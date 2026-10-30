@@ -231,3 +231,19 @@ With `globalgamemanagers.assets` and ordinary managed DLLs supplied, AssetRipper
 - However emitted `Raft_Network.cs` and `SaveAndLoad.cs` were only **2,644** and **2,643** bytes. ILSpy's focused decompilation of these types was **60,704** and **48,675** bytes respectively. Thus **do not treat Level0 AssetRipper output as verified complete gameplay logic**. Likely script templates/stubs for those types; source contents not distributed.
 
 New trial `.github/workflows/raft-code-overlay-probe.yml` uses the **real ILSpy Mono source**, maps only unambiguous classes from Assembly-CSharp and retains AssetRipper's `.cs.meta` identities. It fails safely if it cannot pair classes, and does not publish raw source or assets.
+
+## Job 16: real CSharp overlay into GUID-preserving Unity scenes — SUCCESS
+
+[Initial successful merge](https://github.com/alwansan/raf/actions/runs/41024183424) replaced **1,653** unambiguous filename matches with ILSpy sources, while retaining all **13,969/13,969** exported scene `m_Script` GUID links.
+
+[Namespace-hardened merge](https://github.com/alwansan/raf/actions/runs/41024417472) narrowed that to **1,568** safe C# overwrites in the five-scene sample, skipping **85** cases where namespaces disagreed. Target scripts that belong to assemblies other than `Assembly-CSharp` were never replaced. Concrete core-file evidence:
+- `Raft_Network.cs` from ~2,644-byte AssetRipper script template to **60,704-byte ILSpy decompiled source**.
+- `SaveAndLoad.cs` from ~2,643-byte template to **48,675-byte ILSpy source**.
+- `GameManager.cs` from ~2,643-byte template to **8,347-byte ILSpy source**.
+- `SteamManager.cs` from ~2,644-byte template to **3,074-byte ILSpy source**.
+
+The standalone reusable `scripts/overlay_ilspy_gameplay.py` copies source **only** in an ephemeral local project while preserving the `.cs.meta` file and GUID. [Six synthetic safety tests and full overlay CI](https://github.com/alwansan/raf/actions/runs/41024504209) passed, checking dry run, correct GUID preservation, namespace mismatch, duplicated filenames, other-assembly exclusion, and missing-meta behavior.
+
+All counts measure source file integration only. Not a successful Unity Editor import, compilation, Android build, or complete gameplay recovery. The remaining **221** Assembly-CSharp candidate source files (1789-1568) require separate analysis, as do external plugins and missing LFS assets. Source remains in GitHub-hosted temporary runner only.
+
+A broader `raft-all-scene-links.yml` experiment checks whether the same linking approach works across all 40 scene levels without fetching any LFS file.
