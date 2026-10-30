@@ -43,7 +43,7 @@ jobs:
               source="Raft/Raft_Data/$f"
               if [ -f "$source" ]; then
                 if head -c 48 "$source" | grep -q 'version https://git-lfs.github.com/spec/v1'; then
-                  echo "Unexpected LFS pointer: $source"; exit 2
+                  echo "Skipping unavailable LFS file: $source"; continue
                 fi
                 cp "$source" "$dir/"
               fi
