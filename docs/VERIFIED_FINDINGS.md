@@ -247,3 +247,18 @@ The standalone reusable `scripts/overlay_ilspy_gameplay.py` copies source **only
 All counts measure source file integration only. Not a successful Unity Editor import, compilation, Android build, or complete gameplay recovery. The remaining **221** Assembly-CSharp candidate source files (1789-1568) require separate analysis, as do external plugins and missing LFS assets. Source remains in GitHub-hosted temporary runner only.
 
 A broader `raft-all-scene-links.yml` experiment checks whether the same linking approach works across all 40 scene levels without fetching any LFS file.
+
+## Job 17: all 40 Raft Unity scene files linked to script meta files — SUCCESS
+
+https://github.com/alwansan/raf/actions/runs/41024647631
+
+This wider **read-only no-LFS** experiment staged `level0` through `level39`, `globalgamemanagers.assets`, managed DLLs, and companion configuration, without downloading `sharedassets0.assets` or any LFS resource.
+
+- Exporter exit code **0** and **40 / 40 Unity `.unity` scenes** generated.
+- **3,810** C# script templates and **3,810** associated `.cs.meta` files generated.
+- **517** distinct script GUIDs used across all 40 exported scenes.
+- **64,642 of 64,642** serialized `m_Script` GUID references have matching exported `.cs.meta` files.
+- **0** `0000000deadbeef15deadf00d0000000` placeholder GUID uses.
+- This **proves exported script identity linkage** for all 40 level files in this sample. It does NOT imply materials, shaders, textures, prefabs, non-script GUIDs, required LFS assets, Unity Editor import/compile or actual Android gameplay work.
+
+A second [all-scene non-script resource GUID audit](https://github.com/alwansan/raf/actions/workflows/raft-all-scene-links.yml) checks remaining asset references and duplicate GUIDs. Full resource availability remains a distinct gate.
