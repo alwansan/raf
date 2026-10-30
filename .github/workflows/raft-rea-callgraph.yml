@@ -1,0 +1,80 @@
+name: REA focused Raft network and save call graphs
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - '.github/workflows/raft-rea-callgraph.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  analysis:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Space gate
+        run: |
+          df -h /
+          test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')" -gt 20971520
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.22.2
+      - name: Install versioned REA
+        run: npm install --prefix "$RUNNER_TEMP/rea" --no-audit --no-fund --loglevel=error rea-agents@6.8.0
+      - name: Inspect precisely selected gameplay classes (no execution)
+        shell: bash
+        run: |
+          set -euo pipefail
+          REA="$RUNNER_TEMP/rea/node_modules/.bin/rea"
+          DLL="$GITHUB_WORKSPACE/Raft/Raft_Data/Managed/Assembly-CSharp.dll"
+          mkdir -p "$RUNNER_TEMP/rea-analysis"
+          for type in Raft_Network SaveAndLoad GameManager SteamManager; do
+            echo "Collecting structural call edges for $type"
+            timeout 120s "$REA" inspect-managed-members "$DLL" \
+              --type "$type" --format json > "$RUNNER_TEMP/rea-analysis/$type.json"
+          done
+          python3 - <<'PY'
+          import json,os,collections
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"rea-analysis"
+          md=[]
+          for file in sorted(p.glob("*.json")):
+              j=json.loads(file.read_text(encoding="utf-8"))
+              v=j.get("normalized_result") or {}
+              methods=v.get("methods") or []
+              edges=v.get("call_edges") or []
+              domains=collections.Counter()
+              for edge in edges:
+                  if not isinstance(edge,dict): continue
+                  decl=str(edge.get("target_declaring_type") or "<unresolved>")
+                  if decl.startswith(("Steamworks.","Steam","Party","PartyXBLCSharpSDK")): group="Steam/Party"
+                  elif decl.startswith(("Unity.Netcode.","Unity.Networking.")): group="Unity network"
+                  elif decl.startswith(("System.","mscorlib")): group="System"
+                  elif decl.startswith("FMOD"): group="FMOD"
+                  elif decl.startswith("UnityEngine"): group="Unity engine"
+                  else: group="Game / unknown"
+                  domains[group]+=1
+              methodnames=[m.get("name") for m in methods if isinstance(m,dict)]
+              print(f"{file.stem} :: methods={len(methods)} edges={len(edges)} field_accesses={len(v.get('field_accesses') or [])}")
+              print(f"{file.stem} :: method names={methodnames[:65]}")
+              print(f"{file.stem} :: edge target groups={dict(domains)}")
+              print(f"{file.stem} :: first 25 cross-class references=",
+                    [(e.get("caller"),e.get("target_declaring_type"),e.get("target_name")) for e in edges
+                     if isinstance(e,dict) and str(e.get("target_declaring_type")) != file.stem][:25])
+              md.append((file.stem,len(methods),len(edges),dict(domains)))
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
+              f.write("## Focused REA call graph counts\n")
+              f.write("| Type | Methods | Direct call edges | Target categories |\n|---|---:|---:|---|\n")
+              for name,m,e,d in md:
+                  f.write(f"| {name} | {m} | {e} | {d} |\n")
+              f.write("\nRaw game IL and parsed evidence remain local to temporary CI runner, not uploaded.\n")
+          PY
