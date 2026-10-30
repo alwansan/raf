@@ -1,0 +1,58 @@
+name: Raft collider mesh header correlation (no LFS download)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/trace_collision_mesh_sources.py'
+      - 'tests/test_trace_collision_mesh_sources.py'
+      - '.github/workflows/raft-collider-header-trace.yml'
+  workflow_dispatch:
+    inputs:
+      job_id:
+        description: Completed Unity native build job whose collider log should be inspected
+        required: true
+        default: '124205309687'
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: raft-collider-header-trace
+  cancel-in-progress: true
+jobs:
+  correlate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Run safe synthetic collision-correlation tests
+        run: |
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 -m unittest discover -s tests -p test_trace_collision_mesh_sources.py -v
+      - name: Retrieve existing completed Unity job log (no build, no LFS)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TARGET_JOB: ${{ inputs.job_id || '124205309687' }}
+        run: |
+          set -euo pipefail
+          case "$TARGET_JOB" in ''|*[!0-9]*) exit 1;; esac
+          gh api --allow-escape-sequences --method GET "repos/$GITHUB_REPOSITORY/actions/jobs/$TARGET_JOB/logs" > "$RUNNER_TEMP/native-completed.log"
+      - name: Correlate collision names with original serialized Unity Mesh headers
+        run: |
+          python3 scripts/trace_collision_mesh_sources.py \
+            --root Raft/Raft_Data --log "$RUNNER_TEMP/native-completed.log" \
+            --out "$RUNNER_TEMP/private-collider-coverage.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          d=json.loads((Path(os.environ["RUNNER_TEMP"])/"private-collider-coverage.json").read_text())
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
+              f.write("## Failed collider Mesh header coverage (metadata-only, no LFS)\n")
+              for key in ("failure_log_lines","distinct_failed_names","matched_distinct_names",
+                          "unmatched_distinct_names","ambiguous_names","matched_stream_status",
+                          "matched_original_sources","skipped_lfs_original_header_count","source_parse_errors"):
+                  f.write(f"- {key}: {d[key]}\n")
+              f.write("An unmatched mesh name may belong to the source headers still stored as LFS pointers. No game content uploaded or published.\n")
+          PY
