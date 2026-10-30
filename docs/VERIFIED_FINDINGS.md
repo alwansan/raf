@@ -192,3 +192,30 @@ https://github.com/alwansan/raf/actions/runs/41021653681
 - [Script processing pilot](https://github.com/alwansan/raf/actions/runs/41022158992): the CLI exporter itself exited with code 0 and generated 3 Unity scenes but **0 C# files**. A strict job assertion therefore correctly marked the project script-integration experiment **FAILED**.
 - [Startup and late-scene references](https://github.com/alwansan/raf/actions/runs/41022464657): 5 scenes, 982 `.meta` files, 0 C# files, and 13,969 serialized MonoBehaviour/m_Script occurrences. Regex over serialized script references found one GUID value with 13,969 uses and no matching exported `.meta`. This is an **export result**, not a reliable original script identity count.
 - The successful ILSpy export of **2,394 source files** remains independent of the Unity scenes. Do not claim a playable/restored editor project until real scripts, GUID identities, missing resources, and actual Unity compile/import are verified.
+
+## Job 13: identify missing MonoScript registry without Git LFS — SUCCESS
+
+https://github.com/alwansan/raf/actions/runs/41023529350
+
+The previous five-scene export with 13,969 `deadbeef` placeholders lacked a crucial **ordinary Git** game file: `Raft_Data/globalgamemanagers.assets` (~0.72 MiB). UnityPy 1.25.4 enumerated **3,827 MonoScript** objects in this file (the 10 preceding tested files contained none). Example fields include script class, namespace, assembly name and path ID. Scene external dependencies refer to `globalgamemanagers.assets`; e.g. `level0`'s first external is that file. This is a confirmed explanation for previous unresolved identities.
+
+Additional cross-check: [diagnostic run](https://github.com/alwansan/raf/actions/runs/41022996726) confirmed **all 13,969** previous unresolved scene references used the exact placeholder GUID `0000000deadbeef15deadf00d0000000` with Unity script `fileID: 11500000`. This was not an original GUID identity.
+
+## Job 14: Unity project script metadata linkage — SUCCESS (sample)
+
+https://github.com/alwansan/raf/actions/runs/41023760680
+
+AssetRipperCLI 1.0.1 Unity editor project export, **including** `globalgamemanagers.assets`, its regular `.resS`, five sample levels, limited sharedassets and `Managed/*.dll`, recovered:
+
+| Metric | Result |
+|---|---:|
+| Unity scene files | 5 |
+| .cs files | **3,810** |
+| .cs.meta files | **3,810** |
+| Unique script GUID values referenced in 5 scenes | **296** |
+| Scene `m_Script` refs matching exported script .meta GUIDs | **13,969 / 13,969** |
+| Placeholder `deadbeef` GUID uses | **0** |
+
+The earlier workflow run 41023682679 failed as it correctly refused the `sharedassets0.assets` Git LFS pointer; next workflow was changed to skip that unavailable LFS input. No large LFS payload was fetched. **Script linkage is valid for these five exported scenes only.** It is not an Editor compilation or scene runtime test; other materials, textures, shaders, DLLs and gameplay behavior may still be missing. Source export used `--script-content-level Level1` (stubs, not proof of recovered gameplay logic).
+
+Next: test script `Level0` export for fuller code, then Unity Editor import/compile gates.
