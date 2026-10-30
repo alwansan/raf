@@ -35,4 +35,16 @@ class SdkSourceIsolationTests(unittest.TestCase):
     def test_refuses_gameplay(self):
         self.manifest.write_text(json.dumps({"scripts":[{"assemblyName":"Assembly-CSharp"}]}))
         with self.assertRaises(ValueError): isolate(self.root,self.manifest,apply=True)
+    def test_new_asmdef_without_original_meta_is_allowed_without_creating_guid(self):
+        self.meta.unlink()
+        result=isolate(self.root,self.manifest,apply=True)
+        self.assertEqual(result["asmdefs_without_original_meta"],1)
+        self.assertEqual(json.loads(self.sdk.read_text())["includePlatforms"],["Editor"])
+        self.assertFalse(self.meta.exists())
+    def test_later_invalid_asmdef_causes_no_partial_writes(self):
+        before=self.sdk.read_bytes()
+        bad=self.sdk.parent/"ZInvalid.asmdef"
+        bad.write_text("not json")
+        with self.assertRaises(json.JSONDecodeError): isolate(self.root,self.manifest,apply=True)
+        self.assertEqual(self.sdk.read_bytes(),before)
 if __name__=="__main__": unittest.main()
