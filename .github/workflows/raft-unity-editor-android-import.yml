@@ -331,7 +331,9 @@ jobs:
           unityVersion: 2021.3.45f2
           projectPath: unity-candidate
           targetPlatform: Android
-          buildMethod: ${{ inputs.build_mode == 'native' && 'RaftAndroid.Editor.AndroidNativeBuild.Build' || 'RaftAndroid.Editor.AndroidNativeBuild.ValidateSdkBindings' }}
+          # Pushes use SDK validation unless an intentional [raft-native-build] commit requests one native run.
+          # workflow_dispatch also supports its explicit build_mode=native choice.
+          buildMethod: ${{ ((github.event_name == 'workflow_dispatch' && inputs.build_mode == 'native') || (github.event_name == 'push' && contains(github.event.head_commit.message, '[raft-native-build]'))) && 'RaftAndroid.Editor.AndroidNativeBuild.Build' || 'RaftAndroid.Editor.AndroidNativeBuild.ValidateSdkBindings' }}
           androidExportType: androidPackage
           buildName: RaftAndroidExperimental
           buildsPath: builds
