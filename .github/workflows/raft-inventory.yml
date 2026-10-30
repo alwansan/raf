@@ -1,0 +1,58 @@
+name: Raft safe inventory (no LFS downloads)
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - 'scripts/inspect_raft.py'
+      - '.github/workflows/raft-inventory.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: raft-inventory-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  inventory:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Inspect disk space before checkout
+        run: df -h / /home/runner/work
+      - name: Checkout metadata and regular files, not Git LFS payloads
+        uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Inspect disk space after checkout
+        run: df -h / /home/runner/work
+      - name: Produce safe read-only inventory (no game execution)
+        run: python3 scripts/inspect_raft.py --root Raft --output out/raft-inventory.json
+      - name: Summarize
+        run: |
+          python3 - <<'PY'
+          import json, os
+          p = json.load(open("out/raft-inventory.json", encoding="utf-8"))
+          summary = [
+              "## Raft inventory (no LFS downloaded)",
+              f"- Unity version candidates: {p['unity_versions_candidated_from_globalgamemanagers']}",
+              f"- Files in checkout: {p['file_count']}",
+              f"- LFS pointers: {p['lfs_pointer_count']}",
+              f"- LFS announced GiB: {p['lfs_original_bytes_claimed']/(1024**3):.3f}",
+              f"- Runner free GiB: {p['disk_free_bytes_on_runner']/(1024**3):.2f}",
+              f"- Project structure: {p['checks']}",
+          ]
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as f:
+              f.write("\n".join(summary) + "\n")
+          PY
+      - name: Upload inventory report only (no game assets)
+        uses: actions/upload-artifact@v4
+        with:
+          name: raft-inventory
+          path: out/raft-inventory.json
+          retention-days: 7
