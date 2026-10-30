@@ -61,7 +61,7 @@ jobs:
             <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
             <Nullable>disable</Nullable>
             <OutputType>Library</OutputType>
-            <NoWarn>0168;0649;0618;0672</NoWarn>
+            <NoWarn>0168;0649;0618;0672;SYSLIB0011</NoWarn>
           </PropertyGroup>
           <ItemGroup>{references}</ItemGroup>
           </Project>"""
@@ -80,6 +80,7 @@ jobs:
           result=$?
           set -e
           echo "Compiler exit code: $result"
+          export COMPILER_RESULT="$result"
           python3 - <<'PY'
           import re,collections,os
           from pathlib import Path
@@ -90,12 +91,16 @@ jobs:
           print("Compiler diagnostic errors by code:",dict(codes.most_common(25)))
           print("Compiler diagnostic warnings by code:",dict(warnings.most_common(15)))
           print("Compiler log bytes:",path.stat().st_size)
+          root=Path(os.environ["RUNNER_TEMP"])/"csharp/bin"
+          dlls=list(root.rglob("Raft.Mono.Reconstruction.Diagnostic.dll")) if root.exists() else []
+          print("Compiled diagnostic assembly produced:",bool(dlls))
+          if dlls:print("Compiled diagnostic assembly bytes:",dlls[0].stat().st_size)
           print("Original decompiled CSharp snippets and compiler source lines deliberately NOT printed or uploaded.")
           with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
               f.write('## Raft CSharp compile-compatibility baseline (NOT Unity Editor)\n')
               f.write(f"- Compiler exit code: {os.environ.get('COMPILER_RESULT','not captured')}\n")
               f.write(f"- Compiler error codes: {dict(codes.most_common(20))}\n")
-              f.write('No decompiled source, compiler lines or binaries uploaded. Net8 build is diagnostic; Unity 2021 Editor compatibility is NOT established.\n')
+              f.write('No decompiled source, compiler lines or binaries uploaded. SYSLIB0011 suppressed ONLY for compatibility experiment; do not use insecure BinaryFormatter in final Android port. Unity 2021 Editor compatibility is NOT established.\n')
           if len(text)==0:raise SystemExit("No compiler output, cannot evaluate")
           PY
         env:
