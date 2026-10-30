@@ -1,6 +1,11 @@
 name: Raft targeted LFS mesh restoration (manual opt-in only)
 
 on:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - 'config/mesh-lfs-scope.txt'
   workflow_dispatch:
     inputs:
       approve_lfs_transfer:
@@ -17,8 +22,40 @@ permissions:
   contents: read
 
 jobs:
+  authorize:
+    runs-on: ubuntu-latest
+    outputs:
+      scope: ${{ steps.gate.outputs.scope }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Require explicit event-specific approval
+        id: gate
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          DISPATCH_CHOICE: ${{ inputs.approve_lfs_transfer }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          scope='NO'
+          if [ "$EVENT_NAME" = 'push' ]; then
+            scope=$(tr -d '\\r\\n' < config/mesh-lfs-scope.txt)
+          elif [ "$DISPATCH_CHOICE" = 'YES - download resources.assets only (~106 MiB)' ]; then
+            scope='resources'
+          elif [ "$DISPATCH_CHOICE" = 'YES - download both selected LFS files (~217 MiB)' ]; then
+            scope='both'
+          fi
+          case "$scope" in NO|resources|both) ;; *) echo 'Invalid explicit approval scope'; exit 3;; esac
+          echo "scope=$scope" >> "$GITHUB_OUTPUT"
+          echo "Selected consent scope: $scope"
+          if [ "$scope" = NO ]; then echo 'No LFS objects will be downloaded'; fi
+
   targeted-mesh:
-    if: ${{ inputs.approve_lfs_transfer != 'NO - do not download' }}
+    needs: authorize
+    if: ${{ needs.authorize.outputs.scope != 'NO' }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -29,7 +66,7 @@ jobs:
           df -h /
           free_kb=$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')
           test "$free_kb" -gt 20971520
-          echo "Manual GitHub LFS scope: ${{ inputs.approve_lfs_transfer }}"
+          echo "Approved GitHub LFS scope: ${{ needs.authorize.outputs.scope }}"
           echo "If your LFS bandwidth allotment is exhausted, GitHub may block transfers or bill according to account settings."
       - uses: actions/checkout@v4
         with:
@@ -39,11 +76,11 @@ jobs:
       - name: Fetch only the manually approved LFS content object(s)
         shell: bash
         env:
-          INPUT_APPROVE_LFS_TRANSFER: ${{ inputs.approve_lfs_transfer }}
+          INPUT_APPROVE_LFS_TRANSFER: ${{ needs.authorize.outputs.scope }}
         run: |
           set -euo pipefail
           paths='Raft/Raft_Data/resources.assets'
-          if [ "${{ inputs.approve_lfs_transfer }}" = 'YES - download both selected LFS files (~217 MiB)' ]; then
+          if [ "$INPUT_APPROVE_LFS_TRANSFER" = both ]; then
             paths='Raft/Raft_Data/sharedassets0.assets,Raft/Raft_Data/resources.assets'
           fi
           echo "Selected exact LFS paths: $paths"
@@ -54,7 +91,7 @@ jobs:
           from pathlib import Path
           import re,subprocess,hashlib,os
           expected={'Raft/Raft_Data/resources.assets':111533516}
-          if os.environ.get('INPUT_APPROVE_LFS_TRANSFER') == 'YES - download both selected LFS files (~217 MiB)':
+          if os.environ.get('INPUT_APPROVE_LFS_TRANSFER') == 'both':
               expected['Raft/Raft_Data/sharedassets0.assets']=115978112
           for path,size in expected.items():
               data=Path(path)
