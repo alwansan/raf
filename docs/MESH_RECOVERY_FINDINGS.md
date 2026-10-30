@@ -104,3 +104,19 @@ A follow-up [cheap coverage run 41097275762](https://github.com/alwansan/raf/act
 On a checkout **without Git LFS** and sampling at most 80 Mesh objects per serialized file, the script counted **278** references to Mesh stream payloads: **32 locally available valid ranges**, **246 references whose source stream file is a Git LFS pointer**. LFS pointer counts are uses, not distinct missing assets, and do not imply data loss. The three resource containers that are ordinarily fetched in the full Unity CI have deliberately **not** been fetched for this cheap check; do not compare its `278` to the earlier `1877` full-header read count as though all files had been loaded.
 
 Source streams, original Unity geometry and collisions remain distinct from serialized GUID reference linkage. Before expanding costly LFS retrieval, use the range audit to prioritize physically absent or truncated `.resS` content and separately check Unity collider import warnings.
+
+## Exact non-finite source ranges — Work continuation
+
+[Range audit 41124553138](https://github.com/alwansan/raf/actions/runs/41124553138) passed on commit `5b59f402`: 159 distinct non-finite-error names extracted, no header parse errors or rejected advertised ranges. The private ledger preserves original path IDs, offset/size, original LFS SHA256 and ambiguity; public output contains aggregate counts only.
+
+| Stream prefix | Matched non-finite names | Unique referenced Mesh bytes |
+|---|---:|---:|
+| sharedassets24 | 15 | 890800 |
+| sharedassets25 | 13 | 629888 |
+| sharedassets29 | 22 | 2210584 |
+| sharedassets30 | 19 | 1159296 |
+| sharedassets34 | 24 | 1302336 |
+| sharedassets35 | 34 | 2994520 |
+| sharedassets6 | 3 | 106176 |
+
+These are per-provider name counts, not proven fixes. Range bytes merge overlaps and are not downloadable LFS object sizes. The source-only [one-stream experiment 41124735861](https://github.com/alwansan/raf/actions/runs/41124735861) is queued at this checkpoint, selecting only sharedassets29.assets.resS (295782704 bytes) and validating SHA256/size before checking original decoded positions and triangle indices. It does not test AssetRipper or Unity cooking. Read its result before spending another transfer; do not infer success from scheduling.
