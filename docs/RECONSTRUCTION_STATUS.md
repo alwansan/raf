@@ -155,3 +155,13 @@ Extended `scripts/repair_assetripper_stub_classnames.py` with an explicit **opt-
 The upstream official ILSpy CLI provides [`-lv|--languageversion CSharp9_0`](https://github.com/icsharpcode/ILSpy/blob/master/ICSharpCode.ILSpyCmd/README.md). Instead of patching emitted C#12 code manually, the [no-LFS CI run 41057399641](https://github.com/alwansan/raf/actions/runs/41057399641) pinned ILSpy to **CSharp9_0** during full project decompilation, retained **1,568** namespace- and name-matched source overlays, and showed **zero** later namespace-syntax conversions were necessary across 3,810 CSharp files. The output's two suspect struct declarations no longer used C#12 primary constructor syntax.
 
 [Next real Editor Android build run 41057547888](https://github.com/alwansan/raf/actions/runs/41057547888) uses the CSharp9_0 decompiler option and previous stub/GUID repairs. Its actual Editor and build outcome must be checked in GitHub Actions; **no APK is considered available until a successful build and verified output are observed**.
+
+## CSharp language level diagnosis: explicit ILSpy CSharp9_0 (2026-10-30)
+
+[First failure run 41055289637](https://github.com/alwansan/raf/actions/runs/41055289637) after template fixes showed 636 compile-error lines, largely CSharp 10 file-scoped namespaces from ILSpy default Latest code generation. Adding `scripts/normalize_csharp_namespaces.py` reduced the [next Unity Editor run 41056359011](https://github.com/alwansan/raf/actions/runs/41056359011) to just **16** syntax errors across `Assembly-CSharp/UltimateWater/Spray.cs` and `Assembly-CSharp/Voxelize.cs`.
+
+[Focused probe 41057128585](https://github.com/alwansan/raf/actions/runs/41057128585) isolated the cause to CSharp 12 **primary constructor** syntax in nested structs `Spray.Particle` and `Voxelize.Int3`, which Unity 2021's CSharp9 parser rejects. Do not attempt an ad-hoc name/brace replacement, because correct behavior requires instance field initialization and constructor semantics.
+
+ILSpy v11.2 has a supported `--languageversion CSharp9_0` option. [Exact focused CI run 41057568426](https://github.com/alwansan/raf/actions/runs/41057568426) re-decompiled **2,394** gameplay source files at CSharp9_0, confirming both primary constructors eliminated and neither file contains a file-scoped namespace. This is **verified CSharp output syntax**, not proof of full Unity project compilation.
+
+Main and code overlay workflows now use ILSpy's `-lv CSharp9_0`, along with the existing conservative namespace and script meta GUID checks. [Unity build run 41057547888](https://github.com/alwansan/raf/actions/runs/41057547888) reached Editor again and was running at the time of this note; check its latest result before claiming Android build success.
