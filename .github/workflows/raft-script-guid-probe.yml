@@ -88,7 +88,7 @@ jobs:
           refs=collections.Counter()
           for scene in scenes:
               raw=scene.read_text(encoding="utf8",errors="replace")
-              for m in re.finditer(r'm_Script:\s*\\{[^\\n}]*guid:\s*([a-fA-F0-9]{32})',raw):
+              for m in re.finditer(r'm_Script:\s*\{[^\n}]*guid:\s*([a-fA-F0-9]{32})',raw):
                   refs[m.group(1).lower()]+=1
           known_guids=set()
           script_meta_files=[]
@@ -106,6 +106,7 @@ jobs:
               f.write("## Unity serialized MonoBehaviour linkage check\n")
               f.write(f"- .unity: {len(scenes)}; .cs: {len(scripts)}; .meta: {len(guids)}\n")
               f.write(f"- MonoBehaviour markers: {behaviour}; m_Script references: {script_refs}\n")
+              f.write(f"- Unique GUIDs: {len(refs)}; unresolved GUIDs: {len(unresolved)}; unresolved uses: {sum(unresolved.values())}; .cs.meta files: {len(script_meta_files)}\n")
               f.write("- Raw game assets and decompiled code remained on ephemeral runner only.\n")
           if not scenes: raise SystemExit("No Unity scenes exported")
           PY
