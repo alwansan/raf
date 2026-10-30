@@ -342,6 +342,25 @@ jobs:
           # rejects the build as a dirty git branch before Unity Editor starts.
           versioning: None
           androidVersionCode: 1
+      - name: Audit private native APK payload and ARM64 IL2CPP structure
+        if: ${{ (github.event_name == 'workflow_dispatch' && inputs.build_mode == 'native') || (github.event_name == 'push' && contains(github.event.head_commit.message, '[raft-native-build]')) }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_android_apk_audit.py -v
+          python3 scripts/audit_android_apk.py \
+            --apk "$GITHUB_WORKSPACE/builds/Android/RaftAndroidExperimental.apk" \
+            --report "$RUNNER_TEMP/private-android-apk-audit.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          d=json.loads((Path(os.environ["RUNNER_TEMP"])/"private-android-apk-audit.json").read_text())
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as out:
+              out.write("## Native APK structure (not gameplay verification)\n")
+              for name in ("apk_bytes","zip_members","unity_data_files","unity_data_uncompressed_bytes","abis","arm64_il2cpp","fmod_native_library_present","apk_sha256"):
+                  out.write(f"- {name}: {d[name]}\n")
+              out.write("APK kept private on disposable CI runner; no source/game assets uploaded. Signature/install/gameplay still unverified.\n")
+          PY
       - name: If CI reaches here, report without releasing original game APK
         run: |
           echo 'Unity validation completed. Review RAFT_SDK_VALIDATION_COMPLETE versus RAFT_ANDROID_NATIVE_RESULT; SDK-only mode does not build an APK.' >> "$GITHUB_STEP_SUMMARY"
