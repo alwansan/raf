@@ -45,3 +45,7 @@ Date: 2026-10-30. Source baseline `zip`, development branch `feature/android-nat
 2. Identify which gameplay network features depend on Unity Netcode/Transport versus Windows Party API.
 3. Build platform adapter abstractions for offline services and future LAN host.
 4. Reconstruct a small verified Unity Editor scene; then run editor import and Android build experiments in a licensed environment.
+
+## Exact network dependency follow-up
+
+[Successful full-scope REA audit](https://github.com/alwansan/raf/actions/runs/41020808394) confirms 155 P/Invoke imports: **131 PartyWin32, 21 PartyXboxLiveWin32, 3 lz4unity**. The `AI_NetworkBehaviour` type contains separate `UpdateHost` and `UpdateRemoteclient` methods plus save/restore methods. Our next priority is tracing caller relationships to these Windows imports before changing architecture; see [NETWORK_COMPATIBILITY.md](NETWORK_COMPATIBILITY.md).
