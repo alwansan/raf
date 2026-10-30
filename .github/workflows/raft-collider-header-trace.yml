@@ -43,7 +43,8 @@ jobs:
         run: |
           python3 scripts/trace_collision_mesh_sources.py \
             --root Raft/Raft_Data --log "$RUNNER_TEMP/native-completed.log" \
-            --out "$RUNNER_TEMP/private-collider-coverage.json"
+            --out "$RUNNER_TEMP/private-collider-coverage.json" \
+            --details-out "$RUNNER_TEMP/private-collider-ranges.json"
           python3 - <<'PY'
           import json,os
           from pathlib import Path
@@ -52,10 +53,12 @@ jobs:
               f.write("## Failed collider Mesh header coverage (metadata-only, no LFS)\n")
               for key in ("failure_log_lines","distinct_failed_names","matched_distinct_names",
                           "unmatched_distinct_names","ambiguous_names","matched_stream_status",
-                          "matched_original_sources","skipped_lfs_original_header_count","source_parse_errors"):
+                          "matched_original_sources","skipped_lfs_original_header_count","source_parse_errors",
+                          "nonfinite_distinct_names","nonfinite_range_rejections","nonfinite_stream_ranges"):
                   f.write(f"- {key}: {d[key]}\n")
               f.write("- Cost-ranked missing stream providers (mapped names per 100 MiB):\n")
               for item in d["stream_lfs_priorities"]:
                   f.write(f"  - {item['stream']}: {item['matching_distinct_collider_names']} names, {item['lfs_declared_bytes']} declared bytes, density {item['distinct_names_per_100_MiB']}\n")
               f.write("An unmatched mesh name may belong to the source headers still stored as LFS pointers. No game content uploaded or published.\n")
           PY
+

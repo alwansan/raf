@@ -10,8 +10,6 @@ import argparse
 import json
 import re
 
-import UnityPy
-
 def is_pointer(p):
     return p.stat().st_size<200 and p.read_bytes().startswith(b"version https://git-lfs.github.com/spec/v1")
 
@@ -34,6 +32,7 @@ def classify_stream_range(root, reference, offset, size):
     return "available-range"
 
 def scan(root,max_per_file):
+    import UnityPy
     result={"files":[],"stream_paths":Counter(),"errors":Counter(),"mesh_count":0,
             "inspected_meshes":0,"meshes_with_stream":0,"claimed_stream_bytes":0,
             "stream_range_status":Counter(),"range_status_by_path":{}}
@@ -96,3 +95,4 @@ if __name__=="__main__":
     for k in ("mesh_count","inspected_meshes","meshes_with_stream","claimed_stream_bytes","stream_paths","stream_range_status","errors"):
         print(k+":",data[k])
     print("Per-source Mesh sampled counts:",[(r['file'],r.get('mesh_objects'),r.get('inspected'),r.get('stream_paths')) for r in data['files'] if r.get('stream_paths')][:28])
+

@@ -3,10 +3,43 @@ import unittest
 from pathlib import Path
 from collections import Counter
 
-from scripts.trace_collision_mesh_sources import failing_meshes, summary
+from scripts.trace_collision_mesh_sources import failing_meshes, summary, recovery_ranges
 
 
 class ColliderHeaderTraceTests(unittest.TestCase):
+    def test_private_ranges_merge_overlap_and_preserve_ambiguity(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            stream = "sharedassets29.assets.resS"
+            (root / stream).write_text("version https://git-lfs.github.com/spec/v1\n"
+                "oid sha256:" + "a" * 64 + "\nsize 1000\n")
+            def row(offset, size):
+                return {"source": "sharedassets29.assets", "original_path_id": offset,
+                    "stream_file": stream, "stream_status": "lfs-pointer",
+                    "stream_offset": offset, "stream_size": size}
+            matches = {"A": [row(100, 100), row(150, 100)], "B": [row(250, 50)]}
+            report = recovery_ranges(root, Counter({"A": 10, "B": 2}), matches)
+            provider = report["providers"][0]
+            self.assertEqual(provider["unique_mesh_range_bytes"], 200)
+            self.assertEqual(provider["merged_range_count"], 1)
+            self.assertEqual(provider["distinct_names"], 2)
+            self.assertEqual(provider["lfs_sha256"], "a" * 64)
+            self.assertTrue(provider["meshes"][0]["ambiguous_name"])
+            self.assertEqual(report["rejected_rows"], {})
+
+    def test_ranges_refuse_unsafe_and_beyond_advertised_payload(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            (root / "test.resS").write_text("version https://git-lfs.github.com/spec/v1\n"
+                "oid sha256:" + "a" * 64 + "\nsize 100\n")
+            rows = [{"stream_file": "../test.resS", "stream_status": "lfs-pointer"},
+                    {"stream_file": "test.resS", "stream_status": "lfs-pointer",
+                     "stream_offset": 99, "stream_size": 2}]
+            report = recovery_ranges(root, Counter({"A": 1}), {"A": rows})
+            self.assertEqual(report["providers"], [])
+            self.assertEqual(report["rejected_rows"],
+                {"unsafe-provider": 1, "invalid-declared-range": 1})
+
     def test_extract_mesh_names_without_leaking_coordinates(self):
         log = """
 Failed extracting collision mesh because vertex at index 2 contains a non-finite value (nan, 0, 0). Mesh asset path "Assets/Mesh/BigRock3.asset" Mesh name "BigRock3"
@@ -61,3 +94,4 @@ Failed extracting collision mesh because vertex at index 5 contains a non-finite
 
 if __name__ == "__main__":
     unittest.main()
+

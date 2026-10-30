@@ -12,8 +12,6 @@ import json
 from pathlib import Path
 import re
 
-import UnityPy
-
 try:
     from scripts.audit_mesh_stream_dependencies import classify_stream_range, is_pointer
 except ModuleNotFoundError:
@@ -27,6 +25,7 @@ def failing_meshes(log: str) -> Counter:
 
 
 def scan_original_headers(root: Path, wanted: set[str]) -> tuple[dict, dict]:
+    import UnityPy
     matches: dict[str, list[dict]] = defaultdict(list)
     errors: Counter = Counter()
     skipped: list[str] = []
@@ -61,6 +60,56 @@ def scan_original_headers(root: Path, wanted: set[str]) -> tuple[dict, dict]:
         except Exception as exc:
             errors["load:" + type(exc).__name__] += 1
     return dict(matches), {"skipped_lfs_header_files": skipped, "parse_errors": dict(errors)}
+
+
+def recovery_ranges(root: Path, failures: Counter, matches: dict) -> dict:
+    """Private exact range ledger; no payload reads and no download instructions.
+
+    Keep ambiguous name matches visible. Merge overlaps for byte accounting only;
+    the whole LFS object still has to be obtained and verified before use.
+    """
+    providers = defaultdict(list)
+    rejected = Counter()
+    for name in sorted(failures):
+        for row in matches.get(name, []):
+            stream = row.get("stream_file", "")
+            if row.get("stream_status") != "lfs-pointer":
+                continue
+            if not stream or Path(stream).name != stream or "\\" in stream or ":" in stream:
+                rejected["unsafe-provider"] += 1
+                continue
+            pointer = root / stream
+            if not pointer.is_file() or not is_pointer(pointer):
+                rejected["missing-pointer"] += 1
+                continue
+            payload = pointer.read_text(encoding="ascii")
+            oid = re.search(r"(?m)^oid sha256:([0-9a-f]{64})$", payload)
+            declared = re.search(r"(?m)^size (\d+)$", payload)
+            if not oid or not declared:
+                rejected["invalid-pointer"] += 1
+                continue
+            offset, size = row.get("stream_offset"), row.get("stream_size")
+            if (type(offset) is not int or type(size) is not int or offset < 0 or
+                    size <= 0 or offset + size > int(declared.group(1))):
+                rejected["invalid-declared-range"] += 1
+                continue
+            providers[stream].append(dict(row, mesh_name=name,
+                ambiguous_name=len(matches[name]) > 1, lfs_sha256=oid.group(1),
+                lfs_declared_bytes=int(declared.group(1))))
+    result = []
+    for stream, rows in sorted(providers.items()):
+        intervals = []
+        for start, end in sorted((r["stream_offset"], r["stream_offset"] + r["stream_size"]) for r in rows):
+            if intervals and start <= intervals[-1][1]:
+                intervals[-1][1] = max(intervals[-1][1], end)
+            else:
+                intervals.append([start, end])
+        result.append({"stream": stream, "lfs_sha256": rows[0]["lfs_sha256"],
+                       "lfs_declared_bytes": rows[0]["lfs_declared_bytes"],
+                       "distinct_names": len({r["mesh_name"] for r in rows}),
+                       "unique_mesh_range_bytes": sum(end-start for start, end in intervals),
+                       "merged_range_count": len(intervals), "meshes": rows})
+    return {"providers": result, "rejected_rows": dict(rejected)}
 
 
 def summary(failures: Counter, matches: dict, metadata: dict, root: Path | None = None) -> dict:
@@ -114,11 +163,23 @@ if __name__ == "__main__":
     parser.add_argument("--root", required=True, type=Path)
     parser.add_argument("--log", required=True, type=Path)
     parser.add_argument("--out", type=Path)
+    parser.add_argument("--details-out", type=Path, help="Private per-object range ledger; never printed")
     args = parser.parse_args()
     failures = failing_meshes(args.log.read_text(encoding="utf-8", errors="replace"))
     matches, metadata = scan_original_headers(args.root, set(failures))
     result = summary(failures, matches, metadata, args.root)
+    nonfinite = failing_meshes("\n".join(line for line in args.log.read_text(
+        encoding="utf-8", errors="replace").splitlines() if "contains a non-finite value" in line))
+    ledger = recovery_ranges(args.root, nonfinite, matches)
+    result["nonfinite_distinct_names"] = len(nonfinite)
+    result["nonfinite_range_rejections"] = ledger["rejected_rows"]
+    result["nonfinite_stream_ranges"] = [{k: v for k, v in provider.items()
+        if k not in ("meshes", "lfs_sha256")} for provider in ledger["providers"]]
+    if args.details_out:
+        args.details_out.parent.mkdir(parents=True, exist_ok=True)
+        args.details_out.write_text(json.dumps(ledger, indent=2) + "\n", encoding="utf8")
     if args.out:
         args.out.parent.mkdir(parents=True, exist_ok=True)
         args.out.write_text(json.dumps(result, indent=2) + "\n", encoding="utf8")
     print("RAFT_COLLIDER_ORIGINAL_HEADER_COVERAGE " + json.dumps(result, sort_keys=True))
+
