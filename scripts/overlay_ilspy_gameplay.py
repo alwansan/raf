@@ -41,6 +41,8 @@ def map_sources(project:Path, decompiled:Path, apply:bool) -> dict:
         "ambiguous_names":0,
         "unmatched":0,
         "nonclass_sources":0,
+        "namespace_mismatches":0,
+        "critical_classes":{},
         "missing_meta":0,
         "examples":[],
         "apply":apply,
@@ -67,6 +69,13 @@ def map_sources(project:Path, decompiled:Path, apply:bool) -> dict:
             report["nonclass_sources"]+=1
             continue
         source=src.read_text(encoding="utf8",errors="replace")
+        stub=target.read_text(encoding="utf8",errors="replace")
+        def get_namespace(text):
+            match=re.search(r"(?m)^\\s*namespace\\s+([\\w.]+)\\s*(?:[;{]|$)",text)
+            return match.group(1) if match else ""
+        if get_namespace(source)!=get_namespace(stub):
+            report["namespace_mismatches"]+=1
+            continue
         if not re.search(r"\b(?:class|struct|interface|enum)\s+"+re.escape(stem)+r"\b",source):
             report["nonclass_sources"]+=1
             continue
@@ -74,6 +83,8 @@ def map_sources(project:Path, decompiled:Path, apply:bool) -> dict:
         report["replacements"]+=1
         report["bytes_before"]+=prior
         report["bytes_after"]+=len(source.encode("utf8"))
+        if name in {"Raft_Network.cs","SaveAndLoad.cs","GameManager.cs","SteamManager.cs"}:
+            report["critical_classes"][name]={"stub_bytes":prior,"real_bytes":len(source.encode("utf8"))}
         if len(report["examples"])<9:
             report["examples"].append({"filename":name,"stub_bytes":prior,"real_bytes":len(source.encode("utf8"))})
         if apply:
@@ -93,7 +104,8 @@ if __name__=="__main__":
     for k in ("asset_csharp_files","ilspy_csharp_files","asset_csharp_with_metas",
               "asset_target_paths_containing_assembly_csharp","common_unique_names",
               "replacements","bytes_before","bytes_after","ambiguous_names",
-              "unmatched","missing_meta","nonclass_sources","apply"):
+              "unmatched","missing_meta","nonclass_sources","namespace_mismatches","apply"):
         print(k+":",data[k])
     print("Representative replacement sizes:",data["examples"])
+    print("Important gameplay class source sizes:",data["critical_classes"])
     if not data["replacements"]: raise SystemExit("No safe script overlays identified; inspect path layout")
