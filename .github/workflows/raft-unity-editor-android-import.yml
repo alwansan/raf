@@ -221,6 +221,11 @@ jobs:
           targetPlatform: Android
           buildName: RaftAndroidExperimental
           buildsPath: builds
+          # This workflow reconstructs a Unity project in the workspace after checkout.
+          # Those generated files are intentionally not committed, so Semantic versioning
+          # rejects the build as a dirty git branch before Unity Editor starts.
+          versioning: None
+          androidVersionCode: 1
       - name: If CI reaches here, report without releasing original game APK
         run: |
           echo 'Unity Android build action completed. Review Editor logs and privately test build outputs.' >> "$GITHUB_STEP_SUMMARY"
