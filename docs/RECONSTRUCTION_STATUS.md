@@ -72,3 +72,9 @@ The next gate is `--script-content-level Level0` C# recovery and comparison with
 ## Level0 code fidelity and safe C# overlay
 
 [Level0 AssetRipper run](https://github.com/alwansan/raf/actions/runs/41023910696) produced 3,810 script sources and retained all 13,969 scene GUID links, but individual gameplay class outputs like `SaveAndLoad.cs` were only ~2.6 KiB, compared to ~48.7 KiB of ILSpy-decompiled source. Therefore the AssetRipper source files are **not yet verified as full game logic**. A new CI-only overlay tool `scripts/overlay_ilspy_gameplay.py` combines source from ILSpy with GUID-preserving Unity meta files using conservative unique class filename matching. The merged code is confined to an ephemeral GitHub runner, pending count and consistency checks; no original game C# was added to the public repository.
+
+## Implementation progress: ILSpy source overlay proven in limited Unity export
+
+Confirmed [namespace-checked CI](https://github.com/alwansan/raf/actions/runs/41024417472): **1,568** strictly matched `Assembly-CSharp` source files replaced AssetRipper script templates with C# from ILSpy, while **13,969/13,969** five-scene script GUIDs remained linked. 85 apparent filename matches were intentionally rejected because their namespaces disagreed; scripts from third-party assemblies are not overwritten. Main classes `Raft_Network`, `SaveAndLoad`, `GameManager`, and `SteamManager` all had substantive ILSpy source substituted. [Six synthetic safety tests](https://github.com/alwansan/raf/actions/runs/41024504209) passed.
+
+**Do not assume** this produces a compilable game or fully functional logic. Work remaining: resolve excluded/unmatched classes, editor import errors, platform/Steam/Party integration, real dependencies in 18 LFS files, shaders/mobile assets and Android-specific runtime. Never publish game source/assets publicly.
