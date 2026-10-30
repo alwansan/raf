@@ -22,10 +22,11 @@ jobs:
         shell: bash
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         run: |
-          if [ -n "$UNITY_LICENSE" ] && [ -n "$UNITY_EMAIL" ] && [ -n "$UNITY_PASSWORD" ]; then
+          if [ -n "$UNITY_EMAIL" ] && [ -n "$UNITY_PASSWORD" ] && { [ -n "$UNITY_LICENSE" ] || [ -n "$UNITY_SERIAL" ]; }; then
             echo "ready=true" >> "$GITHUB_OUTPUT"
             echo "Unity activation secrets found; attempting private project import and Android build."
           else
@@ -209,6 +210,7 @@ jobs:
         uses: game-ci/unity-builder@v4
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
