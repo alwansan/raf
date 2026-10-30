@@ -113,6 +113,12 @@ jobs:
           python3 scripts/normalize_csharp_namespaces.py \
             --root "$RUNNER_TEMP/export/ExportedProject/Assets" \
             --apply --require-clean
+      - name: Map third-party managed DLLs and conflicting generated source assemblies
+        shell: bash
+        run: |
+          python3 scripts/audit_mono_plugin_conflicts.py \
+            --project "$RUNNER_TEMP/export/ExportedProject" \
+            --managed "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed"
       - name: Verify serialized scene GUIDs remain linked after CSharp replacement
         shell: bash
         run: |
