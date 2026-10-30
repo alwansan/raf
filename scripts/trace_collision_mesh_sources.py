@@ -63,11 +63,36 @@ def scan_original_headers(root: Path, wanted: set[str]) -> tuple[dict, dict]:
     return dict(matches), {"skipped_lfs_header_files": skipped, "parse_errors": dict(errors)}
 
 
-def summary(failures: Counter, matches: dict, metadata: dict) -> dict:
+def summary(failures: Counter, matches: dict, metadata: dict, root: Path | None = None) -> dict:
     if not failures:
         raise ValueError("No collider-failure mesh paths found in the log")
     matched = {name: matches[name] for name in failures if matches.get(name)}
     missing = set(failures) - set(matched)
+    sources: dict[str, set[str]] = defaultdict(set)
+    for name, rows in matched.items():
+        for row in rows:
+            if row["stream_status"] == "lfs-pointer" and row["stream_file"]:
+                sources[row["stream_file"]].add(name)
+    priorities = []
+    for stream, names in sources.items():
+        advertised = None
+        if root is not None:
+            pointer = root / stream
+            if pointer.is_file() and is_pointer(pointer):
+                match = re.search(r"(?m)^size (\d+)$", pointer.read_text(encoding="ascii"))
+                if match:
+                    advertised = int(match.group(1))
+        priorities.append({
+            "stream": stream,
+            "lfs_declared_bytes": advertised,
+            "matching_distinct_collider_names": len(names),
+            "matching_collider_error_lines": sum(failures[name] for name in names),
+            "distinct_names_per_100_MiB": round(len(names) * 104857600 / advertised, 3)
+            if advertised else None
+        })
+    priorities.sort(key=lambda row: (
+        -(row["distinct_names_per_100_MiB"] or 0),
+        -row["matching_distinct_collider_names"], row["stream"]))
     return {
         "failure_log_lines": sum(failures.values()),
         "distinct_failed_names": len(failures),
@@ -75,6 +100,7 @@ def summary(failures: Counter, matches: dict, metadata: dict) -> dict:
         "unmatched_distinct_names": len(missing),
         "ambiguous_names": sum(len(items) > 1 for items in matched.values()),
         "matched_stream_status": dict(Counter(row["stream_status"] for items in matched.values() for row in items)),
+        "stream_lfs_priorities": priorities,
         "matched_original_sources": dict(Counter(row["source"] for items in matched.values() for row in items)),
         "skipped_lfs_original_header_count": len(metadata["skipped_lfs_header_files"]),
         "source_parse_errors": metadata["parse_errors"],
@@ -90,7 +116,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     failures = failing_meshes(args.log.read_text(encoding="utf-8", errors="replace"))
     matches, metadata = scan_original_headers(args.root, set(failures))
-    result = summary(failures, matches, metadata)
+    result = summary(failures, matches, metadata, args.root)
     if args.out:
         args.out.parent.mkdir(parents=True, exist_ok=True)
         args.out.write_text(json.dumps(result, indent=2) + "\n", encoding="utf8")
