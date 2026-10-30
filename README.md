@@ -44,3 +44,10 @@
 - **No working Android APK or complete restorable Unity project has been produced.**
 - Original Raft game files are commercial third-party content. Do not publish/distribute raw assets, decompiled source or full APK without appropriate permissions; a public repository containing such files can be subject to removal.
 - GitHub LFS downloads may consume paid bandwidth; check billing before expanding data-heavy tests.
+
+### Latest breakthrough: MonoScript identity and serialized scene linkage (2026-10-30)
+
+- Original, **non-LFS** `Raft_Data/globalgamemanagers.assets` contains **3,827 MonoScript records**; earlier samples mistakenly omitted it. [UnityPy evidence](https://github.com/alwansan/raf/actions/runs/41023529350).
+- With that file included, [AssetRipper linkage export](https://github.com/alwansan/raf/actions/runs/41023760680) recovered **3,810 C# scripts + 3,810 script .meta files** and **5 scenes**. All **13,969** scene `m_Script` GUID occurrences matched exported script .meta GUIDs, with no `deadbeef` placeholder in this sample.
+- The latest [full-script Level0 CI experiment](https://github.com/alwansan/raf/actions/workflows/raft-full-script-linked-recovery.yml) is being evaluated. Valid GUID linkage does not yet mean a compiling Unity project or playable APK.
+- No LFS downloads or third-party proprietary asset uploads were needed for this fix.
