@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   export:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 22
     steps:
       - name: Check available disk and suppress LFS downloads
