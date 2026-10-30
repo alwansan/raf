@@ -6,6 +6,8 @@ on:
       - '.github/workflows/raft-single-stream-geometry-probe.yml'
       - 'scripts/probe_collider_stream.py'
       - 'tests/test_probe_collider_stream.py'
+      - 'scripts/compare_exported_mesh_geometry.py'
+      - 'tests/test_compare_exported_mesh_geometry.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,7 @@ jobs:
   probe:
     if: ${{ github.ref == 'refs/heads/feature/android-native-port' && (github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[raft-stream-probe]')) }}
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
         with:
@@ -27,7 +29,8 @@ jobs:
         run: |
           python3 -m unittest discover -s tests -p test_probe_collider_stream.py -v
           python3 -m unittest discover -s tests -p test_trace_collision_mesh_sources.py -v
-          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 -m unittest discover -s tests -p test_compare_exported_mesh_geometry.py -v
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4 PyYAML==6.0.2
       - name: Reconstruct exact private range ledger from existing completed log
         env:
           GH_TOKEN: ${{ github.token }}
@@ -60,3 +63,33 @@ jobs:
       - name: Report scope without publishing game content
         run: |
           echo 'Original source geometry experiment completed; inspect RAFT_VERIFIED_SOURCE_GEOMETRY. This is not AssetRipper/Unity cooking validation or an APK.' >> "$GITHUB_STEP_SUMMARY"
+      - name: Obtain checksum-pinned exporter for focused before-after experiment
+        run: |
+          set -euo pipefail
+          curl -fL --retry 2 --max-time 240 'https://github.com/nowl-it/AssetRipperCLI/releases/download/v1.0.1/AssetRipper_linux_x64.zip' -o "$RUNNER_TEMP/assetripper.zip"
+          echo "b48292e40948ce2634e9187d4724fb4f45c01fa6f4fea2a5f4775aa611def17b  $RUNNER_TEMP/assetripper.zip" | sha256sum -c -
+          mkdir -p "$RUNNER_TEMP/ar"
+          unzip -q "$RUNNER_TEMP/assetripper.zip" -d "$RUNNER_TEMP/ar"
+          chmod +x "$RUNNER_TEMP/ar/AssetRipper.GUI.Free"
+      - name: Export identical original header twice with only stream presence changed
+        run: |
+          set -euo pipefail
+          for variant in before after; do
+            root="$RUNNER_TEMP/$variant-input/Raft_Data"
+            mkdir -p "$root"
+            cp Raft/Raft_Data/sharedassets29.assets Raft/Raft_Data/globalgamemanagers Raft/Raft_Data/globalgamemanagers.assets "$root/"
+            if [ "$variant" = after ]; then
+              cp Raft/Raft_Data/sharedassets29.assets.resS "$root/"
+            fi
+            timeout 420s "$RUNNER_TEMP/ar/AssetRipper.GUI.Free" --cli \
+              --input "$RUNNER_TEMP/$variant-input" --output "$RUNNER_TEMP/$variant-export" \
+              --mode unity --script-content-level Level1 --ignore-streaming-assets \
+              > "$RUNNER_TEMP/$variant-export.log" 2>&1
+            test -d "$RUNNER_TEMP/$variant-export/ExportedProject/Assets/Mesh"
+          done
+      - name: Compare exported position validity and unchanged Mesh GUIDs
+        run: |
+          python3 scripts/compare_exported_mesh_geometry.py \
+            --before "$RUNNER_TEMP/before-export/ExportedProject" \
+            --after "$RUNNER_TEMP/after-export/ExportedProject" \
+            --ledger "$RUNNER_TEMP/private-collider-ranges.json"
