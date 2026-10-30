@@ -58,3 +58,13 @@ All completed Unity scene recovery is **structural only**: no successful Unity E
 - All parsable inline script references in this sample shared **one GUID value**; it was not among the exported `.meta` GUIDs. This may be an export placeholder or other limitation: **do not interpret this as evidence all source behaviours have one original script**.
 - This proves structural Unity script linkage is **not** recovered by current AssetRipperCLI sample. ILSpy output cannot be copied over without reconstructing script identity, namespaces, serialized fields and appropriate `.meta` files/GUIDs.
 - Next gate: determine whether use of official AssetRipper 2.0, complete script data, or a custom MonoScript mapping/export will preserve distinct source script identities; only then test Unity Editor import.
+
+## Updated diagnosis: script-GUID blocker SOLVED in sample (supersedes previous section)
+
+Evidence: [UnityPy 3,827 MonoScript records](https://github.com/alwansan/raf/actions/runs/41023529350) and [successful script-linked export](https://github.com/alwansan/raf/actions/runs/41023760680).
+
+The previous section documented a missing-GUID state **before the dependency was included**. The original sample omitted **`globalgamemanagers.assets`**, a 0.72 MiB file tracked by regular Git containing 3,827 original `MonoScript` records. The prior `deadbeef` GUID was an AssetRipper export placeholder, not evidence that all original scripts shared one identity.
+
+After including this file and `Managed/*.dll`, the five sample scenes exported with 3,810 source-stub `.cs` files and 3,810 corresponding `.cs.meta` files. All 13,969 `m_Script` references in those five scenes had a matching exported `.cs.meta` GUID (296 distinct GUIDs), with **zero** placeholder uses. This **verifies script GUID linkage in the sample**, but not runtime behavior, compiler correctness, prefab completeness, or the remaining game world.
+
+The next gate is `--script-content-level Level0` C# recovery and comparison with ILSpy, before attempting a Unity 2021.3.45f2 Editor import.
