@@ -42,7 +42,7 @@ jobs:
           set -euo pipefail
           scope='NO'
           if [ "$EVENT_NAME" = 'push' ]; then
-            scope=$(tr -d '\\r\\n' < config/mesh-lfs-scope.txt)
+            scope=$(python3 -c "from pathlib import Path; print(Path('config/mesh-lfs-scope.txt').read_text().strip())")
           elif [ "$DISPATCH_CHOICE" = 'YES - download resources.assets only (~106 MiB)' ]; then
             scope='resources'
           elif [ "$DISPATCH_CHOICE" = 'YES - download both selected LFS files (~217 MiB)' ]; then
