@@ -13,11 +13,14 @@
 
 - [Detailed gated porting roadmap](docs/PORTING_ROADMAP.md)
 - [Verified findings and successfully completed audits](docs/VERIFIED_FINDINGS.md)
+- [REA evaluation and tool choice](docs/REA_EVALUATION.md)
 
 ## Tools and repeatable tests
 
 - [Safe build inventory](scripts/inspect_raft.py) / [Actions workflow](.github/workflows/raft-inventory.yml)
 - [Static Mono metadata analysis](scripts/analyze_managed.py) / [Actions workflow](.github/workflows/raft-managed-audit.yml)
+- [REA 6.8 managed assembly static audit](.github/workflows/raft-rea-smoke.yml) — [successful run](https://github.com/alwansan/raf/actions/runs/41020338080)
+- [REA native boundaries and selected networking methods](.github/workflows/raft-rea-network-audit.yml) — [successful run](https://github.com/alwansan/raf/actions/runs/41020491527)
 - [Official AssetRipper Linux tool installation smoke test](.github/workflows/assetripper-tool-smoke.yml)
 - [AssetRipperCLI tool test](.github/workflows/assetripper-cli-smoke.yml)
 - [243-file sample resource export](.github/workflows/raft-asset-probe.yml) — [successful run](https://github.com/alwansan/raf/actions/runs/41017866546)
