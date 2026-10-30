@@ -9,6 +9,8 @@ on:
       - '.github/workflows/raft-unity-editor-android-import.yml'
       - 'scripts/overlay_ilspy_gameplay.py'
       - 'tests/test_csharp_overlay.py'
+      - 'scripts/adapt_unity_url_codecs.py'
+      - 'tests/test_adapt_unity_url_codecs.py'
       - 'scripts/stage_raft_managed_dlls.py'
       - 'tests/test_stage_raft_managed_dlls.py'
       - 'scripts/rename_conflicting_sdk_asmdefs.py'
@@ -175,7 +177,7 @@ jobs:
             --ilspy "$RUNNER_TEMP/ilspy-src" \
             --report "$RUNNER_TEMP/ilspy-supplement.json" \
             --min-added 500 --apply
-      - name: Restore sixteen original compile-time DLLs without platform-provided UI/TMP/InputSystem assemblies
+      - name: Restore twenty-one original compile-time DLLs without platform-provided UI/TMP/InputSystem assemblies
         shell: bash
         run: |
           set -euo pipefail
@@ -196,6 +198,11 @@ jobs:
           set -euo pipefail
           python3 -m unittest discover -s tests -p test_sdk_asmdef_rename.py -v
           python3 scripts/rename_conflicting_sdk_asmdefs.py --project "$RUNNER_TEMP/project/ExportedProject" --apply
+      - name: Adapt original URL form codecs to Unity .NET Standard
+        shell: bash
+        run: |
+          python3 -m unittest discover -s tests -p test_adapt_unity_url_codecs.py -v
+          python3 scripts/adapt_unity_url_codecs.py --project "$RUNNER_TEMP/project/ExportedProject" --apply
       - name: Downgrade ILSpy CSharp 10 file-scoped namespaces to Unity 2021 CSharp 9
         shell: bash
         run: |

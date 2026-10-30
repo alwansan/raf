@@ -40,12 +40,15 @@ ESSENTIALS=(
     "Unity.Services.RemoteConfig.dll",
     "Unity.Services.Core.Internal.dll",
     "Unity.Services.Core.dll",
+    "PathCreator.dll",
+    "NavMeshComponents.dll",
+    "Tayx.Graphy.dll",
+    "Unity.Analytics.DataPrivacy.dll",
+    "MeshExtension.dll",
 )
 OPTIONAL=(
-    "PathCreator.dll",
     "Sirenix.OdinInspector.Attributes.dll",
     "JBooth.MicroSplat.Core.dll",
-    "Tayx.Graphy.dll",
 )
 def stage(managed:Path,project:Path,*,apply:bool,extended:bool=False)->dict:
     if not managed.is_dir() or not (project/"Assets").is_dir():
