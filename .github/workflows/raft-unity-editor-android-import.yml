@@ -9,6 +9,9 @@ on:
       - '.github/workflows/raft-unity-editor-android-import.yml'
       - 'scripts/overlay_ilspy_gameplay.py'
       - 'tests/test_csharp_overlay.py'
+      - 'android-port/Editor/AndroidNativeBuild.cs'
+      - 'scripts/repair_asset_case_collisions.py'
+      - 'tests/test_repair_asset_case_collisions.py'
       - 'scripts/adapt_unity_url_codecs.py'
       - 'tests/test_adapt_unity_url_codecs.py'
       - 'scripts/stage_raft_managed_dlls.py'
@@ -99,6 +102,11 @@ jobs:
               print("Verified selected LFS asset:",p.name,p.stat().st_size)
           PY
           df -h /
+      - name: Audit original mesh stream requirements without downloading additional LFS
+        shell: bash
+        run: |
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 scripts/audit_mesh_stream_dependencies.py --root Raft/Raft_Data --max-per-file 50000 --out "$RUNNER_TEMP/mesh-stream-audit.json"
       - name: Stage selected Unity game files only, never execute Windows binaries
         shell: bash
         run: |
@@ -218,6 +226,16 @@ jobs:
           python3 scripts/repair_assetripper_stub_classnames.py \
             --assets "$RUNNER_TEMP/project/ExportedProject/Assets" \
             --apply --require-clean --repair-timeline
+      - name: Repair exported asset case collisions while preserving GUID metadata
+        shell: bash
+        run: |
+          python3 -m unittest discover -s tests -p test_repair_asset_case_collisions.py -v
+          python3 scripts/repair_asset_case_collisions.py --project "$RUNNER_TEMP/project/ExportedProject" --apply
+      - name: Stage native ARM64 build entry point without changing original scenes
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/project/ExportedProject/Assets/Editor/RaftAndroid"
+          cp android-port/Editor/AndroidNativeBuild.cs "$RUNNER_TEMP/project/ExportedProject/Assets/Editor/RaftAndroid/"
       - name: Validate reconstructed editor project structure and GUID references
         shell: bash
         run: |
@@ -284,6 +302,8 @@ jobs:
           unityVersion: 2021.3.45f2
           projectPath: unity-candidate
           targetPlatform: Android
+          buildMethod: RaftAndroid.Editor.AndroidNativeBuild.Build
+          androidExportType: androidPackage
           buildName: RaftAndroidExperimental
           buildsPath: builds
           # This workflow reconstructs a Unity project in the workspace after checkout.

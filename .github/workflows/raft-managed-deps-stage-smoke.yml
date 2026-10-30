@@ -7,6 +7,8 @@ on:
       - feature/android-native-port
     paths:
       - '.github/workflows/raft-managed-deps-stage-smoke.yml'
+      - 'scripts/repair_asset_case_collisions.py'
+      - 'tests/test_repair_asset_case_collisions.py'
       - 'scripts/adapt_unity_url_codecs.py'
       - 'tests/test_adapt_unity_url_codecs.py'
       - 'scripts/stage_raft_managed_dlls.py'
@@ -33,6 +35,8 @@ jobs:
           lfs: false
           persist-credentials: false
           fetch-depth: 1
+      - name: Test asset case-collision repair without changing payload or GUID bytes
+        run: python3 -m unittest discover -s tests -p test_repair_asset_case_collisions.py -v
       - name: Test URL codec adaptation without changing metadata or other APIs
         run: python3 -m unittest discover -s tests -p test_adapt_unity_url_codecs.py -v
       - name: Test selective third-party managed DLL staging with synthetic fixtures

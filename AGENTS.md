@@ -1,6 +1,8 @@
 # Raft Android port — autonomous engineering instructions
 
-> **New ChatGPT Work sessions (2026-10-30):** Start with [docs/WORK_SESSION_HANDOFF.md](docs/WORK_SESSION_HANDOFF.md). It contains the current verified Unity compiler state (155 C# diagnostics in run 41063426488), prior run history, toolchain, licenses, Git LFS constraints and autonomous next steps. Some older headings below reflect earlier historical states; always refresh the newest GitHub Actions run first. Do not touch main/zip/Unity-Editor.
+> **New ChatGPT Work sessions (2026-10-30):** Start with [docs/WORK_SESSION_HANDOFF.md](docs/WORK_SESSION_HANDOFF.md). It contains the verified compiler/build history, toolchain, licenses, Git LFS constraints and autonomous next steps. The original 155-error snapshot is historical; read its Work continuation sections for the current state. Some older headings below reflect earlier historical states; always refresh the newest GitHub Actions run first. Do not touch main/zip/Unity-Editor.
+
+> **Latest Work milestone:** Unity run [41071111333](https://github.com/alwansan/raf/actions/runs/41071111333) passed C# compilation and reached Android BuildPipeline, then failed due to unset Android CPU architecture. No APK. Latest fixes configure ARM64/IL2CPP and audit newly exposed mesh/asset import issues; read the end of the handoff before acting on historical error counts.
 
 This repository branch is the working record for reconstructing the Windows Unity game data into a **native arm64 Android build**. Not an original Unity Editor project. See `docs/PORTING_ROADMAP.md`, `docs/VERIFIED_FINDINGS.md`, `docs/MESH_RECOVERY_FINDINGS.md` and `docs/RECONSTRUCTION_STATUS.md`.
 
