@@ -2,8 +2,6 @@ import struct
 import unittest
 from pathlib import Path
 import tempfile
-from types import SimpleNamespace
-from unittest.mock import patch
 from scripts.compare_exported_mesh_geometry import positions, compare, inspect
 
 
@@ -13,12 +11,9 @@ class ExportGeometryTests(unittest.TestCase):
             root = Path(temporary)
             mesh = root / 'Assets/Mesh/test.asset'
             mesh.parent.mkdir(parents=True)
-            mesh.write_text('synthetic')
+            mesh.write_text('Mesh:\n  m_Name: test\n  m_VertexData:\n    m_VertexCount: 0\n')
             mesh.with_suffix('.asset.meta').write_text('guid: ' + 'a' * 32)
-            yaml = SimpleNamespace(safe_load=lambda _: {'Mesh': {
-                'm_Name': 'test', 'm_VertexData': {'m_VertexCount': 0}}})
-            with patch.dict('sys.modules', {'yaml': yaml}):
-                rows, errors = inspect(root, {'test'})
+            rows, errors = inspect(root, {'test'})
             self.assertEqual(errors, {})
             self.assertEqual(rows['test.asset']['guid'], 'a' * 32)
             self.assertEqual(rows['test.asset']['position_status'], 'empty-vertices')

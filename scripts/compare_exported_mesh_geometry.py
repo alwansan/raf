@@ -10,6 +10,19 @@ import re
 import struct
 
 
+def load_mesh_yaml(text):
+    import yaml
+    class MeshLoader(yaml.SafeLoader):
+        def construct_mapping(self, node, deep=False):
+            for key, value in node.value:
+                if key.value in ('_typelessdata', 'm_IndexBuffer') and isinstance(value, yaml.ScalarNode):
+                    value.tag = 'tag:yaml.org,2002:str'
+            return super().construct_mapping(node, deep=deep)
+    text = re.sub(r'(?m)^%[^\n]*\n', '', text)
+    text = re.sub(r'(?m)^--- !u!43 &[^\n]*', '---', text)
+    return yaml.load(text, Loader=MeshLoader)['Mesh']
+
+
 def positions(tree):
     data = tree["m_VertexData"]
     count = data["m_VertexCount"]
@@ -41,16 +54,12 @@ def positions(tree):
 
 
 def inspect(root, wanted):
-    import yaml
     rows = {}
     errors = Counter()
     for path in sorted((root / "Assets/Mesh").glob("*.asset")):
         try:
             text = path.read_text(encoding="utf8")
-            # Unity YAML type tags/directives are irrelevant to this Mesh-only read.
-            text = re.sub(r"(?m)^%[^\n]*\n", "", text)
-            text = re.sub(r"(?m)^--- !u!43 &[^\n]*", "---", text)
-            tree = yaml.safe_load(text)["Mesh"]
+            tree = load_mesh_yaml(text)
             if tree.get("m_Name") not in wanted:
                 continue
             meta = path.with_suffix(path.suffix + ".meta").read_text()

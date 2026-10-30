@@ -8,11 +8,13 @@ on:
       - 'tests/test_probe_collider_stream.py'
       - 'scripts/compare_exported_mesh_geometry.py'
       - 'tests/test_compare_exported_mesh_geometry.py'
+      - 'scripts/repair_exported_mesh_vertices.py'
+      - 'tests/test_repair_exported_mesh_vertices.py'
   workflow_dispatch:
     inputs:
       stream:
         type: choice
-        options: [sharedassets24.assets.resS, sharedassets29.assets.resS]
+        options: [sharedassets24.assets.resS]
         default: sharedassets24.assets.resS
         description: Exactly one original stream to test
       job_id:
@@ -45,12 +47,13 @@ jobs:
       - name: Small synthetic tests and strict scope checks before any LFS
         run: |
           set -euo pipefail
-          case "$PROBE_STREAM" in sharedassets24.assets.resS|sharedassets29.assets.resS) ;; *) exit 1;; esac
+          case "$PROBE_STREAM" in sharedassets24.assets.resS) ;; *) exit 1;; esac
           case "$TARGET_JOB" in ''|*[!0-9]*) exit 1;; esac
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4 PyYAML==6.0.2
           python3 -m unittest discover -s tests -p test_probe_collider_stream.py -v
+          python3 -m unittest discover -s tests -p test_repair_exported_mesh_vertices.py -v
           python3 -m unittest discover -s tests -p test_trace_collision_mesh_sources.py -v
           python3 -m unittest discover -s tests -p test_compare_exported_mesh_geometry.py -v
-          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4 PyYAML==6.0.2
       - name: Reconstruct exact private ranges from the selected completed native log
         env:
           GH_TOKEN: ${{ github.token }}
@@ -110,9 +113,16 @@ jobs:
           timeout 420s "$RUNNER_TEMP/ar/AssetRipper.GUI.Free" --cli \
             --input "$RUNNER_TEMP/after-input" --output "$RUNNER_TEMP/after-export" \
             --mode unity --script-content-level Level1 --ignore-streaming-assets > "$RUNNER_TEMP/after-export.log" 2>&1
+      - name: Restore only vertex payloads in the original export without touching its meta files
+        if: ${{ env.BASELINE_ONLY != 'true' }}
+        run: |
+          python3 -m scripts.repair_exported_mesh_vertices \
+            --target "$RUNNER_TEMP/before-export/ExportedProject" --provider "$RUNNER_TEMP/after-export/ExportedProject" \
+            --snapshot "$RUNNER_TEMP/original-mesh-snapshot" \
+            --ledger "$RUNNER_TEMP/private-collider-ranges.json" --stream "$PROBE_STREAM"
       - name: Compare positions, Mesh GUIDs and complete meta bytes
         if: ${{ env.BASELINE_ONLY != 'true' }}
         run: |
           python3 scripts/compare_exported_mesh_geometry.py \
-            --before "$RUNNER_TEMP/before-export/ExportedProject" --after "$RUNNER_TEMP/after-export/ExportedProject" \
+            --before "$RUNNER_TEMP/original-mesh-snapshot" --after "$RUNNER_TEMP/before-export/ExportedProject" \
             --ledger "$RUNNER_TEMP/private-collider-ranges.json" --stream "$PROBE_STREAM"
