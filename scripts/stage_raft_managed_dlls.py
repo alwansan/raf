@@ -17,9 +17,9 @@ import json
 from pathlib import Path
 import shutil
 
-# Unity 2021/UGUI already contributes UnityEngine.UI; copying the original
-# Windows assembly duplicates the compiler reference (CS1704).
-EDITOR_PROVIDED_ASSEMBLIES = frozenset({"UnityEngine.UI.dll"})
+# Unity 2021 UGUI/TMP packages should supply their own compatible assemblies.
+# Original Windows UI/TMP DLLs conflict with those packages (CS1704).
+EDITOR_PROVIDED_ASSEMBLIES = frozenset({"UnityEngine.UI.dll", "Unity.TextMeshPro.dll"})
 
 ESSENTIALS=(
     "FMODUnity.dll",
@@ -28,7 +28,6 @@ ESSENTIALS=(
     "Unity.Netcode.Runtime.dll",
     "Unity.Netcode.Components.dll",
     "Unity.Networking.Transport.dll",
-    "Unity.TextMeshPro.dll",
     "Newtonsoft.Json.dll",
 )
 OPTIONAL=(
