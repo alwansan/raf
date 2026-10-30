@@ -90,3 +90,10 @@ https://github.com/alwansan/raf/actions/runs/41016983283
 - `dnfile==0.18.0`: pip installation **succeeded** on GitHub Actions in Job 2.
 - AssetRipper 2.0.0 official binary smoke-test workflow: `.github/workflows/assetripper-tool-smoke.yml`; installation/execution result pending at writing.
 - Unity Editor and Android Build Support: not installed (editor project still missing); original game version `2021.3.45f2` available on https://unity.com/releases/editor/whats-new/2021.3.45f2 .
+
+## Tools / automation follow-up (2026-10-30)
+
+- Official AssetRipper v2.0.0 Linux x64: downloaded (~29.4 MiB), SHA-256 verified, executable located as `AssetRipper.GUI.Free`, `--help` succeeds. It exposes web/headless options, not a batch `--cli` command. https://github.com/alwansan/raf/actions/runs/41017427416
+- Third-party `nowl-it/AssetRipperCLI` v1.0.1 Linux x64: downloaded (~127 MiB), SHA-256 verified, executable starts and help includes `--cli`. https://github.com/alwansan/raf/actions/runs/41017535607
+- AssetRipper sample resource probe (non-LFS only): https://github.com/alwansan/raf/actions/runs/41017638608 (outcome pending at this documentation update).
+- These tests execute third-party AssetRipper tools in an isolated CI runner with read-only GitHub permission; **they do not execute Raft.exe or its patched DLLs**. No full game files or proprietary outputs are uploaded.
