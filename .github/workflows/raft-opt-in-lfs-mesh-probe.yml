@@ -1,0 +1,134 @@
+name: Raft targeted LFS mesh restoration (manual opt-in only)
+
+on:
+  workflow_dispatch:
+    inputs:
+      approve_lfs_transfer:
+        description: 'Explicit approval: LFS data download can count toward GitHub bandwidth quota'
+        required: true
+        type: choice
+        options:
+          - 'NO - do not download'
+          - 'YES - download exactly two selected LFS files (~217 MiB)'
+        default: 'NO - do not download'
+
+permissions:
+  contents: read
+
+jobs:
+  targeted-mesh:
+    if: ${{ inputs.approve_lfs_transfer == 'YES - download exactly two selected LFS files (~217 MiB)' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check storage and show predicted download size
+        shell: bash
+        run: |
+          set -euo pipefail
+          df -h /
+          free_kb=$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')
+          test "$free_kb" -gt 20971520
+          echo "User explicitly opted into downloading 227511628 bytes of LFS (two files)."
+          echo "If your LFS bandwidth allotment is exhausted, GitHub may block transfers or bill according to account settings."
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          fetch-depth: 1
+          persist-credentials: true
+      - name: Fetch only the 2 permitted LFS content objects
+        shell: bash
+        run: |
+          set -euo pipefail
+          paths='Raft/Raft_Data/sharedassets0.assets,Raft/Raft_Data/resources.assets'
+          git lfs install --local
+          git lfs fetch origin HEAD --include="$paths" --exclude=''
+          git lfs checkout
+          python3 - <<'PY'
+          from pathlib import Path
+          import re,subprocess,hashlib
+          expected={
+             'Raft/Raft_Data/sharedassets0.assets':115978112,
+             'Raft/Raft_Data/resources.assets':111533516,
+          }
+          for path,size in expected.items():
+              data=Path(path)
+              if data.stat().st_size!=size:
+                  raise SystemExit(f'Unexpected size for {path}: {data.stat().st_size}')
+              ptr=subprocess.check_output(['git','show','HEAD:'+path],text=True)
+              sha=re.search(r'^oid sha256:([0-9a-f]{64})$',ptr,re.M)
+              if not sha:raise SystemExit('No LFS sha256 pointer for '+path)
+              digest=hashlib.file_digest(open(path,'rb'),'sha256').hexdigest()
+              if digest!=sha.group(1): raise SystemExit('LFS hash mismatch for '+path)
+              print(f'Verified selective LFS object: {path} size={size} bytes')
+          PY
+          df -h /
+      - name: Stage complete non-LFS serialized files plus only approved LFS data
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="$RUNNER_TEMP/sandbox/Raft_Data"
+          mkdir -p "$root/Managed"
+          cp Raft/Raft_Data/Managed/*.dll "$root/Managed/"
+          cp Raft/Raft_Data/boot.config "$root/"
+          shopt -s nullglob
+          files=0
+          for source in Raft/Raft_Data/globalgamemanagers Raft/Raft_Data/globalgamemanagers.assets* Raft/Raft_Data/resources.assets* Raft/Raft_Data/sharedassets*.assets* Raft/Raft_Data/level*; do
+            [ -f "$source" ] || continue
+            if head -c 48 "$source" | grep -q '^version https://git-lfs.github.com/spec/v1'; then
+              continue
+            fi
+            cp "$source" "$root/"
+            files=$((files+1))
+          done
+          printf 'Staged %d files for isolated export\n' "$files"
+          du -sh "$root"
+      - name: Verify AssetRipperCLI release checksum and extract
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fL --retry 2 --max-time 240 'https://github.com/nowl-it/AssetRipperCLI/releases/download/v1.0.1/AssetRipper_linux_x64.zip' -o "$RUNNER_TEMP/cli.zip"
+          echo "b48292e40948ce2634e9187d4724fb4f45c01fa6f4fea2a5f4775aa611def17b  $RUNNER_TEMP/cli.zip" | sha256sum -c -
+          mkdir -p "$RUNNER_TEMP/cli"
+          unzip -q "$RUNNER_TEMP/cli.zip" -d "$RUNNER_TEMP/cli"
+          chmod +x "$RUNNER_TEMP/cli/AssetRipper.GUI.Free"
+      - name: Export editor project and compare remaining missing mesh pointers
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 1100s "$RUNNER_TEMP/cli/AssetRipper.GUI.Free" \
+            --cli --input "$RUNNER_TEMP/sandbox" \
+            --output "$RUNNER_TEMP/export" --mode unity \
+            --script-content-level Level1 --ignore-streaming-assets \
+            > "$RUNNER_TEMP/export.log" 2>&1
+          python3 scripts/audit_mesh_references.py \
+            --project "$RUNNER_TEMP/export/ExportedProject" \
+            --out "$RUNNER_TEMP/mesh-after-selective-lfs.json"
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,os,re
+          root=Path(os.environ['RUNNER_TEMP'])/'export/ExportedProject'
+          data=json.load(open(Path(os.environ['RUNNER_TEMP'])/'mesh-after-selective-lfs.json'))
+          scenes=list(root.rglob('*.unity'))
+          metaids=set()
+          for f in root.rglob('*.cs.meta'):
+              m=re.search(r'(?m)^guid:\s*([0-9a-fA-F]{32})',f.read_text(errors='replace')[:500])
+              if m: metaids.add(m.group(1).lower())
+          linked=total=0
+          for scene in scenes:
+              for guid in re.findall(r'm_Script:\s*\{[^\n}]*guid:\s*([a-fA-F0-9]{32})',scene.read_text(errors='replace')):
+                  total+=1
+                  linked+=guid.lower() in metaids
+          mesh=data['by_property'].get('m_Mesh',0)
+          print('Levels:',len(scenes))
+          print('Scripts linked:',linked,'/',total)
+          print('Total deadbeef refs (prior non-LFS: 199156):',data['deadbeef_total'])
+          print('m_Mesh deadbeef refs (prior non-LFS: 94152):',mesh)
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as file:
+              file.write('## Explicitly opted-in 217MiB LFS recovery test\n')
+              file.write(f"- Scenes: {len(scenes)}; script links: {linked}/{total}\n")
+              file.write(f"- All placeholders: before 199156, after {data['deadbeef_total']}\n")
+              file.write(f"- m_Mesh placeholders: before 94152, after {mesh}\n")
+              file.write('No proprietary original assets or source files uploaded or committed.\n')
+          if len(scenes)<35 or not total or total!=linked:
+              raise SystemExit('Unity scene/script linkage regression')
+          PY
