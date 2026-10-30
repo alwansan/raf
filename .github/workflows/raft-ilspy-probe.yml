@@ -1,0 +1,68 @@
+name: Raft Mono C# recovery smoke test with ILSpy
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - '.github/workflows/raft-ilspy-probe.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  mono-decompilation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - name: Disk budget check before downloads
+        run: |
+          df -h /
+          test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')" -gt 20971520
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Install .NET SDK 10 for pinned ILSpy tool
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Install official pinned ILSpyCmd 11.2.0.10050
+        shell: bash
+        run: |
+          set -euo pipefail
+          dotnet --version
+          dotnet tool install ilspycmd --version 11.2.0.10050 --tool-path "$RUNNER_TEMP/ilspy"
+          "$RUNNER_TEMP/ilspy/ilspycmd" --version
+          df -h /
+      - name: Decompile two narrowly selected Mono classes to TEMP only
+        shell: bash
+        run: |
+          set -euo pipefail
+          dll="$GITHUB_WORKSPACE/Raft/Raft_Data/Managed/Assembly-CSharp.dll"
+          mkdir -p "$RUNNER_TEMP/ilspy-private"
+          for t in SaveAndLoad Raft_Network; do
+            echo "Checking decompilation of class $t (no code is logged)"
+            timeout 120s "$RUNNER_TEMP/ilspy/ilspycmd" -t "$t" "$dll" \
+              > "$RUNNER_TEMP/ilspy-private/$t.cs" 2>"$RUNNER_TEMP/ilspy-private/$t.stderr"
+            if [ ! -s "$RUNNER_TEMP/ilspy-private/$t.cs" ]; then
+              echo "Empty C# output: $t"; exit 3
+            fi
+          done
+          python3 - <<'PY'
+          from pathlib import Path
+          import os
+          root=Path(os.environ["RUNNER_TEMP"])/"ilspy-private"
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a",encoding="utf8") as f:
+              f.write("## ILSpy narrow Mono C# decompilation check\n")
+              for typ in ("SaveAndLoad","Raft_Network"):
+                  text=(root/f"{typ}.cs").read_text(encoding="utf8",errors="replace")
+                  lines=text.splitlines()
+                  errs=(root/f"{typ}.stderr").read_text(encoding="utf8",errors="replace")
+                  print(f"{typ}: C# output bytes={len(text.encode())}, lines={len(lines)}, nonempty={bool(text.strip())}, stderr_chars={len(errs)}")
+                  f.write(f"- {typ}: {len(lines)} lines, {len(text.encode())} UTF-8 bytes, stderr chars {len(errs)}\n")
+                  if typ not in text: raise SystemExit(f"Decompiler did not emit expected class {typ}")
+              f.write("No decompiled game source was uploaded or committed. This does not imply Unity project compiles.\n")
+          PY
