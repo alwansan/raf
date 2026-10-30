@@ -30,6 +30,14 @@ class UnityPackagesTests(unittest.TestCase):
         (p/"Unity.TextMeshPro.dll").write_bytes(b"placeholder")
         with self.assertRaises(ValueError):
             ensure(self.root, apply=True)
+    def test_input_version_matches_original_and_rejects_duplicate_dll(self):
+        self.assertEqual(PACKAGES["com.unity.inputsystem"],"1.7.0")
+        plugin=self.root/"Assets/Plugins/RaftManagedReferences"
+        plugin.mkdir(parents=True)
+        (plugin/"Unity.InputSystem.dll").write_bytes(b"fixture")
+        with self.assertRaises(ValueError):
+            ensure(self.root,apply=True)
+
     def test_reject_package_version_override(self):
         self.manifest.write_text(json.dumps({"dependencies": {"com.unity.ugui": "8.0.0"}}))
         with self.assertRaises(ValueError):

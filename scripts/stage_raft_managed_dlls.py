@@ -19,7 +19,7 @@ import shutil
 
 # Unity 2021 UGUI/TMP packages should supply their own compatible assemblies.
 # Original Windows UI/TMP DLLs conflict with those packages (CS1704).
-EDITOR_PROVIDED_ASSEMBLIES = frozenset({"UnityEngine.UI.dll", "Unity.TextMeshPro.dll"})
+EDITOR_PROVIDED_ASSEMBLIES = frozenset({"UnityEngine.UI.dll", "Unity.TextMeshPro.dll", "Unity.InputSystem.dll"})
 
 ESSENTIALS=(
     "FMODUnity.dll",
@@ -29,9 +29,10 @@ ESSENTIALS=(
     "Unity.Netcode.Components.dll",
     "Unity.Networking.Transport.dll",
     "Newtonsoft.Json.dll",
+    # Compilation bridge only; original Steam native transport is not Android-safe.
+    "com.rlabrecque.steamworks.net.dll",
 )
 OPTIONAL=(
-    "com.rlabrecque.steamworks.net.dll",
     "PathCreator.dll",
     "Sirenix.OdinInspector.Attributes.dll",
     "JBooth.MicroSplat.Core.dll",

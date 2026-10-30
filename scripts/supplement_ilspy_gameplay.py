@@ -31,7 +31,7 @@ def supplement(project: Path, ilspy: Path, *, apply: bool) -> dict:
     # No duplicate filename additions: preserve every original Unity .cs and .cs.meta path,
     # regardless of whether an earlier overlay could not match a source namespace.
     def identity(path):
-        text=path.read_text(encoding="utf8",errors="replace")
+        text=path.read_text(encoding="utf-8-sig",errors="replace")
         match=re.search(r"(?m)^\s*namespace\s+([\w.]+)\s*(?:[;{]|$)",text)
         return (path.name, match.group(1) if match else "")
     existing={identity(p) for p in scripts.rglob("*.cs")}

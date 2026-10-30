@@ -14,6 +14,7 @@ import re
 import sys
 
 def get_namespace(text):
+    text=text.lstrip("\ufeff")
     match=re.search(r"(?m)^\s*namespace\s+([\w.]+)\s*(?:[;{]|$)",text)
     return match.group(1) if match else ""
 
@@ -41,6 +42,9 @@ def map_sources(project:Path, decompiled:Path, apply:bool) -> dict:
         "ilspy_samples":[str(p.relative_to(decompiled)) for p in ilspy_files[:8]],
         "common_unique_names":0,
         "replacements":0,
+        "source_files_with_bom":sum(p.read_bytes().startswith(b"\xef\xbb\xbf") for p in ilspy_files),
+        "recovered_generic_sources":0,
+        "recovered_interface_sources":0,
         "bytes_before":0,
         "bytes_after":0,
         "ambiguous_names":0,
@@ -85,6 +89,10 @@ def map_sources(project:Path, decompiled:Path, apply:bool) -> dict:
             continue
         prior=target.stat().st_size
         report["replacements"]+=1
+        if re.search(r"\b(?:class|struct|interface)\s+"+re.escape(stem)+r"\s*<",source):
+            report["recovered_generic_sources"]+=1
+        if re.search(r"\binterface\s+"+re.escape(stem)+r"\b",source):
+            report["recovered_interface_sources"]+=1
         report["bytes_before"]+=prior
         report["bytes_after"]+=len(source.encode("utf8"))
         if name in {"Raft_Network.cs","SaveAndLoad.cs","GameManager.cs","SteamManager.cs"}:
@@ -107,7 +115,7 @@ if __name__=="__main__":
     args.report.write_text(json.dumps(data,indent=2)+"\n",encoding="utf8")
     for k in ("asset_csharp_files","ilspy_csharp_files","asset_csharp_with_metas",
               "asset_target_paths_containing_assembly_csharp","common_unique_names",
-              "replacements","bytes_before","bytes_after","ambiguous_names",
+              "replacements","source_files_with_bom","recovered_generic_sources","recovered_interface_sources","bytes_before","bytes_after","ambiguous_names",
               "unmatched","missing_meta","nonclass_sources","namespace_mismatches","apply"):
         print(k+":",data[k])
     print("Representative replacement sizes:",data["examples"])

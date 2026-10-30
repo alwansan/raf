@@ -18,6 +18,8 @@ class StageManagedDllTests(unittest.TestCase):
         result=stage(self.managed,self.project,apply=True)
         self.assertEqual(result["staged"],len(ESSENTIALS))
         self.assertNotIn("UnityEngine.CoreModule.dll",ESSENTIALS)
+        self.assertIn("com.rlabrecque.steamworks.net.dll",ESSENTIALS)
+        self.assertIn("Unity.InputSystem.dll",EDITOR_PROVIDED_ASSEMBLIES)
         self.assertTrue(EDITOR_PROVIDED_ASSEMBLIES.isdisjoint(ESSENTIALS+OPTIONAL))
         self.assertFalse((self.project/"Assets/Plugins/RaftManagedReferences/UnityEngine.UI.dll").exists())
         self.assertFalse((self.project/"Assets/Plugins/RaftManagedReferences/Unity.TextMeshPro.dll").exists())

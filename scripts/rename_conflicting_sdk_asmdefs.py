@@ -19,6 +19,7 @@ def reconcile(project:Path,*,apply:bool)->dict:
         packages=json.loads(manifest.read_text(encoding="utf8")).get("dependencies",{})
         if "com.unity.ugui" in packages:dlls.add("UnityEngine.UI")
         if "com.unity.textmeshpro" in packages:dlls.add("Unity.TextMeshPro")
+        if "com.unity.inputsystem" in packages:dlls.add("Unity.InputSystem")
     rows=[]
     for file in sorted((assets/"Scripts").rglob("*.asmdef")):
         data=json.loads(file.read_text(encoding="utf8"))

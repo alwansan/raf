@@ -88,6 +88,14 @@ class OverlaySafetyTests(unittest.TestCase):
         self.assertEqual(target.read_text(),source)
         self.assertEqual(meta.read_bytes(),before)
 
+    def test_utf8_bom_before_namespace_does_not_hide_interface(self):
+        target,_,_=self.fixture()
+        source="\ufeffnamespace RaftWorld { public interface Sample<T> { T Get(); } }"
+        (self.ilspy/"Sample.cs").write_text(source,encoding="utf8")
+        result=map_sources(self.project,self.ilspy,True)
+        self.assertEqual(result["replacements"],1)
+        self.assertEqual(target.read_text(encoding="utf8"),source)
+
     def test_refuse_other_assemblies(self):
         target,stub,_=self.fixture(asm="PlayFab")
         result=map_sources(self.project,self.ilspy,True)

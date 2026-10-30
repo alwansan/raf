@@ -11,6 +11,8 @@ from pathlib import Path
 PACKAGES = {
     "com.unity.ugui": "1.0.0",
     "com.unity.textmeshpro": "3.0.6",
+    # Original Unity.InputSystem.dll metadata reports assembly version 1.7.0.0.
+    "com.unity.inputsystem": "1.7.0",
 }
 
 def ensure(project: Path, *, apply: bool) -> dict:
@@ -33,7 +35,7 @@ def ensure(project: Path, *, apply: bool) -> dict:
             changed[name] = version
     # Do not stage prebuilt versions of these Unity-owned assemblies as plugins.
     installed = project / "Assets" / "Plugins" / "RaftManagedReferences"
-    for dll in ("UnityEngine.UI.dll", "Unity.TextMeshPro.dll"):
+    for dll in ("UnityEngine.UI.dll", "Unity.TextMeshPro.dll", "Unity.InputSystem.dll"):
         if (installed / dll).exists():
             raise ValueError(f"UI package conflicts with staged Windows DLL: {dll}")
     if apply and changed:

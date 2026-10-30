@@ -45,6 +45,23 @@ class ManagedAssemblyRenameTests(unittest.TestCase):
             self.assertFalse(json.loads(file.read_text())["autoReferenced"])
             self.assertEqual(met.read_text(),"guid: abcdef0123456789abcdef0123456789")
 
+    def test_input_package_supersedes_generated_input_assembly(self):
+        with tempfile.TemporaryDirectory() as d:
+            project=Path(d)
+            (project/"Assets/Plugins/RaftManagedReferences").mkdir(parents=True)
+            (project/"Packages").mkdir()
+            (project/"Packages/manifest.json").write_text(json.dumps({"dependencies":{"com.unity.inputsystem":"1.7.0"}}))
+            root=project/"Assets/Scripts/Unity.InputSystem"
+            root.mkdir(parents=True)
+            asm=root/"Unity.InputSystem.asmdef"
+            asm.write_text('{"name":"Unity.InputSystem","autoReferenced":true}')
+            meta=asm.with_suffix(".asmdef.meta")
+            meta.write_bytes(b"guid: 0123456789abcdef0123456789abcdef")
+            before=meta.read_bytes()
+            self.assertEqual(reconcile(project,apply=True)["renamed"],1)
+            self.assertFalse(json.loads(asm.read_text())["autoReferenced"])
+            self.assertEqual(meta.read_bytes(),before)
+
     def test_nonconflicting_asmdef_unchanged(self):
         with tempfile.TemporaryDirectory() as d:
             project=Path(d)
