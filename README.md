@@ -55,3 +55,7 @@
 ### Reconstructable gameplay code integration
 
 [Verified CI run](https://github.com/alwansan/raf/actions/runs/41024504209) safely overlaid **1,568** name-and-namespace-matched ILSpy gameplay C# files onto AssetRipper's original-script-GUID-preserving export. All **13,969/13,969** script refs in the five-scene sample remained valid. Six fixture-only overlay safety tests passed. This is a **temporary local build-time reconstruction technique**, not a distributable or Unity-compiling game project. See [reconstruction status](docs/RECONSTRUCTION_STATUS.md). A separate [all 40 levels check](.github/workflows/raft-all-scene-links.yml) broadens scene coverage without downloading Git LFS.
+
+### Forty-scene serialized script reference gate
+
+[All levels passed a script-link audit](https://github.com/alwansan/raf/actions/runs/41024647631): `level0..level39` exported **40 Unity scenes** with **64,642/64,642** `m_Script` GUID uses matching exported `.cs.meta` files and no placeholder identifiers. This is a serialized scene linkage milestone, not a runnable game or APK. The full set of other asset dependencies is still being audited without LFS downloads.
