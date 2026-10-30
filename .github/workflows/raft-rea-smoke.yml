@@ -58,9 +58,7 @@ jobs:
           set +e
           timeout 180s "$REA" inspect-managed-artifact \
             "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed/Assembly-CSharp.dll" \
-            --detail summary \
-            --evidence-bundle "$RUNNER_TEMP/rea-evidence/artifact.json" \
-            --json > "$RUNNER_TEMP/rea-managed-summary.json" 2> "$RUNNER_TEMP/rea-error.log"
+            --format json > "$RUNNER_TEMP/rea-managed-summary.json" 2> "$RUNNER_TEMP/rea-error.log"
           code=$?
           set -e
           echo "REA exit code: $code"
