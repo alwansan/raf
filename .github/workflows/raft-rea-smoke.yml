@@ -1,0 +1,73 @@
+name: REA 6.8 managed-code static smoke audit
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - '.github/workflows/raft-rea-smoke.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  managed-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - name: Check storage and preexisting versions
+        run: |
+          df -h /
+          df -Pk "$RUNNER_TEMP"
+          free_kb=$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')
+          test "$free_kb" -gt 20971520
+      - name: Checkout without LFS
+        uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Install supported pinned Node.js version
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.22.2
+      - name: Download and install official REA npm package 6.8.0
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --version
+          npm --version
+          mkdir -p "$RUNNER_TEMP/rea"
+          npm install --prefix "$RUNNER_TEMP/rea" --no-audit --no-fund --loglevel=error rea-agents@6.8.0
+          npm ls --prefix "$RUNNER_TEMP/rea" rea-agents --depth=0
+          df -h /
+      - name: Inspect REA managed commands
+        shell: bash
+        run: |
+          set -euo pipefail
+          REA="$RUNNER_TEMP/rea/node_modules/.bin/rea"
+          "$REA" --version
+          "$REA" inspect-managed-artifact --help | head -85
+      - name: Analyze game managed metadata without running game DLL
+        shell: bash
+        run: |
+          set -euo pipefail
+          REA="$RUNNER_TEMP/rea/node_modules/.bin/rea"
+          mkdir -p "$RUNNER_TEMP/rea-evidence"
+          timeout 180s "$REA" inspect-managed-artifact \
+            "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed/Assembly-CSharp.dll" \
+            --detail summary \
+            --evidence-bundle "$RUNNER_TEMP/rea-evidence/artifact.json" \
+            --json > "$RUNNER_TEMP/rea-managed-summary.json"
+          python3 - <<'PY'
+          import json,os
+          p=os.path.join(os.environ['RUNNER_TEMP'],'rea-managed-summary.json')
+          data=json.load(open(p,encoding='utf-8'))
+          print('REA parser finished; top-level JSON fields:', list(data)[:30] if isinstance(data,dict) else type(data).__name__)
+          print('Result file size:',os.stat(p).st_size,'bytes')
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a',encoding='utf-8') as out:
+              out.write('## REA 6.8 static managed analysis succeeded\n')
+              out.write('Analyzed Mono metadata only; no binary execution, no LFS downloads, no uploaded decompilation.\n')
+              out.write('Result fields: '+', '.join(map(str,list(data)[:30] if isinstance(data,dict) else []))+'\n')
+          PY
