@@ -153,6 +153,13 @@ jobs:
             --ilspy "$RUNNER_TEMP/ilspy-src" \
             --report "$RUNNER_TEMP/overlay-report.json" \
             --apply
+      - name: Downgrade ILSpy CSharp 10 file-scoped namespaces to Unity 2021 CSharp 9
+        shell: bash
+        run: |
+          python3 -m unittest discover -s tests -p test_csharp_namespace_compat.py -v
+          python3 scripts/normalize_csharp_namespaces.py \
+            --root "$RUNNER_TEMP/project/ExportedProject/Assets" \
+            --apply --require-clean
       - name: Repair 79 invalid AssetRipper package stub class names, retain Unity GUIDs
         shell: bash
         run: |
