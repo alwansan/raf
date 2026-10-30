@@ -20,6 +20,7 @@ class StageManagedDllTests(unittest.TestCase):
         self.assertNotIn("UnityEngine.CoreModule.dll",ESSENTIALS)
         self.assertTrue(EDITOR_PROVIDED_ASSEMBLIES.isdisjoint(ESSENTIALS+OPTIONAL))
         self.assertFalse((self.project/"Assets/Plugins/RaftManagedReferences/UnityEngine.UI.dll").exists())
+        self.assertFalse((self.project/"Assets/Plugins/RaftManagedReferences/Unity.TextMeshPro.dll").exists())
         for name in ESSENTIALS:
             self.assertEqual((self.project/"Assets/Plugins/RaftManagedReferences"/name).read_bytes(),
                              (self.managed/name).read_bytes())
