@@ -105,18 +105,10 @@ On a checkout **without Git LFS** and sampling at most 80 Mesh objects per seria
 
 Source streams, original Unity geometry and collisions remain distinct from serialized GUID reference linkage. Before expanding costly LFS retrieval, use the range audit to prioritize physically absent or truncated `.resS` content and separately check Unity collider import warnings.
 
-## Exact non-finite source ranges — Work continuation
+## Work: verified original geometry and absent-stream export defect
 
-[Range audit 41124553138](https://github.com/alwansan/raf/actions/runs/41124553138) passed on commit `5b59f402`: 159 distinct non-finite-error names extracted, no header parse errors or rejected advertised ranges. The private ledger preserves original path IDs, offset/size, original LFS SHA256 and ambiguity; public output contains aggregate counts only.
-
-| Stream prefix | Matched non-finite names | Unique referenced Mesh bytes |
-|---|---:|---:|
-| sharedassets24 | 15 | 890800 |
-| sharedassets25 | 13 | 629888 |
-| sharedassets29 | 22 | 2210584 |
-| sharedassets30 | 19 | 1159296 |
-| sharedassets34 | 24 | 1302336 |
-| sharedassets35 | 34 | 2994520 |
-| sharedassets6 | 3 | 106176 |
-
-These are per-provider name counts, not proven fixes. Range bytes merge overlaps and are not downloadable LFS object sizes. The source-only [one-stream experiment 41124735861](https://github.com/alwansan/raf/actions/runs/41124735861) is queued at this checkpoint, selecting only sharedassets29.assets.resS (295782704 bytes) and validating SHA256/size before checking original decoded positions and triangle indices. It does not test AssetRipper or Unity cooking. Read its result before spending another transfer; do not infer success from scheduling.
+- [Source decoding 41124735861](https://github.com/alwansan/raf/actions/runs/41124735861) passed: checksum/size verified sharedassets29.assets.resS (295782704 bytes), 25 original objects covering 22 failed names, zero non-finite vertices, invalid triangle indices, count mismatches or decode errors.
+- Recovered-stream exports in [41125254178](https://github.com/alwansan/raf/actions/runs/41125254178) and [41125609994](https://github.com/alwansan/raf/actions/runs/41125609994) each contained 25 matching Mesh assets with valid finite positions. Both overall comparisons failed because the initial analyzer could not classify the baseline's empty typeless buffers; no paired GUID comparison passed.
+- [Baseline-only export 41125893623](https://github.com/alwansan/raf/actions/runs/41125893623) then passed with corrected null-buffer classification: **25 matching exports all had truncated position payloads**, no YAML parse errors. All LFS fetch/decode stages were skipped. The defect for this selected group is now tied to absent streamed vertex payloads in exporter inputs; Unity cooking remains to be measured.
+- Native workflow at commit `eef3546eccdcac68afa541e99368e5232b7d9925` adds the verified stream only for deliberate native mode. [Native correction test 41126157041](https://github.com/alwansan/raf/actions/runs/41126157041) has passed license preflight and started reconstruction; no new final Unity/APK result yet. It selects 633443656 LFS bytes total (existing three source headers + this one stream).
+- Original sources, scenes and .meta files were not rewritten by these diagnostics; no collider disabled or synthesized. Exact before/after generated Mesh GUID equality is not established. Local affected tests: 17/17.
