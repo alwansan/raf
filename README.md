@@ -14,6 +14,7 @@
 - [Detailed gated porting roadmap](docs/PORTING_ROADMAP.md)
 - [Verified findings and successfully completed audits](docs/VERIFIED_FINDINGS.md)
 - [REA evaluation and tool choice](docs/REA_EVALUATION.md)
+- [Latest tested reconstruction state, code export and linkage blockers](docs/RECONSTRUCTION_STATUS.md)
 - [Android phone-hosted network compatibility and migration design](docs/NETWORK_COMPATIBILITY.md)
 
 ## Tools and repeatable tests
@@ -39,6 +40,7 @@
 
 - Never execute the included game EXE or untrusted patched Windows binaries in CI.
 - All existing analysis CI runs skip Git LFS downloads on purpose.
-- No working Android APK or complete restorable Unity project has been produced.
+- ILSpy full Mono export succeeded (2,394 .cs files / 251,725 source lines, TEMP only); five exported Unity scenes contain many unresolved script references.
+- **No working Android APK or complete restorable Unity project has been produced.**
 - Original Raft game files are commercial third-party content. Do not publish/distribute raw assets, decompiled source or full APK without appropriate permissions; a public repository containing such files can be subject to removal.
 - GitHub LFS downloads may consume paid bandwidth; check billing before expanding data-heavy tests.
