@@ -42,3 +42,10 @@ This repository branch is the working record for reconstructing the Windows Unit
 - [Three targeted LFS objects](https://github.com/alwansan/raf/actions/runs/41028697081) eliminated ALL `deadbeef` placeholders across exported scenes: **0** missing sentinel references, including **0** `m_Mesh`, with 40 scenes and 64,642/64,642 script links.
 - [Full ILSpy Mono source diagnostic net8 compile](https://github.com/alwansan/raf/actions/runs/41028495873) passed after suppressing only legacy BinaryFormatter obsolete errors for the experiment. [netstandard2.1 separately FAILED](https://github.com/alwansan/raf/actions/runs/41028896726) due to framework reference mismatches; do not mistake the net8 result for Unity Editor/Android compilation.
 - The next concrete milestone is an integrated Unity Editor project build candidate combining those 3 LFS asset containers and GUID-preserving ILSpy source overlay; then real Editor import/compile. Check `.resS` payload fidelity before calling graphics usable.
+
+## Current state to carry forward
+
+- [Integrated Unity project candidate succeeded structurally](https://github.com/alwansan/raf/actions/runs/41029351916): 40 Unity scenes, 3,811 CSharp files/metas, 64,642 script links, **0 deadbeef scene placeholders**, **1,568** original game code overlays. Did **not** run Unity Editor or compile an APK.
+- [Android offline platform adapter compiled + 7/7 tests](https://github.com/alwansan/raf/actions/runs/41029669318) in `android-port/Runtime/Platform`, not yet wired to game.
+- [Unity license-gated import test](https://github.com/alwansan/raf/actions/runs/41030164120) checked the repository's activation secrets, found them unavailable and skipped all heavy work. **Unity 2021.3.45f2 activation remains a real prerequisite for genuine Android export**; never fabricate license credentials or claim an APK.
+- At least 278/724 sampled Unity Mesh assets point to external `.resS` stream content, so mesh link completeness is not visual fidelity completeness. LFS default reset to NO, avoid billing surprises.
