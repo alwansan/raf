@@ -84,6 +84,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--root", required=True, type=Path)
     parser.add_argument("--ledger", required=True, type=Path)
-    parser.add_argument("--stream", choices=["sharedassets29.assets.resS"], required=True)
+    parser.add_argument("--stream", choices=["sharedassets29.assets.resS", "sharedassets24.assets.resS"], required=True)
     args = parser.parse_args()
     probe(args.root, json.loads(args.ledger.read_text()), args.stream)

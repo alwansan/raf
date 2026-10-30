@@ -48,3 +48,9 @@ class ExportGeometryTests(unittest.TestCase):
         self.assertEqual(result["common_meta_guid_changes"], 1)
         self.assertEqual(result["before_nonfinite_meshes"], 1)
         self.assertEqual(result["after_nonfinite_meshes"], 0)
+
+    def test_same_guid_with_changed_meta_bytes_is_visible(self):
+        result = compare({"a": {"guid": "a", "meta_sha256": "old", "vertices": 3, "nonfinite": 0}},
+                         {"a": {"guid": "a", "meta_sha256": "new", "vertices": 3, "nonfinite": 0}})
+        self.assertEqual(result["common_meta_guid_changes"], 0)
+        self.assertEqual(result["common_meta_byte_changes"], 1)

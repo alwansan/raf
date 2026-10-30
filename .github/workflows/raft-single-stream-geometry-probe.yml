@@ -9,6 +9,19 @@ on:
       - 'scripts/compare_exported_mesh_geometry.py'
       - 'tests/test_compare_exported_mesh_geometry.py'
   workflow_dispatch:
+    inputs:
+      stream:
+        type: choice
+        options: [sharedassets24.assets.resS, sharedassets29.assets.resS]
+        default: sharedassets24.assets.resS
+        description: Exactly one original stream to test
+      job_id:
+        default: '124305154603'
+        description: Completed native log used to select actually failing colliders
+      baseline_only:
+        type: boolean
+        default: false
+        description: Inspect missing-stream baseline without any LFS transfer
 permissions:
   contents: read
   actions: read
@@ -20,53 +33,45 @@ jobs:
     if: ${{ github.ref == 'refs/heads/feature/android-native-port' && (github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[raft-stream-probe]') || contains(github.event.head_commit.message, '[raft-export-baseline]')) }}
     runs-on: ubuntu-24.04
     timeout-minutes: 25
+    env:
+      PROBE_STREAM: ${{ inputs.stream || 'sharedassets24.assets.resS' }}
+      TARGET_JOB: ${{ inputs.job_id || '124305154603' }}
+      BASELINE_ONLY: ${{ inputs.baseline_only || contains(github.event.head_commit.message, '[raft-export-baseline]') }}
     steps:
       - uses: actions/checkout@v4
         with:
           lfs: false
           persist-credentials: true
-      - name: Small synthetic tests before any LFS
+      - name: Small synthetic tests and strict scope checks before any LFS
         run: |
+          set -euo pipefail
+          case "$PROBE_STREAM" in sharedassets24.assets.resS|sharedassets29.assets.resS) ;; *) exit 1;; esac
+          case "$TARGET_JOB" in ''|*[!0-9]*) exit 1;; esac
           python3 -m unittest discover -s tests -p test_probe_collider_stream.py -v
           python3 -m unittest discover -s tests -p test_trace_collision_mesh_sources.py -v
           python3 -m unittest discover -s tests -p test_compare_exported_mesh_geometry.py -v
           python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4 PyYAML==6.0.2
-      - name: Reconstruct exact private range ledger from existing completed log
+      - name: Reconstruct exact private ranges from the selected completed native log
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          gh api --allow-escape-sequences --method GET "repos/$GITHUB_REPOSITORY/actions/jobs/124205309687/logs" > "$RUNNER_TEMP/native-completed.log"
+          gh api --allow-escape-sequences --method GET "repos/$GITHUB_REPOSITORY/actions/jobs/$TARGET_JOB/logs" > "$RUNNER_TEMP/native-completed.log"
           python3 scripts/trace_collision_mesh_sources.py --root Raft/Raft_Data \
-            --log "$RUNNER_TEMP/native-completed.log" \
-            --details-out "$RUNNER_TEMP/private-collider-ranges.json"
-      - name: Enforce one-source transfer and storage bounds before fetch
-        if: ${{ !contains(github.event.head_commit.message, '[raft-export-baseline]') }}
-        run: |
+            --log "$RUNNER_TEMP/native-completed.log" --details-out "$RUNNER_TEMP/private-collider-ranges.json"
           python3 - <<'PY'
           import json, os, shutil
           from pathlib import Path
           ledger=json.loads((Path(os.environ['RUNNER_TEMP'])/'private-collider-ranges.json').read_text())
-          rows=[p for p in ledger['providers'] if p['stream']=='sharedassets29.assets.resS']
-          assert len(rows)==1 and rows[0]['lfs_declared_bytes']==295782704
+          stream=os.environ['PROBE_STREAM']
+          expected={'sharedassets24.assets.resS':301743760,'sharedassets29.assets.resS':295782704}
+          rows=[p for p in ledger['providers'] if p['stream']==stream]
+          assert len(rows)==1 and rows[0]['lfs_declared_bytes']==expected[stream]
           assert rows[0]['distinct_names']>0 and not ledger['rejected_rows']
           assert shutil.disk_usage(os.environ['RUNNER_TEMP']).free>3*1024**3
-          print('Verified metadata scope: one original LFS object, 295782704 bytes')
+          print('Verified one-source scope:',stream,expected[stream])
           PY
-          git lfs install --local
-          git lfs fetch origin HEAD --include='Raft/Raft_Data/sharedassets29.assets.resS' --exclude=''
-          git lfs checkout Raft/Raft_Data/sharedassets29.assets.resS
-      - name: Verify source bytes and decode only previously failing collider meshes
-        if: ${{ !contains(github.event.head_commit.message, '[raft-export-baseline]') }}
-        run: |
-          python3 scripts/probe_collider_stream.py --root Raft/Raft_Data \
-            --ledger "$RUNNER_TEMP/private-collider-ranges.json" \
-            --stream sharedassets29.assets.resS
-      - name: Report scope without publishing game content
-        if: ${{ !contains(github.event.head_commit.message, '[raft-export-baseline]') }}
-        run: |
-          echo 'Original source geometry experiment completed; inspect RAFT_VERIFIED_SOURCE_GEOMETRY. This is not AssetRipper/Unity cooking validation or an APK.' >> "$GITHUB_STEP_SUMMARY"
-      - name: Obtain checksum-pinned exporter for focused before-after experiment
+      - name: Obtain checksum-pinned exporter before any LFS transfer
         run: |
           set -euo pipefail
           curl -fL --retry 2 --max-time 240 'https://github.com/nowl-it/AssetRipperCLI/releases/download/v1.0.1/AssetRipper_linux_x64.zip' -o "$RUNNER_TEMP/assetripper.zip"
@@ -74,36 +79,40 @@ jobs:
           mkdir -p "$RUNNER_TEMP/ar"
           unzip -q "$RUNNER_TEMP/assetripper.zip" -d "$RUNNER_TEMP/ar"
           chmod +x "$RUNNER_TEMP/ar/AssetRipper.GUI.Free"
-      - name: Export identical original header twice with only stream presence changed
+      - name: Export and validate missing-stream baseline BEFORE fetching LFS
         run: |
           set -euo pipefail
-          variants='before after'
-          if [ "$BASELINE_ONLY" = true ]; then variants='before'; fi
-          for variant in $variants; do
-            root="$RUNNER_TEMP/$variant-input/Raft_Data"
-            mkdir -p "$root"
-            cp Raft/Raft_Data/sharedassets29.assets Raft/Raft_Data/globalgamemanagers Raft/Raft_Data/globalgamemanagers.assets "$root/"
-            if [ "$variant" = after ]; then
-              cp Raft/Raft_Data/sharedassets29.assets.resS "$root/"
-            fi
-            timeout 420s "$RUNNER_TEMP/ar/AssetRipper.GUI.Free" --cli \
-              --input "$RUNNER_TEMP/$variant-input" --output "$RUNNER_TEMP/$variant-export" \
-              --mode unity --script-content-level Level1 --ignore-streaming-assets \
-              > "$RUNNER_TEMP/$variant-export.log" 2>&1
-            test -d "$RUNNER_TEMP/$variant-export/ExportedProject/Assets/Mesh"
-          done
-        env:
-          BASELINE_ONLY: ${{ contains(github.event.head_commit.message, '[raft-export-baseline]') }}
-      - name: Compare exported position validity and unchanged Mesh GUIDs
-        if: ${{ !contains(github.event.head_commit.message, '[raft-export-baseline]') }}
-        run: |
+          root="$RUNNER_TEMP/before-input/Raft_Data"
+          mkdir -p "$root"
+          cp "Raft/Raft_Data/${PROBE_STREAM%.resS}" Raft/Raft_Data/globalgamemanagers Raft/Raft_Data/globalgamemanagers.assets "$root/"
+          timeout 420s "$RUNNER_TEMP/ar/AssetRipper.GUI.Free" --cli \
+            --input "$RUNNER_TEMP/before-input" --output "$RUNNER_TEMP/before-export" \
+            --mode unity --script-content-level Level1 --ignore-streaming-assets > "$RUNNER_TEMP/before-export.log" 2>&1
           python3 scripts/compare_exported_mesh_geometry.py \
             --before "$RUNNER_TEMP/before-export/ExportedProject" \
-            --after "$RUNNER_TEMP/after-export/ExportedProject" \
-            --ledger "$RUNNER_TEMP/private-collider-ranges.json"
-      - name: Inspect baseline without any LFS transfer
-        if: ${{ contains(github.event.head_commit.message, '[raft-export-baseline]') }}
+            --ledger "$RUNNER_TEMP/private-collider-ranges.json" --stream "$PROBE_STREAM"
+      - name: Fetch exactly the prevalidated source stream
+        if: ${{ env.BASELINE_ONLY != 'true' }}
+        run: |
+          set -euo pipefail
+          git lfs install --local
+          git lfs fetch origin HEAD --include="Raft/Raft_Data/$PROBE_STREAM" --exclude=''
+          git lfs checkout "Raft/Raft_Data/$PROBE_STREAM"
+          python3 scripts/probe_collider_stream.py --root Raft/Raft_Data \
+            --ledger "$RUNNER_TEMP/private-collider-ranges.json" --stream "$PROBE_STREAM"
+      - name: Export identical header with the checksum-verified stream
+        if: ${{ env.BASELINE_ONLY != 'true' }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/after-input/Raft_Data"
+          cp -a "$RUNNER_TEMP/before-input/Raft_Data/." "$RUNNER_TEMP/after-input/Raft_Data/"
+          cp "Raft/Raft_Data/$PROBE_STREAM" "$RUNNER_TEMP/after-input/Raft_Data/"
+          timeout 420s "$RUNNER_TEMP/ar/AssetRipper.GUI.Free" --cli \
+            --input "$RUNNER_TEMP/after-input" --output "$RUNNER_TEMP/after-export" \
+            --mode unity --script-content-level Level1 --ignore-streaming-assets > "$RUNNER_TEMP/after-export.log" 2>&1
+      - name: Compare positions, Mesh GUIDs and complete meta bytes
+        if: ${{ env.BASELINE_ONLY != 'true' }}
         run: |
           python3 scripts/compare_exported_mesh_geometry.py \
-            --before "$RUNNER_TEMP/before-export/ExportedProject" \
-            --ledger "$RUNNER_TEMP/private-collider-ranges.json"
+            --before "$RUNNER_TEMP/before-export/ExportedProject" --after "$RUNNER_TEMP/after-export/ExportedProject" \
+            --ledger "$RUNNER_TEMP/private-collider-ranges.json" --stream "$PROBE_STREAM"
