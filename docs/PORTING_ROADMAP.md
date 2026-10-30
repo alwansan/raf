@@ -17,7 +17,7 @@
 - No `Assets/`, `ProjectSettings/`, or `Packages/` Unity **editor project** at repository root.
 - Native dependencies seen: Steamworks.NET, Steam API (Windows), Microsoft Party/Xbox libraries (Windows), FMOD Studio, PlayFab, Unity Purchasing, Odin, MicroSplat, NewtonSoft JSON, custom DLLs. Their precise usages are unverified.
 - Modified/third-party binaries in the distribution: OnlineFix64.dll, SteamOverlay64.dll, StubDRM64.dll. Treat them as **untrusted**; never run them in CI or transfer them to Android.
-- Engine exact version, binary completeness, real Mono assembly type structure, material/shader fidelity, LFS availability, and Unity licensing: **not yet verified**.
+- Exact Unity version **2021.3.45f2** verified via GitHub Actions; managed metadata: 3032 types, 19512 methods, 16920 fields, 155 P/Invoke declarations. Binary completeness, source-code recovery fidelity, material/shader fidelity, LFS availability, and Unity build licensing remain **unverified**.
 
 ### Critical rights/billing checkpoint
 
@@ -41,7 +41,7 @@ Do not claim a full port until a reproducible APK actually runs on the test phon
 4. Record confirmed Unity editor engine version, Mono / IL2CPP status, file hashes, plugin manifest and original archive provenance.
 5. Evaluate whether original clean retail game distribution is available: skip and quarantine OnlineFix-like binaries.
 
-**Pass:** inventory JSON, verified version and at least one readable asset/assembly. If fail: pause full asset recovery.
+**Current result:** inventory JSON and exact engine version verified; Mono assembly metadata verified. LFS object retrieval and Unity asset round-trip still pending. If those fail: pause full asset recovery.
 
 ### G1 — Managed-code and content dependency map
 
@@ -85,7 +85,7 @@ For each subsystem: compile, integration test, device logs, CPU/GPU memory profi
 ### G5 — New mobile multiplayer, not original Steam multiplayer
 
 1. Start with solo/local-host architecture: host is authoritative owner of world simulation and saves.
-2. Use Unity networking abstraction. Shortlist Mirror (KCP/UDP) vs LiteNetLib/custom snapshot protocol **after** reading actual network coupling in the game assemblies.
+2. Note the verified assembly reference to `Unity.Netcode.Runtime` plus many `AI_NetworkBehaviour_*` classes. First evaluate reuse of existing Unity Netcode game object synchronization by replacing its Windows/Steam/Party transport layer. Compare with Mirror (KCP/UDP) or LiteNetLib **only after** inspecting actual network call sites.
 3. Phase A: LAN same Wi-Fi + manual IP/port join; optionally Android NSD/mDNS discovery.
 4. Phase B: robust spawn/despawn, raft physics snapshots, tick/time sync, prediction/interpolation, inventory RPC with validation, persistence and graceful disconnect/reconnect.
 5. Phase C: Internet over NAT only after LAN works; evaluate relay/ICE/signaling and operating costs. No guarantee universal direct P2P.
