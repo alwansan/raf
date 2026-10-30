@@ -1,0 +1,39 @@
+name: Raft CI runner compatibility guard (Ubuntu 26.04 transition)
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - '.github/workflows/**'
+      - 'scripts/check_ci_runner_compat.py'
+      - 'scripts/extract_raft_lfs_from_rar.py'
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          filter: blob:none
+          sparse-checkout: |
+            .github/workflows
+            scripts/check_ci_runner_compat.py
+            scripts/extract_raft_lfs_from_rar.py
+      - name: Verify pinned OS images and bounded LFS usage
+        run: python3 scripts/check_ci_runner_compat.py
+      - name: Check local RAR extractor syntax without fetching game resources
+        run: python3 -m py_compile scripts/extract_raft_lfs_from_rar.py
+      - name: Explain compatibility decision
+        run: |
+          echo '## Pinned GitHub Actions OS' >> "$GITHUB_STEP_SUMMARY"
+          echo '- Ubuntu 24.04 is explicitly pinned for Raft CI stability.' >> "$GITHUB_STEP_SUMMARY"
+          echo '- GitHub runner-images issue #14748 migrates ubuntu-latest to 26.04 in Oct-Nov 2026.' >> "$GITHUB_STEP_SUMMARY"
+          echo '- No Git LFS objects downloaded by this job.' >> "$GITHUB_STEP_SUMMARY"
