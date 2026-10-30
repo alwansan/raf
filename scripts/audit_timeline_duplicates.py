@@ -25,7 +25,7 @@ def audit(root: Path):
     for name,records in hits.items():
         print("Duplicate type:",name,"count:",len(records))
         for rec in records:print("  ",rec)
-    if not hits:raise SystemExit("No duplicate type declarations found")
+    if not hits: print("No remaining known Timeline type declarations (expected after repairing generated stubs)")
 
 if __name__=="__main__":
     ap=argparse.ArgumentParser()
