@@ -45,14 +45,29 @@ jobs:
         run: python3 -m unittest discover -s tests -p test_sdk_asmdef_rename.py -v
       - name: Test native UI and TextMeshPro package restoration
         run: python3 -m unittest discover -s tests -p test_add_unity_packages.py -v
-      - name: Validate that selected original managed DLLs can be staged
+      - name: Validate SDK closure and source isolation fixtures
+        run: |
+          python3 -m unittest discover -s tests -p test_resolve_managed_closure.py -v
+          python3 -m unittest discover -s tests -p test_isolate_sdk_source_assemblies.py -v
+      - name: Validate that original managed SDK closure can be staged
         shell: bash
         run: |
           mkdir -p "$RUNNER_TEMP/project/Assets"
+          python3 -m pip install --user --disable-pip-version-check dnfile==0.18.0
+          python3 -m scripts.resolve_managed_closure --managed "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed" --out "$RUNNER_TEMP/sdk-dependency-plan.json"
           python3 scripts/stage_raft_managed_dlls.py \
             --managed "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed" \
             --project "$RUNNER_TEMP/project" \
             --report "$RUNNER_TEMP/selected-managed-report.json" \
-            --apply
-          test "$(find "$RUNNER_TEMP/project/Assets/Plugins/RaftManagedReferences" -type f -name '*.dll' | wc -l)" -eq 21
+            --plan "$RUNNER_TEMP/sdk-dependency-plan.json" --apply
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])
+          plan=json.loads((root/"sdk-dependency-plan.json").read_text())
+          actual={p.name for p in (root/"project/Assets/Plugins/RaftManagedReferences").glob("*.dll")}
+          assert actual==set(plan["libraries"])
+          assert "Unity.Timeline.dll" in actual
+          print("Verified original SDK closure libraries:",len(actual))
+          PY
           echo 'Verified selected original managed references exist, with UGUI/TMP engine packages and core DLLs excluded.' >> "$GITHUB_STEP_SUMMARY"

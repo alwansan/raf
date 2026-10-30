@@ -12,8 +12,15 @@ namespace RaftAndroid.Editor
     // Original CI code. Does not replace gameplay or alter recovered scene order.
     public static class AndroidNativeBuild
     {
+        public static void ValidateSdkBindings()
+        {
+            SdkScriptBindingResolver.Rebind(Path.Combine(Application.dataPath, "Editor/RaftAndroid/sdk-script-manifest.json"));
+            Debug.Log("RAFT_SDK_VALIDATION_COMPLETE noAndroidBuildRequested=true");
+        }
+
         public static void Build()
         {
+            ValidateSdkBindings();
             if (EditorUserBuildSettings.activeBuildTarget != BuildTarget.Android)
                 throw new BuildFailedException("Unity must be launched with the Android build target.");
 

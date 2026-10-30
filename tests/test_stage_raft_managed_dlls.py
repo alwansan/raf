@@ -39,6 +39,17 @@ class StageManagedDllTests(unittest.TestCase):
         with self.assertRaises(FileNotFoundError):
             stage(self.managed,self.project,apply=False)
 
+    def test_stage_plan_and_reject_core(self):
+        (self.managed/"Unity.Timeline.dll").write_bytes(b"MetadataTestFixture"*100)
+        names=list(ESSENTIALS)+["Unity.Timeline.dll"]
+        report=stage(self.managed,self.project,apply=True,dependency_plan={"libraries":names})
+        self.assertEqual(report["staged"],len(names))
+        with self.assertRaises(ValueError):
+            stage(self.managed,self.project,apply=False,dependency_plan={"libraries":["UnityEngine.CoreModule.dll"]})
+    def test_missing_plan_dependency_has_no_partial_write(self):
+        with self.assertRaises(FileNotFoundError):
+            stage(self.managed,self.project,apply=True,dependency_plan={"libraries":[ESSENTIALS[0],"Absent.dll"]})
+        self.assertFalse((self.project/"Assets/Plugins/RaftManagedReferences").exists())
     def test_reject_overwrite(self):
         stage(self.managed,self.project,apply=True)
         with self.assertRaises(FileExistsError):

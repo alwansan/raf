@@ -6,6 +6,8 @@ on:
       - 'android-port/Editor/SdkScriptBindingCore.cs'
       - 'android-port/Editor/SdkScriptBindingResolver.cs'
       - 'android-port/Tests/SdkBindings/**'
+      - 'scripts/isolate_sdk_source_assemblies.py'
+      - 'tests/test_isolate_sdk_source_assemblies.py'
       - 'scripts/resolve_managed_closure.py'
       - 'tests/test_resolve_managed_closure.py'
       - 'scripts/build_sdk_script_manifest.py'
@@ -29,6 +31,8 @@ jobs:
           fetch-depth: 1
       - name: Validate metadata-only SDK identity extraction
         run: python3 -m unittest discover -s tests -p test_build_sdk_script_manifest.py -v
+      - name: Test generated SDK source isolation without altering gameplay
+        run: python3 -m unittest discover -s tests -p test_isolate_sdk_source_assemblies.py -v
       - name: Test reference closure safety without executing DLLs
         run: python3 -m unittest discover -s tests -p test_resolve_managed_closure.py -v
       - name: Inspect actual original SDK transitive references (no LFS)

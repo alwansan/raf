@@ -2,6 +2,12 @@ name: Raft gated Unity 2021 Android import + compile (requires license secrets)
 
 on:
   workflow_dispatch:
+    inputs:
+      build_mode:
+        description: Validate SDK bindings first, or request native ARM64 build
+        type: choice
+        options: [sdk-bindings, native]
+        default: sdk-bindings
   push:
     branches:
       - feature/android-native-port
@@ -9,7 +15,13 @@ on:
       - '.github/workflows/raft-unity-editor-android-import.yml'
       - 'scripts/overlay_ilspy_gameplay.py'
       - 'tests/test_csharp_overlay.py'
-      - 'android-port/Editor/AndroidNativeBuild.cs'
+      - 'android-port/Editor/**'
+      - 'scripts/build_sdk_script_manifest.py'
+      - 'scripts/resolve_managed_closure.py'
+      - 'scripts/isolate_sdk_source_assemblies.py'
+      - 'tests/test_build_sdk_script_manifest.py'
+      - 'tests/test_resolve_managed_closure.py'
+      - 'tests/test_isolate_sdk_source_assemblies.py'
       - 'scripts/repair_asset_case_collisions.py'
       - 'tests/test_repair_asset_case_collisions.py'
       - 'scripts/adapt_unity_url_codecs.py'
@@ -73,7 +85,12 @@ jobs:
           fetch-depth: 1
           persist-credentials: true
       - name: Run synthetic code-overlay tests before touching original data
-        run: python3 -m unittest discover -s tests -p test_csharp_overlay.py -v
+        run: |
+          python3 -m unittest discover -s tests -p test_csharp_overlay.py -v
+          python3 -m unittest discover -s tests -p test_stage_raft_managed_dlls.py -v
+          python3 -m unittest discover -s tests -p test_resolve_managed_closure.py -v
+          python3 -m unittest discover -s tests -p test_build_sdk_script_manifest.py -v
+          python3 -m unittest discover -s tests -p test_isolate_sdk_source_assemblies.py -v
       - name: Download exactly 3 selected scene dependency LFS objects
         shell: bash
         run: |
@@ -105,7 +122,7 @@ jobs:
       - name: Audit original mesh stream requirements without downloading additional LFS
         shell: bash
         run: |
-          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4 dnfile==0.18.0
           python3 scripts/audit_mesh_stream_dependencies.py --root Raft/Raft_Data --max-per-file 50000 --out "$RUNNER_TEMP/mesh-stream-audit.json"
       - name: Stage selected Unity game files only, never execute Windows binaries
         shell: bash
@@ -166,6 +183,11 @@ jobs:
             -p -lv CSharp9_0 -o "$RUNNER_TEMP/ilspy-src" \
             "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed/Assembly-CSharp.dll" \
             > "$RUNNER_TEMP/ilspy.log" 2>&1
+      - name: Record original SDK type identities before template repairs
+        shell: bash
+        run: |
+          python3 -m unittest discover -s tests -p test_build_sdk_script_manifest.py -v
+          python3 -m scripts.build_sdk_script_manifest --project "$RUNNER_TEMP/project/ExportedProject" --out "$RUNNER_TEMP/project/ExportedProject/Assets/Editor/RaftAndroid/sdk-script-manifest.json"
       - name: Overlay uniquely identified real CSharp gameplay into Unity project
         shell: bash
         run: |
@@ -190,10 +212,12 @@ jobs:
         run: |
           set -euo pipefail
           python3 -m unittest discover -s tests -p test_stage_raft_managed_dlls.py -v
+          python3 -m unittest discover -s tests -p test_resolve_managed_closure.py -v
+          python3 -m scripts.resolve_managed_closure --managed "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed" --sdk-manifest "$RUNNER_TEMP/project/ExportedProject/Assets/Editor/RaftAndroid/sdk-script-manifest.json" --out "$RUNNER_TEMP/sdk-dependency-plan.json"
           python3 scripts/stage_raft_managed_dlls.py \
             --managed "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed" \
             --project "$RUNNER_TEMP/project/ExportedProject" \
-            --report "$RUNNER_TEMP/managed-refs.json" --apply
+            --report "$RUNNER_TEMP/managed-refs.json" --plan "$RUNNER_TEMP/sdk-dependency-plan.json" --apply
       - name: Restore Unity 2021 UGUI and TextMeshPro packages in temporary project
         shell: bash
         run: |
@@ -211,6 +235,11 @@ jobs:
         run: |
           python3 -m unittest discover -s tests -p test_adapt_unity_url_codecs.py -v
           python3 scripts/adapt_unity_url_codecs.py --project "$RUNNER_TEMP/project/ExportedProject" --apply
+      - name: Keep generated SDK source templates out of the Android player
+        shell: bash
+        run: |
+          python3 -m unittest discover -s tests -p test_isolate_sdk_source_assemblies.py -v
+          python3 scripts/isolate_sdk_source_assemblies.py --project "$RUNNER_TEMP/project/ExportedProject" --manifest "$RUNNER_TEMP/project/ExportedProject/Assets/Editor/RaftAndroid/sdk-script-manifest.json" --apply
       - name: Downgrade ILSpy CSharp 10 file-scoped namespaces to Unity 2021 CSharp 9
         shell: bash
         run: |
@@ -235,7 +264,7 @@ jobs:
         shell: bash
         run: |
           mkdir -p "$RUNNER_TEMP/project/ExportedProject/Assets/Editor/RaftAndroid"
-          cp android-port/Editor/AndroidNativeBuild.cs "$RUNNER_TEMP/project/ExportedProject/Assets/Editor/RaftAndroid/"
+          cp android-port/Editor/*.cs "$RUNNER_TEMP/project/ExportedProject/Assets/Editor/RaftAndroid/"
       - name: Validate reconstructed editor project structure and GUID references
         shell: bash
         run: |
@@ -302,7 +331,7 @@ jobs:
           unityVersion: 2021.3.45f2
           projectPath: unity-candidate
           targetPlatform: Android
-          buildMethod: RaftAndroid.Editor.AndroidNativeBuild.Build
+          buildMethod: ${{ inputs.build_mode == 'native' && 'RaftAndroid.Editor.AndroidNativeBuild.Build' || 'RaftAndroid.Editor.AndroidNativeBuild.ValidateSdkBindings' }}
           androidExportType: androidPackage
           buildName: RaftAndroidExperimental
           buildsPath: builds
@@ -313,5 +342,5 @@ jobs:
           androidVersionCode: 1
       - name: If CI reaches here, report without releasing original game APK
         run: |
-          echo 'Unity Android build action completed. Review Editor logs and privately test build outputs.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Unity validation completed. Review RAFT_SDK_VALIDATION_COMPLETE versus RAFT_ANDROID_NATIVE_RESULT; SDK-only mode does not build an APK.' >> "$GITHUB_STEP_SUMMARY"
           echo 'No copyrighted game APK or source asset was uploaded or published by this workflow.' >> "$GITHUB_STEP_SUMMARY"

@@ -14,6 +14,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 from pathlib import Path
 import shutil
 
@@ -50,11 +51,26 @@ OPTIONAL=(
     "Sirenix.OdinInspector.Attributes.dll",
     "JBooth.MicroSplat.Core.dll",
 )
-def stage(managed:Path,project:Path,*,apply:bool,extended:bool=False)->dict:
+def stage(managed:Path,project:Path,*,apply:bool,extended:bool=False, dependency_plan:dict|None=None)->dict:
     if not managed.is_dir() or not (project/"Assets").is_dir():
         raise FileNotFoundError("Original managed DLL directory or project Assets missing")
     out=project/"Assets"/"Plugins"/"RaftManagedReferences"
     selected=ESSENTIALS+(OPTIONAL if extended else ())
+    if dependency_plan is not None:
+        if extended: raise ValueError("Choose a dependency plan or extended mode, not both")
+        selected=dependency_plan.get("libraries")
+        if not isinstance(selected,list) or not selected or len(selected)!=len(set(selected)):
+            raise ValueError("Dependency plan must contain unique library filenames")
+        try:
+            from scripts.resolve_managed_closure import provided
+        except ModuleNotFoundError:
+            from resolve_managed_closure import provided
+        for name in selected:
+            if not isinstance(name,str) or not re.fullmatch(r"[A-Za-z_][A-Za-z_0-9.-]*\.dll",name):
+                raise ValueError("Invalid dependency plan filename")
+            asm=name[:-4]
+            if provided(asm) or asm.startswith("UnityEditor") or asm=="PlayFab_o":
+                raise ValueError("Refusing an engine/package/editor/overlapping DLL: "+name)
     rows=[]
     for name in selected:
         if name in EDITOR_PROVIDED_ASSEMBLIES:
@@ -69,9 +85,11 @@ def stage(managed:Path,project:Path,*,apply:bool,extended:bool=False)->dict:
         if target.exists():
             raise FileExistsError("Refusing to overwrite existing managed DLL: "+name)
         rows.append({"name":name,"bytes":src.stat().st_size})
-        if apply:
-            out.mkdir(parents=True,exist_ok=True)
-            shutil.copyfile(src,target)
+    # Validate every dependency before writing any plugin.
+    if apply:
+        out.mkdir(parents=True,exist_ok=True)
+        for row in rows:
+            shutil.copyfile(managed/row["name"],out/row["name"])
     report={"staged":len(rows),"total_bytes":sum(x["bytes"] for x in rows),
             "libraries":rows,"applied":apply,
             "limitations":"Compilation-only managed dependency recovery; may require alternative Android-compatible SDKs or stripping Windows native hooks."}
@@ -83,9 +101,11 @@ if __name__=="__main__":
     a.add_argument("--managed",required=True,type=Path)
     a.add_argument("--project",required=True,type=Path)
     a.add_argument("--report",required=True,type=Path)
+    a.add_argument("--plan",type=Path,help="Validated SDK metadata closure plan")
     a.add_argument("--extended",action="store_true")
     a.add_argument("--apply",action="store_true")
     args=a.parse_args()
-    result=stage(args.managed,args.project,apply=args.apply,extended=args.extended)
+    result=stage(args.managed,args.project,apply=args.apply,extended=args.extended,
+                 dependency_plan=json.loads(args.plan.read_text()) if args.plan else None)
     args.report.parent.mkdir(parents=True,exist_ok=True)
     args.report.write_text(json.dumps(result,indent=2)+"\n")
