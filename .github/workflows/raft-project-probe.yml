@@ -1,0 +1,70 @@
+name: Raft tiny Unity editor-project export probe (no LFS downloads)
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - '.github/workflows/raft-project-probe.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  sample:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Check free storage
+        run: |
+          df -h /
+          available_kb=$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')
+          test "$available_kb" -gt 8388608
+      - name: Checkout with LFS disabled
+        uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Copy only a small sample of non-LFS Unity serialized data
+        run: |
+          mkdir -p "$RUNNER_TEMP/raft-sample/Raft_Data"
+          cp Raft/Raft_Data/sharedassets37.assets "$RUNNER_TEMP/raft-sample/Raft_Data/"
+          cp Raft/Raft_Data/sharedassets37.assets.resS "$RUNNER_TEMP/raft-sample/Raft_Data/"
+          cp Raft/Raft_Data/globalgamemanagers "$RUNNER_TEMP/raft-sample/Raft_Data/"
+          du -h "$RUNNER_TEMP/raft-sample/Raft_Data/"*
+          df -h /
+      - name: Install verified checksum-pinned AssetRipperCLI
+        run: |
+          curl --fail --location --retry 2 --max-time 240 \
+            'https://github.com/nowl-it/AssetRipperCLI/releases/download/v1.0.1/AssetRipper_linux_x64.zip' \
+            -o "$RUNNER_TEMP/ar-cli.zip"
+          echo "b48292e40948ce2634e9187d4724fb4f45c01fa6f4fea2a5f4775aa611def17b  $RUNNER_TEMP/ar-cli.zip" | sha256sum --check
+          mkdir -p "$RUNNER_TEMP/ar-cli"
+          unzip -q "$RUNNER_TEMP/ar-cli.zip" -d "$RUNNER_TEMP/ar-cli"
+          chmod +x "$RUNNER_TEMP/ar-cli/AssetRipper.GUI.Free"
+      - name: Attempt isolated read-only Unity asset export
+        run: |
+          set +e
+          timeout 180s "$RUNNER_TEMP/ar-cli/AssetRipper.GUI.Free" \
+            --cli --input "$RUNNER_TEMP/raft-sample/Raft_Data" \
+            --output "$RUNNER_TEMP/raft-project-export" \
+            --mode unity --disable-script-import --ignore-streaming-assets \
+            > "$RUNNER_TEMP/asset-export-log.txt" 2>&1
+          code=$?
+          set -e
+          echo "AssetRipper sample export exit code: $code"
+          tail -80 "$RUNNER_TEMP/asset-export-log.txt" | cut -c 1-300
+          if [ -d "$RUNNER_TEMP/raft-project-export" ]; then
+            echo "Exported output count:"
+            find "$RUNNER_TEMP/raft-project-export" -type f | wc -l
+            du -sh "$RUNNER_TEMP/raft-project-export"
+          fi
+          echo "No extracted game assets are uploaded or committed."
+          test "$code" -eq 0
+          test -d "$RUNNER_TEMP/raft-project-export"
+          test "$(find "$RUNNER_TEMP/raft-project-export" -type f | wc -l)" -gt 0
+          echo "Generated project directories:" 
+          find "$RUNNER_TEMP/raft-project-export" -maxdepth 2 -type d | head -30
+          if [ -d "$RUNNER_TEMP/raft-project-export/Assets" ]; then echo "Assets directory exists"; else echo "Assets directory not found; inspect output manually"; fi
