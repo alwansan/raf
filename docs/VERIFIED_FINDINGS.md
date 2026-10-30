@@ -219,3 +219,15 @@ AssetRipperCLI 1.0.1 Unity editor project export, **including** `globalgamemanag
 The earlier workflow run 41023682679 failed as it correctly refused the `sharedassets0.assets` Git LFS pointer; next workflow was changed to skip that unavailable LFS input. No large LFS payload was fetched. **Script linkage is valid for these five exported scenes only.** It is not an Editor compilation or scene runtime test; other materials, textures, shaders, DLLs and gameplay behavior may still be missing. Source export used `--script-content-level Level1` (stubs, not proof of recovered gameplay logic).
 
 Next: test script `Level0` export for fuller code, then Unity Editor import/compile gates.
+
+## Job 15: AssetRipper Level0 mode with restored script mapping — PASS, but code fidelity not established
+
+https://github.com/alwansan/raf/actions/runs/41023910696
+
+With `globalgamemanagers.assets` and ordinary managed DLLs supplied, AssetRipperCLI v1.0.1 `--script-content-level Level0` produced:
+- 5 scenes, **3,810** `.cs` files and **3,810** `.cs.meta` files;
+- **13,969/13,969** GUID references matched, **0** deadbeef placeholders;
+- Aggregate **10,219,604** C# bytes and **244,584** lines.
+- However emitted `Raft_Network.cs` and `SaveAndLoad.cs` were only **2,644** and **2,643** bytes. ILSpy's focused decompilation of these types was **60,704** and **48,675** bytes respectively. Thus **do not treat Level0 AssetRipper output as verified complete gameplay logic**. Likely script templates/stubs for those types; source contents not distributed.
+
+New trial `.github/workflows/raft-code-overlay-probe.yml` uses the **real ILSpy Mono source**, maps only unambiguous classes from Assembly-CSharp and retains AssetRipper's `.cs.meta` identities. It fails safely if it cannot pair classes, and does not publish raw source or assets.
