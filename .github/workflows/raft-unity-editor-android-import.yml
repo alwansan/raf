@@ -119,30 +119,32 @@ jobs:
               print("Verified selected LFS asset:",p.name,p.stat().st_size)
           PY
           df -h /
-      - name: Restore verified collider stream only for an intentional native experiment
+      - name: Restore two verified collider streams only for an intentional native experiment
         if: ${{ (github.event_name == 'workflow_dispatch' && inputs.build_mode == 'native') || (github.event_name == 'push' && contains(github.event.head_commit.message, '[raft-native-build]')) }}
         shell: bash
         run: |
           set -euo pipefail
-          git lfs fetch origin HEAD --include='Raft/Raft_Data/sharedassets29.assets.resS' --exclude=''
-          git lfs checkout Raft/Raft_Data/sharedassets29.assets.resS
+          git lfs fetch origin HEAD --include='Raft/Raft_Data/sharedassets29.assets.resS,Raft/Raft_Data/sharedassets24.assets.resS' --exclude=''
+          git lfs checkout Raft/Raft_Data/sharedassets29.assets.resS Raft/Raft_Data/sharedassets24.assets.resS
           python3 - <<'PY'
           import hashlib, re, subprocess
           from pathlib import Path
-          name='Raft/Raft_Data/sharedassets29.assets.resS'
-          path=Path(name)
-          pointer=subprocess.check_output(['git','show','HEAD:'+name], text=True)
-          oid=re.search(r'(?m)^oid sha256:([0-9a-f]{64})$', pointer)
-          size=re.search(r'(?m)^size (\d+)$', pointer)
-          if not oid or not size or int(size.group(1))!=295782704:
-              raise SystemExit('Unexpected collider stream pointer identity')
-          if path.stat().st_size!=int(size.group(1)):
-              raise SystemExit('Collider stream size mismatch')
-          with path.open('rb') as source:
-              digest=hashlib.file_digest(source, 'sha256').hexdigest()
-          if digest!=oid.group(1):
-              raise SystemExit('Collider stream SHA256 mismatch')
-          print('RAFT_RECOVERED_COLLIDER_SOURCE verifiedBytes=295782704 source=sharedassets29.assets.resS')
+          expected={'sharedassets29.assets.resS':295782704, 'sharedassets24.assets.resS':301743760}
+          for stream,declared in expected.items():
+              name='Raft/Raft_Data/'+stream
+              path=Path(name)
+              pointer=subprocess.check_output(['git','show','HEAD:'+name], text=True)
+              oid=re.search(r'(?m)^oid sha256:([0-9a-f]{64})$', pointer)
+              size=re.search(r'(?m)^size (\d+)$', pointer)
+              if not oid or not size or int(size.group(1))!=declared:
+                  raise SystemExit('Unexpected collider stream pointer identity')
+              if path.stat().st_size!=declared:
+                  raise SystemExit('Collider stream size mismatch')
+              with path.open('rb') as source:
+                  digest=hashlib.file_digest(source, 'sha256').hexdigest()
+              if digest!=oid.group(1):
+                  raise SystemExit('Collider stream SHA256 mismatch')
+              print('RAFT_RECOVERED_COLLIDER_SOURCE verifiedBytes='+str(declared)+' source='+stream)
           PY
       - name: Audit original mesh stream requirements without downloading additional LFS
         shell: bash
