@@ -1,0 +1,43 @@
+name: Raft Mono gameplay architecture symbol map
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - 'scripts/inspect_gameplay_architecture.py'
+      - '.github/workflows/raft-architecture-map.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  architecture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Check disk before tools
+        run: |
+          df -h /
+          test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')" -gt 2097152
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Install pinned static PE/CLI metadata parser
+        run: python3 -m pip install --user --disable-pip-version-check dnfile==0.18.0
+      - name: Produce focused type/method metadata report (no execution)
+        run: python3 scripts/inspect_gameplay_architecture.py
+      - name: Publish only summary (no game binaries or source code)
+        run: |
+          python3 - <<'PY'
+          import json,os
+          j=json.load(open("out/gameplay-symbol-map.json",encoding="utf8"))
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
+              f.write("## Mono type architecture map\n")
+              f.write(f"- Types: {j['type_count']}\n- Mapped method definitions: {j['typed_method_count']}\n")
+              for k,v in j["domains"].items():
+                  f.write(f"- {k}: {v['type_matches']} type name matches, {v['nongenerated_type_matches']} non-generated names\n")
+          PY
