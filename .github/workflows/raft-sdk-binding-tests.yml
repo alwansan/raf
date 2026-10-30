@@ -60,39 +60,6 @@ jobs:
                   pe.close()
           print("Legacy serialization configuration physical providers:",found)
           PY
-      - name: Inspect original Sirenix serialized metadata in resources header only
-        run: |
-          git lfs install --local
-          git lfs fetch origin HEAD --include='Raft/Raft_Data/resources.assets' --exclude=''
-          git lfs checkout Raft/Raft_Data/resources.assets
-          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
-          python3 - <<'PY'
-          import UnityPy,json,hashlib,subprocess,re
-          from pathlib import Path
-          p=Path("Raft/Raft_Data/resources.assets")
-          pointer=subprocess.check_output(["git","show","HEAD:"+p.as_posix()],text=True)
-          expected=re.search(r"^oid sha256:([0-9a-f]{64})$",pointer,re.M).group(1)
-          with p.open("rb") as f: digest=hashlib.file_digest(f,"sha256").hexdigest()
-          assert digest==expected
-          env=UnityPy.load(str(p))
-          targets={}
-          for obj in env.objects:
-              if obj.type.name!="MonoScript": continue
-              data=obj.read(check_read=False)
-              if "Sirenix" in str(data.m_AssemblyName):
-                  row={"file":p.name,"path_id":obj.path_id,"assembly":str(data.m_AssemblyName),"namespace":str(data.m_Namespace),"class":str(data.m_ClassName)}
-                  targets[obj.path_id]=row
-          print("Original resources Sirenix script registry:",json.dumps(list(targets.values())))
-          for obj in env.objects:
-              if obj.type.name!="MonoBehaviour": continue
-              data=obj.read(check_read=False)
-              script=getattr(data,"m_Script",None)
-              if script and script.m_FileID==0 and script.m_PathID in targets:
-                  fields=[]
-                  try: fields=sorted(obj.read_typetree(check_read=False).keys())
-                  except Exception as e: fields=["typetree unavailable: "+type(e).__name__]
-                  print("Original Sirenix retained object:",json.dumps({"path_id":obj.path_id,"name":str(getattr(data,"m_Name","")),"script":targets[script.m_PathID],"field_names":fields}))
-          PY
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'

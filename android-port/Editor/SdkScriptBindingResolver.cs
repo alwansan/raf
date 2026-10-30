@@ -18,7 +18,8 @@ namespace RaftAndroid.Editor
     public static class SdkScriptBindingResolver
     {
         [Serializable] private sealed class Statistics { public int sdk_references; }
-        [Serializable] private sealed class Manifest { public Identity[] scripts; public Statistics statistics; }
+        [Serializable] private sealed class Manifest { public Identity[] scripts; public Statistics statistics; public OriginalOrphan[] preservedOriginalOrphans; }
+        [Serializable] private sealed class OriginalOrphan { public string sourceGuid; public string usagePath; public string originalFile; public long originalScriptPathId; public long originalObjectPathId; }
         [Serializable] private sealed class Identity
         {
             public string sourceGuid;
@@ -26,6 +27,7 @@ namespace RaftAndroid.Editor
             public string fullTypeName;
             public string simpleTypeName;
             public string sourcePath;
+            public int references;
         }
         private sealed class Candidate
         {
@@ -53,6 +55,23 @@ namespace RaftAndroid.Editor
                     throw new BuildFailedException("Invalid source SDK identity.");
                 identities.Add(row.sourceGuid, row);
             }
+            var originalOrphans = new Dictionary<string, OriginalOrphan>(StringComparer.OrdinalIgnoreCase);
+            foreach (OriginalOrphan orphan in manifest.preservedOriginalOrphans ?? new OriginalOrphan[0])
+            {
+                Identity row;
+                if (orphan == null || !identities.TryGetValue(orphan.sourceGuid ?? "", out row) ||
+                    row.assemblyName != "Sirenix.Serialization.Config" || row.references != 1 ||
+                    (row.fullTypeName != "GlobalSerializationConfig" &&
+                     row.fullTypeName != "Sirenix.Serialization.GlobalSerializationConfig") ||
+                    System.IO.Path.GetFileName(orphan.usagePath ?? "") != "GlobalSerializationConfig.asset" ||
+                    orphan.originalFile != "resources.assets" || orphan.originalScriptPathId != 934 ||
+                    orphan.originalObjectPathId != 6381 ||
+                    File.Exists(System.IO.Path.Combine(Application.dataPath,
+                        "Plugins/RaftManagedReferences/Sirenix.Serialization.Config.dll")))
+                    throw new BuildFailedException("Invalid pre-existing original unresolved configuration record.");
+                originalOrphans.Add(orphan.sourceGuid, orphan);
+            }
+            int preservedOrphanReferences = 0;
             var wanted = new HashSet<string>(manifest.scripts.Select(r => r.assemblyName), StringComparer.Ordinal);
             var candidates = new List<Candidate>();
             var unique = new HashSet<string>(StringComparer.Ordinal);
@@ -113,9 +132,22 @@ namespace RaftAndroid.Editor
                 ScriptBindingRewrite result = SdkScriptBindingCore.Rewrite(text, identities.Keys, targets);
                 refs += result.SourceReferences;
                 changes += result.Changes;
-                foreach (string guid in result.MissingTargets) missing.Add(guid);
+                foreach (string guid in result.MissingTargets)
+                {
+                    OriginalOrphan orphan;
+                    if (!originalOrphans.TryGetValue(guid, out orphan)) { missing.Add(guid); continue; }
+                    string relative = path.Substring(Application.dataPath.Length + 1)
+                        .Replace(System.IO.Path.DirectorySeparatorChar, '/');
+                    if (relative != orphan.usagePath)
+                        throw new BuildFailedException("Original unresolved configuration appeared at an unexpected path.");
+                    preservedOrphanReferences += Regex.Matches(text,
+                        @"(?m)^[ \t]*m_Script:[ \t]*\{[^}\r\n]*\bguid:[ \t]*" + Regex.Escape(guid),
+                        RegexOptions.IgnoreCase).Count;
+                }
                 if (result.Changes != 0) edits.Add(new Edit {Path = path, Text = result.Text});
             }
+            if (preservedOrphanReferences != originalOrphans.Count)
+                throw new BuildFailedException("Original unresolved configuration reference accounting changed.");
             if (refs != manifest.statistics.sdk_references)
                 throw new BuildFailedException("SDK source reference count changed since identity audit; no changes written.");
             if (missing.Count != 0)
@@ -129,6 +161,9 @@ namespace RaftAndroid.Editor
                 throw new BuildFailedException("Used SDK source identities unresolved: " + missing.Count +
                                                ". No serialized binding changes were written.");
             }
+            foreach (OriginalOrphan orphan in originalOrphans.Values)
+                Debug.LogWarning("RAFT_ORIGINAL_UNRESOLVED_CONFIG_PRESERVED source=resources.assets scriptPathId=934 objectPathId=6381 asset=" +
+                    orphan.usagePath + " originalPointerUnchanged=true runtimeImplementationNotFabricated=true");
             foreach (Edit edit in edits) File.WriteAllText(edit.Path, edit.Text, new UTF8Encoding(false));
             edits.Clear();
             AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
@@ -136,7 +171,7 @@ namespace RaftAndroid.Editor
                 throw new BuildFailedException("Original source script metadata changed during SDK binding.");
             Debug.Log("RAFT_SDK_BINDINGS sourceReferences=" + refs + " rewrittenReferences=" + changes +
                       " resolvedTypes=" + targets.Count + " namespaceFallbacks=" + namespaceFallbacks +
-                      " unresolvedUsedTypes=0 originalScriptMetaUnchanged=true");
+                      " unresolvedRequiredSdkTypes=0 preservedOriginalUnresolvedConfigs=" + preservedOrphanReferences + " originalScriptMetaUnchanged=true");
         }
 
         private static void Register(MonoScript script, HashSet<string> wanted, HashSet<string> unique,

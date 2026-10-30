@@ -40,4 +40,31 @@ class SdkManifestTests(unittest.TestCase):
     def test_bom_does_not_hide_identity(self):
         self.source("SDK","Widget","a"*32,"\ufeffnamespace Sdk {\npublic class Widget {}\n}")
         self.assertEqual(build(self.root)["scripts"][0]["fullTypeName"],"Sdk.Widget")
+    def orphan_asset(self,filename="GlobalSerializationConfig.asset",type_name="GlobalSerializationConfig"):
+        self.source("Sirenix.Serialization.Config",type_name,"a"*32,"namespace Sirenix.Serialization {\npublic class "+type_name+" {}\n}")
+        p=self.root/"Assets/Resources"/filename
+        p.parent.mkdir(parents=True,exist_ok=True)
+        p.write_text("%YAML 1.1\n  m_Script: {fileID: 11500000, guid: "+"a"*32+", type: 3}\n")
+        return p
+    def test_known_original_orphan_preserves_identity_and_usage(self):
+        asset=self.orphan_asset()
+        before=asset.read_bytes()
+        result=build(self.root,orphan_check=lambda _:True)
+        self.assertEqual(result["referencedAssemblies"],[])
+        self.assertEqual(result["statistics"]["sdk_references"],1)
+        self.assertEqual(result["preservedOriginalOrphans"][0]["usagePath"],"Resources/GlobalSerializationConfig.asset")
+        self.assertEqual(asset.read_bytes(),before)
+    def test_orphan_exception_needs_original_absence_evidence(self):
+        self.orphan_asset()
+        self.assertEqual(build(self.root)["referencedAssemblies"],["Sirenix.Serialization.Config"])
+        self.assertEqual(build(self.root,orphan_check=lambda _:False)["preservedOriginalOrphans"],[])
+    def test_never_exempts_gameplay_other_types_or_multiple_uses(self):
+        for name in ["Scene.unity","Prefab.prefab","Other.asset"]:
+            with self.subTest(name=name):
+                asset=self.orphan_asset(name)
+                self.assertEqual(build(self.root,orphan_check=lambda _:True)["preservedOriginalOrphans"],[])
+                asset.unlink()
+        asset=self.orphan_asset()
+        asset.write_text(asset.read_text()*2)
+        self.assertEqual(build(self.root,orphan_check=lambda _:True)["preservedOriginalOrphans"],[])
 if __name__=="__main__": unittest.main()

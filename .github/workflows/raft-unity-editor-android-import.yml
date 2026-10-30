@@ -187,7 +187,7 @@ jobs:
         shell: bash
         run: |
           python3 -m unittest discover -s tests -p test_build_sdk_script_manifest.py -v
-          python3 -m scripts.build_sdk_script_manifest --project "$RUNNER_TEMP/project/ExportedProject" --out "$RUNNER_TEMP/project/ExportedProject/Assets/Editor/RaftAndroid/sdk-script-manifest.json"
+          python3 -m scripts.build_sdk_script_manifest --project "$RUNNER_TEMP/project/ExportedProject" --managed "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed" --out "$RUNNER_TEMP/project/ExportedProject/Assets/Editor/RaftAndroid/sdk-script-manifest.json"
       - name: Overlay uniquely identified real CSharp gameplay into Unity project
         shell: bash
         run: |
