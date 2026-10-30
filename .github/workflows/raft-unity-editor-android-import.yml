@@ -13,6 +13,7 @@ permissions:
 
 jobs:
   unity-license-preflight:
+    environment: UNITY_LICENSE
     runs-on: ubuntu-24.04
     outputs:
       ready: ${{ steps.check.outputs.ready }}
@@ -37,6 +38,7 @@ jobs:
 
   reconstruct:
     needs: unity-license-preflight
+    environment: UNITY_LICENSE
     if: ${{ needs.unity-license-preflight.outputs.ready == 'true' }}
     runs-on: ubuntu-24.04
     timeout-minutes: 65
