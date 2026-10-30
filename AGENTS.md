@@ -36,3 +36,9 @@ This repository branch is the working record for reconstructing the Windows Unit
 3. Replace Windows Steam/Party and platform-dependent save ID/bootstrap. Preserve a safe offline save format and test.
 4. Add Android ARM64 touch input, audio, rendering optimization and device diagnostics; build the first native single-player APK.
 5. Implement host-phone LAN networking only after single-player gameplay and save/load work.
+
+## Newly verified progress (2026-10-30)
+
+- [Three targeted LFS objects](https://github.com/alwansan/raf/actions/runs/41028697081) eliminated ALL `deadbeef` placeholders across exported scenes: **0** missing sentinel references, including **0** `m_Mesh`, with 40 scenes and 64,642/64,642 script links.
+- [Full ILSpy Mono source diagnostic net8 compile](https://github.com/alwansan/raf/actions/runs/41028495873) passed after suppressing only legacy BinaryFormatter obsolete errors for the experiment. [netstandard2.1 separately FAILED](https://github.com/alwansan/raf/actions/runs/41028896726) due to framework reference mismatches; do not mistake the net8 result for Unity Editor/Android compilation.
+- The next concrete milestone is an integrated Unity Editor project build candidate combining those 3 LFS asset containers and GUID-preserving ILSpy source overlay; then real Editor import/compile. Check `.resS` payload fidelity before calling graphics usable.
