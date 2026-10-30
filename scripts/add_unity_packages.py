@@ -19,6 +19,8 @@ def ensure(project: Path, *, apply: bool) -> dict:
         raise FileNotFoundError("Unity Packages/manifest.json is missing")
     original = manifest.read_text(encoding="utf-8")
     data = json.loads(original)
+    if not isinstance(data, dict):
+        raise ValueError("Unity manifest must be a JSON object")
     deps = data.get("dependencies")
     if not isinstance(deps, dict):
         raise ValueError("Unity package dependencies must be a JSON object")
