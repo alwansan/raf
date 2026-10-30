@@ -128,4 +128,7 @@ jobs:
                       if "namespace " in line:
                           print("Namespace line:",i+1,repr(line[:120]))
                   print("First line lengths:",[len(line) for line in lines[:5]])
+                  # Inspect only the short generated syntax line of package stubs.
+                  # This is not original gameplay source.
+                  print("Generated line 3 syntax:",repr(lines[2][:100]) if len(lines)>2 else "<none>")
           PY
