@@ -137,3 +137,29 @@ jobs:
           if not refs or matched!=len(refs): raise SystemExit("Scene GUID linkage broke after code overlay")
           if report['replacements']<100: raise SystemExit("Insufficient unique CSharp code overlays")
           PY
+
+      - name: Classify two remaining ILSpy CSharp9 parser errors without revealing game code
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import os,re
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])/"export/ExportedProject/Assets/Scripts/Assembly-CSharp"
+          names={"Voxelize.cs":17,"Spray.cs":15}
+          for name,lineno in names.items():
+              files=list(root.rglob(name))
+              print("Remaining ILSpy compiler issue type:",name,"file_count:",len(files))
+              for p in files[:3]:
+                  lines=p.read_text(errors="replace").splitlines()
+                  print("Relative:",p.relative_to(root),"line count:",len(lines))
+                  for n in (lineno-2,lineno-1,lineno,lineno+1):
+                      if 1<=n<=len(lines):
+                          raw=lines[n-1].strip()
+                          tokenized=re.findall(r"[A-Za-z_]\\w*|[^\\w\\s]",raw)
+                          keep={"public","private","protected","internal","class","struct",
+                                "record","namespace","partial","abstract","sealed",
+                                "unsafe","new","Spray","Voxelize","MonoBehaviour",
+                                "System","UnityEngine","UltimateWater","readonly"}
+                          tokens=[v if v in keep or not re.fullmatch(r"[A-Za-z_]\\w*",v) else "ID" for v in tokenized]
+                          print("Syntax signature line",n,":"," ".join(tokens[:65]))
+          PY
