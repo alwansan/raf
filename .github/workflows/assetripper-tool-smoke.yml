@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   tool-smoke:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 8
     steps:
       - name: Check free storage before any download
