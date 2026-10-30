@@ -1,7 +1,7 @@
 import tempfile
 import unittest
 from pathlib import Path
-from scripts.stage_raft_managed_dlls import ESSENTIALS, OPTIONAL, stage
+from scripts.stage_raft_managed_dlls import ESSENTIALS, OPTIONAL, EDITOR_PROVIDED_ASSEMBLIES, stage
 
 class StageManagedDllTests(unittest.TestCase):
     def setUp(self):
@@ -18,6 +18,8 @@ class StageManagedDllTests(unittest.TestCase):
         result=stage(self.managed,self.project,apply=True)
         self.assertEqual(result["staged"],len(ESSENTIALS))
         self.assertNotIn("UnityEngine.CoreModule.dll",ESSENTIALS)
+        self.assertTrue(EDITOR_PROVIDED_ASSEMBLIES.isdisjoint(ESSENTIALS+OPTIONAL))
+        self.assertFalse((self.project/"Assets/Plugins/RaftManagedReferences/UnityEngine.UI.dll").exists())
         for name in ESSENTIALS:
             self.assertEqual((self.project/"Assets/Plugins/RaftManagedReferences"/name).read_bytes(),
                              (self.managed/name).read_bytes())
