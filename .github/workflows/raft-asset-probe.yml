@@ -50,7 +50,7 @@ jobs:
           timeout 180s "$RUNNER_TEMP/ar-cli/AssetRipper.GUI.Free" \
             --cli --input "$RUNNER_TEMP/raft-sample/Raft_Data" \
             --output "$RUNNER_TEMP/raft-export" \
-            --mode primary --disable-script-import true --ignore-streaming-assets true \
+            --mode primary --disable-script-import --ignore-streaming-assets \
             > "$RUNNER_TEMP/asset-export-log.txt" 2>&1
           code=$?
           set -e
@@ -62,4 +62,6 @@ jobs:
             du -sh "$RUNNER_TEMP/raft-export"
           fi
           echo "No extracted game assets are uploaded or committed."
-          exit "$code"
+          test "$code" -eq 0
+          test -d "$RUNNER_TEMP/raft-export"
+          test "$(find "$RUNNER_TEMP/raft-export" -type f | wc -l)" -gt 0
