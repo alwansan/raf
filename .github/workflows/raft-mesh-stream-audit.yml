@@ -1,0 +1,45 @@
+name: Raft Unity mesh streaming dependency sample (no LFS)
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - 'scripts/audit_mesh_stream_dependencies.py'
+      - '.github/workflows/raft-mesh-stream-audit.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  sampling:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Verify available storage before processing
+        run: |
+          df -h /
+          test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')" -gt 10485760
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Install version-pinned UnityPy
+        run: python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+      - name: Sample serialized Mesh stream source dependencies
+        run: python3 scripts/audit_mesh_stream_dependencies.py --root Raft/Raft_Data --max-per-file 80 --out out/mesh-stream-audit.json
+      - name: Report structural counts only
+        run: |
+          python3 - <<'PY'
+          import os,json
+          data=json.load(open('out/mesh-stream-audit.json',encoding='utf8'))
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              f.write("## Unity Mesh m_StreamData sample (no LFS transfers)\n")
+              for field in ('mesh_count','inspected_meshes','meshes_with_stream','claimed_stream_bytes'):
+                  f.write(f"- {field}: {data[field]}\n")
+              f.write(f"- Sample paths: {data['stream_paths']}\n")
+              f.write(f"- Inspection errors: {data['errors']}\n")
+              f.write("No raw meshes, textures, or game data uploaded.\n")
+          PY
