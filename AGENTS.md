@@ -49,3 +49,9 @@ This repository branch is the working record for reconstructing the Windows Unit
 - [Android offline platform adapter compiled + 7/7 tests](https://github.com/alwansan/raf/actions/runs/41029669318) in `android-port/Runtime/Platform`, not yet wired to game.
 - [Unity license-gated import test](https://github.com/alwansan/raf/actions/runs/41030164120) checked the repository's activation secrets, found them unavailable and skipped all heavy work. **Unity 2021.3.45f2 activation remains a real prerequisite for genuine Android export**; never fabricate license credentials or claim an APK.
 - At least 278/724 sampled Unity Mesh assets point to external `.resS` stream content, so mesh link completeness is not visual fidelity completeness. LFS default reset to NO, avoid billing surprises.
+
+## Language compatibility lesson
+
+- Always decompile `Assembly-CSharp.dll` for Unity 2021 with ILSpy `-lv CSharp9_0`, not ILSpy default Latest. Verified [2,394 CSharp9 sources with no two formerly failing CSharp12 primary constructors](https://github.com/alwansan/raf/actions/runs/41057568426).
+- Retain namespace compatibility guard and AssetRipper invalid script template fixes. Do not alter script `.meta` GUID bytes during code fixes.
+- Language syntax compatibility is not a guarantee of Unity Editor successful import or Android APK creation.
