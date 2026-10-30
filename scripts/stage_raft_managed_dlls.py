@@ -31,6 +31,15 @@ ESSENTIALS=(
     "Newtonsoft.Json.dll",
     # Compilation bridge only; original Steam native transport is not Android-safe.
     "com.rlabrecque.steamworks.net.dll",
+    # Original metadata closure for BitField32 and ConfigResponse.
+    "Unity.Collections.dll",
+    "Unity.Collections.LowLevel.ILSupport.dll",
+    "Unity.Mathematics.dll",
+    "Unity.Burst.dll",
+    "Unity.Burst.Unsafe.dll",
+    "Unity.Services.RemoteConfig.dll",
+    "Unity.Services.Core.Internal.dll",
+    "Unity.Services.Core.dll",
 )
 OPTIONAL=(
     "PathCreator.dll",

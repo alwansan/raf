@@ -175,7 +175,7 @@ jobs:
             --ilspy "$RUNNER_TEMP/ilspy-src" \
             --report "$RUNNER_TEMP/ilspy-supplement.json" \
             --min-added 500 --apply
-      - name: Restore eight original third-party DLLs without platform-provided UI/TMP/InputSystem assemblies
+      - name: Restore sixteen original compile-time DLLs without platform-provided UI/TMP/InputSystem assemblies
         shell: bash
         run: |
           set -euo pipefail

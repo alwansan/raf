@@ -34,6 +34,11 @@ class StageManagedDllTests(unittest.TestCase):
         (self.managed/ESSENTIALS[0]).unlink()
         with self.assertRaises(FileNotFoundError):
             stage(self.managed,self.project,apply=True)
+    def test_reject_missing_transitive_sdk_dependency(self):
+        (self.managed/"Unity.Burst.Unsafe.dll").unlink()
+        with self.assertRaises(FileNotFoundError):
+            stage(self.managed,self.project,apply=False)
+
     def test_reject_overwrite(self):
         stage(self.managed,self.project,apply=True)
         with self.assertRaises(FileExistsError):

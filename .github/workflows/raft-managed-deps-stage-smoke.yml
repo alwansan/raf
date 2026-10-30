@@ -46,5 +46,5 @@ jobs:
             --project "$RUNNER_TEMP/project" \
             --report "$RUNNER_TEMP/selected-managed-report.json" \
             --apply
-          test "$(find "$RUNNER_TEMP/project/Assets/Plugins/RaftManagedReferences" -type f -name '*.dll' | wc -l)" -eq 8
+          test "$(find "$RUNNER_TEMP/project/Assets/Plugins/RaftManagedReferences" -type f -name '*.dll' | wc -l)" -eq 16
           echo 'Verified selected original managed references exist, with UGUI/TMP engine packages and core DLLs excluded.' >> "$GITHUB_STEP_SUMMARY"
