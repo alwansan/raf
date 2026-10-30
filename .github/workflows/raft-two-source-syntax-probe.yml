@@ -1,0 +1,70 @@
+name: Raft focused ILSpy syntax probe for 2 Unity compiler-blocking classes
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - '.github/workflows/raft-two-source-syntax-probe.yml'
+      - 'scripts/normalize_csharp_namespaces.py'
+
+permissions:
+  contents: read
+
+jobs:
+  two-files:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          fetch-depth: 1
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Install trusted ILSpy tool
+        run: |
+          dotnet tool install ilspycmd --version 11.2.0.10050 --tool-path "$RUNNER_TEMP/ilspy"
+      - name: Decompile exactly the original Mono game assembly temporarily
+        run: |
+          mkdir -p "$RUNNER_TEMP/src"
+          timeout 260s "$RUNNER_TEMP/ilspy/ilspycmd" -p -o "$RUNNER_TEMP/src" \
+            Raft/Raft_Data/Managed/Assembly-CSharp.dll > "$RUNNER_TEMP/ilspy.log" 2>&1
+      - name: Summarize original CSharp declarations and normalized CSharp 9 structure only
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import os,re
+          from pathlib import Path
+          from scripts.normalize_csharp_namespaces import convert
+          root=Path(os.environ["RUNNER_TEMP"])/"src"
+          for name in ("Spray.cs","Voxelize.cs"):
+              files=list(root.rglob(name))
+              print("Target:",name,"matched source files:",len(files))
+              if len(files)!=1:raise SystemExit("Missing or ambiguous original ILSpy file "+name)
+              f=files[0]
+              before=f.read_text(encoding="utf-8-sig")
+              after,changed=convert(before)
+              print("Namespace normalized:",changed,"source line count:",len(before.splitlines()),"converted line count:",len(after.splitlines()))
+              for label,source in (("original",before),("converted",after)):
+                  lines=source.splitlines()
+                  print("Form:",label)
+                  for i,line in enumerate(lines[:30],1):
+                      stripped=line.strip()
+                      if not stripped:continue
+                      if stripped.startswith("using "):
+                          continue
+                      if re.match(r"(?:namespace\s|\[|#(?:if|endif|else|elif)|\}|\{|public\s|internal\s|private\s|protected\s|sealed\s|abstract\s)",stripped):
+                          # Keep declarations only; cap output and mask identifiers inside business logic.
+                          if re.search(r"\b(?:class|struct|namespace|interface|enum)\b",stripped) or stripped in ("{","}") or stripped.startswith("#"):
+                              print(i,repr(stripped[:112]))
+              # Validate that a class body opens after its class declaration.
+              for i,line in enumerate(lines[:80]):
+                  if re.search(r'\bclass\s+(?:Spray|Voxelize)\b',line):
+                      print("Class declaration line:",i+1,"following token lines:",[(j+1,lines[j].strip()[:80]) for j in range(i,min(i+5,len(lines)))])
+          PY
+      - name: Run CSharp namespace converter fixtures
+        run: python3 -m unittest discover -s tests -p test_csharp_namespace_compat.py -v
