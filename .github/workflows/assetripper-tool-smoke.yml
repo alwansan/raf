@@ -1,0 +1,49 @@
+name: AssetRipper official Linux tool smoke-test
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - '.github/workflows/assetripper-tool-smoke.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  tool-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Check free storage before any download
+        run: |
+          df -h /
+          available_kb=$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')
+          echo "Free KiB: $available_kb"
+          test "$available_kb" -gt 2097152
+      - name: Download official pinned AssetRipper 2.0.0 binary and verify SHA256
+        run: |
+          curl --fail --location --retry 2 --connect-timeout 15 --max-time 180 \
+            https://github.com/AssetRipper/AssetRipper/releases/download/2.0.0/AssetRipper_linux_x64.tar.xz \
+            --output "$RUNNER_TEMP/assetripper.tar.xz"
+          echo "6f5d4352d36795b944243eb3ec790ec37dbca6d6756e52605bc8616e042d384e  $RUNNER_TEMP/assetripper.tar.xz" | sha256sum --check
+          du -h "$RUNNER_TEMP/assetripper.tar.xz"
+      - name: Extract in temporary directory and inspect command line support
+        run: |
+          mkdir -p "$RUNNER_TEMP/ar-tool"
+          tar -xJf "$RUNNER_TEMP/assetripper.tar.xz" -C "$RUNNER_TEMP/ar-tool"
+          find "$RUNNER_TEMP/ar-tool" -maxdepth 3 -type f | head -35
+          executable=$(find "$RUNNER_TEMP/ar-tool" -type f -name 'AssetRipper' | head -n 1)
+          if [ -z "$executable" ]; then
+            echo 'No AssetRipper executable discovered'
+            exit 2
+          fi
+          chmod +x "$executable"
+          set +e
+          timeout 30s "$executable" --help > "$RUNNER_TEMP/asset-help.txt" 2>&1
+          rc=$?
+          set -e
+          echo "AssetRipper --help status=$rc"
+          head -80 "$RUNNER_TEMP/asset-help.txt"
+          echo "Command line probe finished; no game binaries executed."
