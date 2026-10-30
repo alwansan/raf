@@ -11,7 +11,18 @@ import argparse
 import hashlib
 import json
 from pathlib import Path, PurePosixPath
+import struct
 import zipfile
+
+
+def validate_arm64_elf(header: bytes) -> None:
+    """Check ELF64, little-endian AArch64 shared-object identity, not only magic."""
+    if len(header) < 64 or header[:7] != b'\x7fELF\x02\x01\x01':
+        raise ValueError('Native library is not a complete little-endian ELF64 header')
+    kind, machine, version = struct.unpack_from('<HHI', header, 16)
+    header_size = struct.unpack_from('<H', header, 52)[0]
+    if kind != 3 or machine != 183 or version != 1 or header_size != 64:
+        raise ValueError('Native library is not an AArch64 ELF shared object')
 
 
 def audit(apk: Path, *, min_size: int = 25_000_000, digest: bool = True) -> dict:
@@ -52,8 +63,11 @@ def audit(apk: Path, *, min_size: int = 25_000_000, digest: bool = True) -> dict
                     raise ValueError("Cannot read an essential APK member")
                 if key == "classes.dex" and not magic.startswith(b"dex\n"):
                     raise ValueError("classes.dex does not have a DEX header")
-                if key.endswith(".so") and not magic.startswith(b"\x7fELF"):
-                    raise ValueError("Android ARM64 shared library has no ELF header")
+        arm64_native = [item for item in members if
+                       item.filename.startswith('lib/arm64-v8a/') and item.filename.endswith('.so')]
+        for item in arm64_native:
+            with archive.open(item) as stream:
+                validate_arm64_elf(stream.read(64))
         abi = sorted({item.filename.split("/")[1] for item in members
                       if item.filename.startswith("lib/") and
                       len(item.filename.split("/")) > 2})
@@ -65,6 +79,7 @@ def audit(apk: Path, *, min_size: int = 25_000_000, digest: bool = True) -> dict
             "unity_data_uncompressed_bytes": sum(x.file_size for x in data),
             "abis": abi,
             "arm64_il2cpp": True,
+            "validated_aarch64_shared_libraries": len(arm64_native),
             "fmod_native_library_present": any(
                 x.filename.startswith("lib/arm64-v8a/") and
                 "fmod" in x.filename.lower() and x.filename.endswith(".so")
@@ -90,3 +105,4 @@ if __name__ == "__main__":
         args.report.parent.mkdir(parents=True, exist_ok=True)
         args.report.write_text(json.dumps(result, indent=2) + "\n", encoding="utf8")
     print("RAFT_ANDROID_APK_STRUCTURE " + json.dumps(result, sort_keys=True))
+

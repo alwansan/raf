@@ -1,4 +1,5 @@
 import tempfile
+import struct
 import unittest
 from pathlib import Path
 from zipfile import ZipFile
@@ -6,7 +7,15 @@ from zipfile import ZipFile
 from scripts.audit_android_apk import audit
 
 
-ARM64 = b"\x7fELF" + b"\0" * 12
+def elf(machine=183, elf_class=2, byte_order=1, kind=3):
+    header = bytearray(64)
+    header[:7] = b'\x7fELF' + bytes((elf_class, byte_order, 1))
+    struct.pack_into('<HHI', header, 16, kind, machine, 1)
+    struct.pack_into('<H', header, 52, 64)
+    return bytes(header)
+
+
+ARM64 = elf()
 DEX = b"dex\n035\0" + b"\0" * 8
 BASE = {
     "AndroidManifest.xml": b"\x03\x00\x08\x00" + b"\0" * 8,
@@ -36,6 +45,16 @@ class AndroidApkAuditTests(unittest.TestCase):
             self.assertTrue(result["fmod_native_library_present"])
             self.assertEqual(len(result["apk_sha256"]), 64)
             self.assertNotIn("UnityTestData", repr(result))
+            self.assertEqual(result['validated_aarch64_shared_libraries'], 3)
+
+    def test_reject_mislabeled_abi_and_invalid_optional_plugin(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            apk = Path(temporary) / 'test.apk'
+            for bad in (elf(machine=62), elf(elf_class=1), elf(byte_order=2),
+                        elf(kind=2), ARM64[:16]):
+                sample(apk, extra={'lib/arm64-v8a/libfmod.so': bad})
+                with self.subTest(bad=bad[:20]), self.assertRaises(ValueError):
+                    audit(apk, min_size=0, digest=False)
 
     def test_reject_missing_native_binary_or_game_data(self):
         with tempfile.TemporaryDirectory() as temporary:
@@ -73,3 +92,4 @@ class AndroidApkAuditTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
