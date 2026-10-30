@@ -82,7 +82,7 @@ jobs:
         run: |
           mkdir -p "$RUNNER_TEMP/ilspy-source"
           timeout 360s "$RUNNER_TEMP/ilspy-tool/ilspycmd" \
-            -p -o "$RUNNER_TEMP/ilspy-source" \
+            -p -lv CSharp9_0 -o "$RUNNER_TEMP/ilspy-source" \
             "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed/Assembly-CSharp.dll" \
             > "$RUNNER_TEMP/ilspy.log" 2>&1
           test -n "$(find "$RUNNER_TEMP/ilspy-source" -type f -name '*.cs' -print -quit)"
