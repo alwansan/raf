@@ -1,4 +1,6 @@
+import tempfile
 import unittest
+from pathlib import Path
 from collections import Counter
 
 from scripts.trace_collision_mesh_sources import failing_meshes, summary
@@ -28,6 +30,29 @@ Failed extracting collision mesh because vertex at index 5 contains a non-finite
         self.assertEqual(report["ambiguous_names"], 1)
         self.assertEqual(report["matched_stream_status"]["lfs-pointer"], 2)
         self.assertEqual(report["skipped_lfs_original_header_count"], 1)
+
+    def test_lfs_priorities_come_from_pointer_size_not_guessed(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root=Path(temporary)
+            (root/"sharedassets24.assets.resS").write_text(
+                "version https://git-lfs.github.com/spec/v1\n"
+                "oid sha256:" + "a"*64 + "\nsize 104857600\n", encoding="ascii")
+            (root/"sharedassets35.assets.resS").write_text(
+                "version https://git-lfs.github.com/spec/v1\n"
+                "oid sha256:" + "b"*64 + "\nsize 419430400\n", encoding="ascii")
+            rows = {
+                "First": [{"source": "sharedassets24.assets", "stream_status": "lfs-pointer",
+                           "stream_file": "sharedassets24.assets.resS"}],
+                "Second": [{"source": "sharedassets35.assets", "stream_status": "lfs-pointer",
+                            "stream_file": "sharedassets35.assets.resS"}]
+            }
+            result=summary(Counter({"First": 7,"Second": 20}), rows,
+                           {"skipped_lfs_header_files":[],"parse_errors":{}}, root)
+            priorities=result["stream_lfs_priorities"]
+            self.assertEqual(priorities[0]["stream"], "sharedassets24.assets.resS")
+            self.assertEqual(priorities[0]["lfs_declared_bytes"], 104857600)
+            self.assertEqual(priorities[0]["distinct_names_per_100_MiB"], 1.0)
+            self.assertEqual(priorities[1]["distinct_names_per_100_MiB"], 0.25)
 
     def test_no_errors_is_not_pretended_success(self):
         with self.assertRaises(ValueError):
