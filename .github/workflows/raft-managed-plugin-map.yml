@@ -1,0 +1,28 @@
+name: Raft original managed plugin dependency metadata audit
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - '.github/workflows/raft-managed-plugin-map.yml'
+      - 'scripts/audit_managed_plugins.py'
+
+permissions:
+  contents: read
+
+jobs:
+  inspect:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Install static-only managed metadata parser
+        run: python3 -m pip install --user --disable-pip-version-check dnfile==0.18.0
+      - name: Map original FMOD PlayFab and Steamworks DLL type namespaces and references
+        run: python3 scripts/audit_managed_plugins.py
