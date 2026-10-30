@@ -71,3 +71,11 @@ See [mesh recovery findings, remaining blockers and cost-controlled next gate](d
 [Verified three-file LFS export](https://github.com/alwansan/raf/actions/runs/41028697081) reduced both scene-wide and mesh `deadbeef` references to **zero** across **40 Unity scenes**, retaining **64,642/64,642** script GUID links. Targeted LFS files: `resources.assets`, `sharedassets0.assets`, `sharedassets36.assets` (~322 MiB per combined run), not all 6.47 GiB. [Findings and limitations](docs/MESH_RECOVERY_FINDINGS.md).
 
 [ILSpy decompiled source net8 diagnostic compilation succeeded](https://github.com/alwansan/raf/actions/runs/41028495873), producing a 3.58 MB DLL in the temporary runner. A separate netstandard2.1 diagnostic failed due to framework references, so **Unity Editor import/compile is NOT verified**. Large `.resS` content is still untested.
+
+### Integrated Unity Editor project candidate and offline Android platform adapters
+
+[Integrated full candidate CI — PASS](https://github.com/alwansan/raf/actions/runs/41029351916): all 40 scenes, 3,811 C# files + 3,811 C# metadata files, 64,642/64,642 script GUID matches, **zero** scene deadbeef placeholders, and **1,568** namespace-safe real ILSpy gameplay-source overlays. This is an ephemeral Unity editor project candidate: NOT yet an import/compile pass.
+
+[New Android offline platform adapter — PASS, 7/7 tests](https://github.com/alwansan/raf/actions/runs/41029669318): original `android-port/Runtime/Platform` C# netstandard2.1 library for stable local profile identity, safe isolated save paths and offline-host session semantics. **Not yet wired into Raft_Network/SaveAndLoad.**
+
+[Unity Editor + Android smoke test gate](https://github.com/alwansan/raf/actions/runs/41030164120) checked private activation secret availability, found no Unity license/account credentials and safely skipped the actual build, with **no extra LFS or Docker downloads**. Never claim an APK exists. Unity 2021.3.45f2 Editor import/compile and Android Build Support remain the next hard gate.
