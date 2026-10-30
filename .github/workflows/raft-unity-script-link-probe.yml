@@ -1,4 +1,4 @@
-name: Raft Unity scene + managed scripts reconstruction probe
+name: Raft Unity scene + MonoScript registry reconstruction probe
 
 on:
   workflow_dispatch:
@@ -25,13 +25,15 @@ jobs:
           lfs: false
           persist-credentials: false
           fetch-depth: 1
-      - name: Stage only three scenes plus managed DLL metadata
+      - name: Stage three scenes plus mandatory globalgamemanagers.assets MonoScript registry
         shell: bash
         run: |
           set -euo pipefail
           root="$RUNNER_TEMP/raft-linked-sample/Raft_Data"
           mkdir -p "$root/Managed"
           cp Raft/Raft_Data/globalgamemanagers "$root/"
+          cp Raft/Raft_Data/globalgamemanagers.assets "$root/"
+          cp Raft/Raft_Data/globalgamemanagers.assets.resS "$root/"
           cp Raft/Raft_Data/Managed/*.dll "$root/Managed/"
           for n in 37 38 39; do
             for file in "level$n" "sharedassets$n.assets" "sharedassets$n.assets.resS"; do
