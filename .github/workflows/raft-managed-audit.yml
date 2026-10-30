@@ -1,0 +1,50 @@
+name: Raft static managed audit
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - 'scripts/analyze_managed.py'
+      - '.github/workflows/raft-managed-audit.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check storage first
+        run: df -h /
+      - name: Checkout without downloading Git LFS
+        uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Install pinned metadata parser (never executes game binaries)
+        run: python3 -m pip install --user --disable-pip-version-check dnfile==0.18.0
+      - name: Read assembly metadata only
+        run: python3 scripts/analyze_managed.py
+      - name: Publish safe high-level counts
+        run: |
+          python3 - <<'PY'
+          import json,os
+          j=json.load(open("out/managed-analysis.json"))
+          rows=["## Mono assembly static analysis",
+                f"- Types: {j['type_count']}, methods: {j['method_count']}, fields: {j['field_count']}",
+                f"- P/Invoke declarations: {j['pinvoke_count']}",
+                "### Suspected subsystem classes (keyword counts only)"]
+          rows.extend(f"- {k}: {v}" for k,v in j["feature_keyword_matches"].items())
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as out:
+              out.write("\n".join(rows)+"\n")
+          PY
+      - name: Upload metadata report (not original binaries or source)
+        uses: actions/upload-artifact@v4
+        with:
+          name: raft-managed-audit
+          path: out/managed-analysis.json
+          retention-days: 7
