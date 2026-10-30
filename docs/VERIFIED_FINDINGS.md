@@ -186,3 +186,9 @@ https://github.com/alwansan/raf/actions/runs/41021653681
 - This is a *symbol* inventory; next trace selected call edges and assess network/Steam dependencies before attempting offline bootstrap.
 - Reports are created only on ephemeral runners; no proprietary decompiled source published.
 
+
+## Jobs 11–12: script processing and GUID reference blocker
+
+- [Script processing pilot](https://github.com/alwansan/raf/actions/runs/41022158992): the CLI exporter itself exited with code 0 and generated 3 Unity scenes but **0 C# files**. A strict job assertion therefore correctly marked the project script-integration experiment **FAILED**.
+- [Startup and late-scene references](https://github.com/alwansan/raf/actions/runs/41022464657): 5 scenes, 982 `.meta` files, 0 C# files, and 13,969 serialized MonoBehaviour/m_Script occurrences. Regex over serialized script references found one GUID value with 13,969 uses and no matching exported `.meta`. This is an **export result**, not a reliable original script identity count.
+- The successful ILSpy export of **2,394 source files** remains independent of the Unity scenes. Do not claim a playable/restored editor project until real scripts, GUID identities, missing resources, and actual Unity compile/import are verified.
