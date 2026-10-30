@@ -19,6 +19,7 @@
 - [Safe build inventory](scripts/inspect_raft.py) / [Actions workflow](.github/workflows/raft-inventory.yml)
 - [Static Mono metadata analysis](scripts/analyze_managed.py) / [Actions workflow](.github/workflows/raft-managed-audit.yml)
 - [Official AssetRipper Linux tool installation smoke test](.github/workflows/assetripper-tool-smoke.yml)
+- [AssetRipperCLI tool test](.github/workflows/assetripper-cli-smoke.yml) / [tiny Unity asset import/export experiment](.github/workflows/raft-asset-probe.yml)
 
 ### What has actually been verified?
 
