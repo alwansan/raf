@@ -166,11 +166,16 @@ jobs:
           print('Scripts linked:',linked,'/',total)
           print('Total deadbeef refs (prior non-LFS: 199156):',data['deadbeef_total'])
           print('m_Mesh deadbeef refs (prior non-LFS: 94152):',mesh)
+          print('Two-file recovery baseline (resources only): total=37111, mesh=8631')
+          from collections import Counter
+          extcounts=Counter(p.suffix.lower() for p in root.rglob('*') if p.is_file())
+          print('Exported Unity file types:',dict(extcounts.most_common(16)))
           with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as file:
               file.write('## Explicitly opted-in selective LFS recovery test\n')
               file.write(f"- Scenes: {len(scenes)}; script links: {linked}/{total}\n")
               file.write(f"- All placeholders: before 199156, after {data['deadbeef_total']}\n")
               file.write(f"- m_Mesh placeholders: before 94152, after {mesh}\n")
+              file.write("- Resource-only baseline: deadbeef=37111, mesh=8631; evaluate extra gain of sharedassets0.\n")
               file.write('No proprietary original assets or source files uploaded or committed.\n')
           if len(scenes)<35 or not total or total!=linked:
               raise SystemExit('Unity scene/script linkage regression')
