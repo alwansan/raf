@@ -1,0 +1,33 @@
+name: Raft SDK MonoScript binding metadata and reference safety
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'android-port/Editor/SdkScriptBindingCore.cs'
+      - 'android-port/Tests/SdkBindings/**'
+      - 'scripts/build_sdk_script_manifest.py'
+      - 'tests/test_build_sdk_script_manifest.py'
+      - '.github/workflows/raft-sdk-binding-tests.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raft-sdk-binding-tests-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  reference-safety:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Validate metadata-only SDK identity extraction
+        run: python3 -m unittest discover -s tests -p test_build_sdk_script_manifest.py -v
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Validate signed DLL script IDs and preservation of unrelated references
+        run: dotnet run --project android-port/Tests/SdkBindings/RaftAndroid.SdkBindings.Tests.csproj --configuration Release --nologo
