@@ -1,0 +1,100 @@
+name: Raft Unity scene + managed scripts reconstruction probe
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - '.github/workflows/raft-unity-script-link-probe.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  link-probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check runner storage before checkout/extract
+        run: |
+          df -h /
+          test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')" -gt 20971520
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Stage only three scenes plus managed DLL metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="$RUNNER_TEMP/raft-linked-sample/Raft_Data"
+          mkdir -p "$root/Managed"
+          cp Raft/Raft_Data/globalgamemanagers "$root/"
+          cp Raft/Raft_Data/Managed/*.dll "$root/Managed/"
+          for n in 37 38 39; do
+            for file in "level$n" "sharedassets$n.assets" "sharedassets$n.assets.resS"; do
+              src="Raft/Raft_Data/$file"
+              if [ -f "$src" ]; then
+                if head -c 42 "$src" | grep -q 'version https://git-lfs.github.com/spec/v1'; then
+                  echo "Refusing LFS pointer $file"; exit 1
+                fi
+                cp "$src" "$root/"
+              fi
+            done
+          done
+          du -sh "$root" "$root/Managed"
+      - name: Obtain and check pinned AssetRipperCLI
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 2 --max-time 240 \
+            'https://github.com/nowl-it/AssetRipperCLI/releases/download/v1.0.1/AssetRipper_linux_x64.zip' \
+            -o "$RUNNER_TEMP/ar-cli.zip"
+          echo "b48292e40948ce2634e9187d4724fb4f45c01fa6f4fea2a5f4775aa611def17b  $RUNNER_TEMP/ar-cli.zip" | sha256sum --check
+          mkdir -p "$RUNNER_TEMP/ar-cli"
+          unzip -q "$RUNNER_TEMP/ar-cli.zip" -d "$RUNNER_TEMP/ar-cli"
+          chmod +x "$RUNNER_TEMP/ar-cli/AssetRipper.GUI.Free"
+      - name: Export partial Unity project WITH script processing
+        shell: bash
+        run: |
+          set -euo pipefail
+          set +e
+          timeout 420s "$RUNNER_TEMP/ar-cli/AssetRipper.GUI.Free" \
+            --cli --input "$RUNNER_TEMP/raft-linked-sample/Raft_Data" \
+            --output "$RUNNER_TEMP/linked-export" \
+            --mode unity --script-content-level Level0 --ignore-streaming-assets \
+            > "$RUNNER_TEMP/linked-export.log" 2>&1
+          rc=$?
+          set -e
+          echo "AssetRipper export return code: $rc"
+          echo "Output log last lines (capped):"
+          tail -25 "$RUNNER_TEMP/linked-export.log" | cut -c 1-220
+          test "$rc" -eq 0
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          output=Path(os.environ["RUNNER_TEMP"])/"linked-export"
+          if not output.is_dir(): raise SystemExit("No exported Unity project folder")
+          project=output/"ExportedProject"
+          files=[p for p in project.rglob("*") if p.is_file()]
+          byext={ext:sum(p.suffix.lower()==ext for p in files) for ext in (".unity",".cs",".meta",".prefab",".asset",".csproj")}
+          scripts=list(project.rglob("*.cs"))
+          source_names={p.name for p in scripts}
+          print("Exported project file count:",len(files))
+          print("Counts by suffix:",byext)
+          print("ProjectSettings exists:",(project/"ProjectSettings").is_dir())
+          print("Assets exists:",(project/"Assets").is_dir())
+          print("Named script samples:",{x:x in source_names for x in ("Raft_Network.cs","SaveAndLoad.cs","GameManager.cs")})
+          print("Full export bytes:",sum(p.stat().st_size for p in files))
+          print("No Unity Editor compile test was run, and no game assets or code were uploaded.")
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
+              f.write("## Tiny Unity scene + managed script export test\n")
+              f.write(f"- Exported project files: {len(files)}\n")
+              f.write(f"- Suffix counts: {byext}\n")
+              f.write(f"- Script matches: { {x:x in source_names for x in ('Raft_Network.cs','SaveAndLoad.cs','GameManager.cs')} }\n")
+              f.write("- Small partial export; not proof that Unity compiles or all GUID references resolve.\n")
+          if byext[".unity"]<1 or byext[".cs"]<1:
+              raise SystemExit("Expected both Unity scene and script output; no complete linked project recovered")
+          PY
