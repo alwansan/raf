@@ -70,3 +70,21 @@ No need to reupload AssetRipper or ILSpy; their install and checks have already 
 ## Rights / distribution
 
 The repository appears publicly accessible and contains a third-party commercial PC game's data. All CI tests are for private ephemeral local export and aggregate analysis. Avoid publishing extracted game resources, decompiled code or full derivative APK without authorization. No source or asset artifacts were uploaded by these workflows.
+
+## Verified latest: THREE LFS resource objects eliminate all exported deadbeef scene refs
+
+[Run 41027328691: resources.assets only](https://github.com/alwansan/raf/actions/runs/41027328691) downloaded exactly 111,533,516 LFS bytes (SHA256 verified). 40 scenes and 64,642 script links passed, and placeholders fell to **37,111 total**, **8,631 m_Mesh**.
+
+[Run 41028211970: + sharedassets0.assets](https://github.com/alwansan/raf/actions/runs/41028211970) downloaded 111,533,516 + 115,978,112 bytes, SHA256 verified, all scripts preserved; placeholders **6,697 total**, **3,233 m_Mesh**. These residual references all occurred in a single exported scene, `Landmark_Utopia`. This singled out a likely missing Utopia `sharedassets36.assets` input; independent source m_Mesh pointers previously found **3,209** uses of this asset file.
+
+[Run 41028697081: + sharedassets36.assets](https://github.com/alwansan/raf/actions/runs/41028697081) added a third 110,149,324-byte LFS object (SHA256 verified), total three original resource containers **337,660,952 bytes (~322 MiB)**:
+- **40/40** level scenes exported.
+- **64,642/64,642** scene C# script GUID references still matched.
+- **0 deadbeef** placeholders across exported scene references (previously 393,450).
+- **0 deadbeef m_Mesh** links (previously 198,114).
+- Export now includes **8,389 `.asset` files**, **888 `.prefab`**, **1,536 `.mat`**, **679 `.anim`**, **179 `.controller`**, **140 `.shader`** and 40 `.unity` scenes.
+- This test did **not** download the larger `.resS` payloads or actually import/compile the project with Unity Editor. No material/mesh visual fidelity or working gameplay claim can be made until those tests pass.
+
+The developer-run tests kept all proprietary extracted game resources on disposable runner storage; only numeric results were logged. The local 6-part archive was also discovered in this session; its embedded `Raft-SteamRIP.com.rar` archive was examined without running original binaries. Local `resources.assets`, `sharedassets0.assets`, and `sharedassets36.assets` were selectively extracted and their SHA256 digests matched repository LFS pointers. This may allow future local validation without additional LFS downloads when the same attached files are available.
+
+**Next real gate**: combine full asset export with safe ILSpy C# overlays into one candidate project; inspect Unity package dependencies, and test Unity **2021.3.45f2** Editor import/compilation with legitimate activation. Large `.resS` streams may still contain essential vertex/textures, so zero scene GUID placeholders does NOT mean game is visually complete.
