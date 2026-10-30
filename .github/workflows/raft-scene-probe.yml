@@ -1,0 +1,103 @@
+name: Raft Unity scene recovery (non-LFS, tiny sample)
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - '.github/workflows/raft-scene-probe.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  scenes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - name: Check free disk space
+        run: |
+          df -h /
+          available_kb=$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')
+          test "$available_kb" -gt 10485760
+      - name: Checkout with NO LFS downloads
+        uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Prepare scene sample (levels 37, 38, 39)
+        shell: bash
+        run: |
+          set -euo pipefail
+          sample="$RUNNER_TEMP/raft-scene-sample/Raft_Data"
+          mkdir -p "$sample"
+          cp Raft/Raft_Data/globalgamemanagers "$sample/"
+          for n in 37 38 39; do
+            for f in "level$n" "sharedassets$n.assets" "sharedassets$n.assets.resS"; do
+              src="Raft/Raft_Data/$f"
+              if [ -f "$src" ]; then
+                if head -c 42 "$src" | grep -q 'version https://git-lfs.github.com/spec/v1'; then
+                  echo "Refusing LFS pointer: $f"
+                  exit 2
+                fi
+                cp "$src" "$sample/"
+              fi
+            done
+          done
+          echo "Sample sizes:"
+          du -sh "$sample"
+          ls -lh "$sample"
+      - name: Download verified pinned AssetRipperCLI
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 2 --max-time 240 \
+            'https://github.com/nowl-it/AssetRipperCLI/releases/download/v1.0.1/AssetRipper_linux_x64.zip' \
+            -o "$RUNNER_TEMP/assetripper.zip"
+          echo "b48292e40948ce2634e9187d4724fb4f45c01fa6f4fea2a5f4775aa611def17b  $RUNNER_TEMP/assetripper.zip" | sha256sum --check
+          mkdir -p "$RUNNER_TEMP/ar-cli"
+          unzip -q "$RUNNER_TEMP/assetripper.zip" -d "$RUNNER_TEMP/ar-cli"
+          chmod +x "$RUNNER_TEMP/ar-cli/AssetRipper.GUI.Free"
+      - name: Attempt Unity project scene reconstruction
+        shell: bash
+        run: |
+          set -euo pipefail
+          set +e
+          timeout 360s "$RUNNER_TEMP/ar-cli/AssetRipper.GUI.Free" \
+            --cli --input "$RUNNER_TEMP/raft-scene-sample/Raft_Data" \
+            --output "$RUNNER_TEMP/scene-project" \
+            --mode unity --disable-script-import --ignore-streaming-assets \
+            > "$RUNNER_TEMP/scene-export.log" 2>&1
+          code=$?
+          set -e
+          echo "Exporter process return code: $code"
+          tail -30 "$RUNNER_TEMP/scene-export.log" | cut -c 1-280
+          test "$code" -eq 0
+          test -d "$RUNNER_TEMP/scene-project"
+          python3 - <<'PY'
+          from pathlib import Path
+          import os
+          project=Path(os.environ["RUNNER_TEMP"]) / "scene-project"
+          files=list(project.rglob("*"))
+          candidates=[p for p in files if p.is_file()]
+          scenes=[p for p in candidates if p.suffix==".unity"]
+          prefabs=[p for p in candidates if p.suffix==".prefab"]
+          metas=[p for p in candidates if p.suffix==".meta"]
+          packages=[p for p in candidates if p.name=="manifest.json"]
+          print("Reconstructed files:",len(candidates))
+          print("Unity scene files:",len(scenes))
+          print("Prefab files:",len(prefabs))
+          print("Meta files:",len(metas))
+          print("Package manifest files:",len(packages))
+          print("Found top-level directories:",[x.name for x in project.iterdir() if x.is_dir()])
+          print("Sample output paths:",[str(p.relative_to(project)) for p in candidates[:25]])
+          print("Output byte count:",sum(x.stat().st_size for x in candidates))
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
+              f.write("## Scene export sample (no Git LFS)\n")
+              f.write(f"- Files: {len(candidates)}\n- Scenes: {len(scenes)}\n- Prefabs: {len(prefabs)}\n- Metas: {len(metas)}\n")
+              f.write("- These are partial exports with missing dependencies. No files were uploaded or committed.\n")
+          if not scenes:
+              raise SystemExit("No .unity scene files were reconstructed in this tiny sample")
+          PY
