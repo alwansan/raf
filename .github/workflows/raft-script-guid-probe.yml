@@ -102,6 +102,17 @@ jobs:
           print('Unique script GUIDs missing matching exported .meta:',len(unresolved))
           print('Total unresolved GUID reference uses:',sum(unresolved.values()))
           print('C# script meta files:',len(script_meta_files))
+          print('Script GUID frequencies (top 5):',refs.most_common(5))
+          sample_refs=collections.Counter()
+          for scene in scenes:
+              raw=scene.read_text(encoding="utf8",errors="replace")
+              for m in re.finditer(r'm_Script:\\s*\\{([^}]+)\\}',raw):
+                  item=m.group(1)
+                  file_id=re.search(r'fileID:\\s*(-?\\d+)',item)
+                  guid_id=re.search(r'guid:\\s*([a-fA-F0-9]{32})',item)
+                  sample_refs[(file_id.group(1) if file_id else '<none>',
+                               guid_id.group(1) if guid_id else '<none>')]+=1
+          print('Script reference fileID+guid combinations (top 12):',sample_refs.most_common(12))
           with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
               f.write("## Unity serialized MonoBehaviour linkage check\n")
               f.write(f"- .unity: {len(scenes)}; .cs: {len(scripts)}; .meta: {len(guids)}\n")
