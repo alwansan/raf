@@ -7,6 +7,7 @@ on:
       - feature/android-native-port
     paths:
       - 'scripts/audit_mesh_stream_dependencies.py'
+      - 'tests/test_mesh_stream_coverage.py'
       - '.github/workflows/raft-mesh-stream-audit.yml'
 
 permissions:
@@ -28,6 +29,8 @@ jobs:
           fetch-depth: 1
       - name: Install version-pinned UnityPy
         run: python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+      - name: Check stream-range classification against synthetic fixtures
+        run: python3 -m unittest discover -s tests -p test_mesh_stream_coverage.py -v
       - name: Sample serialized Mesh stream source dependencies
         run: python3 scripts/audit_mesh_stream_dependencies.py --root Raft/Raft_Data --max-per-file 80 --out out/mesh-stream-audit.json
       - name: Report structural counts only
