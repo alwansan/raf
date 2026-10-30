@@ -16,7 +16,7 @@ import UnityPy
 
 def inspect(root:Path) -> dict:
     paths=[root/n for n in (
-        "globalgamemanagers","level0","level1","level37","level38","level39",
+        "globalgamemanagers","globalgamemanagers.assets","level0","level1","level37","level38","level39",
         "sharedassets1.assets","sharedassets37.assets","sharedassets38.assets","sharedassets39.assets")]
     report={"UnityPy_version":getattr(UnityPy,"__version__","unknown"),"samples":[]}
     all_types=Counter()
