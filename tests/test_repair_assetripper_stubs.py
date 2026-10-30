@@ -37,6 +37,22 @@ class RepairAssetRipperTemplatesTests(unittest.TestCase):
         self.assertEqual(fix_stubs(self.assets,apply=False)["fixed_candidates"],1)
         self.assertEqual(p.read_bytes(),original)
         self.assertTrue(meta.exists())
+    def test_timeline_duplicate_template_is_diagnostic_only(self):
+        folder=self.assets/"Scripts/Unity.Timeline/UnityEngine/Timeline"
+        folder.mkdir(parents=True,exist_ok=True)
+        name="AnimationTrack"
+        source=folder/(name+".cs")
+        source.write_text("using UnityEngine;\\n\\npublic class AnimationTrack : MonoBehaviour\\n{\\n}\\n")
+        meta=folder/(name+".cs.meta")
+        original=b"fileFormatVersion: 2\\nguid: a1b2c3d4e5f607182938404142434445\\n"
+        meta.write_bytes(original)
+        self.assertEqual(fix_stubs(self.assets,apply=False).get("fixed_candidates",0),0)
+        info=fix_stubs(self.assets,apply=True,repair_timeline=True)
+        self.assertEqual(info.get("timeline_collisions"),1)
+        updated=list(folder.glob("RecoveredStub_*.cs"))
+        self.assertEqual(len(updated),1)
+        self.assertEqual(updated[0].with_name(updated[0].name+".meta").read_bytes(),original)
+        self.assertFalse(source.exists())
     def test_skip_valid_class_identifiers(self):
         p,meta=self.fixture(stem="Raft_Network")
         d=fix_stubs(self.assets,apply=True)
