@@ -137,3 +137,10 @@ Before ANY download or extraction: inspect `df -h` / free bytes, verify archive 
 - Do not claim a successful build without a real APK.
 - Primary test phone: POCO F5 Pro; emulator optional.
 - Gate large Git LFS usage and third-party downloads by storage and cost checks.
+
+### New verified G2 milestone (2026-10-30)
+
+- Corrected script source discovery: `globalgamemanagers.assets` contains 3,827 MonoScript identities; it is a regular Git blob and needs no LFS transfer.
+- Limited AssetRipper Unity export now emits 3,810 `.cs` plus 3,810 `.cs.meta` files, with **13,969/13,969** script references from five scenes matching exported GUIDs and no placeholder.
+- The export used script `Level1`, so source may be stubs. **Do not infer functional gameplay code** from file counts; a separate `Level0` full-code experiment and Editor import are required.
+- Source assets still belong to commercial game rights holders. No extracted Unity projects or code committed or published.
