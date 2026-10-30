@@ -1,0 +1,109 @@
+name: Raft ILSpy .NET Framework 4.7.2 Mono compatibility audit
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - '.github/workflows/raft-net472-compiler-audit.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  compiler-gaps:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - name: Verify runner disk before dependencies
+        run: |
+          df -h /
+          test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')" -gt 12582912
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          fetch-depth: 1
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Install pinned ILSpy decompiler
+        shell: bash
+        run: |
+          set -euo pipefail
+          dotnet tool install ilspycmd --version 11.2.0.10050 --tool-path "$RUNNER_TEMP/ilspy"
+      - name: Recover Mono CSharp source in ephemeral runner, no publication
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/csharp"
+          timeout 300s "$RUNNER_TEMP/ilspy/ilspycmd" \
+            -p -o "$RUNNER_TEMP/csharp" \
+            Raft/Raft_Data/Managed/Assembly-CSharp.dll > "$RUNNER_TEMP/ilspy.log" 2>&1
+      - name: Make isolated .NET 8 compatibility diagnostic project using original managed references
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import os,html
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])/"csharp"
+          managed=Path(os.environ["GITHUB_WORKSPACE"])/"Raft/Raft_Data/Managed"
+          files=sorted(p for p in managed.glob("*.dll") if p.name.lower()!="assembly-csharp.dll")
+          cs=list(root.rglob("*.cs"))
+          references="\n".join(f'<Reference Include="{html.escape(p.stem)}"><HintPath>{html.escape(str(p))}</HintPath><Private>False</Private></Reference>' for p in files)
+          project=f"""<Project Sdk="Microsoft.NET.Sdk">
+          <PropertyGroup>
+            <TargetFramework>net472</TargetFramework>
+            <LangVersion>latest</LangVersion>
+            <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
+            <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+            <AssemblyName>Raft.Mono.Reconstruction.Diagnostic</AssemblyName>
+            <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+            <Nullable>disable</Nullable>
+            <OutputType>Library</OutputType>
+            <NoWarn>0168;0649;0618;0672;SYSLIB0011</NoWarn>
+          </PropertyGroup>
+          <ItemGroup>{references}</ItemGroup>
+          <ItemGroup><PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies.net472" Version="1.0.3" PrivateAssets="all" /></ItemGroup>
+          </Project>"""
+          (root/"Raft.Mono.Reconstruction.Diagnostic.csproj").write_text(project,encoding="utf8")
+          print("Decompiled CSharp file count:",len(cs))
+          print("Original managed DLL references listed:",len(files))
+          if len(cs)<1000 or len(files)<15:raise SystemExit("Invalid decompilation or DLL inventory")
+          PY
+      - name: Run compiler diagnostic, collect only aggregate codes
+        shell: bash
+        run: |
+          set +e
+          timeout 320s dotnet build "$RUNNER_TEMP/csharp/Raft.Mono.Reconstruction.Diagnostic.csproj" \
+            -v:q --nologo --p:RestoreIgnoreFailedSources=true \
+            > "$RUNNER_TEMP/compiler.log" 2>&1
+          result=$?
+          set -e
+          echo "Compiler exit code: $result"
+          export COMPILER_RESULT="$result"
+          python3 - <<'PY'
+          import re,collections,os
+          from pathlib import Path
+          path=Path(os.environ['RUNNER_TEMP'])/'compiler.log'
+          text=path.read_text(encoding='utf8',errors='replace')
+          codes=collections.Counter(re.findall(r'\berror\s+([A-Z]{2,8}\d{3,6}):',text))
+          warnings=collections.Counter(re.findall(r'\bwarning\s+([A-Z]{2,8}\d{3,6}):',text))
+          print("Compiler diagnostic errors by code:",dict(codes.most_common(25)))
+          print("Compiler diagnostic warnings by code:",dict(warnings.most_common(15)))
+          print("Compiler log bytes:",path.stat().st_size)
+          root=Path(os.environ["RUNNER_TEMP"])/"csharp/bin"
+          dlls=list(root.rglob("Raft.Mono.Reconstruction.Diagnostic.dll")) if root.exists() else []
+          print("Compiled diagnostic assembly produced:",bool(dlls))
+          if dlls:print("Compiled diagnostic assembly bytes:",dlls[0].stat().st_size)
+          print("Original decompiled CSharp snippets and compiler source lines deliberately NOT printed or uploaded.")
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              f.write('## Raft CSharp compile-compatibility baseline (NOT Unity Editor)\n')
+              f.write(f"- Compiler exit code: {os.environ.get('COMPILER_RESULT','not captured')}\n")
+              f.write(f"- Compiler error codes: {dict(codes.most_common(20))}\n")
+              f.write('No decompiled source, compiler lines or binaries uploaded. SYSLIB0011 suppressed ONLY for compatibility experiment; do not use insecure BinaryFormatter in final Android port. Unity 2021 Editor compatibility is NOT established.\n')
+          if len(text)==0:raise SystemExit("No compiler output, cannot evaluate")
+          PY
+        env:
+          COMPILER_RESULT: diagnostic
