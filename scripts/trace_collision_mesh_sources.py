@@ -14,7 +14,10 @@ import re
 
 import UnityPy
 
-from scripts.audit_mesh_stream_dependencies import classify_stream_range, is_pointer
+try:
+    from scripts.audit_mesh_stream_dependencies import classify_stream_range, is_pointer
+except ModuleNotFoundError:
+    from audit_mesh_stream_dependencies import classify_stream_range, is_pointer
 
 COLLIDER = re.compile(r'Mesh asset path "Assets/Mesh/([^"\\/]+)\.asset"')
 
