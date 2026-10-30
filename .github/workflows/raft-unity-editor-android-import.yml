@@ -1,0 +1,223 @@
+name: Raft gated Unity 2021 Android import + compile (requires license secrets)
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - '.github/workflows/raft-unity-editor-android-import.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  unity-license-preflight:
+    runs-on: ubuntu-latest
+    outputs:
+      ready: ${{ steps.check.outputs.ready }}
+    steps:
+      - name: Check whether Unity activation is available without exposing secrets
+        id: check
+        shell: bash
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        run: |
+          if [ -n "$UNITY_LICENSE" ] && [ -n "$UNITY_EMAIL" ] && [ -n "$UNITY_PASSWORD" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+            echo "Unity activation secrets found; attempting private project import and Android build."
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "Unity activation unavailable; will not download LFS or Docker image."
+            echo 'Unity Editor license setup is a genuine remaining prerequisite.' >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+  reconstruct:
+    needs: unity-license-preflight
+    if: ${{ needs.unity-license-preflight.outputs.ready == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    steps:
+      - name: Disk safety gate before dependencies / LFS download
+        shell: bash
+        run: |
+          set -euo pipefail
+          df -h /
+          free_kb=$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')
+          test "$free_kb" -gt 26214400
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          fetch-depth: 1
+          persist-credentials: true
+      - name: Run synthetic code-overlay tests before touching original data
+        run: python3 -m unittest discover -s tests -p test_csharp_overlay.py -v
+      - name: Download exactly 3 selected scene dependency LFS objects
+        shell: bash
+        run: |
+          set -euo pipefail
+          git lfs install --local
+          git lfs fetch origin HEAD \
+            --include='Raft/Raft_Data/resources.assets,Raft/Raft_Data/sharedassets0.assets,Raft/Raft_Data/sharedassets36.assets' \
+            --exclude=''
+          git lfs checkout
+          python3 - <<'PY'
+          import hashlib,subprocess,re
+          from pathlib import Path
+          expected={
+              'Raft/Raft_Data/resources.assets':111533516,
+              'Raft/Raft_Data/sharedassets0.assets':115978112,
+              'Raft/Raft_Data/sharedassets36.assets':110149324,
+          }
+          for name,size in expected.items():
+              p=Path(name)
+              if p.stat().st_size!=size:raise SystemExit("Unexpected LFS object size: "+name)
+              pointer=subprocess.check_output(["git","show","HEAD:"+name],text=True)
+              m=re.search(r'^oid sha256:([0-9a-f]{64})$',pointer,re.M)
+              if not m:raise SystemExit("Missing LFS pointer SHA256 for "+name)
+              with p.open("rb") as f:digest=hashlib.file_digest(f,"sha256").hexdigest()
+              if digest!=m.group(1):raise SystemExit("SHA256 mismatch for "+name)
+              print("Verified selected LFS asset:",p.name,p.stat().st_size)
+          PY
+          df -h /
+      - name: Stage selected Unity game files only, never execute Windows binaries
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="$RUNNER_TEMP/input/Raft_Data"
+          mkdir -p "$root/Managed"
+          cp Raft/Raft_Data/Managed/*.dll "$root/Managed/"
+          cp Raft/Raft_Data/boot.config "$root/"
+          shopt -s nullglob
+          count=0
+          for src in Raft/Raft_Data/globalgamemanagers Raft/Raft_Data/globalgamemanagers.assets* Raft/Raft_Data/resources.assets* Raft/Raft_Data/sharedassets*.assets* Raft/Raft_Data/level*; do
+            [ -f "$src" ] || continue
+            if head -c 48 "$src" | grep -q '^version https://git-lfs.github.com/spec/v1'; then continue; fi
+            cp "$src" "$root/"
+            count=$((count+1))
+          done
+          echo "Source serialized files staged: $count"
+          test "$count" -gt 110
+          du -sh "$root"
+      - name: Obtain SHA256-pinned AssetRipperCLI v1.0.1
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fL --retry 2 --max-time 240 \
+            'https://github.com/nowl-it/AssetRipperCLI/releases/download/v1.0.1/AssetRipper_linux_x64.zip' \
+            -o "$RUNNER_TEMP/assetripper.zip"
+          echo "b48292e40948ce2634e9187d4724fb4f45c01fa6f4fea2a5f4775aa611def17b  $RUNNER_TEMP/assetripper.zip" | sha256sum -c -
+          mkdir -p "$RUNNER_TEMP/ar"
+          unzip -q "$RUNNER_TEMP/assetripper.zip" -d "$RUNNER_TEMP/ar"
+          chmod +x "$RUNNER_TEMP/ar/AssetRipper.GUI.Free"
+      - name: Export 40 scenes into a Unity Editor project with correct MonoScript metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 1200s "$RUNNER_TEMP/ar/AssetRipper.GUI.Free" \
+            --cli --input "$RUNNER_TEMP/input" \
+            --output "$RUNNER_TEMP/project" --mode unity \
+            --script-content-level Level1 --ignore-streaming-assets \
+            > "$RUNNER_TEMP/export.log" 2>&1
+          test -d "$RUNNER_TEMP/project/ExportedProject/Assets"
+          test -d "$RUNNER_TEMP/project/ExportedProject/ProjectSettings"
+          df -h /
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Install ILSpyCmd 11.2.0.10050
+        shell: bash
+        run: |
+          set -euo pipefail
+          dotnet tool install ilspycmd --version 11.2.0.10050 --tool-path "$RUNNER_TEMP/ilspy"
+      - name: Decompile gameplay source to private ephemeral temp directory
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/ilspy-src"
+          timeout 360s "$RUNNER_TEMP/ilspy/ilspycmd" \
+            -p -o "$RUNNER_TEMP/ilspy-src" \
+            "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed/Assembly-CSharp.dll" \
+            > "$RUNNER_TEMP/ilspy.log" 2>&1
+      - name: Overlay uniquely identified real CSharp gameplay into Unity project
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/overlay_ilspy_gameplay.py \
+            --project "$RUNNER_TEMP/project/ExportedProject" \
+            --ilspy "$RUNNER_TEMP/ilspy-src" \
+            --report "$RUNNER_TEMP/overlay-report.json" \
+            --apply
+      - name: Validate reconstructed editor project structure and GUID references
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import os,re,json,collections
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])/"project/ExportedProject"
+          scenes=list(root.rglob("*.unity"))
+          source=list(root.rglob("*.cs"))
+          metas=list(root.rglob("*.cs.meta"))
+          expected_script_guids=set()
+          for f in metas:
+              m=re.search(r"(?m)^guid:\s*([0-9a-fA-F]{32})",f.read_text(errors="replace")[:500])
+              if m:expected_script_guids.add(m.group(1).lower())
+          refs=[]
+          unknown_guid=collections.Counter()
+          for f in scenes:
+              payload=f.read_text(errors="replace")
+              refs+=re.findall(r"m_Script:\s*\{[^\n}]*guid:\s*([a-fA-F0-9]{32})",payload)
+              unknown_guid.update(x.lower() for x in re.findall(r"guid:\s*([a-fA-F0-9]{32})",payload) if x.lower()=="0000000deadbeef15deadf00d0000000")
+          linked=sum(g.lower() in expected_script_guids for g in refs)
+          overlay=json.loads((Path(os.environ["RUNNER_TEMP"])/"overlay-report.json").read_text())
+          exts=collections.Counter(p.suffix for p in root.rglob("*") if p.is_file())
+          manifest=root/"Packages/manifest.json"
+          manifest_data=json.loads(manifest.read_text()) if manifest.exists() else {}
+          print("Editor project scenes:",len(scenes))
+          print("Editor project CSharp files:",len(source))
+          print("Editor project CSharp metas:",len(metas))
+          print("Scene script GUID matched:",linked,"/",len(refs))
+          print("Other deadbeef GUID sentinel uses:",sum(unknown_guid.values()))
+          print("ILSpy CSharp gameplay class overlays:",overlay["replacements"])
+          print("ILSpy namespace mismatch rejects:",overlay["namespace_mismatches"])
+          print("Unity source asset suffix counts:",dict(exts.most_common(14)))
+          print("Project package dependency names:",sorted(manifest_data.get("dependencies",{}))[:50])
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
+              f.write("## Integrated Unity project candidate (NO Unity Editor import yet)\n")
+              f.write(f"- Unity scenes: {len(scenes)}; CSharp files: {len(source)}; CSharp metas: {len(metas)}\n")
+              f.write(f"- Script refs linked: {linked}/{len(refs)}; deadbeef sentinels: {sum(unknown_guid.values())}\n")
+              f.write(f"- Gameplay source overlays: {overlay['replacements']}; namespace rejects: {overlay['namespace_mismatches']}\n")
+              f.write(f"- Project package dependency names: {sorted(manifest_data.get('dependencies',{}))[:30]}\n")
+              f.write("No generated game source, original assets or APK published. Compilation / runtime / stream content remains unverified.\n")
+          if len(scenes)!=40 or not refs or linked!=len(refs):raise SystemExit("Unity scene or script linkage regression")
+          if sum(unknown_guid.values())!=0:raise SystemExit("Unresolved Unity scene GUID references remain")
+          if overlay["replacements"]<1500:raise SystemExit("Insufficient ILSpy source integration")
+          if not manifest.exists():raise SystemExit("Missing Unity Packages manifest")
+          PY
+
+      - name: Stage private Unity project candidate inside runner workspace
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$GITHUB_WORKSPACE/unity-candidate"
+          cp -a "$RUNNER_TEMP/project/ExportedProject/." "$GITHUB_WORKSPACE/unity-candidate/"
+          du -sh "$GITHUB_WORKSPACE/unity-candidate"
+          df -h /
+      - name: Unity Editor 2021.3.45f2 Android import and compile
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: unity-candidate
+          targetPlatform: Android
+          buildName: RaftAndroidExperimental
+          buildsPath: builds
+      - name: If CI reaches here, report without releasing original game APK
+        run: |
+          echo 'Unity Android build action completed. Review Editor logs and privately test build outputs.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'No copyrighted game APK or source asset was uploaded or published by this workflow.' >> "$GITHUB_STEP_SUMMARY"
