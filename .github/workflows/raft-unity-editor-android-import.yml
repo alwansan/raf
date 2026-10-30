@@ -9,6 +9,10 @@ on:
       - '.github/workflows/raft-unity-editor-android-import.yml'
       - 'scripts/stage_raft_managed_dlls.py'
       - 'tests/test_stage_raft_managed_dlls.py'
+      - 'scripts/rename_conflicting_sdk_asmdefs.py'
+      - 'tests/test_sdk_asmdef_rename.py'
+      - 'scripts/add_unity_packages.py'
+      - 'tests/test_add_unity_packages.py'
 
 permissions:
   contents: read
@@ -165,7 +169,7 @@ jobs:
             --ilspy "$RUNNER_TEMP/ilspy-src" \
             --report "$RUNNER_TEMP/ilspy-supplement.json" \
             --min-added 500 --apply
-      - name: Restore eight third-party managed DLLs (FMOD, PlayFab, Netcode) without duplicate Unity UI
+      - name: Restore seven original third-party DLLs without platform-provided UI/TMP assemblies
         shell: bash
         run: |
           set -euo pipefail
@@ -174,6 +178,18 @@ jobs:
             --managed "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed" \
             --project "$RUNNER_TEMP/project/ExportedProject" \
             --report "$RUNNER_TEMP/managed-refs.json" --apply
+      - name: Restore Unity 2021 UGUI and TextMeshPro packages in temporary project
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_add_unity_packages.py -v
+          python3 scripts/add_unity_packages.py --project "$RUNNER_TEMP/project/ExportedProject" --apply
+      - name: Resolve AssetRipper SDK asmdef name collisions without touching GUIDs
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_sdk_asmdef_rename.py -v
+          python3 scripts/rename_conflicting_sdk_asmdefs.py --project "$RUNNER_TEMP/project/ExportedProject" --apply
       - name: Downgrade ILSpy CSharp 10 file-scoped namespaces to Unity 2021 CSharp 9
         shell: bash
         run: |
