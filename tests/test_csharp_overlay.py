@@ -51,11 +51,42 @@ class OverlaySafetyTests(unittest.TestCase):
         target,stub,_=self.fixture()
         other=self.ilspy/"Namespace2"/"Sample.cs"
         other.parent.mkdir()
-        other.write_text("public class Sample {}")
+        other.write_text("namespace RaftWorld { public class Sample {} }")
         result=map_sources(self.project,self.ilspy,True)
         self.assertEqual(result["replacements"],0)
         self.assertEqual(result["ambiguous_names"],1)
         self.assertEqual(target.read_text(),stub)
+
+    def test_other_assembly_same_filename_does_not_block_gameplay(self):
+        target,stub,src=self.fixture()
+        other=self.project/"Assets"/"Scripts"/"OtherSDK"/"Sample.cs"
+        other.parent.mkdir(parents=True)
+        other.write_text(stub)
+        result=map_sources(self.project,self.ilspy,True)
+        self.assertEqual(result["replacements"],1)
+        self.assertEqual(target.read_text(),src)
+        self.assertEqual(other.read_text(),stub)
+
+    def test_same_filename_different_namespace_is_unambiguous(self):
+        target,stub,src=self.fixture()
+        other=self.ilspy/"Other"/"Sample.cs"
+        other.parent.mkdir()
+        other.write_text("namespace Other { public interface Sample {} }")
+        result=map_sources(self.project,self.ilspy,True)
+        self.assertEqual(result["replacements"],1)
+        self.assertEqual(target.read_text(),src)
+
+    def test_recovers_generic_interface_and_preserves_meta(self):
+        target,_,_=self.fixture()
+        target.write_text("namespace RaftWorld { public class Sample {} }")
+        source="namespace RaftWorld { public interface Sample<T> { T Get(); } }"
+        (self.ilspy/"Sample.cs").write_text(source)
+        meta=target.with_suffix(".cs.meta")
+        before=meta.read_bytes()
+        result=map_sources(self.project,self.ilspy,True)
+        self.assertEqual(result["replacements"],1)
+        self.assertEqual(target.read_text(),source)
+        self.assertEqual(meta.read_bytes(),before)
 
     def test_refuse_other_assemblies(self):
         target,stub,_=self.fixture(asm="PlayFab")
