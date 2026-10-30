@@ -150,6 +150,7 @@ jobs:
           print("Asset GUIDs matched to exported .meta:",len(nonnull)-len(missing))
           print("Unique GUIDs without exported .meta:",len(missing))
           print("Missing GUID uses:",sum(missing.values()))
+          print("Unmatched nonzero GUID values and use counts:",sorted(missing.items(),key=lambda kv:-kv[1])[:12])
           print("Duplicate exported meta GUIDs:",len(dup))
           print("Exported file count by extension:",dict(exts.most_common(16)))
           with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as file:
