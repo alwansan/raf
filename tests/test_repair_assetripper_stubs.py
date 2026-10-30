@@ -42,9 +42,9 @@ class RepairAssetRipperTemplatesTests(unittest.TestCase):
         folder.mkdir(parents=True,exist_ok=True)
         name="AnimationTrack"
         source=folder/(name+".cs")
-        source.write_text("using UnityEngine;\\n\\npublic class AnimationTrack : MonoBehaviour\\n{\\n}\\n")
+        source.write_text("using UnityEngine;\n\npublic class AnimationTrack : MonoBehaviour\n{\n}\n")
         meta=folder/(name+".cs.meta")
-        original=b"fileFormatVersion: 2\\nguid: a1b2c3d4e5f607182938404142434445\\n"
+        original=b"fileFormatVersion: 2\nguid: a1b2c3d4e5f607182938404142434445\n"
         meta.write_bytes(original)
         self.assertEqual(fix_stubs(self.assets,apply=False).get("fixed_candidates",0),0)
         info=fix_stubs(self.assets,apply=True,repair_timeline=True)
