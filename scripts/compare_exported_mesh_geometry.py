@@ -31,7 +31,8 @@ def positions(tree):
         offset += count * strides[index]
         offset = (offset + 15) & ~15
     offset += position["offset"]
-    raw = bytes.fromhex(str(data["_typelessdata"]))
+    encoded = data["_typelessdata"]
+    raw = bytes.fromhex("" if encoded is None else str(encoded))
     codec = struct.Struct("<3" + ("f" if position["format"] == 0 else "e"))
     if offset + (count - 1) * strides[stream] + codec.size > len(raw):
         raise ValueError("truncated-positions")
@@ -87,13 +88,19 @@ def compare(before, after):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--before", type=Path, required=True)
-    parser.add_argument("--after", type=Path, required=True)
+    parser.add_argument("--after", type=Path)
     parser.add_argument("--ledger", type=Path, required=True)
     args = parser.parse_args()
     ledger = json.loads(args.ledger.read_text())
     wanted = {r["mesh_name"] for p in ledger["providers"]
               if p["stream"] == "sharedassets29.assets.resS" for r in p["meshes"]}
     before, before_errors = inspect(args.before, wanted)
+    if args.after is None:
+        result = dict(compare(before, {}), before_parse_errors=before_errors)
+        print("RAFT_BASELINE_EXPORT_GEOMETRY " + json.dumps(result, sort_keys=True))
+        if not before or before_errors:
+            raise SystemExit("Baseline analysis incomplete")
+        raise SystemExit(0)
     after, after_errors = inspect(args.after, wanted)
     result = dict(compare(before, after), before_parse_errors=before_errors, after_parse_errors=after_errors)
     print("RAFT_EXPORT_GEOMETRY_COMPARISON " + json.dumps(result, sort_keys=True))

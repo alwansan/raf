@@ -37,6 +37,11 @@ class ExportGeometryTests(unittest.TestCase):
             positions({"m_VertexData": {"m_VertexCount": 1, "m_Channels": [
                 {"stream": 0, "offset": 0, "format": 0, "dimension": 3}], "_typelessdata": "00"}})
 
+    def test_yaml_null_typelessdata_is_truncated_payload(self):
+        with self.assertRaisesRegex(ValueError, 'truncated-positions'):
+            positions({"m_VertexData": {"m_VertexCount": 1, "m_Channels": [
+                {"stream": 0, "offset": 0, "format": 0, "dimension": 3}], "_typelessdata": None}})
+
     def test_meta_changes_are_visible(self):
         result = compare({"a": {"guid": "a", "vertices": 3, "nonfinite": 1}},
                          {"a": {"guid": "b", "vertices": 3, "nonfinite": 0}})

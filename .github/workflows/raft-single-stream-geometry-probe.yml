@@ -17,7 +17,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   probe:
-    if: ${{ github.ref == 'refs/heads/feature/android-native-port' && (github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[raft-stream-probe]')) }}
+    if: ${{ github.ref == 'refs/heads/feature/android-native-port' && (github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[raft-stream-probe]') || contains(github.event.head_commit.message, '[raft-export-baseline]')) }}
     runs-on: ubuntu-24.04
     timeout-minutes: 25
     steps:
@@ -41,6 +41,7 @@ jobs:
             --log "$RUNNER_TEMP/native-completed.log" \
             --details-out "$RUNNER_TEMP/private-collider-ranges.json"
       - name: Enforce one-source transfer and storage bounds before fetch
+        if: ${{ !contains(github.event.head_commit.message, '[raft-export-baseline]') }}
         run: |
           python3 - <<'PY'
           import json, os, shutil
@@ -56,11 +57,13 @@ jobs:
           git lfs fetch origin HEAD --include='Raft/Raft_Data/sharedassets29.assets.resS' --exclude=''
           git lfs checkout Raft/Raft_Data/sharedassets29.assets.resS
       - name: Verify source bytes and decode only previously failing collider meshes
+        if: ${{ !contains(github.event.head_commit.message, '[raft-export-baseline]') }}
         run: |
           python3 scripts/probe_collider_stream.py --root Raft/Raft_Data \
             --ledger "$RUNNER_TEMP/private-collider-ranges.json" \
             --stream sharedassets29.assets.resS
       - name: Report scope without publishing game content
+        if: ${{ !contains(github.event.head_commit.message, '[raft-export-baseline]') }}
         run: |
           echo 'Original source geometry experiment completed; inspect RAFT_VERIFIED_SOURCE_GEOMETRY. This is not AssetRipper/Unity cooking validation or an APK.' >> "$GITHUB_STEP_SUMMARY"
       - name: Obtain checksum-pinned exporter for focused before-after experiment
@@ -74,7 +77,9 @@ jobs:
       - name: Export identical original header twice with only stream presence changed
         run: |
           set -euo pipefail
-          for variant in before after; do
+          variants='before after'
+          if [ "$BASELINE_ONLY" = true ]; then variants='before'; fi
+          for variant in $variants; do
             root="$RUNNER_TEMP/$variant-input/Raft_Data"
             mkdir -p "$root"
             cp Raft/Raft_Data/sharedassets29.assets Raft/Raft_Data/globalgamemanagers Raft/Raft_Data/globalgamemanagers.assets "$root/"
@@ -87,9 +92,18 @@ jobs:
               > "$RUNNER_TEMP/$variant-export.log" 2>&1
             test -d "$RUNNER_TEMP/$variant-export/ExportedProject/Assets/Mesh"
           done
+        env:
+          BASELINE_ONLY: ${{ contains(github.event.head_commit.message, '[raft-export-baseline]') }}
       - name: Compare exported position validity and unchanged Mesh GUIDs
+        if: ${{ !contains(github.event.head_commit.message, '[raft-export-baseline]') }}
         run: |
           python3 scripts/compare_exported_mesh_geometry.py \
             --before "$RUNNER_TEMP/before-export/ExportedProject" \
             --after "$RUNNER_TEMP/after-export/ExportedProject" \
+            --ledger "$RUNNER_TEMP/private-collider-ranges.json"
+      - name: Inspect baseline without any LFS transfer
+        if: ${{ contains(github.event.head_commit.message, '[raft-export-baseline]') }}
+        run: |
+          python3 scripts/compare_exported_mesh_geometry.py \
+            --before "$RUNNER_TEMP/before-export/ExportedProject" \
             --ledger "$RUNNER_TEMP/private-collider-ranges.json"
