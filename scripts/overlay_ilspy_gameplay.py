@@ -13,10 +13,14 @@ import json
 import re
 import sys
 
+def get_namespace(text):
+    match=re.search(r"(?m)^\s*namespace\s+([\w.]+)\s*(?:[;{]|$)",text)
+    return match.group(1) if match else ""
+
 def build_index(files):
     result=defaultdict(list)
     for p in files:
-        result[p.name].append(p)
+        result[(p.name, get_namespace(p.read_text(encoding="utf8", errors="replace")))].append(p)
     return result
 
 def map_sources(project:Path, decompiled:Path, apply:bool) -> dict:
@@ -24,8 +28,9 @@ def map_sources(project:Path, decompiled:Path, apply:bool) -> dict:
     if not assets.is_dir() or not decompiled.is_dir():
         raise FileNotFoundError("Expected Unity ExportedProject/Assets and ILSpy C# directory")
     asset_scripts=list(assets.rglob("*.cs"))
+    gameplay_scripts=[p for p in asset_scripts if "Assembly-CSharp" in p.parts]
     ilspy_files=list(decompiled.rglob("*.cs"))
-    target_index=build_index(asset_scripts)
+    target_index=build_index(gameplay_scripts)
     source_index=build_index(ilspy_files)
     report={
         "asset_csharp_files":len(asset_scripts),
@@ -46,12 +51,14 @@ def map_sources(project:Path, decompiled:Path, apply:bool) -> dict:
         "missing_meta":0,
         "examples":[],
         "apply":apply,
-        "limitations":"Name-unique conservative pairing. Does not prove class serialization, compile or scene correctness.",
+        "limitations":"Assembly-scoped, namespace-and-filename-unique conservative pairing. Does not prove class serialization, compile or scene correctness.",
     }
-    for name,targets in target_index.items():
-        srcs=source_index.get(name,[])
+    for (name,namespace),targets in target_index.items():
+        srcs=source_index.get((name,namespace),[])
         if not srcs:
             report["unmatched"]+=len(targets)
+            if any(key[0]==name for key in source_index):
+                report["namespace_mismatches"]+=len(targets)
             continue
         if len(targets)!=1 or len(srcs)!=1:
             report["ambiguous_names"]+=len(targets)
@@ -70,9 +77,6 @@ def map_sources(project:Path, decompiled:Path, apply:bool) -> dict:
             continue
         source=src.read_text(encoding="utf8",errors="replace")
         stub=target.read_text(encoding="utf8",errors="replace")
-        def get_namespace(text):
-            match=re.search(r"(?m)^\s*namespace\s+([\w.]+)\s*(?:[;{]|$)",text)
-            return match.group(1) if match else ""
         if get_namespace(source)!=get_namespace(stub):
             report["namespace_mismatches"]+=1
             continue
