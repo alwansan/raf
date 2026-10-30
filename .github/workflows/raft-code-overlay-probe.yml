@@ -119,6 +119,11 @@ jobs:
           python3 scripts/audit_mono_plugin_conflicts.py \
             --project "$RUNNER_TEMP/export/ExportedProject" \
             --managed "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed"
+      - name: Audit whether scenes/prefabs link to recovered SDK placeholder scripts
+        shell: bash
+        run: |
+          python3 scripts/audit_sdk_script_links.py \
+            --project "$RUNNER_TEMP/export/ExportedProject"
       - name: Verify serialized scene GUIDs remain linked after CSharp replacement
         shell: bash
         run: |
