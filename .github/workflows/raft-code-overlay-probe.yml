@@ -1,0 +1,126 @@
+name: Raft ILSpy gameplay code overlay into linked Unity scenes
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - '.github/workflows/raft-code-overlay-probe.yml'
+      - 'scripts/overlay_ilspy_gameplay.py'
+
+permissions:
+  contents: read
+
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 28
+    steps:
+      - name: Inspect disk and require room for CSharp project import
+        run: |
+          df -h /
+          test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')" -gt 15728640
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Stage five non-LFS scenes, original MonoScript identities and managed DLLs
+        shell: bash
+        run: |
+          set -euo pipefail
+          dir="$RUNNER_TEMP/sample/Raft_Data"
+          mkdir -p "$dir/Managed"
+          cp Raft/Raft_Data/globalgamemanagers* "$dir/"
+          cp Raft/Raft_Data/boot.config "$dir/"
+          cp Raft/Raft_Data/Managed/*.dll "$dir/Managed/"
+          for n in 0 1 37 38 39; do
+            for f in "level$n" "sharedassets$n.assets" "sharedassets$n.assets.resS"; do
+              path="Raft/Raft_Data/$f"
+              if [ -f "$path" ]; then
+                if head -c 48 "$path" | grep -q 'version https://git-lfs.github.com/spec/v1'; then
+                  echo "Skipped LFS pointer $f"; continue
+                fi
+                cp "$path" "$dir/"
+              fi
+            done
+          done
+          du -sh "$dir"
+      - name: Verify and unpack pinned AssetRipperCLI
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 2 --max-time 240 'https://github.com/nowl-it/AssetRipperCLI/releases/download/v1.0.1/AssetRipper_linux_x64.zip' -o "$RUNNER_TEMP/asset-tool.zip"
+          echo "b48292e40948ce2634e9187d4724fb4f45c01fa6f4fea2a5f4775aa611def17b  $RUNNER_TEMP/asset-tool.zip" | sha256sum --check
+          mkdir -p "$RUNNER_TEMP/ar"
+          unzip -q "$RUNNER_TEMP/asset-tool.zip" -d "$RUNNER_TEMP/ar"
+          chmod +x "$RUNNER_TEMP/ar/AssetRipper.GUI.Free"
+      - name: Export Unity scenes, scripts and GUID-preserving meta files
+        shell: bash
+        run: |
+          timeout 660s "$RUNNER_TEMP/ar/AssetRipper.GUI.Free" \
+            --cli --input "$RUNNER_TEMP/sample" \
+            --output "$RUNNER_TEMP/export" --mode unity \
+            --script-content-level Level1 --ignore-streaming-assets \
+            > "$RUNNER_TEMP/asset-export.log" 2>&1
+          test -d "$RUNNER_TEMP/export/ExportedProject/Assets"
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Install official ILSpyCmd
+        run: |
+          dotnet tool install ilspycmd --version 11.2.0.10050 --tool-path "$RUNNER_TEMP/ilspy-tool"
+          "$RUNNER_TEMP/ilspy-tool/ilspycmd" --version
+      - name: Decompile Mono gameplay assembly in isolated temporary directory
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/ilspy-source"
+          timeout 360s "$RUNNER_TEMP/ilspy-tool/ilspycmd" \
+            -p -o "$RUNNER_TEMP/ilspy-source" \
+            "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed/Assembly-CSharp.dll" \
+            > "$RUNNER_TEMP/ilspy.log" 2>&1
+          test -n "$(find "$RUNNER_TEMP/ilspy-source" -type f -name '*.cs' -print -quit)"
+      - name: Overlay matched real gameplay CSharp source onto Unity script meta identities
+        shell: bash
+        run: |
+          python3 scripts/overlay_ilspy_gameplay.py \
+            --project "$RUNNER_TEMP/export/ExportedProject" \
+            --ilspy "$RUNNER_TEMP/ilspy-source" \
+            --report "$RUNNER_TEMP/code-overlay-report.json" \
+            --apply
+      - name: Verify serialized scene GUIDs remain linked after CSharp replacement
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import os,json,re
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"export/ExportedProject"
+          report=json.loads((Path(os.environ["RUNNER_TEMP"])/"code-overlay-report.json").read_text())
+          sc=list(p.rglob("*.unity"))
+          met=list(p.rglob("*.cs.meta"))
+          cs=list(p.rglob("*.cs"))
+          refs=[]
+          for f in sc:
+              refs+=re.findall(r'm_Script:\s*\{[^\n}]*guid:\s*([0-9a-fA-F]{32})',f.read_text(encoding="utf8",errors="replace"))
+          metaids=set()
+          for f in met:
+              m=re.search(r'(?m)^guid:\s*([0-9a-fA-F]{32})',f.read_text(encoding="utf8",errors="replace")[:500])
+              if m: metaids.add(m.group(1).lower())
+          matched=sum(1 for g in refs if g.lower() in metaids)
+          print("Unity scene count:",len(sc))
+          print("CSharp file count after overlay:",len(cs))
+          print("Meta file count:",len(met))
+          print("GUID match count:",matched,"/",len(refs))
+          print("Actual real-code overlays:",report['replacements'])
+          print("Overlay changed bytes:",report['bytes_before'],"->",report['bytes_after'])
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              f.write('## CSharp gameplay overlay preserving Unity script identities\n')
+              f.write(f"- Unity scenes: {len(sc)}, C#: {len(cs)}, C# metas: {len(met)}\n")
+              f.write(f"- Scene script reference matches: {matched}/{len(refs)}\n")
+              f.write(f"- Unique ILSpy source overlays: {report['replacements']}\n")
+              f.write(f"- Replaced stub bytes: {report['bytes_before']} -> actual CSharp bytes: {report['bytes_after']}\n")
+              f.write('Unity Editor import/compile NOT tested; original game assets and code not published.\n')
+          if not refs or matched!=len(refs): raise SystemExit("Scene GUID linkage broke after code overlay")
+          if report['replacements']<100: raise SystemExit("Insufficient unique CSharp code overlays")
+          PY
