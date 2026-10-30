@@ -59,3 +59,9 @@
 ### Forty-scene serialized script reference gate
 
 [All levels passed a script-link audit](https://github.com/alwansan/raf/actions/runs/41024647631): `level0..level39` exported **40 Unity scenes** with **64,642/64,642** `m_Script` GUID uses matching exported `.cs.meta` files and no placeholder identifiers. This is a serialized scene linkage milestone, not a runnable game or APK. The full set of other asset dependencies is still being audited without LFS downloads.
+
+### Mesh/geometry dependency milestone
+
+[All regular-Git Unity asset export](https://github.com/alwansan/raf/actions/runs/41025868800) **reduced** unresolved `deadbeef` scene references by **49.4%** (393,450 → 199,156) and mesh placeholders by **52.5%** (198,114 → 94,152), without Git LFS downloads. [Independent original Unity pointer audit](https://github.com/alwansan/raf/actions/runs/41026113254) identified `resources.assets` as the largest original mesh reference target (85,525 uses), followed by `sharedassets30.assets` (42,137 uses) and others.
+
+See [mesh recovery findings, remaining blockers and cost-controlled next gate](docs/MESH_RECOVERY_FINDINGS.md). A [manual-only opt-in Git LFS workflow](.github/workflows/raft-opt-in-lfs-mesh-probe.yml) allows a deliberately approved 106 MiB `resources.assets` test or an optional 217 MiB two-file test. **No LFS downloads run automatically**. Neither a fully compilable Unity Editor project nor Android APK exists yet.
