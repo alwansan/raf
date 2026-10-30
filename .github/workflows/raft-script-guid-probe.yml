@@ -1,0 +1,93 @@
+name: Raft MonoBehaviour scene script-reference probe
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - '.github/workflows/raft-script-guid-probe.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  script-references:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - name: Verify free runner disk
+        run: |
+          df -h /
+          test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')" -gt 20971520
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Stage main/startup and late game Unity scenes and Mono managed references
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="$RUNNER_TEMP/probe/Raft_Data"
+          mkdir -p "$root/Managed"
+          cp Raft/Raft_Data/globalgamemanagers Raft/Raft_Data/boot.config "$root/"
+          cp Raft/Raft_Data/Managed/*.dll "$root/Managed/"
+          for n in 0 1 37 38 39; do
+            for file in "level$n" "sharedassets$n.assets" "sharedassets$n.assets.resS"; do
+              src="Raft/Raft_Data/$file"
+              if [ -f "$src" ]; then
+                if head -c 42 "$src" | grep -q 'version https://git-lfs.github.com/spec/v1'; then
+                  echo "Skipping Git LFS pointer: $file"
+                  continue
+                fi
+                cp "$src" "$root/"
+              fi
+            done
+          done
+          du -sh "$root"
+      - name: Fetch verified pinned AssetRipperCLI
+        run: |
+          curl --fail --location --retry 2 --max-time 240 'https://github.com/nowl-it/AssetRipperCLI/releases/download/v1.0.1/AssetRipper_linux_x64.zip' -o "$RUNNER_TEMP/tool.zip"
+          echo "b48292e40948ce2634e9187d4724fb4f45c01fa6f4fea2a5f4775aa611def17b  $RUNNER_TEMP/tool.zip" | sha256sum --check
+          mkdir -p "$RUNNER_TEMP/ar"
+          unzip -q "$RUNNER_TEMP/tool.zip" -d "$RUNNER_TEMP/ar"
+          chmod +x "$RUNNER_TEMP/ar/AssetRipper.GUI.Free"
+      - name: Export scene skeleton and check serialized MonoBehaviour script references
+        shell: bash
+        run: |
+          set -euo pipefail
+          set +e
+          timeout 420s "$RUNNER_TEMP/ar/AssetRipper.GUI.Free" \
+            --cli --input "$RUNNER_TEMP/probe/Raft_Data" \
+            --output "$RUNNER_TEMP/result" --mode unity \
+            --script-content-level Level0 --ignore-streaming-assets \
+            > "$RUNNER_TEMP/export.log" 2>&1
+          rc=$?
+          set -e
+          echo "Exporter return code: $rc"
+          echo "Script processing diagnostics:"
+          grep -Ei 'assembly|script|managed|backend|failed|warning' "$RUNNER_TEMP/export.log" | tail -35 | cut -c 1-240 || true
+          test "$rc" -eq 0
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          root=Path(os.environ['RUNNER_TEMP'])/'result'/'ExportedProject'
+          if not root.is_dir(): raise SystemExit('No ExportedProject')
+          scenes=list(root.rglob('*.unity'))
+          scripts=list(root.rglob('*.cs'))
+          guids=list(root.rglob('*.meta'))
+          behaviour=sum(p.read_bytes().count(b'MonoBehaviour:') for p in scenes)
+          script_refs=sum(p.read_bytes().count(b'm_Script:') for p in scenes)
+          print('Unity scene files:',len(scenes))
+          print('C# script files:',len(scripts))
+          print('Unity meta files:',len(guids))
+          print('MonoBehaviour serialized object markers:',behaviour)
+          print('m_Script field references:',script_refs)
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
+              f.write("## Unity serialized MonoBehaviour linkage check\n")
+              f.write(f"- .unity: {len(scenes)}; .cs: {len(scripts)}; .meta: {len(guids)}\n")
+              f.write(f"- MonoBehaviour markers: {behaviour}; m_Script references: {script_refs}\n")
+              f.write("- Raw game assets and decompiled code remained on ephemeral runner only.\n")
+          if not scenes: raise SystemExit("No Unity scenes exported")
+          PY
