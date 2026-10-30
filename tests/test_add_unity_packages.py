@@ -36,7 +36,7 @@ class UnityPackagesTests(unittest.TestCase):
             ensure(self.root, apply=True)
     def test_reject_invalid_manifest(self):
         self.manifest.write_text("[]")
-        with self.assertRaises(AttributeError):
+        with self.assertRaises(ValueError):
             ensure(self.root, apply=True)
 
 if __name__ == "__main__":
