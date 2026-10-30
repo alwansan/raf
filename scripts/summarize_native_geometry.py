@@ -63,6 +63,7 @@ def compare(before, after, targeted):
     return {'before': old, 'after': new,
             'removed_nonfinite_names': len(old_nonfinite - new_nonfinite),
             'new_nonfinite_names': len(new_nonfinite - old_nonfinite),
+            'new_nonfinite_names_already_failed_other_categories': len((new_nonfinite - old_nonfinite) & old_broad),
             'removed_broad_error_names': len(old_broad - new_broad),
             'new_broad_error_names': len(new_broad - old_broad),
             'targeted_original_names': len(targeted),
@@ -81,12 +82,24 @@ if __name__ == '__main__':
     with args.after.open(encoding='utf-8-sig', errors='replace') as source:
         after = inspect_log(source)
     from scripts.trace_collision_mesh_sources import scan_original_headers
-    matches, metadata = scan_original_headers(args.root, before[2])
+    matches, metadata = scan_original_headers(args.root, before[2] | after[2])
     targeted = {name for name, rows in matches.items() if any(
         row['source'] == 'sharedassets29.assets' and
         row['stream_file'] == 'sharedassets29.assets.resS' for row in rows)}
     if not targeted or not before[0]['native_result'] or not after[0]['native_result']:
         raise SystemExit('Missing target metadata or native build result; refusing incomplete comparison')
     report = compare(before, after, targeted)
+    remaining = {name: matches[name] for name in after[2] if matches.get(name)}
+    report['remaining_nonfinite_matched_names'] = len(remaining)
+    report['remaining_nonfinite_unmatched_names'] = len(after[2] - set(remaining))
+    report['remaining_nonfinite_source_headers'] = dict(Counter(
+        source for name, rows in remaining.items() for source in {r['source'] for r in rows}))
+    report['remaining_nonfinite_new_category_source_headers'] = dict(Counter(
+        source for name in after[2] - before[2] for source in
+        {r['source'] for r in matches.get(name, [])}))
+    from scripts.trace_collision_mesh_sources import summary
+    if after[2]:
+        report['remaining_stream_priorities'] = summary(Counter({name: 1 for name in after[2]}),
+            matches, metadata, args.root)['stream_lfs_priorities']
     report['source_header_parse_errors'] = metadata['parse_errors']
     print('RAFT_NATIVE_GEOMETRY_DIFF ' + json.dumps(report, sort_keys=True))

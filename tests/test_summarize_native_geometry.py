@@ -30,3 +30,10 @@ class NativeGeometrySummaryTests(unittest.TestCase):
         self.assertEqual(report['removed_nonfinite_names'], 1)
         self.assertEqual(report['new_nonfinite_names'], 1)
         self.assertEqual(report['targeted_nonfinite_names_after'], 1)
+        self.assertEqual(report['new_nonfinite_names_already_failed_other_categories'], 0)
+
+    def test_new_nonfinite_category_does_not_mean_a_new_failed_mesh(self):
+        report = compare(({}, {'A', 'B'}, {'A'}), ({}, {'B'}, {'B'}), {'A'})
+        self.assertEqual(report['new_nonfinite_names'], 1)
+        self.assertEqual(report['new_nonfinite_names_already_failed_other_categories'], 1)
+        self.assertEqual(report['new_broad_error_names'], 0)
