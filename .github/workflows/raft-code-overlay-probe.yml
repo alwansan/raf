@@ -88,6 +88,22 @@ jobs:
             "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed/Assembly-CSharp.dll" \
             > "$RUNNER_TEMP/ilspy.log" 2>&1
           test -n "$(find "$RUNNER_TEMP/ilspy-source" -type f -name '*.cs' -print -quit)"
+      - name: Inspect original and exported type identities without method bodies
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import os,re
+          from pathlib import Path
+          wanted={"FastList","ApplicationSingleton","Quadtree","ILocalFoamRenderer","IDecalReceiver","ISpawner","PostProcessingComponent","SpectrumResolverCPU","PARTY_DATA_BUFFER","UTF8StringPtr","ObjectSpawner"}
+          bases=[("ILSpy",Path(os.environ["RUNNER_TEMP"])/"ilspy-source"),("AssetRipper",Path(os.environ["RUNNER_TEMP"])/"export/ExportedProject/Assets/Scripts/Assembly-CSharp")]
+          for label,root in bases:
+              for p in sorted(root.rglob("*.cs")):
+                  if not any(p.name.startswith(n+".") or p.stem==n or p.name.startswith(n+"\x60") for n in wanted): continue
+                  s=p.read_text(encoding="utf-8-sig",errors="replace")
+                  ns=re.findall(r"\bnamespace\s+([\w.]+)",s)
+                  declarations=re.findall(r"\b(class|interface|struct|enum)\s+([\w]+)(\s*<[^>{}]+>)?",s)
+                  print(label,p.relative_to(root).as_posix(),"namespaces",ns,"declarations",declarations[:3])
+          PY
       - name: Overlay matched real gameplay CSharp source onto Unity script meta identities
         shell: bash
         run: |
