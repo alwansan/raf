@@ -9,6 +9,8 @@ on:
       - '.github/workflows/raft-managed-deps-stage-smoke.yml'
       - 'scripts/stage_raft_managed_dlls.py'
       - 'tests/test_stage_raft_managed_dlls.py'
+      - 'scripts/rename_conflicting_sdk_asmdefs.py'
+      - 'tests/test_sdk_asmdef_rename.py'
 
 permissions:
   contents: read
@@ -25,6 +27,8 @@ jobs:
           fetch-depth: 1
       - name: Test selective third-party managed DLL staging with synthetic fixtures
         run: python3 -m unittest discover -s tests -p test_stage_raft_managed_dlls.py -v
+      - name: Verify asmdef collision renaming safety and GUID preservation
+        run: python3 -m unittest discover -s tests -p test_sdk_asmdef_rename.py -v
       - name: Validate that selected original managed DLLs can be staged
         shell: bash
         run: |
