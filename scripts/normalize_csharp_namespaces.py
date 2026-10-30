@@ -15,7 +15,7 @@ import re
 NAMESPACE = re.compile(
     r"(?m)^(?P<indent>[ \t]*)namespace[ \t]+"
     r"(?P<name>[A-Za-z_][A-Za-z_0-9]*(?:\.[A-Za-z_][A-Za-z_0-9]*)*)"
-    r"[ \t]*;[ \t]*(?://[^\r\n]*)?$"
+    r"[ \t]*;[ \t]*(?://[^\r\n]*)?(?:\r?\n|$)"
 )
 
 def convert(text: str) -> tuple[str, bool]:
@@ -45,7 +45,7 @@ def process(root:Path,apply:bool)->dict:
     for path in sorted(root.rglob("*.cs")):
         result["source_files"]+=1
         data=path.read_bytes()
-        try:text=data.decode("utf8-sig")
+        try:text=data.decode("utf-8-sig")
         except UnicodeDecodeError:
             result["non_utf8"]+=1
             continue
