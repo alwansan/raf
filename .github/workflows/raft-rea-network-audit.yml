@@ -61,6 +61,11 @@ jobs:
                       print("Native",section,"sample keys:", list(rows[0])[:40])
               if isinstance(norm.get("summary"),dict):
                   print("Native summary:", str(norm["summary"])[:700])
+              from collections import Counter
+              print("Native PInvoke count by import scope:",dict(Counter(
+                  r.get("import_scope_name","<unknown>") for r in norm.get("pinvoke_imports",[])
+                  if isinstance(r,dict)
+              )))
           print("Result bytes:",os.path.getsize(os.path.join(os.environ["RUNNER_TEMP"],"native-boundaries.json")))
           with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
               f.write("## REA native boundaries: success\n")
