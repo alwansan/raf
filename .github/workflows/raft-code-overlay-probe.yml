@@ -8,6 +8,7 @@ on:
     paths:
       - '.github/workflows/raft-code-overlay-probe.yml'
       - 'scripts/overlay_ilspy_gameplay.py'
+      - 'tests/test_csharp_overlay.py'
 
 permissions:
   contents: read
@@ -26,6 +27,8 @@ jobs:
           lfs: false
           persist-credentials: false
           fetch-depth: 1
+      - name: Run synthetic overlay safety tests
+        run: python3 -m unittest discover -s tests -p 'test_csharp_overlay.py' -v
       - name: Stage five non-LFS scenes, original MonoScript identities and managed DLLs
         shell: bash
         run: |
