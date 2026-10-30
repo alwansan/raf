@@ -35,7 +35,8 @@ def classify_stream_range(root, reference, offset, size):
 
 def scan(root,max_per_file):
     result={"files":[],"stream_paths":Counter(),"errors":Counter(),"mesh_count":0,
-            "inspected_meshes":0,"meshes_with_stream":0,"claimed_stream_bytes":0,\n            "stream_range_status":Counter(),"range_status_by_path":{}}
+            "inspected_meshes":0,"meshes_with_stream":0,"claimed_stream_bytes":0,
+            "stream_range_status":Counter(),"range_status_by_path":{}}
     for path in sorted(root.glob("sharedassets*.assets"))+sorted(root.glob("resources.assets")):
         if is_pointer(path):
             result["files"].append({"file":path.name,"status":"LFS pointer - skipped"})
@@ -77,7 +78,9 @@ def scan(root,max_per_file):
                                 "inspected":scanned,"stream_paths":dict(local.most_common(5)),
                                 "errors":dict(errs)})
     result["stream_paths"]=dict(result["stream_paths"].most_common(30))
-    result["errors"]=dict(result["errors"])\n    result["stream_range_status"]=dict(result["stream_range_status"])\n    result["range_status_by_path"]={p:dict(c) for p,c in result["range_status_by_path"].items()}
+    result["errors"]=dict(result["errors"]) 
+    result["stream_range_status"]=dict(result["stream_range_status"]) 
+    result["range_status_by_path"]={p:dict(c) for p,c in result["range_status_by_path"].items()}
     result["caveat"]="m_StreamData range coverage checks only local source files; an LFS pointer is not a loaded stream. Does not audit texture/animation/audio streams or prove exported Unity geometry integrity. Counts are not distinct bytes needed on device."
     return result
 
