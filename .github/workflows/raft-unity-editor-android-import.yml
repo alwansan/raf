@@ -153,6 +153,16 @@ jobs:
             --ilspy "$RUNNER_TEMP/ilspy-src" \
             --report "$RUNNER_TEMP/overlay-report.json" \
             --apply
+      - name: Recover CSharp helper types absent from AssetRipper MonoScript output
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_supplement_ilspy_gameplay.py -v
+          python3 scripts/supplement_ilspy_gameplay.py \
+            --project "$RUNNER_TEMP/project/ExportedProject" \
+            --ilspy "$RUNNER_TEMP/ilspy-src" \
+            --report "$RUNNER_TEMP/ilspy-supplement.json" \
+            --min-added 500 --apply
       - name: Downgrade ILSpy CSharp 10 file-scoped namespaces to Unity 2021 CSharp 9
         shell: bash
         run: |
