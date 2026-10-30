@@ -124,3 +124,24 @@ https://github.com/alwansan/raf/actions/runs/41018053143
 - No exported Unity files were uploaded or committed.
 
 **Next gate:** dependency-aware, license/cost-conscious wider source export, using selected non-LFS assets first. Full Git LFS download is not justified until project scaffolding and Unity/Android licensing are established.
+
+## Job 6: REA 6.8.0 managed artifact analysis — SUCCESS
+
+https://github.com/alwansan/raf/actions/runs/41020338080
+
+- Node 24.22.2 installed via actions/setup-node on Ubuntu runner.
+- Official `rea-agents@6.8.0` fetched and installed using npm (**176 packages**).
+- Git LFS explicitly disabled. Reported free runner storage after install: approx. **86 GiB** (ephemeral).
+- Parsed `Raft/Raft_Data/Managed/Assembly-CSharp.dll` using `rea inspect-managed-artifact <path> --format json`.
+- Exit code 0, local JSON evidence size **2,189,390 bytes**.
+- Importantly, tool only parsed static data; it did not execute the game DLL, recover an editor project or compile for Android.
+- Earlier job attempts failed on `--detail` being an unsupported REA 6.8 CLI flag. Removed it and re-ran successfully.
+
+## Job 7: REA targeted native imports and network methods — SUCCESS
+
+https://github.com/alwansan/raf/actions/runs/41020491527
+
+- `rea inspect-managed-native-boundaries` succeeded and returned 155 P/Invoke import rows and 271 native implementation rows.
+- Selected `AI_NetworkBehaviour` using `rea inspect-managed-members --type AI_NetworkBehaviour --format json`: 1 type, 9 fields, 14 methods, 27 call edges, 19 field accesses, 3 user strings.
+- Result files were private temporary runner data, with only counts and structure logged; no decompiled game source or extracted game resources were published.
+- This supports targeted network-internals research. Actual class semantics and replacement feasibility remain **unverified** until call-site analysis and a compiling Unity project exist.
