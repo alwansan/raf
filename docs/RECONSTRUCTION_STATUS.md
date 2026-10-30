@@ -68,3 +68,7 @@ The previous section documented a missing-GUID state **before the dependency was
 After including this file and `Managed/*.dll`, the five sample scenes exported with 3,810 source-stub `.cs` files and 3,810 corresponding `.cs.meta` files. All 13,969 `m_Script` references in those five scenes had a matching exported `.cs.meta` GUID (296 distinct GUIDs), with **zero** placeholder uses. This **verifies script GUID linkage in the sample**, but not runtime behavior, compiler correctness, prefab completeness, or the remaining game world.
 
 The next gate is `--script-content-level Level0` C# recovery and comparison with ILSpy, before attempting a Unity 2021.3.45f2 Editor import.
+
+## Level0 code fidelity and safe C# overlay
+
+[Level0 AssetRipper run](https://github.com/alwansan/raf/actions/runs/41023910696) produced 3,810 script sources and retained all 13,969 scene GUID links, but individual gameplay class outputs like `SaveAndLoad.cs` were only ~2.6 KiB, compared to ~48.7 KiB of ILSpy-decompiled source. Therefore the AssetRipper source files are **not yet verified as full game logic**. A new CI-only overlay tool `scripts/overlay_ilspy_gameplay.py` combines source from ILSpy with GUID-preserving Unity meta files using conservative unique class filename matching. The merged code is confined to an ephemeral GitHub runner, pending count and consistency checks; no original game C# was added to the public repository.
