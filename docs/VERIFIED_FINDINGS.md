@@ -145,3 +145,19 @@ https://github.com/alwansan/raf/actions/runs/41020491527
 - Selected `AI_NetworkBehaviour` using `rea inspect-managed-members --type AI_NetworkBehaviour --format json`: 1 type, 9 fields, 14 methods, 27 call edges, 19 field accesses, 3 user strings.
 - Result files were private temporary runner data, with only counts and structure logged; no decompiled game source or extracted game resources were published.
 - This supports targeted network-internals research. Actual class semantics and replacement feasibility remain **unverified** until call-site analysis and a compiling Unity project exist.
+
+## Job 8: exact Windows platform P/Invoke scope and network method names — SUCCESS
+
+https://github.com/alwansan/raf/actions/runs/41020808394
+
+REA parsed all 155 `ImplMap` P/Invoke rows in `Assembly-CSharp.dll`:
+
+- `PartyWin32`: **131** import declarations
+- `PartyXboxLiveWin32`: **21** import declarations
+- `lz4unity`: **3** import declarations
+
+REA also reported 271 native implementation rows. This includes metadata categories that **must not** be assumed to mean extra Windows DLL dependencies.
+
+The selected 14 `AI_NetworkBehaviour` methods include `UpdateHost`, `UpdateRemoteclient`, `Initialize`, `OnRestoreStart`, `OnRestoreFinished`, `Create_SaveData`, `SetNetworkIndexes` and lifecycle methods. This is strong **structural evidence** of separate host vs remote client update paths and save/restore hooks, but not proof that networking transport can be swapped without changes.
+
+See [network migration plan](NETWORK_COMPATIBILITY.md) for tests and migration gates.
