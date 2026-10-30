@@ -102,3 +102,12 @@ Earlier experiments failed because the Unity license was not visible in a GitHub
 - [REA tool assessment](REA_EVALUATION.md)
 
 **End of handoff. The actual current GitHub source and newest Actions compiler log outrank older descriptions. Do not claim success without a compiled and device-tested APK.**
+
+
+## Work continuation: namespace-aware overlay (2026-10-30)
+
+- Resumed at branch HEAD d39c8482280487784100ef6a7af22b14fe5c8bad. Commit workflow lookup returned no runs at that HEAD; this is not a repository-wide listing of newer manual runs. Re-read job 124088681726: actual C# errors remain, and Unity login/entitlement succeeded. Do not change license secrets based on XML formatting speculation.
+- Found a reproducible reconstruction bug: overlay indexed ALL exported assemblies by bare filename and indexed ILSpy sources by bare filename. A same-name unrelated SDK file or different namespace caused a conservative rejection, potentially retaining incorrect generated classes instead of real interfaces/generic bases. Now index only Assembly-CSharp targets and pair by (filename, namespace). Reject same-namespace ambiguities, preserve namespace checks and .meta bytes, never touch other assemblies.
+- Local synthetic validation: 9/9 overlay tests passed, including unrelated-assembly collision, different-namespace collision, original ambiguity rejection, generic interface restoration and unchanged meta bytes. These prove mapper behavior only; no new Unity error count or APK is established.
+- Full workflow push filters now include overlay script and tests, so this change requests one existing gated Unity run on the development branch. Inspect that run before further large tests. No new LFS objects or dependencies added.
+- The earlier hypothesis that generic filename punctuation alone explains the errors is unverified. Next: inspect overlay ambiguity/unmatched counts and original ILSpy declarations in the runner; supplement still deduplicates by bare filename and may need qualified type identity. Steam/InputSystem/Party runtime compatibility remains unresolved.
