@@ -54,5 +54,8 @@ jobs:
                           "unmatched_distinct_names","ambiguous_names","matched_stream_status",
                           "matched_original_sources","skipped_lfs_original_header_count","source_parse_errors"):
                   f.write(f"- {key}: {d[key]}\n")
+              f.write("- Cost-ranked missing stream providers (mapped names per 100 MiB):\n")
+              for item in d["stream_lfs_priorities"]:
+                  f.write(f"  - {item['stream']}: {item['matching_distinct_collider_names']} names, {item['lfs_declared_bytes']} declared bytes, density {item['distinct_names_per_100_MiB']}\n")
               f.write("An unmatched mesh name may belong to the source headers still stored as LFS pointers. No game content uploaded or published.\n")
           PY
