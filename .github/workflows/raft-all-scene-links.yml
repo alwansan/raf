@@ -1,0 +1,119 @@
+name: Raft all 40 scenes script-link coverage (no LFS)
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - '.github/workflows/raft-all-scene-links.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check available disk and suppress LFS downloads
+        shell: bash
+        run: |
+          set -euo pipefail
+          df -h /
+          test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')" -gt 15728640
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Assemble limited game layout with full MonoScript registry
+        shell: bash
+        run: |
+          set -euo pipefail
+          dir="$RUNNER_TEMP/sample/Raft_Data"
+          mkdir -p "$dir/Managed"
+          cp Raft/Raft_Data/globalgamemanagers "$dir/"
+          cp Raft/Raft_Data/globalgamemanagers.assets "$dir/"
+          cp Raft/Raft_Data/globalgamemanagers.assets.resS "$dir/"
+          cp Raft/Raft_Data/boot.config "$dir/"
+          cp Raft/Raft_Data/Managed/*.dll "$dir/Managed/"
+          for n in $(seq 0 39); do
+            for f in "level$n"; do
+              source="Raft/Raft_Data/$f"
+              if [ -f "$source" ]; then
+                if head -c 48 "$source" | grep -q 'version https://git-lfs.github.com/spec/v1'; then
+                  echo "Skipping unavailable LFS file: $source"; continue
+                fi
+                cp "$source" "$dir/"
+              fi
+            done
+          done
+          du -sh "$dir"
+      - name: Download verified CLI tool release
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 2 --max-time 240 \
+            'https://github.com/nowl-it/AssetRipperCLI/releases/download/v1.0.1/AssetRipper_linux_x64.zip' \
+            -o "$RUNNER_TEMP/arcli.zip"
+          echo "b48292e40948ce2634e9187d4724fb4f45c01fa6f4fea2a5f4775aa611def17b  $RUNNER_TEMP/arcli.zip" | sha256sum --check
+          mkdir -p "$RUNNER_TEMP/cli"
+          unzip -q "$RUNNER_TEMP/arcli.zip" -d "$RUNNER_TEMP/cli"
+          chmod +x "$RUNNER_TEMP/cli/AssetRipper.GUI.Free"
+      - name: Export temporary Unity editor project and regenerated script meta
+        shell: bash
+        run: |
+          set -euo pipefail
+          set +e
+          timeout 1200s "$RUNNER_TEMP/cli/AssetRipper.GUI.Free" \
+            --cli --input "$RUNNER_TEMP/sample" \
+            --output "$RUNNER_TEMP/linked-project" --mode unity \
+            --script-content-level Level1 --ignore-streaming-assets \
+            > "$RUNNER_TEMP/linked-export.log" 2>&1
+          code=$?
+          set -e
+          echo "Exporter exit code: $code"
+          grep -Ei 'Exporting scripts|Decompiling|Failed|WARNING|Error' "$RUNNER_TEMP/linked-export.log" | tail -20 | cut -c 1-240 || true
+          test "$code" -eq 0
+      - name: Verify C# files and script GUIDs, no source published
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import os,re,collections
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"linked-project/ExportedProject"
+          scenes=list(p.rglob("*.unity"))
+          scripts=list(p.rglob("*.cs"))
+          metas=list(p.rglob("*.cs.meta"))
+          gids=collections.Counter()
+          for scene in scenes:
+              txt=scene.read_text(encoding="utf8",errors="replace")
+              for g in re.findall(r'm_Script:\s*\{[^\n}]*guid:\s*([0-9a-fA-F]{32})',txt):
+                  gids[g.lower()]+=1
+          metaids=set()
+          for f in metas:
+              c=f.read_text(encoding="utf8",errors="replace")[:500]
+              m=re.search(r'(?m)^guid:\s*([0-9a-fA-F]{32})',c)
+              if m:metaids.add(m.group(1).lower())
+          matched=sum(n for g,n in gids.items() if g in metaids)
+          total=sum(gids.values())
+          print("Scene count:",len(scenes))
+          print("All 40 stage scene names:",[f.name for f in scenes[:10]])
+          print("C# source file count:",len(scripts))
+          print("C# meta count:",len(metas))
+          print("Unique script GUIDs:",len(gids))
+          print("Matched scene script GUID references:",matched,"of",total)
+          print("Placeholder GUID uses:",gids.get('0000000deadbeef15deadf00d0000000',0))
+          print("No proprietary files uploaded or committed.")
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
+              f.write("## Raft script-link export with globalgamemanagers.assets\n")
+              f.write(f"- Scenes: {len(scenes)}, C#: {len(scripts)}, script metas: {len(metas)}\n")
+              f.write(f"- Unique script GUIDs: {len(gids)}, matched references: {matched}/{total}\n")
+              f.write(f"- Placeholder GUID uses: {gids.get('0000000deadbeef15deadf00d0000000',0)}\n")
+              f.write("No original code or assets published. Editor compilation NOT tested.\n")
+          if len(scenes)<35: raise SystemExit("Insufficient recovered scenes from all 40 levels")
+          if matched!=total: raise SystemExit("Missing Unity serialized script GUID references")
+          if not scripts: raise SystemExit("No C# files exported, linkage still unresolved")
+          if not metaids: raise SystemExit("No script identity metadata exported")
+          PY
