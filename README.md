@@ -65,3 +65,9 @@
 [All regular-Git Unity asset export](https://github.com/alwansan/raf/actions/runs/41025868800) **reduced** unresolved `deadbeef` scene references by **49.4%** (393,450 → 199,156) and mesh placeholders by **52.5%** (198,114 → 94,152), without Git LFS downloads. [Independent original Unity pointer audit](https://github.com/alwansan/raf/actions/runs/41026113254) identified `resources.assets` as the largest original mesh reference target (85,525 uses), followed by `sharedassets30.assets` (42,137 uses) and others.
 
 See [mesh recovery findings, remaining blockers and cost-controlled next gate](docs/MESH_RECOVERY_FINDINGS.md). A [manual-only opt-in Git LFS workflow](.github/workflows/raft-opt-in-lfs-mesh-probe.yml) allows a deliberately approved 106 MiB `resources.assets` test or an optional 217 MiB two-file test. **No LFS downloads run automatically**. Neither a fully compilable Unity Editor project nor Android APK exists yet.
+
+### All exported scene resource GUID placeholders resolved (latest)
+
+[Verified three-file LFS export](https://github.com/alwansan/raf/actions/runs/41028697081) reduced both scene-wide and mesh `deadbeef` references to **zero** across **40 Unity scenes**, retaining **64,642/64,642** script GUID links. Targeted LFS files: `resources.assets`, `sharedassets0.assets`, `sharedassets36.assets` (~322 MiB per combined run), not all 6.47 GiB. [Findings and limitations](docs/MESH_RECOVERY_FINDINGS.md).
+
+[ILSpy decompiled source net8 diagnostic compilation succeeded](https://github.com/alwansan/raf/actions/runs/41028495873), producing a 3.58 MB DLL in the temporary runner. A separate netstandard2.1 diagnostic failed due to framework references, so **Unity Editor import/compile is NOT verified**. Large `.resS` content is still untested.
