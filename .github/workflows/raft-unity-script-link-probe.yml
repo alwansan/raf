@@ -150,3 +150,22 @@ jobs:
         run: |
           python3 scripts/audit_timeline_duplicates.py \
             --assets "$RUNNER_TEMP/linked-export/ExportedProject/Assets"
+
+      - name: Identify compilation-target Timeline CSharp template shapes (no source contents)
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import os,re
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])/"linked-export/ExportedProject/Assets"
+          for name in ("AnimationPlayableAsset","AnimationTrack"):
+              p=root/"Scripts/Unity.Timeline/UnityEngine/Timeline"/(name+".cs")
+              if not p.exists():
+                  print("MISSING Timeline script:",name)
+                  continue
+              source=p.read_text(errors="replace")
+              classes=re.findall(r"\b(?:public|internal)\s+(?:partial\s+)?class\s+(\w+)\s*(?::\s*([\w.]+))?",source)
+              print("Timeline diagnostic:",name,"bytes:",p.stat().st_size,"types and bases:",classes[:5],
+                    "MonoBehaviour ref:",bool(re.search(r"\bMonoBehaviour\b",source)),
+                    "first lines:",len(source.splitlines()[:10]),"meta exists:",p.with_name(p.name+".meta").exists())
+          PY
