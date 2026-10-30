@@ -70,7 +70,7 @@ jobs:
           timeout 420s "$RUNNER_TEMP/ar-cli/AssetRipper.GUI.Free" \
             --cli --input "$RUNNER_TEMP/raft-linked-sample/Raft_Data" \
             --output "$RUNNER_TEMP/linked-export" \
-            --mode unity --script-content-level Level0 --ignore-streaming-assets \
+            --mode unity --script-content-level Level1 --ignore-streaming-assets \
             > "$RUNNER_TEMP/linked-export.log" 2>&1
           rc=$?
           set -e
