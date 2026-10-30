@@ -90,6 +90,10 @@ def main():
     print("Native module references:", ", ".join(report["native_module_references"]))
     print("P/Invoke declarations:", report["pinvoke_count"])
     print("Feature matches:", report["feature_keyword_matches"])
+    print("Network class samples:", report["feature_class_samples"]["multiplayer"][:28])
+    print("Raft class samples:", report["feature_class_samples"]["raft"][:20])
+    print("Save class samples:", report["feature_class_samples"]["save_loading"][:20])
+    print("Native imports by module:", dict(collections.Counter(item["module"] for item in report["pinvoke_declarations"])))
     print("Report:", out)
 
 
