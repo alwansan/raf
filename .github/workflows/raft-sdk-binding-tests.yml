@@ -4,6 +4,7 @@ on:
     branches: [feature/android-native-port]
     paths:
       - 'android-port/Editor/SdkScriptBindingCore.cs'
+      - 'android-port/Editor/SdkScriptBindingResolver.cs'
       - 'android-port/Tests/SdkBindings/**'
       - 'scripts/build_sdk_script_manifest.py'
       - 'tests/test_build_sdk_script_manifest.py'

@@ -28,6 +28,15 @@ class SdkManifestTests(unittest.TestCase):
         self.source("SDK","One","a"*32,"public class One {}")
         self.source("SDK","Two","a"*32,"public class Two {}")
         with self.assertRaises(ValueError): build(self.root)
+    def test_provider_selection_uses_script_references_not_arbitrary_guids(self):
+        self.source("SDK","Widget","a"*32,"public class Widget {}")
+        self.source("UnusedSDK","Other","b"*32,"public class Other {}")
+        scene=self.root/"Assets/Scenes/Probe.unity"
+        scene.parent.mkdir()
+        scene.write_text("%YAML 1.1\n  m_Script: {fileID: 11500000, guid: "+"a"*32+", type: 3}\n  m_Mesh: {fileID: 1, guid: "+"b"*32+", type: 3}\n")
+        result=build(self.root)
+        self.assertEqual(result["referencedAssemblies"],["SDK"])
+        self.assertEqual(result["statistics"]["sdk_references"],1)
     def test_bom_does_not_hide_identity(self):
         self.source("SDK","Widget","a"*32,"\ufeffnamespace Sdk {\npublic class Widget {}\n}")
         self.assertEqual(build(self.root)["scripts"][0]["fullTypeName"],"Sdk.Widget")

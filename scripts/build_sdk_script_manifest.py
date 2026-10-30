@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Record SDK MonoScript metadata before diagnostic template renames; no source bodies."""
 import argparse
+from collections import Counter
 import json
 from pathlib import Path
 import re
@@ -34,7 +35,18 @@ def build(project: Path) -> dict:
         rows.append({"sourceGuid":guid,"assemblyName":assembly,
                      "fullTypeName":full,"simpleTypeName":name,
                      "sourcePath":source.relative_to(assets).as_posix()})
-    return {"scripts":rows,"statistics":{"sdk_source_identities":len(rows)}}
+    refs=Counter()
+    script_ref=re.compile(r"(?m)^[ \t]*m_Script:[ \t]*\{[^}\r\n]*\bguid:[ \t]*([0-9a-fA-F]{32})")
+    for asset in assets.rglob("*"):
+        if asset.is_file() and asset.suffix in {".unity",".prefab",".asset"}:
+            refs.update(g.lower() for g in script_ref.findall(asset.read_text(encoding="utf8",errors="replace")))
+    for row in rows:
+        row["references"]=refs[row["sourceGuid"]]
+    providers=sorted({row["assemblyName"] for row in rows if row["references"]})
+    return {"scripts":rows,"referencedAssemblies":providers,
+            "statistics":{"sdk_source_identities":len(rows),
+                          "sdk_references":sum(row["references"] for row in rows),
+                          "referenced_sdk_assemblies":len(providers)}}
 if __name__=="__main__":
     parser=argparse.ArgumentParser()
     parser.add_argument("--project",required=True,type=Path)
