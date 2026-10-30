@@ -161,3 +161,28 @@ REA also reported 271 native implementation rows. This includes metadata categor
 The selected 14 `AI_NetworkBehaviour` methods include `UpdateHost`, `UpdateRemoteclient`, `Initialize`, `OnRestoreStart`, `OnRestoreFinished`, `Create_SaveData`, `SetNetworkIndexes` and lifecycle methods. This is strong **structural evidence** of separate host vs remote client update paths and save/restore hooks, but not proof that networking transport can be swapped without changes.
 
 See [network migration plan](NETWORK_COMPATIBILITY.md) for tests and migration gates.
+
+## Job 9: selected Unity scene project restoration — SUCCESS (partial scenes)
+
+https://github.com/alwansan/raf/actions/runs/41021307639
+
+- Selected **3** small non-LFS scenes: `level37`, `level38`, `level39`, with their matching `sharedassets37-39.assets`, available `.resS` streams and `globalgamemanagers`.
+- Pinned SHA-256 verified `nowl-it/AssetRipperCLI` v1.0.1 invoked in `--mode unity` with script import disabled.
+- **64** exported files, including **3** real `.unity` scene files and **22** `.meta` files. Package manifest and Unity project settings generated. Total output bytes **37,076,315** (~35.4 MiB).
+- Exit code 0, and CI explicitly checked that Unity scene files exist. This **upgrades earlier evidence** (only 20 settings files) to **genuine serialized Unity editor-scene recovery**.
+- No Unity Editor import or compilation yet; incomplete asset dependencies are expected. Three exported scenes do **not** establish a game-ready Unity project.
+- No Git LFS payload download, no extracted game data uploaded to artifacts or committed.
+
+## Job 10: Mono gameplay type architecture inventory — SUCCESS
+
+https://github.com/alwansan/raf/actions/runs/41021653681
+
+- 3,032 managed type names and 19,512 method definitions were mapped using `dnfile==0.18.0`, without assembly execution.
+- Name-based candidate matches (not exclusive, not an execution path): network 367 (363 non-compiler generated), save 40 (20 non-generated), raft 161, platform 269, input 58.
+- Exact relevant types exist: `Raft_Network`, `SaveAndLoad`, `GameManager`, `SteamManager`.
+- `SaveAndLoad`: 48 method definitions. Sample names: `Save`, `Load`, `SaveGame`, `SaveUser`, `GetSettingsPath`.
+- `SteamManager`: 9 method definitions including `Awake`, `OnEnable` and `Update`.
+- `GameManager`: 13 method definitions including `OnWorldRecieved`, `Start` and `OnApplicationQuit`.
+- This is a *symbol* inventory; next trace selected call edges and assess network/Steam dependencies before attempting offline bootstrap.
+- Reports are created only on ephemeral runners; no proprietary decompiled source published.
+
