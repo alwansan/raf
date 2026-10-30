@@ -117,3 +117,47 @@ jobs:
           if not scripts: raise SystemExit("No C# files exported, linkage still unresolved")
           if not metaids: raise SystemExit("No script identity metadata exported")
           PY
+
+      - name: Audit all serialized scene asset GUID links, beyond scripts
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import collections,os,re
+          from pathlib import Path
+          project=Path(os.environ["RUNNER_TEMP"])/"linked-project/ExportedProject"
+          scenes=list(project.rglob("*.unity"))
+          meta=list(project.rglob("*.meta"))
+          registry=set()
+          duplicates=collections.Counter()
+          for f in meta:
+              content=f.read_text(encoding="utf8",errors="replace")[:512]
+              m=re.search(r"(?m)^guid:\s*([a-fA-F0-9]{32})",content)
+              if m:
+                  guid=m.group(1).lower()
+                  duplicates[guid]+=1
+                  registry.add(guid)
+          refs=collections.Counter()
+          for scene in scenes:
+              raw=scene.read_text(encoding="utf8",errors="replace")
+              refs.update(x.lower() for x in re.findall(r"guid:\s*([a-fA-F0-9]{32})",raw))
+          nonnull={guid:n for guid,n in refs.items() if guid!="0"*32}
+          missing={guid:n for guid,n in nonnull.items() if guid not in registry}
+          dup={g:n for g,n in duplicates.items() if n>1}
+          exts=collections.Counter(f.suffix.lower() for f in project.rglob("*") if f.is_file())
+          print("Total serialized guid occurrences:",sum(refs.values()))
+          print("Nonzero GUID occurrences:",sum(nonnull.values()))
+          print("Unique nonzero GUIDs:",len(nonnull))
+          print("Asset GUIDs matched to exported .meta:",len(nonnull)-len(missing))
+          print("Unique GUIDs without exported .meta:",len(missing))
+          print("Missing GUID uses:",sum(missing.values()))
+          print("Duplicate exported meta GUIDs:",len(dup))
+          print("Exported file count by extension:",dict(exts.most_common(16)))
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as file:
+              file.write("## All scene serialized asset GUID coverage (not just scripts)\n")
+              file.write(f"- Nonzero GUID occurrences: {sum(nonnull.values())}; unique: {len(nonnull)}\n")
+              file.write(f"- Unique unmatched GUIDs: {len(missing)}; missing uses: {sum(missing.values())}\n")
+              file.write(f"- Duplicate exported .meta GUIDs: {len(dup)}\n")
+              file.write(f"- Common file suffixes: {dict(exts.most_common(10))}\n")
+              file.write("Missing GUIDs may include Unity built-ins or assets absent from the partial, no-LFS input. Counts alone do not prove broken runtime links.\n")
+          if dup: raise SystemExit("Ambiguous duplicate asset .meta GUIDs detected")
+          PY
