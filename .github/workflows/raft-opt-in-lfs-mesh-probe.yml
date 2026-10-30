@@ -16,6 +16,7 @@ on:
           - 'NO - do not download'
           - 'YES - download resources.assets only (~106 MiB)'
           - 'YES - download both selected LFS files (~217 MiB)'
+          - 'YES - include sharedassets36.assets (~322 MiB total)'
         default: 'NO - do not download'
 
 permissions:
@@ -47,8 +48,10 @@ jobs:
             scope='resources'
           elif [ "$DISPATCH_CHOICE" = 'YES - download both selected LFS files (~217 MiB)' ]; then
             scope='both'
+          elif [ "$DISPATCH_CHOICE" = 'YES - include sharedassets36.assets (~322 MiB total)' ]; then
+            scope='three'
           fi
-          case "$scope" in NO|resources|both) ;; *) echo 'Invalid explicit approval scope'; exit 3;; esac
+          case "$scope" in NO|resources|both|three) ;; *) echo 'Invalid explicit approval scope'; exit 3;; esac
           echo "scope=$scope" >> "$GITHUB_OUTPUT"
           echo "Selected consent scope: $scope"
           if [ "$scope" = NO ]; then echo 'No LFS objects will be downloaded'; fi
@@ -82,6 +85,8 @@ jobs:
           paths='Raft/Raft_Data/resources.assets'
           if [ "$INPUT_APPROVE_LFS_TRANSFER" = both ]; then
             paths='Raft/Raft_Data/sharedassets0.assets,Raft/Raft_Data/resources.assets'
+          elif [ "$INPUT_APPROVE_LFS_TRANSFER" = three ]; then
+            paths='Raft/Raft_Data/sharedassets0.assets,Raft/Raft_Data/resources.assets,Raft/Raft_Data/sharedassets36.assets'
           fi
           echo "Selected exact LFS paths: $paths"
           git lfs install --local
@@ -91,8 +96,10 @@ jobs:
           from pathlib import Path
           import re,subprocess,hashlib,os
           expected={'Raft/Raft_Data/resources.assets':111533516}
-          if os.environ.get('INPUT_APPROVE_LFS_TRANSFER') == 'both':
+          if os.environ.get('INPUT_APPROVE_LFS_TRANSFER') in ('both','three'):
               expected['Raft/Raft_Data/sharedassets0.assets']=115978112
+          if os.environ.get('INPUT_APPROVE_LFS_TRANSFER') == 'three':
+              expected['Raft/Raft_Data/sharedassets36.assets']=110149324
           for path,size in expected.items():
               data=Path(path)
               if data.stat().st_size!=size:
@@ -166,7 +173,7 @@ jobs:
           print('Scripts linked:',linked,'/',total)
           print('Total deadbeef refs (prior non-LFS: 199156):',data['deadbeef_total'])
           print('m_Mesh deadbeef refs (prior non-LFS: 94152):',mesh)
-          print('Two-file recovery baseline (resources only): total=37111, mesh=8631')
+          print('Recovery baselines: resources only total=37111 mesh=8631; resources+sharedassets0 total=6697 mesh=3233')
           from collections import Counter
           extcounts=Counter(p.suffix.lower() for p in root.rglob('*') if p.is_file())
           print('Exported Unity file types:',dict(extcounts.most_common(16)))
@@ -175,7 +182,7 @@ jobs:
               file.write(f"- Scenes: {len(scenes)}; script links: {linked}/{total}\n")
               file.write(f"- All placeholders: before 199156, after {data['deadbeef_total']}\n")
               file.write(f"- m_Mesh placeholders: before 94152, after {mesh}\n")
-              file.write("- Resource-only baseline: deadbeef=37111, mesh=8631; evaluate extra gain of sharedassets0.\n")
+              file.write("- Resource-only baseline: deadbeef=37111, mesh=8631; two-file baseline: deadbeef=6697, mesh=3233. Evaluate gain of sharedassets36.\n")
               file.write('No proprietary original assets or source files uploaded or committed.\n')
           if len(scenes)<35 or not total or total!=linked:
               raise SystemExit('Unity scene/script linkage regression')
