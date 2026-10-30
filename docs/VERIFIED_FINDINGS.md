@@ -97,3 +97,17 @@ https://github.com/alwansan/raf/actions/runs/41016983283
 - Third-party `nowl-it/AssetRipperCLI` v1.0.1 Linux x64: downloaded (~127 MiB), SHA-256 verified, executable starts and help includes `--cli`. https://github.com/alwansan/raf/actions/runs/41017535607
 - AssetRipper sample resource probe (non-LFS only): https://github.com/alwansan/raf/actions/runs/41017638608 (outcome pending at this documentation update).
 - These tests execute third-party AssetRipper tools in an isolated CI runner with read-only GitHub permission; **they do not execute Raft.exe or its patched DLLs**. No full game files or proprietary outputs are uploaded.
+
+## Job 4: first real AssetRipper non-LFS sample export — SUCCESS
+
+https://github.com/alwansan/raf/actions/runs/41017866546
+
+- Input selected from this repository: `sharedassets37.assets`, `sharedassets37.assets.resS`, `globalgamemanagers`, copied to an isolated temporary sample.
+- No LFS objects were downloaded; before the download the runner storage was checked.
+- Tool: checksum-verified `nowl-it/AssetRipperCLI` v1.0.1, CLI with `--mode primary --disable-script-import --ignore-streaming-assets`.
+- Export command exit code: **0**; actual resulting file count: **243**; exported output directory approx. **11 MiB**.
+- Tool reported individual failures on several built-in UI sprites during export, so this is **partial extraction**, not proof that every game scene/material/script can be reconstructed.
+- Neither extracted game assets nor source files were committed or uploaded to workflow artifacts.
+- The prior test run 41017638608 exited 0 but printed `Too many arguments were supplied`; that was a false-positive workflow result. The script was corrected to omit extra `true` words for boolean flags and to check the output directory is nonempty. The successful, validated run is **41017866546**.
+
+**Result:** G1 small-sample Unity asset extraction viability is now verified; next gated step is a narrow project-format export and editor import check, before large LFS downloads.
