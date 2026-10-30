@@ -109,3 +109,23 @@ jobs:
         shell: bash
         run: |
           python3 scripts/normalize_csharp_namespaces.py --root "$RUNNER_TEMP/linked-export/ExportedProject/Assets"
+
+      - name: Check whether failing Unity package-source files are present in limited export
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import os,re
+          from pathlib import Path
+          base=Path(os.environ["RUNNER_TEMP"])/"linked-export/ExportedProject/Assets/Scripts"
+          paths=["Unity.Collections/HeapString.gen.cs","Unity.Mathematics/bool2.gen.cs",
+                 "Unity.InputSystem/FastMouse.partial.cs","UnityEngine.Purchasing.WinRTCore/AssemblyInfo.cs.cs"]
+          for name in paths:
+              p=base/name
+              print("Target generated source",name,"exists:",p.is_file())
+              if p.is_file():
+                  lines=p.read_text(encoding="utf8",errors="replace").splitlines()
+                  for i,line in enumerate(lines[:5]):
+                      if "namespace " in line:
+                          print("Namespace line:",i+1,repr(line[:120]))
+                  print("First line lengths:",[len(line) for line in lines[:5]])
+          PY
