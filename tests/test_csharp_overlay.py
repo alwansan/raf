@@ -96,6 +96,41 @@ class OverlaySafetyTests(unittest.TestCase):
         self.assertEqual(result["replacements"],1)
         self.assertEqual(target.read_text(encoding="utf8"),source)
 
+    def test_opt_in_recovers_lost_namespace_from_field_only_template(self):
+        target,_,source=self.fixture()
+        target.write_text("using UnityEngine;\npublic class Sample : MonoBehaviour { public int value; }")
+        original_meta=target.with_suffix(".cs.meta").read_bytes()
+        self.assertEqual(map_sources(self.project,self.ilspy,False)["replacements"],0)
+        result=map_sources(self.project,self.ilspy,True,recover_unqualified_stubs=True)
+        self.assertEqual(result["unqualified_stubs_recovered"],1)
+        self.assertEqual(target.read_text(),source)
+        self.assertEqual(target.with_suffix(".cs.meta").read_bytes(),original_meta)
+
+    def test_lost_namespace_recovery_refuses_implemented_component(self):
+        target,_,_=self.fixture()
+        stub="public class Sample : MonoBehaviour { public void Awake() { } }"
+        target.write_text(stub)
+        result=map_sources(self.project,self.ilspy,True,recover_unqualified_stubs=True)
+        self.assertEqual(result["replacements"],0)
+        self.assertEqual(target.read_text(),stub)
+
+    def test_lost_namespace_uses_only_unmatched_original_identity(self):
+        target,_,_=self.fixture()
+        target.write_text("public class Sample : MonoBehaviour { }")
+        wrapper=target.parent/"Wrapper"/"Sample.cs"
+        wrapper.parent.mkdir()
+        wrapper.write_text("namespace Wrapper { public class Sample : MonoBehaviour {} }")
+        wrapper.with_suffix(".cs.meta").write_text("guid: abcdef0123456789abcdef0123456789")
+        (self.ilspy/"Sample.cs").unlink()
+        for ns,kind in [("Wrapper","class"),("Interop","struct")]:
+            directory=self.ilspy/ns
+            directory.mkdir()
+            (directory/"Sample.cs").write_text(f"namespace {ns} {{ public {kind} Sample {{ }} }}")
+        result=map_sources(self.project,self.ilspy,True,recover_unqualified_stubs=True)
+        self.assertEqual(result["replacements"],2)
+        self.assertEqual(result["unqualified_stubs_recovered"],1)
+        self.assertIn("namespace Interop",target.read_text())
+
     def test_refuse_other_assemblies(self):
         target,stub,_=self.fixture(asm="PlayFab")
         result=map_sources(self.project,self.ilspy,True)

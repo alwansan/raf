@@ -111,7 +111,7 @@ jobs:
             --project "$RUNNER_TEMP/export/ExportedProject" \
             --ilspy "$RUNNER_TEMP/ilspy-source" \
             --report "$RUNNER_TEMP/code-overlay-report.json" \
-            --apply
+            --recover-unqualified-stubs --apply
       - name: Safely restore missing CSharp helper types absent from MonoScript export
         shell: bash
         run: |

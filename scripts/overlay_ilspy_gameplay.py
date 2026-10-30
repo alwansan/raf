@@ -24,7 +24,7 @@ def build_index(files):
         result[(p.name, get_namespace(p.read_text(encoding="utf8", errors="replace")))].append(p)
     return result
 
-def map_sources(project:Path, decompiled:Path, apply:bool) -> dict:
+def map_sources(project:Path, decompiled:Path, apply:bool, *, recover_unqualified_stubs:bool=False) -> dict:
     assets=project/"Assets"
     if not assets.is_dir() or not decompiled.is_dir():
         raise FileNotFoundError("Expected Unity ExportedProject/Assets and ILSpy C# directory")
@@ -51,6 +51,7 @@ def map_sources(project:Path, decompiled:Path, apply:bool) -> dict:
         "unmatched":0,
         "nonclass_sources":0,
         "namespace_mismatches":0,
+        "unqualified_stubs_recovered":0,
         "critical_classes":{},
         "missing_meta":0,
         "examples":[],
@@ -59,6 +60,17 @@ def map_sources(project:Path, decompiled:Path, apply:bool) -> dict:
     }
     for (name,namespace),targets in target_index.items():
         srcs=source_index.get((name,namespace),[])
+        recovered_unqualified=False
+        if not srcs and recover_unqualified_stubs and not namespace and len(targets)==1:
+            candidates=[p for (filename,ns),paths in source_index.items() if filename==name and ns and (filename,ns) not in target_index for p in paths]
+            stub=targets[0].read_text(encoding="utf8",errors="replace")
+            # AssetRipper exported non-component types as unqualified MonoBehaviour
+            # placeholders. Only recover field-only templates, never real method bodies.
+            template=re.search(r"\bclass\s+"+re.escape(targets[0].stem)+r"\s*:\s*(?:UnityEngine\.)?MonoBehaviour\s*\{",stub)
+            has_callable=re.search(r"\b\w+\s*\([^;{}]*\)\s*(?:\{|=>)",stub)
+            if len(candidates)==1 and template and not has_callable:
+                srcs=candidates
+                recovered_unqualified=True
         if not srcs:
             report["unmatched"]+=len(targets)
             if any(key[0]==name for key in source_index):
@@ -81,7 +93,7 @@ def map_sources(project:Path, decompiled:Path, apply:bool) -> dict:
             continue
         source=src.read_text(encoding="utf8",errors="replace")
         stub=target.read_text(encoding="utf8",errors="replace")
-        if get_namespace(source)!=get_namespace(stub):
+        if get_namespace(source)!=get_namespace(stub) and not recovered_unqualified:
             report["namespace_mismatches"]+=1
             continue
         if not re.search(r"\b(?:class|struct|interface|enum)\s+"+re.escape(stem)+r"\b",source):
@@ -89,6 +101,7 @@ def map_sources(project:Path, decompiled:Path, apply:bool) -> dict:
             continue
         prior=target.stat().st_size
         report["replacements"]+=1
+        if recovered_unqualified: report["unqualified_stubs_recovered"]+=1
         if re.search(r"\b(?:class|struct|interface)\s+"+re.escape(stem)+r"\s*<",source):
             report["recovered_generic_sources"]+=1
         if re.search(r"\binterface\s+"+re.escape(stem)+r"\b",source):
@@ -109,14 +122,15 @@ if __name__=="__main__":
     p.add_argument("--ilspy",type=Path,required=True)
     p.add_argument("--report",type=Path,default=Path("out/code-overlay-report.json"))
     p.add_argument("--apply",action="store_true",help="write only within supplied project directory")
+    p.add_argument("--recover-unqualified-stubs",action="store_true",help="Recover field-only unqualified AssetRipper MonoBehaviour placeholders using a unique original source")
     args=p.parse_args()
-    data=map_sources(args.project,args.ilspy,args.apply)
+    data=map_sources(args.project,args.ilspy,args.apply,recover_unqualified_stubs=args.recover_unqualified_stubs)
     args.report.parent.mkdir(parents=True,exist_ok=True)
     args.report.write_text(json.dumps(data,indent=2)+"\n",encoding="utf8")
     for k in ("asset_csharp_files","ilspy_csharp_files","asset_csharp_with_metas",
               "asset_target_paths_containing_assembly_csharp","common_unique_names",
               "replacements","source_files_with_bom","recovered_generic_sources","recovered_interface_sources","bytes_before","bytes_after","ambiguous_names",
-              "unmatched","missing_meta","nonclass_sources","namespace_mismatches","apply"):
+              "unmatched","missing_meta","nonclass_sources","namespace_mismatches","unqualified_stubs_recovered","apply"):
         print(k+":",data[k])
     print("Representative replacement sizes:",data["examples"])
     print("Important gameplay class source sizes:",data["critical_classes"])

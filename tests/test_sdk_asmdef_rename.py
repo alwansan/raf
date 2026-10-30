@@ -58,7 +58,10 @@ class ManagedAssemblyRenameTests(unittest.TestCase):
             meta=asm.with_suffix(".asmdef.meta")
             meta.write_bytes(b"guid: 0123456789abcdef0123456789abcdef")
             before=meta.read_bytes()
-            self.assertEqual(reconcile(project,apply=True)["renamed"],1)
+            forui=project/"Assets/Scripts/Unity.InputSystem.ForUI"
+            forui.mkdir(parents=True)
+            (forui/"ForUI.asmdef").write_text('{"name":"Unity.InputSystem.ForUI"}')
+            self.assertEqual(reconcile(project,apply=True)["renamed"],2)
             self.assertFalse(json.loads(asm.read_text())["autoReferenced"])
             self.assertEqual(meta.read_bytes(),before)
 
