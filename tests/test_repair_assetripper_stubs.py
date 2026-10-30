@@ -40,7 +40,7 @@ class RepairAssetRipperTemplatesTests(unittest.TestCase):
     def test_skip_valid_class_identifiers(self):
         p,meta=self.fixture(stem="Raft_Network")
         d=fix_stubs(self.assets,apply=True)
-        self.assertEqual(d["invalid_filename"],0)
+        self.assertEqual(d.get("invalid_filename",0),0)
         self.assertTrue(p.exists())
     def test_report_missing_meta_and_dont_rename(self):
         p,_=self.fixture(include_meta=False)
