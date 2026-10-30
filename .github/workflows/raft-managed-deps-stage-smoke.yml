@@ -14,6 +14,10 @@ on:
       - 'scripts/add_unity_packages.py'
       - 'tests/test_add_unity_packages.py'
 
+concurrency:
+  group: raft-managed-dll-smoke-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
