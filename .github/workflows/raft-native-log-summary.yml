@@ -1,0 +1,86 @@
+name: Raft native build diagnostic log summary (no LFS)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths: ['.github/workflows/raft-native-log-summary.yml']
+  workflow_dispatch:
+    inputs:
+      job_id:
+        description: Completed native build job to summarize
+        required: true
+        default: '124122509660'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  summarize:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Retrieve the existing completed job log without rerunning the build
+        env:
+          GH_TOKEN: ${{ github.token }}
+          LOG_JOB_ID: ${{ inputs.job_id || '124122509660' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          case "$LOG_JOB_ID" in ''|*[!0-9]*) exit 1;; esac
+          gh api --method GET "repos/$GITHUB_REPOSITORY/actions/jobs/$LOG_JOB_ID/logs" > "$RUNNER_TEMP/raft-native-build.log"
+      - name: Emit bounded structural counters and failure diagnostics only
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import os,re,json
+          from collections import Counter,deque
+          from pathlib import Path
+          source=Path(os.environ["RUNNER_TEMP"])/"raft-native-build.log"
+          ansi=re.compile(r"\x1b\[[0-9;]*m")
+          compiler=set()
+          failures=deque(maxlen=65)
+          counters=Counter()
+          meshes=set()
+          stats=[]
+          for line in source.open(encoding="utf-8-sig",errors="replace"):
+              text=ansi.sub("",line).rstrip()
+              text=re.sub(r"^\d{4}-\d\d-\d\dT[^ ]+Z\s*","",text)
+              if "error CS" in text:
+                  match=re.search(r"(Assets/.*?error CS\d+.*)",text)
+                  if match: compiler.add(match.group(1))
+              if "CollisionMeshData couldn't" in text:
+                  counters["collision_mesh_log_lines"]+=1
+                  match=re.search(r'Mesh asset path "([^"]+)"',text)
+                  if match: meshes.add(match.group(1))
+                  continue
+              if "NullReferenceException" in text:
+                  counters["null_reference_log_lines"]+=1
+              if text.startswith(("mesh_count:","inspected_meshes:","meshes_with_stream:",
+                                  "claimed_stream_bytes:","stream_paths:","errors:",
+                                  "Per-source Mesh sampled counts:","Exported asset case collisions:",
+                                  "Scene script GUID matched:","RAFT_ANDROID_NATIVE_CONFIG",
+                                  "RAFT_ANDROID_NATIVE_RESULT","replacements:",
+                                  "unqualified_stubs_recovered:")):
+                  stats.append(text[:7000])
+              if any(v in text for v in ("Licensing","access token","license","GL_","GLX_","Start importing",
+                                         "##[group]","echo ","print(","raise SystemExit")):
+                  continue
+              if any(v in text for v in ("##[error]","BuildFailedException","CompilerException","fatal error:",
+                                         "error: ","FAILURE:","Build Finished","Errors:","Build result",
+                                         "BuildFailed","Target architecture","OutOfMemory","Killed",
+                                         "Exception:","Gradle build failed","ninja:","No space left")):
+                  failures.append(text[:2200])
+          print("Original job log bytes:",source.stat().st_size)
+          print("Distinct emitted CSharp diagnostics:",len(compiler))
+          for row in sorted(compiler)[:35]: print("CS_DIAGNOSTIC",row)
+          print("Import diagnostic counts:",dict(counters))
+          print("Distinct collision mesh asset paths:",len(meshes))
+          print("Structural and stream audit counters:")
+          for row in stats[-30:]: print(row)
+          print("Bounded latest failure diagnostics:")
+          for row in failures: print(row)
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as out:
+              out.write("## Prior native build diagnostics (no rebuild or LFS download)\n")
+              out.write(f"- Original log bytes: {source.stat().st_size}\n")
+              out.write(f"- Distinct C# diagnostics: {len(compiler)}\n")
+              out.write(f"- Distinct non-accessible collision mesh paths: {len(meshes)}\n")
+              out.write("- Review bounded diagnostic output; no original assets or source uploaded.\n")
+          PY
