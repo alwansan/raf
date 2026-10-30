@@ -82,3 +82,9 @@ Confirmed [namespace-checked CI](https://github.com/alwansan/raf/actions/runs/41
 ## Broad scene coverage update — all 40 levels
 
 [All-scene GUID test succeeded](https://github.com/alwansan/raf/actions/runs/41024647631): the 40 `levelN` game files each generated Unity `.unity` scenes and all **64,642** scene script reference GUIDs matched exported script metadata (517 distinct script GUID values; zero deadbeef placeholder). The missing global MonoScript registry is resolved **for script IDs**. This does not validate non-script asset references or shaders. Existing ILSpy source overlay in five-scene samples (1,568 strictly matched classes) still needs full-project compile validation.
+
+## Remaining critical blocker: missing mesh and non-script links
+
+[Successful 40-scene deep GUID classification](https://github.com/alwansan/raf/actions/runs/41025306987) confirms that **none** of the 393,450 `deadbeef` placeholder uses is an `m_Script` reference, so the script-GUID linkage milestone remains intact. However **198,114** are `m_Mesh` fields, **191,091** are list/sequence elements whose parent is not proven, and smaller counts belong to SpeedTree wind assets, animator controllers, avatars, sprites, etc. Unity built-in e/f GUID references are normal and not missing game files. One nonbuiltin GUID has a single unresolved reference in a Varuna Point scene.
+
+**Current immediate gate:** restore mesh / material / terrain / prefab dependencies sufficiently for Unity Editor import. Do not claim complete reconstruction from the repaired script links. Audit missing files from LFS by exact path, transfer budget and type; inspect Unity built-in primitive mesh references separately. This does **not** justify unrestricted downloading of the 6.472 GiB LFS payload.
