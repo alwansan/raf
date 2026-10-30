@@ -9,6 +9,8 @@ on:
       - '.github/workflows/raft-unity-script-link-probe.yml'
       - 'scripts/normalize_csharp_namespaces.py'
       - 'tests/test_csharp_namespace_compat.py'
+      - 'scripts/repair_assetripper_stub_classnames.py'
+      - 'tests/test_repair_assetripper_stubs.py'
 
 permissions:
   contents: read
@@ -29,6 +31,8 @@ jobs:
           fetch-depth: 1
       - name: Run CSharp namespace converter synthetic safety tests
         run: python3 -m unittest discover -s tests -p test_csharp_namespace_compat.py -v
+      - name: Run safe synthetic invalid-stub rename tests
+        run: python3 -m unittest discover -s tests -p test_repair_assetripper_stubs.py -v
       - name: Stage three scenes plus mandatory globalgamemanagers.assets MonoScript registry
         shell: bash
         run: |
@@ -132,3 +136,10 @@ jobs:
                   # This is not original gameplay source.
                   print("Generated line 3 syntax:",repr(lines[2][:100]) if len(lines)>2 else "<none>")
           PY
+
+      - name: Repair invalid generated MonoBehaviour class names in sample without changing GUIDs
+        shell: bash
+        run: |
+          python3 scripts/repair_assetripper_stub_classnames.py \
+            --assets "$RUNNER_TEMP/linked-export/ExportedProject/Assets" \
+            --apply --require-clean
