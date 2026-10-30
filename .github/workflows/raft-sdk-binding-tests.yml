@@ -39,6 +39,27 @@ jobs:
         run: |
           python3 -m pip install --user --disable-pip-version-check dnfile==0.18.0
           python3 -m scripts.resolve_managed_closure --managed Raft/Raft_Data/Managed --out "$RUNNER_TEMP/sdk-closure.json"
+      - name: Audit physical ownership of legacy serialization configuration types
+        run: |
+          python3 - <<'PY'
+          import dnfile
+          from pathlib import Path
+          found=[]
+          for path in sorted(Path("Raft/Raft_Data/Managed").glob("*.dll")):
+              if path.name.startswith(("System.","UnityEngine.")) or path.name in {"mscorlib.dll","netstandard.dll","PlayFab_o.dll"}: continue
+              pe=dnfile.dnPE(str(path))
+              try:
+                  if pe.net is None: continue
+                  asm=str(pe.net.mdtables.Assembly.rows[0].Name)
+                  for row in pe.net.mdtables.TypeDef.rows:
+                      name=str(row.TypeName); namespace=str(row.TypeNamespace)
+                      if ("GlobalSerializationConfig" in name or
+                          ("Sirenix" in namespace and "Config" in name)):
+                          found.append({"file":path.name,"assembly":asm,"namespace":namespace,"type":name})
+              finally:
+                  pe.close()
+          print("Legacy serialization configuration physical providers:",found)
+          PY
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
