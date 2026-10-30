@@ -1,0 +1,46 @@
+name: Raft source mesh pointers (UnityPy; no LFS)
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - 'scripts/audit_source_mesh_pointers.py'
+      - '.github/workflows/raft-source-mesh-pointers.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  ptrs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Check available disk space first
+        run: |
+          df -h /
+          test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')" -gt 10485760
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Install pinned UnityPy
+        run: python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+      - name: Inspect original mesh pointer dependencies
+        run: |
+          python3 scripts/audit_source_mesh_pointers.py --root Raft/Raft_Data --out "$RUNNER_TEMP/mesh-source-pointers.json"
+      - name: Summarize independent source mesh audit
+        run: |
+          python3 - <<'PY'
+          import json,os
+          d=json.load(open(os.path.join(os.environ["RUNNER_TEMP"],"mesh-source-pointers.json")))
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
+              f.write("## Original Unity serialized mesh pointer dependencies\n")
+              f.write(f"- Components: {d['components']}\n")
+              f.write(f"- Distinct pointer targets: {d['distinct_pointer_targets']}\n")
+              for k,v in list(d["by_target_file"].items())[:15]:
+                  f.write(f"- {k}: {v}\n")
+              f.write("Source game assets and decompiled CSharp are not committed or uploaded.\n")
+          PY
