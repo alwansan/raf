@@ -21,3 +21,10 @@
 - Unity Editor license is already configured in the user's GitHub **Environment `UNITY_LICENSE`**. Preflight and Editor launch authenticated in earlier runs.
 - Avoid repeated unbounded Git LFS usage: the currently required three game resource files total 337,660,952 bytes per uncached full run.
 - Never infer a functional game from nonzero numbers of recovered scripts, scenes, and DLLs. Test actual Unity Editor compilation and Android gameplay.
+
+## October 30 follow-up: Unity C# CS1704 (run 41059708964)
+
+- [Unity run 41059708964](https://github.com/alwansan/raf/actions/runs/41059708964) completed unsuccessfully after license preflight and project reconstruction succeeded. The compiler reported `CS1704`: duplicate `UnityEngine.UI` assembly. Unity itself referenced `Library/Bee/.../UnityEngine.UI.ref.dll` while the temporary project separately staged `Assets/Plugins/RaftManagedReferences/UnityEngine.UI.dll`.
+- Removed the original Windows `UnityEngine.UI.dll` from the staging allowlist. Unity's Editor-provided UGUI module is retained; the gameplay project's original UI C# source was not deleted. The list is now eight managed dependencies. Added a regression assertion and updated the smoke workflow to expect eight DLLs.
+- The gated Android Unity workflow now listens for managed staging script/test changes so the next compiler evaluation is automatic: [new compile run 41062047785](https://github.com/alwansan/raf/actions/runs/41062047785).
+- **This is a targeted compiler-collision fix, not evidence of Android compatibility or APK creation.** Inspect the next Unity Editor errors separately; never claim an Android build is functional before test.
