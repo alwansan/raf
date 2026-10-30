@@ -26,6 +26,25 @@ class ManagedAssemblyRenameTests(unittest.TestCase):
             self.assertFalse(updated["autoReferenced"])
             self.assertEqual(meta.read_bytes(),raw)
             self.assertEqual(reconcile(project,apply=False)["renamed"],0)
+    def test_native_unity_package_conflicts_renamed_without_meta_changes(self):
+        with tempfile.TemporaryDirectory() as d:
+            project=Path(d)
+            (project/"Assets/Plugins/RaftManagedReferences").mkdir(parents=True)
+            pkg=project/"Packages"
+            pkg.mkdir()
+            (pkg/"manifest.json").write_text(json.dumps({"dependencies": {"com.unity.ugui":"1.0.0","com.unity.textmeshpro":"3.0.6"}}))
+            folder=project/"Assets/Scripts/UnityEngine.UI"
+            folder.mkdir(parents=True)
+            file=folder/"UnityEngine.UI.asmdef"
+            file.write_text(json.dumps({"name":"UnityEngine.UI","autoReferenced":True}))
+            met=folder/"UnityEngine.UI.asmdef.meta"
+            met.write_text("guid: abcdef0123456789abcdef0123456789")
+            r=reconcile(project,apply=True)
+            self.assertEqual(r["renamed"],1)
+            self.assertTrue(json.loads(file.read_text())["name"].startswith("RaftStub."))
+            self.assertFalse(json.loads(file.read_text())["autoReferenced"])
+            self.assertEqual(met.read_text(),"guid: abcdef0123456789abcdef0123456789")
+
     def test_nonconflicting_asmdef_unchanged(self):
         with tempfile.TemporaryDirectory() as d:
             project=Path(d)
