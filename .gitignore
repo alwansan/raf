@@ -1,0 +1,38 @@
+# Generated reports and local export/build outputs (keep proprietary extraction local)
+out/
+exports/
+export/
+recovered/
+reconstructed/
+tmp/
+temp/
+.cache/
+*.log
+*.trace
+
+# Unity Editor local/generated content
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+[Mm]emoryCaptures/
+
+# Android credentials and output
+*.keystore
+*.jks
+*.apk
+*.aab
+*.apks
+*.hprof
+*.heapdump
+
+# Secrets, tools and local SDKs
+.env
+.env.*
+!.env.example
+tools-local/
+android-sdk/
+unity-editor/
