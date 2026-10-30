@@ -30,7 +30,11 @@ def supplement(project: Path, ilspy: Path, *, apply: bool) -> dict:
         raise FileNotFoundError("Expected existing Unity Assets/Scripts/Assembly-CSharp and ILSpy sources")
     # No duplicate filename additions: preserve every original Unity .cs and .cs.meta path,
     # regardless of whether an earlier overlay could not match a source namespace.
-    existing={p.name.lower() for p in scripts.rglob("*.cs")}
+    def identity(path):
+        text=path.read_text(encoding="utf8",errors="replace")
+        match=re.search(r"(?m)^\s*namespace\s+([\w.]+)\s*(?:[;{]|$)",text)
+        return (path.name, match.group(1) if match else "")
+    existing={identity(p) for p in scripts.rglob("*.cs")}
     counters=Counter()
     samples=[]
     for source in sorted(ilspy.rglob("*.cs")):
@@ -42,7 +46,7 @@ def supplement(project: Path, ilspy: Path, *, apply: bool) -> dict:
         if not VALID_FILE.fullmatch(source.name):
             counters["skipped_non_identifier_filename"]+=1
             continue
-        if source.name.lower() in existing:
+        if identity(source) in existing:
             counters["skipped_existing_filename"]+=1
             continue
         target=extras/relative
@@ -62,7 +66,7 @@ def supplement(project: Path, ilspy: Path, *, apply: bool) -> dict:
             target.parent.mkdir(parents=True,exist_ok=True)
             shutil.copyfile(source,target)
         # Suppress intra-batch filename duplicates conservatively too.
-        existing.add(source.name.lower())
+        existing.add(identity(source))
     report={"statistics":dict(counters),"example_added_files":samples,
             "notes":"Only file-unique missing helper type sources, not compiled/released original game code; Unity Editor still required."}
     print("Supplement helper CSharp:",report)

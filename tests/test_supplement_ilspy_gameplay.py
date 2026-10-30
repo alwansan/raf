@@ -44,12 +44,12 @@ class SupplementHelperTypesTests(unittest.TestCase):
         (self.ilspy/"OnlyMethods.cs").write_text("using System;\n")
         report=supplement(self.project,self.ilspy,apply=True)
         self.assertEqual(report["statistics"].get("added",0),0)
-    def test_duplicates_by_filename_are_avoided_even_different_namespaces(self):
+    def test_distinct_namespaces_with_same_filename_are_both_recovered(self):
         a=self.ilspy/"A";b=self.ilspy/"B"
         a.mkdir();b.mkdir()
         (a/"Same.cs").write_text("namespace A { public class Same {} }")
         (b/"Same.cs").write_text("namespace B { public class Same {} }")
         report=supplement(self.project,self.ilspy,apply=True)
-        self.assertEqual(report["statistics"]["added"],1)
+        self.assertEqual(report["statistics"]["added"],2)
 if __name__=="__main__":
     unittest.main()
