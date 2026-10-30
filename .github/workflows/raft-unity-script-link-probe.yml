@@ -11,6 +11,7 @@ on:
       - 'tests/test_csharp_namespace_compat.py'
       - 'scripts/repair_assetripper_stub_classnames.py'
       - 'tests/test_repair_assetripper_stubs.py'
+      - 'scripts/audit_timeline_duplicates.py'
 
 permissions:
   contents: read
@@ -143,3 +144,9 @@ jobs:
           python3 scripts/repair_assetripper_stub_classnames.py \
             --assets "$RUNNER_TEMP/linked-export/ExportedProject/Assets" \
             --apply --require-clean
+
+      - name: Locate duplicate Timeline classes in exported Unity package stubs
+        shell: bash
+        run: |
+          python3 scripts/audit_timeline_duplicates.py \
+            --assets "$RUNNER_TEMP/linked-export/ExportedProject/Assets"
