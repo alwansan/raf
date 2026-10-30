@@ -143,7 +143,7 @@ jobs:
         run: |
           python3 scripts/repair_assetripper_stub_classnames.py \
             --assets "$RUNNER_TEMP/linked-export/ExportedProject/Assets" \
-            --apply --require-clean
+            --apply --require-clean --repair-timeline
 
       - name: Locate duplicate Timeline classes in exported Unity package stubs
         shell: bash
