@@ -55,6 +55,12 @@ jobs:
           print("Native boundary normalized field names:",list(norm)[:40] if isinstance(norm,dict) else type(norm).__name__)
           if isinstance(norm,dict):
               print("Native field cardinalities:",{k:len(v) for k,v in norm.items() if isinstance(v,(list,dict))})
+              for section in ("pinvoke_imports","native_implementations","module_refs"):
+                  rows=norm.get(section,[])
+                  if isinstance(rows,list) and rows and isinstance(rows[0],dict):
+                      print("Native",section,"sample keys:", list(rows[0])[:40])
+              if isinstance(norm.get("summary"),dict):
+                  print("Native summary:", str(norm["summary"])[:700])
           print("Result bytes:",os.path.getsize(os.path.join(os.environ["RUNNER_TEMP"],"native-boundaries.json")))
           with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
               f.write("## REA native boundaries: success\n")
@@ -84,6 +90,11 @@ jobs:
           print("Selected members normalized fields:",list(norm)[:40] if isinstance(norm,dict) else type(norm).__name__)
           if isinstance(norm,dict):
               print("Selected members cardinalities:",{k:len(v) for k,v in norm.items() if isinstance(v,(list,dict))})
+              print("Network method names:", [m.get("name") for m in norm.get("methods",[]) if isinstance(m,dict)][:40])
+              for section in ("types","methods","call_edges"):
+                  rows=norm.get(section,[])
+                  if isinstance(rows,list) and rows and isinstance(rows[0],dict):
+                      print("Network",section,"sample keys:",list(rows[0])[:35])
           print("Result bytes:",os.path.getsize(os.path.join(os.environ["RUNNER_TEMP"],"network-members.json")))
           with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
               f.write("## REA network member metadata: success\n")
