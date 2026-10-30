@@ -34,7 +34,7 @@ jobs:
           mkdir -p "$RUNNER_TEMP/ar-tool"
           tar -xJf "$RUNNER_TEMP/assetripper.tar.xz" -C "$RUNNER_TEMP/ar-tool"
           find "$RUNNER_TEMP/ar-tool" -maxdepth 3 -type f | head -35
-          executable=$(find "$RUNNER_TEMP/ar-tool" -type f -name 'AssetRipper' | head -n 1)
+          executable=$(find "$RUNNER_TEMP/ar-tool" -type f -name 'AssetRipper.GUI.Free' | head -n 1)
           if [ -z "$executable" ]; then
             echo 'No AssetRipper executable discovered'
             exit 2
