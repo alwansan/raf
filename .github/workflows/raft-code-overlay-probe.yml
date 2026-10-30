@@ -10,7 +10,8 @@ on:
       - 'scripts/overlay_ilspy_gameplay.py'
       - 'tests/test_csharp_overlay.py'
       - 'scripts/normalize_csharp_namespaces.py'
-      - 'scripts/supplement_unmatched_ilspy_types.py'
+      - 'scripts/supplement_ilspy_gameplay.py'
+      - 'tests/test_supplement_ilspy_gameplay.py'
       - 'tests/test_csharp_namespace_compat.py'
 
 permissions:
@@ -95,14 +96,15 @@ jobs:
             --ilspy "$RUNNER_TEMP/ilspy-source" \
             --report "$RUNNER_TEMP/code-overlay-report.json" \
             --apply
-      - name: Restore ILSpy type sources missing from AssetRipper output
+      - name: Safely restore missing CSharp helper types absent from MonoScript export
         shell: bash
         run: |
-          python3 scripts/supplement_unmatched_ilspy_types.py \
+          python3 -m unittest discover -s tests -p test_supplement_ilspy_gameplay.py -v
+          python3 scripts/supplement_ilspy_gameplay.py \
             --project "$RUNNER_TEMP/export/ExportedProject" \
             --ilspy "$RUNNER_TEMP/ilspy-source" \
             --report "$RUNNER_TEMP/supplement-report.json" \
-            --apply
+            --min-added 100 --apply
       - name: Run Unicode and CRLF compatibility fixture tests for CSharp namespace conversion
         run: python3 -m unittest discover -s tests -p test_csharp_namespace_compat.py -v
       - name: Convert recovered ILSpy file-scoped namespaces to Unity 2021 supported CSharp syntax
