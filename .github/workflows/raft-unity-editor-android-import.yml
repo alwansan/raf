@@ -7,6 +7,8 @@ on:
       - feature/android-native-port
     paths:
       - '.github/workflows/raft-unity-editor-android-import.yml'
+      - 'scripts/stage_raft_managed_dlls.py'
+      - 'tests/test_stage_raft_managed_dlls.py'
 
 permissions:
   contents: read
@@ -163,7 +165,7 @@ jobs:
             --ilspy "$RUNNER_TEMP/ilspy-src" \
             --report "$RUNNER_TEMP/ilspy-supplement.json" \
             --min-added 500 --apply
-      - name: Restore nine original managed DLLs (FMOD, PlayFab, Netcode, UI) in temporary Unity project
+      - name: Restore eight third-party managed DLLs (FMOD, PlayFab, Netcode) without duplicate Unity UI
         shell: bash
         run: |
           set -euo pipefail
