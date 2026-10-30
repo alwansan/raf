@@ -1,0 +1,47 @@
+name: AssetRipperCLI third-party tool smoke-test
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - '.github/workflows/assetripper-cli-smoke.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  tool-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Check free storage before downloads
+        run: |
+          df -h /
+          available_kb=$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')
+          test "$available_kb" -gt 4194304
+      - name: Download version-pinned CLI build and check source release SHA256
+        run: |
+          curl --fail --location --retry 2 --connect-timeout 15 --max-time 240 \
+            'https://github.com/nowl-it/AssetRipperCLI/releases/download/v1.0.1/AssetRipper_linux_x64.zip' \
+            -o "$RUNNER_TEMP/ar-cli.zip"
+          echo "b48292e40948ce2634e9187d4724fb4f45c01fa6f4fea2a5f4775aa611def17b  $RUNNER_TEMP/ar-cli.zip" | sha256sum --check
+          du -h "$RUNNER_TEMP/ar-cli.zip"
+      - name: Extract and test CLI help, no game import
+        run: |
+          mkdir -p "$RUNNER_TEMP/ar-cli"
+          unzip -q "$RUNNER_TEMP/ar-cli.zip" -d "$RUNNER_TEMP/ar-cli"
+          find "$RUNNER_TEMP/ar-cli" -maxdepth 3 -type f -iname '*AssetRipper*' | head -20
+          executable=$(find "$RUNNER_TEMP/ar-cli" -type f \( -name 'AssetRipper' -o -name 'AssetRipper.GUI.Free' \) | head -n 1)
+          if [ -z "$executable" ]; then
+            echo "Executable was not found"; exit 2
+          fi
+          chmod +x "$executable"
+          set +e
+          timeout 20s "$executable" --help > "$RUNNER_TEMP/cli-help.txt" 2>&1
+          status=$?
+          set -e
+          echo "CLI exit status: $status"
+          head -80 "$RUNNER_TEMP/cli-help.txt"
+          if [ "$status" -ne 0 ]; then exit "$status"; fi
