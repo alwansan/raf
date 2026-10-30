@@ -84,6 +84,24 @@ jobs:
           print('Unity meta files:',len(guids))
           print('MonoBehaviour serialized object markers:',behaviour)
           print('m_Script field references:',script_refs)
+          import re,collections
+          refs=collections.Counter()
+          for scene in scenes:
+              raw=scene.read_text(encoding="utf8",errors="replace")
+              for m in re.finditer(r'm_Script:\s*\\{[^\\n}]*guid:\s*([a-fA-F0-9]{32})',raw):
+                  refs[m.group(1).lower()]+=1
+          known_guids=set()
+          script_meta_files=[]
+          for meta in guids:
+              if meta.name.endswith(".cs.meta"): script_meta_files.append(meta)
+              payload=meta.read_text(encoding="utf8",errors="replace")[:512]
+              m=re.search(r'(?m)^guid:\s*([a-fA-F0-9]{32})',payload)
+              if m:known_guids.add(m.group(1).lower())
+          unresolved={key:n for key,n in refs.items() if key not in known_guids and key!='0'*32}
+          print('Unique script GUIDs referred to by scenes:',len(refs))
+          print('Unique script GUIDs missing matching exported .meta:',len(unresolved))
+          print('Total unresolved GUID reference uses:',sum(unresolved.values()))
+          print('C# script meta files:',len(script_meta_files))
           with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
               f.write("## Unity serialized MonoBehaviour linkage check\n")
               f.write(f"- .unity: {len(scenes)}; .cs: {len(scripts)}; .meta: {len(guids)}\n")
