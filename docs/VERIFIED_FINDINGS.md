@@ -262,3 +262,28 @@ This wider **read-only no-LFS** experiment staged `level0` through `level39`, `g
 - This **proves exported script identity linkage** for all 40 level files in this sample. It does NOT imply materials, shaders, textures, prefabs, non-script GUIDs, required LFS assets, Unity Editor import/compile or actual Android gameplay work.
 
 A second [all-scene non-script resource GUID audit](https://github.com/alwansan/raf/actions/workflows/raft-all-scene-links.yml) checks remaining asset references and duplicate GUIDs. Full resource availability remains a distinct gate.
+
+## Job 18: classify non-script Unity scene GUID placeholders — SUCCESS
+
+https://github.com/alwansan/raf/actions/runs/41025306987
+
+All 40 Unity YAML scenes were inspected in temporary project output, not published. Previous generic [asset GUID audit](https://github.com/alwansan/raf/actions/runs/41025036274) showed 1,256 unique nonzero GUIDs, 1,252 matching exported `.meta`, 4 unmatched, **no duplicate .meta GUIDs**. Those four are:
+
+- `0000000deadbeef15deadf00d0000000`: **393,450 occurrences** — AssetRipper placeholder sentinel for unresolved **non-script** objects.
+- `0000000000000000e000000000000000`: **665 occurrences**, Unity editor's `unity default resources` built-in GUID.
+- `0000000000000000f000000000000000`: **25 occurrences**, `unity_builtin_extra` built-in GUID.
+- `1c09af679308f504fb0d83c7e727df29`: **1 occurrence**, detected in `54#Landmark_VarunaPoint#.unity`; requires investigation, cannot classify from filename alone.
+
+**None of the 393,450 deadbeef placeholder instances are serialized `m_Script` fields**. Highest property groups of deadbeef:
+- `m_Mesh` **198,114**
+- list/sequence element **191,091** (parent list not resolved by this shallow parser; do not label these meshes/materials without further evidence)
+- `m_SpeedTreeWindAsset` **2,572**
+- `m_Controller` **1,189**
+- `m_Avatar` **155**
+- `sprite` **120**
+
+Other categories had much smaller counts.
+
+**Interpretation:** all game script identities in the exported scenes are repaired, but **mesh and other non-script Unity references are not**. Counting 1,252/1,256 unique GUIDs as 'asset completeness 99%' would be misleading because the one deadbeef placeholder stands for many independent unresolved assets. Full fidelity requires restoring appropriate resource dependencies, validating Unity engine built-ins/primitive meshes, and possibly fixing exporter PPtr handling.
+
+This run did not use Git LFS and did not publish game content. Script analysis source: `scripts/audit_guid_ref_fields.py`.
