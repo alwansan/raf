@@ -47,3 +47,14 @@ All completed Unity scene recovery is **structural only**: no successful Unity E
 3. Plan a clean platform identity adapter that replaces Steam ID for saves but preserves existing save data formats.
 4. Decide on Unity Editor and legal license activation method before adding import/build CI.
 5. Move toward offline single-player vertical slice; only then add phone-hosted LAN multiplayer.
+
+## High-priority integration blocker observed in five scenes
+
+[Completed serialized script reference audit](https://github.com/alwansan/raf/actions/runs/41022464657):
+
+- Input samples: `level0`, `level1`, `level37`, `level38`, `level39`, their available non-LFS sharedasset streams, `globalgamemanagers`, `boot.config`, and `Managed/*.dll` assemblies.
+- Exported **5 `.unity` scenes**, **982 `.meta` files**, **zero `.cs` files**.
+- The exported scene YAML has **13,969** `MonoBehaviour:` records and **13,969** `m_Script:` fields.
+- All parsable inline script references in this sample shared **one GUID value**; it was not among the exported `.meta` GUIDs. This may be an export placeholder or other limitation: **do not interpret this as evidence all source behaviours have one original script**.
+- This proves structural Unity script linkage is **not** recovered by current AssetRipperCLI sample. ILSpy output cannot be copied over without reconstructing script identity, namespaces, serialized fields and appropriate `.meta` files/GUIDs.
+- Next gate: determine whether use of official AssetRipper 2.0, complete script data, or a custom MonoScript mapping/export will preserve distinct source script identities; only then test Unity Editor import.
