@@ -9,7 +9,8 @@ on:
         type: choice
         options:
           - 'NO - do not download'
-          - 'YES - download exactly two selected LFS files (~217 MiB)'
+          - 'YES - download resources.assets only (~106 MiB)'
+          - 'YES - download both selected LFS files (~217 MiB)'
         default: 'NO - do not download'
 
 permissions:
@@ -17,7 +18,7 @@ permissions:
 
 jobs:
   targeted-mesh:
-    if: ${{ inputs.approve_lfs_transfer == 'YES - download exactly two selected LFS files (~217 MiB)' }}
+    if: ${{ inputs.approve_lfs_transfer != 'NO - do not download' }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -28,28 +29,33 @@ jobs:
           df -h /
           free_kb=$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')
           test "$free_kb" -gt 20971520
-          echo "User explicitly opted into downloading 227511628 bytes of LFS (two files)."
+          echo "Manual GitHub LFS scope: ${{ inputs.approve_lfs_transfer }}"
           echo "If your LFS bandwidth allotment is exhausted, GitHub may block transfers or bill according to account settings."
       - uses: actions/checkout@v4
         with:
           lfs: false
           fetch-depth: 1
           persist-credentials: true
-      - name: Fetch only the 2 permitted LFS content objects
+      - name: Fetch only the manually approved LFS content object(s)
         shell: bash
+        env:
+          INPUT_APPROVE_LFS_TRANSFER: ${{ inputs.approve_lfs_transfer }}
         run: |
           set -euo pipefail
-          paths='Raft/Raft_Data/sharedassets0.assets,Raft/Raft_Data/resources.assets'
+          paths='Raft/Raft_Data/resources.assets'
+          if [ "${{ inputs.approve_lfs_transfer }}" = 'YES - download both selected LFS files (~217 MiB)' ]; then
+            paths='Raft/Raft_Data/sharedassets0.assets,Raft/Raft_Data/resources.assets'
+          fi
+          echo "Selected exact LFS paths: $paths"
           git lfs install --local
           git lfs fetch origin HEAD --include="$paths" --exclude=''
           git lfs checkout
           python3 - <<'PY'
           from pathlib import Path
-          import re,subprocess,hashlib
-          expected={
-             'Raft/Raft_Data/sharedassets0.assets':115978112,
-             'Raft/Raft_Data/resources.assets':111533516,
-          }
+          import re,subprocess,hashlib,os
+          expected={'Raft/Raft_Data/resources.assets':111533516}
+          if os.environ.get('INPUT_APPROVE_LFS_TRANSFER') == 'YES - download both selected LFS files (~217 MiB)':
+              expected['Raft/Raft_Data/sharedassets0.assets']=115978112
           for path,size in expected.items():
               data=Path(path)
               if data.stat().st_size!=size:
@@ -124,7 +130,7 @@ jobs:
           print('Total deadbeef refs (prior non-LFS: 199156):',data['deadbeef_total'])
           print('m_Mesh deadbeef refs (prior non-LFS: 94152):',mesh)
           with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as file:
-              file.write('## Explicitly opted-in 217MiB LFS recovery test\n')
+              file.write('## Explicitly opted-in selective LFS recovery test\n')
               file.write(f"- Scenes: {len(scenes)}; script links: {linked}/{total}\n")
               file.write(f"- All placeholders: before 199156, after {data['deadbeef_total']}\n")
               file.write(f"- m_Mesh placeholders: before 94152, after {mesh}\n")
