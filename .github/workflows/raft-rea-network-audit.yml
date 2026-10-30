@@ -1,0 +1,91 @@
+name: REA native boundaries and network type evidence
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - '.github/workflows/raft-rea-network-audit.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  network-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - name: Storage safety gate
+        run: |
+          df -h /
+          free_kb=$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')
+          test "$free_kb" -gt 20971520
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.22.2
+      - name: Install REA pinned version
+        run: npm install --prefix "$RUNNER_TEMP/rea" --no-audit --no-fund --loglevel=error rea-agents@6.8.0
+      - name: Native boundary metadata analysis only
+        shell: bash
+        run: |
+          set -euo pipefail
+          REA="$RUNNER_TEMP/rea/node_modules/.bin/rea"
+          DLL="$GITHUB_WORKSPACE/Raft/Raft_Data/Managed/Assembly-CSharp.dll"
+          set +e
+          timeout 180s "$REA" inspect-managed-native-boundaries "$DLL" --format json \
+            > "$RUNNER_TEMP/native-boundaries.json" 2>"$RUNNER_TEMP/native-errors.log"
+          status=$?
+          set -e
+          if [ "$status" -ne 0 ]; then
+            echo "REA native boundaries returned $status"
+            head -c 2000 "$RUNNER_TEMP/native-errors.log" || true
+            head -c 2000 "$RUNNER_TEMP/native-boundaries.json" || true
+            exit "$status"
+          fi
+          python3 - <<'PY'
+          import json,os
+          d=json.load(open(os.path.join(os.environ["RUNNER_TEMP"],"native-boundaries.json"),encoding="utf-8"))
+          norm=d.get("normalized_result",{})
+          print("Native boundary normalized field names:",list(norm)[:40] if isinstance(norm,dict) else type(norm).__name__)
+          if isinstance(norm,dict):
+              print("Native field cardinalities:",{k:len(v) for k,v in norm.items() if isinstance(v,(list,dict))})
+          print("Result bytes:",os.path.getsize(os.path.join(os.environ["RUNNER_TEMP"],"native-boundaries.json")))
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
+              f.write("## REA native boundaries: success\n")
+              f.write("Fields: "+", ".join(norm.keys() if isinstance(norm,dict) else [])+"\n")
+          PY
+      - name: Focused network behaviour methods (no source upload)
+        shell: bash
+        run: |
+          set -euo pipefail
+          REA="$RUNNER_TEMP/rea/node_modules/.bin/rea"
+          DLL="$GITHUB_WORKSPACE/Raft/Raft_Data/Managed/Assembly-CSharp.dll"
+          set +e
+          timeout 180s "$REA" inspect-managed-members "$DLL" --type AI_NetworkBehaviour --format json \
+            > "$RUNNER_TEMP/network-members.json" 2>"$RUNNER_TEMP/member-errors.log"
+          status=$?
+          set -e
+          if [ "$status" -ne 0 ]; then
+            echo "REA selected members returned $status"
+            head -c 2000 "$RUNNER_TEMP/member-errors.log" || true
+            head -c 2000 "$RUNNER_TEMP/network-members.json" || true
+            exit "$status"
+          fi
+          python3 - <<'PY'
+          import json,os
+          d=json.load(open(os.path.join(os.environ["RUNNER_TEMP"],"network-members.json"),encoding="utf-8"))
+          norm=d.get("normalized_result",{})
+          print("Selected members normalized fields:",list(norm)[:40] if isinstance(norm,dict) else type(norm).__name__)
+          if isinstance(norm,dict):
+              print("Selected members cardinalities:",{k:len(v) for k,v in norm.items() if isinstance(v,(list,dict))})
+          print("Result bytes:",os.path.getsize(os.path.join(os.environ["RUNNER_TEMP"],"network-members.json")))
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
+              f.write("## REA network member metadata: success\n")
+              f.write("Fields: "+", ".join(norm.keys() if isinstance(norm,dict) else [])+"\n")
+          PY
