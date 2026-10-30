@@ -160,7 +160,7 @@ jobs:
           python3 -m unittest discover -s tests -p test_repair_assetripper_stubs.py -v
           python3 scripts/repair_assetripper_stub_classnames.py \
             --assets "$RUNNER_TEMP/project/ExportedProject/Assets" \
-            --apply --require-clean
+            --apply --require-clean --repair-timeline
       - name: Validate reconstructed editor project structure and GUID references
         shell: bash
         run: |
