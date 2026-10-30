@@ -14,6 +14,11 @@ def reconcile(project:Path,*,apply:bool)->dict:
     plugin=assets/"Plugins/RaftManagedReferences"
     if not plugin.is_dir():raise FileNotFoundError("Expected staged private managed plugins")
     dlls={p.stem for p in plugin.glob("*.dll")}
+    manifest=project/"Packages/manifest.json"
+    if manifest.is_file():
+        packages=json.loads(manifest.read_text(encoding="utf8")).get("dependencies",{})
+        if "com.unity.ugui" in packages:dlls.add("UnityEngine.UI")
+        if "com.unity.textmeshpro" in packages:dlls.add("Unity.TextMeshPro")
     rows=[]
     for file in sorted((assets/"Scripts").rglob("*.asmdef")):
         data=json.loads(file.read_text(encoding="utf8"))
