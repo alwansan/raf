@@ -7,6 +7,8 @@ on:
       - feature/android-native-port
     paths:
       - '.github/workflows/raft-unity-script-link-probe.yml'
+      - 'scripts/normalize_csharp_namespaces.py'
+      - 'tests/test_csharp_namespace_compat.py'
 
 permissions:
   contents: read
@@ -25,6 +27,8 @@ jobs:
           lfs: false
           persist-credentials: false
           fetch-depth: 1
+      - name: Run CSharp namespace converter synthetic safety tests
+        run: python3 -m unittest discover -s tests -p test_csharp_namespace_compat.py -v
       - name: Stage three scenes plus mandatory globalgamemanagers.assets MonoScript registry
         shell: bash
         run: |
@@ -100,3 +104,8 @@ jobs:
           if byext[".unity"]<1 or byext[".cs"]<1:
               raise SystemExit("Expected both Unity scene and script output; no complete linked project recovered")
           PY
+
+      - name: Diagnose CSharp 10 namespace syntax generated for Unity 2021
+        shell: bash
+        run: |
+          python3 scripts/normalize_csharp_namespaces.py --root "$RUNNER_TEMP/linked-export/ExportedProject/Assets"
