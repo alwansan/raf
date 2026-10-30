@@ -144,3 +144,7 @@ Before ANY download or extraction: inspect `df -h` / free bytes, verify archive 
 - Limited AssetRipper Unity export now emits 3,810 `.cs` plus 3,810 `.cs.meta` files, with **13,969/13,969** script references from five scenes matching exported GUIDs and no placeholder.
 - The export used script `Level1`, so source may be stubs. **Do not infer functional gameplay code** from file counts; a separate `Level0` full-code experiment and Editor import are required.
 - Source assets still belong to commercial game rights holders. No extracted Unity projects or code committed or published.
+
+### Mesh reference fidelity gate added
+
+The all-40-scene script GUID audit passed (64,642/64,642). Subsequent reference audit found 393,450 non-script deadbeef placeholders in Unity YAML, **198,114** under `m_Mesh` and **191,091** as list elements, plus SpeedTree/animator/avatar and other fields. Two distinct unmatched GUIDs are Unity built-in resources. This is the next **non-script** resource repair gate. Only proceed to Unity Editor playability tests after required meshes/materials/prefabs and shader references have been mapped and missing LFS resources are planned with disk/bandwidth safeguards.
