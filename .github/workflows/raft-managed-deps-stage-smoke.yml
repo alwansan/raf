@@ -11,6 +11,8 @@ on:
       - 'tests/test_stage_raft_managed_dlls.py'
       - 'scripts/rename_conflicting_sdk_asmdefs.py'
       - 'tests/test_sdk_asmdef_rename.py'
+      - 'scripts/add_unity_packages.py'
+      - 'tests/test_add_unity_packages.py'
 
 permissions:
   contents: read
@@ -29,6 +31,8 @@ jobs:
         run: python3 -m unittest discover -s tests -p test_stage_raft_managed_dlls.py -v
       - name: Verify asmdef collision renaming safety and GUID preservation
         run: python3 -m unittest discover -s tests -p test_sdk_asmdef_rename.py -v
+      - name: Test native UI and TextMeshPro package restoration
+        run: python3 -m unittest discover -s tests -p test_add_unity_packages.py -v
       - name: Validate that selected original managed DLLs can be staged
         shell: bash
         run: |
