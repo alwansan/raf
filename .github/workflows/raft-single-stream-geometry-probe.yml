@@ -1,0 +1,62 @@
+name: Raft one-source collider geometry experiment
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-single-stream-geometry-probe.yml'
+      - 'scripts/probe_collider_stream.py'
+      - 'tests/test_probe_collider_stream.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: raft-single-stream-geometry-probe
+  cancel-in-progress: false
+jobs:
+  probe:
+    if: ${{ github.ref == 'refs/heads/feature/android-native-port' && (github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[raft-stream-probe]')) }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: true
+      - name: Small synthetic tests before any LFS
+        run: |
+          python3 -m unittest discover -s tests -p test_probe_collider_stream.py -v
+          python3 -m unittest discover -s tests -p test_trace_collision_mesh_sources.py -v
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+      - name: Reconstruct exact private range ledger from existing completed log
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh api --allow-escape-sequences --method GET "repos/$GITHUB_REPOSITORY/actions/jobs/124205309687/logs" > "$RUNNER_TEMP/native-completed.log"
+          python3 scripts/trace_collision_mesh_sources.py --root Raft/Raft_Data \
+            --log "$RUNNER_TEMP/native-completed.log" \
+            --details-out "$RUNNER_TEMP/private-collider-ranges.json"
+      - name: Enforce one-source transfer and storage bounds before fetch
+        run: |
+          python3 - <<'PY'
+          import json, os, shutil
+          from pathlib import Path
+          ledger=json.loads((Path(os.environ['RUNNER_TEMP'])/'private-collider-ranges.json').read_text())
+          rows=[p for p in ledger['providers'] if p['stream']=='sharedassets29.assets.resS']
+          assert len(rows)==1 and rows[0]['lfs_declared_bytes']==295782704
+          assert rows[0]['distinct_names']>0 and not ledger['rejected_rows']
+          assert shutil.disk_usage(os.environ['RUNNER_TEMP']).free>3*1024**3
+          print('Verified metadata scope: one original LFS object, 295782704 bytes')
+          PY
+          git lfs install --local
+          git lfs fetch origin HEAD --include='Raft/Raft_Data/sharedassets29.assets.resS' --exclude=''
+          git lfs checkout Raft/Raft_Data/sharedassets29.assets.resS
+      - name: Verify source bytes and decode only previously failing collider meshes
+        run: |
+          python3 scripts/probe_collider_stream.py --root Raft/Raft_Data \
+            --ledger "$RUNNER_TEMP/private-collider-ranges.json" \
+            --stream sharedassets29.assets.resS
+      - name: Report scope without publishing game content
+        run: |
+          echo 'Original source geometry experiment completed; inspect RAFT_VERIFIED_SOURCE_GEOMETRY. This is not AssetRipper/Unity cooking validation or an APK.' >> "$GITHUB_STEP_SUMMARY"
