@@ -8,7 +8,7 @@ import json
 import UnityPy
 
 TARGETS={"MeshFilter","MeshCollider","SkinnedMeshRenderer"}
-FILES=("level0","level1","level37","level38","level39",
+FILES=tuple(f"level{i}" for i in range(40)) + (
        "sharedassets1.assets","sharedassets35.assets","globalgamemanagers.assets")
 
 def analyze(root:Path):
