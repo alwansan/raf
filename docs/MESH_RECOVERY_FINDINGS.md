@@ -112,3 +112,31 @@ Source streams, original Unity geometry and collisions remain distinct from seri
 - [Baseline-only export 41125893623](https://github.com/alwansan/raf/actions/runs/41125893623) then passed with corrected null-buffer classification: **25 matching exports all had truncated position payloads**, no YAML parse errors. All LFS fetch/decode stages were skipped. The defect for this selected group is now tied to absent streamed vertex payloads in exporter inputs; Unity cooking remains to be measured.
 - Native workflow at commit `eef3546eccdcac68afa541e99368e5232b7d9925` adds the verified stream only for deliberate native mode. [Native correction test 41126157041](https://github.com/alwansan/raf/actions/runs/41126157041) has passed license preflight and started reconstruction; no new final Unity/APK result yet. It selects 633443656 LFS bytes total (existing three source headers + this one stream).
 - Original sources, scenes and .meta files were not rewritten by these diagnostics; no collider disabled or synthesized. Exact before/after generated Mesh GUID equality is not established. Local affected tests: 17/17.
+
+## 2026-10-31 Baghdad: real Unity reduction and source24 identity-preserving repair
+
+[Native run 41126157041](https://github.com/alwansan/raf/actions/runs/41126157041) completed SUCCESS. Existing-log comparisons [41131327848](https://github.com/alwansan/raf/actions/runs/41131327848) and [41131679576](https://github.com/alwansan/raf/actions/runs/41131679576) passed without source payload downloads.
+
+| Actual Unity diagnostic | Native baseline | Source29 restored |
+|---|---:|---:|
+| Build report errors | 3300 | 1913 |
+| Non-finite vertex lines | 1947 | 1147 |
+| Distinct non-finite Mesh names | 159 | 106 |
+| Broader failed Mesh names | 261 | 228 |
+| Selected source29 non-finite names | 22 | 0 |
+| Quickhull failure lines | 8 | 23 |
+| Original scene script links matched | 64642/64642 | 64642/64642 |
+
+80 names left the non-finite category and 27 entered it, but all 27 already failed in other collider categories. No new broadly failed Mesh names appeared. This must not be described as either zero remaining errors or 27 newly broken Mesh assets. Remaining known non-finite source counts are source24=18, source25=7, source30=11, source34=12, source35=35, source6=2; 21 additional names need unresolved-header/alias analysis.
+
+The actual APK was 763219415 bytes, SHA256 02f061ee1dddb77c09316bda2429c4775dd6d11b4cadda9a32efb57a1962ca4b. Its structural audit passed; FMOD native audio library was absent. No APK artifact or device test exists.
+
+### Source24 test, with original meta preservation
+
+[Experiment 41131961216](https://github.com/alwansan/raf/actions/runs/41131961216) verified exactly 301743760 source24 stream bytes and their original SHA256, decoded 18 valid original meshes and exported 18 finite meshes, versus 18 truncated baseline payloads. Its overall paired-export comparison correctly failed on differing generated GUIDs; do not claim it preserved .meta files.
+
+[Restoration experiment 41132754593](https://github.com/alwansan/raf/actions/runs/41132754593) then passed with a conservative vertex-payload-only repair. The script validates matching name/layout/count/indices/submeshes, checks all providers before any write, snapshots targets, modifies only m_VertexData.m_DataSize and _typelessdata, and never copies provider metadata. Real result: **18 invalid payloads→0; 18 common assets; zero GUID changes, full-meta-byte changes, vertex-count changes or parse errors**. Original scene references remain on original GUIDs. This is source/export verification, not yet Unity physics validation.
+
+The workflow now validates baseline exports before any LFS fetch. [Two-stream native gate 41133104278](https://github.com/alwansan/raf/actions/runs/41133104278) is running at source commit 276c593134ca15ba80956d3615bfa3b50fcaaac7; selected original LFS total 935187416 bytes (three original headers + source29/source24 streams), not all streams. Inspect its final Unity result next.
+
+The improved AArch64 ELF validator passed six synthetic APK tests in [41132117684](https://github.com/alwansan/raf/actions/runs/41132117684); the earlier disposed APK was audited by the older magic-only validator.

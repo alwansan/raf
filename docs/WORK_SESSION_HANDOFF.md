@@ -6,7 +6,7 @@
 
 **Purpose:** Cumulative technical record for resuming this project in ChatGPT Work. Earlier sections include historical and superseded statuses. Last checkpoint reviewed 2026-10-30 18:36 UTC (21:36 Baghdad), and the branch/Actions must be refreshed on entry.
 
-**LATEST VERIFIED CHECKPOINT:** [native 41096960758](https://github.com/alwansan/raf/actions/runs/41096960758) actually built an ARM64 IL2CPP APK in disposable CI, but logged 3,300 errors and serious collider mesh corruption; NO downloadable artifact, no release, no device test or verified playable Android port. [Collider source-priority audit 41108252910](https://github.com/alwansan/raf/actions/runs/41108252910) passed. See the final section for next actions.
+**LATEST VERIFIED CHECKPOINT:** [native 41126157041](https://github.com/alwansan/raf/actions/runs/41126157041) built and structurally audited an actual 763219415-byte ARM64 IL2CPP APK. Restoring source29 reduced reported build errors 3300→1913 and distinct non-finite Mesh names 159→106; all 22 targeted names cleared, but substantial physics errors and missing FMOD Android native audio remain. No retained/downloadable APK or device test. [Metadata-preserving source24 repair 41132754593](https://github.com/alwansan/raf/actions/runs/41132754593) passed on 18 Mesh assets. [Next two-stream native test 41133104278](https://github.com/alwansan/raf/actions/runs/41133104278) is in progress. See the final section for current evidence.
 
 ## 1. Non-negotiable instructions from the owner
 
@@ -359,4 +359,9 @@ Earlier experiments failed because the Unity license was not visible in a GitHub
 ### Next native gate
 
 - This commit requests **one deliberate native run with two validated streams, source29 + source24**. Original selected LFS total = **935187416 bytes** (three required headers + two streams). Ordinary SDK validation keeps its previous three-header scope. Both streams are size/SHA256 verified before original-input staging. No collider/gameplay component disabled and no original meta or scene rewritten in source control.
-- Inspect that native run and compare it to completed run 41126157041 using job-log summaries, not to an outdated SDK-only gate. Check actual collider sets, Quickhull failures, original script links and strengthened ELF audit. Then prioritize remaining stream sources and restore offline startup/save/touch/FM0D audio; those runtime requirements remain incomplete.
+- Inspect that native run and compare it to completed run 41126157041 using job-log summaries, not to an outdated SDK-only gate. Check actual collider sets, Quickhull failures, original script links and strengthened ELF audit. Then prioritize remaining stream sources and restore offline startup/save/touch/FMOD audio; those runtime requirements remain incomplete.
+
+### Active follow-up run
+
+- [Two-stream native **41133104278**](https://github.com/alwansan/raf/actions/runs/41133104278), source commit `276c593134ca15ba80956d3615bfa3b50fcaaac7`, is **in progress**. This is the single deliberate test of source24 together with already verified source29. Inspect its actual result before any further full build.
+- Isolated restoration 41132754593 is confirmed completed SUCCESS. Whole-meta preservation was measured on the original 18 repaired Mesh assets; independently generated provider GUIDs were deliberately not copied. Main reconstruction uses verified original streams in a fresh coherent full export; helper is not blindly applied to whole-project duplicate names.
