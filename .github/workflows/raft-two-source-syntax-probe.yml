@@ -68,3 +68,35 @@ jobs:
           PY
       - name: Run CSharp namespace converter fixtures
         run: python3 -m unittest discover -s tests -p test_csharp_namespace_compat.py -v
+
+      - name: Regenerate Mono gameplay using explicit Unity 2021 compatible CSharp 9 syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/cs9"
+          timeout 260s "$RUNNER_TEMP/ilspy/ilspycmd" --languageversion CSharp9_0 \
+            -p -o "$RUNNER_TEMP/cs9" \
+            Raft/Raft_Data/Managed/Assembly-CSharp.dll \
+            > "$RUNNER_TEMP/cs9.log" 2>&1
+          python3 - <<'PY'
+          import os,re
+          from pathlib import Path
+          original=Path(os.environ["RUNNER_TEMP"])/"src"
+          converted=Path(os.environ["RUNNER_TEMP"])/"cs9"
+          count=0
+          for file in converted.rglob("*.cs"):count+=1
+          print("CSharp9 generated source file count:",count)
+          if count<2000:raise SystemExit("CSharp9 output files missing")
+          for name,inner in (("Spray.cs","Particle"),("Voxelize.cs","Int3")):
+              candidates=list(converted.rglob(name))
+              if len(candidates)!=1:raise SystemExit(f"Cannot locate unambiguous {name}")
+              csharp=candidates[0].read_text(encoding="utf8",errors="replace")
+              prior=next(original.rglob(name)).read_text(encoding="utf8",errors="replace")
+              primary=re.compile(r"\\b(?:struct|class)\\s+"+re.escape(inner)+r"\\s*\\(")
+              print(name,"primary constructor in ILSpy Latest:",bool(primary.search(prior)))
+              print(name,"primary constructor in ILSpy CSharp9_0:",bool(primary.search(csharp)))
+              print(name,"file-scoped namespace in CSharp9:",bool(re.search(r"(?m)^\\s*namespace\\s+[\\w.]+;",csharp)))
+              if primary.search(csharp):raise SystemExit(f"CSharp12 primary constructor survived in {name}")
+              if re.search(r"(?m)^\\s*namespace\\s+[\\w.]+;",csharp):
+                  raise SystemExit("CSharp 10 file-scoped namespace survived CSharp9 mode")
+          PY
