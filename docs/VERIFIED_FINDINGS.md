@@ -74,3 +74,19 @@ These are rough case-insensitive keyword matches, not mutually exclusive categor
 - Attempt a tightly scoped read-only sample asset export after checking free storage and exact LFS target size (not wholesale downloads).
 - Prepare Unity 2021.3.45f2 import validation only after restoring a minimal, legally usable editor project.
 - Do NOT confuse a metadata scan with a complete port.
+
+## Job 3: representative class names and native imports — SUCCESS
+
+https://github.com/alwansan/raf/actions/runs/41016983283
+
+- Multiplayer-related type names observed: `AI_NetworkBehavior_Shark`, `AI_NetworkBehaviour`, `AI_NetworkBehaviour_Animal`, `AI_NetworkBehaviour_Bear`, `AI_NetworkBehaviour_Boss_Varuna`, `AI_NetworkBehaviour_Hyena`, `RequestWorldAsClient` (compiler-generated state machine), `SendResultOnceNetworkIsEstablished`.
+- Raft examples: `Anchor`, `Anchor_Stationary`, `Anchor_Throwable`, `Block_Foundation`, `EngineControls`, `FoundationArmor`.
+- Save/load examples: `SaveWorldAsync` and `SaveUserAsync` async state machines, `AsyncLoaderManager`, `FastMessageDeserializer`.
+- Among the first 150 of 155 P/Invoke declarations: `PartyWin32` (126), `PartyXboxLiveWin32` (21), `lz4unity` (3). Five declarations omitted from the truncated histogram; totals are **not** module totals for all 155.
+- **Engineering implication:** investigate replacing the Party native transport while keeping underlying Unity network gameplay components before contemplating a full networking framework migration.
+
+## Tool installation check
+
+- `dnfile==0.18.0`: pip installation **succeeded** on GitHub Actions in Job 2.
+- AssetRipper 2.0.0 official binary smoke-test workflow: `.github/workflows/assetripper-tool-smoke.yml`; installation/execution result pending at writing.
+- Unity Editor and Android Build Support: not installed (editor project still missing); original game version `2021.3.45f2` available on https://unity.com/releases/editor/whats-new/2021.3.45f2 .
