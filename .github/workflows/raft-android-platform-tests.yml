@@ -1,0 +1,45 @@
+name: Raft Android offline platform adapter - build and test
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - 'android-port/**'
+      - '.github/workflows/raft-android-platform-tests.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  platform-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Storage safety
+        run: |
+          df -h /
+          test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')" -gt 2097152
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          fetch-depth: 1
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Compile original offline Android compatibility library against netstandard2.1
+        run: |
+          dotnet build android-port/Runtime/Platform/RaftAndroid.Platform.csproj \
+            --configuration Release --nologo -v:q
+      - name: Run storage, identity and offline-session smoke tests
+        run: |
+          dotnet run --project android-port/Tests/Smoke/RaftAndroid.Platform.Smoke.csproj \
+            --configuration Release --nologo
+      - name: Summarize
+        run: |
+          echo '## Raft Android platform skeleton' >> "$GITHUB_STEP_SUMMARY"
+          echo '- netstandard2.1 platform library compilation: PASS' >> "$GITHUB_STEP_SUMMARY"
+          echo '- Local offline identity, secure save paths, single-player session fixture tests: PASS' >> "$GITHUB_STEP_SUMMARY"
+          echo '- No game C# rewritten or assets included yet; no Android APK from this library alone.' >> "$GITHUB_STEP_SUMMARY"
