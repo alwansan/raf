@@ -111,3 +111,16 @@ https://github.com/alwansan/raf/actions/runs/41017866546
 - The prior test run 41017638608 exited 0 but printed `Too many arguments were supplied`; that was a false-positive workflow result. The script was corrected to omit extra `true` words for boolean flags and to check the output directory is nonempty. The successful, validated run is **41017866546**.
 
 **Result:** G1 small-sample Unity asset extraction viability is now verified; next gated step is a narrow project-format export and editor import check, before large LFS downloads.
+
+## Job 5: tiny Unity-project mode export — PARTIAL technical success
+
+https://github.com/alwansan/raf/actions/runs/41018053143
+
+- Pinned AssetRipperCLI `--mode unity` exit code **0** and printed `Successfully exported` for Unity **2021.3.45f2**.
+- Output: **20 files / ~128 KiB**. Actual directories included `ExportedProject/Packages` and `ExportedProject/ProjectSettings`.
+- In this tiny sample, an `Assets/` directory was **not generated**. No scene or prefab recovery is claimed.
+- The importer explicitly warned that various companion sharedassets files and `resources.assets` were missing from the intentionally limited sample. Those missing dependencies include files stored via LFS pointers.
+- **Interpretation:** restoration of project settings works, but the sample by itself is not a valid/playable Unity project; an Editor import/compile test has NOT happened.
+- No exported Unity files were uploaded or committed.
+
+**Next gate:** dependency-aware, license/cost-conscious wider source export, using selected non-LFS assets first. Full Git LFS download is not justified until project scaffolding and Unity/Android licensing are established.
