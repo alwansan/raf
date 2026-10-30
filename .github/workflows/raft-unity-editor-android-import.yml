@@ -7,6 +7,8 @@ on:
       - feature/android-native-port
     paths:
       - '.github/workflows/raft-unity-editor-android-import.yml'
+      - 'scripts/overlay_ilspy_gameplay.py'
+      - 'tests/test_csharp_overlay.py'
       - 'scripts/stage_raft_managed_dlls.py'
       - 'tests/test_stage_raft_managed_dlls.py'
       - 'scripts/rename_conflicting_sdk_asmdefs.py'
