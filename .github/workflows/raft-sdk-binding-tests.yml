@@ -60,6 +60,29 @@ jobs:
                   pe.close()
           print("Legacy serialization configuration physical providers:",found)
           PY
+      - name: Inspect original legacy Sirenix script registry and retained object metadata (no LFS)
+        run: |
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 - <<'PY'
+          import UnityPy,json
+          from pathlib import Path
+          root=Path("Raft/Raft_Data")
+          scripts=[]
+          for path in sorted(root.iterdir()):
+              if not path.is_file() or not (path.name=="globalgamemanagers" or path.name.startswith("level") or path.name.endswith(".assets")): continue
+              with path.open("rb") as f:
+                  if f.read(48).startswith(b"version https://git-lfs.github.com/spec/v1"): continue
+              try: env=UnityPy.load(str(path))
+              except Exception as e:
+                  print("Skipped unsupported file:",path.name,type(e).__name__);continue
+              for obj in env.objects:
+                  if obj.type.name!="MonoScript": continue
+                  data=obj.read()
+                  asm=str(data.m_AssemblyName)
+                  if "Sirenix" in asm:
+                      scripts.append({"file":path.name,"path_id":obj.path_id,"assembly":asm,"namespace":str(data.m_Namespace),"class":str(data.m_ClassName)})
+          print("Original retained Sirenix script registry:",json.dumps(scripts))
+          PY
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
