@@ -1,0 +1,63 @@
+name: Raft MonoScript identity inventory (UnityPy, no LFS)
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - 'scripts/inspect_monoscript_assets.py'
+      - '.github/workflows/raft-unitypy-monoscript.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  static-monoscript:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - name: Verify storage before download
+        shell: bash
+        run: |
+          set -euo pipefail
+          df -h /
+          test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')" -gt 10485760
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Verify only real Unity files are selected
+        shell: bash
+        run: |
+          set -euo pipefail
+          for f in globalgamemanagers level0 level1 level37 level38 level39 sharedassets1.assets sharedassets37.assets sharedassets38.assets sharedassets39.assets; do
+            p="Raft/Raft_Data/$f"
+            if [ -f "$p" ]; then
+              if head -c 42 "$p" | grep -q 'version https://git-lfs.github.com/spec/v1'; then
+                echo "Unexpected LFS pointer: $p"
+                exit 2
+              fi
+            fi
+          done
+      - name: Install version-pinned UnityPy for static serialized data inspection
+        run: |
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 -c 'import UnityPy;print("UnityPy:",UnityPy.__version__)'
+      - name: Count original serialized MonoScripts and MonoBehaviour pointers
+        run: python3 scripts/inspect_monoscript_assets.py --root Raft/Raft_Data
+      - name: Summarize only aggregate values
+        run: |
+          python3 - <<'PY'
+          import json,os
+          d=json.load(open('out/unitypy-monoscripts.json',encoding='utf8'))
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              f.write('## UnityPy serialized MonoScript probe (no LFS)\n')
+              f.write(f"- Inspected files: {d['overall']['files']}\n")
+              f.write(f"- Total MonoScripts found: {d['overall']['MonoScript']}\n")
+              f.write(f"- Total MonoBehaviours found: {d['overall']['MonoBehaviour']}\n")
+              for x in d['samples']:
+                  f.write(f"- {x['file']}: scripts={x['counts']['MonoScript']}, behaviours={x['counts']['MonoBehaviour']}\n")
+              f.write('No game files, script source or Unity serialized assets were uploaded.\n')
+          PY
