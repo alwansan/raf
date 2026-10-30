@@ -71,8 +71,9 @@ def summary(failures: Counter, matches: dict, metadata: dict, root: Path | None 
     sources: dict[str, set[str]] = defaultdict(set)
     for name, rows in matched.items():
         for row in rows:
-            if row["stream_status"] == "lfs-pointer" and row["stream_file"]:
-                sources[row["stream_file"]].add(name)
+            stream = row.get("stream_file")
+            if row["stream_status"] == "lfs-pointer" and stream:
+                sources[stream].add(name)
     priorities = []
     for stream, names in sources.items():
         advertised = None
