@@ -51,3 +51,7 @@
 - With that file included, [AssetRipper linkage export](https://github.com/alwansan/raf/actions/runs/41023760680) recovered **3,810 C# scripts + 3,810 script .meta files** and **5 scenes**. All **13,969** scene `m_Script` GUID occurrences matched exported script .meta GUIDs, with no `deadbeef` placeholder in this sample.
 - The latest [full-script Level0 CI experiment](https://github.com/alwansan/raf/actions/workflows/raft-full-script-linked-recovery.yml) is being evaluated. Valid GUID linkage does not yet mean a compiling Unity project or playable APK.
 - No LFS downloads or third-party proprietary asset uploads were needed for this fix.
+
+### Reconstructable gameplay code integration
+
+[Verified CI run](https://github.com/alwansan/raf/actions/runs/41024504209) safely overlaid **1,568** name-and-namespace-matched ILSpy gameplay C# files onto AssetRipper's original-script-GUID-preserving export. All **13,969/13,969** script refs in the five-scene sample remained valid. Six fixture-only overlay safety tests passed. This is a **temporary local build-time reconstruction technique**, not a distributable or Unity-compiling game project. See [reconstruction status](docs/RECONSTRUCTION_STATUS.md). A separate [all 40 levels check](.github/workflows/raft-all-scene-links.yml) broadens scene coverage without downloading Git LFS.
