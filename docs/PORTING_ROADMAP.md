@@ -116,14 +116,14 @@ No job should execute `Raft.exe` or third-party patched DLLs. Do not cache or up
 
 | Purpose | Tool | Install / download entry point | Status |
 |---|---|---|---|
-| Unity serialized asset analysis | AssetRipper | https://github.com/AssetRipper/AssetRipper/releases | Not installed; only repo metadata scanned |
-| Mono C# decompilation | ILSpy / ilspycmd | https://github.com/icsharpcode/ILSpy/releases | Not installed |
+| Unity serialized asset analysis | AssetRipper official 2.0.0 | https://github.com/AssetRipper/AssetRipper/releases/download/2.0.0/AssetRipper_linux_x64.tar.xz | Download, checksum and --help **verified** in GitHub Actions; GUI/headless-web, not batch CLI |
+| Mono metadata / C# decompilation | dnfile 0.18.0 / ILSpy | https://pypi.org/project/dnfile/ / https://github.com/icsharpcode/ILSpy/releases | dnfile metadata parser installed and tested; ILSpy decompiler not installed |
 | .NET for ILSpy tooling | .NET SDK | https://dotnet.microsoft.com/download | Not installed |
 | Editor rebuild / Android export | Unity Editor + Android module | https://unity.com/download | Not installed; determine exact version first |
 | CI Unity Android build | GameCI unity-builder | https://game.ci/docs/github/builder/ | Planned, needs editor project and valid license |
 | Future network | Mirror | https://github.com/MirrorNetworking/Mirror | Candidate, NOT selected yet |
 
-Avoid unnecessary forks: GitHub Actions can download released upstream tools and cache by pinned versions. Fork only if we demonstrably need to change upstream code or lock a fork-specific patch.
+Third-party AssetRipperCLI v1.0.1 (https://github.com/nowl-it/AssetRipperCLI/releases/download/v1.0.1/AssetRipper_linux_x64.zip) was independently downloaded, SHA-256 verified and --help tested in isolated GitHub Actions; includes --cli. Test real asset export before choosing it for main recovery. Avoid unnecessary forks: GitHub Actions can download released upstream tools and cache by pinned versions. Fork only if we demonstrably need to change upstream code or lock a fork-specific patch.
 
 ## 5. Space and storage policy
 
