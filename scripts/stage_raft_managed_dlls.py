@@ -17,6 +17,10 @@ import json
 from pathlib import Path
 import shutil
 
+# Unity 2021/UGUI already contributes UnityEngine.UI; copying the original
+# Windows assembly duplicates the compiler reference (CS1704).
+EDITOR_PROVIDED_ASSEMBLIES = frozenset({"UnityEngine.UI.dll"})
+
 ESSENTIALS=(
     "FMODUnity.dll",
     "FMODUnityResonance.dll",
@@ -24,7 +28,6 @@ ESSENTIALS=(
     "Unity.Netcode.Runtime.dll",
     "Unity.Netcode.Components.dll",
     "Unity.Networking.Transport.dll",
-    "UnityEngine.UI.dll",
     "Unity.TextMeshPro.dll",
     "Newtonsoft.Json.dll",
 )
@@ -42,6 +45,8 @@ def stage(managed:Path,project:Path,*,apply:bool,extended:bool=False)->dict:
     selected=ESSENTIALS+(OPTIONAL if extended else ())
     rows=[]
     for name in selected:
+        if name in EDITOR_PROVIDED_ASSEMBLIES:
+            raise ValueError("Refusing to duplicate a Unity Editor-provided assembly: "+name)
         assert name.endswith(".dll") and "/" not in name
         src=managed/name
         if not src.is_file():
