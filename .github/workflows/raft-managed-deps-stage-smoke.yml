@@ -1,0 +1,38 @@
+name: Raft selected Unity managed dependency staging smoke test
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - '.github/workflows/raft-managed-deps-stage-smoke.yml'
+      - 'scripts/stage_raft_managed_dlls.py'
+      - 'tests/test_stage_raft_managed_dlls.py'
+
+permissions:
+  contents: read
+
+jobs:
+  managed-refs:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Test selective third-party managed DLL staging with synthetic fixtures
+        run: python3 -m unittest discover -s tests -p test_stage_raft_managed_dlls.py -v
+      - name: Validate that selected original managed DLLs can be staged
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/project/Assets"
+          python3 scripts/stage_raft_managed_dlls.py \
+            --managed "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed" \
+            --project "$RUNNER_TEMP/project" \
+            --report "$RUNNER_TEMP/selected-managed-report.json" \
+            --apply
+          test "$(find "$RUNNER_TEMP/project/Assets/Plugins/RaftManagedReferences" -type f -name '*.dll' | wc -l)" -eq 9
+          echo 'Verified selected original managed references exist, with game and Unity engine core DLLs excluded.' >> "$GITHUB_STEP_SUMMARY"
