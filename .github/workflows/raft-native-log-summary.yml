@@ -40,6 +40,8 @@ jobs:
           counters=Counter()
           meshes=set()
           stats=[]
+          error_groups=Counter()
+          error_examples={}
           for line in source.open(encoding="utf-8-sig",errors="replace"):
               text=ansi.sub("",line).rstrip()
               text="".join(c for c in text if c.isprintable() or c=="\t")
@@ -64,6 +66,12 @@ jobs:
               if any(v in text for v in ("Licensing","access token","license","GL_","GLX_","Start importing",
                                          "##[group]","echo ","print(","raise SystemExit")):
                   continue
+              if re.search(r"(?i)(?:##\[error\]|error:|shader error|error building|error\s+[A-Za-z])",text):
+                  group=re.sub(r"'[^']*'|\"[^\"]*\"","<quoted>",text)
+                  group=re.sub(r"(?:Assets|Library|/github)/[^\s]+","<path>",group)
+                  group=re.sub(r"\d+","#",group)[:240]
+                  error_groups[group]+=1
+                  error_examples.setdefault(group,text[:650])
               if any(v in text for v in ("##[error]","BuildFailedException","CompilerException","fatal error:",
                                          "error: ","FAILURE:","Build Finished","Errors:","Build result",
                                          "BuildFailed","Target architecture","OutOfMemory","Killed",
@@ -76,6 +84,10 @@ jobs:
           print("Distinct collision mesh asset paths:",len(meshes))
           print("Structural and stream audit counters:")
           for row in stats[-30:]: print(row)
+          print("Most frequent error categories:")
+          for group,count in error_groups.most_common(12):
+              print("ERROR_CATEGORY",count,group)
+              print("ERROR_EXAMPLE",error_examples[group])
           print("Bounded latest failure diagnostics:")
           for row in failures: print(row)
           with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as out:
