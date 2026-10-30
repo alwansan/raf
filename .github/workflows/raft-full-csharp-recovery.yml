@@ -1,0 +1,69 @@
+name: Raft full Mono C# project recovery feasibility
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - '.github/workflows/raft-full-csharp-recovery.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  decompilation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - name: Free space before download and export
+        run: |
+          df -h /
+          test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')" -gt 20971520
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          fetch-depth: 1
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Install pinned ILSpyCmd
+        run: |
+          dotnet tool install ilspycmd --version 11.2.0.10050 --tool-path "$RUNNER_TEMP/ilspy"
+          "$RUNNER_TEMP/ilspy/ilspycmd" --version
+      - name: Generate full decompiled C# project in isolated TEMP
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/mono-recovery"
+          timeout 360s "$RUNNER_TEMP/ilspy/ilspycmd" \
+            -p -o "$RUNNER_TEMP/mono-recovery" \
+            "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed/Assembly-CSharp.dll" \
+            > "$RUNNER_TEMP/ilspy-recovery.log" 2>&1
+          python3 - <<'PY'
+          from pathlib import Path
+          import os
+          base=Path(os.environ["RUNNER_TEMP"])/"mono-recovery"
+          sources=list(base.rglob("*.cs"))
+          projects=list(base.rglob("*.csproj"))
+          totalbytes=sum(p.stat().st_size for p in sources)
+          lines=sum(len(p.read_bytes().splitlines()) for p in sources)
+          names={p.name for p in sources}
+          print("Recovered C# file count:",len(sources))
+          print("C# source bytes:",totalbytes)
+          print("Recovered C# lines:",lines)
+          print("C# project files:",len(projects))
+          for name in ("SaveAndLoad.cs","Raft_Network.cs","SteamManager.cs","GameManager.cs"):
+              print(name,"found:",name in names)
+          print("Decompiler process log bytes:",(Path(os.environ["RUNNER_TEMP"])/"ilspy-recovery.log").stat().st_size)
+          print("No generated C# source is committed, uploaded or copied outside this runner.")
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
+              f.write("## Full Mono C# project export feasibility\n")
+              f.write(f"- {len(sources)} source files, {lines} lines, {totalbytes} UTF-8 bytes\n")
+              f.write(f"- {len(projects)} project files\n")
+              f.write("- Compilation, project scene GUID integration and Android runtime compatibility have NOT been tested.\n")
+              f.write("- Decompiled third-party source remains ephemeral; no artifact published.\n")
+          if len(sources)<100 or len(projects)<1:
+              raise SystemExit("Recovery output below minimum expected project volume")
+          PY
