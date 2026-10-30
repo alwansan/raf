@@ -1,0 +1,116 @@
+name: Raft mesh asset coverage with all non-LFS serialized inputs
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - '.github/workflows/raft-mesh-asset-coverage.yml'
+      - 'scripts/audit_mesh_references.py'
+
+permissions:
+  contents: read
+
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 32
+    steps:
+      - name: Inspect disk before moving assets or downloading tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          df -h /
+          avail=$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')
+          echo "Available KiB: $avail"
+          test "$avail" -gt 20971520
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Copy all regular Git serialized assets, without LFS
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="$RUNNER_TEMP/sandbox/Raft_Data"
+          mkdir -p "$root/Managed"
+          cp Raft/Raft_Data/Managed/*.dll "$root/Managed/"
+          cp Raft/Raft_Data/boot.config "$root/"
+          shopt -s nullglob
+          copied=0
+          skipped=0
+          for source in Raft/Raft_Data/globalgamemanagers Raft/Raft_Data/globalgamemanagers.assets* Raft/Raft_Data/resources.assets* Raft/Raft_Data/sharedassets*.assets* Raft/Raft_Data/level*; do
+            [ -f "$source" ] || continue
+            if head -c 48 "$source" | grep -q '^version https://git-lfs.github.com/spec/v1'; then
+              skipped=$((skipped+1))
+              continue
+            fi
+            cp "$source" "$root/"
+            copied=$((copied+1))
+          done
+          printf 'Copied files: %d; intentionally skipped LFS pointers: %d\n' "$copied" "$skipped"
+          du -sh "$root"
+          df -h /
+          test "$copied" -gt 100
+      - name: Download AssetRipperCLI known release and verify SHA256
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fL --retry 2 --max-time 240 'https://github.com/nowl-it/AssetRipperCLI/releases/download/v1.0.1/AssetRipper_linux_x64.zip' -o "$RUNNER_TEMP/arcli.zip"
+          echo "b48292e40948ce2634e9187d4724fb4f45c01fa6f4fea2a5f4775aa611def17b  $RUNNER_TEMP/arcli.zip" | sha256sum -c -
+          mkdir -p "$RUNNER_TEMP/cli"
+          unzip -q "$RUNNER_TEMP/arcli.zip" -d "$RUNNER_TEMP/cli"
+          chmod +x "$RUNNER_TEMP/cli/AssetRipper.GUI.Free"
+      - name: Export partial Unity project with all available serialized data
+        shell: bash
+        run: |
+          set -euo pipefail
+          set +e
+          timeout 1100s "$RUNNER_TEMP/cli/AssetRipper.GUI.Free" \
+            --cli --input "$RUNNER_TEMP/sandbox" \
+            --output "$RUNNER_TEMP/project" --mode unity \
+            --script-content-level Level1 --ignore-streaming-assets \
+            > "$RUNNER_TEMP/ripper.log" 2>&1
+          status=$?
+          set -e
+          echo "AssetRipper exit code: $status"
+          grep -Ei 'successfully exported|exception|failed to|missing' "$RUNNER_TEMP/ripper.log" | tail -20 | cut -c 1-220 || true
+          test "$status" -eq 0
+      - name: Quantify non-script mesh placeholder changes and script linkage
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/audit_mesh_references.py --project "$RUNNER_TEMP/project/ExportedProject" --out "$RUNNER_TEMP/mesh-diagnostics.json"
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,re,os,collections
+          project=Path(os.environ['RUNNER_TEMP'])/'project'/'ExportedProject'
+          scenes=list(project.rglob('*.unity'))
+          metas=list(project.rglob('*.cs.meta'))
+          ids=set()
+          for p in metas:
+              m=re.search(r'(?m)^guid:\s*([0-9a-fA-F]{32})',p.read_text(errors='replace')[:500])
+              if m: ids.add(m.group(1).lower())
+          refs=[]
+          for p in scenes:
+              refs.extend(re.findall(r'm_Script:\s*\{[^\n}]*guid:\s*([0-9a-fA-F]{32})',p.read_text(errors='replace')))
+          linked=sum(g.lower() in ids for g in refs)
+          mesh=json.load(open(Path(os.environ['RUNNER_TEMP'])/'mesh-diagnostics.json'))
+          print('Scene count:',len(scenes))
+          print('CSharp meta count:',len(metas))
+          print('Script links:',linked,'/',len(refs))
+          print('Mesh deadbeef references:',mesh['by_property'].get('m_Mesh',0))
+          print('All deadbeef references:',mesh['deadbeef_total'])
+          print('Original tiny input baseline: 393450 placeholders, 198114 m_Mesh')
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              f.write('## Non-LFS mesh recovery coverage comparison\n')
+              f.write(f"- Scenes: {len(scenes)}, script linked: {linked}/{len(refs)}\n")
+              f.write(f"- Deadbeef: before 393450, after {mesh['deadbeef_total']}\n")
+              f.write(f"- m_Mesh placeholder refs: before 198114, after {mesh['by_property'].get('m_Mesh',0)}\n")
+              f.write(f"- Mesh pointer fileID grouping: {mesh['mesh_by_pointer_fileid']}\n")
+              f.write('- Original assets and CSharp outputs were NOT committed or uploaded.\n')
+          if len(scenes)<35 or not refs or linked!=len(refs):
+              raise SystemExit('Scene export script linkage regression')
+          PY
