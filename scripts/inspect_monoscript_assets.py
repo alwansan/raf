@@ -25,12 +25,15 @@ def inspect(root:Path) -> dict:
         if path.stat().st_size < 200 and path.read_bytes().startswith(b"version https://git-lfs.github.com/spec/v1"):
             raise RuntimeError(f"Refusing to parse Git LFS pointer: {path}")
         counts=Counter()
+        externals=[]
         mono_scripts=[]
         mono_behaviours=[]
         parse_errors=Counter()
         try:
             env=UnityPy.load(str(path))
             for obj in env.objects:
+                if not externals:
+                    externals=[e.path for e in getattr(obj.assets_file,"externals",[])]
                 typename=getattr(obj.type,"name","unknown")
                 counts[typename]+=1
                 if typename=="MonoScript" and len(mono_scripts)<40:
@@ -59,6 +62,7 @@ def inspect(root:Path) -> dict:
             "file":path.name,"size_bytes":path.stat().st_size,
             "counts":{"all":sum(counts.values()),"MonoScript":counts["MonoScript"],
                       "MonoBehaviour":counts["MonoBehaviour"]},
+            "external_dependencies":externals,
             "script_identities":mono_scripts,
             "behavior_pointer_examples":mono_behaviours[:10],
             "parse_errors":dict(parse_errors),
@@ -84,6 +88,7 @@ if __name__=="__main__":
     for f in report["samples"]:
         print("FILE:",f["file"],"object counts:",f["counts"],
               "identity count sample:",len(f["script_identities"]),"errors:",f["parse_errors"])
+        print("Serialized file external dependencies (first 12):",f["external_dependencies"][:12])
         print("Script sample (max 5):",f["script_identities"][:5])
         print("Behaviour PPtr sample (max 3):",f["behavior_pointer_examples"][:3])
     if not report["samples"]:
