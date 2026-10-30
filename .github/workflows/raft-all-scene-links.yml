@@ -7,6 +7,7 @@ on:
       - feature/android-native-port
     paths:
       - '.github/workflows/raft-all-scene-links.yml'
+      - 'scripts/audit_guid_ref_fields.py'
 
 permissions:
   contents: read
@@ -162,3 +163,9 @@ jobs:
               file.write("Missing GUIDs may include Unity built-ins or assets absent from the partial, no-LFS input. Counts alone do not prove broken runtime links.\n")
           if dup: raise SystemExit("Ambiguous duplicate asset .meta GUIDs detected")
           PY
+
+      - name: Classify deadbeef placeholders by serialized scene field
+        run: |
+          python3 scripts/audit_guid_ref_fields.py \
+            --project "$RUNNER_TEMP/linked-project/ExportedProject" \
+            --out "$RUNNER_TEMP/serialized-guid-summary.json"
