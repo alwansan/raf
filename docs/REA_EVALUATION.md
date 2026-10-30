@@ -10,7 +10,7 @@ Date: 2026-10-30. Source baseline `zip`, development branch `feature/android-nat
 - It successfully executed `rea inspect-managed-artifact Raft/Raft_Data/Managed/Assembly-CSharp.dll --format json`, producing ~2,189,390 bytes of local JSON evidence. The game DLL was parsed, **not executed**.
 - Previous failed workflow attempts were caused by passing unsupported REA 6.8.0 CLI flag `--detail`. The supported and verified rendering option is `--format json`; `--json` / summary examples in older docs should not be assumed to work with this version.
 - This is a verified metadata analysis, **not** proof that REA can compile, recover or automatically port a complete Unity game.
-- Additional targeted [native boundaries and network member workflow](https://github.com/alwansan/raf/actions/workflows/raft-rea-network-audit.yml) is configured. Evaluate its run logs before calling it successful.
+- Targeted [native boundaries and network member audit](https://github.com/alwansan/raf/actions/runs/41020491527) **succeeded**: 155 P/Invoke imports, 271 native implementation rows. Selected `AI_NetworkBehaviour` gave 14 methods, 27 call edges, 19 field accesses and 9 fields. No game DLL execution.
 
 ## Tool selection
 
