@@ -71,7 +71,7 @@ def map_sources(project:Path, decompiled:Path, apply:bool) -> dict:
         source=src.read_text(encoding="utf8",errors="replace")
         stub=target.read_text(encoding="utf8",errors="replace")
         def get_namespace(text):
-            match=re.search(r"(?m)^\\s*namespace\\s+([\\w.]+)\\s*(?:[;{]|$)",text)
+            match=re.search(r"(?m)^\s*namespace\s+([\w.]+)\s*(?:[;{]|$)",text)
             return match.group(1) if match else ""
         if get_namespace(source)!=get_namespace(stub):
             report["namespace_mismatches"]+=1
