@@ -25,7 +25,7 @@ jobs:
         run: |
           set -euo pipefail
           case "$LOG_JOB_ID" in ''|*[!0-9]*) exit 1;; esac
-          gh api --method GET "repos/$GITHUB_REPOSITORY/actions/jobs/$LOG_JOB_ID/logs" > "$RUNNER_TEMP/raft-native-build.log"
+          gh api --allow-escape-sequences --method GET "repos/$GITHUB_REPOSITORY/actions/jobs/$LOG_JOB_ID/logs" > "$RUNNER_TEMP/raft-native-build.log"
       - name: Emit bounded structural counters and failure diagnostics only
         shell: bash
         run: |
@@ -42,6 +42,7 @@ jobs:
           stats=[]
           for line in source.open(encoding="utf-8-sig",errors="replace"):
               text=ansi.sub("",line).rstrip()
+              text="".join(c for c in text if c.isprintable() or c=="\t")
               text=re.sub(r"^\d{4}-\d\d-\d\dT[^ ]+Z\s*","",text)
               if "error CS" in text:
                   match=re.search(r"(Assets/.*?error CS\d+.*)",text)
