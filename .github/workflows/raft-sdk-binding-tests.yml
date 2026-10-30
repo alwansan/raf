@@ -6,6 +6,8 @@ on:
       - 'android-port/Editor/SdkScriptBindingCore.cs'
       - 'android-port/Editor/SdkScriptBindingResolver.cs'
       - 'android-port/Tests/SdkBindings/**'
+      - 'scripts/resolve_managed_closure.py'
+      - 'tests/test_resolve_managed_closure.py'
       - 'scripts/build_sdk_script_manifest.py'
       - 'tests/test_build_sdk_script_manifest.py'
       - '.github/workflows/raft-sdk-binding-tests.yml'
@@ -27,6 +29,12 @@ jobs:
           fetch-depth: 1
       - name: Validate metadata-only SDK identity extraction
         run: python3 -m unittest discover -s tests -p test_build_sdk_script_manifest.py -v
+      - name: Test reference closure safety without executing DLLs
+        run: python3 -m unittest discover -s tests -p test_resolve_managed_closure.py -v
+      - name: Inspect actual original SDK transitive references (no LFS)
+        run: |
+          python3 -m pip install --user --disable-pip-version-check dnfile==0.18.0
+          python3 -m scripts.resolve_managed_closure --managed Raft/Raft_Data/Managed --out "$RUNNER_TEMP/sdk-closure.json"
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
