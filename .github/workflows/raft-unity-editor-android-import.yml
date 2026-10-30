@@ -163,6 +163,15 @@ jobs:
             --ilspy "$RUNNER_TEMP/ilspy-src" \
             --report "$RUNNER_TEMP/ilspy-supplement.json" \
             --min-added 500 --apply
+      - name: Restore nine original managed DLLs (FMOD, PlayFab, Netcode, UI) in temporary Unity project
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_stage_raft_managed_dlls.py -v
+          python3 scripts/stage_raft_managed_dlls.py \
+            --managed "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed" \
+            --project "$RUNNER_TEMP/project/ExportedProject" \
+            --report "$RUNNER_TEMP/managed-refs.json" --apply
       - name: Downgrade ILSpy CSharp 10 file-scoped namespaces to Unity 2021 CSharp 9
         shell: bash
         run: |
