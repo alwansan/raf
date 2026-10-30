@@ -1,0 +1,34 @@
+name: Raft private Android APK structural audit smoke (no game assets)
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - 'scripts/audit_android_apk.py'
+      - 'tests/test_android_apk_audit.py'
+      - '.github/workflows/raft-apk-audit-smoke.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: raft-apk-audit-smoke
+  cancel-in-progress: true
+
+jobs:
+  apk-structure-synthetic:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Run synthetic Android APK format and security tests
+        run: python3 -m unittest discover -s tests -p test_android_apk_audit.py -v
+      - name: Note scope and limitations
+        run: |
+          echo 'Synthetic Android ZIP/APK structure audit passed. No Raft game LFS or Unity Editor build was performed.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'This does not prove installation, signature validity, or on-device runtime correctness.' >> "$GITHUB_STEP_SUMMARY"
