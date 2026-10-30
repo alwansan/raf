@@ -92,11 +92,11 @@ jobs:
               if len(candidates)!=1:raise SystemExit(f"Cannot locate unambiguous {name}")
               csharp=candidates[0].read_text(encoding="utf8",errors="replace")
               prior=next(original.rglob(name)).read_text(encoding="utf8",errors="replace")
-              primary=re.compile(r"\\b(?:struct|class)\\s+"+re.escape(inner)+r"\\s*\\(")
+              primary=re.compile(r"\b(?:struct|class)\s+"+re.escape(inner)+r"\s*\(")
               print(name,"primary constructor in ILSpy Latest:",bool(primary.search(prior)))
               print(name,"primary constructor in ILSpy CSharp9_0:",bool(primary.search(csharp)))
-              print(name,"file-scoped namespace in CSharp9:",bool(re.search(r"(?m)^\\s*namespace\\s+[\\w.]+;",csharp)))
+              print(name,"file-scoped namespace in CSharp9:",bool(re.search(r"(?m)^\s*namespace\s+[\w.]+;",csharp)))
               if primary.search(csharp):raise SystemExit(f"CSharp12 primary constructor survived in {name}")
-              if re.search(r"(?m)^\\s*namespace\\s+[\\w.]+;",csharp):
+              if re.search(r"(?m)^\s*namespace\s+[\w.]+;",csharp):
                   raise SystemExit("CSharp 10 file-scoped namespace survived CSharp9 mode")
           PY
