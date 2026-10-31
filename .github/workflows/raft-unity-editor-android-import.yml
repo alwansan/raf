@@ -295,6 +295,14 @@ jobs:
             --ilspy "$RUNNER_TEMP/ilspy-src" \
             --report "$RUNNER_TEMP/ilspy-supplement.json" \
             --coverage-mode decompiled --min-original-sources 2393 --apply
+      - name: Preserve asset-owned meshes during original Editor collector cleanup
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_adapt_editor_mesh_cleanup.py -v
+          python3 -m scripts.adapt_editor_mesh_cleanup \
+            --project "$RUNNER_TEMP/project/ExportedProject" \
+            --backup "$RUNNER_TEMP/original-mesh-collector" --apply
       - name: Restore twenty-one original compile-time DLLs without platform-provided UI/TMP/InputSystem assemblies
         shell: bash
         run: |
