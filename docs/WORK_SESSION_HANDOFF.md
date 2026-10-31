@@ -436,3 +436,8 @@ If a pending job is known to require more than 10 minutes and there is no other 
 
 - [Native **41200696376**](https://github.com/alwansan/raf/actions/runs/41200696376), source **2c1b5db5308d3039410db90e4a9fc062f4c1b788**, is **IN PROGRESS** at scheduling verification. This is the one deliberate scene+shared recovery test; no new APK/result is claimed. Companion bounded probe is [41200696498](https://github.com/alwansan/raf/actions/runs/41200696498).
 - All source-level validation and current useful independent diagnostics are complete for this candidate. Stop waiting for the long Unity run per owner's explicit preference; owner will announce completion. Next session retrieve its steps, bounded collider/exception comparison and exported font material audit before more changes or downloads. Do not re-download original archive or LFS just to read logs. Current private recovered files/cache exist locally but may expire; original supplied six Library files remain the durable source.
+
+
+## 2026-10-31 — scene/shared native completion; inspect bounded diagnostics next
+
+Native [41200696376](https://github.com/alwansan/raf/actions/runs/41200696376), reconstruction job124535765714, source2c1b5db5308d3039410db90e4a9fc062f4c1b788, is now verified completed SUCCESS, including finite source gate, actual Unity build and APK structural audit. Do not reuse previous APK metrics as this run's evidence. Updated cheap log comparison to compare it against previous shared-only job124517304289, include exported font/source-fidelity audit markers and allow an intentionally empty previous non-finite set for global regression comparison. No new Unity/LFS workload requested by this diagnostic commit.

@@ -47,7 +47,8 @@ def inspect_log(lines):
                 'arm64_il2cpp', 'fmod_native_library_present', 'unity_data_files')}
             apk['validated_aarch64_shared_libraries'] = payload.get('validated_aarch64_shared_libraries')
         for marker in ('RAFT_VERIFIED_MESH_RANGE_DOWNLOAD', 'RAFT_ORIGINAL_MESH_STREAM_INLINE',
-                       'RAFT_ORIGINAL_MESH_POSITION_AUDIT'):
+                       'RAFT_ORIGINAL_MESH_POSITION_AUDIT', 'RAFT_EXPORTED_FONT_MATERIAL_AUDIT',
+                       'RAFT_ILSPY_EMPTY_SOURCE_RECOVERY'):
             if line.startswith(marker + ' '):
                 source_geometry[marker] = json.loads(line.split(' ', 1)[1])
         if line.startswith('RAFT_ANDROID_NATIVE_CONFIG '):
@@ -104,7 +105,7 @@ if __name__ == '__main__':
     from scripts.trace_collision_mesh_sources import scan_original_headers
     matches, metadata = scan_original_headers(args.root, before[2] | after[2])
     targeted = comparison_targets(matches, args.target_stream, before[2])
-    if not targeted or not before[0]['native_result'] or not after[0]['native_result']:
+    if (not targeted and args.target_stream != 'all') or not before[0]['native_result'] or not after[0]['native_result']:
         raise SystemExit('Missing target metadata or native build result; refusing incomplete comparison')
     report = compare(before, after, targeted)
     report['targeted_stream'] = args.target_stream
