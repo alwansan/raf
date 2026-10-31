@@ -51,6 +51,32 @@ jobs:
             timeout 90s "$RUNNER_TEMP/ilspy/ilspycmd" -lv CSharp9_0 -t "$type" "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed/JBooth.MicroSplat.Core.dll" > "$RUNNER_TEMP/runtime-inspection/$name.cs" 2> "$RUNNER_TEMP/ilspy-private.log"
           done
           timeout 90s "$RUNNER_TEMP/ilspy/ilspycmd" -lv CSharp9_0 -t FMOD.VERSION "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed/FMODUnity.dll" > "$RUNNER_TEMP/runtime-inspection/FMOD_VERSION.cs" 2> "$RUNNER_TEMP/ilspy-private.log"
+      - name: Inspect original FMOD platform bootstrap privately
+        env:
+          DOTNET_PROCESSOR_COUNT: '2'
+        run: |
+          set -euo pipefail
+          assembly="$GITHUB_WORKSPACE/Raft/Raft_Data/Managed/FMODUnity.dll"
+          "$RUNNER_TEMP/ilspy/ilspycmd" -l c "$assembly" > "$RUNNER_TEMP/fmod-types-private.txt"
+          python3 - <<'PY'
+          import hashlib, json, os, re, subprocess
+          from pathlib import Path
+          root = Path(os.environ['RUNNER_TEMP'])
+          assembly = Path('Raft/Raft_Data/Managed/FMODUnity.dll')
+          identities = set(re.findall(r'^Class\s+(FMODUnity\.[\w.]+)\s*$', (root / 'fmod-types-private.txt').read_text(), re.M))
+          wanted = ['FMODUnity.' + name for name in ('RuntimeManager', 'RuntimeUtils', 'Settings', 'Platform', 'PlatformDefault', 'PlatformWindows', 'PlatformAndroid')]
+          required = {'FMODUnity.RuntimeManager', 'FMODUnity.RuntimeUtils', 'FMODUnity.Settings'}
+          if not required <= identities: raise SystemExit('Original FMOD core type inventory incomplete')
+          packet = root / 'runtime-inspection'
+          for identity in wanted:
+              if identity not in identities: continue
+              result = subprocess.run([str(root / 'ilspy/ilspycmd'), '-lv', 'CSharp9_0', '-t', identity, str(assembly)], capture_output=True, timeout=90)
+              if result.returncode or not result.stdout: raise SystemExit('Original FMOD private type inspection failed')
+              (packet / (identity.replace('.', '_') + '.cs')).write_bytes(result.stdout)
+          inventory = {'managed_sha256': hashlib.sha256(assembly.read_bytes()).hexdigest(), 'selected_type_presence': {name: name in identities for name in wanted}}
+          (packet / 'fmod-platform-inventory.json').write_text(json.dumps(inventory, sort_keys=True))
+          print('Original FMOD bootstrap packet prepared privately; no source published')
+          PY
       - name: Inspect original editor-lifecycle cleanup candidates without publishing source
         env:
           DOTNET_PROCESSOR_COUNT: '2'

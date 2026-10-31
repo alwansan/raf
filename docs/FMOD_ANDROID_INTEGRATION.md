@@ -82,3 +82,9 @@ real stage. Main Unity integration, original managed Android bootstrap, Java
 initialization, banks, DSPs, attribution and device audio remain unverified.
 Vendor native metas/Java meta/license meta are preserved exactly; no competing
 FMOD CSharp files or debug libraries are imported.
+
+
+Actual Actions preflight41251245329 retry/job124687318069 passed:10 exact files,
+ARM64 ELF identity,0 competing CSharp sources,0 overwritten original metas.
+FMOD_ANDROID_RUNTIME_KEY is now configured in UNITY_LICENSE; no further owner
+setup/download is required. This is not Unity import or audible-device proof.
