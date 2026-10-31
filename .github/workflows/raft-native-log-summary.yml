@@ -119,7 +119,7 @@ jobs:
           last_time = None
           with (root / "after-native.log").open(encoding="utf-8-sig", errors="replace") as source:
               for line in source:
-                  stamp = re.match(r"^(\\d{4}-\\d\\d-\\d\\dT\\S+Z)", line)
+                  stamp = re.match(r"^(\d{4}-\d\d-\d\dT\S+Z)", line)
                   if not stamp:
                       continue
                   last_time = stamp[1]
