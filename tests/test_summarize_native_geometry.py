@@ -45,3 +45,14 @@ class NativeGeometrySummaryTests(unittest.TestCase):
         self.assertEqual(report['new_nonfinite_names'], 1)
         self.assertEqual(report['new_nonfinite_names_already_failed_other_categories'], 1)
         self.assertEqual(report['new_broad_error_names'], 0)
+
+    def test_actual_scene_reembedding_audit_is_retained_without_inventing_native_result(self):
+        payload = {'applied': True, 'scene_bound_assets': 129,
+                   'serialized_objects_before': 1203064, 'serialized_objects_after': 1203064}
+        report, _, _ = inspect_log(['RAFT_SCENE_BOUND_ASSET_REEMBED ' + json.dumps(payload)])
+        self.assertEqual(report['source_geometry']['RAFT_SCENE_BOUND_ASSET_REEMBED'], payload)
+        self.assertIsNone(report['native_result'])
+
+    def test_threaded_scene_errors_are_counted_in_actual_lines(self):
+        report, _, _ = inspect_log(['Do not use ReadObjectThreaded on scene objects!'])
+        self.assertEqual(report['counts']['threaded_scene_object_error_lines'], 1)

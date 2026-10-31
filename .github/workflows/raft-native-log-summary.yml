@@ -15,7 +15,7 @@ on:
       job_id:
         description: Completed corrected native build job to compare with the baseline
         required: true
-        default: '124570812882'
+        default: '124638196554'
 permissions:
   contents: read
   actions: read
@@ -39,7 +39,7 @@ jobs:
       - name: Retrieve two completed job logs without a build or LFS transfer
         env:
           GH_TOKEN: ${{ github.token }}
-          LOG_JOB_ID: ${{ inputs.job_id || '124570812882' }}
+          LOG_JOB_ID: ${{ inputs.job_id || '124638196554' }}
         run: |
           set -euo pipefail
           case "$LOG_JOB_ID" in ''|*[!0-9]*) exit 1;; esac
@@ -86,7 +86,7 @@ jobs:
       - name: Locate interrupted phase and verify timeout annotation
         env:
           GH_TOKEN: ${{ github.token }}
-          LOG_JOB_ID: ${{ inputs.job_id || '124570812882' }}
+          LOG_JOB_ID: ${{ inputs.job_id || '124638196554' }}
         run: |
           gh api "repos/$GITHUB_REPOSITORY/actions/jobs/$LOG_JOB_ID" > "$RUNNER_TEMP/job-metadata.json"
           gh api "repos/$GITHUB_REPOSITORY/check-runs/$LOG_JOB_ID/annotations" > "$RUNNER_TEMP/job-annotations.json"

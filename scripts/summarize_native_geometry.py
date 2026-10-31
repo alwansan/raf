@@ -32,6 +32,8 @@ def inspect_log(lines):
             counts['quickhull_failure_lines'] += 1
         if 'CollisionMeshData couldn' in line:
             counts['nonaccessible_collision_lines'] += 1
+        if 'Do not use ReadObjectThreaded on scene objects!' in line:
+            counts['threaded_scene_object_error_lines'] += 1
         if 'NullReferenceException' in line:
             counts['null_reference_lines'] += 1
         cs = re.search(r'(Assets/.*?error CS\d+.*)', line)
@@ -48,7 +50,7 @@ def inspect_log(lines):
             apk['validated_aarch64_shared_libraries'] = payload.get('validated_aarch64_shared_libraries')
         for marker in ('RAFT_VERIFIED_MESH_RANGE_DOWNLOAD', 'RAFT_ORIGINAL_MESH_STREAM_INLINE',
                        'RAFT_ORIGINAL_MESH_POSITION_AUDIT', 'RAFT_EXPORTED_FONT_MATERIAL_AUDIT',
-                       'RAFT_ILSPY_EMPTY_SOURCE_RECOVERY'):
+                       'RAFT_ILSPY_EMPTY_SOURCE_RECOVERY', 'RAFT_SCENE_BOUND_ASSET_REEMBED'):
             if line.startswith(marker + ' '):
                 source_geometry[marker] = json.loads(line.split(' ', 1)[1])
         if line.startswith('RAFT_ANDROID_NATIVE_CONFIG '):

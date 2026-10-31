@@ -1,5 +1,7 @@
 # Raft v1.1.01 → native Android — ChatGPT Work handoff (updated 2026-10-31)
 
+**LATEST LIVE RESULT (2026-11-01 Baghdad):** Native41235457822 source9c11679ac28463b323716556960d78f7acabb88d has COMPLETED SUCCESS, including actual Unity and APK structural audit. Metrics/residual error analysis pending current bounded log-only summary; no device-ready claim. See newest final continuation.
+
 **CURRENT (2026-10-31):** Actual scene-owned object restoration probe41233952996 PASSED:129 objects/3 scenes,264 references,1203064 objects unchanged, installed field/reference fingerprints and original meta bytes verified. Next deliberate native integrates repair BEFORE Unity. See final section; older timeout checkpoints are historical.
 
 **Authoritative branch:** https://github.com/alwansan/raf/tree/feature/android-native-port
@@ -691,3 +693,10 @@ This section supersedes older active/failure checkpoints above. This documentati
 ### Current full native41235457822 — owner wait checkpoint
 
 [Native41235457822](https://github.com/alwansan/raf/actions/runs/41235457822), source9c11679ac28463b323716556960d78f7acabb88d, is QUEUED at scheduling verification. This single deliberate native run includes losslessly reembedding scene-bound assets BEFORE Unity import. Companion guard41235457890 SUCCESS; separate source probe41235457888 SKIPPED as intended (no duplicate LFS export). Actual new Unity/SDK/BuildReport/APK result remains unknown. Owner monitors this >10-minute native task and reports completion; next continuation refresh its first failed step or completed metrics. Historical native150-minute cancellation is not the state of this new run.
+
+
+## 2026-11-01 — native scene-topology repair reached actual successful Unity/APK gate
+
+- Refreshed HEAD2c0017b5bc5b5152e294c4a612d9a167dbb67495, no newer native run in branch collection. [Native41235457822](https://github.com/alwansan/raf/actions/runs/41235457822), source9c11679ac28463b323716556960d78f7acabb88d, reconstruction124638196554, completed SUCCESS through step31 Unity and step32 actual APK structural audit. All reconstruction/SDK/link/fidelity gates passed. The former native150-minute cancellation is historical, not this result.
+- No actual build size/error/SDK/Mesh/scene-reference count is claimed yet; require actual emitted summary. Existing workflow artifacts collection is EMPTY, so no retained/downloadable APK exists from this disposed runner and no device test is established.
+- Updated bounded no-LFS/no-Unity log summary to baseline124535765714 and current124638196554. Added actual scene-reembedding marker retention and explicit ReadObjectThreaded-error line count;9 local fixtures pass and workflow YAML/embedded Python AST validate. This requests only existing log inspection, no new game data downloads/build. Inspect resulting actual compiler/SDK/font/geometry/BuildReport/APK and remaining exception evidence before proceeding to offline/.rgd/touch/FMOD/runtime work.
