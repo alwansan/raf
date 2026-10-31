@@ -83,6 +83,53 @@ jobs:
           if not complete:
               print("Native result absent: diagnostic comparison skipped; this is not a successful build or proof of zero geometry defects.")
           PY
+      - name: Locate interrupted phase and verify timeout annotation
+        env:
+          GH_TOKEN: ${{ github.token }}
+          LOG_JOB_ID: ${{ inputs.job_id || '124570812882' }}
+        run: |
+          gh api "repos/$GITHUB_REPOSITORY/actions/jobs/$LOG_JOB_ID" > "$RUNNER_TEMP/job-metadata.json"
+          gh api "repos/$GITHUB_REPOSITORY/check-runs/$LOG_JOB_ID/annotations" > "$RUNNER_TEMP/job-annotations.json"
+          python3 - <<'PY'
+          import json, os, re
+          from pathlib import Path
+          root = Path(os.environ["RUNNER_TEMP"])
+          metadata = json.loads((root / "job-metadata.json").read_text())
+          annotations = json.loads((root / "job-annotations.json").read_text())
+          print("RAFT_JOB_TERMINATION " + json.dumps({
+              "status": metadata["status"], "conclusion": metadata["conclusion"],
+              "started_at": metadata["started_at"], "completed_at": metadata["completed_at"],
+              "timeout_annotation": any(re.search(r"maximum execution time|timed out|running longer than|exceeded.*time", a.get("message", ""), re.I) for a in annotations),
+              "annotation_count": len(annotations)}, sort_keys=True))
+          patterns = {
+              "docker_pull": r"Pulling from|Pull complete|Downloading|Extracting|Download complete",
+              "docker_ready": r"Status: Downloaded newer image|Status: Image is up to date",
+              "docker_run": r"docker run",
+              "unity_engine": r"Initialize engine version|COMMAND LINE ARGUMENTS|Begin MonoManager",
+              "license": r"Licensing::|Entitlement|License activated",
+              "packages": r"Package Manager|Resolving packages|Package resolution",
+              "asset_import": r"Importing|AssetImport|Refreshing native plugins|Rebuilding Library",
+              "shader": r"Compiling shader|ShaderCompiler",
+              "csharp": r"error CS[0-9]+|Script compilation|Compilation finished",
+              "sdk": r"RAFT_SDK_",
+              "native": r"RAFT_ANDROID_NATIVE_",
+              "cancel": r"operation was cancel",
+          }
+          progress = {}
+          last_time = None
+          with (root / "after-native.log").open(encoding="utf-8-sig", errors="replace") as source:
+              for line in source:
+                  stamp = re.match(r"^(\\d{4}-\\d\\d-\\d\\dT\\S+Z)", line)
+                  if not stamp:
+                      continue
+                  last_time = stamp[1]
+                  for name, pattern in patterns.items():
+                      if re.search(pattern, line, re.I):
+                          row = progress.setdefault(name, {"occurrences": 0, "first": stamp[1]})
+                          row["occurrences"] += 1
+                          row["last"] = stamp[1]
+          print("RAFT_INTERRUPTED_PHASES " + json.dumps({"last_log_timestamp": last_time, "phases": progress}, sort_keys=True))
+          PY
       - name: Inspect exception origins even when native build was interrupted
         run: python3 -m scripts.summarize_native_exceptions "$RUNNER_TEMP/after-native.log"
       - name: Compare collider failures and inspect actual emitted APK structure audit
