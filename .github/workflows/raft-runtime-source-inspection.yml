@@ -42,6 +42,14 @@ jobs:
             timeout 90s "$RUNNER_TEMP/ilspy/ilspycmd" -lv CSharp9_0 -t "$type" "$assembly" > "$RUNNER_TEMP/runtime-inspection/$type.cs" 2> "$RUNNER_TEMP/ilspy-private.log"
             test -s "$RUNNER_TEMP/runtime-inspection/$type.cs"
           done
+          for type in UltimateWater.MaskModule UltimateWater.WaterDropsIME; do
+            name="${type//./_}"
+            timeout 90s "$RUNNER_TEMP/ilspy/ilspycmd" -lv CSharp9_0 -t "$type" "$assembly" > "$RUNNER_TEMP/runtime-inspection/$name.cs" 2> "$RUNNER_TEMP/ilspy-private.log"
+          done
+          for type in JBooth.MicroSplat.MicroSplatPropData JBooth.MicroSplat.MicroSplatObject; do
+            name="${type//./_}"
+            timeout 90s "$RUNNER_TEMP/ilspy/ilspycmd" -lv CSharp9_0 -t "$type" "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed/JBooth.MicroSplat.Core.dll" > "$RUNNER_TEMP/runtime-inspection/$name.cs" 2> "$RUNNER_TEMP/ilspy-private.log"
+          done
           timeout 90s "$RUNNER_TEMP/ilspy/ilspycmd" -lv CSharp9_0 -t FMOD.VERSION "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed/FMODUnity.dll" > "$RUNNER_TEMP/runtime-inspection/FMOD_VERSION.cs" 2> "$RUNNER_TEMP/ilspy-private.log"
       - name: Collect bounded native diagnostics without publishing raw log content
         env:
@@ -62,7 +70,7 @@ jobs:
               for line in source:
                   tail.append(line)
                   text = re.sub(r"^\d{4}-\d\d-\d\dT\S+Z\s*", "", line)
-                  if re.search(r"Exception:|error|failed|warning|missing|not found|not supported", text, re.I) and not re.search(r"license|licensing|entitlement|UNITY_|password|authorization", text, re.I):
+                  if re.search(r"Exception:|error|failed|warning|missing|not found|not supported|unsupported|cannot|invalid|is null|has no|does not exist", text, re.I) and not re.search(r"license|licensing|entitlement|UNITY_|password|authorization", text, re.I):
                       selected.extend(previous)
                       follow = 6
                   if follow:
