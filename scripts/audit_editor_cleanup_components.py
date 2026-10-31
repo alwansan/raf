@@ -36,6 +36,9 @@ def audit(root):
             try:
                 component = obj.read(check_read=False)
                 pointer = component.m_Script
+                if pointer.m_PathID == 0:
+                    counts['null_script_components'] += 1
+                    continue
                 key = (pointer.m_FileID, pointer.m_PathID)
                 if key not in cache:
                     script = pointer.read()
@@ -44,13 +47,29 @@ def audit(root):
                 counts['resolved_monobehaviours'] += 1
                 if identity in TARGETS:
                     selected[identity] += 1
+                if identity == 'MeshCombineStudio.GarbageCollectMesh':
+                    try:
+                        tree = obj.read_typetree()
+                        mesh = tree.get('mesh')
+                        if not isinstance(mesh, dict) or 'm_PathID' not in mesh:
+                            counts['collector_mesh_schema_unavailable'] += 1
+                        else:
+                            counts['collector_mesh_schema_available'] += 1
+                            if mesh['m_PathID'] == 0:
+                                counts['collector_null_mesh'] += 1
+                            elif mesh['m_FileID'] == 0:
+                                counts['collector_scene_local_mesh_pointer'] += 1
+                            else:
+                                counts['collector_external_mesh_pointer'] += 1
+                    except Exception:
+                        counts['collector_mesh_schema_unavailable'] += 1
             except Exception as exc:
                 failures[type(exc).__name__] += 1
         del env
         gc.collect()
     report = dict(counts= dict(counts), selected_components=dict(selected),
                   identity_failures=dict(failures),
-                  limitations='Counts are original scene instances, not proven error attribution or mesh ownership. No assets modified or exported; no LFS fetched.')
+                  limitations='Counts are original scene instances, not proven error attribution or persistent mesh ownership. Null scripts and unavailable custom schemas are explicit, not repaired. No assets modified or exported; no LFS fetched.')
     print('RAFT_EDITOR_CLEANUP_COMPONENTS ' + json.dumps(report, sort_keys=True))
     if counts['scenes'] != 40 or failures:
         raise SystemExit('Incomplete scene identity inspection; do not infer absent components')

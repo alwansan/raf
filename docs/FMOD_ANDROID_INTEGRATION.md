@@ -46,3 +46,16 @@ and audible/device tests remain separate gates. The owner need not resend the
 already supplied original game archive or bank data merely to acquire FMOD.
 
 Work only on `feature/android-native-port`; no branch merge or release is implied.
+
+
+## Original StreamingAssets inventory (metadata only)
+
+Five original banks total **123817498 bytes**. MasterBank.bank is the only LFS
+bank: **101600960 bytes**, SHA256
+`10d310416b9f104a38b4ead8877e114142e154efb33105fcddbb2024a81af339`.
+The regular Git banks are MasterBank.strings.bank (29530), VO_logs_english.bank
+(11455008), VO_npc_english.bank (8180896), VO_olof_english.bank (2551104 bytes).
+Original StreamingAssets/Data.rgd and haptic WAVs also exist. This inventory did
+not fetch LFS bank bytes. The current export ignores StreamingAssets; a future
+explicit staging/loading audit is required. Do not claim native-library presence
+alone restores audio, or ask the owner to resend the original game archive.
