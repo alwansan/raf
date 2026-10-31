@@ -14,6 +14,7 @@ def inspect_log(lines):
     broad, nonfinite, compiler = set(), set(), set()
     counts = Counter()
     result, apk, bindings, links, config = None, None, None, None, None
+    source_geometry = {}
     for raw in lines:
         line = ANSI.sub('', raw).strip('\ufeff\r\n ')
         line = re.sub(r'^\d{4}-\d\d-\d\dT\S+Z\s*', '', line)
@@ -45,6 +46,10 @@ def inspect_log(lines):
             apk = {key: payload[key] for key in ('apk_bytes', 'apk_sha256', 'abis',
                 'arm64_il2cpp', 'fmod_native_library_present', 'unity_data_files')}
             apk['validated_aarch64_shared_libraries'] = payload.get('validated_aarch64_shared_libraries')
+        for marker in ('RAFT_VERIFIED_MESH_RANGE_DOWNLOAD', 'RAFT_ORIGINAL_MESH_STREAM_INLINE',
+                       'RAFT_ORIGINAL_MESH_POSITION_AUDIT'):
+            if line.startswith(marker + ' '):
+                source_geometry[marker] = json.loads(line.split(' ', 1)[1])
         if line.startswith('RAFT_ANDROID_NATIVE_CONFIG '):
             config = dict(re.findall(r'(\w+)=([\w]+)', line))
         if line.startswith('RAFT_SDK_BINDINGS '):
@@ -56,7 +61,7 @@ def inspect_log(lines):
     public = {'counts': dict(counts), 'distinct_mesh_error_names': len(broad),
               'distinct_nonfinite_names': len(nonfinite), 'distinct_csharp_diagnostics': len(compiler),
               'native_result': result, 'apk_structure': apk, 'sdk_bindings': bindings,
-              'scene_script_links': links, 'native_config': config}
+              'scene_script_links': links, 'native_config': config, 'source_geometry': source_geometry}
     return public, broad, nonfinite
 
 
@@ -80,12 +85,16 @@ def target_names(matches, stream):
         row['source'] == source and row['stream_file'] == stream for row in rows)}
 
 
+def comparison_targets(matches, stream, previous_nonfinite):
+    return set(previous_nonfinite) if stream == 'all' else target_names(matches, stream)
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--before', type=Path, required=True)
     parser.add_argument('--after', type=Path, required=True)
     parser.add_argument('--root', type=Path, required=True)
-    parser.add_argument('--target-stream', choices=['sharedassets24.assets.resS', 'sharedassets29.assets.resS'],
+    parser.add_argument('--target-stream', choices=['all', 'sharedassets24.assets.resS', 'sharedassets29.assets.resS'],
                         default='sharedassets24.assets.resS')
     args = parser.parse_args()
     with args.before.open(encoding='utf-8-sig', errors='replace') as source:
@@ -94,7 +103,7 @@ if __name__ == '__main__':
         after = inspect_log(source)
     from scripts.trace_collision_mesh_sources import scan_original_headers
     matches, metadata = scan_original_headers(args.root, before[2] | after[2])
-    targeted = target_names(matches, args.target_stream)
+    targeted = comparison_targets(matches, args.target_stream, before[2])
     if not targeted or not before[0]['native_result'] or not after[0]['native_result']:
         raise SystemExit('Missing target metadata or native build result; refusing incomplete comparison')
     report = compare(before, after, targeted)

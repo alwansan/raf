@@ -7,6 +7,7 @@
 This repository branch is the working record for reconstructing the Windows Unity game data into a **native arm64 Android build**. Not an original Unity Editor project. See `docs/PORTING_ROADMAP.md`, `docs/VERIFIED_FINDINGS.md`, `docs/MESH_RECOVERY_FINDINGS.md` and `docs/RECONSTRUCTION_STATUS.md`.
 
 ## Owner direction (2026-10-30)
+- **Wait preference (2026-10-31):** If the only remaining activity is waiting for a job known to take more than 10 minutes, stop waiting and give its exact run link/status. The owner will wait and send a completion message. Continue independent useful work while it exists; do not create unnecessary work merely to fill the wait.
 - **Work autonomously:** the owner authorizes choosing engineering approaches, downloading required public tools and dependencies, running technical experiments, creating/updating workflows and making commits on the designated development branch without repeatedly requesting approval.
 - The owner can test Android APKs on **POCO F5 Pro**; desktop/emulator testing is optional, not a prerequisite to sharing an APK.
 - If a needed dependency cannot be installed/downloaded after reasonable attempts, report its exact version and direct official download URL for optional user upload. Do **not** request reuploads of already available REA, Node.js or JADX archives.

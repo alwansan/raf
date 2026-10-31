@@ -1,9 +1,12 @@
 import json
 import unittest
-from scripts.summarize_native_geometry import inspect_log, compare, target_names
+from scripts.summarize_native_geometry import inspect_log, compare, target_names, comparison_targets
 
 
 class NativeGeometrySummaryTests(unittest.TestCase):
+    def test_global_recovery_targets_every_previous_failure_including_unmatched_headers(self):
+        self.assertEqual(comparison_targets({}, 'all', {'A', 'Unknown'}), {'A', 'Unknown'})
+
     def test_select_actual_incremental_stream_not_historical_target(self):
         matches = {'A': [{'source': 'sharedassets24.assets', 'stream_file': 'sharedassets24.assets.resS'}],
                    'B': [{'source': 'sharedassets29.assets', 'stream_file': 'sharedassets29.assets.resS'}]}

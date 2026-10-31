@@ -11,7 +11,7 @@ on:
       job_id:
         description: Completed corrected native build job to compare with the baseline
         required: true
-        default: '124328835472'
+        default: '124517304289'
 permissions:
   contents: read
   actions: read
@@ -34,14 +34,14 @@ jobs:
       - name: Retrieve two completed job logs without a build or LFS transfer
         env:
           GH_TOKEN: ${{ github.token }}
-          LOG_JOB_ID: ${{ inputs.job_id || '124328835472' }}
+          LOG_JOB_ID: ${{ inputs.job_id || '124517304289' }}
         run: |
           set -euo pipefail
           case "$LOG_JOB_ID" in ''|*[!0-9]*) exit 1;; esac
-          gh api --allow-escape-sequences --method GET "repos/$GITHUB_REPOSITORY/actions/jobs/124305154603/logs" > "$RUNNER_TEMP/before-native.log"
+          gh api --allow-escape-sequences --method GET "repos/$GITHUB_REPOSITORY/actions/jobs/124328835472/logs" > "$RUNNER_TEMP/before-native.log"
           gh api --allow-escape-sequences --method GET "repos/$GITHUB_REPOSITORY/actions/jobs/$LOG_JOB_ID/logs" > "$RUNNER_TEMP/after-native.log"
       - name: Compare collider failures and inspect actual emitted APK structure audit
         run: |
           python3 -m scripts.summarize_native_geometry \
             --before "$RUNNER_TEMP/before-native.log" --after "$RUNNER_TEMP/after-native.log" \
-            --root Raft/Raft_Data --target-stream sharedassets24.assets.resS
+            --root Raft/Raft_Data --target-stream all
