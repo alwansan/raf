@@ -1,0 +1,26 @@
+name: Raft original property texture data safety (no LFS)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'android-port/Recovery/PropertyTextures/**'
+      - 'android-port/Tests/PropertyTextures/**'
+      - '.github/workflows/raft-property-texture-tests.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  data-safety:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: android-port
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Preserve HDR float values; reject corrupt data and lossy roundtrips
+        run: dotnet run --project android-port/Tests/PropertyTextures/RaftAndroid.PropertyTextures.Tests.csproj --configuration Release --nologo
