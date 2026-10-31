@@ -72,7 +72,9 @@ jobs:
     environment: UNITY_LICENSE
     if: ${{ needs.unity-license-preflight.outputs.ready == 'true' }}
     runs-on: ubuntu-24.04
-    timeout-minutes: 65
+    # Restored Mono fields now require a substantially larger first-import budget.
+    # Previous 65-minute job expired during active asset import, before Build().
+    timeout-minutes: 150
     steps:
       - name: Disk safety gate before dependencies / LFS download
         shell: bash
