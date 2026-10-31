@@ -51,5 +51,55 @@ class SupplementHelperTypesTests(unittest.TestCase):
         (b/"Same.cs").write_text("namespace B { public class Same {} }")
         report=supplement(self.project,self.ilspy,apply=True)
         self.assertEqual(report["statistics"]["added"],2)
+
+    def test_decompiled_export_complete_and_meta_preserved(self):
+        code="namespace Raft { public class Item { public void Move() { speed = 5; } } }"
+        target=self.scripts/"Item.cs"
+        target.write_text(code)
+        meta=target.with_name("Item.cs.meta")
+        before=b"guid: 0123456789abcdef0123456789abcdef\\n"
+        meta.write_bytes(before)
+        (self.ilspy/"Item.cs").write_text(code)
+        result=supplement(self.project,self.ilspy,apply=True,coverage_mode="decompiled")
+        self.assertEqual(result["statistics"].get("added",0),0)
+        self.assertEqual(result["statistics"]["verified_eligible_sources"],1)
+        self.assertEqual(meta.read_bytes(),before)
+
+    def test_decompiled_export_missing_type_is_rejected(self):
+        (self.ilspy/"Missing.cs").write_text("public interface Missing {}")
+        with self.assertRaisesRegex(ValueError,"omitted 1 original types"):
+            supplement(self.project,self.ilspy,apply=True,coverage_mode="decompiled")
+
+    def test_decompiled_export_rejects_placeholder_with_same_name(self):
+        source="namespace Raft { public class Foo { "+" ".join("void Function%d() { field%d++; }"%(i,i) for i in range(20))+" } }"
+        (self.ilspy/"Foo.cs").write_text(source)
+        (self.scripts/"Foo.cs").write_text("namespace Raft { public class Foo {} }")
+        with self.assertRaisesRegex(ValueError,"Source body missing/truncated"):
+            supplement(self.project,self.ilspy,apply=True,coverage_mode="decompiled")
+
+    def test_decompiled_export_wrong_namespace_is_rejected(self):
+        (self.ilspy/"Foo.cs").write_text("namespace A { public class Foo {} }")
+        (self.scripts/"Foo.cs").write_text("namespace B { public class Foo {} }")
+        with self.assertRaisesRegex(ValueError,"omitted 1 original types"):
+            supplement(self.project,self.ilspy,apply=True,coverage_mode="decompiled")
+
+    def test_sdk_homonym_is_not_gameplay_source_coverage(self):
+        (self.ilspy/"Item.cs").write_text("public class Item {}")
+        sdk=self.project/"Assets"/"Scripts"/"PlayFab"
+        sdk.mkdir()
+        (sdk/"Item.cs").write_text("public class Item {}")
+        with self.assertRaisesRegex(ValueError,"missing or ambiguous"):
+            supplement(self.project,self.ilspy,apply=True,coverage_mode="legacy")
+
+    def test_both_modes_reject_duplicate_original_script_identity(self):
+        (self.ilspy/"Foo.cs").write_text("namespace A { public class Foo {} }")
+        (self.scripts/"Foo.cs").write_text("namespace A { public class Foo {} }")
+        alternate=self.scripts/"other"
+        alternate.mkdir()
+        (alternate/"Foo.cs").write_text("namespace A { public class Foo {} }")
+        for mode in ("legacy","decompiled"):
+            with self.subTest(mode=mode), self.assertRaisesRegex(ValueError,"missing or ambiguous"):
+                supplement(self.project,self.ilspy,apply=True,coverage_mode=mode)
+
 if __name__=="__main__":
     unittest.main()

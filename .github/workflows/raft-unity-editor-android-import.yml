@@ -87,6 +87,7 @@ jobs:
       - name: Run synthetic code-overlay tests before touching original data
         run: |
           python3 -m unittest discover -s tests -p test_csharp_overlay.py -v
+          python3 -m unittest discover -s tests -p test_supplement_ilspy_gameplay.py -v
           python3 -m unittest discover -s tests -p test_stage_raft_managed_dlls.py -v
           python3 -m unittest discover -s tests -p test_resolve_managed_closure.py -v
           python3 -m unittest discover -s tests -p test_build_sdk_script_manifest.py -v
@@ -277,7 +278,7 @@ jobs:
             --project "$RUNNER_TEMP/project/ExportedProject" \
             --ilspy "$RUNNER_TEMP/ilspy-src" \
             --report "$RUNNER_TEMP/ilspy-supplement.json" \
-            --min-added 500 --apply
+            --coverage-mode decompiled --min-original-sources 2393 --apply
       - name: Restore twenty-one original compile-time DLLs without platform-provided UI/TMP/InputSystem assemblies
         shell: bash
         run: |
