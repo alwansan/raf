@@ -7,7 +7,7 @@ on:
     inputs:
       job_id:
         description: Completed native job for bounded residual error context
-        default: '124638196554'
+        default: '124661841900'
         required: true
 permissions:
   contents: read
@@ -54,22 +54,27 @@ jobs:
       - name: Collect bounded native diagnostics without publishing raw log content
         env:
           GH_TOKEN: ${{ github.token }}
-          LOG_JOB_ID: ${{ inputs.job_id || '124638196554' }}
+          LOG_JOB_ID: ${{ inputs.job_id || '124661841900' }}
         run: |
           set -euo pipefail
           case "$LOG_JOB_ID" in ''|*[!0-9]*) exit 1;; esac
           gh api --allow-escape-sequences "repos/$GITHUB_REPOSITORY/actions/jobs/$LOG_JOB_ID/logs" > "$RUNNER_TEMP/native-private.log"
           python3 - <<'PY'
           from collections import deque
-          import os, re
+          import os, re, hashlib
           from pathlib import Path
           root = Path(os.environ["RUNNER_TEMP"])
-          previous, tail, selected = deque(maxlen=2), deque(maxlen=600), []
+          previous, tail, selected = deque(maxlen=24), deque(maxlen=600), []
+          matched = []
+          wanted = {"00e21d8b1e9fa243", "e2444b0b258c8bec"}
           follow = 0
           with (root / "native-private.log").open(encoding="utf-8-sig", errors="replace") as source:
               for line in source:
                   tail.append(line)
                   text = re.sub(r"^\d{4}-\d\d-\d\dT\S+Z\s*", "", line)
+                  clean = re.sub(r"\x1b\[[0-?]*[ -/]*[@-~]", "", text).rstrip("\r\n")
+                  if any(hashlib.sha256(candidate.lower().encode()).hexdigest()[:16] in wanted for candidate in (clean, clean.strip())):
+                      matched.append(line)
                   if re.search(r"Exception:|error|failed|warning|missing|not found|not supported|unsupported|cannot|invalid|is null|has no|does not exist", text, re.I) and not re.search(r"license|licensing|entitlement|UNITY_|password|authorization", text, re.I):
                       selected.extend(previous)
                       follow = 6
@@ -77,7 +82,7 @@ jobs:
                       selected.append(line)
                       follow -= 1
                   previous.append(line)
-          content = "".join(dict.fromkeys(selected))[:1500000] + "\n--- BUILD TAIL ---\n" + "".join(tail)[-300000:]
+          content = "--- EXACT BUILDREPORT HASH MATCHES ---\n" + "".join(matched)[:100000] + "\n--- CONTEXT ---\n" + "".join(dict.fromkeys(selected))[:1500000] + "\n--- BUILD TAIL ---\n" + "".join(tail)[-300000:]
           (root / "runtime-inspection/native-diagnostics.txt").write_text(content)
           PY
       - name: Encrypt packet for this Work session; publish no plaintext source or license files

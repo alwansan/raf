@@ -1,0 +1,25 @@
+name: Raft FMOD Android package validation fixtures (no LFS)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/audit_fmod_unity_package.py'
+      - 'tests/test_audit_fmod_unity_package.py'
+      - '.github/workflows/raft-fmod-package-tests.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  package-safety:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Validate BCD version, ARM64 defined exports, Java bridge and archive safety
+        run: python3 -m unittest discover -s tests -p test_audit_fmod_unity_package.py -v

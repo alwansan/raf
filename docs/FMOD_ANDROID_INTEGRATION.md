@@ -1,0 +1,48 @@
+# FMOD Android integration: verified acquisition and validation
+
+Current source wrapper version: **2.02.15**, constant `131605` / `0x00020215`.
+FMOD versions use BCD; interpreting the patch byte as decimal incorrectly gives21.
+The original FMOD managed providers are present, but the proven Android APKs lack
+the native Android FMOD library. A successful IL2CPP build does not prove audio.
+
+## Required owner-supplied input
+
+Download **FMOD for Unity2.02.15** from https://www.fmod.com/download after signing
+in/registering there, then attach the original `.unitypackage` to the Work chat.
+No PC, fork, extraction or public SDK upload is required. If this exact version
+is unavailable, report that rather than substituting a different version blindly.
+
+The official source repository explicitly excludes native binaries:
+https://github.com/fmod/fmod-for-unity . Forking it cannot supply Android libraries.
+The live FMOD download page requires sign-in. Do not share account passwords or
+Unity license secrets. Do not publish the full downloaded SDK/installer in this
+public project. Official CI/download discussion:
+https://qa.fmod.com/t/how-can-i-download-the-fmod-engine-api-from-a-terminal-or-script/21466
+
+## Read-only preflight
+
+Run `python3 -m scripts.audit_fmod_unity_package /private/input.unitypackage`.
+This standard-library-only validator checks:
+
+- Exact original BCD header version, refusing mixed or incorrect versions.
+- Release Android ARM64 ELF64 shared libraries, bounded section tables, defined
+  dynamic FMOD API exports and missing packaged FMOD/native dependencies.
+- Android `fmod.jar` and actual `org/fmod/FMOD.class` Java class signature.
+- Archive links/traversal/duplicate records, compressed/expanded size bounds,
+  package/library fingerprints. No extracted file writes or native execution.
+
+These are metadata/identity checks, not a vendor-signature assertion or a native
+runtime `getVersion` test. A real official package has NOT been supplied/audited
+yet. Synthetic fixtures do not establish original library availability.
+
+## Integration after the real package passes
+
+Stage only the required native runtime/Java bridge and any actually required DSP
+plugins using correct Android ARM64 import settings. Preserve original managed
+DLLs and gameplay/script GUIDs; do not import a second competing FMOD CSharp SDK.
+Verify native dependency closure and actual FMOD runtime version on Android.
+Original Raft bank selection, sizes/hashes, Android loading paths, DSP availability
+and audible/device tests remain separate gates. The owner need not resend the
+already supplied original game archive or bank data merely to acquire FMOD.
+
+Work only on `feature/android-native-port`; no branch merge or release is implied.
