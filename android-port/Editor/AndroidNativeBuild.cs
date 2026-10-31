@@ -1,6 +1,9 @@
 #if UNITY_EDITOR
 using System;
 using System.IO;
+using System.Collections.Generic;
+using System.Security.Cryptography;
+using System.Text;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.Build;
@@ -15,6 +18,7 @@ namespace RaftAndroid.Editor
         public static void ValidateSdkBindings()
         {
             SdkScriptBindingResolver.Rebind(Path.Combine(Application.dataPath, "Editor/RaftAndroid/sdk-script-manifest.json"));
+            MicroSplatPropertyTextureRecovery.Restore();
             Debug.Log("RAFT_SDK_VALIDATION_COMPLETE noAndroidBuildRequested=true");
         }
 
@@ -57,11 +61,50 @@ namespace RaftAndroid.Editor
                 locationPathName = output,
                 options = BuildOptions.CompressWithLz4
             });
+            ReportDiagnosticClasses(report);
             Debug.Log("RAFT_ANDROID_NATIVE_RESULT result=" + report.summary.result +
                       " errors=" + report.summary.totalErrors +
                       " bytes=" + report.summary.totalSize);
             if (report.summary.result != BuildResult.Succeeded)
                 throw new BuildFailedException("Native ARM64 Android build failed; inspect the preceding Unity diagnostics.");
+        }
+
+        private static void ReportDiagnosticClasses(BuildReport report)
+        {
+            var classes = new SortedDictionary<string, int>(StringComparer.Ordinal);
+            var unknown = new SortedDictionary<string, int>(StringComparer.Ordinal);
+            int occurrences = 0;
+            foreach (var step in report.steps)
+            foreach (var message in step.messages)
+            {
+                if (message.type != LogType.Error && message.type != LogType.Assert &&
+                    message.type != LogType.Exception) continue;
+                occurrences++;
+                string text = (message.content ?? "").ToLowerInvariant();
+                string category =
+                    text.Contains("kfirstvalidstandalonetarget") ? "standalone_target_assertion" :
+                    text.Contains("texture2d.setpixels") && text.Contains("unsupported") ? "property_texture_write" :
+                    text.Contains("nullreferenceexception") ? "null_reference" :
+                    text.Contains("shader") ? "shader" :
+                    text.Contains("texture") ? "other_texture" :
+                    text.Contains("serializ") ? "serialization" :
+                    text.Contains("script") ? "script_binding" : "other";
+                if (!classes.ContainsKey(category)) classes[category] = 0;
+                classes[category]++;
+                if (category == "other")
+                {
+                    string digest;
+                    using (var sha = SHA256.Create())
+                        digest = BitConverter.ToString(sha.ComputeHash(Encoding.UTF8.GetBytes(text)))
+                            .Replace("-", "").Substring(0, 16).ToLowerInvariant();
+                    if (!unknown.ContainsKey(digest)) unknown[digest] = 0;
+                    unknown[digest]++;
+                }
+            }
+            Debug.Log("RAFT_BUILDREPORT_DIAGNOSTIC_CLASSES messageOccurrences=" + occurrences +
+                      " categories=" + string.Join(",", classes.Select(p => p.Key + ":" + p.Value)) +
+                      " unknownMessageHashes=" + string.Join(",", unknown.Take(12).Select(p => p.Key + ":" + p.Value)) +
+                      " notEquivalentToSummaryTotalErrors=true");
         }
 
         private static string Argument(string name, string fallback)

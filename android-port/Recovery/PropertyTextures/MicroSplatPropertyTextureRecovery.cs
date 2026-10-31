@@ -33,10 +33,12 @@ namespace RaftAndroid.Editor
             FieldInfo valuesField = type.GetField("values");
             FieldInfo widthField = type.GetField("maxTextures");
             FieldInfo cacheField = type.GetField("propTex");
+            MethodInfo getter = type.GetMethod("GetTexture", Type.EmptyTypes);
             if (!typeof(ScriptableObject).IsAssignableFrom(type) || valuesField == null ||
                 valuesField.FieldType != typeof(Color[]) || widthField == null ||
                 widthField.FieldType != typeof(int) || cacheField == null ||
-                cacheField.FieldType != typeof(Texture2D))
+                cacheField.FieldType != typeof(Texture2D) || getter == null ||
+                getter.ReturnType != typeof(Texture2D))
                 throw new BuildFailedException("Original MicroSplat property schema changed.");
             string[] guids = AssetDatabase.FindAssets("t:MicroSplatPropData");
             if (guids.Length == 0)
@@ -90,6 +92,8 @@ namespace RaftAndroid.Editor
                 if (PropertyTextureCore.Digest(File.ReadAllBytes(plans[i].Path)) !=
                     PropertyTextureCore.Digest(File.ReadAllBytes(Path.Combine(backup, i + ".asset"))))
                     throw new BuildFailedException("Original property asset backup failed before mutation.");
+                if (PropertyTextureCore.Digest(File.ReadAllBytes(Path.Combine(backup, i + ".asset.meta"))) != plans[i].MetaHash)
+                    throw new BuildFailedException("Original property metadata backup verification failed.");
             }
             // Append only a losslessly derived cache. Existing exported textures,
             // object identities, script metas and property fields are retained.
@@ -97,11 +101,17 @@ namespace RaftAndroid.Editor
             {
                 AssetDatabase.AddObjectToAsset(plan.Texture, plan.Data);
                 plan.CacheField.SetValue(plan.Data, plan.Texture);
+                EditorUtility.SetDirty(plan.Texture);
                 EditorUtility.SetDirty(plan.Data);
             }
             AssetDatabase.SaveAssets();
             foreach (Plan plan in plans)
             {
+                AssetDatabase.ImportAsset(plan.Path, ImportAssetOptions.ForceSynchronousImport);
+                plan.Data = AssetDatabase.LoadAssetAtPath(plan.Path, type);
+                plan.Texture = plan.CacheField.GetValue(plan.Data) as Texture2D;
+                if (plan.Texture == null || plan.Texture.format != TextureFormat.RGBAFloat)
+                    throw new BuildFailedException("Saved float property cache did not reload correctly.");
                 if (NonCacheFields(plan.Data) != plan.OtherFields ||
                     PropertyTextureCore.Digest(File.ReadAllBytes(plan.Path + ".meta")) != plan.MetaHash)
                     throw new BuildFailedException("Original property fields or GUID metadata changed.");
@@ -110,7 +120,7 @@ namespace RaftAndroid.Editor
                 PropertyTextureCore.RequireEqual(plan.OriginalBytes, after);
                 // Exercise the REAL provider method used by terrain rendering,
                 // not a substitute implementation. Original values stay intact.
-                var texture = type.GetMethod("GetTexture", Type.EmptyTypes).Invoke(plan.Data, null) as Texture2D;
+                var texture = getter.Invoke(plan.Data, null) as Texture2D;
                 if (texture != plan.Texture)
                     throw new BuildFailedException("Original SDK replaced the verified float property cache.");
                 PropertyTextureCore.RequireEqual(plan.OriginalBytes, texture.GetRawTextureData());

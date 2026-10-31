@@ -20,6 +20,8 @@ on:
       - 'tests/test_supplement_ilspy_gameplay.py'
       - 'tests/test_csharp_overlay.py'
       - 'android-port/Editor/**'
+      - 'android-port/Recovery/PropertyTextures/**'
+      - 'android-port/Tests/PropertyTextures/**'
       - 'scripts/build_sdk_script_manifest.py'
       - 'scripts/resolve_managed_closure.py'
       - 'scripts/isolate_sdk_source_assemblies.py'
@@ -351,6 +353,7 @@ jobs:
         run: |
           mkdir -p "$RUNNER_TEMP/project/ExportedProject/Assets/Editor/RaftAndroid"
           cp android-port/Editor/*.cs "$RUNNER_TEMP/project/ExportedProject/Assets/Editor/RaftAndroid/"
+          cp android-port/Recovery/PropertyTextures/*.cs "$RUNNER_TEMP/project/ExportedProject/Assets/Editor/RaftAndroid/"
       - name: Validate reconstructed editor project structure and GUID references
         shell: bash
         run: |
