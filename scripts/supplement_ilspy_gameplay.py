@@ -48,7 +48,7 @@ def _audit_original_source_coverage(scripts: Path, ilspy: Path) -> dict:
             continue
         originals[_source_identity(p)].append(p)
     if not originals:
-        raise ValueError("No eligible original gameplay source types")
+        return {"verified_eligible_sources":0, "unique_original_identities":0}
     ident=re.compile(r"[A-Za-z_]\w*")
     decl=re.compile(r"\b(?:class|struct|interface|enum|record)\s+([A-Za-z_]\w*)")
     ignored=set("public private protected internal static readonly sealed partial abstract virtual override new class struct interface enum record delegate namespace using return this base true false null void int bool float double string object var get set value if else for foreach while do switch case break continue default try catch finally throw in out ref params async await where global System UnityEngine".split())

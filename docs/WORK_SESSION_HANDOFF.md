@@ -519,3 +519,7 @@ The completed native trial [41207308718](https://github.com/alwansan/raf/actions
 
 Synthetic tests were extended for legacy and Decompiled modes including zero-addition completeness, retained .meta bytes, an absent helper, incorrect namespace, duplicate source identities, a falsely matching SDK source name, and a hollow placeholder. The 40-scene/64642-script linkage validator, 13-font Material audit, finite Mesh audits, SDK assembly/binding tests, Unity 2021 import, BuildReport and APK audit remain downstream and MUST be verified on a new completed CI run. No game asset or decompiled gameplay code is committed by this repair; no other branch is changed. The latest observed branch head before this change was 6250c8003b38777183d4b82dfd949f72761965a4.
 
+
+### First low-cost pre-LFS synthetic gate and targeted correction
+
+Native run [41210513371](https://github.com/alwansan/raf/actions/runs/41210513371), commit 4bcbf906, passed Unity license preflight and the 13 overlay tests but **failed deliberately before any LFS download** at one pre-existing synthetic fixture containing only excluded metadata/invalid/non-type files. The new strict coverage audit rejected zero eligible originals, although this fixture intentionally has none. The corrected behavior returns verified_eligible_sources=0 for such a synthetic-only dataset; real Unity still requires **--min-original-sources 2393**, so an empty or partial real ILSpy export fails. All ten other supplement tests already passed in the failed run. This is not Unity evidence and generated no APK.
