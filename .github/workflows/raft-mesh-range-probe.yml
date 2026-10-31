@@ -1,0 +1,46 @@
+name: Raft verified Mesh range transport probe (bounded 64 KiB)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/fetch_verified_mesh_ranges.py'
+      - 'tests/test_verified_mesh_ranges.py'
+      - 'config/mesh-stream-ranges.json'
+      - '.github/workflows/raft-mesh-range-probe.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raft-mesh-range-probe
+  cancel-in-progress: true
+jobs:
+  range-probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Validate bounded parsing, original identities and hostile range responses
+        run: |
+          python3 -m unittest discover -s tests -p test_archive_parts_reader.py -v
+          python3 -m unittest discover -s tests -p test_verified_archive_plan.py -v
+          python3 -m unittest discover -s tests -p test_mesh_range_manifest.py -v
+          python3 -m unittest discover -s tests -p test_verified_mesh_ranges.py -v
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          manifest=json.loads(Path('config/mesh-stream-ranges.json').read_text())
+          probe=min(manifest['streams']['sharedassets34.assets.resS']['chunks'],key=lambda c:c['size'])
+          assert probe['size']<=65536
+          print('Maximum authorized probe bytes:',probe['size'])
+          PY
+      - name: Retrieve one tiny checksum-pinned range without full-object fallback
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 -m scripts.fetch_verified_mesh_ranges \
+            --manifest config/mesh-stream-ranges.json --source-root Raft/Raft_Data \
+            --cache "$RUNNER_TEMP/private-range-probe" --probe-stream sharedassets34.assets.resS
+
