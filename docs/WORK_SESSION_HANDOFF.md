@@ -405,3 +405,13 @@ Earlier experiments failed because the Unity license was not visible in a GitHub
 ## Owner wait preference (2026-10-31)
 
 If a pending job is known to require more than 10 minutes and there is no other useful independent work, stop polling, report the exact run URL/current state and let the owner wait and announce completion. Continue real independent work while available. Native run 41194313057 has now completed SUCCESS; retrieve its bounded diagnostic comparison before another build.
+
+
+## 2026-10-31 — verified shared/resource Mesh native result and residual diagnosis
+
+- Native [41194313057](https://github.com/alwansan/raf/actions/runs/41194313057), job 124517304289, commit 41867268dd925f570d498c16915f788f24ad7477, completed SUCCESS. Bounded comparison [41199389742](https://github.com/alwansan/raf/actions/runs/41199389742), job 124531988832, passed seven synthetic tests and inspected actual completed logs without another build/LFS transfer.
+- Reported errors **2430→106**; distinct non-finite Mesh names **110→0**, broader Mesh error names **205→0**; no tracked non-finite, Quickhull or non-accessible CollisionMeshData lines remain. This is scoped to emitted diagnostics, not proof every scene's embedded Mesh or device physics works. NullReferenceException occurrences remain **52**. Zero emitted distinct C# errors, 40 enabled scenes, 64642/64642 script links and unchanged original script meta.
+- Actual APK **943426875 bytes**, SHA256 `e4f6a1cba09b1a6a7f2d810b2cedeb43fb20bf8f15b3cb1ac45bcf72721371a3`, ARM64 IL2CPP, three AArch64 shared libraries structurally validated, 11 Unity Data files. FMOD Android native library remains absent. No playable/device-tested APK is claimed.
+- Actual runner geometry gate confirmed 1845 original Mesh buffers inlined, 56718 other object bodies unchanged, 4045 finite Mesh plus one originally empty Mesh, zero parse errors. Downloaded 191020388 range bytes, reused two full providers, no whole-object fallback.
+- **Coverage correction:** the current recipe/audit scans 41 shared/resource headers only. Earlier use of 'complete/global' must be read within that scope. Private follow-up found scene-embedded streamed Mesh; scene expansion and its object-count discrepancy are NOT yet validated or integrated. Do not claim whole-game geometry completeness or publish unverified expanded fingerprints.
+- Added bounded exception-origin summarizer with three passing tests. Next cheap log-only run classifies residual exception types/first method identities, without raw messages, paths, arguments or source. Inspect its results before changing OnValidate or game data; do not suppress nulls without validating serialized data.

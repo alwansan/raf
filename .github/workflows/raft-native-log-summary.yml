@@ -5,6 +5,8 @@ on:
     paths:
       - '.github/workflows/raft-native-log-summary.yml'
       - 'scripts/summarize_native_geometry.py'
+      - 'scripts/summarize_native_exceptions.py'
+      - 'tests/test_summarize_native_exceptions.py'
       - 'tests/test_summarize_native_geometry.py'
   workflow_dispatch:
     inputs:
@@ -30,6 +32,7 @@ jobs:
       - name: Validate aggregate comparison against synthetic logs
         run: |
           python3 -m unittest discover -s tests -p test_summarize_native_geometry.py -v
+          python3 -m unittest discover -s tests -p test_summarize_native_exceptions.py -v
           python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
       - name: Retrieve two completed job logs without a build or LFS transfer
         env:
@@ -45,3 +48,4 @@ jobs:
           python3 -m scripts.summarize_native_geometry \
             --before "$RUNNER_TEMP/before-native.log" --after "$RUNNER_TEMP/after-native.log" \
             --root Raft/Raft_Data --target-stream all
+          python3 -m scripts.summarize_native_exceptions "$RUNNER_TEMP/after-native.log"
