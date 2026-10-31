@@ -14,6 +14,8 @@ on:
     paths:
       - '.github/workflows/raft-unity-editor-android-import.yml'
       - 'scripts/overlay_ilspy_gameplay.py'
+      - 'scripts/supplement_ilspy_gameplay.py'
+      - 'tests/test_supplement_ilspy_gameplay.py'
       - 'tests/test_csharp_overlay.py'
       - 'android-port/Editor/**'
       - 'scripts/build_sdk_script_manifest.py'
