@@ -39,7 +39,7 @@ jobs:
         run: |
           set -euo pipefail
           case "$LOG_JOB_ID" in ''|*[!0-9]*) exit 1;; esac
-          for job in 124570812882 "$LOG_JOB_ID"; do
+          for job in "$LOG_JOB_ID"; do
             gh api --allow-escape-sequences "repos/$GITHUB_REPOSITORY/actions/jobs/$job/logs" > "$RUNNER_TEMP/import-$job.log"
             echo "Inspected job ID: $job"
             python3 -m scripts.summarize_unity_imports "$RUNNER_TEMP/import-$job.log"

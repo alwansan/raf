@@ -33,3 +33,8 @@ class ImportSummaryTests(unittest.TestCase):
         self.assertEqual(r['patterns']['refresh_restart']['count'], 1)
         self.assertEqual(r['patterns']['cancel']['count'], 1)
         self.assertEqual(r['distinct_import_paths'], 0)
+
+    def test_engine_diagnostics_redact_arguments(self):
+        r = summarize(["Assertion failed on expression: 'secret expression' 123 0xABC"])
+        self.assertNotIn('secret expression', str(r))
+        self.assertEqual(sum(r['diagnostic_headers'].values()), 1)
