@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Overlay uniquely matched ILSpy C# files onto AssetRipper's script .meta layout.
+"""Overlay real ILSpy C# into AssetRipper gameplay scripts while preserving .meta GUIDs.
 
 DO NOT PUBLISH THE INPUTS OR OUTPUT: they contain decompiled proprietary code.
 This helper operates on local, independently provided directories; it preserves
@@ -24,7 +24,9 @@ def build_index(files):
         result[(p.name, get_namespace(p.read_text(encoding="utf8", errors="replace")))].append(p)
     return result
 
-def map_sources(project:Path, decompiled:Path, apply:bool, *, recover_unqualified_stubs:bool=False) -> dict:
+def map_sources(project:Path, decompiled:Path, apply:bool, *,
+                recover_unqualified_stubs:bool=False,
+                recover_unlinked_decompiled:bool=False) -> dict:
     assets=project/"Assets"
     if not assets.is_dir() or not decompiled.is_dir():
         raise FileNotFoundError("Expected Unity ExportedProject/Assets and ILSpy C# directory")
@@ -33,6 +35,12 @@ def map_sources(project:Path, decompiled:Path, apply:bool, *, recover_unqualifie
     ilspy_files=list(decompiled.rglob("*.cs"))
     target_index=build_index(gameplay_scripts)
     source_index=build_index(ilspy_files)
+    # All existing .meta GUID identities are immutable; no .meta is synthesized.
+    import hashlib
+    def meta_hashes():
+        return {p.relative_to(assets).as_posix():hashlib.sha256(p.read_bytes()).hexdigest()
+                for p in assets.rglob("*.cs.meta")}
+    original_meta_hashes=meta_hashes()
     report={
         "asset_csharp_files":len(asset_scripts),
         "ilspy_csharp_files":len(ilspy_files),
@@ -54,6 +62,8 @@ def map_sources(project:Path, decompiled:Path, apply:bool, *, recover_unqualifie
         "unqualified_stubs_recovered":0,
         "critical_classes":{},
         "missing_meta":0,
+        "recovered_unlinked_decompiled":0,
+        "meta_hashes_unchanged":False,
         "examples":[],
         "apply":apply,
         "limitations":"Assembly-scoped, namespace-and-filename-unique conservative pairing. Does not prove class serialization, compile or scene correctness.",
@@ -83,10 +93,13 @@ def map_sources(project:Path, decompiled:Path, apply:bool, *, recover_unqualifie
         if "Assembly-CSharp" not in target.parts:
             # Never replace code exported from unrelated managed assemblies.
             continue
-        if not target.with_suffix(".cs.meta").is_file():
+        has_meta=target.with_suffix(".cs.meta").is_file()
+        if not has_meta:
             report["missing_meta"]+=1
-            continue
-        report["common_unique_names"]+=1
+            if not recover_unlinked_decompiled:
+                continue
+        else:
+            report["common_unique_names"]+=1
         stem=src.stem
         if not re.fullmatch(r"[A-Za-z_][A-Za-z_0-9]*",stem):
             report["nonclass_sources"]+=1
@@ -96,11 +109,15 @@ def map_sources(project:Path, decompiled:Path, apply:bool, *, recover_unqualifie
         if get_namespace(source)!=get_namespace(stub) and not recovered_unqualified:
             report["namespace_mismatches"]+=1
             continue
-        if not re.search(r"\b(?:class|struct|interface|enum)\s+"+re.escape(stem)+r"\b",source):
+        declared=re.search(r"\b(?:class|struct|interface|enum|record)\s+"+re.escape(stem)+r"\b",source)
+        delegated=re.search(r"\bdelegate\b[^;{}]*\b"+re.escape(stem)+r"\s*(?:<[^;{}]*>)?\s*\(",source)
+        if not (declared or delegated):
             report["nonclass_sources"]+=1
             continue
         prior=target.stat().st_size
         report["replacements"]+=1
+        if not has_meta:
+            report["recovered_unlinked_decompiled"]+=1
         if recovered_unqualified: report["unqualified_stubs_recovered"]+=1
         if re.search(r"\b(?:class|struct|interface)\s+"+re.escape(stem)+r"\s*<",source):
             report["recovered_generic_sources"]+=1
@@ -114,6 +131,9 @@ def map_sources(project:Path, decompiled:Path, apply:bool, *, recover_unqualifie
             report["examples"].append({"filename":name,"stub_bytes":prior,"real_bytes":len(source.encode("utf8"))})
         if apply:
             target.write_text(source,encoding="utf8")
+    report["meta_hashes_unchanged"]=(meta_hashes()==original_meta_hashes)
+    if not report["meta_hashes_unchanged"]:
+        raise ValueError("Original Unity CSharp .meta GUIDs changed during source overlay")
     return report
 
 if __name__=="__main__":
@@ -123,14 +143,19 @@ if __name__=="__main__":
     p.add_argument("--report",type=Path,default=Path("out/code-overlay-report.json"))
     p.add_argument("--apply",action="store_true",help="write only within supplied project directory")
     p.add_argument("--recover-unqualified-stubs",action="store_true",help="Recover field-only unqualified AssetRipper MonoBehaviour placeholders using a unique original source")
+    p.add_argument("--recover-unlinked-decompiled",action="store_true",
+                   help="Opt in for Decompiled exporter: overlay original type bodies in unlinked CSharp sources without .cs.meta; never synthesize/replace Unity GUID metadata")
     args=p.parse_args()
-    data=map_sources(args.project,args.ilspy,args.apply,recover_unqualified_stubs=args.recover_unqualified_stubs)
+    data=map_sources(args.project,args.ilspy,args.apply,
+                     recover_unqualified_stubs=args.recover_unqualified_stubs,
+                     recover_unlinked_decompiled=args.recover_unlinked_decompiled)
     args.report.parent.mkdir(parents=True,exist_ok=True)
     args.report.write_text(json.dumps(data,indent=2)+"\n",encoding="utf8")
     for k in ("asset_csharp_files","ilspy_csharp_files","asset_csharp_with_metas",
               "asset_target_paths_containing_assembly_csharp","common_unique_names",
               "replacements","source_files_with_bom","recovered_generic_sources","recovered_interface_sources","bytes_before","bytes_after","ambiguous_names",
-              "unmatched","missing_meta","nonclass_sources","namespace_mismatches","unqualified_stubs_recovered","apply"):
+              "unmatched","missing_meta","recovered_unlinked_decompiled","meta_hashes_unchanged",
+              "nonclass_sources","namespace_mismatches","unqualified_stubs_recovered","apply"):
         print(k+":",data[k])
     print("Representative replacement sizes:",data["examples"])
     print("Important gameplay class source sizes:",data["critical_classes"])

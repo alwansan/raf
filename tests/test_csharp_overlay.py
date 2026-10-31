@@ -143,5 +143,52 @@ class OverlaySafetyTests(unittest.TestCase):
         self.assertEqual(result["replacements"],0)
         self.assertEqual(target.read_text(),stub)
 
+
+    def test_opt_in_restores_full_decompiled_body_without_meta(self):
+        target,old,new=self.fixture(with_meta=False)
+        protected=target.parent/"Protected.cs.meta"
+        original=b"fileFormatVersion: 2\\nguid: 0123456789abcdef0123456789abcdef\\n"
+        protected.write_bytes(original)
+        result=map_sources(self.project,self.ilspy,True,recover_unlinked_decompiled=True)
+        self.assertEqual(result["replacements"],1)
+        self.assertEqual(result["recovered_unlinked_decompiled"],1)
+        self.assertEqual(target.read_text(),new)
+        self.assertFalse(target.with_suffix(".cs.meta").exists())
+        self.assertEqual(protected.read_bytes(),original)
+        self.assertTrue(result["meta_hashes_unchanged"])
+
+    def test_opt_in_refuses_ambiguous_unlinked_source(self):
+        target,old,new=self.fixture(with_meta=False)
+        second=target.parent/"Elsewhere"/"Sample.cs"
+        second.parent.mkdir()
+        second.write_text(old)
+        result=map_sources(self.project,self.ilspy,True,recover_unlinked_decompiled=True)
+        self.assertEqual(result["replacements"],0)
+        self.assertEqual(result["ambiguous_names"],2)
+        self.assertEqual(target.read_text(),old)
+
+    def test_opt_in_does_not_replace_unrelated_sdk_file(self):
+        target,old,new=self.fixture(asm="PlayFab",with_meta=False)
+        result=map_sources(self.project,self.ilspy,True,recover_unlinked_decompiled=True)
+        self.assertEqual(result["replacements"],0)
+        self.assertEqual(target.read_text(),old)
+
+    def test_opt_in_does_not_replace_mismatched_namespace(self):
+        target,old,new=self.fixture(with_meta=False,source_ns="Different")
+        result=map_sources(self.project,self.ilspy,True,recover_unlinked_decompiled=True)
+        self.assertEqual(result["replacements"],0)
+        self.assertEqual(target.read_text(),old)
+
+    def test_opt_in_restores_decompiled_delegate_without_meta(self):
+        target=self.project/"Assets"/"Scripts"/"Assembly-CSharp"/"Handler.cs"
+        target.parent.mkdir(parents=True)
+        target.write_text("namespace Raft { public delegate void Handler(); }")
+        restored="namespace Raft { public delegate bool Handler(int value); }"
+        (self.ilspy/"Handler.cs").write_text(restored)
+        result=map_sources(self.project,self.ilspy,True,recover_unlinked_decompiled=True)
+        self.assertEqual(result["recovered_unlinked_decompiled"],1)
+        self.assertEqual(target.read_text(),restored)
+
+
 if __name__=="__main__":
     unittest.main()

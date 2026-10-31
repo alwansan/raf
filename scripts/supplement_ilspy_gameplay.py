@@ -29,7 +29,7 @@ def _meta_hashes(root: Path) -> dict:
             for p in root.rglob("*.cs.meta")}
 
 
-def _audit_original_source_coverage(scripts: Path, ilspy: Path) -> dict:
+def _audit_original_source_coverage(scripts: Path, ilspy: Path, *, mode: str) -> dict:
     """Verify unique gameplay identities, real source content and original namespaces."""
     from collections import defaultdict
     index=defaultdict(list)
@@ -61,6 +61,8 @@ def _audit_original_source_coverage(scripts: Path, ilspy: Path) -> dict:
         original=sources[0].read_text(encoding="utf-8-sig",errors="replace")
         exported=targets[0].read_text(encoding="utf-8-sig",errors="replace")
         types=set(decl.findall(original))
+        if mode=="decompiled" and original != exported:
+            raise ValueError(f"Decompiled original source body differs from CSharp9 ILSpy: {key}; original_chars={len(original)} exported_chars={len(exported)}")
         if not TYPE_DECL.search(exported) or (types and not (types & set(decl.findall(exported)))):
             raise ValueError(f"Missing original type declaration: {key}")
         expected=symbols(original)
@@ -129,7 +131,7 @@ def supplement(project: Path, ilspy: Path, *, apply: bool, coverage_mode: str = 
     if apply and _meta_hashes(scripts)!=original_metas:
         raise ValueError("CSharp .meta/GUID bytes changed during supplementation")
     if apply:
-        counters.update(_audit_original_source_coverage(scripts,ilspy))
+        counters.update(_audit_original_source_coverage(scripts,ilspy,mode=coverage_mode))
     report={"statistics":dict(counters),"coverage_mode":coverage_mode,"example_added_files":samples,
             "notes":"Only file-unique missing helper type sources, not compiled/released original game code; Unity Editor still required."}
     print("Supplement helper CSharp:",report)

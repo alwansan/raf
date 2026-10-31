@@ -270,7 +270,7 @@ jobs:
             --project "$RUNNER_TEMP/project/ExportedProject" \
             --ilspy "$RUNNER_TEMP/ilspy-src" \
             --report "$RUNNER_TEMP/overlay-report.json" \
-            --recover-unqualified-stubs --apply
+            --recover-unqualified-stubs --recover-unlinked-decompiled --apply
       - name: Recover CSharp helper types absent from AssetRipper MonoScript output
         shell: bash
         run: |

@@ -74,7 +74,7 @@ class SupplementHelperTypesTests(unittest.TestCase):
         source="namespace Raft { public class Foo { "+" ".join("void Function%d() { field%d++; }"%(i,i) for i in range(20))+" } }"
         (self.ilspy/"Foo.cs").write_text(source)
         (self.scripts/"Foo.cs").write_text("namespace Raft { public class Foo {} }")
-        with self.assertRaisesRegex(ValueError,"Source body missing/truncated"):
+        with self.assertRaisesRegex(ValueError,"Decompiled original source body differs"):
             supplement(self.project,self.ilspy,apply=True,coverage_mode="decompiled")
 
     def test_decompiled_export_wrong_namespace_is_rejected(self):
