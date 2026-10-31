@@ -1,0 +1,132 @@
+name: Raft encrypted runtime source inspection (no LFS)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths: ['.github/workflows/raft-runtime-source-inspection.yml']
+  workflow_dispatch:
+    inputs:
+      job_id:
+        description: Completed native job for bounded residual error context
+        default: '124638196554'
+        required: true
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: raft-encrypted-runtime-inspection
+  cancel-in-progress: true
+jobs:
+  inspect:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            Raft/Raft_Data/Managed
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Install pinned metadata decompiler
+        run: dotnet tool install ilspycmd --version 11.2.0.10050 --tool-path "$RUNNER_TEMP/ilspy"
+      - name: Inspect only original runtime classes into private temporary files
+        env:
+          DOTNET_PROCESSOR_COUNT: '2'
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/runtime-inspection"
+          assembly="$GITHUB_WORKSPACE/Raft/Raft_Data/Managed/Assembly-CSharp.dll"
+          for type in SteamManager Raft_Network SaveAndLoad RGD_User RGD_Users Network_UserId GameManager BigPictureInputField TextWriterManager PlayFabManager MyInput CustomInputConfig; do
+            timeout 90s "$RUNNER_TEMP/ilspy/ilspycmd" -lv CSharp9_0 -t "$type" "$assembly" > "$RUNNER_TEMP/runtime-inspection/$type.cs" 2> "$RUNNER_TEMP/ilspy-private.log"
+            test -s "$RUNNER_TEMP/runtime-inspection/$type.cs"
+          done
+          timeout 90s "$RUNNER_TEMP/ilspy/ilspycmd" -lv CSharp9_0 -t FMOD.VERSION "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed/FMODUnity.dll" > "$RUNNER_TEMP/runtime-inspection/FMOD_VERSION.cs" 2> "$RUNNER_TEMP/ilspy-private.log"
+      - name: Collect bounded native diagnostics without publishing raw log content
+        env:
+          GH_TOKEN: ${{ github.token }}
+          LOG_JOB_ID: ${{ inputs.job_id || '124638196554' }}
+        run: |
+          set -euo pipefail
+          case "$LOG_JOB_ID" in ''|*[!0-9]*) exit 1;; esac
+          gh api --allow-escape-sequences "repos/$GITHUB_REPOSITORY/actions/jobs/$LOG_JOB_ID/logs" > "$RUNNER_TEMP/native-private.log"
+          python3 - <<'PY'
+          from collections import deque
+          import os, re
+          from pathlib import Path
+          root = Path(os.environ["RUNNER_TEMP"])
+          previous, tail, selected = deque(maxlen=2), deque(maxlen=600), []
+          follow = 0
+          with (root / "native-private.log").open(encoding="utf-8-sig", errors="replace") as source:
+              for line in source:
+                  tail.append(line)
+                  text = re.sub(r"^\d{4}-\d\d-\d\dT\S+Z\s*", "", line)
+                  if re.search(r"Exception:|error|failed|warning|missing|not found|not supported", text, re.I) and not re.search(r"license|licensing|entitlement|UNITY_|password|authorization", text, re.I):
+                      selected.extend(previous)
+                      follow = 6
+                  if follow:
+                      selected.append(line)
+                      follow -= 1
+                  previous.append(line)
+          content = "".join(dict.fromkeys(selected))[:1500000] + "\n--- BUILD TAIL ---\n" + "".join(tail)[-300000:]
+          (root / "runtime-inspection/native-diagnostics.txt").write_text(content)
+          PY
+      - name: Encrypt packet for this Work session; publish no plaintext source or license files
+        env:
+          PUBLIC_INSPECTION_CERT: |
+            -----BEGIN CERTIFICATE-----
+            MIIELzCCApegAwIBAgIUNbO2oPzXybhs6cHSxAK2IzRfzqowDQYJKoZIhvcNAQEL
+            BQAwJzElMCMGA1UEAwwcUmFmdCBXb3JrIHJ1bnRpbWUgaW5zcGVjdGlvbjAeFw0y
+            NjEwMzEyMTA2NTJaFw0yNjExMDcyMTA2NTJaMCcxJTAjBgNVBAMMHFJhZnQgV29y
+            ayBydW50aW1lIGluc3BlY3Rpb24wggGiMA0GCSqGSIb3DQEBAQUAA4IBjwAwggGK
+            AoIBgQC58R58daO8JfPKCtdrlaRmBBLqBLe+Zb9PaqVtV58aDlFy2s5hmsw6rZDr
+            CHxbBAsm9KbrkiO9Pyh8+aK0NAZhSJeK2SDHCkJhCHC1f5C6piqY4rEBQQ40S/rJ
+            0U9NEiDF9xw9Yta89jVp6Ol6KHmnps4E4c1DEH1v+zDSZGP3+TWLvZsMZgU1pGfq
+            vZL0CDRLV4j1vRZgnSmxxTcsX2UatMMzcInzW2wGnHQcpscupbyoU2O4szHnE2c7
+            Oj6wJMyUI8uj+Zbjw96p5jlxEAKwVGAXkxwI2MtTB8hOBbjDDCu80tU6ZG9lMFKF
+            Q+Lzk/J71wCl4XnE3IB6lqiRa/+ZtU9umZlE7cqJphSp/wVpGTyDKZ7NpF+aBD9D
+            CkPWR/K+ZZ9wIZmT0SFwO+qJHLk363ASa8g0Y5qU8Y1RQs5AMCkgOpIFiJPysEgb
+            KBM8R+LIOkTGEx6h6UjtjCXrhMIXtooeU4plYIPu58aDb7itWsJ7NUqfU9kgOlly
+            bCcmCQ8CAwEAAaNTMFEwHQYDVR0OBBYEFEGhXmYsBXR0+geyjAzfGMxxVJh/MB8G
+            A1UdIwQYMBaAFEGhXmYsBXR0+geyjAzfGMxxVJh/MA8GA1UdEwEB/wQFMAMBAf8w
+            DQYJKoZIhvcNAQELBQADggGBAKZfbTSwBZ6VrTMdRHxenKG6UDuP12ACL1lPeVOZ
+            X9HwupEqrRJo9kKzwo/nlht8mlR960LEO0pXpB/d3AljdEHZLZPgnm9+jaH36+nT
+            jIdUxI/753mbq4dtaxjuX7s00+ocNLyCdunNw1mHnwsSNEanQxbAd02ogVwJphtR
+            1WOxUA/mCv5jOYT7bO7WApu7nLZdhe0dNErWAz47DKVpW8x+BFTdoF3sh1JPV7JA
+            BxHw11tiCwnF1y4nR8s98/SFHj7TKRpJRmjFBlOjNv3GEiKBmq7Q+c/Sc6/jdL0a
+            NfsZapPC7pkYX9rviGQC0cGjy0+8Xik1TN4QfzRCTnpZhd49x8ZEj0QLA4D4e+j+
+            8ndqvoKIdYx1U4Ukk1idFwolhLsBSKcOGTWjf6XNnYSL+i02w2RNEiE6HH4CucQM
+            87jW+oGQP121mEBL5D6hEXyWaBPY2xSPJopPmwT3E6z+FZCd/iCMLQKJJgM+aD9U
+            wLNIxjDGbxMb/2mbR7dareyIWQ==
+            -----END CERTIFICATE-----
+        run: |
+          set -euo pipefail
+          printf '%s\n' "$PUBLIC_INSPECTION_CERT" > "$RUNNER_TEMP/recipient.pem"
+          python3 - <<'PY'
+          import hashlib, json, os, subprocess, zipfile
+          from pathlib import Path
+          root = Path(os.environ["RUNNER_TEMP"])
+          packet = root / "runtime-inspection"
+          assembly = Path("Raft/Raft_Data/Managed/Assembly-CSharp.dll")
+          manifest = {"source_commit": os.environ["GITHUB_SHA"],
+                      "assembly_sha256": hashlib.sha256(assembly.read_bytes()).hexdigest(),
+                      "assembly_git_blob": subprocess.check_output(["git", "rev-parse", "HEAD:" + str(assembly)], text=True).strip(),
+                      "files": {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in packet.iterdir()}}
+          (packet / "manifest.json").write_text(json.dumps(manifest, sort_keys=True))
+          with zipfile.ZipFile(root / "inspection-private.zip", "w", zipfile.ZIP_DEFLATED) as out:
+              for path in packet.iterdir():
+                  out.write(path, path.name)
+          PY
+          openssl cms -encrypt -binary -aes-256-cbc -in "$RUNNER_TEMP/inspection-private.zip" -outform DER -out "$RUNNER_TEMP/runtime-inspection.cms" "$RUNNER_TEMP/recipient.pem"
+          sha256sum "$RUNNER_TEMP/runtime-inspection.cms"
+          test "$(stat -c %s "$RUNNER_TEMP/runtime-inspection.cms")" -lt 524288
+          echo RAFT_PRIVATE_INSPECTION_CMS_BASE64_BEGIN
+          base64 -w 76 "$RUNNER_TEMP/runtime-inspection.cms"
+          echo RAFT_PRIVATE_INSPECTION_CMS_BASE64_END
+      - uses: actions/upload-artifact@v4
+        with:
+          name: raft-runtime-inspection-encrypted
+          path: ${{ runner.temp }}/runtime-inspection.cms
+          retention-days: 1
+          if-no-files-found: error
