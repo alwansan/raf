@@ -1,0 +1,46 @@
+name: Raft interrupted Unity import progress (no LFS)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-unity-import-progress.yml'
+      - 'scripts/summarize_unity_imports.py'
+      - 'tests/test_summarize_unity_imports.py'
+  workflow_dispatch:
+    inputs:
+      job_id:
+        description: Completed native job to inspect
+        default: '124590829204'
+        required: true
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: raft-unity-import-progress
+  cancel-in-progress: true
+jobs:
+  inspect:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Test infrastructure log parser without game data
+        run: python3 -m unittest discover -s tests -p test_summarize_unity_imports.py -v
+      - name: Inspect two existing logs without rebuilding or publishing content
+        env:
+          GH_TOKEN: ${{ github.token }}
+          LOG_JOB_ID: ${{ inputs.job_id || '124590829204' }}
+        run: |
+          set -euo pipefail
+          case "$LOG_JOB_ID" in ''|*[!0-9]*) exit 1;; esac
+          for job in 124570812882 "$LOG_JOB_ID"; do
+            gh api --allow-escape-sequences "repos/$GITHUB_REPOSITORY/actions/jobs/$job/logs" > "$RUNNER_TEMP/import-$job.log"
+            echo "Inspected job ID: $job"
+            python3 -m scripts.summarize_unity_imports "$RUNNER_TEMP/import-$job.log"
+          done
