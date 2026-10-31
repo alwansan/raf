@@ -1,0 +1,27 @@
+name: Raft original Editor cleanup component identities (no LFS)
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-editor-cleanup-probe.yml'
+      - 'scripts/audit_editor_cleanup_components.py'
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Check disk before pinned metadata dependency
+        run: |
+          df -h /
+          test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')" -gt 10485760
+      - name: Install pinned reader
+        run: python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+      - name: Count original scene-owned lifecycle candidates without source export
+        run: python3 scripts/audit_editor_cleanup_components.py Raft/Raft_Data
