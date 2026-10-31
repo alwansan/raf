@@ -51,6 +51,40 @@ jobs:
             timeout 90s "$RUNNER_TEMP/ilspy/ilspycmd" -lv CSharp9_0 -t "$type" "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed/JBooth.MicroSplat.Core.dll" > "$RUNNER_TEMP/runtime-inspection/$name.cs" 2> "$RUNNER_TEMP/ilspy-private.log"
           done
           timeout 90s "$RUNNER_TEMP/ilspy/ilspycmd" -lv CSharp9_0 -t FMOD.VERSION "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed/FMODUnity.dll" > "$RUNNER_TEMP/runtime-inspection/FMOD_VERSION.cs" 2> "$RUNNER_TEMP/ilspy-private.log"
+      - name: Inspect original editor-lifecycle cleanup candidates without publishing source
+        env:
+          DOTNET_PROCESSOR_COUNT: '2'
+        run: |
+          set -euo pipefail
+          timeout 360s "$RUNNER_TEMP/ilspy/ilspycmd" -p -lv CSharp9_0 \
+            -o "$RUNNER_TEMP/lifecycle-original" \
+            "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed/Assembly-CSharp.dll" \
+            > "$RUNNER_TEMP/lifecycle-private.log" 2>&1
+          python3 - <<'PY'
+          import hashlib, json, os, re, shutil
+          from pathlib import Path
+          root = Path(os.environ["RUNNER_TEMP"])
+          packet = root / "runtime-inspection"
+          candidates = []
+          for path in sorted((root / "lifecycle-original").rglob("*.cs")):
+              text = path.read_text(encoding="utf-8-sig")
+              if re.search(r"\b(?:OnDestroy|OnDisable)\s*\(", text) and re.search(r"\b(?:Object\.)?Destroy\s*\(", text):
+                  priority = 0 if re.search(r"ExecuteInEditMode|ExecuteAlways", text) else 1
+                  candidates.append((priority, path, text))
+          selected_bytes = 0
+          inventory = []
+          for priority, path, text in sorted(candidates, key=lambda row: (row[0], str(row[1]))):
+              relative = str(path.relative_to(root / "lifecycle-original"))
+              name = "lifecycle-" + hashlib.sha256(relative.encode()).hexdigest()[:10] + "-" + path.name
+              content = text.encode()
+              if selected_bytes + len(content) > 3500000:
+                  raise SystemExit("Lifecycle source packet exceeds bounded scope; narrow metadata query first")
+              (packet / name).write_bytes(content)
+              selected_bytes += len(content)
+              inventory.append({"file": name, "original_path": relative, "edit_mode_annotation": priority == 0})
+          (packet / "lifecycle-inventory.json").write_text(json.dumps(inventory))
+          print("Original lifecycle metadata candidates:", len(inventory))
+          PY
       - name: Collect bounded native diagnostics without publishing raw log content
         env:
           GH_TOKEN: ${{ github.token }}
@@ -149,7 +183,7 @@ jobs:
           PY
           openssl cms -encrypt -binary -aes-256-cbc -in "$RUNNER_TEMP/inspection-private.zip" -outform DER -out "$RUNNER_TEMP/runtime-inspection.cms" "$RUNNER_TEMP/recipient.pem"
           sha256sum "$RUNNER_TEMP/runtime-inspection.cms"
-          test "$(stat -c %s "$RUNNER_TEMP/runtime-inspection.cms")" -lt 524288
+          test "$(stat -c %s "$RUNNER_TEMP/runtime-inspection.cms")" -lt 2097152
           echo RAFT_PRIVATE_INSPECTION_CMS_BASE64_BEGIN
           base64 -w 76 "$RUNNER_TEMP/runtime-inspection.cms"
           echo RAFT_PRIVATE_INSPECTION_CMS_BASE64_END
