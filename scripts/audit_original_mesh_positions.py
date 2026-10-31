@@ -6,6 +6,7 @@ import gc
 import json
 import math
 from pathlib import Path
+from scripts.mesh_source_files import serialized_sources, owned_objects
 
 
 def position_metrics(vertices, expected):
@@ -18,13 +19,14 @@ def position_metrics(vertices, expected):
     return 'finite'
 
 
-def audit(root):
+def audit(root, expected_meshes=None):
     import UnityPy
     from UnityPy.helpers.MeshHelper import MeshHandler
-    counts, errors = Counter(), Counter()
-    for path in sorted(root.glob('sharedassets*.assets')) + sorted(root.glob('resources.assets')):
+    counts, errors, per_file = Counter(), Counter(), {}
+    for path in serialized_sources(root):
         environment = UnityPy.load(str(path))
-        for obj in environment.objects:
+        per_file[path.name] = sum(obj.type.name == 'Mesh' for obj in owned_objects(environment))
+        for obj in owned_objects(environment):
             if obj.type.name != 'Mesh':
                 continue
             counts['meshes'] += 1
@@ -43,11 +45,12 @@ def audit(root):
         print('Position audit header completed:', path.name, flush=True)
         del environment
         gc.collect()
-    report = {'position_status': dict(counts), 'parse_errors': dict(errors),
+    report = {'position_status': dict(counts), 'parse_errors': dict(errors), 'mesh_counts_by_serialized_owner': per_file,
               'limitations': 'Original Mesh positions only; Unity import/collider cooking/gameplay unverified.'}
     print('RAFT_ORIGINAL_MESH_POSITION_AUDIT ' + json.dumps(report, sort_keys=True), flush=True)
     if (errors or not counts['meshes'] or counts['vertex-count-mismatch'] or
-            counts['nonfinite-or-invalid-position']):
+            counts['nonfinite-or-invalid-position'] or
+            (expected_meshes is not None and counts['meshes'] != expected_meshes)):
         raise SystemExit('Original geometry gate failed; refusing downstream Unity build')
     return report
 
@@ -55,5 +58,8 @@ def audit(root):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--root', type=Path, required=True)
+    parser.add_argument('--manifest', type=Path)
     args = parser.parse_args()
-    audit(args.root)
+    expected = json.loads(args.manifest.read_text())['statistics']['source_meshes'] if args.manifest else None
+    audit(args.root, expected)
+

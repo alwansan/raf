@@ -10,6 +10,7 @@ import gc
 import hashlib
 import json
 from pathlib import Path
+from scripts.mesh_source_files import serialized_sources, owned_objects
 
 from scripts.extract_verified_raft_sources import extraction_plan
 
@@ -46,7 +47,7 @@ def build(root, metadata):
     intervals = defaultdict(list)
     headers = {}
     mesh_count = streamed = selected = 0
-    for path in sorted(root.glob('sharedassets*.assets')) + sorted(root.glob('resources.assets')):
+    for path in serialized_sources(root):
         identity = plan['Raft/Raft_Data/' + path.name]
         actual = sha256_file(path)
         if path.stat().st_size != identity['size']:
@@ -62,7 +63,7 @@ def build(root, metadata):
                 raise ValueError('Original source header Git identity mismatch')
         headers[path.name] = {'size': identity['size'], 'sha256': actual}
         environment = UnityPy.load(str(path))
-        for obj in environment.objects:
+        for obj in owned_objects(environment):
             if obj.type.name != 'Mesh':
                 continue
             mesh_count += 1
@@ -93,17 +94,18 @@ def build(root, metadata):
             raise ValueError('Full private original stream does not match Git LFS identity')
         chunks = []
         with path.open('rb') as source:
-            for offset, size in merged_chunks(spans):
+            for offset, size in merged_chunks([(0, expected['size'])] if name.startswith('level') else spans):
                 source.seek(offset)
                 raw = source.read(size)
                 if len(raw) != size:
                     raise ValueError('Unexpected EOF in verified original stream')
                 chunks.append({'offset': offset, 'size': size, 'sha256': hashlib.sha256(raw).hexdigest()})
-        streams[name] = {'size': expected['size'], 'sha256': expected['digest'], 'chunks': chunks}
+        streams[name] = {'size': expected['size'], 'sha256': expected['digest'], 'chunks': chunks, 'restore_whole': name.startswith('level')}
         print('Verified aggregate Mesh ranges:', name, len(chunks), sum(c['size'] for c in chunks), flush=True)
     stats = {'source_headers': len(headers), 'source_meshes': mesh_count,
              'streamed_meshes': streamed, 'lfs_streamed_meshes': selected,
              'lfs_stream_providers': len(streams),
+             'whole_scene_streams': sum(s['restore_whole'] for s in streams.values()),
              'verified_range_bytes': sum(c['size'] for s in streams.values() for c in s['chunks']),
              'full_source_stream_bytes': sum(s['size'] for s in streams.values())}
     return {'format': 1, 'max_chunk_bytes': 8 * 1024 * 1024,
@@ -120,3 +122,4 @@ if __name__ == '__main__':
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(result, sort_keys=True, indent=2) + '\n')
     print('RAFT_MESH_RANGE_MANIFEST ' + json.dumps(result['statistics'], sort_keys=True))
+

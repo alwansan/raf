@@ -12,7 +12,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
-SOURCE = re.compile(r'^(?:resources|sharedassets\d+)\.assets\.resS$')
+SOURCE = re.compile(r'^(?:(?:resources|sharedassets\d+)\.assets\.resS|level\d+\.resS)$')
 HEX = re.compile(r'^[a-f0-9]{64}$')
 
 
@@ -27,13 +27,20 @@ def validate_manifest(manifest):
         if type(stream['size']) is not int or not 0 < stream['size'] <= 2_500_000_000:
             raise ValueError('Invalid original stream size')
         end = 0
+        whole = stream.get('restore_whole', False)
+        if type(whole) is not bool or not stream['chunks']:
+            raise ValueError('Invalid original stream restoration policy')
         for chunk in stream['chunks']:
             offset, size = chunk['offset'], chunk['size']
+            if whole and offset != end:
+                raise ValueError('Whole original stream has a coverage gap')
             if (type(offset) is not int or type(size) is not int or offset < end or
                     not 0 < size <= manifest['max_chunk_bytes'] or offset + size > stream['size'] or
                     not HEX.fullmatch(chunk['sha256'])):
                 raise ValueError('Unsafe, overlapping or out-of-bounds pinned range')
             end = offset + size
+        if whole and end != stream['size']:
+            raise ValueError('Whole original stream has an uncovered suffix')
 
 
 def cache_path(cache, name, chunk):
@@ -196,3 +203,4 @@ if __name__ == '__main__':
         # Do not print signed URLs, tokens, HTTP bodies or authorization headers.
         detail = 'HTTP ' + str(exc.code) if isinstance(exc, urllib.error.HTTPError) else type(exc).__name__
         raise SystemExit('Original Mesh range recovery failed: ' + detail) from None
+

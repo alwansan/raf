@@ -95,6 +95,9 @@ jobs:
           python3 -m unittest discover -s tests -p test_verified_mesh_ranges.py -v
           python3 -m unittest discover -s tests -p test_inline_mesh_ranges.py -v
           python3 -m unittest discover -s tests -p test_original_mesh_positions.py -v
+          python3 -m unittest discover -s tests -p test_scene_stream_restoration.py -v
+          python3 -m unittest discover -s tests -p test_exported_font_materials.py -v
+          python3 -m unittest discover -s tests -p test_recover_empty_ilspy_sources.py -v
       - name: Download exactly 3 selected scene dependency LFS objects
         shell: bash
         run: |
@@ -187,7 +190,7 @@ jobs:
           python3 -m scripts.inline_verified_mesh_ranges \
             --root "$RUNNER_TEMP/input/Raft_Data" --manifest config/mesh-stream-ranges.json \
             --cache "$RUNNER_TEMP/verified-original-mesh-ranges"
-          python3 -m scripts.audit_original_mesh_positions --root "$RUNNER_TEMP/input/Raft_Data"
+          python3 -m scripts.audit_original_mesh_positions --root "$RUNNER_TEMP/input/Raft_Data" --manifest config/mesh-stream-ranges.json
       - name: Obtain SHA256-pinned AssetRipperCLI v1.0.1
         shell: bash
         run: |
@@ -220,6 +223,8 @@ jobs:
           set -euo pipefail
           dotnet tool install ilspycmd --version 11.2.0.10050 --tool-path "$RUNNER_TEMP/ilspy"
       - name: Decompile gameplay source to private ephemeral temp directory
+        env:
+          DOTNET_PROCESSOR_COUNT: '2'
         shell: bash
         run: |
           set -euo pipefail
@@ -228,11 +233,18 @@ jobs:
             -p -lv CSharp9_0 -o "$RUNNER_TEMP/ilspy-src" \
             "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed/Assembly-CSharp.dll" \
             > "$RUNNER_TEMP/ilspy.log" 2>&1
+          python3 -m scripts.recover_empty_ilspy_sources \
+            --root "$RUNNER_TEMP/ilspy-src" \
+            --assembly "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed/Assembly-CSharp.dll" \
+            --ilspy "$RUNNER_TEMP/ilspy/ilspycmd"
       - name: Record original SDK type identities before template repairs
         shell: bash
         run: |
           python3 -m unittest discover -s tests -p test_build_sdk_script_manifest.py -v
           python3 -m scripts.build_sdk_script_manifest --project "$RUNNER_TEMP/project/ExportedProject" --managed "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed" --out "$RUNNER_TEMP/project/ExportedProject/Assets/Editor/RaftAndroid/sdk-script-manifest.json"
+          python3 -m scripts.audit_exported_font_materials \
+            --project "$RUNNER_TEMP/project/ExportedProject" \
+            --manifest "$RUNNER_TEMP/project/ExportedProject/Assets/Editor/RaftAndroid/sdk-script-manifest.json"
       - name: Overlay uniquely identified real CSharp gameplay into Unity project
         shell: bash
         run: |

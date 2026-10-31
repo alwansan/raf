@@ -12,6 +12,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+from scripts.mesh_source_files import SOURCE, owned_objects
 
 from scripts.fetch_verified_mesh_ranges import validate_manifest, cache_path, read_cached
 
@@ -74,14 +75,47 @@ def external_identity(file):
     return [(item.path, bytes(item.guid), item.type) for item in file.externals]
 
 
+def prepare_whole_streams(root, manifest, cache, pending):
+    restored = 0
+    for name, stream in manifest['streams'].items():
+        if not stream.get('restore_whole'):
+            continue
+        if not name.startswith('level'):
+            raise ValueError('Whole restoration is limited to original scene streams')
+        target = root / name
+        if target.exists():
+            with target.open('rb') as source:
+                if target.stat().st_size != stream['size'] or hashlib.file_digest(source, 'sha256').hexdigest() != stream['sha256']:
+                    raise ValueError('Conflicting original whole scene stream')
+            continue
+        temporary = target.with_name(name + '.mesh-inline-validated')
+        if temporary.exists():
+            raise FileExistsError('Whole-scene validation output already exists')
+        pending.append((temporary, target))
+        digest, written = hashlib.sha256(), 0
+        with temporary.open('xb') as output:
+            for chunk in stream['chunks']:
+                if chunk['offset'] != written:
+                    raise ValueError('Whole original scene stream has a gap')
+                raw = read_cached(cache_path(cache, name, chunk), chunk)
+                output.write(raw)
+                digest.update(raw)
+                written += len(raw)
+        if written != stream['size'] or digest.hexdigest() != stream['sha256']:
+            raise ValueError('Whole original scene stream identity mismatch')
+        restored += 1
+    return restored
+
+
 def inline_headers(root, manifest, cache):
     import UnityPy
     validate_manifest(manifest)
     pending, total, verified_unchanged = [], 0, 0
     try:
+        whole_streams = prepare_whole_streams(root, manifest, cache, pending)
         # Pin every original header before preparing any output.
         for name, identity in manifest['headers'].items():
-            if Path(name).name != name or not name.endswith('.assets'):
+            if Path(name).name != name or not SOURCE.fullmatch(name):
                 raise ValueError('Unsafe serialized source header path')
             path = root / name
             if path.stat().st_size != identity['size']:
@@ -93,10 +127,10 @@ def inline_headers(root, manifest, cache):
             path = root / name
             environment = UnityPy.load(str(path))
             file = environment.file
-            original_ids = {obj.path_id: obj.type.value for obj in environment.objects}
+            original_ids = {obj.path_id: obj.type.value for obj in owned_objects(environment)}
             original_raw, modified = {}, {}
             references, version = external_identity(file), file.unity_version
-            for obj in environment.objects:
+            for obj in owned_objects(environment):
                 original_raw[obj.path_id] = hashlib.sha256(obj.get_raw_data()).hexdigest()
                 if obj.type.name != 'Mesh':
                     continue
@@ -128,10 +162,10 @@ def inline_headers(root, manifest, cache):
             with temporary.open('xb') as output:
                 output.write(file.save())
             check = UnityPy.load(str(temporary))
-            if ({obj.path_id: obj.type.value for obj in check.objects} != original_ids or
+            if ({obj.path_id: obj.type.value for obj in owned_objects(check)} != original_ids or
                     external_identity(check.file) != references or check.file.unity_version != version):
                 raise ValueError('Original object IDs/types/version/external references changed')
-            for obj in check.objects:
+            for obj in owned_objects(check):
                 if obj.path_id not in modified:
                     if hashlib.sha256(obj.get_raw_data()).hexdigest() != original_raw[obj.path_id]:
                         raise ValueError('An unmodified original serialized object changed')
@@ -156,6 +190,7 @@ def inline_headers(root, manifest, cache):
         for temporary, _ in pending:
             temporary.unlink(missing_ok=True)
     report = {'inlined_original_meshes': total, 'verified_unchanged_original_objects': verified_unchanged,
+              'verified_whole_scene_streams_restored': whole_streams,
               'original_object_ids_and_external_references_unchanged': True,
               'fabricated_whole_stream_files': 0}
     print('RAFT_ORIGINAL_MESH_STREAM_INLINE ' + json.dumps(report, sort_keys=True), flush=True)
@@ -169,3 +204,4 @@ if __name__ == '__main__':
     parser.add_argument('--cache', type=Path, required=True)
     args = parser.parse_args()
     inline_headers(args.root, json.loads(args.manifest.read_text()), args.cache)
+
