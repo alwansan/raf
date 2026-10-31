@@ -76,5 +76,46 @@ class RepairAssetRipperTemplatesTests(unittest.TestCase):
         d=fix_stubs(self.assets,apply=True)
         self.assertEqual(d["not_minimal_stub"],1)
         self.assertTrue(p.exists())
+
+    def test_preserve_real_timeline_types_under_decompiled_mode(self):
+        folder=self.assets/"Scripts/Unity.Timeline/UnityEngine/Timeline"
+        folder.mkdir(parents=True)
+        before=b"fileFormatVersion: 2\nguid: a1b2c3d4e5f607182938404142434445\n"
+        for name,base in (("AnimationTrack","TrackAsset"),("AnimationPlayableAsset","PlayableAsset")):
+            target=folder/(name+".cs")
+            code="using UnityEngine;\nnamespace UnityEngine.Timeline { public class "+name+" : "+base+" { public int RealData=7; } }"
+            target.write_text(code)
+            target.with_name(target.name+".meta").write_bytes(before)
+        result=fix_stubs(self.assets,apply=True,repair_timeline=True)
+        self.assertEqual(result.get("preserved_real_timeline_source"),2)
+        self.assertEqual(result.get("fixed_candidates",0),0)
+        for name in ("AnimationTrack","AnimationPlayableAsset"):
+            target=folder/(name+".cs")
+            self.assertIn("RealData",target.read_text())
+            self.assertEqual(target.with_name(target.name+".meta").read_bytes(),before)
+
+    def test_preserve_hyphen_filename_if_real_class_name_is_valid(self):
+        p=self.package/"-BurstDirectCallInitializer.cs"
+        source="namespace Unity.Collections { internal static class BurstDirectCallInitializer { public static void Initialize() {} } }"
+        p.write_text(source)
+        r=fix_stubs(self.assets,apply=True)
+        self.assertEqual(r.get("preserved_non_script_filename"),1)
+        self.assertEqual(r.get("unmatched_or_ambiguous",0),0)
+        self.assertEqual(p.read_text(),source)
+
+    def test_illegal_hyphen_class_declaration_is_repaired_only_with_meta(self):
+        p=self.package/"-Invalid.cs"
+        p.write_text("using UnityEngine;\npublic class -Invalid : MonoBehaviour { }")
+        meta=p.with_name(p.name+".meta")
+        expected=b"guid: a1b2c3d4e5f607182938404142434445\n"
+        meta.write_bytes(expected)
+        report=fix_stubs(self.assets,apply=True)
+        self.assertEqual(report.get("fixed_candidates"),1)
+        self.assertFalse(p.exists())
+        renamed=list(self.package.glob("RecoveredStub_*.cs"))
+        self.assertEqual(len(renamed),1)
+        self.assertEqual(renamed[0].with_name(renamed[0].name+".meta").read_bytes(),expected)
+
+
 if __name__=="__main__":
     unittest.main()

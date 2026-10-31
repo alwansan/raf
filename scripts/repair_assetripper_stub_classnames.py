@@ -54,6 +54,19 @@ def fix_stubs(assets: Path, *, apply: bool, repair_timeline: bool = False) -> di
         original=path.read_text(encoding="utf-8-sig",errors="replace")
         matches=[m for m in DECL.finditer(original) if m.group("classname")==bad_name]
         if len(matches)!=1:
+            # A real Decompiled SDK type is NOT the old synthetic Timeline MonoBehaviour.
+            # Keep it and its original GUID intact; Unity/sdk isolation checks compilation.
+            if timeline_template and len(matches)==0:
+                count["preserved_real_timeline_source"]+=1
+                continue
+            # A C# filename may legally start with a hyphen; only a TYPE declaration
+            # containing that invalid identifier would need a source repair.
+            if bad_name.startswith("-") and len(matches)==0:
+                illegal_type=re.search(r"\b(?:class|struct|interface|enum|record|delegate)\s+"+
+                                       re.escape(bad_name)+r"(?=[\s:{(<])",original)
+                if not illegal_type:
+                    count["preserved_non_script_filename"]+=1
+                    continue
             count["unmatched_or_ambiguous"]+=1
             if len(examples)<12: examples.append({"file":str(path.relative_to(assets)),"reason":"no single matching invalid MonoBehaviour class declaration"})
             continue

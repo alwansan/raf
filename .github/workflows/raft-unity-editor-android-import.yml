@@ -90,6 +90,7 @@ jobs:
         run: |
           python3 -m unittest discover -s tests -p test_csharp_overlay.py -v
           python3 -m unittest discover -s tests -p test_supplement_ilspy_gameplay.py -v
+          python3 -m unittest discover -s tests -p test_repair_assetripper_stubs.py -v
           python3 -m unittest discover -s tests -p test_stage_raft_managed_dlls.py -v
           python3 -m unittest discover -s tests -p test_resolve_managed_closure.py -v
           python3 -m unittest discover -s tests -p test_build_sdk_script_manifest.py -v
@@ -321,7 +322,7 @@ jobs:
           python3 scripts/normalize_csharp_namespaces.py \
             --root "$RUNNER_TEMP/project/ExportedProject/Assets" \
             --apply --require-clean
-      - name: Repair 79 invalid AssetRipper package stub class names, retain Unity GUIDs
+      - name: Audit real Decompiled SDK scripts; repair only synthetic invalid AssetRipper stubs
         shell: bash
         run: |
           set -euo pipefail
