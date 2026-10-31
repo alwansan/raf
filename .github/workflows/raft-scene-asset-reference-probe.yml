@@ -14,6 +14,8 @@ concurrency:
   cancel-in-progress: true
 jobs:
   verify:
+    # Deliberate isolated export only; ordinary repair edits are verified before LFS in native CI.
+    if: ${{ github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[raft-scene-reference-probe]') }}
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:

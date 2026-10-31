@@ -14,6 +14,8 @@ on:
     paths:
       - '.github/workflows/raft-unity-editor-android-import.yml'
       - 'scripts/overlay_ilspy_gameplay.py'
+      - 'scripts/reembed_scene_bound_assets.py'
+      - 'tests/test_reembed_scene_bound_assets.py'
       - 'scripts/supplement_ilspy_gameplay.py'
       - 'tests/test_supplement_ilspy_gameplay.py'
       - 'tests/test_csharp_overlay.py'
@@ -90,6 +92,7 @@ jobs:
           persist-credentials: true
       - name: Run synthetic code-overlay tests before touching original data
         run: |
+          python3 -m unittest discover -s tests -p test_reembed_scene_bound_assets.py -v
           python3 -m unittest discover -s tests -p test_csharp_overlay.py -v
           python3 -m unittest discover -s tests -p test_supplement_ilspy_gameplay.py -v
           python3 -m unittest discover -s tests -p test_repair_assetripper_stubs.py -v
@@ -234,6 +237,12 @@ jobs:
           test -d "$RUNNER_TEMP/project/ExportedProject/Assets"
           test -d "$RUNNER_TEMP/project/ExportedProject/ProjectSettings"
           df -h /
+      - name: Restore scene-owned ScriptableObjects before Unity can import invalid cross-scene assets
+        shell: bash
+        run: |
+          python3 -m scripts.reembed_scene_bound_assets \
+            --project "$RUNNER_TEMP/project/ExportedProject" \
+            --apply --backup-dir "$RUNNER_TEMP/original-scene-bound-files"
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '10.0.x'
