@@ -1,10 +1,14 @@
 from pathlib import Path
 import tempfile
 import unittest
-from scripts.audit_exported_font_materials import audit
+from scripts.audit_exported_font_materials import audit,require_valid
 
 
 class FontMaterialTests(unittest.TestCase):
+    def test_strict_gate_refuses_incomplete_count_or_any_unresolved_material(self):
+        require_valid({'counts':{'font_assets':13,'resolved_material_assets':13}},13)
+        for counts in [{}, {'font_assets':13,'resolved_material_assets':12}, {'font_assets':12,'resolved_material_assets':12}]:
+            with self.assertRaises(ValueError):require_valid({'counts':counts},13)
     def test_resolves_actual_material_and_distinguishes_null_missing_wrong_type(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp); assets = root / 'Assets'; assets.mkdir()
@@ -26,3 +30,4 @@ class FontMaterialTests(unittest.TestCase):
             root = Path(tmp);(root/'Assets').mkdir()
             with self.assertRaises(ValueError):
                 audit(root, {'scripts': [{'fullTypeName': 'TMPro.TMP_FontAsset', 'usagePaths': ['../outside.asset']}]})
+

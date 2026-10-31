@@ -90,6 +90,7 @@ jobs:
           python3 -m unittest discover -s tests -p test_stage_raft_managed_dlls.py -v
           python3 -m unittest discover -s tests -p test_resolve_managed_closure.py -v
           python3 -m unittest discover -s tests -p test_build_sdk_script_manifest.py -v
+          python3 -m unittest discover -s tests -p test_exported_font_materials.py -v
           python3 -m unittest discover -s tests -p test_isolate_sdk_source_assemblies.py -v
           python3 -m unittest discover -s tests -p test_mesh_range_manifest.py -v
           python3 -m unittest discover -s tests -p test_verified_mesh_ranges.py -v
@@ -98,6 +99,14 @@ jobs:
           python3 -m unittest discover -s tests -p test_scene_stream_restoration.py -v
           python3 -m unittest discover -s tests -p test_exported_font_materials.py -v
           python3 -m unittest discover -s tests -p test_recover_empty_ilspy_sources.py -v
+      - name: Validate original CLR providers before any LFS transfer
+        run: |
+          python3 -m unittest discover -s tests -p test_export_managed_providers.py -v
+          python3 -m unittest discover -s tests -p test_assetripper_script_import.py -v
+          python3 -m pip install --user --disable-pip-version-check dnfile==0.18.0
+          python3 -m scripts.stage_export_managed_providers \
+            --source "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed" \
+            --destination "$RUNNER_TEMP/input/Raft_Data/Managed"
       - name: Download exactly 3 selected scene dependency LFS objects
         shell: bash
         run: |
@@ -164,7 +173,8 @@ jobs:
           set -euo pipefail
           root="$RUNNER_TEMP/input/Raft_Data"
           mkdir -p "$root/Managed"
-          cp Raft/Raft_Data/Managed/*.dll "$root/Managed/"
+          test -f "$root/Managed/Assembly-CSharp.dll"
+          test ! -e "$root/Managed/PlayFab_o.dll"
           cp Raft/Raft_Data/boot.config "$root/"
           shopt -s nullglob
           count=0
@@ -202,7 +212,10 @@ jobs:
           mkdir -p "$RUNNER_TEMP/ar"
           unzip -q "$RUNNER_TEMP/assetripper.zip" -d "$RUNNER_TEMP/ar"
           chmod +x "$RUNNER_TEMP/ar/AssetRipper.GUI.Free"
+          python3 -m scripts.configure_assetripper_export --directory "$RUNNER_TEMP/ar"
       - name: Export 40 scenes into a Unity Editor project with correct MonoScript metadata
+        env:
+          DOTNET_PROCESSOR_COUNT: '2'
         shell: bash
         run: |
           set -euo pipefail
@@ -211,6 +224,7 @@ jobs:
             --output "$RUNNER_TEMP/project" --mode unity \
             --script-content-level Level1 --ignore-streaming-assets \
             > "$RUNNER_TEMP/export.log" 2>&1
+          python3 -m scripts.verify_assetripper_script_import --log "$RUNNER_TEMP/export.log"
           test -d "$RUNNER_TEMP/project/ExportedProject/Assets"
           test -d "$RUNNER_TEMP/project/ExportedProject/ProjectSettings"
           df -h /
@@ -244,7 +258,7 @@ jobs:
           python3 -m scripts.build_sdk_script_manifest --project "$RUNNER_TEMP/project/ExportedProject" --managed "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed" --out "$RUNNER_TEMP/project/ExportedProject/Assets/Editor/RaftAndroid/sdk-script-manifest.json"
           python3 -m scripts.audit_exported_font_materials \
             --project "$RUNNER_TEMP/project/ExportedProject" \
-            --manifest "$RUNNER_TEMP/project/ExportedProject/Assets/Editor/RaftAndroid/sdk-script-manifest.json"
+            --manifest "$RUNNER_TEMP/project/ExportedProject/Assets/Editor/RaftAndroid/sdk-script-manifest.json" --require-valid --expected-fonts 13
       - name: Overlay uniquely identified real CSharp gameplay into Unity project
         shell: bash
         run: |
@@ -296,7 +310,7 @@ jobs:
         shell: bash
         run: |
           python3 -m unittest discover -s tests -p test_isolate_sdk_source_assemblies.py -v
-          python3 scripts/isolate_sdk_source_assemblies.py --project "$RUNNER_TEMP/project/ExportedProject" --manifest "$RUNNER_TEMP/project/ExportedProject/Assets/Editor/RaftAndroid/sdk-script-manifest.json" --apply
+          python3 scripts/isolate_sdk_source_assemblies.py --project "$RUNNER_TEMP/project/ExportedProject" --manifest "$RUNNER_TEMP/project/ExportedProject/Assets/Editor/RaftAndroid/sdk-script-manifest.json" --apply --disable-template-compilation
       - name: Downgrade ILSpy CSharp 10 file-scoped namespaces to Unity 2021 CSharp 9
         shell: bash
         run: |

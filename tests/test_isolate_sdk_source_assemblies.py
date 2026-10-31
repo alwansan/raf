@@ -32,6 +32,19 @@ class SdkSourceIsolationTests(unittest.TestCase):
         before=self.sdk.read_bytes()
         isolate(self.root,self.manifest,apply=False)
         self.assertEqual(self.sdk.read_bytes(),before)
+    def test_complete_sdk_sources_are_retained_without_compilation(self):
+        before=self.meta.read_bytes()
+        isolate(self.root,self.manifest,apply=True,disable_compilation=True)
+        data=json.loads(self.sdk.read_text())
+        self.assertEqual(data['includePlatforms'],['Editor'])
+        self.assertIn('!UNITY_EDITOR',data['defineConstraints'])
+        self.assertEqual(self.meta.read_bytes(),before)
+    def test_helper_only_sdk_is_also_excluded_in_decompiled_mode(self):
+        extra=self.root/'Assets/Scripts/HelperOnly/HelperOnly.asmdef'
+        extra.parent.mkdir()
+        extra.write_text('{"name":"HelperOnly"}')
+        isolate(self.root,self.manifest,apply=True,disable_compilation=True)
+        self.assertIn('!UNITY_EDITOR',json.loads(extra.read_text())['defineConstraints'])
     def test_refuses_gameplay(self):
         self.manifest.write_text(json.dumps({"scripts":[{"assemblyName":"Assembly-CSharp"}]}))
         with self.assertRaises(ValueError): isolate(self.root,self.manifest,apply=True)
@@ -48,3 +61,4 @@ class SdkSourceIsolationTests(unittest.TestCase):
         with self.assertRaises(json.JSONDecodeError): isolate(self.root,self.manifest,apply=True)
         self.assertEqual(self.sdk.read_bytes(),before)
 if __name__=="__main__": unittest.main()
+

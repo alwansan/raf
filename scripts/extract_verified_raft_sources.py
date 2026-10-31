@@ -14,7 +14,7 @@ import re
 from scripts.extract_raft_lfs_from_rar import open_libarchive
 
 ALLOWED = re.compile(r'^Raft/Raft_Data/(?:(?:sharedassets\d+|resources)\.assets(?:\.resS)?|'
-                     r'level\d+(?:\.resS)?|globalgamemanagers(?:\.assets)?|boot\.config|Managed/[^/]+\.dll)$')
+                     r'level\d+(?:\.resS)?|globalgamemanagers(?:\.assets(?:\.resS)?)?|boot\.config|Managed/[^/]+\.dll)$')
 
 
 def extraction_plan(metadata):
@@ -122,4 +122,5 @@ if __name__ == '__main__':
     parser.add_argument('--destination', type=Path, required=True)
     args = parser.parse_args()
     extract(args.archive, json.loads(args.metadata.read_text()), args.destination)
+
 

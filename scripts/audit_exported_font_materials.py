@@ -46,11 +46,22 @@ def audit(project, manifest):
     return report
 
 
+def require_valid(report, expected=None):
+    count = report['counts'].get('font_assets', 0)
+    if not count or report['counts'].get('resolved_material_assets', 0) != count or (expected is not None and count != expected):
+        raise ValueError('Original exported font material fidelity gate failed')
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--project', type=Path, required=True)
     parser.add_argument('--manifest', type=Path, required=True)
+    parser.add_argument('--require-valid', action='store_true')
+    parser.add_argument('--expected-fonts', type=int)
     args = parser.parse_args()
     result = audit(args.project, json.loads(args.manifest.read_text()))
     if not result['counts'].get('font_assets'):
         raise SystemExit('No original TMP font identities found')
+    if args.require_valid:
+        require_valid(result, args.expected_fonts)
+

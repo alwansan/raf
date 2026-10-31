@@ -4,9 +4,14 @@ import argparse
 import json
 from pathlib import Path
 import re
-def isolate(project: Path, manifest: Path, *, apply: bool):
+def isolate(project: Path, manifest: Path, *, apply: bool, disable_compilation: bool=False):
     data=json.loads(manifest.read_text(encoding="utf8"))
     names=sorted({row["assemblyName"] for row in data["scripts"]})
+    if disable_compilation:
+        # Decompiled mode also emits helper-only SDKs without MonoScript metas.
+        # They need the same quarantine as SDKs referenced by scene components.
+        names=sorted(set(names)|{folder.name for folder in (project/'Assets/Scripts').iterdir()
+            if folder.is_dir() and folder.name not in {'Assembly-CSharp','Assembly-CSharp-Extras'}})
     plans=[]
     for name in names:
         if name in {"Assembly-CSharp","Assembly-CSharp-Extras"} or not re.fullmatch(r"[A-Za-z_][A-Za-z_0-9.-]*",name):
@@ -19,6 +24,11 @@ def isolate(project: Path, manifest: Path, *, apply: bool):
             contents["includePlatforms"]=["Editor"]
             contents["excludePlatforms"]=[]
             contents["autoReferenced"]=False
+            if disable_compilation:
+                # Editor-only plus !UNITY_EDITOR cannot compile on any platform.
+                # Original scripts/metas stay available for identity rebinding.
+                constraints=contents.setdefault('defineConstraints', [])
+                if '!UNITY_EDITOR' not in constraints: constraints.append('!UNITY_EDITOR')
             meta=path.with_name(path.name+".meta")
             if meta.exists() and not meta.is_file():
                 raise ValueError("SDK asmdef metadata is not a file")
@@ -39,5 +49,7 @@ if __name__=="__main__":
     p.add_argument("--project",required=True,type=Path)
     p.add_argument("--manifest",required=True,type=Path)
     p.add_argument("--apply",action="store_true")
+    p.add_argument("--disable-template-compilation",action="store_true")
     a=p.parse_args()
-    isolate(a.project,a.manifest,apply=a.apply)
+    isolate(a.project,a.manifest,apply=a.apply,disable_compilation=a.disable_template_compilation)
+
