@@ -365,3 +365,39 @@ Earlier experiments failed because the Unity license was not visible in a GitHub
 
 - [Two-stream native **41133104278**](https://github.com/alwansan/raf/actions/runs/41133104278), source commit `276c593134ca15ba80956d3615bfa3b50fcaaac7`, is **in progress**. This is the single deliberate test of source24 together with already verified source29. Inspect its actual result before any further full build.
 - Isolated restoration 41132754593 is confirmed completed SUCCESS. Whole-meta preservation was measured on the original 18 repaired Mesh assets; independently generated provider GUIDs were deliberately not copied. Main reconstruction uses verified original streams in a fresh coherent full export; helper is not blindly applied to whole-project duplicate names.
+
+## 2026-10-31 — complete original Mesh range recovery (latest checkpoint)
+
+### Two-stream native result: real improvement has non-monotonic error categories
+
+- [Native 41133104278](https://github.com/alwansan/raf/actions/runs/41133104278), source `276c593134ca15ba80956d3615bfa3b50fcaaac7`, job **124328835472**, completed SUCCESS including the strengthened ELF audit. [Incremental comparison 41191895353](https://github.com/alwansan/raf/actions/runs/41191895353), job **124510195212**, PASSED without another build or LFS data fetch.
+- Compared with source29-only native: reported errors **1913→2430**, non-finite lines **1147→1739**, distinct non-finite names **106→110**, broader failed names **228→205**, Quickhull lines **23→15**, non-accessible lines **711→633**, NullReference lines **52→52**. All **18 targeted source24 names cleared**. 44 former non-finite names cleared and 48 entered that category; all 48 already failed under other collider categories. **Zero newly broadly failed Mesh names.** Do not describe total error counts as monotonically improving.
+- Actual config: ARM64 IL2CPP, 40 enabled scenes, **64642/64642** original script links, original script meta unchanged, zero emitted distinct C# diagnostics. APK bytes **860182261**; SHA256 **289c1acec2c837075f21d6e2f8fe031599cf5707888a9dbc0f3208ef9e63e4d0**. Strengthened validator checked **3 actual AArch64 ELF shared libraries**. FMOD native library still absent. APK remained disposable, no verified playable/downloadable build or device test.
+- This category churn prompted a complete Mesh-buffer recovery route instead of more single-stream native builds.
+
+### Supplied original archive recovered privately; no extra full Git LFS download
+
+- Used the owner's six previously supplied `Raft-SteamRIP.com.zip.001`–`.006` files. Do not request reuploads. Read them with bounded random access, avoiding a second concatenated 2.6 GB ZIP. Outer ZIP CRC verified; extracted its one original `Raft-SteamRIP.com.rar` (2636697429 bytes). Never execute original Windows native programs.
+- New `scripts/archive_parts_reader.py` and `scripts/extract_verified_raft_sources.py` recover only allowlisted serialized files and Managed CIL DLLs. Exact immutable Git-tree blob identities authenticate ordinary files; LFS pointer blob SHA1 and actual LFS SHA256/size authenticate large files. Real private recovery verified **256 original files / 7052417221 bytes**, including **14 original LFS objects without Git LFS transfer**.
+- Current private local paths: `private_source_archive/` and `private_recovered_source/Raft/Raft_Data` under this session workspace. They may expire after inactivity. Nothing from those raw archives, source assets or DLLs was committed or uploaded. Only reusable tooling and aggregate cryptographic coverage metadata were committed.
+
+### Range manifest and actual bounded transport proof
+
+- `config/mesh-stream-ranges.json` contains **only source/header fingerprints and merged byte-range SHA256s**, not vertices, game bytes, Mesh names/path IDs or decompiled code. Produced from original streams whose COMPLETE SHA256/size were verified against Git LFS pointers.
+- Complete scan: **41 original headers, 4046 Mesh objects, 1877 streamed Mesh objects**. **1845** depend on 11 Git LFS streams; the other 32 stream-backed meshes use ordinary Git files. Exactly **334 pinned chunks / 203233824 bytes (~194 MiB)** cover every LFS Mesh vertex payload, versus **6017902000 bytes** for those whole stream objects.
+- [Real transport probe **41193386035**](https://github.com/alwansan/raf/actions/runs/41193386035), job **124514553156**, PASSED: exactly **42840 remote bytes**, HTTP range honored and range SHA256 matched. Small tests ran first. Client refuses any non-206 response, incorrect Content-Range/size/digest, redirects or full-object fallback. Signed URLs/tokens remain private; the GitHub batch token is never forwarded to object storage.
+- `scripts/fetch_verified_mesh_ranges.py` validates original checkout pointers, reuses already verified full original streams, and downloads at most four bounded ranges concurrently. It prints aggregate counters only.
+
+### Actual complete serialized-source round-trip and finite-position gate
+
+- Added `scripts/inline_verified_mesh_ranges.py`: operate only in staged serialized-header copies. Fill original Mesh m_VertexData.m_DataSize from pinned original bytes and clear that Mesh's external stream descriptor. No fake sparse whole-stream file, fabricated vertex, removed collider or blanket readability change.
+- Verified every original header SHA256 before preparing output. After serialization/reload, verify original path IDs/type IDs/version/external references, every untouched object body's SHA256, every other modified Mesh field's fingerprint, and exact restored payload size/SHA256. Validate all header outputs before replacing any staged header.
+- **Actual local original-data test PASSED:** **1845 Mesh buffers inlined**, **56718 untouched original objects byte-identical**, every original object identity/external reference retained. Local cache contains 203233824 verified range bytes, built from the private verified originals without network.
+- `scripts/audit_original_mesh_positions.py` then read all **4046** staged original meshes: **4045 finite, 1 intentionally empty original Mesh**, zero count mismatches, non-finite/invalid positions or parse errors. No missing payload was disguised as an empty Mesh. This is source geometry proof, not yet AssetRipper/Unity collision proof.
+- Affected local test group **51/51 PASSED**. Not the entire repository's unrelated test suite.
+
+### Deliberate global Mesh native gate
+
+- This commit requests one native build with the global pinned Mesh-buffer recovery and finite-position gate **before AssetRipper export**. Ordinary SDK-only validation retains its previous scope. Keep existing full source24/source29 streams for the texture data already restored; their Mesh chunks are reused locally. Extra network Mesh range scope is **191020388 bytes**, rather than downloading the other whole multi-GB streams; total selected original payload scope is **1126207804 bytes** including three source headers and both existing full streams.
+- Inspect this new run next. Compare to native 41133104278, focusing on distinct Mesh failure sets and actual non-finite/Quickhull diagnostics, all 40 scenes and script links, full ELF audit, APK size and FMOD absence. Do not claim the new native run succeeded until verified.
+- Texture/audio stream recovery beyond the two full streams, Steam/Party-safe offline startup, original .rgd save integration, touch input and device performance remain unfinished. The range method restores Mesh buffers only and does not pretend unrecovered textures/audio exist.

@@ -91,6 +91,10 @@ jobs:
           python3 -m unittest discover -s tests -p test_resolve_managed_closure.py -v
           python3 -m unittest discover -s tests -p test_build_sdk_script_manifest.py -v
           python3 -m unittest discover -s tests -p test_isolate_sdk_source_assemblies.py -v
+          python3 -m unittest discover -s tests -p test_mesh_range_manifest.py -v
+          python3 -m unittest discover -s tests -p test_verified_mesh_ranges.py -v
+          python3 -m unittest discover -s tests -p test_inline_mesh_ranges.py -v
+          python3 -m unittest discover -s tests -p test_original_mesh_positions.py -v
       - name: Download exactly 3 selected scene dependency LFS objects
         shell: bash
         run: |
@@ -170,6 +174,20 @@ jobs:
           echo "Source serialized files staged: $count"
           test "$count" -gt 110
           du -sh "$root"
+      - name: Restore every pinned external Mesh buffer while retaining original serialized identities
+        if: ${{ (github.event_name == 'workflow_dispatch' && inputs.build_mode == 'native') || (github.event_name == 'push' && contains(github.event.head_commit.message, '[raft-native-build]')) }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.fetch_verified_mesh_ranges \
+            --manifest config/mesh-stream-ranges.json --source-root "$GITHUB_WORKSPACE/Raft/Raft_Data" \
+            --cache "$RUNNER_TEMP/verified-original-mesh-ranges"
+          python3 -m scripts.inline_verified_mesh_ranges \
+            --root "$RUNNER_TEMP/input/Raft_Data" --manifest config/mesh-stream-ranges.json \
+            --cache "$RUNNER_TEMP/verified-original-mesh-ranges"
+          python3 -m scripts.audit_original_mesh_positions --root "$RUNNER_TEMP/input/Raft_Data"
       - name: Obtain SHA256-pinned AssetRipperCLI v1.0.1
         shell: bash
         run: |
