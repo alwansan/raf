@@ -68,6 +68,8 @@ jobs:
           matched = []
           native_headers = Counter()
           preceding = None
+          destroy_stack = []
+          collecting_destroy = False
           wanted = {"00e21d8b1e9fa243", "e2444b0b258c8bec"}
           follow = 0
           with (root / "native-private.log").open(encoding="utf-8-sig", errors="replace") as source:
@@ -79,6 +81,12 @@ jobs:
                   first_frame = ("StackWalker::GetCurrentCallstack" in clean or bool(re.match(r"^(?:\[[^\]]+\]\s*)?#0\b", clean)))
                   if first_frame and preceding:
                       native_headers[preceding] += 1
+                      if preceding == "Destroying an object in edit mode destroys it permanently." and not destroy_stack:
+                          collecting_destroy = True
+                  if collecting_destroy and native and len(destroy_stack) < 55:
+                      destroy_stack.append(clean)
+                  elif collecting_destroy and not native and destroy_stack:
+                      collecting_destroy = False
                   if clean.strip() and not native and not re.match(r"^\s*(?:at\s+)?(?:UnityEngine|UnityEditor)\.\w+[:.]", clean):
                       preceding = re.sub(r"^\[[^\]]+\]\s*", "", clean).strip()
                   if any(hashlib.sha256(candidate.lower().encode()).hexdigest()[:16] in wanted for candidate in (clean, clean.strip())):
@@ -90,7 +98,7 @@ jobs:
                       selected.append(line)
                       follow -= 1
                   previous.append(line)
-          content = "--- NATIVE STACK HEADINGS ---\n" + json.dumps(native_headers.most_common(20)) + "\n--- EXACT BUILDREPORT HASH MATCHES ---\n" + "".join(matched)[:100000] + "\n--- CONTEXT ---\n" + "".join(dict.fromkeys(selected))[:1500000] + "\n--- BUILD TAIL ---\n" + "".join(tail)[-300000:]
+          content = "--- NATIVE STACK HEADINGS ---\n" + json.dumps(native_headers.most_common(20)) + "\n--- FIRST EDIT-MODE DESTROY STACK ---\n" + "\n".join(destroy_stack) + "\n--- EXACT BUILDREPORT HASH MATCHES ---\n" + "".join(matched)[:100000] + "\n--- CONTEXT ---\n" + "".join(dict.fromkeys(selected))[:1500000] + "\n--- BUILD TAIL ---\n" + "".join(tail)[-300000:]
           (root / "runtime-inspection/native-diagnostics.txt").write_text(content)
           PY
       - name: Encrypt packet for this Work session; publish no plaintext source or license files
