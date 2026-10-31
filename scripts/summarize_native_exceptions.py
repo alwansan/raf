@@ -11,7 +11,7 @@ FRAME = re.compile(r'^\s*(?:at\s+)?([A-Za-z_][\w.`+<>]*(?:\.[\w`+<>]+)+)\s*\(')
 
 
 def summarize(lines):
-    exceptions, origins, categories = Counter(), Counter(), Counter()
+    exceptions, origins, categories, fields = Counter(), Counter(), Counter(), Counter()
     pending = None
     for raw in lines:
         line = ANSI.sub('', raw).strip('\ufeff\r\n')
@@ -23,6 +23,9 @@ def summarize(lines):
         if match:
             pending = match[1]
             exceptions[pending] += 1
+            field = re.search(r'The variable ([A-Za-z_]\w*) of ([A-Za-z_]\w*) has not been assigned', line)
+            if field:
+                fields[field[2] + '.' + field[1]] += 1
             continue
         if pending:
             frame = FRAME.match(line)
@@ -45,6 +48,7 @@ def summarize(lines):
             if needle in lowered:
                 categories[category] += 1
     return {'exception_occurrences': dict(exceptions),
+            'unassigned_field_occurrences': dict(fields.most_common(40)),
             'first_stack_method_occurrences': dict(origins.most_common(40)),
             'diagnostic_pattern_occurrences': dict(categories),
             'limitations': 'Log occurrences may be duplicated; not BuildReport error accounting. No raw messages, arguments, paths or source emitted.'}

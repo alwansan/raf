@@ -23,3 +23,8 @@ class ExceptionSummaryTests(unittest.TestCase):
     def test_fixed_categories_do_not_emit_messages(self):
         result = summarize(['Shader error in private shader', 'Error: private data'])
         self.assertEqual(result['diagnostic_pattern_occurrences'], {'shader_error': 1, 'error_prefixed': 1})
+
+    def test_unassigned_field_identity_only(self):
+        result = summarize(['UnassignedReferenceException: The variable image of Widget has not been assigned. Private advice'])
+        self.assertEqual(result['unassigned_field_occurrences'], {'Widget.image': 1})
+        self.assertNotIn('Private advice', str(result))
