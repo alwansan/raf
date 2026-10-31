@@ -1,9 +1,14 @@
 import json
 import unittest
-from scripts.summarize_native_geometry import inspect_log, compare
+from scripts.summarize_native_geometry import inspect_log, compare, target_names
 
 
 class NativeGeometrySummaryTests(unittest.TestCase):
+    def test_select_actual_incremental_stream_not_historical_target(self):
+        matches = {'A': [{'source': 'sharedassets24.assets', 'stream_file': 'sharedassets24.assets.resS'}],
+                   'B': [{'source': 'sharedassets29.assets', 'stream_file': 'sharedassets29.assets.resS'}]}
+        self.assertEqual(target_names(matches, 'sharedassets24.assets.resS'), {'A'})
+
     def test_nonfinite_names_and_lines_are_distinct(self):
         line = 'Failed extracting collision mesh because vertex contains a non-finite value (nan). Mesh asset path "Assets/Mesh/A.asset"'
         report, broad, bad = inspect_log([line, line, 'Mesh asset path "Assets/Mesh/B.asset"'])

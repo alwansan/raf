@@ -13,7 +13,7 @@ ANSI = re.compile(r'\x1b\[[0-?]*[ -/]*[@-~]')
 def inspect_log(lines):
     broad, nonfinite, compiler = set(), set(), set()
     counts = Counter()
-    result, apk, bindings, links = None, None, None, None
+    result, apk, bindings, links, config = None, None, None, None, None
     for raw in lines:
         line = ANSI.sub('', raw).strip('\ufeff\r\n ')
         line = re.sub(r'^\d{4}-\d\d-\d\dT\S+Z\s*', '', line)
@@ -44,6 +44,9 @@ def inspect_log(lines):
             payload = json.loads(line.split(' ', 1)[1])
             apk = {key: payload[key] for key in ('apk_bytes', 'apk_sha256', 'abis',
                 'arm64_il2cpp', 'fmod_native_library_present', 'unity_data_files')}
+            apk['validated_aarch64_shared_libraries'] = payload.get('validated_aarch64_shared_libraries')
+        if line.startswith('RAFT_ANDROID_NATIVE_CONFIG '):
+            config = dict(re.findall(r'(\w+)=([\w]+)', line))
         if line.startswith('RAFT_SDK_BINDINGS '):
             bindings = dict(re.findall(r'(\w+)=([\w]+)', line))
         if line.startswith('Scene script GUID matched:'):
@@ -53,7 +56,7 @@ def inspect_log(lines):
     public = {'counts': dict(counts), 'distinct_mesh_error_names': len(broad),
               'distinct_nonfinite_names': len(nonfinite), 'distinct_csharp_diagnostics': len(compiler),
               'native_result': result, 'apk_structure': apk, 'sdk_bindings': bindings,
-              'scene_script_links': links}
+              'scene_script_links': links, 'native_config': config}
     return public, broad, nonfinite
 
 
@@ -71,11 +74,19 @@ def compare(before, after, targeted):
             'targeted_nonfinite_names_after': len(targeted & new_nonfinite)}
 
 
+def target_names(matches, stream):
+    source = stream.removesuffix('.resS')
+    return {name for name, rows in matches.items() if any(
+        row['source'] == source and row['stream_file'] == stream for row in rows)}
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--before', type=Path, required=True)
     parser.add_argument('--after', type=Path, required=True)
     parser.add_argument('--root', type=Path, required=True)
+    parser.add_argument('--target-stream', choices=['sharedassets24.assets.resS', 'sharedassets29.assets.resS'],
+                        default='sharedassets24.assets.resS')
     args = parser.parse_args()
     with args.before.open(encoding='utf-8-sig', errors='replace') as source:
         before = inspect_log(source)
@@ -83,12 +94,11 @@ if __name__ == '__main__':
         after = inspect_log(source)
     from scripts.trace_collision_mesh_sources import scan_original_headers
     matches, metadata = scan_original_headers(args.root, before[2] | after[2])
-    targeted = {name for name, rows in matches.items() if any(
-        row['source'] == 'sharedassets29.assets' and
-        row['stream_file'] == 'sharedassets29.assets.resS' for row in rows)}
+    targeted = target_names(matches, args.target_stream)
     if not targeted or not before[0]['native_result'] or not after[0]['native_result']:
         raise SystemExit('Missing target metadata or native build result; refusing incomplete comparison')
     report = compare(before, after, targeted)
+    report['targeted_stream'] = args.target_stream
     remaining = {name: matches[name] for name in after[2] if matches.get(name)}
     report['remaining_nonfinite_matched_names'] = len(remaining)
     report['remaining_nonfinite_unmatched_names'] = len(after[2] - set(remaining))
