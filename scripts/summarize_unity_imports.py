@@ -15,6 +15,8 @@ def summarize(lines):
     starts, completed, methods, extensions = Counter(), Counter(), Counter(), Counter()
     patterns, last_imports = {}, []
     diagnostic_headers = Counter()
+    native_headers = Counter()
+    preceding_header = None
     totals = Counter()
     for raw in lines:
         totals['lines'] += 1
@@ -23,6 +25,14 @@ def summarize(lines):
         line = ANSI.sub('', STAMP.sub('', raw.lstrip('\ufeff'))).strip()
         if line.startswith(('##[', 'echo ', 'print(', 'python3 ', 'gh api ')):
             continue
+        native_frame = bool(re.match(r'^(?:0x[0-9a-fA-F]+\b|#\d+\b|\(Filename:)', line))
+        if 'NativeFormatImporter::EndImport' in line and preceding_header:
+            native_headers[preceding_header] += 1
+        if line and not native_frame:
+            header = re.sub(r'https?://\S+', '<url>', line[:500])
+            header = re.sub(r'"[^"\n]*"|\x27[^\x27\n]*\x27', '<quoted>', header)
+            header = re.sub(r'0x[0-9a-fA-F]+|\b[0-9a-fA-F]{32,}\b|\b\d+\b', '<id>', header)
+            preceding_header = header[:240]
         lower = line.lower()
         if line.startswith(('Assertion failed', 'Recursive Serialization', 'Error while importing',
                             'Cannot ', 'Failed to ', 'Unable to ', 'Trying to ', 'A Native ')):
@@ -71,6 +81,7 @@ def summarize(lines):
             'import_extensions': dict(extensions), 'last_imports': last_imports,
             'import_method_occurrences': dict(methods.most_common(12)), 'patterns': patterns,
             'diagnostic_headers': dict(diagnostic_headers.most_common(12)),
+            'preceding_native_import_headers': dict(native_headers.most_common(12)),
             'limitations': 'Infrastructure log events only, not gameplay or asset fidelity. Repeats can be legitimate; absence of matches is unknown.'}
 
 

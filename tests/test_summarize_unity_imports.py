@@ -38,3 +38,10 @@ class ImportSummaryTests(unittest.TestCase):
         r = summarize(["Assertion failed on expression: 'secret expression' 123 0xABC"])
         self.assertNotIn('secret expression', str(r))
         self.assertEqual(sum(r['diagnostic_headers'].values()), 1)
+
+    def test_native_stack_retains_preceding_diagnostic_without_addresses(self):
+        r = summarize(['Importer problem with "private argument"',
+                       '0xABC (Unity) StackWalker::Print ()',
+                       '0x123 (Unity) NativeFormatImporter::EndImport ()'])
+        self.assertEqual(r['preceding_native_import_headers'], {'Importer problem with <quoted>': 1})
+        self.assertNotIn('private argument', str(r))
