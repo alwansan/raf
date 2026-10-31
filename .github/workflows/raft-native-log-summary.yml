@@ -15,7 +15,7 @@ on:
       job_id:
         description: Completed corrected native build job to compare with the baseline
         required: true
-        default: '124535765714'
+        default: '124570812882'
 permissions:
   contents: read
   actions: read
@@ -39,17 +39,57 @@ jobs:
       - name: Retrieve two completed job logs without a build or LFS transfer
         env:
           GH_TOKEN: ${{ github.token }}
-          LOG_JOB_ID: ${{ inputs.job_id || '124535765714' }}
+          LOG_JOB_ID: ${{ inputs.job_id || '124570812882' }}
         run: |
           set -euo pipefail
           case "$LOG_JOB_ID" in ''|*[!0-9]*) exit 1;; esac
-          gh api --allow-escape-sequences --method GET "repos/$GITHUB_REPOSITORY/actions/jobs/124517304289/logs" > "$RUNNER_TEMP/before-native.log"
+          gh api --allow-escape-sequences --method GET "repos/$GITHUB_REPOSITORY/actions/jobs/124535765714/logs" > "$RUNNER_TEMP/before-native.log"
           gh api --allow-escape-sequences --method GET "repos/$GITHUB_REPOSITORY/actions/jobs/$LOG_JOB_ID/logs" > "$RUNNER_TEMP/after-native.log"
+      - name: Inspect completed or interrupted build evidence without inferring success
+        id: evidence
+        run: |
+          python3 - <<'PY'
+          import json, os, re
+          from pathlib import Path
+          from scripts.summarize_native_geometry import inspect_log
+          reports = {}
+          for label in ("before", "after"):
+              path = Path(os.environ["RUNNER_TEMP"]) / (label + "-native.log")
+              with path.open(encoding="utf-8-sig", errors="replace") as source:
+                  report, _, _ = inspect_log(source)
+              reports[label] = report
+              print("RAFT_NATIVE_LOG_EVIDENCE " + json.dumps({"label": label, "evidence": report}, sort_keys=True))
+          path = Path(os.environ["RUNNER_TEMP"]) / "after-native.log"
+          patterns = {
+              "execution_timeout": r"exceeded the maximum execution time|job running longer than|job has exceeded|execution time limit",
+              "cancelled": r"operation was canceled|operation was cancelled",
+              "compiler_abort": r"scripts have compiler errors|aborting batchmode due to failure",
+          }
+          counts = dict.fromkeys(patterns, 0)
+          codes = {}
+          with path.open(encoding="utf-8-sig", errors="replace") as source:
+              for line in source:
+                  if line.lstrip().startswith(("echo ", "print(", "##[group]")):
+                      continue
+                  for name, pattern in patterns.items():
+                      if re.search(pattern, line, re.I):
+                          counts[name] += 1
+                  for code in re.findall(r"error (CS[0-9]+)", line):
+                      codes[code] = codes.get(code, 0) + 1
+          print("RAFT_NATIVE_INTERRUPTION_EVIDENCE " + json.dumps({"pattern_occurrences": counts, "compiler_code_occurrences": codes}, sort_keys=True))
+          complete = all(report["native_result"] is not None for report in reports.values())
+          with open(os.environ["GITHUB_OUTPUT"], "a") as output:
+              output.write("complete=" + str(complete).lower() + "\n")
+          if not complete:
+              print("Native result absent: diagnostic comparison skipped; this is not a successful build or proof of zero geometry defects.")
+          PY
+      - name: Inspect exception origins even when native build was interrupted
+        run: python3 -m scripts.summarize_native_exceptions "$RUNNER_TEMP/after-native.log"
       - name: Compare collider failures and inspect actual emitted APK structure audit
+        if: steps.evidence.outputs.complete == 'true'
         run: |
           python3 -m scripts.summarize_native_geometry \
             --before "$RUNNER_TEMP/before-native.log" --after "$RUNNER_TEMP/after-native.log" \
             --root Raft/Raft_Data --target-stream all
           python3 -m unittest discover -s tests -p test_scene_mesh_coverage.py -v
           python3 -m scripts.audit_scene_mesh_coverage Raft/Raft_Data
-          python3 -m scripts.summarize_native_exceptions "$RUNNER_TEMP/after-native.log"
