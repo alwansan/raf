@@ -469,3 +469,11 @@ Native [41200696376](https://github.com/alwansan/raf/actions/runs/41200696376), 
 ### Next deliberate native gate
 
 This commit requests one full native experiment of the **managed-import/serialized-field correction**, retaining the previously verified Mesh recipe and bounded source scope. No extra texture/audio LFS scope added. Provider identity tests and actual151-provider staging run before billable LFS; exporter parallelism capped at2; SDK sources retained but not compiled; font/import fidelity checked before Unity. Inspect actual full-project SDK bindings, script links, restored fields, remaining exception origins, collider sets and APK audit. This candidate has source-level proof only until its new GitHub run completes. FMOD Android binaries, offline startup/saves/touch/device tests remain unfinished. Follow owner >10-minute wait handoff preference.
+
+
+### Active corrected managed-import native run — owner wait handoff
+
+- [Native **41207308718**](https://github.com/alwansan/raf/actions/runs/41207308718), source **4ca863f06f26e4e222f06a87f06c24843017d0da**, reconstruction job **124554945184**, is **IN PROGRESS**, with Unity license preflight completed SUCCESS. Companion SDK metadata safety run41207308701 was also in progress at scheduling verification.
+- This is the single deliberate full-project test of canonical CIL provider staging, real Mono field export, Decompiled SDK GUID identities, noncompiling retained SDK sources and strict13-font Material coverage. No completed new APK or error reduction is claimed. Source-level correction and50 local tests are complete.
+- Stop waiting per owner preference for >10-minute tasks once only this job remains. Next continuation: inspect its actual failed/successful step before any LFS rerun. Pay particular attention to import fidelity, font material gate, full-project SDK manifest/original unresolved records,64642 original scene links, Unity C# errors and actual APK audit. If the new importer exposes additional original structures or compilation issues, fix those rather than removing components/fields.
+- Current private originals/export experiments exist in this workspace but can expire. Do not redownload the archive merely to inspect completed GitHub logs. The original six supplied files remain available; no reupload request needed.
