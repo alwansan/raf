@@ -1,0 +1,49 @@
+{
+  "schema": 1,
+  "version": "2.02.15",
+  "package_sha256": "b157d6e298bed0eb54b9c07246cb4de51ce9de10f850d7dc0c494ccaee664c48",
+  "files": {
+    "Assets/Plugins/FMOD/LICENSE.TXT": {
+      "bytes": 7106,
+      "sha256": "298bb7be796203ef73cfe25b0d16cebf4e40491de228ed69724ad32947c769b2"
+    },
+    "Assets/Plugins/FMOD/LICENSE.TXT.meta": {
+      "bytes": 158,
+      "sha256": "4c2004de4d48a8d1433c4c9ce05aa96501302cfe4b72dbd226fb842abff0d425"
+    },
+    "Assets/Plugins/FMOD/platforms/android/lib/arm64-v8a/libfmod.so": {
+      "bytes": 1158480,
+      "sha256": "cf592e9519862feb3c6d65a0231536f22e08ae3ee27a757fb3fb80342881b75e"
+    },
+    "Assets/Plugins/FMOD/platforms/android/lib/arm64-v8a/libfmod.so.meta": {
+      "bytes": 458,
+      "sha256": "20b2afbc6f97c87570111b70a3934e5409eb60626c2bef5843512fa81febed7f"
+    },
+    "Assets/Plugins/FMOD/platforms/android/lib/arm64-v8a/libfmodstudio.so": {
+      "bytes": 1112104,
+      "sha256": "0576c81ad5b3f6e947efe2a52896e0294acd6da81e2501d16d737a372c210b1d"
+    },
+    "Assets/Plugins/FMOD/platforms/android/lib/arm64-v8a/libfmodstudio.so.meta": {
+      "bytes": 458,
+      "sha256": "1ac59545127666fd972aac58f98a0e7a601acf663b3f22df02839f09cdf6e79c"
+    },
+    "Assets/Plugins/FMOD/platforms/android/lib/arm64-v8a/libresonanceaudio.so": {
+      "bytes": 831152,
+      "sha256": "98a4152eabdb47e265f1cac9884aa5b7ebbe1f4b7dc42ebbd8c151fa669bcb23"
+    },
+    "Assets/Plugins/FMOD/platforms/android/lib/arm64-v8a/libresonanceaudio.so.meta": {
+      "bytes": 632,
+      "sha256": "5e8c001c79717158cab92769d47256ebe065e1ad6081d1086f08cef600cb9ee8"
+    },
+    "Assets/Plugins/FMOD/platforms/android/lib/fmod.jar": {
+      "bytes": 10053,
+      "sha256": "94db450fce32ed830dc8c9d3f1f79667c7b77af5d745f74725113c62752501fe"
+    },
+    "Assets/Plugins/FMOD/platforms/android/lib/fmod.jar.meta": {
+      "bytes": 640,
+      "sha256": "3501909960d6457e0346aef5585ee89da309b40eaf674d3e463f1345dfe5db9a"
+    }
+  },
+  "cipher_bytes": 1240819,
+  "cipher_sha256": "db7ac6bd245a33a417f9ef61436139b3bd7ff45aef88928900756d98c984f556"
+}

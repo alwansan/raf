@@ -5,7 +5,13 @@ FMOD versions use BCD; interpreting the patch byte as decimal incorrectly gives2
 The original FMOD managed providers are present, but the proven Android APKs lack
 the native Android FMOD library. A successful IL2CPP build does not prove audio.
 
-## Required owner-supplied input
+## Package received (2026-11-01)
+
+The owner supplied fmodstudio20215.unitypackage; exact version/ARM64 ELF/export/Java
+checks passed. Package SHA256: b157d6e298bed0eb54b9c07246cb4de51ce9de10f850d7dc0c494ccaee664c48.
+No further download is currently needed. Historical acquisition instructions:
+
+### Original acquisition
 
 Download **FMOD for Unity2.02.15** from https://www.fmod.com/download after signing
 in/registering there, then attach the original `.unitypackage` to the Work chat.
@@ -32,8 +38,8 @@ This standard-library-only validator checks:
   package/library fingerprints. No extracted file writes or native execution.
 
 These are metadata/identity checks, not a vendor-signature assertion or a native
-runtime `getVersion` test. A real official package has NOT been supplied/audited
-yet. Synthetic fixtures do not establish original library availability.
+runtime `getVersion` test. The actual supplied package passed these metadata checks on 2026-11-01.
+Synthetic fixtures remain separate from actual runtime/device evidence.
 
 ## Integration after the real package passes
 
@@ -59,3 +65,20 @@ Original StreamingAssets/Data.rgd and haptic WAVs also exist. This inventory did
 not fetch LFS bank bytes. The current export ignores StreamingAssets; a future
 explicit staging/loading audit is required. Do not claim native-library presence
 alone restores audio, or ask the owner to resend the original game archive.
+
+
+## Private Actions transfer
+
+Only a sealed 10-file runtime subset is in the public branch:
+`android-port/Dependencies/fmod-2.02.15-android-arm64.aesgcm`, with exact file
+provenance in `config/fmod-android-runtime.json`. The 32-byte hex decryption key
+belongs ONLY in the existing UNITY_LICENSE environment secret named
+`FMOD_ANDROID_RUNTIME_KEY`. It is not an FMOD-account credential or Unity license.
+Never commit the key, a plaintext SDK or a hash-derived substitute key.
+
+The isolated `raft-fmod-runtime-preflight.yml` checks file safety and actual
+ARM64 payload only after the secret exists. Missing key explicitly blocks the
+real stage. Main Unity integration, original managed Android bootstrap, Java
+initialization, banks, DSPs, attribution and device audio remain unverified.
+Vendor native metas/Java meta/license meta are preserved exactly; no competing
+FMOD CSharp files or debug libraries are imported.

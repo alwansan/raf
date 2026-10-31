@@ -1,0 +1,69 @@
+name: Raft authenticated FMOD Android runtime preflight (no Unity or LFS)
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-fmod-runtime-preflight.yml'
+      - 'scripts/stage_fmod_android_runtime.py'
+      - 'tests/test_stage_fmod_android_runtime.py'
+      - 'config/fmod-android-runtime.json'
+      - 'android-port/Dependencies/fmod-2.02.15-android-arm64.aesgcm'
+permissions:
+  contents: read
+jobs:
+  preflight:
+    environment: UNITY_LICENSE
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+            config/fmod-android-runtime.json
+            android-port/Dependencies
+      - name: Install pinned authenticated-encryption dependency
+        run: python3 -m pip install --user --disable-pip-version-check cryptography==50.0.2
+      - name: Verify authentication and original file preservation on fixtures
+        run: |
+          python3 -m unittest discover -s tests -p test_stage_fmod_android_runtime.py -v
+          python3 -m unittest discover -s tests -p test_audit_fmod_unity_package.py -v
+      - name: Check required private runtime key without printing it
+        id: key
+        env:
+          FMOD_ANDROID_RUNTIME_KEY: ${{ secrets.FMOD_ANDROID_RUNTIME_KEY }}
+        run: |
+          if [ -n "$FMOD_ANDROID_RUNTIME_KEY" ]; then
+            echo 'ready=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'ready=false' >> "$GITHUB_OUTPUT"
+            echo 'FMOD runtime not staged: missing FMOD_ANDROID_RUNTIME_KEY secret.'
+            echo 'Fixture checks only; real runtime preflight remains BLOCKED.' >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Authenticate and stage only the audited Android runtime subset
+        if: steps.key.outputs.ready == 'true'
+        env:
+          FMOD_ANDROID_RUNTIME_KEY: ${{ secrets.FMOD_ANDROID_RUNTIME_KEY }}
+        run: |
+          python3 -m scripts.stage_fmod_android_runtime \
+            --cipher android-port/Dependencies/fmod-2.02.15-android-arm64.aesgcm \
+            --manifest config/fmod-android-runtime.json \
+            --project "$RUNNER_TEMP/fmod-project" --apply
+          python3 - <<'PY'
+          import hashlib, json, os
+          from pathlib import Path
+          from scripts.audit_fmod_unity_package import elf_identity
+          root = Path(os.environ['RUNNER_TEMP']) / 'fmod-project'
+          manifest = json.loads(Path('config/fmod-android-runtime.json').read_text())
+          for name, expected in manifest['files'].items():
+              data = (root / name).read_bytes()
+              assert hashlib.sha256(data).hexdigest() == expected['sha256']
+              if name.endswith('.so'):
+                  assert elf_identity(data)['abi'] == 'arm64-v8a'
+          assert not list(root.rglob('*.cs'))
+          print('RAFT_FMOD_RUNTIME_PREFLIGHT files=10 exactHashes=true arm64=true competingSources=0 deviceAudioVerified=false')
+          PY
