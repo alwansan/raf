@@ -1,0 +1,76 @@
+name: Raft Editor mesh lifetime policy (original source; no LFS)
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-editor-mesh-policy.yml'
+      - 'scripts/adapt_editor_mesh_cleanup.py'
+      - 'tests/test_adapt_editor_mesh_cleanup.py'
+      - 'android-port/Tests/EditorMeshCleanup/**'
+permissions:
+  contents: read
+jobs:
+  policy:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            Raft/Raft_Data/Managed
+            scripts
+            tests
+            android-port/Tests/EditorMeshCleanup
+      - name: Check safety tests before original source handling
+        run: |
+          df -h /
+          test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')" -gt 10485760
+          python3 -m unittest discover -s tests -p test_adapt_editor_mesh_cleanup.py -v
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.x
+      - name: Install pinned metadata decompiler
+        run: dotnet tool install ilspycmd --version 11.2.0.10050 --tool-path "$RUNNER_TEMP/ilspy"
+      - name: Verify the exact original source pin privately
+        env:
+          DOTNET_PROCESSOR_COUNT: '2'
+        run: |
+          set -euo pipefail
+          timeout 360s "$RUNNER_TEMP/ilspy/ilspycmd" -p -lv CSharp9_0 \
+            -o "$RUNNER_TEMP/original" Raft/Raft_Data/Managed/Assembly-CSharp.dll \
+            > "$RUNNER_TEMP/private-decompile.log" 2>&1
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          from scripts.adapt_editor_mesh_cleanup import adapt, GUARD
+          root = Path(os.environ['RUNNER_TEMP'])
+          files = list((root / 'original').rglob('GarbageCollectMesh.cs'))
+          if len(files) != 1: raise SystemExit('Ambiguous original collector source')
+          original = files[0].read_text(encoding='utf-8-sig')
+          patched = adapt(original)
+          assert patched.replace(GUARD, '', 1) == original
+          assert adapt(patched) == patched
+          (root / 'OriginalCollector.cs').write_text(original)
+          (root / 'PatchedCollector.cs').write_text(patched)
+          print('RAFT_EDITOR_MESH_SOURCE pin=true exactOriginalPreserved=true idempotent=true')
+          PY
+      - name: Compile and exercise original and adapted policies in CSharp9
+        shell: bash
+        run: |
+          set -euo pipefail
+          project=android-port/Tests/EditorMeshCleanup/Smoke.csproj
+          for mode in original-player patched-player patched-editor; do
+            source="$RUNNER_TEMP/PatchedCollector.cs"
+            constants=TRACE
+            if [ "$mode" = original-player ]; then source="$RUNNER_TEMP/OriginalCollector.cs"; fi
+            if [ "$mode" = patched-editor ]; then constants=UNITY_EDITOR; fi
+            dotnet build "$project" -p:CollectorSource="$source" -p:DefineConstants="$constants" \
+              -o "$RUNNER_TEMP/policy-$mode" > "$RUNNER_TEMP/private-build-$mode.log" 2>&1
+            echo "Policy mode: $mode"
+            dotnet "$RUNNER_TEMP/policy-$mode/Smoke.dll"
+          done
