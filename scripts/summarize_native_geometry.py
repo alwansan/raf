@@ -53,6 +53,9 @@ def inspect_log(lines):
                        'RAFT_ILSPY_EMPTY_SOURCE_RECOVERY', 'RAFT_SCENE_BOUND_ASSET_REEMBED'):
             if line.startswith(marker + ' '):
                 source_geometry[marker] = json.loads(line.split(' ', 1)[1])
+        for marker in ('RAFT_MICROSPLAT_PROPERTY_TEXTURES', 'RAFT_BUILDREPORT_DIAGNOSTIC_CLASSES'):
+            if line.startswith(marker + ' '):
+                source_geometry[marker] = dict(re.findall(r'(\w+)=([^\s]+)', line))
         if line.startswith('RAFT_ANDROID_NATIVE_CONFIG '):
             config = dict(re.findall(r'(\w+)=([\w]+)', line))
         if line.startswith('RAFT_SDK_BINDINGS '):

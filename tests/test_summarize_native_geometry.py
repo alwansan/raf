@@ -56,3 +56,10 @@ class NativeGeometrySummaryTests(unittest.TestCase):
     def test_threaded_scene_errors_are_counted_in_actual_lines(self):
         report, _, _ = inspect_log(['Do not use ReadObjectThreaded on scene objects!'])
         self.assertEqual(report['counts']['threaded_scene_object_error_lines'], 1)
+
+    def test_float_cache_and_buildreport_kv_markers_are_retained(self):
+        report, _, _ = inspect_log([
+            'RAFT_MICROSPLAT_PROPERTY_TEXTURES originalTables=3 regeneratedFloatCaches=3 originalValuesUnchanged=true',
+            'RAFT_BUILDREPORT_DIAGNOSTIC_CLASSES messageOccurrences=20 categories=shader:12,other:8 notEquivalentToSummaryTotalErrors=true'])
+        self.assertEqual(report['source_geometry']['RAFT_MICROSPLAT_PROPERTY_TEXTURES']['originalTables'], '3')
+        self.assertEqual(report['source_geometry']['RAFT_BUILDREPORT_DIAGNOSTIC_CLASSES']['categories'], 'shader:12,other:8')
