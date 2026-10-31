@@ -1,0 +1,53 @@
+name: Raft original ILSpy source fidelity guard (no LFS)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/recover_empty_ilspy_sources.py'
+      - 'tests/test_recover_empty_ilspy_sources.py'
+      - '.github/workflows/raft-ilspy-source-fidelity.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raft-ilspy-source-fidelity
+  cancel-in-progress: true
+jobs:
+  source-fidelity:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+            Raft/Raft_Data/Managed
+      - name: Test source identity ambiguity, wrong-type refusal and meta preservation
+        run: python3 -m unittest discover -s tests -p test_recover_empty_ilspy_sources.py -v
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Decompile original CIL with bounded parallelism and recover empty source files
+        env:
+          DOTNET_PROCESSOR_COUNT: '2'
+          DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check dnfile==0.18.0
+          dotnet tool install ilspycmd --version 11.2.0.10050 --tool-path "$RUNNER_TEMP/ilspy"
+          "$RUNNER_TEMP/ilspy/ilspycmd" -p -lv CSharp9_0 -o "$RUNNER_TEMP/original-game-csharp" \
+            "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed/Assembly-CSharp.dll" > "$RUNNER_TEMP/ilspy.log" 2>&1
+          python3 -m scripts.recover_empty_ilspy_sources --root "$RUNNER_TEMP/original-game-csharp" \
+            --assembly "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed/Assembly-CSharp.dll" --ilspy "$RUNNER_TEMP/ilspy/ilspycmd"
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          root=Path(os.environ['RUNNER_TEMP'])/'original-game-csharp'
+          core=['Raft_Network.cs','NetworkIDManager.cs','GraphicsSettingsBox.cs','SaveAndLoad.cs']
+          for name in core:
+              assert (root/name).stat().st_size>0
+          print('Original core source classes nonempty:',len(core))
+          PY
