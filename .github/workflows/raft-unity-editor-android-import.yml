@@ -42,6 +42,8 @@ on:
       - 'tests/test_android_render_lifetimes.py'
       - 'scripts/restore_tmp_shaders.py'
       - 'scripts/restore_postfx_shaders.py'
+      - 'scripts/restore_postfx_compute.py'
+      - 'tests/test_restore_postfx_compute.py'
       - 'tests/test_restore_postfx_shaders.py'
       - 'config/postfx-v1-shader-sources.json'
       - 'tests/test_restore_tmp_shaders.py'
@@ -97,7 +99,7 @@ jobs:
     runs-on: ubuntu-24.04
     # Restored Mono fields now require a substantially larger first-import budget.
     # Previous 65-minute job expired during active asset import, before Build().
-    timeout-minutes: 150
+    timeout-minutes: 240
     steps:
       - name: Disk safety gate before dependencies / LFS download
         shell: bash
@@ -115,6 +117,7 @@ jobs:
         run: |
           python3 -m unittest discover -s tests -p test_android_render_lifetimes.py -v
           python3 -m unittest discover -s tests -p test_restore_postfx_shaders.py -v
+          python3 -m unittest discover -s tests -p test_restore_postfx_compute.py -v
           python3 -m unittest discover -s tests -p test_restore_tmp_shaders.py -v
           python3 -m unittest discover -s tests -p test_runtime_operation_traces.py -v
           python3 -m unittest discover -s tests -p test_android_offline_startup.py -v
@@ -319,6 +322,7 @@ jobs:
         run: |
           set -euo pipefail
           python3 -m scripts.restore_postfx_shaders --project "$RUNNER_TEMP/project/ExportedProject" --backup "$RUNNER_TEMP/original-postfx-shaders"
+          python3 -m scripts.restore_postfx_compute --project "$RUNNER_TEMP/project/ExportedProject" --backup "$RUNNER_TEMP/original-postfx-compute"
       - name: Preserve FFT temporary lifetimes across kernel errors and exclude Windows Party startup from Android solo
         shell: bash
         run: |
@@ -506,7 +510,7 @@ jobs:
           sudo swapon /mnt/raft-unity.swap
           free -m
           df -h / /mnt
-          python3 -m scripts.ci_memory_watch --output "$RUNNER_TEMP/unity-memory.jsonl" --interval 10 --samples 960 > /dev/null 2>&1 &
+          python3 -m scripts.ci_memory_watch --output "$RUNNER_TEMP/unity-memory.jsonl" --interval 10 --samples 1440 > /dev/null 2>&1 &
           echo "$!" > "$RUNNER_TEMP/unity-memory.pid"
       - name: Unity Editor 2021.3.45f2 Android import and compile
         id: unity_build

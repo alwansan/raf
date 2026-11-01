@@ -5,6 +5,8 @@ name: Raft official PostFX v1 shader restoration contracts (no LFS)
     - feature/android-native-port
     paths:
     - scripts/restore_postfx_shaders.py
+    - scripts/restore_postfx_compute.py
+    - tests/test_restore_postfx_compute.py
     - scripts/restore_tmp_shaders.py
     - tests/test_restore_postfx_shaders.py
     - config/postfx-v1-shader-sources.json
@@ -30,5 +32,9 @@ jobs:
       run: 'python3 -m unittest discover -s tests -p test_restore_postfx_shaders.py -v
 
         python3 -m unittest discover -s tests -p test_restore_tmp_shaders.py -v'
+    - name: Verify histogram migration and authenticate official compute source
+      run: |
+        python3 -m unittest discover -s tests -p test_restore_postfx_compute.py -v
+        python3 -m scripts.restore_postfx_compute --verify-only
     - name: Authenticate all selected official v1 shader programs and includes
       run: python3 -m scripts.restore_postfx_shaders --verify-only

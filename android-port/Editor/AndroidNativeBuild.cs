@@ -21,7 +21,24 @@ namespace RaftAndroid.Editor
             MicroSplatPropertyTextureRecovery.Restore();
             FmodAndroidValidation.Validate();
             ReportInputBindings();
+            ValidatePostFxHistogram();
             Debug.Log("RAFT_SDK_VALIDATION_COMPLETE noAndroidBuildRequested=true");
+        }
+
+        private static void ValidatePostFxHistogram()
+        {
+            var histogram = Resources.Load<ComputeShader>("Shaders/EyeHistogram");
+            if (histogram == null)
+                throw new BuildFailedException("Original PostFX histogram Resources identity is unresolved.");
+            foreach (string name in new[] { "KEyeHistogram", "KEyeHistogramClear" })
+            {
+                int kernel = histogram.FindKernel(name);
+                histogram.GetKernelThreadGroupSizes(kernel, out uint x, out uint y, out uint z);
+                uint expectedY = name == "KEyeHistogram" ? 16u : 1u;
+                if (x != 16u || y != expectedY || z != 1u)
+                    throw new BuildFailedException("PostFX histogram kernel thread-group contract mismatch.");
+            }
+            Debug.Log("RAFT_POSTFX_COMPUTE_GATE resource=Shaders/EyeHistogram kernels=2 imported=true deviceDispatchVerified=false");
         }
 
         private static void ReportInputBindings()
