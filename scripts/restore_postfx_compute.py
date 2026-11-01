@@ -33,6 +33,8 @@ def restore(project, backup, raw):
     if not re.search(r'^--- !u!72 &7200000\s*$', text, re.M) or not re.search(r'^  m_Name: EyeHistogram\s*$', text, re.M):
         raise ValueError('Unexpected original ComputeShader identity/fileID')
     meta = Path(str(old)+'.meta')
+    if old.is_symlink() or meta.is_symlink() or not meta.is_file():
+        raise ValueError('Original compute asset and meta must be regular files')
     match = GUID.search(meta.read_text())
     if not match:
         raise ValueError('Missing original compute GUID')
@@ -58,11 +60,23 @@ def restore(project, backup, raw):
     destination.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(old, destination)
     shutil.copy2(meta, Path(str(destination)+'.meta'))
-    output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(rewrite_includes(source, includes, INCLUDES))
-    Path(str(output)+'.meta').write_text('fileFormatVersion: 2\nguid: '+match[1]+'\nComputeShaderImporter:\n  externalObjects: {}\n  currentAPIMask: 4\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n')
-    old.unlink()
-    meta.unlink()
+    output_meta = Path(str(output)+'.meta')
+    try:
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(rewrite_includes(source, includes, INCLUDES))
+    output_meta.write_text('fileFormatVersion: 2\nguid: '+match[1]+'\nComputeShaderImporter:\n  externalObjects: {}\n  currentAPIMask: 4\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n')
+        old.unlink()
+        meta.unlink()
+    except Exception:
+        # Preserve original GUID references if any filesystem operation fails.
+        # Backups contain the exact original asset and original importer meta.
+        if not old.exists():
+            shutil.copy2(destination, old)
+        if not meta.exists():
+            shutil.copy2(Path(str(destination)+'.meta'), meta)
+        output.unlink(missing_ok=True)
+        output_meta.unlink(missing_ok=True)
+        raise
     print('RAFT_POSTFX_COMPUTE_RESTORED kernels=2 originalGUIDPreserved=true mainFileID=7200000 resource=Shaders/EyeHistogram deviceVerified=false')
 
 

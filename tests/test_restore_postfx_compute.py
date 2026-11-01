@@ -57,5 +57,40 @@ class HistogramRecoveryTests(unittest.TestCase):
                 self.assertEqual(old.read_bytes(), original)
                 self.assertTrue(Path(str(old)+'.meta').exists())
 
+    @patch('scripts.restore_postfx_compute.verified_source', return_value='// source')
+    def test_failure_after_original_unlink_restores_exact_original_and_meta(self, _):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp); project, old = self.fixture(root)
+            meta = Path(str(old)+'.meta')
+            original, original_meta = old.read_bytes(), meta.read_bytes()
+            unlink = Path.unlink
+            def fail_original_meta(path, *args, **kwargs):
+                if path == meta:
+                    raise OSError('simulated original-meta unlink failure')
+                return unlink(path, *args, **kwargs)
+            with patch.object(Path, 'unlink', autospec=True, side_effect=fail_original_meta):
+                with self.assertRaisesRegex(OSError, 'simulated original-meta'):
+                    restore(project, root/'backup', b'fixture')
+            self.assertEqual(old.read_bytes(), original)
+            self.assertEqual(meta.read_bytes(), original_meta)
+            output = project/'Assets/RaftAndroid/Resources/Shaders/EyeHistogram.compute'
+            self.assertFalse(output.exists())
+            self.assertFalse(Path(str(output)+'.meta').exists())
+            self.assertEqual((root/'backup'/old.relative_to(project)).read_bytes(), original)
+
+    @patch('scripts.restore_postfx_compute.verified_source', return_value='// source')
+    def test_symlink_original_is_rejected_before_backup(self, _):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp); project, old = self.fixture(root)
+            actual = root/'outside.asset'
+            actual.write_bytes(old.read_bytes())
+            old.unlink()
+            old.symlink_to(actual)
+            with self.assertRaisesRegex(ValueError, 'regular files'):
+                restore(project, root/'backup', b'fixture')
+            self.assertEqual(actual.read_bytes(), old.read_bytes())
+            self.assertFalse((root/'backup').exists())
+
+
 
 if __name__ == '__main__': unittest.main()
