@@ -15,11 +15,17 @@ namespace RaftAndroid.Platform
         private bool opened;
         private Vector2 scroll;
 
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void CaptureBeforeAudioStartup()
+        {
+            lock (gate) events.Clear();
+            Application.logMessageReceivedThreaded -= Capture;
+            Application.logMessageReceivedThreaded += Capture;
+        }
+
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void StartDiagnostics()
         {
-            Application.logMessageReceivedThreaded -= Capture;
-            Application.logMessageReceivedThreaded += Capture;
             var host = new GameObject("RaftAndroidTestDiagnostics");
             DontDestroyOnLoad(host);
             host.AddComponent<AndroidTestDiagnostics>();

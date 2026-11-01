@@ -1,6 +1,8 @@
 import tempfile
 from pathlib import Path
 import unittest
+from unittest.mock import patch
+from scripts.adapt_android_offline_startup import fingerprint
 from scripts.adapt_android_offline_startup import adapt, apply, enter, replace_exact
 
 
@@ -35,3 +37,19 @@ class AndroidOfflineStartupTests(unittest.TestCase):
         changed = replace_exact(text, 'if (RemoteConnected())', 'if (!LocalEnabled && RemoteConnected())')
         self.assertLess(changed.index('DeliverLocal();'), changed.index('!LocalEnabled'))
         self.assertEqual(changed.count('DeliverLocal();'), 1)
+
+    def test_sdk_homonym_and_absent_helper_meta_are_preserved(self):
+        original = 'class Settings { int v = SteamApps.GetAppBuildId(); }'
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            game = root / 'project/Assets/Scripts/Assembly-CSharp/Settings.cs'
+            sdk = root / 'project/Assets/Scripts/SomeSdk/Settings.cs'
+            for p in (game, sdk): p.parent.mkdir(parents=True, exist_ok=True)
+            game.write_text(original)
+            sdk.write_text('unrelated SDK source')
+            with patch('scripts.adapt_android_offline_startup.PINS', {'Settings': fingerprint(original)}):
+                report = apply(root / 'project', root / 'backup', True)
+            self.assertEqual(sdk.read_text(), 'unrelated SDK source')
+            self.assertFalse(game.with_suffix('.cs.meta').exists())
+            self.assertEqual(report['manufacturedMetas'], 0)
+            self.assertEqual((root / 'backup/Settings.cs').read_text(), original)

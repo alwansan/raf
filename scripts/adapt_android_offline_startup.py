@@ -101,36 +101,39 @@ def apply(project, backup, write=False):
         raise ValueError('Original backup must remain outside imported project')
     plans = []
     for name in PINS:
-        paths = list((project / 'Assets').rglob(name + '.cs'))
+        paths = [p for p in (project / 'Assets').rglob(name + '.cs') if 'Assembly-CSharp' in p.parts]
         if len(paths) != 1:
             raise ValueError('Expected unique original source: ' + name)
         path = paths[0]
         meta = path.with_suffix('.cs.meta')
-        if path.is_symlink() or meta.is_symlink() or not meta.is_file():
-            raise ValueError('Original regular source/meta required')
+        if path.is_symlink() or meta.is_symlink() or (meta.exists() and not meta.is_file()):
+            raise ValueError('Regular original source and any existing meta required')
         raw = path.read_bytes()
         result = adapt(name, raw.decode('utf-8-sig')).encode()
         if raw.startswith(b'\xef\xbb\xbf'):
             result = b'\xef\xbb\xbf' + result
-        for p in (path, meta):
+        for p in (path, meta) if meta.exists() else (path,):
             if (backup / p.name).exists():
                 raise ValueError('Original backup exists; refuse reapplication')
-        plans.append((path, meta, raw, meta.read_bytes(), result))
+        plans.append((path, meta, raw, meta.read_bytes() if meta.exists() else None, result))
     if write:
         backup.mkdir(parents=True, exist_ok=True)
         for path, meta, raw, metadata, result in plans:
             shutil.copy2(path, backup / path.name)
-            shutil.copy2(meta, backup / meta.name)
+            if metadata is not None:
+                shutil.copy2(meta, backup / meta.name)
         try:
             for path, meta, raw, metadata, result in plans:
                 path.write_bytes(result)
-                if meta.read_bytes() != metadata or path.read_bytes() != result:
+                if ((metadata is not None and meta.read_bytes() != metadata) or
+                    (metadata is None and meta.exists()) or path.read_bytes() != result):
                     raise ValueError('Installed source/meta validation failed')
         except Exception:
             for path, meta, raw, metadata, result in plans:
                 path.write_bytes(raw)
             raise
     return dict(applied=write, originalSources=len(plans), originalMetasUnchanged=True,
+                existingOriginalMetas=sum(p[3] is not None for p in plans), manufacturedMetas=0,
                 saveIdentityCallSites=6, cloudAuthenticationFabricated=False,
                 localRpcDeliveryPreserved=True, unityRuntimeVerified=False)
 

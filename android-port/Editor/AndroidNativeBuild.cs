@@ -32,6 +32,8 @@ namespace RaftAndroid.Editor
 
             PlayerSettings.SetScriptingBackend(BuildTargetGroup.Android, ScriptingImplementation.IL2CPP);
             PlayerSettings.Android.targetArchitectures = AndroidArchitecture.ARM64;
+            PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.Android, "com.alwansan.raft.androidtest");
+            PlayerSettings.productName = "Raft Android Test";
             EditorUserBuildSettings.exportAsGoogleAndroidProject = false;
             EditorUserBuildSettings.buildAppBundle = false;
 

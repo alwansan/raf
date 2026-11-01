@@ -8,6 +8,10 @@ on:
         type: choice
         options: [sdk-bindings, native]
         default: sdk-bindings
+      publish_early_test:
+        description: Publish an explicitly requested early startup test APK after all APK gates pass
+        type: boolean
+        default: false
   push:
     branches:
       - feature/android-native-port
@@ -30,6 +34,8 @@ on:
       - 'tests/test_isolate_sdk_source_assemblies.py'
       - 'scripts/repair_asset_case_collisions.py'
       - 'tests/test_repair_asset_case_collisions.py'
+      - 'scripts/adapt_android_offline_startup.py'
+      - 'scripts/adapt_original_save_paths.py'
       - 'scripts/adapt_unity_url_codecs.py'
       - 'tests/test_adapt_unity_url_codecs.py'
       - 'scripts/stage_raft_managed_dlls.py'
@@ -94,6 +100,8 @@ jobs:
           persist-credentials: true
       - name: Run synthetic code-overlay tests before touching original data
         run: |
+          python3 -m unittest discover -s tests -p test_android_offline_startup.py -v
+          python3 -m unittest discover -s tests -p test_adapt_original_save_paths.py -v
           python3 -m unittest discover -s tests -p test_reembed_scene_bound_assets.py -v
           python3 -m unittest discover -s tests -p test_fmod_resource_path_policy.py -v
           python3 -m unittest discover -s tests -p test_csharp_overlay.py -v
@@ -296,6 +304,20 @@ jobs:
             --ilspy "$RUNNER_TEMP/ilspy-src" \
             --report "$RUNNER_TEMP/ilspy-supplement.json" \
             --coverage-mode decompiled --min-original-sources 2393 --apply
+      - name: Adapt original local startup and RGD paths without replacing game serialization
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.adapt_original_save_paths \
+            --project "$RUNNER_TEMP/project/ExportedProject" \
+            --backup "$RUNNER_TEMP/original-save-path-source" --apply
+          python3 -m scripts.adapt_android_offline_startup \
+            --project "$RUNNER_TEMP/project/ExportedProject" \
+            --backup "$RUNNER_TEMP/original-offline-startup-source" --apply
+          mkdir -p "$RUNNER_TEMP/project/ExportedProject/Assets/RaftAndroid/Platform"
+          for name in LocalProfileStore.cs LocalPlayerIdentity.cs AndroidTestDiagnostics.cs; do
+            cp "android-port/Runtime/Platform/$name" "$RUNNER_TEMP/project/ExportedProject/Assets/RaftAndroid/Platform/"
+          done
       - name: Preserve asset-owned meshes during original Editor collector cleanup
         shell: bash
         run: |
@@ -465,7 +487,7 @@ jobs:
           # Those generated files are intentionally not committed, so Semantic versioning
           # rejects the build as a dirty git branch before Unity Editor starts.
           versioning: None
-          androidVersionCode: 1
+          androidVersionCode: ${{ github.run_number }}
       - name: Audit private native APK payload and ARM64 IL2CPP structure
         if: ${{ (github.event_name == 'workflow_dispatch' && inputs.build_mode == 'native') || (github.event_name == 'push' && contains(github.event.head_commit.message, '[raft-native-build]')) }}
         shell: bash
@@ -516,7 +538,68 @@ jobs:
               javaDescriptorPresent=True, exactOriginalStreamingFiles=len(report['files']),
               compressedBankFiles=compressed_banks, deviceAudioVerified=False), sort_keys=True))
           PY
-      - name: If CI reaches here, report without releasing original game APK
+      - name: Verify actual APK signature before any early device-test delivery
+        if: ${{ (github.event_name == 'workflow_dispatch' && inputs.build_mode == 'native') || (github.event_name == 'push' && contains(github.event.head_commit.message, '[raft-native-build]')) }}
+        shell: bash
         run: |
-          echo 'Unity validation completed. Review RAFT_SDK_VALIDATION_COMPLETE versus RAFT_ANDROID_NATIVE_RESULT; SDK-only mode does not build an APK.' >> "$GITHUB_STEP_SUMMARY"
-          echo 'No copyrighted game APK or source asset was uploaded or published by this workflow.' >> "$GITHUB_STEP_SUMMARY"
+          set -euo pipefail
+          sdk_root="${ANDROID_SDK_ROOT:-${ANDROID_HOME:-/usr/local/lib/android/sdk}}"
+          signer=$(find "$sdk_root/build-tools" -mindepth 2 -maxdepth 2 -name apksigner -type f | sort -V | tail -n 1)
+          test -n "$signer" && test -x "$signer"
+          "$signer" verify --verbose "$GITHUB_WORKSPACE/builds/Android/RaftAndroidExperimental.apk" > "$RUNNER_TEMP/apk-signature-private.txt"
+          echo 'RAFT_ANDROID_APK_SIGNATURE verified=true installVerified=false gameplayVerified=false'
+      - name: Retain only the explicitly requested early test APK for release delivery
+        if: ${{ github.ref == 'refs/heads/feature/android-native-port' && ((github.event_name == 'push' && contains(github.event.head_commit.message, '[raft-native-build]') && contains(github.event.head_commit.message, '[raft-device-test]')) || (github.event_name == 'workflow_dispatch' && inputs.build_mode == 'native' && inputs.publish_early_test)) }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: raft-android-early-test-apk
+          path: builds/Android/RaftAndroidExperimental.apk
+          retention-days: 1
+          if-no-files-found: error
+      - name: Report validation boundary
+        run: |
+          echo 'Review actual native/SDK/APK evidence. No source or reconstructed project is published. Early startup APK delivery is opt-in; device gameplay/audio/save tests remain unverified.' >> "$GITHUB_STEP_SUMMARY"
+
+  publish-early-test:
+    needs: reconstruct
+    if: ${{ needs.reconstruct.result == 'success' && github.ref == 'refs/heads/feature/android-native-port' && ((github.event_name == 'push' && contains(github.event.head_commit.message, '[raft-native-build]') && contains(github.event.head_commit.message, '[raft-device-test]')) || (github.event_name == 'workflow_dispatch' && inputs.build_mode == 'native' && inputs.publish_early_test)) }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: raft-android-early-test-apk
+          path: release-apk
+      - name: Publish the direct APK as an explicitly experimental prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f release-apk/RaftAndroidExperimental.apk
+          mv release-apk/RaftAndroidExperimental.apk release-apk/Raft-Android-EarlyTest.apk
+          test "$(stat -c %s release-apk/Raft-Android-EarlyTest.apk)" -lt 2147483648
+          python3 - <<'PY'
+          import hashlib, os
+          from pathlib import Path
+          apk = Path('release-apk/Raft-Android-EarlyTest.apk')
+          with apk.open('rb') as source:
+              digest = hashlib.file_digest(source, 'sha256').hexdigest()
+          notes = """نسخة اختبار بدء مبكرة لأندرويد — ليست نسخة لعب مكتملة.
+          الغرض: اختبار التثبيت وفتح القائمة وبدء Singleplayer والصوت وتسجيل الأخطاء على POCO F5 Pro.
+          تحققت CI من البناء ARM64 IL2CPP وبنية APK والتوقيع ومكتبات FMOD وجسر Java وبصمات ملفات الصوت والبيانات.
+          لم يتحقق التشغيل أو الصوت أو الحفظ فعلياً على الهاتف. التحكم الكامل باللمس والرسوميات والإنجازات المحلية ما زالت قيد العمل.
+          داخل التطبيق اضغط Test report ثم Copy test report وأرسل التقرير مع وصف ما حدث.
+          لا تعتبر نجاح CI إثباتاً لعمل اللعبة.
+          """
+          notes += '\nSource: ' + os.environ['GITHUB_SHA'] + '\nAPK bytes: ' + str(apk.stat().st_size) + '\nSHA256: ' + digest + '\n'
+          (Path(os.environ['RUNNER_TEMP']) / 'early-test-notes.md').write_text(notes)
+          PY
+          tag="android-early-test-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          gh release create "$tag" release-apk/Raft-Android-EarlyTest.apk \
+            --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --prerelease \
+            --title "Raft Android — early startup test ${GITHUB_RUN_NUMBER}" \
+            --notes-file "$RUNNER_TEMP/early-test-notes.md" >> "$GITHUB_STEP_SUMMARY"
