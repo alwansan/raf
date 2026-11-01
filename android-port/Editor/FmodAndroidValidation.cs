@@ -12,12 +12,9 @@ namespace RaftAndroid.Editor
     {
         public static void Validate()
         {
-            // Never use Settings.Instance here: it can manufacture default settings.
-            // The original Platform assets live at Resources/FMODStudioSettingsPlatform*.asset,
-            // not inside a Resources/FMODStudioSettings/ directory. Resources.LoadAll with
-            // the settings asset name finds no platforms. Enumerate only those original
-            // root assets, and prove each resolves through the player-facing Resources API.
-            string resourceRoot = Path.Combine(Application.dataPath, "Resources");
+            // The original vendor Settings loader expects platforms under this Resources path.
+            // The staging repair moves original asset+meta pairs; GUIDs and bytes stay intact.
+            string resourceRoot = Path.Combine(Application.dataPath, "Resources/FMODStudioSettings");
             if (!Directory.Exists(resourceRoot))
                 throw new BuildFailedException("Original FMOD Resources directory is missing.");
             string[] platformFiles = Directory.GetFiles(resourceRoot, "FMODStudioSettingsPlatform*.asset",
@@ -28,9 +25,9 @@ namespace RaftAndroid.Editor
             var platforms = platformFiles.Select(path =>
             {
                 string name = Path.GetFileNameWithoutExtension(path);
-                string assetPath = "Assets/Resources/" + Path.GetFileName(path);
+                string assetPath = "Assets/Resources/FMODStudioSettings/" + Path.GetFileName(path);
                 var original = AssetDatabase.LoadAssetAtPath<FMODUnity.Platform>(assetPath);
-                var runtime = Resources.Load<FMODUnity.Platform>(name);
+                var runtime = Resources.Load<FMODUnity.Platform>("FMODStudioSettings/" + name);
                 if (original == null || runtime == null || original != runtime)
                     throw new BuildFailedException("Original FMOD platform is not loadable by resource name: " + name);
                 return runtime;
@@ -51,6 +48,12 @@ namespace RaftAndroid.Editor
                       " defaultPlatforms=" + defaults + " manufacturedSettings=0");
             if (settings == null || android != 1 || defaults != 1)
                 throw new BuildFailedException("Original FMOD settings/platform resource layout is incomplete; no defaults substituted.");
+            if (settings.Platforms.Count != platforms.Length || settings.DefaultPlatform == null ||
+                !settings.Platforms.Any(p => p is FMODUnity.PlatformAndroid) ||
+                platforms.Any(p => !settings.Platforms.Contains(p)))
+                throw new BuildFailedException("Vendor Settings did not populate/link original runtime platforms.");
+            Debug.Log("RAFT_FMOD_RUNTIME_PLATFORM_GRAPH platforms=" + settings.Platforms.Count +
+                      " defaultLinked=true androidPresent=true manufacturedSettings=0");
             var version = new SerializedObject(settings).FindProperty("CurrentVersion");
             Debug.Log("RAFT_FMOD_ORIGINAL_CONFIGURATION version=" + (version == null ? -1 : version.intValue) +
                       " androidUseOBB=" + settings.AndroidUseOBB +

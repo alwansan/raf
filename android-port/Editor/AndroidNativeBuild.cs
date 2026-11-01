@@ -20,7 +20,33 @@ namespace RaftAndroid.Editor
             SdkScriptBindingResolver.Rebind(Path.Combine(Application.dataPath, "Editor/RaftAndroid/sdk-script-manifest.json"));
             MicroSplatPropertyTextureRecovery.Restore();
             FmodAndroidValidation.Validate();
+            ReportInputBindings();
             Debug.Log("RAFT_SDK_VALIDATION_COMPLETE noAndroidBuildRequested=true");
+        }
+
+        private static void ReportInputBindings()
+        {
+            var guids = AssetDatabase.FindAssets("t:InputActionAsset");
+            int assets = 0, bindings = 0, touch = 0, mouse = 0, keyboard = 0, gamepad = 0;
+            foreach (string guid in guids)
+            {
+                var asset = AssetDatabase.LoadAssetAtPath<UnityEngine.InputSystem.InputActionAsset>(AssetDatabase.GUIDToAssetPath(guid));
+                if (asset == null) continue;
+                assets++;
+                foreach (var map in asset.actionMaps)
+                foreach (var binding in map.bindings)
+                {
+                    bindings++;
+                    string path = binding.effectivePath ?? "";
+                    if (path.IndexOf("<Touchscreen>", StringComparison.OrdinalIgnoreCase) >= 0) touch++;
+                    if (path.IndexOf("<Mouse>", StringComparison.OrdinalIgnoreCase) >= 0) mouse++;
+                    if (path.IndexOf("<Keyboard>", StringComparison.OrdinalIgnoreCase) >= 0) keyboard++;
+                    if (path.IndexOf("<Gamepad>", StringComparison.OrdinalIgnoreCase) >= 0) gamepad++;
+                }
+            }
+            Debug.Log("RAFT_INPUT_BINDING_INVENTORY assets=" + assets + " bindings=" + bindings +
+                      " touchscreen=" + touch + " mouse=" + mouse + " keyboard=" + keyboard +
+                      " gamepad=" + gamepad + " deviceBehaviorVerified=false");
         }
 
         public static void Build()

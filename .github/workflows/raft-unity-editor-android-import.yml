@@ -38,6 +38,8 @@ on:
       - 'scripts/instrument_android_runtime_operations.py'
       - 'config/runtime-operation-traces.json'
       - 'scripts/adapt_original_save_paths.py'
+      - 'scripts/restore_fmod_resource_layout.py'
+      - 'tests/test_restore_fmod_resource_layout.py'
       - 'scripts/adapt_unity_url_codecs.py'
       - 'tests/test_adapt_unity_url_codecs.py'
       - 'scripts/stage_raft_managed_dlls.py'
@@ -309,6 +311,13 @@ jobs:
             --ilspy "$RUNNER_TEMP/ilspy-src" \
             --report "$RUNNER_TEMP/ilspy-supplement.json" \
             --coverage-mode decompiled --min-original-sources 2393 --apply
+      - name: Restore original FMOD runtime platform resource topology without changing GUIDs
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.audit_render_input_contracts --project "$RUNNER_TEMP/project/ExportedProject"
+          python3 -m unittest discover -s tests -p test_restore_fmod_resource_layout.py -v
+          python3 -m scripts.restore_fmod_resource_layout --project "$RUNNER_TEMP/project/ExportedProject" --apply
       - name: Adapt original local startup and RGD paths without replacing game serialization
         shell: bash
         run: |

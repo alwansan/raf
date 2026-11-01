@@ -24,7 +24,7 @@ class FmodResourcePathPolicyTests(unittest.TestCase):
     def test_each_original_platform_is_checked_through_editor_and_player_resource_lookups(self):
         self.assertIn('Path.GetFileNameWithoutExtension(path)', self.code)
         self.assertIn('AssetDatabase.LoadAssetAtPath<FMODUnity.Platform>(assetPath)', self.code)
-        self.assertIn('Resources.Load<FMODUnity.Platform>(name)', self.code)
+        self.assertIn('Resources.Load<FMODUnity.Platform>("FMODStudioSettings/" + name)', self.code)
         self.assertIn('original != runtime', self.code)
 
     def test_duplicate_identity_gate_precedes_vendor_settings_loading(self):
