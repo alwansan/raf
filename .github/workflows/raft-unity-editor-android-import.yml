@@ -35,6 +35,8 @@ on:
       - 'scripts/repair_asset_case_collisions.py'
       - 'tests/test_repair_asset_case_collisions.py'
       - 'scripts/adapt_android_offline_startup.py'
+      - 'scripts/instrument_android_runtime_operations.py'
+      - 'config/runtime-operation-traces.json'
       - 'scripts/adapt_original_save_paths.py'
       - 'scripts/adapt_unity_url_codecs.py'
       - 'tests/test_adapt_unity_url_codecs.py'
@@ -102,6 +104,7 @@ jobs:
           persist-credentials: true
       - name: Run synthetic code-overlay tests before touching original data
         run: |
+          python3 -m unittest discover -s tests -p test_runtime_operation_traces.py -v
           python3 -m unittest discover -s tests -p test_android_offline_startup.py -v
           python3 -m unittest discover -s tests -p test_adapt_original_save_paths.py -v
           python3 -m unittest discover -s tests -p test_reembed_scene_bound_assets.py -v
@@ -316,8 +319,12 @@ jobs:
           python3 -m scripts.adapt_android_offline_startup \
             --project "$RUNNER_TEMP/project/ExportedProject" \
             --backup "$RUNNER_TEMP/original-offline-startup-source" --apply
+          python3 -m scripts.instrument_android_runtime_operations \
+            --project "$RUNNER_TEMP/project/ExportedProject" \
+            --backup "$RUNNER_TEMP/original-operation-trace-source" \
+            --manifest config/runtime-operation-traces.json --apply
           mkdir -p "$RUNNER_TEMP/project/ExportedProject/Assets/RaftAndroid/Platform"
-          for name in LocalProfileStore.cs LocalPlayerIdentity.cs AndroidTestDiagnostics.cs; do
+          for name in LocalProfileStore.cs LocalPlayerIdentity.cs AndroidTestDiagnostics.cs PersistentDiagnosticLog.cs AndroidRuntimeLog.cs; do
             cp "android-port/Runtime/Platform/$name" "$RUNNER_TEMP/project/ExportedProject/Assets/RaftAndroid/Platform/"
           done
       - name: Preserve asset-owned meshes during original Editor collector cleanup
