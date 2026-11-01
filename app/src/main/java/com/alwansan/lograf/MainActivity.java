@@ -21,6 +21,7 @@ import rikka.shizuku.Shizuku;
 public final class MainActivity extends Activity {
     private static final int PICK_FOLDER=201;
     private static final int SHIZUKU_REQUEST=202;
+    private boolean pendingStart=false;
     private TextView status, folderLabel;
     private Button start, stop, share;
     private final Handler handler=new Handler(Looper.getMainLooper());
@@ -127,8 +128,6 @@ public final class MainActivity extends Activity {
             Shizuku.requestPermission(SHIZUKU_REQUEST);
         }catch(Throwable e){message("Shizuku: "+e);}
     }
-    private boolean pendingStart=false;
-
     private void startCapture(){
         if(Config.folder(this)==null){message("اختر المجلد أولاً");return;}
         try {
