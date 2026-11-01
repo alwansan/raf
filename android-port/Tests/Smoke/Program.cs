@@ -125,6 +125,28 @@ internal static class Program
                     }
                 }
             });
+            Test("incomplete identity is retried without replacing its writer", () =>
+            {
+                // A separate process may see the final file before the first
+                // process has finished writing its GUID. Never treat this
+                // transient empty file as a permanently corrupt save.
+                string pendingRoot = Path.Combine(root, "pending-profile-writer");
+                string profileDirectory = Path.Combine(pendingRoot, "RaftAndroid", "profiles", "local");
+                Directory.CreateDirectory(profileDirectory);
+                string profileFile = Path.Combine(profileDirectory, "profile.id");
+                File.WriteAllText(profileFile, "");
+                string expected = Guid.NewGuid().ToString("N");
+                Task writer = Task.Run(() =>
+                {
+                    Thread.Sleep(75);
+                    File.WriteAllText(profileFile, expected + Environment.NewLine);
+                });
+                string observed = new LocalProfileStore(pendingRoot).GetOrCreateProfileId();
+                Assert(writer.Wait(5000), "Simulated profile writer did not finish");
+                Assert(observed == expected, "Incomplete identity was not retried");
+                Assert(File.ReadAllText(profileFile).Trim() == expected,
+                    "Concurrent reader overwrote the writer's identity");
+            });
             Test("independent app sandboxes have separate identities", () =>
             {
                 string first = new LocalProfileStore(root).GetOrCreateProfileId();

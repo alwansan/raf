@@ -50,11 +50,17 @@ namespace RaftAndroid.Platform
 
         private static string ReadWhenWriterCloses(string path)
         {
-            // A second caller may observe the path before its exclusive writer
-            // closes. Retry only sharing/IO errors, never invalid existing data.
+            // On Unix, a different process can observe a newly created but
+            // not-yet-populated profile.id even while its writer holds FileShare.None.
+            // Retry both sharing failures and incomplete contents for at most ~1s.
+            // A persistently corrupt ID still fails closed; never replace the file.
             for (int attempt = 0; ; attempt++)
             {
                 try { return ReadExistingId(path); }
+                catch (InvalidDataException) when (attempt < 99)
+                {
+                    Thread.Sleep(10);
+                }
                 catch (IOException) when (attempt < 99)
                 {
                     Thread.Sleep(10);
