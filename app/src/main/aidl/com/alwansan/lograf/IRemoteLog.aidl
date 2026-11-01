@@ -2,7 +2,7 @@ package com.alwansan.lograf;
 import com.alwansan.lograf.ILogSink;
 interface IRemoteLog {
     void destroy() = 16777114;
-    void start(int uid, String targetPackage, ILogSink sink);
-    void stop();
-    String status();
+    void start(int uid, String targetPackage, ILogSink sink) = 1;
+    void stop() = 2;
+    String status() = 3;
 }
