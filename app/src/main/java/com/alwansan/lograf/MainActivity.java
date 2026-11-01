@@ -29,8 +29,9 @@ public final class MainActivity extends Activity {
     };
     private final Shizuku.OnRequestPermissionResultListener permissionListener=(code, result)->{
         if(code==SHIZUKU_REQUEST) runOnUiThread(()-> {
-            if(result==PackageManager.PERMISSION_GRANTED) startCapture();
+            if(result==PackageManager.PERMISSION_GRANTED) { if(pendingStart) startCapture(); else message("Shizuku permitted ✓"); }
             else message("Shizuku permission denied");
+            pendingStart=false;
         });
     };
 
