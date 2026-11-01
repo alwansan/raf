@@ -139,7 +139,8 @@ public final class RemoteLogService extends IRemoteLog.Stub {
                     }
                 }
             } catch (Exception e) {
-                error(source + ": " + e);
+                if (running.get()) error(source + ": " + e);
+                // The intentional logcat pipe close on Stop is not a recorder failure.
             } finally {
                 if (batch.length() > 0) send(source,batch);
                 if (p != null) { p.destroy(); }
