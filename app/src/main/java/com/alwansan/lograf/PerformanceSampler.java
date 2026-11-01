@@ -82,10 +82,14 @@ public final class PerformanceSampler implements Runnable {
         JSONObject sys=procMeminfo();
         row.put("device_mem_available_kb",sys.opt("MemAvailable")==null?JSONObject.NULL:sys.opt("MemAvailable"));
         row.put("device_mem_total_kb",sys.opt("MemTotal")==null?JSONObject.NULL:sys.opt("MemTotal"));
+        row.put("system_load_1min",loadAverage());
+        row.put("cpu_frequency_khz_by_core",cpuFrequencies());
         JSONObject gpu=gpuMetrics();
         row.put("gpu_busy_percent",gpu.opt("busy")==null?JSONObject.NULL:gpu.opt("busy"));
         row.put("gpu_clock_hz",gpu.opt("clock")==null?JSONObject.NULL:gpu.opt("clock"));
         row.put("gpu_utilization_source","KGSL system-wide busy/total, if shell-readable");
+        String gpuModel=readOptional(GPU+"gpu_model",256);
+        row.put("gpu_model",gpuModel==null?JSONObject.NULL:gpuModel);
         if(now-batteryLast>14000){ batteryLast=now; battery(); }
         row.put("battery_level_percent",batteryLevel==null?JSONObject.NULL:batteryLevel)
                 .put("battery_temp_c",batteryTemp==null?JSONObject.NULL:batteryTemp)
@@ -163,6 +167,26 @@ public final class PerformanceSampler implements Runnable {
             }
         }catch(Exception ignored){}
         return o;
+    }
+
+    private Object loadAverage(){
+        try { return round(Double.parseDouble(readFile("/proc/loadavg",200).trim().split("\\s+")[0])); }
+        catch(Exception ignored){return JSONObject.NULL;}
+    }
+
+    private org.json.JSONArray cpuFrequencies(){
+        org.json.JSONArray result=new org.json.JSONArray();
+        for(int i=0;i<cpuCount;i++){
+            String value=readOptional("/sys/devices/system/cpu/cpu"+i+"/cpufreq/scaling_cur_freq",80);
+            try { result.put(value==null?JSONObject.NULL:Long.parseLong(value.trim())); }
+            catch(Exception e){result.put(JSONObject.NULL);}
+        }
+        return result;
+    }
+
+    private static String readOptional(String path,int maxBytes){
+        try {String s=readFile(path,maxBytes).trim(); return s.isEmpty()?null:s;}
+        catch(Exception e){return null;}
     }
 
     private JSONObject gpuMetrics(){
