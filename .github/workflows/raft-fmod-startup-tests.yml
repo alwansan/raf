@@ -1,0 +1,31 @@
+name: Raft Android FMOD bootstrap compile and ordering tests (no LFS)
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-fmod-startup-tests.yml'
+      - 'android-port/Runtime/Audio/**'
+      - 'android-port/Tests/Audio/**'
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            Raft/Raft_Data/Managed
+            android-port/Runtime/Audio
+            android-port/Tests/Audio
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Compile real Android bridge against original managed providers; exercise safe ordering independently
+        run: |
+          dotnet run --project android-port/Tests/Audio/Audio.csproj \
+            -p:ManagedRoot="$GITHUB_WORKSPACE/Raft/Raft_Data/Managed"

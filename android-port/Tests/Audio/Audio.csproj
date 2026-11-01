@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>9.0</LangVersion>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <DefineConstants>UNITY_ANDROID</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../../Runtime/Audio/*.cs" Link="%(Filename)%(Extension)" />
+    <Reference Include="FMODUnity"><HintPath>$(ManagedRoot)/FMODUnity.dll</HintPath></Reference>
+    <Reference Include="UnityEngine.CoreModule"><HintPath>$(ManagedRoot)/UnityEngine.CoreModule.dll</HintPath></Reference>
+    <Reference Include="UnityEngine.AndroidJNIModule"><HintPath>$(ManagedRoot)/UnityEngine.AndroidJNIModule.dll</HintPath></Reference>
+  </ItemGroup>
+</Project>
