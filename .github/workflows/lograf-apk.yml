@@ -30,7 +30,9 @@ jobs:
       - name: Ensure Android SDK platform
         run: |
           test -d "$ANDROID_HOME"
-          sdkmanager --install "platforms;android-35" "build-tools;35.0.0"
+          SDKMGR="$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager | head -n 1)"
+          test -n "$SDKMGR"
+          "$SDKMGR" --install "platforms;android-35" "build-tools;35.0.0"
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.9'
