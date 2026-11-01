@@ -55,7 +55,7 @@ def summarize(path):
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--output',type=Path,required=True);p.add_argument('--summarize',action='store_true');p.add_argument('--interval',type=float,default=10);p.add_argument('--samples',type=int,default=960);a=p.parse_args()
     if a.summarize:print('RAFT_CI_MEMORY_EVIDENCE '+json.dumps(summarize(a.output),sort_keys=True));return
-    if not 0.01<=a.interval<=60 or not 1<=a.samples<=960:raise ValueError('Unbounded CI monitor configuration')
+    if not 0.01<=a.interval<=60 or not 1<=a.samples<=1440:raise ValueError('Unbounded CI monitor configuration')
     a.output.parent.mkdir(parents=True,exist_ok=True)
     stopping=[False]
     signal.signal(signal.SIGTERM,lambda *_:stopping.__setitem__(0,True))

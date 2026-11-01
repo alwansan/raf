@@ -3,9 +3,19 @@ from pathlib import Path
 import tempfile
 import unittest
 from unittest.mock import patch
-from scripts.ci_memory_watch import memory_fields,sample,summarize
+from scripts.ci_memory_watch import memory_fields,sample,summarize,main
 
 class MemoryTests(unittest.TestCase):
+    def test_four_hour_budget_is_bounded_and_samples_written(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            out=Path(tmp)/'memory.jsonl'
+            args=['monitor','--output',str(out),'--samples','1440','--interval','10']
+            with patch('sys.argv',args), patch('scripts.ci_memory_watch.sample',return_value={'MemAvailable_kb':10}), patch('scripts.ci_memory_watch.time.sleep'), patch('scripts.ci_memory_watch.signal.signal'):
+                main()
+            self.assertEqual(len(out.read_text().splitlines()),1440)
+            for count in ('0','1441'):
+                with patch('sys.argv',['monitor','--output',str(out),'--samples',count]):
+                    with self.assertRaises(ValueError): main()
     def test_only_memory_allowlist_is_parsed(self):
         data=memory_fields('MemTotal: 16000 kB\nMemAvailable: 2000 kB\nSwapTotal: 8000 kB\nSwapFree: 7000 kB\nUnrelated: 9000 kB')
         self.assertEqual(data,{'MemTotal_kb':16000,'MemAvailable_kb':2000,'SwapTotal_kb':8000,'SwapFree_kb':7000})
