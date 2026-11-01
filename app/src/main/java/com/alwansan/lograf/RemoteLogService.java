@@ -7,6 +7,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicLong;
+import org.json.JSONObject;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,6 +18,7 @@ import java.util.regex.Pattern;
  */
 public final class RemoteLogService extends IRemoteLog.Stub {
     private final AtomicBoolean running = new AtomicBoolean(false);
+    private final AtomicLong gameLogLines=new AtomicLong(),systemContextLines=new AtomicLong(),reconnections=new AtomicLong();
     private volatile Process gameProcess, systemProcess;
     private volatile ILogSink listener;
     private volatile int gameUid;
@@ -34,6 +37,7 @@ public final class RemoteLogService extends IRemoteLog.Stub {
         }
         stop();
         listener = sink; gameUid = uid; packageName = targetPackage;
+        gameLogLines.set(0);systemContextLines.set(0);reconnections.set(0);
         running.set(true);
         gameThread = new Thread(() -> pump("RAFT", new String[]{
                 "logcat", "-b", "main", "-b", "system", "-b", "crash", "-b", "events",
@@ -63,7 +67,14 @@ public final class RemoteLogService extends IRemoteLog.Stub {
     private void sendMetric(String line) {
         ILogSink sink=listener;
         if(sink!=null && running.get()) {
-            try {sink.onBatch("METRICS",line);} catch(Exception e){error("Metrics delivery: "+e.getClass().getSimpleName());}
+            try {
+                JSONObject data=new JSONObject(line.trim());
+                data.put("game_log_lines",gameLogLines.get());
+                data.put("system_context_lines",systemContextLines.get());
+                data.put("logcat_reconnects",reconnections.get());
+                data.put("logcat_unobserved_losses","unknown");
+                sink.onBatch("METRICS",data.toString()+"\n");
+            } catch(Exception e){error("Metrics delivery: "+e.getClass().getSimpleName());}
         }
     }
 
@@ -118,6 +129,7 @@ public final class RemoteLogService extends IRemoteLog.Stub {
                             continue;
                         }
                         if (!onlyContext || systemRelevant(line)) {
+                            if(onlyContext)systemContextLines.incrementAndGet();else gameLogLines.incrementAndGet();
                             batch.append(line).append('\n');
                             if (batch.length() >= BATCH || (System.nanoTime()-lastDelivery)>800_000_000L) {
                                 send(source,batch);
@@ -133,6 +145,7 @@ public final class RemoteLogService extends IRemoteLog.Stub {
                 if (p != null) { p.destroy(); }
             }
             if (!running.get()) break;
+            reconnections.incrementAndGet();
             error(source + " stream closed; reconnecting (a short gap may occur)");
             try { Thread.sleep(Math.min(10000L, 1000L << Math.min(retries++,3))); }
             catch (InterruptedException e) { break; }
