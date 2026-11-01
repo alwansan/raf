@@ -51,5 +51,21 @@ class AndroidDiagnosticsPolicyTests(unittest.TestCase):
         self.assertIn('stack = stack ?? "";', self.source)
 
 
+    def test_gpu_memory_diagnostics_are_per_app_and_explicitly_bounded(self):
+        # Android Debug.MemoryInfo may exclude protected graphics allocations.
+        # This is a process summary, NOT total GPU usage or the MIUIScout value.
+        self.assertIn('new AndroidJavaObject("android.os.Debug$MemoryInfo")', self.source)
+        self.assertIn('debug.CallStatic("getMemoryInfo", info);', self.source)
+        self.assertIn('info.Call<string>("getMemoryStat", "summary.graphics")', self.source)
+        self.assertIn('if (version.GetStatic<int>("SDK_INT") < 23)', self.source)
+        self.assertIn('"; android_debug_graphics_kb=" + lastAndroidGraphicsKb', self.source)
+        self.assertIn('"; android_debug_graphics_kb=" + AndroidGraphicsMemoryKb()', self.source)
+        self.assertIn('nextGraphicsMemoryProbe = Time.realtimeSinceStartup + 10f;', self.source)
+        self.assertIn('if (Time.realtimeSinceStartup >= nextGraphicsMemoryProbe)', self.source)
+        self.assertIn('if (!Debug.isDebugBuild) return "unavailable";', self.source)
+        self.assertIn('Profiler.GetAllocatedMemoryForGraphicsDriver()', self.source)
+        self.assertIn('"; unity_driver_graphics_bytes=" + UnityGraphicsDriverBytes()', self.source)
+
+
 if __name__ == "__main__":
     unittest.main()
