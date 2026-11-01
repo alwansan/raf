@@ -8,13 +8,16 @@ on:
       - 'settings.gradle'
       - 'gradle.properties'
       - '.github/workflows/lograf-apk.yml'
-      - 'signing/README.md'
+      - 'signing/**'
   workflow_dispatch:
+
 permissions:
   contents: write
+
 concurrency:
   group: lograf-apk-${{ github.ref }}
   cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-24.04
@@ -23,11 +26,46 @@ jobs:
       - uses: actions/checkout@v4
         with:
           lfs: false
-          persist-credentials: false
+          persist-credentials: true
+          fetch-depth: 1
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
+
+      - name: Generate and commit a permanent open-source TEST signing key once
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = "lograf"
+          KEY=signing/lograf-public-test.p12
+          CHECKSUM=signing/lograf-public-test.sha256
+          if [ ! -e "$KEY" ]; then
+            echo "First build: generating one stable public TEST key inside lograf branch."
+            mkdir -p signing
+            keytool -genkeypair -noprompt \
+              -alias lograf-public \
+              -keyalg RSA -keysize 3072 -sigalg SHA256withRSA \
+              -validity 10000 -storetype PKCS12 \
+              -keystore "$KEY" \
+              -storepass LogRaftOpenSource2026 \
+              -keypass LogRaftOpenSource2026 \
+              -dname "CN=LogRaft Public Test, OU=Android Diagnostics, O=LogRaft Open Source, C=IQ"
+            sha256sum "$KEY" > "$CHECKSUM"
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add "$KEY" "$CHECKSUM"
+            git commit -m "chore(lograf): persist single public test Android signing identity [skip ci]"
+            # Fail the run rather than publish an unpersisted key.
+            git push origin HEAD:refs/heads/lograf
+          fi
+          test -s "$KEY"
+          test -s "$CHECKSUM"
+          sha256sum --check "$CHECKSUM"
+          keytool -list -storetype PKCS12 \
+            -keystore "$KEY" -storepass LogRaftOpenSource2026 -alias lograf-public
+          echo "Using stable signing key committed to lograf."
+
       - name: Ensure Android SDK platform
         run: |
           test -d "$ANDROID_HOME"
@@ -37,33 +75,11 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.9'
-      - name: Restore persistent test signing identity (only when configured)
-        id: signing
-        env:
-          LOGRAF_KEY_B64: ${{ secrets.LOGRAF_SIGNING_KEYSTORE_B64 }}
-          LOGRAF_PASSWORD: ${{ secrets.LOGRAF_SIGNING_PASSWORD }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          if [[ -z "$LOGRAF_KEY_B64" || -z "$LOGRAF_PASSWORD" ]]; then
-            echo "SIGNING_AVAILABLE=false" >> "$GITHUB_ENV"
-            echo "Signing secrets missing: compile debug for CI; DO NOT publish an unstable-key APK"
-          else
-            umask 077
-            printf %s "$LOGRAF_KEY_B64" | base64 --decode > "$RUNNER_TEMP/lograf-update.p12"
-            actual="$(sha256sum "$RUNNER_TEMP/lograf-update.p12" | awk '{print $1}')"
-            test "$actual" = "de90c4500d3bbb1336b54891952f90500dfed6efdce4e68388280eb1a2e462a3"
-            echo "LOGRAF_SIGNING_STORE=$RUNNER_TEMP/lograf-update.p12" >> "$GITHUB_ENV"
-            echo "LOGRAF_SIGNING_PASSWORD=$LOGRAF_PASSWORD" >> "$GITHUB_ENV"
-            echo "SIGNING_AVAILABLE=true" >> "$GITHUB_ENV"
-          fi
-      - name: Compile app for diagnostics
-        run: gradle --no-daemon :app:assembleDebug
-      - name: Build persistent-signed release APK
-        if: env.SIGNING_AVAILABLE == 'true'
+
+      - name: Build stable-signed APK
         run: gradle --no-daemon :app:assembleRelease
-      - name: Verify signing certificate and APK package
-        if: env.SIGNING_AVAILABLE == 'true'
+
+      - name: Verify APK signature and matching repository keystore
         shell: bash
         run: |
           set -euo pipefail
@@ -71,30 +87,32 @@ jobs:
           test -s "$APK"
           APK_SIGNER="$ANDROID_HOME/build-tools/35.0.0/apksigner"
           "$APK_SIGNER" verify --verbose --print-certs "$APK" | tee "$RUNNER_TEMP/lograf-signature.txt"
-          grep -Fq 'B2:6A:8C:17:02:90:E4:DC:F3:3C:8E:B0:57:D8:71:23:95:83:39:D5:2D:4A:59:EC:8E:1A:72:94:B5:14:27:B8' "$RUNNER_TEMP/lograf-signature.txt" || \
-          grep -Fiq '8eb6e3019227e931628b937c2bc92d2439ae26575a0608fc55f6843589a1ee90' "$RUNNER_TEMP/lograf-signature.txt"
+          grep -q "Verified using v2 scheme" "$RUNNER_TEMP/lograf-signature.txt"
+          ACTUAL="$(sed -n 's/^Signer #1 certificate SHA-256 digest: //p' "$RUNNER_TEMP/lograf-signature.txt" | head -1 | tr -d '[:space:]' | tr '[:upper:]' '[:lower:]')"
+          EXPECTED="$(keytool -exportcert -alias lograf-public \
+            -keystore signing/lograf-public-test.p12 -storepass LogRaftOpenSource2026 \
+            -storetype PKCS12 | sha256sum | awk '{print $1}')"
+          test -n "$ACTUAL"
+          test "$ACTUAL" = "$EXPECTED"
           cp "$APK" LogRaft-signed.apk
           sha256sum LogRaft-signed.apk > LogRaft-signed.apk.sha256
-      - name: Archive compilation artifact (for inspection only)
-        uses: actions/upload-artifact@v4
+          echo "Verified persistent APK certificate SHA256: $ACTUAL"
+
+      - uses: actions/upload-artifact@v4
         with:
-          name: LogRaft-unsigned-key-ci-debug-DO-NOT-INSTALL-AS-UPDATE
-          path: app/build/outputs/apk/debug/app-debug.apk
-          retention-days: 3
-      - name: Archive signed update APK
-        if: env.SIGNING_AVAILABLE == 'true'
-        uses: actions/upload-artifact@v4
-        with:
-          name: LogRaft-stable-signed-APK
+          name: LogRaft-signed-APK
           path: |
             LogRaft-signed.apk
             LogRaft-signed.apk.sha256
-      - name: Publish signed update APK (never publish ephemeral debug keys)
-        if: env.SIGNING_AVAILABLE == 'true'
+
+      - name: Publish standalone signed APK release
         env:
           GH_TOKEN: ${{ github.token }}
+        shell: bash
         run: |
-          gh release create "lograf-${GITHUB_RUN_NUMBER}" LogRaft-signed.apk LogRaft-signed.apk.sha256 \
-            --title "LogRaft persistent-signed APK (run ${GITHUB_RUN_NUMBER})" \
-            --prerelease --target "${GITHUB_SHA}" \
-            --notes "Signed with stable LogRaft test certificate SHA256 8eb6e3019227e931628b937c2bc92d2439ae26575a0608fc55f6843589a1ee90. No game assets included. First transition from old ephemeral debug APK may require uninstall once. Future updates preserve app data."
+          set -euo pipefail
+          gh release create "lograf-${GITHUB_RUN_NUMBER}" \
+            LogRaft-signed.apk LogRaft-signed.apk.sha256 \
+            --title "LogRaft stable signed APK (run ${GITHUB_RUN_NUMBER})" \
+            --prerelease --target "$(git rev-parse HEAD)" \
+            --notes "Signed with permanent PUBLIC TEST key in lograf/signing. First switch from earlier debug APKs may require a one-time uninstall; future APKs will install as updates. The public signing key is for an open-source experimental logger, not a security boundary."
