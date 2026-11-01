@@ -45,9 +45,11 @@ on:
       - 'scripts/add_unity_packages.py'
       - 'tests/test_add_unity_packages.py'
 
+# Never cancel an active multi-hour Unity import merely because a workflow or
+# test file changed. Non-opt-in pushes must not reconstruct the full project.
 concurrency:
   group: raft-unity-editor-android-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 permissions:
   contents: read
@@ -80,7 +82,7 @@ jobs:
   reconstruct:
     needs: unity-license-preflight
     environment: UNITY_LICENSE
-    if: ${{ needs.unity-license-preflight.outputs.ready == 'true' }}
+    if: ${{ needs.unity-license-preflight.outputs.ready == 'true' && ((github.event_name == 'workflow_dispatch' && inputs.build_mode == 'native') || (github.event_name == 'push' && contains(github.event.head_commit.message, '[raft-native-build]'))) }}
     runs-on: ubuntu-24.04
     # Restored Mono fields now require a substantially larger first-import budget.
     # Previous 65-minute job expired during active asset import, before Build().
