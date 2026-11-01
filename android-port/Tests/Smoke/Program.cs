@@ -1,5 +1,8 @@
 using System;
 using System.IO;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using RaftAndroid.Platform;
 
 internal static class Program
@@ -46,6 +49,26 @@ internal static class Program
                 string first = store.GetOrCreateProfileId();
                 Assert(first.Length == 32, "GUID-format ID required");
                 Assert(first == new LocalProfileStore(root).GetOrCreateProfileId(), "Identity changed on reopen");
+            });
+            Test("concurrent first launches preserve one durable profile identity", () =>
+            {
+                string parallelRoot = Path.Combine(root, "parallel-first-launch");
+                using var start = new ManualResetEventSlim(false);
+                var tasks = Enumerable.Range(0, 24).Select(_ => Task.Run(() =>
+                {
+                    start.Wait();
+                    return new LocalProfileStore(parallelRoot).GetOrCreateProfileId();
+                })).ToArray();
+                start.Set();
+                Task.WaitAll(tasks);
+                string first = tasks[0].Result;
+                Assert(tasks.All(task => task.Result == first),
+                    "Concurrent launch generated multiple profile identities");
+                string profileDirectory = Path.Combine(parallelRoot, "RaftAndroid", "profiles", "local");
+                Assert(Directory.GetFiles(profileDirectory, "*.tmp").Length == 0,
+                    "Concurrent profile creation left temporary identity files");
+                Assert(new LocalProfileStore(parallelRoot).GetOrCreateProfileId() == first,
+                    "Concurrent identity did not persist after restart");
             });
             Test("independent app sandboxes have separate identities", () =>
             {
