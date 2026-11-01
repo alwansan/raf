@@ -13,6 +13,14 @@ This source lives **only** on branch `lograf` of `alwansan/raf`. It is not the g
 - Output: choose a base folder via Android Storage Access Framework. Each capture creates `LogRaft-<timestamp>/session-info.txt`, `raft-*.log` segments, **32 MiB per segment with no delete-on-rotation**. When stopped, **Share** creates ZIP inside the session folder.
 - Recording only stops on explicit Stop, service/permission/process death, storage failure, device shutdown, or external OS enforcement. Shizuku must remain available.
 
+## New in v0.2.0 — game performance telemetry
+- Every ~3 seconds: game process CPU (% of one core and normalized across device cores), RSS and peak RSS, threads, per-process I/O counters, and system memory.
+- Less frequently: process PSS, battery level/temperature, thermal status, Qualcomm Adreno KGSL GPU busy and frequency where readable.
+- Best-effort SurfaceFlinger SurfaceView presented FPS estimate, NOT Unity's actual Update FPS. Android 15 may deny or omit this metric.
+- Missing or blocked readings are null, never fake zeros.
+- Separate metrics-*.jsonl segments (8 MiB), preserved along with the original full raft-*.log (32 MiB) segments.
+- Live metrics in the app, plus a Mark issue action both in the app and notification for correlating a glitch to performance samples.
+- The existing game branch has its own internal AndroidTestDiagnostics frame and Unity memory counters in its private sandbox; this independent logger cannot assume access.
 ## Phone steps
 1. Install and start [Shizuku](https://shizuku.rikka.app/). Android 11+ wireless debugging works without a PC; root is optional. It normally must be restarted after phone reboot.
 2. Install `LogRaft-debug.apk` from [GitHub Releases](https://github.com/alwansan/raf/releases), filter tags starting with `lograf-`. Android may warn about sideloading.
@@ -51,6 +59,9 @@ GitHub Action `.github/workflows/lograf-apk.yml` on the **lograf** branch builds
 - [ ] Raft force-close and native crash are recorded and LogRaft keeps running.
 - [ ] System context lines reference Raft, not unrelated apps.
 - [ ] Continuous 30+ min session grows across segment rollover; no old segment deletion.
+- [ ] metrics-*.jsonl is parseable with 3-second timestamps and nulls for unavailable metrics.
+- [ ] Compare CPU/RSS to independent system readings; KGSL utilization is device-wide, not game-only.
+- [ ] Mark issue button/notification records a matching timestamp.
 - [ ] Stopping closes files; ZIP has all segments and metadata.
 - [ ] Storage revoked/full gracefully indicates failure.
 - [ ] Reboot/Shizuku shutdown does not falsely claim capture continued.

@@ -19,6 +19,7 @@ import rikka.shizuku.Shizuku;
 public final class CaptureService extends Service {
     public static final String START="com.alwansan.lograf.START";
     public static final String STOP="com.alwansan.lograf.STOP";
+    public static final String MARK="com.alwansan.lograf.MARK";
     private static final String CHANNEL="record";
     private static final int NOTIFICATION=11;
     private static final long SEGMENT_BYTES=32L*1024*1024;
@@ -100,14 +101,21 @@ public final class CaptureService extends Service {
         PendingIntent open=PendingIntent.getActivity(this,0,ui,PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE);
         Intent stop=new Intent(this,CaptureService.class).setAction(STOP);
         PendingIntent stopPi=PendingIntent.getService(this,1,stop,PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE);
+        Intent mark=new Intent(this,CaptureService.class).setAction(MARK);
+        PendingIntent markPi=PendingIntent.getService(this,2,mark,PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE);
         return new Notification.Builder(this,CHANNEL)
                 .setContentTitle("LogRaft • recording").setContentText("Raft log streaming into your chosen folder")
                 .setSmallIcon(android.R.drawable.stat_notify_sync).setContentIntent(open)
+                .addAction(android.R.drawable.ic_menu_edit,"Mark issue",markPi)
                 .addAction(android.R.drawable.ic_menu_close_clear_cancel,"Stop",stopPi)
                 .setOngoing(true).build();
     }
 
     @Override public int onStartCommand(Intent intent,int flags,int startId) {
+        if(intent != null && MARK.equals(intent.getAction())) {
+            appendMarker();
+            return START_NOT_STICKY;
+        }
         if(intent != null && STOP.equals(intent.getAction())) {
             halt("Stopped by user");
             stopSelf();
@@ -172,6 +180,19 @@ public final class CaptureService extends Service {
         segmentBytes=0;
         Config.prefs(this).edit().putString("files",new JSONArray(fileUris).toString())
                 .putString("sessionFolder",sessionFolder.toString()).apply();
+    }
+
+    private void appendMarker() {
+        synchronized(writeLock) {
+            if(!active || output==null)return;
+            try {
+                String marker="[USER MARKER] "+new Date().toString()+" : User noticed an issue while playing Raft\n";
+                byte[] data=marker.getBytes(StandardCharsets.UTF_8);
+                if(segmentBytes+data.length>SEGMENT_BYTES)openSegment();
+                output.write(data);output.flush();segmentBytes+=data.length;totalBytes+=data.length;
+                saveStatus("Issue marker saved at "+new Date());
+            }catch(Exception e){fatal("Cannot save marker: "+e);}
+        }
     }
 
     private void openMetricSegment() throws IOException {

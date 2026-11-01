@@ -89,6 +89,13 @@ public final class MainActivity extends Activity {
         });
         layout.addView(launch);
 
+        Button marker=button("علّم لحظة حدوث مشكلة (Marker)");
+        marker.setOnClickListener(v->{
+            startService(new Intent(this,CaptureService.class).setAction(CaptureService.MARK));
+            message("Issue marker requested");
+        });
+        layout.addView(marker);
+
         stop=button("إيقاف التسجيل وحفظ الملفات");
         stop.setOnClickListener(v-> {
             startService(new Intent(this,CaptureService.class).setAction(CaptureService.STOP));
