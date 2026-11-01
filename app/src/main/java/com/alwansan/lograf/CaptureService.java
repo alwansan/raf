@@ -23,7 +23,10 @@ public final class CaptureService extends Service {
     private static final int NOTIFICATION=11;
     private static final long SEGMENT_BYTES=32L*1024*1024;
     private final Object writeLock = new Object();
-    private OutputStream output;
+    private OutputStream output, metricsOutput;
+    private long metricsSegmentBytes;
+    private int metricsPart;
+    private static final long METRICS_SEGMENT_BYTES=8L*1024*1024;
     private Uri folder, sessionFolder;
     private final ArrayList<String> fileUris = new ArrayList<>();
     private long segmentBytes, totalBytes, lastStatus;
@@ -40,14 +43,19 @@ public final class CaptureService extends Service {
             synchronized(writeLock) {
                 if (!active) return;
                 try {
-                    byte[] bytes = ("[" + source + "]\n" + content).getBytes(StandardCharsets.UTF_8);
-                    if (output==null || segmentBytes + bytes.length > SEGMENT_BYTES) openSegment();
-                    output.write(bytes);
-                    segmentBytes += bytes.length; totalBytes += bytes.length;
-                    if (System.currentTimeMillis() - lastStatus > 1500) {
-                        output.flush();
-                        saveStatus("Recording Raft • " + (totalBytes/1024) + " KiB");
+                    if ("METRICS".equals(source)) {
+                        byte[] data=content.getBytes(StandardCharsets.UTF_8);
+                        if(metricsOutput==null || metricsSegmentBytes+data.length>METRICS_SEGMENT_BYTES)openMetricSegment();
+                        metricsOutput.write(data); metricsOutput.flush();
+                        metricsSegmentBytes+=data.length; totalBytes+=data.length;
+                    } else {
+                        byte[] bytes = ("[" + source + "]\n" + content).getBytes(StandardCharsets.UTF_8);
+                        if (output==null || segmentBytes + bytes.length > SEGMENT_BYTES) openSegment();
+                        output.write(bytes);
+                        segmentBytes += bytes.length; totalBytes += bytes.length;
+                        if (System.currentTimeMillis() - lastStatus > 1500) output.flush();
                     }
+                    if (System.currentTimeMillis() - lastStatus > 1500) saveStatus("Recording Raft • " + (totalBytes/1024) + " KiB");
                 } catch (Exception e) { fatal("Storage write failed: " + e); }
             }
         }
@@ -134,6 +142,7 @@ public final class CaptureService extends Service {
             }
             fileUris.add(meta.toString());
             openSegment();
+            openMetricSegment();
             saveStatus("Preparing Shizuku logger...");
             args=new Shizuku.UserServiceArgs(new ComponentName(getPackageName(),RemoteLogService.class.getName()))
                 .daemon(false).processNameSuffix("lograf").debuggable(false).version(1);
@@ -158,6 +167,18 @@ public final class CaptureService extends Service {
         segmentBytes=0;
         Config.prefs(this).edit().putString("files",new JSONArray(fileUris).toString())
                 .putString("sessionFolder",sessionFolder.toString()).apply();
+    }
+
+    private void openMetricSegment() throws IOException {
+        if(metricsOutput!=null){metricsOutput.flush();metricsOutput.close();}
+        metricsPart++;
+        String name=String.format(Locale.US,"metrics-%s-%05d.jsonl",session,metricsPart);
+        Uri uri=DocumentsContract.createDocument(getContentResolver(),sessionFolder,"application/octet-stream",name);
+        if(uri==null)throw new IOException("Cannot create telemetry segment: "+name);
+        metricsOutput=getContentResolver().openOutputStream(uri,"w");
+        if(metricsOutput==null)throw new IOException("Cannot open telemetry segment");
+        fileUris.add(uri.toString()); metricsSegmentBytes=0;
+        Config.prefs(this).edit().putString("files",new JSONArray(fileUris).toString()).apply();
     }
 
     private void saveStatus(String status){
@@ -190,6 +211,7 @@ public final class CaptureService extends Service {
         catch(Exception ignored){}
         synchronized(writeLock) {
             if(output!=null) { try { output.flush(); output.close(); } catch(Exception ignored){} output=null; }
+            if(metricsOutput!=null) { try { metricsOutput.flush(); metricsOutput.close(); } catch(Exception ignored){} metricsOutput=null; }
         }
         saveStatus(status+" • "+(totalBytes/1024)+" KiB saved");
         stopForeground(STOP_FOREGROUND_REMOVE);
