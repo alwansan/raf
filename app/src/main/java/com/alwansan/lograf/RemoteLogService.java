@@ -27,7 +27,8 @@ public final class RemoteLogService extends IRemoteLog.Stub {
     private Thread gameThread, systemThread, pidThread, telemetryThread;
     private static final Pattern PID = Pattern.compile("^\\s*(?:\\d{4}-)?\\d\\d-\\d\\d\\s+\\d\\d:\\d\\d:\\d\\d[^ ]*\\s+(\\d+)\\s+");
     private static final Pattern CRASH_MARK = Pattern.compile("(?i)(FATAL EXCEPTION|Fatal signal|tombstone|crash_dump|am_crash|am_anr|Force finishing|ANR in|native crash|Fatal Java|Process:)");
-    private static final int BATCH = 4096;
+    private static final int BATCH = 32768;
+    private volatile long metricPreviousAt=-1, metricPreviousGameLines=0, metricPreviousSystemLines=0;
 
     public RemoteLogService() {}
 
@@ -38,6 +39,7 @@ public final class RemoteLogService extends IRemoteLog.Stub {
         stop();
         listener = sink; gameUid = uid; packageName = targetPackage;
         gameLogLines.set(0);systemContextLines.set(0);reconnections.set(0);
+        metricPreviousAt=-1;metricPreviousGameLines=0;metricPreviousSystemLines=0;
         running.set(true);
         gameThread = new Thread(() -> pump("RAFT", new String[]{
                 "logcat", "-b", "main", "-b", "system", "-b", "crash", "-b", "events",
@@ -69,7 +71,20 @@ public final class RemoteLogService extends IRemoteLog.Stub {
         if(sink!=null && running.get()) {
             try {
                 JSONObject data=new JSONObject(line.trim());
-                data.put("game_log_lines",gameLogLines.get());
+                long now=android.os.SystemClock.elapsedRealtime();
+                long gameLines=gameLogLines.get();
+                long systemLines=systemContextLines.get();
+                if(metricPreviousAt>0 && now>metricPreviousAt){
+                    double seconds=(now-metricPreviousAt)/1000.0;
+                    double rate=Math.max(0,gameLines-metricPreviousGameLines)/seconds;
+                    data.put("game_log_lines_per_second",Math.round(rate*100.0)/100.0);
+                    data.put("error_flood_warning",rate>=10000);
+                    data.put("system_context_lines_per_second",Math.round(Math.max(0,systemLines-metricPreviousSystemLines)/seconds*100.0)/100.0);
+                }
+                metricPreviousAt=now;
+                metricPreviousGameLines=gameLines;
+                metricPreviousSystemLines=systemLines;
+                data.put("game_log_lines",gameLines);
                 data.put("system_context_lines",systemContextLines.get());
                 data.put("logcat_reconnects",reconnections.get());
                 data.put("logcat_unobserved_losses","unknown");
@@ -123,15 +138,25 @@ public final class RemoteLogService extends IRemoteLog.Stub {
                 try (BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8), 65536)) {
                     String line;
                     long lastDelivery = System.nanoTime();
-                    while (running.get() && (line = in.readLine()) != null) {
-                        if (line.startsWith("--------- beginning of ")) {
-                            // Preserve buffer boundaries even if no Raft activity.
+                    while (running.get()) {
+                        // readLine blocks indefinitely on a quiet logcat stream.
+                        // Poll ready() so pending small batches are flushed within 0.7s.
+                        if (!in.ready()) {
+                            if (batch.length()>0 && System.nanoTime()-lastDelivery>700_000_000L) {
+                                send(source,batch);
+                                lastDelivery=System.nanoTime();
+                            }
+                            if (!p.isAlive()) break;
+                            Thread.sleep(60);
                             continue;
                         }
+                        line=in.readLine();
+                        if(line==null)break;
+                        if (line.startsWith("--------- beginning of ")) continue;
                         if (!onlyContext || systemRelevant(line)) {
                             if(onlyContext)systemContextLines.incrementAndGet();else gameLogLines.incrementAndGet();
                             batch.append(line).append('\n');
-                            if (batch.length() >= BATCH || (System.nanoTime()-lastDelivery)>800_000_000L) {
+                            if (batch.length() >= BATCH || System.nanoTime()-lastDelivery>700_000_000L) {
                                 send(source,batch);
                                 lastDelivery=System.nanoTime();
                             }
