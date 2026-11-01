@@ -43,6 +43,7 @@ namespace RaftAndroid.Platform
             var host = new GameObject("RaftAndroidTestDiagnostics");
             DontDestroyOnLoad(host);
             host.AddComponent<AndroidTestDiagnostics>();
+            ReportPriorExits();
             Debug.Log("RAFT_ANDROID_DEVICE_TEST earlyStartupCandidate=true gameplayVerified=false");
         }
 
@@ -96,6 +97,7 @@ namespace RaftAndroid.Platform
 
 
         private float nextSample;
+        private bool skipNextFrame = true;
         private readonly float[] frameSamples = new float[2048];
         private readonly FrameTiming[] timings = new FrameTiming[1];
         private int sampleCount, intervalFrames;
@@ -121,11 +123,69 @@ namespace RaftAndroid.Platform
                 "; unity_reserved_bytes=" + Profiler.GetTotalReservedMemoryLong() +
                 "; unity_unused_reserved_bytes=" + Profiler.GetTotalUnusedReservedMemoryLong() +
                 "; gc_gen0_total=" + GC.CollectionCount(0) + "; process_rss=" + ProcessRss() +
-                "; process_pss=unavailable; thermal=unavailable; draw_calls=unavailable" +
+                "; process_pss=" + ProcessPss() + "; system_memory=" + AndroidMemory() +
+                "; thermal=unavailable; draw_calls=unavailable" +
                 "; width=" + Screen.width + "; height=" + Screen.height + "; orientation=" + Screen.orientation +
                 "; refresh_hz=" + Screen.currentResolution.refreshRate + "; scene=" + SceneManager.GetActiveScene().name;
             intervalFrames = sampleCount = 0; intervalSeconds = 0;
             return report;
+        }
+        private static void ReportPriorExits()
+        {
+            try
+            {
+                using (var version = new AndroidJavaClass("android.os.Build$VERSION"))
+                    if (version.GetStatic<int>("SDK_INT") < 30) return;
+                using (var player = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+                using (var activity = player.GetStatic<AndroidJavaObject>("currentActivity"))
+                using (var manager = activity.Call<AndroidJavaObject>("getSystemService", "activity"))
+                using (var exits = manager.Call<AndroidJavaObject>("getHistoricalProcessExitReasons", Application.identifier, 0, 4))
+                {
+                    int count = Math.Min(exits.Call<int>("size"), 4);
+                    for (int i = 0; i < count; i++)
+                    using (var exit = exits.Call<AndroidJavaObject>("get", i))
+                        RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("startup", "previous_process_exit",
+                            "reason_code=" + exit.Call<int>("getReason") + "; status=" + exit.Call<int>("getStatus") +
+                            "; timestamp_unix_ms=" + exit.Call<long>("getTimestamp") +
+                            "; pss_kb=" + exit.Call<long>("getPss") + "; rss_kb=" + exit.Call<long>("getRss"), true);
+                }
+            }
+            catch (Exception ex)
+            {
+                RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("startup", "previous_process_exit.unavailable", ex.GetType().Name);
+            }
+        }
+        private static string AndroidMemory()
+        {
+            try
+            {
+                using (var player = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+                using (var activity = player.GetStatic<AndroidJavaObject>("currentActivity"))
+                using (var manager = activity.Call<AndroidJavaObject>("getSystemService", "activity"))
+                using (var info = new AndroidJavaObject("android.app.ActivityManager$MemoryInfo"))
+                {
+                    manager.Call("getMemoryInfo", info);
+                    return "available_bytes:" + info.Get<long>("availMem") + ",total_bytes:" + info.Get<long>("totalMem") +
+                        ",low_memory:" + info.Get<bool>("lowMemory") + ",threshold_bytes:" + info.Get<long>("threshold");
+                }
+            }
+            catch (Exception) { return "unavailable"; }
+        }
+        private static string ProcessPss()
+        {
+            try
+            {
+                foreach (string line in System.IO.File.ReadLines("/proc/self/smaps_rollup"))
+                    if (line.StartsWith("Pss:", StringComparison.Ordinal)) return line.Substring(4).Trim();
+            }
+            catch (Exception) { }
+            return "unavailable";
+        }
+        private static void LowMemory()
+        {
+            RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("memory", "unity.low_memory", AndroidMemory() +
+                "; process_pss=" + ProcessPss(), true);
+            RaftAndroid.Diagnostics.AndroidRuntimeLog.Flush();
         }
         private static string ProcessRss()
         {
@@ -139,12 +199,14 @@ namespace RaftAndroid.Platform
         }
         private void OnEnable()
         {
+            Application.lowMemory += LowMemory;
             SceneManager.sceneLoaded += SceneLoaded;
             SceneManager.sceneUnloaded += SceneUnloaded;
             SceneManager.activeSceneChanged += ActiveSceneChanged;
         }
         private void OnDisable()
         {
+            Application.lowMemory -= LowMemory;
             SceneManager.sceneLoaded -= SceneLoaded;
             SceneManager.sceneUnloaded -= SceneUnloaded;
             SceneManager.activeSceneChanged -= ActiveSceneChanged;
@@ -165,6 +227,7 @@ namespace RaftAndroid.Platform
         {
             if (!paused) EnforceLandscape();
             intervalFrames = sampleCount = 0; intervalSeconds = 0;
+            skipNextFrame = true;
             RaftAndroid.Diagnostics.AndroidRuntimeLog.Flush();
             RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("lifecycle", "pause", paused.ToString(), true);
         }
@@ -187,6 +250,7 @@ namespace RaftAndroid.Platform
         }
         private void Update()
         {
+            if (skipNextFrame) { skipNextFrame = false; return; }
             float delta = Time.unscaledDeltaTime;
             intervalFrames++; intervalSeconds += delta;
             if (sampleCount < frameSamples.Length) frameSamples[sampleCount++] = delta * 1000f;

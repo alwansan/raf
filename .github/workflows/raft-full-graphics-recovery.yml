@@ -1,0 +1,84 @@
+name: Raft full original texture and shader recovery probe (no Unity/APK)
+'on':
+  push:
+    branches:
+    - feature/android-native-port
+    paths:
+    - .github/workflows/raft-full-graphics-recovery.yml
+  workflow_dispatch: {}
+permissions:
+  contents: read
+concurrency:
+  group: raft-full-graphics-recovery
+  cancel-in-progress: false
+jobs:
+  recover:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+    - name: Disk safety gate before dependencies / LFS download
+      shell: bash
+      run: 'set -euo pipefail
+
+        df -h /
+
+        free_kb=$(df -Pk "$RUNNER_TEMP" | awk ''NR==2 {print $4}'')
+
+        test "$free_kb" -gt 36700160
+
+        '
+    - uses: actions/checkout@v4
+      with:
+        lfs: false
+        persist-credentials: true
+        sparse-checkout: 'scripts
+
+          tests
+
+          Raft/Raft_Data'
+    - name: Validate graphics extent/authentication fixtures before LFS
+      run: python3 -m unittest discover -s tests -p test_texture_stream_coverage.py -v
+    - name: Validate original CLR providers before any LFS transfer
+      run: "python3 -m unittest discover -s tests -p test_export_managed_providers.py -v\npython3 -m unittest discover\
+        \ -s tests -p test_assetripper_script_import.py -v\npython3 -m pip install --user --disable-pip-version-check\
+        \ dnfile==0.18.0\npython3 -m scripts.stage_export_managed_providers \\\n  --source \"$GITHUB_WORKSPACE/Raft/Raft_Data/Managed\"\
+        \ \\\n  --destination \"$RUNNER_TEMP/input/Raft_Data/Managed\"\n"
+    - name: Restore owner-authorized full original graphics payloads once
+      run: python3 -m scripts.hydrate_render_payloads --apply
+    - name: Audit every original Texture2D external extent and shader backend table
+      run: 'python3 -m pip install --user UnityPy==1.25.4
+
+        python3 -m scripts.audit_texture_stream_coverage --root Raft/Raft_Data'
+    - name: Stage selected Unity game files only, never execute Windows binaries
+      shell: bash
+      run: "set -euo pipefail\nroot=\"$RUNNER_TEMP/input/Raft_Data\"\nmkdir -p \"$root/Managed\"\ntest -f \"$root/Managed/Assembly-CSharp.dll\"\
+        \ntest ! -e \"$root/Managed/PlayFab_o.dll\"\ncp Raft/Raft_Data/boot.config \"$root/\"\nshopt -s nullglob\n\
+        count=0\nfor src in Raft/Raft_Data/globalgamemanagers Raft/Raft_Data/globalgamemanagers.assets* Raft/Raft_Data/resources.assets*\
+        \ Raft/Raft_Data/sharedassets*.assets* Raft/Raft_Data/level*; do\n  [ -f \"$src\" ] || continue\n  if head\
+        \ -c 48 \"$src\" | grep -q '^version https://git-lfs.github.com/spec/v1'; then continue; fi\n  cp \"$src\"\
+        \ \"$root/\"\n  count=$((count+1))\ndone\necho \"Source serialized files staged: $count\"\ntest \"$count\"\
+        \ -gt 110\ndu -sh \"$root\"\n"
+    - name: Obtain SHA256-pinned AssetRipperCLI v1.0.1
+      shell: bash
+      run: "set -euo pipefail\ncurl -fL --retry 2 --max-time 240 \\\n  'https://github.com/nowl-it/AssetRipperCLI/releases/download/v1.0.1/AssetRipper_linux_x64.zip'\
+        \ \\\n  -o \"$RUNNER_TEMP/assetripper.zip\"\necho \"b48292e40948ce2634e9187d4724fb4f45c01fa6f4fea2a5f4775aa611def17b\
+        \  $RUNNER_TEMP/assetripper.zip\" | sha256sum -c -\nmkdir -p \"$RUNNER_TEMP/ar\"\nunzip -q \"$RUNNER_TEMP/assetripper.zip\"\
+        \ -d \"$RUNNER_TEMP/ar\"\nchmod +x \"$RUNNER_TEMP/ar/AssetRipper.GUI.Free\"\npython3 -m scripts.configure_assetripper_export\
+        \ --directory \"$RUNNER_TEMP/ar\"\n"
+    - name: Export 40 scenes into a Unity Editor project with correct MonoScript metadata
+      env:
+        DOTNET_PROCESSOR_COUNT: '2'
+      shell: bash
+      run: "set -euo pipefail\ntimeout 1200s \"$RUNNER_TEMP/ar/AssetRipper.GUI.Free\" \\\n  --cli --input \"$RUNNER_TEMP/input\"\
+        \ \\\n  --output \"$RUNNER_TEMP/project\" --mode unity \\\n  --script-content-level Level1 --ignore-streaming-assets\
+        \ \\\n  > \"$RUNNER_TEMP/export.log\" 2>&1\npython3 -m scripts.verify_assetripper_script_import --log \"\
+        $RUNNER_TEMP/export.log\"\ntest -d \"$RUNNER_TEMP/project/ExportedProject/Assets\"\ntest -d \"$RUNNER_TEMP/project/ExportedProject/ProjectSettings\"\
+        \ndf -h /\n"
+    - name: Report complete-input shader contracts without publishing sources
+      run: "python3 -m scripts.audit_render_input_contracts --project \"$RUNNER_TEMP/project/ExportedProject\"\n\
+        python3 - <<'PY'\nimport os,re\nfrom pathlib import Path\nfrom collections import Counter\nroot=Path(os.environ[\"\
+        RUNNER_TEMP\"])/\"project/ExportedProject/Assets\"\ncounts=Counter()\nfor p in root.rglob(\"*\"):\n if p.is_file()\
+        \ and p.suffix.lower() in (\".png\",\".jpg\",\".tga\",\".exr\",\".compute\",\".asset\"):\n  counts[p.suffix.lower()]+=1\n\
+        print(\"RAFT_COMPLETE_INPUT_EXPORT_COUNTS\",dict(counts))\nPY\npython3 - <<'PY'\nimport os,re\nfrom pathlib\
+        \ import Path\ntext=(Path(os.environ[\"RUNNER_TEMP\"])/\"export.log\").read_text(errors=\"replace\")\nprint(\"\
+        RAFT_EXPORT_SHADER_MODE\",sorted(set(re.findall(r\"ShaderExportMode:\\s*(\\w+)\",text))))\nPY\n"

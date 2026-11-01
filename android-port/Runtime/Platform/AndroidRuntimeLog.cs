@@ -12,7 +12,7 @@ namespace RaftAndroid.Diagnostics
         private static readonly RepeatedDiagnosticMessages repeated = new RepeatedDiagnosticMessages();
         public static bool UnityMessage(string type, string detail, bool critical)
         {
-            if (critical && !repeated.First(type, detail, DateTime.UtcNow)) return false;
+            if ((critical || type == "Warning") && !repeated.First(type, detail, DateTime.UtcNow)) return false;
             Write("unity", type, detail, critical);
             return true;
         }
