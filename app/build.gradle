@@ -6,8 +6,9 @@ android {
         applicationId 'com.alwansan.lograf'
         minSdk 29
         targetSdk 35
-        versionCode 4
-        versionName '0.4.0'
+        // The workflow run number increases automatically for each new APK.
+        versionCode 1000 + (System.getenv('GITHUB_RUN_NUMBER') ?: '0').toInteger()
+        versionName '0.4.' + (System.getenv('GITHUB_RUN_NUMBER') ?: 'local')
     }
     buildFeatures { aidl true }
     signingConfigs {
