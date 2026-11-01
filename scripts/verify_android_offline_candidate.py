@@ -38,8 +38,8 @@ def prepare(source, managed, runtime, output):
     refs = '\n'.join('<Reference Include="' + html.escape(p.stem) + '"><HintPath>' + html.escape(str(p.resolve())) + '</HintPath><Private>false</Private></Reference>'
                      for p in sorted(managed.glob('*.dll')) if p.name != 'Assembly-CSharp.dll')
     # This mirrors the established original managed compatibility diagnostic.
-    project = '<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><TargetFramework>net10.0</TargetFramework><LangVersion>9.0</LangVersion><GenerateAssemblyInfo>false</GenerateAssemblyInfo><AllowUnsafeBlocks>true</AllowUnsafeBlocks><Nullable>disable</Nullable><NoWarn>0168;0649;0618;0672;SYSLIB0011</NoWarn></PropertyGroup><ItemGroup>' + refs + '</ItemGroup></Project>'
-    for name in ('LocalPlayerIdentity.cs', 'LocalProfileStore.cs'):
+    project = '<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><TargetFramework>net10.0</TargetFramework><LangVersion>9.0</LangVersion><DefineConstants>UNITY_ANDROID;UNITY_5_3_OR_NEWER</DefineConstants><GenerateAssemblyInfo>false</GenerateAssemblyInfo><AllowUnsafeBlocks>true</AllowUnsafeBlocks><Nullable>disable</Nullable><NoWarn>0168;0649;0618;0672;SYSLIB0011</NoWarn></PropertyGroup><ItemGroup>' + refs + '</ItemGroup></Project>'
+    for name in ('LocalPlayerIdentity.cs', 'LocalProfileStore.cs', 'AndroidTestDiagnostics.cs'):
         shutil.copy2(runtime / name, source / ('RaftAndroid-' + name))
     (source / 'Candidate.csproj').write_text(project)
     harness = output / 'harness'
