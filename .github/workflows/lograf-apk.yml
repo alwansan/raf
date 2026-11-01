@@ -8,6 +8,7 @@ on:
       - 'settings.gradle'
       - 'gradle.properties'
       - '.github/workflows/lograf-apk.yml'
+      - 'signing/README.md'
   workflow_dispatch:
 permissions:
   contents: write
@@ -36,22 +37,64 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.9'
-      - name: Build APK
-        run: gradle --no-daemon :app:assembleDebug
-      - name: Rename and checksum
+      - name: Restore persistent test signing identity (only when configured)
+        id: signing
+        env:
+          LOGRAF_KEY_B64: ${{ secrets.LOGRAF_SIGNING_KEYSTORE_B64 }}
+          LOGRAF_PASSWORD: ${{ secrets.LOGRAF_SIGNING_PASSWORD }}
+        shell: bash
         run: |
-          cp app/build/outputs/apk/debug/app-debug.apk LogRaft-debug.apk
-          sha256sum LogRaft-debug.apk > LogRaft-debug.apk.sha256
-      - uses: actions/upload-artifact@v4
+          set -euo pipefail
+          if [[ -z "$LOGRAF_KEY_B64" || -z "$LOGRAF_PASSWORD" ]]; then
+            echo "SIGNING_AVAILABLE=false" >> "$GITHUB_ENV"
+            echo "Signing secrets missing: compile debug for CI; DO NOT publish an unstable-key APK"
+          else
+            umask 077
+            printf %s "$LOGRAF_KEY_B64" | base64 --decode > "$RUNNER_TEMP/lograf-update.p12"
+            actual="$(sha256sum "$RUNNER_TEMP/lograf-update.p12" | awk '{print $1}')"
+            test "$actual" = "de90c4500d3bbb1336b54891952f90500dfed6efdce4e68388280eb1a2e462a3"
+            echo "LOGRAF_SIGNING_STORE=$RUNNER_TEMP/lograf-update.p12" >> "$GITHUB_ENV"
+            echo "LOGRAF_SIGNING_PASSWORD=$LOGRAF_PASSWORD" >> "$GITHUB_ENV"
+            echo "SIGNING_AVAILABLE=true" >> "$GITHUB_ENV"
+          fi
+      - name: Compile app for diagnostics
+        run: gradle --no-daemon :app:assembleDebug
+      - name: Build persistent-signed release APK
+        if: env.SIGNING_AVAILABLE == 'true'
+        run: gradle --no-daemon :app:assembleRelease
+      - name: Verify signing certificate and APK package
+        if: env.SIGNING_AVAILABLE == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          APK=app/build/outputs/apk/release/app-release.apk
+          test -s "$APK"
+          APK_SIGNER="$ANDROID_HOME/build-tools/35.0.0/apksigner"
+          "$APK_SIGNER" verify --verbose --print-certs "$APK" | tee "$RUNNER_TEMP/lograf-signature.txt"
+          grep -Fq 'B2:6A:8C:17:02:90:E4:DC:F3:3C:8E:B0:57:D8:71:23:95:83:39:D5:2D:4A:59:EC:8E:1A:72:94:B5:14:27:B8' "$RUNNER_TEMP/lograf-signature.txt" || \
+          grep -Fiq '8eb6e3019227e931628b937c2bc92d2439ae26575a0608fc55f6843589a1ee90' "$RUNNER_TEMP/lograf-signature.txt"
+          cp "$APK" LogRaft-signed.apk
+          sha256sum LogRaft-signed.apk > LogRaft-signed.apk.sha256
+      - name: Archive compilation artifact (for inspection only)
+        uses: actions/upload-artifact@v4
         with:
-          name: LogRaft-APK
+          name: LogRaft-unsigned-key-ci-debug-DO-NOT-INSTALL-AS-UPDATE
+          path: app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 3
+      - name: Archive signed update APK
+        if: env.SIGNING_AVAILABLE == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: LogRaft-stable-signed-APK
           path: |
-            LogRaft-debug.apk
-            LogRaft-debug.apk.sha256
-      - name: Publish standalone test APK
+            LogRaft-signed.apk
+            LogRaft-signed.apk.sha256
+      - name: Publish signed update APK (never publish ephemeral debug keys)
+        if: env.SIGNING_AVAILABLE == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "lograf-${GITHUB_RUN_NUMBER}" LogRaft-debug.apk LogRaft-debug.apk.sha256 \
-            --title "LogRaft diagnostic APK (run ${GITHUB_RUN_NUMBER})" --prerelease --target "${GITHUB_SHA}" \
-            --notes "Standalone diagnostic logger; no Raft game assets or source included."
+          gh release create "lograf-${GITHUB_RUN_NUMBER}" LogRaft-signed.apk LogRaft-signed.apk.sha256 \
+            --title "LogRaft persistent-signed APK (run ${GITHUB_RUN_NUMBER})" \
+            --prerelease --target "${GITHUB_SHA}" \
+            --notes "Signed with stable LogRaft test certificate SHA256 8eb6e3019227e931628b937c2bc92d2439ae26575a0608fc55f6843589a1ee90. No game assets included. First transition from old ephemeral debug APK may require uninstall once. Future updates preserve app data."
