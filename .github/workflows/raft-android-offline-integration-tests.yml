@@ -1,0 +1,61 @@
+name: Raft original Android local startup integration (no LFS)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-android-offline-integration-tests.yml'
+      - 'scripts/adapt_android_offline_startup.py'
+      - 'scripts/verify_android_offline_candidate.py'
+      - 'tests/test_android_offline_startup.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  offline:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+            android-port/Runtime/Platform
+            Raft/Raft_Data/Managed
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Validate adapters and privately recover original source
+        env:
+          DOTNET_PROCESSOR_COUNT: '2'
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_android_offline_startup.py -v
+          python3 -m unittest discover -s tests -p test_adapt_original_save_paths.py -v
+          dotnet tool install ilspycmd --version 11.2.0.10050 --tool-path "$RUNNER_TEMP/ilspy"
+          timeout 360s "$RUNNER_TEMP/ilspy/ilspycmd" -p -lv CSharp9_0 \
+            -o "$RUNNER_TEMP/original" Raft/Raft_Data/Managed/Assembly-CSharp.dll \
+            > "$RUNNER_TEMP/decompile-private.log" 2>&1
+          python3 -m scripts.verify_android_offline_candidate --source "$RUNNER_TEMP/original" \
+            --managed Raft/Raft_Data/Managed --runtime android-port/Runtime/Platform --output "$RUNNER_TEMP/offline-check"
+      - name: Exercise actual adapted local RPC bodies and durable identity
+        run: dotnet run --project "$RUNNER_TEMP/offline-check/harness/Harness.csproj" --configuration Release --nologo
+      - name: Compile adapted original gameplay without publishing compiler source lines
+        run: |
+          set +e
+          timeout 320s dotnet build "$RUNNER_TEMP/original/Candidate.csproj" --configuration Release --nologo -v:q > "$RUNNER_TEMP/compile-private.log" 2>&1
+          code=$?
+          set -e
+          export COMPILE_EXIT="$code"
+          python3 - <<'PY'
+          from collections import Counter
+          import os, re
+          from pathlib import Path
+          text = (Path(os.environ['RUNNER_TEMP']) / 'compile-private.log').read_text(errors='replace')
+          codes = Counter(re.findall(r'error ([A-Z]+[0-9]+):', text))
+          identities = sorted(set(re.findall(r'([^/\\\s]+\.cs)\([^\n]*?: error (CS[0-9]+)', text)))
+          print('RAFT_OFFLINE_COMPILE exit=' + os.environ['COMPILE_EXIT'] + ' errorCodes=' + str(dict(codes)) + ' affectedFiles=' + str(identities))
+          if os.environ['COMPILE_EXIT'] != '0': raise SystemExit('Original managed compatibility compile failed; not Unity evidence')
+          PY
