@@ -1,0 +1,34 @@
+name: Raft official PostFX v1 shader restoration contracts (no LFS)
+'on':
+  push:
+    branches:
+    - feature/android-native-port
+    paths:
+    - scripts/restore_postfx_shaders.py
+    - scripts/restore_tmp_shaders.py
+    - tests/test_restore_postfx_shaders.py
+    - config/postfx-v1-shader-sources.json
+    - .github/workflows/raft-postfx-shader-tests.yml
+  workflow_dispatch: {}
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        lfs: false
+        persist-credentials: false
+        sparse-checkout: 'scripts
+
+          tests
+
+          config/postfx-v1-shader-sources.json'
+    - name: Preserve original shader identities and require original Bloom pass/uniform contract
+      run: 'python3 -m unittest discover -s tests -p test_restore_postfx_shaders.py -v
+
+        python3 -m unittest discover -s tests -p test_restore_tmp_shaders.py -v'
+    - name: Authenticate all selected official v1 shader programs and includes
+      run: python3 -m scripts.restore_postfx_shaders --verify-only

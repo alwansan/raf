@@ -41,6 +41,9 @@ on:
       - 'scripts/adapt_android_render_lifetimes.py'
       - 'tests/test_android_render_lifetimes.py'
       - 'scripts/restore_tmp_shaders.py'
+      - 'scripts/restore_postfx_shaders.py'
+      - 'tests/test_restore_postfx_shaders.py'
+      - 'config/postfx-v1-shader-sources.json'
       - 'tests/test_restore_tmp_shaders.py'
       - 'scripts/restore_fmod_resource_layout.py'
       - 'tests/test_restore_fmod_resource_layout.py'
@@ -111,6 +114,7 @@ jobs:
       - name: Run synthetic code-overlay tests before touching original data
         run: |
           python3 -m unittest discover -s tests -p test_android_render_lifetimes.py -v
+          python3 -m unittest discover -s tests -p test_restore_postfx_shaders.py -v
           python3 -m unittest discover -s tests -p test_restore_tmp_shaders.py -v
           python3 -m unittest discover -s tests -p test_runtime_operation_traces.py -v
           python3 -m unittest discover -s tests -p test_android_offline_startup.py -v
@@ -310,6 +314,11 @@ jobs:
         run: |
           set -euo pipefail
           python3 -m scripts.restore_tmp_shaders --project "$RUNNER_TEMP/project/ExportedProject" --backup "$RUNNER_TEMP/original-tmp-shaders"
+      - name: Restore authenticated Unity PostFX v1 shader programs with original exported GUIDs
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.restore_postfx_shaders --project "$RUNNER_TEMP/project/ExportedProject" --backup "$RUNNER_TEMP/original-postfx-shaders"
       - name: Preserve FFT temporary lifetimes across kernel errors and exclude Windows Party startup from Android solo
         shell: bash
         run: |

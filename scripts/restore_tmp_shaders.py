@@ -43,31 +43,31 @@ def vendor_sources(raw):
     return shaders,includes,license
 
 
-def rewrite_includes(source, includes):
+def rewrite_includes(source, includes, include_root=ROOT):
     return re.sub(r'(#\s*include\s+")([^"\r\n]+)(")',
-        lambda m:m[1]+(ROOT+m[2] if m[2] in includes else m[2])+m[3],source)
+        lambda m:m[1]+(include_root+m[2] if m[2] in includes else m[2])+m[3],source)
 
 
-def restore(project, backup, shaders, includes, license):
+def restore(project, backup, shaders, includes, license, *, shader_prefix="TextMeshPro/", include_root=ROOT, label="TMP", vendor_version="3.0.6"):
     assets=(project/'Assets').resolve();backup=backup.resolve()
     if backup.is_relative_to(project.resolve()): raise ValueError('Shader backup must be outside Unity project')
     plan=[];used=set()
     for target in sorted(assets.rglob('*.shader')):
         text=target.read_text(encoding='utf-8-sig');match=DECL.search(text)
-        if not match or not match[1].startswith('TextMeshPro/'): continue
+        if not match or not match[1].startswith(shader_prefix): continue
         name=match[1]
-        if name not in shaders: raise ValueError('Unknown original TMP shader name; no replacement invented')
+        if name not in shaders: raise ValueError('Unknown original vendor shader name; no replacement invented')
         if name in used: raise ValueError('Ambiguous exported TMP shader identity')
         used.add(name)
         meta=Path(str(target)+'.meta')
         if not meta.is_file() or target.is_symlink() or meta.is_symlink(): raise ValueError('Missing/unsafe original TMP shader metadata')
-        plan.append((target,rewrite_includes(shaders[name],includes),target.read_bytes(),meta,meta.read_bytes()))
-    if not plan: raise ValueError('No original exported TMP shader identities')
+        plan.append((target,rewrite_includes(shaders[name],includes,include_root),target.read_bytes(),meta,meta.read_bytes()))
+    if not plan: raise ValueError('No original exported vendor shader identities')
     dependency_plan=[]
     for name,source in includes.items():
         if Path(name).name!=name or not name.endswith('.cginc'): raise ValueError('Unsafe include filename')
-        destination=project/ROOT/name
-        content=rewrite_includes(source,includes).encode('utf-8')
+        destination=project/include_root/name
+        content=rewrite_includes(source,includes,include_root).encode('utf-8')
         if destination.exists() and destination.read_bytes()!=content: raise ValueError('Conflicting shader include destination')
         dependency_plan.append((destination,content))
     # A stripped PC build can omit a vendor fallback that was never referenced.
@@ -76,13 +76,13 @@ def restore(project, backup, shaders, includes, license):
     for name, source in shaders.items():
         if name in used: continue
         filename = 'vendor-' + hashlib.sha256(name.encode()).hexdigest()[:16] + '.shader'
-        destination = project/ROOT/filename
-        content = rewrite_includes(source, includes).encode('utf-8')
+        destination = project/include_root/filename
+        content = rewrite_includes(source, includes, include_root).encode('utf-8')
         if destination.exists() and destination.read_bytes() != content:
             raise ValueError('Conflicting vendor fallback shader destination')
         missing.append((destination, content))
     dependency_plan.extend(missing)
-    license_path=project/ROOT/'LICENSE.md'
+    license_path=project/include_root/'LICENSE.md'
     if license_path.exists() and license_path.read_bytes()!=license: raise ValueError('Conflicting TMP notice')
     backup.mkdir(parents=True,exist_ok=False)
     for target,source,original,meta,meta_bytes in plan:
@@ -97,7 +97,7 @@ def restore(project, backup, shaders, includes, license):
     except BaseException:
         for target,source,original,meta,meta_bytes in plan: target.write_bytes(original)
         raise
-    print('RAFT_TMP_SHADER_RESTORATION originalShaders='+str(len(plan))+' vendorFallbacksAdded='+str(len(missing))+' originalMetasUnchanged=true fontAtlasChanged=false vendorVersion=3.0.6')
+    print('RAFT_'+label+'_SHADER_RESTORATION originalShaders='+str(len(plan))+' vendorFallbacksAdded='+str(len(missing))+' originalMetasUnchanged=true fontAtlasChanged=false vendorVersion='+vendor_version)
     return len(plan)
 
 

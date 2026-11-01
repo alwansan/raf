@@ -1,0 +1,152 @@
+{
+  "repository": "Unity-Technologies/PostProcessing",
+  "commit": "933df236f509ed64ae5763ed57af33f2342cd1c2",
+  "shader_root": "PostProcessing/Resources/Shaders/",
+  "files": [
+    {
+      "path": "LICENSE",
+      "git_blob": "5cfd2151c7ffe0c07008cc4a031c2b8226bb65d0",
+      "bytes": 1091
+    },
+    {
+      "path": "PostProcessing/Resources/Shaders/ACES.cginc",
+      "git_blob": "fa996b96e8a5610cf039166ff083c2376ecb818e",
+      "bytes": 46646
+    },
+    {
+      "path": "PostProcessing/Resources/Shaders/AmbientOcclusion.cginc",
+      "git_blob": "42f4bcfca487bc2e616ec8142d4d937f22b4fcf6",
+      "bytes": 15165
+    },
+    {
+      "path": "PostProcessing/Resources/Shaders/AmbientOcclusion.shader",
+      "git_blob": "40bdf7bbf3204e480e4d01a586c35f97d20e6e11",
+      "bytes": 3314
+    },
+    {
+      "path": "PostProcessing/Resources/Shaders/Blit.shader",
+      "git_blob": "3a6c07ff5316488fc042d5788f9c6ef574079594",
+      "bytes": 934
+    },
+    {
+      "path": "PostProcessing/Resources/Shaders/Bloom.cginc",
+      "git_blob": "6e1086a62635a86359d53eb1c619e7b5d53f2bea",
+      "bytes": 2488
+    },
+    {
+      "path": "PostProcessing/Resources/Shaders/Bloom.shader",
+      "git_blob": "d3004bb90e2d4d66c7e14e5d49820a71e4b26c29",
+      "bytes": 5780
+    },
+    {
+      "path": "PostProcessing/Resources/Shaders/BuiltinDebugViews.shader",
+      "git_blob": "337128e48560ad40f51ab7dbad17992f4f98e11a",
+      "bytes": 7066
+    },
+    {
+      "path": "PostProcessing/Resources/Shaders/ColorGrading.cginc",
+      "git_blob": "42796fe6599a78f88d2e799740319caac6821c08",
+      "bytes": 7196
+    },
+    {
+      "path": "PostProcessing/Resources/Shaders/Common.cginc",
+      "git_blob": "d70f2e5cc4cc9fedd74fd1c59f3003df7459bdd6",
+      "bytes": 5206
+    },
+    {
+      "path": "PostProcessing/Resources/Shaders/DepthOfField.cginc",
+      "git_blob": "dad9b4eb4556e8b4264c326ca019f753e3f6dd1e",
+      "bytes": 7890
+    },
+    {
+      "path": "PostProcessing/Resources/Shaders/DepthOfField.shader",
+      "git_blob": "ca9830cb721d2cef075dc9071adcc61d5082551a",
+      "bytes": 5415
+    },
+    {
+      "path": "PostProcessing/Resources/Shaders/DiskKernels.cginc",
+      "git_blob": "6a8d12e5b9f9c9635c5e0b9bc53cdc821c24e6c6",
+      "bytes": 5957
+    },
+    {
+      "path": "PostProcessing/Resources/Shaders/EyeAdaptation.cginc",
+      "git_blob": "f2d1e1def735552d7d9404eefa44f9803086d674",
+      "bytes": 695
+    },
+    {
+      "path": "PostProcessing/Resources/Shaders/EyeAdaptation.shader",
+      "git_blob": "8ec509d6ff4823a8b0b390f3d2fea27ca0bd6bbc",
+      "bytes": 6596
+    },
+    {
+      "path": "PostProcessing/Resources/Shaders/FXAA.shader",
+      "git_blob": "79525b2fee3593329ff7bd0a658bb21aa5624a16",
+      "bytes": 2713
+    },
+    {
+      "path": "PostProcessing/Resources/Shaders/FXAA3.cginc",
+      "git_blob": "8b70f5d8b3dd08a1c8d6f100f6fa094bff97030b",
+      "bytes": 84737
+    },
+    {
+      "path": "PostProcessing/Resources/Shaders/Fog.shader",
+      "git_blob": "b607a64f5cd8e48e4343b1ef8d2becea64bc1544",
+      "bytes": 2582
+    },
+    {
+      "path": "PostProcessing/Resources/Shaders/GrainGen.shader",
+      "git_blob": "0c1bc8182f1908386d0e070ae56122344a9246e1",
+      "bytes": 3079
+    },
+    {
+      "path": "PostProcessing/Resources/Shaders/LutGen.shader",
+      "git_blob": "587719d191dad65011eda2eb8781b5f0718407c1",
+      "bytes": 3350
+    },
+    {
+      "path": "PostProcessing/Resources/Shaders/MotionBlur.cginc",
+      "git_blob": "eca446ab1f1ca4a68d4cb7852bb611a949d26756",
+      "bytes": 12186
+    },
+    {
+      "path": "PostProcessing/Resources/Shaders/MotionBlur.shader",
+      "git_blob": "a5ab97dd9c24b1e0e80ef2c507d61784e3aa0cf0",
+      "bytes": 2601
+    },
+    {
+      "path": "PostProcessing/Resources/Shaders/ScreenSpaceRaytrace.cginc",
+      "git_blob": "0a8def0e2ddc9737e8e4b09ded72c82ce0c83dd7",
+      "bytes": 8059
+    },
+    {
+      "path": "PostProcessing/Resources/Shaders/ScreenSpaceReflection.shader",
+      "git_blob": "1ecb853c6eecb69705d9df0220c4cb7c901d5a65",
+      "bytes": 30966
+    },
+    {
+      "path": "PostProcessing/Resources/Shaders/TAA.cginc",
+      "git_blob": "041f8ed57d97e5eb7101967c18e1bf3d896ff84a",
+      "bytes": 6427
+    },
+    {
+      "path": "PostProcessing/Resources/Shaders/TAA.shader",
+      "git_blob": "5d112649431912404dda51b5f4ab8196b544c816",
+      "bytes": 1893
+    },
+    {
+      "path": "PostProcessing/Resources/Shaders/Tonemapping.cginc",
+      "git_blob": "d33f45f45163877f7ad8bb53f1b6a835a16e7f02",
+      "bytes": 3749
+    },
+    {
+      "path": "PostProcessing/Resources/Shaders/Uber.shader",
+      "git_blob": "dbfee42b5a465258c93285ad25633bfd110d4985",
+      "bytes": 11336
+    },
+    {
+      "path": "PostProcessing/Resources/Shaders/UberSecondPass.cginc",
+      "git_blob": "4a538224968142fdd8b91823a9bb487c80841648",
+      "bytes": 1033
+    }
+  ]
+}
