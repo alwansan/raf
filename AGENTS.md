@@ -1,3 +1,5 @@
+> **LATEST FULL-GRAPHICS CHECKPOINT:** Read docs/WORK_SESSION_HANDOFF_2026-11-01_FULL_GRAPHICS_RECOVERY.md, then the device transfer and history. Full source recovery probe41311076739 PASSED:6.85GB/17objects,4050textures,3948externalextents covered; export STILL Dummy140one-pass shaders. TMPofficial3.0.6restorer and originalFFT exception-lifetime/AndroidParty fixes passed isolated CI41311704761/41311860174. Main candidate now stages all original graphics payloads. Custom water/postFX shader restoration remains a real blocker; do not claim completion or request another FMOD/license setup. Existing branch and publication constraints apply.
+
 > **LATEST DEVICE CHECKPOINT (2026-11-01):** Read [device rendering/input/performance transfer](docs/WORK_SESSION_HANDOFF_2026-11-01_DEVICE_RENDER_INPUT_PERFORMANCE.md) first. Native 41289171484 completed SUCCESS and was released; actual phone logs still show shader-pass failures, zero-kernel water FFT and FMOD Initialize NullReference. Touch/landscape/performance work remains pending. Older summaries below are historical.
 
 # Raft Android port — autonomous engineering instructions

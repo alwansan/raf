@@ -30,7 +30,7 @@ def plan():
     return rows
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--apply',action='store_true');args=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--apply',action='store_true');p.add_argument('--release-cache',action='store_true');args=p.parse_args()
     rows=plan()
     print('RAFT_FULL_GRAPHICS_PLAN objects='+str(len(rows))+' original_bytes='+str(sum(r[2] for r in rows)))
     if not args.apply: return
@@ -43,5 +43,17 @@ def main():
         with path.open('rb') as src: actual=hashlib.file_digest(src,'sha256').hexdigest()
         if actual != digest: raise ValueError('Original graphics payload digest mismatch')
     print('RAFT_FULL_GRAPHICS_VERIFIED objects='+str(len(rows))+' original_bytes='+str(sum(r[2] for r in rows))+' sha256=true')
+    if args.release_cache:
+        # CI-only space reclamation after every working payload was authenticated.
+        # Delete only this plan's duplicate LFS cache objects, never source files.
+        gitdir=Path(subprocess.check_output(['git','rev-parse','--git-dir'],text=True).strip())
+        released=0
+        for name,digest,size in rows:
+            cached=gitdir/'lfs/objects'/digest[:2]/digest[2:4]/digest
+            if cached.is_file() and not cached.is_symlink():
+                released+=cached.stat().st_size
+                cached.unlink()
+        print('RAFT_FULL_GRAPHICS_DUPLICATE_CACHE_RELEASED bytes='+str(released)+' workingOriginalsRetained=true')
+
 
 if __name__=='__main__': main()
