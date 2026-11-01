@@ -102,11 +102,50 @@ namespace RaftAndroid.Platform
         private readonly FrameTiming[] timings = new FrameTiming[1];
         private int sampleCount, intervalFrames;
         private double intervalSeconds;
+        private float nextGraphicsMemoryProbe;
+        private string lastAndroidGraphicsKb = "unavailable";
         private static string Number(double value) => value.ToString("F2", CultureInfo.InvariantCulture);
         private static string Timing(double value) => value > 0 && !double.IsNaN(value) && !double.IsInfinity(value)
             ? Number(value) : "unavailable";
+        // Android's self-process Debug.MemoryInfo can omit protected GPU allocations.
+        // Treat this as a diagnostic memory-summary field, never as total GPU VRAM.
+        private static string AndroidGraphicsMemoryKb()
+        {
+            try
+            {
+                using (var version = new AndroidJavaClass("android.os.Build$VERSION"))
+                    if (version.GetStatic<int>("SDK_INT") < 23) return "unavailable";
+                using (var debug = new AndroidJavaClass("android.os.Debug"))
+                using (var info = new AndroidJavaObject("android.os.Debug$MemoryInfo"))
+                {
+                    debug.CallStatic("getMemoryInfo", info);
+                    string value = info.Call<string>("getMemoryStat", "summary.graphics");
+                    return string.IsNullOrEmpty(value) ? "unavailable" : value;
+                }
+            }
+            catch (Exception) { return "unavailable"; }
+        }
+
+        // Unity 2021 only exposes this counter in development players.
+        // A zero from a release player must not be reported as measured zero.
+        private static string UnityGraphicsDriverBytes()
+        {
+            if (!Debug.isDebugBuild) return "unavailable";
+            try
+            {
+                long bytes = Profiler.GetAllocatedMemoryForGraphicsDriver();
+                return bytes >= 0 ? bytes.ToString(CultureInfo.InvariantCulture) : "unavailable";
+            }
+            catch (Exception) { return "unavailable"; }
+        }
+
         private string PerformanceSample()
         {
+            if (Time.realtimeSinceStartup >= nextGraphicsMemoryProbe)
+            {
+                lastAndroidGraphicsKb = AndroidGraphicsMemoryKb();
+                nextGraphicsMemoryProbe = Time.realtimeSinceStartup + 10f;
+            }
             Array.Sort(frameSamples, 0, sampleCount);
             Func<double, string> percentile = p => sampleCount == 0 ? "unavailable" :
                 Number(frameSamples[Math.Min(sampleCount - 1, (int)Math.Ceiling(sampleCount * p) - 1)]);
@@ -124,6 +163,8 @@ namespace RaftAndroid.Platform
                 "; unity_unused_reserved_bytes=" + Profiler.GetTotalUnusedReservedMemoryLong() +
                 "; gc_gen0_total=" + GC.CollectionCount(0) + "; process_rss=" + ProcessRss() +
                 "; process_pss=" + ProcessPss() + "; system_memory=" + AndroidMemory() +
+                 "; android_debug_graphics_kb=" + lastAndroidGraphicsKb +
+                 "; unity_driver_graphics_bytes=" + UnityGraphicsDriverBytes() +
                 "; thermal=unavailable; draw_calls=unavailable" +
                 "; width=" + Screen.width + "; height=" + Screen.height + "; orientation=" + Screen.orientation +
                 "; refresh_hz=" + Screen.currentResolution.refreshRate + "; scene=" + SceneManager.GetActiveScene().name;
@@ -184,7 +225,7 @@ namespace RaftAndroid.Platform
         private static void LowMemory()
         {
             RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("memory", "unity.low_memory", AndroidMemory() +
-                "; process_pss=" + ProcessPss(), true);
+                "; process_pss=" + ProcessPss() + "; android_debug_graphics_kb=" + AndroidGraphicsMemoryKb(), true);
             RaftAndroid.Diagnostics.AndroidRuntimeLog.Flush();
         }
         private static string ProcessRss()
