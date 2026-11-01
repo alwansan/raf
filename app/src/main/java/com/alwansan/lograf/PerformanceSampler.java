@@ -79,6 +79,8 @@ public final class PerformanceSampler implements Runnable {
             row.put("process_io_read_bytes",io.opt("read_bytes")==null?JSONObject.NULL:io.opt("read_bytes"));
             row.put("process_io_write_bytes",io.opt("write_bytes")==null?JSONObject.NULL:io.opt("write_bytes"));
         }
+        long storageFree=new File("/storage/emulated/0").getUsableSpace();
+        row.put("device_storage_free_bytes",storageFree>0?storageFree:JSONObject.NULL);
         JSONObject sys=procMeminfo();
         row.put("device_mem_available_kb",sys.opt("MemAvailable")==null?JSONObject.NULL:sys.opt("MemAvailable"));
         row.put("device_mem_total_kb",sys.opt("MemTotal")==null?JSONObject.NULL:sys.opt("MemTotal"));
