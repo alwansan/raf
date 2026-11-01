@@ -1,0 +1,48 @@
+"""Cheap source-policy checks for the Android-only local test overlay.
+
+These tests do not substitute for a Unity/Android runtime or frame profiler.
+"""
+from pathlib import Path
+import unittest
+
+
+SOURCE = (Path(__file__).resolve().parents[1] /
+          "android-port/Runtime/Platform/AndroidTestDiagnostics.cs")
+
+
+class AndroidDiagnosticsPolicyTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.source = SOURCE.read_text(encoding="utf-8")
+
+    def test_only_android_player_compiles_overlay(self):
+        self.assertTrue(self.source.startswith("#if UNITY_ANDROID && !UNITY_EDITOR"))
+        self.assertIn("Application.logMessageReceivedThreaded += Capture;", self.source)
+
+    def test_overlay_uses_cached_bounded_preview(self):
+        ui = self.source.split("private void OnGUI()", 1)[1]
+        self.assertIn("RefreshReport();", ui)
+        self.assertIn("GUILayout.Label(visibleReport);", ui)
+        self.assertNotIn("GUILayout.Label(Report());", ui)
+        self.assertNotIn("new StringBuilder()", ui)
+        self.assertIn("VisibleReportLimit = 8000", self.source)
+        self.assertIn("fullReport.Substring(fullReport.Length - VisibleReportLimit)", self.source)
+
+    def test_clipboard_keeps_full_report(self):
+        self.assertIn("GUIUtility.systemCopyBuffer = fullReport;", self.source)
+        self.assertIn("if (reportRevision == version && reportScene == scene) return;", self.source)
+        self.assertIn("snapshot = events.ToArray();", self.source)
+        self.assertIn("reportRevision = version;", self.source)
+        self.assertIn("reportScene = scene;", self.source)
+
+    def test_bounded_thread_safe_capture(self):
+        self.assertIn("if (entry.Length > 3000) entry = entry.Substring(0, 3000);", self.source)
+        self.assertIn("while (events.Count > 48) events.Dequeue();", self.source)
+        self.assertGreaterEqual(self.source.count("eventRevision++;"), 2)
+        self.assertIn("lock (gate)", self.source)
+        self.assertIn('message = message ?? "";', self.source)
+        self.assertIn('stack = stack ?? "";', self.source)
+
+
+if __name__ == "__main__":
+    unittest.main()
