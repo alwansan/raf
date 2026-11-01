@@ -51,5 +51,15 @@ class OriginalSceneIntegrityTests(unittest.TestCase):
         self.assertNotIn("File.Delete(", budget)
         self.assertNotIn("TextureImporterType.Sprite", budget)
 
+    def test_generated_gradle_payload_is_audited_before_compression(self):
+        budget = (SOURCE.parent / "AndroidTextureBudget.cs").read_text(encoding="utf-8")
+        self.assertIn("IPostGenerateGradleAndroidProject", budget)
+        self.assertIn("OnPostGenerateGradleAndroidProject(string path)", budget)
+        self.assertIn('Path.Combine(path, "src/main/assets")', budget)
+        self.assertIn("overJavaArrayLimit=", budget)
+        self.assertIn("size > int.MaxValue", budget)
+        self.assertIn("fileNamesLogged=false", budget)
+        self.assertIn("throw new BuildFailedException", budget)
+
 if __name__ == "__main__":
     unittest.main()

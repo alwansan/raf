@@ -1,6 +1,10 @@
 #if UNITY_EDITOR
 using System;
 using UnityEditor;
+using UnityEditor.Android;
+using UnityEditor.Build;
+using System.IO;
+using System.Linq;
 using UnityEngine;
 
 namespace RaftAndroid.Editor
@@ -64,5 +68,39 @@ namespace RaftAndroid.Editor
                       " originalFilesUnchanged=true gpuVerified=false packageSizeVerified=false");
         }
     }
+
+    // Observe generated Gradle payload sizes BEFORE Android Gradle tries to
+    // allocate a Java byte[] for an oversized asset. Aggregate sizes only:
+    // no proprietary asset paths or content are printed.
+    public sealed class AndroidGradleAssetAudit : IPostGenerateGradleAndroidProject
+    {
+        public int callbackOrder { get { return 1000; } }
+
+        public void OnPostGenerateGradleAndroidProject(string path)
+        {
+            string assets = Path.Combine(path, "src/main/assets");
+            if (!Directory.Exists(assets))
+            {
+                Debug.LogWarning("RAFT_ANDROID_GRADLE_ASSET_AUDIT unavailable=true");
+                return;
+            }
+            long[] sizes = Directory.EnumerateFiles(assets, "*", SearchOption.AllDirectories)
+                .Select(file => new FileInfo(file).Length)
+                .OrderByDescending(size => size).ToArray();
+            long largest = sizes.Length == 0 ? 0 : sizes[0];
+            long total = sizes.Sum();
+            int oversized = sizes.Count(size => size > int.MaxValue);
+            Debug.Log("RAFT_ANDROID_GRADLE_ASSET_AUDIT fileCount=" + sizes.Length +
+                      " largestBytes=" + largest + " totalBytes=" + total +
+                      " topFiveBytes=" + string.Join(",", sizes.Take(5)) +
+                      " overJavaArrayLimit=" + oversized + " fileNamesLogged=false");
+            if (oversized != 0)
+                throw new BuildFailedException(
+                    "Android Gradle assets include a file larger than Java's ~2 GiB array limit. " +
+                    "Refuse packaging without reducing/splitting the generated payload; " +
+                    "original game assets remain unchanged.");
+        }
+    }
+
 }
 #endif
