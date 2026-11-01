@@ -15,7 +15,7 @@ on:
       job_id:
         description: Completed corrected native build job to compare with the baseline
         required: true
-        default: '124757272881'
+        default: '124829584909'
 permissions:
   contents: read
   actions: read
@@ -39,7 +39,7 @@ jobs:
       - name: Retrieve two completed job logs without a build or LFS transfer
         env:
           GH_TOKEN: ${{ github.token }}
-          LOG_JOB_ID: ${{ inputs.job_id || '124757272881' }}
+          LOG_JOB_ID: ${{ inputs.job_id || '124829584909' }}
         run: |
           set -euo pipefail
           case "$LOG_JOB_ID" in ''|*[!0-9]*) exit 1;; esac
@@ -60,6 +60,12 @@ jobs:
               reports[label] = report
               print("RAFT_NATIVE_LOG_EVIDENCE " + json.dumps({"label": label, "evidence": report}, sort_keys=True))
           path = Path(os.environ["RUNNER_TEMP"]) / "after-native.log"
+          markers = ("RAFT_EXPORTED_RENDER_CONTRACT", "RAFT_INPUT_BINDING_INVENTORY", "RAFT_FMOD_RUNTIME_PLATFORM_GRAPH", "RAFT_FMOD_RESOURCE_LAYOUT")
+          with path.open(encoding="utf-8-sig", errors="replace") as source:
+              for line in source:
+                  if any(marker in line for marker in markers) and re.match(r"^\d{4}-\d\d-\d\dT", line):
+                      print(line.rstrip()[:12000])
+
           patterns = {
               "execution_timeout": r"exceeded the maximum execution time|job running longer than|job has exceeded|execution time limit",
               "cancelled": r"operation was canceled|operation was cancelled",
@@ -86,7 +92,7 @@ jobs:
       - name: Locate interrupted phase and verify timeout annotation
         env:
           GH_TOKEN: ${{ github.token }}
-          LOG_JOB_ID: ${{ inputs.job_id || '124757272881' }}
+          LOG_JOB_ID: ${{ inputs.job_id || '124829584909' }}
         run: |
           gh api "repos/$GITHUB_REPOSITORY/actions/jobs/$LOG_JOB_ID" > "$RUNNER_TEMP/job-metadata.json"
           gh api "repos/$GITHUB_REPOSITORY/check-runs/$LOG_JOB_ID/annotations" > "$RUNNER_TEMP/job-annotations.json"
