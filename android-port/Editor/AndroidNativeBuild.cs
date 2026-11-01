@@ -49,8 +49,15 @@ namespace RaftAndroid.Editor
             Directory.CreateDirectory(Path.GetDirectoryName(output));
 
             var scenes = EditorBuildSettings.scenes.Where(s => s.enabled).Select(s => s.path).ToArray();
-            if (scenes.Length == 0 || scenes.Any(s => !File.Exists(s)))
-                throw new BuildFailedException("Enabled original build scenes are missing; refusing a dummy scene build.");
+            // This recovered game has exactly 40 original level scenes. A one-scene
+            // or partial export must never be presented as a complete Raft APK.
+            // Case-insensitive uniqueness also rejects case-only collisions on Linux.
+            if (scenes.Length != 40 ||
+                scenes.Distinct(StringComparer.OrdinalIgnoreCase).Count() != 40 ||
+                scenes.Any(s => !s.EndsWith(".unity", StringComparison.OrdinalIgnoreCase) ||
+                                !File.Exists(s)))
+                throw new BuildFailedException("Expected exactly 40 distinct existing original Unity scenes; refusing a partial Android APK.");
+            Debug.Log("RAFT_ANDROID_SCENE_GATE originalScenes=40 uniquePaths=true");
 
             AssetDatabase.SaveAssets();
             Debug.Log("RAFT_ANDROID_NATIVE_CONFIG backend=" +

@@ -36,6 +36,8 @@ jobs:
         run: python3 -m unittest discover -s tests -p test_android_diagnostics_policy.py -v
       - name: Guard early APK redistribution policy
         run: python3 -m unittest discover -s tests -p test_early_apk_distribution_policy.py -v
+      - name: Guard original 40-scene Android APK integrity
+        run: python3 -m unittest discover -s tests -p test_android_native_scene_policy.py -v
       - name: Compile original offline Android compatibility library against netstandard2.1
         run: |
           dotnet build android-port/Runtime/Platform/RaftAndroid.Platform.csproj \
