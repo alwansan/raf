@@ -13,7 +13,30 @@ namespace RaftAndroid.Editor
         public static void Validate()
         {
             // Never use Settings.Instance here: it can manufacture default settings.
-            var platforms = Resources.LoadAll<FMODUnity.Platform>("FMODStudioSettings");
+            // The original Platform assets live at Resources/FMODStudioSettingsPlatform*.asset,
+            // not inside a Resources/FMODStudioSettings/ directory. Resources.LoadAll with
+            // the settings asset name finds no platforms. Enumerate only those original
+            // root assets, and prove each resolves through the player-facing Resources API.
+            string resourceRoot = Path.Combine(Application.dataPath, "Resources");
+            if (!Directory.Exists(resourceRoot))
+                throw new BuildFailedException("Original FMOD Resources directory is missing.");
+            string[] platformFiles = Directory.GetFiles(resourceRoot, "FMODStudioSettingsPlatform*.asset",
+                    SearchOption.TopDirectoryOnly)
+                .OrderBy(p => p, StringComparer.Ordinal).ToArray();
+            if (platformFiles.Length == 0)
+                throw new BuildFailedException("Original FMOD platform resource files are missing.");
+            var platforms = platformFiles.Select(path =>
+            {
+                string name = Path.GetFileNameWithoutExtension(path);
+                string assetPath = "Assets/Resources/" + Path.GetFileName(path);
+                var original = AssetDatabase.LoadAssetAtPath<FMODUnity.Platform>(assetPath);
+                var runtime = Resources.Load<FMODUnity.Platform>(name);
+                if (original == null || runtime == null || original != runtime)
+                    throw new BuildFailedException("Original FMOD platform is not loadable by resource name: " + name);
+                return runtime;
+            }).ToArray();
+            Debug.Log("RAFT_FMOD_PLATFORM_RESOURCE_LOOKUP candidates=" + platformFiles.Length +
+                      " loaded=" + platforms.Length + " strategy=exact-original-filenames");
             // The vendor Settings.OnEnable destroys duplicate platform assets. Refuse
             // ambiguous original identities before explicitly loading that Settings.
             var identifiers = platforms.Select(p => new SerializedObject(p).FindProperty("identifier")).ToArray();
