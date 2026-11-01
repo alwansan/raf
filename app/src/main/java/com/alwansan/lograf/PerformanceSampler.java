@@ -268,7 +268,7 @@ public final class PerformanceSampler implements Runnable {
             for(int i=1;i<lines.length;i++){
                 String[] parts=lines[i].trim().split("\\s+");
                 if(parts.length!=3)continue;
-                long stamp=Long.parseLong(parts[2]);
+                long stamp=Long.parseLong(parts[1]); // actual present timestamp, not ready-fence timestamp
                 if(stamp>0 && stamp<Long.MAX_VALUE/2){
                     presents.add(stamp);
                     if(stamp>newest)newest=stamp;
