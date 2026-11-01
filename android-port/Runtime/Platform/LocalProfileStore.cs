@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Threading;
 
 namespace RaftAndroid.Platform
 {
@@ -25,35 +26,40 @@ namespace RaftAndroid.Platform
             string path = Path.Combine(_profileDirectory, ProfileFile);
 
             if (File.Exists(path))
-                return ReadExistingId(path);
+                return ReadWhenWriterCloses(path);
 
             string generated = Guid.NewGuid().ToString("N");
-            string tempPath = Path.Combine(_profileDirectory, "profile." + Guid.NewGuid().ToString("N") + ".tmp");
             try
             {
-                using (var output = new FileStream(tempPath, FileMode.CreateNew, FileAccess.Write, FileShare.None))
+                // CreateNew is an atomic exclusive claim on the final path.
+                // File.Move(temp, path) can race another creator's existence check
+                // on Unix, replacing an identity already returned to a caller.
+                using (var output = new FileStream(path, FileMode.CreateNew, FileAccess.Write, FileShare.None))
                 using (var writer = new StreamWriter(output))
                 {
                     writer.WriteLine(generated);
                 }
-
-                // Do not overwrite an existing ID: simultaneous start / restore must never change an established profile.
-                try
-                {
-                    File.Move(tempPath, path);
-                }
-                catch (IOException) when (File.Exists(path))
-                {
-                    // Another caller created the profile first; preserve its identity.
-                }
             }
-            finally
+            catch (IOException) when (File.Exists(path))
             {
-                if (File.Exists(tempPath))
-                    File.Delete(tempPath);
+                // Another process or thread claimed the path. Never replace it.
             }
 
-            return ReadExistingId(path);
+            return ReadWhenWriterCloses(path);
+        }
+
+        private static string ReadWhenWriterCloses(string path)
+        {
+            // A second caller may observe the path before its exclusive writer
+            // closes. Retry only sharing/IO errors, never invalid existing data.
+            for (int attempt = 0; ; attempt++)
+            {
+                try { return ReadExistingId(path); }
+                catch (IOException) when (attempt < 99)
+                {
+                    Thread.Sleep(10);
+                }
+            }
         }
 
         private static string ReadExistingId(string path)
