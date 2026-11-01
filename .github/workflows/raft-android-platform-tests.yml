@@ -7,6 +7,7 @@ on:
       - feature/android-native-port
     paths:
       - 'android-port/**'
+      - 'tests/test_android_diagnostics_policy.py'
       - '.github/workflows/raft-android-platform-tests.yml'
 
 permissions:
@@ -29,6 +30,8 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
+      - name: Guard bounded Android diagnostic UI source policy
+        run: python3 -m unittest discover -s tests -p test_android_diagnostics_policy.py -v
       - name: Compile original offline Android compatibility library against netstandard2.1
         run: |
           dotnet build android-port/Runtime/Platform/RaftAndroid.Platform.csproj \
