@@ -99,3 +99,7 @@ compiled against original providers and passed14policy cases in41256626829;
 original tracked StreamingAssets copying passed6Git-backed safety tests.
 These are not phone/audio results. Existing preflight/key setup is complete;
 no further owner download/login/license preparation is currently required.
+
+## 2026-11-01 actual FMOD Unity import failure and narrow fix
+
+Native [41257065669](https://github.com/alwansan/raf/actions/runs/41257065669) FAILED at original FMOD platform Resources lookup (settings present, platform count zero) before APK creation; all original bank staging steps passed. Original `FMODStudioSettingsPlatform*.asset` files were imported, but the validator queried the wrong Resources path. Commit [9e5f3635](https://github.com/alwansan/raf/commit/9e5f3635a660f85bb492dee6c91bc57bc80aa730) uses original filenames with strict Editor and runtime typed lookups, preserving all assets and identifiers. New native [41259800620](https://github.com/alwansan/raf/actions/runs/41259800620) is running. Static path-policy tests are not Unity/device proof; do not claim FMOD audible or release-ready.

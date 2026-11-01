@@ -1,5 +1,7 @@
 # Raft Android — complete Work session transfer, 2026-11-01
 
+> **NEWER VERIFIED CHECKPOINT:** native 41257065669 FAILED at the original FMOD resource-platform lookup; exact-path fix 9e5f3635 is running in native 41259800620. Read the newest dated section at the end; earlier IN PROGRESS status is historical.
+
 هذا هو تسليم الجلسة الأحدث. اقرأه كاملاً ثم التاريخ الكامل حتى آخر قسم، وراجع HEAD وActions قبل أي تجربة. لا تطلب ملف FMOD أو إعداد ترخيص Unity من المستخدم مجدداً: ملف FMOD وصل والتحقق الخاص في Actions نجح، والترخيص يعمل.
 
 ## 1. Authority and reading order
@@ -270,3 +272,13 @@ Do not report a successful Unity build as proof that an APK launches or the game
 | d5d622ec3678d84e6e93930b89fb1c6170cf07cb | Previous owner wait checkpoint |
 
 This transfer itself is documentation-only. It must not trigger/cancel another heavy native experiment. Current build source remains705dda0..., even though branch HEAD will advance with these documents.
+
+## 2026-11-01 — FMOD native failure diagnosed and exact resource-path fix launched
+
+**Verified result, not an inference:** [native 41257065669](https://github.com/alwansan/raf/actions/runs/41257065669), source `705dda0ae6e6928172bdae495be990612f29d5ab`, reconstruction job `124702391661`, completed **FAILURE** at Unity Editor step 34 (2026-11-01 00:53 UTC). Steps 1–33 passed, including authenticated FMOD ARM64 runtime staging (10 files), original StreamingAssets staging, SDK and GUID structural validation, and Unity import; no CSharp compiler errors were seen in this job. No APK was produced, and post-build APK/FM​​OD audit steps 35–36 were skipped.
+
+The **first fatal error** is `RAFT_FMOD_ORIGINAL_SETTINGS settingsPresent=True resourcePlatforms=0 androidPlatforms=0 defaultPlatforms=0 manufacturedSettings=0` followed by `BuildFailedException: Original FMOD settings/platform resource layout is incomplete; no defaults substituted.` Unity's import log actually shows original `Assets/Resources/FMODStudioSettingsPlatform.asset` and `FMODStudioSettingsPlatform_0.asset` through `_13.asset` (individual original GUIDs retained). The validator mistakenly called `Resources.LoadAll<FMODUnity.Platform>("FMODStudioSettings")`, which searches a resource path named for Settings rather than sibling `FMODStudioSettingsPlatform*.asset` files. This is a **validated path-selection bug**; whether the original assets deserialize to the correct platform subclasses still requires a real Unity rerun. The file-name-vs-internal-object-name warnings during import are not by themselves proof of invalid assets.
+
+**Fix committed:** [9e5f3635a660f85bb492dee6c91bc57bc80aa730](https://github.com/alwansan/raf/commit/9e5f3635a660f85bb492dee6c91bc57bc80aa730). Editor validator now enumerates only exact original root `FMODStudioSettingsPlatform*.asset` files, checks each through both `AssetDatabase.LoadAssetAtPath<FMODUnity.Platform>` and `Resources.Load<FMODUnity.Platform>` by filename, refuses unresolved/ambiguous resources, and still validates identifiers before loading original vendor Settings. No original asset, .meta, GUID, settings default or bank was modified/fabricated. Added three **static policy regression tests** (`tests/test_fmod_resource_path_policy.py`) to the pre-LFS CI gate; they do not substitute for Unity import.
+
+**Next intentional native experiment:** [41259800620](https://github.com/alwansan/raf/actions/runs/41259800620), source `9e5f3635a660f85bb492dee6c91bc57bc80aa730`, **IN PROGRESS at last refresh**. Do **not** launch an equivalent duplicate. At next check read the new run's jobs/steps, the test result, and the first fatal Unity diagnostic if any. If platform assets fail typed lookup, inspect original imported script GUID/provider mapping and serialized platform identifiers without synthesizing replacements. If gate passes, verify actual ARM64 APK, original bank hashes, FMOD ELF/Java descriptor and the remaining graphics/runtime issues. This docs-only checkpoint does not request a build. No phone test or public APK release; no user intervention required for this gate.
