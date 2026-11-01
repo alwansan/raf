@@ -494,8 +494,10 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          # These unused runner tools are replaced by the pinned Unity Android container.
-          sudo rm -rf /usr/local/lib/android /opt/hostedtoolcache/CodeQL
+          # Unity supplies NDK/platforms in its container; retain host build-tools for apksigner.
+          sudo rm -rf /usr/local/lib/android/sdk/ndk /usr/local/lib/android/sdk/platforms /usr/local/lib/android/sdk/system-images /usr/local/lib/android/sdk/cmake /opt/hostedtoolcache/CodeQL
+          sdk_root="${ANDROID_SDK_ROOT:-${ANDROID_HOME:-/usr/local/lib/android/sdk}}"
+          test -d "$sdk_root/build-tools"
           test "$(df -Pk /mnt | awk 'NR==2 {print $4}')" -gt 12582912
           test ! -e /mnt/raft-unity.swap
           sudo fallocate -l 8G /mnt/raft-unity.swap
@@ -507,6 +509,7 @@ jobs:
           python3 -m scripts.ci_memory_watch --output "$RUNNER_TEMP/unity-memory.jsonl" --interval 10 --samples 960 > /dev/null 2>&1 &
           echo "$!" > "$RUNNER_TEMP/unity-memory.pid"
       - name: Unity Editor 2021.3.45f2 Android import and compile
+        id: unity_build
         uses: game-ci/unity-builder@v4
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
@@ -532,11 +535,14 @@ jobs:
           androidVersionCode: ${{ github.run_number }}
       - name: Summarize actual memory and kernel OOM evidence even after Unity failure
         if: always()
+        env:
+          UNITY_STEP_OUTCOME: ${{ steps.unity_build.outcome }}
         shell: bash
         run: |
           if [ -f "$RUNNER_TEMP/unity-memory.pid" ]; then
             kill "$(cat "$RUNNER_TEMP/unity-memory.pid")" 2>/dev/null || true
           fi
+          echo "RAFT_UNITY_STEP_OUTCOME ${UNITY_STEP_OUTCOME:-not_started}"
           python3 -m scripts.ci_memory_watch --output "$RUNNER_TEMP/unity-memory.jsonl" --summarize
           sudo dmesg --notime > "$RUNNER_TEMP/unity-kernel-private.log" 2>/dev/null || true
           python3 - <<'PY'
