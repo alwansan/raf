@@ -39,6 +39,16 @@ class EarlyApkDistributionPolicyTests(unittest.TestCase):
         self.assertLess(release.index('test "${RAFT_DISTRIBUTION_RIGHTS_CONFIRMED:-}" = "true"'),
                         release.index("gh release create"))
 
+    def test_non_opt_in_changes_cannot_start_native_or_cancel_active_build(self):
+        self.assertIn("cancel-in-progress: false", self.workflow)
+        self.assertNotIn("cancel-in-progress: true", self.workflow)
+        self.assertEqual(self.workflow.count("\n  reconstruct:"), 1)
+        reconstruct = self.workflow.split("\n  reconstruct:", 1)[1]
+        condition = reconstruct.split("\n    runs-on:", 1)[0]
+        self.assertIn("needs.unity-license-preflight.outputs.ready == 'true'", condition)
+        self.assertIn("inputs.build_mode == 'native'", condition)
+        self.assertIn("contains(github.event.head_commit.message, '[raft-native-build]')", condition)
+
     def test_no_other_release_publisher_in_workflow(self):
         release = self.workflow.split("\n  publish-early-test:", 1)[1]
         before_release = self.workflow.split("\n  publish-early-test:", 1)[0]
