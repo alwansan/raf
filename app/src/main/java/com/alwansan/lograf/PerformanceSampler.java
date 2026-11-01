@@ -27,6 +27,7 @@ public final class PerformanceSampler implements Runnable {
     private long pssLast=0, batteryLast=0, layersLast=0, thermalLast=0;
     private Long pssCache=null;
     private int pssPid=-1;
+    private int lastObservedPid=-1;
     private Integer batteryLevel=null, batteryStatus=null, thermalStatus=null;
     private Double batteryTemp=null;
     private String surfaceLayer=null;
@@ -60,6 +61,13 @@ public final class PerformanceSampler implements Runnable {
         row.put("schema",1).put("source","lograf_shell").put("timestamp_unix_ms",System.currentTimeMillis())
                 .put("elapsed_ms",now).put("sample",++sample).put("package",target)
                 .put("pid",pid>0?pid:JSONObject.NULL).put("cpu_cores_online",cpuCount);
+        if(pid!=lastObservedPid) {
+            row.put("process_transition",pid>0?"game_started":lastObservedPid>0?"game_exited":"none");
+            row.put("previous_pid",lastObservedPid>0?lastObservedPid:JSONObject.NULL);
+            if(pid!=pssPid){pssCache=null;pssPid=-1;pssLast=0;}
+            surfaceLayer=null;layersLast=0;previousPresent=-1;
+            lastObservedPid=pid;
+        }
         if(pid<=0) {
             row.put("state","game_not_running");
             previousPid=-1; previousTicks=-1; previousAt=-1; previousPresent=-1;
