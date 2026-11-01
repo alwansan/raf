@@ -94,7 +94,7 @@ jobs:
           candidates = []
           for path in sorted((root / "lifecycle-original").rglob("*.cs")):
               text = path.read_text(encoding="utf-8-sig")
-              if (re.search(r"\b(?:OnDestroy|OnDisable)\s*\(", text) and re.search(r"\b(?:Object\.)?Destroy\s*\(", text)) or re.search(r"\bComputeShader\b", text) or path.stem in {'ShaderUtility', 'UnderwaterIME', 'WaterDropsIME'}:
+              if (re.search(r"\b(?:OnDestroy|OnDisable)\s*\(", text) and re.search(r"\b(?:Object\.)?Destroy\s*\(", text)) or re.search(r"\bComputeShader\b", text) or path.stem in {'ShaderUtility', 'ScriptableObjectSingleton', 'UnderwaterIME', 'WaterDropsIME', 'AchievementHandler', 'Helper', 'Settings', 'NewGameBox', 'StartMenuScreen', 'RGD_Settings_Character', 'Player'}:
                   priority = 0 if re.search(r"ExecuteInEditMode|ExecuteAlways", text) else 1
                   candidates.append((priority, path, text))
           selected_bytes = 0
