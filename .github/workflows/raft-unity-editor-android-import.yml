@@ -44,6 +44,8 @@ on:
       - 'scripts/restore_postfx_shaders.py'
       - 'scripts/restore_postfx_compute.py'
       - 'scripts/ci_memory_watch.py'
+      - 'scripts/audit_gradle_asset_payload.py'
+      - 'tests/test_gradle_payload_audit.py'
       - 'tests/test_ci_memory_watch.py'
       - 'tests/test_restore_postfx_compute.py'
       - 'tests/test_restore_postfx_shaders.py'
@@ -118,6 +120,7 @@ jobs:
       - name: Run synthetic code-overlay tests before touching original data
         run: |
           python3 -m unittest discover -s tests -p test_android_render_lifetimes.py -v
+          python3 -m unittest discover -s tests -p test_gradle_payload_audit.py -v
           python3 -m unittest discover -s tests -p test_restore_postfx_shaders.py -v
           python3 -m unittest discover -s tests -p test_restore_postfx_compute.py -v
           python3 -m unittest discover -s tests -p test_restore_tmp_shaders.py -v
@@ -539,6 +542,12 @@ jobs:
           # rejects the build as a dirty git branch before Unity Editor starts.
           versioning: None
           androidVersionCode: ${{ github.run_number }}
+      - name: Capture private Gradle payload sizes after Unity even if packaging fails
+        if: ${{ always() && steps.unity_build.outcome != 'skipped' }}
+        continue-on-error: true
+        shell: bash
+        run: |
+          python3 -m scripts.audit_gradle_asset_payload --project "$GITHUB_WORKSPACE/unity-candidate"
       - name: Summarize actual memory and kernel OOM evidence even after Unity failure
         if: always()
         env:
