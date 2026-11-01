@@ -12,13 +12,23 @@ namespace RaftAndroid.Platform
     {
         private static readonly Queue<string> events = new Queue<string>();
         private static readonly object gate = new object();
+        private static int eventRevision;
+        private const int VisibleReportLimit = 8000;
         private bool opened;
         private Vector2 scroll;
+        private int reportRevision = -1;
+        private string reportScene = "";
+        private string fullReport = "";
+        private string visibleReport = "";
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void CaptureBeforeAudioStartup()
         {
-            lock (gate) events.Clear();
+            lock (gate)
+            {
+                events.Clear();
+                eventRevision++;
+            }
             Application.logMessageReceivedThreaded -= Capture;
             Application.logMessageReceivedThreaded += Capture;
         }
@@ -34,6 +44,8 @@ namespace RaftAndroid.Platform
 
         private static void Capture(string message, string stack, LogType type)
         {
+            message = message ?? "";
+            stack = stack ?? "";
             if (type != LogType.Error && type != LogType.Exception && type != LogType.Assert &&
                 !message.StartsWith("RAFT_", StringComparison.Ordinal)) return;
             string entry = DateTime.UtcNow.ToString("O") + " " + type + " " + message + "\n" + stack;
@@ -42,19 +54,36 @@ namespace RaftAndroid.Platform
             {
                 events.Enqueue(entry);
                 while (events.Count > 48) events.Dequeue();
+                eventRevision++;
             }
         }
 
-        private string Report()
+        private void RefreshReport()
         {
+            string scene = SceneManager.GetActiveScene().name;
+            string[] snapshot;
+            int version;
+            lock (gate)
+            {
+                version = eventRevision;
+                if (reportRevision == version && reportScene == scene) return;
+                snapshot = events.ToArray();
+            }
+
             var text = new StringBuilder();
             text.AppendLine("Raft Android early device test");
-            text.AppendLine("Unity " + Application.unityVersion + "; scene " + SceneManager.GetActiveScene().name);
+            text.AppendLine("Unity " + Application.unityVersion + "; scene " + scene);
             text.AppendLine(SystemInfo.deviceModel + "; " + SystemInfo.operatingSystem);
             text.AppendLine(SystemInfo.graphicsDeviceName + "; " + SystemInfo.graphicsDeviceType);
             text.AppendLine("This report does not verify gameplay, sound or save/load.");
-            lock (gate) foreach (string entry in events) text.AppendLine(entry);
-            return text.ToString();
+            foreach (string entry in snapshot) text.AppendLine(entry);
+            fullReport = text.ToString();
+            visibleReport = fullReport.Length <= VisibleReportLimit
+                ? fullReport
+                : "Preview shows only the last 8000 characters. Copy test report includes all captured entries.\n"
+                  + fullReport.Substring(fullReport.Length - VisibleReportLimit);
+            reportRevision = version;
+            reportScene = scene;
         }
 
         private void OnGUI()
@@ -69,9 +98,10 @@ namespace RaftAndroid.Platform
                 float height = Screen.height / scale - 70;
                 GUILayout.BeginArea(new Rect(8, 60, width, height), GUI.skin.box);
                 GUILayout.Label("Early Android test: startup and diagnostics. Singleplayer and touch controls are still being integrated.");
-                if (GUILayout.Button("Copy test report", GUILayout.Height(44))) GUIUtility.systemCopyBuffer = Report();
+                RefreshReport();
+                if (GUILayout.Button("Copy test report", GUILayout.Height(44))) GUIUtility.systemCopyBuffer = fullReport;
                 scroll = GUILayout.BeginScrollView(scroll);
-                GUILayout.Label(Report());
+                GUILayout.Label(visibleReport);
                 GUILayout.EndScrollView();
                 GUILayout.EndArea();
             }
