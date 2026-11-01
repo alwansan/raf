@@ -19,7 +19,7 @@ namespace RaftAndroid.Editor
 
         internal static void Apply()
         {
-            int examined = 0, large = 0, changed = 0, explicitOverrides = 0;
+            int examined = 0, large = 0, changed = 0, explicitOverrides = 0, alreadyBounded = 0;
             int unknownDimensions = 0;
             foreach (string guid in AssetDatabase.FindAssets("t:Texture2D", new[] { "Assets" }))
             {
@@ -53,6 +53,14 @@ namespace RaftAndroid.Editor
                     explicitOverrides++;
                     continue;
                 }
+                // If the source importer already caps the effective texture to
+                // <=2048, forcing ASTC would change its format without saving
+                // additional resolution or solving the large-texture problem.
+                if (importer.maxTextureSize <= MaxDimension)
+                {
+                    alreadyBounded++;
+                    continue;
+                }
                 settings.name = "Android";
                 settings.overridden = true;
                 settings.maxTextureSize = Math.Min(importer.maxTextureSize, MaxDimension);
@@ -65,6 +73,7 @@ namespace RaftAndroid.Editor
             Debug.Log("RAFT_ANDROID_TEXTURE_BUDGET defaultExamined=" + examined +
                       " sourceOver2048=" + large + " astc6x6Overrides=" + changed +
                       " originalOverridesPreserved=" + explicitOverrides +
+                      " alreadyBoundedPreserved=" + alreadyBounded +
                       " unknownSourceDimensions=" + unknownDimensions +
                       " originalFilesUnchanged=true gpuVerified=false packageSizeVerified=false");
         }

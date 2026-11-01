@@ -46,6 +46,14 @@ class OriginalSceneIntegrityTests(unittest.TestCase):
         self.assertIn("GetSourceTextureWidthAndHeight", budget)
         self.assertIn("Math.Max(width, height) <= MaxDimension", budget)
         self.assertIn("if (settings.overridden)", budget)
+        # Source images may be >2048 even when their original importer already
+        # caps them to <=2048. Keep their original format/quality unchanged.
+        self.assertIn("if (importer.maxTextureSize <= MaxDimension)", budget)
+        self.assertIn("alreadyBoundedPreserved=", budget)
+        self.assertLess(budget.index("if (settings.overridden)"),
+                        budget.index("if (importer.maxTextureSize <= MaxDimension)"))
+        self.assertLess(budget.index("if (importer.maxTextureSize <= MaxDimension)"),
+                        budget.index("settings.format = TextureImporterFormat.ASTC_6x6;"))
         self.assertIn("Math.Min(importer.maxTextureSize, MaxDimension)", budget)
         self.assertIn("TextureImporterFormat.ASTC_6x6", budget)
         self.assertIn("importer.SaveAndReimport();", budget)
