@@ -121,7 +121,11 @@ public final class CaptureService extends Service {
             stopSelf();
             return START_NOT_STICKY;
         }
-        if (active) return START_NOT_STICKY;
+        if (active) return START_STICKY;
+        boolean recovering=intent==null;
+        if(recovering && !Config.prefs(this).getBoolean("recording",false)){
+            stopSelf();return START_NOT_STICKY;
+        }
         try {
             startForeground(NOTIFICATION,notification());
             Uri selected=Config.folder(this);
@@ -140,6 +144,7 @@ public final class CaptureService extends Service {
             fileUris.clear();
             Config.prefs(this).edit().remove("metrics_last").apply();
             String metadata="LogRaft 0.2.0\nTarget="+Config.PACKAGE+
+                    "\nRecoveryRestart="+recovering+
                     "\nStart="+new Date()+"\nBuild="+Build.MANUFACTURER+" "+Build.MODEL+
                     "\nAndroid="+Build.VERSION.RELEASE+" API="+Build.VERSION.SDK_INT+
                     "\nCollector=Shizuku shell/root UID; no root required\n"+
@@ -160,7 +165,7 @@ public final class CaptureService extends Service {
             args=new Shizuku.UserServiceArgs(new ComponentName(getPackageName(),RemoteLogService.class.getName()))
                 .daemon(false).processNameSuffix("lograf").debuggable(false).version(1);
             Shizuku.bindUserService(args,connection);
-            return START_NOT_STICKY;
+            return START_STICKY;
         } catch(Exception e) {
             fatal("Startup failed: " + e);
             stopSelf();
