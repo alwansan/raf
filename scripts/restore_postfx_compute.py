@@ -64,7 +64,7 @@ def restore(project, backup, raw):
     try:
         output.parent.mkdir(parents=True, exist_ok=True)
         output.write_text(rewrite_includes(source, includes, INCLUDES))
-    output_meta.write_text('fileFormatVersion: 2\nguid: '+match[1]+'\nComputeShaderImporter:\n  externalObjects: {}\n  currentAPIMask: 4\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n')
+        output_meta.write_text('fileFormatVersion: 2\nguid: '+match[1]+'\nComputeShaderImporter:\n  externalObjects: {}\n  currentAPIMask: 4\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n')
         old.unlink()
         meta.unlink()
     except Exception:
