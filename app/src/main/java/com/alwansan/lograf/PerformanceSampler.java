@@ -256,9 +256,17 @@ public final class PerformanceSampler implements Runnable {
         try{
             String list=command(1400,240000,"dumpsys","SurfaceFlinger","--list");
             for(String line:list.split("\\n")){
-                if(line.contains(target) && line.contains("SurfaceView")){
-                    surfaceLayer=line.trim(); previousPresent=-1;previousFrameAt=-1;return;
+                if(!line.contains(target) || !line.contains("SurfaceView") || line.contains("Background for"))continue;
+                String name=line.trim();
+                if(name.startsWith("RequestedLayerState{")){
+                    name=name.substring("RequestedLayerState{".length());
+                    int end=name.indexOf(" parentId=");
+                    if(end>0)name=name.substring(0,end);
+                    if(name.endsWith("}"))name=name.substring(0,name.length()-1);
                 }
+                if(name.isEmpty())continue;
+                if(!name.equals(surfaceLayer)){previousPresent=-1;previousFrameAt=-1;}
+                surfaceLayer=name;return;
             }
             surfaceLayer=null;
         } catch(Exception ignored){surfaceLayer=null;}
