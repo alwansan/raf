@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -37,8 +39,13 @@ internal static class Program
         throw new Exception("Expected " + typeof(T).Name);
     }
 
-    private static int Main()
+    private static int Main(string[] args)
     {
+        if (args.Length == 2 && args[0] == "--profile-child")
+        {
+            Console.WriteLine(new LocalProfileStore(args[1]).GetOrCreateProfileId());
+            return 0;
+        }
         string root = Path.Combine(Path.GetTempPath(), "raft-platform-tests-" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(root);
         try
@@ -72,6 +79,50 @@ internal static class Program
                     "Concurrent profile creation left temporary identity files");
                 Assert(new LocalProfileStore(parallelRoot).GetOrCreateProfileId() == first,
                     "Concurrent identity did not persist after restart");
+                }
+            });
+            Test("concurrent separate processes preserve one durable profile identity", () =>
+            {
+                // A process-level regression is needed in addition to the thread test:
+                // the old check-then-Move bug could replace a profile on Unix.
+                string processRoot = Path.Combine(root, "parallel-process-launch");
+                var children = new List<Process>();
+                try
+                {
+                    for (int i = 0; i < 12; i++)
+                    {
+                        var start = new ProcessStartInfo("dotnet")
+                        {
+                            UseShellExecute = false,
+                            RedirectStandardOutput = true,
+                            RedirectStandardError = true
+                        };
+                        start.ArgumentList.Add(typeof(Program).Assembly.Location);
+                        start.ArgumentList.Add("--profile-child");
+                        start.ArgumentList.Add(processRoot);
+                        children.Add(Process.Start(start) ?? throw new Exception("Child process failed to start"));
+                    }
+                    var identities = new List<string>();
+                    foreach (Process child in children)
+                    {
+                        Assert(child.WaitForExit(30000), "Concurrent profile child timed out");
+                        string identity = child.StandardOutput.ReadToEnd().Trim();
+                        string error = child.StandardError.ReadToEnd();
+                        Assert(child.ExitCode == 0, "Concurrent profile child failed: " + error);
+                        Assert(identity.Length == 32, "Concurrent profile child returned invalid identity");
+                        identities.Add(identity);
+                    }
+                    Assert(identities.Distinct().Count() == 1, "Concurrent processes generated different identities");
+                    Assert(new LocalProfileStore(processRoot).GetOrCreateProfileId() == identities[0],
+                        "Concurrent process identity did not persist on reopen");
+                }
+                finally
+                {
+                    foreach (Process child in children)
+                    {
+                        if (!child.HasExited) child.Kill(entireProcessTree: true);
+                        child.Dispose();
+                    }
                 }
             });
             Test("independent app sandboxes have separate identities", () =>
