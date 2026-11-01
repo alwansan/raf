@@ -70,6 +70,9 @@ namespace RaftAndroid.Editor
         {
             ValidateSdkBindings();
             FmodAndroidValidation.RequireOriginalBanks();
+            // Android-only import overrides; never modify the original recovered files.
+            EditorUserBuildSettings.androidBuildSubtarget = MobileTextureSubtarget.ASTC;
+            AndroidTextureBudget.Apply();
             if (EditorUserBuildSettings.activeBuildTarget != BuildTarget.Android)
                 throw new BuildFailedException("Unity must be launched with the Android build target.");
 

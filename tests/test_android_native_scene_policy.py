@@ -37,5 +37,19 @@ class OriginalSceneIntegrityTests(unittest.TestCase):
         self.assertIn('RAFT_ANDROID_SCENE_GATE originalScenes=40 uniquePaths=true', self.source)
 
 
+    def test_android_texture_budget_is_bounded_and_preserves_original_overrides(self):
+        budget = (SOURCE.parent / "AndroidTextureBudget.cs").read_text(encoding="utf-8")
+        self.assertIn("AndroidTextureBudget.Apply();", self.source)
+        self.assertIn("MobileTextureSubtarget.ASTC", self.source)
+        self.assertIn("TextureImporterType.Default", budget)
+        self.assertIn("GetSourceTextureWidthAndHeight", budget)
+        self.assertIn("Math.Max(width, height) <= MaxDimension", budget)
+        self.assertIn("if (settings.overridden)", budget)
+        self.assertIn("Math.Min(importer.maxTextureSize, MaxDimension)", budget)
+        self.assertIn("TextureImporterFormat.ASTC_6x6", budget)
+        self.assertIn("importer.SaveAndReimport();", budget)
+        self.assertNotIn("File.Delete(", budget)
+        self.assertNotIn("TextureImporterType.Sprite", budget)
+
 if __name__ == "__main__":
     unittest.main()
