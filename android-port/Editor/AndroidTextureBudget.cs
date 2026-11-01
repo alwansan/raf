@@ -25,7 +25,8 @@ namespace RaftAndroid.Editor
             {
                 string path = AssetDatabase.GUIDToAssetPath(guid);
                 var importer = AssetImporter.GetAtPath(path) as TextureImporter;
-                if (importer == null || importer.textureType != TextureImporterType.Default)
+                if (importer == null || importer.textureType != TextureImporterType.Default ||
+                    importer.textureShape != TextureImporterShape.Texture2D)
                     continue;
                 // HDR sources and special importers need separate fidelity analysis.
                 if (path.EndsWith(".hdr", StringComparison.OrdinalIgnoreCase) ||

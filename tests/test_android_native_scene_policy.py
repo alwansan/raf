@@ -42,6 +42,7 @@ class OriginalSceneIntegrityTests(unittest.TestCase):
         self.assertIn("AndroidTextureBudget.Apply();", self.source)
         self.assertIn("MobileTextureSubtarget.ASTC", self.source)
         self.assertIn("TextureImporterType.Default", budget)
+        self.assertIn("TextureImporterShape.Texture2D", budget)
         self.assertIn("GetSourceTextureWidthAndHeight", budget)
         self.assertIn("Math.Max(width, height) <= MaxDimension", budget)
         self.assertIn("if (settings.overridden)", budget)
