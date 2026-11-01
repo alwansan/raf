@@ -73,7 +73,9 @@ public final class PerformanceSampler implements Runnable {
             previousPid=-1; previousTicks=-1; previousAt=-1; previousPresent=-1;
         } else {
             row.put("state","game_running");
-            JSONObject cpu=cpuUsage(pid,now);
+            JSONObject cpu;
+            try { cpu=cpuUsage(pid,now); }
+            catch(Exception e) { cpu=new JSONObject(); row.put("process_cpu_error",e.getClass().getSimpleName()); }
             row.put("process_cpu_percent_one_core",cpu.opt("core_pct") == null?JSONObject.NULL:cpu.opt("core_pct"));
             row.put("process_cpu_percent_all_cores",cpu.opt("device_pct")==null?JSONObject.NULL:cpu.opt("device_pct"));
             row.put("process_cpu_source","/proc/pid/stat utime+stime / elapsed wall time");
