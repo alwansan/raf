@@ -250,14 +250,31 @@ public final class PerformanceSampler implements Runnable {
             }
             if(presents.size()<2)return null;
             if(newest==previousPresent){previousFrameAt=now;return 0.0;}
-            int count=0;
-            for(long stamp:presents)if(previousPresent>0 && stamp>previousPresent)count++;
-            if(previousPresent>0 && previousFrameAt>0 && now>previousFrameAt && count>1){
-                double fps=1000.0*count/(now-previousFrameAt);
-                previousPresent=newest;previousFrameAt=now;
-                return fps>0 && fps<300?round(fps):null;
+            // SurfaceFlinger only exposes a small RING BUFFER of recent frames
+            // (often 128). Dividing 128 by our 3-second polling interval would
+            // falsely report ~42fps for a real 60fps game. Compute the rate
+            // from timestamp intervals instead, and require new presentation.
+            if(previousPresent<0) {
+                previousPresent=newest; previousFrameAt=now;
+                return null; // first sample establishes baseline
             }
-            previousPresent=newest; previousFrameAt=now;
+            if(newest<previousPresent){
+                previousPresent=newest;previousFrameAt=now;
+                return null; // layer recreated or counters reset
+            }
+            Collections.sort(presents);
+            long earliest=Long.MAX_VALUE,latest=-1;
+            int count=0;
+            for(long stamp:presents){
+                if(stamp<=0 || newest-stamp>2_000_000_000L)continue;
+                if(stamp==latest)continue;
+                if(earliest==Long.MAX_VALUE)earliest=stamp;
+                latest=stamp;count++;
+            }
+            previousPresent=newest;previousFrameAt=now;
+            if(count<3 || earliest>=latest)return null;
+            double fps=1_000_000_000.0*(count-1)/(latest-earliest);
+            return fps>0 && fps<300?round(fps):null;
         }catch(Exception ignored){}
         return null;
     }
