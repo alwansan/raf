@@ -21,7 +21,7 @@ public final class RemoteLogService extends IRemoteLog.Stub {
     private volatile int gameUid;
     private volatile String packageName;
     private final Set<String> gamePids = java.util.Collections.synchronizedSet(new HashSet<>());
-    private Thread gameThread, systemThread, pidThread;
+    private Thread gameThread, systemThread, pidThread, telemetryThread;
     private static final Pattern PID = Pattern.compile("^\\s*(?:\\d{4}-)?\\d\\d-\\d\\d\\s+\\d\\d:\\d\\d:\\d\\d[^ ]*\\s+(\\d+)\\s+");
     private static final Pattern CRASH_MARK = Pattern.compile("(?i)(FATAL EXCEPTION|Fatal signal|tombstone|crash_dump|am_crash|am_anr|Force finishing|ANR in|native crash|Fatal Java|Process:)");
     private static final int BATCH = 4096;
@@ -47,6 +47,24 @@ public final class RemoteLogService extends IRemoteLog.Stub {
         }, true), "lograf-system-context");
         pidThread = new Thread(this::watchPids, "lograf-pid-watch");
         gameThread.start(); systemThread.start(); pidThread.start();
+        telemetryThread=new Thread(()->new PerformanceSampler(packageName,this::currentPid,running,this::sendMetric).run(),"lograf-telemetry");
+        telemetryThread.start();
+    }
+
+    private int currentPid() {
+        synchronized(gamePids) {
+            for(String pid:gamePids) {
+                try {return Integer.parseInt(pid);} catch(NumberFormatException ignored){}
+            }
+        }
+        return -1;
+    }
+
+    private void sendMetric(String line) {
+        ILogSink sink=listener;
+        if(sink!=null && running.get()) {
+            try {sink.onBatch("METRICS",line);} catch(Exception e){error("Metrics delivery: "+e.getClass().getSimpleName());}
+        }
     }
 
     private void watchPids() {
@@ -142,6 +160,7 @@ public final class RemoteLogService extends IRemoteLog.Stub {
         if (gameThread != null) gameThread.interrupt();
         if (systemThread != null) systemThread.interrupt();
         if (pidThread != null) pidThread.interrupt();
+        if (telemetryThread != null) telemetryThread.interrupt();
         // Close the pipe and deliver tail batches instead of discarding them.
         for (Thread t : new Thread[]{gameThread, systemThread}) {
             if (t != null && t != Thread.currentThread()) {
