@@ -307,23 +307,46 @@ namespace RaftAndroid.Platform
         private void OnGUI()
         {
             float scale = Mathf.Max(1f, Screen.height / 720f);
+            Rect safe = Screen.safeArea;
+            // Screen.safeArea uses a bottom-left origin; IMGUI uses top-left.
+            // Convert before applying the same scale to the entire overlay.
+            Rect safeGui = new Rect(safe.xMin / scale,
+                (Screen.height - safe.yMax) / scale,
+                safe.width / scale, safe.height / scale);
+            float buttonWidth = Mathf.Min(145f, Mathf.Max(0f, safeGui.width - 16f));
+            if (buttonWidth < 48f || safeGui.height < 60f) return;
+
             Matrix4x4 previous = GUI.matrix;
-            GUI.matrix = Matrix4x4.Scale(new Vector3(scale, scale, 1));
-            if (GUI.Button(new Rect(8, 8, 145, 44), opened ? "Close test report" : "Test report")) opened = !opened;
-            if (opened)
+            try
             {
-                float width = Screen.width / scale - 16;
-                float height = Screen.height / scale - 70;
-                GUILayout.BeginArea(new Rect(8, 60, width, height), GUI.skin.box);
-                GUILayout.Label("Early Android test: startup and diagnostics. Singleplayer and touch controls are still being integrated.");
-                RefreshReport();
-                if (GUILayout.Button("Copy test report", GUILayout.Height(44))) GUIUtility.systemCopyBuffer = fullReport;
-                scroll = GUILayout.BeginScrollView(scroll);
-                GUILayout.Label(visibleReport);
-                GUILayout.EndScrollView();
-                GUILayout.EndArea();
+                GUI.matrix = Matrix4x4.Scale(new Vector3(scale, scale, 1));
+                if (GUI.Button(new Rect(safeGui.xMin + 8f, safeGui.yMin + 8f,
+                    buttonWidth, 44f), opened ? "Close test report" : "Test report"))
+                    opened = !opened;
+                if (opened)
+                {
+                    float panelTop = safeGui.yMin + 60f;
+                    float panelHeight = Mathf.Max(0f, safeGui.yMax - panelTop - 8f);
+                    float panelWidth = Mathf.Max(0f, safeGui.width - 16f);
+                    if (panelHeight >= 44f && panelWidth >= 48f)
+                    {
+                        GUILayout.BeginArea(new Rect(safeGui.xMin + 8f, panelTop,
+                            panelWidth, panelHeight), GUI.skin.box);
+                        try
+                        {
+                            GUILayout.Label("Early Android test: startup and diagnostics. Singleplayer and touch controls are still being integrated.");
+                            RefreshReport();
+                            if (GUILayout.Button("Copy test report", GUILayout.Height(44)))
+                                GUIUtility.systemCopyBuffer = fullReport;
+                            scroll = GUILayout.BeginScrollView(scroll);
+                            GUILayout.Label(visibleReport);
+                            GUILayout.EndScrollView();
+                        }
+                        finally { GUILayout.EndArea(); }
+                    }
+                }
             }
-            GUI.matrix = previous;
+            finally { GUI.matrix = previous; }
         }
     }
 }

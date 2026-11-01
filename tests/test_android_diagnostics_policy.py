@@ -67,5 +67,21 @@ class AndroidDiagnosticsPolicyTests(unittest.TestCase):
         self.assertIn('"; unity_driver_graphics_bytes=" + UnityGraphicsDriverBytes()', self.source)
 
 
+    def test_overlay_respects_landscape_notch_safe_area(self):
+        ui = self.source.split("private void OnGUI()", 1)[1]
+        self.assertIn("Rect safe = Screen.safeArea;", ui)
+        self.assertIn("safe.xMin / scale", ui)
+        self.assertIn("(Screen.height - safe.yMax) / scale", ui)
+        self.assertIn("safe.width / scale, safe.height / scale", ui)
+        self.assertIn("safeGui.xMin + 8f, safeGui.yMin + 8f", ui)
+        self.assertIn("safeGui.yMax - panelTop - 8f", ui)
+        self.assertIn("Mathf.Min(145f, Mathf.Max(0f, safeGui.width - 16f))", ui)
+        self.assertIn("finally { GUI.matrix = previous; }", ui)
+        self.assertIn("finally { GUILayout.EndArea(); }", ui)
+        self.assertNotIn("GUI.Button(new Rect(8, 8, 145, 44)", ui)
+        # A diagnostic overlay is not a substitute for original gameplay touch controls.
+
+
+
 if __name__ == "__main__":
     unittest.main()
