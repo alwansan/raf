@@ -6,28 +6,26 @@ android {
         applicationId 'com.alwansan.lograf'
         minSdk 29
         targetSdk 35
-        versionCode 3
-        versionName '0.3.0'
+        versionCode 4
+        versionName '0.4.0'
     }
     buildFeatures { aidl true }
     signingConfigs {
-        if (System.getenv('LOGRAF_SIGNING_STORE')) {
-            stable {
-                storeFile file(System.getenv('LOGRAF_SIGNING_STORE'))
-                storeType 'pkcs12'
-                storePassword System.getenv('LOGRAF_SIGNING_PASSWORD')
-                keyAlias 'lograf-update'
-                keyPassword System.getenv('LOGRAF_SIGNING_PASSWORD')
-            }
+        stable {
+            // Public TEST key, generated once and committed by GitHub Actions.
+            // Never rotate this file or existing installs cannot be upgraded.
+            storeFile file('../signing/lograf-public-test.p12')
+            storeType 'pkcs12'
+            storePassword 'LogRaftOpenSource2026'
+            keyAlias 'lograf-public'
+            keyPassword 'LogRaftOpenSource2026'
         }
     }
     buildTypes {
         debug { }
         release {
             minifyEnabled false
-            if (System.getenv('LOGRAF_SIGNING_STORE')) {
-                signingConfig signingConfigs.stable
-            }
+            signingConfig signingConfigs.stable
         }
     }
     compileOptions {
