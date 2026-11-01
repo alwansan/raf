@@ -7,7 +7,7 @@ on:
     inputs:
       job_id:
         description: Completed native job for bounded residual error context
-        default: '124796660828'
+        default: '124829584909'
         required: true
 permissions:
   contents: read
@@ -94,7 +94,7 @@ jobs:
           candidates = []
           for path in sorted((root / "lifecycle-original").rglob("*.cs")):
               text = path.read_text(encoding="utf-8-sig")
-              if (re.search(r"\b(?:OnDestroy|OnDisable)\s*\(", text) and re.search(r"\b(?:Object\.)?Destroy\s*\(", text)) or re.search(r"\bComputeShader\b", text) or path.stem in {'ShaderUtility', 'ScriptableObjectSingleton', 'UnderwaterIME', 'WaterDropsIME', 'AchievementHandler', 'Helper', 'Settings', 'NewGameBox', 'StartMenuScreen', 'RGD_Settings_Character', 'Player'}:
+              if (re.search(r"\b(?:OnDestroy|OnDisable)\s*\(", text) and re.search(r"\b(?:Object\.)?Destroy\s*\(", text)) or re.search(r"\bComputeShader\b", text) or path.stem in {'ShaderUtility', 'ScriptableObjectSingleton', 'UnderwaterIME', 'WaterDropsIME', 'AchievementHandler', 'Helper', 'Settings', 'NewGameBox', 'StartMenuScreen', 'RGD_Settings_Character', 'Player', 'WavesRendererFFT', 'GpuFFT', 'Dx11FFT', 'CpuFFT', 'WindWaves', 'WaterSubsurfaceScattering', 'WaterCamera', 'GameManager', 'PlayFabMultiplayerManager'}:
                   priority = 0 if re.search(r"ExecuteInEditMode|ExecuteAlways", text) else 1
                   candidates.append((priority, path, text))
           selected_bytes = 0
@@ -114,7 +114,7 @@ jobs:
       - name: Collect bounded native diagnostics without publishing raw log content
         env:
           GH_TOKEN: ${{ github.token }}
-          LOG_JOB_ID: ${{ inputs.job_id || '124796660828' }}
+          LOG_JOB_ID: ${{ inputs.job_id || '124829584909' }}
         run: |
           set -euo pipefail
           case "$LOG_JOB_ID" in ''|*[!0-9]*) exit 1;; esac
@@ -165,29 +165,29 @@ jobs:
         env:
           PUBLIC_INSPECTION_CERT: |
             -----BEGIN CERTIFICATE-----
-            MIIELzCCApegAwIBAgIUKC65Ln+vS372N9Kr/AiEYU8TuFkwDQYJKoZIhvcNAQEL
-            BQAwJzElMCMGA1UEAwwcUmFmdCBXb3JrIHByaXZhdGUgaW5zcGVjdGlvbjAeFw0y
-            NjExMDExMDU5MTBaFw0yNjExMDgxMDU5MTBaMCcxJTAjBgNVBAMMHFJhZnQgV29y
-            ayBwcml2YXRlIGluc3BlY3Rpb24wggGiMA0GCSqGSIb3DQEBAQUAA4IBjwAwggGK
-            AoIBgQCcjK0fyfAnfhqYS6X1Vkv9z1QNoe//r1BHdLzYIMKWIb59Ch/P6HsxYf4j
-            v0Ac/wRyYOqtsE/BLx0kW9WlxgUfeE4NFiNhV3Ho2l+qiEqqPqHoa3e6nXnglTju
-            +CjM/QM3lhZHHNOYntEDfabwK2gEgrlqlrA8HqfpBBlJ3Xl5cOpMBj0+hKV/XQCi
-            CJkGi/m0/a07yaUK75Kqtd3gc4Ou5n1c3SZjc4aDVC70erEju5vqj8QkPN/dnqpy
-            oSxdcE9+jjdHbbabUTK/a9tODuyBfX7erroBgobBhEW5NPiwYUM/++1FBcCuQuSs
-            UIzwGsjAYc+brq2kfwbH99RDvuRppjRk0cSdqMdhWG4yssNVmfAPLu6jws3RO0Hx
-            NKqarefv9MCrrcisBNEGJ9hqJeUEhZsrvqAbCzGw9xIc1aoSUr5KL8c/FdSAK3Nb
-            sRq1JC1Dm5D2+lMTODmd9ZQ2R60g557nzB06oi9VbSJiELPIgoIApWVF9WmGhtx1
-            Pg0Fg00CAwEAAaNTMFEwHQYDVR0OBBYEFCzUnW1IGGAAwAi4BREio6teF65QMB8G
-            A1UdIwQYMBaAFCzUnW1IGGAAwAi4BREio6teF65QMA8GA1UdEwEB/wQFMAMBAf8w
-            DQYJKoZIhvcNAQELBQADggGBABeP2fN0bZ8XkAPfTMFG20k+tF+r9HuA6ZLh5JTW
-            7EMcWyAN3xvqb0KLGagjewEAaUBsHfztO4OegisFYAFYAksBQDetaifNp1H3Q+xx
-            QaDUyIdJHUtY3JAEXJkZWKYcygtREtJDCBgVIxS+GfWu/jzjz2k5wAkYxC1qjSau
-            MK4NZ+tIVQfSo4sNmLXayR4cIovFLUMToX8aP++BA8HzhyH6ge0f7NxN0h95UMkG
-            XrQ1v3pxNwstm69rqd6n7owUdV0F9U7CbsIXVG/IKxkU/+QVA7dNnu1Gafjxvy7Q
-            PNkY54kDBPR9u1VX0Jz4NVocuaTluMsvpCiVHyYQ6IrQZ/qTzd9BYn6LroaAzed2
-            gN1JeucTl+3BSSFI3/26C7B1Somt7L7lDJbqe8kF1NHKUAih0PRRiFDskpkZafy8
-            TVPxRjDxqytZmiGFY3bQnurYt99afvPK3KtkxqrjYA0nON1c7/vNg26DQcweXR6n
-            rLVB23oaOmUNkIR6Bp2ug1/MIg==
+            MIIESzCCArOgAwIBAgIUJdzpAKrB3io4PM+Ixvr/p7UFbeEwDQYJKoZIhvcNAQEL
+            BQAwNTEzMDEGA1UEAwwqUmFmdCBwcml2YXRlIHJlbmRlciBhbmQgbG9hZGluZyBp
+            bnNwZWN0aW9uMB4XDTI2MTEwMTEzMjU0MloXDTI2MTEwODEzMjU0MlowNTEzMDEG
+            A1UEAwwqUmFmdCBwcml2YXRlIHJlbmRlciBhbmQgbG9hZGluZyBpbnNwZWN0aW9u
+            MIIBojANBgkqhkiG9w0BAQEFAAOCAY8AMIIBigKCAYEAtS7atG/p5VwG+RS5r9Pe
+            aivVBxs9rkW9EucKGxIbPHKOpZDgsk1VxhS3pDdQIkOPkWa9OXVpo0oBrWIx3bJX
+            T0gCskHd5Svy02L5nR+SgeQvoNsJYACy0Hz79X9bEcKkjitkBSg9DYVpOpRoSX81
+            /GmA4aBzAQ1CfmNgjesuUNHVf7JY8iBNnmK3/Rw9qLyL8a409KqDFAU4UEOB5AJ9
+            742LUgmBc3l6hFcedqpNtVTX70470vJ0kbF4AEh99iWkB0cln5YvMDhAsLrn8slh
+            sdohWkgykSgQc3d8nRJzt3FBDZLaHkEqBUBvcrBKOMtlVzpUnupVgmYy5kOR8YiX
+            Pbt/AL3IwBxCTarvrbvEfDUODLjAhjUIJ2owKr//S9w3t+Ydk6ET+ojyHFkGsuRL
+            XDZT01Dy34vxu+i2CyBm/RjKaEJHxxLmWEV+HElGGU6uybXpuL15k0LVy5MlvqBW
+            Xm/fua1858EYVai7eadEXH/fEBFMTOvE47oOqcka+H89AgMBAAGjUzBRMB0GA1Ud
+            DgQWBBRbFbJaQa3xjwpv4KQSSxkXY1bGcDAfBgNVHSMEGDAWgBRbFbJaQa3xjwpv
+            4KQSSxkXY1bGcDAPBgNVHRMBAf8EBTADAQH/MA0GCSqGSIb3DQEBCwUAA4IBgQCi
+            s8eVS8npIUPDOPp7Qo76GRYLdYJ5SCPXhKyibG317m7R52zSk9O+bZkKzVFlBONp
+            tFs6UDg0SF7HvBcti/rE1iEQzoIAgKEw/PfoZLl+9PsK2jfVmuZSEzbaKxYxpza3
+            HUFEQH462QxwAS/jVwBTaUEz0f2vfsEnz7JkZT78lyKskK5GiItYgb9+1vCIj0Kb
+            vpCA7QPpOKe5rTCLXj3VEPh25oSHG4siS0c0/7Tv9PXl1vAbHYpOkivbnHI3eCtY
+            E4BRQ9untFf3aAEVuqPY1syOedb4wmNIYXEI8MvXzyx7kCdgiHQOVbsNj3bp8MFN
+            JS09ZjsMVwcYGhUkRVvYYi2H4RnQPMQhQOS7iqtRKesMR13PZWTjdmfXgeyjVnnE
+            7SYNWqKUCKtHw4/b6qQPcuRFqx3XaE8djc1HSb6u9pLmNybpY7G83hodqEcUzHnp
+            nAPFOo9jG1SqmJYmCM/BmEL44cumkRLYKfzQ0wJ8M36XV7dSAOFbXpjo95KUB68=
             -----END CERTIFICATE-----
         run: |
           set -euo pipefail
