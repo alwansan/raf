@@ -356,6 +356,32 @@ jobs:
         run: |
           python3 -m unittest discover -s tests -p test_repair_asset_case_collisions.py -v
           python3 scripts/repair_asset_case_collisions.py --project "$RUNNER_TEMP/project/ExportedProject" --apply
+      - name: Stage authenticated original FMOD Android runtime and narrow Java startup bridge
+        shell: bash
+        env:
+          FMOD_ANDROID_RUNTIME_KEY: ${{ secrets.FMOD_ANDROID_RUNTIME_KEY }}
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check cryptography==50.0.2
+          python3 -m unittest discover -s tests -p test_stage_fmod_android_runtime.py -v
+          python3 -m scripts.stage_fmod_android_runtime \
+            --cipher android-port/Dependencies/fmod-2.02.15-android-arm64.aesgcm \
+            --manifest config/fmod-android-runtime.json \
+            --project "$RUNNER_TEMP/project/ExportedProject" --apply
+          mkdir -p "$RUNNER_TEMP/project/ExportedProject/Assets/RaftAndroid/Audio"
+          cp android-port/Runtime/Audio/*.cs "$RUNNER_TEMP/project/ExportedProject/Assets/RaftAndroid/Audio/"
+      - name: Restore original banks and StreamingAssets using tracked Git and pinned LFS identities
+        if: ${{ (github.event_name == 'workflow_dispatch' && inputs.build_mode == 'native') || (github.event_name == 'push' && contains(github.event.head_commit.message, '[raft-native-build]')) }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_stage_original_streaming_assets.py -v
+          git lfs fetch origin HEAD --include='Raft/Raft_Data/StreamingAssets/MasterBank.bank' --exclude=''
+          git lfs checkout Raft/Raft_Data/StreamingAssets/MasterBank.bank
+          python3 -m scripts.stage_original_streaming_assets \
+            --repo "$GITHUB_WORKSPACE" \
+            --project "$RUNNER_TEMP/project/ExportedProject" \
+            --report "$RUNNER_TEMP/original-streaming-assets.json" --apply
       - name: Stage native ARM64 build entry point without changing original scenes
         shell: bash
         run: |
@@ -457,6 +483,37 @@ jobs:
               for name in ("apk_bytes","zip_members","unity_data_files","unity_data_uncompressed_bytes","abis","arm64_il2cpp","fmod_native_library_present","apk_sha256"):
                   out.write(f"- {name}: {d[name]}\n")
               out.write("APK kept private on disposable CI runner; no source/game assets uploaded. Signature/install/gameplay still unverified.\n")
+          PY
+      - name: Verify actual APK FMOD libraries, Java bridge and original bank/data bytes
+        if: ${{ (github.event_name == 'workflow_dispatch' && inputs.build_mode == 'native') || (github.event_name == 'push' && contains(github.event.head_commit.message, '[raft-native-build]')) }}
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import hashlib, json, os, zipfile
+          from pathlib import Path
+          from scripts.audit_fmod_unity_package import elf_identity
+          report = json.loads((Path(os.environ['RUNNER_TEMP']) / 'original-streaming-assets.json').read_text())
+          apk = Path('builds/Android/RaftAndroidExperimental.apk')
+          exports = set()
+          with zipfile.ZipFile(apk) as archive:
+              for name in ('libfmod.so', 'libfmodstudio.so', 'libresonanceaudio.so'):
+                  metadata = elf_identity(archive.read('lib/arm64-v8a/' + name))
+                  assert metadata['abi'] == 'arm64-v8a'
+                  exports |= metadata['exports']
+              assert {'FMOD_System_Create', 'FMOD_System_GetVersion', 'FMOD_Studio_System_Create'} <= exports
+              dexes = [n for n in archive.namelist() if n.startswith('classes') and n.endswith('.dex') and '/' not in n]
+              assert any(b'Lorg/fmod/FMOD;' in archive.read(n) for n in dexes), 'FMOD Java descriptor absent from APK DEX'
+              compressed_banks = 0
+              for name, expected in report['files'].items():
+                  item = archive.getinfo('assets/' + name)
+                  assert item.file_size == expected['bytes'], 'Original StreamingAssets size changed'
+                  with archive.open(item) as source:
+                      assert hashlib.file_digest(source, 'sha256').hexdigest() == expected['sha256'], 'Original StreamingAssets bytes changed'
+                  if name.endswith('.bank') and item.compress_type != zipfile.ZIP_STORED:
+                      compressed_banks += 1
+          print('RAFT_FMOD_APK_AUDIT ' + json.dumps(dict(arm64RuntimeLibraries=3, requiredExports=True,
+              javaDescriptorPresent=True, exactOriginalStreamingFiles=len(report['files']),
+              compressedBankFiles=compressed_banks, deviceAudioVerified=False), sort_keys=True))
           PY
       - name: If CI reaches here, report without releasing original game APK
         run: |

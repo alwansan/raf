@@ -19,12 +19,14 @@ namespace RaftAndroid.Editor
         {
             SdkScriptBindingResolver.Rebind(Path.Combine(Application.dataPath, "Editor/RaftAndroid/sdk-script-manifest.json"));
             MicroSplatPropertyTextureRecovery.Restore();
+            FmodAndroidValidation.Validate();
             Debug.Log("RAFT_SDK_VALIDATION_COMPLETE noAndroidBuildRequested=true");
         }
 
         public static void Build()
         {
             ValidateSdkBindings();
+            FmodAndroidValidation.RequireOriginalBanks();
             if (EditorUserBuildSettings.activeBuildTarget != BuildTarget.Android)
                 throw new BuildFailedException("Unity must be launched with the Android build target.");
 
