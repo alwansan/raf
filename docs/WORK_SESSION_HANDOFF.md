@@ -1,3 +1,5 @@
+> **LATEST DEVICE CHECKPOINT (2026-11-01):** Read [device rendering/input/performance transfer](WORK_SESSION_HANDOFF_2026-11-01_DEVICE_RENDER_INPUT_PERFORMANCE.md) first. Native 41289171484 completed SUCCESS and was released; actual phone logs still show shader-pass failures, zero-kernel water FFT and FMOD Initialize NullReference. Touch/landscape/performance work remains pending. Older summaries below are historical.
+
 # Raft v1.1.01 → native Android — ChatGPT Work handoff (updated 2026-11-01)
 
 > **LATEST VERIFIED:** FMOD native41259800620 completed SUCCESS including APK/FM​​OD/DEX/original-data byte gates. Detailed bounded log analysis pending; see final section. No phone test.
@@ -983,3 +985,10 @@ One full Unity validation [41289171484](https://github.com/alwansan/raf/actions/
 This candidate is the first to include persisted Unity/all-level logs,27operation boundaries,per-stage native crash barriers and the restored Android save Conditional call. Old installed APK48 does NOT include those files and cannot retroactively generate them. Expected next-build folder: /storage/emulated/0/Android/data/com.alwansan.raft.androidtest/files/raft-logs/. Storage uses the app's own Application.persistentDataPath, no unrestricted storage permission or automatic upload. Owner copies that folder to CL/raft log. Keep checking CL there each continuation. Native faults may bypass managed handlers; read the final flushed stage together with LogFox.
 
 Original source bodies/schema/GUID/meta preservation and separate compile/storage tests are established; actual Unity completion, phone write access, native-crash resolution, audio and real.rgd roundtrip are NOT yet established. Continue recovery and compatibility tasks independent of repeated phone/APK testing. APK delivery, if produced, is only the evidence vehicle. No user file/license/FMOD setup is required. Update handoffs after the real result and continue from the first observed runtime barrier.
+
+
+## 2026-11-01 — newer actual-device evidence and Work transfer
+
+> **LATEST DEVICE CHECKPOINT (2026-11-01):** Read [device rendering/input/performance transfer](WORK_SESSION_HANDOFF_2026-11-01_DEVICE_RENDER_INPUT_PERFORMANCE.md) first. Native 41289171484 completed SUCCESS and was released; actual phone logs still show shader-pass failures, zero-kernel water FFT and FMOD Initialize NullReference. Touch/landscape/performance work remains pending. Older summaries below are historical.
+
+The owner requests continued restoration rather than repeated APK trials. All five CL/raft log/img screenshots were reviewed; latest diagnostic tail proves ongoing rendering, water FFT and FMOD initialization failures. See the linked transfer for evidence hashes, exact coverage, pending orientation/input/performance requirements, tested historical invariants and next actions. This checkpoint changes documentation only.
