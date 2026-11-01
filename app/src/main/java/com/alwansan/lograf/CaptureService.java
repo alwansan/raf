@@ -29,6 +29,7 @@ public final class CaptureService extends Service {
     private long segmentBytes, totalBytes, lastStatus;
     private int part;
     private volatile boolean active;
+    private volatile boolean failed;
     private IRemoteLog remote;
     private String session;
     private Shizuku.UserServiceArgs args;
@@ -74,7 +75,7 @@ public final class CaptureService extends Service {
         }
         @Override public void onServiceDisconnected(ComponentName c) {
             remote=null;
-            if(active) saveStatus("Shizuku disconnected; reconnect it and restart capture");
+            if(active) fatal("Shizuku disconnected; capture ended. Reconnect and restart.");
         }
     };
 
@@ -169,17 +170,22 @@ public final class CaptureService extends Service {
     }
 
     private void fatal(String message) {
+        if(failed) return;
+        failed=true;
         saveStatus(message);
-        halt(message);
-        stopSelf();
+        new Handler(Looper.getMainLooper()).post(() -> {
+            halt(message);
+            stopSelf();
+        });
     }
 
     private void halt(String status) {
-        active=false;
+        // Drain the remote reader's last batch BEFORE disabling our Binder sink.
         if(remote!=null) {
             try { remote.stop(); } catch(Exception ignored){}
             remote=null;
         }
+        active=false;
         if(args!=null) try { Shizuku.unbindUserService(args,connection,true); }
         catch(Exception ignored){}
         synchronized(writeLock) {

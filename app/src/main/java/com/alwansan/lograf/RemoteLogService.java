@@ -142,6 +142,12 @@ public final class RemoteLogService extends IRemoteLog.Stub {
         if (gameThread != null) gameThread.interrupt();
         if (systemThread != null) systemThread.interrupt();
         if (pidThread != null) pidThread.interrupt();
+        // Close the pipe and deliver tail batches instead of discarding them.
+        for (Thread t : new Thread[]{gameThread, systemThread}) {
+            if (t != null && t != Thread.currentThread()) {
+                try { t.join(1600); } catch (InterruptedException e) { Thread.currentThread().interrupt(); break; }
+            }
+        }
         gameProcess = null; systemProcess = null;
     }
 
