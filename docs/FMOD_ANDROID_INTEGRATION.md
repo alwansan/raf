@@ -88,3 +88,14 @@ Actual Actions preflight41251245329 retry/job124687318069 passed:10 exact files,
 ARM64 ELF identity,0 competing CSharp sources,0 overwritten original metas.
 FMOD_ANDROID_RUNTIME_KEY is now configured in UNITY_LICENSE; no further owner
 setup/download is required. This is not Unity import or audible-device proof.
+
+
+## Latest Work transfer and authored integration
+
+See [WORK_SESSION_HANDOFF_2026-11-01_FMOD_ANDROID.md](WORK_SESSION_HANDOFF_2026-11-01_FMOD_ANDROID.md)
+for the complete verified state. Native41257065669/source705dda0... is the pending
+real Unity/settings/importer/bank/APK validation. The Android-only Java bridge
+compiled against original providers and passed14policy cases in41256626829;
+original tracked StreamingAssets copying passed6Git-backed safety tests.
+These are not phone/audio results. Existing preflight/key setup is complete;
+no further owner download/login/license preparation is currently required.
