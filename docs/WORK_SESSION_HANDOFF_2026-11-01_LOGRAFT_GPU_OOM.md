@@ -32,3 +32,12 @@ Newnativeisstillatestedcandidate,notcompleteSingleplayer. Customwatershaders/com
 - Actual native run: https://github.com/alwansan/raf/actions/runs/41320932473 . Observed status: in_progress; unity-license-preflight succeeded, reconstruct job 124890811568 running at Restore every original graphics payload before exporting textures and shaders. No APK/result yet.
 - This run includes the authenticated PostFX sources, all TMP vendor identities, prior FFT exception cleanup, and bounded Unity worker/memory controls. Earlier successful shader contract workflows do not prove Android rendering or phone acceptance.
 - Per user instruction, stop waiting when only this long native job remains; next session inspect this run first without duplicate dispatch/cancellation. Water/compute restoration, touch, orientation and audible sound remain unaccepted on device.
+
+
+### 2026-11-01 19:07 Baghdad — independent Android lifecycle fix while native validation runs
+- Refreshed branch HEAD 62630796295b7cad922bc2f9e081d6decfe512b0 and actual native run 41320932473: preflight SUCCESS; reconstruct job 124890811568 still in Unity Editor import/compile, no artifact yet. No duplicate build or LFS download initiated.
+- AndroidNativeBuild.cs now pins `PlayerSettings.defaultInterfaceOrientation` to `UIOrientation.LandscapeLeft`, rather than AutoRotation, so the Android launch Activity requests landscape before Unity runtime initialization. Existing allowed-landscape-only flags and runtime left/right autorotation remain; this is a startup contract, not yet phone verified.
+- AndroidTestDiagnostics.OnApplicationPause now records the lifecycle transition BEFORE flushing the persistent log. Previously the flush occurred first, allowing the final pause transition to remain buffered if the process was killed. No changes to gameplay, meshes, shaders, scenes, metas or GUIDs.
+- Added source-policy regressions in test_android_native_scene_policy.py and test_android_diagnostics_policy.py. Source-string contract checks only; real Android manifest inspection, Unity compile, device rotation and pause-kill recovery still require subsequent validation.
+- Last checked CL/raft log: 3 LF sessions (16:33, 17:00, 17:30), 15 screenshots through 15:39, 4 LogFox files; no newer LF session observed. Existing 17:00 GPU-memory OOM evidence still applies to older installed APK, not current unreleased native candidate.
+- Next: inspect current native run completion/Unity manifest, then actual APK if produced. Keep original GPU-OOM/root-cause and custom water/compute reconstruction open.

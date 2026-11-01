@@ -35,6 +35,13 @@ class AndroidDiagnosticsPolicyTests(unittest.TestCase):
         self.assertIn("reportRevision = version;", self.source)
         self.assertIn("reportScene = scene;", self.source)
 
+    def test_pause_event_is_persisted_before_flush(self):
+        pause = self.source.split("private void OnApplicationPause(bool paused)", 1)[1]
+        pause = pause.split("private void OnApplicationFocus", 1)[0]
+        self.assertLess(pause.index('AndroidRuntimeLog.Write("lifecycle", "pause"'),
+                        pause.index("AndroidRuntimeLog.Flush();"))
+        self.assertIn("if (!paused) EnforceLandscape();", pause)
+
     def test_bounded_thread_safe_capture(self):
         self.assertIn("if (entry.Length > 3000) entry = entry.Substring(0, 3000);", self.source)
         self.assertIn("while (events.Count > 48) events.Dequeue();", self.source)

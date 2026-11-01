@@ -228,8 +228,10 @@ namespace RaftAndroid.Platform
             if (!paused) EnforceLandscape();
             intervalFrames = sampleCount = 0; intervalSeconds = 0;
             skipNextFrame = true;
-            RaftAndroid.Diagnostics.AndroidRuntimeLog.Flush();
+            // Persist the transition itself before flushing: the previous order
+            // could omit the last pause event when Android kills the process.
             RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("lifecycle", "pause", paused.ToString(), true);
+            RaftAndroid.Diagnostics.AndroidRuntimeLog.Flush();
         }
         private void OnApplicationFocus(bool focused)
         {

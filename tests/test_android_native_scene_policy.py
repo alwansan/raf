@@ -24,6 +24,13 @@ class OriginalSceneIntegrityTests(unittest.TestCase):
         self.assertIn("!File.Exists(s)", self.source)
         self.assertIn("throw new BuildFailedException", self.source)
 
+    def test_android_launch_orientation_is_landscape_before_unity_runtime(self):
+        self.assertIn("PlayerSettings.defaultInterfaceOrientation = UIOrientation.LandscapeLeft;", self.source)
+        self.assertIn("PlayerSettings.allowedAutorotateToPortrait = false;", self.source)
+        self.assertIn("PlayerSettings.allowedAutorotateToPortraitUpsideDown = false;", self.source)
+        self.assertIn("PlayerSettings.allowedAutorotateToLandscapeLeft = true;", self.source)
+        self.assertIn("PlayerSettings.allowedAutorotateToLandscapeRight = true;", self.source)
+
     def test_all_original_scenes_still_pass_to_build_pipeline(self):
         self.assertIn("EditorBuildSettings.scenes.Where(s => s.enabled)", self.source)
         self.assertIn("scenes = scenes,", self.source)

@@ -60,7 +60,9 @@ namespace RaftAndroid.Editor
             PlayerSettings.Android.targetArchitectures = AndroidArchitecture.ARM64;
             PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.Android, "com.alwansan.raft.androidtest");
             PlayerSettings.productName = "Raft Android Test";
-            PlayerSettings.defaultInterfaceOrientation = UIOrientation.AutoRotation;
+            // Force Android's launch Activity to landscape before the first Unity frame.
+            // The runtime may still permit both landscape rotations after startup.
+            PlayerSettings.defaultInterfaceOrientation = UIOrientation.LandscapeLeft;
             PlayerSettings.allowedAutorotateToPortrait = false;
             PlayerSettings.allowedAutorotateToPortraitUpsideDown = false;
             PlayerSettings.allowedAutorotateToLandscapeLeft = true;
