@@ -43,6 +43,8 @@ on:
       - 'scripts/restore_tmp_shaders.py'
       - 'scripts/restore_postfx_shaders.py'
       - 'scripts/restore_postfx_compute.py'
+      - 'scripts/ci_memory_watch.py'
+      - 'tests/test_ci_memory_watch.py'
       - 'tests/test_restore_postfx_compute.py'
       - 'tests/test_restore_postfx_shaders.py'
       - 'config/postfx-v1-shader-sources.json'
