@@ -43,6 +43,12 @@ This version monitors **one fixed package** intentionally; it does not request Q
 - [Shizuku-API](https://github.com/RikkaApps/Shizuku-API) — Binder and UserService model.
 - [LogFox](https://github.com/F0x1d/LogFox) and [ShizuLog](https://github.com/opfans432/ShizuLog) — compared feature sets **only**, code not copied.
 
+## One-time permanent signing (automatic)
+
+No Termux commands or GitHub Secrets are required. GitHub Actions has generated and committed the public **test** signing key to `signing/lograf-public-test.p12`. Every future release uses that exact key. Each GitHub Actions build increments `versionCode` automatically and publishes a verified signed APK named `LogRaft-signed.apk`. Read [signing/README.md](signing/README.md) for the certificate fingerprint and limitations of using a public signing identity.
+
+Older `LogRaft-debug.apk` releases were signed with unrelated debug keys, so switching from these to the stable signed APK might require a **one-time uninstall**. Back up existing recorded sessions first; no uninstall should be necessary between future stable-signed releases.
+
 ## Build
 JDK 17, Android SDK 35, Gradle 8.9, Android Gradle Plugin 8.7.3.
 
