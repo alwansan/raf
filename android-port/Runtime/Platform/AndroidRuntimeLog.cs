@@ -9,6 +9,17 @@ namespace RaftAndroid.Diagnostics
     public static class AndroidRuntimeLog
     {
         private static PersistentDiagnosticLog sink;
+        private static readonly RepeatedDiagnosticMessages repeated = new RepeatedDiagnosticMessages();
+        public static bool UnityMessage(string type, string detail, bool critical)
+        {
+            if (critical && !repeated.First(type, detail, DateTime.UtcNow)) return false;
+            Write("unity", type, detail, critical);
+            return true;
+        }
+        public static void SummarizeRepeated()
+        {
+            repeated.Summarize((area, operation, detail) => Write(area, operation, detail));
+        }
         public static string LogDirectory { get; private set; }
         public static string StorageError { get; private set; }
 
@@ -22,7 +33,10 @@ namespace RaftAndroid.Diagnostics
                 Write("startup", "logger.ready", "version=" + Application.version + "; unity=" + Application.unityVersion +
                     "; package=" + Application.identifier + "; device=" + SystemInfo.deviceModel +
                     "; os=" + SystemInfo.operatingSystem + "; gpu=" + SystemInfo.graphicsDeviceName +
-                    "; graphics=" + SystemInfo.graphicsDeviceType, true);
+                    "; graphics=" + SystemInfo.graphicsDeviceType + "; driver=" + SystemInfo.graphicsDeviceVersion +
+                    "; gpu_vendor=" + SystemInfo.graphicsDeviceVendor + "; compute=" + SystemInfo.supportsComputeShaders +
+                    "; shader_level=" + SystemInfo.graphicsShaderLevel + "; cpu=" + SystemInfo.processorType +
+                    "; cpu_count=" + SystemInfo.processorCount + "; system_memory_mb=" + SystemInfo.systemMemorySize, true);
             }
             catch (Exception ex) { StorageError = ex.GetType().Name + ": " + ex.Message; }
         }
@@ -40,7 +54,7 @@ namespace RaftAndroid.Diagnostics
             catch (Exception ex) { Write("audio", operation + ".failed", ex.ToString(), true); throw; }
         }
 
-        public static void Flush() { sink?.Flush(); }
+        public static void Flush() { SummarizeRepeated(); sink?.Flush(); }
         public static long BeginOperation(string area, string operation, string detail)
         {
             Write(area, operation + ".enter", detail, true);
@@ -53,7 +67,7 @@ namespace RaftAndroid.Diagnostics
                 ms.ToString("F3", System.Globalization.CultureInfo.InvariantCulture), true);
         }
         public static string Status => StorageError ?? sink?.LastError ?? "ready";
-        public static void Shutdown() { sink?.Dispose(); sink = null; }
+        public static void Shutdown() { SummarizeRepeated(); sink?.Dispose(); sink = null; }
     }
 }
 #endif

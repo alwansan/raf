@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Globalization;
+using UnityEngine.Profiling;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -24,6 +26,7 @@ namespace RaftAndroid.Platform
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void CaptureBeforeAudioStartup()
         {
+            EnforceLandscape();
             lock (gate)
             {
                 events.Clear();
@@ -47,8 +50,8 @@ namespace RaftAndroid.Platform
         {
             message = message ?? "";
             stack = stack ?? "";
-            RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("unity", type.ToString(), message + "\n" + stack,
-                type == LogType.Error || type == LogType.Exception || type == LogType.Assert);
+            if (!RaftAndroid.Diagnostics.AndroidRuntimeLog.UnityMessage(type.ToString(), message + "\n" + stack,
+                type == LogType.Error || type == LogType.Exception || type == LogType.Assert)) return;
             if (type != LogType.Error && type != LogType.Exception && type != LogType.Assert &&
                 !message.StartsWith("RAFT_", StringComparison.Ordinal)) return;
             string entry = DateTime.UtcNow.ToString("O") + " " + type + " " + message + "\n" + stack;
@@ -93,6 +96,47 @@ namespace RaftAndroid.Platform
 
 
         private float nextSample;
+        private readonly float[] frameSamples = new float[2048];
+        private readonly FrameTiming[] timings = new FrameTiming[1];
+        private int sampleCount, intervalFrames;
+        private double intervalSeconds;
+        private static string Number(double value) => value.ToString("F2", CultureInfo.InvariantCulture);
+        private static string Timing(double value) => value > 0 && !double.IsNaN(value) && !double.IsInfinity(value)
+            ? Number(value) : "unavailable";
+        private string PerformanceSample()
+        {
+            Array.Sort(frameSamples, 0, sampleCount);
+            Func<double, string> percentile = p => sampleCount == 0 ? "unavailable" :
+                Number(frameSamples[Math.Min(sampleCount - 1, (int)Math.Ceiling(sampleCount * p) - 1)]);
+            uint available = FrameTimingManager.GetLatestTimings(1, timings);
+            string report = "interval_frames=" + intervalFrames + "; fps=" +
+                (intervalSeconds > 0 ? Number(intervalFrames / intervalSeconds) : "unavailable") +
+                "; frame_samples=" + sampleCount + "; sample_capacity=2048; frame_sample_overflow=" + Math.Max(0, intervalFrames - sampleCount) +
+                "; frame_p50_ms=" + percentile(0.50) + "; frame_p95_ms=" + percentile(0.95) +
+                "; frame_p99_ms=" + percentile(0.99) + "; frame_worst_ms=" + percentile(1) +
+                "; cpu_latest_frame_ms=" + (available > 0 ? Timing(timings[0].cpuFrameTime) : "unavailable") +
+                "; gpu_latest_frame_ms=" + (available > 0 ? Timing(timings[0].gpuFrameTime) : "unavailable") +
+                "; process_cpu_percent=unavailable; managed_bytes=" + GC.GetTotalMemory(false) +
+                "; unity_allocated_bytes=" + Profiler.GetTotalAllocatedMemoryLong() +
+                "; unity_reserved_bytes=" + Profiler.GetTotalReservedMemoryLong() +
+                "; unity_unused_reserved_bytes=" + Profiler.GetTotalUnusedReservedMemoryLong() +
+                "; gc_gen0_total=" + GC.CollectionCount(0) + "; process_rss=" + ProcessRss() +
+                "; process_pss=unavailable; thermal=unavailable; draw_calls=unavailable" +
+                "; width=" + Screen.width + "; height=" + Screen.height + "; orientation=" + Screen.orientation +
+                "; refresh_hz=" + Screen.currentResolution.refreshRate + "; scene=" + SceneManager.GetActiveScene().name;
+            intervalFrames = sampleCount = 0; intervalSeconds = 0;
+            return report;
+        }
+        private static string ProcessRss()
+        {
+            try
+            {
+                foreach (string line in System.IO.File.ReadLines("/proc/self/status"))
+                    if (line.StartsWith("VmRSS:", StringComparison.Ordinal)) return line.Substring(6).Trim();
+            }
+            catch (Exception) { }
+            return "unavailable";
+        }
         private void OnEnable()
         {
             SceneManager.sceneLoaded += SceneLoaded;
@@ -119,6 +163,9 @@ namespace RaftAndroid.Platform
         }
         private void OnApplicationPause(bool paused)
         {
+            if (!paused) EnforceLandscape();
+            intervalFrames = sampleCount = 0; intervalSeconds = 0;
+            RaftAndroid.Diagnostics.AndroidRuntimeLog.Flush();
             RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("lifecycle", "pause", paused.ToString(), true);
         }
         private void OnApplicationFocus(bool focused)
@@ -130,13 +177,24 @@ namespace RaftAndroid.Platform
             RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("lifecycle", "quit", "", true);
             RaftAndroid.Diagnostics.AndroidRuntimeLog.Shutdown();
         }
+        private static void EnforceLandscape()
+        {
+            Screen.autorotateToPortrait = false;
+            Screen.autorotateToPortraitUpsideDown = false;
+            Screen.autorotateToLandscapeLeft = true;
+            Screen.autorotateToLandscapeRight = true;
+            Screen.orientation = ScreenOrientation.AutoRotation;
+        }
         private void Update()
         {
+            float delta = Time.unscaledDeltaTime;
+            intervalFrames++; intervalSeconds += delta;
+            if (sampleCount < frameSamples.Length) frameSamples[sampleCount++] = delta * 1000f;
+            FrameTimingManager.CaptureFrameTimings();
             if (Time.realtimeSinceStartup < nextSample) return;
+            RaftAndroid.Diagnostics.AndroidRuntimeLog.SummarizeRepeated();
             nextSample = Time.realtimeSinceStartup + 5f;
-            RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("performance", "sample",
-                "frame=" + Time.frameCount + "; frame_ms=" + (Time.unscaledDeltaTime * 1000f).ToString("F2") +
-                "; managed_bytes=" + GC.GetTotalMemory(false) + "; scene=" + SceneManager.GetActiveScene().name);
+            RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("performance", "sample", PerformanceSample());
         }
 
         private void OnGUI()

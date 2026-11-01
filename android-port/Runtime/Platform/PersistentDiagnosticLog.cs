@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -22,6 +23,8 @@ namespace RaftAndroid.Diagnostics
         private int count, segment;
         private long sequence, dropped;
         private long writtenBytes;
+        private FileStream startup;
+        private const long StartupLimit = 256 * 1024;
         private volatile bool stopping;
         public string LastError { get; private set; }
         public string DirectoryPath => directory;
@@ -37,6 +40,20 @@ namespace RaftAndroid.Diagnostics
             this.queueLimit = queueLimit;
             Directory.CreateDirectory(this.directory);
             session = DateTime.UtcNow.ToString("yyyyMMddTHHmmssfff", CultureInfo.InvariantCulture) + "-" + Guid.NewGuid().ToString("N").Substring(0, 8);
+            // Separate bounded evidence survives routine segment rotation. Keep four launches.
+            string evidence = Path.Combine(this.directory, "startup");
+            Directory.CreateDirectory(evidence);
+            string startupPath = Path.Combine(evidence, "startup-" + session + ".jsonl");
+            startup = new FileStream(startupPath, FileMode.CreateNew, FileAccess.Write, FileShare.Read);
+            var launches = new DirectoryInfo(evidence).GetFiles("startup-*.jsonl");
+            Array.Sort(launches, (a, b) => string.CompareOrdinal(a.Name, b.Name));
+            int oldLaunches = launches.Length - 4;
+            foreach (var launch in launches)
+            {
+                if (oldLaunches <= 0) break;
+                if (launch.FullName == startupPath) continue;
+                launch.Delete(); oldLaunches--;
+            }
             OpenSegment();
             worker = new Thread(Run) { IsBackground = true, Name = "Raft diagnostic writer" };
             worker.Start();
@@ -67,7 +84,7 @@ namespace RaftAndroid.Diagnostics
         {
             lock (ioGate)
             {
-                try { Drain(); writer.Flush(); stream.Flush(true); }
+                try { Drain(); writer.Flush(); stream.Flush(true); startup.Flush(true); }
                 catch (Exception ex) { LastError = ex.GetType().Name + ": " + ex.Message; }
             }
         }
@@ -99,6 +116,11 @@ namespace RaftAndroid.Diagnostics
         private void Append(string line)
         {
             int bytes = Encoding.UTF8.GetByteCount(line) + 1;
+            if (startup.Length + bytes <= StartupLimit)
+            {
+                byte[] copy = Encoding.UTF8.GetBytes(line + "\n");
+                startup.Write(copy, 0, copy.Length);
+            }
             if (writtenBytes != 0 && writtenBytes + bytes > segmentBytes)
             {
                 writer.Dispose();
@@ -156,8 +178,53 @@ namespace RaftAndroid.Diagnostics
             wake.Set();
             worker.Join(2000);
             Flush();
-            lock (ioGate) writer.Dispose();
+            lock (ioGate) { writer.Dispose(); startup.Dispose(); }
             wake.Dispose();
+        }
+    }
+
+    // Thread-safe, bounded identical-message grouping. First stack is always emitted.
+    // Capacity overflow passes through rather than concealing unknown failures.
+    public sealed class RepeatedDiagnosticMessages
+    {
+        private sealed class Entry
+        {
+            public long Repeated;
+            public DateTime First, Last;
+        }
+        private readonly object gate = new object();
+        private readonly Dictionary<string, Entry> entries = new Dictionary<string, Entry>(StringComparer.Ordinal);
+        public bool First(string operation, string detail, DateTime now)
+        {
+            string key = operation + "\n" + detail;
+            if (key.Length > 8192) return true;
+            lock (gate)
+            {
+                if (entries.TryGetValue(key, out var entry))
+                {
+                    entry.Repeated++; entry.Last = now; return false;
+                }
+                if (entries.Count >= 128) return true;
+                entries.Add(key, new Entry { First = now, Last = now });
+                return true;
+            }
+        }
+        public void Summarize(Action<string, string, string> write)
+        {
+            var summaries = new List<string>();
+            lock (gate)
+            {
+                foreach (var pair in entries)
+                {
+                    var entry = pair.Value;
+                    if (entry.Repeated == 0) continue;
+                    summaries.Add("repeated=" + entry.Repeated.ToString(CultureInfo.InvariantCulture) +
+                        "; first=" + entry.First.ToString("O", CultureInfo.InvariantCulture) +
+                        "; last=" + entry.Last.ToString("O", CultureInfo.InvariantCulture) + "; original=" + pair.Key);
+                    entry.Repeated = 0;
+                }
+            }
+            foreach (string summary in summaries) write("unity", "repeat_summary", summary);
         }
     }
 }

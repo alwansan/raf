@@ -43,16 +43,38 @@ class Program
             File.WriteAllText(Path.Combine(rotating, "user-note.txt"), "keep");
             using (var log = new PersistentDiagnosticLog(rotating, 1024, 3))
             {
+                log.Write("startup", "must_survive_rotation", "first failure stack", true);
                 for (int i = 0; i < 30; i++) log.Write("rotation", "event", new string('x', 100), true);
                 Require(Directory.GetFiles(rotating, "raft-*.jsonl").Length <= 3);
                 Require(Directory.GetFiles(rotating, "raft-*.jsonl").All(p => new FileInfo(p).Length <= 1024));
                 Require(File.ReadAllText(Path.Combine(rotating, "user-note.txt")) == "keep");
+                Require(!Lines(rotating).Any(l => l.Contains("must_survive_rotation")));
+                Require(Directory.GetFiles(Path.Combine(rotating, "startup")).SelectMany(File.ReadAllLines)
+                    .Any(l => l.Contains("must_survive_rotation")));
             }
             using (var log = new PersistentDiagnosticLog(rotating, 1024, 3)) log.Write("startup", "new_session", "", true);
             Require(Lines(rotating).Any(l => l.Contains("new_session")));
             Require(Directory.GetFiles(rotating, "raft-*.jsonl").Length <= 3);
+            for (int i = 0; i < 6; i++)
+                using (var log = new PersistentDiagnosticLog(rotating)) log.Write("startup", "bounded_launch", "", true);
+            Require(Directory.GetFiles(Path.Combine(rotating, "startup")).Length == 4);
+            Require(Directory.GetFiles(Path.Combine(rotating, "startup")).All(p => new FileInfo(p).Length <= 256 * 1024));
+            var repeated = new RepeatedDiagnosticMessages();
+            DateTime now = DateTime.UtcNow;
+            Require(repeated.First("Error", "same message\nfull stack", now));
+            Parallel.For(0, 10000, i => RequireFalse(repeated.First("Error", "same message\nfull stack", now.AddSeconds(1))));
+            string summary = null;
+            repeated.Summarize((area, operation, detail) => summary = detail);
+            Require(summary != null && summary.Contains("repeated=10000;") && summary.Contains("full stack"));
+            repeated.Summarize((area, operation, detail) => throw new Exception("Duplicate summary"));
+            Require(repeated.First("Exception", "same message\nfull stack", now));
+            Require(repeated.First("Error", "same message\ndifferent stack", now));
+            for (int i = 0; i < 200; i++) Require(repeated.First("Error", "unique " + i, now));
+            Require(repeated.First("Error", "capacity overflow", now));
+            Require(repeated.First("Error", "capacity overflow", now));
             Console.WriteLine("RAFT_PERSISTENT_LOG_TEST checks=" + checks + " passed=true actualAndroidStorageVerified=false");
         }
         finally { Directory.Delete(root, true); }
     }
+    static void RequireFalse(bool value) { if (value) throw new Exception("Repeated error was not grouped"); }
 }

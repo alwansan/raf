@@ -7,7 +7,7 @@ on:
     inputs:
       job_id:
         description: Completed native job for bounded residual error context
-        default: '124710556393'
+        default: '124796660828'
         required: true
 permissions:
   contents: read
@@ -114,7 +114,7 @@ jobs:
       - name: Collect bounded native diagnostics without publishing raw log content
         env:
           GH_TOKEN: ${{ github.token }}
-          LOG_JOB_ID: ${{ inputs.job_id || '124710556393' }}
+          LOG_JOB_ID: ${{ inputs.job_id || '124796660828' }}
         run: |
           set -euo pipefail
           case "$LOG_JOB_ID" in ''|*[!0-9]*) exit 1;; esac
@@ -165,29 +165,29 @@ jobs:
         env:
           PUBLIC_INSPECTION_CERT: |
             -----BEGIN CERTIFICATE-----
-            MIIELzCCApegAwIBAgIUffofj98SkvIhnEyGLQoMPXd89z4wDQYJKoZIhvcNAQEL
+            MIIELzCCApegAwIBAgIUKC65Ln+vS372N9Kr/AiEYU8TuFkwDQYJKoZIhvcNAQEL
             BQAwJzElMCMGA1UEAwwcUmFmdCBXb3JrIHByaXZhdGUgaW5zcGVjdGlvbjAeFw0y
-            NjExMDEwMjQ4MDFaFw0yNjExMDgwMjQ4MDFaMCcxJTAjBgNVBAMMHFJhZnQgV29y
+            NjExMDExMDU5MTBaFw0yNjExMDgxMDU5MTBaMCcxJTAjBgNVBAMMHFJhZnQgV29y
             ayBwcml2YXRlIGluc3BlY3Rpb24wggGiMA0GCSqGSIb3DQEBAQUAA4IBjwAwggGK
-            AoIBgQDpS6arhYR4p0IbVnDcH+3x6sjO5mQja9R6ntRLASJUCDNL9VjzAYQsCD9o
-            kUKTT/grsX2pjoiATYL2OevOQAhaZgOggz4IebEHSviiubrk0diibNoDfuK2+9mU
-            Hs5MSozl9GSfbX0YlwlulO7raf5BAfviwCpjLo9oikRDjz8YBJvOrVWDI3k+qC4Y
-            ml57TWmMYGGDC/Kiqu08RaVfXbwIoqXYFF+3y9y9LofIXTFPkB3/WDjjeODsQJ/7
-            hKWUyHjK8NNTxszmLvhVfdWaQgW4qmA9jL8hKkGCVHawKEIElCIkNHtHtKhbzfOt
-            6By+XOTs1WdKWn0D0meXKVQtINmTzYD2nz4ezL+ByMNE97eoGYqNAj3jc591IPgK
-            jeZbdoU5XWyt4VsSv1ngdkdMGnbXXDyZo5cxUId/okSZdbvWEjwHqq9MGIv27bX0
-            qmrtsYbD4fiEf1rqhoCmsc66pmiCDjmaEblho3/2fZBBtLVWXA+rqtNMEDEF+oor
-            lzlM750CAwEAAaNTMFEwHQYDVR0OBBYEFCs4V2v+dlv6Cd7vb7ZOSmAroXOWMB8G
-            A1UdIwQYMBaAFCs4V2v+dlv6Cd7vb7ZOSmAroXOWMA8GA1UdEwEB/wQFMAMBAf8w
-            DQYJKoZIhvcNAQELBQADggGBAAwv/P5Iq0YQixDURjCGktw/DipZ4nZNtSnM7PTW
-            H1MxgaG0SrljsB3yN4oWZSmfMII+u3/D5ZYD4+l0gkmaMKTZXFo5HtER+LgEsfqP
-            lXaIYcK26BbXOGXhT7gyNpxqep+cJC9sSQksrsmVcUo8eIq7w0+kMHsN+TLmYrX8
-            32pl0BdLcOGbeJCWtC4mTl+n6R8tbXHJ39soooLZ/QFl/DYJhnMUWpGp3YcjjTg9
-            p+MbRLaCN46fUANDizZ3k2To5x5Od1sNhqvKCjGmLOqrOQHNRV1CkuOO7/w7UUSc
-            3mqP6nG8kFG7293EW/qe6MZuSHav/4ji6PeZs5+ehSuHxptmEzHPberFb9ugexyb
-            5aoxupEW6yhrmu6cUXlwT086JXAbjSduh7v4qIANGqBPcN1qWDA2+VFUQ+Oi4jWE
-            FW27rrEh84Sw2fCdewnA0tnk3rJK6hK6gnEzZFGenP0BmqNEKQXDexhG7xJKiFD/
-            6FAZ1HPYQeTyJVo3x4ZzWxYVbw==
+            AoIBgQCcjK0fyfAnfhqYS6X1Vkv9z1QNoe//r1BHdLzYIMKWIb59Ch/P6HsxYf4j
+            v0Ac/wRyYOqtsE/BLx0kW9WlxgUfeE4NFiNhV3Ho2l+qiEqqPqHoa3e6nXnglTju
+            +CjM/QM3lhZHHNOYntEDfabwK2gEgrlqlrA8HqfpBBlJ3Xl5cOpMBj0+hKV/XQCi
+            CJkGi/m0/a07yaUK75Kqtd3gc4Ou5n1c3SZjc4aDVC70erEju5vqj8QkPN/dnqpy
+            oSxdcE9+jjdHbbabUTK/a9tODuyBfX7erroBgobBhEW5NPiwYUM/++1FBcCuQuSs
+            UIzwGsjAYc+brq2kfwbH99RDvuRppjRk0cSdqMdhWG4yssNVmfAPLu6jws3RO0Hx
+            NKqarefv9MCrrcisBNEGJ9hqJeUEhZsrvqAbCzGw9xIc1aoSUr5KL8c/FdSAK3Nb
+            sRq1JC1Dm5D2+lMTODmd9ZQ2R60g557nzB06oi9VbSJiELPIgoIApWVF9WmGhtx1
+            Pg0Fg00CAwEAAaNTMFEwHQYDVR0OBBYEFCzUnW1IGGAAwAi4BREio6teF65QMB8G
+            A1UdIwQYMBaAFCzUnW1IGGAAwAi4BREio6teF65QMA8GA1UdEwEB/wQFMAMBAf8w
+            DQYJKoZIhvcNAQELBQADggGBABeP2fN0bZ8XkAPfTMFG20k+tF+r9HuA6ZLh5JTW
+            7EMcWyAN3xvqb0KLGagjewEAaUBsHfztO4OegisFYAFYAksBQDetaifNp1H3Q+xx
+            QaDUyIdJHUtY3JAEXJkZWKYcygtREtJDCBgVIxS+GfWu/jzjz2k5wAkYxC1qjSau
+            MK4NZ+tIVQfSo4sNmLXayR4cIovFLUMToX8aP++BA8HzhyH6ge0f7NxN0h95UMkG
+            XrQ1v3pxNwstm69rqd6n7owUdV0F9U7CbsIXVG/IKxkU/+QVA7dNnu1Gafjxvy7Q
+            PNkY54kDBPR9u1VX0Jz4NVocuaTluMsvpCiVHyYQ6IrQZ/qTzd9BYn6LroaAzed2
+            gN1JeucTl+3BSSFI3/26C7B1Somt7L7lDJbqe8kF1NHKUAih0PRRiFDskpkZafy8
+            TVPxRjDxqytZmiGFY3bQnurYt99afvPK3KtkxqrjYA0nON1c7/vNg26DQcweXR6n
+            rLVB23oaOmUNkIR6Bp2ug1/MIg==
             -----END CERTIFICATE-----
         run: |
           set -euo pipefail
