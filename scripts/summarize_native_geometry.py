@@ -50,10 +50,12 @@ def inspect_log(lines):
             apk['validated_aarch64_shared_libraries'] = payload.get('validated_aarch64_shared_libraries')
         for marker in ('RAFT_VERIFIED_MESH_RANGE_DOWNLOAD', 'RAFT_ORIGINAL_MESH_STREAM_INLINE',
                        'RAFT_ORIGINAL_MESH_POSITION_AUDIT', 'RAFT_EXPORTED_FONT_MATERIAL_AUDIT',
-                       'RAFT_ILSPY_EMPTY_SOURCE_RECOVERY', 'RAFT_SCENE_BOUND_ASSET_REEMBED'):
+                       'RAFT_ILSPY_EMPTY_SOURCE_RECOVERY', 'RAFT_SCENE_BOUND_ASSET_REEMBED', 'RAFT_FMOD_APK_AUDIT'):
             if line.startswith(marker + ' '):
                 source_geometry[marker] = json.loads(line.split(' ', 1)[1])
-        for marker in ('RAFT_MICROSPLAT_PROPERTY_TEXTURES', 'RAFT_BUILDREPORT_DIAGNOSTIC_CLASSES'):
+        for marker in ('RAFT_MICROSPLAT_PROPERTY_TEXTURES', 'RAFT_BUILDREPORT_DIAGNOSTIC_CLASSES',
+                       'RAFT_FMOD_PLATFORM_RESOURCE_LOOKUP', 'RAFT_FMOD_ORIGINAL_SETTINGS',
+                       'RAFT_FMOD_ORIGINAL_CONFIGURATION', 'RAFT_FMOD_ANDROID_IMPORTERS'):
             if line.startswith(marker + ' '):
                 source_geometry[marker] = dict(re.findall(r'(\w+)=([^\s]+)', line))
         if line.startswith('RAFT_ANDROID_NATIVE_CONFIG '):

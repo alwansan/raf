@@ -1,5 +1,7 @@
 # Raft Android — complete Work session transfer, 2026-11-01
 
+> **LATEST VERIFIED:** FMOD native41259800620 completed SUCCESS including APK/FM​​OD/DEX/original-data byte gates. Detailed bounded log analysis pending; see final section. No phone test.
+
 > **NEWER VERIFIED CHECKPOINT:** native 41257065669 FAILED at the original FMOD resource-platform lookup; exact-path fix 9e5f3635 is running in native 41259800620. Read the newest dated section at the end; earlier IN PROGRESS status is historical.
 
 هذا هو تسليم الجلسة الأحدث. اقرأه كاملاً ثم التاريخ الكامل حتى آخر قسم، وراجع HEAD وActions قبل أي تجربة. لا تطلب ملف FMOD أو إعداد ترخيص Unity من المستخدم مجدداً: ملف FMOD وصل والتحقق الخاص في Actions نجح، والترخيص يعمل.
@@ -289,3 +291,10 @@ The **first fatal error** is `RAFT_FMOD_ORIGINAL_SETTINGS settingsPresent=True r
 - Independently strengthened the unintegrated offline-platform prototype's save-identity regression in [commit b4716c791a9c481b70e3097120ac69daaf14c455](https://github.com/alwansan/raf/commit/b4716c791a9c481b70e3097120ac69daaf14c455): 24 concurrent first-launch callers must converge on the same durable local profile ID, leave no temporary identity files, and retain that ID after restart. No original game script, scene, `.meta`, GUID, FMOD asset, or save schema was changed.
 - Independent [platform test run 41263936272](https://github.com/alwansan/raf/actions/runs/41263936272), job `124722674985`, completed **SUCCESS**: netstandard2.1 platform library compiled, smoke tests **8 passed / 0 failed**, including the new concurrency regression. It did not trigger/cancel the active Unity native run; no new native build or LFS download was requested.
 - Next: refresh the native run's final Unity result and first fatal error, if any. If successful, inspect actual ARM64 APK/FM​​OD/DEX/original-bank audits and residual graphics errors. Then prioritize integrating real offline Steam/RPC and original `.rgd` paths without substituting prototype `world.sav`. No phone test, public APK or user intervention is established.
+
+
+## 2026-11-01 — FMOD corrected native completed; bounded evidence extraction
+
+Native [41259800620](https://github.com/alwansan/raf/actions/runs/41259800620), source `9e5f3635a660f85bb492dee6c91bc57bc80aa730`, reconstruction `124710556393`, is verified COMPLETED SUCCESS. Unity step34 completed at02:26:21UTC; actual APK structural audit35 and FMOD/DEX/original-StreamingAssets-byte audit36 both passed. This establishes those configured gates passed, not phone startup/audio/gameplay. APK size/hash, actual settings/platform counts, compressed-bank count and remaining diagnostic totals await bounded log extraction; do not reuse pre-FMOD metrics. Direct connector log read returned Transport closed.
+
+Extended existing aggregate parser to retain original FMOD resource/settings/configuration/importer markers and actual APK audio audit, preserving deviceAudioVerified=false and compression counts.12 local parser tests passed, including two new executed-versus-echoed FMOD evidence cases. Workflow YAML and embedded Python AST passed. Cheap log-only comparison now reads collector baseline124682991227 and completed FMOD124710556393; no Unity run, LFS transfer, game source publication or APK release requested. Next inspect this diagnostic result, then address the first established graphics/audio/runtime integration barrier. Original Steam/offline/.rgd/touch/device integration remains incomplete.

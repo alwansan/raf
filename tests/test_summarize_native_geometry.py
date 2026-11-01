@@ -63,3 +63,25 @@ class NativeGeometrySummaryTests(unittest.TestCase):
             'RAFT_BUILDREPORT_DIAGNOSTIC_CLASSES messageOccurrences=20 categories=shader:12,other:8 notEquivalentToSummaryTotalErrors=true'])
         self.assertEqual(report['source_geometry']['RAFT_MICROSPLAT_PROPERTY_TEXTURES']['originalTables'], '3')
         self.assertEqual(report['source_geometry']['RAFT_BUILDREPORT_DIAGNOSTIC_CLASSES']['categories'], 'shader:12,other:8')
+
+    def test_fmod_evidence_preserves_compression_and_device_boundary(self):
+        payload = {'arm64RuntimeLibraries': 3, 'requiredExports': True,
+                   'javaDescriptorPresent': True, 'exactOriginalStreamingFiles': 9,
+                   'compressedBankFiles': 5, 'deviceAudioVerified': False}
+        report, _, _ = inspect_log([
+            '2026-11-01T02:26:23Z RAFT_FMOD_APK_AUDIT ' + json.dumps(payload),
+            'RAFT_FMOD_ORIGINAL_CONFIGURATION version=131605 androidUseOBB=False importType=StreamingAssets bankSubfolderEmpty=True',
+            'RAFT_FMOD_PLATFORM_RESOURCE_LOOKUP candidates=15 loaded=15 strategy=exact-original-filenames',
+            'RAFT_FMOD_ORIGINAL_SETTINGS settingsPresent=True resourcePlatforms=15 androidPlatforms=1 defaultPlatforms=1 manufacturedSettings=0',
+            'RAFT_FMOD_ANDROID_IMPORTERS arm64Libraries=3 editorEnabled=0 originalProvidersPreserved=true'])
+        evidence = report['source_geometry']
+        self.assertEqual(evidence['RAFT_FMOD_APK_AUDIT'], payload)
+        self.assertEqual(evidence['RAFT_FMOD_ORIGINAL_CONFIGURATION']['version'], '131605')
+        self.assertEqual(evidence['RAFT_FMOD_PLATFORM_RESOURCE_LOOKUP']['loaded'], '15')
+        self.assertEqual(evidence['RAFT_FMOD_ORIGINAL_SETTINGS']['manufacturedSettings'], '0')
+        self.assertEqual(evidence['RAFT_FMOD_ANDROID_IMPORTERS']['editorEnabled'], '0')
+        self.assertIsNone(report['native_result'])
+
+    def test_echoed_fmod_audit_is_not_execution_evidence(self):
+        report, _, _ = inspect_log(['2026-11-01T02:26:23Z print("RAFT_FMOD_APK_AUDIT {}")'])
+        self.assertNotIn('RAFT_FMOD_APK_AUDIT', report['source_geometry'])
