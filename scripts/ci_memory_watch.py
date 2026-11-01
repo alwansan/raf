@@ -7,6 +7,7 @@ import subprocess
 import time
 
 FIELDS=('MemTotal','MemAvailable','SwapTotal','SwapFree')
+CGROUP_FIELDS=('low','high','max','oom','oom_kill','oom_group_kill')
 
 def memory_fields(text):
     result={}
@@ -15,10 +16,27 @@ def memory_fields(text):
         if name in FIELDS: result[name+'_kb']=int(value.strip().split()[0])
     return result
 
-def sample(proc=Path('/proc')):
+def cgroup_memory_events(root):
+    # Cgroup-v2 counters are evidence for the observed cgroup, not proof
+    # that Unity or its Docker container caused a host OOM kill.
+    try:
+        values={}
+        for line in (root/'memory.events').read_text().splitlines():
+            fields=line.split()
+            if len(fields)==2 and fields[0] in CGROUP_FIELDS:
+                number=int(fields[1])
+                if number<0:raise ValueError('Negative cgroup event counter')
+                values[fields[0]]=number
+        return values if 'oom' in values and 'oom_kill' in values else None
+    except (OSError,ValueError):
+        return None
+
+def sample(proc=Path('/proc'),cgroup=Path('/sys/fs/cgroup')):
     row={'unix_time':time.time()}
     try:row.update(memory_fields((proc/'meminfo').read_text()))
     except (OSError,ValueError):row['host_memory']='unavailable'
+    events=cgroup_memory_events(cgroup)
+    row['cgroup_v2_memory_events']=events if events is not None else 'unavailable'
     processes=[]
     for path in proc.glob('[0-9]*/status'):
         try:
@@ -47,9 +65,19 @@ def summarize(path):
         try: rows.append(json.loads(line))
         except ValueError:continue
     values=lambda key:[r[key] for r in rows if key in r]
+    event_rows=[r['cgroup_v2_memory_events'] for r in rows
+                if isinstance(r.get('cgroup_v2_memory_events'),dict)]
+    def event_delta(key):
+        if len(event_rows)<2 or key not in event_rows[0] or key not in event_rows[-1]:
+            return None
+        difference=event_rows[-1][key]-event_rows[0][key]
+        return difference if difference>=0 else None
     return {'samples':len(rows),'minimum_available_kb':min(values('MemAvailable_kb'),default=None),
             'minimum_swap_free_kb':min(values('SwapFree_kb'),default=None),
             'maximum_top_process_rss_kb':max((p['rss_kb'] for r in rows for p in r.get('largest_processes',[])),default=None),
+            'cgroup_v2_oom_delta':event_delta('oom'),
+            'cgroup_v2_oom_kill_delta':event_delta('oom_kill'),
+            'cgroup_v2_scope':'observed_monitor_cgroup_not_attributed_to_unity',
             'docker_final_states':docker_states()}
 
 def main():
