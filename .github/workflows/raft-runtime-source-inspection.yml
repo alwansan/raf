@@ -7,7 +7,7 @@ on:
     inputs:
       job_id:
         description: Completed native job for bounded residual error context
-        default: '124661841900'
+        default: '124710556393'
         required: true
 permissions:
   contents: read
@@ -94,7 +94,7 @@ jobs:
           candidates = []
           for path in sorted((root / "lifecycle-original").rglob("*.cs")):
               text = path.read_text(encoding="utf-8-sig")
-              if re.search(r"\b(?:OnDestroy|OnDisable)\s*\(", text) and re.search(r"\b(?:Object\.)?Destroy\s*\(", text):
+              if (re.search(r"\b(?:OnDestroy|OnDisable)\s*\(", text) and re.search(r"\b(?:Object\.)?Destroy\s*\(", text)) or re.search(r"\bComputeShader\b", text) or path.stem in {'ShaderUtility', 'UnderwaterIME', 'WaterDropsIME'}:
                   priority = 0 if re.search(r"ExecuteInEditMode|ExecuteAlways", text) else 1
                   candidates.append((priority, path, text))
           selected_bytes = 0
@@ -114,7 +114,7 @@ jobs:
       - name: Collect bounded native diagnostics without publishing raw log content
         env:
           GH_TOKEN: ${{ github.token }}
-          LOG_JOB_ID: ${{ inputs.job_id || '124661841900' }}
+          LOG_JOB_ID: ${{ inputs.job_id || '124710556393' }}
         run: |
           set -euo pipefail
           case "$LOG_JOB_ID" in ''|*[!0-9]*) exit 1;; esac
@@ -165,29 +165,29 @@ jobs:
         env:
           PUBLIC_INSPECTION_CERT: |
             -----BEGIN CERTIFICATE-----
-            MIIELzCCApegAwIBAgIUNbO2oPzXybhs6cHSxAK2IzRfzqowDQYJKoZIhvcNAQEL
-            BQAwJzElMCMGA1UEAwwcUmFmdCBXb3JrIHJ1bnRpbWUgaW5zcGVjdGlvbjAeFw0y
-            NjEwMzEyMTA2NTJaFw0yNjExMDcyMTA2NTJaMCcxJTAjBgNVBAMMHFJhZnQgV29y
-            ayBydW50aW1lIGluc3BlY3Rpb24wggGiMA0GCSqGSIb3DQEBAQUAA4IBjwAwggGK
-            AoIBgQC58R58daO8JfPKCtdrlaRmBBLqBLe+Zb9PaqVtV58aDlFy2s5hmsw6rZDr
-            CHxbBAsm9KbrkiO9Pyh8+aK0NAZhSJeK2SDHCkJhCHC1f5C6piqY4rEBQQ40S/rJ
-            0U9NEiDF9xw9Yta89jVp6Ol6KHmnps4E4c1DEH1v+zDSZGP3+TWLvZsMZgU1pGfq
-            vZL0CDRLV4j1vRZgnSmxxTcsX2UatMMzcInzW2wGnHQcpscupbyoU2O4szHnE2c7
-            Oj6wJMyUI8uj+Zbjw96p5jlxEAKwVGAXkxwI2MtTB8hOBbjDDCu80tU6ZG9lMFKF
-            Q+Lzk/J71wCl4XnE3IB6lqiRa/+ZtU9umZlE7cqJphSp/wVpGTyDKZ7NpF+aBD9D
-            CkPWR/K+ZZ9wIZmT0SFwO+qJHLk363ASa8g0Y5qU8Y1RQs5AMCkgOpIFiJPysEgb
-            KBM8R+LIOkTGEx6h6UjtjCXrhMIXtooeU4plYIPu58aDb7itWsJ7NUqfU9kgOlly
-            bCcmCQ8CAwEAAaNTMFEwHQYDVR0OBBYEFEGhXmYsBXR0+geyjAzfGMxxVJh/MB8G
-            A1UdIwQYMBaAFEGhXmYsBXR0+geyjAzfGMxxVJh/MA8GA1UdEwEB/wQFMAMBAf8w
-            DQYJKoZIhvcNAQELBQADggGBAKZfbTSwBZ6VrTMdRHxenKG6UDuP12ACL1lPeVOZ
-            X9HwupEqrRJo9kKzwo/nlht8mlR960LEO0pXpB/d3AljdEHZLZPgnm9+jaH36+nT
-            jIdUxI/753mbq4dtaxjuX7s00+ocNLyCdunNw1mHnwsSNEanQxbAd02ogVwJphtR
-            1WOxUA/mCv5jOYT7bO7WApu7nLZdhe0dNErWAz47DKVpW8x+BFTdoF3sh1JPV7JA
-            BxHw11tiCwnF1y4nR8s98/SFHj7TKRpJRmjFBlOjNv3GEiKBmq7Q+c/Sc6/jdL0a
-            NfsZapPC7pkYX9rviGQC0cGjy0+8Xik1TN4QfzRCTnpZhd49x8ZEj0QLA4D4e+j+
-            8ndqvoKIdYx1U4Ukk1idFwolhLsBSKcOGTWjf6XNnYSL+i02w2RNEiE6HH4CucQM
-            87jW+oGQP121mEBL5D6hEXyWaBPY2xSPJopPmwT3E6z+FZCd/iCMLQKJJgM+aD9U
-            wLNIxjDGbxMb/2mbR7dareyIWQ==
+            MIIELzCCApegAwIBAgIUffofj98SkvIhnEyGLQoMPXd89z4wDQYJKoZIhvcNAQEL
+            BQAwJzElMCMGA1UEAwwcUmFmdCBXb3JrIHByaXZhdGUgaW5zcGVjdGlvbjAeFw0y
+            NjExMDEwMjQ4MDFaFw0yNjExMDgwMjQ4MDFaMCcxJTAjBgNVBAMMHFJhZnQgV29y
+            ayBwcml2YXRlIGluc3BlY3Rpb24wggGiMA0GCSqGSIb3DQEBAQUAA4IBjwAwggGK
+            AoIBgQDpS6arhYR4p0IbVnDcH+3x6sjO5mQja9R6ntRLASJUCDNL9VjzAYQsCD9o
+            kUKTT/grsX2pjoiATYL2OevOQAhaZgOggz4IebEHSviiubrk0diibNoDfuK2+9mU
+            Hs5MSozl9GSfbX0YlwlulO7raf5BAfviwCpjLo9oikRDjz8YBJvOrVWDI3k+qC4Y
+            ml57TWmMYGGDC/Kiqu08RaVfXbwIoqXYFF+3y9y9LofIXTFPkB3/WDjjeODsQJ/7
+            hKWUyHjK8NNTxszmLvhVfdWaQgW4qmA9jL8hKkGCVHawKEIElCIkNHtHtKhbzfOt
+            6By+XOTs1WdKWn0D0meXKVQtINmTzYD2nz4ezL+ByMNE97eoGYqNAj3jc591IPgK
+            jeZbdoU5XWyt4VsSv1ngdkdMGnbXXDyZo5cxUId/okSZdbvWEjwHqq9MGIv27bX0
+            qmrtsYbD4fiEf1rqhoCmsc66pmiCDjmaEblho3/2fZBBtLVWXA+rqtNMEDEF+oor
+            lzlM750CAwEAAaNTMFEwHQYDVR0OBBYEFCs4V2v+dlv6Cd7vb7ZOSmAroXOWMB8G
+            A1UdIwQYMBaAFCs4V2v+dlv6Cd7vb7ZOSmAroXOWMA8GA1UdEwEB/wQFMAMBAf8w
+            DQYJKoZIhvcNAQELBQADggGBAAwv/P5Iq0YQixDURjCGktw/DipZ4nZNtSnM7PTW
+            H1MxgaG0SrljsB3yN4oWZSmfMII+u3/D5ZYD4+l0gkmaMKTZXFo5HtER+LgEsfqP
+            lXaIYcK26BbXOGXhT7gyNpxqep+cJC9sSQksrsmVcUo8eIq7w0+kMHsN+TLmYrX8
+            32pl0BdLcOGbeJCWtC4mTl+n6R8tbXHJ39soooLZ/QFl/DYJhnMUWpGp3YcjjTg9
+            p+MbRLaCN46fUANDizZ3k2To5x5Od1sNhqvKCjGmLOqrOQHNRV1CkuOO7/w7UUSc
+            3mqP6nG8kFG7293EW/qe6MZuSHav/4ji6PeZs5+ehSuHxptmEzHPberFb9ugexyb
+            5aoxupEW6yhrmu6cUXlwT086JXAbjSduh7v4qIANGqBPcN1qWDA2+VFUQ+Oi4jWE
+            FW27rrEh84Sw2fCdewnA0tnk3rJK6hK6gnEzZFGenP0BmqNEKQXDexhG7xJKiFD/
+            6FAZ1HPYQeTyJVo3x4ZzWxYVbw==
             -----END CERTIFICATE-----
         run: |
           set -euo pipefail
