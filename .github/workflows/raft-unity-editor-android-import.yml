@@ -38,6 +38,10 @@ on:
       - 'scripts/instrument_android_runtime_operations.py'
       - 'config/runtime-operation-traces.json'
       - 'scripts/adapt_original_save_paths.py'
+      - 'scripts/adapt_android_render_lifetimes.py'
+      - 'tests/test_android_render_lifetimes.py'
+      - 'scripts/restore_tmp_shaders.py'
+      - 'tests/test_restore_tmp_shaders.py'
       - 'scripts/restore_fmod_resource_layout.py'
       - 'tests/test_restore_fmod_resource_layout.py'
       - 'scripts/adapt_unity_url_codecs.py'
@@ -106,6 +110,8 @@ jobs:
           persist-credentials: true
       - name: Run synthetic code-overlay tests before touching original data
         run: |
+          python3 -m unittest discover -s tests -p test_android_render_lifetimes.py -v
+          python3 -m unittest discover -s tests -p test_restore_tmp_shaders.py -v
           python3 -m unittest discover -s tests -p test_runtime_operation_traces.py -v
           python3 -m unittest discover -s tests -p test_android_offline_startup.py -v
           python3 -m unittest discover -s tests -p test_adapt_original_save_paths.py -v
@@ -318,6 +324,16 @@ jobs:
           python3 -m scripts.audit_render_input_contracts --project "$RUNNER_TEMP/project/ExportedProject"
           python3 -m unittest discover -s tests -p test_restore_fmod_resource_layout.py -v
           python3 -m scripts.restore_fmod_resource_layout --project "$RUNNER_TEMP/project/ExportedProject" --apply
+      - name: Restore authenticated TMP 3.0.6 shader programs while retaining original shader GUIDs
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.restore_tmp_shaders --project "$RUNNER_TEMP/project/ExportedProject" --backup "$RUNNER_TEMP/original-tmp-shaders"
+      - name: Preserve FFT temporary lifetimes across kernel errors and exclude Windows Party startup from Android solo
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.adapt_android_render_lifetimes --source "$RUNNER_TEMP/project/ExportedProject" --backup "$RUNNER_TEMP/original-render-lifetimes"
       - name: Adapt original local startup and RGD paths without replacing game serialization
         shell: bash
         run: |

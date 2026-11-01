@@ -1,0 +1,42 @@
+name: Raft authenticated TextMeshPro shader restoration contracts (no LFS)
+'on':
+  push:
+    branches:
+    - feature/android-native-port
+    paths:
+    - scripts/restore_tmp_shaders.py
+    - tests/test_restore_tmp_shaders.py
+    - .github/workflows/raft-tmp-shader-tests.yml
+  workflow_dispatch: {}
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        lfs: false
+        persist-credentials: false
+        sparse-checkout: 'scripts
+
+          tests'
+    - name: Preserve original shader identity and exact vendor dependency layout
+      run: python3 -m unittest discover -s tests -p test_restore_tmp_shaders.py -v
+    - name: Authenticate actual official TMP 3.0.6 Essential Resources subset
+      run: 'python3 - <<''PY''
+
+        import urllib.request
+
+        from scripts.restore_tmp_shaders import URL,vendor_sources
+
+        with urllib.request.urlopen(URL,timeout=90) as response: raw=response.read(16777217)
+
+        shaders,includes,notice=vendor_sources(raw)
+
+        assert len(raw)<16777217 and len(shaders)==13 and len(includes)==4 and notice
+
+        print(''RAFT_REAL_TMP_SUBSET version=3.0.6 shaderPrograms=13 includes=4 packageSha256=true unityExecution=false'')
+
+        PY'

@@ -5,6 +5,9 @@ on:
     paths:
       - '.github/workflows/raft-android-offline-integration-tests.yml'
       - 'scripts/adapt_android_offline_startup.py'
+      - 'scripts/adapt_android_render_lifetimes.py'
+      - 'scripts/verify_fft_lifetime_harness.py'
+      - 'tests/test_android_render_lifetimes.py'
       - 'scripts/verify_android_offline_candidate.py'
       - 'tests/test_android_offline_startup.py'
       - 'android-port/Runtime/Platform/AndroidTestDiagnostics.cs'
@@ -39,6 +42,7 @@ jobs:
           DOTNET_PROCESSOR_COUNT: '2'
         run: |
           set -euo pipefail
+          python3 -m unittest discover -s tests -p test_android_render_lifetimes.py -v
           python3 -m unittest discover -s tests -p test_runtime_operation_traces.py -v
           python3 -m unittest discover -s tests -p test_android_offline_startup.py -v
           python3 -m unittest discover -s tests -p test_adapt_original_save_paths.py -v
@@ -46,6 +50,9 @@ jobs:
           timeout 360s "$RUNNER_TEMP/ilspy/ilspycmd" -p -lv CSharp9_0 \
             -o "$RUNNER_TEMP/original" Raft/Raft_Data/Managed/Assembly-CSharp.dll \
             > "$RUNNER_TEMP/decompile-private.log" 2>&1
+          python3 -m scripts.verify_fft_lifetime_harness --source "$RUNNER_TEMP/original" --output "$RUNNER_TEMP/fft-lifetime-harness"
+          dotnet run --project "$RUNNER_TEMP/fft-lifetime-harness/Harness.csproj" --configuration Release --nologo
+          python3 -m scripts.adapt_android_render_lifetimes --source "$RUNNER_TEMP/original" --backup "$RUNNER_TEMP/render-lifetime-originals"
           python3 -m scripts.verify_android_offline_candidate --source "$RUNNER_TEMP/original" \
             --managed Raft/Raft_Data/Managed --runtime android-port/Runtime/Platform --output "$RUNNER_TEMP/offline-check"
       - name: Exercise actual adapted local RPC bodies and durable identity
