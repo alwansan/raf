@@ -1,0 +1,52 @@
+name: Raft CI memory evidence and swap capability tests (no LFS)
+'on':
+  push:
+    branches:
+    - feature/android-native-port
+    paths:
+    - scripts/ci_memory_watch.py
+    - tests/test_ci_memory_watch.py
+    - .github/workflows/raft-ci-memory-tests.yml
+  workflow_dispatch: {}
+permissions:
+  contents: read
+jobs:
+  memory:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        lfs: false
+        persist-credentials: false
+        sparse-checkout: 'scripts
+
+          tests'
+    - name: Memory parser privacy and truncated-file safety
+      run: python3 -m unittest discover -s tests -p test_ci_memory_watch.py -v
+    - name: Exercise actual bounded host monitor
+      run: 'python3 -m scripts.ci_memory_watch --output "$RUNNER_TEMP/memory.jsonl" --interval 0.05 --samples 3
+
+        python3 -m scripts.ci_memory_watch --output "$RUNNER_TEMP/memory.jsonl" --summarize'
+    - name: Verify small temporary swap is supported on this runner
+      shell: bash
+      run: 'set -euo pipefail
+
+        file=/mnt/raft-swap-preflight
+
+        test ! -e "$file"
+
+        trap ''sudo swapoff /mnt/raft-swap-preflight 2>/dev/null || true; sudo rm -f /mnt/raft-swap-preflight''
+        EXIT
+
+        sudo fallocate -l 256M "$file"
+
+        sudo chmod 600 "$file"
+
+        sudo mkswap "$file"
+
+        sudo swapon "$file"
+
+        swapon --show --bytes
+
+        echo RAFT_RUNNER_SWAP_CAPABILITY_PASSED'

@@ -70,6 +70,18 @@ def restore(project, backup, shaders, includes, license):
         content=rewrite_includes(source,includes).encode('utf-8')
         if destination.exists() and destination.read_bytes()!=content: raise ValueError('Conflicting shader include destination')
         dependency_plan.append((destination,content))
+    # A stripped PC build can omit a vendor fallback that was never referenced.
+    # Add only missing exact vendor identities so real restored shaders can resolve it.
+    missing = []
+    for name, source in shaders.items():
+        if name in used: continue
+        filename = 'vendor-' + hashlib.sha256(name.encode()).hexdigest()[:16] + '.shader'
+        destination = project/ROOT/filename
+        content = rewrite_includes(source, includes).encode('utf-8')
+        if destination.exists() and destination.read_bytes() != content:
+            raise ValueError('Conflicting vendor fallback shader destination')
+        missing.append((destination, content))
+    dependency_plan.extend(missing)
     license_path=project/ROOT/'LICENSE.md'
     if license_path.exists() and license_path.read_bytes()!=license: raise ValueError('Conflicting TMP notice')
     backup.mkdir(parents=True,exist_ok=False)
@@ -85,7 +97,7 @@ def restore(project, backup, shaders, includes, license):
     except BaseException:
         for target,source,original,meta,meta_bytes in plan: target.write_bytes(original)
         raise
-    print('RAFT_TMP_SHADER_RESTORATION originalShaders='+str(len(plan))+' originalMetasUnchanged=true fontAtlasChanged=false vendorVersion=3.0.6')
+    print('RAFT_TMP_SHADER_RESTORATION originalShaders='+str(len(plan))+' vendorFallbacksAdded='+str(len(missing))+' originalMetasUnchanged=true fontAtlasChanged=false vendorVersion=3.0.6')
     return len(plan)
 
 

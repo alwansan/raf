@@ -28,3 +28,14 @@ class ShaderTests(unittest.TestCase):
         out=rewrite_includes(s,{'TMPro.cginc':'x'})
         self.assertIn('#include "UnityCG.cginc"',out)
         self.assertIn(ROOT+'TMPro.cginc',out)
+
+    def test_missing_vendor_fallback_is_added_without_changing_original_guid(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp);target=self.fixture(root);meta=Path(str(target)+'.meta').read_bytes()
+            shaders={'TextMeshPro/Distance Field':'Shader "TextMeshPro/Distance Field" { Fallback "TextMeshPro/Mobile/Distance Field" }',
+                     'TextMeshPro/Mobile/Distance Field':'Shader "TextMeshPro/Mobile/Distance Field" { SubShader { Pass {} } }'}
+            restore(root/'project',root/'backup',shaders,{},b'notice')
+            added=list((root/'project'/ROOT).glob('*.shader'))
+            self.assertEqual(len(added),1)
+            self.assertIn('Shader "TextMeshPro/Mobile/Distance Field"',added[0].read_text())
+            self.assertEqual(Path(str(target)+'.meta').read_bytes(),meta)

@@ -481,6 +481,22 @@ jobs:
           cp -a "$RUNNER_TEMP/project/ExportedProject/." "$GITHUB_WORKSPACE/unity-candidate/"
           du -sh "$GITHUB_WORKSPACE/unity-candidate"
           df -h /
+      - name: Reserve bounded swap and record host memory before full-data Unity build
+        shell: bash
+        run: |
+          set -euo pipefail
+          # These unused runner tools are replaced by the pinned Unity Android container.
+          sudo rm -rf /usr/local/lib/android /opt/hostedtoolcache/CodeQL
+          test "$(df -Pk /mnt | awk 'NR==2 {print $4}')" -gt 12582912
+          test ! -e /mnt/raft-unity.swap
+          sudo fallocate -l 8G /mnt/raft-unity.swap
+          sudo chmod 600 /mnt/raft-unity.swap
+          sudo mkswap /mnt/raft-unity.swap
+          sudo swapon /mnt/raft-unity.swap
+          free -m
+          df -h / /mnt
+          python3 -m scripts.ci_memory_watch --output "$RUNNER_TEMP/unity-memory.jsonl" --interval 10 --samples 960 > /dev/null 2>&1 &
+          echo "$!" > "$RUNNER_TEMP/unity-memory.pid"
       - name: Unity Editor 2021.3.45f2 Android import and compile
         uses: game-ci/unity-builder@v4
         env:
@@ -494,6 +510,8 @@ jobs:
           targetPlatform: Android
           # Pushes use SDK validation unless an intentional [raft-native-build] commit requests one native run.
           # workflow_dispatch also supports its explicit build_mode=native choice.
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
           buildMethod: ${{ ((github.event_name == 'workflow_dispatch' && inputs.build_mode == 'native') || (github.event_name == 'push' && contains(github.event.head_commit.message, '[raft-native-build]'))) && 'RaftAndroid.Editor.AndroidNativeBuild.Build' || 'RaftAndroid.Editor.AndroidNativeBuild.ValidateSdkBindings' }}
           androidExportType: androidPackage
           buildName: RaftAndroidExperimental
@@ -503,6 +521,22 @@ jobs:
           # rejects the build as a dirty git branch before Unity Editor starts.
           versioning: None
           androidVersionCode: ${{ github.run_number }}
+      - name: Summarize actual memory and kernel OOM evidence even after Unity failure
+        if: always()
+        shell: bash
+        run: |
+          if [ -f "$RUNNER_TEMP/unity-memory.pid" ]; then
+            kill "$(cat "$RUNNER_TEMP/unity-memory.pid")" 2>/dev/null || true
+          fi
+          python3 -m scripts.ci_memory_watch --output "$RUNNER_TEMP/unity-memory.jsonl" --summarize
+          sudo dmesg --notime > "$RUNNER_TEMP/unity-kernel-private.log" 2>/dev/null || true
+          python3 - <<'PY'
+          import os,re
+          from pathlib import Path
+          path=Path(os.environ['RUNNER_TEMP'])/'unity-kernel-private.log'
+          text=path.read_text(errors='replace') if path.exists() else ''
+          print('RAFT_CI_KERNEL_OOM_EVIDENCE kernelReadable=' + str(bool(text)) + ' oomKillOccurrences=' + str(len(re.findall(r'Out of memory: Killed process|Memory cgroup out of memory|oom-kill:',text))))
+          PY
       - name: Audit private native APK payload and ARM64 IL2CPP structure
         if: ${{ (github.event_name == 'workflow_dispatch' && inputs.build_mode == 'native') || (github.event_name == 'push' && contains(github.event.head_commit.message, '[raft-native-build]')) }}
         shell: bash
