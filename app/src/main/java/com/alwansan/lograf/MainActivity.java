@@ -16,13 +16,14 @@ import java.util.Locale;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import org.json.JSONArray;
+import org.json.JSONObject;
 import rikka.shizuku.Shizuku;
 
 public final class MainActivity extends Activity {
     private static final int PICK_FOLDER=201;
     private static final int SHIZUKU_REQUEST=202;
     private boolean pendingStart=false;
-    private TextView status, folderLabel;
+    private TextView status, folderLabel, performanceLabel;
     private Button start, stop, share;
     private final Handler handler=new Handler(Looper.getMainLooper());
     private final Runnable refresh=new Runnable(){
@@ -101,6 +102,8 @@ public final class MainActivity extends Activity {
 
         status=title("جاهز",15);
         status.setTextIsSelectable(true); layout.addView(status);
+        performanceLabel=title("القياسات: بانتظار بدء التسجيل",15);
+        performanceLabel.setTextIsSelectable(true); layout.addView(performanceLabel);
         layout.addView(title("تنبيه: التسجيل مستمر أثناء تشغيل Raft حتى تتوقف الخدمة أو يوقفها أندرويد. لا يمكن ضمان سجلات لم تُصدرها اللعبة أو اختفت قبل بدء التسجيل. قد تحتوي الملفات على معلومات حساسة؛ راجعها قبل النشر.",13));
         setContentView(scroll);
 
@@ -146,6 +149,27 @@ public final class MainActivity extends Activity {
         status.setText("الحالة: "+text+"\nالمشروع: Raft\nالتسجيل: "+(recording?"نشط":"متوقف")+
                 "\nالحجم المسجل: "+(Config.prefs(this).getLong("bytes",0)/1024)+" KiB");
         start.setEnabled(!recording); stop.setEnabled(recording);
+        String raw=Config.prefs(this).getString("metrics_last","");
+        if(!raw.isEmpty()) try {
+            JSONObject m=new JSONObject(raw.trim());
+            performanceLabel.setText("قراءات Raft المباشرة (تتحدث كل 3 ثوانٍ):"+
+                "\\nCPU process: "+metric(m,"process_cpu_percent_one_core","% of one core")+
+                "\\nRAM RSS: "+metric(m,"process_rss_kb","KiB")+
+                "\\nRAM PSS: "+metric(m,"process_pss_kb","KiB")+
+                "\\nAvailable RAM: "+metric(m,"device_mem_available_kb","KiB")+
+                "\\nGPU busy (device-wide): "+metric(m,"gpu_busy_percent","%")+
+                "\\nGPU clock: "+metric(m,"gpu_clock_hz","Hz")+
+                "\\nDisplayed FPS estimate: "+metric(m,"presented_fps_estimate","fps")+
+                "\\nBattery: "+metric(m,"battery_level_percent","%")+
+                "\\nBattery temp: "+metric(m,"battery_temp_c","°C")+
+                "\\nThermal status code: "+metric(m,"thermal_status_code","")+
+                "\\nGame state: "+m.optString("state","unknown"));
+        } catch(Exception ignored){performanceLabel.setText("Metrics awaiting valid sample");}
+    }
+
+    private String metric(JSONObject obj,String key,String unit) {
+        Object value=obj.opt(key);
+        return value==null || value==JSONObject.NULL?"غير متاح":value+" "+unit;
     }
 
     private void message(String text) { Toast.makeText(this,text,Toast.LENGTH_LONG).show(); }
