@@ -52,7 +52,10 @@ internal static class Program
             });
             Test("concurrent first launches preserve one durable profile identity", () =>
             {
-                string parallelRoot = Path.Combine(root, "parallel-first-launch");
+                // Exercise multiple fresh roots; the old File.Move race was intermittent.
+                for (int round = 0; round < 8; round++)
+                {
+                string parallelRoot = Path.Combine(root, "parallel-first-launch-" + round);
                 using var start = new ManualResetEventSlim(false);
                 var tasks = Enumerable.Range(0, 24).Select(_ => Task.Run(() =>
                 {
@@ -69,6 +72,7 @@ internal static class Program
                     "Concurrent profile creation left temporary identity files");
                 Assert(new LocalProfileStore(parallelRoot).GetOrCreateProfileId() == first,
                     "Concurrent identity did not persist after restart");
+                }
             });
             Test("independent app sandboxes have separate identities", () =>
             {
