@@ -26,6 +26,7 @@ public final class PerformanceSampler implements Runnable {
     private long previousTicks=-1, previousAt=-1, previousPresent=-1, previousFrameAt=-1;
     private long pssLast=0, batteryLast=0, layersLast=0, thermalLast=0;
     private Long pssCache=null;
+    private int pssPid=-1;
     private Integer batteryLevel=null, batteryStatus=null, thermalStatus=null;
     private Double batteryTemp=null;
     private String surfaceLayer=null;
@@ -72,8 +73,14 @@ public final class PerformanceSampler implements Runnable {
             row.put("process_rss_kb",proc.opt("VmRSS")==null?JSONObject.NULL:proc.opt("VmRSS"));
             row.put("process_rss_peak_kb",proc.opt("VmHWM")==null?JSONObject.NULL:proc.opt("VmHWM"));
             row.put("process_threads",proc.opt("Threads")==null?JSONObject.NULL:proc.opt("Threads"));
-            row.put("process_pss_kb",pssCache==null?JSONObject.NULL:pssCache);
-            if(now-pssLast>15000){ pssLast=now; pssCache=readPss(pid); row.put("process_pss_kb",pssCache==null?JSONObject.NULL:pssCache); }
+            if(now-pssLast>15000 || pssPid!=pid) {
+                pssLast=now; pssPid=pid; pssCache=readPss(pid);
+            }
+            long rss=proc.optLong("VmRSS",-1);
+            boolean validPss=pssCache!=null && (rss<0 || pssCache<=rss+8192);
+            row.put("process_pss_kb",validPss?pssCache:JSONObject.NULL);
+            row.put("pss_validated_against_rss",validPss);
+            row.put("pss_sample_age_ms",pssCache==null?JSONObject.NULL:Math.max(0,now-pssLast));
             row.put("memory_sources","/proc/pid/status; dumpsys meminfo pid when available");
             JSONObject io=processIo(pid);
             row.put("process_io_read_bytes",io.opt("read_bytes")==null?JSONObject.NULL:io.opt("read_bytes"));
