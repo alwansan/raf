@@ -165,6 +165,8 @@ public final class MainActivity extends Activity {
                 "\\nRAM PSS: "+metric(m,"process_pss_kb","KiB")+
                 "\\nAvailable RAM: "+metric(m,"device_mem_available_kb","KiB")+
                 "\\nGPU busy (device-wide): "+metric(m,"gpu_busy_percent","%")+
+                "\\nCPU frequencies: "+frequencySummary(m)+
+                "\\nFree storage: "+storageSummary(m)+
                 "\\nGPU clock: "+metric(m,"gpu_clock_hz","Hz")+
                 "\\nDisplayed FPS estimate: "+metric(m,"presented_fps_estimate","fps")+
                 "\\nBattery: "+metric(m,"battery_level_percent","%")+
@@ -175,6 +177,27 @@ public final class MainActivity extends Activity {
                 "\\nStream reconnects (potential gaps): "+metric(m,"logcat_reconnects","")+
                 "\\nGame state: "+m.optString("state","unknown"));
         } catch(Exception ignored){performanceLabel.setText("Metrics awaiting valid sample");}
+    }
+
+    private String frequencySummary(JSONObject obj) {
+        JSONArray a=obj.optJSONArray("cpu_frequency_khz_by_core");
+        if(a==null || a.length()==0)return "غير متاح";
+        StringBuilder b=new StringBuilder();
+        for(int i=0;i<Math.min(a.length(),16);i++){
+            if(i>0)b.append(", ");
+            Object f=a.opt(i);
+            b.append("C").append(i).append("=");
+            if(f instanceof Number)b.append(((Number)f).longValue()/1000).append("MHz");
+            else b.append("?");
+        }
+        return b.toString();
+    }
+
+    private String storageSummary(JSONObject m){
+        Object value=m.opt("device_storage_free_bytes");
+        if(!(value instanceof Number))return "غير متاح";
+        long free=((Number)value).longValue();
+        return (free/1048576)+" MiB"+(free<536870912L?" — مساحة منخفضة!":"");
     }
 
     private String metric(JSONObject obj,String key,String unit) {
