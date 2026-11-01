@@ -1,0 +1,59 @@
+name: Raft original save path portability (no LFS)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-original-save-path-tests.yml'
+      - 'scripts/adapt_original_save_paths.py'
+      - 'tests/test_adapt_original_save_paths.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  paths:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+            Raft/Raft_Data/Managed
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Run source safety tests and inspect pinned original privately
+        env:
+          DOTNET_PROCESSOR_COUNT: '2'
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_adapt_original_save_paths.py -v
+          dotnet tool install ilspycmd --version 11.2.0.10050 --tool-path "$RUNNER_TEMP/ilspy"
+          timeout 90s "$RUNNER_TEMP/ilspy/ilspycmd" -lv CSharp9_0 -t SaveAndLoad \
+            Raft/Raft_Data/Managed/Assembly-CSharp.dll > "$RUNNER_TEMP/original-save.cs" 2> "$RUNNER_TEMP/private-decompile.log"
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          from scripts.adapt_original_save_paths import adapt, EXPECTED, SUFFIX
+          root = Path(os.environ['RUNNER_TEMP'])
+          original = (root / 'original-save.cs').read_text(encoding='utf-8-sig')
+          adapted = adapt(original)
+          assert adapted.replace(SUFFIX, '') == original
+          assert adapted.count(SUFFIX) == 16 and adapt(adapted) == adapted
+          (root / 'adapted-save-private.cs').write_text(adapted)
+          project = root / 'path-expressions'
+          project.mkdir()
+          (project / 'Paths.csproj').write_text('<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework><LangVersion>9.0</LangVersion></PropertyGroup></Project>')
+          checks = []
+          for value in EXPECTED:
+              literal = json.dumps(value)
+              expected = json.dumps(value.replace('\\', '/'))
+              checks.append('if (' + literal + SUFFIX + ' != ' + expected + ') throw new System.Exception("Unix path portability failed");')
+              checks.append('if (' + literal + ".Replace('\\\\', '\\\\') != " + literal + ') throw new System.Exception("Windows path changed");')
+          (project / 'Program.cs').write_text('class Program { static void Main() { if (System.IO.Path.DirectorySeparatorChar != \'/\') throw new System.Exception("Linux runner required"); ' + '\n'.join(checks) + ' System.Console.WriteLine("RAFT_SAVE_PATH_EXPRESSIONS sevenOriginalShapes=7 unixAndWindowsChecks=14 sourceExpressions=16 saveSchemaChanged=false unityRuntimeVerified=false"); } }')
+          print('RAFT_SAVE_SOURCE_PORTABILITY exactOriginalRevision=true nonPathSourceUnchanged=true idempotent=true pathExpressions=16 identityIntegrated=false')
+          PY
+          dotnet run --project "$RUNNER_TEMP/path-expressions/Paths.csproj" --configuration Release
