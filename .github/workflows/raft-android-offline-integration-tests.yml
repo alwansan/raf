@@ -8,6 +8,11 @@ on:
       - 'scripts/verify_android_offline_candidate.py'
       - 'tests/test_android_offline_startup.py'
       - 'android-port/Runtime/Platform/AndroidTestDiagnostics.cs'
+      - 'android-port/Runtime/Platform/AndroidRuntimeLog.cs'
+      - 'android-port/Runtime/Platform/PersistentDiagnosticLog.cs'
+      - 'scripts/instrument_android_runtime_operations.py'
+      - 'config/runtime-operation-traces.json'
+      - 'tests/test_runtime_operation_traces.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -21,6 +26,7 @@ jobs:
           lfs: false
           persist-credentials: false
           sparse-checkout: |
+            config/runtime-operation-traces.json
             scripts
             tests
             android-port/Runtime/Platform
@@ -33,6 +39,7 @@ jobs:
           DOTNET_PROCESSOR_COUNT: '2'
         run: |
           set -euo pipefail
+          python3 -m unittest discover -s tests -p test_runtime_operation_traces.py -v
           python3 -m unittest discover -s tests -p test_android_offline_startup.py -v
           python3 -m unittest discover -s tests -p test_adapt_original_save_paths.py -v
           dotnet tool install ilspycmd --version 11.2.0.10050 --tool-path "$RUNNER_TEMP/ilspy"
@@ -60,3 +67,4 @@ jobs:
           print('RAFT_OFFLINE_COMPILE exit=' + os.environ['COMPILE_EXIT'] + ' errorCodes=' + str(dict(codes)) + ' affectedFiles=' + str(identities))
           if os.environ['COMPILE_EXIT'] != '0': raise SystemExit('Original managed compatibility compile failed; not Unity evidence')
           PY
+

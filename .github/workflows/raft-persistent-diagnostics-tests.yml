@@ -1,0 +1,28 @@
+name: Raft persistent runtime log storage tests (no LFS)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-persistent-diagnostics-tests.yml'
+      - 'android-port/Runtime/Platform/PersistentDiagnosticLog.cs'
+      - 'android-port/Runtime/Platform/AndroidRuntimeLog.cs'
+      - 'android-port/Tests/Diagnostics/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  storage:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            android-port/Runtime/Platform
+            android-port/Tests/Diagnostics
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - run: dotnet run --project android-port/Tests/Diagnostics/Diagnostics.csproj --configuration Release --nologo

@@ -29,6 +29,7 @@ namespace RaftAndroid.Platform
                 events.Clear();
                 eventRevision++;
             }
+            RaftAndroid.Diagnostics.AndroidRuntimeLog.Initialize();
             Application.logMessageReceivedThreaded -= Capture;
             Application.logMessageReceivedThreaded += Capture;
         }
@@ -46,6 +47,8 @@ namespace RaftAndroid.Platform
         {
             message = message ?? "";
             stack = stack ?? "";
+            RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("unity", type.ToString(), message + "\n" + stack,
+                type == LogType.Error || type == LogType.Exception || type == LogType.Assert);
             if (type != LogType.Error && type != LogType.Exception && type != LogType.Assert &&
                 !message.StartsWith("RAFT_", StringComparison.Ordinal)) return;
             string entry = DateTime.UtcNow.ToString("O") + " " + type + " " + message + "\n" + stack;
@@ -75,6 +78,8 @@ namespace RaftAndroid.Platform
             text.AppendLine("Unity " + Application.unityVersion + "; scene " + scene);
             text.AppendLine(SystemInfo.deviceModel + "; " + SystemInfo.operatingSystem);
             text.AppendLine(SystemInfo.graphicsDeviceName + "; " + SystemInfo.graphicsDeviceType);
+            text.AppendLine("Logs: " + RaftAndroid.Diagnostics.AndroidRuntimeLog.LogDirectory);
+            text.AppendLine("Storage: " + RaftAndroid.Diagnostics.AndroidRuntimeLog.Status);
             text.AppendLine("This report does not verify gameplay, sound or save/load.");
             foreach (string entry in snapshot) text.AppendLine(entry);
             fullReport = text.ToString();
@@ -84,6 +89,54 @@ namespace RaftAndroid.Platform
                   + fullReport.Substring(fullReport.Length - VisibleReportLimit);
             reportRevision = version;
             reportScene = scene;
+        }
+
+
+        private float nextSample;
+        private void OnEnable()
+        {
+            SceneManager.sceneLoaded += SceneLoaded;
+            SceneManager.sceneUnloaded += SceneUnloaded;
+            SceneManager.activeSceneChanged += ActiveSceneChanged;
+        }
+        private void OnDisable()
+        {
+            SceneManager.sceneLoaded -= SceneLoaded;
+            SceneManager.sceneUnloaded -= SceneUnloaded;
+            SceneManager.activeSceneChanged -= ActiveSceneChanged;
+        }
+        private static void SceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("scene", "loaded", scene.name + "; mode=" + mode, true);
+        }
+        private static void SceneUnloaded(Scene scene)
+        {
+            RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("scene", "unloaded", scene.name, true);
+        }
+        private static void ActiveSceneChanged(Scene before, Scene after)
+        {
+            RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("scene", "active_changed", before.name + " -> " + after.name, true);
+        }
+        private void OnApplicationPause(bool paused)
+        {
+            RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("lifecycle", "pause", paused.ToString(), true);
+        }
+        private void OnApplicationFocus(bool focused)
+        {
+            RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("lifecycle", "focus", focused.ToString(), true);
+        }
+        private void OnApplicationQuit()
+        {
+            RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("lifecycle", "quit", "", true);
+            RaftAndroid.Diagnostics.AndroidRuntimeLog.Shutdown();
+        }
+        private void Update()
+        {
+            if (Time.realtimeSinceStartup < nextSample) return;
+            nextSample = Time.realtimeSinceStartup + 5f;
+            RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("performance", "sample",
+                "frame=" + Time.frameCount + "; frame_ms=" + (Time.unscaledDeltaTime * 1000f).ToString("F2") +
+                "; managed_bytes=" + GC.GetTotalMemory(false) + "; scene=" + SceneManager.GetActiveScene().name);
         }
 
         private void OnGUI()
@@ -110,3 +163,4 @@ namespace RaftAndroid.Platform
     }
 }
 #endif
+

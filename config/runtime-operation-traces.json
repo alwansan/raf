@@ -1,0 +1,120 @@
+{
+  "schema": 1,
+  "sources": {
+    "SaveAndLoad": {
+      "sha256": "daf835fc2926d138483462d2ebe7ca627efcec6a9b9829dbcc7466b368317a08",
+      "area": "save",
+      "methods": [
+        {
+          "signature": "private void Awake()"
+        },
+        {
+          "signature": "private void Start()"
+        },
+        {
+          "signature": "public void CreateNecessaryLoadDirectories()"
+        },
+        {
+          "signature": "private DirectoryInfo CreateDirectory(string path)",
+          "detail": "path"
+        },
+        {
+          "signature": "private void MoveDirectory(string source, string target)"
+        },
+        {
+          "signature": "private void Save(string filename, RGD raftgamedata)",
+          "detail": "filename"
+        },
+        {
+          "signature": "public static T Load<T>(string filename)",
+          "detail": "filename"
+        },
+        {
+          "signature": "public void SaveGame(bool sendRemoteMessage)"
+        },
+        {
+          "signature": "private void SaveUser()"
+        },
+        {
+          "signature": "private void SaveWorld()"
+        },
+        {
+          "signature": "public void RestoreUser()"
+        },
+        {
+          "signature": "private void LoadRGDUsers()"
+        },
+        {
+          "signature": "public void RestoreRGDGame(RGD_Game game)"
+        }
+      ]
+    },
+    "Raft_Network": {
+      "sha256": "a0aac2a68f598455d6ecd6c5d74c7b105e8ba4d8e0a7fb8712284145a9bf9180",
+      "area": "session",
+      "methods": [
+        {
+          "signature": "private void Awake()"
+        },
+        {
+          "signature": "private void OnEnable()"
+        },
+        {
+          "signature": "private void Start()"
+        },
+        {
+          "signature": "private void OnSceneLoaded(Scene scene, LoadSceneMode sceneMode)"
+        },
+        {
+          "signature": "public void HostGame(RequestJoinAuthSetting joinAuthSetting, string password)"
+        },
+        {
+          "signature": "private void LoadScene(string sceneName)",
+          "detail": "sceneName"
+        },
+        {
+          "signature": "private Network_Player InternalAddPlayer(Network_UserId steamID, RGD_Settings_Character characterSettings)"
+        },
+        {
+          "signature": "public void LeaveGame(DisconnectReason reason, SceneName sceneName, bool saveGame, bool force = false)"
+        },
+        {
+          "signature": "private void Platform_Init()"
+        },
+        {
+          "signature": "private void Platform_HostGame()"
+        },
+        {
+          "signature": "private void Platform_LeaveGame()"
+        }
+      ]
+    },
+    "SteamManager": {
+      "sha256": "69ac529c391fe64c8c61c39b47c0e7ba2eda37f963afe0ea3200ef12a55c7113",
+      "area": "startup",
+      "methods": [
+        {
+          "signature": "protected virtual void Awake()"
+        }
+      ]
+    },
+    "Settings": {
+      "sha256": "b6ef93c9014fe46b6caa145e2f2c2820e37fa926e39e923ac1515dc4d279ea3f",
+      "area": "settings",
+      "methods": [
+        {
+          "signature": "public void Start()"
+        }
+      ]
+    },
+    "PlayFabManager": {
+      "sha256": "f1ec7f319df592ad72a5cf0cdb30bb00f292fad722eaf00abc85ab4de7de5d92",
+      "area": "startup",
+      "methods": [
+        {
+          "signature": "public void Start()"
+        }
+      ]
+    }
+  }
+}

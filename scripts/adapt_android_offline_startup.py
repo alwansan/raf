@@ -53,6 +53,11 @@ def adapt(name, text):
         count = 4 if name == 'SaveAndLoad' else 1
         expr = 'SteamUser.GetSteamID().m_SteamID'
         result = replace_exact(result, expr, '(' + LOCAL + '.Enabled ? ' + LOCAL + '.Current : ' + expr + ')', count)
+        if name == 'SaveAndLoad':
+            attribute = '[Conditional("UNITY_STANDALONE_WIN")]'
+            result = replace_exact(result, attribute,
+                attribute + '\n\t[Conditional("UNITY_ANDROID")]')
+
     elif name == 'SteamManager':
         anchor = 'UnityEngine.Object.DontDestroyOnLoad(gameObject);'
         result = replace_exact(result, anchor, anchor + '\n        if (' + LOCAL + '.Enabled) { _ = ' + LOCAL + '.Current; m_bInitialized = false; return; }')
@@ -145,3 +150,4 @@ if __name__ == '__main__':
     parser.add_argument('--apply', action='store_true')
     args = parser.parse_args()
     print('RAFT_ANDROID_OFFLINE_SOURCE_ADAPTER ' + json.dumps(apply(args.project, args.backup, args.apply), sort_keys=True))
+

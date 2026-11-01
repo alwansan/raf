@@ -13,8 +13,24 @@ namespace RaftAndroid.Audio
         {
             // Restore the same-version Android bridge omitted from the Windows provider.
             // Do not construct replacement FMOD settings, banks or managed SDK types.
-            Startup.Initialize(FMODUnity.RuntimeUtils.EnforceLibraryOrder, InitializeJava, ReadVersion);
+            RaftAndroid.Diagnostics.AndroidRuntimeLog.Initialize();
+            Startup.Initialize(LoadAndroidLibraries, InitializeJava, ReadVersion);
             Debug.Log("RAFT_FMOD_ANDROID_BOOTSTRAP javaInitialized=true nativeVersion=00020215");
+        }
+
+        private static void LoadAndroidLibraries()
+        {
+            // Restore the vendor's Android-only block compiled out of RuntimeUtils.
+            // Windows VERSION.dll is "fmodstudio"; Android Core is a separate "fmod".
+            using (var system = new AndroidJavaClass("java.lang.System"))
+            {
+                RaftAndroid.Diagnostics.AndroidRuntimeLog.Stage("fmod.load_core",
+                    () => system.CallStatic("loadLibrary", "fmod"));
+                RaftAndroid.Diagnostics.AndroidRuntimeLog.Stage("fmod.load_studio",
+                    () => system.CallStatic("loadLibrary", "fmodstudio"));
+            }
+            RaftAndroid.Diagnostics.AndroidRuntimeLog.Stage("fmod.original_library_order",
+                FMODUnity.RuntimeUtils.EnforceLibraryOrder);
         }
 
         private static void InitializeJava()
@@ -24,23 +40,25 @@ namespace RaftAndroid.Audio
             using (var bridge = new AndroidJavaClass("org.fmod.FMOD"))
             {
                 if (activity == null) throw new InvalidOperationException("Unity Android activity is unavailable for FMOD");
-                bridge.CallStatic("init", activity);
+                RaftAndroid.Diagnostics.AndroidRuntimeLog.Stage("fmod.java_init", () => bridge.CallStatic("init", activity));
             }
         }
 
         private static uint ReadVersion()
         {
             FMOD.System system;
-            Check(FMOD.Factory.System_Create(out system), "create version probe");
+            system = default(FMOD.System);
+            RaftAndroid.Diagnostics.AndroidRuntimeLog.Stage("fmod.version_probe_create", () => Check(FMOD.Factory.System_Create(out system), "create version probe"));
             try
             {
                 uint version;
-                Check(system.getVersion(out version), "read native version");
+                version = 0;
+                RaftAndroid.Diagnostics.AndroidRuntimeLog.Stage("fmod.version_probe_read", () => Check(system.getVersion(out version), "read native version"));
                 return version;
             }
             finally
             {
-                Check(system.release(), "release version probe");
+                RaftAndroid.Diagnostics.AndroidRuntimeLog.Stage("fmod.version_probe_release", () => Check(system.release(), "release version probe"));
             }
         }
 
@@ -52,3 +70,4 @@ namespace RaftAndroid.Audio
     }
 }
 #endif
+

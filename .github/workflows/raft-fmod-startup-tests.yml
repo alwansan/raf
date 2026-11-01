@@ -20,6 +20,7 @@ jobs:
           persist-credentials: false
           sparse-checkout: |
             Raft/Raft_Data/Managed
+            android-port/Runtime/Platform
             android-port/Runtime/Audio
             android-port/Tests/Audio
       - uses: actions/setup-dotnet@v4
@@ -29,3 +30,4 @@ jobs:
         run: |
           dotnet run --project android-port/Tests/Audio/Audio.csproj \
             -p:ManagedRoot="$GITHUB_WORKSPACE/Raft/Raft_Data/Managed"
+

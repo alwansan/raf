@@ -9,6 +9,7 @@ import shutil
 
 from scripts.adapt_android_offline_startup import PINS, adapt
 from scripts.adapt_original_save_paths import adapt as adapt_paths
+from scripts.instrument_android_runtime_operations import instrument
 
 
 def method(text, signature):
@@ -34,12 +35,14 @@ def prepare(source, managed, runtime, output):
         if name == 'SaveAndLoad': text = adapt_paths(text)
         changed[name] = (path, adapt(name, text))
     output.mkdir(parents=True, exist_ok=True)
-    for path, text in changed.values(): path.write_text(text)
+    traces = json.loads(Path('config/runtime-operation-traces.json').read_text())
+    for name, (path, text) in changed.items():
+        path.write_text(instrument(name, text, traces) if name in traces['sources'] else text)
     refs = '\n'.join('<Reference Include="' + html.escape(p.stem) + '"><HintPath>' + html.escape(str(p.resolve())) + '</HintPath><Private>false</Private></Reference>'
                      for p in sorted(managed.glob('*.dll')) if p.name != 'Assembly-CSharp.dll')
     # This mirrors the established original managed compatibility diagnostic.
     project = '<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><TargetFramework>net10.0</TargetFramework><LangVersion>9.0</LangVersion><DefineConstants>UNITY_ANDROID;UNITY_5_3_OR_NEWER</DefineConstants><GenerateAssemblyInfo>false</GenerateAssemblyInfo><AllowUnsafeBlocks>true</AllowUnsafeBlocks><Nullable>disable</Nullable><NoWarn>0168;0649;0618;0672;SYSLIB0011</NoWarn></PropertyGroup><ItemGroup>' + refs + '</ItemGroup></Project>'
-    for name in ('LocalPlayerIdentity.cs', 'LocalProfileStore.cs', 'AndroidTestDiagnostics.cs'):
+    for name in ('LocalPlayerIdentity.cs', 'LocalProfileStore.cs', 'AndroidTestDiagnostics.cs', 'PersistentDiagnosticLog.cs', 'AndroidRuntimeLog.cs'):
         shutil.copy2(runtime / name, source / ('RaftAndroid-' + name))
     (source / 'Candidate.csproj').write_text(project)
     harness = output / 'harness'
@@ -62,9 +65,33 @@ class NetworkUnderTest {
 '''
     # Use ulong here: original Network_UserId defines this exact implicit ID boundary.
     methods = (rpc + '\n' + send).replace('Network_UserId', 'ulong')
+    save_source = changed['SaveAndLoad'][1]
+    save_signature = 'private void Save(string filename, RGD raftgamedata)'
+    save_start = save_source.index(save_signature)
+    attributes = re.findall(r'\[Conditional\("[^"]+"\)\]', save_source[max(0,save_start-200):save_start])
+    if len(attributes) != 2 or '[Conditional("UNITY_ANDROID")]' not in attributes:
+        raise ValueError('Original save call is not enabled for Android')
+    save_harness = '''
+namespace SaveHarness {
+ class RGD {} class FileStream { public void Close() { FileManager.Closed++; } }
+ class FileManager { public static int Calls, Closed, Serialized; public static string Name;
+ public static FileStream CreateFile(string name) { Calls++; Name = name; return new FileStream(); } }
+ class BinaryFormatter { public void Serialize(FileStream file, RGD value) { FileManager.Serialized++; } }
+ class OriginalSaveUnderTest {
+''' + '\n'.join(attributes).replace('[Conditional(', '[System.Diagnostics.Conditional(') + '\n' + method(save_source, save_signature) + '''
+ public void Execute() { Save("fixture-world", new RGD()); }
+ }
+ public static class SaveCallTest { public static void Run() {
+  new OriginalSaveUnderTest().Execute();
+  if (FileManager.Calls != 1 || FileManager.Serialized != 1 || FileManager.Closed != 1 || FileManager.Name != "fixture-world.rgd")
+   throw new System.Exception("Android compiler omitted original RGD save call");
+ } }
+}
+'''
     checks = '''}
 class Program { static void Main() {
  if (!RaftAndroid.Platform.LocalPlayerIdentity.Enabled) throw new Exception("Android branch not enabled");
+ SaveHarness.SaveCallTest.Run();
  var n = new NetworkUnderTest(); var m = new Message();
  n.RPC(m, Target.All, EP2PSend.k_EP2PSendReliable, NetworkChannel.Session);
  if (n.LocalDeliveries != 1) throw new Exception("All RPC lost local delivery");
@@ -89,7 +116,7 @@ class Program { static void Main() {
  Console.WriteLine("RAFT_OFFLINE_ORIGINAL_RPC_TEST localAll=1 localOther=0 directLocal=1 remoteNoCloud=true stableSaveIdentity=true corruptProfilePreserved=true unityRuntimeVerified=false");
 } }
 '''
-    (harness / 'Program.cs').write_text(common + methods + checks)
+    (harness / 'Program.cs').write_text(common + methods + checks + save_harness)
     (harness / 'Harness.csproj').write_text('<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework><LangVersion>9.0</LangVersion><DefineConstants>UNITY_ANDROID</DefineConstants></PropertyGroup></Project>')
     print('RAFT_OFFLINE_PRIVATE_PREPARE originalSources=' + str(len(changed)) + ' sourceBodiesPublished=false nativeCallsExecuted=false')
 
@@ -99,3 +126,4 @@ if __name__ == '__main__':
     for name in ('source', 'managed', 'runtime', 'output'): p.add_argument('--' + name, type=Path, required=True)
     args = p.parse_args()
     prepare(args.source, args.managed, args.runtime, args.output)
+

@@ -67,3 +67,26 @@ jobs:
           assert not list(root.rglob('*.cs'))
           print('RAFT_FMOD_RUNTIME_PREFLIGHT files=10 exactHashes=true arm64=true competingSources=0 deviceAudioVerified=false')
           PY
+      - name: Resolve reported device crash offset against authenticated FMOD ELF metadata
+        if: steps.key.outputs.ready == 'true'
+        run: |
+          python3 - <<'PY'
+          import json, os, subprocess
+          from pathlib import Path
+          library = Path(os.environ['RUNNER_TEMP']) / 'fmod-project/Assets/Plugins/FMOD/platforms/android/lib/arm64-v8a/libfmodstudio.so'
+          pc = 0x101e94
+          text = subprocess.check_output(['readelf', '--dyn-syms', '--wide', str(library)], text=True)
+          functions = []
+          for line in text.splitlines():
+              fields = line.split()
+              if len(fields) >= 8 and fields[3] == 'FUNC' and fields[6] != 'UND':
+                  start, size = int(fields[1], 16), int(fields[2], 0)
+                  functions.append((start, size, fields[7]))
+          containing = [dict(symbol=name, start=hex(start), size=size, offset=pc-start)
+                        for start, size, name in functions if start <= pc < start+size]
+          before = sorted([f for f in functions if f[0] <= pc], reverse=True)[:3]
+          print('RAFT_DEVICE_FMOD_PC_METADATA ' + json.dumps(dict(pc=hex(pc), containing=containing,
+              precedingExportedSymbols=[dict(symbol=n, start=hex(a), size=b) for a,b,n in before],
+              exactInternalSymbolKnown=bool(containing), nativeExecuted=False), sort_keys=True))
+          PY
+

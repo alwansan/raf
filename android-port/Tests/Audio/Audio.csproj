@@ -9,8 +9,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="../../Runtime/Audio/*.cs" Link="%(Filename)%(Extension)" />
+    <Compile Include="../../Runtime/Platform/AndroidRuntimeLog.cs" Link="AndroidRuntimeLog.cs" />
+    <Compile Include="../../Runtime/Platform/PersistentDiagnosticLog.cs" Link="PersistentDiagnosticLog.cs" />
     <Reference Include="FMODUnity"><HintPath>$(ManagedRoot)/FMODUnity.dll</HintPath></Reference>
     <Reference Include="UnityEngine.CoreModule"><HintPath>$(ManagedRoot)/UnityEngine.CoreModule.dll</HintPath></Reference>
     <Reference Include="UnityEngine.AndroidJNIModule"><HintPath>$(ManagedRoot)/UnityEngine.AndroidJNIModule.dll</HintPath></Reference>
   </ItemGroup>
 </Project>
+
