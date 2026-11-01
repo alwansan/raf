@@ -32,7 +32,7 @@ public final class CaptureService extends Service {
     private long segmentBytes, totalBytes, lastStatus;
     private int part;
     private volatile boolean active;
-    private volatile boolean failed;
+    private volatile boolean failed, stopping;
     private IRemoteLog remote;
     private String session;
     private Shizuku.UserServiceArgs args;
@@ -47,6 +47,7 @@ public final class CaptureService extends Service {
                         byte[] data=content.getBytes(StandardCharsets.UTF_8);
                         if(metricsOutput==null || metricsSegmentBytes+data.length>METRICS_SEGMENT_BYTES)openMetricSegment();
                         metricsOutput.write(data); metricsOutput.flush();
+                        Config.prefs(CaptureService.this).edit().putString("metrics_last",content).apply();
                         metricsSegmentBytes+=data.length; totalBytes+=data.length;
                     } else {
                         byte[] bytes = ("[" + source + "]\n" + content).getBytes(StandardCharsets.UTF_8);
@@ -83,7 +84,7 @@ public final class CaptureService extends Service {
         }
         @Override public void onServiceDisconnected(ComponentName c) {
             remote=null;
-            if(active) fatal("Shizuku disconnected; capture ended. Reconnect and restart.");
+            if(active && !stopping) fatal("Shizuku disconnected; capture ended. Reconnect and restart.");
         }
     };
 
@@ -127,13 +128,17 @@ public final class CaptureService extends Service {
             sessionFolder=DocumentsContract.createDocument(getContentResolver(),base,
                     DocumentsContract.Document.MIME_TYPE_DIR,"LogRaft-"+session);
             if(sessionFolder==null) throw new IOException("Folder creation failed");
-            active=true;
-            String metadata="LogRaft 0.1.0\nTarget="+Config.PACKAGE+
+            active=true; stopping=false; failed=false; totalBytes=0; metricsSegmentBytes=0; part=0; metricsPart=0;
+            fileUris.clear();
+            Config.prefs(this).edit().remove("metrics_last").apply();
+            String metadata="LogRaft 0.2.0\nTarget="+Config.PACKAGE+
                     "\nStart="+new Date()+"\nBuild="+Build.MANUFACTURER+" "+Build.MODEL+
                     "\nAndroid="+Build.VERSION.RELEASE+" API="+Build.VERSION.SDK_INT+
                     "\nCollector=Shizuku shell/root UID; no root required\n"+
                     "Capture=Raft UID plus Raft-associated system/crash events\n"+
-                    "Note=Logs only when emitted; cannot capture internal unlogged state\n";
+                    "Note=Logs only when emitted; cannot capture internal unlogged state\n"+
+                    "Telemetry=3s sampling CPU process, process/system memory, KGSL GPU, thermal, battery, SurfaceFlinger displayed frames\n"+
+                    "Missing metrics are null, not measured zeros. Game-internal FPS needs Unity logging.\n";
             Uri meta=DocumentsContract.createDocument(getContentResolver(),sessionFolder,"text/plain","session-info.txt");
             if(meta==null) throw new IOException("Metadata creation failed");
             try(OutputStream out=getContentResolver().openOutputStream(meta,"w")){
@@ -202,6 +207,7 @@ public final class CaptureService extends Service {
 
     private void halt(String status) {
         // Drain the remote reader's last batch BEFORE disabling our Binder sink.
+        stopping=true;
         if(remote!=null) {
             try { remote.stop(); } catch(Exception ignored){}
             remote=null;
