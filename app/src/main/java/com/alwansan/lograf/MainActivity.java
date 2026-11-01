@@ -170,6 +170,9 @@ public final class MainActivity extends Activity {
                 "\\nBattery: "+metric(m,"battery_level_percent","%")+
                 "\\nBattery temp: "+metric(m,"battery_temp_c","°C")+
                 "\\nThermal status code: "+metric(m,"thermal_status_code","")+
+                "\\nLogcat game lines: "+metric(m,"game_log_lines","")+
+                "\\nSystem event lines: "+metric(m,"system_context_lines","")+
+                "\\nStream reconnects (potential gaps): "+metric(m,"logcat_reconnects","")+
                 "\\nGame state: "+m.optString("state","unknown"));
         } catch(Exception ignored){performanceLabel.setText("Metrics awaiting valid sample");}
     }
