@@ -32,6 +32,9 @@ public final class PerformanceSampler implements Runnable {
     private Double batteryTemp=null;
     private String surfaceLayer=null;
     private long sample=0;
+    private long lastFrameProgressMs=-1;
+    private Double lastPresentedP95Ms=null, lastPresentedWorstMs=null;
+    private int lastPresentedFrameCount=0;
     private static final String GPU="/sys/class/kgsl/kgsl-3d0/";
     private final long ticksPerSecond;
     private final int cpuCount=Math.max(1,Runtime.getRuntime().availableProcessors());
@@ -65,7 +68,7 @@ public final class PerformanceSampler implements Runnable {
             row.put("process_transition",pid>0?"game_started":lastObservedPid>0?"game_exited":"none");
             row.put("previous_pid",lastObservedPid>0?lastObservedPid:JSONObject.NULL);
             if(pid!=pssPid){pssCache=null;pssPid=-1;pssLast=0;}
-            surfaceLayer=null;layersLast=0;previousPresent=-1;
+            surfaceLayer=null;layersLast=0;previousPresent=-1;lastFrameProgressMs=-1;
             lastObservedPid=pid;
         }
         if(pid<=0) {
@@ -118,6 +121,13 @@ public final class PerformanceSampler implements Runnable {
         if(pid>0 && now-layersLast>25000){layersLast=now; discoverSurface();}
         Double fps=pid>0?presentedFps(now):null;
         row.put("presented_fps_estimate",fps==null?JSONObject.NULL:fps);
+        row.put("presented_frame_p95_ms",lastPresentedP95Ms==null?JSONObject.NULL:lastPresentedP95Ms);
+        row.put("presented_frame_worst_ms",lastPresentedWorstMs==null?JSONObject.NULL:lastPresentedWorstMs);
+        row.put("presented_frame_window_count",lastPresentedFrameCount);
+        long stallAge=lastFrameProgressMs<0?-1:Math.max(0,now-lastFrameProgressMs);
+        row.put("last_present_progress_age_ms",stallAge<0?JSONObject.NULL:stallAge);
+        row.put("suspected_present_stall",pid>0 && stallAge>=12000 && fps!=null && fps==0);
+        row.put("available_ram_under_1gib_watch",sys.optLong("MemAvailable",Long.MAX_VALUE)<1048576);
         row.put("fps_method","SurfaceFlinger --latency game SurfaceView (NOT Unity Update FPS)");
         row.put("fps_surface",surfaceLayer==null?JSONObject.NULL:surfaceLayer);
         row.put("unity_frame_cpu_ms",JSONObject.NULL).put("unity_frame_gpu_ms",JSONObject.NULL);
@@ -283,6 +293,7 @@ public final class PerformanceSampler implements Runnable {
     }
 
     private Double presentedFps(long now){
+        lastPresentedP95Ms=null;lastPresentedWorstMs=null;lastPresentedFrameCount=0;
         if(surfaceLayer==null || surfaceLayer.isEmpty())return null;
         try{
             String output=command(1400,20000,"dumpsys","SurfaceFlinger","--latency",surfaceLayer);
@@ -306,10 +317,12 @@ public final class PerformanceSampler implements Runnable {
             // falsely report ~42fps for a real 60fps game. Compute the rate
             // from timestamp intervals instead, and require new presentation.
             if(previousPresent<0) {
+                lastFrameProgressMs=now;
                 previousPresent=newest; previousFrameAt=now;
                 return null; // first sample establishes baseline
             }
             if(newest<previousPresent){
+                lastFrameProgressMs=now;
                 previousPresent=newest;previousFrameAt=now;
                 return null; // layer recreated or counters reset
             }
@@ -322,8 +335,24 @@ public final class PerformanceSampler implements Runnable {
                 if(earliest==Long.MAX_VALUE)earliest=stamp;
                 latest=stamp;count++;
             }
+            lastFrameProgressMs=now;
             previousPresent=newest;previousFrameAt=now;
             if(count<3 || earliest>=latest)return null;
+            // Presentation intervals estimate visible frame pacing. They are NOT
+            // Unity per-frame CPU or GPU timings.
+            ArrayList<Double> intervalsMs=new ArrayList<>();
+            long prior=-1;
+            for(long stamp:presents){
+                if(stamp<=0 || newest-stamp>2_000_000_000L || stamp==prior)continue;
+                if(prior>0 && stamp>prior)intervalsMs.add((stamp-prior)/1_000_000.0);
+                prior=stamp;
+            }
+            if(!intervalsMs.isEmpty()){
+                Collections.sort(intervalsMs);
+                lastPresentedFrameCount=intervalsMs.size()+1;
+                lastPresentedWorstMs=round(intervalsMs.get(intervalsMs.size()-1));
+                lastPresentedP95Ms=round(intervalsMs.get(Math.max(0,(int)Math.ceil(intervalsMs.size()*0.95)-1)));
+            }
             double fps=1_000_000_000.0*(count-1)/(latest-earliest);
             return fps>0 && fps<300?round(fps):null;
         }catch(Exception ignored){}

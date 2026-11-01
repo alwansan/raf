@@ -8,9 +8,9 @@ android {
         targetSdk 35
         // The workflow run number increases automatically for each new APK.
         versionCode 1000 + (System.getenv('GITHUB_RUN_NUMBER') ?: '0').toInteger()
-        versionName '0.4.' + (System.getenv('GITHUB_RUN_NUMBER') ?: 'local')
+        versionName '0.5.' + (System.getenv('GITHUB_RUN_NUMBER') ?: 'local')
     }
-    buildFeatures { aidl true }
+    buildFeatures { aidl true; buildConfig true }
     signingConfigs {
         stable {
             // Public TEST key, generated once and committed by GitHub Actions.

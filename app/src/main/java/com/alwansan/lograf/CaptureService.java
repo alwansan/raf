@@ -143,15 +143,17 @@ public final class CaptureService extends Service {
             active=true; stopping=false; failed=false; totalBytes=0; metricsSegmentBytes=0; part=0; metricsPart=0;
             fileUris.clear();
             Config.prefs(this).edit().remove("metrics_last").apply();
-            String metadata="LogRaft 0.2.0\nTarget="+Config.PACKAGE+
+            String metadata="LogRaft "+BuildConfig.VERSION_NAME+"\nTarget="+Config.PACKAGE+
                     "\nRecoveryRestart="+recovering+
                     "\nStart="+new Date()+"\nBuild="+Build.MANUFACTURER+" "+Build.MODEL+
+                    "\nVersionCode="+BuildConfig.VERSION_CODE+
                     "\nAndroid="+Build.VERSION.RELEASE+" API="+Build.VERSION.SDK_INT+
                     "\nCollector=Shizuku shell/root UID; no root required\n"+
                     "Capture=Raft UID plus Raft-associated system/crash events\n"+
                     "Note=Logs only when emitted; cannot capture internal unlogged state\n"+
                     "Telemetry=3s sampling CPU process, process/system memory, KGSL GPU, thermal, battery, SurfaceFlinger displayed frames\n"+
-                    "Missing metrics are null, not measured zeros. Game-internal FPS needs Unity logging.\n";
+                    "Missing metrics are null, not measured zeros. Game-internal FPS needs Unity logging.\n"+
+                    "Warnings=Low available RAM, raw log flood, and suspected presented-frame stalls are heuristic indicators.\n";
             Uri meta=DocumentsContract.createDocument(getContentResolver(),sessionFolder,"text/plain","session-info.txt");
             if(meta==null) throw new IOException("Metadata creation failed");
             try(OutputStream out=getContentResolver().openOutputStream(meta,"w")){

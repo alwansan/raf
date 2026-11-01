@@ -74,3 +74,6 @@ GitHub Action `.github/workflows/lograf-apk.yml` on the **lograf** branch builds
 - [ ] Android device battery optimization doesn't evict the foreground collector in regular tests.
 
 **CI compilation is not hardware evidence.** Never label a build device-verified until those checks pass.
+
+
+See [2026-11-01 17:30 device findings](docs/DEVICE_LOGS_2026-11-01_173033.md).

@@ -175,8 +175,20 @@ public final class MainActivity extends Activity {
                 "\\nLogcat game lines: "+metric(m,"game_log_lines","")+
                 "\\nSystem event lines: "+metric(m,"system_context_lines","")+
                 "\\nStream reconnects (potential gaps): "+metric(m,"logcat_reconnects","")+
+                "\\nLog lines/sec: "+metric(m,"game_log_lines_per_second","")+
+                "\\nFrame pacing P95: "+metric(m,"presented_frame_p95_ms","ms")+
+                "\\nLast frame progress: "+metric(m,"last_present_progress_age_ms","ms")+
+                "\\nAlerts: "+metricWarnings(m)+
                 "\\nGame state: "+m.optString("state","unknown"));
         } catch(Exception ignored){performanceLabel.setText("Metrics awaiting valid sample");}
+    }
+
+    private String metricWarnings(JSONObject obj){
+        StringBuilder status=new StringBuilder();
+        if(obj.optBoolean("error_flood_warning"))status.append("Log flood; ");
+        if(obj.optBoolean("suspected_present_stall"))status.append("Possible presentation stall; ");
+        if(obj.optBoolean("available_ram_under_1gib_watch"))status.append("RAM pressure warning; ");
+        return status.length()==0?"None":status.toString();
     }
 
     private String frequencySummary(JSONObject obj) {
