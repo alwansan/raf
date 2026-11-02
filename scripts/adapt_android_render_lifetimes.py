@@ -73,15 +73,15 @@ using RaftAndroidLegacyInput = UnityEngine.Input;
         # unrelated gameplay/world handoff. Do not swallow other exceptions,
         # spoof event success, or change original local host state.
         declarations = list(re.finditer(
-            r'(?m)^[ \\t]*(?:public|private|protected|internal)'
-            r'[^\\r\\n{};]*\\bvoid\\s+OnSceneEvent\\s*\\([^;{}]*\\)\\s*\\{',
+            r'(?m)^[ \t]*(?:public|private|protected|internal)'
+            r'[^\r\n{};]*\bvoid\s+OnSceneEvent\s*\([^;{}]*\)\s*\{',
             normalized))
         if len(declarations) != 1:
             raise ValueError('Ambiguous original audio scene callback')
         signature = declarations[0].group(0).rsplit('{', 1)[0].strip()
         start, end = body_bounds(normalized, signature)
         body = normalized[start:end]
-        if 'StudioEventEmitter' not in body or not re.search(r'\\bPlay\\s*\\(', body):
+        if 'StudioEventEmitter' not in body or not re.search(r'\bPlay\s*\(', body):
             raise ValueError('Original FMOD scene callback contract changed')
         opening = '''\n#if UNITY_ANDROID && !UNITY_EDITOR
         try
@@ -98,7 +98,7 @@ using RaftAndroidLegacyInput = UnityEngine.Input;
 #endif
 '''
         normalized = normalized[:start] + opening + body + closing + normalized[end:]
-        if normalized[:start] + normalized[start:].replace(opening, '', 1).replace(closing, '', 1) != text.replace('\\r\\n', '\\n'):
+        if normalized[:start] + normalized[start:].replace(opening, '', 1).replace(closing, '', 1) != text.replace('\r\n', '\n'):
             raise ValueError('Original scene callback body changed')
     elif stem == 'GraphicsSettingsBox':
         signature='\tpublic void ApplyCurrentResolutionAndFullscreenMode()\n\t{\n'
