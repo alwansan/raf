@@ -9,12 +9,17 @@ import json
 from pathlib import Path
 
 from scripts.verify_targeted_lfs_compute_sources import verify_sources, EXPECTED
+from scripts.probe_original_compute_containers import scan_blob
 from scripts.probe_authentic_fft_dxbc_translation import (
     OWNER, PATH_ID, ORIGINAL_OBJECT_SHA256, EXPECTED_CONTAINERS,
 )
 
 MAX_VARIANTS = 12
 MAX_KERNELS = 128
+EXPECTED_FFT_WORKGROUP_X_BY_COMPILED_SLOT = (
+    64, 64, 128, 128, 256, 256, 512, 512, 1024, 1024,
+    64, 64, 128, 128, 256, 256, 512, 512, 1024, 1024,
+)
 
 
 def private_variant_element_shape(value, depth=0):
@@ -148,6 +153,59 @@ def summarize_variant_tree(tree, expected_kernels=EXPECTED_CONTAINERS):
     }
 
 
+
+def correlate_original_variant_bytecode(tree, source_scan, expected_workgroup_x=None):
+    """Map each serialized compiled program to the same raw original DXBC."""
+    variants = tree.get("variants") if isinstance(tree, dict) else None
+    if not isinstance(variants, list) or len(variants) != 1:
+        raise ValueError("Unexpected serialized variant group count")
+    kernels = variants[0].get("kernels")
+    if not isinstance(kernels, list) or len(kernels) != len(source_scan):
+        raise ValueError("Original compiled program map count differs from DXBC scan")
+    if expected_workgroup_x is not None and len(expected_workgroup_x) != len(kernels):
+        raise ValueError("Original workgroup table count changed")
+    rows = []
+    for position, (kernel, scanned) in enumerate(zip(kernels, source_scan)):
+        vm = kernel.get("variantMap") if isinstance(kernel, dict) else None
+        if (not isinstance(vm, list) or len(vm) != 1
+                or not isinstance(vm[0], tuple) or len(vm[0]) != 2
+                or not isinstance(vm[0][1], dict)):
+            raise ValueError("Original serialized FFT variantMap structure changed")
+        binaries, groups = [], []
+        for value in vm[0][1].values():
+            if isinstance(value, (tuple, list)):
+                if len(value) > 32 and all(type(x) is int and 0 <= x <= 255 for x in value):
+                    raw = bytes(value)
+                    if raw[:4] == b"DXBC":
+                        binaries.append(raw)
+                if len(value) == 3 and all(type(x) is int and x > 0 for x in value):
+                    groups.append(list(value))
+        if len(binaries) != 1 or len(groups) != 1:
+            raise ValueError("Original compiled DXBC or threadgroup ambiguous")
+        original = binaries[0]
+        digest = hashlib.sha256(original).hexdigest()
+        if digest != scanned.get("binary_sha256") or len(original) != scanned.get("bytes"):
+            raise ValueError("Typed compiled DXBC differs from raw scan at same slot")
+        group = groups[0]
+        if expected_workgroup_x is not None and group != [expected_workgroup_x[position], 1, 1]:
+            raise ValueError("Original serialized workgroup differs from validated SPIR-V")
+        rows.append({
+            "compiled_variant_position": position,
+            "original_dxbc_sha256": digest,
+            "original_dxbc_byte_count": len(original),
+            "original_serialized_workgroup_xyz": group,
+            "private_shader_bytes_exported": False,
+            "original_runtime_kernel_index_proven": False,
+        })
+    return {
+        "authentic_compiled_variants_verified_in_original_order": len(rows),
+        "original_compiled_program_order_sha256_correlated": True,
+        "original_workgroup_mapping_correlated": expected_workgroup_x is not None,
+        "ordered_compiled_programs": rows,
+        "unity_runtime_kernel_index_mapping_verified": False,
+    }
+
+
 def inspect(root: Path):
     verify_sources(root, expected={OWNER: EXPECTED[OWNER]})
     import UnityPy
@@ -159,7 +217,12 @@ def inspect(root: Path):
     obj = items[0]
     if hashlib.sha256(obj.get_raw_data()).hexdigest() != ORIGINAL_OBJECT_SHA256:
         raise ValueError("Authentic original FFT ComputeShader SHA mismatch")
-    return summarize_variant_tree(obj.read_typetree())
+    tree = obj.read_typetree()
+    report = summarize_variant_tree(tree)
+    report["authenticated_compiled_program_order"] = correlate_original_variant_bytecode(
+        tree, scan_blob(obj.get_raw_data())["valid_dxbc_containers"],
+        EXPECTED_FFT_WORKGROUP_X_BY_COMPILED_SLOT)
+    return report
 
 
 def main():

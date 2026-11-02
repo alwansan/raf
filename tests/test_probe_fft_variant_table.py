@@ -44,6 +44,26 @@ class FftVariantTableTests(unittest.TestCase):
         self.assertFalse(record["shader_byte_values_published"])
         self.assertNotIn(str(list(binary)), str(record))
 
+    def test_original_variant_order_requires_identical_bytecode_and_workgroup(self):
+        import hashlib
+        from scripts.probe_fft_variant_table import correlate_original_variant_bytecode
+        program = b"DXBC" + bytes(range(48))
+        raw = {"variants": [{"kernels": [{
+            "name": "FFT", "variantMap": [("", {
+                "programBytes": tuple(program), "threadGroup": [64, 1, 1]})],
+            "globalKeywords": [], "localKeywords": []}]}]}
+        scan = [{"binary_sha256": hashlib.sha256(program).hexdigest(),
+                 "bytes": len(program)}]
+        result = correlate_original_variant_bytecode(raw, scan, [64])
+        self.assertEqual(result["authentic_compiled_variants_verified_in_original_order"], 1)
+        self.assertFalse(result["unity_runtime_kernel_index_mapping_verified"])
+        self.assertNotIn(str(list(program)), str(result))
+        with self.assertRaisesRegex(ValueError, "validated SPIR-V"):
+            correlate_original_variant_bytecode(raw, scan, [128])
+        scan[0]["binary_sha256"] = "0" * 64
+        with self.assertRaisesRegex(ValueError, "differs from raw scan"):
+            correlate_original_variant_bytecode(raw, scan, [64])
+
     def test_changed_count_and_invalid_map_rejected(self):
         tree = {"variants": [{"kernels": [{"name": "X", "variantMap": [], "globalKeywords": [],
                                                   "localKeywords": []}]}]}
