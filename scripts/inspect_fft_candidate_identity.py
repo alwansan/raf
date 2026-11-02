@@ -36,7 +36,10 @@ def identity_summary(tree):
     name = tree.get("m_Name")
     if not isinstance(name, str) or len(name) > 256:
         name = ""
-    kernels = tree.get("kernels")
+    variants = tree.get("variants")
+    if not isinstance(variants, list) or len(variants) != 1 or not isinstance(variants[0], dict):
+        raise ValueError("Serialized compute shader variants absent or ambiguous")
+    kernels = variants[0].get("kernels")
     if not isinstance(kernels, list) or len(kernels) > 64:
         raise ValueError("Serialized kernel table absent or outside safe scope")
     name_hashes = []

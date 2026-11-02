@@ -17,8 +17,8 @@ class IdentityCandidateTests(unittest.TestCase):
             rank(rows)
 
     def test_redacts_identifiers_but_preserves_all_original_slots(self):
-        tree = {"m_Name": "OriginalFFTSecret", "kernels": [
-            {"name": "SecretKernel6"}, {"name": "SecretKernel2"}, {}]}
+        tree = {"m_Name": "OriginalFFTSecret", "variants": [{"kernels": [
+            {"name": "SecretKernel6"}, {"name": "SecretKernel2"}, {}]}]}
         report = identity_summary(tree)
         self.assertEqual(report["original_serialized_kernel_count"], 3)
         self.assertTrue(report["asset_name_contains_fft"])
@@ -33,7 +33,7 @@ class IdentityCandidateTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "absent"):
             identity_summary({"m_Name": "water"})
         with self.assertRaisesRegex(ValueError, "safe scope"):
-            identity_summary({"kernels": [{}] * 65})
+            identity_summary({"variants": [{"kernels": [{}] * 65}]})
 
 
 if __name__ == "__main__":
