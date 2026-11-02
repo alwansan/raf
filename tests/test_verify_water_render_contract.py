@@ -3,7 +3,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from scripts.verify_water_render_contract import inspect, REQUIRED_PASS_COUNT
+from scripts.verify_water_render_contract import inspect, native_ready, REQUIRED_PASS_COUNT
 
 
 def write_shader(assets, name, passes, program=True):
@@ -34,6 +34,9 @@ class WaterRenderGateTests(unittest.TestCase):
             self.assertTrue(result["water_compute_source_candidate_present"])
             self.assertFalse(result["authentic_water_kernel_identity_verified"])
             self.assertFalse(result["device_execution_verified"])
+            # A source-identical-looking test asset is not authenticated
+            # Raft water content. Reject it in the actual native gate.
+            self.assertFalse(native_ready(result))
             self.assertFalse(result["modified_source"])
 
     def test_single_pass_exports_fail_for_all_multi_pass_programs(self):
@@ -46,6 +49,7 @@ class WaterRenderGateTests(unittest.TestCase):
             self.assertFalse(result["all_logged_shader_pass_requirements_satisfied"])
             self.assertEqual(len(result["shader_contracts"]), len(REQUIRED_PASS_COUNT))
             self.assertFalse(result["water_compute_source_candidate_present"])
+            self.assertFalse(native_ready(result))
 
     def test_source_names_and_comments_cannot_fake_a_real_pass_or_program(self):
         with tempfile.TemporaryDirectory() as temp:
