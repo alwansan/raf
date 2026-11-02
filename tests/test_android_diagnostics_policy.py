@@ -99,3 +99,9 @@ class AndroidDiagnosticsPolicyTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+class PerformanceHudContract(unittest.TestCase):
+    def test_visible_hud_retains_metric_scope_and_unavailability(self):
+        text = (Path(__file__).resolve().parents[1] / "android-port/Runtime/Platform/AndroidTestDiagnostics.cs").read_text()
+        for marker in ("RAM system used/total:", "game PSS:", "CPU system:", "GPU: unavailable", "Texture2D.whiteTexture", "Color.black", "Color.white"):
+            self.assertIn(marker, text)

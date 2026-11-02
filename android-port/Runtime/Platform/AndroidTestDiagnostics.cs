@@ -102,6 +102,49 @@ namespace RaftAndroid.Platform
         }
 
 
+        private string hud = "FPS: collecting | RAM: collecting | CPU/GPU: unavailable";
+        private ulong previousCpuTotal, previousCpuIdle;
+        private string SystemCpu()
+        {
+            try
+            {
+                string[] values;
+                foreach (string line in System.IO.File.ReadLines("/proc/stat"))
+                {
+                    if (!line.StartsWith("cpu ", StringComparison.Ordinal)) continue;
+                    values = line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                    ulong total = 0;
+                    // guest fields are already included in user/nice.
+                    for (int i = 1; i < Math.Min(values.Length, 9); i++) total += ulong.Parse(values[i], CultureInfo.InvariantCulture);
+                    ulong idle = ulong.Parse(values[4]) + (values.Length > 5 ? ulong.Parse(values[5]) : 0);
+                    ulong elapsed = total >= previousCpuTotal ? total - previousCpuTotal : 0;
+                    ulong idleElapsed = idle >= previousCpuIdle ? idle - previousCpuIdle : 0;
+                    string result = previousCpuTotal > 0 && elapsed > 0 && idleElapsed <= elapsed
+                        ? Number(100.0 * (elapsed - idleElapsed) / elapsed) + "%" : "unavailable";
+                    previousCpuTotal = total; previousCpuIdle = idle;
+                    return result;
+                }
+            }
+            catch (Exception) { }
+            return "unavailable";
+        }
+        private static string MemoryHud()
+        {
+            try
+            {
+                using (var player = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+                using (var activity = player.GetStatic<AndroidJavaObject>("currentActivity"))
+                using (var manager = activity.Call<AndroidJavaObject>("getSystemService", "activity"))
+                using (var info = new AndroidJavaObject("android.app.ActivityManager$MemoryInfo"))
+                {
+                    manager.Call("getMemoryInfo", info);
+                    long total = info.Get<long>("totalMem"), available = info.Get<long>("availMem");
+                    return "RAM system used/total: " + Number((total - available) / 1048576.0) + "/" + Number(total / 1048576.0) +
+                        " MiB | available: " + Number(available / 1048576.0) + " MiB | game PSS: " + ProcessPss() + " | RSS: " + ProcessRss();
+                }
+            }
+            catch (Exception) { return "RAM: unavailable"; }
+        }
         private float nextSample;
         private bool skipNextFrame = true;
         private readonly float[] frameSamples = new float[2048];
@@ -156,6 +199,9 @@ namespace RaftAndroid.Platform
             Func<double, string> percentile = p => sampleCount == 0 ? "unavailable" :
                 Number(frameSamples[Math.Min(sampleCount - 1, (int)Math.Ceiling(sampleCount * p) - 1)]);
             uint available = FrameTimingManager.GetLatestTimings(1, timings);
+            hud = "FPS: " + (intervalSeconds > 0 ? Number(intervalFrames / intervalSeconds) : "unavailable") +
+                " | frame p95: " + percentile(0.95) + " ms | CPU system: " + SystemCpu() +
+                " | GPU: unavailable (no reliable counter)\n" + MemoryHud();
             string report = "interval_frames=" + intervalFrames + "; fps=" +
                 (intervalSeconds > 0 ? Number(intervalFrames / intervalSeconds) : "unavailable") +
                 "; frame_samples=" + sampleCount + "; sample_capacity=2048; frame_sample_overflow=" + Math.Max(0, intervalFrames - sampleCount) +
@@ -320,6 +366,7 @@ namespace RaftAndroid.Platform
             Rect safeGui = new Rect(safe.xMin / scale,
                 (Screen.height - safe.yMax) / scale,
                 safe.width / scale, safe.height / scale);
+            safeGui.yMin += 70f;
             float buttonWidth = Mathf.Min(145f, Mathf.Max(0f, safeGui.width - 16f));
             if (buttonWidth < 48f || safeGui.height < 60f) return;
 
@@ -327,6 +374,15 @@ namespace RaftAndroid.Platform
             try
             {
                 GUI.matrix = Matrix4x4.Scale(new Vector3(scale, scale, 1));
+                Color oldColor = GUI.color;
+                try
+                {
+                    GUI.color = Color.black;
+                    GUI.DrawTexture(new Rect(safeGui.xMin, safeGui.yMin - 70f, safeGui.width, 66f), Texture2D.whiteTexture);
+                    GUI.color = Color.white;
+                    GUI.Label(new Rect(safeGui.xMin + 8f, safeGui.yMin - 68f, safeGui.width - 16f, 64f), hud);
+                }
+                finally { GUI.color = oldColor; }
                 if (GUI.Button(new Rect(safeGui.xMin + 8f, safeGui.yMin + 8f,
                     buttonWidth, 44f), opened ? "Close test report" : "Test report"))
                     opened = !opened;

@@ -1,0 +1,26 @@
+# Active device feedback and engineering — 2026-11-02
+
+Owner has NOW supplied feedback; preparation-only waiting is superseded. Only feature/android-native-port writable; CL read-only. Do not modify main/zip/Unity-Editor/lograf/clog. Preserve all original data, GUIDs and .rgd. Full fidelity takes precedence over APK/OBB size; needed verified LFS permitted. Existing Unity/FMОD setup works.
+
+## Evidence actually examined
+Six new CL/img screenshots 20:04–20:09 viewed: normal initial menu proportions; settings stretches all UI horizontally; white scene materials with isolated coloured objects; rectangular monochrome effect sprites; world loading reaches INITIALIZING ASSETS then HAVING ISSUES CONNECTING / TRYING TO CONNECT TO HOST.
+Four supplied archives fully streamed line-by-line (all .log.txt members):
+- LogRaft-1793639905225.zip: 5,787,508 lines; 17,133 invalid kernel exceptions, 68,540 Foam invalid-pass lines, 6,914 NullReference headers.
+- LogRaft-1793640117875.zip: 1,347,725 lines; 4,042 invalid kernels.
+- LogRaft-1793642162566.zip: 1,388,852 lines; 4,142 invalid kernels, 1,919 NullReference headers.
+- LogRaft-1793642351692.zip: 2,028,071 lines; 5,941 invalid kernels, 2,482 NullReference headers.
+Counts are captured occurrences, not unique defects or causal FPS measurements. Session-info VersionCode1042/1051 belongs to LogRaft, NOT Raft. Haptic errors explicitly identify main.80.com.alwansan.raft.androidtest.obb, supporting APK80 association. Match installed package/source independently where possible.
+New decisive evidence: DirectoryNotFoundException on `/jar:file:/.../main.80...obb!/assets/Haptics/...wav`. OBB asset URLs are being treated as filesystem paths. FMOD EventNotFoundException and GetEventDescription stacks are present; don't confuse this with older RuntimeManager.Initialize failure. Need examine original runtime bank loader and haptics path reader. Packaging exact bytes alone does not establish runtime bank access from OBB.
+Water still has one-pass placeholders and zero-kernel compute. Complete texture streams do not restore shader semantics. Preserve actual errors rather than clamp pass/kernel to zero. New encrypted source inspection targets completed native job125286312079 with a fresh session-private RSA key; read packet only after actual Actions completion, verify manifest hashes. Private key lives outside repo in current scratch and may expire.
+
+## Owner's requested implementation and acceptance queue
+1. Fix Settings-only resolution/aspect changes at original resolution-setting callsite; preserve initial landscape aspect, not blanket every-frame Screen.SetResolution.
+2. Fix local world initialization/host state; preserve required local host/RPC/scene/player setup, bypass only remote Steam/Party waits. Never fake online authentication or merely hide loading error.
+3. Restore audio from complete original banks in APK/OBB, haptics readers, missing materials/effect shader/water contracts; audible/world acceptance still open.
+4. Always-visible top-left black/white performance HUD: FPS/frame time, system used/total/available RAM and own process PSS/RSS; CPU/GPU with explicit scope and unavailable when protected. First implementation adds cached 5-second HUD and /proc/stat system CPU; not device validated.
+5. Replace old incomplete touch UI with complete Xbox virtual Gamepad (A/B/X/Y, LB/RB/LT/RT, sticks+press, Dpad, Start/Select); direct toggle under HUD, editor button below; select/drag controls, selected size, GLOBAL opacity slider, persisted/reset layout. Existing implementation already uses OnScreenControl virtual Gamepad but remains incomplete and action pairing unproven; replacing labels alone does not fix that.
+6. Non-controller touch should synthesize right mouse only; short tap once, held after500ms, release on up/cancel/pause. Exclude controller/editor/UI hit regions, never leak touch as left-click or conflict with external devices. Need actual InputSystem1.7 routing tests before native integration.
+7. Preserve signed audited APK+OBB immediately before packaging so later package/publish failure can be recovered without Unity rerun. New checkpoint artifact retains exact audited files for2days; no source/project/private keys. Existing final complete-delivery gate remains mandatory.
+
+## Validation and coordination
+Local diagnostic9, distribution6 and package13 tests passed (one permission scenario skipped as root; actual CI required). No new Unity requested. HUD/new checkpoint need real cheap CI/original Android compile. Other requested functionality is PENDING, not claimed fixed. New source inspection is no-LFS/no-Unity encrypted diagnostic only. Refresh remote HEAD and lease before every write; automation must not overwrite ongoing session. Avoid unnecessary tiny touch patches while higher world/audio/render blockers remain.
