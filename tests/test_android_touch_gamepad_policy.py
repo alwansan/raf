@@ -12,6 +12,16 @@ WORKFLOW = (ROOT / ".github/workflows/raft-unity-editor-android-import.yml").rea
 
 
 class TouchGamepadContract(unittest.TestCase):
+    def test_path_restore_never_re_registers_an_active_control(self):
+        self.assertIn('if (widget.controlPath == path) return;', SOURCE)
+        self.assertIn('bool wasEnabled = widget.enabled;', SOURCE)
+        self.assertIn('if (wasEnabled) widget.enabled = false;', SOURCE)
+        self.assertIn('if (wasEnabled) widget.enabled = true;', SOURCE)
+        self.assertIn('ApplyControlPath(stick, IsAllowed(path, StickPaths)', SOURCE)
+        self.assertIn('ApplyControlPath(button, IsAllowed(path, ButtonPaths)', SOURCE)
+        creation=SOURCE.split('canvasObject = new GameObject',1)[1]
+        self.assertLess(creation.index('canvasObject.SetActive(false);'),creation.index('AddStick("Move"'))
+
     def test_android_only_and_opt_in(self):
         self.assertTrue(SOURCE.startswith("#if UNITY_ANDROID && !UNITY_EDITOR"))
         self.assertIn("public bool SetVisible(bool enabled)", SOURCE)

@@ -92,6 +92,8 @@ namespace RaftAndroid.Platform
             canvasObject = new GameObject("RaftAndroidOptionalTouchGamepad",
                 typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler),
                 typeof(GraphicRaycaster));
+            // Configure paths before OnEnable can register a virtual device.
+            canvasObject.SetActive(false);
             canvasObject.transform.SetParent(transform, false);
             var canvas = canvasObject.GetComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
@@ -186,18 +188,35 @@ namespace RaftAndroid.Platform
             return button != null ? button.controlPath : defaultPaths[label];
         }
 
+        private static void ApplyControlPath(OnScreenControl widget, string path)
+        {
+            // Input System 1.7 re-runs SetupInputControl on every active setter,
+            // even for the same path. Unregister first; never double-register.
+            if (widget.controlPath == path) return;
+            bool wasEnabled = widget.enabled;
+            if (wasEnabled) widget.enabled = false;
+            try
+            {
+                widget.controlPath = path;
+            }
+            finally
+            {
+                if (wasEnabled) widget.enabled = true;
+            }
+        }
+
         private void ApplyBinding(string label, string path)
         {
             var rect = surfaces[label];
             var stick = rect.GetComponent<OnScreenStick>();
             if (stick != null)
             {
-                stick.controlPath = IsAllowed(path, StickPaths) ? path : defaultPaths[label];
+                ApplyControlPath(stick, IsAllowed(path, StickPaths) ? path : defaultPaths[label]);
                 return;
             }
             var button = rect.GetComponent<OnScreenButton>();
             if (button != null)
-                button.controlPath = IsAllowed(path, ButtonPaths) ? path : defaultPaths[label];
+                ApplyControlPath(button, IsAllowed(path, ButtonPaths) ? path : defaultPaths[label]);
         }
 
         private void RestoreBinding(string label)
