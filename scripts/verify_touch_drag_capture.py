@@ -43,7 +43,7 @@ public class AndroidTouchGamepadOverlay
     public bool Editing { get; set; }
     public int Selections, Drags, Saves;
     public void Select(string label) { Selections++; }
-    public void Drag(string label, PointerEventData pointer) { Drags++; }
+    public bool Drag(string label, PointerEventData pointer) { Drags++; return true; }
     public void SavePosition(string label) { Saves++; }
 }
 __ACTUAL_HANDLE__
@@ -127,6 +127,16 @@ class Program
         handle.OnPointerUp(second);
         Check(overlay.Drags==5 && overlay.Saves==5,
             "Fresh pointer can drag and save after reset");
+        // Selecting a control without dragging must preserve the original
+        // anchor+offset; SavePosition would otherwise erase its offset on reload.
+        handle.OnPointerDown(first);
+        handle.OnPointerUp(first);
+        Check(overlay.Saves==5,"Selection-only tap must not persist an anchor");
+        handle.OnPointerDown(second);
+        handle.OnDrag(second);
+        handle.OnPointerUp(second);
+        Check(overlay.Drags==6 && overlay.Saves==6,
+            "Actual drag following a tap must still save once");
         Console.WriteLine("RAFT_TOUCH_DRAG_CAPTURE checks="+checks+
             " conflictingTouchesIgnored=true duplicateSaves=0 actualUnityDeviceVerified=false");
     }

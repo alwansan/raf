@@ -404,14 +404,14 @@ namespace RaftAndroid.Platform
             if (editing && surfaces.ContainsKey(label)) selected = label;
         }
 
-        internal void Drag(string label, PointerEventData pointer)
+        internal bool Drag(string label, PointerEventData pointer)
         {
-            if (!editing || safeRoot == null || !surfaces.ContainsKey(label)) return;
+            if (!editing || safeRoot == null || !surfaces.ContainsKey(label)) return false;
             Vector2 local;
             if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                safeRoot, pointer.position, pointer.pressEventCamera, out local)) return;
+                safeRoot, pointer.position, pointer.pressEventCamera, out local)) return false;
             Rect area = safeRoot.rect;
-            if (area.width <= 0 || area.height <= 0) return;
+            if (area.width <= 0 || area.height <= 0) return false;
             var rect = surfaces[label];
             float marginX = Mathf.Min(0.5f, rect.rect.width / (2f * area.width));
             float marginY = Mathf.Min(0.5f, rect.rect.height / (2f * area.height));
@@ -420,6 +420,7 @@ namespace RaftAndroid.Platform
             rect.anchorMin = rect.anchorMax = new Vector2(x, y);
             rect.anchoredPosition = Vector2.zero;
             selected = label;
+            return true;
         }
 
         internal void SavePosition(string label)
@@ -547,6 +548,7 @@ namespace RaftAndroid.Platform
         private AndroidTouchGamepadOverlay overlay;
         private string label;
         private int activePointerId = NoPointer;
+        private bool dragged;
 
         public void Bind(AndroidTouchGamepadOverlay owner, string control)
         {
@@ -560,13 +562,14 @@ namespace RaftAndroid.Platform
             // hijack a drag or overwrite the first finger's saved position.
             if (overlay == null || !overlay.Editing || activePointerId != NoPointer) return;
             activePointerId = pointer.pointerId;
+            dragged = false;
             overlay.Select(label);
         }
 
         public void OnDrag(PointerEventData pointer)
         {
             if (overlay != null && overlay.Editing && activePointerId == pointer.pointerId)
-                overlay.Drag(label, pointer);
+                dragged |= overlay.Drag(label, pointer);
         }
 
         private void FinishPointer(PointerEventData pointer)
@@ -574,11 +577,14 @@ namespace RaftAndroid.Platform
             if (activePointerId != pointer.pointerId) return;
             try
             {
-                if (overlay != null && overlay.Editing) overlay.SavePosition(label);
+                // A tap selects a handle without moving it. Persisting its
+                // default anchor without the original offset would move it
+                // on the next RestoreLayout, so save only successful drags.
+                if (dragged && overlay != null && overlay.Editing) overlay.SavePosition(label);
             }
             finally
             {
-                activePointerId = NoPointer;
+                CancelCapture();
             }
         }
 
@@ -597,6 +603,7 @@ namespace RaftAndroid.Platform
         internal void CancelCapture()
         {
             activePointerId = NoPointer;
+            dragged = false;
         }
 
         private void OnDisable()

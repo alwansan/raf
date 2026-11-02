@@ -140,6 +140,15 @@ class TouchGamepadContract(unittest.TestCase):
         self.assertLess(reset.index("handle.CancelCapture();"),
                         reset.index("RestoreLayout();"))
 
+    def test_selection_only_tap_does_not_destroy_default_anchor_offset(self):
+        self.assertIn("internal bool Drag(string label, PointerEventData pointer)", SOURCE)
+        self.assertIn("dragged |= overlay.Drag(label, pointer);", SOURCE)
+        self.assertIn("if (dragged && overlay != null && overlay.Editing)", SOURCE)
+        self.assertIn("dragged = false;", SOURCE)
+        self.assertIn("return true;", SOURCE.split(
+            "internal bool Drag(string label, PointerEventData pointer)", 1)[1].split(
+            "internal void SavePosition", 1)[0])
+
     def test_edit_drag_pointer_capture_and_release_contract(self):
         self.assertIn("IEndDragHandler, IPointerUpHandler", SOURCE)
         self.assertIn("activePointerId != NoPointer", SOURCE)
