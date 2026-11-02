@@ -1,7 +1,7 @@
 """Synthetic SPIR-V reflection contract; never uses original game shader bytes."""
 import struct
 import unittest
-from scripts.probe_authentic_fft_dxbc_translation import spirv_resource_bindings, compare_roundtrip_contracts
+from scripts.probe_authentic_fft_dxbc_translation import spirv_resource_bindings, compare_roundtrip_contracts, sanitize_spirv_cross_reflection
 
 def make_spv(instructions):
     words = [0x07230203, 0x00010000, 0, 16, 0]
@@ -48,6 +48,32 @@ class FftSpirvBindingTests(unittest.TestCase):
         equal = compare_roundtrip_contracts(original, bindings, original, bindings)
         self.assertTrue(equal["compute_workgroup_shape_preserved"])
         self.assertFalse(equal["original_numeric_results_equal"])
+
+
+    def test_private_spirv_cross_resource_kind_sanitization(self):
+        reflection = {
+            "ubos": [{"name": "secretGlobal", "set": 0, "binding": 3}],
+            "images": [{"name": "originalWaterTex", "set": 0, "binding": 2}],
+            "ssbos": [{"name": "hiddenFFTBuffer", "set": 1, "binding": 0}],
+            "types": {"_14": {"name": "PrivateShaderData"}},
+        }
+        output = sanitize_spirv_cross_reflection(reflection)
+        self.assertEqual(output["original_resource_kind_counts"],
+                         {"ubos": 1, "ssbos": 1, "images": 1})
+        self.assertEqual(output["original_resource_kind_descriptor_pairs"]["images"],
+                         [[0, 2]])
+        self.assertEqual(output["resource_records_total"], 3)
+        for name in ("secretGlobal", "originalWaterTex",
+                     "hiddenFFTBuffer", "PrivateShaderData"):
+            self.assertNotIn(name, str(output))
+        self.assertFalse(output["private_names_or_type_contents_disclosed"])
+
+    def test_reflection_fails_on_invalid_numeric_bindings(self):
+        with self.assertRaisesRegex(ValueError, "descriptor binding"):
+            sanitize_spirv_cross_reflection({"images": [{"binding": True}]})
+        with self.assertRaisesRegex(ValueError, "resource class"):
+            sanitize_spirv_cross_reflection({"images": [{}] * 129})
+
 
 
 if __name__ == "__main__":
