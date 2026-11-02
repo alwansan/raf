@@ -57,6 +57,10 @@ jobs:
           git -C "$RUNNER_TEMP/dxbc-spirv-upstream" fetch -q --depth 1 origin "$PINNED_UPSTREAM"
           git -C "$RUNNER_TEMP/dxbc-spirv-upstream" checkout -q --detach FETCH_HEAD
           test "$(git -C "$RUNNER_TEMP/dxbc-spirv-upstream" rev-parse HEAD)" = "$PINNED_UPSTREAM"
+          # SPIR-V C++ headers are an upstream commit-pinned git submodule,
+          # not a generated or fabricated ShaderLab / game dependency.
+          git -C "$RUNNER_TEMP/dxbc-spirv-upstream" submodule update --init --recursive --depth 1
+          test -f "$RUNNER_TEMP/dxbc-spirv-upstream/submodules/spirv_headers/include/spirv/unified1/spirv.hpp"
           meson setup "$RUNNER_TEMP/dxbc-spirv-build" "$RUNNER_TEMP/dxbc-spirv-upstream" \
             --buildtype=debugoptimized -Denable_tools=true -Denable_tests=false
           timeout 480s meson compile -C "$RUNNER_TEMP/dxbc-spirv-build" -j 2
