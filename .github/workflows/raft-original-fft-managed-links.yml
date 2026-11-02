@@ -1,0 +1,54 @@
+name: Raft original managed FFT caller source contracts - no Unity or LFS
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-original-fft-managed-links.yml'
+      - 'scripts/probe_fft_managed_asset_links.py'
+      - 'tests/test_probe_fft_managed_asset_links.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: raft-original-fft-managed-links-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  original-fft-managed-link-check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+            Raft/Raft_Data/Managed
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Run managed FFT analysis on synthetic source contracts
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_probe_fft_managed_asset_links.py -v
+      - name: Recover private exact CSharp9 original callers
+        shell: bash
+        run: |
+          set -euo pipefail
+          dotnet tool install ilspycmd --version 11.2.0.10050 --tool-path "$RUNNER_TEMP/ilspy"
+          mkdir -p "$RUNNER_TEMP/private-fft-original"
+          timeout 300s "$RUNNER_TEMP/ilspy/ilspycmd" -p -lv CSharp9_0 -o "$RUNNER_TEMP/private-fft-original" \
+            Raft/Raft_Data/Managed/Assembly-CSharp.dll \
+            > "$RUNNER_TEMP/ilspy-private.log" 2>&1
+      - name: Compare original source caller use to authenticated serialized FFT name hash
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.probe_fft_managed_asset_links --source "$RUNNER_TEMP/private-fft-original"
+          # Do not publish original decompiled code or ILSpy logs.
+          # CI is CPU-only source-level evidence; no Unity/game build.
