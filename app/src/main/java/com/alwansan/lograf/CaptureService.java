@@ -233,6 +233,42 @@ public final class CaptureService extends Service {
         });
     }
 
+    private void writeSessionSummary(String stopReason) {
+        // Do not rescan gigabytes of raw logs. This small final summary only
+        // contains counters from the last sample; raw segments remain untouched.
+        if(sessionFolder==null) return;
+        try {
+            org.json.JSONObject report=new org.json.JSONObject();
+            report.put("schema",1);
+            report.put("session",session);
+            report.put("target_package",Config.PACKAGE);
+            report.put("end_unix_ms",System.currentTimeMillis());
+            report.put("stop_reason",stopReason);
+            report.put("total_recorded_bytes",totalBytes);
+            report.put("raw_log_segments",part);
+            report.put("metric_segments",metricsPart);
+            report.put("raw_log_policy","preserve all segments; never delete");
+            report.put("game_process_exit_cause","unknown unless explicitly supported by exit evidence");
+            String raw=Config.prefs(this).getString("metrics_last","");
+            if(!raw.trim().isEmpty()) {
+                try{report.put("last_sample",new org.json.JSONObject(raw.trim()));}
+                catch(org.json.JSONException e){report.put("last_sample_error","invalid JSON");}
+            }
+            Uri file=DocumentsContract.createDocument(getContentResolver(),sessionFolder,
+                    "application/json","session-summary.json");
+            if(file==null)return;
+            try(OutputStream stream=getContentResolver().openOutputStream(file,"w")) {
+                if(stream==null)return;
+                stream.write(report.toString(2).getBytes(StandardCharsets.UTF_8));
+                stream.flush();
+            }
+            fileUris.add(file.toString());
+            Config.prefs(this).edit().putString("files",new JSONArray(fileUris).toString()).apply();
+        }catch(Exception ignored){
+            // An optional summary must never conceal the actual stop reason.
+        }
+    }
+
     private void halt(String status) {
         // Drain the remote reader's last batch BEFORE disabling our Binder sink.
         stopping=true;
@@ -247,6 +283,7 @@ public final class CaptureService extends Service {
             if(output!=null) { try { output.flush(); output.close(); } catch(Exception ignored){} output=null; }
             if(metricsOutput!=null) { try { metricsOutput.flush(); metricsOutput.close(); } catch(Exception ignored){} metricsOutput=null; }
         }
+        writeSessionSummary(status);
         saveStatus(status+" • "+(totalBytes/1024)+" KiB saved");
         stopForeground(STOP_FOREGROUND_REMOVE);
     }
