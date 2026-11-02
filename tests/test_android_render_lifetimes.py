@@ -38,3 +38,38 @@ class AndroidResolutionPolicyTests(unittest.TestCase):
         end = changed.index('#endif', start) + len('#endif\n')
         self.assertEqual(changed[:start] + changed[end:], original)
         self.assertLess(changed.index('return;'), changed.index('ApplyDesktopDisplayMode();'))
+
+
+class WorldSceneAudioIsolationTests(unittest.TestCase):
+    def test_only_missing_fmod_scene_event_is_isolated_on_android(self):
+        import hashlib
+        from unittest.mock import patch
+        original = ('class SoundManager {\n'
+                    '    private void OnSceneEvent(int sceneEvent)\n'
+                    '    {\n'
+                    '        FMODUnity.StudioEventEmitter sound = emitter;\n'
+                    '        sound.Play();\n'
+                    '        UpdateSceneAudioState();\n'
+                    '    }\n'
+                    '}\n')
+        with patch.dict('scripts.adapt_android_render_lifetimes.PINS',
+                        {'SoundManager': (hashlib.sha256(original.encode()).hexdigest(), 0)}):
+            result = adapt('SoundManager', original)
+        self.assertIn('catch (FMODUnity.EventNotFoundException __raftMissingSceneSound)', result)
+        self.assertIn('"scene_event_missing_fmod_event"', result)
+        self.assertNotIn('catch (System.Exception', result)
+        self.assertEqual(result.count('sound.Play();'), 1)
+        self.assertEqual(result.count('UpdateSceneAudioState();'), 1)
+        original_body = original[original.index('sound.Play();'):original.index('    }\n')]
+        self.assertIn(original_body, result)
+
+    def test_unexpected_original_callback_shape_is_rejected(self):
+        import hashlib
+        from unittest.mock import patch
+        original = ('class SoundManager {\n'
+                    '    private void OnSceneEvent(int code) { MissingEmitter(); }\n'
+                    '}\n')
+        with patch.dict('scripts.adapt_android_render_lifetimes.PINS',
+                        {'SoundManager': (hashlib.sha256(original.encode()).hexdigest(), 0)}):
+            with self.assertRaisesRegex(ValueError, 'original FMOD scene callback contract changed|Original FMOD scene callback contract changed'):
+                adapt('SoundManager', original)
