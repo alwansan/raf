@@ -59,6 +59,20 @@ class TouchGamepadContract(unittest.TestCase):
         self.assertIn("opened = false; // Drag controls with report panel closed.", DIAGNOSTICS)
         self.assertIn("touchGamepad.SetLayoutEditMode(startEdit)", DIAGNOSTICS)
 
+    def test_virtual_control_audit_reads_original_enabled_actions_without_rebinding(self):
+        # The API exists in Input System 1.7.0. A source contract is NOT a
+        # Unity compile or evidence of gameplay responding to touch.
+        self.assertIn("InputSystem.ListEnabledActions(enabledActionAudit);", SOURCE)
+        self.assertIn("widget.control", SOURCE)
+        self.assertIn("bound != virtualControl", SOURCE)
+        self.assertIn("enabledActionMatches=", SOURCE)
+        self.assertIn("controlsWithEnabledAction=", SOURCE)
+        self.assertIn("gameplayResponseVerified=false", SOURCE)
+        self.assertIn("if (!enable) AuditVirtualBindings();", SOURCE)
+        self.assertIn("SceneManager.GetActiveScene().handle != lastAuditedSceneHandle", SOURCE)
+        self.assertNotIn("InputSystem.DisableAllEnabledActions", SOURCE)
+        self.assertNotIn("SwitchCurrentControlScheme", SOURCE)
+
     def test_gamepad_paths_and_notch_safe_area(self):
         for path in ("<Gamepad>/leftStick", "<Gamepad>/rightStick",
                      "<Gamepad>/buttonSouth", "<Gamepad>/buttonNorth",
