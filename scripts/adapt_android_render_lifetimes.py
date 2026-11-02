@@ -74,10 +74,10 @@ using RaftAndroidLegacyInput = UnityEngine.Input;
         # spoof event success, or change original local host state.
         # Use the same exact declaration grammar as the read-only probe.
         declaration = re.compile(
-            r"(?m)^\\s*(?:public|private|protected|internal)\\s+"
-            r"(?:(?:static|virtual|override|sealed|new|async)\\s+)*"
-            r"(?P<return>[\\w<>\\[\\],.?]+)\\s+OnSceneEvent"
-            r"\\s*\\([^;{}]*\\)\\s*\\{"
+            r"(?m)^\s*(?:public|private|protected|internal)\s+"
+            r"(?:(?:static|virtual|override|sealed|new|async)\s+)*"
+            r"(?P<return>[\w<>\[\],.?]+)\s+OnSceneEvent"
+            r"\s*\([^;{}]*\)\s*\{"
         )
         declarations = list(declaration.finditer(normalized))
         if len(declarations) != 1:
