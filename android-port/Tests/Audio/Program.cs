@@ -28,11 +28,21 @@ class Program
             }
             string prefix = "jar:" + new Uri(archive).AbsoluteUri + "!/";
             foreach (var mode in new[] { CompressionLevel.NoCompression, CompressionLevel.Optimal })
-                Require(Convert.ToBase64String(AndroidStreamingAssets.ReadAllBytes(prefix + "assets/Haptics/" + mode + ".wav")) == Convert.ToBase64String(bytes));
+            {
+                string original = prefix + "assets/Haptics/" + mode + ".wav";
+                Require(Convert.ToBase64String(AndroidStreamingAssets.ReadAllBytes(original)) == Convert.ToBase64String(bytes));
+                // Actual device logs contain "/jar:file:/...obb!/assets/..." due
+                // to original runtime path normalization, not only "jar:file:".
+                Require(AndroidStreamingAssets.ReadAllBytes("/" + original).SequenceEqual(bytes));
+            }
             foreach (string bad in new[] { "assets/missing.wav", "assets/../escape", "assets/%2e%2e/escape" })
             {
                 bool refused = false;
                 try { AndroidStreamingAssets.ReadAllBytes(prefix + bad); }
+                catch (InvalidDataException) { refused = true; }
+                Require(refused);
+                refused = false;
+                try { AndroidStreamingAssets.ReadAllBytes("/" + prefix + bad); }
                 catch (InvalidDataException) { refused = true; }
                 Require(refused);
             }
