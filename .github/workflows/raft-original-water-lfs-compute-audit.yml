@@ -13,6 +13,8 @@ on:
       - 'tests/test_inspect_fft_candidate_identity.py'
       - 'scripts/probe_original_fft_serialized_refs.py'
       - 'tests/test_probe_original_fft_serialized_refs.py'
+      - 'scripts/probe_authentic_fft_dxbc_translation.py'
+      - 'tests/test_probe_authentic_fft_dxbc_translation.py'
   workflow_dispatch:
 
 permissions:
@@ -43,6 +45,7 @@ jobs:
           python3 -m unittest discover -s tests -p 'test_probe_authenticated_water_compute_inventory.py' -v
           python3 -m unittest discover -s tests -p 'test_inspect_fft_candidate_identity.py' -v
           python3 -m unittest discover -s tests -p 'test_probe_original_fft_serialized_refs.py' -v
+          python3 -m unittest discover -s tests -p 'test_probe_authentic_fft_dxbc_translation.py' -v
           python3 -m unittest discover -s tests -p 'test_probe_original_compute_containers.py' -v
           python3 -m unittest discover -s tests -p 'test_audit_original_compute_metadata.py' -v
       - name: Verify original committed LFS pointers before download
@@ -73,3 +76,17 @@ jobs:
           timeout 240s python3 -m scripts.probe_original_fft_serialized_refs --source Raft/Raft_Data
           # No original shader bytes or translated binaries uploaded.
           # No Unity Editor, Android build or device execution.
+      - name: Install CPU-only DXBC and SPIR-V validators
+        shell: bash
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools
+      - name: Translate original 20 FFT-name DXBC programs privately and check Vulkan 1.1
+        run: |
+          set -euo pipefail
+          timeout 240s python3 -m scripts.probe_authentic_fft_dxbc_translation --source Raft/Raft_Data
+          # No Unity, Android build, APK, Release or GPU execution.
+          # Shader binaries stay only in a bounded temporary directory.
