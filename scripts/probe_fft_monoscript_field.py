@@ -19,7 +19,7 @@ COMPUTE_FIELD = re.compile(
 MAX_SOURCE = 800_000
 
 USAGE = re.compile(r"\b(?:UnityEngine\.)?ComputeShader\b")
-IDENT_AFTER_TYPE = re.compile(r"\s+([A-Za-z_]\w*)\s*([;=({,])")
+IDENT_AFTER_TYPE = re.compile(r"\s+([A-Za-z_]\w*)\s*([;=({,)])")
 MEMBER_ACCESS = re.compile(r"^(?:\s*(?:\[[^\]]+\]\s*)*)(?:(?:public|private|protected|internal|static|readonly|new|volatile)\s+)+")
 
 
@@ -49,6 +49,8 @@ def classify_compute_shader_occurrences(raw):
                 category = "property_candidate"
             elif end == "(":
                 category = "method_declaration_or_call"
+            elif end == ")":
+                category = "typed_parameter_candidate"
             else:
                 category = "type_use_without_confirmed_field"
         elif suffix.lstrip().startswith("<"):
