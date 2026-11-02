@@ -48,7 +48,16 @@ public final class CaptureService extends Service {
                         byte[] data=content.getBytes(StandardCharsets.UTF_8);
                         if(metricsOutput==null || metricsSegmentBytes+data.length>METRICS_SEGMENT_BYTES)openMetricSegment();
                         metricsOutput.write(data); metricsOutput.flush();
-                        Config.prefs(CaptureService.this).edit().putString("metrics_last",content).apply();
+                        android.content.SharedPreferences.Editor editor=Config.prefs(CaptureService.this).edit()
+                                .putString("metrics_last",content);
+                        if(content.contains("\"exit_history_status\"")) {
+                            editor.putString("last_exit_history_sample",content);
+                            try {
+                                editor.putString("exit_history_status",
+                                        new org.json.JSONObject(content.trim()).optString("exit_history_status",""));
+                            } catch(org.json.JSONException ignored){}
+                        }
+                        editor.apply();
                         metricsSegmentBytes+=data.length; totalBytes+=data.length;
                     } else {
                         byte[] bytes = ("[" + source + "]\n" + content).getBytes(StandardCharsets.UTF_8);
@@ -142,7 +151,7 @@ public final class CaptureService extends Service {
             if(sessionFolder==null) throw new IOException("Folder creation failed");
             active=true; stopping=false; failed=false; totalBytes=0; metricsSegmentBytes=0; part=0; metricsPart=0;
             fileUris.clear();
-            Config.prefs(this).edit().remove("metrics_last").apply();
+            Config.prefs(this).edit().remove("metrics_last").remove("last_exit_history_sample").remove("exit_history_status").apply();
             String metadata="LogRaft "+BuildConfig.VERSION_NAME+"\nTarget="+Config.PACKAGE+
                     "\nRecoveryRestart="+recovering+
                     "\nStart="+new Date()+"\nBuild="+Build.MANUFACTURER+" "+Build.MODEL+
@@ -253,6 +262,11 @@ public final class CaptureService extends Service {
             if(!raw.trim().isEmpty()) {
                 try{report.put("last_sample",new org.json.JSONObject(raw.trim()));}
                 catch(org.json.JSONException e){report.put("last_sample_error","invalid JSON");}
+            }
+            String exit=Config.prefs(this).getString("last_exit_history_sample","");
+            if(!exit.trim().isEmpty()) {
+                try{report.put("last_game_exit_evidence",new org.json.JSONObject(exit.trim()));}
+                catch(org.json.JSONException e){report.put("exit_evidence_error","invalid JSON");}
             }
             Uri file=DocumentsContract.createDocument(getContentResolver(),sessionFolder,
                     "application/json","session-summary.json");
