@@ -38,6 +38,8 @@ on:
       - 'scripts/restore_tmp_shaders.py'
       - 'scripts/restore_postfx_shaders.py'
       - 'scripts/restore_postfx_compute.py'
+      - 'scripts/verify_water_render_contract.py'
+      - 'tests/test_verify_water_render_contract.py'
       - 'scripts/ci_memory_watch.py'
       - 'scripts/audit_gradle_asset_payload.py'
       - 'tests/test_gradle_payload_audit.py'
@@ -87,6 +89,7 @@ jobs:
           python3 -m unittest discover -s tests -p test_android_expansion_audit.py -v
           python3 -m unittest discover -s tests -p test_restore_postfx_shaders.py -v
           python3 -m unittest discover -s tests -p test_restore_postfx_compute.py -v
+          python3 -m unittest discover -s tests -p test_verify_water_render_contract.py -v
           python3 -m unittest discover -s tests -p test_restore_tmp_shaders.py -v
           python3 -m unittest discover -s tests -p test_runtime_operation_traces.py -v
           python3 -m unittest discover -s tests -p test_android_offline_startup.py -v
