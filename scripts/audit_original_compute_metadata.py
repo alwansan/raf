@@ -27,6 +27,7 @@ def summarize_tree(tree):
     seen = 0
     nodes = Counter()
     list_lengths = Counter()
+    platform_codes = Counter()
     paths = set()
     stack = [(tree, "", 0)]
     while stack:
@@ -48,6 +49,11 @@ def summarize_tree(tree):
                     paths.add(next_trail)
                     if isinstance(child, list):
                         list_lengths[key] += len(child)
+                        if key.lower() in ("m_platforms", "platforms") and all(
+                                type(item) is int and 0 <= item <= 4096 for item in child):
+                            # Do not interpret unknown Unity backend enums as
+                            # Android compatibility without independent proof.
+                            platform_codes.update(child)
                 if isinstance(child, (dict, list)):
                     if depth >= MAX_DEPTH:
                         raise ValueError("Compute metadata exceeds safe nesting depth")
@@ -64,6 +70,8 @@ def summarize_tree(tree):
     return {
         "metadata_fields": dict(sorted(nodes.items())),
         "metadata_array_totals": dict(sorted(list_lengths.items())),
+        "original_platform_numeric_codes": dict(sorted(platform_codes.items())),
+        "platform_code_meanings_verified": False,
         "metadata_field_paths": sorted(paths)[:MAX_SCALARS],
         "field_paths_truncated": len(paths) > MAX_SCALARS,
         "node_count": seen,
