@@ -12,6 +12,12 @@ namespace RaftAndroid.Platform
         public static byte[] ReadAllBytes(string path)
         {
             if (path == null) throw new ArgumentNullException(nameof(path));
+            // Some original Unity Path.Combine/GetFullPath call sites hand back
+            // "/jar:file:/...obb!/assets/..." instead of "jar:file:/...".
+            // This is still an Android ZIP URI, not a real absolute directory.
+            // Recognize ONLY this exact leading-slash form; keep every archive
+            // and entry validation below instead of silently treating it as a file.
+            if (path.StartsWith("/jar:file:", StringComparison.Ordinal)) path = path.Substring(1);
             if (!path.StartsWith("jar:file:", StringComparison.Ordinal)) return File.ReadAllBytes(path);
             int separator = path.IndexOf("!/", StringComparison.Ordinal);
             if (separator < 0) throw new InvalidDataException("Malformed Android asset URL");
