@@ -27,6 +27,44 @@ class Program
                 }
             }
             string prefix = "jar:" + new Uri(archive).AbsoluteUri + "!/";
+            // Unity 2021 may report its APK path even when Android installed
+            // the authentic original banks in main.<version>.<package>.obb.
+            // The locator MUST select the actual app-owned expansion and never
+            // skip FMOD initialization because streamingAssetsPath says APK.
+            string package = "com.alwansan.raft.androidtest";
+            string apkRoot = "jar:file:///data/app/base.apk!/assets";
+            string ownObb = Path.Combine(root, "app-obb");
+            Directory.CreateDirectory(ownObb);
+            string obbCandidate = Path.Combine(ownObb, "main.80." + package + ".obb");
+            File.Copy(archive, obbCandidate);
+            string resolved = AndroidFmodBankLocator.SelectRoot(apkRoot, ownObb, package);
+            Require(resolved == "jar:" + new Uri(obbCandidate).AbsoluteUri + "!/assets");
+            Require(AndroidStreamingAssets.ReadAllBytes(
+                resolved + "/Haptics/" + CompressionLevel.NoCompression + ".wav").SequenceEqual(bytes));
+            // Existing Unity OBB location is authoritative even when a directory
+            // also happens to contain a different version.
+            Require(AndroidFmodBankLocator.SelectRoot(
+                resolved, ownObb, package) == resolved);
+            // APK-only builds still use APK StreamingAssets, not a silent return.
+            Require(AndroidFmodBankLocator.SelectRoot(apkRoot, null, package) == apkRoot);
+            Require(AndroidFmodBankLocator.SelectRoot(apkRoot,
+                Path.Combine(root, "no-such-directory"), package) == apkRoot);
+            File.WriteAllBytes(Path.Combine(ownObb, "main.foo." + package + ".obb"), bytes);
+            File.WriteAllBytes(Path.Combine(ownObb, "main.7.com.another.game.obb"), bytes);
+            Require(AndroidFmodBankLocator.SelectRoot(apkRoot, ownObb, package) == resolved);
+            File.WriteAllBytes(Path.Combine(ownObb, "main.81." + package + ".obb"), bytes);
+            bool ambiguous = false;
+            try { AndroidFmodBankLocator.SelectRoot(apkRoot, ownObb, package); }
+            catch (InvalidDataException) { ambiguous = true; }
+            Require(ambiguous);
+            bool invalid = false;
+            try { AndroidFmodBankLocator.SelectRoot("/raw/storage", null, package); }
+            catch (InvalidDataException) { invalid = true; }
+            Require(invalid);
+            bool invalidPackage = false;
+            try { AndroidFmodBankLocator.SelectRoot(apkRoot, ownObb, "../unsafe"); }
+            catch (ArgumentException) { invalidPackage = true; }
+            Require(invalidPackage);
             foreach (var mode in new[] { CompressionLevel.NoCompression, CompressionLevel.Optimal })
             {
                 string original = prefix + "assets/Haptics/" + mode + ".wav";
