@@ -62,7 +62,7 @@ def inspect_spirv(data):
     if len(data) < 20 or len(data) % 4 or data[:4] != struct.pack("<I", SPIRV_MAGIC):
         raise ValueError("Not a complete little-endian SPIR-V module")
     magic, version, generator, bound, schema = struct.unpack_from("<5I", data)
-    if version & 0xffff00ff or (version >> 16) != 1 or (version >> 8) & 0xff > 6:
+    if (version >> 16) != 1 or (version & 0xff) != 0 or ((version >> 8) & 0xff) > 6:
         raise ValueError("Unexpected SPIR-V version")
     if schema != 0 or bound == 0:
         raise ValueError("Malformed SPIR-V header")
