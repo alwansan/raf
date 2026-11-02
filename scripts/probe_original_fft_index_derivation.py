@@ -115,6 +115,37 @@ def index_source_links(original, expected):
             if (formula["first_assignment_matches_constructor_int_parameter"]
                     and formula["bank_stride_guard_matches_fourth_bool_parameter"]):
                 formula["proven_formula_shape"] = "(n-5)<<1, then conditional +10"
+    # Trace the formula seed separately: it is NOT assumed to be the int
+    # constructor parameter. Only SHA hashes and masked operator shapes leave CI.
+    seed = {"first_formula_seed_identified": False,
+            "first_formula_seed_identifier_sha256": None,
+            "seed_assignment_count": 0,
+            "seed_assignments": [],
+            "seed_alias_of_constructor_int_proven": False}
+    initial_formula = re.search(
+        r"\b" + re.escape(base) +
+        r"\s*=\s*([A-Za-z_]\w*)\s*-\s*5\s*<<\s*1\s*;", original)
+    if initial_formula:
+        variable = initial_formula.group(1)
+        seed["first_formula_seed_identified"] = True
+        seed["first_formula_seed_identifier_sha256"] = sha(variable)
+        pattern = re.compile(r"\b(?:int\s+|var\s+)?(?:this\s*\.\s*)?" +
+                             re.escape(variable) + r"\s*=\s*([^;]{1,600})\s*;")
+        lineage = []
+        for m in pattern.finditer(original):
+            if len(lineage) >= 20:
+                raise ValueError("Too many original FFT index seed assignments")
+            lineage.append({
+                "source_line": original.count("\n", 0, m.start())+1,
+                "rhs": classify_index_rhs(m.group(1)),
+            })
+        seed["seed_assignments"] = lineage
+        seed["seed_assignment_count"] = len(lineage)
+        if len(constructors) == 1 and len(constructors[0]["params"]) == 4:
+            ctor_int = re.fullmatch(
+                r"\s*int\s+([A-Za-z_]\w*)\s*", constructors[0]["params"][1])
+            if ctor_int:
+                seed["seed_alias_of_constructor_int_proven"] = variable == ctor_int.group(1)
     param_declaration = bool(re.search(r"\bint\s+" + re.escape(base) + r"\s*[,)]", original))
     # Detect references without reporting proprietary field identifiers.
     occurrences = len(re.findall(r"\b" + re.escape(base) + r"\b", original))
@@ -126,6 +157,7 @@ def index_source_links(original, expected):
         "index_assignment_count": len(assignments),
         "index_assignments": assignments,
         "source_proven_original_constructor_kernel_bank_formula": formula,
+        "source_proven_original_kernel_index_formula_seed_lineage": seed,
         "first_and_second_pass_index_runtime_values_verified": False,
         "original_game_expressions_or_identifiers_published": False,
         "android_gpu_execution_proven": False,
