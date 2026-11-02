@@ -25,12 +25,26 @@ def analyze_text(text: str, expected_sha: str):
     digest = hashlib.sha256(text.encode("utf8")).hexdigest()
     if digest != expected_sha:
         raise ValueError("Managed FFT caller original source SHA256 mismatch")
-    literals = LITERAL.findall(text)
-    # Do not print any original literal string, source expression or field name.
-    asset_name_matches = sum(
-        hashlib.sha256(x.encode("utf8")).hexdigest() == SERIALIZED_FFT_NAME_SHA256
-        for x in literals
-    )
+    literal_matches = [match for match in LITERAL.finditer(text)
+                       if hashlib.sha256(match[1].encode("utf8")).hexdigest()
+                       == SERIALIZED_FFT_NAME_SHA256]
+    # Only classify known API callsite contexts; no proprietary source text
+    # or names/args are printed, including unmatched contexts.
+    literal_call_contexts = []
+    for match in literal_matches:
+        preceding = text[max(0, match.start() - 300):match.start()]
+        if re.search(r"Resources\\s*\\.\\s*Load\\s*<\\s*ComputeShader\\s*>\\s*\\(\\s*$", preceding):
+            kind = "resources_load_compute"
+        elif re.search(r"Resources\\s*\\.\\s*Load\\s*\\(\\s*$", preceding):
+            kind = "resources_load_non_generic"
+        elif re.search(r"Shader\\s*\\.\\s*Find\\s*\\(\\s*$", preceding):
+            kind = "shader_find"
+        elif re.search(r"FindKernel\\s*\\(\\s*$", preceding):
+            kind = "compute_find_kernel"
+        else:
+            kind = "unclassified"
+        literal_call_contexts.append(kind)
+    asset_name_matches = len(literal_matches)
     if asset_name_matches > 2:
         raise ValueError("Original asset name literal occurrences unexpectedly repeated")
     calls = {"Dispatch": [], "SetTexture": [], "SetBuffer": []}
@@ -51,6 +65,7 @@ def analyze_text(text: str, expected_sha: str):
             sorted(set(calls["Dispatch"]) & set(calls["SetTexture"])),
         "constant_kernel_index_assignments": len(assigns),
         "original_literal_matches_serialized_fft_asset_name": asset_name_matches,
+        "matched_fft_literal_call_contexts": literal_call_contexts,
         "literal_match_proves_unity_asset_reference": False,
         "decompiled_csharp_published": False,
     }
