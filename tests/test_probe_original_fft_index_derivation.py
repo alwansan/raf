@@ -63,12 +63,33 @@ class IndexDerivationTests(unittest.TestCase):
         report = index_source_links(src, hashlib.sha256(src.encode()).hexdigest())
         contract = report["source_proven_original_constructor_kernel_bank_formula"]
         self.assertTrue(contract["constructor_signature_matched"])
+        self.assertTrue(
+            report["source_proven_original_kernel_index_formula_seed_lineage"]["seed_alias_of_constructor_int_proven"])
         self.assertTrue(contract["first_assignment_matches_constructor_int_parameter"])
         self.assertTrue(contract["bank_stride_guard_matches_fourth_bool_parameter"])
         self.assertEqual(contract["proven_formula_shape"], "(n-5)<<1, then conditional +10")
         self.assertFalse(contract["verified_runtime_kernel_lookup_index"])
         self.assertNotIn("exponent", str(report))
         self.assertNotIn("\'other\'", str(report))
+
+    def test_local_seed_expression_is_detected_without_leaking_identifiers(self):
+        src = ("class Dx11FFT {\n"
+               "  public Dx11FFT(ComputeShader cs, int fftSize, bool a, bool b) {\n"
+               "    int bits = (int)Mathf.Log(fftSize, 2);\n"
+               "    int index = bits - 5 << 1;\n"
+               "    if (b) index += 10;\n"
+               "    cs.Dispatch(index, 1, 1, 1);\n"
+               "    cs.Dispatch(index + 1, 1, 1, 1);\n"
+               "  }\n}"
+        )
+        report = index_source_links(src, hashlib.sha256(src.encode()).hexdigest())
+        seed = report["source_proven_original_kernel_index_formula_seed_lineage"]
+        self.assertTrue(seed["first_formula_seed_identified"])
+        self.assertFalse(seed["seed_alias_of_constructor_int_proven"])
+        self.assertEqual(seed["seed_assignment_count"], 1)
+        self.assertTrue(seed["seed_assignments"][0]["rhs"]["mathf_log2_call"])
+        self.assertNotIn("fftSize", str(seed))
+        self.assertNotIn("bits", str(seed))
 
     def test_wrong_source_and_missing_index_fail_closed(self):
         with self.assertRaisesRegex(ValueError, "hash changed"):
