@@ -61,6 +61,21 @@ class SceneAudioProbeTests(unittest.TestCase):
                 inspect_player(root)
 
 
+    def test_ground_control_dependency_probe_does_not_fabricate_init(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            (root / "PersonController.cs").write_text(
+                "class PersonController {\n"
+                "private void Start() { DoOtherSetup(); }\n"
+                "private void GroundControll(int hit) { actionMove.Process(); settings.Update(); }\n"
+                "}\n"
+            )
+            result = inspect_ground_control(root)
+            self.assertEqual(result["settings"]["method_reads"], 1)
+            self.assertEqual(result["actionMove"]["method_reads"], 1)
+            self.assertEqual(result["settings"]["start_assignments"], 0)
+            self.assertEqual(result["actionMove"]["start_assignments"], 0)
+
     def test_ground_control_probe_is_private_and_identifies_early_init_dependencies(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)
