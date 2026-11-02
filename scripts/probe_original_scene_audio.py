@@ -73,11 +73,55 @@ def inspect(source_root: Path) -> dict:
     return result
 
 
+
+def inspect_player(source_root: Path) -> dict:
+    matches = sorted(source_root.rglob("PersonController.cs"))
+    if len(matches) != 1 or not matches[0].is_file() or matches[0].is_symlink():
+        raise ValueError("Expected exactly one original PersonController source")
+    source = matches[0].read_text(encoding="utf-8-sig").replace("\r\n", "\n")
+    return_type, body = method_body(source, "Start")
+    calls = list(re.finditer(r"\bRuntimeManager\s*\.\s*CreateInstance\s*\(", body))
+    if not calls:
+        raise ValueError("Original player Start must contain FMOD event creation")
+    # Only structural evidence is logged; the original decompiled method stays
+    # entirely within the private CI runner and cannot become an artifact.
+    sites = []
+    for match in calls:
+        prior = body[:match.start()]
+        last_boundary = max(prior.rfind(";"), prior.rfind("{"), prior.rfind("}"))
+        segment = prior[last_boundary + 1:]
+        assignment = bool(re.search(r"(?<![=!<>])=(?!=)", segment))
+        sites.append({
+            "index": len(sites),
+            "has_assignment": assignment,
+            "prefix_sha256": hashlib.sha256(segment.encode()).hexdigest(),
+            "prefix_length": len(segment),
+            "before_settings_assignment": not bool(re.search(r"\bsettings\s*=", prior)),
+            "before_action_move_assignment": not bool(re.search(r"\bactionMove\s*=", prior)),
+            "has_instance_type": "EventInstance" in segment,
+        })
+    return {
+        "class": "PersonController",
+        "source_sha256": hashlib.sha256(source.encode()).hexdigest(),
+        "source_chars": len(source),
+        "start_body_sha256": hashlib.sha256(body.encode()).hexdigest(),
+        "start_void": return_type == "void",
+        "fmod_event_creation_calls": len(calls),
+        "event_creation_sites": sites,
+        "settings_assignment_count": len(re.findall(r"\bsettings\s*=", body)),
+        "action_move_assignment_count": len(re.findall(r"\bactionMove\s*=", body)),
+        "has_catch": bool(re.search(r"\bcatch\s*\(", body)),
+        "modified_source": False,
+        "unity_compiled": False,
+    }
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--source", type=Path, required=True)
     args = parser.parse_args()
     print("RAFT_SCENE_AUDIO_SOURCE_PROBE " + json.dumps(inspect(args.source), sort_keys=True))
+    print("RAFT_PLAYER_AUDIO_SOURCE_PROBE " + json.dumps(inspect_player(args.source), sort_keys=True))
 
 
 if __name__ == "__main__":
