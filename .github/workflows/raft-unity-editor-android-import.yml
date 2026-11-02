@@ -46,6 +46,8 @@ on:
       - 'scripts/ci_memory_watch.py'
       - 'scripts/audit_gradle_asset_payload.py'
       - 'tests/test_gradle_payload_audit.py'
+      - 'scripts/audit_android_expansion.py'
+      - 'tests/test_android_expansion_audit.py'
       - 'tests/test_ci_memory_watch.py'
       - 'tests/test_restore_postfx_compute.py'
       - 'tests/test_restore_postfx_shaders.py'
@@ -121,6 +123,7 @@ jobs:
         run: |
           python3 -m unittest discover -s tests -p test_android_render_lifetimes.py -v
           python3 -m unittest discover -s tests -p test_gradle_payload_audit.py -v
+          python3 -m unittest discover -s tests -p test_android_expansion_audit.py -v
           python3 -m unittest discover -s tests -p test_restore_postfx_shaders.py -v
           python3 -m unittest discover -s tests -p test_restore_postfx_compute.py -v
           python3 -m unittest discover -s tests -p test_restore_tmp_shaders.py -v
@@ -576,6 +579,10 @@ jobs:
           python3 scripts/audit_android_apk.py \
             --apk "$GITHUB_WORKSPACE/builds/Android/RaftAndroidExperimental.apk" \
             --report "$RUNNER_TEMP/private-android-apk-audit.json"
+          python3 scripts/audit_android_expansion.py \
+            --apk "$GITHUB_WORKSPACE/builds/Android/RaftAndroidExperimental.apk" \
+            --obb "$GITHUB_WORKSPACE/builds/Android/RaftAndroidExperimental.main.obb" \
+            --report "$RUNNER_TEMP/private-android-obb-audit.json"
           python3 - <<'PY'
           import json,os
           from pathlib import Path
@@ -596,8 +603,10 @@ jobs:
           from scripts.audit_fmod_unity_package import elf_identity
           report = json.loads((Path(os.environ['RUNNER_TEMP']) / 'original-streaming-assets.json').read_text())
           apk = Path('builds/Android/RaftAndroidExperimental.apk')
+          obb = Path('builds/Android/RaftAndroidExperimental.main.obb')
+          assert obb.is_file(), 'Split binary requires the matching original-data OBB'
           exports = set()
-          with zipfile.ZipFile(apk) as archive:
+          with zipfile.ZipFile(apk) as archive, zipfile.ZipFile(obb) as expansion:
               for name in ('libfmod.so', 'libfmodstudio.so', 'libresonanceaudio.so'):
                   metadata = elf_identity(archive.read('lib/arm64-v8a/' + name))
                   assert metadata['abi'] == 'arm64-v8a'
@@ -606,10 +615,15 @@ jobs:
               dexes = [n for n in archive.namelist() if n.startswith('classes') and n.endswith('.dex') and '/' not in n]
               assert any(b'Lorg/fmod/FMOD;' in archive.read(n) for n in dexes), 'FMOD Java descriptor absent from APK DEX'
               compressed_banks = 0
+              apk_names, obb_names = set(archive.namelist()), set(expansion.namelist())
               for name, expected in report['files'].items():
-                  item = archive.getinfo('assets/' + name)
+                  member = 'assets/' + name
+                  assert member in apk_names or member in obb_names, 'Original StreamingAssets absent from APK/OBB pair'
+                  assert not (member in apk_names and member in obb_names), 'Original StreamingAssets duplicated across APK/OBB'
+                  source_archive = archive if member in apk_names else expansion
+                  item = source_archive.getinfo(member)
                   assert item.file_size == expected['bytes'], 'Original StreamingAssets size changed'
-                  with archive.open(item) as source:
+                  with source_archive.open(item) as source:
                       assert hashlib.file_digest(source, 'sha256').hexdigest() == expected['sha256'], 'Original StreamingAssets bytes changed'
                   if name.endswith('.bank') and item.compress_type != zipfile.ZIP_STORED:
                       compressed_banks += 1
@@ -627,6 +641,10 @@ jobs:
           test -n "$signer" && test -x "$signer"
           "$signer" verify --verbose "$GITHUB_WORKSPACE/builds/Android/RaftAndroidExperimental.apk" > "$RUNNER_TEMP/apk-signature-private.txt"
           echo 'RAFT_ANDROID_APK_SIGNATURE verified=true installVerified=false gameplayVerified=false'
+      - name: Refuse incomplete APK-only delivery when its companion OBB is required
+        if: ${{ github.ref == 'refs/heads/feature/android-native-port' && ((github.event_name == 'push' && contains(github.event.head_commit.message, '[raft-native-build]') && contains(github.event.head_commit.message, '[raft-device-test]')) || (github.event_name == 'workflow_dispatch' && inputs.build_mode == 'native' && inputs.publish_early_test)) }}
+        run: |
+          test ! -f builds/Android/RaftAndroidExperimental.main.obb || { echo 'APK alone is incomplete: companion OBB required; release blocked'; exit 1; }
       - name: Retain only the explicitly requested early test APK for release delivery
         if: ${{ github.ref == 'refs/heads/feature/android-native-port' && ((github.event_name == 'push' && contains(github.event.head_commit.message, '[raft-native-build]') && contains(github.event.head_commit.message, '[raft-device-test]')) || (github.event_name == 'workflow_dispatch' && inputs.build_mode == 'native' && inputs.publish_early_test)) }}
         uses: actions/upload-artifact@v4

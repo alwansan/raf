@@ -47,6 +47,14 @@ class EarlyApkDistributionPolicyTests(unittest.TestCase):
         self.assertIn("inputs.build_mode == 'native'", condition)
         self.assertIn("contains(github.event.head_commit.message, '[raft-native-build]')", condition)
 
+    def test_split_binary_never_publishes_apk_without_obb(self):
+        self.assertIn("PlayerSettings.Android.useAPKExpansionFiles = true;", (
+            ROOT / "android-port/Editor/AndroidNativeBuild.cs").read_text())
+        self.assertIn("Refuse incomplete APK-only delivery", self.workflow)
+        self.assertIn("test ! -f builds/Android/RaftAndroidExperimental.main.obb", self.workflow)
+        self.assertIn("scripts/audit_android_expansion.py", self.workflow)
+        self.assertIn("with zipfile.ZipFile(apk) as archive, zipfile.ZipFile(obb) as expansion:", self.workflow)
+
     def test_no_other_release_publisher_in_workflow(self):
         release = self.workflow.split("\n  publish-early-test:", 1)[1]
         before_release = self.workflow.split("\n  publish-early-test:", 1)[0]

@@ -90,6 +90,13 @@ namespace RaftAndroid.Editor
             PlayerSettings.enableFrameTimingStats = true;
             EditorUserBuildSettings.exportAsGoogleAndroidProject = false;
             EditorUserBuildSettings.buildAppBundle = false;
+            // The full-data candidate generated one 2,750,639,264-byte Unity archive,
+            // exceeding Gradle's Java array limit even after bounded ASTC overrides.
+            // Unity 2021's supported APK + OBB split retains original scenes/assets
+            // without passing that archive through launcher:compressReleaseAssets.
+            // APK alone is NOT a playable package; its matching OBB is mandatory.
+            PlayerSettings.Android.useAPKExpansionFiles = true;
+            Debug.Log("RAFT_ANDROID_PACKAGE_LAYOUT mode=apk_plus_obb companionRequired=true originalDataRetained=true deviceVerified=false");
 
             string version = Argument("-androidVersionCode", "1");
             if (!int.TryParse(version, out int code) || code <= 0)
