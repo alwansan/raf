@@ -13,6 +13,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 import org.json.JSONArray;
 import rikka.shizuku.Shizuku;
 
@@ -24,6 +27,131 @@ public final class CaptureService extends Service {
     private static final int NOTIFICATION=11;
     private static final long SEGMENT_BYTES=32L*1024*1024;
     private final Object writeLock = new Object();
+    // Never hold a SAF provider write lock on the incoming Binder callback.
+    // Bounded buffer (512 batches, hard 12 MiB); on overload fail visibly, not silently.
+    private static final long QUEUE_BYTES_LIMIT = 12L*1024*1024;
+    private static final int QUEUE_BATCH_LIMIT = 512;
+    private final ArrayBlockingQueue<LogChunk> writeQueue=new ArrayBlockingQueue<>(QUEUE_BATCH_LIMIT);
+    private final AtomicLong pendingBytes=new AtomicLong(),peakPendingBytes=new AtomicLong();
+    private final AtomicLong receivedBatches=new AtomicLong(),writtenBatches=new AtomicLong();
+    private final AtomicLong failedBatches=new AtomicLong(),maxQueueDelayMs=new AtomicLong();
+    private volatile Thread writerThread;
+    private volatile String writerFailure="";
+    private final SessionMetricsSummary sessionMetrics=new SessionMetricsSummary();
+
+    private static final class LogChunk {
+        final String source,content;
+        final byte[] bytes;
+        final long enqueuedAt;
+        LogChunk(String source,String content){
+            this.source=source;
+            this.content=content;
+            this.bytes=("METRICS".equals(source)?content:"["+source+"]\n"+content)
+                    .getBytes(StandardCharsets.UTF_8);
+            this.enqueuedAt=SystemClock.elapsedRealtime();
+        }
+    }
+
+    private void enqueue(String source,String content) {
+        if(!active || stopping)return;
+        final LogChunk chunk=new LogChunk(source,content);
+        final long pending=pendingBytes.addAndGet(chunk.bytes.length);
+        if(pending>QUEUE_BYTES_LIMIT){
+            pendingBytes.addAndGet(-chunk.bytes.length);
+            failedBatches.incrementAndGet();
+            fatal("LOG BUFFER OVERFLOW: queued bytes exceeded 12 MiB; recording stopped. "+
+                    "Some unqueued lines may be missing; reduce log flood or use faster storage.");
+            return;
+        }
+        peakPendingBytes.accumulateAndGet(pending,Math::max);
+        boolean added=false;
+        try {added=writeQueue.offer(chunk,1200,TimeUnit.MILLISECONDS);}
+        catch(InterruptedException e){Thread.currentThread().interrupt();}
+        if(!added){
+            pendingBytes.addAndGet(-chunk.bytes.length);
+            failedBatches.incrementAndGet();
+            fatal("LOG BUFFER OVERFLOW: writer fell behind SAF storage; recording stopped "+
+                    "with an explicit gap warning.");
+        }else receivedBatches.incrementAndGet();
+    }
+
+    private void startWriter() {
+        writeQueue.clear();
+        pendingBytes.set(0);peakPendingBytes.set(0);
+        receivedBatches.set(0);writtenBatches.set(0);failedBatches.set(0);
+        maxQueueDelayMs.set(0);writerFailure="";
+        sessionMetrics.reset();
+        writerThread=new Thread(()->{
+            // Stop only after remote.stop() has finished sending tail batches
+            // and the queue has drained. Each entry is retained in FIFO order.
+            while(active || !writeQueue.isEmpty()){
+                LogChunk item=null;
+                try{
+                    item=writeQueue.poll(180,TimeUnit.MILLISECONDS);
+                    if(item==null)continue;
+                    long lag=SystemClock.elapsedRealtime()-item.enqueuedAt;
+                    maxQueueDelayMs.accumulateAndGet(Math.max(0,lag),Math::max);
+                    synchronized(writeLock){
+                        if("METRICS".equals(item.source)){
+                            if(metricsOutput==null ||
+                                    metricsSegmentBytes+item.bytes.length>METRICS_SEGMENT_BYTES)
+                                openMetricSegment();
+                            metricsOutput.write(item.bytes);
+                            metricsOutput.flush();
+                            metricsSegmentBytes+=item.bytes.length;totalBytes+=item.bytes.length;
+                            sessionMetrics.add(item.content);
+                            android.content.SharedPreferences.Editor edit=Config.prefs(CaptureService.this)
+                                    .edit().putString("metrics_last",item.content);
+                            if(item.content.contains("\"exit_history_status\"")){
+                                edit.putString("last_exit_history_sample",item.content);
+                                try{edit.putString("exit_history_status",
+                                        new org.json.JSONObject(item.content.trim())
+                                                .optString("exit_history_status",""));}
+                                catch(org.json.JSONException ignored){}
+                            }
+                            edit.apply();
+                        }else{
+                            if(output==null || segmentBytes+item.bytes.length>SEGMENT_BYTES)
+                                openSegment();
+                            output.write(item.bytes);
+                            segmentBytes+=item.bytes.length;totalBytes+=item.bytes.length;
+                            if(SystemClock.elapsedRealtime()-lastWriterFlush>1200){
+                                output.flush();
+                                lastWriterFlush=SystemClock.elapsedRealtime();
+                            }
+                        }
+                        writtenBatches.incrementAndGet();
+                        if(System.currentTimeMillis()-lastStatus>1500){
+                            Config.prefs(CaptureService.this).edit()
+                                    .putLong("writer_pending_bytes",pendingBytes.get())
+                                    .putLong("writer_max_lag_ms",maxQueueDelayMs.get())
+                                    .putLong("writer_failed_batches",failedBatches.get()).apply();
+                            saveStatus("Recording Raft • "+(totalBytes/1024)+" KiB");
+                        }
+                    }
+                }catch(InterruptedException interrupted){
+                    // Intentional Stop does NOT interrupt this thread: it must drain.
+                    if(!active && writeQueue.isEmpty())break;
+                }catch(Exception e){
+                    writerFailure=e.getClass().getSimpleName()+": "+e.getMessage();
+                    failedBatches.incrementAndGet();
+                    fatal("Storage writer failed: "+writerFailure+
+                            "; recording stopped; queued data might be incomplete");
+                    break;
+                }finally{
+                    if(item!=null)pendingBytes.addAndGet(-item.bytes.length);
+                }
+            }
+            synchronized(writeLock){
+                try{if(output!=null)output.flush();}catch(Exception ignored){}
+                try{if(metricsOutput!=null)metricsOutput.flush();}catch(Exception ignored){}
+            }
+        },"lograf-saf-writer");
+        writerThread.setPriority(Thread.NORM_PRIORITY-1);
+        writerThread.start();
+    }
+
+    private volatile long lastWriterFlush=0;
     private OutputStream output, metricsOutput;
     private long metricsSegmentBytes;
     private int metricsPart;
@@ -39,47 +167,12 @@ public final class CaptureService extends Service {
     private Shizuku.UserServiceArgs args;
 
     private final ILogSink.Stub sink = new ILogSink.Stub() {
-        @Override public void onBatch(String source, String content) {
-            if (!active) return;
-            synchronized(writeLock) {
-                if (!active) return;
-                try {
-                    if ("METRICS".equals(source)) {
-                        byte[] data=content.getBytes(StandardCharsets.UTF_8);
-                        if(metricsOutput==null || metricsSegmentBytes+data.length>METRICS_SEGMENT_BYTES)openMetricSegment();
-                        metricsOutput.write(data); metricsOutput.flush();
-                        android.content.SharedPreferences.Editor editor=Config.prefs(CaptureService.this).edit()
-                                .putString("metrics_last",content);
-                        if(content.contains("\"exit_history_status\"")) {
-                            editor.putString("last_exit_history_sample",content);
-                            try {
-                                editor.putString("exit_history_status",
-                                        new org.json.JSONObject(content.trim()).optString("exit_history_status",""));
-                            } catch(org.json.JSONException ignored){}
-                        }
-                        editor.apply();
-                        metricsSegmentBytes+=data.length; totalBytes+=data.length;
-                    } else {
-                        byte[] bytes = ("[" + source + "]\n" + content).getBytes(StandardCharsets.UTF_8);
-                        if (output==null || segmentBytes + bytes.length > SEGMENT_BYTES) openSegment();
-                        output.write(bytes);
-                        segmentBytes += bytes.length; totalBytes += bytes.length;
-                        if (System.currentTimeMillis() - lastStatus > 1500) output.flush();
-                    }
-                    if (System.currentTimeMillis() - lastStatus > 1500) saveStatus("Recording Raft • " + (totalBytes/1024) + " KiB");
-                } catch (Exception e) { fatal("Storage write failed: " + e); }
-            }
+        @Override public void onBatch(String source,String content){
+            enqueue(source,content);
         }
-        @Override public void onFailure(String message) {
-            synchronized (writeLock) {
-                if (active) {
-                    try {
-                        byte[] bytes = ("[RECORDER WARNING] " + message + "\n").getBytes(StandardCharsets.UTF_8);
-                        if (output != null) { output.write(bytes); output.flush(); }
-                    } catch (Exception ignored) {}
-                }
-            }
-            saveStatus("Warning: " + message);
+        @Override public void onFailure(String message){
+            enqueue("WARNING","[RECORDER WARNING] "+message+"\n");
+            saveStatus("Warning: "+message);
         }
     };
 
@@ -126,8 +219,8 @@ public final class CaptureService extends Service {
             return START_NOT_STICKY;
         }
         if(intent != null && STOP.equals(intent.getAction())) {
-            halt("Stopped by user");
-            stopSelf();
+            // Never block Android's main thread while waiting on slow SAF drains.
+            new Thread(()->{halt("Stopped by user");stopSelf();},"lograf-stop").start();
             return START_NOT_STICKY;
         }
         if (active) return START_STICKY;
@@ -151,7 +244,7 @@ public final class CaptureService extends Service {
             if(sessionFolder==null) throw new IOException("Folder creation failed");
             active=true; stopping=false; failed=false; totalBytes=0; metricsSegmentBytes=0; part=0; metricsPart=0;
             fileUris.clear();
-            Config.prefs(this).edit().remove("metrics_last").remove("last_exit_history_sample").remove("exit_history_status").apply();
+            Config.prefs(this).edit().remove("metrics_last").remove("last_exit_history_sample").remove("exit_history_status").remove("writer_pending_bytes").remove("writer_max_lag_ms").remove("writer_failed_batches").apply();
             String metadata="LogRaft "+BuildConfig.VERSION_NAME+"\nTarget="+Config.PACKAGE+
                     "\nRecoveryRestart="+recovering+
                     "\nStart="+new Date()+"\nBuild="+Build.MANUFACTURER+" "+Build.MODEL+
@@ -172,6 +265,7 @@ public final class CaptureService extends Service {
             fileUris.add(meta.toString());
             openSegment();
             openMetricSegment();
+            startWriter();
             saveStatus("Preparing Shizuku logger...");
             args=new Shizuku.UserServiceArgs(new ComponentName(getPackageName(),RemoteLogService.class.getName()))
                 .daemon(false).processNameSuffix("lograf").debuggable(false).version(1);
@@ -236,10 +330,7 @@ public final class CaptureService extends Service {
         if(failed) return;
         failed=true;
         saveStatus(message);
-        new Handler(Looper.getMainLooper()).post(() -> {
-            halt(message);
-            stopSelf();
-        });
+        new Thread(()->{halt(message);stopSelf();},"lograf-fatal-stop").start();
     }
 
     private void writeSessionSummary(String stopReason) {
@@ -257,6 +348,15 @@ public final class CaptureService extends Service {
             report.put("raw_log_segments",part);
             report.put("metric_segments",metricsPart);
             report.put("raw_log_policy","preserve all segments; never delete");
+            report.put("writer_received_batches",receivedBatches.get());
+            report.put("writer_written_batches",writtenBatches.get());
+            report.put("writer_failed_batches",failedBatches.get());
+            report.put("writer_pending_bytes_at_stop",pendingBytes.get());
+            report.put("writer_peak_pending_bytes",peakPendingBytes.get());
+            report.put("writer_max_queue_delay_ms",maxQueueDelayMs.get());
+            report.put("writer_failure",writerFailure.isEmpty()?org.json.JSONObject.NULL:writerFailure);
+            report.put("backpressure_notice","Logcat ring buffer losses cannot be detected perfectly; zero dropped local batches does not prove zero OS buffer loss");
+            report.put("performance_statistics",sessionMetrics.toJson());
             report.put("game_process_exit_cause","unknown unless explicitly supported by exit evidence");
             String raw=Config.prefs(this).getString("metrics_last","");
             if(!raw.trim().isEmpty()) {
@@ -283,7 +383,8 @@ public final class CaptureService extends Service {
         }
     }
 
-    private void halt(String status) {
+    private synchronized void halt(String status) {
+        if(stopping)return;
         // Drain the remote reader's last batch BEFORE disabling our Binder sink.
         stopping=true;
         if(remote!=null) {
@@ -291,6 +392,18 @@ public final class CaptureService extends Service {
             remote=null;
         }
         active=false;
+        Thread thread=writerThread;
+        if(thread!=null && thread!=Thread.currentThread()){
+            // Allow enough time to flush the full bounded queue. Never discard
+            // silently: if a slow provider prevents draining, record the gap.
+            try{thread.join(18000);}catch(InterruptedException e){Thread.currentThread().interrupt();}
+            if(thread.isAlive()){
+                writerFailure="queue drain exceeded 18 seconds; output may be incomplete";
+                failedBatches.incrementAndGet();
+                status+=" • WRITER DRAIN INCOMPLETE";
+            }
+            writerThread=null;
+        }
         if(args!=null) try { Shizuku.unbindUserService(args,connection,true); }
         catch(Exception ignored){}
         synchronized(writeLock) {
@@ -298,6 +411,10 @@ public final class CaptureService extends Service {
             if(metricsOutput!=null) { try { metricsOutput.flush(); metricsOutput.close(); } catch(Exception ignored){} metricsOutput=null; }
         }
         writeSessionSummary(status);
+        Config.prefs(this).edit()
+                .putLong("writer_pending_bytes",pendingBytes.get())
+                .putLong("writer_max_lag_ms",maxQueueDelayMs.get())
+                .putLong("writer_failed_batches",failedBatches.get()).apply();
         saveStatus(status+" • "+(totalBytes/1024)+" KiB saved");
         stopForeground(STOP_FOREGROUND_REMOVE);
     }
