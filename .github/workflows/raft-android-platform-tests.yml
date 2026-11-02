@@ -10,6 +10,7 @@ on:
       - 'tests/test_android_diagnostics_policy.py'
       - 'tests/test_android_touch_gamepad_policy.py'
       - 'scripts/verify_touch_binding_lifecycle.py'
+      - 'scripts/verify_touch_drag_capture.py'
       - 'scripts/audit_gradle_asset_payload.py'
       - 'tests/test_gradle_payload_audit.py'
       - 'tests/test_early_apk_distribution_policy.py'
@@ -50,6 +51,10 @@ jobs:
         run: |
           python3 -m scripts.verify_touch_binding_lifecycle --output "$RUNNER_TEMP/touch-lifecycle"
           dotnet run --project "$RUNNER_TEMP/touch-lifecycle/Lifecycle.csproj" --configuration Release --nologo
+      - name: Execute actual touch editor drag pointer-capture lifecycle
+        run: |
+          python3 -m scripts.verify_touch_drag_capture --output "$RUNNER_TEMP/touch-drag"
+          dotnet run --project "$RUNNER_TEMP/touch-drag/DragCapture.csproj" --configuration Release --nologo
       - name: Verify complete APK OBB XAPK and lossless transport delivery
         run: python3 -m unittest discover -s tests -p test_android_delivery_package.py -v
       - name: Guard early APK redistribution policy

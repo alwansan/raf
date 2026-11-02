@@ -523,10 +523,12 @@ namespace RaftAndroid.Platform
     }
 
     public sealed class AndroidTouchLayoutHandle : MonoBehaviour,
-        IPointerDownHandler, IDragHandler, IEndDragHandler
+        IPointerDownHandler, IDragHandler, IEndDragHandler, IPointerUpHandler
     {
+        private const int NoPointer = int.MinValue;
         private AndroidTouchGamepadOverlay overlay;
         private string label;
+        private int activePointerId = NoPointer;
 
         public void Bind(AndroidTouchGamepadOverlay owner, string control)
         {
@@ -536,17 +538,49 @@ namespace RaftAndroid.Platform
 
         public void OnPointerDown(PointerEventData pointer)
         {
-            if (overlay != null) overlay.Select(label);
+            // Capture one editing pointer per control. A second finger must not
+            // hijack a drag or overwrite the first finger's saved position.
+            if (overlay == null || !overlay.Editing || activePointerId != NoPointer) return;
+            activePointerId = pointer.pointerId;
+            overlay.Select(label);
         }
 
         public void OnDrag(PointerEventData pointer)
         {
-            if (overlay != null) overlay.Drag(label, pointer);
+            if (overlay != null && overlay.Editing && activePointerId == pointer.pointerId)
+                overlay.Drag(label, pointer);
+        }
+
+        private void FinishPointer(PointerEventData pointer)
+        {
+            if (activePointerId != pointer.pointerId) return;
+            try
+            {
+                if (overlay != null && overlay.Editing) overlay.SavePosition(label);
+            }
+            finally
+            {
+                activePointerId = NoPointer;
+            }
+        }
+
+        // UI modules may dispatch pointer-up before end-drag or vice versa.
+        // Whichever arrives first commits once and releases the capture.
+        public void OnPointerUp(PointerEventData pointer)
+        {
+            FinishPointer(pointer);
         }
 
         public void OnEndDrag(PointerEventData pointer)
         {
-            if (overlay != null) overlay.SavePosition(label);
+            FinishPointer(pointer);
+        }
+
+        private void OnDisable()
+        {
+            // Scene/UI deactivation may omit pointer-up. Never retain a stale
+            // touch ID when the editor is shown again.
+            activePointerId = NoPointer;
         }
     }
 }
