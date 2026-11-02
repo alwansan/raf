@@ -1,0 +1,58 @@
+name: Raft DirectX shader translation lab - synthetic only, no Unity or LFS
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-shader-translation-lab.yml'
+      - 'scripts/run_shader_translation_lab.py'
+      - 'scripts/probe_directx_shader_bridge.py'
+      - 'tests/test_probe_directx_shader_bridge.py'
+      - 'tools/shader_bridge_lab/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: raft-shader-translation-lab-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  synthetic-bytecode-lab:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - name: Checkout tiny public source-only tool scope
+        uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+            tools/shader_bridge_lab
+      - name: Test private-safe shader container parser
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_probe_directx_shader_bridge.py -v
+      - name: Install CPU shader format validators only - no Vulkan GPU or Unity
+        shell: bash
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends glslang-tools spirv-tools vkd3d-compiler
+          glslangValidator --version | head -n 4
+          spirv-val --version | head -n 3
+          vkd3d-compiler --version
+      - name: Validate authored HLSL translation and probe VKD3D DXBC capabilities
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.run_shader_translation_lab \
+            --synthetic-hlsl tools/shader_bridge_lab/compute.hlsl
+          # No original Raft shader, DXVK binaries, Wine, FEX, Unity, Git LFS,
+          # GPU execution, APK/OBB/XAPK, release or build request is involved.
