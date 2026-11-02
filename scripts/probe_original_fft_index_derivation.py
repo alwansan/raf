@@ -18,10 +18,34 @@ MAX_ASSIGNMENTS = 24
 MAX_SOURCE = 700_000
 
 
+
+def anonymized_operator_shape(expression):
+    """Preserve only numeric/operator syntax, replacing all private names."""
+    if len(expression) > 600:
+        raise ValueError("Original kernel index formula unbounded")
+    masked_string = re.sub(r'"(?:\\.|[^"\\])*"', '"S"', expression)
+    masked_identifiers = re.sub(r"\b[A-Za-z_]\w*\b", "V", masked_string)
+    compact = re.sub(r"\s+", "", masked_identifiers)
+    return re.sub(r"[^V0-9()\[\]{}<>!+=*/%&|^?.,:\-]", "?", compact)[:180]
+
+
+def immediate_boolean_guard(text, offset):
+    """Recognize only direct if(identifier) or if(!identifier) guard."""
+    prefix = text[max(0, offset-250):offset]
+    found = re.search(r"\bif\s*\(\s*(!?)\s*([A-Za-z_]\w*)\s*\)\s*\{?\s*$", prefix)
+    if not found:
+        return {"simple_condition_verified": False}
+    return {"simple_condition_verified": True,
+            "guard_identifier_sha256": sha(found.group(2)),
+            "guard_negated": found.group(1) == "!",
+            "private_guard_identifier_published": False}
+
+
 def classify_index_rhs(expression):
     """No expression text in report, and definitely no evaluation."""
     result = {
         "original_expression_sha256": sha(re.sub(r"\s+", "", expression)),
+        "anonymized_operator_shape": anonymized_operator_shape(expression),
         "integer_constants": [int(x) for x in re.findall(
             r"(?<![A-Za-z_.])\d{1,6}(?![A-Za-z_])", expression)][:12],
         "mathf_log2_call": bool(re.search(r"\bMathf\s*\.\s*Log\s*\(", expression)),
@@ -60,6 +84,7 @@ def index_source_links(original, expected):
             "source_line": original.count("\n", 0, m.start()) + 1,
             "operator": m.group(1),
             "right_hand_side": classify_index_rhs(m.group(2)),
+            "preceding_immediate_guard": immediate_boolean_guard(original, m.start()),
         })
     param_declaration = bool(re.search(r"\bint\s+" + re.escape(base) + r"\s*[,)]", original))
     # Detect references without reporting proprietary field identifiers.
