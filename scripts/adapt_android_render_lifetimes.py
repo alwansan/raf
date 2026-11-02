@@ -10,6 +10,7 @@ PINS={
 'MyInput':('66517cd6df549991014002acdfd462e0d883ee76da81193920a31362385e9b6c',0),
 'HapticAudio':('ac0ac86f62d05c774cb8b24cc8454df2b5356e50c6720395137df1730430fe9c',0),
 'SoundManager':('fe5378c4375e9609c3f9bf9c35f51abecff266148f35588a5df2eb358a745d38',0),
+'PersonController':('7889e538712b1dc992b6364248ed9c51a8b1dacc8ce2b5c19656e4d80105ce2e',0),
 'GraphicsSettingsBox':('e1854d74adbbe0565b586ec749f7de2cc73e3f97f59c388934a3faa0defc9300',0),
 'Dx11FFT':('8aa32937d4235f0f1ae0a180b8099fd647558689ad65208a9f37956c69e90fb0',1),
 'WavesRendererFFT':('e7f6b8fd477f321120fc626781f0653fe1168f0e86daad0cdf8d9c4e56b323e9',3),
@@ -46,6 +47,75 @@ def protect_temporaries(text,expected):
     return text
 
 
+
+def isolate_player_start_fmod(normalized):
+    """Keep original player init order, but treat ONLY absent FMOD events as optional.
+
+    Source SHA is authenticated in adapt(). Refuse unexpected assignments rather
+    than using a broad catch across Start or setting world-completion flags.
+    """
+    declaration = re.compile(
+        r"(?m)^\s*(?:public|private|protected|internal)\s+"
+        r"(?:(?:static|virtual|override|sealed|new|async)\s+)*"
+        r"void\s+Start\s*\([^;{}]*\)\s*\{"
+    )
+    matches = list(declaration.finditer(normalized))
+    if len(matches) != 1:
+        raise ValueError("Original player Start declaration drift")
+    signature = matches[0].group(0).rsplit("{", 1)[0].strip()
+    start, end = body_bounds(normalized, signature)
+    body = normalized[start:end]
+    create_calls = list(re.finditer(r"\bRuntimeManager\s*\.\s*CreateInstance\s*\(", body))
+    settings = re.search(r"\bsettings\s*=", body)
+    movement = re.search(r"\bactionMove\s*=", body)
+    if (len(create_calls) != 2 or settings is None or movement is None
+            or any(call.start() >= min(settings.start(), movement.start()) for call in create_calls)):
+        raise ValueError("Original player audio-before-settings contract changed")
+
+    original_lines = body.splitlines(keepends=True)
+    changed = []
+    guarded = 0
+    assignment = re.compile(
+        r"(?P<indent>[ \t]*)(?P<statement>(?:this\.)?[A-Za-z_]\w*"
+        r"(?:\.[A-Za-z_]\w*)*\s*=\s*"
+        r"(?:FMODUnity\.)?RuntimeManager\s*\.\s*CreateInstance"
+        r"\s*\([^;\r\n]*\)\s*;)[ \t]*$"
+    )
+    for line in original_lines:
+        without_newline = line.rstrip("\r\n")
+        if "RuntimeManager.CreateInstance(" not in without_newline:
+            changed.append(line)
+            continue
+        match = assignment.fullmatch(without_newline)
+        if match is None:
+            raise ValueError("Unrecognized player FMOD event assignment")
+        indent = match["indent"]
+        # Keep the original statement itself unchanged. No fallback event
+        # objects, fake FMOD events, or swapped assignment target.
+        changed.append(
+            indent + "#if UNITY_ANDROID && !UNITY_EDITOR\n" +
+            indent + "try\n" + indent + "{\n" +
+            indent + "#endif\n" +
+            line +
+            indent + "#if UNITY_ANDROID && !UNITY_EDITOR\n" +
+            indent + "}\n" +
+            indent + "catch (FMODUnity.EventNotFoundException __raftMissingPlayerSound)\n" +
+            indent + "{\n" +
+            indent + '    RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("audio", "player_start_missing_fmod_event",\n' +
+            indent + "        __raftMissingPlayerSound.ToString(), true);\n" +
+            indent + "}\n" + indent + "#endif\n"
+        )
+        guarded += 1
+    if guarded != 2:
+        raise ValueError("Original player FMOD statement count drift")
+    result = normalized[:start] + "".join(changed) + normalized[end:]
+    # The extra statements are exclusively Android-scoped. Removing the exact
+    # authored guards must reproduce original source byte-for-byte.
+    if result.count("player_start_missing_fmod_event") != 2:
+        raise ValueError("Missing explicit diagnostic on isolated original player events")
+    return result
+
+
 def adapt(stem,text):
     digest,expected=PINS[stem]
     normalized=text.replace('\r\n','\n')
@@ -67,6 +137,8 @@ using RaftAndroidLegacyInput = UnityEngine.Input;
     elif stem == 'HapticAudio':
         if normalized.count('File.ReadAllBytes(')!=1: raise ValueError('Original haptic reader changed')
         normalized=normalized.replace('File.ReadAllBytes(', 'RaftAndroid.Platform.AndroidStreamingAssets.ReadAllBytes(',1)
+    elif stem == 'PersonController':
+        normalized = isolate_player_start_fmod(normalized)
     elif stem == 'SoundManager':
         # Original scene JoinGame is broadcast before WorldHasBeenRecieved.
         # Missing FMOD events must remain visible, but cannot terminate this
