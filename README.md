@@ -19,6 +19,29 @@ Branch: `clog`, derived from `lograf` at 6d268476dc5aa64f379ae7ad7deb09097872a1b
 - Optionally let the user choose the *existing work/log folder* using Android Storage Access Framework, to copy logs on an independent background thread. Never alter Cinemana files or clear stuck downloads.
 - Write each session into the user's selected output folder, segment indefinitely without deleting earlier segments, then share a ZIP on explicit user action.
 
+## Install and use on Android 15
+1. Install the latest directly downloadable `CLog-signed.apk` from the GitHub `clog-*` Releases. It installs separately from LogRaft.
+2. Start Shizuku (wireless debugging or root-managed service). Grant CLog permission only when requested.
+3. Select an **output folder** such as `Download/CLog`, where CLog creates a new `CLog-<date>` session.
+4. Optionally select exactly `Cinemana/work/log` for **read-only**, incremental mirroring of the app's internal diagnostic files. This is not required for the core Logcat collector. Existing files are never modified or deleted. Android's folder picker may restrict some locations.
+5. Tap Start then launch Cinemana. Reproduce Home / Details / Search / Downloads / Video Player / new-episode notification problems. Use **Mark issue** as close as possible to an observed stall.
+6. To compare CPU/UI load, first measure with no deliberate downloads, then run a second session under stress. Keep old MP4/temp/subtitles and MKV manifests intact.
+7. Return to CLog, tap Stop, then Create ZIP and Share. It includes raw `cinemana-*.log`, metrics JSONL, summary JSON and any readable mirrored work/log segments. Review private URLs, tokens, account content, titles and paths before uploading anywhere.
+
+## Diagnostic collection matrix
+| Cinemana subsystem | External signal | Complementary app-side evidence |
+|---|---|---|
+| Main process boot, ART verifier | UID Logcat; process start/death; `VerifyError` | `CinemanaStartupTrace` |
+| Downloads and separate FileDownloader | Separate PID/CPU/RSS/threads/IO + UID Logcat | `downloads.log`, `load_diagnostics.filedownloader.jsonl` |
+| MKV queue and recovery | `QUEUE_ENQUEUED`, `QUEUE_START`, `STAGE_REBUILD_STARTED` markers | `.mkv_export.log`, `download_repair_actions.log` |
+| Single FFmpeg mux and worker stalls | `MKV_FFMPEG_SLOT_ACQUIRED/RELEASED`, `FFMPEG_STALL` counters | per-episode `.mkv.log`, ledger, recovery receipts |
+| Subtitle and Room promotion | Logged exceptions/markers | `mkv_subtitle_catalog.log`, DB and diagnostic logs if emitted |
+| UI jank and ANR | `dumpsys gfxinfo`, Choreographer, `am_anr`, process CPU | `ui_performance.jsonl`, `load_diagnostics.main.jsonl` |
+| Video playback, surface and codecs | SurfaceFlinger estimates + MediaCodec/ExoPlayer logs | `player_diagnostics.log`, `mkv_player_resolver.log` |
+| Episode notifications/subscription checks | Notification/system logs emitted | local episode job diagnostics if present |
+| Startup failure / process kills | `am_proc_died`, Android exit history (best effort) | native tombstones/ANR traces only if exposed |
+
+**Limits:** No external Android app can guarantee visibility into every DB transaction, HTTP request, private app file or method call. CLog does not decrypt HTTPS, capture playback frames or inspect saved account credentials. Even Shizuku shell may be denied certain logs and kernel counters on Xiaomi firmware. All full-log data stays on device until the user explicitly shares it.
 ## Privacy and limitations
 - CLog does **not** require ROOT; it requires an active Shizuku service. Shizuku and Android 15/vendor restrictions can block some counters/log buffers.
 - Do not automatically upload logs or export them to a public service. They may contain URLs, account details, video titles, file paths or authentication material. Review before sharing.
