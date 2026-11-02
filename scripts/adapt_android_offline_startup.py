@@ -80,7 +80,12 @@ def adapt(name, text):
         for method in ('GetLargeSteamAvatarFromID', 'GetMediumSteamAvatarFromID', 'GetSmallSteamAvatarFromID'):
             result = enter(result, method, 'return null;')
     elif name == 'CustomInputConfig':
-        result = replace_exact(result, 'Input.simulateMouseWithTouches = false;', 'Input.simulateMouseWithTouches = ' + LOCAL + '.Enabled;')
+        # Keep the original disabled left-mouse emulation on Android. The
+        # authored AndroidRightTouchPointer owns non-UI touches and emits ONLY
+        # synthetic Mouse1; enabling this would resurrect unintended left clicks
+        # and could depend on MonoBehaviour OnEnable ordering across scenes.
+        if result.count('Input.simulateMouseWithTouches = false;') != 1:
+            raise ValueError('Original touch-to-left-mouse policy drift')
     elif name == 'Raft_Network':
         result = enter(result, 'Platform_Init', 'localSteamID = ' + LOCAL + '.Current; SignedIntoPlayfab = false; return;')
         for method in ('Platform_Update', 'Platform_Shutdown'):
