@@ -10,8 +10,8 @@ class SceneAudioProbeTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)
             (root / "SoundManager.cs").write_text(
-                'class SoundManager { public void OnSceneEvent(int sceneEvent) '
-                '{ RuntimeManager.CreateInstance(secret); } '
+                'class SoundManager {\n    public void OnSceneEvent(int sceneEvent) '
+                '{ RuntimeManager.CreateInstance(secret); }\n    '
                 'private void Awake() { Ready(); } }'
             )
             result = inspect(root)
@@ -24,7 +24,7 @@ class SceneAudioProbeTests(unittest.TestCase):
 
     def test_fails_closed_for_duplicate_or_missing_callbacks(self):
         with self.assertRaises(ValueError):
-            method_body('public void OnSceneEvent() {} public void OnSceneEvent() {}', "OnSceneEvent")
+            method_body('\npublic void OnSceneEvent() {}\npublic void OnSceneEvent() {}', "OnSceneEvent")
         with self.assertRaises(ValueError):
             method_body('private void Awake() {}', "OnSceneEvent")
 
