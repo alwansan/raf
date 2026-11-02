@@ -74,6 +74,17 @@ namespace RaftAndroid.Audio
                         eventResult != FMOD.RESULT.OK);
                 });
             }
+            // Owner's last native trace failed at AudioSettingsBox.SettingStart
+            // resolving exactly vca:/master. Distinguish missing master metadata
+            // from scene-emitter issues after loading every authentic bank.
+            FMOD.Studio.VCA masterVca;
+            FMOD.RESULT vcaResult = FMODUnity.RuntimeManager.StudioSystem.getVCA(
+                "vca:/master", out masterVca);
+            RaftAndroid.Diagnostics.AndroidRuntimeLog.Write(
+                "audio", "fmod.master_vca_probe",
+                "result=" + vcaResult + "; valid=" +
+                (vcaResult == FMOD.RESULT.OK && masterVca.isValid()),
+                vcaResult != FMOD.RESULT.OK);
         }
 
         private static void LoadAndroidLibraries()
