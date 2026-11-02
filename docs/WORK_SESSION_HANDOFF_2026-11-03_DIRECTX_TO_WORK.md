@@ -100,3 +100,13 @@
 ---
 
 **Status:** Work transfer only. No Unity/native build, APK, release, scheduler change, branch merge, or device validation was performed while preparing this handoff.
+
+
+## 9. Work continuation verified on 3 November — authenticated all nine original ComputeShaders
+
+- New source-only SHA-pinned provenance verifier: `scripts/verify_targeted_lfs_compute_sources.py`; original inventory correlator: `scripts/probe_authenticated_water_compute_inventory.py`; six new synthetic regression tests and a narrowly scoped Git LFS CI workflow `.github/workflows/raft-original-water-lfs-compute-audit.yml`.
+- Authenticated original Git LFS owners `resources.assets` (111533516 bytes), `sharedassets0.assets` (115978112), `sharedassets36.assets` (110149324) — **337660952 bytes total**. SHA256 checked pre/post LFS fetch; no other LFS downloaded, no project asset/meta/GUID written.
+- Source commit: [cd4ab1e854a0daa2e5845a28e45125834b11cd0b](https://github.com/alwansan/raf/commit/cd4ab1e854a0daa2e5845a28e45125834b11cd0b). [CI 41533270315](https://github.com/alwansan/raf/actions/runs/41533270315), job125578639659: **COMPLETED SUCCESS**. All Python tests, three source LFS hashes, UnityPy metadata and object reconciliation passed. No Unity, APK, OBB, XAPK, release, GPU/device test or scheduled-task modification.
+- Definitive structural result: **9/9** original ComputeShader objects; **42 valid DXBC bytecode containers**; kernel metadata slots 42 total. `resources.assets` pathIDs 905..911 have respective kernel counts 12,1,2,1,2,2,1; `sharedassets0.assets` pathID2456 has20; `sharedassets29.assets` pathID577 has1. `sharedassets36.assets` authenticated but contains no ComputeShader in this inventory.
+- Dx11FFT original calls fixed kernel indices including 2 and6. Numerically plausible candidate owners (at least seven original kernels) are `resources.assets/pathID905` and `sharedassets0.assets/pathID2456`. **Not yet proven** to be actual water FFT owner, or to have matching resource bindings, program stages, kernel sequence or semantics. No fake FFT source, index clamp or pass changes. The strict water shader gate stays blocking.
+- Detailed durable report: [docs/ORIGINAL_WATER_LFS_COMPUTE_INVENTORY_2026-11-03.md](ORIGINAL_WATER_LFS_COMPUTE_INVENTORY_2026-11-03.md). Next focus: identify the correct original source reference and exact kernel order, privately inspect DXBC model/workgroups/resource bindings of the two real candidates; then test authentic translation against expected Unity/Android contracts. Preserve build hold and the scheduled automation.
