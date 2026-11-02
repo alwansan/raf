@@ -139,6 +139,14 @@ namespace RaftAndroid.Editor
                       " bytes=" + report.summary.totalSize);
             if (report.summary.result != BuildResult.Succeeded)
                 throw new BuildFailedException("Native ARM64 Android build failed; inspect the preceding Unity diagnostics.");
+            // Unity 2021's split-binary APK must never pass CI as a standalone
+            // installable game when its original-data expansion is missing.
+            string companion = Path.ChangeExtension(output, ".main.obb");
+            if (!File.Exists(companion) || new FileInfo(companion).Length == 0)
+                throw new BuildFailedException("Split Android build produced no nonempty companion OBB.");
+            Debug.Log("RAFT_ANDROID_OBB_OUTPUT present=true bytes=" +
+                      new FileInfo(companion).Length +
+                      " integrityVerifiedByPrivateCI=false deviceMountedVerified=false");
         }
 
         private static void ReportDiagnosticClasses(BuildReport report)

@@ -31,6 +31,13 @@ class OriginalSceneIntegrityTests(unittest.TestCase):
         self.assertIn("PlayerSettings.allowedAutorotateToLandscapeLeft = true;", self.source)
         self.assertIn("PlayerSettings.allowedAutorotateToLandscapeRight = true;", self.source)
 
+    def test_split_binary_requires_a_real_companion_after_unity_success(self):
+        self.assertIn("PlayerSettings.Android.useAPKExpansionFiles = true;", self.source)
+        self.assertIn('Path.ChangeExtension(output, ".main.obb")', self.source)
+        self.assertIn("!File.Exists(companion)", self.source)
+        self.assertIn("new FileInfo(companion).Length == 0", self.source)
+        self.assertIn("RAFT_ANDROID_OBB_OUTPUT present=true", self.source)
+
     def test_all_original_scenes_still_pass_to_build_pipeline(self):
         self.assertIn("EditorBuildSettings.scenes.Where(s => s.enabled)", self.source)
         self.assertIn("scenes = scenes,", self.source)
