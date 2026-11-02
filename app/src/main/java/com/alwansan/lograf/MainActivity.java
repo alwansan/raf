@@ -163,18 +163,25 @@ public final class MainActivity extends Activity {
                 "\nCPU process: "+metric(m,"process_cpu_percent_one_core","% of one core")+
                 "\nRAM RSS: "+metric(m,"process_rss_kb","KiB")+
                 "\nRAM PSS: "+metric(m,"process_pss_kb","KiB")+
+                "\nPSS quality: "+m.optString("process_pss_quality","unavailable")+
                 "\nAvailable RAM: "+metric(m,"device_mem_available_kb","KiB")+
                 "\nGPU busy (device-wide): "+metric(m,"gpu_busy_percent","%")+
                 "\nCPU frequencies: "+frequencySummary(m)+
                 "\nFree storage: "+storageSummary(m)+
                 "\nGPU clock: "+metric(m,"gpu_clock_hz","Hz")+
                 "\nDisplayed FPS estimate: "+metric(m,"presented_fps_estimate","fps")+
+                "\nFPS measurement state: "+m.optString("fps_tracking_status","unknown")+
+                "\nFPS data stale: "+(m.optBoolean("frame_telemetry_stale")?
+                    "yes; NOT a proven game freeze":"no")+
                 "\nBattery: "+metric(m,"battery_level_percent","%")+
                 "\nBattery temp: "+metric(m,"battery_temp_c","°C")+
                 "\nThermal status code: "+metric(m,"thermal_status_code","")+
                 "\nLogcat game lines: "+metric(m,"game_log_lines","")+
                 "\nSystem event lines: "+metric(m,"system_context_lines","")+
                 "\nStream reconnects (potential gaps): "+metric(m,"logcat_reconnects","")+
+                "\nWriter pending: "+writerStatus("writer_pending_bytes","bytes")+
+                "\nWriter worst wait: "+writerStatus("writer_max_lag_ms","ms")+
+                "\nWriter failed batches: "+writerStatus("writer_failed_batches","")+
                 "\nLog lines/sec: "+metric(m,"game_log_lines_per_second","")+
                 "\nShader pass errors: "+metric(m,"shader_pass_errors_total","")+
                 "\nCompute kernel errors: "+metric(m,"invalid_compute_kernel_total","")+
@@ -188,9 +195,17 @@ public final class MainActivity extends Activity {
         } catch(Exception ignored){performanceLabel.setText("Metrics awaiting valid sample");}
     }
 
+    private String writerStatus(String key,String unit){
+        long value=Config.prefs(this).getLong(key,-1);
+        return value<0?"unavailable":value+" "+unit;
+    }
+
     private String metricWarnings(JSONObject obj){
         StringBuilder status=new StringBuilder();
         if(obj.optBoolean("error_flood_warning"))status.append("Log flood; ");
+        if(obj.optBoolean("frame_telemetry_stale"))status.append("FRAME_TELEMETRY_STALE (not proof of freeze); ");
+        if(Config.prefs(this).getLong("writer_failed_batches",0)>0)
+            status.append("RECORDER BUFFER LOSS: inspect summary; ");
         if(obj.optBoolean("suspected_present_stall"))status.append("Possible presentation stall; ");
         if(obj.optBoolean("available_ram_under_1gib_watch"))status.append("RAM pressure warning; ");
         return status.length()==0?"None":status.toString();
