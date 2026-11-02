@@ -1,7 +1,12 @@
 """Metadata-only compute tests; no original Raft assets or Unity required."""
 import unittest
+import tempfile
+from pathlib import Path
+from types import SimpleNamespace
+from unittest.mock import patch
+import sys
 
-from scripts.audit_original_compute_metadata import summarize_tree, MAX_NODES
+from scripts.audit_original_compute_metadata import summarize_tree, inspect, MAX_NODES
 
 
 class ComputeMetadataAuditTests(unittest.TestCase):
@@ -40,6 +45,50 @@ class ComputeMetadataAuditTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "metadata key"):
             summarize_tree({"X" * 140: 1})
         self.assertTrue(summarize_tree({"m_Kernels": []})["metadata_fields"])
+
+
+    def test_original_inventory_checks_object_count_and_no_asset_edits(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            path = root / "sharedassets0.assets"
+            path.write_bytes(b"original serialized compute fixture")
+            before = path.read_bytes()
+            def original(path_id):
+                return SimpleNamespace(
+                    type=SimpleNamespace(name="ComputeShader"),
+                    path_id=path_id,
+                    get_raw_data=lambda: b"private-object-binary",
+                    read_typetree=lambda: {"m_Name": "hidden", "m_Platforms": [4],
+                                           "m_Kernels": [{"compiled": b"no-output"}]},
+                )
+            objs = [original(100), original(200)]
+            mock_unitypy = SimpleNamespace(load=lambda p: SimpleNamespace(file=SimpleNamespace(
+                objects={1: objs[0], 2: objs[1]})))
+            with patch.dict(sys.modules, {"UnityPy": mock_unitypy}), patch(
+                    "scripts.audit_original_compute_metadata.serialized_sources",
+                    return_value=[path]), patch(
+                    "scripts.audit_original_compute_metadata.owned_objects",
+                    return_value=objs):
+                result = inspect(root, expected_objects=2)
+                self.assertEqual(result["original_objects"], 2)
+                self.assertFalse(result["source_mutated"])
+                self.assertEqual(result["decoded_compute_sources"], 0)
+                self.assertEqual(result["compute_objects"][0]["metadata"]["original_platform_numeric_codes"], {4: 1})
+                self.assertNotIn("private-object-binary", str(result))
+                with self.assertRaisesRegex(ValueError, "Expected 1 original"):
+                    inspect(root, expected_objects=1)
+            self.assertEqual(path.read_bytes(), before)
+
+    def test_lfs_pointer_is_refused_before_unitypy_parse(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            path = root / "resources.assets"
+            path.write_text("version https://git-lfs.github.com/spec/v1\\noid sha256:" +
+                            "a" * 64 + "\\nsize 1000\\n")
+            with patch("scripts.audit_original_compute_metadata.serialized_sources",
+                       return_value=[path]), patch.dict(sys.modules, {"UnityPy": SimpleNamespace()}):
+                with self.assertRaisesRegex(ValueError, "only a Git LFS pointer"):
+                    inspect(root, expected_objects=1)
 
     def test_large_and_deep_nested_tables_are_rejected(self):
         with self.assertRaisesRegex(ValueError, "array length"):
