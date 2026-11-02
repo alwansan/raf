@@ -31,6 +31,7 @@ public final class PerformanceSampler implements Runnable {
     private Integer batteryLevel=null, batteryStatus=null, thermalStatus=null;
     private Double batteryTemp=null;
     private String surfaceLayer=null;
+    private String fpsStatus="not_started";
     private long sample=0;
     private long lastFrameProgressMs=-1;
     private Double lastPresentedP95Ms=null, lastPresentedWorstMs=null;
@@ -86,6 +87,7 @@ public final class PerformanceSampler implements Runnable {
             }
             if(pid!=pssPid){pssCache=null;pssPid=-1;pssLast=0;}
             surfaceLayer=null;layersLast=0;previousPresent=-1;lastFrameProgressMs=-1;
+            fpsStatus="process_changed";
             lastObservedPid=pid;
         }
         if(pid<=0) {
@@ -109,6 +111,10 @@ public final class PerformanceSampler implements Runnable {
             long rss=proc.optLong("VmRSS",-1);
             boolean validPss=pssCache!=null && (rss<0 || pssCache<=rss+8192);
             row.put("process_pss_kb",validPss?pssCache:JSONObject.NULL);
+            row.put("process_pss_candidate_kb",pssCache==null?JSONObject.NULL:pssCache);
+            row.put("process_pss_quality",pssCache==null?"unavailable":
+                    validPss?"validated_estimate":"rejected_pss_exceeds_rss");
+            row.put("process_pss_note","PSS is sampled less often than RSS, may be stale or vendor-limited");
             row.put("pss_validated_against_rss",validPss);
             row.put("pss_sample_age_ms",pssCache==null?JSONObject.NULL:Math.max(0,now-pssLast));
             row.put("memory_sources","/proc/pid/status; dumpsys meminfo pid when available");
@@ -138,12 +144,22 @@ public final class PerformanceSampler implements Runnable {
         if(pid>0 && now-layersLast>25000){layersLast=now; discoverSurface();}
         Double fps=pid>0?presentedFps(now):null;
         row.put("presented_fps_estimate",fps==null?JSONObject.NULL:fps);
+        row.put("fps_tracking_status",pid>0?fpsStatus:"game_not_running");
+        row.put("fps_quality",fps==null?"unavailable":"surface_presentation_estimate");
         row.put("presented_frame_p95_ms",lastPresentedP95Ms==null?JSONObject.NULL:lastPresentedP95Ms);
         row.put("presented_frame_worst_ms",lastPresentedWorstMs==null?JSONObject.NULL:lastPresentedWorstMs);
         row.put("presented_frame_window_count",lastPresentedFrameCount);
         long stallAge=lastFrameProgressMs<0?-1:Math.max(0,now-lastFrameProgressMs);
         row.put("last_present_progress_age_ms",stallAge<0?JSONObject.NULL:stallAge);
-        row.put("suspected_present_stall",pid>0 && stallAge>=12000 && fps!=null && fps==0);
+        boolean telemetryStale=pid>0 && lastFrameProgressMs>=0 && stallAge>=12000;
+        row.put("frame_telemetry_stale",telemetryStale);
+        row.put("frame_telemetry_status",telemetryStale?
+                "FRAME_TELEMETRY_STALE; no proven game freeze":fpsStatus);
+        // Only consider an apparent present stall if SurfaceFlinger is still
+        // returning the SAME latest timestamp; unavailable data is not a stall.
+        row.put("suspected_present_stall",pid>0 && telemetryStale &&
+                "no_new_present_timestamps".equals(fpsStatus));
+        row.put("stall_warning_caveat","Still or background scenes may intentionally stop presenting; neither indicator proves Unity freeze");
         row.put("available_ram_under_1gib_watch",sys.optLong("MemAvailable",Long.MAX_VALUE)<1048576);
         row.put("fps_method","SurfaceFlinger --latency game SurfaceView (NOT Unity Update FPS)");
         row.put("fps_surface",surfaceLayer==null?JSONObject.NULL:surfaceLayer);
@@ -303,19 +319,24 @@ public final class PerformanceSampler implements Runnable {
                 }
                 if(name.isEmpty())continue;
                 if(!name.equals(surfaceLayer)){previousPresent=-1;previousFrameAt=-1;}
-                surfaceLayer=name;return;
+                surfaceLayer=name;fpsStatus="surface_found";return;
             }
             surfaceLayer=null;
-        } catch(Exception ignored){surfaceLayer=null;}
+            fpsStatus="surface_not_found";
+        } catch(Exception ignored){surfaceLayer=null;fpsStatus="surface_discovery_unavailable";}
     }
 
     private Double presentedFps(long now){
         lastPresentedP95Ms=null;lastPresentedWorstMs=null;lastPresentedFrameCount=0;
-        if(surfaceLayer==null || surfaceLayer.isEmpty())return null;
+        if(surfaceLayer==null || surfaceLayer.isEmpty()){
+            fpsStatus="surface_unavailable";return null;
+        }
         try{
             String output=command(1400,20000,"dumpsys","SurfaceFlinger","--latency",surfaceLayer);
             String[] lines=output.trim().split("\\n");
-            if(lines.length<3 || !lines[0].trim().matches("\\d+"))return null;
+            if(lines.length<3 || !lines[0].trim().matches("\\d+")){
+                fpsStatus="surface_latency_unavailable";return null;
+            }
             long newest=-1;
             List<Long> presents=new ArrayList<>();
             for(int i=1;i<lines.length;i++){
@@ -327,8 +348,12 @@ public final class PerformanceSampler implements Runnable {
                     if(stamp>newest)newest=stamp;
                 }
             }
-            if(presents.size()<2)return null;
-            if(newest==previousPresent){previousFrameAt=now;return 0.0;}
+            if(presents.size()<2){fpsStatus="insufficient_presentation_samples";return null;}
+            if(newest==previousPresent){
+                fpsStatus="no_new_present_timestamps";
+                previousFrameAt=now;
+                return null; // Do not fabricate 0 FPS for an idle/static surface.
+            }
             // SurfaceFlinger only exposes a small RING BUFFER of recent frames
             // (often 128). Dividing 128 by our 3-second polling interval would
             // falsely report ~42fps for a real 60fps game. Compute the rate
@@ -336,11 +361,13 @@ public final class PerformanceSampler implements Runnable {
             if(previousPresent<0) {
                 lastFrameProgressMs=now;
                 previousPresent=newest; previousFrameAt=now;
+                fpsStatus="baseline_new_surface";
                 return null; // first sample establishes baseline
             }
             if(newest<previousPresent){
                 lastFrameProgressMs=now;
                 previousPresent=newest;previousFrameAt=now;
+                fpsStatus="surface_timestamps_reset";
                 return null; // layer recreated or counters reset
             }
             Collections.sort(presents);
@@ -354,7 +381,9 @@ public final class PerformanceSampler implements Runnable {
             }
             lastFrameProgressMs=now;
             previousPresent=newest;previousFrameAt=now;
-            if(count<3 || earliest>=latest)return null;
+            if(count<3 || earliest>=latest){
+                fpsStatus="insufficient_recent_frames";return null;
+            }
             // Presentation intervals estimate visible frame pacing. They are NOT
             // Unity per-frame CPU or GPU timings.
             ArrayList<Double> intervalsMs=new ArrayList<>();
@@ -371,8 +400,10 @@ public final class PerformanceSampler implements Runnable {
                 lastPresentedP95Ms=round(intervalsMs.get(Math.max(0,(int)Math.ceil(intervalsMs.size()*0.95)-1)));
             }
             double fps=1_000_000_000.0*(count-1)/(latest-earliest);
+            fpsStatus=fps>0 && fps<300?"valid_surface_presentation_estimate":
+                    "fps_outside_plausible_range";
             return fps>0 && fps<300?round(fps):null;
-        }catch(Exception ignored){}
+        }catch(Exception e){fpsStatus="surface_latency_error:"+e.getClass().getSimpleName();}
         return null;
     }
 
