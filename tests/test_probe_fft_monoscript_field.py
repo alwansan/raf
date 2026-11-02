@@ -3,7 +3,7 @@ import hashlib
 from pathlib import Path
 import tempfile
 import unittest
-from scripts.probe_fft_monoscript_field import inspect
+from scripts.probe_fft_monoscript_field import inspect, classify_compute_shader_occurrences
 
 
 class OriginalMonoScriptFieldTests(unittest.TestCase):
@@ -24,6 +24,22 @@ class OriginalMonoScriptFieldTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             (Path(tmp) / "Missing.cs").write_text("class Missing {}")
             self.assertFalse(inspect(Path(tmp), "0" * 64)["original_managed_type_matched"])
+
+
+    def test_classifies_field_and_parameter_without_leaking_names(self):
+        raw = ("class Example {\n"
+               " [SerializeField] private UnityEngine.ComputeShader fftShader;\n"
+               " void Foo(UnityEngine.ComputeShader runtimeInput) {} \n"
+               " public UnityEngine.ComputeShader Output { get; set; }\n"
+               " }")
+        result = classify_compute_shader_occurrences(raw)
+        self.assertEqual(len(result), 3)
+        self.assertEqual(result[0]["kind"], "declared_field_candidate")
+        self.assertEqual(result[1]["kind"], "type_use_without_confirmed_field")
+        self.assertEqual(result[2]["kind"], "property_candidate")
+        self.assertNotIn("fftShader", str(result))
+        self.assertNotIn("runtimeInput", str(result))
+
 
 
 if __name__ == "__main__":
