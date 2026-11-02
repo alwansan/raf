@@ -206,6 +206,13 @@ jobs:
           python3 -m scripts.hydrate_render_payloads --apply --release-cache
           python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
           python3 -m scripts.audit_texture_stream_coverage --root Raft/Raft_Data
+      - name: Audit original compute kernel containers before any shader reconstruction
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Read only the nine original ComputeShader objects already hydrated
+          # and SHA-checked above. Do not publish HLSL/DXBC/serialized bytes.
+          python3 -m scripts.audit_original_compute_metadata --source Raft/Raft_Data --expected-objects 9
       - name: Audit original mesh stream requirements without downloading additional LFS
         shell: bash
         run: |
