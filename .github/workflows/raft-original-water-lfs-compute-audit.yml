@@ -1,0 +1,67 @@
+name: Raft verified three-LFS-owner compute audit - CPU only no Unity
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-original-water-lfs-compute-audit.yml'
+      - 'scripts/verify_targeted_lfs_compute_sources.py'
+      - 'scripts/probe_authenticated_water_compute_inventory.py'
+      - 'tests/test_verify_targeted_lfs_compute_sources.py'
+      - 'tests/test_probe_authenticated_water_compute_inventory.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: raft-original-water-lfs-compute-audit-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  verify-and-inspect-original-compute:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 22
+    steps:
+      - name: Checkout source and LFS pointer files only - no smudge
+        uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: true
+          sparse-checkout: |
+            Raft/Raft_Data
+            scripts
+            tests
+      - name: Synthetic proof-of-identity and reconciliation regression tests
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p 'test_verify_targeted_lfs_compute_sources.py' -v
+          python3 -m unittest discover -s tests -p 'test_probe_authenticated_water_compute_inventory.py' -v
+          python3 -m unittest discover -s tests -p 'test_probe_original_compute_containers.py' -v
+          python3 -m unittest discover -s tests -p 'test_audit_original_compute_metadata.py' -v
+      - name: Verify original committed LFS pointers before download
+        run: |
+          set -euo pipefail
+          python3 -m scripts.verify_targeted_lfs_compute_sources --source Raft/Raft_Data --pointers-only
+      - name: Download exactly three original LFS owners never external streams
+        shell: bash
+        env:
+          GIT_LFS_SKIP_SMUDGE: '1'
+          GIT_ATTR_SOURCE: HEAD
+        run: |
+          set -euo pipefail
+          git lfs install --local
+          # Exactly 337660952 bytes in three original serialized .assets.
+          # This explicit include excludes .resS banks and other LFS objects.
+          git lfs pull --include='Raft/Raft_Data/resources.assets,Raft/Raft_Data/sharedassets0.assets,Raft/Raft_Data/sharedassets36.assets' --exclude='' origin
+          python3 -m scripts.verify_targeted_lfs_compute_sources --source Raft/Raft_Data
+      - name: Install original Unity serialization parser without Unity
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+      - name: Correlate all nine original ComputeShader objects and DXBC signatures
+        run: |
+          set -euo pipefail
+          timeout 600s python3 -m scripts.probe_authenticated_water_compute_inventory --source Raft/Raft_Data
+          # No original shader bytes or translated binaries uploaded.
+          # No Unity Editor, Android build or device execution.
