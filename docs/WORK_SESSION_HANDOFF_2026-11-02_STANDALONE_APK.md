@@ -37,3 +37,9 @@ Continue independent source/water/input/save work as supported; if only multi-ho
 ## Verified cheap gates and native delivery opt-in
 Sourcefce6ec4d7ea00b5d87d8d715aff709c17c234f95: platform41400736657/job125131794073 COMPLETED SUCCESS. Real linked selection code ran37cases, actual embedded original-data gate passed standalone/split positive and altered/missing/duplicate negative fixtures, existing7APK/OBB+5payload audits+8scene contracts passed, offline library build and10identity/session smoke passed. Runner41400736664 SUCCESS; gated Unity41400736654 was preflight/skip, NOT full Unity validation.
 Explicitly request ONE native+device-test run with -raftPackageLayout standalone. If it succeeds and all delivery gates pass, publish directAPK automatically under existing prerelease policy; no OBB or rawsource/asset publication. Release notes tell owner Test report→Enable touch gamepad→Edit touch layout and warn of water/render/save/audio uncertainty and lossyASTC. No claim of APK until real outcome.
+
+
+## Submitted native checkpoint
+- Native source1246571d4de5fe4565e73bf3e128cf3ac0d78b81; https://github.com/alwansan/raf/actions/runs/41400935501 observed queued.
+- This is the single intentional full native+device delivery attempt after successful cheap gates. Do not duplicate/cancel it for documentation. Next inspect actual texture conversion count/Android format inventory,40scene gate,Gradle member size,FMОD exact36data/signature and standalone/noOBB/release-size gates. If successful deliver the actual Release APK URL; if failed diagnose actual first error without weakening integrity gates.
+- No new APK is available at this checkpoint; older successful APK+OBB pair was not retained. No phone validation for current shaders/touch/audio/save. Per owner instruction stop waiting now when only this multi-hour integration remains. Scheduled cycle resumes by reading this run's actual result.
