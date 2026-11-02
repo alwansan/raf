@@ -10,6 +10,7 @@ from pathlib import Path
 import re
 
 from scripts.probe_original_water_compute import ORIGINAL_SOURCE_SHA256
+from scripts.probe_original_fft_caller_graph import source_declarations
 from scripts.probe_original_fft_kernel_callsites import (
     CALL, SIMPLE_ID, parse_original_args, sha
 )
@@ -86,6 +87,34 @@ def index_source_links(original, expected):
             "right_hand_side": classify_index_rhs(m.group(2)),
             "preceding_immediate_guard": immediate_boolean_guard(original, m.start()),
         })
+    constructors = [m for m in source_declarations(original) if m["name"] == "Dx11FFT"]
+    formula = {"constructor_signature_matched": False,
+               "first_assignment_matches_constructor_int_parameter": False,
+               "bank_stride_guard_matches_fourth_bool_parameter": False,
+               "proven_formula_shape": None,
+               "verified_runtime_kernel_lookup_index": False}
+    if len(constructors) == 1 and len(constructors[0]["params"]) == 4:
+        args = constructors[0]["params"]
+        integer = re.fullmatch(r"\s*int\s+([A-Za-z_]\w*)\s*", args[1])
+        fourth = re.fullmatch(r"\s*bool\s+([A-Za-z_]\w*)\s*", args[3])
+        formula["constructor_signature_matched"] = bool(integer and fourth)
+        if integer and fourth and len(assignments) == 2:
+            rhs_shape = assignments[0]["right_hand_side"]["anonymized_operator_shape"]
+            literal_formula = re.fullmatch(
+                r"\s*([A-Za-z_]\w*)\s*-\s*5\s*<<\s*1\s*",
+                original[re.search(r"\b" + re.escape(base) +
+                    r"\s*=\s*[^;]{1,600}\s*;", original).start():].split("=", 1)[1].split(";", 1)[0]
+            ) if rhs_shape == "V-5<<1" else None
+            formula["first_assignment_matches_constructor_int_parameter"] = (
+                bool(literal_formula and literal_formula.group(1) == integer.group(1)))
+            formula["bank_stride_guard_matches_fourth_bool_parameter"] = (
+                assignments[1]["operator"] == "+="
+                and assignments[1]["right_hand_side"]["anonymized_operator_shape"] == "10"
+                and assignments[1]["preceding_immediate_guard"].get("guard_identifier_sha256")
+                == sha(fourth.group(1)))
+            if (formula["first_assignment_matches_constructor_int_parameter"]
+                    and formula["bank_stride_guard_matches_fourth_bool_parameter"]):
+                formula["proven_formula_shape"] = "(n-5)<<1, then conditional +10"
     param_declaration = bool(re.search(r"\bint\s+" + re.escape(base) + r"\s*[,)]", original))
     # Detect references without reporting proprietary field identifiers.
     occurrences = len(re.findall(r"\b" + re.escape(base) + r"\b", original))
@@ -96,6 +125,7 @@ def index_source_links(original, expected):
         "first_pass_index_int_parameter_declaration_detected": param_declaration,
         "index_assignment_count": len(assignments),
         "index_assignments": assignments,
+        "source_proven_original_constructor_kernel_bank_formula": formula,
         "first_and_second_pass_index_runtime_values_verified": False,
         "original_game_expressions_or_identifiers_published": False,
         "android_gpu_execution_proven": False,
