@@ -10,7 +10,8 @@ from pathlib import Path
 import re
 
 from scripts.probe_original_water_compute import ORIGINAL_SOURCE_SHA256
-from scripts.probe_original_fft_caller_graph import source_declarations
+from scripts.probe_original_fft_caller_graph import source_declarations, argument_syntax
+from scripts.probe_original_fft_kernel_callsites import sanitized_argument
 from scripts.probe_original_fft_kernel_callsites import (
     CALL, SIMPLE_ID, parse_original_args, sha
 )
@@ -164,12 +165,62 @@ def index_source_links(original, expected):
     }
 
 
+
+def correlate_original_seed_parameter_calls(original, caller, index_report):
+    """Potential lexical method calls only; no proof of receiver type identity."""
+    seed_hash = index_report["source_proven_original_kernel_index_formula_seed_lineage"][
+        "first_formula_seed_identifier_sha256"]
+    if not seed_hash:
+        return {"source_int_parameter_methods": [], "candidate_calls": []}
+    methods = []
+    for m in source_declarations(original):
+        for position, p in enumerate(m["params"]):
+            decl = re.fullmatch(r"\s*int\s+([A-Za-z_]\w*)\s*", p)
+            if decl and sha(decl.group(1)) == seed_hash:
+                methods.append({"name": m["name"], "seed_parameter_position": position,
+                                "total_parameters": len(m["params"])})
+    matches = []
+    for m in methods:
+        regex = re.compile(r"\b" + re.escape(m["name"]) + r"\s*\(")
+        for call in regex.finditer(caller):
+            if len(matches) >= 24:
+                raise ValueError("Unbounded original WaveRendererFFT FFT seed callsites")
+            args, _ = parse_original_args(caller, call.end()-1)
+            pos = m["seed_parameter_position"]
+            if len(args) != m["total_parameters"] or pos >= len(args):
+                continue
+            matches.append({
+                "method_name_sha256": sha(m["name"]),
+                "caller_line": caller.count("\n", 0, call.start())+1,
+                "seed_arg": sanitized_argument(args[pos]),
+                "seed_argument_syntax": argument_syntax(args[pos]),
+                "possible_method_call_only_type_not_resolved": True,
+            })
+    return {"source_int_parameter_methods": [
+        {"method_name_sha256": sha(m["name"]),
+         "seed_parameter_position": m["seed_parameter_position"],
+         "parameter_count": m["total_parameters"]}
+        for m in methods],
+        "candidate_calls": matches,
+        "validated_direct_csharp_runtime_call_graph": False,
+        "proprietary_identifiers_or_source_disclosed": False}
+
+
 def inspect(root):
     paths = list(root.rglob("Dx11FFT.cs"))
     if len(paths) != 1 or paths[0].is_symlink() or not paths[0].is_file():
         raise ValueError("Original Dx11FFT caller source missing")
     original = paths[0].read_text(encoding="utf-8-sig").replace("\r\n", "\n")
-    return index_source_links(original, ORIGINAL_SOURCE_SHA256["Dx11FFT"])
+    candidates = list(root.rglob("WavesRendererFFT.cs"))
+    if len(candidates) != 1 or candidates[0].is_symlink() or not candidates[0].is_file():
+        raise ValueError("Original WavesRendererFFT source missing")
+    caller = candidates[0].read_text(encoding="utf-8-sig").replace("\r\n", "\n")
+    if sha(caller) != ORIGINAL_SOURCE_SHA256["WavesRendererFFT"]:
+        raise ValueError("Original WavesRendererFFT source SHA256 mismatch")
+    report = index_source_links(original, ORIGINAL_SOURCE_SHA256["Dx11FFT"])
+    report["source_correlated_seed_parameter_calls"] = (
+        correlate_original_seed_parameter_calls(original, caller, report))
+    return report
 
 
 def main():
