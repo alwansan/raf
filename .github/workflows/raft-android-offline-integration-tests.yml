@@ -51,11 +51,13 @@ jobs:
           python3 -m unittest discover -s tests -p test_android_render_lifetimes.py -v
           python3 -m unittest discover -s tests -p test_runtime_operation_traces.py -v
           python3 -m unittest discover -s tests -p test_android_offline_startup.py -v
+          python3 -m unittest discover -s tests -p test_probe_original_scene_audio.py -v
           python3 -m unittest discover -s tests -p test_adapt_original_save_paths.py -v
           dotnet tool install ilspycmd --version 11.2.0.10050 --tool-path "$RUNNER_TEMP/ilspy"
           timeout 360s "$RUNNER_TEMP/ilspy/ilspycmd" -p -lv CSharp9_0 \
             -o "$RUNNER_TEMP/original" Raft/Raft_Data/Managed/Assembly-CSharp.dll \
             > "$RUNNER_TEMP/decompile-private.log" 2>&1
+          python3 -m scripts.probe_original_scene_audio --source "$RUNNER_TEMP/original"
           python3 -m scripts.verify_fft_lifetime_harness --source "$RUNNER_TEMP/original" --output "$RUNNER_TEMP/fft-lifetime-harness"
           dotnet run --project "$RUNNER_TEMP/fft-lifetime-harness/Harness.csproj" --configuration Release --nologo
           python3 -m scripts.adapt_android_render_lifetimes --source "$RUNNER_TEMP/original" --backup "$RUNNER_TEMP/render-lifetime-originals"
