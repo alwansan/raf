@@ -109,6 +109,22 @@ class IndexDerivationTests(unittest.TestCase):
         self.assertNotIn("fftExponent", str(calls))
         self.assertNotIn("Execute", str(calls))
 
+    def test_enum_typed_fft_seed_parameter_is_not_excluded(self):
+        original = (
+            "class Dx11FFT { public void Work(FFTSize exponent) {\n"
+            " int index = exponent - 5 << 1;\n"
+            " fft.Dispatch(index, 1, 1, 1);\n"
+            " fft.Dispatch(index + 1, 1, 1, 1);\n"
+            " }}")
+        caller = "worker.Work(FFTSize.Six);"
+        report = index_source_links(original, hashlib.sha256(original.encode()).hexdigest())
+        result = correlate_original_seed_parameter_calls(original, caller, report)
+        self.assertEqual(len(result["source_int_parameter_methods"]), 1)
+        self.assertEqual(result["source_int_parameter_methods"][0]["seed_parameter_type_kind"],
+                         "enum_or_other")
+        self.assertEqual(len(result["candidate_calls"]), 1)
+        self.assertFalse(result["validated_direct_csharp_runtime_call_graph"])
+
     def test_wrong_source_and_missing_index_fail_closed(self):
         with self.assertRaisesRegex(ValueError, "hash changed"):
             index_source_links("shader.Dispatch(index, 1, 1, 1);", "0" * 64)
