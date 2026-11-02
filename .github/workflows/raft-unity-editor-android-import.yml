@@ -139,6 +139,7 @@ jobs:
           python3 -m unittest discover -s tests -p test_android_expansion_audit.py -v
           python3 -m unittest discover -s tests -p test_restore_postfx_shaders.py -v
           python3 -m unittest discover -s tests -p test_restore_postfx_compute.py -v
+          python3 -m unittest discover -s tests -p test_restore_volumetric_shaders.py -v
           python3 -m unittest discover -s tests -p test_restore_tmp_shaders.py -v
           python3 -m unittest discover -s tests -p test_runtime_operation_traces.py -v
           python3 -m unittest discover -s tests -p test_android_offline_startup.py -v
@@ -344,6 +345,11 @@ jobs:
           set -euo pipefail
           python3 -m scripts.restore_postfx_shaders --project "$RUNNER_TEMP/project/ExportedProject" --backup "$RUNNER_TEMP/original-postfx-shaders"
           python3 -m scripts.restore_postfx_compute --project "$RUNNER_TEMP/project/ExportedProject" --backup "$RUNNER_TEMP/original-postfx-compute"
+      - name: Restore authenticated volumetric programs and Raft half-resolution composition with original GUIDs
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.restore_volumetric_shaders --project "$RUNNER_TEMP/project/ExportedProject" --backup "$RUNNER_TEMP/original-volumetric-shaders"
       - name: Preserve FFT temporary lifetimes across kernel errors and exclude Windows Party startup from Android solo
         shell: bash
         run: |

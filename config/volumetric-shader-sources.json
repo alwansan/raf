@@ -1,0 +1,26 @@
+{
+  "repository": "SlightlyMad/VolumetricLights",
+  "commit": "d20b6f9a47ae857e1d313b147db2df3ef44b9196",
+  "files": [
+    {
+      "path": "Assets/Shaders/BilateralBlur.shader",
+      "bytes": 16062,
+      "git_blob": "a55627f212ba55c98c21ef503dc145fdd63b5ae1"
+    },
+    {
+      "path": "Assets/Shaders/BlitAdd.shader",
+      "bytes": 2644,
+      "git_blob": "94b4a6cff0d400ced92340d91bcf6040ba63ee18"
+    },
+    {
+      "path": "Assets/Shaders/VolumetricLight.shader",
+      "bytes": 18934,
+      "git_blob": "72c6648c45349e8bfd3c7a2b4f77bfb319b67eb3"
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 1488,
+      "git_blob": "da8818f7894bf27567a9953ca156c0a2b22ca9ce"
+    }
+  ]
+}

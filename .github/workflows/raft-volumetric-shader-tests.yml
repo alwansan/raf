@@ -1,0 +1,54 @@
+name: Raft volumetric shader recovery contracts (no LFS)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/restore_volumetric_shaders.py
+      - scripts/restore_tmp_shaders.py
+      - config/volumetric-shader-sources.json
+      - tests/test_restore_volumetric_shaders.py
+      - .github/workflows/raft-volumetric-shader-tests.yml
+  workflow_dispatch: {}
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+            config/volumetric-shader-sources.json
+      - name: Reject altered sources and preserve original shader metadata
+        run: python3 -m unittest discover -s tests -p test_restore_volumetric_shaders.py -v
+      - name: Authenticate pinned upstream programs and restore real programs in a temporary fixture
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          import tempfile
+          from scripts.restore_volumetric_shaders import sources, download, restore_project, NOTICE, pass_count
+          shaders, license = sources(json.loads(Path('config/volumetric-shader-sources.json').read_text()), download)
+          with tempfile.TemporaryDirectory() as temp:
+              root = Path(temp)
+              for i, name in enumerate(shaders):
+                  path = root / 'project/Assets/Shader' / (str(i) + '.shader')
+                  path.parent.mkdir(parents=True, exist_ok=True)
+                  path.write_text('Shader "' + name + '" { SubShader { Pass {} } }')
+                  Path(str(path) + '.meta').write_text('guid: original-' + str(i))
+              assert restore_project(root / 'project', root / 'backup', shaders, license) == 3
+              for i, (name, text) in enumerate(shaders.items()):
+                  path = root / 'project/Assets/Shader' / (str(i) + '.shader')
+                  assert path.read_text() == text
+                  assert Path(str(path) + '.meta').read_text() == 'guid: original-' + str(i)
+              assert pass_count(shaders['Hidden/BilateralBlur']) == 13
+              assert (root / 'project' / NOTICE).read_bytes() == license
+          print('RAFT_VOLUMETRIC_AUTHENTIC_RESTORE originalMetasUnchanged=true binaryNotice=true actualUnityDeviceExecution=false')
+          PY
