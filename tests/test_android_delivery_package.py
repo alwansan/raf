@@ -5,6 +5,7 @@ from types import SimpleNamespace
 import tempfile
 import unittest
 import os
+import subprocess
 import yaml
 from unittest.mock import patch
 import zipfile
@@ -13,6 +14,50 @@ from scripts.reassemble_android_delivery import reassemble
 
 
 class DeliveryTests(unittest.TestCase):
+    @unittest.skipUnless(os.name == 'posix', 'CI runner filesystem permissions are POSIX')
+    def test_actual_packaging_step_with_read_only_unity_output_parent(self):
+        if os.geteuid()==0:
+            self.skipTest('Filesystem permission regression requires the non-root Actions runner')
+        workflow=yaml.safe_load((Path(__file__).resolve().parents[1]/'.github/workflows/raft-unity-editor-android-import.yml').read_text())
+        steps=workflow['jobs']['reconstruct']['steps']
+        step=next(s for s in steps if s.get('id')=='package_delivery')
+        # Execute the real SDK/packaging commands; omit only the recursive unit-test invocation.
+        script='set -euo pipefail\nsdk_root='+step['run'].split('sdk_root=',1)[1]
+        script=script.replace('${{ github.run_number }}','77')
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);root.chmod(0o755)
+            apk,obb,_=self.inputs(root)
+            builds=root/'builds';android=builds/'Android';android.mkdir(parents=True)
+            apk.rename(android/'RaftAndroidExperimental.apk')
+            obb.rename(android/'RaftAndroidExperimental.main.obb')
+            runner=root/'runner-temp';runner.mkdir();runner.chmod(0o777)
+            sdk=root/'sdk';tools=sdk/'build-tools/35.0.0';tools.mkdir(parents=True)
+            aapt=tools/'aapt'
+            aapt.write_text("#!/bin/sh\ncat <<'EOF'\npackage: name='"+PACKAGE+"' versionCode='77' versionName='1.0'\nsdkVersion:'23'\ntargetSdkVersion:'35'\nEOF\n")
+            aapt.chmod(0o755)
+            (root/'scripts').symlink_to(Path(__file__).resolve().parents[1]/'scripts',target_is_directory=True)
+            (root/'docs').mkdir();(root/'docs/ANDROID_INSTALL_AR.md').write_text('Synthetic install instructions')
+            builds.chmod(0o555)
+            env=dict(os.environ,RUNNER_TEMP=str(runner),ANDROID_SDK_ROOT=str(sdk),PYTHONDONTWRITEBYTECODE='1')
+            try:
+                old=script.replace('"$RUNNER_TEMP/raft-android-delivery"','builds/delivery')
+                rejected=subprocess.run(['bash','-c',old],cwd=root,env=env,capture_output=True,text=True)
+                self.assertNotEqual(rejected.returncode,0)
+                self.assertIn('PermissionError',rejected.stderr)
+                result=subprocess.run(['bash','-c',script],cwd=root,env=env,capture_output=True,text=True)
+                self.assertEqual(result.returncode,0,result.stderr)
+                out=runner/'raft-android-delivery'
+                self.assertEqual((out/'Raft-Android-Test.apk').read_bytes(),(android/'RaftAndroidExperimental.apk').read_bytes())
+                self.assertEqual((out/('main.77.'+PACKAGE+'.obb')).read_bytes(),(android/'RaftAndroidExperimental.main.obb').read_bytes())
+                self.assertTrue((out/'INSTALL_AR.md').is_file())
+                self.assertTrue((out/'reassemble.py').is_file())
+                retention=next(s for s in steps if s.get('name')=='Retain complete owner-authorized install packages for release delivery')
+                self.assertEqual(retention['with']['path'],'${{ runner.temp }}/raft-android-delivery/')
+                recovery=next(s for s in steps if s.get('name')=='Retain audited native outputs if delivery packaging fails')
+                self.assertEqual(recovery['if'],"${{ failure() && steps.package_delivery.outcome == 'failure' }}")
+                self.assertEqual(recovery['with']['path'].splitlines(),['builds/Android/RaftAndroidExperimental.apk','builds/Android/RaftAndroidExperimental.main.obb'])
+            finally:builds.chmod(0o755)
+
     def test_actual_release_gate_accepts_complete_parts_and_rejects_missing_data(self):
         workflow=yaml.safe_load((Path(__file__).resolve().parents[1]/'.github/workflows/raft-unity-editor-android-import.yml').read_text())
         step=workflow['jobs']['publish-early-test']['steps'][-1]

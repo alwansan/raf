@@ -659,6 +659,7 @@ jobs:
           "$signer" verify --verbose "$GITHUB_WORKSPACE/builds/Android/RaftAndroidExperimental.apk" > "$RUNNER_TEMP/apk-signature-private.txt"
           echo 'RAFT_ANDROID_APK_SIGNATURE verified=true installVerified=false gameplayVerified=false'
       - name: Package complete owner-authorized APK OBB and XAPK delivery
+        id: package_delivery
         if: ${{ github.ref == 'refs/heads/feature/android-native-port' && ((github.event_name == 'push' && contains(github.event.head_commit.message, '[raft-native-build]') && contains(github.event.head_commit.message, '[raft-device-test]')) || (github.event_name == 'workflow_dispatch' && inputs.build_mode == 'native' && inputs.publish_early_test)) }}
         shell: bash
         run: |
@@ -675,14 +676,25 @@ jobs:
           python3 -m scripts.package_android_delivery \
             --apk builds/Android/RaftAndroidExperimental.apk "${companion_args[@]}" \
             --badging "$RUNNER_TEMP/delivery-badging.txt" --version-code "${{ github.run_number }}" \
-            --output builds/delivery
-          cp docs/ANDROID_INSTALL_AR.md builds/delivery/INSTALL_AR.md
+            --output "$RUNNER_TEMP/raft-android-delivery"
+          cp docs/ANDROID_INSTALL_AR.md "$RUNNER_TEMP/raft-android-delivery/INSTALL_AR.md"
+      - name: Retain audited native outputs if delivery packaging fails
+        if: ${{ failure() && steps.package_delivery.outcome == 'failure' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: raft-android-audited-output-recovery
+          path: |
+            builds/Android/RaftAndroidExperimental.apk
+            builds/Android/RaftAndroidExperimental.main.obb
+          compression-level: 0
+          retention-days: 2
+          if-no-files-found: error
       - name: Retain complete owner-authorized install packages for release delivery
         if: ${{ github.ref == 'refs/heads/feature/android-native-port' && ((github.event_name == 'push' && contains(github.event.head_commit.message, '[raft-native-build]') && contains(github.event.head_commit.message, '[raft-device-test]')) || (github.event_name == 'workflow_dispatch' && inputs.build_mode == 'native' && inputs.publish_early_test)) }}
         uses: actions/upload-artifact@v4
         with:
           name: raft-android-test-delivery
-          path: builds/delivery/
+          path: ${{ runner.temp }}/raft-android-delivery/
           compression-level: 0
           retention-days: 1
           if-no-files-found: error
