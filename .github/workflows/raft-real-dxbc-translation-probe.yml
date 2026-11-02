@@ -1,0 +1,72 @@
+name: Raft authentic DXBC 460-byte translator comparison - no Unity or LFS
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-real-dxbc-translation-probe.yml'
+      - 'scripts/run_original_dxbc_translation_probe.py'
+      - 'tests/test_original_dxbc_translation_probe.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: raft-real-dxbc-translation-probe-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  compare-authenticated-dxbc:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 16
+    steps:
+      - name: Read only the original regular-Git Unity asset and private probe source
+        uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            Raft/Raft_Data/sharedassets29.assets
+            scripts
+            tests
+      - name: Verify source-only DXBC stage contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_probe_directx_shader_bridge.py -v
+          python3 -m unittest discover -s tests -p test_probe_original_compute_containers.py -v
+          python3 -m unittest discover -s tests -p test_original_dxbc_translation_probe.py -v
+      - name: Install CPU-only compiler and serializer dependencies
+        shell: bash
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends meson ninja-build build-essential spirv-tools vkd3d-compiler
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+      - name: Source-build SHA-pinned open DXBC-SPIRV debug translator
+        shell: bash
+        env:
+          PINNED_UPSTREAM: f528e1e821527e361f34829f78d1fbd5340e6f6a
+        run: |
+          set -euo pipefail
+          git init -q "$RUNNER_TEMP/dxbc-spirv-upstream"
+          git -C "$RUNNER_TEMP/dxbc-spirv-upstream" remote add origin https://github.com/doitsujin/dxbc-spirv.git
+          git -C "$RUNNER_TEMP/dxbc-spirv-upstream" fetch -q --depth 1 origin "$PINNED_UPSTREAM"
+          git -C "$RUNNER_TEMP/dxbc-spirv-upstream" checkout -q --detach FETCH_HEAD
+          test "$(git -C "$RUNNER_TEMP/dxbc-spirv-upstream" rev-parse HEAD)" = "$PINNED_UPSTREAM"
+          meson setup "$RUNNER_TEMP/dxbc-spirv-build" "$RUNNER_TEMP/dxbc-spirv-upstream" \
+            --buildtype=debugoptimized -Denable_tools=true -Denable_tests=false
+          timeout 480s meson compile -C "$RUNNER_TEMP/dxbc-spirv-build" -j 2
+          test -x "$RUNNER_TEMP/dxbc-spirv-build/tools/dxbc_compiler"
+      - name: Translate privately authenticated original 460-byte DXBC and validate target environments
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.run_original_dxbc_translation_probe \
+            --root Raft/Raft_Data \
+            --dxbc-compiler "$RUNNER_TEMP/dxbc-spirv-build/tools/dxbc_compiler"
+          # Source DXBC, disassembly and converted SPIR-V remain in a temporary
+          # directory which is deleted. No uploaded artifacts. No game build.
