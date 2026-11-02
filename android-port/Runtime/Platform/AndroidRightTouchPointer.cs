@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
+using UnityEngine.UI;
 using TouchPhase = UnityEngine.InputSystem.TouchPhase;
 
 namespace RaftAndroid.Platform
@@ -42,7 +43,26 @@ namespace RaftAndroid.Platform
             if (events == null) return false;
             hits.Clear();
             events.RaycastAll(new PointerEventData(events) { position = point }, hits);
-            return hits.Count > 0 && hits[0].gameObject != null && hits[0].gameObject.transform.IsChildOf(transform);
+            foreach (var hit in hits)
+            {
+                var target = hit.gameObject;
+                if (target == null) continue;
+                // Keep authored controller/editor/HUD touches with their UI module.
+                if (target.transform.IsChildOf(transform)) return true;
+                // Ignore PhysicsRaycaster hits and decorative full-screen HUD
+                // graphics: neither should turn gameplay right-touch into UI.
+                if (!(hit.module is GraphicRaycaster)) continue;
+                // Original UGUI menus are NOT children of the Android host.
+                // Preserve their actual interactive pointer/drag/scroll targets.
+                if (ExecuteEvents.GetEventHandler<IPointerClickHandler>(target) != null ||
+                    ExecuteEvents.GetEventHandler<IPointerDownHandler>(target) != null ||
+                    ExecuteEvents.GetEventHandler<IPointerUpHandler>(target) != null ||
+                    ExecuteEvents.GetEventHandler<IBeginDragHandler>(target) != null ||
+                    ExecuteEvents.GetEventHandler<IDragHandler>(target) != null ||
+                    ExecuteEvents.GetEventHandler<IScrollHandler>(target) != null)
+                    return true;
+            }
+            return false;
         }
 
         private void OnEvent(InputEventPtr input, InputDevice device)

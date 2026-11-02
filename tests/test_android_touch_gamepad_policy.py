@@ -191,6 +191,29 @@ class TouchGamepadContract(unittest.TestCase):
         self.assertIn("activePointerId = NoPointer;", SOURCE)
 
 
+    def test_right_touch_preserves_original_interactive_ugui_and_controller_touches(self):
+        # Previously only children of the Android host were exempt, so original
+        # menu buttons were consumed as right-clicks. This is a source contract,
+        # not a Unity EventSystem or real-device acceptance test.
+        pointer = (ROOT / "android-port/Runtime/Platform/AndroidRightTouchPointer.cs").read_text(encoding="utf-8")
+        ownership = pointer.split("private bool OwnedUi(Vector2 point)", 1)[1].split(
+            "private void OnEvent", 1)[0]
+        routing = pointer.split("private void OnEvent", 1)[1].split(
+            "private void BeforeInput", 1)[0]
+        self.assertIn("foreach (var hit in hits)", ownership)
+        self.assertIn("target.transform.IsChildOf(transform)", ownership)
+        self.assertIn("hit.module is GraphicRaycaster", ownership)
+        for handler in ("IPointerClickHandler", "IPointerDownHandler",
+                        "IPointerUpHandler", "IBeginDragHandler",
+                        "IDragHandler", "IScrollHandler"):
+            self.assertIn("ExecuteEvents.GetEventHandler<" + handler + ">(target)", ownership)
+        self.assertNotIn("hits[0]", ownership)
+        self.assertLess(routing.index("if (phase == TouchPhase.Began && OwnedUi(point))"),
+                        routing.index("input.handled = true;"))
+        self.assertIn("if (uiTouches.Contains(id))", routing)
+        self.assertIn("Input.simulateMouseWithTouches = false;", pointer)
+        self.assertNotIn("MouseButton.Left", pointer)
+
     def test_android_touch_ui_exposes_existing_virtual_binding_editor(self):
         panel = (ROOT / "android-port/Runtime/Platform/AndroidTouchUiPanel.cs").read_text(encoding="utf-8")
         self.assertIn("GetComponent<InputSystemUIInputModule>()", panel)
