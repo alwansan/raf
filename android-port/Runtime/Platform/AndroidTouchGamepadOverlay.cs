@@ -20,6 +20,9 @@ namespace RaftAndroid.Platform
         private GameObject canvasObject;
         private RectTransform safeRoot;
         private bool visible;
+        // Android can pause without pointer-up. Preserve visibility preference
+        // while unregistering all simulated Gamepad controls.
+        private bool suspendedByPause;
         private int lastWidth = -1, lastHeight = -1;
         private Rect lastSafeArea;
         private const string LayoutKey = "raft.android.touchlayout.v1.";
@@ -60,6 +63,7 @@ namespace RaftAndroid.Platform
         {
             if (enabled && !EnsureCanvas()) return false;
             if (!enabled && editing) SetLayoutEditMode(false);
+            suspendedByPause = false;
             visible = enabled;
             if (canvasObject != null)
             {
@@ -513,10 +517,49 @@ namespace RaftAndroid.Platform
                 "; totalControls=" + surfaces.Count + "; gameplayResponseVerified=false");
         }
 
+        private void OnApplicationPause(bool paused)
+        {
+            if (paused)
+            {
+                if (!visible || canvasObject == null || !canvasObject.activeInHierarchy) return;
+                // Android may suspend before the UI module dispatches pointer-up.
+                // Disabling OnScreenControls removes their simulated Gamepad,
+                // so a held stick/button cannot survive a background/resume.
+                suspendedByPause = true;
+                canvasObject.SetActive(false);
+                RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("input", "touch_gamepad_suspended",
+                    "reason=android_pause; visiblePreferencePreserved=true");
+                return;
+            }
+            RestoreAfterPauseIfReady();
+        }
+
+        private void RestoreAfterPauseIfReady()
+        {
+            if (!suspendedByPause || !visible || canvasObject == null) return;
+            // Scene transitions can briefly remove the original UI module.
+            // Defer re-registering controls instead of adding another EventSystem.
+            var events = EventSystem.current;
+            var module = events != null ? events.GetComponent<InputSystemUIInputModule>() : null;
+            if (events == null || !events.isActiveAndEnabled ||
+                module == null || !module.isActiveAndEnabled) return;
+            canvasObject.SetActive(true);
+            suspendedByPause = false;
+            UpdateSafeArea();
+            AuditVirtualBindings();
+            RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("input", "touch_gamepad_resumed",
+                "uiModuleReady=true; gameplayResponseVerified=false");
+        }
+
         private void Update()
         {
             if (visible)
             {
+                if (suspendedByPause)
+                {
+                    RestoreAfterPauseIfReady();
+                    return;
+                }
                 // If the original UI input module disappears during scene
                 // transitions, remove virtual input instead of stealing events.
                 var events = EventSystem.current;
@@ -536,6 +579,7 @@ namespace RaftAndroid.Platform
         private void OnDisable()
         {
             if (editing) SetLayoutEditMode(false);
+            suspendedByPause = false;
             visible = false;
             if (canvasObject != null) canvasObject.SetActive(false);
         }

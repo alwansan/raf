@@ -120,6 +120,33 @@ class TouchGamepadContract(unittest.TestCase):
         self.assertIn("area.yMax / Screen.height", SOURCE)
 
 
+    def test_pause_releases_virtual_controls_without_losing_user_visibility(self):
+        # Input System removes simulated Gamepad when its controls are disabled.
+        # Pause may not deliver pointer-up; defer safe reactivation until UI ready.
+        pause = SOURCE.split("private void OnApplicationPause(bool paused)", 1)[1].split(
+            "private void RestoreAfterPauseIfReady()", 1)[0]
+        resume = SOURCE.split("private void RestoreAfterPauseIfReady()", 1)[1].split(
+            "private void Update()", 1)[0]
+        update = SOURCE.split("private void Update()", 1)[1].split(
+            "private void OnDisable()", 1)[0]
+        self.assertIn("suspendedByPause = true;", pause)
+        self.assertIn("canvasObject.SetActive(false);", pause)
+        self.assertNotIn("visible = false;", pause)
+        self.assertIn("RestoreAfterPauseIfReady();", pause)
+        self.assertIn("events.GetComponent<InputSystemUIInputModule>()", resume)
+        self.assertLess(resume.index("!module.isActiveAndEnabled"), resume.index("canvasObject.SetActive(true);"))
+        self.assertLess(resume.index("canvasObject.SetActive(true);"), resume.index("suspendedByPause = false;"))
+        self.assertIn("UpdateSafeArea();", resume)
+        self.assertIn("AuditVirtualBindings();", resume)
+        self.assertIn("if (suspendedByPause)", update)
+        self.assertIn("RestoreAfterPauseIfReady();", update)
+        self.assertIn("suspendedByPause = false;", SOURCE.split(
+            "public bool SetVisible(bool enabled)", 1)[1].split(
+            "private bool EnsureCanvas()", 1)[0])
+        self.assertIn("suspendedByPause = false;", SOURCE.split(
+            "private void OnDisable()", 1)[1])
+        self.assertNotIn('new GameObject("EventSystem"', resume)
+
     def test_mode_transition_releases_stale_pointer_capture(self):
         mode = SOURCE.split("public bool SetLayoutEditMode(bool enable)", 1)[1].split(
             "private static float SafeFloat", 1)[0]
