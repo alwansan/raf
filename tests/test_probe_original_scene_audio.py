@@ -2,7 +2,7 @@
 import tempfile
 from pathlib import Path
 import unittest
-from scripts.probe_original_scene_audio import inspect, inspect_player, inspect_ground_control, method_body
+from scripts.probe_original_scene_audio import inspect, inspect_player, inspect_ground_control, inspect_audio_settings, method_body
 
 
 class SceneAudioProbeTests(unittest.TestCase):
@@ -75,6 +75,23 @@ class SceneAudioProbeTests(unittest.TestCase):
             self.assertEqual(result["actionMove"]["method_reads"], 1)
             self.assertEqual(result["settings"]["start_assignments"], 0)
             self.assertEqual(result["actionMove"]["start_assignments"], 0)
+
+    def test_original_audio_settings_vca_probe_is_redacted(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            (root / "AudioSettingsBox.cs").write_text(
+                "class AudioSettingsBox {\n"
+                "private void SettingStart() {\n"
+                "  masterVca = RuntimeManager.GetVCA(sensitivePath);\n"
+                "  Ready();\n"
+                "}\n}\n"
+            )
+            report = inspect_audio_settings(root)
+            self.assertTrue(report["returns_void"])
+            self.assertEqual(report["vca_call_count"], 1)
+            self.assertTrue(report["vca_calls_simple_assignments"])
+            self.assertNotIn("sensitivePath", str(report))
+            self.assertFalse(report["modified_source"])
 
     def test_ground_control_probe_is_private_and_identifies_early_init_dependencies(self):
         with tempfile.TemporaryDirectory() as folder:
