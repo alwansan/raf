@@ -93,6 +93,19 @@ def inspect(project: Path) -> dict:
     }
 
 
+def native_ready(report):
+    # Even convincing-looking source with the right pass count is not proof
+    # it matches Raft's original serialized shader GUID, FFT index order or
+    # gameplay material contracts. Until an authenticated recovery can attest
+    # those identities, a synthetic shader must never clear the native gate.
+    return (
+        report["all_logged_shader_pass_requirements_satisfied"]
+        and report["water_compute_source_candidate_present"]
+        and report["authentic_water_kernel_identity_verified"]
+    )
+
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--project", type=Path, required=True)
@@ -100,9 +113,8 @@ def main():
     args = parser.parse_args()
     result = inspect(args.project)
     print("RAFT_ORIGINAL_WATER_RENDER_GATE " + json.dumps(result, sort_keys=True))
-    if args.strict and (not result["all_logged_shader_pass_requirements_satisfied"]
-                        or not result["water_compute_source_candidate_present"]):
-        raise SystemExit("Original water rendering contract incomplete: restore authentic passes and kernels before native Unity build")
+    if args.strict and not native_ready(result):
+        raise SystemExit("Original water rendering contract incomplete or unauthenticated: verify original shader passes, GPU kernels and identities before native Unity build")
 
 
 if __name__ == "__main__":
