@@ -2,7 +2,7 @@
 import tempfile
 from pathlib import Path
 import unittest
-from scripts.probe_original_scene_audio import inspect, inspect_player, method_body
+from scripts.probe_original_scene_audio import inspect, inspect_player, inspect_ground_control, method_body
 
 
 class SceneAudioProbeTests(unittest.TestCase):
@@ -59,6 +59,27 @@ class SceneAudioProbeTests(unittest.TestCase):
             (root / "PersonController.cs").write_text('class PersonController {\nprivate void Start() { settings = null; }\n}')
             with self.assertRaises(ValueError):
                 inspect_player(root)
+
+
+    def test_ground_control_probe_is_private_and_identifies_early_init_dependencies(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            (root / "PersonController.cs").write_text(
+                "class PersonController {\n"
+                "private void Start() { actionMove = InitializeMovement(); settings = Setup(); }\n"
+                "private void GroundControll(int groundHit) {\n"
+                "  actionMove.Process();\n"
+                "  settings.Update();\n"
+                "  AuditGround(secretData);\n"
+                "}\n}\n"
+            )
+            report = inspect_ground_control(root)
+            self.assertTrue(report["method_void"])
+            self.assertEqual(report["settings"]["method_reads"], 1)
+            self.assertEqual(report["actionMove"]["method_reads"], 1)
+            self.assertEqual(report["actionMove"]["start_assignments"], 1)
+            self.assertFalse(report["modified_source"])
+            self.assertNotIn("secretData", str(report))
 
 
 if __name__ == "__main__":
