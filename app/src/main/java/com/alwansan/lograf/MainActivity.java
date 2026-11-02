@@ -176,6 +176,10 @@ public final class MainActivity extends Activity {
                 "\\nSystem event lines: "+metric(m,"system_context_lines","")+
                 "\\nStream reconnects (potential gaps): "+metric(m,"logcat_reconnects","")+
                 "\\nLog lines/sec: "+metric(m,"game_log_lines_per_second","")+
+                "\\nShader pass errors: "+metric(m,"shader_pass_errors_total","")+
+                "\\nCompute kernel errors: "+metric(m,"invalid_compute_kernel_total","")+
+                "\\nMissing asset paths: "+metric(m,"missing_asset_path_errors_total","")+
+                "\\nGame process death events: "+metric(m,"game_process_death_events_total","")+
                 "\\nFrame pacing P95: "+metric(m,"presented_frame_p95_ms","ms")+
                 "\\nLast frame progress: "+metric(m,"last_present_progress_age_ms","ms")+
                 "\\nAlerts: "+metricWarnings(m)+
