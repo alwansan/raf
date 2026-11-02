@@ -360,6 +360,13 @@ namespace RaftAndroid.Platform
 
         public void ResetLayout()
         {
+            // Reset must invalidate a drag already in progress; otherwise its
+            // delayed pointer-up can save a position after defaults are restored.
+            foreach (var rect in surfaces.Values)
+            {
+                var handle = rect.GetComponent<AndroidTouchLayoutHandle>();
+                if (handle != null) handle.CancelCapture();
+            }
             foreach (string label in surfaces.Keys)
             {
                 string key = LayoutKey + label + ".";

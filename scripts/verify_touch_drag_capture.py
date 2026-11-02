@@ -114,6 +114,19 @@ class Program
         Check(overlay.Saves==3,"Stale finger cannot save after mode transition");
         handle.OnPointerUp(second);
         Check(overlay.Saves==4,"Fresh finger can commit after mode transition");
+        // ResetLayout clears captures before deleting saved keys and restoring
+        // defaults. A delayed release must not re-save a stale position.
+        handle.OnPointerDown(first);
+        handle.CancelCapture();
+        handle.OnDrag(first);
+        handle.OnPointerUp(first);
+        Check(overlay.Drags==4 && overlay.Saves==4,
+            "Reset must invalidate an in-flight drag and its delayed save");
+        handle.OnPointerDown(second);
+        handle.OnDrag(second);
+        handle.OnPointerUp(second);
+        Check(overlay.Drags==5 && overlay.Saves==5,
+            "Fresh pointer can drag and save after reset");
         Console.WriteLine("RAFT_TOUCH_DRAG_CAPTURE checks="+checks+
             " conflictingTouchesIgnored=true duplicateSaves=0 actualUnityDeviceVerified=false");
     }

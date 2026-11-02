@@ -131,6 +131,15 @@ class TouchGamepadContract(unittest.TestCase):
         self.assertIn("private void OnDisable()", handle)
         self.assertIn("CancelCapture();", handle)
 
+    def test_reset_cancels_inflight_drag_before_restoring_defaults(self):
+        reset = SOURCE.split("public void ResetLayout()", 1)[1].split(
+            "public void AdjustSelectedSize", 1)[0]
+        self.assertIn("handle.CancelCapture();", reset)
+        self.assertLess(reset.index("handle.CancelCapture();"),
+                        reset.index("PlayerPrefs.DeleteKey"))
+        self.assertLess(reset.index("handle.CancelCapture();"),
+                        reset.index("RestoreLayout();"))
+
     def test_edit_drag_pointer_capture_and_release_contract(self):
         self.assertIn("IEndDragHandler, IPointerUpHandler", SOURCE)
         self.assertIn("activePointerId != NoPointer", SOURCE)
