@@ -21,19 +21,48 @@ namespace RaftAndroid.Audio
 
         private static void LoadExpansionBanks()
         {
-            string root = Application.streamingAssetsPath;
-            if (root.IndexOf(".obb!/", StringComparison.OrdinalIgnoreCase) < 0) return;
-            // The original Windows-compiled provider uses android_asset, which
-            // cannot address Unity's expansion ZIP. Feed the exact original bank
-            // bytes to the original Studio system before scene emitters execute.
+            // Unity may report an APK StreamingAssets URL even when the
+            // split Unity/OBB delivery actually contains the original banks.
+            // The previous ".obb!/" check silently skipped EVERY bank, which
+            // matches the owner's device traces: native FMOD OK but no bank
+            // stages, followed by missing events and master VCA.
+            string reported = Application.streamingAssetsPath;
+            string obbDirectory = null;
+            if (reported.IndexOf(".obb!/", StringComparison.OrdinalIgnoreCase) < 0)
+            {
+                using (var player = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+                using (var activity = player.GetStatic<AndroidJavaObject>("currentActivity"))
+                {
+                    if (activity == null) throw new InvalidOperationException("Android activity unavailable for OBB discovery");
+                    using (var obb = activity.Call<AndroidJavaObject>("getObbDir"))
+                        if (obb != null) obbDirectory = obb.Call<string>("getAbsolutePath");
+                }
+            }
+            string root = AndroidFmodBankLocator.SelectRoot(reported, obbDirectory, Application.identifier);
+            RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("audio", "fmod.bank_root",
+                "archive=" + (root.IndexOf(".obb!/", StringComparison.OrdinalIgnoreCase) >= 0 ? "obb" : "apk") +
+                "; originalUnityRootWasObb=" + (reported.IndexOf(".obb!/", StringComparison.OrdinalIgnoreCase) >= 0), true);
+            // Load every original bank from the actual APK/OBB archive before
+            // scene emitters run. Never extract the full expansion on disk.
             foreach (string name in new[] { "MasterBank.strings.bank", "MasterBank.bank", "VO_logs_english.bank", "VO_npc_english.bank", "VO_olof_english.bank" })
             {
                 RaftAndroid.Diagnostics.AndroidRuntimeLog.Stage("fmod.expansion_bank." + name, () =>
                 {
                     byte[] bytes = RaftAndroid.Platform.AndroidStreamingAssets.ReadAllBytes(root + "/" + name);
                     FMOD.Studio.Bank bank;
-                    Check(FMODUnity.RuntimeManager.StudioSystem.loadBankMemory(bytes, FMOD.Studio.LOAD_BANK_FLAGS.NORMAL, out bank), "load expansion bank " + name);
-                    if (!bank.isValid()) throw new InvalidOperationException("FMOD expansion bank handle is invalid");
+                    FMOD.RESULT result = FMODUnity.RuntimeManager.StudioSystem.loadBankMemory(
+                        bytes, FMOD.Studio.LOAD_BANK_FLAGS.NORMAL, out bank);
+                    // RuntimeManager may have already loaded the exact bank
+                    // from APK StreamingAssets. FMOD reports that explicitly;
+                    // it is not an absent/corrupt bank or a reason to crash.
+                    if (result == FMOD.RESULT.ERR_EVENT_ALREADY_LOADED)
+                    {
+                        RaftAndroid.Diagnostics.AndroidRuntimeLog.Write(
+                            "audio", "fmod_bank_already_loaded", "bank=" + name, true);
+                        return;
+                    }
+                    Check(result, "load original bank " + name);
+                    if (!bank.isValid()) throw new InvalidOperationException("FMOD original bank handle is invalid: " + name);
                     // EventNotFound during original JoinGame can abort world
                     // initialization. Record the real event index loaded from
                     // each authentic bank; no fake event or success flag.
