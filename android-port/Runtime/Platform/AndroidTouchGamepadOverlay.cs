@@ -437,7 +437,16 @@ namespace RaftAndroid.Platform
                     {
                         foreach (var bound in action.controls)
                         {
-                            if (bound != virtualControl) continue;
+                            // A gameplay action can bind to leftStick/x rather
+                            // than leftStick. Walk parents without changing it.
+                            bool consumesVirtualControl = false;
+                            for (var current = bound; current != null; current = current.parent)
+                                if (current == virtualControl)
+                                {
+                                    consumesVirtualControl = true;
+                                    break;
+                                }
+                            if (!consumesVirtualControl) continue;
                             count++;
                             if (count <= 3)
                             {
