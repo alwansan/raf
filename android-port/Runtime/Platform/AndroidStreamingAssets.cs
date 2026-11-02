@@ -28,13 +28,24 @@ namespace RaftAndroid.Platform
                 if (entries.Length != 1) throw new InvalidDataException("Android asset absent or ambiguous");
                 var entry = entries[0];
                 if (entry.Length > 128L * 1024 * 1024) throw new InvalidDataException("Individual audio asset exceeds read bound");
+                // MasterBank can exceed 100 MiB. Allocate only its verified
+                // declared length; MemoryStream.ToArray used to duplicate the
+                // entire bank in managed memory during Android startup.
+                byte[] bytes = new byte[(int)entry.Length];
                 using (var input = entry.Open())
-                using (var output = new MemoryStream((int)entry.Length))
                 {
-                    input.CopyTo(output);
-                    if (output.Length != entry.Length) throw new InvalidDataException("Truncated Android asset");
-                    return output.ToArray();
+                    int offset = 0;
+                    while (offset < bytes.Length)
+                    {
+                        int read = input.Read(bytes, offset, bytes.Length - offset);
+                        if (read <= 0) throw new InvalidDataException("Truncated Android asset");
+                        offset += read;
+                    }
+                    // Do not accept a stream that expands past the declared
+                    // length even when its ZIP metadata is inconsistent.
+                    if (input.ReadByte() != -1) throw new InvalidDataException("Android asset exceeds declared length");
                 }
+                return bytes;
             }
         }
     }
