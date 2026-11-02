@@ -1,5 +1,5 @@
 import unittest
-from scripts.adapt_android_render_lifetimes import protect_temporaries,adapt
+from scripts.adapt_android_render_lifetimes import protect_temporaries,adapt,isolate_player_start_fmod
 class LifetimeTests(unittest.TestCase):
     def test_single_failure_path_has_finally(self):
         s='\tTemporaryRenderTexture temporary = cache.GetTemporary();\n\tWork(temporary);\n\ttemporary.Dispose();\n'
@@ -73,3 +73,57 @@ class WorldSceneAudioIsolationTests(unittest.TestCase):
                         {'SoundManager': (hashlib.sha256(original.encode()).hexdigest(), 0)}):
             with self.assertRaisesRegex(ValueError, 'original FMOD scene callback contract changed|Original FMOD scene callback contract changed'):
                 adapt('SoundManager', original)
+
+
+class PlayerAudioInitializationTests(unittest.TestCase):
+    def test_exact_two_original_player_events_are_guarded_without_skipping_settings(self):
+        import hashlib
+        from unittest.mock import patch
+        original = (
+            "class PersonController {\n"
+            "    private void Start()\n"
+            "    {\n"
+            "        soundA = RuntimeManager.CreateInstance(eventOne);\n"
+            "        soundB = RuntimeManager.CreateInstance(eventTwo);\n"
+            "        settings = RestoreSettings();\n"
+            "        actionMove = CreateMovement();\n"
+            "    }\n"
+            "}\n"
+        )
+        with patch.dict('scripts.adapt_android_render_lifetimes.PINS',
+                        {'PersonController': (hashlib.sha256(original.encode()).hexdigest(), 0)}):
+            result = adapt('PersonController', original)
+        self.assertEqual(result.count("catch (FMODUnity.EventNotFoundException __raftMissingPlayerSound)"), 2)
+        self.assertEqual(result.count("player_start_missing_fmod_event"), 2)
+        self.assertEqual(result.count("RuntimeManager.CreateInstance("), 2)
+        self.assertEqual(result.count("settings = RestoreSettings();"), 1)
+        self.assertEqual(result.count("actionMove = CreateMovement();"), 1)
+        self.assertLess(result.index("soundA = "), result.index("settings = "))
+        self.assertNotIn("catch (System.Exception", result)
+        self.assertNotIn("WorldHasBeenRecieved", result)
+        self.assertNotIn("return;", result)
+
+    def test_broken_call_shape_or_changed_initialization_order_fails_closed(self):
+        base = (
+            "class PersonController {\n"
+            "private void Start() {\n"
+            "soundA = RuntimeManager.CreateInstance(one);\n"
+            "soundB = RuntimeManager.CreateInstance(two);\n"
+            "settings = RestoreSettings();\n"
+            "actionMove = SetupMove();\n"
+            "}\n}\n"
+        )
+        self.assertEqual(isolate_player_start_fmod(base).count("player_start_missing_fmod_event"), 2)
+        with self.assertRaisesRegex(ValueError, "audio-before-settings"):
+            isolate_player_start_fmod(base.replace("settings = RestoreSettings();\n",
+                                                   "settings = RestoreSettings();\n", 1)
+                                     .replace("soundB = RuntimeManager.CreateInstance(two);\n",
+                                              "settings = ReadFromDisk();\nsoundB = RuntimeManager.CreateInstance(two);\n"))
+        with self.assertRaisesRegex(ValueError, "Unrecognized player FMOD event assignment"):
+            isolate_player_start_fmod(base.replace(
+                "soundB = RuntimeManager.CreateInstance(two);",
+                "FinishInitialization(RuntimeManager.CreateInstance(two));"))
+        with self.assertRaisesRegex(ValueError, "statement count drift|audio-before-settings"):
+            isolate_player_start_fmod(base.replace(
+                "soundB = RuntimeManager.CreateInstance(two);\n", ""))
+
