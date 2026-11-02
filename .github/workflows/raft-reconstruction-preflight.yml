@@ -1,0 +1,110 @@
+name: Raft reconstruction unit preflight (no Unity or LFS)
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - '.github/workflows/raft-unity-editor-android-import.yml'
+      - 'scripts/overlay_ilspy_gameplay.py'
+      - 'scripts/reembed_scene_bound_assets.py'
+      - 'tests/test_reembed_scene_bound_assets.py'
+      - 'scripts/supplement_ilspy_gameplay.py'
+      - 'tests/test_supplement_ilspy_gameplay.py'
+      - 'tests/test_csharp_overlay.py'
+      - 'android-port/Editor/**'
+      - 'scripts/package_android_delivery.py'
+      - 'scripts/reassemble_android_delivery.py'
+      - 'tests/test_android_delivery_package.py'
+      - 'docs/ANDROID_INSTALL_AR.md'
+      - 'tests/test_standalone_original_data_gate.py'
+      - 'android-port/Recovery/PropertyTextures/**'
+      - 'android-port/Tests/PropertyTextures/**'
+      - 'scripts/build_sdk_script_manifest.py'
+      - 'scripts/resolve_managed_closure.py'
+      - 'scripts/isolate_sdk_source_assemblies.py'
+      - 'tests/test_build_sdk_script_manifest.py'
+      - 'tests/test_resolve_managed_closure.py'
+      - 'tests/test_isolate_sdk_source_assemblies.py'
+      - 'scripts/repair_asset_case_collisions.py'
+      - 'tests/test_repair_asset_case_collisions.py'
+      - 'scripts/adapt_android_offline_startup.py'
+      - 'scripts/instrument_android_runtime_operations.py'
+      - 'config/runtime-operation-traces.json'
+      - 'scripts/adapt_original_save_paths.py'
+      - 'scripts/adapt_android_render_lifetimes.py'
+      - 'tests/test_android_render_lifetimes.py'
+      - 'scripts/restore_tmp_shaders.py'
+      - 'scripts/restore_postfx_shaders.py'
+      - 'scripts/restore_postfx_compute.py'
+      - 'scripts/ci_memory_watch.py'
+      - 'scripts/audit_gradle_asset_payload.py'
+      - 'tests/test_gradle_payload_audit.py'
+      - 'scripts/audit_android_expansion.py'
+      - 'tests/test_android_expansion_audit.py'
+      - 'tests/test_ci_memory_watch.py'
+      - 'tests/test_restore_postfx_compute.py'
+      - 'tests/test_restore_postfx_shaders.py'
+      - 'config/postfx-v1-shader-sources.json'
+      - 'tests/test_restore_tmp_shaders.py'
+      - 'scripts/restore_fmod_resource_layout.py'
+      - 'tests/test_restore_fmod_resource_layout.py'
+      - 'scripts/adapt_unity_url_codecs.py'
+      - 'tests/test_adapt_unity_url_codecs.py'
+      - 'scripts/stage_raft_managed_dlls.py'
+      - 'tests/test_stage_raft_managed_dlls.py'
+      - 'scripts/rename_conflicting_sdk_asmdefs.py'
+      - 'tests/test_sdk_asmdef_rename.py'
+      - 'scripts/add_unity_packages.py'
+      - 'tests/test_add_unity_packages.py'
+      - '.github/workflows/raft-reconstruction-preflight.yml'
+      - '.github/workflows/raft-unity-android-experiment.yml'
+      - 'tests/test_native_workflow_isolation.py'
+
+permissions:
+  contents: read
+concurrency:
+  group: raft-reconstruction-preflight-${{ github.ref }}
+  cancel-in-progress: false
+  queue: max
+
+jobs:
+  source-contracts:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Validate native queue isolation and delivery obligations
+        run: python3 -m unittest discover -s tests -p test_native_workflow_isolation.py -v
+      - name: Run original reconstruction unit fixtures without Unity or original downloads
+        run: |
+          python3 -m unittest discover -s tests -p test_android_render_lifetimes.py -v
+          python3 -m unittest discover -s tests -p test_gradle_payload_audit.py -v
+          python3 -m unittest discover -s tests -p test_android_expansion_audit.py -v
+          python3 -m unittest discover -s tests -p test_restore_postfx_shaders.py -v
+          python3 -m unittest discover -s tests -p test_restore_postfx_compute.py -v
+          python3 -m unittest discover -s tests -p test_restore_tmp_shaders.py -v
+          python3 -m unittest discover -s tests -p test_runtime_operation_traces.py -v
+          python3 -m unittest discover -s tests -p test_android_offline_startup.py -v
+          python3 -m unittest discover -s tests -p test_adapt_original_save_paths.py -v
+          python3 -m unittest discover -s tests -p test_reembed_scene_bound_assets.py -v
+          python3 -m unittest discover -s tests -p test_fmod_resource_path_policy.py -v
+          python3 -m unittest discover -s tests -p test_csharp_overlay.py -v
+          python3 -m unittest discover -s tests -p test_supplement_ilspy_gameplay.py -v
+          python3 -m unittest discover -s tests -p test_repair_assetripper_stubs.py -v
+          python3 -m unittest discover -s tests -p test_stage_raft_managed_dlls.py -v
+          python3 -m unittest discover -s tests -p test_resolve_managed_closure.py -v
+          python3 -m unittest discover -s tests -p test_build_sdk_script_manifest.py -v
+          python3 -m unittest discover -s tests -p test_exported_font_materials.py -v
+          python3 -m unittest discover -s tests -p test_isolate_sdk_source_assemblies.py -v
+          python3 -m unittest discover -s tests -p test_mesh_range_manifest.py -v
+          python3 -m unittest discover -s tests -p test_verified_mesh_ranges.py -v
+          python3 -m unittest discover -s tests -p test_inline_mesh_ranges.py -v
+          python3 -m unittest discover -s tests -p test_original_mesh_positions.py -v
+          python3 -m unittest discover -s tests -p test_scene_stream_restoration.py -v
+          python3 -m unittest discover -s tests -p test_exported_font_materials.py -v
+          python3 -m unittest discover -s tests -p test_recover_empty_ilspy_sources.py -v

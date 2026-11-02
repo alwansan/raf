@@ -1,85 +1,87 @@
-name: Raft gated Unity 2021 Android import + compile (requires license secrets)
+name: Raft full native APK OBB XAPK build and delivery
 
 on:
   workflow_dispatch:
     inputs:
       build_mode:
-        description: Validate SDK bindings first, or request native ARM64 build
+        description: Full native ARM64 build; lightweight tests use separate workflows
         type: choice
-        options: [sdk-bindings, native]
-        default: sdk-bindings
+        options: [native]
+        default: native
       publish_early_test:
-        description: Publish an explicitly requested early startup test APK after all APK gates pass
+        description: Publish complete APK OBB XAPK after all delivery gates pass
         type: boolean
-        default: false
+        default: true
+  workflow_call:
+    inputs:
+      build_mode:
+        type: string
+        default: native
+      publish_early_test:
+        type: boolean
+        default: true
+      build_lane:
+        type: string
+        default: delivery
   push:
     branches:
       - feature/android-native-port
     paths:
-      - '.github/workflows/raft-unity-editor-android-import.yml'
-      - 'scripts/overlay_ilspy_gameplay.py'
-      - 'scripts/reembed_scene_bound_assets.py'
-      - 'tests/test_reembed_scene_bound_assets.py'
-      - 'scripts/supplement_ilspy_gameplay.py'
-      - 'tests/test_supplement_ilspy_gameplay.py'
-      - 'tests/test_csharp_overlay.py'
-      - 'android-port/Editor/**'
-      - 'scripts/package_android_delivery.py'
-      - 'scripts/reassemble_android_delivery.py'
-      - 'tests/test_android_delivery_package.py'
-      - 'docs/ANDROID_INSTALL_AR.md'
-      - 'tests/test_standalone_original_data_gate.py'
-      - 'android-port/Recovery/PropertyTextures/**'
-      - 'android-port/Tests/PropertyTextures/**'
-      - 'scripts/build_sdk_script_manifest.py'
-      - 'scripts/resolve_managed_closure.py'
-      - 'scripts/isolate_sdk_source_assemblies.py'
-      - 'tests/test_build_sdk_script_manifest.py'
-      - 'tests/test_resolve_managed_closure.py'
-      - 'tests/test_isolate_sdk_source_assemblies.py'
-      - 'scripts/repair_asset_case_collisions.py'
-      - 'tests/test_repair_asset_case_collisions.py'
-      - 'scripts/adapt_android_offline_startup.py'
-      - 'scripts/instrument_android_runtime_operations.py'
-      - 'config/runtime-operation-traces.json'
-      - 'scripts/adapt_original_save_paths.py'
-      - 'scripts/adapt_android_render_lifetimes.py'
-      - 'tests/test_android_render_lifetimes.py'
-      - 'scripts/restore_tmp_shaders.py'
-      - 'scripts/restore_postfx_shaders.py'
-      - 'scripts/restore_postfx_compute.py'
-      - 'scripts/ci_memory_watch.py'
-      - 'scripts/audit_gradle_asset_payload.py'
-      - 'tests/test_gradle_payload_audit.py'
-      - 'scripts/audit_android_expansion.py'
-      - 'tests/test_android_expansion_audit.py'
-      - 'tests/test_ci_memory_watch.py'
-      - 'tests/test_restore_postfx_compute.py'
-      - 'tests/test_restore_postfx_shaders.py'
-      - 'config/postfx-v1-shader-sources.json'
-      - 'tests/test_restore_tmp_shaders.py'
-      - 'scripts/restore_fmod_resource_layout.py'
-      - 'tests/test_restore_fmod_resource_layout.py'
-      - 'scripts/adapt_unity_url_codecs.py'
-      - 'tests/test_adapt_unity_url_codecs.py'
-      - 'scripts/stage_raft_managed_dlls.py'
-      - 'tests/test_stage_raft_managed_dlls.py'
-      - 'scripts/rename_conflicting_sdk_asmdefs.py'
-      - 'tests/test_sdk_asmdef_rename.py'
-      - 'scripts/add_unity_packages.py'
-      - 'tests/test_add_unity_packages.py'
+      - '.github/raft-native-build-request.json'
 
-# Never cancel an active multi-hour Unity import merely because a workflow or
-# test file changed. Non-opt-in pushes must not reconstruct the full project.
+# Preserve the existing delivery mutex so current immutable builds stay protected.
+# Dedicated request file prevents ordinary source/test pushes entering this queue.
 concurrency:
-  group: raft-unity-editor-android-${{ github.ref }}
+  group: ${{ inputs.build_lane == 'experiment' && 'raft-unity-android-experiment' || 'raft-unity-editor-android' }}-${{ github.ref }}
   cancel-in-progress: false
+  queue: max
 
 permissions:
   contents: read
 
 jobs:
+  native-request-gate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Require an explicit full native request on the owner branch
+        env:
+          NATIVE_REQUESTED: ${{ (github.event_name == 'workflow_dispatch' && inputs.build_mode == 'native') || (github.event_name == 'push' && contains(github.event.head_commit.message, '[raft-native-build]')) }}
+          DELIVERY_REQUESTED: ${{ (github.event_name == 'workflow_dispatch' && inputs.publish_early_test) || (github.event_name == 'push' && contains(github.event.head_commit.message, '[raft-device-test]')) }}
+          BUILD_LANE: ${{ inputs.build_lane || 'delivery' }}
+          REQUEST_EVENT: ${{ github.event_name }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF" = "refs/heads/feature/android-native-port"
+          test "$NATIVE_REQUESTED" = "true"
+          if [ "$BUILD_LANE" = "experiment" ]; then
+            test "$REQUEST_EVENT" = "workflow_dispatch" || test "$REQUEST_EVENT" = "push"
+            test "$DELIVERY_REQUESTED" != "true"
+          else
+            test "$BUILD_LANE" = "delivery"
+            test "$DELIVERY_REQUESTED" = "true"
+          fi
+          if [ "$REQUEST_EVENT" = "push" ]; then
+            python3 - <<'PY'
+          import json,os,re
+          from pathlib import Path
+          path='.github/raft-native-experiment-request.json' if os.environ['BUILD_LANE']=='experiment' else '.github/raft-native-build-request.json'
+          request=json.loads(Path(path).read_text())
+          assert isinstance(request.get('request_id'),str) and 1 <= len(request['request_id']) <= 128
+          assert isinstance(request.get('reason'),str) and 1 <= len(request['reason']) <= 512
+          assert re.fullmatch('[a-f0-9]{40}',request.get('requested_from_sha',''))
+          print('RAFT_NATIVE_REQUEST accepted=true event=push')
+          PY
+          fi
+
   unity-license-preflight:
+    needs: native-request-gate
     environment: UNITY_LICENSE
     runs-on: ubuntu-24.04
     outputs:
@@ -100,10 +102,16 @@ jobs:
           else
             echo "ready=false" >> "$GITHUB_OUTPUT"
             echo "Unity activation unavailable; will not download LFS or Docker image."
-            echo 'Unity Editor license setup is a genuine remaining prerequisite.' >> "$GITHUB_STEP_SUMMARY"
+            echo '::error::Unity activation unavailable for this explicit native request; no APK produced.'
+            exit 1
           fi
 
   reconstruct:
+    # Both native lanes serialize actual Editor work to avoid license contention.
+    concurrency:
+      group: raft-native-engine-${{ github.ref }}
+      cancel-in-progress: false
+      queue: max
     needs: unity-license-preflight
     environment: UNITY_LICENSE
     if: ${{ needs.unity-license-preflight.outputs.ready == 'true' && ((github.event_name == 'workflow_dispatch' && inputs.build_mode == 'native') || (github.event_name == 'push' && contains(github.event.head_commit.message, '[raft-native-build]'))) }}
@@ -747,3 +755,36 @@ jobs:
             --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --prerelease \
             --title "Raft Android — early startup test ${GITHUB_RUN_NUMBER}" \
             --notes-file "$RUNNER_TEMP/early-test-notes.md" >> "$GITHUB_STEP_SUMMARY"
+          gh release view "$tag" --repo "$GITHUB_REPOSITORY" --json assets,url > "$RUNNER_TEMP/published-delivery.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          local={p.name:p.stat().st_size for p in Path('release-apk').iterdir() if p.is_file()}
+          remote=json.loads((Path(os.environ['RUNNER_TEMP'])/'published-delivery.json').read_text())
+          actual={a['name']:a['size'] for a in remote['assets']}
+          assert actual==local, 'Published release is missing or changed delivery files'
+          with Path(os.environ['GITHUB_STEP_SUMMARY']).open('a') as out:
+              out.write('Verified complete delivery: '+remote['url']+' files='+str(len(actual))+'\n')
+          print('RAFT_PUBLISHED_DELIVERY verifiedFiles='+str(len(actual))+' deviceInstallVerified=false')
+          PY
+
+  delivery-result:
+    if: always()
+    needs: [native-request-gate, unity-license-preflight, reconstruct, publish-early-test]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Refuse green native runs with missing build or delivery
+        env:
+          REQUEST_RESULT: ${{ needs.native-request-gate.result }}
+          NATIVE_RESULT: ${{ needs.reconstruct.result }}
+          RELEASE_RESULT: ${{ needs.publish-early-test.result }}
+          BUILD_LANE: ${{ inputs.build_lane || 'delivery' }}
+        run: |
+          set -eu
+          test "$REQUEST_RESULT" = "success"
+          test "$NATIVE_RESULT" = "success"
+          if [ "$BUILD_LANE" != "experiment" ]; then
+            test "$RELEASE_RESULT" = "success"
+          fi
+          echo "RAFT_NATIVE_DELIVERY_RESULT lane=$BUILD_LANE build=$NATIVE_RESULT release=$RELEASE_RESULT"

@@ -1,0 +1,31 @@
+name: Raft isolated native experiment (private)
+
+on:
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: Specific hypothesis to validate; check active native jobs and license capacity first
+        type: string
+        required: true
+
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - '.github/raft-native-experiment-request.json'
+
+# A separately named workflow/lane reuses the reviewed build implementation.
+# Dedicated experiment request only; no public release or delivery queue collision.
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  experiment:
+    if: ${{ github.ref == 'refs/heads/feature/android-native-port' && (github.event_name == 'workflow_dispatch' || (contains(github.event.head_commit.message, '[raft-native-build]') && contains(github.event.head_commit.message, '[raft-native-experiment]') && !contains(github.event.head_commit.message, '[raft-device-test]'))) }}
+    uses: ./.github/workflows/raft-unity-editor-android-import.yml
+    with:
+      build_mode: native
+      publish_early_test: false
+      build_lane: experiment
+    secrets: inherit
