@@ -415,7 +415,10 @@ namespace RaftAndroid.Platform
 
         private void UpdateSafeArea()
         {
-            if (safeRoot == null || Screen.width <= 0 || Screen.height <= 0) return;
+            // An inactive canvas cannot complete a layout pass. Do not cache its
+            // safe-area dimensions or the first visible frame may skip clamping.
+            if (safeRoot == null || canvasObject == null || !canvasObject.activeInHierarchy ||
+                Screen.width <= 0 || Screen.height <= 0) return;
             Rect area = Screen.safeArea;
             if (Screen.width == lastWidth && Screen.height == lastHeight && area == lastSafeArea) return;
             lastWidth = Screen.width;

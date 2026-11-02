@@ -71,6 +71,25 @@ class TouchGamepadContract(unittest.TestCase):
         self.assertIn("opened = false; // Drag controls with report panel closed.", DIAGNOSTICS)
         self.assertIn("touchGamepad.SetLayoutEditMode(startEdit)", DIAGNOSTICS)
 
+    def test_safe_area_cache_waits_for_first_active_canvas_layout(self):
+        # EnsureCanvas creates an inactive root. ForceUpdateCanvases cannot
+        # measure its RectTransform until SetVisible activates the hierarchy.
+        update = SOURCE.split("private void UpdateSafeArea()", 1)[1].split(
+            "// Read-only evidence", 1)[0]
+        self.assertIn("!canvasObject.activeInHierarchy", update)
+        self.assertLess(update.index("!canvasObject.activeInHierarchy"),
+                        update.index("lastWidth = Screen.width;"))
+        self.assertLess(update.index("lastWidth = Screen.width;"),
+                        update.index("Canvas.ForceUpdateCanvases();"))
+        show = SOURCE.split("public bool SetVisible(bool enabled)", 1)[1].split(
+            "private bool EnsureCanvas()", 1)[0]
+        self.assertLess(show.index("canvasObject.SetActive(enabled);"),
+                        show.index("UpdateSafeArea();"))
+        create = SOURCE.split("private bool EnsureCanvas()", 1)[1].split(
+            "private RectTransform AddSurface", 1)[0]
+        self.assertLess(create.index("canvasObject.SetActive(false);"),
+                        create.index("UpdateSafeArea();"))
+
     def test_virtual_control_audit_reads_original_enabled_actions_without_rebinding(self):
         # The API exists in Input System 1.7.0. A source contract is NOT a
         # Unity compile or evidence of gameplay responding to touch.
