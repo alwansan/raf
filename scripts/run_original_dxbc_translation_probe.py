@@ -116,6 +116,53 @@ def probe(root: Path, dxbc_compiler: Path):
                                           ("spirv_validator_vulkan_1_3", "vulkan1.3")):
                         report[name_ver] = execute(["spirv-val", "--target-env", env, str(output)]).returncode == 0
             backends[name] = report
+
+        # Private DXBC -> SPIR-V -> reconstructed HLSL -> SPIR-V
+        # diagnostic only. Cross-compiled HLSL is never printed or committed,
+        # and matching a workgroup shape cannot prove shader equivalence.
+        roundtrip = {
+            "spirv_cross_generated_hlsl": False,
+            "generated_hlsl_contains_compute_group": False,
+            "generated_hlsl_recompiled_to_spirv": False,
+            "recompiled_spirv_valid_for_vulkan_1_1": False,
+            "recompiled_compute_workgroup_preserved": False,
+            "original_semantics_or_unity_shader_restored": False,
+        }
+        vkd3d = backends["vkd3d_1_2"]
+        if vkd3d["produced_spirv"] and vkd3d["spirv_validator_vulkan_1_1"]:
+            vkd3d_file = temp / "vkd3d.spv"
+            candidate_hlsl = temp / "private_from_spv.hlsl"
+            cross = execute([
+                "spirv-cross", str(vkd3d_file), "--hlsl",
+                "--shader-model", "50", "--output", str(candidate_hlsl),
+            ])
+            if cross.returncode == 0 and candidate_hlsl.is_file():
+                roundtrip["spirv_cross_generated_hlsl"] = True
+                if candidate_hlsl.stat().st_size <= 256 * 1024:
+                    original_private_hlsl = candidate_hlsl.read_text(errors="replace")
+                    import re
+                    roundtrip["generated_hlsl_contains_compute_group"] = bool(
+                        re.search(r"\\[\\s*numthreads\\s*\\(\\s*8\\s*,\\s*8\\s*,\\s*1\\s*\\)\\s*\\]", original_private_hlsl)
+                    )
+                    roundtrip_output = temp / "private_roundtrip.spv"
+                    compiled = execute([
+                        "glslangValidator", "-V", "-D", "-S", "comp", "-e", "main",
+                        "-o", str(roundtrip_output), str(candidate_hlsl),
+                    ])
+                    if compiled.returncode == 0 and roundtrip_output.is_file():
+                        try:
+                            inspected = inspect(roundtrip_output.read_bytes())
+                        except ValueError:
+                            inspected = None
+                        if inspected is not None and inspected["container"] == "SPIR-V":
+                            roundtrip["generated_hlsl_recompiled_to_spirv"] = True
+                            roundtrip["recompiled_spirv_valid_for_vulkan_1_1"] = execute([
+                                "spirv-val", "--target-env", "vulkan1.1", str(roundtrip_output)
+                            ]).returncode == 0
+                            roundtrip["recompiled_compute_workgroup_preserved"] = (
+                                inspected["entrypoint_execution_models"].get(5) == 1
+                                and [8, 8, 1] in inspected["declared_local_workgroup_sizes"]
+                            )
         return {
             "original_source": ORIGINAL_OWNER,
             "original_compute_path_id": ORIGINAL_PATH_ID,
@@ -125,6 +172,7 @@ def probe(root: Path, dxbc_compiler: Path):
             "original_dxbc_chunks": context["chunk_tags"],
             "shader_version_tokens": version_tokens(dxbc),
             "translation_backends": backends,
+            "private_hlsl_roundtrip": roundtrip,
             "original_raft_shader_program_published": False,
             "unity_runtime_compiled": False,
             "android_vulkan_gpu_executed": False,
