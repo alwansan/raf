@@ -160,30 +160,30 @@ public final class MainActivity extends Activity {
         if(!raw.isEmpty()) try {
             JSONObject m=new JSONObject(raw.trim());
             performanceLabel.setText("قراءات Raft المباشرة (تتحدث كل 3 ثوانٍ):"+
-                "\\nCPU process: "+metric(m,"process_cpu_percent_one_core","% of one core")+
-                "\\nRAM RSS: "+metric(m,"process_rss_kb","KiB")+
-                "\\nRAM PSS: "+metric(m,"process_pss_kb","KiB")+
-                "\\nAvailable RAM: "+metric(m,"device_mem_available_kb","KiB")+
-                "\\nGPU busy (device-wide): "+metric(m,"gpu_busy_percent","%")+
-                "\\nCPU frequencies: "+frequencySummary(m)+
-                "\\nFree storage: "+storageSummary(m)+
-                "\\nGPU clock: "+metric(m,"gpu_clock_hz","Hz")+
-                "\\nDisplayed FPS estimate: "+metric(m,"presented_fps_estimate","fps")+
-                "\\nBattery: "+metric(m,"battery_level_percent","%")+
-                "\\nBattery temp: "+metric(m,"battery_temp_c","°C")+
-                "\\nThermal status code: "+metric(m,"thermal_status_code","")+
-                "\\nLogcat game lines: "+metric(m,"game_log_lines","")+
-                "\\nSystem event lines: "+metric(m,"system_context_lines","")+
-                "\\nStream reconnects (potential gaps): "+metric(m,"logcat_reconnects","")+
-                "\\nLog lines/sec: "+metric(m,"game_log_lines_per_second","")+
-                "\\nShader pass errors: "+metric(m,"shader_pass_errors_total","")+
-                "\\nCompute kernel errors: "+metric(m,"invalid_compute_kernel_total","")+
-                "\\nMissing asset paths: "+metric(m,"missing_asset_path_errors_total","")+
-                "\\nGame process death events: "+metric(m,"game_process_death_events_total","")+
-                "\\nFrame pacing P95: "+metric(m,"presented_frame_p95_ms","ms")+
-                "\\nLast frame progress: "+metric(m,"last_present_progress_age_ms","ms")+
-                "\\nAlerts: "+metricWarnings(m)+
-                "\\nGame state: "+m.optString("state","unknown"));
+                "\nCPU process: "+metric(m,"process_cpu_percent_one_core","% of one core")+
+                "\nRAM RSS: "+metric(m,"process_rss_kb","KiB")+
+                "\nRAM PSS: "+metric(m,"process_pss_kb","KiB")+
+                "\nAvailable RAM: "+metric(m,"device_mem_available_kb","KiB")+
+                "\nGPU busy (device-wide): "+metric(m,"gpu_busy_percent","%")+
+                "\nCPU frequencies: "+frequencySummary(m)+
+                "\nFree storage: "+storageSummary(m)+
+                "\nGPU clock: "+metric(m,"gpu_clock_hz","Hz")+
+                "\nDisplayed FPS estimate: "+metric(m,"presented_fps_estimate","fps")+
+                "\nBattery: "+metric(m,"battery_level_percent","%")+
+                "\nBattery temp: "+metric(m,"battery_temp_c","°C")+
+                "\nThermal status code: "+metric(m,"thermal_status_code","")+
+                "\nLogcat game lines: "+metric(m,"game_log_lines","")+
+                "\nSystem event lines: "+metric(m,"system_context_lines","")+
+                "\nStream reconnects (potential gaps): "+metric(m,"logcat_reconnects","")+
+                "\nLog lines/sec: "+metric(m,"game_log_lines_per_second","")+
+                "\nShader pass errors: "+metric(m,"shader_pass_errors_total","")+
+                "\nCompute kernel errors: "+metric(m,"invalid_compute_kernel_total","")+
+                "\nMissing asset paths: "+metric(m,"missing_asset_path_errors_total","")+
+                "\nGame process death events: "+metric(m,"game_process_death_events_total","")+
+                "\nFrame pacing P95: "+metric(m,"presented_frame_p95_ms","ms")+
+                "\nLast frame progress: "+metric(m,"last_present_progress_age_ms","ms")+
+                "\nAlerts: "+metricWarnings(m)+
+                "\nGame state: "+m.optString("state","unknown"));
         } catch(Exception ignored){performanceLabel.setText("Metrics awaiting valid sample");}
     }
 
