@@ -1,0 +1,49 @@
+"""Metadata-only compute tests; no original Raft assets or Unity required."""
+import unittest
+
+from scripts.audit_original_compute_metadata import summarize_tree, MAX_NODES
+
+
+class ComputeMetadataAuditTests(unittest.TestCase):
+    def test_reports_only_metadata_keys_and_counts_not_programs(self):
+        original = {
+            "m_Name": "ProprietaryFFT",
+            "m_ComputeShaders": [
+                {"m_Kernels": [
+                    {"name": "PrivateKernelA", "m_CompiledProgram": bytes([1, 9, 22])},
+                    {"name": "PrivateKernelB", "m_CompiledProgram": bytes([66, 77])},
+                ], "m_Platforms": [12, 16]},
+                {"m_Kernels": [{"name": "SecretKernel", "m_Program": "CODE-DO-NOT-PUBLISH"}]},
+            ],
+        }
+        result = summarize_tree(original)
+        self.assertGreaterEqual(result["metadata_fields"].get("m_Kernels", 0), 2)
+        self.assertEqual(result["metadata_array_totals"]["m_Kernels"], 3)
+        self.assertEqual(result["metadata_array_totals"]["m_Platforms"], 2)
+        self.assertFalse(result["private_shader_programs_emitted"])
+        self.assertNotIn("PrivateKernelA", str(result))
+        self.assertNotIn("CODE-DO-NOT-PUBLISH", str(result))
+        self.assertNotIn("ProprietaryFFT", str(result))
+        self.assertNotIn("66, 77", str(result))
+
+    def test_requires_typetree_dict_and_bounded_paths(self):
+        with self.assertRaisesRegex(ValueError, "dictionary"):
+            summarize_tree([{"m_Kernels": []}])
+        with self.assertRaisesRegex(ValueError, "metadata key"):
+            summarize_tree({"X" * 140: 1})
+        self.assertTrue(summarize_tree({"m_Kernels": []})["metadata_fields"])
+
+    def test_large_and_deep_nested_tables_are_rejected(self):
+        with self.assertRaisesRegex(ValueError, "array length"):
+            summarize_tree({"m_Kernels": [None] * (MAX_NODES + 1)})
+        child = {}
+        current = child
+        for i in range(15):
+            current["m_Kernels"] = {}
+            current = current["m_Kernels"]
+        with self.assertRaisesRegex(ValueError, "nesting depth"):
+            summarize_tree(child)
+
+
+if __name__ == "__main__":
+    unittest.main()
