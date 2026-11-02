@@ -47,6 +47,29 @@ class IndexDerivationTests(unittest.TestCase):
         self.assertEqual(data["index_assignments"][1]["right_hand_side"]["integer_constants"], [10])
         self.assertNotIn("conditional", str(data))
 
+    def test_constructor_parameter_and_boolean_bank_match_original_formula(self):
+        src = ("class Dx11FFT {\n"
+               " public Dx11FFT(ComputeShader cs, int exponent, bool dynamic, bool other) {\n"
+               "   int localIndex = exponent - 5 << 1;\n"
+               "   if (other) {\n"
+               "     localIndex += 10;\n"
+               "   }\n"
+               "   cs.SetTexture(localIndex, \"A\", src);\n"
+               "   cs.Dispatch(localIndex, 1, 1, 1);\n"
+               "   cs.SetTexture(localIndex + 1, \"B\", dst);\n"
+               "   cs.Dispatch(localIndex + 1, 1, 1, 1);\n"
+               " }\n"
+               "}")
+        report = index_source_links(src, hashlib.sha256(src.encode()).hexdigest())
+        contract = report["source_proven_original_constructor_kernel_bank_formula"]
+        self.assertTrue(contract["constructor_signature_matched"])
+        self.assertTrue(contract["first_assignment_matches_constructor_int_parameter"])
+        self.assertTrue(contract["bank_stride_guard_matches_fourth_bool_parameter"])
+        self.assertEqual(contract["proven_formula_shape"], "(n-5)<<1, then conditional +10")
+        self.assertFalse(contract["verified_runtime_kernel_lookup_index"])
+        self.assertNotIn("exponent", str(report))
+        self.assertNotIn("other", str(report))
+
     def test_wrong_source_and_missing_index_fail_closed(self):
         with self.assertRaisesRegex(ValueError, "hash changed"):
             index_source_links("shader.Dispatch(index, 1, 1, 1);", "0" * 64)
