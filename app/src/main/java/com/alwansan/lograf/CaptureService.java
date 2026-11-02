@@ -53,7 +53,8 @@ public final class CaptureService extends Service {
     }
 
     private void enqueue(String source,String content) {
-        if(!active || stopping)return;
+        // Accept final reader batches during remote.stop(); active becomes false only after tail delivery.
+        if(!active)return;
         final LogChunk chunk=new LogChunk(source,content);
         final long pending=pendingBytes.addAndGet(chunk.bytes.length);
         if(pending>QUEUE_BYTES_LIMIT){
