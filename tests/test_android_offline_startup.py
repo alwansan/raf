@@ -7,6 +7,26 @@ from scripts.adapt_android_offline_startup import adapt, apply, enter, replace_e
 
 
 class AndroidOfflineStartupTests(unittest.TestCase):
+
+    def test_original_android_touch_emulation_is_not_reenabled_as_left_mouse(self):
+        # The Android right-touch bridge takes ownership of non-UI touch events.
+        # Original CustomInputConfig disabled legacy left-click emulation; the
+        # old adapter flipped that setting to true for local sessions.
+        original = ('class CustomInputConfig { void OnEnable() { '
+                    'Input.simulateMouseWithTouches = false; } }')
+        with patch('scripts.adapt_android_offline_startup.PINS',
+                   {'CustomInputConfig': fingerprint(original)}):
+            changed = adapt('CustomInputConfig', original)
+        self.assertEqual(changed, original)
+        self.assertNotIn('Input.simulateMouseWithTouches = RaftAndroid.Platform.LocalPlayerIdentity.Enabled', changed)
+
+    def test_touch_policy_refuses_unrecognized_original_assignment(self):
+        original = 'class CustomInputConfig { void OnEnable() { Input.simulateMouseWithTouches = true; } }'
+        with patch('scripts.adapt_android_offline_startup.PINS',
+                   {'CustomInputConfig': fingerprint(original)}):
+            with self.assertRaisesRegex(ValueError, 'touch-to-left-mouse policy drift'):
+                adapt('CustomInputConfig', original)
+
     def test_unknown_original_revision_is_refused(self):
         with self.assertRaises(ValueError):
             adapt('SteamManager', 'class SteamManager {}')
