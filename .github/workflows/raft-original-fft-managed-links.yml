@@ -7,6 +7,8 @@ on:
       - '.github/workflows/raft-original-fft-managed-links.yml'
       - 'scripts/probe_fft_managed_asset_links.py'
       - 'tests/test_probe_fft_managed_asset_links.py'
+      - 'scripts/probe_fft_monoscript_field.py'
+      - 'tests/test_probe_fft_monoscript_field.py'
   workflow_dispatch:
 
 permissions:
@@ -36,6 +38,7 @@ jobs:
         run: |
           set -euo pipefail
           python3 -m unittest discover -s tests -p test_probe_fft_managed_asset_links.py -v
+          python3 -m unittest discover -s tests -p test_probe_fft_monoscript_field.py -v
       - name: Recover private exact CSharp9 original callers
         shell: bash
         run: |
@@ -50,5 +53,6 @@ jobs:
         run: |
           set -euo pipefail
           python3 -m scripts.probe_fft_managed_asset_links --source "$RUNNER_TEMP/private-fft-original"
+          python3 -m scripts.probe_fft_monoscript_field --source "$RUNNER_TEMP/private-fft-original"
           # Do not publish original decompiled code or ILSpy logs.
           # CI is CPU-only source-level evidence; no Unity/game build.
