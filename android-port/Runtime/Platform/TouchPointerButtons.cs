@@ -4,13 +4,13 @@ namespace RaftAndroid.Platform
 {
     // A tap remains pressed for one input update. Rapid taps are separated by
     // a released update so neither UI polling nor legacy callers lose clicks.
-    public sealed class RightTouchButtons
+    public sealed class TouchPointerButtons
     {
         private readonly Action<bool> emit;
         private bool held, pulse;
         private int pending;
         public bool Pressed { get; private set; }
-        public RightTouchButtons(Action<bool> emit) { this.emit = emit ?? throw new ArgumentNullException(nameof(emit)); }
+        public TouchPointerButtons(Action<bool> emit) { this.emit = emit ?? throw new ArgumentNullException(nameof(emit)); }
         private void Set(bool value) { if (Pressed == value) return; Pressed = value; emit(value); }
         public void Hold(bool value) { held = value; Set(held || pulse); }
         public void Tap()

@@ -10,14 +10,14 @@ using TouchPhase = UnityEngine.InputSystem.TouchPhase;
 namespace RaftAndroid.Platform
 {
     // Filter outside touches BEFORE InputSystemUIInputModule can see a left
-    // touch press. Only authored controller/editor surfaces retain touch events.
+    // touch press. Original interactive UI and authored controller/editor surfaces retain touch events.
     // Physical mouse/keyboard/gamepad events are never intercepted or removed.
-    public sealed class AndroidRightTouchPointer : MonoBehaviour
+    public sealed class AndroidTouchPointer : MonoBehaviour
     {
-        private static AndroidRightTouchPointer instance;
+        private static AndroidTouchPointer instance;
         private Mouse mouse;
-        private RightTouchGesture gesture;
-        private RightTouchButtons buttons;
+        private TouchPointerGesture gesture;
+        private TouchPointerButtons buttons;
         private Vector2 position;
         private int pressedFrame = -1, releasedFrame = -1;
         private bool suspended;
@@ -29,12 +29,12 @@ namespace RaftAndroid.Platform
             instance = this;
             // Matches original CustomInputConfig, including before its OnEnable.
             Input.simulateMouseWithTouches = false;
-            mouse = InputSystem.AddDevice<Mouse>("RaftAndroidRightTouch");
-            buttons = new RightTouchButtons(SetButton);
-            gesture = new RightTouchGesture(Command);
+            mouse = InputSystem.AddDevice<Mouse>("RaftAndroidTouchLeft");
+            buttons = new TouchPointerButtons(SetButton);
+            gesture = new TouchPointerGesture(Command);
             InputSystem.onEvent += OnEvent;
             InputSystem.onBeforeUpdate += BeforeInput;
-            RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("input", "right_touch_ready", "holdMs=500; outsideTouchLeftClick=false; actualDeviceExecutionVerified=false");
+            RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("input", "touch_pointer_ready", "holdMs=500; button=left; automaticTouchMouseSimulation=false; actualDeviceExecutionVerified=false");
         }
 
         private bool OwnedUi(Vector2 point)
@@ -50,7 +50,7 @@ namespace RaftAndroid.Platform
                 // Keep authored controller/editor/HUD touches with their UI module.
                 if (target.transform.IsChildOf(transform)) return true;
                 // Ignore PhysicsRaycaster hits and decorative full-screen HUD
-                // graphics: neither should turn gameplay right-touch into UI.
+                // graphics: neither should turn gameplay touch into UI.
                 if (!(hit.module is GraphicRaycaster)) continue;
                 // Original UGUI menus are NOT children of the Android host.
                 // Preserve their actual interactive pointer/drag/scroll targets.
@@ -96,13 +96,13 @@ namespace RaftAndroid.Platform
             gesture.Tick(InputState.currentTime);
         }
 
-        private void Command(RightTouchCommand command, float x, float y)
+        private void Command(TouchPointerCommand command, float x, float y)
         {
             Vector2 previous = position;
             position = new Vector2(x, y);
-            if (command == RightTouchCommand.Tap) buttons.Tap();
-            else if (command == RightTouchCommand.Down) buttons.Hold(true);
-            else if (command == RightTouchCommand.Up) buttons.Hold(false);
+            if (command == TouchPointerCommand.Tap) buttons.Tap();
+            else if (command == TouchPointerCommand.Down) buttons.Hold(true);
+            else if (command == TouchPointerCommand.Up) buttons.Hold(false);
             else Send(position - previous);
         }
 
@@ -115,9 +115,9 @@ namespace RaftAndroid.Platform
         private void Send(Vector2 delta)
         {
             if (mouse == null || !mouse.added) return;
-            // A dedicated MouseState contains only the right button, no left.
+            // A dedicated MouseState contains only the left button, no right.
             var state = new MouseState { position = position, delta = delta };
-            state = state.WithButton(MouseButton.Right, buttons.Pressed);
+            state = state.WithButton(MouseButton.Left, buttons.Pressed);
             InputSystem.QueueStateEvent(mouse, state);
         }
 
@@ -137,14 +137,14 @@ namespace RaftAndroid.Platform
             if (instance == this) instance = null;
         }
 
-        // Original MyInput uses legacy KeyCode calls. Merge only Mouse1 with
+        // Original MyInput uses legacy KeyCode calls. Merge only Mouse0 with
         // this pointer; real peripherals and every other key retain their path.
         public static bool GetKey(KeyCode key)
-        { return Input.GetKey(key) || (key == KeyCode.Mouse1 && instance != null && instance.buttons.Pressed); }
+        { return Input.GetKey(key) || (key == KeyCode.Mouse0 && instance != null && instance.buttons.Pressed); }
         public static bool GetKeyDown(KeyCode key)
-        { return Input.GetKeyDown(key) || (key == KeyCode.Mouse1 && instance != null && instance.pressedFrame == Time.frameCount); }
+        { return Input.GetKeyDown(key) || (key == KeyCode.Mouse0 && instance != null && instance.pressedFrame == Time.frameCount); }
         public static bool GetKeyUp(KeyCode key)
-        { return Input.GetKeyUp(key) || (key == KeyCode.Mouse1 && instance != null && instance.releasedFrame == Time.frameCount); }
+        { return Input.GetKeyUp(key) || (key == KeyCode.Mouse0 && instance != null && instance.releasedFrame == Time.frameCount); }
     }
 }
 #endif

@@ -1,0 +1,4 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net8.0</TargetFramework><LangVersion>9.0</LangVersion></PropertyGroup>
+  <ItemGroup><Compile Include="../../Runtime/Platform/TouchPointerGesture.cs" Link="TouchPointerGesture.cs" /><Compile Include="../../Runtime/Platform/TouchPointerButtons.cs" Link="TouchPointerButtons.cs" /></ItemGroup>
+</Project>

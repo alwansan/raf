@@ -9,6 +9,7 @@ on:
       - 'android-port/**'
       - 'tests/test_android_diagnostics_policy.py'
       - 'tests/test_android_touch_gamepad_policy.py'
+      - 'scripts/verify_touch_pointer_mouse_mapping.py'
       - 'scripts/verify_touch_binding_lifecycle.py'
       - 'scripts/verify_touch_drag_capture.py'
       - 'scripts/audit_gradle_asset_payload.py'
@@ -73,8 +74,12 @@ jobs:
         run: |
           dotnet build android-port/Runtime/Platform/RaftAndroid.Platform.csproj \
             --configuration Release --nologo -v:q
-      - name: Execute actual right-touch tap hold cancel and multitouch ownership policy
-        run: dotnet run --project android-port/Tests/RightTouch/RightTouch.csproj --configuration Release --nologo
+      - name: Execute actual left-touch tap hold cancel and multitouch ownership policy
+        run: dotnet run --project android-port/Tests/TouchPointer/TouchPointer.csproj --configuration Release --nologo
+      - name: Verify actual synthetic left-button output and physical legacy mouse preservation
+        run: |
+          python3 -m scripts.verify_touch_pointer_mouse_mapping --output "$RUNNER_TEMP/touch-mouse-mapping"
+          dotnet run --project "$RUNNER_TEMP/touch-mouse-mapping/Mapping.csproj" --configuration Release --nologo
       - name: Run storage, identity and offline-session smoke tests
         run: |
           dotnet run --project android-port/Tests/Smoke/RaftAndroid.Platform.Smoke.csproj \

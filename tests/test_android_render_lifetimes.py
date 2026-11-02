@@ -16,7 +16,7 @@ class LifetimeTests(unittest.TestCase):
         with self.assertRaises(ValueError):protect_temporaries('TemporaryRenderTexture temporary = cache.GetTemporary();\nWork();\n',1)
 
 class AndroidResolutionPolicyTests(unittest.TestCase):
-    def test_mouse_one_merge_preserves_original_call_structure_and_desktop_path(self):
+    def test_mouse_zero_merge_preserves_original_call_structure_and_desktop_path(self):
         import hashlib
         from unittest.mock import patch
         original='using UnityEngine;\npublic class MyInput : MonoBehaviour {\n'+''.join('Input.'+name+'(key);\n' for name,count in [('GetKey',4),('GetKeyDown',2),('GetKeyUp',2)] for _ in range(count))+'}\n'

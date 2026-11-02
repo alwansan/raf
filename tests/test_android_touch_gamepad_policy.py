@@ -191,11 +191,11 @@ class TouchGamepadContract(unittest.TestCase):
         self.assertIn("activePointerId = NoPointer;", SOURCE)
 
 
-    def test_right_touch_preserves_original_interactive_ugui_and_controller_touches(self):
+    def test_touch_pointer_preserves_original_interactive_ugui_and_controller_touches(self):
         # Previously only children of the Android host were exempt, so original
-        # menu buttons were consumed as right-clicks. This is a source contract,
+        # menu buttons were consumed by the gameplay pointer. This is a source contract,
         # not a Unity EventSystem or real-device acceptance test.
-        pointer = (ROOT / "android-port/Runtime/Platform/AndroidRightTouchPointer.cs").read_text(encoding="utf-8")
+        pointer = (ROOT / "android-port/Runtime/Platform/AndroidTouchPointer.cs").read_text(encoding="utf-8")
         ownership = pointer.split("private bool OwnedUi(Vector2 point)", 1)[1].split(
             "private void OnEvent", 1)[0]
         routing = pointer.split("private void OnEvent", 1)[1].split(
@@ -213,7 +213,10 @@ class TouchGamepadContract(unittest.TestCase):
         self.assertLess(routing.index("if (uiTouches.Contains(id))"),
                         routing.rindex("input.handled = true;"))
         self.assertIn("Input.simulateMouseWithTouches = false;", pointer)
-        self.assertNotIn("MouseButton.Left", pointer)
+        self.assertIn("MouseButton.Left", pointer)
+        self.assertNotIn("MouseButton.Right", pointer)
+        self.assertIn("KeyCode.Mouse0", pointer)
+        self.assertNotIn("KeyCode.Mouse1", pointer)
 
     def test_android_touch_ui_exposes_existing_virtual_binding_editor(self):
         panel = (ROOT / "android-port/Runtime/Platform/AndroidTouchUiPanel.cs").read_text(encoding="utf-8")

@@ -46,7 +46,7 @@ namespace RaftAndroid.Platform
             host.AddComponent<AndroidTestDiagnostics>();
             host.AddComponent<AndroidTouchGamepadOverlay>();
             host.AddComponent<AndroidTouchUiPanel>();
-            host.AddComponent<AndroidRightTouchPointer>();
+            host.AddComponent<AndroidTouchPointer>();
             ReportPriorExits();
             Debug.Log("RAFT_ANDROID_DEVICE_TEST earlyStartupCandidate=true gameplayVerified=false");
         }

@@ -179,7 +179,7 @@ def adapt(stem,text):
         if normalized.count(marker)!=1 or tuple(normalized.count('Input.'+name+'(') for name in ('GetKey', 'GetKeyDown', 'GetKeyUp'))!=(4,2,2):
             raise ValueError('Original legacy key input contract changed')
         alias='''#if UNITY_ANDROID && !UNITY_EDITOR
-using RaftAndroidLegacyInput = RaftAndroid.Platform.AndroidRightTouchPointer;
+using RaftAndroidLegacyInput = RaftAndroid.Platform.AndroidTouchPointer;
 #else
 using RaftAndroidLegacyInput = UnityEngine.Input;
 #endif

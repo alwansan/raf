@@ -81,8 +81,8 @@ def adapt(name, text):
             result = enter(result, method, 'return null;')
     elif name == 'CustomInputConfig':
         # Keep the original disabled left-mouse emulation on Android. The
-        # authored AndroidRightTouchPointer owns non-UI touches and emits ONLY
-        # synthetic Mouse1; enabling this would resurrect unintended left clicks
+        # authored AndroidTouchPointer owns non-UI touches and emits ONLY
+        # synthetic Mouse0; enabling this would duplicate left clicks
         # and could depend on MonoBehaviour OnEnable ordering across scenes.
         if result.count('Input.simulateMouseWithTouches = false;') != 1:
             raise ValueError('Original touch-to-left-mouse policy drift')
