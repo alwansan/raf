@@ -78,6 +78,7 @@ def probe(root: Path):
         examined = 0
         raw_candidates = 0
         verified = []
+        unreadable = []
         types = Counter()
         objects = env.file.objects.values()
         for obj in objects:
@@ -95,7 +96,21 @@ def probe(root: Path):
             if not offsets:
                 continue
             raw_candidates += 1
-            parsed = typed_reference_paths(obj.read_typetree(), target)
+            try:
+                parsed = typed_reference_paths(obj.read_typetree(), target)
+            except ValueError as error:
+                # UnityPy may have a structurally incomplete MonoBehaviour type tree
+                # even with the *correct* original bytes. Never count an unreadable
+                # raw PPtr candidate as either a confirmed link or proven absence.
+                if not ("Expected to read" in str(error) and "bytes" in str(error)):
+                    raise
+                if len(unreadable) >= MAX_MATCHES_PER_OWNER:
+                    raise ValueError("Too many unparsed original PPtr candidates")
+                unreadable.append({"source_type": obj.type.name,
+                                   "source_path_id": int(obj.path_id),
+                                   "raw_pptr_pattern_count": len(offsets),
+                                   "typed_tree_parse_incomplete": True})
+                continue
             if parsed:
                 if len(verified) >= MAX_MATCHES_PER_OWNER:
                     raise ValueError("Exceeded original typed link report scope")
@@ -109,6 +124,8 @@ def probe(root: Path):
                         "raw_candidate_source_objects": raw_candidates,
                         "verified_local_typed_pptr_sources": verified,
                         "verified_source_types": dict(sorted(types.items())),
+                        "unparsed_candidate_sources": unreadable,
+                        "typed_reference_coverage_complete": not unreadable,
                         "nonlocal_or_dynamic_references_examined": False})
     return {"targets": reports, "same_file_typed_references_only": True,
             "runtime_fft_owner_confirmed": False,
