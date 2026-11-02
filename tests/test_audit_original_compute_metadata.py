@@ -20,11 +20,19 @@ class ComputeMetadataAuditTests(unittest.TestCase):
         self.assertGreaterEqual(result["metadata_fields"].get("m_Kernels", 0), 2)
         self.assertEqual(result["metadata_array_totals"]["m_Kernels"], 3)
         self.assertEqual(result["metadata_array_totals"]["m_Platforms"], 2)
+        self.assertEqual(result["original_platform_numeric_codes"], {12: 1, 16: 1})
+        self.assertFalse(result["platform_code_meanings_verified"])
         self.assertFalse(result["private_shader_programs_emitted"])
         self.assertNotIn("PrivateKernelA", str(result))
         self.assertNotIn("CODE-DO-NOT-PUBLISH", str(result))
         self.assertNotIn("ProprietaryFFT", str(result))
         self.assertNotIn("66, 77", str(result))
+
+
+    def test_unrecognized_backend_values_are_not_treated_as_platform_codes(self):
+        result = summarize_tree({"m_Platforms": [{"unknown": "secret"}], "m_Kernels": []})
+        self.assertEqual(result["original_platform_numeric_codes"], {})
+        self.assertFalse(result["platform_code_meanings_verified"])
 
     def test_requires_typetree_dict_and_bounded_paths(self):
         with self.assertRaisesRegex(ValueError, "dictionary"):
