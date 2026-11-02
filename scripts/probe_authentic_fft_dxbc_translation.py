@@ -61,6 +61,64 @@ def run(command, timeout=15):
         return False
 
 
+
+def compare_roundtrip_contracts(original_reflection, original_bindings,
+                                roundtrip_reflection, roundtrip_bindings):
+    """Structural comparison only. Never calls this mathematical equivalence."""
+    return {
+        "compute_entrypoint_model_preserved":
+            original_reflection["entrypoint_execution_models"] ==
+            roundtrip_reflection["entrypoint_execution_models"],
+        "compute_workgroup_shape_preserved":
+            original_reflection["declared_local_workgroup_sizes"] ==
+            roundtrip_reflection["declared_local_workgroup_sizes"],
+        "descriptor_binding_pairs_preserved":
+            original_bindings["descriptor_binding_pairs"] ==
+            roundtrip_bindings["descriptor_binding_pairs"],
+        "original_numeric_results_equal": False,
+        "unity_gpu_execution_proven": False,
+    }
+
+
+def cross_compile_roundtrip(source_spv, original_reflection, original_bindings,
+                            temporary, index):
+    """Return exact stages independently; shader text remains private temp only."""
+    result = {
+        "spirv_cross_hlsl50_generated": False,
+        "glslang_hlsl50_spirv_generated": False,
+        "glslang_spirv_valid_for_vulkan_1_1": False,
+        "cross_compile_semantically_verified": False,
+        "authored_shaderlab_restored": False,
+    }
+    hlsl = temporary / ("fft_" + str(index) + ".hlsl")
+    recomp = temporary / ("fft_" + str(index) + "_roundtrip.spv")
+    if not run(["spirv-cross", str(source_spv), "--hlsl",
+                "--shader-model", "50", "--output", str(hlsl)], timeout=25):
+        return result
+    if not hlsl.is_file() or not 0 < hlsl.stat().st_size < 512 * 1024:
+        return result
+    result["spirv_cross_hlsl50_generated"] = True
+    if not run(["glslangValidator", "-V", "-D", "-S", "comp", "-e", "main",
+                "-o", str(recomp), str(hlsl)], timeout=25):
+        return result
+    if not recomp.is_file() or not 0 < recomp.stat().st_size <= MAX_SPIRV_BYTES:
+        return result
+    try:
+        module = recomp.read_bytes()
+        parsed = inspect(module)
+        bindings = spirv_resource_bindings(module)
+    except (ValueError, struct.error):
+        return result
+    if parsed.get("container") != "SPIR-V":
+        return result
+    result["glslang_hlsl50_spirv_generated"] = True
+    result["glslang_spirv_valid_for_vulkan_1_1"] = run(
+        ["spirv-val", "--target-env", "vulkan1.1", str(recomp)], timeout=25)
+    result.update(compare_roundtrip_contracts(
+        original_reflection, original_bindings, parsed, bindings))
+    return result
+
+
 def probe(root):
     verify_sources(root)
     import UnityPy
@@ -112,6 +170,9 @@ def probe(root):
                 entry["bindings"] = spirv_resource_bindings(spv_bytes)
                 entry["validated_for_vulkan_1_1"] = run(
                     ["spirv-val", "--target-env", "vulkan1.1", str(spv)])
+                if entry["validated_for_vulkan_1_1"]:
+                    entry["private_hlsl_roundtrip"] = cross_compile_roundtrip(
+                        spv, information, entry["bindings"], temp, index)
             reports.append(entry)
     return {
         "original_owner": OWNER,
@@ -121,6 +182,14 @@ def probe(root):
         "vkd3d_spirv_generated_count": sum(x["vkd3d_spirv_generated"] for x in reports),
         "vulkan_1_1_validated_count": sum(x["validated_for_vulkan_1_1"] for x in reports),
         "programs": reports,
+        "hlsl50_generated_count": sum(x.get("private_hlsl_roundtrip", {}).get(
+            "spirv_cross_hlsl50_generated", False) for x in reports),
+        "hlsl50_recompiled_spirv_valid_count": sum(x.get("private_hlsl_roundtrip", {}).get(
+            "glslang_spirv_valid_for_vulkan_1_1", False) for x in reports),
+        "roundtrip_workgroups_preserved_count": sum(x.get("private_hlsl_roundtrip", {}).get(
+            "compute_workgroup_shape_preserved", False) for x in reports),
+        "roundtrip_bindings_preserved_count": sum(x.get("private_hlsl_roundtrip", {}).get(
+            "descriptor_binding_pairs_preserved", False) for x in reports),
         "original_kernel_indices_verified": False,
         "original_water_resource_contract_verified": False,
         "adreno_gpu_executed": False,
