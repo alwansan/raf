@@ -28,6 +28,15 @@ var c = '\\'';
 ScalableBufferManager.ResizeBuffers(0.5f, 0.5f);'''
         self.assertEqual([x['category'] for x in inspect_source(source)], ['scalable_buffer_resize'])
 
+    def test_scalable_buffer_arguments_are_compared_without_source_output(self):
+        source = ('ScalableBufferManager.ResizeBuffers(scale, scale);\n'
+                  'ScalableBufferManager.ResizeBuffers(width, height);\n'
+                  'ScalableBufferManager.ResizeBuffers(Mathf.Clamp(x, 0, 1), Mathf.Clamp(x, 0, 1));\n'
+                  'ScalableBufferManager.ResizeBuffers(Mix(a, b), Mix(a, c));')
+        values = [site['xy_arguments_syntactically_identical'] for site in inspect_source(source)]
+        self.assertEqual(values, [True, False, True, False])
+        self.assertNotIn('Mathf.Clamp', str(inspect_source(source)))
+
     def test_read_only_inventory_and_source_revision(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)

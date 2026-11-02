@@ -77,13 +77,41 @@ def mask_csharp_noncode(source: str) -> str:
     return ''.join(chars)
 
 
+def scalable_xy_syntactically_equal(source: str, masked: str, opening: int):
+    """Compare two authored arguments without revealing their source text."""
+    if masked[opening] != '(':
+        raise ValueError('Invalid original ResizeBuffers call boundary')
+    depth = 1
+    starts = [opening + 1]
+    ends = []
+    for pos in range(opening + 1, min(len(masked), opening + 4096)):
+        ch = masked[pos]
+        if ch == '(':
+            depth += 1
+        elif ch == ')':
+            depth -= 1
+            if depth == 0:
+                ends.append(pos)
+                break
+        elif ch == ',' and depth == 1:
+            ends.append(pos)
+            starts.append(pos + 1)
+    if depth != 0 or len(starts) != 2 or len(ends) != 2:
+        return None
+    expressions = [re.sub(r'\s+', '', source[a:b]) for a, b in zip(starts, ends)]
+    return bool(expressions[0]) and expressions[0] == expressions[1]
+
+
 def inspect_source(source: str):
     code = mask_csharp_noncode(source)
     sites = []
     for category, pattern in PATTERNS.items():
         for match in pattern.finditer(code):
-            sites.append({"category": category,
-                          "line": code.count('\n', 0, match.start()) + 1})
+            site = {"category": category, "line": code.count('\n', 0, match.start()) + 1}
+            if category == 'scalable_buffer_resize':
+                site['xy_arguments_syntactically_identical'] = scalable_xy_syntactically_equal(
+                    source, code, match.end() - 1)
+            sites.append(site)
     return sorted(sites, key=lambda site: (site['line'], site['category']))
 
 
