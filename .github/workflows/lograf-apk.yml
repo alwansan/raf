@@ -9,6 +9,7 @@ on:
       - 'gradle.properties'
       - '.github/workflows/lograf-apk.yml'
       - 'signing/**'
+      - 'scripts/test_lograf_v06.py'
   workflow_dispatch:
 
 permissions:
@@ -32,6 +33,9 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
+
+      - name: Verify recorder v0.6 safety invariants
+        run: python3 scripts/test_lograf_v06.py
 
       - name: Verify pinned public test signing identity
         shell: bash

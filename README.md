@@ -31,6 +31,23 @@ An owner-supplied LogRaft v0.5.34 recording from Poco F5 Pro (Android 15) began 
 - SurfaceFlinger FPS reported in 14/33 samples, approximately 3.9–120.7 presented frames/s. This is **not Unity game FPS** or GPU frame time. GPU busy was readable, while GPU clock was unavailable.
 
 The follow-up version adds in-stream cumulative error counters (shader passes, compute kernels, missing asset paths, Java/native fatal markers, and process deaths), live status labels, and an automatically exported session-summary.json containing last telemetry and recorder totals. Raw log segments are retained without filtering or deletion.
+## New in v0.6 — recorder backpressure, frame telemetry quality and session statistics
+
+- Raw Logcat and metrics now arrive into a **bounded FIFO** on Binder callbacks, and a separate slightly low-priority SAF writer handles actual file writes. Logcat's remote reader is not blocked by every SAF flush. Hard limits: 512 pending batches and 12 MiB pending bytes.
+- **On queue overflow or SAF write failure, recording stops with an explicit incomplete-data warning**, rather than silently discarding records. This does not prove Android's own rotating Logcat buffers cannot lose lines; such losses remain unknown.
+- Stop lets the remote reader deliver its last batches, then drains the writer queue before closing files and building `session-summary.json`. Stop runs off the UI thread.
+- `session-summary.json` now reports local writer received/written/failed batches, queue peak size and worst delay, plus per-session observed min, max, mean and valid-sample counts for FPS, CPU, RSS, PSS, GPU, battery temperature and Logcat throughput.
+- Frame tracking now reports *why* presented FPS is missing: unavailable surface, insufficient frames, layer baseline, stale timestamps, SurfaceFlinger failure, or invalid estimate. Missing SurfaceFlinger data is **not** reported as 0 FPS or confirmed Unity freeze. A separate `FRAME_TELEMETRY_STALE` warning marks observations that stopped progressing.
+- PSS exposes a candidate value and a quality marker (`validated_estimate`, `rejected_pss_exceeds_rss`, `unavailable`); rejected values are not presented as reliable game memory.
+- User-reported CPU/GPU/RAM figures on Poco F5 Pro remain best-effort external indicators. For authoritative per-frame Unity CPU/GPU timings, the game itself must emit them.
+
+## Suggested validation on the Poco F5 Pro
+
+1. Install the latest `LogRaft-signed.apk` over the prior stable-signed Build 42 without clearing app data or existing recording folders.
+2. Start Shizuku and LogRaft, choose a writable local SAF destination, start capture, then open Raft.
+3. Run one short baseline and one high-error-water/Shader-heavy session. Add a user marker shortly before a visible problem, wait a few seconds and stop using the notification or app.
+4. Check the ZIP includes all `raft-*.log`, `metrics-*.jsonl`, and `session-summary.json`. Inspect `writer_failed_batches`, `writer_peak_pending_bytes`, `writer_max_queue_delay_ms`, and `performance_statistics`.
+5. Check `fps_tracking_status`, `frame_telemetry_stale` and `process_pss_quality`. Do not conclude the game froze solely because FPS became unavailable.
 ## Phone steps
 1. Install and start [Shizuku](https://shizuku.rikka.app/). Android 11+ wireless debugging works without a PC; root is optional. It normally must be restarted after phone reboot.
 2. Install `LogRaft-signed.apk` from [GitHub Releases](https://github.com/alwansan/raf/releases), filter tags starting with `lograf-`. Android may warn about sideloading.

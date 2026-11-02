@@ -318,7 +318,9 @@ public final class PerformanceSampler implements Runnable {
                     if(name.endsWith("}"))name=name.substring(0,name.length()-1);
                 }
                 if(name.isEmpty())continue;
-                if(!name.equals(surfaceLayer)){previousPresent=-1;previousFrameAt=-1;}
+                if(!name.equals(surfaceLayer)){
+                    previousPresent=-1;previousFrameAt=-1;lastFrameProgressMs=-1;
+                }
                 surfaceLayer=name;fpsStatus="surface_found";return;
             }
             surfaceLayer=null;
