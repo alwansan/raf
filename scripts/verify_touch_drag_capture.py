@@ -28,17 +28,17 @@ HARNESS = r'''
 using System;
 using System.Reflection;
 
-class MonoBehaviour {}
-interface IPointerDownHandler { void OnPointerDown(PointerEventData pointer); }
-interface IDragHandler { void OnDrag(PointerEventData pointer); }
-interface IEndDragHandler { void OnEndDrag(PointerEventData pointer); }
-interface IPointerUpHandler { void OnPointerUp(PointerEventData pointer); }
-class PointerEventData
+public class MonoBehaviour {}
+public interface IPointerDownHandler { void OnPointerDown(PointerEventData pointer); }
+public interface IDragHandler { void OnDrag(PointerEventData pointer); }
+public interface IEndDragHandler { void OnEndDrag(PointerEventData pointer); }
+public interface IPointerUpHandler { void OnPointerUp(PointerEventData pointer); }
+public class PointerEventData
 {
     public int pointerId;
     public PointerEventData(int id) { pointerId=id; }
 }
-class AndroidTouchGamepadOverlay
+public class AndroidTouchGamepadOverlay
 {
     public bool Editing { get; set; }
     public int Selections, Drags, Saves;

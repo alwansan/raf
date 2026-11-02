@@ -26,3 +26,8 @@ Read docs/NATIVE_WORKFLOW_OPERATIONS.md for exact entry points and request schem
 Push first as cheap-CI-only change. Inspect the new sidecar and existing platform/runner checks; no real new native integration claimed.
 Current41419971187/job125192945569 remains IN_PROGRESS on immutable1eaa2465, last observed Unity Editor import/compile. No currentAPK/release result yet. This refactor does not affect the active run or start a second one.
 Update existing hourly scheduler with the dedicated-request protocol. After active result, inspect actual complete delivery; incorporate validated newer source once via a new request file+markers only if justified. No repeated user permission/dependency/license requests.
+
+
+## First real isolated CI result and unrelated fixture repair
+Sourcec4bbf346: new sidecar41434836582/job125241963213 COMPLETED SUCCESS without a Unity/native run. Runner41434836338 SUCCESS. Platform41434836349 FAILED at recently added actual touch-drag harness compilation: CS0060/CS0051 because synthetic MonoBehaviour, pointer interfaces, PointerEventData and overlay double were internal while the extracted actual authored handle remained public. This is harness accessibility, not original game CSharp failure. Correct doubles to public as actual Unity API types are; preserve the actual extracted runtime class. Targeted platform rerun requested by source fix; no native JSON/markers touched.
+Existing hourly automation updated successfully/enabled with dedicated request paths, no duplicate/cancel loops, separate unit/private lanes, full-delivery result requirement and verified Release files. Active41419971187 remains immutable and running. This CI result is not a new APK.
