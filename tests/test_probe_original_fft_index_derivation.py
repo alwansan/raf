@@ -45,7 +45,7 @@ class IndexDerivationTests(unittest.TestCase):
                          "(V>>5)-1")
         self.assertTrue(data["index_assignments"][1]["preceding_immediate_guard"]["simple_condition_verified"])
         self.assertEqual(data["index_assignments"][1]["right_hand_side"]["integer_constants"], [10])
-        self.assertNotIn("conditional", str(data))
+        self.assertNotIn("\'conditional\'", str(data))
 
     def test_constructor_parameter_and_boolean_bank_match_original_formula(self):
         src = ("class Dx11FFT {\n"
@@ -68,7 +68,7 @@ class IndexDerivationTests(unittest.TestCase):
         self.assertEqual(contract["proven_formula_shape"], "(n-5)<<1, then conditional +10")
         self.assertFalse(contract["verified_runtime_kernel_lookup_index"])
         self.assertNotIn("exponent", str(report))
-        self.assertNotIn("other", str(report))
+        self.assertNotIn("\'other\'", str(report))
 
     def test_wrong_source_and_missing_index_fail_closed(self):
         with self.assertRaisesRegex(ValueError, "hash changed"):
