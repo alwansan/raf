@@ -7,6 +7,7 @@ No shader sources, game logic, object names, or bytecode emitted. No Unity.
 import argparse
 from collections import Counter
 import json
+import hashlib
 from pathlib import Path
 import struct
 from scripts.verify_targeted_lfs_compute_sources import verify_sources
