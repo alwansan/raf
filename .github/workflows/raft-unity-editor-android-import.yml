@@ -348,7 +348,7 @@ jobs:
             --backup "$RUNNER_TEMP/original-operation-trace-source" \
             --manifest config/runtime-operation-traces.json --apply
           mkdir -p "$RUNNER_TEMP/project/ExportedProject/Assets/RaftAndroid/Platform"
-          for name in LocalProfileStore.cs LocalPlayerIdentity.cs AndroidTestDiagnostics.cs PersistentDiagnosticLog.cs AndroidRuntimeLog.cs; do
+          for name in LocalProfileStore.cs LocalPlayerIdentity.cs AndroidTestDiagnostics.cs AndroidTouchGamepadOverlay.cs PersistentDiagnosticLog.cs AndroidRuntimeLog.cs; do
             cp "android-port/Runtime/Platform/$name" "$RUNNER_TEMP/project/ExportedProject/Assets/RaftAndroid/Platform/"
           done
       - name: Preserve asset-owned meshes during original Editor collector cleanup

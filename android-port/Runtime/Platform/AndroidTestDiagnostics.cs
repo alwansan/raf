@@ -17,6 +17,7 @@ namespace RaftAndroid.Platform
         private static int eventRevision;
         private const int VisibleReportLimit = 8000;
         private bool opened;
+        private AndroidTouchGamepadOverlay touchGamepad;
         private Vector2 scroll;
         private int reportRevision = -1;
         private string reportScene = "";
@@ -43,6 +44,7 @@ namespace RaftAndroid.Platform
             var host = new GameObject("RaftAndroidTestDiagnostics");
             DontDestroyOnLoad(host);
             host.AddComponent<AndroidTestDiagnostics>();
+            host.AddComponent<AndroidTouchGamepadOverlay>();
             ReportPriorExits();
             Debug.Log("RAFT_ANDROID_DEVICE_TEST earlyStartupCandidate=true gameplayVerified=false");
         }
@@ -306,6 +308,7 @@ namespace RaftAndroid.Platform
 
         private void OnGUI()
         {
+            if (touchGamepad == null) touchGamepad = GetComponent<AndroidTouchGamepadOverlay>();
             float scale = Mathf.Max(1f, Screen.height / 720f);
             Rect safe = Screen.safeArea;
             // Screen.safeArea uses a bottom-left origin; IMGUI uses top-left.
@@ -338,6 +341,8 @@ namespace RaftAndroid.Platform
                             RefreshReport();
                             if (GUILayout.Button("Copy test report", GUILayout.Height(44)))
                                 GUIUtility.systemCopyBuffer = fullReport;
+                            if (touchGamepad != null && GUILayout.Button(touchGamepad.Visible ? "Hide touch gamepad" : "Enable touch gamepad", GUILayout.Height(44)))
+                                touchGamepad.SetVisible(!touchGamepad.Visible);
                             scroll = GUILayout.BeginScrollView(scroll);
                             GUILayout.Label(visibleReport);
                             GUILayout.EndScrollView();

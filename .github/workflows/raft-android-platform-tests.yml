@@ -8,6 +8,7 @@ on:
     paths:
       - 'android-port/**'
       - 'tests/test_android_diagnostics_policy.py'
+      - 'tests/test_android_touch_gamepad_policy.py'
       - 'scripts/audit_gradle_asset_payload.py'
       - 'tests/test_gradle_payload_audit.py'
       - 'tests/test_early_apk_distribution_policy.py'
@@ -36,6 +37,8 @@ jobs:
           dotnet-version: '8.0.x'
       - name: Guard bounded Android diagnostic UI source policy
         run: python3 -m unittest discover -s tests -p test_android_diagnostics_policy.py -v
+      - name: Guard optional on-screen gamepad source contract
+        run: python3 -m unittest discover -s tests -p test_android_touch_gamepad_policy.py -v
       - name: Guard early APK redistribution policy
         run: python3 -m unittest discover -s tests -p test_early_apk_distribution_policy.py -v
       - name: Verify privacy-safe generated Gradle payload accounting (no LFS)
