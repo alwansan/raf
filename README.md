@@ -23,7 +23,7 @@ Branch: `clog`, derived from `lograf` at 6d268476dc5aa64f379ae7ad7deb09097872a1b
 1. Install the latest directly downloadable `CLog-signed.apk` from the GitHub `clog-*` Releases. It installs separately from LogRaft.
 2. Start Shizuku (wireless debugging or root-managed service). Grant CLog permission only when requested.
 3. Select an **output folder** such as `Download/CLog`, where CLog creates a new `CLog-<date>` session.
-4. Optionally select exactly `Cinemana/work/log` for **read-only**, incremental mirroring of the app's internal diagnostic files. This is not required for the core Logcat collector. Existing files are never modified or deleted. Android's folder picker may restrict some locations.
+4. Optionally select `Cinemana/work` for **read-only**, incremental mirroring of the app's internal diagnostic files. This is not required for the core Logcat collector. Existing files are never modified or deleted. Android's folder picker may restrict some locations.
 5. Tap Start then launch Cinemana. Reproduce Home / Details / Search / Downloads / Video Player / new-episode notification problems. Use **Mark issue** as close as possible to an observed stall.
 6. To compare CPU/UI load, first measure with no deliberate downloads, then run a second session under stress. Keep old MP4/temp/subtitles and MKV manifests intact.
 7. Return to CLog, tap Stop, then Create ZIP and Share. It includes raw `cinemana-*.log`, metrics JSONL, summary JSON and any readable mirrored work/log segments. Review private URLs, tokens, account content, titles and paths before uploading anywhere.
@@ -60,3 +60,9 @@ Branch: `clog`, derived from `lograf` at 6d268476dc5aa64f379ae7ad7deb09097872a1b
 - `Cinemana_PATCH252_Project/app/AndroidManifest.xml` (verified actual app ID/services)
 
 Build and signing use GitHub Actions on **only** `clog`, independent from LogRaft's workflow. The logger is installed as `com.alwansan.clog`, so LogRaft and CLog can coexist without conflicting app data.
+
+## Safe filesystem metadata audit
+
+If CLog is granted read-only access to the `Cinemana/work` folder, it counts direct-child `.mp4`, final `.mkv`, `.part`, `.temp`, `.srt` and `.vtt` entries without reading video/subtitle bytes. It also mirrors newly appended logs from `Cinemana/work/log` into the recording session. A part file older than 30 minutes is an **age-based candidate only**, never proof that FFmpeg has finished or that it can be deleted. CLog does not remove or change Cinemana files.
+
+If you select only `Cinemana/work/log`, logs can be captured but parent media counts remain unavailable. The final `session-summary.json` includes the last numeric media census.
