@@ -3,7 +3,7 @@ import hashlib
 import unittest
 
 from scripts.probe_original_fft_kernel_callsites import (
-    analyze_source, parse_original_args, sanitized_argument,
+    analyze_source, parse_original_args, sanitized_argument, constant_offset_from_base,
 )
 
 
@@ -23,6 +23,23 @@ class KernelCallsiteTests(unittest.TestCase):
         self.assertEqual(st["argument_count"], 3)
         self.assertNotIn("_SecretTex", str(report))
         self.assertFalse(report["runtime_kernel_index_to_serialized_program_proven"])
+
+    def test_sha_pinned_original_two_pass_kernel_expression_offsets(self):
+        src = ("class F {\n"
+               "  void Fft(int originalIndex) {\n"
+               "    fft.SetTexture(originalIndex, \"A\", src);\n"
+               "    fft.Dispatch(originalIndex, 1, 4, 1);\n"
+               "    fft.SetTexture(originalIndex + 1, \"B\", dest);\n"
+               "    fft.Dispatch(originalIndex + 1, 1, 4, 1);\n"
+               "  }\n"
+               "}\n")
+        expected = hashlib.sha256(src.encode()).hexdigest()
+        report = analyze_source(src, expected)
+        self.assertEqual(report["verified_affine_kernel_index_offsets"], [0, 1])
+        self.assertEqual([x["kernel_index_affine_offset_from_first_dispatch"]
+                          for x in report["compute_api_callsites"]], [0, 0, 1, 1])
+        self.assertTrue(report["no_numeric_runtime_base_kernel_index_inferred"])
+        self.assertIsNone(constant_offset_from_base("1 / originalIndex", "originalIndex"))
 
     def test_fail_closed_on_wrong_source_and_unbalanced_call(self):
         with self.assertRaisesRegex(ValueError, "SHA256"):
