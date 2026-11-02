@@ -157,6 +157,37 @@ def inspect_ground_control(source_root: Path) -> dict:
         "unity_compiled": False,
     }
 
+
+def inspect_audio_settings(source_root: Path) -> dict:
+    matches = sorted(source_root.rglob("AudioSettingsBox.cs"))
+    if len(matches) != 1 or not matches[0].is_file() or matches[0].is_symlink():
+        raise ValueError("Expected exactly one original AudioSettingsBox source")
+    source = matches[0].read_text(encoding="utf-8-sig").replace("\r\n", "\n")
+    return_type, body = method_body(source, "SettingStart")
+    calls = list(re.finditer(r"\b(?:RuntimeManager\.)?GetVCA\s*\(", body))
+    return {
+        "class": "AudioSettingsBox",
+        "source_sha256": hashlib.sha256(source.encode()).hexdigest(),
+        "source_chars": len(source),
+        "setting_start_sha256": hashlib.sha256(body.encode()).hexdigest(),
+        "returns_void": return_type == "void",
+        "vca_call_count": len(calls),
+        "vca_calls_simple_assignments": all(
+            bool(re.search(r"(?<![=!<>])=(?!=)",
+                           body[max(body.rfind(";", 0, match.start()),
+                                    body.rfind("{", 0, match.start()),
+                                    body.rfind("}", 0, match.start())) + 1:match.start()]))
+            for match in calls
+        ),
+        "vca_call_preceded_by_return": [
+            bool(re.search(r"\breturn\b", body[:call.start()])) for call in calls
+        ],
+        "fmod_studio_runtime_refs": len(re.findall(r"\bRuntimeManager\b", body)),
+        "has_catch": bool(re.search(r"\bcatch\s*\(", body)),
+        "modified_source": False,
+        "unity_compiled": False,
+    }
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--source", type=Path, required=True)
@@ -164,6 +195,7 @@ def main():
     print("RAFT_SCENE_AUDIO_SOURCE_PROBE " + json.dumps(inspect(args.source), sort_keys=True))
     print("RAFT_PLAYER_AUDIO_SOURCE_PROBE " + json.dumps(inspect_player(args.source), sort_keys=True))
     print("RAFT_PLAYER_GROUND_CONTROL_PROBE " + json.dumps(inspect_ground_control(args.source), sort_keys=True))
+    print("RAFT_AUDIO_SETTINGS_SOURCE_PROBE " + json.dumps(inspect_audio_settings(args.source), sort_keys=True))
 
 
 if __name__ == "__main__":
