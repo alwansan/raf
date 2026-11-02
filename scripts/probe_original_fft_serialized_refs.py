@@ -77,11 +77,20 @@ def summarize_monobehaviour_script(partial, original_file):
               "class_or_namespace_mentions_fft": False}
     if not isinstance(partial, dict):
         return result
+    result["original_partial_head_field_keys"] = sorted(
+        key for key in partial if isinstance(key, str) and key.startswith("m_")
+    )[:32]
     script_ptr = partial.get("m_Script")
+    result["original_script_pointer_key_present"] = isinstance(script_ptr, dict)
     if not isinstance(script_ptr, dict):
         return result
     file_id, path_id = script_ptr.get("m_FileID"), script_ptr.get("m_PathID")
-    if type(file_id) is not int or type(path_id) is not int or file_id != 0:
+    if type(file_id) is not int or type(path_id) is not int:
+        return result
+    result["original_script_pointer_file_id"] = file_id
+    result["original_script_pointer_path_id"] = path_id
+    if file_id != 0:
+        result["original_script_pointer_external"] = True
         return result
     script = original_file.objects.get(path_id)
     if script is None or script.type.name != "MonoScript":
