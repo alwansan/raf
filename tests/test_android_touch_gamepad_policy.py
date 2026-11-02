@@ -154,7 +154,9 @@ class TouchGamepadContract(unittest.TestCase):
         self.assertIn("activePointerId != NoPointer", SOURCE)
         self.assertIn("activePointerId == pointer.pointerId", SOURCE)
         self.assertIn("if (activePointerId != pointer.pointerId) return;", SOURCE)
-        self.assertIn("if (overlay != null && overlay.Editing) overlay.SavePosition(label);", SOURCE)
+        # A selection-only tap must never persist a default anchor without its offset.
+        # Only a successful drag may save the new position.
+        self.assertIn("if (dragged && overlay != null && overlay.Editing) overlay.SavePosition(label);", SOURCE)
         self.assertIn("public void OnPointerUp(PointerEventData pointer)", SOURCE)
         self.assertIn("public void OnEndDrag(PointerEventData pointer)", SOURCE)
         self.assertEqual(SOURCE.count("FinishPointer(pointer);"), 2)
