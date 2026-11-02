@@ -32,7 +32,11 @@ class OriginalSceneIntegrityTests(unittest.TestCase):
         self.assertIn("PlayerSettings.allowedAutorotateToLandscapeRight = true;", self.source)
 
     def test_split_binary_requires_a_real_companion_after_unity_success(self):
-        self.assertIn("PlayerSettings.Android.useAPKExpansionFiles = true;", self.source)
+        self.assertIn('Argument("-raftPackageLayout", "standalone")', self.source)
+        self.assertIn('bool splitExpansion = packageLayout == "split";', self.source)
+        self.assertIn("PlayerSettings.Android.useAPKExpansionFiles = splitExpansion;", self.source)
+        self.assertIn("if (splitExpansion)", self.source)
+        self.assertIn("Standalone Android output unexpectedly includes an OBB.", self.source)
         self.assertIn('Path.ChangeExtension(output, ".main.obb")', self.source)
         self.assertIn("!File.Exists(companion)", self.source)
         self.assertIn("new FileInfo(companion).Length == 0", self.source)
@@ -66,6 +70,17 @@ class OriginalSceneIntegrityTests(unittest.TestCase):
         self.assertIn("importer.SaveAndReimport();", budget)
         self.assertNotIn("File.Delete(", budget)
         self.assertNotIn("TextureImporterType.Sprite", budget)
+
+    def test_colour_compression_keeps_resolution_and_excludes_data_fonts(self):
+        budget = (SOURCE.parent / "AndroidTextureBudget.cs").read_text()
+        self.assertIn("AndroidTextureBudget.CompressUncompressedColour();", self.source)
+        self.assertIn('importer.GetAutomaticFormat("Android")', budget)
+        self.assertIn('AssetDatabase.FindAssets("t:TMP_FontAsset"', budget)
+        self.assertIn("settings.maxTextureSize = importer.maxTextureSize;", budget)
+        self.assertIn("TextureImporterFormat.ASTC_4x4", budget)
+        self.assertIn("AndroidColourTexturePolicy.ShouldCompress", budget)
+        self.assertIn("importer.sRGBTexture", budget)
+        self.assertIn("settings.overridden, fontDependencies.Contains(path)", budget)
 
     def test_generated_gradle_payload_is_audited_before_compression(self):
         budget = (SOURCE.parent / "AndroidTextureBudget.cs").read_text(encoding="utf-8")

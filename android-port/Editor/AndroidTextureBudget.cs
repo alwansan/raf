@@ -17,6 +17,53 @@ namespace RaftAndroid.Editor
     {
         private const int MaxDimension = 2048;
 
+        // Recover Android GPU compression for imported colour images that still
+        // resolve to uncompressed RGB(A). This does not downscale them or touch
+        // explicit platform overrides, linear/data maps, font dependencies or HDR.
+        internal static void CompressUncompressedColour()
+        {
+            var fontDependencies = new System.Collections.Generic.HashSet<string>(StringComparer.Ordinal);
+            foreach (string guid in AssetDatabase.FindAssets("t:TMP_FontAsset", new[] { "Assets" }))
+            foreach (string dependency in AssetDatabase.GetDependencies(AssetDatabase.GUIDToAssetPath(guid), true))
+                fontDependencies.Add(dependency);
+            int examined = 0, changed = 0;
+            var formats = new System.Collections.Generic.SortedDictionary<string, int>(StringComparer.Ordinal);
+            foreach (string guid in AssetDatabase.FindAssets("t:Texture2D", new[] { "Assets" }))
+            {
+                string path = AssetDatabase.GUIDToAssetPath(guid);
+                var importer = AssetImporter.GetAtPath(path) as TextureImporter;
+                if (importer == null) continue;
+                examined++;
+                var settings = importer.GetPlatformTextureSettings("Android");
+                var format = settings.format == TextureImporterFormat.Automatic
+                    ? importer.GetAutomaticFormat("Android") : settings.format;
+                string formatName = format.ToString();
+                if (!formats.ContainsKey(formatName)) formats[formatName] = 0;
+                formats[formatName]++;
+                bool default2D = importer.textureType == TextureImporterType.Default &&
+                                 importer.textureShape == TextureImporterShape.Texture2D;
+                if (!AndroidColourTexturePolicy.ShouldCompress(default2D, importer.sRGBTexture,
+                        settings.overridden, fontDependencies.Contains(path),
+                        Path.GetExtension(path), formatName)) continue;
+                settings.name = "Android";
+                settings.overridden = true;
+                // Preserve the existing effective resolution and all CPU/readability,
+                // filtering, alpha and mip settings. ASTC4x4 is lossy GPU compression.
+                settings.maxTextureSize = importer.maxTextureSize;
+                settings.format = TextureImporterFormat.ASTC_4x4;
+                settings.textureCompression = TextureImporterCompression.Compressed;
+                settings.compressionQuality = 50;
+                settings.crunchedCompression = false;
+                importer.SetPlatformTextureSettings(settings);
+                importer.SaveAndReimport();
+                changed++;
+            }
+            Debug.Log("RAFT_ANDROID_COLOUR_COMPRESSION examined=" + examined +
+                      " uncompressedColourConverted=" + changed +
+                      " androidFormatsBefore=" + string.Join(",", formats.Select(p => p.Key + ":" + p.Value)) +
+                      " resolutionPreserved=true compression=ASTC4x4 lossy=true deviceVerified=false");
+        }
+
         internal static void Apply()
         {
             int examined = 0, large = 0, changed = 0, explicitOverrides = 0, alreadyBounded = 0;

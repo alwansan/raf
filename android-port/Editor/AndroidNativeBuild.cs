@@ -73,6 +73,7 @@ namespace RaftAndroid.Editor
             // Android-only import overrides; never modify the original recovered files.
             EditorUserBuildSettings.androidBuildSubtarget = MobileTextureSubtarget.ASTC;
             AndroidTextureBudget.Apply();
+            AndroidTextureBudget.CompressUncompressedColour();
             if (EditorUserBuildSettings.activeBuildTarget != BuildTarget.Android)
                 throw new BuildFailedException("Unity must be launched with the Android build target.");
 
@@ -90,13 +91,15 @@ namespace RaftAndroid.Editor
             PlayerSettings.enableFrameTimingStats = true;
             EditorUserBuildSettings.exportAsGoogleAndroidProject = false;
             EditorUserBuildSettings.buildAppBundle = false;
-            // The full-data candidate generated one 2,750,639,264-byte Unity archive,
-            // exceeding Gradle's Java array limit even after bounded ASTC overrides.
-            // Unity 2021's supported APK + OBB split retains original scenes/assets
-            // without passing that archive through launcher:compressReleaseAssets.
-            // APK alone is NOT a playable package; its matching OBB is mandatory.
-            PlayerSettings.Android.useAPKExpansionFiles = true;
-            Debug.Log("RAFT_ANDROID_PACKAGE_LAYOUT mode=apk_plus_obb companionRequired=true originalDataRetained=true deviceVerified=false");
+            // Standalone delivery is retried only with measured Android colour
+            // compression; split mode remains an explicit private diagnostic option.
+            string packageLayout = Argument("-raftPackageLayout", "standalone");
+            if (packageLayout != "standalone" && packageLayout != "split")
+                throw new BuildFailedException("Unknown Android package layout.");
+            bool splitExpansion = packageLayout == "split";
+            PlayerSettings.Android.useAPKExpansionFiles = splitExpansion;
+            Debug.Log("RAFT_ANDROID_PACKAGE_LAYOUT mode=" + packageLayout +
+                      " companionRequired=" + splitExpansion + " originalDataRetained=true deviceVerified=false");
 
             string version = Argument("-androidVersionCode", "1");
             if (!int.TryParse(version, out int code) || code <= 0)
@@ -139,14 +142,17 @@ namespace RaftAndroid.Editor
                       " bytes=" + report.summary.totalSize);
             if (report.summary.result != BuildResult.Succeeded)
                 throw new BuildFailedException("Native ARM64 Android build failed; inspect the preceding Unity diagnostics.");
-            // Unity 2021's split-binary APK must never pass CI as a standalone
-            // installable game when its original-data expansion is missing.
             string companion = Path.ChangeExtension(output, ".main.obb");
-            if (!File.Exists(companion) || new FileInfo(companion).Length == 0)
-                throw new BuildFailedException("Split Android build produced no nonempty companion OBB.");
-            Debug.Log("RAFT_ANDROID_OBB_OUTPUT present=true bytes=" +
-                      new FileInfo(companion).Length +
-                      " integrityVerifiedByPrivateCI=false deviceMountedVerified=false");
+            if (splitExpansion)
+            {
+                if (!File.Exists(companion) || new FileInfo(companion).Length == 0)
+                    throw new BuildFailedException("Split Android build produced no nonempty companion OBB.");
+                Debug.Log("RAFT_ANDROID_OBB_OUTPUT present=true bytes=" +
+                          new FileInfo(companion).Length +
+                          " integrityVerifiedByPrivateCI=false deviceMountedVerified=false");
+            }
+            else if (File.Exists(companion))
+                throw new BuildFailedException("Standalone Android output unexpectedly includes an OBB.");
         }
 
         private static void ReportDiagnosticClasses(BuildReport report)

@@ -14,6 +14,7 @@ on:
       - 'tests/test_early_apk_distribution_policy.py'
       - 'scripts/audit_android_expansion.py'
       - 'tests/test_android_expansion_audit.py'
+      - 'tests/test_standalone_original_data_gate.py'
       - '.github/workflows/raft-unity-editor-android-import.yml'
       - '.github/workflows/raft-android-platform-tests.yml'
 
@@ -43,12 +44,16 @@ jobs:
         run: python3 -m unittest discover -s tests -p test_android_touch_gamepad_policy.py -v
       - name: Guard early APK redistribution policy
         run: python3 -m unittest discover -s tests -p test_early_apk_distribution_policy.py -v
+      - name: Execute original FMOD data gate for standalone and split packages
+        run: python3 -m unittest discover -s tests -p test_standalone_original_data_gate.py -v
       - name: Verify synthetic APK plus OBB archive integrity without LFS
         run: python3 -m unittest discover -s tests -p test_android_expansion_audit.py -v
       - name: Verify privacy-safe generated Gradle payload accounting (no LFS)
         run: python3 -m unittest discover -s tests -p test_gradle_payload_audit.py -v
       - name: Guard original 40-scene Android APK integrity
         run: python3 -m unittest discover -s tests -p test_android_native_scene_policy.py -v
+      - name: Execute real Android colour texture selection policy without Unity
+        run: dotnet run --project android-port/Tests/ColourTextures/ColourTextures.csproj --configuration Release --nologo
       - name: Compile original offline Android compatibility library against netstandard2.1
         run: |
           dotnet build android-port/Runtime/Platform/RaftAndroid.Platform.csproj \

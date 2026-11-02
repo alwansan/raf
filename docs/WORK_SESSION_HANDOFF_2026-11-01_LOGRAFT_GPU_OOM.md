@@ -190,3 +190,7 @@ Native opt-in commit f23c29b1 changed only monitor/docs, which were absent from 
 ### 2026-11-02 ~09:13 Baghdad — remapping source/CI verification
 - [Android platform 41398404710](https://github.com/alwansan/raf/actions/runs/41398404710) COMPLETED SUCCESS at source `af6d49ed`: touch allowlist/edit-mode/persistence/reset source-contract checks, diagnostics policy, APK/OBB synthetic audits, netstandard2.1 library and offline smoke tests.
 - [Original startup integration 41398404703](https://github.com/alwansan/raf/actions/runs/41398404703) COMPLETED SUCCESS at the same SHA: adapted original C# compile, local RPC/identity tests. Neither is a Unity full-data import nor physical phone touch/action validation. No new APK or OBB produced. Continue with original gameplay input mapping proof, controller rebinding and safe original save/scene verification; avoid duplicating heavy native.
+
+
+## 2026-11-02 owner-requested standalone delivery attempt
+Read docs/WORK_SESSION_HANDOFF_2026-11-02_STANDALONE_APK.md for latest source/research/validation. Previous actual native41371789680 produced APK+mandatoryOBB but retained neither; source now adds targeted no-downscale Android colour compression and standalone delivery guards. Actual texture-format counts, Unity result and phone acceptance remain pending; cheap executable selection/data-integrity gates first. Existing source/scene/GUID/FMОD integrity and strict APK-only release policy retained.

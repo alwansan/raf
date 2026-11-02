@@ -24,6 +24,7 @@ on:
       - 'tests/test_supplement_ilspy_gameplay.py'
       - 'tests/test_csharp_overlay.py'
       - 'android-port/Editor/**'
+      - 'tests/test_standalone_original_data_gate.py'
       - 'android-port/Recovery/PropertyTextures/**'
       - 'android-port/Tests/PropertyTextures/**'
       - 'scripts/build_sdk_script_manifest.py'
@@ -579,11 +580,13 @@ jobs:
           python3 scripts/audit_android_apk.py \
             --apk "$GITHUB_WORKSPACE/builds/Android/RaftAndroidExperimental.apk" \
             --report "$RUNNER_TEMP/private-android-apk-audit.json"
-          python3 scripts/audit_android_expansion.py \
-            --apk "$GITHUB_WORKSPACE/builds/Android/RaftAndroidExperimental.apk" \
-            --obb "$GITHUB_WORKSPACE/builds/Android/RaftAndroidExperimental.main.obb" \
-            --verify-crc \
-            --report "$RUNNER_TEMP/private-android-obb-audit.json"
+          if [ -f "$GITHUB_WORKSPACE/builds/Android/RaftAndroidExperimental.main.obb" ]; then
+            python3 scripts/audit_android_expansion.py \
+              --apk "$GITHUB_WORKSPACE/builds/Android/RaftAndroidExperimental.apk" \
+              --obb "$GITHUB_WORKSPACE/builds/Android/RaftAndroidExperimental.main.obb" \
+              --verify-crc \
+              --report "$RUNNER_TEMP/private-android-obb-audit.json"
+          fi
           python3 - <<'PY'
           import json,os
           from pathlib import Path
@@ -600,14 +603,14 @@ jobs:
         run: |
           python3 - <<'PY'
           import hashlib, json, os, zipfile
+          from contextlib import nullcontext
           from pathlib import Path
           from scripts.audit_fmod_unity_package import elf_identity
           report = json.loads((Path(os.environ['RUNNER_TEMP']) / 'original-streaming-assets.json').read_text())
           apk = Path('builds/Android/RaftAndroidExperimental.apk')
           obb = Path('builds/Android/RaftAndroidExperimental.main.obb')
-          assert obb.is_file(), 'Split binary requires the matching original-data OBB'
           exports = set()
-          with zipfile.ZipFile(apk) as archive, zipfile.ZipFile(obb) as expansion:
+          with zipfile.ZipFile(apk) as archive, (zipfile.ZipFile(obb) if obb.is_file() else nullcontext(None)) as expansion:
               for name in ('libfmod.so', 'libfmodstudio.so', 'libresonanceaudio.so'):
                   metadata = elf_identity(archive.read('lib/arm64-v8a/' + name))
                   assert metadata['abi'] == 'arm64-v8a'
@@ -616,7 +619,8 @@ jobs:
               dexes = [n for n in archive.namelist() if n.startswith('classes') and n.endswith('.dex') and '/' not in n]
               assert any(b'Lorg/fmod/FMOD;' in archive.read(n) for n in dexes), 'FMOD Java descriptor absent from APK DEX'
               compressed_banks = 0
-              apk_names, obb_names = set(archive.namelist()), set(expansion.namelist())
+              apk_names = set(archive.namelist())
+              obb_names = set(expansion.namelist()) if expansion is not None else set()
               for name, expected in report['files'].items():
                   member = 'assets/' + name
                   assert member in apk_names or member in obb_names, 'Original StreamingAssets absent from APK/OBB pair'
