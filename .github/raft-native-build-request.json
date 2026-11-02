@@ -1,0 +1,5 @@
+{
+  "request_id": "delivery-permission-repair-20261102-2114bfc5",
+  "reason": "Deliver full fidelity APK+OBB/XAPK after fixing confirmed packaging PermissionError; include verified Android touch lifecycle fixes. Cheap permission, delivery and isolation CI passed.",
+  "requested_from_sha": "2114bfc5abd71b624f1129f63af4ef4dd2163b15"
+}
