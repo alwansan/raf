@@ -37,6 +37,8 @@ public final class CaptureService extends Service {
     private IRemoteLog remote;
     private String session;
     private Shizuku.UserServiceArgs args;
+    private final java.util.concurrent.atomic.AtomicBoolean workLogRunning=new java.util.concurrent.atomic.AtomicBoolean(false);
+    private Thread workLogThread;
 
     private final ILogSink.Stub sink = new ILogSink.Stub() {
         @Override public void onBatch(String source, String content) {
@@ -173,6 +175,26 @@ public final class CaptureService extends Service {
             openSegment();
             openMetricSegment();
             saveStatus("Preparing Shizuku logger...");
+            Uri internal=Config.workLogsFolder(this);
+            if(internal!=null){
+                workLogRunning.set(true);
+                workLogThread=new Thread(()->new CinemanaWorkLogCollector(
+                        getContentResolver(),internal,sessionFolder,workLogRunning,
+                        new CinemanaWorkLogCollector.Listener(){
+                            @Override public void onNewFile(Uri file){
+                                synchronized(writeLock){
+                                    fileUris.add(file.toString());
+                                    Config.prefs(CaptureService.this).edit()
+                                            .putString("files",new JSONArray(fileUris).toString()).apply();
+                                }
+                            }
+                            @Override public void onIssue(String issue){
+                                sink.onFailure(issue);
+                            }
+                        }).run(),"clog-saf-app-logs");
+                workLogThread.setPriority(Thread.MIN_PRIORITY);
+                workLogThread.start();
+            }
             args=new Shizuku.UserServiceArgs(new ComponentName(getPackageName(),RemoteLogService.class.getName()))
                 .daemon(false).processNameSuffix("lograf").debuggable(false).version(1);
             Shizuku.bindUserService(args,connection);
@@ -257,6 +279,8 @@ public final class CaptureService extends Service {
             report.put("raw_log_segments",part);
             report.put("metric_segments",metricsPart);
             report.put("raw_log_policy","preserve all segments; never delete");
+            report.put("internal_work_log_capture_enabled",Config.workLogsFolder(this)!=null);
+            report.put("internal_source_access","user-selected read-only SAF; source files never edited");
             report.put("game_process_exit_cause","unknown unless explicitly supported by exit evidence");
             String raw=Config.prefs(this).getString("metrics_last","");
             if(!raw.trim().isEmpty()) {
@@ -284,11 +308,18 @@ public final class CaptureService extends Service {
     }
 
     private void halt(String status) {
+        workLogRunning.set(false);
+        if(workLogThread!=null)workLogThread.interrupt();
         // Drain the remote reader's last batch BEFORE disabling our Binder sink.
         stopping=true;
         if(remote!=null) {
             try { remote.stop(); } catch(Exception ignored){}
             remote=null;
+        }
+        if(workLogThread!=null && workLogThread!=Thread.currentThread()){
+            try{workLogThread.join(1200);}
+            catch(InterruptedException e){Thread.currentThread().interrupt();}
+            workLogThread=null;
         }
         active=false;
         if(args!=null) try { Shizuku.unbindUserService(args,connection,true); }
