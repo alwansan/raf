@@ -19,12 +19,12 @@ class ExpansionAuditTests(unittest.TestCase):
             make(apk, {"assets/bin/Data/first": b"first"})
             with self.assertRaises(FileNotFoundError):
                 audit_companion(apk, obb)
-            make(obb, {"assets/bin/Data/level1": b"original", "assets/bin/Data/StreamingAssets/a.bank": b"bank"})
+            make(obb, {"assets/bin/Data/level1": b"original-scene-data", "assets/bin/Data/StreamingAssets/a.bank": b"bank"})
             result = audit_companion(apk, obb)
             self.assertEqual(result["obbUnityDataMembers"], 2)
             self.assertTrue(result["companionRequired"])
             self.assertEqual(len(result["obbSha256"]), 64)
-            self.assertNotIn("original", str(result))
+            self.assertNotIn("original-scene-data", str(result))
             self.assertFalse(result["deviceMountedVerified"])
 
     def test_rejects_missing_original_data(self):
