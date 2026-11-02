@@ -42,5 +42,27 @@ class OriginalMonoScriptFieldTests(unittest.TestCase):
 
 
 
+    def test_inherited_compute_shader_source_is_reported_without_class_names(self):
+        child = ("namespace World.Water {\n"
+                 "public class WaterBridge : WaterParent { void F(){} }\n}")
+        parent = ("namespace World.Water {\n"
+                  "public class WaterParent : MonoBehaviour {\n"
+                  "  public UnityEngine.ComputeShader originalFFT;\n"
+                  "}\n}")
+        with tempfile.TemporaryDirectory() as tmp:
+            p = Path(tmp)
+            (p / "WaterBridge.cs").write_text(child)
+            (p / "WaterParent.cs").write_text(parent)
+            expected = hashlib.sha256(b"World.Water.WaterBridge").hexdigest()
+            output = inspect(p, expected)
+            self.assertTrue(output["original_managed_type_matched"])
+            chain = output["matches"][0]["bounded_original_base_type_analysis"]
+            self.assertEqual(len(chain), 1)
+            self.assertEqual(chain[0]["direct_field_candidates"], 1)
+            self.assertNotIn("WaterParent", str(chain))
+            self.assertNotIn("originalFFT", str(chain))
+
+
+
 if __name__ == "__main__":
     unittest.main()

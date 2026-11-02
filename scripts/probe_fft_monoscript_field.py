@@ -18,6 +18,47 @@ COMPUTE_FIELD = re.compile(
 )
 MAX_SOURCE = 800_000
 
+CLASS_DECLARATION_TEMPLATE = r"\bclass\s+%s\b(?:\s*<[^>{}]{1,120}>)?\s*(?::\s*([^{\r\n]+))?\s*\{"
+TYPE_IDENTIFIER = re.compile(r"^[A-Za-z_]\w*(?:\.[A-Za-z_]\w*)*$")
+
+
+def inherited_compute_sources(root, path, original_source):
+    """Bounded type-base exploration, never return a class or field name."""
+    ancestors = []
+    visited = set()
+    current_path, current_source = path, original_source
+    for depth in range(3):
+        declaration = re.search(
+            CLASS_DECLARATION_TEMPLATE % re.escape(current_path.stem),
+            current_source)
+        if declaration is None or not declaration.group(1):
+            break
+        parent = declaration.group(1).split(",", 1)[0].strip().split("<", 1)[0].strip()
+        if not TYPE_IDENTIFIER.fullmatch(parent):
+            break
+        parent_stem = parent.rsplit(".", 1)[-1]
+        if parent_stem in {"MonoBehaviour", "ScriptableObject", "Object", "Behaviour"}:
+            break
+        matches = [x for x in root.rglob(parent_stem + ".cs")
+                   if x.is_file() and not x.is_symlink() and x.stat().st_size <= MAX_SOURCE]
+        if len(matches) != 1 or matches[0] in visited:
+            break
+        visited.add(matches[0])
+        parent_source = matches[0].read_text(encoding="utf-8-sig")
+        ancestors.append({
+            "inheritance_depth": depth + 1,
+            "original_parent_source_sha256":
+                hashlib.sha256(parent_source.encode("utf8")).hexdigest(),
+            "compute_shader_type_occurrences":
+                len(re.findall(r"\bComputeShader\b", parent_source)),
+            "direct_field_candidates": len(COMPUTE_FIELD.findall(parent_source)),
+            "token_contexts": classify_compute_shader_occurrences(parent_source),
+            "original_type_name_or_csharp_published": False,
+        })
+        current_path, current_source = matches[0], parent_source
+    return ancestors
+
+
 USAGE = re.compile(r"\b(?:UnityEngine\.)?ComputeShader\b")
 IDENT_AFTER_TYPE = re.compile(r"\s+([A-Za-z_]\w*)\s*([;=({,)])")
 MEMBER_ACCESS = re.compile(r"^(?:\s*(?:\[[^\]]+\]\s*)*)(?:(?:public|private|protected|internal|static|readonly|new|volatile)\s+)+")
@@ -81,6 +122,7 @@ def inspect(root: Path, expected_sha=ORIGINAL_MONOSCRIPT_NAME_SHA256):
             continue
         compute_fields = COMPUTE_FIELD.findall(raw)
         usage = classify_compute_shader_occurrences(raw)
+        parents = inherited_compute_sources(root, file, raw)
         matches.append({
             "original_monoscript_identity_sha256": expected_sha,
             "original_class_csharp_source_sha256": hashlib.sha256(raw.encode("utf8")).hexdigest(),
@@ -90,6 +132,7 @@ def inspect(root: Path, expected_sha=ORIGINAL_MONOSCRIPT_NAME_SHA256):
             ],
             "compute_shader_mentions": len(re.findall(r"\bComputeShader\b", raw)),
             "compute_shader_contexts": usage,
+            "bounded_original_base_type_analysis": parents,
             "waves_renderer_fft_mentions": len(re.findall(r"\bWavesRendererFFT\b", raw)),
             "dx11_fft_mentions": len(re.findall(r"\bDx11FFT\b", raw)),
             "original_type_name_or_csharp_published": False,
