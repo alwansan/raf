@@ -10,6 +10,7 @@ import hashlib
 import json
 from pathlib import Path, PurePosixPath
 import zipfile
+import zlib
 
 # Google Play's documented maximum is 2 GB for EACH APK expansion file.
 # This is a distribution constraint, not a proof of Android sideload failure.
@@ -31,12 +32,21 @@ def _names(archive):
 
 def audit_companion(apk: Path, obb: Path, *, digest: bool = True,
                     play_limit_bytes: int = PLAY_EXPANSION_FILE_LIMIT_BYTES,
-                    java_array_limit_bytes: int = JAVA_ARRAY_LIMIT_BYTES):
+                    java_array_limit_bytes: int = JAVA_ARRAY_LIMIT_BYTES,
+                    verify_crc: bool = False):
     if not apk.is_file() or not obb.is_file() or obb.stat().st_size == 0:
         raise FileNotFoundError("Both nonempty APK and matching OBB are required")
     with zipfile.ZipFile(apk) as app, zipfile.ZipFile(obb) as expansion:
         app_names = _names(app)
         expansion_names = _names(expansion)
+        # Stream each ZIP member through Python's bounded reader to check CRC.
+        # CRC verifies transport integrity, not original game-byte fidelity.
+        if verify_crc:
+            try:
+                if app.testzip() is not None or expansion.testzip() is not None:
+                    raise ValueError("APK/OBB ZIP payload CRC mismatch")
+            except (zipfile.BadZipFile, EOFError, RuntimeError, OSError, zlib.error):
+                raise ValueError("APK/OBB ZIP payload CRC validation failed") from None
         if not any(x.filename.startswith("assets/bin/Data/") and x.file_size
                    for x in app.infolist()):
             raise ValueError("APK is missing the initial Unity scene/data")
@@ -62,6 +72,14 @@ def audit_companion(apk: Path, obb: Path, *, digest: bool = True,
             "obbBytes": obb_bytes,
             "obbPlayLimitBytes": play_limit_bytes,
             "obbPlayLimitExceeded": obb_bytes > play_limit_bytes,
+            "obbPlayExcessBytes": max(0, obb_bytes - play_limit_bytes),
+            "obbUnityStoredMembers": sum(x.compress_type == zipfile.ZIP_STORED for x in data),
+            "obbUnityDeflatedMembers": sum(x.compress_type == zipfile.ZIP_DEFLATED for x in data),
+            "obbUnityStoredBytes": sum(x.file_size for x in data
+                                       if x.compress_type == zipfile.ZIP_STORED),
+            "obbZipContainerOverheadBytes": obb_bytes - sum(
+                x.compress_size for x in expansion.infolist()),
+            "zipCrcVerified": verify_crc,
             "obbUnityLargestMemberBytes": max(x.file_size for x in data),
             "obbUnityCompressedBytes": sum(x.compress_size for x in data),
             "obbUnityMembersOverJavaArray": sum(
@@ -88,8 +106,10 @@ if __name__ == "__main__":
     parser.add_argument("--apk", type=Path, required=True)
     parser.add_argument("--obb", type=Path, required=True)
     parser.add_argument("--report", type=Path)
+    parser.add_argument("--verify-crc", action="store_true",
+                        help="Stream-validate APK and OBB ZIP member CRCs")
     args = parser.parse_args()
-    report = audit_companion(args.apk, args.obb)
+    report = audit_companion(args.apk, args.obb, verify_crc=args.verify_crc)
     if args.report:
         args.report.parent.mkdir(parents=True, exist_ok=True)
         args.report.write_text(json.dumps(report, sort_keys=True, indent=2) + "\n")

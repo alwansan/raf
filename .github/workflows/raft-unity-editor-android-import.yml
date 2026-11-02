@@ -582,6 +582,7 @@ jobs:
           python3 scripts/audit_android_expansion.py \
             --apk "$GITHUB_WORKSPACE/builds/Android/RaftAndroidExperimental.apk" \
             --obb "$GITHUB_WORKSPACE/builds/Android/RaftAndroidExperimental.main.obb" \
+            --verify-crc \
             --report "$RUNNER_TEMP/private-android-obb-audit.json"
           python3 - <<'PY'
           import json,os
