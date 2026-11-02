@@ -30,6 +30,20 @@ class TouchGamepadContract(unittest.TestCase):
         self.assertNotIn("StandaloneInputModule", SOURCE)
         self.assertIn("SetVisible(false);", SOURCE)
 
+    def test_touch_layout_editor_contract(self):
+        self.assertIn("public bool SetLayoutEditMode(bool enable)", SOURCE)
+        self.assertIn("stick.enabled = !enable;", SOURCE)
+        self.assertIn("button.enabled = !enable;", SOURCE)
+        self.assertIn("ScreenPointToLocalPointInRectangle", SOURCE)
+        self.assertIn("pointer.pressEventCamera", SOURCE)
+        self.assertIn("PlayerPrefs.SetFloat(LayoutKey + label + \".x\"", SOURCE)
+        self.assertIn("PlayerPrefs.SetFloat(LayoutKey + selected + \".size\"", SOURCE)
+        self.assertIn("PlayerPrefs.SetFloat(LayoutKey + selected + \".opacity\"", SOURCE)
+        self.assertIn("PlayerPrefs.DeleteKey", SOURCE)
+        self.assertIn("float.IsNaN(value) || float.IsInfinity(value)", SOURCE)
+        self.assertIn("opened = false; // Drag controls with report panel closed.", DIAGNOSTICS)
+        self.assertIn("touchGamepad.SetLayoutEditMode(startEdit)", DIAGNOSTICS)
+
     def test_gamepad_paths_and_notch_safe_area(self):
         for path in ("<Gamepad>/leftStick", "<Gamepad>/rightStick",
                      "<Gamepad>/buttonSouth", "<Gamepad>/buttonNorth",

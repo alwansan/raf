@@ -343,6 +343,28 @@ namespace RaftAndroid.Platform
                                 GUIUtility.systemCopyBuffer = fullReport;
                             if (touchGamepad != null && GUILayout.Button(touchGamepad.Visible ? "Hide touch gamepad" : "Enable touch gamepad", GUILayout.Height(44)))
                                 touchGamepad.SetVisible(!touchGamepad.Visible);
+                            if (touchGamepad != null && touchGamepad.Visible)
+                            {
+                                if (GUILayout.Button(touchGamepad.Editing ? "Finish touch layout" : "Edit touch layout", GUILayout.Height(44)))
+                                {
+                                    bool startEdit = !touchGamepad.Editing;
+                                    if (touchGamepad.SetLayoutEditMode(startEdit) && startEdit)
+                                        opened = false; // Drag controls with report panel closed.
+                                }
+                                if (touchGamepad.Editing)
+                                {
+                                    GUILayout.Label("Selected: " + touchGamepad.SelectedControl);
+                                    GUILayout.BeginHorizontal();
+                                    if (GUILayout.Button("Size -")) touchGamepad.AdjustSelectedSize(-15f);
+                                    if (GUILayout.Button("Size +")) touchGamepad.AdjustSelectedSize(15f);
+                                    GUILayout.EndHorizontal();
+                                    GUILayout.BeginHorizontal();
+                                    if (GUILayout.Button("Opacity -")) touchGamepad.AdjustSelectedOpacity(-0.1f);
+                                    if (GUILayout.Button("Opacity +")) touchGamepad.AdjustSelectedOpacity(0.1f);
+                                    GUILayout.EndHorizontal();
+                                    if (GUILayout.Button("Reset touch layout")) touchGamepad.ResetLayout();
+                                }
+                            }
                             scroll = GUILayout.BeginScrollView(scroll);
                             GUILayout.Label(visibleReport);
                             GUILayout.EndScrollView();

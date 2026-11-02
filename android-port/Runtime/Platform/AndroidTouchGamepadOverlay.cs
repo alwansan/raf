@@ -1,4 +1,5 @@
 #if UNITY_ANDROID && !UNITY_EDITOR
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.OnScreen;
@@ -18,11 +19,21 @@ namespace RaftAndroid.Platform
         private bool visible;
         private int lastWidth = -1, lastHeight = -1;
         private Rect lastSafeArea;
+        private const string LayoutKey = "raft.android.touchlayout.v1.";
+        private readonly Dictionary<string, RectTransform> surfaces = new Dictionary<string, RectTransform>();
+        private readonly Dictionary<string, Vector2> defaults = new Dictionary<string, Vector2>();
+        private readonly Dictionary<string, Vector2> defaultOffsets = new Dictionary<string, Vector2>();
+        private readonly Dictionary<string, float> defaultSizes = new Dictionary<string, float>();
+        private bool editing;
+        private string selected;
         public bool Visible { get { return visible; } }
+        public bool Editing { get { return editing; } }
+        public string SelectedControl { get { return selected ?? "none"; } }
 
         public bool SetVisible(bool enabled)
         {
             if (enabled && !EnsureCanvas()) return false;
+            if (!enabled && editing) SetLayoutEditMode(false);
             visible = enabled;
             if (canvasObject != null) canvasObject.SetActive(enabled);
             RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("input", "touch_gamepad_visible",
@@ -68,6 +79,7 @@ namespace RaftAndroid.Platform
             AddButton("Inventory", "<Gamepad>/buttonWest", new Vector2(0f, 0f), new Vector2(400f, 120f));
             AddButton("Menu", "<Gamepad>/start", new Vector2(1f, 1f), new Vector2(-105f, -90f));
             UpdateSafeArea();
+            RestoreLayout();
             canvasObject.SetActive(false);
             return true;
         }
@@ -97,6 +109,11 @@ namespace RaftAndroid.Platform
             text.alignment = TextAnchor.MiddleCenter;
             text.color = Color.white;
             text.raycastTarget = false;
+            surfaces.Add(label, rect);
+            defaults.Add(label, anchor);
+            defaultOffsets.Add(label, offset);
+            defaultSizes.Add(label, size);
+            node.AddComponent<AndroidTouchLayoutHandle>().Bind(this, label);
             return rect;
         }
 
@@ -115,6 +132,140 @@ namespace RaftAndroid.Platform
         {
             var rect = AddSurface(label, anchor, offset, 100f);
             rect.gameObject.AddComponent<OnScreenButton>().controlPath = path;
+        }
+
+        public bool SetLayoutEditMode(bool enable)
+        {
+            if (enable && (!visible || canvasObject == null)) return false;
+            editing = enable;
+            selected = null;
+            foreach (var rect in surfaces.Values)
+            {
+                var stick = rect.GetComponent<OnScreenStick>();
+                if (stick != null) stick.enabled = !enable;
+                var button = rect.GetComponent<OnScreenButton>();
+                if (button != null) button.enabled = !enable;
+            }
+            RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("input", "touch_layout_edit",
+                "enabled=" + enable + "; gameplayInputSuppressed=" + enable);
+            return true;
+        }
+
+        private static float SafeFloat(float value, float fallback)
+        {
+            return float.IsNaN(value) || float.IsInfinity(value) ? fallback : value;
+        }
+
+        private void Resize(string label, float size)
+        {
+            var rect = surfaces[label];
+            size = Mathf.Clamp(SafeFloat(size, defaultSizes[label]), 70f, 280f);
+            rect.sizeDelta = new Vector2(size, size);
+            var stick = rect.GetComponent<OnScreenStick>();
+            if (stick != null) stick.movementRange = Mathf.Min(110f, size * 0.55f);
+        }
+
+        private void Opacity(string label, float alpha)
+        {
+            alpha = Mathf.Clamp(SafeFloat(alpha, 0.36f), 0.2f, 0.95f);
+            var rect = surfaces[label];
+            var image = rect.GetComponent<Image>();
+            var color = image.color;
+            color.a = alpha;
+            image.color = color;
+            var caption = rect.GetComponentInChildren<Text>();
+            if (caption != null)
+            {
+                color = caption.color;
+                color.a = alpha;
+                caption.color = color;
+            }
+        }
+
+        private void RestoreLayout()
+        {
+            foreach (var entry in surfaces)
+            {
+                string label = entry.Key;
+                var rect = entry.Value;
+                string key = LayoutKey + label + ".";
+                rect.anchorMin = rect.anchorMax = defaults[label];
+                rect.anchoredPosition = defaultOffsets[label];
+                if (PlayerPrefs.HasKey(key + "x") && PlayerPrefs.HasKey(key + "y"))
+                {
+                    float x = SafeFloat(PlayerPrefs.GetFloat(key + "x"), defaults[label].x);
+                    float y = SafeFloat(PlayerPrefs.GetFloat(key + "y"), defaults[label].y);
+                    rect.anchorMin = rect.anchorMax = new Vector2(Mathf.Clamp01(x), Mathf.Clamp01(y));
+                    rect.anchoredPosition = Vector2.zero;
+                }
+                Resize(label, PlayerPrefs.GetFloat(key + "size", defaultSizes[label]));
+                Opacity(label, PlayerPrefs.GetFloat(key + "opacity", 0.36f));
+            }
+        }
+
+        public void ResetLayout()
+        {
+            foreach (string label in surfaces.Keys)
+            {
+                string key = LayoutKey + label + ".";
+                PlayerPrefs.DeleteKey(key + "x");
+                PlayerPrefs.DeleteKey(key + "y");
+                PlayerPrefs.DeleteKey(key + "size");
+                PlayerPrefs.DeleteKey(key + "opacity");
+            }
+            PlayerPrefs.Save();
+            selected = null;
+            RestoreLayout();
+        }
+
+        public void AdjustSelectedSize(float delta)
+        {
+            if (!editing || selected == null) return;
+            Resize(selected, surfaces[selected].sizeDelta.x + delta);
+            PlayerPrefs.SetFloat(LayoutKey + selected + ".size", surfaces[selected].sizeDelta.x);
+            PlayerPrefs.Save();
+        }
+
+        public void AdjustSelectedOpacity(float delta)
+        {
+            if (!editing || selected == null) return;
+            float alpha = surfaces[selected].GetComponent<Image>().color.a + delta;
+            Opacity(selected, alpha);
+            PlayerPrefs.SetFloat(LayoutKey + selected + ".opacity",
+                surfaces[selected].GetComponent<Image>().color.a);
+            PlayerPrefs.Save();
+        }
+
+        internal void Select(string label)
+        {
+            if (editing && surfaces.ContainsKey(label)) selected = label;
+        }
+
+        internal void Drag(string label, PointerEventData pointer)
+        {
+            if (!editing || safeRoot == null || !surfaces.ContainsKey(label)) return;
+            Vector2 local;
+            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                safeRoot, pointer.position, pointer.pressEventCamera, out local)) return;
+            Rect area = safeRoot.rect;
+            if (area.width <= 0 || area.height <= 0) return;
+            var rect = surfaces[label];
+            float marginX = Mathf.Min(0.5f, rect.rect.width / (2f * area.width));
+            float marginY = Mathf.Min(0.5f, rect.rect.height / (2f * area.height));
+            float x = Mathf.Clamp(local.x / area.width + safeRoot.pivot.x, marginX, 1f - marginX);
+            float y = Mathf.Clamp(local.y / area.height + safeRoot.pivot.y, marginY, 1f - marginY);
+            rect.anchorMin = rect.anchorMax = new Vector2(x, y);
+            rect.anchoredPosition = Vector2.zero;
+            selected = label;
+        }
+
+        internal void SavePosition(string label)
+        {
+            if (!editing || !surfaces.ContainsKey(label)) return;
+            Vector2 position = surfaces[label].anchorMin;
+            PlayerPrefs.SetFloat(LayoutKey + label + ".x", position.x);
+            PlayerPrefs.SetFloat(LayoutKey + label + ".y", position.y);
+            PlayerPrefs.Save();
         }
 
         private void UpdateSafeArea()
@@ -148,8 +299,37 @@ namespace RaftAndroid.Platform
 
         private void OnDisable()
         {
+            if (editing) SetLayoutEditMode(false);
             visible = false;
             if (canvasObject != null) canvasObject.SetActive(false);
+        }
+    }
+
+    public sealed class AndroidTouchLayoutHandle : MonoBehaviour,
+        IPointerDownHandler, IDragHandler, IEndDragHandler
+    {
+        private AndroidTouchGamepadOverlay overlay;
+        private string label;
+
+        public void Bind(AndroidTouchGamepadOverlay owner, string control)
+        {
+            overlay = owner;
+            label = control;
+        }
+
+        public void OnPointerDown(PointerEventData pointer)
+        {
+            if (overlay != null) overlay.Select(label);
+        }
+
+        public void OnDrag(PointerEventData pointer)
+        {
+            if (overlay != null) overlay.Drag(label, pointer);
+        }
+
+        public void OnEndDrag(PointerEventData pointer)
+        {
+            if (overlay != null) overlay.SavePosition(label);
         }
     }
 }
