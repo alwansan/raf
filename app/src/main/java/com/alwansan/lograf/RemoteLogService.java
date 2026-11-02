@@ -19,6 +19,8 @@ import java.util.regex.Pattern;
 public final class RemoteLogService extends IRemoteLog.Stub {
     private final AtomicBoolean running = new AtomicBoolean(false);
     private final AtomicLong gameLogLines=new AtomicLong(),systemContextLines=new AtomicLong(),reconnections=new AtomicLong();
+    private final AtomicLong shaderPassErrors=new AtomicLong(),kernelErrors=new AtomicLong(),missingAssetPaths=new AtomicLong();
+    private final AtomicLong javaFatalMarkers=new AtomicLong(),nativeFatalMarkers=new AtomicLong(),processDeathEvents=new AtomicLong();
     private volatile Process gameProcess, systemProcess;
     private volatile ILogSink listener;
     private volatile int gameUid;
@@ -39,6 +41,8 @@ public final class RemoteLogService extends IRemoteLog.Stub {
         stop();
         listener = sink; gameUid = uid; packageName = targetPackage;
         gameLogLines.set(0);systemContextLines.set(0);reconnections.set(0);
+        shaderPassErrors.set(0);kernelErrors.set(0);missingAssetPaths.set(0);
+        javaFatalMarkers.set(0);nativeFatalMarkers.set(0);processDeathEvents.set(0);
         metricPreviousAt=-1;metricPreviousGameLines=0;metricPreviousSystemLines=0;
         running.set(true);
         gameThread = new Thread(() -> pump("RAFT", new String[]{
@@ -87,6 +91,13 @@ public final class RemoteLogService extends IRemoteLog.Stub {
                 data.put("game_log_lines",gameLines);
                 data.put("system_context_lines",systemContextLines.get());
                 data.put("logcat_reconnects",reconnections.get());
+                data.put("shader_pass_errors_total",shaderPassErrors.get());
+                data.put("invalid_compute_kernel_total",kernelErrors.get());
+                data.put("missing_asset_path_errors_total",missingAssetPaths.get());
+                data.put("java_fatal_markers_total",javaFatalMarkers.get());
+                data.put("native_fatal_markers_total",nativeFatalMarkers.get());
+                data.put("game_process_death_events_total",processDeathEvents.get());
+                data.put("process_exit_reason","unknown; process death alone is not a crash");
                 data.put("logcat_unobserved_losses","unknown");
                 sink.onBatch("METRICS",data.toString()+"\n");
             } catch(Exception e){error("Metrics delivery: "+e.getClass().getSimpleName());}
@@ -154,7 +165,23 @@ public final class RemoteLogService extends IRemoteLog.Stub {
                         if(line==null)break;
                         if (line.startsWith("--------- beginning of ")) continue;
                         if (!onlyContext || systemRelevant(line)) {
-                            if(onlyContext)systemContextLines.incrementAndGet();else gameLogLines.incrementAndGet();
+                            if(onlyContext) {
+                                systemContextLines.incrementAndGet();
+                                if(line.contains("am_proc_died") && line.contains(packageName))
+                                    processDeathEvents.incrementAndGet();
+                            } else {
+                                gameLogLines.incrementAndGet();
+                                if(line.contains("Invalid pass number") && line.contains("Graphics.Blit"))
+                                    shaderPassErrors.incrementAndGet();
+                                if(line.contains("Invalid kernelIndex"))
+                                    kernelErrors.incrementAndGet();
+                                if(line.contains("DirectoryNotFoundException"))
+                                    missingAssetPaths.incrementAndGet();
+                                if(line.contains("FATAL EXCEPTION"))
+                                    javaFatalMarkers.incrementAndGet();
+                                if(line.contains("Fatal signal") || line.contains("SIGSEGV") || line.contains("SIGABRT"))
+                                    nativeFatalMarkers.incrementAndGet();
+                            }
                             batch.append(line).append('\n');
                             if (batch.length() >= BATCH || System.nanoTime()-lastDelivery>700_000_000L) {
                                 send(source,batch);
