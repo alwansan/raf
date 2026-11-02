@@ -69,8 +69,11 @@ def typed_reference_paths(tree, target):
     return matches
 
 
-def summarize_monobehaviour_script(partial, original_file):
-    """Describe only original MonoScript identity metadata, never private names."""
+def summarize_monobehaviour_script(partial, original_file, root=None):
+    """Inspect exact MonoScript PPtr from partial head, no private type names."""
+    import hashlib
+    import re
+    import UnityPy
     result = {"original_monobehaviour_script_link_verified": False,
               "original_monoscript_class_name_sha256": None,
               "class_or_namespace_mentions_water": False,
@@ -89,10 +92,30 @@ def summarize_monobehaviour_script(partial, original_file):
         return result
     result["original_script_pointer_file_id"] = file_id
     result["original_script_pointer_path_id"] = path_id
+    owner = original_file
     if file_id != 0:
         result["original_script_pointer_external"] = True
-        return result
-    script = original_file.objects.get(path_id)
+        if not (1 <= file_id <= len(original_file.externals)):
+            return result
+        external_path = original_file.externals[file_id - 1].path
+        if not isinstance(external_path, str):
+            return result
+        basename = external_path.replace("\\", "/").rsplit("/", 1)[-1]
+        if not re.fullmatch(r"(?:globalgamemanagers(?:\\.assets)?|sharedassets[0-9]+\\.assets|resources\\.assets)", basename):
+            # Do not follow arbitrary archive paths or remote URLs.
+            result["external_original_owner_unsupported"] = True
+            return result
+        result["external_original_owner_basename"] = basename
+        if root is None:
+            return result
+        source = Path(root) / basename
+        if source.is_symlink() or not source.is_file() or source.stat().st_size > 130_000_000:
+            return result
+        with source.open("rb") as stream:
+            if stream.read(48).startswith(b"version https://git-lfs.github.com/spec/v1"):
+                return result
+        owner = UnityPy.load(str(source)).file
+    script = owner.objects.get(path_id)
     if script is None or script.type.name != "MonoScript":
         return result
     tree = script.read_typetree()
@@ -106,7 +129,8 @@ def summarize_monobehaviour_script(partial, original_file):
     result.update({
         "original_monobehaviour_script_link_verified": True,
         "original_monoscript_path_id": int(path_id),
-        "original_monoscript_class_name_sha256": __import__("hashlib").sha256(full.encode()).hexdigest(),
+        "original_monoscript_raw_sha256": hashlib.sha256(script.get_raw_data()).hexdigest(),
+        "original_monoscript_class_name_sha256": hashlib.sha256(full.encode()).hexdigest(),
         "class_or_namespace_mentions_water": "water" in full.casefold(),
         "class_or_namespace_mentions_fft": "fft" in full.casefold(),
     })
@@ -153,7 +177,7 @@ def probe(root: Path):
                 partial = obj.read_typetree(check_read=False)
                 # This is only the base MonoBehaviour head (often 56 bytes),
                 # NOT proof that its remaining custom fields have typed links.
-                mono_script = summarize_monobehaviour_script(partial, env.file)
+                mono_script = summarize_monobehaviour_script(partial, env.file, root)
                 unreadable.append({"source_type": obj.type.name,
                                    "source_path_id": int(obj.path_id),
                                    "raw_pptr_pattern_count": len(offsets),
