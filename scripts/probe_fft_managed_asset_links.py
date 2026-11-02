@@ -62,7 +62,7 @@ def inspect(root: Path):
         paths = list(root.rglob(stem + ".cs"))
         if len(paths) != 1 or paths[0].is_symlink() or not paths[0].is_file():
             raise ValueError("Exactly one original SHA-pinned " + stem + " required")
-        content = paths[0].read_text(encoding="utf8-sig").replace("\r\n", "\n")
+        content = paths[0].read_text(encoding="utf-8-sig").replace("\r\n", "\n")
         result[stem] = analyze_text(content, expected)
     return {"callers": result, "original_serialized_fft_name_sha256":
             SERIALIZED_FFT_NAME_SHA256, "original_assets_modified": False,
