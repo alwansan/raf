@@ -33,13 +33,13 @@ def analyze_text(text: str, expected_sha: str):
     literal_call_contexts = []
     for match in literal_matches:
         preceding = text[max(0, match.start() - 300):match.start()]
-        if re.search(r"Resources\\s*\\.\\s*Load\\s*<\\s*ComputeShader\\s*>\\s*\\(\\s*$", preceding):
+        if re.search(r"Resources\s*\.\s*Load\s*<\s*ComputeShader\s*>\s*\(\s*$", preceding):
             kind = "resources_load_compute"
-        elif re.search(r"Resources\\s*\\.\\s*Load\\s*\\(\\s*$", preceding):
+        elif re.search(r"Resources\s*\.\s*Load\s*\(\s*$", preceding):
             kind = "resources_load_non_generic"
-        elif re.search(r"Shader\\s*\\.\\s*Find\\s*\\(\\s*$", preceding):
+        elif re.search(r"Shader\s*\.\s*Find\s*\(\s*$", preceding):
             kind = "shader_find"
-        elif re.search(r"FindKernel\\s*\\(\\s*$", preceding):
+        elif re.search(r"FindKernel\s*\(\s*$", preceding):
             kind = "compute_find_kernel"
         else:
             kind = "unclassified"
