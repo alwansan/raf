@@ -68,7 +68,7 @@ public final class PerformanceSampler implements Runnable {
         int pid=pidSupplier.getAsInt();
         int workerPid=downloaderPidSupplier.getAsInt();
         JSONObject row=new JSONObject();
-        row.put("schema",1).put("source","lograf_shell").put("timestamp_unix_ms",System.currentTimeMillis())
+        row.put("schema",1).put("source","clog_shell").put("timestamp_unix_ms",System.currentTimeMillis())
                 .put("elapsed_ms",now).put("sample",++sample).put("package",target)
                 .put("pid",pid>0?pid:JSONObject.NULL).put("cpu_cores_online",cpuCount);
         row.put("app_process_type","main");
@@ -113,6 +113,12 @@ public final class PerformanceSampler implements Runnable {
             row.put("process_rss_kb",proc.opt("VmRSS")==null?JSONObject.NULL:proc.opt("VmRSS"));
             row.put("process_rss_peak_kb",proc.opt("VmHWM")==null?JSONObject.NULL:proc.opt("VmHWM"));
             row.put("process_threads",proc.opt("Threads")==null?JSONObject.NULL:proc.opt("Threads"));
+            row.put("process_fd_count",fileDescriptorCount(pid));
+            row.put("process_vm_swap_kb",proc.has("VmSwap")?proc.opt("VmSwap"):JSONObject.NULL);
+            row.put("process_voluntary_context_switches",proc.has("voluntary_ctxt_switches")?
+                    proc.opt("voluntary_ctxt_switches"):JSONObject.NULL);
+            row.put("process_involuntary_context_switches",proc.has("nonvoluntary_ctxt_switches")?
+                    proc.opt("nonvoluntary_ctxt_switches"):JSONObject.NULL);
             if(now-pssLast>15000 || pssPid!=pid) {
                 pssLast=now; pssPid=pid; pssCache=readPss(pid);
             }
@@ -188,6 +194,8 @@ public final class PerformanceSampler implements Runnable {
             o.put("rss_kb",status.has("VmRSS")?status.opt("VmRSS"):JSONObject.NULL);
             o.put("rss_peak_kb",status.has("VmHWM")?status.opt("VmHWM"):JSONObject.NULL);
             o.put("threads",status.has("Threads")?status.opt("Threads"):JSONObject.NULL);
+            o.put("open_fds",fileDescriptorCount(pid));
+            o.put("swap_kb",status.has("VmSwap")?status.opt("VmSwap"):JSONObject.NULL);
             JSONObject io=processIo(pid);
             o.put("io_read_bytes",io.has("read_bytes")?io.opt("read_bytes"):JSONObject.NULL);
             o.put("io_write_bytes",io.has("write_bytes")?io.opt("write_bytes"):JSONObject.NULL);
@@ -265,12 +273,19 @@ public final class PerformanceSampler implements Runnable {
         return o;
     }
 
+    private Object fileDescriptorCount(int pid){
+        try{
+            String[] items=new File("/proc/"+pid+"/fd").list();
+            return items==null?JSONObject.NULL:items.length;
+        }catch(Exception ignored){return JSONObject.NULL;}
+    }
+
     private JSONObject processStatus(int pid){
         JSONObject o=new JSONObject();
         try {
             String s=readFile("/proc/"+pid+"/status",16384);
             for(String line:s.split("\\n")){
-                for(String key:new String[]{"VmRSS","VmHWM","Threads"}){
+                for(String key:new String[]{"VmRSS","VmHWM","Threads","VmSwap","VmSize","voluntary_ctxt_switches","nonvoluntary_ctxt_switches"}){
                     if(line.startsWith(key+":")){
                         String[] v=line.substring(key.length()+1).trim().split("\\s+");
                         o.put(key,Long.parseLong(v[0]));

@@ -177,6 +177,9 @@ public final class MainActivity extends Activity {
                 "\n:filedownloader CPU: "+subMetric(m,"filedownloader","cpu_percent_one_core","% of one core")+
                 "\n:filedownloader RSS: "+subMetric(m,"filedownloader","rss_kb","KiB")+
                 "\n:filedownloader threads: "+subMetric(m,"filedownloader","threads","")+
+                "\nMain process FDs: "+metric(m,"process_fd_count","")+
+                "\n:filedownloader FDs: "+subMetric(m,"filedownloader","open_fds","")+
+                "\nMain process swap: "+metric(m,"process_vm_swap_kb","KiB")+
                 "\nAndroid UI rendered frames: "+subMetric(m,"android_ui_gfxinfo","total_frames_rendered_","")+
                 "\nAndroid UI janky frames: "+subMetric(m,"android_ui_gfxinfo","janky_frames_","")+
                 "\nRAM RSS: "+metric(m,"process_rss_kb","KiB")+

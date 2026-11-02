@@ -49,7 +49,7 @@ public final class RemoteLogService extends IRemoteLog.Stub {
         javaFatalMarkers.set(0);nativeFatalMarkers.set(0);processDeathEvents.set(0);
         metricPreviousAt=-1;metricPreviousGameLines=0;metricPreviousSystemLines=0;
         running.set(true);
-        gameThread = new Thread(() -> pump("RAFT", new String[]{
+        gameThread = new Thread(() -> pump("CINEMANA", new String[]{
                 "logcat", "-b", "main", "-b", "system", "-b", "crash", "-b", "events",
                 "-v", "threadtime", "-v", "uid", "-v", "year", "-v", "usec", "-v", "printable",
                 "-T", "1", "--uid=" + gameUid, "*:V"
