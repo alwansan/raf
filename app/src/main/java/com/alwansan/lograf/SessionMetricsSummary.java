@@ -36,6 +36,7 @@ final class SessionMetricsSummary {
     private long total,unreadable,gameRunning,gameAbsent,fpsStale;
     private long firstTimestamp=-1,lastTimestamp=-1;
     private long lastShaderErrors,lastComputeErrors,lastAssetErrors,firstFpsAt=-1,lastFpsAt=-1;
+    private JSONObject lastErrorGroups=new JSONObject();
     SessionMetricsSummary(){reset();}
     void reset(){
         fields.clear();
@@ -51,6 +52,7 @@ final class SessionMetricsSummary {
         total=0;unreadable=0;gameRunning=0;gameAbsent=0;fpsStale=0;
         firstTimestamp=-1;lastTimestamp=-1;firstFpsAt=-1;lastFpsAt=-1;
         lastShaderErrors=0;lastComputeErrors=0;lastAssetErrors=0;
+        lastErrorGroups=new JSONObject();
     }
     void add(String raw){
         try{
@@ -73,6 +75,8 @@ final class SessionMetricsSummary {
             lastShaderErrors=Math.max(lastShaderErrors,row.optLong("shader_pass_errors_total"));
             lastComputeErrors=Math.max(lastComputeErrors,row.optLong("invalid_compute_kernel_total"));
             lastAssetErrors=Math.max(lastAssetErrors,row.optLong("missing_asset_path_errors_total"));
+            JSONObject category=row.optJSONObject("error_groups");
+            if(category!=null)lastErrorGroups=category;
         }catch(Exception err){unreadable++;}
     }
     JSONObject toJson(){
@@ -92,6 +96,7 @@ final class SessionMetricsSummary {
             for(Map.Entry<String,Stats> e:fields.entrySet())
                 stats.put(e.getKey(),e.getValue().json());
             o.put("metrics",stats);
+            o.put("error_category_breakdown",lastErrorGroups);
             o.put("fps_caveat","External SurfaceFlinger presented frames; not Unity engine FPS");
         }catch(JSONException ignored){}
         return o;

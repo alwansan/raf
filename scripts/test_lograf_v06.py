@@ -30,6 +30,7 @@ checks={
     "PSS rejection marker": '"rejected_pss_exceeds_rss"' in sampler,
     "queue stats visible in UI": "writer_pending_bytes" in ui and "frame_telemetry_stale" in ui,
     "raw Logcat unchanged target": '"--uid=" + gameUid' in remote,
+    "error classes tracked without raw text": '"error_groups"' in remote and (src/"ErrorCategorySummary.java").exists(),
 }
 bad=[name for name,valid in checks.items() if not valid]
 for name,valid in checks.items():print(("PASS" if valid else "FAIL")+" "+name)

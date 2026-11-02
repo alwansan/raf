@@ -183,6 +183,7 @@ public final class MainActivity extends Activity {
                 "\nWriter worst wait: "+writerStatus("writer_max_lag_ms","ms")+
                 "\nWriter failed batches: "+writerStatus("writer_failed_batches","")+
                 "\nLog lines/sec: "+metric(m,"game_log_lines_per_second","")+
+                "\nTop recurring errors: "+topErrors(m)+
                 "\nShader pass errors: "+metric(m,"shader_pass_errors_total","")+
                 "\nCompute kernel errors: "+metric(m,"invalid_compute_kernel_total","")+
                 "\nMissing asset paths: "+metric(m,"missing_asset_path_errors_total","")+
@@ -198,6 +199,25 @@ public final class MainActivity extends Activity {
     private String writerStatus(String key,String unit){
         long value=Config.prefs(this).getLong(key,-1);
         return value<0?"unavailable":value+" "+unit;
+    }
+
+    private String topErrors(JSONObject m){
+        JSONObject groups=m.optJSONObject("error_groups");
+        if(groups==null || groups.length()==0)return "none detected";
+        java.util.ArrayList<String> names=new java.util.ArrayList<>();
+        java.util.Iterator<String> keys=groups.keys();
+        while(keys.hasNext())names.add(keys.next());
+        names.sort((a,b)->Long.compare(
+                groups.optJSONObject(b)==null?0:groups.optJSONObject(b).optLong("count"),
+                groups.optJSONObject(a)==null?0:groups.optJSONObject(a).optLong("count")));
+        StringBuilder result=new StringBuilder();
+        for(int i=0;i<Math.min(3,names.size());i++){
+            String key=names.get(i);
+            if(i>0)result.append(", ");
+            result.append(key).append("=")
+                    .append(groups.optJSONObject(key).optLong("count"));
+        }
+        return result.toString();
     }
 
     private String metricWarnings(JSONObject obj){

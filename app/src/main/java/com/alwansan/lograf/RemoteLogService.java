@@ -20,6 +20,7 @@ public final class RemoteLogService extends IRemoteLog.Stub {
     private final AtomicBoolean running = new AtomicBoolean(false);
     private final AtomicLong gameLogLines=new AtomicLong(),systemContextLines=new AtomicLong(),reconnections=new AtomicLong();
     private final AtomicLong shaderPassErrors=new AtomicLong(),kernelErrors=new AtomicLong(),missingAssetPaths=new AtomicLong();
+    private final ErrorCategorySummary errorGroups=new ErrorCategorySummary();
     private final AtomicLong javaFatalMarkers=new AtomicLong(),nativeFatalMarkers=new AtomicLong(),processDeathEvents=new AtomicLong();
     private volatile Process gameProcess, systemProcess;
     private volatile ILogSink listener;
@@ -43,6 +44,7 @@ public final class RemoteLogService extends IRemoteLog.Stub {
         gameLogLines.set(0);systemContextLines.set(0);reconnections.set(0);
         shaderPassErrors.set(0);kernelErrors.set(0);missingAssetPaths.set(0);
         javaFatalMarkers.set(0);nativeFatalMarkers.set(0);processDeathEvents.set(0);
+        errorGroups.reset();
         metricPreviousAt=-1;metricPreviousGameLines=0;metricPreviousSystemLines=0;
         running.set(true);
         gameThread = new Thread(() -> pump("RAFT", new String[]{
@@ -98,6 +100,8 @@ public final class RemoteLogService extends IRemoteLog.Stub {
                 data.put("native_fatal_markers_total",nativeFatalMarkers.get());
                 data.put("game_process_death_events_total",processDeathEvents.get());
                 data.put("process_exit_reason","unknown; process death alone is not a crash");
+                data.put("error_groups",errorGroups.snapshot());
+                data.put("error_groups_note","fixed categories only; original messages remain in raw Logcat");
                 data.put("logcat_unobserved_losses","unknown");
                 sink.onBatch("METRICS",data.toString()+"\n");
             } catch(Exception e){error("Metrics delivery: "+e.getClass().getSimpleName());}
@@ -171,6 +175,7 @@ public final class RemoteLogService extends IRemoteLog.Stub {
                                     processDeathEvents.incrementAndGet();
                             } else {
                                 gameLogLines.incrementAndGet();
+                                errorGroups.observe(line);
                                 if(line.contains("Invalid pass number") && line.contains("Graphics.Blit"))
                                     shaderPassErrors.incrementAndGet();
                                 if(line.contains("Invalid kernelIndex"))
