@@ -11,6 +11,8 @@ on:
       - 'tests/test_probe_authenticated_water_compute_inventory.py'
       - 'scripts/inspect_fft_candidate_identity.py'
       - 'tests/test_inspect_fft_candidate_identity.py'
+      - 'scripts/probe_original_fft_serialized_refs.py'
+      - 'tests/test_probe_original_fft_serialized_refs.py'
   workflow_dispatch:
 
 permissions:
@@ -40,6 +42,7 @@ jobs:
           python3 -m unittest discover -s tests -p 'test_verify_targeted_lfs_compute_sources.py' -v
           python3 -m unittest discover -s tests -p 'test_probe_authenticated_water_compute_inventory.py' -v
           python3 -m unittest discover -s tests -p 'test_inspect_fft_candidate_identity.py' -v
+          python3 -m unittest discover -s tests -p 'test_probe_original_fft_serialized_refs.py' -v
           python3 -m unittest discover -s tests -p 'test_probe_original_compute_containers.py' -v
           python3 -m unittest discover -s tests -p 'test_audit_original_compute_metadata.py' -v
       - name: Verify original committed LFS pointers before download
@@ -67,5 +70,6 @@ jobs:
           set -euo pipefail
           timeout 600s python3 -m scripts.probe_authenticated_water_compute_inventory --source Raft/Raft_Data
           python3 -m scripts.inspect_fft_candidate_identity --source Raft/Raft_Data
+          timeout 240s python3 -m scripts.probe_original_fft_serialized_refs --source Raft/Raft_Data
           # No original shader bytes or translated binaries uploaded.
           # No Unity Editor, Android build or device execution.
