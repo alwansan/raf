@@ -383,12 +383,19 @@ namespace RaftAndroid.Platform
                     GUI.Label(new Rect(safeGui.xMin + 8f, safeGui.yMin - 68f, safeGui.width - 16f, 64f), hud);
                 }
                 finally { GUI.color = oldColor; }
+                if (touchGamepad != null)
+                {
+                    if (GUI.Button(new Rect(safeGui.xMin + 8f, safeGui.yMin + 56f, buttonWidth, 44f), touchGamepad.Visible ? "Hide Xbox" : "Show Xbox"))
+                        touchGamepad.SetVisible(!touchGamepad.Visible);
+                    if (touchGamepad.Visible && GUI.Button(new Rect(safeGui.xMin + 8f, safeGui.yMin + 104f, buttonWidth, 44f), "Xbox layout"))
+                    { touchGamepad.SetLayoutEditMode(true); opened = true; }
+                }
                 if (GUI.Button(new Rect(safeGui.xMin + 8f, safeGui.yMin + 8f,
                     buttonWidth, 44f), opened ? "Close test report" : "Test report"))
                     opened = !opened;
                 if (opened)
                 {
-                    float panelTop = safeGui.yMin + 60f;
+                    float panelTop = safeGui.yMin + 154f;
                     float panelHeight = Mathf.Max(0f, safeGui.yMax - panelTop - 8f);
                     float panelWidth = Mathf.Max(0f, safeGui.width - 16f);
                     if (panelHeight >= 44f && panelWidth >= 48f)
@@ -414,6 +421,9 @@ namespace RaftAndroid.Platform
                                 if (touchGamepad.Editing)
                                 {
                                     GUILayout.Label("Selected: " + touchGamepad.SelectedControl);
+                                    GUILayout.Label("Xbox opacity (all controls)");
+                                    float opacity = GUILayout.HorizontalSlider(touchGamepad.GlobalOpacity, 0.2f, 0.95f);
+                                    if (Mathf.Abs(opacity - touchGamepad.GlobalOpacity) > 0.005f) touchGamepad.SetGlobalOpacity(opacity);
                                     GUILayout.BeginHorizontal();
                                     if (GUILayout.Button("Size -")) touchGamepad.AdjustSelectedSize(-15f);
                                     if (GUILayout.Button("Size +")) touchGamepad.AdjustSelectedSize(15f);

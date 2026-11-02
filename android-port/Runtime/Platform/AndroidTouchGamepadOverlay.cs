@@ -118,6 +118,17 @@ namespace RaftAndroid.Platform
             AddButton("Jump", "<Gamepad>/buttonNorth", new Vector2(1f, 0f), new Vector2(-210f, 360f));
             AddButton("Inventory", "<Gamepad>/buttonWest", new Vector2(0f, 0f), new Vector2(400f, 120f));
             AddButton("Menu", "<Gamepad>/start", new Vector2(1f, 1f), new Vector2(-105f, -90f));
+            AddButton("B", "<Gamepad>/buttonEast", new Vector2(1f, 0f), new Vector2(-100f, 200f));
+            AddButton("LB", "<Gamepad>/leftShoulder", new Vector2(0f, 0f), new Vector2(150f, 650f));
+            AddButton("RB", "<Gamepad>/rightShoulder", new Vector2(1f, 0f), new Vector2(-150f, 650f));
+            AddButton("LT", "<Gamepad>/leftTrigger", new Vector2(0f, 0f), new Vector2(300f, 650f));
+            AddButton("LS", "<Gamepad>/leftStickPress", new Vector2(0f, 0f), new Vector2(150f, 400f));
+            AddButton("RS", "<Gamepad>/rightStickPress", new Vector2(1f, 0f), new Vector2(-150f, 400f));
+            AddButton("Select", "<Gamepad>/select", new Vector2(1f, 0f), new Vector2(-260f, 90f));
+            AddButton("Dpad Up", "<Gamepad>/dpad/up", new Vector2(0f, 0f), new Vector2(500f, 330f));
+            AddButton("Dpad Down", "<Gamepad>/dpad/down", new Vector2(0f, 0f), new Vector2(500f, 130f));
+            AddButton("Dpad Left", "<Gamepad>/dpad/left", new Vector2(0f, 0f), new Vector2(400f, 230f));
+            AddButton("Dpad Right", "<Gamepad>/dpad/right", new Vector2(0f, 0f), new Vector2(600f, 230f));
             UpdateSafeArea();
             RestoreLayout();
             canvasObject.SetActive(false);
@@ -143,7 +154,7 @@ namespace RaftAndroid.Platform
             textRect.anchorMax = Vector2.one;
             textRect.offsetMin = textRect.offsetMax = Vector2.zero;
             var text = caption.GetComponent<Text>();
-            text.text = label;
+            text.text = label == "Interact" ? "A" : label == "Action" ? "RT" : label == "Jump" ? "Y" : label == "Inventory" ? "X" : label == "Menu" ? "Start" : label;
             text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
             text.fontSize = 22;
             text.alignment = TextAnchor.MiddleCenter;
@@ -341,6 +352,7 @@ namespace RaftAndroid.Platform
 
         private void RestoreLayout()
         {
+            GlobalOpacity = Mathf.Clamp(SafeFloat(PlayerPrefs.GetFloat(LayoutKey + "globalOpacity", 0.36f), 0.36f), 0.2f, 0.95f);
             foreach (var entry in surfaces)
             {
                 string label = entry.Key;
@@ -381,6 +393,8 @@ namespace RaftAndroid.Platform
                 PlayerPrefs.DeleteKey(key + "binding");
             }
             PlayerPrefs.Save();
+            PlayerPrefs.DeleteKey(LayoutKey + "globalOpacity");
+            PlayerPrefs.Save();
             selected = null;
             RestoreLayout();
         }
@@ -393,6 +407,18 @@ namespace RaftAndroid.Platform
             PlayerPrefs.Save();
         }
 
+        public float GlobalOpacity { get; private set; } = 0.36f;
+        public void SetGlobalOpacity(float value)
+        {
+            GlobalOpacity = Mathf.Clamp(SafeFloat(value, 0.36f), 0.2f, 0.95f);
+            foreach (string control in surfaces.Keys)
+            {
+                Opacity(control, GlobalOpacity);
+                PlayerPrefs.SetFloat(LayoutKey + control + ".opacity", GlobalOpacity);
+            }
+            PlayerPrefs.SetFloat(LayoutKey + "globalOpacity", GlobalOpacity);
+            PlayerPrefs.Save();
+        }
         public void AdjustSelectedOpacity(float delta)
         {
             if (!editing || selected == null) return;

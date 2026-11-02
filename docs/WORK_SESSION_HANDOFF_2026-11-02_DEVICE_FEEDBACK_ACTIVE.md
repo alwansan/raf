@@ -24,3 +24,7 @@ Water still has one-pass placeholders and zero-kernel compute. Complete texture 
 
 ## Validation and coordination
 Local diagnostic9, distribution6 and package13 tests passed (one permission scenario skipped as root; actual CI required). No new Unity requested. HUD/new checkpoint need real cheap CI/original Android compile. Other requested functionality is PENDING, not claimed fixed. New source inspection is no-LFS/no-Unity encrypted diagnostic only. Refresh remote HEAD and lease before every write; automation must not overwrite ongoing session. Avoid unnecessary tiny touch patches while higher world/audio/render blockers remain.
+
+## Xbox implementation slice
+Expanded existing InputSystem1.7 virtual Gamepad to all Xbox game controls: original two sticks and A/X/Y/RT/Start plus B/LB/RB/LT/LS/RS/Select/four Dpad directions. Keep original action assets/external devices; actual pairing still requires evidence. Direct Show/Hide Xbox and Xbox layout buttons below HUD, whole-controller opacity slider with persistence/reset added. Existing select/drag/size lifecycle preserved. Right-mouse touch bridge is NOT implemented yet. Local12touch+9diagnostic policies pass; real original-source compile pending.
+Performance metrics from four archives fully parsed (142+50+49+55samples). Last session has only7readable presented-FPS samples,17.74–120.71; worst observed presented frame1085.94ms, p95 up to132.66ms. SurfaceFlinger estimate is NOT Unity FPS; no causal attribution from these few samples. GPU KGSL is system-wide.
