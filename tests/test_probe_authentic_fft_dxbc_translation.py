@@ -1,7 +1,7 @@
 """Synthetic SPIR-V reflection contract; never uses original game shader bytes."""
 import struct
 import unittest
-from scripts.probe_authentic_fft_dxbc_translation import spirv_resource_bindings
+from scripts.probe_authentic_fft_dxbc_translation import spirv_resource_bindings, compare_roundtrip_contracts
 
 def make_spv(instructions):
     words = [0x07230203, 0x00010000, 0, 16, 0]
@@ -30,6 +30,24 @@ class FftSpirvBindingTests(unittest.TestCase):
             spirv_resource_bindings(b"NOPE" + spv[4:])
         with self.assertRaisesRegex(ValueError, "instruction boundary"):
             spirv_resource_bindings(spv[:-4])
+
+
+    def test_roundtrip_comparison_does_not_claim_semantic_equivalence(self):
+        original = {"entrypoint_execution_models": {5: 1},
+                    "declared_local_workgroup_sizes": [[128, 1, 1]]}
+        reb = {"entrypoint_execution_models": {5: 1},
+               "declared_local_workgroup_sizes": [[256, 1, 1]]}
+        bindings = {"descriptor_binding_pairs": [[0, 0], [0, 1], [0, 2]]}
+        damaged = {"descriptor_binding_pairs": [[0, 0], [0, 1]]}
+        result = compare_roundtrip_contracts(original, bindings, reb, damaged)
+        self.assertTrue(result["compute_entrypoint_model_preserved"])
+        self.assertFalse(result["compute_workgroup_shape_preserved"])
+        self.assertFalse(result["descriptor_binding_pairs_preserved"])
+        self.assertFalse(result["original_numeric_results_equal"])
+        self.assertFalse(result["unity_gpu_execution_proven"])
+        equal = compare_roundtrip_contracts(original, bindings, original, bindings)
+        self.assertTrue(equal["compute_workgroup_shape_preserved"])
+        self.assertFalse(equal["original_numeric_results_equal"])
 
 
 if __name__ == "__main__":
