@@ -82,3 +82,5 @@ One new native delivery run https://github.com/alwansan/raf/actions/runs/4144808
 ### Verified bounded-logging source CI
 - Android platform run https://github.com/alwansan/raf/actions/runs/41450883944 (source 9f7380da) COMPLETED SUCCESS at 2026-11-02 13:12:27 UTC, including the new early-filter source contract and existing managed Android/platform, touch, distribution and offline smoke gates. This is a cheap CI result only; physical log volume, GPU pressure, gameplay and audio remain unverified.
 - Original-source offline integration https://github.com/alwansan/raf/actions/runs/41450883692 was still compiling at this observation. The sole full Unity delivery https://github.com/alwansan/raf/actions/runs/41448086401 remained in reconstruct, source 9462f8e. No new native request or publication was made.
+
+- Final additional check: original-source offline integration https://github.com/alwansan/raf/actions/runs/41450883692 COMPLETED SUCCESS on 9f7380da. Both cheap lanes for the log-filter fix are green. Full native 41448086401 is still reconstructing on older immutable 9462f8e, now at FMOD staging; no new APK or phone validation from this source fix.
