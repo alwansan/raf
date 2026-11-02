@@ -24,11 +24,30 @@ namespace RaftAndroid.Platform
         private readonly Dictionary<string, Vector2> defaults = new Dictionary<string, Vector2>();
         private readonly Dictionary<string, Vector2> defaultOffsets = new Dictionary<string, Vector2>();
         private readonly Dictionary<string, float> defaultSizes = new Dictionary<string, float>();
+        private readonly Dictionary<string, string> defaultPaths = new Dictionary<string, string>();
+        // Closed allowlists prevent persisted settings from injecting arbitrary device paths.
+        private static readonly string[] StickPaths = {
+            "<Gamepad>/leftStick", "<Gamepad>/rightStick"
+        };
+        private static readonly string[] ButtonPaths = {
+            "<Gamepad>/buttonSouth", "<Gamepad>/buttonEast",
+            "<Gamepad>/buttonWest", "<Gamepad>/buttonNorth",
+            "<Gamepad>/leftShoulder", "<Gamepad>/rightShoulder",
+            "<Gamepad>/leftTrigger", "<Gamepad>/rightTrigger",
+            "<Gamepad>/start", "<Gamepad>/select",
+            "<Gamepad>/leftStickPress", "<Gamepad>/rightStickPress",
+            "<Gamepad>/dpad/up", "<Gamepad>/dpad/down",
+            "<Gamepad>/dpad/left", "<Gamepad>/dpad/right"
+        };
         private bool editing;
         private string selected;
         public bool Visible { get { return visible; } }
         public bool Editing { get { return editing; } }
         public string SelectedControl { get { return selected ?? "none"; } }
+        public string SelectedBinding
+        {
+            get { return selected != null && surfaces.ContainsKey(selected) ? GetBinding(selected) : "none"; }
+        }
 
         public bool SetVisible(bool enabled)
         {
@@ -124,6 +143,7 @@ namespace RaftAndroid.Platform
         private void AddStick(string label, string path, Vector2 anchor, Vector2 offset)
         {
             var rect = AddSurface(label, anchor, offset, 190f);
+            defaultPaths.Add(label, path);
             var stick = rect.gameObject.AddComponent<OnScreenStick>();
             stick.controlPath = path;
             stick.movementRange = 110f;
@@ -135,7 +155,62 @@ namespace RaftAndroid.Platform
         private void AddButton(string label, string path, Vector2 anchor, Vector2 offset)
         {
             var rect = AddSurface(label, anchor, offset, 100f);
+            defaultPaths.Add(label, path);
             rect.gameObject.AddComponent<OnScreenButton>().controlPath = path;
+        }
+
+        private static bool IsAllowed(string path, string[] choices)
+        {
+            foreach (string candidate in choices)
+                if (candidate == path) return true;
+            return false;
+        }
+
+        private string GetBinding(string label)
+        {
+            var rect = surfaces[label];
+            var stick = rect.GetComponent<OnScreenStick>();
+            if (stick != null) return stick.controlPath;
+            var button = rect.GetComponent<OnScreenButton>();
+            return button != null ? button.controlPath : defaultPaths[label];
+        }
+
+        private void ApplyBinding(string label, string path)
+        {
+            var rect = surfaces[label];
+            var stick = rect.GetComponent<OnScreenStick>();
+            if (stick != null)
+            {
+                stick.controlPath = IsAllowed(path, StickPaths) ? path : defaultPaths[label];
+                return;
+            }
+            var button = rect.GetComponent<OnScreenButton>();
+            if (button != null)
+                button.controlPath = IsAllowed(path, ButtonPaths) ? path : defaultPaths[label];
+        }
+
+        private void RestoreBinding(string label)
+        {
+            string saved = PlayerPrefs.GetString(LayoutKey + label + ".binding", defaultPaths[label]);
+            ApplyBinding(label, saved);
+        }
+
+        public void CycleSelectedBinding(int delta)
+        {
+            // The on-screen controls are disabled in edit mode. Original action
+            // assets and physical controller/keyboard bindings are untouched.
+            if (!editing || selected == null || !surfaces.ContainsKey(selected)) return;
+            var rect = surfaces[selected];
+            string[] choices = rect.GetComponent<OnScreenStick>() != null ? StickPaths : ButtonPaths;
+            int current = System.Array.IndexOf(choices, GetBinding(selected));
+            if (current < 0) current = 0;
+            int next = (current + (delta < 0 ? choices.Length - 1 : 1)) % choices.Length;
+            ApplyBinding(selected, choices[next]);
+            PlayerPrefs.SetString(LayoutKey + selected + ".binding", GetBinding(selected));
+            PlayerPrefs.Save();
+            RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("input", "touch_binding_changed",
+                "control=" + selected + "; virtualPath=" + GetBinding(selected) +
+                "; originalGameplayActionVerified=false");
         }
 
         public bool SetLayoutEditMode(bool enable)
@@ -237,6 +312,7 @@ namespace RaftAndroid.Platform
                 Resize(label, PlayerPrefs.GetFloat(key + "size", defaultSizes[label]));
                 ClampControlToSafeArea(label);
                 Opacity(label, PlayerPrefs.GetFloat(key + "opacity", 0.36f));
+                RestoreBinding(label);
             }
         }
 
@@ -249,6 +325,7 @@ namespace RaftAndroid.Platform
                 PlayerPrefs.DeleteKey(key + "y");
                 PlayerPrefs.DeleteKey(key + "size");
                 PlayerPrefs.DeleteKey(key + "opacity");
+                PlayerPrefs.DeleteKey(key + "binding");
             }
             PlayerPrefs.Save();
             selected = null;

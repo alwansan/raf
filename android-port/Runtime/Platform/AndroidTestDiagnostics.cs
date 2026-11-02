@@ -362,6 +362,11 @@ namespace RaftAndroid.Platform
                                     if (GUILayout.Button("Opacity -")) touchGamepad.AdjustSelectedOpacity(-0.1f);
                                     if (GUILayout.Button("Opacity +")) touchGamepad.AdjustSelectedOpacity(0.1f);
                                     GUILayout.EndHorizontal();
+                                    GUILayout.Label("Virtual binding: " + touchGamepad.SelectedBinding);
+                                    GUILayout.BeginHorizontal();
+                                    if (GUILayout.Button("Binding <")) touchGamepad.CycleSelectedBinding(-1);
+                                    if (GUILayout.Button("Binding >")) touchGamepad.CycleSelectedBinding(1);
+                                    GUILayout.EndHorizontal();
                                     if (GUILayout.Button("Reset touch layout")) touchGamepad.ResetLayout();
                                 }
                             }
