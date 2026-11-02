@@ -106,6 +106,9 @@ namespace RaftAndroid.Platform
             var stick = rect.gameObject.AddComponent<OnScreenStick>();
             stick.controlPath = path;
             stick.movementRange = 110f;
+            // Keep pointer actions isolated when PlayerInput switches to the
+            // virtual Gamepad, preventing pointer-up jitter on drag.
+            stick.useIsolatedInputActions = true;
         }
 
         private void AddButton(string label, string path, Vector2 anchor, Vector2 offset)
@@ -134,7 +137,9 @@ namespace RaftAndroid.Platform
                 // If the original UI input module disappears during scene
                 // transitions, remove virtual input instead of stealing events.
                 var events = EventSystem.current;
-                if (events == null || events.GetComponent<InputSystemUIInputModule>() == null)
+                if (events == null || !events.isActiveAndEnabled ||
+                    events.GetComponent<InputSystemUIInputModule>() == null ||
+                    !events.GetComponent<InputSystemUIInputModule>().isActiveAndEnabled)
                     SetVisible(false);
                 else
                     UpdateSafeArea();

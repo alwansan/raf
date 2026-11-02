@@ -38,6 +38,7 @@ class TouchGamepadContract(unittest.TestCase):
         self.assertIn("image.raycastTarget = true;", SOURCE)
         self.assertIn("text.raycastTarget = false;", SOURCE)
         self.assertIn("Screen.safeArea", SOURCE)
+        self.assertIn("stick.useIsolatedInputActions = true;", SOURCE)
         self.assertIn("area.xMin / Screen.width", SOURCE)
         self.assertIn("area.yMax / Screen.height", SOURCE)
 
