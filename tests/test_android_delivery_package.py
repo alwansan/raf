@@ -98,6 +98,47 @@ class DeliveryTests(unittest.TestCase):
             root=Path(tmp);(root/'delivery.json').write_text(json.dumps({'files':[{'name':'safe.xapk','parts':[{'name':'../outside'}]}]}))
             with self.assertRaises(ValueError):reassemble(root,'safe.xapk')
 
+    def test_interrupted_assembly_is_not_deleted(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);apk,obb,meta=self.inputs(root);out=root/'delivery'
+            package(apk,obb,meta,out,part_bytes=257,asset_limit=500)
+            name='Raft-Android-Test.xapk'
+            temporary=out/(name+'.assembling')
+            temporary.write_bytes(b'previous partial download - do not erase')
+            with self.assertRaisesRegex(ValueError,'Existing assembly temporary file'):
+                reassemble(out,name)
+            self.assertEqual(temporary.read_bytes(),b'previous partial download - do not erase')
+            self.assertFalse((out/name).exists())
+
+    def test_dangling_symlink_paths_are_not_overwritten(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);apk,obb,meta=self.inputs(root);out=root/'delivery'
+            package(apk,obb,meta,out,part_bytes=257,asset_limit=500)
+            name='Raft-Android-Test.xapk'
+            output=out/name
+            output.symlink_to(out/'nonexistent')
+            with self.assertRaisesRegex(ValueError,'Refusing to overwrite output'):
+                reassemble(out,name)
+            self.assertTrue(output.is_symlink())
+            output.unlink()
+            temporary=out/(name+'.assembling')
+            temporary.symlink_to(out/'nonexistent')
+            with self.assertRaisesRegex(ValueError,'Existing assembly temporary file'):
+                reassemble(out,name)
+            self.assertTrue(temporary.is_symlink())
+
+    def test_failed_new_assembly_removes_only_own_temporary(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);apk,obb,meta=self.inputs(root);out=root/'delivery'
+            result=package(apk,obb,meta,out,part_bytes=257,asset_limit=500)
+            row=result['files'][-1]
+            row['sha256']='0'*64
+            (out/'delivery.json').write_text(json.dumps(result))
+            with self.assertRaisesRegex(ValueError,'Assembled file SHA256 mismatch'):
+                reassemble(out,row['name'])
+            self.assertFalse((out/(row['name']+'.assembling')).exists())
+            self.assertFalse((out/row['name']).exists())
+
     def test_zip64_streaming_transport_roundtrip(self):
         with tempfile.TemporaryDirectory() as tmp:
             root=Path(tmp);apk,obb,meta=self.inputs(root);out=root/'delivery'

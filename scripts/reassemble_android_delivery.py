@@ -28,20 +28,29 @@ def reassemble(root, name):
         if parts[0]['sha256']!=row['sha256'] or parts[0]['bytes']!=row['bytes']:
             raise ValueError('Complete-file metadata mismatch')
         return output
-    if output.exists(): raise ValueError('Refusing to overwrite output')
+    # Never overwrite a pre-existing destination, including a dangling symlink.
+    if output.exists() or output.is_symlink(): raise ValueError('Refusing to overwrite output')
     temporary=root/(name+'.assembling')
+    # An interrupted prior assembly belongs to the user; do not delete it.
+    if temporary.exists() or temporary.is_symlink():
+        raise ValueError('Existing assembly temporary file')
     digest=hashlib.sha256();size=0
+    created=False
     try:
         with temporary.open('xb') as target:
+            created=True
             for part in parts:
                 with (root/part['name']).open('rb') as source:
                     for block in iter(lambda:source.read(1024*1024),b''):
                         target.write(block);digest.update(block);size+=len(block)
         if size!=row['bytes'] or digest.hexdigest()!=row['sha256']:
             raise ValueError('Assembled file SHA256 mismatch')
+        if output.exists() or output.is_symlink():
+            raise ValueError('Refusing to overwrite output')
         temporary.rename(output)
     except Exception:
-        if temporary.is_file(): temporary.unlink()
+        if created and temporary.is_file() and not temporary.is_symlink():
+            temporary.unlink()
         raise
     return output
 
