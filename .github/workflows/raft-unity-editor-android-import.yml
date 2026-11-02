@@ -140,6 +140,7 @@ jobs:
           python3 -m unittest discover -s tests -p test_restore_postfx_shaders.py -v
           python3 -m unittest discover -s tests -p test_restore_postfx_compute.py -v
           python3 -m unittest discover -s tests -p test_restore_volumetric_shaders.py -v
+          python3 -m unittest discover -s tests -p test_restore_builtin_shaders.py -v
           python3 -m unittest discover -s tests -p test_restore_tmp_shaders.py -v
           python3 -m unittest discover -s tests -p test_runtime_operation_traces.py -v
           python3 -m unittest discover -s tests -p test_android_offline_startup.py -v
@@ -350,6 +351,11 @@ jobs:
         run: |
           set -euo pipefail
           python3 -m scripts.restore_volumetric_shaders --project "$RUNNER_TEMP/project/ExportedProject" --backup "$RUNNER_TEMP/original-volumetric-shaders"
+      - name: Restore exact-name Unity 2021.3.45f2 built-in material and particle programs with original GUIDs
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.restore_builtin_shaders --project "$RUNNER_TEMP/project/ExportedProject" --backup "$RUNNER_TEMP/original-builtin-shaders"
       - name: Preserve FFT temporary lifetimes across kernel errors and exclude Windows Party startup from Android solo
         shell: bash
         run: |

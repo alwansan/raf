@@ -1,0 +1,50 @@
+name: Raft exact-version built-in shader recovery (no LFS)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/restore_builtin_shaders.py
+      - tests/test_restore_builtin_shaders.py
+      - .github/workflows/raft-builtin-shader-tests.yml
+  workflow_dispatch: {}
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Preserve GUIDs and custom programs; fail before mutation on missing dependencies
+        run: python3 -m unittest discover -s tests -p test_restore_builtin_shaders.py -v
+      - name: Authenticate official Unity 2021.3.45f2 programs and restore real material and particle samples
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import tempfile
+          from scripts.restore_builtin_shaders import archive_sources, download, restore_project, NOTICE
+          shaders, files, license = archive_sources(download())
+          names = ['Standard', 'Particles/Standard Unlit', 'Sprites/Default', 'UI/Default', 'Legacy Shaders/Particles/Additive']
+          with tempfile.TemporaryDirectory() as temp:
+              root = Path(temp)
+              for i, name in enumerate(names):
+                  path = root / 'project/Assets/Shader' / (str(i) + '.shader')
+                  path.parent.mkdir(parents=True, exist_ok=True)
+                  path.write_text('Shader "' + name + '" { SubShader { Pass {} } }')
+                  Path(str(path) + '.meta').write_text('guid: original-' + str(i))
+              assert restore_project(root / 'project', root / 'backup', shaders, files, license) == len(names)
+              for i in range(len(names)):
+                  path = root / 'project/Assets/Shader' / (str(i) + '.shader')
+                  assert 'CGPROGRAM' in path.read_text()
+                  assert Path(str(path) + '.meta').read_text() == 'guid: original-' + str(i)
+              assert (root / 'project' / NOTICE).read_bytes() == license
+          print('RAFT_BUILTIN_AUTHENTIC_RESTORE sampleShaders=5 originalMetasUnchanged=true actualUnityDeviceExecution=false')
+          PY
