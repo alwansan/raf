@@ -173,7 +173,12 @@ public final class MainActivity extends Activity {
         if(!raw.isEmpty()) try {
             JSONObject m=new JSONObject(raw.trim());
             performanceLabel.setText("قراءات Cinemana المباشرة (تتحدث كل 3 ثوانٍ):"+
-                "\nCPU process: "+metric(m,"process_cpu_percent_one_core","% of one core")+
+                "\nCinemana main CPU: "+metric(m,"process_cpu_percent_one_core","% of one core")+
+                "\n:filedownloader CPU: "+subMetric(m,"filedownloader","cpu_percent_one_core","% of one core")+
+                "\n:filedownloader RSS: "+subMetric(m,"filedownloader","rss_kb","KiB")+
+                "\n:filedownloader threads: "+subMetric(m,"filedownloader","threads","")+
+                "\nAndroid UI rendered frames: "+subMetric(m,"android_ui_gfxinfo","total_frames_rendered_","")+
+                "\nAndroid UI janky frames: "+subMetric(m,"android_ui_gfxinfo","janky_frames_","")+
                 "\nRAM RSS: "+metric(m,"process_rss_kb","KiB")+
                 "\nRAM PSS: "+metric(m,"process_pss_kb","KiB")+
                 "\nAvailable RAM: "+metric(m,"device_mem_available_kb","KiB")+
@@ -189,7 +194,8 @@ public final class MainActivity extends Activity {
                 "\nSystem event lines: "+metric(m,"system_context_lines","")+
                 "\nStream reconnects (potential gaps): "+metric(m,"logcat_reconnects","")+
                 "\nLog lines/sec: "+metric(m,"game_log_lines_per_second","")+
-                "\nShader pass errors: "+metric(m,"shader_pass_errors_total","")+
+                "\nCinemana diagnostics: "+eventCounts(m)+
+                "\nShader pass errors (legacy): "+metric(m,"shader_pass_errors_total","")+
                 "\nCompute kernel errors: "+metric(m,"invalid_compute_kernel_total","")+
                 "\nMissing asset paths: "+metric(m,"missing_asset_path_errors_total","")+
                 "\nGame process death events: "+metric(m,"game_process_death_events_total","")+
@@ -197,7 +203,7 @@ public final class MainActivity extends Activity {
                 "\nLast frame progress: "+metric(m,"last_present_progress_age_ms","ms")+
                 "\nAlerts: "+metricWarnings(m)+
                 "\nExit reason lookup: "+Config.prefs(this).getString("exit_history_status","not checked")+
-                "\nGame state: "+m.optString("state","unknown"));
+                "\nCinemana main process: "+m.optString("state","unknown"));
         } catch(Exception ignored){performanceLabel.setText("Metrics awaiting valid sample");}
     }
 
@@ -228,6 +234,26 @@ public final class MainActivity extends Activity {
         if(!(value instanceof Number))return "غير متاح";
         long free=((Number)value).longValue();
         return (free/1048576)+" MiB"+(free<536870912L?" — مساحة منخفضة!":"");
+    }
+
+    private String subMetric(JSONObject parent,String childKey,String key,String unit){
+        JSONObject child=parent.optJSONObject(childKey);
+        return child==null?"غير متاح":metric(child,key,unit);
+    }
+
+    private String eventCounts(JSONObject telemetry){
+        JSONObject obj=telemetry.optJSONObject("cinemana_event_counts");
+        if(obj==null)return "بانتظار تسجيل أحداث سينمانا";
+        return "MKV queue="+obj.optLong("mkv_queue_enqueued")+
+                ", start="+obj.optLong("mkv_queue_started")+
+                ", FFmpeg="+obj.optLong("mkv_ffmpeg_acquired")+
+                ", released="+obj.optLong("mkv_ffmpeg_released")+
+                ", stalls="+obj.optLong("mkv_watchdog_stalls")+
+                ", repair="+obj.optLong("download_repair_events")+
+                ", UI stalls="+obj.optLong("main_looper_blocked")+
+                ", ANR="+obj.optLong("android_anrs")+
+                ", Verifier="+obj.optLong("art_verify_errors")+
+                ", crashes="+obj.optLong("java_fatal_exceptions");
     }
 
     private String metric(JSONObject obj,String key,String unit) {
