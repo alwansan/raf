@@ -21,9 +21,19 @@ This source lives **only** on branch `lograf` of `alwansan/raf`. It is not the g
 - Separate metrics-*.jsonl segments (8 MiB), preserved along with the original full raft-*.log (32 MiB) segments.
 - Live metrics in the app, plus a Mark issue action both in the app and notification for correlating a glitch to performance samples.
 - The existing game branch has its own internal AndroidTestDiagnostics frame and Unity memory counters in its private sandbox; this independent logger cannot assume access.
+## November 2, 2026 — measured device session
+
+An owner-supplied LogRaft v0.5.34 recording from Poco F5 Pro (Android 15) began at 19:19:22 local time and included:
+- 1,008,422 raw log lines and 33 samples across around 104 seconds.
+- 38,744 invalid Graphics.Blit pass messages, 1,430 invalid compute-kernel messages, and 35 missing-path exception lines for packaged Android haptics assets.
+- Raft game PID 21258 died at 19:20:58 while foreground. am_proc_died identifies process death, **not why**. No Fatal signal, SIGSEGV, FATAL EXCEPTION, or ANR was found in these recorded segments.
+- Available device memory fell to roughly 604 MB. Peak process RSS was approximately 1.63 GB and process CPU reached ~265% of one core. Correlation with shader errors is not proof of causation.
+- SurfaceFlinger FPS reported in 14/33 samples, approximately 3.9–120.7 presented frames/s. This is **not Unity game FPS** or GPU frame time. GPU busy was readable, while GPU clock was unavailable.
+
+The follow-up version adds in-stream cumulative error counters (shader passes, compute kernels, missing asset paths, Java/native fatal markers, and process deaths), live status labels, and an automatically exported session-summary.json containing last telemetry and recorder totals. Raw log segments are retained without filtering or deletion.
 ## Phone steps
 1. Install and start [Shizuku](https://shizuku.rikka.app/). Android 11+ wireless debugging works without a PC; root is optional. It normally must be restarted after phone reboot.
-2. Install `LogRaft-debug.apk` from [GitHub Releases](https://github.com/alwansan/raf/releases), filter tags starting with `lograf-`. Android may warn about sideloading.
+2. Install `LogRaft-signed.apk` from [GitHub Releases](https://github.com/alwansan/raf/releases), filter tags starting with `lograf-`. Android may warn about sideloading.
 3. Open LogRaft and select a writable user-owned **folder**. Do not select another app's inaccessible `Android/data` directory.
 4. Grant Shizuku permission to LogRaft. Allow notifications and set battery usage to unrestricted if available.
 5. Tap **Start** then **Open Raft** and reproduce the issue; leave LogRaft running with its notification in the background.
@@ -56,7 +66,7 @@ JDK 17, Android SDK 35, Gradle 8.9, Android Gradle Plugin 8.7.3.
 gradle --no-daemon :app:assembleDebug
 ```
 
-GitHub Action `.github/workflows/lograf-apk.yml` on the **lograf** branch builds and publishes `LogRaft-debug.apk` as a standalone GitHub prerelease. It needs no game build, Unity, license, LFS checkout or PC.
+GitHub Action `.github/workflows/lograf-apk.yml` on the **lograf** branch builds and publishes `LogRaft-signed.apk` as a standalone GitHub prerelease. It needs no game build, Unity, license, LFS checkout or PC.
 
 ## Test acceptance checklist (on actual Poco F5 Pro)
 - [ ] Shizuku permission dialog works, can bind service, and app reports target UID.
