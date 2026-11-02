@@ -72,10 +72,14 @@ using RaftAndroidLegacyInput = UnityEngine.Input;
         # Missing FMOD events must remain visible, but cannot terminate this
         # unrelated gameplay/world handoff. Do not swallow other exceptions,
         # spoof event success, or change original local host state.
-        declarations = list(re.finditer(
-            r'(?m)^[ \t]*(?:public|private|protected|internal)'
-            r'[^\r\n{};]*\bvoid\s+OnSceneEvent\s*\([^;{}]*\)\s*\{',
-            normalized))
+        # Use the same exact declaration grammar as the read-only probe.
+        declaration = re.compile(
+            r"(?m)^\\s*(?:public|private|protected|internal)\\s+"
+            r"(?:(?:static|virtual|override|sealed|new|async)\\s+)*"
+            r"(?P<return>[\\w<>\\[\\],.?]+)\\s+OnSceneEvent"
+            r"\\s*\\([^;{}]*\\)\\s*\\{"
+        )
+        declarations = list(declaration.finditer(normalized))
         if len(declarations) != 1:
             raise ValueError('Ambiguous original audio scene callback')
         signature = declarations[0].group(0).rsplit('{', 1)[0].strip()
