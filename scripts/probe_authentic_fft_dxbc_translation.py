@@ -54,6 +54,56 @@ def spirv_resource_bindings(data):
     }
 
 
+
+RESOURCE_CLASSES = (
+    "ubos", "ssbos", "images", "textures", "separate_images",
+    "separate_samplers", "subpass_inputs", "push_constants",
+    "acceleration_structures"
+)
+
+
+def sanitize_spirv_cross_reflection(parsed):
+    """Resource kind / numeric bindings only, never output private shader names."""
+    if not isinstance(parsed, dict):
+        raise ValueError("Invalid SPIRV-Cross reflection JSON")
+    groups = {}
+    total = 0
+    for name in RESOURCE_CLASSES:
+        values = parsed.get(name, [])
+        if not isinstance(values, list) or len(values) > 128:
+            raise ValueError("Unbounded SPIR-V reflection resource class")
+        refs = []
+        for item in values:
+            if not isinstance(item, dict):
+                raise ValueError("Unexpected SPIR-V resource record")
+            set_id = item.get("set")
+            binding = item.get("binding")
+            if set_id is not None and (type(set_id) is not int or set_id < 0 or set_id > 65535):
+                raise ValueError("Invalid SPIR-V descriptor set")
+            if binding is not None and (type(binding) is not int or binding < 0 or binding > 65535):
+                raise ValueError("Invalid SPIR-V descriptor binding")
+            refs.append([set_id, binding])
+        total += len(refs)
+        if refs:
+            groups[name] = sorted(refs, key=lambda v: (
+                v[0] is None, v[0] or 0, v[1] is None, v[1] or 0))
+    return {
+        "original_resource_kind_counts": {k: len(v) for k, v in groups.items()},
+        "original_resource_kind_descriptor_pairs": groups,
+        "resource_records_total": total,
+        "private_names_or_type_contents_disclosed": False,
+    }
+
+
+def private_spirv_cross_reflect(path):
+    process = subprocess.run(
+        ["spirv-cross", str(path), "--reflect"], capture_output=True,
+        timeout=20, check=False)
+    if process.returncode != 0 or not 0 < len(process.stdout) < 512 * 1024:
+        raise ValueError("SPIRV-Cross original resource reflection unavailable")
+    return sanitize_spirv_cross_reflection(json.loads(process.stdout))
+
+
 def run(command, timeout=15):
     try:
         return subprocess.run(command, capture_output=True, timeout=timeout, check=False).returncode == 0
@@ -168,6 +218,7 @@ def probe(root):
                 entry["local_workgroups"] = information["declared_local_workgroup_sizes"]
                 entry["instruction_count"] = information["instruction_count"]
                 entry["bindings"] = spirv_resource_bindings(spv_bytes)
+                entry["resource_types"] = private_spirv_cross_reflect(spv)
                 entry["validated_for_vulkan_1_1"] = run(
                     ["spirv-val", "--target-env", "vulkan1.1", str(spv)])
                 if entry["validated_for_vulkan_1_1"]:
