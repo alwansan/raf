@@ -101,7 +101,7 @@ def summarize_monobehaviour_script(partial, original_file, root=None):
         if not isinstance(external_path, str):
             return result
         basename = external_path.replace("\\", "/").rsplit("/", 1)[-1]
-        if not re.fullmatch(r"(?:globalgamemanagers(?:\\.assets)?|sharedassets[0-9]+\\.assets|resources\\.assets)", basename):
+        if not re.fullmatch(r"(?:globalgamemanagers(?:\.assets)?|sharedassets[0-9]+\.assets|resources\.assets)", basename):
             # Do not follow arbitrary archive paths or remote URLs.
             result["external_original_owner_unsupported"] = True
             return result
