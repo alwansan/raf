@@ -191,5 +191,24 @@ class TouchGamepadContract(unittest.TestCase):
         self.assertIn("activePointerId = NoPointer;", SOURCE)
 
 
+    def test_android_touch_ui_exposes_existing_virtual_binding_editor(self):
+        panel = (ROOT / "android-port/Runtime/Platform/AndroidTouchUiPanel.cs").read_text(encoding="utf-8")
+        self.assertIn("GetComponent<InputSystemUIInputModule>()", panel)
+        self.assertIn("gamepad.SelectedBinding", panel)
+        self.assertIn('bindingText.text = "Binding: " + gamepad.SelectedBinding;', panel)
+        self.assertIn('AddButton(edit, "Bind -", 252, 204, 112, () => gamepad.CycleSelectedBinding(-1));', panel)
+        self.assertIn('AddButton(edit, "Bind +", 372, 204, 112, () => gamepad.CycleSelectedBinding(1));', panel)
+        self.assertIn('AddButton(edit, "Finish editing", 12, 204, 220, () => gamepad.SetLayoutEditMode(false));', panel)
+        self.assertIn("gamepad.SetGlobalOpacity(value)", panel)
+        self.assertNotIn("AddComponent<PlayerInput>", panel)
+        self.assertNotIn('new GameObject("EventSystem"', panel)
+        # All editor actions must fit the existing 500 x 252 panel
+        # without overlapping the opacity slider or the row above.
+        self.assertLessEqual(372 + 112, 500)
+        self.assertLessEqual(204 + 42, 252)
+        self.assertLess(145 + 32, 204)
+
+
+
 if __name__ == "__main__":
     unittest.main()
