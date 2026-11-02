@@ -20,9 +20,32 @@ class IndexDerivationTests(unittest.TestCase):
         self.assertTrue(rhs["mathf_log2_call"])
         self.assertIn(6, rhs["integer_constants"])
         self.assertTrue(rhs["has_subtraction"])
+        self.assertIn("V", rhs["anonymized_operator_shape"])
+        self.assertNotIn("resolution", rhs["anonymized_operator_shape"])
+        self.assertFalse(data["index_assignments"][0]["preceding_immediate_guard"]["simple_condition_verified"])
         self.assertFalse(data["first_and_second_pass_index_runtime_values_verified"])
         self.assertNotIn("localIndex", str(data))
         self.assertNotIn("resolution", str(data))
+
+
+    def test_direct_condition_before_second_original_index_assignment(self):
+        src = ("class Example {\n void Work(int size, bool conditional) {\n"
+               "  int localIndex = (size >> 5) - 1;\n"
+               "  if (conditional) {\n"
+               "    localIndex += 10;\n"
+               "  }\n"
+               "  fft.SetTexture(localIndex, \"A\", foo);\n"
+               "  fft.Dispatch(localIndex, 1, 1, 1);\n"
+               "  fft.SetTexture(localIndex + 1, \"B\", bar);\n"
+               "  fft.Dispatch(localIndex + 1, 1, 1, 1);\n"
+               " }}")
+        data = index_source_links(src, hashlib.sha256(src.encode()).hexdigest())
+        self.assertEqual(data["index_assignment_count"], 2)
+        self.assertEqual(data["index_assignments"][0]["right_hand_side"]["anonymized_operator_shape"],
+                         "(V>>5)-1")
+        self.assertTrue(data["index_assignments"][1]["preceding_immediate_guard"]["simple_condition_verified"])
+        self.assertEqual(data["index_assignments"][1]["right_hand_side"]["integer_constants"], [10])
+        self.assertNotIn("conditional", str(data))
 
     def test_wrong_source_and_missing_index_fail_closed(self):
         with self.assertRaisesRegex(ValueError, "hash changed"):
