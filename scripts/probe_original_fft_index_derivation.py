@@ -175,10 +175,19 @@ def correlate_original_seed_parameter_calls(original, caller, index_report):
     methods = []
     for m in source_declarations(original):
         for position, p in enumerate(m["params"]):
-            decl = re.fullmatch(r"\s*int\s+([A-Za-z_]\w*)\s*", p)
-            if decl and sha(decl.group(1)) == seed_hash:
-                methods.append({"name": m["name"], "seed_parameter_position": position,
-                                "total_parameters": len(m["params"])})
+            terms = p.split("=", 1)[0].strip().split()
+            if len(terms) < 2:
+                continue
+            name = terms[-1]
+            if SIMPLE_ID.fullmatch(name) and sha(name) == seed_hash:
+                typ = terms[-2]
+                methods.append({
+                    "name": m["name"], "seed_parameter_position": position,
+                    "total_parameters": len(m["params"]),
+                    "seed_parameter_type_kind": typ if typ in (
+                        "int", "uint", "float", "long", "byte", "bool", "double")
+                        else "enum_or_other",
+                })
     matches = []
     for m in methods:
         regex = re.compile(r"\b" + re.escape(m["name"]) + r"\s*\(")
@@ -199,6 +208,7 @@ def correlate_original_seed_parameter_calls(original, caller, index_report):
     return {"source_int_parameter_methods": [
         {"method_name_sha256": sha(m["name"]),
          "seed_parameter_position": m["seed_parameter_position"],
+         "seed_parameter_type_kind": m["seed_parameter_type_kind"],
          "parameter_count": m["total_parameters"]}
         for m in methods],
         "candidate_calls": matches,
