@@ -44,7 +44,7 @@ jobs:
         run: |
           set -euo pipefail
           sudo apt-get update -qq
-          sudo apt-get install -y -qq --no-install-recommends meson ninja-build build-essential spirv-tools vkd3d-compiler
+          sudo apt-get install -y -qq --no-install-recommends meson ninja-build build-essential spirv-tools vkd3d-compiler spirv-cross glslang-tools
           python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
       - name: Source-build SHA-pinned open DXBC-SPIRV debug translator
         shell: bash
