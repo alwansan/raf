@@ -9,6 +9,8 @@ on:
       - 'tests/test_probe_fft_managed_asset_links.py'
       - 'scripts/probe_fft_monoscript_field.py'
       - 'tests/test_probe_fft_monoscript_field.py'
+      - 'scripts/probe_original_fft_kernel_callsites.py'
+      - 'tests/test_probe_original_fft_kernel_callsites.py'
   workflow_dispatch:
 
 permissions:
@@ -39,6 +41,7 @@ jobs:
           set -euo pipefail
           python3 -m unittest discover -s tests -p test_probe_fft_managed_asset_links.py -v
           python3 -m unittest discover -s tests -p test_probe_fft_monoscript_field.py -v
+          python3 -m unittest discover -s tests -p test_probe_original_fft_kernel_callsites.py -v
       - name: Recover private exact CSharp9 original callers
         shell: bash
         run: |
@@ -54,5 +57,6 @@ jobs:
           set -euo pipefail
           python3 -m scripts.probe_fft_managed_asset_links --source "$RUNNER_TEMP/private-fft-original"
           python3 -m scripts.probe_fft_monoscript_field --source "$RUNNER_TEMP/private-fft-original"
+          python3 -m scripts.probe_original_fft_kernel_callsites --source "$RUNNER_TEMP/private-fft-original"
           # Do not publish original decompiled code or ILSpy logs.
           # CI is CPU-only source-level evidence; no Unity/game build.
