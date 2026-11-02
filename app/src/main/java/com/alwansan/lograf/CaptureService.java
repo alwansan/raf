@@ -224,7 +224,9 @@ public final class CaptureService extends Service {
             new Thread(()->{halt("Stopped by user");stopSelf();},"lograf-stop").start();
             return START_NOT_STICKY;
         }
-        if (active) return START_STICKY;
+        // A previous session may still be draining its buffered log batches.
+        // Never open another session or replace its files until Stop has finished.
+        if (active || stopping) return START_STICKY;
         boolean recovering=intent==null;
         if(recovering && !Config.prefs(this).getBoolean("recording",false)){
             stopSelf();return START_NOT_STICKY;
