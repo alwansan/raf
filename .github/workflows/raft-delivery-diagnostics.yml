@@ -28,7 +28,7 @@ jobs:
         run: |
           set -euo pipefail
           case "$LOG_JOB_ID" in ''|*[!0-9]*) exit 1;; esac
-          gh api --method GET "repos/$GITHUB_REPOSITORY/actions/jobs/$LOG_JOB_ID/logs" > "$RUNNER_TEMP/native-private.log"
+          gh api --allow-escape-sequences --method GET "repos/$GITHUB_REPOSITORY/actions/jobs/$LOG_JOB_ID/logs" > "$RUNNER_TEMP/native-private.log"
       - name: Extract bounded packaging failure evidence without publishing original logs
         run: |
           python3 - <<'PY'
