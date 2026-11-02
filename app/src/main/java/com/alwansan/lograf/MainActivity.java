@@ -22,6 +22,7 @@ import rikka.shizuku.Shizuku;
 public final class MainActivity extends Activity {
     private static final int PICK_FOLDER=201;
     private static final int SHIZUKU_REQUEST=202;
+    private static final int PICK_WORK_LOGS=203;
     private boolean pendingStart=false;
     private TextView status, folderLabel, performanceLabel;
     private Button start, stop, share;
@@ -79,7 +80,7 @@ public final class MainActivity extends Activity {
             Intent i=new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
             i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION|
                     Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
-            startActivityForResult(i,202);
+            startActivityForResult(i,PICK_WORK_LOGS);
         });
         layout.addView(workFolder);
 
@@ -160,7 +161,9 @@ public final class MainActivity extends Activity {
     private void update(){
         if(status==null) return;
         Uri u=Config.folder(this);
-        folderLabel.setText("مجلد الحفظ: "+(u==null ? "لم يتم التحديد" : u.toString()));
+        folderLabel.setText("مجلد الحفظ: "+(u==null ? "لم يتم التحديد" : u.toString())+
+                "\nمصدر سجلات Cinemana الداخلي: "+
+                (Config.workLogsFolder(this)==null?"غير محدد (اختياري)":"مفعّل للقراءة فقط"));
         String text=Config.prefs(this).getString("status","جاهز");
         boolean recording=Config.prefs(this).getBoolean("recording",false);
         status.setText("الحالة: "+text+"\nالمشروع: Cinemana\nالتسجيل: "+(recording?"نشط":"متوقف")+
@@ -236,6 +239,15 @@ public final class MainActivity extends Activity {
 
     @Override protected void onActivityResult(int request,int result,Intent data){
         super.onActivityResult(request,result,data);
+        if(request==PICK_WORK_LOGS && result==RESULT_OK && data!=null && data.getData()!=null){
+            Uri u=data.getData();
+            try{
+                getContentResolver().takePersistableUriPermission(u,Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                Config.prefs(this).edit().putString("work_logs_folder",u.toString()).apply();
+                message("Cinemana work/log folder selected for read-only mirroring");
+                update();
+            }catch(Exception err){message("Work/log permission denied: "+err.getClass().getSimpleName());}
+        }
         if(request==PICK_FOLDER && result==RESULT_OK && data!=null && data.getData()!=null){
             Uri u=data.getData();
             try {
