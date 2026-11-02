@@ -17,6 +17,38 @@ MAX_VARIANTS = 12
 MAX_KERNELS = 128
 
 
+def private_variant_element_shape(value, depth=0):
+    """Output primitive types, bounded numeric tags and byte lengths, never raw code."""
+    if depth > 3:
+        return {"kind": type(value).__name__, "depth_limited": True}
+    if isinstance(value, (bytes, bytearray)):
+        if len(value) > 8 * 1024 * 1024:
+            raise ValueError("Unbounded variantMap program byte payload")
+        return {"kind": "byte_payload", "bytes": len(value),
+                "begins_with_dxbc_magic": bytes(value[:4]) == b"DXBC"}
+    if type(value) is int:
+        return {"kind": "integer", "value": value if -1_000_000 <= value <= 1_000_000 else None}
+    if type(value) is str:
+        if len(value) > 1024:
+            raise ValueError("Unbounded private variant identifier")
+        return {"kind": "private_string", "chars": len(value),
+                "sha256": hashlib.sha256(value.encode()).hexdigest()}
+    if type(value) in (tuple, list):
+        if len(value) > 16:
+            raise ValueError("Unbounded variantMap nested sequence")
+        return {"kind": type(value).__name__,
+                "items": [private_variant_element_shape(v, depth + 1) for v in value]}
+    if isinstance(value, dict):
+        if len(value) > 32:
+            raise ValueError("Unbounded variantMap nested mapping")
+        return {"kind": "dict", "fields": [
+            {"key_sha256": hashlib.sha256(str(k).encode()).hexdigest(),
+             "value": private_variant_element_shape(v, depth + 1)}
+            for k, v in sorted(value.items(), key=lambda kv: str(kv[0]))]}
+    return {"kind": type(value).__name__}
+
+
+
 def private_keyword_bundle(value):
     """Numeric size+stable digest only; original keyword strings are redacted."""
     if not isinstance(value, (list, tuple)):
@@ -70,6 +102,9 @@ def summarize_variant_tree(tree, expected_kernels=EXPECTED_CONTAINERS):
                 "variant_map_entries": len(variant_map),
                 "variant_map_schema_types": sorted(set(type(item).__name__ for item in variant_map)),
                 "variant_map_sha256": hashlib.sha256(repr(variant_map).encode()).hexdigest(),
+                "variant_map_private_structure": [
+                    private_variant_element_shape(item) for item in variant_map
+                ],
             })
         total += len(kernels)
         results.append({

@@ -22,6 +22,18 @@ class FftVariantTableTests(unittest.TestCase):
         self.assertNotIn("FFT", str(result))
         self.assertNotIn("b'a'", str(result))
 
+
+    def test_private_variant_tuple_keeps_numeric_tags_and_redacts_program_bytes(self):
+        value = ("HiddenKernel", 5, b"DXBC" + b"\x01" * 16)
+        from scripts.probe_fft_variant_table import private_variant_element_shape
+        shape = private_variant_element_shape(value)
+        self.assertEqual(shape["kind"], "tuple")
+        self.assertEqual(shape["items"][1], {"kind": "integer", "value": 5})
+        self.assertTrue(shape["items"][2]["begins_with_dxbc_magic"])
+        self.assertEqual(shape["items"][2]["bytes"], 20)
+        self.assertNotIn("HiddenKernel", str(shape))
+        self.assertNotIn("DXBC", str(shape))
+
     def test_changed_count_and_invalid_map_rejected(self):
         tree = {"variants": [{"kernels": [{"name": "X", "variantMap": [], "globalKeywords": [],
                                                   "localKeywords": []}]}]}
