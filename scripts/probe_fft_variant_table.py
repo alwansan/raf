@@ -17,6 +17,19 @@ MAX_VARIANTS = 12
 MAX_KERNELS = 128
 
 
+def private_keyword_bundle(value):
+    """Numeric size+stable digest only; original keyword strings are redacted."""
+    if not isinstance(value, (list, tuple)):
+        raise ValueError("Original keyword bundle is not a sequence")
+    if len(value) > 64:
+        raise ValueError("Unbounded original keyword bundle")
+    return {
+        "keyword_count": len(value),
+        "bundle_sha256": hashlib.sha256(repr(value).encode()).hexdigest(),
+        "keyword_names_published": False,
+    }
+
+
 def summarize_variant_tree(tree, expected_kernels=EXPECTED_CONTAINERS):
     if not isinstance(tree, dict):
         raise ValueError("Original compute type tree absent")
@@ -33,6 +46,7 @@ def summarize_variant_tree(tree, expected_kernels=EXPECTED_CONTAINERS):
             raise ValueError("Missing or excessive original compiled kernel entries")
         name_hashes = []
         maps = []
+        keywords = []
         schemas = set()
         for k in kernels:
             if not isinstance(k, dict):
@@ -45,6 +59,10 @@ def summarize_variant_tree(tree, expected_kernels=EXPECTED_CONTAINERS):
             if not isinstance(original_name, str) or not 0 < len(original_name) <= 256:
                 raise ValueError("Original compiled kernel entry lacks name")
             name_hashes.append(hashlib.sha256(original_name.encode()).hexdigest())
+            keywords.append({
+                "global": private_keyword_bundle(k.get("globalKeywords")),
+                "local": private_keyword_bundle(k.get("localKeywords")),
+            })
             variant_map = k.get("variantMap")
             if not isinstance(variant_map, list) or len(variant_map) > 64:
                 raise ValueError("Original kernel variant map invalid")
@@ -63,6 +81,11 @@ def summarize_variant_tree(tree, expected_kernels=EXPECTED_CONTAINERS):
             "kernel_entry_schema_count": len(schemas),
             "variant_map_by_compiled_entry": maps,
             "unique_variant_map_digests": len(set(x["variant_map_sha256"] for x in maps)),
+            "original_keyword_bundles_by_compiled_entry": keywords,
+            "unique_global_keyword_bundles": len(set(x["global"]["bundle_sha256"] for x in keywords)),
+            "unique_local_keyword_bundles": len(set(x["local"]["bundle_sha256"] for x in keywords)),
+            "unique_combined_keyword_bundles": len(set(
+                (x["global"]["bundle_sha256"], x["local"]["bundle_sha256"]) for x in keywords)),
             "runtime_kernels_from_compiled_entry_count_verified": False,
         })
     if total != expected_kernels:
