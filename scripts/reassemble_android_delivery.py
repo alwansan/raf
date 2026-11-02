@@ -2,6 +2,7 @@
 import hashlib
 import json
 from pathlib import Path
+import shutil
 import sys
 
 
@@ -34,6 +35,10 @@ def reassemble(root, name):
     # An interrupted prior assembly belongs to the user; do not delete it.
     if temporary.exists() or temporary.is_symlink():
         raise ValueError('Existing assembly temporary file')
+    # A multi-gigabyte Android download must not fill the phone before discovering
+    # that the complete destination cannot fit. Free space can still change later.
+    if shutil.disk_usage(root).free < row['bytes']:
+        raise ValueError('Insufficient free disk for assembly')
     digest=hashlib.sha256();size=0
     created=False
     try:

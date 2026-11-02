@@ -1,6 +1,7 @@
 import hashlib
 import json
 from pathlib import Path
+from types import SimpleNamespace
 import tempfile
 import unittest
 import os
@@ -126,6 +127,18 @@ class DeliveryTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,'Existing assembly temporary file'):
                 reassemble(out,name)
             self.assertTrue(temporary.is_symlink())
+
+    def test_insufficient_disk_is_rejected_before_creating_large_output(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);apk,obb,meta=self.inputs(root);out=root/'delivery'
+            package(apk,obb,meta,out,part_bytes=257,asset_limit=500)
+            name='Raft-Android-Test.xapk'
+            with patch('scripts.reassemble_android_delivery.shutil.disk_usage',
+                       return_value=SimpleNamespace(free=0)):
+                with self.assertRaisesRegex(ValueError,'Insufficient free disk'):
+                    reassemble(out,name)
+            self.assertFalse((out/name).exists())
+            self.assertFalse((out/(name+'.assembling')).exists())
 
     def test_failed_new_assembly_removes_only_own_temporary(self):
         with tempfile.TemporaryDirectory() as tmp:
