@@ -25,6 +25,8 @@ public final class RemoteLogService extends IRemoteLog.Stub {
     private volatile ILogSink listener;
     private volatile int gameUid;
     private volatile String packageName;
+    private volatile int mainPid=-1,downloaderPid=-1;
+    private final CinemanaEventCounters cinemanaCounters=new CinemanaEventCounters();
     private final Set<String> gamePids = java.util.Collections.synchronizedSet(new HashSet<>());
     private Thread gameThread, systemThread, pidThread, telemetryThread;
     private static final Pattern PID = Pattern.compile("^\\s*(?:\\d{4}-)?\\d\\d-\\d\\d\\s+\\d\\d:\\d\\d:\\d\\d[^ ]*\\s+(\\d+)\\s+");
@@ -40,6 +42,8 @@ public final class RemoteLogService extends IRemoteLog.Stub {
         }
         stop();
         listener = sink; gameUid = uid; packageName = targetPackage;
+        mainPid=-1;downloaderPid=-1;
+        cinemanaCounters.reset();
         gameLogLines.set(0);systemContextLines.set(0);reconnections.set(0);
         shaderPassErrors.set(0);kernelErrors.set(0);missingAssetPaths.set(0);
         javaFatalMarkers.set(0);nativeFatalMarkers.set(0);processDeathEvents.set(0);
@@ -57,18 +61,12 @@ public final class RemoteLogService extends IRemoteLog.Stub {
         }, true), "lograf-system-context");
         pidThread = new Thread(this::watchPids, "lograf-pid-watch");
         gameThread.start(); systemThread.start(); pidThread.start();
-        telemetryThread=new Thread(()->new PerformanceSampler(packageName,this::currentPid,running,this::sendMetric).run(),"lograf-telemetry");
+        telemetryThread=new Thread(()->new PerformanceSampler(packageName,this::currentPid,this::currentDownloaderPid,running,this::sendMetric).run(),"lograf-telemetry");
         telemetryThread.start();
     }
 
-    private int currentPid() {
-        synchronized(gamePids) {
-            for(String pid:gamePids) {
-                try {return Integer.parseInt(pid);} catch(NumberFormatException ignored){}
-            }
-        }
-        return -1;
-    }
+    private int currentPid(){return mainPid;}
+    private int currentDownloaderPid(){return downloaderPid;}
 
     private void sendMetric(String line) {
         ILogSink sink=listener;
@@ -98,31 +96,43 @@ public final class RemoteLogService extends IRemoteLog.Stub {
                 data.put("native_fatal_markers_total",nativeFatalMarkers.get());
                 data.put("game_process_death_events_total",processDeathEvents.get());
                 data.put("process_exit_reason","unknown; process death alone is not a crash");
+                data.put("cinemana_event_counts",cinemanaCounters.snapshot());
+                data.put("main_pid",mainPid>0?mainPid:JSONObject.NULL);
+                data.put("filedownloader_pid",downloaderPid>0?downloaderPid:JSONObject.NULL);
                 data.put("logcat_unobserved_losses","unknown");
                 sink.onBatch("METRICS",data.toString()+"\n");
             } catch(Exception e){error("Metrics delivery: "+e.getClass().getSimpleName());}
         }
     }
 
+    private int lookupPid(String name) {
+        Process p=null;
+        try {
+            p=new ProcessBuilder("pidof",name).redirectErrorStream(true).start();
+            try(BufferedReader input=new BufferedReader(new InputStreamReader(
+                    p.getInputStream(),StandardCharsets.UTF_8))) {
+                String line=input.readLine();
+                if(line!=null)for(String value:line.trim().split("\\s+")){
+                    try{return Integer.parseInt(value);}catch(NumberFormatException ignored){}
+                }
+            }
+        } catch(Exception ignored) {
+            // Shell may restrict pidof on some Android vendor builds.
+        } finally {if(p!=null)p.destroy();}
+        return -1;
+    }
+
     private void watchPids() {
-        while (running.get()) {
-            Process p = null;
-            try {
-                p = new ProcessBuilder("pidof", packageName).redirectErrorStream(true).start();
-                StringBuilder found = new StringBuilder();
-                try (BufferedReader b = new BufferedReader(new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8))) {
-                    String line;
-                    while ((line=b.readLine()) != null) found.append(line).append(" ");
-                }
-                Set<String> current = new HashSet<>();
-                for (String item : found.toString().trim().split("\\s+")) {
-                    if (item.matches("[0-9]+")) current.add(item);
-                }
-                synchronized (gamePids) { gamePids.clear(); gamePids.addAll(current); }
-            } catch (Exception ignored) {
-                // The UID stream does not depend on pidof.
-            } finally { if (p != null) p.destroy(); }
-            try { Thread.sleep(800); } catch (InterruptedException e) { return; }
+        while(running.get()){
+            int main=lookupPid(packageName);
+            int worker=lookupPid(packageName+":filedownloader");
+            mainPid=main;downloaderPid=worker;
+            synchronized(gamePids){
+                gamePids.clear();
+                if(main>0)gamePids.add(Integer.toString(main));
+                if(worker>0)gamePids.add(Integer.toString(worker));
+            }
+            try{Thread.sleep(1000);}catch(InterruptedException ex){return;}
         }
     }
 
@@ -182,6 +192,7 @@ public final class RemoteLogService extends IRemoteLog.Stub {
                                 if(line.contains("Fatal signal") || line.contains("SIGSEGV") || line.contains("SIGABRT"))
                                     nativeFatalMarkers.incrementAndGet();
                             }
+                            cinemanaCounters.observe(line,onlyContext);
                             batch.append(line).append('\n');
                             if (batch.length() >= BATCH || System.nanoTime()-lastDelivery>700_000_000L) {
                                 send(source,batch);
