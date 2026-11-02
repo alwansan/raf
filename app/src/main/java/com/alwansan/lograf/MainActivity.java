@@ -183,6 +183,7 @@ public final class MainActivity extends Activity {
                 "\nFrame pacing P95: "+metric(m,"presented_frame_p95_ms","ms")+
                 "\nLast frame progress: "+metric(m,"last_present_progress_age_ms","ms")+
                 "\nAlerts: "+metricWarnings(m)+
+                "\nExit reason lookup: "+Config.prefs(this).getString("exit_history_status","not checked")+
                 "\nGame state: "+m.optString("state","unknown"));
         } catch(Exception ignored){performanceLabel.setText("Metrics awaiting valid sample");}
     }
