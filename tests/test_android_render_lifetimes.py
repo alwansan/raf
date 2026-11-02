@@ -14,3 +14,15 @@ class LifetimeTests(unittest.TestCase):
     def test_unknown_revision_and_missing_cleanup_rejected(self):
         with self.assertRaises(ValueError):adapt('Dx11FFT','unknown original')
         with self.assertRaises(ValueError):protect_temporaries('TemporaryRenderTexture temporary = cache.GetTemporary();\nWork();\n',1)
+
+class AndroidResolutionPolicyTests(unittest.TestCase):
+    def test_mobile_guard_preserves_original_desktop_body(self):
+        import hashlib
+        from unittest.mock import patch
+        original = '\tpublic void ApplyCurrentResolutionAndFullscreenMode()\n\t{\n\t\tApplyDesktopDisplayMode();\n\t}\n'
+        with patch.dict('scripts.adapt_android_render_lifetimes.PINS', {'GraphicsSettingsBox': (hashlib.sha256(original.encode()).hexdigest(), 0)}):
+            changed = adapt('GraphicsSettingsBox', original)
+        start = changed.index('#if UNITY_ANDROID && !UNITY_EDITOR')
+        end = changed.index('#endif', start) + len('#endif\n')
+        self.assertEqual(changed[:start] + changed[end:], original)
+        self.assertLess(changed.index('return;'), changed.index('ApplyDesktopDisplayMode();'))

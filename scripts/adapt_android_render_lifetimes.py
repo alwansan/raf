@@ -5,6 +5,7 @@ from pathlib import Path
 import re
 
 PINS={
+'GraphicsSettingsBox':('e1854d74adbbe0565b586ec749f7de2cc73e3f97f59c388934a3faa0defc9300',0),
 'Dx11FFT':('8aa32937d4235f0f1ae0a180b8099fd647558689ad65208a9f37956c69e90fb0',1),
 'WavesRendererFFT':('e7f6b8fd477f321120fc626781f0653fe1168f0e86daad0cdf8d9c4e56b323e9',3),
 'PlayFabMultiplayerManager':('e71cd10249c028c7ae0b13e06e4cbe8826ec87d39a1c54778d6e288e97ca6087',0)}
@@ -45,6 +46,15 @@ def adapt(stem,text):
     normalized=text.replace('\r\n','\n')
     if hashlib.sha256(normalized.encode()).hexdigest()!=digest: raise ValueError('Unknown original source revision: '+stem)
     if expected: normalized=protect_temporaries(normalized,expected)
+    elif stem == 'GraphicsSettingsBox':
+        signature='\tpublic void ApplyCurrentResolutionAndFullscreenMode()\n\t{\n'
+        if normalized.count(signature)!=1: raise ValueError('Ambiguous original resolution setter')
+        normalized=normalized.replace(signature,signature+"""#if UNITY_ANDROID && !UNITY_EDITOR
+        // Android owns the landscape surface. Desktop display modes may be
+        // portrait and must not replace the initial Android render dimensions.
+        return;
+#endif
+""",1)
     else:
         signature='\t\tprivate void InitializeImpl()\n\t\t{\n'
         if normalized.count(signature)!=1: raise ValueError('Ambiguous original Party initialization boundary')
@@ -77,7 +87,7 @@ def apply(root,backup):
     except BaseException:
         for p,raw,changed,meta,meta_bytes in plan:p.write_bytes(raw)
         raise
-    print('RAFT_ANDROID_RENDER_LIFETIMES temporaryResources=4 exceptionSafe=true windowsPartyInitializationBypassed=true originalMetasUnchanged=true')
+    print('RAFT_ANDROID_RENDER_LIFETIMES temporaryResources=4 exceptionSafe=true androidDesktopResolutionBypassed=true windowsPartyInitializationBypassed=true originalMetasUnchanged=true')
 
 if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--source',type=Path,required=True);p.add_argument('--backup',type=Path,required=True);args=p.parse_args();apply(args.source,args.backup)
