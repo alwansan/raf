@@ -83,5 +83,19 @@ class AndroidDiagnosticsPolicyTests(unittest.TestCase):
 
 
 
+    def test_info_spam_is_filtered_before_persistent_disk_logging(self):
+        capture = self.source.split("private static void Capture(", 1)[1]
+        capture = capture.split("private void RefreshReport()", 1)[0]
+        self.assertIn('bool critical = type == LogType.Error || type == LogType.Exception || type == LogType.Assert;', capture)
+        self.assertIn('bool raftMarker = message.StartsWith("RAFT_", StringComparison.Ordinal);', capture)
+        guard = 'if (!critical && type != LogType.Warning && !raftMarker) return;'
+        sink = 'AndroidRuntimeLog.UnityMessage(type.ToString(),'
+        self.assertIn(guard, capture)
+        self.assertLess(capture.index(guard), capture.index(sink))
+        # Keep non-RAFT warnings in persistent evidence, but not the small UI preview.
+        self.assertIn('if (!critical && !raftMarker) return;', capture)
+        self.assertIn('message + "\\n" + stack, critical)', capture)
+
+
 if __name__ == "__main__":
     unittest.main()

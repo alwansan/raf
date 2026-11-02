@@ -53,10 +53,14 @@ namespace RaftAndroid.Platform
         {
             message = message ?? "";
             stack = stack ?? "";
-            if (!RaftAndroid.Diagnostics.AndroidRuntimeLog.UnityMessage(type.ToString(), message + "\n" + stack,
-                type == LogType.Error || type == LogType.Exception || type == LogType.Assert)) return;
-            if (type != LogType.Error && type != LogType.Exception && type != LogType.Assert &&
-                !message.StartsWith("RAFT_", StringComparison.Ordinal)) return;
+            bool critical = type == LogType.Error || type == LogType.Exception || type == LogType.Assert;
+            bool raftMarker = message.StartsWith("RAFT_", StringComparison.Ordinal);
+            // Filter ordinary informational spam before the persistent disk sink.
+            // Always retain warnings and critical failures, plus RAFT_ milestones.
+            if (!critical && type != LogType.Warning && !raftMarker) return;
+            if (!RaftAndroid.Diagnostics.AndroidRuntimeLog.UnityMessage(type.ToString(),
+                message + "\n" + stack, critical)) return;
+            if (!critical && !raftMarker) return;
             string entry = DateTime.UtcNow.ToString("O") + " " + type + " " + message + "\n" + stack;
             if (entry.Length > 3000) entry = entry.Substring(0, 3000);
             lock (gate)
