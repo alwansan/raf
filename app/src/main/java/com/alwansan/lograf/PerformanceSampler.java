@@ -67,6 +67,23 @@ public final class PerformanceSampler implements Runnable {
         if(pid!=lastObservedPid) {
             row.put("process_transition",pid>0?"game_started":lastObservedPid>0?"game_exited":"none");
             row.put("previous_pid",lastObservedPid>0?lastObservedPid:JSONObject.NULL);
+            if(pid<=0 && lastObservedPid>0) {
+                // The shell UID can query Android's app-exit tracker. Logcat
+                // process death alone never proves native crash, ANR or LMK.
+                // Capture the package-scoped history only once per exit.
+                row.put("exit_history_for_pid",lastObservedPid);
+                try {
+                    String snapshot=command(2400,18000,"dumpsys","activity","exit-info",target);
+                    if(snapshot.contains("PROCESS EXIT INFO") && snapshot.contains(target)) {
+                        row.put("exit_history_snapshot",snapshot.length()>14000?snapshot.substring(0,14000):snapshot);
+                        row.put("exit_history_status","captured; match PID and timestamp before interpreting cause");
+                    } else {
+                        row.put("exit_history_status","unavailable_or_not_yet_reported");
+                    }
+                } catch(Exception err) {
+                    row.put("exit_history_status","unavailable:"+err.getClass().getSimpleName());
+                }
+            }
             if(pid!=pssPid){pssCache=null;pssPid=-1;pssLast=0;}
             surfaceLayer=null;layersLast=0;previousPresent=-1;lastFrameProgressMs=-1;
             lastObservedPid=pid;
