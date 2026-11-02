@@ -45,6 +45,26 @@ class ExpansionAuditTests(unittest.TestCase):
             make(obb, {"assets/bin/Data/level1": b"data", "assets/unity_obb_guid": b"A"})
             self.assertEqual(audit_companion(apk, obb, digest=False)["expansionIdentityCheck"], "verified")
 
+    def test_reports_obb_size_and_member_limits_without_asset_names(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            apk, obb = Path(tmp) / "a.apk", Path(tmp) / "a.main.obb"
+            make(apk, {"assets/bin/Data/first": b"first"})
+            make(obb, {"assets/bin/Data/level1": b"original-scene-data",
+                       "assets/bin/Data/StreamingAssets/a.bank": b"bank"})
+            normal = audit_companion(apk, obb, digest=False)
+            self.assertFalse(normal["obbPlayLimitExceeded"])
+            self.assertEqual(normal["obbPlayLimitBytes"], 2_000_000_000)
+            self.assertEqual(normal["obbUnityLargestMemberBytes"], len(b"original-scene-data"))
+            self.assertEqual(normal["obbUnityCompressedBytes"], len(b"original-scene-data") + len(b"bank"))
+            self.assertEqual(normal["obbUnityMembersOverJavaArray"], 0)
+            constrained = audit_companion(apk, obb, digest=False,
+                                          play_limit_bytes=obb.stat().st_size - 1,
+                                          java_array_limit_bytes=4)
+            self.assertTrue(constrained["obbPlayLimitExceeded"])
+            self.assertEqual(constrained["obbUnityMembersOverJavaArray"], 1)
+            self.assertNotIn("level1", str(constrained))
+            self.assertNotIn("a.bank", str(constrained))
+
     def test_rejects_unsafe_obb_path(self):
         with tempfile.TemporaryDirectory() as tmp:
             apk, obb = Path(tmp) / "a.apk", Path(tmp) / "a.main.obb"

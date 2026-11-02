@@ -11,6 +11,11 @@ import json
 from pathlib import Path, PurePosixPath
 import zipfile
 
+# Google Play's documented maximum is 2 GB for EACH APK expansion file.
+# This is a distribution constraint, not a proof of Android sideload failure.
+PLAY_EXPANSION_FILE_LIMIT_BYTES = 2_000_000_000
+JAVA_ARRAY_LIMIT_BYTES = 2_147_483_647
+
 
 def _names(archive):
     names = set()
@@ -24,7 +29,9 @@ def _names(archive):
     return names
 
 
-def audit_companion(apk: Path, obb: Path, *, digest: bool = True):
+def audit_companion(apk: Path, obb: Path, *, digest: bool = True,
+                    play_limit_bytes: int = PLAY_EXPANSION_FILE_LIMIT_BYTES,
+                    java_array_limit_bytes: int = JAVA_ARRAY_LIMIT_BYTES):
     if not apk.is_file() or not obb.is_file() or obb.stat().st_size == 0:
         raise FileNotFoundError("Both nonempty APK and matching OBB are required")
     with zipfile.ZipFile(apk) as app, zipfile.ZipFile(obb) as expansion:
@@ -47,9 +54,18 @@ def audit_companion(apk: Path, obb: Path, *, digest: bool = True):
                     app.read(marker) != expansion.read(marker)):
                 raise ValueError("APK/OBB identity mismatch")
             match = "verified"
+        # Size-only diagnostics: no asset paths, payloads or proprietary bytes.
+        # ZIP member sizes are uncompressed; compressed_size excludes ZIP headers.
+        obb_bytes = obb.stat().st_size
         result = {
             "companionRequired": True,
-            "obbBytes": obb.stat().st_size,
+            "obbBytes": obb_bytes,
+            "obbPlayLimitBytes": play_limit_bytes,
+            "obbPlayLimitExceeded": obb_bytes > play_limit_bytes,
+            "obbUnityLargestMemberBytes": max(x.file_size for x in data),
+            "obbUnityCompressedBytes": sum(x.compress_size for x in data),
+            "obbUnityMembersOverJavaArray": sum(
+                x.file_size > java_array_limit_bytes for x in data),
             "obbZipMembers": len(expansion.infolist()),
             "obbUnityDataMembers": len(data),
             "obbUnityDataBytes": sum(x.file_size for x in data),
