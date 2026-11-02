@@ -11,6 +11,8 @@ on:
       - 'scripts/verify_android_offline_candidate.py'
       - 'scripts/probe_original_scene_audio.py'
       - 'scripts/probe_original_world_readiness.py'
+      - 'scripts/probe_original_android_display_paths.py'
+      - 'tests/test_probe_original_android_display_paths.py'
       - 'tests/test_probe_original_world_readiness.py'
       - 'scripts/probe_original_water_compute.py'
       - 'tests/test_probe_original_scene_audio.py'
@@ -59,6 +61,7 @@ jobs:
           python3 -m unittest discover -s tests -p test_android_offline_startup.py -v
           python3 -m unittest discover -s tests -p test_probe_original_scene_audio.py -v
           python3 -m unittest discover -s tests -p test_probe_original_world_readiness.py -v
+          python3 -m unittest discover -s tests -p test_probe_original_android_display_paths.py -v
           python3 -m unittest discover -s tests -p test_probe_original_water_compute.py -v
           python3 -m unittest discover -s tests -p test_adapt_original_save_paths.py -v
           dotnet tool install ilspycmd --version 11.2.0.10050 --tool-path "$RUNNER_TEMP/ilspy"
@@ -67,6 +70,7 @@ jobs:
             > "$RUNNER_TEMP/decompile-private.log" 2>&1
           python3 -m scripts.probe_original_scene_audio --source "$RUNNER_TEMP/original"
           python3 -m scripts.probe_original_world_readiness --source "$RUNNER_TEMP/original"
+          python3 -m scripts.probe_original_android_display_paths --source "$RUNNER_TEMP/original"
           python3 -m scripts.probe_original_water_compute --source "$RUNNER_TEMP/original"
           python3 -m scripts.verify_fft_lifetime_harness --source "$RUNNER_TEMP/original" --output "$RUNNER_TEMP/fft-lifetime-harness"
           dotnet run --project "$RUNNER_TEMP/fft-lifetime-harness/Harness.csproj" --configuration Release --nologo
