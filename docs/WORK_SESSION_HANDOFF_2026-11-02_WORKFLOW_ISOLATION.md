@@ -77,3 +77,8 @@ One new native delivery run https://github.com/alwansan/raf/actions/runs/4144808
 - Cheap platform https://github.com/alwansan/raf/actions/runs/41450883944 and original offline https://github.com/alwansan/raf/actions/runs/41450883692 were IN_PROGRESS at checkpoint; verify their actual outcomes. This is not Unity compilation or POCO F5 Pro profiling proof.
 - Sole full native delivery https://github.com/alwansan/raf/actions/runs/41448086401 remains IN_PROGRESS on immutable source 9462f8edd8cdb5becbccb96521f2876ef9924410, reconstruct step; do not cancel, duplicate or start a heavy experiment. The new logging fix is NOT in that immutable build. Next: verify cheap checks and full native APK+OBB/XAPK/signature/release gates; only request another full build after actual result and a justified tested source candidate.
 - CL raft log indices remain historical 2026-11-01 evidence (3 lf sessions, 15 screenshots, 4 logfox files), not phone evidence for the logging change. No user action required.
+
+
+### Verified bounded-logging source CI
+- Android platform run https://github.com/alwansan/raf/actions/runs/41450883944 (source 9f7380da) COMPLETED SUCCESS at 2026-11-02 13:12:27 UTC, including the new early-filter source contract and existing managed Android/platform, touch, distribution and offline smoke gates. This is a cheap CI result only; physical log volume, GPU pressure, gameplay and audio remain unverified.
+- Original-source offline integration https://github.com/alwansan/raf/actions/runs/41450883692 was still compiling at this observation. The sole full Unity delivery https://github.com/alwansan/raf/actions/runs/41448086401 remained in reconstruct, source 9462f8e. No new native request or publication was made.
