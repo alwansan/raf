@@ -20,6 +20,11 @@ public final class PerformanceSampler implements Runnable {
     interface Emitter { void emit(String jsonLine); }
     private final String target;
     private final IntSupplier pidSupplier;
+    private final IntSupplier downloaderPidSupplier;
+    private int previousDownloaderPid=-1, lastObservedDownloaderPid=-1;
+    private long previousDownloaderTicks=-1, previousDownloaderAt=-1;
+    private long lastGfxinfoSample=-1;
+    private JSONObject cachedGfxinfo=new JSONObject();
     private final AtomicBoolean running;
     private final Emitter emitter;
     private int previousPid=-1;
@@ -39,8 +44,9 @@ public final class PerformanceSampler implements Runnable {
     private final long ticksPerSecond;
     private final int cpuCount=Math.max(1,Runtime.getRuntime().availableProcessors());
 
-    PerformanceSampler(String target, IntSupplier pidSupplier, AtomicBoolean running, Emitter emitter) {
-        this.target=target; this.pidSupplier=pidSupplier; this.running=running; this.emitter=emitter;
+    PerformanceSampler(String target,IntSupplier pidSupplier,IntSupplier downloaderPidSupplier, AtomicBoolean running, Emitter emitter) {
+        this.target=target; this.pidSupplier=pidSupplier;this.downloaderPidSupplier=downloaderPidSupplier;
+        this.running=running;this.emitter=emitter;
         long ticks=100;
         try { ticks=Os.sysconf(OsConstants._SC_CLK_TCK); } catch(Throwable ignored) {}
         ticksPerSecond=Math.max(1,ticks);
@@ -60,10 +66,14 @@ public final class PerformanceSampler implements Runnable {
     private JSONObject sample() throws Exception {
         long now=SystemClock.elapsedRealtime();
         int pid=pidSupplier.getAsInt();
+        int workerPid=downloaderPidSupplier.getAsInt();
         JSONObject row=new JSONObject();
         row.put("schema",1).put("source","lograf_shell").put("timestamp_unix_ms",System.currentTimeMillis())
                 .put("elapsed_ms",now).put("sample",++sample).put("package",target)
                 .put("pid",pid>0?pid:JSONObject.NULL).put("cpu_cores_online",cpuCount);
+        row.put("app_process_type","main");
+        row.put("filedownloader_pid",workerPid>0?workerPid:JSONObject.NULL);
+        row.put("filedownloader",sampleDownloader(workerPid,now));
         if(pid!=lastObservedPid) {
             row.put("process_transition",pid>0?"game_started":lastObservedPid>0?"game_exited":"none");
             row.put("previous_pid",lastObservedPid>0?lastObservedPid:JSONObject.NULL);
@@ -122,6 +132,12 @@ public final class PerformanceSampler implements Runnable {
         row.put("device_mem_available_kb",sys.opt("MemAvailable")==null?JSONObject.NULL:sys.opt("MemAvailable"));
         row.put("device_mem_total_kb",sys.opt("MemTotal")==null?JSONObject.NULL:sys.opt("MemTotal"));
         row.put("system_load_1min",loadAverage());
+        if(pid>0 && (lastGfxinfoSample<0 || now-lastGfxinfoSample>16000)){
+            lastGfxinfoSample=now;
+            cachedGfxinfo=queryGfxinfo();
+        }
+        row.put("android_ui_gfxinfo",pid>0?cachedGfxinfo:JSONObject.NULL);
+        row.put("gfxinfo_source","dumpsys gfxinfo package; may be blocked on Android 15");
         row.put("cpu_frequency_khz_by_core",cpuFrequencies());
         JSONObject gpu=gpuMetrics();
         row.put("gpu_busy_percent",gpu.opt("busy")==null?JSONObject.NULL:gpu.opt("busy"));
@@ -145,11 +161,87 @@ public final class PerformanceSampler implements Runnable {
         row.put("last_present_progress_age_ms",stallAge<0?JSONObject.NULL:stallAge);
         row.put("suspected_present_stall",pid>0 && stallAge>=12000 && fps!=null && fps==0);
         row.put("available_ram_under_1gib_watch",sys.optLong("MemAvailable",Long.MAX_VALUE)<1048576);
-        row.put("fps_method","SurfaceFlinger --latency game SurfaceView (NOT Unity Update FPS)");
+        row.put("fps_method","SurfaceFlinger --latency app SurfaceView; video playback presentation, NOT UI responsiveness");
         row.put("fps_surface",surfaceLayer==null?JSONObject.NULL:surfaceLayer);
         row.put("unity_frame_cpu_ms",JSONObject.NULL).put("unity_frame_gpu_ms",JSONObject.NULL);
-        row.put("unity_frame_timing_reason","Requires game-side Unity FrameTimingManager diagnostics");
+        row.put("unity_frame_timing_reason","Not applicable: Cinemana is an Android UI/media app, not Unity");
         return row;
+    }
+
+    private JSONObject sampleDownloader(int pid,long now){
+        JSONObject o=new JSONObject();
+        try {
+            o.put("pid",pid>0?pid:JSONObject.NULL);
+            o.put("status",pid>0?"running":"not_running");
+            if(pid!=lastObservedDownloaderPid){
+                o.put("process_transition",pid>0?"started":
+                        lastObservedDownloaderPid>0?"exited":"none");
+                o.put("previous_pid",lastObservedDownloaderPid>0?
+                        lastObservedDownloaderPid:JSONObject.NULL);
+                lastObservedDownloaderPid=pid;
+                previousDownloaderPid=-1;
+                previousDownloaderTicks=-1;
+                previousDownloaderAt=-1;
+            }
+            if(pid<=0)return o;
+            JSONObject status=processStatus(pid);
+            o.put("rss_kb",status.has("VmRSS")?status.opt("VmRSS"):JSONObject.NULL);
+            o.put("rss_peak_kb",status.has("VmHWM")?status.opt("VmHWM"):JSONObject.NULL);
+            o.put("threads",status.has("Threads")?status.opt("Threads"):JSONObject.NULL);
+            JSONObject io=processIo(pid);
+            o.put("io_read_bytes",io.has("read_bytes")?io.opt("read_bytes"):JSONObject.NULL);
+            o.put("io_write_bytes",io.has("write_bytes")?io.opt("write_bytes"):JSONObject.NULL);
+            try {
+                String stat=readFile("/proc/"+pid+"/stat",2048);
+                int end=stat.lastIndexOf(')');
+                if(end>=0){
+                    String[] fields=stat.substring(end+2).trim().split("\\s+");
+                    if(fields.length>12){
+                        long ticks=Long.parseLong(fields[11])+Long.parseLong(fields[12]);
+                        if(pid==previousDownloaderPid && previousDownloaderTicks>=0 &&
+                                now>previousDownloaderAt && ticks>=previousDownloaderTicks){
+                            double percent=100.0*(ticks-previousDownloaderTicks)*1000.0/
+                                    ticksPerSecond/(now-previousDownloaderAt);
+                            if(Double.isFinite(percent) && percent>=0)
+                                o.put("cpu_percent_one_core",round(percent));
+                        }
+                        previousDownloaderPid=pid;
+                        previousDownloaderTicks=ticks;
+                        previousDownloaderAt=now;
+                    }
+                }
+            }catch(Exception ignored){}
+            if(!o.has("cpu_percent_one_core"))
+                o.put("cpu_percent_one_core",JSONObject.NULL);
+        }catch(Exception e){
+            try{o.put("read_error",e.getClass().getSimpleName());}
+            catch(Exception ignored){}
+        }
+        return o;
+    }
+
+    private JSONObject queryGfxinfo(){
+        JSONObject o=new JSONObject();
+        try{
+            String data=command(2200,65536,"dumpsys","gfxinfo",target);
+            for(String line:data.split("\\n")){
+                String t=line.trim();
+                for(String key:new String[]{"Total frames rendered:","Janky frames:",
+                        "50th percentile:","90th percentile:","95th percentile:",
+                        "99th percentile:","Number Missed Vsync:","Number Slow UI thread:"}){
+                    if(!t.startsWith(key))continue;
+                    String label=key.toLowerCase(Locale.ROOT).replace(' ','_').replace(':','_');
+                    java.util.regex.Matcher m=java.util.regex.Pattern.compile("([0-9]+)").matcher(
+                            t.substring(key.length()));
+                    if(m.find())o.put(label,Long.parseLong(m.group(1)));
+                }
+            }
+            o.put("status",o.length()>0?"available":"unsupported_or_empty");
+        }catch(Exception e){
+            try{o.put("status","unavailable:"+e.getClass().getSimpleName());}
+            catch(Exception ignored){}
+        }
+        return o;
     }
 
     private JSONObject cpuUsage(int pid,long now) throws Exception {
