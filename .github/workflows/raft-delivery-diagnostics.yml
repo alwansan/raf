@@ -1,0 +1,59 @@
+name: Raft delivery failure diagnostics (no Unity or LFS)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths: ['.github/workflows/raft-delivery-diagnostics.yml']
+  workflow_dispatch:
+    inputs:
+      job_id:
+        description: Completed native job to inspect
+        required: true
+        default: '125192945569'
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: raft-delivery-diagnostics
+  cancel-in-progress: false
+  queue: max
+jobs:
+  diagnose:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Retrieve completed native log privately
+        env:
+          GH_TOKEN: ${{ github.token }}
+          LOG_JOB_ID: ${{ inputs.job_id || '125192945569' }}
+        run: |
+          set -euo pipefail
+          case "$LOG_JOB_ID" in ''|*[!0-9]*) exit 1;; esac
+          gh api --method GET "repos/$GITHUB_REPOSITORY/actions/jobs/$LOG_JOB_ID/logs" > "$RUNNER_TEMP/native-private.log"
+      - name: Extract bounded packaging failure evidence without publishing original logs
+        run: |
+          python3 - <<'PY'
+          import json, os, re
+          from pathlib import Path
+          active = False
+          lines = []
+          markers = []
+          with (Path(os.environ['RUNNER_TEMP'])/'native-private.log').open(encoding='utf-8-sig',errors='replace') as source:
+              for raw in source:
+                  line = re.sub(r'^\d{4}-\d\d-\d\dT\S+\s+', '', raw).rstrip()
+                  if '##[group]Run set -euo pipefail' in line:
+                      active = False
+                  if 'python3 -m unittest discover -s tests -p test_android_delivery_package.py' in line:
+                      active = True
+                  if active:
+                      lines.append(line)
+                      lines = lines[-120:]
+                  if re.match(r'^RAFT_(ANDROID_NATIVE_RESULT|ANDROID_OBB_OUTPUT|ANDROID_APK_SIGNATURE|CI_MEMORY_SUMMARY|GRADLE_PAYLOAD)',line):
+                      markers.append(line[:1600])
+          errors = [line[:1600] for line in lines if re.match(r'^(?:[A-Za-z]+Error:|FAILED |ERROR:|Ran [0-9]+ tests|OK$|.*No space left on device|.*Process completed with exit code)',line)]
+          report = {'packaging_stage_observed':active,'failure_lines':errors[-12:],'build_markers':markers[-10:]}
+          message = json.dumps(report,ensure_ascii=True,sort_keys=True)
+          print('RAFT_DELIVERY_FAILURE_EVIDENCE '+message)
+          print('::notice title=Delivery failure evidence::'+message.replace('%','%25').replace('\r','%0D').replace('\n','%0A'))
+          with Path(os.environ['GITHUB_STEP_SUMMARY']).open('a') as out:
+              out.write('Delivery failure evidence (bounded authored packaging diagnostics):\n\n```json\n'+message+'\n```\n')
+          PY
