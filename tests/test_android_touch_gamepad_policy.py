@@ -120,6 +120,17 @@ class TouchGamepadContract(unittest.TestCase):
         self.assertIn("area.yMax / Screen.height", SOURCE)
 
 
+    def test_mode_transition_releases_stale_pointer_capture(self):
+        mode = SOURCE.split("public bool SetLayoutEditMode(bool enable)", 1)[1].split(
+            "private static float SafeFloat", 1)[0]
+        self.assertIn("if (editing != enable)", mode)
+        self.assertIn("handle.CancelCapture();", mode)
+        self.assertLess(mode.index("handle.CancelCapture();"), mode.index("editing = enable;"))
+        handle = SOURCE.split("public sealed class AndroidTouchLayoutHandle", 1)[1]
+        self.assertIn("internal void CancelCapture()", handle)
+        self.assertIn("private void OnDisable()", handle)
+        self.assertIn("CancelCapture();", handle)
+
     def test_edit_drag_pointer_capture_and_release_contract(self):
         self.assertIn("IEndDragHandler, IPointerUpHandler", SOURCE)
         self.assertIn("activePointerId != NoPointer", SOURCE)

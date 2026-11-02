@@ -99,6 +99,21 @@ class Program
         handle.OnDrag(second);
         handle.OnPointerUp(second);
         Check(overlay.Drags==3 && overlay.Saves==3,"Handle must accept a new gesture after disable");
+        // A layout-edit toggle can happen without pointer-up or OnDisable.
+        // Overlay.SetLayoutEditMode calls CancelCapture on every handle.
+        handle.OnPointerDown(first);
+        overlay.Editing=false;
+        handle.CancelCapture();
+        overlay.Editing=true;
+        handle.OnPointerDown(second);
+        handle.OnDrag(first);
+        Check(overlay.Drags==3,"Stale finger cannot drag after mode transition");
+        handle.OnDrag(second);
+        Check(overlay.Drags==4,"Fresh finger can drag after mode transition");
+        handle.OnPointerUp(first);
+        Check(overlay.Saves==3,"Stale finger cannot save after mode transition");
+        handle.OnPointerUp(second);
+        Check(overlay.Saves==4,"Fresh finger can commit after mode transition");
         Console.WriteLine("RAFT_TOUCH_DRAG_CAPTURE checks="+checks+
             " conflictingTouchesIgnored=true duplicateSaves=0 actualUnityDeviceVerified=false");
     }

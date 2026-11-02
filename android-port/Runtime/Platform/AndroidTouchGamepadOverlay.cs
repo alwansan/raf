@@ -246,6 +246,17 @@ namespace RaftAndroid.Platform
         public bool SetLayoutEditMode(bool enable)
         {
             if (enable && (!visible || canvasObject == null)) return false;
+            // Exiting or entering edit mode can interrupt a touch without
+            // dispatching pointer-up/OnDisable to its handle. Clear captures
+            // before accepting another finger in the new mode.
+            if (editing != enable)
+            {
+                foreach (var rect in surfaces.Values)
+                {
+                    var handle = rect.GetComponent<AndroidTouchLayoutHandle>();
+                    if (handle != null) handle.CancelCapture();
+                }
+            }
             editing = enable;
             selected = null;
             foreach (var rect in surfaces.Values)
@@ -576,11 +587,16 @@ namespace RaftAndroid.Platform
             FinishPointer(pointer);
         }
 
+        internal void CancelCapture()
+        {
+            activePointerId = NoPointer;
+        }
+
         private void OnDisable()
         {
             // Scene/UI deactivation may omit pointer-up. Never retain a stale
             // touch ID when the editor is shown again.
-            activePointerId = NoPointer;
+            CancelCapture();
         }
     }
 }
