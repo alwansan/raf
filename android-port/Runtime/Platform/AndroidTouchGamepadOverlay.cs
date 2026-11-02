@@ -1,9 +1,12 @@
 #if UNITY_ANDROID && !UNITY_EDITOR
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.OnScreen;
 using UnityEngine.InputSystem.UI;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace RaftAndroid.Platform
@@ -39,6 +42,10 @@ namespace RaftAndroid.Platform
             "<Gamepad>/dpad/up", "<Gamepad>/dpad/down",
             "<Gamepad>/dpad/left", "<Gamepad>/dpad/right"
         };
+        // Reuse the same buffer for bounded, read-only active action audits.
+        // This does not change PlayerInput pairing or any original binding.
+        private readonly List<InputAction> enabledActionAudit = new List<InputAction>(64);
+        private int lastAuditedSceneHandle = -1;
         private bool editing;
         private string selected;
         public bool Visible { get { return visible; } }
@@ -57,7 +64,11 @@ namespace RaftAndroid.Platform
             if (canvasObject != null)
             {
                 canvasObject.SetActive(enabled);
-                if (enabled) UpdateSafeArea();
+                if (enabled)
+                {
+                    UpdateSafeArea();
+                    AuditVirtualBindings();
+                }
             }
             RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("input", "touch_gamepad_visible",
                 "enabled=" + enabled + "; gamepadBindingExecutionVerified=false");
@@ -227,6 +238,7 @@ namespace RaftAndroid.Platform
             }
             RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("input", "touch_layout_edit",
                 "enabled=" + enable + "; gameplayInputSuppressed=" + enable);
+            if (!enable) AuditVirtualBindings();
             return true;
         }
 
@@ -399,6 +411,58 @@ namespace RaftAndroid.Platform
             ClampAllControlsToSafeArea();
         }
 
+        // Read-only evidence of whether the ORIGINAL enabled InputActions
+        // actually resolve to the simulated Gamepad controls. Zero matches
+        // is a useful diagnosis, not permission to rewrite the game actions.
+        // Even positive matches do not prove gameplay response on a phone.
+        public void AuditVirtualBindings()
+        {
+            if (!visible || editing || canvasObject == null ||
+                !canvasObject.activeInHierarchy) return;
+            lastAuditedSceneHandle = SceneManager.GetActiveScene().handle;
+            enabledActionAudit.Clear();
+            InputSystem.ListEnabledActions(enabledActionAudit);
+            int resolved = 0, matched = 0;
+            foreach (var entry in surfaces)
+            {
+                OnScreenControl widget = entry.Value.GetComponent<OnScreenStick>();
+                if (widget == null) widget = entry.Value.GetComponent<OnScreenButton>();
+                var virtualControl = widget != null ? widget.control : null;
+                int count = 0;
+                var actionNames = new StringBuilder();
+                if (virtualControl != null)
+                {
+                    resolved++;
+                    foreach (var action in enabledActionAudit)
+                    {
+                        foreach (var bound in action.controls)
+                        {
+                            if (bound != virtualControl) continue;
+                            count++;
+                            if (count <= 3)
+                            {
+                                if (actionNames.Length > 0) actionNames.Append(",");
+                                // Names come from the game's action maps, not user input.
+                                string actionName = action.name ?? "unnamed";
+                                actionNames.Append(actionName.Substring(0, Mathf.Min(40, actionName.Length)));
+                            }
+                            break;
+                        }
+                    }
+                }
+                if (count > 0) matched++;
+                RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("input", "touch_binding_audit",
+                    "control=" + entry.Key + "; virtualPath=" + GetBinding(entry.Key) +
+                    "; resolved=" + (virtualControl != null) +
+                    "; enabledActionMatches=" + count + "; firstActions=" + actionNames +
+                    "; gameplayResponseVerified=false");
+            }
+            RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("input", "touch_binding_audit_summary",
+                "scene=" + lastAuditedSceneHandle + "; enabledActions=" + enabledActionAudit.Count +
+                "; resolvedVirtualControls=" + resolved + "; controlsWithEnabledAction=" + matched +
+                "; totalControls=" + surfaces.Count + "; gameplayResponseVerified=false");
+        }
+
         private void Update()
         {
             if (visible)
@@ -411,7 +475,11 @@ namespace RaftAndroid.Platform
                     !events.GetComponent<InputSystemUIInputModule>().isActiveAndEnabled)
                     SetVisible(false);
                 else
+                {
                     UpdateSafeArea();
+                    if (!editing && SceneManager.GetActiveScene().handle != lastAuditedSceneHandle)
+                        AuditVirtualBindings();
+                }
             }
         }
 
