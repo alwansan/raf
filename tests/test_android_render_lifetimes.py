@@ -16,6 +16,18 @@ class LifetimeTests(unittest.TestCase):
         with self.assertRaises(ValueError):protect_temporaries('TemporaryRenderTexture temporary = cache.GetTemporary();\nWork();\n',1)
 
 class AndroidResolutionPolicyTests(unittest.TestCase):
+    def test_mouse_one_merge_preserves_original_call_structure_and_desktop_path(self):
+        import hashlib
+        from unittest.mock import patch
+        original='using UnityEngine;\npublic class MyInput : MonoBehaviour {\n'+''.join('Input.'+name+'(key);\n' for name,count in [('GetKey',4),('GetKeyDown',2),('GetKeyUp',2)] for _ in range(count))+'}\n'
+        with patch.dict('scripts.adapt_android_render_lifetimes.PINS', {'MyInput':(hashlib.sha256(original.encode()).hexdigest(),0)}):
+            changed=adapt('MyInput',original)
+        self.assertIn('using RaftAndroidLegacyInput = UnityEngine.Input;',changed)
+        self.assertIn('#if UNITY_ANDROID && !UNITY_EDITOR',changed)
+        self.assertEqual(changed.count('RaftAndroidLegacyInput.GetKey(key);'),4)
+        self.assertEqual(changed.count('RaftAndroidLegacyInput.GetKeyDown(key);'),2)
+        self.assertEqual(changed.count('RaftAndroidLegacyInput.GetKeyUp(key);'),2)
+
     def test_mobile_guard_preserves_original_desktop_body(self):
         import hashlib
         from unittest.mock import patch

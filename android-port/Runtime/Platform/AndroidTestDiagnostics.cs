@@ -45,6 +45,8 @@ namespace RaftAndroid.Platform
             DontDestroyOnLoad(host);
             host.AddComponent<AndroidTestDiagnostics>();
             host.AddComponent<AndroidTouchGamepadOverlay>();
+            host.AddComponent<AndroidTouchUiPanel>();
+            host.AddComponent<AndroidRightTouchPointer>();
             ReportPriorExits();
             Debug.Log("RAFT_ANDROID_DEVICE_TEST earlyStartupCandidate=true gameplayVerified=false");
         }
@@ -383,6 +385,8 @@ namespace RaftAndroid.Platform
                     GUI.Label(new Rect(safeGui.xMin + 8f, safeGui.yMin - 68f, safeGui.width - 16f, 64f), hud);
                 }
                 finally { GUI.color = oldColor; }
+                var touchPanel = GetComponent<AndroidTouchUiPanel>();
+                if (touchPanel != null && touchPanel.Ready) return;
                 if (touchGamepad != null)
                 {
                     if (GUI.Button(new Rect(safeGui.xMin + 8f, safeGui.yMin + 56f, buttonWidth, 44f), touchGamepad.Visible ? "Hide Xbox" : "Show Xbox"))
@@ -450,6 +454,9 @@ namespace RaftAndroid.Platform
             }
             finally { GUI.matrix = previous; }
         }
+
+        public string TouchReportPreview() { RefreshReport(); return visibleReport; }
+        public void CopyTouchReport() { RefreshReport(); GUIUtility.systemCopyBuffer = fullReport; }
     }
 }
 #endif

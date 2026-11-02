@@ -73,6 +73,8 @@ jobs:
         run: |
           dotnet build android-port/Runtime/Platform/RaftAndroid.Platform.csproj \
             --configuration Release --nologo -v:q
+      - name: Execute actual right-touch tap hold cancel and multitouch ownership policy
+        run: dotnet run --project android-port/Tests/RightTouch/RightTouch.csproj --configuration Release --nologo
       - name: Run storage, identity and offline-session smoke tests
         run: |
           dotnet run --project android-port/Tests/Smoke/RaftAndroid.Platform.Smoke.csproj \
