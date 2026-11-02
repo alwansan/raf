@@ -41,6 +41,12 @@ class TouchGamepadContract(unittest.TestCase):
         self.assertIn("PlayerPrefs.SetFloat(LayoutKey + selected + \".opacity\"", SOURCE)
         self.assertIn("PlayerPrefs.DeleteKey", SOURCE)
         self.assertIn("float.IsNaN(value) || float.IsInfinity(value)", SOURCE)
+        self.assertIn("private void ClampControlToSafeArea(string label)", SOURCE)
+        self.assertIn("ClampAllControlsToSafeArea();", SOURCE)
+        self.assertIn("Canvas.ForceUpdateCanvases();", SOURCE)
+        self.assertIn("rect.rect.width / (2f * area.width)", SOURCE)
+        self.assertIn("rect.rect.height / (2f * area.height)", SOURCE)
+        self.assertIn("if (enabled) UpdateSafeArea();", SOURCE)
         self.assertIn("opened = false; // Drag controls with report panel closed.", DIAGNOSTICS)
         self.assertIn("touchGamepad.SetLayoutEditMode(startEdit)", DIAGNOSTICS)
 

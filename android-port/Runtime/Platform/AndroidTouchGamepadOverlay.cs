@@ -35,7 +35,11 @@ namespace RaftAndroid.Platform
             if (enabled && !EnsureCanvas()) return false;
             if (!enabled && editing) SetLayoutEditMode(false);
             visible = enabled;
-            if (canvasObject != null) canvasObject.SetActive(enabled);
+            if (canvasObject != null)
+            {
+                canvasObject.SetActive(enabled);
+                if (enabled) UpdateSafeArea();
+            }
             RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("input", "touch_gamepad_visible",
                 "enabled=" + enabled + "; gamepadBindingExecutionVerified=false");
             return true;
@@ -163,6 +167,38 @@ namespace RaftAndroid.Platform
             rect.sizeDelta = new Vector2(size, size);
             var stick = rect.GetComponent<OnScreenStick>();
             if (stick != null) stick.movementRange = Mathf.Min(110f, size * 0.55f);
+            ClampControlToSafeArea(label);
+        }
+
+        // Clamp the entire hit target, not just its center. Saved normalized
+        // positions and original offsets can otherwise end up under a cutout
+        // after rotation, a resolution change or a user-requested resize.
+        private void ClampControlToSafeArea(string label)
+        {
+            if (safeRoot == null) return;
+            Rect area = safeRoot.rect;
+            if (area.width <= 0f || area.height <= 0f) return;
+            var rect = surfaces[label];
+            Vector2 offset = rect.anchoredPosition;
+            Vector2 center = rect.anchorMin +
+                new Vector2(offset.x / area.width, offset.y / area.height);
+            float marginX = Mathf.Min(0.5f, rect.rect.width / (2f * area.width));
+            float marginY = Mathf.Min(0.5f, rect.rect.height / (2f * area.height));
+            Vector2 clamped = new Vector2(
+                Mathf.Clamp(center.x, marginX, 1f - marginX),
+                Mathf.Clamp(center.y, marginY, 1f - marginY));
+            if (Mathf.Abs(center.x - clamped.x) > 0.0001f ||
+                Mathf.Abs(center.y - clamped.y) > 0.0001f)
+            {
+                rect.anchorMin = rect.anchorMax = clamped;
+                rect.anchoredPosition = Vector2.zero;
+            }
+        }
+
+        private void ClampAllControlsToSafeArea()
+        {
+            foreach (string label in surfaces.Keys)
+                ClampControlToSafeArea(label);
         }
 
         private void Opacity(string label, float alpha)
@@ -199,6 +235,7 @@ namespace RaftAndroid.Platform
                     rect.anchoredPosition = Vector2.zero;
                 }
                 Resize(label, PlayerPrefs.GetFloat(key + "size", defaultSizes[label]));
+                ClampControlToSafeArea(label);
                 Opacity(label, PlayerPrefs.GetFloat(key + "opacity", 0.36f));
             }
         }
@@ -279,6 +316,10 @@ namespace RaftAndroid.Platform
             safeRoot.anchorMin = new Vector2(area.xMin / Screen.width, area.yMin / Screen.height);
             safeRoot.anchorMax = new Vector2(area.xMax / Screen.width, area.yMax / Screen.height);
             safeRoot.offsetMin = safeRoot.offsetMax = Vector2.zero;
+            // RectTransform dimensions update at the canvas layout boundary.
+            // Force one layout only on an actual safe-area/orientation change.
+            Canvas.ForceUpdateCanvases();
+            ClampAllControlsToSafeArea();
         }
 
         private void Update()
