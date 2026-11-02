@@ -1,0 +1,66 @@
+name: CLog Cinemana Signed APK
+on:
+  push:
+    branches: [clog]
+    paths:
+      - 'app/**'
+      - 'build.gradle'
+      - 'settings.gradle'
+      - 'gradle.properties'
+      - 'scripts/test_clog_scope.py'
+      - '.github/workflows/clog-build.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: clog-build-${{ github.run_id }}
+  cancel-in-progress: false
+jobs:
+  build:
+    if: github.ref == 'refs/heads/clog'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Check CLog target isolation
+        run: python3 scripts/test_clog_scope.py
+      - name: Setup Android SDK
+        run: |
+          SDKMGR="$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager | head -n 1)"
+          test -n "$SDKMGR"
+          "$SDKMGR" --install "platforms;android-35" "build-tools;35.0.0"
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+      - name: Build signed Cinemana diagnostic APK
+        run: gradle --no-daemon :app:assembleRelease
+      - name: Verify APK identity and signature
+        run: |
+          set -euo pipefail
+          APK=app/build/outputs/apk/release/app-release.apk
+          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging "$APK" | grep -F "package: name='com.alwansan.clog'"
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose --print-certs "$APK" | tee /tmp/clog-apk-signer.txt
+          grep -Fq 'bdb27cfad1fd9a6ac14bd47317206ce4df462040f45ddb1fdbb66a0974043149' /tmp/clog-apk-signer.txt
+          cp "$APK" CLog-signed.apk
+          sha256sum CLog-signed.apk > CLog-signed.apk.sha256
+      - uses: actions/upload-artifact@v4
+        with:
+          name: CLog-Cinemana-APK
+          path: |
+            CLog-signed.apk
+            CLog-signed.apk.sha256
+      - name: Publish CLog APK
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "clog-${GITHUB_RUN_NUMBER}" CLog-signed.apk CLog-signed.apk.sha256 \
+            --title "CLog Cinemana diagnostics APK (build ${GITHUB_RUN_NUMBER})" \
+            --prerelease --target "${GITHUB_SHA}" \
+            --notes "CLog monitors com.cinemana.pro and :filedownloader via Shizuku, optional SAF work/log mirror. Separate package com.alwansan.clog. Public test signing key."
