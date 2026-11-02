@@ -29,3 +29,18 @@ The latest owner message authorizes **one additional recovery/research automatio
 ## Validation
 
 At preparation:14 touch policy,8 offline startup and11 render/audio/source checks passed locally. Additional mapping/gesture C# execution and original managed compatibility compile pending automatic cheap CI. Build hold remains active. Follow results and update this handoff and prompt/STATUS.md; do not ask for a fresh APK test to proceed with independent engineering.
+
+
+## Confirmed left-input CI and scheduler result
+
+Correction source [6aafa9f4](https://github.com/alwansan/raf/commit/6aafa9f4594954710281e52a48a3a93e6c11895b): [platform41548465582](https://github.com/alwansan/raf/actions/runs/41548465582), [actual original Android source41548465622](https://github.com/alwansan/raf/actions/runs/41548465622), [preflight41548465581](https://github.com/alwansan/raf/actions/runs/41548465581) and runner41548465563 all COMPLETED SUCCESS. Executed22 gesture/pulse checks and53 extracted actual-method mapping checks: syntheticButton=left, legacyKey=Mouse0, physical devices preserved. The mapping harness uses strict doubles; original-source compilation adds real managed API compatibility, neither executes a Unity input loop or proves phone interaction.
+
+Scheduler confirmed creation/enabled state of **Raft — استعادة الموارد والتجارب**, hourly at minute40, timezoneAsia/Baghdad. This is the one additional owner-requested task; the original task and its minute10 schedule/prompt/status were not changed. New task reads permanent prompts/current requirements each cycle, performs independent resource/source fixes/CPU experiments, coordinates leases and avoids duplicate work, never builds Unity/APK, and updates the checkpoint. No guarantee of activity between scheduled runs.
+
+## Original FFT seed dataflow — source-proven local result, remote CI pending
+
+The earlier scanner searched only inside Dx11FFT and could not find an assignment to its selector seed. The genuine SHA-verified GpuFFT base source contains the matching protected int field, initialized in its constructor as **truncate(log(r)/log(2))** via original Mathf floating-point arithmetic. The original derived constructor forwards its second argument (int size) unchanged into the base constructor's first int. This is original source dataflow, not replacing the seed with a guessed exponent.
+
+New `scripts/probe_original_fft_inherited_seed.py` verifies original Dx11FFT SHA8aa32937... plus GpuFFT SHA2f866cbe58836da8260461fe6406793f35d868eba94e816e593209544b4ba704, exact protected-field hash, inheritance, constructor forwarding, unique original logarithm assignment, no extra writes and existing fourth-bool +10 branch. Five corruption/visibility/guard/forwarding/privacy tests pass. Local run on the previously decrypted manifest-verified original CSharp9 files passed. Existing original-source CI now reruns this using fresh ILSpy output from the original managed DLL, without LFS/Unity or proprietary-source publication.
+
+Algebraic examples n5..9 map to pairs0/1..8/9 and10/11..18/19. These examples do not prove actual runtime resolutions, Mathf float rounding, Unity kernel-index interpretation, GPU limits, image formats/bindings or numerical equivalence. Strict water gate remains blocked and all game/shader assets are unchanged. Next record remote CI, then correlate source-derived selectors with typed compute resource semantics and validate original output behaviour before authoring a restoration candidate.
