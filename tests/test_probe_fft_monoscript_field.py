@@ -35,7 +35,7 @@ class OriginalMonoScriptFieldTests(unittest.TestCase):
         result = classify_compute_shader_occurrences(raw)
         self.assertEqual(len(result), 3)
         self.assertEqual(result[0]["kind"], "declared_field_candidate")
-        self.assertEqual(result[1]["kind"], "type_use_without_confirmed_field")
+        self.assertEqual(result[1]["kind"], "typed_parameter_candidate")
         self.assertEqual(result[2]["kind"], "property_candidate")
         self.assertNotIn("fftShader", str(result))
         self.assertNotIn("runtimeInput", str(result))
