@@ -37,6 +37,28 @@ def candidate_offsets(raw: bytes, target: int):
     return offsets
 
 
+
+
+def raw_tail_array_shape(raw, offsets):
+    """Report byte-level tail hypotheses; never call them confirmed typed fields."""
+    if not isinstance(raw, bytes):
+        raise ValueError("Expected original serialized raw bytes")
+    findings = []
+    for at in offsets:
+        if not 4 <= at <= len(raw) - 12:
+            raise ValueError("Out-of-range raw PPtr offset")
+        preceding = struct.unpack_from("<i", raw, at - 4)[0]
+        at_end = at + 12 == len(raw)
+        findings.append({
+            "raw_pptr_offset": at,
+            "preceding_four_bytes_as_int32": preceding,
+            "pointer_at_end_of_object": at_end,
+            "one_item_array_tail_shape_only": at_end and preceding == 1,
+            "typed_array_field_verified": False,
+        })
+    return findings
+
+
 def typed_reference_paths(tree, target):
     """Return only structural field paths containing a typed 0/target PPtr."""
     matches = []
@@ -181,7 +203,9 @@ def probe(root: Path):
                 unreadable.append({"source_type": obj.type.name,
                                    "source_path_id": int(obj.path_id),
                                    "raw_pptr_pattern_count": len(offsets),
+                                   "original_object_sha256": hashlib.sha256(data).hexdigest(),
                                    "possible_raw_pptr_offsets": offsets,
+                                   "raw_tail_array_shape": raw_tail_array_shape(data, offsets),
                                    "typed_tree_parse_incomplete": True,
                                    "partial_monobehaviour_script": mono_script})
                 continue

@@ -20,6 +20,22 @@ class OriginalMonoScriptFieldTests(unittest.TestCase):
             self.assertNotIn("originalFFT", str(result))
             self.assertFalse(result["serialized_compute_field_offset_verified"])
 
+
+    def test_compute_shader_array_is_not_misclassified_as_scalar(self):
+        code = ("namespace Custom.Water { public class WaterBridge { "
+                "[SerializeField] private UnityEngine.ComputeShader[] fftVariants; "
+                "void Use(UnityEngine.ComputeShader input) {} } }")
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "WaterBridge.cs"
+            path.write_text(code)
+            expected = hashlib.sha256(b"Custom.Water.WaterBridge").hexdigest()
+            result = inspect(Path(tmp), expected)["matches"][0]
+            self.assertEqual(result["original_field_type_compute_shader_declarations"], 0)
+            self.assertEqual(result["original_direct_compute_shader_array_declarations"], 1)
+            self.assertEqual(result["compute_shader_contexts"][0]["kind"],
+                             "declared_compute_array_candidate")
+            self.assertNotIn("fftVariants", str(result))
+
     def test_mismatch_is_not_fabricated(self):
         with tempfile.TemporaryDirectory() as tmp:
             (Path(tmp) / "Missing.cs").write_text("class Missing {}")

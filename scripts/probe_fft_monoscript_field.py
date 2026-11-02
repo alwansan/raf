@@ -18,6 +18,13 @@ COMPUTE_FIELD = re.compile(
 )
 MAX_SOURCE = 800_000
 
+COMPUTE_ARRAY_FIELD = re.compile(
+    r"\b(?:public|private|protected|internal)\s+"
+    r"(?:(?:static|readonly|new|volatile)\s+)*"
+    r"(?:UnityEngine\.)?ComputeShader\s*\[\s*\]\s+"
+    r"([A-Za-z_]\w*)\s*(?:[;=,])"
+)
+
 CLASS_DECLARATION_TEMPLATE = r"\bclass\s+%s\b(?:\s*<[^>{}]{1,120}>)?\s*(?::\s*([^{\r\n]+))?\s*\{"
 TYPE_IDENTIFIER = re.compile(r"^[A-Za-z_]\w*(?:\.[A-Za-z_]\w*)*$")
 
@@ -61,6 +68,7 @@ def inherited_compute_sources(root, path, original_source):
 
 USAGE = re.compile(r"\b(?:UnityEngine\.)?ComputeShader\b")
 IDENT_AFTER_TYPE = re.compile(r"\s+([A-Za-z_]\w*)\s*([;=({,)])")
+ARRAY_AFTER_TYPE = re.compile(r"\s*\[\s*\]\s+([A-Za-z_]\w*)\s*([;=,({])")
 MEMBER_ACCESS = re.compile(r"^(?:\s*(?:\[[^\]]+\]\s*)*)(?:(?:public|private|protected|internal|static|readonly|new|volatile)\s+)+")
 
 
@@ -94,6 +102,18 @@ def classify_compute_shader_occurrences(raw):
                 category = "typed_parameter_candidate"
             else:
                 category = "type_use_without_confirmed_field"
+        elif suffix.lstrip().startswith("["):
+            item = ARRAY_AFTER_TYPE.match(suffix)
+            if item is not None:
+                name_sha = hashlib.sha256(item.group(1).encode()).hexdigest()
+                prior = re.sub(r"\bUnityEngine\.$", "", prefix)
+                has_member_access = bool(re.search(
+                    r"\b(?:public|private|protected|internal)\s+(?:(?:static|readonly|new|volatile)\s+)*$", prior))
+                category = ("declared_compute_array_candidate"
+                            if has_member_access and item.group(2) in (";", "=", ",")
+                            else "array_type_usage_unresolved")
+            else:
+                category = "array_or_indexer_usage_unresolved"
         elif suffix.lstrip().startswith("<"):
             category = "generic_type_use"
         elif suffix.lstrip().startswith("."):
@@ -121,12 +141,17 @@ def inspect(root: Path, expected_sha=ORIGINAL_MONOSCRIPT_NAME_SHA256):
         if hashlib.sha256(identity.encode("utf8")).hexdigest() != expected_sha:
             continue
         compute_fields = COMPUTE_FIELD.findall(raw)
+        array_fields = COMPUTE_ARRAY_FIELD.findall(raw)
         usage = classify_compute_shader_occurrences(raw)
         parents = inherited_compute_sources(root, file, raw)
         matches.append({
             "original_monoscript_identity_sha256": expected_sha,
             "original_class_csharp_source_sha256": hashlib.sha256(raw.encode("utf8")).hexdigest(),
             "original_field_type_compute_shader_declarations": len(compute_fields),
+            "original_direct_compute_shader_array_declarations": len(array_fields),
+            "original_direct_compute_shader_array_field_sha256": [
+                hashlib.sha256(name.encode("utf8")).hexdigest() for name in array_fields
+            ],
             "compute_shader_field_name_sha256": [
                 hashlib.sha256(name.encode("utf8")).hexdigest() for name in compute_fields
             ],
