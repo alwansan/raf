@@ -69,6 +69,41 @@ def typed_reference_paths(tree, target):
     return matches
 
 
+def summarize_monobehaviour_script(partial, original_file):
+    """Describe only original MonoScript identity metadata, never private names."""
+    result = {"original_monobehaviour_script_link_verified": False,
+              "original_monoscript_class_name_sha256": None,
+              "class_or_namespace_mentions_water": False,
+              "class_or_namespace_mentions_fft": False}
+    if not isinstance(partial, dict):
+        return result
+    script_ptr = partial.get("m_Script")
+    if not isinstance(script_ptr, dict):
+        return result
+    file_id, path_id = script_ptr.get("m_FileID"), script_ptr.get("m_PathID")
+    if type(file_id) is not int or type(path_id) is not int or file_id != 0:
+        return result
+    script = original_file.objects.get(path_id)
+    if script is None or script.type.name != "MonoScript":
+        return result
+    tree = script.read_typetree()
+    name = tree.get("m_ClassName")
+    namespace = tree.get("m_Namespace", "")
+    if not isinstance(name, str) or not name or len(name) > 256:
+        return result
+    if not isinstance(namespace, str) or len(namespace) > 256:
+        return result
+    full = namespace + "." + name
+    result.update({
+        "original_monobehaviour_script_link_verified": True,
+        "original_monoscript_path_id": int(path_id),
+        "original_monoscript_class_name_sha256": __import__("hashlib").sha256(full.encode()).hexdigest(),
+        "class_or_namespace_mentions_water": "water" in full.casefold(),
+        "class_or_namespace_mentions_fft": "fft" in full.casefold(),
+    })
+    return result
+
+
 def probe(root: Path):
     verify_sources(root)
     import UnityPy
@@ -106,10 +141,16 @@ def probe(root: Path):
                     raise
                 if len(unreadable) >= MAX_MATCHES_PER_OWNER:
                     raise ValueError("Too many unparsed original PPtr candidates")
+                partial = obj.read_typetree(check_read=False)
+                # This is only the base MonoBehaviour head (often 56 bytes),
+                # NOT proof that its remaining custom fields have typed links.
+                mono_script = summarize_monobehaviour_script(partial, env.file)
                 unreadable.append({"source_type": obj.type.name,
                                    "source_path_id": int(obj.path_id),
                                    "raw_pptr_pattern_count": len(offsets),
-                                   "typed_tree_parse_incomplete": True})
+                                   "possible_raw_pptr_offsets": offsets,
+                                   "typed_tree_parse_incomplete": True,
+                                   "partial_monobehaviour_script": mono_script})
                 continue
             if parsed:
                 if len(verified) >= MAX_MATCHES_PER_OWNER:
