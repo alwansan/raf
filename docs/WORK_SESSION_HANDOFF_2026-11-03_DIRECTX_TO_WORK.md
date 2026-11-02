@@ -53,3 +53,50 @@
 5. [41527047341](https://github.com/alwansan/raf/actions/runs/41527047341) SUCCESS: سلسلة البرنامج الأصلي `DXBC → VKD3D SPIR-V 1.0 → SPIRV-Cross HLSL مشتق خاص → glslang SPIR-V → spirv-val Vulkan1.1`، مع الحفاظ على workgroup 8×8×1. **هذا إثبات صحة تركيبية/ترجمية لبرنامج واحد، وليس إثبات مطابقة حسابية أو ربط موارد أو نجاح GPU أو استعادة نوى الماء الأصلية.** لم تُنشر بايتات DXBC أو الشيدر المفكك أو SPIR-V الناتج خارج مؤقتات CI.
 6. ملفات الأدوات: `scripts/probe_directx_shader_bridge.py`, `scripts/probe_original_compute_containers.py`, `scripts/run_original_dxbc_translation_probe.py`, `scripts/run_shader_translation_lab.py`, `scripts/audit_original_compute_metadata.py`. Workflows منفصلة خفيفة: `raft-shader-translation-lab.yml`, `raft-original-dxbc-source-probe.yml`, `raft-real-dxbc-translation-probe.yml`. اختبارات المصدر في `tests/test_*.py`، جميعها بدون بناء اللعبة.
 7. مؤلف UltimateWater الرسمي المعروف: https://github.com/Moonlit-Games/Ultimate-Water-System . المستودع عام لكنه ليس حزمة شيدرات كاملة، ولا نعلم الإصدار المطابق داخل Raft. لا تستبدل به شيدر مشابه أو حزمة غير متوافقة بلا تحقق من المصدر والـGUID والواجهات والفهارس. التطوير الجديد يجب أن يركز على كشف النوى الحقيقية في LFS ثم اختبار ترجمتها مع إثبات تطابق الموارد والسلوك.
+
+## 6. خطوات عملية للجلسة الجديدة — لا تكتفِ بالتخطيط
+
+**ابدأ بالقراءة وفحص الحالة الحية ثم بعمل هندسي حقيقي، بلا تكرار الأسئلة المحسومة.**
+
+1. افحص HEAD وGitHub Actions وشجرة الفرع واللوغات القديمة/الجديدة، وتأكد من عدم وجود تغييرات متزامنة أو بناء Unity جارٍ. استخدم موصل GitHub وليس افتراضات من ذاكرة المحادثة. لا تغير ملف طلب native أو المهمة المجدولة.
+2. الأولوية **استعادة نوى FFT UltimateWater الأصلية** من بيانات `resources.assets` و`sharedassets0.assets` و`sharedassets36.assets` في Git LFS، وليس برنامج `sharedassets29.assets` فقط. لا تخلط عدم قراءة ملف مع غياب المعلومة فيه. المالك يجيز استخدام LFS عند الحاجة، لكن تجنب تنزيل/تصدير كل ~6.85GB بلا سبب؛ افحص البصمات والأحجام والمساحة، وفضّل جرد metadata مبنياً على الملفات الضرورية فقط من دون Unity. الحظر الحالي هو على البناء Unity/APK والتجارب الثقيلة وليس على التحقيق التقني الآمن. لا تنشر كود الشيدر أو البايتات الأصلية.
+3. طابق كل كائن `ComputeShader` مع المصدر ومسار GUID/fileID و`Dx11FFT` و`WavesRendererFFT` وأرقام kernel المحفوظة وترتيبها وموارد SetTexture/Dispatch؛ اعرف هل الأصلي DXBC أو DXIL أو بيانات رسومية ناقصة. **لا تعيّن kernel index 0 كبديل**. طبّق التجارب الخاصة الفعالة `DXBC -> VKD3D SPIR-V -> SPIRV-Cross HLSL` فقط على مصدر موثّق، مع اختبار Shader Model, reflection, workgroups وresource bindings والآثار الحسابية.
+4. استعد الشيدرات متعددة التمريرات الأصلية للماء/الرغوة/العمق ومواد اللعبة باستخدام مصدر موثق والـGUID الصحيح؛ لا ترفع علم `authentic_water_kernel_identity_verified` إلا بعد إثبات هوية ومطابقة البرنامج. قبول spirv-val وحده غير كافٍ.
+5. استكمل إصلاحات الصوت/العالم بشكل مصدر-موجه: تحميل بنوك FMOD من OBB الحقيقي، `vca:/master`، `PersonController.Start`، `SoundManager.OnSceneEvent`، وترتيب `Raft_Network.WorldHasBeenLoaded`. حافظ على RPC/الهوية/العالم والفيزياء والحفظ. اختبر بكود managed حقيقي ودوال أصلية مقتطعة مع اختبارات لا-Unity.
+6. احتفظ بمشاكل واجهة Settings وأبعاد الشاشة والاتجاه الإجباري الأفقي واللمس UGUI/Xbox والذاكرة وGPU كعناصر مفتوحة حتى يتحقق الهاتف مستقبلاً. لا تعيد طلب اللوق الذي رفعه المالك بالفعل، ولا تساوِ نجاح CI بالصورة النهائية.
+7. أجرِ تغييرات صغيرة موثقة فقط على الفرع المسموح؛ استخدم source/CI tests وراجع الفشل الأول ثم صححه. بعد كل مجموعة أعمال حدّث ملف التسليم ووثّق SHA/run links/حالة مصدر-اختبار-جهاز. إذا لم يبق إلا انتظار workflow طويل، أعط الرابط والحالة، ولا تدّعِ تشغيل أتمتة جديدة.
+8. عند الحاجة الفعلية لاعتماد مدفوع أو نسخة خاصة لا يمكن استعادتها، دوّن اسم الحزمة والإصدار والرابط الرسمي والمحاولات في `docs/USER_ACTIONS_REQUIRED.md` وواصل المهام المستقلة؛ لا تطلب FMOD/Unity/AssetRipper/ILSpy مجدداً.
+
+## 7. دليل المسارات والأساسيات
+
+- **تعليمات مالك المشروع الملزمة:** `AGENTS.md`، وأول سطورها «NO FULL UNITY/APK BUILD».
+- **سجل الجهاز مع الإصلاحات الأخيرة:** `docs/WORK_SESSION_HANDOFF_2026-11-02_DEVICE_FEEDBACK_ACTIVE.md` (اقرأ حتى آخر فقرة).
+- **تقارير DirectX/SPIR-V الحالية:** `docs/DIRECTX_SHADER_TRANSLATION_EXPERIMENTS.md`.
+- **ملف التسليم السابق الذي ضم تاريخ آخر APK:** `docs/WORK_SESSION_HANDOFF_2026-11-02_WORK_PREPARATION_AND_DEVICE_FEEDBACK.md`. تعليماته بالانتظار حتى يشرح المالك مشاكل تجربته متجاوزة لأنه شرحها بالفعل بعد ذلك؛ لا تعاملها باعتبارها الطلب الحالي.
+- **فصل Actions والبناء:** `docs/WORK_SESSION_HANDOFF_2026-11-02_WORKFLOW_ISOLATION.md`، `docs/NATIVE_WORKFLOW_OPERATIONS.md`، `docs/WORK_SESSION_HANDOFF_2026-11-02_COMPLETE_DELIVERY.md` و`docs/ANDROID_INSTALL_AR.md`.
+- **سجلات المصدر والتاريخ:** `docs/WORK_SESSION_HANDOFF.md` (اقرأ التاريخ كاملاً بما فيه أحدث checkpoint، لا تبدأ من حالات IN_PROGRESS القديمة)، `docs/WORK_SESSION_HANDOFF_2026-11-01_FMOD_ANDROID.md`، `docs/WORK_SESSION_HANDOFF_2026-11-01_DEVICE_RENDER_INPUT_PERFORMANCE.md`، `docs/WORK_SESSION_HANDOFF_2026-11-01_FULL_GRAPHICS_RECOVERY.md`، `docs/WORK_SESSION_HANDOFF_2026-11-01_LOGRAFT_GPU_OOM.md`.
+- **تقارير إضافية:** `docs/RECONSTRUCTION_STATUS.md`، `docs/VERIFIED_FINDINGS.md`، `docs/MESH_RECOVERY_FINDINGS.md`، `docs/UNITY_COMPILER_DEPENDENCIES.md`، `docs/PORTING_ROADMAP.md`، `docs/FMOD_ANDROID_INTEGRATION.md`، `docs/NETWORK_COMPATIBILITY.md`، وملفات `scripts/` و`tests/` ذات الصلة.
+- **المستودع واللوغات:** https://github.com/alwansan/raf/tree/feature/android-native-port وhttps://github.com/alwansan/CL/tree/main/raft%20log . لا تغير CL.
+- **الاختبارات المسموحة:** `.github/workflows/raft-reconstruction-preflight.yml`، `raft-android-offline-integration-tests.yml`، اختبارات المنصة والخوادم الصوتية، وتجارب `raft-*dxbc*-probe.yml` و`raft-shader-translation-lab.yml` الخفيفة. تدفقات `raft-unity-editor-android-import.yml` و`raft-unity-android-experiment.yml` ثقيلة وممنوعة حالياً.
+- **حدود GitHub:** GitHub Actions full build لا يُشغّل على commits `docs/` العادية؛ يحتاج الطلب الصريح والمفاتيح. لا تنشر نتائج التجارب التي تحتوي على DXBC أو HLSL تجاري؛ التقارير الهيكلية والبصمات فقط.
+
+## 8. نص افتتاح جلسة Work الجديدة — انسخه كما هو
+
+> أريدك أن تستكمل **التطوير الفعلي** لتحويل Raft v1.1.01 من Windows PC إلى Android Native APK، من أحدث دليل مؤكد، وليس إعداد خطة أو تكرار التاريخ فقط.
+>
+> **المستودع:** https://github.com/alwansan/raf
+>
+> **فرع العمل الوحيد:** `feature/android-native-port`؛ ممنوع تعديل أو دمج أو حذف `main` و`zip` و`Unity-Editor`، ومستودع `alwansan/CL` للقراءة فقط.
+>
+> اقرأ أولاً **ملف تسليم Work الجديد بالكامل**:
+> https://github.com/alwansan/raf/blob/feature/android-native-port/docs/WORK_SESSION_HANDOFF_2026-11-03_DIRECTX_TO_WORK.md
+>
+> ثم اقرأ `AGENTS.md` وتقرير الجهاز `docs/WORK_SESSION_HANDOFF_2026-11-02_DEVICE_FEEDBACK_ACTIVE.md` وتقرير `docs/DIRECTX_SHADER_TRANSLATION_EXPERIMENTS.md`، والوثائق والتاريخ الكامل والاختبارات المرتبطة **بالترتيب داخل ملف التسليم**. راجع HEAD المباشر وآخر Actions وCL قبل أي تعديل. بعدها أكمل الهندسة فعلياً، خصوصاً **استعادة نوى UltimateWater FFT والشيدرات الحقيقية من ملفات LFS الأصلية**، وفحص نجاح DXBC → SPIR-V → HLSL على الكود الحقيقي، ثم إصلاح FMOD وتهيئة العالم واللمس والاتجاه والحفظ والأداء. لا تضف موارد وهمية ولا تنسب نجاح CI إلى الهاتف.
+>
+> **أمر المالك الحالي مستمر:** لا تشغّل أي بناء Unity Editor أو Android APK/OBB/XAPK أو Release، ولا تغيّر ملفي طلب البناء ولا المهمة المجدولة، **حتى أخبرك صراحةً بالسماح**. اختبارات Python/C# الخفيفة وأبحاث DirectX CPU-only مسموحة. لا تطلب مني PC أو مفاتيح Unity/FMОD أو إعادة رفع ملفات موجودة. نفّذ تغييرات مصدر واختبارات وتوثيقاً حقيقياً على الفرع المحدد؛ ميّز بين نجاح CI والتحقق الفعلي على الهاتف.
+>
+> **Continue.**
+
+---
+
+**Status:** Work transfer only. No Unity/native build, APK, release, scheduler change, branch merge, or device validation was performed while preparing this handoff.
