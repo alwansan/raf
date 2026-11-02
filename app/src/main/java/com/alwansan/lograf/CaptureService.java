@@ -153,7 +153,7 @@ public final class CaptureService extends Service {
             if(sessionFolder==null) throw new IOException("Folder creation failed");
             active=true; stopping=false; failed=false; totalBytes=0; metricsSegmentBytes=0; part=0; metricsPart=0;
             fileUris.clear();
-            Config.prefs(this).edit().remove("metrics_last").remove("last_exit_history_sample").remove("exit_history_status").apply();
+            Config.prefs(this).edit().remove("metrics_last").remove("last_exit_history_sample").remove("exit_history_status").remove("work_audit_last").apply();
             String metadata="CLog "+BuildConfig.VERSION_NAME+"\nTarget="+Config.PACKAGE+
                     "\nRecoveryRestart="+recovering+
                     "\nStart="+new Date()+"\nBuild="+Build.MANUFACTURER+" "+Build.MODEL+
@@ -187,6 +187,10 @@ public final class CaptureService extends Service {
                                     Config.prefs(CaptureService.this).edit()
                                             .putString("files",new JSONArray(fileUris).toString()).apply();
                                 }
+                            }
+                            @Override public void onAudit(org.json.JSONObject summary){
+                                Config.prefs(CaptureService.this).edit()
+                                        .putString("work_audit_last",summary.toString()).apply();
                             }
                             @Override public void onIssue(String issue){
                                 try{sink.onFailure(issue);}
@@ -281,6 +285,11 @@ public final class CaptureService extends Service {
             report.put("metric_segments",metricsPart);
             report.put("raw_log_policy","preserve all segments; never delete");
             report.put("internal_work_log_capture_enabled",Config.workLogsFolder(this)!=null);
+            String audit=Config.prefs(this).getString("work_audit_last","");
+            if(!audit.isEmpty()){
+                try{report.put("last_work_filesystem_audit",new org.json.JSONObject(audit));}
+                catch(org.json.JSONException ignored){}
+            }
             report.put("internal_source_access","user-selected read-only SAF; source files never edited");
             report.put("game_process_exit_cause","unknown unless explicitly supported by exit evidence");
             String raw=Config.prefs(this).getString("metrics_last","");
