@@ -15,7 +15,27 @@ namespace RaftAndroid.Audio
             // Do not construct replacement FMOD settings, banks or managed SDK types.
             RaftAndroid.Diagnostics.AndroidRuntimeLog.Initialize();
             Startup.Initialize(LoadAndroidLibraries, InitializeJava, ReadVersion);
+            LoadExpansionBanks();
             Debug.Log("RAFT_FMOD_ANDROID_BOOTSTRAP javaInitialized=true nativeVersion=00020215");
+        }
+
+        private static void LoadExpansionBanks()
+        {
+            string root = Application.streamingAssetsPath;
+            if (root.IndexOf(".obb!/", StringComparison.OrdinalIgnoreCase) < 0) return;
+            // The original Windows-compiled provider uses android_asset, which
+            // cannot address Unity's expansion ZIP. Feed the exact original bank
+            // bytes to the original Studio system before scene emitters execute.
+            foreach (string name in new[] { "MasterBank.strings.bank", "MasterBank.bank", "VO_logs_english.bank", "VO_npc_english.bank", "VO_olof_english.bank" })
+            {
+                RaftAndroid.Diagnostics.AndroidRuntimeLog.Stage("fmod.expansion_bank." + name, () =>
+                {
+                    byte[] bytes = RaftAndroid.Platform.AndroidStreamingAssets.ReadAllBytes(root + "/" + name);
+                    FMOD.Studio.Bank bank;
+                    Check(FMODUnity.RuntimeManager.StudioSystem.loadBankMemory(bytes, FMOD.Studio.LOAD_BANK_FLAGS.NORMAL, out bank), "load expansion bank " + name);
+                    if (!bank.isValid()) throw new InvalidOperationException("FMOD expansion bank handle is invalid");
+                });
+            }
         }
 
         private static void LoadAndroidLibraries()
