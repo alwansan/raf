@@ -189,7 +189,8 @@ public final class CaptureService extends Service {
                                 }
                             }
                             @Override public void onIssue(String issue){
-                                sink.onFailure(issue);
+                                try{sink.onFailure(issue);}
+                                catch(android.os.RemoteException ignored){}
                             }
                         }).run(),"clog-saf-app-logs");
                 workLogThread.setPriority(Thread.MIN_PRIORITY);
