@@ -7,6 +7,8 @@ on:
       - '.github/workflows/raft-original-fft-array-provenance.yml'
       - 'scripts/verify_original_fft_array_provenance.py'
       - 'tests/test_verify_original_fft_array_provenance.py'
+      - 'scripts/probe_fft_variant_table.py'
+      - 'tests/test_probe_fft_variant_table.py'
   workflow_dispatch:
 
 permissions:
@@ -36,6 +38,7 @@ jobs:
         run: |
           set -euo pipefail
           python3 -m unittest discover -s tests -p test_verify_original_fft_array_provenance.py -v
+          python3 -m unittest discover -s tests -p test_probe_fft_variant_table.py -v
           python3 -m unittest discover -s tests -p test_probe_fft_monoscript_field.py -v
           python3 -m unittest discover -s tests -p test_probe_original_fft_serialized_refs.py -v
       - name: Authenticate pointer then hydrate only sharedassets0.assets
@@ -81,5 +84,6 @@ jobs:
           set -euo pipefail
           timeout 180s python3 -m scripts.verify_original_fft_array_provenance \
             --source Raft/Raft_Data --managed-source "$RUNNER_TEMP/original-csharp"
+          python3 -m scripts.probe_fft_variant_table --source Raft/Raft_Data
           # No shader, game source, Unity project, device data or artifacts exported.
           # No Unity Editor, APK, OBB, XAPK or Release step.
