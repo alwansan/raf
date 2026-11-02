@@ -19,6 +19,8 @@ class TouchGamepadContract(unittest.TestCase):
         self.assertIn("host.AddComponent<AndroidTouchGamepadOverlay>();", DIAGNOSTICS)
         self.assertIn("touchGamepad.SetVisible(!touchGamepad.Visible);", DIAGNOSTICS)
         self.assertIn("AndroidTouchGamepadOverlay.cs", WORKFLOW)
+        original_compile = (ROOT / "scripts/verify_android_offline_candidate.py").read_text(encoding="utf-8")
+        self.assertIn("\'AndroidTouchGamepadOverlay.cs\'", original_compile)
 
     def test_original_input_module_and_external_peripherals_preserved(self):
         self.assertIn("GetComponent<InputSystemUIInputModule>()", SOURCE)

@@ -11,6 +11,7 @@ on:
       - 'scripts/verify_android_offline_candidate.py'
       - 'tests/test_android_offline_startup.py'
       - 'android-port/Runtime/Platform/AndroidTestDiagnostics.cs'
+      - 'android-port/Runtime/Platform/AndroidTouchGamepadOverlay.cs'
       - 'android-port/Runtime/Platform/AndroidRuntimeLog.cs'
       - 'android-port/Runtime/Platform/PersistentDiagnosticLog.cs'
       - 'scripts/instrument_android_runtime_operations.py'
