@@ -132,6 +132,15 @@ def inspect_ground_control(source_root: Path) -> dict:
         }
     # Only known prior-device-report and startup symbols, never original
     # source text, string literals, private paths or method implementation.
+    # Contract for the specific device failure: GroundControll dereferences
+    # both fields, and each is initialized once in PersonController.Start.
+    # A missing FMOD event earlier in Start can therefore leave both null.
+    # Fail closed if we ever infer this from an unrecognized original revision.
+    if hashlib.sha256(source.encode()).hexdigest() == (
+            "7889e538712b1dc992b6364248ed9c51a8b1dacc8ce2b5c19656e4d80105ce2e"):
+        for field in ("settings", "actionMove"):
+            if reads(field)["method_reads"] < 1 or reads(field)["start_assignments"] != 1:
+                raise ValueError("Original GroundControll initialization dependency changed")
     return {
         "class": "PersonController",
         "source_sha256": hashlib.sha256(source.encode()).hexdigest(),
