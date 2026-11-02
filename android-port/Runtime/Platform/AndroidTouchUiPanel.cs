@@ -16,7 +16,7 @@ namespace RaftAndroid.Platform
         private RectTransform safeRoot;
         private AndroidTouchGamepadOverlay gamepad;
         private AndroidTestDiagnostics diagnostics;
-        private Text toggleText, selectionText, reportText;
+        private Text toggleText, selectionText, bindingText, reportText;
         private Slider opacity;
         private bool reportOpen;
         private float nextReport;
@@ -39,6 +39,7 @@ namespace RaftAndroid.Platform
             editorObject.SetActive(gamepad.Visible && gamepad.Editing);
             reportObject.SetActive(reportOpen && !gamepad.Editing);
             selectionText.text = "Selected: " + gamepad.SelectedControl + "   (drag to move)";
+            bindingText.text = "Binding: " + gamepad.SelectedBinding;
             opacity.SetValueWithoutNotify(gamepad.GlobalOpacity);
             if (reportObject.activeSelf && Time.unscaledTime >= nextReport)
             {
@@ -78,8 +79,10 @@ namespace RaftAndroid.Platform
             AddButton(edit, "Size -", 12, 45, 112, () => gamepad.AdjustSelectedSize(-15));
             AddButton(edit, "Size +", 132, 45, 112, () => gamepad.AdjustSelectedSize(15));
             AddButton(edit, "Reset", 252, 45, 112, () => gamepad.ResetLayout());
-            Label(edit, "Controller transparency", 12, 98, 460, 28);
-            var sliderRoot = Node("GlobalOpacity", edit, 16, 134, 460, 32);
+            bindingText = Label(edit, "Binding: none", 12, 91, 476, 22);
+            bindingText.fontSize = 14;
+            Label(edit, "Controller transparency", 12, 115, 460, 24);
+            var sliderRoot = Node("GlobalOpacity", edit, 16, 145, 460, 32);
             sliderRoot.gameObject.AddComponent<Image>().color = new Color(.2f, .2f, .2f, 1);
             opacity = sliderRoot.gameObject.AddComponent<Slider>();
             opacity.navigation = new Navigation { mode = Navigation.Mode.None };
@@ -88,7 +91,9 @@ namespace RaftAndroid.Platform
             var handleImage = handle.gameObject.AddComponent<Image>(); handleImage.color = Color.white;
             opacity.handleRect = handle; opacity.targetGraphic = handleImage;
             opacity.onValueChanged.AddListener(value => gamepad.SetGlobalOpacity(value));
-            AddButton(edit, "Finish editing", 12, 190, 220, () => gamepad.SetLayoutEditMode(false));
+            AddButton(edit, "Finish editing", 12, 204, 220, () => gamepad.SetLayoutEditMode(false));
+            AddButton(edit, "Bind -", 252, 204, 112, () => gamepad.CycleSelectedBinding(-1));
+            AddButton(edit, "Bind +", 372, 204, 112, () => gamepad.CycleSelectedBinding(1));
             reportObject = Panel("Local test report", 650, 440);
             var report = reportObject.GetComponent<RectTransform>();
             AddButton(report, "Copy report", 12, 8, 200, () => diagnostics.CopyTouchReport());
