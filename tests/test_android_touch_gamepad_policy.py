@@ -209,8 +209,9 @@ class TouchGamepadContract(unittest.TestCase):
             self.assertIn("ExecuteEvents.GetEventHandler<" + handler + ">(target)", ownership)
         self.assertNotIn("hits[0]", ownership)
         self.assertLess(routing.index("if (phase == TouchPhase.Began && OwnedUi(point))"),
-                        routing.index("input.handled = true;"))
-        self.assertIn("if (uiTouches.Contains(id))", routing)
+                        routing.rindex("input.handled = true;"))
+        self.assertLess(routing.index("if (uiTouches.Contains(id))"),
+                        routing.rindex("input.handled = true;"))
         self.assertIn("Input.simulateMouseWithTouches = false;", pointer)
         self.assertNotIn("MouseButton.Left", pointer)
 
