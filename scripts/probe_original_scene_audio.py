@@ -116,12 +116,45 @@ def inspect_player(source_root: Path) -> dict:
     }
 
 
+
+def inspect_ground_control(source_root: Path) -> dict:
+    matches = sorted(source_root.rglob("PersonController.cs"))
+    if len(matches) != 1 or matches[0].is_symlink():
+        raise ValueError("Original person controller source ambiguous")
+    source = matches[0].read_text(encoding="utf-8-sig").replace("\r\n", "\n")
+    return_type, body = method_body(source, "GroundControll")
+    _, start = method_body(source, "Start")
+    def reads(symbol: str) -> dict:
+        return {
+            "method_reads": len(re.findall(r"\b" + re.escape(symbol) + r"\s*\.", body)),
+            "method_references": len(re.findall(r"\b" + re.escape(symbol) + r"\b", body)),
+            "start_assignments": len(re.findall(r"\b" + re.escape(symbol) + r"\s*=", start)),
+        }
+    # Only known prior-device-report and startup symbols, never original
+    # source text, string literals, private paths or method implementation.
+    return {
+        "class": "PersonController",
+        "source_sha256": hashlib.sha256(source.encode()).hexdigest(),
+        "method_sha256": hashlib.sha256(body.encode()).hexdigest(),
+        "method_void": return_type == "void",
+        "statement_count": body.count(";"),
+        "nested_call_count": len(re.findall(r"\w+\s*\(", body)),
+        "settings": reads("settings"),
+        "actionMove": reads("actionMove"),
+        "rigidbody": reads("rigidbody"),
+        "groundHit": reads("groundHit"),
+        "has_catch": bool(re.search(r"\bcatch\s*\(", body)),
+        "modified_source": False,
+        "unity_compiled": False,
+    }
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--source", type=Path, required=True)
     args = parser.parse_args()
     print("RAFT_SCENE_AUDIO_SOURCE_PROBE " + json.dumps(inspect(args.source), sort_keys=True))
     print("RAFT_PLAYER_AUDIO_SOURCE_PROBE " + json.dumps(inspect_player(args.source), sort_keys=True))
+    print("RAFT_PLAYER_GROUND_CONTROL_PROBE " + json.dumps(inspect_ground_control(args.source), sort_keys=True))
 
 
 if __name__ == "__main__":
