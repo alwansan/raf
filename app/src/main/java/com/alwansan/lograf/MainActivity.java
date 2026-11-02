@@ -58,11 +58,12 @@ public final class MainActivity extends Activity {
         layout.setPadding(dp,dp,dp,dp);
         scroll.addView(layout);
 
-        TextView head=title("LogRaft  •  مسجل تشخيص لعبة Raft",23);
+        TextView head=title("CLog  •  مسجل تشخيص لعبة Cinemana",23);
         head.setTextColor(0xff163c52);
         layout.addView(head);
         layout.addView(title("مخصص للعبة com.alwansan.raft.androidtest. يلتقط Unity / Java / IL2CPP / FMOD / GPU عند ظهورها في Logcat، مع أحداث النظام المرتبطة باللعبة.",15));
         folderLabel=title("",14); layout.addView(folderLabel);
+        layout.addView(title("التطبيق المستهدف: com.cinemana.pro (العملية الرئيسية و:filedownloader)",14));
 
         Button folder=button("1  •  اختر مجلد حفظ اللوقات");
         folder.setOnClickListener(v-> {
@@ -73,18 +74,27 @@ public final class MainActivity extends Activity {
         });
         layout.addView(folder);
 
+        Button workFolder=button("اختياري: اختر Cinemana/work/log لنسخ سجلات التطبيق الداخلية");
+        workFolder.setOnClickListener(v->{
+            Intent i=new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+            i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION|
+                    Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+            startActivityForResult(i,202);
+        });
+        layout.addView(workFolder);
+
         Button permission=button("2  •  تخويل Shizuku");
         permission.setOnClickListener(v->requestShizuku(false));
         layout.addView(permission);
 
-        start=button("3  •  ابدأ التسجيل قبل فتح Raft");
+        start=button("3  •  ابدأ التسجيل قبل فتح Cinemana");
         start.setOnClickListener(v->requestShizuku(true));
         layout.addView(start);
 
-        Button launch=button("افتح لعبة Raft");
+        Button launch=button("افتح لعبة Cinemana");
         launch.setOnClickListener(v->{
             Intent i=getPackageManager().getLaunchIntentForPackage(Config.PACKAGE);
-            if(i==null) message("Raft ليست مثبتة بالحزمة المحددة");
+            if(i==null) message("Cinemana ليست مثبتة بالحزمة المحددة");
             else startActivity(i);
         });
         layout.addView(launch);
@@ -111,7 +121,7 @@ public final class MainActivity extends Activity {
         status.setTextIsSelectable(true); layout.addView(status);
         performanceLabel=title("القياسات: بانتظار بدء التسجيل",15);
         performanceLabel.setTextIsSelectable(true); layout.addView(performanceLabel);
-        layout.addView(title("تنبيه: التسجيل مستمر أثناء تشغيل Raft حتى تتوقف الخدمة أو يوقفها أندرويد. لا يمكن ضمان سجلات لم تُصدرها اللعبة أو اختفت قبل بدء التسجيل. قد تحتوي الملفات على معلومات حساسة؛ راجعها قبل النشر.",13));
+        layout.addView(title("تنبيه: التسجيل مستمر أثناء تشغيل Cinemana حتى تتوقف الخدمة أو يوقفها أندرويد. لا يمكن ضمان سجلات لم تُصدرها اللعبة أو اختفت قبل بدء التسجيل. قد تحتوي الملفات على معلومات حساسة؛ راجعها قبل النشر.",13));
         setContentView(scroll);
 
         try { Shizuku.addRequestPermissionResultListener(permissionListener); }
@@ -130,7 +140,7 @@ public final class MainActivity extends Activity {
                 return;
             }
             if(Shizuku.shouldShowRequestPermissionRationale()){
-                message("شغّل صلاحية LogRaft داخل إعدادات Shizuku");
+                message("شغّل صلاحية CLog داخل إعدادات Shizuku");
                 return;
             }
             // Only auto-start after the permission request if the user pressed Start.
@@ -153,13 +163,13 @@ public final class MainActivity extends Activity {
         folderLabel.setText("مجلد الحفظ: "+(u==null ? "لم يتم التحديد" : u.toString()));
         String text=Config.prefs(this).getString("status","جاهز");
         boolean recording=Config.prefs(this).getBoolean("recording",false);
-        status.setText("الحالة: "+text+"\nالمشروع: Raft\nالتسجيل: "+(recording?"نشط":"متوقف")+
+        status.setText("الحالة: "+text+"\nالمشروع: Cinemana\nالتسجيل: "+(recording?"نشط":"متوقف")+
                 "\nالحجم المسجل: "+(Config.prefs(this).getLong("bytes",0)/1024)+" KiB");
         start.setEnabled(!recording); stop.setEnabled(recording);
         String raw=Config.prefs(this).getString("metrics_last","");
         if(!raw.isEmpty()) try {
             JSONObject m=new JSONObject(raw.trim());
-            performanceLabel.setText("قراءات Raft المباشرة (تتحدث كل 3 ثوانٍ):"+
+            performanceLabel.setText("قراءات Cinemana المباشرة (تتحدث كل 3 ثوانٍ):"+
                 "\nCPU process: "+metric(m,"process_cpu_percent_one_core","% of one core")+
                 "\nRAM RSS: "+metric(m,"process_rss_kb","KiB")+
                 "\nRAM PSS: "+metric(m,"process_pss_kb","KiB")+
@@ -251,7 +261,7 @@ public final class MainActivity extends Activity {
                 JSONArray files=new JSONArray(raw);
                 if(files.length()==0)throw new IOException("Empty session");
                 Uri parent=Uri.parse(dir);
-                String zipName="LogRaft-"+System.currentTimeMillis()+".zip";
+                String zipName="CLog-"+System.currentTimeMillis()+".zip";
                 Uri outputUri=DocumentsContract.createDocument(getContentResolver(),parent,"application/zip",zipName);
                 if(outputUri==null)throw new IOException("ZIP creation failed");
                 try (OutputStream stream=getContentResolver().openOutputStream(outputUri,"w");
@@ -275,9 +285,9 @@ public final class MainActivity extends Activity {
                     Intent shareIntent=new Intent(Intent.ACTION_SEND);
                     shareIntent.setType("application/zip");
                     shareIntent.putExtra(Intent.EXTRA_STREAM,outputUri);
-                    shareIntent.setClipData(ClipData.newRawUri("LogRaft",outputUri));
+                    shareIntent.setClipData(ClipData.newRawUri("CLog",outputUri));
                     shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    startActivity(Intent.createChooser(shareIntent,"Share Raft logs"));
+                    startActivity(Intent.createChooser(shareIntent,"Share Cinemana logs"));
                     share.setEnabled(true);
                 });
             }catch(Exception e){runOnUiThread(()->{

@@ -1,89 +1,39 @@
-# LogRaft — dedicated Raft Android diagnostic recorder
+# CLog — Cinemana Pro dedicated Android diagnostic companion
 
-Standalone Android app for **Raft v1.1.01 Android Native** device testing.
-This source lives **only** on branch `lograf` of `alwansan/raf`. It is not the game APK and includes no game binaries/assets.
+Branch: `clog`, derived from `lograf` at 6d268476dc5aa64f379ae7ad7deb09097872a1b1. This branch is separate from both the `lograf` logger and CP game project.
 
-## Target and purpose
-- Target Android package: `com.alwansan.raft.androidtest`.
-- Unity 2021.3 / ARM64 IL2CPP / FMOD; POCO F5 Pro (Android 15).
-- Preserve Unity, Java, native, Audio/FM​​OD, Adreno/EGL/Vulkan, input, ActivityManager/ANR logs **when actually published into Android Logcat**.
-- Start recording *before* launching Raft; continue in a user-initiated foreground service across game termination.
-- Shizuku UserService reads Logcat as shell/root, instead of relying on an ordinary app's restricted background READ_LOGS access.
-- One full game-UID stream across main, system, crash and events buffers; **separate** Raft-related system context lines from system/crash/events. No unrelated application log dumping to disk by default.
-- Output: choose a base folder via Android Storage Access Framework. Each capture creates `LogRaft-<timestamp>/session-info.txt`, `raft-*.log` segments, **32 MiB per segment with no delete-on-rotation**. When stopped, **Share** creates ZIP inside the session folder.
-- Recording only stops on explicit Stop, service/permission/process death, storage failure, device shutdown, or external OS enforcement. Shizuku must remain available.
+## Target confirmed from the actual CP branch
+- Read-only source: `alwansan/CP`, `feature/stable-core-ui-performance`, head 39c23fbf3a43181a6a372ba6bece32444e9b8687.
+- Android package: **`com.cinemana.pro`**, APK reconstructed from Smali/DEX.
+- Process: main app; `com.cinemana.pro:filedownloader` for `com.liulishuo.filedownloader.services.FileDownloadService$SeparateProcessService`.
+- Primary UI: HomeActivity, DownloadsActivity, VideoPlayerActivity, SettingsActivity; splash and profile/details fragments.
+- MKV pipeline: `DownloadRepair129`, `RecoveryCapsule`, `MkvReconciler`, `Queue110`, `MkvExporter`, `MkvPriority325`, `Lease115`, `MkvManifestStore` / Room database, FFmpeg single-worker mux, subtitle checks and durable queue receipts.
+- Risks: E42/E49 stalled `.mkv.cnm115-UUID.part`, repeated queue enqueues without corresponding export start, state-write failures, `MkvCancel262.clearCurrent` liveness, startup ART VerifyError, background ANRs, high CPU/threads, dropped frames, player return-to-details navigation, new-episode notifications.
+- Existing app telemetry in `/storage/emulated/0/Cinemana/work/log` includes `load_diagnostics.main.jsonl`, `load_diagnostics.filedownloader.jsonl`, `ui_performance.jsonl`, `downloads.log`, `.mkv_export.log`, `download_repair_actions.log`, `download_repair_unresolved.log`, `player_diagnostics.log`, `mkv_player_resolver.log`, `mkv_subtitle_catalog.log`, `diagnostics.log`, `ui95.log`, per-episode .mkv.log files. Files can be private and contain signed URLs.
 
-## New in v0.2.0 — game performance telemetry
-- Every ~3 seconds: game process CPU (% of one core and normalized across device cores), RSS and peak RSS, threads, per-process I/O counters, and system memory.
-- Less frequently: process PSS, battery level/temperature, thermal status, Qualcomm Adreno KGSL GPU busy and frequency where readable.
-- Best-effort SurfaceFlinger SurfaceView presented FPS estimate, NOT Unity's actual Update FPS. Android 15 may deny or omit this metric.
-- Missing or blocked readings are null, never fake zeros.
-- Separate metrics-*.jsonl segments (8 MiB), preserved along with the original full raft-*.log (32 MiB) segments.
-- Live metrics in the app, plus a Mark issue action both in the app and notification for correlating a glitch to performance samples.
-- The existing game branch has its own internal AndroidTestDiagnostics frame and Unity memory counters in its private sandbox; this independent logger cannot assume access.
-## November 2, 2026 — measured device session
+## Goals of CLog
+- Use Shizuku to capture the *target UID* across `main`, `system`, `events` and `crash` Logcat buffers; separately filter system messages referencing `com.cinemana.pro` or its actual process PIDs.
+- Sample CPU, RSS, threads, PSS, I/O, memory pressure, GPU/CPU frequencies, battery, and thermal data without claiming unavailable counters are zero.
+- Monitor both main and `:filedownloader` process, not just the UI PID.
+- Count critical known markers and capture ANR, VerifyError, Room, FileDownloader, MKV, FFmpeg, player/codec, notification and graphics indicators in a compact separate metrics stream. Preserve full raw logcat.
+- Optionally let the user choose the *existing work/log folder* using Android Storage Access Framework, to copy logs on an independent background thread. Never alter Cinemana files or clear stuck downloads.
+- Write each session into the user's selected output folder, segment indefinitely without deleting earlier segments, then share a ZIP on explicit user action.
 
-An owner-supplied LogRaft v0.5.34 recording from Poco F5 Pro (Android 15) began at 19:19:22 local time and included:
-- 1,008,422 raw log lines and 33 samples across around 104 seconds.
-- 38,744 invalid Graphics.Blit pass messages, 1,430 invalid compute-kernel messages, and 35 missing-path exception lines for packaged Android haptics assets.
-- Raft game PID 21258 died at 19:20:58 while foreground. am_proc_died identifies process death, **not why**. No Fatal signal, SIGSEGV, FATAL EXCEPTION, or ANR was found in these recorded segments.
-- Available device memory fell to roughly 604 MB. Peak process RSS was approximately 1.63 GB and process CPU reached ~265% of one core. Correlation with shader errors is not proof of causation.
-- SurfaceFlinger FPS reported in 14/33 samples, approximately 3.9–120.7 presented frames/s. This is **not Unity game FPS** or GPU frame time. GPU busy was readable, while GPU clock was unavailable.
+## Privacy and limitations
+- CLog does **not** require ROOT; it requires an active Shizuku service. Shizuku and Android 15/vendor restrictions can block some counters/log buffers.
+- Do not automatically upload logs or export them to a public service. They may contain URLs, account details, video titles, file paths or authentication material. Review before sharing.
+- User-provided access to a work/log folder is *read only*. This is not permission to delete/change MP4, subtitle, MKV `.part`, JSON, Room or app settings.
+- A third-party logger **cannot see internal Java method calls, database transactions, FPS or network content not emitted to logs**. For deep diagnosis, CP's own instrumentation and its persisted log files remain necessary.
+- Android process termination, including `:filedownloader`, is **not** automatically a confirmed crash. Treat exit-history evidence as unavailable until verified on device.
+- CPU/GPU thermal samples and external presented FPS estimates are indicators, not proof of the cause of UI freezes.
 
-The follow-up version adds in-stream cumulative error counters (shader passes, compute kernels, missing asset paths, Java/native fatal markers, and process deaths), live status labels, and an automatically exported session-summary.json containing last telemetry and recorder totals. Raw log segments are retained without filtering or deletion.
-## Phone steps
-1. Install and start [Shizuku](https://shizuku.rikka.app/). Android 11+ wireless debugging works without a PC; root is optional. It normally must be restarted after phone reboot.
-2. Install `LogRaft-signed.apk` from [GitHub Releases](https://github.com/alwansan/raf/releases), filter tags starting with `lograf-`. Android may warn about sideloading.
-3. Open LogRaft and select a writable user-owned **folder**. Do not select another app's inaccessible `Android/data` directory.
-4. Grant Shizuku permission to LogRaft. Allow notifications and set battery usage to unrestricted if available.
-5. Tap **Start** then **Open Raft** and reproduce the issue; leave LogRaft running with its notification in the background.
-6. Return, tap **Stop**, then **Create ZIP and Share**. ZIP is also saved in the chosen session folder. Verify its contents before uploading publicly.
-7. Send session's ZIP privately, or review/redact and upload to a suitable diagnostics folder. Logs can include identifiers or sensitive paths.
+## CP documents read to design this variant
+- `docs/stable-core/WORK_SESSION_HANDOFF.md` (historical checkpoint with PATCH330 link)
+- `docs/stable-core/PATCH330_WORKER_CLEANUP_RESILIENCE.md`
+- `docs/stable-core/PATCH329_RECOVERED_QUEUE_RESILIENCE.md`
+- `docs/stable-core/PATCH328_MKV_WORKER_WATCHDOG.md`
+- `docs/stable-core/PATCH308_THREAD_CPU_DIAGNOSTICS.md`, `PATCH309_CPU_PLAYER_ATTRIBUTION.md`
+- `Cinemana_PATCH252_Project/DIAGNOSTIC_BUILD_AR.md` (player, H.264 10-bit and surface diagnostics)
+- `Cinemana_PATCH252_Project/app/AndroidManifest.xml` (verified actual app ID/services)
 
-## Coverage and important limits
-There is no universal "record absolutely everything" Android API. Logcat only includes published log messages, not every game function call, scene frame, input action, GPU command, or filesystem operation. Log buffers can roll over and the OS can kill even foreground services; a shell UID may see less than root on some vendor devices. No unlimited disk storage exists. The app **never silently deletes older log segments**, but stops and reports writes when its SAF provider fails or the device fills up.
-
-The game has its **own** `Application.persistentDataPath/raft-logs` JSONL diagnostics within `Android/data/com.alwansan.raft.androidtest/files/`. Android scoped storage usually blocks another unprivileged app reading that location. These Unity diagnostics complement LogRaft, and developers should preserve first-failure events. See the latest game branch checkpoint `docs/WORK_SESSION_HANDOFF_2026-11-01_DEVICE_RENDER_INPUT_PERFORMANCE.md`.
-
-This version monitors **one fixed package** intentionally; it does not request QUERY_ALL_PACKAGES. ADB/shell is used only by the Shizuku remote reader. Raw data is not uploaded to any server.
-
-## Design references
-- [Android logcat documentation](https://developer.android.com/tools/logcat) — buffers, UID filter, metadata formats.
-- [Android logging restrictions](https://source.android.com/docs/core/tests/debug/understanding-logging) — background READ_LOGS limits.
-- [Shizuku-API](https://github.com/RikkaApps/Shizuku-API) — Binder and UserService model.
-- [LogFox](https://github.com/F0x1d/LogFox) and [ShizuLog](https://github.com/opfans432/ShizuLog) — compared feature sets **only**, code not copied.
-
-## One-time permanent signing (automatic)
-
-No Termux commands or GitHub Secrets are required. GitHub Actions has generated and committed the public **test** signing key to `signing/lograf-public-test.p12`. Every future release uses that exact key. Each GitHub Actions build increments `versionCode` automatically and publishes a verified signed APK named `LogRaft-signed.apk`. Read [signing/README.md](signing/README.md) for the certificate fingerprint and limitations of using a public signing identity.
-
-Older `LogRaft-debug.apk` releases were signed with unrelated debug keys, so switching from these to the stable signed APK might require a **one-time uninstall**. Back up existing recorded sessions first; no uninstall should be necessary between future stable-signed releases.
-
-## Build
-JDK 17, Android SDK 35, Gradle 8.9, Android Gradle Plugin 8.7.3.
-
-```bash
-gradle --no-daemon :app:assembleDebug
-```
-
-GitHub Action `.github/workflows/lograf-apk.yml` on the **lograf** branch builds and publishes `LogRaft-signed.apk` as a standalone GitHub prerelease. It needs no game build, Unity, license, LFS checkout or PC.
-
-## Test acceptance checklist (on actual Poco F5 Pro)
-- [ ] Shizuku permission dialog works, can bind service, and app reports target UID.
-- [ ] LogRaft records **while Raft is in foreground**; notification remains visible.
-- [ ] A known `Unity` console error appears in saved game log.
-- [ ] Raft force-close and native crash are recorded and LogRaft keeps running.
-- [ ] System context lines reference Raft, not unrelated apps.
-- [ ] Continuous 30+ min session grows across segment rollover; no old segment deletion.
-- [ ] metrics-*.jsonl is parseable with 3-second timestamps and nulls for unavailable metrics.
-- [ ] Compare CPU/RSS to independent system readings; KGSL utilization is device-wide, not game-only.
-- [ ] Mark issue button/notification records a matching timestamp.
-- [ ] Stopping closes files; ZIP has all segments and metadata.
-- [ ] Storage revoked/full gracefully indicates failure.
-- [ ] Reboot/Shizuku shutdown does not falsely claim capture continued.
-- [ ] Android device battery optimization doesn't evict the foreground collector in regular tests.
-
-**CI compilation is not hardware evidence.** Never label a build device-verified until those checks pass.
-
-
-See [2026-11-01 17:30 device findings](docs/DEVICE_LOGS_2026-11-01_173033.md).
+Build and signing use GitHub Actions on **only** `clog`, independent from LogRaft's workflow. The logger is installed as `com.alwansan.clog`, so LogRaft and CLog can coexist without conflicting app data.

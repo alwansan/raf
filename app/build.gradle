@@ -3,12 +3,12 @@ android {
     namespace 'com.alwansan.lograf'
     compileSdk 35
     defaultConfig {
-        applicationId 'com.alwansan.lograf'
+        applicationId 'com.alwansan.clog'
         minSdk 29
         targetSdk 35
         // The workflow run number increases automatically for each new APK.
         versionCode 1000 + (System.getenv('GITHUB_RUN_NUMBER') ?: '0').toInteger()
-        versionName '0.5.' + (System.getenv('GITHUB_RUN_NUMBER') ?: 'local')
+        versionName '1.0.' + (System.getenv('GITHUB_RUN_NUMBER') ?: 'local')
     }
     buildFeatures { aidl true; buildConfig true }
     signingConfigs {
