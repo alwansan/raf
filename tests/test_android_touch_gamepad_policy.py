@@ -64,7 +64,8 @@ class TouchGamepadContract(unittest.TestCase):
         # Unity compile or evidence of gameplay responding to touch.
         self.assertIn("InputSystem.ListEnabledActions(enabledActionAudit);", SOURCE)
         self.assertIn("widget.control", SOURCE)
-        self.assertIn("bound != virtualControl", SOURCE)
+        self.assertIn("current == virtualControl", SOURCE)
+        self.assertIn("current = current.parent", SOURCE)
         self.assertIn("enabledActionMatches=", SOURCE)
         self.assertIn("controlsWithEnabledAction=", SOURCE)
         self.assertIn("gameplayResponseVerified=false", SOURCE)
