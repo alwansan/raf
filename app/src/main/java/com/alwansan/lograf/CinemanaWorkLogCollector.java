@@ -19,6 +19,7 @@ public final class CinemanaWorkLogCollector implements Runnable {
     public interface Listener {
         void onNewFile(Uri file);
         void onIssue(String message);
+        default void onAudit(org.json.JSONObject summary) {}
     }
     private static final long SEGMENT_LIMIT=16L*1024L*1024L;
     private static final int CHUNK_LIMIT=256*1024;
@@ -29,7 +30,7 @@ public final class CinemanaWorkLogCollector implements Runnable {
     private final Listener listener;
     private final HashMap<String,Long> offsets=new HashMap<>();
     private int part=0,scanStart=0;
-    private long segmentBytes=0,bytesCopied=0;
+    private long segmentBytes=0,bytesCopied=0,lastAuditTime=0;
     private OutputStream stream;
     private boolean warningAlreadySent=false;
     private final byte[] buffer=new byte[32768];
@@ -58,9 +59,9 @@ public final class CinemanaWorkLogCollector implements Runnable {
 
     private static final class Item {
         String id,name,mime;
-        long size;
-        Item(String id,String name,String mime,long size){
-            this.id=id;this.name=name;this.mime=mime;this.size=size;
+        long size,modified;
+        Item(String id,String name,String mime,long size,long modified){
+            this.id=id;this.name=name;this.mime=mime;this.size=size;this.modified=modified;
         }
     }
 
@@ -74,14 +75,16 @@ public final class CinemanaWorkLogCollector implements Runnable {
         String[] cols={DocumentsContract.Document.COLUMN_DOCUMENT_ID,
                 DocumentsContract.Document.COLUMN_DISPLAY_NAME,
                 DocumentsContract.Document.COLUMN_MIME_TYPE,
-                DocumentsContract.Document.COLUMN_SIZE};
+                DocumentsContract.Document.COLUMN_SIZE,
+                DocumentsContract.Document.COLUMN_LAST_MODIFIED};
         try(Cursor cursor=resolver.query(children,cols,null,null,null)){
             if(cursor==null)throw new IOException("SAF query returned null");
             int id=0,name=1,mime=2,size=3;
             while(cursor.moveToNext()){
                 if(files.size()>=4000){warnOnce("Folder has >4000 entries; narrow selection to Cinemana/work/log");break;}
                 files.add(new Item(cursor.getString(id),cursor.getString(name),
-                        cursor.getString(mime),cursor.isNull(size)?-1:cursor.getLong(size)));
+                        cursor.getString(mime),cursor.isNull(size)?-1:cursor.getLong(size),
+                        cursor.isNull(4)?-1:cursor.getLong(4)));
             }
         }
         return files;
@@ -100,6 +103,10 @@ public final class CinemanaWorkLogCollector implements Runnable {
         Uri root=DocumentsContract.buildDocumentUriUsingTree(selectedTree,
                 DocumentsContract.getTreeDocumentId(selectedTree));
         List<Item> entries=children(root);
+        if(System.currentTimeMillis()-lastAuditTime>=30000){
+            lastAuditTime=System.currentTimeMillis();
+            auditRootMetadata(entries);
+        }
         for(Item i:entries){
             if(i.name!=null && i.name.equals("log") &&
                     DocumentsContract.Document.MIME_TYPE_DIR.equals(i.mime)){
@@ -118,6 +125,45 @@ public final class CinemanaWorkLogCollector implements Runnable {
             copyTail(item);
         }
         scanStart=(start+count)%files.size();
+    }
+
+    private void auditRootMetadata(List<Item> files){
+        // SAF *metadata only*: no reads of MP4, subtitles, .part or Room files.
+        try{
+            long mp4=0,mkv=0,part=0,temporary=0,subtitle=0,partBytes=0,oldParts=0,unknownDates=0;
+            long now=System.currentTimeMillis();
+            boolean workRoot=false;
+            for(Item f:files){
+                if(f.name==null || f.mime==null)continue;
+                if(DocumentsContract.Document.MIME_TYPE_DIR.equals(f.mime)){
+                    if(f.name.equals("log"))workRoot=true;
+                    continue;
+                }
+                String name=f.name.toLowerCase(Locale.ROOT);
+                if(name.endsWith(".mp4"))mp4++;
+                else if(name.endsWith(".mkv"))mkv++;
+                else if(name.endsWith(".part")){
+                    part++;
+                    if(f.size>0)partBytes+=f.size;
+                    if(f.modified<=0)unknownDates++;
+                    else if(now-f.modified>30*60*1000L)oldParts++;
+                }
+                else if(name.endsWith(".temp"))temporary++;
+                else if(name.endsWith(".srt") || name.endsWith(".vtt"))subtitle++;
+            }
+            org.json.JSONObject row=new org.json.JSONObject();
+            row.put("timestamp_unix_ms",now);
+            row.put("scope",workRoot?"Cinemana/work root":"selected folder only");
+            row.put("source","SAF metadata only; no file contents scanned for media audit");
+            row.put("entries_scanned",files.size());
+            row.put("mp4_files",mp4).put("mkv_files",mkv);
+            row.put("part_files",part).put("part_bytes",partBytes);
+            row.put("part_age_over_30min_candidates",oldParts);
+            row.put("part_modification_time_unavailable",unknownDates);
+            row.put("temp_files",temporary).put("subtitle_files",subtitle);
+            row.put("part_age_note","Old .part timestamp does NOT prove it is abandoned; never auto-delete");
+            listener.onAudit(row);
+        }catch(Exception err){warnOnce("SAF metadata audit: "+err.getClass().getSimpleName());}
     }
 
     private void copyTail(Item item) {
