@@ -1,5 +1,5 @@
 import unittest
-from scripts.adapt_android_render_lifetimes import protect_temporaries,adapt,isolate_player_start_fmod
+from scripts.adapt_android_render_lifetimes import protect_temporaries,adapt,isolate_player_start_fmod,isolate_audio_settings_vca
 class LifetimeTests(unittest.TestCase):
     def test_single_failure_path_has_finally(self):
         s='\tTemporaryRenderTexture temporary = cache.GetTemporary();\n\tWork(temporary);\n\ttemporary.Dispose();\n'
@@ -127,3 +127,43 @@ class PlayerAudioInitializationTests(unittest.TestCase):
             isolate_player_start_fmod(base.replace(
                 "soundB = RuntimeManager.CreateInstance(two);\n", ""))
 
+
+
+
+class AndroidAudioSettingsVcaTests(unittest.TestCase):
+    def test_six_missing_vcas_do_not_abort_later_original_settings(self):
+        import hashlib
+        from unittest.mock import patch
+        assignments = "".join(
+            "    master" + str(i) + ' = RuntimeManager.GetVCA("vca:/test' + str(i) + '");\n'
+            for i in range(6)
+        )
+        original = (
+            "class AudioSettingsBox {\n"
+            "  private void SettingStart() {\n" +
+            assignments +
+            "    CompleteOtherSettings();\n"
+            "  }\n"
+            "}\n"
+        )
+        with patch.dict('scripts.adapt_android_render_lifetimes.PINS',
+                        {'AudioSettingsBox': (hashlib.sha256(original.encode()).hexdigest(), 0)}):
+            output = adapt("AudioSettingsBox", original)
+        self.assertEqual(output.count("FMODUnity.VCANotFoundException __raftMissingAudioVca"), 6)
+        self.assertEqual(output.count("settings_missing_fmod_vca"), 6)
+        self.assertEqual(output.count("RuntimeManager.GetVCA("), 6)
+        self.assertEqual(output.count("CompleteOtherSettings();"), 1)
+        self.assertNotIn("catch (System.Exception", output)
+        self.assertNotIn("SetWorld", output)
+
+    def test_vca_adapter_rejects_missing_call_or_expression_drift(self):
+        assignments = "".join("    f" + str(i) + " = RuntimeManager.GetVCA(v" + str(i) + ");\n"
+                              for i in range(6))
+        fixture = "class AudioSettingsBox {\n  public void SettingStart() {\n" + assignments + "  }\n}"
+        self.assertEqual(isolate_audio_settings_vca(fixture).count("settings_missing_fmod_vca"), 6)
+        with self.assertRaisesRegex(ValueError, "exactly six"):
+            isolate_audio_settings_vca(fixture.replace("    f5 = RuntimeManager.GetVCA(v5);\n", ""))
+        with self.assertRaisesRegex(ValueError, "assignment shape"):
+            isolate_audio_settings_vca(fixture.replace(
+                "f5 = RuntimeManager.GetVCA(v5);",
+                "PlayWithoutField(RuntimeManager.GetVCA(v5));"))
