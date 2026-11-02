@@ -75,7 +75,7 @@ public final class MainActivity extends Activity {
         });
         layout.addView(folder);
 
-        Button workFolder=button("اختياري: اختر Cinemana/work/log لنسخ سجلات التطبيق الداخلية");
+        Button workFolder=button("اختياري: اختر Cinemana/work لعد ملفات MKV/MP4 ونسخ سجلات log");
         workFolder.setOnClickListener(v->{
             Intent i=new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
             i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION|
@@ -206,8 +206,24 @@ public final class MainActivity extends Activity {
                 "\nLast frame progress: "+metric(m,"last_present_progress_age_ms","ms")+
                 "\nAlerts: "+metricWarnings(m)+
                 "\nExit reason lookup: "+Config.prefs(this).getString("exit_history_status","not checked")+
-                "\nCinemana main process: "+m.optString("state","unknown"));
+                "\nCinemana main process: "+m.optString("state","unknown")+
+                "\nWork audit: "+workAuditSummary());
         } catch(Exception ignored){performanceLabel.setText("Metrics awaiting valid sample");}
+    }
+
+    private String workAuditSummary(){
+        String raw=Config.prefs(this).getString("work_audit_last","");
+        if(raw.isEmpty())return "غير مفعّل؛ اختر Cinemana/work";
+        try {
+            JSONObject x=new JSONObject(raw);
+            return x.optString("scope","selected")+
+                    " MP4="+x.optLong("mp4_files")+
+                    " MKV="+x.optLong("mkv_files")+
+                    " .part="+x.optLong("part_files")+
+                    " oldPartCandidates="+x.optLong("part_age_over_30min_candidates")+
+                    " .temp="+x.optLong("temp_files")+
+                    " SRT="+x.optLong("subtitle_files");
+        }catch(Exception ignored){return "قيد التحليل";}
     }
 
     private String metricWarnings(JSONObject obj){
