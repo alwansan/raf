@@ -142,7 +142,7 @@ def probe(root: Path, dxbc_compiler: Path):
                     original_private_hlsl = candidate_hlsl.read_text(errors="replace")
                     import re
                     roundtrip["generated_hlsl_contains_compute_group"] = bool(
-                        re.search(r"\\[\\s*numthreads\\s*\\(\\s*8\\s*,\\s*8\\s*,\\s*1\\s*\\)\\s*\\]", original_private_hlsl)
+                        re.search(r"\[\s*numthreads\s*\(\s*8\s*,\s*8\s*,\s*1\s*\)\s*\]", original_private_hlsl)
                     )
                     roundtrip_output = temp / "private_roundtrip.spv"
                     compiled = execute([
