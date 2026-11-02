@@ -1,7 +1,7 @@
 """Synthetic original FFT index derivation checks; no Raft source content."""
 import hashlib
 import unittest
-from scripts.probe_original_fft_index_derivation import index_source_links
+from scripts.probe_original_fft_index_derivation import index_source_links, correlate_original_seed_parameter_calls
 
 
 class IndexDerivationTests(unittest.TestCase):
@@ -90,6 +90,24 @@ class IndexDerivationTests(unittest.TestCase):
         self.assertTrue(seed["seed_assignments"][0]["rhs"]["mathf_log2_call"])
         self.assertNotIn("fftSize", str(seed))
         self.assertNotIn("bits", str(seed))
+
+    def test_original_seed_appears_as_method_parameter_and_callsite(self):
+        original = (
+            "class Dx11FFT { public void Execute(int fftExponent) {\n"
+            " int ix = fftExponent - 5 << 1;\n"
+            " fft.Dispatch(ix, 1, 1, 1);\n"
+            " fft.Dispatch(ix + 1, 1, 1, 1);\n"
+            "}}\n")
+        caller = "class Caller { void Work() { helper.Execute(7); } }"
+        report = index_source_links(original, hashlib.sha256(original.encode()).hexdigest())
+        calls = correlate_original_seed_parameter_calls(original, caller, report)
+        self.assertEqual(len(calls["source_int_parameter_methods"]), 1)
+        self.assertEqual(calls["source_int_parameter_methods"][0]["seed_parameter_position"], 0)
+        self.assertEqual(len(calls["candidate_calls"]), 1)
+        self.assertEqual(calls["candidate_calls"][0]["seed_arg"]["value"], 7)
+        self.assertFalse(calls["validated_direct_csharp_runtime_call_graph"])
+        self.assertNotIn("fftExponent", str(calls))
+        self.assertNotIn("Execute", str(calls))
 
     def test_wrong_source_and_missing_index_fail_closed(self):
         with self.assertRaisesRegex(ValueError, "hash changed"):
