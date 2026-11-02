@@ -34,6 +34,16 @@ class FftVariantTableTests(unittest.TestCase):
         self.assertNotIn("HiddenKernel", str(shape))
         self.assertNotIn("DXBC", str(shape))
 
+    def test_long_original_byte_tuple_is_hashed_not_dumped(self):
+        from scripts.probe_fft_variant_table import private_variant_element_shape
+        binary = b"DXBC" + bytes(range(128))
+        record = private_variant_element_shape(tuple(binary))
+        self.assertEqual(record["kind"], "byte_valued_sequence")
+        self.assertEqual(record["bytes"], len(binary))
+        self.assertTrue(record["begins_with_dxbc_magic"])
+        self.assertFalse(record["shader_byte_values_published"])
+        self.assertNotIn(str(list(binary)), str(record))
+
     def test_changed_count_and_invalid_map_rejected(self):
         tree = {"variants": [{"kernels": [{"name": "X", "variantMap": [], "globalKeywords": [],
                                                   "localKeywords": []}]}]}

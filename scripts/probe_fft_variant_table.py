@@ -34,8 +34,21 @@ def private_variant_element_shape(value, depth=0):
         return {"kind": "private_string", "chars": len(value),
                 "sha256": hashlib.sha256(value.encode()).hexdigest()}
     if type(value) in (tuple, list):
-        if len(value) > 16:
+        if len(value) > 1024 * 1024:
             raise ValueError("Unbounded variantMap nested sequence")
+        if len(value) > 16:
+            if all(type(item) is int and 0 <= item <= 255 for item in value):
+                binary = bytes(value)
+                return {
+                    "kind": "byte_valued_sequence",
+                    "bytes": len(binary),
+                    "begins_with_dxbc_magic": binary[:4] == b"DXBC",
+                    "sha256": hashlib.sha256(binary).hexdigest(),
+                    "shader_byte_values_published": False,
+                }
+            kinds = sorted(set(type(item).__name__ for item in value))
+            return {"kind": "long_opaque_sequence", "elements": len(value),
+                    "member_kinds": kinds, "member_values_published": False}
         return {"kind": type(value).__name__,
                 "items": [private_variant_element_shape(v, depth + 1) for v in value]}
     if isinstance(value, dict):
