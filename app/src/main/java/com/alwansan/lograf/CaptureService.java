@@ -37,6 +37,7 @@ public final class CaptureService extends Service {
     private final AtomicLong failedBatches=new AtomicLong(),maxQueueDelayMs=new AtomicLong();
     private volatile Thread writerThread;
     private volatile String writerFailure="";
+    private volatile String stopExitEvidence="";
     private final SessionMetricsSummary sessionMetrics=new SessionMetricsSummary();
 
     private static final class LogChunk {
@@ -80,7 +81,7 @@ public final class CaptureService extends Service {
         writeQueue.clear();
         pendingBytes.set(0);peakPendingBytes.set(0);
         receivedBatches.set(0);writtenBatches.set(0);failedBatches.set(0);
-        maxQueueDelayMs.set(0);writerFailure="";
+        maxQueueDelayMs.set(0);writerFailure="";stopExitEvidence="";
         sessionMetrics.reset();
         writerThread=new Thread(()->{
             // Stop only after remote.stop() has finished sending tail batches
@@ -361,6 +362,11 @@ public final class CaptureService extends Service {
             report.put("backpressure_notice","Logcat ring buffer losses cannot be detected perfectly; zero dropped local batches does not prove zero OS buffer loss");
             report.put("performance_statistics",sessionMetrics.toJson());
             report.put("game_process_exit_cause","unknown unless explicitly supported by exit evidence");
+            if(!stopExitEvidence.isEmpty()){
+                try{report.put("stop_time_android_process_exit_info",
+                        new org.json.JSONObject(stopExitEvidence));}
+                catch(org.json.JSONException e){report.put("stop_time_exit_info_status","unreadable");}
+            }
             String raw=Config.prefs(this).getString("metrics_last","");
             if(!raw.trim().isEmpty()) {
                 try{report.put("last_sample",new org.json.JSONObject(raw.trim()));}
@@ -391,7 +397,11 @@ public final class CaptureService extends Service {
         // Drain the remote reader's last batch BEFORE disabling our Binder sink.
         stopping=true;
         if(remote!=null) {
-            try { remote.stop(); } catch(Exception ignored){}
+            try{remote.stop();}catch(Exception ignored){}
+            // Exit info can appear after the final 3-second telemetry sample;
+            // request it while still connected to the Shizuku shell process.
+            try{stopExitEvidence=remote.finalExitEvidence();}
+            catch(Exception error){stopExitEvidence="{\"status\":\"binder_unavailable\"}";}
             remote=null;
         }
         active=false;

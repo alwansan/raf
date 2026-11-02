@@ -104,3 +104,7 @@ GitHub Action `.github/workflows/lograf-apk.yml` on the **lograf** branch builds
 
 
 See [2026-11-01 17:30 device findings](docs/DEVICE_LOGS_2026-11-01_173033.md).
+
+## 2026-11-02 device follow-up: first confirmed SIGKILL exit evidence
+
+From two user-supplied 0.6.51 sessions: 4,284/4,284 and 6,152/6,152 buffered write batches completed; no local failed batches (not proof of no Android Logcat buffer loss). First session PID 20115 exited 20:55:58 Asia/Baghdad; Android exit-info matched exact PID and showed reason=2 SIGNALED, status=9 SIGKILL. Who killed the game and why is **not** established; this was not a Java crash or SIGSEGV proof. The second session's PID 22545 exited after the last 3-second metric sample, leaving an incomplete exit summary. Hence CLog-like stop-time exit evidence was added to LogRaft itself. FPS was unavailable 49/49 samples in the first session, and 48/55 in the second. Missing FPS alerts now track time since the game began or the last readable FPS and survive SurfaceView rediscovery; they never claim an actual game freeze without supporting evidence.

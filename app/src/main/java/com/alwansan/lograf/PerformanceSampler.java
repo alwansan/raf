@@ -445,7 +445,7 @@ public final class PerformanceSampler implements Runnable {
         }
     }
 
-    private static String command(long timeoutMs,int cap,String... args) throws Exception {
+    static String command(long timeoutMs,int cap,String... args) throws Exception {
         Process proc=new ProcessBuilder(args).redirectErrorStream(true).start();
         ByteArrayOutputStream out=new ByteArrayOutputStream();
         Thread reader=new Thread(()->{

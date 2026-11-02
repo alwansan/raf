@@ -5,4 +5,5 @@ interface IRemoteLog {
     void start(int uid, String targetPackage, ILogSink sink) = 1;
     void stop() = 2;
     String status() = 3;
+    String finalExitEvidence() = 4;
 }

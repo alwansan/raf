@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.json.JSONObject;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -26,6 +27,9 @@ public final class RemoteLogService extends IRemoteLog.Stub {
     private volatile ILogSink listener;
     private volatile int gameUid;
     private volatile String packageName;
+    private final AtomicInteger lastDeathPid=new AtomicInteger(-1);
+    private final AtomicInteger lastKnownPid=new AtomicInteger(-1);
+    private final AtomicLong lastDeathAtUnixMs=new AtomicLong(-1);
     private final Set<String> gamePids = java.util.Collections.synchronizedSet(new HashSet<>());
     private Thread gameThread, systemThread, pidThread, telemetryThread;
     private static final Pattern PID = Pattern.compile("^\\s*(?:\\d{4}-)?\\d\\d-\\d\\d\\s+\\d\\d:\\d\\d:\\d\\d[^ ]*\\s+(\\d+)\\s+");
@@ -45,6 +49,7 @@ public final class RemoteLogService extends IRemoteLog.Stub {
         shaderPassErrors.set(0);kernelErrors.set(0);missingAssetPaths.set(0);
         javaFatalMarkers.set(0);nativeFatalMarkers.set(0);processDeathEvents.set(0);
         errorGroups.reset();
+        lastDeathPid.set(-1);lastKnownPid.set(-1);lastDeathAtUnixMs.set(-1);
         metricPreviousAt=-1;metricPreviousGameLines=0;metricPreviousSystemLines=0;
         running.set(true);
         gameThread = new Thread(() -> pump("RAFT", new String[]{
@@ -123,6 +128,10 @@ public final class RemoteLogService extends IRemoteLog.Stub {
                     if (item.matches("[0-9]+")) current.add(item);
                 }
                 synchronized (gamePids) { gamePids.clear(); gamePids.addAll(current); }
+                if(!current.isEmpty()){
+                    try{lastKnownPid.set(Integer.parseInt(current.iterator().next()));}
+                    catch(NumberFormatException ignored){}
+                }
             } catch (Exception ignored) {
                 // The UID stream does not depend on pidof.
             } finally { if (p != null) p.destroy(); }
@@ -171,8 +180,16 @@ public final class RemoteLogService extends IRemoteLog.Stub {
                         if (!onlyContext || systemRelevant(line)) {
                             if(onlyContext) {
                                 systemContextLines.incrementAndGet();
-                                if(line.contains("am_proc_died") && line.contains(packageName))
+                                if(line.contains("am_proc_died") && line.contains(packageName)){
                                     processDeathEvents.incrementAndGet();
+                                    lastDeathAtUnixMs.set(System.currentTimeMillis());
+                                    Matcher died=Pattern.compile("\\[\\d+,(\\d+),").matcher(line);
+                                    if(died.find()){
+                                        try{lastDeathPid.set(Integer.parseInt(died.group(1)));}
+                                        catch(NumberFormatException ignored){}
+                                    }
+                                    if(lastDeathPid.get()<=0)lastDeathPid.set(lastKnownPid.get());
+                                }
                             } else {
                                 gameLogLines.incrementAndGet();
                                 errorGroups.observe(line);
@@ -239,6 +256,64 @@ public final class RemoteLogService extends IRemoteLog.Stub {
             }
         }
         gameProcess = null; systemProcess = null;
+    }
+
+    @Override public String finalExitEvidence() {
+        JSONObject evidence=new JSONObject();
+        try {
+            int pid=lastDeathPid.get();
+            evidence.put("target_package",Config.PACKAGE);
+            evidence.put("source","Shizuku shell / Android ActivityManager exit-info");
+            evidence.put("last_system_death_pid",pid>0?pid:JSONObject.NULL);
+            evidence.put("last_system_death_observed_unix_ms",
+                    lastDeathAtUnixMs.get()>0?lastDeathAtUnixMs.get():JSONObject.NULL);
+            evidence.put("system_death_event_count",processDeathEvents.get());
+            evidence.put("cause_warning","Signal 9 means SIGKILL; its sender and motive are not established by exit-info alone");
+            if(pid<=0){
+                evidence.put("status","no_game_death_event_observed");
+                return evidence.toString();
+            }
+            String snapshot=PerformanceSampler.command(2400,24000,"dumpsys","activity",
+                    "exit-info",Config.PACKAGE);
+            // Select only the record for the precise PID that Logcat observed.
+            // Android may localize timestamps with Arabic digits, so match the
+            // ASCII PID/reason/status tokens rather than interpreting the date.
+            String[] lines=snapshot.split("\\n");
+            for(int i=0;i<lines.length;i++){
+                String line=lines[i];
+                if(!line.contains("pid="+pid+" ") && !line.endsWith("pid="+pid))
+                    continue;
+                evidence.put("matched_pid",pid);
+                evidence.put("exit_header",line.trim().length()>450?
+                        line.trim().substring(0,450):line.trim());
+                if(i+1<lines.length){
+                    String details=lines[i+1].trim();
+                    java.util.regex.Matcher reason=Pattern.compile(
+                        "reason=([0-9]+) \\(([^)]*)\\)").matcher(details);
+                    java.util.regex.Matcher status=Pattern.compile(
+                        "\\bstatus=([0-9]+)").matcher(details);
+                    java.util.regex.Matcher subreason=Pattern.compile(
+                        "subreason=([0-9]+) \\(([^)]*)\\)").matcher(details);
+                    if(reason.find()){
+                        evidence.put("android_exit_reason_code",Integer.parseInt(reason.group(1)));
+                        evidence.put("android_exit_reason_label",reason.group(2));
+                    }
+                    if(status.find())evidence.put("signal_or_exit_status",
+                            Integer.parseInt(status.group(1)));
+                    if(subreason.find()){
+                        evidence.put("android_exit_subreason_code",Integer.parseInt(subreason.group(1)));
+                        evidence.put("android_exit_subreason_label",subreason.group(2));
+                    }
+                }
+                evidence.put("status","matched_pid_in_android_exit_history");
+                return evidence.toString();
+            }
+            evidence.put("status","exit_history_pending_or_pid_not_found");
+        }catch(Exception err){
+            try{evidence.put("status","exit_history_unavailable:"+err.getClass().getSimpleName());}
+            catch(Exception ignored){}
+        }
+        return evidence.toString();
     }
 
     @Override public String status() {
