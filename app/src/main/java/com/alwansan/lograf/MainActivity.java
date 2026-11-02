@@ -171,6 +171,9 @@ public final class MainActivity extends Activity {
                 "\nGPU clock: "+metric(m,"gpu_clock_hz","Hz")+
                 "\nDisplayed FPS estimate: "+metric(m,"presented_fps_estimate","fps")+
                 "\nFPS measurement state: "+m.optString("fps_tracking_status","unknown")+
+                "\nFPS unavailable for: "+metric(m,"fps_unavailable_duration_ms","ms")+
+                "\nValid FPS measurements: "+metric(m,"fps_valid_sample_count","")+
+                "\nFPS gap: "+m.optString("frame_telemetry_gap_kind","unknown")+
                 "\nFPS data stale: "+(m.optBoolean("frame_telemetry_stale")?
                     "yes; NOT a proven game freeze":"no")+
                 "\nBattery: "+metric(m,"battery_level_percent","%")+

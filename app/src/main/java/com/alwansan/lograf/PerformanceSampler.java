@@ -34,6 +34,9 @@ public final class PerformanceSampler implements Runnable {
     private String fpsStatus="not_started";
     private long sample=0;
     private long lastFrameProgressMs=-1;
+    private long firstTrackingMs=-1,lastReadableFpsMs=-1;
+    private int consecutiveUnavailableFps=0;
+    private long validFpsSamples=0;
     private Double lastPresentedP95Ms=null, lastPresentedWorstMs=null;
     private int lastPresentedFrameCount=0;
     private static final String GPU="/sys/class/kgsl/kgsl-3d0/";
@@ -87,6 +90,8 @@ public final class PerformanceSampler implements Runnable {
             }
             if(pid!=pssPid){pssCache=null;pssPid=-1;pssLast=0;}
             surfaceLayer=null;layersLast=0;previousPresent=-1;lastFrameProgressMs=-1;
+            firstTrackingMs=pid>0?now:-1;
+            lastReadableFpsMs=-1;consecutiveUnavailableFps=0;validFpsSamples=0;
             fpsStatus="process_changed";
             lastObservedPid=pid;
         }
@@ -143,7 +148,18 @@ public final class PerformanceSampler implements Runnable {
         row.put("thermal_status_code",thermalStatus==null?JSONObject.NULL:thermalStatus);
         if(pid>0 && now-layersLast>25000){layersLast=now; discoverSurface();}
         Double fps=pid>0?presentedFps(now):null;
+        if(pid>0 && firstTrackingMs<0)firstTrackingMs=now;
+        if(pid>0){
+            if(fps!=null){lastReadableFpsMs=now;validFpsSamples++;consecutiveUnavailableFps=0;}
+            else consecutiveUnavailableFps++;
+        }
         row.put("presented_fps_estimate",fps==null?JSONObject.NULL:fps);
+        row.put("fps_valid_sample_count",validFpsSamples);
+        row.put("fps_consecutive_unavailable_samples",consecutiveUnavailableFps);
+        long observedFrom=lastReadableFpsMs>=0?lastReadableFpsMs:firstTrackingMs;
+        long unavailableForMs=pid>0&&observedFrom>=0?Math.max(0,now-observedFrom):-1;
+        row.put("fps_unavailable_duration_ms",unavailableForMs<0?JSONObject.NULL:unavailableForMs);
+        row.put("fps_has_ever_been_readable",validFpsSamples>0);
         row.put("fps_tracking_status",pid>0?fpsStatus:"game_not_running");
         row.put("fps_quality",fps==null?"unavailable":"surface_presentation_estimate");
         row.put("presented_frame_p95_ms",lastPresentedP95Ms==null?JSONObject.NULL:lastPresentedP95Ms);
@@ -151,14 +167,21 @@ public final class PerformanceSampler implements Runnable {
         row.put("presented_frame_window_count",lastPresentedFrameCount);
         long stallAge=lastFrameProgressMs<0?-1:Math.max(0,now-lastFrameProgressMs);
         row.put("last_present_progress_age_ms",stallAge<0?JSONObject.NULL:stallAge);
-        boolean telemetryStale=pid>0 && lastFrameProgressMs>=0 && stallAge>=12000;
+        // Never reset last readable FPS age merely because a SurfaceView was
+        // rediscovered or SurfaceFlinger became unreadable. These are gaps in
+        // telemetry, not evidence that rendering itself stopped.
+        boolean telemetryStale=pid>0 && fps==null && unavailableForMs>=12000;
         row.put("frame_telemetry_stale",telemetryStale);
         row.put("frame_telemetry_status",telemetryStale?
-                "FRAME_TELEMETRY_STALE; no proven game freeze":fpsStatus);
+                "FRAME_TELEMETRY_STALE; "+fpsStatus+"; not evidence of a freeze":fpsStatus);
+        row.put("frame_telemetry_gap_kind",telemetryStale?
+                validFpsSamples>0?"fps_lost_after_valid_samples":"fps_never_available":
+                "none_or_not_yet_stale");
         // Only consider an apparent present stall if SurfaceFlinger is still
         // returning the SAME latest timestamp; unavailable data is not a stall.
         row.put("suspected_present_stall",pid>0 && telemetryStale &&
-                "no_new_present_timestamps".equals(fpsStatus));
+                "no_new_present_timestamps".equals(fpsStatus) &&
+                lastFrameProgressMs>=0);
         row.put("stall_warning_caveat","Still or background scenes may intentionally stop presenting; neither indicator proves Unity freeze");
         row.put("available_ram_under_1gib_watch",sys.optLong("MemAvailable",Long.MAX_VALUE)<1048576);
         row.put("fps_method","SurfaceFlinger --latency game SurfaceView (NOT Unity Update FPS)");

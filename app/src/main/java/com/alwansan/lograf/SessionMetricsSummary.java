@@ -34,6 +34,8 @@ final class SessionMetricsSummary {
     }
     private final LinkedHashMap<String,Stats> fields=new LinkedHashMap<>();
     private long total,unreadable,gameRunning,gameAbsent,fpsStale;
+    private long lastFpsUnavailableDurationMs=0,maxFpsUnavailableDurationMs=0;
+    private String lastFpsStatus="not_sampled";
     private long firstTimestamp=-1,lastTimestamp=-1;
     private long lastShaderErrors,lastComputeErrors,lastAssetErrors,firstFpsAt=-1,lastFpsAt=-1;
     private JSONObject lastErrorGroups=new JSONObject();
@@ -50,6 +52,8 @@ final class SessionMetricsSummary {
             fields.put(key,new Stats());
         }
         total=0;unreadable=0;gameRunning=0;gameAbsent=0;fpsStale=0;
+        lastFpsUnavailableDurationMs=0;maxFpsUnavailableDurationMs=0;
+        lastFpsStatus="not_sampled";
         firstTimestamp=-1;lastTimestamp=-1;firstFpsAt=-1;lastFpsAt=-1;
         lastShaderErrors=0;lastComputeErrors=0;lastAssetErrors=0;
         lastErrorGroups=new JSONObject();
@@ -65,6 +69,12 @@ final class SessionMetricsSummary {
             if("game_running".equals(row.optString("state")))gameRunning++;
             if("game_not_running".equals(row.optString("state")))gameAbsent++;
             if(row.optBoolean("frame_telemetry_stale",false))fpsStale++;
+            long age=row.optLong("fps_unavailable_duration_ms",-1);
+            if(age>=0){
+                lastFpsUnavailableDurationMs=age;
+                maxFpsUnavailableDurationMs=Math.max(maxFpsUnavailableDurationMs,age);
+            }
+            lastFpsStatus=row.optString("fps_tracking_status","unavailable");
             for(Map.Entry<String,Stats> metric:fields.entrySet())
                 metric.getValue().add(row.opt(metric.getKey()));
             Object fps=row.opt("presented_fps_estimate");
@@ -85,6 +95,9 @@ final class SessionMetricsSummary {
             o.put("total_samples",total).put("unreadable_samples",unreadable);
             o.put("game_running_samples",gameRunning).put("game_absent_samples",gameAbsent);
             o.put("frame_telemetry_stale_samples",fpsStale);
+            o.put("last_fps_tracking_status",lastFpsStatus);
+            o.put("last_fps_unavailable_duration_ms",lastFpsUnavailableDurationMs);
+            o.put("max_fps_unavailable_duration_ms",maxFpsUnavailableDurationMs);
             o.put("first_sample_unix_ms",firstTimestamp<0?JSONObject.NULL:firstTimestamp);
             o.put("last_sample_unix_ms",lastTimestamp<0?JSONObject.NULL:lastTimestamp);
             o.put("first_readable_fps_unix_ms",firstFpsAt<0?JSONObject.NULL:firstFpsAt);
