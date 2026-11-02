@@ -90,17 +90,40 @@ def sanitized_argument(arg):
             "source_expression_disclosed": False}
 
 
+
+def constant_offset_from_base(expression, base):
+    """Extract only affine differences; no evaluation of original CSharp code."""
+    if not isinstance(base, str) or not SIMPLE_ID.fullmatch(base):
+        return None
+    value = expression.strip()
+    for _ in range(3):
+        if value.startswith("(") and value.endswith(")"):
+            value = value[1:-1].strip()
+        else:
+            break
+    if value == base:
+        return 0
+    pattern = re.fullmatch(re.escape(base) + r"\s*([+-])\s*(\d{1,5})", value)
+    if pattern:
+        n = int(pattern.group(2))
+        return n if pattern.group(1) == "+" else -n
+    pattern = re.fullmatch(r"(\d{1,5})\s*\+\s*" + re.escape(base), value)
+    return int(pattern.group(1)) if pattern else None
+
+
 def analyze_source(source, expected_sha):
     if not isinstance(source, str) or len(source) > MAX_SOURCE_CHARS:
         raise ValueError("Original managed FFT code outside size bound")
     if sha(source) != expected_sha:
         raise ValueError("Original managed FFT callsite source SHA256 mismatch")
     rows = []
+    raw_kernel_args = []
     for match in CALL.finditer(source):
         if len(rows) >= MAX_CALLS:
             raise ValueError("Unbounded original compute API calls")
         op = match.group(1)
         args, end = parse_original_args(source, match.end()-1)
+        raw_kernel_args.append(args[0] if args else "")
         previous = source[max(0, match.start()-180):match.start()]
         receiver_match = RECEIVER.search(previous)
         rows.append({
@@ -115,9 +138,25 @@ def analyze_source(source, expected_sha):
             "caller_original_code_disclosed": False,
             "runtime_shader_kernel_indices_proven": False,
         })
+    # Relate each compute call's index expression to the first simple
+    # Dispatch index without printing or evaluating private game expressions.
+    base = next((raw_kernel_args[i].strip()
+                 for i, row in enumerate(rows) if row["call_kind"] == "Dispatch"
+                 and SIMPLE_ID.fullmatch(raw_kernel_args[i].strip())), None)
+    for i, row in enumerate(rows):
+        if row["call_kind"] in ("Dispatch", "SetTexture") and row["argument_count"] >= 3:
+            row["kernel_index_affine_offset_from_first_dispatch"] = (
+                constant_offset_from_base(raw_kernel_args[i], base) if base else None)
+        else:
+            row["kernel_index_affine_offset_from_first_dispatch"] = None
+    offsets = sorted(set(row["kernel_index_affine_offset_from_first_dispatch"]
+                         for row in rows if row["kernel_index_affine_offset_from_first_dispatch"]
+                         is not None))
     return {
         "original_source_sha256_verified": True,
         "calls_by_api": dict(sorted(Counter(row["call_kind"] for row in rows).items())),
+        "verified_affine_kernel_index_offsets": offsets,
+        "no_numeric_runtime_base_kernel_index_inferred": True,
         "compute_api_callsites": rows,
         "runtime_kernel_index_to_serialized_program_proven": False,
         "original_source_or_binary_exported": False,
