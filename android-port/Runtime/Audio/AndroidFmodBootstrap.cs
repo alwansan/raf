@@ -34,6 +34,15 @@ namespace RaftAndroid.Audio
                     FMOD.Studio.Bank bank;
                     Check(FMODUnity.RuntimeManager.StudioSystem.loadBankMemory(bytes, FMOD.Studio.LOAD_BANK_FLAGS.NORMAL, out bank), "load expansion bank " + name);
                     if (!bank.isValid()) throw new InvalidOperationException("FMOD expansion bank handle is invalid");
+                    // EventNotFound during original JoinGame can abort world
+                    // initialization. Record the real event index loaded from
+                    // each authentic bank; no fake event or success flag.
+                    int eventCount = 0;
+                    FMOD.RESULT eventResult = bank.getEventCount(out eventCount);
+                    RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("audio", "fmod_expansion_bank_events",
+                        "bank=" + name + "; result=" + eventResult +
+                        "; eventCount=" + (eventResult == FMOD.RESULT.OK ? eventCount.ToString() : "unavailable"),
+                        eventResult != FMOD.RESULT.OK);
                 });
             }
         }
