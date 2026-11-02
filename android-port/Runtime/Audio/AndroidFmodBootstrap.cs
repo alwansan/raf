@@ -26,6 +26,7 @@ namespace RaftAndroid.Audio
             // The previous ".obb!/" check silently skipped EVERY bank, which
             // matches the owner's device traces: native FMOD OK but no bank
             // stages, followed by missing events and master VCA.
+            long installedVersionCode = ReadInstalledVersionCode();
             string reported = Application.streamingAssetsPath;
             string obbDirectory = null;
             if (reported.IndexOf(".obb!/", StringComparison.OrdinalIgnoreCase) < 0)
@@ -38,9 +39,11 @@ namespace RaftAndroid.Audio
                         if (obb != null) obbDirectory = obb.Call<string>("getAbsolutePath");
                 }
             }
-            string root = AndroidFmodBankLocator.SelectRoot(reported, obbDirectory, Application.identifier);
+            string root = AndroidFmodBankLocator.SelectRoot(
+                reported, obbDirectory, Application.identifier, installedVersionCode);
             RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("audio", "fmod.bank_root",
                 "archive=" + (root.IndexOf(".obb!/", StringComparison.OrdinalIgnoreCase) >= 0 ? "obb" : "apk") +
+                "; installedVersionCode=" + installedVersionCode +
                 "; originalUnityRootWasObb=" + (reported.IndexOf(".obb!/", StringComparison.OrdinalIgnoreCase) >= 0), true);
             // Load every original bank from the actual APK/OBB archive before
             // scene emitters run. Never extract the full expansion on disk.
@@ -85,6 +88,32 @@ namespace RaftAndroid.Audio
                 "result=" + vcaResult + "; valid=" +
                 (vcaResult == FMOD.RESULT.OK && masterVca.isValid()),
                 vcaResult != FMOD.RESULT.OK);
+        }
+
+        private static long ReadInstalledVersionCode()
+        {
+            // OBB filenames are keyed to the installed Android versionCode,
+            // not Unity's human-readable Application.version.
+            using (var player = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+            using (var activity = player.GetStatic<AndroidJavaObject>("currentActivity"))
+            {
+                if (activity == null)
+                    throw new InvalidOperationException("Android activity unavailable for package version lookup");
+                using (var manager = activity.Call<AndroidJavaObject>("getPackageManager"))
+                using (var info = manager.Call<AndroidJavaObject>(
+                    "getPackageInfo", Application.identifier, 0))
+                using (var build = new AndroidJavaClass("android.os.Build$VERSION"))
+                {
+                    if (info == null)
+                        throw new InvalidOperationException("Installed Android PackageInfo unavailable");
+                    long versionCode = build.GetStatic<int>("SDK_INT") >= 28
+                        ? info.Call<long>("getLongVersionCode")
+                        : info.Get<int>("versionCode");
+                    if (versionCode <= 0)
+                        throw new InvalidOperationException("Invalid installed Android versionCode");
+                    return versionCode;
+                }
+            }
         }
 
         private static void LoadAndroidLibraries()
