@@ -356,6 +356,15 @@ jobs:
         run: |
           set -euo pipefail
           python3 -m scripts.restore_builtin_shaders --project "$RUNNER_TEMP/project/ExportedProject" --backup "$RUNNER_TEMP/original-builtin-shaders"
+      - name: Fail early if authentic water shaders and FFT kernel source are still missing
+        shell: bash
+        run: |
+          set -euo pipefail
+          # November 2 phone logs prove the one-pass export and zero-kernel
+          # compute objects are not playable on Android. Never manufacture a
+          # placeholder pass or kernel just to make the Unity job succeed.
+          python3 -m scripts.verify_water_render_contract \
+            --project "$RUNNER_TEMP/project/ExportedProject" --strict
       - name: Preserve FFT temporary lifetimes across kernel errors and exclude Windows Party startup from Android solo
         shell: bash
         run: |
