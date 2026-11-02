@@ -1,0 +1,50 @@
+name: Raft original compute DXBC inventory - Git sources only, no Unity or LFS
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-original-dxbc-source-probe.yml'
+      - 'scripts/probe_original_compute_containers.py'
+      - 'tests/test_probe_original_compute_containers.py'
+      - 'scripts/probe_directx_shader_bridge.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: raft-original-dxbc-source-probe-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  original-compute-inventory:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - name: Checkout ordinary Git-only original Unity serialized owners
+        uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            Raft/Raft_Data
+            scripts
+            tests
+      - name: Validate scanner on synthetic DXBC and rejected LFS pointers
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_probe_directx_shader_bridge.py -v
+          python3 -m unittest discover -s tests -p test_probe_original_compute_containers.py -v
+      - name: Install strict original Unity serializer parser without GPU tools
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+      - name: Inspect only original present Unity ComputeShader objects
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 360s python3 -m scripts.probe_original_compute_containers --source Raft/Raft_Data
+          # If any original provider is still an LFS pointer the report
+          # MUST state it. This is not proof that all 9 objects were checked.
+          # No shader programs or original assets are uploaded or printed.
