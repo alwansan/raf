@@ -32,7 +32,7 @@ class OriginalSceneIntegrityTests(unittest.TestCase):
         self.assertIn("PlayerSettings.allowedAutorotateToLandscapeRight = true;", self.source)
 
     def test_split_binary_requires_a_real_companion_after_unity_success(self):
-        self.assertIn('Argument("-raftPackageLayout", "standalone")', self.source)
+        self.assertIn('Argument("-raftPackageLayout", "split")', self.source)
         self.assertIn('bool splitExpansion = packageLayout == "split";', self.source)
         self.assertIn("PlayerSettings.Android.useAPKExpansionFiles = splitExpansion;", self.source)
         self.assertIn("if (splitExpansion)", self.source)
@@ -81,6 +81,12 @@ class OriginalSceneIntegrityTests(unittest.TestCase):
         self.assertIn("AndroidColourTexturePolicy.ShouldCompress", budget)
         self.assertIn("importer.sRGBTexture", budget)
         self.assertIn("settings.overridden, fontDependencies.Contains(path)", budget)
+
+    def test_original_fidelity_profile_does_not_force_size_reduction(self):
+        self.assertIn('Argument("-raftTextureProfile", "fidelity")', self.source)
+        block=self.source.split('if (textureProfile == "mobile")',1)[1].split('Debug.Log("RAFT_ANDROID_TEXTURE_PROFILE',1)[0]
+        self.assertIn('AndroidTextureBudget.Apply();',block)
+        self.assertIn('AndroidTextureBudget.CompressUncompressedColour();',block)
 
     def test_generated_gradle_payload_is_audited_before_compression(self):
         budget = (SOURCE.parent / "AndroidTextureBudget.cs").read_text(encoding="utf-8")

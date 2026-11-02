@@ -14,7 +14,7 @@ class EarlyApkDistributionPolicyTests(unittest.TestCase):
         cls.workflow = WORKFLOW.read_text(encoding="utf-8")
 
     def test_artifact_retention_requires_explicit_native_and_device_request(self):
-        marker = "- name: Retain only the explicitly requested early test APK for release delivery"
+        marker = "- name: Retain complete owner-authorized install packages for release delivery"
         self.assertEqual(self.workflow.count(marker), 1)
         block = self.workflow.split(marker, 1)[1].split("- name: Report validation boundary", 1)[0]
         self.assertIn(NATIVE_REQUEST, block)
@@ -50,8 +50,10 @@ class EarlyApkDistributionPolicyTests(unittest.TestCase):
     def test_split_binary_never_publishes_apk_without_obb(self):
         self.assertIn("PlayerSettings.Android.useAPKExpansionFiles = splitExpansion;", (
             ROOT / "android-port/Editor/AndroidNativeBuild.cs").read_text())
-        self.assertIn("Refuse incomplete APK-only delivery", self.workflow)
-        self.assertIn("test ! -f builds/Android/RaftAndroidExperimental.main.obb", self.workflow)
+        self.assertIn("Package complete owner-authorized APK OBB and XAPK delivery", self.workflow)
+        self.assertIn("python3 -m scripts.package_android_delivery", self.workflow)
+        self.assertIn("companion_args=(--obb builds/Android/RaftAndroidExperimental.main.obb)", self.workflow)
+        self.assertIn("--version-code", self.workflow)
         self.assertIn("scripts/audit_android_expansion.py", self.workflow)
         self.assertIn("zipfile.ZipFile(obb) if obb.is_file() else nullcontext(None)", self.workflow)
         self.assertIn("Original StreamingAssets absent from APK/OBB pair", self.workflow)

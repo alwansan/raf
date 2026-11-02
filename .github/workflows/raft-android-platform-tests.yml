@@ -13,6 +13,9 @@ on:
       - 'tests/test_gradle_payload_audit.py'
       - 'tests/test_early_apk_distribution_policy.py'
       - 'scripts/audit_android_expansion.py'
+      - 'scripts/package_android_delivery.py'
+      - 'scripts/reassemble_android_delivery.py'
+      - 'tests/test_android_delivery_package.py'
       - 'tests/test_android_expansion_audit.py'
       - 'tests/test_standalone_original_data_gate.py'
       - '.github/workflows/raft-unity-editor-android-import.yml'
@@ -42,6 +45,8 @@ jobs:
         run: python3 -m unittest discover -s tests -p test_android_diagnostics_policy.py -v
       - name: Guard optional on-screen gamepad source contract
         run: python3 -m unittest discover -s tests -p test_android_touch_gamepad_policy.py -v
+      - name: Verify complete APK OBB XAPK and lossless transport delivery
+        run: python3 -m unittest discover -s tests -p test_android_delivery_package.py -v
       - name: Guard early APK redistribution policy
         run: python3 -m unittest discover -s tests -p test_early_apk_distribution_policy.py -v
       - name: Execute original FMOD data gate for standalone and split packages

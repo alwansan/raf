@@ -43,3 +43,7 @@ Explicitly request ONE native+device-test run with -raftPackageLayout standalone
 - Native source1246571d4de5fe4565e73bf3e128cf3ac0d78b81; https://github.com/alwansan/raf/actions/runs/41400935501 observed queued.
 - This is the single intentional full native+device delivery attempt after successful cheap gates. Do not duplicate/cancel it for documentation. Next inspect actual texture conversion count/Android format inventory,40scene gate,Gradle member size,FMОD exact36data/signature and standalone/noOBB/release-size gates. If successful deliver the actual Release APK URL; if failed diagnose actual first error without weakening integrity gates.
 - No new APK is available at this checkpoint; older successful APK+OBB pair was not retained. No phone validation for current shaders/touch/audio/save. Per owner instruction stop waiting now when only this multi-hour integration remains. Scheduled cycle resumes by reading this run's actual result.
+
+
+## Superseded delivery preference
+Owner accepts large complete APK+OBB/XAPK and authorizes Release publication. See WORK_SESSION_HANDOFF_2026-11-02_COMPLETE_DELIVERY.md. No forced size-driven reduction in next split/fidelity build. Existing41400935501 immutable source stays running; next native waits for its result. Old no-OBB-publication statements are historical.

@@ -24,6 +24,10 @@ on:
       - 'tests/test_supplement_ilspy_gameplay.py'
       - 'tests/test_csharp_overlay.py'
       - 'android-port/Editor/**'
+      - 'scripts/package_android_delivery.py'
+      - 'scripts/reassemble_android_delivery.py'
+      - 'tests/test_android_delivery_package.py'
+      - 'docs/ANDROID_INSTALL_AR.md'
       - 'tests/test_standalone_original_data_gate.py'
       - 'android-port/Recovery/PropertyTextures/**'
       - 'android-port/Tests/PropertyTextures/**'
@@ -536,7 +540,7 @@ jobs:
           # Pushes use SDK validation unless an intentional [raft-native-build] commit requests one native run.
           # workflow_dispatch also supports its explicit build_mode=native choice.
           dockerMemoryLimit: 12g
-          customParameters: -job-worker-count 2 -raftPackageLayout standalone
+          customParameters: -job-worker-count 2 -raftPackageLayout split -raftTextureProfile fidelity
           buildMethod: ${{ ((github.event_name == 'workflow_dispatch' && inputs.build_mode == 'native') || (github.event_name == 'push' && contains(github.event.head_commit.message, '[raft-native-build]'))) && 'RaftAndroid.Editor.AndroidNativeBuild.Build' || 'RaftAndroid.Editor.AndroidNativeBuild.ValidateSdkBindings' }}
           androidExportType: androidPackage
           buildName: RaftAndroidExperimental
@@ -646,16 +650,32 @@ jobs:
           test -n "$signer" && test -x "$signer"
           "$signer" verify --verbose "$GITHUB_WORKSPACE/builds/Android/RaftAndroidExperimental.apk" > "$RUNNER_TEMP/apk-signature-private.txt"
           echo 'RAFT_ANDROID_APK_SIGNATURE verified=true installVerified=false gameplayVerified=false'
-      - name: Refuse incomplete APK-only delivery when its companion OBB is required
+      - name: Package complete owner-authorized APK OBB and XAPK delivery
         if: ${{ github.ref == 'refs/heads/feature/android-native-port' && ((github.event_name == 'push' && contains(github.event.head_commit.message, '[raft-native-build]') && contains(github.event.head_commit.message, '[raft-device-test]')) || (github.event_name == 'workflow_dispatch' && inputs.build_mode == 'native' && inputs.publish_early_test)) }}
+        shell: bash
         run: |
-          test ! -f builds/Android/RaftAndroidExperimental.main.obb || { echo 'APK alone is incomplete: companion OBB required; release blocked'; exit 1; }
-      - name: Retain only the explicitly requested early test APK for release delivery
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_android_delivery_package.py -v
+          sdk_root="${ANDROID_SDK_ROOT:-${ANDROID_HOME:-/usr/local/lib/android/sdk}}"
+          aapt=$(find "$sdk_root/build-tools" -mindepth 2 -maxdepth 2 -name aapt -type f | sort -V | tail -n 1)
+          test -n "$aapt" && test -x "$aapt"
+          "$aapt" dump badging builds/Android/RaftAndroidExperimental.apk > "$RUNNER_TEMP/delivery-badging.txt"
+          companion_args=()
+          if [ -f builds/Android/RaftAndroidExperimental.main.obb ]; then
+            companion_args=(--obb builds/Android/RaftAndroidExperimental.main.obb)
+          fi
+          python3 -m scripts.package_android_delivery \
+            --apk builds/Android/RaftAndroidExperimental.apk "${companion_args[@]}" \
+            --badging "$RUNNER_TEMP/delivery-badging.txt" --version-code "${{ github.run_number }}" \
+            --output builds/delivery
+          cp docs/ANDROID_INSTALL_AR.md builds/delivery/INSTALL_AR.md
+      - name: Retain complete owner-authorized install packages for release delivery
         if: ${{ github.ref == 'refs/heads/feature/android-native-port' && ((github.event_name == 'push' && contains(github.event.head_commit.message, '[raft-native-build]') && contains(github.event.head_commit.message, '[raft-device-test]')) || (github.event_name == 'workflow_dispatch' && inputs.build_mode == 'native' && inputs.publish_early_test)) }}
         uses: actions/upload-artifact@v4
         with:
-          name: raft-android-early-test-apk
-          path: builds/Android/RaftAndroidExperimental.apk
+          name: raft-android-test-delivery
+          path: builds/delivery/
+          compression-level: 0
           retention-days: 1
           if-no-files-found: error
       - name: Report validation boundary
@@ -668,16 +688,16 @@ jobs:
     needs: reconstruct
     if: ${{ needs.reconstruct.result == 'success' && github.ref == 'refs/heads/feature/android-native-port' && ((github.event_name == 'push' && contains(github.event.head_commit.message, '[raft-native-build]') && contains(github.event.head_commit.message, '[raft-device-test]')) || (github.event_name == 'workflow_dispatch' && inputs.build_mode == 'native' && inputs.publish_early_test)) }}
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 30
     permissions:
       contents: write
       actions: read
     steps:
       - uses: actions/download-artifact@v4
         with:
-          name: raft-android-early-test-apk
+          name: raft-android-test-delivery
           path: release-apk
-      - name: Publish the direct APK as an explicitly experimental prerelease
+      - name: Publish complete APK OBB XAPK packages and lossless transport parts
         env:
           GH_TOKEN: ${{ github.token }}
           EARLY_TEST_REQUESTED: ${{ (github.event_name == 'push' && contains(github.event.head_commit.message, '[raft-native-build]') && contains(github.event.head_commit.message, '[raft-device-test]')) || (github.event_name == 'workflow_dispatch' && inputs.build_mode == 'native' && inputs.publish_early_test) }}
@@ -686,29 +706,44 @@ jobs:
           set -euo pipefail
           test "${EARLY_TEST_REQUESTED:-}" = "true"
           test "$GITHUB_REF" = "refs/heads/feature/android-native-port"
-          test -f release-apk/RaftAndroidExperimental.apk
-          mv release-apk/RaftAndroidExperimental.apk release-apk/Raft-Android-EarlyTest.apk
-          test "$(stat -c %s release-apk/Raft-Android-EarlyTest.apk)" -lt 2147483648
           python3 - <<'PY'
-          import hashlib, os
+          import hashlib, json, os
           from pathlib import Path
-          apk = Path('release-apk/Raft-Android-EarlyTest.apk')
-          with apk.open('rb') as source:
-              digest = hashlib.file_digest(source, 'sha256').hexdigest()
-          notes = """نسخة اختبار بدء مبكرة لأندرويد — ليست نسخة لعب مكتملة.
-          الغرض: اختبار التثبيت وفتح القائمة وبدء Singleplayer والصوت وتسجيل الأخطاء على POCO F5 Pro.
-          تحققت CI من البناء ARM64 IL2CPP وبنية APK والتوقيع ومكتبات FMOD وجسر Java وبصمات ملفات الصوت والبيانات.
-          لم يتحقق التشغيل أو الصوت أو الحفظ فعلياً على الهاتف. الماء وcompute shaders والتوافق الرسومي ما زالت قيد الإصلاح.
-          أزرار اللمس تجريبية: Test report ثم Enable touch gamepad؛ لتعديلها Edit touch layout. قد لا ترتبط جميع الأفعال بعد.
-          هذه محاولة APK مستقل مع ضغط ASTC4x4 لبعض صور الألوان دون خفض دقتها؛ الضغط غير مطابق للأصل بكسلًا ببكسل.
-          داخل التطبيق اضغط Test report ثم Copy test report وأرسل التقرير مع وصف ما حدث.
-          لا تعتبر نجاح CI إثباتاً لعمل اللعبة.
+          root = Path('release-apk')
+          delivery = json.loads((root/'delivery.json').read_text())
+          assert delivery['package'] == 'com.alwansan.raft.androidtest'
+          assert delivery['version_code'] == os.environ['GITHUB_RUN_NUMBER']
+          for row in delivery['files']:
+              total = hashlib.sha256()
+              size = 0
+              for part in row['parts']:
+                  name = part['name']
+                  assert Path(name).name == name and '/' not in name and chr(92) not in name
+                  path = root/name
+                  assert path.is_file() and 0 < path.stat().st_size < 2147483648
+                  digest = hashlib.sha256()
+                  with path.open('rb') as source:
+                      for block in iter(lambda: source.read(1024*1024), b''):
+                          total.update(block)
+                          digest.update(block)
+                          size += len(block)
+                  assert path.stat().st_size == part['bytes'] and digest.hexdigest() == part['sha256']
+              assert size == row['bytes'] and total.hexdigest() == row['sha256']
+          for path in root.iterdir():
+              assert path.is_file() and 0 < path.stat().st_size < 2147483648
+          notes = """نسخة اختبار Android ARM64 IL2CPP — ليست نسخة لعب مكتملة.
+          اختر XAPK الكامل مع مثبت يدعم OBB، أو APK مع ملف OBB المطابق. APK وحده لا يكفي إذا كانت companion_required=true في delivery.json.
+          الملفات الأكبر من حد GitHub نُشرت كأجزاء نقل مطابقة للبايتات؛ اجمعها بأداة reassemble.py حسب INSTALL_AR.md قبل التثبيت.
+          هذه الأجزاء لا تعني تقسيم بيانات Unity أو حذف مواردها. لا حاجة لتنزيل XAPK وAPK+OBB معاً؛ هما بديلان.
+          لم يتحقق التثبيت أو تركيب OBB أو اللعب أو الصوت أو الحفظ على الهاتف. الماء وشيدراته لا تزال قيد الإصلاح.
+          أدوات اللمس تجريبية: Test report ثم Enable touch gamepad وEdit touch layout.
           """
-          notes += '\nSource: ' + os.environ['GITHUB_SHA'] + '\nAPK bytes: ' + str(apk.stat().st_size) + '\nSHA256: ' + digest + '\n'
-          (Path(os.environ['RUNNER_TEMP']) / 'early-test-notes.md').write_text(notes)
+          notes += '\nSource: ' + os.environ['GITHUB_SHA'] + '\n'
+          notes += '\n'.join(row['name'] + ' bytes=' + str(row['bytes']) + ' SHA256=' + row['sha256'] for row in delivery['files']) + '\n'
+          (Path(os.environ['RUNNER_TEMP'])/'early-test-notes.md').write_text(notes)
           PY
           tag="android-early-test-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
-          gh release create "$tag" release-apk/Raft-Android-EarlyTest.apk \
+          gh release create "$tag" release-apk/* \
             --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --prerelease \
             --title "Raft Android — early startup test ${GITHUB_RUN_NUMBER}" \
             --notes-file "$RUNNER_TEMP/early-test-notes.md" >> "$GITHUB_STEP_SUMMARY"

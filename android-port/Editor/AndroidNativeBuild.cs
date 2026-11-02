@@ -70,10 +70,19 @@ namespace RaftAndroid.Editor
         {
             ValidateSdkBindings();
             FmodAndroidValidation.RequireOriginalBanks();
-            // Android-only import overrides; never modify the original recovered files.
+            // Owner prioritizes complete original data over package size. Use the
+            // platform's normal Android imports, with NO forced resize/recompression.
             EditorUserBuildSettings.androidBuildSubtarget = MobileTextureSubtarget.ASTC;
-            AndroidTextureBudget.Apply();
-            AndroidTextureBudget.CompressUncompressedColour();
+            string textureProfile = Argument("-raftTextureProfile", "fidelity");
+            if (textureProfile != "fidelity" && textureProfile != "mobile")
+                throw new BuildFailedException("Unknown Android texture profile.");
+            if (textureProfile == "mobile")
+            {
+                AndroidTextureBudget.Apply();
+                AndroidTextureBudget.CompressUncompressedColour();
+            }
+            Debug.Log("RAFT_ANDROID_TEXTURE_PROFILE mode=" + textureProfile +
+                      " forcedDownscaleOrRecompression=" + (textureProfile == "mobile"));
             if (EditorUserBuildSettings.activeBuildTarget != BuildTarget.Android)
                 throw new BuildFailedException("Unity must be launched with the Android build target.");
 
@@ -93,7 +102,7 @@ namespace RaftAndroid.Editor
             EditorUserBuildSettings.buildAppBundle = false;
             // Standalone delivery is retried only with measured Android colour
             // compression; split mode remains an explicit private diagnostic option.
-            string packageLayout = Argument("-raftPackageLayout", "standalone");
+            string packageLayout = Argument("-raftPackageLayout", "split");
             if (packageLayout != "standalone" && packageLayout != "split")
                 throw new BuildFailedException("Unknown Android package layout.");
             bool splitExpansion = packageLayout == "split";
