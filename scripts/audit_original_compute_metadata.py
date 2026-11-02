@@ -48,7 +48,9 @@ def summarize_tree(tree):
                     paths.add(next_trail)
                     if isinstance(child, list):
                         list_lengths[key] += len(child)
-                if depth < MAX_DEPTH and isinstance(child, (dict, list)):
+                if isinstance(child, (dict, list)):
+                    if depth >= MAX_DEPTH:
+                        raise ValueError("Compute metadata exceeds safe nesting depth")
                     stack.append((child, next_trail, depth + 1))
             continue
         if isinstance(value, list):
