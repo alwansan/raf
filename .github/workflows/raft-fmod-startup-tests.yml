@@ -6,6 +6,7 @@ on:
     paths:
       - '.github/workflows/raft-fmod-startup-tests.yml'
       - 'android-port/Runtime/Audio/**'
+      - 'android-port/Runtime/Platform/AndroidStreamingAssets.cs'
       - 'android-port/Tests/Audio/**'
 permissions:
   contents: read
