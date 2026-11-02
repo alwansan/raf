@@ -55,7 +55,9 @@ class TouchGamepadContract(unittest.TestCase):
         self.assertIn("Canvas.ForceUpdateCanvases();", SOURCE)
         self.assertIn("rect.rect.width / (2f * area.width)", SOURCE)
         self.assertIn("rect.rect.height / (2f * area.height)", SOURCE)
-        self.assertIn("if (enabled) UpdateSafeArea();", SOURCE)
+        self.assertIn("if (enabled)", SOURCE)
+        self.assertIn("UpdateSafeArea();", SOURCE)
+        self.assertIn("AuditVirtualBindings();", SOURCE)
         self.assertIn("opened = false; // Drag controls with report panel closed.", DIAGNOSTICS)
         self.assertIn("touchGamepad.SetLayoutEditMode(startEdit)", DIAGNOSTICS)
 
