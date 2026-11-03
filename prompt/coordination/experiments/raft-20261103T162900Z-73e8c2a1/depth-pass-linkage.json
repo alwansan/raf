@@ -2,9 +2,9 @@
   "schema_version": 1,
   "owner": "raft-20261103T162900Z-73e8c2a1",
   "session_id": "w1-20261103T133907199Z-7c92e41a",
-  "status": "planned",
-  "source_sha": null,
-  "run_url": null,
+  "status": "completed",
+  "source_sha": "433074c02a49f2feab31569965ae6e549e98ddef",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41647954010",
   "hypothesis": "Exact original Depth Copy serialized passes retain m_BlobIndex links to recoverable vertex/fragment bytecode and original resource metadata; linked pair recovery can replace unassociated stage samples as basis for real pass reconstruction.",
   "input_hashes": [
     {
@@ -31,10 +31,12 @@
   "concurrency_group": "raft-w1-depth-pass-linkage-${{ github.ref }}",
   "artifact_prefix": "w1-depth-passes-aggregate",
   "budget": "20min total,600sec recovery,<=24 variants per stage/pass, two-owner227511628bytes use existing exact LFS cache no resS",
-  "result": "3 local tests PASS; authentic run pending",
+  "result": "SUCCESS at433074c02/run41647954010: exact original Depth Copy2subshaders6+3passes,18 linked stage occurrences7distinctDXBC,9 same-permutation stage pairs;15texture+15sampler bindings and18vertex semantics reconstructed across occurrences;18/18 property-rebound stages compile+validate Vulkan1.1. Actual original parameter blob0 semantics/GPU numeric/ShaderLab integration remain unverified.",
   "limitations": [
     "Stage interfaces/validation do not prove numerical or image equivalence",
-    "No installed ShaderLab,material/GUID mutation, native/Unity/GPU/APK operation"
+    "No installed ShaderLab,material/GUID mutation, native/Unity/GPU/APK operation",
+    "Original vsroundtrip locations renumbered18/18; paired interfaces match9/9, no semantic inference",
+    "Parameter blob index0 not decoded; common property mappings alone are incomplete integration evidence"
   ],
-  "next_step": "Use actual recovered pass metadata for original binding reconstruction and targeted numeric/render test."
+  "next_step": "Decode exact original parameter-table entry0, reconcile overrides, reconstruct private ShaderLab6+3 original render-state wrapper and execute targeted paired output comparison before integration."
 }

@@ -3,8 +3,8 @@
   "owner": "raft-20261103T162900Z-73e8c2a1",
   "client_label": "W1",
   "issue_id": "RENDER-002",
-  "status": "planned",
-  "updated_at": "2026-11-03T13:39:07.199Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T13:53:30.498Z",
   "base_sha": "6800280651ab43dc0625f55293f694d73df4c4b1",
   "hypothesis": "Exact original Depth Copy serialized passes retain m_BlobIndex links to recoverable vertex/fragment bytecode and original resource metadata; linked pair recovery can replace unassociated stage samples as basis for real pass reconstruction.",
   "intended_files": [
@@ -40,6 +40,10 @@
   "experiment_ids": [
     "depth-pass-linkage"
   ],
-  "result": null,
-  "next_step": "Recover all original Depth Copy pass bindings privately and validate original+roundtrip stage pairs, without claiming numerical/GPU proof."
+  "result": "SUCCESS at433074c02/run41647954010: exact original Depth Copy2subshaders6+3passes,18 linked stage occurrences7distinctDXBC,9 same-permutation stage pairs;15texture+15sampler bindings and18vertex semantics reconstructed across occurrences;18/18 property-rebound stages compile+validate Vulkan1.1. Actual original parameter blob0 semantics/GPU numeric/ShaderLab integration remain unverified.",
+  "next_step": "Decode exact original parameter-table entry0, reconcile overrides, reconstruct private ShaderLab6+3 original render-state wrapper and execute targeted paired output comparison before integration.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41647954010",
+    "https://github.com/alwansan/raf/commit/433074c02a49f2feab31569965ae6e549e98ddef"
+  ]
 }

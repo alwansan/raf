@@ -1,0 +1,36 @@
+# W1 exact original Depth Copy recovery — 3 November 2026
+
+Final source [433074c02a49f2feab31569965ae6e549e98ddef](https://github.com/alwansan/raf/commit/433074c02a49f2feab31569965ae6e549e98ddef), [CPU-only run41647954010](https://github.com/alwansan/raf/actions/runs/41647954010), job125958181232 **COMPLETED SUCCESS**. [Aggregate artifact](https://github.com/alwansan/raf/actions/runs/41647954010/artifacts/13234389374); [durable hash/count evidence](W1_DEPTH_COPY_PASS_RECOVERY_2026-11-03.json). This follows W1's [first graphics recovery](W1_GRAPHICS_PROGRAM_RECOVERY_2026-11-03.md), but now resolves actual pass/stage links and reconstructs property names/vertex input semantics.
+
+## Verified original identity and layout
+
+Exact original `UltimateWater/Depth/Depth Copy`: sharedassets0.assets/pathID2407, raw object SHA256 `cf978dad4f4c67e57fb58448cee7a8c033c30d1491ef54b0a6ad887317fba75a`. Original serialized parsed-form digest `5c38b0b937b77edbcf1ba84a808d18408fec2106bbfd41ac1120fd76dda2c697`. Both parent owners independently size/SHA-pinned using W1's original227511628-byte two-owner input manifest. Existing LFS cache hit confirmed on retries, followed by full payload authentication. No resS hydration.
+
+Actual Shader has **two subshaders with6 and3 passes**, **18 stage occurrences /7 distinct DXBC bytecodes**. Preserve these separate subshader boundaries and original pass indices; never flatten them to a single9-pass shader. All18 original stages have empty legacy `m_SubPrograms` and populated `m_PlayerSubPrograms` bucket3 (counts0,0,0,1). First recovery attempt incorrectly assumed only the legacy array. Fixed decoder preserves the original player bucket, keyword permutation and exact `m_BlobIndex`, rather than guessing from list order. Source shader itself was not edited.
+
+All18 original vertex/fragment occurrences resolved to exactly one expected-stage DXBC container. Nine original same-bucket/same-keyword pairs have matching vertex-output/fragment-input location types; nine reconstructed pairs also match. Both original translations and private HLSL roundtrips pass Vulkan1.1 validation. Original-vs-roundtrip literal interface locations differ18/18 because the varying is renumbered from1 to0 within the reconstructed pair; pairing compatibility is not literal module identity or semantic equivalence. Resource-slot signatures match18/18 before name rebinding. The original first subshader includes six passes and the second three; original property block count0 does not mean no runtime textures.
+
+## Actual property and vertex reconstruction
+
+A private rebinder resolves texture register IDs via original per-pass `m_NameIndices` and `m_CommonParameters.m_TextureParams`. It uses the original register encoded in translator resource symbols; **it does not assume descriptor binding numbers equal original DXBC register numbers**. Original texture/sampler names are restored in private HLSL while preserving generated register annotations. Original vertex input semantics are read from each original DXBC ISGN chunk, then replace generic translator TEXCOORD semantics inside its input struct. No invented color, material property, atlas, vertex attribute or texture was substituted.
+
+Across18 stage occurrences: **15 texture bindings and15 sampler bindings reconstructed**, and **18 original vertex semantics across9 vertex stages restored**. These totals count repeated pass occurrences, not15 distinct textures or18 unique semantics. Every property-rebound stage recompiles and passes Vulkan1.1 validation (**18/18**). Original parsed state, stage metadata, common parameters and original name tables are retained verbatim in a temporary private packet; only its file count/commitment and aggregate results are published. Original/derived source and program binaries are never uploaded. Regeneration code preserves the reproducible recovery method.
+
+Classification: **original DXBC and serialized metadata are authenticated original inputs**; the generated HLSL is **reconstructed implementation whose numerical/visual equivalence is not yet established**. This is not recovered authored original HLSL, not an installed Unity ShaderLab replacement, and not accepted phone rendering.
+
+## Test/failure evidence
+
+- [Initial9325a317 /run41646527015](https://github.com/alwansan/raf/actions/runs/41646527015) FAILED on empty legacy stage arrays, then [schema-intake bdce74a1/run41646749500](https://github.com/alwansan/raf/actions/runs/41646749500) confirmed original player-table layout. Public serializer schema corroborated using UnityPy generated.py; no program source printed.
+- [Player-table correction8d40b995/run41647000251](https://github.com/alwansan/raf/actions/runs/41647000251) SUCCESS:18 recovered stages and9 linked original/reconstructed pairs.
+- [Property-rebinding cb057caa/run41647688723](https://github.com/alwansan/raf/actions/runs/41647688723) FAILED explicitly after9/18 property-rebound stages compiled. Token renaming had also rewritten sampler identifiers inside HLSL `register(s0)`, making all9 fragments invalid. The original translated stages remained18/18 valid.
+- Final fix433074c02 preserves `register(...)` annotations during identifier replacement. Exact-source [run41647954010](https://github.com/alwansan/raf/actions/runs/41647954010) SUCCESS: four pass-linkage and three binding tests; all18 property-rebound original stages valid. Local10/10 W1 tests include earlier three segment controls. Negative controls cover wrong blob index, mismatched stage, wrong keyword permutation/interface location/type, missing property mapping, unknown translator register, altered original vertex signature, and two-texture register annotation preservation.
+
+Tools retained: Ubuntu24.04 /UnityPy1.25.4 /vkd3d1.2 /SPIRV-Cross2021.01.15+1.3.239 /glslang15.1 /spirv-tools2025.1; exact package versions in final job logs. Workflow budget20min, recovery600sec, at most24 variants per stage. All source work isolated in W1-owned scripts/tests/workflow; no A-client source/workflow changed or job cancelled.
+
+## Remaining concrete work
+
+Every stage's `m_ParameterBlobIndices` refers to index0, whose parameter semantics have **not yet been decoded**. Do not claim all metadata overrides verified based only on common texture metadata. Decode that exact original entry next, reconcile its parameter map with common metadata, then construct a private ShaderLab wrapper with original6+3 pass boundaries, blend/depth/cull/stencil state, tags, original resource names and recovered vertex semantics. Compare original-translated versus reconstructed paired output using asymmetric texture/depth inputs, including wrong-resource/axis/depth negative controls. Only then integrate by original exported shader identity while retaining original .meta/GUID; use targeted Unity validation if required. No full APK request.
+
+No Unity compilation, actual GPU execution, numeric image comparison or POCO F5 Pro trial in this cycle. Installed APK80 and four2-Nov CL sessions remain historical; no new game release. WATER-001/RENDER-002/FFT-FORMAT-009 remain OPEN, NOT_READY, full immutable-candidate audits0/3. Existing tasks/native requests/protected branches and read-only CL unchanged.
+
+W1 identity `raft-20261103T162900Z-73e8c2a1`, session `w1-20261103T133907199Z-7c92e41a`.
