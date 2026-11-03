@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T184205Z-a12d793c",
+  "client_label": "A12",
+  "issue_id": "WATER-001",
+  "status": "planned",
+  "updated_at": "2026-11-03T18:42:05Z",
+  "hypothesis": "Original Subsurface Blur Shader contains authentic DXBC pass/stage pairs that may be recovered via W1's strict serialized shader program decoder, distinct from completed Depth Copy and A1 FFT numeric work; unknown until SHA-pinned original two-owner inspection.",
+  "intended_files": [
+    "scripts/a12_probe_original_blur_passes.py",
+    "tests/test_a12_original_blur_passes.py",
+    ".github/workflows/raft-a12-original-blur-pass-graph.yml",
+    "prompt/coordination/clients/raft-20261103T184205Z-a12d793c/*",
+    "prompt/coordination/experiments/raft-20261103T184205Z-a12d793c/*"
+  ],
+  "related_work": [
+    "W1 depth pass wrapper and native staging already available",
+    "A1 FFT software Vulkan finite numeric proof does not restore Unity water shaders",
+    "W3 full game Material shader refs complete source inventory",
+    "A13 original material PPtr 2-owner links",
+    "Native41687765928 zero builtin identity 142/198 before strict water gate"
+  ],
+  "experiment_ids": [
+    "original-subsurface-blur-pass-program-graph"
+  ],
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41687765928"
+  ],
+  "result": null,
+  "next_step": "Analyze SHA-pinned original Blur pass-stage metadata and validate isolated CPU synthetic tests. No new native run without authentic reconstruction."
+}
