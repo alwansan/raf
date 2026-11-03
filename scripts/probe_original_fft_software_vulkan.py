@@ -85,7 +85,7 @@ def validate_requested_workload(result, seed, group_y):
     """A canary-sized report cannot stand in for the requested FFT execution."""
     if (result["extent_width"] != SELECTED_WIDTH
             or result["extent_height"] != SELECTED_HEIGHT
-            or not result["synthetic_canary_verified"]
+            or result["synthetic_canary_verified"]
             or result["input_seed"] != seed
             or result["dispatch_group_y"] != group_y):
         raise ValueError("Vulkan runner did not execute requested workload")

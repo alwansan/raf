@@ -807,3 +807,7 @@ This establishes **reconstructed implementation equivalence only within these se
 
 ## FFT requested workload boundary repair — 2026-11-03
 The production software-Vulkan caller now rejects an incorrect image extent or failed synthetic canary, in addition to wrong seed/group. Parser support for8x1 isolated canary records remains. Six local controls using the exact AST-extracted authored helper passed; Python source parses. Regression fixture added in tests/test_fft_requested_workload.py. This fixes acceptance of erroneous executor reports, not shader arithmetic; no historical run is asserted invalid. No Unity, GPU, LFS, native request or device run performed; broader WATER/RENDER blockers remain OPEN.
+
+
+## Correction: FFT canary mode flag — 2026-11-03
+Run41686164808 failed20/20 at validation because the newly authored boundary incorrectly required synthetic_canary_verified=true for actual FFT workloads. C++ emits this flag from --canary mode only; the workflow separately verifies the known8x1 sum before original FFT execution. Corrected boundary requires production mode(false), exact1024x1024 extent and requested seed/group. Six exact AST-extracted controls pass locally; fixture corrected. Previous statement that false meant failed canary is superseded. No shader arithmetic or historical equivalence result invalidated by this diagnostic regression. Next inspect justified same-workflow rerun triggered by corrected source; no Unity/native build.
