@@ -9,27 +9,47 @@ import shutil
 LITERALS = re.compile(r'//[^\r\n]*|/\*[\s\S]*?\*/|@"(?:""|[^"])*"|"(?:\\.|[^"\\])*"|\'(?:\\.|[^\'\\])*\'')
 
 
+def executable_only(text):
+    """Mask C# comments/strings/char literals without moving original offsets.
+
+    This is a deliberately bounded C#9 lexical check, not a full parser.
+    Original bytes and SHA-pinned bodies remain untouched for instrumentation.
+    """
+    return LITERALS.sub(
+        lambda match: ''.join(ch if ch in '\r\n' else ' ' for ch in match.group()),
+        text,
+    )
+
+
 def body_bounds(text, signature):
-    if text.count(signature) != 1:
-        raise ValueError('Operation signature must be unique: ' + signature)
-    opening = text.index('{', text.index(signature) + len(signature))
-    literals = {m.start(): m.end() for m in LITERALS.finditer(text, opening)}
-    depth, i = 1, opening + 1
-    while i < len(text):
-        if i in literals:
-            i = literals[i]
-            continue
-        if text[i] == '{': depth += 1
-        if text[i] == '}': depth -= 1
-        if depth == 0: return opening + 1, i
-        i += 1
+    executable = executable_only(text)
+    matches = list(re.finditer(re.escape(signature), executable))
+    if len(matches) != 1:
+        raise ValueError('Operation signature must be unique in executable source: ' + signature)
+
+    # A declaration followed by a semicolon, arrow expression or another method
+    # is NOT a block body. Never steal the next method's opening brace.
+    after_signature = matches[0].end()
+    opener = re.match(r'\s*\{', executable[after_signature:])
+    if opener is None:
+        raise ValueError('Operation signature must immediately precede a block body: ' + signature)
+    opening = after_signature + opener.end() - 1
+
+    depth = 1
+    for i in range(opening + 1, len(executable)):
+        if executable[i] == '{':
+            depth += 1
+        elif executable[i] == '}':
+            depth -= 1
+            if depth == 0:
+                return opening + 1, i
     raise ValueError('Unbalanced original operation')
 
 
 def wrap(text, signature, area, detail='""'):
     start, end = body_bounds(text, signature)
     original = text[start:end]
-    if '__raftOperation' in original:
+    if '__raftOperation' in executable_only(original):
         raise ValueError('Refuse duplicate operation instrumentation')
     name = signature.split('(')[0].split()[-1]
     prefix = '\n#if UNITY_ANDROID && !UNITY_EDITOR\n' + (
