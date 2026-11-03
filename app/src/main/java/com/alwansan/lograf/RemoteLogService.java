@@ -174,7 +174,13 @@ public final class RemoteLogService extends IRemoteLog.Stub {
                 // pidof may print a diagnostic instead of a PID, or exit
                 // nonzero. Never treat that as proof the game has exited.
                 int exit=p.waitFor();
-                if(exit!=0)throw new IOException("pidof_exit_"+exit);
+                // Android toybox pidof exits 1 when no matching process
+                // exists. That is a valid empty observation, not an I/O
+                // failure. A nonzero exit with PIDs or diagnostic output
+                // remains unverified; never fabricate a game exit.
+                boolean verifiedEmpty=exit==1 && found.toString().trim().isEmpty();
+                if(exit!=0 && !verifiedEmpty)
+                    throw new IOException("pidof_exit_"+exit);
                 pidProbeSuccesses.incrementAndGet();
                 // Preserve all PIDs for system-context correlation, but only
                 // sample CPU/RSS/FPS for the exact main process. If /proc is
