@@ -74,7 +74,21 @@ class A2ScalerSchemaTests(unittest.TestCase):
         self.assertEqual(out["additional_instance_m_field_declarations"], 2)
         self.assertTrue(out["extra_preset_info_is_world_bool_declared"])
         self.assertTrue(out["extra_preset_info_is_world_has_serializefield_near"])
+        self.assertFalse(out["extra_preset_info_is_world_is_last"])
+        self.assertEqual(out["other_extra_serializefield_markers"], 0)
         self.assertFalse(out["original_unity_ui_serialized_typetree_verified"])
+
+
+
+    def test_preset_bool_source_last_and_other_undeclared_serializations_rejected(self):
+        result = managed_fields("""class CanvasScaler {
+          [SerializeField] private ScaleMode m_UiScaleMode;
+          [SerializeField] private float m_MatchWidthOrHeight;
+          [SerializeField] private bool m_PresetInfoIsWorld;
+          private float m_PrevScaleFactor;
+        }""")
+        self.assertTrue(result["extra_preset_info_is_world_is_last"])
+        self.assertEqual(result["other_extra_serializefield_markers"], 0)
 
 
 if __name__ == "__main__":

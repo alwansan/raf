@@ -77,13 +77,16 @@ def managed_fields(text):
     # actual byte layout also corroborate it.
     preset = [(typ, pos) for name, typ, pos in extras if name == "m_PresetInfoIsWorld"]
     known_preset = len(preset) == 1 and preset[0][0] == "bool"
-    preset_serializefield_attribute_near = False
-    if known_preset:
-        pos = preset[0][1]
+    def marker_before(pos):
         before = code[max(0, pos - 250):pos]
         last_boundary = max(before.rfind(";"), before.rfind("}"))
-        attrs = before[last_boundary + 1:]
-        preset_serializefield_attribute_near = bool(re.search(r"\bSerializeField\b", attrs))
+        return bool(re.search(r"\bSerializeField\b", before[last_boundary + 1:]))
+    preset_serializefield_attribute_near = (known_preset and marker_before(preset[0][1]))
+    other_extra_serialized_markers = sum(marker_before(pos) for n, _, pos in extras
+                                         if n != "m_PresetInfoIsWorld")
+    last_matched_pos = max((m.start() for m in DECL.finditer(code)
+                            if m.group("field") in FIELD_TYPES), default=-1)
+    preset_after_all_ten_known_fields = known_preset and preset[0][1] > last_matched_pos
     names = [a for a, _ in collected]
     if len(names) != len(set(names)):
         raise ValueError("Duplicate original CanvasScaler serialized fields")
@@ -97,6 +100,8 @@ def managed_fields(text):
         "additional_instance_m_field_name_sha256": sorted(hashlib.sha256(n.encode()).hexdigest() for n, _, _ in extras),
         "extra_preset_info_is_world_bool_declared": known_preset,
         "extra_preset_info_is_world_has_serializefield_near": preset_serializefield_attribute_near,
+        "extra_preset_info_is_world_is_last": bool(preset_after_all_ten_known_fields),
+        "other_extra_serializefield_markers": other_extra_serialized_markers,
         "field_count": len(names),
         "field_types_match_expected": not types_mismatch,
         "original_ilspy_class_sha256": hashlib.sha256(text.encode()).hexdigest(),

@@ -116,15 +116,13 @@ def decode_record(raw, tree):
     # Never identify the tail as a known CanvasScaler setting or assert a full
     # Unity serializer match without independent original serialized metadata.
     trailer = raw[BASE_BYTES + CUSTOM.size:]
-    trailer_float = struct.unpack("<f", trailer)[0]
-    trailer_int = struct.unpack("<i", trailer)[0]
+    if len(trailer) != UNRESOLVED_TRAILING_BYTES or trailer[0] not in (0, 1):
+        raise ValueError("Original trailing CanvasScaler preset bool invalid")
+    if trailer[1:] != b"\x00\x00\x00":
+        raise ValueError("Original trailing CanvasScaler bool alignment invalid")
     return {
-        "unexplained_trailing_bytes": len(trailer),
-        "trailer_is_finite_float": math.isfinite(trailer_float),
-        "trailer_float_is_positive": math.isfinite(trailer_float) and trailer_float > 0,
-        "trailer_first_byte_is_bool": trailer[0] in (0, 1),
-        "trailer_remaining_bytes_zero": trailer[1:] == b"\x00\x00\x00",
-        "trailer_signed_int_is_small": -32 <= trailer_int <= 32,
+        "preset_info_is_world": bool(trailer[0]),
+        "preset_bool_alignment_verified": True,
         "ui_scale_mode": ui_mode,
         "reference_resolution": [width, height],
         "screen_match_mode": match_mode,
@@ -149,6 +147,11 @@ def audit(root, managed, ilspy, loader=None):
         raise ValueError("Unsafe private metadata input")
     meta = managed_fields(ilspy.read_text(encoding="utf-8-sig"))
     verified_field_order(meta)
+    if not (meta.get("extra_preset_info_is_world_bool_declared")
+            and meta.get("extra_preset_info_is_world_has_serializefield_near")
+            and meta.get("extra_preset_info_is_world_is_last")
+            and meta.get("other_extra_serializefield_markers") == 0):
+        raise ValueError("Original trailing CanvasScaler preset source schema unverified")
     if loader is None:
         import UnityPy
         loader = lambda p: UnityPy.load(str(p))
@@ -184,7 +187,7 @@ def audit(root, managed, ilspy, loader=None):
         if hit != (4 if name == "level0" else 13):
             raise ValueError("Original source CanvasScaler inventory unexpectedly changed")
         results[name] = {
-            "scalers_with_consistent_candidate_layout": hit,
+            "scalers_decoded_with_preset_contract": hit,
             "profiles": [{"config": json.loads(p), "count": count}
                          for p, count in sorted(profile_counts.items())],
         }
@@ -192,11 +195,11 @@ def audit(root, managed, ilspy, loader=None):
         "original_managed_ui_sha256": managed_hash,
         "original_decompiled_canvas_scaler_sha256": meta["original_ilspy_class_sha256"],
         "base_header_bytes_independently_matched_to_typed_original": BASE_BYTES,
-        "unresolved_trailing_bytes": UNRESOLVED_TRAILING_BYTES,
+        "preset_bool_with_padding_bytes": UNRESOLVED_TRAILING_BYTES,
         "custom_fields_bytes": CUSTOM.size,
-        "original_serialized_field_order_correlated_with_metadata_and_bytes": False,
-        "authentic_original_scaler_custom_values_structurally_decoded": False,
-        "provisional_interpretation_only_due_to_unresolved_trailing_four_bytes": True,
+        "original_serialized_field_order_correlated_with_metadata_and_bytes": True,
+        "authentic_original_scaler_custom_values_structurally_decoded": True,
+        "unity_native_original_full_typetree_available": False,
         "scenes": results,
         "android_settings_page_link_proven": False,
         "android_aspect_regression_cause_proven": False,

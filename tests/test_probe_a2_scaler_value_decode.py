@@ -36,8 +36,8 @@ class A2StrictScalerValuesTests(unittest.TestCase):
         raw, typed = generated_record()
         decoded = decode_record(raw, typed)
         self.assertEqual(decoded["reference_resolution"], [1280., 720.])
-        self.assertEqual(decoded["unexplained_trailing_bytes"], 4)
-        self.assertTrue(decoded["trailer_is_finite_float"])
+        self.assertFalse(decoded["preset_info_is_world"])
+        self.assertTrue(decoded["preset_bool_alignment_verified"])
         self.assertEqual(decoded["ui_scale_mode"], 1)
         self.assertEqual(decoded["match_width_or_height"], 0.5)
         self.assertEqual(decoded["screen_match_mode"], 0)
@@ -87,6 +87,19 @@ class A2StrictScalerValuesTests(unittest.TestCase):
         bad = dict(typed);bad["m_Enabled"] = 3
         with self.assertRaisesRegex(ValueError, "enabled"):
             decode_record(raw, bad)
+
+
+
+    def test_trailing_preset_flag_and_padding_fail_closed(self):
+        raw, base = generated_record()
+        flag = bytearray(raw);flag[76] = 1
+        self.assertTrue(decode_record(bytes(flag), base)["preset_info_is_world"])
+        bad = bytearray(raw);bad[77] = 2
+        with self.assertRaisesRegex(ValueError, "alignment"):
+            decode_record(bytes(bad), base)
+        bad = bytearray(raw);bad[76] = 3
+        with self.assertRaisesRegex(ValueError, "bool invalid"):
+            decode_record(bytes(bad), base)
 
 
 if __name__ == "__main__":
