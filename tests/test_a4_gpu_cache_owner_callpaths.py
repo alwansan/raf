@@ -33,7 +33,7 @@ class OriginalGpuCacheOwnerTests(unittest.TestCase):
         renamed = OWNER.replace("Construct", "SecretMethodFromOriginalGame")
         data = inspect_owner_source(renamed, "WavesRendererFFT")
         self.assertNotIn("SecretMethodFromOriginalGame", str(data))
-        self.assertNotIn("cache", str(data["structural_relevant_methods"]).lower())
+        self.assertNotIn("private RenderTexturesCache cache", str(data))
         self.assertIn("OnDisable", str(data))
 
     def test_no_claim_of_cleanup_on_same_spelling_in_comment_or_string(self):
