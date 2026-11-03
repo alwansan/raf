@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T145149Z-a3e71b29",
+  "status": "completed",
+  "issue_id": "DELIVERY-013",
+  "hypothesis": "A POSIX rename() after nonexistence checks overwrites a competing signed output file when it appears between the last check and publication.",
+  "source_baseline_sha": "fd7dbc5d0f8aa4301fe852c846a564fb9c4eac81",
+  "red": {
+    "source_sha": "7d0771ee1bbe1d402515e2a8a6db170df28fc049",
+    "run_url": "https://github.com/alwansan/raf/actions/runs/41658379104",
+    "job_id": 125994719912,
+    "conclusion": "failed as intended",
+    "new_tests": 4,
+    "failed": 1,
+    "reason": "ValueError not raised; concurrent competing writer file was not preserved"
+  },
+  "green": {
+    "source_sha": "c568e6c6c090c2ade8d15f1c5d70d061ba66940e",
+    "run_url": "https://github.com/alwansan/raf/actions/runs/41658736942",
+    "job_id": 125995989618,
+    "conclusion": "success",
+    "new_checks": 4,
+    "existing_checks": 13
+  },
+  "final": {
+    "source_sha": "8f19c687eaef96683042359583ac6272555bbe63",
+    "run_url": "https://github.com/alwansan/raf/actions/runs/41658894880",
+    "job_id": 125996555701,
+    "conclusion": "success",
+    "new_checks": 5,
+    "existing_checks": 13
+  },
+  "workflow_path": ".github/workflows/raft-a3-reassembly-publish-race.yml",
+  "concurrency_group": "raft-a3-reassembly-race-${{ github.ref }}-${{ github.sha }}",
+  "budget": "6 minutes on ubuntu-24.04, CPU only, no LFS",
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_a3_reassembly_publish_race.py -v",
+    "python3 -m unittest discover -s tests -p test_android_delivery_package.py -v"
+  ],
+  "negative_controls": [
+    "second writer publishes output after final check",
+    "output already exists",
+    "assembled SHA mismatch",
+    "hard-link EPERM/no shared storage support"
+  ],
+  "positive_controls": [
+    "actual split ZIP payload byte-for-byte",
+    "all 13 legacy packaging, upload gate, ZIP64 and recovery tests"
+  ],
+  "result": "Reassembly refuses to clobber concurrent output atomically; publisher uses exclusive hard link from fully SHA-verified temp instead of potentially overwriting rename.",
+  "limitations": [
+    "Actual Android FUSE support not tested; Termux home required if hard links unavailable",
+    "No real signed or multi-GB package produced",
+    "This is CPU-only artifact recovery behavior, not game readiness"
+  ],
+  "readiness": "NOT_READY_0_OF_3",
+  "report": "docs/A3_RELEASE_REASSEMBLY_ATOMIC_2026-11-03.md"
+}
