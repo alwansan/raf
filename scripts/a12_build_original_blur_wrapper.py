@@ -139,8 +139,17 @@ def build(root, repo, out):
                         # discard them merely to compile an incomplete ShaderLab.
                         report["last_original_parameter_shape"] = parameter
                         if not parameter["parameters_empty"]:
-                            subphase = "original_parameter_requires_exact_binding"
-                            raise ValueError("Original numeric/resource binding recovery incomplete")
+                            if not parameter["only_zero_size_empty_cb_groups"]:
+                                subphase = "original_parameter_requires_exact_binding"
+                                raise ValueError("Original numeric/resource binding recovery incomplete")
+                            # This is a recorded zero-byte, zero-member CB
+                            # *group declaration*, not a fabricated parameter.
+                            # Source remains private; later compiler stages
+                            # still validate all original recovered code.
+                            report["zero_byte_original_constant_buffer_groups"] = (
+                                report.get("zero_byte_original_constant_buffer_groups", 0)
+                                + parameter["constant_buffer_count"]
+                            )
                         subphase = "original_stage_bytecode"
                         original, link = linked_program(meta, entries, stage)
                         versions.append(version_tokens(original)[0]["shader_model"])
