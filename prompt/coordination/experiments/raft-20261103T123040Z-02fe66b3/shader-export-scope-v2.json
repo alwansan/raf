@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T123040Z-02fe66b3",
+  "status": "planned",
+  "hypothesis": "Current read-only full-export integrity scope tool accepts symlinked ancestor/incomplete expected counts and malformed/duplicate original .meta GUIDs, permitting an ungrounded local snapshot success.",
+  "input_hashes": [
+    "Baseline script git blob cf4a19301f1787b3039413e9cfaedd25c0afd2a2",
+    "Baseline 11-test blob ee692dd67446816dbc33527215dd918c0212dc14"
+  ],
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_a11_shader_export_scope.py -v"
+  ],
+  "expected_signal": "RED proves every unsafe synthetic case accepted before fix; GREEN rejects redirect, bad/duplicate GUID and incomplete or ignored count assertions with no source mutation.",
+  "negative_controls": [
+    "symlinked ancestor to unrelated project",
+    "snapshot creation with mismatched expected 140 for 1 local shader",
+    "one-sided expected count",
+    "invalid/missing GUID",
+    "duplicate valid GUID",
+    "orphan shader metadata"
+  ],
+  "workflow_path": ".github/workflows/raft-a11-shader-export-scope.yml",
+  "concurrency_group": "raft-a11-shader-export-scope-v1-${{ github.ref }}",
+  "artifact_prefix": "a11-shader-export-scope-${{ github.run_id }}",
+  "budget": "CPU-only isolated existing A11 workflow; 8-minute timeout, no LFS, Unity, native, original private sources, network download",
+  "run_url": null,
+  "source_sha": null,
+  "result": null,
+  "limitations": [
+    "Synthetic fixture only",
+    "Cannot determine complete original 41624581951 export identities or repair water GPU",
+    "Cannot claim any APK or phone success"
+  ],
+  "next_step": "Record RED, patch source, verify GREEN, document status."
+}
