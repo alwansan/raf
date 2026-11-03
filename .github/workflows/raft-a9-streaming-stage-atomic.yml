@@ -8,6 +8,7 @@ on:
     paths:
       - 'scripts/stage_original_streaming_assets.py'
       - 'tests/test_a9_streaming_stage_atomic.py'
+      - 'tests/test_stage_original_streaming_assets.py'
       - '.github/workflows/raft-a9-streaming-stage-atomic.yml'
 
 permissions:
@@ -26,6 +27,18 @@ jobs:
         with:
           lfs: false
           persist-credentials: false
+      - name: Original seven-root Git blob provenance (no LFS hydration)
+        run: |
+          python3 - <<'PY'
+          import subprocess
+          from scripts.stage_original_streaming_assets import ORIGINAL_ROOT_BLOB_SHAS
+          prefix = 'Raft/Raft_Data/StreamingAssets/'
+          for name, pinned in sorted(ORIGINAL_ROOT_BLOB_SHAS.items()):
+              observed = subprocess.check_output(['git', 'rev-parse', 'HEAD:' + prefix + name], text=True).strip()
+              if observed != pinned:
+                  raise SystemExit('ORIGINAL_ROOT_BLOB_MISMATCH: ' + name)
+          print('ORIGINAL_ROOT_BLOB_PASS count=' + str(len(ORIGINAL_ROOT_BLOB_SHAS)) + ' original_bytes_unchanged=true lfs_hydrated=false')
+          PY
       - name: A9 interrupted and corrupted stream copy negative controls (synthetic Git only)
         run: python3 -m unittest discover -s tests -p test_a9_streaming_stage_atomic.py -v
       - name: Existing original bank and Haptics strict staging tests
