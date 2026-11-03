@@ -2,7 +2,7 @@
   "schema_version": 1,
   "owner": "raft-20261103T095340Z-a81c6e42",
   "issue_id": "FFT-FORMAT-009",
-  "status": "active",
+  "status": "completed",
   "base_sha": "97b9135f545a209b236d3e61690bc0709d011349",
   "hypothesis": "Actual butterfly texture format may invalidate hypothetical half-storage address conclusions",
   "intended_files": [
@@ -11,5 +11,6 @@
     "prompt/coordination/experiments/raft-20261103T095340Z-a81c6e42"
   ],
   "related_work": [],
-  "result": null
+  "result": "Pinned original texture-format mapping and negative controls pass; runtime behavior unknown",
+  "next_step": "Trace caller-provided highPrecision flags and actual texture creation; compare translated FFT output against original numeric oracle."
 }

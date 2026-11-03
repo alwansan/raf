@@ -1,1 +1,7 @@
-Investigating actual original butterfly texture format. No changes to original source or shader; private-source SHA verification required.
+
+
+## Authenticated butterfly storage policy — 3 November 2026
+
+Client raft-20261103T095340Z-a81c6e42 verified original GpuFFT/Dx11FFT SHA-pinned sources and added scripts/probe_fft_butterfly_storage.py. Local execution passed all4 flag combinations;2 unknown-source negative controls rejected. Butterfly storage is RGBAHalf or RGBAFloat selected by highPrecision, independent of twoChannels. Intermediate targets instead select RGHalf/RGFloat or ARGBHalf/ARGBFloat. Original texture setup requests Point/Clamp, linear and no mip chain. Compute override stores integer indices; base GPU path stores normalized centers. Therefore half-coordinate results cannot be generalized across paths or applied when highPrecision selects float. This is an authenticated source-policy mapping, not actual Unity format creation, GPU arithmetic or restored programs. Next: Trace caller-provided highPrecision flags and actual texture creation; compare translated FFT output against original numeric oracle. Original shader/format blockers and NOT_READY/0-of-3 remain; no Unity/build/request/task change. CL identities unchanged.
+
+Read coordination setup plan COORD-001; no competing FFT work records existed when registering. Recovery identity: raft-20261103T095340Z-a81c6e42

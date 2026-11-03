@@ -1,3 +1,6 @@
+
+
+**Owner role replacement, 3 November 2026:** Task6ae930dd1c248191ab637a5268342007 was renamed and enabled as «Raft — عميل الإصلاح والتجارب». It now performs source/resource repairs and CPU-only experiments using coordination records; its previous readiness/build coordinator role is superseded. It does not initiate Unity/native delivery. Other tasks unchanged; do not recreate a coordinator automatically.
 أريدك أن تستكمل **الإصلاح والتطوير الهندسي الفعلي** لمشروع Raft v1.1.01 من Windows إلى Android Native، من أحدث حالة مؤكدة، وليس الاكتفاء بخطة أو تقرير.
 
 المستودع: https://github.com/alwansan/raf

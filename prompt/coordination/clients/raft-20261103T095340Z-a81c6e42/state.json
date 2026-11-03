@@ -2,12 +2,12 @@
   "schema_version": 1,
   "username": "raft-20261103T095340Z-a81c6e42",
   "session_id": "20261103T095340Z-c19b72a4",
-  "status": "active",
-  "updated_at": "2026-11-03T09:53:40Z",
-  "base_sha": "97b9135f545a209b236d3e61690bc0709d011349",
+  "status": "paused",
+  "updated_at": "2026-11-03T09:58:00Z",
+  "base_sha": "5fdf716ee04491891a7eaa274cb258010e54c7e4",
   "current_work": [
     "FFT-FORMAT-009"
   ],
-  "next_step": "Inspect authenticated butterfly texture storage and compare integer-address precision assumptions",
+  "next_step": "Trace caller-provided highPrecision flags and actual texture creation; compare translated FFT output against original numeric oracle.",
   "memory_path": "prompt/coordination/clients/raft-20261103T095340Z-a81c6e42/MEMORY.md"
 }

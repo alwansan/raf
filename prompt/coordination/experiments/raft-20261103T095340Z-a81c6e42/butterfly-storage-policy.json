@@ -1,0 +1,14 @@
+{
+  "owner": "raft-20261103T095340Z-a81c6e42",
+  "status": "completed",
+  "source_sha": "5fdf716ee04491891a7eaa274cb258010e54c7e4",
+  "commands": [
+    "python scripts/probe_fft_butterfly_storage.py --gpu-source PRIVATE_GPU_SOURCE --dx-source PRIVATE_DX_SOURCE"
+  ],
+  "result": "4 source-policy variants and 2 negative controls passed locally",
+  "limitations": [
+    "No Unity texture creation",
+    "No GPU numeric proof"
+  ],
+  "next_step": "Trace caller-provided highPrecision flags and actual texture creation; compare translated FFT output against original numeric oracle."
+}

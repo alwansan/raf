@@ -201,3 +201,11 @@ Located existing private source under the workspace-relative private-inspection/
 ## Multi-client coordination setup — 3 November 2026
 
 Added prompt/coordination/README.md, UNIFIED_PROMPT_AR.md, RESTORE_CLIENT_AR.md, TEMPLATES.md, per-client setup record and work record, and ADDITIONAL_TASK_PROMPT_AR.md. Covers parallel same-issue work, per-client memory, isolated experiments/discussions/incidents, SHA leases, stale-session caution and identity restoration. Documentation-only, no game/build/readiness status changed. Requested additional hourly task prompt prepared; no task created here because this execution's automation instructions prohibit creating another automation. Existing tasks unchanged.
+
+
+## Authenticated butterfly storage policy — 3 November 2026
+
+Client raft-20261103T095340Z-a81c6e42 verified original GpuFFT/Dx11FFT SHA-pinned sources and added scripts/probe_fft_butterfly_storage.py. Local execution passed all4 flag combinations;2 unknown-source negative controls rejected. Butterfly storage is RGBAHalf or RGBAFloat selected by highPrecision, independent of twoChannels. Intermediate targets instead select RGHalf/RGFloat or ARGBHalf/ARGBFloat. Original texture setup requests Point/Clamp, linear and no mip chain. Compute override stores integer indices; base GPU path stores normalized centers. Therefore half-coordinate results cannot be generalized across paths or applied when highPrecision selects float. This is an authenticated source-policy mapping, not actual Unity format creation, GPU arithmetic or restored programs. Next: Trace caller-provided highPrecision flags and actual texture creation; compare translated FFT output against original numeric oracle. Original shader/format blockers and NOT_READY/0-of-3 remain; no Unity/build/request/task change. CL identities unchanged.
+
+
+**Owner role replacement, 3 November 2026:** Task6ae930dd1c248191ab637a5268342007 was renamed and enabled as «Raft — عميل الإصلاح والتجارب». It now performs source/resource repairs and CPU-only experiments using coordination records; its previous readiness/build coordinator role is superseded. It does not initiate Unity/native delivery. Other tasks unchanged; do not recreate a coordinator automatically.
