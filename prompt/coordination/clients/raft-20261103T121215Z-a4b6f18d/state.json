@@ -4,13 +4,13 @@
   "client_label": "A4",
   "session_id": "a4-20261103T121215Z-38b6e51c",
   "resumed_from": "raft-20261103T105430Z-a4d9e31b",
-  "status": "active",
-  "updated_at": "2026-11-03T12:12:15Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T12:28:09.208Z",
   "base_sha": "bc19fd12a889a118cd576a1d1e8a6b4a7a8dc3b7",
   "current_work": [
     "DIAG-010"
   ],
-  "last_commit": null,
-  "next_step": "Prove duplicate-suppression collision between (operation,detail) pairs separated by newline; fix minimal discriminator and CPU-only CI, then docs/STATUS/handoff.",
+  "last_commit": "dd43d3a24059994bdad170f06e0df453bfda2a3c",
+  "next_step": "DIAG-010 first-error collision fixed and red/green .NET CI passed; project NOT_READY, see experiment for limits. Next session recheck live head and active clients.",
   "memory_path": "prompt/coordination/clients/raft-20261103T121215Z-a4b6f18d/MEMORY.md"
 }
