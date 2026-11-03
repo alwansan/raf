@@ -9,10 +9,10 @@
   "intended_files": [
     "scripts/adapt_original_save_paths.py",
     "tests/test_a10_original_save_selector.py",
+    ".github/workflows/raft-original-save-path-tests.yml",
     "prompt/coordination/clients/raft-20261103T100200Z-9d4ea16b/*",
     "prompt/coordination/experiments/raft-20261103T100200Z-9d4ea16b/*",
-    "prompt/coordination/work/LOCAL-005/raft-20261103T100200Z-9d4ea16b-offline-world-save-audit.json",
-    "append-only prompt/STATUS.md and latest handoff after verified tests"
+    "prompt/STATUS.md and linked handoff (append-only after test evidence)"
   ],
   "exclusions": [
     "main",
@@ -22,6 +22,9 @@
     ".meta",
     "Unity/APK/OBB/XAPK workflows"
   ],
-  "next_step": "Reproduce duplicate SaveAndLoad.cs selector error with synthetic game + SDK fixtures and patch source selector only.",
-  "updated_at": "2026-11-03T10:10:00Z"
+  "next_step": "Verify four synthetic tests and original private SHA-pinned save path portability in dedicated no-LFS GitHub Actions run; then update evidence and close this narrow work item.",
+  "updated_at": "2026-11-03T10:12:00Z",
+  "experiment_ids": [
+    "save-selector-sdk-homonym-20261103"
+  ]
 }

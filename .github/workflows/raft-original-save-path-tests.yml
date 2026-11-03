@@ -6,6 +6,7 @@ on:
       - '.github/workflows/raft-original-save-path-tests.yml'
       - 'scripts/adapt_original_save_paths.py'
       - 'tests/test_adapt_original_save_paths.py'
+      - 'tests/test_a10_original_save_selector.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -31,6 +32,7 @@ jobs:
         run: |
           set -euo pipefail
           python3 -m unittest discover -s tests -p test_adapt_original_save_paths.py -v
+          python3 -m unittest discover -s tests -p test_a10_original_save_selector.py -v
           dotnet tool install ilspycmd --version 11.2.0.10050 --tool-path "$RUNNER_TEMP/ilspy"
           timeout 90s "$RUNNER_TEMP/ilspy/ilspycmd" -lv CSharp9_0 -t SaveAndLoad \
             Raft/Raft_Data/Managed/Assembly-CSharp.dll > "$RUNNER_TEMP/original-save.cs" 2> "$RUNNER_TEMP/private-decompile.log"

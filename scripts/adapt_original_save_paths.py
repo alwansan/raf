@@ -47,7 +47,11 @@ def adapt(text, expected=ORIGINAL, inventory=EXPECTED):
 
 
 def apply(project, backup, write=False):
-    paths = list((project / 'Assets').rglob('SaveAndLoad.cs'))
+    # Only the decompiled game assembly is authoritative. SDKs may contain a
+    # different SaveAndLoad.cs; never adapt an SDK homonym or mark it ambiguous.
+    # Match the source scope used by adapt_android_offline_startup.apply().
+    paths = [path for path in (project / 'Assets').rglob('SaveAndLoad.cs')
+             if 'Assembly-CSharp' in path.parts]
     if len(paths) != 1:
         raise ValueError('Require one original SaveAndLoad source')
     path = paths[0]
