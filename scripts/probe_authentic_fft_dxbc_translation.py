@@ -18,6 +18,7 @@ from scripts.run_original_dxbc_translation_probe import version_tokens
 from scripts.probe_fft_spirv_images import image_resource_contracts, compare_image_contracts
 from scripts.probe_fft_spirv_operation_profile import image_operation_profile, compare_image_operation_profiles
 from scripts.probe_fft_spirv_formatless_repair import restore_formatless_write
+from scripts.probe_fft_spirv_image_flow import image_slot_dataflow
 
 OWNER = "sharedassets0.assets"
 PATH_ID = 2456
@@ -168,6 +169,7 @@ def cross_compile_roundtrip(source_spv, original_reflection, original_bindings,
         bindings = spirv_resource_bindings(module)
         typed_images = image_resource_contracts(module)
         image_ops = image_operation_profile(module)
+        image_flow = image_slot_dataflow(module)
     except (ValueError, struct.error):
         return result
     if parsed.get("container") != "SPIR-V":
@@ -183,6 +185,7 @@ def cross_compile_roundtrip(source_spv, original_reflection, original_bindings,
     op_diff = compare_image_operation_profiles(original_reflection_image_ops, image_ops)
     result['image_operation_profile_preserved'] = op_diff['same_image_operation_and_capability_counts']
     result['image_operation_profile_difference'] = op_diff
+    result['roundtrip_image_slot_flow'] = image_flow
     try:
         temporary_repaired = restore_formatless_write(
             module, original_images, original_reflection_image_ops)
@@ -251,6 +254,7 @@ def probe(root):
                 entry["resource_types"] = private_spirv_cross_reflect(spv)
                 entry["typed_images"] = image_resource_contracts(spv_bytes)
                 entry["image_operation_profile"] = image_operation_profile(spv_bytes)
+                entry["image_slot_flow"] = image_slot_dataflow(spv_bytes)
                 reflected = entry["resource_types"]["original_resource_kind_counts"]
                 reflected_images = sum(reflected.get(kind, 0) for kind in
                                        ("images", "textures", "separate_images"))
@@ -282,6 +286,8 @@ def probe(root):
                                                for x in reports),
         "original_image_write_instructions_total": sum(x.get("image_operation_profile", {}).get(
             "op_image_write_count", 0) for x in reports),
+        "original_programs_with_all_image_ops_resolved": sum(x.get("image_slot_flow", {}).get(
+            "all_image_operations_uniquely_traced", False) for x in reports),
         "original_formatless_write_capability_modules": sum(x.get("image_operation_profile", {}).get(
             "storage_image_write_without_format_capability_declared", False) for x in reports),
         "roundtrip_image_operation_profile_preserved_count": sum(x.get(
