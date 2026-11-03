@@ -18,6 +18,20 @@ MASTER_SHA = '10d310416b9f104a38b4ead8877e114142e154efb33105fcddbb2024a81af339'
 BANKS = {'MasterBank.bank', 'MasterBank.strings.bank', 'VO_logs_english.bank',
          'VO_npc_english.bank', 'VO_olof_english.bank'}
 
+# Original ZIP-branch Git blobs, independently cross-checked with immutable
+# APK80 source 9462f8edd8cdb5becbccb96521f2876ef9924410. Branch-local
+# git hash-object == HEAD is insufficient if BOTH are accidentally co-edited.
+# Haptics/ is separately anchored by PINNED_ORIGINAL_HAPTICS_MANIFEST_BLOB_SHA.
+ORIGINAL_ROOT_BLOB_SHAS = {
+    'Data.rgd': '074ede472912c827038ffa24a105f4254a670e13',
+    'MasterBank.bank': 'df9a55eb8362114b7aa143b3f93967771fb899e9',
+    'MasterBank.strings.bank': '19849025a66ac8a05fd43f42053aae25a607d164',
+    'UnityServicesProjectConfiguration.json': '467544d866876bd06c4d9e5bd40e60c580034a19',
+    'VO_logs_english.bank': 'fca5b714b816b13ce6b1b2fd7199e19c36ce8ae0',
+    'VO_npc_english.bank': '62bd7f6da49ae98b02bac3b124cfdcce0d82eef3',
+    'VO_olof_english.bank': '4143404b19c5e8fe9a5c26656fa4caba695445fe',
+}
+
 
 def sha256(path):
     with path.open('rb') as source:
@@ -73,6 +87,10 @@ def stage(repo, project, report_path, apply=False, *,
         if (mode != '100644' or kind != 'blob' or not name.startswith(prefix)
                 or '..' in Path(relative).parts or '\\' in relative):
             raise ValueError('Unexpected tracked StreamingAssets layout')
+        # Fail closed on co-mutated original banks, Data.rgd, or new
+        # unproven root files; these OIDs are independent of mutable HEAD.
+        if not relative.startswith('Haptics/') and ORIGINAL_ROOT_BLOB_SHAS.get(relative) != oid:
+            raise ValueError('original root StreamingAssets Git blob identity mismatch')
         source = repo / name
         if source.is_symlink() or not source.resolve().is_relative_to((repo / prefix).resolve()):
             raise ValueError('Unsafe source StreamingAssets path')
