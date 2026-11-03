@@ -2,7 +2,7 @@
   "schema_version": 1,
   "owner": "raft-20261103T231207Z-a5d12e9c",
   "issue_id": "HAPTICS-008",
-  "status": "red_test_committed",
+  "status": "completed",
   "hypothesis": "Production CLI without --haptics-manifest reports successful APK/OBB structure despite not enforcing any of the 29 pinned original Haptics entry/Git identity checks, and may permit an empty-Haptics archive to be misreported as a complete release audit.",
   "input_hashes": [
     "Original manifest Git blob 88df20f0c64ae5f46f057939d4d6d96773a33ef8",
@@ -23,12 +23,22 @@
   "workflow_path": ".github/workflows/raft-a5-haptics-archive.yml",
   "concurrency_group": "raft-a5-haptics-008-${{ github.run_id }}",
   "budget": "CPU tests, 8min CI, 0 LFS, 0 Unity, 0 native APK/OBB/XAPK",
-  "run_url": null,
-  "source_sha": "e7cd6788865a0eb167f27fd5566c3e5c5b52ab5e",
-  "result": null,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41737475281",
+  "source_sha": "dd0e15a2bb8520fa3a297c682e01a57cedcc0393",
+  "result": "Fixed mandatory production CLI original-Haptics manifest omission bypass. CLI now refuses to run without --haptics-manifest; Python audit_companion API preserves optional Haptics for explicitly scoped library tests. RED/ GREEN CPU CI verified; runtime phone acceptance remains OPEN.",
   "limitations": [
-    "Does not audit a real signed OBB/Android mounted path",
-    "The prior original WAV source and C# reader evidence does not show gameplay haptics"
+    "CPU-only source/test verification. No Unity-generated/signed APK/OBB/XAPK, Android mount or physical haptics test.",
+    "Does not close WATER-001/RENDER-002/FFT source blockers or readiness 0/3.",
+    "No original proprietary audio/meta/GUID modified."
   ],
-  "next_step": "Observe RED CI, change CLI argument required=True, run GREEN exact source and update A5 files."
+  "next_step": "Scope completed. On next coordinator-approved game candidate run mandatory original 29-WAV pinned CLI against actual signed expansion; then collect installed Android jar/physical haptic diagnostics.",
+  "updated_at": "2026-11-03T23:15:56.700Z",
+  "red_sha": "e7cd6788865a0eb167f27fd5566c3e5c5b52ab5e",
+  "red_run_url": "https://github.com/alwansan/raf/actions/runs/41737344144",
+  "evidence": [
+    "RED CI41737344144: test correctly failed twice; production CLI accepted missing manifest both with 29 synthetic WAVs and zero Haptics archive members (exit 0).",
+    "GREEN CI41737475281 on exact source dd0e15a2: 17 synthetic OBB cases, 4 adapter tests, original 29 WAV source identities 32,733,104 bytes, 58 authentic and 58 synthetic CSharp reader reads.",
+    "Native workflow existing --haptics-manifest and --verify-crc explicitly confirmed.",
+    "Historical CL four 2026-11-02 sessions unchanged; last full game APK80 source 9462f8e."
+  ]
 }
