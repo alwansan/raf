@@ -5,12 +5,14 @@
   "work_id": "offline-world-save-audit",
   "status": "active",
   "base_sha": "61a5811b06c39fcdb633c5559f884ce559ea7f0f",
-  "approach": "Investigate exact offline world-create/load/host/save .rgd invariants with original source and CPU-only executable test. No fake startup flags.",
+  "approach": "A8 has already corrected readiness comment/string false positives; A10 now separately isolates original SaveAndLoad.cs selection to Assembly-CSharp, avoiding SDK homonyms, with synthetic file-tree regression tests.",
   "intended_files": [
-    "prompt/coordination/clients/raft-20261103T100200Z-9d4ea16b/state.json",
-    "prompt/coordination/clients/raft-20261103T100200Z-9d4ea16b/MEMORY.md",
-    "prompt/coordination/experiments/raft-20261103T100200Z-9d4ea16b/local-world-source-contract.json",
-    "potential isolated tests under tests/; shared game source only after recheck/coordination"
+    "scripts/adapt_original_save_paths.py",
+    "tests/test_a10_original_save_selector.py",
+    "prompt/coordination/clients/raft-20261103T100200Z-9d4ea16b/*",
+    "prompt/coordination/experiments/raft-20261103T100200Z-9d4ea16b/*",
+    "prompt/coordination/work/LOCAL-005/raft-20261103T100200Z-9d4ea16b-offline-world-save-audit.json",
+    "append-only prompt/STATUS.md and latest handoff after verified tests"
   ],
   "exclusions": [
     "main",
@@ -20,5 +22,6 @@
     ".meta",
     "Unity/APK/OBB/XAPK workflows"
   ],
-  "next_step": "Locate relevant local world/load/save code and existing verification fixtures"
+  "next_step": "Reproduce duplicate SaveAndLoad.cs selector error with synthetic game + SDK fixtures and patch source selector only.",
+  "updated_at": "2026-11-03T10:10:00Z"
 }
