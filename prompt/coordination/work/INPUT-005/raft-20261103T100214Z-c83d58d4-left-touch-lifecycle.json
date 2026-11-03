@@ -2,8 +2,8 @@
   "schema_version": 1,
   "owner": "raft-20261103T100214Z-c83d58d4",
   "issue_id": "INPUT-005",
-  "status": "active",
-  "updated_at": "2026-11-03T10:04:00Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T10:09:30Z",
   "base_sha": "cb95d4bb8b736013f996a7583e434775a5160223",
   "hypothesis": "Exact 499/500/501ms boundary, different absolute input clocks, cancellation and multi-touch owner stability must preserve one LEFT tap or balanced hold; large bounded pulse queues must release between taps.",
   "intended_files": [
@@ -25,8 +25,9 @@
     "a7-touch-500ms-boundary-matrix-20261103"
   ],
   "evidence": [
-    "https://github.com/alwansan/raf/actions/runs/41548465582"
+    "https://github.com/alwansan/raf/commit/caa9bb7ae76da9920d46b4474d3fc2c10e994e1a",
+    "https://github.com/alwansan/raf/actions/runs/41616691487"
   ],
-  "result": null,
-  "next_step": "Check completed platform workflow and document actual results before claiming regression coverage."
+  "result": "425 actual C# gesture tests and 53 strict synthetic mouse mapping checks PASS in CPU-only platform CI; no runtime source repair or device validation.",
+  "next_step": "Close after reporting; further Unity/phone input acceptance belongs to readiness-coordinated device testing."
 }

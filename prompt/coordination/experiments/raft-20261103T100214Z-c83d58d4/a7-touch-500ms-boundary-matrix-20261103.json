@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "owner": "raft-20261103T100214Z-c83d58d4",
-  "status": "in_progress",
+  "status": "completed",
   "hypothesis": "Exact 499/500/501ms boundary, different absolute input clocks, cancellation and multi-touch owner stability must preserve one LEFT tap or balanced hold; large bounded pulse queues must release between taps.",
   "input_hashes": [
     "TouchPointerGesture.cs blob a892a110d8fc2992449a7e93a53be3ddc0d5f2c9",
@@ -22,12 +22,13 @@
   "concurrency_group": null,
   "artifact_prefix": null,
   "budget": "Existing push-triggered CPU-only platform CI; <=10min; no LFS; no Unity",
-  "run_url": null,
-  "source_sha": null,
-  "result": "Pending CI; C# additions only and no production source change",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41616691487",
+  "source_sha": "caa9bb7ae76da9920d46b4474d3fc2c10e994e1a",
+  "result": "PASS: 425 C# gesture checks incl new matrix, 53 mapping checks, platform CI success on exact SHA. No Unity/phone execution.",
   "limitations": [
-    "No dotnet compiler in local sandbox; CI required to run actual C# code",
-    "Not Unity InputSystem/EventSystem or device evidence"
+    "No dotnet compiler in assistant local sandbox; actual C# executed in GitHub CI",
+    "No Unity InputSystem, EventSystem or phone validation",
+    "Existing automatic platform CI reused instead of starting overlapping new workflow"
   ],
-  "next_step": "Check completed platform workflow and document actual results before claiming regression coverage."
+  "next_step": "Device/Unity acceptance in future coordinator-controlled build after source blockers close."
 }
