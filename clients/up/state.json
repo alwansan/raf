@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "username": "up",
+  "client_label": "up",
+  "session_id": "up-setup-20261103-01",
+  "status": "paused",
+  "source_sha": "8a685a542b96ae9a3a5ce8ea18a814330dace7ae",
+  "source_branch": "feature/android-native-port",
+  "report_branch": "update",
+  "updated_at": "2026-11-03",
+  "next_step": "Recheck live source and actual jobs, enrich per-client activity with evidence, update snapshot without inventing global completion",
+  "memory_path": "clients/up/MEMORY.md"
+}
