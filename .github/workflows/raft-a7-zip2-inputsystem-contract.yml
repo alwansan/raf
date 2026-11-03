@@ -1,0 +1,92 @@
+name: Raft A7 ZIP2 original InputSystem ABI contract (CPU only)
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-a7-zip2-inputsystem-contract.yml'
+      - 'scripts/a7_zip2_inputsystem_contract/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: raft-a7-zip2-original-inputsystem-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  verify-original-inputsystem-abi:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      ZIP2_COMMIT: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+    steps:
+      - name: Verify workspace budget
+        run: |
+          set -euo pipefail
+          df -h /
+          test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')" -gt 1048576
+      - name: Checkout authored A7 checker only - no LFS
+        uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          fetch-depth: 1
+          sparse-checkout: |
+            scripts/a7_zip2_inputsystem_contract
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Sparse checkout immutable original ZIP2 assembly only
+        run: |
+          set -euo pipefail
+          ZIP2_CHECKOUT="$RUNNER_TEMP/raft-a7-zip2-original"
+          git init -q "$ZIP2_CHECKOUT"
+          git -C "$ZIP2_CHECKOUT" remote add origin https://github.com/alwansan/raf.git
+          git -C "$ZIP2_CHECKOUT" -c protocol.version=2 fetch -q --depth=1 --filter=blob:none origin zip2
+          test "$(git -C "$ZIP2_CHECKOUT" rev-parse FETCH_HEAD)" = "$ZIP2_COMMIT"
+          git -C "$ZIP2_CHECKOUT" sparse-checkout init --no-cone
+          printf '%s\n' '/RAFT_FILE_MANIFEST.tsv' \
+            '/Raft/Raft_Data/ScriptingAssemblies.json' \
+            '/Raft/Raft_Data/Managed/Unity.InputSystem.dll' \
+            | git -C "$ZIP2_CHECKOUT" sparse-checkout set --no-cone --stdin
+          git -C "$ZIP2_CHECKOUT" checkout -q --detach FETCH_HEAD
+          test "$(git -C "$ZIP2_CHECKOUT" rev-parse HEAD)" = "$ZIP2_COMMIT"
+          DLL="$ZIP2_CHECKOUT/Raft/Raft_Data/Managed/Unity.InputSystem.dll"
+          SCRIPTS="$ZIP2_CHECKOUT/Raft/Raft_Data/ScriptingAssemblies.json"
+          test "$(stat -c %s "$DLL")" = 1052672
+          printf '032031efe7f85aec81e28f4af43be496be3cf83d8d20e314ba9de8ca95ebfc3f  %s\n' "$DLL" | sha256sum -c --status
+          printf '50becc5aca96c0287bd8e909cea80ffbb94e45631f8dbb45740c0614e00cbf20  %s\n' "$SCRIPTS" | sha256sum -c --status
+          echo "RAFT_A7_ZIP2_ORIGINAL source_pin_verified=true managed_dll_sha256_verified=true no_lfs=true"
+      - name: Build read-only managed metadata checker - no Unity
+        run: |
+          set -euo pipefail
+          dotnet build scripts/a7_zip2_inputsystem_contract/A7Zip2InputSystemContract.csproj -c Release --nologo -v:q
+      - name: Verify authentic original Raft InputSystem public API and negative controls
+        run: |
+          set -euo pipefail
+          ROOT="$RUNNER_TEMP/raft-a7-zip2-original"
+          DLL="$ROOT/Raft/Raft_Data/Managed/Unity.InputSystem.dll"
+          SCRIPT_LIST="$ROOT/Raft/Raft_Data/ScriptingAssemblies.json"
+          MANIFEST="$ROOT/RAFT_FILE_MANIFEST.tsv"
+          CHECKER="scripts/a7_zip2_inputsystem_contract/bin/Release/net8.0/A7Zip2InputSystemContract.dll"
+          dotnet "$CHECKER" "$DLL" "$MANIFEST" "$SCRIPT_LIST"
+          cp "$DLL" "$RUNNER_TEMP/a7-tampered.dll"
+          printf '\000' | dd of="$RUNNER_TEMP/a7-tampered.dll" bs=1 seek=0 conv=notrunc status=none
+          if dotnet "$CHECKER" "$RUNNER_TEMP/a7-tampered.dll" "$MANIFEST" "$SCRIPT_LIST"; then
+            echo "::error::Corrupt original DLL unexpectedly passed"
+            exit 1
+          fi
+          cp "$MANIFEST" "$RUNNER_TEMP/a7-tampered-manifest.tsv"
+          sed -i 's/032031efe7f85aec81e28f4af43be496be3cf83d8d20e314ba9de8ca95ebfc3f/132031efe7f85aec81e28f4af43be496be3cf83d8d20e314ba9de8ca95ebfc3f/' "$RUNNER_TEMP/a7-tampered-manifest.tsv"
+          if dotnet "$CHECKER" "$DLL" "$RUNNER_TEMP/a7-tampered-manifest.tsv" "$SCRIPT_LIST"; then
+            echo "::error::Altered ZIP2 manifest unexpectedly passed"
+            exit 1
+          fi
+          echo "RAFT_A7_ZIP2_NEGATIVE_CONTROLS modified_dll=rejected altered_manifest=rejected"
+          echo "## A7 original InputSystem contract" >> "$GITHUB_STEP_SUMMARY"
+          echo "- ZIP2 pinned original DLL: exact size/SHA and manifest verified, no Git LFS" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Public managed ABI check executed on original Raft DLL (CPU metadata only)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Corrupt DLL/manifest rejected; not Unity compile or phone acceptance" >> "$GITHUB_STEP_SUMMARY"
