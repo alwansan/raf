@@ -1,0 +1,8 @@
+# A5 — post-build original-Haptics manifest mandatory contract
+
+- Identity raft-20261103T231207Z-a5d12e9c, session A5-20261103T231207Z-e812ca57, resumed from completed raft-20261103T224700Z-a5fb701c; initialized UTC 2026-11-03T23:12:27.251Z, source baseline HEAD 0aee07b1b412f4c3eb70c5c51a89d82ef271507d (refresh on each write).
+- Read unified protocol and README, owner requirements and ZIP2 original provider notice, prior A5 state/MEMORY, latest source auditor/tests, Actions. Historical four CL 2026-11-02 logs and APK80 not current-device evidence. Last A5 fix source 73c5498c successfully removed manifest pin override, CI41735417533 GREEN.
+- HAPTICS-008 source and archived WAVs verified in prior CI; old on-device OBB path evidence remains pending. WATER-001/RENDER-002/FFT render remain unrelated blockers, NOT_READY/0-of-3. A3 active on RENDER-002 different files; no overlap.
+- New test hypothesis: production CLI `scripts/audit_android_expansion.py` allows callers to omit `--haptics-manifest` completely; it then reports an otherwise successful OBB audit with Haptics authenticity false. A human/automation may incorrectly treat CLI exit0 as passing required 29-WAV fidelity gate. Make this command-line arg required and retain optional Python audit_companion API for explicitly scoped synthetic tests. Native workflow already supplies manifest; no change to it.
+- Excluded: Raft original asset content, Haptics WAVs/GUIDs, A3/A9 staging, Unity/native requests, workflow definitions and scheduled tasks, protected branches, LFS and zip2 acquisition.
+- Resume checkpoint: identity registered, RED/GREEN and code pending.
