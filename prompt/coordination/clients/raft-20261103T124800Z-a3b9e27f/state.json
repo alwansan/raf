@@ -4,13 +4,13 @@
   "display_name": "A3",
   "session_id": "A3-20261103T124800Z-zip-precision-174e8a",
   "resumed_from": "raft-20261103T120645Z-8cde319a",
-  "status": "active",
-  "updated_at": "2026-11-03T12:48:00Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T13:07:00Z",
   "base_sha": "c6868a38c41e8384dd8153289c913e87714c8a05",
   "current_work": [
     "DELIVERY-012"
   ],
-  "last_commit": null,
-  "next_step": "Red/green CPU-only exact ZIP entry-name preflight for APK/OBB audit; reject '.' and repeated slash components without altering payloads.",
+  "last_commit": "7faf0a8bb557e59131a92a062bd2571c98547b8c",
+  "next_step": "Scoped exact ZIP name audit fixed and verified; future game readiness coordinator must still close authentic shaders/FFT and review full immutable candidate 3/3.",
   "memory_path": "prompt/coordination/clients/raft-20261103T124800Z-a3b9e27f/MEMORY.md"
 }
