@@ -66,9 +66,12 @@ def top_level_members(scope):
     if level != 0:
         raise ValueError("Member brace mismatch")
 
-def field_signature(source):
+def field_signature(source, original_script_names=None):
     kinds, skips = Counter(), Counter()
     accepted, total = [], 0
+    source_type_classes = Counter()
+    catalog = set(original_script_names or [])
+    collection_element_categories = Counter()
     for stmt in top_level_members(class_scope(source)):
         total += 1
         if total > 768:
@@ -92,6 +95,12 @@ def field_signature(source):
         short = typ.split(".")[-1]
         if typ.endswith("[]") or typ.startswith("List<"):
             kind = "array_or_collection_unknown_element"
+            element = typ[:-2] if typ.endswith("[]") else typ[5:-1]
+            element_kind = ("original_assembly_monoscript_classname_match"
+                            if element.split(".")[-1] in catalog else
+                            "known_unity_native_type" if element.split(".")[-1] in UNITY_TYPES else
+                            "other_unverified_element_type")
+            collection_element_categories[element_kind] += 1
         elif short in UNITY_TYPES:
             kind = "known_unity_native_object_reference"
         elif short in ("bool","int","float","double","long","string","Vector2","Vector3","Color"):
@@ -99,6 +108,9 @@ def field_signature(source):
         else:
             kind = "custom_type_or_enum_unverified"
         kinds[kind] += 1
+        if kind == "custom_type_or_enum_unverified":
+            source_type_classes["original_assembly_monoscript_classname_match" if
+                                short in catalog else "other_unverified"] += 1
         accepted.append(kind)
         if len(accepted) > 256:
             raise ValueError("Unbounded candidate field inventory")
@@ -107,6 +119,9 @@ def field_signature(source):
     return {
         "candidate_serializable_field_count": len(accepted),
         "candidate_type_categories": dict(sorted(kinds.items())),
+        "candidate_categories_in_source_declaration_order": accepted,
+        "custom_type_original_script_classname_match_count": dict(sorted(source_type_classes.items())),
+        "collection_element_classification": dict(sorted(collection_element_categories.items())),
         "excluded_and_unparsed_counts": dict(sorted(skips.items())),
         "type_order_signature_sha256": hashlib.sha256("\n".join(accepted).encode()).hexdigest(),
         "typed_unity_serialization_order_verified": False,
@@ -132,11 +147,26 @@ def scan(source_root, ilspy_root):
     if len(paths) != 1:
         raise ValueError("Settings private original source ambiguous")
     text = paths[0].read_text(encoding="utf-8-sig").replace("\r\n","\n")
+    import UnityPy
+    global_file = UnityPy.load(str(source_root/SCRIPT_SOURCE)).file
+    script_names = set()
+    for obj in global_file.objects.values():
+        if str(obj.type.name) != "MonoScript":
+            continue
+        tree = obj.read_typetree(check_read=False)
+        if not isinstance(tree,dict):
+            continue
+        if tree.get("m_AssemblyName") in ("Assembly-CSharp","Assembly-CSharp.dll"):
+            name = tree.get("m_ClassName")
+            if isinstance(name,str) and name:
+                script_names.add(name)
     return {
         "zip2_source_pinned_commit": ZIP2_PIN,
         "original_small_files_sha_locked": 4,
         "original_settings_cs_sha256": SETTINGS_SHA,
-        "field_shape": field_signature(text),
+        "field_shape": field_signature(text, script_names),
+        "original_assembly_script_registry_available": bool(script_names),
+        "original_script_name_catalog_emitted": False,
         "original_lfs_downloaded": False,
         "unity_or_android_executed": False,
         "android_settings_cause_proven": False,
