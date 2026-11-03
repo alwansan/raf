@@ -4,14 +4,15 @@
   "agent": "A4",
   "session_id": "a4-resume-20261103T224500Z-84e2c91f",
   "resumed_from": "a4-resume-20261103T145128736Z-c29f7d43",
-  "status": "active",
-  "updated_at": "2026-11-03T22:44:54.646Z",
+  "status": "paused",
+  "updated_at": "2026-11-03T22:52:41.965Z",
   "base_sha": "b3ebf3ddd69e44b1f430c1d77a6642f70adbd404",
   "current_work": [
-    "PERF-007 previous cgroup continuity exact-source 10/10 CI verified; next original GPU resource lifetime trace, no build"
+    "PERF-007 cgroup continuity 10/10 exact-source tests SUCCESS",
+    "PERF-007 event-boundary GPU diagnostics source and CPU CI SUCCESS; actual GPU OOM root cause unresolved"
   ],
-  "last_commit": "7462e0b2754720a8b6581cf00e037cb9af094e04",
-  "next_step": "Source-locked inspect current GPU resource allocation/teardown paths and identify a falsifiable leak/duplication before an isolated code change; avoid FFT ownership overlap. No Unity/native/APK/OBB/XAPK, maintain NOT_READY 0/3.",
+  "last_commit": "74df62250c0f4db1bd5f33981ee22d24ee62934a",
+  "next_step": "On next explicitly resumed session, inspect authenticated original GPU allocation/release path for a provable defect, coordinate with FFT/render clients, then propose minimal source fix and independent CPU validation. The event-boundary diagnostics are not Android/Unity phone proof. NOT_READY 0/3.",
   "memory_path": "prompt/coordination/clients/raft-20261103T095832Z-a4c7e2b1/MEMORY.md",
-  "last_verified_run": "https://github.com/alwansan/raf/actions/runs/41658344282"
+  "last_verified_run": "https://github.com/alwansan/raf/actions/runs/41734019524"
 }
