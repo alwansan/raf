@@ -1,0 +1,41 @@
+name: Raft original CPU 2D FFT oracle no Unity
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-fft-cpu-2d.yml'
+      - 'scripts/verify_original_fft_cpu_2d.py'
+permissions:
+  contents: read
+concurrency:
+  group: raft-original-cpu-2d-4e91b2cd-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  numeric:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            Raft/Raft_Data/Managed
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Install pinned decompiler
+        run: dotnet tool install ilspycmd --version 11.2.0.10050 --tool-path "$RUNNER_TEMP/ilspy"
+      - name: Prepare private authenticated original bodies
+        env:
+          DOTNET_PROCESSOR_COUNT: '2'
+        run: |
+          set -euo pipefail
+          timeout 360s "$RUNNER_TEMP/ilspy/ilspycmd" -p -lv CSharp9_0 -o "$RUNNER_TEMP/original-2d" Raft/Raft_Data/Managed/Assembly-CSharp.dll > "$RUNNER_TEMP/private-2d-decompile.log" 2>&1
+          python3 -m scripts.verify_original_fft_cpu_2d --source "$RUNNER_TEMP/original-2d" --output "$RUNNER_TEMP/private-2d-harness"
+      - name: Execute original complex lane in2D and compare direct DFT
+        run: |
+          set -euo pipefail
+          dotnet run --project "$RUNNER_TEMP/private-2d-harness/Numeric.csproj" -c Release > "$RUNNER_TEMP/private-2d-result.log" 2>&1 || { echo 'Original numeric harness failed; inspect private diagnostic run without publishing source'; exit 1; }
+          grep '^RAFT_ORIGINAL_' "$RUNNER_TEMP/private-2d-result.log"
