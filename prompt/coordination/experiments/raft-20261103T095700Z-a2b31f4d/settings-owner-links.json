@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "owner": "raft-20261103T095700Z-a2b31f4d",
-  "status": "active",
+  "status": "completed",
   "hypothesis": "Original Settings controller object references scene UI objects by serialized PPtrs. A bounded source SHA-pinned scan of authentic scene0/1 Settings MonoBehaviours, canonical CSharp9 Settings.cs and native hierarchy can discriminate whether a CanvasScaler component is referenced directly or indirectly.",
   "input_hashes": [
     "Settings.cs normalized sha256:904c52b337fe951f711e2efc15bfafc4fc77f2a8d2cc9c5bee2f7d14075103ad",
@@ -12,7 +12,8 @@
   ],
   "commands": [
     "python3 -m unittest discover -s tests -p test_probe_a2_settings_owner_links.py -v",
-    "python3 -m scripts.probe_a2_settings_owner_links --source Raft/Raft_Data --decompiled TMP"
+    "python3 -m scripts.probe_a2_settings_owner_links --source Raft/Raft_Data --decompiled TMP",
+    "python3 -m scripts.probe_a2_settings_owner_links --source Raft/Raft_Data --decompiled PRIVATE_CSHARP9"
   ],
   "expected_signal": "Verified original Settings owner class identity, source SHA and authenticated non-LFS scenes; bounded candidate PPtr counts by native object type & Canvas ancestry; no original source data, binary, names or methods printed.",
   "negative_controls": [
@@ -26,13 +27,16 @@
   "concurrency_group": "raft-a2-settings-links-${{ github.ref }}-${{ github.sha }}",
   "artifact_prefix": null,
   "budget": "CPU only Ubuntu24.04 <=10min, original small scenes0/1+managed Assembly-CSharp.dll+global script library, no LFS/Unity or native pipeline.",
-  "run_url": null,
-  "source_sha": null,
-  "result": null,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41660274964",
+  "source_sha": "5db3a912727c8d2686a3b3301e04b7d80359fe0c",
+  "result": "CI41660274964 COMPLETED SUCCESS job126001319101 on source5db3a912: 10/10 synthetic negative tests; exact original Settings.cs SHA and three non-LFS source blob pins matched. 48 raw matches per scene overlap, max nonoverlap=45, all optimal subsets share44; potential scaler targets among maximal sets level0 [44,45],level1 [45,45]. Distinguish candidate windows from typed fields.",
   "limitations": [
     "Raw local 0/pathID byte patterns can be coincidental and are not typed serialized field links.",
     "MonoBehaviour base UnityPy typetree lacks original custom Settings fields.",
-    "Original Settings menu may be runtime instantiated or prefab-backed outside scene0/1."
+    "Original Settings menu may be runtime instantiated or prefab-backed outside scene0/1.",
+    "Overlapping raw PPtr byte windows cannot all be distinct typed pointer fields; DP yields only maximum feasible candidate count, not verified field identities.",
+    "Verified native CanvasScaler ancestry of candidate targets is not evidence of active Settings panel/UnityEvent linkage nor Android bug causality."
   ],
-  "next_step": "Refine original Settings UI wiring from source field order and verified typed object pointer ownership; do not patch display without proof."
+  "next_step": "Recover exact original Settings.cs Unity-serialized field order, types and collection boundaries then map to native PPtrs; UI runtime correction remains unproven.",
+  "updated_at": "2026-11-03T15:11:19.057Z"
 }
