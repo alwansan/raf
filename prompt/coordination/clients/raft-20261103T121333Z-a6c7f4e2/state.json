@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "username": "raft-20261103T121333Z-a6c7f4e2",
+  "client_label": "A6",
+  "session_id": "a6-20261103T121333Z-6f4a2cd1",
+  "resumed_from": "raft-20261103T100042Z-afcedabb",
+  "status": "active",
+  "updated_at": "2026-11-03T12:13:33Z",
+  "base_sha": "98fa7380811d7251b011b158e6a50318c5186763",
+  "current_work": [
+    "RENDER-002"
+  ],
+  "last_commit": null,
+  "next_step": "Verify standalone include comment parsing fix; distinct from A9 exported shader identity, source-only no Unity/native",
+  "memory_path": "prompt/coordination/clients/raft-20261103T121333Z-a6c7f4e2/MEMORY.md"
+}
