@@ -1,6 +1,6 @@
 """Compare authentic FFT compute SPIR-V vs its HLSL roundtrip on CPU Vulkan.
 
-Only deterministic RGBA32Float input images are exercised. Original DXBC,
+Only bounded deterministic inputs across four original GPU-FFT temporary cache formats are exercised. Original DXBC,
 temporary SPIR-V/HLSL, actual shader names, output pixel arrays and raw tool
 diagnostics remain inside TemporaryDirectory and are never emitted or uploaded.
 Vulkan lavapipe execution is neither an Android GPU test nor a Unity water fix.
@@ -15,13 +15,17 @@ import tempfile
 
 from scripts.verify_targeted_lfs_compute_sources import EXPECTED, verify_sources
 from scripts.probe_original_compute_containers import scan_blob
+from scripts.probe_fft_spirv_images import image_resource_contracts
+from scripts.probe_fft_spirv_operation_profile import image_operation_profile
+from scripts.probe_fft_spirv_formatless_repair import restore_formatless_write
 from scripts.probe_authentic_fft_dxbc_translation import (
     OWNER, PATH_ID, ORIGINAL_OBJECT_SHA256, EXPECTED_CONTAINERS,
 )
 
 MARKER = "RAFT_A1_VULKAN_DIFF "
 KEYS = (
-    "cpu_software_vulkan", "rgba32f_linear_only",
+    "cpu_software_vulkan", "vulkan_image_format", "image_channels",
+    "image_component_bits",
     "extent_width", "extent_height", "input_seed", "dispatch_group_y",
     "original_written_pixels",
     "roundtrip_written_pixels", "write_coverage_mismatch_pixels",
@@ -32,6 +36,11 @@ KEYS = (
 SELECTED_WIDTH = 1024
 SELECTED_HEIGHT = 1024
 SCENARIOS = ((0, 1), (19, 1), (257, 2))
+# Authenticated original GpuFFT source: RGHalf/RGFloat/ARGBHalf/ARGBFloat.
+IMAGE_FORMATS = {
+    "rg16f": (2, 16), "rg32f": (2, 32),
+    "rgba16f": (4, 16), "rgba32f": (4, 32),
+}
 
 
 def parse_private_numeric_result(output):
@@ -44,14 +53,21 @@ def parse_private_numeric_result(output):
         ValueError("Nonfinite private Vulkan JSON value")))
     if type(report) is not dict or set(report) != set(KEYS):
         raise ValueError("Unexpected Vulkan result schema")
-    for flag in ("cpu_software_vulkan", "rgba32f_linear_only",
-                 "within_selected_tolerance", "synthetic_canary_verified",
-                 "unity_gpu_or_android_device_verified"):
+    for flag in ("cpu_software_vulkan", "within_selected_tolerance",
+                 "synthetic_canary_verified", "unity_gpu_or_android_device_verified"):
         if type(report[flag]) is not bool:
             raise ValueError("Invalid Vulkan boolean")
-    if (not report["cpu_software_vulkan"] or not report["rgba32f_linear_only"]
-            or report["unity_gpu_or_android_device_verified"]):
+    if (not report["cpu_software_vulkan"] or
+            report["unity_gpu_or_android_device_verified"]):
         raise ValueError("Unsupported or false Vulkan platform claim")
+    if (type(report["vulkan_image_format"]) is not str or
+            report["vulkan_image_format"] not in IMAGE_FORMATS):
+        raise ValueError("Unrecognized Vulkan original FFT image format")
+    channels, bits = IMAGE_FORMATS[report["vulkan_image_format"]]
+    if (type(report["image_channels"]) is not int or
+            type(report["image_component_bits"]) is not int or
+            (report["image_channels"], report["image_component_bits"]) != (channels, bits)):
+        raise ValueError("Vulkan output image layout mismatches original requested format")
     for field in ("extent_width", "extent_height", "input_seed",
                   "dispatch_group_y", "original_written_pixels",
                   "roundtrip_written_pixels", "write_coverage_mismatch_pixels",
@@ -81,13 +97,14 @@ def parse_private_numeric_result(output):
     return report
 
 
-def validate_requested_workload(result, seed, group_y):
+def validate_requested_workload(result, seed, group_y, fmt="rgba32f"):
     """A canary-sized report cannot stand in for the requested FFT execution."""
     if (result["extent_width"] != SELECTED_WIDTH
             or result["extent_height"] != SELECTED_HEIGHT
             or result["synthetic_canary_verified"]
             or result["input_seed"] != seed
-            or result["dispatch_group_y"] != group_y):
+            or result["dispatch_group_y"] != group_y
+            or result["vulkan_image_format"] != fmt):
         raise ValueError("Vulkan runner did not execute requested workload")
     return result
 
@@ -136,6 +153,7 @@ def analyze(root, runner):
             translated = temp / "private_original.spv"
             hlsl = temp / "private_roundtrip.hlsl"
             recompiled = temp / "private_roundtrip.spv"
+            formatless = temp / "private_formatless_roundtrip.spv"
             source.write_bytes(binary)
             row = {"compiled_program_slot_not_unity_kernel_index": i,
                    "status": "not_executed", "numerical_equivalence_proven": False,
@@ -154,39 +172,75 @@ def analyze(root, runner):
                                 timeout=30)
                 private_command(["spirv-val", "--target-env", "vulkan1.1",
                                  str(recompiled)], timeout=20)
-                scenarios = []
-                for seed, group_y in SCENARIOS:
-                    output = private_command([str(runner), str(translated),
-                                              str(recompiled), str(SELECTED_WIDTH),
-                                              str(SELECTED_HEIGHT), str(seed), str(group_y)],
-                                             timeout=90)
-                    result = parse_private_numeric_result(
-                        output.decode("utf-8", errors="strict"))
-                    validate_requested_workload(result, seed, group_y)
-                    scenarios.append({
-                        "input_seed": seed,
-                        "dispatch_group_y": group_y,
-                        "same_output_tolerance": result["within_selected_tolerance"],
-                        "original_written_pixels": result["original_written_pixels"],
-                        "roundtrip_written_pixels": result["roundtrip_written_pixels"],
-                        "coverage_mismatch_pixels": result["write_coverage_mismatch_pixels"],
-                        "nonfinite_components": result["nonfinite_components"],
-                        "max_abs_difference": result["max_abs_difference"],
-                        "relative_l2_difference": result["relative_l2_difference"],
-                    })
-                row.update({"status": "executed_on_cpu_vulkan",
-                            "scenario_comparisons": scenarios,
-                            "all_scenarios_same_tolerance": all(
-                                item["same_output_tolerance"] for item in scenarios)})
+                restored = restore_formatless_write(
+                    recompiled.read_bytes(),
+                    image_resource_contracts(translated.read_bytes()),
+                    image_operation_profile(translated.read_bytes()))
+                formatless.write_bytes(restored)
+                private_command(["spirv-val", "--target-env", "vulkan1.1",
+                                 str(formatless)], timeout=20)
+                format_rows = []
+                for fmt in IMAGE_FORMATS:
+                    scenarios = []
+                    status = "executed_on_cpu_vulkan"
+                    error_class = None
+                    for seed, group_y in SCENARIOS:
+                        try:
+                            # Rgba32f is the legacy typed roundtrip baseline;
+                            # other original formats require a private, bounded,
+                            # source-verified formatless output declaration.
+                            compared = recompiled if fmt == "rgba32f" else formatless
+                            output = private_command([
+                                str(runner), str(translated), str(compared),
+                                str(SELECTED_WIDTH), str(SELECTED_HEIGHT),
+                                str(seed), str(group_y), fmt], timeout=90)
+                            result = parse_private_numeric_result(
+                                output.decode("utf-8", errors="strict"))
+                            validate_requested_workload(result, seed, group_y, fmt)
+                            scenarios.append({
+                                "input_seed": seed, "dispatch_group_y": group_y,
+                                "same_output_tolerance": result["within_selected_tolerance"],
+                                "original_written_pixels": result["original_written_pixels"],
+                                "roundtrip_written_pixels": result["roundtrip_written_pixels"],
+                                "coverage_mismatch_pixels": result["write_coverage_mismatch_pixels"],
+                                "nonfinite_components": result["nonfinite_components"],
+                                "max_abs_difference": result["max_abs_difference"],
+                                "relative_l2_difference": result["relative_l2_difference"],
+                            })
+                        except (UnicodeError, ValueError) as exc:
+                            status = "inconclusive_execution_or_format"
+                            error_class = ("invalid_executor_result" if
+                                           "Vulkan" in str(exc) else
+                                           "private_pipeline_or_image_format")
+                            break
+                    item = {"format": fmt, "status": status, "scenarios": scenarios}
+                    if error_class is not None:
+                        item["failure_category"] = error_class
+                    format_rows.append(item)
+                row.update({
+                    "status": ("executed_on_cpu_vulkan" if all(
+                        x["status"] == "executed_on_cpu_vulkan" for x in format_rows)
+                        else "partially_executed"),
+                    "format_comparisons": format_rows,
+                    "all_scenarios_same_tolerance": all(
+                        scene["same_output_tolerance"] for fmt_row in format_rows
+                        for scene in fmt_row["scenarios"]) and all(
+                        fmt_row["status"] == "executed_on_cpu_vulkan"
+                        for fmt_row in format_rows),
+                    "private_formatless_contract_restored": True,
+                })
             except (UnicodeError, ValueError) as exc:
                 # Never emit original shaders, filename paths, GLSL text or tool stderr.
                 row.update({"status": "inconclusive_execution_or_translation",
                             "failure_category": ("invalid_executor_result" if
                                 "Vulkan" in str(exc) else "private_tool_or_pipeline")})
             rows.append(row)
-            for p in (source, translated, hlsl, recompiled):
+            for p in (source, translated, hlsl, recompiled, formatless):
                 p.unlink(missing_ok=True)
     executed = [row for row in rows if row["status"] == "executed_on_cpu_vulkan"]
+    complete = [(r, f) for r in rows for f in r.get("format_comparisons", [])
+                if f["status"] == "executed_on_cpu_vulkan"]
+    scenarios = [x for _, f in complete for x in f["scenarios"]]
     return {
         "authenticated_original_object_sha256": ORIGINAL_OBJECT_SHA256,
         "original_lfs_owner_count": 1,
@@ -194,14 +248,17 @@ def analyze(root, runner):
         "compiled_programs_checked": len(rows),
         "software_vulkan_executed_pairs": len(executed),
         "software_vulkan_inconclusive_pairs": len(rows)-len(executed),
-        "scenarios_per_executed_program": len(SCENARIOS),
-        "total_executed_comparisons": sum(len(r["scenario_comparisons"]) for r in executed),
-        "equal_across_all_selected_rgba32f_scenarios": sum(
-            r["all_scenarios_same_tolerance"] for r in executed),
-        "different_in_at_least_one_rgba32f_scenario": sum(
-            not r["all_scenarios_same_tolerance"] for r in executed),
+        "selected_original_formats": list(IMAGE_FORMATS),
+        "format_comparisons_completed": len(complete),
+        "format_comparisons_expected": len(rows)*len(IMAGE_FORMATS),
+        "scenarios_per_original_format": len(SCENARIOS),
+        "total_executed_comparisons": len(scenarios),
+        "equal_executed_comparisons": sum(x["same_output_tolerance"] for x in scenarios),
+        "different_executed_comparisons": sum(not x["same_output_tolerance"] for x in scenarios),
+        "private_roundtrip_formatless_restore_verified": all(
+            r.get("private_formatless_contract_restored") is True for r in rows),
         "software_vulkan_is_adreno_or_unity_proof": False,
-        "other_original_formats_or_all_inputs_proven": False,
+        "all_input_values_and_full_water_fft_proven": False,
         "original_private_shader_bytes_exported": False,
         "programs": rows,
     }
@@ -214,8 +271,12 @@ def main():
     args = parser.parse_args()
     result = analyze(args.source, args.runner)
     print("RAFT_A1_AUTHENTIC_FFT_SOFTWARE_VK " + json.dumps(result, sort_keys=True))
-    if result["software_vulkan_executed_pairs"] == 0:
-        raise SystemExit("No authentic FFT software Vulkan program executed; test inconclusive")
+    if (result["software_vulkan_executed_pairs"] != EXPECTED_CONTAINERS or
+            result["format_comparisons_completed"] !=
+            result["format_comparisons_expected"] or
+            result["equal_executed_comparisons"] !=
+            result["total_executed_comparisons"]):
+        raise SystemExit("Authenticated original FFT resource matrix incomplete or differing; keep water blocker OPEN")
 
 
 if __name__ == "__main__":
