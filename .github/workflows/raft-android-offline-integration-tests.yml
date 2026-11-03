@@ -15,6 +15,8 @@ on:
       - 'scripts/probe_original_scene_audio.py'
       - 'scripts/probe_original_world_readiness.py'
       - 'scripts/probe_original_android_display_paths.py'
+      - 'scripts/probe_settings_dynamic_reachability.py'
+      - 'tests/test_probe_settings_dynamic_reachability.py'
       - 'tests/test_probe_original_android_display_paths.py'
       - 'tests/test_probe_original_world_readiness.py'
       - 'scripts/probe_original_water_compute.py'
@@ -66,6 +68,7 @@ jobs:
           python3 -m unittest discover -s tests -p test_probe_original_scene_audio.py -v
           python3 -m unittest discover -s tests -p test_probe_original_world_readiness.py -v
           python3 -m unittest discover -s tests -p test_probe_original_android_display_paths.py -v
+          python3 -m unittest discover -s tests -p test_probe_settings_dynamic_reachability.py -v
           python3 -m unittest discover -s tests -p test_probe_original_water_compute.py -v
           python3 -m unittest discover -s tests -p test_adapt_original_save_paths.py -v
           python3 -m scripts.verify_player_audio_initialization --output "$RUNNER_TEMP/player-audio-guards"
@@ -77,6 +80,7 @@ jobs:
           python3 -m scripts.probe_original_scene_audio --source "$RUNNER_TEMP/original"
           python3 -m scripts.probe_original_world_readiness --source "$RUNNER_TEMP/original"
           python3 -m scripts.probe_original_android_display_paths --source "$RUNNER_TEMP/original"
+          python3 -m scripts.probe_settings_dynamic_reachability --source "$RUNNER_TEMP/original"
           python3 -m scripts.probe_original_water_compute --source "$RUNNER_TEMP/original"
           python3 -m scripts.verify_fft_lifetime_harness --source "$RUNNER_TEMP/original" --output "$RUNNER_TEMP/fft-lifetime-harness"
           dotnet run --project "$RUNNER_TEMP/fft-lifetime-harness/Harness.csproj" --configuration Release --nologo
