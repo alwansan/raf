@@ -32,7 +32,7 @@ namespace RaftAndroid.Platform
 
         public string GetWorldSaveFile(string worldId)
         {
-            return Path.Combine(GetWorldDirectory(worldId), "world.sav");
+            return CheckedSaveFile(GetWorldDirectory(worldId));
         }
 
         public string GetWorldSaveFileAndCreateDirectory(string worldId)
@@ -42,7 +42,7 @@ namespace RaftAndroid.Platform
             // Recheck after creating missing directories; this is not an atomic
             // defence against a hostile concurrent filesystem writer.
             RejectLinkedSaveDirectories(worldId);
-            return Path.Combine(directory, "world.sav");
+            return CheckedSaveFile(directory);
         }
 
         private void RejectLinkedSaveDirectories(string worldId)
@@ -57,6 +57,24 @@ namespace RaftAndroid.Platform
                     (File.GetAttributes(path) & FileAttributes.ReparsePoint) != 0)
                     throw new IOException("Linked local save directories are not supported.");
             }
+        }
+
+        private static string CheckedSaveFile(string directory)
+        {
+            string path = Path.Combine(directory, "world.sav");
+            try
+            {
+                // A real parent directory is insufficient: the leaf can be a
+                // link to a save outside the profile. Check the link itself,
+                // including a dangling link, rather than following a File.Exists
+                // check that could suppress broken symbolic links.
+                if ((File.GetAttributes(path) & FileAttributes.ReparsePoint) != 0)
+                    throw new IOException("Linked local save files are not supported.");
+            }
+            catch (FileNotFoundException) { } // New worlds do not have a save yet.
+            catch (DirectoryNotFoundException) { }
+            // Managed prechecks do not prevent a hostile concurrent path swap.
+            return path;
         }
 
         private static void ValidateSegment(string segment, string paramName)

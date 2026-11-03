@@ -203,6 +203,44 @@ internal static class Program
                 ExpectException<IOException>(() => paths.GetWorldDirectory("legit_world"));
                 Assert(!Directory.Exists(Path.Combine(outside, "worlds")), "Outside profile directories created");
             });
+            Test("save file symlink cannot redirect writes outside sandbox", () =>
+            {
+                string sandbox = Path.Combine(root, "linked-file-sandbox");
+                string profile = new LocalProfileStore(sandbox).GetOrCreateProfileId();
+                var paths = new LocalSavePaths(sandbox, profile);
+                string leaf = paths.GetWorldSaveFileAndCreateDirectory("valid_world");
+                string outside = Path.Combine(root, "external-world-save.bin");
+                File.WriteAllText(outside, "original-external");
+                File.CreateSymbolicLink(leaf, outside);
+                ExpectException<IOException>(() => paths.GetWorldSaveFile("valid_world"));
+                ExpectException<IOException>(() => paths.GetWorldSaveFileAndCreateDirectory("valid_world"));
+                Assert(File.ReadAllText(outside) == "original-external", "External file changed");
+            });
+            Test("dangling save file symlink is rejected before target creation", () =>
+            {
+                string sandbox = Path.Combine(root, "dangling-file-sandbox");
+                string profile = new LocalProfileStore(sandbox).GetOrCreateProfileId();
+                var paths = new LocalSavePaths(sandbox, profile);
+                string leaf = paths.GetWorldSaveFileAndCreateDirectory("valid_world");
+                string outside = Path.Combine(root, "missing-target.bin");
+                Assert(!File.Exists(outside), "Negative control target already exists");
+                File.CreateSymbolicLink(leaf, outside);
+                Assert(!File.Exists(leaf), "Dangling link unexpectedly resolves to a file");
+                ExpectException<IOException>(() => paths.GetWorldSaveFile("valid_world"));
+                ExpectException<IOException>(() => paths.GetWorldSaveFileAndCreateDirectory("valid_world"));
+                Assert(!File.Exists(outside), "Broken link unexpectedly created target");
+            });
+            Test("existing ordinary world save file remains readable and writable", () =>
+            {
+                string sandbox = Path.Combine(root, "regular-file-sandbox");
+                string profile = new LocalProfileStore(sandbox).GetOrCreateProfileId();
+                var paths = new LocalSavePaths(sandbox, profile);
+                string leaf = paths.GetWorldSaveFileAndCreateDirectory("valid_world");
+                File.WriteAllText(leaf, "unchanged-format");
+                Assert(paths.GetWorldSaveFile("valid_world") == leaf, "Ordinary save filename changed");
+                Assert(paths.GetWorldSaveFileAndCreateDirectory("valid_world") == leaf, "Regular world path changed");
+                Assert(File.ReadAllText(leaf) == "unchanged-format", "Regular save contents changed");
+            });
             Test("corrupt existing identity is not silently overwritten", () =>
             {
                 string bad = Path.Combine(root, "corrupted-sandbox", "RaftAndroid", "profiles", "local");
