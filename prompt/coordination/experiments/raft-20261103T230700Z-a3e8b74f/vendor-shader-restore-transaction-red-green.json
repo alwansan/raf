@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T230700Z-a3e8b74f",
+  "display_name": "A3",
+  "session_id": "a3-20261103T230700Z-c64da0f2",
+  "resumed_from": "raft-20261103T224800Z-a3c41e7b",
+  "issue_id": "RENDER-002",
+  "experiment_id": "vendor-shader-restore-transaction-red-green",
+  "status": "completed",
+  "source_commit": "ab556f12d398e91b58fa6ed395d71ac6af2f1024",
+  "red_source_commit": "8316f5b8b8d4e913dd309af30ba4342f0f980af0",
+  "workflow": ".github/workflows/raft-a3-vendor-shader-restore-transaction.yml",
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_a3_vendor_shader_restore_transaction.py -v",
+    "python3 -m unittest discover -s tests -p test_restore_tmp_shaders.py -v",
+    "python3 -m unittest discover -s tests -p test_restore_postfx_shaders.py -v",
+    "python3 -m unittest discover -s tests -p test_restore_volumetric_shaders.py -v"
+  ],
+  "hypothesis": "Production shared TMP/PostFX/Volumetric restorer can leave partial vendor assets, incomplete backups, and write through symlink parents after a failure.",
+  "ci": {
+    "red": {
+      "id": 41737057615,
+      "job": 126268842611,
+      "conclusion": "failure",
+      "failed_tests": 4,
+      "passed_tests": 1
+    },
+    "green": {
+      "id": 41737411435,
+      "job": 126270048884,
+      "conclusion": "success",
+      "new_tests": 5,
+      "tmp_tests": 4,
+      "postfx_tests": 3,
+      "volumetric_tests": 6,
+      "total_passed": 18
+    }
+  },
+  "result": "Preflight symlink/identity and output conflicts; new includes/fallbacks/notice exclusively created; cleanup only newly created files; originals restored; complete backups retained; incomplete backups removed.",
+  "limits": [
+    "Synthetic CPU tests only; no authentic shader asset/Unity/GPU/Android execution",
+    "W1 built-in shader recovery and volumetric post-shared restore notice not included",
+    "No native APK/OBB/XAPK, no LFS/ZIP2 transfer, no protected branches or automation changes",
+    "Game NOT_READY, readiness 0/3, WATER-001/RENDER-002/FFT-FORMAT-009 OPEN"
+  ]
+}
