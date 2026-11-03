@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T121800Z-a5b4f02c",
+  "issue_id": "HAPTICS-008",
+  "status": "planned",
+  "updated_at": "2026-11-03T12:18:47.167Z",
+  "base_sha": "8b6c5dd48ea2b7ac14fc497a1c5f215378821334",
+  "resumed_from": "raft-20261103T105730Z-a5e8b126",
+  "hypothesis": "Original WAV reader passed synthetic ZIP but true Unity expansion ZIP may omit/misplace or corrupt assets/Haptics WAV paths. Existing audit checks some Unity Data; add pinned 29/29 final ZIP entry identity gate.",
+  "intended_files": [
+    "scripts/audit_android_expansion.py",
+    "tests/test_android_expansion_audit.py",
+    ".github/workflows/raft-unity-editor-android-import.yml",
+    "prompt/coordination/clients/raft-20261103T121800Z-a5b4f02c/",
+    "prompt/coordination/work/HAPTICS-008/raft-20261103T121800Z-a5b4f02c-obb-layout-contract.json",
+    "prompt/coordination/experiments/raft-20261103T121800Z-a5b4f02c/",
+    "prompt/STATUS.md",
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+  ],
+  "excluded_files": [
+    "scripts/stage_original_streaming_assets.py",
+    "config/original-haptics-manifest.json",
+    "Raft/Raft_Data/StreamingAssets/**",
+    "android-port/Runtime/Platform/AndroidStreamingAssets.cs",
+    "android-port/Tests/Haptics/**",
+    ".github/raft-native-build-request.json"
+  ],
+  "related_work": [
+    "A3 staging CI41623215003",
+    "A5 original WAV C# reader CI41624251634",
+    "Historical APK80 CL failures"
+  ],
+  "experiment_ids": [
+    "obb-original-haptics-archive"
+  ],
+  "result": null,
+  "next_step": "Implement strict optionally invoked final OBB 29-WAV SHA-backed ZIP member audit, synthetic negative tests and CPU CI; integrate into existing full native audit without starting build."
+}
