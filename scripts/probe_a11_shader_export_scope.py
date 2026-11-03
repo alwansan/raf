@@ -10,6 +10,7 @@ import json
 import os
 import re
 from pathlib import Path
+from scripts.restore_builtin_shaders import archive_sources, exported_shader_identity
 
 
 class ScopeError(ValueError):
@@ -124,17 +125,85 @@ def verify(project, manifest, expected_shaders=None, expected_computes=None):
     }
 
 
+
+def audit_same_stage_builtin_identities(project, archive_path, expected_shaders, expected_computes):
+    """Compare exact SHA-pinned Unity vendor identities on one stable local scope.
+
+    This MUST run on the exported project before restoration, not on a different
+    sample or on overwritten shader sources. An operator-supplied scope is not
+    independently authenticated as the original full AssetRipper export.
+    """
+    if expected_shaders is None or expected_computes is None:
+        raise ScopeError("stage_requires_paired_expected_counts")
+    before = snapshot(project)
+    _check_expected_counts(before, expected_shaders, expected_computes)
+    archive = Path(archive_path)
+    if archive.is_symlink() or not archive.is_file() or archive.stat().st_size > 2 * 1024 * 1024:
+        raise ScopeError("invalid_builtin_archive")
+    try:
+        vendor, _, _ = archive_sources(archive.read_bytes())
+    except (ValueError, OSError, KeyError, UnicodeError, EOFError, RuntimeError):
+        raise ScopeError("unauthenticated_builtin_archive") from None
+    parsed = 0
+    matched = 0
+    unmatched = 0
+    seen_matches = set()
+    for path in (Path(project) / "Assets").rglob("*.shader"):
+        if path.is_symlink() or not path.is_file():
+            raise ScopeError("redirected_asset_entry")
+        try:
+            identity = exported_shader_identity(path.read_bytes().decode("utf-8-sig"))
+        except UnicodeError:
+            raise ScopeError("invalid_shader_source_encoding") from None
+        except ValueError:
+            raise ScopeError("ambiguous_shaderlab_declarations") from None
+        if identity is None:
+            continue
+        parsed += 1
+        if identity in vendor:
+            if identity in seen_matches:
+                raise ScopeError("duplicate_builtin_export_identity")
+            seen_matches.add(identity)
+            matched += 1
+        else:
+            unmatched += 1
+    after = snapshot(project)
+    if before != after:
+        raise ScopeError("stage_changed_during_identity_audit")
+    return {
+        "schema_version": 1,
+        "status": "SCOPED_DIAGNOSTIC_ONLY",
+        "shader_files": before["shader_files"],
+        "compute_files": before["compute_files"],
+        "parseable_shaderlab_headers": parsed,
+        "unparseable_shaderlab_headers": before["shader_files"] - parsed,
+        "builtin_identity_matches": matched,
+        "nonbuiltin_headers": unmatched,
+        "authenticated_builtin_archive_identities": len(vendor),
+        "paired_expected_counts_equal": True,
+        "same_scope_bytes_unchanged_during_audit": True,
+        "scope_inventory_sha256": before["entries_sha256"],
+        "original_export_provenance_verified": False,
+        "original_gpu_shader_execution_verified": False,
+        "ready_for_build": False,
+    }
+
 def main(argv=None):
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--project", type=Path, required=True)
     g = p.add_mutually_exclusive_group(required=True)
     g.add_argument("--write-local-snapshot", type=Path)
     g.add_argument("--verify-local-snapshot", type=Path)
+    g.add_argument("--audit-stage-builtin-archive", type=Path)
     p.add_argument("--expected-shaders", type=int)
     p.add_argument("--expected-computes", type=int)
     args = p.parse_args(argv)
     try:
-        if args.write_local_snapshot:
+        if args.audit_stage_builtin_archive:
+            result = audit_same_stage_builtin_identities(
+                args.project, args.audit_stage_builtin_archive,
+                args.expected_shaders, args.expected_computes)
+        elif args.write_local_snapshot:
             record = snapshot(args.project)
             _check_expected_counts(record, args.expected_shaders, args.expected_computes)
             if args.write_local_snapshot.is_symlink() or args.write_local_snapshot.exists():

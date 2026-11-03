@@ -6,8 +6,9 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+from unittest import mock
 
-from scripts.probe_a11_shader_export_scope import ScopeError, main, snapshot, verify
+from scripts.probe_a11_shader_export_scope import ScopeError, main, snapshot, verify, audit_same_stage_builtin_identities
 
 
 def add_shader(project, name, content=b'Shader "Synthetic" {}', meta=None):
@@ -200,6 +201,93 @@ class ShaderExportScopeTests(unittest.TestCase):
             self.assertEqual(code, 2)
             self.assertFalse(out.exists())
             self.assertIn("incomplete_expected_counts", log.getvalue())
+
+
+    def test_same_stage_builtin_probe_is_scoped_not_original_authentication(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            project, _ = self.fixture(root)
+            archive = root / "vendor.zip"
+            archive.write_bytes(b"synthetic vendor fixture")
+            with mock.patch("scripts.probe_a11_shader_export_scope.archive_sources",
+                            return_value=({"Synthetic": "vendor.shader"}, {}, b"license")):
+                result = audit_same_stage_builtin_identities(project, archive, 1, 0)
+            self.assertEqual(result["builtin_identity_matches"], 1)
+            self.assertEqual(result["parseable_shaderlab_headers"], 1)
+            self.assertEqual(result["authenticated_builtin_archive_identities"], 1)
+            self.assertTrue(result["same_scope_bytes_unchanged_during_audit"])
+            self.assertFalse(result["original_export_provenance_verified"])
+            self.assertFalse(result["ready_for_build"])
+            self.assertNotIn("Synthetic", json.dumps(result))
+
+    def test_same_stage_count_mismatch_fails_before_vendor_inspection(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            project, _ = self.fixture(root)
+            archive = root / "vendor.zip"
+            archive.write_bytes(b"fixture")
+            with mock.patch("scripts.probe_a11_shader_export_scope.archive_sources") as loader:
+                with self.assertRaisesRegex(ScopeError, "reported_shader_count_mismatch"):
+                    audit_same_stage_builtin_identities(project, archive, 140, 0)
+                loader.assert_not_called()
+                with self.assertRaisesRegex(ScopeError, "stage_requires_paired_expected_counts"):
+                    audit_same_stage_builtin_identities(project, archive, 1, None)
+
+    def test_same_stage_rejects_unauthenticated_vendor_archive(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            project, _ = self.fixture(root)
+            archive = root / "vendor.zip"
+            archive.write_bytes(b"not the official Unity archive")
+            with self.assertRaisesRegex(ScopeError, "unauthenticated_builtin_archive"):
+                audit_same_stage_builtin_identities(project, archive, 1, 0)
+
+    def test_same_stage_rejects_mutation_during_header_scan(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            project, path = self.fixture(root)
+            archive = root / "vendor.zip"
+            archive.write_bytes(b"fixture")
+            def change_source(source):
+                path.write_bytes(b'Shader "Changed" {}')
+                return "Synthetic"
+            with mock.patch("scripts.probe_a11_shader_export_scope.archive_sources",
+                            return_value=({"Synthetic": "vendor.shader"}, {}, b"license")), \
+                 mock.patch("scripts.probe_a11_shader_export_scope.exported_shader_identity",
+                            side_effect=change_source):
+                with self.assertRaisesRegex(ScopeError, "stage_changed_during_identity_audit"):
+                    audit_same_stage_builtin_identities(project, archive, 1, 0)
+
+    def test_same_stage_rejects_duplicate_builtin_header(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            project, _ = self.fixture(root)
+            add_shader(project, "b", content=b'Shader "Synthetic" {}')
+            archive = root / "vendor.zip"
+            archive.write_bytes(b"fixture")
+            with mock.patch("scripts.probe_a11_shader_export_scope.archive_sources",
+                            return_value=({"Synthetic": "vendor.shader"}, {}, b"license")):
+                with self.assertRaisesRegex(ScopeError, "duplicate_builtin_export_identity"):
+                    audit_same_stage_builtin_identities(project, archive, 2, 0)
+
+    def test_same_stage_cli_mandatory_counts_and_aggregate_only(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            project, _ = self.fixture(root)
+            archive = root / "vendor.zip"
+            archive.write_bytes(b"fixture")
+            with mock.patch("scripts.probe_a11_shader_export_scope.archive_sources",
+                            return_value=({"Synthetic": "vendor.shader"}, {}, b"license")):
+                with contextlib.redirect_stdout(io.StringIO()) as stdout:
+                    code = main(["--project", str(project), "--audit-stage-builtin-archive",
+                                 str(archive), "--expected-shaders", "1", "--expected-computes", "0"])
+                self.assertEqual(code, 0)
+                self.assertIn('"builtin_identity_matches": 1', stdout.getvalue())
+                self.assertNotIn("Synthetic", stdout.getvalue())
+                with contextlib.redirect_stdout(io.StringIO()) as stdout:
+                    code = main(["--project", str(project), "--audit-stage-builtin-archive", str(archive)])
+                self.assertEqual(code, 2)
+                self.assertIn("stage_requires_paired_expected_counts", stdout.getvalue())
 
 
 if __name__ == "__main__":
