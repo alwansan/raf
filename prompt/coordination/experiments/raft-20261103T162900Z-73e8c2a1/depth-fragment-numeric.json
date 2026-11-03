@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T162900Z-73e8c2a1",
+  "client_label": "W1",
+  "session_id": "w1-20261103T160542216Z-e73a91cd",
+  "issue_id": "RENDER-002",
+  "status": "planned",
+  "updated_at": "2026-11-03T16:05:42.217Z",
+  "base_sha": "bdb6ca90c10d14ee65167060d6080e480e02048e",
+  "hypothesis": "Original Depth Copy fragment sampling/arithmetic and reconstructed HLSL may agree on deterministic asymmetric RGBA32F fields when lifted to a compute execution harness; wrong UV/resource/arithmetic controls must produce differences. This isolates fragment operations before raster/depth integration.",
+  "intended_files": [
+    "scripts/w1_depth_fragment_numeric.py",
+    "scripts/w1_depth_fragment_vulkan.cpp",
+    ".github/workflows/raft-w1-depth-fragment-numeric.yml"
+  ],
+  "related_work": [
+    "A1 lavapipe FFT runner reused by copy into W1-owned harness; A1 files untouched",
+    "W3 external Material-Shader links read; broader color causes remain independent",
+    "W3 and independent peer both reviewed W1 Unity success and warned selected6passes are not9executed"
+  ],
+  "experiment_ids": [
+    "depth-fragment-numeric"
+  ],
+  "budget": "20min CPU lavapipe, cached two-owner227511628bytes; noUnity/APK",
+  "limitations": [
+    "Compute lifting removes rasterization and fixed-function depth; cannot prove shader rendering",
+    "RGBA32F with nearest clamp sampler and deterministic UV only; NaN and half formats not proven"
+  ],
+  "next_step": "Create bounded compute-lift runner, execute original-vs-reconstructed fragment operations and negative controls.",
+  "workflow_path": ".github/workflows/raft-w1-depth-fragment-numeric.yml",
+  "concurrency_group": "raft-w1-depth-fragment-numeric-${github.ref}",
+  "artifact_prefix": "w1-fragment-numeric-aggregate",
+  "source_sha": null,
+  "run_url": null,
+  "expected_signal": "9/9 fragment occurrences executed, 3deterministic31x19 scenarios each, all outputs written and equal within1e-4abs/1e-5relativeL2; axis/resource/arithmetic mutations must differ.",
+  "negative_controls": [
+    "swap UV axes",
+    "swap sampled image0/1",
+    "add0.25 output"
+  ],
+  "input_hashes": [
+    {
+      "object_sha256": "cf978dad4f4c67e57fb58448cee7a8c033c30d1491ef54b0a6ad887317fba75a"
+    }
+  ]
+}
