@@ -19,7 +19,7 @@ def generated_record(*, go=5, script=123, ui=1, width=1280.0, height=720.0,
            struct.pack("<iq", 1, script) +
            struct.pack("<i", 0) +
            CUSTOM.pack(ui, 100, 1, width, height, mode, match, 2, 96, 96, 1) +
-           struct.pack("<f", 1))
+           struct.pack("<B3x", 0))
     assert len(raw) == BASE_BYTES + CUSTOM.size + 4 == 80
     return raw, typed
 
