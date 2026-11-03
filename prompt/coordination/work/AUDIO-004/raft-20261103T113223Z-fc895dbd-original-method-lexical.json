@@ -2,8 +2,8 @@
   "schema_version": 1,
   "owner": "raft-20261103T113223Z-fc895dbd",
   "issue_id": "AUDIO-004",
-  "status": "active",
-  "updated_at": "2026-11-03T11:32:47.380Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T11:38:48.676Z",
   "hypothesis": "Original scene audio source probe method_body scans raw C# braces and can truncate at braces inside quoted strings or comments; red/green CPU tests should reject false boundaries without changing original game.",
   "intended_files": [
     "scripts/probe_original_scene_audio.py",
@@ -22,7 +22,11 @@
   "experiment_ids": [
     "original-method-brace-lexical"
   ],
-  "evidence": [],
-  "next_step": "Synthetic source red repro; preserve exact extracted original body and sha; run no-LFS original Android local startup integration CI.",
-  "base_sha": "8feac3e6921f260ab5098a4e77d6279a3883bc3e"
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/c4fae959ca9417e8ba7e37c1cd5520e34f923d83",
+    "https://github.com/alwansan/raf/actions/runs/41628714708"
+  ],
+  "next_step": "No more action within this scoped parser experiment; audio integration and phone verification remain outside scope.",
+  "base_sha": "8feac3e6921f260ab5098a4e77d6279a3883bc3e",
+  "result": "Method scanner ignores quoted/comment braces and fake declarations; synthetic red reproduction locally and 10/10 green CI probe tests on private original source; managed original compatibility compile exits 0; no game/runtime change."
 }

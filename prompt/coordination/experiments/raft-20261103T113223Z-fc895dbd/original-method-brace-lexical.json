@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T113223Z-fc895dbd",
+  "issue_id": "AUDIO-004",
+  "experiment_id": "original-method-brace-lexical",
+  "status": "completed",
+  "started_at": "2026-11-03T11:32:23Z",
+  "completed_at": "2026-11-03T11:38:48.676Z",
+  "source_commit": "c4fae959ca9417e8ba7e37c1cd5520e34f923d83",
+  "hypothesis": "Original FMOD method source scan falsely closes at non-executable CSharp braces and counts commented declarations",
+  "synthetic_red_evidence": "Local synthetic case with a quoted URL ending } caused raw scan to miss a following RuntimeManager.CreateInstance call",
+  "fix": "offset-preserving regex masks ordinary/verbatim strings, char, // and /* */ comments for declaration and brace boundaries; returns original unmasked body",
+  "test_command": "python3 -m unittest discover -s tests -p test_probe_original_scene_audio.py -v (existing no-LFS original startup workflow)",
+  "workflow_path": ".github/workflows/raft-android-offline-integration-tests.yml",
+  "run_id": 41628714708,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41628714708",
+  "job_id": 125892508502,
+  "result": "10 tests green, original pinned audio/world source reports green, local RPC harness green, original managed compile exit=0",
+  "negative_controls": [
+    "line and block comment fake closing brace",
+    "quoted URL closing brace",
+    "verbatim quoted doubled quotes and closing brace",
+    "char literal closing brace",
+    "fake commented declaration",
+    "exact original body return"
+  ],
+  "limits": [
+    "CSharp9-oriented lexical detection, not full Roslyn parse",
+    "Only source-audit boundaries, no executable Unity or native audio changes",
+    "Unrelated older native preview failed in built-in shader restoration",
+    "No phone test; no readiness upgrade"
+  ],
+  "original_source_modified": false,
+  "game_build": false,
+  "lfs_downloaded": false,
+  "readiness": "NOT_READY"
+}
