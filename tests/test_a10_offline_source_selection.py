@@ -78,6 +78,45 @@ class OriginalSourceSelectionTests(unittest.TestCase):
 class OriginalManagedInstallIntegrityTests(unittest.TestCase):
     """Only artificial source bytes: validate the original-private CI prepare gate."""
 
+    def test_late_harness_failure_never_modifies_original_sources(self):
+        """Private ILSpy originals must not change if late RPC extraction fails."""
+        from unittest.mock import patch
+        from scripts.verify_android_offline_candidate import prepare
+
+        with TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source = root / "decompiled"
+            runtime = root / "runtime"
+            source.mkdir()
+            runtime.mkdir()
+            original_network = b"// no RPC signature in synthetic source\nclass Raft_Network {}\n"
+            original_save = b"\xef\xbb\xbfclass SaveAndLoad {}\r\n"
+            network = source / "Raft_Network.cs"
+            save = source / "SaveAndLoad.cs"
+            network.write_bytes(original_network)
+            save.write_bytes(original_save)
+            for name in (
+                "AndroidStreamingAssets.cs", "TouchPointerGesture.cs",
+                "TouchPointerButtons.cs", "AndroidTouchPointer.cs",
+                "AndroidTouchUiPanel.cs", "LocalPlayerIdentity.cs",
+                "LocalProfileStore.cs", "AndroidTestDiagnostics.cs",
+                "AndroidTouchGamepadOverlay.cs", "PersistentDiagnosticLog.cs",
+                "AndroidRuntimeLog.cs",
+            ):
+                (runtime / name).write_text("// synthetic runtime helper")
+            pins = {
+                "Raft_Network": fingerprint(network.read_text(encoding="utf-8-sig")),
+                "SaveAndLoad": fingerprint(save.read_text(encoding="utf-8-sig")),
+            }
+            with patch.dict("scripts.verify_android_offline_candidate.PINS", pins, clear=True):
+                with patch("scripts.verify_android_offline_candidate.adapt", side_effect=lambda name, text: text):
+                    with patch("scripts.verify_android_offline_candidate.adapt_paths", side_effect=lambda text: text):
+                        with patch("scripts.verify_android_offline_candidate.instrument", side_effect=lambda name, text, manifest: text + "\n// synthetic wrapped"):
+                            with self.assertRaises(ValueError):
+                                prepare(source, root / "managed", runtime, root / "output")
+            self.assertEqual(network.read_bytes(), original_network)
+            self.assertEqual(save.read_bytes(), original_save)
+
     def test_later_instrumentation_failure_preserves_all_source_bytes(self):
         from unittest.mock import patch
         with TemporaryDirectory() as tmp:
