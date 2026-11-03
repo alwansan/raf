@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T225203Z-a14c07d9",
+  "client_label": "A14",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "updated_at": "2026-11-03T22:52:03Z",
+  "base_sha": "3a6346eae3537f1e28fa4ceb876f9edd266820f3",
+  "hypothesis": "The original built-in shader restorer preserves arbitrary existing .meta bytes but does not reject malformed or duplicate GUID declarations among matched exports before irreversible staging, so a misleading GUID-preservation claim may pass with collisions.",
+  "intended_files": [
+    "scripts/restore_builtin_shaders.py",
+    "tests/test_a14_shader_meta_guid_preflight.py",
+    ".github/workflows/raft-a14-builtin-backup-atomicity.yml",
+    "prompt/coordination/clients/raft-20261103T225203Z-a14c07d9/state.json",
+    "prompt/coordination/clients/raft-20261103T225203Z-a14c07d9/MEMORY.md",
+    "prompt/coordination/work/RENDER-002/raft-20261103T225203Z-a14c07d9-guid-contract.json",
+    "prompt/coordination/discussions/RENDER-002/20261103T225203Z-raft-20261103T225203Z-a14c07d9-guid-contract.md",
+    "docs/A14_BUILTIN_GUID_PREFLIGHT_2026-11-03.md",
+    "prompt/STATUS.md"
+  ],
+  "related_work": [
+    "A14 prior backup failure fix 8dcca858, completed",
+    "A3 path guard d93f6aec, completed",
+    "A9 lexer d159f348, completed",
+    "A15 addition rollback b7188de1, completed",
+    "W1/A1 original FFT work independent; do not touch shader assets or compute"
+  ],
+  "experiment_ids": [
+    "a14-shader-meta-guid-preflight"
+  ],
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/8dcca858d2ae0646d5fb1a48fbdb2ab51a2909dc"
+  ],
+  "result": null,
+  "next_step": "Preflight meta GUID identifiers without changing original metadata, stage no actual game files, synthetic red-green tests."
+}
