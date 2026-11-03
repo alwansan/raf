@@ -2,15 +2,15 @@
   "schema_version": 1,
   "username": "raft-20261103T100200Z-9d4ea16b",
   "client_label": "A10",
-  "session_id": "a10-20261103T1212Z-f8ca6412",
+  "session_id": "a10-20261103T1322Z-84bd630a",
   "resumed_from": null,
-  "status": "completed",
-  "updated_at": "2026-11-03T12:20:00Z",
-  "base_sha": "66d8e67da5b4ee610526452ccfb763b6c10e52fc",
+  "status": "active",
+  "updated_at": "2026-11-03T13:22:00Z",
+  "base_sha": "1526f6380e41b8b8dae10d22208f0123f9775bef",
   "current_work": [
-    "LOCAL-005: complete original managed staging preflight/rollback CI (completed)"
+    "LOCAL-005: late private harness failure must never mutate original C# source"
   ],
   "last_commit": "b432955271139540bf47155226efae3a681907be",
-  "next_step": "This A10 source-only scope completed with CI41634496958 SUCCESS. When owner explicitly says Continue again, reread live docs/HEAD/clients/actions and register a new independent work item. LOCAL-005 overall and WATER-001/RENDER-002/FFT-FORMAT-009 remain NOT_READY/0-of-3.",
+  "next_step": "Make original C# changes the final step of private managed prepare(), after all harness-generation and runtime-copy preflight; add synthetic failure case and original no-LFS CPU CI.",
   "memory_path": "prompt/coordination/clients/raft-20261103T100200Z-9d4ea16b/MEMORY.md"
 }
