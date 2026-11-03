@@ -20,6 +20,7 @@ from scripts.probe_original_compute_containers import scan_blob
 from scripts.run_original_dxbc_translation_probe import version_tokens
 
 TARGET = 'UltimateWater/Depth/Depth Copy'
+OBJECT_SHA256 = 'cf978dad4f4c67e57fb58448cee7a8c033c30d1491ef54b0a6ad887317fba75a'
 
 
 def digest(value):
@@ -72,6 +73,17 @@ def variant_key(metadata):
         'm_ShaderHardwareTier', 'm_KeywordIndices', 'm_GlobalKeywordIndices', 'm_LocalKeywordIndices'))
 
 
+def stage_variants(program):
+    """Preserve player-table buckets; do not mistake stripped editor arrays for no code."""
+    legacy = program.get('m_SubPrograms', [])
+    player = program.get('m_PlayerSubPrograms', [])
+    if legacy and any(player):
+        raise ValueError('Both editor and player program tables populated; explicit choice required')
+    if legacy:
+        return [(None, i, v) for i, v in enumerate(legacy)]
+    return [(bucket, i, v) for bucket, values in enumerate(player) for i, v in enumerate(values)]
+
+
 def schema_shape(value, depth=0):
     """Public serializer schema/counts only, never property names or values."""
     if isinstance(value, dict):
@@ -103,11 +115,8 @@ def recover(root, out):
         raise ValueError('Original D3D11 graphics table is ambiguous')
     entries = tables[0][1]
     parsed = tree['m_ParsedForm']
-    print('RAFT_W1_DEPTH_ORIGINAL_SCHEMA ' + json.dumps({
-        'owner': owner, 'path_id': path_id, 'object_sha256': object_sha,
-        'subshaders': [{'passes': [{'vertex': schema_shape(p['progVertex']),
-                                  'fragment': schema_shape(p['progFragment'])}
-                                 for p in s['m_Passes']]} for s in parsed['m_SubShaders']]}, sort_keys=True))
+    if owner != 'sharedassets0.assets' or path_id != 2407 or object_sha != OBJECT_SHA256:
+        raise ValueError('Previously authenticated original Depth Copy object identity changed')
     passes, stages = [], []
     with tempfile.TemporaryDirectory(prefix='w1-private-depth-passes-') as folder:
         packet = Path(folder)
@@ -123,17 +132,23 @@ def recover(root, out):
                                'variants': {}, 'linked_pairs': []}
                 reflected = {1: [], 0: []}
                 for field, stage in (('progVertex', 1), ('progFragment', 0)):
-                    variants = shader_pass[field]['m_SubPrograms']
+                    program = shader_pass[field]
+                    variants = stage_variants(program)
                     pass_report['variants'][str(stage)] = len(variants)
+                    pass_report.setdefault('player_bucket_counts', {})[str(stage)] = [len(v) for v in program.get('m_PlayerSubPrograms', [])]
+                    (packet / ('s%d-p%d-stage%d-original-program.json' % (si, pi, stage))).write_text(json.dumps(program, sort_keys=True))
                     if not 0 < len(variants) <= 24:
                         raise ValueError('Depth Copy stage variant count outside1..24: ' + str(len(variants)))
-                    for vi, metadata in enumerate(variants):
+                    for vi, (bucket, bucket_index, metadata) in enumerate(variants):
                         code, link = linked_program(metadata, entries, stage)
                         target = packet / ('s%d-p%d-stage%d-v%d' % (si, pi, stage, vi))
                         target.mkdir()
                         result = translate(code, stage, target)
                         result.update(link, subshader=si, pass_index=pi, variant_index=vi,
-                                      metadata_schema=sorted(metadata))
+                                      metadata_schema=sorted(metadata), player_bucket=bucket,
+                                      bucket_variant_index=bucket_index,
+                                      common_parameters_sha256=digest(program.get('m_CommonParameters')),
+                                      parameter_blob_indices_sha256=digest(program.get('m_ParameterBlobIndices')))
                         (target / 'original-stage-metadata.json').write_text(json.dumps(metadata, sort_keys=True))
                         if result['hlsl_recovered'] and result['roundtrip_vulkan11_valid']:
                             original = reflection(target / 'original.spv')
@@ -141,15 +156,16 @@ def recover(root, out):
                             result.update(original_reflection=original, roundtrip_reflection=rebuilt,
                                           resource_slots_preserved=original['resource_slots'] == rebuilt['resource_slots'],
                                           stage_interface_preserved=original['inputs'] == rebuilt['inputs'] and original['outputs'] == rebuilt['outputs'])
-                            reflected[stage].append((metadata, vi, original, rebuilt))
+                            reflected[stage].append((bucket, metadata, vi, original, rebuilt))
                         stages.append(result)
-                for vm, vi, original_v, rebuilt_v in reflected[1]:
-                    for fm, fi, original_f, rebuilt_f in reflected[0]:
-                        if variant_key(vm) != variant_key(fm):
+                for vb, vm, vi, original_v, rebuilt_v in reflected[1]:
+                    for fb, fm, fi, original_f, rebuilt_f in reflected[0]:
+                        if vb != fb or variant_key(vm) != variant_key(fm):
                             continue
                         pass_report['linked_pairs'].append({'vertex_variant': vi, 'fragment_variant': fi,
                             'original_location_types_match': interfaces_match(original_v, original_f),
                             'roundtrip_location_types_match': interfaces_match(rebuilt_v, rebuilt_f),
+                            'player_bucket': vb,
                             'permutation_metadata_sha256': digest(variant_key(vm))})
                 passes.append(pass_report)
         packet_manifest = {str(p.relative_to(packet)): hashlib.sha256(p.read_bytes()).hexdigest()

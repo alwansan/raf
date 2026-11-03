@@ -1,9 +1,15 @@
 import unittest
 from unittest.mock import patch
-from scripts.w1_recover_depth_passes import linked_program, interfaces_match, variant_key
+from scripts.w1_recover_depth_passes import linked_program, interfaces_match, variant_key, stage_variants
 
 
 class DepthPassLinkage(unittest.TestCase):
+    def test_stripped_editor_table_preserves_player_bucket_and_variant(self):
+        original = {'m_SubPrograms': [], 'm_PlayerSubPrograms': [[], [{'m_BlobIndex': 3}], [], [{'m_BlobIndex': 8}, {'m_BlobIndex': 9}]]}
+        self.assertEqual(stage_variants(original), [(1, 0, {'m_BlobIndex': 3}), (3, 0, {'m_BlobIndex': 8}), (3, 1, {'m_BlobIndex': 9})])
+        with self.assertRaises(ValueError):
+            stage_variants({'m_SubPrograms': [{'m_BlobIndex': 2}], 'm_PlayerSubPrograms': [[{'m_BlobIndex': 3}]]})
+
     def test_stage_and_blob_index_not_inferred_from_order(self):
         with patch('scripts.w1_recover_depth_passes.scan_blob', return_value={'valid_dxbc_containers': [
                 {'offset_in_original_object': 2, 'bytes': 4}]}), patch(
