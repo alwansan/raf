@@ -2,9 +2,9 @@
   "schema_version": 1,
   "owner": "raft-20261103T190657Z-9004f68d",
   "client_label": "A12R",
-  "status": "blocked",
+  "status": "running",
   "created_at": "2026-11-03T19:06:57Z",
-  "updated_at": "2026-11-03T19:21:14.648Z",
+  "updated_at": "2026-11-03T22:47:57.920Z",
   "hypothesis": "Private compiled DXBC RDEF CB declarations and slots can independently constrain original Blur memberless-but-nonzero serialized constant-buffer metadata without silently dropping data.",
   "input_hashes": [
     "original Blur Shader object c9341848367eaedb12e551ce9061b1eea728f54f2069ef1a3c12c4a4a2e9bb52",
@@ -12,7 +12,9 @@
   ],
   "commands": [
     "python3 -m unittest discover -s tests -p test_a12r_190657_blur_cb_reflection.py -v",
-    "python3 -m scripts.a12r_190657_blur_cb_reflection --source Raft/Raft_Data --repo . --out $RUNNER_TEMP/a12r-structural.json"
+    "python3 -m unittest discover -s tests -p test_a12r_zip2_shader_owners.py -v",
+    "python3 -m scripts.a12r_zip2_shader_owners --zip2-checkout original-zip2-a12r --dest $RUNNER_TEMP/a12r-original/Raft_Data",
+    "python3 -m scripts.a12r_190657_blur_cb_reflection --source $RUNNER_TEMP/a12r-original/Raft_Data --repo . --out $RUNNER_TEMP/a12r-structural.json"
   ],
   "expected_signal": "Safe CB name/size/slot match counts across exact two passes and four stages; zero names/code in artifact; explicitly not game ready.",
   "negative_controls": [
@@ -24,11 +26,19 @@
   ],
   "workflow_path": ".github/workflows/raft-a12r-190657-cb-reflection.yml",
   "concurrency_group": "raft-a12r-190657-${{ github.ref }}-${{ github.sha }}",
-  "artifact_prefix": "raft-a12r-190657-aggregate",
-  "budget": "CPU-only Ubuntu24.04 20min, cache-only verified SHA LFS objects; abort on cache miss; no Unity/native/APK/OBB/XAPK/Release",
-  "run_url": "https://github.com/alwansan/raf/actions/runs/41701535937",
-  "source_sha": "e378eeaf0dd14751e259cf643671e11b38a1e7f1",
-  "result": {
+  "artifact_prefix": "raft-a12r-190657-zip2-aggregate",
+  "budget": "CPU only 25min, 14 exact owners 488439356 bytes from pinned ZIP2, isolated staging; no LFS network, Unity, APK, OBB, XAPK or releases",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41733616039",
+  "source_sha": "50aedc8b00506232b653d63902488ba2b31114fd",
+  "result": null,
+  "limitations": [
+    "DXBC structural CB size/slot correlation does not validate uniform values or ShaderLab runtime binding",
+    "A12 original wrapper and water/FFT full gates remain blocked",
+    "No GPU/phone validation",
+    "The W1 SHA-pinned cache contains resources.assets and sharedassets0.assets but lacks sharedassets36.assets; exact original_shader requires all 14 owners. No original RDEF reflection metrics should be inferred."
+  ],
+  "next_step": "Inspect run41733616039 terminal original-owner SHA restore and RDEF phase; act only on this client's files if failure; no Unity/APK",
+  "previous_result": {
     "run_id": 41701535937,
     "job_id": 126145781465,
     "conclusion": "failure",
@@ -39,11 +49,5 @@
     "original_reflection_executed": false,
     "privacy_safe_artifact_id": 13263124031
   },
-  "limitations": [
-    "DXBC structural CB size/slot correlation does not validate uniform values or ShaderLab runtime binding",
-    "A12 original wrapper and water/FFT full gates remain blocked",
-    "No GPU/phone validation",
-    "The W1 SHA-pinned cache contains resources.assets and sharedassets0.assets but lacks sharedassets36.assets; exact original_shader requires all 14 owners. No original RDEF reflection metrics should be inferred."
-  ],
-  "next_step": "Find previously authenticated sharedassets36.assets (110149324 bytes, SHA256 b32fcd9d327c8926b2309ffc1b5645a0c23d64ed95be37ed94e96f34736530c8) in approved existing source/cache; never bypass source checks. Then rerun CPU experiment. No native Unity."
+  "zip2_source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385"
 }
