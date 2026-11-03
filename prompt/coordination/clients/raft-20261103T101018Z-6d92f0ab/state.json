@@ -1,9 +1,10 @@
 {
   "client_id": "raft-20261103T101018Z-6d92f0ab",
   "session_id": "auto11-6d92f0ab",
-  "state": "active",
-  "heartbeat_utc": "2026-11-03T10:10:18Z",
+  "state": "completed",
+  "heartbeat_utc": "2026-11-03T10:11:00Z",
   "issue": "FFT-FORMAT-009",
-  "scope": "independent original FFT image-format evidence audit",
-  "base_sha": "b4ab7275cdadead58081d188cea305d8aa814766"
+  "scope": "independent evidence audit",
+  "result": "No new runtime code defect resolved; original typed-image discrepancy remains open",
+  "experiment": "prompt/coordination/experiments/raft-20261103T101018Z-6d92f0ab/format-audit.json"
 }
