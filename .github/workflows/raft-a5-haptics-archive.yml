@@ -10,6 +10,7 @@ on:
       - 'tests/test_haptic_archive_adapter.py'
       - 'scripts/adapt_android_render_lifetimes.py'
       - 'scripts/audit_android_expansion.py'
+      - '.github/workflows/raft-unity-editor-android-import.yml'
       - 'tests/test_android_expansion_audit.py'
   workflow_dispatch:
 
@@ -37,6 +38,7 @@ jobs:
             android-port/Tests/Haptics
             config
             Raft/Raft_Data/StreamingAssets/Haptics
+            .github/workflows
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
