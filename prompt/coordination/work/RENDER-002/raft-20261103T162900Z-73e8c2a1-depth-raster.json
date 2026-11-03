@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T162900Z-73e8c2a1",
+  "client_label": "W1",
+  "session_id": "w1-20261103T162620454Z-a63c8f12",
+  "issue_id": "RENDER-002",
+  "status": "planned",
+  "updated_at": "2026-11-03T16:26:20.454Z",
+  "base_sha": "7838e650fb8e9f400ea10964a198a9375d27690e",
+  "hypothesis": "Paired original vertex+fragment SPIR-V and resource/semantic-rebound reconstructed HLSL may render identical RGBA32F color and D32 depth attachments under original supported pass states; real rasterization can reveal clip/interpolation/depth differences hidden by compute lifting.",
+  "intended_files": [
+    "scripts/w1_depth_raster_vulkan.cpp",
+    "scripts/w1_depth_raster_numeric.py",
+    ".github/workflows/raft-w1-depth-raster.yml"
+  ],
+  "related_work": [
+    "W2 current color-space metadata audit separate; do not edit",
+    "W3 completed full1556material topology separate",
+    "A1 FFT lavapipe source unchanged; W1 copies own prior executor scaffold"
+  ],
+  "experiment_ids": [
+    "depth-raster"
+  ],
+  "input_hashes": [
+    {
+      "shader_object_sha256": "cf978dad4f4c67e57fb58448cee7a8c033c30d1491ef54b0a6ad887317fba75a"
+    }
+  ],
+  "budget": "25min single CPU-only lavapipe job; cached two-owner227511628bytes authenticated; no Unity/APK",
+  "negative_controls": [
+    "UV axis swap",
+    "incorrect clip geometry",
+    "depth compare Never",
+    "wrong resource alias"
+  ],
+  "expected_signal": "9passes preserve original6+3indices; positive full color/depth agreement with nonzero actual changed coverage; discriminating negative controls; independent authored constant-color/depth canary.",
+  "limitations": [
+    "CPU Vulkan not Adreno/Unity",
+    "RGBA32F nearestclamp and D32 only; no all-input or NaN proof",
+    "Descriptor decoration normalization uses original serialized property/texture/sampler names, does not prove Unity binding"
+  ],
+  "next_step": "Create actual graphics render pass with color+depth readback and compare original vs rebound stages before game integration."
+}

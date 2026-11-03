@@ -2,15 +2,15 @@
   "schema_version": 1,
   "client_label": "W1",
   "username": "raft-20261103T162900Z-73e8c2a1",
-  "session_id": "w1-20261103T160542216Z-e73a91cd",
+  "session_id": "w1-20261103T162620454Z-a63c8f12",
   "resumed_from": null,
-  "status": "paused",
-  "updated_at": "2026-11-03T16:18:32.851Z",
-  "base_sha": "bdb6ca90c10d14ee65167060d6080e480e02048e",
+  "status": "active",
+  "updated_at": "2026-11-03T16:26:29.427Z",
+  "base_sha": "7838e650fb8e9f400ea10964a198a9375d27690e",
   "current_work": [
-    "Completed bounded Depth Copy fragment numerical comparison and actual Unity compilation checkpoint"
+    "RENDER-002 real raster/color/depth comparison"
   ],
   "last_commit": "0eae48c39c620f05d678705cdcb5198b9955c6da",
-  "next_step": "Actual raster/depth/vertex/resource-binding comparison before GUID-preserving integration; no repeat of equivalent finite RGBA32F compute-lift cases.",
+  "next_step": "Create actual graphics render pass with color+depth readback and compare original vs rebound stages before game integration.",
   "memory_path": "prompt/coordination/clients/raft-20261103T162900Z-73e8c2a1/MEMORY.md"
 }
