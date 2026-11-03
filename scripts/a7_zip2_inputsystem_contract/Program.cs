@@ -62,6 +62,24 @@ internal static class Program
         return false;
     }
 
+    private static bool HasPublicReadWriteProperty(MetadataReader reader, TypeDefinition type, string propertyName)
+    {
+        foreach (var handle in type.GetProperties())
+        {
+            var property = reader.GetPropertyDefinition(handle);
+            if (reader.GetString(property.Name) != propertyName)
+                continue;
+            var accessors = property.GetAccessors();
+            if (accessors.Getter.IsNil || accessors.Setter.IsNil)
+                return false;
+            var get = reader.GetMethodDefinition(accessors.Getter);
+            var set = reader.GetMethodDefinition(accessors.Setter);
+            return (get.Attributes & MethodAttributes.MemberAccessMask) == MethodAttributes.Public &&
+                   (set.Attributes & MethodAttributes.MemberAccessMask) == MethodAttributes.Public;
+        }
+        return false;
+    }
+
     private static bool HasMethod(MetadataReader reader, TypeDefinition type, string methodName,
                                   bool generic = false)
     {
@@ -115,7 +133,10 @@ internal static class Program
                 "missing-public-TouchState.phase-getter");
         Require(HasMethod(reader, eventPtr, "IsA", generic: true),
                 "missing-public-InputEventPtr.IsA-generic");
-        Require(HasMethod(reader, system, "add_onEvent"), "missing-public-InputSystem.onEvent");
+        // InputSystem 1.7 onEvent is a public get/set InputEventListener
+        // property supporting compound +=/-=, not a CLI event with add_onEvent.
+        Require(HasPublicReadWriteProperty(reader, system, "onEvent"),
+                "missing-public-InputSystem.onEvent-read-write-property");
         Require(HasMethod(reader, system, "add_onBeforeUpdate"),
                 "missing-public-InputSystem.onBeforeUpdate");
         // A type lookup for Touchscreen also ensures its interface is present.
@@ -123,7 +144,7 @@ internal static class Program
 
         Console.WriteLine("RAFT_A7_ZIP2_INPUTSYSTEM_ABI authenticated_source=true bytes=" +
                           ExpectedBytes + " metadata_types=" + reader.TypeDefinitions.Count +
-                          " touchstate_fields=3 phase_property=true public_raw_state_api=true original_lfs_used=false" +
+                          " touchstate_fields=3 phase_property=true onEvent_property=true public_raw_state_api=true original_lfs_used=false" +
                           " unity_execution=false android_device_execution=false");
     }
 
