@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T184205Z-a12d793c",
+  "status": "planned",
+  "inputs": [
+    "14 Shader-bearing authenticated original owners, 165 Shader objects and original Blur SHA c9341848...",
+    "Authored W1 ShaderLab and HLSL translators under current branch",
+    "Original D3D11 platform code 4 with 2 passes,2 paired program permutations"
+  ],
+  "hypothesis": "Existing W1 exact-staged restoration can be generalized to original 2-pass Blur if original resource and property layouts fit; any unsupported field or unequal stage shows explicit failure, never guessed substitute.",
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_a12_original_blur_wrapper.py -v",
+    "python3 -m scripts.a12_build_original_blur_wrapper --source Raft/Raft_Data --repo . --out $RUNNER_TEMP/a12-blur-wrapper-summary.json"
+  ],
+  "expected_signal": "2 original passes, 4 independent translated DXBC stages, true original binding names/semantics, ShaderLab wrapper hash and Vulkan1.1 wrapped stages, source and GUID unchanged, no game delivery.",
+  "budget": "14 sources 488.4MB, 3 LFS objects reusing W1 cache; toolchain CPU only, timeout 25min; no Unity Editor, APK or release",
+  "negative_controls": [
+    "Original identity/object SHA drift rejects",
+    "Original nonempty property or parameter override rejects until serialized schema mapped",
+    "Multi-permutation or mismatched stages fail closed",
+    "Private HLSL and ShaderLab never uploaded or logged"
+  ],
+  "workflow_path": ".github/workflows/raft-a12-original-blur-wrapper.yml",
+  "concurrency_group": "raft-a12-blur-wrapper-${{ github.ref }}-${{ github.sha }}",
+  "artifact_prefix": "a12-blur-wrapper-aggregate",
+  "result": null,
+  "limitations": [
+    "Vulkan validation not Unity ShaderLab material binding or phone rendering",
+    "Water FFT remaining kernels still block native delivery"
+  ]
+}
