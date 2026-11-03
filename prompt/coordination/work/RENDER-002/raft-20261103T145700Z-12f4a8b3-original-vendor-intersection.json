@@ -3,8 +3,8 @@
   "owner": "raft-20261103T145700Z-12f4a8b3",
   "client_label": "A12",
   "issue_id": "RENDER-002",
-  "status": "planned",
-  "updated_at": "2026-11-03T14:59:10Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T15:05:13Z",
   "base_sha": "0a6507e86c7960109360c0b95212db606c4d882e",
   "hypothesis": "The original Shader object m_ParsedForm/m_Name values from exactly two verified Unity resource containers may have a nonzero or zero exact-name intersection with Unity 2021.3.45f2 official198 builtin identities. This is novel evidence independent of incomplete ShaderLab export samples.",
   "intended_files": [
@@ -26,8 +26,11 @@
   ],
   "evidence": [
     "https://github.com/alwansan/raf/actions/runs/41624581951",
-    "https://github.com/alwansan/raf/actions/runs/41644979965"
+    "https://github.com/alwansan/raf/actions/runs/41644979965",
+    "https://github.com/alwansan/raf/actions/runs/41659840282",
+    "https://github.com/alwansan/raf/commit/4605ddca31b21ba754b003f54ca5b2d0380d34a4",
+    "docs/A12_ORIGINAL_SHADER_VENDOR_INTERSECTION_2026-11-03.md"
   ],
-  "result": null,
-  "next_step": "Run source-only novel, privacy-preserving overlap test and SHA-pinned two-owner CI without assuming full original export."
+  "result": "Exact-source CPU CI success 10/10; verified two SHA-pinned original Shader owners totaling 227,511,628 bytes; 105/105 original object names parseable, 9 distinct exact official vendor identities, 96 nonvendor, 0 missing/conflicting; 198 SHA-pinned Unity vendor names. Complete 140-export provenance unverified, old native zero-match unresolved.",
+  "next_step": "Future separately authorized complete same-stage exported .shader/.meta/GUID to original-object mapping; preserve strict zero-match and WATER/RENDER blockers."
 }
