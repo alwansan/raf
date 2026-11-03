@@ -2,15 +2,15 @@
   "schema_version": 1,
   "client_label": "W1",
   "username": "raft-20261103T162900Z-73e8c2a1",
-  "session_id": "w1-full-engine-20261103T231900684Z",
+  "session_id": "w1-owner-build-20261103T233714200Z",
   "resumed_from": null,
-  "status": "paused",
-  "updated_at": "2026-11-03T23:30:36.122Z",
-  "base_sha": "4252763869dfc285bf0f8f5f8574687a7220b959",
+  "status": "active",
+  "updated_at": "2026-11-03T23:37:14.200Z",
+  "base_sha": "3934904d51bb01a527199b83bb422eb6bbb9f76f",
   "current_work": [
-    "Full165original shader engine coverage complete:25actualUnitybindings/schemas and25negativecontrols PASS"
+    "Owner-authorized full native/XAPK attempt with ZIP2 source reuse and read-only Material→Shader diagnostic before existing authenticity gates"
   ],
   "last_commit": "da39e24c3f4e85276d386182c960895b88e35839",
-  "next_step": "Recover/verify actual complete-export original Material→Shader associations and internal-engine PPtrs. Then implement justified builtin zero-loose-file gate correction; source/program/phone proof remains separate. Do not repeat completed mappings or identical native build.",
+  "next_step": "Add fail-closed aggregate export diagnostic, reuse pinned ZIP2 for three original scene owners, test, then request one full build; do not alter builtin/water authenticity gates or claim readiness.",
   "memory_path": "prompt/coordination/clients/raft-20261103T162900Z-73e8c2a1/MEMORY.md"
 }

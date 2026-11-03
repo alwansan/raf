@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "username": "raft-20261103T162900Z-73e8c2a1",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "started_at": "2026-11-03T23:37:14.200Z",
+  "base_sha": "3934904d51bb01a527199b83bb422eb6bbb9f76f",
+  "owner_authorization": "Latest explicit owner request asks attempt full project/XAPK build using existing main workflow. Experimental attempt only; NOT_READY remains 0/3.",
+  "approach": "Gather genuine complete-export Material Shader PPtr closure evidence before the strict builtin gate. Reuse verified ZIP2 cached owners rather than selected LFS download. No gate bypass, substitutions or fake readiness.",
+  "paths": [
+    "scripts/w1_audit_export_material_shaders.py",
+    "tests/test_w1_export_material_shaders.py",
+    ".github/workflows/raft-unity-editor-android-import.yml"
+  ],
+  "budget": "One existing native attempt, 240-minute existing maximum; no duplicate native or cancellation."
+}
