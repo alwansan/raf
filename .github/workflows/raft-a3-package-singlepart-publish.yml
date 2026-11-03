@@ -1,0 +1,30 @@
+name: Raft A3 DELIVERY-014 single-part signed delivery publish (CPU only)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/package_android_delivery.py'
+      - 'tests/test_a3_package_singlepart_publish.py'
+      - '.github/workflows/raft-a3-package-singlepart-publish.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raft-a3-delivery014-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+  queue: max
+jobs:
+  exclusive-publish:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Exercise real PartsWriter synthetic collision and failure controls
+        run: python3 -m unittest discover -s tests -p test_a3_package_singlepart_publish.py -v
+      - name: Existing delivery packing and recovery regression
+        run: python3 -m unittest discover -s tests -p test_android_delivery_package.py -v
+      - name: State evidence limits
+        run: echo 'Synthetic source tool validation only; no Unity/APK/OBB/XAPK/phone evidence.' >> "$GITHUB_STEP_SUMMARY"
