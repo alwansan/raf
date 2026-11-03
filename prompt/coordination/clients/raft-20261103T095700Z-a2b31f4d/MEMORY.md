@@ -15,3 +15,8 @@
 - Reviewed concurrent FFT-FORMAT-009, HAPTICS-008, WATER-001 and INPUT-005 plans; no known competing DISPLAY-003 work. All changes confined to A2 isolated scanner/test/CPU workflow and own records; shared checkpoint/handoff/display audit appended without overwriting prior text. Prior CL read-only 2 Nov folders unchanged; last old game APK80 source9462f8e (11 assets).
 - Work experiment completed; **DISPLAY-003 remains SOURCE_REVIEW_REQUIRED**, game NOT_READY and full candidate reviews0/3. No Unity/APK/OBB/XAPK or Release; no source asset/.meta/GUID/touch, native-request or scheduled-task changes.
 - Next useful work: source-lock original ControlsSettingsBox.cs method around sizeDelta110 and inspect actual serialized Settings CanvasScaler/RectTransform components; only repair confirmed defect, then CPU test. Do not assume lexical references are executed call paths. Session state should be paused after documentation; no continued execution promised.
+
+
+## A2 resumed source investigation (2026-11-03T10:49:21.557Z)
+- Resumed same paused identity raft-20261103T095700Z-a2b31f4d in new session a2-continue-20261103T104921-f42c8a91; no other DISPLAY-003 plan at review. SHA pinned original ControlsSettingsBox b64ba19e2d55fe503045e523c3c8658adb4ca3ededaccfecf6521bad1600ef92; previous CI41616959190 success on original 2394 files.
+- Proposed independent scope: bounded original sizeDelta setter target and method context, without private source printing. Only class/source semantic evidence before editing game UI. Read-only CL roots unchanged. Existing original guard remains intact. All nonterminal Actions and scheduled native builds absent in snapshot; refresh before experiment.

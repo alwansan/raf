@@ -1,13 +1,15 @@
 {
   "schema_version": 1,
   "username": "raft-20261103T095700Z-a2b31f4d",
-  "session_id": "a2-20261103T095700Z-b7e41c2f",
-  "resumed_from": null,
-  "status": "paused",
-  "updated_at": "2026-11-03T10:20:00Z",
-  "base_sha": "84843b8c21847faf663126dc399c6b7947f8a0e8",
-  "current_work": [],
+  "session_id": "a2-continue-20261103T104921-f42c8a91",
+  "resumed_from": "a2-20261103T095700Z-b7e41c2f",
+  "status": "active",
+  "updated_at": "2026-11-03T10:49:21.557Z",
+  "base_sha": "488cd17bf6e8c0d44db418b528a92e728df45b5f",
+  "current_work": [
+    "DISPLAY-003"
+  ],
   "last_commit": "b4ab7275cdadead58081d188cea305d8aa814766",
-  "next_step": "Review source-locked original ControlsSettingsBox.cs sizeDelta write line110, including method/caller and Settings CanvasScaler serialized assets. CI41616959190 is success; DISPLAY-003 and NOT_READY remain open; no current autonomous/background execution.",
+  "next_step": "Original SHA-pinned ControlsSettingsBox sizeDelta target/method/caller probe and read-only scene CanvasScaler evidence; no Unity/LFS/native build.",
   "memory_path": "prompt/coordination/clients/raft-20261103T095700Z-a2b31f4d/MEMORY.md"
 }

@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T095700Z-a2b31f4d",
+  "issue_id": "DISPLAY-003",
+  "status": "planned",
+  "updated_at": "2026-11-03T10:49:21.557Z",
+  "base_sha": "488cd17bf6e8c0d44db418b528a92e728df45b5f",
+  "hypothesis": "The sole Settings-related source-side sizeDelta write belongs to a narrow control-binding row rather than a global canvas resize; verify context and reachability before any Android aspect change.",
+  "intended_files": [
+    "scripts/probe_a2_controls_layout_context.py",
+    "tests/test_probe_a2_controls_layout_context.py",
+    ".github/workflows/raft-a2-controls-layout-source.yml",
+    "prompt/coordination/clients/raft-20261103T095700Z-a2b31f4d/",
+    "docs/A2_DISPLAY_SETTINGS_LAYOUT_SOURCE_2026-11-03.md",
+    "prompt/STATUS.md",
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+  ],
+  "related_work": [
+    "prompt/coordination/work/DISPLAY-003/raft-20261103T095700Z-a2b31f4d-orientation-settings.json"
+  ],
+  "experiment_ids": [
+    "controls-layout-target"
+  ],
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41616959190",
+    "ControlsSettingsBox.cs authenticated SHA256 b64ba19e2d55fe503045e523c3c8658adb4ca3ededaccfecf6521bad1600ef92"
+  ],
+  "result": null,
+  "next_step": "Develop private source-only context parser and negative-controls tests; inspect original scene references only if already available without LFS."
+}

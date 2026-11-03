@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T095700Z-a2b31f4d",
+  "status": "planned",
+  "hypothesis": "The ControlsSettingsBox.cs sizeDelta write at line110 acts on an item-specific RectTransform and is unlikely to cause global Settings UI horizontal stretch.",
+  "input_hashes": [
+    "ControlsSettingsBox.cs sha256 b64ba19e2d55fe503045e523c3c8658adb4ca3ededaccfecf6521bad1600ef92"
+  ],
+  "commands": [
+    "python -m unittest tests.test_probe_a2_controls_layout_context -v",
+    "python -m scripts.probe_a2_controls_layout_context --source PRIVATE_CSHARP9"
+  ],
+  "expected_signal": "Authenticated method boundary and target-scope categories with no recovered source excerpts; reject non-target and comments.",
+  "negative_controls": [
+    "Unknown/mismatched SHA",
+    "duplicate target",
+    "fake sizeDelta in string/comment",
+    "multiple/malformed assignments",
+    "symlink source"
+  ],
+  "workflow_path": ".github/workflows/raft-a2-controls-layout-source.yml",
+  "concurrency_group": "raft-a2-display-003-controls-${{ github.ref }}-${{ github.sha }}",
+  "artifact_prefix": null,
+  "budget": "Ubuntu24.04 ≤10min CPU no-LFS no-Unity, one execution per source SHA",
+  "run_url": null,
+  "source_sha": null,
+  "result": null,
+  "limitations": [
+    "No original UI serialization verified yet",
+    "Source-only lexical method analysis",
+    "No device test"
+  ],
+  "next_step": "Inspect authenticated CI and actual assignment target."
+}
