@@ -4,8 +4,8 @@
   "client_label": "W1",
   "session_id": "w1-20261103T150217800Z-d4a79e63",
   "issue_id": "RENDER-002",
-  "status": "active",
-  "updated_at": "2026-11-03T15:25:05.604Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T16:19:18.235Z",
   "base_sha": "528068d21253340a9a673517aa608dbb58a015d0",
   "hypothesis": "Original Depth Copy parameter entry0 may be empty per-variant overrides; exact decode and serialized render-state reconstruction can produce a faithful private ShaderLab wrapper retaining6+3subshader boundaries and property-rebound stage programs.",
   "intended_files": [
@@ -24,6 +24,6 @@
     "depth-shaderlab-wrapper",
     "w1-depth-unity"
   ],
-  "result": "CPU source891e10a9/run41662298511 SUCCESS: exact empty parameter0; private original6+3ShaderLab wrapper,27genuine fog references preserved,18/18wrapped stages validated. Unity run41663393724 in progress.",
-  "next_step": "Inspect targeted Unity aggregate; fix actual parser/platform compiler failures, then numerical/render controls before any GUID integration."
+  "result": "Exact private6+3ShaderLab restored and actualUnity2021.3.45f2AndroidVulkanbundle run41663393724 SUCCESS; bounded fragment numerics run41672408152 SUCCESS. No actual raster/depth/phone acceptance.",
+  "next_step": "Actual raster/depth/vertex/resource-binding comparison before GUID-preserving game integration."
 }
