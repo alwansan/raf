@@ -90,8 +90,10 @@ def rebind(source, program, name_indices, *, original_inputs=None):
     if used['t'] != set(textures) or used['s'] != set(samplers):
         raise ValueError('Serialized texture/sampler metadata not fully resolved')
     if mapping:
-        token = re.compile(r'\b(?:' + '|'.join(re.escape(k) for k in mapping) + r')\b')
-        source = token.sub(lambda m: mapping[m[0]], source)
+        token = re.compile(r'\bregister\s*\([^)]*\)|\b(?:' + '|'.join(re.escape(k) for k in mapping) + r')\b')
+        # register(s0/t1) is compiler binding syntax, not an identifier use.
+        # Renaming those tokens creates invalid HLSL or changes descriptor slots.
+        source = token.sub(lambda m: mapping.get(m[0], m[0]), source)
     semantics = 0
     if original_inputs is not None:
         input_struct = re.search(r'\bstruct\s+SPIRV_Cross_Input\s*\{([^{}]*)\}', source)
