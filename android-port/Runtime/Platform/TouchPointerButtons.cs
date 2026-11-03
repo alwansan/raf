@@ -12,9 +12,18 @@ namespace RaftAndroid.Platform
         public bool Pressed { get; private set; }
         public TouchPointerButtons(Action<bool> emit) { this.emit = emit ?? throw new ArgumentNullException(nameof(emit)); }
         private void Set(bool value) { if (Pressed == value) return; Pressed = value; emit(value); }
-        public void Hold(bool value) { held = value; Set(held || pulse); }
+        public void Hold(bool value)
+        {
+            // New held input supersedes queued old taps. Replaying one after
+            // the release would create an unintended extra LEFT mouse click.
+            if (value && !held) pending = 0;
+            held = value;
+            Set(held || pulse);
+        }
         public void Tap()
         {
+            // An extra request while held cannot become a click after release.
+            if (held) return;
             if (!Pressed && !pulse && pending == 0) { pulse = true; Set(true); }
             else pending++;
         }
