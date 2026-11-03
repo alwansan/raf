@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T162900Z-73e8c2a1",
+  "session_id": "w1-zip2-20261103T223612473Z",
+  "status": "active",
+  "updated_at": "2026-11-03T22:36:12.474Z",
+  "base_sha": "5e40225929a6517eab937858d5ae438122a4f2c1",
+  "hypothesis": "Exact exporter may map original built-in Shader objects to engine references rather than loose files; determine mapping before changing zero-match gate. Move W1 regeneration input to SHA-pinned ZIP2 without new LFS.",
+  "intended_files": [
+    "scripts/w1_stage_zip2_owners.py",
+    ".github/workflows/raft-w1-depth-stage.yml",
+    "docs/W1_ZIP2_AND_BUILTIN_DISPOSITION_2026-11-04.md"
+  ],
+  "related_work": [
+    "A1 ZIP2 FFT single-owner stager; reuse without overwriting peer",
+    "A12 Blur CB reflection distinct scope",
+    "A2 active ZIP2 Settings lane distinct"
+  ],
+  "next_step": "Use pinned ZIP2 for W1 shader restoration; prove why full export omits builtins before a native retry."
+}

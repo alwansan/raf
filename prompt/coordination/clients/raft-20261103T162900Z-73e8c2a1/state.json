@@ -2,15 +2,15 @@
   "schema_version": 1,
   "client_label": "W1",
   "username": "raft-20261103T162900Z-73e8c2a1",
-  "session_id": "w1-20261103T174159718Z-resume",
+  "session_id": "w1-zip2-20261103T223612473Z",
   "resumed_from": null,
-  "status": "paused",
-  "updated_at": "2026-11-03T17:49:09.114Z",
-  "base_sha": "37268a58a56929ad355d695a795e8dde891a3d8c",
+  "status": "active",
+  "updated_at": "2026-11-03T22:36:12.474Z",
+  "base_sha": "5e40225929a6517eab937858d5ae438122a4f2c1",
   "current_work": [
-    "External native preview run41687765928 running"
+    "ZIP2 two-owner source adapter and original exporter builtin disposition diagnosis"
   ],
   "last_commit": "a8e04dd2aa2bfcd8bf449abcbc139745619424fa",
-  "next_step": "Inspect live41687765928 sourcea8e04dd2 actual export install/builtin/water gates and packaging. Do not duplicate request. No XAPK yet.",
+  "next_step": "Use pinned ZIP2 for W1 shader restoration; prove why full export omits builtins before a native retry.",
   "memory_path": "prompt/coordination/clients/raft-20261103T162900Z-73e8c2a1/MEMORY.md"
 }
