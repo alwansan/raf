@@ -6,3 +6,13 @@
 - Original `ScriptingAssemblies.json` lists Unity.InputSystem, and original DLL is available without Git LFS. However earlier A7's actual touch packet tests used strict Unity doubles and public upstream API; no binary metadata acceptance from ORIGINAL shipped game.
 - Work: obtain only pinned original binary and two small manifests via GitHub Actions sparse partial clone, authenticate bytes, use built-in .NET metadata APIs to assert required original managed types and touch-state method signatures, include tampered-DLL and missing-assembly-list negative controls.
 - Scope: No original game resource publication, source-aliasing, LFS, Unity Editor/native APK/OBB/XAPK, Releases, tasks or CL writes. CPU metadata not gameplay test. Status NOT_READY 0/3.
+
+## Final verified ZIP2 original InputSystem checkpoint — 2026-11-03T22:55:04.856Z
+
+- Run [41734239232](https://github.com/alwansan/raf/actions/runs/41734239232) FAIL: checker modeled `TouchState.phase` as public field; original binary exposes `phaseId` field and public `phase` property. Not original game runtime defect.
+- Run [41734394488](https://github.com/alwansan/raf/actions/runs/41734394488) FAIL: checker required `InputSystem.add_onEvent` CLR event, whereas original binary uses a public `onEvent` get/set InputEventListener property. Not game defect.
+- Checker fixed in [24688691567ccc84177a8d97e3e699bac6de9d6e](https://github.com/alwansan/raf/commit/24688691567ccc84177a8d97e3e699bac6de9d6e), untouched AndroidTouchPointer runtime.
+- [Final original ZIP2 CPU **41734563980**](https://github.com/alwansan/raf/actions/runs/41734563980) COMPLETED SUCCESS on exact checker SHA: original 1,052,672-byte Unity.InputSystem.dll manifest/SHA verified; 639 managed type definitions; generic `StateEvent.GetState`, `InputEventPtr.IsA`, `TouchState.touchId/position/phaseId`, public `phase` getter, `InputSystem.onEvent` public read/write property, onBeforeUpdate registration and Touchscreen type. Corrupt DLL and manifest negative controls rejected.
+- Only sparse/read-only original ZIP2 provider used, original source commit pin `15964ea8f246b6e076ce26b60931ee2e1a9a2385`; no Git LFS, full 7.79GB checkout, original binaries committed, Unity/native build/APK/Release, CL, other clients, or task changes.
+- Bounded subtask **completed**; does not prove Unity Editor compile or Android actual UGUI/gamepad simultaneous input. Global INPUT acceptance pending; WATER/RENDER unresolved, NOT_READY 0/3 candidate reviews. All previous A7 completed identities preserved; next continuation must use fresh identity/HEAD when prior possibly active.
+- Report: [A7_ZIP2_ORIGINAL_INPUTSYSTEM_ABI_2026-11-04.md](../../../docs/A7_ZIP2_ORIGINAL_INPUTSYSTEM_ABI_2026-11-04.md).
