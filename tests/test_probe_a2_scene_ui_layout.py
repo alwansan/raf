@@ -120,5 +120,62 @@ class A2SceneUiLayoutTests(unittest.TestCase):
             scan_objects([FakeObject("Canvas", i, {}) for i in range(MAX_OWNER_OBJECTS + 1)])
 
 
+    def test_settings_canvas_ancestor_followed_via_native_parent_pptrs(self):
+        ptr = lambda x: {"m_FileID": 0, "m_PathID": x}
+        objs = [
+            FakeObject("GameObject", 1, {"m_Name": "SettingsPanel"}),
+            FakeObject("GameObject", 2, {"m_Name": "MainCanvas"}),
+            FakeObject("Canvas", 21, {"m_GameObject": ptr(2)}),
+            FakeObject("RectTransform", 11, {
+                "m_GameObject": ptr(1), "m_Father": ptr(12),
+                "m_AnchorMin": {"x": 0, "y": 0},
+                "m_AnchorMax": {"x": 1, "y": 1},
+                "m_SizeDelta": {"x": 0, "y": 25},
+            }),
+            FakeObject("RectTransform", 12, {
+                "m_GameObject": ptr(2), "m_Father": ptr(0),
+                "m_AnchorMin": {"x": 0, "y": 0},
+                "m_AnchorMax": {"x": 1, "y": 1},
+                "m_SizeDelta": {"x": 0, "y": 0},
+            }),
+        ]
+        result = scan_objects(objs)
+        self.assertEqual(result["counts"]["settings_named_go_under_native_canvas"], 1)
+        self.assertEqual(result["counts"]["rect_linked_to_settings_named_go"], 1)
+        self.assertFalse(result["canvas_scaler_script_identity_confirmed"])
+        self.assertNotIn("SettingsPanel", str(result))
+
+    def test_remote_or_cyclic_ancestry_is_unknown_not_outside_canvas(self):
+        ptr = lambda x, fid=0: {"m_FileID": fid, "m_PathID": x}
+        for parent in (ptr(99, 1), ptr(12)):
+            objs = [
+                FakeObject("GameObject", 1, {"m_Name": "Settings"}),
+                FakeObject("RectTransform", 11, {
+                    "m_GameObject": ptr(1), "m_Father": parent,
+                    "m_AnchorMin": {"x": 0, "y": 0},
+                    "m_AnchorMax": {"x": 0, "y": 0},
+                    "m_SizeDelta": {"x": 20, "y": 20},
+                }),
+            ]
+            if parent == ptr(12):
+                objs.append(FakeObject("Transform", 12, {
+                    "m_GameObject": ptr(2), "m_Father": ptr(11),
+                }))
+            result = scan_objects(objs)
+            self.assertEqual(result["counts"]["settings_canvas_ancestry_unknown"], 1)
+            self.assertNotIn(
+                "settings_named_go_without_native_canvas_ancestor_in_this_scene",
+                result["counts"])
+
+    def test_base_only_mono_is_not_misreported_as_custom_component_data(self):
+        base_fields = {"m_GameObject": {"m_FileID": 0, "m_PathID": 1},
+                       "m_Script": {"m_FileID": 1, "m_PathID": 900},
+                       "m_Name": "", "m_Enabled": True}
+        result = scan_objects([FakeObject("MonoBehaviour", 3, base_fields)])
+        self.assertEqual(result["counts"]["mono_base_fields_only_no_custom_schema"], 1)
+        self.assertFalse(result["canvas_scaler_script_identity_confirmed"])
+
+
+
 if __name__ == "__main__":
     unittest.main()

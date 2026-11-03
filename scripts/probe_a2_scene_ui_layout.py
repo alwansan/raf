@@ -5,7 +5,7 @@ Print only generic numeric summaries and cryptographic fingerprints. No original
 object names, script bodies, payloads, raw typetrees, or assets are exported.
 """
 import argparse
-from collections import Counter
+from collections import Counter, defaultdict
 import hashlib
 import json
 import math
@@ -21,7 +21,7 @@ SCENE_BLOBS = {
 }
 MAX_SCENE_BYTES = 12_000_000
 MAX_OWNER_OBJECTS = 100_000
-INTERESTING = {"GameObject", "RectTransform", "Canvas", "MonoBehaviour"}
+INTERESTING = {"GameObject", "Transform", "RectTransform", "Canvas", "MonoBehaviour"}
 SCALER_FIELDS = frozenset({
     "m_UiScaleMode", "m_ReferenceResolution",
     "m_ScreenMatchMode", "m_MatchWidthOrHeight",
@@ -73,8 +73,13 @@ def scan_objects(objects):
     if len(objects) > MAX_OWNER_OBJECTS:
         raise ValueError("Unbounded original scene object inventory")
     counts, errors = Counter(), Counter()
-    named_settings = set()
-    rect_records = []
+    named_settings, canvas_owners, rect_owner_gos = set(), set(), set()
+    owner_to_transforms, transform_owners, transform_parents = defaultdict(list), {}, {}
+    mono_base_fields = {
+        "m_GameObject", "m_Enabled", "m_EditorHideFlags", "m_Script", "m_Name",
+        "m_ObjectHideFlags", "m_CorrespondingSourceObject", "m_PrefabInstance",
+        "m_PrefabAsset", "m_EditorClassIdentifier",
+    }
     for obj in objects:
         kind = str(obj.type.name)
         counts["owner_objects"] += 1
@@ -94,35 +99,91 @@ def scan_objects(objects):
             if isinstance(name, str) and "settings" in name.casefold():
                 counts["settings_name_gameobjects"] += 1
                 named_settings.add(int(obj.path_id))
-        elif kind == "RectTransform":
-            anchor_min = vector2(tree.get("m_AnchorMin"))
-            anchor_max = vector2(tree.get("m_AnchorMax"))
-            size = vector2(tree.get("m_SizeDelta"))
-            if anchor_min is not None and anchor_max is not None and size is not None:
-                counts["rect_geometry_decoded"] += 1
-                if anchor_min == anchor_max:
-                    counts["rect_fixed_anchor_geometry"] += 1
-                else:
-                    counts["rect_stretch_anchor_geometry"] += 1
-                if any(abs(v) > 1e-7 for v in size):
-                    counts["rect_nonzero_size_delta"] += 1
+        elif kind == "Canvas":
+            owner = local_pptr(tree.get("m_GameObject"))
+            if owner is None:
+                counts["canvas_owner_unknown"] += 1
             else:
-                counts["rect_geometry_unknown"] += 1
-            rect_records.append(local_pptr(tree.get("m_GameObject")))
+                canvas_owners.add(owner)
+        elif kind in {"Transform", "RectTransform"}:
+            ident = int(obj.path_id)
+            owner = local_pptr(tree.get("m_GameObject"))
+            if owner is not None:
+                owner_to_transforms[owner].append(ident)
+                transform_owners[ident] = owner
+            parent = tree.get("m_Father")
+            if (isinstance(parent, dict) and type(parent.get("m_FileID")) is int
+                    and type(parent.get("m_PathID")) is int
+                    and parent["m_FileID"] == 0 and parent["m_PathID"] == 0):
+                transform_parents[ident] = None
+            else:
+                transform_parents[ident] = local_pptr(parent) or "unknown"
+            if kind == "RectTransform":
+                if owner is not None:
+                    rect_owner_gos.add(owner)
+                amin = vector2(tree.get("m_AnchorMin"))
+                amax = vector2(tree.get("m_AnchorMax"))
+                size = vector2(tree.get("m_SizeDelta"))
+                if amin is not None and amax is not None and size is not None:
+                    counts["rect_geometry_decoded"] += 1
+                    counts["rect_fixed_anchor_geometry" if amin == amax
+                           else "rect_stretch_anchor_geometry"] += 1
+                    if any(abs(v) > 1e-7 for v in size):
+                        counts["rect_nonzero_size_delta"] += 1
+                else:
+                    counts["rect_geometry_unknown"] += 1
         elif kind == "MonoBehaviour":
-            # A field shape is an evidence candidate only; absent script metadata
-            # must not become a claim of confirmed CanvasScaler class identity.
+            # UnityPy often decodes *only the MonoBehaviour base fields* when
+            # original MonoScript field schema is unavailable. Never claim
+            # CanvasScaler absent because that generic tree has no custom fields.
             if SCALER_FIELDS.issubset(tree):
                 counts["canvas_scaler_serialized_field_shape_candidates"] += 1
+            elif set(tree).issubset(mono_base_fields):
+                counts["mono_base_fields_only_no_custom_schema"] += 1
             else:
-                counts["other_mono_shape_or_unknown"] += 1
+                counts["mono_custom_fields_without_scaler_shape"] += 1
     counts["rect_linked_to_settings_named_go"] = sum(
-        owner in named_settings for owner in rect_records if owner is not None)
+        len(owner_to_transforms.get(go, [])) == 1
+        and owner_to_transforms[go][0] in transform_parents
+        and go in rect_owner_gos
+        for go in named_settings)
+    for go in named_settings:
+        roots = owner_to_transforms.get(go, [])
+        if len(roots) != 1:
+            counts["settings_canvas_ancestry_unknown"] += 1
+            continue
+        seen, current, in_canvas = set(), roots[0], False
+        ancestry_unknown = False
+        for _ in range(256):
+            if current in seen or current not in transform_parents:
+                ancestry_unknown = True
+                break
+            seen.add(current)
+            owner = transform_owners.get(current)
+            if owner is None:
+                ancestry_unknown = True
+                break
+            if owner in canvas_owners:
+                in_canvas = True
+                break
+            parent = transform_parents[current]
+            if parent is None:
+                break
+            if parent == "unknown":
+                ancestry_unknown = True
+                break
+            current = parent
+        else:
+            ancestry_unknown = True
+        counts["settings_named_go_under_native_canvas" if in_canvas else
+               "settings_canvas_ancestry_unknown" if ancestry_unknown else
+               "settings_named_go_without_native_canvas_ancestor_in_this_scene"] += 1
     return {
         "counts": dict(sorted(counts.items())),
         "decode_unknowns": dict(sorted(errors.items())),
         "source_gameobject_names_emitted": False,
         "canvas_scaler_script_identity_confirmed": False,
+        "monobehaviour_base_typetree_is_not_custom_schema": True,
         "nondecoded_mono_does_not_prove_absence": True,
         "settings_prefab_completeness_confirmed": False,
         "settings_stretch_cause_proven": False,
