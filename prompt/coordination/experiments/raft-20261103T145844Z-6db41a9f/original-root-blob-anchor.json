@@ -2,7 +2,7 @@
   "schema_version": 1,
   "owner": "raft-20261103T145844Z-6db41a9f",
   "issue_id": "AUDIO-004",
-  "status": "planned",
+  "status": "completed",
   "hypothesis": "Coedited original bank/Data.rgd must fail even when worktree SHA equals mutable HEAD.",
   "input_hashes": [
     {
@@ -24,11 +24,28 @@
   "concurrency_group": "raft-a9-stage-atomic-${{ github.ref }}-${{ github.sha }}",
   "artifact_prefix": null,
   "budget": "Ubuntu24.04 CPU-only six minutes, synthetic fixtures, no LFS/Unity/native",
-  "run_url": null,
-  "source_sha": null,
-  "result": null,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41660142521",
+  "source_sha": "e2b8c6f081c9500d95b47b954c86c3fd565efd62",
+  "result": {
+    "red_source_sha": "a22114063e2c757fbe685fc1ec33c7569bcfaaf4",
+    "red_run": 41659894862,
+    "red_expected_failures": 3,
+    "source_fix_sha": "f1f5e1b8e40cfc13638662bb649a1beeeb4378ca",
+    "green_run": 41660031718,
+    "final_source_sha": "e2b8c6f081c9500d95b47b954c86c3fd565efd62",
+    "final_run": 41660142521,
+    "job_id": 126000873511,
+    "conclusion": "success",
+    "actual_original_git_root_blobs_checked": 7,
+    "synthetic_new_tests": 7,
+    "synthetic_prior_tests": 12,
+    "original_payloads_hydrated": false
+  },
   "limitations": [
-    "Git original-blob pin is source-only, not phone OBB or FMOD runtime proof."
+    "Git original-blob pin is source-only, not phone OBB or FMOD runtime proof.",
+    "Proof of tracked Git object identities only; no downloaded MasterBank LFS bytes, packaged OBB, Unity, or phone FMOD/game test.",
+    "Pin cannot prevent deliberate simultaneous edits of verifier source code plus expected pins."
   ],
-  "next_step": "Verify exact SHA CI and record."
+  "next_step": "Scope source authenticity guard complete; retain AUDIO-004/HAPTICS runtime OPEN.",
+  "updated_at": "2026-11-03T15:07:09.378Z"
 }
