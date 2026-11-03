@@ -1,0 +1,84 @@
+name: Raft A12 original Subsurface Blur pass graph (CPU only)
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/a12_probe_original_blur_passes.py'
+      - 'tests/test_a12_original_blur_passes.py'
+      - '.github/workflows/raft-a12-original-blur-pass-graph.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: raft-a12-original-blur-pass-graph-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  audit-original-water-blur:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: true
+          sparse-checkout: |
+            scripts
+            tests
+            Raft/Raft_Data
+
+      - name: Run A12 source-only negative controls before original LFS hydration
+        run: python3 -m unittest discover -s tests -p test_a12_original_blur_passes.py -v
+
+      - name: Assert exactly two SHA-authenticated original source pointers and 8 GiB disk budget
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import shutil
+          from scripts.verify_targeted_lfs_compute_sources import verify_sources
+          from scripts.w1_recover_graphics_programs import OWNERS
+          assert len(OWNERS) == 2 and shutil.disk_usage('.').free >= 8 * 1024**3
+          verify_sources(Path('Raft/Raft_Data'), pointers_only=True, expected=OWNERS)
+          print('RAFT_A12_BLUR_ORIGINAL_POINTERS two_owners=true sha_pinned=true')
+          PY
+
+      - name: Restore existing exact two-owner W1 LFS cache when available
+        uses: actions/cache@v4
+        with:
+          path: .git/lfs/objects
+          key: w1-graphics-87493249-0498f738-v1
+
+      - name: Hydrate only two exact verified graphics resources (227511628 bytes)
+        env:
+          GIT_LFS_SKIP_SMUDGE: '1'
+        run: |
+          set -euo pipefail
+          git lfs install --local
+          git lfs pull --include='Raft/Raft_Data/resources.assets,Raft/Raft_Data/sharedassets0.assets' --exclude='' origin
+          python3 - <<'PY'
+          from pathlib import Path
+          from scripts.verify_targeted_lfs_compute_sources import verify_sources
+          from scripts.w1_recover_graphics_programs import OWNERS
+          verify_sources(Path('Raft/Raft_Data'), expected=OWNERS)
+          print('RAFT_A12_BLUR_SOURCE_SHA_VERIFIED bytes=227511628')
+          PY
+
+      - name: Install pinned CPU-only original serialized shader decoder
+        run: python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+
+      - name: Extract exact authenticated original Blur pass graph (no source publishing)
+        run: |
+          timeout 240s python3 -m scripts.a12_probe_original_blur_passes \
+            --source Raft/Raft_Data --out "$RUNNER_TEMP/a12-blur-pass-graph.json"
+
+      - name: Publish aggregate counts and hashes only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: a12-blur-original-pass-summary-${{ github.sha }}
+          path: ${{ runner.temp }}/a12-blur-pass-graph.json
+          if-no-files-found: ignore
+          retention-days: 7
