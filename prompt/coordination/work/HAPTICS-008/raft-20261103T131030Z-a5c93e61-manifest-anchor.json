@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T131030Z-a5c93e61",
+  "issue_id": "HAPTICS-008",
+  "status": "planned",
+  "updated_at": "2026-11-03T13:10:54.544Z",
+  "base_sha": "e034f56e47b8231c9aceb9d574944b55a56b61b5",
+  "resumed_from": "raft-20261103T121800Z-a5b4f02c",
+  "hypothesis": "Current 29/29 original Haptics WAV SHA auditing compares tracked bytes to a manifest stored in the same writable branch; a coordinated edit to both file and manifest can pass, yielding a false original-fidelity claim. Pin manifest Git blob independently to audited original immutable SHA and preserve synthetic fixture override.",
+  "intended_files": [
+    "scripts/probe_haptics_asset_manifest.py",
+    "tests/test_probe_haptics_asset_manifest.py",
+    "scripts/stage_original_streaming_assets.py",
+    "tests/test_stage_original_streaming_assets.py",
+    "scripts/audit_android_expansion.py",
+    "tests/test_android_expansion_audit.py",
+    ".github/workflows/raft-a5-haptics-archive.yml",
+    "prompt/coordination/clients/raft-20261103T131030Z-a5c93e61/",
+    "prompt/coordination/work/HAPTICS-008/raft-20261103T131030Z-a5c93e61-manifest-anchor.json",
+    "prompt/coordination/experiments/raft-20261103T131030Z-a5c93e61/",
+    "prompt/STATUS.md",
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+  ],
+  "excluded_files": [
+    "config/original-haptics-manifest.json",
+    "Raft/Raft_Data/StreamingAssets/**",
+    "android-port/Runtime/Platform/AndroidStreamingAssets.cs",
+    ".github/raft-native-build-request.json"
+  ],
+  "related_work": [
+    "A3 completed source manifest and stage CI41623215003",
+    "A5 previous original WAV C# reader CI41624251634 and final ZIP entry check CI41635398564",
+    "A3 completed independent ZIP entry canonicalization CI41641182243; do not modify _names"
+  ],
+  "experiment_ids": [
+    "original-haptics-manifest-immutable-anchor"
+  ],
+  "evidence": [],
+  "result": null,
+  "next_step": "Add red synthetic test for co-mutating original WAV and source-manifest SHA, then implement trusted manifest blob SHA override in staging and OBB checks without altering original payloads."
+}
