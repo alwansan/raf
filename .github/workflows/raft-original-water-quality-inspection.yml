@@ -1,0 +1,118 @@
+name: Raft private original water quality resource inspection - no Unity
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-original-water-quality-inspection.yml'
+      - 'scripts/collect_original_water_quality_packet.py'
+      - 'tests/test_collect_original_water_quality_packet.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raft-original-water-quality-inspection-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  inspect:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: true
+          sparse-checkout: |
+            scripts
+            tests
+            Raft/Raft_Data/resources.assets
+            Raft/Raft_Data/globalgamemanagers.assets
+            Raft/Raft_Data/Managed
+      - name: Test exact script pointer selection before fetching resources
+        run: python3 -m unittest discover -s tests -p test_collect_original_water_quality_packet.py -v
+      - name: Authenticate pointer and hydrate only original resources owner
+        env:
+          GIT_LFS_SKIP_SMUDGE: '1'
+          GIT_ATTR_SOURCE: HEAD
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          from scripts.verify_targeted_lfs_compute_sources import EXPECTED,verify_sources
+          verify_sources(Path('Raft/Raft_Data'),pointers_only=True,expected={'resources.assets':EXPECTED['resources.assets']})
+          PY
+          git lfs install --local
+          git lfs pull --include='Raft/Raft_Data/resources.assets' --exclude='' origin
+          python3 - <<'PY'
+          from pathlib import Path
+          from scripts.verify_targeted_lfs_compute_sources import EXPECTED,verify_sources
+          verify_sources(Path('Raft/Raft_Data'),expected={'resources.assets':EXPECTED['resources.assets']})
+          PY
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Install pinned CPU serializer and managed decompiler
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          dotnet tool install ilspycmd --version 11.2.0.10050 --tool-path "$RUNNER_TEMP/ilspy"
+      - name: Inspect original source and serialized quality object privately
+        env:
+          DOTNET_PROCESSOR_COUNT: '2'
+        run: |
+          set -euo pipefail
+          timeout 360s "$RUNNER_TEMP/ilspy/ilspycmd" -p -lv CSharp9_0 -o "$RUNNER_TEMP/original-csharp" Raft/Raft_Data/Managed/Assembly-CSharp.dll > "$RUNNER_TEMP/private-decompile.log" 2>&1
+          timeout 180s python3 -m scripts.collect_original_water_quality_packet --source Raft/Raft_Data --managed-source "$RUNNER_TEMP/original-csharp" --output "$RUNNER_TEMP/quality-private"
+      - name: Encrypt bounded packet; publish no plaintext game resources
+        env:
+          PUBLIC_INSPECTION_CERT: |
+            -----BEGIN CERTIFICATE-----
+            MIIEKzCCApOgAwIBAgIUJ/YOWJyDnUoThrP8YUtFm1JvEsUwDQYJKoZIhvcNAQEL
+            BQAwJTEjMCEGA1UEAwwaUmFmdCBXb3JrIGRldmljZSBkaWFnbm9zaXMwHhcNMjYx
+            MTAyMTg0NTQ0WhcNMjYxMTE2MTg0NTQ0WjAlMSMwIQYDVQQDDBpSYWZ0IFdvcmsg
+            ZGV2aWNlIGRpYWdub3NpczCCAaIwDQYJKoZIhvcNAQEBBQADggGPADCCAYoCggGB
+            AJN3XZkfk/9qAJPt3hGwwT6Kgm3ivEtNkj5GmXKSKFWIJjwtD8d+kV68MIzBK7JJ
+            A3tfflXJXNWrk6Rh1zWpkTOna72Hga415jNxT5xkwVucuokz8Abjk0nhyFLtWLWv
+            KvUN+a1kEO/N+YKo9zXFB9Mh+UauBKuLE78LPVjT9oxXLNJ1BiQYI/zz+XWK7Hci
+            QJXUbdYZreLNkxsNLJcFz17kiW1GxQt7c47TohsnUoO8TkiPsuniJV3iFyHQt6Gr
+            9HYXCruzCjOeVgN7dVmljDY24FQt/7s3L+bwXsiE96B8dej8ZtPv1Pevnx8+OMBt
+            6zWj6VEvTEyT6i/XGoBK5fBOb/fNdOsMtXx5pVKSLTTZuWmJxeKL6qNb6Sr/PIMo
+            IQjrQF1IdSia4HEt0Vrob9c+2OxKMA3vbjtpPblH32ZMHfxrXUMQySMiIbr4Zzzj
+            ukE9S7socvw7hE/u77vcCKzbKiz6BVbe+XBZT9+ZZAniJU5blSlJqG24PBs6B7cR
+            qQIDAQABo1MwUTAdBgNVHQ4EFgQU/PdZr25++JnsgpNETDzzONsLnfMwHwYDVR0j
+            BBgwFoAU/PdZr25++JnsgpNETDzzONsLnfMwDwYDVR0TAQH/BAUwAwEB/zANBgkq
+            hkiG9w0BAQsFAAOCAYEAMYBduu8ITD9qxAzHILA5A0rF1Qb08NkY+nkvXWrLmfS8
+            jaJOWfzit1jytfAq5zemICI7DLiMmlsAcU+RVk9qr9oezqlkH+QeVIHaw6zzhosi
+            J7YB49OmlTgzLfNaHCK/wJlcO1/T2hTQwZRvik/Fz6wDEJtVkJ67ze8JAnflYcXH
+            gfpnzcaPGmO8ORlM57NHVVk5aqm7lMcVTbfMZlJSXqwLutnWneXeJIvgTR8VVfGb
+            TmykxwE8/tfNH7uE7L3dtlQFGWHmgqzU4xNvvb8ybribjoN4MBpDPR6edAr7oH8v
+            zlwJBhHSklafseZ9ZchBT40O3PrPVuh9zyEOgndtrfCkyNrEEyJYoUWLxmRT+ln7
+            EL24H+1vQ2UcJZwIA2C35zW2UuDnPqj7lfALqVakspS8Hox4S/0bDkJiHCN5qvQm
+            w9CoEU0ePdNTLEIiVAWbkjgrSim3MIJwo0DbsBT/GhssMN4Pu6bFQD++1sXb528D
+            qG2dANeINVmhYU+XVNJ5
+            -----END CERTIFICATE-----
+        run: |
+          set -euo pipefail
+          printf '%s\n' "$PUBLIC_INSPECTION_CERT" > "$RUNNER_TEMP/recipient.pem"
+          python3 - <<'PY'
+          import os,zipfile,json,hashlib
+          from pathlib import Path
+          root=Path(os.environ['RUNNER_TEMP']);packet=root/'quality-private'
+          manifest=packet/'quality-manifest.json'
+          data=json.loads(manifest.read_text());data['source_commit']=os.environ['GITHUB_SHA'];manifest.write_text(json.dumps(data,sort_keys=True))
+          with zipfile.ZipFile(root/'quality-private.zip','w',zipfile.ZIP_DEFLATED) as out:
+              for path in sorted(packet.iterdir()):
+                  if path.is_symlink() or not path.is_file():raise ValueError('Unsafe private packet')
+                  out.write(path,path.name)
+          if (root/'quality-private.zip').stat().st_size>2097152:raise ValueError('Private packet exceeds bound')
+          PY
+          openssl cms -encrypt -binary -aes-256-cbc -in "$RUNNER_TEMP/quality-private.zip" -outform DER -out "$RUNNER_TEMP/quality.cms" "$RUNNER_TEMP/recipient.pem"
+          sha256sum "$RUNNER_TEMP/quality.cms"
+          echo RAFT_PRIVATE_QUALITY_CMS_BASE64_BEGIN
+          base64 -w 76 "$RUNNER_TEMP/quality.cms"
+          echo RAFT_PRIVATE_QUALITY_CMS_BASE64_END
+      - uses: actions/upload-artifact@v4
+        with:
+          name: raft-original-quality-encrypted
+          path: ${{ runner.temp }}/quality.cms
+          retention-days: 1
+          if-no-files-found: error
