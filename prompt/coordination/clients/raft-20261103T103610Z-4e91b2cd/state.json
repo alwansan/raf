@@ -2,11 +2,11 @@
   "schema_version": 1,
   "username": "raft-20261103T103610Z-4e91b2cd",
   "session_id": "20261103T114303Z-policy-ci",
-  "status": "active",
-  "base_sha": "41afc05494adc911d8412a04a6aa0d09beb8e095",
+  "status": "paused",
+  "base_sha": "7ccf606c84a697a7ce867b2102d46cb4a0e686ac",
   "updated_at": "2026-11-03T10:40:00Z",
   "current_work": [
     "WATER-001"
   ],
-  "next_step": "Create independent no-LFS original-source FFT policy CI"
+  "next_step": "Inspect actual compatible format and shader numerical behavior"
 }
