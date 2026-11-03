@@ -99,6 +99,51 @@ class ImageFlowTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "Repeated SPIR-V tracked result ID"):
                     image_slot_dataflow(spv(ops))
 
+    def test_core_sparse_and_query_consumers_follow_numeric_binding(self):
+        ops = example() + [(86, [2, 40, 20, 80])]  # SampledImage -> image binding2
+        for n, op in enumerate((87, 88, 89, 90, 91, 92, 93, 94,
+                                305, 306, 307, 308, 309, 310, 311, 312)):
+            ops.append((op, [3, 100 + n, 40, 77, 55]))
+        for n, op in enumerate((96, 97, 314, 315)):
+            ops.append((op, [3, 130 + n, 40, 77, 55]))
+        for n, op in enumerate((101, 102, 103, 104, 105, 106, 107)):
+            ops.append((op, [3, 140 + n, 20, 77]))
+        for n, op in enumerate((313, 320)):
+            ops.append((op, [3, 150 + n, 20, 77]))
+        result = image_slot_dataflow(spv(ops))
+        self.assertTrue(result["all_image_operations_uniquely_traced"])
+        for group, num in (("sample", 16), ("gather", 4), ("query", 7), ("read", 1)):
+            self.assertEqual(result["image_operand_slot_uses"][group]["resolved_slot_counts"],
+                             [{"descriptor_set": 0, "binding": 2, "calls": num}])
+        self.assertEqual(result["image_operand_slot_uses"]["fetch"]["resolved_slot_counts"],
+                         [{"descriptor_set": 0, "binding": 0, "calls": 1},
+                          {"descriptor_set": 0, "binding": 2, "calls": 1}])
+
+    def test_ignored_sample_is_no_longer_silent_success(self):
+        r = image_slot_dataflow(spv(example() + [(87, [3, 90, 199, 77])]))
+        self.assertFalse(r["all_image_operations_uniquely_traced"])
+        self.assertEqual(r["image_operand_slot_uses"]["sample"]["unresolved_count"], 1)
+
+    def test_texel_pointer_and_inbounds_ptr_access_chain(self):
+        r = image_slot_dataflow(spv(example() +
+                                   [(70, [2, 70, 5, 77]), (60, [2, 71, 70, 77, 88])]))
+        self.assertTrue(r["all_image_operations_uniquely_traced"])
+        self.assertEqual(r["image_operand_slot_uses"]["texel_pointer"]["resolved_slot_counts"],
+                         [{"descriptor_set": 0, "binding": 2, "calls": 1}])
+
+    def test_array_length_must_not_be_an_image_alias(self):
+        r = image_slot_dataflow(spv(example() + [(68, [2, 88, 5, 0]),
+                                                  (99, [88, 42, 43])]))
+        self.assertFalse(r["all_image_operations_uniquely_traced"])
+        self.assertEqual(r["image_operand_slot_uses"]["write"]["unresolved_count"], 1)
+
+    def test_truncated_core_image_opcodes_rejected(self):
+        for op, args in ((87, [3, 90, 20]), (96, [3, 91, 20, 7]),
+                         (101, [3, 92]), (60, [3, 93, 20, 7])):
+            with self.subTest(op=op):
+                with self.assertRaisesRegex(ValueError, "Truncated SPIR-V image"):
+                    image_slot_dataflow(spv(example() + [(op, args)]))
+
     def test_no_private_name_or_semantic_claim(self):
         r = image_slot_dataflow(spv(example()))
         self.assertFalse(r["private_shader_ids_or_names_disclosed"])

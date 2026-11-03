@@ -1,7 +1,7 @@
 """Private SPIR-V SSA image operand -> numeric descriptor slot tracing.
 
 Handles bounded direct loads, pointer access chains, image and copy aliases,
-phi/select unions. Unresolved/dynamic resource references are explicitly
+phi/select unions and SPIR-V core/sparse image consumers. Unresolved/dynamic resource references are explicitly
 reported, never guessed. No shader identifiers, code or binaries leave CI.
 """
 import struct
@@ -16,7 +16,11 @@ def image_slot_dataflow(module):
     if words[0] != 0x07230203 or not words[3] or words[4]:
         raise ValueError("Invalid SPIR-V image-flow header")
     bindings, sets, variables, aliases = {}, {}, set(), {}
-    operations = {"write": [], "fetch": [], "read": []}
+    # Numeric descriptor consumers: SPIR-V core image ops, plus sparse variants.
+    # Count all supported resource uses; an ignored sample must never
+    # accidentally make the global uniqueness flag true.
+    operations = {"write": [], "fetch": [], "read": [],
+                  "sample": [], "gather": [], "query": [], "texel_pointer": []}
 
     def record_alias(result_id, parents):
         # A tracked SSA ID has exactly one definition. Overwriting its prior
@@ -43,8 +47,11 @@ def image_slot_dataflow(module):
             if a[1] in variables or a[1] in aliases:
                 raise ValueError("Repeated SPIR-V tracked result ID")
             variables.add(a[1])
-        if op in (65, 66, 67, 68) and count >= 4:  # AccessChain pointer alias
+        if op in (65, 66, 67, 70) and count >= 4:  # AccessChain pointer alias
             record_alias(a[1], (a[2],))
+        if op == 60 and count >= 6:  # OpImageTexelPointer => image texel pointer
+            record_alias(a[1], (a[2],))
+            operations["texel_pointer"].append(a[2])
         if op == 61 and count >= 4:  # OpLoad result => pointer
             record_alias(a[1], (a[2],))
         if op in (83, 100) and count >= 4:  # CopyObject, OpImage
@@ -55,12 +62,29 @@ def image_slot_dataflow(module):
             record_alias(a[1], (a[3], a[4]))
         if op == 245 and count >= 5:  # OpPhi result => alternating value, parent
             record_alias(a[1], tuple(a[k] for k in range(2, len(a), 2)))
-        if op == 99 and count >= 4:  # OpImageWrite
-            operations["write"].append(a[0])
-        if op == 95 and count >= 5:  # OpImageFetch
-            operations["fetch"].append(a[2])
-        if op == 98 and count >= 5:  # OpImageRead
-            operations["read"].append(a[2])
+        # SPIR-V core Image* opcodes (Khronos unified grammar). The Image or
+        # Sampled Image operand is word a[2], except OpImageWrite where it is a[0].
+        # Sparse image ops 305-315 and 320 use the same operand position.
+        bucket = None
+        minimum = 0
+        if op == 99:
+            bucket, minimum = "write", 4
+        elif op in (95, 313):
+            bucket, minimum = "fetch", 5
+        elif op in (98, 320):
+            bucket, minimum = "read", 5
+        elif 87 <= op <= 94 or 305 <= op <= 312:
+            bucket, minimum = "sample", 5
+        elif op in (96, 97, 314, 315):
+            bucket, minimum = "gather", 6
+        elif 101 <= op <= 107:
+            bucket, minimum = "query", 4
+        if bucket is not None:
+            if count < minimum:
+                raise ValueError("Truncated SPIR-V image operation")
+            operations[bucket].append(a[0] if op == 99 else a[2])
+        if op == 60 and count < 6:
+            raise ValueError("Truncated SPIR-V image texel pointer")
         i += count
     slots = {v: (sets.get(v), bindings[v]) for v in variables if v in bindings}
     def find_slots(value, visited):
