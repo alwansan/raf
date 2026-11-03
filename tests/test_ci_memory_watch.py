@@ -101,3 +101,49 @@ class MemoryUnavailableEvidenceTests(unittest.TestCase):
         self.assertEqual(memory_fields('MemAvailable: 0 kB\n'),
                          {'MemAvailable_kb':0})
 
+
+class CgroupContinuityEvidenceTests(unittest.TestCase):
+    def test_reset_between_plausible_endpoints_is_not_an_oom_delta(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path=Path(tmp)/'memory.jsonl'
+            # First -> last looks monotonic, but the middle row proves a
+            # counter reset: this is not one continuous observed cgroup.
+            events=[{'oom':10,'oom_kill':5},
+                    {'oom':1,'oom_kill':0},
+                    {'oom':14,'oom_kill':7}]
+            path.write_text('\\n'.join(json.dumps({'cgroup_v2_memory_events':row})
+                                      for row in events)+'\\n')
+            with patch('scripts.ci_memory_watch.docker_states',return_value=[]):
+                result=summarize(path)
+            self.assertEqual(result['samples'],3)
+            self.assertIsNone(result['cgroup_v2_oom_delta'])
+            self.assertIsNone(result['cgroup_v2_oom_kill_delta'])
+            # Even a reset of only one required counter invalidates both
+            # deltas: scope continuity is no longer established.
+            events[1]={'oom':12,'oom_kill':0}
+            path.write_text('\\n'.join(json.dumps({'cgroup_v2_memory_events':row})
+                                      for row in events)+'\\n')
+            with patch('scripts.ci_memory_watch.docker_states',return_value=[]):
+                result=summarize(path)
+            self.assertIsNone(result['cgroup_v2_oom_delta'])
+            self.assertIsNone(result['cgroup_v2_oom_kill_delta'])
+
+    def test_missing_or_corrupt_intermediate_samples_do_not_bridge_evidence(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path=Path(tmp)/'memory.jsonl'
+            begin=json.dumps({'cgroup_v2_memory_events':{'oom':1,'oom_kill':2}})
+            end=json.dumps({'cgroup_v2_memory_events':{'oom':5,'oom_kill':3}})
+            with patch('scripts.ci_memory_watch.docker_states',return_value=[]):
+                path.write_text(begin+'\\n'+end+'\\n')
+                ok=summarize(path)
+                self.assertEqual((ok['cgroup_v2_oom_delta'],ok['cgroup_v2_oom_kill_delta']),(4,1))
+                for middle in (
+                    json.dumps({'cgroup_v2_memory_events':'unavailable'}),
+                    json.dumps({'cgroup_v2_memory_events':{'oom':True,'oom_kill':2}}),
+                    '{"truncated":',
+                    'null',
+                ):
+                    path.write_text(begin+'\\n'+middle+'\\n'+end+'\\n')
+                    result=summarize(path)
+                    self.assertIsNone(result['cgroup_v2_oom_delta'],middle)
+                    self.assertIsNone(result['cgroup_v2_oom_kill_delta'],middle)
