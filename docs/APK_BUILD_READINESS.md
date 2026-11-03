@@ -115,3 +115,9 @@ Do not label or document READY_FOR_BUILD until every demonstrated source/resourc
 - Review 3/3: NOT STARTED — no complete immutable candidate.
 
 **State remains NOT_READY**. No workflow dispatch or native request from this policy. Existing scheduled tasks unchanged.
+
+
+
+## Verified original source cache and typed format matrix — 3 November 2026
+
+[Detailed source and CI proof](ORIGINAL_FFT_STORAGE_IMAGE_MATRIX_2026-11-03.md): [cache audit41562582726](https://github.com/alwansan/raf/actions/runs/41562582726), [pinned format lineage41562995693](https://github.com/alwansan/raf/actions/runs/41562995693), and [four-mode compatibility CI41563298155](https://github.com/alwansan/raf/actions/runs/41563298155) all COMPLETED SUCCESS. Original CSharp9 RenderTexturesCache has one five-argument RenderTexture constructor, and a direct lexical RenderTextureFormat reference as fourth argument. GpuFFT requests RGHalf, RGFloat, ARGBHalf and ARGBFloat by channel/precision. Independently authenticated roundtrip storage output format Rgba32f can exactly match only the expected ARGBFloat view among these four; actual Unity Vulkan image view/device support remains unknown, so this is a FORMAT-CONTRACT RISK not proven visual failure. WATER-001/FFT-FORMAT-009/RENDER-002 remain OPEN. Complete three-pass readiness reviews: **0/3**. NOT_READY; no immutable build candidate selected.
