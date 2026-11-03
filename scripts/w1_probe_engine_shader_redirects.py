@@ -10,8 +10,10 @@ from scripts.w1_stage_zip2_owners import PINS, fingerprint
 def shader_key(tree):
     parsed = tree['m_ParsedForm']
     name = tree['m_Name']
-    if not isinstance(name, str) or not name or name != parsed['m_Name']:
-        raise ValueError('Original shader names require explicit reconciliation')
+    # The exporter cache uses IShader.Name (the asset's m_Name), not the
+    # ShaderLab declaration name. The two are distinct in real engine assets.
+    if not isinstance(name, str) or not name:
+        raise ValueError('Original shader asset name unavailable')
     props = parsed['m_PropInfo']['m_Props']
     names = tuple(p['m_Name'] for p in props)
     if not all(isinstance(n, str) for n in names):
@@ -76,7 +78,7 @@ def probe(source):
             refs['local_material_refs_to_other_shaders'] += 1
     return {'original_owner_count': len(PINS), 'verified_bytes': sum(x[0] for x in PINS.values()),
             'engine_owners': owner_rows, **classify(game_keys, canonical), **refs,
-            'matching_rule': 'exact_original_name_and_ordered_property_names',
+            'matching_rule': 'exact_asset_m_Name_and_ordered_property_names',
             'embedded_exporter_engine_database_verified': False,
             'actual_exported_engine_material_refs_verified': False,
             'zero_loose_builtin_gate_may_be_skipped': False,

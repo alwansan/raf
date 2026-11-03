@@ -63,6 +63,9 @@ class Zip2Owners(unittest.TestCase):
         self.assertNotEqual(a,b)
         self.assertEqual(classify([a,b],{a:[1]})['unique_engine_identity_candidates'],1)
         self.assertEqual(classify([a],{a:[1,2]})['ambiguous_engine_identity_candidates'],1)
+        different_declaration = tree(['a','b'])
+        different_declaration['m_ParsedForm']['m_Name'] = 'different ShaderLab name'
+        self.assertEqual(shader_key(different_declaration), a)
 
 
 if __name__ == '__main__': unittest.main()
