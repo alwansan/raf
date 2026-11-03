@@ -12,17 +12,23 @@ namespace RaftAndroid.Platform
     {
         private const string ProfileFile = "profile.id";
         private readonly string _profileDirectory;
+        private readonly string _persistentRoot;
 
         public LocalProfileStore(string persistentDataPath)
         {
             if (string.IsNullOrWhiteSpace(persistentDataPath))
                 throw new ArgumentException("Persistent data root must be provided.", nameof(persistentDataPath));
-            _profileDirectory = Path.Combine(Path.GetFullPath(persistentDataPath), "RaftAndroid", "profiles", "local");
+            _persistentRoot = Path.GetFullPath(persistentDataPath);
+            _profileDirectory = Path.Combine(_persistentRoot, "RaftAndroid", "profiles", "local");
         }
 
         public string GetOrCreateProfileId()
         {
+            // A valid-looking profile.id symlink must never import a different
+            // sandbox's identity. Check app-owned parents before/after creation.
+            RejectManagedRedirects();
             Directory.CreateDirectory(_profileDirectory);
+            RejectManagedRedirects();
             string path = Path.Combine(_profileDirectory, ProfileFile);
 
             if (File.Exists(path))
@@ -68,8 +74,32 @@ namespace RaftAndroid.Platform
             }
         }
 
+        private void RejectManagedRedirects()
+        {
+            string appRoot = Path.Combine(_persistentRoot, "RaftAndroid");
+            string profiles = Path.Combine(appRoot, "profiles");
+            RejectLink(appRoot);
+            RejectLink(profiles);
+            RejectLink(_profileDirectory);
+            RejectLink(Path.Combine(_profileDirectory, ProfileFile));
+        }
+
+        private static void RejectLink(string path)
+        {
+            try
+            {
+                if ((File.GetAttributes(path) & FileAttributes.ReparsePoint) != 0)
+                    throw new UnauthorizedAccessException("Local profile storage must not redirect through a symbolic link.");
+            }
+            catch (FileNotFoundException) { } // Newly-created profile path is expected to be absent.
+            catch (DirectoryNotFoundException) { }
+        }
+
         private static string ReadExistingId(string path)
         {
+            // Repeat the file-level check near the read, not only at startup.
+            // A concurrent malicious swap is still outside this managed precheck.
+            RejectLink(path);
             string id = File.ReadAllText(path).Trim();
             if (id.Length != 32)
                 throw new InvalidDataException("Local profile identity is invalid; refusing to overwrite existing saves.");

@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T100326Z-9df2b7ac",
+  "status": "implemented_pending_CI",
+  "hypothesis": "An existing symlink at profile.id or one of the app-owned RaftAndroid/profiles/local directories can redirect profile reads outside the intended sandbox; fail closed without altering the real profile ID format.",
+  "input_hashes": [
+    {
+      "file": "android-port/Runtime/Platform/LocalProfileStore.cs",
+      "blob_sha": "24d5f0ed157898ddefec61e6238052190e63ba93"
+    },
+    {
+      "file": ".github/workflows/raft-android-platform-tests.yml",
+      "blob_sha": "ed1402f95835fbb499505238ec65c45acc31d364"
+    }
+  ],
+  "commands": [
+    "dotnet run --project android-port/Tests/ProfileLinkSafety/ProfileLinkSafety.csproj --configuration Release --nologo",
+    "dotnet run --project android-port/Tests/Smoke/RaftAndroid.Platform.Smoke.csproj --configuration Release --nologo"
+  ],
+  "expected_signal": "3 symlink redirects explicitly rejected; normal profile remains stable and source library compiles.",
+  "negative_controls": [
+    "profile.id symlink to a valid external 32-char identity",
+    "profiles/local directory symlink to external profile",
+    "RaftAndroid directory symlink to external profile"
+  ],
+  "workflow_path": ".github/workflows/raft-android-platform-tests.yml",
+  "concurrency_group": "existing cheap platform CI (no native; no custom group)",
+  "artifact_prefix": null,
+  "budget": "CPU-only; existing 10-minute platform CI; no LFS; no Unity",
+  "run_url": null,
+  "source_sha": null,
+  "result": null,
+  "limitations": [
+    "Prechecks do not atomically exclude a hostile simultaneous symlink swap; assumes app-private data directory access boundary",
+    "This is platform identity storage safety, not original .rgd world save/load runtime proof or device test"
+  ],
+  "next_step": "Commit with branch lease, verify cheap platform CI green and source/Smoke regression; no Unity/native dispatch."
+}

@@ -84,6 +84,8 @@ jobs:
         run: |
           dotnet run --project android-port/Tests/Smoke/RaftAndroid.Platform.Smoke.csproj \
             --configuration Release --nologo
+      - name: Reject local profile symlink redirects in actual managed source (CPU only)
+        run: dotnet run --project android-port/Tests/ProfileLinkSafety/ProfileLinkSafety.csproj --configuration Release --nologo
       - name: Summarize
         run: |
           echo '## Raft Android platform skeleton' >> "$GITHUB_STEP_SUMMARY"
