@@ -1,1 +1,7 @@
-Independent caller precision/path investigation; avoids A1 SSA and existing image audit files.
+
+
+## Original FFT caller reachability — 3 November 2026
+
+Client raft-20261103T103610Z-4e91b2cd inspected SHA-pinned WavesRendererFFT e7f6b8fd477f321120fc626781f0653fe1168f0e86daad0cdf8d9c4e56b323e9. Added scripts/probe_fft_caller_policy.py, an explicitly modeled source-policy table guarded by the full source SHA. Local112 boolean/size cases pass, including10 compute selections; unknown source rejected. Actual caller chooses pixel when ForcePixelShader, missing compute asset, unsupported compute, or resolution>512; high precision is requestedHighPrecision OR resolution>=2048. Thus the earlier N2048 half-integer compute storage negative control is unreachable through this selector, not a demonstrated game defect. N1024 pixel/half remains source-reachable if high precision is false, but active resolution/quality, texture creation and GPU execution remain unknown. No original shader/quality/source changed; WATER-001/RENDER-002/FFT-FORMAT-009 stay open and NOT_READY/0-of-3. No queued/in_progress runs returned; CL identities unchanged; lograf-65 is not game delivery. Next correlate active quality and requested resolution before numeric shader replay. No Unity/LFS/native request/task changes.
+
+Correlate active quality/resolution and pixel N1024 half possibility; do not infer a GPU defect from the model.

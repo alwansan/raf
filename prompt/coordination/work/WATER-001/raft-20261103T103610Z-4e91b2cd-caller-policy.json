@@ -1,10 +1,8 @@
 {
   "owner": "raft-20261103T103610Z-4e91b2cd",
-  "status": "active",
+  "status": "completed",
   "issue_id": "WATER-001",
-  "base_sha": "7ccf606c84a697a7ce867b2102d46cb4a0e686ac",
-  "intended_files": [
-    "scripts/probe_fft_caller_policy.py"
-  ],
-  "hypothesis": "Original caller forces float at large sizes and selects compute only <=512; hypothetical half address errors may be unreachable"
+  "base_sha": "02d1ad5a00ad92ca638da988534dc3c852440e8b",
+  "result": "112 source-policy cases and unknown-source rejection passed",
+  "next_step": "Correlate active quality/resolution and pixel N1024 half possibility; do not infer a GPU defect from the model."
 }

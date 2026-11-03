@@ -2,11 +2,11 @@
   "schema_version": 1,
   "username": "raft-20261103T103610Z-4e91b2cd",
   "session_id": "caller-policy-4e91b2cd",
-  "status": "active",
+  "status": "paused",
   "base_sha": "7ccf606c84a697a7ce867b2102d46cb4a0e686ac",
-  "updated_at": "2026-11-03T10:36:10Z",
+  "updated_at": "2026-11-03T10:40:00Z",
   "current_work": [
     "WATER-001"
   ],
-  "next_step": "Source-pinned caller path/precision model"
+  "next_step": "Correlate active quality/resolution and pixel N1024 half possibility; do not infer a GPU defect from the model."
 }

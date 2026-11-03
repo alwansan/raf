@@ -1,0 +1,12 @@
+{
+  "owner": "raft-20261103T103610Z-4e91b2cd",
+  "status": "completed",
+  "source_sha": "02d1ad5a00ad92ca638da988534dc3c852440e8b",
+  "result": "112 cases;10 compute;N2048 forces float; N1024 pixel half reachable",
+  "limitations": [
+    "Python policy model, not original C# execution",
+    "Active scene settings unknown",
+    "GPU behavior unknown"
+  ],
+  "next_step": "Correlate active quality/resolution and pixel N1024 half possibility; do not infer a GPU defect from the model."
+}
