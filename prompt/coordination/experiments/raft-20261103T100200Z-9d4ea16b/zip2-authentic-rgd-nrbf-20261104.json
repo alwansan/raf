@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T100200Z-9d4ea16b",
+  "session_id": "a10-20261103T224523Z-dc871304",
+  "status": "active",
+  "hypothesis": "Use original ZIP2 Data.rgd 2941-byte artifact to validate BinaryFormatter NRBF payload structural decodability without executing deserialization code, ensuring original .rgd byte-level provenance while narrowing the real save compatibility gap.",
+  "source_sha": "2480a0d932e3339e24bcb11bdce832aee8516ed3",
+  "input_hashes": [
+    "zip2@15964ea8:Data.rgd size2941 SHA256 b2785187aa11e33872698adfa79ab252cf65a824d92bee7e88773ce4aa11cbba"
+  ],
+  "commands": [
+    "actions/checkout@v4 separate pinned zip2 sparse Data.rgd",
+    "dotnet run --project tests/a10-original-rgd-nrbf -- --file zip2-original/Raft/Raft_Data/StreamingAssets/Data.rgd --sha256 ... --negative-controls"
+  ],
+  "expected_signal": "Authentic NRBF parsed as ClassRecord; malformed header / wrong hash / truncation rejected; no user game runtime or source executed",
+  "negative_controls": [
+    "sha mismatch",
+    "header mutation",
+    "truncated payload"
+  ],
+  "workflow_path": ".github/workflows/raft-a10-zip2-original-rgd-nrbf.yml",
+  "concurrency_group": "raft-a10-zip2-rgd-nrbf-${{ github.ref }}",
+  "artifact_prefix": null,
+  "budget": "CI ubuntu-24.04 6 minutes, ~3KB original source checkout only",
+  "run_url": null,
+  "result": null,
+  "limitations": [
+    "Source safe NRBF decoding not Unity BinaryFormatter real save/load, not gameplay or phone"
+  ],
+  "next_step": "Inspect live CI results, don't claim acceptance on metadata alone."
+}
