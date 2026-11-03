@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T184205Z-a12d793c",
+  "status": "planned",
+  "target": "UltimateWater/Utilities/Blur (Subsurface Scattering)",
+  "hypothesis": "Actual pass/stage identities may be recoverable from the original two resources and may satisfy the logged minimum two passes without inventing code.",
+  "inputs": [
+    "Original resources.assets and sharedassets0.assets 227511628 bytes combined, preverified SHA per W1",
+    "Pinned exact original Subsurface Blur serialized shader name; no implicit generic target substitution"
+  ],
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_a12_original_blur_passes.py -v",
+    "python3 -m scripts.a12_probe_original_blur_passes --source Raft/Raft_Data --out $RUNNER_TEMP/a12-blur-graph.json"
+  ],
+  "workflow_path": ".github/workflows/raft-a12-original-blur-pass-graph.yml",
+  "concurrency_group": "raft-a12-blur-graph-${{ github.ref }}-${{ github.sha }}",
+  "artifact_prefix": "raft-a12-original-blur-aggregate",
+  "budget": "Two SHA-pinned existing W1 source LFS objects, ~227.5MB, cache reuse, Ubuntu24.04 CPU, 15min timeout; no Unity, raw shader publication or device build",
+  "negative_controls": [
+    "Missing genuine target is a hard failure",
+    "Ambiguous duplicate original targets fail closed",
+    "Invalid blob indices, stage types, source count fail closed",
+    "Any unknown variant or parameter format remains unknown"
+  ],
+  "results": null,
+  "limitations": [
+    "Only two original resource owners; candidate may be elsewhere",
+    "Structural validity does not prove GPU numeric equivalence, ShaderLab insertion or material GUID mapping"
+  ]
+}
