@@ -2,8 +2,8 @@
   "schema_version": 1,
   "owner": "raft-20261103T105250Z-12695739",
   "issue_id": "DIAG-010",
-  "status": "active",
-  "updated_at": "2026-11-03T10:53:12.398Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T10:58:40.653Z",
   "base_sha": "13bd0330904b48eb58fad73e27b7299e0d08b230",
   "hypothesis": "A cross-thread Write racing Dispose can call wake.Set() after wake.Dispose() and throw ObjectDisposedException; align write/dispose lifecycle and enable existing C# logger harness in platform CI.",
   "intended_files": [
@@ -25,7 +25,13 @@
   "experiment_ids": [
     "logger-dispose-race"
   ],
-  "evidence": [],
-  "result": null,
-  "next_step": "Run executable C# stress harness, review source, lock lifecycle Write/Dispose, validate net8 and netstandard compatibility."
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/e70dd94d9ea0309718f523352edb24299960c15d",
+    "https://github.com/alwansan/raf/actions/runs/41623238332",
+    "https://github.com/alwansan/raf/actions/runs/41623238273",
+    "https://github.com/alwansan/raf/actions/runs/41623238300",
+    "https://github.com/alwansan/raf/commit/3d30429e52a67869b79adf0c5669f3aaa36c33fb"
+  ],
+  "result": "Protected write/Dispose logger lifecycle race and validated with C# harness 256 checks in dedicated CPU-only CI, plus successful platform and original startup integration CI. Duplicate platform step removed after discovering dedicated test lane; no phone proof.",
+  "next_step": "No further A8 work within this scope; await future game-level tests with later APK only after readiness gates."
 }

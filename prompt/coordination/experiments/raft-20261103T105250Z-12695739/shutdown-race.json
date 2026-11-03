@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T105250Z-12695739",
+  "issue_id": "DIAG-010",
+  "experiment_id": "logger-dispose-race",
+  "status": "completed",
+  "started_at": "2026-11-03T10:52:50Z",
+  "completed_at": "2026-11-03T10:58:40.653Z",
+  "hypothesis": "Writer can pass stopping check and then signal wake after concurrent Dispose closes the event",
+  "source_commit": "e70dd94d9ea0309718f523352edb24299960c15d",
+  "cleanup_commit": "3d30429e52a67869b79adf0c5669f3aaa36c33fb",
+  "test_command": "dotnet run --project android-port/Tests/Diagnostics/Diagnostics.csproj --configuration Release --nologo",
+  "test_cases": [
+    "eight shutdown race rounds, eight threads x 150 iterations each",
+    "after-dispose Write no-op",
+    "no unexpected exceptions",
+    "JSONL parsing after each round",
+    "existing retention/startup and repeat grouping tests"
+  ],
+  "test_source_path": "android-port/Tests/Diagnostics/Program.cs",
+  "workflow_path": ".github/workflows/raft-persistent-diagnostics-tests.yml",
+  "run_id": 41623238332,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41623238332",
+  "report": "RAFT_PERSISTENT_LOG_TEST checks=256 passed=true actualAndroidStorageVerified=false",
+  "related_ci": [
+    41623238273,
+    41623238300,
+    41623238341
+  ],
+  "result": "All named CI passed against e70dd94d; no Unity/Android hardware execution",
+  "limits": [
+    "Race opportunity found by source inspection, not historic phone crash evidence",
+    "Stress tests cannot prove every possible scheduling",
+    "No device storage lifecycle or OBB/Unity test",
+    "No readiness upgrade"
+  ],
+  "lfs_downloaded": false,
+  "game_build": false,
+  "readiness": "NOT_READY"
+}
