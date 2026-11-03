@@ -96,12 +96,88 @@ def analyze(caller, expected_sha):
         "unity_or_device_execution": False,
     }
 
+WIND_WAVES_SHA256 = 'fd145a6bc3344a0089e608d365df534bb3e4ad0b499d372c963d302620644f2f'
+
+
+def analyze_resolution_owner(caller, owner, caller_sha, owner_sha):
+    """Resolve one pinned property/backing-field/minimum chain, not runtime values."""
+    from scripts.instrument_android_runtime_operations import body_bounds
+    if len(caller) > 700000 or len(owner) > 700000 or sha(caller) != caller_sha or sha(owner) != owner_sha:
+        raise ValueError('Original FFT resolution owner fingerprint mismatch')
+    start, end = body_bounds(caller, 'private GpuFFT ChooseBestFFTAlgorithm(bool twoChannels)')
+    body = caller[start:end]
+    code = mask_csharp_noncode(body)
+    calls = list(re.finditer(r'\bnew\s+Dx11FFT\s*\(', code))
+    if len(calls) != 1:
+        raise ValueError('Original selected FFT constructor count changed')
+    args, _ = parse_original_args(body, calls[0].end()-1)
+    if len(args) != 4 or not re.fullmatch(r'[A-Za-z_]\w*', args[1].strip()):
+        raise ValueError('Original selected FFT size local changed')
+    variable = args[1].strip()
+    bindings = list(re.finditer(r'\bint\s+' + re.escape(variable) +
+        r'\s*=\s*([A-Za-z_]\w*)\s*\.\s*([A-Za-z_]\w*)\s*;', code[:calls[0].start()]))
+    if len(bindings) != 1:
+        raise ValueError('Original FFT size property binding changed')
+    if len(re.findall(r'\b' + re.escape(variable) + r'\s*(?:\+\+|--|[+*/%\-]?=(?!=))', code)) != 1:
+        raise ValueError('Original FFT size local has additional writes')
+    receiver, member = bindings[0].groups()
+    caller_code = mask_csharp_noncode(caller)
+    if len(re.findall(r'\bprivate\s+(?:readonly\s+)?WindWaves\s+' + re.escape(receiver) + r'\s*;', caller_code)) != 1:
+        raise ValueError('Original FFT property receiver type changed')
+    owner_code = mask_csharp_noncode(owner)
+    props = list(re.finditer(r'\bpublic\s+int\s+' + re.escape(member) +
+                            r'\s*=>\s*([A-Za-z_]\w*)\s*;', owner_code))
+    if len(props) != 1:
+        raise ValueError('Original FFT resolution property getter changed')
+    backing = props[0][1]
+    if len(re.findall(r'\bprivate\s+int\s+' + re.escape(backing) + r'\s*;', owner_code)) != 1:
+        raise ValueError('Original FFT resolution backing type changed')
+    writes = list(re.finditer(r'\b' + re.escape(backing) + r'\s*=(?!=)\s*([A-Za-z_]\w*)\s*;', owner_code))
+    if len(writes) != 1 or len(re.findall(r'\b' + re.escape(backing) + r'\s*(?:\+\+|--|[+*/%\-]?=(?!=))', owner_code)) != 1:
+        raise ValueError('Original FFT resolution backing write changed')
+    value = writes[0][1]
+    a, b = body_bounds(owner, 'internal void ResolveFinalSettings(WaterQualityLevel quality)')
+    if not a <= writes[0].start() < b:
+        raise ValueError('Original FFT resolution assignment owner changed')
+    minimum = list(re.finditer(r'\bint\s+' + re.escape(value) + r'\s*=\s*Mathf\s*\.\s*Min\s*\(', owner_code[a:b]))
+    if len(minimum) != 1 or len(re.findall(r'\b' + re.escape(value) + r'\s*(?:\+\+|--|[+*/%\-]?=(?!=))', owner_code[a:b])) != 1:
+        raise ValueError('Original FFT resolution minimum changed')
+    inputs, _ = parse_original_args(owner, a + minimum[0].end()-1)
+    compact = [re.sub(r'\s+', '', x) for x in inputs]
+    if len(compact) != 3 or not all(SIMPLE_ID.fullmatch(x) for x in compact) or compact[2] != 'SystemInfo.maxTextureSize':
+        raise ValueError('Original FFT resolution minimum inputs changed')
+    return {
+        'original_wind_waves_sha256': owner_sha,
+        'constructor_size_property_receiver_type': 'WindWaves',
+        'property_return_type': 'int',
+        'property_is_direct_backing_field_getter': True,
+        'backing_field_type': 'int',
+        'backing_field_lexical_write_count': len(writes),
+        'backing_field_write_uses_settings_minimum_local': True,
+        'settings_minimum_arity': 3,
+        'settings_minimum_input_hashes': [sha(x) for x in compact],
+        'third_minimum_input_is_device_max_texture_size': True,
+        'requested_and_quality_values_proven': False,
+        'power_of_two_or_lower_bound_proven': False,
+        'runtime_resolution_or_unity_kernel_mapping_verified': False,
+        'original_identifiers_or_expressions_published': False,
+        'unity_or_device_execution': False,
+    }
+
+
 def inspect(root):
     paths = list(root.rglob("WavesRendererFFT.cs"))
     if len(paths) != 1 or paths[0].is_symlink() or not paths[0].is_file():
         raise ValueError("Original WavesRendererFFT source missing or ambiguous")
     source = paths[0].read_text(encoding="utf-8-sig").replace("\r\n", "\n")
-    return analyze(source, ORIGINAL_SOURCE_SHA256["WavesRendererFFT"])
+    owners = list(root.rglob("WindWaves.cs"))
+    if len(owners) != 1 or owners[0].is_symlink() or not owners[0].is_file():
+        raise ValueError("Original WindWaves source missing or ambiguous")
+    owner = owners[0].read_text(encoding="utf-8-sig").replace("\r\n", "\n")
+    result = analyze(source, ORIGINAL_SOURCE_SHA256["WavesRendererFFT"])
+    result["size_property_owner_provenance"] = analyze_resolution_owner(
+        source, owner, ORIGINAL_SOURCE_SHA256["WavesRendererFFT"], WIND_WAVES_SHA256)
+    return result
 
 if __name__ == "__main__":
     p = argparse.ArgumentParser(description=__doc__)
