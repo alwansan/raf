@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "client_label": "A11",
+  "username": "raft-20261103T123040Z-02fe66b3",
+  "session_id": "a11-source-provenance-20261103T123040Z",
+  "resumed_from": null,
+  "status": "active",
+  "updated_at": "2026-11-03T12:30:40Z",
+  "base_sha": "aae8cc2070126449fa05049a669235a144309101",
+  "current_work": [
+    "RENDER-002: independent shader-export scope diagnostics"
+  ],
+  "last_commit": null,
+  "next_step": "Validate actual-export provenance and build CPU-only strict diagnostics; do not infer matches from a 107-file subset.",
+  "memory_path": "prompt/coordination/clients/raft-20261103T123040Z-02fe66b3/MEMORY.md"
+}
