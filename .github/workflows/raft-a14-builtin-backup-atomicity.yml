@@ -27,7 +27,13 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p "$RUNNER_TEMP/a14-evidence"
-          python3 -m unittest discover -s tests -p 'test_a14_*.py' -v 2>&1 | tee "$RUNNER_TEMP/a14-evidence/synthetic-results.txt"
+          {
+            python3 -m unittest discover -s tests -p 'test_a14_*.py' -v
+            python3 -m unittest discover -s tests -p 'test_a3_builtin_shader_symlink_paths.py' -v
+            python3 -m unittest discover -s tests -p 'test_a9_builtin_shader_identity.py' -v
+            python3 -m unittest discover -s tests -p 'test_a15_builtin_restore_rollback.py' -v
+            python3 -m unittest discover -s tests -p 'test_restore_builtin_shaders.py' -v
+          } 2>&1 | tee "$RUNNER_TEMP/a14-evidence/synthetic-results.txt"
       - name: Retain aggregate fixture evidence only
         if: always()
         uses: actions/upload-artifact@v4
