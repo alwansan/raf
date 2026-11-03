@@ -3,8 +3,8 @@
   "owner": "raft-20261103T184205Z-a12d793c",
   "client_label": "A12",
   "issue_id": "WATER-001",
-  "status": "planned",
-  "updated_at": "2026-11-03T18:42:05Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T19:04:00Z",
   "hypothesis": "Original Subsurface Blur Shader contains authentic DXBC pass/stage pairs that may be recovered via W1's strict serialized shader program decoder, distinct from completed Depth Copy and A1 FFT numeric work; unknown until SHA-pinned original two-owner inspection.",
   "intended_files": [
     "scripts/a12_probe_original_blur_passes.py",
@@ -24,8 +24,11 @@
     "original-subsurface-blur-pass-program-graph"
   ],
   "evidence": [
-    "https://github.com/alwansan/raf/actions/runs/41687765928"
+    "https://github.com/alwansan/raf/actions/runs/41687765928",
+    "https://github.com/alwansan/raf/actions/runs/41695272821",
+    "https://github.com/alwansan/raf/actions/runs/41696171379",
+    "docs/A12_ORIGINAL_SUBSURFACE_BLUR_PARAMETER_BLOCKER_2026-11-03.md"
   ],
-  "result": null,
-  "next_step": "Analyze SHA-pinned original Blur pass-stage metadata and validate isolated CPU synthetic tests. No new native run without authentic reconstruction."
+  "result": "Authentic full 14-owner source: 488439356 verified bytes, 165 original Shader objects, exact Subsurface Blur source object SHA c9341848 and parsed SHA 865e5529, 1 original subshader with 2 passes and 4 linked DXBC vertex/fragment programs, 2 matching stage permutations. Synthetic11/11; no ShaderLab installed; separate original CB metadata 544-byte blocker in follow-up.",
+  "next_step": "Pass graph scope completed; continue only CB reflection and exact ShaderLab source reconstruction under separate current work."
 }
