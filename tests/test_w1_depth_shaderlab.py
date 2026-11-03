@@ -1,6 +1,6 @@
 import struct
 import unittest
-from scripts.w1_depth_shaderlab import decode_empty_parameters, stage_body, render_state
+from scripts.w1_depth_shaderlab import decode_empty_parameters, stage_body, render_state, val
 
 
 def value(n):
@@ -21,6 +21,11 @@ def state():
 
 
 class DepthShaderLab(unittest.TestCase):
+    def test_fast_property_name_is_not_a_dynamic_override(self):
+        self.assertEqual(val({'val': 1, 'name': {'name': ''}}), 1)
+        with self.assertRaises(ValueError):
+            val({'val': 1, 'name': {'name': 'FixtureDynamic'}})
+
     def test_parameter_record_empty_and_complete_consumption(self):
         blob = struct.pack('<ii', 202012090, 1) + struct.pack('<i', 0) + struct.pack('<4i', 0, 0, 0, 0)
         self.assertTrue(decode_empty_parameters(blob)['overrides_empty'])

@@ -63,7 +63,14 @@ def number(value):
 
 
 def val(record):
-    if not isinstance(record, dict) or record.get('name') not in ('', None):
+    if not isinstance(record, dict):
+        raise ValueError('Invalid original render-state value record')
+    name = record.get('name')
+    # UnityPy's typetree may retain FastPropertyName as {name:string}; it is
+    # distinct from a genuinely property-driven state and must not be guessed.
+    if isinstance(name, dict) and set(name) == {'name'}:
+        name = name['name']
+    if name not in ('', None):
         raise ValueError('Dynamic original render state requires explicit property recovery')
     return record['val']
 
