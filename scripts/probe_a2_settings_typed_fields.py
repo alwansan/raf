@@ -26,7 +26,7 @@ FIELDS = re.compile(
 UNITY_TYPES = set("GameObject RectTransform Transform Canvas CanvasScaler Button Image RawImage ScrollRect Slider Toggle Text Dropdown InputField CanvasGroup Scrollbar RectMask2D Camera Material Sprite Texture Graphic".split())
 
 def class_scope(source):
-    if not isinstance(source, str) or not 100 <= len(source) <= MAX_SOURCE:
+    if not isinstance(source, str) or not 1 <= len(source) <= MAX_SOURCE:
         raise ValueError("Missing or oversized original Settings class")
     code = mask_csharp_noncode(source)
     matches = list(re.finditer(r"\bclass\s+Settings\b", code))
