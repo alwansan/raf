@@ -2,17 +2,16 @@
   "schema_version": 1,
   "username": "raft-20261103T095832Z-a4c7e2b1",
   "agent": "A4",
-  "session_id": "a4-resume-20261103T224500Z-84e2c91f",
-  "resumed_from": "a4-resume-20261103T145128736Z-c29f7d43",
-  "status": "paused",
-  "updated_at": "2026-11-03T22:52:41.965Z",
-  "base_sha": "b3ebf3ddd69e44b1f430c1d77a6642f70adbd404",
+  "session_id": "a4-resume-20261103T231050Z-7d96e2a1",
+  "resumed_from": "a4-resume-20261103T224500Z-84e2c91f",
+  "status": "active",
+  "updated_at": "2026-11-03T23:10:59.131Z",
+  "base_sha": "8316f5b8b8d4e913dd309af30ba4342f0f980af0",
   "current_work": [
-    "PERF-007 cgroup continuity 10/10 exact-source tests SUCCESS",
-    "PERF-007 event-boundary GPU diagnostics source and CPU CI SUCCESS; actual GPU OOM root cause unresolved"
+    "PERF-007 original GPU cache ownership/release path investigation from authenticated ZIP2 CSharp9 source, no LFS/Unity/APK"
   ],
   "last_commit": "74df62250c0f4db1bd5f33981ee22d24ee62934a",
-  "next_step": "On next explicitly resumed session, inspect authenticated original GPU allocation/release path for a provable defect, coordinate with FFT/render clients, then propose minimal source fix and independent CPU validation. The event-boundary diagnostics are not Android/Unity phone proof. NOT_READY 0/3.",
+  "next_step": "Register independent source-locked GPU cache lifecycle experiment; inspect original GpuFFT/RenderTexturesCache methods and failure paths with bounded CPU-only tests. No original code disclosure, no overlap with A1/W1, no Unity/APK.",
   "memory_path": "prompt/coordination/clients/raft-20261103T095832Z-a4c7e2b1/MEMORY.md",
   "last_verified_run": "https://github.com/alwansan/raf/actions/runs/41734019524"
 }
