@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T121910Z-a9c47e01",
+  "issue_id": "AUDIO-004",
+  "status": "planned",
+  "updated_at": "2026-11-03T12:19:10.900Z",
+  "base_sha": "cc5d7b7805892681510af8a9fb77e6b35e9b763f",
+  "hypothesis": "stage_original_streaming_assets.stage copies each source directly into final project path; interrupted copy leaves incomplete bank/audio/data file, making rerun fail and potentially exposing a corrupt game asset.",
+  "intended_files": [
+    "scripts/stage_original_streaming_assets.py",
+    "tests/test_a9_streaming_stage_atomic.py",
+    ".github/workflows/raft-a9-streaming-stage-atomic.yml",
+    "prompt/coordination/clients/raft-20261103T121910Z-a9c47e01/*",
+    "prompt/coordination/work/AUDIO-004/raft-20261103T121910Z-a9c47e01-streaming-stage-atomic.json",
+    "prompt/coordination/experiments/raft-20261103T121910Z-a9c47e01/*",
+    "prompt/STATUS.md and latest handoff after verified CI"
+  ],
+  "related_work": [
+    "A3 source manifest/stage Haptics completed, no new active HAPTICS client",
+    "A5 original WAV read completed",
+    "A10 private CSharp instrumentation active on different source",
+    "A1 WATER/FFT; A2 DISPLAY; A3/A6 RENDER active and distinct"
+  ],
+  "experiment_ids": [
+    "stage-original-atomic-publish-redgreen"
+  ],
+  "evidence": [],
+  "result": null,
+  "next_step": "Add synthetic failure-injection test before repair and run distinct Red CI, then implement atomic per-file copy/publish and verify full smoke without original files or LFS."
+}

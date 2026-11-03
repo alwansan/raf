@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "username": "raft-20261103T121910Z-a9c47e01",
+  "display_name": "A9",
+  "session_id": "A9-20261103T121910Z-audio-copy",
+  "resumed_from": "raft-20261103T113735Z-a93e6c40",
+  "status": "active",
+  "updated_at": "2026-11-03T12:19:10.900Z",
+  "base_sha": "cc5d7b7805892681510af8a9fb77e6b35e9b763f",
+  "current_work": [
+    "AUDIO-004"
+  ],
+  "last_commit": null,
+  "next_step": "Reproduce interrupted original StreamingAssets copy leaving a partial final bank/data asset; implement per-file staged, verified no-overwrite atomic publish and CPU-only regression.",
+  "memory_path": "prompt/coordination/clients/raft-20261103T121910Z-a9c47e01/MEMORY.md"
+}
