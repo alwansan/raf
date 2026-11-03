@@ -21,17 +21,19 @@ def sha256(path):
     with path.open('rb') as source:
         return hashlib.file_digest(source, 'sha256').hexdigest()
 
-def stage_verified_asset(source, target, size, digest):
+def stage_verified_asset(source, target, size, digest, project):
     """Publish only fully checked bytes, without replacing an existing asset.
 
     The original 100 MiB bank must not become visible as a half-written final
-    filename after an interrupted copy. A same-directory temporary file is
-    verified before an exclusive hard-link creates the final entry atomically.
+    filename after an interrupted copy. A temporary at the Unity project root
+    (outside Assets/StreamingAssets) is verified before an exclusive hard-link
+    creates the final entry atomically. Even an unclean process termination
+    cannot leave a temporary file where Unity would package it.
     The original source and existing destination are never overwritten.
     """
     target.parent.mkdir(parents=True, exist_ok=True)
     fd, temporary_name = tempfile.mkstemp(
-        prefix='.raft-stage-', suffix='.partial', dir=str(target.parent))
+        prefix='.raft-stage-', suffix='.partial', dir=str(project))
     os.close(fd)
     temporary = Path(temporary_name)
     try:
@@ -94,7 +96,7 @@ def stage(repo, project, report_path, apply=False):
     if apply:
         for _, source, target, size, digest in plan:
             if not target.exists():
-                stage_verified_asset(source, target, size, digest)
+                stage_verified_asset(source, target, size, digest, project)
             if target.stat().st_size != size or sha256(target) != digest:
                 raise ValueError('Staged original StreamingAssets verification failed')
     report = dict(applied=apply, files={name: dict(bytes=size, sha256=digest)
