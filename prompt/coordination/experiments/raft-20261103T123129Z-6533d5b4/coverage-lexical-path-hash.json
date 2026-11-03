@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "owner": "raft-20261103T123129Z-6533d5b4",
-  "status": "planned",
+  "status": "completed",
   "hypothesis": "The prior read-only 107-file coverage probe uses comment-unaware HEADER and path-free content digests; commented vendor declarations may be spurious matches and relocating files can leave same digest, overstating provenance. Correct without assuming a complete export.",
   "input_hashes": [],
   "commands": [
@@ -18,13 +18,13 @@
   "concurrency_group": "raft-a13-coverage-integrity-${{ github.ref }}-${{ github.sha }}",
   "artifact_prefix": "raft-a13-builtin-coverage-counts",
   "budget": "CPU-only <=6 min no LFS synthetic files",
-  "run_url": null,
-  "source_sha": null,
-  "result": null,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41637048446",
+  "source_sha": "6bfde3425438d92aa5fc1313e489df5c502c1018",
+  "result": "9/9 synthetic tests success on exact source, archive artifact13231330739; no original full export tested.",
   "limitations": [
     "Cannot establish actual full export from 107 subset",
     "Vendor identity coincidence does not prove shader authenticity",
     "No Unity/GPU/Android runtime"
   ],
-  "next_step": "Write diagnostic, test, aggregate report."
+  "next_step": "Preserve failing zero-match; gather full export provenance before actual shader restoration."
 }

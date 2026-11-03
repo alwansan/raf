@@ -2,8 +2,8 @@
   "schema_version": 1,
   "owner": "raft-20261103T123129Z-6533d5b4",
   "issue_id": "RENDER-002",
-  "status": "planned",
-  "updated_at": "2026-11-03T12:31:29Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T12:38:03.107Z",
   "base_sha": "aae8cc2070126449fa05049a669235a144309101",
   "hypothesis": "The prior read-only 107-file coverage probe uses comment-unaware HEADER and path-free content digests; commented vendor declarations may be spurious matches and relocating files can leave same digest, overstating provenance. Correct without assuming a complete export.",
   "intended_files": [
@@ -27,8 +27,11 @@
     "coverage-lexical-path-hash"
   ],
   "evidence": [
-    "native failure 41624581951 reconstruct job125878883840: 140 one-pass shaders 0 computes; prior to Unity"
+    "native failure 41624581951 reconstruct job125878883840: 140 one-pass shaders 0 computes; prior to Unity",
+    "https://github.com/alwansan/raf/commit/6bfde3425438d92aa5fc1313e489df5c502c1018",
+    "https://github.com/alwansan/raf/actions/runs/41637048446",
+    "docs/A13_BUILTIN_EXPORT_COVERAGE_INTEGRITY_2026-11-03.md"
   ],
-  "result": null,
-  "next_step": "Implement no-LFS synthetic red/green test; RENDER-002 OPEN."
+  "result": "Comment-aware exact vendor source and path-bound digest fix; 9/9 on exact source CI41637048446, synthetic only; complete 107 vs 140 export mapping unresolved.",
+  "next_step": "Future authenticated exact-run complete export/provenance audit if coordinator authorizes; do not bypass no-match."
 }
