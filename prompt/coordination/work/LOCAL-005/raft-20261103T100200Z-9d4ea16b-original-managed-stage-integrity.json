@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "issue_id": "LOCAL-005",
+  "username": "raft-20261103T100200Z-9d4ea16b",
+  "work_id": "original-managed-stage-integrity",
+  "status": "active",
+  "session_id": "a10-20261103T1212Z-f8ca6412",
+  "updated_at": "2026-11-03T12:13:30Z",
+  "hypothesis": "The private original managed test's prepare() instruments and writes each SHA-pinned original C# sequentially. A later instrumentation validation failure or disk write exception may leave earlier C# originals modified, breaking provenance for downstream checks.",
+  "scope": "Source-only CI preparation; not genuine .rgd runtime, not APK build",
+  "target_paths": [
+    "scripts/verify_android_offline_candidate.py",
+    "tests/test_a10_offline_source_selection.py",
+    "prompt/STATUS.md",
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+  ],
+  "strategy": "Reproduce partial mutation synthetically; precompute all instrumentation before writing; verify rollback of every attempted write on I/O errors; use existing no-LFS original managed integration workflow. Keep original metadata untouched.",
+  "excluded": [
+    "Other clients' DIAG-011 operation-source-parser",
+    "RENDER-002 shader restore",
+    "WATER-001 FFT",
+    "A9 identity helpers",
+    "A7 touch gesture source",
+    ".github/raft-native-build-request.json"
+  ],
+  "checks": [
+    "original byte-for-byte preservation if later instrumentation fails",
+    "rollback of previously written adapted source on write exception",
+    "successful in-place source adaptation when all validated",
+    "real original managed no-LFS CI"
+  ],
+  "limits": [
+    "Not a transaction covering unrelated harness generation or disk failure during restoration",
+    "Not real on-phone save/load",
+    "No Unity build, assets or release"
+  ]
+}
