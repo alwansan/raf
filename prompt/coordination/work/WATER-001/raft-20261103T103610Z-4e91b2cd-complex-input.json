@@ -1,0 +1,10 @@
+{
+  "owner": "raft-20261103T103610Z-4e91b2cd",
+  "status": "active",
+  "base_sha": "881f13d7e6ee3f67074457a71884668c6d9133b2",
+  "hypothesis": "Existing random2D oracle exercises real inputs only; independent imaginary random lane can reveal conjugation/channel mixing",
+  "intended_files": [
+    "scripts/verify_original_fft_cpu_2d.py"
+  ],
+  "next_step": "Run original CSharp CPU complex random forward and inverse comparison"
+}
