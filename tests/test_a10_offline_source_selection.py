@@ -4,7 +4,7 @@ from tempfile import TemporaryDirectory
 import unittest
 
 from scripts.adapt_android_offline_startup import fingerprint
-from scripts.verify_android_offline_candidate import select_original_source
+from scripts.verify_android_offline_candidate import select_original_source, install_adapted_originals
 
 
 class OriginalSourceSelectionTests(unittest.TestCase):
@@ -73,6 +73,100 @@ class OriginalSourceSelectionTests(unittest.TestCase):
             sdk.write_bytes(b"\xff\x80")
             self.assertEqual(select_original_source(root, "SaveAndLoad", fingerprint("genuine")), (original, "genuine"))
             self.assertEqual(sdk.read_bytes(), b"\xff\x80")
+
+
+class OriginalManagedInstallIntegrityTests(unittest.TestCase):
+    """Only artificial source bytes: validate the original-private CI prepare gate."""
+
+    def test_later_instrumentation_failure_preserves_all_source_bytes(self):
+        from unittest.mock import patch
+        with TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            one, two = root / "One.cs", root / "Two.cs"
+            # Use an explicit ordinary second original to model a late guard failure.
+            raw_one = b"\xef\xbb\xbfclass One {}\r\n"
+            one.write_bytes(raw_one)
+            two.write_bytes(b"class Two {}\n")
+            original_meta = root / "One.cs.meta"
+            original_meta.write_bytes(b"guid: original\n")
+            pins = {"One": fingerprint(one.read_text(encoding="utf-8-sig")),
+                    "Two": fingerprint(two.read_text())}
+            changed = {"One": (one, "class One { /* adapted */ }"),
+                       "Two": (two, "class Two { /* adapted */ }")}
+
+            def guard(name, value, manifest):
+                if name == "Two":
+                    raise ValueError("Synthetic original operation signature drift")
+                return value + "\n/* instrumented */"
+
+            with patch.dict("scripts.verify_android_offline_candidate.PINS", pins, clear=True):
+                with patch("scripts.verify_android_offline_candidate.instrument", side_effect=guard):
+                    with self.assertRaisesRegex(ValueError, "signature drift"):
+                        install_adapted_originals(changed, {"sources": {"One": {}, "Two": {}}})
+            self.assertEqual(one.read_bytes(), raw_one)
+            self.assertEqual(two.read_bytes(), b"class Two {}\n")
+            self.assertEqual(original_meta.read_bytes(), b"guid: original\n")
+
+    def test_second_write_error_rolls_back_both_originals(self):
+        from unittest.mock import patch
+        with TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            first, last = root / "One.cs", root / "Two.cs"
+            before_first = b"\xef\xbb\xbfclass One {}\r\n"
+            before_last = b"class Two {}\n"
+            first.write_bytes(before_first)
+            last.write_bytes(before_last)
+            changed = {"One": (first, "class One { adapted; }"),
+                       "Two": (last, "class Two { adapted; }")}
+            pins = {"One": fingerprint(first.read_text(encoding="utf-8-sig")),
+                    "Two": fingerprint(last.read_text())}
+            real_write = Path.write_bytes
+
+            def fail_mid_write(target, payload):
+                if target == last and payload == b"class Two { adapted; }":
+                    real_write(target, payload[:4])  # Simulate a truncated write.
+                    raise OSError("Synthetic disk write error")
+                return real_write(target, payload)
+
+            with patch.dict("scripts.verify_android_offline_candidate.PINS", pins, clear=True):
+                with patch.object(Path, "write_bytes", fail_mid_write):
+                    with self.assertRaisesRegex(OSError, "disk write error"):
+                        install_adapted_originals(changed, {"sources": {}})
+            self.assertEqual(first.read_bytes(), before_first)
+            self.assertEqual(last.read_bytes(), before_last)
+
+    def test_successful_preflight_replaces_exactly_selected_originals(self):
+        from unittest.mock import patch
+        with TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            one, two = root / "One.cs", root / "Two.cs"
+            one.write_text("original one")
+            two.write_text("original two")
+            meta = root / "One.cs.meta"
+            meta.write_bytes(b"guid: retained\n")
+            third = root / "Sdk.cs"
+            third.write_text("untouched SDK")
+            pins = {"One": fingerprint("original one"),
+                    "Two": fingerprint("original two")}
+            changed = {"One": (one, "adapted one"), "Two": (two, "adapted two")}
+            with patch.dict("scripts.verify_android_offline_candidate.PINS", pins, clear=True):
+                install_adapted_originals(changed, {"sources": {}})
+            self.assertEqual(one.read_text(), "adapted one")
+            self.assertEqual(two.read_text(), "adapted two")
+            self.assertEqual(meta.read_bytes(), b"guid: retained\n")
+            self.assertEqual(third.read_text(), "untouched SDK")
+
+    def test_original_source_change_after_sha_selection_fails_before_writing(self):
+        from unittest.mock import patch
+        with TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            one = root / "One.cs"
+            one.write_text("unexpected newer source")
+            with patch.dict("scripts.verify_android_offline_candidate.PINS",
+                            {"One": fingerprint("previous original")}, clear=True):
+                with self.assertRaisesRegex(ValueError, "changed after SHA selection"):
+                    install_adapted_originals({"One": (one, "adapted")}, {"sources": {}})
+            self.assertEqual(one.read_text(), "unexpected newer source")
 
 
 if __name__ == "__main__":
