@@ -6,6 +6,8 @@ on:
       - '.github/workflows/raft-a4-original-gpu-cache-lifecycle.yml'
       - 'scripts/a4_original_gpu_cache_lifecycle.py'
       - 'tests/test_a4_original_gpu_cache_lifecycle.py'
+      - 'scripts/a4_gpu_cache_owner_callpaths.py'
+      - 'tests/test_a4_gpu_cache_owner_callpaths.py'
   workflow_dispatch: {}
 
 permissions:
@@ -29,7 +31,10 @@ jobs:
             scripts
             tests
       - name: Verify fail-closed GPU allocation and lifetime parser controls
-        run: python3 -m unittest discover -s tests -p 'test_a4_original_gpu_cache_lifecycle.py' -v
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p 'test_a4_original_gpu_cache_lifecycle.py' -v
+          python3 -m unittest discover -s tests -p 'test_a4_gpu_cache_owner_callpaths.py' -v
 
   original-zip2:
     needs: synthetic
@@ -94,6 +99,8 @@ jobs:
             -o "$RUNNER_TEMP/a4-csharp9" zip2-a4/Raft/Raft_Data/Managed/Assembly-CSharp.dll \
             > "$RUNNER_TEMP/a4-decompiler-private.log" 2>&1
           timeout 30s python3 -m scripts.a4_original_gpu_cache_lifecycle \
+            --source-root "$RUNNER_TEMP/a4-csharp9"
+          timeout 30s python3 -m scripts.a4_gpu_cache_owner_callpaths \
             --source-root "$RUNNER_TEMP/a4-csharp9"
           echo "RAFT_A4_PRIVACY original_source_upload=false original_source_text_logged=false"
           # Original private CSharp9 files remain runner-local only.
