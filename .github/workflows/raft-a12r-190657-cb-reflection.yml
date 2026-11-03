@@ -1,0 +1,65 @@
+name: Raft A12R original Blur DXBC CB reflection CPU only
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/a12r_190657_blur_cb_reflection.py'
+      - 'tests/test_a12r_190657_blur_cb_reflection.py'
+      - '.github/workflows/raft-a12r-190657-cb-reflection.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: raft-a12r-190657-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  reflect-cb:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+            Raft/Raft_Data
+      - name: Synthetic RDEF structural and privacy tests before original file access
+        run: python3 -m unittest discover -s tests -p test_a12r_190657_blur_cb_reflection.py -v
+      - name: Verify source pointers and bound disk budget
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import shutil
+          from scripts.w1_recover_graphics_programs import OWNERS
+          from scripts.verify_targeted_lfs_compute_sources import verify_sources
+          assert shutil.disk_usage('.').free > 10 * 1024**3
+          verify_sources(Path('Raft/Raft_Data'), pointers_only=True, expected=OWNERS)
+          PY
+      - name: Only reuse original authenticated W1 LFS object cache
+        uses: actions/cache/restore@v4
+        with:
+          path: .git/lfs/objects
+          key: w1-graphics-87493249-0498f738-v1
+          fail-on-cache-miss: true
+      - name: Checkout LFS from cache, never network pull
+        run: |
+          set -euo pipefail
+          git lfs install --local
+          GIT_LFS_SKIP_SMUDGE=1 git lfs checkout Raft/Raft_Data/resources.assets Raft/Raft_Data/sharedassets0.assets Raft/Raft_Data/sharedassets36.assets
+      - name: Inspect SHA-pinned original Blur compiled RDEF privately
+        run: |
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 -m scripts.a12r_190657_blur_cb_reflection --source Raft/Raft_Data --repo . --out "$RUNNER_TEMP/a12r-structural.json"
+      - name: Retain privacy-safe numeric aggregates only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: raft-a12r-190657-aggregate-${{ github.sha }}
+          path: ${{ runner.temp }}/a12r-structural.json
+          if-no-files-found: ignore
+          retention-days: 7
