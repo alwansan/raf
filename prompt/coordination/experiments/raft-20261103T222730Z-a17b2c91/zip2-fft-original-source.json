@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T222730Z-a17b2c91",
+  "issue_id": "WATER-001",
+  "status": "completed",
+  "experiment_id": "zip2-fft-original-source",
+  "updated_at": "2026-11-03T22:35:17.815Z",
+  "original_source": {
+    "branch": "zip2",
+    "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "owner": "Raft_Data/sharedassets0.assets",
+    "size_bytes": 115978112,
+    "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "parts": [
+      47185920,
+      47185920,
+      21606272
+    ],
+    "original_shader_object_path_id": 2456,
+    "original_object_sha256": "9d934f5c99183c6df5cf2f1fefc9d3e5ec4bce5da5f96a86e4c02910d5322247"
+  },
+  "code": {
+    "workflow_commit": "14ba21e93af3dac3623265a9230afeccea6986ce",
+    "helper_commit": "eac1f62caf7960357568535bbd91a84ca338a9a3",
+    "synthetic_tests_commit": "c1ff199162eff751b94fc6eac2fae272123dc805"
+  },
+  "real_ci": {
+    "run": 41731607739,
+    "url": "https://github.com/alwansan/raf/actions/runs/41731607739",
+    "status": "completed/success",
+    "synthetic_job_id": 126250116759,
+    "original_job_id": 126250329499,
+    "synthetic_zip2_tests_passed": 10,
+    "existing_vulkan_schema_tests_passed": 8,
+    "zip2_git_pin_verified": true,
+    "original_sha_reconstructed_verified": true,
+    "git_lfs_pull_invoked": false,
+    "original_fft_programs_executed": 20,
+    "scenarios_per_program": 3,
+    "matching_write_and_numeric_comparisons": 60,
+    "max_abs_difference": 0,
+    "max_relative_l2_difference": 0,
+    "programs_inconclusive": 0
+  },
+  "notes": [
+    "Source-only CPU workflow, no game import or native APK build",
+    "Immutable zip2 checkout only reads three chunk blobs and manifest, retains original game assets",
+    "This is not complete 7.79GB SHA proof nor Adreno/Unity water/graphics proof"
+  ],
+  "readiness": "NOT_READY; independent complete immutable reviews0/3"
+}
