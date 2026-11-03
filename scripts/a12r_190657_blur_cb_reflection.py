@@ -120,6 +120,72 @@ def public_common_counts(program):
     return result
 
 
+def crosscheck_unity_cb(name_indices, common, groups):
+    """Match exact original Unity CB names, sizes and binding slots privately.
+
+    This verifies source metadata agreement, NOT DXBC register declarations,
+    HLSL uniform values or a working Unity ShaderLab program.
+    """
+    if not isinstance(name_indices, list) or not isinstance(common, dict):
+        raise ValueError("unity_cb_bad_original_schema")
+    names, seen_names = {}, set()
+    for entry in name_indices:
+        if not isinstance(entry, (tuple, list)) or len(entry) != 2:
+            raise ValueError("unity_cb_bad_name_table")
+        value, index = entry
+        if not isinstance(value, str) or type(index) is not int or index < 0:
+            raise ValueError("unity_cb_bad_name_table")
+        if index in names or value in seen_names:
+            raise ValueError("unity_cb_ambiguous_name_table")
+        names[index] = value
+        seen_names.add(value)
+
+    buffers = common.get("m_ConstantBuffers", [])
+    bindings = common.get("m_ConstantBufferBindings", [])
+    if not isinstance(buffers, list) or not isinstance(bindings, list):
+        raise ValueError("unity_cb_bad_original_schema")
+    if len(buffers) != len(groups) or len(bindings) != len(groups):
+        raise ValueError("unity_cb_count_mismatch")
+    declarations, registers = {}, {}
+    member_counts = {"m_MatrixParams": 0, "m_VectorParams": 0, "m_StructParams": 0}
+    for entry in buffers:
+        if not isinstance(entry, dict):
+            raise ValueError("unity_cb_bad_definition")
+        name_index, size = entry.get("m_NameIndex"), entry.get("m_Size")
+        if type(name_index) is not int or name_index not in names or type(size) is not int or size < 0:
+            raise ValueError("unity_cb_bad_definition")
+        name = names[name_index]
+        if name in declarations:
+            raise ValueError("unity_cb_duplicate_definition")
+        declarations[name] = size
+        for field in member_counts:
+            values = entry.get(field, [])
+            if not isinstance(values, list):
+                raise ValueError("unity_cb_bad_members")
+            member_counts[field] += len(values)
+    for entry in bindings:
+        if not isinstance(entry, dict):
+            raise ValueError("unity_cb_bad_binding")
+        name_index, slot = entry.get("m_NameIndex"), entry.get("m_Index")
+        if type(name_index) is not int or name_index not in names or type(slot) is not int or slot < 0 or slot > 255:
+            raise ValueError("unity_cb_bad_binding")
+        name = names[name_index]
+        if name in registers or slot in registers.values():
+            raise ValueError("unity_cb_ambiguous_binding")
+        registers[name] = slot
+    if set(groups) != set(declarations) or set(groups) != set(registers):
+        raise ValueError("unity_cb_names_mismatch")
+    if any(groups[key] != declarations[key] for key in groups):
+        raise ValueError("unity_cb_sizes_mismatch")
+    return {
+        "unity_serialized_cb_name_size_slot_matches": len(groups),
+        "unity_serialized_cb_identity_source_verified": True,
+        "unity_cb_binding_slot_count": len(set(registers.values())),
+        "unity_cb_member_parameter_counts": member_counts,
+        "dxbc_register_or_shaderlab_runtime_verified": False,
+    }
+
+
 def main(source, repo, out):
     # These exact hard-coded error markers contain no original Shader identifiers.
     safe_error_codes = {
@@ -194,6 +260,23 @@ def main(source, repo, out):
                     phase = "original_memberless_groups"
                     original_groups = serialized_groups(raw)
                     item["original_cb_sizes_only"] = sorted(original_groups.values())
+                    phase = "unity_serialized_cb_links"
+                    try:
+                        item.update(crosscheck_unity_cb(p["m_NameIndices"],
+                                                      prog["m_CommonParameters"], original_groups))
+                    except ValueError as error:
+                        safe_cb_errors = {
+                            "unity_cb_bad_original_schema", "unity_cb_bad_name_table",
+                            "unity_cb_ambiguous_name_table", "unity_cb_count_mismatch",
+                            "unity_cb_bad_definition", "unity_cb_duplicate_definition",
+                            "unity_cb_bad_members", "unity_cb_bad_binding",
+                            "unity_cb_ambiguous_binding", "unity_cb_names_mismatch",
+                            "unity_cb_sizes_mismatch",
+                        }
+                        item["unity_serialized_cb_identity_source_verified"] = False
+                        item["unity_serialized_cb_blocker"] = (
+                            str(error) if str(error) in safe_cb_errors else "unclassified"
+                        )
                     if compiled is None:
                         item["classification"] = "compiled_rdef_stripped_original_cb_names_unresolved"
                     else:
