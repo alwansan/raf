@@ -12,7 +12,7 @@ def fixture(root):
     shader.parent.mkdir(parents=True)
     shader.write_text('Shader "Standard" { SubShader { Pass {} } }', encoding="utf-8")
     meta = Path(str(shader) + ".meta")
-    meta.write_bytes(b"guid: original-unchanged\n")
+    meta.write_bytes(b"guid: " + b"a" * 32 + b"\n")
     sources = {"DefaultResourcesExtra/Standard.shader":
                'Shader "Standard" { SubShader { Pass {} } }'}
     return project, shader, meta, {"Standard": "DefaultResourcesExtra/Standard.shader"}, sources
