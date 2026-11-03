@@ -1,0 +1,53 @@
+name: Raft A5 HAPTICS-008 original OBB path CPU contract (no Unity LFS)
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-a5-haptics-archive.yml'
+      - 'android-port/Tests/Haptics/**'
+      - 'android-port/Runtime/Platform/AndroidStreamingAssets.cs'
+      - 'tests/test_haptic_archive_adapter.py'
+      - 'scripts/adapt_android_render_lifetimes.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: raft-a5-haptics-008-${{ github.run_id }}
+  cancel-in-progress: false
+
+jobs:
+  original-haptic-zip-contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          fetch-depth: 1
+          sparse-checkout: |
+            scripts
+            tests
+            android-port/Runtime/Platform
+            android-port/Tests/Haptics
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Check exact original single-call HapticAudio source adapter (no Unity)
+        run: python3 -m unittest discover -s tests -p test_haptic_archive_adapter.py -v
+      - name: Exercise real AndroidStreamingAssets CSharp reader on all 29 original WAV names
+        shell: bash
+        run: |
+          set -euo pipefail
+          git ls-tree -r --name-only HEAD -- Raft/Raft_Data/StreamingAssets/Haptics \
+            | sed -n 's|^Raft/Raft_Data/StreamingAssets/Haptics/||p' > "$RUNNER_TEMP/raft-a5-haptic-names.txt"
+          test "$(wc -l < "$RUNNER_TEMP/raft-a5-haptic-names.txt")" -eq 29
+          dotnet run --project android-port/Tests/Haptics/ArchiveReader.csproj \
+            --configuration Release --nologo -- "$RUNNER_TEMP/raft-a5-haptic-names.txt"
+      - name: Record experiment limitation
+        run: |
+          echo '### A5 HAPTICS-008 source/ZIP experiment' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Test-owned ZIP entries and actual repo reader only; no Unity, LFS hydration, original audio bytes, FMOD, device vibration, or signed OBB delivery.' >> "$GITHUB_STEP_SUMMARY"

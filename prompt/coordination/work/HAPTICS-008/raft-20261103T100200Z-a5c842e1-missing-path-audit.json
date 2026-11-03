@@ -2,22 +2,27 @@
   "schema_version": 1,
   "owner": "raft-20261103T100200Z-a5c842e1",
   "issue_id": "HAPTICS-008",
-  "status": "planned",
-  "updated_at": "2026-11-03T10:00:33.759Z",
+  "status": "active",
+  "updated_at": "2026-11-03T10:09:03.465Z",
   "base_sha": "0310e94d5c8d257c555acb0307cc670362d01e7c",
   "hypothesis": "The previously observed vibration asset path error can be traced to a concrete case-sensitive resource or Android APK/OBB lookup mismatch; distinguish optional haptics from fatal initialization without modifying original content.",
   "intended_files": [
-    "scripts/tests/",
-    "scripts/",
-    "prompt/coordination/clients/raft-20261103T100200Z-a5c842e1/",
-    "prompt/coordination/experiments/raft-20261103T100200Z-a5c842e1/",
-    "prompt/STATUS.md",
-    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+    "android-port/Tests/Haptics/ArchiveReader.csproj",
+    "android-port/Tests/Haptics/Program.cs",
+    "tests/test_haptic_archive_adapter.py",
+    ".github/workflows/raft-a5-haptics-archive.yml",
+    "prompt/coordination/experiments/raft-20261103T100200Z-a5c842e1/haptic-obb-reader-cpu.json",
+    "prompt/coordination/clients/raft-20261103T100200Z-a5c842e1/state.json",
+    "prompt/coordination/clients/raft-20261103T100200Z-a5c842e1/MEMORY.md",
+    "prompt/coordination/work/HAPTICS-008/raft-20261103T100200Z-a5c842e1-missing-path-audit.json"
   ],
   "related_work": [],
-  "experiment_ids": [],
+  "experiment_ids": [
+    "haptic-obb-reader-cpu"
+  ],
   "evidence": [
-    "https://github.com/alwansan/CL/blob/main/raft%20log/lf/LogRaft-20261102-205608-054/session-summary.json"
+    "https://github.com/alwansan/CL/blob/main/raft%20log/lf/LogRaft-20261102-205608-054/session-summary.json",
+    "https://github.com/alwansan/raf/tree/feature/android-native-port/Raft/Raft_Data/StreamingAssets/Haptics"
   ],
   "result": null,
   "next_step": "Inspect raw log path, relevant resource lookup code and test policy before source change."

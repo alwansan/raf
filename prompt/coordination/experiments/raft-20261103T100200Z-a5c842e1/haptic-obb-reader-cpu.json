@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T100200Z-a5c842e1",
+  "status": "active",
+  "hypothesis": "CL old APK80 haptics failures result from File.ReadAllBytes on a /jar:file OBB URI, despite all 29 original WAV entry names existing; current SHA-pinned adapter and production ZIP reader should preserve content and reject unsafe/missing entries.",
+  "input_hashes": [
+    "CL log segment git blob cf26b883707d1bacceade526ff08498e0e6cf3f3",
+    "original HapticAudio pinned SHA ac0ac86f62d05c774cb8b24cc8454df2b5356e50c6720395137df1730430fe9c",
+    "production reader blob 85f34b7a6dbd00a63fe3db61d0326e407c8f4c14"
+  ],
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_haptic_archive_adapter.py -v",
+    "git ls-tree -r --name-only HEAD -- Raft/Raft_Data/StreamingAssets/Haptics",
+    "dotnet run --project android-port/Tests/Haptics/ArchiveReader.csproj --configuration Release -- <private_test_manifest>"
+  ],
+  "expected_signal": "4 adapter cases plus 29 standard jar and 29 leading-slash jar synthetic ZIP roundtrips, with missing, traversal, duplicate, malformed and remote URI rejection",
+  "negative_controls": [
+    "unknown original HapticAudio SHA",
+    "two original file reads",
+    "changed file read API",
+    "missing ZIP entry",
+    "encoded ZIP traversal",
+    "duplicate ZIP entry",
+    "malformed and remote URI"
+  ],
+  "workflow_path": ".github/workflows/raft-a5-haptics-archive.yml",
+  "concurrency_group": "raft-a5-haptics-008-${{ github.run_id }}",
+  "artifact_prefix": "none",
+  "budget": "Ubuntu 24.04, 8 minutes maximum; no LFS hydration, Unity, APK or release",
+  "run_url": null,
+  "source_sha": "23161cfcc670bfed23b6daf77fe559ba9dc32716",
+  "result": null,
+  "limitations": [
+    "Older CL log does not validate newer adapter",
+    "Synthetic ZIP bytes are not original WAV payloads",
+    "No real installed APK/OBB, Unity, haptic playback or Android run"
+  ],
+  "next_step": "Observe cheap CI result, classify source fix versus runtime acceptance; update handoff and checkpoint."
+}
