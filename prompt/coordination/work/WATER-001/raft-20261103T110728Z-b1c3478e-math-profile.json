@@ -3,8 +3,8 @@
   "owner": "raft-20261103T110728Z-b1c3478e",
   "client_label": "A1",
   "issue_id": "WATER-001",
-  "status": "active",
-  "updated_at": "2026-11-03T11:07:29.047Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T11:13:00.358Z",
   "base_sha": "6cefb8df0394ca7f19f32830701f703d12d0b3f6",
   "hypothesis": "FFT descriptor/workgroup matches may conceal arithmetic opcode profile changes after HLSL cross-compile. Need purely numeric per-module operation profiles and negative controls on real SHA-checked original 20 programs.",
   "intended_files": [
@@ -28,5 +28,11 @@
   "experiment_ids": [
     "fft-math-opcode-profile"
   ],
-  "result": null
+  "result": "Real original20-program private CPU audit PASSED with 20/20 arithmetic profiles compared, 0/20 preserved, exact aggregate instruction-count differences. This identifies structural compiler changes, not a numerical shader defect or verified restoration.",
+  "source_sha": "19884e775733feb49763b10b29ee19578dc4790d",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41625193607 (6/6 synthetic, SUCCESS)",
+    "https://github.com/alwansan/raf/actions/runs/41625193741 (20/20 private original programs, SUCCESS)"
+  ],
+  "next_step": "Separate operand/dataflow and numeric equivalence work; do not automatically change shader output or water readiness."
 }

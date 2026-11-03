@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T110728Z-b1c3478e",
+  "issue_id": "WATER-001",
+  "experiment_id": "fft-math-opcode-profile",
+  "recorded_utc": "2026-11-03T11:13:00.358Z",
+  "source_sha": "19884e775733feb49763b10b29ee19578dc4790d",
+  "source_files": [
+    "scripts/probe_fft_spirv_math_profile.py",
+    "scripts/probe_authentic_fft_dxbc_translation.py",
+    "tests/test_probe_fft_spirv_math_profile.py"
+  ],
+  "original_resource_owner": "sharedassets0.assets",
+  "original_resource_path_id": 2456,
+  "original_payload_sha_pinned": true,
+  "private_artifacts_published": false,
+  "synthetic_run": "https://github.com/alwansan/raf/actions/runs/41625193607",
+  "synthetic_result": "SUCCESS, 6/6 targeted new tests",
+  "original_run": "https://github.com/alwansan/raf/actions/runs/41625193741",
+  "original_result": "SUCCESS, 20/20 original translated and inspected, no original binaries published",
+  "workflow_paths": [
+    ".github/workflows/raft-original-water-synthetic.yml",
+    ".github/workflows/raft-original-water-lfs-compute-audit.yml"
+  ],
+  "test_budget": "Synthetic <8min no LFS; existing original-source audit max22min and exactly 337660952 bytes three SHA-pinned owners; no Unity/native/GPU execution",
+  "aggregate": {
+    "original_programs": 20,
+    "vulkan_valid_programs": 20,
+    "roundtrip_binding_matches": 20,
+    "roundtrip_workgroup_matches": 20,
+    "arithmetic_profiles_compared": 20,
+    "arithmetic_profiles_preserved": 0,
+    "typed_image_profiles_preserved": 0,
+    "image_capability_profiles_preserved": 0,
+    "per_program_extension_count_matches": 20,
+    "per_program_phi_count_changed": 20,
+    "deltas": {
+      "bitcast": {
+        "original": 1050,
+        "roundtrip": 1435
+      },
+      "integer_add": {
+        "original": 365,
+        "roundtrip": 318
+      },
+      "integer_mul": {
+        "original": 205,
+        "roundtrip": 140
+      },
+      "phi": {
+        "original": 0,
+        "roundtrip": 50
+      }
+    },
+    "authentic_kernel_identity_proven": false,
+    "shader_numeric_equivalence_proven": false,
+    "unity_gpu_executed": false,
+    "adreno_gpu_executed": false
+  },
+  "limit": [
+    "Counts alone cannot establish semantic divergence or correctness",
+    "OpExtInst numbers not compared by import-specific semantic identity",
+    "No full operand/SSA/control-flow path-level comparison or GPU numeric replay",
+    "No actual game water/FFT kernel restored",
+    "Old APK80 phone logs not testing new source"
+  ],
+  "next_step": "Analyze operand/control-flow dataflow or run authentic shader numeric oracle in a safe isolated environment; keep readiness NOT_READY."
+}
