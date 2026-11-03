@@ -3,8 +3,8 @@
   "owner": "raft-20261103T100100Z-a1c46e79",
   "client_label": "A1",
   "issue_id": "WATER-001",
-  "status": "planned",
-  "updated_at": "2026-11-03T10:02:07.944Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T10:07:06.360Z",
   "base_sha": "2020291470b8c3dce96cfee1ca8ecec68c3e150d",
   "hypothesis": "Duplicate SPIR-V SSA result IDs in traced alias definitions may silently overwrite lineage, misreporting a unique descriptor. Fail closed on collision and exercise synthetic negative control.",
   "intended_files": [
@@ -22,7 +22,12 @@
   "experiment_ids": [
     "a1-image-ssa-uniqueness"
   ],
-  "evidence": [],
-  "result": null,
-  "next_step": "Run deterministic synthetic negative duplicate-ID test before and after fix."
+  "evidence": [
+    "Source code fix dc8533ba6df694b959fd37cb84c327584961642c",
+    "Reproduction before fix: malformed repeated OpLoad result 20 incorrectly rebinds write from set0/binding2 to set0/binding0 and returns all_image_operations_uniquely_traced=true",
+    "Local: existing 8/8 Python unittest; after patch 12/12 PASS",
+    "CI41616248165 completed SUCCESS on source dc8533ba6df694b959fd37cb84c327584961642c (synthetic CPU-only); authenticated original compute CI41616248166 in_progress at inspection"
+  ],
+  "result": "Fail-closed guard rejects duplicate result IDs among tracked aliases/variables across OpLoad, CopyObject, Select, Phi and related paths. Audit trust repaired, shader/kernel/restoration not proven.",
+  "next_step": "Review CI41616248166 final authentic20 output; remain NOT_READY / 0-of-3 full candidate reviews."
 }

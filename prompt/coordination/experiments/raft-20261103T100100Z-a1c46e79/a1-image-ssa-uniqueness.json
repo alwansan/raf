@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T100100Z-a1c46e79",
+  "status": "completed",
+  "hypothesis": "Repeated tracked SSA result definitions can masquerade as a unique descriptor binding in image_slot_dataflow",
+  "input_hashes": [
+    "original script blob 08f06575761c01e6024d6753542d0b5db82c42fa",
+    "original tests blob 5b1dbcb297ee572d2086a03a8f83d0d5d0bacaec"
+  ],
+  "commands": [
+    "python -m unittest tests.test_probe_fft_spirv_image_flow -v",
+    "synthetic malformed repeated OpLoad result_id20 before fix: write set0/binding0 and falsely unique; after fix: ValueError"
+  ],
+  "expected_signal": "Duplicate aliases and declared resource IDs fail closed, no original valid fixture regression",
+  "negative_controls": [
+    "duplicate OpLoad",
+    "alias shadows OpVariable",
+    "OpVariable shadows alias",
+    "OpSelect or OpPhi redefines OpLoad"
+  ],
+  "workflow_path": ".github/workflows/raft-original-water-fft-synthetic.yml (existing; actual workflow name verified by CI run)",
+  "concurrency_group": null,
+  "artifact_prefix": null,
+  "budget": "local Python 12 fixtures + existing ordinary-push CPU synthetic CI; no native workflow manually dispatched",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41616248165",
+  "source_sha": "dc8533ba6df694b959fd37cb84c327584961642c",
+  "result": "12/12 local Python fixtures passed; synthetic GitHub CI success; original-resource audit in progress at check",
+  "limitations": [
+    "Tracked alias and variable IDs only; not an exhaustive SPIR-V ID validator",
+    "Malformed synthetic negative controls not source evidence of original-shader defect",
+    "No authentic shader numerics, Unity compile or device acceptance"
+  ],
+  "next_step": "Check 41616248166 final status and exact original audit counts; do not close WATER-001 from scanner integrity alone."
+}

@@ -4,13 +4,13 @@
   "client_label": "A1",
   "session_id": "a1-20261103T100100Z-8e29b73d",
   "resumed_from": null,
-  "status": "active",
-  "updated_at": "2026-11-03T10:02:07.944Z",
+  "status": "paused",
+  "updated_at": "2026-11-03T10:07:06.360Z",
   "base_sha": "2020291470b8c3dce96cfee1ca8ecec68c3e150d",
   "current_work": [
     "WATER-001"
   ],
-  "last_commit": null,
-  "next_step": "Test SPIR-V image-flow SSA collisions with synthetic fixture, no Unity/native build.",
+  "last_commit": "dc8533ba6df694b959fd37cb84c327584961642c",
+  "next_step": "Review the original 20-program CPU-only resource audit41616248166 when it completes, then continue authentic shader numeric and binding recovery; this session does not run in background.",
   "memory_path": "prompt/coordination/clients/raft-20261103T100100Z-a1c46e79/MEMORY.md"
 }
