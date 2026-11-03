@@ -6,13 +6,19 @@ EXTRA=r'''
  static void TwoDimensional() {
   int n=32,stages=5;double max=0;
   ButterflyFFTUtility.ComputeButterfly(n,stages,out int[][] indices,out float[][] weights);
-  for(int kind=0;kind<4;kind++) {
+  for(int kind=0;kind<5;kind++) {
    var input=new Complex[n*n];uint seed=98765;
    for(int y=0;y<n;y++)for(int x=0;x<n;x++) {
     if(kind==0)input[y*n+x]=(x==3&&y==5)?new Complex(1,0.5):Complex.Zero;
     else if(kind==1)input[y*n+x]=new Complex(0.3f,-0.2f);
     else if(kind==2)input[y*n+x]=new Complex(Math.Cos(2*Math.PI*(3*x+5*y)/n),Math.Sin(2*Math.PI*(3*x+5*y)/n));
-    else {seed=1664525*seed+1013904223;input[y*n+x]=new Complex((float)((seed>>8)/16777216.0-0.5),0);}
+    else {
+     seed=1664525*seed+1013904223;
+     float real=(float)((seed>>8)/16777216.0-0.5);
+     double imaginary=0;
+     if(kind==4) {seed=1664525*seed+1013904223;imaginary=(float)((seed>>8)/16777216.0-0.5);}
+     input[y*n+x]=new Complex(real,imaginary);
+    }
    }
    var middle=new Complex[n*n];var actual=new Complex[n*n];var expected=new Complex[n*n];
    for(int y=0;y<n;y++) {
@@ -53,7 +59,7 @@ EXTRA=r'''
     Require(Error(normalized,expected)>0.1,"negative2D normalization");
    }
   }
-  Console.WriteLine("RAFT_ORIGINAL_CPU_2D cases=4 inverseRoundtrips=4 size=32 negativeControls=2 maxRelativeL2="+max.ToString("R",System.Globalization.CultureInfo.InvariantCulture)+" actualUnityOrGpuExecution=false");
+  Console.WriteLine("RAFT_ORIGINAL_CPU_2D cases=5 inverseRoundtrips=5 size=32 negativeControls=2 maxRelativeL2="+max.ToString("R",System.Globalization.CultureInfo.InvariantCulture)+" actualUnityOrGpuExecution=false");
  }
 '''
 def build(source,output):
