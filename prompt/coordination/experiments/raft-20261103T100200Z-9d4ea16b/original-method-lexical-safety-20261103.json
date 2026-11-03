@@ -2,7 +2,7 @@
   "schema_version": 1,
   "owner": "raft-20261103T100200Z-9d4ea16b",
   "session_id": "a10-20261103T150015Z-bca52ed0",
-  "status": "planned",
+  "status": "completed",
   "hypothesis": "The private original RPC/save method slice helper counts braces and signature text inside C# comments and string literals, causing premature or incorrect extraction or deceptive source-only checks.",
   "input_hashes": [],
   "commands": [
@@ -20,12 +20,31 @@
   "concurrency_group": null,
   "artifact_prefix": null,
   "budget": "Existing no-LFS 12min workflow; no Unity/build or new LFS",
-  "run_url": null,
-  "source_sha": "528068d21253340a9a673517aa608dbb58a015d0",
-  "result": null,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41660275041",
+  "source_sha": "b0a72fc7fe5d2b5efe3fa32528a39879fdecdd51",
+  "result": {
+    "red_run_id": 41660238082,
+    "red_conclusion": "completed_failure_intentional",
+    "red_tests_failed": 5,
+    "existing_tests_passed": 11,
+    "green_run_id": 41660275041,
+    "green_job_id": 126001316926,
+    "green_sha": "b0a72fc7fe5d2b5efe3fa32528a39879fdecdd51",
+    "green_conclusion": "completed_success",
+    "a10_tests_passed": 16,
+    "original_sha_pinned_sources": 12,
+    "original_RPC_identity": "PASS",
+    "managed_compile_exit": 0,
+    "managed_compile_error_codes": {},
+    "unity_or_phone": false,
+    "scope": "CSharp9 lexical method extraction and fail-closed signature verification; original game source never published or altered by patch"
+  },
   "limitations": [
     "Only C#9 lexical source extraction, not true Unity gameplay/.rgd or phone acceptance",
-    "No source content is uploaded"
+    "No source content is uploaded",
+    "Legacy hand-rolled lexical extraction is bounded to C#9: it does not replace a formal compiler/preprocessor parser or prove every possible future syntax.",
+    "No Unity/APK/OBB/XAPK produced, no on-device .rgd serialization or shaders tested; game NOT_READY, 0/3."
   ],
-  "next_step": "Add synthetic negative controls first. Make method signature detection and brace counting ignore literals/comments, reject duplicates and prototype-only signatures. Validate via existing no-LFS original-source workflow; preserve source SHA pins and private data."
+  "next_step": "Scoped helper fixed, no further work in this session. Overall LOCAL-005 genuine .rgd world/create/load/resume acceptance, WATER-001/RENDER-002/FFT-FORMAT-009 and complete independent readiness reviews remain pending.",
+  "red_run_url": "https://github.com/alwansan/raf/actions/runs/41660238082"
 }
