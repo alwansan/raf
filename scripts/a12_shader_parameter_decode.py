@@ -75,6 +75,10 @@ def parse_parameter_blob(raw):
     for group in range(groups):
         reader.string()
         used_size = reader.number(MAX_RECORD_BYTES)
+        counts["all_group_used_bytes"] += used_size
+        if group:
+            counts["constant_buffer_used_bytes"] += used_size
+            counts["nonzero_size_constant_buffers"] += used_size > 0
         count = reader.number()
         if group and not used_size and count:
             # A zero-sized named constant buffer cannot contain numeric values.
@@ -153,6 +157,9 @@ def parse_parameter_blob(raw):
         "record_sha256": hashlib.sha256(raw).hexdigest(),
         "group_count": counts["groups"],
         "constant_buffer_count": counts["constant_buffers"],
+        "constant_buffer_used_bytes": counts["constant_buffer_used_bytes"],
+        "all_group_used_bytes": counts["all_group_used_bytes"],
+        "nonzero_size_constant_buffers": counts["nonzero_size_constant_buffers"],
         "numeric_parameter_count": counts["numeric_parameter_records"],
         "matrix_parameter_count": counts["matrix_parameters"],
         "vector_parameter_count": counts["vector_parameters"],
@@ -171,6 +178,16 @@ def parse_parameter_blob(raw):
             and counts["structs"] == 0
             and counts["resource_parameter_records"] == 0
             and counts["constant_buffers"] == 0
+        ),
+        # Name-only constant-buffer groups with zero data, and no other
+        # parameter bindings, carry zero authored runtime parameter bytes.
+        # The original group count stays recorded; not treated as empty.
+        "only_zero_size_empty_cb_groups": (
+            counts["constant_buffers"] > 0
+            and counts["all_group_used_bytes"] == 0
+            and counts["numeric_parameter_records"] == 0
+            and counts["structs"] == 0
+            and counts["resource_parameter_records"] == 0
         ),
         "original_shader_names_published": False,
         "raw_shader_bytes_published": False,
