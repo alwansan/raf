@@ -56,6 +56,7 @@ jobs:
       - name: SHA-verify ZIP2 and classify original Settings fields
         run: |
           set -euo pipefail
+          python3 -m pip install --break-system-packages --disable-pip-version-check 'UnityPy==1.23.0'
           python3 -m scripts.probe_a2_settings_typed_fields \
             --source original-zip2/Raft/Raft_Data --decompiled "$RUNNER_TEMP/a2-original"
           echo 'A2_ZIP2_CPU_ONLY unityRan=false nativeBuildRan=false lfsDownloaded=false'
