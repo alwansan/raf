@@ -2,18 +2,24 @@
   "schema_version": 1,
   "owner": "raft-20261103T095700Z-a2b31f4d",
   "issue_id": "DISPLAY-003",
-  "status": "planned",
-  "updated_at": "2026-11-03T09:57:00Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T10:18:00Z",
   "base_sha": "84843b8c21847faf663126dc399c6b7947f8a0e8",
   "hypothesis": "Settings aspect and forced landscape behavior may diverge from authentic Android screen orientation on startup or resize; seek a source-level reproducible mismatch, then write a targeted safe repair.",
   "intended_files": [
-    "android-port/Runtime/",
-    "scripts/tests/",
-    "prompt/coordination/"
+    "scripts/probe_a2_settings_layout.py",
+    "tests/test_probe_a2_settings_layout.py",
+    ".github/workflows/raft-a2-settings-layout-source.yml",
+    "docs/A2_DISPLAY_SETTINGS_LAYOUT_SOURCE_2026-11-03.md"
   ],
   "related_work": [],
-  "experiment_ids": [],
-  "evidence": [],
-  "result": null,
-  "next_step": "Inspect live code and other clients; narrow path before any patch"
+  "experiment_ids": [
+    "settings-layout-signal-inventory"
+  ],
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/b4ab7275cdadead58081d188cea305d8aa814766",
+    "https://github.com/alwansan/raf/actions/runs/41616959190"
+  ],
+  "result": "Completed bounded A2 original UI geometry lexical investigation: 2394 SHA-pinned CSharp9 source files; eight Settings-related files and 20 sites; ControlsSettingsBox sizeDelta direct assignment line110. This completes experiment only, not DISPLAY-003 source repair.",
+  "next_step": "Authenticated method-context review of ControlsSettingsBox assignment and original serialized CanvasScaler scene data; keep DISPLAY-003 SOURCE_REVIEW_REQUIRED."
 }
