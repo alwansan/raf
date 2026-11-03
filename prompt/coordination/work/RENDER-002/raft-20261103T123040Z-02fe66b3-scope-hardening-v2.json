@@ -3,8 +3,8 @@
   "owner": "raft-20261103T123040Z-02fe66b3",
   "client_label": "A11",
   "issue_id": "RENDER-002",
-  "status": "planned",
-  "updated_at": "2026-11-03T13:21:12Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T13:29:40Z",
   "base_sha": "221314e2caa17f3c7649a72c61677d49a7f6cff7",
   "hypothesis": "A11 integrity probe can accept redirected project ancestors, malformed/colliding shader GUID metadata and silently ignore supplied expected counts during snapshot creation; these are verifiable provenance-integrity defects independent of authentic game graphics.",
   "intended_files": [
@@ -28,8 +28,12 @@
   ],
   "evidence": [
     "https://github.com/alwansan/raf/actions/runs/41637552496",
-    "https://github.com/alwansan/raf/actions/runs/41624581951"
+    "https://github.com/alwansan/raf/actions/runs/41624581951",
+    "https://github.com/alwansan/raf/actions/runs/41644180493",
+    "https://github.com/alwansan/raf/commit/9e85d22cc195d239048be1ef145ec3626e76fc26",
+    "https://github.com/alwansan/raf/actions/runs/41644281473",
+    "docs/A11_SHADER_EXPORT_SCOPE_HARDENING_V2_2026-11-03.md"
   ],
-  "result": null,
-  "next_step": "Add synthetic red tests, record failures, repair only A11-owned tool; run A11 unique CPU workflow; preserve non-ready and no full-export claims."
+  "result": "RED 6/17 failed as expected for unguarded A11 tool; GREEN exact-source 17/17 success. Reject symlinked project ancestry, malformed/colliding GUIDs, orphan shader .meta, ignored/incomplete count assertions. Original game export untouched and unverified.",
+  "next_step": "Full exact-stage original export scope/identity provenance still needed; RENDER-002/WATER-001 OPEN and NOT_READY 0/3."
 }
