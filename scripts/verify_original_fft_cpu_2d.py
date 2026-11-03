@@ -31,6 +31,19 @@ EXTRA=r'''
      double angle=-2*Math.PI*(kx*x+ky*y)/n;
      expected[ky*n+kx]+=input[y*n+x]*new Complex(Math.Cos(angle),Math.Sin(angle));
     }
+   // Inverse via conjugate-forward-conjugate verifies the roundtrip scale.
+   var inverseRows=new Complex[n*n];var recovered=new Complex[n*n];
+   for(int y=0;y<n;y++) {
+    var row=new Complex[n];for(int x=0;x<n;x++)row[x]=Complex.Conjugate(actual[y*n+x]);
+    var output=OriginalCpu(row,indices,weights);
+    for(int x=0;x<n;x++)inverseRows[y*n+x]=output[x];
+   }
+   for(int x=0;x<n;x++) {
+    var col=new Complex[n];for(int y=0;y<n;y++)col[y]=inverseRows[y*n+x];
+    var output=OriginalCpu(col,indices,weights);
+    for(int y=0;y<n;y++)recovered[y*n+x]=Complex.Conjugate(output[y])/(n*n);
+   }
+   Require(Error(recovered,input)<1e-5,"original CPU2D inverse roundtrip");
    double error=Error(actual,expected);max=Math.Max(max,error);
    Require(error<1e-5,"original CPU row-column vs direct2D DFT");
    if(kind==3) {
@@ -40,7 +53,7 @@ EXTRA=r'''
     Require(Error(normalized,expected)>0.1,"negative2D normalization");
    }
   }
-  Console.WriteLine("RAFT_ORIGINAL_CPU_2D cases=4 size=32 negativeControls=2 maxRelativeL2="+max.ToString("R",System.Globalization.CultureInfo.InvariantCulture)+" actualUnityOrGpuExecution=false");
+  Console.WriteLine("RAFT_ORIGINAL_CPU_2D cases=4 inverseRoundtrips=4 size=32 negativeControls=2 maxRelativeL2="+max.ToString("R",System.Globalization.CultureInfo.InvariantCulture)+" actualUnityOrGpuExecution=false");
  }
 '''
 def build(source,output):
