@@ -2,8 +2,8 @@
   "schema_version": 1,
   "owner": "raft-20261103T105730Z-a5e8b126",
   "issue_id": "HAPTICS-008",
-  "status": "planned",
-  "updated_at": "2026-11-03T10:57:41.720Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T11:05:04.577Z",
   "base_sha": "d01f4c4bfab342dc2eba35c569151cac9b292973",
   "resumed_from": "raft-20261103T100200Z-a5c842e1",
   "hypothesis": "Previous synthetic archive path checks missed whether the actual 29 source WAV payloads survive ZIP pack+read through the production reader for both jar:file and /jar:file forms. Verify exact hashes of original input/output and fail closed without producing an APK/OBB.",
@@ -30,6 +30,11 @@
   "experiment_ids": [
     "authentic-haptic-wav-zip-roundtrip"
   ],
-  "result": null,
-  "next_step": "Confirm original source SHA/size baseline, modify only A5 test harness/workflow and validate real source bytes via isolated CPU CI."
+  "result": "On source 76589b5d, CI41624251634 SUCCESS: source manifest validates 29 exact original WAV Git blobs / 32733104 bytes; actual AndroidStreamingAssets C# reads 58 original ZIP entries byte-exact/SHA256, alongside 58 synthetic reads/69 checks and four Python tests. Valid ZIP tamper is detected by test comparison (not runtime SHA). No Unity or device proof; HAPTICS-008 OPEN.",
+  "next_step": "Wait for coordinator-authorized next game candidate; actual Unity staged signed OBB/mounted jar/haptics vibration not tested.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41624251634",
+    "https://github.com/alwansan/raf/actions/runs/41623215003",
+    "https://github.com/alwansan/raf/commit/76589b5d731b3f7f2323061487c2a633bd1d0ff0"
+  ]
 }
