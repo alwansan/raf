@@ -16,6 +16,21 @@ from scripts.probe_original_scene_audio import method_body
 RECEIVED = re.compile(r"\bWorldHasBeenRecieved\s*=\s*true\s*;")
 BROADCAST = re.compile(r"\bHelper\s*\.\s*BroadCastToScene\s*\(")
 
+# Only executable C# tokens count toward this source-level contract. Mask
+# comments and literals without shifting the original character offsets.
+# Interpolated string expressions are conservatively not counted.
+_CSHARP_NON_CODE = re.compile(
+    r'''//[^\r\n]*|/\*[\s\S]*?\*/|@"(?:""|[^"])*"|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*' '''
+    .strip()
+)
+
+
+def _executable_only(body: str) -> str:
+    return _CSHARP_NON_CODE.sub(
+        lambda match: re.sub(r"[^\r\n]", " ", match.group()), body
+    )
+
+
 
 def inspect(source_root: Path) -> dict:
     matches = sorted(source_root.rglob("Raft_Network.cs"))
@@ -26,8 +41,9 @@ def inspect(source_root: Path) -> dict:
     if digest != PINS["Raft_Network"]:
         raise ValueError("Unknown original Raft_Network revision")
     return_type, body = method_body(source, "WorldHasBeenLoaded")
-    broadcasts = list(BROADCAST.finditer(body))
-    received = list(RECEIVED.finditer(body))
+    executable = _executable_only(body)
+    broadcasts = list(BROADCAST.finditer(executable))
+    received = list(RECEIVED.finditer(executable))
     if len(received) != 1 or not broadcasts:
         raise ValueError("Original world readiness/broadcast contract changed")
     before = sum(event.start() < received[0].start() for event in broadcasts)
@@ -43,8 +59,8 @@ def inspect(source_root: Path) -> dict:
         "scene_broadcast_calls": len(broadcasts),
         "broadcasts_before_received_assignment": before,
         "received_true_assignments": len(received),
-        "wait_or_yield_references": len(re.findall(r"\b(?:yield|WaitUntil|WaitForSeconds)\b", body)),
-        "game_manager_start_references": len(re.findall(r"\bgameManagerStartCalled\b", body)),
+        "wait_or_yield_references": len(re.findall(r"\b(?:yield|WaitUntil|WaitForSeconds)\b", executable)),
+        "game_manager_start_references": len(re.findall(r"\bgameManagerStartCalled\b", executable)),
         "modified_original_source": False,
         "unity_or_device_executed": False,
     }

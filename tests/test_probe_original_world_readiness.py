@@ -41,6 +41,44 @@ class WorldReadinessProbeTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, 'readiness|broadcast'):
                     self.inspect_fixture(source)
 
+    def test_comment_or_string_literal_is_not_world_progress(self):
+        real = fixture()
+        cases = (
+            real.replace('Helper.BroadCastToScene(secretEvent);',
+                         '// Helper.BroadCastToScene(secretEvent);'),
+            real.replace('Helper.BroadCastToScene(secretEvent);',
+                         '/* Helper.BroadCastToScene(secretEvent); */'),
+            real.replace('Helper.BroadCastToScene(secretEvent);',
+                         'string info = "Helper.BroadCastToScene(secretEvent);";'),
+            real.replace('WorldHasBeenRecieved = true;',
+                         'string info = "WorldHasBeenRecieved = true;";'),
+            real.replace('WorldHasBeenRecieved = true;',
+                         'string info = @"note ""WorldHasBeenRecieved = true;""";'),
+        )
+        for index, source in enumerate(cases):
+            with self.subTest(index=index):
+                with self.assertRaisesRegex(ValueError, 'readiness|broadcast'):
+                    self.inspect_fixture(source)
+
+    def test_false_earlier_broadcast_does_not_hide_real_wrong_order(self):
+        source = fixture(before=False).replace(
+            'WorldHasBeenRecieved = true;',
+            '// Helper.BroadCastToScene(secretEvent);\n'
+            'WorldHasBeenRecieved = true;')
+        with self.assertRaisesRegex(ValueError, 'no longer follows'):
+            self.inspect_fixture(source)
+
+    def test_lexical_decoys_do_not_inflate_counts(self):
+        source = fixture().replace(
+            'WorldHasBeenRecieved = true;',
+            'string link = "https://example.invalid/WorldHasBeenRecieved";\n'
+            'char slash = \'/\';\n'
+            'string note = @"// Helper.BroadCastToScene(fake);";\n'
+            'WorldHasBeenRecieved = true;')
+        report = self.inspect_fixture(source)
+        self.assertEqual(report['scene_broadcast_calls'], 1)
+        self.assertEqual(report['received_true_assignments'], 1)
+
     def test_source_revision_and_ambiguity_fail_closed(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
