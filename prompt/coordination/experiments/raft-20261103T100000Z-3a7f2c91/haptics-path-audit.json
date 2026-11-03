@@ -2,7 +2,7 @@
   "schema_version": 1,
   "owner": "raft-20261103T100000Z-3a7f2c91",
   "issue_id": "HAPTICS-008",
-  "status": "source_test_pending",
+  "status": "completed",
   "source_manifest_count": 29,
   "source_manifest_total_bytes": 32733104,
   "hypothesis": "All 29 tracked Haptics WAVs have stable Git identities; fail-closed source audit distinguishes missing/tampered staging input from old Android runtime path lookup",
@@ -20,5 +20,20 @@
     "No Android OBB/APK mounted path check",
     "No full Unity or device test",
     "No original asset bytes changed"
-  ]
+  ],
+  "source_sha": "0ee683300bbe3a14197fb1291a23910b4d2435e4",
+  "ci_run_id": 41616535073,
+  "ci_job_id": 125851268252,
+  "ci_url": "https://github.com/alwansan/raf/actions/runs/41616535073",
+  "ci_conclusion": "success",
+  "ci_synthetic_tests": {
+    "passed": 8,
+    "failed": 0
+  },
+  "ci_authentic_manifest": {
+    "file_count": 29,
+    "source_bytes": 32733104,
+    "git_blob_worktree_match": true
+  },
+  "remaining_issue": "HAPTICS-008 OPEN: exact path/old APK+OBB resource access unresolved"
 }
