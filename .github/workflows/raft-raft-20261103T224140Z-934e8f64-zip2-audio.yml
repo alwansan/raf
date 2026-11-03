@@ -1,0 +1,110 @@
+name: Raft A9 ZIP2 MasterBank verified source staging (CPU only, no LFS)
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/stage_zip2_master_bank.py'
+      - 'tests/test_stage_zip2_master_bank.py'
+      - 'scripts/stage_original_streaming_assets.py'
+      - 'tests/test_a9_streaming_stage_atomic.py'
+      - '.github/workflows/raft-raft-20261103T224140Z-934e8f64-zip2-audio.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: raft-a9-zip2-masterbank-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  synthetic-source-failure-controls:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: A9 ZIP2 source, interrupted publish and hostile-file controls
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p 'test_stage_zip2_master_bank.py' -v
+          python3 -m unittest discover -s tests -p 'test_a9_streaming_stage_atomic.py' -v
+          python3 -m unittest discover -s tests -p 'test_stage_original_streaming_assets.py' -v
+
+  authentic-source-no-lfs-stage:
+    needs: synthetic-source-failure-controls
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      ZIP2_COMMIT: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+    steps:
+      - name: Checkout only A9 source code and original small audio/haptics references
+        uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            config
+            Raft/Raft_Data/StreamingAssets
+      - name: Fetch ZIP2 immutable original MasterBank chunks without Git LFS
+        run: |
+          set -euo pipefail
+          mkdir -p zip2-source
+          git -C zip2-source init -q
+          git -C zip2-source remote add origin https://github.com/alwansan/raf.git
+          git -C zip2-source -c protocol.version=2 fetch -q --depth=1 --filter=blob:none origin zip2
+          test "$(git -C zip2-source rev-parse FETCH_HEAD)" = "$ZIP2_COMMIT"
+          git -C zip2-source sparse-checkout init --no-cone
+          printf '%s\n' '/RAFT_FILE_MANIFEST.tsv' '/Raft/Raft_Data/StreamingAssets/MasterBank.bank/' \
+            | git -C zip2-source sparse-checkout set --no-cone --stdin
+          git -C zip2-source checkout -q --detach FETCH_HEAD
+          test "$(git -C zip2-source rev-parse HEAD)" = "$ZIP2_COMMIT"
+          test -f zip2-source/RAFT_FILE_MANIFEST.tsv
+          test -f zip2-source/Raft/Raft_Data/StreamingAssets/MasterBank.bank/part-00000
+          test -f zip2-source/Raft/Raft_Data/StreamingAssets/MasterBank.bank/part-00001
+          test -f zip2-source/Raft/Raft_Data/StreamingAssets/MasterBank.bank/part-00002
+          echo "RAFT_A9_ZIP2_SOURCE_PIN $ZIP2_COMMIT lfs_used=false checkout_scope=MasterBank"
+      - name: Reassemble and SHA-verify original 101600960-byte MasterBank outside Assets
+        run: |
+          set -euo pipefail
+          python3 -m scripts.stage_zip2_master_bank \
+            --zip2-checkout zip2-source \
+            --destination "$RUNNER_TEMP/a9-original-bank/MasterBank.bank"
+      - name: Stage all genuine branch StreamingAssets via no-LFS ZIP2 bank
+        run: |
+          set -euo pipefail
+          python3 -m scripts.stage_original_streaming_assets \
+            --repo "$GITHUB_WORKSPACE" \
+            --project "$RUNNER_TEMP/a9-original-project" \
+            --report "$RUNNER_TEMP/a9-source-report.json" \
+            --verified-external-master-bank "$RUNNER_TEMP/a9-original-bank/MasterBank.bank" \
+            --apply
+      - name: Verify exact file stage and original identity with no LFS or Unity
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          from scripts.stage_original_streaming_assets import MASTER_SHA, ORIGINAL_ROOT_BLOB_SHAS
+          temp = Path(os.environ["RUNNER_TEMP"])
+          report = json.loads((temp / "a9-source-report.json").read_text())
+          bank = temp / "a9-original-project/Assets/StreamingAssets/MasterBank.bank"
+          assert bank.is_file() and bank.stat().st_size == 101600960
+          actual = hashlib.file_digest(bank.open("rb"), "sha256").hexdigest()
+          assert actual == MASTER_SHA
+          assert report["applied"] and not report["original_data_modified"]
+          assert len(report["files"]) == 36 and len(ORIGINAL_ROOT_BLOB_SHAS) == 7
+          assert report["files"]["MasterBank.bank"]["sha256"] == MASTER_SHA
+          assert not any((temp / "a9-original-project").rglob(".zip2-masterbank-*.partial"))
+          print("RAFT_A9_ZIP2_STREAMING_STAGE original_bank_bytes=101600960 root_oid_count=7 streaming_files=36 sha_match=true git_lfs_hydration=false unity=false phone=false")
+          PY
