@@ -49,6 +49,7 @@ jobs:
           test -n "$VK_DRIVER_FILES"
           cat >/tmp/a1-base.comp <<'EOF'
           #version 450
+          #extension GL_EXT_samplerless_texture_functions : require
           layout(local_size_x=8,local_size_y=1,local_size_z=1) in;
           layout(set=0,binding=0) uniform texture2D src0;
           layout(set=0,binding=1) uniform texture2D src1;
