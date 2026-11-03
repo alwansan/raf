@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T230900Z-a1f608bd",
+  "issue_id": "WATER-001",
+  "experiment_id": "authentic-fft-two-pass-vulkan",
+  "status": "completed",
+  "updated_at": "2026-11-03T23:20:00.042Z",
+  "writable_branch": "feature/android-native-port",
+  "source_sha": "71906dbc3bd53166b05f0c9f97e64280a9c39482",
+  "zip2": {
+    "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "owner": "Raft_Data/sharedassets0.assets",
+    "bytes": 115978112,
+    "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "original_shader_path_id": 2456,
+    "original_shader_raw_sha256": "9d934f5c99183c6df5cf2f1fefc9d3e5ec4bce5da5f96a86e4c02910d5322247",
+    "git_lfs_used": false
+  },
+  "ci": {
+    "run": 41737548860,
+    "url": "https://github.com/alwansan/raf/actions/runs/41737548860",
+    "conclusion": "success",
+    "source_sha": "71906dbc3bd53166b05f0c9f97e64280a9c39482",
+    "synthetic_job": 126270519045,
+    "original_job": 126270676109,
+    "synthetic_unit_tests": 10,
+    "synthetic_two_pass_positive": true,
+    "wrong_second_shader_detected": true
+  },
+  "resource_chain": {
+    "first_stage_reads": "source+butterfly",
+    "first_stage_writes": "intermediate",
+    "second_stage_reads": "intermediate+same butterfly",
+    "second_stage_writes": "final",
+    "separate_original_and_roundtrip_targets": true,
+    "Vulkan_barrier": "VK_ACCESS_SHADER_WRITE_BIT to VK_ACCESS_SHADER_READ_BIT",
+    "original_compiled_adjacent_candidate_pairs": 10,
+    "real_runtime_unity_kernel_mapping_proven": false,
+    "source_caller_two_pass_verified_in_other_prior_audits": true
+  },
+  "formats": [
+    {
+      "image": "RGHalf",
+      "vk": "R16G16_SFLOAT",
+      "pairs": 10,
+      "scenarios": 30,
+      "matching": 30
+    },
+    {
+      "image": "RGFloat",
+      "vk": "R32G32_SFLOAT",
+      "pairs": 10,
+      "scenarios": 30,
+      "matching": 30
+    },
+    {
+      "image": "ARGBHalf",
+      "vk": "R16G16B16A16_SFLOAT",
+      "pairs": 10,
+      "scenarios": 30,
+      "matching": 30
+    },
+    {
+      "image": "ARGBFloat",
+      "vk": "R32G32B32A32_SFLOAT",
+      "pairs": 10,
+      "scenarios": 30,
+      "matching": 30
+    }
+  ],
+  "totals": {
+    "two_pass_executable_comparisons": 120,
+    "matching": 120,
+    "mismatching": 0,
+    "missing_coverage": 0,
+    "nonfinite": 0,
+    "max_abs": 0,
+    "max_relative_l2": 0,
+    "inconclusive": 0
+  },
+  "source_paths": [
+    "scripts/a1_fft_two_pass_vulkan.cpp",
+    "scripts/probe_original_fft_two_pass_software_vulkan.py",
+    "tests/test_probe_original_fft_two_pass_software_vulkan.py",
+    ".github/workflows/raft-a1-fft-two-pass-vulkan.yml"
+  ],
+  "limits": [
+    "CPU software Vulkan, no Android Adreno or authored Unity ComputeShader/shader pass",
+    "No verified Unity runtime kernel index to serialized candidate position",
+    "Three bounded workloads are not mathematical proof for all inputs",
+    "No Unity/native APK/OBB/XAPK/build request, no original shader bytes exported"
+  ],
+  "readiness": "NOT_READY, immutable candidate absent, 0/3 independent full reviews",
+  "next_step": "Resolve verified runtime kernel index and original ComputeShader/ShaderLab/material identity, coordinate W1 and other original graphics owners"
+}
