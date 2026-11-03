@@ -10,6 +10,20 @@ import json
 from pathlib import Path
 import re
 
+# Mask CSharp9 comments and literals without moving offsets. A brace in a log
+# message, char, comment or verbatim string cannot close a method. Preserve
+# the unmasked original body for pinned SHA reports; the mask is not game code.
+# The string alternatives precede comments, so "//" inside a URL stays quoted.
+_CSHARP_NON_CODE = re.compile(
+    r'''@"(?:""|[^"])*"|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|//[^\r\n]*|/\*[\s\S]*?\*/'''
+)
+
+
+def _executable_positions(source: str) -> str:
+    return _CSHARP_NON_CODE.sub(
+        lambda match: re.sub(r"[^\r\n]", " ", match.group()), source
+    )
+
 
 def method_body(source: str, method: str):
     # ILSpy's CSharp9 class methods have a regular method declaration here.
@@ -19,16 +33,17 @@ def method_body(source: str, method: str):
         r"(?P<return>[\w<>\[\],.?]+)\s+" + re.escape(method)
         + r"\s*\([^;{}]*\)\s*\{"
     )
-    matches = list(declaration.finditer(source))
+    executable = _executable_positions(source)
+    matches = list(declaration.finditer(executable))
     if len(matches) != 1:
         raise ValueError("Expected one original " + method + " declaration; found " + str(len(matches)))
     match = matches[0]
     start = match.end()
     depth = 1
-    for i in range(start, len(source)):
-        if source[i] == "{":
+    for i in range(start, len(executable)):
+        if executable[i] == "{":
             depth += 1
-        elif source[i] == "}":
+        elif executable[i] == "}":
             depth -= 1
             if depth == 0:
                 return match["return"], source[start:i]

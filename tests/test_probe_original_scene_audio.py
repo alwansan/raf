@@ -22,6 +22,59 @@ class SceneAudioProbeTests(unittest.TestCase):
             self.assertFalse(result["modified_source"])
             self.assertFalse(result["unity_compiled"])
 
+
+    def test_method_body_ignores_quoted_comment_and_char_braces(self):
+        source = (
+            'class SoundManager {\n'
+            '  private void OnSceneEvent() {\n'
+            '    string note = "https://example.invalid/}";\n'
+            '    string verbatim = @"quoted ""brace }"" // still string";\n'
+            '    char marker = \'}\'; /* fake close } */\n'
+            '    // fake brace and call } RuntimeManager.CreateInstance(fake);\n'
+            '    RuntimeManager.CreateInstance(realEvent);\n'
+            '  }\n'
+            '  private void Awake() { Other(); }\n'
+            '}'
+        )
+        return_type, body = method_body(source, "OnSceneEvent")
+        self.assertEqual(return_type, "void")
+        self.assertIn("RuntimeManager.CreateInstance(realEvent);", body)
+        self.assertNotIn("private void Awake", body)
+        self.assertIn('https://example.invalid/}', body)
+        self.assertIn("/* fake close } */", body)
+
+    def test_method_declaration_inside_comment_cannot_fake_duplicate(self):
+        source = (
+            'class SoundManager {\n'
+            '/*\npublic void OnSceneEvent() { Fake(); }\n*/\n'
+            'private void OnSceneEvent() { Real(); }\n'
+            '}'
+        )
+        return_type, body = method_body(source, "OnSceneEvent")
+        self.assertEqual(return_type, "void")
+        self.assertEqual(body.strip(), "Real();")
+        with self.assertRaisesRegex(ValueError, "found 0"):
+            method_body('/*\npublic void OnSceneEvent() { Fake(); }\n*/', "OnSceneEvent")
+
+    def test_method_body_preserves_exact_original_source_and_offsets(self):
+        original = (
+            'class C {\n'
+            ' private void Start() {\n'
+            '   string diagnostic = "a } b";\n'
+            '   /* {{  }} */\n'
+            '   if (ok) { Run(); }\n'
+            ' }\n'
+            ' private void Next() { } \n'
+            '}'
+        )
+        return_type, body = method_body(original, "Start")
+        self.assertEqual(return_type, "void")
+        self.assertEqual(body,
+                         '\n   string diagnostic = "a } b";\n'
+                         '   /* {{  }} */\n'
+                         '   if (ok) { Run(); }\n ')
+        self.assertEqual(original.count(body), 1)
+
     def test_fails_closed_for_duplicate_or_missing_callbacks(self):
         with self.assertRaises(ValueError):
             method_body('\npublic void OnSceneEvent() {}\npublic void OnSceneEvent() {}', "OnSceneEvent")
