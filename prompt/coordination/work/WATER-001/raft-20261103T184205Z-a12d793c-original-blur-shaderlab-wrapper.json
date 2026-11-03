@@ -3,8 +3,8 @@
   "owner": "raft-20261103T184205Z-a12d793c",
   "client_label": "A12",
   "issue_id": "WATER-001",
-  "status": "planned",
-  "updated_at": "2026-11-03T18:53:00Z",
+  "status": "blocked",
+  "updated_at": "2026-11-03T19:04:00Z",
   "base_sha": null,
   "hypothesis": "Full 14-owner authentic original Subsurface Blur verified 2 original passes and 4 exact linked stage programs without permutations, enabling an authentic private ShaderLab wrapper using only the original compiled code, resource names and render-state metadata if serialized parameter/property schemas are supported. First authentic run found 88-byte nonempty parameter record in pass0 vertex, so an exact 2021.3 source-spec decoder must enumerate resource/numeric bindings before any shader wrapper is accepted.",
   "intended_files": [
@@ -28,7 +28,11 @@
   "evidence": [
     "https://github.com/alwansan/raf/actions/runs/41696171379",
     "https://github.com/alwansan/raf/actions/runs/41696943954",
-    "https://github.com/alwansan/raf/actions/runs/41697630711"
+    "https://github.com/alwansan/raf/actions/runs/41697630711",
+    "https://github.com/alwansan/raf/actions/runs/41699037399",
+    "https://github.com/alwansan/raf/actions/runs/41699143656",
+    "docs/A12_ORIGINAL_SUBSURFACE_BLUR_PARAMETER_BLOCKER_2026-11-03.md"
   ],
-  "next_step": "Read pinned AssetRipper ShaderSubProgram.ReadParameters public implementation; add non-lossy bounded private metadata decoder, synthetic negative tests, and original 88-byte aggregate audit. No dropping shader parameters."
+  "next_step": "Recover DXBC constant buffer registers/sizes and original m_CommonParameters; preserve both nonzero CB groups and reject unverifiable Unity ShaderLab. No full native request yet.",
+  "result": "Fail closed on authenticated source: original parameter record 88 bytes SHA4ef5ff71, 3 groups incl 2 Constant Buffers with 544 used bytes; none of 2 CBs zero-sized. Numeric/resource/struct records zero but CB binding semantics unresolved; no private ShaderLab constructed/installed. Original 14-owner source/4 DXBC links remain valid. Public-format parameter parser 12/12 tests +5/5 prior W1 and exact-source run41699143656 confirmed safe refusal. Native builtin zero-match 142/198 still OPEN."
 }
