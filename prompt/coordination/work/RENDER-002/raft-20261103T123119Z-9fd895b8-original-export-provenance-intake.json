@@ -3,8 +3,8 @@
   "owner": "raft-20261103T123119Z-9fd895b8",
   "client_label": "A14",
   "issue_id": "RENDER-002",
-  "status": "planned",
-  "updated_at": "2026-11-03T12:31:19.959Z",
+  "status": "paused",
+  "updated_at": "2026-11-03T15:09:57.595Z",
   "base_sha": "aae8cc2070126449fa05049a669235a144309101",
   "hypothesis": "Full original shader export identity/provenance for failed run 41624581951 remains unverified; the inspected 107 shaders are only an unauthenticated subset.",
   "intended_files": [
@@ -22,6 +22,6 @@
   "evidence": [
     "https://github.com/alwansan/raf/actions/runs/41624581951"
   ],
-  "result": null,
-  "next_step": "Wait for A14-specific owner scope; avoid duplicate coverage probe or changing shared restorer."
+  "result": "Original 107 subset authentication not established; A11/A13 completed independent scope checks. A14 changed no full-original-export assumptions.",
+  "next_step": "Only reopen for authentic exact-run original export identity evidence under separate scope and identity; don't rerun equivalent subset probes."
 }

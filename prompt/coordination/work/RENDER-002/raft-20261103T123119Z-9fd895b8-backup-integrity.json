@@ -3,8 +3,8 @@
   "owner": "raft-20261103T123119Z-9fd895b8",
   "client_label": "A14",
   "issue_id": "RENDER-002",
-  "status": "active",
-  "updated_at": "2026-11-03T14:59:06.565Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T15:09:57.595Z",
   "base_sha": "b6a962018e06513d5cf408e646751f161f0e00ca",
   "hypothesis": "Once genuine built-in names match, restore_builtin_shaders writes backups before its rollback try block; a mid-backup IO error can strand partial proprietary copies and block safe retry, although original source/GUID is untouched.",
   "intended_files": [
@@ -24,11 +24,17 @@
     "W1 Depth Copy separate source files"
   ],
   "experiment_ids": [
-    "a14-partial-external-backup-write-redgreen"
+    "a14-partial-backup-write-redgreen"
   ],
   "evidence": [
-    "https://github.com/alwansan/raf/actions/runs/41624581951"
+    "https://github.com/alwansan/raf/actions/runs/41659753191",
+    "https://github.com/alwansan/raf/commit/8dcca858d2ae0646d5fb1a48fbdb2ab51a2909dc",
+    "https://github.com/alwansan/raf/actions/runs/41660203887",
+    "https://github.com/alwansan/raf/actions/runs/41660203946",
+    "https://github.com/alwansan/raf/actions/runs/41660203931",
+    "https://github.com/alwansan/raf/actions/runs/41660204010",
+    "https://github.com/alwansan/raf/actions/runs/41660204069"
   ],
-  "result": null,
-  "next_step": "Add fault-injection regression and independent no-LFS CI; prove red, then minimally guard newly-created backup subtree cleanup, prove green. Original full export remains unresolved."
+  "result": "Two fail-first synthetic partial external backup writes left residue; cleanup fix tested, 4/4 green, A3/A9/A15/vendor same-source CI green. No original export/game GPU tested.",
+  "next_step": "Scope completed; original shader identity overlap, original pass/FFT kernel recovery and Unity/device acceptance unresolved."
 }

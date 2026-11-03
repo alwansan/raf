@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T123119Z-9fd895b8",
+  "client_label": "A14",
+  "issue_id": "RENDER-002",
+  "status": "completed",
+  "updated_at": "2026-11-03T15:09:26.953Z",
+  "hypothesis": "Late or partial external shader backup write can leave private partial bytes despite no original project mutation",
+  "input_hashes": [
+    "baseline_test_commit=219d517dae054bfea970f6bbbb11bc53fd81bdc4",
+    "fixed_source_commit=8dcca858d2ae0646d5fb1a48fbdb2ab51a2909dc"
+  ],
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_a14_builtin_backup_atomicity.py -v"
+  ],
+  "expected_signal": "RED 2 failing cleanups, GREEN all 4 pass",
+  "negative_controls": [
+    "first partial .shader backup write",
+    "second late .meta backup write",
+    "pre-existing directory preserved"
+  ],
+  "workflow_path": ".github/workflows/raft-a14-builtin-backup-atomicity.yml",
+  "concurrency_group": "raft-a14-backup-atomicity-${{ github.ref }}-${{ github.sha }}",
+  "artifact_prefix": "raft-a14-synthetic-backup-",
+  "budget": "7 minute CPU-only,no LFS,no Unity",
+  "red_run_url": "https://github.com/alwansan/raf/actions/runs/41659753191",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41660203887",
+  "source_sha": "8dcca858d2ae0646d5fb1a48fbdb2ab51a2909dc",
+  "result": "RED 2/4 failed intentionally; GREEN 4/4 pass; independent A3/A9/A15/official vendor CI pass at same SHA",
+  "limitations": [
+    "no original export authenticated",
+    "not atomic against adversarial simultaneous filesystem mutation",
+    "no GPU,Unity,Android,device test"
+  ],
+  "next_step": "Genuine original ShaderLab/compute restoration remains required"
+}

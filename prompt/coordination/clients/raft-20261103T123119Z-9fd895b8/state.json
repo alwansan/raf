@@ -4,13 +4,11 @@
   "client_label": "A14",
   "session_id": "A14-20261103T123119Z-71377153",
   "resumed_from": null,
-  "status": "active",
-  "updated_at": "2026-11-03T14:59:06.565Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T15:09:57.595Z",
   "base_sha": "b6a962018e06513d5cf408e646751f161f0e00ca",
-  "current_work": [
-    "RENDER-002 isolated built-in shader pre-copy backup rollback on partial I/O"
-  ],
-  "last_commit": null,
-  "next_step": "Run independent fail-first backup-write injection tests before modifying shared restorer; preserve original files/meta; coordinate A15 completed addition-write scope.",
+  "current_work": [],
+  "last_commit": "8dcca858d2ae0646d5fb1a48fbdb2ab51a2909dc",
+  "next_step": "Completed backup I/O correction. Next A14 role must first refresh HEAD and peer scopes; genuine original full-export identity and shader/compute recovery remain open.",
   "memory_path": "prompt/coordination/clients/raft-20261103T123119Z-9fd895b8/MEMORY.md"
 }
