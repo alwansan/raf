@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "username": "raft-20261103T224215Z-a7d93c52",
+  "agent": "A7",
+  "session_id": "A7-20261103T224215Z-0c9d72f3",
+  "resumed_from": "raft-20261103T145805Z-a7c2f809",
+  "status": "active",
+  "updated_at": "2026-11-03T22:45:19.115Z",
+  "base_sha": "edd758e5131c8efbc9b9d1199d76ab57108158bf",
+  "current_work": [
+    "INPUT-005"
+  ],
+  "last_commit": null,
+  "next_step": "Verify original ZIP2 Unity.InputSystem DLL SHA and public ABI via CPU-only workflow without LFS or Unity build.",
+  "memory_path": "prompt/coordination/clients/raft-20261103T224215Z-a7d93c52/MEMORY.md"
+}
