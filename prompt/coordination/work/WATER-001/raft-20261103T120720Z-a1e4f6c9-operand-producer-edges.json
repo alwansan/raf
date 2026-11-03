@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T120720Z-a1e4f6c9",
+  "client_label": "A1",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "updated_at": "2026-11-03T12:07:55.818Z",
+  "base_sha": "09d7cee8ffaedba9cb8e7e61e9828f1842381267",
+  "hypothesis": "Opcode histograms miss operand-level data-dependency differences. Build privacy-preserving, bounded exact edge census for tracked SPIR-V integer/bitcast/phi producers, compare old original vs HLSL-roundtripped 20 modules. Never claim semantic equivalence.",
+  "intended_files": [
+    "scripts/probe_fft_spirv_operand_edges.py",
+    "tests/test_probe_fft_spirv_operand_edges.py",
+    "scripts/probe_authentic_fft_dxbc_translation.py",
+    ".github/workflows/raft-original-water-synthetic.yml",
+    ".github/workflows/raft-original-water-lfs-compute-audit.yml",
+    "prompt/coordination/clients/raft-20261103T120720Z-a1e4f6c9",
+    "prompt/coordination/experiments/raft-20261103T120720Z-a1e4f6c9",
+    "prompt/coordination/discussions/WATER-001",
+    "docs/FFT_OPERAND_EDGE_A1_2026-11-03.md",
+    "prompt/STATUS.md",
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+  ],
+  "related_work": [
+    "A1 prior math and extension instruction profiles paused",
+    "a81c6e42 FFT format policy paused, distinct files",
+    "4e91b2cd caller-policy paused, distinct files",
+    "6d92f0ab FFT resource audit distinct"
+  ],
+  "budget": "8 min CPU synthetic and <=22 min preexisting SHA-authenticated three-LFS-owner audit via ordinary push; no native request/manual Unity or duplicated LFS downloads outside established CI",
+  "next_step": "Implement and test guarded, input-ID-only edge census, then inspect real original20 comparison; record limitations.",
+  "experiment_ids": [
+    "operand-producer-edges"
+  ]
+}
