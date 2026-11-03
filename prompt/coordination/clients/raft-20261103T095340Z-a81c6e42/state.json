@@ -2,12 +2,12 @@
   "schema_version": 1,
   "username": "raft-20261103T095340Z-a81c6e42",
   "session_id": "20261103T112942Z-source-expression",
-  "status": "active",
+  "status": "paused",
   "updated_at": "2026-11-03T11:29:42Z",
   "base_sha": "aa5f0b6d236a5bbac8cadadd3e2278ec2acb6df4",
   "current_work": [
     "FFT-FORMAT-009"
   ],
-  "next_step": "Evaluate RGFloat capability re-enable and candidate-specific Unity format fallback before functional change.",
+  "next_step": "Inspect actual Unity descriptor-compatible format and creation behavior before capability changes.",
   "memory_path": "prompt/coordination/clients/raft-20261103T095340Z-a81c6e42/MEMORY.md"
 }

@@ -1,0 +1,11 @@
+{
+  "owner": "raft-20261103T095340Z-a81c6e42",
+  "status": "completed",
+  "source_sha": "762dcab3b51f73f592b907931da5c03c79cc7d04",
+  "result": "Same discrepancy using extracted original conditions",
+  "limitations": [
+    "No C# execution",
+    "No backend format evidence"
+  ],
+  "next_step": "Inspect actual Unity descriptor-compatible format and creation behavior before capability changes."
+}
