@@ -2,15 +2,15 @@
   "schema_version": 1,
   "client_label": "W1",
   "username": "raft-20261103T162900Z-73e8c2a1",
-  "session_id": "w1-20261103T173334037Z-e7a64319",
+  "session_id": "w1-20261103T174159718Z-resume",
   "resumed_from": null,
   "status": "active",
-  "updated_at": "2026-11-03T17:35:44.152Z",
-  "base_sha": "928343dfe8e3540f7ecde964c8774b641a8fece2",
+  "updated_at": "2026-11-03T17:41:59.719Z",
+  "base_sha": "4f1a3f9a8de18e8a85c30d7fbe8ce2af6bc22e1e",
   "current_work": [
     "Depth Copy staged integration and owner-requested all-client XAPK candidate review"
   ],
   "last_commit": "41ba9a1d9d904f017dae82088f1e32375a402ade",
-  "next_step": "Install exact target transactionally and validate actual export; verify all-client source ancestry and compatibility; owner-XAPK request only with explicit unresolved-source accounting, never fabricated readiness.",
+  "next_step": "Continue staged Depth integration and classify all-client candidate; owner authorizes experimental XAPK without pretending readiness.",
   "memory_path": "prompt/coordination/clients/raft-20261103T162900Z-73e8c2a1/MEMORY.md"
 }
