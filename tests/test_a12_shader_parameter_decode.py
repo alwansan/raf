@@ -17,11 +17,11 @@ def packed_name(name):
     return result + b"\0" * ((-len(source)) % 4)
 
 
-def fixture(groups=1, numeric=0, resources=0, struct_count=0):
+def fixture(groups=1, numeric=0, resources=0, struct_count=0, cb_size=0):
     output = bytearray(i32(202012090) + i32(groups))
     for ix in range(groups):
         output += packed_name("SyntheticGlobal" if ix == 0 else "SyntheticCB")
-        output += i32(16 if numeric and ix else 0)
+        output += i32((cb_size if ix else 0) or (16 if numeric and ix else 0))
         output += i32(numeric)
         for _ in range(numeric):
             output += packed_name("SyntheticFloat4")
@@ -76,6 +76,15 @@ class A12OriginalShaderParameterTests(unittest.TestCase):
         got = parse_parameter_blob(raw)
         self.assertEqual(got["constant_buffer_count"], 1)
         self.assertFalse(got["parameters_empty"])
+        self.assertTrue(got["only_zero_size_empty_cb_groups"])
+        self.assertEqual(got["all_group_used_bytes"], 0)
+        self.assertEqual(got["nonzero_size_constant_buffers"], 0)
+
+    def test_nonzero_size_empty_constant_buffer_not_omitted(self):
+        got = parse_parameter_blob(fixture(groups=2, cb_size=16))
+        self.assertEqual(got["constant_buffer_used_bytes"], 16)
+        self.assertEqual(got["nonzero_size_constant_buffers"], 1)
+        self.assertFalse(got["only_zero_size_empty_cb_groups"])
 
     def test_struct_parameter_schema_counted_without_leaking_names(self):
         got = parse_parameter_blob(fixture(struct_count=1))
