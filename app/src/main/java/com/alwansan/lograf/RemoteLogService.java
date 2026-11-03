@@ -179,8 +179,16 @@ public final class RemoteLogService extends IRemoteLog.Stub {
                         found.append(chars,0,n);
                 }
                 Set<String> current = new HashSet<>();
-                for (String item : found.toString().trim().split("\\s+")) {
-                    if (item.matches("[0-9]+")) current.add(item);
+                String pidOutput=found.toString().trim();
+                // A successful probe must contain only PID tokens. A shell
+                // diagnostic mixed into stdout must never become an apparent
+                // game exit or an unverified process treated as absent.
+                if(!pidOutput.isEmpty()) {
+                    for(String item:pidOutput.split("\\s+")) {
+                        if(!item.matches("[0-9]+"))
+                            throw new IOException("pidof_invalid_output");
+                        current.add(item);
+                    }
                 }
                 // pidof may print a diagnostic instead of a PID, or exit
                 // nonzero. Never treat that as proof the game has exited.
@@ -192,6 +200,9 @@ public final class RemoteLogService extends IRemoteLog.Stub {
                 boolean verifiedEmpty=exit==1 && found.toString().trim().isEmpty();
                 if(exit!=0 && !verifiedEmpty)
                     throw new IOException("pidof_exit_"+exit);
+                // Exit 0 without a PID is ambiguous, not confirmed absence.
+                if(exit==0 && current.isEmpty())
+                    throw new IOException("pidof_empty_success");
                 pidProbeSuccesses.incrementAndGet();
                 // Preserve all PIDs for system-context correlation, but only
                 // sample CPU/RSS/FPS for the exact main process. If /proc is
