@@ -2,8 +2,8 @@
   "schema_version": 1,
   "owner": "raft-20261103T222730Z-a17b2c91",
   "issue_id": "WATER-001",
-  "status": "active",
-  "updated_at": "2026-11-03T22:29:03.060Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T22:35:56.722Z",
   "base_sha": "f604848e7efdc146de64ec2b8569bc35ad9e2689",
   "source_ref": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
   "original_target": "Raft_Data/sharedassets0.assets",
@@ -19,5 +19,16 @@
     "prompt/STATUS.md",
     "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
   ],
-  "next_step": "Source-only test and authentic ZIP2 20x3 FFT runtime, no Unity or APK."
+  "next_step": "Use ZIP2 for original ShaderLab/water binding/precision restoration, NOT_READY 0/3; no native Unity build by A1.",
+  "source_commit": "14ba21e93af3dac3623265a9230afeccea6986ce",
+  "result": "Original 115978112-byte FFT owner reassembled from 3 ZIP2 plain Git chunks with independently pinned original SHA, no LFS. Authentic20×3 CPU Vulkan comparisons 60/60 matched outputs; original owner/ComputeShader SHA verified.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41731607739",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/A1_ZIP2_ORIGINAL_FFT_NO_LFS_2026-11-04.md"
+  ],
+  "synthetic_restore_tests_passed": 10,
+  "existing_schema_tests_passed": 8,
+  "real_programs": 20,
+  "real_compares": 60,
+  "differences": 0
 }
