@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T095832Z-a4c7e2b1",
+  "issue_id": "PERF-007",
+  "status": "planned",
+  "updated_at": "2026-11-03T10:03:00Z",
+  "base_sha": "43b862ca910750d0b179539ab8857855dea01e3b",
+  "hypothesis": "Memory watcher currently reports absent process VmRSS as measured zero and can accept impossible negative host/RSS values; those are false signals during CI failure diagnostics.",
+  "intended_files": [
+    "scripts/ci_memory_watch.py",
+    "tests/test_ci_memory_watch.py",
+    "prompt/coordination/clients/raft-20261103T095832Z-a4c7e2b1/",
+    "prompt/coordination/experiments/raft-20261103T095832Z-a4c7e2b1/",
+    "prompt/coordination/work/PERF-007/raft-20261103T095832Z-a4c7e2b1-memory-evidence.json"
+  ],
+  "related_work": [
+    "HAPTICS-008 agents afcedabb and a5c842e1: avoid overlapping runtime/tests; abandoned A4 haptics scope before edits",
+    "DISPLAY-003 A2 independent",
+    "FFT-FORMAT-009 A1 independent"
+  ],
+  "experiment_ids": [
+    "rss-unavailable-negative-controls"
+  ],
+  "evidence": [],
+  "result": null,
+  "next_step": "Reproduce false-zero/negative counters with synthetic proc fixtures, patch only proof-bound parsing, run tests; report scope explicitly"
+}

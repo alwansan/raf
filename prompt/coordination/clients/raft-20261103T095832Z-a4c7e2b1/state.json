@@ -5,12 +5,12 @@
   "session_id": "a4-20261103T095832Z-71d4c6b8",
   "resumed_from": null,
   "status": "active",
-  "updated_at": "2026-11-03T09:58:32Z",
-  "base_sha": "af354e4154b915a99fd9ba55a37b63ce849a16f5",
+  "updated_at": "2026-11-03T10:03:00Z",
+  "base_sha": "43b862ca910750d0b179539ab8857855dea01e3b",
   "current_work": [
-    "HAPTICS-008"
+    "PERF-007"
   ],
   "last_commit": null,
-  "next_step": "Trace authentic CL haptics missing path and current Android resource loading; implement targeted source repair only if evidence supports it; run CPU-only local tests.",
+  "next_step": "Correct false-zero/negative RSS evidence in scripts/ci_memory_watch.py with executable isolated Python regressions, preserving all source and build constraints.",
   "memory_path": "prompt/coordination/clients/raft-20261103T095832Z-a4c7e2b1/MEMORY.md"
 }

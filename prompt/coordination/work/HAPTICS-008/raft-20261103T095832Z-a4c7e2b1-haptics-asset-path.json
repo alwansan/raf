@@ -2,7 +2,7 @@
   "schema_version": 1,
   "owner": "raft-20261103T095832Z-a4c7e2b1",
   "issue_id": "HAPTICS-008",
-  "status": "planned",
+  "status": "paused",
   "updated_at": "2026-11-03T09:58:32Z",
   "base_sha": "af354e4154b915a99fd9ba55a37b63ce849a16f5",
   "hypothesis": "Historical missing haptic asset-path messages may reflect a correctable packaged-asset lookup or exception-handling defect rather than mandatory game startup failure.",
@@ -18,6 +18,6 @@
   ],
   "experiment_ids": [],
   "evidence": [],
-  "result": null,
-  "next_step": "Inspect CL exact haptics failures and authenticated current code before choosing patch"
+  "result": "No HAPTICS source edits by A4; two other independently registered agents cover this issue; switched to PERF-007 to avoid concurrent file edits.",
+  "next_step": "No action by A4 unless coordination requests later."
 }

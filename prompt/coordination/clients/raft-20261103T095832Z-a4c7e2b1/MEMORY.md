@@ -5,3 +5,7 @@
 - Read owner requirements, permanent prompts, coordination protocol and other clients. Existing FFT-FORMAT-009 and DISPLAY-003 work will not be overwritten.
 - Scope: investigate missing haptics paths from historic APK80 phone logs against actual source; write an isolated falsifiable repair/test if evidence exists; do not misclassify old device logs as newly tested source.
 - Next: inspect current implementation, CL exact paths, then validate any fix and update this memory and plan.
+
+## Scope change / coordination
+
+Two additional clients registered HAPTICS-008 while A4 inspected it (afcedabb and a5c842e1). A4 will not write their overlapping haptics assets, code or tests. Shifted to PERF-007 CI memory-evidence integrity. Reproduction target: missing VmRSS appears as measured zero; malformed/negative memory may be accepted. This is a CI diagnostics correction, not a phone GPU-OOM fix.
