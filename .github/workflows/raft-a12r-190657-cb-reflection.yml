@@ -7,6 +7,8 @@ on:
       - 'scripts/a12r_190657_blur_cb_reflection.py'
       - 'tests/test_a12r_190657_blur_cb_reflection.py'
       - 'scripts/a12r_zip2_shader_owners.py'
+      - 'scripts/a12r_dx11_cb_declarations.py'
+      - 'tests/test_a12r_dx11_cb_declarations.py'
       - 'tests/test_a12r_zip2_shader_owners.py'
       - '.github/workflows/raft-a12r-190657-cb-reflection.yml'
   workflow_dispatch:
@@ -37,7 +39,8 @@ jobs:
           set -euo pipefail
           python3 -m unittest discover -s tests -p test_a12r_190657_blur_cb_reflection.py -v
           python3 -m unittest discover -s tests -p test_a12r_zip2_shader_owners.py -v
-          python3 -m py_compile scripts/a12r_zip2_shader_owners.py scripts/a12r_190657_blur_cb_reflection.py
+          python3 -m unittest discover -s tests -p test_a12r_dx11_cb_declarations.py -v
+          python3 -m py_compile scripts/a12r_zip2_shader_owners.py scripts/a12r_190657_blur_cb_reflection.py scripts/a12r_dx11_cb_declarations.py
 
       - name: Require bounded disk before ZIP2 14-owner acquisition
         run: |

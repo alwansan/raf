@@ -8,6 +8,7 @@ from scripts.a12_probe_original_blur_passes import original_shader, inspect_shad
 from scripts.a12_shader_parameter_decode import parse_parameter_blob
 from scripts.w1_recover_depth_passes import linked_program, stage_variants
 from scripts.w1_recover_graphics_programs import decoded_platforms, records
+from scripts.a12r_dx11_cb_declarations import declarations as dxbc_cb_declarations
 
 def u(b, p):
     if p < 0 or p + 4 > len(b):
@@ -120,7 +121,7 @@ def public_common_counts(program):
     return result
 
 
-def crosscheck_unity_cb(name_indices, common, groups):
+def crosscheck_unity_cb(name_indices, common, groups, dxbc_declarations=None):
     """Match exact original Unity CB names, sizes and binding slots privately.
 
     This verifies source metadata agreement, NOT DXBC register declarations,
@@ -177,12 +178,20 @@ def crosscheck_unity_cb(name_indices, common, groups):
         raise ValueError("unity_cb_names_mismatch")
     if any(groups[key] != declarations[key] for key in groups):
         raise ValueError("unity_cb_sizes_mismatch")
+    compiled_dcl_verified = False
+    if dxbc_declarations is not None:
+        if not isinstance(dxbc_declarations, dict) or set(dxbc_declarations) != set(registers.values()):
+            raise ValueError("unity_cb_dxbc_registers_mismatch")
+        if any(dxbc_declarations[registers[key]] != groups[key] for key in groups):
+            raise ValueError("unity_cb_dxbc_sizes_mismatch")
+        compiled_dcl_verified = True
     return {
         "unity_serialized_cb_name_size_slot_matches": len(groups),
         "unity_serialized_cb_identity_source_verified": True,
         "unity_cb_binding_slot_count": len(set(registers.values())),
         "unity_cb_member_parameter_counts": member_counts,
         "dxbc_register_or_shaderlab_runtime_verified": False,
+        "dxbc_dcl_original_slot_size_verified": compiled_dcl_verified,
     }
 
 
@@ -242,6 +251,29 @@ def main(source, repo, out):
                         "unity_common_array_counts": public_common_counts(prog),
                         "original_name_index_count": len(p["m_NameIndices"]),
                         "shaderlab_binding_verified": False}
+                phase = "compiled_dxbc_constant_buffer_declarations"
+                try:
+                    original_decl = dxbc_cb_declarations(code)
+                except ValueError as dcl_error:
+                    # A failed compiled-declaration parse cannot be counted as
+                    # original register evidence, even if Unity source matches.
+                    original_decl = None
+                    item["compiled_dxbc_dcl_status"] = "unverified"
+                    safe_dcl_errors = {
+                        "dxbc_dcl_truncated", "dxbc_dcl_bad_container", "dxbc_dcl_bad_total_size",
+                        "dxbc_dcl_bad_chunks", "dxbc_dcl_bad_chunk_offset",
+                        "dxbc_dcl_bad_chunk_range", "dxbc_dcl_missing_unique_shader",
+                        "dxbc_dcl_bad_token_stream", "dxbc_dcl_bad_declared_tokens",
+                        "dxbc_dcl_bad_instruction_size", "dxbc_dcl_unsupported_cb_encoding",
+                        "dxbc_dcl_unsupported_cb_operand", "dxbc_dcl_unsafe_cb_declaration",
+                        "dxbc_dcl_no_constant_buffers",
+                    }
+                    item["compiled_dxbc_dcl_blocker"] = (
+                        str(dcl_error) if str(dcl_error) in safe_dcl_errors else "unclassified"
+                    )
+                else:
+                    item["compiled_dxbc_dcl_status"] = "decoded"
+                    item["compiled_dxbc_dcl_count"] = len(original_decl)
                 phase = "compiled_dxbc_rdef"
                 try:
                     compiled = rdef(code)
@@ -263,7 +295,8 @@ def main(source, repo, out):
                     phase = "unity_serialized_cb_links"
                     try:
                         item.update(crosscheck_unity_cb(p["m_NameIndices"],
-                                                      prog["m_CommonParameters"], original_groups))
+                                                      prog["m_CommonParameters"], original_groups,
+                                                      dxbc_declarations=original_decl))
                     except ValueError as error:
                         safe_cb_errors = {
                             "unity_cb_bad_original_schema", "unity_cb_bad_name_table",
@@ -271,7 +304,8 @@ def main(source, repo, out):
                             "unity_cb_bad_definition", "unity_cb_duplicate_definition",
                             "unity_cb_bad_members", "unity_cb_bad_binding",
                             "unity_cb_ambiguous_binding", "unity_cb_names_mismatch",
-                            "unity_cb_sizes_mismatch",
+                            "unity_cb_sizes_mismatch", "unity_cb_dxbc_registers_mismatch",
+                            "unity_cb_dxbc_sizes_mismatch",
                         }
                         item["unity_serialized_cb_identity_source_verified"] = False
                         item["unity_serialized_cb_blocker"] = (
@@ -290,6 +324,9 @@ def main(source, repo, out):
                       compiled_rdef_present_count=sum(row["rdef_present"] for row in rows),
                       compiled_rdef_stripped_count=sum(not row["rdef_present"] for row in rows),
                       original_shaderlab_cb_binding_verified=False,
+                      compiled_original_cb_dcl_linked_stages=sum(
+                          row.get("dxbc_dcl_original_slot_size_verified") is True for row in rows
+                      ),
                       source_only_structural_diagnostic=True)
     except Exception as exc:
         report["failure_type"] = type(exc).__name__

@@ -25,6 +25,28 @@ def compiled(size=544, key="FakeCB", bound=True):
     return b"DXBC" + b"\0" * 16 + u(1) + u(36 + len(chunk)) + u(1) + u(36) + chunk
 
 class A12RTests(unittest.TestCase):
+    def test_unity_and_original_dxbc_declaration_sizes_match(self):
+        src = {"m_ConstantBuffers": [
+            {"m_NameIndex": 3, "m_Size": 176},
+            {"m_NameIndex": 4, "m_Size": 368},
+        ], "m_ConstantBufferBindings": [
+            {"m_NameIndex": 3, "m_Index": 0},
+            {"m_NameIndex": 4, "m_Index": 1},
+        ]}
+        got = crosscheck_unity_cb([("SyntheticOne", 3), ("SyntheticTwo", 4)],
+                                 src, {"SyntheticOne": 176, "SyntheticTwo": 368},
+                                 dxbc_declarations={0: 176, 1: 368})
+        self.assertTrue(got["dxbc_dcl_original_slot_size_verified"])
+        self.assertFalse(got["dxbc_register_or_shaderlab_runtime_verified"])
+
+    def test_unity_dxbc_declarations_mismatched_slot_or_size_fail_closed(self):
+        src = {"m_ConstantBuffers": [{"m_NameIndex": 3, "m_Size": 176}],
+               "m_ConstantBufferBindings": [{"m_NameIndex": 3, "m_Index": 2}]}
+        for bad, expected in (({1: 176}, "registers_mismatch"), ({2: 160}, "sizes_mismatch")):
+            with self.subTest(bad=bad), self.assertRaisesRegex(ValueError, expected):
+                crosscheck_unity_cb([("Synthetic", 3)], src, {"Synthetic": 176},
+                                    dxbc_declarations=bad)
+
     def test_unity_constant_buffer_names_sizes_and_registers_match_privately(self):
         key0, key1 = "FakeUnityCb0", "FakeUnityCb1"
         common = {
@@ -42,6 +64,7 @@ class A12RTests(unittest.TestCase):
         self.assertTrue(result["unity_serialized_cb_identity_source_verified"])
         self.assertEqual(result["unity_serialized_cb_name_size_slot_matches"], 2)
         self.assertFalse(result["dxbc_register_or_shaderlab_runtime_verified"])
+        self.assertFalse(result["dxbc_dcl_original_slot_size_verified"])
         for private in (key0, key1, "never-log"):
             self.assertNotIn(private, json.dumps(result))
 
