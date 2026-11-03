@@ -101,7 +101,7 @@ def stage(repo, project, report_path, apply=False, *,
         # actual bytes without hydrating that pointer via Git LFS. Never
         # substitute a different non-LFS bank or bypass size/SHA checks.
         if relative == 'MasterBank.bank' and verified_external_master_bank is not None:
-            if not identity.startswith(b'version https://git-lfs.github.com/spec/v1\\n'):
+            if not identity.startswith(b'version https://git-lfs.github.com/spec/v1\n'):
                 raise ValueError('ZIP2 bank override requires original pinned LFS pointer')
             external = Path(verified_external_master_bank)
             ancestor = external
