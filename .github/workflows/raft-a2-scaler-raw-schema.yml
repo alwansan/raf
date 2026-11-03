@@ -6,6 +6,8 @@ on:
       - '.github/workflows/raft-a2-scaler-raw-schema.yml'
       - 'scripts/probe_a2_scaler_raw_shapes.py'
       - 'tests/test_probe_a2_scaler_raw_shapes.py'
+      - 'scripts/probe_a2_scaler_value_decode.py'
+      - 'tests/test_probe_a2_scaler_value_decode.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -36,6 +38,8 @@ jobs:
           set -euo pipefail
           python3 -m unittest discover -s tests -p 'test_probe_a2_scaler_raw_shapes.py' -v
           python3 -m py_compile scripts/probe_a2_scaler_raw_shapes.py
+          python3 -m unittest discover -s tests -p 'test_probe_a2_scaler_value_decode.py' -v
+          python3 -m py_compile scripts/probe_a2_scaler_value_decode.py
       - name: Private UI class metadata source recovery (never printed)
         run: |
           set -euo pipefail
@@ -49,6 +53,10 @@ jobs:
           set -euo pipefail
           python3 -m pip install --break-system-packages --disable-pip-version-check 'UnityPy==1.23.0'
           python3 -m scripts.probe_a2_scaler_raw_shapes \
+            --source Raft/Raft_Data \
+            --managed Raft/Raft_Data/Managed/UnityEngine.UI.dll \
+            --ilspy "$RUNNER_TEMP/a2-private-canvas-scaler.cs"
+          python3 -m scripts.probe_a2_scaler_value_decode \
             --source Raft/Raft_Data \
             --managed Raft/Raft_Data/Managed/UnityEngine.UI.dll \
             --ilspy "$RUNNER_TEMP/a2-private-canvas-scaler.cs"
