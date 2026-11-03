@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "owner": "raft-20261103T100200Z-a5c842e1",
-  "status": "active",
+  "status": "completed",
   "hypothesis": "CL old APK80 haptics failures result from File.ReadAllBytes on a /jar:file OBB URI, despite all 29 original WAV entry names existing; current SHA-pinned adapter and production ZIP reader should preserve content and reject unsafe/missing entries.",
   "input_hashes": [
     "CL log segment git blob cf26b883707d1bacceade526ff08498e0e6cf3f3",
@@ -27,13 +27,13 @@
   "concurrency_group": "raft-a5-haptics-008-${{ github.run_id }}",
   "artifact_prefix": "none",
   "budget": "Ubuntu 24.04, 8 minutes maximum; no LFS hydration, Unity, APK or release",
-  "run_url": null,
-  "source_sha": "23161cfcc670bfed23b6daf77fe559ba9dc32716",
-  "result": null,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41617621699",
+  "source_sha": "387be6460bd914a6ba05e53eb31c4316b28c66d6",
+  "result": "SUCCESS: 4 Python SHA-locked adapter tests, 29 original WAV names, 58 synthetic ZIP reads and 69 assertions in real C# reader; catches missing/unsafe/duplicate entries and unsupported jar URLs. Earlier runs 41617107530 and 41617439909 failed and were repaired.",
   "limitations": [
     "Older CL log does not validate newer adapter",
     "Synthetic ZIP bytes are not original WAV payloads",
     "No real installed APK/OBB, Unity, haptic playback or Android run"
   ],
-  "next_step": "Observe cheap CI result, classify source fix versus runtime acceptance; update handoff and checkpoint."
+  "next_step": "Actual Android mounted OBB/haptic playback not tested; HAPTICS-008 runtime pending."
 }

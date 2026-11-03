@@ -3,13 +3,13 @@
   "username": "raft-20261103T100200Z-a5c842e1",
   "session_id": "A5-20261103T100200Z-541ecd0b",
   "resumed_from": null,
-  "status": "active",
-  "updated_at": "2026-11-03T10:09:03.465Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T10:17:46.997Z",
   "base_sha": "0310e94d5c8d257c555acb0307cc670362d01e7c",
   "current_work": [
     "HAPTICS-008"
   ],
-  "last_commit": null,
-  "next_step": "Commit A5 isolated CPU source/ZIP tests; inspect CI before reporting success.",
+  "last_commit": "387be6460bd914a6ba05e53eb31c4316b28c66d6",
+  "next_step": "CPU tests complete. Device/Unity OBB and haptics runtime acceptance remain pending; no build authorized for A5.",
   "memory_path": "prompt/coordination/clients/raft-20261103T100200Z-a5c842e1/MEMORY.md"
 }
