@@ -23,6 +23,8 @@ on:
       - 'tests/test_probe_original_fft_cache_dataflow.py'
       - 'scripts/verify_original_fft_format_matrix.py'
       - 'tests/test_verify_original_fft_format_matrix.py'
+      - 'scripts/probe_original_fft_cache_lifetime.py'
+      - 'tests/test_probe_original_fft_cache_lifetime.py'
       - 'scripts/probe_original_fft_inherited_seed.py'
       - 'scripts/verify_original_butterfly_numeric.py'
       - 'tests/test_verify_original_butterfly_numeric.py'
@@ -66,6 +68,7 @@ jobs:
           python3 -m unittest discover -s tests -p test_probe_original_fft_cache_implementation.py -v
           python3 -m unittest discover -s tests -p test_probe_original_fft_cache_dataflow.py -v
           python3 -m unittest discover -s tests -p test_verify_original_fft_format_matrix.py -v
+          python3 -m unittest discover -s tests -p test_probe_original_fft_cache_lifetime.py -v
           python3 -m unittest discover -s tests -p test_probe_original_fft_inherited_seed.py -v
           python3 -m unittest discover -s tests -p test_verify_original_butterfly_numeric.py -v
           python3 -m unittest discover -s tests -p test_probe_original_fft_size_argument.py -v
@@ -91,6 +94,7 @@ jobs:
           python3 -m scripts.probe_original_fft_cache_implementation --source "$RUNNER_TEMP/private-fft-original"
           python3 -m scripts.probe_original_fft_cache_dataflow --source "$RUNNER_TEMP/private-fft-original"
           python3 -m scripts.verify_original_fft_format_matrix --source "$RUNNER_TEMP/private-fft-original"
+          python3 -m scripts.probe_original_fft_cache_lifetime --source "$RUNNER_TEMP/private-fft-original"
           python3 -m scripts.probe_original_fft_inherited_seed --source "$RUNNER_TEMP/private-fft-original"
           python3 -m scripts.probe_original_fft_size_argument --source "$RUNNER_TEMP/private-fft-original"
           # Do not publish original decompiled code or ILSpy logs.
