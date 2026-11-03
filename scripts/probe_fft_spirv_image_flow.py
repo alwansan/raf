@@ -17,6 +17,15 @@ def image_slot_dataflow(module):
         raise ValueError("Invalid SPIR-V image-flow header")
     bindings, sets, variables, aliases = {}, {}, set(), {}
     operations = {"write": [], "fetch": [], "read": []}
+
+    def record_alias(result_id, parents):
+        # A tracked SSA ID has exactly one definition. Overwriting its prior
+        # parent silently invents a unique resource lineage for malformed data.
+        # This is not a substitute for full spirv-val structural validation.
+        if result_id in variables or result_id in aliases:
+            raise ValueError("Repeated SPIR-V tracked result ID")
+        aliases[result_id] = parents
+
     i = 5
     while i < len(words):
         count, op = words[i] >> 16, words[i] & 65535
@@ -31,21 +40,21 @@ def image_slot_dataflow(module):
                     raise ValueError("Ambiguous SPIR-V descriptor decoration")
                 record[target] = value
         if op == 59 and count in (4, 5):  # OpVariable
-            if a[1] in variables:
-                raise ValueError("Repeated SPIR-V variable ID")
+            if a[1] in variables or a[1] in aliases:
+                raise ValueError("Repeated SPIR-V tracked result ID")
             variables.add(a[1])
         if op in (65, 66, 67, 68) and count >= 4:  # AccessChain pointer alias
-            aliases[a[1]] = (a[2],)
+            record_alias(a[1], (a[2],))
         if op == 61 and count >= 4:  # OpLoad result => pointer
-            aliases[a[1]] = (a[2],)
+            record_alias(a[1], (a[2],))
         if op in (83, 100) and count >= 4:  # CopyObject, OpImage
-            aliases[a[1]] = (a[2],)
+            record_alias(a[1], (a[2],))
         if op == 86 and count >= 5:  # OpSampledImage result => image
-            aliases[a[1]] = (a[2],)
+            record_alias(a[1], (a[2],))
         if op == 169 and count == 6:  # OpSelect result => two candidates
-            aliases[a[1]] = (a[3], a[4])
+            record_alias(a[1], (a[3], a[4]))
         if op == 245 and count >= 5:  # OpPhi result => alternating value, parent
-            aliases[a[1]] = tuple(a[k] for k in range(2, len(a), 2))
+            record_alias(a[1], tuple(a[k] for k in range(2, len(a), 2)))
         if op == 99 and count >= 4:  # OpImageWrite
             operations["write"].append(a[0])
         if op == 95 and count >= 5:  # OpImageFetch

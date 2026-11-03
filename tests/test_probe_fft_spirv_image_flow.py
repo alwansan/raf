@@ -74,6 +74,31 @@ class ImageFlowTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             image_slot_dataflow(spv(example() + [(71, [5, 33, 4])]))
 
+    def test_duplicate_load_id_cannot_rewrite_uniquely_traced_binding(self):
+        ops = example()
+        ops.insert(7, (61, [2, 20, 6]))  # previously overwrote 20: set0/binding2 -> binding0
+        with self.assertRaisesRegex(ValueError, "Repeated SPIR-V tracked result ID"):
+            image_slot_dataflow(spv(ops))
+
+    def test_alias_id_must_not_shadow_declared_variable(self):
+        ops = example()
+        ops.insert(7, (83, [2, 5, 20]))  # variable 5 owns original set0/binding2
+        with self.assertRaisesRegex(ValueError, "Repeated SPIR-V tracked result ID"):
+            image_slot_dataflow(spv(ops))
+
+    def test_variable_id_must_not_shadow_earlier_alias(self):
+        with self.assertRaisesRegex(ValueError, "Repeated SPIR-V tracked result ID"):
+            image_slot_dataflow(spv(example() + [(59, [2, 20, 0])]))
+
+    def test_select_and_phi_must_not_redefine_existing_load_id(self):
+        for operation in ((169, [2, 20, 50, 5, 6]),
+                          (245, [2, 20, 5, 80, 6, 81])):
+            with self.subTest(operation=operation[0]):
+                ops = example()
+                ops.insert(7, operation)
+                with self.assertRaisesRegex(ValueError, "Repeated SPIR-V tracked result ID"):
+                    image_slot_dataflow(spv(ops))
+
     def test_no_private_name_or_semantic_claim(self):
         r = image_slot_dataflow(spv(example()))
         self.assertFalse(r["private_shader_ids_or_names_disclosed"])
