@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T113245Z-a7e48c92",
+  "issue_id": "INPUT-005",
+  "status": "planned",
+  "updated_at": "2026-11-03T11:32:45Z",
+  "base_sha": "bfedd6e51786f710ccc05164c158c269fe8927ae",
+  "hypothesis": "If Tick at 500ms emits Down and the callback cancels the gesture (pause/focus loss), End may emit a cancelled Tap and Move may emit stale motion after release; a post-Tick active/owner guard should prevent both.",
+  "intended_files": [
+    "android-port/Runtime/Platform/TouchPointerGesture.cs",
+    "android-port/Tests/TouchPointer/BoundaryMatrix.cs",
+    "prompt/coordination/clients/raft-20261103T113245Z-a7e48c92",
+    "prompt/coordination/experiments/raft-20261103T113245Z-a7e48c92",
+    "prompt/STATUS.md",
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+  ],
+  "related_work": [
+    "Prior A7 raft-20261103T105625Z-a7d793f4 finished pending-tap FIFO repair",
+    "Other active clients: separate WATER-001/FFT, DISPLAY-003, HAPTICS-008, LOCAL-005, DIAG-010; avoid unrelated files"
+  ],
+  "experiment_ids": [],
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41624267337"
+  ],
+  "result": null,
+  "next_step": "Inject red C# test using actual class and on-Down callback Cancel; then make minimal and fail-closed source fix."
+}
