@@ -56,7 +56,7 @@ def image_slot_dataflow(module):
     slots = {v: (sets.get(v), bindings[v]) for v in variables if v in bindings}
     def find_slots(value, visited):
         if value in slots:
-            return {slots[value]}
+            return {slots[value]} if slots[value][0] is not None else {None}
         if value in visited:
             return {None}
         parent = aliases.get(value)
