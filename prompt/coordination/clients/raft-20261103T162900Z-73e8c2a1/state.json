@@ -2,15 +2,15 @@
   "schema_version": 1,
   "client_label": "W1",
   "username": "raft-20261103T162900Z-73e8c2a1",
-  "session_id": "w1-20261103T133907199Z-7c92e41a",
+  "session_id": "w1-20261103T150217800Z-d4a79e63",
   "resumed_from": null,
-  "status": "paused",
-  "updated_at": "2026-11-03T13:53:30.498Z",
-  "base_sha": "6800280651ab43dc0625f55293f694d73df4c4b1",
+  "status": "active",
+  "updated_at": "2026-11-03T15:02:17.800Z",
+  "base_sha": "528068d21253340a9a673517aa608dbb58a015d0",
   "current_work": [
-    "RENDER-002 parameter-blob0 and faithful ShaderLab wrapper pending"
+    "RENDER-002 original parameter0 and private ShaderLab6+3 wrapper"
   ],
   "last_commit": "433074c02a49f2feab31569965ae6e549e98ddef",
-  "next_step": "Decode exact original parameter-table entry0, reconcile overrides, reconstruct private ShaderLab6+3 original render-state wrapper and execute targeted paired output comparison before integration.",
+  "next_step": "Decode original parameter entry0 with pinned serializer version, recover complete render-state wrapper privately and validate stage compilation.",
   "memory_path": "prompt/coordination/clients/raft-20261103T162900Z-73e8c2a1/MEMORY.md"
 }

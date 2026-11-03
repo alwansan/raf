@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T162900Z-73e8c2a1",
+  "client_label": "W1",
+  "session_id": "w1-20261103T150217800Z-d4a79e63",
+  "issue_id": "RENDER-002",
+  "status": "planned",
+  "updated_at": "2026-11-03T15:02:17.800Z",
+  "base_sha": "528068d21253340a9a673517aa608dbb58a015d0",
+  "hypothesis": "Original Depth Copy parameter entry0 may be empty per-variant overrides; exact decode and serialized render-state reconstruction can produce a faithful private ShaderLab wrapper retaining6+3subshader boundaries and property-rebound stage programs.",
+  "intended_files": [
+    "scripts/w1_depth_shaderlab.py",
+    "scripts/w1_build_depth_wrapper.py",
+    "tests/test_w1_depth_shaderlab.py",
+    ".github/workflows/raft-w1-depth-wrapper.yml"
+  ],
+  "related_work": [
+    "A1 active softwareVulkan FFT numeric uses separate compute runner",
+    "A12 planned original/vendor overlap, no same files",
+    "A11/A13 scope probes and A15 restorer completed, no shared edits",
+    "W1 prior433074c02/41647954010 DepthCopy18stages"
+  ],
+  "experiment_ids": [
+    "depth-shaderlab-wrapper"
+  ],
+  "result": null,
+  "next_step": "Decode exact blob and reconstruct private states; no source/GPU/readiness claim from compilation alone."
+}
