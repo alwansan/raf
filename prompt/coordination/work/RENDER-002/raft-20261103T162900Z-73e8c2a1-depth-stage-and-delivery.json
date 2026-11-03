@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T162900Z-73e8c2a1",
+  "client_label": "W1",
+  "session_id": "w1-20261103T173334037Z-e7a64319",
+  "status": "active",
+  "updated_at": "2026-11-03T17:35:44.152Z",
+  "base_sha": "928343dfe8e3540f7ecde964c8774b641a8fece2",
+  "issue_id": "RENDER-002",
+  "hypothesis": "The validated Depth Copy reconstruction can replace exactly one actual exported ShaderLab identity while retaining its .meta/GUID and all other asset bytes; real export review must classify zero builtin matches rather than bypass gates. Owner now requests all-client source review and experimental XAPK.",
+  "intended_files": [
+    "scripts/w1_install_depth_copy.py",
+    "scripts/w1_build_depth_wrapper.py",
+    "tests/test_w1_depth_install.py",
+    ".github/workflows/raft-w1-depth-stage.yml"
+  ],
+  "related_work": [
+    "W2 active fullgametexturecolors; no writes to W2 files",
+    "W3 fullmaterials+keywords parsed; source audit only not shipping shaders",
+    "AllA1-A15 states inventoried; no nonterminalActions at start; original native41624581951 failedbuiltin identity"
+  ],
+  "experiment_ids": [
+    "depth-stage-and-delivery-review"
+  ],
+  "next_step": "Install exact target transactionally and validate actual export; verify all-client source ancestry and compatibility; owner-XAPK request only with explicit unresolved-source accounting, never fabricated readiness."
+}
