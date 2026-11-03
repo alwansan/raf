@@ -1,0 +1,30 @@
+name: Raft A3 exported shader symlink-parent safety (CPU no Unity)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-a3-builtin-shader-path-guard.yml'
+      - 'scripts/restore_builtin_shaders.py'
+      - 'tests/test_a3_builtin_shader_symlink_paths.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raft-a3-builtin-shader-path-${{ github.ref }}
+  cancel-in-progress: false
+  queue: max
+jobs:
+  pre-copy-redirects:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Exercise real restorer against symlinked parents without original assets
+        run: python3 -m unittest discover -s tests -p test_a3_builtin_shader_symlink_paths.py -v
+      - name: Verify existing A9 identity and built-in safety tests
+        run: |
+          python3 -m unittest discover -s tests -p test_a9_builtin_shader_identity.py -v
+          python3 -m unittest discover -s tests -p test_restore_builtin_shaders.py -v
