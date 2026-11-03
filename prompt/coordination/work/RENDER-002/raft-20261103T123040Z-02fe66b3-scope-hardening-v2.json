@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T123040Z-02fe66b3",
+  "client_label": "A11",
+  "issue_id": "RENDER-002",
+  "status": "planned",
+  "updated_at": "2026-11-03T13:21:12Z",
+  "base_sha": "221314e2caa17f3c7649a72c61677d49a7f6cff7",
+  "hypothesis": "A11 integrity probe can accept redirected project ancestors, malformed/colliding shader GUID metadata and silently ignore supplied expected counts during snapshot creation; these are verifiable provenance-integrity defects independent of authentic game graphics.",
+  "intended_files": [
+    "scripts/probe_a11_shader_export_scope.py",
+    "tests/test_a11_shader_export_scope.py",
+    "prompt/coordination/clients/raft-20261103T123040Z-02fe66b3/state.json",
+    "prompt/coordination/clients/raft-20261103T123040Z-02fe66b3/MEMORY.md",
+    "prompt/coordination/experiments/raft-20261103T123040Z-02fe66b3/shader-export-scope-v2.json",
+    "docs/A11_SHADER_EXPORT_SCOPE_INTEGRITY_2026-11-03.md",
+    "prompt/STATUS.md",
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+  ],
+  "related_work": [
+    "A11 11-case CI 41637552496 and strict local provenance limitations",
+    "A13 separate comment-aware vendor matching and 107-subset probe",
+    "A9/A3/A6 restore_builtin_shaders fixes, no changes planned",
+    "Other clients on HAPTICS-008, local saves and FFT; no shared source touched"
+  ],
+  "experiment_ids": [
+    "shader-export-scope-v2"
+  ],
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41637552496",
+    "https://github.com/alwansan/raf/actions/runs/41624581951"
+  ],
+  "result": null,
+  "next_step": "Add synthetic red tests, record failures, repair only A11-owned tool; run A11 unique CPU workflow; preserve non-ready and no full-export claims."
+}
