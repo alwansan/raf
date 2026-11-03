@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T162900Z-73e8c2a1",
+  "session_id": "w1-20261103T133907199Z-7c92e41a",
+  "status": "planned",
+  "source_sha": null,
+  "run_url": null,
+  "hypothesis": "Exact original Depth Copy serialized passes retain m_BlobIndex links to recoverable vertex/fragment bytecode and original resource metadata; linked pair recovery can replace unassociated stage samples as basis for real pass reconstruction.",
+  "input_hashes": [
+    {
+      "owner": "resources.assets",
+      "sha256": "87493249f1adfc0c5eb8b82e4e199e208cd2c95eabe9796cab82116c4838595c"
+    },
+    {
+      "owner": "sharedassets0.assets",
+      "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3"
+    }
+  ],
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_w1_depth_pass_linkage.py -v",
+    "timeout 600s python3 -m scripts.w1_recover_depth_passes --source Raft/Raft_Data --out $RUNNER_TEMP/w1-depth-passes-summary.json"
+  ],
+  "expected_signal": "Exact original Depth Copy >=4 passes, every vertex/fragment variant resolves m_BlobIndex+stage, private HLSL recovered and Vulkan roundtrip valid. Same permutation pairs checked by original metadata, locations/types compared independently.",
+  "negative_controls": [
+    "wrong stage",
+    "invalid table index",
+    "changed keyword permutation",
+    "wrong interface location/type"
+  ],
+  "workflow_path": ".github/workflows/raft-w1-depth-pass-recovery.yml",
+  "concurrency_group": "raft-w1-depth-pass-linkage-${{ github.ref }}",
+  "artifact_prefix": "w1-depth-passes-aggregate",
+  "budget": "20min total,600sec recovery,<=24 variants per stage/pass, two-owner227511628bytes use existing exact LFS cache no resS",
+  "result": "3 local tests PASS; authentic run pending",
+  "limitations": [
+    "Stage interfaces/validation do not prove numerical or image equivalence",
+    "No installed ShaderLab,material/GUID mutation, native/Unity/GPU/APK operation"
+  ],
+  "next_step": "Use actual recovered pass metadata for original binding reconstruction and targeted numeric/render test."
+}
