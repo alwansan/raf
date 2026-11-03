@@ -2,8 +2,8 @@
   "schema_version": 1,
   "owner": "raft-20261103T224700Z-a5fb701c",
   "issue_id": "HAPTICS-008",
-  "status": "active",
-  "updated_at": "2026-11-03T22:47:00Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T23:02:09.884Z",
   "base_sha": "2098dca38eb9ae843227b51e4950a094c2067506",
   "resumed_from": "raft-20261103T131030Z-a5c93e61",
   "hypothesis": "The post-build production OBB audit has a command-line --haptics-manifest-blob override that can replace the supposedly immutable original 29-WAV manifest anchor and attest a forged manifest/OBB pair. Remove override from shipped CLI; keep synthetic fixture SHA injection in test-only Python API.",
@@ -32,7 +32,23 @@
   "experiment_ids": [
     "production-haptics-cli-pin-override"
   ],
-  "evidence": [],
-  "result": null,
-  "next_step": "Create red/green synthetic subprocess checks and run isolated CPU CI without Unity or APK."
+  "evidence": [
+    "RED https://github.com/alwansan/raf/actions/runs/41735250497 (expected failure only new CLI test; accepted forged SHA returned 0)",
+    "GREEN https://github.com/alwansan/raf/actions/runs/41735417533 (16 archive Python, 4 adapter, 29 original SHA WAV, 58 authentic and 58 synthetic CSharp zip reads)",
+    "Same-source https://github.com/alwansan/raf/actions/runs/41735417508 preflight SUCCESS",
+    "Same-source https://github.com/alwansan/raf/actions/runs/41735417657 Android platform SUCCESS",
+    "Same-source https://github.com/alwansan/raf/actions/runs/41735417532 A3 exact ZIP SUCCESS"
+  ],
+  "result": "RED synthetic caller-provided Haptics manifest pin was accepted by production audit CLI (CI41735250497 failed expected AssertionError 0==0); GREEN after removing CLI --haptics-manifest-blob override, real pinned default retained and 16/16 OBB tests, 4 adapter tests, 29 authentic WAV source identities, 58 original byte CSharp ZIP reads, all other same-source preflight/platform/A3 checks passed. No Unity/actual OBB/phone.",
+  "next_step": "Scope completed. In future coordinator-authorized native candidate audit real OBB with fixed trusted production CLI; device haptics acceptance still OPEN.",
+  "source_sha": "73c5498c350221c6aed62d2e8de6734923c842eb",
+  "red_sha": "caf21074d204f25749cc344befd94db6729249f4",
+  "green_sha": "73c5498c350221c6aed62d2e8de6734923c842eb",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41735417533",
+  "limitations": [
+    "CPU/source-only, does not execute or authenticate Unity-generated OBB nor Android mounted jar or physical vibration",
+    "Existing Python audit_companion API supports synthetic fixture overrides only; direct caller trust is a code/API review boundary",
+    "Historical 35 HapticAudio path exceptions are APK80; newer source remains uninstalled",
+    "WATER-001/RENDER-002 and other pre-build gates remain open, NOT_READY / 0 of 3."
+  ]
 }
