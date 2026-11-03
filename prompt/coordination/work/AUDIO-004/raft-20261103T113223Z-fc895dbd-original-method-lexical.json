@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T113223Z-fc895dbd",
+  "issue_id": "AUDIO-004",
+  "status": "active",
+  "updated_at": "2026-11-03T11:32:47.380Z",
+  "hypothesis": "Original scene audio source probe method_body scans raw C# braces and can truncate at braces inside quoted strings or comments; red/green CPU tests should reject false boundaries without changing original game.",
+  "intended_files": [
+    "scripts/probe_original_scene_audio.py",
+    "tests/test_probe_original_scene_audio.py",
+    "prompt/coordination/clients/raft-20261103T113223Z-fc895dbd/",
+    "prompt/coordination/work/AUDIO-004/raft-20261103T113223Z-fc895dbd-original-method-lexical.json",
+    "prompt/STATUS.md",
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+  ],
+  "related_work": [
+    "A8 previous DIAG-010 completed",
+    "A1 WATER-001 active, different files",
+    "A2 DISPLAY-003 separate",
+    "A9 LOCAL-005 separate"
+  ],
+  "experiment_ids": [
+    "original-method-brace-lexical"
+  ],
+  "evidence": [],
+  "next_step": "Synthetic source red repro; preserve exact extracted original body and sha; run no-LFS original Android local startup integration CI.",
+  "base_sha": "8feac3e6921f260ab5098a4e77d6279a3883bc3e"
+}
