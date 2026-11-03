@@ -208,5 +208,72 @@ class OriginalManagedInstallIntegrityTests(unittest.TestCase):
             self.assertEqual(one.read_text(), "unexpected newer source")
 
 
+class OriginalMethodLexicalSafetyTests(unittest.TestCase):
+    """Method bodies must be isolated from exact original C# code, not comments."""
+
+    def test_ignores_comment_and_string_signature_decoys(self):
+        from scripts.verify_android_offline_candidate import method
+        signature = "public void RPC(Message message)"
+        src = '''
+// public void RPC(Message message) { /* fake */ }
+class Network {
+    string decoy = "public void RPC(Message message) { }";
+    /* public void RPC(Message message) { } */
+    public void RPC(Message message) {
+        string tricky = "}";
+        // }
+        /* { } */
+        int meaningful = 42;
+    }
+    void Unrelated() {}
+}
+'''
+        body = method(src, signature)
+        self.assertTrue(body.startswith(signature))
+        self.assertIn("int meaningful = 42;", body)
+        self.assertNotIn("Unrelated", body)
+
+    def test_verbatim_interpolated_and_character_braces_do_not_close_body(self):
+        from scripts.verify_android_offline_candidate import method
+        signature = "private void Save(string filename)"
+        src = '''
+class SaveHarness {
+    private void Save(string filename) {
+        string verbatim = @"literal "" } "" escaped";
+        string interpolated = $"value {42} }} more";
+        char close = '}';
+        int mustRemain = 7;
+    }
+    void Next() {}
+}
+'''
+        body = method(src, signature)
+        self.assertIn("int mustRemain = 7;", body)
+        self.assertNotIn("void Next()", body)
+
+    def test_duplicate_live_signatures_fail_closed(self):
+        from scripts.verify_android_offline_candidate import method
+        signature = "public void RPC(Message message)"
+        src = (signature + " { int first = 1; }\n"
+               + signature + " { int second = 2; }\n")
+        with self.assertRaisesRegex(ValueError, "Ambiguous"):
+            method(src, signature)
+
+    def test_prototype_without_body_does_not_capture_following_class(self):
+        from scripts.verify_android_offline_candidate import method
+        signature = "public void RPC(Message message)"
+        src = signature + "; class Next { void Fake() {} }\n"
+        with self.assertRaises(ValueError):
+            method(src, signature)
+
+    def test_comment_only_signature_is_not_a_method(self):
+        from scripts.verify_android_offline_candidate import method
+        signature = "public void RPC(Message message)"
+        src = ('/* ' + signature + ' { } */\n'
+               + 'class Fake { string value = "' + signature + ' { }"; }\n')
+        with self.assertRaises(ValueError):
+            method(src, signature)
+
+
 if __name__ == "__main__":
     unittest.main()
