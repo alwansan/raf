@@ -32,3 +32,12 @@
 - Confirmed original 41624581951 stopped before Unity with 0 authenticated builtin shader matches; A11 41644281473 GREEN 17/17 is synthetic integrity only. 107 local shader fixture cannot be represented as same-stage 140 native export.
 - ZIP2 source provider pinned 15964ea8f246b6e076ce26b60931ee2e1a9a2385 is now preferred; no LFS fetch, Unity build or original asset copy in this session.
 - Proceeding with opt-in paired-count authenticated vendor identity audit and pre/post immutable snapshot; original provenance and Android rendering remain UNKNOWN. Do not mark READY.
+
+## A11 resumed v3 result — 2026-11-03T23:00:00Z
+
+- Session `a11-resume-20261103T2255Z-c6f3a290` registered at coordination commit `1a77a4fe7a60a68c278672b48f67928b5c411fc7` after exclusive plan commit `5c1e65f4f3a6cfd60c278fc82ebf9c7cd4db6eb0`.
+- Source/test commit [04a4eefe](https://github.com/alwansan/raf/commit/04a4eefea18a8bff9059e8217d801b9ef87576de), code blob `2d639c83bfca63d09b65828eab1abcc619d83665`, test blob `4d661370d63da324aac20ed8a6e9d90e9b0bafff`.
+- [A11 CI41735395961](https://github.com/alwansan/raf/actions/runs/41735395961) job `126263178117` **COMPLETED SUCCESS, 23/23 synthetic tests**, artifact `13277394069`. New six checks cover positive vendor identity scope, mandatory expected counts, wrong archive, write-during-parse, repeated built-in declaration, CLI aggregate-only output.
+- Added opt-in `--audit-stage-builtin-archive`: 2MiB max, SHA-pinned Unity archive through existing `archive_sources`, exact ShaderLab matcher through existing `exported_shader_identity`, double snapshot source+meta scope equality, no code/filesystem modification and no proprietary names. Requires paired expected file counts.
+- No complete original AssetRipper export captured or genuine builtin match proven here. Historical 41624581951 still 0 matching source identities before Unity and 107 local fixture is not same-stage 140. **RENDER-002/WATER-001 OPEN, NOT_READY, readiness 0/3.** No Unity/native/APK/OBB/XAPK/LFS/scheduled tasks or protected branches touched.
+- Final next step: execute new audit on actual complete pre-restoration export *in the same run* after independently verifying source provenance; only then diagnose 0 vendor matches and consider restoration. ZIP2 provider pin 15964ea8f246b6e076ce26b60931ee2e1a9a2385 preferred for original assets.

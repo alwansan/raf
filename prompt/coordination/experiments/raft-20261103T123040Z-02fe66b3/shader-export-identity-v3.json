@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T123040Z-02fe66b3",
+  "client_label": "A11",
+  "session_id": "a11-resume-20261103T2255Z-c6f3a290",
+  "issue_id": "RENDER-002",
+  "status": "completed",
+  "source_commit": "04a4eefea18a8bff9059e8217d801b9ef87576de",
+  "source_blob": "2d639c83bfca63d09b65828eab1abcc619d83665",
+  "tests_blob": "4d661370d63da324aac20ed8a6e9d90e9b0bafff",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41735395961",
+  "job_id": 126263178117,
+  "artifact_id": 13277394069,
+  "tests": "23/23 SUCCESS; six new synthetic + 17 baseline",
+  "budget": "existing A11 isolated CPU-only workflow 8 min no LFS, no Unity/native",
+  "expected_signal": "stable same-stage exact vendor-match aggregate with mandatory expected counts, SHA-pinned archive, double scope digest",
+  "negative_controls": [
+    "mismatched counts",
+    "incomplete count pair",
+    "nonofficial vendor archive",
+    "source change during parse",
+    "duplicate builtin identity"
+  ],
+  "result": "Scoped diagnostic feature implemented and synthetically validated, genuine original full export not tested",
+  "limitations": [
+    "No original export provenance",
+    "No original GPU/Unity/Android execution",
+    "RENDER-002/WATER-001 still OPEN; NOT_READY"
+  ],
+  "next_step": "Run audit on immutable complete AssetRipper original export at pre-restoration boundary with real size/SHA-verified pinned Unity 2021.3.45f2 builtin archive; keep stage metadata and counts, do not infer 107 local fixture equals 140 original. RENDER-002/WATER-001 OPEN."
+}

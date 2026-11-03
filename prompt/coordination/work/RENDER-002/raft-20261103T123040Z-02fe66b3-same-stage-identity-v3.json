@@ -4,8 +4,8 @@
   "client_label": "A11",
   "session_id": "a11-resume-20261103T2255Z-c6f3a290",
   "issue_id": "RENDER-002",
-  "status": "active",
-  "updated_at": "2026-11-03T22:55:00Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T23:00:00Z",
   "hypothesis": "Original AssetRipper full-export provenance/identity mismatch remains unverified. Add read-only exact-vendor SHA-pinned identity evidence from the same local stage with before/after scope digest, paired counts, fail-closed checks.",
   "intended_files": [
     "scripts/probe_a11_shader_export_scope.py",
@@ -20,5 +20,8 @@
     "A9/A3/A6 builtin restoration work, W1/W2/W3 materials"
   ],
   "limits": "No Unity/APK/native, no LFS/original payload exposure, no other client's paths; WATER-001/RENDER-002 remain open and NOT_READY 0/3.",
-  "next_step": "Source/test patch and CPU-only synthetic CI, then original in-run stage capture later."
+  "next_step": "Run audit on immutable complete AssetRipper original export at pre-restoration boundary with real size/SHA-verified pinned Unity 2021.3.45f2 builtin archive; keep stage metadata and counts, do not infer 107 local fixture equals 140 original. RENDER-002/WATER-001 OPEN.",
+  "source_commit": "04a4eefea18a8bff9059e8217d801b9ef87576de",
+  "ci_url": "https://github.com/alwansan/raf/actions/runs/41735395961",
+  "result": "CPU-only 23/23 synthetic tests SUCCESS on exact source 04a4eefe. Added optional authenticated built-in identity stage audit with double inventory digest, expected count gate and no original names or GPU claims. No complete original export executed."
 }
