@@ -1,0 +1,5 @@
+# A6 recovered transient ref update — 2026-11-03
+
+Identity raft-20261103T145401Z-051434ed; session a6-20261103T145401Z-ba243dcc; LOCAL-005.
+
+Three consecutive GitHub ref update attempts failed with GraphQL UNKNOWN (first on 2026-11-03T14:57:56Z; final at 14:58:18Z), while attempting an atomic two-file production guard on the designated branch. Afterward, independent live reads of both production files still found the original `Path.exists`-only guards. A bounded recovery used source-file blob-SHA conditional updates on the current feature branch, yielding [d922f999](https://github.com/alwansan/raf/commit/d922f999c11bbd2e9b02fef5bc4ea945d0eb8f1e) and [b6a96201](https://github.com/alwansan/raf/commit/b6a962018e06513d5cf408e646751f161f0e00ca). Green same-source [41659075182](https://github.com/alwansan/raf/actions/runs/41659075182) and [41659111730](https://github.com/alwansan/raf/actions/runs/41659111730). No force, branch rewind, overwrite of another client's files or cancellation. Status: resolved.
