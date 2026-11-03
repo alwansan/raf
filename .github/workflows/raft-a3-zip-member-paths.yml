@@ -1,0 +1,30 @@
+name: Raft A3 exact APK-OBB ZIP member names (CPU only)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-a3-zip-member-paths.yml'
+      - 'scripts/audit_android_expansion.py'
+      - 'tests/test_a3_zip_entry_paths.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raft-a3-zip-member-paths-${{ github.run_id }}
+  cancel-in-progress: false
+jobs:
+  exact-member-path-contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Validate exact APK/OBB member spelling with synthetic fixtures
+        run: python3 -m unittest discover -s tests -p test_a3_zip_entry_paths.py -v
+      - name: Recheck all prior Android companion and Haptics archive tests
+        run: python3 -m unittest discover -s tests -p test_android_expansion_audit.py -v
+      - name: Scope note
+        run: |
+          echo 'CPU-only ZIP entry names and original audit integrity; no Unity, APK build, original WAV content, OBB mount or phone run.' >> "$GITHUB_STEP_SUMMARY"
