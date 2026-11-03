@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T121800Z-a5b4f02c",
+  "issue_id": "HAPTICS-008",
+  "status": "completed",
+  "created_at": "2026-11-03T12:25:52.321Z",
+  "hypothesis": "The previously successful original WAV reader roundtrip does not prove a Unity-built OBB contains the correct /jar:file:...obb!/assets/Haptics/*.wav entries. The final companion auditor should validate exact jar paths and Git-original bytes before releasing a package.",
+  "input_hashes": [
+    "source manifest path config/original-haptics-manifest.json with 29 original WAV Git object IDs and sizes",
+    "scripts/audit_android_expansion.py source f298bece2ed281df0b6571bcecb9bbb69bbc795a",
+    "native workflow integration d007daf6cc134ff60bf0437fb984e719e05cc3f4"
+  ],
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_android_expansion_audit.py -v",
+    "python3 -m unittest discover -s tests -p test_haptic_archive_adapter.py -v",
+    "python3 -m scripts.probe_haptics_asset_manifest --repo . --manifest config/original-haptics-manifest.json --expected-count 29",
+    "dotnet run --project android-port/Tests/Haptics/ArchiveReader.csproj --configuration Release -- --original-wavs Raft/Raft_Data/StreamingAssets/Haptics"
+  ],
+  "expected_signal": "Reconstructed archive from synthetic ZIP files: 29 exact Android jar URL paths, all Git SHA1( blob header + uncompressed bytes ) equal synthetic manifest, rejects absent/renamed/wrong-directory/case-only/tampered same-size/forged-manifest files; existing original WAV archive reader and source manifest remain green.",
+  "negative_controls": [
+    "missing Haptic WAV in OBB",
+    "Haptic WAV present only at assets/bin/Data/StreamingAssets/Haptics instead of jar URL path",
+    "case-only renamed original",
+    "extra nested directory",
+    "valid ZIP same-size WAV tampering",
+    "manifest false Git SHA",
+    "malformed names/schema/count",
+    "native workflow missing --haptics-manifest"
+  ],
+  "workflow_path": ".github/workflows/raft-a5-haptics-archive.yml",
+  "concurrency_group": "raft-a5-haptics-008-${{ github.run_id }}",
+  "artifact_prefix": "none",
+  "budget": "Ubuntu 24.04, 8min, no Unity/LFS hydrating, no original bytes exported or zipped outside ephemeral CI",
+  "source_sha": "26c2b27230a9ee77fa8ef6774d4fe4b791d39ed4",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41635398564",
+  "job_id": 125915196927,
+  "result": "SUCCESS on exact source 26c2b272: 13 synthetic private APK/OBB ZIP tests (including a static full-native workflow wiring check), four Python reader adapter tests, 29 original SHA-verified WAV source files totaling 32733104 bytes and 58 original WAV ZIP reader roundtrips/58 synthetic ZIP reads/69 assertions. Production post-build audit now optionally checks exact 29 original Haptics ZIP paths and Git object identity; full native workflow passes manifest explicitly. This does not prove actual Unity-generated OBB conforms or device vibration succeeds.",
+  "limitations": [
+    "No Unity build or final APK/OBB/XAPK was created by this client; preview run41624581951 failed earlier at built-in shader zero-match before Unity.",
+    "The ZIP layout audit has been tested with synthetic ZIP contents, not a genuine Unity-generated/signed expansion file. Source WAV byte reader proof is separate CPU synthetic-container evidence, not device mount.",
+    "The original runtime Haptics SHA is not enforced by production reader; companion integrity check is invoked after packaging with --haptics-manifest.",
+    "WATER-001/RENDER-002/FFT-FORMAT-009 and full project readiness gates remain open, NOT_READY/0-of-3."
+  ],
+  "next_step": "After separate owner-authorized Unity export, run final APK/OBB companion audit with original Haptics manifest; if gate fails, inspect actual ZIP layout privately and repair packaging/reader contract without weakening validation. Install/mount/vibration acceptance needs phone."
+}
