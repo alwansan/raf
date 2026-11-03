@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "username": "raft-20261103T131030Z-a5c93e61",
+  "display_name": "A5",
+  "session_id": "A5-20261103T131030Z-4762ac91",
+  "resumed_from": "raft-20261103T121800Z-a5b4f02c",
+  "status": "active",
+  "updated_at": "2026-11-03T13:10:54.544Z",
+  "base_sha": "e034f56e47b8231c9aceb9d574944b55a56b61b5",
+  "current_work": [
+    "HAPTICS-008"
+  ],
+  "last_commit": null,
+  "next_step": "Reproduce co-mutated original WAV+manifest bypass; add separate immutable original Haptics manifest Git-blob pin to source staging and final OBB archive verification, test synthetic red/green CPU-only. No Unity/APK.",
+  "memory_path": "prompt/coordination/clients/raft-20261103T131030Z-a5c93e61/MEMORY.md"
+}
