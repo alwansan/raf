@@ -41,6 +41,8 @@ on:
       - 'scripts/verify_water_render_contract.py'
       - 'tests/test_verify_water_render_contract.py'
       - 'scripts/audit_original_compute_metadata.py'
+      - 'scripts/probe_original_water_quality_values.py'
+      - 'tests/test_probe_original_water_quality_values.py'
       - 'tests/test_audit_original_compute_metadata.py'
       - 'scripts/ci_memory_watch.py'
       - 'scripts/audit_gradle_asset_payload.py'
@@ -93,6 +95,7 @@ jobs:
           python3 -m unittest discover -s tests -p test_restore_postfx_compute.py -v
           python3 -m unittest discover -s tests -p test_verify_water_render_contract.py -v
           python3 -m unittest discover -s tests -p test_audit_original_compute_metadata.py -v
+          python3 -m unittest discover -s tests -p test_probe_original_water_quality_values.py -v
           python3 -m unittest discover -s tests -p test_restore_tmp_shaders.py -v
           python3 -m unittest discover -s tests -p test_runtime_operation_traces.py -v
           python3 -m unittest discover -s tests -p test_android_offline_startup.py -v
