@@ -15,6 +15,8 @@ def example():
         "rgba32f_linear_only": True,
         "extent_width": 8,
         "extent_height": 1,
+        "input_seed": 0,
+        "dispatch_group_y": 1,
         "original_written_pixels": 8,
         "roundtrip_written_pixels": 8,
         "write_coverage_mismatch_pixels": 0,
@@ -65,6 +67,8 @@ class PrivateExecutorResultTests(unittest.TestCase):
             {"original_written_pixels": True},
             {"within_selected_tolerance": 1},
             {"extent_width": 999},
+            {"input_seed": 1024},
+            {"dispatch_group_y": 3},
         ):
             with self.subTest(changed=changed), self.assertRaises(ValueError):
                 parse_private_numeric_result(encoded(dict(example(), **changed)))
