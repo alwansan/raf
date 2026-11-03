@@ -4,8 +4,8 @@
   "client_label": "A15",
   "session_id": "A15-20261103T225613-66d7040c",
   "issue_id": "RENDER-002",
-  "status": "active",
-  "updated_at": "2026-11-03T22:56:13.132Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T23:01:05.606Z",
   "hypothesis": "Original SHA-pinned 2-owner Shader m_ParsedForm carries SubShader/Pass topology that can independently bound one-pass export fidelity; compare aggregates without assuming one-to-one with 142 full-export ShaderLab files.",
   "intended_files": [
     "scripts/a15_probe_original_shader_passes.py",
@@ -29,5 +29,12 @@
     "No private shader content disclosure"
   ],
   "expected_evidence": "Synthetic tests and CPU-only original 2-owner aggregate with independent SHA pins, bounded scope.",
-  "base_sha": "5c1e65f4f3a6cfd60c278fc82ebf9c7cd4db6eb0"
+  "base_sha": "5c1e65f4f3a6cfd60c278fc82ebf9c7cd4db6eb0",
+  "source_sha": "392b18f85b199645013834ca8e29d1833c7aff21",
+  "result": "Completed SUCCESS exact source CI 41735321157, artifact13278681723: 10/10 synthetic tests; original two SHA-verified ZIP2 shader owners105 Shader/123 SubShader/318 Pass records,64 multi-pass. No per-export join or engine redirect proof.",
+  "next_step": "Separate per-object original-to-complete-export GUID/owner pass fidelity join after W1 verifies generated Shader Name mapping.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41735321157",
+    "https://github.com/alwansan/raf/commit/392b18f85b199645013834ca8e29d1833c7aff21"
+  ]
 }
