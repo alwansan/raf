@@ -2,15 +2,15 @@
   "schema_version": 1,
   "client_label": "W1",
   "username": "raft-20261103T162900Z-73e8c2a1",
-  "session_id": "w1-20261103T150217800Z-d4a79e63",
+  "session_id": "w1-20261103T160542216Z-e73a91cd",
   "resumed_from": null,
-  "status": "paused",
-  "updated_at": "2026-11-03T15:26:35.393Z",
-  "base_sha": "528068d21253340a9a673517aa608dbb58a015d0",
+  "status": "active",
+  "updated_at": "2026-11-03T16:05:49.764Z",
+  "base_sha": "bdb6ca90c10d14ee65167060d6080e480e02048e",
   "current_work": [
-    "RENDER-002 private original6+3Depth ShaderLab; Unity Android Vulkan compilation run41663393724"
+    "RENDER-002 Depth Copy fragment arithmetic/sampling numerical comparison"
   ],
   "last_commit": "08594a6637336e7795b00c13a821983b8022cb42",
-  "next_step": "Resume by freshly checking Unity run41663393724; last observed at Unity single-shader compile step, not a result. Fix verified parser/compiler failure or proceed to numerical/render controls after acceptance.",
+  "next_step": "Create bounded compute-lift runner, execute original-vs-reconstructed fragment operations and negative controls.",
   "memory_path": "prompt/coordination/clients/raft-20261103T162900Z-73e8c2a1/MEMORY.md"
 }
