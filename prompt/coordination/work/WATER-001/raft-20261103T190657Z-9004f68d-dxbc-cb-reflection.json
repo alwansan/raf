@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T190657Z-9004f68d",
+  "client_label": "A12R",
+  "issue_id": "WATER-001",
+  "status": "planned",
+  "updated_at": "2026-11-03T19:06:57.872Z",
+  "base_sha": null,
+  "hypothesis": "The original Blur zero-member but nonzero-size CB declarations (544 bytes) may be validated against original DXBC RDEF CB size and bind slot without dropping authored semantics.",
+  "intended_files": [
+    "scripts/a12r_original_blur_cb_reflection.py",
+    "tests/test_a12r_original_blur_cb_reflection.py",
+    ".github/workflows/raft-a12r-original-blur-cb-reflection.yml",
+    "prompt/coordination/clients/raft-20261103T190657Z-9004f68d/",
+    "prompt/coordination/work/WATER-001/raft-20261103T190657Z-9004f68d-dxbc-cb-reflection.json",
+    "prompt/coordination/discussions/WATER-001/20261103T190657Z-raft-20261103T190657Z-9004f68d-cb-reflection.md"
+  ],
+  "related_work": [
+    "A12 original Blur CI41699143656 blocked at original_parameter_requires_exact_binding",
+    "W1 private DXBC linker; no modifications",
+    "A1 FFT numeric, distinct"
+  ],
+  "experiment_ids": [
+    "original-blur-cb-reflection"
+  ],
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41699143656"
+  ],
+  "result": null,
+  "next_step": "Isolate compiled RDEF CB and serialized group size/slot matching; bounded privacy-preserving CPU-only tests."
+}

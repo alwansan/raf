@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "username": "raft-20261103T190657Z-9004f68d",
+  "client_label": "A12R",
+  "session_id": "a12r-20261103T190657Z-dbd4a448",
+  "resumed_from": "raft-20261103T184205Z-a12d793c",
+  "status": "active",
+  "updated_at": "2026-11-03T19:06:57.872Z",
+  "base_sha": null,
+  "current_work": [
+    "WATER-001 independent DXBC RDEF reflection vs nonzero serialized constant buffer groups; preserve original live A12 work"
+  ],
+  "last_commit": null,
+  "next_step": "Develop standalone exact DXBC RDEF CB reflection and matching probe with synthetic tests, no native build or acceptance claims.",
+  "memory_path": "prompt/coordination/clients/raft-20261103T190657Z-9004f68d/MEMORY.md"
+}
