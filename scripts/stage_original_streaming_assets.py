@@ -67,7 +67,8 @@ def stage_verified_asset(source, target, size, digest, project):
 
 
 def stage(repo, project, report_path, apply=False, *,
-          haptics_manifest_blob_sha=PINNED_ORIGINAL_HAPTICS_MANIFEST_BLOB_SHA):
+          haptics_manifest_blob_sha=PINNED_ORIGINAL_HAPTICS_MANIFEST_BLOB_SHA,
+          verified_external_master_bank=None):
     # Fail before copying any asset if one of the 29 original Haptics WAV
     # files disappeared or changed. Banks/Data.rgd alone are not enough.
     # The independent source audit checks tracked paths, Git OIDs, sizes
@@ -95,6 +96,24 @@ def stage(repo, project, report_path, apply=False, *,
         if source.is_symlink() or not source.resolve().is_relative_to((repo / prefix).resolve()):
             raise ValueError('Unsafe source StreamingAssets path')
         identity = subprocess.check_output(['git', '-C', str(repo), 'cat-file', 'blob', oid])
+        # A PINNED branch Git-LFS pointer still proves the old MasterBank
+        # identity. A verified external ZIP2 restored file may provide the
+        # actual bytes without hydrating that pointer via Git LFS. Never
+        # substitute a different non-LFS bank or bypass size/SHA checks.
+        if relative == 'MasterBank.bank' and verified_external_master_bank is not None:
+            if not identity.startswith(b'version https://git-lfs.github.com/spec/v1\\n'):
+                raise ValueError('ZIP2 bank override requires original pinned LFS pointer')
+            external = Path(verified_external_master_bank)
+            ancestor = external
+            while True:
+                if ancestor.is_symlink():
+                    raise ValueError('Unsafe verified external MasterBank source link')
+                if ancestor.parent == ancestor:
+                    break
+                ancestor = ancestor.parent
+            if not external.is_file():
+                raise ValueError('Missing verified external MasterBank source')
+            source = external
         size = source.stat().st_size
         digest = sha256(source)
         if identity.startswith(b'version https://git-lfs.github.com/spec/v1\n'):
@@ -136,5 +155,8 @@ if __name__ == '__main__':
     parser.add_argument('--project', type=Path, required=True)
     parser.add_argument('--report', type=Path, required=True)
     parser.add_argument('--apply', action='store_true')
+    parser.add_argument('--verified-external-master-bank', type=Path,
+                        help='SHA-verified ZIP2 MasterBank restored outside Assets')
     args = parser.parse_args()
-    stage(args.repo.resolve(), args.project.resolve(), args.report, args.apply)
+    stage(args.repo.resolve(), args.project.resolve(), args.report, args.apply,
+          verified_external_master_bank=args.verified_external_master_bank)
