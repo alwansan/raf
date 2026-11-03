@@ -103,6 +103,19 @@ internal static class BoundaryMatrix
             Require(!buttons.Pressed && transitions[transitions.Count - 1] == false, "cancel-clears-hold-and-queue");
         }
 
+        // An earlier pending tap must not fire AFTER a later held touch releases.
+        {
+            var events = new List<bool>();
+            var buttons = new TouchPointerButtons(events.Add);
+            buttons.Tap(); buttons.Tap();
+            buttons.BeginUpdate(); // first pulse releases, second remains queued
+            buttons.Hold(true); buttons.BeginUpdate(); buttons.Hold(false);
+            int endOfHold = events.Count;
+            for (int i = 0; i < 5; i++) buttons.BeginUpdate();
+            Require(!buttons.Pressed, "ghost-tap-not-pressed");
+            Require(events.Count == endOfHold, "ghost-tap-after-hold-release");
+        }
+
         return checks;
     }
 }
