@@ -4,13 +4,11 @@
   "client_label": "A15",
   "session_id": "A15-20261103T123140Z-7ea78212",
   "resumed_from": null,
-  "status": "active",
-  "updated_at": "2026-11-03T12:31:40.016Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T13:31:34.100Z",
   "base_sha": "aae8cc2070126449fa05049a669235a144309101",
-  "current_work": [
-    "COORD-001"
-  ],
-  "last_commit": null,
-  "next_step": "Await the separate specific A15 assignment; validate scope and independent evidence before modifying shared source.",
+  "current_work": [],
+  "last_commit": "b7188de1daffb34eaba11efcf24d4295f912453a",
+  "next_step": "A15 addition-rollback scope completed with CPU red-green evidence. Future A15 work requires new scoped task, live HEAD and coordination review. Original shader zero-match unresolved; NOT_READY 0/3.",
   "memory_path": "prompt/coordination/clients/raft-20261103T123140Z-7ea78212/MEMORY.md"
 }
