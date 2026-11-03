@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T095700Z-a2b31f4d",
+  "status": "active",
+  "hypothesis": "Original UnityEngine.UI CanvasScaler serialized values can be independently decoded using authenticated original managed field metadata plus raw scene MonoBehaviours; fail closed on unknown base byte layout instead of inventing an aspect fix.",
+  "input_hashes": [
+    "globalgamemanagers.assets git-sha1:4eabb7cb093ead2f2b0c8f3451dd953a9f5ff0c9",
+    "level0 git-sha1:2aec4377058baf72656a2ba0daea9aefc67fcb7e",
+    "level1 git-sha1:1944f11673108f8db2084906ff5899003c97fc4a",
+    "UnityEngine.UI.dll git-sha1:7c31ff89d8525add38b34f218666f6c9d8db0a58"
+  ],
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_probe_a2_canvas_scaler_serialized_values.py -v",
+    "python3 -m scripts.probe_a2_canvas_scaler_serialized_values --source Raft/Raft_Data --managed Raft/Raft_Data/Managed/UnityEngine.UI.dll"
+  ],
+  "expected_signal": "Exact original CanvasScaler MonoScript pointer and resource SHA, original field metadata signature, raw mono body lengths and validated UI scaling values or explicit UNKNOWN; no asset data or decompiled code output.",
+  "negative_controls": [
+    "tampered original binary SHA",
+    "foreign MonoScript same class name",
+    "incomplete typed base header",
+    "invalid or truncated float/enum",
+    "false positive from marker bytes",
+    "no verified field order"
+  ],
+  "workflow_path": ".github/workflows/raft-a2-canvas-values.yml",
+  "concurrency_group": "raft-a2-canvas-values-${{ github.ref }}-${{ github.sha }}",
+  "artifact_prefix": null,
+  "budget": "CPU-only ubuntu24.04 max10m, scene0/1/globalgamemanagers original non-LFS plus UI DLL; no Unity no native no LFS.",
+  "run_url": null,
+  "source_sha": null,
+  "result": null,
+  "limitations": [
+    "Actual Unity native serialization alignment must be established from source and original object structure before declaring decoded values",
+    "No UI scene/prefab path closure or Android runtime"
+  ],
+  "next_step": "Use byte-length/type tree and original UnityEngine.UI.dll field order to verify CanvasScaler value extraction; otherwise return unknown with structural reason."
+}

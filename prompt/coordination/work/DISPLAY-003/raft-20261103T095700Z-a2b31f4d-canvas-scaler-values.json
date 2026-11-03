@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T095700Z-a2b31f4d",
+  "issue_id": "DISPLAY-003",
+  "status": "active",
+  "updated_at": "2026-11-03T12:07:40.695Z",
+  "base_sha": "034abfbc4fce60bf4be2466b126d10984f2ea19b",
+  "hypothesis": "Original UnityEngine.UI CanvasScaler serialized values can be independently decoded using authenticated original managed field metadata plus raw scene MonoBehaviours; fail closed on unknown base byte layout instead of inventing an aspect fix.",
+  "intended_files": [
+    "scripts/probe_a2_canvas_scaler_serialized_values.py",
+    "tests/test_probe_a2_canvas_scaler_serialized_values.py",
+    ".github/workflows/raft-a2-canvas-values.yml",
+    "docs/A2_ORIGINAL_SCENE_UI_CANVAS_2026-11-03.md",
+    "prompt/coordination/clients/raft-20261103T095700Z-a2b31f4d/state.json",
+    "prompt/coordination/clients/raft-20261103T095700Z-a2b31f4d/MEMORY.md",
+    "prompt/STATUS.md",
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+  ],
+  "related_work": [
+    "prompt/coordination/work/DISPLAY-003/raft-20261103T095700Z-a2b31f4d-serialized-scene-layout.json"
+  ],
+  "experiment_ids": [
+    "canvas-scaler-values"
+  ],
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41629641835"
+  ],
+  "result": null,
+  "next_step": "Use byte-length/type tree and original UnityEngine.UI.dll field order to verify CanvasScaler value extraction; otherwise return unknown with structural reason."
+}

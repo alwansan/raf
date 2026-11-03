@@ -1,13 +1,15 @@
 {
   "schema_version": 1,
   "username": "raft-20261103T095700Z-a2b31f4d",
-  "session_id": "a2-continue-20261103T112400-f7a82190",
-  "resumed_from": "a2-continue-20261103T104921-f42c8a91",
-  "status": "paused",
-  "updated_at": "2026-11-03T11:45:56.088Z",
-  "base_sha": "3fa646ed1dca28071d2b65c6394f0003231362e6",
-  "current_work": [],
+  "session_id": "a2-continue-20261103120740-de5c9031",
+  "resumed_from": "a2-continue-20261103T112400-f7a82190",
+  "status": "active",
+  "updated_at": "2026-11-03T12:07:40.695Z",
+  "base_sha": "034abfbc4fce60bf4be2466b126d10984f2ea19b",
+  "current_work": [
+    "DISPLAY-003 authentic CanvasScaler serialized value audit"
+  ],
   "last_commit": "5d732187d92440cbe7f902f166149794dd13734e",
-  "next_step": "DISPLAY-003 source review: recover authentic custom serialized CanvasScaler fields (referenceResolution, uiScaleMode, matchWidthOrHeight) and actual active Settings prefab/page chain. Existing source-only GitHub CI41629641835 success; owner build readiness NOT_READY/0-of-3. Resume only on explicit new turn, do not touch independent native run.",
+  "next_step": "Pin original UnityEngine.UI.dll metadata and compare original CanvasScaler source field schema to extracted MonoBehaviour raw layout in scene0/1. CPU-only, no Unity/Android/asset modification.",
   "memory_path": "prompt/coordination/clients/raft-20261103T095700Z-a2b31f4d/MEMORY.md"
 }
