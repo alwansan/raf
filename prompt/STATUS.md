@@ -68,3 +68,8 @@ Full delivery workflow and packaging script inspected; strict genuine water comp
 ## Parallel-safe DISPLAY-003 investigation — 3 November 2026
 
 Added SHA-pinned, private original CSharp9 Settings/DynamicResolution lexical reference audit with three local synthetic tests and new lightweight offline integration CI wiring. [Scope, evidence and limits](../docs/ORIGINAL_ANDROID_DISPLAY_AUDIT_2026-11-03.md). Actual original-source counts must be confirmed by the new run; this is not a proven Settings cause or runtime aspect repair. Concurrent FFT typed-image and FMOD work was left untouched. WATER-001/RENDER-002 and DISPLAY-003 remain open; NOT_READY, no Unity/native game build, no request JSON/automation change.
+
+
+## FFT target format source correlation — 3 November 2026
+
+New SHA-pinned source probe confirms original temporary cache uses RGHalf/RGFloat when two-channel flag is false and ARGBHalf/ARGBFloat when true, selected by precision; dimensions are2N by2N, linear, with original UAV flag forwarded. Local authenticated GpuFFT source passed; two fail-closed synthetic tests passed. Original-source managed CI will verify fresh decompilation; its result is pending. This narrows FFT-FORMAT-009: a fixed Rgba32f compiler declaration cannot be assumed equivalent to all four original requested formats. Actual created graphics format, cache implementation and GPU compatibility remain unverified. No shader, native request, assets or automation changed; NOT_READY retained.

@@ -179,3 +179,8 @@ Keep genuine shader/program/variant/GUID recovery and FFT resource format checks
 ## Independent DISPLAY-003 original-source reference audit — 3 November 2026
 
 Added a SHA-pinned, privacy-safe CSharp9 reference/writer inventory and synthetic tests to clarify the still-unproven Settings/aspect cause without touching DynamicResolution or original runtime behavior. Local3 tests/py_compile passed; follow the new light original-source CI for authentic results before drawing conclusions. See [display audit](ORIGINAL_ANDROID_DISPLAY_AUDIT_2026-11-03.md). Water shader work was already changed concurrently; it was deliberately not overwritten or rerun. No Unity/APK/LFS request, asset/GUID, release or scheduled-task modification; permanent resume instructions unchanged.
+
+
+## FFT target format source correlation — 3 November 2026
+
+New SHA-pinned source probe confirms original temporary cache uses RGHalf/RGFloat when two-channel flag is false and ARGBHalf/ARGBFloat when true, selected by precision; dimensions are2N by2N, linear, with original UAV flag forwarded. Local authenticated GpuFFT source passed; two fail-closed synthetic tests passed. Original-source managed CI will verify fresh decompilation; its result is pending. This narrows FFT-FORMAT-009: a fixed Rgba32f compiler declaration cannot be assumed equivalent to all four original requested formats. Actual created graphics format, cache implementation and GPU compatibility remain unverified. No shader, native request, assets or automation changed; NOT_READY retained.
