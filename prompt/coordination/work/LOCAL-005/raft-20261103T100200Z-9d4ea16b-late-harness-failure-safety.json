@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "username": "raft-20261103T100200Z-9d4ea16b",
+  "client_label": "A10",
+  "session_id": "a10-20261103T1322Z-84bd630a",
+  "issue_id": "LOCAL-005",
+  "work_id": "late-harness-failure-safety",
+  "updated_at": "2026-11-03T13:22:00Z",
+  "status": "active",
+  "hypothesis": "Original private C# source gets rewritten before runtime helper copying, method extraction and harness project generation. A late exception in those steps therefore leaves a project with modified originals and no valid offline harness; previous source-write rollback does not cover this case.",
+  "proposed_fix": "Move install_adapted_originals to the last mutation in prepare() once all harness files are generated; preserve existing source preflight and failed-write exact byte rollback.",
+  "source_paths": [
+    "scripts/verify_android_offline_candidate.py",
+    "tests/test_a10_offline_source_selection.py"
+  ],
+  "record_paths": [
+    "prompt/coordination/work/LOCAL-005/raft-20261103T100200Z-9d4ea16b-late-harness-failure-safety.json",
+    "prompt/coordination/clients/raft-20261103T100200Z-9d4ea16b/MEMORY.md",
+    "prompt/coordination/clients/raft-20261103T100200Z-9d4ea16b/state.json",
+    "prompt/STATUS.md",
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+  ],
+  "test_strategy": "New synthetic failure-in-harness-generation regression with original bytes intact, no published original data; existing 10 A10 tests and SHA-authenticated private managed offline CI.",
+  "overlap_check": "A1/FFT, A2/DISPLAY, A3/A5/HAPTICS/DELIVERY, A6/A9/RENDER, A8/DIAG, A7/INPUT; A10-only source file and own tests.",
+  "constraints": [
+    "feature/android-native-port only",
+    "No Unity, APK, OBB, XAPK, Release or automation",
+    "No original game private source or assets uploaded",
+    "No changes to .rgd schema, .meta or GUIDs"
+  ],
+  "limitations": [
+    "Does not guarantee atomic rollback of generated harness files",
+    "Does not prove Unity or on-device original world lifecycle"
+  ]
+}
