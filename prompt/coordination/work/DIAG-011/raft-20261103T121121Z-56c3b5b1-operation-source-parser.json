@@ -2,8 +2,8 @@
   "schema_version": 1,
   "owner": "raft-20261103T121121Z-56c3b5b1",
   "issue_id": "DIAG-011",
-  "status": "active",
-  "updated_at": "2026-11-03T12:11:51.036Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T12:22:38.729Z",
   "hypothesis": "Current body_bounds text.count(signature) overcounts C# text/comments, and raw opening-brace scan may steal later method body after abstract/semicolon declaration. This can block or misplace instrumentation for original SaveAndLoad/Raft_Network diagnostic methods despite source SHA pin.",
   "intended_files": [
     "scripts/instrument_android_runtime_operations.py",
@@ -22,7 +22,10 @@
     "A9 LOCAL-005 separate"
   ],
   "no_native_build": true,
-  "tests": [],
-  "last_result": null,
+  "tests": [
+    41634028276,
+    41634028255
+  ],
+  "last_result": "Source3f7baadd, five additional synthetic regressions, 8/8 operation parser tests CI41634028276 SUCCESS; original offline managed compile CI41634028255 SUCCESS.",
   "base_sha": "e3bdcfc18118ac729c040f801f9045690197129f"
 }
