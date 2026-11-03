@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "owner": "raft-20261103T184205Z-a12d793c",
-  "status": "planned",
+  "status": "completed",
   "target": "UltimateWater/Utilities/Blur (Subsurface Scattering)",
   "hypothesis": "Actual pass/stage identities may be recoverable from the original two resources and may satisfy the logged minimum two passes without inventing code.",
   "inputs": [
@@ -22,9 +22,24 @@
     "Invalid blob indices, stage types, source count fail closed",
     "Any unknown variant or parameter format remains unknown"
   ],
-  "results": null,
+  "results": {
+    "ci": "completed_success",
+    "synthetic_tests": 11,
+    "authenticated_owner_count": 14,
+    "original_source_total_bytes": 488439356,
+    "original_shader_objects": 165,
+    "subshader_count": 1,
+    "pass_count": 2,
+    "linked_vertex_fragment_programs": 4,
+    "stage_pairs": 2,
+    "unresolved_parameter_index_layout": 0,
+    "private_shaderlab_installed": false
+  },
   "limitations": [
     "Only two original resource owners; candidate may be elsewhere",
     "Structural validity does not prove GPU numeric equivalence, ShaderLab insertion or material GUID mapping"
-  ]
+  ],
+  "source_sha": "c8ddf9c3e921757e852929dc3e8d0339ba73927c",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41696171379",
+  "next_step": "Exact parameter group contents require separate original CB recovery, not a pass graph failure."
 }
