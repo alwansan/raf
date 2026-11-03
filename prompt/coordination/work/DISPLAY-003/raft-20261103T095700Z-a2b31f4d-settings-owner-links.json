@@ -2,8 +2,8 @@
   "schema_version": 1,
   "owner": "raft-20261103T095700Z-a2b31f4d",
   "issue_id": "DISPLAY-003",
-  "status": "active",
-  "updated_at": "2026-11-03T14:48:37.472Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T15:11:12.686Z",
   "base_sha": "0a1e260bb1e4cbe211cb05c3374bfd0e4d0af696",
   "hypothesis": "Original Settings controller object references scene UI objects by serialized PPtrs. A bounded source SHA-pinned scan of authentic scene0/1 Settings MonoBehaviours, canonical CSharp9 Settings.cs and native hierarchy can discriminate whether a CanvasScaler component is referenced directly or indirectly.",
   "intended_files": [
@@ -23,8 +23,13 @@
     "settings-owner-links"
   ],
   "evidence": [
-    "https://github.com/alwansan/raf/actions/runs/41636519603"
+    "https://github.com/alwansan/raf/actions/runs/41636519603",
+    "https://github.com/alwansan/raf/actions/runs/41660274964",
+    "https://github.com/alwansan/raf/actions/runs/41658552259",
+    "https://github.com/alwansan/raf/commit/5214d3209d3970b69441d7096aebe35586c224ee",
+    "https://github.com/alwansan/raf/commit/5006ba9cb9d7763d7bcf67c415e24717cd0b3046",
+    "https://github.com/alwansan/raf/commit/5db3a912727c8d2686a3b3301e04b7d80359fe0c"
   ],
-  "result": null,
-  "next_step": "Use original scene0/1 Settings MonoBehaviour raw payload after typed header and authenticated original source metadata to classify candidate local PPtrs. Only confirmed typed links can establish UI canvas ownership."
+  "result": "Authenticated source-only original Settings controller UI candidate investigation COMPLETE. Source5db3a912, CI41660274964 success 10 synthetic tests and original SHA-correct Settings.cs plus two non-LFS scene scans. Each 612-byte Settings record has 48 RAW aligned local PPtr patterns to existing objects (11 GameObject/34 MonoBehaviour/3 RectTransform), but 8-byte overlaps disprove 48 distinct fields. Maximum non-overlapping 12-byte windows 45; 44 mandatory across all optimal disjoint selections. Source CanvasScaler ancestry bounds among maximum sets: level0 44–45, level1 45. Actual typed Settings CSharp field mapping, prefab/UnityEvent, Android geometry/defect NOT proven. DISPLAY-003 still open, overall NOT_READY/0 of3.",
+  "next_step": "Use original Settings.cs field types and collection serialization to distinguish typed links from overlapping PPtr candidates, prove actual Settings active UI component/Canvas ownership and Android aspect cause before changing gameplay/runtime."
 }
