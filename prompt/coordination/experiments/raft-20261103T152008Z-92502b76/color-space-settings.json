@@ -23,8 +23,8 @@
   "concurrency_group": "raft-w2-color-space-settings-${{ github.ref }}-${{ github.sha }}",
   "artifact_prefix": "raft-w2-color-space-settings-",
   "budget": "single CPU-only run under 5 minutes; timeout 300s; workflow timeout 10 min; no Unity, no GPU, no LFS",
-  "run_url": null,
-  "source_sha": null,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41673021263",
+  "source_sha": "5ef8c57",
   "result": "LOCAL AUTHENTIC RUN COMPLETE: original project color space is LINEAR (m_ActiveColorSpace=1 per Unity ColorSpace enum Gamma=0/Linear=1); m_ColorGamuts=[0]; BuildSettings.m_Version=2021.3.45f2; 5 QualitySettings tiers. First-order build-level candidate cause for pale surfaces on the Android port: a Gamma-space port of a Linear-space original washes out colors. CI pending.",
   "limitations": [
     "records the original setting; does not itself fix or build anything",
@@ -32,5 +32,7 @@
     "does not cover per-material render states or texture-import sRGB double conversion (next W2 micro-lane)",
     "does not close WATER-001/RENDER-002/FFT-FORMAT-009; NOT_READY/0-of-3 unchanged"
   ],
-  "next_step": "push and verify green CI, then extend lane to texture-import sRGB/format aggregates inside the two payload owners"
+  "next_step": "push and verify green CI, then extend lane to texture-import sRGB/format aggregates inside the two payload owners",
+  "ci_conclusion": "failure (first run: tests ran before UnityPy install; import ordering bug) — fixed with lazy UnityPy import + fake-module injection tests; rerun pending",
+  "incidents": "incidents/raft-20261103T152008Z-92502b76/2026-11-03T170000Z-color-space-ci-failure-and-fix.md"
 }

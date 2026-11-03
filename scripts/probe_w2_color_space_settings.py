@@ -26,8 +26,6 @@ import json
 from pathlib import Path
 import sys
 
-import UnityPy
-
 SCHEMA_VERSION = 1
 
 VALID_COLOR_SPACES = {0: "Gamma", 1: "Linear"}
@@ -35,6 +33,10 @@ VALID_COLOR_SPACES = {0: "Gamma", 1: "Linear"}
 
 def read_color_space(ggm_path: Path) -> dict:
     """Return the aggregate-only color-space / engine-version payload."""
+    # UnityPy is imported lazily so the fail-closed synthetic tests can run
+    # before any serializer installation step (CI orders tests first).
+    import UnityPy
+
     if not ggm_path.is_file():
         raise FileNotFoundError(f"missing original owner file: {ggm_path}")
     env = UnityPy.load(str(ggm_path))
