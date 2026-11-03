@@ -3,8 +3,8 @@
   "owner": "raft-20261103T145000Z-a1c92f74",
   "client_label": "A1",
   "issue_id": "WATER-001",
-  "status": "active",
-  "updated_at": "2026-11-03T14:50:31.560Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T15:09:55.428Z",
   "base_sha": "af85dde964781ce6d392e3977520e63005d1d538",
   "hypothesis": "Executable original and HLSL roundtrip FFT compute SPIR-V under software Vulkan can reveal actual bounded numerical and image-format disagreement missed by SSA/opcode counts.",
   "intended_files": [
@@ -27,6 +27,14 @@
   "experiment_ids": [
     "private-lavapipe-execution"
   ],
-  "budget": "single independent source-triggered workflow 25 min, exactly SHA-verified 3 original LFS owners 337660952 bytes, CPU Mesa lavapipe software Vulkan only, no Unity/native delivery, no artifact upload, no repeated action dispatch. Fail-closed if unsupported feature/format.",
-  "next_step": "Implement synthetic CPU software Vulkan test, then private authenticated original shader execution with same image inputs; no original shader payload publication."
+  "budget": "Single 115978112-byte SHA-authenticated original sharedassets0.assets LFS owner and isolated Mesa software Vulkan CPU-only Actions; no native Unity build. Source edits triggered intermediate runs; exact final CI41660159285 SUCCESS, no manual rerun.",
+  "next_step": "Test authentic RGHalf, RGFloat and ARGBHalf/ARGBFloat view types, half precision and actual Unity FFT dispatch/resource semantics; no mathematical universality or Android GPU claim, keep WATER-001/RENDER-002/FFT-FORMAT-009 OPEN and NOT_READY0/3.",
+  "source_sha": "3406dd121ebeca30ad344ccd8f71278fe0505310",
+  "result": "Both positive and deliberately changed-arithmetic synthetic Vulkan shaders executed; negative detected. Authenticated 20 original DXBC FFT compiled variants independently ran vs HLSL roundtrip SPIR-V on Mesa CPU Vulkan under three deterministic RGBA32F inputs/dispatch patterns: 60/60 real written-pixel matches (maxAbs0, relativeL2=0), zero inconclusive.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41658674936 (synthetic Vulkan positive/negative SUCCESS)",
+    "https://github.com/alwansan/raf/actions/runs/41659199363 (initial authentic20 single scenario SUCCESS)",
+    "https://github.com/alwansan/raf/actions/runs/41660159285 (final 60 comparisons SUCCESS)",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/A1_ORIGINAL_FFT_SOFTWARE_VULKAN_NUMERICS_2026-11-03.md"
+  ]
 }
