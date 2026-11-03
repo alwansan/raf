@@ -5,8 +5,8 @@
   "session_id": "a10-20261103T150015Z-bca52ed0",
   "issue_id": "LOCAL-005",
   "work_id": "original-method-lexical-safety-20261103",
-  "status": "active",
-  "updated_at": "2026-11-03T15:00:15Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T15:07:49Z",
   "base_sha": "528068d21253340a9a673517aa608dbb58a015d0",
   "hypothesis": "The private original RPC/save method slice helper counts braces and signature text inside C# comments and string literals, causing premature or incorrect extraction or deceptive source-only checks.",
   "intended_files": [
@@ -24,8 +24,29 @@
     "original-method-lexical-safety-20261103"
   ],
   "evidence": [
-    "https://github.com/alwansan/raf/actions/runs/41644049824"
+    "https://github.com/alwansan/raf/actions/runs/41644049824",
+    "https://github.com/alwansan/raf/actions/runs/41660238082",
+    "https://github.com/alwansan/raf/actions/runs/41660275041",
+    "https://github.com/alwansan/raf/commit/b0a72fc7fe5d2b5efe3fa32528a39879fdecdd51"
   ],
-  "result": null,
-  "next_step": "Add synthetic negative controls first. Make method signature detection and brace counting ignore literals/comments, reject duplicates and prototype-only signatures. Validate via existing no-LFS original-source workflow; preserve source SHA pins and private data."
+  "result": {
+    "red_run_id": 41660238082,
+    "red_conclusion": "completed_failure_intentional",
+    "red_tests_failed": 5,
+    "existing_tests_passed": 11,
+    "green_run_id": 41660275041,
+    "green_job_id": 126001316926,
+    "green_sha": "b0a72fc7fe5d2b5efe3fa32528a39879fdecdd51",
+    "green_conclusion": "completed_success",
+    "a10_tests_passed": 16,
+    "original_sha_pinned_sources": 12,
+    "original_RPC_identity": "PASS",
+    "managed_compile_exit": 0,
+    "managed_compile_error_codes": {},
+    "unity_or_phone": false,
+    "scope": "CSharp9 lexical method extraction and fail-closed signature verification; original game source never published or altered by patch"
+  },
+  "next_step": "Scoped helper fixed, no further work in this session. Overall LOCAL-005 genuine .rgd world/create/load/resume acceptance, WATER-001/RENDER-002/FFT-FORMAT-009 and complete independent readiness reviews remain pending.",
+  "source_fix_commit": "b0a72fc7fe5d2b5efe3fa32528a39879fdecdd51",
+  "test_red_commit": "6c4d1bf8e2507c03b729004cae38dee08038256d"
 }
