@@ -45,7 +45,7 @@ checks={
     "no HashSet PID sampling": 'for(String pid:gamePids)' not in remote,
     "no guessed process PID when proc inaccessible": 'return selected;' in remote and 'int selected=-1;' in remote,
     "pidof failure invalidates stale process telemetry": 'primaryGamePid.set(-1);\n                synchronized(gamePids){gamePids.clear();}' in remote,
-    "pidof exit status checked": 'int exit=p.waitFor();' in remote and 'if(exit!=0 && !verifiedEmpty)' in remote,
+    "pidof exit status checked": 'int exit=p.exitValue();' in remote and 'if(exit!=0 && !verifiedEmpty)' in remote,
     "pidof no-match exit 1 is not probe failure": 'exit==1 && found.toString().trim().isEmpty()' in remote and 'pidProbeSuccesses.incrementAndGet();' in remote,
     "nonempty failed pidof is unverified": 'if(exit!=0 && !verifiedEmpty)' in remote and 'throw new IOException("pidof_exit_"+exit)' in remote,
     "pid probe failures explicitly measured": '"pid_probe_failures_total"' in remote and 'pidProbeFailures.incrementAndGet();' in remote,
