@@ -5,8 +5,8 @@
   "session_id": "a10-20261103T1322Z-84bd630a",
   "issue_id": "LOCAL-005",
   "work_id": "late-harness-failure-safety",
-  "updated_at": "2026-11-03T13:22:00Z",
-  "status": "active",
+  "updated_at": "2026-11-03T13:26:00Z",
+  "status": "completed",
   "hypothesis": "Original private C# source gets rewritten before runtime helper copying, method extraction and harness project generation. A late exception in those steps therefore leaves a project with modified originals and no valid offline harness; previous source-write rollback does not cover this case.",
   "proposed_fix": "Move install_adapted_originals to the last mutation in prepare() once all harness files are generated; preserve existing source preflight and failed-write exact byte rollback.",
   "source_paths": [
@@ -31,5 +31,31 @@
   "limitations": [
     "Does not guarantee atomic rollback of generated harness files",
     "Does not prove Unity or on-device original world lifecycle"
+  ],
+  "test_commit": "dedf795a7e26b5eea8a558a0ad436edd79e89c4a",
+  "fix_commit": "057222022c132a910f04b0b6fdc4704ed6dc0634",
+  "ci_red": {
+    "run_id": 41643936030,
+    "job_id": 125944198401,
+    "status": "completed_failure_intentional",
+    "failure": "Synthetic missing RPC signature after original C# adaptation produced byte mismatch in Raft_Network.cs, confirming pre-fix partial mutation."
+  },
+  "ci_green": {
+    "run_id": 41644049824,
+    "job_id": 125944586674,
+    "status": "completed_success",
+    "same_source_sha": "057222022c132a910f04b0b6fdc4704ed6dc0634",
+    "a10_tests": "11/11",
+    "private_original_source_count": 12,
+    "local_RPC_identity": "PASS",
+    "managed_compile_exit": 0,
+    "managed_compile_error_codes": 0
+  },
+  "scope_result": "Original C# source installation deferred until all scaffolding/harness file writes and original RPC/save method extraction complete; original inputs remain untouched on a late harness-preparation error. Source write error rollback remains best effort.",
+  "remaining": "No original .rgd game saving/loading tested; harness output may exist on failure. No Unity/native/phone proof; WATER-001/RENDER-002/FFT-FORMAT-009 remain open and game NOT_READY 0/3.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41643936030",
+    "https://github.com/alwansan/raf/commit/057222022c132a910f04b0b6fdc4704ed6dc0634",
+    "https://github.com/alwansan/raf/actions/runs/41644049824"
   ]
 }
