@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T224306Z-d17e2cb7",
+  "issue_id": "LOCAL-005",
+  "experiment_id": "a8-zip2-original-save-provider",
+  "status": "running",
+  "source_sha": "3e354068cfbd62a684d3f9211d15961f898d4851",
+  "zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "hypothesis": "Original SaveAndLoad CI can use authenticated ZIP2 Assembly-CSharp.dll and Data.rgd with no Git LFS and without changing game source behavior.",
+  "input_hashes": [
+    "Assembly-CSharp.dll SHA256 0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e (3211776 bytes)",
+    "StreamingAssets/Data.rgd SHA256 b2785187aa11e33872698adfa79ab252cf65a824d92bee7e88773ce4aa11cbba (2941 bytes)"
+  ],
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_verify_a8_zip2_local_save_provider.py -v",
+    "python3 -m scripts.verify_a8_zip2_local_save_provider --zip2-checkout original-zip2",
+    "dotnet tool install ilspycmd --version 11.2.0.10050 --tool-path $RUNNER_TEMP/ilspy",
+    "ilspycmd -lv CSharp9_0 -t SaveAndLoad original-zip2/Raft/Raft_Data/Managed/Assembly-CSharp.dll",
+    "dotnet run --project $RUNNER_TEMP/path-expressions/Paths.csproj --configuration Release"
+  ],
+  "expected_signal": "ZIP2 checkout exact immutable source SHA; 11 synthetic negatives/positive; original DLL and RGD SHA match independent pins; unchanged original SaveAndLoad expressions and Linux C# path behavior checks pass.",
+  "negative_controls": [
+    "Same-size changed original DLL",
+    "Wrong manifest size/SHA",
+    "Duplicate manifest original",
+    "Split file substituted for plain",
+    "Source leaf or parent symlink",
+    "Source length mismatch",
+    "Missing original",
+    "Oversized/invalid manifest"
+  ],
+  "workflow_path": ".github/workflows/raft-original-save-path-tests.yml",
+  "concurrency_group": "raft-a8-zip2-original-save-${{ github.ref }}-${{ github.sha }}",
+  "artifact_prefix": null,
+  "budget": "CPU-only, GitHub Actions ubuntu-24.04 timeout 10 minutes, sparse two original small ZIP2 files; no full Raft, LFS, Unity or phone.",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41733527931",
+  "result": null,
+  "limitations": [
+    "Original Data.rgd hash does not mean a user saved world was loaded",
+    "Original save path C# compatibility is not Unity/Android/phone save cycle",
+    "No native APK/OBB/XAPK request permitted in A8 recovery role"
+  ],
+  "next_step": "Inspect actual full CI run; repair any source/check failure; persist scoped test evidence."
+}
