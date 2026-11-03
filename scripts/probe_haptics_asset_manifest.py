@@ -4,6 +4,7 @@ Pins tracked original WAV Git blobs by name, length and Git OID.
 This proves repository input fidelity, not Android paths or device success.
 """
 import argparse
+import hashlib
 import json
 from pathlib import Path
 import re
@@ -21,9 +22,29 @@ def _git(repo, *args):
     return subprocess.check_output(['git', '-C', str(repo), *args], stderr=subprocess.PIPE)
 
 
-def audit(repo: Path, manifest_path: Path, expected_count=None):
+def verify_manifest_blob(manifest_path: Path, pinned_blob_sha: str):
+    """Require the original source-of-truth manifest, not a co-edited one."""
+    if not isinstance(pinned_blob_sha, str) or not SHA.fullmatch(pinned_blob_sha):
+        raise HapticsInventoryError('Malformed trusted Haptics manifest pin')
+    if manifest_path.is_symlink() or not manifest_path.is_file():
+        raise HapticsInventoryError('Unsafe or absent Haptics manifest')
+    payload = manifest_path.read_bytes()
+    git_blob = hashlib.sha1(
+        ('blob ' + str(len(payload))).encode('ascii') + b'\\0' + payload
+    ).hexdigest()
+    if git_blob != pinned_blob_sha:
+        raise HapticsInventoryError('Original Haptics manifest provenance changed')
+    return payload
+
+
+def audit(repo: Path, manifest_path: Path, expected_count=None, *,
+          expected_manifest_blob_sha=None):
     repo = repo.resolve(strict=True)
-    manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
+    if expected_manifest_blob_sha is None:
+        manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
+    else:
+        manifest = json.loads(
+            verify_manifest_blob(manifest_path, expected_manifest_blob_sha).decode('utf-8'))
     if manifest.get('schema_version') != 1 or manifest.get('path_prefix') != PREFIX:
         raise HapticsInventoryError('Unexpected Haptics manifest schema/path')
     expected = manifest.get('files')
@@ -88,9 +109,12 @@ def main():
     parser.add_argument('--repo', type=Path, required=True)
     parser.add_argument('--manifest', type=Path, required=True)
     parser.add_argument('--expected-count', type=int, default=29)
+    parser.add_argument('--expected-manifest-blob', default=PINNED_ORIGINAL_HAPTICS_MANIFEST_BLOB_SHA,
+                        help='Trusted Git object SHA for original manifest; not derived from mutable working tree')
     args = parser.parse_args()
     print('RAFT_HAPTICS_SOURCE_AUDIT ' + json.dumps(
-        audit(args.repo, args.manifest, args.expected_count), sort_keys=True))
+        audit(args.repo, args.manifest, args.expected_count,
+              expected_manifest_blob_sha=args.expected_manifest_blob), sort_keys=True))
 
 
 if __name__ == '__main__':
