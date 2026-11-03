@@ -4,11 +4,14 @@
   "client_label": "A12",
   "session_id": "a12-20261103T184205Z-831fab74",
   "resumed_from": "raft-20261103T145700Z-12f4a8b3",
-  "status": "active",
-  "updated_at": "2026-11-03T18:42:05Z",
+  "status": "paused",
+  "updated_at": "2026-11-03T19:04:00Z",
   "current_work": [
-    "WATER-001 original Subsurface Blur program/pass feasibility; owner requested resolution of failed native41687765928"
+    "WATER-001 original Subsurface Blur pass structure authenticated (completed)",
+    "Subsurface Blur ShaderLab blocked on 544 bytes of original Constant Buffer groups; follow-up needs DXBC constant buffer binding recovery",
+    "User native41687765928 historical zero built-in matches unchanged; no new full Unity build"
   ],
-  "next_step": "SHA-verified two-owner CPU-only shader pass graph investigation; no duplicate full native until authentic water blocker repaired.",
-  "memory_path": "prompt/coordination/clients/raft-20261103T184205Z-a12d793c/MEMORY.md"
+  "next_step": "Resume via a new coordinated session: compare exact four original DXBC Constant Buffer reflection layouts with 2 nonzero-size CB groups (544 B total) and m_CommonParameters; restore authentic HLSL and original export mapping; do not retry native while builtin/water strict gates fail.",
+  "memory_path": "prompt/coordination/clients/raft-20261103T184205Z-a12d793c/MEMORY.md",
+  "last_commit": "5d91d0283f5bad6ab49684b3f14b897711f9ae53"
 }
