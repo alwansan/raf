@@ -1,5 +1,10 @@
 # Current Raft checkpoint — 3 November 2026
 
+## Latest verified checkpoint — stored water quality values
+
+Original quality object6376/resources.assets (476bytes) was authenticated through its MonoScript; source-corroborated local decoding consumes every byte and yields seven spectrum caps:32,64,256,512,512,256,256. Unity-quality synchronization is enabled; saved index6 is not proof of active phone quality. Four original schema source hashes and the exact object SHA passed locally. [Resource CI41554294910](https://github.com/alwansan/raf/actions/runs/41554294910), [no-LFS schema-source inspection41554501052](https://github.com/alwansan/raf/actions/runs/41554501052) and [synthetic decoder preflight41554799751](https://github.com/alwansan/raf/actions/runs/41554799751) SUCCESS. Local22 related tests passed. Full custom TypeTree and runtime size/GPU output remain unproven. [Full evidence](../docs/ORIGINAL_WATER_QUALITY_VALUES_2026-11-03.md). Next inspect serialized per-water requested resolution and scene/active-quality linkage; strict water gate and build hold remain active.
+
+
 ## Latest verified checkpoint — FFT resolution owner
 
 [Original-source CI41553441187](https://github.com/alwansan/raf/actions/runs/41553441187) SUCCESS on0cf19b7b: the size passed to the original FFT constructor is now traced through its typed WindWaves int property/backing field to a three-input minimum of requested resolution, quality limit and device texture limit. Ten size/provenance tests passed,26 related local tests passed. Serialized values, runtime initialization/range, kernel mapping and numerical behavior remain unproven; strict water gate stays closed. See the final section of [authentic FFT report](../docs/ORIGINAL_WATER_LFS_COMPUTE_INVENTORY_2026-11-03.md). Next inspect original serialized water/quality values; reuse authenticated archive resources. No Unity/APK build, shader substitution, automation edit or new LFS transfer.
