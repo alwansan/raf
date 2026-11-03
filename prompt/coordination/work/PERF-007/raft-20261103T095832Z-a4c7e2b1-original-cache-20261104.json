@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T095832Z-a4c7e2b1",
+  "agent": "A4",
+  "session_id": "a4-resume-20261103T231050Z-7d96e2a1",
+  "issue_id": "PERF-007",
+  "status": "active",
+  "updated_at": "2026-11-03T23:11:48.174Z",
+  "base_sha": "8316f5b8b8d4e913dd309af30ba4342f0f980af0",
+  "hypothesis": "Original RenderTexturesCache / RenderTexturesSet GPU allocations may remain owned after repeated scene/unload/reinitialization or exception; prove their actual lifecycle before changing game source.",
+  "source_provider": {
+    "branch": "zip2",
+    "immutable_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "relative_path": "Raft/Raft_Data/Managed/Assembly-CSharp.dll",
+    "expected_bytes": 3211776,
+    "expected_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e"
+  },
+  "intended_files": [
+    "scripts/a4_original_gpu_cache_lifecycle.py",
+    "tests/test_a4_original_gpu_cache_lifecycle.py",
+    ".github/workflows/raft-a4-original-gpu-cache-lifecycle.yml",
+    "prompt/coordination/work/PERF-007/raft-20261103T095832Z-a4c7e2b1-original-cache-20261104.json",
+    "prompt/coordination/clients/raft-20261103T095832Z-a4c7e2b1/MEMORY.md",
+    "prompt/coordination/clients/raft-20261103T095832Z-a4c7e2b1/state.json"
+  ],
+  "related_work": [
+    "A1 ongoing FFT shader/equivalence; no code edits in their tools",
+    "W1/W2/W3 shaders/materials ownership unchanged",
+    "Previous A4 GPU scene-boundary diagnostics source SHA 74df622; not a leak repair"
+  ],
+  "steps": [
+    "Create bounded CSharp9 source lifecycle structural probe with synthetic adversarial fixtures",
+    "Run isolated CPU-only GitHub workflow against immutable ZIP2 original assembly with full size/hash validation; no LFS",
+    "Only after proven allocation/disposal defect, implement a minimal CSharp adapter correction or verified safe guard and executable test",
+    "Document exact source result and unknowns, update status/handoff; avoid Unity/APK native delivery"
+  ],
+  "budget": "CPU-only GitHub runner up to 15 minutes; one original 3,211,776-byte managed DLL from zip2, no full 7.79GB and no Unity/editor/license",
+  "result": null,
+  "next_step": "Implement fail-closed analyzer and original-data workflow, collect structural ownership evidence."
+}
