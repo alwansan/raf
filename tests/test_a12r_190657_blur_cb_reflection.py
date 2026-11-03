@@ -2,7 +2,7 @@
 import json
 import struct
 import unittest
-from scripts.a12r_190657_blur_cb_reflection import rdef, serialized_groups, compare
+from scripts.a12r_190657_blur_cb_reflection import rdef, serialized_groups, compare, public_common_counts
 
 def u(x):
     return struct.pack("<I", x)
@@ -25,6 +25,20 @@ def compiled(size=544, key="FakeCB", bound=True):
     return b"DXBC" + b"\0" * 16 + u(1) + u(36 + len(chunk)) + u(1) + u(36) + chunk
 
 class A12RTests(unittest.TestCase):
+    def test_known_unity_common_parameter_array_counts_never_leak_values(self):
+        source = {"m_CommonParameters": {
+            "m_ConstantBuffers": [{"private_shader_identifier": "do-not-publish"}],
+            "m_TextureParams": [{"private_texture_identifier": "do-not-publish"}],
+        }}
+        result = public_common_counts(source)
+        self.assertEqual(result["m_ConstantBuffers"], 1)
+        self.assertEqual(result["m_TextureParams"], 1)
+        self.assertNotIn("do-not-publish", json.dumps(result))
+
+    def test_unknown_unity_common_shape_fails_closed(self):
+        with self.assertRaises(ValueError):
+            public_common_counts({"m_CommonParameters": {"m_ConstantBuffers": "bad"}})
+
     def test_exact_structure_only_not_game_ready(self):
         result = compare(serialized_groups(params()), rdef(compiled()))
         self.assertEqual(result["serialized_cb_used_bytes"], 544)

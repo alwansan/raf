@@ -103,6 +103,23 @@ def compare(groups, reflection):
             "name_size_and_slot_matches": len(exact & set(slots)),
             "shaderlab_runtime_or_gpu_verified": False}
 
+def public_common_counts(program):
+    """Publish only counts of *known* original Unity parameter arrays, never values."""
+    common = program.get("m_CommonParameters", {})
+    if not isinstance(common, dict):
+        raise ValueError("Unknown original common-parameter layout")
+    fields = ("m_BufferParams", "m_ConstantBufferBindings", "m_ConstantBuffers",
+              "m_MatrixParams", "m_UAVParams", "m_VectorParams",
+              "m_Samplers", "m_TextureParams")
+    result = {}
+    for field in fields:
+        values = common.get(field, [])
+        if not isinstance(values, list):
+            raise ValueError("Unknown original common-parameter array")
+        result[field] = len(values)
+    return result
+
+
 def main(source, repo, out):
     # These exact hard-coded error markers contain no original Shader identifiers.
     safe_error_codes = {
@@ -153,19 +170,44 @@ def main(source, repo, out):
                 item = {"pass": pi, "stage": st, "parameter_sha256": hashlib.sha256(raw).hexdigest(),
                         "numeric_members": decoded["numeric_parameter_count"],
                         "resource_records": decoded["resource_parameter_count"],
-                        "struct_count": decoded["struct_count"]}
+                        "struct_count": decoded["struct_count"],
+                        "original_cb_count": decoded["constant_buffer_count"],
+                        "original_cb_used_bytes": decoded["constant_buffer_used_bytes"],
+                        "unity_common_array_counts": public_common_counts(prog),
+                        "original_name_index_count": len(p["m_NameIndices"]),
+                        "shaderlab_binding_verified": False}
+                phase = "compiled_dxbc_rdef"
+                try:
+                    compiled = rdef(code)
+                except ValueError as error:
+                    if str(error) != "missing unique original RDEF":
+                        raise
+                    # Reflection-stripped DXBC is authentic input, not proof of
+                    # absent cbuffers. Continue to inspect serialized Unity data.
+                    item["rdef_present"] = False
+                    compiled = None
+                else:
+                    item["rdef_present"] = True
                 if item["numeric_members"] or item["resource_records"] or item["struct_count"]:
                     item["classification"] = "members_need_exact_recovery"
                 else:
-                    item["classification"] = "memberless_original_cb_reflected"
                     phase = "original_memberless_groups"
                     original_groups = serialized_groups(raw)
-                    phase = "compiled_dxbc_rdef"
-                    compiled = rdef(code)
-                    phase = "constant_buffer_correlation"
-                    item.update(compare(original_groups, compiled))
+                    item["original_cb_sizes_only"] = sorted(original_groups.values())
+                    if compiled is None:
+                        item["classification"] = "compiled_rdef_stripped_original_cb_names_unresolved"
+                    else:
+                        item["classification"] = "memberless_original_cb_reflected"
+                        phase = "constant_buffer_correlation"
+                        item.update(compare(original_groups, compiled))
                 rows.append(item)
-        report.update(status="diagnostic_complete", stage_count=len(rows), stages=rows)
+        if len(rows) != 4:
+            raise ValueError("Original stage count changed")
+        report.update(status="diagnostic_complete", stage_count=len(rows), stages=rows,
+                      compiled_rdef_present_count=sum(row["rdef_present"] for row in rows),
+                      compiled_rdef_stripped_count=sum(not row["rdef_present"] for row in rows),
+                      original_shaderlab_cb_binding_verified=False,
+                      source_only_structural_diagnostic=True)
     except Exception as exc:
         report["failure_type"] = type(exc).__name__
         report["failure_phase"] = phase
