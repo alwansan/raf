@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "owner": "raft-20261103T145805Z-a7c2f809",
-  "status": "active",
+  "status": "completed",
   "hypothesis": "After OnDisable -> Suspend(true), the next AndroidTouchPointer.OnEnable does not clear suspended, swallowing all gameplay touch events.",
   "input_hashes": [
     "AndroidTouchPointer.cs blob c71b95e395a78bb7051d8b172e776d6b83f15e8d",
@@ -22,12 +22,12 @@
   "concurrency_group": null,
   "artifact_prefix": null,
   "budget": "Existing push CI CPU no LFS no Unity timeout 10m",
-  "run_url": "https://github.com/alwansan/raf/actions/runs/41659146129",
-  "source_sha": "bbecc37ebee01949300d508d0fd2b73315c3146b",
-  "result": "Initial test-only CI failed at harness compilation CS0128 local name; harness corrected at 34dcdb06; behavioral red not yet confirmed.",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41659802113",
+  "source_sha": "7517f30fd7010af11dac6444f7c0b3d3dadd5064",
+  "result": "First harness attempt41659146129 failed test-only duplicate-variable CS0128, corrected; true RED41659588079 behavior assertion reenable-clears-stale-suspension; source fix7517f30f, GREEN platform41659802113 17+446+53 tests and offline41659802250 original managed compile exit0/errorCodes{}.",
   "limitations": [
-    "Actual Unity Engine not executed",
-    "Test stubs input event dispatch and UI geometry"
+    "Tests extract production methods but run with C# Unity event doubles (not real Unity/phone)",
+    "APK80 predates fix; phone acceptance pending"
   ],
-  "next_step": "Verify proper red, patch runtime, green CI, document exact results."
+  "next_step": "Closed scoped A7 repair; run device test with newer approved build only."
 }
