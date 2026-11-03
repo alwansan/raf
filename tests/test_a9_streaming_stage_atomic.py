@@ -165,9 +165,9 @@ class AtomicStageTests(unittest.TestCase):
         from scripts import stage_original_streaming_assets as source_module
         original = self.source / "MasterBank.bank"
         original.write_bytes(
-            b"version https://git-lfs.github.com/spec/v1\\n"
+            b"version https://git-lfs.github.com/spec/v1\n"
             + b"oid sha256:" + source_module.MASTER_SHA.encode()
-            + b"\\nsize 101600960\\n"
+            + b"\nsize 101600960\n"
         )
         self.commit()
         # Fixture-only re-pin of a new synthetic Git blob; production original
