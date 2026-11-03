@@ -2,7 +2,7 @@
   "schema_version": 1,
   "owner": "raft-20261103T105031Z-4b175384",
   "issue_id": "HAPTICS-008",
-  "status": "pending_ci",
+  "status": "completed",
   "hypothesis": "Native stage() currently requires 5 banks and Data.rgd, but not the complete original Haptics WAV set; a new commit omitting a WAV could pass the stage although source integrity regresses.",
   "change": "Call A3 verified 29-source-WAV manifest audit strictly before any stage copying; expand 29-fixture synthetic stage tests and add isolated CPU CI",
   "evidence": [
@@ -18,5 +18,22 @@
     "No LFS hydrated banks",
     "Does not change or hide original WAVs",
     "Runtime adapter A5 separately validated and untouched"
-  ]
+  ],
+  "source_sha": "61f39303eadedbbbcc569d2ba1a9839742f6f377",
+  "workflow": ".github/workflows/raft-a3-haptics-staging-gate.yml",
+  "ci_run_id": 41623215003,
+  "ci_job_id": 125873922310,
+  "ci_conclusion": "success",
+  "synthetic_tests": {
+    "passed": 11,
+    "failed": 0,
+    "added": 5
+  },
+  "authentic_source_check": {
+    "files": 29,
+    "source_bytes": 32733104,
+    "git_blob_and_checkout_match": true,
+    "phone_obb_read_verified": false
+  },
+  "next_step": "HAPTICS-008 remains open, device test after coordinator-authorized candidate only"
 }
