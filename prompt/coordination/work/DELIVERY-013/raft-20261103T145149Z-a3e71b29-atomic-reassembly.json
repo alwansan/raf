@@ -2,8 +2,8 @@
   "schema_version": 1,
   "owner": "raft-20261103T145149Z-a3e71b29",
   "issue_id": "DELIVERY-013",
-  "status": "active",
-  "updated_at": "2026-11-03T14:51:49Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T15:00:00.710Z",
   "base_sha": "a43bbd3ea9ac40a8dd08594159367902548d083f",
   "hypothesis": "reassemble_android_delivery.py performs exists() check before Path.rename(), which overwrites pre-existing destination if another thread creates it during the gap, violating never-overwrite guarantee for APK/OBB/XAPK part recovery.",
   "intended_files": [
@@ -20,5 +20,13 @@
     "A9 atomic original StreamingAssets stage completed; separate files",
     "W1 graphics recovery ongoing separate"
   ],
-  "next_step": "Reproduce race red on real reassembler then fix atomic no-replace without extra multi-GB copy."
+  "next_step": "Use Termux home for unsupported Android shared storage; scope completed; real shader and water blockers remain open.",
+  "result": "POSIX Path.rename overwrite RED CI41658379104; os.link atomic final output fix c568e6c6; exact-source GREEN CI41658736942 4+13 pass and final CI41658894880 5+13 pass; unsupported hardlink refusal synthetic checked.",
+  "last_commit": "c568e6c6c090c2ade8d15f1c5d70d061ba66940e",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41658379104",
+    "https://github.com/alwansan/raf/actions/runs/41658736942",
+    "https://github.com/alwansan/raf/actions/runs/41658894880",
+    "docs/A3_RELEASE_REASSEMBLY_ATOMIC_2026-11-03.md"
+  ]
 }
