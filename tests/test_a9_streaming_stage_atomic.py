@@ -119,5 +119,35 @@ class AtomicStageTests(unittest.TestCase):
         self.assert_no_staged_partials()
 
 
+    def test_committed_original_bank_coedit_does_not_rebase_trust(self):
+        # Both source and mutable HEAD agree; that is not proof of the
+        # original ZIP game's audio bytes.
+        (self.source / "VO_npc_english.bank").write_bytes(b"synthetic new committed bank")
+        self.commit()
+        with self.assertRaisesRegex(ValueError, "original root .*identity"):
+            stage(self.repo, self.project, self.report, apply=True,
+                  haptics_manifest_blob_sha=self.haptics_manifest_blob_sha)
+        self.assertFalse(self.project.exists())
+        self.assertFalse(self.report.exists())
+
+    def test_committed_original_data_rgd_coedit_does_not_rebase_trust(self):
+        (self.source / "Data.rgd").write_bytes(b"synthetic different save payload")
+        self.commit()
+        with self.assertRaisesRegex(ValueError, "original root .*identity"):
+            stage(self.repo, self.project, self.report, apply=True,
+                  haptics_manifest_blob_sha=self.haptics_manifest_blob_sha)
+        self.assertFalse(self.project.exists())
+        self.assertFalse(self.report.exists())
+
+    def test_unknown_committed_root_asset_fails_closed(self):
+        (self.source / "NotOriginal.data").write_bytes(b"synthetic added root file")
+        self.commit()
+        with self.assertRaisesRegex(ValueError, "original root .*identity"):
+            stage(self.repo, self.project, self.report, apply=True,
+                  haptics_manifest_blob_sha=self.haptics_manifest_blob_sha)
+        self.assertFalse(self.project.exists())
+        self.assertFalse(self.report.exists())
+
+
 if __name__ == "__main__":
     unittest.main()
