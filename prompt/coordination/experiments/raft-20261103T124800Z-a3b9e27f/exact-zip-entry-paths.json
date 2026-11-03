@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T124800Z-a3b9e27f",
+  "issue_id": "DELIVERY-012",
+  "status": "completed",
+  "hypothesis": "PurePosixPath drops raw '.' and empty ZIP components, masking noncanonical jar member names from the APK/OBB audit.",
+  "baseline_source_sha": "887c50be279e72a2620c7f59b40a9b0740f9d798",
+  "red_source_sha": "5d7f2e3afc5bbd4c48c6a40d3286407e3608d33e",
+  "green_source_sha": "7faf0a8bb557e59131a92a062bd2571c98547b8c",
+  "red_ci_run_id": 41641061681,
+  "red_ci_job_id": 125934396072,
+  "red_result": {
+    "conclusion": "failure_as_expected",
+    "tests": 8,
+    "passed": 3,
+    "failed": 5,
+    "reason": "ValueError not raised for five malformed ZIP entry spellings"
+  },
+  "green_ci_run_id": 41641182243,
+  "green_ci_job_id": 125934812340,
+  "green_result": {
+    "conclusion": "success",
+    "new_tests": {
+      "passed": 8,
+      "failed": 0
+    },
+    "existing_expansion_and_haptics_tests": {
+      "passed": 13,
+      "failed": 0
+    }
+  },
+  "additional_same_sha_ci": [
+    {
+      "id": 41641182249,
+      "conclusion": "success",
+      "topic": "HAPTICS-008"
+    },
+    {
+      "id": 41641182147,
+      "conclusion": "success",
+      "topic": "reconstruction unit preflight"
+    },
+    {
+      "id": 41641182250,
+      "conclusion": "success",
+      "topic": "offline platform adapter"
+    }
+  ],
+  "workflow_path": ".github/workflows/raft-a3-zip-member-paths.yml",
+  "concurrency_group": "raft-a3-zip-member-paths-${{ github.run_id }}",
+  "budget": "6 minutes, CPU only, no LFS, no Unity",
+  "input_hashes": [],
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_a3_zip_entry_paths.py -v",
+    "python3 -m unittest discover -s tests -p test_android_expansion_audit.py -v"
+  ],
+  "negative_controls": [
+    "dot component in OBB entry",
+    "double slash in OBB entry",
+    "dot component in APK entry",
+    "double slash in APK entry",
+    "dot component in unrelated archive entry"
+  ],
+  "positive_controls": [
+    "normal member paths pass",
+    "directory marker trailing slash accepted",
+    "parent traversal remains rejected"
+  ],
+  "result": "Proven source preflight false acceptance fixed; 21/21 synthetic checks on green SHA",
+  "limitations": [
+    "No original APK or OBB audited",
+    "No Unity compile/Android mounted OBB",
+    "Not evidence of restored shader or water",
+    "No full candidate audits"
+  ],
+  "next_step": "Keep actual rendering/world/device blockers open. Coordinator future authorized build uses existing audit."
+}
