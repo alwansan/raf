@@ -1,0 +1,76 @@
+name: Raft W1 private Depth Copy ShaderLab reconstruction (CPU only)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-w1-depth-wrapper.yml'
+      - 'scripts/w1_build_depth_wrapper.py'
+      - 'scripts/w1_depth_shaderlab.py'
+      - 'tests/test_w1_depth_shaderlab.py'
+permissions:
+  contents: read
+concurrency:
+  group: raft-w1-depth-shaderlab-wrapper-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  recover:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+            Raft/Raft_Data
+      - name: Validate segment routing before original downloads
+        run: |
+          python3 -m unittest discover -s tests -p test_w1_depth_shaderlab.py -v
+      - name: Disk and source pointer gate
+        run: |
+          python3 - <<'PY'
+          import shutil
+          from pathlib import Path
+          from scripts.verify_targeted_lfs_compute_sources import verify_sources
+          from scripts.w1_recover_graphics_programs import OWNERS
+          assert shutil.disk_usage('.').free > 10 * 1024**3
+          print(verify_sources(Path('Raft/Raft_Data'), pointers_only=True, expected=OWNERS))
+          PY
+      - name: Reuse authenticated two-owner LFS payloads on retries
+        uses: actions/cache@v4
+        with:
+          path: .git/lfs/objects
+          key: w1-graphics-87493249-0498f738-v1
+      - name: Hydrate only two shader owners (227511628 bytes)
+        env:
+          GIT_LFS_SKIP_SMUDGE: '1'
+        run: |
+          git lfs install --local
+          git lfs pull --include='Raft/Raft_Data/resources.assets,Raft/Raft_Data/sharedassets0.assets' --exclude='' origin
+          python3 - <<'PY'
+          from pathlib import Path
+          from scripts.verify_targeted_lfs_compute_sources import verify_sources
+          from scripts.w1_recover_graphics_programs import OWNERS
+          print(verify_sources(Path('Raft/Raft_Data'), expected=OWNERS))
+          PY
+      - name: Install bounded CPU serialization and translation tools
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
+          dpkg-query -W vkd3d-compiler spirv-tools spirv-cross glslang-tools
+      - name: Decode original parameters and reconstruct private ShaderLab wrapper
+        run: timeout 600s python3 -m scripts.w1_build_depth_wrapper --source Raft/Raft_Data --out "$RUNNER_TEMP/w1-depth-wrapper-summary.json"
+      - name: Retain aggregate recovery evidence only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w1-depth-wrapper-aggregate-${{ github.sha }}
+          path: ${{ runner.temp }}/w1-depth-wrapper-summary.json
+          if-no-files-found: ignore
+          retention-days: 7
+
+
