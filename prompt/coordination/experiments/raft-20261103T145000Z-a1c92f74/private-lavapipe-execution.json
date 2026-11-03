@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T145000Z-a1c92f74",
+  "client_label": "A1",
+  "issue_id": "WATER-001",
+  "experiment_id": "private-lavapipe-execution",
+  "status": "completed",
+  "updated_at": "2026-11-03T15:09:00.374Z",
+  "hypothesis": "Structural SPIR-V op/SSA drift and storage-image format enum drift may or may not change actual generated FFT numeric output. Execute original and roundtrip compute shaders with identical descriptors and inputs on CPU software Vulkan.",
+  "source_sha": "3406dd121ebeca30ad344ccd8f71278fe0505310",
+  "source_paths": [
+    "scripts/a1_fft_vulkan_cpu.cpp",
+    "scripts/probe_original_fft_software_vulkan.py",
+    "tests/test_probe_original_fft_software_vulkan.py",
+    ".github/workflows/raft-a1-fft-software-vulkan.yml"
+  ],
+  "ci": {
+    "first_canary": "https://github.com/alwansan/raf/actions/runs/41658674936",
+    "first_original": "https://github.com/alwansan/raf/actions/runs/41659199363",
+    "final": "https://github.com/alwansan/raf/actions/runs/41660159285",
+    "final_jobs": {
+      "synthetic": 126000930338,
+      "original": 126001151314
+    },
+    "final_status": "completed/success"
+  },
+  "original": {
+    "owner": "sharedassets0.assets",
+    "bytes": 115978112,
+    "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "path_id": 2456,
+    "object_sha256": "9d934f5c99183c6df5cf2f1fefc9d3e5ec4bce5da5f96a86e4c02910d5322247",
+    "programs": 20,
+    "compiled_program_positions_not_verified_unity_kernel_indices": true
+  },
+  "executor": {
+    "backend": "Mesa lavapipe CPU Vulkan",
+    "format": "VK_FORMAT_R32G32B32A32_SFLOAT",
+    "extent": [
+      1024,
+      1024
+    ],
+    "descriptor_set": 0,
+    "sampled_bindings": [
+      0,
+      1
+    ],
+    "storage_binding": 2,
+    "scenarios": [
+      {
+        "seed": 0,
+        "dispatch_groups_y": 1
+      },
+      {
+        "seed": 19,
+        "dispatch_groups_y": 1
+      },
+      {
+        "seed": 257,
+        "dispatch_groups_y": 2
+      }
+    ],
+    "programs_executed": 20,
+    "total_comparisons": 60,
+    "matching_write_coverage_and_output": 60,
+    "inconclusive": 0,
+    "max_abs_difference": 0,
+    "max_relative_l2": 0,
+    "synthetic_wrong_arithmetic_detected": true
+  },
+  "limitations": [
+    "One RGBA32F backing format, not original four-format Unity cache",
+    "Three deterministic workloads do not establish universal mathematical equality",
+    "No original runtime Unity kernel index, full water pass or Adreno device execution",
+    "Original bytes only in CI temp; never publish shaders or output pixels"
+  ],
+  "readiness": "NOT_READY 0/3",
+  "next_step": "Exercise source-authenticated RGHalf/RGFloat/ARGBHalf/ARGBFloat variants, Vulkan image-format binding conditions and real two-pass FFT before any authored shader installation."
+}
