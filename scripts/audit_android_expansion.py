@@ -194,15 +194,13 @@ if __name__ == "__main__":
     parser.add_argument("--report", type=Path)
     parser.add_argument("--haptics-manifest", type=Path,
                         help="Strict original 29-WAV final OBB jar path/Git blob audit")
-    parser.add_argument("--haptics-manifest-blob",
-                        default=PINNED_ORIGINAL_HAPTICS_MANIFEST_BLOB_SHA,
-                        help="Audited original manifest Git blob SHA, never read from a mutable manifest")
     parser.add_argument("--verify-crc", action="store_true",
                         help="Stream-validate APK and OBB ZIP member CRCs")
     args = parser.parse_args()
+    # Production CLI must not accept a replacement for the original manifest
+    # pin. Python API callers may explicitly inject fixture pins in unit tests.
     report = audit_companion(args.apk, args.obb, verify_crc=args.verify_crc,
-                             haptics_manifest=args.haptics_manifest,
-                             haptics_manifest_blob_sha=args.haptics_manifest_blob)
+                             haptics_manifest=args.haptics_manifest)
     if args.report:
         args.report.parent.mkdir(parents=True, exist_ok=True)
         args.report.write_text(json.dumps(report, sort_keys=True, indent=2) + "\n")
