@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "owner": "raft-20261103T095700Z-a2b31f4d",
-  "status": "active",
+  "status": "completed",
   "hypothesis": "Exact Settings TypeDef and FieldDef metadata token order with custom attributes/types, cross-checked against original MonoScript class identity, can distinguish nested serialization candidates and reveal why 14 CSharp field declaration candidates have 45 disjoint apparent PPtr windows.",
   "input_hashes": [
     "ZIP2 pinned source:15964ea8f246b6e076ce26b60931ee2e1a9a2385",
@@ -13,7 +13,9 @@
   "commands": [
     "dotnet run --project tools/a2-settings-metadata -- original-zip2/Raft/Raft_Data/Managed/Assembly-CSharp.dll PRIVATE_JSON",
     "python3 -m unittest discover -s tests -p test_probe_a2_settings_metadata_contract.py -v",
-    "python3 -m scripts.probe_a2_settings_metadata_contract --source original-zip2/Raft/Raft_Data --metadata PRIVATE_JSON"
+    "python3 -m scripts.probe_a2_settings_metadata_contract --source original-zip2/Raft/Raft_Data --metadata PRIVATE_JSON",
+    "dotnet run --configuration Release --project tools/a2-settings-metadata/SettingsMetadata.csproj -- original-zip2/Raft/Raft_Data/Managed/Assembly-CSharp.dll PRIVATE_JSON",
+    "python3 -m scripts.probe_a2_settings_metadata_contract --source original-zip2/Raft/Raft_Data --metadata PRIVATE_JSON --decompiled PRIVATE_CSharp9"
   ],
   "expected_signal": "Exact original managed Settings TypeDef identity and metadata field ordering, private types grouped by MonoScript vs enum vs struct vs array, field tokens/order hashed; validated fixed original scene Settings class linkage and source SHA. No original names or bodies logged.",
   "negative_controls": [
@@ -28,13 +30,17 @@
   "concurrency_group": "raft-a2-settings-metadata-${{ github.ref }}-${{ github.sha }}",
   "artifact_prefix": null,
   "budget": "CPU-only ubuntu24.04 max10 min; pinned sparse ZIP2 four small blobs, no LFS or Unity; Mono.Cecil dependency pinned 0.11.6 from NuGet.",
-  "run_url": null,
-  "source_sha": null,
-  "result": null,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41737541506",
+  "source_sha": "243771a29db8d5227278f552274b5c3bab76fa2b",
+  "result": "CI41737541506 SUCCESS 10/10 synthetic tests and authentic SHA-pinned original ZIP2 managed+scene data. Exact top-level MonoScript TypeDef identity, 21 FieldDefs/13 metadata-eligible and 14 source candidates with one lexical false. All 13 source and managed names/order agree. Runtime Unity binary offsets and UI canvas not established.",
   "limitations": [
     "Full Unity custom serialization TypeTree/Prefab linkage not yet known; metadata field types alone do not prove binary offsets.",
     "Do not log proprietary source names, object names, field bodies or binary bytes.",
-    "No native build or release in this session."
+    "No native build or release in this session.",
+    "16 managed same-simple-name Settings types; only exact top-level TypeDef identity matches original MonoScript namespace. Do not use class name alone.",
+    "One CSharp9 source lexical candidate has no managed FieldDef; 13 metadata-eligible fields are not automatically 13 Unity serialized PPtrs.",
+    "Managed metadata field ordering is not Unity custom TypeTree, array lengths or active Android Settings panel CanvasScaler linkage."
   ],
-  "next_step": "Use original Unity MonoScript assembly/namespace as exact TypeDef identity, privately inspect Cecil metadata fields and collection element types, reject source-to-byte offsets until verified."
+  "next_step": "Validate original Unity serialized custom fields for 13 managed eligible entries and native array lengths; map displayed Settings panel→Canvas/Scaler, then test Android before runtime patch.",
+  "updated_at": "2026-11-03T23:17:50.746Z"
 }
