@@ -40,16 +40,46 @@ def select_original_source(source: Path, name: str, expected_sha256: str):
         raise ValueError('Require exactly one SHA-pinned original source: ' + name)
     return found[0]
 
+
+def install_adapted_originals(changed, traces):
+    """Preflight all adapted originals before altering any private ILSpy C#.
+
+    Undo attempted original-source writes if I/O fails mid-install. This does
+    not promise atomic recovery against concurrent filesystem mutations or
+    failures in later harness-generation steps.
+    """
+    plans = []
+    for name, (path, text) in changed.items():
+        if path.is_symlink() or not path.is_file():
+            raise ValueError('Require regular original source before instrumentation: ' + name)
+        before = path.read_bytes()
+        if fingerprint(before.decode('utf-8-sig')) != PINS[name]:
+            raise ValueError('Original source changed after SHA selection: ' + name)
+        result = instrument(name, text, traces) if name in traces['sources'] else text
+        plans.append((path, before, result.encode('utf-8')))
+
+    attempted = []
+    try:
+        for path, before, result in plans:
+            attempted.append((path, before))
+            path.write_bytes(result)
+            if path.read_bytes() != result:
+                raise ValueError('Private adapted source write mismatch: ' + path.name)
+    except Exception:
+        for path, before in reversed(attempted):
+            path.write_bytes(before)
+        raise
+
+
 def prepare(source, managed, runtime, output):
     changed = {}
     for name in PINS:
         path, text = select_original_source(source, name, PINS[name])
         if name == 'SaveAndLoad': text = adapt_paths(text)
         changed[name] = (path, adapt(name, text))
-    output.mkdir(parents=True, exist_ok=True)
     traces = json.loads(Path('config/runtime-operation-traces.json').read_text())
-    for name, (path, text) in changed.items():
-        path.write_text(instrument(name, text, traces) if name in traces['sources'] else text)
+    install_adapted_originals(changed, traces)
+    output.mkdir(parents=True, exist_ok=True)
     refs = '\n'.join('<Reference Include="' + html.escape(p.stem) + '"><HintPath>' + html.escape(str(p.resolve())) + '</HintPath><Private>false</Private></Reference>'
                      for p in sorted(managed.glob('*.dll')) if p.name != 'Assembly-CSharp.dll')
     # This mirrors the established original managed compatibility diagnostic.
