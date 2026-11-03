@@ -1,27 +1,35 @@
 {
   "schema_version": 1,
   "owner": "raft-20261103T100042Z-afcedabb",
-  "status": "planned",
+  "status": "completed",
   "hypothesis": "Local save helper path safety fails for an unusual but valid path; isolate without changing original RGD serializer",
-  "input_hashes": [],
-  "commands": [
-    "dotnet run --project android-port/Tests/Smoke/RaftAndroid.Platform.Smoke.csproj"
+  "input_hashes": [
+    "android-port/Runtime/Platform/LocalSavePaths.cs blob fc4600febb672e5a86f8cfa3030d98ffaf8cef0f",
+    "android-port/Tests/Smoke/Program.cs blob a5b6211aceba4c27f91a3a59461d02c0917a1c45"
   ],
-  "expected_signal": "Reproducible local sandbox escape or contract violation with negative case",
+  "commands": [
+    "Python3 tempfile/pathlib: create worlds/redirect symlink to outside; write synthetic world.sav via linked directory; confirmed outside write",
+    "dotnet run --project android-port/Tests/Smoke/RaftAndroid.Platform.Smoke.csproj --configuration Release --nologo (GitHub Actions runner)"
+  ],
+  "expected_signal": "Fail closed for existing world/profile directory symlinks without changing normal storage paths",
   "negative_controls": [
-    "Ordinary world path remains stable",
-    "Unsafe world IDs rejected",
-    "Original .rgd serializer never touched"
+    "Valid world path and new directory fixture retained in existing smoke suite",
+    "Unsafe ../ and slash world IDs remain rejected",
+    "Two linked-parent/wold smoke negatives added",
+    "Original RGD sources and save data untouched"
   ],
   "workflow_path": ".github/workflows/raft-android-platform-tests.yml",
   "concurrency_group": null,
   "artifact_prefix": null,
   "budget": "Local dotnet; optional existing CPU-only CI on path changes, no new LFS",
-  "run_url": null,
-  "source_sha": null,
-  "result": null,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41617053603",
+  "source_sha": "0fa98e71fbe5c06a1e92cae3d93fff89fae2fec0",
+  "result": "CI COMPLETED SUCCESS all steps; 2 new Linux .NET symlink negative tests; source-only helper change confirmed in commit diff",
   "limitations": [
-    "Platform smoke does not prove original game SaveAndLoad, Unity, or Android phone"
+    "Not original game SaveAndLoad integration or .rgd path proof",
+    "No Unity/Android device file operations tested",
+    "Guard does not establish safety against a hostile concurrent symlink swap",
+    "Intentionally does not reject symlinks in caller-provided root ancestors"
   ],
-  "next_step": "Run isolated test and patch if legitimate"
+  "next_step": "Trace authentic local game save/load integration rather than upgrading readiness"
 }
