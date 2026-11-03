@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T230700Z-a3e8b74f",
+  "display_name": "A3",
+  "issue_id": "RENDER-002",
+  "session_id": "a3-20261103T230700Z-c64da0f2",
+  "status": "active",
+  "updated_at": "2026-11-03T23:07:00Z",
+  "base_sha": "f6adf9361999146c730f1d8b6b959dcb59c0977a",
+  "resumed_from": "raft-20261103T224800Z-a3c41e7b",
+  "hypothesis": "Shared shader restorer scripts/restore_tmp_shaders.py is used by authenticated TMP v3.0.6, PostFX v1 and Volumetric shader recovery. It copies fallback/include paths with write_bytes before originals and can leave partially published programs on interrupted I/O; it also follows symlinked Assets parents. An incomplete restore can make some effects/colours regress while still retaining .meta.",
+  "intended_files": [
+    "scripts/restore_tmp_shaders.py",
+    "tests/test_a3_vendor_shader_restore_transaction.py",
+    ".github/workflows/raft-a3-vendor-shader-restore-transaction.yml",
+    "prompt/coordination/clients/raft-20261103T230700Z-a3e8b74f/",
+    "prompt/coordination/work/RENDER-002/raft-20261103T230700Z-a3e8b74f-vendor-shader-restore-transaction.json",
+    "prompt/coordination/experiments/raft-20261103T230700Z-a3e8b74f/",
+    "prompt/coordination/discussions/RENDER-002/",
+    "docs/A3_VENDOR_SHADER_RESTORE_TRANSACTION_2026-11-04.md",
+    "prompt/STATUS.md",
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+  ],
+  "related_work": [
+    "A3 previous scoped DELIVERY-014 completed CI41734812562",
+    "A3 builtin path tests CI41735986426 and W1/A14 current exact builtin restore are separate code paths",
+    "W1 authentic shader and FFT source, W2/W3 materials ongoing; do not edit their paths"
+  ],
+  "excluded_files": [
+    "scripts/restore_builtin_shaders.py",
+    "scripts/w1_depth_shaderlab.py",
+    "Raft/**",
+    "zip2/**",
+    "android-port/**",
+    ".github/raft-native-build-request.json"
+  ],
+  "safety": "Only vendor shader restoration production logic + isolated CPU synthetic tests; no LFS, Unity, native requests/APK/OBB/XAPK, Releases, tasks, shader source dump, or protected branch changes. Fresh HEAD expected_sha lease."
+}

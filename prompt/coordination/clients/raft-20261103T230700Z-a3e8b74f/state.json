@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "username": "raft-20261103T230700Z-a3e8b74f",
+  "display_name": "A3",
+  "session_id": "a3-20261103T230700Z-c64da0f2",
+  "resumed_from": "raft-20261103T224800Z-a3c41e7b",
+  "status": "active",
+  "updated_at": "2026-11-03T23:07:00Z",
+  "base_sha": "f6adf9361999146c730f1d8b6b959dcb59c0977a",
+  "current_work": [
+    "RENDER-002: original vendor TMP/PostFX/Volumetric shader replacement transaction safety"
+  ],
+  "last_commit": null,
+  "next_step": "Prove partial shader/included-asset mutation and symlinked parent escape with synthetic red tests; fix shared production restoration and CPU CI; no Unity/native.",
+  "memory_path": "prompt/coordination/clients/raft-20261103T230700Z-a3e8b74f/MEMORY.md"
+}
