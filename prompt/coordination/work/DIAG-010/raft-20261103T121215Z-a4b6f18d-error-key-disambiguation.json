@@ -2,9 +2,9 @@
   "schema_version": 1,
   "owner": "raft-20261103T121215Z-a4b6f18d",
   "issue_id": "DIAG-010",
-  "status": "planned",
+  "status": "completed",
   "base_sha": "bc19fd12a889a118cd576a1d1e8a6b4a7a8dc3b7",
-  "updated_at": "2026-11-03T12:12:15Z",
+  "updated_at": "2026-11-03T12:28:09.208Z",
   "scope": "Protect RepeatedDiagnosticMessages composite (operation,detail) identity against separator collisions",
   "hypothesis": "First(operation='save\\nload',detail='stack') and First(operation='save',detail='load\\nstack') use same key; second first stack is hidden",
   "intended_files": [
@@ -19,5 +19,14 @@
   "concurrency": "A1, A2, A3 and A6 work in unrelated files. Prior A4 diagnostic work completed. Recheck file sha before writing.",
   "test": "dotnet run --project android-port/Tests/Diagnostics/Diagnostics.csproj --configuration Release --nologo",
   "workflow": ".github/workflows/raft-persistent-diagnostics-tests.yml",
-  "next_step": "Add deterministic regression test; record red CI; fix composite key; record green CI; finalize scopes and evidence"
+  "next_step": "On-device logging/graphics/world acceptance not established; game NOT_READY.",
+  "red_sha": "1c5ce3a3edce9ccf00d58a47e482aebc899cc037",
+  "fix_sha": "dd43d3a24059994bdad170f06e0df453bfda2a3c",
+  "result": "RED 41634437815 failed as expected at check 271. GREEN 41635036073 succeeded 278 C# tests. Same-SHA platform and original managed CI also passed.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41634437815",
+    "https://github.com/alwansan/raf/actions/runs/41635036073",
+    "https://github.com/alwansan/raf/actions/runs/41635035671",
+    "https://github.com/alwansan/raf/actions/runs/41635035562"
+  ]
 }
