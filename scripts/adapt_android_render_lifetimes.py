@@ -119,6 +119,37 @@ def isolate_player_start_fmod(normalized):
 
 
 
+def isolate_player_start_emitters(normalized):
+    """Do not let the two earlier optional emitter.Play calls abort player setup."""
+    signature = 'private void Start()'
+    start, end = body_bounds(normalized, signature)
+    body = normalized[start:end]
+    pattern = re.compile(r'(?m)^(?P<indent>[ \t]*)(?P<receiver>[A-Za-z_]\w*)\.Play\(\);[ \t]*$')
+    calls = list(pattern.finditer(body))
+    settings = re.search(r'\bsettings\s*=', body)
+    movement = re.search(r'\bactionMove\s*=', body)
+    if len(calls) != 2 or settings is None or movement is None:
+        raise ValueError('Original player early emitter count or setup changed')
+    for call in calls:
+        if call.start() >= min(settings.start(), movement.start()) or not re.search(
+                r'\bStudioEventEmitter\s+' + re.escape(call['receiver']) + r'\s*;', normalized):
+            raise ValueError('Original player early emitter type/order changed')
+    changed = body
+    for call in reversed(calls):
+        indent = call['indent']
+        statement = call[0]
+        guarded = (indent + '#if UNITY_ANDROID && !UNITY_EDITOR\n' +
+                   indent + 'try\n' + indent + '{\n' + indent + '#endif\n' + statement + '\n' +
+                   indent + '#if UNITY_ANDROID && !UNITY_EDITOR\n' + indent + '}\n' +
+                   indent + 'catch (FMODUnity.EventNotFoundException __raftMissingFallSound)\n' +
+                   indent + '{\n' +
+                   indent + '    RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("audio", "player_fall_emitter_missing_fmod_event",\n' +
+                   indent + '        __raftMissingFallSound.ToString(), true);\n' +
+                   indent + '}\n' + indent + '#endif')
+        changed = changed[:call.start()] + guarded + changed[call.end():]
+    return normalized[:start] + changed + normalized[end:]
+
+
 def isolate_audio_settings_vca(normalized):
     """Catch missing VCA at the six original assignments, not all settings."""
     declaration = re.compile(
@@ -194,6 +225,7 @@ using RaftAndroidLegacyInput = UnityEngine.Input;
         normalized = isolate_audio_settings_vca(normalized)
     elif stem == 'PersonController':
         normalized = isolate_player_start_fmod(normalized)
+        normalized = isolate_player_start_emitters(normalized)
     elif stem == 'SoundManager':
         # Original scene JoinGame is broadcast before WorldHasBeenRecieved.
         # Missing FMOD events must remain visible, but cannot terminate this

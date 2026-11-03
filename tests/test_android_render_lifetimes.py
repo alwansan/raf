@@ -1,5 +1,5 @@
 import unittest
-from scripts.adapt_android_render_lifetimes import protect_temporaries,adapt,isolate_player_start_fmod,isolate_audio_settings_vca
+from scripts.adapt_android_render_lifetimes import protect_temporaries,adapt,isolate_player_start_fmod,isolate_audio_settings_vca,isolate_player_start_emitters
 class LifetimeTests(unittest.TestCase):
     def test_single_failure_path_has_finally(self):
         s='\tTemporaryRenderTexture temporary = cache.GetTemporary();\n\tWork(temporary);\n\ttemporary.Dispose();\n'
@@ -81,8 +81,15 @@ class PlayerAudioInitializationTests(unittest.TestCase):
         from unittest.mock import patch
         original = (
             "class PersonController {\n"
+            "    StudioEventEmitter fallLocal;\n"
+            "    StudioEventEmitter fallRemote;\n"
             "    private void Start()\n"
             "    {\n"
+            "        if (local) {\n"
+            "            fallLocal.Play();\n"
+            "        } else {\n"
+            "            fallRemote.Play();\n"
+            "        }\n"
             "        soundA = RuntimeManager.CreateInstance(eventOne);\n"
             "        soundB = RuntimeManager.CreateInstance(eventTwo);\n"
             "        settings = RestoreSettings();\n"
@@ -94,6 +101,7 @@ class PlayerAudioInitializationTests(unittest.TestCase):
                         {'PersonController': (hashlib.sha256(original.encode()).hexdigest(), 0)}):
             result = adapt('PersonController', original)
         self.assertEqual(result.count("catch (FMODUnity.EventNotFoundException __raftMissingPlayerSound)"), 2)
+        self.assertEqual(result.count("player_fall_emitter_missing_fmod_event"), 2)
         self.assertEqual(result.count("player_start_missing_fmod_event"), 2)
         self.assertEqual(result.count("RuntimeManager.CreateInstance("), 2)
         self.assertEqual(result.count("settings = RestoreSettings();"), 1)
@@ -102,6 +110,28 @@ class PlayerAudioInitializationTests(unittest.TestCase):
         self.assertNotIn("catch (System.Exception", result)
         self.assertNotIn("WorldHasBeenRecieved", result)
         self.assertNotIn("return;", result)
+
+    def test_early_emitters_preserve_desktop_source_and_reject_drift(self):
+        original = ("class P {\nStudioEventEmitter a;\nStudioEventEmitter b;\n"
+                    "private void Start() {\nif (local) {\na.Play();\n} else {\nb.Play();\n}\n"
+                    "settings = Load();\nactionMove = Move();\n}\n}\n")
+        guarded = isolate_player_start_emitters(original)
+        desktop = []
+        android = False
+        for line in guarded.splitlines(keepends=True):
+            if line.strip() == "#if UNITY_ANDROID && !UNITY_EDITOR":
+                android = True
+            elif line.strip() == "#endif":
+                android = False
+            elif not android:
+                desktop.append(line)
+        self.assertEqual("".join(desktop), original)
+        self.assertNotIn("catch (System.Exception", guarded)
+        for changed in (original.replace("b.Play();", ""),
+                        original.replace("StudioEventEmitter b;", "Other b;"),
+                        original.replace("a.Play();", "settings = Load();\na.Play();")):
+            with self.assertRaises(ValueError):
+                isolate_player_start_emitters(changed)
 
     def test_broken_call_shape_or_changed_initialization_order_fails_closed(self):
         base = (
