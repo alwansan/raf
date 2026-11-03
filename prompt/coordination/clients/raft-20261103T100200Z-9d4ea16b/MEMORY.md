@@ -30,3 +30,16 @@ Trace named local world and .rgd source files and test a concrete invariant; do 
 
 Reopened this completed identity only after the owner's explicit Continue; new session_id a10-20261103T1055Z-92bdfa67.
 Reviewed live docs, HEAD, Actions, clients/work and original CL historical logs; previously published SaveAndLoad selector fix still present. New independent scope: exact SHA-pinned source selection in the original private no-LFS integration harness. A8 DIAG-010, A1 WATER, A2 DISPLAY, A3 HAPTICS are active separately; their files are excluded. Work plan: prompt/coordination/work/LOCAL-005/raft-20261103T100200Z-9d4ea16b-offline-original-sha-selection.json. No scheduled/native release actions.
+
+
+## A10 resumed SHA source selection — final verified CI
+
+- Reopened previous A10 completed record with new session_id `a10-20261103T1055Z-92bdfa67` after owner said Continue; branch HEAD and every nonterminal Actions reviewed, CL historical 2 November sessions and old APK80 distinguished from later source.
+- Deconflicted from other agents: A8 DIAG-010, A1 WATER-001, A2 DISPLAY-003, A3 HAPTICS-008, A6/A9 separate local save classes. New A10 scope was private `verify_android_offline_candidate.prepare` selection rather than the previously completed `adapt_original_save_paths` selector.
+- Fixed basename-only selection to select **exactly one SHA-pinned original game C#** at [29128ab](https://github.com/alwansan/raf/commit/29128ab789d5cf8a26a7e01d3ae5a9a39f331848). Source may be in flat ILSpy project; it is not required to contain `Assembly-CSharp` in its path. SDK basename collisions do not cause false failure. Missing/duplicate exact sources, symlink files refused; UTF8 BOM and CRLF preserved. No original SHA pins weakened.
+- Added six synthetic negative/positive tests [fbc95905](https://github.com/alwansan/raf/commit/fbc95905d690c83d809183b2ad09c0e5bf1d010b) and CI path wiring [031236bb](https://github.com/alwansan/raf/commit/031236bb5f4d4aeefc5b6ddc4b4de5188082920a).
+- [Run41624212828](https://github.com/alwansan/raf/actions/runs/41624212828), job125877336792 **COMPLETED SUCCESS** on 031236bb: 6/6 new tests passed; 12 original SHA-verified game sources recovered privately, local RPC and profile identity tests passed, managed compatibility compilation exit0 with zero errors. Original content was never published or altered. Earlier run41623949396 also SUCCESS on source29128 before test wiring.
+- GitHub optimistic ref mutations briefly returned GraphQL UNKNOWN and concurrent STATUS SHA conflicts 409; each recovered after re-reading HEAD/file content, rebasing/merging and without force or cancellation. Shared status/handoff append-only updates succeeded.
+- A10 subtask completed, **NOT_READY** remains for original water/render/FFT and overall LOCAL-005 integration and phone acceptance, candidate absent, 0/3 independent complete readiness audits. No Unity/APK/OBB/XAPK/Release, secrets, task changes, .rgd/meta/GUID/Mouse0/Xbox change.
+- For next explicit Continue, re-read current HEAD + coordination first; do not treat the older source/game release as phone evidence.
+
