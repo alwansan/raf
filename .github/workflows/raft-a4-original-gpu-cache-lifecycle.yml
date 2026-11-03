@@ -8,6 +8,8 @@ on:
       - 'tests/test_a4_original_gpu_cache_lifecycle.py'
       - 'scripts/a4_gpu_cache_owner_callpaths.py'
       - 'tests/test_a4_gpu_cache_owner_callpaths.py'
+      - 'scripts/a4_gpu_cache_destroy_callgraph.py'
+      - 'tests/test_a4_gpu_cache_destroy_callgraph.py'
   workflow_dispatch: {}
 
 permissions:
@@ -35,6 +37,7 @@ jobs:
           set -euo pipefail
           python3 -m unittest discover -s tests -p 'test_a4_original_gpu_cache_lifecycle.py' -v
           python3 -m unittest discover -s tests -p 'test_a4_gpu_cache_owner_callpaths.py' -v
+          python3 -m unittest discover -s tests -p 'test_a4_gpu_cache_destroy_callgraph.py' -v
 
   original-zip2:
     needs: synthetic
@@ -101,6 +104,8 @@ jobs:
           timeout 30s python3 -m scripts.a4_original_gpu_cache_lifecycle \
             --source-root "$RUNNER_TEMP/a4-csharp9"
           timeout 30s python3 -m scripts.a4_gpu_cache_owner_callpaths \
+            --source-root "$RUNNER_TEMP/a4-csharp9"
+          timeout 30s python3 -m scripts.a4_gpu_cache_destroy_callgraph \
             --source-root "$RUNNER_TEMP/a4-csharp9"
           echo "RAFT_A4_PRIVACY original_source_upload=false original_source_text_logged=false"
           # Original private CSharp9 files remain runner-local only.
