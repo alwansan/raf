@@ -40,6 +40,19 @@ struct TouchState {
     public TouchPhase phase;
 }
 class StateEvent {}
+class Mouse { public bool added = true; }
+static class Input { public static bool simulateMouseWithTouches; }
+static class InputSystem {
+    public static Action<InputEventPtr,InputDevice> onEvent;
+    public static Action onBeforeUpdate;
+    public static T AddDevice<T>(string name) where T:new() {return new T();}
+    public static void RemoveDevice(Mouse m) { m.added = false; }
+}
+namespace RaftAndroid.Diagnostics {
+    static class AndroidRuntimeLog {
+        public static void Write(string category,string name,string detail) {}
+    }
+}
 class InputEventPtr {
     public bool handled, isState=true, isTouchState=true, readable=true;
     public double time;
@@ -70,11 +83,19 @@ class AndroidTouchPointer {
     public readonly List<TouchPointerCommand> commands=new List<TouchPointerCommand>();
     public readonly List<string> trace=new List<string>();
     private readonly HashSet<int> uiTouches=new HashSet<int>();
-    private readonly TouchPointerGesture gesture;
+    private static AndroidTouchPointer instance;
+    private Mouse mouse;
+    private TouchPointerButtons buttons;
+    private TouchPointerGesture gesture;
     private bool suspended;
     public AndroidTouchPointer() {
         gesture=new TouchPointerGesture((cmd,x,y)=>commands.Add(cmd));
     }
+    public void Enable() {OnEnable();}
+    public void Disable() {OnDisable();}
+    private void SetButton(bool pressed) {}
+    private void Command(TouchPointerCommand cmd,float x,float y) {commands.Add(cmd);}
+    private void BeforeInput() {}
     public bool Active {get{return gesture.Active;}}
     public bool Held {get{return gesture.Held;}}
     public int UiTouchCount {get{return uiTouches.Count;}}
@@ -83,6 +104,9 @@ class AndroidTouchPointer {
     // Production OwnedUi has separately covered GraphicRaycaster source contracts.
     private bool OwnedUi(Vector2 p) {return p.x<100f;}
     public void Route(InputEventPtr input, InputDevice device) {OnEvent(input,device);}
+__ENABLE_METHOD__
+__DISABLE_METHOD__
+__SUSPEND_METHOD__
 __METHOD__
 }
 static class Program {
@@ -168,6 +192,23 @@ static class Program {
         d.Route(paused,screen);
         Require(paused.handled && !d.Active && d.commands.Count==0,
             "pause-keeps-gesture-released");
+        // Exact production enable/disable/suspend lifecycle. Re-enabling the
+        // same Unity component must not remain latched in suspended mode.
+        var e=new AndroidTouchPointer();
+        e.Enable();
+        var first=Packet(10,420,TouchPhase.Began,time:50d);
+        e.Route(first,screen);
+        Require(first.handled && e.Active,"reenable-first-activation");
+        e.Disable();
+        Require(!e.Active,"reenable-disables-old-gesture");
+        int oldCommands=e.commands.Count;
+        e.Enable();
+        var again=Packet(11,430,TouchPhase.Began,time:60d);
+        e.Route(again,screen);
+        Require(again.handled && e.Active && e.commands.Count==oldCommands+1 &&
+            e.commands[e.commands.Count-1]==TouchPointerCommand.Move,
+            "reenable-clears-stale-suspension");
+        e.Disable();
         Console.WriteLine("RAFT_TOUCH_RAW_PACKET_ROUTING checks="+checks+
             " primaryUiSecondaryGameplay=true secondaryUiPreserved=true"+
             " authoredOnEventExtracted=true actualUnityDeviceExecution=false");
@@ -179,14 +220,22 @@ static class Program {
 def generate(output, root=Path(".")):
     source=(root/"android-port/Runtime/Platform/AndroidTouchPointer.cs").read_text(encoding="utf-8")
     authored=extract_method(source,"private void OnEvent(InputEventPtr input, InputDevice device)")
-    # StateEvent is a Unity static method; the stub defines it on StateEvent below.
-    program=HARNESS.replace("__METHOD__",authored)
+    enable=extract_method(source,"private void OnEnable()")
+    disable=extract_method(source,"private void OnDisable()")
+    suspend=extract_method(source,"private void Suspend(bool value)")
+    # Extract actual authored callbacks; engine interfaces are strict CPU doubles.
+    program=(HARNESS.replace("__METHOD__",authored)
+             .replace("__ENABLE_METHOD__",enable)
+             .replace("__DISABLE_METHOD__",disable)
+             .replace("__SUSPEND_METHOD__",suspend))
     program=program.replace("StateEvent.GetState<TouchState>(input)",
                             "StateEventReader.GetState<TouchState>(input)")
     output.mkdir(parents=True, exist_ok=False)
     (output/"Program.cs").write_text(program,encoding="utf-8")
     shutil.copy2(root/"android-port/Runtime/Platform/TouchPointerGesture.cs",
                  output/"TouchPointerGesture.cs")
+    shutil.copy2(root/"android-port/Runtime/Platform/TouchPointerButtons.cs",
+                 output/"TouchPointerButtons.cs")
     (output/"Router.csproj").write_text(
         '<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><OutputType>Exe</OutputType>'
         '<TargetFramework>net8.0</TargetFramework><LangVersion>9.0</LangVersion>'
