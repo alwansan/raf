@@ -30,3 +30,12 @@ Official technical references: [SPIR-V Image Format enumerants](https://registry
 - Finish existing RENDER-002, LOCAL-005, AUDIO-004, INPUT-006, DISPLAY-003 and PERF-007 source/integration reviews. Source-only CI is not a new APK test.
 
 Build state NOT_READY. Under the owner's new rule there are 0/3 complete independent full candidate readiness audits, because no candidate with all pre-build blockers closed exists. No Unity/native APK/OBB/XAPK or release was launched; no scheduled tasks, original LFS assets or game .meta/GUID/.rgd were changed.
+
+
+## Original cache lifetime API and bounded memory estimate
+
+[Source/test commit0effd8f1](https://github.com/alwansan/raf/commit/0effd8f1698e1769c055148c8d6ef7b09e874f18) and [managed CI41563786696](https://github.com/alwansan/raf/actions/runs/41563786696) COMPLETED SUCCESS. The same pinned RenderTexturesCache source SHA 4157076c3e4bddc27ac5b24da768d29ff9e6c227c4da07a9e2f55ae9ff6b8245 has bounded lexical API counts: 1 new RenderTexture,1 Create,2 Release,2 Dispose,2 Destroy,1 Clear,0 Remove and2 GetCache references. This refutes an assertion that the original class contains no cleanup APIs, but neither proves their runtime reachability nor rules out a leaked reference/texture. Separate existing original Dx11FFT exception-lifetime managed harness is not a RenderTexturesCache actual device lifetime test.
+
+Using source-requested dimension 2N×2N and conventional uncompressed format bytes per pixel, ONE requested N=512 target consumes RGHalf 4 MiB, RGFloat 8 MiB, ARGBHalf 8 MiB or ARGBFloat 16 MiB before padding, alignment, mipmaps and driver allocations. Verified stored quality maximums are32,64,256,512,512,256,256, not proven active device size. The number of simultaneous render targets, allocations caused by the engine and exact GPU heap impact remain UNKNOWN. Do not reduce resolution/quality or diagnose the historical phone OOM from these single-target estimates.
+
+PERF-007 stays SOURCE_REVIEW_REQUIRED and water/format blockers remain OPEN; the actual CPU-only CI did not run Unity or phone GPU.
