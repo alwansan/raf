@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "owner": "raft-20261103T145401Z-051434ed",
-  "status": "planned",
-  "updated_at": "2026-11-03T14:54:01.756Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T15:02:06.638Z",
   "hypothesis": "Dangling backup-leaf symlink bypasses existing Path.exists guard.",
   "expected_signal": "Both adapters reject before source/meta or backup mutation; tests green after fix, fail before fix.",
   "commands": [
@@ -18,10 +18,17 @@
     "Dangling SteamManager.cs destination",
     "Normal backup behavior"
   ],
-  "run_urls": [],
-  "result": null,
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41658800717",
+    "https://github.com/alwansan/raf/actions/runs/41658800643",
+    "https://github.com/alwansan/raf/actions/runs/41659075182",
+    "https://github.com/alwansan/raf/actions/runs/41659111730"
+  ],
+  "result": "RED: original save 1/6 and offline 1/10 fail ValueError not raised. GREEN: save 6/6 plus selector 4/4; offline 10/10 plus managed compile exit0 errorCodes={}. Synthetic POSIX temp files only.",
   "limitations": [
-    "No atomic file handle safety",
-    "No Unity/phone/rgd acceptance"
-  ]
+    "Existing backup symlinks fail closed, not atomic against concurrent symlink swaps",
+    "No Unity/native build or authentic .rgd world/phone acceptance",
+    "Do not infer host path threat model from synthetic local reproducer"
+  ],
+  "source_sha": "b6a962018e06513d5cf408e646751f161f0e00ca"
 }
