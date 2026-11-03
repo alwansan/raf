@@ -21,6 +21,7 @@ from scripts.probe_fft_spirv_formatless_repair import restore_formatless_write
 from scripts.probe_fft_spirv_image_flow import image_slot_dataflow
 from scripts.probe_fft_spirv_math_profile import numeric_opcode_profile, compare_numeric_opcode_profiles
 from scripts.probe_fft_spirv_extinst_profile import extended_instruction_profile, compare_extended_instruction_profiles
+from scripts.probe_fft_spirv_operand_edges import direct_producer_edges, compare_direct_producer_edges
 
 OWNER = "sharedassets0.assets"
 PATH_ID = 2456
@@ -137,7 +138,8 @@ def compare_roundtrip_contracts(original_reflection, original_bindings,
 
 
 def cross_compile_roundtrip(source_spv, original_reflection, original_bindings,
-                            original_images, original_reflection_image_ops, original_math_profile, original_ext_profile, temporary, index):
+                            original_images, original_reflection_image_ops, original_math_profile, original_ext_profile,
+                            original_direct_edges, temporary, index):
     """Return exact stages independently; shader text remains private temp only."""
     result = {
         "spirv_cross_hlsl50_generated": False,
@@ -149,6 +151,7 @@ def cross_compile_roundtrip(source_spv, original_reflection, original_bindings,
         "image_operation_profile_preserved": False,
         "math_opcode_profile_preserved": None,
         "extended_instruction_profile_preserved": None,
+        "direct_tracked_producer_edge_profile_preserved": None,
         "private_formatless_restoration_structurally_constructed": False,
         "private_formatless_restoration_valid_vulkan_1_1": False,
         "private_formatless_restoration_image_contract_matched": False,
@@ -198,6 +201,12 @@ def cross_compile_roundtrip(source_spv, original_reflection, original_bindings,
     result["extended_instruction_profile_difference"] = ext_diff
     result["extended_instruction_profile_preserved"] = (
         ext_diff["same_fully_classified_extended_opcode_profile"])
+    edge_diff = compare_direct_producer_edges(
+        original_direct_edges, direct_producer_edges(module))
+    result["direct_tracked_producer_edge_difference"] = edge_diff
+    result["direct_tracked_producer_edge_profile_preserved"] = (
+        edge_diff["same_tracked_opcode_counts"] and
+        edge_diff["same_direct_tracked_producer_edges"])
     try:
         temporary_repaired = restore_formatless_write(
             module, original_images, original_reflection_image_ops)
@@ -269,6 +278,7 @@ def probe(root):
                 entry["image_slot_flow"] = image_slot_dataflow(spv_bytes)
                 entry["math_opcode_profile"] = numeric_opcode_profile(spv_bytes)
                 entry["extended_instruction_profile"] = extended_instruction_profile(spv_bytes)
+                entry["direct_tracked_producer_edges"] = direct_producer_edges(spv_bytes)
                 reflected = entry["resource_types"]["original_resource_kind_counts"]
                 reflected_images = sum(reflected.get(kind, 0) for kind in
                                        ("images", "textures", "separate_images"))
@@ -279,7 +289,8 @@ def probe(root):
                 if entry["validated_for_vulkan_1_1"]:
                     entry["private_hlsl_roundtrip"] = cross_compile_roundtrip(
                         spv, information, entry["bindings"], entry["typed_images"], entry["image_operation_profile"], entry["math_opcode_profile"],
-                        entry["extended_instruction_profile"], temp, index)
+                        entry["extended_instruction_profile"],
+                        entry["direct_tracked_producer_edges"], temp, index)
             reports.append(entry)
     return {
         "original_owner": OWNER,
@@ -329,6 +340,21 @@ def probe(root):
         "roundtrip_unclassified_ext_uses_total": sum(
             x.get("private_hlsl_roundtrip", {}).get("extended_instruction_profile_difference", {})
              .get("roundtrip_unclassified_extended_count", 0)
+            for x in reports),
+        "roundtrip_direct_tracked_edge_profiles_compared_count": sum(
+            x.get("private_hlsl_roundtrip", {}).get(
+                "direct_tracked_producer_edge_profile_preserved") is not None
+            for x in reports),
+        "roundtrip_direct_tracked_edge_profiles_preserved_count": sum(
+            x.get("private_hlsl_roundtrip", {}).get(
+                "direct_tracked_producer_edge_profile_preserved") is True
+            for x in reports),
+        "original_tracked_direct_producer_edge_uses_total": sum(
+            x.get("direct_tracked_producer_edges", {}).get("direct_tracked_edge_total", 0)
+            for x in reports),
+        "original_tracked_operand_uses_from_untracked_producers_total": sum(
+            x.get("direct_tracked_producer_edges", {}).get(
+                "operand_uses_from_untracked_producers", 0)
             for x in reports),
         "roundtrip_typed_images_preserved_count": sum(x.get("private_hlsl_roundtrip", {}).get(
             "typed_image_contract_preserved", False) for x in reports),
