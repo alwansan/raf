@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T123129Z-6533d5b4",
+  "status": "planned",
+  "hypothesis": "The prior read-only 107-file coverage probe uses comment-unaware HEADER and path-free content digests; commented vendor declarations may be spurious matches and relocating files can leave same digest, overstating provenance. Correct without assuming a complete export.",
+  "input_hashes": [],
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_a13_builtin_coverage_integrity.py -v"
+  ],
+  "expected_signal": "Commented builtin header not matched; path relocation changes path-bound tree digest; bad UTF8 and symlink rejected; genuine vendor fixture recognized; completeness stays false",
+  "negative_controls": [
+    "comment-only vendor header",
+    "same bytes under distinct relative paths",
+    "symlink outside root",
+    "invalid UTF-8 shader"
+  ],
+  "workflow_path": ".github/workflows/raft-a13-builtin-coverage-integrity.yml",
+  "concurrency_group": "raft-a13-coverage-integrity-${{ github.ref }}-${{ github.sha }}",
+  "artifact_prefix": "raft-a13-builtin-coverage-counts",
+  "budget": "CPU-only <=6 min no LFS synthetic files",
+  "run_url": null,
+  "source_sha": null,
+  "result": null,
+  "limitations": [
+    "Cannot establish actual full export from 107 subset",
+    "Vendor identity coincidence does not prove shader authenticity",
+    "No Unity/GPU/Android runtime"
+  ],
+  "next_step": "Write diagnostic, test, aggregate report."
+}

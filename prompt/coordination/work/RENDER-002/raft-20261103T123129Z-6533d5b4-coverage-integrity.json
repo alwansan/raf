@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T123129Z-6533d5b4",
+  "issue_id": "RENDER-002",
+  "status": "planned",
+  "updated_at": "2026-11-03T12:31:29Z",
+  "base_sha": "aae8cc2070126449fa05049a669235a144309101",
+  "hypothesis": "The prior read-only 107-file coverage probe uses comment-unaware HEADER and path-free content digests; commented vendor declarations may be spurious matches and relocating files can leave same digest, overstating provenance. Correct without assuming a complete export.",
+  "intended_files": [
+    "scripts/probe_builtin_export_coverage.py",
+    "tests/test_a13_builtin_coverage_integrity.py",
+    ".github/workflows/raft-a13-builtin-coverage-integrity.yml",
+    "prompt/coordination/clients/raft-20261103T123129Z-6533d5b4/",
+    "prompt/coordination/work/RENDER-002/raft-20261103T123129Z-6533d5b4-coverage-integrity.json",
+    "prompt/coordination/experiments/raft-20261103T123129Z-6533d5b4/",
+    "prompt/coordination/discussions/RENDER-002/",
+    "prompt/STATUS.md",
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+  ],
+  "related_work": [
+    "RENDER-002 coverage raft-20261103T103610Z-4e91b2cd 107 subset incomplete",
+    "RENDER-002 identity parser A9 raft-20261103T113735Z-a93e6c40 completed",
+    "RENDER-002 symlink guard A3 raft-20261103T120645Z-8cde319a completed",
+    "RENDER-002 commented include A6 raft-20261103T121333Z-a6c7f4e2 completed"
+  ],
+  "experiment_ids": [
+    "coverage-lexical-path-hash"
+  ],
+  "evidence": [
+    "native failure 41624581951 reconstruct job125878883840: 140 one-pass shaders 0 computes; prior to Unity"
+  ],
+  "result": null,
+  "next_step": "Implement no-LFS synthetic red/green test; RENDER-002 OPEN."
+}
