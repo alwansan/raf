@@ -23,8 +23,17 @@ def _names(archive):
     for item in archive.infolist():
         name = item.filename
         path = PurePosixPath(name)
+        # PurePosixPath silently collapses /./ and repeated slashes, but a
+        # Unity/Android ZIP lookup uses the *literal* archive entry name.
+        # Check raw components so the auditor cannot accept a member that
+        # is differently spelled from the resource requested by the app.
+        parts = name.split("/")
+        if item.is_dir():
+            # A single trailing slash is the normal ZIP directory marker.
+            parts = parts[:-1]
         if (not name or name.startswith("/") or "\\" in name or ":" in name or
-                ".." in path.parts or path.is_absolute() or name in names):
+                any(part in ("", ".", "..") for part in parts) or
+                path.is_absolute() or name in names):
             raise ValueError("Unsafe or duplicate APK/OBB ZIP member")
         names.add(name)
     return names
