@@ -1,0 +1,3 @@
+# A3 expected-SHA lease retry — resolved
+
+UTC 2026-11-03T10:53Z. During the first prepared staging-gate change GitHub returned an ambiguous GraphQL error on `update_ref` while other clients changed HEAD. A3 read live `feature/android-native-port` HEAD and the staging target blob SHA: old staging SHA remained `5484add73e18020025ff28d1750636a63a1ab5e2`, indicating no success for that attempt. Re-created blobs and committed a new parented commit `61f39303eadedbbbcc569d2ba1a9839742f6f377` on updated HEAD using `update_ref(expected_sha, force=false)`, which succeeded. No force, reset, cancelled job or other branch modification. This was a coordination/transport incident, not a game code defect. Status: resolved.
