@@ -50,3 +50,8 @@ Run41686164808 failed20/20 at validation because the newly authored boundary inc
 
 ## FFT executor boundary correction verified
 Actual CPU Vulkan run41687345468 SUCCESS at9cd002eec0b3fe623d1e58a570320251a6d51176: all20 authenticated program pairs execute again; all20 match within selected RGBA32F scenarios. Rejected-run41686164808 remains recorded as diagnostic regression, not shader failure. Some scenarios write only64pixels, so equal output does not imply full1024x1024 coverage or full-water correctness. Separate no-LFS workflow raft-fft-workload-boundary.yml now explicitly runs the new requested-workload fixture and existing schema suite; prior heavy workflow selected only its old test filename. No Unity/device/full-water proof. Next verify cheap fixture CI and continue original shader restoration rather than repeating this numeric workload.
+
+
+## Workload boundary regression final verification — 2026-11-03
+Run41696574334/source42cbccbf6108f3ca082711f0d067369971a62709 SUCCESS, job126128580376. Actual logs confirm new workload fixture1/1 (six positive/negative controls) and schema suite8/8 executed. No LFS or Unity. Together with original software Vulkan41687345468 this closes the diagnostic workload-boundary repair only. Canary semantics correction remains explicit; no full water/device proof.
+Next independent source-restoration target: A12 nonzero constant-buffer reflection blocker (88-byte original metadata,544usedSize across2CBs); read exact stage pins and common parameter layouts before making changes. Do not discard CB records or alter W1 empty-override assumptions. No repeated numeric run needed.
