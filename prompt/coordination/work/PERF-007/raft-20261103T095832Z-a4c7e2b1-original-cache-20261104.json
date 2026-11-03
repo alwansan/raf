@@ -4,8 +4,8 @@
   "agent": "A4",
   "session_id": "a4-resume-20261103T231050Z-7d96e2a1",
   "issue_id": "PERF-007",
-  "status": "active",
-  "updated_at": "2026-11-03T23:11:48.174Z",
+  "status": "paused",
+  "updated_at": "2026-11-03T23:24:57.845Z",
   "base_sha": "8316f5b8b8d4e913dd309af30ba4342f0f980af0",
   "hypothesis": "Original RenderTexturesCache / RenderTexturesSet GPU allocations may remain owned after repeated scene/unload/reinitialization or exception; prove their actual lifecycle before changing game source.",
   "source_provider": {
@@ -35,6 +35,13 @@
     "Document exact source result and unknowns, update status/handoff; avoid Unity/APK native delivery"
   ],
   "budget": "CPU-only GitHub runner up to 15 minutes; one original 3,211,776-byte managed DLL from zip2, no full 7.79GB and no Unity/editor/license",
-  "result": null,
-  "next_step": "Implement fail-closed analyzer and original-data workflow, collect structural ownership evidence."
+  "result": "Authentic ZIP2 original Assembly-CSharp.dll size/SHA verified; 16 synthetic negative/positive cases across 3 probes passed in CPU-only Actions. Original cache 1 RenderTexture ctor, 2 Release, 2 Destroy, 2 Dispose, and Release cleanup path. Original WavesRendererFFT OnDestroy directly calls unqualified Dispose(), proving initial dotted-member-only gap was scanner blindspot, not missing cleanup. No additional Dispose patch made; runtime GPU OOM root cause remains unproven.",
+  "next_step": "Investigate real original GPU resource allocation-exception teardown using isolated executable CSharp source harness, and Android phone trial after valid new build. Do not inject duplicate OnDestroy.Dispose or claim OOM fixed.",
+  "source_sha": "20a7dbd8d1c2a6e81f439c531f8e421383b83ed8",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41737956653",
+    "https://github.com/alwansan/raf/actions/runs/41738337389",
+    "https://github.com/alwansan/raf/actions/runs/41738673806",
+    "docs/A4_ORIGINAL_GPU_CACHE_ZIP2_2026-11-04.md"
+  ]
 }
