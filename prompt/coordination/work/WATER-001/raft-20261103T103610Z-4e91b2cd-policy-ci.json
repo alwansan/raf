@@ -1,0 +1,9 @@
+{
+  "owner": "raft-20261103T103610Z-4e91b2cd",
+  "status": "active",
+  "base_sha": "41afc05494adc911d8412a04a6aa0d09beb8e095",
+  "intended_files": [
+    ".github/workflows/raft-fft-source-policy.yml"
+  ],
+  "hypothesis": "Reproducible original-source policy validation without LFS/Unity"
+}
