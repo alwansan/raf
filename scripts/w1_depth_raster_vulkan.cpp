@@ -5,6 +5,7 @@
 #include <vulkan/vulkan.h>
 #include <algorithm>
 #include <array>
+#include <atomic>
 #include <cmath>
 #include <cstdint>
 #include <cstring>
@@ -16,6 +17,15 @@
 #include <string>
 #include <vector>
 
+static std::atomic_uint32_t validationErrors{0},validationWarnings{0};
+static VKAPI_ATTR VkBool32 VKAPI_CALL validationCallback(
+    VkDebugUtilsMessageSeverityFlagBitsEXT severity,VkDebugUtilsMessageTypeFlagsEXT,
+    const VkDebugUtilsMessengerCallbackDataEXT*,void*) {
+    // Never print validation contents or original resource/shader identifiers.
+    if(severity&VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT)validationErrors++;
+    if(severity&VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT)validationWarnings++;
+    return VK_FALSE;
+}
 static void require(bool cond, const char* message) {
     if (!cond) throw std::runtime_error(message);
 }
@@ -71,8 +81,24 @@ int main(int argc,char** argv) {
     app.apiVersion=VK_API_VERSION_1_1;
     VkInstanceCreateInfo instanceInfo{VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO};
     instanceInfo.pApplicationInfo=&app;
+    const char* layer="VK_LAYER_KHRONOS_validation";
+    const std::array<const char*,2> extensions={VK_EXT_DEBUG_UTILS_EXTENSION_NAME,VK_EXT_VALIDATION_FEATURES_EXTENSION_NAME};
+    VkDebugUtilsMessengerCreateInfoEXT debugInfo{VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT};
+    debugInfo.messageSeverity=VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT|VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT;
+    debugInfo.messageType=VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT|VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT|VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
+    debugInfo.pfnUserCallback=validationCallback;
+    const VkValidationFeatureEnableEXT syncFeature=VK_VALIDATION_FEATURE_ENABLE_SYNCHRONIZATION_VALIDATION_EXT;
+    VkValidationFeaturesEXT validation{VK_STRUCTURE_TYPE_VALIDATION_FEATURES_EXT};
+    validation.enabledValidationFeatureCount=1;validation.pEnabledValidationFeatures=&syncFeature;validation.pNext=&debugInfo;
+    instanceInfo.pNext=&validation;instanceInfo.enabledLayerCount=1;instanceInfo.ppEnabledLayerNames=&layer;
+    instanceInfo.enabledExtensionCount=extensions.size();instanceInfo.ppEnabledExtensionNames=extensions.data();
     VkInstance instance=VK_NULL_HANDLE;
     check(vkCreateInstance(&instanceInfo,nullptr,&instance),"vkCreateInstance");
+    auto createDebug=reinterpret_cast<PFN_vkCreateDebugUtilsMessengerEXT>(vkGetInstanceProcAddr(instance,"vkCreateDebugUtilsMessengerEXT"));
+    auto destroyDebug=reinterpret_cast<PFN_vkDestroyDebugUtilsMessengerEXT>(vkGetInstanceProcAddr(instance,"vkDestroyDebugUtilsMessengerEXT"));
+    require(createDebug&&destroyDebug,"Vulkan validation messenger unavailable");
+    VkDebugUtilsMessengerEXT messenger;
+    check(createDebug(instance,&debugInfo,nullptr,&messenger),"create private validation messenger");
     uint32_t count=0;
     check(vkEnumeratePhysicalDevices(instance,&count,nullptr),"enumerate devices");
     require(count>0 && count<64,"No bounded Vulkan CPU devices");
@@ -346,11 +372,13 @@ int main(int argc,char** argv) {
     require(changedA>0,"Original graphics produced no observable writes");
     if(mutation==0)require(changedB>0,"Rebuilt graphics produced no observable writes");
     if(canary)require(canaryErrors==0&&changedB>0,"Known raster color/depth canary disagrees");
+    require(validationErrors.load()==0,"Vulkan API or synchronization validation errors detected");
     bool match=coverageMismatch==0&&nonfinite==0&&maxColor<=1e-4&&maxDepth<=1e-6;
     std::cout<<std::setprecision(12)<<"RAFT_W1_RASTER_DIFF {\"cpu_vulkan\":true,\"width\":"<<w<<",\"height\":"<<h
         <<",\"changed_original_pixels\":"<<changedA<<",\"changed_rebuilt_pixels\":"<<changedB<<",\"coverage_mismatch_pixels\":"<<coverageMismatch
         <<",\"nonfinite_components\":"<<nonfinite<<",\"max_color_abs\":"<<maxColor<<",\"max_depth_abs\":"<<maxDepth
         <<",\"within_tolerance\":"<<(match?"true":"false")<<",\"known_color_depth_canary\":"<<(canary?"true":"false")
+        <<",\"vulkan_validation_errors\":"<<validationErrors.load()<<",\"vulkan_validation_warnings\":"<<validationWarnings.load()<<",\"synchronization_validation_enabled\":true"
         <<",\"mutation\":"<<mutation<<",\"android_or_unity_render\":false}\n";
     check(vkDeviceWaitIdle(device),"device wait idle");
     vkDestroyCommandPool(device,commandPool,nullptr);
@@ -362,7 +390,8 @@ int main(int argc,char** argv) {
     vkDestroyBuffer(device,vertexBuffer,nullptr);vkFreeMemory(device,vertexMemory,nullptr);
     vkDestroySampler(device,sampler,nullptr);
     for(auto& t:images){vkUnmapMemory(device,t.memory);vkDestroyImageView(device,t.view,nullptr);vkDestroyImage(device,t.image,nullptr);vkFreeMemory(device,t.memory,nullptr);}
-    vkDestroyDevice(device,nullptr);vkDestroyInstance(instance,nullptr);return 0;
+    vkDestroyDevice(device,nullptr);destroyDebug(instance,messenger,nullptr);vkDestroyInstance(instance,nullptr);
+    require(validationErrors.load()==0,"Vulkan cleanup validation errors detected");return 0;
  }catch(const std::exception& e){std::cerr<<"RAFT_W1_RASTER_ERROR "<<e.what()<<"\n";return 2;}
 }
 

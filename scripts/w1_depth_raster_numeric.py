@@ -104,6 +104,8 @@ def compare(runner,stages,state,seed,mutation,texture_count,canary=False):
     value=json.loads(lines[0].split(' ',1)[1])
     if not value['cpu_vulkan'] or value['android_or_unity_render'] or value['mutation']!=mutation:
         raise ValueError('Unsupported graphics platform or mutation claim')
+    if not value.get('synchronization_validation_enabled') or value.get('vulkan_validation_errors')!=0:
+        raise ValueError('Vulkan API/synchronization validation not clean')
     return value
 
 def canary(runner,folder):
