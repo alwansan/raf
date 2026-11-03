@@ -98,5 +98,22 @@ class A2OwnerLinks(unittest.TestCase):
                 source_pin(root)
             self.assertEqual(len(SETTINGS_SHA), 64)
 
+
+    def test_dense_48_pointer_stride_is_structural_not_typed_field(self):
+        from scripts.probe_a2_settings_owner_links import strict_pointer_stride_shape
+        body = b"".join(struct.pack("<iq", 0, 100+i) for i in range(48))
+        raw = b"\0" * 32 + body + b"\x00\x00\x00\x00"
+        candidates = scan_candidates(raw, {100+i for i in range(48)})
+        data = strict_pointer_stride_shape(raw, candidates)
+        self.assertTrue(data["exact_48_pointer_stride"])
+        self.assertTrue(data["tail_is_bool_plus_zero_padding"])
+        self.assertFalse(data["source_declared_field_names_mapped"])
+        bad = strict_pointer_stride_shape(raw, candidates[:-1])
+        self.assertFalse(bad["exact_48_pointer_stride"])
+        replaced = raw[:-2] + b"\x01\x03"
+        bad = strict_pointer_stride_shape(replaced, candidates)
+        self.assertFalse(bad["tail_is_bool_plus_zero_padding"])
+
+
 if __name__ == "__main__":
     unittest.main()
