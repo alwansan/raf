@@ -33,6 +33,9 @@ public final class RemoteLogService extends IRemoteLog.Stub {
     private final AtomicLong lastDeathAtUnixMs=new AtomicLong(-1);
     private final Set<String> gamePids = java.util.Collections.synchronizedSet(new HashSet<>());
     private final AtomicInteger primaryGamePid=new AtomicInteger(-1);
+    private final AtomicLong pidProbeFailures=new AtomicLong();
+    private final AtomicLong pidProbeSuccesses=new AtomicLong();
+    private volatile String pidProbeStatus="not_started";
     private Thread gameThread, systemThread, pidThread, telemetryThread;
     private static final Pattern PID = Pattern.compile("^\\s*(?:\\d{4}-)?\\d\\d-\\d\\d\\s+\\d\\d:\\d\\d:\\d\\d[^ ]*\\s+(\\d+)\\s+");
     private static final Pattern CRASH_MARK = Pattern.compile("(?i)(FATAL EXCEPTION|Fatal signal|tombstone|crash_dump|am_crash|am_anr|Force finishing|ANR in|native crash|Fatal Java|Process:)");
@@ -53,6 +56,7 @@ public final class RemoteLogService extends IRemoteLog.Stub {
         errorGroups.reset();
         lastDeathPid.set(-1);lastKnownPid.set(-1);lastDeathAtUnixMs.set(-1);
         primaryGamePid.set(-1);
+        pidProbeFailures.set(0);pidProbeSuccesses.set(0);pidProbeStatus="not_started";
         synchronized(gamePids){gamePids.clear();}
         metricPreviousAt=-1;metricPreviousGameLines=0;metricPreviousSystemLines=0;
         running.set(true);
@@ -121,6 +125,10 @@ public final class RemoteLogService extends IRemoteLog.Stub {
                 metricPreviousGameLines=gameLines;
                 metricPreviousSystemLines=systemLines;
                 data.put("game_log_lines",gameLines);
+                data.put("pid_probe_status",pidProbeStatus);
+                data.put("pid_probe_failures_total",pidProbeFailures.get());
+                data.put("pid_probe_successes_total",pidProbeSuccesses.get());
+                data.put("main_process_pid_verified",primaryGamePid.get()>0);
                 data.put("system_context_lines",systemContextLines.get());
                 data.put("logcat_reconnects",reconnections.get());
                 data.put("shader_pass_errors_total",shaderPassErrors.get());
@@ -152,14 +160,23 @@ public final class RemoteLogService extends IRemoteLog.Stub {
                 for (String item : found.toString().trim().split("\\s+")) {
                     if (item.matches("[0-9]+")) current.add(item);
                 }
+                // pidof may print a diagnostic instead of a PID, or exit
+                // nonzero. Never treat that as proof the game has exited.
+                int exit=p.waitFor();
+                if(exit!=0)throw new IOException("pidof_exit_"+exit);
+                pidProbeSuccesses.incrementAndGet();
                 // Preserve all PIDs for system-context correlation, but only
                 // sample CPU/RSS/FPS for the exact main process. If /proc is
                 // inaccessible, mark PID unavailable instead of guessing.
                 int main=findMainPid(current);
                 synchronized (gamePids) { gamePids.clear(); gamePids.addAll(current); }
                 primaryGamePid.set(main);
+                pidProbeStatus=main>0?"main_pid_verified":
+                        current.isEmpty()?"pidof_empty":"main_cmdline_unverified";
                 if(main>0)lastKnownPid.set(main);
             } catch (Exception ignored) {
+                pidProbeFailures.incrementAndGet();
+                pidProbeStatus="pidof_probe_failed";
                 // A failed pidof invocation must not leave a stale main PID
                 // behind. Otherwise the sampler can attribute CPU/RSS and
                 // process transitions to a PID which is no longer the game.
