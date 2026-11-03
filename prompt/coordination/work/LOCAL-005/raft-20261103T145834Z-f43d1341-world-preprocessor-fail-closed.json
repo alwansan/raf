@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T145834Z-f43d1341",
+  "issue_id": "LOCAL-005",
+  "status": "active",
+  "updated_at": "2026-11-03T15:00:24.604Z",
+  "base_sha": "528068d21253340a9a673517aa608dbb58a015d0",
+  "hypothesis": "World readiness probe counts #if-inactive C# broadcasts and assignments as executable source; no compilation symbols are known to its lexical check.",
+  "intended_files": [
+    "scripts/probe_original_world_readiness.py",
+    "tests/test_probe_original_world_readiness.py",
+    "prompt/coordination/clients/raft-20261103T145834Z-f43d1341/state.json",
+    "prompt/coordination/clients/raft-20261103T145834Z-f43d1341/MEMORY.md",
+    "prompt/coordination/work/LOCAL-005/raft-20261103T145834Z-f43d1341-world-preprocessor-fail-closed.json"
+  ],
+  "related_work": [
+    "A8 original LOCAL-005 source guard completed 23161cfc",
+    "A6 local save path and source root guards completed",
+    "A9 identity-link safety completed",
+    "A10 original offline harness staging completed"
+  ],
+  "experiment_ids": [
+    "world-preprocessor-fail-closed"
+  ],
+  "evidence": [],
+  "result": null,
+  "next_step": "Reject conditional compilation directives in pinned world method; add synthetic controls; run no-LFS CI."
+}
