@@ -37,6 +37,7 @@ public final class RemoteLogService extends IRemoteLog.Stub {
     private final AtomicLong pidProbeFailures=new AtomicLong();
     private final AtomicLong pidProbeSuccesses=new AtomicLong();
     private volatile String pidProbeStatus="not_started";
+    private volatile String pidProbeFailureReason="none";
     private Thread gameThread, systemThread, pidThread, telemetryThread;
     private static final Pattern PID = Pattern.compile("^\\s*(?:\\d{4}-)?\\d\\d-\\d\\d\\s+\\d\\d:\\d\\d:\\d\\d[^ ]*\\s+(\\d+)\\s+");
     private static final Pattern CRASH_MARK = Pattern.compile("(?i)(FATAL EXCEPTION|Fatal signal|tombstone|crash_dump|am_crash|am_anr|Force finishing|ANR in|native crash|Fatal Java|Process:)");
@@ -57,7 +58,7 @@ public final class RemoteLogService extends IRemoteLog.Stub {
         errorGroups.reset();
         lastDeathPid.set(-1);lastKnownPid.set(-1);lastDeathAtUnixMs.set(-1);
         primaryGamePid.set(-1);
-        pidProbeFailures.set(0);pidProbeSuccesses.set(0);pidProbeStatus="not_started";
+        pidProbeFailures.set(0);pidProbeSuccesses.set(0);pidProbeStatus="not_started";pidProbeFailureReason="none";
         synchronized(gamePids){gamePids.clear();}
         metricPreviousAt=-1;metricPreviousGameLines=0;metricPreviousSystemLines=0;
         running.set(true);
@@ -127,6 +128,7 @@ public final class RemoteLogService extends IRemoteLog.Stub {
                 metricPreviousSystemLines=systemLines;
                 data.put("game_log_lines",gameLines);
                 data.put("pid_probe_status",pidProbeStatus);
+                data.put("pid_probe_failure_reason",pidProbeFailureReason);
                 data.put("pid_probe_failures_total",pidProbeFailures.get());
                 data.put("pid_probe_successes_total",pidProbeSuccesses.get());
                 data.put("main_process_pid_verified",primaryGamePid.get()>0);
@@ -209,6 +211,7 @@ public final class RemoteLogService extends IRemoteLog.Stub {
                 if(exit==0 && current.isEmpty())
                     throw new IOException("pidof_empty_success");
                 pidProbeSuccesses.incrementAndGet();
+                pidProbeFailureReason="none";
                 // Preserve all PIDs for system-context correlation, but only
                 // sample CPU/RSS/FPS for the exact main process. If /proc is
                 // inaccessible, mark PID unavailable instead of guessing.
@@ -218,7 +221,14 @@ public final class RemoteLogService extends IRemoteLog.Stub {
                 pidProbeStatus=main>0?"main_pid_verified":
                         current.isEmpty()?"pidof_empty":"main_cmdline_unverified";
                 if(main>0)lastKnownPid.set(main);
-            } catch (Exception ignored) {
+            } catch (Exception probeError) {
+                // Stable, bounded reason codes; never export command output or paths.
+                String reason=probeError.getMessage();
+                pidProbeFailureReason=reason!=null && (reason.equals("pidof_timeout") ||
+                        reason.equals("pidof_output_overflow") ||
+                        reason.equals("pidof_invalid_output") ||
+                        reason.equals("pidof_empty_success") ||
+                        reason.startsWith("pidof_exit_")) ? reason : "pidof_execution_error";
                 pidProbeFailures.incrementAndGet();
                 pidProbeStatus="pidof_probe_failed";
                 // A failed pidof invocation must not leave a stale main PID
