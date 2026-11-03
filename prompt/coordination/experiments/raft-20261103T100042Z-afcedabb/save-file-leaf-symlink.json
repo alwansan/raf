@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T100042Z-afcedabb",
+  "status": "planned",
+  "hypothesis": "Existing final world.sav symlink bypasses prior directory-only guard and redirects writes outside sandbox",
+  "input_hashes": [],
+  "commands": [
+    "Python pathlib synthetic file symlink write repro",
+    "dotnet run --project android-port/Tests/Smoke/RaftAndroid.Platform.Smoke.csproj --configuration Release --nologo"
+  ],
+  "expected_signal": "Reject world.sav symbolic links before returning writable path; normal world save remains writable; broken links rejected",
+  "negative_controls": [
+    "existing directory symlink tests",
+    "ordinary world and valid regular save files",
+    "dangling world.sav symlink"
+  ],
+  "workflow_path": ".github/workflows/raft-android-platform-tests.yml",
+  "concurrency_group": null,
+  "artifact_prefix": null,
+  "budget": "platform CPU-only existing workflow, no Unity/LFS/native",
+  "run_url": null,
+  "source_sha": null,
+  "result": null,
+  "limitations": [
+    "Standalone LocalSavePaths helper not original .rgd path",
+    "Prechecks not atomic against hostile concurrent swaps"
+  ],
+  "next_step": "Implement test and scoped runtime guard"
+}
