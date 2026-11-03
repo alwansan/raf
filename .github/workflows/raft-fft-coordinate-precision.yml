@@ -1,0 +1,29 @@
+name: Raft FFT coordinate precision - CPU only no LFS
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/audit_fft_binary16_addresses.mjs'
+      - '.github/workflows/raft-fft-coordinate-precision.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raft-fft-coordinate-precision-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  numeric:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: scripts/audit_fft_binary16_addresses.mjs
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Execute binary16 address boundary and negative controls
+        run: node scripts/audit_fft_binary16_addresses.mjs
