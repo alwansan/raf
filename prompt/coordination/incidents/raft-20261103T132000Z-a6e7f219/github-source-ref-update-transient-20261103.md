@@ -1,0 +1,5 @@
+# A6 GitHub ref update contention — recovered (2026-11-03)
+
+Identity `raft-20261103T132000Z-a6e7f219`, issue LOCAL-005. Two attempted expected-SHA GitHub branch-ref updates returned transient GraphQL UNKNOWN around 13:26 UTC; neither source blob changed according to subsequent live re-reads. A later file write returned HTTP409 after another client's unrelated HEAD advance. A6 reread the branch and each file blob before installing the narrowly scoped changes using `update_file` with current file SHAs. No force push, branch reset, or alteration of other clients' code.
+
+Result: save source 33afc2ac8f7868f4ed74bff00208d2711a9c43f9; offline source da4b98a63cf008c05249046595fee10fb2976d09; [save green CI41644415213](https://github.com/alwansan/raf/actions/runs/41644415213) and [offline green CI41644473219](https://github.com/alwansan/raf/actions/runs/41644473219). Resolved ref coordination issue only.
