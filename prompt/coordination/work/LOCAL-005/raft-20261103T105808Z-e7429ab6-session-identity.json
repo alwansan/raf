@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T105808Z-e7429ab6",
+  "issue_id": "LOCAL-005",
+  "status": "planned",
+  "updated_at": "2026-11-03T10:58:08.597Z",
+  "base_sha": "196fce7bd147b5baac2bb8214a8c4d0aad5e2af2",
+  "hypothesis": "OfflineSession constructor accepts any nonempty string despite LocalPlayerIdentity and downstream LocalSavePaths rejecting noncanonical local profiles; this creates a false locally-connected session and late failure.",
+  "intended_files": [
+    "android-port/Runtime/Platform/OfflineSession.cs",
+    "android-port/Tests/OfflineSessionIdentity/Program.cs",
+    "android-port/Tests/OfflineSessionIdentity/OfflineSessionIdentity.csproj",
+    ".github/workflows/raft-a9-offline-session-identity.yml",
+    "prompt/coordination/clients/raft-20261103T105808Z-e7429ab6/*",
+    "prompt/coordination/work/LOCAL-005/raft-20261103T105808Z-e7429ab6-session-identity.json",
+    "prompt/coordination/experiments/raft-20261103T105808Z-e7429ab6/*",
+    "prompt/STATUS.md and latest handoff (append only on meaningful result)"
+  ],
+  "related_work": [
+    "A9 previous completed symlink identity guard; A6 LocalSavePaths + Smoke owner active; A10 source selector completed; A8 DIAG-010 active; no intended source overlap."
+  ],
+  "experiment_ids": [
+    "offline-session-identity-redgreen"
+  ],
+  "evidence": [],
+  "result": null,
+  "next_step": "Create new independent C# net8 regression and CPU-only workflow before changing OfflineSession to observe real failure; fix and rerun."
+}
