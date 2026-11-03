@@ -1,5 +1,5 @@
 {
-  "request_id": "owner-all-client-xapk-preview-w1-20261103-37268a58a5",
-  "reason": "Owner explicitly requests an experimental XAPK including available A1-A15/W1-W3 work after staging/review. Incomplete preview attempt, NOT_READY; retain all authenticity, resource, signature and packaging gates. W1 staging passed; unresolved builtin/water blockers remain explicit.",
-  "requested_from_sha": "37268a58a56929ad355d695a795e8dde891a3d8c"
+  "request_id": "owner-full-xapk-w1-zip2-material-20261103T234108697Z",
+  "reason": "Owner explicitly requests full project/XAPK attempt. New source stages three original scene owners from SHA-verified ZIP2 cache with feature pointer checks and captures actual full-export Material Shader references plus water contract. Experimental NOT_READY 0/3; retain all strict authenticity, compilation, signature and complete delivery gates.",
+  "requested_from_sha": "a2e143246ff29dfdfb9f2a68301d3aae6a38eeeb"
 }

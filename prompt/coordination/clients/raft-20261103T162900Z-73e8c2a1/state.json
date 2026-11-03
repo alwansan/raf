@@ -2,15 +2,15 @@
   "schema_version": 1,
   "client_label": "W1",
   "username": "raft-20261103T162900Z-73e8c2a1",
-  "session_id": "w1-owner-build-20261103T233714200Z",
+  "session_id": "w1-owner-build-20261103T234108697Z",
   "resumed_from": null,
   "status": "active",
-  "updated_at": "2026-11-03T23:37:14.200Z",
-  "base_sha": "3934904d51bb01a527199b83bb422eb6bbb9f76f",
+  "updated_at": "2026-11-03T23:41:08.697Z",
+  "base_sha": "a2e143246ff29dfdfb9f2a68301d3aae6a38eeeb",
   "current_work": [
-    "Owner-authorized full native/XAPK attempt with ZIP2 source reuse and read-only Material→Shader diagnostic before existing authenticity gates"
+    "One owner-authorized full native delivery attempt with ZIP2 source migration and actual-export Material/water diagnostic evidence"
   ],
-  "last_commit": "da39e24c3f4e85276d386182c960895b88e35839",
-  "next_step": "Add fail-closed aggregate export diagnostic, reuse pinned ZIP2 for three original scene owners, test, then request one full build; do not alter builtin/water authenticity gates or claim readiness.",
+  "last_commit": "a2e143246ff29dfdfb9f2a68301d3aae6a38eeeb",
+  "next_step": "Inspect exact new native request run; retain genuine failed gates. If only long waiting remains, pause with exact run link. NOT_READY 0/3.",
   "memory_path": "prompt/coordination/clients/raft-20261103T162900Z-73e8c2a1/MEMORY.md"
 }

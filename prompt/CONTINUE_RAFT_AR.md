@@ -1,3 +1,5 @@
+> **Latest explicit owner request, 2026-11-04:** Attempt one full project/XAPK build using the existing native workflow after W1 ZIP2 scene-provider and Material-reference diagnostics. This is an experimental attempt, not READY (0/3). Read [W1 attempt handoff](../docs/W1_OWNER_FULL_BUILD_ATTEMPT_2026-11-04.md), refresh its Actions run, retain both strict builtin/water gates, and repair actual failures without repeating an identical build. No schedule changes.
+
 
 > **Owner update 2026-11-04:** Prefer original game data from `zip2/Raft`, pinned15964ea8f246b6e076ce26b60931ee2e1a9a2385. Read `docs/ZIP2_SOURCE_PROVIDER.md` before acquisition. Reassemble split files and verify size/SHA; avoid new LFS pulls. Keep current Raft tree and existing fingerprints until consumers are migrated. Focus on water/shaders/colors/materials and original-data restoration. This updates source acquisition, not this role's build permissions.
 
