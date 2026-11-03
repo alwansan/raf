@@ -3,8 +3,8 @@
   "owner": "raft-20261103T123140Z-7ea78212",
   "client_label": "A15",
   "issue_id": "RENDER-002",
-  "status": "active",
-  "updated_at": "2026-11-03T13:20:41.849Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T13:31:49.126Z",
   "base_sha": null,
   "hypothesis": "Production restore_builtin_shaders.restore_project writes newly created license/include files sequentially; a partial write exception can strand destination files, blocking future retries while originals may remain unchanged. Test fail-first, implement bounded rollback only for newly created additions, preserve pre-existing identical files and exact shader/.meta bytes.",
   "intended_files": [
@@ -23,8 +23,14 @@
     "a15-builtin-additions-fail-first"
   ],
   "evidence": [
-    "https://github.com/alwansan/raf/actions/runs/41624581951"
+    "https://github.com/alwansan/raf/actions/runs/41624581951",
+    "https://github.com/alwansan/raf/actions/runs/41643857822",
+    "https://github.com/alwansan/raf/actions/runs/41644109948",
+    "https://github.com/alwansan/raf/actions/runs/41644110046",
+    "https://github.com/alwansan/raf/actions/runs/41644110350",
+    "https://github.com/alwansan/raf/actions/runs/41644109994"
   ],
-  "result": null,
-  "next_step": "CPU-only red/green tests for simulated partial include/license write failure and restored shader writer failure. Never alter zero-match strict gate or any native request."
+  "result": "Source rollback failure reproduced 4/4 intentional RED; fixed and 22/22 GREEN synthetic/previous tests plus independent A3, A9 and authenticated vendor CI. Strict historic original zero-match unchanged.",
+  "next_step": "Scope completed; original full-export provenance and water/kernel gate need separate source work.",
+  "source_sha": "b7188de1daffb34eaba11efcf24d4295f912453a"
 }
