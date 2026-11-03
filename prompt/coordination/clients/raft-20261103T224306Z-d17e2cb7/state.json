@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "username": "raft-20261103T224306Z-d17e2cb7",
+  "display_name": "A8",
+  "session_id": "A8-20261103T224306Z-fcc160e1",
+  "resumed_from": "raft-20261103T145834Z-f43d1341",
+  "status": "active",
+  "updated_at": "2026-11-03T22:43:06.904Z",
+  "base_sha": "3c07c4b5b7de15c454d12fe634be0ce0c37667a6",
+  "current_work": [
+    "LOCAL-005: pinned ZIP2 original managed and Data.rgd no-LFS source provider migration"
+  ],
+  "last_commit": null,
+  "next_step": "Introduce isolated source-fingerprint helper and synthetic controls, migrate original save-path CPU CI to verified ZIP2 source, inspect CI, document remaining runtime gaps.",
+  "memory_path": "prompt/coordination/clients/raft-20261103T224306Z-d17e2cb7/MEMORY.md"
+}
