@@ -76,7 +76,7 @@ class A2StrictScalerValuesTests(unittest.TestCase):
                      {"match": float("nan")}, {"width": math.inf},
                      {"ui": 5}, {"mode": 8}):
             raw, typed = generated_record(**args)
-            with self.assertRaisesRegex(ValueError, "(range|bounded|non-finite)"):
+            with self.assertRaisesRegex(ValueError, "(range|bounded|non-finite|implausible)"):
                 decode_record(raw, typed)
 
     def test_rejects_spoofed_base_field_types(self):
