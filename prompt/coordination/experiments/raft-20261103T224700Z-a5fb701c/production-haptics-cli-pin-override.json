@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T224700Z-a5fb701c",
+  "issue_id": "HAPTICS-008",
+  "status": "red_test_committed",
+  "hypothesis": "Production standalone OBB audit CLI can override immutable Haptics manifest pin via --haptics-manifest-blob, making test-owned forged 29-WAV ZIP and manifest appear original.",
+  "input_hashes": [
+    "original manifest Git SHA1 88df20f0c64ae5f46f057939d4d6d96773a33ef8",
+    "earlier A5 CI41642937521 SUCCESS"
+  ],
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_android_expansion_audit.py -v",
+    "automatic CPU-only .github/workflows/raft-a5-haptics-archive.yml"
+  ],
+  "expected_signal": "RED: caller fixture pin bypasses archive originality via production CLI. GREEN: production parser refuses caller-supplied --haptics-manifest-blob; tests continue passing via explicitly injected Python API fixture pin.",
+  "negative_controls": [
+    "Existing normal production CLI defaults to genuine pin",
+    "test fixture API explicitly supplies fixture pin and continues passing",
+    "native workflow contains --haptics-manifest but no alternate pin"
+  ],
+  "workflow_path": ".github/workflows/raft-a5-haptics-archive.yml",
+  "concurrency_group": "raft-a5-haptics-008-${{ github.run_id }}",
+  "artifact_prefix": null,
+  "budget": "CPU-only no Unity/APK/OBB/XAPK",
+  "run_url": null,
+  "source_sha": "caf21074d204f25749cc344befd94db6729249f4",
+  "result": null,
+  "limitations": [
+    "Not real Unity-generated archive or installed-phone haptics"
+  ],
+  "next_step": "Verify red run first failing test, remove production CLI bypass, await green run; document runtime pending."
+}
