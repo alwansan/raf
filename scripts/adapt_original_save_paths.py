@@ -68,7 +68,8 @@ def apply(project, backup, write=False):
     if write and changed:
         if backup.resolve().is_relative_to(project.resolve()):
             raise ValueError('Backup must remain outside imported project')
-        if any((backup / p.name).exists() for p in (path, meta)):
+        if any((backup / p.name).exists() or (backup / p.name).is_symlink()
+               for p in (path, meta)):
             raise ValueError('Refuse original backup overwrite')
         backup.mkdir(parents=True, exist_ok=True)
         for source in (path, meta):
