@@ -3,8 +3,8 @@
   "owner": "raft-20261103T123040Z-02fe66b3",
   "client_label": "A11",
   "issue_id": "RENDER-002",
-  "status": "planned",
-  "updated_at": "2026-11-03T12:30:40Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T12:40:41Z",
   "base_sha": "aae8cc2070126449fa05049a669235a144309101",
   "hypothesis": "Local 107 shader files cannot be equated with the original 41624581951 exported 140-shader in-run inventory. CPU-only count and provenance joins can expose this gap without claiming restored identities.",
   "intended_files": [
@@ -25,8 +25,12 @@
     "shader-export-scope-v1"
   ],
   "evidence": [
-    "https://github.com/alwansan/raf/actions/runs/41624581951"
+    "https://github.com/alwansan/raf/actions/runs/41624581951",
+    "https://github.com/alwansan/raf/commit/d5aa9e4d5005b3e90f65b1b7cd26c497cf41dcf4",
+    "https://github.com/alwansan/raf/commit/de5c65a335d883e0005f7ddca46a68e898aaee51",
+    "https://github.com/alwansan/raf/commit/d01411409e1e422c04b78533e65e138613a43573",
+    "https://github.com/alwansan/raf/actions/runs/41637552496"
   ],
-  "result": null,
-  "next_step": "Run independent synthetic strict-provenance validator tests, no Unity or LFS."
+  "result": "CPU-only local snapshot-integrity tool created and exact-source GitHub CI completed SUCCESS 11/11. Counts/mismatches and SHA-manifests do not authenticate complete original export. No original full-run export was inspected; zero-match blocker remains.",
+  "next_step": "Use full export in situ under separate authorized coordinator to capture original stage provenance; preserve strict no-match."
 }
