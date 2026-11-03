@@ -44,14 +44,25 @@ def decode_record(raw, tree):
     go, script = tree.get("m_GameObject"), tree.get("m_Script")
     if not isinstance(go, dict) or not isinstance(script, dict):
         raise ValueError("Cannot verify original base PPtr fields")
-    def pptr(offset, expected):
+    def pptr(offset, expected, role):
         if type(expected.get("m_FileID")) is not int or type(expected.get("m_PathID")) is not int:
             raise ValueError("Original base PPtr field type unknown")
         parsed = struct.unpack_from("<iq", raw, offset)
         if parsed != (expected["m_FileID"], expected["m_PathID"]):
-            raise ValueError("Original base PPtr byte layout disagrees with native TypeTree")
-    pptr(0, go)
-    pptr(20, script)
+            candidates64 = [n for n in range(0, 45)
+                            if struct.unpack_from("<iq", raw, n)
+                            == (expected["m_FileID"], expected["m_PathID"])]
+            candidates32 = [n for n in range(0, 45)
+                            if (-(2**31) <= expected["m_PathID"] < 2**31
+                                and struct.unpack_from("<ii", raw, n)
+                                == (expected["m_FileID"], expected["m_PathID"]))]
+            raise ValueError(
+                "Original base PPtr byte layout disagrees with native TypeTree"
+                + " role=" + role
+                + " candidate_offsets_i32i64=" + repr(candidates64)
+                + " candidate_offsets_i32i32=" + repr(candidates32))
+    pptr(0, go, "gameobject")
+    pptr(20, script, "script")
     enabled = tree.get("m_Enabled")
     flags = tree.get("m_EditorHideFlags")
     name = tree.get("m_Name")
