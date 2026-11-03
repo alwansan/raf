@@ -1,0 +1,85 @@
+name: Raft A12 original Subsurface Blur private ShaderLab recovery (CPU only)
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/a12_build_original_blur_wrapper.py'
+      - 'tests/test_a12_original_blur_wrapper.py'
+      - '.github/workflows/raft-a12-original-blur-wrapper.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: raft-a12-original-blur-wrapper-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  recover-original-blur:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+            Raft/Raft_Data
+          persist-credentials: true
+
+      - name: Execute synthetic genuine-pass and ShaderLab refusal tests before source hydration
+        run: |
+          python3 -m unittest discover -s tests -p test_a12_original_blur_passes.py -v
+          python3 -m unittest discover -s tests -p test_a12_original_blur_wrapper.py -v
+
+      - name: Verify disk budget and exact two-owner pointers before LFS
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import shutil
+          from scripts.w1_recover_graphics_programs import OWNERS
+          from scripts.verify_targeted_lfs_compute_sources import verify_sources
+          assert shutil.disk_usage('.').free > 10 * 1024**3
+          assert len(OWNERS) == 2
+          verify_sources(Path('Raft/Raft_Data'), pointers_only=True, expected=OWNERS)
+          print('RAFT_A12_BLUR_WRAPPER_LFS_POINTERS owners=2 verified=true')
+          PY
+
+      - name: Reuse authenticated original W1 two-owner cache
+        uses: actions/cache@v4
+        with:
+          path: .git/lfs/objects
+          key: w1-graphics-87493249-0498f738-v1
+
+      - name: Hydrate just three LFS providers for full original Shader-bearing inventory
+        env:
+          GIT_LFS_SKIP_SMUDGE: '1'
+        run: |
+          set -euo pipefail
+          git lfs install --local
+          git lfs pull --include='Raft/Raft_Data/resources.assets,Raft/Raft_Data/sharedassets0.assets,Raft/Raft_Data/sharedassets36.assets' --exclude='' origin
+
+      - name: Install pinned original Unity serializer and CPU DXBC translation tools
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
+
+      - name: Build genuine original two-pass Blur ShaderLab only in private temp and Vulkan-validate
+        run: |
+          timeout 660s python3 -m scripts.a12_build_original_blur_wrapper \
+            --source Raft/Raft_Data --repo . --out "$RUNNER_TEMP/a12-blur-wrapper-summary.json"
+
+      - name: Retain numeric counts and hashes only, never private ShaderLab or DXBC/HLSL sources
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: a12-original-blur-wrapper-aggregate-${{ github.sha }}
+          path: ${{ runner.temp }}/a12-blur-wrapper-summary.json
+          if-no-files-found: ignore
+          retention-days: 7
