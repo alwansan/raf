@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "username": "raft-20261103T100200Z-9d4ea16b",
+  "issue_id": "LOCAL-005",
+  "id": "original-managed-staging-failure-20261103",
+  "status": "completed",
+  "question": "Can a late instrumentation failure or write failure leave private SHA-pinned original C# partially adapted before .NET diagnostic?",
+  "baseline_provenance": "Old scripts/verify_android_offline_candidate.py computed each instrumented text and immediately wrote it inside a for loop, without pre-validating later classes or restoring earlier originals.",
+  "approach": "Validate all SHA pins and all original instrumentation plans first; write after preflight; on any source-write exception restore exact bytes of attempted originals in reverse order.",
+  "production_code": "scripts/verify_android_offline_candidate.py",
+  "new_tests": "tests/test_a10_offline_source_selection.py",
+  "new_test_cases": [
+    "Later instrument failure leaves both original sources byte-identical and .meta intact",
+    "second write raises after partial truncation and both original sources are rolled back",
+    "all validated source changes install successfully preserving unrelated SDK and .meta",
+    "source drift between selection and installation fails without writing"
+  ],
+  "source_commit": "90066492cec9f2d0d4c54faeb35a641a7ace896c",
+  "tests_commit": "b432955271139540bf47155226efae3a681907be",
+  "workflow_path": ".github/workflows/raft-android-offline-integration-tests.yml",
+  "workflow_run_id": 41634496958,
+  "workflow_job_id": 125912125220,
+  "run_conclusion": "completed_success",
+  "run_head_sha": "b432955271139540bf47155226efae3a681907be",
+  "checks": {
+    "a10_tests_passed": 10,
+    "new_a10_tests_passed": 4,
+    "managed_original_sources_prepared": 12,
+    "offline_rpc_identity_harness": "passed",
+    "managed_diagnostic_compile_exit": 0,
+    "managed_diagnostic_compile_errors": 0,
+    "actual_unity_build": false,
+    "actual_phone_save_load": false
+  },
+  "limitations": [
+    "Rollback best-effort; severe disk failure can also prevent restoration",
+    "Not a transaction for later copies or generated harness failures",
+    "Does not prove original .rgd save/load schema in Unity",
+    "No source/resource/shader/GUID changes, CI LFS=false"
+  ],
+  "parallel": "A1 water FFT, A2 display, A3/A6/A9 render, A7 touch and A8 DIAG-011 untouched",
+  "status_game": "NOT_READY, 0/3 complete reviews"
+}
