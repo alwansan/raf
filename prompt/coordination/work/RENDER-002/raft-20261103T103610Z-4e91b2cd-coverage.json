@@ -1,0 +1,9 @@
+{
+  "owner": "raft-20261103T103610Z-4e91b2cd",
+  "status": "active",
+  "base_sha": "2ca2023bb64a0c4d806089ebcaa09622dde75bc8",
+  "intended_files": [
+    "scripts/probe_builtin_export_coverage.py"
+  ],
+  "hypothesis": "Read-only source subset coverage; A9/A6 files excluded"
+}
