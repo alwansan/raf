@@ -100,5 +100,46 @@ class A2OriginalScalerTests(unittest.TestCase):
             self.assertEqual(len(ORIGINAL_SCRIPTS_BLOB), 40)
             self.assertEqual(len(SCENE_BLOBS["level0"]), 40)
 
+
+    def test_native_settings_script_to_canvas_scaler_ancestry(self):
+        ptr = lambda fid, pid: {"m_FileID": fid, "m_PathID": pid}
+        records = [
+            FakeObject("GameObject", 1, {"m_Name": "SettingsMenu"}),
+            FakeObject("GameObject", 2, {"m_Name": "CanvasRoot"}),
+            FakeObject("Canvas", 3, {"m_GameObject": ptr(0, 2)}),
+            FakeObject("RectTransform", 4, {"m_GameObject": ptr(0, 1),
+                                          "m_Father": ptr(0, 5)}),
+            FakeObject("RectTransform", 5, {"m_GameObject": ptr(0, 2),
+                                          "m_Father": ptr(0, 0)}),
+            FakeObject("MonoBehaviour", 6, {"m_GameObject": ptr(0, 2),
+                                          "m_Script": ptr(1, 25)}),
+            FakeObject("MonoBehaviour", 7, {"m_GameObject": ptr(0, 1),
+                                          "m_Script": ptr(1, 26)}),
+        ]
+        categories = {25: "verified_unity_ui_canvas_scaler",
+                      26: "matching_original_game_class_unverified_Settings"}
+        result = inspect_scene_file(FakeFile(records,
+            ["globalgamemanagers.assets"]), categories)
+        self.assertEqual(result["counts"]["settings_script_named_object_has_verified_scaler_ancestor"], 1)
+        self.assertEqual(result["counts"]["settings_class_script_owner_named_settings"], 1)
+        self.assertFalse(result["canvas_scaler_custom_fields_decoded"])
+        self.assertNotIn("SettingsMenu", str(result))
+
+    def test_unresolved_parent_is_unknown_not_proven_absent_scaler(self):
+        ptr = lambda fid, pid: {"m_FileID": fid, "m_PathID": pid}
+        records = [
+            FakeObject("GameObject", 1, {"m_Name": "SettingsMenu"}),
+            FakeObject("RectTransform", 4, {"m_GameObject": ptr(0, 1),
+                                          "m_Father": ptr(1, 5)}),
+            FakeObject("MonoBehaviour", 7, {"m_GameObject": ptr(0, 1),
+                                          "m_Script": ptr(1, 26)}),
+        ]
+        category = {26: "matching_original_game_class_unverified_Settings"}
+        result = inspect_scene_file(FakeFile(records, ["globalgamemanagers.assets"]), category)
+        self.assertEqual(result["counts"]["settings_script_canvas_scaler_ancestry_unknown"], 1)
+        self.assertNotIn("settings_script_named_object_no_verified_scaler_ancestor_in_this_scene",
+                         result["counts"])
+
+
 if __name__ == "__main__":
     unittest.main()

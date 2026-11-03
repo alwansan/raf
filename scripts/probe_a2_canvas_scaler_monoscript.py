@@ -80,12 +80,13 @@ def resolve_script(script_pptr, external_paths, local_registry, global_registry)
 
 def inspect_scene_file(owner_file, global_registry):
     externals = [x.path for x in owner_file.externals]
-    local_registry, local_counts = script_registry(owner_file.objects.values())
+    local_registry, _ = script_registry(owner_file.objects.values())
     counters = Counter()
     canvas_owners, named_settings, behaviours = set(), set(), []
+    transforms_by_go, owners_by_transform, fathers = {}, {}, {}
     for obj in owner_file.objects.values():
         kind = str(obj.type.name)
-        if kind not in {"GameObject", "Canvas", "MonoBehaviour"}:
+        if kind not in {"GameObject", "Canvas", "MonoBehaviour", "Transform", "RectTransform"}:
             continue
         try:
             tree = obj.read_typetree(check_read=False)
@@ -103,20 +104,70 @@ def inspect_scene_file(owner_file, global_registry):
             owner = local_pptr(tree.get("m_GameObject"))
             if owner:
                 canvas_owners.add(owner)
+        elif kind in {"Transform", "RectTransform"}:
+            owner = local_pptr(tree.get("m_GameObject"))
+            tid = int(obj.path_id)
+            if owner is not None:
+                if owner in transforms_by_go:
+                    transforms_by_go[owner] = "ambiguous"
+                else:
+                    transforms_by_go[owner] = tid
+                owners_by_transform[tid] = owner
+            parent = tree.get("m_Father")
+            if (isinstance(parent, dict)
+                    and type(parent.get("m_FileID")) is int
+                    and type(parent.get("m_PathID")) is int
+                    and parent["m_FileID"] == 0 and parent["m_PathID"] == 0):
+                fathers[tid] = None
+            else:
+                fathers[tid] = local_pptr(parent) or "unknown"
         else:
             if len(behaviours) >= MAX_BEHAVIOURS:
                 raise ValueError("Unbounded original scene MonoBehaviour inventory")
             behaviours.append((tree.get("m_Script"), local_pptr(tree.get("m_GameObject"))))
+    scaler_canvas_owners, settings_script_named_owners = set(), set()
     for ptr, owner in behaviours:
         category = resolve_script(ptr, externals, local_registry, global_registry)
         counters[category] += 1
         if category == "verified_unity_ui_canvas_scaler":
             if owner in canvas_owners:
                 counters["canvas_scaler_owner_is_native_canvas_owner"] += 1
+                scaler_canvas_owners.add(owner)
             if owner in named_settings:
                 counters["canvas_scaler_owner_named_settings"] += 1
         elif category == "matching_original_game_class_unverified_Settings" and owner in named_settings:
             counters["settings_class_script_owner_named_settings"] += 1
+            settings_script_named_owners.add(owner)
+    for go in settings_script_named_owners:
+        tid = transforms_by_go.get(go)
+        if type(tid) is not int or tid not in fathers:
+            counters["settings_script_canvas_scaler_ancestry_unknown"] += 1
+            continue
+        seen, scaler_ancestor, unknown = set(), False, False
+        for _ in range(256):
+            if tid in seen or tid not in fathers:
+                unknown = True
+                break
+            seen.add(tid)
+            ancestor_owner = owners_by_transform.get(tid)
+            if ancestor_owner is None:
+                unknown = True
+                break
+            if ancestor_owner in scaler_canvas_owners:
+                scaler_ancestor = True
+                break
+            parent = fathers[tid]
+            if parent is None:
+                break
+            if parent == "unknown":
+                unknown = True
+                break
+            tid = parent
+        else:
+            unknown = True
+        counters["settings_script_named_object_has_verified_scaler_ancestor" if scaler_ancestor
+                 else "settings_script_canvas_scaler_ancestry_unknown" if unknown
+                 else "settings_script_named_object_no_verified_scaler_ancestor_in_this_scene"] += 1
     return {
         "counts": dict(sorted(counters.items())),
         "original_script_owner_gitmismatch": False,
