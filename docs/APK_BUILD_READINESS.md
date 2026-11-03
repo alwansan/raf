@@ -163,3 +163,8 @@ Live branch review at 5368aef31ce07e982805c63056713b694e0e6cda: no queued/in-pro
 ## Readiness evidence refresh — 3 November 2026, 08:31 Baghdad
 
 Reviewed HEAD 415e51b082bb2c1fff4d7c5d1518205d89d4af91 and nonterminal Actions (none queued/in_progress returned). Existing WATER-001/RENDER-002/FFT-FORMAT-009 source blockers and incomplete integration reviews remain unresolved; no immutable ready candidate exists and complete reviews remain0/3. The latest CPU coordinate experiment is not a substitute for translated-program numerical or Unity image-format evidence. NOT_READY retained; no native request or retry issued. Last game release remains APK80/source9462f8e,11 delivery assets; current CL root identities match the prior review. Next action remains source/resource closure, not a repeated native build.
+
+
+## Coordinate CI confirmed; readiness unchanged — 3 November 2026
+
+[FFT coordinate precision CI41584946408](https://github.com/alwansan/raf/actions/runs/41584946408) COMPLETED SUCCESS on de5dec1e7aede04c678e68fe62d1933f6a5260ca, confirming the isolated Node24 CPU experiment now runs in Actions without LFS. This supersedes its pending status. It does not validate translated shader output, image-format equivalence, complete water kernels or device operation. WATER-001/RENDER-002/FFT-FORMAT-009 remain open; candidate absent, reviews0/3, NOT_READY. No native request or build initiated.

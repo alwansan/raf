@@ -261,3 +261,8 @@ Reviewed HEAD 415e51b082bb2c1fff4d7c5d1518205d89d4af91 and nonterminal Actions (
 ## Reproducible FFT coordinate test lane — 3 November 2026
 
 Executed scripts/audit_fft_binary16_addresses.mjs under actual Node24.22.1 locally: all7 size rows and built-in compute-range/negative-boundary assertions passed (exit0), matching the earlier tool-JS experiment. Added an isolated5-minute CPU-only Node24 Actions lane, triggered only by the address script or its own workflow; no Unity, LFS or shared heavy compute audit is started. Remote result pending; this improves reproducibility rather than proving shader/GPU behavior. No shader or original game input changed, and NOT_READY/0-of-3 remain unchanged.
+
+
+## Coordinate CI confirmed; readiness unchanged — 3 November 2026
+
+[FFT coordinate precision CI41584946408](https://github.com/alwansan/raf/actions/runs/41584946408) COMPLETED SUCCESS on de5dec1e7aede04c678e68fe62d1933f6a5260ca, confirming the isolated Node24 CPU experiment now runs in Actions without LFS. This supersedes its pending status. It does not validate translated shader output, image-format equivalence, complete water kernels or device operation. WATER-001/RENDER-002/FFT-FORMAT-009 remain open; candidate absent, reviews0/3, NOT_READY. No native request or build initiated.
