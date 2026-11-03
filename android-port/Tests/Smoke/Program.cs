@@ -225,7 +225,10 @@ internal static class Program
                 string outside = Path.Combine(root, "missing-target.bin");
                 Assert(!File.Exists(outside), "Negative control target already exists");
                 File.CreateSymbolicLink(leaf, outside);
-                Assert(!File.Exists(leaf), "Dangling link unexpectedly resolves to a file");
+                // File.Exists can report the link entry as existing on some .NET runtimes
+                // even when its target is missing. Assert the actual link metadata.
+                Assert((File.GetAttributes(leaf) & FileAttributes.ReparsePoint) != 0,
+                    "Dangling save entry is not a symbolic link");
                 ExpectException<IOException>(() => paths.GetWorldSaveFile("valid_world"));
                 ExpectException<IOException>(() => paths.GetWorldSaveFileAndCreateDirectory("valid_world"));
                 Assert(!File.Exists(outside), "Broken link unexpectedly created target");
