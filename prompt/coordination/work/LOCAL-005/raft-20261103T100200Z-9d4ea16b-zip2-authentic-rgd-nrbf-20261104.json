@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "username": "raft-20261103T100200Z-9d4ea16b",
+  "client_label": "A10",
+  "session_id": "a10-20261103T224523Z-dc871304",
+  "issue_id": "LOCAL-005",
+  "status": "active",
+  "updated_at": "2026-11-03T22:45:23Z",
+  "base_sha": "2480a0d932e3339e24bcb11bdce832aee8516ed3",
+  "hypothesis": "Use original ZIP2 Data.rgd 2941-byte artifact to validate BinaryFormatter NRBF payload structural decodability without executing deserialization code, ensuring original .rgd byte-level provenance while narrowing the real save compatibility gap.",
+  "intended_files": [
+    "tests/a10-original-rgd-nrbf/OriginalRgdProbe.csproj",
+    "tests/a10-original-rgd-nrbf/Program.cs",
+    ".github/workflows/raft-a10-zip2-original-rgd-nrbf.yml",
+    "prompt/coordination/work/LOCAL-005/raft-20261103T100200Z-9d4ea16b-zip2-authentic-rgd-nrbf-20261104.json",
+    "prompt/coordination/experiments/raft-20261103T100200Z-9d4ea16b/zip2-authentic-rgd-nrbf-20261104.json",
+    "prompt/coordination/clients/raft-20261103T100200Z-9d4ea16b/state.json",
+    "prompt/coordination/clients/raft-20261103T100200Z-9d4ea16b/MEMORY.md"
+  ],
+  "related_work": [
+    "A10 prior original source selection completed",
+    "A6 local save symlink guards",
+    "A8 world lexical diagnostics",
+    "A1 ZIP2 pin source provider separate FFT workflow"
+  ],
+  "experiment_ids": [
+    "zip2-authentic-rgd-nrbf-20261104"
+  ],
+  "zip2_source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "original_path": "Raft/Raft_Data/StreamingAssets/Data.rgd",
+  "original_bytes": 2941,
+  "original_sha256": "b2785187aa11e33872698adfa79ab252cf65a824d92bee7e88773ce4aa11cbba",
+  "constraints": [
+    "Read zip2 only, write feature/android-native-port only",
+    "No LFS, proprietary payload publication, or BinaryFormatter.Deserialize",
+    "No Unity/APK/OBB/XAPK/Release or native request",
+    "No changes to original .rgd, .meta/GUIDs or other agents files"
+  ],
+  "result": null,
+  "next_step": "Run isolated GitHub Actions verification, inspect first authentic graph result. Assert source hash and NRBF record extraction; report only safe metadata and limitations."
+}
