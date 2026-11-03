@@ -66,6 +66,10 @@ class Zip2Owners(unittest.TestCase):
         different_declaration = tree(['a','b'])
         different_declaration['m_ParsedForm']['m_Name'] = 'different ShaderLab name'
         self.assertEqual(shader_key(different_declaration), a)
+        different_declaration['m_Name'] = ''
+        self.assertIsNone(shader_key(different_declaration))
+        self.assertIsNotNone(shader_key(different_declaration, 'declaration'))
+        self.assertEqual(classify([None],{})['unavailable_original_name_keys'],1)
 
 
 if __name__ == '__main__': unittest.main()
