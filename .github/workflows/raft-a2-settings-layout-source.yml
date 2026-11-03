@@ -1,0 +1,46 @@
+name: Raft A2 private original Settings UI layout audit (CPU only)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-a2-settings-layout-source.yml'
+      - 'scripts/probe_a2_settings_layout.py'
+      - 'tests/test_probe_a2_settings_layout.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raft-a2-display-003-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  source-layout:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+            Raft/Raft_Data/Managed
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Run A2 source scanner synthetic checks
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_probe_a2_settings_layout.py -v
+          python3 -m py_compile scripts/probe_a2_settings_layout.py
+      - name: Recover original managed CSharp9 privately and inventory Settings layout
+        env:
+          DOTNET_PROCESSOR_COUNT: '2'
+        run: |
+          set -euo pipefail
+          dotnet tool install ilspycmd --version 11.2.0.10050 --tool-path "$RUNNER_TEMP/a2-ilspy"
+          timeout 360s "$RUNNER_TEMP/a2-ilspy/ilspycmd" -p -lv CSharp9_0 \
+            -o "$RUNNER_TEMP/a2-original" Raft/Raft_Data/Managed/Assembly-CSharp.dll \
+            > "$RUNNER_TEMP/a2-private-decompile.log" 2>&1
+          python3 -m scripts.probe_a2_settings_layout --source "$RUNNER_TEMP/a2-original"
+          echo 'RAFT_A2_PRIVATE_SOURCE_ANALYSIS_ONLY unityRan=false androidBuildRan=false'
