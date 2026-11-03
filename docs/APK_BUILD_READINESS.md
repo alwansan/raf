@@ -153,3 +153,8 @@ WATER-001, RENDER-002 and FFT-FORMAT-009 remain OPEN. Actual shader binding in U
 [Final full LFS audit 41566206022](https://github.com/alwansan/raf/actions/runs/41566206022), job125688252081, COMPLETED SUCCESS on source358e42b0d2863b53d5904d82ed1209a897d3603a after the OpSelect/copy-alias test refinement: all 20 original programs retain uniquely resolved image operation bindings and all20 temporary formatless patched modules pass Vulkan1.1 and match original typed-image declarations. [Independent no-LFS synthetic CI41566206211](https://github.com/alwansan/raf/actions/runs/41566206211) also COMPLETED SUCCESS on the exact same source. Distinguish both source checks from Unity or device operation. The new lean lane permits future synthetic-only edits without triggering another 337660952-byte original LFS hydration.
 
 No source/resource acceptance is upgraded: WATER-001, RENDER-002 and FFT-FORMAT-009 remain OPEN, native test candidate is absent, full readiness audits0/3 and NOT_READY. Latest complete game delivery is still APK80, not these later changes.
+
+
+## Readiness recheck — 3 November 2026, 07:47 Baghdad
+
+Live branch review at 5368aef31ce07e982805c63056713b694e0e6cda: no queued/in-progress Actions returned. Latest binary16 address experiment remains CPU/model-only; it does not close WATER-001, RENDER-002 or FFT-FORMAT-009, and does not count as any of the three complete immutable-candidate reviews. No candidate selected, readiness0/3, NOT_READY. No native request or build started. Next evidence remains actual translated FFT numerical/format behavior and authentic complete shader restoration, plus the unresolved integration reviews already listed. Existing task configurations and native request files remain unchanged.
