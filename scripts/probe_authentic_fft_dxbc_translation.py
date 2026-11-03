@@ -17,6 +17,7 @@ from scripts.probe_directx_shader_bridge import inspect
 from scripts.run_original_dxbc_translation_probe import version_tokens
 from scripts.probe_fft_spirv_images import image_resource_contracts, compare_image_contracts
 from scripts.probe_fft_spirv_operation_profile import image_operation_profile, compare_image_operation_profiles
+from scripts.probe_fft_spirv_formatless_repair import restore_formatless_write
 
 OWNER = "sharedassets0.assets"
 PATH_ID = 2456
@@ -143,6 +144,10 @@ def cross_compile_roundtrip(source_spv, original_reflection, original_bindings,
         "authored_shaderlab_restored": False,
         "typed_image_contract_preserved": False,
         "image_operation_profile_preserved": False,
+        "private_formatless_restoration_structurally_constructed": False,
+        "private_formatless_restoration_valid_vulkan_1_1": False,
+        "private_formatless_restoration_image_contract_matched": False,
+        "private_formatless_restoration_gpu_or_math_proven": False,
     }
     hlsl = temporary / ("fft_" + str(index) + ".hlsl")
     recomp = temporary / ("fft_" + str(index) + "_roundtrip.spv")
@@ -178,6 +183,19 @@ def cross_compile_roundtrip(source_spv, original_reflection, original_bindings,
     op_diff = compare_image_operation_profiles(original_reflection_image_ops, image_ops)
     result['image_operation_profile_preserved'] = op_diff['same_image_operation_and_capability_counts']
     result['image_operation_profile_difference'] = op_diff
+    try:
+        temporary_repaired = restore_formatless_write(
+            module, original_images, original_reflection_image_ops)
+    except ValueError:
+        return result
+    private_path = temporary / ("fft_" + str(index) + "_formatless_private.spv")
+    private_path.write_bytes(temporary_repaired)
+    result["private_formatless_restoration_structurally_constructed"] = True
+    result["private_formatless_restoration_image_contract_matched"] = (
+        image_resource_contracts(temporary_repaired)["typed_image_declarations"] ==
+        original_images["typed_image_declarations"])
+    result["private_formatless_restoration_valid_vulkan_1_1"] = run(
+        ["spirv-val", "--target-env", "vulkan1.1", str(private_path)], timeout=25)
     return result
 
 
@@ -268,6 +286,10 @@ def probe(root):
             "storage_image_write_without_format_capability_declared", False) for x in reports),
         "roundtrip_image_operation_profile_preserved_count": sum(x.get(
             "private_hlsl_roundtrip", {}).get("image_operation_profile_preserved", False) for x in reports),
+        "private_formatless_restoration_valid_vulkan_count": sum(x.get(
+            "private_hlsl_roundtrip", {}).get("private_formatless_restoration_valid_vulkan_1_1", False) for x in reports),
+        "private_formatless_restoration_matched_original_contract_count": sum(x.get(
+            "private_hlsl_roundtrip", {}).get("private_formatless_restoration_image_contract_matched", False) for x in reports),
         "roundtrip_typed_images_preserved_count": sum(x.get("private_hlsl_roundtrip", {}).get(
             "typed_image_contract_preserved", False) for x in reports),
         "original_kernel_indices_verified": False,
