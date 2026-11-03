@@ -4,8 +4,8 @@
   "client_label": "A10",
   "session_id": "a10-20261103T224523Z-dc871304",
   "issue_id": "LOCAL-005",
-  "status": "active",
-  "updated_at": "2026-11-03T22:45:23Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T22:55:14Z",
   "base_sha": "2480a0d932e3339e24bcb11bdce832aee8516ed3",
   "hypothesis": "Use original ZIP2 Data.rgd 2941-byte artifact to validate BinaryFormatter NRBF payload structural decodability without executing deserialization code, ensuring original .rgd byte-level provenance while narrowing the real save compatibility gap.",
   "intended_files": [
@@ -36,6 +36,34 @@
     "No Unity/APK/OBB/XAPK/Release or native request",
     "No changes to original .rgd, .meta/GUIDs or other agents files"
   ],
-  "result": null,
-  "next_step": "Run isolated GitHub Actions verification, inspect first authentic graph result. Assert source hash and NRBF record extraction; report only safe metadata and limitations."
+  "result": {
+    "source_sha": "951e25e213160c442bd10a47631242d6fffcdf5d",
+    "original_rgd_sha256": "b2785187aa11e33872698adfa79ab252cf65a824d92bee7e88773ce4aa11cbba",
+    "original_managed_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "success_run_id": 41734609973,
+    "job_id": 126260447371,
+    "conclusion": "SUCCESS",
+    "byte_count": 2941,
+    "root_record": "ClassWithMembersAndTypes",
+    "root_bytes_consumed": 2941,
+    "game_original_type_count": 3033,
+    "root_type_present_in_original_assembly": true,
+    "root_declared_field_count": 1,
+    "rgd_root_serialized_members": 1,
+    "field_name_exact_matches": 0,
+    "property_count": 0,
+    "implements_ISerializable_direct": false,
+    "negative_controls_passed": 4,
+    "original_bytes_modified": false,
+    "unity_tested": false
+  },
+  "next_step": "Investigate the single root member naming discrepancy with original producer/consumer / field attributes and keep full game NOT_READY. Does not prove actual save/load.",
+  "code_commit": "951e25e213160c442bd10a47631242d6fffcdf5d",
+  "workflow_commit": "66af65b82a57f21292dfa2629c3b7832e78eeaa6",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41734043230",
+    "https://github.com/alwansan/raf/actions/runs/41734409921",
+    "https://github.com/alwansan/raf/actions/runs/41734609973",
+    "docs/A10_ZIP2_ORIGINAL_RGD_SCHEMA_2026-11-04.md"
+  ]
 }
