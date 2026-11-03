@@ -3,7 +3,7 @@
   "owner": "raft-20261103T153100Z-b4d2c9e7",
   "issue_id": "RENDER-002",
   "status": "completed",
-  "updated_at": "2026-11-03T15:47:30Z",
+  "updated_at": "2026-11-03T17:10:00Z",
   "base_sha": "153edf140d17cac8c2552a998a2f0ed104e0cb71",
   "hypothesis": "A13's 156 unresolved external Material->Shader pointers are sliceable from their serialized m_Externals tables; most of them point to already-authenticated owner files instead of truly unknown owners, and the resulting names can prioritize appearance-side shader recovery.",
   "intended_files": [
@@ -15,6 +15,12 @@
     "prompt/coordination/work/RENDER-002/raft-20261103T153100Z-b4d2c9e7-externals.json",
     "prompt/coordination/experiments/raft-20261103T153100Z-b4d2c9e7/material-shader-externals.json",
     "prompt/coordination/discussions/RENDER-002/2026-11-03T154500Z-raft-20261103T153100Z-b4d2c9e7-externals-done.md",
+    "scripts/probe_w3_shader_property_schema.py",
+    "scripts/w3_test_shader_property_schema.py",
+    "docs/W3_SHADER_PROPERTY_SCHEMA_2026-11-03.json",
+    "docs/W3_SHADER_PROPERTY_SCHEMA_2026-11-03.md",
+    "prompt/coordination/experiments/raft-20261103T153100Z-b4d2c9e7/shader-property-schema.json",
+    "prompt/coordination/discussions/RENDER-002/2026-11-03T165000Z-raft-20261103T153100Z-b4d2c9e7-scope-announcement-shader-prop-schema.md",
     "prompt/STATUS.md"
   ],
   "related_work": [
@@ -28,8 +34,9 @@
     "aggregate JSON committed: docs/W3_MATERIAL_SHADER_EXTERNALS_2026-11-03.json sha256 b15ab1494db0d17e823201400db8cac5480e6cfc6bc832a402d999cc24b695a2",
     "synthetic model tests 9/9 OK local; all probe negative controls true; exit 0",
     "resolution: 144/514 cross-file material references resolve to 11 distinct in-game Shader objects; 12 engine transports fail-closed",
-    "follow-up (same cycle): full-game inventory over 82 byte-verified local owners committed docs/W3_FULL_MATERIAL_SHADER_INVENTORY_2026-11-03.json sha256 d80256a7e0b51c17b263a089d56c01eb9d32b57f6085b64f64f9acb94af842f8 — 1556 materials / 165 shaders / 1556 references fully resolved (437 same-file, 1103 cross-owner, 16 engine transports fail-closed), 77/77 named targets; tests 7/7 + 9/9; prior superseded run from a strings/list classification bug corrected and re-run"
+    "follow-up (same cycle): full-game inventory over 82 byte-verified local owners committed docs/W3_FULL_MATERIAL_SHADER_INVENTORY_2026-11-03.json sha256 d80256a7e0b51c17b263a089d56c01eb9d32b57f6085b64f64f9acb94af842f8 — 1556 materials / 165 shaders / 1556 references fully resolved (437 same-file, 1103 cross-owner, 16 engine transports fail-closed), 77/77 named targets; tests 7/7 + 9/9; prior superseded run from a strings/list classification bug corrected and re-run",
+    "step 3 (same cycle): priority-shader serialized property/keyword schema committed docs/W3_SHADER_PROPERTY_SCHEMA_2026-11-03.json sha256 7a698ec263d9cf5509c1c6aa320637127f31287123bd00b52f88b621f7758a8b — 11 identity-exact targets, prop type enum verified (0=Color, 2=Float, 3=Range, 4=Texture) via Standard membership match, keyword budgets 8-38 per shader, m_ParsedForm.m_Dependencies=0 for all 11; tests 8/8; names published only as sorted-list SHA commitments"
   ],
   "result": "completed — reference-topology evidence only; no shader restoration, no water/render gate closed; reported in docs report with explicit limits. Same-cycle full-game extension result recorded in evidence fields.",
-  "next_step": "hand priority list to W1 (done via discussion); full-game inventory committed; next options: affected-materials property/color/keyword audit, texture dependency mapping (m_NonModifiableTextures), StandardVColor vertex-color field audit"
+  "next_step": "hand priority list to W1 (done via discussion); full-game inventory + priority-shader property/keyword schema committed; next options: per-material keyword-usage audit for priority shaders, m_FallbackName/m_CustomEditorName enumeration, or resource-binding map (m_NonModifiableTextures) inside same owners"
 }

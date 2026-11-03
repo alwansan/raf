@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T153100Z-b4d2c9e7",
+  "status": "completed",
+  "hypothesis": "The 11 appearance-priority original Shader objects expose their serialized property/keyword schemas (m_PropInfo, m_KeywordNames, m_ParsedForm.m_Dependencies) with identity-exact names, giving every later ShaderLab reconstruction its exact keyword budget and property layout without reading program bodies.",
+  "input_hashes": [
+    "sha256(resources.assets,111533516)=87493249f1adfc0c5eb8b82e4e199e208cd2c95eabe9796cab82116c4838595c",
+    "sha256(sharedassets0.assets,115978112)=0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "committed-inventory-identity-source=docs/W3_FULL_MATERIAL_SHADER_INVENTORY_2026-11-03.json (sha d80256a7e0b51c17b263a089d56c01eb9d32b57f6085b64f64f9acb94af842f8)"
+  ],
+  "commands": [
+    "python3 scripts/probe_w3_shader_property_schema.py --game-data <Raft_Data> --aggregate-json docs/W3_SHADER_PROPERTY_SCHEMA_2026-11-03.json",
+    "python3 scripts/w3_test_shader_property_schema.py"
+  ],
+  "expected_signal": "identity-exact targets; complete prop-type classification with zero unknowns; per-target keyword counts 8-38; deterministic SortedNameList SHA commitments; failure controls all true",
+  "negative_controls": [
+    "identity mismatch rejected (m_ParsedForm.m_Name exact-match gate)",
+    "missing target pathID rejected",
+    "out-of-enum m_Type and nameless props conservatively bucketed unknown (fail-closed against name loss)",
+    "non-string dependency names never fake-committed"
+  ],
+  "workflow_path": null,
+  "concurrency_group": null,
+  "artifact_prefix": null,
+  "budget": "local CPU only, minutes; no LFS, no CI, no Unity",
+  "run_url": null,
+  "source_sha": "9eaa0599c3f6c6e2ee081f3d100bb308f14cc8a6",
+  "result": "completed. Artifact docs/W3_SHADER_PROPERTY_SCHEMA_2026-11-03.json sha256 7a698ec263d9cf5509c1c6aa320637127f31287123bd00b52f88b621f7758a8b. 11 priority targets identity-exact: Standard(2398) 27 props [2 Color,10 Float,6 Range,9 Texture,37 keywords]; BlockPaint(2424) 35 props; SpeedTree8 38 keywords; particle/fire family 8-9 keywords with 2 texture slots each; all names published only as sorted-list SHA commitments. Type enum verified: 0=Color,2=Float,3=Range (6/6 Standard membership match,),4=Texture (9/9 membership + m_DefTexture evidence). m_ParsedForm.m_Dependencies=0 for all 11.",
+  "limitations": [
+    "schema/commitment aggregate only: no material property values (W2 colors lane), no program bodies (W1 lane), no texture payload/format audit (W2 formats lane)",
+    "m_KeywordFlags semantics counted-only, not interpreted beyond name count",
+    "local execution documented, not claimed as a CI run"
+  ],
+  "next_step": "publish results summary in STATUS + docs; options afterward: per-material keyword-usage audit for priority shaders, m_FallbackName/m_CustomEditorName enumeration, or resource-binding map (m_NonModifiableTextures) inside same owners"
+}

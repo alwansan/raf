@@ -1,0 +1,302 @@
+{
+  "negative_controls": {
+    "identity_mismatch_rejected": true,
+    "missing_target_rejected": true,
+    "wrong_prop_type_bucketed_unknown": true
+  },
+  "owners": {
+    "resources.assets": {
+      "bytes": 111533516,
+      "sha256": "87493249f1adfc0c5eb8b82e4e199e208cd2c95eabe9796cab82116c4838595c",
+      "verified": true
+    },
+    "sharedassets0.assets": {
+      "bytes": 115978112,
+      "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+      "verified": true
+    }
+  },
+  "probe": "w3-priority-shader-property-schema",
+  "schema_version": 1,
+  "targets": [
+    {
+      "dependencies_commitment": null,
+      "dependencies_count": 0,
+      "keyword_names_count": 37,
+      "keywords_commitment": "b5525552667e5804b85c876cb8cd9a2e6403d7b3104a7e5d6fcdd4d6e75e38e5",
+      "name": "Standard",
+      "name_lists_commitment": {
+        "all": "911462cfd734885393df2851114337be50f284bfc2007f217c4ada311967355c",
+        "colors": "2f1f9704ffa9071601d4bd18d62c5dd420201c13a4d3cbe0a6df176399509a2a",
+        "floats": "6e82f5473f3a8866dd2e8fb0709d5a22b012179cbbc2a149bcbe79c2ff932230",
+        "textures": "11ebb1bb99c02f857b6f95fa6437da284592b4cb1de6548c209a4c1dcff21711",
+        "vectors": null
+      },
+      "owner": "sharedassets0.assets",
+      "path_id": 2398,
+      "props_by_type": {
+        "Color": 2,
+        "Float": 10,
+        "ScalarType3": 6,
+        "Texture": 9,
+        "Vector": 0,
+        "unknown": 0
+      },
+      "props_total": 27
+    },
+    {
+      "dependencies_commitment": null,
+      "dependencies_count": 0,
+      "keyword_names_count": 27,
+      "keywords_commitment": "3283a4b3a79b19eca929dc34ddf989b4f29f1cc20e81c936db3de57370939a2a",
+      "name": "Skin_Amplify",
+      "name_lists_commitment": {
+        "all": "a234443a9d7553a8c9f87074cbe0319f67a71171e07062e4c013f61edd95e8f0",
+        "colors": "209bfb6c0e05d7ee294be742557a51e8b228f5952d46f9f58421de02734f707c",
+        "floats": "75b4fe38099614ff5675fccb5de12aa9f6de1ef29226b61eca3040314fcc9b3f",
+        "textures": "5335d117aac238c59d1bfcd479e98717c5a431553b7cf68d8f005eaac82c1cc1",
+        "vectors": null
+      },
+      "owner": "sharedassets0.assets",
+      "path_id": 2416,
+      "props_by_type": {
+        "Color": 1,
+        "Float": 1,
+        "ScalarType3": 5,
+        "Texture": 6,
+        "Vector": 0,
+        "unknown": 0
+      },
+      "props_total": 13
+    },
+    {
+      "dependencies_commitment": null,
+      "dependencies_count": 0,
+      "keyword_names_count": 27,
+      "keywords_commitment": "3283a4b3a79b19eca929dc34ddf989b4f29f1cc20e81c936db3de57370939a2a",
+      "name": "Shimmer",
+      "name_lists_commitment": {
+        "all": "460f7f39beb039ddf071c0ec65e7a27a9640b563a5e86a7abaaa88464370f059",
+        "colors": "addb6e5cfc8619c1bd0d30abf12d5a5cb71a8c7e13d31faab696d519eb81753e",
+        "floats": "c6cf79b23e8023ac17f54ce237884c8e544dae636557ca6a7e58c8efead8cccb",
+        "textures": "931a27f802e6ac1f7e2da251dc87bf734031b584ccafb7dd6ff303e85cf59617",
+        "vectors": null
+      },
+      "owner": "sharedassets0.assets",
+      "path_id": 2445,
+      "props_by_type": {
+        "Color": 1,
+        "Float": 4,
+        "ScalarType3": 3,
+        "Texture": 5,
+        "Vector": 0,
+        "unknown": 0
+      },
+      "props_total": 13
+    },
+    {
+      "dependencies_commitment": null,
+      "dependencies_count": 0,
+      "keyword_names_count": 27,
+      "keywords_commitment": "3283a4b3a79b19eca929dc34ddf989b4f29f1cc20e81c936db3de57370939a2a",
+      "name": " BlockPaint",
+      "name_lists_commitment": {
+        "all": "43d20e173e4759f56cf913153296f47c76e1a246ec49b6defbe464b28b8fa529",
+        "colors": "d3d26ad472c13361d585c7cd9871f95edd5192201c7fcc4ce065d391ac79ec14",
+        "floats": "c63d5ba9693bb4b5486ee9e107a293754f7fd37cfbea339d5fffcae27d6184b1",
+        "textures": "927d30f73f6cb01dff0bbc39260f9381bd11d008508269da47fe79ec0a34e9c0",
+        "vectors": null
+      },
+      "owner": "sharedassets0.assets",
+      "path_id": 2424,
+      "props_by_type": {
+        "Color": 5,
+        "Float": 6,
+        "ScalarType3": 18,
+        "Texture": 6,
+        "Vector": 0,
+        "unknown": 0
+      },
+      "props_total": 35
+    },
+    {
+      "dependencies_commitment": null,
+      "dependencies_count": 0,
+      "keyword_names_count": 38,
+      "keywords_commitment": "dce0f2029ffb321ce5ebeb9ddd9fc6fa869e83f7d3d0e440dc57aff081fbb182",
+      "name": "Nature/SpeedTree8",
+      "name_lists_commitment": {
+        "all": "b7d6828563d6eb9b3422c03f0d6b2532666a4a22333de57ecde135b6dc2ba287",
+        "colors": "07ed3dbf3eecc56cd0d4e5d0ecc1aa7807ed89512ef5c7d46bee77723f4d8aad",
+        "floats": "d1c94328c58397797851f75675bb5e8a1cd3052e4576c7b9a0f76fda91dbea21",
+        "textures": "c297ad6ffe3d1f2bfd6ee54ddf4ef15064fa3c1193a965e7935e4fdfd9a49d39",
+        "vectors": null
+      },
+      "owner": "sharedassets0.assets",
+      "path_id": 2405,
+      "props_by_type": {
+        "Color": 3,
+        "Float": 5,
+        "ScalarType3": 5,
+        "Texture": 4,
+        "Vector": 0,
+        "unknown": 0
+      },
+      "props_total": 17
+    },
+    {
+      "dependencies_commitment": null,
+      "dependencies_count": 0,
+      "keyword_names_count": 9,
+      "keywords_commitment": "c3474b6e857c38158110234e03adb18ff1db1133a49a0812e4640ba4a1bea048",
+      "name": "ParticleShader",
+      "name_lists_commitment": {
+        "all": "aac3a8490d0a8774b186018af185b832c9e8a6d765958f652c6152e8934d9170",
+        "colors": "d206be6a1a0d31a00505b7c055055ca048c12cd5049318b8e1d223b861af6844",
+        "floats": "febe264d482ad2b53626c151dfe41629bf6bdeba78bf9a15e4707db9946944f4",
+        "textures": "d0d3f88bd022ebb9be73127941db8e8e3a5dc688142be25af3e23228286e44f0",
+        "vectors": null
+      },
+      "owner": "sharedassets0.assets",
+      "path_id": 2426,
+      "props_by_type": {
+        "Color": 1,
+        "Float": 4,
+        "ScalarType3": 5,
+        "Texture": 2,
+        "Vector": 0,
+        "unknown": 0
+      },
+      "props_total": 12
+    },
+    {
+      "dependencies_commitment": null,
+      "dependencies_count": 0,
+      "keyword_names_count": 27,
+      "keywords_commitment": "3283a4b3a79b19eca929dc34ddf989b4f29f1cc20e81c936db3de57370939a2a",
+      "name": "Tri-Planar",
+      "name_lists_commitment": {
+        "all": "ccac536afeaa54484439aa0b214ea229faec2a59e6f704684f0c412256756324",
+        "colors": "03a364de73bd9bd77220333f87ca1dcb4266963e82933e7e0c56924dbaedaf0b",
+        "floats": "5ac6e6eba1d125b6af96feb041d2afd39a841c1363f88877f2ce97a95afa7195",
+        "textures": "4f2983cb29d5918514bac7be9769a44736f98cbc602ee0ac2b40d5cff3e0526c",
+        "vectors": null
+      },
+      "owner": "sharedassets0.assets",
+      "path_id": 2414,
+      "props_by_type": {
+        "Color": 2,
+        "Float": 4,
+        "ScalarType3": 5,
+        "Texture": 5,
+        "Vector": 0,
+        "unknown": 0
+      },
+      "props_total": 16
+    },
+    {
+      "dependencies_commitment": null,
+      "dependencies_count": 0,
+      "keyword_names_count": 27,
+      "keywords_commitment": "3283a4b3a79b19eca929dc34ddf989b4f29f1cc20e81c936db3de57370939a2a",
+      "name": "Vegetation",
+      "name_lists_commitment": {
+        "all": "f6c2ea491ce7dd25e40d9407850ebbce8890af01c395bf8a846e47a901da3404",
+        "colors": "addb6e5cfc8619c1bd0d30abf12d5a5cb71a8c7e13d31faab696d519eb81753e",
+        "floats": "cd0bd570a86306861ff675e0b063838ba03ae6f35e7a7847bb07a60799e236f0",
+        "textures": "b8ef4a53815f7bd4e8ebefb994cf931c1b25bae52f4e33c0ebf1e7aeb37f0e2c",
+        "vectors": null
+      },
+      "owner": "sharedassets0.assets",
+      "path_id": 2439,
+      "props_by_type": {
+        "Color": 1,
+        "Float": 3,
+        "ScalarType3": 8,
+        "Texture": 4,
+        "Vector": 0,
+        "unknown": 0
+      },
+      "props_total": 16
+    },
+    {
+      "dependencies_commitment": null,
+      "dependencies_count": 0,
+      "keyword_names_count": 8,
+      "keywords_commitment": "e6898e927f0ea12f27c0ff386895a92426dcc0a67b9823f599d8861c5238938a",
+      "name": "ParticleShader_Additive",
+      "name_lists_commitment": {
+        "all": "6bc022e5b99217db1318f169a49d3cd27804f39efd0d94fdde49d89e23f56074",
+        "colors": "d206be6a1a0d31a00505b7c055055ca048c12cd5049318b8e1d223b861af6844",
+        "floats": "470927488f9e9cb2a08a85a6c2529570878babdc8f941179e3b033b709f3ca28",
+        "textures": "d0d3f88bd022ebb9be73127941db8e8e3a5dc688142be25af3e23228286e44f0",
+        "vectors": null
+      },
+      "owner": "sharedassets0.assets",
+      "path_id": 2417,
+      "props_by_type": {
+        "Color": 1,
+        "Float": 3,
+        "ScalarType3": 1,
+        "Texture": 2,
+        "Vector": 0,
+        "unknown": 0
+      },
+      "props_total": 7
+    },
+    {
+      "dependencies_commitment": null,
+      "dependencies_count": 0,
+      "keyword_names_count": 26,
+      "keywords_commitment": "55d5155539e7bb65fea30068795eb0d7c29977c96d4c192f58664b49fbca7e91",
+      "name": "AnimalDissolve",
+      "name_lists_commitment": {
+        "all": "bac34fb0f032f870cfb72726aae5ea3eaec9b2775e02ae94fa5cb384227261a3",
+        "colors": "0bfee859f29959c9deba21e42450a721e8c20d708a138549138f0a955b4213bd",
+        "floats": "2355c5faf59afc6de90b53405546addeb5c5ab0b21b436f66f09a0ed4fc3a0bd",
+        "textures": "9e8e1054356ba07389fe4c17909b045f5de475fe20fd0f1ce43ef9cc4d73812f",
+        "vectors": null
+      },
+      "owner": "sharedassets0.assets",
+      "path_id": 2451,
+      "props_by_type": {
+        "Color": 1,
+        "Float": 4,
+        "ScalarType3": 3,
+        "Texture": 9,
+        "Vector": 0,
+        "unknown": 0
+      },
+      "props_total": 17
+    },
+    {
+      "dependencies_commitment": null,
+      "dependencies_count": 0,
+      "keyword_names_count": 9,
+      "keywords_commitment": "47acb94735eb188373f13dac0210525f531d24fe527e4edbc6d16c8869bdaf3b",
+      "name": "FireParticles_Amplify",
+      "name_lists_commitment": {
+        "all": "93bdeb164c9c3e06c8e91555b2821891c14d11ee9aeac44c8c6891c985e5d43e",
+        "colors": "d206be6a1a0d31a00505b7c055055ca048c12cd5049318b8e1d223b861af6844",
+        "floats": "df06bfccd2e4ce47599ce042a997806d0a515770b3facf6809221ed0d096ed03",
+        "textures": "4fe2d0ca10b898310fd922c32a808fc5e61ffc555052cb23ae9bdf8b7f7017af",
+        "vectors": null
+      },
+      "owner": "sharedassets0.assets",
+      "path_id": 2440,
+      "props_by_type": {
+        "Color": 1,
+        "Float": 4,
+        "ScalarType3": 6,
+        "Texture": 2,
+        "Vector": 0,
+        "unknown": 0
+      },
+      "props_total": 13
+    }
+  ],
+  "tool_versions": {
+    "python": "3.14.8",
+    "unitypy": "1.25.4"
+  }
+}
