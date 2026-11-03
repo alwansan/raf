@@ -63,10 +63,28 @@ jobs:
           dpkg-query -W vkd3d-compiler spirv-tools spirv-cross glslang-tools
       - name: Compile W1 private CPU Vulkan executor
         run: g++ -O2 -std=c++17 scripts/w1_depth_fragment_vulkan.cpp -lvulkan -o "$RUNNER_TEMP/w1-fragment-vulkan"
+      - name: Verify known sampled-image sum before any original numerical comparison
+        run: |
+          set -euo pipefail
+          export VK_DRIVER_FILES="$(find /usr/share/vulkan/icd.d -maxdepth 1 -name '*lvp*.json' -print -quit)"
+          test -n "$VK_DRIVER_FILES"
+          cat >"$RUNNER_TEMP/w1-canary.comp" <<'EOF'
+          #version 450
+          layout(local_size_x=1,local_size_y=1) in;
+          layout(set=0,binding=0) uniform sampler2D src0;
+          layout(set=0,binding=1) uniform sampler2D src1;
+          layout(set=0,binding=2,rgba32f) uniform writeonly image2D dst;
+          void main(){ivec2 p=ivec2(gl_GlobalInvocationID.xy);imageStore(dst,p,texelFetch(src0,p,0)+texelFetch(src1,p,0));}
+          EOF
+          glslangValidator -V -S comp -o "$RUNNER_TEMP/w1-canary.spv" "$RUNNER_TEMP/w1-canary.comp"
+          spirv-val --target-env vulkan1.1 "$RUNNER_TEMP/w1-canary.spv"
+          timeout 30s "$RUNNER_TEMP/w1-fragment-vulkan" "$RUNNER_TEMP/w1-canary.spv" "$RUNNER_TEMP/w1-canary.spv" 8 1 --canary
       - name: Execute original and reconstructed fragment operations with negative controls
-        env:
-          VK_DRIVER_FILES: /usr/share/vulkan/icd.d/lvp_icd.x86_64.json
-        run: timeout 600s python3 -m scripts.w1_depth_fragment_numeric --source Raft/Raft_Data --runner "$RUNNER_TEMP/w1-fragment-vulkan" --out "$RUNNER_TEMP/w1-fragment-numeric.json"
+        run: |
+          set -euo pipefail
+          export VK_DRIVER_FILES="$(find /usr/share/vulkan/icd.d -maxdepth 1 -name '*lvp*.json' -print -quit)"
+          test -n "$VK_DRIVER_FILES"
+          timeout 600s python3 -m scripts.w1_depth_fragment_numeric --source Raft/Raft_Data --runner "$RUNNER_TEMP/w1-fragment-vulkan" --out "$RUNNER_TEMP/w1-fragment-numeric.json"
       - name: Retain aggregate recovery evidence only
         if: always()
         uses: actions/upload-artifact@v4
