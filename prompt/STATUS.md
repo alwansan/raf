@@ -1,5 +1,11 @@
 # Current Raft checkpoint — 3 November 2026
 
+<!-- A11_STAGE_IDENTITY_V3_20261103 -->
+## A11 RENDER-002 scoped shader-identity audit v3 (2026-11-03)
+
+[A11 commit 04a4eefe](https://github.com/alwansan/raf/commit/04a4eefea18a8bff9059e8217d801b9ef87576de) and [CPU-only GitHub Actions 41735395961](https://github.com/alwansan/raf/actions/runs/41735395961): **SUCCESS 23/23 synthetic tests**. New `--audit-stage-builtin-archive` pairs expected .shader/.compute counts with SHA-verified Unity 2021.3.45f2 vendor identities and a before/after source/.meta snapshot. It does not mutate original files or disclose names. [A11 report](../docs/A11_SHADER_EXPORT_IDENTITY_STAGE_V3_2026-11-03.md); [closed A11 scope cdcd3aa0](https://github.com/alwansan/raf/commit/cdcd3aa0770549ca798cdd6591874debd4835f1f). Actual full original AssetRipper export is **not yet audited**: 107 local files and 140 native-stage files cannot be equated, nor does this repair any shader or prove Unity/device operation. RENDER-002/WATER-001 OPEN, NOT_READY/0-of-3. Next run at exact complete pre-restoration original export boundary, using pinned ZIP2 and no unverified substitutions.
+
+
 Read [current owner requirements](../docs/CURRENT_OWNER_REQUIREMENTS.md), [AGENTS.md](../AGENTS.md), then the [latest full handoff](../docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md). This file is a concise checkpoint; refresh live HEAD, Actions and concurrent changes before writing.
 
 ## New readiness/build coordinator
