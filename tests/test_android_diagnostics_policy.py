@@ -67,6 +67,31 @@ class AndroidDiagnosticsPolicyTests(unittest.TestCase):
         self.assertIn('"; unity_driver_graphics_bytes=" + UnityGraphicsDriverBytes()', self.source)
 
 
+    def test_scene_boundaries_and_low_memory_capture_partial_gpu_counters(self):
+        # The 5-second/10-second periodic samples can miss a short-lived
+        # allocation spike around a scene switch or a low-memory callback.
+        # These callbacks must not claim total VRAM, remove scene events,
+        # mutate resource ownership or introduce per-frame GPU JNI probes.
+        helper = self.source.split("private static string GraphicsMemoryAtBoundary()", 1)[1]
+        helper = helper.split("private static void LowMemory()", 1)[0]
+        self.assertIn('"; android_debug_graphics_kb=" + AndroidGraphicsMemoryKb()', helper)
+        self.assertIn('"; unity_driver_graphics_bytes=" + UnityGraphicsDriverBytes()', helper)
+        self.assertIn('"; process_rss=" + ProcessRss()', helper)
+        self.assertIn('partial process/driver counters', self.source)
+        scenes = self.source.split("private static void SceneLoaded(", 1)[1]
+        scenes = scenes.split("private void OnApplicationPause(", 1)[0]
+        self.assertEqual(scenes.count("GraphicsMemoryAtBoundary()"), 2)
+        self.assertIn('AndroidRuntimeLog.Write("scene", "loaded"', scenes)
+        self.assertIn('AndroidRuntimeLog.Write("scene", "unloaded"', scenes)
+        low = self.source.split("private static void LowMemory()", 1)[1]
+        low = low.split("private static string ProcessRss()", 1)[0]
+        self.assertIn('"; " + GraphicsMemoryAtBoundary(), true)', low)
+        self.assertLess(low.index('GraphicsMemoryAtBoundary()'), low.index('AndroidRuntimeLog.Flush();'))
+        periodic = self.source.split("private string PerformanceSample()", 1)[1]
+        periodic = periodic.split("private static void ReportPriorExits()", 1)[0]
+        self.assertNotIn("GraphicsMemoryAtBoundary()", periodic)
+        self.assertIn('if (!Debug.isDebugBuild) return "unavailable";', self.source)
+
     def test_overlay_respects_landscape_notch_safe_area(self):
         ui = self.source.split("private void OnGUI()", 1)[1]
         self.assertIn("Rect safe = Screen.safeArea;", ui)
