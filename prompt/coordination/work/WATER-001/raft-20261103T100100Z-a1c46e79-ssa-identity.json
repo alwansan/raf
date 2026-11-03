@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T100100Z-a1c46e79",
+  "client_label": "A1",
+  "issue_id": "WATER-001",
+  "status": "planned",
+  "updated_at": "2026-11-03T10:02:07.944Z",
+  "base_sha": "2020291470b8c3dce96cfee1ca8ecec68c3e150d",
+  "hypothesis": "Duplicate SPIR-V SSA result IDs in traced alias definitions may silently overwrite lineage, misreporting a unique descriptor. Fail closed on collision and exercise synthetic negative control.",
+  "intended_files": [
+    "scripts/probe_fft_spirv_image_flow.py",
+    "tests/test_probe_fft_spirv_image_flow.py",
+    "prompt/coordination/clients/raft-20261103T100100Z-a1c46e79",
+    "prompt/STATUS.md",
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+  ],
+  "related_work": [
+    "FFT-FORMAT-009 butterfly-storage investigation (non-overlap)",
+    "DISPLAY-003 A2 active (different files)",
+    "HAPTICS-008 active (different files)"
+  ],
+  "experiment_ids": [
+    "a1-image-ssa-uniqueness"
+  ],
+  "evidence": [],
+  "result": null,
+  "next_step": "Run deterministic synthetic negative duplicate-ID test before and after fix."
+}
