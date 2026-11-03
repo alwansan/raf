@@ -174,9 +174,14 @@ public final class RemoteLogService extends IRemoteLog.Stub {
                         new InputStreamReader(p.getInputStream(),StandardCharsets.UTF_8))) {
                     char[] chars=new char[256];
                     int n;
-                    while(found.length()<4096 && (n=reader.read(chars,0,
-                            Math.min(chars.length,4096-found.length())))!=-1)
+                    while(found.length()<=4096 && (n=reader.read(chars,0,
+                            Math.min(chars.length,4097-found.length())))!=-1)
                         found.append(chars,0,n);
+                    // Never interpret a truncated numeric PID as a valid one.
+                    // The extra character distinguishes an exact 4096-byte
+                    // response from a response exceeding the safety limit.
+                    if(found.length()>4096)
+                        throw new IOException("pidof_output_overflow");
                 }
                 Set<String> current = new HashSet<>();
                 String pidOutput=found.toString().trim();
