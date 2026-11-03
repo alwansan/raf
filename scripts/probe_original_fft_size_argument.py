@@ -48,12 +48,39 @@ def analyze(caller, expected_sha):
     if len(declarations) > 32:
         raise ValueError("Unbounded FFT size declarations")
     changes = []
+    alias_candidates = []
     for m in writes.finditer(masked):
         if len(changes) >= 32:
             raise ValueError("Unbounded FFT size writes")
+        rhs = caller[m.start(2):m.end(2)].strip()
+        if m.group(1) == "=" and SIMPLE_ID.fullmatch(rhs):
+            alias_candidates.append(rhs)
         changes.append({"line": masked.count("\n", 0, m.start())+1,
                         "assignment_operator": m.group(1),
                         **classify_rhs(caller[m.start(2):m.end(2)])})
+    if len(set(alias_candidates)) > 8:
+        raise ValueError("Unbounded FFT size alias candidates")
+    alias_reports = []
+    for alias in sorted(set(alias_candidates)):
+        alias_name = alias.split(".")[-1]
+        if alias_name == name:
+            continue
+        alias_declarations = list(re.finditer(
+            r"\b(int|uint|long|float|double|var)\s+" + re.escape(alias_name) + r"\b", masked))
+        alias_writes = list(re.finditer(
+            r"(?<![\w])(?:this\s*\.\s*)?" + re.escape(alias_name)
+            + r"\s*(\+=|-=|\*=|/=|=(?!=))\s*([^;]{1,1000});", masked))
+        if len(alias_declarations) > 32 or len(alias_writes) > 32:
+            raise ValueError("Unbounded FFT size alias provenance")
+        alias_reports.append({
+            "alias_identifier_sha256": sha(alias),
+            "declarations": [{"line": masked.count("\n", 0, m.start())+1,
+                              "type_kind": m.group(1)} for m in alias_declarations],
+            "lexical_writes": [{"line": masked.count("\n", 0, m.start())+1,
+                                "assignment_operator": m.group(1),
+                                **classify_rhs(caller[m.start(2):m.end(2)])} for m in alias_writes],
+            "type_resolved": False,
+        })
     return {
         "original_waves_renderer_sha256": expected_sha,
         "constructor_call_count": len(constructors),
@@ -62,6 +89,7 @@ def analyze(caller, expected_sha):
         "size_argument_has_member_access": "." in second,
         "size_argument_declarations": declarations,
         "size_argument_lexical_writes": changes,
+        "size_argument_one_hop_aliases": alias_reports,
         "source_level_size_value_proven": False,
         "runtime_resolution_or_unity_kernel_mapping_verified": False,
         "original_identifiers_or_expressions_published": False,

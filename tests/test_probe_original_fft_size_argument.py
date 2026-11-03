@@ -28,6 +28,14 @@ class OriginalFftSizeArgumentTests(unittest.TestCase):
         for private in ("tileSize", "shader", "Math.Max", "ignored", "wide"):
             self.assertNotIn(private, json.dumps(r))
 
+    def test_one_hop_alias_tracks_literal_without_claiming_runtime_value(self):
+        source = "class WavesRendererFFT { int originalDimension = 256; void Start() { int size = originalDimension; new Dx11FFT(cs, size, true, false); } }"
+        report = analyze(source, sha(source))
+        self.assertEqual(len(report["size_argument_one_hop_aliases"]), 1)
+        self.assertEqual(report["size_argument_one_hop_aliases"][0]["lexical_writes"][0]["integer_literal"], 256)
+        self.assertFalse(report["size_argument_one_hop_aliases"][0]["type_resolved"])
+        self.assertNotIn("originalDimension", str(report))
+
     def test_member_reference_remains_unproven(self):
         source = "class WavesRendererFFT { void Start() { var fft = new Dx11FFT(cs, this.width, true, false); } }"
         r = analyze(source, sha(source))
