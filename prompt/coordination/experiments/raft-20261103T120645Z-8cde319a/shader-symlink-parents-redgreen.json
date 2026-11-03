@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T120645Z-8cde319a",
+  "issue_id": "RENDER-002",
+  "status": "completed",
+  "red": {
+    "commit": "e62aedc662eb5be9c2c937c1cec2ae908d40557c",
+    "run_id": 41633814002,
+    "job_id": 125909790423,
+    "conclusion": "failure_as_expected",
+    "tests_passed": 1,
+    "tests_failed": 3,
+    "observed": "ValueError not raised for three symlinked source/destination ancestor cases"
+  },
+  "green": {
+    "commit": "d93f6aecac8214057debfc1d18eda85b6fa50ce1",
+    "run_id": 41634098552,
+    "job_id": 125910766378,
+    "conclusion": "success",
+    "new_tests_passed": 4,
+    "prior_a9_tests_passed": 4,
+    "prior_restorer_tests_passed": 10,
+    "additional_runs": [
+      {
+        "id": 41634098651,
+        "conclusion": "success"
+      },
+      {
+        "id": 41634098559,
+        "conclusion": "success",
+        "authentic_vendor_runtime_shader_identities": 198,
+        "fixture_shader_matches": 5,
+        "restored_includes": 29
+      }
+    ]
+  },
+  "executed_commands": [
+    "python3 -m unittest discover -s tests -p test_a3_builtin_shader_symlink_paths.py -v",
+    "python3 -m unittest discover -s tests -p test_a9_builtin_shader_identity.py -v",
+    "python3 -m unittest discover -s tests -p test_restore_builtin_shaders.py -v"
+  ],
+  "modified_files": [
+    "scripts/restore_builtin_shaders.py"
+  ],
+  "new_files": [
+    "tests/test_a3_builtin_shader_symlink_paths.py",
+    ".github/workflows/raft-a3-builtin-shader-path-guard.yml"
+  ],
+  "result": "Fail-closed pre-copy symlink ancestor checks prevent writes outside authorized project in synthetic fixtures; original shader matching semantics and .meta GUID unchanged",
+  "limitations": [
+    "Does not close earlier zero exported built-in shader match blocker",
+    "No Unity or phone GPU execution",
+    "No immutable native candidate or complete 3 audits",
+    "Non-atomic symlink change race still possible"
+  ],
+  "readiness": "NOT_READY_0_OF_3",
+  "report": "docs/A3_BUILTIN_SHADER_PATH_SAFETY_2026-11-03.md"
+}
