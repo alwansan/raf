@@ -226,20 +226,49 @@ namespace RaftAndroid.Diagnostics
         }
         public void Summarize(Action<string, string, string> write)
         {
-            var summaries = new List<string>();
-            lock (gate)
+            // Never zero all groups before sending the first one: a failing
+            // persistent sink would otherwise erase summaries it never received.
+            List<string> keys;
+            lock (gate) keys = new List<string>(entries.Keys);
+            foreach (string key in keys)
             {
-                foreach (var pair in entries)
+                long repeated;
+                DateTime first, last;
+                lock (gate)
                 {
-                    var entry = pair.Value;
-                    if (entry.Repeated == 0) continue;
-                    summaries.Add("repeated=" + entry.Repeated.ToString(CultureInfo.InvariantCulture) +
-                        "; first=" + entry.First.ToString("O", CultureInfo.InvariantCulture) +
-                        "; last=" + entry.Last.ToString("O", CultureInfo.InvariantCulture) + "; original=" + pair.Key);
+                    Entry entry;
+                    if (!entries.TryGetValue(key, out entry) || entry.Repeated == 0) continue;
+                    repeated = entry.Repeated;
+                    first = entry.First;
+                    last = entry.Last;
                     entry.Repeated = 0;
                 }
+                string summary = "repeated=" + repeated.ToString(CultureInfo.InvariantCulture) +
+                    "; first=" + first.ToString("O", CultureInfo.InvariantCulture) +
+                    "; last=" + last.ToString("O", CultureInfo.InvariantCulture) + "; original=" + key;
+                try
+                {
+                    // Keep callbacks outside the lock: they can log concurrently.
+                    write("unity", "repeat_summary", summary);
+                }
+                catch
+                {
+                    lock (gate)
+                    {
+                        // Retain both the failed batch and repeats arriving
+                        // during the callback. Replays are at-least-once if a
+                        // sink wrote successfully before throwing.
+                        Entry entry;
+                        if (entries.TryGetValue(key, out entry))
+                        {
+                            entry.Repeated += repeated;
+                            if (first < entry.First) entry.First = first;
+                            if (last > entry.Last) entry.Last = last;
+                        }
+                    }
+                    throw;
+                }
             }
-            foreach (string summary in summaries) write("unity", "repeat_summary", summary);
         }
     }
 }

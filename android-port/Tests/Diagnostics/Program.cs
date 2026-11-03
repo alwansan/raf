@@ -105,6 +105,55 @@ class Program
             for (int i = 0; i < 200; i++) Require(repeated.First("Error", "unique " + i, now));
             Require(repeated.First("Error", "capacity overflow", now));
             Require(repeated.First("Error", "capacity overflow", now));
+            // The previous implementation cleared every group's count before
+            // delivering the first summary; an injected callback failure erased
+            // both the failed group and groups never attempted.
+            var faulted = new RepeatedDiagnosticMessages();
+            Require(faulted.First("Exception", "alpha full stack", now));
+            Require(!faulted.First("Exception", "alpha full stack", now));
+            Require(!faulted.First("Exception", "alpha full stack", now));
+            Require(faulted.First("Exception", "beta full stack", now));
+            Require(!faulted.First("Exception", "beta full stack", now));
+            bool callbackFailed = false;
+            int attempted = 0;
+            try
+            {
+                faulted.Summarize((area, operation, detail) =>
+                {
+                    attempted++;
+                    throw new IOException("Injected persistent sink failure");
+                });
+            }
+            catch (IOException) { callbackFailed = true; }
+            Require(callbackFailed && attempted == 1);
+            var recovered = new System.Collections.Generic.List<string>();
+            faulted.Summarize((area, operation, detail) => recovered.Add(detail));
+            Require(recovered.Count == 2);
+            Require(recovered.Any(s => s.Contains("repeated=2;") && s.Contains("alpha full stack")));
+            Require(recovered.Any(s => s.Contains("repeated=1;") && s.Contains("beta full stack")));
+            faulted.Summarize((area, operation, detail) => throw new Exception("Duplicate recovery summary"));
+
+            // Repeats received concurrently during a failing callback must
+            // survive alongside the original failed batch, without re-logging
+            // the first full exception stack.
+            var overlapping = new RepeatedDiagnosticMessages();
+            Require(overlapping.First("Error", "overlap stack", now));
+            Require(!overlapping.First("Error", "overlap stack", now));
+            callbackFailed = false;
+            try
+            {
+                overlapping.Summarize((area, operation, detail) =>
+                {
+                    Require(!overlapping.First("Error", "overlap stack", now.AddSeconds(1)));
+                    throw new IOException("Injected overlapping sink failure");
+                });
+            }
+            catch (IOException) { callbackFailed = true; }
+            Require(callbackFailed);
+            string combined = null;
+            overlapping.Summarize((area, operation, detail) => combined = detail);
+            Require(combined != null && combined.Contains("repeated=2;"));
+            overlapping.Summarize((area, operation, detail) => throw new Exception("Duplicate overlap summary"));
             Console.WriteLine("RAFT_PERSISTENT_LOG_TEST checks=" + checks + " passed=true actualAndroidStorageVerified=false");
         }
         finally { Directory.Delete(root, true); }
