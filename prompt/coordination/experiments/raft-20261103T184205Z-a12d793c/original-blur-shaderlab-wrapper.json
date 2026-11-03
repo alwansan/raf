@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "owner": "raft-20261103T184205Z-a12d793c",
-  "status": "planned",
+  "status": "blocked",
   "inputs": [
     "14 Shader-bearing authenticated original owners, 165 Shader objects and original Blur SHA c9341848...",
     "Authored W1 ShaderLab and HLSL translators under current branch",
@@ -23,9 +23,31 @@
   "workflow_path": ".github/workflows/raft-a12-original-blur-wrapper.yml",
   "concurrency_group": "raft-a12-blur-wrapper-${{ github.ref }}-${{ github.sha }}",
   "artifact_prefix": "a12-blur-wrapper-aggregate",
-  "result": null,
+  "result": {
+    "ci": "completed_failure_expected_for_original_contract",
+    "phase": "original_parameter_requires_exact_binding",
+    "original_pass_index": 0,
+    "original_stage": 1,
+    "original_parameter_sha256": "4ef5ff719573ed68a5292a3e39834cb510a54ca53ec21df84f09d278c9299ea9",
+    "original_parameter_bytes": 88,
+    "parameter_groups": 3,
+    "constant_buffer_groups": 2,
+    "nonzero_constant_buffer_groups": 2,
+    "total_used_bytes": 544,
+    "numeric_parameters": 0,
+    "resource_parameters": 0,
+    "structs": 0,
+    "parser_cpu_tests": 12,
+    "w1_legacy_compat_tests": 5,
+    "private_shaderlab_constructed": false,
+    "changes_original_assets": false
+  },
   "limitations": [
     "Vulkan validation not Unity ShaderLab material binding or phone rendering",
-    "Water FFT remaining kernels still block native delivery"
-  ]
+    "Water FFT remaining kernels still block native delivery",
+    "This session does not prove actual shader uniform bindings, GPU numerical equivalence or Unity compilation; no new full native run."
+  ],
+  "source_sha": "b0ca211b4c1ee313f7e50d0ae9adefaddd5051a8",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41699143656",
+  "next_step": "Original DXBC constant buffers must be reflected and reconciled with 544 bytes before HLSL/ShaderLab construction. Do not drop groups or skip gate."
 }
