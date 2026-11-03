@@ -26,6 +26,20 @@ private void UpdateRow() {
         self.assertNotIn('height', str(result))
         self.assertNotIn('UpdateRow', str(result))
 
+    def test_parameter_types_are_distinguished_from_global_screen_scaling(self):
+        source = '''class ControlsSettingsBox {
+void Adjust(RectTransform item, Vector2 desired) {
+    item.sizeDelta = desired;
+}
+}'''
+        result = inspect_text(source, strict_line=False)
+        self.assertTrue(result['target_is_recttransform_parameter'])
+        self.assertTrue(result['rhs_is_vector2_parameter'])
+        self.assertTrue(result['rhs_is_simple_identifier'])
+        self.assertFalse(result['target_is_transform_parameter'])
+        self.assertFalse(result['owner_declares_target_as_recttransform_outside_method'])
+        self.assertFalse(result['rhs_uses_screen_dimension'])
+
     def test_comments_strings_comparison_not_executable_writes(self):
         source = '''class A { string x = "rect.sizeDelta = nope";
 // row.sizeDelta = something;

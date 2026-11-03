@@ -95,6 +95,13 @@ def inspect_text(source, strict_line=True):
         raise ValueError('Empty sizeDelta right-hand side')
     # CSharp9 includes assignments such as new Vector2(..), no variable text emitted.
     method_signature = code[method.start():method.end()].strip()
+    parameters = method_signature.split('(', 1)[1].rsplit(')', 1)[0]
+    # Bound to syntactically typed signature parameters. Never print parameter names.
+    rect_parameters = set(re.findall(r'\b(?:UnityEngine\s*\.\s*)?RectTransform\s+([A-Za-z_]\w*)\b', parameters))
+    vector_parameters = set(re.findall(r'\b(?:UnityEngine\s*\.\s*)?Vector2\s+([A-Za-z_]\w*)\b', parameters))
+    transform_parameters = set(re.findall(r'\b(?:UnityEngine\s*\.\s*)?Transform\s+([A-Za-z_]\w*)\b', parameters))
+    rhs_ident = rhs.strip() if re.fullmatch(r'\s*[A-Za-z_]\w*\s*', rhs) else None
+    outside_method = code[:method.start()] + code[end+1:]
     call_refs = [x for x in re.finditer(r'\b' + re.escape(method.group('name')) + r'\s*\(', code)
                  if x.start() != method.start() and not method.start() <= x.start() < method.end()]
     return {
@@ -104,6 +111,12 @@ def inspect_text(source, strict_line=True):
         'target_form': form,
         'target_identifier_sha256': digest(target) if target else None,
         'target_has_local_recttransform_declaration': typed,
+        'target_is_recttransform_parameter': bool(target and target in rect_parameters),
+        'target_is_transform_parameter': bool(target and target in transform_parameters),
+        'rhs_is_simple_identifier': rhs_ident is not None,
+        'rhs_is_vector2_parameter': bool(rhs_ident and rhs_ident in vector_parameters),
+        'owner_declares_target_as_recttransform_outside_method': bool(target and re.search(
+            r'\bRectTransform\s+' + re.escape(target) + r'\b', outside_method)),
         'target_initialized_via_getcomponent_recttransform': component,
         'method_signature_sha256': digest(method_signature),
         'method_start_line': line_at(code, method.start()),
