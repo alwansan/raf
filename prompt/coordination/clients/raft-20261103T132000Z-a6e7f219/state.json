@@ -4,13 +4,13 @@
   "client_label": "A6",
   "session_id": "a6-20261103T132000Z-f2a19e7c",
   "resumed_from": "raft-20261103T121333Z-a6c7f4e2",
-  "status": "active",
-  "updated_at": "2026-11-03T13:20:00Z",
+  "status": "paused",
+  "updated_at": "2026-11-03T13:29:48.985Z",
   "base_sha": "33c30f81dddf608413e1a28697b0b161725e2b46",
   "current_work": [
     "LOCAL-005"
   ],
-  "last_commit": null,
-  "next_step": "Source-only RED/GREEN: reject symlinked Unity Assets staging root before SaveAndLoad/other original game source read/write; preserve .rgd and .meta; CPU CI only",
+  "last_commit": "da4b98a63cf008c05249046595fee10fb2976d09",
+  "next_step": "Scoped Assets root symlink source staging guard complete/red-green verified. Original game .rgd single-player world create/save/load/resume remains OPEN; refresh HEAD/client state before new distinct scope.",
   "memory_path": "prompt/coordination/clients/raft-20261103T132000Z-a6e7f219/MEMORY.md"
 }
