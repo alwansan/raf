@@ -66,11 +66,57 @@ def top_level_members(scope):
     if level != 0:
         raise ValueError("Member brace mismatch")
 
-def field_signature(source, original_script_names=None):
+
+def original_type_declarations(settings_source, decompiled_root, monosc_name_catalog):
+    """Classify only unrecognized CSharp types using private original code.
+
+    A name-only declaration is not a fully namespace-resolved type identity.
+    No type names or decompiled source are exported to CI output.
+    """
+    unknown = set()
+    for statement in top_level_members(class_scope(settings_source)):
+        m = FIELDS.fullmatch(statement)
+        if not m:
+            continue
+        raw = m.group("type").replace(" ", "")
+        if raw.endswith("[]"):
+            candidate = raw[:-2]
+        elif raw.startswith("List<") and raw.endswith(">"):
+            candidate = raw[5:-1]
+        else:
+            candidate = raw
+        short = candidate.split(".")[-1]
+        if short not in UNITY_TYPES and short not in monosc_name_catalog and short not in (
+            "bool", "int", "float", "double", "long", "string", "Vector2", "Vector3", "Color"):
+            if re.fullmatch(r"[A-Za-z_]\w*", short):
+                unknown.add(short)
+    if len(unknown) > 128:
+        raise ValueError("Original CSharp type probe exceeded bound")
+    resolved = {}
+    for name in unknown:
+        files = list(decompiled_root.rglob(name + ".cs"))
+        settings_files = list(decompiled_root.rglob("Settings.cs"))
+        paths = list(dict.fromkeys(files + settings_files))
+        if len(paths) > 8:
+            raise ValueError("Ambiguous source declaration files")
+        kinds = []
+        expression = re.compile(r"\b(enum|struct|class|interface)\s+" + re.escape(name) + r"\b")
+        for p in paths:
+            if p.is_symlink() or not p.is_file() or p.stat().st_size > MAX_SOURCE:
+                raise ValueError("Unsafe original CSharp type declaration")
+            source = p.read_text(encoding="utf-8-sig")
+            kinds.extend(expression.findall(mask_csharp_noncode(source)))
+        resolved[name] = kinds[0] if len(kinds) == 1 else "ambiguous_or_not_found"
+    return resolved
+
+
+def field_signature(source, original_script_names=None, declared_families=None):
     kinds, skips = Counter(), Counter()
     accepted, total = [], 0
     source_type_classes = Counter()
     catalog = set(original_script_names or [])
+    declared = declared_families or {}
+    unknown_type_families = Counter()
     collection_element_categories = Counter()
     for stmt in top_level_members(class_scope(source)):
         total += 1
@@ -101,6 +147,8 @@ def field_signature(source, original_script_names=None):
                             "known_unity_native_type" if element.split(".")[-1] in UNITY_TYPES else
                             "other_unverified_element_type")
             collection_element_categories[element_kind] += 1
+            if element_kind == "other_unverified_element_type":
+                unknown_type_families["collection_"+declared.get(element.split(".")[-1],"unknown")] += 1
         elif short in UNITY_TYPES:
             kind = "known_unity_native_object_reference"
         elif short in ("bool","int","float","double","long","string","Vector2","Vector3","Color"):
@@ -111,6 +159,8 @@ def field_signature(source, original_script_names=None):
         if kind == "custom_type_or_enum_unverified":
             source_type_classes["original_assembly_monoscript_classname_match" if
                                 short in catalog else "other_unverified"] += 1
+            if short not in catalog:
+                unknown_type_families["custom_"+declared.get(short,"unknown")] += 1
         accepted.append(kind)
         if len(accepted) > 256:
             raise ValueError("Unbounded candidate field inventory")
@@ -122,6 +172,7 @@ def field_signature(source, original_script_names=None):
         "candidate_categories_in_source_declaration_order": accepted,
         "custom_type_original_script_classname_match_count": dict(sorted(source_type_classes.items())),
         "collection_element_classification": dict(sorted(collection_element_categories.items())),
+        "unverified_type_declaration_families": dict(sorted(unknown_type_families.items())),
         "excluded_and_unparsed_counts": dict(sorted(skips.items())),
         "type_order_signature_sha256": hashlib.sha256("\n".join(accepted).encode()).hexdigest(),
         "typed_unity_serialization_order_verified": False,
@@ -160,11 +211,14 @@ def scan(source_root, ilspy_root):
             name = tree.get("m_ClassName")
             if isinstance(name,str) and name:
                 script_names.add(name)
+    families = original_type_declarations(text, ilspy_root, script_names)
     return {
         "zip2_source_pinned_commit": ZIP2_PIN,
         "original_small_files_sha_locked": 4,
         "original_settings_cs_sha256": SETTINGS_SHA,
-        "field_shape": field_signature(text, script_names),
+        "field_shape": field_signature(text, script_names, families),
+        "unresolved_type_probes_run": len(families),
+        "private_type_names_emitted": False,
         "original_assembly_script_registry_available": bool(script_names),
         "original_script_name_catalog_emitted": False,
         "original_lfs_downloaded": False,
