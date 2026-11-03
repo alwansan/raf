@@ -707,6 +707,13 @@ Client `raft-20261103T145000Z-a1c92f74` completed **real numerical shader execut
 
 
 
+<!-- W3-FULL-MATERIAL-SHADER-INVENTORY-20261103 -->
+## W3 full original game Material→Shader inventory — 3 November 2026
+
+Same W3 client session (`raft-20261103T153100Z-b4d2c9e7`) extended the fail-closed resolver to **all 82 serialized owners present in the byte-verified local PC originals** (42 `.assets` + 40 `level*`; every file SHA-256'd first; the two pinned owners verified against their pins; no LFS transfer). New script `scripts/probe_w3_full_material_shader_inventory.py` + 7/7 synthetic model tests (previous 9/9 remain green). Real-data run exit 0 with all five fail-closed negative controls true; one earlier run was superseded by an-resolved-strings classification bug, corrected and re-run — recorded honestly; only the final JSON is durable. Aggregate artifact: [W3_FULL_MATERIAL_SHADER_INVENTORY_2026-11-03.json](../docs/W3_FULL_MATERIAL_SHADER_INVENTORY_2026-11-03.json) SHA `d80256a7e0b51c17b263a089d56c01eb9d32b57f6085b64f64f9acb94af842f8` + [report](../docs/W3_FULL_MATERIAL_SHADER_INVENTORY_2026-11-03.md) and [discussion](coordination/discussions/RENDER-002/2026-11-03T163500Z-raft-20261103T153100Z-b4d2c9e7-full-game-inventory.md).
+
+Result: the original game's entire serialised Material→Shader reference topology is now mapped with zero orphans and zero fabricated data — **1,556 materials, 165 Shader objects, 1,556 references fully resolved (437 same-file, 1,103 cross-owner, 16 engine transports fail-closed), 77/77 referenced targets named (75 distinct names; list published only as SHA commitment).** Appearance-recovery priority (top material counts): `Standard` 674 (pathID 2398), `Skin_Amplify` 208 (2416), `Shimmer` 96 (2445), ` BlockPaint` 87 (2424), `Nature/SpeedTree8` 50 (2405), `ParticleShader` 48 (2426), `Tri-Planar` 30 (2414), `Vegetation` 29 (2439), `ParticleShader_Additive` 26 (2417), plus fire/effect buckets `FireParticles_Amplify` 11 and `AnimalDissolve`/`Skin_AmplifyDissolve` 23/17. This is reference topology only: no shader restoration, no GPU/Unity/phone claim; WATER-001/RENDER-002/FFT-FORMAT-009 stay OPEN, NOT_READY, no candidate, 0/3 reviews. Next W3 options: properties/keywords audit of the priority-shader materials, resource-binding (`m_NonModifiableTextures`/texture dependency) mapping inside the same authenticated owners, or UV/vertex-color field audit for `StandardVColor` (sharedassets36:880).
+
 <!-- W3-MATERIAL-SHADER-EXTERNALS-20261103 -->
 ## W3 resolved 144 of A13's 156 external Material→Shader links — 3 November 2026
 
