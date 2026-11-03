@@ -116,6 +116,24 @@ internal static class BoundaryMatrix
             Require(events.Count == endOfHold, "ghost-tap-after-hold-release");
         }
 
+        // A tap request made while the left button is already held must not
+        // become a click after its release; a genuinely new tap still works.
+        {
+            var events = new List<bool>();
+            var buttons = new TouchPointerButtons(events.Add);
+            buttons.Hold(true);
+            buttons.Tap();
+            buttons.BeginUpdate();
+            buttons.Hold(false);
+            int atRelease = events.Count;
+            for (int i = 0; i < 4; i++) buttons.BeginUpdate();
+            Require(!buttons.Pressed && events.Count == atRelease, "no-tap-replay-during-hold");
+            buttons.Tap();
+            Require(buttons.Pressed && events.Count == atRelease + 1, "new-tap-after-hold");
+            buttons.BeginUpdate();
+            Require(!buttons.Pressed && events.Count == atRelease + 2, "new-tap-release-after-hold");
+        }
+
         return checks;
     }
 }
