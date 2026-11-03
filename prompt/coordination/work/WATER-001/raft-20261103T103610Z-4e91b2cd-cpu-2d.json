@@ -1,0 +1,10 @@
+{
+  "owner": "raft-20261103T103610Z-4e91b2cd",
+  "status": "active",
+  "base_sha": "d01411409e1e422c04b78533e65e138613a43573",
+  "intended_files": [
+    "scripts/verify_original_fft_cpu_2d.py",
+    ".github/workflows/raft-fft-cpu-2d.yml"
+  ],
+  "hypothesis": "Execute original CPU rows and columns versus direct2D DFT; no GPU claim"
+}
