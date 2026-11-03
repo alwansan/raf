@@ -34,6 +34,7 @@ public final class RemoteLogService extends IRemoteLog.Stub {
     private final AtomicLong lastDeathAtUnixMs=new AtomicLong(-1);
     private final Set<String> gamePids = java.util.Collections.synchronizedSet(new HashSet<>());
     private final AtomicInteger primaryGamePid=new AtomicInteger(-1);
+    private final AtomicLong sinkFailedBatches=new AtomicLong(),sinkFailedBytes=new AtomicLong();
     private final AtomicLong pidProbeFailures=new AtomicLong();
     private final AtomicLong pidProbeSuccesses=new AtomicLong();
     private volatile String pidProbeStatus="not_started";
@@ -58,6 +59,7 @@ public final class RemoteLogService extends IRemoteLog.Stub {
         errorGroups.reset();
         lastDeathPid.set(-1);lastKnownPid.set(-1);lastDeathAtUnixMs.set(-1);
         primaryGamePid.set(-1);
+        sinkFailedBatches.set(0);sinkFailedBytes.set(0);
         pidProbeFailures.set(0);pidProbeSuccesses.set(0);pidProbeStatus="not_started";pidProbeFailureReason="none";
         synchronized(gamePids){gamePids.clear();}
         metricPreviousAt=-1;metricPreviousGameLines=0;metricPreviousSystemLines=0;
@@ -154,6 +156,8 @@ public final class RemoteLogService extends IRemoteLog.Stub {
                 data.put("error_groups",errorGroups.snapshot());
                 data.put("error_groups_note","fixed categories only; original messages remain in raw Logcat");
                 data.put("logcat_unobserved_losses","unknown");
+                data.put("remote_sink_failed_batches",sinkFailedBatches.get());
+                data.put("remote_sink_failed_bytes",sinkFailedBytes.get());
                 sink.onBatch("METRICS",data.toString()+"\n");
             } catch(Exception e){error("Metrics delivery: "+e.getClass().getSimpleName());}
         }
@@ -359,12 +363,24 @@ public final class RemoteLogService extends IRemoteLog.Stub {
     }
 
     private void send(String source, StringBuilder batch) {
-        String text = batch.toString(); batch.setLength(0);
-        if (text.isEmpty()) return;
+        if (batch.length() == 0) return;
+        String text = batch.toString();
         ILogSink sink = listener;
-        if (sink == null) return;
-        try { sink.onBatch(source,text); }
-        catch (Exception e) { running.set(false); }
+        try {
+            if (sink == null) throw new IOException("sink_unavailable");
+            sink.onBatch(source,text);
+        } catch (Exception e) {
+            // Binder delivery is not acknowledged by the SAF writer. Never
+            // retry blindly (which can duplicate a partially accepted batch).
+            // Record the upper bound of possibly lost data for diagnostics.
+            sinkFailedBatches.incrementAndGet();
+            sinkFailedBytes.addAndGet(text.getBytes(StandardCharsets.UTF_8).length);
+            running.set(false);
+            error("Log sink delivery failed; raw batch delivery unverified");
+        } finally {
+            // Keep bounded memory even if Binder fails or stop races the pump.
+            batch.setLength(0);
+        }
     }
 
     private void error(String message) {
@@ -449,7 +465,7 @@ public final class RemoteLogService extends IRemoteLog.Stub {
     }
 
     @Override public String status() {
-        return "running=" + running.get() + " uid=" + gameUid + " mainPid=" + primaryGamePid.get() + " pids=" + gamePids;
+        return "running=" + running.get() + " uid=" + gameUid + " mainPid=" + primaryGamePid.get() + " pids=" + gamePids + " sinkFailedBatches=" + sinkFailedBatches.get() + " sinkFailedBytes=" + sinkFailedBytes.get();
     }
 
     @Override public void destroy() { stop(); System.exit(0); }
