@@ -1,0 +1,36 @@
+name: Raft A12 original Shader parameter decoder schema (CPU only)
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/a12_shader_parameter_decode.py'
+      - 'tests/test_a12_shader_parameter_decode.py'
+      - '.github/workflows/raft-a12-shader-parameter-decoder.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: raft-a12-parameter-decoder-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  validate-original-parameter-blob-schema:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Validate strict Unity 2021 parameter byte layout, negative cases and privacy
+        run: |
+          python3 -m unittest discover -s tests -p test_a12_shader_parameter_decode.py -v
+      - name: Preserve W1 empty parameter decoder behavior
+        run: |
+          python3 -m unittest discover -s tests -p test_w1_depth_shaderlab.py -v
