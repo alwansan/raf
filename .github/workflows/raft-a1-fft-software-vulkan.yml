@@ -8,6 +8,8 @@ on:
       - 'scripts/a1_fft_vulkan_cpu.cpp'
       - 'scripts/probe_original_fft_software_vulkan.py'
       - 'tests/test_probe_original_fft_software_vulkan.py'
+      - 'scripts/stage_zip2_fft_owner.py'
+      - 'tests/test_stage_zip2_fft_owner.py'
   workflow_dispatch:
 
 permissions:
@@ -41,6 +43,7 @@ jobs:
         run: |
           set -euo pipefail
           python3 -m unittest discover -s tests -p 'test_probe_original_fft_software_vulkan.py' -v
+          python3 -m unittest discover -s tests -p 'test_stage_zip2_fft_owner.py' -v
       - name: Compile A1 Vulkan numeric executor
         run: |
           set -euo pipefail
@@ -85,36 +88,50 @@ jobs:
       DEBIAN_FRONTEND: noninteractive
       GIT_LFS_SKIP_SMUDGE: '1'
     steps:
-      - name: Checkout original LFS pointer and diagnostic code without smudge
+      - name: Checkout A1 diagnostic scripts only - no original Raft data
         uses: actions/checkout@v4
         with:
           lfs: false
-          persist-credentials: true
+          persist-credentials: false
           sparse-checkout: |
-            Raft/Raft_Data
             scripts
             tests
-      - name: Verify original owner pointer identity before download
+      - name: Fetch only three original ZIP2 FFT chunks from immutable source
+        env:
+          ZIP2_COMMIT: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
         run: |
           set -euo pipefail
-          python3 - <<'PY'
-          from pathlib import Path
-          from scripts.verify_targeted_lfs_compute_sources import verify_sources,EXPECTED
-          verify_sources(Path("Raft/Raft_Data"), pointers_only=True,
-                         expected={"sharedassets0.assets": EXPECTED["sharedassets0.assets"]})
-          print("RAFT_A1_AUTHENTIC_FFT_OWNER_POINTER verified=true owner_count=1")
-          PY
-      - name: Download exactly one original FFT LFS owner and reverify SHA
+          mkdir -p zip2-source
+          git -C zip2-source init -q
+          git -C zip2-source remote add origin https://github.com/alwansan/raf.git
+          git -C zip2-source -c protocol.version=2 fetch -q --depth=1 --filter=blob:none origin zip2
+          test "$(git -C zip2-source rev-parse FETCH_HEAD)" = "$ZIP2_COMMIT"
+          git -C zip2-source sparse-checkout init --no-cone
+          printf '%s\n' '/RAFT_FILE_MANIFEST.tsv' '/Raft/Raft_Data/sharedassets0.assets/' \
+            | git -C zip2-source sparse-checkout set --no-cone --stdin
+          git -C zip2-source checkout -q --detach FETCH_HEAD
+          test "$(git -C zip2-source rev-parse HEAD)" = "$ZIP2_COMMIT"
+          test -f zip2-source/RAFT_FILE_MANIFEST.tsv
+          test -f zip2-source/Raft/Raft_Data/sharedassets0.assets/part-00000
+          test -f zip2-source/Raft/Raft_Data/sharedassets0.assets/part-00001
+          test -f zip2-source/Raft/Raft_Data/sharedassets0.assets/part-00002
+          test ! -e zip2-source/Raft/Raft_Data/sharedassets0.assets.resS
+          echo "RAFT_A1_ZIP2_PIN source_verified=true commit=$ZIP2_COMMIT original_git_lfs_used=false"
+      - name: Reassemble exact source SHA and verify original FFT owner - no LFS
         run: |
           set -euo pipefail
-          git lfs install --local
-          git lfs pull --include='Raft/Raft_Data/sharedassets0.assets' --exclude='' origin
+          python3 -m scripts.stage_zip2_fft_owner \
+            --zip2-checkout zip2-source \
+            --destination "$RUNNER_TEMP/raft-a1-fft-zip2/Raft_Data/sharedassets0.assets"
           python3 - <<'PY'
+          import os
           from pathlib import Path
-          from scripts.verify_targeted_lfs_compute_sources import verify_sources,EXPECTED
-          verify_sources(Path("Raft/Raft_Data"),
-                         expected={"sharedassets0.assets": EXPECTED["sharedassets0.assets"]})
-          print("RAFT_A1_AUTHENTIC_FFT_OWNER_PAYLOAD verified=true original_bytes=115978112")
+          from scripts.verify_targeted_lfs_compute_sources import verify_sources, EXPECTED
+          root = Path(os.environ["RUNNER_TEMP"]) / "raft-a1-fft-zip2" / "Raft_Data"
+          verified = verify_sources(root, expected={"sharedassets0.assets": EXPECTED["sharedassets0.assets"]})
+          assert verified["authenticated_owners"] == 1
+          assert verified["expected_total_payload_bytes"] == 115978112
+          print("RAFT_A1_ZIP2_FFT_ORIGINAL_SHA verified=true bytes=115978112 provider=zip2_no_lfs")
           PY
       - name: Install CPU Vulkan, shader translators and Unity serialization reader
         run: |
@@ -129,6 +146,7 @@ jobs:
           test -n "$VK_DRIVER_FILES"
           g++ -std=c++17 -O2 -w scripts/a1_fft_vulkan_cpu.cpp -lvulkan -o /tmp/a1-fft-vk
           python3 -m unittest discover -s tests -p 'test_probe_original_fft_software_vulkan.py' -v
+          python3 -m unittest discover -s tests -p 'test_stage_zip2_fft_owner.py' -v
           timeout 720s python3 -m scripts.probe_original_fft_software_vulkan \
-            --source Raft/Raft_Data --runner /tmp/a1-fft-vk
+            --source "$RUNNER_TEMP/raft-a1-fft-zip2/Raft_Data" --runner /tmp/a1-fft-vk
           # Source shaders are ephemeral; no upload, Unity Editor or Android run.
