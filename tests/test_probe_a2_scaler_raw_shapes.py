@@ -62,5 +62,20 @@ class A2ScalerSchemaTests(unittest.TestCase):
             managed_fields("x" * 400001)
 
 
+
+    def test_extra_preset_flag_is_not_automatically_verified_layout(self):
+        source = """class CanvasScaler {
+            [SerializeField]
+            private bool m_PresetInfoIsWorld;
+            private float m_PrevScaleFactor;
+            private float m_ScaleFactor;
+        }"""
+        out = managed_fields(source)
+        self.assertEqual(out["additional_instance_m_field_declarations"], 2)
+        self.assertTrue(out["extra_preset_info_is_world_bool_declared"])
+        self.assertTrue(out["extra_preset_info_is_world_has_serializefield_near"])
+        self.assertFalse(out["original_unity_ui_serialized_typetree_verified"])
+
+
 if __name__ == "__main__":
     unittest.main()

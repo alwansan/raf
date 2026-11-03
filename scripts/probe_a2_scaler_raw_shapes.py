@@ -70,8 +70,20 @@ def managed_fields(text):
         if field not in FIELD_TYPES:
             continue
         collected.append((field, match.group("type")))
-    extras = [(m.group("field"), m.group("type")) for m in ALL_INSTANCE_M_FIELDS.finditer(code)
+    extras = [(m.group("field"), m.group("type"), m.start()) for m in ALL_INSTANCE_M_FIELDS.finditer(code)
               if m.group("field") not in FIELD_TYPES]
+    # The UI library's editor-only preset flag may explain a four-byte tail,
+    # but it is not a confirmed serialized field unless source attributes and
+    # actual byte layout also corroborate it.
+    preset = [(typ, pos) for name, typ, pos in extras if name == "m_PresetInfoIsWorld"]
+    known_preset = len(preset) == 1 and preset[0][0] == "bool"
+    preset_serializefield_attribute_near = False
+    if known_preset:
+        pos = preset[0][1]
+        before = code[max(0, pos - 250):pos]
+        last_boundary = max(before.rfind(";"), before.rfind("}"))
+        attrs = before[last_boundary + 1:]
+        preset_serializefield_attribute_near = bool(re.search(r"\\bSerializeField\\b", attrs))
     names = [a for a, _ in collected]
     if len(names) != len(set(names)):
         raise ValueError("Duplicate original CanvasScaler serialized fields")
@@ -82,7 +94,9 @@ def managed_fields(text):
     return {
         "fields_matched": names,
         "additional_instance_m_field_declarations": len(extras),
-        "additional_instance_m_field_name_sha256": sorted(hashlib.sha256(n.encode()).hexdigest() for n, _ in extras),
+        "additional_instance_m_field_name_sha256": sorted(hashlib.sha256(n.encode()).hexdigest() for n, _, _ in extras),
+        "extra_preset_info_is_world_bool_declared": known_preset,
+        "extra_preset_info_is_world_has_serializefield_near": preset_serializefield_attribute_near,
         "field_count": len(names),
         "field_types_match_expected": not types_mismatch,
         "original_ilspy_class_sha256": hashlib.sha256(text.encode()).hexdigest(),

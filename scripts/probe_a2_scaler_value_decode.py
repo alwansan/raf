@@ -21,8 +21,9 @@ from scripts.probe_a2_canvas_scaler_monoscript import (
 )
 
 CUSTOM = struct.Struct("<iffffififff")
-BASE_BYTES = 36
-RECORD_BYTES = BASE_BYTES + CUSTOM.size
+BASE_BYTES = 32
+UNRESOLVED_TRAILING_BYTES = 4
+RECORD_BYTES = BASE_BYTES + CUSTOM.size + UNRESOLVED_TRAILING_BYTES
 EXPECTED_ORDER = tuple(FIELD_TYPES)
 MAX_BEHAVIOURS = 25_000
 
@@ -114,12 +115,16 @@ def decode_record(raw, tree):
     # Source has an unexplained extra four bytes after the ten expected fields.
     # Never identify the tail as a known CanvasScaler setting or assert a full
     # Unity serializer match without independent original serialized metadata.
-    trailer = raw[76:80]
+    trailer = raw[BASE_BYTES + CUSTOM.size:]
     trailer_float = struct.unpack("<f", trailer)[0]
+    trailer_int = struct.unpack("<i", trailer)[0]
     return {
         "unexplained_trailing_bytes": len(trailer),
         "trailer_is_finite_float": math.isfinite(trailer_float),
         "trailer_float_is_positive": math.isfinite(trailer_float) and trailer_float > 0,
+        "trailer_first_byte_is_bool": trailer[0] in (0, 1),
+        "trailer_remaining_bytes_zero": trailer[1:] == b"\\x00\\x00\\x00",
+        "trailer_signed_int_is_small": -32 <= trailer_int <= 32,
         "ui_scale_mode": ui_mode,
         "reference_resolution": [width, height],
         "screen_match_mode": match_mode,
@@ -187,6 +192,7 @@ def audit(root, managed, ilspy, loader=None):
         "original_managed_ui_sha256": managed_hash,
         "original_decompiled_canvas_scaler_sha256": meta["original_ilspy_class_sha256"],
         "base_header_bytes_independently_matched_to_typed_original": BASE_BYTES,
+        "unresolved_trailing_bytes": UNRESOLVED_TRAILING_BYTES,
         "custom_fields_bytes": CUSTOM.size,
         "original_serialized_field_order_correlated_with_metadata_and_bytes": False,
         "authentic_original_scaler_custom_values_structurally_decoded": False,
