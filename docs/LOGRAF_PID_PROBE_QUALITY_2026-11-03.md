@@ -15,3 +15,9 @@ The changes are diagnostic only: no changes to Raft, no extra high-frequency she
 ## Device acceptance
 
 On Android 15/Poco F5 Pro, record a session with Raft running and one with Raft closed. Check `metrics-*.jsonl` for `pid_probe_status` and that a transient pidof error yields `game_process_state_unknown` instead of a confirmed exit. Validate `session-summary.json` separately against exact PID-matched Android exit evidence. Do not infer a crash from process tracking loss.
+
+## 11:34 Baghdad follow-up — normal pidof absence versus error
+
+Reviewed live `lograf` HEAD `9bbd3d36` and game branch `29ee09c7`. The previous fix rejected **all** nonzero `pidof` statuses. Android toybox `pidof` normally exits **1 with empty stdout when the target is not running**, so this classified an ordinary absent game as `pidof_probe_failed` and prevented a trustworthy `pidof_empty` state. Fixed in `aa0775fd`: accept only exit 0 or the narrow case of exit 1 **and empty stdout** as verified probes. Any other nonzero status (including exit 1 with text or PIDs) remains a failure. The raw Logcat pipeline and Shizuku permissions are unchanged. The structural regression test was updated in `c53bbefc`.
+
+The recent Raft CPU-only FFT workflow `41598252205` succeeded on commit `83bb6497`; the current game HEAD `29ee09c7` documents that these results do not prove Android GPU or full APK readiness. Device acceptance: with Raft absent, `pid_probe_status=pidof_empty` and `pid_probe_failures_total` should not rise for normal no-match exit; with a genuine command error, status should be `pidof_probe_failed` and no confirmed game-exit claim should be made. Confirm on Android 15 before calling the fix device-verified.
