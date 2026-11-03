@@ -1,0 +1,75 @@
+name: Raft W2 original material property aggregates (CPU only)
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-w2-material-property-stats.yml'
+      - 'scripts/probe_w2_material_property_stats.py'
+      - 'tests/test_w2_material_property_stats.py'
+permissions:
+  contents: read
+concurrency:
+  group: raft-w2-material-property-stats-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  material-property-stats:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+            Raft/Raft_Data
+      - name: Fail-closed synthetic tests before LFS hydration
+        run: python3 -m unittest discover -s tests -p test_w2_material_property_stats.py -v
+      - name: Compile probe
+        run: python3 -m py_compile scripts/probe_w2_material_property_stats.py
+      - name: Verify two-owner pointer identity
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          from scripts.verify_targeted_lfs_compute_sources import EXPECTED, verify_sources
+          pins={n:EXPECTED[n] for n in ('resources.assets','sharedassets0.assets')}
+          print(verify_sources(Path('Raft/Raft_Data'), pointers_only=True, expected=pins))
+          PY
+      - name: Reuse exact W1 two-owner cached LFS
+        uses: actions/cache@v4
+        with:
+          path: .git/lfs/objects
+          key: w1-graphics-87493249-0498f738-v1
+      - name: Hydrate two original owners and verify full SHA256
+        env:
+          GIT_LFS_SKIP_SMUDGE: '1'
+        run: |
+          set -euo pipefail
+          git lfs install --local
+          git lfs pull --include='Raft/Raft_Data/resources.assets,Raft/Raft_Data/sharedassets0.assets' --exclude='' origin
+          python3 - <<'PY'
+          from pathlib import Path
+          from scripts.verify_targeted_lfs_compute_sources import EXPECTED, verify_sources
+          pins={n:EXPECTED[n] for n in ('resources.assets','sharedassets0.assets')}
+          print(verify_sources(Path('Raft/Raft_Data'), expected=pins))
+          PY
+      - name: Install CPU-only original serializer
+        run: python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+      - name: Aggregate original Material property-distribution (no payload published)
+        run: |
+          set -euo pipefail
+          timeout 500s python3 -m scripts.probe_w2_material_property_stats \
+            --source Raft/Raft_Data \
+            --out "$RUNNER_TEMP/w2-material-property-stats.json"
+          echo 'RAFT_W2_MATERIAL_PROPERTY_STATS aggregateOnly=true noPayloadPublished=true unityRan=false androidBuildRan=false'
+      - name: Retain only the aggregate JSON
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: raft-w2-material-property-stats-${{ github.run_id }}
+          path: ${{ runner.temp }}/w2-material-property-stats.json
+          retention-days: 7
+          if-no-files-found: ignore

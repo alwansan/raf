@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T152008Z-92502b76",
+  "client_label": "W2",
+  "task": "RENDER-002 original material serialization aggregates recovery support",
+  "status": "in_progress",
+  "updated_at": "2026-11-03T18:25:00.000Z",
+  "base_sha": "0185c19",
+  "experiment_ids": ["material-property-stats"],
+  "deliverables": [
+    "scripts/probe_w2_material_property_stats.py",
+    "tests/test_w2_material_property_stats.py (8/8 pass)",
+    ".github/workflows/raft-w2-material-property-stats.yml",
+    "docs/W2_MATERIAL_PROPERTY_STATS_2026-11-03.md"
+  ],
+  "result": "514 materials (163+351) matching A13/W3; 35 queue overrides incl. transparent/overlay queues; dominant lightmap flag 4; heavy instancing; per-owner keyword-shape distributions. Port constraints for transparency ordering and variant selection. CI pending.",
+  "next_step": "push, verify green CI, update STATUS + discussion summary"
+}
