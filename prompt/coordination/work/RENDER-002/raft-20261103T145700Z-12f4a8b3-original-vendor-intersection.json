@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T145700Z-12f4a8b3",
+  "client_label": "A12",
+  "issue_id": "RENDER-002",
+  "status": "planned",
+  "updated_at": "2026-11-03T14:59:10Z",
+  "base_sha": "0a6507e86c7960109360c0b95212db606c4d882e",
+  "hypothesis": "The original Shader object m_ParsedForm/m_Name values from exactly two verified Unity resource containers may have a nonzero or zero exact-name intersection with Unity 2021.3.45f2 official198 builtin identities. This is novel evidence independent of incomplete ShaderLab export samples.",
+  "intended_files": [
+    "scripts/a12_probe_original_vendor_identity_overlap.py",
+    "tests/test_a12_vendor_identity_overlap.py",
+    ".github/workflows/raft-a12-vendor-identity-overlap.yml",
+    "prompt/coordination/clients/raft-20261103T145700Z-12f4a8b3/*",
+    "prompt/coordination/experiments/raft-20261103T145700Z-12f4a8b3/*"
+  ],
+  "related_work": [
+    "A11 107 snapshot integrity / 140 exported stubs",
+    "A13 independent comment-aware sample counts",
+    "A14 export-provenance active, different scope",
+    "A15 built-in restorer rollback",
+    "W1 two authenticated Shader owner objects/graphics DXBC"
+  ],
+  "experiment_ids": [
+    "original-vendor-overlap-two-owners"
+  ],
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41624581951",
+    "https://github.com/alwansan/raf/actions/runs/41644979965"
+  ],
+  "result": null,
+  "next_step": "Run source-only novel, privacy-preserving overlap test and SHA-pinned two-owner CI without assuming full original export."
+}
