@@ -2,9 +2,9 @@
   "schema_version": 1,
   "owner": "raft-20261103T100042Z-afcedabb",
   "issue_id": "LOCAL-005",
-  "status": "active",
-  "updated_at": "2026-11-03T10:04:37.077Z",
-  "base_sha": null,
+  "status": "completed",
+  "updated_at": "2026-11-03T10:13:01.911Z",
+  "base_sha": "b4ab7275cdadead58081d188cea305d8aa814766",
   "hypothesis": "Standalone local profile/save path adapter has a falsifiable cross-platform failure mode not currently covered by world-save smoke tests; retain original RGD serializer and only change contract-safe Android platform logic after reproduction",
   "intended_files": [
     "android-port/Runtime/Platform/LocalSavePaths.cs",
@@ -21,7 +21,10 @@
   "experiment_ids": [
     "local-path-sandbox-contract"
   ],
-  "evidence": [],
-  "result": null,
-  "next_step": "Reproduce path-canonicalization or save-profile invariant in isolated dotnet harness, then safe targeted fix or report negative result"
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/0fa98e71fbe5c06a1e92cae3d93fff89fae2fec0",
+    "https://github.com/alwansan/raf/actions/runs/41617053603"
+  ],
+  "result": "Synthetic Linux symlink directory escape reproduced; helper rejects pre-existing redirected profile/world directories, two new .NET smoke cases; exact-source platform workflow SUCCESS; no original game SaveAndLoad proof",
+  "next_step": "Independent original .rgd SaveAndLoad integration audit, active world load/save/resume and Android on-device acceptance after legitimate full-build coordination"
 }
