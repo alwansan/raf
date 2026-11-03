@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T112510Z-a1ef930c",
+  "issue_id": "FFT-FORMAT-009",
+  "experiment_id": "extinst-identity",
+  "updated_at": "2026-11-03T11:32:09.097Z",
+  "hypothesis": "Identical total count OpExtInst can mask different numeric GLSL.std.450 operation identities after HLSL roundtrip.",
+  "source_sha": "3fa646ed1dca28071d2b65c6394f0003231362e6",
+  "synthetic_negative_control": "With two calls each, changing public instruction 27 to28 is detected despite unchanged total; same instruction numbers with different operands never assert equivalence.",
+  "synthetic_results": "8/8 new tests PASS in CI",
+  "synthetic_url": "https://github.com/alwansan/raf/actions/runs/41627854878",
+  "synthetic_job_id": 125889663239,
+  "authenticated_original_result": "20/20 original validated Vulkan1.1; 20/20 public GLSL.std.450 ext numeric profiles preserved; 105 original and 105 roundtrip,0 unclassified. Other arithmetic/image type profiles 0/20.",
+  "authenticated_original_url": "https://github.com/alwansan/raf/actions/runs/41627854853",
+  "authenticated_original_job_id": 125889663438,
+  "concurrency": "Original existing private three-LFS-owner workflow, cancel-in-progress:false; no manual native action",
+  "limits": [
+    "Numeric opcode histogram only, not original operand graphs or math equivalence",
+    "No actual GPU, Vulkan device, Unity shader or Adreno execution",
+    "No proprietary shader source or binary output"
+  ],
+  "readiness": "NOT_READY,0/3",
+  "status": "completed"
+}

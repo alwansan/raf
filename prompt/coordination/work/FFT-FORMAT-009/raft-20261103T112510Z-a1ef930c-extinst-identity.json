@@ -3,8 +3,8 @@
   "owner": "raft-20261103T112510Z-a1ef930c",
   "client_label": "A1",
   "issue_id": "FFT-FORMAT-009",
-  "status": "active",
-  "updated_at": "2026-11-03T11:25:10Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T11:32:09.097Z",
   "base_sha": "f929e3c98a5b96460edc57e31acc9ba5799dbd04",
   "hypothesis": "Extended instruction totals may match across original and HLSL roundtrip yet GLSL.std.450 numeric operation IDs differ. Confirm without publishing shader operands or names; negative controls for unknown imports.",
   "intended_files": [
@@ -24,9 +24,14 @@
     "WATER other clients caller-policy, image contracts, precision scope reviewed"
   ],
   "budget": "Isolated Python synthetic CI, then existing private three-LFS-owner audit only if new evidence justified; same exact 3 LFS files, no Unity or release; no manual rerun of native.",
-  "next_step": "Implement fail-closed public GLSL.std.450 numeric operation census and compare real original20 if available",
+  "next_step": "Separate operand-level/typed-image numeric compute validation; maintain NOT_READY/0-of-3.",
   "experiment_ids": [
     "extinst-identity"
   ],
-  "result": null
+  "result": "8/8 new isolated synthetic tests PASS and SHA-verified 20-original CPU audit PASS. Public GLSL.std.450 numeric op instruction profiles 20/20 preserved (105 uses original and roundtrip, no nonstandard); instruction operand/numeric equivalence not proven. Earlier arithmetic/type profiles still 0/20.",
+  "source_sha": "3fa646ed1dca28071d2b65c6394f0003231362e6",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41627854878 (success,8 tests)",
+    "https://github.com/alwansan/raf/actions/runs/41627854853 (success,20-authenticated FFT modules)"
+  ]
 }
