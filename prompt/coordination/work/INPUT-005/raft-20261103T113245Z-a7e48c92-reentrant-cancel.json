@@ -2,8 +2,8 @@
   "schema_version": 1,
   "owner": "raft-20261103T113245Z-a7e48c92",
   "issue_id": "INPUT-005",
-  "status": "planned",
-  "updated_at": "2026-11-03T11:32:45Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T11:44:19.345Z",
   "base_sha": "bfedd6e51786f710ccc05164c158c269fe8927ae",
   "hypothesis": "If Tick at 500ms emits Down and the callback cancels the gesture (pause/focus loss), End may emit a cancelled Tap and Move may emit stale motion after release; a post-Tick active/owner guard should prevent both.",
   "intended_files": [
@@ -18,10 +18,16 @@
     "Prior A7 raft-20261103T105625Z-a7d793f4 finished pending-tap FIFO repair",
     "Other active clients: separate WATER-001/FFT, DISPLAY-003, HAPTICS-008, LOCAL-005, DIAG-010; avoid unrelated files"
   ],
-  "experiment_ids": [],
-  "evidence": [
-    "https://github.com/alwansan/raf/actions/runs/41624267337"
+  "experiment_ids": [
+    "reentrant-cancel-500ms-20261103"
   ],
-  "result": null,
-  "next_step": "Inject red C# test using actual class and on-Down callback Cancel; then make minimal and fail-closed source fix."
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41628646181",
+    "https://github.com/alwansan/raf/actions/runs/41628839519",
+    "https://github.com/alwansan/raf/actions/runs/41629285422",
+    "https://github.com/alwansan/raf/actions/runs/41629509261",
+    "https://github.com/alwansan/raf/actions/runs/41629508866"
+  ],
+  "result": "Two actual authored C# fail-first tests proved cancelled Tap/Move and same numeric id replacement defects. Post-Tick active/id/generation guards fix both. Final platform CI 440 gesture+53 mouse mapping checks SUCCESS; source offline managed compile exit0. Device/Unity unverified.",
+  "next_step": "Do not conflate source repair completion with overall INPUT-005 device acceptance or NOT_READY game readiness; separate future experiment only with new evidence."
 }
