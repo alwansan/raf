@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "owner": "raft-20261103T113245Z-a7e48c92",
-  "status": "in_progress",
+  "status": "completed",
   "hypothesis": "On a 500ms End or crossing Move, the synchronous Down callback may cancel/reown touch; the original caller must not emit a Tap/Move afterward.",
   "input_hashes": [
     "TouchPointerGesture.cs pre-fix blob a892a110d8fc2992449a7e93a53be3ddc0d5f2c9",
@@ -16,19 +16,21 @@
   "expected_signal": "RED pre-fix: error reentrant-cancel-end-no-ghost-tap. GREEN after fix: no post-cancel Tap from End, no trailing Move after synchronous Cancel, preserved 500ms and physical mouse mapping tests.",
   "negative_controls": [
     "Cancel() issued inside Down callback on End threshold => exactly Move,Down,Up, no Tap",
-    "Cancel() issued inside Down callback on Move threshold => exactly Move,Down,Up, no trailing Move"
+    "Cancel() issued inside Down callback on Move threshold => exactly Move,Down,Up, no trailing Move",
+    "Same touch ID reuse after Cancel + Begin must retain new gesture without extra old Tap or Move"
   ],
   "workflow_path": ".github/workflows/raft-android-platform-tests.yml",
   "concurrency_group": null,
   "artifact_prefix": null,
   "budget": "Use existing push-triggered cheap CI only; platform timeout10m; original offline harness timeout12m; no LFS/Unity/new workflow dispatch",
-  "run_url": "https://github.com/alwansan/raf/actions/runs/41628839519",
-  "source_sha": "97892fca662a7c708d3e46a90ff7b7aa5ac6df5b",
-  "result": "Red pre-fix run41628646181 completed FAILURE at intended actual C# assertion; post-fix CI pending.",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41629509261",
+  "source_sha": "f2460ecd59d2193088c25eded576b67122fe4783",
+  "result": "RED41628646181 failed reentrant-cancel-end-no-ghost-tap, first GREEN41628839519 434 C# gesture/53 mapping. RED41629285422 failed same-touch-id-restart-survives-old-end. Final GREEN41629509261 440 gesture/53 mapping; offline managed41629508866 exit0 codes{}. Source handles cancellation and generation replacement after Down callbacks; no real Unity/device event timing.",
   "limitations": [
     "Down callback reentrant Cancel is an isolated C# harness, not measured Android focus-event timing",
     "No Unity InputSystem, UGUI, physical-device, APK or phone execution",
-    "Queued-tap fix from previous A7 session is independent and unchanged"
+    "Queued-tap fix from previous A7 session is independent and unchanged",
+    "An exact reentrant device lifecycle has not been observed on the owner's phone; source C# harness is synthetic by design"
   ],
-  "next_step": "Verify green platform and original-managed jobs and actual log counts; update own memory/state/work and shared checkpoint/handoff with exact limits."
+  "next_step": "Bounded A7 experiment completed; preserve 500ms/LEFT Mouse0 and separate real UGUI/Android acceptance."
 }
