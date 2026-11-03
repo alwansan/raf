@@ -3,13 +3,11 @@
   "username": "raft-20261103T095700Z-a2b31f4d",
   "session_id": "a2-continue-20261103144837-72f30c9a",
   "resumed_from": "a2-continue-20261103120740-de5c9031",
-  "status": "active",
-  "updated_at": "2026-11-03T14:48:37.472Z",
+  "status": "paused",
+  "updated_at": "2026-11-03T15:10:41.546Z",
   "base_sha": "0a1e260bb1e4cbe211cb05c3374bfd0e4d0af696",
-  "current_work": [
-    "DISPLAY-003 original Settings controller serialized candidate PPtr and Canvas ownership"
-  ],
-  "last_commit": "b83f51a1c1e921332d610d995db3fcb409255071",
-  "next_step": "Source-lock Settings MonoScript and original Settings CSharp9, inspect exact local Unity PPtr candidates and native Canvas ancestry in scenes0/1 without claiming typed field links; run no-LFS CPU-only independent CI.",
+  "current_work": [],
+  "last_commit": "5db3a912727c8d2686a3b3301e04b7d80359fe0c",
+  "next_step": "DISPLAY-003 remains OPEN. CI41660274964 success 10/10 + original Settings SHA/scene:48 overlapping PPtr raw matches each; max 45 nonoverlapping windows,44 present in every maximal set, scaler-ancestor range level0 44–45 and level1 45. Custom original Settings.cs serialized field types/array boundaries and active UI panel path NOT VERIFIED. Next resume new user turn and map typed fields to PPtr+UGUI, compare Android landscape, do not globally force UI scale. NOT_READY/0 of3.",
   "memory_path": "prompt/coordination/clients/raft-20261103T095700Z-a2b31f4d/MEMORY.md"
 }
