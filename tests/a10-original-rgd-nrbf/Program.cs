@@ -38,7 +38,7 @@ static void MustReject(byte[] bytes, string sha, string name)
 }
 
 
-static (bool RootTypeDefined, int TypesDefined, int OriginalFields, int SerializedMembers, int MatchingFields)
+static (bool RootTypeDefined, int TypesDefined, int OriginalFields, int SerializedMembers, int MatchingFields, int Properties, int MatchingProperties, bool ISerializable)
     CompareAuthenticAssembly(byte[] payload, byte[] managedAssembly, string expectedAssemblySha)
 {
     if (!string.Equals(Hash(managedAssembly), expectedAssemblySha, StringComparison.OrdinalIgnoreCase))
@@ -61,9 +61,26 @@ static (bool RootTypeDefined, int TypesDefined, int OriginalFields, int Serializ
             continue;
         var fields = type.GetFields().Select(h => meta.GetString(meta.GetFieldDefinition(h).Name))
             .ToHashSet(StringComparer.Ordinal);
-        return (true, meta.TypeDefinitions.Count, fields.Count, serialized.Count, serialized.Count(fields.Contains));
+        var properties = type.GetProperties()
+            .Select(h => meta.GetString(meta.GetPropertyDefinition(h).Name))
+            .ToHashSet(StringComparer.Ordinal);
+        bool implementsCustomSerialization = false;
+        foreach (var interfaceHandle in type.GetInterfaceImplementations())
+        {
+            var reference = meta.GetInterfaceImplementation(interfaceHandle).Interface;
+            if (reference.Kind == HandleKind.TypeReference)
+            {
+                var typeRef = meta.GetTypeReference((TypeReferenceHandle)reference);
+                if (meta.GetString(typeRef.Name) == "ISerializable" &&
+                    meta.GetString(typeRef.Namespace) == "System.Runtime.Serialization")
+                    implementsCustomSerialization = true;
+            }
+        }
+        return (true, meta.TypeDefinitions.Count, fields.Count, serialized.Count,
+            serialized.Count(fields.Contains), properties.Count, serialized.Count(properties.Contains),
+            implementsCustomSerialization);
     }
-    return (false, meta.TypeDefinitions.Count, 0, serialized.Count, 0);
+    return (false, meta.TypeDefinitions.Count, 0, serialized.Count, 0, 0, 0, false);
 }
 
 try
@@ -87,7 +104,7 @@ try
     byte[] originalManaged = File.ReadAllBytes(args[5]);
     if (originalManaged.Length != 3211776) throw new InvalidDataException("Unexpected original Assembly-CSharp byte count");
     var metadata = CompareAuthenticAssembly(original, originalManaged, args[7]);
-    Console.WriteLine($"RAFT_ZIP2_RGD_ASSEMBLY originalManagedBytes={originalManaged.Length} assemblySHA256={Hash(originalManaged)} rootTypeDefinedInAssembly={metadata.RootTypeDefined} gameTypeDefinitions={metadata.TypesDefined} declaredFields={metadata.OriginalFields} serializedRootMembers={metadata.SerializedMembers} intersectingFields={metadata.MatchingFields} codeExecuted=false");
+    Console.WriteLine($"RAFT_ZIP2_RGD_ASSEMBLY originalManagedBytes={originalManaged.Length} assemblySHA256={Hash(originalManaged)} rootTypeDefinedInAssembly={metadata.RootTypeDefined} gameTypeDefinitions={metadata.TypesDefined} declaredFields={metadata.OriginalFields} serializedRootMembers={metadata.SerializedMembers} intersectingFields={metadata.MatchingFields} properties={metadata.Properties} intersectingProperties={metadata.MatchingProperties} implementsISerializable={metadata.ISerializable} codeExecuted=false");
     try { CompareAuthenticAssembly(original, originalManaged, new string('0', 64)); throw new InvalidDataException("Assembly SHA negative accepted"); }
     catch (InvalidDataException ex) when (ex.Message.Contains("SHA256 mismatch", StringComparison.Ordinal)) { Console.WriteLine("RAFT_RGD_NEGATIVE mismatchedAssemblyHash=rejected"); }
     Console.WriteLine("RAFT_ZIP2_RGD_NBRF negativeControls=4/4 sameSourceDeterministic=true unityRuntimeVerified=false actualSaveLoadVerified=false");
