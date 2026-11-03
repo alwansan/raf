@@ -35,10 +35,11 @@ static std::vector<uint32_t> spirvFile(const char* path) {
     return result;
 }
 static float inputValue(uint32_t x,uint32_t y,int texture,int channel) {
-    const float t=float((x*17u+y*13u+texture*19u+channel*7u)%1021u)*0.017f;
+    const float t=float((x*17u+y*13u+texture*19u+channel*7u+inputSeed*101u)%1021u)*0.017f;
     return std::sin(t)*0.3f+std::cos(t*0.27f)*0.15f;
 }
 static constexpr float sentinel=123456.f;
+static uint32_t inputSeed=0;
 struct Texture {
     VkImage image=VK_NULL_HANDLE;
     VkImageView view=VK_NULL_HANDLE;
@@ -56,9 +57,18 @@ static bool isWritten(const std::array<float,4>& p) {
 }
 int main(int argc,char** argv) {
  try {
-    require(argc==5 || argc==6,"Usage: original.spv roundtrip.spv width height [--canary]");
-    bool canary=(argc==6);
-    require(!canary || std::string(argv[5])=="--canary","Unknown test mode");
+    require(argc>=5 && argc<=7,"Usage: original.spv roundtrip.spv width height [seed [groupsY] | --canary]");
+    bool canary=(argc==6 && std::string(argv[5])=="--canary");
+    if(!canary && argc>=6) {
+        inputSeed=uint32_t(std::stoul(argv[5]));
+        require(inputSeed<=1023 && std::to_string(inputSeed)==argv[5],"Invalid bounded input seed");
+    }
+    uint32_t dispatchGroupY=1;
+    if(argc==7) {
+        dispatchGroupY=uint32_t(std::stoul(argv[6]));
+        require(dispatchGroupY>=1 && dispatchGroupY<=2 &&
+                std::to_string(dispatchGroupY)==argv[6],"Invalid bounded Y dispatch");
+    }
     auto original=spirvFile(argv[1]),roundtrip=spirvFile(argv[2]);
     int widthInt=std::stoi(argv[3]),heightInt=std::stoi(argv[4]);
     require(widthInt>=1 && widthInt<=2048 && heightInt>=1 && heightInt<=2048,
@@ -258,7 +268,7 @@ int main(int argc,char** argv) {
         vkCmdBindPipeline(cmd,VK_PIPELINE_BIND_POINT_COMPUTE,pipelines[i]);
         vkCmdBindDescriptorSets(cmd,VK_PIPELINE_BIND_POINT_COMPUTE,
                                 pipeLayout,0,1,&sets[i],0,nullptr);
-        vkCmdDispatch(cmd,1,1,1);
+        vkCmdDispatch(cmd,1,dispatchGroupY,1);
     }
     std::array<VkImageMemoryBarrier,2> postBarriers{};
     for(int i=0;i<2;i++){
@@ -307,6 +317,8 @@ int main(int argc,char** argv) {
              <<"RAFT_A1_VULKAN_DIFF {\"cpu_software_vulkan\":true,"
              <<"\"rgba32f_linear_only\":true,\"extent_width\":"<<w
              <<",\"extent_height\":"<<h
+             <<",\"input_seed\":"<<inputSeed
+             <<",\"dispatch_group_y\":"<<dispatchGroupY
              <<",\"original_written_pixels\":"<<writesA
              <<",\"roundtrip_written_pixels\":"<<writesB
              <<",\"write_coverage_mismatch_pixels\":"<<missing
