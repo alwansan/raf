@@ -70,6 +70,9 @@ def build(root, repo, out):
         "water_or_fft_build_ready": False,
     }
     phase = "source"
+    subphase = "source_sha"
+    active_pass = None
+    active_stage = None
     try:
         owner, object_sha, tree = original_shader(root, repo)
         if object_sha != OBJECT_SHA256:
@@ -83,10 +86,12 @@ def build(root, repo, out):
         report["genuine_original_source_pinned"] = True
         report["original_object_sha256"] = object_sha
         report["original_parsed_form_sha256"] = parsed_sha
+        subphase = "source_platform_tables"
         tables = [(p, records(s)) for p, s in decoded_platforms(tree) if p == 4]
         if len(tables) != 1:
             raise ValueError("Original D3D11 blur platform table missing or ambiguous")
         entries = tables[0][1]
+        subphase = "source_pass_linkage"
         graph = inspect_shader(parsed, entries)
         report["original_passes"] = graph["original_pass_count"]
         report["original_stage_programs"] = graph["linked_stage_programs"]
@@ -102,10 +107,13 @@ def build(root, repo, out):
             stages = []
             for si, sub in enumerate(parsed["m_SubShaders"]):
                 for pi, p in enumerate(sub["m_Passes"]):
+                    active_pass = pi
                     pair = {}
                     permutations = []
                     versions = []
                     for field, stage in (("progVertex", 1), ("progFragment", 0)):
+                        active_stage = stage
+                        subphase = "original_stage_variant"
                         program = p[field]
                         variants = stage_variants(program)
                         if len(variants) != 1:
@@ -114,6 +122,7 @@ def build(root, repo, out):
                         if meta.get("m_KeywordIndices"):
                             raise ValueError("Original Blur keyword permutation unresolved")
                         permutations.append((bucket, variant_key(meta)))
+                        subphase = "original_parameter_index"
                         param_table = program["m_ParameterBlobIndices"]
                         if bucket is None or len(param_table) != len(program["m_PlayerSubPrograms"]):
                             raise ValueError("Original Blur parameter table layout unsupported")
@@ -121,14 +130,20 @@ def build(root, repo, out):
                         if type(index) is not int or not 0 <= index < len(entries):
                             raise ValueError("Original Blur parameter table index invalid")
                         seg, raw_params = entries[index]
+                        subphase = "original_parameter_payload"
+                        report["last_original_parameter_size"] = len(raw_params)
+                        report["last_original_parameter_sha256"] = hashlib.sha256(raw_params).hexdigest()
                         parameter = decode_empty_parameters(raw_params)
+                        subphase = "original_stage_bytecode"
                         original, link = linked_program(meta, entries, stage)
                         versions.append(version_tokens(original)[0]["shader_model"])
                         private = folder / ("pass%d-stage%d" % (pi, stage))
                         private.mkdir()
+                        subphase = "private_dxbc_translation"
                         translated = translate(original, stage, private)
                         if not translated["hlsl_recovered"] or not translated["roundtrip_vulkan11_valid"]:
                             raise ValueError("Original Blur stage translation did not validate")
+                        subphase = "serialized_resource_rebinding"
                         rebound, binding = rebind(
                             (private / "private.hlsl").read_text(), program, p["m_NameIndices"],
                             original_inputs=signature_inputs(original) if stage == 1 else None,
@@ -148,6 +163,8 @@ def build(root, repo, out):
                             "vulkan11_valid": translated["vulkan11_valid"],
                             "roundtrip_vulkan11_valid": translated["roundtrip_vulkan11_valid"],
                         })
+                    subphase = "paired_original_stage_permutation"
+                    active_stage = None
                     if permutations[0] != permutations[1]:
                         raise ValueError("Original Blur paired stage permutation mismatch")
                     generated[(si, pi)] = (
@@ -156,6 +173,8 @@ def build(root, repo, out):
                     combined = folder / ("pass%d-combined.hlsl" % pi)
                     combined.write_text(stage_body(pair[1], pair[0]))
                     for stage, macro in ((1, "VERTEX"), (0, "FRAGMENT")):
+                        active_stage = stage
+                        subphase = "rebuilt_stage_vulkan_validation"
                         output = folder / ("pass%d-stage%d-validated.spv" % (pi, stage))
                         valid = command([
                             "glslangValidator", "-V", "-D", "-DSHADER_STAGE_" + macro + "=1",
@@ -166,6 +185,9 @@ def build(root, repo, out):
                     if not all(r.get("wrapped_stage_vulkan11_valid") for r in stages[-2:]):
                         raise ValueError("Original Blur rebound stage failed Vulkan1.1 validation")
             phase = "shaderlab"
+            active_stage = None
+            active_pass = None
+            subphase = "original_shaderlab_state"
             result = wrapper(parsed, generated)
             report.update({
                 "status": "private_shaderlab_recovered",
@@ -181,6 +203,9 @@ def build(root, repo, out):
         # property values from arbitrary decoder exceptions.
         report["status"] = "blocked"
         report["failure_phase"] = phase
+        report["failure_subphase"] = subphase
+        report["failure_original_pass_index"] = active_pass
+        report["failure_stage_code"] = active_stage
         report["failure_type"] = type(exc).__name__
         safe = json.dumps(report, sort_keys=True)
         out.write_text(safe + "\n", encoding="utf-8")
