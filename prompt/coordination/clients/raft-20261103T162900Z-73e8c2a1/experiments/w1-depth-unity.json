@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T162900Z-73e8c2a1",
+  "session_id": "w1-20261103T150217800Z-d4a79e63",
+  "status": "planned",
+  "hypothesis": "Unity 2021.3.45f2 can import the reconstructed original Depth Copy ShaderLab with preserved 6+3 passes and compile a single private Android Vulkan shader bundle without shader errors.",
+  "source_basis": "891e10a9dcc8b5cc16e66e12457b039e6f6d3086",
+  "input_shaderlab_sha256": "0a7e11f750cac17ecc25cb7179c0a29850d6fb91fa983618f12e6bd8782ed1ea",
+  "workflow_path": ".github/workflows/raft-w1-depth-unity.yml",
+  "concurrency_group": "raft-w1-depth-unity-${github.ref}",
+  "cancel_in_progress": false,
+  "budget": "30min one ubuntu job, two authenticated 227511628-byte owners reused from cache, one Unity Android shader assetbundle; no Player/APK",
+  "expected_signal": "shaderImported, androidVulkanOnly, privateShaderBundleBuilt, zero ShaderUtil errors; aggregate result only",
+  "negative_signal": "ShaderLab parser or platform compiler rejection",
+  "limitations": [
+    "Not numerical equivalence",
+    "Not GPU execution or POCO appearance",
+    "Assetbundle success does not prove every runtime pass or variant"
+  ],
+  "next_step": "Inspect aggregate Unity result before any original GUID integration."
+}

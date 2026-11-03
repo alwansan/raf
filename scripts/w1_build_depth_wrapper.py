@@ -14,7 +14,7 @@ from scripts.run_original_dxbc_translation_probe import version_tokens
 from scripts.w1_depth_shaderlab import decode_empty_parameters, stage_body, wrapper, property_name
 
 
-def build(root, out):
+def build(root, out, private_project=None):
     verify_sources(root, expected=OWNERS)
     import UnityPy
     env = UnityPy.load(str(root / 'sharedassets0.assets'))
@@ -112,6 +112,17 @@ def build(root, out):
                           all_wrapped_stages_valid=all(r['wrapped_stage_vulkan11_valid'] for r in report['stages']))
             if not report['all_wrapped_stages_valid']:
                 raise ValueError('Combined ShaderLab stage body failed validation')
+            if private_project is not None:
+                project = private_project.resolve()
+                if project.exists():
+                    raise ValueError('Refusing to overwrite an existing private Unity probe project')
+                (project / 'Assets/Editor').mkdir(parents=True)
+                (project / 'Packages').mkdir()
+                (project / 'ProjectSettings').mkdir()
+                (project / 'Assets/W1Depth.shader').write_text(source)
+                (project / 'Packages/manifest.json').write_text('{"dependencies":{}}\n')
+                (project / 'ProjectSettings/ProjectVersion.txt').write_text('m_EditorVersion: 2021.3.45f2\n')
+                report['private_unity_probe_project_prepared'] = True
     except Exception as exc:
         report['failure_type'] = type(exc).__name__
         # These errors are authored aggregate diagnostics, never compiler output
@@ -128,5 +139,6 @@ if __name__ == '__main__':
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--source', type=Path, required=True)
     p.add_argument('--out', type=Path, required=True)
+    p.add_argument('--private-project', type=Path)
     args = p.parse_args()
-    build(args.source, args.out)
+    build(args.source, args.out, args.private_project)
