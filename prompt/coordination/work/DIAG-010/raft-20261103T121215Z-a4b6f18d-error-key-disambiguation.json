@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T121215Z-a4b6f18d",
+  "issue_id": "DIAG-010",
+  "status": "planned",
+  "base_sha": "bc19fd12a889a118cd576a1d1e8a6b4a7a8dc3b7",
+  "updated_at": "2026-11-03T12:12:15Z",
+  "scope": "Protect RepeatedDiagnosticMessages composite (operation,detail) identity against separator collisions",
+  "hypothesis": "First(operation='save\\nload',detail='stack') and First(operation='save',detail='load\\nstack') use same key; second first stack is hidden",
+  "intended_files": [
+    "android-port/Runtime/Platform/PersistentDiagnosticLog.cs",
+    "android-port/Tests/Diagnostics/Program.cs",
+    "prompt/coordination/clients/raft-20261103T121215Z-a4b6f18d/state.json",
+    "prompt/coordination/clients/raft-20261103T121215Z-a4b6f18d/MEMORY.md",
+    "prompt/coordination/work/DIAG-010/raft-20261103T121215Z-a4b6f18d-error-key-disambiguation.json",
+    "prompt/STATUS.md",
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+  ],
+  "concurrency": "A1, A2, A3 and A6 work in unrelated files. Prior A4 diagnostic work completed. Recheck file sha before writing.",
+  "test": "dotnet run --project android-port/Tests/Diagnostics/Diagnostics.csproj --configuration Release --nologo",
+  "workflow": ".github/workflows/raft-persistent-diagnostics-tests.yml",
+  "next_step": "Add deterministic regression test; record red CI; fix composite key; record green CI; finalize scopes and evidence"
+}

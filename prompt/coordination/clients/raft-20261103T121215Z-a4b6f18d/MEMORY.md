@@ -1,0 +1,7 @@
+# A4 resumed — DIAG-010 composite repeat-log key
+
+- Identity: `raft-20261103T121215Z-a4b6f18d`; session `a4-20261103T121215Z-38b6e51c`; resumed_from completed A4 `raft-20261103T105430Z-a4d9e31b` and previous A4 `raft-20261103T095832Z-a4c7e2b1`. Live initial HEAD bc19fd12a889a118cd576a1d1e8a6b4a7a8dc3b7.
+- Read latest owner prompt/AGENTS/STATUS/handoff and `prompt/coordination/README.md`, independent work plans and experiments, latest Actions, releases and historical CL inventory.
+- Active client deconfliction: A1 WATER/FFT, A2 DISPLAY/CanvasScaler, A3/A6 RENDER shader recovery. A5 unrelated past diagnostic lifecycle fix was already completed. Avoid any file changes in those scopes or Unity/native builds.
+- Distinct DIAG-010 scope: `RepeatedDiagnosticMessages.First` currently generates `operation + "\\n" + detail` as its dictionary key. Two different (operation, detail) pairs can produce an identical concatenation and incorrectly suppress the *first* occurrence of a different error, hiding a real original error stack. Plan test-first negative control and minimal lossless pair discriminator, preserving 128 group limit and repeat retry behavior.
+- Source under own plan: `android-port/Runtime/Platform/PersistentDiagnosticLog.cs`; test `android-port/Tests/Diagnostics/Program.cs`; its existing no-LFS GitHub Actions workflow will be triggered by source changes; own coordination/STATUS/handoff only. No LFS/.meta/GUID, no CL edits, no Unity/APK/OBB/XAPK/Release or schedule changes; preserve Mouse0/500ms/UGUI/controller and real input.
