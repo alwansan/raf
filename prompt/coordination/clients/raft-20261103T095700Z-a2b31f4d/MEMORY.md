@@ -20,3 +20,15 @@
 ## A2 resumed source investigation (2026-11-03T10:49:21.557Z)
 - Resumed same paused identity raft-20261103T095700Z-a2b31f4d in new session a2-continue-20261103T104921-f42c8a91; no other DISPLAY-003 plan at review. SHA pinned original ControlsSettingsBox b64ba19e2d55fe503045e523c3c8658adb4ca3ededaccfecf6521bad1600ef92; previous CI41616959190 success on original 2394 files.
 - Proposed independent scope: bounded original sizeDelta setter target and method context, without private source printing. Only class/source semantic evidence before editing game UI. Read-only CL roots unchanged. Existing original guard remains intact. All nonterminal Actions and scheduled native builds absent in snapshot; refresh before experiment.
+
+
+<!-- A2-DISPLAY-003-CONTROLS-CI41623586923 -->
+## Completed A2 follow-up
+
+[CPU-only original-source CI41623131096](https://github.com/alwansan/raf/actions/runs/41623131096) at [ee8b11e](https://github.com/alwansan/raf/commit/ee8b11e88aee10530f16b927e09d4f37af5694d4) and [refined CI41623586923](https://github.com/alwansan/raf/actions/runs/41623586923) at [b9ec97d](https://github.com/alwansan/raf/commit/b9ec97d2776e8504a0c5d71f1b226e29f320707c) both COMPLETED SUCCESS (refined nine synthetic tests plus original CSharp9 source SHA pin).
+
+Original ControlsSettingsBox SHA256 b64ba19e2d55fe503045e523c3c8658adb4ca3ededaccfecf6521bad1600ef92. Its unique executable `.sizeDelta` write at line110 belongs to method106–112. Receiver matches a `RectTransform` declaration elsewhere in same owner class (not a method RectTransform/Transform parameter); RHS is a simple identifier, not a Vector2 parameter or direct screen-width/height reference. This method has no direct Screen.SetResolution/CanvasScaler scale-property writes or explicit same-owner invocation, and is not a recognized lifecycle method. Lexical context is not causal/serialized scene proof.
+
+DISPLAY-003 SOURCE_REVIEW_REQUIRED, NOT_READY/0 of3; no runtime, Unity/APK/OBB/XAPK, GUID/.meta, LFS, touch, tasks, native requests or release changed. Next inspect authenticated serialized Settings UI CanvasScaler and opening/UnityEvent path.
+
+- Separate work and experiment closed; A2 state paused. No work continues between turns.
