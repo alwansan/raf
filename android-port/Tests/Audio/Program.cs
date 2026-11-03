@@ -97,6 +97,45 @@ class Program
                 catch (InvalidDataException) { refused = true; }
                 Require(refused);
             }
+            // Assert original bank provenance is checked before runtime FMOD loading.
+            // These are synthetic bytes, never a copy of the proprietary game banks.
+            byte[] sampleBank = { 0, 1, 2, 3, 4, 255 };
+            string sampleSha;
+            using (var sha = System.Security.Cryptography.SHA256.Create())
+                sampleSha = BitConverter.ToString(sha.ComputeHash(sampleBank)).Replace("-", "").ToLowerInvariant();
+            AndroidOriginalBankIdentity.VerifyExact(sampleBank, sampleBank.Length, sampleSha);
+            Require(true);
+            byte[] altered = (byte[])sampleBank.Clone();
+            altered[2] ^= 1;
+            bool alteredRejected = false;
+            try { AndroidOriginalBankIdentity.VerifyExact(altered, sampleBank.Length, sampleSha); }
+            catch (InvalidDataException) { alteredRejected = true; }
+            Require(alteredRejected);
+            bool lengthRejected = false;
+            try { AndroidOriginalBankIdentity.VerifyExact(sampleBank, sampleBank.Length + 1, sampleSha); }
+            catch (InvalidDataException) { lengthRejected = true; }
+            Require(lengthRejected);
+            bool malformedHashRejected = false;
+            try { AndroidOriginalBankIdentity.VerifyExact(sampleBank, sampleBank.Length, "bad"); }
+            catch (ArgumentException) { malformedHashRejected = true; }
+            Require(malformedHashRejected);
+            foreach (string originalName in new[] { "MasterBank.bank", "MasterBank.strings.bank",
+                "VO_logs_english.bank", "VO_npc_english.bank", "VO_olof_english.bank" })
+            {
+                bool wrongOriginalRejected = false;
+                try { AndroidOriginalBankIdentity.Verify(originalName, sampleBank); }
+                catch (InvalidDataException) { wrongOriginalRejected = true; }
+                Require(wrongOriginalRejected);
+            }
+            bool unknownBankRejected = false;
+            try { AndroidOriginalBankIdentity.Verify("untracked.bank", sampleBank); }
+            catch (InvalidDataException) { unknownBankRejected = true; }
+            Require(unknownBankRejected);
+            bool nullBankRejected = false;
+            try { AndroidOriginalBankIdentity.Verify("MasterBank.bank", null); }
+            catch (ArgumentNullException) { nullBankRejected = true; }
+            Require(nullBankRejected);
+
             // Exercise a multi-megabyte bank, not just tiny haptic samples.
             // The runtime reader must return exact bytes without ToArray's
             // second full-size allocation (the real MasterBank is ~100 MiB).

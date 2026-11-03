@@ -52,6 +52,9 @@ namespace RaftAndroid.Audio
                 RaftAndroid.Diagnostics.AndroidRuntimeLog.Stage("fmod.expansion_bank." + name, () =>
                 {
                     byte[] bytes = RaftAndroid.Platform.AndroidStreamingAssets.ReadAllBytes(root + "/" + name);
+                    // Require the independently authenticated original bank bytes before FMOD.
+                    // A correct OBB filename alone cannot detect a damaged/replaced ZIP entry.
+                    AndroidOriginalBankIdentity.Verify(name, bytes);
                     FMOD.Studio.Bank bank;
                     FMOD.RESULT result = FMODUnity.RuntimeManager.StudioSystem.loadBankMemory(
                         bytes, FMOD.Studio.LOAD_BANK_FLAGS.NORMAL, out bank);
