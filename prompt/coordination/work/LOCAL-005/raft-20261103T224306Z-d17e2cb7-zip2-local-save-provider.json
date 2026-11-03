@@ -2,8 +2,8 @@
   "schema_version": 1,
   "owner": "raft-20261103T224306Z-d17e2cb7",
   "issue_id": "LOCAL-005",
-  "status": "active",
-  "updated_at": "2026-11-03T22:43:06.904Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T22:50:22.652Z",
   "base_sha": "3c07c4b5b7de15c454d12fe634be0ce0c37667a6",
   "hypothesis": "Existing original SaveAndLoad portability CI uses feature branch Raft/Managed original DLL. Source can instead be acquired from owner ZIP2 without Git LFS, SHA-pinning both original DLL and Data.rgd and executing the same original save compatibility checks.",
   "intended_files": [
@@ -23,7 +23,13 @@
   "experiment_ids": [
     "a8-zip2-original-save-provider"
   ],
-  "evidence": [],
-  "result": null,
-  "next_step": "Run independent synthetic SHA/manifest/security negatives then original ZIP2 SaveAndLoad + Data.rgd source-aware no-LFS Actions check."
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41733527931",
+    "https://github.com/alwansan/raf/actions/runs/41733872815",
+    "https://github.com/alwansan/raf/commit/5f5be03230b3becc1f9fa88bc86fa9a395919483",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/A8_ZIP2_ORIGINAL_SAVE_NO_LFS_2026-11-04.md"
+  ],
+  "result": "No-LFS ZIP2 pinned original SaveAndLoad source provider operational in original save path workflow; safety RED/GREEN path traversal fixed, authentic source hashes matched and original CSharp9 path tests pass. No game save/device proof.",
+  "next_step": "End scoped A8 provider work; next independent agent should investigate original world .rgd create/save/load/resume and preserve graphics gates.",
+  "source_sha": "5f5be03230b3becc1f9fa88bc86fa9a395919483"
 }
