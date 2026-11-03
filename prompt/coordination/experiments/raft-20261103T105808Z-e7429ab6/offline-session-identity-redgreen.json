@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T105808Z-e7429ab6",
+  "status": "red_test_pending",
+  "hypothesis": "OfflineSession accepted nonempty arbitrary identities and reported a host even when LocalPlayerIdentity.FromProfile would reject; negative controls must fail before source fix, pass after.",
+  "input_hashes": [
+    {
+      "file": "android-port/Runtime/Platform/OfflineSession.cs",
+      "blob_sha": "5f31ca03c47f39f0b62e91d18825671fd24571e4"
+    }
+  ],
+  "commands": [
+    "dotnet run --project android-port/Tests/OfflineSessionIdentity/OfflineSessionIdentity.csproj --configuration Release --nologo"
+  ],
+  "expected_signal": "Before fix: test fails on invalid identity; after fix: all 14 checks pass and valid 32-hex local identity/host semantics remain unchanged.",
+  "negative_controls": [
+    "null/empty/short IDs",
+    "31/33-length lower hex IDs",
+    "uppercase/non-hex 32-length IDs",
+    "path traversal/separator",
+    "locally safe path-segment but invalid profile value"
+  ],
+  "workflow_path": ".github/workflows/raft-a9-offline-session-identity.yml",
+  "concurrency_group": "raft-a9-local005-identity-${{ github.ref }}-${{ github.sha }}",
+  "artifact_prefix": null,
+  "budget": "Ubuntu24.04 CPU-only Dotnet8, timeout6min, no LFS Unity or native build",
+  "run_url": null,
+  "source_sha": null,
+  "result": null,
+  "limitations": [
+    "This validates platform skeleton input only; original Raft_Network and .rgd save/load remain unexecuted",
+    "No Android device input or identity-provider integration test"
+  ],
+  "next_step": "Inspect intentionally failing red CI then apply minimal constructor validation and check green CI"
+}

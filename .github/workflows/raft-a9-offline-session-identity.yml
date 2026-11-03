@@ -1,0 +1,35 @@
+name: A9 offline session identity invariants (CPU only)
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - 'android-port/Runtime/Platform/OfflineSession.cs'
+      - 'android-port/Runtime/Platform/LocalPlayerIdentity.cs'
+      - 'android-port/Runtime/Platform/LocalProfileStore.cs'
+      - 'android-port/Tests/OfflineSessionIdentity/**'
+      - '.github/workflows/raft-a9-offline-session-identity.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: raft-a9-local005-identity-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  local-session-identity:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Run actual CSharp canonical offline identity regression (no Unity)
+        run: dotnet run --project android-port/Tests/OfflineSessionIdentity/OfflineSessionIdentity.csproj --configuration Release --nologo
