@@ -2,6 +2,7 @@ package com.alwansan.lograf;
 
 import android.os.RemoteException;
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
@@ -31,6 +32,7 @@ public final class RemoteLogService extends IRemoteLog.Stub {
     private final AtomicInteger lastKnownPid=new AtomicInteger(-1);
     private final AtomicLong lastDeathAtUnixMs=new AtomicLong(-1);
     private final Set<String> gamePids = java.util.Collections.synchronizedSet(new HashSet<>());
+    private final AtomicInteger primaryGamePid=new AtomicInteger(-1);
     private Thread gameThread, systemThread, pidThread, telemetryThread;
     private static final Pattern PID = Pattern.compile("^\\s*(?:\\d{4}-)?\\d\\d-\\d\\d\\s+\\d\\d:\\d\\d:\\d\\d[^ ]*\\s+(\\d+)\\s+");
     private static final Pattern CRASH_MARK = Pattern.compile("(?i)(FATAL EXCEPTION|Fatal signal|tombstone|crash_dump|am_crash|am_anr|Force finishing|ANR in|native crash|Fatal Java|Process:)");
@@ -50,6 +52,8 @@ public final class RemoteLogService extends IRemoteLog.Stub {
         javaFatalMarkers.set(0);nativeFatalMarkers.set(0);processDeathEvents.set(0);
         errorGroups.reset();
         lastDeathPid.set(-1);lastKnownPid.set(-1);lastDeathAtUnixMs.set(-1);
+        primaryGamePid.set(-1);
+        synchronized(gamePids){gamePids.clear();}
         metricPreviousAt=-1;metricPreviousGameLines=0;metricPreviousSystemLines=0;
         running.set(true);
         gameThread = new Thread(() -> pump("RAFT", new String[]{
@@ -69,12 +73,33 @@ public final class RemoteLogService extends IRemoteLog.Stub {
     }
 
     private int currentPid() {
-        synchronized(gamePids) {
-            for(String pid:gamePids) {
-                try {return Integer.parseInt(pid);} catch(NumberFormatException ignored){}
-            }
+        // A HashSet iteration is nondeterministic. The sampler must never
+        // switch to a :worker process or invent a PID on an unreadable /proc.
+        return primaryGamePid.get();
+    }
+
+    private static String processCmdline(int pid) {
+        if(pid<=0)return null;
+        try(FileInputStream in=new FileInputStream("/proc/"+pid+"/cmdline")){
+            byte[] buf=new byte[256];
+            int n=in.read(buf);
+            if(n<=0)return null;
+            int end=0;
+            while(end<n && buf[end]!=0)end++;
+            return new String(buf,0,end,StandardCharsets.UTF_8);
+        }catch(Exception ignored){return null;}
+    }
+
+    private int findMainPid(Set<String> candidates) {
+        int selected=-1;
+        for(String item:candidates){
+            try{
+                int pid=Integer.parseInt(item);
+                if(packageName.equals(processCmdline(pid)) &&
+                        (selected<0 || pid<selected))selected=pid;
+            }catch(NumberFormatException ignored){}
         }
-        return -1;
+        return selected;
     }
 
     private void sendMetric(String line) {
@@ -127,11 +152,13 @@ public final class RemoteLogService extends IRemoteLog.Stub {
                 for (String item : found.toString().trim().split("\\s+")) {
                     if (item.matches("[0-9]+")) current.add(item);
                 }
+                // Preserve all PIDs for system-context correlation, but only
+                // sample CPU/RSS/FPS for the exact main process. If /proc is
+                // inaccessible, mark PID unavailable instead of guessing.
+                int main=findMainPid(current);
                 synchronized (gamePids) { gamePids.clear(); gamePids.addAll(current); }
-                if(!current.isEmpty()){
-                    try{lastKnownPid.set(Integer.parseInt(current.iterator().next()));}
-                    catch(NumberFormatException ignored){}
-                }
+                primaryGamePid.set(main);
+                if(main>0)lastKnownPid.set(main);
             } catch (Exception ignored) {
                 // The UID stream does not depend on pidof.
             } finally { if (p != null) p.destroy(); }
@@ -284,6 +311,7 @@ public final class RemoteLogService extends IRemoteLog.Stub {
             }
         }
         gameProcess = null; systemProcess = null;
+        primaryGamePid.set(-1);
     }
 
     @Override public String finalExitEvidence() {
@@ -345,7 +373,7 @@ public final class RemoteLogService extends IRemoteLog.Stub {
     }
 
     @Override public String status() {
-        return "running=" + running.get() + " uid=" + gameUid + " pids=" + gamePids;
+        return "running=" + running.get() + " uid=" + gameUid + " mainPid=" + primaryGamePid.get() + " pids=" + gamePids;
     }
 
     @Override public void destroy() { stop(); System.exit(0); }

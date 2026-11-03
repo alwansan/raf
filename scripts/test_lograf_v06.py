@@ -36,6 +36,10 @@ checks={
     "stop-time exit evidence": 'remote.finalExitEvidence()' in capture and 'stop_time_android_process_exit_info' in capture,
     "system context rejects substring package names": 'containsExactPackage(line,packageName)' in remote and 'isPackageCharacter(line.charAt(end))' in remote,
     "system context still accepts tracked PID": 'gamePids.contains(m.group(1))' in remote,
+    "telemetry uses exact main process": 'return primaryGamePid.get();' in remote and 'packageName.equals(processCmdline(pid))' in remote,
+    "no HashSet PID sampling": 'for(String pid:gamePids)' not in remote,
+    "no guessed process PID when proc inaccessible": 'return selected;' in remote and 'int selected=-1;' in remote,
+    "all PIDs retained for context": 'gamePids.addAll(current)' in remote,
     "raw Logcat unchanged target": '"--uid=" + gameUid' in remote,
     "error classes tracked without raw text": '"error_groups"' in remote and (src/"ErrorCategorySummary.java").exists(),
 }
