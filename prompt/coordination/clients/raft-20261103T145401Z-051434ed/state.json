@@ -4,13 +4,13 @@
   "client_label": "A6",
   "session_id": "a6-20261103T145401Z-ba243dcc",
   "resumed_from": "raft-20261103T132000Z-a6e7f219",
-  "status": "active",
-  "updated_at": "2026-11-03T14:54:01.756Z",
-  "base_sha": null,
+  "status": "paused",
+  "updated_at": "2026-11-03T15:02:06.638Z",
+  "base_sha": "5006ba9cb9d7763d7bcf67c415e24717cd0b3046",
   "current_work": [
     "LOCAL-005"
   ],
-  "last_commit": null,
-  "next_step": "Reproduce original source backup dangling symlink redirect; fix adapters and test same-source CPU-only.",
+  "last_commit": "b6a962018e06513d5cf408e646751f161f0e00ca",
+  "next_step": "Scoped backup-leaf fix complete. Next session recheck live A6 chain/HEAD/Actions, then choose separate original .rgd world create/save/load/resume evidence or unclaimed source defect. Do not build Unity/APK here.",
   "memory_path": "prompt/coordination/clients/raft-20261103T145401Z-051434ed/MEMORY.md"
 }
