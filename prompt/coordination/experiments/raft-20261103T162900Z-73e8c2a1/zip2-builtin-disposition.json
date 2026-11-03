@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T162900Z-73e8c2a1",
+  "status": "completed",
+  "source_sha": "afb4bc1b8b86d3254a35916b5cc336234fd547aa",
+  "source_provider_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41733600478",
+  "workflow_path": ".github/workflows/raft-w1-depth-stage.yml",
+  "concurrency_group": "raft-w1-depth-stage-${github.ref}",
+  "budget": "20minuteCPU-only;4owners233281064B;verifiedpayloadcache",
+  "result": {
+    "actual_exported_engine_material_refs_verified": false,
+    "dimensions": {
+      "asset": {
+        "game_shaders": 105,
+        "unavailable_original_name_keys": 105
+      },
+      "declaration": {
+        "game_shaders": 105,
+        "not_in_engine_owners": 105
+      }
+    },
+    "embedded_exporter_engine_database_verified": false,
+    "engine_owners": [
+      {
+        "canonical_shader_objects": 6
+      },
+      {
+        "canonical_shader_objects": 54
+      }
+    ],
+    "external_material_shader_refs_not_resolved": 156,
+    "generated_IShader_Name_mapping_verified": false,
+    "local_material_refs_to_other_shaders": 358,
+    "matching_rule": "independent_raw_asset_and_parsed_declaration_names_plus_ordered_properties",
+    "original_owner_count": 4,
+    "original_programs_or_names_published": false,
+    "verified_bytes": 233281064,
+    "zero_loose_builtin_gate_may_be_skipped": false
+  },
+  "limitations": [
+    "Scopedinputmigration complete;builtin mapping unresolved",
+    "No generatedName/embedded enginecache proof",
+    "No gamebuild/phone/render proof",
+    "Gateunchanged;NOT_READY0/3"
+  ],
+  "next_step": "Inspect exact AssetRipper.SourceGenerated1.3.2 Shader.ReadRelease Name copy and embedded engine cache; reconcile actual full-export Material engine pointers before fixing gate. No identical native retry."
+}

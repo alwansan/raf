@@ -1,0 +1,105 @@
+{
+  "zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "source_commit": "62556db1e79e658f1301b6559df2ff84f1a6363e",
+  "stage_workflow": "41733115872",
+  "old_run": "41732681344",
+  "verified_source_bytes": 233281064,
+  "verified_source_files": 4,
+  "git_lfs_used": false,
+  "independent_engine_git_blob_equality": [
+    {
+      "size": 4832808,
+      "git_blob": "777ccb2db0b4d5957cc6d4e4ac95e202f84ab716"
+    },
+    {
+      "size": 936628,
+      "git_blob": "b949c9ade5bdf6b489d5bb01c8f8542c9ec24195"
+    }
+  ],
+  "original_exporter_source": [
+    {
+      "repository": "nowl-it/AssetRipperCLI",
+      "commit": "036098ab525a3f9f693dc101edeb21faad4d32d8",
+      "path": "Source/AssetRipper.Export.UnityProjects/ProjectExporter.Overrides.cs",
+      "git_blob_sha": "6459facefe0ee7a157d351d7eabf17277de1a965"
+    },
+    {
+      "repository": "nowl-it/AssetRipperCLI",
+      "commit": "036098ab525a3f9f693dc101edeb21faad4d32d8",
+      "path": "Source/AssetRipper.Export.UnityProjects/EngineAssets/EngineAssetsExporter.cs",
+      "git_blob_sha": "74181029996848ae223cc5f8019b6675d1d23170"
+    },
+    {
+      "repository": "nowl-it/AssetRipperCLI",
+      "commit": "036098ab525a3f9f693dc101edeb21faad4d32d8",
+      "path": "Source/AssetRipper.Export.UnityProjects/EngineAssets/PredefinedAssetCache.cs",
+      "git_blob_sha": "5c3f212eacf0762b82fe10222a08738f386090fd"
+    },
+    {
+      "repository": "nowl-it/AssetRipperCLI",
+      "commit": "036098ab525a3f9f693dc101edeb21faad4d32d8",
+      "path": "Source/AssetRipper.Export.UnityProjects/SingleRedirectExportCollection.cs",
+      "git_blob_sha": "58ecf9e070ec09699e83215af024bf5b11df3664"
+    }
+  ],
+  "previous_native_run": "41687765928",
+  "previous_native_shader_install": {
+    "exported_meta_unchanged": true,
+    "installed_targets": 1,
+    "meta_sha256": "dc9864d5606c25a83ec061cfd38fa58a9569c596ce9bfd10340591bab714baf9",
+    "original_export_provenance_verified": false,
+    "original_export_shader_sha256": "9c802f3b4c0dfa7b2a82d5bf9af77bb3f8a119e514d8064f1ee97fd30b5b54de",
+    "reconstruction_sha256": "0a7e11f750cac17ecc25cb7179c0a29850d6fb91fa983618f12e6bd8782ed1ea",
+    "target_path_sha256": "ea079536036296bcb7f14343429aad9b9df455ba89a02f91102d84d1b8c72a66",
+    "unity_binding_or_phone_acceptance": false
+  },
+  "previous_native_failure": "142 parseable loose shader declarations;0vendor matches;strict water gate also unresolved",
+  "local_w1_tests": 32,
+  "limits": [
+    "Engine cache contents not authenticated against current exporter yet",
+    "Actual exported builtin references not verified",
+    "No full native rerun",
+    "No new package or phone test"
+  ],
+  "final_source": "afb4bc1b8b86d3254a35916b5cc336234fd547aa",
+  "second_diagnostic_failure": "41733115872: empty raw asset name, bounded diagnosis corrected to explicit unknowns",
+  "final_run": "https://github.com/alwansan/raf/actions/runs/41733600478",
+  "final_conclusion": "success",
+  "engine_comparison": {
+    "actual_exported_engine_material_refs_verified": false,
+    "dimensions": {
+      "asset": {
+        "game_shaders": 105,
+        "unavailable_original_name_keys": 105
+      },
+      "declaration": {
+        "game_shaders": 105,
+        "not_in_engine_owners": 105
+      }
+    },
+    "embedded_exporter_engine_database_verified": false,
+    "engine_owners": [
+      {
+        "canonical_shader_objects": 6
+      },
+      {
+        "canonical_shader_objects": 54
+      }
+    ],
+    "external_material_shader_refs_not_resolved": 156,
+    "generated_IShader_Name_mapping_verified": false,
+    "local_material_refs_to_other_shaders": 358,
+    "matching_rule": "independent_raw_asset_and_parsed_declaration_names_plus_ordered_properties",
+    "original_owner_count": 4,
+    "original_programs_or_names_published": false,
+    "verified_bytes": 233281064,
+    "zero_loose_builtin_gate_may_be_skipped": false
+  },
+  "generator_lead": {
+    "repository": "AssetRipper/AssetRipper",
+    "commit": "259caac0c7df906c94b80dd5a14d589787f67570",
+    "path": "Source/AssetRipper.AssemblyDumper/Passes/Pass504_FixShaderName.cs",
+    "finding": "Upstream generator copies parsed shader name into asset Name during release/editor reads; exact1.3.2package implementation still needs verification"
+  },
+  "final_ci_tests": 19
+}
