@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T121215Z-a4b6f18d",
+  "experiment_id": "multiline-pair-identity",
+  "issue_id": "DIAG-010",
+  "status": "completed",
+  "hypothesis": "The original newline-separated dictionary key conflates different (operation, detail) pairs and hides first full stack",
+  "red": {
+    "commit": "1c5ce3a3edce9ccf00d58a47e482aebc899cc037",
+    "workflow_run": "https://github.com/alwansan/raf/actions/runs/41634437815",
+    "job": 125911922962,
+    "result": "EXPECTED FAILURE at assertion 271, distinct error misclassified as repeated."
+  },
+  "green": {
+    "commit": "dd43d3a24059994bdad170f06e0df453bfda2a3c",
+    "workflow_run": "https://github.com/alwansan/raf/actions/runs/41635036073",
+    "job": 125913966707,
+    "result": "SUCCESS; 278 C# managed checks, including independently emitted first full stacks, separate repeat counters and operation length metadata",
+    "source_blob": "9d73cd051a9d29d882c733bbc894b02e347ce7c3",
+    "test_blob": "813b30d9568a42eadd556e7cb24bf8d14e29f03c"
+  },
+  "same_sha_ci": [
+    {
+      "url": "https://github.com/alwansan/raf/actions/runs/41635035671",
+      "result": "SUCCESS, platform checks incl. 446 touch gesture, 53 Mouse0 mapping and 15 smoke"
+    },
+    {
+      "url": "https://github.com/alwansan/raf/actions/runs/41635035562",
+      "result": "SUCCESS, original-source managed compile exit 0"
+    }
+  ],
+  "test_command": "dotnet run --project android-port/Tests/Diagnostics/Diagnostics.csproj --configuration Release --nologo",
+  "workflow": ".github/workflows/raft-persistent-diagnostics-tests.yml",
+  "limitations": [
+    "No real Android storage/LogRaft install acceptance",
+    "No Unity game build nor GPU/FFT/world or .rgd restoration",
+    "At-least-once summary behavior if sink persists before throwing unchanged",
+    "Project NOT_READY, 0/3 readiness reviews"
+  ]
+}
