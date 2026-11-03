@@ -13,6 +13,7 @@ import tempfile
 from scripts.a12_probe_original_blur_passes import (
     TARGET, SHADER_OWNERS, original_shader, inspect_shader,
 )
+from scripts.a12_shader_parameter_decode import parse_parameter_blob
 from scripts.w1_recover_graphics_programs import decoded_platforms, records, translate, command
 from scripts.w1_recover_depth_passes import linked_program, stage_variants, variant_key
 from scripts.w1_rebind_depth_resources import rebind, signature_inputs
@@ -133,7 +134,13 @@ def build(root, repo, out):
                         subphase = "original_parameter_payload"
                         report["last_original_parameter_size"] = len(raw_params)
                         report["last_original_parameter_sha256"] = hashlib.sha256(raw_params).hexdigest()
-                        parameter = decode_empty_parameters(raw_params)
+                        parameter = parse_parameter_blob(raw_params)
+                        # Nonempty parameters are real original overrides; never
+                        # discard them merely to compile an incomplete ShaderLab.
+                        report["last_original_parameter_shape"] = parameter
+                        if not parameter["parameters_empty"]:
+                            subphase = "original_parameter_requires_exact_binding"
+                            raise ValueError("Original numeric/resource binding recovery incomplete")
                         subphase = "original_stage_bytecode"
                         original, link = linked_program(meta, entries, stage)
                         versions.append(version_tokens(original)[0]["shader_model"])
@@ -156,7 +163,7 @@ def build(root, repo, out):
                             "original_parameter_sha256": hashlib.sha256(raw_params).hexdigest(),
                             "original_parameter_bytes": len(raw_params),
                             "original_parameter_segment": seg,
-                            "parameters_empty": parameter["overrides_empty"],
+                            "parameters_empty": parameter["parameters_empty"],
                             "original_blob_index": link["blob_index"],
                             "bindings": binding,
                             "source_private": True,
