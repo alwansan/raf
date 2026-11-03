@@ -134,6 +134,7 @@ jobs:
           persist-credentials: true
       - name: Run synthetic code-overlay tests before touching original data
         run: |
+          python3 -m unittest discover -s tests -p test_w1_export_material_shaders.py -v
           python3 -m unittest discover -s tests -p test_android_render_lifetimes.py -v
           python3 -m unittest discover -s tests -p test_gradle_payload_audit.py -v
           python3 -m unittest discover -s tests -p test_android_expansion_audit.py -v
@@ -170,32 +171,56 @@ jobs:
           python3 -m scripts.stage_export_managed_providers \
             --source "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed" \
             --destination "$RUNNER_TEMP/input/Raft_Data/Managed"
-      - name: Download exactly 3 selected scene dependency LFS objects
+      - name: Reuse authenticated ZIP2 shader-owner cache before acquisition
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/w1-original
+          key: w1-zip2-15964ea8-full-shader-owners-v1
+          restore-keys: w1-zip2-15964ea8-four-owners-v1
+      - name: Select only missing SHA-pinned ZIP2 owners
+        id: w1_zip2_needed
+        run: python3 -m scripts.w1_full_engine_sources --plan --destination "$RUNNER_TEMP/w1-original"
+      - name: Read pinned ZIP2 provider without LFS
+        uses: actions/checkout@v4
+        with:
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-original
+          filter: blob:none
+          lfs: false
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: ${{ steps.w1_zip2_needed.outputs.paths }}
+      - name: Authenticate ZIP2 owners and stage three original scene dependencies
         shell: bash
         run: |
           set -euo pipefail
-          git lfs install --local
-          git lfs fetch origin HEAD \
-            --include='Raft/Raft_Data/resources.assets,Raft/Raft_Data/sharedassets0.assets,Raft/Raft_Data/sharedassets36.assets' \
-            --exclude=''
-          git lfs checkout
+          python3 -m scripts.w1_full_engine_sources --zip2-checkout zip2-original --destination "$RUNNER_TEMP/w1-original"
           python3 - <<'PY'
-          import hashlib,subprocess,re
+          import os,re,shutil,subprocess
           from pathlib import Path
-          expected={
-              'Raft/Raft_Data/resources.assets':111533516,
-              'Raft/Raft_Data/sharedassets0.assets':115978112,
-              'Raft/Raft_Data/sharedassets36.assets':110149324,
-          }
-          for name,size in expected.items():
-              p=Path(name)
-              if p.stat().st_size!=size:raise SystemExit("Unexpected LFS object size: "+name)
-              pointer=subprocess.check_output(["git","show","HEAD:"+name],text=True)
-              m=re.search(r'^oid sha256:([0-9a-f]{64})$',pointer,re.M)
-              if not m:raise SystemExit("Missing LFS pointer SHA256 for "+name)
-              with p.open("rb") as f:digest=hashlib.file_digest(f,"sha256").hexdigest()
-              if digest!=m.group(1):raise SystemExit("SHA256 mismatch for "+name)
-              print("Verified selected LFS asset:",p.name,p.stat().st_size)
+          from scripts.w1_stage_zip2_owners import fingerprint
+          from scripts.w1_full_engine_sources import pins
+          source=Path(os.environ['RUNNER_TEMP'])/'w1-original'
+          # Preserve feature-branch pointer identity as an independent check.
+          # Only these three working-tree pointers are hydrated here; Git and ZIP2 stay unchanged.
+          for name in ('resources.assets','sharedassets0.assets','sharedassets36.assets'):
+              relative='Raft_Data/'+name
+              target=Path('Raft')/relative
+              pointer=subprocess.check_output(['git','show','HEAD:'+target.as_posix()],text=True)
+              sha=re.search(r'^oid sha256:([0-9a-f]{64})$',pointer,re.M)
+              size=re.search(r'^size (\d+)$',pointer,re.M)
+              expected=pins()[relative]
+              if not sha or not size or (int(size[1]),sha[1])!=expected:
+                  raise SystemExit('Feature pointer and authenticated ZIP2 provider disagree')
+              original=source/relative
+              if fingerprint(original)!=expected:
+                  raise SystemExit('Cached ZIP2 original changed before staging')
+              if target.is_symlink():
+                  raise SystemExit('Unsafe original scene owner target')
+              shutil.copyfile(original,target)
+              if fingerprint(target)!=expected:
+                  raise SystemExit('Staged original scene owner fingerprint mismatch')
+              print('RAFT_NATIVE_ZIP2_SCENE_OWNER size='+str(expected[0])+' sha256Verified=true')
           PY
           df -h /
       - name: Restore every original graphics payload before exporting textures and shaders
@@ -377,6 +402,37 @@ jobs:
           path: |
             ${{ runner.temp }}/w1-depth-wrapper-summary.json
             ${{ runner.temp }}/w1-depth-install-summary.json
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Inventory actual exported Material Shader references without modifying assets
+        id: w1_material_inventory
+        # A diagnostic failure stays visible in the JSON. Existing strict builtin
+        # and water gates below remain authoritative and are never skipped.
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.w1_audit_export_material_shaders --project "$RUNNER_TEMP/project/ExportedProject" --out "$RUNNER_TEMP/w1-native-material-shader-summary.json"
+      - name: Record actual water source contract before the first strict authenticity gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          from scripts.verify_water_render_contract import inspect
+          root=Path(os.environ['RUNNER_TEMP'])
+          report=inspect(root/'project/ExportedProject')
+          (root/'w1-native-water-contract-summary.json').write_text(json.dumps(report,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Retain aggregate Material and water diagnostic evidence on prebuild failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w1-native-export-reference-audit-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/w1-native-material-shader-summary.json
+            ${{ runner.temp }}/w1-native-water-contract-summary.json
           if-no-files-found: ignore
           retention-days: 7
       - name: Restore exact-name Unity 2021.3.45f2 built-in material and particle programs with original GUIDs
