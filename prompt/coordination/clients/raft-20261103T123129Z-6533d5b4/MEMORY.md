@@ -11,3 +11,7 @@ Hypothesis: comment-aware identities and path-bound tree digests prevent false e
 ## Verified checkpoint 2026-11-03T12:38:03.107Z
 
 Source [6bfde3425438d92aa5fc1313e489df5c502c1018](https://github.com/alwansan/raf/commit/6bfde3425438d92aa5fc1313e489df5c502c1018): read-only probe changed; no restorer or original data changed. Independent GitHub Actions [41637048446](https://github.com/alwansan/raf/actions/runs/41637048446) completed SUCCESS (9/9 synthetic, job125920757165), artifact13231330739. Local 9/9 used synthetic helper stub only, final CI exercised actual repo reader. Scope RENDER-002 diagnostic integrity **completed**; RENDER-002 overall remains OPEN. Prior 107 sample not full export; native 41624581951 before Unity still failed. HEAD review at checkpoint f92529806353768679181e4b4a9bc0793f137ce7; next: full-export authenticated provenance under separate authorized activity, without Unity by this client. No new device evidence; NOT_READY 0/3.
+
+## A13 continuation 2026-11-03T14:59:49.620Z
+
+Session a13-20261103T150000Z-7e4a02d9 resumes completed a51cfa60d12ea766fd1d9819 on live HEAD 0a6507e86c7960109360c0b95212db606c4d882e. Reviewed current STATUS, owner/AGENTS/coordination, A11/A15/A14 RENDER peer files, W1 source/depth progress, action history and old APK distinction. New nonoverlapping original Material->Shader PPtr and authenticated vendor identity audit planned (2 owners SHA-pinned). No current source/runtime claim. Follow original evidence, retain external unknown, no Unity/APK or raw data.

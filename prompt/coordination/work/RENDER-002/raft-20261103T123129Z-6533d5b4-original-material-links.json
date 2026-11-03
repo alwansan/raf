@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T123129Z-6533d5b4",
+  "client_label": "A13",
+  "issue_id": "RENDER-002",
+  "status": "planned",
+  "updated_at": "2026-11-03T14:59:49.620Z",
+  "base_sha": "0a6507e86c7960109360c0b95212db606c4d882e",
+  "hypothesis": "Two authenticated original owner files contain Material.m_Shader PPtr relationships to Shader objects. Exact owner-local references and official built-in identity intersection can be measured independently of the unauthenticated 107/140 exported file samples.",
+  "intended_files": [
+    "scripts/probe_a13_material_shader_links.py",
+    "tests/test_a13_material_shader_links.py",
+    ".github/workflows/raft-a13-material-shader-links.yml",
+    "prompt/coordination/clients/raft-20261103T123129Z-6533d5b4/",
+    "prompt/coordination/work/RENDER-002/raft-20261103T123129Z-6533d5b4-original-material-links.json",
+    "prompt/coordination/experiments/raft-20261103T123129Z-6533d5b4/original-material-links.json",
+    "prompt/coordination/discussions/RENDER-002/",
+    "prompt/STATUS.md",
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+  ],
+  "related_work": [
+    "A11 export provenance completes separate sampling",
+    "A15 restorer rollback complete",
+    "W1 original Shader programs and Depth Copy linked; no changes to their files"
+  ],
+  "experiment_ids": [
+    "original-material-links"
+  ],
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41647954010",
+    "https://github.com/alwansan/raf/actions/runs/41624581951"
+  ],
+  "result": null,
+  "next_step": "Synthetic ptr controls before SHA-pinned 2-owner real CPU probe; no Unity/Android."
+}

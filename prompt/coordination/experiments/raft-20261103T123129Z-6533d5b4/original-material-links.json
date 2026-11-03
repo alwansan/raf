@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T123129Z-6533d5b4",
+  "status": "planned",
+  "hypothesis": "Two authenticated original owner files contain Material.m_Shader PPtr relationships to Shader objects. Exact owner-local references and official built-in identity intersection can be measured independently of the unauthenticated 107/140 exported file samples.",
+  "input_hashes": [
+    "resources.assets 111533516 sha256:87493249f1adfc0c5eb8b82e4e199e208cd2c95eabe9796cab82116c4838595c",
+    "sharedassets0.assets 115978112 sha256:0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "Unity 2021.3.45f2 official builtin archive SHA256:5cb0f9c4d022d6054d179778b9b50a0301d6748eaf4abdedd21c93f0c30b10c5"
+  ],
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_a13_material_shader_links.py -v",
+    "python3 -m scripts.probe_a13_material_shader_links --source Raft/Raft_Data --out $RUNNER_TEMP/a13-original-material-links.json"
+  ],
+  "expected_signal": "Exact original Material source and vendor Shader reference categories, external unknown, no full-export claim",
+  "negative_controls": [
+    "fileID>0 never resolved via same-owner pathid",
+    "negative fileID fails",
+    "missing shader field fails",
+    "duplicate owner/pathID fails",
+    "nil pointer not resolved"
+  ],
+  "workflow_path": ".github/workflows/raft-a13-material-shader-links.yml",
+  "concurrency_group": "raft-a13-material-links-${{ github.ref }}-${{ github.sha }}",
+  "artifact_prefix": "raft-a13-original-material-links",
+  "budget": "CPU only <=15 minutes, 2 existing cached authenticated LFS objects 227.5MB, 198 official archived identities; no Unity/Android",
+  "run_url": null,
+  "source_sha": null,
+  "result": null,
+  "limitations": [
+    "Not all original export containers",
+    "External pointers unresolved",
+    "No original names/asset blobs or shader programs published",
+    "No GPU/Unity/device proof"
+  ],
+  "next_step": "Complete code/run, append negative results."
+}
