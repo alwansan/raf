@@ -2,15 +2,16 @@
   "schema_version": 1,
   "username": "raft-20261103T190657Z-9004f68d",
   "client_label": "A12R",
-  "session_id": "a12r-20261103T190657Z-dbd4a448",
+  "session_id": "a12r-zip2-20261103T224242860Z-c7e6a9e8",
   "resumed_from": "raft-20261103T184205Z-a12d793c",
-  "status": "paused",
-  "updated_at": "2026-11-03T19:21:14.648Z",
+  "status": "active",
+  "updated_at": "2026-11-03T22:42:42.860Z",
   "base_sha": "0f037caf175fbc193c98e93d9057d27850f67f36",
   "current_work": [
-    "WATER-001 independent DXBC RDEF source + 7 synthetic regressions completed; original SHA-pinned source probe BLOCKED by absent cached sharedassets36.assets in CI41701535937"
+    "WATER-001: migrate independent A12R original Blur RDEF source experiment to immutable zip2 original files, offline reassembly with SHA-256; no LFS/Unity/native"
   ],
   "last_commit": "aa6c70f46464059304f3a8efadfe9b57fbc777b5",
-  "next_step": "Find previously authenticated sharedassets36.assets (110149324 bytes, SHA256 b32fcd9d327c8926b2309ffc1b5645a0c23d64ed95be37ed94e96f34736530c8) in approved existing source/cache; never bypass source checks. Then rerun CPU experiment. No native Unity.",
-  "memory_path": "prompt/coordination/clients/raft-20261103T190657Z-9004f68d/MEMORY.md"
+  "next_step": "Add SHA-verified selective zip2 source restorer, synthetic tests and CPU-only workflow; run and report original RDEF CB correlation; no other client paths changed.",
+  "memory_path": "prompt/coordination/clients/raft-20261103T190657Z-9004f68d/MEMORY.md",
+  "zip2_source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385"
 }
