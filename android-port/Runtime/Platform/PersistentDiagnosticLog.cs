@@ -206,13 +206,20 @@ namespace RaftAndroid.Diagnostics
         {
             public long Repeated;
             public DateTime First, Last;
+            public string Original;
+            public int OperationLength;
         }
         private readonly object gate = new object();
         private readonly Dictionary<string, Entry> entries = new Dictionary<string, Entry>(StringComparer.Ordinal);
         public bool First(string operation, string detail, DateTime now)
         {
-            string key = operation + "\n" + detail;
-            if (key.Length > 8192) return true;
+            // Include the operation length to disambiguate ("a\\nb", "stack")
+            // from ("a", "b\\nstack"). A plain newline separator can silently
+            // suppress the first occurrence of an unrelated crash.
+            operation = operation ?? "";
+            detail = detail ?? "";
+            if ((long)operation.Length + detail.Length + 1 > 8192) return true;
+            string key = operation.Length.ToString(CultureInfo.InvariantCulture) + ":" + operation + detail;
             lock (gate)
             {
                 if (entries.TryGetValue(key, out var entry))
@@ -220,7 +227,8 @@ namespace RaftAndroid.Diagnostics
                     entry.Repeated++; entry.Last = now; return false;
                 }
                 if (entries.Count >= 128) return true;
-                entries.Add(key, new Entry { First = now, Last = now });
+                entries.Add(key, new Entry { First = now, Last = now,
+                    Original = operation + "\n" + detail, OperationLength = operation.Length });
                 return true;
             }
         }
@@ -234,6 +242,8 @@ namespace RaftAndroid.Diagnostics
             {
                 long repeated;
                 DateTime first, last;
+                string original;
+                int operationLength;
                 lock (gate)
                 {
                     Entry entry;
@@ -241,11 +251,14 @@ namespace RaftAndroid.Diagnostics
                     repeated = entry.Repeated;
                     first = entry.First;
                     last = entry.Last;
+                    original = entry.Original;
+                    operationLength = entry.OperationLength;
                     entry.Repeated = 0;
                 }
                 string summary = "repeated=" + repeated.ToString(CultureInfo.InvariantCulture) +
                     "; first=" + first.ToString("O", CultureInfo.InvariantCulture) +
-                    "; last=" + last.ToString("O", CultureInfo.InvariantCulture) + "; original=" + key;
+                    "; last=" + last.ToString("O", CultureInfo.InvariantCulture) +
+                    "; operation_length=" + operationLength.ToString(CultureInfo.InvariantCulture) + "; original=" + original;
                 try
                 {
                     // Keep callbacks outside the lock: they can log concurrently.

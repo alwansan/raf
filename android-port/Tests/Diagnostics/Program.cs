@@ -165,6 +165,8 @@ class Program
             collision.Summarize((area, operation, detail) => collisionSummaries.Add(detail));
             Require(collisionSummaries.Count == 2);
             Require(collisionSummaries.All(s => s.Contains("repeated=1;")));
+            Require(collisionSummaries.Any(s => s.Contains("operation_length=10;")));
+            Require(collisionSummaries.Any(s => s.Contains("operation_length=5;")));
             collision.Summarize((area, operation, detail) => throw new Exception("Duplicate colliding summary"));
             Console.WriteLine("RAFT_PERSISTENT_LOG_TEST checks=" + checks + " passed=true actualAndroidStorageVerified=false");
         }
