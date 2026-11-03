@@ -28,7 +28,7 @@ def lift(text, reflection, mutation=None):
             slot=re.fullmatch(r'SPIRV_Cross_Combinedt([01])s[01]',name)
             if not slot: raise ValueError('Unsupported combined resource identity')
             ix=int(slot[1]); textures.append(ix)
-            if mutation=='resource': ix=1-ix
+            if mutation=='resource': ix=0 if len(reflection.get('separate_images',[]))>1 else 1-ix
             stripped.append('layout(set=0,binding=%d) uniform sampler2D %s;'%(ix,name));continue
         stripped.append(line)
     if not inputs or len(inputs)>2 or len(outputs)>1 or len(textures)!=len(set(textures)):
