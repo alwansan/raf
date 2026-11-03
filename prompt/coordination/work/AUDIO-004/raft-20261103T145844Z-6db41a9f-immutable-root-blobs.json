@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T145844Z-6db41a9f",
+  "issue_id": "AUDIO-004",
+  "status": "active",
+  "updated_at": "2026-11-03T15:00:06.569Z",
+  "base_sha": "0cee9fe8e0c11e615a7a410cc373013d494ca912",
+  "hypothesis": "Branch-local Git tracked checks can accept co-edited original non-LFS VO banks/Data.rgd; immutable owner archive blob anchor missing.",
+  "intended_files": [
+    "scripts/stage_original_streaming_assets.py",
+    "tests/test_stage_original_streaming_assets.py",
+    "tests/test_a9_streaming_stage_atomic.py",
+    "prompt/coordination/clients/raft-20261103T145844Z-6db41a9f/*",
+    "prompt/coordination/work/AUDIO-004/raft-20261103T145844Z-6db41a9f-immutable-root-blobs.json",
+    "prompt/coordination/experiments/raft-20261103T145844Z-6db41a9f/*",
+    "prompt/STATUS.md and latest handoff after CI"
+  ],
+  "related_work": [
+    "Prior A9 atomic streaming stage completed",
+    "A5 Haptics SHA anchor distinct source",
+    "Active A1 water and A3 delivery non-overlap"
+  ],
+  "experiment_ids": [
+    "original-root-git-blob-anchor"
+  ],
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41643072610"
+  ],
+  "result": null,
+  "next_step": "Reproduce branch+content co-edit acceptance, pin seven original root Git OIDs, validate synthetic CI."
+}
