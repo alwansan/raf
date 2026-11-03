@@ -34,12 +34,12 @@ static std::vector<uint32_t> spirvFile(const char* path) {
     require(bool(f) && result[0]==0x07230203, "Shader SPIR-V invalid");
     return result;
 }
+static uint32_t inputSeed=0;
 static float inputValue(uint32_t x,uint32_t y,int texture,int channel) {
     const float t=float((x*17u+y*13u+texture*19u+channel*7u+inputSeed*101u)%1021u)*0.017f;
     return std::sin(t)*0.3f+std::cos(t*0.27f)*0.15f;
 }
 static constexpr float sentinel=123456.f;
-static uint32_t inputSeed=0;
 struct Texture {
     VkImage image=VK_NULL_HANDLE;
     VkImageView view=VK_NULL_HANDLE;
