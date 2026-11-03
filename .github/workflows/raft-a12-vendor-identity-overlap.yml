@@ -1,0 +1,85 @@
+name: Raft A12 authentic original Shader vendor overlap (CPU only)
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/a12_probe_original_vendor_identity_overlap.py'
+      - 'tests/test_a12_vendor_identity_overlap.py'
+      - '.github/workflows/raft-a12-vendor-identity-overlap.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: raft-a12-original-vendor-overlap-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  compare-authentic-shader-identities:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+            Raft/Raft_Data
+          persist-credentials: true
+
+      - name: Run A12 synthetic positive and fail-closed controls before asset hydration
+        run: python3 -m unittest discover -s tests -p test_a12_vendor_identity_overlap.py -v
+
+      - name: Enforce runner disk and exactly two original authenticated source pointers
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import shutil
+          from scripts.verify_targeted_lfs_compute_sources import verify_sources
+          from scripts.w1_recover_graphics_programs import OWNERS
+          assert shutil.disk_usage('.').free >= 8 * 1024**3
+          assert len(OWNERS) == 2
+          print('RAFT_A12_POINTERS ' + str(verify_sources(Path('Raft/Raft_Data'), pointers_only=True, expected=OWNERS)))
+          PY
+
+      - name: Restore previously cached exact W1 two-owner LFS objects if available
+        uses: actions/cache@v4
+        with:
+          path: .git/lfs/objects
+          key: w1-graphics-87493249-0498f738-v1
+
+      - name: Hydrate only SHA-pinned two owners, no Unity export or third-party game data
+        env:
+          GIT_LFS_SKIP_SMUDGE: '1'
+        run: |
+          set -euo pipefail
+          git lfs install --local
+          git lfs pull --include='Raft/Raft_Data/resources.assets,Raft/Raft_Data/sharedassets0.assets' --exclude='' origin
+          python3 - <<'PY'
+          from pathlib import Path
+          from scripts.verify_targeted_lfs_compute_sources import verify_sources
+          from scripts.w1_recover_graphics_programs import OWNERS
+          verify_sources(Path('Raft/Raft_Data'), expected=OWNERS)
+          print('RAFT_A12_SHA_VERIFIED ownerCount=' + str(len(OWNERS)) + ' bytes=227511628')
+          PY
+
+      - name: Install CPU-only serialized Unity reader
+        run: python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+
+      - name: Compare original serialized identities to SHA-pinned official Unity built-in list
+        run: |
+          timeout 420s python3 -m scripts.a12_probe_original_vendor_identity_overlap \
+            --source Raft/Raft_Data \
+            --out "$RUNNER_TEMP/a12-original-vendor-summary.json"
+
+      - name: Upload count and aggregate digest only; never source names or bytecode
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: a12-original-vendor-summary-${{ github.sha }}
+          path: ${{ runner.temp }}/a12-original-vendor-summary.json
+          if-no-files-found: ignore
+          retention-days: 7
