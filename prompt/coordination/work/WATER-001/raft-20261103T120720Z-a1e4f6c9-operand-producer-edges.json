@@ -3,8 +3,8 @@
   "owner": "raft-20261103T120720Z-a1e4f6c9",
   "client_label": "A1",
   "issue_id": "WATER-001",
-  "status": "active",
-  "updated_at": "2026-11-03T12:07:55.818Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T12:21:03.573Z",
   "base_sha": "09d7cee8ffaedba9cb8e7e61e9828f1842381267",
   "hypothesis": "Opcode histograms miss operand-level data-dependency differences. Build privacy-preserving, bounded exact edge census for tracked SPIR-V integer/bitcast/phi producers, compare old original vs HLSL-roundtripped 20 modules. Never claim semantic equivalence.",
   "intended_files": [
@@ -27,8 +27,14 @@
     "6d92f0ab FFT resource audit distinct"
   ],
   "budget": "8 min CPU synthetic and <=22 min preexisting SHA-authenticated three-LFS-owner audit via ordinary push; no native request/manual Unity or duplicated LFS downloads outside established CI",
-  "next_step": "Implement and test guarded, input-ID-only edge census, then inspect real original20 comparison; record limitations.",
+  "next_step": "Correct actual shader numerics/typed formats and original Unity kernel identity by independent evidence. NOT_READY,0/3.",
   "experiment_ids": [
     "operand-producer-edges"
-  ]
+  ],
+  "source_sha": "2be0c6938257591818414e407909814dbcd5b599",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41633667561 (9 new synthetic cases PASS)",
+    "https://github.com/alwansan/raf/actions/runs/41634076530 (authenticated20,9 synthetic PASS, result SUCCESS)"
+  ],
+  "result": "Original 20 programs valid, all20 direct tracked profiles differ after roundtrip: original525->roundtrip750 direct edges, original1665->roundtrip1701 unclassified producer operands. Three edge families differ in all20. This is structural compiler drift, not math or device failure proof."
 }
