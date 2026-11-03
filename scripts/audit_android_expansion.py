@@ -30,15 +30,76 @@ def _names(archive):
     return names
 
 
+
+def _audit_original_haptics(expansion, manifest_path):
+    """Validate the *archive* URLs used by HapticAudio, not merely source staging.
+
+    Old device traces request jar:file:/...obb!/assets/Haptics/<name>.wav.
+    The pinned manifest names the original Git blobs. Read each member
+    incrementally (no WAV extraction, payload logging or extra huge buffer).
+    """
+    import re
+
+    manifest = json.loads(Path(manifest_path).read_text(encoding="utf-8"))
+    if (manifest.get("schema_version") != 1 or
+            manifest.get("path_prefix") != "Raft/Raft_Data/StreamingAssets/Haptics/"):
+        raise ValueError("Invalid original Haptics manifest schema")
+    files = manifest.get("files")
+    if not isinstance(files, dict) or len(files) != 29:
+        raise ValueError("Expected exactly 29 pinned original Haptics WAV identities")
+    seen_casefold = set()
+    total = 0
+    for name, expected in files.items():
+        if (not isinstance(name, str) or
+                re.fullmatch(r"[A-Za-z0-9_-]+\.wav", name) is None or
+                name.casefold() in seen_casefold or
+                not isinstance(expected, dict) or
+                set(expected) != {"bytes", "git_blob_sha"} or
+                type(expected["bytes"]) is not int or expected["bytes"] <= 0 or
+                not isinstance(expected["git_blob_sha"], str) or
+                re.fullmatch(r"[0-9a-f]{40}", expected["git_blob_sha"]) is None):
+            raise ValueError("Unsafe or malformed original Haptics manifest")
+        seen_casefold.add(name.casefold())
+        # This exact entry is requested by the historical Android OBB URL.
+        # assets/bin/Data/StreamingAssets/Haptics/ is NOT equivalent.
+        target = "assets/Haptics/" + name
+        try:
+            entry = expansion.getinfo(target)
+        except KeyError:
+            raise ValueError("Original Haptics entry absent at Android jar URL") from None
+        if entry.is_dir() or entry.file_size != expected["bytes"]:
+            raise ValueError("Original Haptics entry size/type mismatch")
+        h = hashlib.sha1()
+        h.update(("blob " + str(expected["bytes"])).encode("ascii") + b"\0")
+        size = 0
+        try:
+            with expansion.open(entry) as stream:
+                for data in iter(lambda: stream.read(256 * 1024), b""):
+                    size += len(data)
+                    if size > expected["bytes"]:
+                        raise ValueError("Original Haptics entry exceeded pinned size")
+                    h.update(data)
+        except (zipfile.BadZipFile, EOFError, RuntimeError, OSError, zlib.error):
+            raise ValueError("Original Haptics OBB ZIP member corrupted") from None
+        if size != expected["bytes"] or h.hexdigest() != expected["git_blob_sha"]:
+            raise ValueError("Original Haptics OBB Git blob identity mismatch")
+        total += size
+    return {"hapticsOriginalMembers": len(files),
+            "hapticsOriginalBytes": total,
+            "hapticsJarPathsAndOriginalGitBlobsVerified": True}
+
+
 def audit_companion(apk: Path, obb: Path, *, digest: bool = True,
                     play_limit_bytes: int = PLAY_EXPANSION_FILE_LIMIT_BYTES,
                     java_array_limit_bytes: int = JAVA_ARRAY_LIMIT_BYTES,
-                    verify_crc: bool = False):
+                    verify_crc: bool = False, haptics_manifest: Path = None):
     if not apk.is_file() or not obb.is_file() or obb.stat().st_size == 0:
         raise FileNotFoundError("Both nonempty APK and matching OBB are required")
     with zipfile.ZipFile(apk) as app, zipfile.ZipFile(obb) as expansion:
         app_names = _names(app)
         expansion_names = _names(expansion)
+        haptics = (_audit_original_haptics(expansion, haptics_manifest)
+                   if haptics_manifest is not None else None)
         # Stream each ZIP member through Python's bounded reader to check CRC.
         # CRC verifies transport integrity, not original game-byte fidelity.
         if verify_crc:
@@ -91,7 +152,10 @@ def audit_companion(apk: Path, obb: Path, *, digest: bool = True,
             "originalBytesVerified": False,
             "deviceMountedVerified": False,
             "assetNamesLogged": False,
+            "hapticsJarPathsAndOriginalGitBlobsVerified": haptics is not None,
         }
+    if haptics is not None:
+        result.update(haptics)
     if digest:
         h = hashlib.sha256()
         with obb.open("rb") as source:
@@ -106,10 +170,13 @@ if __name__ == "__main__":
     parser.add_argument("--apk", type=Path, required=True)
     parser.add_argument("--obb", type=Path, required=True)
     parser.add_argument("--report", type=Path)
+    parser.add_argument("--haptics-manifest", type=Path,
+                        help="Strict original 29-WAV final OBB jar path/Git blob audit")
     parser.add_argument("--verify-crc", action="store_true",
                         help="Stream-validate APK and OBB ZIP member CRCs")
     args = parser.parse_args()
-    report = audit_companion(args.apk, args.obb, verify_crc=args.verify_crc)
+    report = audit_companion(args.apk, args.obb, verify_crc=args.verify_crc,
+                             haptics_manifest=args.haptics_manifest)
     if args.report:
         args.report.parent.mkdir(parents=True, exist_ok=True)
         args.report.write_text(json.dumps(report, sort_keys=True, indent=2) + "\n")
