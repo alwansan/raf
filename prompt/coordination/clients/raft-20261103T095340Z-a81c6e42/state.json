@@ -2,12 +2,12 @@
   "schema_version": 1,
   "username": "raft-20261103T095340Z-a81c6e42",
   "session_id": "20261103T105053Z-precision-capability",
-  "status": "active",
-  "updated_at": "2026-11-03T10:50:53Z",
-  "base_sha": "c625cc7f9678be1ca7364dea9487a061fa94e9d8",
+  "status": "paused",
+  "updated_at": "2026-11-03T10:55:00Z",
+  "base_sha": "aa5f0b6d236a5bbac8cadadd3e2278ec2acb6df4",
   "current_work": [
     "FFT-FORMAT-009"
   ],
-  "next_step": "Check original RGFloat capability guard versus final precision resolver",
+  "next_step": "Evaluate RGFloat capability re-enable and candidate-specific Unity format fallback before functional change.",
   "memory_path": "prompt/coordination/clients/raft-20261103T095340Z-a81c6e42/MEMORY.md"
 }

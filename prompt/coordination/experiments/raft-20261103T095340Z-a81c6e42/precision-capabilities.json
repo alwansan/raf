@@ -1,0 +1,12 @@
+{
+  "owner": "raft-20261103T095340Z-a81c6e42",
+  "status": "completed",
+  "source_sha": "84fbfa7e600840060a164d5d4551b42fdf42d10f",
+  "result": "16 cases;1 capability re-enable discrepancy;unknown source rejected",
+  "limitations": [
+    "Python model not actual C#",
+    "No device feature query",
+    "No Unity fallback validation"
+  ],
+  "next_step": "Evaluate RGFloat capability re-enable and candidate-specific Unity format fallback before functional change."
+}
