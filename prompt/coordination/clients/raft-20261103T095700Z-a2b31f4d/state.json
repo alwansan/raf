@@ -1,13 +1,15 @@
 {
   "schema_version": 1,
   "username": "raft-20261103T095700Z-a2b31f4d",
-  "session_id": "a2-continue-20261103222847-8f51a4d2",
-  "resumed_from": "a2-continue-20261103144837-72f30c9a",
-  "status": "paused",
-  "updated_at": "2026-11-03T22:46:26.639Z",
-  "base_sha": "d9e3a051a623964aed767876972f52511e27b844",
-  "current_work": [],
+  "session_id": "a2-continue-20261103225417-c42fe8d1",
+  "resumed_from": "a2-continue-20261103222847-8f51a4d2",
+  "status": "active",
+  "updated_at": "2026-11-03T22:54:17.092Z",
+  "base_sha": "d9440e405a6dc94e3570ba5e963fbddfb592eed9",
+  "current_work": [
+    "DISPLAY-003 exact original Settings metadata field token/type and scene-owner linkage via immutable ZIP2"
+  ],
   "last_commit": "a2455448194317481a60a7199d932f85d2c2014f",
-  "next_step": "DISPLAY-003 still OPEN. ZIP2 original native source direct no-LFS CI41733061252 successful on a2455448: 7 synthetic tests +4 original SHA-locked Git objects, 14 candidate Settings source fields with 6 Assembly-CSharp MonoScript class-name matches among 8 custom types; typed offsets/collections and Settings active UI panel to Canvas still unknown. Next use original managed metadata tokens and nested field schema to map source field references onto exact 612-byte serialized record; do not fix global CanvasScaler speculatively. NOT_READY/0 of3. Resume only on explicit user turn.",
+  "next_step": "Run independent original managed Assembly-CSharp exact Cecil metadata schema/token classification, compare to source-only Settings.cs field inventory and original scene owner pointer structure. No Unity/APK or production runtime change.",
   "memory_path": "prompt/coordination/clients/raft-20261103T095700Z-a2b31f4d/MEMORY.md"
 }

@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T095700Z-a2b31f4d",
+  "issue_id": "DISPLAY-003",
+  "status": "active",
+  "updated_at": "2026-11-03T22:54:17.092Z",
+  "base_sha": "d9440e405a6dc94e3570ba5e963fbddfb592eed9",
+  "hypothesis": "Exact Settings TypeDef and FieldDef metadata token order with custom attributes/types, cross-checked against original MonoScript class identity, can distinguish nested serialization candidates and reveal why 14 CSharp field declaration candidates have 45 disjoint apparent PPtr windows.",
+  "intended_files": [
+    "tools/a2-settings-metadata/SettingsMetadata.csproj",
+    "tools/a2-settings-metadata/Program.cs",
+    "scripts/probe_a2_settings_metadata_contract.py",
+    "tests/test_probe_a2_settings_metadata_contract.py",
+    ".github/workflows/raft-a2-zip2-settings-metadata.yml",
+    "docs/A2_ZIP2_SETTINGS_METADATA_2026-11-04.md",
+    "prompt/coordination/clients/raft-20261103T095700Z-a2b31f4d/state.json",
+    "prompt/coordination/clients/raft-20261103T095700Z-a2b31f4d/MEMORY.md",
+    "prompt/coordination/work/DISPLAY-003/raft-20261103T095700Z-a2b31f4d-zip2-settings-managed-schema.json",
+    "prompt/coordination/experiments/raft-20261103T095700Z-a2b31f4d/zip2-settings-managed-schema.json",
+    "prompt/STATUS.md",
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+  ],
+  "related_work": [
+    "prompt/coordination/work/DISPLAY-003/raft-20261103T095700Z-a2b31f4d-zip2-settings-typed-fields.json"
+  ],
+  "experiment_ids": [
+    "zip2-settings-managed-schema"
+  ],
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41733061252"
+  ],
+  "result": null,
+  "next_step": "Use original Unity MonoScript assembly/namespace as exact TypeDef identity, privately inspect Cecil metadata fields and collection element types, reject source-to-byte offsets until verified."
+}

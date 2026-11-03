@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T095700Z-a2b31f4d",
+  "status": "active",
+  "hypothesis": "Exact Settings TypeDef and FieldDef metadata token order with custom attributes/types, cross-checked against original MonoScript class identity, can distinguish nested serialization candidates and reveal why 14 CSharp field declaration candidates have 45 disjoint apparent PPtr windows.",
+  "input_hashes": [
+    "ZIP2 pinned source:15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "Assembly-CSharp.dll original git:fc9d4ba920a178fdb89c970d9d772a01051dadc6",
+    "globalgamemanagers.assets original git:4eabb7cb093ead2f2b0c8f3451dd953a9f5ff0c9",
+    "level0 original git:2aec4377058baf72656a2ba0daea9aefc67fcb7e",
+    "level1 original git:1944f11673108f8db2084906ff5899003c97fc4a"
+  ],
+  "commands": [
+    "dotnet run --project tools/a2-settings-metadata -- original-zip2/Raft/Raft_Data/Managed/Assembly-CSharp.dll PRIVATE_JSON",
+    "python3 -m unittest discover -s tests -p test_probe_a2_settings_metadata_contract.py -v",
+    "python3 -m scripts.probe_a2_settings_metadata_contract --source original-zip2/Raft/Raft_Data --metadata PRIVATE_JSON"
+  ],
+  "expected_signal": "Exact original managed Settings TypeDef identity and metadata field ordering, private types grouped by MonoScript vs enum vs struct vs array, field tokens/order hashed; validated fixed original scene Settings class linkage and source SHA. No original names or bodies logged.",
+  "negative_controls": [
+    "wrong SHA original DLL",
+    "wrong or multiple Settings TypeDef candidates",
+    "spoofed script MonoScript name/assembly",
+    "metadata field token order drift",
+    "ambiguous array element or inheritance",
+    "raw PPtr matching not typed serialized location"
+  ],
+  "workflow_path": ".github/workflows/raft-a2-zip2-settings-metadata.yml",
+  "concurrency_group": "raft-a2-settings-metadata-${{ github.ref }}-${{ github.sha }}",
+  "artifact_prefix": null,
+  "budget": "CPU-only ubuntu24.04 max10 min; pinned sparse ZIP2 four small blobs, no LFS or Unity; Mono.Cecil dependency pinned 0.11.6 from NuGet.",
+  "run_url": null,
+  "source_sha": null,
+  "result": null,
+  "limitations": [
+    "Full Unity custom serialization TypeTree/Prefab linkage not yet known; metadata field types alone do not prove binary offsets.",
+    "Do not log proprietary source names, object names, field bodies or binary bytes.",
+    "No native build or release in this session."
+  ],
+  "next_step": "Use original Unity MonoScript assembly/namespace as exact TypeDef identity, privately inspect Cecil metadata fields and collection element types, reject source-to-byte offsets until verified."
+}
