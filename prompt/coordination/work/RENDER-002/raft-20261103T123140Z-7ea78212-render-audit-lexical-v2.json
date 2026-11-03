@@ -3,8 +3,8 @@
   "owner": "raft-20261103T123140Z-7ea78212",
   "client_label": "A15",
   "issue_id": "RENDER-002",
-  "status": "planned",
-  "updated_at": "2026-11-03T15:00:35.072Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T15:07:41.725Z",
   "base_sha": "30bb846728cfe0b07fe4e94d1ffe3719b2adaa12",
   "hypothesis": "scripts/audit_render_input_contracts.py uses comment and quoted-string blind regex in the original failing run in-run one-pass and kernel inventory. Synthetic counterexamples should reproduce miscounts before any source correction; this is not verified cause of zero matching original shader identities.",
   "intended_files": [
@@ -26,8 +26,11 @@
     "render-contract-lexical-fail-first"
   ],
   "evidence": [
-    "https://github.com/alwansan/raf/actions/runs/41624581951"
+    "https://github.com/alwansan/raf/actions/runs/41624581951",
+    "https://github.com/alwansan/raf/actions/runs/41659903543",
+    "https://github.com/alwansan/raf/actions/runs/41660138192"
   ],
-  "result": null,
-  "next_step": "Synthetic red test for commented ShaderLab Pass, quoted Pass, commented CGPROGRAM/HLSLPROGRAM, commented and embedded #pragma kernel; CPU green regression; preserve original SHA/export uncertainty."
+  "result": "RED 5/6 failure confirms comment/quoted text pass/program/kernel counts in raw lexical audit; GREEN 6 A15+4 A9 tests SUCCESS on d0680dbd. Original run140 export not rerun or authenticated; historical built-in zero match unaffected.",
+  "next_step": "Scope completed; original full in-run export provenance and real ShaderLab pass programs/FFT remain separate work.",
+  "source_sha": "d0680dbd16676c54fb7473f797c26f58e76c786e"
 }
