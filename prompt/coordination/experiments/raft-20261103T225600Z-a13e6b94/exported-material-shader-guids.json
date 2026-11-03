@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T225600Z-a13e6b94",
+  "session_id": "a13-20261103T225600Z-76d14a0f",
+  "issue_id": "RENDER-002",
+  "experiment_id": "exported-material-shader-guid-guard",
+  "status": "completed",
+  "observed_at": "2026-11-03T23:02:14.451Z",
+  "source_sha": "236ad8f68d166afa1bc51c21e8ff886e855c8c62",
+  "source_commit_chain": [
+    "5ed6ff67326dc7424deebb2da2458bf26808512f",
+    "a2e868b92d77f0169df64047d6d3f7d41bda464e",
+    "236ad8f68d166afa1bc51c21e8ff886e855c8c62"
+  ],
+  "run_id": 41735646696,
+  "job_id": 126264034218,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41735646696",
+  "conclusion": "success",
+  "synthetic_tests": 15,
+  "original_game_export_scanned": false,
+  "original_game_source_scanned": false,
+  "original_data_provider": "zip2 pinned at 15964ea8f246b6e076ce26b60931ee2e1a9a2385, not used by this synthetic test",
+  "runner": "ubuntu-24.04",
+  "lfs": false,
+  "unity": false,
+  "apk": false,
+  "original_export_completeness_verified": false,
+  "render_equivalence_verified": false,
+  "source_or_original_assets_mutated": false,
+  "remaining": [
+    "Run on actual authenticated complete export",
+    "Compare 1556 original Material identities to export GUIDs without assuming 1:1 loose-file counts",
+    "Restore real shaders through W1; still NOT_READY/0-of-3"
+  ]
+}
