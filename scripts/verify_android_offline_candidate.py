@@ -12,16 +12,72 @@ from scripts.adapt_original_save_paths import adapt as adapt_paths
 from scripts.instrument_android_runtime_operations import instrument
 
 
+def _csharp_code_mask(text):
+    """Mask comments and quoted literals, retaining exact C# source offsets."""
+    code = list(text)
+    i = 0
+    while i < len(text):
+        if text.startswith('//', i):
+            end = text.find('\n', i)
+            if end < 0:
+                end = len(text)
+        elif text.startswith('/*', i):
+            end = text.find('*/', i + 2)
+            if end < 0:
+                raise ValueError('Unclosed C# block comment')
+            end += 2
+        elif text[i] in ('"', "'"):
+            quote = text[i]
+            verbatim = quote == '"' and (
+                (i > 0 and text[i - 1] == '@') or text[max(0, i - 2):i] == '@$'
+            )
+            end = i + 1
+            while end < len(text):
+                if verbatim and text.startswith('""', end):
+                    end += 2
+                elif not verbatim and text[end] == '\\':
+                    end += 2
+                elif text[end] == quote:
+                    end += 1
+                    break
+                else:
+                    end += 1
+            else:
+                raise ValueError('Unclosed C# quoted literal')
+        else:
+            i += 1
+            continue
+        for offset in range(i, end):
+            code[offset] = ' '
+        i = end
+    return ''.join(code)
+
+
+def _original_method_start(code, signature):
+    start = code.find(signature)
+    if start < 0:
+        raise ValueError('Missing original method signature: ' + signature)
+    if code.find(signature, start + len(signature)) >= 0:
+        raise ValueError('Ambiguous original method signature: ' + signature)
+    return start
+
+
 def method(text, signature):
-    start = text.index(signature)
-    opening = text.index('{', start)
+    code = _csharp_code_mask(text)
+    start = _original_method_start(code, signature)
+    opening = code.find('{', start + len(signature))
+    semicolon = code.find(';', start + len(signature))
+    if opening < 0 or (semicolon >= 0 and semicolon < opening):
+        raise ValueError('Original method has no body: ' + signature)
     depth = 0
-    for pos in range(opening, len(text)):
-        if text[pos] == '{': depth += 1
-        if text[pos] == '}': depth -= 1
-        if depth == 0:
-            return text[start:pos + 1]
-    raise ValueError('Unclosed original method')
+    for pos in range(opening, len(code)):
+        if code[pos] == '{':
+            depth += 1
+        elif code[pos] == '}':
+            depth -= 1
+            if depth == 0:
+                return text[start:pos + 1]
+    raise ValueError('Unclosed original method: ' + signature)
 
 
 def select_original_source(source: Path, name: str, expected_sha256: str):
@@ -108,7 +164,7 @@ class NetworkUnderTest {
     methods = (rpc + '\n' + send).replace('Network_UserId', 'ulong')
     save_source = changed['SaveAndLoad'][1]
     save_signature = 'private void Save(string filename, RGD raftgamedata)'
-    save_start = save_source.index(save_signature)
+    save_start = _original_method_start(_csharp_code_mask(save_source), save_signature)
     attributes = re.findall(r'\[Conditional\("[^"]+"\)\]', save_source[max(0,save_start-200):save_start])
     if len(attributes) != 2 or '[Conditional("UNITY_ANDROID")]' not in attributes:
         raise ValueError('Original save call is not enabled for Android')
