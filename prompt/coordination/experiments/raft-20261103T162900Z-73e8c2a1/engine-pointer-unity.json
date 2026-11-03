@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "owner": "raft-20261103T162900Z-73e8c2a1",
-  "status": "running",
+  "status": "completed",
   "hypothesis": "Exact nine original metadata keys and embedded engine IDs resolve to matching shader names/property layouts in Unity2021.3.45f2; nine wrong-pointer controls must fail, then AndroidVulkan bundle compilation must pass. CPU reflection alone cannot prove this binding.",
   "input_hashes": [
     {
@@ -21,7 +21,22 @@
     "No visual/phone/all-material equivalence",
     "No shared native requests or bypass gates"
   ],
-  "next_step": "Inspect actual binding counts and compilation before using the result in builtin gate correction.",
-  "updated_at": "2026-11-03T23:13:18.423Z",
-  "result": "License,exactreader+engineDB,sourcepins and9positive/9negativeprivateprojectpreparationpassed;Unityactualbindingstepinprogress."
+  "next_step": "Inspect actual full165shader coverage41738481868 at da39e24c; no launch-as-success. Then tie actual full-export Material engine pointers to original associations before builtin gate correction. No identical full native retry.",
+  "updated_at": "2026-11-03T23:27:19.927Z",
+  "result": {
+    "unityVersion": "2021.3.45f2",
+    "failureType": "",
+    "requestedMaterials": 9,
+    "matchedShaderNames": 9,
+    "matchedPropertyLayouts": 9,
+    "wrongPointerControlsDetected": 9,
+    "shaderErrors": 0,
+    "androidVulkanOnly": true,
+    "privateBundleBuilt": true,
+    "passed": true,
+    "privateBundleBytes": 208424,
+    "fullGameExportVerified": false,
+    "phoneRenderingVerified": false,
+    "apkBuilt": false
+  }
 }

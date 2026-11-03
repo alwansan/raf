@@ -1,0 +1,28 @@
+{
+  "nine_material_source": "be740083d8faeea55ed2ba030cceea0d239e5f60",
+  "run": 41737038201,
+  "job": 126268778276,
+  "artifact": 13278789548,
+  "result": {
+    "unityVersion": "2021.3.45f2",
+    "failureType": "",
+    "requestedMaterials": 9,
+    "matchedShaderNames": 9,
+    "matchedPropertyLayouts": 9,
+    "wrongPointerControlsDetected": 9,
+    "shaderErrors": 0,
+    "androidVulkanOnly": true,
+    "privateBundleBuilt": true,
+    "passed": true,
+    "privateBundleBytes": 208424,
+    "fullGameExportVerified": false,
+    "phoneRenderingVerified": false,
+    "apkBuilt": false
+  },
+  "full_original_source": "da39e24c3f4e85276d386182c960895b88e35839",
+  "full_run": 41738481868,
+  "full_result": "pending",
+  "production_gates_changed": false,
+  "readiness": "NOT_READY",
+  "full_readiness_reviews": 0
+}

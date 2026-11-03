@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "owner": "raft-20261103T162900Z-73e8c2a1",
-  "status": "active",
-  "updated_at": "2026-11-03T23:19:00.681Z",
+  "status": "paused",
+  "updated_at": "2026-11-03T23:27:19.927Z",
   "base_sha": "4252763869dfc285bf0f8f5f8574687a7220b959",
   "hypothesis": "The exact embedded engine database and proven Unity pointer contract account for engine-owned keys across all165original shader objects, rather than only W1twoowner105sample.",
   "intended_files": [
@@ -17,5 +17,11 @@
     "Existing9materialUnity41737038201SUCCESS, no repeat"
   ],
   "budget": "One30minute targetedUnity job;sharedengineMutex;12GiBDocker;14originalmetadataowners488439356B;cache before selective acquisition;noAPK",
-  "next_step": "Authenticate all14original shader owners using cached ZIP2, map all165objects to exact embedded engine DB, validate every unique matched key in isolated Unity before builtin gate correction."
+  "next_step": "Inspect actual full165shader coverage41738481868 at da39e24c; no launch-as-success. Then tie actual full-export Material engine pointers to original associations before builtin gate correction. No identical full native retry.",
+  "source_sha": "da39e24c3f4e85276d386182c960895b88e35839",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41737038201",
+    "https://github.com/alwansan/raf/actions/runs/41738481868"
+  ],
+  "result": "Original14owner authentication and165object preparation passed; full Unity result pending. Prior9keys Unity+Vulkan bundle passed. No production gate change."
 }

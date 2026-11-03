@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T162900Z-73e8c2a1",
+  "status": "running",
+  "source_sha": "da39e24c3f4e85276d386182c960895b88e35839",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41738481868",
+  "workflow_path": ".github/workflows/raft-w1-full-engine-unity.yml",
+  "concurrency_group": "raft-native-engine-${github.ref};raft-w1-full-engine-unity",
+  "budget": "30minutes12GiBDocker;cache-first14owners488439356bytes;noLFS;noAPK",
+  "result": "Source authentication and original165shader preparation passed; actual Unity result pending",
+  "limitations": [
+    "No full-export Material association proof",
+    "No original program/render/phone equivalence",
+    "NOT_READY0/3"
+  ],
+  "next_step": "Inspect actual full165shader coverage41738481868 at da39e24c; no launch-as-success. Then tie actual full-export Material engine pointers to original associations before builtin gate correction. No identical full native retry."
+}
