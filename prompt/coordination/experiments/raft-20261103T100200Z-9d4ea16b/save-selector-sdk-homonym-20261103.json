@@ -3,7 +3,7 @@
   "username": "raft-20261103T100200Z-9d4ea16b",
   "issue_id": "LOCAL-005",
   "id": "save-selector-sdk-homonym-20261103",
-  "status": "submitted_pending_ci",
+  "status": "completed_source_only",
   "hypothesis": "An SDK SaveAndLoad.cs homonym in Assets makes the original save-path adapter reject an otherwise unambiguous game source, or select an unrelated SDK source.",
   "baseline": {
     "reproduced": true,
@@ -18,12 +18,28 @@
     "tests/test_a10_original_save_selector.py",
     ".github/workflows/raft-original-save-path-tests.yml"
   ],
-  "validation": "Four isolated synthetic Python tests added to original save-path no-LFS workflow; source SHA pin/16 original path expressions remain in existing CI, pending actual run.",
+  "validation": "https://github.com/alwansan/raf/actions/runs/41617920198",
   "risk": "No .rgd serialization, original game source, .meta/GUID or Unity/native pipeline touched.",
   "limitations": [
     "No evidence current exported tree actually has an SDK homonym",
     "This guards source selection, not world startup, save/load on phone or serializer compatibility",
-    "No LFS, Unity/APK/OBB/XAPK/Release"
+    "No LFS, Unity/APK/OBB/XAPK/Release",
+    "Synthetic SDK collision case does not prove such collision exists in the currently staged Unity game.",
+    "Only source selector/authenticated original expression tests executed; local world/phone .rgd acceptance remains pending."
   ],
-  "base_sha": "d36bc551ce63346e0cf0cc87e8677b4401c14a6e"
+  "base_sha": "d36bc551ce63346e0cf0cc87e8677b4401c14a6e",
+  "result": {
+    "source_commit": "14dd7fce3257ec852ebb22ec76c22629d1a86b76",
+    "original_save_ci_run": 41617920198,
+    "original_save_ci_job": 125855914596,
+    "original_save_ci_conclusion": "success",
+    "baseline_python_tests": 4,
+    "new_python_tests": 4,
+    "original_path_expressions": 16,
+    "managed_cross_platform_checks": 14,
+    "preflight_run": 41617920208,
+    "preflight_conclusion": "success",
+    "original_game_payload_modified": false,
+    "unity_or_phone_test": false
+  }
 }
