@@ -230,6 +230,42 @@ internal static class BoundaryMatrix
                 !gesture.Active, "same-touch-id-restart-move-new-tap-valid");
         }
 
+        // Repeated Stationary touch packets must advance the gesture clock,
+        // including the exact 500ms hold, without manufacturing 90 identical
+        // synthetic mouse-position state events. Real position changes survive.
+        {
+            var events = new List<(TouchPointerCommand command, float x, float y)>();
+            var gesture = new TouchPointerGesture((cmd, px, py) => events.Add((cmd, px, py)));
+            gesture.Begin(71, 10f, 20f, 100d);
+            for (int i = 1; i <= 90; i++)
+                gesture.Move(71, 10f, 20f, 100d + i * 0.01d);
+            Require(gesture.Held, "stationary-coalescing-preserves-500ms-hold");
+            Require(events.Count == 2 &&
+                events[0].command == TouchPointerCommand.Move &&
+                events[1].command == TouchPointerCommand.Down,
+                "stationary-coalescing-no-redundant-move");
+            gesture.Move(71, 11f, 22f, 100.91d);
+            Require(events.Count == 3 &&
+                events[2].command == TouchPointerCommand.Move &&
+                events[2].x == 11f && events[2].y == 22f,
+                "stationary-coalescing-real-motion-preserved");
+            gesture.End(71, 12f, 23f, 100.95d, false);
+            Require(events.Count == 4 &&
+                events[3].command == TouchPointerCommand.Up &&
+                events[3].x == 12f && events[3].y == 23f &&
+                !gesture.Active, "stationary-coalescing-release-preserved");
+
+            // Even without moving the pointer, stale earlier timestamps
+            // should still be rejected after stationary updates.
+            gesture.Begin(72, 50f, 60f, 110d);
+            gesture.Move(72, 50f, 60f, 110.25d);
+            int beforeStale = events.Count;
+            gesture.Move(72, 99f, 99f, 110.1d);
+            Require(events.Count == beforeStale, "stationary-coalescing-clock-updated");
+            gesture.Cancel();
+            Require(!gesture.Active, "stationary-coalescing-cancel");
+        }
+
         return checks;
     }
 }
