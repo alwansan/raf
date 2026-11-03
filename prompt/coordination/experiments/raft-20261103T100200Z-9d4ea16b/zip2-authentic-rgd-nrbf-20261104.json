@@ -2,9 +2,9 @@
   "schema_version": 1,
   "owner": "raft-20261103T100200Z-9d4ea16b",
   "session_id": "a10-20261103T224523Z-dc871304",
-  "status": "active",
+  "status": "completed",
   "hypothesis": "Use original ZIP2 Data.rgd 2941-byte artifact to validate BinaryFormatter NRBF payload structural decodability without executing deserialization code, ensuring original .rgd byte-level provenance while narrowing the real save compatibility gap.",
-  "source_sha": "2480a0d932e3339e24bcb11bdce832aee8516ed3",
+  "source_sha": "951e25e213160c442bd10a47631242d6fffcdf5d",
   "input_hashes": [
     "zip2@15964ea8:Data.rgd size2941 SHA256 b2785187aa11e33872698adfa79ab252cf65a824d92bee7e88773ce4aa11cbba"
   ],
@@ -22,10 +22,33 @@
   "concurrency_group": "raft-a10-zip2-rgd-nrbf-${{ github.ref }}",
   "artifact_prefix": null,
   "budget": "CI ubuntu-24.04 6 minutes, ~3KB original source checkout only",
-  "run_url": null,
-  "result": null,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41734609973",
+  "result": {
+    "source_sha": "951e25e213160c442bd10a47631242d6fffcdf5d",
+    "original_rgd_sha256": "b2785187aa11e33872698adfa79ab252cf65a824d92bee7e88773ce4aa11cbba",
+    "original_managed_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "success_run_id": 41734609973,
+    "job_id": 126260447371,
+    "conclusion": "SUCCESS",
+    "byte_count": 2941,
+    "root_record": "ClassWithMembersAndTypes",
+    "root_bytes_consumed": 2941,
+    "game_original_type_count": 3033,
+    "root_type_present_in_original_assembly": true,
+    "root_declared_field_count": 1,
+    "rgd_root_serialized_members": 1,
+    "field_name_exact_matches": 0,
+    "property_count": 0,
+    "implements_ISerializable_direct": false,
+    "negative_controls_passed": 4,
+    "original_bytes_modified": false,
+    "unity_tested": false
+  },
   "limitations": [
-    "Source safe NRBF decoding not Unity BinaryFormatter real save/load, not gameplay or phone"
+    "Source safe NRBF decoding not Unity BinaryFormatter real save/load, not gameplay or phone",
+    "NrbfDecoder safe record decoding is not BinaryFormatter deserialization or real Unity RGD load and could differ in behavior.",
+    "Exact metadata field/serialized member mismatch must not be assumed to be a user-facing load defect without inspecting compatibility rules.",
+    "No player-generated world or phone data is tested; the seed Data.rgd may not be a world save."
   ],
-  "next_step": "Inspect live CI results, don't claim acceptance on metadata alone."
+  "next_step": "Investigate the single root member naming discrepancy with original producer/consumer / field attributes and keep full game NOT_READY. Does not prove actual save/load."
 }
