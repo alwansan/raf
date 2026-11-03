@@ -93,6 +93,29 @@ def verify_fielddefs(data, assembly, namespace, source_names):
     ordered=[x[0] for x in eligible]
     if len(source_names)!=len(set(source_names)):
         raise ValueError("Duplicate original Settings candidate source fields")
+    # CSharp9 text is a lexical candidate list; metadata is authoritative
+    # on field identities but NOT on Unity's full serializer rules. Classify
+    # mismatches without printing any original private field/type names.
+    source_set=set(source_names)
+    eligible_set=set(ordered)
+    all_definitions={f["name"]:f for f in fields}
+    missing_counts=Counter()
+    for name in source_set-eligible_set:
+        item=all_definitions.get(name)
+        if item is None:
+            missing_counts["source_only_no_matching_fielddef"]+=1
+        elif item.get("is_static") or item.get("is_const") or item.get("is_readonly"):
+            missing_counts["source_candidate_static_or_readonly_in_metadata"]+=1
+        elif item.get("is_not_serialized") or item.get("has_nonserialized_attribute"):
+            missing_counts["source_candidate_not_serialized_in_metadata"]+=1
+        elif not (item.get("is_public") or item.get("has_serialize_field")
+                  or item.get("has_serialize_reference")):
+            missing_counts["source_candidate_not_marked_for_serialization"]+=1
+        else:
+            missing_counts["metadata_filter_unknown"]+=1
+    intersection=set(source_names)&eligible_set
+    common_source=[name for name in source_names if name in intersection]
+    common_meta=[name for name in ordered if name in intersection]
     family=Counter(x[1] for x in eligible)
     nested=Counter(x[2] or "unknown" for x in eligible if x[1] in
                    ("array","list_generic","generic_other"))
@@ -107,6 +130,10 @@ def verify_fielddefs(data, assembly, namespace, source_names):
         "source_field_count":len(source_names),
         "source_field_name_set_equals_metadata":set(source_names)==set(ordered),
         "source_declaration_order_equals_metadata_order":list(source_names)==ordered,
+        "shared_source_to_metadata_order_equal":common_source==common_meta,
+        "source_only_exclusion_reason_counts":dict(sorted(missing_counts.items())),
+        "source_candidates_absent_from_eligible_metadata":len(source_set-eligible_set),
+        "metadata_eligible_fields_absent_from_source_candidates":len(eligible_set-source_set),
         "fielddef_token_order_validated":True,
         "metadata_kind_sequence_sha256":fingerprint,
         "source_type_and_field_names_emitted":False,

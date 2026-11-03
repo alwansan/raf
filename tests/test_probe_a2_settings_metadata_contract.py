@@ -79,5 +79,15 @@ class OriginalMetadataTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"missing or ambiguous"):
             candidate_source_names("class Other { public int Count; }")
 
+
+    def test_reconciles_source_only_field_without_exposing_its_name(self):
+        meta=sample([row("shown",1),row("excluded",2,is_readonly=True)])
+        result=verify_fielddefs(meta,"Assembly-CSharp","Game",["shown","excluded"])
+        self.assertEqual(result["source_candidates_absent_from_eligible_metadata"],1)
+        self.assertEqual(result["source_only_exclusion_reason_counts"]["source_candidate_static_or_readonly_in_metadata"],1)
+        self.assertEqual(result["metadata_eligible_fields_absent_from_source_candidates"],0)
+        self.assertTrue(result["shared_source_to_metadata_order_equal"])
+        self.assertNotIn("excluded",str(result))
+
 if __name__=="__main__":
     unittest.main()
