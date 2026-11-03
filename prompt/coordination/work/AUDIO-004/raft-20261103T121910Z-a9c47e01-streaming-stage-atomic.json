@@ -2,8 +2,8 @@
   "schema_version": 1,
   "owner": "raft-20261103T121910Z-a9c47e01",
   "issue_id": "AUDIO-004",
-  "status": "planned",
-  "updated_at": "2026-11-03T12:19:10.900Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T12:31:14.674Z",
   "base_sha": "cc5d7b7805892681510af8a9fb77e6b35e9b763f",
   "hypothesis": "stage_original_streaming_assets.stage copies each source directly into final project path; interrupted copy leaves incomplete bank/audio/data file, making rerun fail and potentially exposing a corrupt game asset.",
   "intended_files": [
@@ -24,7 +24,14 @@
   "experiment_ids": [
     "stage-original-atomic-publish-redgreen"
   ],
-  "evidence": [],
-  "result": null,
-  "next_step": "Add synthetic failure-injection test before repair and run distinct Red CI, then implement atomic per-file copy/publish and verify full smoke without original files or LFS."
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41634964894",
+    "https://github.com/alwansan/raf/actions/runs/41635663572",
+    "https://github.com/alwansan/raf/actions/runs/41635870775",
+    "https://github.com/alwansan/raf/actions/runs/41635837364",
+    "https://github.com/alwansan/raf/commit/44af18c72390b0193a3ee8f9bf068b76feb771d5",
+    "docs/A9_ORIGINAL_STREAMING_ASSETS_ATOMIC_STAGING_2026-11-03.md"
+  ],
+  "result": "Reproduced invalid final bank on interrupted/corrupt copy (2 negative controls), second red exposing packaged temp path, then verified atomic exclusive publish outside Assets (4 new+11 existing CPU cases and independent A3 staging CI).",
+  "next_step": "Scoped source resilience fix complete. Authentic game bank/OBB phone use is not validated; AUDIO-004 remains OPEN."
 }

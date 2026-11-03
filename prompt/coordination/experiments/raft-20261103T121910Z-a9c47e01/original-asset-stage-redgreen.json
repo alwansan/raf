@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T121910Z-a9c47e01",
+  "status": "completed",
+  "issue_id": "AUDIO-004",
+  "hypothesis": "Direct source-to-final original audio/data copies can leave truncated/corrupt final assets after partial I/O and temps under StreamingAssets can remain package-visible after unclean process kill.",
+  "inputs": {
+    "source": "scripts/stage_original_streaming_assets.py",
+    "baseline_blob_sha": "83b2fd1ce8e60d6ee5425e1a8d339d6fbba960ed",
+    "original_assets_used": false,
+    "synthetic_file_count": 35,
+    "synthetic_bytes": 1700
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_a9_streaming_stage_atomic.py -v",
+    "python3 -m unittest discover -s tests -p test_stage_original_streaming_assets.py -v"
+  ],
+  "workflow_path": ".github/workflows/raft-a9-streaming-stage-atomic.yml",
+  "budget": {
+    "os": "ubuntu-24.04",
+    "timeout_minutes": 6,
+    "lfs": false,
+    "unity": false
+  },
+  "negative_controls": [
+    "partial final file after simulated OSError",
+    "corrupted copied bytes after copy returns",
+    "temporary file visible inside Unity Assets directory",
+    "concurrent destination appearance after preflight"
+  ],
+  "red": [
+    {
+      "source_sha": "014bc5ec9863ca978e6bf4d15741c3848221d08a",
+      "run_id": 41634964894,
+      "failed_cases": 2
+    },
+    {
+      "source_sha": "8505324b6f6061e10daa0c92e8d1b5e08c1214ce",
+      "run_id": 41635663572,
+      "failed_cases": 1
+    }
+  ],
+  "intermediate_success": {
+    "source_sha": "70056b50692f35bb79b7babf0dec23c81428465d",
+    "run_id": 41635309443,
+    "new_passed": 2,
+    "existing_passed": 11
+  },
+  "final": {
+    "source_sha": "4f5a1a3d6f31df9273cbfa2ce9cee97cf8a1e657",
+    "source_fix_sha": "44af18c72390b0193a3ee8f9bf068b76feb771d5",
+    "run_id": 41635870775,
+    "job_id": 125916794157,
+    "conclusion": "success",
+    "new_tests_passed": 4,
+    "existing_tests_passed": 11,
+    "independent_haptics_stage_run_id": 41635837364
+  },
+  "limitations": [
+    "Synthetic Git fixtures only; no verified genuine FMOD bank ZIP/OBB load or Android phone execution",
+    "Project-root temporary outside Assets may remain orphaned after hard kill; no final asset corruption",
+    "Exclusive hard links need same filesystem; tested on Ubuntu24.04 fixture, not all filesystems",
+    "This is not atomic commit for the entire bank+Haptics+Data batch"
+  ],
+  "next_step": "Limited staging durability subtask complete; AUDIO-004/HAPTICS runtime and full native resource authentication remain open."
+}

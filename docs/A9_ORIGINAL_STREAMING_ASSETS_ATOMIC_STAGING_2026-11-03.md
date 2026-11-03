@@ -1,0 +1,28 @@
+# A9 / AUDIO-004 — original StreamingAssets crash-safe staging (3 November 2026)
+
+## Problem and independent scope
+
+Before this change, `scripts/stage_original_streaming_assets.py` copied an original audio or save asset from its authenticated Git/LFS source **directly to the final Unity `Assets/StreamingAssets` filename**. A filesystem exception halfway through a file could leave a truncated/corrupt bank at the final path. The next stage invocation then correctly rejected that unexpected file as a conflict, but could not resume, and Unity might see an incomplete data asset. This was a source-contract flaw, demonstrated on synthetic files; not a recorded APK80 phone failure.
+
+A9 registered `raft-20261103T121910Z-a9c47e01` independently. Existing A3 source Haptics 29/29 manifest checks and A5 original WAV/OBB checks remain unchanged; A10 original CSharp instrumentation, A1 water, A2 display and A3/A6 renderer work use different source files. Only `feature/android-native-port` was writable; `alwansan/CL` historical logs were read-only.
+
+## Real red/green evidence
+
+1. [RED source 014bc5ec](https://github.com/alwansan/raf/commit/014bc5ec9863ca978e6bf4d15741c3848221d08a) added two synthetic Git-owned failing cases. [A9 CI 41634964894](https://github.com/alwansan/raf/actions/runs/41634964894) FAILED AS INTENDED in 2/2: interrupted copy and byte-corrupt copy both left a final bank file, even though stage raised an error.
+2. [Initial source fix 70056b50692f35bb79b7babf0dec23c81428465d](https://github.com/alwansan/raf/commit/70056b50692f35bb79b7babf0dec23c81428465d) copies into a randomly named temporary file, verifies file size and SHA256 **before** publication and atomically creates the target using `os.link` (exclusive, unlike `os.replace`). `finally` removes temporary data on ordinary exceptions. [A9 CI 41635309443](https://github.com/alwansan/raf/actions/runs/41635309443) SUCCESS (2 new + 11 existing fixtures); independent A3 Haptics staging [41635309447](https://github.com/alwansan/raf/actions/runs/41635309447) SUCCESS.
+3. A second [RED test commit 8505324b](https://github.com/alwansan/raf/commit/8505324b6f6061e10daa0c92e8d1b5e08c1214ce) proved the temporary was still created *under* `Assets/StreamingAssets`; an unclean process termination could leave that temporary eligible for Unity packaging. [A9 CI 41635663572](https://github.com/alwansan/raf/actions/runs/41635663572) FAILED AS EXPECTED in this one test, while three others passed.
+4. Final production [fix 44af18c72390b0193a3ee8f9bf068b76feb771d5](https://github.com/alwansan/raf/commit/44af18c72390b0193a3ee8f9bf068b76feb771d5) places temporary data at the Unity project root **outside `Assets`**, on the normal same filesystem as the destination. The atomic hard-link publication remains. Final [test commit 4f5a1a3d6f31df9273cbfa2ce9cee97cf8a1e657](https://github.com/alwansan/raf/commit/4f5a1a3d6f31df9273cbfa2ce9cee97cf8a1e657) requires temp cleanup throughout the project and tests an adversarial destination appearance between preflight and publish; the pre-existing destination survives unchanged and the run fails closed. [Exact-source A9 CI 41635870775](https://github.com/alwansan/raf/actions/runs/41635870775), job125916794157, COMPLETED SUCCESS: **4/4 A9 cases + 11/11 inherited original StreamingAssets tests**, without LFS or Unity. Independent A3 staging [41635837364](https://github.com/alwansan/raf/actions/runs/41635837364) SUCCESS on production fix 44af18c72390b0193a3ee8f9bf068b76feb771d5.
+
+The CI fixture builds a synthetic temporary Git repository with **35 small synthetic files (1700 total bytes)**, covering the original required path categories (5 banks, 29 Haptics WAV names, Data.rgd), but NOT actual original payload bytes. The original A3 manifest preflight still runs. This is actual execution of `stage_original_streaming_assets.stage`, not a static grep or hypothetical workaround.
+
+## Limits and remaining work
+
+A hard process kill can still leave an orphan `.raft-stage-*.partial` at the Unity project **root**, but not inside `Assets/StreamingAssets`, and the final verified bank name is never published partially. Ordinary copy failures clean the temp. The source still fails closed if the temporary cannot be hard-linked across mount points or permissions; project-root and Assets paths are on the same filesystem in the Ubuntu CI fixture, not a universal Android filesystem guarantee. Concurrent hostile path swaps after preflight remain outside this staging-level managed check. Each already committed prior asset can be reused idempotently on retry; there is no claim of an atomic transaction for the complete 35-file batch.
+
+No proprietary game byte, Unity shader/program, original .rgd serializer/schema, source .meta/GUID, signature, native build request, runtime service or app release was changed. This **does not** prove that genuine FMOD banks load, OBB ZIP assets resolve on Android, Haptics audio/vibration operates, original world loads or APK passes graphics. WATER-001/RENDER-002/FFT-FORMAT-009 and AUDIO-004 device acceptance remain open. Game **NOT_READY, candidate absent and three full independent immutable-SHA readiness reviews 0/3**. No Unity/APK/OBB/XAPK build, LFS hydration or scheduled-task modification was initiated by A9.
+
+## Pointers
+
+- Client [state/memory](../prompt/coordination/clients/raft-20261103T121910Z-a9c47e01/MEMORY.md)
+- Independent [experiment](../prompt/coordination/experiments/raft-20261103T121910Z-a9c47e01/original-asset-stage-redgreen.json) and [synthetic failure record](../prompt/coordination/incidents/raft-20261103T121910Z-a9c47e01/synthetic-interrupted-bank-publish.md)
+- Final [CI 41635870775](https://github.com/alwansan/raf/actions/runs/41635870775)
