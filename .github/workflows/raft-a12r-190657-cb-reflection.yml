@@ -6,6 +6,8 @@ on:
     paths:
       - 'scripts/a12r_190657_blur_cb_reflection.py'
       - 'tests/test_a12r_190657_blur_cb_reflection.py'
+      - 'scripts/a12r_zip2_shader_owners.py'
+      - 'tests/test_a12r_zip2_shader_owners.py'
       - '.github/workflows/raft-a12r-190657-cb-reflection.yml'
   workflow_dispatch:
 
@@ -19,47 +21,78 @@ concurrency:
 jobs:
   reflect-cb:
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    timeout-minutes: 25
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout A12R code only (no game files or LFS)
+        uses: actions/checkout@v4
         with:
           lfs: false
+          persist-credentials: false
           sparse-checkout: |
             scripts
             tests
-            Raft/Raft_Data
-      - name: Synthetic RDEF structural and privacy tests before original file access
-        run: python3 -m unittest discover -s tests -p test_a12r_190657_blur_cb_reflection.py -v
-      - name: Verify source pointers and bound disk budget
-        run: |
-          python3 - <<'PY'
-          from pathlib import Path
-          import shutil
-          from scripts.w1_recover_graphics_programs import OWNERS
-          from scripts.verify_targeted_lfs_compute_sources import verify_sources
-          assert shutil.disk_usage('.').free > 10 * 1024**3
-          verify_sources(Path('Raft/Raft_Data'), pointers_only=True, expected=OWNERS)
-          PY
-      - name: Only reuse original authenticated W1 LFS object cache
-        uses: actions/cache/restore@v4
-        with:
-          path: .git/lfs/objects
-          key: w1-graphics-87493249-0498f738-v1
-          fail-on-cache-miss: true
-      - name: Checkout LFS from cache, never network pull
+
+      - name: Run synthetic CB + original ZIP2 reassembly tests
         run: |
           set -euo pipefail
-          git lfs install --local
-          GIT_LFS_SKIP_SMUDGE=1 git lfs checkout Raft/Raft_Data/resources.assets Raft/Raft_Data/sharedassets0.assets Raft/Raft_Data/sharedassets36.assets
-      - name: Inspect SHA-pinned original Blur compiled RDEF privately
+          python3 -m unittest discover -s tests -p test_a12r_190657_blur_cb_reflection.py -v
+          python3 -m unittest discover -s tests -p test_a12r_zip2_shader_owners.py -v
+          python3 -m py_compile scripts/a12r_zip2_shader_owners.py scripts/a12r_190657_blur_cb_reflection.py
+
+      - name: Require bounded disk before ZIP2 14-owner acquisition
         run: |
+          python3 - <<'PY'
+          import shutil
+          assert shutil.disk_usage(".").free > 10 * 1024**3
+          print("RAFT_A12R_ZIP2_DISK_BUDGET_OK")
+          PY
+
+      - name: Checkout immutable ZIP2 original Shader-bearing owners only
+        uses: actions/checkout@v4
+        with:
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: original-zip2-a12r
+          filter: blob:none
+          fetch-depth: 1
+          lfs: false
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            Raft/Raft_Data/globalgamemanagers.assets
+            Raft/Raft_Data/resources.assets/*
+            Raft/Raft_Data/sharedassets0.assets/*
+            Raft/Raft_Data/sharedassets1.assets
+            Raft/Raft_Data/sharedassets24.assets
+            Raft/Raft_Data/sharedassets25.assets
+            Raft/Raft_Data/sharedassets29.assets
+            Raft/Raft_Data/sharedassets30.assets
+            Raft/Raft_Data/sharedassets34.assets
+            Raft/Raft_Data/sharedassets35.assets
+            Raft/Raft_Data/sharedassets36.assets/*
+            Raft/Raft_Data/sharedassets6.assets
+            Raft/Raft_Data/sharedassets8.assets
+            Raft/Raft_Data/sharedassets9.assets
+
+      - name: Reassemble SHA-256-verified ZIP2 originals into isolated temp path
+        run: |
+          set -euo pipefail
+          python3 -m scripts.a12r_zip2_shader_owners \
+            --zip2-checkout original-zip2-a12r \
+            --dest "$RUNNER_TEMP/a12r-original/Raft_Data"
+
+      - name: Compare SHA-pinned original Blur DXBC constant buffer reflection
+        run: |
+          set -euo pipefail
           python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
-          python3 -m scripts.a12r_190657_blur_cb_reflection --source Raft/Raft_Data --repo . --out "$RUNNER_TEMP/a12r-structural.json"
-      - name: Retain privacy-safe numeric aggregates only
+          python3 -m scripts.a12r_190657_blur_cb_reflection \
+            --source "$RUNNER_TEMP/a12r-original/Raft_Data" \
+            --repo . --out "$RUNNER_TEMP/a12r-structural.json"
+
+      - name: Retain only safe aggregate counts, never private shader bytes
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: raft-a12r-190657-aggregate-${{ github.sha }}
+          name: raft-a12r-190657-zip2-aggregate-${{ github.sha }}
           path: ${{ runner.temp }}/a12r-structural.json
           if-no-files-found: ignore
           retention-days: 7
