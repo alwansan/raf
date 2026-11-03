@@ -1,13 +1,15 @@
 {
   "schema_version": 1,
   "username": "raft-20261103T095700Z-a2b31f4d",
-  "session_id": "a2-continue-20261103120740-de5c9031",
-  "resumed_from": "a2-continue-20261103T112400-f7a82190",
-  "status": "paused",
-  "updated_at": "2026-11-03T12:36:53.126Z",
-  "base_sha": "034abfbc4fce60bf4be2466b126d10984f2ea19b",
-  "current_work": [],
+  "session_id": "a2-continue-20261103144837-72f30c9a",
+  "resumed_from": "a2-continue-20261103120740-de5c9031",
+  "status": "active",
+  "updated_at": "2026-11-03T14:48:37.472Z",
+  "base_sha": "0a1e260bb1e4cbe211cb05c3374bfd0e4d0af696",
+  "current_work": [
+    "DISPLAY-003 original Settings controller serialized candidate PPtr and Canvas ownership"
+  ],
   "last_commit": "b83f51a1c1e921332d610d995db3fcb409255071",
-  "next_step": "DISPLAY-003 OPEN. Original CanvasScaler numeric data recovered for 17 source scene objects (CI41636519603 success); next verify actual Settings UI/prefab/UnityEvent ownership and device landscape scaling. Do not globally override UI; NOT_READY 0/3. New user turn needed to resume.",
+  "next_step": "Source-lock Settings MonoScript and original Settings CSharp9, inspect exact local Unity PPtr candidates and native Canvas ancestry in scenes0/1 without claiming typed field links; run no-LFS CPU-only independent CI.",
   "memory_path": "prompt/coordination/clients/raft-20261103T095700Z-a2b31f4d/MEMORY.md"
 }

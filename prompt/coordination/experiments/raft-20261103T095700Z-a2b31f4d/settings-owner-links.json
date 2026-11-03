@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T095700Z-a2b31f4d",
+  "status": "active",
+  "hypothesis": "Original Settings controller object references scene UI objects by serialized PPtrs. A bounded source SHA-pinned scan of authentic scene0/1 Settings MonoBehaviours, canonical CSharp9 Settings.cs and native hierarchy can discriminate whether a CanvasScaler component is referenced directly or indirectly.",
+  "input_hashes": [
+    "Settings.cs normalized sha256:904c52b337fe951f711e2efc15bfafc4fc77f2a8d2cc9c5bee2f7d14075103ad",
+    "level0 git-sha1:2aec4377058baf72656a2ba0daea9aefc67fcb7e",
+    "level1 git-sha1:1944f11673108f8db2084906ff5899003c97fc4a",
+    "globalgamemanagers.assets git-sha1:4eabb7cb093ead2f2b0c8f3451dd953a9f5ff0c9",
+    "Assembly-CSharp.dll git-sha1:fc9d4ba920a178fdb89c970d9d772a01051dadc6"
+  ],
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_probe_a2_settings_owner_links.py -v",
+    "python3 -m scripts.probe_a2_settings_owner_links --source Raft/Raft_Data --decompiled TMP"
+  ],
+  "expected_signal": "Verified original Settings owner class identity, source SHA and authenticated non-LFS scenes; bounded candidate PPtr counts by native object type & Canvas ancestry; no original source data, binary, names or methods printed.",
+  "negative_controls": [
+    "Spoofed same class name in different assembly must be rejected",
+    "No raw scan before base header",
+    "Reject negative/unknown/non-local typed path IDs",
+    "Unknown/ambiguous parent chains cannot be counted as verified canvas links",
+    "Reject >bounded source lengths and invalid normalized Settings SHA"
+  ],
+  "workflow_path": ".github/workflows/raft-a2-settings-owner-links.yml",
+  "concurrency_group": "raft-a2-settings-links-${{ github.ref }}-${{ github.sha }}",
+  "artifact_prefix": null,
+  "budget": "CPU only Ubuntu24.04 <=10min, original small scenes0/1+managed Assembly-CSharp.dll+global script library, no LFS/Unity or native pipeline.",
+  "run_url": null,
+  "source_sha": null,
+  "result": null,
+  "limitations": [
+    "Raw local 0/pathID byte patterns can be coincidental and are not typed serialized field links.",
+    "MonoBehaviour base UnityPy typetree lacks original custom Settings fields.",
+    "Original Settings menu may be runtime instantiated or prefab-backed outside scene0/1."
+  ],
+  "next_step": "Refine original Settings UI wiring from source field order and verified typed object pointer ownership; do not patch display without proof."
+}

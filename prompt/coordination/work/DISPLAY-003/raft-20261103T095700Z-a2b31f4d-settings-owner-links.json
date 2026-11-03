@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T095700Z-a2b31f4d",
+  "issue_id": "DISPLAY-003",
+  "status": "active",
+  "updated_at": "2026-11-03T14:48:37.472Z",
+  "base_sha": "0a1e260bb1e4cbe211cb05c3374bfd0e4d0af696",
+  "hypothesis": "Original Settings controller object references scene UI objects by serialized PPtrs. A bounded source SHA-pinned scan of authentic scene0/1 Settings MonoBehaviours, canonical CSharp9 Settings.cs and native hierarchy can discriminate whether a CanvasScaler component is referenced directly or indirectly.",
+  "intended_files": [
+    "scripts/probe_a2_settings_owner_links.py",
+    "tests/test_probe_a2_settings_owner_links.py",
+    ".github/workflows/raft-a2-settings-owner-links.yml",
+    "docs/A2_ORIGINAL_SETTINGS_OWNER_LINKS_2026-11-03.md",
+    "prompt/coordination/clients/raft-20261103T095700Z-a2b31f4d/state.json",
+    "prompt/coordination/clients/raft-20261103T095700Z-a2b31f4d/MEMORY.md",
+    "prompt/STATUS.md",
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+  ],
+  "related_work": [
+    "prompt/coordination/work/DISPLAY-003/raft-20261103T095700Z-a2b31f4d-canvas-scaler-values.json"
+  ],
+  "experiment_ids": [
+    "settings-owner-links"
+  ],
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41636519603"
+  ],
+  "result": null,
+  "next_step": "Use original scene0/1 Settings MonoBehaviour raw payload after typed header and authenticated original source metadata to classify candidate local PPtrs. Only confirmed typed links can establish UI canvas ownership."
+}

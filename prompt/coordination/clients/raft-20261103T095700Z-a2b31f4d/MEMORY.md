@@ -64,3 +64,9 @@ DISPLAY-003 SOURCE_REVIEW_REQUIRED, NOT_READY/0 of3; no runtime, Unity/APK/OBB/X
 - Original 80-byte component: native typed MonoBehaviour32-byte base, 44-byte ten UI numeric fields, 4-byte [SerializeField] m_PresetInfoIsWorld bool and pad. All17: reference1920×1080, uiScaleMode1, screenMatchMode0, matchWidthOrHeight1 (height); original scaleFactor1 sixteen components, 0.66 one level1; editor preset false. Unity complete custom TypeTree still not independently available; source/bytes/pointers corroborate.
 - [Detailed report](../../../../docs/A2_ORIGINAL_CANVAS_SCALER_VALUES_2026-11-03.md) and [STATUS](../../../STATUS.md) + [latest handoff](../../../../docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md) updated. No original game assets, .meta/GUID, runtime UI code, CL, scheduled tasks, full native build request, Unity/APK/OBB/XAPK or LFS changed by A2.
 - Scope experiment **completed**, A2 **paused**. General DISPLAY-003 source-only follow-up requires actual Settings panel to Canvas pointer/callback chain and Android viewport/aspect before changing runtime. WATER-001/RENDER-002/FFT-FORMAT-009 and other build blockers remain; **NOT_READY / 0/3** full immutable candidate reviews.
+
+
+## A2 Settings owner-link follow-up — 2026-11-03T14:48:37.472Z
+- User explicitly resumed paused A2 with session a2-continue-20261103144837-72f30c9a; live SHA 0a1e260bb1e4cbe211cb05c3374bfd0e4d0af696.
+- Earlier SHA-pinned CanvasScaler 17/17 authentic serialized values CI41636519603 SUCCESS, but displayed Settings panel to UI Canvas pointer path unverified. This new independently scoped work reads exact original scenes0/1 and source-managed Settings CSharp9 and enumerates candidate raw references without claiming typed pointers.
+- Latest branch HEAD/Actions/release/CL checked read-only; current NOT_READY/0 of3 and independent water/render jobs unaffected.
