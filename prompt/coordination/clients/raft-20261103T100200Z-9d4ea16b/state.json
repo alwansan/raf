@@ -2,15 +2,15 @@
   "schema_version": 1,
   "username": "raft-20261103T100200Z-9d4ea16b",
   "client_label": "A10",
-  "session_id": "a10-20261103T1002Z-6037eacf",
+  "session_id": "a10-20261103T1055Z-92bdfa67",
   "resumed_from": null,
-  "status": "completed",
-  "updated_at": "2026-11-03T10:18:00Z",
-  "base_sha": "61a5811b06c39fcdb633c5559f884ce559ea7f0f",
+  "status": "active",
+  "updated_at": "2026-11-03T10:55:00Z",
+  "base_sha": "66d8e67da5b4ee610526452ccfb763b6c10e52fc",
   "current_work": [
-    "LOCAL-005"
+    "LOCAL-005: original SHA-pinned offline private source selection"
   ],
   "last_commit": "14dd7fce3257ec852ebb22ec76c22629d1a86b76",
-  "next_step": "A10 scoped selector fix and CI complete; broader LOCAL-005 integration/phone save readiness remain open for other owners.",
+  "next_step": "Investigate exact source-name collision in verify_android_offline_candidate.prepare; implement SHA-pinned selector, isolated synthetic tests, use non-Unity original offline CI; maintain NOT_READY.",
   "memory_path": "prompt/coordination/clients/raft-20261103T100200Z-9d4ea16b/MEMORY.md"
 }

@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "issue_id": "LOCAL-005",
+  "username": "raft-20261103T100200Z-9d4ea16b",
+  "work_id": "offline-original-sha-selection",
+  "status": "active",
+  "updated_at": "2026-11-03T10:55:00Z",
+  "base_sha": "66d8e67da5b4ee610526452ccfb763b6c10e52fc",
+  "depends_on": "14dd7fce3257ec852ebb22ec76c22629d1a86b76",
+  "hypothesis": "Private offline managed integration preparation currently counts any same-named C# file, rejecting original game code if SDK homonym exists; SHA pin selection should distinguish authentic original from unrelated SDK without guessing paths.",
+  "approach": "Select the unique non-symlink C# source whose normalized SHA256 matches PINS[name] before adapting; synthetic filename collision, wrong-digest, duplicates, BOM/CRLF fixtures. Execute existing real original no-LFS workflow.",
+  "intended_files": [
+    "scripts/verify_android_offline_candidate.py",
+    "tests/test_a10_offline_source_selection.py",
+    ".github/workflows/raft-android-offline-integration-tests.yml",
+    "prompt/coordination/work/LOCAL-005/raft-20261103T100200Z-9d4ea16b-offline-original-sha-selection.json",
+    "prompt/coordination/clients/raft-20261103T100200Z-9d4ea16b/MEMORY.md",
+    "prompt/coordination/clients/raft-20261103T100200Z-9d4ea16b/state.json",
+    "prompt/STATUS.md",
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+  ],
+  "coordination": "Other active A8 DIAG-010, A1 WATER, A2 DISPLAY, A3 HAPTICS; A6/A9 distinct platform local save classes. Do not modify their files, no Unity, APK, or assets.",
+  "constraints": [
+    "No original proprietary sources in commits or logs",
+    "Keep SHA pins and original .rgd untouched",
+    "Do not modify task or native request"
+  ],
+  "evidence": [],
+  "next_step": "Publish isolated selector and test first; verify on original SHA-checked CI."
+}

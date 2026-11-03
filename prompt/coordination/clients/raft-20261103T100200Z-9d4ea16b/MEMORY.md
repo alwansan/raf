@@ -25,3 +25,8 @@ Trace named local world and .rgd source files and test a concrete invariant; do 
 - [Save-path Actions https://github.com/alwansan/raf/actions/runs/41617920198](https://github.com/alwansan/raf/actions/runs/41617920198) completed SUCCESS at source 14dd7fce3257ec852ebb22ec76c22629d1a86b76; job125855914596: four existing + four new Python tests passed; original SHA-pinned private SaveAndLoad source remains unchanged beyond 16 idempotent path expressions, 14 Unix/Windows .NET checks passed. [Reconstruction preflight https://github.com/alwansan/raf/actions/runs/41617920208](https://github.com/alwansan/raf/actions/runs/41617920208) also SUCCESS. CI is not Unity or phone runtime proof.
 - The narrow selector work is completed. LOCAL-005 overall remains open for offline world create/load/resume/save .rgd integration and phone acceptance; WATER-001/RENDER-002 remain open. No native/Unity/APK/OBB/XAPK/release/task change by A10.
 - Last source result: 14dd7fce3257ec852ebb22ec76c22629d1a86b76. Check live branch HEAD and current Actions before follow-up; do not assume this commit remains tip.
+
+## A10 continuation — 2026-11-03T10:55:00Z
+
+Reopened this completed identity only after the owner's explicit Continue; new session_id a10-20261103T1055Z-92bdfa67.
+Reviewed live docs, HEAD, Actions, clients/work and original CL historical logs; previously published SaveAndLoad selector fix still present. New independent scope: exact SHA-pinned source selection in the original private no-LFS integration harness. A8 DIAG-010, A1 WATER, A2 DISPLAY, A3 HAPTICS are active separately; their files are excluded. Work plan: prompt/coordination/work/LOCAL-005/raft-20261103T100200Z-9d4ea16b-offline-original-sha-selection.json. No scheduled/native release actions.
