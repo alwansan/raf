@@ -10,6 +10,9 @@ remote=(src/"RemoteLogService.java").read_text()
 ui=(src/"MainActivity.java").read_text()
 signing=(root/"app/build.gradle").read_text()
 checks={
+    "pidof probe bounded to 2 seconds": 'p.waitFor(2000,java.util.concurrent.TimeUnit.MILLISECONDS)' in remote and 'p.destroyForcibly()' in remote,
+    "pidof output capped": 'found.length()<4096' in remote,
+    "pidof exit status checked after completion": 'int exit=p.exitValue();' in remote,
     "stable Android app identity": "applicationId 'com.alwansan.lograf'" in signing,
     "stable update signing key": "signing/lograf-public-test.p12" in signing,
     "version v0.6": "versionName '0.6.'" in signing,

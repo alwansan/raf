@@ -162,10 +162,21 @@ public final class RemoteLogService extends IRemoteLog.Stub {
             Process p = null;
             try {
                 p = new ProcessBuilder("pidof", packageName).redirectErrorStream(true).start();
+                // A wedged pidof must not freeze this thread indefinitely.
+                // pidof emits only a short PID list; wait for completion before
+                // reading, with a strict timeout and bounded output.
+                if(!p.waitFor(2000,java.util.concurrent.TimeUnit.MILLISECONDS)){
+                    p.destroyForcibly();
+                    throw new IOException("pidof_timeout");
+                }
                 StringBuilder found = new StringBuilder();
-                try (BufferedReader b = new BufferedReader(new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8))) {
-                    String line;
-                    while ((line=b.readLine()) != null) found.append(line).append(" ");
+                try (BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(p.getInputStream(),StandardCharsets.UTF_8))) {
+                    char[] chars=new char[256];
+                    int n;
+                    while(found.length()<4096 && (n=reader.read(chars,0,
+                            Math.min(chars.length,4096-found.length())))!=-1)
+                        found.append(chars,0,n);
                 }
                 Set<String> current = new HashSet<>();
                 for (String item : found.toString().trim().split("\\s+")) {
@@ -173,7 +184,7 @@ public final class RemoteLogService extends IRemoteLog.Stub {
                 }
                 // pidof may print a diagnostic instead of a PID, or exit
                 // nonzero. Never treat that as proof the game has exited.
-                int exit=p.waitFor();
+                int exit=p.exitValue();
                 // Android toybox pidof exits 1 when no matching process
                 // exists. That is a valid empty observation, not an I/O
                 // failure. A nonzero exit with PIDs or diagnostic output
