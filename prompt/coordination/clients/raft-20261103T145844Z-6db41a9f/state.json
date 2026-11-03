@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "username": "raft-20261103T145844Z-6db41a9f",
+  "client_label": "A9",
+  "session_id": "A9-20261103T145844Z-91c65a3f",
+  "resumed_from": "raft-20261103T121910Z-a9c47e01",
+  "status": "active",
+  "updated_at": "2026-11-03T15:00:06.569Z",
+  "base_sha": "0cee9fe8e0c11e615a7a410cc373013d494ca912",
+  "current_work": [
+    "AUDIO-004: original StreamingAssets root Git blob provenance"
+  ],
+  "last_commit": null,
+  "next_step": "Add immutable zip-source blob OID pin and fail-first co-mutated original bank/Data.rgd tests (CPU only)",
+  "memory_path": "prompt/coordination/clients/raft-20261103T145844Z-6db41a9f/MEMORY.md"
+}
