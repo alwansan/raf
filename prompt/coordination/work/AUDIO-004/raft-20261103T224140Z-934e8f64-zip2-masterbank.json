@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T224140Z-934e8f64",
+  "issue_id": "AUDIO-004",
+  "status": "active",
+  "updated_at": "2026-11-03T22:41:40.697Z",
+  "base_sha": "a87b3556563b277f1b047c14368341b48eb6f4cb",
+  "hypothesis": "Production original StreamingAssets stage currently requires hydrated LFS MasterBank.bank; verified ZIP2 original contains the same SHA split across Git blobs and can supply it without LFS using an authenticated narrow provider.",
+  "intended_files": [
+    "scripts/stage_zip2_master_bank.py",
+    "tests/test_stage_zip2_master_bank.py",
+    "scripts/stage_original_streaming_assets.py",
+    "tests/test_a9_streaming_stage_atomic.py",
+    ".github/workflows/raft-raft-20261103T224140Z-934e8f64-zip2-audio.yml",
+    "prompt/coordination/clients/raft-20261103T224140Z-934e8f64/*",
+    "prompt/coordination/work/AUDIO-004/raft-20261103T224140Z-934e8f64-zip2-masterbank.json",
+    "prompt/coordination/experiments/raft-20261103T224140Z-934e8f64/*",
+    "prompt/STATUS.md and latest handoff after CI"
+  ],
+  "related_work": [
+    "A1 ZIP2 FFT migration eac1f62/41731607739 is a separate source path",
+    "A9 completed immutable root blob staging 41660142521",
+    "A5 29 Haptics manifest SHA pin and A3 ZIP member checks remain untouched"
+  ],
+  "experiment_ids": [
+    "zip2-authenticated-masterbank-no-lfs"
+  ],
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41731607739"
+  ],
+  "result": null,
+  "next_step": "Execute fail-first and positive 101600960-byte no-LFS ZIP2-source reconstruction in CPU-only Actions."
+}
