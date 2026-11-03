@@ -65,3 +65,39 @@ class MemoryTests(unittest.TestCase):
             with patch('scripts.ci_memory_watch.docker_states',return_value=[]):out=summarize(p)
             self.assertEqual(out['samples'],1);self.assertEqual(out['minimum_available_kb'],123)
             self.assertEqual(out['maximum_top_process_rss_kb'],789)
+
+class MemoryUnavailableEvidenceTests(unittest.TestCase):
+    def test_missing_or_malformed_rss_does_not_become_measured_zero(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp)
+            (root/'meminfo').write_text('MemAvailable: 1024 kB\n')
+            for folder,status in {
+                '101': 'Name:\tNoRSS\n',
+                '102': 'Name:\tNegative\nVmRSS:\t-4 kB\n',
+                '103': 'Name:\tWrongUnit\nVmRSS:\t10 MB\n',
+                '104': 'Name:\tMalformed\nVmRSS:\tinvalid kB\n',
+                '105': 'Name:\tReal\nVmRSS:\t0 kB\n',
+                '106garbage': 'Name:\tFakePID\nVmRSS:\t9000 kB\n'
+            }.items():
+                folder_path=root/folder
+                folder_path.mkdir()
+                (folder_path/'status').write_text(status)
+            rows=sample(root)['largest_processes']
+            self.assertEqual(rows,[{'name':'Real','rss_kb':0}])
+            self.assertNotIn('NoRSS',json.dumps(rows))
+            self.assertNotIn('FakePID',json.dumps(rows))
+
+    def test_negative_or_unknown_host_memory_is_unavailable_not_measured(self):
+        for invalid in ('MemAvailable: -1 kB\n', 'MemAvailable: 12 MB\n',
+                        'MemAvailable: missing kB\n'):
+            with self.assertRaises(ValueError):
+                memory_fields(invalid)
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp)
+            (root/'meminfo').write_text('MemAvailable: -1 kB\n')
+            row=sample(root)
+            self.assertEqual(row['host_memory'],'unavailable')
+            self.assertNotIn('MemAvailable_kb',row)
+        self.assertEqual(memory_fields('MemAvailable: 0 kB\n'),
+                         {'MemAvailable_kb':0})
+

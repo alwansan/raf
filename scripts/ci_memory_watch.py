@@ -13,7 +13,13 @@ def memory_fields(text):
     result={}
     for line in text.splitlines():
         name,sep,value=line.partition(':')
-        if name in FIELDS: result[name+'_kb']=int(value.strip().split()[0])
+        if name in FIELDS:
+            pieces=value.strip().split()
+            if len(pieces)!=2 or pieces[1]!='kB':
+                raise ValueError('Missing/invalid host-memory unit')
+            amount=int(pieces[0])
+            if amount<0:raise ValueError('Negative host-memory counter')
+            result[name+'_kb']=amount
     return result
 
 def cgroup_memory_events(root):
@@ -39,10 +45,21 @@ def sample(proc=Path('/proc'),cgroup=Path('/sys/fs/cgroup')):
     row['cgroup_v2_memory_events']=events if events is not None else 'unavailable'
     processes=[]
     for path in proc.glob('[0-9]*/status'):
+        if not path.parent.name.isascii() or not path.parent.name.isdecimal():
+            continue  # A path with a numeric prefix is not necessarily a /proc PID.
         try:
             fields=dict(line.split(':',1) for line in path.read_text().splitlines() if ':' in line)
-            rss=int(fields.get('VmRSS','0 kB').split()[0])
-            processes.append({'name':fields.get('Name','').strip()[:50],'rss_kb':rss})
+            raw_rss=fields.get('VmRSS')
+            if raw_rss is None:
+                continue  # Missing data is unavailable, not a measured zero.
+            pieces=raw_rss.split()
+            if len(pieces)!=2 or pieces[1]!='kB':
+                continue
+            rss=int(pieces[0])
+            name=fields.get('Name','').strip()[:50]
+            if rss<0 or not name:
+                continue
+            processes.append({'name':name,'rss_kb':rss})
         except (OSError,ValueError):continue
     row['largest_processes']=sorted(processes,key=lambda x:x['rss_kb'],reverse=True)[:6]
     return row
