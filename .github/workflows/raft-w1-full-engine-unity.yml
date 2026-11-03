@@ -1,0 +1,112 @@
+name: Raft W1 complete original shader engine-key coverage in Unity Vulkan
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'android-port/Experiments/W1FullEngineUnity/**'
+      - 'scripts/w1_full_engine_sources.py'
+      - 'scripts/w1_prepare_full_engine_unity.py'
+      - '.github/workflows/raft-w1-full-engine-unity.yml'
+permissions:
+  contents: read
+concurrency:
+  group: raft-w1-full-engine-unity-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  exact-engine:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    environment: UNITY_LICENSE
+    concurrency:
+      group: raft-native-engine-${{ github.ref }}
+      cancel-in-progress: false
+      queue: max
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+            android-port/Experiments/W1EngineDatabase
+            android-port/Experiments/W1FullEngineUnity
+      - name: Check license readiness without exposing values
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        run: |
+          test -n "$UNITY_EMAIL" && test -n "$UNITY_PASSWORD"
+          test -n "$UNITY_LICENSE$UNITY_SERIAL"
+          python3 -c "import shutil; assert shutil.disk_usage('.').free > 20 * 1024**3"
+      - name: Synthetic identity controls before acquisition
+        run: python3 -m unittest discover -s tests -p test_w1_engine_database_mapping.py -v
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Obtain matching host asset-model source required by the internal generated package
+        uses: actions/checkout@v4
+        with:
+          repository: nowl-it/AssetRipperCLI
+          ref: 036098ab525a3f9f693dc101edeb21faad4d32d8
+          path: ar-host
+          persist-credentials: false
+          sparse-checkout: |
+            Source/AssetRipper.Assets
+            Source/AssetRipper.IO.Files
+      - name: Reflect exact pinned reader and extract private embedded engine shader database
+        run: |
+          dotnet run --project android-port/Experiments/W1EngineDatabase/W1EngineDatabase.csproj -c Release -- "$RUNNER_TEMP/w1-engine-database-private.json" "$RUNNER_TEMP/w1-exact-reader-summary.json"
+      - name: Restore verified originals before choosing Git payloads
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/w1-original
+          key: w1-zip2-15964ea8-full-shader-owners-v1
+          restore-keys: w1-zip2-15964ea8-four-owners-v1
+      - name: Choose only missing authenticated shader-owner payloads
+        id: needed
+        run: python3 -m scripts.w1_full_engine_sources --plan --destination "$RUNNER_TEMP/w1-original"
+      - uses: actions/checkout@v4
+        with:
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-original
+          filter: blob:none
+          lfs: false
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: ${{ steps.needed.outputs.paths }}
+      - name: Authenticate all fourteen original shader owners without LFS
+        run: python3 -m scripts.w1_full_engine_sources --zip2-checkout zip2-original --destination "$RUNNER_TEMP/w1-original"
+      - name: Prepare all original engine keys and different-pointer controls
+        run: |
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 -m scripts.w1_prepare_full_engine_unity --source "$RUNNER_TEMP/w1-original" --private-database "$RUNNER_TEMP/w1-engine-database-private.json" --reader-summary "$RUNNER_TEMP/w1-exact-reader-summary.json" --project w1-full-engine-project --out "$RUNNER_TEMP/w1-full-engine-map-summary.json"
+          cp android-port/Experiments/W1FullEngineUnity/Editor/FullEnginePointerValidation.cs w1-full-engine-project/Assets/Editor/
+      - name: Resolve original engine IDs and compile all matched private materials; no Player build
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: w1-full-engine-project
+          targetPlatform: Android
+          buildMethod: RaftW1Full.FullEnginePointerValidation.Validate
+          versioning: None
+          allowDirtyBuild: true
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2
+      - name: Retain aggregate evidence only; private engine database is excluded
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w1-full-engine-unity-aggregate-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/w1-exact-reader-summary.json
+            ${{ runner.temp }}/w1-full-engine-map-summary.json
+            w1-full-engine-project/ProbeResults/w1-full-engine-unity-summary.json
+          if-no-files-found: ignore
+          retention-days: 7
