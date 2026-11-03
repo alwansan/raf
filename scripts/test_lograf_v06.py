@@ -29,6 +29,8 @@ checks={
     "do not fake zero for missing fps": 'return 0.0' not in sampler[sampler.index('private Double presentedFps'):],
     "PSS rejection marker": '"rejected_pss_exceeds_rss"' in sampler,
     "queue stats visible in UI": "writer_pending_bytes" in ui and "frame_telemetry_stale" in ui,
+    "count only exact game process death events": 'processDeathEvents.incrementAndGet();' in remote[remote.index('packageName.equals(died.group(2).trim())'):] and remote.index('packageName.equals(died.group(2).trim())') < remote.index('processDeathEvents.incrementAndGet();'),
+    "no false death on colon worker process": 'packageName.equals(died.group(2).trim())' in remote,
     "exit PID requires exact event package": 'packageName.equals(died.group(2).trim())' in remote,
     "exit PID cannot fall back to stale last known": 'lastDeathPid.set(lastKnownPid.get())' not in remote,
     "stop-time exit evidence": 'remote.finalExitEvidence()' in capture and 'stop_time_android_process_exit_info' in capture,

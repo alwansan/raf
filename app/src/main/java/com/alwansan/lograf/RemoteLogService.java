@@ -181,17 +181,20 @@ public final class RemoteLogService extends IRemoteLog.Stub {
                             if(onlyContext) {
                                 systemContextLines.incrementAndGet();
                                 if(line.contains("am_proc_died") && line.contains(packageName)){
-                                    processDeathEvents.incrementAndGet();
-                                    lastDeathAtUnixMs.set(System.currentTimeMillis());
-                                    // am_proc_died is an event-buffer record, normally
-                                    // [userId,pid,processName,...]. Do not infer a PID
-                                    // from an unrelated last-seen process: that could
-                                    // attach a different process's exit cause.
+                                    // Count ONLY parseable death events for the exact target.
+                                    // A substring match alone can select a different process
+                                    // (e.g. com.alwansan.raft.androidtest:worker).
                                     Matcher died=Pattern.compile(
-                                            "\\[\\d+,(\\d+),([^,\\]]+)").matcher(line);
+                                            "\\[\\s*\\d+\\s*,\\s*(\\d+)\\s*,\\s*([^,\\]]+)").matcher(line);
                                     if(died.find() && packageName.equals(died.group(2).trim())){
-                                        try{lastDeathPid.set(Integer.parseInt(died.group(1)));}
-                                        catch(NumberFormatException ignored){}
+                                        try{
+                                            int exactPid=Integer.parseInt(died.group(1));
+                                            if(exactPid>0){
+                                                processDeathEvents.incrementAndGet();
+                                                lastDeathPid.set(exactPid);
+                                                lastDeathAtUnixMs.set(System.currentTimeMillis());
+                                            }
+                                        }catch(NumberFormatException ignored){}
                                     }
                                 }
                             } else {
