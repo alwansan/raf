@@ -1,0 +1,409 @@
+{
+  "preliminary_not_acceptance": {
+    "android_or_unity_render_proven": false,
+    "compute_lift_not_raster_or_depth_state": true,
+    "equal_pairs": 9,
+    "executed": 9,
+    "numeric_equivalence_all_inputs": false,
+    "original_object_sha256": "cf978dad4f4c67e57fb58448cee7a8c033c30d1491ef54b0a6ad887317fba75a",
+    "rows": [
+      {
+        "all_selected_equal": true,
+        "negative_controls_detected": {
+          "arithmetic": true,
+          "axis": true,
+          "resource": true
+        },
+        "original_dxbc_sha256": "077c727e4bd5493ca828aedf81b3ff41795d9e2acdd3a3a776702c7b080555ed",
+        "pass": 0,
+        "phase": "negative_execution",
+        "scenarios": [
+          {
+            "max_abs_difference": 0,
+            "nonfinite_components": 0,
+            "relative_l2_difference": 0,
+            "within_selected_tolerance": true,
+            "write_coverage_mismatch_pixels": 0
+          },
+          {
+            "max_abs_difference": 0,
+            "nonfinite_components": 0,
+            "relative_l2_difference": 0,
+            "within_selected_tolerance": true,
+            "write_coverage_mismatch_pixels": 0
+          },
+          {
+            "max_abs_difference": 0,
+            "nonfinite_components": 0,
+            "relative_l2_difference": 0,
+            "within_selected_tolerance": true,
+            "write_coverage_mismatch_pixels": 0
+          }
+        ],
+        "shape": {
+          "input_count": 1,
+          "output_is_depth": false,
+          "texture_slots": [
+            0
+          ]
+        },
+        "status": "executed",
+        "subshader": 0
+      },
+      {
+        "all_selected_equal": true,
+        "negative_controls_detected": {
+          "arithmetic": true,
+          "axis": true,
+          "resource": false
+        },
+        "original_dxbc_sha256": "0d0b125058f2296f9fa0885c230cccf5a54912a7e20ffea0d3af8e74868c2867",
+        "pass": 1,
+        "phase": "negative_execution",
+        "scenarios": [
+          {
+            "max_abs_difference": 0,
+            "nonfinite_components": 0,
+            "relative_l2_difference": 0,
+            "within_selected_tolerance": true,
+            "write_coverage_mismatch_pixels": 0
+          },
+          {
+            "max_abs_difference": 0,
+            "nonfinite_components": 0,
+            "relative_l2_difference": 0,
+            "within_selected_tolerance": true,
+            "write_coverage_mismatch_pixels": 0
+          },
+          {
+            "max_abs_difference": 0,
+            "nonfinite_components": 0,
+            "relative_l2_difference": 0,
+            "within_selected_tolerance": true,
+            "write_coverage_mismatch_pixels": 0
+          }
+        ],
+        "shape": {
+          "input_count": 1,
+          "output_is_depth": false,
+          "texture_slots": [
+            0,
+            1
+          ]
+        },
+        "status": "executed",
+        "subshader": 0
+      },
+      {
+        "all_selected_equal": true,
+        "negative_controls_detected": {
+          "arithmetic": true,
+          "axis": true,
+          "resource": false
+        },
+        "original_dxbc_sha256": "d5b6a9be8d9dffff0f3d53458d0865bf801e3bdf9f3470408599ef35b14d69e5",
+        "pass": 2,
+        "phase": "negative_execution",
+        "scenarios": [
+          {
+            "max_abs_difference": 0,
+            "nonfinite_components": 0,
+            "relative_l2_difference": 0,
+            "within_selected_tolerance": true,
+            "write_coverage_mismatch_pixels": 0
+          },
+          {
+            "max_abs_difference": 0,
+            "nonfinite_components": 0,
+            "relative_l2_difference": 0,
+            "within_selected_tolerance": true,
+            "write_coverage_mismatch_pixels": 0
+          },
+          {
+            "max_abs_difference": 0,
+            "nonfinite_components": 0,
+            "relative_l2_difference": 0,
+            "within_selected_tolerance": true,
+            "write_coverage_mismatch_pixels": 0
+          }
+        ],
+        "shape": {
+          "input_count": 1,
+          "output_is_depth": false,
+          "texture_slots": [
+            0,
+            1
+          ]
+        },
+        "status": "executed",
+        "subshader": 0
+      },
+      {
+        "all_selected_equal": true,
+        "negative_controls_detected": {
+          "arithmetic": true,
+          "axis": true,
+          "resource": true
+        },
+        "original_dxbc_sha256": "121f19fed36df3e06a390d3dc3ab5148be4d1a6ca309f5ef2b7f4fe3b7fde78b",
+        "pass": 3,
+        "phase": "negative_execution",
+        "scenarios": [
+          {
+            "max_abs_difference": 0,
+            "nonfinite_components": 0,
+            "relative_l2_difference": 0,
+            "within_selected_tolerance": true,
+            "write_coverage_mismatch_pixels": 0
+          },
+          {
+            "max_abs_difference": 0,
+            "nonfinite_components": 0,
+            "relative_l2_difference": 0,
+            "within_selected_tolerance": true,
+            "write_coverage_mismatch_pixels": 0
+          },
+          {
+            "max_abs_difference": 0,
+            "nonfinite_components": 0,
+            "relative_l2_difference": 0,
+            "within_selected_tolerance": true,
+            "write_coverage_mismatch_pixels": 0
+          }
+        ],
+        "shape": {
+          "input_count": 1,
+          "output_is_depth": true,
+          "texture_slots": [
+            0
+          ]
+        },
+        "status": "executed",
+        "subshader": 0
+      },
+      {
+        "all_selected_equal": true,
+        "negative_controls_detected": {
+          "arithmetic": true,
+          "axis": true,
+          "resource": false
+        },
+        "original_dxbc_sha256": "27269754cddd8805739a436ebb7624b3154c802fc91d37a0d5e435812683b7f5",
+        "pass": 4,
+        "phase": "negative_execution",
+        "scenarios": [
+          {
+            "max_abs_difference": 0,
+            "nonfinite_components": 0,
+            "relative_l2_difference": 0,
+            "within_selected_tolerance": true,
+            "write_coverage_mismatch_pixels": 0
+          },
+          {
+            "max_abs_difference": 0,
+            "nonfinite_components": 0,
+            "relative_l2_difference": 0,
+            "within_selected_tolerance": true,
+            "write_coverage_mismatch_pixels": 0
+          },
+          {
+            "max_abs_difference": 0,
+            "nonfinite_components": 0,
+            "relative_l2_difference": 0,
+            "within_selected_tolerance": true,
+            "write_coverage_mismatch_pixels": 0
+          }
+        ],
+        "shape": {
+          "input_count": 1,
+          "output_is_depth": true,
+          "texture_slots": [
+            0,
+            1
+          ]
+        },
+        "status": "executed",
+        "subshader": 0
+      },
+      {
+        "all_selected_equal": true,
+        "negative_controls_detected": {
+          "arithmetic": true,
+          "axis": true,
+          "resource": false
+        },
+        "original_dxbc_sha256": "1ebe1163be711492e0c1d397ec0c6fa0d0c70a69d2a4372b98653fbda61f3307",
+        "pass": 5,
+        "phase": "negative_execution",
+        "scenarios": [
+          {
+            "max_abs_difference": 0,
+            "nonfinite_components": 0,
+            "relative_l2_difference": 0,
+            "within_selected_tolerance": true,
+            "write_coverage_mismatch_pixels": 0
+          },
+          {
+            "max_abs_difference": 0,
+            "nonfinite_components": 0,
+            "relative_l2_difference": 0,
+            "within_selected_tolerance": true,
+            "write_coverage_mismatch_pixels": 0
+          },
+          {
+            "max_abs_difference": 0,
+            "nonfinite_components": 0,
+            "relative_l2_difference": 0,
+            "within_selected_tolerance": true,
+            "write_coverage_mismatch_pixels": 0
+          }
+        ],
+        "shape": {
+          "input_count": 1,
+          "output_is_depth": true,
+          "texture_slots": [
+            0,
+            1
+          ]
+        },
+        "status": "executed",
+        "subshader": 0
+      },
+      {
+        "all_selected_equal": true,
+        "negative_controls_detected": {
+          "arithmetic": true,
+          "axis": true,
+          "resource": true
+        },
+        "original_dxbc_sha256": "077c727e4bd5493ca828aedf81b3ff41795d9e2acdd3a3a776702c7b080555ed",
+        "pass": 0,
+        "phase": "negative_execution",
+        "scenarios": [
+          {
+            "max_abs_difference": 0,
+            "nonfinite_components": 0,
+            "relative_l2_difference": 0,
+            "within_selected_tolerance": true,
+            "write_coverage_mismatch_pixels": 0
+          },
+          {
+            "max_abs_difference": 0,
+            "nonfinite_components": 0,
+            "relative_l2_difference": 0,
+            "within_selected_tolerance": true,
+            "write_coverage_mismatch_pixels": 0
+          },
+          {
+            "max_abs_difference": 0,
+            "nonfinite_components": 0,
+            "relative_l2_difference": 0,
+            "within_selected_tolerance": true,
+            "write_coverage_mismatch_pixels": 0
+          }
+        ],
+        "shape": {
+          "input_count": 1,
+          "output_is_depth": false,
+          "texture_slots": [
+            0
+          ]
+        },
+        "status": "executed",
+        "subshader": 1
+      },
+      {
+        "all_selected_equal": true,
+        "negative_controls_detected": {
+          "arithmetic": true,
+          "axis": true,
+          "resource": false
+        },
+        "original_dxbc_sha256": "0d0b125058f2296f9fa0885c230cccf5a54912a7e20ffea0d3af8e74868c2867",
+        "pass": 1,
+        "phase": "negative_execution",
+        "scenarios": [
+          {
+            "max_abs_difference": 0,
+            "nonfinite_components": 0,
+            "relative_l2_difference": 0,
+            "within_selected_tolerance": true,
+            "write_coverage_mismatch_pixels": 0
+          },
+          {
+            "max_abs_difference": 0,
+            "nonfinite_components": 0,
+            "relative_l2_difference": 0,
+            "within_selected_tolerance": true,
+            "write_coverage_mismatch_pixels": 0
+          },
+          {
+            "max_abs_difference": 0,
+            "nonfinite_components": 0,
+            "relative_l2_difference": 0,
+            "within_selected_tolerance": true,
+            "write_coverage_mismatch_pixels": 0
+          }
+        ],
+        "shape": {
+          "input_count": 1,
+          "output_is_depth": false,
+          "texture_slots": [
+            0,
+            1
+          ]
+        },
+        "status": "executed",
+        "subshader": 1
+      },
+      {
+        "all_selected_equal": true,
+        "negative_controls_detected": {
+          "arithmetic": true,
+          "axis": true,
+          "resource": false
+        },
+        "original_dxbc_sha256": "d5b6a9be8d9dffff0f3d53458d0865bf801e3bdf9f3470408599ef35b14d69e5",
+        "pass": 2,
+        "phase": "negative_execution",
+        "scenarios": [
+          {
+            "max_abs_difference": 0,
+            "nonfinite_components": 0,
+            "relative_l2_difference": 0,
+            "within_selected_tolerance": true,
+            "write_coverage_mismatch_pixels": 0
+          },
+          {
+            "max_abs_difference": 0,
+            "nonfinite_components": 0,
+            "relative_l2_difference": 0,
+            "within_selected_tolerance": true,
+            "write_coverage_mismatch_pixels": 0
+          },
+          {
+            "max_abs_difference": 0,
+            "nonfinite_components": 0,
+            "relative_l2_difference": 0,
+            "within_selected_tolerance": true,
+            "write_coverage_mismatch_pixels": 0
+          }
+        ],
+        "shape": {
+          "input_count": 1,
+          "output_is_depth": false,
+          "texture_slots": [
+            0,
+            1
+          ]
+        },
+        "status": "executed",
+        "subshader": 1
+      }
+    ],
+    "source_sha": "9c84dd23112e1d3318cf7a0d393444df84c46a55"
+  },
+  "reason_ci_failed": "Two-resource exchange is nondiscriminating for six fragment occurrences; retain failure, replace with resource alias control before acceptance",
+  "next_source": "0eae48c39c620f05d678705cdcb5198b9955c6da",
+  "next_run_id": 41672408152
+}
