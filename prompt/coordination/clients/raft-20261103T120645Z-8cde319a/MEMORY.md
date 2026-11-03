@@ -1,3 +1,10 @@
 # A3 resumed RENDER-002 — shader restoration filesystem preflight
 
 New independent ID raft-20261103T120645Z-8cde319a / a3-20261103T120645Z-symlink-0f43e9b2, resumed from completed A3 Haptics session. Read live owner prompts/AGENTS/coordination, latest STATUS/handoff, HEAD, Actions, CL roots, releases, competing RENDER-002 work. A9 ShaderLab identity work is completed with CI41629545455; no overlap with its test files. Live last native run41624581951 failed earlier before Unity, unrelated to this proposed integrity guard. Source: `scripts/restore_builtin_shaders.py` writes MIT license and includes under Assets; test whether pre-existing symlinked parent escapes project even if leaf is not itself symlink. Hold strict no-match gate and original GUID preservation. No Unity or native build.
+
+## A3 source-path red/green verified — 2026-11-03T12:20Z
+
+REAL original utility `scripts/restore_builtin_shaders.py` had no parent-symlink gate. RED [CI41633814002](https://github.com/alwansan/raf/actions/runs/41633814002) at e62aedc failed exactly3/4 A3 fixture tests (three unintended redirects) while positive case passed. GREEN [source d93f6aec](https://github.com/alwansan/raf/commit/d93f6aecac8214057debfc1d18eda85b6fa50ce1), [A3 CI41634098552](https://github.com/alwansan/raf/actions/runs/41634098552) SUCCESS: 4/4 new A3 +4/4 A9 +10/10 existing. [A9 CI41634098651](https://github.com/alwansan/raf/actions/runs/41634098651) and [vendor original-version archive CI41634098559](https://github.com/alwansan/raf/actions/runs/41634098559) SUCCESS: 198 verified Unity2021.3.45f2 built-ins, 5 sample matches, 29 include dependencies, GUID metadata unchanged. Report [docs/A3_BUILTIN_SHADER_PATH_SAFETY_2026-11-03.md](../docs/A3_BUILTIN_SHADER_PATH_SAFETY_2026-11-03.md).
+
+This fixes only unsafe exported-shader source/path redirection, does not solve native41624581951's zero built-in matches or original UltimateWater/FFT rendering. RENDER-002/WATER-001/FFT-FORMAT-009 OPEN, candidate absent, NOT_READY, full candidate reviews0/3. No Unity/APK/OBB/XAPK/native request, CL, original game/shader/meta/GUID or schedule change.
+
