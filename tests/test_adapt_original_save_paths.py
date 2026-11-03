@@ -57,3 +57,28 @@ class SavePathTests(unittest.TestCase):
             self.assertEqual(source.read_bytes(), original)
             self.assertEqual(metadata.read_bytes(), meta_bytes)
             self.assertFalse(backup.exists())
+
+    def test_dangling_backup_leaf_cannot_redirect_original_save_source(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source = root / 'project/Assets/Assembly-CSharp/SaveAndLoad.cs'
+            source.parent.mkdir(parents=True)
+            source.write_bytes(b'class SaveAndLoad {}\n')
+            meta = source.with_suffix('.cs.meta')
+            meta.write_bytes(b'guid: synthetic-save\n')
+            backup = root / 'backup'
+            backup.mkdir()
+            outside = root / 'outside-source.cs'
+            try:
+                (backup / 'SaveAndLoad.cs').symlink_to(outside)
+            except (OSError, NotImplementedError):
+                self.skipTest('File symlinks unavailable')
+            self.assertFalse((backup / 'SaveAndLoad.cs').exists())
+            self.assertTrue((backup / 'SaveAndLoad.cs').is_symlink())
+            with patch('scripts.adapt_original_save_paths.adapt',
+                       side_effect=lambda text: text + '\n// synthetic adapted'):
+                with self.assertRaisesRegex(ValueError, 'backup'):
+                    apply(root / 'project', backup, write=True)
+            self.assertFalse(outside.exists())
+            self.assertEqual(source.read_bytes(), b'class SaveAndLoad {}\n')
+            self.assertEqual(meta.read_bytes(), b'guid: synthetic-save\n')

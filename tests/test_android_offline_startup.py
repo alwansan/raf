@@ -99,3 +99,29 @@ class AndroidOfflineStartupTests(unittest.TestCase):
             self.assertEqual(source.read_text(), original)
             self.assertEqual(meta.read_bytes(), b'guid: synthetic-offline\n')
             self.assertFalse(backup.exists())
+
+    def test_dangling_backup_leaf_cannot_redirect_original_offline_source(self):
+        original = 'class Settings { int v = SteamApps.GetAppBuildId(); }'
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source = root / 'project/Assets/Assembly-CSharp/Settings.cs'
+            source.parent.mkdir(parents=True)
+            source.write_text(original)
+            meta = source.with_suffix('.cs.meta')
+            meta.write_bytes(b'guid: synthetic-settings\n')
+            backup = root / 'backup'
+            backup.mkdir()
+            outside = root / 'outside-settings.cs'
+            try:
+                (backup / 'Settings.cs').symlink_to(outside)
+            except (OSError, NotImplementedError):
+                self.skipTest('File symlinks unavailable')
+            self.assertFalse((backup / 'Settings.cs').exists())
+            self.assertTrue((backup / 'Settings.cs').is_symlink())
+            with patch('scripts.adapt_android_offline_startup.PINS',
+                       {'Settings': fingerprint(original)}):
+                with self.assertRaisesRegex(ValueError, 'backup'):
+                    apply(root / 'project', backup, True)
+            self.assertFalse(outside.exists())
+            self.assertEqual(source.read_text(), original)
+            self.assertEqual(meta.read_bytes(), b'guid: synthetic-settings\n')
