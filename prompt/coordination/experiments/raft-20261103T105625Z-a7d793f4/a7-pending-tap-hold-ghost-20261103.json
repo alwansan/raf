@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "owner": "raft-20261103T105625Z-a7d793f4",
-  "status": "in_progress",
+  "status": "completed",
   "hypothesis": "Queued short taps created before an active long hold, or Tap requested during that hold, can replay AFTER Hold(false) as an unintended Mouse0 click.",
   "input_hashes": [
     "TouchPointerButtons.cs original blob 8db44fe3510be94008d6fb3c773f69a1057e598f",
@@ -24,11 +24,11 @@
   "budget": "Existing push-triggered CPU-only platform CI, 10 minute timeout, no LFS/Unity/APK",
   "run_url": "https://github.com/alwansan/raf/actions/runs/41624267337",
   "source_sha": "8570d2e6efc5d73000b4f515fa299bbd2582f539",
-  "result": "RED verified: run41623753511 failed at exact custom ghost-tap-after-hold-release assertion; post-fix CI pending.",
+  "result": "RED run41623753511 completed failure at custom ghost-tap-after-hold-release before fix. Runtime fix7693ea6c GREEN run41624236216 427 touch checks,53 mapping checks. Final test commit8570d2e6 GREEN run41624267337 430 gesture checks,53 mouse mapping checks; original offline source CI41624236295 completed success. No Unity or phone test.",
   "limitations": [
     "No on-phone test; no Unity InputSystem integration",
     "One policy tradeoff: queued clicks superseded by a new held gesture are deliberately discarded rather than replayed after release",
     "CI mapping harness preserves only synthetic/legacy physical-path semantics, not device validation"
   ],
-  "next_step": "Read green platform job logs; document 500ms/Mouse0 test totals and update shared STATUS/handoff."
+  "next_step": "Bounded source fix complete. Track device only after actual readiness; no extra Unity or APK authorized."
 }
