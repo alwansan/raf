@@ -94,17 +94,12 @@ def decode_record(raw, tree):
         raise ValueError("Original MonoBehaviour name is non-empty or unresolved")
     if not isinstance(identifier, str) or identifier:
         raise ValueError("Original MonoBehaviour editor identifier unexpected")
-    if struct.unpack_from("<i", raw, 28)[0] != 0 or struct.unpack_from("<i", raw, 32)[0] != 0:
-        raise ValueError("Original MonoBehaviour base name/editor string lengths mismatch" +
-                         " int28=" + str(struct.unpack_from("<i", raw, 28)[0]) +
-                         " int32=" + str(struct.unpack_from("<i", raw, 32)[0]) +
-                         " typed_editor_class_identifier_present=" + str("m_EditorClassIdentifier" in tree) +
-                         " typed_editor_flags_present=" + str("m_EditorHideFlags" in tree) +
-                         " candidate_offset32=" + str(plausible_custom_at(raw, 32)) +
-                         " candidate_offset36=" + str(plausible_custom_at(raw, 36)) +
-                         " last4_allzero=" + str(raw[76:80] == b"\\x00\\x00\\x00\\x00"))
+    if struct.unpack_from("<i", raw, 28)[0] != 0:
+        raise ValueError("Original MonoBehaviour base name string length mismatch")
+    if not plausible_custom_at(raw, 32):
+        raise ValueError("Original CanvasScaler candidate custom field layout implausible")
     (ui_mode, ref_ppu, scale_factor, width, height, match_mode,
-     match_width, physical_unit, fallback_dpi, default_sprite_dpi, dynamic_ppu) = CUSTOM.unpack_from(raw, BASE_BYTES)
+     match_width, physical_unit, fallback_dpi, default_sprite_dpi, dynamic_ppu) = CUSTOM.unpack_from(raw, 32)
     numeric = (ref_ppu, scale_factor, width, height, match_width,
                fallback_dpi, default_sprite_dpi, dynamic_ppu)
     if not all(math.isfinite(v) for v in numeric):
@@ -116,8 +111,15 @@ def decode_record(raw, tree):
             0 <= match_width <= 1 and 0 < fallback_dpi <= 2000 and
             0 < default_sprite_dpi <= 2000 and 0 < dynamic_ppu <= 2000):
         raise ValueError("Original CanvasScaler float outside bounded UI contract")
-    # Return only aggregate presentation categories, not raw bytes or any name.
+    # Source has an unexplained extra four bytes after the ten expected fields.
+    # Never identify the tail as a known CanvasScaler setting or assert a full
+    # Unity serializer match without independent original serialized metadata.
+    trailer = raw[76:80]
+    trailer_float = struct.unpack("<f", trailer)[0]
     return {
+        "unexplained_trailing_bytes": len(trailer),
+        "trailer_is_finite_float": math.isfinite(trailer_float),
+        "trailer_float_is_positive": math.isfinite(trailer_float) and trailer_float > 0,
         "ui_scale_mode": ui_mode,
         "reference_resolution": [width, height],
         "screen_match_mode": match_mode,
@@ -177,7 +179,7 @@ def audit(root, managed, ilspy, loader=None):
         if hit != (4 if name == "level0" else 13):
             raise ValueError("Original source CanvasScaler inventory unexpectedly changed")
         results[name] = {
-            "scalers_decoded": hit,
+            "scalers_with_consistent_candidate_layout": hit,
             "profiles": [{"config": json.loads(p), "count": count}
                          for p, count in sorted(profile_counts.items())],
         }
@@ -186,8 +188,9 @@ def audit(root, managed, ilspy, loader=None):
         "original_decompiled_canvas_scaler_sha256": meta["original_ilspy_class_sha256"],
         "base_header_bytes_independently_matched_to_typed_original": BASE_BYTES,
         "custom_fields_bytes": CUSTOM.size,
-        "original_serialized_field_order_correlated_with_metadata_and_bytes": True,
-        "authentic_original_scaler_custom_values_structurally_decoded": True,
+        "original_serialized_field_order_correlated_with_metadata_and_bytes": False,
+        "authentic_original_scaler_custom_values_structurally_decoded": False,
+        "provisional_interpretation_only_due_to_unresolved_trailing_four_bytes": True,
         "scenes": results,
         "android_settings_page_link_proven": False,
         "android_aspect_regression_cause_proven": False,

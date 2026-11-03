@@ -34,6 +34,12 @@ FIELD_TYPES = {
     "m_DefaultSpriteDPI": "float",
     "m_DynamicPixelsPerUnit": "float",
 }
+
+ALL_INSTANCE_M_FIELDS = re.compile(
+    r"\b(?:private|public|protected|internal)\s+"
+    r"(?:(?:readonly)\s+)*"
+    r"(?P<type>[A-Za-z_]\w*)\s+(?P<field>m_[A-Za-z_]\w*)\s*(?=[;=])"
+)
 DECL = re.compile(
     r"\b(?:private|public|protected|internal)\s+"
     r"(?:(?:static|readonly)\s+)*"
@@ -64,6 +70,8 @@ def managed_fields(text):
         if field not in FIELD_TYPES:
             continue
         collected.append((field, match.group("type")))
+    extras = [(m.group("field"), m.group("type")) for m in ALL_INSTANCE_M_FIELDS.finditer(code)
+              if m.group("field") not in FIELD_TYPES]
     names = [a for a, _ in collected]
     if len(names) != len(set(names)):
         raise ValueError("Duplicate original CanvasScaler serialized fields")
@@ -73,6 +81,8 @@ def managed_fields(text):
     # serialized TypeTree. Report unknown rather than promising byte offsets.
     return {
         "fields_matched": names,
+        "additional_instance_m_field_declarations": len(extras),
+        "additional_instance_m_field_name_sha256": sorted(hashlib.sha256(n.encode()).hexdigest() for n, _ in extras),
         "field_count": len(names),
         "field_types_match_expected": not types_mismatch,
         "original_ilspy_class_sha256": hashlib.sha256(text.encode()).hexdigest(),

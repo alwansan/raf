@@ -17,8 +17,9 @@ def generated_record(*, go=5, script=123, ui=1, width=1280.0, height=720.0,
     raw = (struct.pack("<iq", 0, go) +
            struct.pack("<BB2x", enabled, 0) +
            struct.pack("<iq", 1, script) +
-           struct.pack("<ii", 0, 0) +
-           CUSTOM.pack(ui, 100, 1, width, height, mode, match, 2, 96, 96, 1))
+           struct.pack("<i", 0) +
+           CUSTOM.pack(ui, 100, 1, width, height, mode, match, 2, 96, 96, 1) +
+           struct.pack("<f", 1))
     assert len(raw) == BASE_BYTES + CUSTOM.size == 80
     return raw, typed
 
@@ -35,6 +36,8 @@ class A2StrictScalerValuesTests(unittest.TestCase):
         raw, typed = generated_record()
         decoded = decode_record(raw, typed)
         self.assertEqual(decoded["reference_resolution"], [1280., 720.])
+        self.assertEqual(decoded["unexplained_trailing_bytes"], 4)
+        self.assertTrue(decoded["trailer_is_finite_float"])
         self.assertEqual(decoded["ui_scale_mode"], 1)
         self.assertEqual(decoded["match_width_or_height"], 0.5)
         self.assertEqual(decoded["screen_match_mode"], 0)
