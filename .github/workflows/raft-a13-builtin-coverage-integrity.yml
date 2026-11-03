@@ -1,0 +1,38 @@
+name: Raft A13 built-in export coverage integrity (CPU only)
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - 'scripts/probe_builtin_export_coverage.py'
+      - 'tests/test_a13_builtin_coverage_integrity.py'
+      - '.github/workflows/raft-a13-builtin-coverage-integrity.yml'
+permissions:
+  contents: read
+concurrency:
+  group: raft-a13-coverage-integrity-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  coverage-integrity:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: A13 synthetic read-only shader coverage integrity checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/raft-a13-coverage"
+          python3 -m unittest discover -s tests -p test_a13_builtin_coverage_integrity.py -v 2>&1 | tee "$RUNNER_TEMP/raft-a13-coverage/cpu-results.txt"
+      - name: Retain synthetic-only aggregate test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: raft-a13-builtin-coverage-counts-${{ github.run_id }}
+          path: ${{ runner.temp }}/raft-a13-coverage/cpu-results.txt
+          if-no-files-found: ignore
+          retention-days: 7
