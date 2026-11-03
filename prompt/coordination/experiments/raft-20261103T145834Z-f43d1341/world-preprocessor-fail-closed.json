@@ -3,7 +3,7 @@
   "owner": "raft-20261103T145834Z-f43d1341",
   "issue_id": "LOCAL-005",
   "experiment_id": "world-preprocessor-fail-closed",
-  "status": "running",
+  "status": "completed",
   "hypothesis": "Unknown C# compilation symbols permit disabled method-local text to be mis-certified by structural regex.",
   "input_hashes": [],
   "commands": [
@@ -24,12 +24,14 @@
   "budget": "No new native/Unity/LFS; existing no-LFS offline integration 12min timeout; two push-triggered runs because GitHub file-SHA updates were serialized on busy shared branch.",
   "source_sha": "1846c5de0f80aa95cd2efb66c9d55549ac131ff8",
   "run_url": "https://github.com/alwansan/raf/actions/runs/41660089549",
-  "result": null,
+  "result": "CI41660089549 SUCCESS on source1846c5de; 9/9 synthetic world probe, authenticated original world contract, local RPC/identity harness, original managed compile exit0 errors0.",
   "limitations": [
     "Source-only lexical fail-closed, not preprocessor symbol resolution",
     "No original C# game source modification",
     "No Unity/Android/phone gameplay proof",
-    "Does not close LOCAL-005 pre-build integration"
+    "Does not close LOCAL-005 pre-build integration",
+    "No original C# preprocessor defines evaluated; directives are rejected rather than resolved"
   ],
-  "next_step": "Check run41660089549 final conclusion and fail logs if any; update client state, MEMORY and status if validated."
+  "next_step": "Keep LOCAL-005 open for genuine create/load/save .rgd and device evidence; future diagnostic work under another session.",
+  "completed_at": "2026-11-03T15:06:43.715Z"
 }
