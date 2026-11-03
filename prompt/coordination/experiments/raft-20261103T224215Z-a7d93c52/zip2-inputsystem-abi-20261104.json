@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "owner": "raft-20261103T224215Z-a7d93c52",
-  "status": "planned",
+  "status": "completed",
   "hypothesis": "Actual original Unity.InputSystem.dll API must be checked for exact public StateEvent.GetState<TouchState> and touch field compatibility, rather than trusting only upstream source and test doubles.",
   "input_hashes": [
     "ZIP2 commit 15964ea8f246b6e076ce26b60931ee2e1a9a2385",
@@ -23,12 +23,14 @@
   "concurrency_group": "raft-a7-zip2-inputsystem-contract-feature-android-native-port",
   "artifact_prefix": null,
   "budget": "Only 1.05 MiB original DLL + metadata small file, no LFS, ubuntu-24.04, 8-minute timeout, no Unity/native",
-  "run_url": null,
-  "source_sha": null,
-  "result": null,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41734563980",
+  "source_sha": "24688691567ccc84177a8d97e3e699bac6de9d6e",
+  "result": "Initial CPU workflow41734239232 correctly authenticated original ZIP2 bytes but checker incorrectly required phase as field; workflow41734394488 corrected this but checker incorrectly required InputSystem.onEvent as CLR add-event. After modeling exact original phaseId+phase property and onEvent public read/write property, final source24688691567 CI41734563980 SUCCESS: metadata_types639, original sha/size verified, all public TouchState/GetState/IsA/InputSystem surface checks and 2 hash/manifest tamper negative controls pass.",
   "limitations": [
-    "Original managed DLL metadata is not Android/Unity runtime ABI acceptance",
-    "No actual phone or GPU proof"
+    "Original ZIP2 Windows Unity.InputSystem DLL metadata compatibility only, no Android device execution",
+    "No Unity Editor compilation of authored AndroidTouchPointer",
+    "No proof of UGUI/Xbox dual-touch routing at runtime or overall game readiness",
+    "No LFS fetch, source payload copying, Unity build, APK/OBB/XAPK or release"
   ],
-  "next_step": "Run lightweight workflow and record exact source SHA + outcomes."
+  "next_step": "Scoped successful ABI verification done; later readiness-approved Unity/API integration and phone input acceptance."
 }
