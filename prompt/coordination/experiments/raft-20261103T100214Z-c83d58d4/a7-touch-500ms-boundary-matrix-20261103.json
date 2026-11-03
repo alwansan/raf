@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T100214Z-c83d58d4",
+  "status": "in_progress",
+  "hypothesis": "Exact 499/500/501ms boundary, different absolute input clocks, cancellation and multi-touch owner stability must preserve one LEFT tap or balanced hold; large bounded pulse queues must release between taps.",
+  "input_hashes": [
+    "TouchPointerGesture.cs blob a892a110d8fc2992449a7e93a53be3ddc0d5f2c9",
+    "TouchPointerButtons.cs blob 8db44fe3510be94008d6fb3c773f69a1057e598f",
+    "Program.cs blob 7737e0be827ff77df35844e2331c1939c6f5bf8b"
+  ],
+  "commands": [
+    "dotnet run --project android-port/Tests/TouchPointer/TouchPointer.csproj --configuration Release --nologo"
+  ],
+  "expected_signal": "No exceptions; RAFT_TOUCH_POINTER_GESTURE passed=true and increased check count from dedicated BoundaryMatrix; invalid shifts/cancel/owner/pulse controls would fail.",
+  "negative_controls": [
+    "499ms must NOT hold; 500ms MUST hold",
+    "cancelled short tap must not synthesize Tap",
+    "second finger must not terminate first gesture",
+    "128 queued taps must alternate true/false"
+  ],
+  "workflow_path": ".github/workflows/raft-android-platform-tests.yml",
+  "concurrency_group": null,
+  "artifact_prefix": null,
+  "budget": "Existing push-triggered CPU-only platform CI; <=10min; no LFS; no Unity",
+  "run_url": null,
+  "source_sha": null,
+  "result": "Pending CI; C# additions only and no production source change",
+  "limitations": [
+    "No dotnet compiler in local sandbox; CI required to run actual C# code",
+    "Not Unity InputSystem/EventSystem or device evidence"
+  ],
+  "next_step": "Check completed platform workflow and document actual results before claiming regression coverage."
+}

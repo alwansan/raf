@@ -5,12 +5,12 @@
   "session_id": "A7-20261103T100214Z-4121ce131222",
   "resumed_from": null,
   "status": "active",
-  "updated_at": "2026-11-03T10:02:14Z",
-  "base_sha": "cb95d4bb8b736013f996a7583e434775a5160223",
+  "updated_at": "2026-11-03T10:04:00Z",
+  "base_sha": "ec17a43e210a09fcffc9cfa9078e90db4abaa385",
   "current_work": [
     "INPUT-005"
   ],
   "last_commit": null,
-  "next_step": "Inspect current Android LEFT Mouse0 gesture & mapping and source/CI, find a falsifiable independent defect, add bounded CPU-only regression, preserve assets/peripherals.",
+  "next_step": "Execute boundary matrix with existing CPU-only platform CI; inspect logs; finalize experiment evidence.",
   "memory_path": "prompt/coordination/clients/raft-20261103T100214Z-c83d58d4/MEMORY.md"
 }

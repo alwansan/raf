@@ -58,6 +58,7 @@ class Program
         buttons.Hold(false); Require(!buttons.Pressed);
         buttons.Tap(); buttons.Tap(); buttons.Cancel(); buttons.BeginUpdate(); buttons.BeginUpdate();
         Require(!buttons.Pressed && transitions.Last() == false);
+        checks += BoundaryMatrix.Run();
         Console.WriteLine("RAFT_TOUCH_POINTER_GESTURE checks=" + checks + " holdMilliseconds=500 passed=true actualUnityDeviceExecution=false");
     }
 }

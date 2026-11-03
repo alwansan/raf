@@ -2,10 +2,10 @@
   "schema_version": 1,
   "owner": "raft-20261103T100214Z-c83d58d4",
   "issue_id": "INPUT-005",
-  "status": "planned",
-  "updated_at": "2026-11-03T10:02:14Z",
+  "status": "active",
+  "updated_at": "2026-11-03T10:04:00Z",
   "base_sha": "cb95d4bb8b736013f996a7583e434775a5160223",
-  "hypothesis": "Android outside-UI LEFT mouse gesture lifecycle may contain a reproducible cancel/release/drag edge case not covered by existing pure gesture and source-mapping tests; do not assume defect.",
+  "hypothesis": "Exact 499/500/501ms boundary, different absolute input clocks, cancellation and multi-touch owner stability must preserve one LEFT tap or balanced hold; large bounded pulse queues must release between taps.",
   "intended_files": [
     "android-port/Runtime/Platform/AndroidTouchPointer.cs",
     "android-port/Runtime/Platform/TouchPointerGesture.cs",
@@ -21,10 +21,12 @@
     "DISPLAY-003: active client, avoid display code",
     "HAPTICS-008: two active clients, avoid haptic paths"
   ],
-  "experiment_ids": [],
+  "experiment_ids": [
+    "a7-touch-500ms-boundary-matrix-20261103"
+  ],
   "evidence": [
     "https://github.com/alwansan/raf/actions/runs/41548465582"
   ],
   "result": null,
-  "next_step": "Read current pointer code and tests; select evidence-backed change and test with no Unity."
+  "next_step": "Check completed platform workflow and document actual results before claiming regression coverage."
 }
