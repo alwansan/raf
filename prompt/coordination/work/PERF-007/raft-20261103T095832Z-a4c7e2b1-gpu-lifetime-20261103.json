@@ -4,8 +4,8 @@
   "agent": "A4",
   "session_id": "a4-resume-20261103T224500Z-84e2c91f",
   "issue_id": "PERF-007",
-  "status": "active",
-  "updated_at": "2026-11-03T22:44:54.646Z",
+  "status": "paused",
+  "updated_at": "2026-11-03T22:52:41.965Z",
   "base_sha": "b3ebf3ddd69e44b1f430c1d77a6642f70adbd404",
   "hypothesis": "GPU OOM causality unknown. Event-only graphics memory snapshots at scene transitions and Unity lowMemory preserve closer source-level evidence of allocation/release vs periodic snapshots; counters remain partial and cannot prove total VRAM.",
   "intended_files": [
@@ -27,12 +27,18 @@
     "Implement isolated behavior-preserving resource-lifetime fix and CPU-only harness only if defect is proven; otherwise record limits"
   ],
   "evidence": [
-    "https://github.com/alwansan/raf/actions/runs/41658344282"
+    "https://github.com/alwansan/raf/actions/runs/41658344282",
+    "https://github.com/alwansan/raf/commit/dac7ba8fffd955d9901c4691c9ce35d584c422ba",
+    "https://github.com/alwansan/raf/commit/74df62250c0f4db1bd5f33981ee22d24ee62934a",
+    "https://github.com/alwansan/raf/actions/runs/41734019524",
+    "https://github.com/alwansan/raf/actions/runs/41734013814",
+    "docs/A4_PERF_GPU_SCENE_DIAGNOSTICS_2026-11-04.md"
   ],
-  "result": null,
+  "result": "Scoped improvement published: event-only process PSS/RSS + partial Android graphics + development-only Unity driver counter at scene loaded/unloaded and lowMemory. Exact source Android platform CI 41734019524 SUCCESS; 10/10 diagnostic source-policy tests, new boundary test PASS. Code-head local startup CI 41734013814 SUCCESS. No demonstrated resource-leak fix; the broader PERF-007 GPU lifetime review stays open/paused.",
   "limitations": [
     "No Android GPU measurements from current candidate",
     "No Unity/Native/APK during restoration"
   ],
-  "next_step": "Fix observed source telemetry blindspot: 5s performance samples / 10s graphics summaries can miss GPU memory immediately around scene load/unload/lowMemory. Add event-only scoped snapshots preserving no-alloc behavior/quality; test branch/source policy via existing CPU-only Android platform workflow."
+  "next_step": "Root-cause original GPU allocation/lifetime and test on compiled Android device later. No Unity/native/APK by A4.",
+  "source_sha": "74df62250c0f4db1bd5f33981ee22d24ee62934a"
 }
