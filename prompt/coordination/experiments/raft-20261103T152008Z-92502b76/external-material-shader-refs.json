@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T152008Z-92502b76",
+  "client_label": "W2",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "updated_at": "2026-11-03T16:08:00.000Z",
+  "base_sha": "891e10a9dcc8b5cc16e66e12457b039e6f6d3086",
+  "hypothesis": "Parsing m_Externals dependency headers of the two SHA-pinned original serialized files classifies every one of the 156 external m_FileID Material m_Shader pointers to a named target owner, and the engine pointer convention is one-based (m_FileID - 1).",
+  "input_hashes": [
+    "resources.assets sha256=87493249f1adfc0c5eb8b82e4e199e208cd2c95eabe9796cab82116c4838595c (111533516 bytes, locally identical to authenticated LFS owner)",
+    "sharedassets0.assets sha256=0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3 (115978112 bytes, locally identical)",
+    "validation owners: globalgamemanagers.assets, Resources/unity default resources, Resources/unity_builtin_extra (tracked regular files; hashes recorded in run artifact)"
+  ],
+  "commands": [
+    "python3 -m scripts.probe_w2_external_material_shader_refs --source <Raft_Data> --out w2-aggregate-final.json --validate-owner globalgamemanagers.assets --validate-owner 'Resources/unity default resources' --validate-owner 'Resources/unity_builtin_extra'"
+  ],
+  "expected_signal": "All 156 external shader pointers + 159 external texture pointers resolve to named owners with target pathIDs existing in physical owner files under one-based convention; zero-based control resolves zero shader pathIDs in physical builtin owners.",
+  "negative_controls": [
+    "zero-based convention reading (documented aggregate control, refuted)",
+    "wrong-size/missing pinned owner verification fails closed",
+    "out-of-range and negative fileIDs classified explicitly unresolved",
+    "non-aggregate output key rejected",
+    "duplicate external dependency name rejected at parse time"
+  ],
+  "workflow_path": ".github/workflows/raft-w2-external-material-refs.yml",
+  "concurrency_group": "raft-w2-external-material-refs-${{ github.ref }}-${{ github.sha }}",
+  "artifact_prefix": "raft-w2-external-material-refs-",
+  "budget": "single CPU-only run under 10 minutes; timeout 500s; workflow timeout 15 min; no Unity, no GPU",
+  "run_url": null,
+  "source_sha": null,
+  "result": "LOCAL AUTHENTIC RUN COMPLETE: 156/156 external Material m_Shader pointers resolve (142 -> sharedassets0.assets original custom shaders, 7+5 -> Library/unity default resources builtin, 2 -> globalgamemanagers.assets); 159/159 external Material m_TexEnvs texture pointers resolve to sharedassets0.assets texture objects; cross-owner existence validation 315/315 target pathIDs exist, 0 missing; zero-based control refuted (310 owner-name mismatches, 5 out-of-table). NO broken Material->Shader or Material->Texture references in the two original owners. Historic 'broken external pointer' cause hypothesis for pale surfaces is REJECTED. CI run pending. | CORROBORATION: peer W3 (raft-20261103T153100Z-b4d2c9e7, published ~15:45Z) independently produced the same classification with parsed-form names (144 custom, 12 engine transports, 11 distinct targets); numbers match exactly at every intersection. W2's run stands as deliberate independent verification and additionally covers material->texture externals (159/159) and cross-owner target-existence validation (315/315). Race documented in prompt/coordination/incidents/raft-20261103T152008Z-92502b76/2026-11-03T160500Z-race-with-w3.md.",
+  "limitations": [
+    "classifies references; does not restore shader programs, materials or rendering; no numeric/visual equivalence",
+    "aggregate-only outputs; dependency-table names are packaging metadata, no object names/pathIDs published",
+    "local target-existence validation hashes tracked-file copies at run time; CI performs the same validation on repo checkout copies",
+    "does not close WATER-001/RENDER-002/FFT-FORMAT-009; NOT_READY/0-of-3 unchanged"
+  ],
+  "next_step": "Push workflow CI, then pivot to the color/texture-format/sRGB lane (no overlap with W3/W1)."
+}

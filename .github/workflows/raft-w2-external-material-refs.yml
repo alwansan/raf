@@ -1,0 +1,80 @@
+name: Raft W2 external Material Shader refs classification (CPU only)
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-w2-external-material-refs.yml'
+      - 'scripts/probe_w2_external_material_shader_refs.py'
+      - 'tests/test_w2_external_material_shader_refs.py'
+permissions:
+  contents: read
+concurrency:
+  group: raft-w2-external-material-refs-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  external-material-refs:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+            Raft/Raft_Data
+      - name: Fail-closed synthetic tests before any LFS hydration
+        run: python3 -m unittest discover -s tests -p test_w2_external_material_shader_refs.py -v
+      - name: Compile probe script
+        run: python3 -m py_compile scripts/probe_w2_external_material_shader_refs.py
+      - name: Check disk space and pointer identity
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import shutil
+          from pathlib import Path
+          from scripts.verify_targeted_lfs_compute_sources import EXPECTED, verify_sources
+          assert shutil.disk_usage('.').free > 10 * 1024**3
+          pins={n:EXPECTED[n] for n in ('resources.assets','sharedassets0.assets')}
+          print(verify_sources(Path('Raft/Raft_Data'), pointers_only=True, expected=pins))
+          PY
+      - name: Reuse exact W1 two-owner cached LFS
+        uses: actions/cache@v4
+        with:
+          path: .git/lfs/objects
+          key: w1-graphics-87493249-0498f738-v1
+      - name: Hydrate only two original owners and verify full SHA256
+        env:
+          GIT_LFS_SKIP_SMUDGE: '1'
+        run: |
+          set -euo pipefail
+          git lfs install --local
+          git lfs pull --include='Raft/Raft_Data/resources.assets,Raft/Raft_Data/sharedassets0.assets' --exclude='' origin
+          python3 - <<'PY'
+          from pathlib import Path
+          from scripts.verify_targeted_lfs_compute_sources import EXPECTED, verify_sources
+          pins={n:EXPECTED[n] for n in ('resources.assets','sharedassets0.assets')}
+          print(verify_sources(Path('Raft/Raft_Data'), expected=pins))
+          PY
+      - name: Install CPU-only original serializer
+        run: python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+      - name: Classify original external Material pointers (one-based, with existence validation)
+        run: |
+          set -euo pipefail
+          timeout 500s python3 -m scripts.probe_w2_external_material_shader_refs \
+            --source Raft/Raft_Data \
+            --out "$RUNNER_TEMP/w2-external-material-refs.json" \
+            --validate-owner 'Raft/Raft_Data/globalgamemanagers.assets' \
+            --validate-owner 'Raft/Raft_Data/Resources/unity default resources' \
+            --validate-owner 'Raft/Raft_Data/Resources/unity_builtin_extra'
+          echo 'RAFT_W2_EXTERNAL_MATERIAL_REFS aggregateOnly=true noPayloadPublished=true unityRan=false androidBuildRan=false'
+      - name: Retain only aggregate counts and authenticated input hashes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: raft-w2-external-material-refs-${{ github.run_id }}
+          path: ${{ runner.temp }}/w2-external-material-refs.json
+          retention-days: 7
+          if-no-files-found: ignore

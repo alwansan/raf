@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T152008Z-92502b76",
+  "client_label": "W2",
+  "issue_id": "RENDER-002",
+  "status": "completed",
+  "updated_at": "2026-11-03T16:08:00.000Z",
+  "base_sha": "891e10a9dcc8b5cc16e66e12457b039e6f6d3086",
+  "hypothesis": "External dependency tables (m_Externals) of the two SHA-pinned original owners classify the 156 unresolved Material m_Shader PPtrs into Unity builtin (unity_builtin_extra), another named serialized-file owner, or a genuinely missing name. Builtin-masked inputs are used exactly as authenticated; no LFS re-download needed because identical byte SHA256 originals exist locally in the session workspace game copy.",
+  "intended_files": [
+    "scripts/probe_w2_external_material_shader_refs.py",
+    "tests/test_w2_external_material_shader_refs.py",
+    ".github/workflows/raft-w2-external-material-refs.yml",
+    "prompt/coordination/clients/raft-20261103T152008Z-92502b76/",
+    "prompt/coordination/work/RENDER-002/raft-20261103T152008Z-92502b76-external-material-shader-refs.json",
+    "prompt/coordination/experiments/raft-20261103T152008Z-92502b76/external-material-shader-refs.json",
+    "prompt/coordination/discussions/RENDER-002/",
+    "prompt/STATUS.md"
+  ],
+  "related_work": [
+    "A13 completed internal material links; this is its declared next step, no overlap with its files",
+    "W1 active on parameter0 decode + Depth Copy ShaderLab wrapper; untouched",
+    "A12 owns 198 builtin vendor-name intersection; classification here is owner-table-based, not name matching"
+  ],
+  "experiment_ids": [
+    "external-material-shader-refs"
+  ],
+  "evidence": [
+    "docs/A13_ORIGINAL_MATERIAL_SHADER_LINKS_2026-11-03.md",
+    "https://github.com/alwansan/raf/actions/runs/41660807306",
+    "docs/W2_EXTERNAL_MATERIAL_SHADER_REFS_2026-11-03.md"
+  ],
+  "result": "Local authenticated run: 156/156 external material->shader pointers + 159/159 external texture pointers resolve under one-based convention; target existence 315/315, 0 missing; zero-based control refuted. No broken material references. CI pending. Corroborates W3's concurrent publication exactly (144/12/11); W2 adds 159/159 texture external resolution and 315/315 target-existence validation. Local scope completed; CI verification pending after push.",
+  "next_step": "After green CI, pivot to color/texture-format/sRGB analysis lane."
+}
