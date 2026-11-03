@@ -1,0 +1,7 @@
+# A12 continuation — water shader reconstruction
+
+Previous session `raft-20261103T145700Z-12f4a8b3` completed authentic 9/105 built-in vendor intersections. New A12 session `a12-20261103T184205Z-831fab74` registered to advance authentic WATER-001 source recovery after user provided failed native41687765928.
+
+Actual native source a8e04dd2 failed at built-in restore: 142 parseable exported shaders, zero official198 exact matches; Unity never entered; W1 restored Depth Copy generated wrapper beforehand. Old W1 build source a8e04d, HEAD cbc8e3d7 at initial check. The following strict original water gate has hard-coded `authentic_water_kernel_identity_verified=false`, so a builtin-only adjustment cannot produce an XAPK. Do not bypass identity gates or fake ready state; no new native request until a meaningful restoration candidate exists.
+
+Peers checked A11/A13/A14/A15 RENDER-002, W1 depth wrapper, A1 FFT numeric Vulkan, W3 full Material refs, W2 colors. New independent scope: original `UltimateWater/Utilities/Blur (Subsurface Scattering)` serialized Shader pass/stage linkage from SHA-authenticated `resources.assets` and `sharedassets0.assets`; source/tests/workflow isolated and no shipping game code modification initially. Need gather original pass/program variant counts and structural feasibility, preserving .meta/GUID and private shader bytecode. Future attempt could reconstruct real ShaderLab program using W1 primitive rebinders; reject unsupported variants/parameter blobs instead of guessing. Full game remains NOT_READY.
