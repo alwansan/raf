@@ -171,6 +171,65 @@ internal static class BoundaryMatrix
             Require(!gesture.Active && !gesture.Held, "reentrant-cancel-move-clears-state");
         }
 
+        // Even when a new finger receives the SAME numeric touchId after a
+        // synchronous focus reset, the old callback must never end the NEW
+        // gesture. Ownership alone cannot distinguish these two lifetimes.
+        {
+            var events = new List<TouchPointerCommand>();
+            TouchPointerGesture gesture = null;
+            bool restarted = false;
+            gesture = new TouchPointerGesture((cmd, x, y) =>
+            {
+                events.Add(cmd);
+                if (cmd == TouchPointerCommand.Down && !restarted)
+                {
+                    restarted = true;
+                    gesture.Cancel();
+                    gesture.Begin(41, 90f, 91f, 30.5d);
+                }
+            });
+            gesture.Begin(41, 1f, 2f, 30d);
+            gesture.End(41, 3f, 4f, 30.5d, false);
+            Require(gesture.Active && !gesture.Held, "same-touch-id-restart-survives-old-end");
+            Require(events.Count == 4 &&
+                events[0] == TouchPointerCommand.Move &&
+                events[1] == TouchPointerCommand.Down &&
+                events[2] == TouchPointerCommand.Up &&
+                events[3] == TouchPointerCommand.Move, "same-touch-id-restart-no-old-tap");
+            gesture.End(41, 92f, 93f, 30.6d, false);
+            Require(events.Count == 5 &&
+                events[4] == TouchPointerCommand.Tap &&
+                !gesture.Active, "same-touch-id-restart-new-tap-valid");
+        }
+
+        {
+            var events = new List<TouchPointerCommand>();
+            TouchPointerGesture gesture = null;
+            bool restarted = false;
+            gesture = new TouchPointerGesture((cmd, x, y) =>
+            {
+                events.Add(cmd);
+                if (cmd == TouchPointerCommand.Down && !restarted)
+                {
+                    restarted = true;
+                    gesture.Cancel();
+                    gesture.Begin(42, 90f, 91f, 40.51d);
+                }
+            });
+            gesture.Begin(42, 1f, 2f, 40d);
+            gesture.Move(42, 3f, 4f, 40.51d);
+            Require(gesture.Active && !gesture.Held, "same-touch-id-restart-survives-old-move");
+            Require(events.Count == 4 &&
+                events[0] == TouchPointerCommand.Move &&
+                events[1] == TouchPointerCommand.Down &&
+                events[2] == TouchPointerCommand.Up &&
+                events[3] == TouchPointerCommand.Move, "same-touch-id-restart-no-old-motion");
+            gesture.End(42, 92f, 93f, 40.6d, false);
+            Require(events.Count == 5 &&
+                events[4] == TouchPointerCommand.Tap &&
+                !gesture.Active, "same-touch-id-restart-move-new-tap-valid");
+        }
+
         return checks;
     }
 }
