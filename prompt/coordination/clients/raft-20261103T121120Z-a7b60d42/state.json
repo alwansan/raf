@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "username": "raft-20261103T121120Z-a7b60d42",
+  "agent": "A7",
+  "session_id": "A7-20261103T121120Z-3a28b2d1",
+  "resumed_from": "raft-20261103T113245Z-a7e48c92",
+  "status": "active",
+  "updated_at": "2026-11-03T12:11:20.674Z",
+  "base_sha": "905bd61c040025aa37dda22816126108b8e8c793",
+  "current_work": [
+    "INPUT-005"
+  ],
+  "last_commit": null,
+  "next_step": "CPU C# regression for redundant unchanged-coordinate Move emission and 500ms hold; implement minimal coalescing if red test confirms while preserving effective motions.",
+  "memory_path": "prompt/coordination/clients/raft-20261103T121120Z-a7b60d42/MEMORY.md"
+}

@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T121120Z-a7b60d42",
+  "issue_id": "INPUT-005",
+  "status": "planned",
+  "updated_at": "2026-11-03T12:11:20.674Z",
+  "base_sha": "905bd61c040025aa37dda22816126108b8e8c793",
+  "hypothesis": "TouchPointerGesture.Move emits unchanged coordinate Motion for every Stationary touch event, generating redundant synthetic MouseState events; coalescing these leaves hold timing unchanged while reducing event traffic.",
+  "intended_files": [
+    "android-port/Runtime/Platform/TouchPointerGesture.cs",
+    "android-port/Tests/TouchPointer/BoundaryMatrix.cs",
+    "prompt/coordination/clients/raft-20261103T121120Z-a7b60d42/",
+    "prompt/coordination/experiments/raft-20261103T121120Z-a7b60d42/",
+    "prompt/coordination/incidents/raft-20261103T121120Z-a7b60d42/",
+    "prompt/STATUS.md",
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+  ],
+  "related_work": [
+    "A7 prior completed INPUT-005 reentrant generation and queued tap fixes; preserve both",
+    "Active FFT-WATER/DISPLAY/RENDER clients have no intended touching gesture files"
+  ],
+  "experiment_ids": [],
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41629509261"
+  ],
+  "result": null,
+  "next_step": "Red failing authored C# event-count regression, green after smallest production coalescing, verify platform and source CI."
+}
