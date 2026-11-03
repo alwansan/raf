@@ -4,8 +4,8 @@
   "client_label": "W1",
   "session_id": "w1-20261103T150217800Z-d4a79e63",
   "issue_id": "RENDER-002",
-  "status": "planned",
-  "updated_at": "2026-11-03T15:02:17.800Z",
+  "status": "active",
+  "updated_at": "2026-11-03T15:25:05.604Z",
   "base_sha": "528068d21253340a9a673517aa608dbb58a015d0",
   "hypothesis": "Original Depth Copy parameter entry0 may be empty per-variant overrides; exact decode and serialized render-state reconstruction can produce a faithful private ShaderLab wrapper retaining6+3subshader boundaries and property-rebound stage programs.",
   "intended_files": [
@@ -21,8 +21,9 @@
     "W1 prior433074c02/41647954010 DepthCopy18stages"
   ],
   "experiment_ids": [
-    "depth-shaderlab-wrapper"
+    "depth-shaderlab-wrapper",
+    "w1-depth-unity"
   ],
-  "result": null,
-  "next_step": "Decode exact blob and reconstruct private states; no source/GPU/readiness claim from compilation alone."
+  "result": "CPU source891e10a9/run41662298511 SUCCESS: exact empty parameter0; private original6+3ShaderLab wrapper,27genuine fog references preserved,18/18wrapped stages validated. Unity run41663393724 in progress.",
+  "next_step": "Inspect targeted Unity aggregate; fix actual parser/platform compiler failures, then numerical/render controls before any GUID integration."
 }
