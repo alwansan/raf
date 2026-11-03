@@ -27,6 +27,21 @@ EXPECTED_ORDER = tuple(FIELD_TYPES)
 MAX_BEHAVIOURS = 25_000
 
 
+
+def plausible_custom_at(raw, offset):
+    if offset + CUSTOM.size > len(raw):
+        return False
+    (mode, refppu, scale, w, h, screenmode, match,
+     unit, fallback, sprite, dynppu) = CUSTOM.unpack_from(raw, offset)
+    vals = (refppu, scale, w, h, match, fallback, sprite, dynppu)
+    return (0 <= mode <= 2 and 0 <= screenmode <= 2 and 0 <= unit <= 4
+            and all(math.isfinite(v) for v in vals)
+            and 0 < refppu <= 2000 and 0 < scale <= 100
+            and 0 < w <= 65536 and 0 < h <= 65536
+            and 0 <= match <= 1 and 0 < fallback <= 2000
+            and 0 < sprite <= 2000 and 0 < dynppu <= 2000)
+
+
 def verified_field_order(meta):
     if meta.get("fields_matched") != list(EXPECTED_ORDER) or (
             not meta.get("field_types_match_expected")):
@@ -84,7 +99,10 @@ def decode_record(raw, tree):
                          " int28=" + str(struct.unpack_from("<i", raw, 28)[0]) +
                          " int32=" + str(struct.unpack_from("<i", raw, 32)[0]) +
                          " typed_editor_class_identifier_present=" + str("m_EditorClassIdentifier" in tree) +
-                         " typed_editor_flags_present=" + str("m_EditorHideFlags" in tree))
+                         " typed_editor_flags_present=" + str("m_EditorHideFlags" in tree) +
+                         " candidate_offset32=" + str(plausible_custom_at(raw, 32)) +
+                         " candidate_offset36=" + str(plausible_custom_at(raw, 36)) +
+                         " last4_allzero=" + str(raw[76:80] == b"\\x00\\x00\\x00\\x00"))
     (ui_mode, ref_ppu, scale_factor, width, height, match_mode,
      match_width, physical_unit, fallback_dpi, default_sprite_dpi, dynamic_ppu) = CUSTOM.unpack_from(raw, BASE_BYTES)
     numeric = (ref_ppu, scale_factor, width, height, match_width,
