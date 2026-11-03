@@ -10,6 +10,7 @@ import json
 from pathlib import Path, PurePosixPath
 import posixpath
 import re
+import shutil
 import time
 import urllib.request
 import zipfile
@@ -186,11 +187,18 @@ def restore_project(project, backup, shaders, files, license):
         if path.exists() and (path.is_symlink() or path.read_bytes() != content):
             raise ValueError('Conflicting built-in dependency or license destination')
     backup.mkdir(parents=True, exist_ok=False)
-    for path, content, original, meta, metadata in plan:
-        saved = backup / path.relative_to(assets)
-        saved.parent.mkdir(parents=True, exist_ok=True)
-        saved.write_bytes(original)
-        Path(str(saved) + '.meta').write_bytes(metadata)
+    try:
+        for path, content, original, meta, metadata in plan:
+            saved = backup / path.relative_to(assets)
+            saved.parent.mkdir(parents=True, exist_ok=True)
+            saved.write_bytes(original)
+            Path(str(saved) + '.meta').write_bytes(metadata)
+    except BaseException:
+        # We exclusively created this external backup directory and have not
+        # changed any exported shader yet. Never strand partially copied
+        # original source/meta bytes or block a safe retry after an I/O error.
+        shutil.rmtree(backup)
+        raise
     created_additions = []
     replaced_shaders = []
     try:
