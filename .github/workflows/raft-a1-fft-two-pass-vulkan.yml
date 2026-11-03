@@ -1,0 +1,141 @@
+name: A1 authentic FFT two-pass Vulkan chaining (CPU only)
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - ".github/workflows/raft-a1-fft-two-pass-vulkan.yml"
+      - "scripts/a1_fft_two_pass_vulkan.cpp"
+      - "scripts/probe_original_fft_two_pass_software_vulkan.py"
+      - "tests/test_probe_original_fft_two_pass_software_vulkan.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: raft-a1-two-pass-vulkan-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  synthetic-two-pass:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Install CPU Vulkan and GLSL/SPIR-V tools
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends g++ libvulkan-dev mesa-vulkan-drivers glslang-tools spirv-tools
+      - name: Run true two-pass source-free schema and mapping tests
+        run: |
+          python3 -m unittest discover -s tests -p 'test_probe_original_fft_two_pass_software_vulkan.py' -v
+      - name: Compile Vulkan two-pass host
+        run: |
+          g++ -std=c++17 -O2 -Wall -Wextra scripts/a1_fft_two_pass_vulkan.cpp -lvulkan -o /tmp/a1-two-pass-vk
+      - name: Execute authentic two-stage dependency canary and deliberately wrong second shader
+        run: |
+          set -euo pipefail
+          export VK_DRIVER_FILES="$(find /usr/share/vulkan/icd.d -maxdepth 1 -name '*lvp*.json' -print -quit)"
+          test -n "$VK_DRIVER_FILES"
+          cat >/tmp/a1-add.comp <<'EOF'
+          #version 450
+          #extension GL_EXT_samplerless_texture_functions : require
+          layout(local_size_x=8,local_size_y=1,local_size_z=1) in;
+          layout(set=0,binding=0) uniform texture2D src0;
+          layout(set=0,binding=1) uniform texture2D src1;
+          layout(set=0,binding=2,rgba32f) uniform writeonly image2D outputImage;
+          void main() {
+              ivec2 xy=ivec2(gl_GlobalInvocationID.xy);
+              imageStore(outputImage,xy,texelFetch(src0,xy,0)+texelFetch(src1,xy,0));
+          }
+          EOF
+          sed 's/texelFetch(src0,xy,0)+texelFetch(src1,xy,0)/texelFetch(src0,xy,0)-texelFetch(src1,xy,0)/' \
+            /tmp/a1-add.comp >/tmp/a1-wrong.comp
+          glslangValidator -V -S comp -o /tmp/a1-add.spv /tmp/a1-add.comp
+          glslangValidator -V -S comp -o /tmp/a1-wrong.spv /tmp/a1-wrong.comp
+          spirv-val --target-env vulkan1.1 /tmp/a1-add.spv
+          spirv-val --target-env vulkan1.1 /tmp/a1-wrong.spv
+          timeout 30s /tmp/a1-two-pass-vk \
+            /tmp/a1-add.spv /tmp/a1-add.spv /tmp/a1-add.spv /tmp/a1-add.spv \
+            8 1 0 1 rgba32f --canary | tee /tmp/a1-2pass-positive.log
+          grep -q '"synthetic_canary_verified":true' /tmp/a1-2pass-positive.log
+          grep -q '"within_selected_tolerance":true' /tmp/a1-2pass-positive.log
+          timeout 30s /tmp/a1-two-pass-vk \
+            /tmp/a1-add.spv /tmp/a1-add.spv /tmp/a1-add.spv /tmp/a1-wrong.spv \
+            8 1 0 1 rgba32f | tee /tmp/a1-2pass-negative.log
+          grep -q '"within_selected_tolerance":false' /tmp/a1-2pass-negative.log
+
+  original-two-pass:
+    needs: synthetic-two-pass
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      DEBIAN_FRONTEND: noninteractive
+      GIT_LFS_SKIP_SMUDGE: "1"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Fetch exactly three original ZIP2 SHA-pinned FFT owner parts
+        env:
+          ZIP2_COMMIT: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+        run: |
+          set -euo pipefail
+          mkdir -p zip2-source
+          git -C zip2-source init -q
+          git -C zip2-source remote add origin https://github.com/alwansan/raf.git
+          git -C zip2-source -c protocol.version=2 fetch -q --depth=1 --filter=blob:none origin zip2
+          test "$(git -C zip2-source rev-parse FETCH_HEAD)" = "$ZIP2_COMMIT"
+          git -C zip2-source sparse-checkout init --no-cone
+          printf '%s\n' '/RAFT_FILE_MANIFEST.tsv' '/Raft/Raft_Data/sharedassets0.assets/' \
+            | git -C zip2-source sparse-checkout set --no-cone --stdin
+          git -C zip2-source checkout -q --detach FETCH_HEAD
+          test "$(git -C zip2-source rev-parse HEAD)" = "$ZIP2_COMMIT"
+          test ! -e zip2-source/Raft/Raft_Data/sharedassets0.assets.resS
+          for item in part-00000 part-00001 part-00002; do
+            test -f "zip2-source/Raft/Raft_Data/sharedassets0.assets/$item"
+          done
+      - name: Verify SHA of restored original 115978112-byte FFT owner without LFS
+        run: |
+          set -euo pipefail
+          python3 -m scripts.stage_zip2_fft_owner \
+            --zip2-checkout zip2-source \
+            --destination "$RUNNER_TEMP/a1-original-two-pass/Raft_Data/sharedassets0.assets"
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          from scripts.verify_targeted_lfs_compute_sources import EXPECTED,verify_sources
+          root=Path(os.environ["RUNNER_TEMP"])/"a1-original-two-pass"/"Raft_Data"
+          result=verify_sources(root,expected={"sharedassets0.assets":EXPECTED["sharedassets0.assets"]})
+          assert result["authenticated_owners"]==1
+          print("RAFT_A1_TWO_PASS_ORIGINAL_PIN bytes=115978112 authenticated=true lfs=false")
+          PY
+      - name: Install private shader translation and CPU Vulkan
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends g++ libvulkan-dev mesa-vulkan-drivers glslang-tools spirv-tools spirv-cross vkd3d-compiler
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+      - name: Execute all original paired two-pass FFT on four format views and 3 inputs
+        run: |
+          set -euo pipefail
+          export VK_DRIVER_FILES="$(find /usr/share/vulkan/icd.d -maxdepth 1 -name '*lvp*.json' -print -quit)"
+          test -n "$VK_DRIVER_FILES"
+          g++ -std=c++17 -O2 -Wall -Wextra scripts/a1_fft_two_pass_vulkan.cpp -lvulkan -o /tmp/a1-two-pass-vk
+          python3 -m unittest discover -s tests -p 'test_probe_original_fft_two_pass_software_vulkan.py' -v
+          timeout 900s python3 -m scripts.probe_original_fft_two_pass_software_vulkan \
+            --source "$RUNNER_TEMP/a1-original-two-pass/Raft_Data" \
+            --runner /tmp/a1-two-pass-vk
+          # No artifact upload: bytecode, HLSL, images never leave temporary directories.
