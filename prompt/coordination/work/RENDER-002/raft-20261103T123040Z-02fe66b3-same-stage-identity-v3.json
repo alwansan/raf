@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T123040Z-02fe66b3",
+  "client_label": "A11",
+  "session_id": "a11-resume-20261103T2255Z-c6f3a290",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "updated_at": "2026-11-03T22:55:00Z",
+  "hypothesis": "Original AssetRipper full-export provenance/identity mismatch remains unverified. Add read-only exact-vendor SHA-pinned identity evidence from the same local stage with before/after scope digest, paired counts, fail-closed checks.",
+  "intended_files": [
+    "scripts/probe_a11_shader_export_scope.py",
+    "tests/test_a11_shader_export_scope.py",
+    "prompt/coordination/clients/raft-20261103T123040Z-02fe66b3/state.json",
+    "prompt/coordination/clients/raft-20261103T123040Z-02fe66b3/MEMORY.md",
+    "prompt/coordination/experiments/raft-20261103T123040Z-02fe66b3/shader-export-identity-v3.json"
+  ],
+  "related_work": [
+    "A11 v2 CI 41644281473 GREEN 17/17",
+    "A13 107 local files not guaranteed same original 140-scope",
+    "A9/A3/A6 builtin restoration work, W1/W2/W3 materials"
+  ],
+  "limits": "No Unity/APK/native, no LFS/original payload exposure, no other client's paths; WATER-001/RENDER-002 remain open and NOT_READY 0/3.",
+  "next_step": "Source/test patch and CPU-only synthetic CI, then original in-run stage capture later."
+}
