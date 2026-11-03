@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T145700Z-12f4a8b3",
+  "status": "planned",
+  "hypothesis": "Exact serialized original Shader identities in W1 two-owner SHA-verified sources can be intersected with independently authenticated official built-in Shader identities without relying on incomplete AssetRipper-exported 107/140 shader files.",
+  "input_hashes": [
+    "Official vendor archive SHA256 5cb0f9c4d022d6054d179778b9b50a0301d6748eaf4abdedd21c93f0c30b10c5",
+    "Two original owners pinned by scripts/w1_recover_graphics_programs.py/verify_targeted_lfs_compute_sources.py"
+  ],
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_a12_vendor_identity_overlap.py -v",
+    "python3 -m scripts.a12_probe_original_vendor_identity_overlap --source Raft/Raft_Data --out \"$RUNNER_TEMP/a12-vendor-summary.json\""
+  ],
+  "expected_signal": "Only aggregate object/count/vendor overlap and SHA of complete two-owner inventory, plus original-source scope false and build ready false; 0 matches is not proof all exports lack matches.",
+  "negative_controls": [
+    "Unverified owner bytes fail SHA check before reading",
+    "Conflicting parsed/raw original names count as ambiguous, never matched",
+    "Partial, empty or case/namespace-shifted names cannot create a match",
+    "Source names must never appear in printed public report"
+  ],
+  "workflow_path": ".github/workflows/raft-a12-vendor-identity-overlap.yml",
+  "concurrency_group": "raft-a12-original-vendor-overlap-${{ github.ref }}-${{ github.sha }}",
+  "artifact_prefix": "a12-original-vendor-summary",
+  "budget": "Two SHA-authenticated existing 227511628-byte LFS owners, cache if present; max 15 min Ubuntu24.04 CPU-only; no Unity/APK",
+  "run_url": null,
+  "source_sha": null,
+  "result": null,
+  "limitations": [
+    "Only two original Shader-object owners, not full 140 exported shaders",
+    "Does not execute shaders, reconstruct Unity ShaderLab or prove device rendering"
+  ],
+  "next_step": "Verify red/green controls and original sources via isolated workflow."
+}
