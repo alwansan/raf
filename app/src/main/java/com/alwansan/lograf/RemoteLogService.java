@@ -300,7 +300,7 @@ public final class RemoteLogService extends IRemoteLog.Stub {
                         }
                         line=in.readLine();
                         if(line==null)break;
-                        if (line.startsWith("--------- beginning of ")) continue;
+                        // Preserve logcat buffer-boundary headers in the raw stream.
                         if (!onlyContext || systemRelevant(line)) {
                             if(onlyContext) {
                                 systemContextLines.incrementAndGet();
