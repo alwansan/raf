@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "username": "raft-20261103T095700Z-a2b31f4d",
+  "session_id": "a2-20261103T095700Z-b7e41c2f",
+  "resumed_from": null,
+  "status": "active",
+  "updated_at": "2026-11-03T09:57:00Z",
+  "base_sha": "84843b8c21847faf663126dc399c6b7947f8a0e8",
+  "current_work": [
+    "DISPLAY-003"
+  ],
+  "last_commit": null,
+  "next_step": "Inspect live display/Settings/orientation code and all coordination records; isolate a reproducible CPU-only source defect without Unity/Android build.",
+  "memory_path": "prompt/coordination/clients/raft-20261103T095700Z-a2b31f4d/MEMORY.md"
+}

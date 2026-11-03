@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T095700Z-a2b31f4d",
+  "issue_id": "DISPLAY-003",
+  "status": "planned",
+  "updated_at": "2026-11-03T09:57:00Z",
+  "base_sha": "84843b8c21847faf663126dc399c6b7947f8a0e8",
+  "hypothesis": "Settings aspect and forced landscape behavior may diverge from authentic Android screen orientation on startup or resize; seek a source-level reproducible mismatch, then write a targeted safe repair.",
+  "intended_files": [
+    "android-port/Runtime/",
+    "scripts/tests/",
+    "prompt/coordination/"
+  ],
+  "related_work": [],
+  "experiment_ids": [],
+  "evidence": [],
+  "result": null,
+  "next_step": "Inspect live code and other clients; narrow path before any patch"
+}
