@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "username": "raft-20261103T100200Z-9d4ea16b",
+  "client_label": "A10",
+  "session_id": "a10-20261103T1002Z-6037eacf",
+  "resumed_from": null,
+  "status": "active",
+  "updated_at": "2026-11-03T10:02:00Z",
+  "base_sha": "61a5811b06c39fcdb633c5559f884ce559ea7f0f",
+  "current_work": [
+    "LOCAL-005"
+  ],
+  "last_commit": null,
+  "next_step": "Inspect source-backed local offline world create/load/save .rgd contracts; run CPU-only reproducible validation; preserve all original bytes and concurrent work.",
+  "memory_path": "prompt/coordination/clients/raft-20261103T100200Z-9d4ea16b/MEMORY.md"
+}

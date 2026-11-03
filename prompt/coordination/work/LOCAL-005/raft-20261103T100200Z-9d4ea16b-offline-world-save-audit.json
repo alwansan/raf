@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "issue_id": "LOCAL-005",
+  "username": "raft-20261103T100200Z-9d4ea16b",
+  "work_id": "offline-world-save-audit",
+  "status": "active",
+  "base_sha": "61a5811b06c39fcdb633c5559f884ce559ea7f0f",
+  "approach": "Investigate exact offline world-create/load/host/save .rgd invariants with original source and CPU-only executable test. No fake startup flags.",
+  "intended_files": [
+    "prompt/coordination/clients/raft-20261103T100200Z-9d4ea16b/state.json",
+    "prompt/coordination/clients/raft-20261103T100200Z-9d4ea16b/MEMORY.md",
+    "prompt/coordination/experiments/raft-20261103T100200Z-9d4ea16b/local-world-source-contract.json",
+    "potential isolated tests under tests/; shared game source only after recheck/coordination"
+  ],
+  "exclusions": [
+    "main",
+    "zip",
+    "Unity-Editor",
+    "alwansan/CL",
+    ".meta",
+    "Unity/APK/OBB/XAPK workflows"
+  ],
+  "next_step": "Locate relevant local world/load/save code and existing verification fixtures"
+}
