@@ -5,8 +5,8 @@
   "session_id": "A3-20261103T225045Z-9d52c8a1",
   "resumed_from": "raft-20261103T145149Z-a3e71b29",
   "issue_id": "DELIVERY-014",
-  "status": "active",
-  "updated_at": "2026-11-03T22:50:45Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T22:56:00Z",
   "hypothesis": "PartsWriter.finish in scripts/package_android_delivery.py uses Path.rename for single-part artifact: on POSIX it can clobber a concurrently published signed file with same final name. A3 prior DELiVERY-013 fixed reassembly, not packaging.",
   "intended_files": [
     "scripts/package_android_delivery.py",
@@ -29,5 +29,15 @@
     "A9 AUDIO-004 source staging active, avoid that code",
     "W1/W2/W3 shader/material restoration active, avoid those paths"
   ],
-  "safety": "Synthetic CPU tests only; no Unity/APK/OBB/XAPK or release, no source data/LFS access, no automations, no protected branch updates; expected SHA lease."
+  "safety": "Synthetic CPU tests only; no Unity/APK/OBB/XAPK or release, no source data/LFS access, no automations, no protected branch updates; expected SHA lease.",
+  "last_commit": "db88edd26d0454db5cd971c643ca80786de77c87",
+  "result": "RED CI41734635288 exposed POSIX Path.rename overwrite; GREEN CI41734812562 on db88edd succeeded, 4/4 A3 and 13/13 existing checks; hardened PartsWriter single-part publish with os.link O_EXCL-like no-replace semantics, no duplicate payload copy.",
+  "ci": {
+    "red_run": 41734635288,
+    "red_status": "failure expected",
+    "green_run": 41734812562,
+    "green_status": "success",
+    "green_job": 126261144475
+  },
+  "next_step": "Only future owner-authorized native release and Termux/Android delivery filesystem checks; broader project NOT_READY 0/3. No Unity native work by A3."
 }

@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T224800Z-a3c41e7b",
+  "display_name": "A3",
+  "issue_id": "DELIVERY-014",
+  "experiment_id": "singlepart-no-clobber-red-green",
+  "status": "completed",
+  "source_commit": "db88edd26d0454db5cd971c643ca80786de77c87",
+  "red_source_commit": "5b3ccf60f558da225188b2f47cb8b28791cb6bb2",
+  "hypothesis": "PartsWriter.finish Path.rename overwrites competing output for a signed one-part delivery on POSIX.",
+  "command": [
+    "python3 -m unittest discover -s tests -p test_a3_package_singlepart_publish.py -v",
+    "python3 -m unittest discover -s tests -p test_android_delivery_package.py -v"
+  ],
+  "workflow": ".github/workflows/raft-a3-package-singlepart-publish.yml",
+  "ci": {
+    "red": {
+      "run_id": 41734635288,
+      "job_id": 126260534560,
+      "conclusion": "failure",
+      "two_expected_failing_cases": true
+    },
+    "green": {
+      "run_id": 41734812562,
+      "job_id": 126261144475,
+      "conclusion": "success",
+      "new_tests": 4,
+      "legacy_tests": 13
+    }
+  },
+  "result": "Fail-closed exclusive hardlink publication of single-part output preserves existing destination; source bytes/manifest unchanged; no extra full payload copy.",
+  "limits": [
+    "Synthetic CPU only, no signed APK/OBB/XAPK or Unity run",
+    "No Android/Termux shared-storage filesystem acceptance",
+    "No on-device haptics/water/audio/shader/world acceptance",
+    "Global NOT_READY 0/3"
+  ]
+}
