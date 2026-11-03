@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "client_label": "W1",
+  "username": "raft-20261103T162900Z-73e8c2a1",
+  "session_id": "w1-20261103-73e8c2a1",
+  "resumed_from": null,
+  "status": "active",
+  "updated_at": "2026-11-03T13:27:00.713Z",
+  "base_sha": "33afc2ac8f7868f4ed74bff00208d2711a9c43f9",
+  "current_work": [
+    "RENDER-002 original graphics program recovery"
+  ],
+  "last_commit": null,
+  "next_step": "Recover original graphics DXBC/pass metadata privately; preserve peer restorer files.",
+  "memory_path": "prompt/coordination/clients/raft-20261103T162900Z-73e8c2a1/MEMORY.md"
+}

@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T162900Z-73e8c2a1",
+  "client_label": "W1",
+  "issue_id": "RENDER-002",
+  "status": "planned",
+  "updated_at": "2026-11-03T13:27:00.713Z",
+  "base_sha": "33afc2ac8f7868f4ed74bff00208d2711a9c43f9",
+  "hypothesis": "Original serialized Shader records retain graphics DXBC absent from Dummy exports; direct extraction/translation can recover actual programs.",
+  "intended_files": [
+    "scripts/w1_recover_graphics_programs.py",
+    ".github/workflows/raft-w1-graphics-recovery.yml"
+  ],
+  "related_work": [
+    "A11/A13 scope evidence",
+    "A14 provenance intake",
+    "A15 builtin rollback (no overlap)",
+    "A1 FFT profiles"
+  ],
+  "experiment_ids": [
+    "original-graphics-program-recovery"
+  ],
+  "evidence": [],
+  "result": null,
+  "next_step": "Run independent bounded CPU recovery on authenticated source; no raw shader outputs."
+}
