@@ -2,8 +2,8 @@
   "schema_version": 1,
   "owner": "raft-20261103T105031Z-4b175384",
   "issue_id": "HAPTICS-008",
-  "status": "active",
-  "updated_at": "2026-11-03T10:50:31Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T10:56:00Z",
   "base_sha": "aa5f0b6d236a5bbac8cadadd3e2278ec2acb6df4",
   "resumed_from": "raft-20261103T100000Z-3a7f2c91",
   "hypothesis": "Native source staging currently checks banks and Data.rgd but not mandatory complete 29 original WAV Haptics set; deleting a WAV and making a new HEAD can pass the pre-copy required-name gate even with A3 manifest CI separate.",
@@ -28,5 +28,7 @@
     ".github/raft-native-build-request.json"
   ],
   "safety": "No Unity, no LFS hydration, no native request/APK/OBB/XAPK/Release, no schedule changes, strict expected_sha lease",
-  "next_step": "Read latest staging code and native invocation, implement manifest audit before copy and regression tests on synthetic Git fixture."
+  "next_step": "Coordinator future candidate runs native stage and later phone validates Haptics OBB path. Original A5 loader tested separately.",
+  "last_commit": "61f39303eadedbbbcc569d2ba1a9839742f6f377",
+  "result": "Staging now requires SHA-pinned 29/29 original WAVs before copy, 11/11 synthetic tests and 29 authentic source WAVs passed CI41623215003; no Unity/OBB/phone test."
 }
