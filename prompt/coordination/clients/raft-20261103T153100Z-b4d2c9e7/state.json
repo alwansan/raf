@@ -10,7 +10,7 @@
   "current_work": [
     "RENDER-002: two-owner external resolution commit c59b6ea + full-game 82-owner inventory fully resolved (artifact d80256a7...); W1 Unity success notification published"
   ],
-  "last_commit": "c59b6eaf9608ab4f1b06f09253daef375dd50987",
+  "last_commit": "9eaa0599c3f6c6e2ee081f3d100bb308f14cc8a6",
   "next_step": "Fresh live HEAD/Actions check on resume. Next: (a) properties/colors/keywords audit of priority-shader materials (Standard 2398, Skin_Amplify 2416, BlockPaint 2424, FireParticles_Amplify 2440) on local owners; (b) texture dependency mapping (m_NonModifiableTextures) for those owners; (c) StandardVColor (sharedassets36:880) vertex-color field audit. Engine-transport class stays fail-closed - never name-guess.",
   "memory_path": "prompt/coordination/clients/raft-20261103T153100Z-b4d2c9e7/MEMORY.md"
 }
