@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T224500Z-a1d7e439",
+  "issue_id": "FFT-FORMAT-009",
+  "experiment_id": "original-half-twochannel-vulkan",
+  "status": "completed",
+  "updated_at": "2026-11-03T22:56:01.815Z",
+  "source_commit": "34e7f04d8571eed231758cb7ba70a04e39643833",
+  "original_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "original_sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+  "original_object_sha256": "9d934f5c99183c6df5cf2f1fefc9d3e5ec4bce5da5f96a86e4c02910d5322247",
+  "source_file_size": 115978112,
+  "original_compiled_variants": 20,
+  "formats": [
+    {
+      "source": "RGHalf",
+      "vulkan": "VK_FORMAT_R16G16_SFLOAT",
+      "components": 2,
+      "bits": 16,
+      "pairs": 60,
+      "matching": 60
+    },
+    {
+      "source": "RGFloat",
+      "vulkan": "VK_FORMAT_R32G32_SFLOAT",
+      "components": 2,
+      "bits": 32,
+      "pairs": 60,
+      "matching": 60
+    },
+    {
+      "source": "ARGBHalf",
+      "vulkan": "VK_FORMAT_R16G16B16A16_SFLOAT",
+      "components": 4,
+      "bits": 16,
+      "pairs": 60,
+      "matching": 60
+    },
+    {
+      "source": "ARGBFloat",
+      "vulkan": "VK_FORMAT_R32G32B32A32_SFLOAT",
+      "components": 4,
+      "bits": 32,
+      "pairs": 60,
+      "matching": 60
+    }
+  ],
+  "scenarios": [
+    {
+      "seed": 0,
+      "groupY": 1
+    },
+    {
+      "seed": 19,
+      "groupY": 1
+    },
+    {
+      "seed": 257,
+      "groupY": 2
+    }
+  ],
+  "roundtrip_private_formatless_decl_restored": true,
+  "validated_spirv_vulkan11": true,
+  "runner": "Mesa CPU Vulkan 1.1",
+  "original_program_runs": 20,
+  "actual_format_program_pairs": 80,
+  "actual_numeric_output_comparisons": 240,
+  "matching_comparisons": 240,
+  "inconclusive": 0,
+  "max_abs_difference": 0,
+  "max_relative_l2": 0,
+  "source_code_changes": [
+    "scripts/a1_fft_vulkan_cpu.cpp",
+    "scripts/probe_original_fft_software_vulkan.py",
+    "tests/test_probe_original_fft_software_vulkan.py"
+  ],
+  "ci": {
+    "final_run": 41734497370,
+    "final_source_sha": "34e7f04d8571eed231758cb7ba70a04e39643833",
+    "final_status": "success",
+    "synthetic_job": 126260059133,
+    "original_job": 126260229156,
+    "red_regression_run": 41734092773,
+    "red_reason": "New format CLI parameter left Y dispatch at default in third scenario; fixed parsing argc>=7",
+    "format_schema_tests": 10,
+    "source_restore_tests": 10
+  },
+  "claimed_scope": "Single software CPU Vulkan execution and selected deterministic authentic resource views only; no Android/Unity",
+  "readiness": "NOT_READY/0-of-3",
+  "next_step": "Recover original Unity ComputeShader variant/caller binding and real runtime GPU resource contract. No native build by A1."
+}
