@@ -5,10 +5,12 @@ No game data is generated, decoded, normalized or published by this script.
 import argparse
 import hashlib
 import json
+import os
 from pathlib import Path
 import re
 import shutil
 import subprocess
+import tempfile
 
 MASTER_SHA = '10d310416b9f104a38b4ead8877e114142e154efb33105fcddbb2024a81af339'
 BANKS = {'MasterBank.bank', 'MasterBank.strings.bank', 'VO_logs_english.bank',
@@ -18,6 +20,32 @@ BANKS = {'MasterBank.bank', 'MasterBank.strings.bank', 'VO_logs_english.bank',
 def sha256(path):
     with path.open('rb') as source:
         return hashlib.file_digest(source, 'sha256').hexdigest()
+
+def stage_verified_asset(source, target, size, digest):
+    """Publish only fully checked bytes, without replacing an existing asset.
+
+    The original 100 MiB bank must not become visible as a half-written final
+    filename after an interrupted copy. A same-directory temporary file is
+    verified before an exclusive hard-link creates the final entry atomically.
+    The original source and existing destination are never overwritten.
+    """
+    target.parent.mkdir(parents=True, exist_ok=True)
+    fd, temporary_name = tempfile.mkstemp(
+        prefix='.raft-stage-', suffix='.partial', dir=str(target.parent))
+    os.close(fd)
+    temporary = Path(temporary_name)
+    try:
+        shutil.copyfile(source, temporary)
+        if temporary.stat().st_size != size or sha256(temporary) != digest:
+            raise ValueError('Staged original StreamingAssets verification failed')
+        try:
+            # Unlike os.replace, link fails if another process created target
+            # after the preflight. Never overwrite a previously staged bank.
+            os.link(temporary, target)
+        except FileExistsError as exc:
+            raise ValueError('Existing original StreamingAssets conflict; no overwrite') from exc
+    finally:
+        temporary.unlink(missing_ok=True)
 
 
 def stage(repo, project, report_path, apply=False):
@@ -66,8 +94,7 @@ def stage(repo, project, report_path, apply=False):
     if apply:
         for _, source, target, size, digest in plan:
             if not target.exists():
-                target.parent.mkdir(parents=True, exist_ok=True)
-                shutil.copyfile(source, target)
+                stage_verified_asset(source, target, size, digest)
             if target.stat().st_size != size or sha256(target) != digest:
                 raise ValueError('Staged original StreamingAssets verification failed')
     report = dict(applied=apply, files={name: dict(bytes=size, sha256=digest)
