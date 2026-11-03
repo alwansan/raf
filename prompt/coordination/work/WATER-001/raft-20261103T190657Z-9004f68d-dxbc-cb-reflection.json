@@ -3,17 +3,17 @@
   "owner": "raft-20261103T190657Z-9004f68d",
   "client_label": "A12R",
   "issue_id": "WATER-001",
-  "status": "planned",
-  "updated_at": "2026-11-03T19:06:57.872Z",
-  "base_sha": null,
+  "status": "paused",
+  "updated_at": "2026-11-03T19:17:47.597Z",
+  "base_sha": "e378eeaf0dd14751e259cf643671e11b38a1e7f1",
   "hypothesis": "The original Blur zero-member but nonzero-size CB declarations (544 bytes) may be validated against original DXBC RDEF CB size and bind slot without dropping authored semantics.",
   "intended_files": [
-    "scripts/a12r_original_blur_cb_reflection.py",
-    "tests/test_a12r_original_blur_cb_reflection.py",
-    ".github/workflows/raft-a12r-original-blur-cb-reflection.yml",
-    "prompt/coordination/clients/raft-20261103T190657Z-9004f68d/",
-    "prompt/coordination/work/WATER-001/raft-20261103T190657Z-9004f68d-dxbc-cb-reflection.json",
-    "prompt/coordination/discussions/WATER-001/20261103T190657Z-raft-20261103T190657Z-9004f68d-cb-reflection.md"
+    "scripts/a12r_190657_blur_cb_reflection.py",
+    "tests/test_a12r_190657_blur_cb_reflection.py",
+    ".github/workflows/raft-a12r-190657-cb-reflection.yml",
+    "prompt/coordination/clients/raft-20261103T190657Z-9004f68d/state.json",
+    "prompt/coordination/clients/raft-20261103T190657Z-9004f68d/MEMORY.md",
+    "prompt/coordination/experiments/raft-20261103T190657Z-9004f68d/original-blur-cb-reflection.json"
   ],
   "related_work": [
     "A12 original Blur CI41699143656 blocked at original_parameter_requires_exact_binding",
@@ -24,8 +24,11 @@
     "original-blur-cb-reflection"
   ],
   "evidence": [
-    "https://github.com/alwansan/raf/actions/runs/41699143656"
+    "https://github.com/alwansan/raf/actions/runs/41699143656",
+    "https://github.com/alwansan/raf/commit/0a2f9524440625b590e698a9adbbe4ce2434ae5f",
+    "https://github.com/alwansan/raf/commit/e378eeaf0dd14751e259cf643671e11b38a1e7f1",
+    "https://github.com/alwansan/raf/actions/runs/41701535937"
   ],
-  "result": null,
-  "next_step": "Isolate compiled RDEF CB and serialized group size/slot matching; bounded privacy-preserving CPU-only tests."
+  "result": "Independent source/test/workflow committed. CI still running; no outcome or original reflection data yet.",
+  "next_step": "Inspect run41701535937 terminal jobs and artifact; if synthetic or RDEF probe fails, fix only A12R code and rerun CPU, document result, coordinate with A12. No Unity/native build."
 }
