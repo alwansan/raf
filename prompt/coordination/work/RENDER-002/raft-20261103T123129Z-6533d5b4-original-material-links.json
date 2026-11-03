@@ -6,7 +6,7 @@
   "status": "planned",
   "updated_at": "2026-11-03T14:59:49.620Z",
   "base_sha": "0a6507e86c7960109360c0b95212db606c4d882e",
-  "hypothesis": "Two authenticated original owner files contain Material.m_Shader PPtr relationships to Shader objects. Exact owner-local references and official built-in identity intersection can be measured independently of the unauthenticated 107/140 exported file samples.",
+  "hypothesis": "Count exact source-authenticated Material.m_Shader PPtr linkage to owner-local Shader objects in two original resources only. A12 independently handles original-to-Unity vendor name intersection; do NOT duplicate.",
   "intended_files": [
     "scripts/probe_a13_material_shader_links.py",
     "tests/test_a13_material_shader_links.py",
@@ -21,7 +21,8 @@
   "related_work": [
     "A11 export provenance completes separate sampling",
     "A15 restorer rollback complete",
-    "W1 original Shader programs and Depth Copy linked; no changes to their files"
+    "W1 original Shader programs and Depth Copy linked; no changes to their files",
+    "A12 original 198 vendor name intersection active independently; A13 measures only Material PPtr"
   ],
   "experiment_ids": [
     "original-material-links"
@@ -31,5 +32,5 @@
     "https://github.com/alwansan/raf/actions/runs/41624581951"
   ],
   "result": null,
-  "next_step": "Synthetic ptr controls before SHA-pinned 2-owner real CPU probe; no Unity/Android."
+  "next_step": "Run 12 pure pointer tests and exact-source two-owner original material linkage CI, do not download vendor archive."
 }
