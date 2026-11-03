@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T162900Z-73e8c2a1",
+  "session_id": "w1-20261103T150217800Z-d4a79e63",
+  "status": "completed",
+  "hypothesis": "Original Depth Copy parameter entry0 may be empty per-variant overrides; exact decode and serialized render-state reconstruction can produce a faithful private ShaderLab wrapper retaining6+3subshader boundaries and property-rebound stage programs.",
+  "input_hashes": [
+    {
+      "owner": "sharedassets0.assets",
+      "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3"
+    },
+    {
+      "shader_path_id": 2407,
+      "sha256": "cf978dad4f4c67e57fb58448cee7a8c033c30d1491ef54b0a6ad887317fba75a"
+    }
+  ],
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_w1_depth_shaderlab.py -v",
+    "timeout600s python3 -m scripts.w1_build_depth_wrapper --source Raft/Raft_Data --out $RUNNER_TEMP/w1-depth-wrapper-summary.json"
+  ],
+  "expected_signal": "Exact parameter0 fully consumed as empty overrides; private ShaderLab preserves6+3subshader state/order, all18 stage bodies compile with Unity stage macros and validateVulkan1.1. No Unity/numeric implication.",
+  "negative_controls": [
+    "truncation/trailing bytes",
+    "wrong serializer",
+    "nonempty overrides",
+    "stage separation",
+    "dynamic fog and depth/mask preservation"
+  ],
+  "workflow_path": ".github/workflows/raft-w1-depth-wrapper.yml",
+  "concurrency_group": "raft-w1-depth-shaderlab-wrapper-${{ github.ref }}",
+  "artifact_prefix": "w1-depth-wrapper-aggregate",
+  "budget": "20min total/600s reconstruction,227511628-byte existing two-ownerLFS cache verified, no resS/Unity/APK",
+  "source_sha": "891e10a9dcc8b5cc16e66e12457b039e6f6d3086",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41662298511",
+  "result": "5tests PASS, exact empty parameter0, original6+3wrapper privately reconstructed;18/18 wrapped stages compile/validate; Unity/numeric not proven.",
+  "limitations": [
+    "No actual Unity ShaderLab parser/ShaderUtil compilation or render yet",
+    "No GPU numeric/phone equivalence; no original assets installed"
+  ],
+  "next_step": "Targeted Unity run41663393724; then numerical/render comparison before game integration."
+}

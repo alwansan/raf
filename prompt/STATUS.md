@@ -713,3 +713,8 @@ Client `raft-20261103T145000Z-a1c92f74` completed **real numerical shader execut
 
 **Limit:** This fixes only the backup I/O failure path, not the [native41624581951](https://github.com/alwansan/raf/actions/runs/41624581951) original zero-match built-in shader failure, authentic shader passes, FFT water kernels, Unity/Android graphics or device behavior. The inspected 107-file snapshot is not a confirmed full original export. RENDER-002/WATER-001/FFT-FORMAT-009 OPEN, **NOT_READY / three full immutable candidate reviews 0/3**. No Unity/APK/OBB/XAPK, release, LFS, native request, CL or scheduled task touched by A14.
 
+
+
+## W1: original Depth Copy ShaderLab reconstruction
+
+CPU source891e10a9, [run41662298511](https://github.com/alwansan/raf/actions/runs/41662298511) SUCCESS: original parameter0 fully decoded as empty overrides; private original6+3pass wrapper reconstructed with27dynamic fog references preserved,18/18combinedstagesvalid and5tests. See [report](../docs/W1_DEPTH_SHADERLAB_RECONSTRUCTION_2026-11-03.md). Reconstructed implementation, not authored original source or proven numeric/visual equivalent; no game GUID/meta installed. Targeted Unity2021.3.45f2 Android Vulkan single-shader assetbundle [run41663393724](https://github.com/alwansan/raf/actions/runs/41663393724) started at2467c031,30mincap, aggregate artifacts only, noAPK. Inspect its actual result before integration. WATER/RENDER/FFT remain open, NOT_READY0/3. W1 username raft-20261103T162900Z-73e8c2a1.

@@ -5,12 +5,12 @@
   "session_id": "w1-20261103T150217800Z-d4a79e63",
   "resumed_from": null,
   "status": "active",
-  "updated_at": "2026-11-03T15:02:17.800Z",
+  "updated_at": "2026-11-03T15:24:18.125Z",
   "base_sha": "528068d21253340a9a673517aa608dbb58a015d0",
   "current_work": [
-    "RENDER-002 original parameter0 and private ShaderLab6+3 wrapper"
+    "RENDER-002 private original6+3Depth ShaderLab; Unity Android Vulkan compilation run41663393724"
   ],
-  "last_commit": "433074c02a49f2feab31569965ae6e549e98ddef",
-  "next_step": "Decode original parameter entry0 with pinned serializer version, recover complete render-state wrapper privately and validate stage compilation.",
+  "last_commit": "2467c03172af01471a1f5df32b16bbdac92f14b2",
+  "next_step": "Inspect Unity run41663393724 aggregate result; fix actual ShaderLab/compiler failure, then asymmetric depth/resource numerical/render controls before integration.",
   "memory_path": "prompt/coordination/clients/raft-20261103T162900Z-73e8c2a1/MEMORY.md"
 }
