@@ -1,0 +1,69 @@
+name: Original Blur CB reflection ZIP2 CPU only 4e91
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths: ['.github/workflows/raft-blur-zip2-4e91.yml']
+permissions:
+  contents: read
+concurrency:
+  group: blur-zip2-4e91-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  reflect:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+            Raft/Raft_Data
+      - uses: actions/checkout@v4
+        with:
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-source
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/globalgamemanagers.assets
+            Raft/Raft_Data/resources.assets
+            Raft/Raft_Data/sharedassets0.assets
+            Raft/Raft_Data/sharedassets1.assets
+            Raft/Raft_Data/sharedassets24.assets
+            Raft/Raft_Data/sharedassets25.assets
+            Raft/Raft_Data/sharedassets29.assets
+            Raft/Raft_Data/sharedassets30.assets
+            Raft/Raft_Data/sharedassets34.assets
+            Raft/Raft_Data/sharedassets35.assets
+            Raft/Raft_Data/sharedassets36.assets
+            Raft/Raft_Data/sharedassets6.assets
+            Raft/Raft_Data/sharedassets8.assets
+            Raft/Raft_Data/sharedassets9.assets
+      - name: Test source decoding before original access
+        run: python3 -m unittest discover -s tests -p 'test_a12r_190657_blur_cb_reflection.py' -v
+      - name: Stage fourteen exact original providers without LFS
+        run: |
+          python3 - <<'PY'
+          import json,shutil,os
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import stage
+          from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
+          assert shutil.disk_usage('.').free > 2*1024**3
+          pins={'Raft_Data/'+k:v for k,v in SHADER_OWNERS.items()}
+          print(json.dumps(stage(Path('zip2-source'),Path(os.environ['RUNNER_TEMP'])/'blur-original',pins=pins),sort_keys=True))
+          PY
+      - name: Decode exact original CB bindings privately
+        run: |
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 -m scripts.a12r_190657_blur_cb_reflection --source "$RUNNER_TEMP/blur-original/Raft_Data" --repo . --out "$RUNNER_TEMP/blur-cb-summary.json"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: blur-cb-4e91-${{ github.sha }}
+          path: ${{ runner.temp }}/blur-cb-summary.json
+          if-no-files-found: ignore
+          retention-days: 7
