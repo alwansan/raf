@@ -2,9 +2,9 @@
   "schema_version": 1,
   "owner": "raft-20261103T105625Z-a7d793f4",
   "issue_id": "INPUT-005",
-  "status": "planned",
-  "updated_at": "2026-11-03T10:56:55.022Z",
-  "base_sha": "26c78e404b100ab86052e1c62c70817b6559c6d4",
+  "status": "completed",
+  "updated_at": "2026-11-03T11:05:35.305Z",
+  "base_sha": "22735cd40c8c5f20342c2b534274875a1626ddee",
   "hypothesis": "A queued short-tap press may fire after a later long hold is released, generating a ghost Mouse0 input; clear or reorder stale queued pulses at the hold transition without losing normal rapid tap release separation.",
   "intended_files": [
     "android-port/Runtime/Platform/TouchPointerButtons.cs",
@@ -18,10 +18,15 @@
     "A7 prior raft-20261103T100214Z-c83d58d4 completed independent 425 check boundary matrix",
     "WATER-001, DISPLAY-003, HAPTICS-008, LOCAL-005, DIAG-010 active elsewhere; no file overlap"
   ],
-  "experiment_ids": [],
-  "evidence": [
-    "https://github.com/alwansan/raf/actions/runs/41616691487"
+  "experiment_ids": [
+    "a7-pending-tap-hold-ghost-20261103"
   ],
-  "result": null,
-  "next_step": "Introduce a regression exercising queue + Hold(true) + Hold(false), verify red actual C# on CI, then apply minimal fix and green CI."
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41616691487",
+    "https://github.com/alwansan/raf/actions/runs/41623753511",
+    "https://github.com/alwansan/raf/actions/runs/41624267337",
+    "https://github.com/alwansan/raf/actions/runs/41624236295"
+  ],
+  "result": "Actual authored C# bug reproduced with red CI and repaired; final green CI 430 touch checks and 53 mapping checks, original offline source integration CI SUCCESS. No phone/Unity acceptance.",
+  "next_step": "Future phone test and physical mouse isolation acceptance; maintain NOT_READY, no readiness review credit."
 }
