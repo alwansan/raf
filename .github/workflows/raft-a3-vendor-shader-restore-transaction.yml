@@ -1,0 +1,34 @@
+name: Raft A3 vendor shader restore transactional integrity (CPU only)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/restore_tmp_shaders.py'
+      - 'tests/test_a3_vendor_shader_restore_transaction.py'
+      - '.github/workflows/raft-a3-vendor-shader-restore-transaction.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raft-a3-vendor-shader-transaction-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+  queue: max
+jobs:
+  restore-transaction:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Exercise production shader replacement with I/O and symlink failure controls
+        run: python3 -m unittest discover -s tests -p test_a3_vendor_shader_restore_transaction.py -v
+      - name: Existing TMP shader restoration regressions
+        run: python3 -m unittest discover -s tests -p test_restore_tmp_shaders.py -v
+      - name: Existing PostFX shader restoration regressions
+        run: python3 -m unittest discover -s tests -p test_restore_postfx_shaders.py -v
+      - name: Existing volumetric shader restoration regressions
+        run: python3 -m unittest discover -s tests -p test_restore_volumetric_shaders.py -v
+      - name: Evidence boundary
+        run: echo 'Synthetic CPU shader-staging transaction only; not actual Unity GPU shaders, colours, FFT, or Android runtime.' >> "$GITHUB_STEP_SUMMARY"
