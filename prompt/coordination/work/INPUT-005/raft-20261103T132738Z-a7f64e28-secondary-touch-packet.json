@@ -2,8 +2,8 @@
   "schema_version": 1,
   "owner": "raft-20261103T132738Z-a7f64e28",
   "issue_id": "INPUT-005",
-  "status": "planned",
-  "updated_at": "2026-11-03T13:28:17.119Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T13:37:13.668Z",
   "base_sha": "9dc9179fd45c9b611f744dec7ed4686b4bb4771d",
   "hypothesis": "When primary UI/gamepad touch is active, a secondary raw TouchState packet is misread via primaryTouch.ReadValueFromEvent; safe StateEvent.GetState<TouchState>(input) preserves event-specific id/phase/position.",
   "intended_files": [
@@ -18,10 +18,14 @@
   "related_work": [
     "Prior A7 INPUT-005 scopes completed; current other clients' work concentrates separate HAPTICS/LOCAL/WATER/DISPLAY/RENDER"
   ],
-  "experiment_ids": [],
-  "evidence": [
-    "https://docs.unity.cn/Packages/com.unity.inputsystem@1.7/api/UnityEngine.InputSystem.LowLevel.StateEvent.html"
+  "experiment_ids": [
+    "raw-multitouch-secondary-input-20261103"
   ],
-  "result": null,
-  "next_step": "Implement fail-first C# runner extracted from current production OnEvent, then patch raw per-finger event read with fallback and verify CI."
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41645203051",
+    "https://github.com/alwansan/raf/actions/runs/41645428990",
+    "https://github.com/alwansan/raf/actions/runs/41645429004"
+  ],
+  "result": "RED: real OnEvent extracted into C# strict Unity doubles lost secondary raw gameplay touch with primary UI. Fixed via documented 1.7 StateEvent.GetState<TouchState>, fallback to old primary path for other state formats. GREEN:14 raw routing checks +446 C# gesture +53 mapping +15 platform suites, original offline compile exit0. No actual Unity or phone execution.",
+  "next_step": "Distinct on-phone virtual gamepad+second gameplay finger validation after justified newer APK, plus Unity API compile. General input acceptance remains open."
 }
