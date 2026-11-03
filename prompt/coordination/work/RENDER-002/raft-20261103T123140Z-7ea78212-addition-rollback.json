@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T123140Z-7ea78212",
+  "client_label": "A15",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "updated_at": "2026-11-03T13:20:41.849Z",
+  "base_sha": null,
+  "hypothesis": "Production restore_builtin_shaders.restore_project writes newly created license/include files sequentially; a partial write exception can strand destination files, blocking future retries while originals may remain unchanged. Test fail-first, implement bounded rollback only for newly created additions, preserve pre-existing identical files and exact shader/.meta bytes.",
+  "intended_files": [
+    "scripts/restore_builtin_shaders.py",
+    "tests/test_a15_builtin_restore_rollback.py",
+    ".github/workflows/raft-a15-builtin-restore-rollback.yml"
+  ],
+  "related_work": [
+    "A3 RENDER-002 symlink-component guard completed d93f6aec",
+    "A6 RENDER-002 include-comment parser completed fa464735",
+    "A9 RENDER-002 lexical identity guard completed d159f348",
+    "A11/A13 independent export provenance diagnosis completed; original 107 sample not full export",
+    "A14 currently active export provenance intake with no source changes recorded"
+  ],
+  "experiment_ids": [
+    "a15-builtin-additions-fail-first"
+  ],
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41624581951"
+  ],
+  "result": null,
+  "next_step": "CPU-only red/green tests for simulated partial include/license write failure and restored shader writer failure. Never alter zero-match strict gate or any native request."
+}
