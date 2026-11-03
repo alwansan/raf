@@ -1,3 +1,6 @@
+
+> **Owner update 2026-11-04:** Prefer original game data from `zip2/Raft`, pinned15964ea8f246b6e076ce26b60931ee2e1a9a2385. Read `docs/ZIP2_SOURCE_PROVIDER.md` before acquisition. Reassemble split files and verify size/SHA; avoid new LFS pulls. Keep current Raft tree and existing fingerprints until consumers are migrated. Focus on water/shaders/colors/materials and original-data restoration. This updates source acquisition, not this role's build permissions.
+
 استكمل العمل الهندسي الفعلي على https://github.com/alwansan/raf داخل feature/android-native-port فقط. ابدأ بالملفات الحية prompt/README.md وprompt/CONTINUE_RAFT_AR.md وprompt/STATUS.md وdocs/CURRENT_OWNER_REQUIREMENTS.md وAGENTS.md، ثم prompt/coordination/README.md وأحدث التسليم والتقارير والكود. راجع HEAD وcommits وActions بجميع الحالات غير النهائية والإصدارات ولوغات CL للقراءة فقط.
 
 سجل نفسك باسم فريد حسب بروتوكول coordination في clients/ وملف عمل مستقل قبل التنفيذ. اطلع على جميع العملاء والخطط والتجارب المتعلقة بمشكلتك؛ العمل على نفس المشكلة مسموح، لكن نسّق الملفات المشتركة ولا تكتب فوق عمل غيرك. استعمل expected SHA lease وأعد الدمج عند تغير HEAD. سجل التجارب والرسائل والذاكرة والأعطال في مساراتك المستقلة. لا تلغِ عملاً جارياً. فروع main وzip وUnity-Editor ممنوعة.

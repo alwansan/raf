@@ -838,3 +838,25 @@ Private exact program-to-ShaderLab recovery [41696943954](https://github.com/alw
 ## Workload boundary regression final verification — 2026-11-03
 Run41696574334/source42cbccbf6108f3ca082711f0d067369971a62709 SUCCESS, job126128580376. Actual logs confirm new workload fixture1/1 (six positive/negative controls) and schema suite8/8 executed. No LFS or Unity. Together with original software Vulkan41687345468 this closes the diagnostic workload-boundary repair only. Canary semantics correction remains explicit; no full water/device proof.
 Next independent source-restoration target: A12 nonzero constant-buffer reflection blocker (88-byte original metadata,544usedSize across2CBs); read exact stage pins and common parameter layouts before making changes. Do not discard CB records or alter W1 empty-override assumptions. No repeated numeric run needed.
+
+
+# ZIP2 original game source — owner direction 2026-11-04
+
+Preferred original input: https://github.com/alwansan/raf/tree/zip2/Raft
+Reviewed immutable source commit: 15964ea8f246b6e076ce26b60931ee2e1a9a2385.
+Read zip2 only; write source/code/docs only on feature/android-native-port. Protected main/zip/Unity-Editor unchanged.
+
+## Verified inventory and limits
+RAFT_FILE_MANIFEST.tsv has366 original files,7789295609 bytes,22 split files. Recursive Git tree is complete (577 entries); all plain file sizes and all split-part summed sizes match manifest. resources.assets manifest SHA87493249f1adfc0c5eb8b82e4e199e208cd2c95eabe9796cab82116c4838595c matches existing authenticated source pin.
+This is structural verification, NOT full7.79GB content SHA verification or successful Unity import. Every restored file must pass original size/SHA before use.
+
+## Use
+Fetch pinned zip2 into an isolated checkout with LFS smudge disabled, without switching or overwriting another client's worktree. Read README_ZIP2.txt, RAFT_FILE_MANIFEST.tsv and restore_raft.sh. Run bash restore_raft.sh /absolute/separate/Raft-restored in that checkout. Output must be separate from source and existing projects. Restore only needed providers if bandwidth/disk matters; concatenate part-00000 etc in exact order, verify final size and SHA, then stage under original path. Keep metadata and source hash checks. Never pass split folders as .assets/.resS/.bank files or execute Windows binaries.
+
+Prefer ZIP2 verified reconstruction over new git lfs pull. Reuse already verified local/cache payloads. Do not silently fall back to LFS or claim unavailable payload success. Existing workflows still using LFS require a deliberate adapter/checkout/staging change; this documentation does not convert them automatically. Pin source SHA in experiment records and compare existing original fingerprints; investigate mismatches.
+
+## Migration choice
+Keep feature/android-native-port/Raft for now: existing pointer identity and Git blob validators rely on it. Do not copy7.79GB/split trees over it or delete it wholesale. ZIP2 is the external original-data provider; stage restored files in disposable experiment directories. Gradually adapt consumers while retaining original authenticity checks, .meta/GUIDs, scene/material links, kernel ordering and all content.
+
+## All clients and tasks
+A1–A15, W1/W2/W3 and recovery helpers: read this notice before further original-data acquisition. Communicate through coordination records; no immediate cross-session delivery is implied. Prioritize substantive water/FFT/shader/color/material/effect restoration and data recovery. Do not spend cycles on repetitive audits when original source progress is possible. Preserve each role's Unity/build restrictions and ongoing jobs. Successful reconstruction does not close rendering/audio/world/device gates.

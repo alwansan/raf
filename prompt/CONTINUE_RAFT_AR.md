@@ -1,4 +1,7 @@
 
+> **Owner update 2026-11-04:** Prefer original game data from `zip2/Raft`, pinned15964ea8f246b6e076ce26b60931ee2e1a9a2385. Read `docs/ZIP2_SOURCE_PROVIDER.md` before acquisition. Reassemble split files and verify size/SHA; avoid new LFS pulls. Keep current Raft tree and existing fingerprints until consumers are migrated. Focus on water/shaders/colors/materials and original-data restoration. This updates source acquisition, not this role's build permissions.
+
+
 
 **Owner role replacement, 3 November 2026:** Task6ae930dd1c248191ab637a5268342007 was renamed and enabled as «Raft — عميل الإصلاح والتجارب». It now performs source/resource repairs and CPU-only experiments using coordination records; its previous readiness/build coordinator role is superseded. It does not initiate Unity/native delivery. Other tasks unchanged; do not recreate a coordinator automatically.
 أريدك أن تستكمل **الإصلاح والتطوير الهندسي الفعلي** لمشروع Raft v1.1.01 من Windows إلى Android Native، من أحدث حالة مؤكدة، وليس الاكتفاء بخطة أو تقرير.
