@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T095700Z-a2b31f4d",
+  "status": "active",
+  "hypothesis": "Native RectTransform and Canvas records in original non-LFS 6 scene binaries can be scoped without materializing any LFS asset or running Unity; identify whether Settings-like GameObjects reside in this slice.",
+  "input_hashes": [
+    "level0:git-sha1:2aec4377058baf72656a2ba0daea9aefc67fcb7e",
+    "level1:git-sha1:1944f11673108f8db2084906ff5899003c97fc4a",
+    "level2:git-sha1:a45e7c562ea249a08980198c8afca850f7b09778",
+    "level3:git-sha1:f394bff39030688193ba62c11acc819ad459a821",
+    "level4:git-sha1:03bcf6426b1152f0c4de0ecc16a90d4ae766cf1a",
+    "level5:git-sha1:99582def7e1cdc101504d2dbd2c687c6b9c327eb"
+  ],
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_probe_a2_scene_ui_layout.py -v",
+    "python3 -m scripts.probe_a2_scene_ui_layout --source Raft/Raft_Data"
+  ],
+  "expected_signal": "Six exact git-blobs; scenes with Canvas/RectTransform and hashed Settings-looking object counts; possible CanvasScaler field shape only if mono typetree available; no sensitive names, no runtime conclusions.",
+  "negative_controls": [
+    "Reject LFS pointer and modified SHA",
+    "Reject symlinks/unsafe paths and oversized sources",
+    "A fake class name without the four CanvasScaler serialized keys cannot trigger positive",
+    "Unknown MonoBehaviour typetree does not prove absent CanvasScaler",
+    "Unrelated/missing link objects cannot be labeled Settings root"
+  ],
+  "workflow_path": ".github/workflows/raft-a2-scene-ui-layout.yml",
+  "concurrency_group": "raft-a2-scene-layout-${{ github.ref }}-${{ github.sha }}",
+  "artifact_prefix": null,
+  "budget": "CPU-only ubuntu-24.04 timeout 10min; checkout six scene blobs no LFS; optional pinned UnityPy installed runner; no Unity/native/whole-LFS hydration.",
+  "run_url": null,
+  "source_sha": null,
+  "result": null,
+  "limitations": [
+    "Original scene slice only 0..5, not all game scenes nor prefabs in resources.assets LFS.",
+    "MonoBehaviour script PPtrs may not resolve CanvasScaler without dependency graph.",
+    "No Android runtime/Settings aspect cause inferred."
+  ],
+  "next_step": "Inspect actual CI, expand to relevant original serialized prefab only on authenticated evidence."
+}

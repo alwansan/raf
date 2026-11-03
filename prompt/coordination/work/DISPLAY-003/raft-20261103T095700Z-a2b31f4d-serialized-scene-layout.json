@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T095700Z-a2b31f4d",
+  "issue_id": "DISPLAY-003",
+  "status": "active",
+  "updated_at": "2026-11-03T11:24:00Z",
+  "base_sha": "3fa646ed1dca28071d2b65c6394f0003231362e6",
+  "hypothesis": "Original menu scene 0-5 contains native Canvas/RectTransform objects whose serialized anchors/layout may narrow the Settings stretched UI issue; CanvasScaler MonoBehaviour decoding may be unavailable and must be represented as unknown.",
+  "intended_files": [
+    "scripts/probe_a2_scene_ui_layout.py",
+    "tests/test_probe_a2_scene_ui_layout.py",
+    ".github/workflows/raft-a2-scene-ui-layout.yml",
+    "docs/A2_DISPLAY_SETTINGS_LAYOUT_SOURCE_2026-11-03.md",
+    "prompt/coordination/clients/raft-20261103T095700Z-a2b31f4d/MEMORY.md",
+    "prompt/coordination/clients/raft-20261103T095700Z-a2b31f4d/state.json",
+    "prompt/STATUS.md",
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+  ],
+  "related_work": [
+    "prompt/coordination/work/DISPLAY-003/raft-20261103T095700Z-a2b31f4d-controls-layout-context.json"
+  ],
+  "experiment_ids": [
+    "serialized-scene-layout"
+  ],
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41623586923"
+  ],
+  "result": null,
+  "next_step": "Audit only original level0..level5 no-LFS binary scenes, Git blob SHA authenticated, never publish raw assets/serialized labels."
+}

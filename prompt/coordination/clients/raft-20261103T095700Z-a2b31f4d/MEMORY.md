@@ -32,3 +32,10 @@ Original ControlsSettingsBox SHA256 b64ba19e2d55fe503045e523c3c8658adb4ca3ededac
 DISPLAY-003 SOURCE_REVIEW_REQUIRED, NOT_READY/0 of3; no runtime, Unity/APK/OBB/XAPK, GUID/.meta, LFS, touch, tasks, native requests or release changed. Next inspect authenticated serialized Settings UI CanvasScaler and opening/UnityEvent path.
 
 - Separate work and experiment closed; A2 state paused. No work continues between turns.
+
+
+## A2 third turn — serialized Settings scene investigation
+- Resumed only after user Continue from paused state at 2026-11-03T11:24:00Z; new session a2-continue-20261103T112400-f7a82190.
+- Source from branch 3fa646ed1dca28071d2b65c6394f0003231362e6; no other DISPLAY-003 active work. Prior CSharp9 Controls CI41623586923 success; Settings stretch not proven.
+- New experiment uses 6 original non-LFS Unity binary scenes, exact Git SHA1 blobs; avoids all LFS, CanvasScaler/RectTransform unknowns explicitly retained and no game runtime changes.
+- One independent native build41624581951 was in_progress on older source c7254f7d during review; do not cancel/alter or infer any device proof.

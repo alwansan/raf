@@ -1,13 +1,15 @@
 {
   "schema_version": 1,
   "username": "raft-20261103T095700Z-a2b31f4d",
-  "session_id": "a2-continue-20261103T104921-f42c8a91",
-  "resumed_from": "a2-20261103T095700Z-b7e41c2f",
-  "status": "paused",
-  "updated_at": "2026-11-03T11:01:38.684Z",
-  "base_sha": "04a260a81982a4d983b96e5364b2925b6c5988d5",
-  "current_work": [],
+  "session_id": "a2-continue-20261103T112400-f7a82190",
+  "resumed_from": "a2-continue-20261103T104921-f42c8a91",
+  "status": "active",
+  "updated_at": "2026-11-03T11:24:00Z",
+  "base_sha": "3fa646ed1dca28071d2b65c6394f0003231362e6",
+  "current_work": [
+    "DISPLAY-003 original 6-scene UI object read-only audit"
+  ],
   "last_commit": "b9ec97d2776e8504a0c5d71f1b226e29f320707c",
-  "next_step": "Inspect original serialized Settings CanvasScaler / scene layout; DISPLAY-003 remains SOURCE_REVIEW_REQUIRED. Resume only by new user turn.",
+  "next_step": "Run independent original 6-scene no-LFS serialized UI probe, report typed/native Canvas and RectTransform evidence, keep Settings regression open.",
   "memory_path": "prompt/coordination/clients/raft-20261103T095700Z-a2b31f4d/MEMORY.md"
 }
