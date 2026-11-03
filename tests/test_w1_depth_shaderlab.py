@@ -57,8 +57,10 @@ class DepthShaderLab(unittest.TestCase):
         self.assertIn('Blend [FixtureSourceBlend] Zero', render_state(original))
         original = state()
         original['fogDensity'] = value(1)
-        with self.assertRaises(ValueError):
-            render_state(original)
+        self.assertIn('Density 1', render_state(original))
+        original['fogStart'] = {'val': 0, 'name': 'FixtureFogStart'}
+        original['fogEnd'] = {'val': 0, 'name': 'FixtureFogEnd'}
+        self.assertIn('Range [FixtureFogStart], [FixtureFogEnd]', render_state(original))
 
     def test_stage_bodies_are_separated(self):
         text = stage_body('float4 originalVertex;', 'float4 originalFragment;')

@@ -95,6 +95,15 @@ def enum(record, names):
     return names[int(value)]
 
 
+def numeric(record):
+    name = property_name(record)
+    return '[' + name + ']' if name is not None else number(val(record))
+
+
+def zero(record):
+    return property_name(record) is None and val(record) == 0
+
+
 def tags(value):
     return 'Tags { ' + ' '.join(quoted(k) + ' = ' + quoted(v) for k, v in value.get('tags', [])) + ' }'
 
@@ -132,11 +141,25 @@ def render_state(state):
     lines.append('Offset ' + number(val(state['offsetFactor'])) + ', ' + number(val(state['offsetUnits'])))
     if 'conservative' in state and val(state['conservative']) != 0:
         raise ValueError('Conservative raster state requires targeted support proof')
-    # Reject nonneutral fixed-function fog rather than silently omitting it.
-    if state.get('fogMode', -1) != -1 or any(val(state[k]) != 0 for k in ('fogDensity', 'fogStart', 'fogEnd')):
-        raise ValueError('Nonneutral original fog state requires explicit recovery')
-    if any(val(state['fogColor'][k]) != 0 for k in ('x', 'y', 'z', 'w')):
-        raise ValueError('Nonneutral original fog color requires explicit recovery')
+    # Preserve both literal and property-driven original fog, including names
+    # whose serialized fallback is zero. Never discard them as neutral values.
+    color = state['fogColor']
+    color_name = property_name(color)
+    color_active = color_name is not None or any(not zero(color[k]) for k in ('x', 'y', 'z', 'w'))
+    if state.get('fogMode', -1) != -1 or color_active or any(not zero(state[k]) for k in ('fogDensity', 'fogStart', 'fogEnd')):
+        lines.append('Fog {')
+        if state['fogMode'] != -1:
+            mode = {0: 'Off', 1: 'Linear', 2: 'Exp', 3: 'Exp2'}.get(state['fogMode'])
+            if mode is None:
+                raise ValueError('Unknown original fog mode')
+            lines.append('Mode ' + mode)
+        if color_active:
+            lines.append('Color ' + ('[' + color_name + ']' if color_name is not None else '(' + ','.join(numeric(color[k]) for k in ('x', 'y', 'z', 'w')) + ')'))
+        if not zero(state['fogDensity']):
+            lines.append('Density ' + numeric(state['fogDensity']))
+        if not zero(state['fogStart']) or not zero(state['fogEnd']):
+            lines.append('Range ' + numeric(state['fogStart']) + ', ' + numeric(state['fogEnd']))
+        lines.append('}')
     stencil = []
     for key, label in (('stencilRef', 'Ref'), ('stencilReadMask', 'ReadMask'), ('stencilWriteMask', 'WriteMask')):
         stencil.append(label + ' ' + number(val(state[key])))
