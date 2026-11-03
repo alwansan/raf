@@ -135,6 +135,7 @@ def restore_project(project, backup, shaders, files, license):
         raise ValueError('Shader backup must be outside Unity project')
     plan = []
     used = set()
+    metadata_guids = set()
     dependencies = set()
     shader_files = 0
     declared_identities = 0
@@ -156,9 +157,23 @@ def restore_project(project, backup, shaders, files, license):
         _require_safe_asset_path(assets, meta)
         if not meta.is_file() or meta.is_symlink() or path.is_symlink():
             raise ValueError('Missing/unsafe original shader metadata')
+        # Authenticate the matched exported shader's identity before backups or
+        # publication. Preserve every original metadata byte; reject ambiguous
+        # top-level GUIDs and collisions instead of silently corrupting Unity links.
+        metadata = meta.read_bytes()
+        guid_lines = [line for line in metadata.splitlines() if line.startswith(b'guid:')]
+        if len(guid_lines) != 1:
+            raise ValueError('Missing or ambiguous original shader metadata GUID')
+        match = re.fullmatch(rb'guid:[ \t]*([0-9a-fA-F]{32})[ \t]*', guid_lines[0])
+        if match is None:
+            raise ValueError('Malformed original shader metadata GUID')
+        guid = match.group(1).lower()
+        if guid in metadata_guids:
+            raise ValueError('Duplicate original shader metadata GUID')
+        metadata_guids.add(guid)
         source, required = rewrite(shaders[name], files)
         dependencies.update(required)
-        plan.append((path, source.encode(), path.read_bytes(), meta, meta.read_bytes()))
+        plan.append((path, source.encode(), path.read_bytes(), meta, metadata))
     # Count-only evidence answers why a genuine export matched no trusted
     # built-in identities, without leaking original/custom shader names or
     # turning this strict authenticity gate into an optional success.

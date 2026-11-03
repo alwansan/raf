@@ -1,16 +1,17 @@
-name: Raft A14 built-in shader external backup integrity (CPU only)
+name: Raft A14 built-in shader backup and GUID preflight (CPU only)
 on:
   push:
     branches: [feature/android-native-port]
     paths:
       - scripts/restore_builtin_shaders.py
       - tests/test_a14_builtin_backup_atomicity.py
+      - tests/test_a14_shader_meta_guid_preflight.py
       - .github/workflows/raft-a14-builtin-backup-atomicity.yml
   workflow_dispatch:
 permissions:
   contents: read
 concurrency:
-  group: raft-a14-backup-atomicity-${{ github.ref }}-${{ github.sha }}
+  group: raft-a14-shader-preflight-${{ github.ref }}-${{ github.sha }}
   cancel-in-progress: false
 jobs:
   backup-write-injection:
@@ -26,7 +27,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p "$RUNNER_TEMP/a14-evidence"
-          python3 -m unittest discover -s tests -p test_a14_builtin_backup_atomicity.py -v 2>&1 | tee "$RUNNER_TEMP/a14-evidence/synthetic-results.txt"
+          python3 -m unittest discover -s tests -p 'test_a14_*.py' -v 2>&1 | tee "$RUNNER_TEMP/a14-evidence/synthetic-results.txt"
       - name: Retain aggregate fixture evidence only
         if: always()
         uses: actions/upload-artifact@v4
