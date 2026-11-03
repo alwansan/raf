@@ -78,6 +78,8 @@ internal static class Program
                 "Malformed archive URI must fail");
             Throws<InvalidDataException>(() => AndroidStreamingAssets.ReadAllBytes("jar:https://example.org/a.obb!/assets/Haptics/x.wav"),
                 "Remote ZIP URI must not be accepted");
+            Throws<InvalidDataException>(() => AndroidStreamingAssets.ReadAllBytes("/jar:https://example.org/a.obb!/assets/Haptics/x.wav"),
+                "Leading-slash remote ZIP URI must not be accepted");
             string dup = Path.Combine(root, "dup.obb");
             using (var stream = File.Create(dup))
             using (var archive = new ZipArchive(stream, ZipArchiveMode.Create))

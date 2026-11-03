@@ -18,7 +18,15 @@ namespace RaftAndroid.Platform
             // Recognize ONLY this exact leading-slash form; keep every archive
             // and entry validation below instead of silently treating it as a file.
             if (path.StartsWith("/jar:file:", StringComparison.Ordinal)) path = path.Substring(1);
-            if (!path.StartsWith("jar:file:", StringComparison.Ordinal)) return File.ReadAllBytes(path);
+            if (!path.StartsWith("jar:file:", StringComparison.Ordinal))
+            {
+                // Never mistake another jar: transport for a regular local
+                // filesystem path. Only local APK/OBB ZIP archives are valid.
+                if (path.StartsWith("jar:", StringComparison.Ordinal) ||
+                    path.StartsWith("/jar:", StringComparison.Ordinal))
+                    throw new InvalidDataException("Unsupported Android asset archive URL");
+                return File.ReadAllBytes(path);
+            }
             int separator = path.IndexOf("!/", StringComparison.Ordinal);
             if (separator < 0) throw new InvalidDataException("Malformed Android asset URL");
             var archiveUri = new Uri(path.Substring(4, separator - 4), UriKind.Absolute);
