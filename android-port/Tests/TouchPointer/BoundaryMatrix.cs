@@ -134,6 +134,43 @@ internal static class BoundaryMatrix
             Require(!buttons.Pressed && events.Count == atRelease + 2, "new-tap-release-after-hold");
         }
 
+        // A pause/focus callback can synchronously cancel a touch while the
+        // 500ms Down notification is being delivered. Neither completion path
+        // may then emit a Tap or Move AFTER that cancellation/Up.
+        {
+            var events = new List<TouchPointerCommand>();
+            TouchPointerGesture gesture = null;
+            gesture = new TouchPointerGesture((cmd, x, y) =>
+            {
+                events.Add(cmd);
+                if (cmd == TouchPointerCommand.Down) gesture.Cancel();
+            });
+            gesture.Begin(31, 1f, 2f, 10d);
+            gesture.End(31, 8f, 9f, 10.5d, false);
+            Require(events.Count == 3 &&
+                events[0] == TouchPointerCommand.Move &&
+                events[1] == TouchPointerCommand.Down &&
+                events[2] == TouchPointerCommand.Up, "reentrant-cancel-end-no-ghost-tap");
+            Require(!gesture.Active && !gesture.Held, "reentrant-cancel-end-clears-state");
+        }
+
+        {
+            var events = new List<TouchPointerCommand>();
+            TouchPointerGesture gesture = null;
+            gesture = new TouchPointerGesture((cmd, x, y) =>
+            {
+                events.Add(cmd);
+                if (cmd == TouchPointerCommand.Down) gesture.Cancel();
+            });
+            gesture.Begin(32, 1f, 2f, 20d);
+            gesture.Move(32, 8f, 9f, 20.51d);
+            Require(events.Count == 3 &&
+                events[0] == TouchPointerCommand.Move &&
+                events[1] == TouchPointerCommand.Down &&
+                events[2] == TouchPointerCommand.Up, "reentrant-cancel-move-no-trailing-motion");
+            Require(!gesture.Active && !gesture.Held, "reentrant-cancel-move-clears-state");
+        }
+
         return checks;
     }
 }
