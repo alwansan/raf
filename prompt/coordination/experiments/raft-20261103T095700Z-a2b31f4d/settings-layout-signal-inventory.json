@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T095700Z-a2b31f4d",
+  "status": "completed",
+  "hypothesis": "Settings-related original CSharp9 classes may directly change UI geometry beyond the known desktop Screen.SetResolution; inspect before suggesting a runtime fix.",
+  "input_hashes": [
+    "Settings.cs sha256:904c52b337fe951f711e2efc15bfafc4fc77f2a8d2cc9c5bee2f7d14075103ad",
+    "GraphicsSettingsBox.cs sha256:e1854d74adbbe0565b586ec749f7de2cc73e3f97f59c388934a3faa0defc9300",
+    "DynamicResolution.cs sha256:69f9ab873de44b167deb3d6d00182fd59b0147b27d8365fff64b2849069cedbc"
+  ],
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_probe_a2_settings_layout.py -v",
+    "python3 -m scripts.probe_a2_settings_layout --source PRIVATE_ORIGINAL_CSHARP9"
+  ],
+  "expected_signal": "Bounded original Settings UI-reference categories and exact line numbers, no proprietary code excerpts.",
+  "negative_controls": [
+    "mask comments/strings",
+    "ignore == as assignment",
+    "fail closed on modified/duplicate original SHA",
+    "reject symlinks",
+    "exclude unrelated gameplay files"
+  ],
+  "workflow_path": ".github/workflows/raft-a2-settings-layout-source.yml",
+  "concurrency_group": "raft-a2-display-003-${{ github.ref }}-${{ github.sha }}",
+  "artifact_prefix": null,
+  "budget": "CPU-only single original-source audit on Ubuntu 24.04; timeout10min; no Unity or LFS.",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41616959190",
+  "source_sha": "b4ab7275cdadead58081d188cea305d8aa814766",
+  "result": "SUCCESS: 4/4 synthetic tests. SHA-verified private original CSharp9: 2394 source files, 8 Settings-related, 20 lexical sites; ControlsSettingsBox direct sizeDelta write line110, no direct CanvasScaler setters within selected classes.",
+  "limitations": [
+    "Source scan is lexical, not a Settings call graph",
+    "Does not inspect original serialized CanvasScaler settings",
+    "Does not prove cause of Settings stretch",
+    "No Unity/phone execution; only original APK80 device evidence available"
+  ],
+  "next_step": "Inspect pinned original ControlsSettingsBox sizeDelta assignment target and scene CanvasScaler/RectTransform serialization; keep DISPLAY-003 OPEN."
+}
