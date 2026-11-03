@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T120720Z-a1e4f6c9",
+  "experiment_id": "operand-producer-edges",
+  "issue_id": "WATER-001",
+  "status": "completed",
+  "updated_at": "2026-11-03T12:21:03.573Z",
+  "source_commits": [
+    "07dc7781dcaf517311ecfe08923cbb9da661e253",
+    "2be0c6938257591818414e407909814dbcd5b599"
+  ],
+  "synthetic_url": "https://github.com/alwansan/raf/actions/runs/41633667561",
+  "synthetic_tests": 9,
+  "original_url": "https://github.com/alwansan/raf/actions/runs/41634076530",
+  "original_job": 125910690956,
+  "original_result": {
+    "programs_compared": 20,
+    "valid_spirv": 20,
+    "binding_matches": 20,
+    "workgroup_matches": 20,
+    "direct_tracked_edge_profiles_matching": 0,
+    "original_tracked_edges": 525,
+    "roundtrip_tracked_edges": 750,
+    "original_unclassified_operand_uses": 1665,
+    "roundtrip_unclassified_operand_uses": 1701,
+    "drift": [
+      {
+        "producer": 124,
+        "consumer": 124,
+        "original": 0,
+        "roundtrip": 390,
+        "pairs_changed": 20
+      },
+      {
+        "producer": 128,
+        "consumer": 128,
+        "original": 140,
+        "roundtrip": 40,
+        "pairs_changed": 20
+      },
+      {
+        "producer": 132,
+        "consumer": 128,
+        "original": 205,
+        "roundtrip": 140,
+        "pairs_changed": 20
+      }
+    ],
+    "gpu_executed": false,
+    "water_contract_proven": false
+  },
+  "limitations": [
+    "Only four public arithmetic/phi opcodes tracked; many input producers unknown",
+    "Structural drift cannot show whether FFT numeric results differ",
+    "No Unity kernel, device GPU or Android runtime validation"
+  ],
+  "readiness": "NOT_READY;0/3"
+}
