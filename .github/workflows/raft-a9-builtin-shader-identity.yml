@@ -1,0 +1,32 @@
+name: Raft A9 exported ShaderLab identity guard (CPU only no Unity)
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - 'scripts/restore_builtin_shaders.py'
+      - 'tests/test_a9_builtin_shader_identity.py'
+      - '.github/workflows/raft-a9-builtin-shader-identity.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: raft-a9-builtin-shader-id-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  shader-identity:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: A9 exported shader identity negative and positive controls
+        run: python3 -m unittest discover -s tests -p test_a9_builtin_shader_identity.py -v
+      - name: Existing vendor shader restore safety fixtures
+        run: python3 -m unittest discover -s tests -p test_restore_builtin_shaders.py -v
