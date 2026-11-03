@@ -46,6 +46,22 @@ internal static class Program
         return false;
     }
 
+    private static bool HasPublicReadableProperty(MetadataReader reader, TypeDefinition type, string propertyName)
+    {
+        foreach (var handle in type.GetProperties())
+        {
+            var property = reader.GetPropertyDefinition(handle);
+            if (reader.GetString(property.Name) != propertyName)
+                continue;
+            var getter = property.GetAccessors().Getter;
+            if (getter.IsNil)
+                return false;
+            var method = reader.GetMethodDefinition(getter);
+            return (method.Attributes & MethodAttributes.MemberAccessMask) == MethodAttributes.Public;
+        }
+        return false;
+    }
+
     private static bool HasMethod(MetadataReader reader, TypeDefinition type, string methodName,
                                   bool generic = false)
     {
@@ -92,7 +108,11 @@ internal static class Program
                 "missing-public-StateEvent.GetState-generic");
         Require(HasPublicField(reader, touchState, "touchId"), "missing-public-TouchState.touchId");
         Require(HasPublicField(reader, touchState, "position"), "missing-public-TouchState.position");
-        Require(HasPublicField(reader, touchState, "phase"), "missing-public-TouchState.phase");
+        // Unity's original packed TouchState stores phaseId as a byte and exposes
+        // phase through a public property, not through a public field.
+        Require(HasPublicField(reader, touchState, "phaseId"), "missing-public-TouchState.phaseId");
+        Require(HasPublicReadableProperty(reader, touchState, "phase"),
+                "missing-public-TouchState.phase-getter");
         Require(HasMethod(reader, eventPtr, "IsA", generic: true),
                 "missing-public-InputEventPtr.IsA-generic");
         Require(HasMethod(reader, system, "add_onEvent"), "missing-public-InputSystem.onEvent");
@@ -103,7 +123,7 @@ internal static class Program
 
         Console.WriteLine("RAFT_A7_ZIP2_INPUTSYSTEM_ABI authenticated_source=true bytes=" +
                           ExpectedBytes + " metadata_types=" + reader.TypeDefinitions.Count +
-                          " touchstate_fields=3 public_raw_state_api=true original_lfs_used=false" +
+                          " touchstate_fields=3 phase_property=true public_raw_state_api=true original_lfs_used=false" +
                           " unity_execution=false android_device_execution=false");
     }
 
