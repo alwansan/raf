@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "username": "raft-20261103T224500Z-a1d7e439",
+  "client_label": "A1",
+  "session_id": "a1-20261103T224500Z-cb902dd1",
+  "resumed_from": "raft-20261103T222730Z-a17b2c91",
+  "status": "active",
+  "updated_at": "2026-11-03T22:45:19.261Z",
+  "base_sha": "edd758e5131c8efbc9b9d1199d76ab57108158bf",
+  "current_work": [
+    "WATER-001",
+    "FFT-FORMAT-009"
+  ],
+  "last_commit": null,
+  "next_step": "Repair HLSL-roundtripped FFT storage image formatless contract in private CPU Vulkan and evaluate authenticated original program outputs using actual Unity RGHalf/RGFloat/ARGBHalf/ARGBFloat Vulkan backing formats from pinned ZIP2; never claim Android GPU."
+}
