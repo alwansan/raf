@@ -130,6 +130,16 @@ public final class RemoteLogService extends IRemoteLog.Stub {
                 data.put("pid_probe_failures_total",pidProbeFailures.get());
                 data.put("pid_probe_successes_total",pidProbeSuccesses.get());
                 data.put("main_process_pid_verified",primaryGamePid.get()>0);
+                if("pidof_probe_failed".equals(pidProbeStatus) ||
+                        "main_cmdline_unverified".equals(pidProbeStatus)){
+                    // The sampler sees PID=-1, but failed discovery is NOT
+                    // evidence that the game exited. Preserve raw process
+                    // transition separately as an unverified observation.
+                    if("game_exited".equals(data.optString("process_transition")))
+                        data.put("process_transition","pid_tracking_lost_unverified");
+                    if("game_not_running".equals(data.optString("state")))
+                        data.put("state","game_process_state_unknown");
+                }
                 data.put("system_context_lines",systemContextLines.get());
                 data.put("logcat_reconnects",reconnections.get());
                 data.put("shader_pass_errors_total",shaderPassErrors.get());
