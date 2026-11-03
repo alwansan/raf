@@ -1,0 +1,24 @@
+{
+  "source_sha": "2467c03172af01471a1f5df32b16bbdac92f14b2",
+  "run_id": 41663393724,
+  "job_id": 126012182439,
+  "result": {
+    "unityVersion": "2021.3.45f2",
+    "shaderSha256": "0a7e11f750cac17ecc25cb7179c0a29850d6fb91fa983618f12e6bd8782ed1ea",
+    "messageDigest": "dec6b54c97b787fa444afb0611af5a1d0546a35c510dce915b5dd05945358c0b",
+    "shaderMessages": 20,
+    "shaderErrors": 0,
+    "observedMaterialPassCount": 6,
+    "privateBundleBytes": 7185,
+    "shaderImported": true,
+    "androidVulkanOnly": true,
+    "privateShaderBundleBuilt": true,
+    "shaderLabUnityValidated": true,
+    "numericOrVisualEquivalence": false,
+    "gameOrApkBuilt": false,
+    "failureType": ""
+  },
+  "warnings_reviewed": "20 compiler warnings about isnan optimization on glcore/vulkan; no shader errors",
+  "all_passes_rendered": false,
+  "device_tested": false
+}
