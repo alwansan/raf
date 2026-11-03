@@ -80,6 +80,63 @@ def strict_pointer_stride_shape(raw, candidates):
     }
 
 
+
+def nonoverlap_profile(candidates, has_verified_scaler_ancestor):
+    """Maximal disjoint 12-byte PPtr *candidates*, not authenticated fields.
+
+    A raw LE pattern can overlap another by 4 or 8 bytes. Consider every
+    maximal-cardinality disjoint candidate set and bound scaler ancestry
+    hits without pretending one arbitrary tie-break is the true layout.
+    """
+    from bisect import bisect_left
+    from functools import lru_cache
+
+    if len(candidates) != len(has_verified_scaler_ancestor):
+        raise ValueError("Unpaired original candidate classification")
+    if len(candidates) > MAX_MATCHES:
+        raise ValueError("Unbounded overlap solver")
+    indexed = sorted(zip(candidates, has_verified_scaler_ancestor),
+                     key=lambda x: x[0][0])
+    positions = [candidate[0] for candidate, _ in indexed]
+    if len(positions) != len(set(positions)) or any(i < 32 or i % 4 for i in positions):
+        raise ValueError("Unsafe original candidate offset order")
+    labels = [bool(v) for _, v in indexed]
+    n = len(positions)
+    next_pos = [bisect_left(positions, positions[i] + 12) for i in range(n)]
+
+    def best(forbidden):
+        @lru_cache(None)
+        def rec(i):
+            if i == n:
+                return (0, 0, 0)
+            without = rec(i + 1)
+            if i == forbidden:
+                return without
+            tail = rec(next_pos[i])
+            with_this = (1 + tail[0],
+                         int(labels[i]) + tail[1],
+                         int(labels[i]) + tail[2])
+            if with_this[0] > without[0]:
+                return with_this
+            if without[0] > with_this[0]:
+                return without
+            return (with_this[0], min(with_this[1], without[1]),
+                    max(with_this[2], without[2]))
+        return rec(0)
+
+    maximum, min_good, max_good = best(-1)
+    forced = sum(best(i)[0] < maximum for i in range(n))
+    return {
+        "total_overlapping_raw_patterns": n,
+        "maximum_disjoint_12byte_candidate_windows": maximum,
+        "minimum_verified_scaler_ancestor_hits_among_maximal_disjoint_sets": min_good,
+        "maximum_verified_scaler_ancestor_hits_among_maximal_disjoint_sets": max_good,
+        "candidate_windows_present_in_every_maximal_disjoint_set": forced,
+        "patterns_not_simultaneously_placeable": n - maximum,
+        "no_custom_serialized_field_types_inferred": True,
+    }
+
+
 def native_graph(objects, externals, local_scripts, global_scripts):
     kinds, component_owner, transform_of_go, parent, canvases, scalers = {}, {}, {}, {}, set(), set()
     for obj in objects:
@@ -154,6 +211,7 @@ def audit_scene(owner_file, global_scripts):
     kinds, owners, trans, parents, canvases, scalers = graph
     settings, counts_by_kind, counts_by_ancestry, sizes = 0, Counter(), Counter(), Counter()
     stride_results = []
+    disjoint_profiles = []
     for obj in objects:
         if str(obj.type.name) != "MonoBehaviour":
             continue
@@ -174,6 +232,9 @@ def audit_scene(owner_file, global_scripts):
         sizes[len(raw)] += 1
         matches = scan_candidates(raw, kinds)
         stride_results.append(strict_pointer_stride_shape(raw, matches))
+        disjoint_profiles.append(nonoverlap_profile(matches, [
+            ancestry(target, graph) == "candidate_with_verified_scaler_ancestor"
+            for _, target in matches]))
         for offset, target in matches:
             kind = kinds[target]
             counts_by_kind[kind if kind in ("GameObject", "RectTransform", "Transform", "Canvas", "MonoBehaviour") else "other"] += 1
@@ -190,6 +251,7 @@ def audit_scene(owner_file, global_scripts):
                 all(v["exact_48_pointer_stride"] and
                     v["tail_is_bool_plus_zero_padding"] for v in stride_results),
             "dense_candidate_structural_profiles": stride_results,
+            "disjoint_pointer_candidate_bounds": disjoint_profiles,
             "candidate_custom_field_typing_verified": False,
             "displayed_settings_panel_to_canvas_proven": False}
 
