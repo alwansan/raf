@@ -1,9 +1,13 @@
 {
   "schema_version": 1,
   "owner": "raft-20261103T123040Z-02fe66b3",
-  "status": "planned",
+  "status": "completed",
   "hypothesis": "Sample-vs-full export counts are misleading absent same-stage scope provenance; fail closed on partial, inconsistent or unknown scope.",
-  "input_hashes": [],
+  "input_hashes": [
+    "repository script git blob cf4a19301f1787b3039413e9cfaedd25c0afd2a2",
+    "repository tests git blob ee692dd67446816dbc33527215dd918c0212dc14",
+    "workflow git blob d12fd4250ba232444be54a0975dc2b7df23fcffc"
+  ],
   "commands": [
     "python3 -m unittest tests.test_a11_shader_export_scope -v"
   ],
@@ -17,12 +21,14 @@
   "concurrency_group": "raft-a11-shader-export-scope-v1",
   "artifact_prefix": "a11-shader-export-scope-v1",
   "budget": "CPU-only Python, no LFS/network/Unity, <=8min",
-  "run_url": null,
-  "source_sha": null,
-  "result": null,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41637552496",
+  "source_sha": "d01411409e1e422c04b78533e65e138613a43573",
+  "result": "11/11 synthetic tests succeeded in exact-source CI, including missing meta, redirect, rename/byte changes and hypothetical 107-vs-140 count mismatch; no original full-export data tested.",
   "limitations": [
-    "No complete original exporter inventory in current CI run artifacts",
-    "No authentic shader restoration or device evidence"
+    "Synthetic local AssetRipper-style fixtures only; source directory not tied to private original run",
+    "107 local subset not authenticated same full-export/same stage as historical 140 audit",
+    "A13 separately improved preexisting lexical vendor coverage; no original vendor identity recovery here",
+    "No original Unity/Android device pass or compute kernel validated"
   ],
-  "next_step": "Construct synthetic provenance regression suite."
+  "next_step": "Full-export authentic in-run capture in future authorized coordinator, not an A11 Unity build."
 }
