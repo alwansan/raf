@@ -111,8 +111,8 @@ class CgroupContinuityEvidenceTests(unittest.TestCase):
             events=[{'oom':10,'oom_kill':5},
                     {'oom':1,'oom_kill':0},
                     {'oom':14,'oom_kill':7}]
-            path.write_text('\\n'.join(json.dumps({'cgroup_v2_memory_events':row})
-                                      for row in events)+'\\n')
+            path.write_text('\n'.join(json.dumps({'cgroup_v2_memory_events':row})
+                                      for row in events)+'\n')
             with patch('scripts.ci_memory_watch.docker_states',return_value=[]):
                 result=summarize(path)
             self.assertEqual(result['samples'],3)
@@ -121,8 +121,8 @@ class CgroupContinuityEvidenceTests(unittest.TestCase):
             # Even a reset of only one required counter invalidates both
             # deltas: scope continuity is no longer established.
             events[1]={'oom':12,'oom_kill':0}
-            path.write_text('\\n'.join(json.dumps({'cgroup_v2_memory_events':row})
-                                      for row in events)+'\\n')
+            path.write_text('\n'.join(json.dumps({'cgroup_v2_memory_events':row})
+                                      for row in events)+'\n')
             with patch('scripts.ci_memory_watch.docker_states',return_value=[]):
                 result=summarize(path)
             self.assertIsNone(result['cgroup_v2_oom_delta'])
@@ -134,7 +134,7 @@ class CgroupContinuityEvidenceTests(unittest.TestCase):
             begin=json.dumps({'cgroup_v2_memory_events':{'oom':1,'oom_kill':2}})
             end=json.dumps({'cgroup_v2_memory_events':{'oom':5,'oom_kill':3}})
             with patch('scripts.ci_memory_watch.docker_states',return_value=[]):
-                path.write_text(begin+'\\n'+end+'\\n')
+                path.write_text(begin+'\n'+end+'\n')
                 ok=summarize(path)
                 self.assertEqual((ok['cgroup_v2_oom_delta'],ok['cgroup_v2_oom_kill_delta']),(4,1))
                 for middle in (
@@ -143,7 +143,7 @@ class CgroupContinuityEvidenceTests(unittest.TestCase):
                     '{"truncated":',
                     'null',
                 ):
-                    path.write_text(begin+'\\n'+middle+'\\n'+end+'\\n')
+                    path.write_text(begin+'\n'+middle+'\n'+end+'\n')
                     result=summarize(path)
                     self.assertIsNone(result['cgroup_v2_oom_delta'],middle)
                     self.assertIsNone(result['cgroup_v2_oom_kill_delta'],middle)
