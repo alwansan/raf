@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T224306Z-d17e2cb7",
+  "issue_id": "LOCAL-005",
+  "status": "active",
+  "updated_at": "2026-11-03T22:43:06.904Z",
+  "base_sha": "3c07c4b5b7de15c454d12fe634be0ce0c37667a6",
+  "hypothesis": "Existing original SaveAndLoad portability CI uses feature branch Raft/Managed original DLL. Source can instead be acquired from owner ZIP2 without Git LFS, SHA-pinning both original DLL and Data.rgd and executing the same original save compatibility checks.",
+  "intended_files": [
+    "scripts/verify_a8_zip2_local_save_provider.py",
+    "tests/test_verify_a8_zip2_local_save_provider.py",
+    ".github/workflows/raft-original-save-path-tests.yml",
+    "prompt/coordination/clients/raft-20261103T224306Z-d17e2cb7/state.json",
+    "prompt/coordination/clients/raft-20261103T224306Z-d17e2cb7/MEMORY.md",
+    "prompt/coordination/work/LOCAL-005/raft-20261103T224306Z-d17e2cb7-zip2-local-save-provider.json"
+  ],
+  "related_work": [
+    "Completed A8 LOCAL-005 world-preprocessor guards",
+    "A6/A9/A10 completed LOCAL-005 source and safety",
+    "A1 ZIP2 FFT no-LFS provider verified 41731607739",
+    "A2 ZIP2 Settings no-LFS workflow 41732187637"
+  ],
+  "experiment_ids": [
+    "a8-zip2-original-save-provider"
+  ],
+  "evidence": [],
+  "result": null,
+  "next_step": "Run independent synthetic SHA/manifest/security negatives then original ZIP2 SaveAndLoad + Data.rgd source-aware no-LFS Actions check."
+}
