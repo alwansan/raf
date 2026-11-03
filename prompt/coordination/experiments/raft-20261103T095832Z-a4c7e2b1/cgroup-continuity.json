@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T095832Z-a4c7e2b1",
+  "status": "planned",
+  "hypothesis": "summarize() compares only first/last cgroup oom counters; an intermediate reset followed by growth can produce a plausible false positive OOM delta.",
+  "input_hashes": [
+    "scripts/ci_memory_watch.py git-blob c36af68b410fc81c2f91f4e5c2192a95c4cf7bcc",
+    "tests/test_ci_memory_watch.py git-blob 60d815018d1bdd746a1ab7554c9b44827b54ae31"
+  ],
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_ci_memory_watch.py -v"
+  ],
+  "expected_signal": "counter delta is null if ANY intervening sample is missing or non-monotonic; valid increases remain correct",
+  "negative_controls": [
+    "rise-reset-rise first/last valid-looking net increase must return null",
+    "missing intermediate cgroup observation must return null",
+    "real monotonic increases preserve numeric delta",
+    "invalid JSON row does not impersonate a sample"
+  ],
+  "workflow_path": null,
+  "concurrency_group": null,
+  "artifact_prefix": null,
+  "budget": "CPU-only local Python; no Unity/LFS/APK",
+  "run_url": null,
+  "source_sha": null,
+  "result": null,
+  "limitations": [
+    "Not evidence of GPU OOM cause or phone behavior"
+  ],
+  "next_step": "Test and implement small source fix, then CI when available without full native trigger."
+}
