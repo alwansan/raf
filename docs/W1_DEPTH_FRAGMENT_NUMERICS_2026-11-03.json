@@ -1,5 +1,10 @@
 {
-  "preliminary_not_acceptance": {
+  "source_sha": "0eae48c39c620f05d678705cdcb5198b9955c6da",
+  "run_id": 41672408152,
+  "job_id": 126043952039,
+  "artifact_id": 13248597343,
+  "conclusion": "success",
+  "summary": {
     "android_or_unity_render_proven": false,
     "compute_lift_not_raster_or_depth_state": true,
     "equal_pairs": 9,
@@ -55,7 +60,7 @@
         "negative_controls_detected": {
           "arithmetic": true,
           "axis": true,
-          "resource": false
+          "resource": true
         },
         "original_dxbc_sha256": "0d0b125058f2296f9fa0885c230cccf5a54912a7e20ffea0d3af8e74868c2867",
         "pass": 1,
@@ -99,7 +104,7 @@
         "negative_controls_detected": {
           "arithmetic": true,
           "axis": true,
-          "resource": false
+          "resource": true
         },
         "original_dxbc_sha256": "d5b6a9be8d9dffff0f3d53458d0865bf801e3bdf9f3470408599ef35b14d69e5",
         "pass": 2,
@@ -186,7 +191,7 @@
         "negative_controls_detected": {
           "arithmetic": true,
           "axis": true,
-          "resource": false
+          "resource": true
         },
         "original_dxbc_sha256": "27269754cddd8805739a436ebb7624b3154c802fc91d37a0d5e435812683b7f5",
         "pass": 4,
@@ -230,7 +235,7 @@
         "negative_controls_detected": {
           "arithmetic": true,
           "axis": true,
-          "resource": false
+          "resource": true
         },
         "original_dxbc_sha256": "1ebe1163be711492e0c1d397ec0c6fa0d0c70a69d2a4372b98653fbda61f3307",
         "pass": 5,
@@ -317,7 +322,7 @@
         "negative_controls_detected": {
           "arithmetic": true,
           "axis": true,
-          "resource": false
+          "resource": true
         },
         "original_dxbc_sha256": "0d0b125058f2296f9fa0885c230cccf5a54912a7e20ffea0d3af8e74868c2867",
         "pass": 1,
@@ -361,7 +366,7 @@
         "negative_controls_detected": {
           "arithmetic": true,
           "axis": true,
-          "resource": false
+          "resource": true
         },
         "original_dxbc_sha256": "d5b6a9be8d9dffff0f3d53458d0865bf801e3bdf9f3470408599ef35b14d69e5",
         "pass": 2,
@@ -401,9 +406,11 @@
         "subshader": 1
       }
     ],
-    "source_sha": "9c84dd23112e1d3318cf7a0d393444df84c46a55"
+    "source_sha": "0eae48c39c620f05d678705cdcb5198b9955c6da"
   },
-  "reason_ci_failed": "Two-resource exchange is nondiscriminating for six fragment occurrences; retain failure, replace with resource alias control before acceptance",
-  "next_source": "0eae48c39c620f05d678705cdcb5198b9955c6da",
-  "next_run_id": 41672408152
+  "preliminary_failed_control_run": 41672073080,
+  "positive_comparisons": 27,
+  "negative_controls_detected": 27,
+  "known_cpu_sum_canary_verified": true,
+  "full_raster_depth_or_android_proven": false
 }

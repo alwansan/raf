@@ -4,8 +4,8 @@
   "client_label": "W1",
   "session_id": "w1-20261103T160542216Z-e73a91cd",
   "issue_id": "RENDER-002",
-  "status": "planned",
-  "updated_at": "2026-11-03T16:05:42.217Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T16:18:32.851Z",
   "base_sha": "bdb6ca90c10d14ee65167060d6080e480e02048e",
   "hypothesis": "Original Depth Copy fragment sampling/arithmetic and reconstructed HLSL may agree on deterministic asymmetric RGBA32F fields when lifted to a compute execution harness; wrong UV/resource/arithmetic controls must produce differences. This isolates fragment operations before raster/depth integration.",
   "intended_files": [
@@ -26,5 +26,8 @@
     "Compute lifting removes rasterization and fixed-function depth; cannot prove shader rendering",
     "RGBA32F with nearest clamp sampler and deterministic UV only; NaN and half formats not proven"
   ],
-  "next_step": "Create bounded compute-lift runner, execute original-vs-reconstructed fragment operations and negative controls."
+  "next_step": "Actual raster/depth/vertex/resource-binding comparison before GUID-preserving integration; no repeat of equivalent finite RGBA32F compute-lift cases.",
+  "source_sha": "0eae48c39c620f05d678705cdcb5198b9955c6da",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41672408152",
+  "result": "9fragment occurrences,27positive comparisons all maxAbs0/relativeL2=0,27negative controls detected,knownCPU-sum canary PASS. Bounded compute-lift only; no raster/device claim."
 }

@@ -21,3 +21,10 @@ Next source0eae48c39c620f05d678705cdcb5198b9955c6da changes only resource-negati
 ## Remaining
 
 NaN/Inf, half/two-channel view formats, implicit derivatives/LOD, filter settings outside nearestclamp, vertex clip/depth conventions, all9fixed-functionpasses, Unity/propertybinding/keywords and POCO appearance remain unproven. No original authored source recovered and no original game.shader/.meta/GUID/material replaced. Do not flatten6+3, lowerquality or close WATER/RENDER/FFT. NOT_READY0/3. After successful bounded comparison, next independent question is real raster/depth/resource-binding behavior and GUID-preserving project integration before device build via separate lane.
+
+
+## Final bounded result — verified live
+
+[Exact source0eae48c3](https://github.com/alwansan/raf/commit/0eae48c39c620f05d678705cdcb5198b9955c6da), [run41672408152](https://github.com/alwansan/raf/actions/runs/41672408152), job126043952039 **COMPLETED SUCCESS**. All9original fragment occurrences executed across3asymmetric inputs: **27/27positive matches, maxAbs0/relativeL2=0**, no nonfinite or coverage mismatches. Each comparison wrote all589pixels. Known8×1CPU sum canary passed. **27/27negative controls detected**:9arithmetic mutations,9UV-axis swaps and9wrongresourcealias/wrongimage controls. The prior symmetric-exchange failed control remains preserved rather than counted as acceptance. Aggregate-only artifact13248597343, transport digest6fcaa31c7cc41afb30609eb8446c6eafa5eec6cbbcf2a40eaecc33d131f41ac6.
+
+This narrows equivalence to the explicitly described compute-lifted fragment workloads. It does not prove rendering, actual Unity input/property/sampler bindings, vertex/depth conventions, NaN/Inf behavior, other formats/filtering or Android/POCO appearance. Reconstructed ShaderLab has also separately passed actual Unity import/AndroidVulkan bundle compilation; there is still no production game shader integration. Next measure real raster/depth output with exact original bindings and asymmetric vertex/UV geometry before GUID-preserving integration. No further equivalent compute repeats are warranted without a new failure or changed source.

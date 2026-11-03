@@ -4,13 +4,13 @@
   "username": "raft-20261103T162900Z-73e8c2a1",
   "session_id": "w1-20261103T160542216Z-e73a91cd",
   "resumed_from": null,
-  "status": "active",
-  "updated_at": "2026-11-03T16:05:49.764Z",
+  "status": "paused",
+  "updated_at": "2026-11-03T16:18:32.851Z",
   "base_sha": "bdb6ca90c10d14ee65167060d6080e480e02048e",
   "current_work": [
-    "RENDER-002 Depth Copy fragment arithmetic/sampling numerical comparison"
+    "Completed bounded Depth Copy fragment numerical comparison and actual Unity compilation checkpoint"
   ],
-  "last_commit": "08594a6637336e7795b00c13a821983b8022cb42",
-  "next_step": "Create bounded compute-lift runner, execute original-vs-reconstructed fragment operations and negative controls.",
+  "last_commit": "0eae48c39c620f05d678705cdcb5198b9955c6da",
+  "next_step": "Actual raster/depth/vertex/resource-binding comparison before GUID-preserving integration; no repeat of equivalent finite RGBA32F compute-lift cases.",
   "memory_path": "prompt/coordination/clients/raft-20261103T162900Z-73e8c2a1/MEMORY.md"
 }
