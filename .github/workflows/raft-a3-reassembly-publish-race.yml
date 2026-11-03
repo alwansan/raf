@@ -1,0 +1,28 @@
+name: Raft A3 release reassembly final publish race (CPU only)
+on:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - 'scripts/reassemble_android_delivery.py'
+      - 'tests/test_a3_reassembly_publish_race.py'
+      - '.github/workflows/raft-a3-reassembly-publish-race.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raft-a3-reassembly-race-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  preserve-existing-output:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: A3 real reassembler race regression (tiny synthetic delivery)
+        run: python3 -m unittest discover -s tests -p test_a3_reassembly_publish_race.py -v
+      - name: Existing signed delivery package/recovery tests
+        run: python3 -m unittest discover -s tests -p test_android_delivery_package.py -v
