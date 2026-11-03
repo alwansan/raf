@@ -15,6 +15,7 @@ on:
       - 'scripts/probe_fft_spirv_formatless_repair.py'
       - 'scripts/probe_fft_spirv_image_flow.py'
       - 'scripts/probe_fft_spirv_math_profile.py'
+      - 'scripts/probe_fft_spirv_extinst_profile.py'
   workflow_dispatch:
 
 permissions:
@@ -51,6 +52,7 @@ jobs:
           python3 -m unittest discover -s tests -p 'test_probe_fft_spirv_formatless_repair.py' -v
           python3 -m unittest discover -s tests -p 'test_probe_fft_spirv_image_flow.py' -v
           python3 -m unittest discover -s tests -p 'test_probe_fft_spirv_math_profile.py' -v
+          python3 -m unittest discover -s tests -p 'test_probe_fft_spirv_extinst_profile.py' -v
           python3 -m unittest discover -s tests -p 'test_probe_original_compute_containers.py' -v
           python3 -m unittest discover -s tests -p 'test_audit_original_compute_metadata.py' -v
       - name: Verify original committed LFS pointers before download

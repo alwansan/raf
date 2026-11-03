@@ -17,6 +17,7 @@ on:
       - 'tests/test_probe_fft_spirv_formatless_repair.py'
       - 'tests/test_probe_fft_spirv_image_flow.py'
       - 'tests/test_probe_fft_spirv_math_profile.py'
+      - 'tests/test_probe_fft_spirv_extinst_profile.py'
   workflow_dispatch:
 
 permissions:
@@ -53,3 +54,4 @@ jobs:
           python3 -m unittest discover -s tests -p 'test_probe_fft_spirv_formatless_repair.py' -v
           python3 -m unittest discover -s tests -p 'test_probe_fft_spirv_image_flow.py' -v
           python3 -m unittest discover -s tests -p 'test_probe_fft_spirv_math_profile.py' -v
+          python3 -m unittest discover -s tests -p 'test_probe_fft_spirv_extinst_profile.py' -v
