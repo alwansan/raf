@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T231207Z-a5d12e9c",
+  "issue_id": "HAPTICS-008",
+  "status": "active",
+  "updated_at": "2026-11-03T23:12:27.251Z",
+  "base_sha": "0aee07b1b412f4c3eb70c5c51a89d82ef271507d",
+  "resumed_from": "raft-20261103T224700Z-a5fb701c",
+  "hypothesis": "Standalone APK/OBB production audit exits zero when --haptics-manifest is absent, allowing skipping otherwise mandatory original WAV source/package check. Fail closed for production CLI while keeping isolated Python API fixtures optional.",
+  "intended_files": [
+    "scripts/audit_android_expansion.py",
+    "tests/test_android_expansion_audit.py",
+    "prompt/coordination/clients/raft-20261103T231207Z-a5d12e9c/",
+    "prompt/coordination/work/HAPTICS-008/raft-20261103T231207Z-a5d12e9c-required-cli-manifest.json",
+    "prompt/coordination/experiments/raft-20261103T231207Z-a5d12e9c/",
+    "prompt/coordination/discussions/HAPTICS-008/",
+    "prompt/STATUS.md",
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+  ],
+  "related_work": [
+    "Prior completed A5 provenance cli override fix 73c5498c CI41735417533",
+    "A3 currently active RENDER-002 vendor shader restoration only"
+  ],
+  "experiment_ids": [
+    "mandatory-production-haptics-manifest"
+  ],
+  "evidence": [],
+  "result": null,
+  "next_step": "Reproduce missing-Haptics production audit success on synthetic APK/OBB with RED test, then make argparse required and verify green CPU-only actions."
+}
