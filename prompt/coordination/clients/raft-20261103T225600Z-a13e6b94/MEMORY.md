@@ -1,0 +1,9 @@
+# A13 — resumed identity raft-20261103T225600Z-a13e6b94
+
+- Session: `a13-20261103T225600Z-76d14a0f`, resumed_from `raft-20261103T123129Z-6533d5b4` (previous A13 status **completed**, last commit `816f680405aea70c18132ab4e5d2ef658f06b3a6`). Do not overwrite old state/MEMORY.
+- Recorded UTC: 2026-11-03T22:56:45.925Z; baseline reviewed HEAD `97739461a45cdbe0bfd066b0724577d343c14b9c`. Current HEAD/Actions must be re-read before every write.
+- Previous verified original A13 CPU CI [41660807306](https://github.com/alwansan/raf/actions/runs/41660807306): 514 Materials, 105 Shader objects across two authentic owners; 358 local pointers resolved and 156 external initially unknown. This is the old result, NOT phone or export proof.
+- Subsequent W2 and W3 (read coordination discussions): 156/156 previously external source links resolved; full 82-owner original graph = 1556 Materials, 165 Shader objects, 1103 cross-owner, 437 same-owner and 16 engine transports. Do not duplicate these experiments.
+- New isolated scope: exported Material GUID to Shader .meta linkage safety before Unity import. Check structural fidelity without renaming or replacing shaders. No new original payload, LFS, Unity/APK/OBB/XAPK or release. Source provider zip2 pinned `15964ea8f246b6e076ce26b60931ee2e1a9a2385`; use only if original acquisition is necessary.
+- Concurrent W1 original ShaderLab + engine disposition, A1 water/FFT, A12R Blur, W2 material colors, W3 serialized graph. Avoid their files and Jobs. Game **NOT_READY**, source blockers remain, readiness reviews **0/3**.
+- Next: implement only new guarded export inspector + synthetic tests + isolated CI. No original export completeness or visual verification may be claimed from a fixture.

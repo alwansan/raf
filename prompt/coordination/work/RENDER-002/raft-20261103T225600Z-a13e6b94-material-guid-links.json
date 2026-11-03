@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T225600Z-a13e6b94",
+  "client_label": "A13",
+  "session_id": "a13-20261103T225600Z-76d14a0f",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "updated_at": "2026-11-03T22:56:45.925Z",
+  "resumed_from": "raft-20261103T123129Z-6533d5b4",
+  "base_sha": "97739461a45cdbe0bfd066b0724577d343c14b9c",
+  "hypothesis": "Actual exported .mat shader GUID references can silently point to missing or wrong-type metadata despite original source Material PPtrs resolving. Reject missing, duplicate, symlinked or ambiguous .meta references, with builtin refs counted separately. Synthetic success alone does not prove full original export fidelity.",
+  "intended_files": [
+    "scripts/probe_a13_exported_material_shader_guids.py",
+    "tests/test_a13_exported_material_shader_guids.py",
+    ".github/workflows/raft-a13-exported-material-shader-guids.yml",
+    "prompt/coordination/clients/raft-20261103T225600Z-a13e6b94/",
+    "prompt/coordination/work/RENDER-002/raft-20261103T225600Z-a13e6b94-material-guid-links.json",
+    "prompt/coordination/experiments/raft-20261103T225600Z-a13e6b94/",
+    "prompt/coordination/discussions/RENDER-002/",
+    "docs/A13_EXPORTED_MATERIAL_SHADER_GUID_GUARD_2026-11-04.md"
+  ],
+  "related_work": [
+    "Previous A13 514 original Materials/105 Shaders, 358 local/156 external pointers source CI 41660807306",
+    "W2 verified all 156 external source PPtrs and 159 texture links",
+    "W3 full original 82-owner inventory 1556 Materials, 165 Shaders; no full exported identity proof",
+    "A11 local exported .shader/.compute metadata snapshot is scope-limited, not full export",
+    "W1 active original shader restoration; do not edit its code or runtime assets"
+  ],
+  "next_step": "Implement bounded CPU-only Unity YAML .mat->.shader.meta identity linkage check with synthetic positive/negative cases, isolated CI, and reconcile actual exported data only when authenticated full export is available.",
+  "experimental_runs": [],
+  "native_build_allowed": false
+}
