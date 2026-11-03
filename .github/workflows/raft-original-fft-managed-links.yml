@@ -17,6 +17,8 @@ on:
       - 'tests/test_probe_original_fft_index_derivation.py'
       - 'scripts/probe_original_fft_inherited_seed.py'
       - 'tests/test_probe_original_fft_inherited_seed.py'
+      - 'scripts/probe_original_fft_size_argument.py'
+      - 'tests/test_probe_original_fft_size_argument.py'
   workflow_dispatch:
 
 permissions:
@@ -51,6 +53,7 @@ jobs:
           python3 -m unittest discover -s tests -p test_probe_original_fft_caller_graph.py -v
           python3 -m unittest discover -s tests -p test_probe_original_fft_index_derivation.py -v
           python3 -m unittest discover -s tests -p test_probe_original_fft_inherited_seed.py -v
+          python3 -m unittest discover -s tests -p test_probe_original_fft_size_argument.py -v
       - name: Recover private exact CSharp9 original callers
         shell: bash
         run: |
@@ -70,5 +73,6 @@ jobs:
           python3 -m scripts.probe_original_fft_caller_graph --source "$RUNNER_TEMP/private-fft-original"
           python3 -m scripts.probe_original_fft_index_derivation --source "$RUNNER_TEMP/private-fft-original"
           python3 -m scripts.probe_original_fft_inherited_seed --source "$RUNNER_TEMP/private-fft-original"
+          python3 -m scripts.probe_original_fft_size_argument --source "$RUNNER_TEMP/private-fft-original"
           # Do not publish original decompiled code or ILSpy logs.
           # CI is CPU-only source-level evidence; no Unity/game build.
