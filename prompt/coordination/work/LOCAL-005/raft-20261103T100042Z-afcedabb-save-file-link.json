@@ -2,9 +2,9 @@
   "schema_version": 1,
   "owner": "raft-20261103T100042Z-afcedabb",
   "issue_id": "LOCAL-005",
-  "status": "active",
-  "updated_at": "2026-11-03T10:53:59.321Z",
-  "base_sha": "0f9c574da5c39c74f542b5f58071ed355fd40d90",
+  "status": "completed",
+  "updated_at": "2026-11-03T10:59:36.121Z",
+  "base_sha": "66d8e67da5b4ee610526452ccfb763b6c10e52fc",
   "hypothesis": "Existing final world.sav symlink bypasses prior directory-only guard and redirects writes outside sandbox",
   "intended_files": [
     "android-port/Runtime/Platform/LocalSavePaths.cs",
@@ -24,8 +24,12 @@
     "save-file-leaf-symlink"
   ],
   "evidence": [
-    "Local Linux synthetic reproduction: normal world directories, world.sav -> outside.rgd, write changes outside bytes"
+    "https://github.com/alwansan/raf/commit/66d8e67da5b4ee610526452ccfb763b6c10e52fc",
+    "https://github.com/alwansan/raf/commit/d01f4c4bfab342dc2eba35c569151cac9b292973",
+    "https://github.com/alwansan/raf/actions/runs/41623327576",
+    "https://github.com/alwansan/raf/actions/runs/41623564391"
   ],
-  "result": null,
-  "next_step": "Add fail-closed file leaf guard, broken-link regression, and verify same-source CPU CI; no original RGD changes"
+  "result": "POSIX synthetic external-file overwrite through world.sav symlink reproduced. Checked final save leaf is reparse-free; three new net8 Smoke cases passed under netstandard2.1 platform library; first CI red due dangling-link File.Exists test assumption corrected, final CI 15/15 and 24 steps SUCCESS.",
+  "next_step": "Original game .rgd SaveAndLoad create/load/resume integration, Unity & on-device acceptance remain open; no security claim against simultaneous hostile filesystem swaps.",
+  "source_sha": "d01f4c4bfab342dc2eba35c569151cac9b292973"
 }
