@@ -1,0 +1,13 @@
+# A9 LOCAL-005 — offline session identity red/green (3 November 2026)
+
+## Source problem
+Before [source `5e4cedcb61373a8a90cf1ff0524c5c130b8b00b4`](https://github.com/alwansan/raf/commit/5e4cedcb61373a8a90cf1ff0524c5c130b8b00b4), the authored `OfflineSession` accepted any non-empty string as localProfileId and reported IsConnected/IsHost true. The actual original-compatible `LocalPlayerIdentity.FromProfile` requires 32 lowercase hexadecimal characters. This mismatch permitted a nominally connected local platform prototype with an unusable profile ID.
+
+## Verified test
+- [RED source/test run 41623805054](https://github.com/alwansan/raf/actions/runs/41623805054), source 5e398d53ce496ea6d16aceb8413e47c34aa5d950, **FAILED intentionally** with `invalid profile was accepted: short`. Real C# source under a bounded CPU-only .NET workflow.
+- [Fix `5e4cedcb61373a8a90cf1ff0524c5c130b8b00b4`](https://github.com/alwansan/raf/commit/5e4cedcb61373a8a90cf1ff0524c5c130b8b00b4) calls the already existing `LocalPlayerIdentity.FromProfile(localProfileId)` before storing the session profile, without changing mapping/hashing, save data, scenes, .meta/GUIDs or .rgd format.
+- [GREEN run 41624155797](https://github.com/alwansan/raf/actions/runs/41624155797) **COMPLETED SUCCESS** on that exact fix: `A9_OFFLINE_SESSION_IDENTITY_PASS checks=14`, four positive valid local-profile assertions and ten deliberately malformed inputs rejected.
+- Broad platform [run41624155880](https://github.com/alwansan/raf/actions/runs/41624155880) at that source failed **separately** on an A7 INPUT-005 ghost-click boundary; later [A7 source 7693ea6c](https://github.com/alwansan/raf/commit/7693ea6c515e) and [A7 tests 8570d2e6](https://github.com/alwansan/raf/commit/8570d2e6efc5) independently addressed it. Source `8570d2e6` [platform CI41624267337](https://github.com/alwansan/raf/actions/runs/41624267337) is SUCCESS. The previous broad CI failure is not evidence of A9 identity failure.
+
+## Limitations
+This is a guarded input invariant on the authored skeleton, NOT proof that original `Raft_Network` creates/loads an offline world or preserves/loads .rgd on the phone. Original WATER-001/RENDER-002 and other integration problems remain open; no native build/release by A9. The original A9 `LocalProfileStore.cs` file-symlink fix was independently verified in earlier [CI41617170076](https://github.com/alwansan/raf/actions/runs/41617170076). The repository's previous A9 session state stayed active due a GitHub write interruption; this document records its completed **limited** source fix after later direct CI verification.

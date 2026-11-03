@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T113735Z-a93e6c40",
+  "status": "completed",
+  "hypothesis": "Commented ShaderLab builtin identity can be incorrectly selected and overwrite an unrelated exported custom shader.",
+  "input_hashes": [
+    {
+      "file": "scripts/restore_builtin_shaders.py",
+      "baseline_blob_sha": "3aa9849ed50193b78cb8dd631518bf96b9f4f9a7"
+    }
+  ],
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_a9_builtin_shader_identity.py -v",
+    "python3 -m unittest discover -s tests -p test_restore_builtin_shaders.py -v"
+  ],
+  "expected_signal": "Before fix fail actual method on comment-only false identity; after fix 4+7 tests pass, official pinned archive sample succeeds.",
+  "negative_controls": [
+    "comment-only Standard must not override private custom shader",
+    "commented Legacy must not preempt actual Standard",
+    "embedded // in quoted ShaderLab name remains an identity",
+    "zero-match aggregate counts must fail closed"
+  ],
+  "workflow_path": ".github/workflows/raft-a9-builtin-shader-identity.yml",
+  "concurrency_group": "raft-a9-builtin-shader-id-${{ github.ref }}-${{ github.sha }}",
+  "artifact_prefix": null,
+  "budget": "6min CPU-only Ubuntu24.04, no LFS or Unity",
+  "source_sha": "d159f348e06af597e04507ae19ddda5590265e9f",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41629545455",
+  "result": {
+    "red_run_id": 41629225184,
+    "red_source_sha": "c8afc7c545a0b2dbd9a1444a5fd7505b605eceb7",
+    "red_failed_cases": 3,
+    "green_run_id": 41629545455,
+    "green_source_sha": "d159f348e06af597e04507ae19ddda5590265e9f",
+    "green_new_tests_passed": 4,
+    "green_existing_tests_passed": 7,
+    "authentic_archive_run_id": 41629545330,
+    "archive_shader_names_verified": 198,
+    "verified_vendor_samples_restored": 5,
+    "original_export_zero_match_resolved": false,
+    "unity_or_device_executed": false
+  },
+  "limitations": [
+    "Synthetic comments and vendor fixture, not actual original exported shader inventory",
+    "Does not resolve strict 0-match native source c7254f7d failure or water GPU integrity"
+  ],
+  "next_step": "Await coordinator-owned exact-source export inspection for actual aggregate counts; do not rerun native automatically."
+}

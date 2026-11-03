@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "owner": "raft-20261103T105808Z-e7429ab6",
-  "status": "red_test_pending",
+  "status": "completed",
   "hypothesis": "OfflineSession accepted nonempty arbitrary identities and reported a host even when LocalPlayerIdentity.FromProfile would reject; negative controls must fail before source fix, pass after.",
   "input_hashes": [
     {
@@ -24,12 +24,18 @@
   "concurrency_group": "raft-a9-local005-identity-${{ github.ref }}-${{ github.sha }}",
   "artifact_prefix": null,
   "budget": "Ubuntu24.04 CPU-only Dotnet8, timeout6min, no LFS Unity or native build",
-  "run_url": null,
-  "source_sha": null,
-  "result": null,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41624155797",
+  "source_sha": "5e4cedcb61373a8a90cf1ff0524c5c130b8b00b4",
+  "result": {
+    "red_run_id": 41623805054,
+    "red_expected_failure": "accepted short ID",
+    "green_run_id": 41624155797,
+    "green_checks": 14,
+    "device_tested": false
+  },
   "limitations": [
     "This validates platform skeleton input only; original Raft_Network and .rgd save/load remain unexecuted",
     "No Android device input or identity-provider integration test"
   ],
-  "next_step": "Inspect intentionally failing red CI then apply minimal constructor validation and check green CI"
+  "next_step": "Source-local identity accepted, overall original world/.rgd remains OPEN."
 }

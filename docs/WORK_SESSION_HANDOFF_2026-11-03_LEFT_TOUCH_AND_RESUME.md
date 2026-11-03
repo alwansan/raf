@@ -545,3 +545,14 @@ This is a reproducible authored C# cancellation-state repair, **not** proof that
 ## FFT policy CI verified — 3 November 2026
 
 CPU-only [41630004335](https://github.com/alwansan/raf/actions/runs/41630004335) SUCCESS on72a42aac4cf97575e3d7bd4ad964a4291167fc71:112 caller cases,4 storage variants,16 capability cases,1 discrepancy. Pinned original-source decompilation; no LFS, Unity/GPU or raw source artifacts. New12-minute independent lane. Source/evaluator negative controls and local workflow parse pass. Water restoration/format blockers remain OPEN; NOT_READY/0-of-3. No native request/task changes. Next: actual compatible-format and shader numeric evidence.
+
+
+<!-- A9-LOCAL005-SESSION-ID-20261103 -->
+### A9 previous LOCAL-005 identity source red/green — reconstructed checkpoint
+
+Source [5e4cedcb61373a8a90cf1ff0524c5c130b8b00b4](https://github.com/alwansan/raf/commit/5e4cedcb61373a8a90cf1ff0524c5c130b8b00b4) validated canonical offline profile identities in the authored session adapter. [RED 41623805054](https://github.com/alwansan/raf/actions/runs/41623805054) intentionally failed; [GREEN 41624155797](https://github.com/alwansan/raf/actions/runs/41624155797) passed 14/14 actual C# checks. Later successful A7 [platform41624267337](https://github.com/alwansan/raf/actions/runs/41624267337) closes a separate touch test failure. [Scope report](A9_OFFLINE_SESSION_IDENTITY_CONTRACT_2026-11-03.md). No original .rgd world readiness proof; LOCAL-005 overall OPEN.
+
+<!-- A9-RENDER002-BUILTIN-LEX-20261103 -->
+### A9 RENDER-002 strict ShaderLab identity reader / verified CPU CI
+
+On authenticated built-in archive recovery, [native41624581951](https://github.com/alwansan/raf/actions/runs/41624581951) failed before Unity because no exported built-in shader identities matched. No native retry authorized or triggered by A9. A9's independent synthetic [RED41629225184](https://github.com/alwansan/raf/actions/runs/41629225184) showed a quoted built-in identity in a comment could replace a custom original, and [fix d159f348e06af597e04507ae19ddda5590265e9f](https://github.com/alwansan/raf/commit/d159f348e06af597e04507ae19ddda5590265e9f) guards exported ShaderLab declaration parsing without mutating shared vendor manifest or lowering strict authenticity. [A9 no-LFS CI 41629545455](https://github.com/alwansan/raf/actions/runs/41629545455) SUCCESS (4 new + 7 existing); [official archive fixture CI 41629545330](https://github.com/alwansan/raf/actions/runs/41629545330) SUCCESS, 198 verified names/5 restored fixture samples with metadata preservation. Count-only `RAFT_BUILTIN_EXPORT_MATCH_AUDIT` improves future failure diagnostics without publishing game shader names. [Full report](A9_BUILTIN_SHADER_IDENTITY_GUARD_2026-11-03.md). Original exported shader matches, full water/material fidelity and device execution remain open. State NOT_READY, 0/3 identical candidate audits; no Unity/APK/OBB/XAPK request/release/task changes by A9.

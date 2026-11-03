@@ -2,8 +2,8 @@
   "schema_version": 1,
   "owner": "raft-20261103T105808Z-e7429ab6",
   "issue_id": "LOCAL-005",
-  "status": "planned",
-  "updated_at": "2026-11-03T10:58:08.597Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T11:45:48.074Z",
   "base_sha": "196fce7bd147b5baac2bb8214a8c4d0aad5e2af2",
   "hypothesis": "OfflineSession constructor accepts any nonempty string despite LocalPlayerIdentity and downstream LocalSavePaths rejecting noncanonical local profiles; this creates a false locally-connected session and late failure.",
   "intended_files": [
@@ -22,7 +22,12 @@
   "experiment_ids": [
     "offline-session-identity-redgreen"
   ],
-  "evidence": [],
-  "result": null,
-  "next_step": "Create new independent C# net8 regression and CPU-only workflow before changing OfflineSession to observe real failure; fix and rerun."
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41623805054",
+    "https://github.com/alwansan/raf/actions/runs/41624155797",
+    "https://github.com/alwansan/raf/commit/5e4cedcb61373a8a90cf1ff0524c5c130b8b00b4",
+    "docs/A9_OFFLINE_SESSION_IDENTITY_CONTRACT_2026-11-03.md"
+  ],
+  "result": "Canonical OfflineSession profile input guard 14/14 exact-source C# fixtures after observed red acceptance of short ID, original gameplay still OPEN.",
+  "next_step": "LOCAL-005 remaining original game source/device acceptance; coordinate separate scope"
 }
