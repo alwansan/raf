@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "username": "raft-20261103T145834Z-f43d1341",
+  "display_name": "A8",
+  "session_id": "A8-20261103T145834Z-055d8d55",
+  "resumed_from": "raft-20261103T121121Z-56c3b5b1",
+  "status": "active",
+  "updated_at": "2026-11-03T15:00:04.844Z",
+  "base_sha": "0a6507e86c7960109360c0b95212db606c4d882e",
+  "current_work": [
+    "LOCAL-005 world-readiness conditional-compilation probe"
+  ],
+  "last_commit": null,
+  "next_step": "Add synthetic #if false negative control; conservatively reject conditional branches in audited world coroutine; run source checks.",
+  "memory_path": "prompt/coordination/clients/raft-20261103T145834Z-f43d1341/MEMORY.md"
+}
