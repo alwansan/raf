@@ -10,6 +10,8 @@ from pathlib import Path
 import re
 import shutil
 import subprocess
+
+from scripts.probe_haptics_asset_manifest import PINNED_ORIGINAL_HAPTICS_MANIFEST_BLOB_SHA
 import tempfile
 
 MASTER_SHA = '10d310416b9f104a38b4ead8877e114142e154efb33105fcddbb2024a81af339'
@@ -50,13 +52,15 @@ def stage_verified_asset(source, target, size, digest, project):
         temporary.unlink(missing_ok=True)
 
 
-def stage(repo, project, report_path, apply=False):
+def stage(repo, project, report_path, apply=False, *,
+          haptics_manifest_blob_sha=PINNED_ORIGINAL_HAPTICS_MANIFEST_BLOB_SHA):
     # Fail before copying any asset if one of the 29 original Haptics WAV
     # files disappeared or changed. Banks/Data.rgd alone are not enough.
     # The independent source audit checks tracked paths, Git OIDs, sizes
     # and checkout contents against the pinned original manifest.
     from scripts.probe_haptics_asset_manifest import audit as audit_haptics
-    audit_haptics(repo, repo / 'config/original-haptics-manifest.json', expected_count=29)
+    audit_haptics(repo, repo / 'config/original-haptics-manifest.json', expected_count=29,
+                  expected_manifest_blob_sha=haptics_manifest_blob_sha)
     prefix = 'Raft/Raft_Data/StreamingAssets/'
     raw = subprocess.check_output(['git', '-C', str(repo), 'ls-tree', '-rz', 'HEAD', '--', prefix])
     plan = []
