@@ -117,6 +117,7 @@ def field_signature(source, original_script_names=None, declared_families=None):
     catalog = set(original_script_names or [])
     declared = declared_families or {}
     unknown_type_families = Counter()
+    original_builtin_subtypes = Counter()
     collection_element_categories = Counter()
     for stmt in top_level_members(class_scope(source)):
         total += 1
@@ -153,6 +154,9 @@ def field_signature(source, original_script_names=None, declared_families=None):
             kind = "known_unity_native_object_reference"
         elif short in ("bool","int","float","double","long","string","Vector2","Vector3","Color"):
             kind = "builtin_value_or_struct"
+            original_builtin_subtypes["string" if short == "string" else
+                                      "primitive_4byte" if short in ("bool","int","float") else
+                                      "other_value_type"] += 1
         else:
             kind = "custom_type_or_enum_unverified"
         kinds[kind] += 1
@@ -169,6 +173,7 @@ def field_signature(source, original_script_names=None, declared_families=None):
     return {
         "candidate_serializable_field_count": len(accepted),
         "candidate_type_categories": dict(sorted(kinds.items())),
+        "builtin_scalar_serialization_families": dict(sorted(original_builtin_subtypes.items())),
         "candidate_categories_in_source_declaration_order": accepted,
         "custom_type_original_script_classname_match_count": dict(sorted(source_type_classes.items())),
         "collection_element_classification": dict(sorted(collection_element_categories.items())),
