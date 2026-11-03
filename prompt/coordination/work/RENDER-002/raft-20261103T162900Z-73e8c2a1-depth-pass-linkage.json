@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T162900Z-73e8c2a1",
+  "client_label": "W1",
+  "issue_id": "RENDER-002",
+  "status": "planned",
+  "updated_at": "2026-11-03T13:39:07.199Z",
+  "base_sha": "6800280651ab43dc0625f55293f694d73df4c4b1",
+  "hypothesis": "Exact original Depth Copy serialized passes retain m_BlobIndex links to recoverable vertex/fragment bytecode and original resource metadata; linked pair recovery can replace unassociated stage samples as basis for real pass reconstruction.",
+  "intended_files": [
+    "scripts/w1_recover_depth_passes.py",
+    "tests/test_w1_depth_pass_linkage.py",
+    ".github/workflows/raft-w1-depth-pass-recovery.yml"
+  ],
+  "related_work": [
+    "prompt/coordination/work/FFT-FORMAT-009/raft-20261103T095340Z-a81c6e42-butterfly-storage.json",
+    "prompt/coordination/work/FFT-FORMAT-009/raft-20261103T095340Z-a81c6e42-precision-capabilities.json",
+    "prompt/coordination/work/FFT-FORMAT-009/raft-20261103T095340Z-a81c6e42-source-expression.json",
+    "prompt/coordination/work/FFT-FORMAT-009/raft-20261103T101018Z-6d92f0ab-audit.json",
+    "prompt/coordination/work/FFT-FORMAT-009/raft-20261103T112510Z-a1ef930c-extinst-identity.json",
+    "prompt/coordination/work/RENDER-002/raft-20261103T103610Z-4e91b2cd-coverage.json",
+    "prompt/coordination/work/RENDER-002/raft-20261103T113735Z-a93e6c40-shader-identity.json",
+    "prompt/coordination/work/RENDER-002/raft-20261103T120645Z-8cde319a-shader-path-guard.json",
+    "prompt/coordination/work/RENDER-002/raft-20261103T121333Z-a6c7f4e2-include-comments.json",
+    "prompt/coordination/work/RENDER-002/raft-20261103T123040Z-02fe66b3-export-provenance.json",
+    "prompt/coordination/work/RENDER-002/raft-20261103T123040Z-02fe66b3-scope-hardening-v2.json",
+    "prompt/coordination/work/RENDER-002/raft-20261103T123119Z-9fd895b8-original-export-provenance-intake.json",
+    "prompt/coordination/work/RENDER-002/raft-20261103T123129Z-6533d5b4-coverage-integrity.json",
+    "prompt/coordination/work/RENDER-002/raft-20261103T123140Z-7ea78212-addition-rollback.json",
+    "prompt/coordination/work/RENDER-002/raft-20261103T162900Z-73e8c2a1-original-graphics-recovery.json",
+    "prompt/coordination/work/WATER-001/raft-20261103T100100Z-a1c46e79-ssa-identity.json",
+    "prompt/coordination/work/WATER-001/raft-20261103T103610Z-4e91b2cd-caller-policy.json",
+    "prompt/coordination/work/WATER-001/raft-20261103T103610Z-4e91b2cd-cpu-2d.json",
+    "prompt/coordination/work/WATER-001/raft-20261103T103610Z-4e91b2cd-inverse-roundtrip.json",
+    "prompt/coordination/work/WATER-001/raft-20261103T103610Z-4e91b2cd-policy-ci.json",
+    "prompt/coordination/work/WATER-001/raft-20261103T104800Z-a1f742c0-image-op-coverage.json",
+    "prompt/coordination/work/WATER-001/raft-20261103T110728Z-b1c3478e-math-profile.json",
+    "prompt/coordination/work/WATER-001/raft-20261103T120720Z-a1e4f6c9-operand-producer-edges.json"
+  ],
+  "experiment_ids": [
+    "depth-pass-linkage"
+  ],
+  "result": null,
+  "next_step": "Recover all original Depth Copy pass bindings privately and validate original+roundtrip stage pairs, without claiming numerical/GPU proof."
+}

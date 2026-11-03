@@ -2,15 +2,15 @@
   "schema_version": 1,
   "client_label": "W1",
   "username": "raft-20261103T162900Z-73e8c2a1",
-  "session_id": "w1-20261103-73e8c2a1",
+  "session_id": "w1-20261103T133907199Z-7c92e41a",
   "resumed_from": null,
-  "status": "paused",
-  "updated_at": "2026-11-03T13:33:22.188Z",
-  "base_sha": "33afc2ac8f7868f4ed74bff00208d2711a9c43f9",
+  "status": "active",
+  "updated_at": "2026-11-03T13:39:07.199Z",
+  "base_sha": "6800280651ab43dc0625f55293f694d73df4c4b1",
   "current_work": [
-    "RENDER-002: pass/stage/property binding reconstruction pending"
+    "RENDER-002 exact original Depth Copy pass-stage recovery"
   ],
   "last_commit": "01f1cfcc335f6756ae1caa1f8ce6abbfd902135a",
-  "next_step": "Read recovery report then join exact original m_BlobIndex/pass/keyword metadata for one affected Shader; test paired stages before ShaderLab integration.",
+  "next_step": "Recover original pass-index/variant/binding metadata and linked vertex/fragment HLSL for Depth Copy; no generic replacement.",
   "memory_path": "prompt/coordination/clients/raft-20261103T162900Z-73e8c2a1/MEMORY.md"
 }
