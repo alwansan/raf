@@ -89,5 +89,19 @@ class A3ReassemblyPublicationTests(unittest.TestCase):
             self.assertFalse((root / (name + ".assembling")).exists())
 
 
+    def test_unsupported_android_hardlinks_fail_without_publishing_partial_output(self):
+        import errno
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            name, _ = fixture(root)
+            with patch("scripts.reassemble_android_delivery.os.link",
+                       side_effect=OSError(errno.EPERM, "shared-storage-hardlink-denied")):
+                with self.assertRaisesRegex(OSError, "Termux home"):
+                    reassemble(root, name)
+            self.assertFalse((root / name).exists())
+            self.assertFalse((root / (name + ".assembling")).exists())
+
+
+
 if __name__ == "__main__":
     unittest.main()
