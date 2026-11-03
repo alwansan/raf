@@ -2,12 +2,13 @@
   "schema_version": 1,
   "username": "up",
   "client_label": "up",
-  "session_id": "up-setup-20261103-01",
+  "session_id": "up-20261103T124952Z-8c4e1b07",
   "status": "paused",
-  "source_sha": "8a685a542b96ae9a3a5ce8ea18a814330dace7ae",
+  "source_sha": "c6868a38c41e8384dd8153289c913e87714c8a05",
   "source_branch": "feature/android-native-port",
   "report_branch": "update",
-  "updated_at": "2026-11-03",
-  "next_step": "Recheck live source and actual jobs, enrich per-client activity with evidence, update snapshot without inventing global completion",
+  "updated_at": "2026-11-03T12:49:52Z",
+  "report_snapshot": "snapshots/2026-11-03T124952Z.json",
+  "next_step": "Recheck live branch source SHA, Actions and peer state changes; audit new original shader provenance and preserve separate historical versus newly verified evidence.",
   "memory_path": "clients/up/MEMORY.md"
 }
