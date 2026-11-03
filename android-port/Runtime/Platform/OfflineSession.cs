@@ -12,6 +12,10 @@ namespace RaftAndroid.Platform
         {
             if (string.IsNullOrEmpty(localProfileId))
                 throw new ArgumentException("Local identity required.", nameof(localProfileId));
+            // LocalProfileStore produces canonical 32-character lowercase hex IDs.
+            // Reject a nonempty but invalid ID before advertising a connected host;
+            // reuse the validator used by the stable original save-key mapping.
+            _ = LocalPlayerIdentity.FromProfile(localProfileId);
             LocalProfileId = localProfileId;
         }
 
