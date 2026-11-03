@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T105730Z-a5e8b126",
+  "issue_id": "HAPTICS-008",
+  "status": "planned",
+  "updated_at": "2026-11-03T10:57:41.720Z",
+  "base_sha": "d01f4c4bfab342dc2eba35c569151cac9b292973",
+  "resumed_from": "raft-20261103T100200Z-a5c842e1",
+  "hypothesis": "Previous synthetic archive path checks missed whether the actual 29 source WAV payloads survive ZIP pack+read through the production reader for both jar:file and /jar:file forms. Verify exact hashes of original input/output and fail closed without producing an APK/OBB.",
+  "intended_files": [
+    "android-port/Tests/Haptics/Program.cs",
+    ".github/workflows/raft-a5-haptics-archive.yml",
+    "prompt/coordination/clients/raft-20261103T105730Z-a5e8b126/",
+    "prompt/coordination/experiments/raft-20261103T105730Z-a5e8b126/",
+    "prompt/coordination/work/HAPTICS-008/raft-20261103T105730Z-a5e8b126-original-bytes-zip.json",
+    "prompt/STATUS.md",
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+  ],
+  "related_work": [
+    "A5 previous raft-20261103T100200Z-a5c842e1 CI41617621699",
+    "A3 raft-20261103T105031Z-4b175384 is actively editing stage_original_streaming_assets.py and its tests; those are excluded."
+  ],
+  "excluded_files": [
+    "scripts/stage_original_streaming_assets.py",
+    "tests/test_stage_original_streaming_assets.py",
+    "config/original-haptics-manifest.json",
+    "Raft/Raft_Data/StreamingAssets/**",
+    ".github/raft-native-build-request.json"
+  ],
+  "experiment_ids": [
+    "authentic-haptic-wav-zip-roundtrip"
+  ],
+  "result": null,
+  "next_step": "Confirm original source SHA/size baseline, modify only A5 test harness/workflow and validate real source bytes via isolated CPU CI."
+}
