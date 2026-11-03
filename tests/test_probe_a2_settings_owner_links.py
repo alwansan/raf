@@ -115,5 +115,28 @@ class A2OwnerLinks(unittest.TestCase):
         self.assertFalse(bad["tail_is_bool_plus_zero_padding"])
 
 
+
+    def test_ambiguous_overlapping_pointer_windows_need_disjoint_bounds(self):
+        from scripts.probe_a2_settings_owner_links import nonoverlap_profile
+        candidates = [(32, 1), (40, 2), (52, 3), (64, 4)]
+        profile = nonoverlap_profile(candidates, [True, False, True, True])
+        self.assertEqual(profile["total_overlapping_raw_patterns"], 4)
+        self.assertEqual(profile["maximum_disjoint_12byte_candidate_windows"], 3)
+        self.assertEqual(profile["patterns_not_simultaneously_placeable"], 1)
+        self.assertEqual(profile["minimum_verified_scaler_ancestor_hits_among_maximal_disjoint_sets"], 2)
+        self.assertEqual(profile["maximum_verified_scaler_ancestor_hits_among_maximal_disjoint_sets"], 3)
+        self.assertEqual(profile["candidate_windows_present_in_every_maximal_disjoint_set"], 2)
+        self.assertTrue(profile["no_custom_serialized_field_types_inferred"])
+        with self.assertRaisesRegex(ValueError, "Unpaired"):
+            nonoverlap_profile(candidates, [True])
+
+    def test_nonoverlap_single_and_empty_scenarios(self):
+        from scripts.probe_a2_settings_owner_links import nonoverlap_profile
+        self.assertEqual(nonoverlap_profile([], [])["maximum_disjoint_12byte_candidate_windows"], 0)
+        one = nonoverlap_profile([(32, 1)], [True])
+        self.assertEqual(one["maximum_disjoint_12byte_candidate_windows"], 1)
+        self.assertEqual(one["candidate_windows_present_in_every_maximal_disjoint_set"], 1)
+
+
 if __name__ == "__main__":
     unittest.main()
