@@ -625,6 +625,7 @@ jobs:
               --apk "$GITHUB_WORKSPACE/builds/Android/RaftAndroidExperimental.apk" \
               --obb "$GITHUB_WORKSPACE/builds/Android/RaftAndroidExperimental.main.obb" \
               --verify-crc \
+              --haptics-manifest "$GITHUB_WORKSPACE/config/original-haptics-manifest.json" \
               --report "$RUNNER_TEMP/private-android-obb-audit.json"
           fi
           python3 - <<'PY'
