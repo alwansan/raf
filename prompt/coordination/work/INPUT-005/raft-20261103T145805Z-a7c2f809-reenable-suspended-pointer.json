@@ -2,8 +2,8 @@
   "schema_version": 1,
   "owner": "raft-20261103T145805Z-a7c2f809",
   "issue_id": "INPUT-005",
-  "status": "active",
-  "updated_at": "2026-11-03T14:58:05.824Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T15:08:15.607Z",
   "base_sha": "7462e0b2754720a8b6581cf00e037cb9af094e04",
   "hypothesis": "OnDisable Suspend(true) leaves suspended latched; OnEnable misses reset so re-enabled AndroidTouchPointer consumes raw touches rather than delivering gameplay input.",
   "intended_files": [
@@ -22,7 +22,13 @@
   "experiment_ids": [
     "reenable-suspended-pointer-20261103"
   ],
-  "evidence": [],
-  "result": null,
-  "next_step": "Test fail first on source-extracted OnEnable/OnEvent and fix only after deterministic red."
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41659146129",
+    "https://github.com/alwansan/raf/actions/runs/41659588079",
+    "https://github.com/alwansan/raf/commit/7517f30fd7010af11dac6444f7c0b3d3dadd5064",
+    "https://github.com/alwansan/raf/actions/runs/41659802113",
+    "https://github.com/alwansan/raf/actions/runs/41659802250"
+  ],
+  "result": "RED actual C# lifecycle fail-first at reenable-clears-stale-suspension, fix OnEnable, GREEN 17 packet/lifecycle+446 gestures+53 Mouse0 and original managed compile exit0. CPU only, no Unity/phone.",
+  "next_step": "Scoped completed. Real device acceptance when readiness coordinator approves candidate."
 }
