@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T225121Z-7e4d2c91",
+  "issue_id": "LOCAL-005",
+  "experiment_id": "dangling-save-directory-link",
+  "status": "planned",
+  "hypothesis": "Directory.Exists/File.Exists can both miss a dangling symlink, so RejectLinkedSaveDirectories skips File.GetAttributes before the target later appears.",
+  "inputs": [
+    "synthetic dangling world directory link",
+    "synthetic dangling profile ancestor link",
+    "ordinary world save path"
+  ],
+  "expected": "Both redirected paths rejected before target creation; ordinary saves unchanged",
+  "workflow": ".github/workflows/raft-android-platform-tests.yml",
+  "limits": "CPU-only .NET; original game .rgd and phone runtime untested."
+}

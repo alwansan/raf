@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "username": "raft-20261103T225121Z-7e4d2c91",
+  "client_label": "A6",
+  "session_id": "a6-20261103T225121Z-40bca78e",
+  "resumed_from": "raft-20261103T132000Z-a6e7f219",
+  "status": "active",
+  "updated_at": "2026-11-03T22:51:21Z",
+  "base_sha": "verified from live ref before registration",
+  "current_work": [
+    "LOCAL-005"
+  ],
+  "last_commit": null,
+  "next_step": "Fix dangling directory symlink bypass in LocalSavePaths and verify .NET smoke CI; original .rgd/phone pending.",
+  "memory_path": "prompt/coordination/clients/raft-20261103T225121Z-7e4d2c91/MEMORY.md"
+}

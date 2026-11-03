@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T225121Z-7e4d2c91",
+  "issue_id": "LOCAL-005",
+  "status": "active",
+  "updated_at": "2026-11-03T22:51:21Z",
+  "hypothesis": "Directory.Exists/File.Exists can both miss a dangling symlink, so RejectLinkedSaveDirectories skips File.GetAttributes before the target later appears.",
+  "intended_files": [
+    "android-port/Runtime/Platform/LocalSavePaths.cs",
+    "android-port/Tests/Smoke/Program.cs",
+    "prompt/coordination/clients/raft-20261103T225121Z-7e4d2c91/state.json",
+    "prompt/coordination/clients/raft-20261103T225121Z-7e4d2c91/MEMORY.md",
+    "prompt/coordination/work/LOCAL-005/raft-20261103T225121Z-7e4d2c91-dangling-dir-link.json",
+    "prompt/coordination/experiments/raft-20261103T225121Z-7e4d2c91/dangling-save-directory-link.json"
+  ],
+  "related_work": [
+    "Prior A6 path and shader CI completed",
+    "A8 ZIP2 original-save provider active, separate scripts",
+    "A10 .rgd probe separate"
+  ],
+  "evidence": [],
+  "next_step": "Fail-closed File.GetAttributes on each managed descendant, test dangling world and profile ancestor links; do not build Unity."
+}
