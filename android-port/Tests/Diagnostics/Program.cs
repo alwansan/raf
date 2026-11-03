@@ -154,6 +154,18 @@ class Program
             overlapping.Summarize((area, operation, detail) => combined = detail);
             Require(combined != null && combined.Contains("repeated=2;"));
             overlapping.Summarize((area, operation, detail) => throw new Exception("Duplicate overlap summary"));
+            // DIAG-010: the two pairs below serialize to the same old key,
+            // but their first full error stacks must remain independent.
+            var collision = new RepeatedDiagnosticMessages();
+            Require(collision.First("scene\nload", "stack", now));
+            Require(collision.First("scene", "load\nstack", now));
+            Require(!collision.First("scene\nload", "stack", now));
+            Require(!collision.First("scene", "load\nstack", now));
+            var collisionSummaries = new System.Collections.Generic.List<string>();
+            collision.Summarize((area, operation, detail) => collisionSummaries.Add(detail));
+            Require(collisionSummaries.Count == 2);
+            Require(collisionSummaries.All(s => s.Contains("repeated=1;")));
+            collision.Summarize((area, operation, detail) => throw new Exception("Duplicate colliding summary"));
             Console.WriteLine("RAFT_PERSISTENT_LOG_TEST checks=" + checks + " passed=true actualAndroidStorageVerified=false");
         }
         finally { Directory.Delete(root, true); }
