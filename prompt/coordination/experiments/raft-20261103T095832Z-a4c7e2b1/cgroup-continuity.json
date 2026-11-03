@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "owner": "raft-20261103T095832Z-a4c7e2b1",
-  "status": "planned",
+  "status": "paused",
   "hypothesis": "summarize() compares only first/last cgroup oom counters; an intermediate reset followed by growth can produce a plausible false positive OOM delta.",
   "input_hashes": [
     "scripts/ci_memory_watch.py git-blob c36af68b410fc81c2f91f4e5c2192a95c4cf7bcc",
@@ -22,10 +22,17 @@
   "artifact_prefix": null,
   "budget": "CPU-only local Python; no Unity/LFS/APK",
   "run_url": null,
-  "source_sha": null,
-  "result": null,
+  "source_sha": "10563d4622a898ee4e2bcc9631bf4f95e3fcd0b2",
+  "result": "CI summary now returns null for cgroup resets, missing/malformed intermediate observations and non-object JSON lines; local 7/7 targeted replica checks passed. Published code + 2 new repository regression methods; exact-source GitHub Actions run after these changes not verified.",
   "limitations": [
-    "Not evidence of GPU OOM cause or phone behavior"
+    "Not evidence of GPU OOM cause or phone behavior",
+    "7 local checks run against copied continuity routine, not complete checked-out repository test suite",
+    "No CI run verified for new source/test SHA; previous A4 CI success predates this patch"
   ],
-  "next_step": "Test and implement small source fix, then CI when available without full native trigger."
+  "next_step": "Verify full repo test_ci_memory_watch.py suite on a known post-change commit using cheap CPU-only Actions, then analyze actual game GPU resource lifetime separately; no Unity/APK from A4.",
+  "updated_at": "2026-11-03T14:56:57.038Z",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/c9b2cf3ee6502893f2d61160269c2dbb18365ee6",
+    "https://github.com/alwansan/raf/commit/10563d4622a898ee4e2bcc9631bf4f95e3fcd0b2"
+  ]
 }
