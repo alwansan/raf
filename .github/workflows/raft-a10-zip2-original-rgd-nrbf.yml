@@ -37,13 +37,15 @@ jobs:
           lfs: false
           sparse-checkout: |
             Raft/Raft_Data/StreamingAssets/Data.rgd
+            Raft/Raft_Data/Managed/Assembly-CSharp.dll
           sparse-checkout-cone-mode: false
       - name: Assert pinned ZIP2 source commit without disclosing payload
         run: |
           set -euo pipefail
           test "$(git -C zip2-original rev-parse HEAD)" = "15964ea8f246b6e076ce26b60931ee2e1a9a2385"
           test "$(wc -c < zip2-original/Raft/Raft_Data/StreamingAssets/Data.rgd)" -eq 2941
-          echo "RAFT_A10_SOURCE ZIP2_SHA_PIN=true sourceBytes=2941 lfs=false"
+          test "$(wc -c < zip2-original/Raft/Raft_Data/Managed/Assembly-CSharp.dll)" -eq 3211776
+          echo "RAFT_A10_SOURCE ZIP2_SHA_PIN=true rgdBytes=2941 originalManagedBytes=3211776 lfs=false"
       - name: Install managed SDK for non-executable NRBF record decoding
         uses: actions/setup-dotnet@v4
         with:
@@ -56,4 +58,6 @@ jobs:
           dotnet run --configuration Release \
             --project tests/a10-original-rgd-nrbf/OriginalRgdProbe.csproj -- \
             --file zip2-original/Raft/Raft_Data/StreamingAssets/Data.rgd \
-            --sha256 b2785187aa11e33872698adfa79ab252cf65a824d92bee7e88773ce4aa11cbba
+            --sha256 b2785187aa11e33872698adfa79ab252cf65a824d92bee7e88773ce4aa11cbba \
+            --assembly zip2-original/Raft/Raft_Data/Managed/Assembly-CSharp.dll \
+            --assembly-sha256 0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e
