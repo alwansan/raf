@@ -39,7 +39,55 @@ static float inputValue(uint32_t x,uint32_t y,int texture,int channel) {
     const float t=float((x*17u+y*13u+texture*19u+channel*7u+inputSeed*101u)%1021u)*0.017f;
     return std::sin(t)*0.3f+std::cos(t*0.27f)*0.15f;
 }
-static constexpr float sentinel=123456.f;
+// Finite exact half-precision sentinel; counts only stored format channels.
+static constexpr float sentinel=8192.f;
+struct ImageFormat {
+    std::string token;
+    VkFormat vk=VK_FORMAT_UNDEFINED;
+    uint32_t channels=0, componentBytes=0;
+    uint32_t stride() const {return channels*componentBytes;}
+};
+static ImageFormat selectFormat(const std::string& token) {
+    if(token=="rg16f") return {token,VK_FORMAT_R16G16_SFLOAT,2,2};
+    if(token=="rg32f") return {token,VK_FORMAT_R32G32_SFLOAT,2,4};
+    if(token=="rgba16f") return {token,VK_FORMAT_R16G16B16A16_SFLOAT,4,2};
+    if(token=="rgba32f") return {token,VK_FORMAT_R32G32B32A32_SFLOAT,4,4};
+    throw std::runtime_error("Unsupported original FFT Vulkan image format");
+}
+static uint16_t floatToHalf(float value) {
+    uint32_t word=0;
+    std::memcpy(&word,&value,4);
+    const uint32_t sign=(word>>16)&0x8000u;
+    uint32_t exp=(word>>23)&255u, mant=word&0x7fffffu;
+    if(exp==255u) return uint16_t(sign|0x7c00u|(mant?0x0200u:0u));
+    int32_t halfExp=int32_t(exp)-127+15;
+    if(halfExp>=31) return uint16_t(sign|0x7c00u);
+    if(halfExp<=0) {
+        if(halfExp < -10) return uint16_t(sign);
+        mant|=0x800000u;
+        const uint32_t shift=uint32_t(14-halfExp);
+        const uint32_t top=mant>>shift;
+        const uint32_t rest=mant&((1u<<shift)-1u);
+        const uint32_t midpoint=1u<<(shift-1);
+        return uint16_t(sign|top+(rest>midpoint||(rest==midpoint&&(top&1u))));
+    }
+    // RNE at float32 13-bit precision discarded for binary16, including carry.
+    const uint32_t rounded=mant+0x0fffu+((mant>>13)&1u);
+    if(rounded&0x800000u) {
+        halfExp++;
+        if(halfExp>=31) return uint16_t(sign|0x7c00u);
+        mant=0;
+    } else mant=rounded;
+    return uint16_t(sign|(uint32_t(halfExp)<<10)|(mant>>13));
+}
+static float halfToFloat(uint16_t half) {
+    const float sign=(half&0x8000u)?-1.f:1.f;
+    const uint32_t exp=(half>>10)&31u, mant=half&1023u;
+    if(exp==31u) return mant?std::numeric_limits<float>::quiet_NaN():
+                               sign*std::numeric_limits<float>::infinity();
+    if(exp==0u) return sign*std::ldexp(float(mant),-24);
+    return sign*std::ldexp(float(1024u+mant),int(exp)-25);
+}
 struct Texture {
     VkImage image=VK_NULL_HANDLE;
     VkImageView view=VK_NULL_HANDLE;
@@ -47,17 +95,36 @@ struct Texture {
     VkSubresourceLayout sub{};
     uint8_t* address=nullptr;
 };
-static std::array<float,4> pixel(const Texture& t,uint32_t x,uint32_t y) {
-    std::array<float,4> v{};
-    std::memcpy(v.data(),t.address+t.sub.offset+y*t.sub.rowPitch+x*16,16);
+static void putPixel(const Texture& t,uint32_t x,uint32_t y,
+                     const ImageFormat& fmt,const std::array<float,4>& values) {
+    auto ptr=t.address+t.sub.offset+y*t.sub.rowPitch+x*fmt.stride();
+    for(uint32_t c=0;c<fmt.channels;c++) {
+        if(fmt.componentBytes==2u) {
+            uint16_t bits=floatToHalf(values[c]);
+            std::memcpy(ptr+c*2u,&bits,2u);
+        } else std::memcpy(ptr+c*4u,&values[c],4u);
+    }
+}
+static std::array<float,4> pixel(const Texture& t,uint32_t x,uint32_t y,
+                                 const ImageFormat& fmt) {
+    std::array<float,4> v={0.f,0.f,0.f,1.f};
+    auto ptr=t.address+t.sub.offset+y*t.sub.rowPitch+x*fmt.stride();
+    for(uint32_t c=0;c<fmt.channels;c++) {
+        if(fmt.componentBytes==2u) {
+            uint16_t bits=0;
+            std::memcpy(&bits,ptr+c*2u,2u);
+            v[c]=halfToFloat(bits);
+        } else std::memcpy(&v[c],ptr+c*4u,4u);
+    }
     return v;
 }
-static bool isWritten(const std::array<float,4>& p) {
-    return std::any_of(p.begin(),p.end(),[](float f){return f!=sentinel;});
+static bool isWritten(const std::array<float,4>& p,const ImageFormat& fmt) {
+    for(uint32_t i=0;i<fmt.channels;i++)if(p[i]!=sentinel)return true;
+    return false;
 }
 int main(int argc,char** argv) {
  try {
-    require(argc>=5 && argc<=7,"Usage: original.spv roundtrip.spv width height [seed [groupsY] | --canary]");
+    require(argc>=5 && argc<=8,"Usage: original.spv roundtrip.spv width height [seed [groupsY [rg16f|rg32f|rgba16f|rgba32f]] | --canary]");
     bool canary=(argc==6 && std::string(argv[5])=="--canary");
     if(!canary && argc>=6) {
         inputSeed=uint32_t(std::stoul(argv[5]));
@@ -69,6 +136,7 @@ int main(int argc,char** argv) {
         require(dispatchGroupY>=1 && dispatchGroupY<=2 &&
                 std::to_string(dispatchGroupY)==argv[6],"Invalid bounded Y dispatch");
     }
+    const ImageFormat imageFormat=selectFormat(argc==8?argv[7]:"rgba32f");
     auto original=spirvFile(argv[1]),roundtrip=spirvFile(argv[2]);
     int widthInt=std::stoi(argv[3]),heightInt=std::stoi(argv[4]);
     require(widthInt>=1 && widthInt<=2048 && heightInt>=1 && heightInt<=2048,
@@ -104,11 +172,11 @@ int main(int argc,char** argv) {
     require(properties.limits.maxComputeWorkGroupInvocations>=1024 || canary,
             "CPU Vulkan max workgroup invocations below 1024");
     VkFormatProperties formatProps{};
-    vkGetPhysicalDeviceFormatProperties(physical,VK_FORMAT_R32G32B32A32_SFLOAT,&formatProps);
+    vkGetPhysicalDeviceFormatProperties(physical,imageFormat.vk,&formatProps);
     require((formatProps.linearTilingFeatures&
              (VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT|VK_FORMAT_FEATURE_STORAGE_IMAGE_BIT))==
             (VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT|VK_FORMAT_FEATURE_STORAGE_IMAGE_BIT),
-            "CPU driver lacks linear-tiled RGBA32F sampled/storage support");
+            "CPU driver lacks original FFT requested linear sampled/storage image format");
     uint32_t queues=0;
     vkGetPhysicalDeviceQueueFamilyProperties(physical,&queues,nullptr);
     require(queues>0 && queues<64,"Compute queue families missing");
@@ -142,7 +210,7 @@ int main(int argc,char** argv) {
         auto& tex=images[t];
         VkImageCreateInfo ci{VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO};
         ci.imageType=VK_IMAGE_TYPE_2D;
-        ci.format=VK_FORMAT_R32G32B32A32_SFLOAT;
+        ci.format=imageFormat.vk;
         ci.extent={w,h,1};
         ci.mipLevels=1;ci.arrayLayers=1;ci.samples=VK_SAMPLE_COUNT_1_BIT;
         ci.tiling=VK_IMAGE_TILING_LINEAR;
@@ -168,17 +236,17 @@ int main(int argc,char** argv) {
         void* mapped=nullptr;
         check(vkMapMemory(device,tex.memory,0,required.size,0,&mapped),"vkMapMemory");
         tex.address=reinterpret_cast<uint8_t*>(mapped);
-        require(tex.sub.rowPitch>=w*16&&
-                tex.sub.offset+(h-1)*tex.sub.rowPitch+w*16<=required.size,
+        require(tex.sub.rowPitch>=w*imageFormat.stride()&&
+                tex.sub.offset+(h-1)*tex.sub.rowPitch+w*imageFormat.stride()<=required.size,
                 "Mapped image layout out of bounds");
         for(uint32_t y=0;y<h;y++)for(uint32_t x=0;x<w;x++) {
             std::array<float,4> p{};
             for(int c=0;c<4;c++)p[c]=(t<2)?inputValue(x,y,t,c):sentinel;
-            std::memcpy(tex.address+tex.sub.offset+y*tex.sub.rowPitch+x*16,p.data(),16);
+            putPixel(tex,x,y,imageFormat,p);
         }
         VkImageViewCreateInfo view{VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO};
         view.image=tex.image;view.viewType=VK_IMAGE_VIEW_TYPE_2D;
-        view.format=VK_FORMAT_R32G32B32A32_SFLOAT;
+        view.format=imageFormat.vk;
         view.subresourceRange={VK_IMAGE_ASPECT_COLOR_BIT,0,1,0,1};
         check(vkCreateImageView(device,&view,nullptr,&tex.view),"vkCreateImageView");
     }
@@ -292,12 +360,12 @@ int main(int argc,char** argv) {
     uint64_t writesA=0,writesB=0,missing=0,nonFinite=0,canaryErrors=0;
     double sumSquares=0,referenceSquares=0,maxAbs=0;
     for(uint32_t y=0;y<h;y++)for(uint32_t x=0;x<w;x++) {
-        const auto a=pixel(images[2],x,y),b=pixel(images[3],x,y);
-        bool writeA=isWritten(a),writeB=isWritten(b);
+        const auto a=pixel(images[2],x,y,imageFormat),b=pixel(images[3],x,y,imageFormat);
+        bool writeA=isWritten(a,imageFormat),writeB=isWritten(b,imageFormat);
         writesA+=writeA;writesB+=writeB;
         if(writeA!=writeB) {missing++;continue;}
         if(!writeA)continue;
-        for(int c=0;c<4;c++){
+        for(uint32_t c=0;c<imageFormat.channels;c++){
             const float va=a[c],vb=b[c];
             if(!std::isfinite(va)||!std::isfinite(vb)){nonFinite++;continue;}
             double delta=double(va)-double(vb);
@@ -315,7 +383,10 @@ int main(int argc,char** argv) {
     if(canary)require(canaryErrors==0,"Synthetic canary output disagrees with known CPU sum");
     std::cout<<std::setprecision(12)
              <<"RAFT_A1_VULKAN_DIFF {\"cpu_software_vulkan\":true,"
-             <<"\"rgba32f_linear_only\":true,\"extent_width\":"<<w
+             <<"\"vulkan_image_format\":\""<<imageFormat.token<<"\""
+             <<",\"image_channels\":"<<imageFormat.channels
+             <<",\"image_component_bits\":"<<imageFormat.componentBytes*8u
+             <<",\"extent_width\":"<<w
              <<",\"extent_height\":"<<h
              <<",\"input_seed\":"<<inputSeed
              <<",\"dispatch_group_y\":"<<dispatchGroupY
