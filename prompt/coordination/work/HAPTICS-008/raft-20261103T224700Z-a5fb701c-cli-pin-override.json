@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T224700Z-a5fb701c",
+  "issue_id": "HAPTICS-008",
+  "status": "active",
+  "updated_at": "2026-11-03T22:47:00Z",
+  "base_sha": "2098dca38eb9ae843227b51e4950a094c2067506",
+  "resumed_from": "raft-20261103T131030Z-a5c93e61",
+  "hypothesis": "The post-build production OBB audit has a command-line --haptics-manifest-blob override that can replace the supposedly immutable original 29-WAV manifest anchor and attest a forged manifest/OBB pair. Remove override from shipped CLI; keep synthetic fixture SHA injection in test-only Python API.",
+  "intended_files": [
+    "scripts/audit_android_expansion.py",
+    "tests/test_android_expansion_audit.py",
+    "prompt/coordination/clients/raft-20261103T224700Z-a5fb701c/",
+    "prompt/coordination/work/HAPTICS-008/raft-20261103T224700Z-a5fb701c-cli-pin-override.json",
+    "prompt/coordination/experiments/raft-20261103T224700Z-a5fb701c/",
+    "prompt/coordination/discussions/HAPTICS-008/",
+    "prompt/STATUS.md",
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+  ],
+  "excluded_files": [
+    "config/original-haptics-manifest.json",
+    "Raft/Raft_Data/StreamingAssets/**",
+    "scripts/stage_original_streaming_assets.py",
+    "scripts/probe_haptics_asset_manifest.py",
+    ".github/raft-native-build-request.json"
+  ],
+  "related_work": [
+    "A5 immutable manifest anchor final 6c7ff044 / CI41642937521",
+    "A3 Haptics original ZIP names CI41733403834",
+    "A9 ZIP2 bank/source staging CI41733666911"
+  ],
+  "experiment_ids": [
+    "production-haptics-cli-pin-override"
+  ],
+  "evidence": [],
+  "result": null,
+  "next_step": "Create red/green synthetic subprocess checks and run isolated CPU CI without Unity or APK."
+}

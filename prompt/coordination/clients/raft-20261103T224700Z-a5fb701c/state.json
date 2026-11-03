@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "display_name": "A5",
+  "username": "raft-20261103T224700Z-a5fb701c",
+  "session_id": "A5-20261103T224700Z-7ed4c9f1",
+  "resumed_from": "raft-20261103T131030Z-a5c93e61",
+  "status": "active",
+  "updated_at": "2026-11-03T22:47:00Z",
+  "base_sha": "2098dca38eb9ae843227b51e4950a094c2067506",
+  "current_work": [
+    "HAPTICS-008"
+  ],
+  "last_commit": null,
+  "next_step": "Bounded standalone production CLI trust-anchor override regression: verify immutable 29-WAV pin cannot be overridden by --haptics-manifest-blob; maintain synthetic test fixtures via Python API; CPU CI only.",
+  "memory_path": "prompt/coordination/clients/raft-20261103T224700Z-a5fb701c/MEMORY.md"
+}
