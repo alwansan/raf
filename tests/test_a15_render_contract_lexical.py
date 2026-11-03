@@ -38,10 +38,10 @@ def run_audit(shaders, computes=()):
 class A15RenderContractLexicalTests(unittest.TestCase):
     def test_quoted_and_commented_pass_tokens_cannot_inflate_real_passes(self):
         shader = (
-            'Shader "Raft/Pass { CGPROGRAM" {\\n'
-            ' // Pass { HLSLPROGRAM\\n'
-            ' /* Pass {\\nCGPROGRAM\\n*/\\n'
-            ' SubShader { Pass { CGPROGRAM ENDCG } }\\n'
+            'Shader "Raft/Pass { CGPROGRAM" {\n'
+            ' // Pass { HLSLPROGRAM\n'
+            ' /* Pass {\nCGPROGRAM\n*/\n'
+            ' SubShader { Pass { CGPROGRAM ENDCG } }\n'
             '}'
         )
         passes, _, targeted, _ = run_audit([shader])
@@ -50,10 +50,10 @@ class A15RenderContractLexicalTests(unittest.TestCase):
 
     def test_fake_program_in_comments_is_not_counted_for_real_target(self):
         shader = (
-            '// CGPROGRAM \\n'
-            'Shader "Hidden/Post FX/Bloom" {\\n'
-            '  /* HLSLPROGRAM */\\n'
-            '  SubShader { Pass { } }\\n'
+            '// CGPROGRAM \n'
+            'Shader "Hidden/Post FX/Bloom" {\n'
+            '  /* HLSLPROGRAM */\n'
+            '  SubShader { Pass { } }\n'
             '}'
         )
         passes, _, targeted, _ = run_audit([shader])
@@ -64,7 +64,7 @@ class A15RenderContractLexicalTests(unittest.TestCase):
 
     def test_fake_target_shader_name_in_comment_does_not_preempt_real(self):
         shader = (
-            '/* Shader "Hidden/Post FX/Bloom" { Pass { CGPROGRAM } } */\\n'
+            '/* Shader "Hidden/Post FX/Bloom" { Pass { CGPROGRAM } } */\n'
             'Shader "Raft/SyntheticPlain" { SubShader { Pass { } } }'
         )
         passes, _, targeted, _ = run_audit([shader])
@@ -73,11 +73,11 @@ class A15RenderContractLexicalTests(unittest.TestCase):
 
     def test_block_comment_compute_pragma_is_not_a_real_kernel(self):
         compute = (
-            '/*\\n#pragma kernel FAKE_A\\n*/\\n'
-            '// #pragma kernel FAKE_B\\n'
-            '#pragma kernel RealFFT\\n'
-            '/* #pragma kernel FAKE_C */\\n'
-            '[numthreads(1, 1, 1)] void RealFFT() {}\\n'
+            '/*\n#pragma kernel FAKE_A\n*/\n'
+            '// #pragma kernel FAKE_B\n'
+            '#pragma kernel RealFFT\n'
+            '/* #pragma kernel FAKE_C */\n'
+            '[numthreads(1, 1, 1)] void RealFFT() {}\n'
         )
         passes, kernels, targeted, _ = run_audit([], [compute])
         self.assertEqual(passes, {})
@@ -91,11 +91,11 @@ class A15RenderContractLexicalTests(unittest.TestCase):
 
     def test_active_program_and_kernel_controls_remain_visible(self):
         shader = (
-            'Shader "Hidden/Post FX/Bloom" {\\n'
-            '  SubShader { Pass { HLSLPROGRAM ENDHLSL } }\\n'
+            'Shader "Hidden/Post FX/Bloom" {\n'
+            '  SubShader { Pass { HLSLPROGRAM ENDHLSL } }\n'
             '}'
         )
-        compute = '#pragma kernel RealFFT\\n[numthreads(1,1,1)] void RealFFT() {}\\n'
+        compute = '#pragma kernel RealFFT\n[numthreads(1,1,1)] void RealFFT() {}\n'
         passes, kernels, targeted, _ = run_audit([shader], [compute])
         self.assertEqual(passes, {1: 1})
         self.assertEqual(kernels, {1: 1})
