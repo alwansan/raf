@@ -1,5 +1,13 @@
 # Current Raft checkpoint — 3 November 2026
 
+## Latest verified checkpoint — dynamic timing guard
+
+- Source [fb0cdc20](https://github.com/alwansan/raf/commit/fb0cdc20eef70a75c8d0bd1a5ed455137cbf7078): Android dynamic-resolution decisions now reject absent/nonpositive/nonfinite GPU timing samples. Original valid-sample scaling and desktop source remain unchanged.
+- [Original-source CI41552985664](https://github.com/alwansan/raf/actions/runs/41552985664) SUCCESS:23 executable checks across10 cases using the actual original adapted DynamicResolution class; full managed gameplay compilation exit0/no errors. Local28 relevant Python tests passed. No actual GPU/Unity/device execution.
+- Private original-source inspection41552723321 SUCCESS and manifest verified. Internal width/height scale operations match; different source variable names do not establish an aspect bug. Settings reachability/external writers/UI state and phone acceptance remain open. [Full evidence](../docs/ORIGINAL_ANDROID_DISPLAY_AUDIT_2026-11-03.md).
+- Continue genuine resource/FFT semantic restoration and Settings/audio/local-world investigation. Build hold and both automation configurations remain unchanged. The last installed-device evidence still concerns APK80.
+
+
 - Latest continuation: [left-touch correction and permanent resume](../docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md).
 - Current authority: [CURRENT_OWNER_REQUIREMENTS.md](../docs/CURRENT_OWNER_REQUIREMENTS.md), then `AGENTS.md`. **No Unity/APK/OBB/XAPK/release build.** LEFT touch / Mouse0,500ms. Existing automation preserved; one additional no-build recovery task requested.
 - Reviewed immutable base: `f4df907d3c017810cf758a5e280ad68ea54a2e1b`. This is a reviewed base, not a claim of live HEAD. Refresh live HEAD/Actions before editing.
