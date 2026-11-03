@@ -1,0 +1,73 @@
+name: A1 FFT software Vulkan numeric differential - CPU only
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-a1-fft-software-vulkan.yml'
+      - 'scripts/a1_fft_vulkan_cpu.cpp'
+      - 'scripts/probe_original_fft_software_vulkan.py'
+      - 'tests/test_probe_original_fft_software_vulkan.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: raft-a1-fft-lavapipe-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  synthetic-vulkan-canary:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 9
+    env:
+      DEBIAN_FRONTEND: noninteractive
+    steps:
+      - name: Checkout diagnostic code without Git LFS
+        uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Install CPU-only software Vulkan prerequisites
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends g++ libvulkan-dev mesa-vulkan-drivers glslang-tools spirv-tools
+      - name: Compile A1 Vulkan numeric executor
+        run: |
+          set -euo pipefail
+          g++ -std=c++17 -O2 -Wall -Wextra scripts/a1_fft_vulkan_cpu.cpp -lvulkan -o /tmp/a1-fft-vk
+      - name: Execute known synthetic sum and mismatched operation controls on CPU only
+        shell: bash
+        run: |
+          set -euo pipefail
+          export VK_DRIVER_FILES="$(find /usr/share/vulkan/icd.d -maxdepth 1 -name '*lvp*.json' -print -quit)"
+          test -n "$VK_DRIVER_FILES"
+          cat >/tmp/a1-base.comp <<'EOF'
+          #version 450
+          layout(local_size_x=8,local_size_y=1,local_size_z=1) in;
+          layout(set=0,binding=0) uniform texture2D src0;
+          layout(set=0,binding=1) uniform texture2D src1;
+          layout(set=0,binding=2,rgba32f) uniform writeonly image2D outputImage;
+          void main() {
+            ivec2 xy=ivec2(gl_GlobalInvocationID.xy);
+            vec4 a=texelFetch(src0,xy,0);
+            vec4 b=texelFetch(src1,xy,0);
+            imageStore(outputImage,xy,a+b);
+          }
+          EOF
+          sed 's/imageStore(outputImage,xy,a+b);/imageStore(outputImage,xy,a-b);/' \
+            /tmp/a1-base.comp >/tmp/a1-negative.comp
+          glslangValidator -V -S comp -o /tmp/a1-base.spv /tmp/a1-base.comp
+          glslangValidator -V -S comp -o /tmp/a1-negative.spv /tmp/a1-negative.comp
+          spirv-val --target-env vulkan1.1 /tmp/a1-base.spv
+          spirv-val --target-env vulkan1.1 /tmp/a1-negative.spv
+          timeout 30s /tmp/a1-fft-vk /tmp/a1-base.spv /tmp/a1-base.spv 8 1 --canary | tee /tmp/a1-canary.jsonlog
+          grep -q '"synthetic_canary_verified":true' /tmp/a1-canary.jsonlog
+          grep -q '"within_selected_tolerance":true' /tmp/a1-canary.jsonlog
+          timeout 30s /tmp/a1-fft-vk /tmp/a1-base.spv /tmp/a1-negative.spv 8 1 | tee /tmp/a1-negative.jsonlog
+          grep -q '"within_selected_tolerance":false' /tmp/a1-negative.jsonlog
