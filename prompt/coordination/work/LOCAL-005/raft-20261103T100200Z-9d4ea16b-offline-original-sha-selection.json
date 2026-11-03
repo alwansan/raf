@@ -3,8 +3,8 @@
   "issue_id": "LOCAL-005",
   "username": "raft-20261103T100200Z-9d4ea16b",
   "work_id": "offline-original-sha-selection",
-  "status": "active",
-  "updated_at": "2026-11-03T10:55:00Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T11:04:00Z",
   "base_sha": "66d8e67da5b4ee610526452ccfb763b6c10e52fc",
   "depends_on": "14dd7fce3257ec852ebb22ec76c22629d1a86b76",
   "hypothesis": "Private offline managed integration preparation currently counts any same-named C# file, rejecting original game code if SDK homonym exists; SHA pin selection should distinguish authentic original from unrelated SDK without guessing paths.",
@@ -25,6 +25,18 @@
     "Keep SHA pins and original .rgd untouched",
     "Do not modify task or native request"
   ],
-  "evidence": [],
-  "next_step": "Publish isolated selector and test first; verify on original SHA-checked CI."
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/29128ab789d5cf8a26a7e01d3ae5a9a39f331848",
+    "https://github.com/alwansan/raf/commit/fbc95905d690c83d809183b2ad09c0e5bf1d010b",
+    "https://github.com/alwansan/raf/commit/031236bb5f4d4aeefc5b6ddc4b4de5188082920a",
+    "https://github.com/alwansan/raf/actions/runs/41624212828"
+  ],
+  "next_step": "A10 scoped source-selection repair is completed. Overall LOCAL-005 remains open for real original .rgd create/load/resume and Unity/device acceptance, with WATER-001 and RENDER-002 blockers.",
+  "code_commit": "29128ab789d5cf8a26a7e01d3ae5a9a39f331848",
+  "test_commit": "fbc95905d690c83d809183b2ad09c0e5bf1d010b",
+  "workflow_commit": "031236bb5f4d4aeefc5b6ddc4b4de5188082920a",
+  "ci_run_id": 41624212828,
+  "ci_job_id": 125877336792,
+  "ci_status": "COMPLETED_SUCCESS",
+  "result": "SHA-pinned 12 original managed C# sources selected/privately compiled; all 6 synthetic source-selection tests passed, actual local RPC/identity harness passed, diagnostic managed compile exit=0; source_only_no_Unity_or_device."
 }
