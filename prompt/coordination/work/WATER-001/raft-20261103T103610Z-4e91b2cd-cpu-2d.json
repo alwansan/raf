@@ -1,10 +1,18 @@
 {
   "owner": "raft-20261103T103610Z-4e91b2cd",
-  "status": "active",
+  "status": "completed",
   "base_sha": "d01411409e1e422c04b78533e65e138613a43573",
   "intended_files": [
     "scripts/verify_original_fft_cpu_2d.py",
     ".github/workflows/raft-fft-cpu-2d.yml"
   ],
-  "hypothesis": "Execute original CPU rows and columns versus direct2D DFT; no GPU claim"
+  "hypothesis": "Execute original CPU rows and columns versus direct2D DFT; no GPU claim",
+  "issue_id": "WATER-001",
+  "schema_version": 1,
+  "updated_at": "2026-11-03T12:41:00Z",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41637650224"
+  ],
+  "result": "4 original CPU2D cases, 2 negative controls pass; max relativeL2 1.8933043868319998e-7; no GPU or Unity",
+  "next_step": "Compare authentic translated two-pass shader against bounded original CPU2D oracle when available; intermediate precision remains open"
 }

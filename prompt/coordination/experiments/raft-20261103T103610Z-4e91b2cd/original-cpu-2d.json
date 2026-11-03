@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T103610Z-4e91b2cd",
+  "status": "completed",
+  "hypothesis": "Execute original CPU rows and columns versus direct2D DFT; no GPU claim",
+  "source_sha": "555e7f6e39416b65d0e657db43e71d0be7d1949e",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41637650224",
+  "workflow_path": ".github/workflows/raft-fft-cpu-2d.yml",
+  "result": "4 original CPU2D cases, 2 negative controls pass; max relativeL2 1.8933043868319998e-7; no GPU or Unity",
+  "limitations": [
+    "N32 complex CPU lane only",
+    "No Unity or GPU",
+    "No half intermediate render target"
+  ],
+  "next_step": "Compare authentic translated two-pass shader against bounded original CPU2D oracle when available; intermediate precision remains open"
+}

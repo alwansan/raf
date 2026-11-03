@@ -1,12 +1,15 @@
 {
   "schema_version": 1,
   "username": "raft-20261103T103610Z-4e91b2cd",
-  "session_id": "20261103T114303Z-policy-ci",
+  "session_id": "20261103T124100Z-cpu-2d-results",
+  "resumed_from": null,
   "status": "paused",
-  "base_sha": "7ccf606c84a697a7ce867b2102d46cb4a0e686ac",
-  "updated_at": "2026-11-03T10:40:00Z",
+  "updated_at": "2026-11-03T12:41:00Z",
+  "base_sha": "551e013ab4631c2e424a3c4ba9eaa8646a82193b",
   "current_work": [
     "WATER-001"
   ],
-  "next_step": "Inspect actual compatible format and shader numerical behavior"
+  "last_commit": "555e7f6e39416b65d0e657db43e71d0be7d1949e",
+  "next_step": "Compare authentic translated two-pass shader against bounded original CPU2D oracle when available; intermediate precision remains open",
+  "memory_path": "prompt/coordination/clients/raft-20261103T103610Z-4e91b2cd/MEMORY.md"
 }
