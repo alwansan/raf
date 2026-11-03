@@ -1,6 +1,9 @@
 # Current owner requirements — 3 November 2026
 
-This file and the latest explicit owner message supersede conflicting historical instructions in older handoffs. Historical commits, measurements and test results are not rewritten as new device evidence.
+This file and the latest explicit owner message supersede conflicting historical instructions in older handoffs.
+
+- **Additional owner direction, 2026-11-03:** Continue substantive source/resource engineering rather than monitoring only. Do not record READY_FOR_BUILD until EVERY demonstrated pre-build blocker is closed and three separate FULL independent readiness reviews pass for an IDENTICAL immutable candidate commit. Each review must recheck concurrent HEAD/Actions, authentic water FFT/shaders/materials and GUIDs, original data/LFS, FMOD, world/.rgd, LEFT touch/controller, orientation/Settings, performance, CI and the existing signed APK+OBB+XAPK release/recovery pipeline. Record verifiable evidence for each pass; a changed candidate resets the count to 0/3. Do not demand post-build phone validation before producing a phone-test APK. Preserve the three existing scheduled tasks; do not duplicate, edit or pause them.
+ Historical commits, measurements and test results are not rewritten as new device evidence.
 
 - Work only on `alwansan/raf:feature/android-native-port`. Never modify, merge or delete `main`, `zip` or `Unity-Editor`; `alwansan/CL` is read-only.
 - **Latest owner direction: readiness-driven full delivery.** The separate task **Raft — جاهزية وبناء اللعبة** maintains [APK_BUILD_READINESS.md](APK_BUILD_READINESS.md) and runs the existing full APK+OBB+XAPK pipeline after all actual pre-build source/resource blockers are closed and the next useful step is user testing. It may then update the delivery request using the existing protocol, and fix demonstrated build/package failures. The two recovery tasks keep their CPU/source/resource focus and do not independently initiate Unity/native work. Preserve running work; do not request a build for a partial batch or repeat a delivered candidate. Native experiment requests are not used for this readiness task.

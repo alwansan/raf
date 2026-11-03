@@ -104,3 +104,14 @@ Concurrent source [81edb578](https://github.com/alwansan/raf/commit/81edb5780d3e
 First private managed FFT [41561700091](https://github.com/alwansan/raf/actions/runs/41561700091) failed only because a literal backslash-n joined two Python workflow commands. Corrected the YAML command boundary in [ee027d9d](https://github.com/alwansan/raf/commit/ee027d9d9f096496d6d15a35008c39714b82fccd) via expected HEAD without force. [Follow-up41561918626](https://github.com/alwansan/raf/actions/runs/41561918626), job125674275806, COMPLETED SUCCESS: exact original CSharp9 source format checks and 194887 baseline butterfly numeric checks (exit0), no Unity or game build.
 
 Original SPIR-V output image format Unknown becomes Rgba32f after HLSL roundtrip; actual cache image format, kernel mapping, GPU arithmetic and format support remain unproven. FFT-FORMAT-009/WATER-001/RENDER-002 remain OPEN, NOT_READY. No request, no tasks changed.
+
+
+## Mandatory 3/3 full independent readiness audits — new owner direction, 3 November 2026
+
+Do not label or document READY_FOR_BUILD until every demonstrated source/resource pre-build blocker is actually closed and **three distinct comprehensive reviews** have independently PASSED for the **same immutable candidate_source_sha**. Re-audit everything each time: live HEAD/concurrent Actions and equivalence, provenance/LFS SHA/.meta/GUIDs/content, authentic UltimateWater/FFT kernel+pass+format behavior and other shader/material programs, FMOD/OBB bank integrity, local create/load/host/.rgd preservation, LEFT Mouse0 short-click/500ms hold and virtual Xbox/physical devices, orientation/Settings/aspect, realistic memory/performance integration, CI tests, Unity2021.3.45f2 workflow, signature/release, genuine APK+OBB+XAPK and signed-output checkpoint/recovery. Record exact commit, evidence links, unresolved issues, reviewer method and completion time for each pass; never count one CI result three times. Any candidate source/resource change invalidates all prior audits (reset 0/3); doc-only change must be proven not to alter candidate inputs. Distinguish pending device-only verification from pre-build blockers so the first device-test build is not blocked by its own future acceptance.
+
+- Review 1/3: NOT STARTED — no complete immutable candidate.
+- Review 2/3: NOT STARTED — no complete immutable candidate.
+- Review 3/3: NOT STARTED — no complete immutable candidate.
+
+**State remains NOT_READY**. No workflow dispatch or native request from this policy. Existing scheduled tasks unchanged.
