@@ -67,5 +67,31 @@ class A2FieldMetadata(unittest.TestCase):
         self.assertEqual(len(DLL_BLOB),40)
         with self.assertRaisesRegex(ValueError,"oversized"):
             class_scope("class Settings {"+"x"*300001+"}")
+
+    def test_unresolved_original_types_resolve_only_named_private_classes(self):
+        import tempfile
+        from pathlib import Path
+        from scripts.probe_a2_settings_typed_fields import original_type_declarations
+        sample="""class Settings {
+            public MyEnum mode;
+            [SerializeField] private MySerializableOption[] options;
+            public CustomUnityComponent child;
+            public GameObject panel;
+        }"""
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d)
+            (root/"Settings.cs").write_text(sample)
+            (root/"MyEnum.cs").write_text("public enum MyEnum { A, B }")
+            (root/"MySerializableOption.cs").write_text("[Serializable] public struct MySerializableOption { public int x; }")
+            families=original_type_declarations(sample,root,{"CustomUnityComponent"})
+            self.assertEqual(families["MyEnum"],"enum")
+            self.assertEqual(families["MySerializableOption"],"struct")
+            x=field_signature(sample,{"CustomUnityComponent"},families)
+            self.assertEqual(x["candidate_serializable_field_count"],4)
+            self.assertEqual(x["unverified_type_declaration_families"]["custom_enum"],1)
+            self.assertEqual(x["unverified_type_declaration_families"]["collection_struct"],1)
+            self.assertEqual(x["custom_type_original_script_classname_match_count"]["original_assembly_monoscript_classname_match"],1)
+            self.assertFalse(x["typed_original_pointer_offsets_recovered"])
+
 if __name__=="__main__":
     unittest.main()
