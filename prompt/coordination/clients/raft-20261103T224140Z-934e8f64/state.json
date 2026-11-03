@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "username": "raft-20261103T224140Z-934e8f64",
+  "client_label": "A9",
+  "session_id": "A9-20261103T224140Z-fd86b1d0",
+  "resumed_from": "raft-20261103T145844Z-6db41a9f",
+  "status": "active",
+  "updated_at": "2026-11-03T22:41:40.697Z",
+  "base_sha": "a87b3556563b277f1b047c14368341b48eb6f4cb",
+  "current_work": [
+    "AUDIO-004 ZIP2 pinned no-LFS MasterBank recovery and Android source staging"
+  ],
+  "last_commit": null,
+  "next_step": "Create synthetic tests and a fail-closed ZIP2 original MasterBank reassembler, then integrate with original StreamingAssets staging and verify real CI without LFS or Unity.",
+  "memory_path": "prompt/coordination/clients/raft-20261103T224140Z-934e8f64/MEMORY.md"
+}
