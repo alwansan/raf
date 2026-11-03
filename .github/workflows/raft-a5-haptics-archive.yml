@@ -9,6 +9,8 @@ on:
       - 'android-port/Runtime/Platform/AndroidStreamingAssets.cs'
       - 'tests/test_haptic_archive_adapter.py'
       - 'scripts/adapt_android_render_lifetimes.py'
+      - 'scripts/audit_android_expansion.py'
+      - 'tests/test_android_expansion_audit.py'
   workflow_dispatch:
 
 permissions:
@@ -59,6 +61,8 @@ jobs:
           set -euo pipefail
           dotnet run --project android-port/Tests/Haptics/ArchiveReader.csproj \
             --configuration Release -- --original-wavs Raft/Raft_Data/StreamingAssets/Haptics
+      - name: Verify synthetic final OBB Haptics jar placement and original Git blob identity gate
+        run: python3 -m unittest discover -s tests -p test_android_expansion_audit.py -v
       - name: Record experiment limitation
         run: |
           echo '### A5 HAPTICS-008 source/ZIP experiment' >> "$GITHUB_STEP_SUMMARY"
