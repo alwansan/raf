@@ -2,8 +2,8 @@
   "schema_version": 1,
   "owner": "raft-20261103T095832Z-a4c7e2b1",
   "issue_id": "PERF-007",
-  "status": "planned",
-  "updated_at": "2026-11-03T10:03:00Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T10:17:00Z",
   "base_sha": "43b862ca910750d0b179539ab8857855dea01e3b",
   "hypothesis": "Memory watcher currently reports absent process VmRSS as measured zero and can accept impossible negative host/RSS values; those are false signals during CI failure diagnostics.",
   "intended_files": [
@@ -21,7 +21,11 @@
   "experiment_ids": [
     "rss-unavailable-negative-controls"
   ],
-  "evidence": [],
-  "result": null,
-  "next_step": "Reproduce false-zero/negative counters with synthetic proc fixtures, patch only proof-bound parsing, run tests; report scope explicitly"
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/1b37647587e94b4e3a7baf6e34865c634a442216",
+    "https://github.com/alwansan/raf/actions/runs/41616939992",
+    "https://github.com/alwansan/raf/actions/runs/41616940049"
+  ],
+  "result": "8/8 exact-source CI memory watcher tests pass; absent/invalid RSS corrected; this is not a game GPU OOM repair.",
+  "next_step": "Separate authentic GPU allocation/lifetime and phone investigation, no new native build from A4."
 }

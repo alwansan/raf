@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T095832Z-a4c7e2b1",
+  "issue_id": "PERF-007",
+  "experiment_id": "rss-unavailable-negative-controls",
+  "status": "completed",
+  "source_sha": "1b37647587e94b4e3a7baf6e34865c634a442216",
+  "hypothesis": "Absent VmRSS was misclassified as measured zero, impossible negative/bad-unit counters were accepted.",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41616939992",
+  "preflight_url": "https://github.com/alwansan/raf/actions/runs/41616940049",
+  "job_id": 125852628608,
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_ci_memory_watch.py -v",
+    "python3 -m scripts.ci_memory_watch --output \"$RUNNER_TEMP/memory.jsonl\" --interval 0.05 --samples 3",
+    "python3 -m scripts.ci_memory_watch --output \"$RUNNER_TEMP/memory.jsonl\" --summarize"
+  ],
+  "results": {
+    "tests_passed": 8,
+    "new_negative_controls": 2,
+    "live_monitor_samples": 3,
+    "swap_capability": "256MiB PASS"
+  },
+  "limitations": [
+    "No Unity/device gameplay memory result",
+    "No GPU OOM source fix",
+    "No shader/FFT restoration",
+    "No full native delivery"
+  ]
+}

@@ -4,13 +4,13 @@
   "agent": "A4",
   "session_id": "a4-20261103T095832Z-71d4c6b8",
   "resumed_from": null,
-  "status": "active",
-  "updated_at": "2026-11-03T10:03:00Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T10:17:00Z",
   "base_sha": "43b862ca910750d0b179539ab8857855dea01e3b",
   "current_work": [
     "PERF-007"
   ],
-  "last_commit": null,
-  "next_step": "Correct false-zero/negative RSS evidence in scripts/ci_memory_watch.py with executable isolated Python regressions, preserving all source and build constraints.",
+  "last_commit": "1b37647587e94b4e3a7baf6e34865c634a442216",
+  "next_step": "A4 diagnostic scope completed; no background execution. Next session re-read HEAD, coordination, source and Actions; readiness remains NOT_READY.",
   "memory_path": "prompt/coordination/clients/raft-20261103T095832Z-a4c7e2b1/MEMORY.md"
 }

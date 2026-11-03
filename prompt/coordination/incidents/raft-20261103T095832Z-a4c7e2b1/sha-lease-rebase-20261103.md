@@ -1,0 +1,3 @@
+# A4 expected-SHA update recovery — resolved
+
+During concurrent branch updates on 2026-11-03 UTC10:05–10:13, GitHub returned GraphQL UNKNOWN on several update_ref attempts based on stale parent HEADs. Unapplied Git commits were not written to the branch; do not interpret those object SHAs as published work. Re-read the live ref/trees and re-created commits with expected_sha and force=false. Published A4 code 1b37647587e94b4e3a7baf6e34865c634a442216; shared status/handoff update 0b847d4c; no job cancelled or forced reset. Exact internal cause of the transient GraphQL errors is unconfirmed. Status: resolved.

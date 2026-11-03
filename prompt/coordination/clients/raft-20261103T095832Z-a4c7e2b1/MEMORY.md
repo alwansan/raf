@@ -9,3 +9,13 @@
 ## Scope change / coordination
 
 Two additional clients registered HAPTICS-008 while A4 inspected it (afcedabb and a5c842e1). A4 will not write their overlapping haptics assets, code or tests. Shifted to PERF-007 CI memory-evidence integrity. Reproduction target: missing VmRSS appears as measured zero; malformed/negative memory may be accepted. This is a CI diagnostics correction, not a phone GPU-OOM fix.
+
+
+<!-- A4-PERF007-FINAL-20261103 -->
+## Verified A4 result and next checkpoint
+
+- Source 1b37647587e94b4e3a7baf6e34865c634a442216 adjusted only `scripts/ci_memory_watch.py` and `tests/test_ci_memory_watch.py`: absent VmRSS no longer fabricates measured zero; negative/malformed units and fake PID prefix excluded; actual 0 remains valid.
+- https://github.com/alwansan/raf/actions/runs/41616939992, job125852628608: **COMPLETED SUCCESS**, eight Python tests incl. two new negative controls; live 3-sample runner monitor and 256MiB swap capability PASS. Also [preflight 41616940049](https://github.com/alwansan/raf/actions/runs/41616940049) success on same SHA. Neither runs original game or phone.
+- Status/handoff evidence saved in [0b847d4c](https://github.com/alwansan/raf/commit/0b847d4c526b7612f52238de1c5d803a4a078509). HAPTICS code left untouched because concurrent clients registered it; A4 scope moved to PERF-007.
+- Multiple transient GitHub GraphQL update_ref errors under moving HEAD were safely re-based with expected SHA. No forced ref update or interrupted jobs.
+- No gameplay GPU OOM, water shader/FFT, Unity, phone acceptance, APK/OBB/XAPK or readiness claim; NOT_READY/0-of-3. No .meta/GUID, left Mouse0/500ms, UGUI/controller, LFS, CL or task change. A4 scoped task completed; no asynchronous activity.
