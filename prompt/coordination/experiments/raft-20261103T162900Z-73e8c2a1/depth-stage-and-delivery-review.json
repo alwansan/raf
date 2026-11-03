@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T162900Z-73e8c2a1",
+  "status": "running",
+  "updated_at": "2026-11-03T17:49:09.114Z",
+  "hypothesis": "Pinned Depth Copy reconstruction installs uniquely in original staged export without metadata changes; actual native integrity gates must independently pass.",
+  "source_sha": "a8e04dd2aa2bfcd8bf449abcbc139745619424fa",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41687765928",
+  "workflow_path": ".github/workflows/raft-unity-editor-android-import.yml",
+  "budget": "Existing240minute native cap; one owner-authorized experimental preview, no cancellation or duplicate.",
+  "input_hashes": [
+    {
+      "sha256": "0a7e11f750cac17ecc25cb7179c0a29850d6fb91fa983618f12e6bd8782ed1ea",
+      "kind": "reconstructedDepthCopy"
+    }
+  ],
+  "result": "Source/synthetic stage passed41687431767; actual game export/native result pending",
+  "limitations": [
+    "NOT_READY0/3",
+    "No actual XAPK or phone acceptance",
+    "48 ancestry results do not establish all-client compatibility",
+    "Known builtin/water source blockers retained"
+  ]
+}

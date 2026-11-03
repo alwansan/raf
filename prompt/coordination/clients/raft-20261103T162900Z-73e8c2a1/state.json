@@ -4,13 +4,13 @@
   "username": "raft-20261103T162900Z-73e8c2a1",
   "session_id": "w1-20261103T174159718Z-resume",
   "resumed_from": null,
-  "status": "active",
-  "updated_at": "2026-11-03T17:48:11.977Z",
+  "status": "paused",
+  "updated_at": "2026-11-03T17:49:09.114Z",
   "base_sha": "37268a58a56929ad355d695a795e8dde891a3d8c",
   "current_work": [
-    "Owner-authorized incomplete experimental XAPK attempt with W1 GUID-preserving staging and all-client ancestry inventory"
+    "External native preview run41687765928 running"
   ],
-  "last_commit": "c7513a1944c748c752a5790b440fa98767887dec",
-  "next_step": "Inspect full native run at actual export target, strict builtin/water gates; fix actual failures without bypass. Verify platform/preflight and peer FFT run.",
+  "last_commit": "a8e04dd2aa2bfcd8bf449abcbc139745619424fa",
+  "next_step": "Inspect live41687765928 sourcea8e04dd2 actual export install/builtin/water gates and packaging. Do not duplicate request. No XAPK yet.",
   "memory_path": "prompt/coordination/clients/raft-20261103T162900Z-73e8c2a1/MEMORY.md"
 }
