@@ -1,0 +1,9 @@
+{
+  "owner": "raft-20261103T095340Z-a81c6e42",
+  "status": "active",
+  "base_sha": "8718f6abffbb7e637d27a7e69c656ae10712928a",
+  "intended_files": [
+    "scripts/probe_fft_precision_capabilities.py"
+  ],
+  "hypothesis": "Evaluate extracted original expressions rather than a hand-authored policy copy"
+}

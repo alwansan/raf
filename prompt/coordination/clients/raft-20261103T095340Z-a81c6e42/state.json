@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "username": "raft-20261103T095340Z-a81c6e42",
-  "session_id": "20261103T105053Z-precision-capability",
-  "status": "paused",
-  "updated_at": "2026-11-03T10:55:00Z",
+  "session_id": "20261103T112942Z-source-expression",
+  "status": "active",
+  "updated_at": "2026-11-03T11:29:42Z",
   "base_sha": "aa5f0b6d236a5bbac8cadadd3e2278ec2acb6df4",
   "current_work": [
     "FFT-FORMAT-009"
