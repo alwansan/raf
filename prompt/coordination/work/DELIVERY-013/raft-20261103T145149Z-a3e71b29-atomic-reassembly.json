@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T145149Z-a3e71b29",
+  "issue_id": "DELIVERY-013",
+  "status": "active",
+  "updated_at": "2026-11-03T14:51:49Z",
+  "base_sha": "a43bbd3ea9ac40a8dd08594159367902548d083f",
+  "hypothesis": "reassemble_android_delivery.py performs exists() check before Path.rename(), which overwrites pre-existing destination if another thread creates it during the gap, violating never-overwrite guarantee for APK/OBB/XAPK part recovery.",
+  "intended_files": [
+    "scripts/reassemble_android_delivery.py",
+    "tests/test_a3_reassembly_publish_race.py",
+    ".github/workflows/raft-a3-reassembly-publish-race.yml",
+    "prompt/coordination/clients/raft-20261103T145149Z-a3e71b29",
+    "prompt/coordination/work/DELIVERY-013/raft-20261103T145149Z-a3e71b29-atomic-reassembly.json",
+    "prompt/coordination/experiments/raft-20261103T145149Z-a3e71b29",
+    "prompt/STATUS.md",
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+  ],
+  "related_work": [
+    "A9 atomic original StreamingAssets stage completed; separate files",
+    "W1 graphics recovery ongoing separate"
+  ],
+  "next_step": "Reproduce race red on real reassembler then fix atomic no-replace without extra multi-GB copy."
+}
