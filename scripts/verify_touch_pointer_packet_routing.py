@@ -196,9 +196,9 @@ static class Program {
         // same Unity component must not remain latched in suspended mode.
         var e=new AndroidTouchPointer();
         e.Enable();
-        var first=Packet(10,420,TouchPhase.Began,time:50d);
-        e.Route(first,screen);
-        Require(first.handled && e.Active,"reenable-first-activation");
+        var firstLifecycle=Packet(10,420,TouchPhase.Began,time:50d);
+        e.Route(firstLifecycle,screen);
+        Require(firstLifecycle.handled && e.Active,"reenable-first-activation");
         e.Disable();
         Require(!e.Active,"reenable-disables-old-gesture");
         int oldCommands=e.commands.Count;
