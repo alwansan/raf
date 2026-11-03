@@ -206,7 +206,7 @@ public final class RemoteLogService extends IRemoteLog.Stub {
                 // remains unverified; never fabricate a game exit.
                 boolean verifiedEmpty=exit==1 && found.toString().trim().isEmpty();
                 if(exit!=0 && !verifiedEmpty)
-                    throw new IOException("pidof_exit_"+exit);
+                    throw new IOException("pidof_nonzero_exit");
                 // Exit 0 without a PID is ambiguous, not confirmed absence.
                 if(exit==0 && current.isEmpty())
                     throw new IOException("pidof_empty_success");
@@ -228,7 +228,7 @@ public final class RemoteLogService extends IRemoteLog.Stub {
                         reason.equals("pidof_output_overflow") ||
                         reason.equals("pidof_invalid_output") ||
                         reason.equals("pidof_empty_success") ||
-                        reason.startsWith("pidof_exit_")) ? reason : "pidof_execution_error";
+                        reason.equals("pidof_nonzero_exit")) ? reason : "pidof_execution_error";
                 pidProbeFailures.incrementAndGet();
                 pidProbeStatus="pidof_probe_failed";
                 // A failed pidof invocation must not leave a stale main PID
