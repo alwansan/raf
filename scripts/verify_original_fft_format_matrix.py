@@ -12,11 +12,18 @@ from scripts.probe_original_fft_cache_dataflow import source_contract as origina
 
 # Khronos SPIR-V ImageFormat enumerants, Unity requested format names.
 # Actual underlying Unity GraphicsFormat/view still requires runtime verification.
+# SPIR-V StorageImageExtendedFormats (capability 49) is DISTINCT from Vulkan's
+# shaderStorageImageExtendedFormats physical-device feature. Rg32f has mandatory
+# Vulkan core storage support despite requiring SPIR-V capability 49. Rg16f's
+# storage support is guaranteed by the Vulkan feature, or may be queried
+# individually on devices that do not expose the whole feature.
+# tuple: (SPIR-V format, VkFormat, SPIR-V extended capability,
+#         Vulkan feature guarantees storage support, Vulkan core guarantees it)
 FORMATS = {
-    "RGHalf": (7, "VK_FORMAT_R16G16_SFLOAT", True),
-    "RGFloat": (6, "VK_FORMAT_R32G32_SFLOAT", True),
-    "ARGBHalf": (2, "VK_FORMAT_R16G16B16A16_SFLOAT", False),
-    "ARGBFloat": (1, "VK_FORMAT_R32G32B32A32_SFLOAT", False),
+    "RGHalf": (7, "VK_FORMAT_R16G16_SFLOAT", True, True, False),
+    "RGFloat": (6, "VK_FORMAT_R32G32_SFLOAT", True, False, True),
+    "ARGBHalf": (2, "VK_FORMAT_R16G16B16A16_SFLOAT", False, False, True),
+    "ARGBFloat": (1, "VK_FORMAT_R32G32B32A32_SFLOAT", False, False, True),
 }
 ALL_MODES = {(two, high) for two in (False, True) for high in (False, True)}
 
@@ -42,14 +49,17 @@ def analyze_formats(original_modes, shader_output_format=1):
         expected += "Float" if pair[1] else "Half"
         if expected != name:
             raise ValueError("Original FFT mode/format mismatch")
-        image_enum, vk, extended = FORMATS[name]
+        image_enum, vk, spirv_extended, vk_feature_guarantee, vk_core = FORMATS[name]
         outputs.append({
             "two_channels": pair[0],
             "high_precision": pair[1],
             "requested_unity_format": name,
             "expected_spirv_storage_image_format": image_enum,
             "expected_vk_image_view_format": vk,
-            "requires_storage_image_extended_formats_if_typed": extended,
+            "spirv_storage_image_extended_formats_capability": spirv_extended,
+            "vulkan_extended_formats_feature_guarantees_storage_support": vk_feature_guarantee,
+            "vulkan_core_mandatory_storage_format": vk_core,
+            "per_format_storage_query_if_vulkan_feature_absent": vk_feature_guarantee and not vk_core,
             "roundtrip_r32g32b32a32f_output_can_exactly_match_requested_view":
                 shader_output_format == image_enum if shader_output_format != 0 else False,
         })

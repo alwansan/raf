@@ -30,10 +30,20 @@ class FftStorageFormatMatrixTests(unittest.TestCase):
         self.assertEqual(result["exact_typed_view_format_candidates"], [])
         self.assertFalse(result["requested_unity_format_equals_actual_vk_image_view_format_proven"])
 
-    def test_spirv_rg_formats_require_extended_formats_if_typed(self):
+    def test_spirv_capability_and_vulkan_device_feature_are_not_conflated(self):
         modes = analyze_formats(MODES, 6)["mode_matrix"]
         self.assertEqual([m["requested_unity_format"] for m in modes
-                          if m["requires_storage_image_extended_formats_if_typed"]], ["RGHalf", "RGFloat"])
+                          if m["spirv_storage_image_extended_formats_capability"]],
+                         ["RGHalf", "RGFloat"])
+        self.assertEqual([m["requested_unity_format"] for m in modes
+                          if m["vulkan_extended_formats_feature_guarantees_storage_support"]],
+                         ["RGHalf"])
+        self.assertEqual([m["requested_unity_format"] for m in modes
+                          if m["vulkan_core_mandatory_storage_format"]],
+                         ["RGFloat", "ARGBHalf", "ARGBFloat"])
+        self.assertEqual([m["requested_unity_format"] for m in modes
+                          if m["per_format_storage_query_if_vulkan_feature_absent"]],
+                         ["RGHalf"])
 
     def test_reject_duplicate_and_forged_mode(self):
         with self.assertRaisesRegex(ValueError, "Duplicate"):
