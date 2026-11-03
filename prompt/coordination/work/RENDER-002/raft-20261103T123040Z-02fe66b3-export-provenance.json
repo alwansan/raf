@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T123040Z-02fe66b3",
+  "client_label": "A11",
+  "issue_id": "RENDER-002",
+  "status": "planned",
+  "updated_at": "2026-11-03T12:30:40Z",
+  "base_sha": "aae8cc2070126449fa05049a669235a144309101",
+  "hypothesis": "Local 107 shader files cannot be equated with the original 41624581951 exported 140-shader in-run inventory. CPU-only count and provenance joins can expose this gap without claiming restored identities.",
+  "intended_files": [
+    "scripts/probe_a11_shader_export_scope.py",
+    "tests/test_a11_shader_export_scope.py",
+    ".github/workflows/raft-a11-shader-export-scope.yml",
+    "prompt/coordination/clients/raft-20261103T123040Z-02fe66b3/*",
+    "prompt/coordination/experiments/raft-20261103T123040Z-02fe66b3/*",
+    "prompt/coordination/discussions/RENDER-002/*"
+  ],
+  "related_work": [
+    "A9 exported identity parser",
+    "A3 symlink safety",
+    "A6 comment include repair",
+    "raft-20261103T103610Z-4e91b2cd local 107 sample"
+  ],
+  "experiment_ids": [
+    "shader-export-scope-v1"
+  ],
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41624581951"
+  ],
+  "result": null,
+  "next_step": "Run independent synthetic strict-provenance validator tests, no Unity or LFS."
+}
