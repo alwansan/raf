@@ -44,7 +44,21 @@ def verify_fielddefs(data, assembly, namespace, source_names):
     matches=[t for t in types if isinstance(t,dict) and
              t.get("name")=="Settings" and t.get("namespace_name")==namespace]
     if len(matches)!=1:
-        raise ValueError("Original scene script to TypeDef identity ambiguous")
+        # No source type or namespace is printed. Different assemblies may
+        # contain a Settings MonoScript with a matching class-name only.
+        details = {
+            "matching_typedef_count": len(matches),
+            "settings_typedef_candidates": len(types),
+            "scene_namespace_is_empty": namespace == "",
+            "candidate_empty_namespace_count": sum(
+                t.get("namespace_name") == "" for t in types if isinstance(t,dict)),
+            "matching_casefold_count": sum(
+                isinstance(t,dict) and isinstance(t.get("namespace_name"),str)
+                and t["namespace_name"].casefold() == namespace.casefold()
+                for t in types),
+        }
+        raise ValueError("Original scene script to TypeDef identity ambiguous "
+                         + json.dumps(details,sort_keys=True))
     item=matches[0]
     if type(item.get("token")) is not int or item["token"]>>24 != 2:
         raise ValueError("Original TypeDef token invalid")
