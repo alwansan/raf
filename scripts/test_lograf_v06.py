@@ -58,6 +58,10 @@ checks={
     "unverified PID distinguished from stopped game": '"main_cmdline_unverified"' in remote and '"pidof_probe_failed"' in remote,
     "all PIDs retained for context": 'gamePids.addAll(current)' in remote,
     "raw logcat buffer headers retained": 'if (line.startsWith("--------- beginning of ")) continue;' not in remote and 'batch.append(line).append(\'\\n\');' in remote,
+    "remote Binder failures counted without blind replay": 'sinkFailedBatches.incrementAndGet();' in remote and 'sinkFailedBytes.addAndGet(text.getBytes(StandardCharsets.UTF_8).length);' in remote and 'running.set(false);' in remote[remote.index('private void send(String source, StringBuilder batch)'):remote.index('private void error(String message)')],
+    "remote batch cleared after delivery attempt": 'finally {\n            // Keep bounded memory' in remote and 'batch.setLength(0);' in remote[remote.index('private void send(String source, StringBuilder batch)'):remote.index('private void error(String message)')],
+    "remote sink loss visible in metrics and status": '"remote_sink_failed_batches"' in remote and '"remote_sink_failed_bytes"' in remote and '" sinkFailedBatches="' in remote,
+    "remote sink failure is not claimed as definite loss": 'raw batch delivery unverified' in remote,
     "raw Logcat unchanged target": '"--uid=" + gameUid' in remote,
     "error classes tracked without raw text": '"error_groups"' in remote and (src/"ErrorCategorySummary.java").exists(),
 }
