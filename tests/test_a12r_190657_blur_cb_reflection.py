@@ -2,7 +2,7 @@
 import json
 import struct
 import unittest
-from scripts.a12r_190657_blur_cb_reflection import rdef, serialized_groups, compare, public_common_counts, crosscheck_unity_cb
+from scripts.a12r_190657_blur_cb_reflection import rdef, serialized_groups, compare, public_common_counts, crosscheck_unity_cb, compare_compiled_cb_spans
 
 def u(x):
     return struct.pack("<I", x)
@@ -25,6 +25,45 @@ def compiled(size=544, key="FakeCB", bound=True):
     return b"DXBC" + b"\0" * 16 + u(1) + u(36 + len(chunk)) + u(1) + u(36) + chunk
 
 class A12RTests(unittest.TestCase):
+    def test_compiled_constant_buffer_smaller_than_unity_allocation_is_bounded_not_exact(self):
+        names = [("PrivateA", 7), ("PrivateB", 9)]
+        common = {"m_ConstantBuffers": [
+            {"m_NameIndex": 7, "m_Size": 176},
+            {"m_NameIndex": 9, "m_Size": 368},
+        ], "m_ConstantBufferBindings": [
+            {"m_NameIndex": 7, "m_Index": 0},
+            {"m_NameIndex": 9, "m_Index": 1},
+        ]}
+        report = compare_compiled_cb_spans(names, common, {"PrivateA": 176, "PrivateB": 368},
+                                           {0: 144, 1: 352})
+        self.assertTrue(report["compiled_slot_set_exact"])
+        self.assertTrue(report["compiled_spans_within_unity_allocations"])
+        self.assertFalse(report["compiled_spans_exactly_equal_unity_allocations"])
+        self.assertEqual(report["compiled_spans_numeric_by_slot"][0]["unity_bytes"], 176)
+        self.assertEqual(report["compiled_spans_numeric_by_slot"][0]["dxbc_declared_bytes"], 144)
+        self.assertNotIn("PrivateA", json.dumps(report))
+        self.assertFalse(report["dxbc_parameter_value_or_shaderlab_runtime_verified"])
+
+    def test_compiled_constant_buffer_larger_than_unity_allocation_never_bounded(self):
+        common = {"m_ConstantBuffers": [{"m_NameIndex": 3, "m_Size": 80}],
+                  "m_ConstantBufferBindings": [{"m_NameIndex": 3, "m_Index": 2}]}
+        report = compare_compiled_cb_spans([("Fake", 3)], common, {"Fake": 80}, {2: 96})
+        self.assertTrue(report["compiled_slot_set_exact"])
+        self.assertFalse(report["compiled_spans_within_unity_allocations"])
+
+    def test_compiled_slot_mismatch_never_bounded(self):
+        common = {"m_ConstantBuffers": [{"m_NameIndex": 3, "m_Size": 80}],
+                  "m_ConstantBufferBindings": [{"m_NameIndex": 3, "m_Index": 2}]}
+        report = compare_compiled_cb_spans([("Fake", 3)], common, {"Fake": 80}, {0: 80})
+        self.assertFalse(report["compiled_slot_set_exact"])
+        self.assertFalse(report["compiled_spans_within_unity_allocations"])
+
+    def test_compiled_bad_numeric_size_refused(self):
+        common = {"m_ConstantBuffers": [{"m_NameIndex": 3, "m_Size": 80}],
+                  "m_ConstantBufferBindings": [{"m_NameIndex": 3, "m_Index": 2}]}
+        with self.assertRaisesRegex(ValueError, "unsafe_numeric_span"):
+            compare_compiled_cb_spans([("Fake", 3)], common, {"Fake": 80}, {2: 0})
+
     def test_unity_and_original_dxbc_declaration_sizes_match(self):
         src = {"m_ConstantBuffers": [
             {"m_NameIndex": 3, "m_Size": 176},

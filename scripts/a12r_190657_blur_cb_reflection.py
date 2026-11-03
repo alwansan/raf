@@ -195,6 +195,45 @@ def crosscheck_unity_cb(name_indices, common, groups, dxbc_declarations=None):
     }
 
 
+def compare_compiled_cb_spans(name_indices, common, groups, compiled):
+    """Bounded numeric comparison of actual compiled DXBC CB spans.
+
+    Unity's serialized buffer allocation can exceed the shader's declared
+    register span. Record both values by numeric slot; NEVER infer equivalence
+    of contained values or GPU runtime semantics from size containment.
+    """
+    # Strictly check authored name/size/slot identities first, independently
+    # of the compiled declarations, to preserve this source proof on drift.
+    crosscheck_unity_cb(name_indices, common, groups)
+    names = {index: name for name, index in name_indices}
+    by_slot = {
+        item["m_Index"]: groups[names[item["m_NameIndex"]]]
+        for item in common["m_ConstantBufferBindings"]
+    }
+    if any(type(slot) is not int or type(size) is not int or slot < 0 or size <= 0
+           for slot, size in compiled.items()):
+        raise ValueError("dxbc_dcl_unsafe_numeric_span")
+    exact_slot_set = set(by_slot) == set(compiled)
+    observations = [
+        {"slot": slot, "unity_bytes": by_slot.get(slot),
+         "dxbc_declared_bytes": compiled[slot],
+         "exact_bytes": by_slot.get(slot) == compiled[slot],
+         "within_unity_bytes": slot in by_slot and 0 < compiled[slot] <= by_slot[slot]}
+        for slot in sorted(compiled)
+    ]
+    bounded = exact_slot_set and all(x["within_unity_bytes"] for x in observations)
+    exact = bounded and all(x["exact_bytes"] for x in observations)
+    return {
+        "dxbc_declared_slot_count": len(compiled),
+        "unity_serialized_slot_count": len(by_slot),
+        "compiled_slot_set_exact": exact_slot_set,
+        "compiled_spans_within_unity_allocations": bounded,
+        "compiled_spans_exactly_equal_unity_allocations": exact,
+        "compiled_spans_numeric_by_slot": observations,
+        "dxbc_parameter_value_or_shaderlab_runtime_verified": False,
+    }
+
+
 def main(source, repo, out):
     # These exact hard-coded error markers contain no original Shader identifiers.
     safe_error_codes = {
@@ -295,8 +334,12 @@ def main(source, repo, out):
                     phase = "unity_serialized_cb_links"
                     try:
                         item.update(crosscheck_unity_cb(p["m_NameIndices"],
-                                                      prog["m_CommonParameters"], original_groups,
-                                                      dxbc_declarations=original_decl))
+                                                      prog["m_CommonParameters"], original_groups))
+                        if original_decl is not None:
+                            item.update(compare_compiled_cb_spans(
+                                p["m_NameIndices"], prog["m_CommonParameters"],
+                                original_groups, original_decl
+                            ))
                     except ValueError as error:
                         safe_cb_errors = {
                             "unity_cb_bad_original_schema", "unity_cb_bad_name_table",
@@ -325,7 +368,13 @@ def main(source, repo, out):
                       compiled_rdef_stripped_count=sum(not row["rdef_present"] for row in rows),
                       original_shaderlab_cb_binding_verified=False,
                       compiled_original_cb_dcl_linked_stages=sum(
-                          row.get("dxbc_dcl_original_slot_size_verified") is True for row in rows
+                          row.get("compiled_spans_exactly_equal_unity_allocations") is True for row in rows
+                      ),
+                      compiled_original_cb_slot_sets_matched_stages=sum(
+                          row.get("compiled_slot_set_exact") is True for row in rows
+                      ),
+                      compiled_original_cb_bounded_spans_stages=sum(
+                          row.get("compiled_spans_within_unity_allocations") is True for row in rows
                       ),
                       source_only_structural_diagnostic=True)
     except Exception as exc:
