@@ -34,11 +34,13 @@ class AtomicStageTests(unittest.TestCase):
         with mock.patch("scripts.stage_original_streaming_assets.shutil.copyfile",
                         side_effect=interrupt_copy):
             with self.assertRaisesRegex(OSError, "interrupted"):
-                stage(self.repo, self.project, self.report, apply=True)
+                stage(self.repo, self.project, self.report, apply=True,
+                      haptics_manifest_blob_sha=self.haptics_manifest_blob_sha)
         self.assertFalse(final.exists(), "Broken final bank must not be visible")
         self.assertFalse(self.report.exists(), "Failed staging cannot publish success report")
         self.assert_no_staged_partials()
-        stage(self.repo, self.project, self.report, apply=True)
+        stage(self.repo, self.project, self.report, apply=True,
+                      haptics_manifest_blob_sha=self.haptics_manifest_blob_sha)
         self.assertEqual(final.read_bytes(), source.read_bytes())
         self.assert_no_staged_partials()
 
@@ -57,11 +59,13 @@ class AtomicStageTests(unittest.TestCase):
         with mock.patch("scripts.stage_original_streaming_assets.shutil.copyfile",
                         side_effect=corrupt_copy):
             with self.assertRaisesRegex(ValueError, "verification failed"):
-                stage(self.repo, self.project, self.report, apply=True)
+                stage(self.repo, self.project, self.report, apply=True,
+                      haptics_manifest_blob_sha=self.haptics_manifest_blob_sha)
         self.assertFalse(final.exists(), "Corrupt final bank must not be visible")
         self.assertFalse(self.report.exists())
         self.assert_no_staged_partials()
-        stage(self.repo, self.project, self.report, apply=True)
+        stage(self.repo, self.project, self.report, apply=True,
+                      haptics_manifest_blob_sha=self.haptics_manifest_blob_sha)
         self.assertEqual(final.read_bytes(), source.read_bytes())
         self.assert_no_staged_partials()
 
@@ -84,7 +88,8 @@ class AtomicStageTests(unittest.TestCase):
 
         with mock.patch("scripts.stage_original_streaming_assets.shutil.copyfile",
                         side_effect=inspect_copy):
-            stage(self.repo, self.project, self.report, apply=True)
+            stage(self.repo, self.project, self.report, apply=True,
+                      haptics_manifest_blob_sha=self.haptics_manifest_blob_sha)
         self.assertEqual(len(paths), 1)
         self.assertEqual((assets / name).read_bytes(), source.read_bytes())
         self.assert_no_staged_partials()
@@ -106,7 +111,8 @@ class AtomicStageTests(unittest.TestCase):
         with mock.patch("scripts.stage_original_streaming_assets.os.link",
                         side_effect=race_link):
             with self.assertRaisesRegex(ValueError, "Existing original StreamingAssets conflict"):
-                stage(self.repo, self.project, self.report, apply=True)
+                stage(self.repo, self.project, self.report, apply=True,
+                      haptics_manifest_blob_sha=self.haptics_manifest_blob_sha)
         self.assertEqual(len(called), 1)
         self.assertEqual(final.read_bytes(), b"synthetic concurrent owner")
         self.assertFalse(self.report.exists())
