@@ -1,0 +1,99 @@
+name: Raft A4 ZIP2 original GPU cache lifecycle (CPU only no LFS)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-a4-original-gpu-cache-lifecycle.yml'
+      - 'scripts/a4_original_gpu_cache_lifecycle.py'
+      - 'tests/test_a4_original_gpu_cache_lifecycle.py'
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: raft-a4-original-gpu-cache-${{ github.ref }}
+  cancel-in-progress: false
+  queue: max
+
+jobs:
+  synthetic:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Verify fail-closed GPU allocation and lifetime parser controls
+        run: python3 -m unittest discover -s tests -p 'test_a4_original_gpu_cache_lifecycle.py' -v
+
+  original-zip2:
+    needs: synthetic
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      ORIGINAL_ZIP2_SHA: '15964ea8f246b6e076ce26b60931ee2e1a9a2385'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Fetch immutable ZIP2 manifest and original managed DLL only
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir zip2-a4
+          git -C zip2-a4 init -q
+          git -C zip2-a4 remote add origin https://github.com/alwansan/raf.git
+          git -C zip2-a4 -c protocol.version=2 fetch -q --depth=1 --filter=blob:none origin zip2
+          test "$(git -C zip2-a4 rev-parse FETCH_HEAD)" = "$ORIGINAL_ZIP2_SHA"
+          git -C zip2-a4 sparse-checkout init --no-cone
+          printf '%s\n' '/RAFT_FILE_MANIFEST.tsv' '/Raft/Raft_Data/Managed/Assembly-CSharp.dll' \
+            | git -C zip2-a4 sparse-checkout set --no-cone --stdin
+          git -C zip2-a4 checkout -q --detach FETCH_HEAD
+          test "$(git -C zip2-a4 rev-parse HEAD)" = "$ORIGINAL_ZIP2_SHA"
+          python3 - <<'PY'
+          import hashlib
+          from pathlib import Path
+          root = Path("zip2-a4")
+          entry = "plain\t3211776\t0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e\t660\tRaft_Data/Managed/Assembly-CSharp.dll"
+          lines = (root / "RAFT_FILE_MANIFEST.tsv").read_text().splitlines()
+          if lines.count(entry) != 1:
+              raise SystemExit("ZIP2 original managed input manifest pin changed")
+          assembly = root / "Raft/Raft_Data/Managed/Assembly-CSharp.dll"
+          if assembly.is_symlink() or not assembly.is_file():
+              raise SystemExit("Missing or unsafe original managed binary")
+          if assembly.stat().st_size != 3211776:
+              raise SystemExit("Original assembly length differs")
+          if hashlib.sha256(assembly.read_bytes()).hexdigest() != "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e":
+              raise SystemExit("Original assembly SHA differs")
+          print("RAFT_A4_ORIGINAL_INPUT verified=true bytes=3211776 provider=zip2 lfs=false original_content_disclosed=false")
+          PY
+      - name: Install pinned CPU-only CSharp9 decompiler
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Install pinned ILSpy tool
+        run: dotnet tool install ilspycmd --version 11.2.0.10050 --tool-path "$RUNNER_TEMP/ilspy"
+      - name: Privately inspect exact decompiled original GPU cache
+        env:
+          DOTNET_PROCESSOR_COUNT: '2'
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/a4-csharp9"
+          timeout 300s "$RUNNER_TEMP/ilspy/ilspycmd" -p -lv CSharp9_0 \
+            -o "$RUNNER_TEMP/a4-csharp9" zip2-a4/Raft/Raft_Data/Managed/Assembly-CSharp.dll \
+            > "$RUNNER_TEMP/a4-decompiler-private.log" 2>&1
+          timeout 30s python3 -m scripts.a4_original_gpu_cache_lifecycle \
+            --source-root "$RUNNER_TEMP/a4-csharp9"
+          echo "RAFT_A4_PRIVACY original_source_upload=false original_source_text_logged=false"
+          # Original private CSharp9 files remain runner-local only.
