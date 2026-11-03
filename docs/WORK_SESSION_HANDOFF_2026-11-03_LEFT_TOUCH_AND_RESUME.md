@@ -131,3 +131,10 @@ The owner requested one new task to maintain unresolved problems in a project fi
 Reviewed live main workflow and native operations: Unity2021.3.45f2/ARM64 IL2CPP/split/fidelity; APK+OBB+XAPK with exact lossless transport parts/SHA checks; checkpoint raft-android-signed-output-checkpoint before packaging and raft-android-audited-output-recovery after failure; successful delivery-result and verified release files. The coordinator can repair a demonstrated build failure and issue one justified retry, recovering valid signed outputs for packaging-only failures whenever feasible. It does not cancel running work, bypass source/data/signature/water checks, replace the existing pipeline, rebuild unchanged deliveries each hour or fabricate device success.
 
 Current requirements, AGENTS, permanent resume and STATUS now point to this role and ledger. Scheduling confirmation is the only task configuration change. These documentation changes do not touch native request JSON, game source, assets or workflow code and start no Unity/APK build.
+
+
+## Readiness review — 3 November 2026
+
+Reviewed live HEAD ee1be1d424f5b02f5bfdcca6db9c635ef85bbd6a and repository Actions: no queued/in-progress runs at review. Game release android-early-test-41448086401-1 still points to9462f8edd8cdb5becbccb96521f2876ef9924410 and has11 assets; CL raft-log root hashes remain unchanged. No new candidate or native request was selected. WATER-001 and RENDER-002 remain OPEN; numeric table validation does not close authentic shader/kernel restoration.
+
+Executed local water-contract, delivery-package and native-workflow-isolation fixtures:25 tests ran successfully with1 skipped. These are test-owned/source-level fixtures, not an audit of a new APK or restored GPU programs. State remains NOT_READY. Next close WATER-001/RENDER-002 and complete DISPLAY-003/PERF-007 source reviews; device-only acceptance remains separate.

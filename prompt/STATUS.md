@@ -27,3 +27,10 @@ Only feature/android-native-port writable; CL read-only. Full native delivery is
 Last game delivery: APK80/source9462f8edd8cdb5becbccb96521f2876ef9924410, tagandroid-early-test-41448086401-1,11assets verified. Newer lograf releases are separate. Current CL raft-log roots unchanged. Later source fixes are not installed-phone evidence.
 
 Next: use the numeric reference to compare actual translated original DXBC/SPIR-V arithmetic/output, typed image formats, stages and both passes; also establish serialized per-water requested resolution/scene linkage and active quality/device limits. Do not infer runtime kernel enumeration from serialized20-slot order or ship dummy/clamped kernels. Continue independent genuine fixes where evidence supports them. Update this checkpoint and full handoff after meaningful work; update [copy-ready resume prompt](CONTINUE_RAFT_AR.md) when directions change.
+
+
+## Readiness review — 3 November 2026
+
+Reviewed live HEAD ee1be1d424f5b02f5bfdcca6db9c635ef85bbd6a and repository Actions: no queued/in-progress runs at review. Game release android-early-test-41448086401-1 still points to9462f8edd8cdb5becbccb96521f2876ef9924410 and has11 assets; CL raft-log root hashes remain unchanged. No new candidate or native request was selected. WATER-001 and RENDER-002 remain OPEN; numeric table validation does not close authentic shader/kernel restoration.
+
+Executed local water-contract, delivery-package and native-workflow-isolation fixtures:25 tests ran successfully with1 skipped. These are test-owned/source-level fixtures, not an audit of a new APK or restored GPU programs. State remains NOT_READY. Next close WATER-001/RENDER-002 and complete DISPLAY-003/PERF-007 source reviews; device-only acceptance remains separate.
