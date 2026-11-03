@@ -78,22 +78,40 @@ def docker_states():
 def summarize(path):
     if not path.exists():return {'samples':0,'status':'monitor_not_started'}
     rows=[]
+    stream_complete=True
     for line in path.read_text().splitlines():
-        try: rows.append(json.loads(line))
-        except ValueError:continue
+        try: row=json.loads(line)
+        except ValueError:
+            stream_complete=False
+            continue
+        if not isinstance(row,dict):
+            stream_complete=False
+            continue
+        rows.append(row)
     values=lambda key:[r[key] for r in rows if key in r]
-    event_rows=[r['cgroup_v2_memory_events'] for r in rows
-                if isinstance(r.get('cgroup_v2_memory_events'),dict)]
-    def event_delta(key):
-        if len(event_rows)<2 or key not in event_rows[0] or key not in event_rows[-1]:
-            return None
-        difference=event_rows[-1][key]-event_rows[0][key]
-        return difference if difference>=0 else None
+    def event_deltas():
+        # A reset or a missing/corrupt intermediate sample makes both deltas
+        # unknown; first/last subtraction alone can falsely report an OOM.
+        if not stream_complete or len(rows)<2:return None,None
+        observations=[]
+        for row in rows:
+            events=row.get('cgroup_v2_memory_events')
+            if not isinstance(events,dict):return None,None
+            oom,kill=events.get('oom'),events.get('oom_kill')
+            if (type(oom) is not int or type(kill) is not int or
+                    oom<0 or kill<0):return None,None
+            observations.append((oom,kill))
+        if any(curr[0]<prev[0] or curr[1]<prev[1]
+               for prev,curr in zip(observations,observations[1:])):
+            return None,None
+        return (observations[-1][0]-observations[0][0],
+                observations[-1][1]-observations[0][1])
+    oom_delta,oom_kill_delta=event_deltas()
     return {'samples':len(rows),'minimum_available_kb':min(values('MemAvailable_kb'),default=None),
             'minimum_swap_free_kb':min(values('SwapFree_kb'),default=None),
             'maximum_top_process_rss_kb':max((p['rss_kb'] for r in rows for p in r.get('largest_processes',[])),default=None),
-            'cgroup_v2_oom_delta':event_delta('oom'),
-            'cgroup_v2_oom_kill_delta':event_delta('oom_kill'),
+            'cgroup_v2_oom_delta':oom_delta,
+            'cgroup_v2_oom_kill_delta':oom_kill_delta,
             'cgroup_v2_scope':'observed_monitor_cgroup_not_attributed_to_unity',
             'docker_final_states':docker_states()}
 
