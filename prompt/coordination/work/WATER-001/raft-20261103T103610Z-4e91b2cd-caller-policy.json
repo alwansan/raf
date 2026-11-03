@@ -1,0 +1,10 @@
+{
+  "owner": "raft-20261103T103610Z-4e91b2cd",
+  "status": "active",
+  "issue_id": "WATER-001",
+  "base_sha": "7ccf606c84a697a7ce867b2102d46cb4a0e686ac",
+  "intended_files": [
+    "scripts/probe_fft_caller_policy.py"
+  ],
+  "hypothesis": "Original caller forces float at large sizes and selects compute only <=512; hypothetical half address errors may be unreachable"
+}

@@ -1,0 +1,1 @@
+Independent caller precision/path investigation; avoids A1 SSA and existing image audit files.
