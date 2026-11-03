@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "username": "raft-20261103T121121Z-56c3b5b1",
+  "display_name": "A8",
+  "session_id": "A8-20261103T121121Z-parser-4bbf",
+  "resumed_from": "raft-20261103T113223Z-fc895dbd",
+  "status": "active",
+  "updated_at": "2026-11-03T12:11:51.036Z",
+  "current_work": [
+    "DIAG-011"
+  ],
+  "last_commit": null,
+  "next_step": "Bound original operation signature and body discovery to executable C# tokens; add fail-closed regressions; run no-LFS reconstruction preflight on code SHA.",
+  "memory_path": "prompt/coordination/clients/raft-20261103T121121Z-56c3b5b1/MEMORY.md",
+  "base_sha": "e3bdcfc18118ac729c040f801f9045690197129f"
+}

@@ -1,0 +1,9 @@
+# A8 resumed — DIAG-011 operation instrumentation signature safety
+
+Identity `raft-20261103T121121Z-56c3b5b1` (fresh), `resumed_from=raft-20261103T113223Z-fc895dbd`. Source-only CPU analysis, not a running job or automatic schedule.
+
+Current prompt/README, prompt/CONTINUE_RAFT_AR, prompt/STATUS, docs/CURRENT_OWNER_REQUIREMENTS, AGENTS, coordination protocol and readiness document reviewed. Live HEAD, latest commits, Actions (none active at initial scan), old APK80 release (source9462f8e, not new tests) and CL raft-log/lf (Nov2 logs only) checked. A separate native preview41624581951 FAILED in built-in shader recovery; do not re-run or touch its request. Other active work on WATER/FFT, RENDER and DISPLAY is distinct. No other client has DIAG-011 plan as of register time.
+
+Source bug: `scripts/instrument_android_runtime_operations.py::body_bounds` counts method signature text even inside comments and C# string literals, and selects the first raw `{` after any signature without checking that a method body begins directly after it. Thus the parser can report spurious duplicates or instrument a later unrelated method body when the matched declaration ends with `;`. The function is run against SHA-pinned original C# before instrumentation and writes diagnostic boundaries in adapted Unity C#; a mis-boundary is correctness-critical for saved game and network instrumentation. Proposed conservative, offset-preserving masking of C# literals/comments, exactly one executable occurrence, required brace after optional whitespace/comments, and braces counted on masked source while returning original offsets. Synthetic non-game tests only; no claim of specific bad original source or phone failure.
+
+No LFS, Unity native build, APK/OBB/XAPK, original assets/meta/GUIDs, tasks or protected branches.

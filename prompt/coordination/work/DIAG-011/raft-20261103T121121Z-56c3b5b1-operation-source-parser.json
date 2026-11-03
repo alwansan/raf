@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T121121Z-56c3b5b1",
+  "issue_id": "DIAG-011",
+  "status": "active",
+  "updated_at": "2026-11-03T12:11:51.036Z",
+  "hypothesis": "Current body_bounds text.count(signature) overcounts C# text/comments, and raw opening-brace scan may steal later method body after abstract/semicolon declaration. This can block or misplace instrumentation for original SaveAndLoad/Raft_Network diagnostic methods despite source SHA pin.",
+  "intended_files": [
+    "scripts/instrument_android_runtime_operations.py",
+    "tests/test_runtime_operation_traces.py",
+    "prompt/coordination/clients/raft-20261103T121121Z-56c3b5b1/",
+    "prompt/coordination/work/DIAG-011/raft-20261103T121121Z-56c3b5b1-operation-source-parser.json",
+    "prompt/STATUS.md",
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+  ],
+  "verification": "Isolated synthetic negative/positive tests + original reconstruction preflight no-LFS lane; no Unity/OBB/APK or raw game source publication.",
+  "related_clients": [
+    "A8 completed AUDIO-004 parser audit (different file)",
+    "A6 RENDER-002 original ShaderLab include verifier active",
+    "A1 WATER-001/FFT-FORMAT-009 active",
+    "A2 DISPLAY-003 separate",
+    "A9 LOCAL-005 separate"
+  ],
+  "no_native_build": true,
+  "tests": [],
+  "last_result": null,
+  "base_sha": "e3bdcfc18118ac729c040f801f9045690197129f"
+}
