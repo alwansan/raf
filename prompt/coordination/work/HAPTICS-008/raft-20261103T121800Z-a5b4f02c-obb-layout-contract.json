@@ -2,8 +2,8 @@
   "schema_version": 1,
   "owner": "raft-20261103T121800Z-a5b4f02c",
   "issue_id": "HAPTICS-008",
-  "status": "planned",
-  "updated_at": "2026-11-03T12:18:47.167Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T12:26:28.378Z",
   "base_sha": "8b6c5dd48ea2b7ac14fc497a1c5f215378821334",
   "resumed_from": "raft-20261103T105730Z-a5e8b126",
   "hypothesis": "Original WAV reader passed synthetic ZIP but true Unity expansion ZIP may omit/misplace or corrupt assets/Haptics WAV paths. Existing audit checks some Unity Data; add pinned 29/29 final ZIP entry identity gate.",
@@ -33,6 +33,11 @@
   "experiment_ids": [
     "obb-original-haptics-archive"
   ],
-  "result": null,
-  "next_step": "Implement strict optionally invoked final OBB 29-WAV SHA-backed ZIP member audit, synthetic negative tests and CPU CI; integrate into existing full native audit without starting build."
+  "result": "Added optional strict 29-WAV Haptics final OBB audit requiring exact assets/Haptics URL paths, expected size and original Git blob SHA. Integrated --haptics-manifest into actual native workflow post-build companion audit. CPU CI41635398564 SUCCESS: 13 synthetic ZIP tests incl negative controls+native wiring, 4 Python adapter checks, original WAV source29/29/32733104 bytes and 58 authentic C# ZIP reads. No actual signed Unity OBB or device acceptance; HAPTICS-008 OPEN and NOT_READY/0-of-3.",
+  "next_step": "A future owner-authorized native candidate should pass complete Haptics final OBB audit; if it fails inspect real archive privately, do not fake entry success. Device vibration acceptance remains pending.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41635398564",
+    "https://github.com/alwansan/raf/actions/runs/41635039704",
+    "https://github.com/alwansan/raf/actions/runs/41624581951"
+  ]
 }
