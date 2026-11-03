@@ -3,6 +3,8 @@ import json
 import subprocess
 import tempfile
 import unittest
+from unittest import mock
+from scripts import stage_original_streaming_assets as source_stage
 from scripts.stage_original_streaming_assets import BANKS, stage
 
 
@@ -42,6 +44,21 @@ class OriginalStreamingTests(unittest.TestCase):
         # The default production stage instead pins the real original SHA.
         self.haptics_manifest_blob_sha = self.git(
             'hash-object', '--', 'config/original-haptics-manifest.json').decode().strip()
+
+        # Fixture-owned Git blobs are deliberately not the private original
+        # archive's immutable root blobs. Rebind only inside this synthetic
+        # test lifetime; no production runtime override is exposed.
+        self.synthetic_root_blobs = {
+            name: self.git('rev-parse', '--verify',
+                           'HEAD:Raft/Raft_Data/StreamingAssets/' + name).decode().strip()
+            for name in BANKS | {'Data.rgd', 'UnityServicesProjectConfiguration.json'}
+            if (self.source / name).is_file()
+        }
+        if hasattr(source_stage, 'ORIGINAL_ROOT_BLOB_SHAS'):
+            original_root_blob_patcher = mock.patch.object(
+                source_stage, 'ORIGINAL_ROOT_BLOB_SHAS', self.synthetic_root_blobs)
+            original_root_blob_patcher.start()
+            self.addCleanup(original_root_blob_patcher.stop)
 
     def git(self, *args):
         return subprocess.check_output(['git', '-C', str(self.repo), *args], stderr=subprocess.STDOUT)
