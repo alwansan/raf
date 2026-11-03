@@ -39,6 +39,7 @@ checks={
     "telemetry uses exact main process": 'return primaryGamePid.get();' in remote and 'packageName.equals(processCmdline(pid))' in remote,
     "no HashSet PID sampling": 'for(String pid:gamePids)' not in remote,
     "no guessed process PID when proc inaccessible": 'return selected;' in remote and 'int selected=-1;' in remote,
+    "pidof failure invalidates stale process telemetry": 'primaryGamePid.set(-1);\n                synchronized(gamePids){gamePids.clear();}' in remote,
     "all PIDs retained for context": 'gamePids.addAll(current)' in remote,
     "raw Logcat unchanged target": '"--uid=" + gameUid' in remote,
     "error classes tracked without raw text": '"error_groups"' in remote and (src/"ErrorCategorySummary.java").exists(),

@@ -160,7 +160,12 @@ public final class RemoteLogService extends IRemoteLog.Stub {
                 primaryGamePid.set(main);
                 if(main>0)lastKnownPid.set(main);
             } catch (Exception ignored) {
-                // The UID stream does not depend on pidof.
+                // A failed pidof invocation must not leave a stale main PID
+                // behind. Otherwise the sampler can attribute CPU/RSS and
+                // process transitions to a PID which is no longer the game.
+                // Keep UID-filtered Logcat capture alive independently.
+                primaryGamePid.set(-1);
+                synchronized(gamePids){gamePids.clear();}
             } finally { if (p != null) p.destroy(); }
             try { Thread.sleep(800); } catch (InterruptedException e) { return; }
         }
