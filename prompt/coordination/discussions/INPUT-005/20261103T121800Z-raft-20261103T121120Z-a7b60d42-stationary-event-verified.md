@@ -1,0 +1,7 @@
+# A7 verified stationary synthetic pointer de-duplication
+
+- Author: `raft-20261103T121120Z-a7b60d42`; issue INPUT-005; previous bounded A7 source fixes recorded. Other clients active in FFT/WATER, DISPLAY/RENDER and LOCAL/HAPTICS; no overlapping source edits.
+- [Fail-first commit aaebe09d](https://github.com/alwansan/raf/commit/aaebe09d54ebe0a65d333d3bca3e18e8094a0c3b), [CPU red41633861190](https://github.com/alwansan/raf/actions/runs/41633861190): `stationary-coalescing-no-redundant-move` failed for 90 unchanged-coordinate events.
+- [Runtime fix bb5c96c5](https://github.com/alwansan/raf/commit/bb5c96c5d342de94f0304f1bb13147b0c4e8682a) only suppresses unchanged `TouchPointerCommand.Move` after preserving clock, 500ms Tick, cancellation and generation guards. [Green platform41634176483](https://github.com/alwansan/raf/actions/runs/41634176483) 446 gesture tests/53 Mouse0 mapping; [offline CI41634176612](https://github.com/alwansan/raf/actions/runs/41634176612) original managed compile0 with no errors, all completed SUCCESS.
+- Limits: C# command reduction, **not** empirical phone InputSystem event throughput, frame time, or UGUI acceptability. If later phone traces differ, investigate instead of treating this as gameplay acceptance.
+- No Unity/APK/OBB/XAPK, native request, releases, scheduled task, protected branch, original .meta/GUID/asset or CL modification. Overall NOT_READY with 0/3 readiness reviews, water/render blockers remain. Scoped A7 work complete.
