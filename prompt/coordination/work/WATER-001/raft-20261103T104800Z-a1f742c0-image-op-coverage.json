@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T104800Z-a1f742c0",
+  "client_label": "A1",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "updated_at": "2026-11-03T10:48:31.736Z",
+  "base_sha": "802e82fc599822a328057d7da7aee05b045605ad",
+  "hypothesis": "SPIR-V SSA image-use audit currently ignores OpImageSample* and gather opcodes, so all_image_operations_uniquely_traced can be true while sampled resources are untracked. Verify synthetic counterexample and add explicit support or fail-closed count.",
+  "intended_files": [
+    "scripts/probe_fft_spirv_image_flow.py",
+    "tests/test_probe_fft_spirv_image_flow.py",
+    "prompt/coordination/clients/raft-20261103T104800Z-a1f742c0",
+    "prompt/coordination/experiments/raft-20261103T104800Z-a1f742c0",
+    "prompt/coordination/discussions/WATER-001",
+    "prompt/STATUS.md",
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+  ],
+  "related_work": [
+    "raft-20261103T100100Z-a1c46e79 old paused SSA repair",
+    "raft-20261103T103610Z-4e91b2cd caller policy separate parser"
+  ],
+  "experiment_ids": [
+    "image-operation-coverage"
+  ],
+  "result": null,
+  "next_step": "Reproduce and test CPU-only; do not build Unity/APK."
+}
