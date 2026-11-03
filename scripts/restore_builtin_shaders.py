@@ -108,10 +108,28 @@ def rewrite(path, files):
     return ''.join(result), dependencies
 
 
+def _require_safe_asset_path(assets, path):
+    """Reject symlinked Assets parents before read, backup or write.
+
+    An output leaf may not exist yet. Checking only path.is_symlink() misses
+    an existing redirected parent such as Assets/StreamingAssets.
+    """
+    if assets.is_symlink() or not assets.is_dir() or not path.is_relative_to(assets):
+        raise ValueError('Unsafe Unity Assets path')
+    parent = assets
+    for segment in path.relative_to(assets).parts:
+        parent = parent / segment
+        if parent.is_symlink():
+            raise ValueError('Unsafe symlinked Unity Assets path')
+    if not path.resolve().is_relative_to(assets.resolve()):
+        raise ValueError('Unsafe Unity Assets path')
+
+
 def restore_project(project, backup, shaders, files, license):
     project = project.resolve()
     assets = project / 'Assets'
     backup = backup.resolve()
+    _require_safe_asset_path(assets, assets)
     if backup.is_relative_to(project):
         raise ValueError('Shader backup must be outside Unity project')
     plan = []
@@ -121,6 +139,7 @@ def restore_project(project, backup, shaders, files, license):
     declared_identities = 0
     unmatched_identities = 0
     for path in sorted(assets.rglob('*.shader')):
+        _require_safe_asset_path(assets, path)
         shader_files += 1
         name = exported_shader_identity(path.read_text(encoding='utf-8-sig'))
         if name is None:
@@ -133,6 +152,7 @@ def restore_project(project, backup, shaders, files, license):
             raise ValueError('Ambiguous exported built-in shader identity')
         used.add(name)
         meta = Path(str(path) + '.meta')
+        _require_safe_asset_path(assets, meta)
         if not meta.is_file() or meta.is_symlink() or path.is_symlink():
             raise ValueError('Missing/unsafe original shader metadata')
         source, required = rewrite(shaders[name], files)
@@ -162,6 +182,7 @@ def restore_project(project, backup, shaders, files, license):
         additions[project / ROOT / path] = source.encode()
         pending.extend(required - done)
     for path, content in additions.items():
+        _require_safe_asset_path(assets, path)
         if path.exists() and (path.is_symlink() or path.read_bytes() != content):
             raise ValueError('Conflicting built-in dependency or license destination')
     backup.mkdir(parents=True, exist_ok=False)
