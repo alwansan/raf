@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "client_label": "W3",
+  "username": "raft-20261103T153100Z-b4d2c9e7",
+  "session_id": "w3-20261103T153254112Z-9f3c1a85",
+  "resumed_from": null,
+  "status": "active",
+  "updated_at": "2026-11-03T15:47:30Z",
+  "base_sha": "153edf140d17cac8c2552a998a2f0ed104e0cb71",
+  "current_work": [
+    "RENDER-002 A13-followup: original Material->Shader external PPtr resolution from byte-verified local PC originals"
+  ],
+  "last_commit": "153edf140d17cac8c2552a998a2f0ed104e0cb71",
+  "next_step": "Resume by re-reading live HEAD/Actions and peers (W1 run41663393724 pending). Next engineering options: (a) hand resolved pathID/name priority list (Skin_Amplify 2416, SpeedTree8 2405, Standard 2398) to W1's program recovery lane; (b) extend resolution to the other 38 sharedassets owners present locally; (c) audit serialized properties/colors of materials referencing affected shaders.",
+  "memory_path": "prompt/coordination/clients/raft-20261103T153100Z-b4d2c9e7/MEMORY.md"
+}

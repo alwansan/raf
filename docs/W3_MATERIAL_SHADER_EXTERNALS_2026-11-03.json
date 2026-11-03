@@ -1,0 +1,136 @@
+{
+  "builtin_engine_references": {
+    "aggregate_by_owner_fileid": {
+      "resources.assets|fid=3": 7,
+      "sharedassets0.assets|fid=3": 5
+    },
+    "distinct": 2,
+    "total_references": 12
+  },
+  "cross_owner_resolution": {
+    "distinct_resolved_shader_targets": 11,
+    "link_kinds": {
+      "resources.assets": {
+        "owner_resolveable": 149,
+        "same_file": 14
+      },
+      "sharedassets0.assets": {
+        "owner_resolveable": 7,
+        "same_file": 344
+      }
+    },
+    "material_totals": {
+      "resources.assets": 163,
+      "sharedassets0.assets": 351
+    },
+    "shader_targets": [
+      {
+        "material_references": 50,
+        "name": "Skin_Amplify",
+        "owner": "sharedassets0.assets",
+        "path_id": 2416
+      },
+      {
+        "material_references": 41,
+        "name": "Nature/SpeedTree8",
+        "owner": "sharedassets0.assets",
+        "path_id": 2405
+      },
+      {
+        "material_references": 29,
+        "name": "Standard",
+        "owner": "sharedassets0.assets",
+        "path_id": 2398
+      },
+      {
+        "material_references": 7,
+        "name": "Hair_Amplify",
+        "owner": "sharedassets0.assets",
+        "path_id": 2448
+      },
+      {
+        "material_references": 5,
+        "name": "Vegetation",
+        "owner": "sharedassets0.assets",
+        "path_id": 2439
+      },
+      {
+        "material_references": 5,
+        "name": "Shimmer",
+        "owner": "sharedassets0.assets",
+        "path_id": 2445
+      },
+      {
+        "material_references": 2,
+        "name": "TextMeshPro/Distance Field",
+        "owner": "sharedassets0.assets",
+        "path_id": 2433
+      },
+      {
+        "material_references": 2,
+        "name": "TextMeshPro/Mobile/Distance Field",
+        "owner": "sharedassets0.assets",
+        "path_id": 2455
+      },
+      {
+        "material_references": 1,
+        "name": "GlassWater",
+        "owner": "sharedassets0.assets",
+        "path_id": 2434
+      },
+      {
+        "material_references": 1,
+        "name": "Azure[Sky]/Fog Scattering",
+        "owner": "globalgamemanagers.assets",
+        "path_id": 12
+      },
+      {
+        "material_references": 1,
+        "name": "Azure[Sky]/Pixel Dynamic Cloud",
+        "owner": "globalgamemanagers.assets",
+        "path_id": 15
+      }
+    ]
+  },
+  "negative_controls": {
+    "fileid0_unresolved": true,
+    "missing_target_pathid_fails_closed": true,
+    "negative_fileid_rejected": true,
+    "out_of_range_fileid_rejected": true
+  },
+  "owners": {
+    "globalgamemanagers.assets": {
+      "bytes": 758412,
+      "note": "local original file used as reference owner; not one of the two pinned LFS owners",
+      "sha256": "b549af329d48244d80f28cb3cce6cd0b17769176081c249dc4646e1d62c58e28",
+      "verified": null
+    },
+    "resources.assets": {
+      "bytes": 111533516,
+      "externals_table": [
+        "globalgamemanagers.assets",
+        "sharedassets0.assets",
+        "Library/unity default resources",
+        "Resources/unity_builtin_extra"
+      ],
+      "sha256": "87493249f1adfc0c5eb8b82e4e199e208cd2c95eabe9796cab82116c4838595c",
+      "verified": true
+    },
+    "sharedassets0.assets": {
+      "bytes": 115978112,
+      "externals_table": [
+        "globalgamemanagers.assets",
+        "Resources/unity_builtin_extra",
+        "Library/unity default resources"
+      ],
+      "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+      "verified": true
+    }
+  },
+  "probe": "w3-material-shader-externals",
+  "schema_version": 1,
+  "tool_versions": {
+    "python": "3.14.8",
+    "unitypy": "1.25.4"
+  }
+}

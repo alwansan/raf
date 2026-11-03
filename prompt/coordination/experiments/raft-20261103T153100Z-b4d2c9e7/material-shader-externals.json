@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T153100Z-b4d2c9e7",
+  "status": "completed",
+  "hypothesis": "Original serialized m_Externals tables plus local byte-authenticated PC originals allow fail-closed resolution of A13's unresolved external Material->Shader PPtrs without any new LFS transfer, yielding named appearance-chain shader targets.",
+  "input_hashes": [
+    "sha256(resources.assets,111533516)=87493249f1adfc0c5eb8b82e4e199e208cd2c95eabe9796cab82116c4838595c",
+    "sha256(sharedassets0.assets,115978112)=0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3"
+  ],
+  "commands": [
+    "python3 scripts/probe_w3_material_shader_externals.py --game-data /root/test/test/raft/Raft/Raft_Data --aggregate-json docs/W3_MATERIAL_SHADER_EXTERNALS_2026-11-03.json",
+    "python3 scripts/w3_test_material_shader_externals.py"
+  ],
+  "expected_signal": "4/4 fail-closed negative controls true; 1-based FileID mapping consistent with Unity semantics; distinct named shader targets counted; engine transports classified without fabricated names",
+  "negative_controls": [
+    "negative m_FileID rejected",
+    "out-of-range m_FileID rejected",
+    "m_FileID=0 stays same-file/unresolved without owner claim",
+    "missing target pathID in declared owner fails closed",
+    "synthetic tests: engine transports never given game shader names"
+  ],
+  "workflow_path": null,
+  "concurrency_group": null,
+  "artifact_prefix": null,
+  "budget": "local CPU only; no LFS, no CI minutes consumed for the real-data pass in this session",
+  "run_url": null,
+  "source_sha": "153edf140d17cac8c2552a998a2f0ed104e0cb71",
+  "result": "completed. 144/156 external references resolve to 11 distinct in-game Shader objects (Skin_Amplify 50 materials, SpeedTree8 41, Standard 29, Hair_Amplify 7, Vegetation 5, Shimmer 5, TMP 2+2, GlassWater 1, Azure[Sky] fog/cloud 1+1 via globalgamemanagers.assets); 12 engine default-resources transports fail-closed. Aggregate committed at docs/W3_MATERIAL_SHADER_EXTERNALS_2026-11-03.json sha256 b15ab1494db0d17e823201400db8cac5480e6cfc6bc832a402d999cc24b695a2; 9/9 synthetic tests OK; local real-data run exit 0 (not claimed as CI).",
+  "limitations": [
+    "serialized reference topology only; no shader program restoration, no visual/numeric equivalence, no GPU/Unity/device evidence",
+    "parsed-form names used; not an independent re-derivation of all vendor identities",
+    "covers the two pinned owners plus globalgamemanagers reference owner; other local owners untouched"
+  ],
+  "next_step": "prioritized pathID list to W1; extension to remaining local owners; material property/color audit"
+}
