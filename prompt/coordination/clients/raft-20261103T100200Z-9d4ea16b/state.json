@@ -4,13 +4,13 @@
   "client_label": "A10",
   "session_id": "a10-20261103T1212Z-f8ca6412",
   "resumed_from": null,
-  "status": "active",
-  "updated_at": "2026-11-03T12:13:20Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T12:20:00Z",
   "base_sha": "66d8e67da5b4ee610526452ccfb763b6c10e52fc",
   "current_work": [
-    "LOCAL-005: private original managed source install consistency after instrumentation failure"
+    "LOCAL-005: complete original managed staging preflight/rollback CI (completed)"
   ],
-  "last_commit": "031236bb5f4d4aeefc5b6ddc4b4de5188082920a",
-  "next_step": "Preflight entire original instrumentation plan before any export writes; rollback if a source write fails; protect .meta, hashes and unrelated classes.",
+  "last_commit": "b432955271139540bf47155226efae3a681907be",
+  "next_step": "This A10 source-only scope completed with CI41634496958 SUCCESS. When owner explicitly says Continue again, reread live docs/HEAD/clients/actions and register a new independent work item. LOCAL-005 overall and WATER-001/RENDER-002/FFT-FORMAT-009 remain NOT_READY/0-of-3.",
   "memory_path": "prompt/coordination/clients/raft-20261103T100200Z-9d4ea16b/MEMORY.md"
 }
