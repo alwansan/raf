@@ -2,8 +2,8 @@
   "schema_version": 1,
   "owner": "raft-20261103T095700Z-a2b31f4d",
   "issue_id": "DISPLAY-003",
-  "status": "active",
-  "updated_at": "2026-11-03T22:28:47.961Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T22:46:26.639Z",
   "base_sha": "d9e3a051a623964aed767876972f52511e27b844",
   "hypothesis": "ZIP2 no-LFS exact source files match original Settings byte and managed source fingerprints and enable a verified serialization-field-type inventory. Pair original CSharp9 fields and 612-byte scene owner layout without publishing proprietary data, and reject overlapping raw PPtr matches as typed fields.",
   "intended_files": [
@@ -27,8 +27,13 @@
   "evidence": [
     "https://github.com/alwansan/raf/actions/runs/41660274964",
     "https://github.com/alwansan/raf/tree/zip2/Raft",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/ZIP2_SOURCE_PROVIDER.md"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/ZIP2_SOURCE_PROVIDER.md",
+    "https://github.com/alwansan/raf/actions/runs/41733061252",
+    "https://github.com/alwansan/raf/commit/a2455448194317481a60a7199d932f85d2c2014f",
+    "https://github.com/alwansan/raf/actions/runs/41731775311",
+    "https://github.com/alwansan/raf/actions/runs/41732187637",
+    "https://github.com/alwansan/raf/actions/runs/41732807830"
   ],
-  "result": null,
-  "next_step": "Prove source-typed serialized Settings field/collection signature and reconcile original owner record byte layout. Keep actual UI canvas/page ownership unproven until typed pointer graph verified."
+  "result": "Proved owner-provided immutable ZIP2 commit15964ea8 as an exact no-LFS original source input for A2; source a2455448, original CI41733061252 SUCCESS: 7 synthetic field-parser regression tests, exact 4 original Git object SHA matches, private original Settings.cs CSharp9 SHA confirmed. Identified 14 candidate serializable own-class fields (4 known native Unity refs,8 custom with6 same-name Assembly-CSharp MonoScript class matches, one array/collection unresolved, one 4-byte scalar). Two custom types and collection not conclusively resolved. Source field order and typed pointer offsets, Android Settings cause remain unproved. Earlier raw 48 matching byte patterns cannot be interpreted as 48 typed pointers.",
+  "next_step": "Use original managed field metadata and verified collection type lengths to reconstruct typed Settings PPtr offsets; prove displayed panel and CanvasScaler before any runtime changes."
 }

@@ -3,13 +3,11 @@
   "username": "raft-20261103T095700Z-a2b31f4d",
   "session_id": "a2-continue-20261103222847-8f51a4d2",
   "resumed_from": "a2-continue-20261103144837-72f30c9a",
-  "status": "active",
-  "updated_at": "2026-11-03T22:28:47.961Z",
+  "status": "paused",
+  "updated_at": "2026-11-03T22:46:26.639Z",
   "base_sha": "d9e3a051a623964aed767876972f52511e27b844",
-  "current_work": [
-    "DISPLAY-003 original Settings typed-field owner mapping via ZIP2 exact SHA"
-  ],
-  "last_commit": "5db3a912727c8d2686a3b3301e04b7d80359fe0c",
-  "next_step": "CPU-only pinned zip2 source provider + original Settings CSharp9 serialized field metadata; build bounded parser and test source counts, record layout/typed pointers; only source SHA evidence, no runtime change.",
+  "current_work": [],
+  "last_commit": "a2455448194317481a60a7199d932f85d2c2014f",
+  "next_step": "DISPLAY-003 still OPEN. ZIP2 original native source direct no-LFS CI41733061252 successful on a2455448: 7 synthetic tests +4 original SHA-locked Git objects, 14 candidate Settings source fields with 6 Assembly-CSharp MonoScript class-name matches among 8 custom types; typed offsets/collections and Settings active UI panel to Canvas still unknown. Next use original managed metadata tokens and nested field schema to map source field references onto exact 612-byte serialized record; do not fix global CanvasScaler speculatively. NOT_READY/0 of3. Resume only on explicit user turn.",
   "memory_path": "prompt/coordination/clients/raft-20261103T095700Z-a2b31f4d/MEMORY.md"
 }

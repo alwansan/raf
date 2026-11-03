@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "owner": "raft-20261103T095700Z-a2b31f4d",
-  "status": "active",
+  "status": "completed",
   "hypothesis": "ZIP2 no-LFS exact source files match original Settings byte and managed source fingerprints and enable a verified serialization-field-type inventory. Pair original CSharp9 fields and 612-byte scene owner layout without publishing proprietary data, and reject overlapping raw PPtr matches as typed fields.",
   "input_hashes": [
     "zip2 pinned commit:15964ea8f246b6e076ce26b60931ee2e1a9a2385",
@@ -30,13 +30,18 @@
   "concurrency_group": "raft-a2-zip2-settings-${{ github.ref }}-${{ github.sha }}",
   "artifact_prefix": null,
   "budget": "CPU only Ubuntu24.04 10min, pinned zip2 sparse checkout <10MB, no LFS, no full restore, no Unity/Android build or release.",
-  "run_url": null,
-  "source_sha": null,
-  "result": null,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41733061252",
+  "source_sha": "a2455448194317481a60a7199d932f85d2c2014f",
+  "result": "Proved owner-provided immutable ZIP2 commit15964ea8 as an exact no-LFS original source input for A2; source a2455448, original CI41733061252 SUCCESS: 7 synthetic field-parser regression tests, exact 4 original Git object SHA matches, private original Settings.cs CSharp9 SHA confirmed. Identified 14 candidate serializable own-class fields (4 known native Unity refs,8 custom with6 same-name Assembly-CSharp MonoScript class matches, one array/collection unresolved, one 4-byte scalar). Two custom types and collection not conclusively resolved. Source field order and typed pointer offsets, Android Settings cause remain unproved. Earlier raw 48 matching byte patterns cannot be interpreted as 48 typed pointers.",
   "limitations": [
     "Serialized CSharp field order from ILSpy text may differ from metadata tokens; label candidates until independently verified.",
     "Original displayed Settings prefab and Android viewport runtime still unknown.",
-    "Do not publish original decompiled source or assets."
+    "Do not publish original decompiled source or assets.",
+    "No full 7.79GB ZIP2 content verification, only four exact SHA-checked small original files; no split file restoration needed.",
+    "CSharp9 source field declarations classify candidates, not proven Unity serializable token order or nested object bytes.",
+    "Two custom type families and one collection element not uniquely identified by source or original MonoScript class-name registry.",
+    "No original active Settings panel/Canvas runtime linkage or Android landscape/device acceptance."
   ],
-  "next_step": "Prove source-typed serialized Settings field/collection signature and reconcile original owner record byte layout. Keep actual UI canvas/page ownership unproven until typed pointer graph verified."
+  "next_step": "Use original managed field metadata and verified collection type lengths to reconstruct typed Settings PPtr offsets; prove displayed panel and CanvasScaler before any runtime changes.",
+  "updated_at": "2026-11-03T22:46:26.639Z"
 }
