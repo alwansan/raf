@@ -73,3 +73,6 @@ Added SHA-pinned, private original CSharp9 Settings/DynamicResolution lexical re
 ## FFT target format source correlation — 3 November 2026
 
 New SHA-pinned source probe confirms original temporary cache uses RGHalf/RGFloat when two-channel flag is false and ARGBHalf/ARGBFloat when true, selected by precision; dimensions are2N by2N, linear, with original UAV flag forwarded. Local authenticated GpuFFT source passed; two fail-closed synthetic tests passed. Original-source managed CI will verify fresh decompilation; its result is pending. This narrows FFT-FORMAT-009: a fixed Rgba32f compiler declaration cannot be assumed equivalent to all four original requested formats. Actual created graphics format, cache implementation and GPU compatibility remain unverified. No shader, native request, assets or automation changed; NOT_READY retained.
+
+
+Live validation links for source3da39e4: [CI runner guard41561621224](https://github.com/alwansan/raf/actions/runs/41561621224) COMPLETED SUCCESS; [original private-CSharp offline integration41561621297](https://github.com/alwansan/raf/actions/runs/41561621297) IN_PROGRESS at the last review. These are distinct checks. No final authenticated reference counts or original managed compile result should be claimed until the second run is complete.
