@@ -3,8 +3,8 @@
   "owner": "raft-20261103T224500Z-a1d7e439",
   "client_label": "A1",
   "issue_id": "FFT-FORMAT-009",
-  "status": "active",
-  "updated_at": "2026-11-03T22:45:19.261Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T22:56:44.510Z",
   "base_sha": "edd758e5131c8efbc9b9d1199d76ab57108158bf",
   "reference": "zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
   "hypothesis": "Authentic original FFT formatless storage shader and private repaired roundtrip SPIR-V can execute equal outputs using Vulkan R16G16_SFLOAT,R32G32_SFLOAT,R16G16B16A16_SFLOAT,R32G32B32A32_SFLOAT backing images; this may reveal half/two-channel disagreement hidden in RGBA32F-only tests.",
@@ -25,5 +25,15 @@
     "no Unity/Adreno/device proof",
     "no binary shader publication"
   ],
-  "next_step": "Implement format-selectable Vulkan image allocation, half float encode/decode, check actual features, private formatless SPIR-V repair, synthetic canary and real 20×4 test. Pause and document upon any unsupported format."
+  "next_step": "Coordinate real authored Unity ShaderLab/FFT compiled variant matching, resource bindings, RenderTexture availability on device, and phone GPU acceptance. Keep WATER-001/RENDER-002/FFT-FORMAT-009 OPEN and NOT_READY 0/3.",
+  "code_sha": "34e7f04d8571eed231758cb7ba70a04e39643833",
+  "source_commit": "34e7f04d8571eed231758cb7ba70a04e39643833",
+  "real_run": 41734497370,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41734497370",
+  "run_status": "completed/success",
+  "result": "20 SHA-authenticated original FFT compiled programs across four actual source-equivalent RGHalf/RGFloat/ARGBHalf/ARGBFloat Vulkan image formats and three seed/groupY workloads: 240/240 actual written-pixel outputs equal, zero absolute/relativeL2 difference, no inconclusive, no missing image writes; private SPIR-V roundtrip formatless contract restored. No Android/Unity proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41734497370",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/A1_FFT_ORIGINAL_FORMAT_MATRIX_2026-11-04.md"
+  ]
 }
