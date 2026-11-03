@@ -369,6 +369,16 @@ jobs:
           sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
           timeout 600s python3 -m scripts.w1_build_depth_wrapper --source Raft/Raft_Data --out "$RUNNER_TEMP/w1-depth-wrapper-summary.json" --private-shader "$RUNNER_TEMP/w1-private-depth.shader"
           python3 -m scripts.w1_install_depth_copy --project "$RUNNER_TEMP/project/ExportedProject" --private-shader "$RUNNER_TEMP/w1-private-depth.shader" --backup "$RUNNER_TEMP/w1-original-depth" --out "$RUNNER_TEMP/w1-depth-install-summary.json"
+      - name: Retain W1 aggregate staging evidence even when a later authenticity gate fails
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w1-native-depth-staging-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/w1-depth-wrapper-summary.json
+            ${{ runner.temp }}/w1-depth-install-summary.json
+          if-no-files-found: ignore
+          retention-days: 7
       - name: Restore exact-name Unity 2021.3.45f2 built-in material and particle programs with original GUIDs
         shell: bash
         run: |

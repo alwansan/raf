@@ -5,12 +5,12 @@
   "session_id": "w1-20261103T174159718Z-resume",
   "resumed_from": null,
   "status": "active",
-  "updated_at": "2026-11-03T17:41:59.719Z",
-  "base_sha": "4f1a3f9a8de18e8a85c30d7fbe8ce2af6bc22e1e",
+  "updated_at": "2026-11-03T17:48:11.977Z",
+  "base_sha": "37268a58a56929ad355d695a795e8dde891a3d8c",
   "current_work": [
-    "Depth Copy staged integration and owner-requested all-client XAPK candidate review"
+    "Owner-authorized incomplete experimental XAPK attempt with W1 GUID-preserving staging and all-client ancestry inventory"
   ],
-  "last_commit": "41ba9a1d9d904f017dae82088f1e32375a402ade",
-  "next_step": "Continue staged Depth integration and classify all-client candidate; owner authorizes experimental XAPK without pretending readiness.",
+  "last_commit": "c7513a1944c748c752a5790b440fa98767887dec",
+  "next_step": "Inspect full native run at actual export target, strict builtin/water gates; fix actual failures without bypass. Verify platform/preflight and peer FFT run.",
   "memory_path": "prompt/coordination/clients/raft-20261103T162900Z-73e8c2a1/MEMORY.md"
 }
