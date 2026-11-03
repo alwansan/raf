@@ -14,6 +14,9 @@ namespace RaftAndroid.Diagnostics
         private readonly ConcurrentQueue<string> pending = new ConcurrentQueue<string>();
         private readonly AutoResetEvent wake = new AutoResetEvent(false);
         private readonly object ioGate = new object();
+        // Prevent a background Unity logger from signalling wake after Dispose closes it.
+        // Keep this separate from ioGate, which protects filesystem I/O.
+        private readonly object lifecycleGate = new object();
         private readonly string directory, session;
         private readonly long segmentBytes;
         private readonly int retainedFiles, queueLimit;
@@ -61,23 +64,32 @@ namespace RaftAndroid.Diagnostics
 
         public void Write(string area, string operation, string detail, bool critical = false)
         {
-            if (stopping) return;
-            if (Interlocked.Increment(ref count) > queueLimit)
+            // The stopping check and wake.Set must be in the same lifecycle
+            // critical section as Dispose's stop transition. Otherwise a
+            // callback can observe stopping=false, then call Set on a closed
+            // AutoResetEvent after Dispose returns.
+            lock (lifecycleGate)
             {
-                Interlocked.Decrement(ref count);
-                if (!critical) { Interlocked.Increment(ref dropped); return; }
-                Flush();
-                Interlocked.Increment(ref count);
+                if (stopping) return;
+                if (Interlocked.Increment(ref count) > queueLimit)
+                {
+                    Interlocked.Decrement(ref count);
+                    if (!critical) { Interlocked.Increment(ref dropped); return; }
+                    Flush();
+                    Interlocked.Increment(ref count);
+                }
+                long id = Interlocked.Increment(ref sequence);
+                string line = "{\"utc\":" + Quote(DateTime.UtcNow.ToString("O", CultureInfo.InvariantCulture)) +
+                    ",\"session\":" + Quote(session) + ",\"sequence\":" + id.ToString(CultureInfo.InvariantCulture) +
+                    ",\"thread\":" + Thread.CurrentThread.ManagedThreadId.ToString(CultureInfo.InvariantCulture) +
+                    ",\"area\":" + Quote(area) + ",\"operation\":" + Quote(operation) +
+                    ",\"detail\":" + Quote(detail) + "}";
+                pending.Enqueue(line);
+                wake.Set();
+                // Critical flush completes before the lifecycle gate is released,
+                // so Dispose cannot close the writer before its crash barrier.
+                if (critical) Flush();
             }
-            long id = Interlocked.Increment(ref sequence);
-            string line = "{\"utc\":" + Quote(DateTime.UtcNow.ToString("O", CultureInfo.InvariantCulture)) +
-                ",\"session\":" + Quote(session) + ",\"sequence\":" + id.ToString(CultureInfo.InvariantCulture) +
-                ",\"thread\":" + Thread.CurrentThread.ManagedThreadId.ToString(CultureInfo.InvariantCulture) +
-                ",\"area\":" + Quote(area) + ",\"operation\":" + Quote(operation) +
-                ",\"detail\":" + Quote(detail) + "}";
-            pending.Enqueue(line);
-            wake.Set();
-            if (critical) Flush();
         }
 
         public void Flush()
@@ -173,9 +185,12 @@ namespace RaftAndroid.Diagnostics
 
         public void Dispose()
         {
-            if (stopping) return;
-            stopping = true;
-            wake.Set();
+            lock (lifecycleGate)
+            {
+                if (stopping) return;
+                stopping = true;
+                wake.Set();
+            }
             worker.Join(2000);
             Flush();
             lock (ioGate) { writer.Dispose(); startup.Dispose(); }

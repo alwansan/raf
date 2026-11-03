@@ -59,6 +59,39 @@ class Program
                 using (var log = new PersistentDiagnosticLog(rotating)) log.Write("startup", "bounded_launch", "", true);
             Require(Directory.GetFiles(Path.Combine(rotating, "startup")).Length == 4);
             Require(Directory.GetFiles(Path.Combine(rotating, "startup")).All(p => new FileInfo(p).Length <= 256 * 1024));
+            // Regression: Unity's threaded log callbacks can still be entering
+            // Write while the scene/activity shuts down this sink. None may
+            // signal an already-disposed AutoResetEvent or corrupt JSONL.
+            string shutdownRoot = Path.Combine(root, "shutdown-race");
+            Directory.CreateDirectory(shutdownRoot);
+            for (int round = 0; round < 8; round++)
+            {
+                var concurrentLog = new PersistentDiagnosticLog(shutdownRoot, 4096, 4, 32);
+                var go = new System.Threading.ManualResetEventSlim(false);
+                var ready = new System.Threading.CountdownEvent(8);
+                var unexpected = new System.Collections.Concurrent.ConcurrentQueue<Exception>();
+                var writers = Enumerable.Range(0, 8).Select(workerId => Task.Run(() =>
+                {
+                    ready.Signal();
+                    go.Wait();
+                    for (int k = 0; k < 150; k++)
+                    {
+                        try { concurrentLog.Write("shutdown", "threaded", workerId + ":" + k, k % 50 == 0); }
+                        catch (Exception error) { unexpected.Enqueue(error); }
+                    }
+                })).ToArray();
+                Require(ready.Wait(5000));
+                go.Set();
+                concurrentLog.Dispose();
+                Require(Task.WaitAll(writers, 10000));
+                concurrentLog.Write("shutdown", "after_dispose", "", true);
+                Require(unexpected.IsEmpty);
+                Require(concurrentLog.LastError == null);
+                foreach (string line in Lines(shutdownRoot))
+                    using (JsonDocument.Parse(line)) { }
+                ready.Dispose();
+                go.Dispose();
+            }
             var repeated = new RepeatedDiagnosticMessages();
             DateTime now = DateTime.UtcNow;
             Require(repeated.First("Error", "same message\nfull stack", now));
