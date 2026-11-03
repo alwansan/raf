@@ -12,8 +12,14 @@ from pathlib import Path, PurePosixPath
 import zipfile
 import zlib
 
-from scripts.probe_haptics_asset_manifest import (
-    PINNED_ORIGINAL_HAPTICS_MANIFEST_BLOB_SHA, verify_manifest_blob)
+# This tool runs both as a package module in unit tests and directly via
+# "python3 scripts/audit_android_expansion.py" in the native delivery workflow.
+if __package__:
+    from scripts.probe_haptics_asset_manifest import (
+        PINNED_ORIGINAL_HAPTICS_MANIFEST_BLOB_SHA, verify_manifest_blob)
+else:
+    from probe_haptics_asset_manifest import (
+        PINNED_ORIGINAL_HAPTICS_MANIFEST_BLOB_SHA, verify_manifest_blob)
 
 # Google Play's documented maximum is 2 GB for EACH APK expansion file.
 # This is a distribution constraint, not a proof of Android sideload failure.
