@@ -16,6 +16,7 @@ from scripts.probe_original_compute_containers import scan_blob
 from scripts.probe_directx_shader_bridge import inspect
 from scripts.run_original_dxbc_translation_probe import version_tokens
 from scripts.probe_fft_spirv_images import image_resource_contracts, compare_image_contracts
+from scripts.probe_fft_spirv_operation_profile import image_operation_profile, compare_image_operation_profiles
 
 OWNER = "sharedassets0.assets"
 PATH_ID = 2456
@@ -132,7 +133,7 @@ def compare_roundtrip_contracts(original_reflection, original_bindings,
 
 
 def cross_compile_roundtrip(source_spv, original_reflection, original_bindings,
-                            original_images, temporary, index):
+                            original_images, original_reflection_image_ops, temporary, index):
     """Return exact stages independently; shader text remains private temp only."""
     result = {
         "spirv_cross_hlsl50_generated": False,
@@ -141,6 +142,7 @@ def cross_compile_roundtrip(source_spv, original_reflection, original_bindings,
         "cross_compile_semantically_verified": False,
         "authored_shaderlab_restored": False,
         "typed_image_contract_preserved": False,
+        "image_operation_profile_preserved": False,
     }
     hlsl = temporary / ("fft_" + str(index) + ".hlsl")
     recomp = temporary / ("fft_" + str(index) + "_roundtrip.spv")
@@ -160,6 +162,7 @@ def cross_compile_roundtrip(source_spv, original_reflection, original_bindings,
         parsed = inspect(module)
         bindings = spirv_resource_bindings(module)
         typed_images = image_resource_contracts(module)
+        image_ops = image_operation_profile(module)
     except (ValueError, struct.error):
         return result
     if parsed.get("container") != "SPIR-V":
@@ -172,6 +175,9 @@ def cross_compile_roundtrip(source_spv, original_reflection, original_bindings,
     drift = compare_image_contracts(original_images, typed_images)
     result['typed_image_contract_preserved'] = drift['full_type_declarations_preserved']
     result['typed_image_contract_difference'] = drift
+    op_diff = compare_image_operation_profiles(original_reflection_image_ops, image_ops)
+    result['image_operation_profile_preserved'] = op_diff['same_image_operation_and_capability_counts']
+    result['image_operation_profile_difference'] = op_diff
     return result
 
 
@@ -226,6 +232,7 @@ def probe(root):
                 entry["bindings"] = spirv_resource_bindings(spv_bytes)
                 entry["resource_types"] = private_spirv_cross_reflect(spv)
                 entry["typed_images"] = image_resource_contracts(spv_bytes)
+                entry["image_operation_profile"] = image_operation_profile(spv_bytes)
                 reflected = entry["resource_types"]["original_resource_kind_counts"]
                 reflected_images = sum(reflected.get(kind, 0) for kind in
                                        ("images", "textures", "separate_images"))
@@ -235,7 +242,7 @@ def probe(root):
                     ["spirv-val", "--target-env", "vulkan1.1", str(spv)])
                 if entry["validated_for_vulkan_1_1"]:
                     entry["private_hlsl_roundtrip"] = cross_compile_roundtrip(
-                        spv, information, entry["bindings"], entry["typed_images"], temp, index)
+                        spv, information, entry["bindings"], entry["typed_images"], entry["image_operation_profile"], temp, index)
             reports.append(entry)
     return {
         "original_owner": OWNER,
@@ -255,6 +262,12 @@ def probe(root):
             "descriptor_binding_pairs_preserved", False) for x in reports),
         "typed_image_declarations_checked": sum(x.get("typed_images", {}).get("count", 0)
                                                for x in reports),
+        "original_image_write_instructions_total": sum(x.get("image_operation_profile", {}).get(
+            "op_image_write_count", 0) for x in reports),
+        "original_formatless_write_capability_modules": sum(x.get("image_operation_profile", {}).get(
+            "storage_image_write_without_format_capability_declared", False) for x in reports),
+        "roundtrip_image_operation_profile_preserved_count": sum(x.get(
+            "private_hlsl_roundtrip", {}).get("image_operation_profile_preserved", False) for x in reports),
         "roundtrip_typed_images_preserved_count": sum(x.get("private_hlsl_roundtrip", {}).get(
             "typed_image_contract_preserved", False) for x in reports),
         "original_kernel_indices_verified": False,
