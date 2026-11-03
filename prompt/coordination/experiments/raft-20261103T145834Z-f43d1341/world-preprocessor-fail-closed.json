@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T145834Z-f43d1341",
+  "issue_id": "LOCAL-005",
+  "experiment_id": "world-preprocessor-fail-closed",
+  "status": "running",
+  "hypothesis": "Unknown C# compilation symbols permit disabled method-local text to be mis-certified by structural regex.",
+  "input_hashes": [],
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_probe_original_world_readiness.py -v",
+    "python3 -m scripts.probe_original_world_readiness --source $RUNNER_TEMP/original"
+  ],
+  "expected_signal": "Synthetic conditional branch cases raise explicit ValueError; strings/comments with #if-like text remain accepted; original SHA-authenticated offline private probe and adapted managed compile pass.",
+  "negative_controls": [
+    "#if false disabled broadcast",
+    "#if false disabled readiness assignment",
+    "#if DEBUG/#else ambiguous completion",
+    "multi-line C# comment directive text",
+    "multi-line verbatim-string directive text"
+  ],
+  "workflow_path": ".github/workflows/raft-android-offline-integration-tests.yml",
+  "concurrency_group": null,
+  "artifact_prefix": null,
+  "budget": "No new native/Unity/LFS; existing no-LFS offline integration 12min timeout; two push-triggered runs because GitHub file-SHA updates were serialized on busy shared branch.",
+  "source_sha": "1846c5de0f80aa95cd2efb66c9d55549ac131ff8",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41660089549",
+  "result": null,
+  "limitations": [
+    "Source-only lexical fail-closed, not preprocessor symbol resolution",
+    "No original C# game source modification",
+    "No Unity/Android/phone gameplay proof",
+    "Does not close LOCAL-005 pre-build integration"
+  ],
+  "next_step": "Check run41660089549 final conclusion and fail logs if any; update client state, MEMORY and status if validated."
+}
