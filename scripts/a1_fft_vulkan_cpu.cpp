@@ -26,7 +26,7 @@ static void check(VkResult result, const char* operation) {
 static std::vector<uint32_t> spirvFile(const char* path) {
     std::ifstream f(path, std::ios::binary | std::ios::ate);
     require(bool(f), "Shader file unavailable");
-    auto n=f.tellg();
+    auto n=static_cast<std::streamoff>(f.tellg());
     require(n >= 20 && n <= 1048576 && n%4 == 0, "Shader length invalid");
     std::vector<uint32_t> result(size_t(n)/4);
     f.seekg(0);
