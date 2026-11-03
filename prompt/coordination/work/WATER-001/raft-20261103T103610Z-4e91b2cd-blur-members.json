@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T103610Z-4e91b2cd",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "updated_at": "2026-11-04T00:00:00Z",
+  "base_sha": "138010dd1d36708a74feef9526b8a16714709510",
+  "hypothesis": "Original Unity matrix/vector metadata may explain allocated-vs-compiled CB span mismatch. Observe authenticated serialized indices/types/arrays; byte-offset/32-bit lane interpretation remains a hypothesis, never runtime proof.",
+  "intended_files": [
+    "scripts/probe_original_blur_member_layout.py",
+    "tests/test_original_blur_member_layout.py",
+    ".github/workflows/raft-blur-zip2-4e91.yml"
+  ],
+  "related_work": [
+    "A12R completed 41736229248 structural reflection; this is member-level follow-up, not repeat."
+  ],
+  "next_step": "Run bounded CPU original metadata observation then evaluate actual results; do not rewrite shared A12/W1 code or shaders.",
+  "experiment_ids": [
+    "blur-members-zip2"
+  ]
+}

@@ -1,4 +1,4 @@
-name: Original Blur CB reflection ZIP2 CPU only 4e91
+name: Original Blur member layout ZIP2 CPU only 4e91
 on:
   push:
     branches: [feature/android-native-port]
@@ -44,7 +44,7 @@ jobs:
             Raft/Raft_Data/sharedassets8.assets
             Raft/Raft_Data/sharedassets9.assets
       - name: Test source decoding before original access
-        run: python3 -m unittest discover -s tests -p 'test_a12r_190657_blur_cb_reflection.py' -v
+        run: python3 -m unittest discover -s tests -p 'test_original_blur_member_layout.py' -v
       - name: Stage fourteen exact original providers without LFS
         run: |
           python3 - <<'PY'
@@ -56,14 +56,14 @@ jobs:
           pins={'Raft_Data/'+k:v for k,v in SHADER_OWNERS.items()}
           print(json.dumps(stage(Path('zip2-source'),Path(os.environ['RUNNER_TEMP'])/'blur-original',pins=pins),sort_keys=True))
           PY
-      - name: Decode exact original CB bindings privately
+      - name: Observe original member indices against compiled CB spans privately
         run: |
           python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
-          python3 -m scripts.a12r_190657_blur_cb_reflection --source "$RUNNER_TEMP/blur-original/Raft_Data" --repo . --out "$RUNNER_TEMP/blur-cb-summary.json"
+          python3 -m scripts.probe_original_blur_member_layout --source "$RUNNER_TEMP/blur-original/Raft_Data" --repo . --out "$RUNNER_TEMP/blur-member-summary.json"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: blur-cb-4e91-${{ github.sha }}
-          path: ${{ runner.temp }}/blur-cb-summary.json
+          name: blur-members-4e91-${{ github.sha }}
+          path: ${{ runner.temp }}/blur-member-summary.json
           if-no-files-found: ignore
           retention-days: 7

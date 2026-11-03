@@ -1,15 +1,15 @@
 {
   "schema_version": 1,
   "username": "raft-20261103T103610Z-4e91b2cd",
-  "session_id": "20261103T203700Z-boundary-close",
+  "session_id": "20261104-blur-member-layout",
   "resumed_from": null,
-  "status": "paused",
-  "updated_at": "2026-11-03T20:37:00Z",
-  "base_sha": "73d2eaba9d8023b31630d39a0650c02919cddc09",
+  "status": "active",
+  "updated_at": "2026-11-04T00:00:00Z",
+  "base_sha": "138010dd1d36708a74feef9526b8a16714709510",
   "current_work": [
     "WATER-001"
   ],
   "last_commit": "42cbccbf6108f3ca082711f0d067369971a62709",
-  "next_step": "Investigate independent exact original CB reflection for A12 Blur blocker; coordinate before edits",
+  "next_step": "Run bounded CPU original metadata observation then evaluate actual results; do not rewrite shared A12/W1 code or shaders.",
   "memory_path": "prompt/coordination/clients/raft-20261103T103610Z-4e91b2cd/MEMORY.md"
 }
