@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T105625Z-a7d793f4",
+  "status": "in_progress",
+  "hypothesis": "Queued short taps created before an active long hold, or Tap requested during that hold, can replay AFTER Hold(false) as an unintended Mouse0 click.",
+  "input_hashes": [
+    "TouchPointerButtons.cs original blob 8db44fe3510be94008d6fb3c773f69a1057e598f",
+    "BoundaryMatrix.cs prior blob 10be2924a5af62ac142759bd4ab98350e753704c"
+  ],
+  "commands": [
+    "dotnet run --project android-port/Tests/TouchPointer/TouchPointer.csproj --configuration Release --nologo",
+    "GitHub Actions automatic no-Unity/no-LFS platform job"
+  ],
+  "expected_signal": "Red test on unmodified production fails ghost-tap-after-hold-release; green after production fix retains 128 queued rapid taps, 500ms hold, Mouse0 mapping and new post-hold tap tests.",
+  "negative_controls": [
+    "red commit 6c54fdc9 expected failing C# exception ghost-tap-after-hold-release",
+    "queue+hold-release no extra post-hold transition",
+    "Tap while held never replays after release",
+    "normal new tap after hold still emits press/release"
+  ],
+  "workflow_path": ".github/workflows/raft-android-platform-tests.yml",
+  "concurrency_group": null,
+  "artifact_prefix": null,
+  "budget": "Existing push-triggered CPU-only platform CI, 10 minute timeout, no LFS/Unity/APK",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41624267337",
+  "source_sha": "8570d2e6efc5d73000b4f515fa299bbd2582f539",
+  "result": "RED verified: run41623753511 failed at exact custom ghost-tap-after-hold-release assertion; post-fix CI pending.",
+  "limitations": [
+    "No on-phone test; no Unity InputSystem integration",
+    "One policy tradeoff: queued clicks superseded by a new held gesture are deliberately discarded rather than replayed after release",
+    "CI mapping harness preserves only synthetic/legacy physical-path semantics, not device validation"
+  ],
+  "next_step": "Read green platform job logs; document 500ms/Mouse0 test totals and update shared STATUS/handoff."
+}
