@@ -1,0 +1,47 @@
+name: Raft A2 original Controls Settings layout context (CPU only)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-a2-controls-layout-source.yml'
+      - 'scripts/probe_a2_controls_layout_context.py'
+      - 'tests/test_probe_a2_controls_layout_context.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raft-a2-controls-layout-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  inspect-original-controls:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+            Raft/Raft_Data/Managed
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Verify synthetic Controls layout controls and scanner
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_probe_a2_controls_layout_context.py -v
+          python3 -m unittest discover -s tests -p test_probe_a2_settings_layout.py -v
+          python3 -m py_compile scripts/probe_a2_controls_layout_context.py
+      - name: Authenticated original CSharp9 method-context scan (no Unity)
+        env:
+          DOTNET_PROCESSOR_COUNT: '2'
+        run: |
+          set -euo pipefail
+          dotnet tool install ilspycmd --version 11.2.0.10050 --tool-path "$RUNNER_TEMP/a2-ilspy"
+          timeout 360s "$RUNNER_TEMP/a2-ilspy/ilspycmd" -p -lv CSharp9_0 \
+            -o "$RUNNER_TEMP/a2-original" Raft/Raft_Data/Managed/Assembly-CSharp.dll \
+            > "$RUNNER_TEMP/a2-private-decompile.log" 2>&1
+          python3 -m scripts.probe_a2_controls_layout_context --source "$RUNNER_TEMP/a2-original"
+          echo 'RAFT_A2_CONTROLS_CPU_ONLY originalSourcePrinted=false unityRan=false androidBuildRan=false'
