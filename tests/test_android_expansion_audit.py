@@ -301,6 +301,26 @@ class OriginalHapticsObbContractTests(unittest.TestCase):
             self.assertIn("manifest provenance changed", result.stderr)
             self.assertNotIn("SyntheticHaptic", result.stderr)
 
+    def test_production_cli_rejects_untrusted_manifest_pin_override(self):
+        """Native verification must not accept a caller-supplied original identity."""
+        import subprocess
+        import sys
+
+        with tempfile.TemporaryDirectory() as tmp:
+            apk, obb, manifest, _, _, _ = self.fixture(Path(tmp))
+            attempt = subprocess.run([
+                sys.executable, "scripts/audit_android_expansion.py",
+                "--apk", str(apk), "--obb", str(obb),
+                "--haptics-manifest", str(manifest),
+                "--haptics-manifest-blob", self.synthetic_manifest_pin(manifest)],
+                cwd=Path(__file__).resolve().parents[1],
+                capture_output=True, text=True, check=False)
+            self.assertNotEqual(attempt.returncode, 0,
+                                "Production CLI accepted caller-defined original identity")
+            self.assertNotIn("RAFT_ANDROID_OBB_AUDIT", attempt.stdout)
+            self.assertIn("unrecognized arguments", attempt.stderr)
+            self.assertNotIn("SyntheticHaptic", attempt.stderr)
+
     def test_without_manifest_does_not_claim_haptic_archive_identity(self):
         with tempfile.TemporaryDirectory() as tmp:
             apk, obb, manifest, entries, _, names = self.fixture(Path(tmp))
