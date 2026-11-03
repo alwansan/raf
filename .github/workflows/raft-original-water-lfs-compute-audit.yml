@@ -7,22 +7,13 @@ on:
       - '.github/workflows/raft-original-water-lfs-compute-audit.yml'
       - 'scripts/verify_targeted_lfs_compute_sources.py'
       - 'scripts/probe_authenticated_water_compute_inventory.py'
-      - 'tests/test_verify_targeted_lfs_compute_sources.py'
-      - 'tests/test_probe_authenticated_water_compute_inventory.py'
       - 'scripts/inspect_fft_candidate_identity.py'
-      - 'tests/test_inspect_fft_candidate_identity.py'
       - 'scripts/probe_original_fft_serialized_refs.py'
-      - 'tests/test_probe_original_fft_serialized_refs.py'
       - 'scripts/probe_authentic_fft_dxbc_translation.py'
-      - 'tests/test_probe_authentic_fft_dxbc_translation.py'
       - 'scripts/probe_fft_spirv_images.py'
-      - 'tests/test_probe_fft_spirv_images.py'
       - 'scripts/probe_fft_spirv_operation_profile.py'
-      - 'tests/test_probe_fft_spirv_operation_profile.py'
       - 'scripts/probe_fft_spirv_formatless_repair.py'
-      - 'tests/test_probe_fft_spirv_formatless_repair.py'
       - 'scripts/probe_fft_spirv_image_flow.py'
-      - 'tests/test_probe_fft_spirv_image_flow.py'
   workflow_dispatch:
 
 permissions:

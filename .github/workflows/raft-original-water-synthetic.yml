@@ -1,0 +1,53 @@
+name: Raft original water/FFT synthetic contracts - no Unity or LFS
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-original-water-synthetic.yml'
+      - 'tests/test_verify_targeted_lfs_compute_sources.py'
+      - 'tests/test_probe_authenticated_water_compute_inventory.py'
+      - 'tests/test_inspect_fft_candidate_identity.py'
+      - 'tests/test_probe_original_fft_serialized_refs.py'
+      - 'tests/test_probe_authentic_fft_dxbc_translation.py'
+      - 'tests/test_probe_original_compute_containers.py'
+      - 'tests/test_audit_original_compute_metadata.py'
+      - 'tests/test_probe_fft_spirv_images.py'
+      - 'tests/test_probe_fft_spirv_operation_profile.py'
+      - 'tests/test_probe_fft_spirv_formatless_repair.py'
+      - 'tests/test_probe_fft_spirv_image_flow.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: raft-original-water-synthetic-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  source-only-synthetic:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Unit-test all isolated original shader and provenance contracts
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p 'test_verify_targeted_lfs_compute_sources.py' -v
+          python3 -m unittest discover -s tests -p 'test_probe_authenticated_water_compute_inventory.py' -v
+          python3 -m unittest discover -s tests -p 'test_inspect_fft_candidate_identity.py' -v
+          python3 -m unittest discover -s tests -p 'test_probe_original_fft_serialized_refs.py' -v
+          python3 -m unittest discover -s tests -p 'test_probe_authentic_fft_dxbc_translation.py' -v
+          python3 -m unittest discover -s tests -p 'test_probe_original_compute_containers.py' -v
+          python3 -m unittest discover -s tests -p 'test_audit_original_compute_metadata.py' -v
+          python3 -m unittest discover -s tests -p 'test_probe_fft_spirv_images.py' -v
+          python3 -m unittest discover -s tests -p 'test_probe_fft_spirv_operation_profile.py' -v
+          python3 -m unittest discover -s tests -p 'test_probe_fft_spirv_formatless_repair.py' -v
+          python3 -m unittest discover -s tests -p 'test_probe_fft_spirv_image_flow.py' -v

@@ -31,9 +31,11 @@ class ImageFlowTests(unittest.TestCase):
 
     def test_copy_and_access_chain_track_variable(self):
         ops = example()
-        ops.insert(-2, (83, [2, 30, 20]))
+        ops.insert(7, (83, [2, 30, 20]))
         ops[8] = (99, [30, 42, 43])
         r = image_slot_dataflow(spv(ops))
+        self.assertEqual(r["image_operand_slot_uses"]["write"]["total"], 1)
+        self.assertEqual(r["image_operand_slot_uses"]["write"]["unresolved_count"], 0)
         self.assertEqual(r["image_operand_slot_uses"]["write"]["resolved_slot_counts"][0]["binding"], 2)
 
     def test_unresolved_and_ambiguous_reported_not_guessed(self):

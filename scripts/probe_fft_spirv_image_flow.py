@@ -42,8 +42,8 @@ def image_slot_dataflow(module):
             aliases[a[1]] = (a[2],)
         if op == 86 and count >= 5:  # OpSampledImage result => image
             aliases[a[1]] = (a[2],)
-        if op == 169 and count >= 6:  # OpSelect result => two candidates
-            aliases[a[1]] = (a[4], a[5]) if len(a) >= 6 else (a[3], a[4])
+        if op == 169 and count == 6:  # OpSelect result => two candidates
+            aliases[a[1]] = (a[3], a[4])
         if op == 245 and count >= 5:  # OpPhi result => alternating value, parent
             aliases[a[1]] = tuple(a[k] for k in range(2, len(a), 2))
         if op == 99 and count >= 4:  # OpImageWrite
