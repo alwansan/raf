@@ -80,7 +80,11 @@ def decode_record(raw, tree):
     if not isinstance(identifier, str) or identifier:
         raise ValueError("Original MonoBehaviour editor identifier unexpected")
     if struct.unpack_from("<i", raw, 28)[0] != 0 or struct.unpack_from("<i", raw, 32)[0] != 0:
-        raise ValueError("Original MonoBehaviour base name/editor string lengths mismatch")
+        raise ValueError("Original MonoBehaviour base name/editor string lengths mismatch" +
+                         " int28=" + str(struct.unpack_from("<i", raw, 28)[0]) +
+                         " int32=" + str(struct.unpack_from("<i", raw, 32)[0]) +
+                         " typed_editor_class_identifier_present=" + str("m_EditorClassIdentifier" in tree) +
+                         " typed_editor_flags_present=" + str("m_EditorHideFlags" in tree))
     (ui_mode, ref_ppu, scale_factor, width, height, match_mode,
      match_width, physical_unit, fallback_dpi, default_sprite_dpi, dynamic_ppu) = CUSTOM.unpack_from(raw, BASE_BYTES)
     numeric = (ref_ppu, scale_factor, width, height, match_width,
