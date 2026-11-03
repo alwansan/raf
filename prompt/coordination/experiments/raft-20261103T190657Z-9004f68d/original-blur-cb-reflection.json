@@ -2,9 +2,9 @@
   "schema_version": 1,
   "owner": "raft-20261103T190657Z-9004f68d",
   "client_label": "A12R",
-  "status": "running",
+  "status": "blocked",
   "created_at": "2026-11-03T19:06:57Z",
-  "updated_at": "2026-11-03T19:16:15.719Z",
+  "updated_at": "2026-11-03T19:21:14.648Z",
   "hypothesis": "Private compiled DXBC RDEF CB declarations and slots can independently constrain original Blur memberless-but-nonzero serialized constant-buffer metadata without silently dropping data.",
   "input_hashes": [
     "original Blur Shader object c9341848367eaedb12e551ce9061b1eea728f54f2069ef1a3c12c4a4a2e9bb52",
@@ -28,11 +28,22 @@
   "budget": "CPU-only Ubuntu24.04 20min, cache-only verified SHA LFS objects; abort on cache miss; no Unity/native/APK/OBB/XAPK/Release",
   "run_url": "https://github.com/alwansan/raf/actions/runs/41701535937",
   "source_sha": "e378eeaf0dd14751e259cf643671e11b38a1e7f1",
-  "result": null,
+  "result": {
+    "run_id": 41701535937,
+    "job_id": 126145781465,
+    "conclusion": "failure",
+    "passed_synthetic_tests": 7,
+    "stage": "Inspect SHA-pinned original Blur compiled RDEF privately",
+    "input_blocker": "A12R cache-only LFS checkout skipped sharedassets36.assets because content not local; original 14-owner checksum preflight refused",
+    "source_verified": false,
+    "original_reflection_executed": false,
+    "privacy_safe_artifact_id": 13263124031
+  },
   "limitations": [
     "DXBC structural CB size/slot correlation does not validate uniform values or ShaderLab runtime binding",
     "A12 original wrapper and water/FFT full gates remain blocked",
-    "No GPU/phone validation"
+    "No GPU/phone validation",
+    "The W1 SHA-pinned cache contains resources.assets and sharedassets0.assets but lacks sharedassets36.assets; exact original_shader requires all 14 owners. No original RDEF reflection metrics should be inferred."
   ],
-  "next_step": "On terminal CI outcome inspect failing step and aggregate artifact, update own state/memory, then coordinate with live A12 without modifying its original files."
+  "next_step": "Find previously authenticated sharedassets36.assets (110149324 bytes, SHA256 b32fcd9d327c8926b2309ffc1b5645a0c23d64ed95be37ed94e96f34736530c8) in approved existing source/cache; never bypass source checks. Then rerun CPU experiment. No native Unity."
 }

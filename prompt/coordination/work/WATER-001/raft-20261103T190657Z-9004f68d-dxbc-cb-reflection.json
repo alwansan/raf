@@ -3,8 +3,8 @@
   "owner": "raft-20261103T190657Z-9004f68d",
   "client_label": "A12R",
   "issue_id": "WATER-001",
-  "status": "paused",
-  "updated_at": "2026-11-03T19:17:47.597Z",
+  "status": "blocked",
+  "updated_at": "2026-11-03T19:21:14.648Z",
   "base_sha": "e378eeaf0dd14751e259cf643671e11b38a1e7f1",
   "hypothesis": "The original Blur zero-member but nonzero-size CB declarations (544 bytes) may be validated against original DXBC RDEF CB size and bind slot without dropping authored semantics.",
   "intended_files": [
@@ -29,6 +29,6 @@
     "https://github.com/alwansan/raf/commit/e378eeaf0dd14751e259cf643671e11b38a1e7f1",
     "https://github.com/alwansan/raf/actions/runs/41701535937"
   ],
-  "result": "Independent source/test/workflow committed. CI still running; no outcome or original reflection data yet.",
-  "next_step": "Inspect run41701535937 terminal jobs and artifact; if synthetic or RDEF probe fails, fix only A12R code and rerun CPU, document result, coordinate with A12. No Unity/native build."
+  "result": "Run41701535937 completed FAILURE. Seven synthetic negative/privacy tests PASS; SHA pointer/disk guard and cache restore PASS. Git LFS checkout skipped sharedassets36.assets: object not in local cache. Original probe reports original_verified=false and ValueError without original RDEF results. No new LFS download, Unity or APK. Full game NOT_READY.",
+  "next_step": "Find previously authenticated sharedassets36.assets (110149324 bytes, SHA256 b32fcd9d327c8926b2309ffc1b5645a0c23d64ed95be37ed94e96f34736530c8) in approved existing source/cache; never bypass source checks. Then rerun CPU experiment. No native Unity."
 }

@@ -5,12 +5,12 @@
   "session_id": "a12r-20261103T190657Z-dbd4a448",
   "resumed_from": "raft-20261103T184205Z-a12d793c",
   "status": "paused",
-  "updated_at": "2026-11-03T19:17:47.597Z",
+  "updated_at": "2026-11-03T19:21:14.648Z",
   "base_sha": "0f037caf175fbc193c98e93d9057d27850f67f36",
   "current_work": [
-    "WATER-001 independent original Blur DXBC RDEF CB reflection source committed; CPU-only CI41701535937 in progress, results not yet asserted"
+    "WATER-001 independent DXBC RDEF source + 7 synthetic regressions completed; original SHA-pinned source probe BLOCKED by absent cached sharedassets36.assets in CI41701535937"
   ],
-  "last_commit": "7f5ded1e48f6a6b0d2c79b8f96d72b51bad89232",
-  "next_step": "Inspect run41701535937 terminal jobs and artifact; if synthetic or RDEF probe fails, fix only A12R code and rerun CPU, document result, coordinate with A12. No Unity/native build.",
+  "last_commit": "aa6c70f46464059304f3a8efadfe9b57fbc777b5",
+  "next_step": "Find previously authenticated sharedassets36.assets (110149324 bytes, SHA256 b32fcd9d327c8926b2309ffc1b5645a0c23d64ed95be37ed94e96f34736530c8) in approved existing source/cache; never bypass source checks. Then rerun CPU experiment. No native Unity.",
   "memory_path": "prompt/coordination/clients/raft-20261103T190657Z-9004f68d/MEMORY.md"
 }
