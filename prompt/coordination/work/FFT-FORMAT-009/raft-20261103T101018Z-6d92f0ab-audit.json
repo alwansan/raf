@@ -1,0 +1,11 @@
+{
+  "client": "raft-20261103T101018Z-6d92f0ab",
+  "issue": "FFT-FORMAT-009",
+  "state": "active",
+  "approach": "Read-only cross-check of authenticated SPIR-V typed output and Unity render-target contract, then isolated evidence report",
+  "files": [
+    "prompt/coordination/clients/raft-20261103T101018Z-6d92f0ab/MEMORY.md",
+    "prompt/coordination/experiments/raft-20261103T101018Z-6d92f0ab/format-audit.json"
+  ],
+  "no_native": true
+}
