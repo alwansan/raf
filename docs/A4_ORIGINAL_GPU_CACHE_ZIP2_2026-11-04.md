@@ -26,4 +26,4 @@ Crucial disambiguation: the independent [explicit OnDestroy->Dispose callgraph C
 
 Original binary input authenticated; original GPU cache allocation/release methods structurally located. **Concrete GPU lifetime defect, repeated allocation/scene survival, exception-safety and actual phone VRAM use remain UNKNOWN** until caller/behavior evidence. No Unity Editor, APK/OBB/XAPK/release, original .meta/GUID/.rgd, water/shader/material changes, memory quality degradation, new LFS, CL mutation or scheduled task change. Only feature branch scripts/tests/workflow/coordination/docs edited. **WATER-001, RENDER-002, PERF-007 OPEN; NOT_READY, 0/3.**
 
-Next: inspect direct owner callpaths and run executable resource-lifecycle doubles when a concrete release gap is identified. Avoid overlapping A1/W1/W2/W3 FFT/shader work.
+Next: run a source-locked executable exception/repeated-scene resource-lifecycle harness and inspect allocation transfer. The direct OnDestroy→Dispose source call is already confirmed: do not inject duplicate Dispose. Avoid overlapping A1/W1/W2/W3 FFT/shader work.
