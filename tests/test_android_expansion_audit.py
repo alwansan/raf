@@ -134,7 +134,7 @@ class OriginalHapticsObbContractTests(unittest.TestCase):
         import hashlib
         content = path.read_bytes()
         return hashlib.sha1(
-            ("blob " + str(len(content))).encode("ascii") + b"\\0" + content
+            ("blob " + str(len(content))).encode("ascii") + b"\0" + content
         ).hexdigest()
 
     def fixture(self, root):
@@ -271,7 +271,7 @@ class OriginalHapticsObbContractTests(unittest.TestCase):
             forged["files"][names[0]] = {
                 "bytes": len(replacement),
                 "git_blob_sha": hashlib.sha1(
-                    ("blob " + str(len(replacement))).encode() + b"\\0" + replacement
+                    ("blob " + str(len(replacement))).encode() + b"\0" + replacement
                 ).hexdigest()
             }
             manifest.write_text(json.dumps(forged), encoding="utf-8")
