@@ -29,6 +29,16 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '9.0.x'
+      - name: Obtain matching host asset-model source required by the internal generated package
+        uses: actions/checkout@v4
+        with:
+          repository: nowl-it/AssetRipperCLI
+          ref: 036098ab525a3f9f693dc101edeb21faad4d32d8
+          path: ar-host
+          persist-credentials: false
+          sparse-checkout: |
+            Source/AssetRipper.Assets
+            Source/AssetRipper.IO.Files
       - name: Reflect exact pinned reader and extract private embedded engine shader database
         run: |
           dotnet run --project android-port/Experiments/W1EngineDatabase/W1EngineDatabase.csproj -c Release -- "$RUNNER_TEMP/w1-engine-database-private.json" "$RUNNER_TEMP/w1-exact-reader-summary.json"
