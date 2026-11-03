@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T105730Z-a5e8b126",
+  "display_name": "A5",
+  "issue_id": "HAPTICS-008",
+  "status": "completed",
+  "hypothesis": "29 original Git-authenticated Haptics WAV files can be staged into an ephemeral OBB-shaped ZIP and recovered byte-exact by the production AndroidStreamingAssets CSharp reader on both jar:file: and CL-observed /jar:file: forms.",
+  "input_hashes": [
+    "source original Git blobs: config/original-haptics-manifest.json 29 WAVs, 32733104 bytes",
+    "production AndroidStreamingAssets.cs snapshot at workflow head 76589b5d731b3f7f2323061487c2a633bd1d0ff0",
+    "original HapticAudio source SHA ac0ac86f62d05c774cb8b24cc8454df2b5356e50c6720395137df1730430fe9c"
+  ],
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_haptic_archive_adapter.py -v",
+    "dotnet run --project android-port/Tests/Haptics/ArchiveReader.csproj --configuration Release -- \"$RUNNER_TEMP/raft-a5-haptic-names.txt\"",
+    "python3 -m scripts.probe_haptics_asset_manifest --repo . --manifest config/original-haptics-manifest.json --expected-count 29",
+    "dotnet run --project android-port/Tests/Haptics/ArchiveReader.csproj --configuration Release -- --original-wavs Raft/Raft_Data/StreamingAssets/Haptics"
+  ],
+  "expected_signal": "29 source WAV Git source checks, 58 authentic SHA-256 and exact-byte ZIP roundtrips (29 standard jar and 29 leading slash), plus tamper negative control; zero unpublished data exported.",
+  "negative_controls": [
+    "Malformed/unrecognized original HapticAudio adapter",
+    "Synthetic absent, encoded traversal and duplicate ZIP entry rejection",
+    "Source manifest Git OID mismatch fails closed before archive test",
+    "Altered WAV content in well-formed ZIP must differ in SHA-256 and bytes"
+  ],
+  "workflow_path": ".github/workflows/raft-a5-haptics-archive.yml",
+  "concurrency_group": "raft-a5-haptics-008-${{ github.run_id }}",
+  "artifact_prefix": "none",
+  "budget": "Ubuntu 24.04 CPU-only, timeout 8 minutes; original 29 WAVs are 32,733,104 bytes tracked Git blobs, zero LFS, no public artifact",
+  "source_sha": "76589b5d731b3f7f2323061487c2a633bd1d0ff0",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41624251634",
+  "job_id": 125877475706,
+  "conclusion": "success",
+  "result": "CI completed SUCCESS. 4 Python adapter tests; synthetic 29 names/58 reads/69 assertions; authenticated original 29 WAV source files/32733104 bytes and 58 authentic content roundtrips, every byte and SHA-256 matches. Deliberately altered valid archive entry differs and is caught by test comparison; production reader itself does not authenticate WAV contents.",
+  "limitations": [
+    "Ephemeral synthetic ZIP container built from original WAV data, not the Unity staged or signed APK80/OBB layout; no actual Android jar mount or device haptics",
+    "No Unity or APK/OBB/XAPK build and no release",
+    "Test compares WAV SHA-256 to source, but production reader does not itself enforce a Haptics SHA manifest at runtime; original staging gate separately added by A3",
+    "CL 35 DirectoryNotFoundExceptions came from old APK80 and do not validate newer source",
+    "HAPTICS-008 remains OPEN for coordinator-authorized installed APK/OBB and physical vibration acceptance"
+  ],
+  "related_clients": [
+    "A3 raft-20261103T105031Z-4b175384 staging gate CI41623215003",
+    "A5 previous raft-20261103T100200Z-a5c842e1 synthetic reader CI41617621699"
+  ],
+  "next_step": "Keep HAPTICS-008 runtime acceptance pending; evaluate whether dedicated SHA validation on device is warranted only with explicit original manifest evidence and no duplicate staging change."
+}
