@@ -57,6 +57,7 @@ checks={
     "pid probe successes measured": '"pid_probe_successes_total"' in remote and 'pidProbeSuccesses.incrementAndGet();' in remote,
     "unverified PID distinguished from stopped game": '"main_cmdline_unverified"' in remote and '"pidof_probe_failed"' in remote,
     "all PIDs retained for context": 'gamePids.addAll(current)' in remote,
+    "raw logcat buffer headers retained": 'if (line.startsWith("--------- beginning of ")) continue;' not in remote and 'batch.append(line).append(\'\\n\');' in remote,
     "raw Logcat unchanged target": '"--uid=" + gameUid' in remote,
     "error classes tracked without raw text": '"error_groups"' in remote and (src/"ErrorCategorySummary.java").exists(),
 }
