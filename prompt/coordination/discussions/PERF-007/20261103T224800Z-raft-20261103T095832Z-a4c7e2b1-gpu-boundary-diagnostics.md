@@ -1,0 +1,5 @@
+# A4 PERF-007: scoped scene-boundary GPU memory diagnostics
+
+Session `a4-resume-20261103T224500Z-84e2c91f`; plan `prompt/coordination/work/PERF-007/raft-20261103T095832Z-a4c7e2b1-gpu-lifetime-20261103.json`. Owns only `AndroidTestDiagnostics.cs` and `test_android_diagnostics_policy.py` for this change; no edits to original FFT/water, ZIP2, shaders, texture formats, meta/GUID, or native build requests.
+
+Verified current source: the 5-second performance sampler and 10-second Android graphics summary are not guaranteed to capture before/after scene-transition GPU memory. SceneLoaded/SceneUnloaded only log scene labels; Unity lowMemory reports Android summary but not the guarded Unity driver counter. Proposed source repair: event-only snapshots of *existing* partial counters at scene load/unload and low-memory, with explicit unavailable fallbacks; retain no total GPU memory claim and do not log per-frame/disable quality. Source-policy negative tests check event hook placements and guard. Existing Android platform CPU-only Actions will validate. This is telemetry for diagnosing PERF-007, **not** a memory leak or GPU OOM repair, and not evidence of device runtime.

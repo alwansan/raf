@@ -7,16 +7,19 @@
   "status": "active",
   "updated_at": "2026-11-03T22:44:54.646Z",
   "base_sha": "b3ebf3ddd69e44b1f430c1d77a6642f70adbd404",
-  "hypothesis": "Historical on-phone GPU-memory OOM may involve a RenderTexture/cache lifetime or repeated GPU allocation; a source-locked path and negative control are needed before any gameplay fix.",
+  "hypothesis": "GPU OOM causality unknown. Event-only graphics memory snapshots at scene transitions and Unity lowMemory preserve closer source-level evidence of allocation/release vs periodic snapshots; counters remain partial and cannot prove total VRAM.",
   "intended_files": [
     "prompt/coordination/clients/raft-20261103T095832Z-a4c7e2b1/state.json",
     "prompt/coordination/clients/raft-20261103T095832Z-a4c7e2b1/MEMORY.md",
-    "prompt/coordination/work/PERF-007/raft-20261103T095832Z-a4c7e2b1-gpu-lifetime-20261103.json"
+    "prompt/coordination/work/PERF-007/raft-20261103T095832Z-a4c7e2b1-gpu-lifetime-20261103.json",
+    "android-port/Runtime/Platform/AndroidTestDiagnostics.cs",
+    "tests/test_android_diagnostics_policy.py"
   ],
   "related_work": [
     "Existing original FFT cache lifetime probes and other agents on WATER-001/FFT-FORMAT-009: read/coordinate, do not rewrite",
     "A4 cgroup-monitor task now exact-source CI verified and completed",
-    "Native full delivery remains readiness-coordinator only"
+    "Native full delivery remains readiness-coordinator only",
+    "Existing diagnostic source currently samples performance every 5s and Android graphics summary every 10s; sceneLoaded/Unloaded events log names but no GPU memory; lowMemory has only Android graphics summary not guarded Unity driver bytes."
   ],
   "steps": [
     "Inspect authentic original source and current adapter for concrete allocation/cleanup path, not lexical counts alone",
@@ -31,5 +34,5 @@
     "No Android GPU measurements from current candidate",
     "No Unity/Native/APK during restoration"
   ],
-  "next_step": "Inspect prior FFT cache lifetime findings and existing Android renderer adapter to find falsifiable lifecycle failure."
+  "next_step": "Fix observed source telemetry blindspot: 5s performance samples / 10s graphics summaries can miss GPU memory immediately around scene load/unload/lowMemory. Add event-only scoped snapshots preserving no-alloc behavior/quality; test branch/source policy via existing CPU-only Android platform workflow."
 }
