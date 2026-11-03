@@ -1,0 +1,72 @@
+name: Raft original FFT source policies CPU only
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-fft-source-policy.yml'
+      - 'scripts/probe_fft_caller_policy.py'
+      - 'scripts/probe_fft_butterfly_storage.py'
+      - 'scripts/probe_fft_precision_capabilities.py'
+permissions:
+  contents: read
+concurrency:
+  group: raft-fft-source-policy-4e91b2cd-${{ github.ref }}
+  cancel-in-progress: false
+  queue: max
+jobs:
+  source-policy:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            Raft/Raft_Data/Managed
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Install pinned CPU decompiler
+        run: dotnet tool install ilspycmd --version 11.2.0.10050 --tool-path "$RUNNER_TEMP/ilspy"
+      - name: Decompile original privately
+        env:
+          DOTNET_PROCESSOR_COUNT: '2'
+        run: |
+          set -euo pipefail
+          timeout 360s "$RUNNER_TEMP/ilspy/ilspycmd" -p -lv CSharp9_0 -o "$RUNNER_TEMP/fft-policy-source" Raft/Raft_Data/Managed/Assembly-CSharp.dll > "$RUNNER_TEMP/private-fft-policy-decompile.log" 2>&1
+      - name: Verify exact original source and policy evidence
+        env:
+          PRIVATE_SOURCE: ${{ runner.temp }}/fft-policy-source
+        run: |
+          python3 - <<'PY'
+          import os,json,tempfile
+          from pathlib import Path
+          from scripts.probe_fft_caller_policy import inspect as caller
+          from scripts.probe_fft_butterfly_storage import inspect as storage
+          from scripts.probe_fft_precision_capabilities import inspect as precision,evaluate
+          root=Path(os.environ['PRIVATE_SOURCE'])
+          def one(name):
+              matches=list(root.rglob(name+'.cs'))
+              assert len(matches)==1, 'Original class selection ambiguous'
+              return matches[0]
+          c=caller(one('WavesRendererFFT'))
+          b=storage(one('GpuFFT'),one('Dx11FFT'))
+          p=precision(one('WindWaves'))
+          assert c['case_count']==112 and len(b['variants'])==4 and p['policy_cases']==16
+          with tempfile.NamedTemporaryFile(mode='w',suffix='.cs') as f:
+              f.write('unknown source');f.flush()
+              for probe in (caller,precision):
+                  try: probe(f.name)
+                  except ValueError: pass
+                  else: raise AssertionError('Unknown original accepted')
+              try: storage(f.name,one('Dx11FFT'))
+              except ValueError: pass
+              else: raise AssertionError('Unknown GPU source accepted')
+          for expression in ('unknown','f()','requested == True','requested + rg'):
+              try: evaluate(expression,dict(requested=True,rg=True))
+              except ValueError: pass
+              else: raise AssertionError('Unsupported expression accepted')
+          print('RAFT_FFT_SOURCE_POLICY '+json.dumps(dict(caller_cases=c['case_count'],storage_variants=len(b['variants']),capability_cases=p['policy_cases'],capability_discrepancies=len(p['mismatches']),source_sha_verified=True,unity_or_gpu_executed=False),sort_keys=True))
+          PY
