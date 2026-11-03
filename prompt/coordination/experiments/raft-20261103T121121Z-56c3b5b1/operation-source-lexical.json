@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T121121Z-56c3b5b1",
+  "issue": "DIAG-011",
+  "status": "completed",
+  "code_commit": "3f7baadd6a412548786ec1b511f7c311992ddb12",
+  "hypothesis": "Raw CSharp signature/brace scanning can count commented or quoted method signatures and borrow unrelated subsequent braces",
+  "negative_controls": [
+    "quoted/commented declaration",
+    "comment braces adjacent to method signature",
+    "semicolon and arrow non-body declarations",
+    "actual duplicate executable declaration",
+    "duplicate instrument marker appearing only as text"
+  ],
+  "test_count": 8,
+  "new_tests": 5,
+  "ci": [
+    {
+      "run": 41634028276,
+      "result": "success",
+      "url": "https://github.com/alwansan/raf/actions/runs/41634028276"
+    },
+    {
+      "run": 41634028255,
+      "result": "success",
+      "url": "https://github.com/alwansan/raf/actions/runs/41634028255",
+      "original_managed_compile": "exit=0 errorCodes={}"
+    }
+  ],
+  "limitations": [
+    "CSharp9 lexical scan, not full compiler parsing",
+    "No original pinned method known to contain the synthetic failure patterns",
+    "Original operation tracing not validated in actual Unity or Android runtime"
+  ],
+  "scope": "Python instrumentation source and synthetic tests only",
+  "native_requested": false,
+  "lfs": false,
+  "readiness": "NOT_READY 0/3"
+}
