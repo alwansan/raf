@@ -149,5 +149,44 @@ class AtomicStageTests(unittest.TestCase):
         self.assertFalse(self.report.exists())
 
 
+    def test_a9_zip2_override_rejects_unpinned_bank(self):
+        # A synthetic file may never masquerade as a ZIP2 replacement if the
+        # tracked MasterBank is not the authentic original LFS pointer.
+        fake_bank = self.root / "fake-restored.bank"
+        fake_bank.write_bytes(b"not an original bank")
+        with self.assertRaisesRegex(ValueError, "requires original pinned LFS pointer"):
+            stage(self.repo, self.project, self.report, apply=True,
+                  haptics_manifest_blob_sha=self.haptics_manifest_blob_sha,
+                  verified_external_master_bank=fake_bank)
+        self.assertFalse(self.project.exists())
+        self.assertFalse(self.report.exists())
+
+    def test_a9_zip2_override_rejects_linked_restored_bank(self):
+        from scripts import stage_original_streaming_assets as source_module
+        original = self.source / "MasterBank.bank"
+        original.write_bytes(
+            b"version https://git-lfs.github.com/spec/v1\\n"
+            + b"oid sha256:" + source_module.MASTER_SHA.encode()
+            + b"\\nsize 101600960\\n"
+        )
+        self.commit()
+        # Fixture-only re-pin of a new synthetic Git blob; production original
+        # has an independent immutable OID and SHA256 validator.
+        source_module.ORIGINAL_ROOT_BLOB_SHAS["MasterBank.bank"] = self.git(
+            "rev-parse", "HEAD:Raft/Raft_Data/StreamingAssets/MasterBank.bank"
+        ).decode().strip()
+        outside = self.root / "fake-restored.bank"
+        outside.write_bytes(b"synthetic, not game audio")
+        linked = self.root / "linked-restored.bank"
+        linked.symlink_to(outside)
+        with self.assertRaisesRegex(ValueError, "source link"):
+            stage(self.repo, self.project, self.report, apply=True,
+                  haptics_manifest_blob_sha=self.haptics_manifest_blob_sha,
+                  verified_external_master_bank=linked)
+        self.assertEqual(outside.read_bytes(), b"synthetic, not game audio")
+        self.assertFalse(self.project.exists())
+        self.assertFalse(self.report.exists())
+
+
 if __name__ == "__main__":
     unittest.main()
