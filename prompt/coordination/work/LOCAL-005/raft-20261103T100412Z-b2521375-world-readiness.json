@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T100412Z-b2521375",
+  "issue_id": "LOCAL-005",
+  "status": "active",
+  "updated_at": "2026-11-03T10:05:42.502Z",
+  "base_sha": "8aa6ff73f7a83f50213b51624ea8812b2196e832",
+  "hypothesis": "World-readiness structural probe can count comments/string literals as event or completion assignments; synthetic negative controls should disprove a false green.",
+  "intended_files": [
+    "scripts/probe_original_world_readiness.py",
+    "tests/test_probe_original_world_readiness.py",
+    "prompt/coordination/clients/raft-20261103T100412Z-b2521375/",
+    "prompt/coordination/work/LOCAL-005/raft-20261103T100412Z-b2521375-world-readiness.json",
+    "prompt/STATUS.md",
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+  ],
+  "related_work": [
+    "DISPLAY-003 separate owner A2",
+    "FFT-FORMAT-009 A1 paused",
+    "HAPTICS-008 A3/A4/A5/A6 active"
+  ],
+  "experiment_ids": [
+    "world-readiness-lexical-guards"
+  ],
+  "evidence": [],
+  "result": null,
+  "next_step": "Run synthetic reproduction, repair lexical false positive and add negative controls, then CPU-only tests."
+}

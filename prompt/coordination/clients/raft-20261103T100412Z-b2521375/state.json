@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "username": "raft-20261103T100412Z-b2521375",
+  "display_name": "A8",
+  "session_id": "A8-20261103T100412Z-72c5a4",
+  "resumed_from": null,
+  "status": "active",
+  "updated_at": "2026-11-03T10:05:42.502Z",
+  "base_sha": "8aa6ff73f7a83f50213b51624ea8812b2196e832",
+  "current_work": [
+    "LOCAL-005"
+  ],
+  "last_commit": null,
+  "next_step": "Reproduce false positives from comment/string in the pinned world-readiness source probe; repair only the read-only probe and synthetic tests.",
+  "memory_path": "prompt/coordination/clients/raft-20261103T100412Z-b2521375/MEMORY.md"
+}
