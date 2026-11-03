@@ -7,7 +7,7 @@ from pathlib import Path
 import re
 import shutil
 
-from scripts.adapt_android_offline_startup import PINS, adapt
+from scripts.adapt_android_offline_startup import PINS, adapt, fingerprint
 from scripts.adapt_original_save_paths import adapt as adapt_paths
 from scripts.instrument_android_runtime_operations import instrument
 
@@ -24,14 +24,26 @@ def method(text, signature):
     raise ValueError('Unclosed original method')
 
 
+def select_original_source(source: Path, name: str, expected_sha256: str):
+    """Choose the unique SHA-pinned original source, ignoring SDK homonyms."""
+    found = []
+    for path in source.rglob(name + '.cs'):
+        if path.is_symlink() or not path.is_file():
+            continue
+        try:
+            original = path.read_text(encoding='utf-8-sig')
+        except UnicodeError:
+            continue
+        if fingerprint(original) == expected_sha256:
+            found.append((path, original))
+    if len(found) != 1:
+        raise ValueError('Require exactly one SHA-pinned original source: ' + name)
+    return found[0]
+
 def prepare(source, managed, runtime, output):
     changed = {}
     for name in PINS:
-        matches = list(source.rglob(name + '.cs'))
-        if len(matches) != 1:
-            raise ValueError('Require unique original source: ' + name)
-        path = matches[0]
-        text = path.read_text(encoding='utf-8-sig')
+        path, text = select_original_source(source, name, PINS[name])
         if name == 'SaveAndLoad': text = adapt_paths(text)
         changed[name] = (path, adapt(name, text))
     output.mkdir(parents=True, exist_ok=True)
