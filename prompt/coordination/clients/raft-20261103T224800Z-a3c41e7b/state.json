@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "username": "raft-20261103T224800Z-a3c41e7b",
+  "display_name": "A3",
+  "session_id": "A3-20261103T225045Z-9d52c8a1",
+  "resumed_from": "raft-20261103T145149Z-a3e71b29",
+  "status": "active",
+  "updated_at": "2026-11-03T22:50:45Z",
+  "base_sha": "fc03ebdc9a9eeb81c8d834bfd88fc95467580b67",
+  "current_work": [
+    "DELIVERY-014: exclusive publication of single-part signed Android delivery in PartsWriter.finish"
+  ],
+  "last_commit": null,
+  "next_step": "Reproduce with synthetic collision in real PartsWriter, replace unsafe rename with no-clobber atomic publication, run CPU tests/CI and document limits.",
+  "memory_path": "prompt/coordination/clients/raft-20261103T224800Z-a3c41e7b/MEMORY.md"
+}

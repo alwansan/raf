@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T224800Z-a3c41e7b",
+  "display_name": "A3",
+  "session_id": "A3-20261103T225045Z-9d52c8a1",
+  "resumed_from": "raft-20261103T145149Z-a3e71b29",
+  "issue_id": "DELIVERY-014",
+  "status": "active",
+  "updated_at": "2026-11-03T22:50:45Z",
+  "hypothesis": "PartsWriter.finish in scripts/package_android_delivery.py uses Path.rename for single-part artifact: on POSIX it can clobber a concurrently published signed file with same final name. A3 prior DELiVERY-013 fixed reassembly, not packaging.",
+  "intended_files": [
+    "scripts/package_android_delivery.py",
+    "tests/test_a3_package_singlepart_publish.py",
+    ".github/workflows/raft-a3-package-singlepart-publish.yml",
+    "prompt/coordination/clients/raft-20261103T224800Z-a3c41e7b/",
+    "prompt/coordination/work/DELIVERY-014/raft-20261103T224800Z-a3c41e7b-package-publish.json",
+    "prompt/coordination/experiments/raft-20261103T224800Z-a3c41e7b/",
+    "prompt/STATUS.md"
+  ],
+  "excluded_files": [
+    "Raft/**",
+    ".github/raft-native-build-request.json",
+    "scripts/stage_original_streaming_assets.py",
+    "android-port/Runtime/Platform/AndroidStreamingAssets.cs",
+    "scripts/reassemble_android_delivery.py"
+  ],
+  "related_work": [
+    "A3 DELIVERY-013 original reassembler exclusive hard-link fix CI41658894880",
+    "A9 AUDIO-004 source staging active, avoid that code",
+    "W1/W2/W3 shader/material restoration active, avoid those paths"
+  ],
+  "safety": "Synthetic CPU tests only; no Unity/APK/OBB/XAPK or release, no source data/LFS access, no automations, no protected branch updates; expected SHA lease."
+}
