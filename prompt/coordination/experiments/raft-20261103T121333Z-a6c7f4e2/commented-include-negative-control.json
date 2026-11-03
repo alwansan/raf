@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T121333Z-a6c7f4e2",
+  "status": "planned",
+  "hypothesis": "Commented ShaderLab #include tokens currently pass into rewrite() dependencies and incorrectly fail certified Unity shader restore; exclude comments while preserving original quoted and comment bytes. Never relax existing genuine include or zero-match gates.",
+  "source_sha": null,
+  "workflow_path": ".github/workflows/raft-builtin-shader-tests.yml",
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_restore_builtin_shaders.py -v"
+  ],
+  "test_cases": [
+    "line-comment fake include rejected as dependency",
+    "block-comment fake include rejected",
+    "unterminated block fake include rejected",
+    "quoted include path containing // preserved",
+    "real active include failure remains fail-closed",
+    "existing archive/GUID regression retained"
+  ],
+  "expected_signal": "Regression initially red, then green; untouched comments byte-preserved and genuine includes resolved to authenticated vendor files",
+  "run_url": null,
+  "result": null,
+  "limitations": [
+    "This fixes a parse false-positive but does not supply missing original programs/FFT",
+    "No Unity/Android phone test"
+  ]
+}
