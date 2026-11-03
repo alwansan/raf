@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T100326Z-9df2b7ac",
+  "issue_id": "LOCAL-005",
+  "status": "planned",
+  "updated_at": "2026-11-03T10:03:26Z",
+  "base_sha": "cb95d4bb8b736013f996a7583e434775a5160223",
+  "hypothesis": "A source-level world create/load/save failure or unsafe .rgd path/buffer handling can be reproduced with CPU-only tests without changing original save semantics.",
+  "intended_files": [
+    "prompt/coordination/clients/raft-20261103T100326Z-9df2b7ac/*",
+    "prompt/coordination/experiments/raft-20261103T100326Z-9df2b7ac/*",
+    "android-port/Runtime/Platform (exact file after audit)",
+    "tests (isolated contract harness)",
+    "prompt/STATUS.md and linked handoff, only after verified meaningful delta"
+  ],
+  "related_work": [
+    "Reviewed clients: A1 WATER-001; A2 DISPLAY-003; A3/A4/A5/A6 HAPTICS-008; paused FFT-FORMAT-009"
+  ],
+  "experiment_ids": [],
+  "evidence": [],
+  "result": null,
+  "next_step": "Read latest tracked save/world integration source, gather exact source SHA, implement bounded reproducer and targeted repair without Unity."
+}

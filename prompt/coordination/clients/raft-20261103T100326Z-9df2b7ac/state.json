@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "username": "raft-20261103T100326Z-9df2b7ac",
+  "display_name": "A9",
+  "session_id": "A9-20261103T100326Z-d3a8c7f1",
+  "resumed_from": null,
+  "status": "active",
+  "updated_at": "2026-11-03T10:03:26Z",
+  "base_sha": "cb95d4bb8b736013f996a7583e434775a5160223",
+  "current_work": [
+    "LOCAL-005"
+  ],
+  "last_commit": null,
+  "next_step": "Read original/offline world save/runtime paths; run bounded negative- and positive-case CPU tests; patch only distinct proven defect.",
+  "memory_path": "prompt/coordination/clients/raft-20261103T100326Z-9df2b7ac/MEMORY.md"
+}
