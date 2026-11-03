@@ -1,0 +1,102 @@
+"""Synthetic-only Settings controller PPtr and native Canvas ancestry tests."""
+import struct
+import tempfile
+from pathlib import Path
+import unittest
+from scripts.probe_a2_settings_owner_links import (
+    SETTINGS_SHA, MAX_MATCHES, scan_candidates, native_graph,
+    ancestry, audit_scene, source_pin,
+)
+
+class O:
+    def __init__(self, kind, pid, tree=None, data=b""):
+        self.type = type("Type", (), {"name": kind})()
+        self.path_id, self.tree, self.data = pid, tree or {}, data
+    def read_typetree(self, **kwargs):
+        return self.tree
+    def get_raw_data(self):
+        return self.data
+
+class File:
+    def __init__(self, objects):
+        self.objects = {o.path_id: o for o in objects}
+        self.externals = [type("External", (), {"path": "globalgamemanagers.assets"})()]
+
+def pptr(fid, pid):
+    return {"m_FileID": fid, "m_PathID": pid}
+
+def sample():
+    header = (struct.pack("<iq", 0, 3) + b"\x01\x00\x00\x00"
+              + struct.pack("<iq", 1, 21) + struct.pack("<i", 0))
+    return File([
+        O("GameObject", 2), O("GameObject", 3), O("GameObject", 8),
+        O("RectTransform", 9, {"m_GameObject": pptr(0, 8), "m_Father": pptr(0, 10)}),
+        O("RectTransform", 10, {"m_GameObject": pptr(0, 2), "m_Father": pptr(0, 0)}),
+        O("Canvas", 11, {"m_GameObject": pptr(0, 2)}),
+        O("MonoBehaviour", 12, {"m_GameObject": pptr(0, 2), "m_Script": pptr(1, 22)}),
+        O("MonoBehaviour", 13, {"m_GameObject": pptr(0, 3), "m_Script": pptr(1, 21)},
+          header + struct.pack("<iq", 0, 8)),
+    ])
+
+REGISTRY = {21: "matching_original_game_class_unverified_Settings",
+            22: "verified_unity_ui_canvas_scaler"}
+
+class A2OwnerLinks(unittest.TestCase):
+    def test_candidate_aligned_and_not_base_header(self):
+        raw = b"\0" * 32 + struct.pack("<iq", 0, 9)
+        self.assertEqual(scan_candidates(raw, {9}), [(32, 9)])
+        self.assertEqual(scan_candidates(raw, {10}), [])
+        self.assertEqual(scan_candidates(b"\0" * 32 + b"X" + struct.pack("<iq", 0, 9), {9}), [])
+
+    def test_candidate_ancestor_is_native_canvas_scaler(self):
+        s = sample()
+        graph = native_graph(list(s.objects.values()), [e.path for e in s.externals], {}, REGISTRY)
+        self.assertEqual(ancestry(8, graph), "candidate_with_verified_scaler_ancestor")
+        self.assertEqual(ancestry(9, graph), "candidate_with_verified_scaler_ancestor")
+        self.assertEqual(ancestry(3, graph), "target_transform_missing")
+
+    def test_settings_owner_raw_link_is_only_candidate(self):
+        result = audit_scene(sample(), REGISTRY)
+        self.assertEqual(result["settings_owner_count"], 1)
+        self.assertEqual(result["raw_local_pptr_candidate_count"], 1)
+        self.assertEqual(result["candidate_target_types"]["GameObject"], 1)
+        self.assertEqual(result["authentic_scaler_canvas_owners"], 1)
+        self.assertFalse(result["candidate_custom_field_typing_verified"])
+        self.assertFalse(result["displayed_settings_panel_to_canvas_proven"])
+
+    def test_mismatch_or_foreign_script_is_rejected(self):
+        with self.assertRaisesRegex(ValueError, "one original Settings"):
+            audit_scene(sample(), {22: REGISTRY[22], 21: "unrelated"})
+        s = sample()
+        s.objects[13].tree["m_GameObject"] = pptr(0, 4)
+        with self.assertRaisesRegex(ValueError, "base PPtr mismatch"):
+            audit_scene(s, REGISTRY)
+
+    def test_cycle_external_parent_and_missing_are_unknown(self):
+        s = sample()
+        for new_parent in (pptr(0, 999), pptr(0, 9), pptr(1, 10)):
+            s.objects[9].tree["m_Father"] = new_parent
+            graph = native_graph(list(s.objects.values()), ["globalgamemanagers.assets"], {}, REGISTRY)
+            self.assertEqual(ancestry(8, graph), "unknown_ancestry")
+
+    def test_unbounded_matches_and_truncated_records(self):
+        with self.assertRaisesRegex(ValueError, "Unsafe"):
+            scan_candidates(b"\0" * 31, {7})
+        raw = b"\0" * 32 + struct.pack("<iq", 0, 7) * (MAX_MATCHES + 1)
+        with self.assertRaisesRegex(ValueError, "Unbounded"):
+            scan_candidates(raw, {7})
+
+    def test_source_sha_drift_fails_closed(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            src = root / "Settings.cs"
+            src.write_text("class Settings {}")
+            with self.assertRaisesRegex(ValueError, "SHA drift"):
+                source_pin(root)
+            src.unlink()
+            with self.assertRaisesRegex(ValueError, "missing"):
+                source_pin(root)
+            self.assertEqual(len(SETTINGS_SHA), 64)
+
+if __name__ == "__main__":
+    unittest.main()
