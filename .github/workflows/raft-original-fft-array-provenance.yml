@@ -9,6 +9,9 @@ on:
       - 'tests/test_verify_original_fft_array_provenance.py'
       - 'scripts/probe_fft_variant_table.py'
       - 'tests/test_probe_fft_variant_table.py'
+      - 'scripts/probe_original_fft_resource_bindings.py'
+      - 'tests/test_probe_original_fft_resource_bindings.py'
+      - 'scripts/probe_original_fft_inherited_seed.py'
   workflow_dispatch:
 
 permissions:
@@ -41,6 +44,8 @@ jobs:
           python3 -m unittest discover -s tests -p test_probe_fft_variant_table.py -v
           python3 -m unittest discover -s tests -p test_probe_fft_monoscript_field.py -v
           python3 -m unittest discover -s tests -p test_probe_original_fft_serialized_refs.py -v
+          python3 -m unittest discover -s tests -p test_probe_original_fft_resource_bindings.py -v
+          python3 -m unittest discover -s tests -p test_probe_original_fft_inherited_seed.py -v
       - name: Authenticate pointer then hydrate only sharedassets0.assets
         shell: bash
         env:
@@ -85,5 +90,6 @@ jobs:
           timeout 180s python3 -m scripts.verify_original_fft_array_provenance \
             --source Raft/Raft_Data --managed-source "$RUNNER_TEMP/original-csharp"
           python3 -m scripts.probe_fft_variant_table --source Raft/Raft_Data
+          python3 -m scripts.probe_original_fft_resource_bindings --source Raft/Raft_Data --managed-source "$RUNNER_TEMP/original-csharp"
           # No shader, game source, Unity project, device data or artifacts exported.
           # No Unity Editor, APK, OBB, XAPK or Release step.

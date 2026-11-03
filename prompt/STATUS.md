@@ -13,3 +13,5 @@
 - Additional task confirmed enabled: **Raft — استعادة الموارد والتجارب**, hourly at minute40 Asia/Baghdad, no Unity/APK; original hourly minute10 task unchanged. Avoid creating another copy.
 
 - Final verified source checkpoint:2074cc1ae454cd107553d5612e5e6556286ac1d3; [FFT inherited-seed CI41548942077](https://github.com/alwansan/raf/actions/runs/41548942077) SUCCESS, job125631346478. No native request JSON changed; CL/img,lf,logfox hashes unchanged and published APK80 still has11 release assets. Refresh live HEAD before the next write.
+
+- Current investigation:20/20 original compiled metadata resource-name hashes match the six original CSharp SetTexture calls locally; first-pass output equals second-pass input and both reuse the butterfly image. Seven corruption/dataflow tests pass. Fresh single-owner116MB LFS/original-source CI pending after commit. Unavailable session/text attachments are explicitly ignored per owner. Six original split-game archive identities have now been found in Library; archive content not yet inspected.

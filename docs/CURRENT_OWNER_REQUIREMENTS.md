@@ -13,3 +13,5 @@ This file and the latest explicit owner message supersede conflicting historical
 - Do not publish proprietary decompiled game/shader sources, original loose assets, raw DXBC/SPIR-V or secrets. Reports may contain hashes and structural findings. Do not request PC, licenses, FMOD or already supplied dependencies again.
 
 Arabic resume entry: [prompt/CONTINUE_RAFT_AR.md](../prompt/CONTINUE_RAFT_AR.md). Current checkpoint: [prompt/STATUS.md](../prompt/STATUS.md).
+
+- Latest continuation: ignore unavailable `الجلسة1.txt` and `text.txt`; do not request them again or block ongoing repairs on them. The owner reiterates authorized Git LFS use up to their10GB allocation and asks to inspect the six original game archives when identifiable; do not infer their contents without inspecting.
