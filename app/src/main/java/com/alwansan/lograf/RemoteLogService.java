@@ -139,8 +139,29 @@ public final class RemoteLogService extends IRemoteLog.Stub {
         }
     }
 
+    // Reject substring-only matches (com.alwansan.raft.androidtest, :worker).
+    // Keep punctuation boundaries because system events can include a package
+    // followed by a comma, slash, space or closing bracket.
+    private static boolean containsExactPackage(String line,String target) {
+        if(line==null || target==null || target.isEmpty())return false;
+        int from=0;
+        while((from=line.indexOf(target,from))>=0){
+            int end=from+target.length();
+            boolean left=from==0 || !isPackageCharacter(line.charAt(from-1));
+            boolean right=end==line.length() || !isPackageCharacter(line.charAt(end));
+            if(left && right)return true;
+            from=end;
+        }
+        return false;
+    }
+
+    private static boolean isPackageCharacter(char c) {
+        return (c>='a'&&c<='z') || (c>='A'&&c<='Z') ||
+                (c>='0'&&c<='9') || c=='_' || c=='.' || c==':';
+    }
+
     private boolean systemRelevant(String line) {
-        if (line.contains(packageName)) return true;
+        if (containsExactPackage(line,packageName)) return true;
         Matcher m = PID.matcher(line);
         if (m.find()) {
             synchronized (gamePids) {

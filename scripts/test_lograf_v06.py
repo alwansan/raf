@@ -34,6 +34,8 @@ checks={
     "exit PID requires exact event package": 'packageName.equals(died.group(2).trim())' in remote,
     "exit PID cannot fall back to stale last known": 'lastDeathPid.set(lastKnownPid.get())' not in remote,
     "stop-time exit evidence": 'remote.finalExitEvidence()' in capture and 'stop_time_android_process_exit_info' in capture,
+    "system context rejects substring package names": 'containsExactPackage(line,packageName)' in remote and 'isPackageCharacter(line.charAt(end))' in remote,
+    "system context still accepts tracked PID": 'gamePids.contains(m.group(1))' in remote,
     "raw Logcat unchanged target": '"--uid=" + gameUid' in remote,
     "error classes tracked without raw text": '"error_groups"' in remote and (src/"ErrorCategorySummary.java").exists(),
 }
