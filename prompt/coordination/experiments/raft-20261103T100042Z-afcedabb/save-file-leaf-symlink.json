@@ -1,29 +1,35 @@
 {
   "schema_version": 1,
   "owner": "raft-20261103T100042Z-afcedabb",
-  "status": "planned",
+  "status": "completed",
   "hypothesis": "Existing final world.sav symlink bypasses prior directory-only guard and redirects writes outside sandbox",
-  "input_hashes": [],
-  "commands": [
-    "Python pathlib synthetic file symlink write repro",
-    "dotnet run --project android-port/Tests/Smoke/RaftAndroid.Platform.Smoke.csproj --configuration Release --nologo"
+  "input_hashes": [
+    "Before fix source blob 1d3cc68b520db5490fca84e7b1fa0aff88fa7a07",
+    "Before fix Smoke blob d07d62b946f5652411e6c9ab4d31d0f15043513d"
   ],
-  "expected_signal": "Reject world.sav symbolic links before returning writable path; normal world save remains writable; broken links rejected",
+  "commands": [
+    "Local Python pathlib TemporaryDirectory: symlink world.sav -> outside.rgd, write via leaf, verify outside file modified",
+    "GitHub Actions dotnet run --project android-port/Tests/Smoke/RaftAndroid.Platform.Smoke.csproj --configuration Release --nologo"
+  ],
+  "expected_signal": "Reject existing target and dangling file leaf symlinks; preserve ordinary file save path",
   "negative_controls": [
-    "existing directory symlink tests",
-    "ordinary world and valid regular save files",
-    "dangling world.sav symlink"
+    "symbolic link to existing external file",
+    "dangling link verified via ReparsePoint with missing destination",
+    "regular existing save survives reading and updating",
+    "earlier directory symlink and invalid world name smoke tests"
   ],
   "workflow_path": ".github/workflows/raft-android-platform-tests.yml",
   "concurrency_group": null,
   "artifact_prefix": null,
   "budget": "platform CPU-only existing workflow, no Unity/LFS/native",
-  "run_url": null,
-  "source_sha": null,
-  "result": null,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41623564391",
+  "source_sha": "d01f4c4bfab342dc2eba35c569151cac9b292973",
+  "result": "Initial CI red 41623327576 (14/15 fixture assertion File.Exists(danglingLink) false was not portable); final CI green 41623564391 (Smoke 15/15, workflow 24 successful steps, netstandard2.1 0 errors).",
   "limitations": [
-    "Standalone LocalSavePaths helper not original .rgd path",
-    "Prechecks not atomic against hostile concurrent swaps"
+    "Only standalone LocalSavePaths adapter, not original .rgd serializer integration",
+    "No Unity or Android device game trial",
+    "Managed path precheck is not an atomic no-follow file opening guarantee",
+    "No original game assets or GUID changed"
   ],
-  "next_step": "Implement test and scoped runtime guard"
+  "next_step": "Resume independent original .rgd integration after live scope coordination"
 }
