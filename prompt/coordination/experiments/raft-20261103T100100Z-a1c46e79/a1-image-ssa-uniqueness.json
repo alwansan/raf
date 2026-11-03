@@ -18,17 +18,32 @@
     "OpVariable shadows alias",
     "OpSelect or OpPhi redefines OpLoad"
   ],
-  "workflow_path": ".github/workflows/raft-original-water-fft-synthetic.yml (existing; actual workflow name verified by CI run)",
+  "workflow_path": ".github/workflows/raft-original-water-synthetic.yml",
   "concurrency_group": null,
   "artifact_prefix": null,
   "budget": "local Python 12 fixtures + existing ordinary-push CPU synthetic CI; no native workflow manually dispatched",
   "run_url": "https://github.com/alwansan/raf/actions/runs/41616248165",
   "source_sha": "dc8533ba6df694b959fd37cb84c327584961642c",
-  "result": "12/12 local Python fixtures passed; synthetic GitHub CI success; original-resource audit in progress at check",
+  "result": "Local 12/12 Python fixtures PASS; synthetic CI41616248165 COMPLETED SUCCESS; authenticated 20-program original LFS audit41616248166 COMPLETED SUCCESS at same source dc8533ba. Authentic declared typed-image and operation-profile matches remain 0/20, so water authenticity gate OPEN.",
   "limitations": [
     "Tracked alias and variable IDs only; not an exhaustive SPIR-V ID validator",
     "Malformed synthetic negative controls not source evidence of original-shader defect",
     "No authentic shader numerics, Unity compile or device acceptance"
   ],
-  "next_step": "Check 41616248166 final status and exact original audit counts; do not close WATER-001 from scanner integrity alone."
+  "next_step": "True HLSL shader/GPU numeric resource-format and complete Unity kernel identity remains open; no code acceptance upgrade.",
+  "original_resource_audit_url": "https://github.com/alwansan/raf/actions/runs/41616248166",
+  "original_resource_audit_job": 125850318461,
+  "original_resource_aggregate": {
+    "programs": 20,
+    "validated_spirv": 20,
+    "binding_roundtrip_matches": 20,
+    "workgroup_roundtrip_matches": 20,
+    "typed_image_roundtrip_matches": 0,
+    "image_operation_profile_roundtrip_matches": 0,
+    "formatless_private_matches": 20,
+    "formatless_private_vulkan_valid": 20,
+    "kernel_identity_verified": false,
+    "full_water_contract_verified": false,
+    "gpu_executed": false
+  }
 }
