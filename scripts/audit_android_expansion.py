@@ -192,8 +192,11 @@ if __name__ == "__main__":
     parser.add_argument("--apk", type=Path, required=True)
     parser.add_argument("--obb", type=Path, required=True)
     parser.add_argument("--report", type=Path)
-    parser.add_argument("--haptics-manifest", type=Path,
-                        help="Strict original 29-WAV final OBB jar path/Git blob audit")
+    # Every production APK/OBB audit must check the original 29 Haptics WAVs.
+    # Omission must not produce a successful release audit. Test-owned callers
+    # can still use the audit_companion Python API without a manifest.
+    parser.add_argument("--haptics-manifest", type=Path, required=True,
+                        help="Required: pinned original 29-WAV jar path/Git blob audit")
     parser.add_argument("--verify-crc", action="store_true",
                         help="Stream-validate APK and OBB ZIP member CRCs")
     args = parser.parse_args()
