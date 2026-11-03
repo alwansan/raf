@@ -3,8 +3,8 @@
   "owner": "raft-20261103T224306Z-d17e2cb7",
   "issue_id": "LOCAL-005",
   "experiment_id": "a8-zip2-original-save-provider",
-  "status": "running",
-  "source_sha": "3e354068cfbd62a684d3f9211d15961f898d4851",
+  "status": "completed",
+  "source_sha": "5f5be03230b3becc1f9fa88bc86fa9a395919483",
   "zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
   "hypothesis": "Original SaveAndLoad CI can use authenticated ZIP2 Assembly-CSharp.dll and Data.rgd with no Git LFS and without changing game source behavior.",
   "input_hashes": [
@@ -33,12 +33,14 @@
   "concurrency_group": "raft-a8-zip2-original-save-${{ github.ref }}-${{ github.sha }}",
   "artifact_prefix": null,
   "budget": "CPU-only, GitHub Actions ubuntu-24.04 timeout 10 minutes, sparse two original small ZIP2 files; no full Raft, LFS, Unity or phone.",
-  "run_url": "https://github.com/alwansan/raf/actions/runs/41733527931",
-  "result": null,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41733872815",
+  "result": "SUCCESS 41733872815 on original SHA-pinned ZIP2: DLL 3211776 bytes+Data.rgd 2941 bytes authenticated; 11 synthetic+6 existing portability+4 selector tests passed; 16 original SaveAndLoad path expressions and 14 executable platform checks passed. Initial RED41733527931 failed traversal negative; fixed source5f5be032.",
   "limitations": [
     "Original Data.rgd hash does not mean a user saved world was loaded",
     "Original save path C# compatibility is not Unity/Android/phone save cycle",
     "No native APK/OBB/XAPK request permitted in A8 recovery role"
   ],
-  "next_step": "Inspect actual full CI run; repair any source/check failure; persist scoped test evidence."
+  "next_step": "LOCAL-005 real generated-world .rgd save/load/resume and Android device runtime acceptance pending; no readiness upgrade.",
+  "completed_at": "2026-11-03T22:50:22.652Z",
+  "red_run_url": "https://github.com/alwansan/raf/actions/runs/41733527931"
 }
