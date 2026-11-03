@@ -58,6 +58,7 @@ def verify(zip2_root: Path, *, pins=None) -> dict:
     for relative, pin in pins.items():
         if (not isinstance(relative, str) or
                 not re.fullmatch(r"[A-Za-z0-9_.-]+(?:/[A-Za-z0-9_.-]+)+", relative) or
+                any(component in (".", "..") for component in relative.split("/")) or
                 not isinstance(pin, tuple) or len(pin) != 2 or
                 type(pin[0]) is not int or not 0 < pin[0] <= 16 * 1024 * 1024 or
                 not isinstance(pin[1], str) or
