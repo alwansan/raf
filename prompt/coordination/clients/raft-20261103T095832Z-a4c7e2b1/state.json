@@ -2,15 +2,15 @@
   "schema_version": 1,
   "username": "raft-20261103T095832Z-a4c7e2b1",
   "agent": "A4",
-  "session_id": "a4-20261103T095832Z-71d4c6b8",
-  "resumed_from": null,
-  "status": "completed",
-  "updated_at": "2026-11-03T10:17:00Z",
-  "base_sha": "43b862ca910750d0b179539ab8857855dea01e3b",
+  "session_id": "a4-resume-20261103T145128736Z-c29f7d43",
+  "resumed_from": "a4-20261103T095832Z-71d4c6b8",
+  "status": "active",
+  "updated_at": "2026-11-03T14:51:28.736Z",
+  "base_sha": "b09de2aca410f43b741f94b5353131d47d2d7386",
   "current_work": [
-    "PERF-007"
+    "PERF-007 cgroup memory.events summary counter continuity"
   ],
   "last_commit": "1b37647587e94b4e3a7baf6e34865c634a442216",
-  "next_step": "A4 diagnostic scope completed; no background execution. Next session re-read HEAD, coordination, source and Actions; readiness remains NOT_READY.",
+  "next_step": "Inspect test baseline; fix false nonzero OOM deltas when intermediate cgroup samples reset, add isolated tests, verify source; no Unity/APK.",
   "memory_path": "prompt/coordination/clients/raft-20261103T095832Z-a4c7e2b1/MEMORY.md"
 }
