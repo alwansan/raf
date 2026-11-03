@@ -4,7 +4,7 @@ Never loads original game shaders or serialized LFS sources in unit tests.
 """
 import json
 import unittest
-from scripts.probe_original_fft_software_vulkan import parse_private_numeric_result
+from scripts.probe_original_fft_software_vulkan import parse_private_numeric_result, validate_requested_workload
 
 PREFIX = "RAFT_A1_VULKAN_DIFF "
 
@@ -12,7 +12,9 @@ PREFIX = "RAFT_A1_VULKAN_DIFF "
 def example():
     return {
         "cpu_software_vulkan": True,
-        "rgba32f_linear_only": True,
+        "vulkan_image_format": "rgba32f",
+        "image_channels": 4,
+        "image_component_bits": 32,
         "extent_width": 8,
         "extent_height": 1,
         "input_seed": 0,
@@ -62,7 +64,10 @@ class PrivateExecutorResultTests(unittest.TestCase):
     def test_invalid_platform_assertions_and_bool_numbers_rejected(self):
         for changed in (
             {"cpu_software_vulkan": False},
-            {"rgba32f_linear_only": False},
+            {"vulkan_image_format": "made_up"},
+            {"vulkan_image_format": 3},
+            {"image_channels": 2},
+            {"image_component_bits": 16},
             {"unity_gpu_or_android_device_verified": True},
             {"original_written_pixels": True},
             {"within_selected_tolerance": 1},
@@ -93,6 +98,29 @@ class PrivateExecutorResultTests(unittest.TestCase):
             with self.subTest(changed=changed), self.assertRaisesRegex(
                     ValueError, "Inconsistent"):
                 parse_private_numeric_result(encoded(dict(example(), **changed)))
+
+    def test_all_original_fft_cache_formats_are_checked(self):
+        formats = {"rg16f": (2, 16), "rg32f": (2, 32),
+                   "rgba16f": (4, 16), "rgba32f": (4, 32)}
+        for name, (channels, bits) in formats.items():
+            with self.subTest(fmt=name):
+                row = dict(example(), vulkan_image_format=name,
+                           image_channels=channels, image_component_bits=bits,
+                           extent_width=1024, extent_height=1024,
+                           synthetic_canary_verified=False)
+                accepted = parse_private_numeric_result(encoded(row))
+                validate_requested_workload(accepted, 0, 1, name)
+                with self.assertRaisesRegex(ValueError, "workload"):
+                    validate_requested_workload(accepted, 0, 1,
+                                                "rg16f" if name != "rg16f" else "rgba32f")
+
+    def test_half_format_byte_and_channel_claims_rejected(self):
+        for fields in ({"vulkan_image_format": "rg16f", "image_channels": 4},
+                       {"vulkan_image_format": "rgba16f", "image_component_bits": 32},
+                       {"vulkan_image_format": "rg32f", "image_channels": True},
+                       {"vulkan_image_format": "rgba32f", "image_component_bits": True}):
+            with self.subTest(fields=fields), self.assertRaisesRegex(ValueError, "layout"):
+                parse_private_numeric_result(encoded(dict(example(), **fields)))
 
     def test_no_unknown_schema_fields_can_leak_private_data(self):
         row = dict(example(), original_shader_text="private shader body")
