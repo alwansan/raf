@@ -358,3 +358,9 @@ A7 coordination identity `raft-20261103T100214Z-c83d58d4` completed an independe
 ## A4 PERF-007 CI memory evidence (2026-11-03)
 
 [Source 1b376475](https://github.com/alwansan/raf/commit/1b37647587e94b4e3a7baf6e34865c634a442216) rejects missing per-process VmRSS as a fabricated zero, negative/bad-unit memory readings and non-PID paths. [CI 41616939992](https://github.com/alwansan/raf/actions/runs/41616939992), job125852628608, COMPLETED SUCCESS on exact SHA: 8 tests including 2 new negative controls, 3 live runner samples and 256MiB swap capability check. [Preflight 41616940049](https://github.com/alwansan/raf/actions/runs/41616940049) SUCCESS on same SHA. No runtime/game GPU OOM fix or phone evidence. No Unity/APK/OBB/XAPK, release, LFS, .meta/GUID, Mouse0/500ms, controller or automation changes. A4 abandoned overlapping HAPTICS-008 source edits after observing other clients. Game remains NOT_READY/0-of-3.
+
+
+<!-- A9-LOCAL-005-PROFILE-LINK-20261103 -->
+### A9 — LOCAL-005 local identity storage safety / verified CPU-only result
+
+[Scoped source fix 345b151d1fce59a996883b8c673930b56876fc68](https://github.com/alwansan/raf/commit/345b151d1fce59a996883b8c673930b56876fc68) adds checked app-owned path components for profile identity `profile.id` to reject symlink-based redirection before reads. Actual [platform CI 41617170076](https://github.com/alwansan/raf/actions/runs/41617170076) **SUCCESS** at that commit; isolated managed `PROFILE_LINK_SAFETY_PASS checks=7`, existing Smoke `TOTAL passed=12 failed=0`. New independent test is wired into cheap CI. [Full evidence](LOCAL_PROFILE_LINK_SAFETY_A9_2026-11-03.md) documents non-atomic path-check limitation and remaining original world/.rgd/runtime gap. This does not claim device acceptance, original game world success or readiness; NOT_READY and 0/3 candidate reviews persist. No native build or scheduled task touched. Coordinated nonoverlapping files with concurrent LOCAL-005 clients.

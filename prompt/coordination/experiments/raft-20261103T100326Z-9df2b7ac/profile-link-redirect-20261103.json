@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "owner": "raft-20261103T100326Z-9df2b7ac",
-  "status": "implemented_pending_CI",
+  "status": "completed",
   "hypothesis": "An existing symlink at profile.id or one of the app-owned RaftAndroid/profiles/local directories can redirect profile reads outside the intended sandbox; fail closed without altering the real profile ID format.",
   "input_hashes": [
     {
@@ -27,9 +27,17 @@
   "concurrency_group": "existing cheap platform CI (no native; no custom group)",
   "artifact_prefix": null,
   "budget": "CPU-only; existing 10-minute platform CI; no LFS; no Unity",
-  "run_url": null,
-  "source_sha": null,
-  "result": null,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41617170076",
+  "source_sha": "345b151d1fce59a996883b8c673930b56876fc68",
+  "result": {
+    "conclusion": "success",
+    "job_id": 125853405998,
+    "managed_symlink_checks_passed": 7,
+    "existing_smoke_checks_passed": 12,
+    "existing_smoke_checks_failed": 0,
+    "netstandard_compilation": "success",
+    "unity_or_device_tested": false
+  },
   "limitations": [
     "Prechecks do not atomically exclude a hostile simultaneous symlink swap; assumes app-private data directory access boundary",
     "This is platform identity storage safety, not original .rgd world save/load runtime proof or device test"

@@ -2,9 +2,9 @@
   "schema_version": 1,
   "owner": "raft-20261103T100326Z-9df2b7ac",
   "issue_id": "LOCAL-005",
-  "status": "active",
-  "updated_at": "2026-11-03T10:08:35.102Z",
-  "base_sha": "caa9bb7ae76da9920d46b4474d3fc2c10e994e1a",
+  "status": "completed",
+  "updated_at": "2026-11-03T10:14:05.648Z",
+  "base_sha": "0b847d4c526b7612f52238de1c5d803a4a078509",
   "hypothesis": "LocalProfileStore follows pre-existing symlinks inside the app-owned RaftAndroid/profiles/local/profile.id chain, allowing identity reads outside the expected sandbox; reject reparse redirects while preserving first-launch stability and original .rgd data.",
   "intended_files": [
     "android-port/Runtime/Platform/LocalProfileStore.cs",
@@ -21,7 +21,11 @@
     "A10 LOCAL-005 owns independent original world/save source probe — no overlap expected"
   ],
   "experiment_ids": [],
-  "evidence": [],
-  "result": null,
-  "next_step": "Reproduce valid external profile.id symlink and directory-link with C# net8 harness; reject them in LocalProfileStore only; verify old positive tests and CI."
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/345b151d1fce59a996883b8c673930b56876fc68",
+    "https://github.com/alwansan/raf/actions/runs/41617170076",
+    "docs/LOCAL_PROFILE_LINK_SAFETY_A9_2026-11-03.md"
+  ],
+  "result": "Isolated actual managed C# identity symlink protection passed 7 tests; existing offline Smoke 12/12. LOCAL-005 as a whole remains open; no real .rgd save/device validation.",
+  "next_step": "World serializer/platform integration remains open and owned by separate clients; no shared code changes without coordination."
 }
