@@ -1,0 +1,39 @@
+name: Raft A13 exported Material Shader GUID guard (CPU only)
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/probe_a13_exported_material_shader_guids.py
+      - tests/test_a13_exported_material_shader_guids.py
+      - .github/workflows/raft-a13-exported-material-shader-guids.yml
+permissions:
+  contents: read
+concurrency:
+  group: a13-export-guid-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  synthetic-export-guid-guard:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Run 15 synthetic positive and negative GUID controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_a13_exported_material_shader_guids.py -v 2>&1 | tee a13-export-guid-test-results.txt
+      - name: Retain only synthetic test console output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: a13-export-guid-fixtures-${{ github.run_id }}
+          path: a13-export-guid-test-results.txt
+          retention-days: 7
+          if-no-files-found: ignore
