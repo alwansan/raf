@@ -4,8 +4,8 @@
   "display_name": "A3",
   "issue_id": "RENDER-002",
   "session_id": "a3-20261103T230700Z-c64da0f2",
-  "status": "active",
-  "updated_at": "2026-11-03T23:07:00Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T23:16:00Z",
   "base_sha": "f6adf9361999146c730f1d8b6b959dcb59c0977a",
   "resumed_from": "raft-20261103T224800Z-a3c41e7b",
   "hypothesis": "Shared shader restorer scripts/restore_tmp_shaders.py is used by authenticated TMP v3.0.6, PostFX v1 and Volumetric shader recovery. It copies fallback/include paths with write_bytes before originals and can leave partially published programs on interrupted I/O; it also follows symlinked Assets parents. An incomplete restore can make some effects/colours regress while still retaining .meta.",
@@ -34,5 +34,11 @@
     "android-port/**",
     ".github/raft-native-build-request.json"
   ],
-  "safety": "Only vendor shader restoration production logic + isolated CPU synthetic tests; no LFS, Unity, native requests/APK/OBB/XAPK, Releases, tasks, shader source dump, or protected branch changes. Fresh HEAD expected_sha lease."
+  "safety": "Only vendor shader restoration production logic + isolated CPU synthetic tests; no LFS, Unity, native requests/APK/OBB/XAPK, Releases, tasks, shader source dump, or protected branch changes. Fresh HEAD expected_sha lease.",
+  "last_commit": "ab556f12d398e91b58fa6ed395d71ac6af2f1024",
+  "result": "Synthetic RED CI41737057615 exposed 4/5 source transaction defects; code ab556f12 fixes shared vendor shader restorer symlink escapes, incomplete backup cleanup, exclusive additions and rollback; GREEN CI41737411435 5 A3 + 4 TMP + 3 PostFX + 6 Volumetric tests SUCCESS. Not a Unity/Android GPU test.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41737057615",
+    "https://github.com/alwansan/raf/actions/runs/41737411435"
+  ]
 }
