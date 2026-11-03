@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T224500Z-a1d7e439",
+  "client_label": "A1",
+  "issue_id": "FFT-FORMAT-009",
+  "status": "active",
+  "updated_at": "2026-11-03T22:45:19.261Z",
+  "base_sha": "edd758e5131c8efbc9b9d1199d76ab57108158bf",
+  "reference": "zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "hypothesis": "Authentic original FFT formatless storage shader and private repaired roundtrip SPIR-V can execute equal outputs using Vulkan R16G16_SFLOAT,R32G32_SFLOAT,R16G16B16A16_SFLOAT,R32G32B32A32_SFLOAT backing images; this may reveal half/two-channel disagreement hidden in RGBA32F-only tests.",
+  "intended_files": [
+    "scripts/a1_fft_vulkan_cpu.cpp",
+    "scripts/probe_original_fft_software_vulkan.py",
+    "tests/test_probe_original_fft_software_vulkan.py",
+    ".github/workflows/raft-a1-fft-software-vulkan.yml",
+    "prompt/coordination/clients/raft-20261103T224500Z-a1d7e439",
+    "prompt/coordination/experiments/raft-20261103T224500Z-a1d7e439",
+    "docs/A1_FFT_ORIGINAL_FORMAT_MATRIX_2026-11-04.md",
+    "prompt/STATUS.md",
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+  ],
+  "limits": [
+    "source-only CPU Vulkan",
+    "original game data restored from ZIP2 SHA-pinned no LFS",
+    "no Unity/Adreno/device proof",
+    "no binary shader publication"
+  ],
+  "next_step": "Implement format-selectable Vulkan image allocation, half float encode/decode, check actual features, private formatless SPIR-V repair, synthetic canary and real 20×4 test. Pause and document upon any unsupported format."
+}
