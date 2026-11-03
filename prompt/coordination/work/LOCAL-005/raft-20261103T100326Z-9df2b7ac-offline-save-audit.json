@@ -2,22 +2,26 @@
   "schema_version": 1,
   "owner": "raft-20261103T100326Z-9df2b7ac",
   "issue_id": "LOCAL-005",
-  "status": "planned",
-  "updated_at": "2026-11-03T10:03:26Z",
-  "base_sha": "cb95d4bb8b736013f996a7583e434775a5160223",
-  "hypothesis": "A source-level world create/load/save failure or unsafe .rgd path/buffer handling can be reproduced with CPU-only tests without changing original save semantics.",
+  "status": "active",
+  "updated_at": "2026-11-03T10:08:35.102Z",
+  "base_sha": "caa9bb7ae76da9920d46b4474d3fc2c10e994e1a",
+  "hypothesis": "LocalProfileStore follows pre-existing symlinks inside the app-owned RaftAndroid/profiles/local/profile.id chain, allowing identity reads outside the expected sandbox; reject reparse redirects while preserving first-launch stability and original .rgd data.",
   "intended_files": [
+    "android-port/Runtime/Platform/LocalProfileStore.cs",
+    "android-port/Tests/ProfileLinkSafety/{Program.cs,ProfileLinkSafety.csproj}",
+    ".github/workflows/raft-android-platform-tests.yml",
     "prompt/coordination/clients/raft-20261103T100326Z-9df2b7ac/*",
+    "prompt/coordination/work/LOCAL-005/raft-20261103T100326Z-9df2b7ac-offline-save-audit.json",
     "prompt/coordination/experiments/raft-20261103T100326Z-9df2b7ac/*",
-    "android-port/Runtime/Platform (exact file after audit)",
-    "tests (isolated contract harness)",
-    "prompt/STATUS.md and linked handoff, only after verified meaningful delta"
+    "prompt/STATUS.md and linked handoff (append only, after validation)"
   ],
   "related_work": [
-    "Reviewed clients: A1 WATER-001; A2 DISPLAY-003; A3/A4/A5/A6 HAPTICS-008; paused FFT-FORMAT-009"
+    "A6 LOCAL-005 owns LocalSavePaths.cs and Smoke/Program.cs — do not edit them",
+    "A8 LOCAL-005 owns world-readiness probe and tests — do not edit them",
+    "A10 LOCAL-005 owns independent original world/save source probe — no overlap expected"
   ],
   "experiment_ids": [],
   "evidence": [],
   "result": null,
-  "next_step": "Read latest tracked save/world integration source, gather exact source SHA, implement bounded reproducer and targeted repair without Unity."
+  "next_step": "Reproduce valid external profile.id symlink and directory-link with C# net8 harness; reject them in LocalProfileStore only; verify old positive tests and CI."
 }
