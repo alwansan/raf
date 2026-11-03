@@ -4,13 +4,13 @@
   "agent": "A7",
   "session_id": "A7-20261103T121120Z-3a28b2d1",
   "resumed_from": "raft-20261103T113245Z-a7e48c92",
-  "status": "active",
-  "updated_at": "2026-11-03T12:11:20.674Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T12:18:38.134Z",
   "base_sha": "905bd61c040025aa37dda22816126108b8e8c793",
   "current_work": [
     "INPUT-005"
   ],
-  "last_commit": null,
-  "next_step": "CPU C# regression for redundant unchanged-coordinate Move emission and 500ms hold; implement minimal coalescing if red test confirms while preserving effective motions.",
+  "last_commit": "bb5c96c5d342de94f0304f1bb13147b0c4e8682a",
+  "next_step": "A7 scoped unchanged-coordinate event suppression proven red/green CPU, tests 446 gesture/53 mapping; real Android/Unity performance, device-input and broader INPUT acceptance remain pending. Start any next task with new identity/live HEAD.",
   "memory_path": "prompt/coordination/clients/raft-20261103T121120Z-a7b60d42/MEMORY.md"
 }
