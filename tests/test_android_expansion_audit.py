@@ -301,6 +301,29 @@ class OriginalHapticsObbContractTests(unittest.TestCase):
             self.assertIn("manifest provenance changed", result.stderr)
             self.assertNotIn("SyntheticHaptic", result.stderr)
 
+    def test_production_cli_requires_original_haptics_manifest(self):
+        """A successful release audit must not silently omit the 29-WAV gate."""
+        import subprocess
+        import sys
+
+        with tempfile.TemporaryDirectory() as tmp:
+            apk, obb, manifest, entries, _, names = self.fixture(Path(tmp))
+            for remove_original_entries in (False, True):
+                with self.subTest(original_haptics_removed=remove_original_entries):
+                    if remove_original_entries:
+                        make(obb, {key: value for key, value in entries.items()
+                                   if not key.startswith("assets/Haptics/")})
+                    result = subprocess.run([
+                        sys.executable, "scripts/audit_android_expansion.py",
+                        "--apk", str(apk), "--obb", str(obb)],
+                        cwd=Path(__file__).resolve().parents[1],
+                        capture_output=True, text=True, check=False)
+                    self.assertNotEqual(result.returncode, 0,
+                                        "Release audit bypassed required Haptics authenticity")
+                    self.assertIn("--haptics-manifest", result.stderr)
+                    self.assertNotIn("RAFT_ANDROID_OBB_AUDIT", result.stdout)
+                    self.assertNotIn(names[0], result.stderr)
+
     def test_production_cli_rejects_untrusted_manifest_pin_override(self):
         """Native verification must not accept a caller-supplied original identity."""
         import subprocess
