@@ -183,12 +183,16 @@ public final class RemoteLogService extends IRemoteLog.Stub {
                                 if(line.contains("am_proc_died") && line.contains(packageName)){
                                     processDeathEvents.incrementAndGet();
                                     lastDeathAtUnixMs.set(System.currentTimeMillis());
-                                    Matcher died=Pattern.compile("\\[\\d+,(\\d+),").matcher(line);
-                                    if(died.find()){
+                                    // am_proc_died is an event-buffer record, normally
+                                    // [userId,pid,processName,...]. Do not infer a PID
+                                    // from an unrelated last-seen process: that could
+                                    // attach a different process's exit cause.
+                                    Matcher died=Pattern.compile(
+                                            "\\[\\d+,(\\d+),([^,\\]]+)").matcher(line);
+                                    if(died.find() && packageName.equals(died.group(2).trim())){
                                         try{lastDeathPid.set(Integer.parseInt(died.group(1)));}
                                         catch(NumberFormatException ignored){}
                                     }
-                                    if(lastDeathPid.get()<=0)lastDeathPid.set(lastKnownPid.get());
                                 }
                             } else {
                                 gameLogLines.incrementAndGet();
