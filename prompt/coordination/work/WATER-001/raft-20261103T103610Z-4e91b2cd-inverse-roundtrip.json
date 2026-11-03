@@ -1,0 +1,13 @@
+{
+  "owner": "raft-20261103T103610Z-4e91b2cd",
+  "status": "active",
+  "base_sha": "feb44bd2a8bde0b4e6ab40696356cbb029026cdc",
+  "hypothesis": "Original CPU conjugate-forward-conjugate inverse recovers each input with N squared normalization",
+  "intended_files": [
+    "scripts/verify_original_fft_cpu_2d.py"
+  ],
+  "limitations": [
+    "Not shader execution"
+  ],
+  "next_step": "Inspect actual CI result"
+}
