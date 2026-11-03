@@ -1,0 +1,36 @@
+name: Raft A15 built-in shader addition rollback (CPU only)
+
+on:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - scripts/restore_builtin_shaders.py
+      - tests/test_a15_builtin_restore_rollback.py
+      - .github/workflows/raft-a15-builtin-restore-rollback.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: raft-a15-builtin-additions-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  rollback:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: A15 synthetic rollback red-green checks
+        run: |
+          python3 -m unittest discover -s tests -p 'test_a15_builtin_restore_rollback.py' -v
+      - name: Existing shader identity, symlink and include checks
+        run: |
+          python3 -m unittest discover -s tests -p 'test_restore_builtin_shaders.py' -v
+          python3 -m unittest discover -s tests -p 'test_a9_builtin_shader_identity.py' -v
+          python3 -m unittest discover -s tests -p 'test_a3_builtin_shader_symlink_paths.py' -v
