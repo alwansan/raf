@@ -19,6 +19,7 @@ from scripts.probe_fft_spirv_images import image_resource_contracts, compare_ima
 from scripts.probe_fft_spirv_operation_profile import image_operation_profile, compare_image_operation_profiles
 from scripts.probe_fft_spirv_formatless_repair import restore_formatless_write
 from scripts.probe_fft_spirv_image_flow import image_slot_dataflow
+from scripts.probe_fft_spirv_math_profile import numeric_opcode_profile, compare_numeric_opcode_profiles
 
 OWNER = "sharedassets0.assets"
 PATH_ID = 2456
@@ -135,7 +136,7 @@ def compare_roundtrip_contracts(original_reflection, original_bindings,
 
 
 def cross_compile_roundtrip(source_spv, original_reflection, original_bindings,
-                            original_images, original_reflection_image_ops, temporary, index):
+                            original_images, original_reflection_image_ops, original_math_profile, temporary, index):
     """Return exact stages independently; shader text remains private temp only."""
     result = {
         "spirv_cross_hlsl50_generated": False,
@@ -145,6 +146,7 @@ def cross_compile_roundtrip(source_spv, original_reflection, original_bindings,
         "authored_shaderlab_restored": False,
         "typed_image_contract_preserved": False,
         "image_operation_profile_preserved": False,
+        "math_opcode_profile_preserved": None,
         "private_formatless_restoration_structurally_constructed": False,
         "private_formatless_restoration_valid_vulkan_1_1": False,
         "private_formatless_restoration_image_contract_matched": False,
@@ -186,6 +188,9 @@ def cross_compile_roundtrip(source_spv, original_reflection, original_bindings,
     result['image_operation_profile_preserved'] = op_diff['same_image_operation_and_capability_counts']
     result['image_operation_profile_difference'] = op_diff
     result['roundtrip_image_slot_flow'] = image_flow
+    math_diff = compare_numeric_opcode_profiles(original_math_profile, numeric_opcode_profile(module))
+    result["math_opcode_profile_difference"] = math_diff
+    result["math_opcode_profile_preserved"] = math_diff["same_tracked_opcode_profile"]
     try:
         temporary_repaired = restore_formatless_write(
             module, original_images, original_reflection_image_ops)
@@ -255,6 +260,7 @@ def probe(root):
                 entry["typed_images"] = image_resource_contracts(spv_bytes)
                 entry["image_operation_profile"] = image_operation_profile(spv_bytes)
                 entry["image_slot_flow"] = image_slot_dataflow(spv_bytes)
+                entry["math_opcode_profile"] = numeric_opcode_profile(spv_bytes)
                 reflected = entry["resource_types"]["original_resource_kind_counts"]
                 reflected_images = sum(reflected.get(kind, 0) for kind in
                                        ("images", "textures", "separate_images"))
@@ -264,7 +270,7 @@ def probe(root):
                     ["spirv-val", "--target-env", "vulkan1.1", str(spv)])
                 if entry["validated_for_vulkan_1_1"]:
                     entry["private_hlsl_roundtrip"] = cross_compile_roundtrip(
-                        spv, information, entry["bindings"], entry["typed_images"], entry["image_operation_profile"], temp, index)
+                        spv, information, entry["bindings"], entry["typed_images"], entry["image_operation_profile"], entry["math_opcode_profile"], temp, index)
             reports.append(entry)
     return {
         "original_owner": OWNER,
@@ -296,6 +302,12 @@ def probe(root):
             "private_hlsl_roundtrip", {}).get("private_formatless_restoration_valid_vulkan_1_1", False) for x in reports),
         "private_formatless_restoration_matched_original_contract_count": sum(x.get(
             "private_hlsl_roundtrip", {}).get("private_formatless_restoration_image_contract_matched", False) for x in reports),
+        "roundtrip_math_opcode_profile_compared_count": sum(
+            x.get("private_hlsl_roundtrip", {}).get("math_opcode_profile_preserved") is not None
+            for x in reports),
+        "roundtrip_math_opcode_profile_preserved_count": sum(
+            x.get("private_hlsl_roundtrip", {}).get("math_opcode_profile_preserved") is True
+            for x in reports),
         "roundtrip_typed_images_preserved_count": sum(x.get("private_hlsl_roundtrip", {}).get(
             "typed_image_contract_preserved", False) for x in reports),
         "original_kernel_indices_verified": False,
