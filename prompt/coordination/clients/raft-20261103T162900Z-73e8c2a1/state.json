@@ -2,15 +2,15 @@
   "schema_version": 1,
   "client_label": "W1",
   "username": "raft-20261103T162900Z-73e8c2a1",
-  "session_id": "w1-zip2-20261103T223612473Z",
+  "session_id": "w1-engine-db-20261103T225712644Z",
   "resumed_from": null,
-  "status": "paused",
-  "updated_at": "2026-11-03T22:48:52.904Z",
-  "base_sha": "5e40225929a6517eab937858d5ae438122a4f2c1",
+  "status": "active",
+  "updated_at": "2026-11-03T22:57:12.644Z",
+  "base_sha": "fda3590403e3cf01d6487eb78fa601a9e18906ad",
   "current_work": [
-    "ZIP2 W1 source restoration complete and verified; builtin redirect mapping unresolved"
+    "Reflect exact SourceGenerated1.3.2 and embedded TPK engine shader mapping"
   ],
   "last_commit": "afb4bc1b8b86d3254a35916b5cc336234fd547aa",
-  "next_step": "Inspect exact AssetRipper.SourceGenerated1.3.2 Shader.ReadRelease Name copy and embedded engine cache; reconcile actual full-export Material engine pointers before fixing gate. No identical native retry.",
+  "next_step": "Prove parsed-name copy in actual pinned assembly and match original shader property keys to exact engine dataset before any gate correction.",
   "memory_path": "prompt/coordination/clients/raft-20261103T162900Z-73e8c2a1/MEMORY.md"
 }

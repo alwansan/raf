@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T162900Z-73e8c2a1",
+  "status": "active",
+  "updated_at": "2026-11-03T22:57:12.644Z",
+  "base_sha": "fda3590403e3cf01d6487eb78fa601a9e18906ad",
+  "hypothesis": "Pinned generated1.3.2 reader copies parsed shader names; exact embedded TPK mapping can account for omitted loose builtin shader files. Neither current canonical-owner0matches nor generic engine source proves this.",
+  "intended_files": [
+    "android-port/Experiments/W1EngineDatabase/Program.cs",
+    "android-port/Experiments/W1EngineDatabase/W1EngineDatabase.csproj",
+    "scripts/w1_match_embedded_engine_shaders.py",
+    ".github/workflows/raft-w1-engine-database.yml"
+  ],
+  "related_work": [
+    "Existing W1 fourownerZIP2cache",
+    "A12BlurCBreflections distinct",
+    "No other engine-db probe found in current tree"
+  ],
+  "next_step": "Prove parsed-name copy in actual pinned assembly and match original shader property keys to exact engine dataset before any gate correction."
+}
