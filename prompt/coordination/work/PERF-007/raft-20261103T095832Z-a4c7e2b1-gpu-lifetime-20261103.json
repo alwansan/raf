@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T095832Z-a4c7e2b1",
+  "agent": "A4",
+  "session_id": "a4-resume-20261103T224500Z-84e2c91f",
+  "issue_id": "PERF-007",
+  "status": "active",
+  "updated_at": "2026-11-03T22:44:54.646Z",
+  "base_sha": "b3ebf3ddd69e44b1f430c1d77a6642f70adbd404",
+  "hypothesis": "Historical on-phone GPU-memory OOM may involve a RenderTexture/cache lifetime or repeated GPU allocation; a source-locked path and negative control are needed before any gameplay fix.",
+  "intended_files": [
+    "prompt/coordination/clients/raft-20261103T095832Z-a4c7e2b1/state.json",
+    "prompt/coordination/clients/raft-20261103T095832Z-a4c7e2b1/MEMORY.md",
+    "prompt/coordination/work/PERF-007/raft-20261103T095832Z-a4c7e2b1-gpu-lifetime-20261103.json"
+  ],
+  "related_work": [
+    "Existing original FFT cache lifetime probes and other agents on WATER-001/FFT-FORMAT-009: read/coordinate, do not rewrite",
+    "A4 cgroup-monitor task now exact-source CI verified and completed",
+    "Native full delivery remains readiness-coordinator only"
+  ],
+  "steps": [
+    "Inspect authentic original source and current adapter for concrete allocation/cleanup path, not lexical counts alone",
+    "Compare scene reload/disposal and error/exception branches against source and prior fixes",
+    "Implement isolated behavior-preserving resource-lifetime fix and CPU-only harness only if defect is proven; otherwise record limits"
+  ],
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41658344282"
+  ],
+  "result": null,
+  "limitations": [
+    "No Android GPU measurements from current candidate",
+    "No Unity/Native/APK during restoration"
+  ],
+  "next_step": "Inspect prior FFT cache lifetime findings and existing Android renderer adapter to find falsifiable lifecycle failure."
+}

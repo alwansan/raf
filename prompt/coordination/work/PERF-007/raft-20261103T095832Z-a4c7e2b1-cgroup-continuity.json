@@ -2,8 +2,8 @@
   "schema_version": 1,
   "owner": "raft-20261103T095832Z-a4c7e2b1",
   "issue_id": "PERF-007",
-  "status": "paused",
-  "updated_at": "2026-11-03T14:56:57.038Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T22:44:54.646Z",
   "base_sha": "b09de2aca410f43b741f94b5353131d47d2d7386",
   "hypothesis": "summarize() compares only first/last cgroup oom counters; an intermediate reset followed by growth can produce a plausible false positive OOM delta.",
   "intended_files": [
@@ -26,9 +26,11 @@
     "https://github.com/alwansan/raf/commit/1b37647587e94b4e3a7baf6e34865c634a442216",
     "https://github.com/alwansan/raf/actions/runs/41616939992",
     "https://github.com/alwansan/raf/commit/c9b2cf3ee6502893f2d61160269c2dbb18365ee6",
-    "https://github.com/alwansan/raf/commit/10563d4622a898ee4e2bcc9631bf4f95e3fcd0b2"
+    "https://github.com/alwansan/raf/commit/10563d4622a898ee4e2bcc9631bf4f95e3fcd0b2",
+    "https://github.com/alwansan/raf/actions/runs/41658344282",
+    "https://github.com/alwansan/raf/actions/runs/41658343421"
   ],
-  "result": "CI summary now returns null for cgroup resets, missing/malformed intermediate observations and non-object JSON lines; local 7/7 targeted replica checks passed. Published code + 2 new repository regression methods; exact-source GitHub Actions run after these changes not verified.",
-  "next_step": "Verify full repo test_ci_memory_watch.py suite on a known post-change commit using cheap CPU-only Actions, then analyze actual game GPU resource lifetime separately; no Unity/APK from A4.",
+  "result": "Original 10/10 post-change memory tests verified in exact-source GitHub Actions 41658344282 / job 125994601312; 3 live samples and 256MiB swap capability also PASS. Previous 7/7 local focused checks were partial.",
+  "next_step": "Complete; move to independent PERF-007 GPU resource lifetime source inspection.",
   "source_sha": "10563d4622a898ee4e2bcc9631bf4f95e3fcd0b2"
 }
