@@ -77,6 +77,21 @@ class TestHapticsInventory(unittest.TestCase):
         self.manifest.write_text(json.dumps(data))
         with self.assertRaises(HapticsInventoryError): audit(self.repo, self.manifest)
 
+    def test_co_mutated_tracked_wav_and_manifest_must_not_redefine_original(self):
+        # Negative control: an unanchored manifest and matching re-committed
+        # WAV can agree with each other but both differ from the audited original.
+        immutable_anchor = self.run_git('hash-object', '--', str(self.manifest))
+        (self.folder / 'A.wav').write_bytes(b'SYNTHETIC_CHANGED_WITH_MANIFEST')
+        self.run_git('add', '.')
+        self.run_git('-c', 'user.name=Fixture', '-c', 'user.email=test@example.invalid',
+                     'commit', '-qm', 'co-mutated-test-source')
+        self.write_manifest()
+        self.assertTrue(audit(self.repo, self.manifest, expected_count=2)
+                        ['original_manifest_and_worktree_match'])
+        with self.assertRaises(HapticsInventoryError):
+            audit(self.repo, self.manifest, expected_count=2,
+                  expected_manifest_blob_sha=immutable_anchor)
+
     def test_count_policy_rejected(self):
         with self.assertRaises(HapticsInventoryError): audit(self.repo, self.manifest, 29)
 
