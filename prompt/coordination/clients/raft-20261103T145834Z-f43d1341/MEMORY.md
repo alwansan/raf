@@ -1,0 +1,7 @@
+# A8 restored — LOCAL-005 source diagnostic integrity
+
+New session `A8-20261103T145834Z-055d8d55` in `raft-20261103T145834Z-f43d1341`; resumed_from latest completed A8 `raft-20261103T121121Z-56c3b5b1`. Original A8 chain: LOCAL-005 `raft-20261103T100412Z-b2521375` commit23161cfc/CI41616815415, DIAG-010 `raft-20261103T105250Z-12695739` commit e70dd94d/CI41623238332, AUDIO-004 `raft-20261103T113223Z-fc895dbd` commit c4fae959/CI41628714708, DIAG-011 latest commit3f7baadd/CI41634028276 and41634028255. All previous states marked completed; their records untouched.
+
+Verified branch feature/android-native-port live on 2026-11-03 and read current coordination/unified protocol, prompts, owner requirements, AGENTS, readiness, work of A6/A9/A10 and current Actions/releases. Old APK80 and CL Nov2 logs are historical. NOT_READY/0-of-3 remains while WATER-001, RENDER-002 and integrated world device acceptance open. No Unity/APK/OBB/XAPK, LFS, release, build request or task changes.
+
+Restore point: latest completed DIAG-011. Independent next step is narrow LOCAL-005 diagnostic correction: source-level world readiness probe can be fooled by preprocessor-disabled C# statements. Without compiler define context reject method-local `#if/#elif/#else/#endif` rather than label text executable. Add negative/safe controls to synthetic tests, validate cheap no-LFS CI. Only two world-probe Python files and this client's coordination records are in scope, not original game code, GUIDs, assets, .rgd, or other clients.
