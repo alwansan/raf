@@ -1,0 +1,8 @@
+# A7 ZIP2 original InputSystem assembly ABI verification
+
+- Session: `A7-20261103T224215Z-0c9d72f3`; identity `raft-20261103T224215Z-a7d93c52`; resumed from completed `raft-20261103T145805Z-a7c2f809`; timestamp 2026-11-03T22:47:25.397Z.
+- Writable branch `feature/android-native-port` only. Original ZIP2 source immutable SHA `15964ea8f246b6e076ce26b60931ee2e1a9a2385`, read-only; zip2 file `Raft/Raft_Data/Managed/Unity.InputSystem.dll` normal Git blob, **1,052,672 bytes** manifest SHA256 `032031efe7f85aec81e28f4af43be496be3cf83d8d20e314ba9de8ca95ebfc3f`. Manifest also pins original ScriptingAssemblies.json SHA `50becc5aca96c0287bd8e909cea80ffbb94e45631f8dbb45740c0614e00cbf20`.
+- Read live unified, README, owner requirements, docs/ZIP2_SOURCE_PROVIDER.md, original ZIP2 file listing, previous A7 completed state/memory, Actions and INPUT work. Other clients building A1 water, A2 Settings and W1 rendering tools; no INPUT path overlap.
+- Original `ScriptingAssemblies.json` lists Unity.InputSystem, and original DLL is available without Git LFS. However earlier A7's actual touch packet tests used strict Unity doubles and public upstream API; no binary metadata acceptance from ORIGINAL shipped game.
+- Work: obtain only pinned original binary and two small manifests via GitHub Actions sparse partial clone, authenticate bytes, use built-in .NET metadata APIs to assert required original managed types and touch-state method signatures, include tampered-DLL and missing-assembly-list negative controls.
+- Scope: No original game resource publication, source-aliasing, LFS, Unity Editor/native APK/OBB/XAPK, Releases, tasks or CL writes. CPU metadata not gameplay test. Status NOT_READY 0/3.
