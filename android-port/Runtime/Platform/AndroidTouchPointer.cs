@@ -69,12 +69,27 @@ namespace RaftAndroid.Platform
         {
             var screen = device as Touchscreen;
             if (screen == null || input.handled || !input.IsA<StateEvent>()) return;
-            // Touchscreen's 1.7 state callback maps raw Android TouchState
-            // packets to primaryTouch for ReadValueFromEvent, before allocation.
+            // Unity Input System 1.7 maps per-finger TouchState reads from
+            // controls only to primaryTouch, which stays on the FIRST finger.
+            // Read the actual event payload to route secondary gameplay touches
+            // while another finger owns the original UGUI/virtual controller.
             int id; Vector2 point; TouchPhase phase;
-            if (!screen.primaryTouch.touchId.ReadValueFromEvent(input, out id) ||
-                !screen.primaryTouch.position.ReadValueFromEvent(input, out point) ||
-                !screen.primaryTouch.phase.ReadValueFromEvent(input, out phase)) return;
+            try
+            {
+                TouchState touch = StateEvent.GetState<TouchState>(input);
+                id = touch.touchId;
+                point = touch.position;
+                phase = touch.phase;
+                if (id == 0) return; // Unity touch IDs must be non-zero.
+            }
+            catch (System.InvalidOperationException)
+            {
+                // A full TouchscreenState event is not a single TouchState.
+                // Keep the existing primaryTouch fallback for those packets.
+                if (!screen.primaryTouch.touchId.ReadValueFromEvent(input, out id) ||
+                    !screen.primaryTouch.position.ReadValueFromEvent(input, out point) ||
+                    !screen.primaryTouch.phase.ReadValueFromEvent(input, out phase)) return;
+            }
             if (suspended) { input.handled = true; return; }
             if (phase == TouchPhase.Began && OwnedUi(point)) uiTouches.Add(id);
             if (uiTouches.Contains(id))
