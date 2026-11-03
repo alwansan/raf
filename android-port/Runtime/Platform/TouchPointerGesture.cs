@@ -33,6 +33,9 @@ namespace RaftAndroid.Platform
         public void Move(int id, float px, float py, double time)
         {
             if (!active || owner != id || !Valid(px, py, time) || time < lastTime) return;
+            // Stationary packets advance the touch clock for 500ms hold
+            // detection, but must not enqueue an identical mouse position.
+            bool positionChanged = x != px || y != py;
             x = px; y = py; lastTime = time;
             uint currentGeneration = generation;
             Tick(time);
@@ -40,7 +43,7 @@ namespace RaftAndroid.Platform
             // Never deliver motion for a gesture that was just released or
             // replaced by a different owner during that callback.
             if (!active || owner != id || generation != currentGeneration) return;
-            emit(TouchPointerCommand.Move, x, y);
+            if (positionChanged) emit(TouchPointerCommand.Move, x, y);
         }
 
         public void Tick(double time)
