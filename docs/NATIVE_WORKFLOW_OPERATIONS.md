@@ -1,5 +1,7 @@
 # Native build, light preflight and experimental lanes
 
+> **3 November owner direction:** The separate **Raft — جاهزية وبناء اللعبة** coordinator maintains [APK_BUILD_READINESS.md](APK_BUILD_READINESS.md) and uses this existing full-delivery protocol once actual pre-build source/resource blockers are resolved and the next useful step is user testing. Recovery tasks keep their source/CPU scope. Preserve signed checkpoints for packaging recovery; do not issue duplicate builds or treat partial cheap-test success as readiness.
+
 Only feature/android-native-port is writable. Keep Unity2021.3.45f2 and existing data/signature/scene gates.
 
 ## Dedicated workflows

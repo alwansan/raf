@@ -2,6 +2,10 @@
 
 Read [current owner requirements](../docs/CURRENT_OWNER_REQUIREMENTS.md), [AGENTS.md](../AGENTS.md), then the [latest full handoff](../docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md). This file is a concise checkpoint; refresh live HEAD, Actions and concurrent changes before writing.
 
+## New readiness/build coordinator
+
+**Raft — جاهزية وبناء اللعبة** is created/enabled, hourly at minute55 Asia/Baghdad. It maintains [APK_BUILD_READINESS.md](../docs/APK_BUILD_READINESS.md), currently **NOT_READY**, and uses the existing full APK+OBB+XAPK system after actual pre-build source/resource blockers are resolved and device testing is the next useful step. It diagnoses/repairs build errors and recovers signed checkpoints for packaging failures. The two recovery tasks remain unchanged. No new native request/build was made. This coordinator-specific direction supersedes earlier blanket build-hold wording; source/recovery work continues independently.
+
 ## Latest verified result: original FFT numeric reference
 
 Source d57d00a94826508608bd21b8d34b793d0ff4ba7f; [original-source CPU numeric CI41555453779](https://github.com/alwansan/raf/actions/runs/41555453779), job125653301781, **SUCCESS**. Executes the original butterfly utility, original GPU-table encoding body and original CPU FFT stage body with three SHA pins. For sizes32/64/128/256/512:40 packed-table cases,20 original CPU signal comparisons,194,887 checks; three deliberately wrong stage/sign/normalization controls detected. Max relative-L2 errors: full-float replay1.8894e-7; table-only binary16 replay2.3869e-4; original CPU lane2.0495e-7. Local21 related Python tests passed. [Full report and limits](../docs/ORIGINAL_BUTTERFLY_NUMERIC_2026-11-03.md).
@@ -18,7 +22,7 @@ This does not execute original/translated GPU programs, Unity, two-dimensional w
 
 ## Current constraints and next work
 
-Only feature/android-native-port writable; CL read-only. **No Unity/import/APK/OBB/XAPK/release and no native request JSON changes.** Preserve original assets/.meta/GUID/.rgd. LEFT MouseButton.Left/Mouse0,500ms; automatic touch-to-mouse=false; preserve UGUI/controller/physical input. Ignore unavailable الجلسة1.txt/text.txt. Both existing recovery tasks remain configured; do not duplicate or edit either.
+Only feature/android-native-port writable; CL read-only. Full native delivery is coordinated through [APK_BUILD_READINESS.md](../docs/APK_BUILD_READINESS.md) and the separate readiness task after its evidence conditions are satisfied; source/recovery tasks do not independently start Unity/native work. Preserve original assets/.meta/GUID/.rgd. LEFT MouseButton.Left/Mouse0,500ms; automatic touch-to-mouse=false; preserve UGUI/controller/physical input. Ignore unavailable الجلسة1.txt/text.txt. Both recovery tasks remain configured; the new readiness/build coordinator is separate. Preserve all tasks and avoid duplicates.
 
 Last game delivery: APK80/source9462f8edd8cdb5becbccb96521f2876ef9924410, tagandroid-early-test-41448086401-1,11assets verified. Newer lograf releases are separate. Current CL raft-log roots unchanged. Later source fixes are not installed-phone evidence.
 
