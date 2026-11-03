@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T230900Z-a1f608bd",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "updated_at": "2026-11-03T23:09:33.770Z",
+  "base_sha": "f6adf9361999146c730f1d8b6b959dcb59c0977a",
+  "original_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "hypothesis": "Sequential authentic FFT first and second shader pairs with image output-to-input barriers, same butterfly lookup and real half/float storage views can be numerically compared original DXBC vs HLSL-roundtrip; previous independent per-pass checks missed two-pass binding/sync.",
+  "intended_files": [
+    "scripts/a1_fft_two_pass_vulkan.cpp",
+    "scripts/probe_original_fft_two_pass_software_vulkan.py",
+    "tests/test_probe_original_fft_two_pass_software_vulkan.py",
+    ".github/workflows/raft-a1-fft-two-pass-vulkan.yml",
+    "prompt/coordination/clients/raft-20261103T230900Z-a1f608bd",
+    "prompt/coordination/experiments/raft-20261103T230900Z-a1f608bd",
+    "prompt/coordination/discussions/WATER-001",
+    "docs/A1_FFT_TWO_PASS_ORIGINAL_VULKAN_2026-11-04.md",
+    "prompt/STATUS.md",
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+  ],
+  "constraints": [
+    "CPU Mesa Vulkan only",
+    "Use only read-only pinned ZIP2 sharedassets0 original SHA verified, never Git LFS",
+    "No game asset/kernel/name substitution, no raw binary outputs",
+    "No Unity/APK/OBB/Release or scheduled task edits",
+    "Do not overlap W1/A12R original graphics/CB files"
+  ],
+  "next_step": "Add sequential two-pass Vulkan runner and private original paired DXBC test; synthetic positive/negative controls then exact CI."
+}
