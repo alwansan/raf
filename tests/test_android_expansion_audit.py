@@ -120,5 +120,126 @@ class ExpansionAuditTests(unittest.TestCase):
                 audit_companion(apk, obb, digest=False)
 
 
+class OriginalHapticsObbContractTests(unittest.TestCase):
+    """Synthetic-only ZIP layout and Git-blob parity negative controls.
+
+    The production manifest is exercised independently in A3 staging and
+    A5's authenticated original source reader CI. Fixtures never contain
+    proprietary audio or emit member names in diagnostic messages.
+    """
+
+    def fixture(self, root):
+        import hashlib
+        import json
+
+        apk = root / "a.apk"
+        obb = root / "a.main.obb"
+        manifest = root / "original-haptics.json"
+        names = ["SyntheticHaptic%02d.wav" % i for i in range(29)]
+        payloads = {name: (b"RIFF-TEST-ONLY-" + name.encode()) for name in names}
+        files = {}
+        for name, payload in payloads.items():
+            oid = hashlib.sha1(b"blob " + str(len(payload)).encode() + b"\0" + payload).hexdigest()
+            files[name] = {"git_blob_sha": oid, "bytes": len(payload)}
+        original = {"schema_version": 1,
+                    "path_prefix": "Raft/Raft_Data/StreamingAssets/Haptics/",
+                    "files": files}
+        manifest.write_text(json.dumps(original), encoding="utf-8")
+        make(apk, {"assets/bin/Data/first": b"first"})
+        entries = {"assets/bin/Data/level1": b"original-data"}
+        entries.update({"assets/Haptics/" + name: payload for name, payload in payloads.items()})
+        make(obb, entries)
+        return apk, obb, manifest, entries, original, names
+
+    def test_exact_29_jar_paths_and_git_blobs_pass_without_original_asset_export(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            apk, obb, manifest, _, _, _ = self.fixture(Path(tmp))
+            result = audit_companion(apk, obb, digest=False, verify_crc=True,
+                                     haptics_manifest=manifest)
+            self.assertEqual(result["hapticsOriginalMembers"], 29)
+            self.assertGreater(result["hapticsOriginalBytes"], 0)
+            self.assertTrue(result["hapticsJarPathsAndOriginalGitBlobsVerified"])
+            self.assertFalse(result["originalBytesVerified"])  # other Unity data unverified
+            self.assertFalse(result["deviceMountedVerified"])
+            self.assertNotIn("SyntheticHaptic", str(result))
+
+    def test_missing_misplaced_and_case_changed_entries_fail_closed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            apk, obb, manifest, entries, _, names = self.fixture(Path(tmp))
+            original_key = "assets/Haptics/" + names[0]
+            scenarios = [
+                ("missing", None),
+                ("wrong_unity_data_prefix", "assets/bin/Data/StreamingAssets/Haptics/" + names[0]),
+                ("case_changed", "assets/Haptics/" + names[0].lower()),
+                ("wrong_subdirectory", "assets/Haptics/extra/" + names[0]),
+            ]
+            for name, replacement in scenarios:
+                with self.subTest(name=name):
+                    other = dict(entries)
+                    value = other.pop(original_key)
+                    if replacement is not None:
+                        other[replacement] = value
+                    make(obb, other)
+                    with self.assertRaisesRegex(ValueError, "absent") as error:
+                        audit_companion(apk, obb, digest=False,
+                                        haptics_manifest=manifest)
+                    self.assertNotIn(names[0], str(error.exception))
+
+    def test_valid_zip_same_size_tamper_and_wrong_manifest_sha_fail_closed(self):
+        import json
+
+        with tempfile.TemporaryDirectory() as tmp:
+            apk, obb, manifest, entries, original, names = self.fixture(Path(tmp))
+            target = "assets/Haptics/" + names[0]
+            tampered = dict(entries)
+            value = tampered[target]
+            tampered[target] = value[:-1] + bytes([value[-1] ^ 1])
+            make(obb, tampered)
+            with self.assertRaisesRegex(ValueError, "identity mismatch"):
+                audit_companion(apk, obb, digest=False,
+                                haptics_manifest=manifest)
+            make(obb, entries)
+            forged = json.loads(json.dumps(original))
+            forged["files"][names[0]]["git_blob_sha"] = "0" * 40
+            manifest.write_text(json.dumps(forged), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "identity mismatch"):
+                audit_companion(apk, obb, digest=False,
+                                haptics_manifest=manifest)
+
+    def test_manifest_must_have_exact_safe_29_original_wav_names(self):
+        import json
+
+        with tempfile.TemporaryDirectory() as tmp:
+            apk, obb, manifest, _, original, names = self.fixture(Path(tmp))
+            candidates = []
+            shorter = json.loads(json.dumps(original))
+            shorter["files"].pop(names[0])
+            candidates.append(shorter)
+            alias = json.loads(json.dumps(original))
+            alias["files"][names[0].lower()] = alias["files"].pop(names[1])
+            candidates.append(alias)
+            traversal = json.loads(json.dumps(original))
+            traversal["files"]["../outside.wav"] = traversal["files"].pop(names[0])
+            candidates.append(traversal)
+            wrong_schema = json.loads(json.dumps(original))
+            wrong_schema["path_prefix"] = "assets/Haptics/"
+            candidates.append(wrong_schema)
+            for bad in candidates:
+                with self.subTest(case=list(bad["files"])[0]):
+                    manifest.write_text(json.dumps(bad), encoding="utf-8")
+                    with self.assertRaises(ValueError):
+                        audit_companion(apk, obb, digest=False, haptics_manifest=manifest)
+
+    def test_without_manifest_does_not_claim_haptic_archive_identity(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            apk, obb, manifest, entries, _, names = self.fixture(Path(tmp))
+            entries.pop("assets/Haptics/" + names[0])
+            make(obb, entries)
+            result = audit_companion(apk, obb, digest=False)
+            self.assertFalse(result["hapticsJarPathsAndOriginalGitBlobsVerified"])
+            with self.assertRaises(ValueError):
+                audit_companion(apk, obb, digest=False, haptics_manifest=manifest)
+
+
 if __name__ == "__main__":
     unittest.main()
