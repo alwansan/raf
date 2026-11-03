@@ -53,9 +53,16 @@ namespace RaftAndroid.Platform
             foreach (string part in new[] { "RaftAndroid", "profiles", _profileId, "worlds", worldId })
             {
                 path = Path.Combine(path, part);
-                if ((Directory.Exists(path) || File.Exists(path)) &&
-                    (File.GetAttributes(path) & FileAttributes.ReparsePoint) != 0)
-                    throw new IOException("Linked local save directories are not supported.");
+                // Exists checks are not a reliable way to identify a broken
+                // directory link: a missing target can conceal a live entry.
+                // Inspect the entry metadata directly, like CheckedSaveFile.
+                try
+                {
+                    if ((File.GetAttributes(path) & FileAttributes.ReparsePoint) != 0)
+                        throw new IOException("Linked local save directories are not supported.");
+                }
+                catch (FileNotFoundException) { } // New managed path component.
+                catch (DirectoryNotFoundException) { }
             }
         }
 

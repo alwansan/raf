@@ -203,6 +203,42 @@ internal static class Program
                 ExpectException<IOException>(() => paths.GetWorldDirectory("legit_world"));
                 Assert(!Directory.Exists(Path.Combine(outside, "worlds")), "Outside profile directories created");
             });
+            Test("dangling world directory link is refused before target appears", () =>
+            {
+                string sandbox = Path.Combine(root, "dangling-world-directory-sandbox");
+                string profile = new LocalProfileStore(sandbox).GetOrCreateProfileId();
+                var paths = new LocalSavePaths(sandbox, profile);
+                string directory = paths.GetWorldDirectory("pending_redirect");
+                Directory.CreateDirectory(Path.GetDirectoryName(directory)!);
+                string outside = Path.Combine(root, "missing-world-directory-target");
+                Assert(!Directory.Exists(outside), "Missing world target already exists");
+                Directory.CreateSymbolicLink(directory, outside);
+                Assert((File.GetAttributes(directory) & FileAttributes.ReparsePoint) != 0,
+                    "Dangling world directory link metadata not observable");
+                ExpectException<IOException>(() => paths.GetWorldDirectory("pending_redirect"));
+                ExpectException<IOException>(() => paths.GetWorldSaveFile("pending_redirect"));
+                ExpectException<IOException>(() => paths.GetWorldSaveFileAndCreateDirectory("pending_redirect"));
+                Assert(!Directory.Exists(outside), "Dangling world link created its target");
+                Directory.CreateDirectory(outside);
+                ExpectException<IOException>(() => paths.GetWorldDirectory("pending_redirect"));
+                Assert(!File.Exists(Path.Combine(outside, "world.sav")), "Redirected world file created");
+            });
+            Test("dangling profile ancestor link is refused before target appears", () =>
+            {
+                string sandbox = Path.Combine(root, "dangling-profile-ancestor-sandbox");
+                string profiles = Path.Combine(sandbox, "RaftAndroid", "profiles");
+                Directory.CreateDirectory(profiles);
+                string outside = Path.Combine(root, "missing-profile-ancestor-target");
+                Assert(!Directory.Exists(outside), "Missing profile target already exists");
+                string link = Path.Combine(profiles, "safe_profile");
+                Directory.CreateSymbolicLink(link, outside);
+                Assert((File.GetAttributes(link) & FileAttributes.ReparsePoint) != 0,
+                    "Dangling profile link metadata not observable");
+                var paths = new LocalSavePaths(sandbox, "safe_profile");
+                ExpectException<IOException>(() => paths.GetWorldDirectory("legit_world"));
+                ExpectException<IOException>(() => paths.GetWorldSaveFileAndCreateDirectory("legit_world"));
+                Assert(!Directory.Exists(outside), "Dangling profile link created outside directories");
+            });
             Test("save file symlink cannot redirect writes outside sandbox", () =>
             {
                 string sandbox = Path.Combine(root, "linked-file-sandbox");
