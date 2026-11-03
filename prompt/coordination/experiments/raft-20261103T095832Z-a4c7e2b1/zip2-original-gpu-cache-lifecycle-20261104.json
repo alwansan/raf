@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T095832Z-a4c7e2b1",
+  "agent": "A4",
+  "session_id": "a4-resume-20261103T231050Z-7d96e2a1",
+  "issue_id": "PERF-007",
+  "experiment_id": "zip2-original-gpu-cache-lifecycle-20261104",
+  "status": "completed",
+  "source_provider": {
+    "branch": "zip2",
+    "immutable_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "manifest_relative_path": "Raft_Data/Managed/Assembly-CSharp.dll",
+    "size_bytes": 3211776,
+    "sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "decompiler": "ilspycmd 11.2.0.10050 -p -lv CSharp9_0"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p 'test_a4_original_gpu_cache_lifecycle.py' -v",
+    "python3 -m unittest discover -s tests -p 'test_a4_gpu_cache_owner_callpaths.py' -v",
+    "python3 -m unittest discover -s tests -p 'test_a4_gpu_cache_destroy_callgraph.py' -v",
+    "python3 -m scripts.a4_original_gpu_cache_lifecycle --source-root PRIVATE",
+    "python3 -m scripts.a4_gpu_cache_owner_callpaths --source-root PRIVATE",
+    "python3 -m scripts.a4_gpu_cache_destroy_callgraph --source-root PRIVATE"
+  ],
+  "workflow_path": ".github/workflows/raft-a4-original-gpu-cache-lifecycle.yml",
+  "concurrency_group": "raft-a4-original-gpu-cache-${{ github.ref }}",
+  "cancel_in_progress": false,
+  "source_sha": "20a7dbd8d1c2a6e81f439c531f8e421383b83ed8",
+  "runs": [
+    {
+      "id": 41737956653,
+      "status": "completed",
+      "conclusion": "success",
+      "result": "6/6 synthetic + exact original cache lifecycle SHA"
+    },
+    {
+      "id": 41738337389,
+      "status": "completed",
+      "conclusion": "success",
+      "result": "original 5-source cache owners and 5/5 new synthetic owner tests"
+    },
+    {
+      "id": 41738673806,
+      "status": "completed",
+      "conclusion": "success",
+      "result": "5/5 additional callgraph tests + authenticated original OnDestroy->Dispose edge"
+    }
+  ],
+  "original_source_observations": {
+    "cache_sha256": "44af5fbb2e0bf9d08de9a4848fd33d62604e52247aaa0ae3c0f0588428d0dc0b",
+    "cache_rendertexture_alloc_sites": 1,
+    "cache_rendertexture_create_sites": 1,
+    "cache_release_sites": 2,
+    "cache_destroy_sites": 2,
+    "cache_dispose_sites": 2,
+    "cache_clear_sites": 1,
+    "owner_types_count": 5,
+    "waves_sha256": "2db9943277431ae23930e7ef0753a4575466ab7d68f5df435871724c1270d276",
+    "waves_original_on_destroy_direct_self_dispose": true,
+    "waves_original_on_destroy_transitive_self_dispose": true
+  },
+  "decision": "Do not inject duplicate Dispose into original WavesRendererFFT.OnDestroy: direct unqualified Dispose() is already present, missed by initial dotted-member-only scanner.",
+  "limitations": [
+    "The current source static callgraph does not prove OnDestroy runs or Dispose succeeds on Android Unity player.",
+    "No dynamic exception path resource ownership or GPU VRAM trace measured on current candidate; phone failure remains historic APK.",
+    "Do not infer overall memory leak absence from this bounded class audit.",
+    "No original shader/resource/code payload was uploaded as artifact, no LFS, no Unity/APK/OBB/XAPK.",
+    "Historical cache source SHA pin difference was resolved operationally after verifying immutable original assembly, but specific source text generation difference unexplained."
+  ],
+  "documentation": "docs/A4_ORIGINAL_GPU_CACHE_ZIP2_2026-11-04.md",
+  "next_step": "Use private actual CSharp9 source to test cache allocation exception recovery and repeated scene resource teardown with executable isolated CSharp doubles before any runtime code change; coordinate A1/W1/W2/W3 ownership."
+}
