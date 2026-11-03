@@ -1,11 +1,13 @@
 {
   "schema_version": 1,
   "owner": "raft-20261103T145700Z-12f4a8b3",
-  "status": "planned",
+  "status": "completed",
   "hypothesis": "Exact serialized original Shader identities in W1 two-owner SHA-verified sources can be intersected with independently authenticated official built-in Shader identities without relying on incomplete AssetRipper-exported 107/140 shader files.",
   "input_hashes": [
     "Official vendor archive SHA256 5cb0f9c4d022d6054d179778b9b50a0301d6748eaf4abdedd21c93f0c30b10c5",
-    "Two original owners pinned by scripts/w1_recover_graphics_programs.py/verify_targeted_lfs_compute_sources.py"
+    "Two original owners pinned by scripts/w1_recover_graphics_programs.py/verify_targeted_lfs_compute_sources.py",
+    "resources.assets SHA256 87493249f1adfc0c5eb8b82e4e199e208cd2c95eabe9796cab82116c4838595c / 111533516 bytes",
+    "sharedassets0.assets SHA256 0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3 / 115978112 bytes"
   ],
   "commands": [
     "python3 -m unittest discover -s tests -p test_a12_vendor_identity_overlap.py -v",
@@ -22,12 +24,32 @@
   "concurrency_group": "raft-a12-original-vendor-overlap-${{ github.ref }}-${{ github.sha }}",
   "artifact_prefix": "a12-original-vendor-summary",
   "budget": "Two SHA-authenticated existing 227511628-byte LFS owners, cache if present; max 15 min Ubuntu24.04 CPU-only; no Unity/APK",
-  "run_url": null,
-  "source_sha": null,
-  "result": null,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41659840282",
+  "source_sha": "4605ddca31b21ba754b003f54ca5b2d0380d34a4",
+  "result": {
+    "ci": "completed_success",
+    "job_id": 125999820007,
+    "synthetic_tests_passed": 10,
+    "verified_owner_count": 2,
+    "source_bytes": 227511628,
+    "original_shader_objects": 105,
+    "unique_usable_names": 105,
+    "exact_vendor_objects": 9,
+    "unique_vendor_names": 9,
+    "nonvendor_objects": 96,
+    "missing_names": 0,
+    "conflicting_names": 0,
+    "expected_vendor_names": 198,
+    "whole_inventory_sha256": "8eb2144854bbd9c2bf8111c854914197f2110276ba64c7ac175d710d0e1d837b",
+    "artifact_id": 13239644796,
+    "proven_full_export": false,
+    "build_ready": false
+  },
   "limitations": [
     "Only two original Shader-object owners, not full 140 exported shaders",
-    "Does not execute shaders, reconstruct Unity ShaderLab or prove device rendering"
+    "Does not execute shaders, reconstruct Unity ShaderLab or prove device rendering",
+    "All 9 vendor matches derive from parsed-form serialized name only; no simultaneous independent m_Name match",
+    "105 exact-name source objects cannot establish the full AssetRipper 140 shader-file export or resolve the older zero-match by itself"
   ],
-  "next_step": "Verify red/green controls and original sources via isolated workflow."
+  "next_step": "Compare authenticated same-stage full AssetRipper export mappings to original Shader objects/GUIDs; no Unity request in this scope."
 }
