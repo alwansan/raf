@@ -104,6 +104,20 @@ def compare(groups, reflection):
             "shaderlab_runtime_or_gpu_verified": False}
 
 def main(source, repo, out):
+    # These exact hard-coded error markers contain no original Shader identifiers.
+    safe_error_codes = {
+        "invalid DXBC container", "invalid DXBC chunk table", "invalid DXBC chunk range",
+        "missing unique original RDEF", "RDEF table bounds", "invalid private string",
+        "RDEF CB invalid", "RDEF CB slot invalid", "truncated original reflection",
+        "exact member recovery required", "serializer version drift", "group count drift",
+        "group string overflow", "unexpected member records", "duplicate group",
+        "unparsed resources/trailing bytes", "original object fingerprint drift",
+        "original platform drift", "original pass topology drift",
+        "original stage permutations drift",
+    }
+    phase = "original_source"
+    active_pass = None
+    active_stage = None
     report = {"status": "blocked", "original_verified": False,
               "shaderlab_installed": False, "game_ready": False, "private_names_published": False}
     try:
@@ -111,17 +125,22 @@ def main(source, repo, out):
         if digest != "c9341848367eaedb12e551ce9061b1eea728f54f2069ef1a3c12c4a4a2e9bb52":
             raise ValueError("original object fingerprint drift")
         report["original_verified"] = True
+        phase = "platform_records"
         tables = [records(p) for code, p in decoded_platforms(tree) if code == 4]
         if len(tables) != 1:
             raise ValueError("original platform drift")
         entries = tables[0]
         parsed = tree["m_ParsedForm"]
+        phase = "original_graph"
         graph = inspect_shader(parsed, entries)
         if graph["original_pass_count"] != 2 or graph["linked_stage_programs"] != 4:
             raise ValueError("original pass topology drift")
         rows = []
         for pi, p in enumerate(parsed["m_SubShaders"][0]["m_Passes"]):
+            active_pass = pi
             for field, st in (("progVertex", 1), ("progFragment", 0)):
+                active_stage = st
+                phase = "original_stage_links"
                 prog = p[field]
                 variants = stage_variants(prog)
                 if len(variants) != 1:
@@ -129,6 +148,7 @@ def main(source, repo, out):
                 bucket, vi, meta = variants[0]
                 raw = entries[prog["m_ParameterBlobIndices"][bucket][vi]][1]
                 code, _ = linked_program(meta, entries, st)
+                phase = "original_parameter_schema"
                 decoded = parse_parameter_blob(raw)
                 item = {"pass": pi, "stage": st, "parameter_sha256": hashlib.sha256(raw).hexdigest(),
                         "numeric_members": decoded["numeric_parameter_count"],
@@ -138,11 +158,21 @@ def main(source, repo, out):
                     item["classification"] = "members_need_exact_recovery"
                 else:
                     item["classification"] = "memberless_original_cb_reflected"
-                    item.update(compare(serialized_groups(raw), rdef(code)))
+                    phase = "original_memberless_groups"
+                    original_groups = serialized_groups(raw)
+                    phase = "compiled_dxbc_rdef"
+                    compiled = rdef(code)
+                    phase = "constant_buffer_correlation"
+                    item.update(compare(original_groups, compiled))
                 rows.append(item)
         report.update(status="diagnostic_complete", stage_count=len(rows), stages=rows)
     except Exception as exc:
         report["failure_type"] = type(exc).__name__
+        report["failure_phase"] = phase
+        report["failure_pass_index"] = active_pass
+        report["failure_stage_code"] = active_stage
+        # Never print arbitrary exception text (which may contain original names).
+        report["failure_code"] = str(exc) if type(exc) is ValueError and str(exc) in safe_error_codes else "unclassified"
     safe = json.dumps(report, sort_keys=True)
     out.write_text(safe + "\n", encoding="utf-8")
     print("RAFT_A12R_CB " + safe)
