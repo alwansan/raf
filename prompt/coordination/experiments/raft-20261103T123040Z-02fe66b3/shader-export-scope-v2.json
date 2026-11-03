@@ -1,14 +1,17 @@
 {
   "schema_version": 1,
   "owner": "raft-20261103T123040Z-02fe66b3",
-  "status": "planned",
+  "status": "completed",
   "hypothesis": "Current read-only full-export integrity scope tool accepts symlinked ancestor/incomplete expected counts and malformed/duplicate original .meta GUIDs, permitting an ungrounded local snapshot success.",
   "input_hashes": [
     "Baseline script git blob cf4a19301f1787b3039413e9cfaedd25c0afd2a2",
-    "Baseline 11-test blob ee692dd67446816dbc33527215dd918c0212dc14"
+    "Baseline 11-test blob ee692dd67446816dbc33527215dd918c0212dc14",
+    "RED tests Git blob f988fb3bfe3f271595c2535a10c733957b53de33",
+    "GREEN source Git blob 12096810a976505d509f95f82960b67b4f22d7e0"
   ],
   "commands": [
-    "python3 -m unittest discover -s tests -p test_a11_shader_export_scope.py -v"
+    "python3 -m unittest discover -s tests -p test_a11_shader_export_scope.py -v",
+    "python3 -m py_compile scripts/probe_a11_shader_export_scope.py tests/test_a11_shader_export_scope.py"
   ],
   "expected_signal": "RED proves every unsafe synthetic case accepted before fix; GREEN rejects redirect, bad/duplicate GUID and incomplete or ignored count assertions with no source mutation.",
   "negative_controls": [
@@ -23,13 +26,13 @@
   "concurrency_group": "raft-a11-shader-export-scope-v1-${{ github.ref }}",
   "artifact_prefix": "a11-shader-export-scope-${{ github.run_id }}",
   "budget": "CPU-only isolated existing A11 workflow; 8-minute timeout, no LFS, Unity, native, original private sources, network download",
-  "run_url": null,
-  "source_sha": null,
-  "result": null,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41644281473",
+  "source_sha": "9e85d22cc195d239048be1ef145ec3626e76fc26",
+  "result": "RED Actions41644180493 on test-only SHA11336a6c failed six targeted assertions as expected (11 baseline pass). GREEN Actions41644281473 on source9e85d22 succeeded all17 cases; artifact13234366506 aggregate only; tool/test Git blob SHA match local green files. No original asset provenance or device evidence.",
   "limitations": [
     "Synthetic fixture only",
     "Cannot determine complete original 41624581951 export identities or repair water GPU",
     "Cannot claim any APK or phone success"
   ],
-  "next_step": "Record RED, patch source, verify GREEN, document status."
+  "next_step": "Original full-export in-run stage remains unavailable; do not infer built-in identities or readiness."
 }
