@@ -72,6 +72,15 @@ def variant_key(metadata):
         'm_ShaderHardwareTier', 'm_KeywordIndices', 'm_GlobalKeywordIndices', 'm_LocalKeywordIndices'))
 
 
+def schema_shape(value, depth=0):
+    """Public serializer schema/counts only, never property names or values."""
+    if isinstance(value, dict):
+        return {k: schema_shape(v, depth + 1) for k, v in value.items()} if depth < 3 else 'dict'
+    if isinstance(value, list):
+        return {'count': len(value), 'first_shape': schema_shape(value[0], depth + 1) if value and depth < 3 else None}
+    return type(value).__name__
+
+
 def recover(root, out):
     verify_sources(root, expected=OWNERS)
     import UnityPy
@@ -94,6 +103,11 @@ def recover(root, out):
         raise ValueError('Original D3D11 graphics table is ambiguous')
     entries = tables[0][1]
     parsed = tree['m_ParsedForm']
+    print('RAFT_W1_DEPTH_ORIGINAL_SCHEMA ' + json.dumps({
+        'owner': owner, 'path_id': path_id, 'object_sha256': object_sha,
+        'subshaders': [{'passes': [{'vertex': schema_shape(p['progVertex']),
+                                  'fragment': schema_shape(p['progFragment'])}
+                                 for p in s['m_Passes']]} for s in parsed['m_SubShaders']]}, sort_keys=True))
     passes, stages = [], []
     with tempfile.TemporaryDirectory(prefix='w1-private-depth-passes-') as folder:
         packet = Path(folder)
@@ -112,7 +126,7 @@ def recover(root, out):
                     variants = shader_pass[field]['m_SubPrograms']
                     pass_report['variants'][str(stage)] = len(variants)
                     if not 0 < len(variants) <= 24:
-                        raise ValueError('Depth Copy stage variant count exceeds bounded recovery')
+                        raise ValueError('Depth Copy stage variant count outside1..24: ' + str(len(variants)))
                     for vi, metadata in enumerate(variants):
                         code, link = linked_program(metadata, entries, stage)
                         target = packet / ('s%d-p%d-stage%d-v%d' % (si, pi, stage, vi))
