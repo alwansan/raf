@@ -59,7 +59,12 @@ def compile_lift(spv, folder, tag, mutation=None):
     lifted,shape=lift(text,reflection,mutation)
     glsl=folder/(tag+'.comp'); output=folder/(tag+'.spv')
     glsl.write_text(lifted)
-    private_command(['glslangValidator','-V','-S','comp','-o',str(output),str(glsl)])
+    process=subprocess.run(['glslangValidator','-V','-S','comp','-o',str(output),str(glsl)],capture_output=True,timeout=30)
+    if process.returncode:
+        diagnostic=(process.stdout+process.stderr).decode(errors='replace')
+        categories=[term for term in ('syntax error','undeclared identifier','redefinition','extension','no matching overloaded','Missing entry point','not allowed','reserved word','cannot convert','SPIR-V is not generated') if term.lower() in diagnostic.lower()]
+        raise ValueError('Lift compile rejected; classes='+','.join(categories)+'; diagnostic_sha256='+hashlib.sha256(process.stdout+process.stderr).hexdigest())
+
     private_command(['spirv-val','--target-env','vulkan1.1',str(output)])
     return output,shape
 
@@ -96,10 +101,14 @@ def analyze(root,runner):
                     dest=folder/('s%d-p%d'%(si,pi));dest.mkdir()
                     result=translate(code,0,dest)
                     if not result['roundtrip_vulkan11_valid']: raise ValueError('Roundtrip invalid')
+                    row['phase']='original_lift'
                     a,shape=compile_lift(dest/'original.spv',dest,'original-lift')
+                    row['phase']='roundtrip_lift'
                     b,other=compile_lift(dest/'roundtrip.spv',dest,'rebuilt-lift')
                     if shape!=other: raise ValueError('Lifted interface differs')
+                    row['phase']='positive_execution'
                     positives=[compare(runner,a,b,seed) for seed in (0,19,257)]
+                    row['phase']='negative_execution'
                     negatives={}
                     for mutation in ('arithmetic','axis','resource'):
                         changed,_=compile_lift(dest/'roundtrip.spv',dest,'negative-'+mutation,mutation)
