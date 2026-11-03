@@ -4,13 +4,13 @@
   "agent": "A7",
   "session_id": "A7-20261103T145805Z-7bf83c12",
   "resumed_from": "raft-20261103T132738Z-a7f64e28",
-  "status": "active",
-  "updated_at": "2026-11-03T14:58:05.824Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T15:08:15.607Z",
   "base_sha": "7462e0b2754720a8b6581cf00e037cb9af094e04",
   "current_work": [
     "INPUT-005"
   ],
-  "last_commit": null,
-  "next_step": "Reproduce and fix stale suspended touch pointer after disable/enable using actual OnEnable C# extraction, CPU-only red/green tests; no Unity/APK.",
+  "last_commit": "7517f30fd7010af11dac6444f7c0b3d3dadd5064",
+  "next_step": "Scoped RED41659588079/GREEN41659802113+41659802250 re-enable fix complete; new session must review live HEAD/peers; device/Unity acceptance remains pending.",
   "memory_path": "prompt/coordination/clients/raft-20261103T145805Z-a7c2f809/MEMORY.md"
 }
