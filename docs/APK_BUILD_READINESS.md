@@ -168,3 +168,8 @@ Reviewed HEAD 415e51b082bb2c1fff4d7c5d1518205d89d4af91 and nonterminal Actions (
 ## Coordinate CI confirmed; readiness unchanged — 3 November 2026
 
 [FFT coordinate precision CI41584946408](https://github.com/alwansan/raf/actions/runs/41584946408) COMPLETED SUCCESS on de5dec1e7aede04c678e68fe62d1933f6a5260ca, confirming the isolated Node24 CPU experiment now runs in Actions without LFS. This supersedes its pending status. It does not validate translated shader output, image-format equivalence, complete water kernels or device operation. WATER-001/RENDER-002/FFT-FORMAT-009 remain open; candidate absent, reviews0/3, NOT_READY. No native request or build initiated.
+
+
+## Candidate evidence refresh — 3 November 2026, 11:04 Baghdad
+
+Live source baseline 83bb6497f5772965521f57bb9b440fac789c0430. [Float32/half coordinate CI41598252205](https://github.com/alwansan/raf/actions/runs/41598252205) COMPLETED SUCCESS; this supersedes the pending coordinate-control result. The comparison validates the authored CPU address model only, not translated FFT numerical equivalence or original shader restoration. WATER-001, RENDER-002 and FFT-FORMAT-009 remain OPEN, and the DISPLAY-003/PERF-007/integration source reviews are incomplete. No candidate selected; complete immutable-candidate reviews0/3; NOT_READY. Explicit repository-wide queued and in_progress queries both returned empty. APK80 release still has11 assets; CL raft-log root identities unchanged. No new build attempt/error/request or recovery artifact exists for a candidate. Next: close authentic program/pass/kernel and format/numerical contracts, then complete the listed integration reviews; phone-only acceptance remains post-delivery. No native request or task changes.
