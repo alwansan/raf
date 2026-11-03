@@ -37,6 +37,10 @@ jobs:
           set -euo pipefail
           sudo apt-get update -qq
           sudo apt-get install -y -qq --no-install-recommends g++ libvulkan-dev mesa-vulkan-drivers glslang-tools spirv-tools
+      - name: Verify private Vulkan result schema with independent CPU tests
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p 'test_probe_original_fft_software_vulkan.py' -v
       - name: Compile A1 Vulkan numeric executor
         run: |
           set -euo pipefail
@@ -72,3 +76,59 @@ jobs:
           grep -q '"within_selected_tolerance":true' /tmp/a1-canary.jsonlog
           timeout 30s /tmp/a1-fft-vk /tmp/a1-base.spv /tmp/a1-negative.spv 8 1 | tee /tmp/a1-negative.jsonlog
           grep -q '"within_selected_tolerance":false' /tmp/a1-negative.jsonlog
+
+  authenticated-original-fft-on-software-vulkan:
+    needs: synthetic-vulkan-canary
+    runs-on: ubuntu-24.04
+    timeout-minutes: 27
+    env:
+      DEBIAN_FRONTEND: noninteractive
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - name: Checkout original LFS pointer and diagnostic code without smudge
+        uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: true
+          sparse-checkout: |
+            Raft/Raft_Data
+            scripts
+            tests
+      - name: Verify original owner pointer identity before download
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          from scripts.verify_targeted_lfs_compute_sources import verify_sources,EXPECTED
+          verify_sources(Path("Raft/Raft_Data"), pointers_only=True,
+                         expected={"sharedassets0.assets": EXPECTED["sharedassets0.assets"]})
+          print("RAFT_A1_AUTHENTIC_FFT_OWNER_POINTER verified=true owner_count=1")
+          PY
+      - name: Download exactly one original FFT LFS owner and reverify SHA
+        run: |
+          set -euo pipefail
+          git lfs install --local
+          git lfs pull --include='Raft/Raft_Data/sharedassets0.assets' --exclude='' origin
+          python3 - <<'PY'
+          from pathlib import Path
+          from scripts.verify_targeted_lfs_compute_sources import verify_sources,EXPECTED
+          verify_sources(Path("Raft/Raft_Data"),
+                         expected={"sharedassets0.assets": EXPECTED["sharedassets0.assets"]})
+          print("RAFT_A1_AUTHENTIC_FFT_OWNER_PAYLOAD verified=true original_bytes=115978112")
+          PY
+      - name: Install CPU Vulkan, shader translators and Unity serialization reader
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends g++ libvulkan-dev mesa-vulkan-drivers glslang-tools spirv-tools spirv-cross vkd3d-compiler
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+      - name: Compile and execute original FFT SPIR-V pairs on software CPU Vulkan
+        run: |
+          set -euo pipefail
+          export VK_DRIVER_FILES="$(find /usr/share/vulkan/icd.d -maxdepth 1 -name '*lvp*.json' -print -quit)"
+          test -n "$VK_DRIVER_FILES"
+          g++ -std=c++17 -O2 -w scripts/a1_fft_vulkan_cpu.cpp -lvulkan -o /tmp/a1-fft-vk
+          python3 -m unittest discover -s tests -p 'test_probe_original_fft_software_vulkan.py' -v
+          timeout 720s python3 -m scripts.probe_original_fft_software_vulkan \
+            --source Raft/Raft_Data --runner /tmp/a1-fft-vk
+          # Source shaders are ephemeral; no upload, Unity Editor or Android run.
