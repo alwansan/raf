@@ -1,0 +1,37 @@
+name: Raft A14 built-in shader external backup integrity (CPU only)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/restore_builtin_shaders.py
+      - tests/test_a14_builtin_backup_atomicity.py
+      - .github/workflows/raft-a14-builtin-backup-atomicity.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raft-a14-backup-atomicity-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  backup-write-injection:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Exercise actual restorer on synthetic source only
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/a14-evidence"
+          python3 -m unittest discover -s tests -p test_a14_builtin_backup_atomicity.py -v 2>&1 | tee "$RUNNER_TEMP/a14-evidence/synthetic-results.txt"
+      - name: Retain aggregate fixture evidence only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: raft-a14-synthetic-backup-${{ github.run_id }}
+          path: ${{ runner.temp }}/a14-evidence/synthetic-results.txt
+          if-no-files-found: ignore
+          retention-days: 7
