@@ -276,10 +276,20 @@ namespace RaftAndroid.Platform
             catch (Exception) { }
             return "unavailable";
         }
+        // Capture existing partial process/driver counters at infrequent scene
+        // boundaries. Neither counter is total GPU allocation or proof of OOM
+        // causality; absent development-build data must remain "unavailable".
+        private static string GraphicsMemoryAtBoundary()
+        {
+            return "process_pss=" + ProcessPss() + "; process_rss=" + ProcessRss() +
+                "; android_debug_graphics_kb=" + AndroidGraphicsMemoryKb() +
+                "; unity_driver_graphics_bytes=" + UnityGraphicsDriverBytes();
+        }
+
         private static void LowMemory()
         {
             RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("memory", "unity.low_memory", AndroidMemory() +
-                "; process_pss=" + ProcessPss() + "; android_debug_graphics_kb=" + AndroidGraphicsMemoryKb(), true);
+                "; " + GraphicsMemoryAtBoundary(), true);
             RaftAndroid.Diagnostics.AndroidRuntimeLog.Flush();
         }
         private static string ProcessRss()
@@ -308,11 +318,13 @@ namespace RaftAndroid.Platform
         }
         private static void SceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("scene", "loaded", scene.name + "; mode=" + mode, true);
+            RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("scene", "loaded",
+                scene.name + "; mode=" + mode + "; " + GraphicsMemoryAtBoundary(), true);
         }
         private static void SceneUnloaded(Scene scene)
         {
-            RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("scene", "unloaded", scene.name, true);
+            RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("scene", "unloaded",
+                scene.name + "; " + GraphicsMemoryAtBoundary(), true);
         }
         private static void ActiveSceneChanged(Scene before, Scene after)
         {
