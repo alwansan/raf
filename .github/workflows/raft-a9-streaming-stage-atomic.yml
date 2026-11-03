@@ -1,0 +1,32 @@
+name: Raft A9 original StreamingAssets staging atomic recovery (CPU only)
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - 'scripts/stage_original_streaming_assets.py'
+      - 'tests/test_a9_streaming_stage_atomic.py'
+      - '.github/workflows/raft-a9-streaming-stage-atomic.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: raft-a9-stage-atomic-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  stage-atomic:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: A9 interrupted and corrupted stream copy negative controls (synthetic Git only)
+        run: python3 -m unittest discover -s tests -p test_a9_streaming_stage_atomic.py -v
+      - name: Existing original bank and Haptics strict staging tests
+        run: python3 -m unittest discover -s tests -p test_stage_original_streaming_assets.py -v
