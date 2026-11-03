@@ -73,3 +73,29 @@ class AndroidOfflineStartupTests(unittest.TestCase):
             self.assertFalse(game.with_suffix('.cs.meta').exists())
             self.assertEqual(report['manufacturedMetas'], 0)
             self.assertEqual((root / 'backup/Settings.cs').read_text(), original)
+
+
+    def test_symlinked_assets_root_cannot_redirect_original_offline_source(self):
+        original = 'class Settings { int v = SteamApps.GetAppBuildId(); }'
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            project = root / 'project'
+            project.mkdir()
+            external = root / 'external-game' / 'Scripts' / 'Assembly-CSharp'
+            external.mkdir(parents=True)
+            source = external / 'Settings.cs'
+            meta = source.with_suffix('.cs.meta')
+            source.write_text(original)
+            meta.write_bytes(b'guid: synthetic-offline\n')
+            try:
+                (project / 'Assets').symlink_to(external.parent.parent, target_is_directory=True)
+            except (OSError, NotImplementedError):
+                self.skipTest('Directory symlinks unavailable')
+            backup = root / 'backup'
+            with patch('scripts.adapt_android_offline_startup.PINS',
+                       {'Settings': fingerprint(original)}):
+                with self.assertRaisesRegex(ValueError, 'Unsafe.*Assets'):
+                    apply(project, backup, True)
+            self.assertEqual(source.read_text(), original)
+            self.assertEqual(meta.read_bytes(), b'guid: synthetic-offline\n')
+            self.assertFalse(backup.exists())

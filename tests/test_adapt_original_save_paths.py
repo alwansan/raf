@@ -1,6 +1,9 @@
 from collections import Counter
+from pathlib import Path
+import tempfile
+from unittest.mock import patch
 import unittest
-from scripts.adapt_original_save_paths import adapt, fingerprint, SUFFIX
+from scripts.adapt_original_save_paths import adapt, apply, fingerprint, SUFFIX
 
 
 class SavePathTests(unittest.TestCase):
@@ -27,3 +30,30 @@ class SavePathTests(unittest.TestCase):
         text = 'var path = "World\\\\";'
         with self.assertRaises(ValueError):
             adapt(text + SUFFIX, fingerprint(text), Counter({'World\\': 1}))
+
+
+    def test_symlinked_assets_root_is_rejected_before_original_save_source_is_touched(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            project = root / 'project'
+            project.mkdir()
+            external = root / 'external-originals' / 'Assembly-CSharp'
+            external.mkdir(parents=True)
+            source = external / 'SaveAndLoad.cs'
+            metadata = source.with_suffix('.cs.meta')
+            original = b'class SaveAndLoad { /* synthetic only */ }\n'
+            meta_bytes = b'guid: synthetic-original\n'
+            source.write_bytes(original)
+            metadata.write_bytes(meta_bytes)
+            try:
+                (project / 'Assets').symlink_to(external.parent, target_is_directory=True)
+            except (OSError, NotImplementedError):
+                self.skipTest('Directory symlinks unavailable')
+            backup = root / 'backup'
+            with patch('scripts.adapt_original_save_paths.adapt',
+                       side_effect=lambda text: text + '\n// synthetic adapted'):
+                with self.assertRaisesRegex(ValueError, 'Unsafe.*Assets'):
+                    apply(project, backup, write=True)
+            self.assertEqual(source.read_bytes(), original)
+            self.assertEqual(metadata.read_bytes(), meta_bytes)
+            self.assertFalse(backup.exists())
