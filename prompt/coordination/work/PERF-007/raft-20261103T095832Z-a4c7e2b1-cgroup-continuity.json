@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T095832Z-a4c7e2b1",
+  "issue_id": "PERF-007",
+  "status": "active",
+  "updated_at": "2026-11-03T14:52:03.043Z",
+  "base_sha": "b09de2aca410f43b741f94b5353131d47d2d7386",
+  "hypothesis": "summarize() compares only first/last cgroup oom counters; an intermediate reset followed by growth can produce a plausible false positive OOM delta.",
+  "intended_files": [
+    "scripts/ci_memory_watch.py",
+    "tests/test_ci_memory_watch.py",
+    "prompt/coordination/clients/raft-20261103T095832Z-a4c7e2b1/state.json",
+    "prompt/coordination/clients/raft-20261103T095832Z-a4c7e2b1/MEMORY.md",
+    "prompt/coordination/work/PERF-007/raft-20261103T095832Z-a4c7e2b1-cgroup-continuity.json",
+    "prompt/coordination/experiments/raft-20261103T095832Z-a4c7e2b1/cgroup-continuity.json"
+  ],
+  "related_work": [
+    "A4 previous rss-unavailable-negative-controls complete at 1b376475; do not rewrite",
+    "Other HAPTICS-008 agents A3/A5 own runtime work; no haptics edits",
+    "Readiness task owns full native build and APK delivery"
+  ],
+  "experiment_ids": [
+    "cgroup-continuity"
+  ],
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/1b37647587e94b4e3a7baf6e34865c634a442216",
+    "https://github.com/alwansan/raf/actions/runs/41616939992"
+  ],
+  "result": null,
+  "next_step": "Preserve true monotonic deltas; reject intermediate reset/missing measurement; run isolated regression tests; no native build."
+}
