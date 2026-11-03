@@ -1,0 +1,35 @@
+name: Raft A3 HAPTICS-008 original staging completeness (CPU only)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-a3-haptics-staging-gate.yml'
+      - 'scripts/stage_original_streaming_assets.py'
+      - 'tests/test_stage_original_streaming_assets.py'
+      - 'scripts/probe_haptics_asset_manifest.py'
+      - 'config/original-haptics-manifest.json'
+      - 'Raft/Raft_Data/StreamingAssets/Haptics/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raft-a3-haptics-staging-${{ github.ref }}
+  cancel-in-progress: false
+  queue: max
+jobs:
+  staging-integrity:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Exercise full 29-fixture original stage and fail-closed corruption controls
+        run: python3 -m unittest discover -s tests -p test_stage_original_streaming_assets.py -v
+      - name: Verify authentic 29 original WAV Git blobs in source checkout
+        run: python3 -m scripts.probe_haptics_asset_manifest --repo . --manifest config/original-haptics-manifest.json --expected-count 29
+      - name: Record boundaries
+        run: |
+          echo '### Original Haptics staging source-only integrity' >> "$GITHUB_STEP_SUMMARY"
+          echo 'No real Unity, APK, OBB, FMOD, device test or MasterBank LFS hydration.' >> "$GITHUB_STEP_SUMMARY"

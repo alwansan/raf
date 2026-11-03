@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T105031Z-4b175384",
+  "issue_id": "HAPTICS-008",
+  "status": "pending_ci",
+  "hypothesis": "Native stage() currently requires 5 banks and Data.rgd, but not the complete original Haptics WAV set; a new commit omitting a WAV could pass the stage although source integrity regresses.",
+  "change": "Call A3 verified 29-source-WAV manifest audit strictly before any stage copying; expand 29-fixture synthetic stage tests and add isolated CPU CI",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41616535073",
+    "https://github.com/alwansan/raf/actions/runs/41617621699"
+  ],
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_stage_original_streaming_assets.py -v",
+    "python3 -m scripts.probe_haptics_asset_manifest --repo . --manifest config/original-haptics-manifest.json --expected-count 29"
+  ],
+  "limitations": [
+    "No Unity/APK/OBB or phone haptics proof",
+    "No LFS hydrated banks",
+    "Does not change or hide original WAVs",
+    "Runtime adapter A5 separately validated and untouched"
+  ]
+}

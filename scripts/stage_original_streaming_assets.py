@@ -21,6 +21,12 @@ def sha256(path):
 
 
 def stage(repo, project, report_path, apply=False):
+    # Fail before copying any asset if one of the 29 original Haptics WAV
+    # files disappeared or changed. Banks/Data.rgd alone are not enough.
+    # The independent source audit checks tracked paths, Git OIDs, sizes
+    # and checkout contents against the pinned original manifest.
+    from scripts.probe_haptics_asset_manifest import audit as audit_haptics
+    audit_haptics(repo, repo / 'config/original-haptics-manifest.json', expected_count=29)
     prefix = 'Raft/Raft_Data/StreamingAssets/'
     raw = subprocess.check_output(['git', '-C', str(repo), 'ls-tree', '-rz', 'HEAD', '--', prefix])
     plan = []
