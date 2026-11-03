@@ -3,8 +3,8 @@
   "owner": "raft-20261103T225203Z-a14c07d9",
   "client_label": "A14",
   "issue_id": "RENDER-002",
-  "status": "active",
-  "updated_at": "2026-11-03T22:52:03Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T23:05:49.598Z",
   "base_sha": "3a6346eae3537f1e28fa4ceb876f9edd266820f3",
   "hypothesis": "The original built-in shader restorer preserves arbitrary existing .meta bytes but does not reject malformed or duplicate GUID declarations among matched exports before irreversible staging, so a misleading GUID-preservation claim may pass with collisions.",
   "intended_files": [
@@ -29,8 +29,15 @@
     "a14-shader-meta-guid-preflight"
   ],
   "evidence": [
-    "https://github.com/alwansan/raf/commit/8dcca858d2ae0646d5fb1a48fbdb2ab51a2909dc"
+    "https://github.com/alwansan/raf/commit/8dcca858d2ae0646d5fb1a48fbdb2ab51a2909dc",
+    "https://github.com/alwansan/raf/commit/7252455a8e0b4943bdc13ed3b222c99b34054a90",
+    "https://github.com/alwansan/raf/actions/runs/41735307997",
+    "https://github.com/alwansan/raf/commit/b7a4daaf8ce67b844c57d5d205dadac7db41c587",
+    "https://github.com/alwansan/raf/commit/1b6d754fd2546c9bb35d290b21c26381e61c4c3c",
+    "https://github.com/alwansan/raf/commit/94e139247f82b701ab29f7adbcef7afd050e96d3",
+    "https://github.com/alwansan/raf/commit/91a84466fcf14f980149a931109ec2e2f1e45344",
+    "https://github.com/alwansan/raf/actions/runs/41736092400"
   ],
-  "result": null,
-  "next_step": "Preflight meta GUID identifiers without changing original metadata, stage no actual game files, synthetic red-green tests."
+  "result": "Strict fail-closed top-level GUID extraction for matched original exported .shader.meta; casefold collision rejection; no metadata rewrite. A14 9/9 CPU synthetic checks on fix; peer fixtures repaired to valid synthetic GUID values, final integrated 31/31 CI PASS on 91a84466.",
+  "next_step": "Separate genuine full-export shader identity/provenance and authored Unity shader/FFT integration required; RENDER-002/WATER-001/FFT-FORMAT-009 remain OPEN, NOT_READY 0/3. No native build."
 }

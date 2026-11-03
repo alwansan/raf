@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T225203Z-a14c07d9",
+  "client_label": "A14",
+  "session_id": "A14-20261103T225203Z-1d3c44b2",
+  "issue_id": "RENDER-002",
+  "status": "completed",
+  "updated_at": "2026-11-03T23:05:49.598Z",
+  "hypothesis": "Malformed/missing/duplicate matched shader export GUIDs can pass into backup and restoration in older restorer.",
+  "input_hashes": [
+    "old_restorer_blob=de4dce799e7735cc36768acd20791a8e2f937560",
+    "fixed_restorer_blob=814b1196e7dcea0558640f55512be5e9e91efc1a",
+    "final_ci_source_commit=91a84466fcf14f980149a931109ec2e2f1e45344"
+  ],
+  "commands": [
+    "python3 -m unittest discover -s tests -p 'test_a14_*.py' -v",
+    "python3 -m unittest discover -s tests -p 'test_a3_builtin_shader_symlink_paths.py' -v",
+    "python3 -m unittest discover -s tests -p 'test_a9_builtin_shader_identity.py' -v",
+    "python3 -m unittest discover -s tests -p 'test_a15_builtin_restore_rollback.py' -v",
+    "python3 -m unittest discover -s tests -p 'test_restore_builtin_shaders.py' -v"
+  ],
+  "expected_signal": "Reject ambiguous, invalid and colliding top-level 32-hex GUIDs before any backups, preserve exact byte-for-byte original metadata, all compatible fixtures green.",
+  "negative_controls": [
+    "missing top-level guid",
+    "malformed non-hex guid",
+    "repeated top-level guid",
+    "casefold duplicate across matched shaders",
+    "prior synthetic backup partial write, symlink, rollback and identity guards"
+  ],
+  "workflow_path": ".github/workflows/raft-a14-builtin-backup-atomicity.yml",
+  "concurrency_group": "raft-a14-shader-preflight-${{ github.ref }}-${{ github.sha }}",
+  "artifact_prefix": "raft-a14-synthetic-backup-",
+  "budget": "7 minute CPU-only; no LFS; no Unity; no original game data",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41736092400",
+  "source_sha": "91a84466fcf14f980149a931109ec2e2f1e45344",
+  "result": "COMPLETED SUCCESS, job126265565649, five suites 9+4+4+4+10=31/31 synthetic CPU tests; no original shader export proof.",
+  "limitations": [
+    "checks GUID uniqueness only among matched exported built-in shader assets, not all project meta files",
+    "not real Unity/AssetRipper export identity/authentic vendor intersection",
+    "not actual water/FFT/pass restoration or phone rendering",
+    "source commit 91a84466 verified; later HEAD may differ and must be rechecked"
+  ],
+  "next_step": "Continue authentic original ShaderLab/full-export/staging and GPU pass integration with independent scope; do not infer READY from CPU fixture result."
+}
