@@ -1,0 +1,765 @@
+{
+  "source_review_sha": "c85042acb1282b5eeacc7feae25a7b9ead73caa5",
+  "review_type": "ancestry inventory; NOT a full compatibility or readiness review",
+  "clients": [
+    {
+      "username": "raft-20261103T100326Z-9df2b7ac",
+      "client_label": null,
+      "status": "completed",
+      "last_commit": "345b151d1fce59a996883b8c673930b56876fc68",
+      "current_work": [
+        "LOCAL-005"
+      ]
+    },
+    {
+      "username": "raft-20261103T100200Z-9d4ea16b",
+      "client_label": "A10",
+      "status": "completed",
+      "last_commit": "b0a72fc7fe5d2b5efe3fa32528a39879fdecdd51",
+      "current_work": [
+        "LOCAL-005 original C# method extraction lexical guard complete; 5 RED -> 5 GREEN; 16/16 A10 tests and authenticated original no-LFS CI"
+      ]
+    },
+    {
+      "username": "raft-20261103T103610Z-4e91b2cd",
+      "client_label": null,
+      "status": "paused",
+      "last_commit": "86dedcecaa54d18966a13f6eba04a02d2a689a39",
+      "current_work": [
+        "WATER-001"
+      ]
+    },
+    {
+      "username": "raft-20261103T100100Z-a1c46e79",
+      "client_label": "A1",
+      "status": "paused",
+      "last_commit": "dc8533ba6df694b959fd37cb84c327584961642c",
+      "current_work": [
+        "WATER-001"
+      ]
+    },
+    {
+      "username": "raft-20261103T095832Z-a4c7e2b1",
+      "client_label": null,
+      "status": "paused",
+      "last_commit": "7462e0b2754720a8b6581cf00e037cb9af094e04",
+      "current_work": [
+        "PERF-007 continuity correction published; full new-source CI pending"
+      ]
+    },
+    {
+      "username": "raft-20261103T104800Z-a1f742c0",
+      "client_label": "A1",
+      "status": "paused",
+      "last_commit": "94ebac477707bfe7db9f7f2e02be6efc41b79db0",
+      "current_work": [
+        "WATER-001"
+      ]
+    },
+    {
+      "username": "raft-20261103T100214Z-c83d58d4",
+      "client_label": null,
+      "status": "completed",
+      "last_commit": "caa9bb7ae76da9920d46b4474d3fc2c10e994e1a",
+      "current_work": [
+        "INPUT-005"
+      ]
+    },
+    {
+      "username": "raft-20261103T110728Z-b1c3478e",
+      "client_label": "A1",
+      "status": "paused",
+      "last_commit": "19884e775733feb49763b10b29ee19578dc4790d",
+      "current_work": [
+        "WATER-001",
+        "FFT-FORMAT-009"
+      ]
+    },
+    {
+      "username": "raft-20261103T100000Z-3a7f2c91",
+      "client_label": null,
+      "status": "completed",
+      "last_commit": "0ee683300bbe3a14197fb1291a23910b4d2435e4",
+      "current_work": [
+        "HAPTICS-008"
+      ]
+    },
+    {
+      "username": "raft-20261103T120720Z-a1e4f6c9",
+      "client_label": "A1",
+      "status": "paused",
+      "last_commit": "2be0c6938257591818414e407909814dbcd5b599",
+      "current_work": [
+        "WATER-001",
+        "FFT-FORMAT-009"
+      ]
+    },
+    {
+      "username": "raft-20261103T105808Z-e7429ab6",
+      "client_label": "A9",
+      "status": "completed",
+      "last_commit": "5e4cedcb61373a8a90cf1ff0524c5c130b8b00b4",
+      "current_work": [
+        "LOCAL-005"
+      ]
+    },
+    {
+      "username": "raft-20261103-coordination-7f3a9c21",
+      "client_label": null,
+      "status": "completed",
+      "last_commit": null,
+      "current_work": [
+        "COORD-001"
+      ]
+    },
+    {
+      "username": "raft-20261103T105031Z-4b175384",
+      "client_label": null,
+      "status": "completed",
+      "last_commit": "61f39303eadedbbbcc569d2ba1a9839742f6f377",
+      "current_work": [
+        "HAPTICS-008"
+      ]
+    },
+    {
+      "username": "raft-20261103T105625Z-a7d793f4",
+      "client_label": null,
+      "status": "completed",
+      "last_commit": "8570d2e6efc5d73000b4f515fa299bbd2582f539",
+      "current_work": [
+        "INPUT-005"
+      ]
+    },
+    {
+      "username": "raft-20261103T121121Z-56c3b5b1",
+      "client_label": null,
+      "status": "completed",
+      "last_commit": "3f7baadd6a412548786ec1b511f7c311992ddb12",
+      "current_work": [
+        "DIAG-011"
+      ]
+    },
+    {
+      "username": "raft-20261103T113245Z-a7e48c92",
+      "client_label": null,
+      "status": "completed",
+      "last_commit": "f2460ecd59d2193088c25eded576b67122fe4783",
+      "current_work": [
+        "INPUT-005"
+      ]
+    },
+    {
+      "username": "raft-20261103T121120Z-a7b60d42",
+      "client_label": null,
+      "status": "completed",
+      "last_commit": "bb5c96c5d342de94f0304f1bb13147b0c4e8682a",
+      "current_work": [
+        "INPUT-005"
+      ]
+    },
+    {
+      "username": "raft-20261103T095700Z-a2b31f4d",
+      "client_label": null,
+      "status": "paused",
+      "last_commit": "5db3a912727c8d2686a3b3301e04b7d80359fe0c",
+      "current_work": []
+    },
+    {
+      "username": "raft-20261103T112510Z-a1ef930c",
+      "client_label": "A1",
+      "status": "paused",
+      "last_commit": "3fa646ed1dca28071d2b65c6394f0003231362e6",
+      "current_work": [
+        "WATER-001",
+        "FFT-FORMAT-009"
+      ]
+    },
+    {
+      "username": "raft-20261103T131030Z-a5c93e61",
+      "client_label": null,
+      "status": "completed",
+      "last_commit": "6c7ff044fcee9a229c2c5b1ca2f63e5b106460b2",
+      "current_work": [
+        "HAPTICS-008"
+      ]
+    },
+    {
+      "username": "raft-20261103T132000Z-a6e7f219",
+      "client_label": "A6",
+      "status": "paused",
+      "last_commit": "da4b98a63cf008c05249046595fee10fb2976d09",
+      "current_work": [
+        "LOCAL-005"
+      ]
+    },
+    {
+      "username": "raft-20261103T120645Z-8cde319a",
+      "client_label": null,
+      "status": "completed",
+      "last_commit": "d93f6aecac8214057debfc1d18eda85b6fa50ce1",
+      "current_work": [
+        "RENDER-002"
+      ]
+    },
+    {
+      "username": "raft-20261103T121910Z-a9c47e01",
+      "client_label": null,
+      "status": "completed",
+      "last_commit": "4f5a1a3d6f31df9273cbfa2ce9cee97cf8a1e657",
+      "current_work": [
+        "AUDIO-004"
+      ]
+    },
+    {
+      "username": "raft-20261103T121800Z-a5b4f02c",
+      "client_label": null,
+      "status": "completed",
+      "last_commit": "26c2b27230a9ee77fa8ef6774d4fe4b791d39ed4",
+      "current_work": [
+        "HAPTICS-008"
+      ]
+    },
+    {
+      "username": "raft-20261103T123140Z-7ea78212",
+      "client_label": "A15",
+      "status": "completed",
+      "last_commit": "d0680dbd16676c54fb7473f797c26f58e76c786e",
+      "current_work": []
+    },
+    {
+      "username": "raft-20261103T100412Z-b2521375",
+      "client_label": null,
+      "status": "completed",
+      "last_commit": "23161cfcc670bfed23b6daf77fe559ba9dc32716",
+      "current_work": [
+        "LOCAL-005"
+      ]
+    },
+    {
+      "username": "raft-20261103T105730Z-a5e8b126",
+      "client_label": null,
+      "status": "completed",
+      "last_commit": "76589b5d731b3f7f2323061487c2a633bd1d0ff0",
+      "current_work": [
+        "HAPTICS-008"
+      ]
+    },
+    {
+      "username": "raft-20261103T123040Z-02fe66b3",
+      "client_label": "A11",
+      "status": "completed",
+      "last_commit": "9e85d22cc195d239048be1ef145ec3626e76fc26",
+      "current_work": []
+    },
+    {
+      "username": "raft-20261103T124800Z-a3b9e27f",
+      "client_label": null,
+      "status": "completed",
+      "last_commit": "7faf0a8bb557e59131a92a062bd2571c98547b8c",
+      "current_work": [
+        "DELIVERY-012"
+      ]
+    },
+    {
+      "username": "raft-20261103T123119Z-9fd895b8",
+      "client_label": "A14",
+      "status": "completed",
+      "last_commit": "8dcca858d2ae0646d5fb1a48fbdb2ab51a2909dc",
+      "current_work": []
+    },
+    {
+      "username": "raft-20261103T113223Z-fc895dbd",
+      "client_label": null,
+      "status": "completed",
+      "last_commit": "c4fae959ca9417e8ba7e37c1cd5520e34f923d83",
+      "current_work": [
+        "AUDIO-004"
+      ]
+    },
+    {
+      "username": "raft-20261103T095340Z-a81c6e42",
+      "client_label": null,
+      "status": "paused",
+      "last_commit": null,
+      "current_work": [
+        "FFT-FORMAT-009"
+      ]
+    },
+    {
+      "username": "raft-20261103T105430Z-a4d9e31b",
+      "client_label": "A4",
+      "status": "completed",
+      "last_commit": "196fce7bd147b5baac2bb8214a8c4d0aad5e2af2",
+      "current_work": [
+        "DIAG-010"
+      ]
+    },
+    {
+      "username": "raft-20261103T145401Z-051434ed",
+      "client_label": "A6",
+      "status": "paused",
+      "last_commit": "b6a962018e06513d5cf408e646751f161f0e00ca",
+      "current_work": [
+        "LOCAL-005"
+      ]
+    },
+    {
+      "username": "raft-20261103T123129Z-6533d5b4",
+      "client_label": "A13",
+      "status": "completed",
+      "last_commit": "816f680405aea70c18132ab4e5d2ef658f06b3a6",
+      "current_work": [
+        "RENDER-002 original Material->Shader pointer provenance"
+      ]
+    },
+    {
+      "username": "raft-20261103T145000Z-a1c92f74",
+      "client_label": "A1",
+      "status": "paused",
+      "last_commit": "3406dd121ebeca30ad344ccd8f71278fe0505310",
+      "current_work": [
+        "WATER-001",
+        "FFT-FORMAT-009"
+      ]
+    },
+    {
+      "username": "raft-20261103T153100Z-b4d2c9e7",
+      "client_label": "W3",
+      "status": "paused",
+      "last_commit": "10ae52c5d4d5e06cf11b1525e93ad3a13c115e29",
+      "current_work": [
+        "RENDER-002 four-step chain complete and pushed: externals c59b6ea, full-game inventory 9eaa059, property/keyword schema bafd4f8, per-material keyword usage 10ae52c (artifact 3e1ebc22...)",
+        "Zero keyword-set consistency violations game-wide (1282/1282); variant footprints bounded: Standard 7/37, SpeedTree8 7, ParticleShader 1, bespoke 8 all-empty"
+      ]
+    },
+    {
+      "username": "raft-20261103T162900Z-73e8c2a1",
+      "client_label": "W1",
+      "status": "active",
+      "last_commit": "41ba9a1d9d904f017dae82088f1e32375a402ade",
+      "current_work": [
+        "Depth Copy staged integration and owner-requested all-client XAPK candidate review"
+      ]
+    },
+    {
+      "username": "raft-20261103T145700Z-12f4a8b3",
+      "client_label": "A12",
+      "status": "completed",
+      "last_commit": "40367912b35be5646935a4016c4498224d4f66b6",
+      "current_work": [
+        "RENDER-002 original 2-owner vendor intersection: completed and CI verified"
+      ]
+    },
+    {
+      "username": "raft-20261103T152008Z-92502b76",
+      "client_label": "W2",
+      "status": "active",
+      "last_commit": "8e0c9dc feat(w2): game-wide per-owner texture color-space split",
+      "current_work": [
+        "RENDER-002 completed local independent verification of external Material->Shader/Texture classification (corroborates W3, adds texture+existence+convention-control)"
+      ]
+    },
+    {
+      "username": "raft-20261103T145805Z-a7c2f809",
+      "client_label": null,
+      "status": "completed",
+      "last_commit": "7517f30fd7010af11dac6444f7c0b3d3dadd5064",
+      "current_work": [
+        "INPUT-005"
+      ]
+    },
+    {
+      "username": "raft-20261103T145834Z-f43d1341",
+      "client_label": null,
+      "status": "completed",
+      "last_commit": "1846c5de0f80aa95cd2efb66c9d55549ac131ff8",
+      "current_work": [
+        "LOCAL-005 world-readiness conditional-compilation probe"
+      ]
+    },
+    {
+      "username": "raft-20261103T145844Z-6db41a9f",
+      "client_label": "A9",
+      "status": "completed",
+      "last_commit": "e2b8c6f081c9500d95b47b954c86c3fd565efd62",
+      "current_work": [
+        "AUDIO-004: completed original StreamingAssets root source provenance pin"
+      ]
+    },
+    {
+      "username": "raft-20261103T121215Z-a4b6f18d",
+      "client_label": "A4",
+      "status": "completed",
+      "last_commit": "dd43d3a24059994bdad170f06e0df453bfda2a3c",
+      "current_work": [
+        "DIAG-010"
+      ]
+    },
+    {
+      "username": "raft-20261103T132738Z-a7f64e28",
+      "client_label": null,
+      "status": "completed",
+      "last_commit": "583f414dee85f1659783a08ab2b4363cc2992d14",
+      "current_work": [
+        "INPUT-005"
+      ]
+    },
+    {
+      "username": "raft-20261103T145149Z-a3e71b29",
+      "client_label": null,
+      "status": "completed",
+      "last_commit": "c568e6c6c090c2ade8d15f1c5d70d061ba66940e",
+      "current_work": [
+        "DELIVERY-013"
+      ]
+    },
+    {
+      "username": "raft-20261103T105250Z-12695739",
+      "client_label": null,
+      "status": "completed",
+      "last_commit": "e70dd94d9ea0309718f523352edb24299960c15d",
+      "current_work": [
+        "DIAG-010"
+      ]
+    },
+    {
+      "username": "raft-20261103T100042Z-afcedabb",
+      "client_label": null,
+      "status": "paused",
+      "last_commit": "d01f4c4bfab342dc2eba35c569151cac9b292973",
+      "current_work": [
+        "LOCAL-005"
+      ]
+    },
+    {
+      "username": "raft-20261103T121333Z-a6c7f4e2",
+      "client_label": "A6",
+      "status": "paused",
+      "last_commit": "fa4647359f07b0734e6013dade930b9b010bc1f6",
+      "current_work": [
+        "RENDER-002"
+      ]
+    },
+    {
+      "username": "raft-20261103T100200Z-a5c842e1",
+      "client_label": null,
+      "status": "completed",
+      "last_commit": "387be6460bd914a6ba05e53eb31c4316b28c66d6",
+      "current_work": [
+        "HAPTICS-008"
+      ]
+    },
+    {
+      "username": "raft-20261103T113735Z-a93e6c40",
+      "client_label": "A9",
+      "status": "completed",
+      "last_commit": "d159f348e06af597e04507ae19ddda5590265e9f",
+      "current_work": [
+        "RENDER-002"
+      ]
+    }
+  ],
+  "ancestry": [
+    {
+      "sha": "10ae52c5d4d5e06cf11b1525e93ad3a13c115e29",
+      "status": "ahead",
+      "ahead": 8,
+      "behind": 0
+    },
+    {
+      "sha": "86dedcecaa54d18966a13f6eba04a02d2a689a39",
+      "status": "ahead",
+      "ahead": 42,
+      "behind": 0
+    },
+    {
+      "sha": "41ba9a1d9d904f017dae82088f1e32375a402ade",
+      "status": "ahead",
+      "ahead": 14,
+      "behind": 0
+    },
+    {
+      "sha": "816f680405aea70c18132ab4e5d2ef658f06b3a6",
+      "status": "ahead",
+      "ahead": 85,
+      "behind": 0
+    },
+    {
+      "sha": "40367912b35be5646935a4016c4498224d4f66b6",
+      "status": "ahead",
+      "ahead": 130,
+      "behind": 0
+    },
+    {
+      "sha": "e2b8c6f081c9500d95b47b954c86c3fd565efd62",
+      "status": "ahead",
+      "ahead": 133,
+      "behind": 0
+    },
+    {
+      "sha": "3406dd121ebeca30ad344ccd8f71278fe0505310",
+      "status": "ahead",
+      "ahead": 132,
+      "behind": 0
+    },
+    {
+      "sha": "7517f30fd7010af11dac6444f7c0b3d3dadd5064",
+      "status": "ahead",
+      "ahead": 147,
+      "behind": 0
+    },
+    {
+      "sha": "b0a72fc7fe5d2b5efe3fa32528a39879fdecdd51",
+      "status": "ahead",
+      "ahead": 126,
+      "behind": 0
+    },
+    {
+      "sha": "b6a962018e06513d5cf408e646751f161f0e00ca",
+      "status": "ahead",
+      "ahead": 197,
+      "behind": 0
+    },
+    {
+      "sha": "5db3a912727c8d2686a3b3301e04b7d80359fe0c",
+      "status": "ahead",
+      "ahead": 125,
+      "behind": 0
+    },
+    {
+      "sha": "bb5c96c5d342de94f0304f1bb13147b0c4e8682a",
+      "status": "ahead",
+      "ahead": 469,
+      "behind": 0
+    },
+    {
+      "sha": "d0680dbd16676c54fb7473f797c26f58e76c786e",
+      "status": "ahead",
+      "ahead": 134,
+      "behind": 0
+    },
+    {
+      "sha": "c568e6c6c090c2ade8d15f1c5d70d061ba66940e",
+      "status": "ahead",
+      "ahead": 209,
+      "behind": 0
+    },
+    {
+      "sha": "9e85d22cc195d239048be1ef145ec3626e76fc26",
+      "status": "ahead",
+      "ahead": 296,
+      "behind": 0
+    },
+    {
+      "sha": "8dcca858d2ae0646d5fb1a48fbdb2ab51a2909dc",
+      "status": "ahead",
+      "ahead": 131,
+      "behind": 0
+    },
+    {
+      "sha": "26c2b27230a9ee77fa8ef6774d4fe4b791d39ed4",
+      "status": "ahead",
+      "ahead": 411,
+      "behind": 0
+    },
+    {
+      "sha": "7faf0a8bb557e59131a92a062bd2571c98547b8c",
+      "status": "ahead",
+      "ahead": 343,
+      "behind": 0
+    },
+    {
+      "sha": "1846c5de0f80aa95cd2efb66c9d55549ac131ff8",
+      "status": "ahead",
+      "ahead": 135,
+      "behind": 0
+    },
+    {
+      "sha": "3fa646ed1dca28071d2b65c6394f0003231362e6",
+      "status": "ahead",
+      "ahead": 536,
+      "behind": 0
+    },
+    {
+      "sha": "4f5a1a3d6f31df9273cbfa2ce9cee97cf8a1e657",
+      "status": "ahead",
+      "ahead": 391,
+      "behind": 0
+    },
+    {
+      "sha": "7462e0b2754720a8b6581cf00e037cb9af094e04",
+      "status": "ahead",
+      "ahead": 202,
+      "behind": 0
+    },
+    {
+      "sha": "d93f6aecac8214057debfc1d18eda85b6fa50ce1",
+      "status": "ahead",
+      "ahead": 472,
+      "behind": 0
+    },
+    {
+      "sha": "387be6460bd914a6ba05e53eb31c4316b28c66d6",
+      "status": "ahead",
+      "ahead": 656,
+      "behind": 0
+    },
+    {
+      "sha": "5e4cedcb61373a8a90cf1ff0524c5c130b8b00b4",
+      "status": "ahead",
+      "ahead": 579,
+      "behind": 0
+    },
+    {
+      "sha": "6c7ff044fcee9a229c2c5b1ca2f63e5b106460b2",
+      "status": "ahead",
+      "ahead": 323,
+      "behind": 0
+    },
+    {
+      "sha": "345b151d1fce59a996883b8c673930b56876fc68",
+      "status": "ahead",
+      "ahead": 663,
+      "behind": 0
+    },
+    {
+      "sha": "2be0c6938257591818414e407909814dbcd5b599",
+      "status": "ahead",
+      "ahead": 474,
+      "behind": 0
+    },
+    {
+      "sha": "8570d2e6efc5d73000b4f515fa299bbd2582f539",
+      "status": "ahead",
+      "ahead": 572,
+      "behind": 0
+    },
+    {
+      "sha": "19884e775733feb49763b10b29ee19578dc4790d",
+      "status": "ahead",
+      "ahead": 539,
+      "behind": 0
+    },
+    {
+      "sha": "196fce7bd147b5baac2bb8214a8c4d0aad5e2af2",
+      "status": "ahead",
+      "ahead": 607,
+      "behind": 0
+    },
+    {
+      "sha": "0ee683300bbe3a14197fb1291a23910b4d2435e4",
+      "status": "ahead",
+      "ahead": 680,
+      "behind": 0
+    },
+    {
+      "sha": "da4b98a63cf008c05249046595fee10fb2976d09",
+      "status": "ahead",
+      "ahead": 290,
+      "behind": 0
+    },
+    {
+      "sha": "dd43d3a24059994bdad170f06e0df453bfda2a3c",
+      "status": "ahead",
+      "ahead": 427,
+      "behind": 0
+    },
+    {
+      "sha": "fa4647359f07b0734e6013dade930b9b010bc1f6",
+      "status": "ahead",
+      "ahead": 490,
+      "behind": 0
+    },
+    {
+      "sha": "61f39303eadedbbbcc569d2ba1a9839742f6f377",
+      "status": "ahead",
+      "ahead": 618,
+      "behind": 0
+    },
+    {
+      "sha": "dc8533ba6df694b959fd37cb84c327584961642c",
+      "status": "ahead",
+      "ahead": 685,
+      "behind": 0
+    },
+    {
+      "sha": "94ebac477707bfe7db9f7f2e02be6efc41b79db0",
+      "status": "ahead",
+      "ahead": 616,
+      "behind": 0
+    },
+    {
+      "sha": "caa9bb7ae76da9920d46b4474d3fc2c10e994e1a",
+      "status": "ahead",
+      "ahead": 678,
+      "behind": 0
+    },
+    {
+      "sha": "583f414dee85f1659783a08ab2b4363cc2992d14",
+      "status": "ahead",
+      "ahead": 252,
+      "behind": 0
+    },
+    {
+      "sha": "23161cfcc670bfed23b6daf77fe559ba9dc32716",
+      "status": "ahead",
+      "ahead": 676,
+      "behind": 0
+    },
+    {
+      "sha": "e70dd94d9ea0309718f523352edb24299960c15d",
+      "status": "ahead",
+      "ahead": 617,
+      "behind": 0
+    },
+    {
+      "sha": "3f7baadd6a412548786ec1b511f7c311992ddb12",
+      "status": "ahead",
+      "ahead": 476,
+      "behind": 0
+    },
+    {
+      "sha": "f2460ecd59d2193088c25eded576b67122fe4783",
+      "status": "ahead",
+      "ahead": 517,
+      "behind": 0
+    },
+    {
+      "sha": "c4fae959ca9417e8ba7e37c1cd5520e34f923d83",
+      "status": "ahead",
+      "ahead": 527,
+      "behind": 0
+    },
+    {
+      "sha": "d01f4c4bfab342dc2eba35c569151cac9b292973",
+      "status": "ahead",
+      "ahead": 609,
+      "behind": 0
+    },
+    {
+      "sha": "76589b5d731b3f7f2323061487c2a633bd1d0ff0",
+      "status": "ahead",
+      "ahead": 573,
+      "behind": 0
+    },
+    {
+      "sha": "d159f348e06af597e04507ae19ddda5590265e9f",
+      "status": "ahead",
+      "ahead": 516,
+      "behind": 0
+    }
+  ],
+  "w2_latest_verified_source": "8130cda612ffc3c6e48394264f78e5227a81e8f3",
+  "unresolved": [
+    "Full original export builtin identity zero matches",
+    "WATER-001",
+    "RENDER-002",
+    "FFT-FORMAT-009",
+    "Latest FFT run41686164808 inconclusive 0 pairs; not numeric mismatch",
+    "Unity automatic property and caller integration",
+    "Full same-candidate compatibility checks not yet performed"
+  ],
+  "readiness": "NOT_READY",
+  "full_readiness_reviews": 0,
+  "local_w1_tests_passed": 26
+}

@@ -14,7 +14,7 @@ from scripts.run_original_dxbc_translation_probe import version_tokens
 from scripts.w1_depth_shaderlab import decode_empty_parameters, stage_body, wrapper, property_name
 
 
-def build(root, out, private_project=None):
+def build(root, out, private_project=None, private_shader=None):
     verify_sources(root, expected=OWNERS)
     import UnityPy
     env = UnityPy.load(str(root / 'sharedassets0.assets'))
@@ -112,6 +112,10 @@ def build(root, out, private_project=None):
                           all_wrapped_stages_valid=all(r['wrapped_stage_vulkan11_valid'] for r in report['stages']))
             if not report['all_wrapped_stages_valid']:
                 raise ValueError('Combined ShaderLab stage body failed validation')
+            if private_shader is not None:
+                # Original-derived source is local-only, never a CI artifact.
+                with private_shader.open('xb') as stream:
+                    stream.write(source.encode())
             if private_project is not None:
                 project = private_project.resolve()
                 if project.exists():
@@ -140,5 +144,7 @@ if __name__ == '__main__':
     p.add_argument('--source', type=Path, required=True)
     p.add_argument('--out', type=Path, required=True)
     p.add_argument('--private-project', type=Path)
+    p.add_argument('--private-shader', type=Path)
     args = p.parse_args()
-    build(args.source, args.out, args.private_project)
+    build(args.source, args.out, args.private_project, args.private_shader)
+

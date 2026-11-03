@@ -358,6 +358,17 @@ jobs:
         run: |
           set -euo pipefail
           python3 -m scripts.restore_volumetric_shaders --project "$RUNNER_TEMP/project/ExportedProject" --backup "$RUNNER_TEMP/original-volumetric-shaders"
+      - name: Stage bounded W1 Depth Copy reconstruction with original exported GUID
+        shell: bash
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_w1_depth_install.py -v
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
+          timeout 600s python3 -m scripts.w1_build_depth_wrapper --source Raft/Raft_Data --out "$RUNNER_TEMP/w1-depth-wrapper-summary.json" --private-shader "$RUNNER_TEMP/w1-private-depth.shader"
+          python3 -m scripts.w1_install_depth_copy --project "$RUNNER_TEMP/project/ExportedProject" --private-shader "$RUNNER_TEMP/w1-private-depth.shader" --backup "$RUNNER_TEMP/w1-original-depth" --out "$RUNNER_TEMP/w1-depth-install-summary.json"
       - name: Restore exact-name Unity 2021.3.45f2 built-in material and particle programs with original GUIDs
         shell: bash
         run: |
