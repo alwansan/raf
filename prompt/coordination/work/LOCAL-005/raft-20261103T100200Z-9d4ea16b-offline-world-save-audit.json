@@ -3,7 +3,7 @@
   "issue_id": "LOCAL-005",
   "username": "raft-20261103T100200Z-9d4ea16b",
   "work_id": "offline-world-save-audit",
-  "status": "active",
+  "status": "completed",
   "base_sha": "61a5811b06c39fcdb633c5559f884ce559ea7f0f",
   "approach": "A8 has already corrected readiness comment/string false positives; A10 now separately isolates original SaveAndLoad.cs selection to Assembly-CSharp, avoiding SDK homonyms, with synthetic file-tree regression tests.",
   "intended_files": [
@@ -22,9 +22,16 @@
     ".meta",
     "Unity/APK/OBB/XAPK workflows"
   ],
-  "next_step": "Verify four synthetic tests and original private SHA-pinned save path portability in dedicated no-LFS GitHub Actions run; then update evidence and close this narrow work item.",
-  "updated_at": "2026-11-03T10:12:00Z",
+  "next_step": "Other owners continue local-world/save integration, authentic .rgd flows and device checks after authorized build; A10 work completed.",
+  "updated_at": "2026-11-03T10:18:00Z",
   "experiment_ids": [
     "save-selector-sdk-homonym-20261103"
-  ]
+  ],
+  "result": "Scoped original SaveAndLoad.cs selector to Assembly-CSharp; 4 new synthetic tests and 4 baseline tests passed; SHA-pinned original path expressions and 14 .NET checks passed. This completes only A10 source selection hardening, not overall LOCAL-005.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/14dd7fce3257ec852ebb22ec76c22629d1a86b76",
+    "https://github.com/alwansan/raf/actions/runs/41617920198",
+    "https://github.com/alwansan/raf/actions/runs/41617920208"
+  ],
+  "last_commit": "14dd7fce3257ec852ebb22ec76c22629d1a86b76"
 }
