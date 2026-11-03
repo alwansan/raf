@@ -4,13 +4,13 @@
   "client_label": "A10",
   "session_id": "a10-20261103T224523Z-dc871304",
   "resumed_from": null,
-  "status": "active",
-  "updated_at": "2026-11-03T22:45:23Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T22:55:14Z",
   "base_sha": "2480a0d932e3339e24bcb11bdce832aee8516ed3",
   "current_work": [
-    "LOCAL-005 ZIP2 authentic Data.rgd safe serialization graph probe, CPU-only no-LFS"
+    "LOCAL-005 ZIP2 authentic Data.rgd NRBF graph decoding and original Assembly-CSharp type metadata correspondence: completed source-only"
   ],
-  "last_commit": "b0a72fc7fe5d2b5efe3fa32528a39879fdecdd51",
-  "next_step": "Build scoped safe NRBF decoder CI for original ZIP2 Data.rgd pinned binary SHA and independent negative controls; no Unity/native execution. Preserve existing original files.",
+  "last_commit": "951e25e213160c442bd10a47631242d6fffcdf5d",
+  "next_step": "A10 source experiment complete: ZIP2 original RGD+Assembly SHA verified, CI41734609973 SUCCESS, 4/4 negative controls, root type in Assembly-CSharp, one serialized member vs one field with no direct name match. Investigate original serialization mapping/producer/consumer without changing .rgd, then true Unity/phone read-load-resume after coordinator build. Full game NOT_READY 0/3. New explicit Continue must review current HEAD/Actions, coordinate peers.",
   "memory_path": "prompt/coordination/clients/raft-20261103T100200Z-9d4ea16b/MEMORY.md"
 }
