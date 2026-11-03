@@ -1,5 +1,5 @@
 {
-  "request_id": "delivery-permission-repair-20261102-2114bfc5",
-  "reason": "Deliver full fidelity APK+OBB/XAPK after fixing confirmed packaging PermissionError; include verified Android touch lifecycle fixes. Cheap permission, delivery and isolation CI passed.",
-  "requested_from_sha": "2114bfc5abd71b624f1129f63af4ef4dd2163b15"
+  "request_id": "owner-incomplete-device-preview-20261103-4dece0a777",
+  "reason": "Owner explicitly requests an incomplete experimental device preview now, independently of ongoing repairs. Build existing split/fidelity APK+OBB+XAPK delivery without claiming readiness or changing verification gates.",
+  "requested_from_sha": "4dece0a77741e89ba248b7cda980c6395480fb7a"
 }
