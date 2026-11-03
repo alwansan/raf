@@ -4,8 +4,8 @@
   "client_label": "W1",
   "session_id": "w1-20261103T162620454Z-a63c8f12",
   "issue_id": "RENDER-002",
-  "status": "planned",
-  "updated_at": "2026-11-03T16:26:20.454Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T16:41:54.938Z",
   "base_sha": "7838e650fb8e9f400ea10964a198a9375d27690e",
   "hypothesis": "Paired original vertex+fragment SPIR-V and resource/semantic-rebound reconstructed HLSL may render identical RGBA32F color and D32 depth attachments under original supported pass states; real rasterization can reveal clip/interpolation/depth differences hidden by compute lifting.",
   "intended_files": [
@@ -39,5 +39,8 @@
     "RGBA32F nearestclamp and D32 only; no all-input or NaN proof",
     "Descriptor decoration normalization uses original serialized property/texture/sampler names, does not prove Unity binding"
   ],
-  "next_step": "Create actual graphics render pass with color+depth readback and compare original vs rebound stages before game integration."
+  "next_step": "GUID-preserving installation into actual authenticated staged Depth Copy export, then bounded Unity caller/resource integration; do not bypass strict builtin identity failure or request fullAPK.",
+  "source_sha": "41ba9a1d9d904f017dae82088f1e32375a402ade",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41675980141",
+  "result": "9pass occurrences,27actual raster color+D32image matches maxAbs0,36/36wrongUV/geometry/depth/resource controls detected; known color+depth canary PASS; Vulkan API/sync validation clean,3binding testsPASS."
 }

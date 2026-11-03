@@ -4,13 +4,13 @@
   "username": "raft-20261103T162900Z-73e8c2a1",
   "session_id": "w1-20261103T162620454Z-a63c8f12",
   "resumed_from": null,
-  "status": "active",
-  "updated_at": "2026-11-03T16:26:29.427Z",
+  "status": "paused",
+  "updated_at": "2026-11-03T16:41:54.938Z",
   "base_sha": "7838e650fb8e9f400ea10964a198a9375d27690e",
   "current_work": [
-    "RENDER-002 real raster/color/depth comparison"
+    "Completed actual Depth Copy raster/depth equivalence within controlled cases"
   ],
-  "last_commit": "0eae48c39c620f05d678705cdcb5198b9955c6da",
-  "next_step": "Create actual graphics render pass with color+depth readback and compare original vs rebound stages before game integration.",
+  "last_commit": "41ba9a1d9d904f017dae82088f1e32375a402ade",
+  "next_step": "GUID-preserving installation into actual authenticated staged Depth Copy export, then bounded Unity caller/resource integration; do not bypass strict builtin identity failure or request fullAPK.",
   "memory_path": "prompt/coordination/clients/raft-20261103T162900Z-73e8c2a1/MEMORY.md"
 }

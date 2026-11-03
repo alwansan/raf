@@ -4,8 +4,8 @@
   "client_label": "W1",
   "session_id": "w1-20261103T162620454Z-a63c8f12",
   "issue_id": "RENDER-002",
-  "status": "planned",
-  "updated_at": "2026-11-03T16:26:20.454Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T16:41:54.938Z",
   "base_sha": "7838e650fb8e9f400ea10964a198a9375d27690e",
   "hypothesis": "Paired original vertex+fragment SPIR-V and resource/semantic-rebound reconstructed HLSL may render identical RGBA32F color and D32 depth attachments under original supported pass states; real rasterization can reveal clip/interpolation/depth differences hidden by compute lifting.",
   "intended_files": [
@@ -35,16 +35,17 @@
   ],
   "expected_signal": "9passes preserve original6+3indices; positive full color/depth agreement with nonzero actual changed coverage; discriminating negative controls; independent authored constant-color/depth canary.",
   "limitations": [
-    "CPU Vulkan not Adreno/Unity",
-    "RGBA32F nearestclamp and D32 only; no all-input or NaN proof",
-    "Descriptor decoration normalization uses original serialized property/texture/sampler names, does not prove Unity binding"
+    "Controlled CPU Vulkan graphics onRGBA32F/D32, not Unity/Adreno",
+    "Normalized descriptor slots tied to original names, not runtime Unity binding",
+    "No all-input/NaN/half-format or gameGUIDintegration claim"
   ],
-  "next_step": "Create actual graphics render pass with color+depth readback and compare original vs rebound stages before game integration.",
+  "next_step": "GUID-preserving installation into actual authenticated staged Depth Copy export, then bounded Unity caller/resource integration; do not bypass strict builtin identity failure or request fullAPK.",
+  "source_sha": "41ba9a1d9d904f017dae82088f1e32375a402ade",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41675980141",
+  "result": "9pass occurrences,27actual raster color+D32image matches maxAbs0,36/36wrongUV/geometry/depth/resource controls detected; known color+depth canary PASS; Vulkan API/sync validation clean,3binding testsPASS.",
   "workflow_path": ".github/workflows/raft-w1-depth-raster.yml",
   "concurrency_group": "raft-w1-depth-raster-${github.ref}",
   "cancel_in_progress": false,
   "artifact_prefix": "w1-depth-raster-aggregate",
-  "source_sha": null,
-  "run_url": null,
-  "result": "3independent SPIR-V binding fixture tests PASS locally; actual graphics runner and canary await CI."
+  "artifact_id": 13251030678
 }
