@@ -1,0 +1,30 @@
+name: Raft A3 haptics original-path inventory (CPU only)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-a3-haptics-source-contract.yml'
+      - 'scripts/probe_haptics_asset_manifest.py'
+      - 'tests/test_probe_haptics_asset_manifest.py'
+      - 'config/original-haptics-manifest.json'
+      - 'Raft/Raft_Data/StreamingAssets/Haptics/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raft-a3-haptics-original-source-${{ github.ref }}
+  cancel-in-progress: false
+  queue: max
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Run synthetic path, blob and tamper controls
+        run: python3 -m unittest discover -s tests -p test_probe_haptics_asset_manifest.py -v
+      - name: Verify 29 tracked original WAV blobs without Unity, LFS or device claims
+        run: python3 -m scripts.probe_haptics_asset_manifest --repo . --manifest config/original-haptics-manifest.json --expected-count 29

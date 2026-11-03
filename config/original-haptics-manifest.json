@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "source_branch": "feature/android-native-port",
+  "path_prefix": "Raft/Raft_Data/StreamingAssets/Haptics/",
+  "files": {
+    "AlfaLand.wav": {
+      "git_blob_sha": "2ba75860de7e3b7fa81966a47777c535435260af",
+      "bytes": 163844
+    },
+    "AxeHit.wav": {
+      "git_blob_sha": "979154902bf5c08f1d3c05699529d390e6839f20",
+      "bytes": 166192
+    },
+    "BalboaBridge.wav": {
+      "git_blob_sha": "2dd082c245b90b95ebe438396effebbc3d77cc97",
+      "bytes": 604716
+    },
+    "BossRumble.wav": {
+      "git_blob_sha": "3c500a66234463c13cf9ae3aed94e61ce61100bd",
+      "bytes": 2310712
+    },
+    "BossSmashWall.wav": {
+      "git_blob_sha": "b5e0cb3bae11d06f9daaaec18353e6e8bf918dcd",
+      "bytes": 421040
+    },
+    "Build.wav": {
+      "git_blob_sha": "60ba66bb8bf3cf826fa2eb53a90a7104e7276c48",
+      "bytes": 60964
+    },
+    "CaravanRocket.wav": {
+      "git_blob_sha": "0ec7156c101ed2d94a974fac0127d3dedb3f1c9c",
+      "bytes": 2163756
+    },
+    "ContainerDrop.wav": {
+      "git_blob_sha": "143072ba5b6747169895783297cf8f07caa931be",
+      "bytes": 113496
+    },
+    "DoorExplosion.wav": {
+      "git_blob_sha": "72fc298feef962bd304dbee03e3371800404d18c",
+      "bytes": 632420
+    },
+    "DrowningHaptics.wav": {
+      "git_blob_sha": "7167394e63f53e1d64f1055b28a1240c77bb155c",
+      "bytes": 740164
+    },
+    "Dynamite.wav": {
+      "git_blob_sha": "097155a4f244032a37a3f96171aad3926e0e8b17",
+      "bytes": 284340
+    },
+    "FishBobHaptics.wav": {
+      "git_blob_sha": "5c5b1e54f955400490db628417ef7fefb4e93740",
+      "bytes": 124844
+    },
+    "Harpoon.wav": {
+      "git_blob_sha": "ad0e103e3d788f7d8451cec4d7178d539310d710",
+      "bytes": 219680
+    },
+    "HookHit.wav": {
+      "git_blob_sha": "11005c590d7b5af70653af07419a75d61b2b6dd8",
+      "bytes": 48792
+    },
+    "HungryHaptics.wav": {
+      "git_blob_sha": "6bb16bd351b48d5a64270f37ff289152ffc9338f",
+      "bytes": 389544
+    },
+    "IceBreak.wav": {
+      "git_blob_sha": "b78dcef924140b64a8b848f6dcfb90a8974b66f4",
+      "bytes": 1117880
+    },
+    "LowAir.wav": {
+      "git_blob_sha": "2f0ca5954e5d47d39ccefa4274d141fc18af10f2",
+      "bytes": 270304
+    },
+    "ReactorError.wav": {
+      "git_blob_sha": "fbd5c37eaefdc9d39436e5dea16332b8cf0fe5e5",
+      "bytes": 757656
+    },
+    "SeleneDoor.wav": {
+      "git_blob_sha": "8a8739d8792f9cd792bf358039a1d80f3186756a",
+      "bytes": 2297672
+    },
+    "SharkBiteRaftHaptics.wav": {
+      "git_blob_sha": "271cf4ff13cd6ffe1401fe22e35645b0505013bf",
+      "bytes": 5613552
+    },
+    "SharkStabbed.wav": {
+      "git_blob_sha": "bfac227e6b8747e24600288e35189c34315ef86c",
+      "bytes": 205232
+    },
+    "Snowmobile.wav": {
+      "git_blob_sha": "99fda0838377815cb6502ce29bd9c6f98b7fc972",
+      "bytes": 2175972
+    },
+    "Splash.wav": {
+      "git_blob_sha": "81abc44cc76348b0387b720fe1daa0cf37d3a76a",
+      "bytes": 81684
+    },
+    "TakeDamageHaptics.wav": {
+      "git_blob_sha": "bc539b194f8313fbdcfa95005bee79e6f229fd0a",
+      "bytes": 131176
+    },
+    "TangaroaDoor.wav": {
+      "git_blob_sha": "0e31e01335d2844aeddfc646ad4749b1ad621d1a",
+      "bytes": 1435340
+    },
+    "TangaroaFlood.wav": {
+      "git_blob_sha": "c23969852a9ce1aa8a0a20d347d9cf0644aea528",
+      "bytes": 2085792
+    },
+    "TangaroaLaunch.wav": {
+      "git_blob_sha": "dc75118628cf369de598f96ad5e38ed41900d8b6",
+      "bytes": 2650316
+    },
+    "ThirstyHaptics.wav": {
+      "git_blob_sha": "7230631e760fd973719839a0ab62d06cfb476e99",
+      "bytes": 745400
+    },
+    "Zipline.wav": {
+      "git_blob_sha": "b5b389200851fb7be7955d97191d4e4b952ea14e",
+      "bytes": 4720624
+    }
+  }
+}

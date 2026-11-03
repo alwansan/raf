@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T100000Z-3a7f2c91",
+  "issue_id": "HAPTICS-008",
+  "status": "source_test_pending",
+  "source_manifest_count": 29,
+  "source_manifest_total_bytes": 32733104,
+  "hypothesis": "All 29 tracked Haptics WAVs have stable Git identities; fail-closed source audit distinguishes missing/tampered staging input from old Android runtime path lookup",
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_probe_haptics_asset_manifest.py -v",
+    "python3 -m scripts.probe_haptics_asset_manifest --repo . --manifest config/original-haptics-manifest.json --expected-count 29"
+  ],
+  "local_synthetic_tests": {
+    "passed": 8,
+    "failed": 0
+  },
+  "ci": "workflow triggered by source commit; verify live run before claiming pass",
+  "limitations": [
+    "Historical CL records 35 missing-path events but raw 33MB log was not accessible through bounded contents API",
+    "No Android OBB/APK mounted path check",
+    "No full Unity or device test",
+    "No original asset bytes changed"
+  ]
+}
