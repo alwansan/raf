@@ -15,6 +15,10 @@ from scripts.probe_original_scene_audio import method_body
 
 RECEIVED = re.compile(r"\bWorldHasBeenRecieved\s*=\s*true\s*;")
 BROADCAST = re.compile(r"\bHelper\s*\.\s*BroadCastToScene\s*\(")
+# This lexical probe has no target C# preprocessor symbols. Reject
+# conditional branches instead of treating potentially disabled code as live.
+_CONDITIONAL_DIRECTIVE = re.compile(r"^[ \t]*#[ \t]*(?:if|elif|else|endif)\b", re.MULTILINE)
+
 
 # Only executable C# tokens count toward this source-level contract. Mask
 # comments and literals without shifting the original character offsets.
@@ -42,6 +46,8 @@ def inspect(source_root: Path) -> dict:
         raise ValueError("Unknown original Raft_Network revision")
     return_type, body = method_body(source, "WorldHasBeenLoaded")
     executable = _executable_only(body)
+    if _CONDITIONAL_DIRECTIVE.search(executable):
+        raise ValueError("Cannot verify world readiness with conditional compilation")
     broadcasts = list(BROADCAST.finditer(executable))
     received = list(RECEIVED.finditer(executable))
     if len(received) != 1 or not broadcasts:
