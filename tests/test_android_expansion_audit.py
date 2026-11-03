@@ -230,6 +230,18 @@ class OriginalHapticsObbContractTests(unittest.TestCase):
                     with self.assertRaises(ValueError):
                         audit_companion(apk, obb, digest=False, haptics_manifest=manifest)
 
+
+    def test_native_obb_audit_wires_manifest_in_same_command(self):
+        # Static wiring guard only; does not run a native build.
+        workflow = (Path(".github/workflows/raft-unity-editor-android-import.yml")
+                    .read_text(encoding="utf-8"))
+        start = workflow.find("python3 scripts/audit_android_expansion.py")
+        self.assertGreaterEqual(start, 0)
+        command = workflow[start: workflow.find("\n          fi", start)]
+        self.assertIn('--haptics-manifest "$GITHUB_WORKSPACE/config/original-haptics-manifest.json"',
+                      command)
+        self.assertIn("--verify-crc", command)
+
     def test_without_manifest_does_not_claim_haptic_archive_identity(self):
         with tempfile.TemporaryDirectory() as tmp:
             apk, obb, manifest, entries, _, names = self.fixture(Path(tmp))
