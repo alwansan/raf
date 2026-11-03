@@ -21,6 +21,13 @@
     "docs/W3_SHADER_PROPERTY_SCHEMA_2026-11-03.md",
     "prompt/coordination/experiments/raft-20261103T153100Z-b4d2c9e7/shader-property-schema.json",
     "prompt/coordination/discussions/RENDER-002/2026-11-03T165000Z-raft-20261103T153100Z-b4d2c9e7-scope-announcement-shader-prop-schema.md",
+    "scripts/probe_w3_per_material_keywords.py",
+    "scripts/w3_test_per_material_keywords.py",
+    "docs/W3_PER_MATERIAL_KEYWORD_USAGE_2026-11-03.json",
+    "docs/W3_PER_MATERIAL_KEYWORD_USAGE_2026-11-03.md",
+    "prompt/coordination/experiments/raft-20261103T153100Z-b4d2c9e7/per-material-keyword-usage.json",
+    "prompt/coordination/discussions/RENDER-002/2026-11-03T174000Z-raft-20261103T153100Z-b4d2c9e7-scope-announcement-per-material-keywords.md",
+    "prompt/coordination/discussions/RENDER-002/2026-11-03T181000Z-raft-20261103T153100Z-b4d2c9e7-per-material-keywords-result.md",
     "prompt/STATUS.md"
   ],
   "related_work": [
@@ -35,7 +42,8 @@
     "synthetic model tests 9/9 OK local; all probe negative controls true; exit 0",
     "resolution: 144/514 cross-file material references resolve to 11 distinct in-game Shader objects; 12 engine transports fail-closed",
     "follow-up (same cycle): full-game inventory over 82 byte-verified local owners committed docs/W3_FULL_MATERIAL_SHADER_INVENTORY_2026-11-03.json sha256 d80256a7e0b51c17b263a089d56c01eb9d32b57f6085b64f64f9acb94af842f8 — 1556 materials / 165 shaders / 1556 references fully resolved (437 same-file, 1103 cross-owner, 16 engine transports fail-closed), 77/77 named targets; tests 7/7 + 9/9; prior superseded run from a strings/list classification bug corrected and re-run",
-    "step 3 (same cycle): priority-shader serialized property/keyword schema committed docs/W3_SHADER_PROPERTY_SCHEMA_2026-11-03.json sha256 7a698ec263d9cf5509c1c6aa320637127f31287123bd00b52f88b621f7758a8b — 11 identity-exact targets, prop type enum verified (0=Color, 2=Float, 3=Range, 4=Texture) via Standard membership match, keyword budgets 8-38 per shader, m_ParsedForm.m_Dependencies=0 for all 11; tests 8/8; names published only as sorted-list SHA commitments"
+    "step 3 (same cycle): priority-shader serialized property/keyword schema committed docs/W3_SHADER_PROPERTY_SCHEMA_2026-11-03.json sha256 7a698ec263d9cf5509c1c6aa320637127f31287123bd00b52f88b621f7758a8b — 11 identity-exact targets, prop type enum verified (0=Color, 2=Float, 3=Range, 4=Texture) via Standard membership match, keyword budgets 8-38 per shader, m_ParsedForm.m_Dependencies=0 for all 11; tests 8/8; names published only as sorted-list SHA commitments",
+    "step 4 (same cycle): per-material keyword-usage audit committed docs/W3_PER_MATERIAL_KEYWORD_USAGE_2026-11-03.json sha256 3e1ebc22169c23b107bf3a9a1751972b23b671a246fab3eb4762a92a52a8906d — 1282 priority materials match inventory exactly; ZERO keyword-set violations (1282/1282 m_ValidKeywords subset of shader m_KeywordNames); used footprints Standard 7/37, SpeedTree8 7, ParticleShader 1, other 8 targets all-empty; disabledShaderPasses=0; tests 8/8; one superseded run recorded honestly"
   ],
   "result": "completed — reference-topology evidence only; no shader restoration, no water/render gate closed; reported in docs report with explicit limits. Same-cycle full-game extension result recorded in evidence fields.",
   "next_step": "hand priority list to W1 (done via discussion); full-game inventory + priority-shader property/keyword schema committed; next options: per-material keyword-usage audit for priority shaders, m_FallbackName/m_CustomEditorName enumeration, or resource-binding map (m_NonModifiableTextures) inside same owners"

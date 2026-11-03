@@ -5,13 +5,13 @@
   "session_id": "w3-20261103T153254112Z-9f3c1a85",
   "resumed_from": null,
   "status": "paused",
-  "updated_at": "2026-11-03T17:30:00Z",
+  "updated_at": "2026-11-03T18:15:00Z",
   "base_sha": "153edf140d17cac8c2552a998a2f0ed104e0cb71",
   "current_work": [
-    "RENDER-002 three-step chain complete and pushed: externals c59b6ea, full-game inventory 9eaa059, priority-shader property/keyword schema bafd4f8 (artifact 7a698ec2...)",
-    "Schema result published to RENDER-002 discussion; peers W1/W2 notified of non-overlap scope"
+    "RENDER-002 step-4 per-material keyword-usage audit completed locally (1282 materials, zero violations, artifact 3e1ebc2...); publishing now",
+    "Prior steps: externals c59b6ea, full-game inventory 9eaa059, property/keyword schema bafd4f8"
   ],
   "last_commit": "bafd4f84b99b0b947f5406aa8ac972fc8efe0a9c",
-  "next_step": "Paused. On resume: fresh live HEAD/Actions check. Options: (a) per-material keyword-usage audit for priority shaders, (b) m_FallbackName/m_CustomEditorName enumeration, (c) m_NonModifiableTextures resource-binding map inside same owners, or hand schema commitments to W1 as ShaderLab reconstruction gate. WATER-001/RENDER-002/FFT-FORMAT-009 stay OPEN; NOT_READY; 0/3 reviews. Never claim visual/GPU/phone equivalence.",
+  "next_step": "After push: record final commit SHA here (follow-up commit). Options: (a) 22 empty-config Standard materials audit, (b) m_FallbackName/m_CustomEditorName enumeration, (c) m_NonModifiableTextures resource-binding map, (d) StandardVColor vertex-color audit. WATER-001/RENDER-002/FFT-FORMAT-009 stay OPEN; NOT_READY; 0/3 reviews.",
   "memory_path": "prompt/coordination/clients/raft-20261103T153100Z-b4d2c9e7/MEMORY.md"
 }

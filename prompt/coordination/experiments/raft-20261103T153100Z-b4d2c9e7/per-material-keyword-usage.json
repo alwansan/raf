@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T153100Z-b4d2c9e7",
+  "status": "completed",
+  "hypothesis": "For every original Material referencing the 11 appearance-priority Shader targets, the per-material serialized keyword state (m_ValidKeywords, m_InvalidKeywords, disabledShaderPasses) is consistent with the shader's serialized m_KeywordNames set and reveals the true used-variant footprint, bounding any later variant enumeration to observed configs only.",
+  "input_hashes": [
+    "sha256(resources.assets,111533516)=87493249f1adfc0c5eb8b82e4e199e208cd2c95eabe9796cab82116c4838595c",
+    "sha256(sharedassets0.assets,115978112)=0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "owner-set + pin-verification identical to committed inventory docs/W3_FULL_MATERIAL_SHADER_INVENTORY_2026-11-03.json (d80256a7...)",
+    "shader keyword-name sets from committed schema docs/W3_SHADER_PROPERTY_SCHEMA_2026-11-03.json (7a698ec2...) targets"
+  ],
+  "commands": [
+    "python3 scripts/probe_w3_per_material_keywords.py --game-data <Raft_Data> --aggregate-json docs/W3_PER_MATERIAL_KEYWORD_USAGE_2026-11-03.json",
+    "python3 scripts/w3_test_per_material_keywords.py"
+  ],
+  "expected_signal": "exact 1282 priority-material match to inventory per-shader counts; zero keyword-set violations; small used-keyword footprints (Standard 7 of 37, SpeedTree8 7, ParticleShader 1, rest 0, with all-empty configs for bespoke shaders); deterministic commitments",
+  "negative_controls": [
+    "negative/out-of-range m_FileID fail-closed (same resolver as inventory)",
+    "engine transports counted, never resolved or name-guessed (16 pass-by references)",
+    "empty-string names never produce commitments",
+    "histogram invariant: sized-set counts sum to material counts per target",
+    "names never written to repo/artifacts without --print-names-local"
+  ],
+  "workflow_path": null,
+  "concurrency_group": null,
+  "budget": "local CPU only, minutes; no LFS, no CI, no Unity",
+  "run_url": null,
+  "source_sha": "9a0acc2b0b4e41d3ef16e4a069830c67414122ec",
+  "result": "completed. Artifact docs/W3_PER_MATERIAL_KEYWORD_USAGE_2026-11-03.json sha256 3e1ebc22169c23b107bf3a9a1751972b23b671a246fab3eb4762a92a52a8906d. 1282 priority materials (matches inventory exactly). ZERO violations: every m_ValidKeywords subset of shader m_KeywordNames (1282/1282). Used footprints: Standard 7 distinct of 37 (hist 22x0/21x1/498x2/118x3/15x4), Nature/SpeedTree8 7 (6x3/34x4/9x5/1x6), ParticleShader 1 (42x0/6x1); the other 8 targets (Skin_Amplify, Shimmer, BlockPaint, Tri-Planar, Vegetation, ParticleShader_Additive, AnimalDissolve, FireParticles_Amplify) have ALL materials empty (single-default-variant reconstruction suffices). 317 materials carry non-empty m_InvalidKeywords (legacy strings; counts only). disabledShaderPasses slots = 0. One superseded run (pre-fix commit_names empty-string semantics) had identical headline numbers; corrected run is the only durable artifact.",
+  "limitations": [
+    "keyword-config evidence only: no material values/colors (W2 lane), no program bodies (W1 lane), no texture payload/format audit (W2 lane)",
+    "no Unity compile, no CPU/GPU representation or phone claim; WATER-001/RENDER-002/FFT-FORMAT-009 remain OPEN; NOT_READY; 0/3 reviews",
+    "InvalidKeywords contents not interpreted beyond counts"
+  ],
+  "next_step": "publish STATUS section + result discussion; afterward options: (a) audit the 22 empty-config Standard materials as base-variant population, (b) m_FallbackName/m_CustomEditorName enumeration, (c) m_NonModifiableTextures resource-binding map, (d) StandardVColor (sharedassets36:880) vertex-color audit"
+}
