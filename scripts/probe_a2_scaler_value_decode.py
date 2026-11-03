@@ -123,7 +123,7 @@ def decode_record(raw, tree):
         "trailer_is_finite_float": math.isfinite(trailer_float),
         "trailer_float_is_positive": math.isfinite(trailer_float) and trailer_float > 0,
         "trailer_first_byte_is_bool": trailer[0] in (0, 1),
-        "trailer_remaining_bytes_zero": trailer[1:] == b"\\x00\\x00\\x00",
+        "trailer_remaining_bytes_zero": trailer[1:] == b"\x00\x00\x00",
         "trailer_signed_int_is_small": -32 <= trailer_int <= 32,
         "ui_scale_mode": ui_mode,
         "reference_resolution": [width, height],
