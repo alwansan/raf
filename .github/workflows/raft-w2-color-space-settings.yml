@@ -1,0 +1,61 @@
+name: Raft W2 original color-space settings probe (CPU only)
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-w2-color-space-settings.yml'
+      - 'scripts/probe_w2_color_space_settings.py'
+      - 'tests/test_w2_color_space_settings.py'
+permissions:
+  contents: read
+concurrency:
+  group: raft-w2-color-space-settings-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  color-space-settings:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+            Raft/Raft_Data
+      - name: Fail-closed synthetic tests first
+        run: python3 -m unittest discover -s tests -p test_w2_color_space_settings.py -v
+      - name: Compile probe
+        run: python3 -m py_compile scripts/probe_w2_color_space_settings.py
+      - name: Hash the original engine owner before reading it
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib, sys
+          p='Raft/Raft_Data/globalgamemanagers'
+          h=hashlib.sha256(open(p,'rb').read()).hexdigest()
+          size=__import__('os').path.getsize(p)
+          expect='6d1288cd08b91d8c321ed2526503404b64b978819985b9b7fa5a9a146c29a8f5'
+          if h!=expect or size!=1914356:
+              sys.exit(f'FATAL unauthenticated globalgamemanagers {h} {size}')
+          print(f'authenticated {p} sha256={h} bytes={size}')
+          PY
+      - name: Install CPU-only original serializer (typetree reader only)
+        run: python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+      - name: Read original PlayerSettings color space (aggregate-only)
+        run: |
+          set -euo pipefail
+          timeout 300s python3 -m scripts.probe_w2_color_space_settings \
+            --source Raft/Raft_Data \
+            --out "$RUNNER_TEMP/w2-color-space-settings.json"
+          echo 'RAFT_W2_COLOR_SPACE_SETTINGS aggregateOnly=true noPayloadPublished=true unityRan=false androidBuildRan=false'
+      - name: Retain only the aggregate JSON
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: raft-w2-color-space-settings-${{ github.run_id }}
+          path: ${{ runner.temp }}/w2-color-space-settings.json
+          retention-days: 7
+          if-no-files-found: ignore

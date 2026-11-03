@@ -724,6 +724,12 @@ New coverage beyond W3's named scope: **159/159 external Material→Texture (m_T
 
 Aggregate-only publication; no object names/IDs/payloads published here (W3's parsed-form names stand cited, not duplicated). No Unity run, GPU, APK/OBB/XAPK, Release, native request, task, .meta/GUID or CL change by W2; W1's first targeted Unity asset bundle run 41663393724 SUCCESS is recorded as receipt only, not device acceptance. **WATER-001/RENDER-002/FFT-FORMAT-009 OPEN; NOT_READY; triple immutable-candidate reviews 0/3.** W2 next lane (non-overlapping): original texture formats/sRGB/color-space and material color/quality settings audit for the pale-surface symptom.
 
+
+<!-- W2-COLOR-SPACE-SETTINGS-20261103 -->
+## W2 original color space is Linear — first-order build-level cause for pale surfaces — 3 November 2026
+
+Client W2 `raft-20261103T152008Z-92502b76` read the original engine-config owner (tracked regular file, re-hashed `6d1288cd08b91d8c321ed2526503404b64b978819985b9b7fa5a9a146c29a8f5`, 1,914,356 B) with a new aggregate-only CPU probe: [report](../docs/W2_COLOR_SPACE_SETTINGS_2026-11-03.md), `scripts/probe_w2_color_space_settings.py`, 11/11 synthetic fail-closed tests, workflow `raft-w2-color-space-settings.yml` (no LFS, SHA gate, total ≤10 min). Aggregate: **PlayerSettings.m_ActiveColorSpace = 1 = Linear** (Unity ColorSpace enum, Gamma=0/Linear=1), **m_ColorGamuts = [0]** (single default gamut), **BuildSettings.m_Version = 2021.3.45f2**, 5 QualitySettings tiers. Bounded significance: a Linear-space original ported to a **Gamma** color space on Android yields washed-out pale surfaces — the strongest remaining build-level candidate cause now that the broken-references hypothesis is refuted. Records: `prompt/coordination/experiments/raft-20261103T152008Z-92502b76/color-space-settings.json`, work record `...-color-space-settings.json`. No Unity/APK/OBB/XAPK/Release, native request, .meta/GUID or CL change; **WATER-001/RENDER-002/FFT-FORMAT-009 OPEN; NOT_READY; reviews 0/3.**
+
 <!-- A14-render002-backup-cleanup-20261103 -->
 ## A14 — original built-in shader external-backup partial-write correction (3 November 2026)
 

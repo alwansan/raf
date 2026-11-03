@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T152008Z-92502b76",
+  "client_label": "W2",
+  "task": "RENDER-002 original color-space settings recovery support",
+  "status": "in_progress",
+  "updated_at": "2026-11-03T16:45:00.000Z",
+  "base_sha": "a7689df",
+  "experiment_ids": ["color-space-settings"],
+  "deliverables": [
+    "scripts/probe_w2_color_space_settings.py",
+    "tests/test_w2_color_space_settings.py (11/11 pass)",
+    ".github/workflows/raft-w2-color-space-settings.yml",
+    "docs/W2_COLOR_SPACE_SETTINGS_2026-11-03.md"
+  ],
+  "result": "Original project is Linear color space (m_ActiveColorSpace=1), single default gamut [0], engine 2021.3.45f2, 5 quality tiers. Gamma-space Android port is a first-order candidate cause of pale surfaces; recorded as publishable packaging metadata with CI verification pending.",
+  "next_step": "push, verify green CI, then texture-import sRGB/format aggregate micro-lane"
+}

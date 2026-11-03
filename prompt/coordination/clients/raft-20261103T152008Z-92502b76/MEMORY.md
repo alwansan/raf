@@ -56,3 +56,10 @@
 - **تشغيل W1:** تشغيله Unity asset bundle الموجّه 41663393724 يسجَّل لي مكتمل SUCCESS على head_sha 2467c031 — ليس APK كاملاً ولا قبول جهاز؛ بانديل أصل شيدر واحد فقط.
 - مخرجاتي في الفرع قبل الدفع: scripts/probe_w2_external_material_shader_refs.py + tests (19/19) + workflow raft-w2-external-material-refs.yml + docs/W2_EXTERNAL_MATERIAL_SHADER_REFS_2026-11-03.md + سجلات coordination.
 - **الخطوة التالية:** بعد سقوط CI الأخضر أتحوّل إلى مسار مستقل غير متقاطع: فحص ضبط الألوان وصيغ الخامات (sRGB/color space/TexEnv scales) لأعراض فقدان الألوان.
+
+## تحديث 16:55Z — CI أخضر للمسار الأول + مسار فضاء الألوان
+- **CI:** 41671654138 COMPLETED SUCCESS @ 50cf650 (aggregate-only artifact 1052 B) — تصنيف المراجع الخارجية CI-verified. Commit أійсمه الدفعي wraps: 50cf650, ثم docs CI a7689df.
+- **نتيجة مسار فضاء الألوان (local run):** الأصلي **Linear** (m_ActiveColorSpace=1؛ محرك Unity Gamma=0/Linear=1)، gamuts=[0]، إصدار المحرك 2021.3.45f2، 5 طبقات جودة (textureQuality 3/2/0/0/0).
+- **سبب مرشح من الدرجة الأولى:** بناء Gamma على أندروود لمشروع Linear أصلي = أسطح شاحبة مباشرة. أعلى من فرضية مرجعية مرفوضة.
+- ملفات المسار: scripts/probe_w2_color_space_settings.py + tests (11/11) + workflow raft-w2-color-space-settings.yml (بلا LFS، SHA gate) + docs/W2_COLOR_SPACE_SETTINGS_2026-11-03.md.
+- **الخطوة التالية:** CI أخضر للمسار الثاني ثم micro-lane تنسيقات الخامات وصيغ sRGB في المالكين.
