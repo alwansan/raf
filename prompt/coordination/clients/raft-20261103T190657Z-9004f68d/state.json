@@ -4,14 +4,14 @@
   "client_label": "A12R",
   "session_id": "a12r-zip2-20261103T224242860Z-c7e6a9e8",
   "resumed_from": "raft-20261103T184205Z-a12d793c",
-  "status": "active",
-  "updated_at": "2026-11-03T22:47:57.920Z",
-  "base_sha": "0f037caf175fbc193c98e93d9057d27850f67f36",
+  "status": "completed",
+  "updated_at": "2026-11-03T23:09:59.513Z",
+  "base_sha": "d8162ba37c3ffb022c29dc57531683c7ac2b23f7",
   "current_work": [
-    "WATER-001 CPU-only ZIP2 exact 14-original-owner restoration and original Blur DXBC RDEF reflection; 8 new + 7 prior synthetic tests CI step SUCCESS; original ZIP2 checkout still running in run41733616039."
+    "Completed independent WATER-001 SHA-authenticated ZIP2 original Blur CB/DXBC structural audit: 14 sources / 488439356 bytes; four compiled stages and six exact slots; CI41736229248 success (35 tests)."
   ],
-  "last_commit": "50aedc8b00506232b653d63902488ba2b31114fd",
-  "next_step": "Inspect run41733616039 terminal original-owner SHA restore and RDEF phase; act only on this client's files if failure; no Unity/APK",
+  "last_commit": "0aee07b1b412f4c3eb70c5c51a89d82ef271507d",
+  "next_step": "New coordinated session: recover exact original Unity CB matrix/vector member offsets/types/arrays and DXBC used registers; reconstruct original private HLSL/ShaderLab safely and preserve GUIDs. Strict water/FFT and builtin shaders still BLOCK game build. No Unity/native from this recovery scope.",
   "memory_path": "prompt/coordination/clients/raft-20261103T190657Z-9004f68d/MEMORY.md",
   "zip2_source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385"
 }

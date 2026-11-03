@@ -3,9 +3,9 @@
   "owner": "raft-20261103T190657Z-9004f68d",
   "client_label": "A12R",
   "issue_id": "WATER-001",
-  "status": "active",
-  "updated_at": "2026-11-03T22:47:57.920Z",
-  "base_sha": "50aedc8b00506232b653d63902488ba2b31114fd",
+  "status": "completed",
+  "updated_at": "2026-11-03T23:09:59.513Z",
+  "base_sha": "d8162ba37c3ffb022c29dc57531683c7ac2b23f7",
   "hypothesis": "The original Blur zero-member but nonzero-size CB declarations (544 bytes) may be validated against original DXBC RDEF CB size and bind slot without dropping authored semantics.",
   "intended_files": [
     "scripts/a12r_190657_blur_cb_reflection.py",
@@ -33,8 +33,13 @@
     "https://github.com/alwansan/raf/actions/runs/41701535937",
     "https://github.com/alwansan/raf/commit/e8f7be47233bed754735997df69ce67f2c45189b",
     "https://github.com/alwansan/raf/commit/50aedc8b00506232b653d63902488ba2b31114fd",
-    "https://github.com/alwansan/raf/actions/runs/41733616039"
+    "https://github.com/alwansan/raf/actions/runs/41733616039",
+    "https://github.com/alwansan/raf/actions/runs/41736229248",
+    "https://github.com/alwansan/raf/actions/runs/41735231510",
+    "https://github.com/alwansan/raf/actions/runs/41735762982",
+    "https://github.com/alwansan/raf/commit/d8162ba37c3ffb022c29dc57531683c7ac2b23f7",
+    "docs/A12R_ZIP2_ORIGINAL_BLUR_CB_DXBC_2026-11-04.md"
   ],
-  "result": "A12R 14-owner SHA-verified ZIP2 staging code, 8 new synthetic regressions and isolated CPU workflow pushed; terminal original input result pending. Prior LFS cache experiment failed as recorded.",
-  "next_step": "Inspect run41733616039 terminal original-owner SHA restore and RDEF phase; act only on this client's files if failure; no Unity/APK"
+  "result": "Scoped CPU experiment COMPLETED: exact 14 ZIP2 SHA256 sources (488439356 bytes); 35/35 tests; 4 DXBC stage declaration tables; all six numeric slot identities match Unity source and compiled spans are within serialized CB sizes; 3/4 have smaller compiled spans, 1/4 exact sizes. Renderer/ShaderLab/water still OPEN, NOT_READY 0/3, no Unity.",
+  "next_step": "New coordinated session: recover exact original Unity CB matrix/vector member offsets/types/arrays and DXBC used registers; reconstruct original private HLSL/ShaderLab safely and preserve GUIDs. Strict water/FFT and builtin shaders still BLOCK game build. No Unity/native from this recovery scope."
 }
