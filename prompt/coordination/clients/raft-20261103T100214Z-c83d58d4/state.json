@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "username": "raft-20261103T100214Z-c83d58d4",
+  "agent": "A7",
+  "session_id": "A7-20261103T100214Z-4121ce131222",
+  "resumed_from": null,
+  "status": "active",
+  "updated_at": "2026-11-03T10:02:14Z",
+  "base_sha": "cb95d4bb8b736013f996a7583e434775a5160223",
+  "current_work": [
+    "INPUT-005"
+  ],
+  "last_commit": null,
+  "next_step": "Inspect current Android LEFT Mouse0 gesture & mapping and source/CI, find a falsifiable independent defect, add bounded CPU-only regression, preserve assets/peripherals.",
+  "memory_path": "prompt/coordination/clients/raft-20261103T100214Z-c83d58d4/MEMORY.md"
+}

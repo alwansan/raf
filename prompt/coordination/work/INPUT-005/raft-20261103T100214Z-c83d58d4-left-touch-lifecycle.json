@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T100214Z-c83d58d4",
+  "issue_id": "INPUT-005",
+  "status": "planned",
+  "updated_at": "2026-11-03T10:02:14Z",
+  "base_sha": "cb95d4bb8b736013f996a7583e434775a5160223",
+  "hypothesis": "Android outside-UI LEFT mouse gesture lifecycle may contain a reproducible cancel/release/drag edge case not covered by existing pure gesture and source-mapping tests; do not assume defect.",
+  "intended_files": [
+    "android-port/Runtime/Platform/AndroidTouchPointer.cs",
+    "android-port/Runtime/Platform/TouchPointerGesture.cs",
+    "android-port/Runtime/Platform/TouchPointerButtons.cs",
+    "android-port/Tests/TouchPointer/Program.cs",
+    "prompt/coordination/clients/raft-20261103T100214Z-c83d58d4/",
+    "prompt/coordination/experiments/raft-20261103T100214Z-c83d58d4/",
+    "prompt/STATUS.md",
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+  ],
+  "related_work": [
+    "FFT-FORMAT-009: independent client, no overlap",
+    "DISPLAY-003: active client, avoid display code",
+    "HAPTICS-008: two active clients, avoid haptic paths"
+  ],
+  "experiment_ids": [],
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41548465582"
+  ],
+  "result": null,
+  "next_step": "Read current pointer code and tests; select evidence-backed change and test with no Unity."
+}
