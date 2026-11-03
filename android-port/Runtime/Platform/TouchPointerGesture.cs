@@ -10,6 +10,7 @@ namespace RaftAndroid.Platform
     {
         public const double HoldSeconds = 0.5;
         private int owner;
+        private uint generation; // Distinguishes touch lifetimes even when Android reuses an id.
         private bool active, held;
         private double began, lastTime;
         private float x, y;
@@ -24,7 +25,7 @@ namespace RaftAndroid.Platform
         public void Begin(int id, float px, float py, double time)
         {
             if (active || !Valid(px, py, time)) return;
-            owner = id; active = true; held = false;
+            owner = id; generation++; active = true; held = false;
             began = lastTime = time; x = px; y = py;
             emit(TouchPointerCommand.Move, x, y);
         }
@@ -33,11 +34,12 @@ namespace RaftAndroid.Platform
         {
             if (!active || owner != id || !Valid(px, py, time) || time < lastTime) return;
             x = px; y = py; lastTime = time;
+            uint currentGeneration = generation;
             Tick(time);
             // Down can synchronously trigger Cancel (pause/focus loss).
             // Never deliver motion for a gesture that was just released or
             // replaced by a different owner during that callback.
-            if (!active || owner != id) return;
+            if (!active || owner != id || generation != currentGeneration) return;
             emit(TouchPointerCommand.Move, x, y);
         }
 
@@ -56,10 +58,11 @@ namespace RaftAndroid.Platform
             if (!active || owner != id) return;
             if (!Valid(px, py, time) || time < lastTime) { Cancel(); return; }
             x = px; y = py;
+            uint currentGeneration = generation;
             if (!cancelled) Tick(time);
             // Tick may deliver Down, whose listener can cancel/restart touch.
             // Otherwise End could synthesize a Tap after Cancel already sent Up.
-            if (!active || owner != id) return;
+            if (!active || owner != id || generation != currentGeneration) return;
             bool wasHeld = held;
             active = held = false;
             if (wasHeld) emit(TouchPointerCommand.Up, x, y);
