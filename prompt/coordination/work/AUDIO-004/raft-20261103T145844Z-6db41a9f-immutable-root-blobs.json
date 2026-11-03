@@ -2,8 +2,8 @@
   "schema_version": 1,
   "owner": "raft-20261103T145844Z-6db41a9f",
   "issue_id": "AUDIO-004",
-  "status": "active",
-  "updated_at": "2026-11-03T15:00:06.569Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T15:07:09.378Z",
   "base_sha": "0cee9fe8e0c11e615a7a410cc373013d494ca912",
   "hypothesis": "Branch-local Git tracked checks can accept co-edited original non-LFS VO banks/Data.rgd; immutable owner archive blob anchor missing.",
   "intended_files": [
@@ -24,8 +24,13 @@
     "original-root-git-blob-anchor"
   ],
   "evidence": [
-    "https://github.com/alwansan/raf/actions/runs/41643072610"
+    "https://github.com/alwansan/raf/actions/runs/41643072610",
+    "https://github.com/alwansan/raf/actions/runs/41659894862",
+    "https://github.com/alwansan/raf/actions/runs/41660031718",
+    "https://github.com/alwansan/raf/actions/runs/41660142521",
+    "https://github.com/alwansan/raf/commit/f1f5e1b8e40cfc13638662bb649a1beeeb4378ca",
+    "docs/A9_IMMUTABLE_ORIGINAL_STREAMING_ROOT_BLOBS_2026-11-03.md"
   ],
-  "result": null,
-  "next_step": "Reproduce branch+content co-edit acceptance, pin seven original root Git OIDs, validate synthetic CI."
+  "result": "3 intentional RED co-edited original failures; pinned seven original root Git OIDs, GREEN source7/7 and baseline12/12; final real source blob audit7/7 via 41660142521 SUCCESS, no LFS/Unity/device.",
+  "next_step": "A9 scoped source provenance complete; AUDIO/HAPTICS OBB and phone acceptance not established. Keep project NOT_READY and 0/3."
 }
