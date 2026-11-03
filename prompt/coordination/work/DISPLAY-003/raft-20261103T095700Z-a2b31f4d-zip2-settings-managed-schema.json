@@ -2,8 +2,8 @@
   "schema_version": 1,
   "owner": "raft-20261103T095700Z-a2b31f4d",
   "issue_id": "DISPLAY-003",
-  "status": "active",
-  "updated_at": "2026-11-03T22:54:17.092Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T23:17:45.545Z",
   "base_sha": "d9440e405a6dc94e3570ba5e963fbddfb592eed9",
   "hypothesis": "Exact Settings TypeDef and FieldDef metadata token order with custom attributes/types, cross-checked against original MonoScript class identity, can distinguish nested serialization candidates and reveal why 14 CSharp field declaration candidates have 45 disjoint apparent PPtr windows.",
   "intended_files": [
@@ -27,8 +27,12 @@
     "zip2-settings-managed-schema"
   ],
   "evidence": [
-    "https://github.com/alwansan/raf/actions/runs/41733061252"
+    "https://github.com/alwansan/raf/actions/runs/41733061252",
+    "https://github.com/alwansan/raf/actions/runs/41737541506",
+    "https://github.com/alwansan/raf/commit/243771a29db8d5227278f552274b5c3bab76fa2b",
+    "https://github.com/alwansan/raf/actions/runs/41736773796",
+    "https://github.com/alwansan/raf/actions/runs/41737137816"
   ],
-  "result": null,
-  "next_step": "Use original Unity MonoScript assembly/namespace as exact TypeDef identity, privately inspect Cecil metadata fields and collection element types, reject source-to-byte offsets until verified."
+  "result": "Completed exact immutable ZIP2 managed Settings TypeDef/FieldDef source and MonoScript identity verification. Code243771a29d, CI41737541506 COMPLETED SUCCESS 10 synthetic controls, four original source Git object SHA matches. Both native scene0/1 Settings records point to exact same top-level original managed Settings TypeDef among 16 same-named (largely nested) types. Top-level has21 FieldDefs,13 candidate eligible under metadata filtering; original source CSharp9 lexical14 contained one source-only false candidate with no managed FieldDef, 13 others exact names/order. Type families:6 same-assembly class,4 UnityEngine-prefixed,1 other external class,1 array of UnityEngine-prefixed elements,1 <=4-byte scalar. No Unity serialized field offsets or actual displayed Settings panel/CanvasScaler path proven; DISPLAY-003 OPEN, NOT_READY/0/3.",
+  "next_step": "Recover exact Unity serialized Settings custom TypeTree, managed nested field sizes and array length; map trusted binary PPtrs to actual instantiated Settings UI and CanvasScaler, compare Android landscape geometry; avoid blanket runtime scale overrides."
 }
