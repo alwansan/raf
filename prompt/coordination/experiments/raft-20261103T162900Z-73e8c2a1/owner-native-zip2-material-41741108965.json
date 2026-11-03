@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "username": "raft-20261103T162900Z-73e8c2a1",
+  "status": "in_progress",
+  "recorded_at": "2026-11-03T23:42:02.010Z",
+  "source_sha": "2cb893434d7c819f085d52b34fad1e6568db4ae8",
+  "implementation_sha": "a2e143246ff29dfdfb9f2a68301d3aae6a38eeeb",
+  "run_id": 41741108965,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41741108965",
+  "workflow": ".github/workflows/raft-unity-editor-android-import.yml",
+  "budget_minutes": 240,
+  "local_tests": 45,
+  "independent_cheap_ci": "4 SUCCESS",
+  "hypothesis": "Actual complete-export Material PPtr inventory will explain loose builtin shader gate failure; ZIP2 verified cache can replace selected scene LFS acquisition.",
+  "readiness": "NOT_READY 0/3",
+  "output_apk_xapk": "not yet produced",
+  "limits": "Strict authenticity gates unchanged; internal PPtr inventory does not prove original associations or rendering."
+}

@@ -1,5 +1,7 @@
 ## W1 latest owner-authorized full XAPK attempt (2026-11-04)
 
+[Actual native run41741108965](https://github.com/alwansan/raf/actions/runs/41741108965) source `2cb893434d7c819f085d52b34fad1e6568db4ae8`: **IN_PROGRESS**, not a readiness pass or produced XAPK. Inspect before further build requests.
+
 [Build-attempt handoff](../docs/W1_OWNER_FULL_BUILD_ATTEMPT_2026-11-04.md). Code [a2e143246](https://github.com/alwansan/raf/commit/a2e143246ff29dfdfb9f2a68301d3aae6a38eeeb): native scene owners now use verified pinned ZIP2/cache rather than the selected3 LFS fetch; actual full-export Material Shader references and water source contract are retained before strict gates. Local45/45 W1 tests PASS. Latest explicit owner request authorizes ONE experimental full APK+OBB+XAPK attempt now. **NOT_READY,0/3**; existing builtin/water gates unchanged, no new APK or phone result claimed. Refresh Actions for its immutable request commit; do not duplicate/cancel or alter schedules.
 
 # Raft APK build readiness

@@ -1,3 +1,5 @@
+> **استأنف من محاولة البناء الفعلية:** [41741108965](https://github.com/alwansan/raf/actions/runs/41741108965)، المصدر الثابت `2cb893434d7c819f085d52b34fad1e6568db4ae8`، IN_PROGRESS عند آخر مشاهدة؛ لا XAPK جديد بعد. افحص النتيجة والأدلة أولاً ولا تكرر الطلب.
+
 > **Latest explicit owner request, 2026-11-04:** Attempt one full project/XAPK build using the existing native workflow after W1 ZIP2 scene-provider and Material-reference diagnostics. This is an experimental attempt, not READY (0/3). Read [W1 attempt handoff](../docs/W1_OWNER_FULL_BUILD_ATTEMPT_2026-11-04.md), refresh its Actions run, retain both strict builtin/water gates, and repair actual failures without repeating an identical build. No schedule changes.
 
 

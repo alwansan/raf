@@ -80,3 +80,5 @@ The25engine+140non-engine split agrees with the old native export's140initial lo
 
 ## Owner full build attempt 2026-11-03T23:41:08.697Z
 Implementation a2e143246: ZIP2 full14 cache reused; three scene inputs independently match original feature LFS pointers; read-only actual Material→Shader reference inventory and water diagnostic precede unchanged strict builtin/water gates. Local45 W1 tests PASS. One explicit owner-authorized native+device request now; NOT_READY0/3. Next inspect actual run and original associations, do not repeat identical attempt or change schedulers.
+
+Actual run: [41741108965](https://github.com/alwansan/raf/actions/runs/41741108965), immutable source `2cb893434d7c819f085d52b34fad1e6568db4ae8`, **IN_PROGRESS at last observation**. Explicit request gate steps succeeded. Code-source independent reconstruction preflight41740993327, platform41740993260, runner guard41740993213 and A5 OBB CPU contract41740992797 all **SUCCESS**. Native result/XAPK not yet available. Session paused per owner's long-build wait preference; job continues independently in GitHub Actions. First continuation action is inspect this exact run, not request another.
