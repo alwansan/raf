@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T121120Z-a7b60d42",
+  "status": "in_progress",
+  "hypothesis": "Repeated unchanged-coordinate TouchPointerGesture.Move calls enqueue redundant synthetic MouseState events, without altering timing or position.",
+  "input_hashes": [
+    "TouchPointerGesture.cs original blob 2789d67f6135de2fa6f3826875b8b912bfabc46e",
+    "TouchPointerGesture.cs patched blob 773435d2c085ea9393ce3c160a8f393f8898ae4f",
+    "BoundaryMatrix.cs modified blob 9b46eda7daef6530e174687a31a7f4f2faa86b79"
+  ],
+  "commands": [
+    "dotnet run --project android-port/Tests/TouchPointer/TouchPointer.csproj -c Release --nologo",
+    "existing push-triggered GitHub Actions raft-android-platform-tests.yml, no native build"
+  ],
+  "expected_signal": "Red C# fails stationary-coalescing-no-redundant-move; green event count for 90 identical Move calls limited to 1 initial Move and 1 held Down, plus real motion, Up, time ordering and cancel preserved.",
+  "negative_controls": [
+    "Exact 500ms hold still emits Down",
+    "Later different coordinates still emit Move",
+    "End still emits Up for held gesture",
+    "Unchanged position advances lastTime; stale earlier times rejected",
+    "Cancellation and prior reentrant generation checks remain passing"
+  ],
+  "workflow_path": ".github/workflows/raft-android-platform-tests.yml",
+  "concurrency_group": null,
+  "artifact_prefix": null,
+  "budget": "Existing platform CI CPU/no-LFS/no-Unity; no extra workflow dispatch; no native build",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41634176483",
+  "source_sha": "bb5c96c5d342de94f0304f1bb13147b0c4e8682a",
+  "result": "Red run41633861190 completed failure at exact expected C# assertion; green in progress.",
+  "limitations": [
+    "This counts deterministic synthesized Move commands in actual authored C#, not on-device InputSystem QueueStateEvent frequency or measured FPS",
+    "Touchscreen primary-touch and UGUI multicontact acceptance remain unverified",
+    "Does not restore any shaders, assets, or world systems"
+  ],
+  "next_step": "Verify actual green CI counts and offline managed compilation; record scoped completion/limits with current shared docs."
+}
