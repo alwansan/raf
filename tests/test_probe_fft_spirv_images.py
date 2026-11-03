@@ -1,7 +1,7 @@
 """Synthetic typed-image SPIR-V tests; no original source or shader data."""
 import struct
 import unittest
-from scripts.probe_fft_spirv_images import image_resource_contracts
+from scripts.probe_fft_spirv_images import image_resource_contracts, compare_image_contracts
 
 
 def spv(instructions):
@@ -65,6 +65,35 @@ class ImageContractTests(unittest.TestCase):
                             (71, [6, 34, 0])]
         with self.assertRaisesRegex(ValueError, "Ambiguous"):
             image_resource_contracts(spv(data))
+
+
+
+class ImageContractDriftTests(unittest.TestCase):
+    def test_identical_contract(self):
+        a = image_resource_contracts(spv(example()))
+        result = compare_image_contracts(a, a)
+        self.assertTrue(result["full_type_declarations_preserved"])
+        self.assertEqual(result["changed_numeric_image_declarations"], [])
+
+    def test_changes_to_sampling_and_format_reported(self):
+        a = image_resource_contracts(spv(example()))
+        b = image_resource_contracts(spv(
+            example()[:1] + [(25, [2, 1, 1, 0, 0, 0, 1, 0])] + example()[2:]))
+        result = compare_image_contracts(a, b)
+        self.assertFalse(result["full_type_declarations_preserved"])
+        self.assertTrue(result["bound_image_slots_preserved"])
+        self.assertEqual(
+            [x["field"] for x in result["changed_numeric_image_declarations"][0]["differences"]],
+            ["sampled_enum", "format_enum"])
+
+    def test_changed_slots_reported_without_names(self):
+        a = image_resource_contracts(spv(example()))
+        b = image_resource_contracts(spv(
+            example()[:-2] + [(71, [4, 33, 5]), (71, [4, 34, 0])]))
+        result = compare_image_contracts(a, b)
+        self.assertFalse(result["bound_image_slots_preserved"])
+        self.assertEqual((result["original_only_slots"], result["roundtrip_only_slots"]), (1, 1))
+        self.assertFalse(result["names_disclosed"])
 
 
 if __name__ == "__main__":

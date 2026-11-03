@@ -15,7 +15,7 @@ from scripts.verify_targeted_lfs_compute_sources import verify_sources
 from scripts.probe_original_compute_containers import scan_blob
 from scripts.probe_directx_shader_bridge import inspect
 from scripts.run_original_dxbc_translation_probe import version_tokens
-from scripts.probe_fft_spirv_images import image_resource_contracts
+from scripts.probe_fft_spirv_images import image_resource_contracts, compare_image_contracts
 
 OWNER = "sharedassets0.assets"
 PATH_ID = 2456
@@ -169,8 +169,9 @@ def cross_compile_roundtrip(source_spv, original_reflection, original_bindings,
         ["spirv-val", "--target-env", "vulkan1.1", str(recomp)], timeout=25)
     result.update(compare_roundtrip_contracts(
         original_reflection, original_bindings, parsed, bindings))
-    result['typed_image_contract_preserved'] = (typed_images['typed_image_declarations'] ==
-                                                original_images['typed_image_declarations'])
+    drift = compare_image_contracts(original_images, typed_images)
+    result['typed_image_contract_preserved'] = drift['full_type_declarations_preserved']
+    result['typed_image_contract_difference'] = drift
     return result
 
 

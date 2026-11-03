@@ -100,3 +100,37 @@ def image_resource_contracts(data):
         "unity_format_proven": False,
         "gpu_execution_proven": False,
     }
+
+
+def compare_image_contracts(original, converted):
+    """Describe source/roundtrip declaration drift without names or shader bytes."""
+    old = original["typed_image_declarations"]
+    new = converted["typed_image_declarations"]
+
+    def mapping(records):
+        by_slot = {(r["set"], r["binding"]): r for r in records}
+        if len(by_slot) != len(records):
+            raise ValueError("Ambiguous typed-image resource slots")
+        return by_slot
+
+    a, b = mapping(old), mapping(new)
+    fields = ("scalar_kind", "scalar_bits", "dimension_enum", "depth_enum",
+              "arrayed", "multisampled", "sampled_enum", "format_enum", "access_enum")
+    changed = []
+    for slot in sorted(set(a) & set(b), key=lambda x: (x[0] is None, x[0] or 0, x[1])):
+        differences = [
+            {"field": field, "original": a[slot][field], "roundtrip": b[slot][field]}
+            for field in fields if a[slot][field] != b[slot][field]
+        ]
+        if differences:
+            changed.append({"set": slot[0], "binding": slot[1],
+                            "differences": differences})
+    return {
+        "bound_image_slots_preserved": set(a) == set(b),
+        "original_only_slots": len(set(a) - set(b)),
+        "roundtrip_only_slots": len(set(b) - set(a)),
+        "changed_numeric_image_declarations": changed,
+        "full_type_declarations_preserved": old == new,
+        "names_disclosed": False,
+        "numeric_execution_proven": False,
+    }
