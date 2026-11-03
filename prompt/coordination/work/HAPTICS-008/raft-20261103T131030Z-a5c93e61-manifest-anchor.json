@@ -2,8 +2,8 @@
   "schema_version": 1,
   "owner": "raft-20261103T131030Z-a5c93e61",
   "issue_id": "HAPTICS-008",
-  "status": "planned",
-  "updated_at": "2026-11-03T13:10:54.544Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T13:21:03.728Z",
   "base_sha": "e034f56e47b8231c9aceb9d574944b55a56b61b5",
   "resumed_from": "raft-20261103T121800Z-a5b4f02c",
   "hypothesis": "Current 29/29 original Haptics WAV SHA auditing compares tracked bytes to a manifest stored in the same writable branch; a coordinated edit to both file and manifest can pass, yielding a false original-fidelity claim. Pin manifest Git blob independently to audited original immutable SHA and preserve synthetic fixture override.",
@@ -35,7 +35,13 @@
   "experiment_ids": [
     "original-haptics-manifest-immutable-anchor"
   ],
-  "evidence": [],
-  "result": null,
-  "next_step": "Add red synthetic test for co-mutating original WAV and source-manifest SHA, then implement trusted manifest blob SHA override in staging and OBB checks without altering original payloads."
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41642183946",
+    "https://github.com/alwansan/raf/actions/runs/41642349531",
+    "https://github.com/alwansan/raf/actions/runs/41642937521",
+    "https://github.com/alwansan/raf/actions/runs/41643072610",
+    "https://github.com/alwansan/raf/actions/runs/41642937058"
+  ],
+  "result": "Completed new immutable original manifest SHA anchor 88df20f0..., shared across standalone source CLI, native StreamingAssets source staging and post-build APK/OBB audit CLI. Co-edited synthetic WAV+manifest bypass is rejected with trusted pin. RED41642183946 expected; GREEN source41642349531 9 tests, A5 final41642937521 15 ZIP tests+4 adapter+29 authentic/58 original WAV reads, native preflight41642937058 and A9 atomic41643072610 SUCCESS; no Unity/device/actual OBB.",
+  "next_step": "Next authorized candidate must pass actual Unity-produced OBB hash/jar path audit and then on-phone haptic playback; keep NOT_READY/0-of-3 until all unrelated blockers reviewed."
 }
