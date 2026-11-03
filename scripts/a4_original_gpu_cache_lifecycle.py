@@ -13,7 +13,11 @@ import re
 
 from scripts.probe_original_android_display_paths import mask_csharp_noncode
 
-CACHE_SHA = "4157076c3e4bddc27ac5b24da768d29ff9e6c227c4da07a9e2f55ae9ff6b8245"
+# CSharp9 output SHA from immutable ZIP2 Assembly-CSharp.dll (3,211,776 bytes;
+# SHA256 0a6f0527...24f72e) decompiled by pinned ilspycmd 11.2.0.10050.
+# Historical 4157076c... source pin was produced in an earlier tool context;
+# its differing bytes have NOT been attributed to a particular decompiler change.
+CACHE_SHA = "44af5fbb2e0bf9d08de9a4848fd33d62604e52247aaa0ae3c0f0588428d0dc0b"
 MAX_SOURCE_BYTES = 750_000
 MAX_METHODS = 200
 # Include constructors as well as regular CSharp9 instance/static methods.
