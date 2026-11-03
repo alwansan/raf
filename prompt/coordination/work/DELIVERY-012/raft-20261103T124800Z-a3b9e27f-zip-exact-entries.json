@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T124800Z-a3b9e27f",
+  "issue_id": "DELIVERY-012",
+  "status": "active",
+  "updated_at": "2026-11-03T12:48:00Z",
+  "base_sha": "c6868a38c41e8384dd8153289c913e87714c8a05",
+  "hypothesis": "audit_android_expansion._names uses PurePosixPath.parts, which silently removes '.' and empty components. A malformed APK/OBB ZIP path can pass structural validation despite not being equal to the entry Unity/Android loader requests.",
+  "intended_files": [
+    "scripts/audit_android_expansion.py",
+    "tests/test_a3_zip_entry_paths.py",
+    ".github/workflows/raft-a3-zip-member-paths.yml",
+    "prompt/coordination/clients/raft-20261103T124800Z-a3b9e27f/state.json",
+    "prompt/coordination/clients/raft-20261103T124800Z-a3b9e27f/MEMORY.md",
+    "prompt/coordination/work/DELIVERY-012/raft-20261103T124800Z-a3b9e27f-zip-exact-entries.json",
+    "prompt/coordination/experiments/raft-20261103T124800Z-a3b9e27f/exact-zip-entry-paths.json",
+    "prompt/STATUS.md",
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+  ],
+  "related_work": [
+    "A5 HAPTICS-008 exact original 29 WAV jar entry audit (completed; avoid editing its tests or native workflow)",
+    "A9 staged original StreamingAssets atomic recovery (completed; no modifications)",
+    "A11/A13 RENDER-002 shader scope, A1 FFT work separate"
+  ],
+  "experiment_ids": [
+    "exact-zip-entry-paths"
+  ],
+  "evidence": [],
+  "result": null,
+  "next_step": "Create A3-owned synthetic positive/negative controls, capture red CI against actual audit, minimally harden _names to require raw slash-delimited path components, capture green CI. No LFS/Unity/APK build."
+}

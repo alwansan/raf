@@ -1,0 +1,5 @@
+# A3 continuation — ZIP member path precision for APK+OBB preflight
+
+Session: A3-20261103T124800Z-zip-precision-174e8a, username `raft-20261103T124800Z-a3b9e27f`, resumed_from completed `raft-20261103T120645Z-8cde319a`. Latest branch HEAD at registration: `c6868a38c41e8384dd8153289c913e87714c8a05`. Read permanent owner/AGENTS/coordination, STATUS/handoff/readiness and client/work scopes; reviewed recent runs, releases and CL read-only. RENDER-002 actual full export and WATER-001/FFT are being pursued by A11/A13/A1, while A5 original Haptics ZIP audit and A9 original staging are completed: avoid their files.
+
+Independent issue: `scripts/audit_android_expansion._names` validates `PurePosixPath(name).parts`, which strips explicit `.` and duplicate separator components. An APK/OBB ZIP entry with such a noncanonical spelling can be accepted despite Android jar ZIP member selection being exact. Use synthetic test-owned data only, read/write no original game assets, and keep existing vendor 29-WAV integrity workflow unchanged. Target strict fail-closed structural validation before calculating size counts or CRC; no Unity/device proof.

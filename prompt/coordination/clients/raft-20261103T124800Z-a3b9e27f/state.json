@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "username": "raft-20261103T124800Z-a3b9e27f",
+  "display_name": "A3",
+  "session_id": "A3-20261103T124800Z-zip-precision-174e8a",
+  "resumed_from": "raft-20261103T120645Z-8cde319a",
+  "status": "active",
+  "updated_at": "2026-11-03T12:48:00Z",
+  "base_sha": "c6868a38c41e8384dd8153289c913e87714c8a05",
+  "current_work": [
+    "DELIVERY-012"
+  ],
+  "last_commit": null,
+  "next_step": "Red/green CPU-only exact ZIP entry-name preflight for APK/OBB audit; reject '.' and repeated slash components without altering payloads.",
+  "memory_path": "prompt/coordination/clients/raft-20261103T124800Z-a3b9e27f/MEMORY.md"
+}
