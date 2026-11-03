@@ -62,20 +62,25 @@ def decode_record(raw, tree):
                 + " candidate_offsets_i32i64=" + repr(candidates64)
                 + " candidate_offsets_i32i32=" + repr(candidates32))
     pptr(0, go, "gameobject")
-    pptr(20, script, "script")
+    pptr(16, script, "script")
     enabled = tree.get("m_Enabled")
-    flags = tree.get("m_EditorHideFlags")
+    flags = tree.get("m_EditorHideFlags", 0)
     name = tree.get("m_Name")
+    identifier = tree.get("m_EditorClassIdentifier", "")
     if type(enabled) not in (int, bool) or int(enabled) not in (0, 1):
         raise ValueError("Original enabled field unknown")
-    if raw[12] != int(enabled) or raw[13:16] != b"\x00\x00\x00":
+    if raw[12] != int(enabled) or raw[14:16] != b"\x00\x00":
         raise ValueError("Original enabled/alignment bytes mismatch")
-    if type(flags) is not int or struct.unpack_from("<i", raw, 16)[0] != flags:
-        raise ValueError("Original editor flags layout mismatch")
+    # Native Unity MonoBehaviour uses one byte for EditorHideFlags in this
+    # authenticated source, followed by two pad bytes before m_Script PPtr.
+    if type(flags) not in (int, bool) or not 0 <= int(flags) <= 255 or raw[13] != int(flags):
+        raise ValueError("Original editor flags byte layout mismatch")
     if not isinstance(name, str) or name:
         raise ValueError("Original MonoBehaviour name is non-empty or unresolved")
-    if struct.unpack_from("<i", raw, 32)[0] != 0:
-        raise ValueError("Original MonoBehaviour name-string length mismatch")
+    if not isinstance(identifier, str) or identifier:
+        raise ValueError("Original MonoBehaviour editor identifier unexpected")
+    if struct.unpack_from("<i", raw, 28)[0] != 0 or struct.unpack_from("<i", raw, 32)[0] != 0:
+        raise ValueError("Original MonoBehaviour base name/editor string lengths mismatch")
     (ui_mode, ref_ppu, scale_factor, width, height, match_mode,
      match_width, physical_unit, fallback_dpi, default_sprite_dpi, dynamic_ppu) = CUSTOM.unpack_from(raw, BASE_BYTES)
     numeric = (ref_ppu, scale_factor, width, height, match_width,

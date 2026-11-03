@@ -13,11 +13,11 @@ def generated_record(*, go=5, script=123, ui=1, width=1280.0, height=720.0,
     ptr = lambda fid, pid: {"m_FileID": fid, "m_PathID": pid}
     typed = {"m_GameObject": ptr(0, go),
              "m_Enabled": enabled, "m_EditorHideFlags": 0,
-             "m_Script": ptr(1, script), "m_Name": ""}
+             "m_Script": ptr(1, script), "m_Name": "", "m_EditorClassIdentifier": ""}
     raw = (struct.pack("<iq", 0, go) +
-           struct.pack("<B3xi", enabled, 0) +
+           struct.pack("<BB2x", enabled, 0) +
            struct.pack("<iq", 1, script) +
-           struct.pack("<i", 0) +
+           struct.pack("<ii", 0, 0) +
            CUSTOM.pack(ui, 100, 1, width, height, mode, match, 2, 96, 96, 1))
     assert len(raw) == BASE_BYTES + CUSTOM.size == 80
     return raw, typed
@@ -61,7 +61,7 @@ class A2StrictScalerValuesTests(unittest.TestCase):
     def test_rejects_nonzero_padding_or_invalid_name(self):
         raw, typed = generated_record()
         changed = bytearray(raw)
-        changed[14] = 1
+        changed[15] = 1
         with self.assertRaisesRegex(ValueError, "alignment"):
             decode_record(bytes(changed), typed)
         bad = dict(typed);bad["m_Name"] = "bad"
