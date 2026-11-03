@@ -65,6 +65,11 @@ def strict_pointer_stride_shape(raw, candidates):
     tail = raw[608:]
     return {
         "exact_48_pointer_stride": positions == expected,
+        "pointer_stride_after_four_byte_prefix": positions == list(range(36, 36 + 48 * 12, 12)),
+        "first_candidate_offset": positions[0] if positions else None,
+        "last_candidate_offset": positions[-1] if positions else None,
+        "candidate_delta_histogram": dict(sorted(Counter(b - a for a, b in zip(positions, positions[1:])).items())),
+        "prefix_int32_equals_48": struct.unpack_from("<i", raw, 32)[0] == 48,
         "record_length_612": True,
         "tail_is_bool_plus_zero_padding": tail[0] in (0, 1)
                                       and tail[1:] == b"\x00\x00\x00",
