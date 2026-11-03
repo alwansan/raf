@@ -2,15 +2,15 @@
   "schema_version": 1,
   "username": "raft-20261103T100200Z-9d4ea16b",
   "client_label": "A10",
-  "session_id": "a10-20261103T150015Z-bca52ed0",
+  "session_id": "a10-20261103T224523Z-dc871304",
   "resumed_from": null,
-  "status": "completed",
-  "updated_at": "2026-11-03T15:07:49Z",
-  "base_sha": "528068d21253340a9a673517aa608dbb58a015d0",
+  "status": "active",
+  "updated_at": "2026-11-03T22:45:23Z",
+  "base_sha": "2480a0d932e3339e24bcb11bdce832aee8516ed3",
   "current_work": [
-    "LOCAL-005 original C# method extraction lexical guard complete; 5 RED -> 5 GREEN; 16/16 A10 tests and authenticated original no-LFS CI"
+    "LOCAL-005 ZIP2 authentic Data.rgd safe serialization graph probe, CPU-only no-LFS"
   ],
   "last_commit": "b0a72fc7fe5d2b5efe3fa32528a39879fdecdd51",
-  "next_step": "A10 2026-11-03 lexical source extraction scope complete. RED CI41660238082 on 6c4d1bf (5 new tests failed, 11 old passed); GREEN CI41660275041 on b0a72fc successful (16 A10 tests, 12 SHA-pinned originals, original local RPC/save/identity PASS, managed compile exit0). Further explicit restore must recheck live HEAD/Actions, choose new independent LOCAL-005 or other scoped issue. Raft NOT_READY, 0/3; no Unity or device proof.",
+  "next_step": "Build scoped safe NRBF decoder CI for original ZIP2 Data.rgd pinned binary SHA and independent negative controls; no Unity/native execution. Preserve existing original files.",
   "memory_path": "prompt/coordination/clients/raft-20261103T100200Z-9d4ea16b/MEMORY.md"
 }
