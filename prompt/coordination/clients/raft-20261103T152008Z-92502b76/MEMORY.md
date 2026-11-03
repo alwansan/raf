@@ -80,3 +80,7 @@
 - 82 مالكاً خليد الهويات (3 LFS: resources, sharedassets0, sharedassets36؛ 79 tracked-regular blob). manifest بالهشتاجات في docs/W2_FULLGAME_TEXTURE_COLORS_2026-11-03.json.
 - 4,050 خامة كاملة العب (37 مالكاً مع خامات): 1,173 sRGB / 2,877 linear (28.96%/71.03%). خاتمة: تقسيم اللون لكل خامة يمتد لبقية اللعبة.
 - سكربت/8 اختبارات/workflow قيد الدفع + سجلات + رسالة W3 بالاستدامة في حقل formats N1.
+
+## تحديث 20:00Z — الحلقة الخامسة CI أخضر بعد إصلاح مصدر الهوية
+- first CI 41682133693 فشل fail-closed (الهوية من worktree مهترئ بدل HEAD)؛ الإصلاح 8130cda: قراءة المسجل دائماً من `git show HEAD:<path>`؛ اختبارات 9/9 مع helper git حقيقي؛ rerun 41683656843 SUCCESS: 82 مالكاً، aggregate مكتوب، artifact 5640 B.
+- خمس حلقات W2: الأرقام موثقة في CI أو بتسلسل هوية محلي موثق (الحلقة 5 CI-verified الآن أيضاً).

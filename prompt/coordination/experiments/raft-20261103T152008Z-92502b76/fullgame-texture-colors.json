@@ -3,7 +3,7 @@
   "owner": "raft-20261103T152008Z-92502b76",
   "client_label": "W2",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed",
   "updated_at": "2026-11-03T19:20:00.000Z",
   "base_sha": "4d92767",
   "lane": "non-overlapping micro-lane: full-game per-owner Texture2D color-space/format aggregates (82 owners; W3 scopes formats lane as W2's; no overlap with W3 material->shader/keyword-schema channels, W1 programs, A12 vendor names)",
@@ -24,14 +24,16 @@
   "concurrency_group": "raft-w2-fullgame-texture-colors-${{ github.ref }}-${{ github.sha }}",
   "artifact_prefix": "raft-w2-fullgame-texture-colors-",
   "budget": "single CPU-only run under 30 minutes; local run measured ~31s parse + ~2min hashing",
-  "run_url": "https://github.com/alwansan/raf/actions/runs/41682133693",
-  "source_sha": "8e0c9dc",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41683656843",
+  "source_sha": "8130cda",
   "result": "LOCAL AUTHENTIC RUN COMPLETE: 82 owners scanned (~820 MB), 37 texture-bearing, 4,050 Texture2D total: 1,173 sRGB-labelled (Gamma=0) vs 2,877 linear (Linear=1) = 28.96%/71.03% game-wide mixed split; extends the two-owner CI-verified finding to the full game; per-owner table and SHA manifest in docs/W2_FULLGAME_TEXTURE_COLORS_2026-11-03.json. CI pending.",
   "limitations": [
     "aggregate per owner; no per-texture identity",
     "no on-device sampling, programs or build claims",
     "does not close WATER-001/RENDER-002/FFT-FORMAT-009; NOT_READY/0-of-3 unchanged"
   ],
-  "next_step": "push fix and verify green CI rerun",
-  "ci_notes": "first CI 41682133693 failed fail-closed (identity source read from worktree instead of committed object under hydrated LFS); fix: always resolve registered identity via git show HEAD:<path>; tests extended with real-git helper (pointer match under hydration, mismatches) 9/9; incident file recorded"
+  "next_step": "lane complete; W2 five-ring chain fully CI-verified (lanes 1-4) + game-wide extension (lane 5 CI-verified)",
+  "ci_notes": "first CI 41682133693 failed fail-closed (identity source read from worktree instead of committed object under hydrated LFS); fix: always resolve registered identity via git show HEAD:<path>; tests extended with real-git helper (pointer match under hydration, mismatches) 9/9; incident file recorded",
+  "history": "first CI 41682133693 failure (identity-source bug) documented; rerun on 8130cda after fix pending",
+  "ci_conclusion": "success (41683656843 @ 8130cda after identity-source fix; owner count 82, aggregate written, artifact 5640 B)"
 }
