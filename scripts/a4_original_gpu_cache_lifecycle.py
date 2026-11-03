@@ -75,7 +75,7 @@ def inspect_source(source, expected_sha=CACHE_SHA):
         raise ValueError("Invalid/unbounded original cache source")
     sha = hashlib.sha256(source.encode("utf-8")).hexdigest()
     if sha != expected_sha:
-        raise ValueError("Original GPU cache source SHA mismatch")
+        raise ValueError("Original GPU cache source SHA mismatch observed_sha256=" + sha)
     masked = mask_csharp_noncode(source)
     if len(re.findall(r"\bclass\s+RenderTexturesCache\b", masked)) != 1:
         raise ValueError("Original RenderTexturesCache identity missing/ambiguous")
