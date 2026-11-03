@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "owner": "raft-20261103T121120Z-a7b60d42",
-  "status": "in_progress",
+  "status": "completed",
   "hypothesis": "Repeated unchanged-coordinate TouchPointerGesture.Move calls enqueue redundant synthetic MouseState events, without altering timing or position.",
   "input_hashes": [
     "TouchPointerGesture.cs original blob 2789d67f6135de2fa6f3826875b8b912bfabc46e",
@@ -26,11 +26,11 @@
   "budget": "Existing platform CI CPU/no-LFS/no-Unity; no extra workflow dispatch; no native build",
   "run_url": "https://github.com/alwansan/raf/actions/runs/41634176483",
   "source_sha": "bb5c96c5d342de94f0304f1bb13147b0c4e8682a",
-  "result": "Red run41633861190 completed failure at exact expected C# assertion; green in progress.",
+  "result": "RED run41633861190 completed failure at stationary-coalescing-no-redundant-move (real authored C#). GREEN run41634176483 completed success:446 gesture checks,53 synthetic Mouse0 mapping checks,15 smoke suites; original source/offline run41634176612 completed success compile exit0 errorCodes={}. 90 unchanged-coordinate Move calls now emit no redundant Move yet advance time and activate Down after 500ms; changed-coordinate Move/Up and cancel preserved.",
   "limitations": [
     "This counts deterministic synthesized Move commands in actual authored C#, not on-device InputSystem QueueStateEvent frequency or measured FPS",
     "Touchscreen primary-touch and UGUI multicontact acceptance remain unverified",
     "Does not restore any shaders, assets, or world systems"
   ],
-  "next_step": "Verify actual green CI counts and offline managed compilation; record scoped completion/limits with current shared docs."
+  "next_step": "Scoped experiment done, no Unity/phone event counts or measured FPS; preserve limitations."
 }
