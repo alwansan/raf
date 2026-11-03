@@ -5,6 +5,7 @@ XAPK installation/OBB mounting still requires a compatible device installer.
 """
 import argparse
 import hashlib
+import os
 import json
 from pathlib import Path
 import re
@@ -57,7 +58,18 @@ class PartsWriter:
         self._finish()
         if len(self.parts) == 1:
             previous = self.parts[0]['name']
-            (self.root/previous).rename(self.root/self.name)
+            # Both names are in the same delivery directory. A POSIX rename
+            # would silently replace a competing signed APK/OBB/XAPK published
+            # after this part was written. An exclusive hard link makes the
+            # fully closed, SHA-tracked part visible only if the final name is
+            # still absent, without another multi-GB copy.
+            try:
+                os.link(self.root / previous, self.root / self.name)
+            except FileExistsError as exc:
+                raise ValueError('Refusing to overwrite existing signed delivery output') from exc
+            except OSError as exc:
+                raise OSError('Atomic single-part publish requires hard-link support in the delivery workspace') from exc
+            (self.root / previous).unlink()
             self.parts[0]['name'] = self.name
         return {'name':self.name, 'bytes':self.position,
                 'sha256':self.total_hash.hexdigest(), 'parts':self.parts}
