@@ -3,13 +3,13 @@
   "username": "raft-20261103T100042Z-afcedabb",
   "session_id": "a6-20261103T100042Z-8d2c701e",
   "resumed_from": null,
-  "status": "paused",
-  "updated_at": "2026-11-03T10:13:01.911Z",
-  "base_sha": "17af4fd2c4276e27498a28abdcbe819220fa7539",
+  "status": "active",
+  "updated_at": "2026-11-03T10:53:59.321Z",
+  "base_sha": "0f9c574da5c39c74f542b5f58071ed355fd40d90",
   "current_work": [
     "LOCAL-005"
   ],
   "last_commit": "0fa98e71fbe5c06a1e92cae3d93fff89fae2fec0",
-  "next_step": "LOCAL-005 original SaveAndLoad .rgd and real single-player integration remain unverified; resume via new session after live HEAD/Actions and other clients review",
+  "next_step": "Bounded final world.sav symlink leaf regression and C# guard, distinct from A9 profile.id guard and A10 SaveAndLoad selector",
   "memory_path": "prompt/coordination/clients/raft-20261103T100042Z-afcedabb/MEMORY.md"
 }
