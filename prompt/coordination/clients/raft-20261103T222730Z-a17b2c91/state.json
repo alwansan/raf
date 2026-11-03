@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "username": "raft-20261103T222730Z-a17b2c91",
+  "client_label": "A1",
+  "session_id": "a1-20261103T222730Z-cf5e711a",
+  "resumed_from": "raft-20261103T145000Z-a1c92f74",
+  "status": "active",
+  "updated_at": "2026-11-03T22:29:03.060Z",
+  "base_sha": "f604848e7efdc146de64ec2b8569bc35ad9e2689",
+  "current_work": [
+    "WATER-001",
+    "FFT-FORMAT-009"
+  ],
+  "last_commit": null,
+  "next_step": "Migrate prior A1 authentic20 CPU Vulkan FFT source acquisition to immutable ZIP2 split original with verified SHA and no LFS, source-only CI."
+}
