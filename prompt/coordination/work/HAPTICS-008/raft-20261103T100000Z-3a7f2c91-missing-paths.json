@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T100000Z-3a7f2c91",
+  "issue_id": "HAPTICS-008",
+  "status": "active",
+  "base_sha": "17af4fd2c4276e27498a28abdcbe819220fa7539",
+  "hypothesis": "Classify 35 historical haptics missing path errors; distinguish absent staged resource from optional/runtime path mapping error with exact source and controlled tests",
+  "intended_files": [
+    "scripts/probe_haptics_asset_path_contract.py",
+    "tests/test_probe_haptics_asset_path_contract.py",
+    "prompt/coordination/clients/raft-20261103T100000Z-3a7f2c91",
+    "prompt/coordination/work/HAPTICS-008/raft-20261103T100000Z-3a7f2c91-missing-paths.json",
+    "prompt/coordination/experiments/raft-20261103T100000Z-3a7f2c91",
+    "prompt/STATUS.md",
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+  ],
+  "related_work": [
+    "COORD-001",
+    "FFT-FORMAT-009 (separate source owner)"
+  ],
+  "next_step": "CL haptics path extraction, structural source comparison, CPU synthetic negative tests",
+  "safety": "No Unity, APK, LFS, shared runtime rewrite"
+}
