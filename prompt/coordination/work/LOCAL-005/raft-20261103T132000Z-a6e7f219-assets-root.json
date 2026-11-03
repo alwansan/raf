@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T132000Z-a6e7f219",
+  "issue_id": "LOCAL-005",
+  "status": "active",
+  "updated_at": "2026-11-03T13:20:00Z",
+  "base_sha": "33c30f81dddf608413e1a28697b0b161725e2b46",
+  "hypothesis": "Original save and offline source adapters may traverse project/Assets when it is a symlink to outside source, then write original C# outside the intended Unity project despite leaf.is_symlink false.",
+  "intended_files": [
+    "scripts/adapt_original_save_paths.py",
+    "scripts/adapt_android_offline_startup.py",
+    "tests/test_adapt_original_save_paths.py",
+    "tests/test_android_offline_startup.py",
+    "prompt/coordination/clients/raft-20261103T132000Z-a6e7f219/",
+    "prompt/coordination/work/LOCAL-005/",
+    "prompt/coordination/experiments/raft-20261103T132000Z-a6e7f219/",
+    "prompt/STATUS.md",
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+  ],
+  "related_work": [
+    "A10 original source SHA selection/atomic staging completed",
+    "A9 identity and save helper completed",
+    "A8 world probe completed",
+    "A1 shader/FFT, A3/A5 HAPTICS continue independent source"
+  ],
+  "experiment_ids": [
+    "source-assets-symlink-root"
+  ],
+  "evidence": [
+    "Local POSIX Path.rglob follows symlinked root to an external SaveAndLoad.cs; child symlink not traversed by default"
+  ],
+  "result": null,
+  "next_step": "Record actual test-fixture red and code guard, run no-LFS original-source CI on exact source; no Unity/native"
+}
