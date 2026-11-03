@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "issue_id": "LOCAL-005",
+  "username": "raft-20261103T100200Z-9d4ea16b",
+  "experiment_id": "offline-sha-source-selection-20261103",
+  "status": "completed",
+  "hypothesis": "Filename-only original C# selection cannot disambiguate same-named unrelated SDK classes, despite stable pinned original SHA256.",
+  "provenance": "Original private source SHA fingerprints held in scripts/adapt_android_offline_startup.py; no game source content committed.",
+  "patch": "scripts/verify_android_offline_candidate.py: SHA-pinned unique C# source selection; ignore unrelated SDK names, unreadable UTF8 homonyms; reject file symlinks and duplicate exact originals; retain normalized BOM/CRLF handling.",
+  "code_commit": "29128ab789d5cf8a26a7e01d3ae5a9a39f331848",
+  "tests_commit": "fbc95905d690c83d809183b2ad09c0e5bf1d010b",
+  "workflow_commit": "031236bb5f4d4aeefc5b6ddc4b4de5188082920a",
+  "run_id": 41624212828,
+  "job_id": 125877336792,
+  "run_attempt": 1,
+  "conclusion": "success",
+  "test_evidence": {
+    "synthetic_tests_passed": 6,
+    "original_private_sources_prepared": 12,
+    "local_RPC_harness": "PASS",
+    "profile_identity_harness": "PASS",
+    "diagnostic_managed_compile_exit": 0,
+    "diagnostic_managed_compile_errorCodes": {},
+    "native_or_phone_test": false
+  },
+  "test_cases": [
+    "SDK homonym",
+    "missing pinned source",
+    "duplicate exact originals",
+    "symlink file",
+    "UTF8 BOM/CRLF normalization unchanged bytes",
+    "undecodable unrelated SDK"
+  ],
+  "limitations": [
+    "Original private ILSpy C# inspection and .NET diagnostic are not Unity Editor/IL2CPP execution",
+    "No on-device .rgd create/load/host or actual gameplay tested",
+    "Untrusted same-time filesystem race and directory symlink ancestors not tested by this selector",
+    "No shader, FMOD, Unity, APK/OBB/XAPK, release or automation changes"
+  ],
+  "source_url": "https://github.com/alwansan/raf/actions/runs/41624212828"
+}
