@@ -126,7 +126,7 @@ def apply(project, backup, write=False):
         if raw.startswith(b'\xef\xbb\xbf'):
             result = b'\xef\xbb\xbf' + result
         for p in (path, meta) if meta.exists() else (path,):
-            if (backup / p.name).exists():
+            if (backup / p.name).exists() or (backup / p.name).is_symlink():
                 raise ValueError('Original backup exists; refuse reapplication')
         plans.append((path, meta, raw, meta.read_bytes() if meta.exists() else None, result))
     if write:
