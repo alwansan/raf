@@ -109,9 +109,12 @@ def adapt(name, text):
 def apply(project, backup, write=False):
     if backup.resolve().is_relative_to(project.resolve()):
         raise ValueError('Original backup must remain outside imported project')
+    assets = project / 'Assets'
+    if assets.is_symlink() or not assets.is_dir():
+        raise ValueError('Unsafe Unity Assets root')
     plans = []
     for name in PINS:
-        paths = [p for p in (project / 'Assets').rglob(name + '.cs') if 'Assembly-CSharp' in p.parts]
+        paths = [p for p in assets.rglob(name + '.cs') if 'Assembly-CSharp' in p.parts]
         if len(paths) != 1:
             raise ValueError('Expected unique original source: ' + name)
         path = paths[0]
