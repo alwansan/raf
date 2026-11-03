@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T231207Z-a5d12e9c",
+  "issue_id": "HAPTICS-008",
+  "status": "red_test_committed",
+  "hypothesis": "Production CLI without --haptics-manifest reports successful APK/OBB structure despite not enforcing any of the 29 pinned original Haptics entry/Git identity checks, and may permit an empty-Haptics archive to be misreported as a complete release audit.",
+  "input_hashes": [
+    "Original manifest Git blob 88df20f0c64ae5f46f057939d4d6d96773a33ef8",
+    "Last A5 fixed SHA 73c5498c350221c6aed62d2e8de6734923c842eb",
+    "Test commit e7cd6788865a0eb167f27fd5566c3e5c5b52ab5e"
+  ],
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_android_expansion_audit.py -v",
+    "GH Actions .github/workflows/raft-a5-haptics-archive.yml (CPU-only; push test path)"
+  ],
+  "expected_signal": "RED: production subprocess audit without original manifest exits 0 for an otherwise valid synthetic OBB even if Haptics were removed. GREEN: production CLI --haptics-manifest is required and aborts before any success output; existing test API and workflow manifest option unchanged.",
+  "negative_controls": [
+    "Synthetic OBB with 29 matching WAV files but manifest omitted must fail CLI",
+    "Synthetic OBB with all Haptics removed and manifest omitted must fail CLI",
+    "Python audit_companion intentionally without manifest continues to return hapticsJarPathsAndOriginalGitBlobsVerified false for audit-library consumers",
+    "Native packaging workflow explicitly supplies --haptics-manifest"
+  ],
+  "workflow_path": ".github/workflows/raft-a5-haptics-archive.yml",
+  "concurrency_group": "raft-a5-haptics-008-${{ github.run_id }}",
+  "budget": "CPU tests, 8min CI, 0 LFS, 0 Unity, 0 native APK/OBB/XAPK",
+  "run_url": null,
+  "source_sha": "e7cd6788865a0eb167f27fd5566c3e5c5b52ab5e",
+  "result": null,
+  "limitations": [
+    "Does not audit a real signed OBB/Android mounted path",
+    "The prior original WAV source and C# reader evidence does not show gameplay haptics"
+  ],
+  "next_step": "Observe RED CI, change CLI argument required=True, run GREEN exact source and update A5 files."
+}
