@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T100042Z-afcedabb",
+  "issue_id": "LOCAL-005",
+  "status": "active",
+  "updated_at": "2026-11-03T10:53:59.321Z",
+  "base_sha": "0f9c574da5c39c74f542b5f58071ed355fd40d90",
+  "hypothesis": "Existing final world.sav symlink bypasses prior directory-only guard and redirects writes outside sandbox",
+  "intended_files": [
+    "android-port/Runtime/Platform/LocalSavePaths.cs",
+    "android-port/Tests/Smoke/Program.cs",
+    "prompt/coordination/clients/raft-20261103T100042Z-afcedabb/",
+    "prompt/coordination/experiments/raft-20261103T100042Z-afcedabb/",
+    "prompt/STATUS.md",
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+  ],
+  "related_work": [
+    "A6 earlier directory symlink test 0fa98e71",
+    "A9 profile ID link guard 345b151d",
+    "A10 SaveAndLoad selector 14dd7fce",
+    "A8 readiness probe 23161cfc"
+  ],
+  "experiment_ids": [
+    "save-file-leaf-symlink"
+  ],
+  "evidence": [
+    "Local Linux synthetic reproduction: normal world directories, world.sav -> outside.rgd, write changes outside bytes"
+  ],
+  "result": null,
+  "next_step": "Add fail-closed file leaf guard, broken-link regression, and verify same-source CPU CI; no original RGD changes"
+}
