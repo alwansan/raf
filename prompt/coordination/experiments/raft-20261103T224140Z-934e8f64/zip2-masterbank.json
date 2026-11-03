@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T224140Z-934e8f64",
+  "status": "planned",
+  "issue_id": "AUDIO-004",
+  "hypothesis": "ZIP2 exact original MasterBank chunks can feed original staging via strictly validated external path without hydrated LFS pointer.",
+  "input_hashes": [
+    {
+      "path": "zip2 commit",
+      "sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+    },
+    {
+      "path": "RAFT_FILE_MANIFEST.tsv",
+      "git_blob_sha": "4201fda426d80caba36c275ceaddb440b05c5b4e"
+    },
+    {
+      "path": "MasterBank.bank",
+      "sha256": "10d310416b9f104a38b4ead8877e114142e154efb33105fcddbb2024a81af339",
+      "bytes": 101600960
+    }
+  ],
+  "commands": [
+    "python3 -m unittest discover -s tests -p 'test_stage_zip2_master_bank.py' -v",
+    "python3 -m scripts.stage_zip2_master_bank --zip2-checkout zip2-source --destination /tmp/..."
+  ],
+  "expected_signal": "MasterBank restored original SHA and source staging succeeds without LFS, wrong parts/missing/corrupt/fake ZIP2 source safely rejected.",
+  "negative_controls": [
+    "Manifest coedit",
+    "Wrong chunk length/hash",
+    "Missing or extra chunk",
+    "Symlinked ZIP2 source",
+    "Wrong source commit",
+    "LFS pointer used as actual bank",
+    "Existing target not overwritten"
+  ],
+  "workflow_path": ".github/workflows/raft-raft-20261103T224140Z-934e8f64-zip2-audio.yml",
+  "concurrency_group": "raft-raft-20261103T224140Z-934e8f64-zip2-audio-${{ github.ref }}-${{ github.sha }}",
+  "budget": "CPU Ubuntu24.04 no Unity/LFS; one 101600960-byte real MasterBank reconstruction plus tiny synthetic tests, ~170MiB relevant sparse fetch, bounded timeout15min",
+  "run_url": null,
+  "source_sha": null,
+  "result": null,
+  "limitations": [
+    "No FMOD playback or APK/OBB/device validation."
+  ],
+  "next_step": "Verify CI at exact SHA."
+}
