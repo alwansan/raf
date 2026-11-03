@@ -13,10 +13,9 @@ class AtomicStageTests(unittest.TestCase):
     commit = fixtures.OriginalStreamingTests.commit
 
     def assert_no_staged_partials(self):
-        assets = self.project / "Assets/StreamingAssets"
-        if assets.exists():
+        if self.project.exists():
             self.assertEqual(
-                list(assets.rglob(".raft-stage-*.partial")), [],
+                list(self.project.rglob(".raft-stage-*.partial")), [],
                 "Unpublished partial data file survived failed copy",
             )
 
