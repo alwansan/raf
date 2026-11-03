@@ -3,8 +3,8 @@
   "owner": "raft-20261103T162900Z-73e8c2a1",
   "client_label": "W1",
   "issue_id": "RENDER-002",
-  "status": "planned",
-  "updated_at": "2026-11-03T13:27:00.713Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T13:33:22.188Z",
   "base_sha": "33afc2ac8f7868f4ed74bff00208d2711a9c43f9",
   "hypothesis": "Original serialized Shader records retain graphics DXBC absent from Dummy exports; direct extraction/translation can recover actual programs.",
   "intended_files": [
@@ -20,7 +20,10 @@
   "experiment_ids": [
     "original-graphics-program-recovery"
   ],
-  "evidence": [],
-  "result": null,
-  "next_step": "Run independent bounded CPU recovery on authenticated source; no raw shader outputs."
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41644979965",
+    "https://github.com/alwansan/raf/commit/01f1cfcc335f6756ae1caa1f8ce6abbfd902135a"
+  ],
+  "result": "SUCCESS: 105 authenticated Shader objects,318 serialized passes,15645 table entries,97 nonzero-segment entries,12033 valid graphics DXBC containers (6121 fragment/5912 vertex).12 sampled entries (11 distinct bytecodes,6 objects) recovered private HLSL and each passed original+roundtrip Vulkan1.1 validation. No actual ShaderLab integration/numeric/GPU/device proof.",
+  "next_step": "Join each m_ParsedForm pass/stage m_BlobIndex with exact table entry and serialized binding metadata; reconstruct eligible pass wrapper without changing original material properties/GUIDs. Execute paired numeric/render test before acceptance."
 }

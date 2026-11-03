@@ -4,13 +4,13 @@
   "username": "raft-20261103T162900Z-73e8c2a1",
   "session_id": "w1-20261103-73e8c2a1",
   "resumed_from": null,
-  "status": "active",
-  "updated_at": "2026-11-03T13:27:00.713Z",
+  "status": "paused",
+  "updated_at": "2026-11-03T13:33:22.188Z",
   "base_sha": "33afc2ac8f7868f4ed74bff00208d2711a9c43f9",
   "current_work": [
-    "RENDER-002 original graphics program recovery"
+    "RENDER-002: pass/stage/property binding reconstruction pending"
   ],
-  "last_commit": null,
-  "next_step": "Recover original graphics DXBC/pass metadata privately; preserve peer restorer files.",
+  "last_commit": "01f1cfcc335f6756ae1caa1f8ce6abbfd902135a",
+  "next_step": "Read recovery report then join exact original m_BlobIndex/pass/keyword metadata for one affected Shader; test paired stages before ShaderLab integration.",
   "memory_path": "prompt/coordination/clients/raft-20261103T162900Z-73e8c2a1/MEMORY.md"
 }
