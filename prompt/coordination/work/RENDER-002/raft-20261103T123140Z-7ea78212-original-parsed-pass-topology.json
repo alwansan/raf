@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T123140Z-7ea78212",
+  "client_label": "A15",
+  "session_id": "A15-20261103T225613-66d7040c",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "updated_at": "2026-11-03T22:56:13.132Z",
+  "hypothesis": "Original SHA-pinned 2-owner Shader m_ParsedForm carries SubShader/Pass topology that can independently bound one-pass export fidelity; compare aggregates without assuming one-to-one with 142 full-export ShaderLab files.",
+  "intended_files": [
+    "scripts/a15_probe_original_shader_passes.py",
+    "tests/test_a15_original_shader_passes.py",
+    ".github/workflows/raft-a15-original-shader-passes.yml",
+    "prompt/coordination/experiments/raft-20261103T123140Z-7ea78212/a15-original-shader-passes.json",
+    "prompt/coordination/clients/raft-20261103T123140Z-7ea78212/state.json",
+    "prompt/coordination/clients/raft-20261103T123140Z-7ea78212/MEMORY.md"
+  ],
+  "related_work": [
+    "W1 engine-name/export mapping actively distinct",
+    "A13 105 original Shader/514 original Material refs verified separately",
+    "A12R original Blur DXBC CB reflection distinct",
+    "A15 previous lexical audit completed"
+  ],
+  "zip2_source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "prohibited_actions": [
+    "No Unity/native APK/OBB/XAPK/Release",
+    "No LFS or changing zip2",
+    "No weakening zero-match/water gates",
+    "No private shader content disclosure"
+  ],
+  "expected_evidence": "Synthetic tests and CPU-only original 2-owner aggregate with independent SHA pins, bounded scope.",
+  "base_sha": "5c1e65f4f3a6cfd60c278fc82ebf9c7cd4db6eb0"
+}

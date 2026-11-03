@@ -2,13 +2,15 @@
   "schema_version": 1,
   "username": "raft-20261103T123140Z-7ea78212",
   "client_label": "A15",
-  "session_id": "A15-20261103T150103Z-lexical",
-  "resumed_from": null,
-  "status": "completed",
-  "updated_at": "2026-11-03T15:08:24.137Z",
-  "base_sha": "805999a47a7681f9763dc734322fa86ac77d6575",
-  "current_work": [],
+  "session_id": "A15-20261103T225613-66d7040c",
+  "resumed_from": "A15-20261103T150103Z-lexical",
+  "status": "active",
+  "updated_at": "2026-11-03T22:56:13.132Z",
+  "base_sha": "5c1e65f4f3a6cfd60c278fc82ebf9c7cd4db6eb0",
+  "current_work": [
+    "RENDER-002: original Shader m_ParsedForm SubShader/Pass structural recovery from SHA-pinned ZIP2, independent CPU-only"
+  ],
   "last_commit": "d0680dbd16676c54fb7473f797c26f58e76c786e",
-  "next_step": "Scoped live export pass/kernel lexical audit completed with green 10/10 CPU tests; original full exported shader identity zero-match, WATER-001/RENDER-002 remain open. Any continuation needs fresh HEAD/peers.",
+  "next_step": "Create original Shader parsed-pass structural scanner and synthetic tests; use original W1 ZIP2 4-owner staging in separate CPU-only workflow; do not alter original assets, W1 code, readiness gates or native builds",
   "memory_path": "prompt/coordination/clients/raft-20261103T123140Z-7ea78212/MEMORY.md"
 }
