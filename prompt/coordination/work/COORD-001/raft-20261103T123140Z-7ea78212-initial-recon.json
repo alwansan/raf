@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T123140Z-7ea78212",
+  "client_label": "A15",
+  "issue_id": "COORD-001",
+  "status": "planned",
+  "updated_at": "2026-11-03T12:31:40.016Z",
+  "base_sha": "aae8cc2070126449fa05049a669235a144309101",
+  "hypothesis": "A15's explicit technical assignment follows in a separate user message; first validate live project instructions and peer scopes to avoid duplicate or conflicting engineering.",
+  "intended_files": [
+    "prompt/coordination/clients/raft-20261103T123140Z-7ea78212/state.json",
+    "prompt/coordination/clients/raft-20261103T123140Z-7ea78212/MEMORY.md"
+  ],
+  "related_work": [
+    "RENDER-002 original built-in identity coverage and A3/A6/A9 completed scopes",
+    "WATER-001 authentic FFT, independent peers",
+    "A2 DISPLAY-003 CPU workflow active"
+  ],
+  "experiment_ids": [],
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41624581951"
+  ],
+  "result": null,
+  "next_step": "Receive exact A15 task, select scope, create independent experiments/discussion, then execute lightweight validation only."
+}
