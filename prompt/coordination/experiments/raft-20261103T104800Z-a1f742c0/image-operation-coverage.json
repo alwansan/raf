@@ -3,7 +3,7 @@
   "owner": "raft-20261103T104800Z-a1f742c0",
   "issue_id": "WATER-001",
   "experiment_id": "image-operation-coverage",
-  "updated_at": "2026-11-03T10:55:27.346Z",
+  "updated_at": "2026-11-03T10:56:45.843Z",
   "hypothesis": "Ignored OpImageSampleImplicitLod and sparse/query operations make all_image_operations_uniquely_traced true while hidden uses exist.",
   "synthetic_before": "12 existing tests pass, new synthetic sample-unknown expected-false check fails because checker returns true",
   "synthetic_after": "17/17 local tests PASS and same 17/17 GitHub Actions PASS, job125873109925",
@@ -11,7 +11,7 @@
   "workflow_path": ".github/workflows/raft-original-water-synthetic.yml",
   "workflow_url": "https://github.com/alwansan/raf/actions/runs/41622977666",
   "original_sha_pinned_audit_run_url": "https://github.com/alwansan/raf/actions/runs/41622977691",
-  "original_audit_status_at_checkpoint": "completed/success",
+  "original_audit_status_at_checkpoint": "completed/success (verified post-checkpoint)",
   "changed_paths": [
     "scripts/probe_fft_spirv_image_flow.py",
     "tests/test_probe_fft_spirv_image_flow.py"
@@ -32,5 +32,20 @@
     "Original compute audit pending at checkpoint",
     "No Unity Android GPU or numeric equivalence proof"
   ],
-  "readiness": "NOT_READY, 0/3"
+  "readiness": "NOT_READY, 0/3",
+  "original_audit_job_id": 125873110805,
+  "original_audit_aggregate": {
+    "original_programs_inspected": 20,
+    "vulkan_1_1_validated": 20,
+    "original_programs_with_all_image_ops_resolved": 20,
+    "roundtrip_bindings_preserved": 20,
+    "roundtrip_workgroups_preserved": 20,
+    "typed_image_declarations_checked": 60,
+    "roundtrip_typed_images_preserved": 0,
+    "roundtrip_image_operation_profile_preserved": 0,
+    "original_water_resource_contract_verified": false,
+    "original_sample_gather_query_uses": 0,
+    "gpu_executed": false
+  },
+  "result": "Synthetic 17/17 and original20-program audit both SUCCESS; narrow parser lineage verified; exact typed-image and operation profile still fail 0/20; WATER-001 remains open"
 }

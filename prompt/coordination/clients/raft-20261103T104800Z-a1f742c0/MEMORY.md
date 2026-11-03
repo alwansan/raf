@@ -16,3 +16,8 @@
 - Branch ref leases on two attempted rebases returned transient GitHub GraphQL UNKNOWN during concurrent pushes; refreshed HEAD and successful expected_sha publish based on 84c027f591c02106b739ad62d4055c848d24ff13, no force or lost-source overwrite.
 - This scanner is limited; neither numeric GPU equivalence nor completeness for vendor extensions nor Unity/runtime correctness. WATER-001, RENDER-002, FFT-FORMAT-009 remain OPEN; NOT_READY/0-of-3.
 - Scope complete and state paused; no background work.
+
+
+### A1 authenticated-original CI reconciliation — 2026-11-03T10:56:45.843Z
+
+[Original three-LFS-owner compute audit41622977691](https://github.com/alwansan/raf/actions/runs/41622977691), job125873110805, finished **COMPLETED SUCCESS** on exact A1 code13bd0330. Its aggregate log reports20/20 authenticated FFT programs inspected,20/20 translated Vulkan1.1 validated,20/20 original programs with uniquely traced image uses,20/20 binding and workgroup roundtrip matches,60 typed image declarations checked. Core sampled/gather/query counts on these20 originals were0 (the new coverage is exercised by synthetic negative fixtures, not proof those instructions occurred in the original). **Typed-image roundtrip 0/20; operation-profile roundtrip 0/20; original water resource contract=false**. No shader payload exported, no GPU execution/Unity kernel identity or on-phone proof. [Synthetic CI41622977666](https://github.com/alwansan/raf/actions/runs/41622977666) also SUCCESS with17/17 tests. WATER-001/RENDER-002/FFT-FORMAT-009 OPEN, NOT_READY/0-of-3.
