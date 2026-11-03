@@ -1,0 +1,34 @@
+{
+  "client": "raft-20261103T101018Z-6d92f0ab",
+  "issue": "FFT-FORMAT-009",
+  "state": "completed_read_only_audit",
+  "date_utc": "2026-11-03T10:11:00Z",
+  "baseline_head": "b4ab7275cdadead58081d188cea305d8aa814766",
+  "evidence": [
+    {
+      "run": 41616248166,
+      "status": "completed",
+      "conclusion": "success",
+      "source": "dc8533ba6df694b959fd37cb84c327584961642c",
+      "scope": "authenticated 20 original DXBC SPIR-V resource lineage audit"
+    },
+    {
+      "run": 41616959190,
+      "status": "completed",
+      "conclusion": "success",
+      "source": "b4ab7275cdadead58081d188cea305d8aa814766",
+      "scope": "A2 Settings-only CPU source layout audit; independent display work"
+    }
+  ],
+  "confirmed_from_existing_authenticated_reports": {
+    "original_storage_binding": "set0/binding2",
+    "original_format_enum": 0,
+    "recompiled_format_enum": 1,
+    "translated_variants": 20,
+    "exact_typed_matches": 0
+  },
+  "interpretation": "Source audit validates declarations, not numerical GPU equivalence; do not rewrite Unknown to Rgba32f without actual Unity RenderTexture format and device capability evidence.",
+  "next": "Cross-check original Unity RenderTexture formats and actual FFT storage-image writes; use independent CPU-only source experiment with owner hashes. No duplicate LFS or Unity.",
+  "limitations": "No new shader execution, private source extraction, native build or phone test performed.",
+  "readiness": "NOT_READY"
+}
