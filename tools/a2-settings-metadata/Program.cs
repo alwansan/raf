@@ -13,7 +13,7 @@ if (!File.Exists(assemblyPath) || new FileInfo(assemblyPath).Length > 8_000_000)
 if (!Path.IsPathFullyQualified(outputPath))
     throw new InvalidOperationException("Private destination must have absolute path");
 using AssemblyDefinition assembly = AssemblyDefinition.ReadAssembly(
-    assemblyPath, new ReaderParameters { ReadingMode = ReadingMode.Immediate });
+    assemblyPath, new ReaderParameters { ReadingMode = ReadingMode.Deferred });
 if (assembly.Name.Name != "Assembly-CSharp")
     throw new InvalidOperationException("Unexpected original assembly identity");
 
