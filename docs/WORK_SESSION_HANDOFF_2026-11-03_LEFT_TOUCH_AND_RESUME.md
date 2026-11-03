@@ -1,5 +1,13 @@
 # Owner correction, permanent resume and recovery helper — 3 November 2026
 
+<!-- A11_STAGE_IDENTITY_V3_20261103 -->
+## A11 resumed RENDER-002 shader export scope v3 — verified 2026-11-03
+
+Original A11 identity `raft-20261103T123040Z-02fe66b3`, resumed session `a11-resume-20261103T2255Z-c6f3a290`. [Code and 6 new synthetic tests 04a4eefe](https://github.com/alwansan/raf/commit/04a4eefea18a8bff9059e8217d801b9ef87576de); [CI 41735395961](https://github.com/alwansan/raf/actions/runs/41735395961) COMPLETED SUCCESS, 23/23. A11 work/state/memory/experiment closed in [cdcd3aa0](https://github.com/alwansan/raf/commit/cdcd3aa0770549ca798cdd6591874debd4835f1f). Read [exact result](A11_SHADER_EXPORT_IDENTITY_STAGE_V3_2026-11-03.md).
+
+Opt-in source-only `--audit-stage-builtin-archive` uses official SHA-pinned Unity vendor identities, mandatory paired count verification, comment-aware ShaderLab header decoder and before/after scope fingerprints. No shader replacement, original asset, native workflow, LFS, Unity/APK or task mutation. Historical native 41624581951 found zero exact builtin matches before Unity; complete original 140-file stage not captured by A11, and local 107-file subset is not proven equivalent. Do not claim restored game graphics: RENDER-002/WATER-001 OPEN; NOT_READY/0-of-3. Next capture exact complete pre-restoration export stage and invoke audit against authentic vendor archive; preserve ZIP2 source SHA/size authentication.
+
+
 Read [current owner requirements](CURRENT_OWNER_REQUIREMENTS.md), `AGENTS.md` and [prompt/STATUS.md](../prompt/STATUS.md) first. They supersede older contradictory instructions.
 
 ## Reviewed evidence
