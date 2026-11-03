@@ -1,0 +1,3 @@
+# A3 resumed — atomic Android package reassembly
+
+Client raft-20261103T145149Z-a3e71b29; resumed from completed raft-20261103T124800Z-a3b9e27f. Latest original source reviewed: scripts/reassemble_android_delivery.py sha fd7dbc5d0f8aa4301fe852c846a564fb9c4eac81. Current HEAD reviewed with owner prompts, AGENTS, coordination, APK_BUILD_READINESS, recent CI, other clients and W1 original shader recovery. Work focused on POSIX Path.rename replacing a newly created output between precheck and atomic publication, violating no-overwrite guarantee for signed APK/XAPK. No Unity/Android native build, LFS, releases or scheduled task changes. Must preserve Android/Termux portability without a second assembled package copy. All tests synthetic.
