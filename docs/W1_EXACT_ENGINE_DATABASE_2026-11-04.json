@@ -1,0 +1,55 @@
+{
+  "cpu_source": "7eed8dbada2472e928be14eb860d1f7dd672cee2",
+  "cpu_run": 41736103335,
+  "cpu_job": 126265602490,
+  "cpu_artifact": 13278408659,
+  "evidence": [
+    {
+      "sourcegenerated_version": "1.3.2.0",
+      "generated_assembly_sha256": "7aedba39a03b7d3fa4837a4a47fb2795780c1670a71b2c4dbca88613b8d231fd",
+      "selected_shader_type": "AssetRipper.SourceGenerated.Classes.ClassID_48.Shader_2021_3_35",
+      "selected_unity_version": "2021.3.45f2",
+      "release_name_copy_verified": true,
+      "editor_name_copy_verified": true,
+      "engine_dataset_version": "2021.2.0b14",
+      "tpk_sha256": "be9863e90b424b3cbe42caea675e5ae36179d62df2c55d41ef19d217992a8b12",
+      "dataset_json_sha256": "72370e5ba37150a4cba193a5c5eca7ebfaece93f97730b5405e9152100c4fc93",
+      "default_shader_records": 6,
+      "extra_shader_records": 190,
+      "actual_export_material_refs_verified": false,
+      "unity_or_android_executed": false
+    },
+    {
+      "actual_export_material_engine_ptrs_verified": false,
+      "exact_engine_keys_uniquely_mapped": 9,
+      "nonmatching_engine_keys": 96,
+      "original_official_vendor_name_objects": 9,
+      "original_shader_objects": 105,
+      "private_engine_names_or_ids_published": false,
+      "reader_contract": {
+        "actual_export_material_refs_verified": false,
+        "dataset_json_sha256": "72370e5ba37150a4cba193a5c5eca7ebfaece93f97730b5405e9152100c4fc93",
+        "default_shader_records": 6,
+        "editor_name_copy_verified": true,
+        "engine_dataset_version": "2021.2.0b14",
+        "extra_shader_records": 190,
+        "generated_assembly_sha256": "7aedba39a03b7d3fa4837a4a47fb2795780c1670a71b2c4dbca88613b8d231fd",
+        "release_name_copy_verified": true,
+        "selected_shader_type": "AssetRipper.SourceGenerated.Classes.ClassID_48.Shader_2021_3_35",
+        "selected_unity_version": "2021.3.45f2",
+        "sourcegenerated_version": "1.3.2.0",
+        "tpk_sha256": "be9863e90b424b3cbe42caea675e5ae36179d62df2c55d41ef19d217992a8b12",
+        "unity_or_android_executed": false
+      },
+      "strict_zero_match_gate_changed": false,
+      "unity_or_android_executed": false,
+      "vendor_keys_uniquely_mapped": 9,
+      "wrong_name_and_property_controls_detected": 18
+    }
+  ],
+  "unity_source": "be740083d8faeea55ed2ba030cceea0d239e5f60",
+  "unity_run": 41737038201,
+  "unity_result": "pending",
+  "readiness": "NOT_READY",
+  "full_readiness_reviews": 0
+}

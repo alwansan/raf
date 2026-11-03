@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "owner": "raft-20261103T162900Z-73e8c2a1",
-  "status": "active",
-  "updated_at": "2026-11-03T22:57:12.644Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T23:13:18.423Z",
   "base_sha": "fda3590403e3cf01d6487eb78fa601a9e18906ad",
   "hypothesis": "Pinned generated1.3.2 reader copies parsed shader names; exact embedded TPK mapping can account for omitted loose builtin shader files. Neither current canonical-owner0matches nor generic engine source proves this.",
   "intended_files": [
@@ -16,5 +16,9 @@
     "A12BlurCBreflections distinct",
     "No other engine-db probe found in current tree"
   ],
-  "next_step": "Prove parsed-name copy in actual pinned assembly and match original shader property keys to exact engine dataset before any gate correction."
+  "next_step": "Inspect actual41737038201 nine-pointer/property/bundle result from be740083. Fix observed error, then prove full-exportMaterial engine references before builtin gate correction. No identical full native retry.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41736103335"
+  ],
+  "result": "Exact1.3.2readernamecopyverified, actualembeddedengineDB196shaderrecords, all9officialoriginalkeysuniquelymatch,18wrongname/propertycontrolsdetected. CPUsubtaskcomplete; actualUnity/full-export stillpending."
 }

@@ -4,13 +4,13 @@
   "username": "raft-20261103T162900Z-73e8c2a1",
   "session_id": "w1-engine-db-20261103T225712644Z",
   "resumed_from": null,
-  "status": "active",
-  "updated_at": "2026-11-03T22:57:12.644Z",
+  "status": "paused",
+  "updated_at": "2026-11-03T23:13:18.423Z",
   "base_sha": "fda3590403e3cf01d6487eb78fa601a9e18906ad",
   "current_work": [
-    "Reflect exact SourceGenerated1.3.2 and embedded TPK engine shader mapping"
+    "Exact SourceGenerated1.3.2/embedded engine mapping9of9 proven; external targeted Unity41737038201 running"
   ],
-  "last_commit": "afb4bc1b8b86d3254a35916b5cc336234fd547aa",
-  "next_step": "Prove parsed-name copy in actual pinned assembly and match original shader property keys to exact engine dataset before any gate correction.",
+  "last_commit": "be740083d8faeea55ed2ba030cceea0d239e5f60",
+  "next_step": "Inspect actual41737038201 nine-pointer/property/bundle result from be740083. Fix observed error, then prove full-exportMaterial engine references before builtin gate correction. No identical full native retry.",
   "memory_path": "prompt/coordination/clients/raft-20261103T162900Z-73e8c2a1/MEMORY.md"
 }

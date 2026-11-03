@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "owner": "raft-20261103T162900Z-73e8c2a1",
-  "status": "planned",
+  "status": "running",
   "hypothesis": "Exact nine original metadata keys and embedded engine IDs resolve to matching shader names/property layouts in Unity2021.3.45f2; nine wrong-pointer controls must fail, then AndroidVulkan bundle compilation must pass. CPU reflection alone cannot prove this binding.",
   "input_hashes": [
     {
@@ -14,12 +14,14 @@
   "concurrency_group": "raft-native-engine-${github.ref};own raft-w1-engine-unity",
   "artifact_prefix": "w1-engine-unity-aggregate",
   "budget": "30minutes;12GiB Docker;20GiB disk gate;9positive+9negative materials;noAPK",
-  "source_sha": null,
-  "run_url": null,
+  "source_sha": "be740083d8faeea55ed2ba030cceea0d239e5f60",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41737038201",
   "limitations": [
     "Minimal private probe, not full exported game",
     "No visual/phone/all-material equivalence",
     "No shared native requests or bypass gates"
   ],
-  "next_step": "Inspect actual binding counts and compilation before using the result in builtin gate correction."
+  "next_step": "Inspect actual binding counts and compilation before using the result in builtin gate correction.",
+  "updated_at": "2026-11-03T23:13:18.423Z",
+  "result": "License,exactreader+engineDB,sourcepins and9positive/9negativeprivateprojectpreparationpassed;Unityactualbindingstepinprogress."
 }
