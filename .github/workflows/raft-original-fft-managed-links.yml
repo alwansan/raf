@@ -16,6 +16,8 @@ on:
       - 'scripts/probe_original_fft_index_derivation.py'
       - 'tests/test_probe_original_fft_index_derivation.py'
       - 'scripts/probe_original_fft_inherited_seed.py'
+      - 'scripts/verify_original_butterfly_numeric.py'
+      - 'tests/test_verify_original_butterfly_numeric.py'
       - 'tests/test_probe_original_fft_inherited_seed.py'
       - 'scripts/probe_original_fft_size_argument.py'
       - 'tests/test_probe_original_fft_size_argument.py'
@@ -53,6 +55,7 @@ jobs:
           python3 -m unittest discover -s tests -p test_probe_original_fft_caller_graph.py -v
           python3 -m unittest discover -s tests -p test_probe_original_fft_index_derivation.py -v
           python3 -m unittest discover -s tests -p test_probe_original_fft_inherited_seed.py -v
+          python3 -m unittest discover -s tests -p test_verify_original_butterfly_numeric.py -v
           python3 -m unittest discover -s tests -p test_probe_original_fft_size_argument.py -v
       - name: Recover private exact CSharp9 original callers
         shell: bash
@@ -76,3 +79,22 @@ jobs:
           python3 -m scripts.probe_original_fft_size_argument --source "$RUNNER_TEMP/private-fft-original"
           # Do not publish original decompiled code or ILSpy logs.
           # CI is CPU-only source-level evidence; no Unity/game build.
+      - name: Execute original butterfly tables and CPU FFT against independent DFT
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.verify_original_butterfly_numeric --source "$RUNNER_TEMP/private-fft-original" --output "$RUNNER_TEMP/butterfly-numeric-private"
+          set +e
+          timeout 180s dotnet run --project "$RUNNER_TEMP/butterfly-numeric-private/Numeric.csproj" --configuration Release --nologo > "$RUNNER_TEMP/butterfly-numeric-private.log" 2>&1
+          code=$?
+          set -e
+          export NUMERIC_EXIT="$code"
+          python3 - <<'PY'
+          import os,re
+          from pathlib import Path
+          text=(Path(os.environ['RUNNER_TEMP'])/'butterfly-numeric-private.log').read_text(errors='replace')
+          lines=[line for line in text.splitlines() if line.startswith('RAFT_ORIGINAL_BUTTERFLY_NUMERIC ')]
+          for line in lines:print(line)
+          print('RAFT_BUTTERFLY_NUMERIC_EXECUTION exit='+os.environ['NUMERIC_EXIT']+' errorCodes='+str(sorted(set(re.findall(r'error ([A-Z]+[0-9]+):',text)))))
+          if int(os.environ['NUMERIC_EXIT']) or len(lines)!=1:raise SystemExit('Private original numeric experiment failed; source/log not published')
+          PY
