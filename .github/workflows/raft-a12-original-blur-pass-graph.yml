@@ -33,14 +33,15 @@ jobs:
       - name: Run A12 source-only negative controls before original LFS hydration
         run: python3 -m unittest discover -s tests -p test_a12_original_blur_passes.py -v
 
-      - name: Assert exactly two SHA-authenticated original source pointers and 8 GiB disk budget
+      - name: Assert pinned Shader owners and 8 GiB disk budget
         run: |
           python3 - <<'PY'
           from pathlib import Path
           import shutil
           from scripts.verify_targeted_lfs_compute_sources import verify_sources
           from scripts.w1_recover_graphics_programs import OWNERS
-          assert len(OWNERS) == 2 and shutil.disk_usage('.').free >= 8 * 1024**3
+          from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
+          assert len(OWNERS) == 2 and len(SHADER_OWNERS) == 14 and shutil.disk_usage('.').free >= 8 * 1024**3
           verify_sources(Path('Raft/Raft_Data'), pointers_only=True, expected=OWNERS)
           print('RAFT_A12_BLUR_ORIGINAL_POINTERS two_owners=true sha_pinned=true')
           PY
@@ -51,19 +52,19 @@ jobs:
           path: .git/lfs/objects
           key: w1-graphics-87493249-0498f738-v1
 
-      - name: Hydrate only two exact verified graphics resources (227511628 bytes)
+      - name: Hydrate only three LFS resources used by original 14 Shader-bearing owners
         env:
           GIT_LFS_SKIP_SMUDGE: '1'
         run: |
           set -euo pipefail
           git lfs install --local
-          git lfs pull --include='Raft/Raft_Data/resources.assets,Raft/Raft_Data/sharedassets0.assets' --exclude='' origin
+          git lfs pull --include='Raft/Raft_Data/resources.assets,Raft/Raft_Data/sharedassets0.assets,Raft/Raft_Data/sharedassets36.assets' --exclude='' origin
           python3 - <<'PY'
           from pathlib import Path
           from scripts.verify_targeted_lfs_compute_sources import verify_sources
           from scripts.w1_recover_graphics_programs import OWNERS
           verify_sources(Path('Raft/Raft_Data'), expected=OWNERS)
-          print('RAFT_A12_BLUR_SOURCE_SHA_VERIFIED bytes=227511628')
+          print('RAFT_A12_BLUR_SOURCE_SHA_VERIFIED two_base_owners_bytes=227511628 other_owners_verified_in_probe=true')
           PY
 
       - name: Install pinned CPU-only original serialized shader decoder
@@ -72,7 +73,7 @@ jobs:
       - name: Extract exact authenticated original Blur pass graph (no source publishing)
         run: |
           timeout 240s python3 -m scripts.a12_probe_original_blur_passes \
-            --source Raft/Raft_Data --out "$RUNNER_TEMP/a12-blur-pass-graph.json"
+            --source Raft/Raft_Data --repo . --out "$RUNNER_TEMP/a12-blur-pass-graph.json"
 
       - name: Publish aggregate counts and hashes only
         if: always()
