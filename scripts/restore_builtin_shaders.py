@@ -191,17 +191,41 @@ def restore_project(project, backup, shaders, files, license):
         saved.parent.mkdir(parents=True, exist_ok=True)
         saved.write_bytes(original)
         Path(str(saved) + '.meta').write_bytes(metadata)
+    created_additions = []
+    replaced_shaders = []
     try:
         for path, content in additions.items():
+            # Earlier preflight guarantees that existing assets have identical
+            # authenticated bytes. Do not rewrite them during publication.
+            _require_safe_asset_path(assets, path)
+            if path.exists():
+                if path.is_symlink() or not path.is_file() or path.read_bytes() != content:
+                    raise ValueError('Conflicting built-in dependency or license destination')
+                continue
             path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_bytes(content)
+            _require_safe_asset_path(assets, path)
+            # Exclusive create avoids overwriting a file added after preflight.
+            # Record it only once opened, so a concurrent file is never deleted.
+            with path.open('xb') as stream:
+                created_additions.append(path)
+                stream.write(content)
         for path, content, original, meta, metadata in plan:
+            # Append before writing: write_bytes can fail after truncating.
+            replaced_shaders.append((path, original))
             path.write_bytes(content)
             if meta.read_bytes() != metadata:
                 raise ValueError('Original built-in shader metadata changed')
     except BaseException:
-        for path, content, original, meta, metadata in plan:
-            path.write_bytes(original)
+        try:
+            # Exact exported bytes and metadata remain in the external backup.
+            for path, original in reversed(replaced_shaders):
+                path.write_bytes(original)
+        finally:
+            # Also remove partial newly-created include/license files. Never
+            # remove pre-existing identical files or a concurrently added file.
+            for path in reversed(created_additions):
+                if path.is_file() and not path.is_symlink():
+                    path.unlink()
         raise
     print('RAFT_BUILTIN_SHADER_RESTORATION matchedShaders=' + str(len(plan)) +
           ' includes=' + str(len(done)) + ' originalMetasUnchanged=true customShadersChanged=false deviceExecution=false')
