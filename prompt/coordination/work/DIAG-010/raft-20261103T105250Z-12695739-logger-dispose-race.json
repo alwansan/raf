@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T105250Z-12695739",
+  "issue_id": "DIAG-010",
+  "status": "active",
+  "updated_at": "2026-11-03T10:53:12.398Z",
+  "base_sha": "13bd0330904b48eb58fad73e27b7299e0d08b230",
+  "hypothesis": "A cross-thread Write racing Dispose can call wake.Set() after wake.Dispose() and throw ObjectDisposedException; align write/dispose lifecycle and enable existing C# logger harness in platform CI.",
+  "intended_files": [
+    "android-port/Runtime/Platform/PersistentDiagnosticLog.cs",
+    "android-port/Tests/Diagnostics/Program.cs",
+    ".github/workflows/raft-android-platform-tests.yml",
+    "prompt/coordination/clients/raft-20261103T105250Z-12695739/",
+    "prompt/coordination/work/DIAG-010/raft-20261103T105250Z-12695739-logger-dispose-race.json",
+    "prompt/STATUS.md",
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+  ],
+  "related_work": [
+    "A8 previous LOCAL-005 world probe (separate source)",
+    "A4 PERF-007 CI memory evidence (different files)",
+    "A2 DISPLAY-003",
+    "A1 WATER-001",
+    "A5 HAPTICS-008"
+  ],
+  "experiment_ids": [
+    "logger-dispose-race"
+  ],
+  "evidence": [],
+  "result": null,
+  "next_step": "Run executable C# stress harness, review source, lock lifecycle Write/Dispose, validate net8 and netstandard compatibility."
+}

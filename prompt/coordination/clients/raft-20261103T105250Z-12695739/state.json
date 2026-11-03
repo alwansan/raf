@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "username": "raft-20261103T105250Z-12695739",
+  "display_name": "A8",
+  "session_id": "A8-20261103T105250Z-7e154bc6",
+  "resumed_from": "raft-20261103T100412Z-b2521375",
+  "status": "active",
+  "updated_at": "2026-11-03T10:53:12.398Z",
+  "base_sha": "13bd0330904b48eb58fad73e27b7299e0d08b230",
+  "current_work": [
+    "DIAG-010"
+  ],
+  "last_commit": null,
+  "next_step": "Reproduce shutdown/write lifecycle race in PersistentDiagnosticLog, fix without extra disk output or altering retention; run actual C# harness through no-Unity platform CI.",
+  "memory_path": "prompt/coordination/clients/raft-20261103T105250Z-12695739/MEMORY.md"
+}
