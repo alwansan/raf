@@ -45,6 +45,14 @@ class ImageFlowTests(unittest.TestCase):
         self.assertFalse(r["all_image_operations_uniquely_traced"])
         self.assertEqual(r["image_operand_slot_uses"]["write"]["unresolved_count"], 1)
 
+    def test_select_with_unknown_arm_cannot_claim_unique_binding(self):
+        ops = example()
+        ops.insert(7, (169, [2, 30, 50, 20, 199]))
+        ops[8] = (99, [30, 42, 43])
+        r = image_slot_dataflow(spv(ops))
+        self.assertFalse(r["all_image_operations_uniquely_traced"])
+        self.assertEqual(r["image_operand_slot_uses"]["write"]["unresolved_count"], 1)
+
     def test_invalid_input_fails_closed(self):
         with self.assertRaises(ValueError):
             image_slot_dataflow(spv(example())[:-4])

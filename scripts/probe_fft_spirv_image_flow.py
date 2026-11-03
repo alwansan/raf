@@ -58,10 +58,10 @@ def image_slot_dataflow(module):
         if value in slots:
             return {slots[value]}
         if value in visited:
-            return set()
+            return {None}
         parent = aliases.get(value)
         if parent is None:
-            return set()
+            return {None}
         found = set()
         for item in parent:
             found.update(find_slots(item, visited | {value}))
@@ -72,7 +72,9 @@ def image_slot_dataflow(module):
         unresolved = ambiguous = 0
         for ident in ids:
             parents = find_slots(ident, set())
-            if len(parents) == 1:
+            if None in parents:
+                unresolved += 1
+            elif len(parents) == 1:
                 key = next(iter(parents))
                 counts[key] = counts.get(key, 0) + 1
             elif not parents:
