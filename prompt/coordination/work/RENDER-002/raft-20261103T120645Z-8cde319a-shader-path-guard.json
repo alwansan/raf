@@ -2,9 +2,9 @@
   "schema_version": 1,
   "owner": "raft-20261103T120645Z-8cde319a",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed",
   "base_sha": "c9304af41071dc878ddf76734cd6e1bdf5a12a5d",
-  "updated_at": "2026-11-03T12:06:45Z",
+  "updated_at": "2026-11-03T12:20:00Z",
   "hypothesis": "restore_project checks only leaf .shader and target path symlinks; existing symlinked Assets/StreamingAssets or Assets/RaftAndroid parent could redirect license/include writes outside Unity project even with authenticated archive, without explicit preflight failure",
   "intended_files": [
     "scripts/restore_builtin_shaders.py",
@@ -21,5 +21,14 @@
     "A3 earlier HAPTICS-008 stages completed"
   ],
   "safety": "No original ShaderLab asset/mat/.meta/GUID replacement in repo; no LFS/Unity/APK/OBB/XAPK/Release/automation; use expected_sha lease",
-  "next_step": "Isolated synthetic red fixture and CI, then minimal fail-closed parent symlink guard; verify positive vendor fixture CI."
+  "next_step": "Stop scoped source repair; maintain RENDER-002 open for zero actual exported built-in shader matches, authentic Unity pass/resource restoration, future coordinator-approved phone build",
+  "last_commit": "d93f6aecac8214057debfc1d18eda85b6fa50ce1",
+  "result": "CPU-only RED 3/4 fails as expected on symlink root/parent; GREEN A3 4/4 plus A9 4/4 + original 10/10; vendor official 5 sample shader matches/29 includes, all exact-source success",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41633814002",
+    "https://github.com/alwansan/raf/actions/runs/41634098552",
+    "https://github.com/alwansan/raf/actions/runs/41634098651",
+    "https://github.com/alwansan/raf/actions/runs/41634098559",
+    "docs/A3_BUILTIN_SHADER_PATH_SAFETY_2026-11-03.md"
+  ]
 }
