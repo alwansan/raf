@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T113245Z-a7e48c92",
+  "status": "in_progress",
+  "hypothesis": "On a 500ms End or crossing Move, the synchronous Down callback may cancel/reown touch; the original caller must not emit a Tap/Move afterward.",
+  "input_hashes": [
+    "TouchPointerGesture.cs pre-fix blob a892a110d8fc2992449a7e93a53be3ddc0d5f2c9",
+    "TouchPointerGesture.cs patched blob d0c0b2fc3e1ecd0d6c73fc8c8cc8f8c062536203",
+    "BoundaryMatrix.cs red blob d2d1caa99a820b1217d270421450cad2e0f0de19"
+  ],
+  "commands": [
+    "dotnet run --project android-port/Tests/TouchPointer/TouchPointer.csproj --configuration Release --nologo",
+    "GitHub Actions automatic CPU-only platform tests, no Unity/LFS",
+    "GitHub Actions automatic original Android offline managed source CI"
+  ],
+  "expected_signal": "RED pre-fix: error reentrant-cancel-end-no-ghost-tap. GREEN after fix: no post-cancel Tap from End, no trailing Move after synchronous Cancel, preserved 500ms and physical mouse mapping tests.",
+  "negative_controls": [
+    "Cancel() issued inside Down callback on End threshold => exactly Move,Down,Up, no Tap",
+    "Cancel() issued inside Down callback on Move threshold => exactly Move,Down,Up, no trailing Move"
+  ],
+  "workflow_path": ".github/workflows/raft-android-platform-tests.yml",
+  "concurrency_group": null,
+  "artifact_prefix": null,
+  "budget": "Use existing push-triggered cheap CI only; platform timeout10m; original offline harness timeout12m; no LFS/Unity/new workflow dispatch",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41628839519",
+  "source_sha": "97892fca662a7c708d3e46a90ff7b7aa5ac6df5b",
+  "result": "Red pre-fix run41628646181 completed FAILURE at intended actual C# assertion; post-fix CI pending.",
+  "limitations": [
+    "Down callback reentrant Cancel is an isolated C# harness, not measured Android focus-event timing",
+    "No Unity InputSystem, UGUI, physical-device, APK or phone execution",
+    "Queued-tap fix from previous A7 session is independent and unchanged"
+  ],
+  "next_step": "Verify green platform and original-managed jobs and actual log counts; update own memory/state/work and shared checkpoint/handoff with exact limits."
+}
