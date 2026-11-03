@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "username": "raft-20261103T123119Z-9fd895b8",
+  "client_label": "A14",
+  "session_id": "A14-20261103T123119Z-71377153",
+  "resumed_from": null,
+  "status": "active",
+  "updated_at": "2026-11-03T12:31:19.959Z",
+  "base_sha": "aae8cc2070126449fa05049a669235a144309101",
+  "current_work": [
+    "RENDER-002 export-provenance intake (read-only until scoped task)"
+  ],
+  "last_commit": null,
+  "next_step": "Receive the owner-supplied A14-specific assignment; recheck HEAD and peer scopes; choose a non-overlapping CPU-only source/asset experiment.",
+  "memory_path": "prompt/coordination/clients/raft-20261103T123119Z-9fd895b8/MEMORY.md"
+}

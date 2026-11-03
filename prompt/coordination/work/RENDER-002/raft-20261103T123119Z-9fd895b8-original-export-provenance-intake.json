@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T123119Z-9fd895b8",
+  "client_label": "A14",
+  "issue_id": "RENDER-002",
+  "status": "planned",
+  "updated_at": "2026-11-03T12:31:19.959Z",
+  "base_sha": "aae8cc2070126449fa05049a669235a144309101",
+  "hypothesis": "Full original shader export identity/provenance for failed run 41624581951 remains unverified; the inspected 107 shaders are only an unauthenticated subset.",
+  "intended_files": [
+    "prompt/coordination/clients/raft-20261103T123119Z-9fd895b8/state.json",
+    "prompt/coordination/clients/raft-20261103T123119Z-9fd895b8/MEMORY.md",
+    "prompt/coordination/work/RENDER-002/raft-20261103T123119Z-9fd895b8-original-export-provenance-intake.json"
+  ],
+  "related_work": [
+    "A9 ShaderLab declaration lexer d159f348 (completed)",
+    "A6 include comment parser fa464735 (completed)",
+    "A3 built-in path guard d93f6aec (completed)",
+    "A? coverage probe 107-file subset (completed)"
+  ],
+  "experiment_ids": [],
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41624581951"
+  ],
+  "result": null,
+  "next_step": "Wait for A14-specific owner scope; avoid duplicate coverage probe or changing shared restorer."
+}
