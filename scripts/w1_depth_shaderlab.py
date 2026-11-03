@@ -70,7 +70,9 @@ def property_name(record):
     # distinct from a genuinely property-driven state and must not be guessed.
     if isinstance(name, dict) and set(name) == {'name'}:
         name = name['name']
-    if name in ('', None):
+    # AssetRipper's public SerializedShaderFloatValueExtensions explicitly
+    # identifies Unity's <noninit> sentinel as nameless, not a material property.
+    if name in ('', None, '<noninit>'):
         return None
     if not isinstance(name, str) or not re.fullmatch(r'[A-Za-z_]\w*', name):
         raise ValueError('Invalid original render-state property identifier')

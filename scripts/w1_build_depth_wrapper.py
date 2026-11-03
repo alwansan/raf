@@ -11,7 +11,7 @@ from scripts.w1_recover_graphics_programs import OWNERS, decoded_platforms, reco
 from scripts.w1_recover_depth_passes import TARGET, OBJECT_SHA256, linked_program, stage_variants, variant_key, digest
 from scripts.w1_rebind_depth_resources import rebind, signature_inputs
 from scripts.run_original_dxbc_translation_probe import version_tokens
-from scripts.w1_depth_shaderlab import decode_empty_parameters, stage_body, wrapper
+from scripts.w1_depth_shaderlab import decode_empty_parameters, stage_body, wrapper, property_name
 
 
 def build(root, out):
@@ -36,6 +36,19 @@ def build(root, out):
               'private_shaderlab_constructed': False, 'unity_compiled': False,
               'software_vulkan_executed': False, 'numeric_or_visual_equivalence': False,
               'installed_shader_or_original_guid_changed': False}
+    def named_states(value):
+        if isinstance(value, dict):
+            if 'val' in value and 'name' in value:
+                yield property_name(value)
+            else:
+                for child in value.values():
+                    yield from named_states(child)
+        elif isinstance(value, list):
+            for child in value:
+                yield from named_states(child)
+    names = [name for s in parsed['m_SubShaders'] for p in s['m_Passes'] for name in named_states(p['m_State'])]
+    report['original_render_state_values'] = len(names)
+    report['genuine_dynamic_render_state_references'] = sum(name is not None for name in names)
     try:
         with tempfile.TemporaryDirectory(prefix='w1-depth-wrapper-private-') as folder:
             private = Path(folder)

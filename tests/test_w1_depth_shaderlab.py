@@ -23,6 +23,8 @@ def state():
 class DepthShaderLab(unittest.TestCase):
     def test_fast_property_name_is_not_a_dynamic_override(self):
         self.assertEqual(val({'val': 1, 'name': {'name': ''}}), 1)
+        self.assertEqual(val({'val': 1, 'name': '<noninit>'}), 1)
+        self.assertEqual(val({'val': 0, 'name': {'name': '<noninit>'}}), 0)
         with self.assertRaises(ValueError):
             val({'val': 1, 'name': {'name': 'FixtureDynamic'}})
 
