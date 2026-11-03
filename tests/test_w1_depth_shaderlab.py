@@ -50,8 +50,9 @@ class DepthShaderLab(unittest.TestCase):
     def test_dynamic_or_nondefault_fog_not_discarded(self):
         original = state()
         original['zWrite']['name'] = 'FixtureProperty'
-        with self.assertRaises(ValueError):
-            render_state(original)
+        self.assertIn('ZWrite [FixtureProperty]', render_state(original))
+        original['rtBlend0']['srcBlend']['name'] = {'name': 'FixtureSourceBlend'}
+        self.assertIn('Blend [FixtureSourceBlend] Zero', render_state(original))
         original = state()
         original['fogDensity'] = value(1)
         with self.assertRaises(ValueError):

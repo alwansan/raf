@@ -62,7 +62,7 @@ def number(value):
     return format(value, '.9g')
 
 
-def val(record):
+def property_name(record):
     if not isinstance(record, dict):
         raise ValueError('Invalid original render-state value record')
     name = record.get('name')
@@ -70,12 +70,23 @@ def val(record):
     # distinct from a genuinely property-driven state and must not be guessed.
     if isinstance(name, dict) and set(name) == {'name'}:
         name = name['name']
-    if name not in ('', None):
+    if name in ('', None):
+        return None
+    if not isinstance(name, str) or not re.fullmatch(r'[A-Za-z_]\w*', name):
+        raise ValueError('Invalid original render-state property identifier')
+    return name
+
+
+def val(record):
+    if property_name(record) is not None:
         raise ValueError('Dynamic original render state requires explicit property recovery')
     return record['val']
 
 
 def enum(record, names):
+    name = property_name(record)
+    if name is not None:
+        return '[' + name + ']'
     value = val(record)
     if value != int(value) or int(value) not in names:
         raise ValueError('Unsupported original render-state enum')
@@ -112,7 +123,7 @@ def render_state(state):
     lines.append('AlphaToMask ' + enum(state['alphaToMask'], {0: 'Off', 1: 'On'}))
     lines.append('ZClip ' + enum(state['zClip'], {0: 'Off', 1: 'On'}))
     # Serialized None means inherit the default, not an invented Always test.
-    if val(state['zTest']) != 0:
+    if property_name(state['zTest']) is not None or val(state['zTest']) != 0:
         lines.append('ZTest ' + enum(state['zTest'], COMPARE))
     lines.append('ZWrite ' + enum(state['zWrite'], {0: 'Off', 1: 'On'}))
     lines.append('Cull ' + enum(state['culling'], {0: 'Off', 1: 'Front', 2: 'Back'}))
