@@ -2,8 +2,8 @@
   "schema_version": 1,
   "owner": "raft-20261103T100412Z-b2521375",
   "issue_id": "LOCAL-005",
-  "status": "active",
-  "updated_at": "2026-11-03T10:05:42.502Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T10:12:09.746Z",
   "base_sha": "8aa6ff73f7a83f50213b51624ea8812b2196e832",
   "hypothesis": "World-readiness structural probe can count comments/string literals as event or completion assignments; synthetic negative controls should disprove a false green.",
   "intended_files": [
@@ -22,7 +22,10 @@
   "experiment_ids": [
     "world-readiness-lexical-guards"
   ],
-  "evidence": [],
-  "result": null,
-  "next_step": "Run synthetic reproduction, repair lexical false positive and add negative controls, then CPU-only tests."
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/23161cfcc670bfed23b6daf77fe559ba9dc32716",
+    "https://github.com/alwansan/raf/actions/runs/41616815415"
+  ],
+  "result": "A lexical false-positive in source-only world-readiness diagnostics was guarded. Seven synthetic unittest cases, original SHA-pinned world coroutine probe, offline harness, original managed compile passed in no-LFS CI. No runtime game fix or device validation.",
+  "next_step": "LOCAL-005 gameplay integration remains open with A6/A9/A10, and original-world acceptance remains device pending; do not upgrade readiness."
 }

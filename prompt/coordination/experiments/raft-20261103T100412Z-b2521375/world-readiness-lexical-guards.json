@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T100412Z-b2521375",
+  "issue_id": "LOCAL-005",
+  "experiment_id": "world-readiness-lexical-guards",
+  "status": "completed",
+  "started_at": "2026-11-03T10:04:12Z",
+  "completed_at": "2026-11-03T10:12:09.746Z",
+  "baseline_commit": "9f649d071190f3e7980797580f45d085f5416ec5",
+  "source_commit": "23161cfcc670bfed23b6daf77fe559ba9dc32716",
+  "hypothesis": "Raw regex world-readiness probe can falsely count event/completion occurrences inside C# non-executable tokens",
+  "test_command": "python3 -m unittest discover -s tests -p test_probe_original_world_readiness.py -v (in existing no-LFS CI)",
+  "workflow": "raft-android-offline-integration-tests.yml",
+  "run_id": 41616815415,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41616815415",
+  "result": "7 synthetic cases passed; original SHA-pinned source reports one real event prior to one real readiness assignment; original managed compatibility compile exit0; run success",
+  "negative_controls": [
+    "line comment event",
+    "block comment event",
+    "quoted event",
+    "quoted completion",
+    "verbatim quoted completion",
+    "fake earlier event wrong order"
+  ],
+  "limits": [
+    "Not original Unity/game execution",
+    "No Android or graphics/audio/water acceptance",
+    "CSharp lexical mask conservatively ignores interpolation expressions",
+    "No preprocessor evaluation; pinned original source revision only"
+  ],
+  "original_source_modified": false,
+  "unity_apk_run": false,
+  "lfs_bytes_downloaded": 0,
+  "readiness": "NOT_READY"
+}
