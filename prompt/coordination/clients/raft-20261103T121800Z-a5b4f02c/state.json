@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "username": "raft-20261103T121800Z-a5b4f02c",
+  "display_name": "A5",
+  "session_id": "A5-20261103T121800Z-f24d57ca",
+  "resumed_from": "raft-20261103T105730Z-a5e8b126",
+  "status": "active",
+  "updated_at": "2026-11-03T12:18:47.167Z",
+  "base_sha": "8b6c5dd48ea2b7ac14fc497a1c5f215378821334",
+  "current_work": [
+    "HAPTICS-008"
+  ],
+  "last_commit": null,
+  "next_step": "Independent final OBB exact Haptics jar path/source-identity audit; CPU only; no Unity/APK build.",
+  "memory_path": "prompt/coordination/clients/raft-20261103T121800Z-a5b4f02c/MEMORY.md"
+}
