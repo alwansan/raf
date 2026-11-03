@@ -6,7 +6,18 @@ from scripts.probe_original_fft_two_pass_software_vulkan import (
     MARKER, EXTRA_FLAGS, parse_two_pass_result, validate_original_compiled_pairs,
 )
 from scripts.probe_original_fft_software_vulkan import IMAGE_FORMATS
-from tests.test_probe_original_fft_software_vulkan import example
+def example():
+    return {
+        "cpu_software_vulkan":True,
+        "extent_width":8,"extent_height":1,
+        "input_seed":0,"dispatch_group_y":1,
+        "original_written_pixels":8,"roundtrip_written_pixels":8,
+        "write_coverage_mismatch_pixels":0,
+        "nonfinite_components":0,"max_abs_difference":0.0,
+        "relative_l2_difference":0.0,"within_selected_tolerance":True,
+        "synthetic_canary_verified":True,
+        "unity_gpu_or_android_device_verified":False,
+    }
 
 
 def report(**changes):
