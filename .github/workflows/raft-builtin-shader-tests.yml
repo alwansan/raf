@@ -39,12 +39,12 @@ jobs:
                   path = root / 'project/Assets/Shader' / (str(i) + '.shader')
                   path.parent.mkdir(parents=True, exist_ok=True)
                   path.write_text('Shader "' + name + '" { SubShader { Pass {} } }')
-                  Path(str(path) + '.meta').write_text('guid: original-' + str(i))
+                  Path(str(path) + '.meta').write_text('guid: ' + format(i + 1, '032x'))
               assert restore_project(root / 'project', root / 'backup', shaders, files, license) == len(names)
               for i in range(len(names)):
                   path = root / 'project/Assets/Shader' / (str(i) + '.shader')
                   assert 'CGPROGRAM' in path.read_text()
-                  assert Path(str(path) + '.meta').read_text() == 'guid: original-' + str(i)
+                  assert Path(str(path) + '.meta').read_text() == 'guid: ' + format(i + 1, '032x')
               assert (root / 'project' / NOTICE).read_bytes() == license
           print('RAFT_BUILTIN_AUTHENTIC_RESTORE sampleShaders=5 originalMetasUnchanged=true actualUnityDeviceExecution=false')
           PY
