@@ -69,7 +69,13 @@ def compile_lift(spv, folder, tag, mutation=None):
     return output,shape
 
 def compare(runner,a,b,seed):
-    raw=private_command([str(runner),str(a),str(b),'31','19',str(seed)],timeout=60).decode()
+    process=subprocess.run([str(runner),str(a),str(b),'31','19',str(seed)],capture_output=True,timeout=60)
+    if process.returncode:
+        # Executor emits only authored Vulkan operation/status diagnostics.
+        diagnostic=process.stderr.decode(errors='replace').splitlines()
+        safe=[x for x in diagnostic if x.startswith('RAFT_W1_VULKAN_ERROR ')]
+        raise ValueError(safe[0][:250] if len(safe)==1 else 'Private Vulkan executor failed without aggregate')
+    raw=process.stdout.decode()
     lines=[x for x in raw.splitlines() if x.startswith('RAFT_W1_VULKAN_DIFF ')]
     if len(lines)!=1: raise ValueError('Missing bounded numerical result')
     d=json.loads(lines[0].split(' ',1)[1])
