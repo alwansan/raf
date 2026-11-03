@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T162900Z-73e8c2a1",
+  "status": "active",
+  "updated_at": "2026-11-03T23:19:00.681Z",
+  "base_sha": "4252763869dfc285bf0f8f5f8574687a7220b959",
+  "hypothesis": "The exact embedded engine database and proven Unity pointer contract account for engine-owned keys across all165original shader objects, rather than only W1twoowner105sample.",
+  "intended_files": [
+    "scripts/w1_full_engine_sources.py",
+    "scripts/w1_prepare_full_engine_unity.py",
+    "android-port/Experiments/W1FullEngineUnity/Editor/FullEnginePointerValidation.cs",
+    ".github/workflows/raft-w1-full-engine-unity.yml"
+  ],
+  "related_work": [
+    "A12pins14owners488439356bytes;read-only reuse",
+    "W1four-owner cache contains2largest inputs;avoid refetch",
+    "Existing9materialUnity41737038201SUCCESS, no repeat"
+  ],
+  "budget": "One30minute targetedUnity job;sharedengineMutex;12GiBDocker;14originalmetadataowners488439356B;cache before selective acquisition;noAPK",
+  "next_step": "Authenticate all14original shader owners using cached ZIP2, map all165objects to exact embedded engine DB, validate every unique matched key in isolated Unity before builtin gate correction."
+}

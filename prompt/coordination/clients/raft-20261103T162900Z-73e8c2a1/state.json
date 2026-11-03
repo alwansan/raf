@@ -2,15 +2,15 @@
   "schema_version": 1,
   "client_label": "W1",
   "username": "raft-20261103T162900Z-73e8c2a1",
-  "session_id": "w1-engine-db-20261103T225712644Z",
+  "session_id": "w1-full-engine-20261103T231900684Z",
   "resumed_from": null,
-  "status": "paused",
-  "updated_at": "2026-11-03T23:13:18.423Z",
-  "base_sha": "fda3590403e3cf01d6487eb78fa601a9e18906ad",
+  "status": "active",
+  "updated_at": "2026-11-03T23:19:00.681Z",
+  "base_sha": "4252763869dfc285bf0f8f5f8574687a7220b959",
   "current_work": [
-    "Exact SourceGenerated1.3.2/embedded engine mapping9of9 proven; external targeted Unity41737038201 running"
+    "Verified9/9Unity engine pointers; extend to authenticated165-shader corpus"
   ],
   "last_commit": "be740083d8faeea55ed2ba030cceea0d239e5f60",
-  "next_step": "Inspect actual41737038201 nine-pointer/property/bundle result from be740083. Fix observed error, then prove full-exportMaterial engine references before builtin gate correction. No identical full native retry.",
+  "next_step": "Authenticate all14original shader owners using cached ZIP2, map all165objects to exact embedded engine DB, validate every unique matched key in isolated Unity before builtin gate correction.",
   "memory_path": "prompt/coordination/clients/raft-20261103T162900Z-73e8c2a1/MEMORY.md"
 }
