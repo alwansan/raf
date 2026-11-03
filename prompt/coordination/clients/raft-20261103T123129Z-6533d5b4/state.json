@@ -4,13 +4,13 @@
   "client_label": "A13",
   "session_id": "a13-20261103T150000Z-7e4a02d9",
   "resumed_from": null,
-  "status": "active",
-  "updated_at": "2026-11-03T14:59:49.620Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T15:11:02.361Z",
   "base_sha": "0a6507e86c7960109360c0b95212db606c4d882e",
   "current_work": [
     "RENDER-002 original Material->Shader pointer provenance"
   ],
-  "last_commit": "6bfde3425438d92aa5fc1313e489df5c502c1018",
-  "next_step": "CPU-only original source audit of SHA-pinned resources.assets and sharedassets0.assets, vendor identity, internal PPtrs",
+  "last_commit": "816f680405aea70c18132ab4e5d2ef658f06b3a6",
+  "next_step": "Scope completed: 156 external PPtrs require exact original owner-table mapping; A12 vendor intersection separate. No claim full export.",
   "memory_path": "prompt/coordination/clients/raft-20261103T123129Z-6533d5b4/MEMORY.md"
 }

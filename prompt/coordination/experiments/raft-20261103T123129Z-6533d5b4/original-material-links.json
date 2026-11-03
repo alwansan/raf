@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "owner": "raft-20261103T123129Z-6533d5b4",
-  "status": "planned",
-  "hypothesis": "Two authenticated original owner files contain Material.m_Shader PPtr relationships to Shader objects. Exact owner-local references and official built-in identity intersection can be measured independently of the unauthenticated 107/140 exported file samples.",
+  "status": "completed",
+  "hypothesis": "Independent material m_Shader owner-local PPtr linkage; A12 handles vendor name overlap; no duplicate vendor archive probe.",
   "input_hashes": [
     "resources.assets 111533516 sha256:87493249f1adfc0c5eb8b82e4e199e208cd2c95eabe9796cab82116c4838595c",
     "sharedassets0.assets 115978112 sha256:0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
@@ -24,14 +24,15 @@
   "concurrency_group": "raft-a13-material-links-${{ github.ref }}-${{ github.sha }}",
   "artifact_prefix": "raft-a13-original-material-links",
   "budget": "CPU only <=15 minutes, 2 existing cached authenticated LFS objects 227.5MB, 198 official archived identities; no Unity/Android",
-  "run_url": null,
-  "source_sha": null,
-  "result": null,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41660807306",
+  "source_sha": "816f680405aea70c18132ab4e5d2ef658f06b3a6",
+  "result": "COMPLETED SUCCESS 12/12 synthetic and exact 2-owner original SHA validation; 514 Material/105 Shader, 358/358 local pointers, 156 external unresolved; no actual failed export or GPU.",
   "limitations": [
     "Not all original export containers",
     "External pointers unresolved",
     "No original names/asset blobs or shader programs published",
-    "No GPU/Unity/device proof"
+    "No GPU/Unity/device proof",
+    "Original external FileID dependency mapping untested; all 156 external pointers unknown."
   ],
-  "next_step": "Complete code/run, append negative results."
+  "next_step": "Record external owner dependency mapping with SHA-pinned source once independently scoped."
 }

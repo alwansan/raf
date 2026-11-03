@@ -3,8 +3,8 @@
   "owner": "raft-20261103T123129Z-6533d5b4",
   "client_label": "A13",
   "issue_id": "RENDER-002",
-  "status": "planned",
-  "updated_at": "2026-11-03T14:59:49.620Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T15:11:02.361Z",
   "base_sha": "0a6507e86c7960109360c0b95212db606c4d882e",
   "hypothesis": "Count exact source-authenticated Material.m_Shader PPtr linkage to owner-local Shader objects in two original resources only. A12 independently handles original-to-Unity vendor name intersection; do NOT duplicate.",
   "intended_files": [
@@ -29,8 +29,11 @@
   ],
   "evidence": [
     "https://github.com/alwansan/raf/actions/runs/41647954010",
-    "https://github.com/alwansan/raf/actions/runs/41624581951"
+    "https://github.com/alwansan/raf/actions/runs/41624581951",
+    "https://github.com/alwansan/raf/commit/816f680405aea70c18132ab4e5d2ef658f06b3a6",
+    "https://github.com/alwansan/raf/actions/runs/41660807306",
+    "docs/A13_ORIGINAL_MATERIAL_SHADER_LINKS_2026-11-03.md"
   ],
-  "result": null,
-  "next_step": "Run 12 pure pointer tests and exact-source two-owner original material linkage CI, do not download vendor archive."
+  "result": "Exact original two SHA-pinned owners: 514 materials, 105 shaders, 358/358 internal references resolve locally to 48 distinct Shader objects, 156 external unknown. 12/12 synthetic controls+actual CPU authenticated original CI completed success; no vendor/name overlap.",
+  "next_step": "Map original external FileID owner dependency tables and compare authenticated actual export; maintain zero-match strict."
 }
