@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T184205Z-a12d793c",
+  "client_label": "A12",
+  "issue_id": "WATER-001",
+  "status": "planned",
+  "updated_at": "2026-11-03T18:44:00Z",
+  "base_sha": null,
+  "hypothesis": "Full 14-owner authentic original Subsurface Blur verified 2 original passes and 4 exact linked stage programs without permutations, enabling an authentic private ShaderLab wrapper using only the original compiled code, resource names and render-state metadata if serialized parameter/property schemas are supported.",
+  "intended_files": [
+    "scripts/a12_build_original_blur_wrapper.py",
+    "tests/test_a12_original_blur_wrapper.py",
+    ".github/workflows/raft-a12-original-blur-wrapper.yml",
+    "prompt/coordination/clients/raft-20261103T184205Z-a12d793c/*",
+    "prompt/coordination/experiments/raft-20261103T184205Z-a12d793c/original-blur-shaderlab-wrapper.json"
+  ],
+  "related_work": [
+    "A12 pass graph success CI41696171379 exact c8ddf9c3",
+    "W1 source helpers for Depth Copy but no modifications to W1",
+    "A1 FFT numeric proof, different input",
+    "native41687765928 unresolved built-in and water gate"
+  ],
+  "experiment_ids": [
+    "original-blur-shaderlab-wrapper"
+  ],
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41696171379"
+  ],
+  "next_step": "Construct original ShaderLab locally in private ephemeral directory, preserve 2 pass states, pass exact ShaderLab property data only if understood; validate original + roundtrip stages and reject unknown parameter/resource/vertex layout. No Unity native request."
+}
