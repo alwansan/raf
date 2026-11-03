@@ -1,0 +1,55 @@
+name: Raft A2 original CanvasScaler raw schema (CPU only)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-a2-scaler-raw-schema.yml'
+      - 'scripts/probe_a2_scaler_raw_shapes.py'
+      - 'tests/test_probe_a2_scaler_raw_shapes.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raft-a2-scaler-raw-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  private-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+            Raft/Raft_Data/level0
+            Raft/Raft_Data/level1
+            Raft/Raft_Data/globalgamemanagers.assets
+            Raft/Raft_Data/Managed/UnityEngine.UI.dll
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Verify isolated synthetic field parsing and fail-closed hash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p 'test_probe_a2_scaler_raw_shapes.py' -v
+          python3 -m py_compile scripts/probe_a2_scaler_raw_shapes.py
+      - name: Private UI class metadata source recovery (never printed)
+        run: |
+          set -euo pipefail
+          dotnet tool install ilspycmd --version 11.2.0.10050 --tool-path "$RUNNER_TEMP/a2-ui-ilspy"
+          timeout 180s "$RUNNER_TEMP/a2-ui-ilspy/ilspycmd" -t UnityEngine.UI.CanvasScaler \
+            Raft/Raft_Data/Managed/UnityEngine.UI.dll \
+            > "$RUNNER_TEMP/a2-private-canvas-scaler.cs" 2> "$RUNNER_TEMP/a2-private-ilspy.log"
+          test -s "$RUNNER_TEMP/a2-private-canvas-scaler.cs"
+      - name: Authenticate managed DLL and original scene scaler record dimensions
+        run: |
+          set -euo pipefail
+          python3 -m pip install --break-system-packages --disable-pip-version-check 'UnityPy==1.23.0'
+          python3 -m scripts.probe_a2_scaler_raw_shapes \
+            --source Raft/Raft_Data \
+            --managed Raft/Raft_Data/Managed/UnityEngine.UI.dll \
+            --ilspy "$RUNNER_TEMP/a2-private-canvas-scaler.cs"
+          echo 'RAFT_A2_UI_SCHEMA_ONLY unityRan=false originalLfsHydrated=false nativeBuildRan=false'
