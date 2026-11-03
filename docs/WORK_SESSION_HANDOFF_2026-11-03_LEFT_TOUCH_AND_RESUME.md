@@ -138,3 +138,11 @@ Current requirements, AGENTS, permanent resume and STATUS now point to this role
 Reviewed live HEAD ee1be1d424f5b02f5bfdcca6db9c635ef85bbd6a and repository Actions: no queued/in-progress runs at review. Game release android-early-test-41448086401-1 still points to9462f8edd8cdb5becbccb96521f2876ef9924410 and has11 assets; CL raft-log root hashes remain unchanged. No new candidate or native request was selected. WATER-001 and RENDER-002 remain OPEN; numeric table validation does not close authentic shader/kernel restoration.
 
 Executed local water-contract, delivery-package and native-workflow-isolation fixtures:25 tests ran successfully with1 skipped. These are test-owned/source-level fixtures, not an audit of a new APK or restored GPU programs. State remains NOT_READY. Next close WATER-001/RENDER-002 and complete DISPLAY-003/PERF-007 source reviews; device-only acceptance remains separate.
+
+
+
+## Continued source work — authenticated FFT typed-image format contracts, CI pending
+
+On 3 November 2026, commit [c1ba4a74](https://github.com/alwansan/raf/commit/c1ba4a74d79342998b40697b072b0216356f842c) added a name-free SPIR-V numeric image-type parser with actual decorated-variable/type-pointer provenance, duplicate binding/repeated-decoration rejection and fail-closed malformed/type checks. The probe runs against all 20 previously authenticated original FFT DXBC conversions, comparing reflected image declarations to SPIRV-Cross class counts and their HLSL recompiled counterparts. It now emits declared scalar kind/width, 2D/array/MS/depth flags, numeric image format/sampling/access enums and a per-program roundtrip equality flag. These are declared module formats, not measured Unity RenderTexture formats or phone GPU equivalence. No shader or original asset is replaced.
+
+Nine local synthetic parser tests passed; the [CPU-only original compute audit41560719688](https://github.com/alwansan/raf/actions/runs/41560719688) passed its initial test stage and was still running during LFS hydration at this checkpoint. Do not claim 20-program results, typed image counts, equivalence or runtime recovery before final logs. The authentic water gate remains false; WATER-001/RENDER-002 open; no game build/release started. All scheduled tasks remain unchanged. No original proprietary shader/source was published.

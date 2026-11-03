@@ -58,3 +58,9 @@ The coordinator maintains this ledger, prompt/STATUS.md and the latest handoff a
 Reviewed live HEAD ee1be1d424f5b02f5bfdcca6db9c635ef85bbd6a and repository Actions: no queued/in-progress runs at review. Game release android-early-test-41448086401-1 still points to9462f8edd8cdb5becbccb96521f2876ef9924410 and has11 assets; CL raft-log root hashes remain unchanged. No new candidate or native request was selected. WATER-001 and RENDER-002 remain OPEN; numeric table validation does not close authentic shader/kernel restoration.
 
 Executed local water-contract, delivery-package and native-workflow-isolation fixtures:25 tests ran successfully with1 skipped. These are test-owned/source-level fixtures, not an audit of a new APK or restored GPU programs. State remains NOT_READY. Next close WATER-001/RENDER-002 and complete DISPLAY-003/PERF-007 source reviews; device-only acceptance remains separate.
+
+
+
+## WATER-001 typed SPIR-V image-contract probe — 3 November 2026
+
+Source-only engineering commit [c1ba4a74](https://github.com/alwansan/raf/commit/c1ba4a74d79342998b40697b072b0216356f842c) added a fail-closed numeric OpTypeImage/OpTypeSampledImage → pointer → decorated variable parser. It records sampled scalar width/kind, dimensionality, multisample/array, declared image format and optional access qualifier for each bound SPIR-V image, with no private shader names or code. It compares this declared contract for each authentic FFT DXBC → SPIR-V → HLSL → SPIR-V candidate. Nine independent synthetic test cases passed locally; the new pre-LFS test step in [CPU-only audit41560719688](https://github.com/alwansan/raf/actions/runs/41560719688) also passed, but authenticated 20-program analysis was still RUNNING at this checkpoint. Treat actual format results and cross-roundtrip match as pending, not passed. This changes no original resources, Unity code or compute programs. WATER-001/RENDER-002 remain OPEN; NOT_READY, no native request.
