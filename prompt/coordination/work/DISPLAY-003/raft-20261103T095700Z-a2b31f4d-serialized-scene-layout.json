@@ -2,8 +2,8 @@
   "schema_version": 1,
   "owner": "raft-20261103T095700Z-a2b31f4d",
   "issue_id": "DISPLAY-003",
-  "status": "active",
-  "updated_at": "2026-11-03T11:24:00Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T11:45:56.088Z",
   "base_sha": "3fa646ed1dca28071d2b65c6394f0003231362e6",
   "hypothesis": "Original menu scene 0-5 contains native Canvas/RectTransform objects whose serialized anchors/layout may narrow the Settings stretched UI issue; CanvasScaler MonoBehaviour decoding may be unavailable and must be represented as unknown.",
   "intended_files": [
@@ -14,7 +14,10 @@
     "prompt/coordination/clients/raft-20261103T095700Z-a2b31f4d/MEMORY.md",
     "prompt/coordination/clients/raft-20261103T095700Z-a2b31f4d/state.json",
     "prompt/STATUS.md",
-    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md",
+    "scripts/probe_a2_canvas_scaler_monoscript.py",
+    "tests/test_probe_a2_canvas_scaler_monoscript.py",
+    "docs/A2_ORIGINAL_SCENE_UI_CANVAS_2026-11-03.md"
   ],
   "related_work": [
     "prompt/coordination/work/DISPLAY-003/raft-20261103T095700Z-a2b31f4d-controls-layout-context.json"
@@ -23,8 +26,16 @@
     "serialized-scene-layout"
   ],
   "evidence": [
-    "https://github.com/alwansan/raf/actions/runs/41623586923"
+    "https://github.com/alwansan/raf/actions/runs/41623586923",
+    "https://github.com/alwansan/raf/commit/8feac3e6921f260ab5098a4e77d6279a3883bc3e",
+    "https://github.com/alwansan/raf/commit/0a2eee0dcf0c9ea73ded43f1c744e82f195541dc",
+    "https://github.com/alwansan/raf/commit/86bd9a0ec84df9f9764b649680d11478afabcf59",
+    "https://github.com/alwansan/raf/commit/db9ba867619a67bbb05f047fcf17fddd632dfbb2",
+    "https://github.com/alwansan/raf/actions/runs/41628388766",
+    "https://github.com/alwansan/raf/actions/runs/41628772940",
+    "https://github.com/alwansan/raf/actions/runs/41629163061",
+    "https://github.com/alwansan/raf/actions/runs/41629641835"
   ],
-  "result": null,
-  "next_step": "Audit only original level0..level5 no-LFS binary scenes, Git blob SHA authenticated, never publish raw assets/serialized labels."
+  "result": "A2 independent DISPLAY-003 scene+global-MonoScript structure test completed. Original 6 no-LFS Git blobs plus global script owner sha verified; CI41629641835 11+7 synthetic checks successful. Level0 4 Canvas/1644 RectTransform/4 authentic CanvasScaler, level1 56/3033/13; all 17 scaler objects co-owned by native Canvas. Settings name-script GO in each scene lacks direct scaler ancestor in same native transform chain, but page composition and scaler custom fields unknown. No runtime change, general issue remains open.",
+  "next_step": "Source-lock authentic CanvasScaler custom serialized values, match UI page to scene/prefab and Android screen geometry before changing runtime."
 }
