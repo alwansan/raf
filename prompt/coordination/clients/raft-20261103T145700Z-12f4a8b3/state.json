@@ -4,13 +4,13 @@
   "client_label": "A12",
   "session_id": "a12-20261103T145700Z-4b919fe8",
   "resumed_from": null,
-  "status": "active",
-  "updated_at": "2026-11-03T14:59:10Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T15:05:13Z",
   "base_sha": "0a6507e86c7960109360c0b95212db606c4d882e",
   "current_work": [
-    "RENDER-002 original 2-owner Shader object identities vs verified Unity 198 vendor identities (CPU-only)"
+    "RENDER-002 original 2-owner vendor intersection: completed and CI verified"
   ],
-  "last_commit": null,
-  "next_step": "Execute independent SHA-verified vendor intersection with synthetic controls, report only counts/hash; never assume full export provenance.",
+  "last_commit": "40367912b35be5646935a4016c4498224d4f66b6",
+  "next_step": "Scope completed: 9/105 original Shader objects match official built-ins; future complete original-object→exported ShaderLab mapping must be verified independently before build.",
   "memory_path": "prompt/coordination/clients/raft-20261103T145700Z-12f4a8b3/MEMORY.md"
 }
