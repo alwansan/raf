@@ -3,7 +3,7 @@
   "owner": "raft-20261103T225121Z-7e4d2c91",
   "issue_id": "LOCAL-005",
   "experiment_id": "dangling-save-directory-link",
-  "status": "planned",
+  "status": "completed",
   "hypothesis": "Directory.Exists/File.Exists can both miss a dangling symlink, so RejectLinkedSaveDirectories skips File.GetAttributes before the target later appears.",
   "inputs": [
     "synthetic dangling world directory link",
@@ -12,5 +12,20 @@
   ],
   "expected": "Both redirected paths rejected before target creation; ordinary saves unchanged",
   "workflow": ".github/workflows/raft-android-platform-tests.yml",
-  "limits": "CPU-only .NET; original game .rgd and phone runtime untested."
+  "limits": "No pre-fix red on tested Linux runner; this is cross-platform fail-closed hardening, not demonstrated exploit. No original .rgd game integration, Unity build, GPU, phone or atomic concurrent symlink swap guarantee.",
+  "updated_at": "2026-11-03T22:58:14.902Z",
+  "source_sha": "2db90307d5c9df199c2986c92ed7fe8384a84e97",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41734951563",
+  "job_id": 126261621800,
+  "commands": [
+    "GitHub Actions ubuntu-24.04 dotnet build android-port/Runtime/Platform/RaftAndroid.Platform.csproj --configuration Release",
+    "GitHub Actions dotnet run --project android-port/Tests/Smoke/RaftAndroid.Platform.Smoke.csproj --configuration Release --nologo"
+  ],
+  "negative_controls": [
+    "Broken world-directory symlink metadata tested before target exists",
+    "Broken managed profile-ancestor symlink metadata tested before target exists",
+    "World symlink remains rejected after target later exists",
+    "Ordinary existing save file and previous path/leaf/profile regressions retained"
+  ],
+  "result": "COMPLETED SUCCESS on exact code SHA: 17 passed, 0 failed Smoke; netstandard2.1 build succeeded 0 errors; all workflow steps success."
 }

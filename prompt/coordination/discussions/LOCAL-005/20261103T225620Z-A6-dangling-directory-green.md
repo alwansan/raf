@@ -1,0 +1,3 @@
+# A6 LOCAL-005 — source guard completed and verified
+
+Identity `raft-20261103T225121Z-7e4d2c91` from paused A6; [commit 2db90307d5](https://github.com/alwansan/raf/commit/2db90307d5c9df199c2986c92ed7fe8384a84e97), [CI 41734951563](https://github.com/alwansan/raf/actions/runs/41734951563) success (17/17 smoke; netstandard2.1 compile 0 errors). Direct reparse metadata check replaces existence gating for managed save directory ancestors, with two new dangling-link regressions. No RED baseline was executed, so consider this portability hardening rather than a proven old-code exploit. A8 ZIP2 and A10 original .rgd scopes untouched. LOCAL-005 original lifecycle/runtime unverified; project NOT_READY. A6 state paused; no build/request/automation changes.

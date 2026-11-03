@@ -4,13 +4,13 @@
   "client_label": "A6",
   "session_id": "a6-20261103T225121Z-40bca78e",
   "resumed_from": "raft-20261103T132000Z-a6e7f219",
-  "status": "active",
-  "updated_at": "2026-11-03T22:51:21Z",
-  "base_sha": "verified from live ref before registration",
+  "status": "paused",
+  "updated_at": "2026-11-03T22:58:14.902Z",
+  "base_sha": "2db90307d5c9df199c2986c92ed7fe8384a84e97",
   "current_work": [
     "LOCAL-005"
   ],
-  "last_commit": null,
-  "next_step": "Fix dangling directory symlink bypass in LocalSavePaths and verify .NET smoke CI; original .rgd/phone pending.",
+  "last_commit": "2db90307d5c9df199c2986c92ed7fe8384a84e97",
+  "next_step": "Scoped dangling-directory-link metadata hardening passed 17/17 smoke at 41734951563; original .rgd world lifecycle and phone test remain OPEN; continue only from a fresh HEAD and deconflicted scope.",
   "memory_path": "prompt/coordination/clients/raft-20261103T225121Z-7e4d2c91/MEMORY.md"
 }
