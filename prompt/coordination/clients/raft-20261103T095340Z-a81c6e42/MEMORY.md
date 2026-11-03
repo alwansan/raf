@@ -1,0 +1,1 @@
+Investigating actual original butterfly texture format. No changes to original source or shader; private-source SHA verification required.
