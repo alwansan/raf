@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T105430Z-a4d9e31b",
+  "issue_id": "DIAG-010",
+  "status": "planned",
+  "updated_at": "2026-11-03T10:54:30Z",
+  "base_sha": "e70dd94d9ea0309718f523352edb24299960c15d",
+  "hypothesis": "Throwing summary callback can irrevocably zero pending repeat counters, including entries whose summary was never delivered.",
+  "intended_files": [
+    "android-port/Runtime/Platform/PersistentDiagnosticLog.cs",
+    "android-port/Tests/Diagnostics/Program.cs",
+    "prompt/coordination/clients/raft-20261103T105430Z-a4d9e31b/",
+    "prompt/coordination/work/DIAG-010/",
+    "prompt/coordination/experiments/raft-20261103T105430Z-a4d9e31b/",
+    "prompt/STATUS.md",
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+  ],
+  "related_work": [
+    "A4 previous PERF-007 memory-evidence completed; separate files",
+    "WATER-001 independent clients",
+    "HAPTICS-008 independent clients"
+  ],
+  "experiment_ids": [
+    "summary-callback-failure-atomicity"
+  ],
+  "evidence": [],
+  "result": null,
+  "next_step": "Failing-callback test first, then minimal atomic/exception-safe summary fix and CPU-only CI"
+}

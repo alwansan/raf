@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "username": "raft-20261103T105430Z-a4d9e31b",
+  "client_label": "A4",
+  "session_id": "a4-20261103T105430Z-5c7d9b28",
+  "resumed_from": "raft-20261103T095832Z-a4c7e2b1",
+  "status": "active",
+  "updated_at": "2026-11-03T10:54:30Z",
+  "base_sha": "e70dd94d9ea0309718f523352edb24299960c15d",
+  "current_work": [
+    "DIAG-010"
+  ],
+  "last_commit": null,
+  "next_step": "Reproduce RepeatedDiagnosticMessages.Summarize callback-failure loss in existing .NET diagnostics test, fix without changing initial-error retention, then CPU-only CI.",
+  "memory_path": "prompt/coordination/clients/raft-20261103T105430Z-a4d9e31b/MEMORY.md"
+}
