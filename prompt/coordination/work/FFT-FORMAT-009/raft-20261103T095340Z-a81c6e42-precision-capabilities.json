@@ -1,0 +1,10 @@
+{
+  "owner": "raft-20261103T095340Z-a81c6e42",
+  "issue_id": "FFT-FORMAT-009",
+  "status": "active",
+  "base_sha": "aa5f0b6d236a5bbac8cadadd3e2278ec2acb6df4",
+  "intended_files": [
+    "scripts/probe_fft_precision_capabilities.py"
+  ],
+  "hypothesis": "ResolveFinalSettings may re-enable high precision when RGFloat is unsupported although CheckSupport rejected it"
+}

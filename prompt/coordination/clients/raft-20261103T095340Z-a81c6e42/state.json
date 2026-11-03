@@ -1,13 +1,13 @@
 {
   "schema_version": 1,
   "username": "raft-20261103T095340Z-a81c6e42",
-  "session_id": "20261103T095340Z-c19b72a4",
-  "status": "paused",
-  "updated_at": "2026-11-03T09:58:00Z",
-  "base_sha": "5fdf716ee04491891a7eaa274cb258010e54c7e4",
+  "session_id": "20261103T105053Z-precision-capability",
+  "status": "active",
+  "updated_at": "2026-11-03T10:50:53Z",
+  "base_sha": "c625cc7f9678be1ca7364dea9487a061fa94e9d8",
   "current_work": [
     "FFT-FORMAT-009"
   ],
-  "next_step": "Trace caller-provided highPrecision flags and actual texture creation; compare translated FFT output against original numeric oracle.",
+  "next_step": "Check original RGFloat capability guard versus final precision resolver",
   "memory_path": "prompt/coordination/clients/raft-20261103T095340Z-a81c6e42/MEMORY.md"
 }
