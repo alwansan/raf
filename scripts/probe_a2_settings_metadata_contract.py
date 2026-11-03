@@ -141,6 +141,22 @@ def verify_fielddefs(data, assembly, namespace, source_names):
         "original_unity_serialized_field_offsets_proven":False,
     }
 
+
+def enforce_pinned_original_contract(result):
+    """Strong original-only invariant, not assumed for unrelated synthetic samples."""
+    expected = (result.get("original_total_fielddefs") == 21
+                and result.get("original_candidate_eligible_fielddefs") == 13
+                and result.get("source_field_count") == 14
+                and result.get("source_candidates_absent_from_eligible_metadata") == 1
+                and result.get("metadata_eligible_fields_absent_from_source_candidates") == 0
+                and result.get("shared_source_to_metadata_order_equal") is True
+                and result.get("source_only_exclusion_reason_counts") ==
+                    {"source_only_no_matching_fielddef": 1})
+    if not expected:
+        raise ValueError("Pinned original Settings source versus FieldDef contract drift")
+    return True
+
+
 def scene_settings_identity(root, loader=None):
     if loader is None:
         import UnityPy
@@ -212,10 +228,12 @@ def audit(root,meta_path,private_sources,loader=None):
     names=candidate_source_names(src[0].read_text(encoding="utf-8-sig").replace("\r\n","\n"))
     identity=scene_settings_identity(root,loader=loader)
     fields=verify_fielddefs(private,identity["assembly"],identity["namespace"],names)
+    enforce_pinned_original_contract(fields)
     return {
         "original_source_zip2_commit":ZIP2_PIN,
         "original_input_git_sha_pins_matched":4,
         "original_settings_monoscript_scene_owners":identity["verified_script_linked_scene_owners"],
+        "pinned_settings_managed_and_source_field_contract_verified":True,
         "metadata":fields,
         "private_original_code_or_field_names_emitted":False,
         "lfs_downloaded":False,

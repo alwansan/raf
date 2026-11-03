@@ -89,5 +89,35 @@ class OriginalMetadataTests(unittest.TestCase):
         self.assertTrue(result["shared_source_to_metadata_order_equal"])
         self.assertNotIn("excluded",str(result))
 
+
+    def test_nested_same_name_is_not_original_top_level_settings(self):
+        m=sample([row("flag",1)])
+        nested=dict(name="Settings", namespace_name="Game",
+                    full_name="Game.Container/Settings", token=0x02000012,
+                    fields=[row("other",2)])
+        m["candidate_types"].insert(0,nested)
+        report=verify_fielddefs(m,"Assembly-CSharp","Game",["flag"])
+        self.assertEqual(report["original_candidate_eligible_fielddefs"],1)
+        m["candidate_types"].pop()
+        m["candidate_types"]=[nested]
+        with self.assertRaisesRegex(ValueError,"identity ambiguous"):
+            verify_fielddefs(m,"Assembly-CSharp","Game",["flag"])
+
+    def test_pinned_original_contract_fails_closed_on_count_drift(self):
+        from scripts.probe_a2_settings_metadata_contract import enforce_pinned_original_contract
+        result={
+            "original_total_fielddefs":21,
+            "original_candidate_eligible_fielddefs":13,
+            "source_field_count":14,
+            "source_candidates_absent_from_eligible_metadata":1,
+            "metadata_eligible_fields_absent_from_source_candidates":0,
+            "shared_source_to_metadata_order_equal":True,
+            "source_only_exclusion_reason_counts":{"source_only_no_matching_fielddef":1},
+        }
+        self.assertTrue(enforce_pinned_original_contract(result))
+        result["source_candidates_absent_from_eligible_metadata"]=2
+        with self.assertRaisesRegex(ValueError,"contract drift"):
+            enforce_pinned_original_contract(result)
+
 if __name__=="__main__":
     unittest.main()
