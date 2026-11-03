@@ -13,7 +13,7 @@ def fixture(root, shader_body):
     file = project / "Assets/Shaders/exported.shader"
     file.parent.mkdir(parents=True)
     file.write_text(shader_body, encoding="utf-8")
-    Path(str(file) + ".meta").write_bytes(b"guid: authentic-export-marker\n")
+    Path(str(file) + ".meta").write_bytes(b"guid: " + b"a" * 32 + b"\n")
     files = {
         "DefaultResourcesExtra/Standard.shader": 'Shader "Standard" { Pass { } }',
         "DefaultResourcesExtra/Legacy.shader": 'Shader "Legacy" { Pass { } }',
@@ -43,7 +43,7 @@ class A9BuiltinIdentityTests(unittest.TestCase):
             project, file, shaders, files = fixture(root, original)
             self.assertEqual(restore_project(project, root / "backup", shaders, files, b"license"), 1)
             self.assertEqual(file.read_text(), files["DefaultResourcesExtra/Standard.shader"])
-            self.assertEqual(Path(str(file) + ".meta").read_bytes(), b"guid: authentic-export-marker\n")
+            self.assertEqual(Path(str(file) + ".meta").read_bytes(), b"guid: " + b"a" * 32 + b"\n")
             self.assertEqual((root / "backup/Shaders/exported.shader").read_text(), original)
 
     def test_comment_embedded_in_shader_name_does_not_strip_real_identity(self):

@@ -10,7 +10,7 @@ class BuiltinShaderTests(unittest.TestCase):
         path = project / 'Assets/Shader/standard.shader'
         path.parent.mkdir(parents=True)
         path.write_text('Shader "Standard" { SubShader { Pass {} } }')
-        Path(str(path) + '.meta').write_bytes(b'guid: original-standard\n')
+        Path(str(path) + '.meta').write_bytes(b'guid: ' + b'a' * 32 + b'\n')
         custom = project / 'Assets/Shader/raft.shader'
         custom.write_text('Shader "Raft/Custom" { SubShader { Pass {} } }')
         files = {'DefaultResourcesExtra/Standard.shader': 'Shader "Standard" { CGPROGRAM\n#include "UnityCG.cginc"\nENDCG }',
@@ -65,9 +65,9 @@ class BuiltinShaderTests(unittest.TestCase):
             Path(str(path) + '.meta').unlink()
             with self.assertRaisesRegex(ValueError, 'metadata'):
                 restore_project(project, root / 'backup', shaders, files, b'notice')
-            Path(str(path) + '.meta').write_text('guid: original')
+            Path(str(path) + '.meta').write_text('guid: ' + 'a' * 32)
             custom.write_bytes(path.read_bytes())
-            Path(str(custom) + '.meta').write_text('guid: another')
+            Path(str(custom) + '.meta').write_text('guid: ' + 'b' * 32)
             with self.assertRaisesRegex(ValueError, 'Ambiguous'):
                 restore_project(project, root / 'backup', shaders, files, b'notice')
 

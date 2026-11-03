@@ -17,7 +17,7 @@ def fixture(base):
     before = b'Shader "Standard" { SubShader { Pass {} } }'
     shader.write_bytes(before)
     meta = Path(str(shader) + ".meta")
-    original_meta = b"guid: original-synthetic\n"
+    original_meta = b"guid: " + b"a" * 32 + b"\n"
     meta.write_bytes(original_meta)
     custom = shader.parent / "private.shader"
     original_custom = b'Shader "Raft/SyntheticCustom" { Pass {} }'
