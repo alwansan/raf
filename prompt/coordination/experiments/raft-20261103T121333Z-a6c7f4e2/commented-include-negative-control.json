@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "owner": "raft-20261103T121333Z-a6c7f4e2",
-  "status": "planned",
+  "status": "completed",
   "hypothesis": "Commented ShaderLab #include tokens currently pass into rewrite() dependencies and incorrectly fail certified Unity shader restore; exclude comments while preserving original quoted and comment bytes. Never relax existing genuine include or zero-match gates.",
-  "source_sha": null,
+  "source_sha": "fa4647359f07b0734e6013dade930b9b010bc1f6",
   "workflow_path": ".github/workflows/raft-builtin-shader-tests.yml",
   "commands": [
     "python3 -m unittest discover -s tests -p test_restore_builtin_shaders.py -v"
@@ -17,10 +17,18 @@
     "existing archive/GUID regression retained"
   ],
   "expected_signal": "Regression initially red, then green; untouched comments byte-preserved and genuine includes resolved to authenticated vendor files",
-  "run_url": null,
-  "result": null,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41633638783",
+  "result": "Initial local red 10 checks/2 errors before fix; exact-source CPU-green 10/10; SHA256-pinned official ZIP authenticated 198 vendor identities and 5 restoration fixture shaders; 29 includes; meta unchanged. A9 4/4 lexer tests green. No Unity or device.",
   "limitations": [
-    "This fixes a parse false-positive but does not supply missing original programs/FFT",
-    "No Unity/Android phone test"
-  ]
+    "Synthetic and vendor controlled fixtures, not original game shader export",
+    "No change to no-matched-builtins strict gate",
+    "No claims about native shader GPU execution or quality"
+  ],
+  "updated_at": "2026-11-03T12:13:25.402Z",
+  "input_hashes": [
+    "source parent blob: 103303c0fd6be1498024f0c705f9de043115de7f",
+    "test parent blob: 6bc7a166a7a1ade6d4429956744165fc817edd4d",
+    "official vendor ZIP SHA256: 5cb0f9c4d022d6054d179778b9b50a0301d6748eaf4abdedd21c93f0c30b10c5"
+  ],
+  "related_run_url": "https://github.com/alwansan/raf/actions/runs/41633638754"
 }
