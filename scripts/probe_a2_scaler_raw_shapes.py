@@ -83,7 +83,7 @@ def managed_fields(text):
         before = code[max(0, pos - 250):pos]
         last_boundary = max(before.rfind(";"), before.rfind("}"))
         attrs = before[last_boundary + 1:]
-        preset_serializefield_attribute_near = bool(re.search(r"\\bSerializeField\\b", attrs))
+        preset_serializefield_attribute_near = bool(re.search(r"\bSerializeField\b", attrs))
     names = [a for a, _ in collected]
     if len(names) != len(set(names)):
         raise ValueError("Duplicate original CanvasScaler serialized fields")
