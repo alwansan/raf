@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T145844Z-6db41a9f",
+  "issue_id": "AUDIO-004",
+  "status": "planned",
+  "hypothesis": "Coedited original bank/Data.rgd must fail even when worktree SHA equals mutable HEAD.",
+  "input_hashes": [
+    {
+      "path": "scripts/stage_original_streaming_assets.py",
+      "blob_sha": "64544a11d43b2f0ffd2835fabc1924508f8773c1"
+    }
+  ],
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_a9_streaming_stage_atomic.py -v",
+    "python3 -m unittest discover -s tests -p test_stage_original_streaming_assets.py -v"
+  ],
+  "expected_signal": "Coedited bank/Data.rgd and added root file rejected before any final staging; valid originals unchanged.",
+  "negative_controls": [
+    "HEAD and source of bank coedited",
+    "HEAD and source Data.rgd coedited",
+    "Extra unpinned root asset committed"
+  ],
+  "workflow_path": ".github/workflows/raft-a9-streaming-stage-atomic.yml",
+  "concurrency_group": "raft-a9-stage-atomic-${{ github.ref }}-${{ github.sha }}",
+  "artifact_prefix": null,
+  "budget": "Ubuntu24.04 CPU-only six minutes, synthetic fixtures, no LFS/Unity/native",
+  "run_url": null,
+  "source_sha": null,
+  "result": null,
+  "limitations": [
+    "Git original-blob pin is source-only, not phone OBB or FMOD runtime proof."
+  ],
+  "next_step": "Verify exact SHA CI and record."
+}
