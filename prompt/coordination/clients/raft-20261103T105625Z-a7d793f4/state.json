@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "username": "raft-20261103T105625Z-a7d793f4",
+  "agent": "A7",
+  "session_id": "A7-20261103T105625Z-4d2fa3b1",
+  "resumed_from": "raft-20261103T100214Z-c83d58d4",
+  "status": "active",
+  "updated_at": "2026-11-03T10:56:55.022Z",
+  "base_sha": "26c78e404b100ab86052e1c62c70817b6559c6d4",
+  "current_work": [
+    "INPUT-005"
+  ],
+  "last_commit": null,
+  "next_step": "Reproduce delayed synthetic Mouse0 tap after Hold(false) with queued short taps; add fail-first isolated regression and minimal correct runtime fix.",
+  "memory_path": "prompt/coordination/clients/raft-20261103T105625Z-a7d793f4/MEMORY.md"
+}

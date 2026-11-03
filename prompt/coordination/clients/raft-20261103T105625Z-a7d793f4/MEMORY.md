@@ -1,0 +1,7 @@
+# A7 resumed — INPUT-005 pending-pulse lifecycle
+
+- New session `A7-20261103T105625Z-4d2fa3b1`; client `raft-20261103T105625Z-a7d793f4`; resumed_from completed A7 `raft-20261103T100214Z-c83d58d4` after user said Continue. UTC 2026-11-03T10:56:55.022Z. Initial HEAD `26c78e404b100ab86052e1c62c70817b6559c6d4`.
+- Read current owner instructions and collaboration protocol; STATUS, readiness and prior A7 evidence; reviewed latest branch commits/Actions, current CL log folders/release (reading only). Existing live authenticated water audit 41622977691 in progress: leave untouched.
+- Other active clients address WATER-001/FFT, DISPLAY-003, HAPTICS-008, LOCAL-005, DIAG-010/PERF-007; INPUT-005 had only A7 completed record. Avoid shared production files outside TouchPointerButtons and A7-owned test harness/notes.
+- Source observation: `TouchPointerButtons.BeginUpdate()` processes pending taps whenever `!held`. A pending pulse that existed prior to a held gesture can therefore generate a new press AFTER Hold(false) instead of at its original time. This is a deterministic source-state-machine inference. Must reproduce with a real C# negative test, not claim runtime phone evidence.
+- Plan: failing regression, minimal queue management repair retaining rapid-tap transitions and one-update pulse semantics, CPU-only CI, record limitations; do not change Unity requests, APK, settings or game assets.

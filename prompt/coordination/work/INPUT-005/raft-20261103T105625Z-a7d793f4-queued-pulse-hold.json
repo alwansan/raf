@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T105625Z-a7d793f4",
+  "issue_id": "INPUT-005",
+  "status": "planned",
+  "updated_at": "2026-11-03T10:56:55.022Z",
+  "base_sha": "26c78e404b100ab86052e1c62c70817b6559c6d4",
+  "hypothesis": "A queued short-tap press may fire after a later long hold is released, generating a ghost Mouse0 input; clear or reorder stale queued pulses at the hold transition without losing normal rapid tap release separation.",
+  "intended_files": [
+    "android-port/Runtime/Platform/TouchPointerButtons.cs",
+    "android-port/Tests/TouchPointer/BoundaryMatrix.cs",
+    "prompt/coordination/clients/raft-20261103T105625Z-a7d793f4/",
+    "prompt/coordination/experiments/raft-20261103T105625Z-a7d793f4/",
+    "prompt/STATUS.md",
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+  ],
+  "related_work": [
+    "A7 prior raft-20261103T100214Z-c83d58d4 completed independent 425 check boundary matrix",
+    "WATER-001, DISPLAY-003, HAPTICS-008, LOCAL-005, DIAG-010 active elsewhere; no file overlap"
+  ],
+  "experiment_ids": [],
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41616691487"
+  ],
+  "result": null,
+  "next_step": "Introduce a regression exercising queue + Hold(true) + Hold(false), verify red actual C# on CI, then apply minimal fix and green CI."
+}
