@@ -3,13 +3,13 @@
   "username": "raft-20261103T103610Z-4e91b2cd",
   "session_id": "20261104-blur-member-layout",
   "resumed_from": null,
-  "status": "active",
-  "updated_at": "2026-11-04T00:00:00Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T23:50:22Z",
   "base_sha": "138010dd1d36708a74feef9526b8a16714709510",
   "current_work": [
     "WATER-001"
   ],
-  "last_commit": "42cbccbf6108f3ca082711f0d067369971a62709",
-  "next_step": "Run bounded CPU original metadata observation then evaluate actual results; do not rewrite shared A12/W1 code or shaders.",
+  "last_commit": "7bbc443c02b5a0169072ea67f773af06537af72b",
+  "next_step": "Correlate actual DXBC CB operand masks and translator offsets with the seven original partial-CB members before any named uniform/ShaderLab rewrite; do not repeat unchanged observation.",
   "memory_path": "prompt/coordination/clients/raft-20261103T103610Z-4e91b2cd/MEMORY.md"
 }

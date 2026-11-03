@@ -2,8 +2,8 @@
   "schema_version": 1,
   "owner": "raft-20261103T103610Z-4e91b2cd",
   "issue_id": "WATER-001",
-  "status": "active",
-  "updated_at": "2026-11-04T00:00:00Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T23:50:22Z",
   "base_sha": "138010dd1d36708a74feef9526b8a16714709510",
   "hypothesis": "Original Unity matrix/vector metadata may explain allocated-vs-compiled CB span mismatch. Observe authenticated serialized indices/types/arrays; byte-offset/32-bit lane interpretation remains a hypothesis, never runtime proof.",
   "intended_files": [
@@ -14,8 +14,12 @@
   "related_work": [
     "A12R completed 41736229248 structural reflection; this is member-level follow-up, not repeat."
   ],
-  "next_step": "Run bounded CPU original metadata observation then evaluate actual results; do not rewrite shared A12/W1 code or shaders.",
+  "next_step": "Correlate actual DXBC CB operand masks and translator offsets with the seven original partial-CB members before any named uniform/ShaderLab rewrite; do not repeat unchanged observation.",
   "experiment_ids": [
     "blur-members-zip2"
-  ]
+  ],
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41742032440"
+  ],
+  "result": "14 original owners verified. All six CB records are partial; seven original member index/dimension records observed, all within compiled spans under explicitly unverified byte-offset model, zero overlaps. Four tests pass. No shader binding/runtime claim."
 }

@@ -1,1 +1,10 @@
-{"owner":"raft-20261103T103610Z-4e91b2cd","status":"active","base_sha":"5ee44240fc68ca86a477ac25401aae4379bd62ff","hypothesis":"ZIP2 fourteen-owner staging resolves pre-reflection input gap without LFS","next_step":"Inspect actual isolated CPU reflection result; no shader integration","budget":"488439356 source bytes,15min,noUnity"}
+{
+  "owner": "raft-20261103T103610Z-4e91b2cd",
+  "status": "completed",
+  "base_sha": "5ee44240fc68ca86a477ac25401aae4379bd62ff",
+  "hypothesis": "ZIP2 fourteen-owner staging resolves pre-reflection input gap without LFS",
+  "next_step": "Correlate actual DXBC CB operand masks and translator offsets with the seven original partial-CB members before any named uniform/ShaderLab rewrite; do not repeat unchanged observation.",
+  "budget": "488439356 source bytes,15min,noUnity",
+  "updated_at": "2026-11-03T23:50:22Z",
+  "result": "ZIP2 acquisition succeeded in41733578461; old reflection failed afterward. A12R41736229248 subsequently resolved structural reflection. Follow-up member experiment41742032440 succeeded; source acquisition subtask closed only."
+}
