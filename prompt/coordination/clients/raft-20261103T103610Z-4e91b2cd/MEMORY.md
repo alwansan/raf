@@ -34,3 +34,7 @@ The original CPU complex lane executes all rows then all columns for four 32×32
 ## Limits and next work
 This establishes a bounded CPU oracle for axis order, sign and normalization at N=32 using the original complex lane. It does not execute a translated shader, a Unity import, GPU, half-precision intermediate render textures, every CPU lane, or Android. It cannot close WATER-001, RENDER-002 or FFT-FORMAT-009. No runtime source, original asset, GUID/meta, quality setting, build request or scheduled task changed.
 Next use this oracle when authentic shader bodies/resource bindings become available; validate two-pass shader output and intermediate precision independently. Project remains NOT_READY, no candidate, 0/3 complete reviews.
+
+
+## Verified original CPU inverse FFT
+2026-11-03: https://github.com/alwansan/raf/actions/runs/41645609498 SUCCESS on753a3d71d870edf821210bb50cc7dfa67ed977ee: 4/4 original CPU32x32 inverse roundtrips relativeL2<1e-5, 4 direct2D comparisons max1.8933e-7 and2 negative controls pass. No GPU/Unity/device claim; WATER-001/RENDER-002 remain OPEN, NOT_READY0/3. Next compare restored shader arithmetic. No native build or tasks changed.
