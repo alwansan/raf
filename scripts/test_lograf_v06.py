@@ -11,7 +11,8 @@ ui=(src/"MainActivity.java").read_text()
 signing=(root/"app/build.gradle").read_text()
 checks={
     "pidof probe bounded to 2 seconds": 'p.waitFor(2000,java.util.concurrent.TimeUnit.MILLISECONDS)' in remote and 'p.destroyForcibly()' in remote,
-    "pidof output capped": 'found.length()<4096' in remote,
+    "pidof output capped with overflow sentinel": 'found.length()<=4096' in remote and '4097-found.length()' in remote,
+    "pidof oversized output fails closed": 'if(found.length()>4096)' in remote and 'throw new IOException("pidof_output_overflow")' in remote,
     "reject pidof diagnostic text instead of reporting game absent": 'throw new IOException("pidof_invalid_output")' in remote and 'if(!item.matches("[0-9]+"))' in remote,
     "reject successful but empty pidof as ambiguous": 'if(exit==0 && current.isEmpty())' in remote and 'throw new IOException("pidof_empty_success")' in remote,
     "pidof exit status checked after completion": 'int exit=p.exitValue();' in remote,
