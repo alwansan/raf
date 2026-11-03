@@ -1,0 +1,5 @@
+# Raw Logcat buffer boundary preservation — 2026-11-03
+
+The UID-scoped RAFT stream previously discarded lines beginning `--------- beginning of ` before they reached the bounded writer. These are Logcat buffer-boundary metadata, not game messages, but discarding them violates byte-for-byte line retention expectations and removes useful capture context. `RemoteLogService.pump` now passes them to the existing batch pipeline, with no extra polling, sampling, storage or network permissions. The SYSTEM stream remains intentionally context-filtered; this change does not turn it into a full-system dump.
+
+Code commit: `45289c320651cc2bd1cbefa96a9f856d1ad01532`; regression assertion commit: `9c24ab90aa4e8433b328a529da915e0d33424d4d`. The assertion checks that the explicit discard is absent and the original batch append remains. This is a structural test, not a device test. CI and signed APK status must be verified separately. On Android 15/Poco F5 Pro, verify boundary lines when present, normal UID log capture, segment ordering and writer loss counters. No game branch was modified.
