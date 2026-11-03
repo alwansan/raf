@@ -45,7 +45,7 @@ class ActualCpu {
 }
 '''
 HARNESS='''using System;
-using System.Numerics;
+using Complex = System.Numerics.Complex;
 using UnityEngine;
 using UltimateWater;
 class Tests {
