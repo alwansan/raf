@@ -24,6 +24,9 @@ namespace RaftAndroid.Platform
         public string GetWorldDirectory(string worldId)
         {
             ValidateSegment(worldId, nameof(worldId));
+            // Pre-existing profile/world links can redirect otherwise-safe IDs
+            // outside the app sandbox. Fail closed without modifying save data.
+            RejectLinkedSaveDirectories(worldId);
             return Path.Combine(_root, "RaftAndroid", "profiles", _profileId, "worlds", worldId);
         }
 
@@ -36,7 +39,24 @@ namespace RaftAndroid.Platform
         {
             string directory = GetWorldDirectory(worldId);
             Directory.CreateDirectory(directory);
+            // Recheck after creating missing directories; this is not an atomic
+            // defence against a hostile concurrent filesystem writer.
+            RejectLinkedSaveDirectories(worldId);
             return Path.Combine(directory, "world.sav");
+        }
+
+        private void RejectLinkedSaveDirectories(string worldId)
+        {
+            // Caller-provided Android root ancestors may legitimately be links.
+            // Only descendants controlled by this helper must be link-free.
+            string path = _root;
+            foreach (string part in new[] { "RaftAndroid", "profiles", _profileId, "worlds", worldId })
+            {
+                path = Path.Combine(path, part);
+                if ((Directory.Exists(path) || File.Exists(path)) &&
+                    (File.GetAttributes(path) & FileAttributes.ReparsePoint) != 0)
+                    throw new IOException("Linked local save directories are not supported.");
+            }
         }
 
         private static void ValidateSegment(string segment, string paramName)

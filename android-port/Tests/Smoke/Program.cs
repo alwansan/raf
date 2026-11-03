@@ -177,6 +177,32 @@ internal static class Program
                 foreach (string input in new[] { "../other", "..", "x/y", "x\\y", "", "space here" })
                     ExpectException<ArgumentException>(() => paths.GetWorldDirectory(input));
             });
+            Test("world directory symlink cannot redirect save outside sandbox", () =>
+            {
+                string sandbox = Path.Combine(root, "linked-world-sandbox");
+                string profile = new LocalProfileStore(sandbox).GetOrCreateProfileId();
+                var paths = new LocalSavePaths(sandbox, profile);
+                string directory = paths.GetWorldDirectory("redirect");
+                Directory.CreateDirectory(Path.GetDirectoryName(directory)!);
+                string outside = Path.Combine(root, "world-outside");
+                Directory.CreateDirectory(outside);
+                Directory.CreateSymbolicLink(directory, outside);
+                ExpectException<IOException>(() => paths.GetWorldSaveFile("redirect"));
+                ExpectException<IOException>(() => paths.GetWorldSaveFileAndCreateDirectory("redirect"));
+                Assert(!File.Exists(Path.Combine(outside, "world.sav")), "Outside world save created");
+            });
+            Test("linked profile ancestor cannot redirect world saves", () =>
+            {
+                string sandbox = Path.Combine(root, "linked-profile-sandbox");
+                string profiles = Path.Combine(sandbox, "RaftAndroid", "profiles");
+                Directory.CreateDirectory(profiles);
+                string outside = Path.Combine(root, "profile-outside");
+                Directory.CreateDirectory(outside);
+                Directory.CreateSymbolicLink(Path.Combine(profiles, "safe_profile"), outside);
+                var paths = new LocalSavePaths(sandbox, "safe_profile");
+                ExpectException<IOException>(() => paths.GetWorldDirectory("legit_world"));
+                Assert(!Directory.Exists(Path.Combine(outside, "worlds")), "Outside profile directories created");
+            });
             Test("corrupt existing identity is not silently overwritten", () =>
             {
                 string bad = Path.Combine(root, "corrupted-sandbox", "RaftAndroid", "profiles", "local");
