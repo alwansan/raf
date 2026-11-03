@@ -1,0 +1,59 @@
+name: Raft A10 ZIP2 authentic original RGD structure (CPU no LFS)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-a10-zip2-original-rgd-nrbf.yml'
+      - 'tests/a10-original-rgd-nrbf/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+concurrency:
+  group: a10-zip2-original-rgd-nrbf-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  original-rgd:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    steps:
+      - name: Fetch only A10 harness from working branch without LFS
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            tests/a10-original-rgd-nrbf
+            .github/workflows/raft-a10-zip2-original-rgd-nrbf.yml
+          sparse-checkout-cone-mode: false
+      - name: Fetch only authentic original Data.rgd from immutable ZIP2
+        uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-original
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            Raft/Raft_Data/StreamingAssets/Data.rgd
+          sparse-checkout-cone-mode: false
+      - name: Assert pinned ZIP2 source commit without disclosing payload
+        run: |
+          set -euo pipefail
+          test "$(git -C zip2-original rev-parse HEAD)" = "15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+          test "$(wc -c < zip2-original/Raft/Raft_Data/StreamingAssets/Data.rgd)" -eq 2941
+          echo "RAFT_A10_SOURCE ZIP2_SHA_PIN=true sourceBytes=2941 lfs=false"
+      - name: Install managed SDK for non-executable NRBF record decoding
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Verify original .rgd SHA and safely decode NRBF graph with negative controls
+        env:
+          DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+        run: |
+          set -euo pipefail
+          dotnet run --configuration Release \
+            --project tests/a10-original-rgd-nrbf/OriginalRgdProbe.csproj -- \
+            --file zip2-original/Raft/Raft_Data/StreamingAssets/Data.rgd \
+            --sha256 b2785187aa11e33872698adfa79ab252cf65a824d92bee7e88773ce4aa11cbba
