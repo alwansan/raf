@@ -22,7 +22,8 @@ from scripts.probe_authentic_fft_dxbc_translation import (
 MARKER = "RAFT_A1_VULKAN_DIFF "
 KEYS = (
     "cpu_software_vulkan", "rgba32f_linear_only",
-    "extent_width", "extent_height", "original_written_pixels",
+    "extent_width", "extent_height", "input_seed", "dispatch_group_y",
+    "original_written_pixels",
     "roundtrip_written_pixels", "write_coverage_mismatch_pixels",
     "nonfinite_components", "max_abs_difference",
     "relative_l2_difference", "within_selected_tolerance",
@@ -30,6 +31,7 @@ KEYS = (
 )
 SELECTED_WIDTH = 1024
 SELECTED_HEIGHT = 1024
+SCENARIOS = ((0, 1), (19, 1), (257, 2))
 
 
 def parse_private_numeric_result(output):
@@ -50,7 +52,8 @@ def parse_private_numeric_result(output):
     if (not report["cpu_software_vulkan"] or not report["rgba32f_linear_only"]
             or report["unity_gpu_or_android_device_verified"]):
         raise ValueError("Unsupported or false Vulkan platform claim")
-    for field in ("extent_width", "extent_height", "original_written_pixels",
+    for field in ("extent_width", "extent_height", "input_seed",
+                  "dispatch_group_y", "original_written_pixels",
                   "roundtrip_written_pixels", "write_coverage_mismatch_pixels",
                   "nonfinite_components"):
         if type(report[field]) is not int or report[field] < 0:
@@ -58,6 +61,8 @@ def parse_private_numeric_result(output):
     if (report["extent_width"] not in (8, SELECTED_WIDTH)
             or report["extent_height"] not in (1, SELECTED_HEIGHT)):
         raise ValueError("Unexpected Vulkan extent")
+    if report["input_seed"] > 1023 or report["dispatch_group_y"] not in (1, 2):
+        raise ValueError("Unbounded Vulkan workload configuration")
     pixels = report["extent_width"] * report["extent_height"]
     if (not 0 < report["original_written_pixels"] <= pixels
             or not 0 < report["roundtrip_written_pixels"] <= pixels
@@ -138,18 +143,31 @@ def analyze(root, runner):
                                 timeout=30)
                 private_command(["spirv-val", "--target-env", "vulkan1.1",
                                  str(recompiled)], timeout=20)
-                output = private_command([str(runner), str(translated),
-                                          str(recompiled), str(SELECTED_WIDTH),
-                                          str(SELECTED_HEIGHT)], timeout=90)
-                parsed = parse_private_numeric_result(output.decode("utf-8", errors="strict"))
+                scenarios = []
+                for seed, group_y in SCENARIOS:
+                    output = private_command([str(runner), str(translated),
+                                              str(recompiled), str(SELECTED_WIDTH),
+                                              str(SELECTED_HEIGHT), str(seed), str(group_y)],
+                                             timeout=90)
+                    result = parse_private_numeric_result(
+                        output.decode("utf-8", errors="strict"))
+                    if result["input_seed"] != seed or result["dispatch_group_y"] != group_y:
+                        raise ValueError("Vulkan runner did not execute requested workload")
+                    scenarios.append({
+                        "input_seed": seed,
+                        "dispatch_group_y": group_y,
+                        "same_output_tolerance": result["within_selected_tolerance"],
+                        "original_written_pixels": result["original_written_pixels"],
+                        "roundtrip_written_pixels": result["roundtrip_written_pixels"],
+                        "coverage_mismatch_pixels": result["write_coverage_mismatch_pixels"],
+                        "nonfinite_components": result["nonfinite_components"],
+                        "max_abs_difference": result["max_abs_difference"],
+                        "relative_l2_difference": result["relative_l2_difference"],
+                    })
                 row.update({"status": "executed_on_cpu_vulkan",
-                            "same_rgba32f_workload_tolerance": parsed["within_selected_tolerance"],
-                            "original_written_pixels": parsed["original_written_pixels"],
-                            "roundtrip_written_pixels": parsed["roundtrip_written_pixels"],
-                            "coverage_mismatch_pixels": parsed["write_coverage_mismatch_pixels"],
-                            "nonfinite_components": parsed["nonfinite_components"],
-                            "max_abs_difference": parsed["max_abs_difference"],
-                            "relative_l2_difference": parsed["relative_l2_difference"]})
+                            "scenario_comparisons": scenarios,
+                            "all_scenarios_same_tolerance": all(
+                                item["same_output_tolerance"] for item in scenarios)})
             except (UnicodeError, ValueError) as exc:
                 # Never emit original shaders, filename paths, GLSL text or tool stderr.
                 row.update({"status": "inconclusive_execution_or_translation",
@@ -166,10 +184,12 @@ def analyze(root, runner):
         "compiled_programs_checked": len(rows),
         "software_vulkan_executed_pairs": len(executed),
         "software_vulkan_inconclusive_pairs": len(rows)-len(executed),
-        "equal_within_single_rgba32f_workload": sum(
-            r["same_rgba32f_workload_tolerance"] for r in executed),
-        "different_within_single_rgba32f_workload": sum(
-            not r["same_rgba32f_workload_tolerance"] for r in executed),
+        "scenarios_per_executed_program": len(SCENARIOS),
+        "total_executed_comparisons": sum(len(r["scenario_comparisons"]) for r in executed),
+        "equal_across_all_selected_rgba32f_scenarios": sum(
+            r["all_scenarios_same_tolerance"] for r in executed),
+        "different_in_at_least_one_rgba32f_scenario": sum(
+            not r["all_scenarios_same_tolerance"] for r in executed),
         "software_vulkan_is_adreno_or_unity_proof": False,
         "other_original_formats_or_all_inputs_proven": False,
         "original_private_shader_bytes_exported": False,
