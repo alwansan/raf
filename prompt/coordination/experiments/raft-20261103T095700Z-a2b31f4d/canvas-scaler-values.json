@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "owner": "raft-20261103T095700Z-a2b31f4d",
-  "status": "active",
+  "status": "completed",
   "hypothesis": "Original UnityEngine.UI CanvasScaler serialized values can be independently decoded using authenticated original managed field metadata plus raw scene MonoBehaviours; fail closed on unknown base byte layout instead of inventing an aspect fix.",
   "input_hashes": [
     "globalgamemanagers.assets git-sha1:4eabb7cb093ead2f2b0c8f3451dd953a9f5ff0c9",
@@ -11,9 +11,13 @@
   ],
   "commands": [
     "python3 -m unittest discover -s tests -p test_probe_a2_canvas_scaler_serialized_values.py -v",
-    "python3 -m scripts.probe_a2_canvas_scaler_serialized_values --source Raft/Raft_Data --managed Raft/Raft_Data/Managed/UnityEngine.UI.dll"
+    "python3 -m scripts.probe_a2_canvas_scaler_serialized_values --source Raft/Raft_Data --managed Raft/Raft_Data/Managed/UnityEngine.UI.dll",
+    "python3 -m unittest discover -s tests -p test_probe_a2_scaler_raw_shapes.py -v",
+    "python3 -m unittest discover -s tests -p test_probe_a2_scaler_value_decode.py -v",
+    "python3 -m scripts.probe_a2_scaler_raw_shapes --source Raft/Raft_Data --managed Raft/Raft_Data/Managed/UnityEngine.UI.dll --ilspy PRIVATE_TMP",
+    "python3 -m scripts.probe_a2_scaler_value_decode --source Raft/Raft_Data --managed Raft/Raft_Data/Managed/UnityEngine.UI.dll --ilspy PRIVATE_TMP"
   ],
-  "expected_signal": "Exact original CanvasScaler MonoScript pointer and resource SHA, original field metadata signature, raw mono body lengths and validated UI scaling values or explicit UNKNOWN; no asset data or decompiled code output.",
+  "expected_signal": "Original ten-plus-one serialized CanvasScaler fields, exact original scene+DLL pins and source-derived numeric values for 17 authentic original components; no game source excerpts.",
   "negative_controls": [
     "tampered original binary SHA",
     "foreign MonoScript same class name",
@@ -26,12 +30,16 @@
   "concurrency_group": "raft-a2-canvas-values-${{ github.ref }}-${{ github.sha }}",
   "artifact_prefix": null,
   "budget": "CPU-only ubuntu24.04 max10m, scene0/1/globalgamemanagers original non-LFS plus UI DLL; no Unity no native no LFS.",
-  "run_url": null,
-  "source_sha": null,
-  "result": null,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41636519603",
+  "source_sha": "b83f51a1c1e921332d610d995db3fcb409255071",
+  "result": "Completed independent SHA-pinned original UI value recovery. Final source b83f51a1, CI41636519603 SUCCESS 8+8 synthetic tests and authentic 17/17 CanvasScaler original 80-byte records. Exact original UI.dll metadata confirms 10 numeric fields and serialized editor preset bool; 32-base +44-values +4-bool/pad. All17 reference1920x1080, uiScaleMode1 MatchWithScreenSize, matchWidthOrHeight1; scaleFactor1 for16, 0.66 for one original level1. Source-only, no Settings UI/prefab causality or device execution.",
   "limitations": [
     "Actual Unity native serialization alignment must be established from source and original object structure before declaring decoded values",
-    "No UI scene/prefab path closure or Android runtime"
+    "No UI scene/prefab path closure or Android runtime",
+    "Original Unity native full custom TypeTree not recovered; data validated structurally by source DLL SHA, ten fields + extra serialized bool, typed base and 17 complete records.",
+    "Original displayed Settings panel/prefab/Canvas pointer path unknown; serialized scaleFactor is not verified effective device scaling.",
+    "No Android phone test or full Unity build; this closes the data audit, not DISPLAY-003 or readiness."
   ],
-  "next_step": "Use byte-length/type tree and original UnityEngine.UI.dll field order to verify CanvasScaler value extraction; otherwise return unknown with structural reason."
+  "next_step": "Targeted authenticated Settings widget event/prefab pointer graph and Android scene/screen match; do not patch without proof.",
+  "updated_at": "2026-11-03T12:36:53.126Z"
 }

@@ -2,8 +2,8 @@
   "schema_version": 1,
   "owner": "raft-20261103T095700Z-a2b31f4d",
   "issue_id": "DISPLAY-003",
-  "status": "active",
-  "updated_at": "2026-11-03T12:07:40.695Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T12:36:53.126Z",
   "base_sha": "034abfbc4fce60bf4be2466b126d10984f2ea19b",
   "hypothesis": "Original UnityEngine.UI CanvasScaler serialized values can be independently decoded using authenticated original managed field metadata plus raw scene MonoBehaviours; fail closed on unknown base byte layout instead of inventing an aspect fix.",
   "intended_files": [
@@ -23,8 +23,12 @@
     "canvas-scaler-values"
   ],
   "evidence": [
-    "https://github.com/alwansan/raf/actions/runs/41629641835"
+    "https://github.com/alwansan/raf/actions/runs/41629641835",
+    "https://github.com/alwansan/raf/actions/runs/41636519603",
+    "https://github.com/alwansan/raf/commit/b83f51a1c1e921332d610d995db3fcb409255071",
+    "https://github.com/alwansan/raf/actions/runs/41633458226",
+    "https://github.com/alwansan/raf/actions/runs/41635191374"
   ],
-  "result": null,
-  "next_step": "Use byte-length/type tree and original UnityEngine.UI.dll field order to verify CanvasScaler value extraction; otherwise return unknown with structural reason."
+  "result": "Completed independent SHA-pinned original UI value recovery. Final source b83f51a1, CI41636519603 SUCCESS 8+8 synthetic tests and authentic 17/17 CanvasScaler original 80-byte records. Exact original UI.dll metadata confirms 10 numeric fields and serialized editor preset bool; 32-base +44-values +4-bool/pad. All17 reference1920x1080, uiScaleMode1 MatchWithScreenSize, matchWidthOrHeight1; scaleFactor1 for16, 0.66 for one original level1. Source-only, no Settings UI/prefab causality or device execution.",
+  "next_step": "Targeted authenticated Settings widget event/prefab pointer graph and Android scene/screen match; do not patch without proof."
 }
