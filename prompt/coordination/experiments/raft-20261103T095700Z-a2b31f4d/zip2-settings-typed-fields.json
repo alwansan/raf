@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T095700Z-a2b31f4d",
+  "status": "active",
+  "hypothesis": "ZIP2 no-LFS exact source files match original Settings byte and managed source fingerprints and enable a verified serialization-field-type inventory. Pair original CSharp9 fields and 612-byte scene owner layout without publishing proprietary data, and reject overlapping raw PPtr matches as typed fields.",
+  "input_hashes": [
+    "zip2 pinned commit:15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "zip2 original Assembly-CSharp.dll git:fc9d4ba920a178fdb89c970d9d772a01051dadc6",
+    "zip2 level0 git:2aec4377058baf72656a2ba0daea9aefc67fcb7e",
+    "zip2 level1 git:1944f11673108f8db2084906ff5899003c97fc4a",
+    "zip2 globalgamemanagers.assets git:4eabb7cb093ead2f2b0c8f3451dd953a9f5ff0c9",
+    "Settings.cs normalized sha256:904c52b337fe951f711e2efc15bfafc4fc77f2a8d2cc9c5bee2f7d14075103ad"
+  ],
+  "commands": [
+    "checkout pinned zip2 SHA with blob:none and sparse paths for original managed DLL, level0/1 and globalgamemanagers.assets, LFS disabled",
+    "private ILSpy CSharp9 decompile Settings from original Assembly-CSharp.dll",
+    "python3 -m unittest discover -s tests -p test_probe_a2_settings_typed_fields.py -v",
+    "python3 -m scripts.probe_a2_settings_typed_fields --source PINNED_ZIP2_ORIGINAL --decompiled PRIVATE"
+  ],
+  "expected_signal": "Authenticated original ZIP2 exact Git source and original Settings CSharp9 typed serializable fields, field-kind/collection count and original raw owner record layout; reject claims of typed Scene PPtrs without exact order and Unity array rules.",
+  "negative_controls": [
+    "drifted SHA/source",
+    "comments and string spoofing",
+    "static and non-serialized private fields",
+    "collection of Unity object refs not mistaken for single PPtr",
+    "raw pointer window overlapping rejected",
+    "original scene external file ID mismatch"
+  ],
+  "workflow_path": ".github/workflows/raft-a2-settings-zip2-typed-fields.yml",
+  "concurrency_group": "raft-a2-zip2-settings-${{ github.ref }}-${{ github.sha }}",
+  "artifact_prefix": null,
+  "budget": "CPU only Ubuntu24.04 10min, pinned zip2 sparse checkout <10MB, no LFS, no full restore, no Unity/Android build or release.",
+  "run_url": null,
+  "source_sha": null,
+  "result": null,
+  "limitations": [
+    "Serialized CSharp field order from ILSpy text may differ from metadata tokens; label candidates until independently verified.",
+    "Original displayed Settings prefab and Android viewport runtime still unknown.",
+    "Do not publish original decompiled source or assets."
+  ],
+  "next_step": "Prove source-typed serialized Settings field/collection signature and reconcile original owner record byte layout. Keep actual UI canvas/page ownership unproven until typed pointer graph verified."
+}

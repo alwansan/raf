@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T095700Z-a2b31f4d",
+  "issue_id": "DISPLAY-003",
+  "status": "active",
+  "updated_at": "2026-11-03T22:28:47.961Z",
+  "base_sha": "d9e3a051a623964aed767876972f52511e27b844",
+  "hypothesis": "ZIP2 no-LFS exact source files match original Settings byte and managed source fingerprints and enable a verified serialization-field-type inventory. Pair original CSharp9 fields and 612-byte scene owner layout without publishing proprietary data, and reject overlapping raw PPtr matches as typed fields.",
+  "intended_files": [
+    "scripts/probe_a2_settings_typed_fields.py",
+    "tests/test_probe_a2_settings_typed_fields.py",
+    ".github/workflows/raft-a2-settings-zip2-typed-fields.yml",
+    "docs/A2_SETTINGS_ZIP2_TYPED_FIELDS_2026-11-04.md",
+    "prompt/coordination/clients/raft-20261103T095700Z-a2b31f4d/state.json",
+    "prompt/coordination/clients/raft-20261103T095700Z-a2b31f4d/MEMORY.md",
+    "prompt/coordination/work/DISPLAY-003/raft-20261103T095700Z-a2b31f4d-zip2-settings-typed-fields.json",
+    "prompt/coordination/experiments/raft-20261103T095700Z-a2b31f4d/zip2-settings-typed-fields.json",
+    "prompt/STATUS.md",
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+  ],
+  "related_work": [
+    "prompt/coordination/work/DISPLAY-003/raft-20261103T095700Z-a2b31f4d-settings-owner-links.json"
+  ],
+  "experiment_ids": [
+    "zip2-settings-typed-fields"
+  ],
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41660274964",
+    "https://github.com/alwansan/raf/tree/zip2/Raft",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/ZIP2_SOURCE_PROVIDER.md"
+  ],
+  "result": null,
+  "next_step": "Prove source-typed serialized Settings field/collection signature and reconcile original owner record byte layout. Keep actual UI canvas/page ownership unproven until typed pointer graph verified."
+}
