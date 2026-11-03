@@ -2,9 +2,9 @@
   "schema_version": 1,
   "owner": "raft-20261103T095700Z-a2b31f4d",
   "issue_id": "DISPLAY-003",
-  "status": "planned",
-  "updated_at": "2026-11-03T10:49:21.557Z",
-  "base_sha": "488cd17bf6e8c0d44db418b528a92e728df45b5f",
+  "status": "completed",
+  "updated_at": "2026-11-03T11:01:38.684Z",
+  "base_sha": "04a260a81982a4d983b96e5364b2925b6c5988d5",
   "hypothesis": "The sole Settings-related source-side sizeDelta write belongs to a narrow control-binding row rather than a global canvas resize; verify context and reachability before any Android aspect change.",
   "intended_files": [
     "scripts/probe_a2_controls_layout_context.py",
@@ -22,9 +22,9 @@
     "controls-layout-target"
   ],
   "evidence": [
-    "https://github.com/alwansan/raf/actions/runs/41616959190",
-    "ControlsSettingsBox.cs authenticated SHA256 b64ba19e2d55fe503045e523c3c8658adb4ca3ededaccfecf6521bad1600ef92"
+    "https://github.com/alwansan/raf/actions/runs/41623131096",
+    "https://github.com/alwansan/raf/actions/runs/41623586923"
   ],
-  "result": null,
-  "next_step": "Develop private source-only context parser and negative-controls tests; inspect original scene references only if already available without LFS."
+  "result": "Authenticated original ControlsSettingsBox sizeDelta line110 within method106-112, target linked to RectTransform declaration outside method; no direct Screen/CanvasScaler writes. Two CPU-only CI runs pass, refined9/9 synthetic tests. Scope experiment complete, DISPLAY-003 unresolved.",
+  "next_step": "Inspect original serialized Settings UI CanvasScaler, event reachability and target source; no speculative runtime change."
 }

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "owner": "raft-20261103T095700Z-a2b31f4d",
-  "status": "planned",
+  "status": "completed",
   "hypothesis": "The ControlsSettingsBox.cs sizeDelta write at line110 acts on an item-specific RectTransform and is unlikely to cause global Settings UI horizontal stretch.",
   "input_hashes": [
     "ControlsSettingsBox.cs sha256 b64ba19e2d55fe503045e523c3c8658adb4ca3ededaccfecf6521bad1600ef92"
@@ -22,13 +22,15 @@
   "concurrency_group": "raft-a2-display-003-controls-${{ github.ref }}-${{ github.sha }}",
   "artifact_prefix": null,
   "budget": "Ubuntu24.04 ≤10min CPU no-LFS no-Unity, one execution per source SHA",
-  "run_url": null,
-  "source_sha": null,
-  "result": null,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41623586923",
+  "source_sha": "b9ec97d2776e8504a0c5d71f1b226e29f320707c",
+  "result": "COMPLETED SUCCESS (refined CI41623586923):9/9 synthetic tests; SHA-pinned ControlsSettingsBox; sizeDelta method106-112 line110; receiver matches RectTransform declaration outside method; no direct CanvasScaler/Screen changes.",
   "limitations": [
     "No original UI serialization verified yet",
     "Source-only lexical method analysis",
-    "No device test"
+    "No device test",
+    "No original scene UI serialization or Unity/device execution",
+    "Receiver declaration outside method does not prove runtime object/call chain"
   ],
-  "next_step": "Inspect authenticated CI and actual assignment target."
+  "next_step": "Source-locked serialized Settings UI and caller investigation; global issue remains OPEN."
 }
