@@ -1,9 +1,142 @@
 {
-  "nine_material_source": "be740083d8faeea55ed2ba030cceea0d239e5f60",
-  "run": 41737038201,
-  "job": 126268778276,
-  "artifact": 13278789548,
-  "result": {
+  "full_source": "da39e24c3f4e85276d386182c960895b88e35839",
+  "full_run": 41738481868,
+  "full_job": 126273694040,
+  "full_artifact": 13280257470,
+  "full_result": "success",
+  "evidence": {
+    "acquisition_plan": {
+      "owners": 14,
+      "missing": 12,
+      "cached": 2
+    },
+    "source_authentication": {
+      "lfs_used": false,
+      "owners": [
+        {
+          "cache_hit": false,
+          "sha256": "b549af329d48244d80f28cb3cce6cd0b17769176081c249dc4646e1d62c58e28",
+          "verified_bytes": 758412
+        },
+        {
+          "cache_hit": true,
+          "sha256": "87493249f1adfc0c5eb8b82e4e199e208cd2c95eabe9796cab82116c4838595c",
+          "verified_bytes": 111533516
+        },
+        {
+          "cache_hit": true,
+          "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+          "verified_bytes": 115978112
+        },
+        {
+          "cache_hit": false,
+          "sha256": "c6bdf49f7d38ab060872fcb298770bc7113959f85ea2fd1a42dc663323d7660a",
+          "verified_bytes": 34888388
+        },
+        {
+          "cache_hit": false,
+          "sha256": "a28921562b0d64a0c5aeddfabd7a50c2695d9e9422725c19df9c786f8fdd6bdc",
+          "verified_bytes": 7987136
+        },
+        {
+          "cache_hit": false,
+          "sha256": "b29ec028607fe74f9b0ac6fe55d0e565e26b29ac520bd80732c5a3bc851f7f67",
+          "verified_bytes": 17611892
+        },
+        {
+          "cache_hit": false,
+          "sha256": "1d1e3e9047e5d67df2dade7f85e32ff2873f1d07dc75611ade3e7d4be2bd8e8e",
+          "verified_bytes": 9198256
+        },
+        {
+          "cache_hit": false,
+          "sha256": "0cacdad92d1f1c94e9b8f4c971619851908a0305a0d32f66e6d67b8068320b26",
+          "verified_bytes": 19568972
+        },
+        {
+          "cache_hit": false,
+          "sha256": "c422af7ca6e4153ef9abe8e6522123ee089b82b90d85b29223db011987dcdb9e",
+          "verified_bytes": 13612772
+        },
+        {
+          "cache_hit": false,
+          "sha256": "6e52bc4588605289c00b95dd3d4b2ad15a427c40c7f857ea52fb36a5d73a00e5",
+          "verified_bytes": 26845236
+        },
+        {
+          "cache_hit": false,
+          "sha256": "b32fcd9d327c8926b2309ffc1b5645a0c23d64ed95be37ed94e96f34736530c8",
+          "verified_bytes": 110149324
+        },
+        {
+          "cache_hit": false,
+          "sha256": "0476792cfeffac19d16e920011ed8d2fb2da62973c2f09a8689bc59e1ac4b632",
+          "verified_bytes": 6607272
+        },
+        {
+          "cache_hit": false,
+          "sha256": "55477662f824670d0e38e8b9811e55850c7d25bb4e6aff837d08d933aa3e1823",
+          "verified_bytes": 9257796
+        },
+        {
+          "cache_hit": false,
+          "sha256": "a7ce9c85095d19712100c61329f198a54ff0c8a077426c2acc4f2b96af13c54c",
+          "verified_bytes": 4442272
+        }
+      ],
+      "provider_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+      "verified_bytes": 488439356
+    },
+    "mapping": {
+      "actual_complete_export_graph_verified": false,
+      "exact_engine_keys_uniquely_mapped": 25,
+      "nonmatching_engine_keys": 140,
+      "original_names_or_ids_published": false,
+      "original_official_vendor_name_objects": 25,
+      "original_owner_count": 14,
+      "original_shader_objects": 165,
+      "original_verified_bytes": 488439356,
+      "unique_private_positive_materials": 25,
+      "unity_binding_verified": false,
+      "vendor_keys_uniquely_mapped": 25,
+      "wrong_name_and_property_controls_detected": 50,
+      "wrong_pointer_controls": 25
+    },
+    "unity": {
+      "unityVersion": "2021.3.45f2",
+      "failureType": "",
+      "requestedMaterials": 25,
+      "matchedShaderNames": 25,
+      "matchedPropertyLayouts": 25,
+      "wrongPointerControlsDetected": 25,
+      "shaderErrors": 0,
+      "androidVulkanOnly": true,
+      "privateBundleBuilt": true,
+      "passed": true,
+      "privateBundleBytes": 414127,
+      "fullGameExportVerified": false,
+      "phoneRenderingVerified": false,
+      "apkBuilt": false
+    },
+    "reader": {
+      "sourcegenerated_version": "1.3.2.0",
+      "generated_assembly_sha256": "7aedba39a03b7d3fa4837a4a47fb2795780c1670a71b2c4dbca88613b8d231fd",
+      "selected_shader_type": "AssetRipper.SourceGenerated.Classes.ClassID_48.Shader_2021_3_35",
+      "selected_unity_version": "2021.3.45f2",
+      "release_name_copy_verified": true,
+      "editor_name_copy_verified": true,
+      "engine_dataset_version": "2021.2.0b14",
+      "tpk_sha256": "be9863e90b424b3cbe42caea675e5ae36179d62df2c55d41ef19d217992a8b12",
+      "dataset_json_sha256": "72370e5ba37150a4cba193a5c5eca7ebfaece93f97730b5405e9152100c4fc93",
+      "default_shader_records": 6,
+      "extra_shader_records": 190,
+      "actual_export_material_refs_verified": false,
+      "unity_or_android_executed": false
+    }
+  },
+  "prior_nine_source": "be740083d8faeea55ed2ba030cceea0d239e5f60",
+  "prior_nine_run": 41737038201,
+  "prior_nine_result": {
     "unityVersion": "2021.3.45f2",
     "failureType": "",
     "requestedMaterials": 9,
@@ -19,9 +152,6 @@
     "phoneRenderingVerified": false,
     "apkBuilt": false
   },
-  "full_original_source": "da39e24c3f4e85276d386182c960895b88e35839",
-  "full_run": 41738481868,
-  "full_result": "pending",
   "production_gates_changed": false,
   "readiness": "NOT_READY",
   "full_readiness_reviews": 0
