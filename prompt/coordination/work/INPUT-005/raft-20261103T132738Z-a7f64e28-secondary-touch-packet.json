@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T132738Z-a7f64e28",
+  "issue_id": "INPUT-005",
+  "status": "planned",
+  "updated_at": "2026-11-03T13:28:17.119Z",
+  "base_sha": "9dc9179fd45c9b611f744dec7ed4686b4bb4771d",
+  "hypothesis": "When primary UI/gamepad touch is active, a secondary raw TouchState packet is misread via primaryTouch.ReadValueFromEvent; safe StateEvent.GetState<TouchState>(input) preserves event-specific id/phase/position.",
+  "intended_files": [
+    "android-port/Runtime/Platform/AndroidTouchPointer.cs",
+    "scripts/verify_touch_pointer_packet_routing.py",
+    ".github/workflows/raft-android-platform-tests.yml",
+    "prompt/coordination/clients/raft-20261103T132738Z-a7f64e28/",
+    "prompt/coordination/experiments/raft-20261103T132738Z-a7f64e28/",
+    "prompt/STATUS.md",
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+  ],
+  "related_work": [
+    "Prior A7 INPUT-005 scopes completed; current other clients' work concentrates separate HAPTICS/LOCAL/WATER/DISPLAY/RENDER"
+  ],
+  "experiment_ids": [],
+  "evidence": [
+    "https://docs.unity.cn/Packages/com.unity.inputsystem@1.7/api/UnityEngine.InputSystem.LowLevel.StateEvent.html"
+  ],
+  "result": null,
+  "next_step": "Implement fail-first C# runner extracted from current production OnEvent, then patch raw per-finger event read with fallback and verify CI."
+}
