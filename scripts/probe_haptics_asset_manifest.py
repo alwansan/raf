@@ -12,6 +12,8 @@ import subprocess
 
 PREFIX = 'Raft/Raft_Data/StreamingAssets/Haptics/'
 SHA = re.compile(r'[0-9a-f]{40}\Z')
+# Immutable Git blob SHA of the original 29-WAV reference manifest.
+PINNED_ORIGINAL_HAPTICS_MANIFEST_BLOB_SHA = '88df20f0c64ae5f46f057939d4d6d96773a33ef8'
 
 
 class HapticsInventoryError(ValueError):
@@ -30,7 +32,7 @@ def verify_manifest_blob(manifest_path: Path, pinned_blob_sha: str):
         raise HapticsInventoryError('Unsafe or absent Haptics manifest')
     payload = manifest_path.read_bytes()
     git_blob = hashlib.sha1(
-        ('blob ' + str(len(payload))).encode('ascii') + b'\\0' + payload
+        ('blob ' + str(len(payload))).encode('ascii') + b'\0' + payload
     ).hexdigest()
     if git_blob != pinned_blob_sha:
         raise HapticsInventoryError('Original Haptics manifest provenance changed')
