@@ -67,5 +67,52 @@ class AtomicStageTests(unittest.TestCase):
         self.assert_no_staged_partials()
 
 
+    def test_copy_temporary_path_is_outside_unity_streamingassets(self):
+        original_copy = shutil.copyfile
+        name = "VO_npc_english.bank"
+        source = self.source / name
+        assets = self.project / "Assets/StreamingAssets"
+        paths = []
+
+        def inspect_copy(src, dst, *args, **kwargs):
+            if Path(src) == source:
+                paths.append(Path(dst))
+                self.assertFalse(
+                    Path(dst).is_relative_to(assets),
+                    "A crash can leave a temporary file packaged as StreamingAssets",
+                )
+            return original_copy(src, dst, *args, **kwargs)
+
+        with mock.patch("scripts.stage_original_streaming_assets.shutil.copyfile",
+                        side_effect=inspect_copy):
+            stage(self.repo, self.project, self.report, apply=True)
+        self.assertEqual(len(paths), 1)
+        self.assertEqual((assets / name).read_bytes(), source.read_bytes())
+        self.assert_no_staged_partials()
+
+    def test_atomic_no_overwrite_if_destination_appears_after_preflight(self):
+        from scripts import stage_original_streaming_assets as source_module
+        original_link = source_module.os.link
+        name = "VO_npc_english.bank"
+        final = self.project / "Assets/StreamingAssets" / name
+        called = []
+
+        def race_link(src, dst, *args, **kwargs):
+            if Path(dst) == final:
+                called.append(True)
+                final.write_bytes(b"synthetic concurrent owner")
+                raise FileExistsError("synthetic cross-job race")
+            return original_link(src, dst, *args, **kwargs)
+
+        with mock.patch("scripts.stage_original_streaming_assets.os.link",
+                        side_effect=race_link):
+            with self.assertRaisesRegex(ValueError, "Existing original StreamingAssets conflict"):
+                stage(self.repo, self.project, self.report, apply=True)
+        self.assertEqual(len(called), 1)
+        self.assertEqual(final.read_bytes(), b"synthetic concurrent owner")
+        self.assertFalse(self.report.exists())
+        self.assert_no_staged_partials()
+
+
 if __name__ == "__main__":
     unittest.main()
