@@ -151,3 +151,8 @@ Executed scripts/audit_fft_binary16_addresses.mjs under actual Node24.22.1 local
 ## Coordinate CI confirmed; readiness unchanged — 3 November 2026
 
 [FFT coordinate precision CI41584946408](https://github.com/alwansan/raf/actions/runs/41584946408) COMPLETED SUCCESS on de5dec1e7aede04c678e68fe62d1933f6a5260ca, confirming the isolated Node24 CPU experiment now runs in Actions without LFS. This supersedes its pending status. It does not validate translated shader output, image-format equivalence, complete water kernels or device operation. WATER-001/RENDER-002/FFT-FORMAT-009 remain open; candidate absent, reviews0/3, NOT_READY. No native request or build initiated.
+
+
+## FFT half-address Clamp/bank experiment — 3 November 2026
+
+Extended scripts/audit_fft_binary16_addresses.mjs and executed the actual file using Node24.22.1 (exit0). In the authored nearest-point Clamp CPU model, N32–512 retain exact centers and indices; N1024 has511 wrong indices after Clamp,0 cross-half reads; N2048 has1535 wrong indices after Clamp,1 cross-half read. Clamp removes exactly the single outer-edge out-of-bounds address in each larger-size negative control. Exact count assertions prevent treating Clamp as a general precision repair. The initial proposed N1024 cross-half expectation was rejected by execution and corrected to0 before committing. No original shader/quality/format changed. This is a binary16 coordinate model, not hardware filtering, translated-shader numerical equivalence or phone evidence; WATER-001/RENDER-002/FFT-FORMAT-009 stay open, NOT_READY/0-of-3. Existing cheap coordinate CI will validate this source; result pending. Live Actions showed only completed successes; CL directory identities unchanged. No native request, build, release or task changes.
