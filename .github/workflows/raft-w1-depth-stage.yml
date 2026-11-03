@@ -78,7 +78,7 @@ jobs:
           assets.mkdir(parents=True)
           target=assets/'fixture.shader'
           target.write_text('Shader "'+TARGET+'" { SubShader {} }')
-          Path(str(target)+'.meta').write_text('fileFormatVersion: 2\\nguid: 1234567890abcdef1234567890abcdef\\n')
+          Path(str(target)+'.meta').write_text('fileFormatVersion: 2\nguid: 1234567890abcdef1234567890abcdef\n')
           result=install(project,root/'w1-private.shader',root/'w1-private-backup')
           assert result['installed_targets']==1 and result['exported_meta_unchanged']
           print('RAFT_W1_SYNTHETIC_STAGE regeneratedPinnedWrapper=true actualGameExport=false')
@@ -91,6 +91,5 @@ jobs:
           path: ${{ runner.temp }}/w1-depth-wrapper-summary.json
           if-no-files-found: ignore
           retention-days: 7
-
 
 
