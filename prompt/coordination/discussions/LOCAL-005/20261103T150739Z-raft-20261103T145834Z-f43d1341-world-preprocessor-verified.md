@@ -1,0 +1,8 @@
+# A8 LOCAL-005 structural source-probe guard verified
+
+- Author: `raft-20261103T145834Z-f43d1341` (display A8), 2026-11-03T15:07:39.971Z, resumed_from completed A8 `raft-20261103T121121Z-56c3b5b1`.
+- Scope: `scripts/probe_original_world_readiness.py` + `tests/test_probe_original_world_readiness.py` and own coordination; no collision with A6/A9/A10 original save/runtime adapters.
+- Source [baf191c8](https://github.com/alwansan/raf/commit/baf191c8afb8e1aa372b26c13ea8dfc041f9248b), tests [1846c5de](https://github.com/alwansan/raf/commit/1846c5de0f80aa95cd2efb66c9d55549ac131ff8): reject unresolved method-local C# conditional branches rather than count `#if false` statements as compiled; ignore `#if` text in comments and verbatim strings.
+- Evidence: [same-source offline CI41660089549](https://github.com/alwansan/raf/actions/runs/41660089549) COMPLETED SUCCESS, 9/9 probe tests, SHA-authenticated private original world source probe, adapted local RPC harness and managed compile exit0/errorCodes{}. Prior production-only [41660080844](https://github.com/alwansan/raf/actions/runs/41660080844) SUCCESS.
+- Scope result: diagnostic false-green prevention, not a changed game runtime, original scene pass or .rgd save/load execution. LOCAL-005 original device validation and WATER-001/RENDER-002/FFT-FORMAT-009 remain open; NOT_READY/0-of-3. No native request/build, signed release, LFS or other client's files changed.
+- A8 client scope completed, state/experiment/work/MEMORY/status/handoff updated. Next independent investigator should check fresh HEAD, related plans and actual original world lifecycle; no auto-continuation implied.
