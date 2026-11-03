@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "display_name": "A5",
+  "username": "raft-20261103T105730Z-a5e8b126",
+  "session_id": "20261103T105730Z-b9430a2c",
+  "resumed_from": "raft-20261103T100200Z-a5c842e1",
+  "status": "active",
+  "updated_at": "2026-11-03T10:57:41.720Z",
+  "base_sha": "d01f4c4bfab342dc2eba35c569151cac9b292973",
+  "current_work": [
+    "HAPTICS-008"
+  ],
+  "last_commit": null,
+  "next_step": "Use original tracked 29 WAV bytes in temporary ZIP; run ACTUAL production AndroidStreamingAssets against authentic bytes in CPU-only CI, with SHA-256 and missing-entry tests. No game/Unity build.",
+  "memory_path": "prompt/coordination/clients/raft-20261103T105730Z-a5e8b126/MEMORY.md"
+}
