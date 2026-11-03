@@ -5,12 +5,12 @@
   "session_id": "A14-20261103T123119Z-71377153",
   "resumed_from": null,
   "status": "active",
-  "updated_at": "2026-11-03T12:31:19.959Z",
-  "base_sha": "aae8cc2070126449fa05049a669235a144309101",
+  "updated_at": "2026-11-03T14:59:06.565Z",
+  "base_sha": "b6a962018e06513d5cf408e646751f161f0e00ca",
   "current_work": [
-    "RENDER-002 export-provenance intake (read-only until scoped task)"
+    "RENDER-002 isolated built-in shader pre-copy backup rollback on partial I/O"
   ],
   "last_commit": null,
-  "next_step": "Receive the owner-supplied A14-specific assignment; recheck HEAD and peer scopes; choose a non-overlapping CPU-only source/asset experiment.",
+  "next_step": "Run independent fail-first backup-write injection tests before modifying shared restorer; preserve original files/meta; coordinate A15 completed addition-write scope.",
   "memory_path": "prompt/coordination/clients/raft-20261103T123119Z-9fd895b8/MEMORY.md"
 }

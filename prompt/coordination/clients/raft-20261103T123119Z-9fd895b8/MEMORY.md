@@ -19,3 +19,9 @@ Owner stated A14-specific task will follow this introductory message. Pending th
 ## Restore point
 
 Read `prompt/coordination/README.md`, `UNIFIED_PROMPT_AR.md`, `TEMPLATES.md` and current owner instructions; read A14 state and work plan; obtain the exact A14 task, then recheck live HEAD and execute scoped CPU-only work using expected SHA lease and isolated tests. Keep project NOT_READY until all actual prebuild gates and three independent full reviews pass.
+
+## Continuation 2026-11-03T14:59:06.565Z
+
+- Live HEAD `b6a962018e06513d5cf408e646751f161f0e00ca`, native41624581951 unchanged old failure. New A11/A13 source-scope audits and A15 addition rollback are complete; W1 real DXBC/depth pass experiments are distinct. Current active A14 scope is external built-in backup write integrity, not a claim about missing original matches.
+- Scoped discussion: `prompt/coordination/discussions/RENDER-002/20261103T145906Z-raft-20261103T123119Z-9fd895b8-backup-scope.md` and plan `prompt/coordination/work/RENDER-002/raft-20261103T123119Z-9fd895b8-backup-integrity.json`.
+- Intended red-green: inject late/partial backup write failure, verify no backup residue or original shader/meta mutation; run existing peer checks on green.
