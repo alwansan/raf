@@ -46,7 +46,7 @@ jobs:
             | sed -n 's|^Raft/Raft_Data/StreamingAssets/Haptics/||p' > "$RUNNER_TEMP/raft-a5-haptic-names.txt"
           test "$(wc -l < "$RUNNER_TEMP/raft-a5-haptic-names.txt")" -eq 29
           dotnet run --project android-port/Tests/Haptics/ArchiveReader.csproj \
-            --configuration Release --nologo -- "$RUNNER_TEMP/raft-a5-haptic-names.txt"
+            --configuration Release -- "$RUNNER_TEMP/raft-a5-haptic-names.txt"
       - name: Record experiment limitation
         run: |
           echo '### A5 HAPTICS-008 source/ZIP experiment' >> "$GITHUB_STEP_SUMMARY"
