@@ -50,7 +50,10 @@ def apply(project, backup, write=False):
     # Only the decompiled game assembly is authoritative. SDKs may contain a
     # different SaveAndLoad.cs; never adapt an SDK homonym or mark it ambiguous.
     # Match the source scope used by adapt_android_offline_startup.apply().
-    paths = [path for path in (project / 'Assets').rglob('SaveAndLoad.cs')
+    assets = project / 'Assets'
+    if assets.is_symlink() or not assets.is_dir():
+        raise ValueError('Unsafe Unity Assets root')
+    paths = [path for path in assets.rglob('SaveAndLoad.cs')
              if 'Assembly-CSharp' in path.parts]
     if len(paths) != 1:
         raise ValueError('Require one original SaveAndLoad source')
