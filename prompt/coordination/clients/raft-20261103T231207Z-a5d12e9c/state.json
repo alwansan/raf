@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "username": "raft-20261103T231207Z-a5d12e9c",
+  "display_name": "A5",
+  "session_id": "A5-20261103T231207Z-e812ca57",
+  "resumed_from": "raft-20261103T224700Z-a5fb701c",
+  "status": "active",
+  "updated_at": "2026-11-03T23:12:07.671Z",
+  "base_sha": "79fe2740eb7e8debfce684079be493a5e842bf38",
+  "current_work": [
+    "HAPTICS-008"
+  ],
+  "last_commit": null,
+  "next_step": "Make production post-build APK/OBB CLI require immutable original Haptics manifest; reproduce omission bypass with synthetic RED, preserve programmatic test API, run CPU CI. No Unity/native.",
+  "memory_path": "prompt/coordination/clients/raft-20261103T231207Z-a5d12e9c/MEMORY.md"
+}
