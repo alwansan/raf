@@ -1,0 +1,27 @@
+name: FFT requested workload boundary regression CPU only
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'tests/test_fft_requested_workload.py'
+      - 'scripts/probe_original_fft_software_vulkan.py'
+      - '.github/workflows/raft-fft-workload-boundary.yml'
+permissions:
+  contents: read
+concurrency:
+  group: fft-workload-boundary-4e91b2cd-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - run: python3 -m unittest discover -s tests -p 'test_fft_requested_workload.py' -v
+      - run: python3 -m unittest discover -s tests -p 'test_probe_original_fft_software_vulkan.py' -v

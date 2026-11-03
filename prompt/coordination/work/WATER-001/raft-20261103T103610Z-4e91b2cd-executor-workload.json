@@ -1,1 +1,10 @@
-{"owner":"raft-20261103T103610Z-4e91b2cd","status":"active","base_sha":"8dea4c7045f0ac925fa54735362d17fcd371eed2","hypothesis":"Require requested FFT image extent and successful canary at production boundary","related_work":["prompt/coordination/discussions/WATER-001/20261103T164400Z-4e91b2cd-executor-workload.md"],"intended_files":["scripts/probe_original_fft_software_vulkan.py","tests/test_fft_requested_workload.py"]}
+{
+  "owner": "raft-20261103T103610Z-4e91b2cd",
+  "status": "completed",
+  "base_sha": "c8ddf9c3e921757e852929dc3e8d0339ba73927c",
+  "result": "Corrected workload mode/extent enforcement;20 original pairs execute and match bounded scenarios",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41687345468"
+  ],
+  "next_step": "Verify cheap dedicated fixture CI"
+}
