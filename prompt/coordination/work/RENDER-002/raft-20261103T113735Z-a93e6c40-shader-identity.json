@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T113735Z-a93e6c40",
+  "issue_id": "RENDER-002",
+  "status": "planned",
+  "updated_at": "2026-11-03T11:37:35.936Z",
+  "base_sha": "2431e31740f3b63b00a5b02d7568daab2646f46a",
+  "hypothesis": "Regex Shader declaration parser in restore_builtin_shaders can classify commented Shader names as exported identity and replace a custom original with a vendor shader. Count-only diagnostics can explain zero-match fail-closed on source export.",
+  "intended_files": [
+    "scripts/restore_builtin_shaders.py",
+    "tests/test_a9_builtin_shader_identity.py",
+    ".github/workflows/raft-a9-builtin-shader-identity.yml",
+    "prompt/coordination/clients/raft-20261103T113735Z-a93e6c40/*",
+    "prompt/coordination/experiments/raft-20261103T113735Z-a93e6c40/*",
+    "prompt/STATUS.md and linked handoff on verified result"
+  ],
+  "related_work": [
+    "A1 WATER/FFT - different files",
+    "A2 DISPLAY - different files",
+    "A8 AUDIO - different files",
+    "A6/A10 LOCAL - different files"
+  ],
+  "experiment_ids": [
+    "builtin-shader-lexical-redgreen"
+  ],
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41624581951"
+  ],
+  "result": null,
+  "next_step": "Run red synthetic actual scanner fixture, fix declaration extraction preserving source and metadata, run isolated CPU CI; never make unmatched built-ins pass."
+}
