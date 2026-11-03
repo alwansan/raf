@@ -19,11 +19,11 @@ URL = 'https://download.unity3d.com/download_unity/88f88f591b2e/builtin_shaders-
 SHA256 = '5cb0f9c4d022d6054d179778b9b50a0301d6748eaf4abdedd21c93f0c30b10c5'
 ROOT = 'Assets/RaftAndroid/BuiltinShaderSources/'
 NOTICE = 'Assets/StreamingAssets/RaftAndroidNotices/unity-builtin-shaders-MIT.txt'
-INCLUDE = re.compile(r'(#\\s*include(?:_with_pragmas)?\\s+")([^"\\r\\n]+)(")')
+INCLUDE = re.compile(r'(#\s*include(?:_with_pragmas)?\s+")([^"\r\n]+)(")')
 # A ShaderLab header may be preceded by a commented-out Shader name. The
 # shared DECL regex also appears in other restorers; avoid changing it globally.
-EXPORT_DECL = re.compile(r'^\\s*Shader\\s+"([^"\\r\\n]+)"', re.MULTILINE)
-COMMENT_OR_STRING = re.compile(r'//[^\\r\\n]*|/\\*[\\s\\S]*?(?:\\*/|$)|"(?:\\\\.|[^"\\\\])*"')
+EXPORT_DECL = re.compile(r'^\s*Shader\s+"([^"\r\n]+)"', re.MULTILINE)
+COMMENT_OR_STRING = re.compile(r'//[^\r\n]*|/\*[\s\S]*?(?:\*/|$)|"(?:\\.|[^"\\])*"')
 
 
 def exported_shader_identity(source):
@@ -36,7 +36,7 @@ def exported_shader_identity(source):
         token = match.group()
         if token.startswith('"'):
             return token
-        return ''.join(c if c in '\\r\\n' else ' ' for c in token)
+        return ''.join(c if c in '\r\n' else ' ' for c in token)
 
     stripped = COMMENT_OR_STRING.sub(mask, source)
     identities = EXPORT_DECL.findall(stripped)
