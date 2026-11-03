@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T100042Z-afcedabb",
+  "issue_id": "HAPTICS-008",
+  "status": "planned",
+  "updated_at": "2026-11-03T10:01:12.332Z",
+  "base_sha": "af354e4154b915a99fd9ba55a37b63ce849a16f5",
+  "hypothesis": "Historical LogRaft haptics resource-path failures reveal an Android path resolution/staging defect; validate exact errors against current code before touching runtime behavior",
+  "intended_files": [
+    "android-port/Runtime/",
+    "scripts/tests/",
+    "prompt/coordination/clients/raft-20261103T100042Z-afcedabb/",
+    "prompt/coordination/experiments/raft-20261103T100042Z-afcedabb/",
+    "prompt/coordination/work/HAPTICS-008/"
+  ],
+  "related_work": [
+    "DISPLAY-003/A2 (avoid concurrent Runtime settings edits)",
+    "FFT-FORMAT-009/A1 (separate shaders and audits)"
+  ],
+  "experiment_ids": [
+    "haptics-path-repro"
+  ],
+  "evidence": [
+    "https://github.com/alwansan/CL/tree/main/raft%20log/lf/LogRaft-20261102-205608-054"
+  ],
+  "result": null,
+  "next_step": "Identify raw failing resource names; inspect existing path semantics, add fail-safe targeted regression and repair only if evidenced"
+}

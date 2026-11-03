@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T100042Z-afcedabb",
+  "status": "planned",
+  "hypothesis": "Android haptics lookup points to inaccessible game resource paths, which can be reproduced with a source-level path contract",
+  "input_hashes": [],
+  "commands": [],
+  "expected_signal": "Concrete missing path and current fallback mismatch (or proof of optional non-blocking handling)",
+  "negative_controls": [
+    "Known valid resource staging",
+    "Missing optional resource"
+  ],
+  "workflow_path": null,
+  "concurrency_group": null,
+  "artifact_prefix": null,
+  "budget": "Local CPU-only; no new LFS downloads or native workflows",
+  "run_url": null,
+  "source_sha": null,
+  "result": null,
+  "limitations": [
+    "Historical phone logging predates latest source commits"
+  ],
+  "next_step": "Inspect original raw log and source before choosing tests"
+}

@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "username": "raft-20261103T100042Z-afcedabb",
+  "session_id": "a6-20261103T100042Z-8d2c701e",
+  "resumed_from": null,
+  "status": "active",
+  "updated_at": "2026-11-03T10:01:12.332Z",
+  "base_sha": "af354e4154b915a99fd9ba55a37b63ce849a16f5",
+  "current_work": [
+    "HAPTICS-008"
+  ],
+  "last_commit": null,
+  "next_step": "Audit CL 20261102 haptics missing paths versus staged source, reproduce a concrete failure, add a scoped CPU-only correction and tests where feasible",
+  "memory_path": "prompt/coordination/clients/raft-20261103T100042Z-afcedabb/MEMORY.md"
+}
