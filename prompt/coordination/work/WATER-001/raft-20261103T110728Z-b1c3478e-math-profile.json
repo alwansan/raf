@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T110728Z-b1c3478e",
+  "client_label": "A1",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "updated_at": "2026-11-03T11:07:29.047Z",
+  "base_sha": "6cefb8df0394ca7f19f32830701f703d12d0b3f6",
+  "hypothesis": "FFT descriptor/workgroup matches may conceal arithmetic opcode profile changes after HLSL cross-compile. Need purely numeric per-module operation profiles and negative controls on real SHA-checked original 20 programs.",
+  "intended_files": [
+    "scripts/probe_fft_spirv_math_profile.py",
+    "tests/test_probe_fft_spirv_math_profile.py",
+    "scripts/probe_authentic_fft_dxbc_translation.py",
+    ".github/workflows/raft-original-water-synthetic.yml",
+    ".github/workflows/raft-original-water-lfs-compute-audit.yml",
+    "prompt/coordination/clients/raft-20261103T110728Z-b1c3478e",
+    "prompt/coordination/experiments/raft-20261103T110728Z-b1c3478e",
+    "prompt/STATUS.md",
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+  ],
+  "related_work": [
+    "A1 former image-flow scoped repair paused",
+    "a81c6e42 precision policy separate",
+    "4e91b2cd FFT caller policy separate",
+    "6d92f0ab typed-image structural audit separate"
+  ],
+  "budget": "No Unity/APK, existing private source-only authenticated three-owner 337660952-byte workflow 22min, synthetic 8min, no forced LFS outside already-allowed workflow.",
+  "experiment_ids": [
+    "fft-math-opcode-profile"
+  ],
+  "result": null
+}

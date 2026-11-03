@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "username": "raft-20261103T110728Z-b1c3478e",
+  "client_label": "A1",
+  "session_id": "a1-20261103T110728Z-482f39a0",
+  "resumed_from": "raft-20261103T104800Z-a1f742c0",
+  "status": "active",
+  "updated_at": "2026-11-03T11:07:29.047Z",
+  "base_sha": "6cefb8df0394ca7f19f32830701f703d12d0b3f6",
+  "current_work": [
+    "WATER-001",
+    "FFT-FORMAT-009"
+  ],
+  "last_commit": null,
+  "next_step": "Isolated arithmetic opcode numeric profile of 20 authenticated original FFT DXBC and cross-compiled HLSL SPIR-V; synthetic negatives; no semantic or GPU equivalence claimed.",
+  "memory_path": "prompt/coordination/clients/raft-20261103T110728Z-b1c3478e/MEMORY.md"
+}
