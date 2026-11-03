@@ -15,6 +15,7 @@ from scripts.verify_targeted_lfs_compute_sources import verify_sources
 from scripts.probe_original_compute_containers import scan_blob
 from scripts.probe_directx_shader_bridge import inspect
 from scripts.run_original_dxbc_translation_probe import version_tokens
+from scripts.probe_fft_spirv_images import image_resource_contracts
 
 OWNER = "sharedassets0.assets"
 PATH_ID = 2456
@@ -131,7 +132,7 @@ def compare_roundtrip_contracts(original_reflection, original_bindings,
 
 
 def cross_compile_roundtrip(source_spv, original_reflection, original_bindings,
-                            temporary, index):
+                            original_images, temporary, index):
     """Return exact stages independently; shader text remains private temp only."""
     result = {
         "spirv_cross_hlsl50_generated": False,
@@ -139,6 +140,7 @@ def cross_compile_roundtrip(source_spv, original_reflection, original_bindings,
         "glslang_spirv_valid_for_vulkan_1_1": False,
         "cross_compile_semantically_verified": False,
         "authored_shaderlab_restored": False,
+        "typed_image_contract_preserved": False,
     }
     hlsl = temporary / ("fft_" + str(index) + ".hlsl")
     recomp = temporary / ("fft_" + str(index) + "_roundtrip.spv")
@@ -157,6 +159,7 @@ def cross_compile_roundtrip(source_spv, original_reflection, original_bindings,
         module = recomp.read_bytes()
         parsed = inspect(module)
         bindings = spirv_resource_bindings(module)
+        typed_images = image_resource_contracts(module)
     except (ValueError, struct.error):
         return result
     if parsed.get("container") != "SPIR-V":
@@ -166,6 +169,8 @@ def cross_compile_roundtrip(source_spv, original_reflection, original_bindings,
         ["spirv-val", "--target-env", "vulkan1.1", str(recomp)], timeout=25)
     result.update(compare_roundtrip_contracts(
         original_reflection, original_bindings, parsed, bindings))
+    result['typed_image_contract_preserved'] = (typed_images['typed_image_declarations'] ==
+                                                original_images['typed_image_declarations'])
     return result
 
 
@@ -219,11 +224,17 @@ def probe(root):
                 entry["instruction_count"] = information["instruction_count"]
                 entry["bindings"] = spirv_resource_bindings(spv_bytes)
                 entry["resource_types"] = private_spirv_cross_reflect(spv)
+                entry["typed_images"] = image_resource_contracts(spv_bytes)
+                reflected = entry["resource_types"]["original_resource_kind_counts"]
+                reflected_images = sum(reflected.get(kind, 0) for kind in
+                                       ("images", "textures", "separate_images"))
+                if entry["typed_images"]["count"] != reflected_images:
+                    raise ValueError("Typed-image declarations disagree with reflection")
                 entry["validated_for_vulkan_1_1"] = run(
                     ["spirv-val", "--target-env", "vulkan1.1", str(spv)])
                 if entry["validated_for_vulkan_1_1"]:
                     entry["private_hlsl_roundtrip"] = cross_compile_roundtrip(
-                        spv, information, entry["bindings"], temp, index)
+                        spv, information, entry["bindings"], entry["typed_images"], temp, index)
             reports.append(entry)
     return {
         "original_owner": OWNER,
@@ -241,6 +252,10 @@ def probe(root):
             "compute_workgroup_shape_preserved", False) for x in reports),
         "roundtrip_bindings_preserved_count": sum(x.get("private_hlsl_roundtrip", {}).get(
             "descriptor_binding_pairs_preserved", False) for x in reports),
+        "typed_image_declarations_checked": sum(x.get("typed_images", {}).get("count", 0)
+                                               for x in reports),
+        "roundtrip_typed_images_preserved_count": sum(x.get("private_hlsl_roundtrip", {}).get(
+            "typed_image_contract_preserved", False) for x in reports),
         "original_kernel_indices_verified": False,
         "original_water_resource_contract_verified": False,
         "adreno_gpu_executed": False,

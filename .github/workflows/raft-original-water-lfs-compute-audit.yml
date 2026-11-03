@@ -15,6 +15,8 @@ on:
       - 'tests/test_probe_original_fft_serialized_refs.py'
       - 'scripts/probe_authentic_fft_dxbc_translation.py'
       - 'tests/test_probe_authentic_fft_dxbc_translation.py'
+      - 'scripts/probe_fft_spirv_images.py'
+      - 'tests/test_probe_fft_spirv_images.py'
   workflow_dispatch:
 
 permissions:
@@ -46,6 +48,7 @@ jobs:
           python3 -m unittest discover -s tests -p 'test_inspect_fft_candidate_identity.py' -v
           python3 -m unittest discover -s tests -p 'test_probe_original_fft_serialized_refs.py' -v
           python3 -m unittest discover -s tests -p 'test_probe_authentic_fft_dxbc_translation.py' -v
+          python3 -m unittest discover -s tests -p 'test_probe_fft_spirv_images.py' -v
           python3 -m unittest discover -s tests -p 'test_probe_original_compute_containers.py' -v
           python3 -m unittest discover -s tests -p 'test_audit_original_compute_metadata.py' -v
       - name: Verify original committed LFS pointers before download
