@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T152008Z-92502b76",
+  "client_label": "W2",
+  "task": "RENDER-002 game-wide texture color-space split inventory",
+  "status": "in_progress",
+  "updated_at": "2026-11-03T19:20:00.000Z",
+  "base_sha": "4d92767",
+  "experiment_ids": ["fullgame-texture-colors"],
+  "deliverables": [
+    "scripts/probe_w2_fullgame_texture_colors.py",
+    "tests/test_w2_fullgame_texture_colors.py (8/8 pass)",
+    ".github/workflows/raft-w2-fullgame-texture-colors.yml",
+    "docs/W2_FULLGAME_TEXTURE_COLORS_2026-11-03.md",
+    "docs/W2_FULLGAME_TEXTURE_COLORS_2026-11-03.json (aggregate-only manifest with per-owner SHA manifest)"
+  ],
+  "result": "82 owners identity-verified (3 LFS + 79 tracked-regular), 37 texture-bearing, 4,050 textures game-wide (1,173 sRGB / 2,877 linear). CI pending.",
+  "next_step": "push, verify green CI, update STATUS + coordination summary"
+}

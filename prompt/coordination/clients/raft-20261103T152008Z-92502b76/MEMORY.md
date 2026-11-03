@@ -75,3 +75,8 @@
 
 ## تحديث 18:50Z — أربعة أسباقات CI أخضر
 - material-property-stats 41676717657 SUCCESS @ a57127e. كل حلقات W2 الأربع CI-verified: externals 41671654138، color-space 41673884477، texture-colors 41674316772، matprops 41676717657. سلسلة قيود البورت مكتملة.
+
+## تحديث 19:25Z — الحلقة الخامسة: التقسيم اللوني كامل اللعبة (82 مالكاً)
+- 82 مالكاً خليد الهويات (3 LFS: resources, sharedassets0, sharedassets36؛ 79 tracked-regular blob). manifest بالهشتاجات في docs/W2_FULLGAME_TEXTURE_COLORS_2026-11-03.json.
+- 4,050 خامة كاملة العب (37 مالكاً مع خامات): 1,173 sRGB / 2,877 linear (28.96%/71.03%). خاتمة: تقسيم اللون لكل خامة يمتد لبقية اللعبة.
+- سكربت/8 اختبارات/workflow قيد الدفع + سجلات + رسالة W3 بالاستدامة في حقل formats N1.

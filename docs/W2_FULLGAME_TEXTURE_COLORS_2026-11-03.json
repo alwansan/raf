@@ -1,0 +1,1545 @@
+{
+  "aggregate_only": true,
+  "no_proprietary_payload": true,
+  "owner_manifest": {
+    "globalgamemanagers.assets": {
+      "byte_count": 758412,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "b549af329d48244d80f28cb3cce6cd0b17769176081c249dc4646e1d62c58e28",
+      "sha256": "b549af329d48244d80f28cb3cce6cd0b17769176081c249dc4646e1d62c58e28"
+    },
+    "level0": {
+      "byte_count": 3927436,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "33e7855a700ae0d90d04f50d8ea75ab6f14e9d5aa0314a32e91b96fb1f6a3a62",
+      "sha256": "33e7855a700ae0d90d04f50d8ea75ab6f14e9d5aa0314a32e91b96fb1f6a3a62"
+    },
+    "level1": {
+      "byte_count": 2001504,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "9ca3a83f4d8841d4052a4899d0855a2bb0fcc87d5378b8c50fb17902cd2418a0",
+      "sha256": "9ca3a83f4d8841d4052a4899d0855a2bb0fcc87d5378b8c50fb17902cd2418a0"
+    },
+    "level10": {
+      "byte_count": 4915736,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "2f058038da957e7ccd120767c6431b05331da694a1328d760ff5c60e52e6522b",
+      "sha256": "2f058038da957e7ccd120767c6431b05331da694a1328d760ff5c60e52e6522b"
+    },
+    "level11": {
+      "byte_count": 2515548,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "38bee0a59f85f7be06650f92aebe7e9bd3dc90fea0062a7b22d64bd0fec8efc6",
+      "sha256": "38bee0a59f85f7be06650f92aebe7e9bd3dc90fea0062a7b22d64bd0fec8efc6"
+    },
+    "level12": {
+      "byte_count": 6408532,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "99529b95eb7231351604790f6c280bd48814c1b55d932d5ea77d33fe379f9542",
+      "sha256": "99529b95eb7231351604790f6c280bd48814c1b55d932d5ea77d33fe379f9542"
+    },
+    "level13": {
+      "byte_count": 2176744,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "ee814a41a2730f928b69965f67095f1fe1f9d12c4a666a03914a896b3cbd999d",
+      "sha256": "ee814a41a2730f928b69965f67095f1fe1f9d12c4a666a03914a896b3cbd999d"
+    },
+    "level14": {
+      "byte_count": 2161764,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "59c97a1466b3ea12367312f45e4cf32d8effee4a3569d07a5e69f3828370aaf7",
+      "sha256": "59c97a1466b3ea12367312f45e4cf32d8effee4a3569d07a5e69f3828370aaf7"
+    },
+    "level15": {
+      "byte_count": 2020260,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "2fc77a305b478b3a3c94471fa7502ce72f6684486460930d668b155c7931a348",
+      "sha256": "2fc77a305b478b3a3c94471fa7502ce72f6684486460930d668b155c7931a348"
+    },
+    "level16": {
+      "byte_count": 1816296,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "d84076456bd693c7bfd4f7413e3011bf378e61a2b2e64379181996cc03c740f9",
+      "sha256": "d84076456bd693c7bfd4f7413e3011bf378e61a2b2e64379181996cc03c740f9"
+    },
+    "level17": {
+      "byte_count": 976896,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "2b800cd36b0af51abd24366fff12da71e697d076394e474f627e846552e42235",
+      "sha256": "2b800cd36b0af51abd24366fff12da71e697d076394e474f627e846552e42235"
+    },
+    "level18": {
+      "byte_count": 1181636,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "7c3f8b466c51837ff5cc9a420d8b8797233aaa38fe334c1fac2f0437dc92c30e",
+      "sha256": "7c3f8b466c51837ff5cc9a420d8b8797233aaa38fe334c1fac2f0437dc92c30e"
+    },
+    "level19": {
+      "byte_count": 1312144,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "6c725b9aff205589bc1d22d7bb36b8027bd42c39986986f10c59fe5f6dc98f5f",
+      "sha256": "6c725b9aff205589bc1d22d7bb36b8027bd42c39986986f10c59fe5f6dc98f5f"
+    },
+    "level2": {
+      "byte_count": 22204,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "3ed1e89bbdb4509af723fd6e7b37c4ffa0e92a8de548940e1fd7db6e90bf7c8b",
+      "sha256": "3ed1e89bbdb4509af723fd6e7b37c4ffa0e92a8de548940e1fd7db6e90bf7c8b"
+    },
+    "level20": {
+      "byte_count": 1318340,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "569099da77a687652a52fc07bca52e97bbc348afc4ba9c5d261e7660e68d840f",
+      "sha256": "569099da77a687652a52fc07bca52e97bbc348afc4ba9c5d261e7660e68d840f"
+    },
+    "level21": {
+      "byte_count": 1435756,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "ac474618209dcab566cec0f974fe0acfd5203df84026c49b29df59cc42cb71d3",
+      "sha256": "ac474618209dcab566cec0f974fe0acfd5203df84026c49b29df59cc42cb71d3"
+    },
+    "level22": {
+      "byte_count": 1516824,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "e8775ebe247f3e8cb5c035090197009afda4454b11cdf6d65f6f876a32a4b06d",
+      "sha256": "e8775ebe247f3e8cb5c035090197009afda4454b11cdf6d65f6f876a32a4b06d"
+    },
+    "level23": {
+      "byte_count": 1430612,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "9c01895caf7e232c6d0c047d074f45a87f0e2419fab3cccf30e98ac4d66630f2",
+      "sha256": "9c01895caf7e232c6d0c047d074f45a87f0e2419fab3cccf30e98ac4d66630f2"
+    },
+    "level24": {
+      "byte_count": 2803016,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "6a06f3e95da765e89ded81c13837cd3de5844969c131ea02e59c38dbda22fc5d",
+      "sha256": "6a06f3e95da765e89ded81c13837cd3de5844969c131ea02e59c38dbda22fc5d"
+    },
+    "level25": {
+      "byte_count": 8507616,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "a1f194f103818a855ceabf317e333081517e3c6ad2b2e6b1611af2d69453dd31",
+      "sha256": "a1f194f103818a855ceabf317e333081517e3c6ad2b2e6b1611af2d69453dd31"
+    },
+    "level26": {
+      "byte_count": 1153248,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "e6b40ae4a8f86cbcef553230bd25e40b589e5b885adb49bf18644f37091f76cd",
+      "sha256": "e6b40ae4a8f86cbcef553230bd25e40b589e5b885adb49bf18644f37091f76cd"
+    },
+    "level27": {
+      "byte_count": 1306904,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "5e12b60b087367f3aa19ad66a906385bf4b592867bb7e7721e53997c847815be",
+      "sha256": "5e12b60b087367f3aa19ad66a906385bf4b592867bb7e7721e53997c847815be"
+    },
+    "level28": {
+      "byte_count": 994008,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "033ca631126eb09672d722deac7e2ce78f406c14bd131c6c886e99325d2f8fbe",
+      "sha256": "033ca631126eb09672d722deac7e2ce78f406c14bd131c6c886e99325d2f8fbe"
+    },
+    "level29": {
+      "byte_count": 27323532,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "7ce3680b92c90279f368e91837e3ae3558b67961c42062aa81776bf6085bd62b",
+      "sha256": "7ce3680b92c90279f368e91837e3ae3558b67961c42062aa81776bf6085bd62b"
+    },
+    "level3": {
+      "byte_count": 20388,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "0bbeece712333cc3119995a7db34abe79a2c1a371825f559dc486b944a5031a4",
+      "sha256": "0bbeece712333cc3119995a7db34abe79a2c1a371825f559dc486b944a5031a4"
+    },
+    "level30": {
+      "byte_count": 70435196,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "53eb88c75c3a7d63333536e26b199dbfdcfd5ba8fb656ce843f24e45c3d9c94f",
+      "sha256": "53eb88c75c3a7d63333536e26b199dbfdcfd5ba8fb656ce843f24e45c3d9c94f"
+    },
+    "level31": {
+      "byte_count": 2428320,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "240fa2926afce581b03ae85cc09601c6ad8aec6aad9e2666253cb98bae3dfe2e",
+      "sha256": "240fa2926afce581b03ae85cc09601c6ad8aec6aad9e2666253cb98bae3dfe2e"
+    },
+    "level32": {
+      "byte_count": 1317544,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "c527c55f9ee411b9db8d36cb4ab5d0b7f2e82a5f8c99388a1ef8b11307ea8da6",
+      "sha256": "c527c55f9ee411b9db8d36cb4ab5d0b7f2e82a5f8c99388a1ef8b11307ea8da6"
+    },
+    "level33": {
+      "byte_count": 2507592,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "859a97705cb0570fcd8d4bd894c5b87e6b4c4f8e1e92752a16a43a7518b8126c",
+      "sha256": "859a97705cb0570fcd8d4bd894c5b87e6b4c4f8e1e92752a16a43a7518b8126c"
+    },
+    "level34": {
+      "byte_count": 52351536,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "6ebcf37fe3d2c07305d1b8091b0284c213537e860e0ff068d9d8ea0692c749d4",
+      "sha256": "6ebcf37fe3d2c07305d1b8091b0284c213537e860e0ff068d9d8ea0692c749d4"
+    },
+    "level35": {
+      "byte_count": 5678944,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "b4a5e83f4b80a0be23603f4e38640364c801b567fc072b5a42aa234a3fe77a0e",
+      "sha256": "b4a5e83f4b80a0be23603f4e38640364c801b567fc072b5a42aa234a3fe77a0e"
+    },
+    "level36": {
+      "byte_count": 8235320,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "8d312d883a44d0bde6ee68470c007b9a93a413c4d9babdd2b88b3449e0ae4041",
+      "sha256": "8d312d883a44d0bde6ee68470c007b9a93a413c4d9babdd2b88b3449e0ae4041"
+    },
+    "level37": {
+      "byte_count": 293840,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "6b6276d92ef94d7729239c730525721e392e551c0d23a40cdb3b103e2cf3e1a6",
+      "sha256": "6b6276d92ef94d7729239c730525721e392e551c0d23a40cdb3b103e2cf3e1a6"
+    },
+    "level38": {
+      "byte_count": 178892,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "205515429d83c0e502987f6c917fadd56bf3e8d5af18f6b38e95059db54a2932",
+      "sha256": "205515429d83c0e502987f6c917fadd56bf3e8d5af18f6b38e95059db54a2932"
+    },
+    "level39": {
+      "byte_count": 202252,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "8be4fd42f444ab37c58a4eef9ddb7e196bfde7ad186d9edf5cd2d9d4b2e0cf07",
+      "sha256": "8be4fd42f444ab37c58a4eef9ddb7e196bfde7ad186d9edf5cd2d9d4b2e0cf07"
+    },
+    "level4": {
+      "byte_count": 30668,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "a62b5ac7b80f8a906c9744ec457be8816663da4a2e8bb2a38924122448522511",
+      "sha256": "a62b5ac7b80f8a906c9744ec457be8816663da4a2e8bb2a38924122448522511"
+    },
+    "level5": {
+      "byte_count": 19496,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "28875e384d1c470e9215f89de0ef1bd8f1ef155a78dcfaea47dcd3ca70dbadf1",
+      "sha256": "28875e384d1c470e9215f89de0ef1bd8f1ef155a78dcfaea47dcd3ca70dbadf1"
+    },
+    "level6": {
+      "byte_count": 2470032,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "fcafc8d31a023b539076bd64c08089a4d1b4d475fdf46b7aa20c76141c7b76c9",
+      "sha256": "fcafc8d31a023b539076bd64c08089a4d1b4d475fdf46b7aa20c76141c7b76c9"
+    },
+    "level7": {
+      "byte_count": 38380,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "40c9fa15c03e9f04997ba41dda6184cc890fd5401d0473dde8434d693c7e29f9",
+      "sha256": "40c9fa15c03e9f04997ba41dda6184cc890fd5401d0473dde8434d693c7e29f9"
+    },
+    "level8": {
+      "byte_count": 3432968,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "1e20c7c3508f03f3736c2b685e51359d7ef4ef59144bce695d7654c7ef8882ae",
+      "sha256": "1e20c7c3508f03f3736c2b685e51359d7ef4ef59144bce695d7654c7ef8882ae"
+    },
+    "level9": {
+      "byte_count": 4370048,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "2d53731b5645722d985b3108e6714f5f56b65c2fddb4de33730fdbdd98cea46f",
+      "sha256": "2d53731b5645722d985b3108e6714f5f56b65c2fddb4de33730fdbdd98cea46f"
+    },
+    "resources.assets": {
+      "byte_count": 111533516,
+      "identity_kind": "lfs-pointer-oid",
+      "registered_sha256": "87493249f1adfc0c5eb8b82e4e199e208cd2c95eabe9796cab82116c4838595c",
+      "sha256": "87493249f1adfc0c5eb8b82e4e199e208cd2c95eabe9796cab82116c4838595c"
+    },
+    "sharedassets0.assets": {
+      "byte_count": 115978112,
+      "identity_kind": "lfs-pointer-oid",
+      "registered_sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+      "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3"
+    },
+    "sharedassets1.assets": {
+      "byte_count": 34888388,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "c6bdf49f7d38ab060872fcb298770bc7113959f85ea2fd1a42dc663323d7660a",
+      "sha256": "c6bdf49f7d38ab060872fcb298770bc7113959f85ea2fd1a42dc663323d7660a"
+    },
+    "sharedassets10.assets": {
+      "byte_count": 4912068,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "acf445834adf92c0c9720055624a941270f3d728a4aca0264d736afb8358a313",
+      "sha256": "acf445834adf92c0c9720055624a941270f3d728a4aca0264d736afb8358a313"
+    },
+    "sharedassets11.assets": {
+      "byte_count": 3818268,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "c29b47be055642500406c7f6e0cfad386a92875492406d1a848b68aa941ba7d6",
+      "sha256": "c29b47be055642500406c7f6e0cfad386a92875492406d1a848b68aa941ba7d6"
+    },
+    "sharedassets12.assets": {
+      "byte_count": 4352984,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "af58ae345e4e5f4e2bc49c21deb364f6c89acef8a4205b57133bf8d2790bad77",
+      "sha256": "af58ae345e4e5f4e2bc49c21deb364f6c89acef8a4205b57133bf8d2790bad77"
+    },
+    "sharedassets13.assets": {
+      "byte_count": 5001500,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "c40e4bb2372b01d32a4edb199990a6f4e613e860816288e5fa8cd4e30a8d0188",
+      "sha256": "c40e4bb2372b01d32a4edb199990a6f4e613e860816288e5fa8cd4e30a8d0188"
+    },
+    "sharedassets14.assets": {
+      "byte_count": 3892416,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "a81187215f53602d3ef03b9d09d4bbde6db32c573b32941f3ec7ef7005367c1f",
+      "sha256": "a81187215f53602d3ef03b9d09d4bbde6db32c573b32941f3ec7ef7005367c1f"
+    },
+    "sharedassets15.assets": {
+      "byte_count": 3794788,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "d95868e623fab88f26eaff553ad50597f14ab23d06cab92dacacd23df7a5a1db",
+      "sha256": "d95868e623fab88f26eaff553ad50597f14ab23d06cab92dacacd23df7a5a1db"
+    },
+    "sharedassets16.assets": {
+      "byte_count": 3984744,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "de85cd82aca1cc6931a11dc94a5e2ff9f485ca3d672d0c88fd25c813be7e3de8",
+      "sha256": "de85cd82aca1cc6931a11dc94a5e2ff9f485ca3d672d0c88fd25c813be7e3de8"
+    },
+    "sharedassets17.assets": {
+      "byte_count": 3944220,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "8eaba9948ad005eaef193838d5b215de871ce7fa4df013ec79e1084d47b392d6",
+      "sha256": "8eaba9948ad005eaef193838d5b215de871ce7fa4df013ec79e1084d47b392d6"
+    },
+    "sharedassets18.assets": {
+      "byte_count": 3979640,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "6c78fa11180cc1b0206e16864c48d4264932f042d862e2143a3a0300bfbefc13",
+      "sha256": "6c78fa11180cc1b0206e16864c48d4264932f042d862e2143a3a0300bfbefc13"
+    },
+    "sharedassets19.assets": {
+      "byte_count": 3995944,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "6a0563a7921edf26bcbf22dc1df9fe616a23159a62585fd0be6b9052d1a25895",
+      "sha256": "6a0563a7921edf26bcbf22dc1df9fe616a23159a62585fd0be6b9052d1a25895"
+    },
+    "sharedassets2.assets": {
+      "byte_count": 260488,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "eddf1dd6d3ef1da79c9ac216365203b9c9ba2e672a3a9d8cb83ba055edeb6aa8",
+      "sha256": "eddf1dd6d3ef1da79c9ac216365203b9c9ba2e672a3a9d8cb83ba055edeb6aa8"
+    },
+    "sharedassets20.assets": {
+      "byte_count": 3851064,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "e5e82cf6155f692026c22804b90c1a55f4a3c27c3c32dd4104f72ce1b8aebbb1",
+      "sha256": "e5e82cf6155f692026c22804b90c1a55f4a3c27c3c32dd4104f72ce1b8aebbb1"
+    },
+    "sharedassets21.assets": {
+      "byte_count": 3723112,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "6060d8667c1799b50e7954b8c93c0132bedf41e540decc1998e646e48800225f",
+      "sha256": "6060d8667c1799b50e7954b8c93c0132bedf41e540decc1998e646e48800225f"
+    },
+    "sharedassets22.assets": {
+      "byte_count": 3809536,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "b2e7b3489bf12c01075a678cf0f900311d3080cf5b76321549fafce8b4410581",
+      "sha256": "b2e7b3489bf12c01075a678cf0f900311d3080cf5b76321549fafce8b4410581"
+    },
+    "sharedassets23.assets": {
+      "byte_count": 3814852,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "e9b84d43a3b85c5027149c91e037e272ada031e98e0bf6ce71aa59aad119be63",
+      "sha256": "e9b84d43a3b85c5027149c91e037e272ada031e98e0bf6ce71aa59aad119be63"
+    },
+    "sharedassets24.assets": {
+      "byte_count": 7987136,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "a28921562b0d64a0c5aeddfabd7a50c2695d9e9422725c19df9c786f8fdd6bdc",
+      "sha256": "a28921562b0d64a0c5aeddfabd7a50c2695d9e9422725c19df9c786f8fdd6bdc"
+    },
+    "sharedassets25.assets": {
+      "byte_count": 17611892,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "b29ec028607fe74f9b0ac6fe55d0e565e26b29ac520bd80732c5a3bc851f7f67",
+      "sha256": "b29ec028607fe74f9b0ac6fe55d0e565e26b29ac520bd80732c5a3bc851f7f67"
+    },
+    "sharedassets26.assets": {
+      "byte_count": 4715876,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "ced979b94e37e2b53704ee452e89300e447f95a0b8375ce23450139a48f6c783",
+      "sha256": "ced979b94e37e2b53704ee452e89300e447f95a0b8375ce23450139a48f6c783"
+    },
+    "sharedassets27.assets": {
+      "byte_count": 4915836,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "24314ead4fe4255e15a818b5d162f1db6ff316ac3e28794409ebc6ee55e9d796",
+      "sha256": "24314ead4fe4255e15a818b5d162f1db6ff316ac3e28794409ebc6ee55e9d796"
+    },
+    "sharedassets28.assets": {
+      "byte_count": 4214456,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "8e520c05c667aab52cb816fbedd57d42eb23f078df7fdfeebc18457b79fbcbd9",
+      "sha256": "8e520c05c667aab52cb816fbedd57d42eb23f078df7fdfeebc18457b79fbcbd9"
+    },
+    "sharedassets29.assets": {
+      "byte_count": 9198256,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "1d1e3e9047e5d67df2dade7f85e32ff2873f1d07dc75611ade3e7d4be2bd8e8e",
+      "sha256": "1d1e3e9047e5d67df2dade7f85e32ff2873f1d07dc75611ade3e7d4be2bd8e8e"
+    },
+    "sharedassets3.assets": {
+      "byte_count": 207032,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "098a20faae4859e8c875ece30df252958f2376cad4677cda314359bd17623435",
+      "sha256": "098a20faae4859e8c875ece30df252958f2376cad4677cda314359bd17623435"
+    },
+    "sharedassets30.assets": {
+      "byte_count": 19568972,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "0cacdad92d1f1c94e9b8f4c971619851908a0305a0d32f66e6d67b8068320b26",
+      "sha256": "0cacdad92d1f1c94e9b8f4c971619851908a0305a0d32f66e6d67b8068320b26"
+    },
+    "sharedassets31.assets": {
+      "byte_count": 4124548,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "00f686f4f6e62d9059a47edd24434954f4d0b081b8205c9847e2e08ce93ab955",
+      "sha256": "00f686f4f6e62d9059a47edd24434954f4d0b081b8205c9847e2e08ce93ab955"
+    },
+    "sharedassets32.assets": {
+      "byte_count": 3909716,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "8d472472cdc88e5c5d5436392418b53fce6286fd4aed38d24b4fc953f4d824bc",
+      "sha256": "8d472472cdc88e5c5d5436392418b53fce6286fd4aed38d24b4fc953f4d824bc"
+    },
+    "sharedassets33.assets": {
+      "byte_count": 3867576,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "4f0da67bb1594da4a529d598ce914ced3b0116e29ebdef0095d090035b6cc051",
+      "sha256": "4f0da67bb1594da4a529d598ce914ced3b0116e29ebdef0095d090035b6cc051"
+    },
+    "sharedassets34.assets": {
+      "byte_count": 13612772,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "c422af7ca6e4153ef9abe8e6522123ee089b82b90d85b29223db011987dcdb9e",
+      "sha256": "c422af7ca6e4153ef9abe8e6522123ee089b82b90d85b29223db011987dcdb9e"
+    },
+    "sharedassets35.assets": {
+      "byte_count": 26845236,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "6e52bc4588605289c00b95dd3d4b2ad15a427c40c7f857ea52fb36a5d73a00e5",
+      "sha256": "6e52bc4588605289c00b95dd3d4b2ad15a427c40c7f857ea52fb36a5d73a00e5"
+    },
+    "sharedassets36.assets": {
+      "byte_count": 110149324,
+      "identity_kind": "lfs-pointer-oid",
+      "registered_sha256": "b32fcd9d327c8926b2309ffc1b5645a0c23d64ed95be37ed94e96f34736530c8",
+      "sha256": "b32fcd9d327c8926b2309ffc1b5645a0c23d64ed95be37ed94e96f34736530c8"
+    },
+    "sharedassets37.assets": {
+      "byte_count": 5464060,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "c93e4b7e9579a5385835b3b0fd85611402622f2f20d9b37e6171904202d1dd3f",
+      "sha256": "c93e4b7e9579a5385835b3b0fd85611402622f2f20d9b37e6171904202d1dd3f"
+    },
+    "sharedassets38.assets": {
+      "byte_count": 4444508,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "c9f6f9e5f2910ed830f7e4bd24a67729303cf878da4e2078f587c6568b596012",
+      "sha256": "c9f6f9e5f2910ed830f7e4bd24a67729303cf878da4e2078f587c6568b596012"
+    },
+    "sharedassets39.assets": {
+      "byte_count": 4309804,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "218564a191697b42304780da2499b35aa923bebaf49cd4010c8e867dbcde793d",
+      "sha256": "218564a191697b42304780da2499b35aa923bebaf49cd4010c8e867dbcde793d"
+    },
+    "sharedassets4.assets": {
+      "byte_count": 202985,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "60604a93885faf4d7f3827f714e9238ce26ec0424b04e1ea9a80ded19a4f1066",
+      "sha256": "60604a93885faf4d7f3827f714e9238ce26ec0424b04e1ea9a80ded19a4f1066"
+    },
+    "sharedassets5.assets": {
+      "byte_count": 202961,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "2ab7aff3c64ac8c727d2eb215a221121be03062085ff26bd75c4d881d16a5d63",
+      "sha256": "2ab7aff3c64ac8c727d2eb215a221121be03062085ff26bd75c4d881d16a5d63"
+    },
+    "sharedassets6.assets": {
+      "byte_count": 6607272,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "0476792cfeffac19d16e920011ed8d2fb2da62973c2f09a8689bc59e1ac4b632",
+      "sha256": "0476792cfeffac19d16e920011ed8d2fb2da62973c2f09a8689bc59e1ac4b632"
+    },
+    "sharedassets7.assets": {
+      "byte_count": 203045,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "6a8e2f2dfe9eee79db739af8c57c5f571c3b9f4e221a6c498b3cc9129137a59f",
+      "sha256": "6a8e2f2dfe9eee79db739af8c57c5f571c3b9f4e221a6c498b3cc9129137a59f"
+    },
+    "sharedassets8.assets": {
+      "byte_count": 9257796,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "55477662f824670d0e38e8b9811e55850c7d25bb4e6aff837d08d933aa3e1823",
+      "sha256": "55477662f824670d0e38e8b9811e55850c7d25bb4e6aff837d08d933aa3e1823"
+    },
+    "sharedassets9.assets": {
+      "byte_count": 4442272,
+      "identity_kind": "tracked-regular-blob",
+      "registered_sha256": "a7ce9c85095d19712100c61329f198a54ff0c8a077426c2acc4f2b96af13c54c",
+      "sha256": "a7ce9c85095d19712100c61329f198a54ff0c8a077426c2acc4f2b96af13c54c"
+    }
+  },
+  "owners": {
+    "globalgamemanagers.assets": {
+      "colorspace_split": {
+        "Linear": 5
+      },
+      "distinct_formats": 3,
+      "texture_count": 5,
+      "top_pairs": [
+        {
+          "colorspace": "Linear",
+          "count": 3,
+          "format": 12
+        },
+        {
+          "colorspace": "Linear",
+          "count": 1,
+          "format": 3
+        },
+        {
+          "colorspace": "Linear",
+          "count": 1,
+          "format": 4
+        }
+      ]
+    },
+    "level0": {
+      "colorspace_split": {},
+      "distinct_formats": 0,
+      "texture_count": 0,
+      "top_pairs": []
+    },
+    "level1": {
+      "colorspace_split": {},
+      "distinct_formats": 0,
+      "texture_count": 0,
+      "top_pairs": []
+    },
+    "level10": {
+      "colorspace_split": {},
+      "distinct_formats": 0,
+      "texture_count": 0,
+      "top_pairs": []
+    },
+    "level11": {
+      "colorspace_split": {},
+      "distinct_formats": 0,
+      "texture_count": 0,
+      "top_pairs": []
+    },
+    "level12": {
+      "colorspace_split": {},
+      "distinct_formats": 0,
+      "texture_count": 0,
+      "top_pairs": []
+    },
+    "level13": {
+      "colorspace_split": {},
+      "distinct_formats": 0,
+      "texture_count": 0,
+      "top_pairs": []
+    },
+    "level14": {
+      "colorspace_split": {},
+      "distinct_formats": 0,
+      "texture_count": 0,
+      "top_pairs": []
+    },
+    "level15": {
+      "colorspace_split": {},
+      "distinct_formats": 0,
+      "texture_count": 0,
+      "top_pairs": []
+    },
+    "level16": {
+      "colorspace_split": {},
+      "distinct_formats": 0,
+      "texture_count": 0,
+      "top_pairs": []
+    },
+    "level17": {
+      "colorspace_split": {},
+      "distinct_formats": 0,
+      "texture_count": 0,
+      "top_pairs": []
+    },
+    "level18": {
+      "colorspace_split": {},
+      "distinct_formats": 0,
+      "texture_count": 0,
+      "top_pairs": []
+    },
+    "level19": {
+      "colorspace_split": {},
+      "distinct_formats": 0,
+      "texture_count": 0,
+      "top_pairs": []
+    },
+    "level2": {
+      "colorspace_split": {},
+      "distinct_formats": 0,
+      "texture_count": 0,
+      "top_pairs": []
+    },
+    "level20": {
+      "colorspace_split": {},
+      "distinct_formats": 0,
+      "texture_count": 0,
+      "top_pairs": []
+    },
+    "level21": {
+      "colorspace_split": {},
+      "distinct_formats": 0,
+      "texture_count": 0,
+      "top_pairs": []
+    },
+    "level22": {
+      "colorspace_split": {},
+      "distinct_formats": 0,
+      "texture_count": 0,
+      "top_pairs": []
+    },
+    "level23": {
+      "colorspace_split": {},
+      "distinct_formats": 0,
+      "texture_count": 0,
+      "top_pairs": []
+    },
+    "level24": {
+      "colorspace_split": {},
+      "distinct_formats": 0,
+      "texture_count": 0,
+      "top_pairs": []
+    },
+    "level25": {
+      "colorspace_split": {},
+      "distinct_formats": 0,
+      "texture_count": 0,
+      "top_pairs": []
+    },
+    "level26": {
+      "colorspace_split": {},
+      "distinct_formats": 0,
+      "texture_count": 0,
+      "top_pairs": []
+    },
+    "level27": {
+      "colorspace_split": {},
+      "distinct_formats": 0,
+      "texture_count": 0,
+      "top_pairs": []
+    },
+    "level28": {
+      "colorspace_split": {},
+      "distinct_formats": 0,
+      "texture_count": 0,
+      "top_pairs": []
+    },
+    "level29": {
+      "colorspace_split": {},
+      "distinct_formats": 0,
+      "texture_count": 0,
+      "top_pairs": []
+    },
+    "level3": {
+      "colorspace_split": {},
+      "distinct_formats": 0,
+      "texture_count": 0,
+      "top_pairs": []
+    },
+    "level30": {
+      "colorspace_split": {},
+      "distinct_formats": 0,
+      "texture_count": 0,
+      "top_pairs": []
+    },
+    "level31": {
+      "colorspace_split": {},
+      "distinct_formats": 0,
+      "texture_count": 0,
+      "top_pairs": []
+    },
+    "level32": {
+      "colorspace_split": {},
+      "distinct_formats": 0,
+      "texture_count": 0,
+      "top_pairs": []
+    },
+    "level33": {
+      "colorspace_split": {},
+      "distinct_formats": 0,
+      "texture_count": 0,
+      "top_pairs": []
+    },
+    "level34": {
+      "colorspace_split": {},
+      "distinct_formats": 0,
+      "texture_count": 0,
+      "top_pairs": []
+    },
+    "level35": {
+      "colorspace_split": {},
+      "distinct_formats": 0,
+      "texture_count": 0,
+      "top_pairs": []
+    },
+    "level36": {
+      "colorspace_split": {},
+      "distinct_formats": 0,
+      "texture_count": 0,
+      "top_pairs": []
+    },
+    "level37": {
+      "colorspace_split": {},
+      "distinct_formats": 0,
+      "texture_count": 0,
+      "top_pairs": []
+    },
+    "level38": {
+      "colorspace_split": {},
+      "distinct_formats": 0,
+      "texture_count": 0,
+      "top_pairs": []
+    },
+    "level39": {
+      "colorspace_split": {},
+      "distinct_formats": 0,
+      "texture_count": 0,
+      "top_pairs": []
+    },
+    "level4": {
+      "colorspace_split": {},
+      "distinct_formats": 0,
+      "texture_count": 0,
+      "top_pairs": []
+    },
+    "level5": {
+      "colorspace_split": {},
+      "distinct_formats": 0,
+      "texture_count": 0,
+      "top_pairs": []
+    },
+    "level6": {
+      "colorspace_split": {},
+      "distinct_formats": 0,
+      "texture_count": 0,
+      "top_pairs": []
+    },
+    "level7": {
+      "colorspace_split": {},
+      "distinct_formats": 0,
+      "texture_count": 0,
+      "top_pairs": []
+    },
+    "level8": {
+      "colorspace_split": {},
+      "distinct_formats": 0,
+      "texture_count": 0,
+      "top_pairs": []
+    },
+    "level9": {
+      "colorspace_split": {},
+      "distinct_formats": 0,
+      "texture_count": 0,
+      "top_pairs": []
+    },
+    "resources.assets": {
+      "colorspace_split": {
+        "Gamma": 153,
+        "Linear": 255
+      },
+      "distinct_formats": 4,
+      "texture_count": 408,
+      "top_pairs": [
+        {
+          "colorspace": "Linear",
+          "count": 151,
+          "format": 12
+        },
+        {
+          "colorspace": "Linear",
+          "count": 98,
+          "format": 10
+        },
+        {
+          "colorspace": "Gamma",
+          "count": 66,
+          "format": 1
+        },
+        {
+          "colorspace": "Gamma",
+          "count": 63,
+          "format": 12
+        }
+      ]
+    },
+    "sharedassets0.assets": {
+      "colorspace_split": {
+        "Gamma": 265,
+        "Linear": 858
+      },
+      "distinct_formats": 5,
+      "texture_count": 1123,
+      "top_pairs": [
+        {
+          "colorspace": "Linear",
+          "count": 466,
+          "format": 12
+        },
+        {
+          "colorspace": "Linear",
+          "count": 259,
+          "format": 10
+        },
+        {
+          "colorspace": "Gamma",
+          "count": 243,
+          "format": 12
+        },
+        {
+          "colorspace": "Linear",
+          "count": 133,
+          "format": 4
+        }
+      ]
+    },
+    "sharedassets1.assets": {
+      "colorspace_split": {
+        "Gamma": 67,
+        "Linear": 349
+      },
+      "distinct_formats": 6,
+      "texture_count": 416,
+      "top_pairs": [
+        {
+          "colorspace": "Linear",
+          "count": 183,
+          "format": 10
+        },
+        {
+          "colorspace": "Linear",
+          "count": 127,
+          "format": 12
+        },
+        {
+          "colorspace": "Gamma",
+          "count": 59,
+          "format": 12
+        },
+        {
+          "colorspace": "Linear",
+          "count": 36,
+          "format": 4
+        }
+      ]
+    },
+    "sharedassets10.assets": {
+      "colorspace_split": {
+        "Gamma": 2
+      },
+      "distinct_formats": 1,
+      "texture_count": 2,
+      "top_pairs": [
+        {
+          "colorspace": "Gamma",
+          "count": 2,
+          "format": 5
+        }
+      ]
+    },
+    "sharedassets11.assets": {
+      "colorspace_split": {
+        "Gamma": 4,
+        "Linear": 4
+      },
+      "distinct_formats": 3,
+      "texture_count": 8,
+      "top_pairs": [
+        {
+          "colorspace": "Gamma",
+          "count": 2,
+          "format": 12
+        },
+        {
+          "colorspace": "Linear",
+          "count": 2,
+          "format": 12
+        },
+        {
+          "colorspace": "Linear",
+          "count": 2,
+          "format": 10
+        },
+        {
+          "colorspace": "Gamma",
+          "count": 2,
+          "format": 5
+        }
+      ]
+    },
+    "sharedassets12.assets": {
+      "colorspace_split": {
+        "Gamma": 2
+      },
+      "distinct_formats": 1,
+      "texture_count": 2,
+      "top_pairs": [
+        {
+          "colorspace": "Gamma",
+          "count": 2,
+          "format": 5
+        }
+      ]
+    },
+    "sharedassets13.assets": {
+      "colorspace_split": {
+        "Gamma": 6,
+        "Linear": 8
+      },
+      "distinct_formats": 3,
+      "texture_count": 14,
+      "top_pairs": [
+        {
+          "colorspace": "Linear",
+          "count": 6,
+          "format": 12
+        },
+        {
+          "colorspace": "Gamma",
+          "count": 4,
+          "format": 12
+        },
+        {
+          "colorspace": "Linear",
+          "count": 2,
+          "format": 10
+        },
+        {
+          "colorspace": "Gamma",
+          "count": 2,
+          "format": 5
+        }
+      ]
+    },
+    "sharedassets14.assets": {
+      "colorspace_split": {
+        "Gamma": 2
+      },
+      "distinct_formats": 1,
+      "texture_count": 2,
+      "top_pairs": [
+        {
+          "colorspace": "Gamma",
+          "count": 2,
+          "format": 5
+        }
+      ]
+    },
+    "sharedassets15.assets": {
+      "colorspace_split": {
+        "Gamma": 2
+      },
+      "distinct_formats": 1,
+      "texture_count": 2,
+      "top_pairs": [
+        {
+          "colorspace": "Gamma",
+          "count": 2,
+          "format": 5
+        }
+      ]
+    },
+    "sharedassets16.assets": {
+      "colorspace_split": {
+        "Gamma": 2
+      },
+      "distinct_formats": 1,
+      "texture_count": 2,
+      "top_pairs": [
+        {
+          "colorspace": "Gamma",
+          "count": 2,
+          "format": 5
+        }
+      ]
+    },
+    "sharedassets17.assets": {
+      "colorspace_split": {
+        "Gamma": 2
+      },
+      "distinct_formats": 1,
+      "texture_count": 2,
+      "top_pairs": [
+        {
+          "colorspace": "Gamma",
+          "count": 2,
+          "format": 5
+        }
+      ]
+    },
+    "sharedassets18.assets": {
+      "colorspace_split": {
+        "Gamma": 2
+      },
+      "distinct_formats": 1,
+      "texture_count": 2,
+      "top_pairs": [
+        {
+          "colorspace": "Gamma",
+          "count": 2,
+          "format": 5
+        }
+      ]
+    },
+    "sharedassets19.assets": {
+      "colorspace_split": {
+        "Gamma": 2
+      },
+      "distinct_formats": 1,
+      "texture_count": 2,
+      "top_pairs": [
+        {
+          "colorspace": "Gamma",
+          "count": 2,
+          "format": 5
+        }
+      ]
+    },
+    "sharedassets2.assets": {
+      "colorspace_split": {},
+      "distinct_formats": 0,
+      "texture_count": 0,
+      "top_pairs": []
+    },
+    "sharedassets20.assets": {
+      "colorspace_split": {
+        "Gamma": 2
+      },
+      "distinct_formats": 1,
+      "texture_count": 2,
+      "top_pairs": [
+        {
+          "colorspace": "Gamma",
+          "count": 2,
+          "format": 5
+        }
+      ]
+    },
+    "sharedassets21.assets": {
+      "colorspace_split": {
+        "Gamma": 2
+      },
+      "distinct_formats": 1,
+      "texture_count": 2,
+      "top_pairs": [
+        {
+          "colorspace": "Gamma",
+          "count": 2,
+          "format": 5
+        }
+      ]
+    },
+    "sharedassets22.assets": {
+      "colorspace_split": {
+        "Gamma": 2
+      },
+      "distinct_formats": 1,
+      "texture_count": 2,
+      "top_pairs": [
+        {
+          "colorspace": "Gamma",
+          "count": 2,
+          "format": 5
+        }
+      ]
+    },
+    "sharedassets23.assets": {
+      "colorspace_split": {
+        "Gamma": 2
+      },
+      "distinct_formats": 1,
+      "texture_count": 2,
+      "top_pairs": [
+        {
+          "colorspace": "Gamma",
+          "count": 2,
+          "format": 5
+        }
+      ]
+    },
+    "sharedassets24.assets": {
+      "colorspace_split": {
+        "Gamma": 78,
+        "Linear": 149
+      },
+      "distinct_formats": 5,
+      "texture_count": 227,
+      "top_pairs": [
+        {
+          "colorspace": "Linear",
+          "count": 79,
+          "format": 12
+        },
+        {
+          "colorspace": "Gamma",
+          "count": 75,
+          "format": 12
+        },
+        {
+          "colorspace": "Linear",
+          "count": 69,
+          "format": 10
+        },
+        {
+          "colorspace": "Gamma",
+          "count": 2,
+          "format": 5
+        }
+      ]
+    },
+    "sharedassets25.assets": {
+      "colorspace_split": {
+        "Gamma": 64,
+        "Linear": 128
+      },
+      "distinct_formats": 3,
+      "texture_count": 192,
+      "top_pairs": [
+        {
+          "colorspace": "Linear",
+          "count": 76,
+          "format": 12
+        },
+        {
+          "colorspace": "Gamma",
+          "count": 62,
+          "format": 12
+        },
+        {
+          "colorspace": "Linear",
+          "count": 52,
+          "format": 10
+        },
+        {
+          "colorspace": "Gamma",
+          "count": 2,
+          "format": 5
+        }
+      ]
+    },
+    "sharedassets26.assets": {
+      "colorspace_split": {
+        "Gamma": 2
+      },
+      "distinct_formats": 1,
+      "texture_count": 2,
+      "top_pairs": [
+        {
+          "colorspace": "Gamma",
+          "count": 2,
+          "format": 5
+        }
+      ]
+    },
+    "sharedassets27.assets": {
+      "colorspace_split": {
+        "Gamma": 2
+      },
+      "distinct_formats": 1,
+      "texture_count": 2,
+      "top_pairs": [
+        {
+          "colorspace": "Gamma",
+          "count": 2,
+          "format": 5
+        }
+      ]
+    },
+    "sharedassets28.assets": {
+      "colorspace_split": {
+        "Gamma": 2
+      },
+      "distinct_formats": 1,
+      "texture_count": 2,
+      "top_pairs": [
+        {
+          "colorspace": "Gamma",
+          "count": 2,
+          "format": 5
+        }
+      ]
+    },
+    "sharedassets29.assets": {
+      "colorspace_split": {
+        "Gamma": 62,
+        "Linear": 137
+      },
+      "distinct_formats": 4,
+      "texture_count": 199,
+      "top_pairs": [
+        {
+          "colorspace": "Linear",
+          "count": 75,
+          "format": 10
+        },
+        {
+          "colorspace": "Linear",
+          "count": 62,
+          "format": 12
+        },
+        {
+          "colorspace": "Gamma",
+          "count": 59,
+          "format": 12
+        },
+        {
+          "colorspace": "Gamma",
+          "count": 2,
+          "format": 5
+        }
+      ]
+    },
+    "sharedassets3.assets": {
+      "colorspace_split": {},
+      "distinct_formats": 0,
+      "texture_count": 0,
+      "top_pairs": []
+    },
+    "sharedassets30.assets": {
+      "colorspace_split": {
+        "Gamma": 109,
+        "Linear": 247
+      },
+      "distinct_formats": 3,
+      "texture_count": 356,
+      "top_pairs": [
+        {
+          "colorspace": "Linear",
+          "count": 127,
+          "format": 12
+        },
+        {
+          "colorspace": "Linear",
+          "count": 120,
+          "format": 10
+        },
+        {
+          "colorspace": "Gamma",
+          "count": 106,
+          "format": 12
+        },
+        {
+          "colorspace": "Gamma",
+          "count": 2,
+          "format": 5
+        }
+      ]
+    },
+    "sharedassets31.assets": {
+      "colorspace_split": {
+        "Gamma": 2
+      },
+      "distinct_formats": 1,
+      "texture_count": 2,
+      "top_pairs": [
+        {
+          "colorspace": "Gamma",
+          "count": 2,
+          "format": 5
+        }
+      ]
+    },
+    "sharedassets32.assets": {
+      "colorspace_split": {
+        "Gamma": 2
+      },
+      "distinct_formats": 1,
+      "texture_count": 2,
+      "top_pairs": [
+        {
+          "colorspace": "Gamma",
+          "count": 2,
+          "format": 5
+        }
+      ]
+    },
+    "sharedassets33.assets": {
+      "colorspace_split": {
+        "Gamma": 2
+      },
+      "distinct_formats": 1,
+      "texture_count": 2,
+      "top_pairs": [
+        {
+          "colorspace": "Gamma",
+          "count": 2,
+          "format": 5
+        }
+      ]
+    },
+    "sharedassets34.assets": {
+      "colorspace_split": {
+        "Gamma": 82,
+        "Linear": 172
+      },
+      "distinct_formats": 2,
+      "texture_count": 254,
+      "top_pairs": [
+        {
+          "colorspace": "Linear",
+          "count": 98,
+          "format": 12
+        },
+        {
+          "colorspace": "Gamma",
+          "count": 82,
+          "format": 12
+        },
+        {
+          "colorspace": "Linear",
+          "count": 74,
+          "format": 10
+        }
+      ]
+    },
+    "sharedassets35.assets": {
+      "colorspace_split": {
+        "Gamma": 114,
+        "Linear": 269
+      },
+      "distinct_formats": 3,
+      "texture_count": 383,
+      "top_pairs": [
+        {
+          "colorspace": "Linear",
+          "count": 136,
+          "format": 10
+        },
+        {
+          "colorspace": "Linear",
+          "count": 123,
+          "format": 12
+        },
+        {
+          "colorspace": "Gamma",
+          "count": 112,
+          "format": 12
+        },
+        {
+          "colorspace": "Linear",
+          "count": 10,
+          "format": 4
+        }
+      ]
+    },
+    "sharedassets36.assets": {
+      "colorspace_split": {
+        "Gamma": 82,
+        "Linear": 205
+      },
+      "distinct_formats": 2,
+      "texture_count": 287,
+      "top_pairs": [
+        {
+          "colorspace": "Linear",
+          "count": 109,
+          "format": 10
+        },
+        {
+          "colorspace": "Linear",
+          "count": 96,
+          "format": 12
+        },
+        {
+          "colorspace": "Gamma",
+          "count": 82,
+          "format": 12
+        }
+      ]
+    },
+    "sharedassets37.assets": {
+      "colorspace_split": {
+        "Gamma": 3,
+        "Linear": 2
+      },
+      "distinct_formats": 3,
+      "texture_count": 5,
+      "top_pairs": [
+        {
+          "colorspace": "Gamma",
+          "count": 2,
+          "format": 4
+        },
+        {
+          "colorspace": "Gamma",
+          "count": 1,
+          "format": 12
+        },
+        {
+          "colorspace": "Linear",
+          "count": 1,
+          "format": 12
+        },
+        {
+          "colorspace": "Linear",
+          "count": 1,
+          "format": 10
+        }
+      ]
+    },
+    "sharedassets38.assets": {
+      "colorspace_split": {
+        "Gamma": 2
+      },
+      "distinct_formats": 1,
+      "texture_count": 2,
+      "top_pairs": [
+        {
+          "colorspace": "Gamma",
+          "count": 2,
+          "format": 4
+        }
+      ]
+    },
+    "sharedassets39.assets": {
+      "colorspace_split": {
+        "Gamma": 2
+      },
+      "distinct_formats": 1,
+      "texture_count": 2,
+      "top_pairs": [
+        {
+          "colorspace": "Gamma",
+          "count": 2,
+          "format": 4
+        }
+      ]
+    },
+    "sharedassets4.assets": {
+      "colorspace_split": {},
+      "distinct_formats": 0,
+      "texture_count": 0,
+      "top_pairs": []
+    },
+    "sharedassets5.assets": {
+      "colorspace_split": {},
+      "distinct_formats": 0,
+      "texture_count": 0,
+      "top_pairs": []
+    },
+    "sharedassets6.assets": {
+      "colorspace_split": {
+        "Gamma": 25,
+        "Linear": 62
+      },
+      "distinct_formats": 3,
+      "texture_count": 87,
+      "top_pairs": [
+        {
+          "colorspace": "Linear",
+          "count": 43,
+          "format": 12
+        },
+        {
+          "colorspace": "Gamma",
+          "count": 23,
+          "format": 12
+        },
+        {
+          "colorspace": "Linear",
+          "count": 19,
+          "format": 10
+        },
+        {
+          "colorspace": "Gamma",
+          "count": 2,
+          "format": 5
+        }
+      ]
+    },
+    "sharedassets7.assets": {
+      "colorspace_split": {},
+      "distinct_formats": 0,
+      "texture_count": 0,
+      "top_pairs": []
+    },
+    "sharedassets8.assets": {
+      "colorspace_split": {
+        "Gamma": 15,
+        "Linear": 23
+      },
+      "distinct_formats": 3,
+      "texture_count": 38,
+      "top_pairs": [
+        {
+          "colorspace": "Linear",
+          "count": 16,
+          "format": 12
+        },
+        {
+          "colorspace": "Gamma",
+          "count": 13,
+          "format": 12
+        },
+        {
+          "colorspace": "Linear",
+          "count": 7,
+          "format": 10
+        },
+        {
+          "colorspace": "Gamma",
+          "count": 2,
+          "format": 5
+        }
+      ]
+    },
+    "sharedassets9.assets": {
+      "colorspace_split": {
+        "Gamma": 4,
+        "Linear": 4
+      },
+      "distinct_formats": 3,
+      "texture_count": 8,
+      "top_pairs": [
+        {
+          "colorspace": "Linear",
+          "count": 3,
+          "format": 12
+        },
+        {
+          "colorspace": "Gamma",
+          "count": 2,
+          "format": 12
+        },
+        {
+          "colorspace": "Gamma",
+          "count": 2,
+          "format": 5
+        },
+        {
+          "colorspace": "Linear",
+          "count": 1,
+          "format": 10
+        }
+      ]
+    }
+  },
+  "schema_version": 1
+}
