@@ -12,6 +12,7 @@ PINS={
 'SoundManager':('fe5378c4375e9609c3f9bf9c35f51abecff266148f35588a5df2eb358a745d38',0),
 'PersonController':('7889e538712b1dc992b6364248ed9c51a8b1dacc8ce2b5c19656e4d80105ce2e',0),
 'AudioSettingsBox':('97e9b951895671e47b98a8840eda474d60016e1c921477c57d8fa5316fb9bafc',0),
+'DynamicResolution':('69f9ab873de44b167deb3d6d00182fd59b0147b27d8365fff64b2849069cedbc',0),
 'GraphicsSettingsBox':('e1854d74adbbe0565b586ec749f7de2cc73e3f97f59c388934a3faa0defc9300',0),
 'Dx11FFT':('8aa32937d4235f0f1ae0a180b8099fd647558689ad65208a9f37956c69e90fb0',1),
 'WavesRendererFFT':('e7f6b8fd477f321120fc626781f0653fe1168f0e86daad0cdf8d9c4e56b323e9',3),
@@ -200,6 +201,34 @@ def isolate_audio_settings_vca(normalized):
         raise ValueError("Incomplete source-locked audio VCA logging")
     return result
 
+def guard_dynamic_resolution_timings(normalized):
+    """Reject absent/nonfinite GPU samples before the original scale algorithm."""
+    signature = 'private void DetermineResolution()'
+    start, end = body_bounds(normalized, signature)
+    body = normalized[start:end]
+    call = 'FrameTimingManager.GetLatestTimings(1u, frameTimings);'
+    if body.count(call) != 1:
+        raise ValueError('Original dynamic resolution timing read changed')
+    matches = list(re.finditer(r'(?m)^[ \t]*' + re.escape(call) + r'[ \t]*$', body))
+    if len(matches) != 1:
+        raise ValueError('Original dynamic resolution timing statement changed')
+    original = matches[0]
+    replacement = """#if UNITY_ANDROID && !UNITY_EDITOR
+        // The array capacity is not the number of samples returned by Unity.
+        // Keep stale, unsupported and nonfinite GPU timings out of scale control.
+        if (FrameTimingManager.GetLatestTimings(1u, frameTimings) == 0u ||
+            frameTimings[0].gpuFrameTime <= 0.0 ||
+            double.IsNaN(frameTimings[0].gpuFrameTime) ||
+            double.IsInfinity(frameTimings[0].gpuFrameTime))
+        {
+            return;
+        }
+#else
+""" + original[0] + "\n#endif"
+    body = body[:original.start()] + replacement + body[original.end():]
+    return normalized[:start] + body + normalized[end:]
+
+
 def adapt(stem,text):
     digest,expected=PINS[stem]
     normalized=text.replace('\r\n','\n')
@@ -263,6 +292,8 @@ using RaftAndroidLegacyInput = UnityEngine.Input;
         normalized = normalized[:start] + opening + body + closing + normalized[end:]
         if normalized[:start] + normalized[start:].replace(opening, '', 1).replace(closing, '', 1) != text.replace('\r\n', '\n'):
             raise ValueError('Original scene callback body changed')
+    elif stem == 'DynamicResolution':
+        normalized = guard_dynamic_resolution_timings(normalized)
     elif stem == 'GraphicsSettingsBox':
         signature='\tpublic void ApplyCurrentResolutionAndFullscreenMode()\n\t{\n'
         if normalized.count(signature)!=1: raise ValueError('Ambiguous original resolution setter')

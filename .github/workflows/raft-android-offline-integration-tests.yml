@@ -8,6 +8,8 @@ on:
       - 'scripts/adapt_android_render_lifetimes.py'
       - 'scripts/verify_fft_lifetime_harness.py'
       - 'scripts/verify_player_audio_initialization.py'
+      - 'scripts/verify_dynamic_resolution_timings.py'
+      - 'tests/test_dynamic_resolution_timings.py'
       - 'tests/test_android_render_lifetimes.py'
       - 'scripts/verify_android_offline_candidate.py'
       - 'scripts/probe_original_scene_audio.py'
@@ -58,6 +60,7 @@ jobs:
         run: |
           set -euo pipefail
           python3 -m unittest discover -s tests -p test_android_render_lifetimes.py -v
+          python3 -m unittest discover -s tests -p test_dynamic_resolution_timings.py -v
           python3 -m unittest discover -s tests -p test_runtime_operation_traces.py -v
           python3 -m unittest discover -s tests -p test_android_offline_startup.py -v
           python3 -m unittest discover -s tests -p test_probe_original_scene_audio.py -v
@@ -77,6 +80,8 @@ jobs:
           python3 -m scripts.probe_original_water_compute --source "$RUNNER_TEMP/original"
           python3 -m scripts.verify_fft_lifetime_harness --source "$RUNNER_TEMP/original" --output "$RUNNER_TEMP/fft-lifetime-harness"
           dotnet run --project "$RUNNER_TEMP/fft-lifetime-harness/Harness.csproj" --configuration Release --nologo
+          python3 -m scripts.verify_dynamic_resolution_timings --source "$RUNNER_TEMP/original" --output "$RUNNER_TEMP/dynamic-timing-harness"
+          dotnet run --project "$RUNNER_TEMP/dynamic-timing-harness/DynamicTiming.csproj" --configuration Release --nologo
           python3 -m scripts.adapt_android_render_lifetimes --source "$RUNNER_TEMP/original" --backup "$RUNNER_TEMP/render-lifetime-originals"
           python3 -m scripts.verify_android_offline_candidate --source "$RUNNER_TEMP/original" \
             --managed Raft/Raft_Data/Managed --runtime android-port/Runtime/Platform --output "$RUNNER_TEMP/offline-check"
