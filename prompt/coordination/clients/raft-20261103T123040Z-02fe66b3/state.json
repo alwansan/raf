@@ -2,13 +2,15 @@
   "schema_version": 1,
   "client_label": "A11",
   "username": "raft-20261103T123040Z-02fe66b3",
-  "session_id": "a11-source-provenance-20261103T123040Z",
-  "resumed_from": null,
-  "status": "completed",
-  "updated_at": "2026-11-03T12:40:41Z",
-  "base_sha": "aae8cc2070126449fa05049a669235a144309101",
-  "current_work": [],
+  "session_id": "a11-scope-v2-20261103T132112Z",
+  "resumed_from": "a11-source-provenance-20261103T123040Z",
+  "status": "active",
+  "updated_at": "2026-11-03T13:21:12Z",
+  "base_sha": "9eac97a6f502ea0bffbd256def5c325306948ed0",
+  "current_work": [
+    "RENDER-002: shader-export scope integrity red-green v2"
+  ],
   "last_commit": "d01411409e1e422c04b78533e65e138613a43573",
-  "next_step": "Exact 11-case CPU CI successful; next obtain an in-run full-export inventory/provenance capture from a coordinator-authorized original export, without changing no-match gate or starting Unity.",
+  "next_step": "Run synthetic RED checks on A11-owned scope probe, then fix only proven provenance integrity regressions; remain NOT_READY.",
   "memory_path": "prompt/coordination/clients/raft-20261103T123040Z-02fe66b3/MEMORY.md"
 }
