@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T123040Z-02fe66b3",
+  "status": "planned",
+  "hypothesis": "Sample-vs-full export counts are misleading absent same-stage scope provenance; fail closed on partial, inconsistent or unknown scope.",
+  "input_hashes": [],
+  "commands": [
+    "python3 -m unittest tests.test_a11_shader_export_scope -v"
+  ],
+  "expected_signal": "Known complete-scope manifest compares; partial/missing-scope controls reject. Synthetic only; no source names output.",
+  "negative_controls": [
+    "partial sample vs full count",
+    "missing full scope assertion",
+    "duplicate shader identities"
+  ],
+  "workflow_path": ".github/workflows/raft-a11-shader-export-scope.yml",
+  "concurrency_group": "raft-a11-shader-export-scope-v1",
+  "artifact_prefix": "a11-shader-export-scope-v1",
+  "budget": "CPU-only Python, no LFS/network/Unity, <=8min",
+  "run_url": null,
+  "source_sha": null,
+  "result": null,
+  "limitations": [
+    "No complete original exporter inventory in current CI run artifacts",
+    "No authentic shader restoration or device evidence"
+  ],
+  "next_step": "Construct synthetic provenance regression suite."
+}
