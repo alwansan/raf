@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T123140Z-7ea78212",
+  "client_label": "A15",
+  "status": "completed",
+  "hypothesis": "New original built-in shader include and license outputs can remain partially written after failed restoration, disrupting a retry even when original exported shader bodies recover.",
+  "input_hashes": [
+    "initial scripts/restore_builtin_shaders.py git blob 3ed3d42dc9963e1e1fc30c08d8ba4d6ad0b8019f",
+    "fixed scripts/restore_builtin_shaders.py git blob b5c442134e84ed4620fa2bb81a944af0f8a8268f"
+  ],
+  "commands": [
+    "python3 -m unittest discover -s tests -p 'test_a15_builtin_restore_rollback.py' -v",
+    "python3 -m unittest discover -s tests -p 'test_restore_builtin_shaders.py' -v",
+    "python3 -m unittest discover -s tests -p 'test_a9_builtin_shader_identity.py' -v",
+    "python3 -m unittest discover -s tests -p 'test_a3_builtin_shader_symlink_paths.py' -v"
+  ],
+  "expected_signal": "Fail-first 4/4 synthetic cases followed by green 4/4 and existing 18/18 checks without weakening original identity or metadata policy.",
+  "negative_controls": [
+    "Partial new include write",
+    "Partial original shader overwrite before cleanup",
+    "Preexisting identical notice should not be rewritten",
+    "Concurrent different-content destination after preflight must not be overwritten/deleted"
+  ],
+  "workflow_path": ".github/workflows/raft-a15-builtin-restore-rollback.yml",
+  "concurrency_group": "raft-a15-builtin-additions-${{ github.ref }}-${{ github.sha }}",
+  "artifact_prefix": null,
+  "budget": "6 minutes, Ubuntu 24.04, no LFS/Unity, CPU only",
+  "red_run_url": "https://github.com/alwansan/raf/actions/runs/41643857822",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41644109948",
+  "source_sha": "b7188de1daffb34eaba11efcf24d4295f912453a",
+  "result": "RED 4/4 intentional FAIL; GREEN A15 22/22 SUCCESS; A3/A9/authenticated-vendor same-source CI all SUCCESS.",
+  "limitations": [
+    "No complete original AssetRipper shader scope/provenance; historical zero-match persists",
+    "No Unity or phone testing, shader GPU correctness or full water authenticity",
+    "Best effort rollback; not crash-atomic, may retain external backup/empty directories"
+  ],
+  "next_step": "Obtain full in-run export provenance under authorized CPU-only workflow; do not weaken strict no-match gate."
+}
