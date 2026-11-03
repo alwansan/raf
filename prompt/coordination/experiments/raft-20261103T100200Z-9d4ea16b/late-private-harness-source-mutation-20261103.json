@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "username": "raft-20261103T100200Z-9d4ea16b",
+  "issue_id": "LOCAL-005",
+  "experiment_id": "late-private-harness-source-mutation-20261103",
+  "status": "completed",
+  "hypothesis": "A failure generating offline RPC/save harness after the original SHA-pinned C# sources are installed leaves adapted original files despite a failing prepare() and creates misleading provenance.",
+  "baseline": "install_adapted_originals(changed,traces) was called before runtime helper copies, method() extraction and harness csproj emission; previous rollback only handled install() failures.",
+  "regression": "tests/test_a10_offline_source_selection.py::OriginalManagedInstallIntegrityTests.test_late_harness_failure_never_modifies_original_sources",
+  "synthetic_inputs": "Original named Raft_Network.cs and SaveAndLoad.cs with synthetic bytes including BOM/CRLF, 11 dummy runtime helper files; mocked pinned checks and instrumentation; deliberately absent RPC signature",
+  "red": {
+    "source_commit": "dedf795a7e26b5eea8a558a0ad436edd79e89c4a",
+    "run_id": 41643936030,
+    "job_id": 125944198401,
+    "conclusion": "failure_intentional",
+    "assertion": "Raft_Network.cs original bytes differ: appended synthetic instrumentation; one of 11 tests failed"
+  },
+  "repair": {
+    "source_commit": "057222022c132a910f04b0b6fdc4704ed6dc0634",
+    "description": "Perform all original SHA-pinned C# instrumentation writes as final step of prepare(), after harness files copied and emitted, preserving prior preflight and rollback guarantees."
+  },
+  "green": {
+    "source_commit": "057222022c132a910f04b0b6fdc4704ed6dc0634",
+    "run_id": 41644049824,
+    "job_id": 125944586674,
+    "conclusion": "completed_success",
+    "a10_tests_passed": 11,
+    "private_original_sources_prepared": 12,
+    "offline_rpc_identity": "PASS",
+    "managed_compile_exit": 0,
+    "managed_compile_error_codes": {}
+  },
+  "scope": "source-only synthetic / managed original CI, no LFS, Unity or device",
+  "limitations": [
+    "Does not guarantee cleanup of generated harness files on early failure",
+    "Does not attest original RGD on-disk serialization",
+    "Does not repair original shader/water blockers, GPU/Unity failure, or phone tests",
+    "No .meta, GUID, original game content, native build request or scheduled automation modified"
+  ],
+  "status_game": "NOT_READY, 0/3 full independent candidate readiness reviews"
+}
