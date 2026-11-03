@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T132738Z-a7f64e28",
+  "status": "completed",
+  "hypothesis": "Unity InputSystem 1.7 ReadValueFromEvent in TouchState events aliases primaryTouch; when first touch is UI, second raw gameplay touch is missed. Raw StateEvent.GetState<TouchState> restores per-finger ID/phase/position.",
+  "input_hashes": [
+    "AndroidTouchPointer.cs original blob 16b7bbf9ed826e5ea421a01aee23531ab38bb3c4",
+    "AndroidTouchPointer.cs fixed blob c71b95e395a78bb7051d8b172e776d6b83f15e8d",
+    "Unity InputSystem 1.7 tagged Touchscreen.cs blob c119cb05c63f04fa721822be7c571d03e65ef7fb"
+  ],
+  "commands": [
+    "python3 -m scripts.verify_touch_pointer_packet_routing --output \"$RUNNER_TEMP/touch-packet-router\"",
+    "dotnet run --project \"$RUNNER_TEMP/touch-packet-router/Router.csproj\" --configuration Release --nologo",
+    "GitHub Actions push-triggered CPU-only platform / offline managed source checks"
+  ],
+  "expected_signal": "Fail first at second-gameplay-touch-recognized when primary UI finger id 1 and second raw gameplay id 2. After raw decode, green: second gameplay Move and Tap, second UI finger sticky preservation, full-state fallback, handled and paused guards.",
+  "negative_controls": [
+    "secondary gameplay finger routed even while primary UI finger remains",
+    "secondary UI finger not consumed when gameplay finger remains primary",
+    "UI finger drag stays UI after leaving its hit-test area",
+    "non TouchState full-state fallback still routes primary",
+    "already-handled/unrelated events not stolen",
+    "pause does not start gameplay gesture"
+  ],
+  "workflow_path": ".github/workflows/raft-android-platform-tests.yml",
+  "concurrency_group": null,
+  "artifact_prefix": null,
+  "budget": "Existing CPU-only platform workflow (ubuntu-24.04, timeout10m) plus existing offline source workflow. No native/Unity/manual dispatch.",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41645428990",
+  "source_sha": "583f414dee85f1659783a08ab2b4363cc2992d14",
+  "result": "Fail-first exact production OnEvent method extract CI41645203051 job125948599849 failed at MULTITOUCH_ROUTE: second-gameplay-touch-recognized. Code fix583f414d success CI41645428990 job125949388401: RAFT_TOUCH_RAW_PACKET_ROUTING checks=14, gesture446, mouse-mapping53, 15 other suites; offline original source CI41645429004 job125949389297 compile exit0 errorCodes{}. No Unity or phone execution.",
+  "limitations": [
+    "Harness stubs event timing/control semantics and substitutes UGUI geometry hit test with deterministic x threshold; actual Unity InputSystem and phone behaviors unverified",
+    "StateEvent.GetState<TouchState> public 1.7 API confirmed by exact docs; Unity Editor compile not yet run",
+    "Non TouchState full-state packets use unchanged primaryTouch fallback and are not per-finger",
+    "Published old APK80 predates all these changes"
+  ],
+  "next_step": "Scoped A7 source fix complete; next input acceptance requires true Unity/Android multi-finger UI+gameplay check on a readiness-approved candidate, without treating phone acceptance as a pre-build source blocker."
+}
