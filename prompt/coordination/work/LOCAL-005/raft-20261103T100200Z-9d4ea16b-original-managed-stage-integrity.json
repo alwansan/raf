@@ -3,9 +3,9 @@
   "issue_id": "LOCAL-005",
   "username": "raft-20261103T100200Z-9d4ea16b",
   "work_id": "original-managed-stage-integrity",
-  "status": "active",
+  "status": "completed",
   "session_id": "a10-20261103T1212Z-f8ca6412",
-  "updated_at": "2026-11-03T12:13:30Z",
+  "updated_at": "2026-11-03T12:19:20Z",
   "hypothesis": "The private original managed test's prepare() instruments and writes each SHA-pinned original C# sequentially. A later instrumentation validation failure or disk write exception may leave earlier C# originals modified, breaking provenance for downstream checks.",
   "scope": "Source-only CI preparation; not genuine .rgd runtime, not APK build",
   "target_paths": [
@@ -33,5 +33,27 @@
     "Not a transaction covering unrelated harness generation or disk failure during restoration",
     "Not real on-phone save/load",
     "No Unity build, assets or release"
-  ]
+  ],
+  "source_commit": "90066492cec9f2d0d4c54faeb35a641a7ace896c",
+  "test_commit": "b432955271139540bf47155226efae3a681907be",
+  "ci_run_id": 41634496958,
+  "ci_job_id": 125912125220,
+  "conclusion": "COMPLETED SUCCESS at test SHA",
+  "validation": {
+    "synthetic_total": 10,
+    "new_tests": 4,
+    "new_passed": 4,
+    "original_private_sources_prepared": 12,
+    "original_local_rpc_test": "PASS",
+    "original_managed_compile_exit": 0,
+    "original_managed_compile_errors": {},
+    "unity_phone_apk": false
+  },
+  "scope_result": "All adapted original bodies validated before any writes, source changes re-attested, byte-exact preexisting source rollback on attempted I/O write failure, synthetic positive and negative controls green. No .rgd schema or game code modified.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/90066492cec9f2d0d4c54faeb35a641a7ace896c",
+    "https://github.com/alwansan/raf/commit/b432955271139540bf47155226efae3a681907be",
+    "https://github.com/alwansan/raf/actions/runs/41634496958"
+  ],
+  "next_step": "Scoped work finished. LOCAL-005 broader game world/.rgd integration remains open; release preview41624581951 failed built-in shader restore, RENDER agents own it. Review live state before new scope."
 }
