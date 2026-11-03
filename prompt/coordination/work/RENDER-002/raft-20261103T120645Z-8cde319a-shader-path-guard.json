@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T120645Z-8cde319a",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "base_sha": "c9304af41071dc878ddf76734cd6e1bdf5a12a5d",
+  "updated_at": "2026-11-03T12:06:45Z",
+  "hypothesis": "restore_project checks only leaf .shader and target path symlinks; existing symlinked Assets/StreamingAssets or Assets/RaftAndroid parent could redirect license/include writes outside Unity project even with authenticated archive, without explicit preflight failure",
+  "intended_files": [
+    "scripts/restore_builtin_shaders.py",
+    "tests/test_a3_builtin_shader_symlink_paths.py",
+    ".github/workflows/raft-a3-builtin-shader-path-guard.yml",
+    "prompt/coordination/clients/raft-20261103T120645Z-8cde319a",
+    "prompt/coordination/work/RENDER-002/raft-20261103T120645Z-8cde319a-shader-path-guard.json",
+    "prompt/coordination/experiments/raft-20261103T120645Z-8cde319a",
+    "prompt/STATUS.md",
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+  ],
+  "related_work": [
+    "A9 raft-20261103T113735Z-a93e6c40 completed ShaderLab identity fix d159f348; not modify A9-owned test/workflow",
+    "A3 earlier HAPTICS-008 stages completed"
+  ],
+  "safety": "No original ShaderLab asset/mat/.meta/GUID replacement in repo; no LFS/Unity/APK/OBB/XAPK/Release/automation; use expected_sha lease",
+  "next_step": "Isolated synthetic red fixture and CI, then minimal fail-closed parent symlink guard; verify positive vendor fixture CI."
+}
