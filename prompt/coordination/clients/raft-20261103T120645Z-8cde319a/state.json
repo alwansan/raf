@@ -4,12 +4,13 @@
   "display_name": "A3",
   "session_id": "a3-20261103T120645Z-symlink-0f43e9b2",
   "resumed_from": "raft-20261103T105031Z-4b175384",
-  "status": "active",
-  "updated_at": "2026-11-03T12:06:45Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T12:20:00Z",
   "base_sha": "c9304af41071dc878ddf76734cd6e1bdf5a12a5d",
   "current_work": [
     "RENDER-002"
   ],
-  "next_step": "Red/green CPU regression: refuse symlinked Assets parent paths in restore_builtin_shaders before project writes; keep vendor shader identity checks unchanged",
-  "memory_path": "prompt/coordination/clients/raft-20261103T120645Z-8cde319a/MEMORY.md"
+  "next_step": "Scoped symlink-parent guard complete (RED CI41633814002, GREEN 41634098552/41634098651/41634098559). RENDER-002 original export zero-matches and native GPU acceptance remain OPEN.",
+  "memory_path": "prompt/coordination/clients/raft-20261103T120645Z-8cde319a/MEMORY.md",
+  "last_commit": "d93f6aecac8214057debfc1d18eda85b6fa50ce1"
 }
