@@ -2,8 +2,8 @@
   "schema_version": 1,
   "owner": "raft-20261103T231207Z-a5d12e9c",
   "issue_id": "HAPTICS-008",
-  "status": "active",
-  "updated_at": "2026-11-03T23:12:27.251Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T23:15:56.700Z",
   "base_sha": "0aee07b1b412f4c3eb70c5c51a89d82ef271507d",
   "resumed_from": "raft-20261103T224700Z-a5fb701c",
   "hypothesis": "Standalone APK/OBB production audit exits zero when --haptics-manifest is absent, allowing skipping otherwise mandatory original WAV source/package check. Fail closed for production CLI while keeping isolated Python API fixtures optional.",
@@ -24,7 +24,21 @@
   "experiment_ids": [
     "mandatory-production-haptics-manifest"
   ],
-  "evidence": [],
-  "result": null,
-  "next_step": "Reproduce missing-Haptics production audit success on synthetic APK/OBB with RED test, then make argparse required and verify green CPU-only actions."
+  "evidence": [
+    "RED CI41737344144: test correctly failed twice; production CLI accepted missing manifest both with 29 synthetic WAVs and zero Haptics archive members (exit 0).",
+    "GREEN CI41737475281 on exact source dd0e15a2: 17 synthetic OBB cases, 4 adapter tests, original 29 WAV source identities 32,733,104 bytes, 58 authentic and 58 synthetic CSharp reader reads.",
+    "Native workflow existing --haptics-manifest and --verify-crc explicitly confirmed.",
+    "Historical CL four 2026-11-02 sessions unchanged; last full game APK80 source 9462f8e."
+  ],
+  "result": "Fixed mandatory production CLI original-Haptics manifest omission bypass. CLI now refuses to run without --haptics-manifest; Python audit_companion API preserves optional Haptics for explicitly scoped library tests. RED/ GREEN CPU CI verified; runtime phone acceptance remains OPEN.",
+  "next_step": "Scope completed. On next coordinator-approved game candidate run mandatory original 29-WAV pinned CLI against actual signed expansion; then collect installed Android jar/physical haptic diagnostics.",
+  "source_sha": "dd0e15a2bb8520fa3a297c682e01a57cedcc0393",
+  "red_sha": "e7cd6788865a0eb167f27fd5566c3e5c5b52ab5e",
+  "red_run_url": "https://github.com/alwansan/raf/actions/runs/41737344144",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41737475281",
+  "limitations": [
+    "CPU-only source/test verification. No Unity-generated/signed APK/OBB/XAPK, Android mount or physical haptics test.",
+    "Does not close WATER-001/RENDER-002/FFT source blockers or readiness 0/3.",
+    "No original proprietary audio/meta/GUID modified."
+  ]
 }
