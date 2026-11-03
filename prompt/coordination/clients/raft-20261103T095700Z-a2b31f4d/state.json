@@ -3,13 +3,11 @@
   "username": "raft-20261103T095700Z-a2b31f4d",
   "session_id": "a2-continue-20261103225417-c42fe8d1",
   "resumed_from": "a2-continue-20261103222847-8f51a4d2",
-  "status": "active",
-  "updated_at": "2026-11-03T22:54:17.092Z",
+  "status": "paused",
+  "updated_at": "2026-11-03T23:18:33.070Z",
   "base_sha": "d9440e405a6dc94e3570ba5e963fbddfb592eed9",
-  "current_work": [
-    "DISPLAY-003 exact original Settings metadata field token/type and scene-owner linkage via immutable ZIP2"
-  ],
-  "last_commit": "a2455448194317481a60a7199d932f85d2c2014f",
-  "next_step": "Run independent original managed Assembly-CSharp exact Cecil metadata schema/token classification, compare to source-only Settings.cs field inventory and original scene owner pointer structure. No Unity/APK or production runtime change.",
+  "current_work": [],
+  "last_commit": "243771a29db8d5227278f552274b5c3bab76fa2b",
+  "next_step": "DISPLAY-003 OPEN / NOT_READY 0-of-3. On immutable ZIP2 original, CI41737541506 SUCCESS 10 synthetic and exact original 4 Git blob pins. Native source scene0/1 Settings MonoScript uniquely linked to top-level managed Settings TypeDef (16 same-name nested candidates). 21 FieldDefs, 13 metadata-eligible; source lexical14 includes one no-matching-FieldDef candidate, other13 same declaration order. Next independently recover Unity custom serialized Settings TypeTree, array element lengths/PPtr offsets, active Settings panel→CanvasScaler and Android landscape behavior before runtime patch. No native builds or full ZIP2 hydration.",
   "memory_path": "prompt/coordination/clients/raft-20261103T095700Z-a2b31f4d/MEMORY.md"
 }
