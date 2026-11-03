@@ -4,13 +4,15 @@
   "display_name": "A5",
   "session_id": "A5-20261103T231207Z-e812ca57",
   "resumed_from": "raft-20261103T224700Z-a5fb701c",
-  "status": "active",
-  "updated_at": "2026-11-03T23:12:07.671Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T23:16:29.652Z",
   "base_sha": "79fe2740eb7e8debfce684079be493a5e842bf38",
   "current_work": [
     "HAPTICS-008"
   ],
-  "last_commit": null,
-  "next_step": "Make production post-build APK/OBB CLI require immutable original Haptics manifest; reproduce omission bypass with synthetic RED, preserve programmatic test API, run CPU CI. No Unity/native.",
-  "memory_path": "prompt/coordination/clients/raft-20261103T231207Z-a5d12e9c/MEMORY.md"
+  "last_commit": "dd0e15a2bb8520fa3a297c682e01a57cedcc0393",
+  "next_step": "Mandatory Haptics production APK/OBB CLI original-manifest check scope completed; RED 41737344144, GREEN 41737475281 on dd0e15a2. Actual Unity-generated expansion and phone haptics still unverified; WATER/RENDER/FFT gates and project readiness remain NOT_READY 0/3. New future A5 session must use new identity with resumed_from.",
+  "memory_path": "prompt/coordination/clients/raft-20261103T231207Z-a5d12e9c/MEMORY.md",
+  "red_run": "https://github.com/alwansan/raf/actions/runs/41737344144",
+  "final_ci": "https://github.com/alwansan/raf/actions/runs/41737475281"
 }
