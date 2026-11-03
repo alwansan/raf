@@ -6,6 +6,8 @@ on:
       - '.github/workflows/raft-w1-depth-pass-recovery.yml'
       - 'scripts/w1_recover_depth_passes.py'
       - 'tests/test_w1_depth_pass_linkage.py'
+      - 'scripts/w1_rebind_depth_resources.py'
+      - 'tests/test_w1_depth_resource_rebinding.py'
 permissions:
   contents: read
 concurrency:
@@ -24,7 +26,9 @@ jobs:
             tests
             Raft/Raft_Data
       - name: Validate segment routing before original downloads
-        run: python3 -m unittest discover -s tests -p test_w1_depth_pass_linkage.py -v
+        run: |
+          python3 -m unittest discover -s tests -p test_w1_depth_pass_linkage.py -v
+          python3 -m unittest discover -s tests -p test_w1_depth_resource_rebinding.py -v
       - name: Disk and source pointer gate
         run: |
           python3 - <<'PY'

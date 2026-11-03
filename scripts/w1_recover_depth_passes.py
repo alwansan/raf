@@ -18,6 +18,8 @@ from scripts.w1_recover_graphics_programs import OWNERS, decoded_platforms, reco
 from scripts.verify_targeted_lfs_compute_sources import verify_sources
 from scripts.probe_original_compute_containers import scan_blob
 from scripts.run_original_dxbc_translation_probe import version_tokens
+from scripts.w1_rebind_depth_resources import rebind, signature_inputs
+from scripts.w1_recover_graphics_programs import command
 
 TARGET = 'UltimateWater/Depth/Depth Copy'
 OBJECT_SHA256 = 'cf978dad4f4c67e57fb58448cee7a8c033c30d1491ef54b0a6ad887317fba75a'
@@ -149,6 +151,10 @@ def recover(root, out):
                                       bucket_variant_index=bucket_index,
                                       common_parameters_sha256=digest(program.get('m_CommonParameters')),
                                       parameter_blob_indices_sha256=digest(program.get('m_ParameterBlobIndices')))
+                        if bucket is not None:
+                            parameter_indices = program.get('m_ParameterBlobIndices', [])
+                            result['parameter_blob_index'] = parameter_indices[bucket][bucket_index] if bucket < len(parameter_indices) and bucket_index < len(parameter_indices[bucket]) else None
+                            result['parameter_blob_semantics_verified'] = False
                         (target / 'original-stage-metadata.json').write_text(json.dumps(metadata, sort_keys=True))
                         if result['hlsl_recovered'] and result['roundtrip_vulkan11_valid']:
                             original = reflection(target / 'original.spv')
@@ -156,6 +162,16 @@ def recover(root, out):
                             result.update(original_reflection=original, roundtrip_reflection=rebuilt,
                                           resource_slots_preserved=original['resource_slots'] == rebuilt['resource_slots'],
                                           stage_interface_preserved=original['inputs'] == rebuilt['inputs'] and original['outputs'] == rebuilt['outputs'])
+                            rebound, binding_counts = rebind((target / 'private.hlsl').read_text(), program,
+                                shader_pass['m_NameIndices'], original_inputs=signature_inputs(code) if stage == 1 else None)
+                            rebound_path = target / 'property-rebound.hlsl'
+                            rebound_path.write_text(rebound)
+                            rebound_spv = target / 'property-rebound.spv'
+                            result['original_binding_recovery'] = binding_counts
+                            result['property_rebound_sha256'] = hashlib.sha256(rebound.encode()).hexdigest()
+                            result['property_rebound_vulkan11_valid'] = command(['glslangValidator', '-V', '-D',
+                                '-S', 'vert' if stage == 1 else 'frag', '-e', 'main', '-o', str(rebound_spv), str(rebound_path)]) and command([
+                                'spirv-val', '--target-env', 'vulkan1.1', str(rebound_spv)])
                             reflected[stage].append((bucket, metadata, vi, original, rebuilt))
                         stages.append(result)
                 for vb, vm, vi, original_v, rebuilt_v in reflected[1]:
@@ -181,7 +197,7 @@ def recover(root, out):
                   'gpu_or_numeric_or_phone_equivalence': False}
     out.write_text(json.dumps(report, sort_keys=True, indent=2) + '\n')
     print('RAFT_W1_DEPTH_PASS_RECOVERY ' + json.dumps(report, sort_keys=True))
-    if len(passes) < 4 or not report['all_stages_recovered'] or not report['all_passes_have_matching_permutation_pair']:
+    if len(passes) < 4 or not report['all_stages_recovered'] or not report['all_passes_have_matching_permutation_pair'] or not all(r.get('property_rebound_vulkan11_valid') for r in stages):
         raise ValueError('Actual original Depth Copy pass recovery incomplete; inspect aggregate result')
 
 
