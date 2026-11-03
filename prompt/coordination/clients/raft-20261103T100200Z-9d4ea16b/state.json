@@ -2,15 +2,15 @@
   "schema_version": 1,
   "username": "raft-20261103T100200Z-9d4ea16b",
   "client_label": "A10",
-  "session_id": "a10-20261103T1055Z-92bdfa67",
+  "session_id": "a10-20261103T1212Z-f8ca6412",
   "resumed_from": null,
-  "status": "completed",
-  "updated_at": "2026-11-03T11:05:00Z",
+  "status": "active",
+  "updated_at": "2026-11-03T12:13:20Z",
   "base_sha": "66d8e67da5b4ee610526452ccfb763b6c10e52fc",
   "current_work": [
-    "LOCAL-005: original SHA-pinned offline C# source selection (completed)"
+    "LOCAL-005: private original managed source install consistency after instrumentation failure"
   ],
   "last_commit": "031236bb5f4d4aeefc5b6ddc4b4de5188082920a",
-  "next_step": "For next explicit user Continue, refresh live owner docs/HEAD/actions/clients and select new independent source problem; LOCAL-005 global save/world integration and WATER-001/RENDER-002 remain NOT_READY, 0/3.",
+  "next_step": "Preflight entire original instrumentation plan before any export writes; rollback if a source write fails; protect .meta, hashes and unrelated classes.",
   "memory_path": "prompt/coordination/clients/raft-20261103T100200Z-9d4ea16b/MEMORY.md"
 }
