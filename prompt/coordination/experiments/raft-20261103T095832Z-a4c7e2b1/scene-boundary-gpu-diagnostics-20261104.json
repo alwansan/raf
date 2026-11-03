@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T095832Z-a4c7e2b1",
+  "agent": "A4",
+  "session_id": "a4-resume-20261103T224500Z-84e2c91f",
+  "issue_id": "PERF-007",
+  "experiment_id": "scene-boundary-gpu-diagnostics-20261104",
+  "status": "completed",
+  "source_sha": "74df62250c0f4db1bd5f33981ee22d24ee62934a",
+  "hypothesis": "Five-second perf and ten-second process graphics sample intervals can fail to capture scene transition or lowMemory event effects; discrete snapshots add closer partial evidence without per-frame overhead.",
+  "changed_paths": [
+    "android-port/Runtime/Platform/AndroidTestDiagnostics.cs",
+    "tests/test_android_diagnostics_policy.py"
+  ],
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_android_diagnostics_policy.py -v",
+    "GitHub Actions raft-android-platform-tests.yml on source head"
+  ],
+  "workflows": [
+    ".github/workflows/raft-android-platform-tests.yml"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41734019524",
+    "https://github.com/alwansan/raf/actions/runs/41734013639",
+    "https://github.com/alwansan/raf/actions/runs/41734013814"
+  ],
+  "evidence": {
+    "platform_exact_test_sha": "74df62250c0f4db1bd5f33981ee22d24ee62934a",
+    "platform_run_id": 41734019524,
+    "platform_job_id": 126258407653,
+    "diagnostic_policy_tests_passed": 10,
+    "new_test": "test_scene_boundaries_and_low_memory_capture_partial_gpu_counters",
+    "platform_conclusion": "success",
+    "offline_startup_code_sha": "dac7ba8fffd955d9901c4691c9ce35d584c422ba",
+    "offline_startup_run": 41734013814,
+    "offline_startup_conclusion": "success"
+  },
+  "limits": [
+    "Source-policy tests and existing CPU-only platform validation, not actual Unity Android compiled diagnostics.",
+    "No on-device GPU allocation or OOM cause verified.",
+    "Android summary.graphics and development-player profiler counter are partial; not total VRAM.",
+    "No evidence for any WATER-001 or RENDER-002 closure; build NOT_READY 0/3."
+  ],
+  "next_step": "Investigate authentic source-owned GPU allocation/teardown and identify a reproducible gameplay leak; coordinate with other water/render owners."
+}
