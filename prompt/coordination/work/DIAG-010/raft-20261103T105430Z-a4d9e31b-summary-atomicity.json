@@ -2,8 +2,8 @@
   "schema_version": 1,
   "owner": "raft-20261103T105430Z-a4d9e31b",
   "issue_id": "DIAG-010",
-  "status": "planned",
-  "updated_at": "2026-11-03T10:54:30Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T11:00:30.934Z",
   "base_sha": "e70dd94d9ea0309718f523352edb24299960c15d",
   "hypothesis": "Throwing summary callback can irrevocably zero pending repeat counters, including entries whose summary was never delivered.",
   "intended_files": [
@@ -23,7 +23,12 @@
   "experiment_ids": [
     "summary-callback-failure-atomicity"
   ],
-  "evidence": [],
-  "result": null,
-  "next_step": "Failing-callback test first, then minimal atomic/exception-safe summary fix and CPU-only CI"
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/196fce7bd147b5baac2bb8214a8c4d0aad5e2af2",
+    "https://github.com/alwansan/raf/actions/runs/41623644272",
+    "https://github.com/alwansan/raf/actions/runs/41623644866",
+    "https://github.com/alwansan/raf/actions/runs/41623644500"
+  ],
+  "result": "CPU-only actual .NET tests passed 270 checks; callback failure preserves all pending group counters and overlapping repeats.",
+  "next_step": "Separate on-device log retention/throughput acceptance, do not treat tests as a game/phone result."
 }

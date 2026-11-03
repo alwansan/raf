@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T105430Z-a4d9e31b",
+  "experiment_id": "summary-callback-failure-atomicity",
+  "issue_id": "DIAG-010",
+  "status": "completed",
+  "hypothesis": "Summarize zeroes all pending groups before callbacks and loses all pending repeats if callback throws",
+  "source_sha": "196fce7bd147b5baac2bb8214a8c4d0aad5e2af2",
+  "code_files": [
+    "android-port/Runtime/Platform/PersistentDiagnosticLog.cs",
+    "android-port/Tests/Diagnostics/Program.cs"
+  ],
+  "test_command": "dotnet run --project android-port/Tests/Diagnostics/Diagnostics.csproj --configuration Release --nologo",
+  "workflow": ".github/workflows/raft-persistent-diagnostics-tests.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41623644272",
+  "job_id": 125875404710,
+  "related_ci": [
+    "https://github.com/alwansan/raf/actions/runs/41623644866",
+    "https://github.com/alwansan/raf/actions/runs/41623644500"
+  ],
+  "result": "SUCCESS; 270 checks; injected IOException callback and concurrent repeat restoration; first full stack unchanged; 2 unattempted groups restored.",
+  "limitations": [
+    "At-least-once summary when sink persists before throwing",
+    "No actual Android storage or high-rate phone game test",
+    "No native Unity build or water/GPU shader acceptance"
+  ]
+}
