@@ -131,7 +131,7 @@ int main(int argc,char** argv) {
         require(inputSeed<=1023 && std::to_string(inputSeed)==argv[5],"Invalid bounded input seed");
     }
     uint32_t dispatchGroupY=1;
-    if(argc==7) {
+    if(argc>=7) {
         dispatchGroupY=uint32_t(std::stoul(argv[6]));
         require(dispatchGroupY>=1 && dispatchGroupY<=2 &&
                 std::to_string(dispatchGroupY)==argv[6],"Invalid bounded Y dispatch");
