@@ -3,8 +3,8 @@
   "owner": "raft-20261103T104800Z-a1f742c0",
   "client_label": "A1",
   "issue_id": "WATER-001",
-  "status": "active",
-  "updated_at": "2026-11-03T10:48:31.736Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T10:55:27.346Z",
   "base_sha": "802e82fc599822a328057d7da7aee05b045605ad",
   "hypothesis": "SPIR-V SSA image-use audit currently ignores OpImageSample* and gather opcodes, so all_image_operations_uniquely_traced can be true while sampled resources are untracked. Verify synthetic counterexample and add explicit support or fail-closed count.",
   "intended_files": [
@@ -23,6 +23,9 @@
   "experiment_ids": [
     "image-operation-coverage"
   ],
-  "result": null,
-  "next_step": "Reproduce and test CPU-only; do not build Unity/APK."
+  "result": "Reproduced fail-open ignored sample in synthetic SPIR-V, extended core/sparse sampling/gather/query/texel pointer tracing and corrected opcode68/70, 17/17 local and 17/17 matching synthetic CI. No actual GPU/kernels recovered.",
+  "next_step": "Verify private original audit final when complete; maintain NOT_READY, 0/3.",
+  "source_sha": "13bd0330904b48eb58fad73e27b7299e0d08b230",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41622977666",
+  "authenticated_original_audit": "https://github.com/alwansan/raf/actions/runs/41622977691 (completed/success at checkpoint)"
 }

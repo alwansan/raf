@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T104800Z-a1f742c0",
+  "issue_id": "WATER-001",
+  "experiment_id": "image-operation-coverage",
+  "updated_at": "2026-11-03T10:55:27.346Z",
+  "hypothesis": "Ignored OpImageSampleImplicitLod and sparse/query operations make all_image_operations_uniquely_traced true while hidden uses exist.",
+  "synthetic_before": "12 existing tests pass, new synthetic sample-unknown expected-false check fails because checker returns true",
+  "synthetic_after": "17/17 local tests PASS and same 17/17 GitHub Actions PASS, job125873109925",
+  "source_sha": "13bd0330904b48eb58fad73e27b7299e0d08b230",
+  "workflow_path": ".github/workflows/raft-original-water-synthetic.yml",
+  "workflow_url": "https://github.com/alwansan/raf/actions/runs/41622977666",
+  "original_sha_pinned_audit_run_url": "https://github.com/alwansan/raf/actions/runs/41622977691",
+  "original_audit_status_at_checkpoint": "completed/success",
+  "changed_paths": [
+    "scripts/probe_fft_spirv_image_flow.py",
+    "tests/test_probe_fft_spirv_image_flow.py"
+  ],
+  "budget": "No Unity/native. Existing ordinary-push synthetic CPU CI plus automatically triggered separate three-LFS-owner audit; no manual dispatch or download.",
+  "covered_uses": [
+    "OpImageSample*",
+    "OpImageGather*",
+    "OpImageQuery*",
+    "OpImageSparse* (305-315,320)",
+    "OpImageTexelPointer",
+    "OpInBoundsPtrAccessChain"
+  ],
+  "original_game_shader_modified": false,
+  "limits": [
+    "Synthetic SPIR-V instructions are opcode fixtures, not fully typed spirv-val-verified programs",
+    "Vendor extension image instructions not exhaustively covered",
+    "Original compute audit pending at checkpoint",
+    "No Unity Android GPU or numeric equivalence proof"
+  ],
+  "readiness": "NOT_READY, 0/3"
+}
