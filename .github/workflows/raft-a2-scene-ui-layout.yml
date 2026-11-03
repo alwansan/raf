@@ -7,6 +7,8 @@ on:
       - '.github/workflows/raft-a2-scene-ui-layout.yml'
       - 'scripts/probe_a2_scene_ui_layout.py'
       - 'tests/test_probe_a2_scene_ui_layout.py'
+      - 'scripts/probe_a2_canvas_scaler_monoscript.py'
+      - 'tests/test_probe_a2_canvas_scaler_monoscript.py'
 permissions:
   contents: read
 concurrency:
@@ -30,11 +32,14 @@ jobs:
             Raft/Raft_Data/level3
             Raft/Raft_Data/level4
             Raft/Raft_Data/level5
+            Raft/Raft_Data/globalgamemanagers.assets
       - name: Synthetic scope and PPtr/geometry tests
         run: |
           set -euo pipefail
           python3 -m unittest discover -s tests -p 'test_probe_a2_scene_ui_layout.py' -v
           python3 -m py_compile scripts/probe_a2_scene_ui_layout.py
+          python3 -m unittest discover -s tests -p 'test_probe_a2_canvas_scaler_monoscript.py' -v
+          python3 -m py_compile scripts/probe_a2_canvas_scaler_monoscript.py
       - name: Install bounded original Unity serialized reader
         run: |
           set -euo pipefail
@@ -43,4 +48,5 @@ jobs:
         run: |
           set -euo pipefail
           python3 -m scripts.probe_a2_scene_ui_layout --source Raft/Raft_Data
+          python3 -m scripts.probe_a2_canvas_scaler_monoscript --source Raft/Raft_Data
           echo 'RAFT_A2_ORIGINAL_SCENE_ONLY unityRan=false originalLfsHydrated=false nativeBuildRan=false'
