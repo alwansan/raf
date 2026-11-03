@@ -26,6 +26,9 @@ namespace RaftAndroid.Platform
 
         private void OnEnable()
         {
+            // OnDisable leaves suspension latched. A reused, re-enabled
+            // component must accept fresh touches without a focus callback.
+            suspended = false;
             instance = this;
             // Matches original CustomInputConfig, including before its OnEnable.
             Input.simulateMouseWithTouches = false;
