@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T224215Z-a7d93c52",
+  "issue_id": "INPUT-005",
+  "status": "active",
+  "updated_at": "2026-11-03T22:47:25.397Z",
+  "base_sha": null,
+  "hypothesis": "Actual original Unity.InputSystem.dll API must be checked for exact public StateEvent.GetState<TouchState> and touch field compatibility, rather than trusting only upstream source and test doubles.",
+  "intended_files": [
+    "scripts/a7_zip2_inputsystem_contract/Program.cs",
+    "scripts/a7_zip2_inputsystem_contract/A7Zip2InputSystemContract.csproj",
+    ".github/workflows/raft-a7-zip2-inputsystem-contract.yml",
+    "prompt/coordination/clients/raft-20261103T224215Z-a7d93c52/MEMORY.md",
+    "prompt/coordination/work/INPUT-005/raft-20261103T224215Z-a7d93c52-zip2-original-inputsystem-abi.json",
+    "prompt/coordination/experiments/raft-20261103T224215Z-a7d93c52/zip2-inputsystem-abi-20261104.json",
+    "prompt/STATUS.md",
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+  ],
+  "related_work": [
+    "A7 raft-20261103T145805Z-a7c2f809 completed and preserved",
+    "ZIP2 original provider pinned 15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "A2 original Settings and W1 shader workflows active, no path overlap"
+  ],
+  "experiment_ids": [
+    "zip2-inputsystem-abi-20261104"
+  ],
+  "evidence": [],
+  "result": null,
+  "next_step": "Auth original DLL metadata via SHA/length and CPU-only GitHub Actions, report PASS/FAIL without guessing Unity/phone."
+}
