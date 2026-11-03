@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "username": "raft-20261103-coordination-7f3a9c21",
+  "session_id": "coordination-setup-7f3a9c21",
+  "resumed_from": null,
+  "status": "completed",
+  "updated_at": "2026-11-03",
+  "base_sha": "ca36510d401a22960cbfd886e5cd0f4ec777d8c7",
+  "current_work": [
+    "COORD-001"
+  ],
+  "last_commit": null,
+  "next_step": "Use unified prompt to register the next independent client",
+  "memory_path": "prompt/coordination/clients/raft-20261103-coordination-7f3a9c21/MEMORY.md"
+}
