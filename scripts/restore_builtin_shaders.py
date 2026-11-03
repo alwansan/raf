@@ -6,6 +6,7 @@ Unknown/custom game shaders and all materials/textures remain untouched.
 import argparse
 import hashlib
 import io
+import json
 from pathlib import Path, PurePosixPath
 import posixpath
 import re
@@ -18,7 +19,31 @@ URL = 'https://download.unity3d.com/download_unity/88f88f591b2e/builtin_shaders-
 SHA256 = '5cb0f9c4d022d6054d179778b9b50a0301d6748eaf4abdedd21c93f0c30b10c5'
 ROOT = 'Assets/RaftAndroid/BuiltinShaderSources/'
 NOTICE = 'Assets/StreamingAssets/RaftAndroidNotices/unity-builtin-shaders-MIT.txt'
-INCLUDE = re.compile(r'(#\s*include(?:_with_pragmas)?\s+")([^"\r\n]+)(")')
+INCLUDE = re.compile(r'(#\\s*include(?:_with_pragmas)?\\s+")([^"\\r\\n]+)(")')
+# A ShaderLab header may be preceded by a commented-out Shader name. The
+# shared DECL regex also appears in other restorers; avoid changing it globally.
+EXPORT_DECL = re.compile(r'^\\s*Shader\\s+"([^"\\r\\n]+)"', re.MULTILINE)
+COMMENT_OR_STRING = re.compile(r'//[^\\r\\n]*|/\\*[\\s\\S]*?(?:\\*/|$)|"(?:\\\\.|[^"\\\\])*"')
+
+
+def exported_shader_identity(source):
+    """Return exactly one real ShaderLab header, ignoring quoted comment markers.
+
+    Preserve quoted strings while blanking comments (and their line breaks), so
+    Shader "Custom//Name" stays valid. Never print proprietary shader names.
+    """
+    def mask(match):
+        token = match.group()
+        if token.startswith('"'):
+            return token
+        return ''.join(c if c in '\\r\\n' else ' ' for c in token)
+
+    stripped = COMMENT_OR_STRING.sub(mask, source)
+    identities = EXPORT_DECL.findall(stripped)
+    if len(identities) > 1:
+        raise ValueError('Multiple real ShaderLab declarations in exported shader')
+    return identities[0] if identities else None
+
 
 
 def archive_sources(raw):
@@ -77,19 +102,37 @@ def restore_project(project, backup, shaders, files, license):
     plan = []
     used = set()
     dependencies = set()
+    shader_files = 0
+    declared_identities = 0
+    unmatched_identities = 0
     for path in sorted(assets.rglob('*.shader')):
-        match = DECL.search(path.read_text(encoding='utf-8-sig'))
-        if not match or match[1] not in shaders:
+        shader_files += 1
+        name = exported_shader_identity(path.read_text(encoding='utf-8-sig'))
+        if name is None:
             continue
-        if match[1] in used:
+        declared_identities += 1
+        if name not in shaders:
+            unmatched_identities += 1
+            continue
+        if name in used:
             raise ValueError('Ambiguous exported built-in shader identity')
-        used.add(match[1])
+        used.add(name)
         meta = Path(str(path) + '.meta')
         if not meta.is_file() or meta.is_symlink() or path.is_symlink():
             raise ValueError('Missing/unsafe original shader metadata')
-        source, required = rewrite(shaders[match[1]], files)
+        source, required = rewrite(shaders[name], files)
         dependencies.update(required)
         plan.append((path, source.encode(), path.read_bytes(), meta, meta.read_bytes()))
+    # Count-only evidence answers why a genuine export matched no trusted
+    # built-in identities, without leaking original/custom shader names or
+    # turning this strict authenticity gate into an optional success.
+    print('RAFT_BUILTIN_EXPORT_MATCH_AUDIT ' + json.dumps({
+        'shader_files': shader_files,
+        'parseable_declarations': declared_identities,
+        'unmatched_declarations': unmatched_identities,
+        'matched_identities': len(plan),
+        'unparseable_declarations': shader_files - declared_identities,
+    }, sort_keys=True))
     if not plan:
         raise ValueError('No exported built-in shader identities matched; custom shaders cannot be substituted')
     additions = {project / NOTICE: license, project / ROOT / 'license.txt': license}
