@@ -26,9 +26,93 @@ internal static class Program
 
     static byte[] TestBytes(string name) => Encoding.ASCII.GetBytes("RIFF-TEST-ONLY-WAVE:" + name);
 
+    // Separate high-fidelity CPU lane. The original 29 WAV inputs stay in a
+    // private GitHub Actions workspace and the temporary OBB is never uploaded.
+    // A3's independent SHA/Git-blob source manifest gate runs before this lane.
+    static int RunOriginalWavs(string sourceDirectory)
+    {
+        string[] paths = Directory.GetFiles(sourceDirectory, "*.wav", SearchOption.TopDirectoryOnly);
+        Require(paths.Length == 29, "Expected all original tracked WAV files");
+        Require(paths.Sum(p => new FileInfo(p).Length) == 32733104L,
+                "Original total WAV byte length changed");
+        Require(paths.All(p => Path.GetFileName(p).EndsWith(".wav", StringComparison.Ordinal)),
+                "Unexpected original file extension");
+
+        string temporary = Path.Combine(Path.GetTempPath(), "raft-a5-original-haptics-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(temporary);
+        try
+        {
+            string obb = Path.Combine(temporary, "main.80.com.alwansan.raft.androidtest.obb");
+            using (var stream = File.Create(obb))
+            using (var zip = new ZipArchive(stream, ZipArchiveMode.Create))
+            {
+                foreach (string path in paths)
+                {
+                    var entry = zip.CreateEntry("assets/Haptics/" + Path.GetFileName(path), CompressionLevel.Optimal);
+                    using var src = File.OpenRead(path);
+                    using var dest = entry.Open();
+                    src.CopyTo(dest);
+                }
+            }
+
+            string jarRoot = "jar:" + new Uri(Path.GetFullPath(obb)).AbsoluteUri + "!/assets/Haptics/";
+            long validated = 0;
+            foreach (string path in paths)
+            {
+                string entry = Path.GetFileName(path);
+                byte[] original = File.ReadAllBytes(path);
+                byte[] originalHash = System.Security.Cryptography.SHA256.HashData(original);
+                foreach (string prefix in new[] { "", "/" })
+                {
+                    byte[] extracted = AndroidStreamingAssets.ReadAllBytes(prefix + jarRoot + entry);
+                    Require(extracted.Length == original.Length, "Original ZIP payload length changed");
+                    Require(extracted.AsSpan().SequenceEqual(original), "Original ZIP payload bytes changed");
+                    Require(System.Security.Cryptography.SHA256.HashData(extracted).AsSpan().SequenceEqual(originalHash),
+                            "Original ZIP SHA-256 changed");
+                    validated++;
+                }
+            }
+
+            // A corrupt *but internally well-formed* OBB entry may be returned by
+            // this byte reader. The external hash comparison catches it; do NOT
+            // claim the production reader itself authenticates WAVs at runtime.
+            string modified = Path.Combine(temporary, "tampered.obb");
+            string victim = paths[0];
+            byte[] originalVictim = File.ReadAllBytes(victim);
+            byte[] altered = (byte[])originalVictim.Clone();
+            altered[altered.Length / 2] ^= 1;
+            using (var stream = File.Create(modified))
+            using (var zip = new ZipArchive(stream, ZipArchiveMode.Create))
+            using (var dst = zip.CreateEntry("assets/Haptics/" + Path.GetFileName(victim), CompressionLevel.Optimal).Open())
+            {
+                dst.Write(altered, 0, altered.Length);
+            }
+            byte[] testedAltered = AndroidStreamingAssets.ReadAllBytes(
+                "jar:" + new Uri(Path.GetFullPath(modified)).AbsoluteUri +
+                "!/assets/Haptics/" + Path.GetFileName(victim));
+            Require(!testedAltered.AsSpan().SequenceEqual(originalVictim),
+                    "Tamper negative control did not change content");
+            Require(!System.Security.Cryptography.SHA256.HashData(testedAltered).AsSpan()
+                        .SequenceEqual(System.Security.Cryptography.SHA256.HashData(originalVictim)),
+                    "Tamper negative control did not change SHA-256");
+
+            Console.WriteLine("RAFT_A5_AUTHENTIC_HAPTICS_ARCHIVE originalWavs=29 " +
+                              "originalSourceBytes=32733104 originalArchiveReads=" + validated +
+                              " strictSourceBytesMatched=true tamperControlDetected=true " +
+                              "rawAssetOutput=false unityRun=false phoneRun=false");
+            return 0;
+        }
+        finally
+        {
+            Directory.Delete(temporary, recursive: true);
+        }
+    }
+
     static int Main(string[] args)
     {
-        if (args.Length != 1) throw new ArgumentException("Supply git-tree-derived original filename manifest");
+        if (args.Length == 2 && args[0] == "--original-wavs")
+            return RunOriginalWavs(args[1]);
+        if (args.Length != 1) throw new ArgumentException("Supply filename manifest or --original-wavs source directory");
         string[] names = File.ReadAllLines(args[0]);
         Require(names.Length == 29, "Original tracked Haptics WAV count changed");
         Require(names.Distinct(StringComparer.Ordinal).Count() == names.Length, "Duplicate original filenames");
