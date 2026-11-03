@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T123140Z-7ea78212",
+  "client_label": "A15",
+  "status": "completed",
+  "hypothesis": "The in-run pre-Unity ShaderLab render contract audit counts tokens from comments and quoted strings, making source pass, program and kernel evidence unreliable for some inputs. This defect is not proven in the actual 140 shader export.",
+  "input_hashes": [
+    "red test SHA c0742bacf0832acf93d66a4a632e51cf8bb7d4a3",
+    "fixed source SHA d0680dbd16676c54fb7473f797c26f58e76c786e",
+    "prior script Git blob dbc160d8e325f71f21885a2e98f4e376dfb4f34d",
+    "fixed script Git blob 58ba1b2a873f2b277a7ba1648b326fd5464b17e9"
+  ],
+  "commands": [
+    "python3 -m unittest discover -s tests -p 'test_a15_render_contract_lexical.py' -v",
+    "python3 -m unittest discover -s tests -p 'test_a9_builtin_shader_identity.py' -v"
+  ],
+  "expected_signal": "RED on false pass/program/target/kernel from strings/comments and omitted whitespace-separated Pass, then green 6/6 with 4 prior header controls.",
+  "negative_controls": [
+    "Quoted ShaderLab names containing Pass {",
+    "Commented Pass { and program tokens",
+    "Commented target Shader header",
+    "Block-commented #pragma kernel",
+    "Pass /* comment */ { counting",
+    "Positive active Shader program and compute kernel"
+  ],
+  "workflow_path": ".github/workflows/raft-a15-render-lexical-ci.yml",
+  "concurrency_group": "raft-a15-render-lexical-${{ github.ref }}-${{ github.sha }}",
+  "artifact_prefix": null,
+  "budget": "6-minute Ubuntu 24.04, no LFS, no Unity, CPU synthetic only",
+  "red_run_url": "https://github.com/alwansan/raf/actions/runs/41659903543",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41660138192",
+  "source_sha": "d0680dbd16676c54fb7473f797c26f58e76c786e",
+  "result": "RED 5/6 failed as expected with real-positive control success. GREEN source exact SHA completed SUCCESS 6/6 A15 and 4/4 A9 controls. No original export or Unity result.",
+  "limitations": [
+    "Original run 41624581951 140-file source histogram has not been re-measured",
+    "107 local shader files not proven complete same-stage export",
+    "Lexical scanner does not evaluate #if or full ShaderLab grammar",
+    "No proof of original shader/kernel identity, signed APK or on-phone GPU execution"
+  ],
+  "next_step": "Separate authenticated same-stage shader export provenance and original serialized graphics program correlation; do not relax fail-closed zero-match."
+}
