@@ -78,7 +78,6 @@ def prepare(source, managed, runtime, output):
         if name == 'SaveAndLoad': text = adapt_paths(text)
         changed[name] = (path, adapt(name, text))
     traces = json.loads(Path('config/runtime-operation-traces.json').read_text())
-    install_adapted_originals(changed, traces)
     output.mkdir(parents=True, exist_ok=True)
     refs = '\n'.join('<Reference Include="' + html.escape(p.stem) + '"><HintPath>' + html.escape(str(p.resolve())) + '</HintPath><Private>false</Private></Reference>'
                      for p in sorted(managed.glob('*.dll')) if p.name != 'Assembly-CSharp.dll')
@@ -160,6 +159,9 @@ class Program { static void Main() {
 '''
     (harness / 'Program.cs').write_text(common + methods + checks + save_harness)
     (harness / 'Harness.csproj').write_text('<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework><LangVersion>9.0</LangVersion><DefineConstants>UNITY_ANDROID</DefineConstants></PropertyGroup></Project>')
+    # Every private managed fixture and method must be valid before any
+    # SHA-pinned original C# is mutated. Failed source installation rolls back.
+    install_adapted_originals(changed, traces)
     print('RAFT_OFFLINE_PRIVATE_PREPARE originalSources=' + str(len(changed)) + ' sourceBodiesPublished=false nativeCallsExecuted=false')
 
 
