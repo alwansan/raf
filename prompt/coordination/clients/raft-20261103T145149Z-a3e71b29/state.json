@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "username": "raft-20261103T145149Z-a3e71b29",
+  "display_name": "A3",
+  "session_id": "a3-20261103T145149Z-atomic-87c3f41d",
+  "resumed_from": "raft-20261103T124800Z-a3b9e27f",
+  "status": "active",
+  "updated_at": "2026-11-03T14:52:51.626Z",
+  "base_sha": "a43bbd3ea9ac40a8dd08594159367902548d083f",
+  "current_work": [
+    "DELIVERY-013"
+  ],
+  "last_commit": null,
+  "next_step": "CPU-only fail-first race test and atomic no-replace release archive reassembly; no Unity/game build.",
+  "memory_path": "prompt/coordination/clients/raft-20261103T145149Z-a3e71b29/MEMORY.md"
+}
