@@ -3,7 +3,7 @@
   "owner": "raft-20261103T152008Z-92502b76",
   "client_label": "W2",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed",
   "updated_at": "2026-11-03T18:25:00.000Z",
   "base_sha": "0185c19",
   "lane": "non-overlapping micro-lane: serialized Material property aggregates (render queue / flags / instancing / keyword shape); no overlap with W1 programs, W3 inventory, A12 vendor names",
@@ -24,13 +24,14 @@
   "concurrency_group": "raft-w2-material-property-stats-${{ github.ref }}-${{ github.sha }}",
   "artifact_prefix": "raft-w2-material-property-stats-",
   "budget": "single CPU-only run under 8 minutes; workflow timeout 15 min; no Unity, no GPU",
-  "run_url": null,
-  "source_sha": null,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41676717657",
+  "source_sha": "a57127e",
   "result": "LOCAL AUTHENTIC RUN COMPLETE: 163+351=514 materials matches A13/W3 exactly. Queue overrides: resources (-1:153, 2450:7, 3000:2, 5000:1), sharedassets0 (-1:324, 2450:22, 3000:3, 2000:2). Lightmap flags 4 dominant (140/210). Instancing 141/163 and 266/351. DoubleSidedGI 36 vs 9. Keyword-shape distributions differ per owner (0-majority). Disabled passes: all-0 except one material with 1. Port constraints recorded. CI pending.",
   "limitations": [
     "aggregate distributions only; no per-material identity",
     "does not prove device rasterization or program semantics",
     "does not close WATER-001/RENDER-002/FFT-FORMAT-009; NOT_READY/0-of-3 unchanged"
   ],
-  "next_step": "push, verify green CI, update STATUS, send micro-lane summary to W1/A13"
+  "next_step": "lane complete; W2 RENDER-002 aggregate chain fully CI-verified",
+  "ci_conclusion": "success (41676717657 @ a57127e)"
 }

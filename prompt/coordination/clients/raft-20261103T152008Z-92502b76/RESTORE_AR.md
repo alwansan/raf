@@ -11,3 +11,13 @@
 5. متابعة آخر عمل: حل 156 مرجع Material→Shader خارجي عبر جداول m_Externals (RENDER-002) — أسكربت scripts/probe_w2_external_material_shader_refs.py واختباراته وworkflow الخاص باسم W2.
 6. إذا تسلمت الإصلاح المرتقب من W1 (parameter blob + ShaderLab wrapper)، تجنب مجاله (لا تعمل على decode parameter0 أو غلاف Depth Copy) وامضِ في جزء الألوان/الخامات/المراجع.
 7. عند أي كتابة: expected SHA بدون force، أدمج من أحدث HEAD، لا تعدل workflow جارياً أو native request أو المهام المجدولة؛ ممنوع main/zip/Unity-Editor؛ لا بناء Unity/APK/OBB/XAPK/Release.
+
+## استرجاع جلسة 3 نوفمبر — الحلقات الأربع المكتملة (بحلول 18:35Z)
+- **ظروف التشغيل:** استنساخ `/tmp/opencode/raf-w2`، فرع محلي `w2-work` → دفع `HEAD:feature/android-native-port` عبر credential.helper بـ`gh auth token`؛ تكرار نمط rebase-race: stash (بدون `__pycache__`) → reset --hard على origin tip → pop → اختبارات → commit → push (وإعادة الانتظار لو تحرك tip بين fetch وpush).
+- **حليلات أصلية محلية من:** `/root/test/test/raft/Raft/Raft_Data` (نسخة مطابقة للمالكَين المعتمدَين، بلا LFS إضافي).
+- **حلقة 1 (externals):** scripts/probe_w2_external_material_shader_refs.py + 19 اختبارا + docs/W2_EXTERNAL_MATERIAL_SHADER_REFS_2026-11-03.md؛ CI 41671654138 SUCCESS @ 50cf650؛ سبق W3 موثق في incidents.
+- **حلقة 2 (color space):** probe_w2_color_space_settings + 11 اختبار; **الأصلي Linear (m_ActiveColorSpace=1)، gamuts=[0]، محرك 2021.3.45f2**، 5 طبقات جودة; docs/W2_COLOR_SPACE_SETTINGS_2026-11-03.md; أول سباق 41673021263 فشل fail-closed (استيراد UnityPy قبل التثبيت) ثم الإصلاح: استيراد مؤجل + حقن وحدة زائفة → 41673884477 SUCCESS.
+- **حلقة 3 (per-texture split):** probe_w2_texture_color_formats + 6 اختبارات; resources 408 خامات (153 sRGB/255 linear) وشيعتها سائدة (fmt12 L 151، fmt10 L 98، fmt1 G 66، fmt12 G 63)؛ sharedassets0 1123 (265/858؛ 12 Linear 466، 10 Linear 259، 12 Gamma 243، 4 Linear 133); docs/W2_TEXTURE_COLOR_FORMATS_2026-11-03.md; CI 41674316772 SUCCESS @ a52841e.
+- **حلقة 4 (material props):** probe_w2_material_property_stats + 8 اختبارات; 163+351=514 مطابقة A13/W3; 35 من قيد الطابور أُصلياً (2450×29، 3000×5، 5000×1، 2000×2); علم lightmap 4 السائد (140/210); instancing 141/163 & 266/351; DoubleSidedGI 36/9; أشكال الكلمات متباينة لكل المالك; docs/W2_MATERIAL_PROPERTY_STATS_2026-11-03.md; CI 41676717657 (مُسترَجَ أن يأتي).
+- **قاعدة التنسيق الثابتة:** أرقام aggregate فقط، لا أسماء مواد/شيدرات/كلمات/IDs؛ هوية W2 <w2@raft-local.example>؛ لا touch لملفات W1/W3/كلون CL؛ نفس نمط النسخ السابقة للاستمرارية.
+- **قيود ما بعدها:** NOT_READY / WATER-001 / RENDER-002 / FFT-FORMAT-009 مفتوحة؛ 0/3 reviews؛ المتبقي: امتداد محتمل خامات شخصية مجمّع أو إغلاق heartbeat.

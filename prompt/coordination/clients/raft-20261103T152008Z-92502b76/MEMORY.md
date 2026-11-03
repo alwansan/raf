@@ -72,3 +72,6 @@
 ## تحديث 18:05Z — كل سباقات W2 الثلاثة أخضر
 - سباقات CI: externals 41671654138 SUCCESS، color-space 41673884477 SUCCESS (بعد إصلاح 41673021263)، texture-colors 41674316772 SUCCESS @ a52841e.
 - سلسلة فقدان الألوان كاملة وموثقة: لا روابط مكسورة + مشروع Linear + مزيج sRGB/linear لكل خامة.
+
+## تحديث 18:50Z — أربعة أسباقات CI أخضر
+- material-property-stats 41676717657 SUCCESS @ a57127e. كل حلقات W2 الأربع CI-verified: externals 41671654138، color-space 41673884477، texture-colors 41674316772، matprops 41676717657. سلسلة قيود البورت مكتملة.
