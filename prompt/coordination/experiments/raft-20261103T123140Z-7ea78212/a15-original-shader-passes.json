@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T123140Z-7ea78212",
+  "client_label": "A15",
+  "session_id": "A15-20261103T225613-66d7040c",
+  "status": "testing",
+  "hypothesis": "Original 2-owner Shader m_ParsedForm contains authentically serialized SubShader/Pass counts that bound one-pass original game export restoration; this does not establish one-to-one linkage with 142 loose shader files.",
+  "source_provider": "zip2",
+  "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "source_pins": [
+    "resources.assets:111533516 bytes SHA87493249f1adfc0c5eb8b82e4e199e208cd2c95eabe9796cab82116c4838595c",
+    "sharedassets0.assets:115978112 bytes SHA0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3"
+  ],
+  "workflow_path": ".github/workflows/raft-a15-original-shader-passes.yml",
+  "concurrency_group": "raft-a15-original-passes-${{ github.ref }}-${{ github.sha }}",
+  "budget": "CPU only ubuntu-24.04 18 minutes, cache restore for original SHA-verified W1 ZIP2 data, no LFS/Unity/native",
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_a15_original_shader_passes.py -v",
+    "python3 -m scripts.w1_stage_zip2_owners --zip2-checkout zip2-original --destination $RUNNER_TEMP/w1-original",
+    "python3 -m scripts.a15_probe_original_shader_passes --source $RUNNER_TEMP/w1-original --out $RUNNER_TEMP/a15-original-pass-aggregate.json"
+  ],
+  "negative_controls": [
+    "Missing and invalid parsed forms",
+    "Non-list subshaders or passes",
+    "Duplicate/invalid owner PathID",
+    "Zero-pass no-invention",
+    "Private-name non-disclosure"
+  ],
+  "result": "pending",
+  "limitations": [
+    "Only two authenticated original owners; not full exported ShaderLab stage",
+    "UnityPy parsed structure is serialization, not executable GPU behavior",
+    "Cannot identify original built-in ShaderKey redirect or prove final APK graphics"
+  ]
+}

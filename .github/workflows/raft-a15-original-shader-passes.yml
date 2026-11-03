@@ -1,0 +1,58 @@
+name: Raft A15 original serialized Shader passes (CPU only)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-a15-original-shader-passes.yml'
+      - 'scripts/a15_probe_original_shader_passes.py'
+      - 'tests/test_a15_original_shader_passes.py'
+      - 'scripts/w1_stage_zip2_owners.py'
+permissions:
+  contents: read
+concurrency:
+  group: raft-a15-original-passes-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  original-passes:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Synthetic pass topology red/green controls
+        run: python3 -m unittest discover -s tests -p 'test_a15_original_shader_passes.py' -v
+      - name: Disk space before SHA-pinned original inputs
+        run: python3 -c "import shutil; assert shutil.disk_usage('.').free > 2 * 1024**3"
+      - uses: actions/checkout@v4
+        with:
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-original
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            Raft/Raft_Data/resources.assets
+            Raft/Raft_Data/sharedassets0.assets
+            Raft/Raft_Data/Resources
+      - name: Restore verified prior W1 cache if available
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ runner.temp }}/w1-original
+          key: w1-zip2-15964ea8-four-owners-v1
+      - name: SHA-check original ZIP2 source without LFS
+        run: python3 -m scripts.w1_stage_zip2_owners --zip2-checkout zip2-original --destination "$RUNNER_TEMP/w1-original"
+      - name: Install bounded Unity serialized reader
+        run: python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+      - name: Extract private original parsed-pass topology as aggregate only
+        run: timeout 420s python3 -m scripts.a15_probe_original_shader_passes --source "$RUNNER_TEMP/w1-original" --out "$RUNNER_TEMP/a15-original-pass-aggregate.json"
+      - name: Retain only aggregate safe counts (no game sources)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: a15-original-pass-aggregate-${{ github.sha }}
+          path: ${{ runner.temp }}/a15-original-pass-aggregate.json
+          if-no-files-found: ignore
+          retention-days: 7
