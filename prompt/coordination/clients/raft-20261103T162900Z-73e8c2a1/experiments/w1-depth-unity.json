@@ -2,7 +2,7 @@
   "schema_version": 1,
   "owner": "raft-20261103T162900Z-73e8c2a1",
   "session_id": "w1-20261103T150217800Z-d4a79e63",
-  "status": "planned",
+  "status": "running",
   "hypothesis": "Unity 2021.3.45f2 can import the reconstructed original Depth Copy ShaderLab with preserved 6+3 passes and compile a single private Android Vulkan shader bundle without shader errors.",
   "source_basis": "891e10a9dcc8b5cc16e66e12457b039e6f6d3086",
   "input_shaderlab_sha256": "0a7e11f750cac17ecc25cb7179c0a29850d6fb91fa983618f12e6bd8782ed1ea",
@@ -17,5 +17,8 @@
     "Not GPU execution or POCO appearance",
     "Assetbundle success does not prove every runtime pass or variant"
   ],
-  "next_step": "Inspect aggregate Unity result before any original GUID integration."
+  "next_step": "Inspect aggregate Unity result before any original GUID integration.",
+  "source_sha": "2467c03172af01471a1f5df32b16bbdac92f14b2",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41663393724",
+  "result": "Last observed: credential gate, original hash checks and wrapper reconstruction succeeded; Unity compile in progress. No compiler result yet."
 }
