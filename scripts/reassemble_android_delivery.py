@@ -1,5 +1,6 @@
 """Join lossless Release download parts: python reassemble.py Raft-Android-Test.xapk"""
 import hashlib
+import os
 import json
 from pathlib import Path
 import shutil
@@ -52,7 +53,18 @@ def reassemble(root, name):
             raise ValueError('Assembled file SHA256 mismatch')
         if output.exists() or output.is_symlink():
             raise ValueError('Refusing to overwrite output')
-        temporary.rename(output)
+        # A same-directory hard link is atomic and refuses to overwrite any
+        # output published by another process after the existence check.
+        # Path.rename() would clobber that output on POSIX.
+        try:
+            os.link(temporary, output)
+        except FileExistsError as exc:
+            raise ValueError('Refusing to overwrite output') from exc
+        except OSError as exc:
+            # Some Android shared-storage layers do not allow hard links.
+            # Fail safely instead of silently replacing a signed file.
+            raise OSError('Atomic publish requires a filesystem with hard-link support; reassemble in Termux home') from exc
+        temporary.unlink()
     except Exception:
         if created and temporary.is_file() and not temporary.is_symlink():
             temporary.unlink()
