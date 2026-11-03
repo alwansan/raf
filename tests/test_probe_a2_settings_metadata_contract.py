@@ -62,7 +62,7 @@ class OriginalMetadataTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"ambiguous"):
             verify_fielddefs(sample([row("same",1),row("same",2)]),
                              "Assembly-CSharp","Game",["same"])
-        with self.assertRaisesRegex(ValueError,"ambiguous"):
+        with self.assertRaisesRegex(ValueError,"Duplicate"):
             verify_fielddefs(sample([row("x",1)]),"Assembly-CSharp","Game",["x","x"])
 
     def test_source_member_negative_controls(self):
