@@ -12,6 +12,9 @@ from pathlib import Path, PurePosixPath
 import zipfile
 import zlib
 
+from scripts.probe_haptics_asset_manifest import (
+    PINNED_ORIGINAL_HAPTICS_MANIFEST_BLOB_SHA, verify_manifest_blob)
+
 # Google Play's documented maximum is 2 GB for EACH APK expansion file.
 # This is a distribution constraint, not a proof of Android sideload failure.
 PLAY_EXPANSION_FILE_LIMIT_BYTES = 2_000_000_000
@@ -40,7 +43,7 @@ def _names(archive):
 
 
 
-def _audit_original_haptics(expansion, manifest_path):
+def _audit_original_haptics(expansion, manifest_path, trusted_manifest_blob_sha):
     """Validate the *archive* URLs used by HapticAudio, not merely source staging.
 
     Old device traces request jar:file:/...obb!/assets/Haptics/<name>.wav.
@@ -49,7 +52,8 @@ def _audit_original_haptics(expansion, manifest_path):
     """
     import re
 
-    manifest = json.loads(Path(manifest_path).read_text(encoding="utf-8"))
+    manifest = json.loads(verify_manifest_blob(
+        Path(manifest_path), trusted_manifest_blob_sha).decode("utf-8"))
     if (manifest.get("schema_version") != 1 or
             manifest.get("path_prefix") != "Raft/Raft_Data/StreamingAssets/Haptics/"):
         raise ValueError("Invalid original Haptics manifest schema")
@@ -101,13 +105,15 @@ def _audit_original_haptics(expansion, manifest_path):
 def audit_companion(apk: Path, obb: Path, *, digest: bool = True,
                     play_limit_bytes: int = PLAY_EXPANSION_FILE_LIMIT_BYTES,
                     java_array_limit_bytes: int = JAVA_ARRAY_LIMIT_BYTES,
-                    verify_crc: bool = False, haptics_manifest: Path = None):
+                    verify_crc: bool = False, haptics_manifest: Path = None,
+                    haptics_manifest_blob_sha: str = PINNED_ORIGINAL_HAPTICS_MANIFEST_BLOB_SHA):
     if not apk.is_file() or not obb.is_file() or obb.stat().st_size == 0:
         raise FileNotFoundError("Both nonempty APK and matching OBB are required")
     with zipfile.ZipFile(apk) as app, zipfile.ZipFile(obb) as expansion:
         app_names = _names(app)
         expansion_names = _names(expansion)
-        haptics = (_audit_original_haptics(expansion, haptics_manifest)
+        haptics = (_audit_original_haptics(expansion, haptics_manifest,
+                                            haptics_manifest_blob_sha)
                    if haptics_manifest is not None else None)
         # Stream each ZIP member through Python's bounded reader to check CRC.
         # CRC verifies transport integrity, not original game-byte fidelity.
@@ -162,6 +168,7 @@ def audit_companion(apk: Path, obb: Path, *, digest: bool = True,
             "deviceMountedVerified": False,
             "assetNamesLogged": False,
             "hapticsJarPathsAndOriginalGitBlobsVerified": haptics is not None,
+            "hapticsOriginalManifestPinned": haptics is not None,
         }
     if haptics is not None:
         result.update(haptics)
@@ -181,11 +188,15 @@ if __name__ == "__main__":
     parser.add_argument("--report", type=Path)
     parser.add_argument("--haptics-manifest", type=Path,
                         help="Strict original 29-WAV final OBB jar path/Git blob audit")
+    parser.add_argument("--haptics-manifest-blob",
+                        default=PINNED_ORIGINAL_HAPTICS_MANIFEST_BLOB_SHA,
+                        help="Audited original manifest Git blob SHA, never read from a mutable manifest")
     parser.add_argument("--verify-crc", action="store_true",
                         help="Stream-validate APK and OBB ZIP member CRCs")
     args = parser.parse_args()
     report = audit_companion(args.apk, args.obb, verify_crc=args.verify_crc,
-                             haptics_manifest=args.haptics_manifest)
+                             haptics_manifest=args.haptics_manifest,
+                             haptics_manifest_blob_sha=args.haptics_manifest_blob)
     if args.report:
         args.report.parent.mkdir(parents=True, exist_ok=True)
         args.report.write_text(json.dumps(report, sort_keys=True, indent=2) + "\n")
