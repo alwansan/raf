@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T100200Z-9d4ea16b",
+  "session_id": "a10-20261103T150015Z-bca52ed0",
+  "status": "planned",
+  "hypothesis": "The private original RPC/save method slice helper counts braces and signature text inside C# comments and string literals, causing premature or incorrect extraction or deceptive source-only checks.",
+  "input_hashes": [],
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_a10_offline_source_selection.py -v",
+    "existing .github/workflows/raft-android-offline-integration-tests.yml on source change"
+  ],
+  "expected_signal": "Existing authentic 12 original source RPC/save extraction and managed compile pass; synthetic fake method signatures/braces rejected or skipped.",
+  "negative_controls": [
+    "signature in comment/string only",
+    "brace in string/comment",
+    "ambiguous repeated live signatures",
+    "prototype signature with no body"
+  ],
+  "workflow_path": ".github/workflows/raft-android-offline-integration-tests.yml",
+  "concurrency_group": null,
+  "artifact_prefix": null,
+  "budget": "Existing no-LFS 12min workflow; no Unity/build or new LFS",
+  "run_url": null,
+  "source_sha": "528068d21253340a9a673517aa608dbb58a015d0",
+  "result": null,
+  "limitations": [
+    "Only C#9 lexical source extraction, not true Unity gameplay/.rgd or phone acceptance",
+    "No source content is uploaded"
+  ],
+  "next_step": "Add synthetic negative controls first. Make method signature detection and brace counting ignore literals/comments, reject duplicates and prototype-only signatures. Validate via existing no-LFS original-source workflow; preserve source SHA pins and private data."
+}

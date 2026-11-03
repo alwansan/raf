@@ -2,15 +2,15 @@
   "schema_version": 1,
   "username": "raft-20261103T100200Z-9d4ea16b",
   "client_label": "A10",
-  "session_id": "a10-20261103T1322Z-84bd630a",
+  "session_id": "a10-20261103T150015Z-bca52ed0",
   "resumed_from": null,
-  "status": "completed",
-  "updated_at": "2026-11-03T13:28:00Z",
-  "base_sha": "1526f6380e41b8b8dae10d22208f0123f9775bef",
+  "status": "active",
+  "updated_at": "2026-11-03T15:00:15Z",
+  "base_sha": "528068d21253340a9a673517aa608dbb58a015d0",
   "current_work": [
-    "LOCAL-005: late harness failure safety RED/GREEN source-only repair complete"
+    "LOCAL-005: harden private original C# RPC/save method extraction against comment/string brace decoys"
   ],
   "last_commit": "057222022c132a910f04b0b6fdc4704ed6dc0634",
-  "next_step": "A10 narrow correction complete; CI41643936030 intentional RED and CI41644049824 GREEN on 05722202. For another explicit Continue refresh live head/owners/actions/coordination and choose different unowned flaw. Overall Raft NOT_READY, 0/3; no on-device original RGD/Unity proven.",
+  "next_step": "A10 lexical method extraction isolated repair: test synthetic braces/comments/ambiguity, then run existing no-LFS private original managed CI. No Unity/native/release.",
   "memory_path": "prompt/coordination/clients/raft-20261103T100200Z-9d4ea16b/MEMORY.md"
 }

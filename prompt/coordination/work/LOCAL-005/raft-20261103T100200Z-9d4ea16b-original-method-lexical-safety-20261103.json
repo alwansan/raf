@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T100200Z-9d4ea16b",
+  "client_label": "A10",
+  "session_id": "a10-20261103T150015Z-bca52ed0",
+  "issue_id": "LOCAL-005",
+  "work_id": "original-method-lexical-safety-20261103",
+  "status": "active",
+  "updated_at": "2026-11-03T15:00:15Z",
+  "base_sha": "528068d21253340a9a673517aa608dbb58a015d0",
+  "hypothesis": "The private original RPC/save method slice helper counts braces and signature text inside C# comments and string literals, causing premature or incorrect extraction or deceptive source-only checks.",
+  "intended_files": [
+    "scripts/verify_android_offline_candidate.py",
+    "tests/test_a10_offline_source_selection.py",
+    "prompt/coordination/work/LOCAL-005/raft-20261103T100200Z-9d4ea16b-original-method-lexical-safety-20261103.json",
+    "prompt/coordination/experiments/raft-20261103T100200Z-9d4ea16b/original-method-lexical-safety-20261103.json",
+    "prompt/coordination/clients/raft-20261103T100200Z-9d4ea16b/state.json",
+    "prompt/coordination/clients/raft-20261103T100200Z-9d4ea16b/MEMORY.md"
+  ],
+  "related_work": [
+    "A10 late-harness-failure-safety completed; A6 save path independent; A8 DIAG-011 separate code"
+  ],
+  "experiment_ids": [
+    "original-method-lexical-safety-20261103"
+  ],
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41644049824"
+  ],
+  "result": null,
+  "next_step": "Add synthetic negative controls first. Make method signature detection and brace counting ignore literals/comments, reject duplicates and prototype-only signatures. Validate via existing no-LFS original-source workflow; preserve source SHA pins and private data."
+}

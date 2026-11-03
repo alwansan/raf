@@ -66,3 +66,10 @@ Reviewed live docs, HEAD, Actions, clients/work and original CL historical logs;
 - This is an actual source-pipeline integrity fix, not closure of LOCAL-005: local world create/load/resume and real serializer still pending; original shaders WATER-001/RENDER-002/FFT-FORMAT-009 remain OPEN. Entire game remains NOT_READY, immutable candidate absent, readiness reviews0/3. No assets, .meta/GUID, protected branches, CL write, native build/release, LFS transfer or automations changed.
 - When owner explicitly says Continue later, reread live state/actions and choose new bounded issue; no session is active in background solely because the Git-backed record exists.
 
+
+## A10 resumed lexical extraction checkpoint — 2026-11-03T15:00:15Z
+
+- Original identity confirmed `completed` at previous checkpoint, re-opened only on the owner's explicit restore request. New session `a10-20261103T150015Z-bca52ed0` at live head `528068d21253340a9a673517aa608dbb58a015d0`.
+- Read UNIFIED_PROMPT_AR, coordination README/RESTORE/TEMPLATES, current AGENTS/owner requirements, A10 state, entire A10 prior work/experiments/incident and related LOCAL-005 messages. Prior source fix 05722202 verified via Actions run41644049824 SUCCESS; RED 41643936030 is intentional. Current queued/running actions belong to other peers; not canceled.
+- Own plan: `prompt/coordination/work/LOCAL-005/raft-20261103T100200Z-9d4ea16b-original-method-lexical-safety-20261103.json`; investigation is private C# method lexical extraction, not game runtime proof. Target only A10's source helper/tests, preserve SHA-pinned provenance and peer work. Discussion: `prompt/coordination/discussions/LOCAL-005/20261103T150015-raft-20261103T100200Z-9d4ea16b-method-lexical-safety.md`.
+- Next checkpoint: add negative synthetic tests, implement fail-closed extraction, verify exact workflow run, record result and mark completed/paused honestly. No work continues asynchronously after the chat.
