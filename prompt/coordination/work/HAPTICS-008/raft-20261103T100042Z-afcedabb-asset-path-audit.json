@@ -2,27 +2,22 @@
   "schema_version": 1,
   "owner": "raft-20261103T100042Z-afcedabb",
   "issue_id": "HAPTICS-008",
-  "status": "planned",
-  "updated_at": "2026-11-03T10:01:12.332Z",
+  "status": "paused",
+  "updated_at": "2026-11-03T10:04:37.077Z",
   "base_sha": "af354e4154b915a99fd9ba55a37b63ce849a16f5",
-  "hypothesis": "Historical LogRaft haptics resource-path failures reveal an Android path resolution/staging defect; validate exact errors against current code before touching runtime behavior",
+  "hypothesis": "Historical LogRaft haptic path defects (investigated by A3/A4/A5 in parallel)",
   "intended_files": [
-    "android-port/Runtime/",
-    "scripts/tests/",
-    "prompt/coordination/clients/raft-20261103T100042Z-afcedabb/",
-    "prompt/coordination/experiments/raft-20261103T100042Z-afcedabb/",
-    "prompt/coordination/work/HAPTICS-008/"
+    "prompt/coordination/clients/raft-20261103T100042Z-afcedabb/"
   ],
   "related_work": [
-    "DISPLAY-003/A2 (avoid concurrent Runtime settings edits)",
-    "FFT-FORMAT-009/A1 (separate shaders and audits)"
+    "A3: raft-20261103T100000Z-3a7f2c91",
+    "A4: raft-20261103T095832Z-a4c7e2b1",
+    "A5: raft-20261103T100200Z-a5c842e1"
   ],
   "experiment_ids": [
     "haptics-path-repro"
   ],
-  "evidence": [
-    "https://github.com/alwansan/CL/tree/main/raft%20log/lf/LogRaft-20261102-205608-054"
-  ],
-  "result": null,
-  "next_step": "Identify raw failing resource names; inspect existing path semantics, add fail-safe targeted regression and repair only if evidenced"
+  "evidence": [],
+  "result": "A6 voluntarily deferred overlapping HAPTICS-008; no source touched",
+  "next_step": "Read A3/A4/A5 findings later; focus A6 on LOCAL-005 instead"
 }

@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T100042Z-afcedabb",
+  "status": "planned",
+  "hypothesis": "Local save helper path safety fails for an unusual but valid path; isolate without changing original RGD serializer",
+  "input_hashes": [],
+  "commands": [
+    "dotnet run --project android-port/Tests/Smoke/RaftAndroid.Platform.Smoke.csproj"
+  ],
+  "expected_signal": "Reproducible local sandbox escape or contract violation with negative case",
+  "negative_controls": [
+    "Ordinary world path remains stable",
+    "Unsafe world IDs rejected",
+    "Original .rgd serializer never touched"
+  ],
+  "workflow_path": ".github/workflows/raft-android-platform-tests.yml",
+  "concurrency_group": null,
+  "artifact_prefix": null,
+  "budget": "Local dotnet; optional existing CPU-only CI on path changes, no new LFS",
+  "run_url": null,
+  "source_sha": null,
+  "result": null,
+  "limitations": [
+    "Platform smoke does not prove original game SaveAndLoad, Unity, or Android phone"
+  ],
+  "next_step": "Run isolated test and patch if legitimate"
+}

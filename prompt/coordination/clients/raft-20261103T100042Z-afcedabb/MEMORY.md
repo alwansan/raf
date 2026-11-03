@@ -1,9 +1,7 @@
-# A6 — HAPTICS-008 isolated engineering session
+# A6 — isolated LOCAL-005 engineering
 
-- Session: `a6-20261103T100042Z-8d2c701e`; repository `alwansan/raf`; writable branch ONLY `feature/android-native-port`.
-- Initial live HEAD `af354e4154b915a99fd9ba55a37b63ce849a16f5`; no nonterminal Actions observed in initial list; game APK80 is old source.
-- Read full live instructions, `prompt/coordination/README.md`, current readiness ledger and latest touch handoff. Other clients: `raft-20261103T095700Z-a2b31f4d` active on DISPLAY-003; `raft-20261103T095340Z-a81c6e42` paused after FFT-FORMAT-009 experiment; avoid their source/test files.
-- Investigate HAPTICS-008 independently, prioritizing authenticated CL device path errors and current Android staging. No Unity/APK/OBB/XAPK, no native request, no scheduled-task changes; no modifications to CL.
-- Initial claim boundaries: historical CL paths are not proof of a defect in later unbuilt source. No readiness upgrade; NOT_READY/0-of-3.
+Identity `raft-20261103T100042Z-afcedabb`; session `a6-20261103T100042Z-8d2c701e`; only `feature/android-native-port` writable. Registered as HAPTICS-008 at 17af4fd2; subsequent live coordination identified A3, A4 and A5 on HAPTICS-008. A6 voluntarily paused that work, did not edit haptics/source, and pivoted to independent LOCAL-005.
 
-Next: inspect CL session files, haptics source and related tests, then isolate an executable reproduction and fix with evidence. Log failures and negative controls under this username.
+Read current owner and AGENTS, coordination protocol, STATUS/readiness, latest handoff, existing HAPTICS-008 plans, A1 WATER and A2 DISPLAY states. Local save path sources inspected: `LocalSavePaths.cs`, `LocalProfileStore.cs`, `LocalPlayerIdentity.cs`, original save path adapter, smoke suite and source-only workflow. Existing save format `.rgd` remains original; helper `world.sav` is isolated prototype, not proof that game SaveAndLoad uses it.
+
+Plan: reproduce concrete path/sandbox or cross-platform defect with an executable local test before any safe source change. No Unity/native/OBB/APK, existing requests, release or automation changes. Do not change `.meta`/GUID, original assets or `.rgd` serialization.

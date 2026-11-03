@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T100042Z-afcedabb",
+  "issue_id": "LOCAL-005",
+  "status": "active",
+  "updated_at": "2026-11-03T10:04:37.077Z",
+  "base_sha": null,
+  "hypothesis": "Standalone local profile/save path adapter has a falsifiable cross-platform failure mode not currently covered by world-save smoke tests; retain original RGD serializer and only change contract-safe Android platform logic after reproduction",
+  "intended_files": [
+    "android-port/Runtime/Platform/LocalSavePaths.cs",
+    "android-port/Tests/Smoke/Program.cs",
+    "prompt/coordination/clients/raft-20261103T100042Z-afcedabb/",
+    "prompt/coordination/work/LOCAL-005/",
+    "prompt/coordination/experiments/raft-20261103T100042Z-afcedabb/"
+  ],
+  "related_work": [
+    "A2 DISPLAY-003 (no shared display code)",
+    "A1 WATER-001 (no shader code)",
+    "A3/A4/A5 HAPTICS-008 (no haptics code)"
+  ],
+  "experiment_ids": [
+    "local-path-sandbox-contract"
+  ],
+  "evidence": [],
+  "result": null,
+  "next_step": "Reproduce path-canonicalization or save-profile invariant in isolated dotnet harness, then safe targeted fix or report negative result"
+}
