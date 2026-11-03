@@ -1,0 +1,7 @@
+# A12 incident — full trial 41687765928 cannot reach Unity
+
+Native run [41687765928](https://github.com/alwansan/raf/actions/runs/41687765928), source `a8e04dd2aa2bfcd8bf449abcbc139745619424fa`, reconstruct job126098234576, **COMPLETED FAILURE** on 3 November 2026. Official Unity2021.3.45f2 builtin archive SHA verified (198 Shader names); source current stage shows `shader_files=142, parseable_declarations=142, unmatched=142, matched=0`. This is an original exported project issue: no exact-match candidate eligible for vendor material/particle restore. Do not substitute custom names or silently skip gate. Unity Editor, APK, OBB and XAPK were all skipped.
+
+The *next* `scripts.verify_water_render_contract --strict` is independently not ready: water shaders/FFT kernel provenance isn't installed or attested. Current `authentic_water_kernel_identity_verified=false` is explicit and intentional. Thus simply forcing builtin no-op would still leave the true game render blocker.
+
+A12 corrective avenue: SHA-verified CPU-only original Subsurface Blur pass-source reconstruction to close one actual missing pass family rather than manufacture green CI. Distinct W1 Depth Copy; source/test/workflow private. Owner asked to fix and run: **do not retry an equivalent native input** before authenticated source changes justify it. Evidence and negative outcomes retained. Status: OPEN across RENDER-002/WATER-001.
