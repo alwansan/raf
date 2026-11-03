@@ -2,8 +2,8 @@
   "schema_version": 1,
   "owner": "raft-20261103T230900Z-a1f608bd",
   "issue_id": "WATER-001",
-  "status": "active",
-  "updated_at": "2026-11-03T23:09:33.770Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T23:20:25.553Z",
   "base_sha": "f6adf9361999146c730f1d8b6b959dcb59c0977a",
   "original_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
   "hypothesis": "Sequential authentic FFT first and second shader pairs with image output-to-input barriers, same butterfly lookup and real half/float storage views can be numerically compared original DXBC vs HLSL-roundtrip; previous independent per-pass checks missed two-pass binding/sync.",
@@ -26,5 +26,10 @@
     "No Unity/APK/OBB/Release or scheduled task edits",
     "Do not overlap W1/A12R original graphics/CB files"
   ],
-  "next_step": "Add sequential two-pass Vulkan runner and private original paired DXBC test; synthetic positive/negative controls then exact CI."
+  "next_step": "Recover exact original Unity runtime ComputeShader kernel index-to-compiled-slot and water ShaderLab/asset/resource links; W1/other peers remain independent. Keep gates OPEN NOT_READY/0-of-3.",
+  "source_sha": "71906dbc3bd53166b05f0c9f97e64280a9c39482",
+  "result": "Auth original FFT 20 variants /10 candidate adjacent two-pass pairs; actual Vulkan SHADER_WRITE→SHADER_READ barrier output-to-intermediate-to-second-source chaining; four original half/float image VkFormats × 3 input/dispatch cases = 120/120 actual CPU Vulkan final readback comparisons matching maxAbs0 maxL2=0 with 0 missing writes/nonfinite; source+output schema 10/10 and wrong-second-shader detected.",
+  "ci_url": "https://github.com/alwansan/raf/actions/runs/41737548860",
+  "ci_status": "completed/success",
+  "real_runtime_kernel_mapping_proven": false
 }
