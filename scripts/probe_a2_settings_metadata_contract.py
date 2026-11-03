@@ -41,8 +41,13 @@ def verify_fielddefs(data, assembly, namespace, source_names):
     types=data.get("candidate_types")
     if not isinstance(types,list) or not 1<=len(types)<=16:
         raise ValueError("Original Settings metadata type inventory unsafe")
+    # Unity MonoScript m_Namespace is a namespace, not a nested declaring
+    # type. Mono.Cecil may expose numerous nested classes named Settings
+    # with an empty Namespace; only the exact top-level full-name matches.
+    full = (namespace + "." if namespace else "") + "Settings"
     matches=[t for t in types if isinstance(t,dict) and
-             t.get("name")=="Settings" and t.get("namespace_name")==namespace]
+             t.get("name")=="Settings" and t.get("namespace_name")==namespace
+             and t.get("full_name")==full]
     if len(matches)!=1:
         # No source type or namespace is printed. Different assemblies may
         # contain a Settings MonoScript with a matching class-name only.

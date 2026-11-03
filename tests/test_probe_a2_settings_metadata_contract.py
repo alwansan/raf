@@ -13,7 +13,7 @@ def row(name,n,kind="unity_engine_type_unverified_base",**kw):
 
 def sample(fields,ns="Game"):
     return dict(format_version=1,assembly_name="Assembly-CSharp",
-      candidate_types=[dict(name="Settings",namespace_name=ns,token=0x02000011,
+      candidate_types=[dict(name="Settings",namespace_name=ns,full_name=(ns+"." if ns else "")+"Settings",token=0x02000011,
                              fields=fields)])
 
 class OriginalMetadataTests(unittest.TestCase):
