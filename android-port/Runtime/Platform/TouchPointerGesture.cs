@@ -34,6 +34,10 @@ namespace RaftAndroid.Platform
             if (!active || owner != id || !Valid(px, py, time) || time < lastTime) return;
             x = px; y = py; lastTime = time;
             Tick(time);
+            // Down can synchronously trigger Cancel (pause/focus loss).
+            // Never deliver motion for a gesture that was just released or
+            // replaced by a different owner during that callback.
+            if (!active || owner != id) return;
             emit(TouchPointerCommand.Move, x, y);
         }
 
@@ -53,6 +57,9 @@ namespace RaftAndroid.Platform
             if (!Valid(px, py, time) || time < lastTime) { Cancel(); return; }
             x = px; y = py;
             if (!cancelled) Tick(time);
+            // Tick may deliver Down, whose listener can cancel/restart touch.
+            // Otherwise End could synthesize a Tap after Cancel already sent Up.
+            if (!active || owner != id) return;
             bool wasHeld = held;
             active = held = false;
             if (wasHeld) emit(TouchPointerCommand.Up, x, y);
