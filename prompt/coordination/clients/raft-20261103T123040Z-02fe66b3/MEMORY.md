@@ -25,3 +25,10 @@
 - Report: `docs/A11_SHADER_EXPORT_SCOPE_HARDENING_V2_2026-11-03.md`; incident and discussion recorded, shared STATUS and latest handoff merged with blob-SHA compare-and-swap. A concurrent 409 on result file create was retried from fresh HEAD, no force.
 - Historical failing original native run41624581951 still ZERO builtin match before Unity. Original full export inventory not authenticated; 107 local sample vs140 in-run historical aggregate is not a proven omission. RENDER-002/WATER-001/FFT-FORMAT-009 OPEN, NOT_READY/0-of-3. No original shaders/GUIDs, CL, LFS, Unity, APK/OBB/XAPK, native requests, protected branches, releases or tasks altered.
 - Next: a separately authorized *in-situ* complete original export audit with same-stage manifest and authentic shader identity comparison; never invent vendor aliases or use a successful test as device/Unity evidence.
+
+## A11 resumed — a11-resume-20261103T2255Z-c6f3a290
+
+- Original state completed; previous session a11-scope-v2-20261103T132112Z. Verified 2026-11-03 live HEAD and GitHub Actions, retained A11 identity. Resume plan: prompt/coordination/work/RENDER-002/raft-20261103T123040Z-02fe66b3-same-stage-identity-v3.json; committed 5c1e65f4f3a6cfd60c278fc82ebf9c7cd4db6eb0.
+- Confirmed original 41624581951 stopped before Unity with 0 authenticated builtin shader matches; A11 41644281473 GREEN 17/17 is synthetic integrity only. 107 local shader fixture cannot be represented as same-stage 140 native export.
+- ZIP2 source provider pinned 15964ea8f246b6e076ce26b60931ee2e1a9a2385 is now preferred; no LFS fetch, Unity build or original asset copy in this session.
+- Proceeding with opt-in paired-count authenticated vendor identity audit and pre/post immutable snapshot; original provenance and Android rendering remain UNKNOWN. Do not mark READY.
