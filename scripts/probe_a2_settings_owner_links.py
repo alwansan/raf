@@ -51,6 +51,30 @@ def scan_candidates(raw, available):
     return matches
 
 
+
+def strict_pointer_stride_shape(raw, candidates):
+    """Verify 48 packed local PPtrs + 4 trailing bytes, not their CSharp field names."""
+    if not isinstance(raw, bytes):
+        raise ValueError("Expected original Settings raw bytes")
+    if len(raw) != 612:
+        return {"exact_48_pointer_stride": False,
+                "record_length_612": False,
+                "tail_is_bool_plus_zero_padding": False}
+    expected = list(range(32, 32 + 48 * 12, 12))
+    positions = sorted(i for i, _ in candidates)
+    tail = raw[608:]
+    return {
+        "exact_48_pointer_stride": positions == expected,
+        "record_length_612": True,
+        "tail_is_bool_plus_zero_padding": tail[0] in (0, 1)
+                                      and tail[1:] == b"\x00\x00\x00",
+        "tail_scalar_is_true": tail[0] == 1
+                               if tail[1:] == b"\x00\x00\x00" else None,
+        "source_declared_field_names_mapped": False,
+        "array_or_field_boundary_proven": False,
+    }
+
+
 def native_graph(objects, externals, local_scripts, global_scripts):
     kinds, component_owner, transform_of_go, parent, canvases, scalers = {}, {}, {}, {}, set(), set()
     for obj in objects:
@@ -124,6 +148,7 @@ def audit_scene(owner_file, global_scripts):
     graph = native_graph(objects, externals, local_scripts, global_scripts)
     kinds, owners, trans, parents, canvases, scalers = graph
     settings, counts_by_kind, counts_by_ancestry, sizes = 0, Counter(), Counter(), Counter()
+    stride_results = []
     for obj in objects:
         if str(obj.type.name) != "MonoBehaviour":
             continue
@@ -142,7 +167,9 @@ def audit_scene(owner_file, global_scripts):
                        != (expected["m_FileID"], expected["m_PathID"])):
                 raise ValueError("Typed original Settings base PPtr mismatch")
         sizes[len(raw)] += 1
-        for offset, target in scan_candidates(raw, kinds):
+        matches = scan_candidates(raw, kinds)
+        stride_results.append(strict_pointer_stride_shape(raw, matches))
+        for offset, target in matches:
             kind = kinds[target]
             counts_by_kind[kind if kind in ("GameObject", "RectTransform", "Transform", "Canvas", "MonoBehaviour") else "other"] += 1
             counts_by_ancestry[ancestry(target, graph)] += 1
@@ -154,6 +181,10 @@ def audit_scene(owner_file, global_scripts):
             "candidate_target_types": dict(sorted(counts_by_kind.items())),
             "candidate_native_ancestry": dict(sorted(counts_by_ancestry.items())),
             "authentic_scaler_canvas_owners": len(scalers & canvases),
+            "full_uniform_48_local_pptrs_and_bool_tail": bool(stride_results) and
+                all(v["exact_48_pointer_stride"] and
+                    v["tail_is_bool_plus_zero_padding"] for v in stride_results),
+            "dense_candidate_structural_profiles": stride_results,
             "candidate_custom_field_typing_verified": False,
             "displayed_settings_panel_to_canvas_proven": False}
 
