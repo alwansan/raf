@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T121333Z-a6c7f4e2",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "updated_at": "2026-11-03T12:13:33Z",
+  "base_sha": "98fa7380811d7251b011b158e6a50318c5186763",
+  "hypothesis": "Commented ShaderLab #include tokens currently pass into rewrite() dependencies and incorrectly fail certified Unity shader restore; exclude comments while preserving original quoted and comment bytes. Never relax existing genuine include or zero-match gates.",
+  "intended_files": [
+    "scripts/restore_builtin_shaders.py",
+    "tests/test_restore_builtin_shaders.py",
+    "prompt/coordination/clients/raft-20261103T121333Z-a6c7f4e2/",
+    "prompt/coordination/work/RENDER-002/",
+    "prompt/coordination/experiments/raft-20261103T121333Z-a6c7f4e2/",
+    "prompt/STATUS.md",
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+  ],
+  "related_work": [
+    "A9 RENDER-002 exported ShaderLab declaration scanner completed on d159f348",
+    "A1 WATER/FFT ongoing independent files",
+    "Prior A6 LOCAL-005 completed"
+  ],
+  "experiment_ids": [
+    "commented-include-negative-control"
+  ],
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41624581951"
+  ],
+  "result": null,
+  "next_step": "Rebase previous isolated negative controls onto live A9 source; CI via pre-existing no-LFS workflow, not a native build"
+}
