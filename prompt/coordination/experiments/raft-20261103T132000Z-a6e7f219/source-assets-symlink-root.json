@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T132000Z-a6e7f219",
+  "status": "planned",
+  "updated_at": "2026-11-03T13:20:00Z",
+  "source_sha": null,
+  "hypothesis": "Original save and offline source adapters may traverse project/Assets when it is a symlink to outside source, then write original C# outside the intended Unity project despite leaf.is_symlink false.",
+  "expected_signal": "A root Assets symlink to a sibling external source tree must fail before any source or meta read/write; regular Assets tree must continue adapt and preserve .rgd data/meta.",
+  "input_hashes": [],
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_adapt_original_save_paths.py -v",
+    "python3 -m unittest discover -s tests -p test_android_offline_startup.py -v"
+  ],
+  "workflow_paths": [
+    ".github/workflows/raft-original-save-path-tests.yml",
+    ".github/workflows/raft-original-android-local-startup.yml"
+  ],
+  "negative_controls": [
+    "Assets root symlink to outside Assembly-CSharp/SaveAndLoad.cs",
+    "Assets root symlink for synthetic Settings game source",
+    "normal Assets game source adaptation tests",
+    "no backup/source mutation after rejection"
+  ],
+  "run_urls": [],
+  "result": null,
+  "limits": [
+    "Source-stage filesystem safety, NOT game .rgd integration",
+    "Not a global TOCTOU-proof, no Unity/device runtime proof"
+  ]
+}
