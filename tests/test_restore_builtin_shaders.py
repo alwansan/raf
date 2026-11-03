@@ -78,6 +78,28 @@ class BuiltinShaderTests(unittest.TestCase):
         self.assertEqual(dependencies, {'DefaultResourcesExtra/common.cginc'})
         self.assertIn(ROOT + 'DefaultResourcesExtra/common.cginc', source)
 
+    def test_line_comment_include_is_not_a_dependency(self):
+        files = {'DefaultResourcesExtra/a.shader': 'Shader "Standard" {\n// #include "missing.cginc"\n#include "active.cginc"\n}',
+                 'CGIncludes/active.cginc': '// official include fixture'}
+        text, deps = rewrite('DefaultResourcesExtra/a.shader', files)
+        self.assertEqual(deps, {'CGIncludes/active.cginc'})
+        self.assertIn('// #include "missing.cginc"', text)
+        self.assertIn(ROOT + 'CGIncludes/active.cginc', text)
+
+    def test_inactive_block_and_unterminated_comment_includes_are_not_dependencies(self):
+        for comment in ('/* #include "missing.cginc" */', '/*\n#include "missing.cginc"'):
+            files = {'DefaultResourcesExtra/a.shader': 'Shader "Standard" {\n' + comment}
+            text, deps = rewrite('DefaultResourcesExtra/a.shader', files)
+            self.assertEqual(deps, set())
+            self.assertEqual(text, files['DefaultResourcesExtra/a.shader'])
+
+    def test_include_path_with_literal_comment_markers_is_still_active(self):
+        files = {'DefaultResourcesExtra/a.shader': '#include "dir//active.cginc"',
+                 'DefaultResourcesExtra/dir/active.cginc': '// official include fixture'}
+        text, deps = rewrite('DefaultResourcesExtra/a.shader', files)
+        self.assertEqual(deps, {'DefaultResourcesExtra/dir/active.cginc'})
+        self.assertIn(ROOT + 'DefaultResourcesExtra/dir/active.cginc', text)
+
     def test_in_project_backup_refused(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)

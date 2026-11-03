@@ -82,15 +82,30 @@ def archive_sources(raw):
 
 def rewrite(path, files):
     dependencies = set()
-    def replace(match):
+    original = files[path]
+
+    def mask_comment(match):
+        token = match.group()
+        if token.startswith(('//', '/*')):
+            return ''.join(c if c in '\r\n' else ' ' for c in token)
+        return token
+
+    # Identify live #include tokens on a same-length comment-masked copy, then
+    # preserve untouched original source including comments and quoted paths.
+    clean = COMMENT_OR_STRING.sub(mask_comment, original)
+    result = []
+    last = 0
+    for match in INCLUDE.finditer(clean):
         include = match[2]
         candidates = (posixpath.normpath(posixpath.join(posixpath.dirname(path), include)), 'CGIncludes/' + include)
         found = next((p for p in candidates if p in files and p.endswith(('.cginc', '.glslinc'))), None)
         if found is None:
             raise ValueError('Unresolved built-in shader include')
         dependencies.add(found)
-        return match[1] + ROOT + found + match[3]
-    return INCLUDE.sub(replace, files[path]), dependencies
+        result.extend((original[last:match.start()], match[1] + ROOT + found + match[3]))
+        last = match.end()
+    result.append(original[last:])
+    return ''.join(result), dependencies
 
 
 def restore_project(project, backup, shaders, files, license):
