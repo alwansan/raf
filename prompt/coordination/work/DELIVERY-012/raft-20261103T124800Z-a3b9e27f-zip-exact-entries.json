@@ -2,8 +2,8 @@
   "schema_version": 1,
   "owner": "raft-20261103T124800Z-a3b9e27f",
   "issue_id": "DELIVERY-012",
-  "status": "active",
-  "updated_at": "2026-11-03T12:48:00Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T13:07:00Z",
   "base_sha": "c6868a38c41e8384dd8153289c913e87714c8a05",
   "hypothesis": "audit_android_expansion._names uses PurePosixPath.parts, which silently removes '.' and empty components. A malformed APK/OBB ZIP path can pass structural validation despite not being equal to the entry Unity/Android loader requests.",
   "intended_files": [
@@ -25,7 +25,14 @@
   "experiment_ids": [
     "exact-zip-entry-paths"
   ],
-  "evidence": [],
-  "result": null,
-  "next_step": "Create A3-owned synthetic positive/negative controls, capture red CI against actual audit, minimally harden _names to require raw slash-delimited path components, capture green CI. No LFS/Unity/APK build."
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41641061681",
+    "https://github.com/alwansan/raf/actions/runs/41641182243",
+    "https://github.com/alwansan/raf/actions/runs/41641182249",
+    "https://github.com/alwansan/raf/commit/7faf0a8bb557e59131a92a062bd2571c98547b8c",
+    "docs/A3_ANDROID_ZIP_MEMBER_EXACTNESS_2026-11-03.md"
+  ],
+  "result": "RED CI41641061681 failed 5/8 as intended; GREEN CI41641182243 passed 8/8 A3 +13/13 prior OBB/Haptics on exact SHA; same-SHA 41641182249, 41641182147, 41641182250 passed.",
+  "next_step": "Scope complete; original shader/water/candidate blockers remain open and no full build permitted from this A3 task.",
+  "last_commit": "7faf0a8bb557e59131a92a062bd2571c98547b8c"
 }
