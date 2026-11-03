@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T145401Z-051434ed",
+  "issue_id": "LOCAL-005",
+  "status": "active",
+  "updated_at": "2026-11-03T14:54:01.756Z",
+  "hypothesis": "Dangling symlink at existing original-source backup destination bypasses Path.exists and redirects shutil.copy2 outside backup.",
+  "intended_files": [
+    "scripts/adapt_original_save_paths.py",
+    "scripts/adapt_android_offline_startup.py",
+    "tests/test_adapt_original_save_paths.py",
+    "tests/test_android_offline_startup.py",
+    "prompt/coordination/clients/raft-20261103T145401Z-051434ed/",
+    "prompt/coordination/experiments/raft-20261103T145401Z-051434ed/"
+  ],
+  "related_work": [
+    "Prior A6 Assets root source guard completed",
+    "A10 original managed staging separate",
+    "A9 identity separate"
+  ],
+  "experiment_ids": [
+    "backup-dangling-link"
+  ],
+  "result": null,
+  "next_step": "Synthetic red regression plus safe source fix and CPU Actions."
+}

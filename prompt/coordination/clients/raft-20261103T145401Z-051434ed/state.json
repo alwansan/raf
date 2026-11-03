@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "username": "raft-20261103T145401Z-051434ed",
+  "client_label": "A6",
+  "session_id": "a6-20261103T145401Z-ba243dcc",
+  "resumed_from": "raft-20261103T132000Z-a6e7f219",
+  "status": "active",
+  "updated_at": "2026-11-03T14:54:01.756Z",
+  "base_sha": null,
+  "current_work": [
+    "LOCAL-005"
+  ],
+  "last_commit": null,
+  "next_step": "Reproduce original source backup dangling symlink redirect; fix adapters and test same-source CPU-only.",
+  "memory_path": "prompt/coordination/clients/raft-20261103T145401Z-051434ed/MEMORY.md"
+}

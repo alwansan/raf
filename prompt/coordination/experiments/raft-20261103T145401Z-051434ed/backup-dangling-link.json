@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T145401Z-051434ed",
+  "status": "planned",
+  "updated_at": "2026-11-03T14:54:01.756Z",
+  "hypothesis": "Dangling backup-leaf symlink bypasses existing Path.exists guard.",
+  "expected_signal": "Both adapters reject before source/meta or backup mutation; tests green after fix, fail before fix.",
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_adapt_original_save_paths.py -v",
+    "python3 -m unittest discover -s tests -p test_android_offline_startup.py -v"
+  ],
+  "workflow_paths": [
+    ".github/workflows/raft-original-save-path-tests.yml",
+    ".github/workflows/raft-original-android-local-startup.yml"
+  ],
+  "negative_controls": [
+    "Dangling SaveAndLoad.cs destination",
+    "Dangling SteamManager.cs destination",
+    "Normal backup behavior"
+  ],
+  "run_urls": [],
+  "result": null,
+  "limitations": [
+    "No atomic file handle safety",
+    "No Unity/phone/rgd acceptance"
+  ]
+}
