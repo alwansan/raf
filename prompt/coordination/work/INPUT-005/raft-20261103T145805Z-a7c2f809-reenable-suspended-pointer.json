@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T145805Z-a7c2f809",
+  "issue_id": "INPUT-005",
+  "status": "active",
+  "updated_at": "2026-11-03T14:58:05.824Z",
+  "base_sha": "7462e0b2754720a8b6581cf00e037cb9af094e04",
+  "hypothesis": "OnDisable Suspend(true) leaves suspended latched; OnEnable misses reset so re-enabled AndroidTouchPointer consumes raw touches rather than delivering gameplay input.",
+  "intended_files": [
+    "android-port/Runtime/Platform/AndroidTouchPointer.cs",
+    "scripts/verify_touch_pointer_packet_routing.py",
+    "prompt/coordination/clients/raft-20261103T145805Z-a7c2f809/",
+    "prompt/coordination/experiments/raft-20261103T145805Z-a7c2f809/",
+    "prompt/coordination/discussions/INPUT-005/",
+    "prompt/STATUS.md",
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+  ],
+  "related_work": [
+    "resumed_from raft-20261103T132738Z-a7f64e28 completed raw secondary touch routing",
+    "five earlier A7 INPUT-005 scopes completed; other clients focused WATER/RENDER/LOCAL/AUDIO/DISPLAY"
+  ],
+  "experiment_ids": [
+    "reenable-suspended-pointer-20261103"
+  ],
+  "evidence": [],
+  "result": null,
+  "next_step": "Test fail first on source-extracted OnEnable/OnEvent and fix only after deterministic red."
+}
