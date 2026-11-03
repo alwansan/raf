@@ -7,9 +7,14 @@ on:
       - 'scripts/adapt_original_save_paths.py'
       - 'tests/test_adapt_original_save_paths.py'
       - 'tests/test_a10_original_save_selector.py'
+      - 'scripts/verify_a8_zip2_local_save_provider.py'
+      - 'tests/test_verify_a8_zip2_local_save_provider.py'
   workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: raft-a8-zip2-original-save-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
 jobs:
   paths:
     runs-on: ubuntu-24.04
@@ -22,7 +27,19 @@ jobs:
           sparse-checkout: |
             scripts
             tests
-            Raft/Raft_Data/Managed
+      - name: Checkout immutable ZIP2 source, no Git LFS
+        uses: actions/checkout@v4
+        with:
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: original-zip2
+          fetch-depth: 1
+          filter: blob:none
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/Managed/Assembly-CSharp.dll
+            Raft/Raft_Data/StreamingAssets/Data.rgd
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '10.0.x'
@@ -31,11 +48,14 @@ jobs:
           DOTNET_PROCESSOR_COUNT: '2'
         run: |
           set -euo pipefail
+          test "$(git -C original-zip2 rev-parse HEAD)" = "15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+          python3 -m unittest discover -s tests -p test_verify_a8_zip2_local_save_provider.py -v
+          python3 -m scripts.verify_a8_zip2_local_save_provider --zip2-checkout original-zip2
           python3 -m unittest discover -s tests -p test_adapt_original_save_paths.py -v
           python3 -m unittest discover -s tests -p test_a10_original_save_selector.py -v
           dotnet tool install ilspycmd --version 11.2.0.10050 --tool-path "$RUNNER_TEMP/ilspy"
           timeout 90s "$RUNNER_TEMP/ilspy/ilspycmd" -lv CSharp9_0 -t SaveAndLoad \
-            Raft/Raft_Data/Managed/Assembly-CSharp.dll > "$RUNNER_TEMP/original-save.cs" 2> "$RUNNER_TEMP/private-decompile.log"
+            original-zip2/Raft/Raft_Data/Managed/Assembly-CSharp.dll > "$RUNNER_TEMP/original-save.cs" 2> "$RUNNER_TEMP/private-decompile.log"
           python3 - <<'PY'
           import json, os
           from pathlib import Path
