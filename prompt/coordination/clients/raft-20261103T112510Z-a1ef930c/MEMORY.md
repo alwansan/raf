@@ -1,0 +1,7 @@
+# A1 independent FFT extended instruction identity experiment
+
+Registered 2026-11-03T11:25:10Z, identity `raft-20261103T112510Z-a1ef930c`, session `a1-20261103T112510Z-5b80d2fa`, resumed_from `raft-20261103T110728Z-b1c3478e` (paused). Baseline f929e3c98a5b96460edc57e31acc9ba5799dbd04.
+
+Live prerequisite review: prompt/README, CONTINUE_RAFT_AR, STATUS, CURRENT_OWNER_REQUIREMENTS, AGENTS, coordination/README, APK_BUILD_READINESS and latest A1 arithmetic report; HEAD/commits/Actions/release checked. Prior A1 math-profile run 41625193741 SUCCESS on20 original; counts of OpExtInst matched but imported sets/individual instruction opcode IDs were not compared. No CUDA/Unity/GPU semantics inferred; other WATER agents' caller/precision/format independent plans reviewed.
+
+Bounded hypothesis: equal OpExtInst totals conceal changed GLSL.std.450 extended opcode identity. New parser should recognize only documented public GLSL.std.450 import by exact name internally and emit numeric instruction IDs/counts only, unknown imports counted without names, unresolved import fail closed. Add negative synthetic controls and exact20 original authenticated CPU experiment if justified. Preserve source and .meta/GUID, LEFT Mouse0 500ms, all controls, CL read-only. Do not touch or cancel native run41624581951 already in_progress on older source c7254f7d; no Unity/APK, native requests or automations. NOT_READY 0/3.

@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "username": "raft-20261103T112510Z-a1ef930c",
+  "client_label": "A1",
+  "session_id": "a1-20261103T112510Z-5b80d2fa",
+  "resumed_from": "raft-20261103T110728Z-b1c3478e",
+  "status": "active",
+  "updated_at": "2026-11-03T11:25:10Z",
+  "base_sha": "f929e3c98a5b96460edc57e31acc9ba5799dbd04",
+  "current_work": [
+    "WATER-001",
+    "FFT-FORMAT-009"
+  ],
+  "last_commit": null,
+  "next_step": "Audit SPIR-V OpExtInst standard numeric instruction identities across original20 vs cross-compiled SPIR-V; CPU-only, no builds.",
+  "memory_path": "prompt/coordination/clients/raft-20261103T112510Z-a1ef930c/MEMORY.md"
+}

@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T112510Z-a1ef930c",
+  "client_label": "A1",
+  "issue_id": "FFT-FORMAT-009",
+  "status": "active",
+  "updated_at": "2026-11-03T11:25:10Z",
+  "base_sha": "f929e3c98a5b96460edc57e31acc9ba5799dbd04",
+  "hypothesis": "Extended instruction totals may match across original and HLSL roundtrip yet GLSL.std.450 numeric operation IDs differ. Confirm without publishing shader operands or names; negative controls for unknown imports.",
+  "intended_files": [
+    "scripts/probe_fft_spirv_extinst_profile.py",
+    "tests/test_probe_fft_spirv_extinst_profile.py",
+    "scripts/probe_authentic_fft_dxbc_translation.py",
+    ".github/workflows/raft-original-water-synthetic.yml",
+    ".github/workflows/raft-original-water-lfs-compute-audit.yml",
+    "prompt/coordination/clients/raft-20261103T112510Z-a1ef930c",
+    "prompt/coordination/experiments/raft-20261103T112510Z-a1ef930c",
+    "prompt/STATUS.md",
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+  ],
+  "related_work": [
+    "A1 previous math census source19884e77 completed",
+    "A1 previous image flow completed",
+    "WATER other clients caller-policy, image contracts, precision scope reviewed"
+  ],
+  "budget": "Isolated Python synthetic CI, then existing private three-LFS-owner audit only if new evidence justified; same exact 3 LFS files, no Unity or release; no manual rerun of native.",
+  "next_step": "Implement fail-closed public GLSL.std.450 numeric operation census and compare real original20 if available",
+  "experiment_ids": [
+    "extinst-identity"
+  ],
+  "result": null
+}
