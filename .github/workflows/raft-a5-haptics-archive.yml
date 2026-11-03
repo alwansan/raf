@@ -33,6 +33,8 @@ jobs:
             tests
             android-port/Runtime/Platform
             android-port/Tests/Haptics
+            config
+            Raft/Raft_Data/StreamingAssets/Haptics
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
@@ -47,7 +49,17 @@ jobs:
           test "$(wc -l < "$RUNNER_TEMP/raft-a5-haptic-names.txt")" -eq 29
           dotnet run --project android-port/Tests/Haptics/ArchiveReader.csproj \
             --configuration Release -- "$RUNNER_TEMP/raft-a5-haptic-names.txt"
+      - name: Verify 29 original tracked WAVs and Git source identities before ZIP test
+        run: |
+          set -euo pipefail
+          python3 -m scripts.probe_haptics_asset_manifest \
+            --repo . --manifest config/original-haptics-manifest.json --expected-count 29
+      - name: Exercise authentic original WAV bytes in temporary OBB ZIP with production CSharp reader
+        run: |
+          set -euo pipefail
+          dotnet run --project android-port/Tests/Haptics/ArchiveReader.csproj \
+            --configuration Release -- --original-wavs Raft/Raft_Data/StreamingAssets/Haptics
       - name: Record experiment limitation
         run: |
           echo '### A5 HAPTICS-008 source/ZIP experiment' >> "$GITHUB_STEP_SUMMARY"
-          echo 'Test-owned ZIP entries and actual repo reader only; no Unity, LFS hydration, original audio bytes, FMOD, device vibration, or signed OBB delivery.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Both synthetic entries and exact original 29 WAV input bytes exercised through a temporary unpublished ZIP after authenticated Git source audit; no Unity, LFS hydration, APK/OBB publication, Android or haptic playback.' >> "$GITHUB_STEP_SUMMARY"
