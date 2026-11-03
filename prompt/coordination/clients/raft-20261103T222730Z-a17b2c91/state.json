@@ -4,13 +4,13 @@
   "client_label": "A1",
   "session_id": "a1-20261103T222730Z-cf5e711a",
   "resumed_from": "raft-20261103T145000Z-a1c92f74",
-  "status": "active",
-  "updated_at": "2026-11-03T22:29:03.060Z",
+  "status": "paused",
+  "updated_at": "2026-11-03T22:35:56.722Z",
   "base_sha": "f604848e7efdc146de64ec2b8569bc35ad9e2689",
   "current_work": [
     "WATER-001",
     "FFT-FORMAT-009"
   ],
-  "last_commit": null,
-  "next_step": "Migrate prior A1 authentic20 CPU Vulkan FFT source acquisition to immutable ZIP2 split original with verified SHA and no LFS, source-only CI."
+  "last_commit": "14ba21e93af3dac3623265a9230afeccea6986ce",
+  "next_step": "A1 source migration completed: ZIP2 15964ea8 three split chunks reassembled and SHA verified without LFS, CI41731607739 SUCCESS (10 synthetic restore,8 schema, original20×3=60/60 software Vulkan match). Next restore genuine water/material/ShaderLab/half precision via ZIP2, coordinate other agents; no game readiness claim."
 }
