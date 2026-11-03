@@ -27,7 +27,7 @@ def run_audit(shaders, computes=()):
         result = buffer.getvalue()
         assert result.startswith("RAFT_EXPORTED_RENDER_CONTRACT "), result
         def record(name):
-            match = re.search(r"\\b" + re.escape(name) + r"=(\\{[^}]*\\})", result)
+            match = re.search(r"\b" + re.escape(name) + r"=(\{[^}]*\})", result)
             if match is None:
                 raise AssertionError(f"missing {name} aggregate marker")
             return ast.literal_eval(match[1])
