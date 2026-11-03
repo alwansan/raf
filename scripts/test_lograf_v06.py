@@ -52,6 +52,7 @@ checks={
     "pid probe failures explicitly measured": '"pid_probe_failures_total"' in remote and 'pidProbeFailures.incrementAndGet();' in remote,
     "pid probe failure reason exposed in telemetry": '"pid_probe_failure_reason"' in remote and 'pidProbeFailureReason="none";' in remote,
     "pid probe errors use bounded reason codes": 'reason.equals("pidof_timeout")' in remote and 'reason.equals("pidof_output_overflow")' in remote and 'reason.equals("pidof_invalid_output")' in remote and '"pidof_execution_error"' in remote,
+    "nonzero pidof exit reason is fixed cardinality": 'throw new IOException("pidof_nonzero_exit")' in remote and 'reason.equals("pidof_nonzero_exit")' in remote and 'pidof_exit_"+exit' not in remote and 'reason.startsWith("pidof_exit_")' not in remote,
     "pid probe error reason never exports raw exception": 'data.put("pid_probe_failure_reason",pidProbeFailureReason)' in remote and 'pidProbeFailureReason=probeError.toString()' not in remote,
     "pid probe successes measured": '"pid_probe_successes_total"' in remote and 'pidProbeSuccesses.incrementAndGet();' in remote,
     "unverified PID distinguished from stopped game": '"main_cmdline_unverified"' in remote and '"pidof_probe_failed"' in remote,
