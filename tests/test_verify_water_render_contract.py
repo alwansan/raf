@@ -62,6 +62,17 @@ class WaterRenderGateTests(unittest.TestCase):
             result = inspect(Path(temp))
             self.assertFalse(result["shader_contracts"][name]["contract_satisfied"])
 
+    def test_commented_compute_kernel_is_not_a_candidate(self):
+        with tempfile.TemporaryDirectory() as temp:
+            assets = Path(temp) / "Assets"
+            assets.mkdir()
+            source = assets / "FFT.compute"
+            source.write_text("/*\n#pragma kernel Fake\n*/\n")
+            Path(str(source) + ".meta").write_text("guid: " + "a"*32)
+            result = inspect(Path(temp))
+            self.assertEqual(result["compute_files_with_kernels"], 0)
+            self.assertFalse(result["water_compute_source_candidate_present"])
+
     def test_duplicate_original_shader_identifiers_rejected(self):
         with tempfile.TemporaryDirectory() as temp:
             assets = Path(temp) / "Assets"

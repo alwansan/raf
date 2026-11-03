@@ -66,7 +66,8 @@ def inspect(project: Path) -> dict:
         if path.is_symlink() or not path.is_file():
             raise ValueError("Unsafe source compute shader path")
         raw = path.read_text(encoding="utf-8-sig", errors="replace")
-        kernels = KERNEL.findall(raw)
+        without_comments = re.sub(r'/\*[\s\S]*?\*/|//[^\r\n]*', '', raw)
+        kernels = KERNEL.findall(without_comments)
         computes.append({
             "kernel_count": len(kernels),
             "is_water_or_fft_named": bool(re.search(r'(water|fft|spectrum|foam)', path.name, re.IGNORECASE)),

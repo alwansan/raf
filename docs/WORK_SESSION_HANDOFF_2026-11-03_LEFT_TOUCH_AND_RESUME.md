@@ -296,3 +296,8 @@ On source de4eb605a20f61878f5a48cb917f3642e447cfd2, [synthetic CI41605046080](ht
 ## Descriptor completeness guard — 3 November 2026
 
 Continued owner-requested repairs before APK. Fixed another audit false-positive: a resource with Binding but missing DescriptorSet could be reported uniquely traced as (None,binding). It now remains unresolved. Added missing-set regression and an independent two-known-binding OpSelect ambiguity case; all8 Python tests pass locally. No shader/resource restoration claimed. Latest original audit41605045982 remains evidence for the previous source only; new CI must be reviewed. WATER-001/RENDER-002/FFT-FORMAT-009 still OPEN; NOT_READY/0-of-3, so no native request yet. CL identities unchanged. Owner reiterates completing repairs/audits then building; existing conditional readiness protocol retained.
+
+
+## Water compute comment false-positive repair — 3 November 2026
+
+Owner reiterated continuing repairs through XAPK delivery. Fixed water source-candidate audit counting #pragma kernel inside block comments as real kernels; compute scanning now removes comments as shader pass scanning already does. Added regression and ran all5 water-contract tests locally, exit0. No authentic shader/kernel restored by this change; strict identity gate stays false and WATER-001/RENDER-002/FFT-FORMAT-009 stay open. NOT_READY/0-of-3, no native request. Current workspace lacks the earlier private-inspection directory, so previous authenticated-source claims are retained as historical CI evidence, not new local inspection. Continue original-source recovery via existing authenticated workflow/data paths; no user re-upload requested.
