@@ -2,8 +2,8 @@
   "schema_version": 1,
   "owner": "raft-20261103T145834Z-f43d1341",
   "issue_id": "LOCAL-005",
-  "status": "active",
-  "updated_at": "2026-11-03T15:00:24.604Z",
+  "status": "completed",
+  "updated_at": "2026-11-03T15:06:43.715Z",
   "base_sha": "528068d21253340a9a673517aa608dbb58a015d0",
   "hypothesis": "World readiness probe counts #if-inactive C# broadcasts and assignments as executable source; no compilation symbols are known to its lexical check.",
   "intended_files": [
@@ -22,7 +22,12 @@
   "experiment_ids": [
     "world-preprocessor-fail-closed"
   ],
-  "evidence": [],
-  "result": null,
-  "next_step": "Reject conditional compilation directives in pinned world method; add synthetic controls; run no-LFS CI."
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/baf191c8afb8e1aa372b26c13ea8dfc041f9248b",
+    "https://github.com/alwansan/raf/commit/1846c5de0f80aa95cd2efb66c9d55549ac131ff8",
+    "https://github.com/alwansan/raf/actions/runs/41660089549"
+  ],
+  "result": "Unknown-define conditional C# branches fail closed while quoted/commented directive lookalikes remain ignored. Nine synthetic world tests, original pinned world probe and managed source offline CI successful; device world remains unproven.",
+  "next_step": "Original local world lifecycle/save .rgd integration and phone acceptance remain open; do not declare READY.",
+  "source_sha": "1846c5de0f80aa95cd2efb66c9d55549ac131ff8"
 }
