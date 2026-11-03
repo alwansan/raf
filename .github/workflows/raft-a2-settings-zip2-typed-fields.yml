@@ -1,0 +1,61 @@
+name: Raft A2 ZIP2 original Settings metadata CPU only
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-a2-settings-zip2-typed-fields.yml'
+      - 'scripts/probe_a2_settings_typed_fields.py'
+      - 'tests/test_probe_a2_settings_typed_fields.py'
+permissions:
+  contents: read
+concurrency:
+  group: raft-a2-zip2-settings-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  original-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Checkout immutable ZIP2 small original source only
+        uses: actions/checkout@v4
+        with:
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: original-zip2
+          filter: blob:none
+          fetch-depth: 1
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            Raft/Raft_Data/Managed/Assembly-CSharp.dll
+            Raft/Raft_Data/level0
+            Raft/Raft_Data/level1
+            Raft/Raft_Data/globalgamemanagers.assets
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Verify synthetic Settings field negatives
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_probe_a2_settings_typed_fields.py -v
+          python3 -m py_compile scripts/probe_a2_settings_typed_fields.py
+      - name: Private original CSharp9 source recovery
+        run: |
+          set -euo pipefail
+          dotnet tool install ilspycmd --version 11.2.0.10050 --tool-path "$RUNNER_TEMP/a2-fields-ilspy"
+          timeout 360s "$RUNNER_TEMP/a2-fields-ilspy/ilspycmd" -p -lv CSharp9_0 \
+            -o "$RUNNER_TEMP/a2-original" original-zip2/Raft/Raft_Data/Managed/Assembly-CSharp.dll \
+            > "$RUNNER_TEMP/a2-private-source.log" 2>&1
+      - name: SHA-verify ZIP2 and classify original Settings fields
+        run: |
+          set -euo pipefail
+          python3 -m scripts.probe_a2_settings_typed_fields \
+            --source original-zip2/Raft/Raft_Data --decompiled "$RUNNER_TEMP/a2-original"
+          echo 'A2_ZIP2_CPU_ONLY unityRan=false nativeBuildRan=false lfsDownloaded=false'
