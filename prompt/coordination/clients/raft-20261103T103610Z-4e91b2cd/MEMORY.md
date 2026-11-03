@@ -38,3 +38,7 @@ Next use this oracle when authentic shader bodies/resource bindings become avail
 
 ## Verified original CPU inverse FFT
 2026-11-03: https://github.com/alwansan/raf/actions/runs/41645609498 SUCCESS on753a3d71d870edf821210bb50cc7dfa67ed977ee: 4/4 original CPU32x32 inverse roundtrips relativeL2<1e-5, 4 direct2D comparisons max1.8933e-7 and2 negative controls pass. No GPU/Unity/device claim; WATER-001/RENDER-002 remain OPEN, NOT_READY0/3. Next compare restored shader arithmetic. No native build or tasks changed.
+
+
+## Original CPU complex random FFT reference — verified 2026-11-03
+[Run41667519615](https://github.com/alwansan/raf/actions/runs/41667519615) SUCCESS on86dedcecaa54d18966a13f6eba04a02d2a689a39: **5 direct2D comparisons and5 inverse roundtrips**, including independent deterministic random real/imaginary inputs, N32. Max forward relativeL2=1.8933043868319998e-7; all inverse errors<1e-5;2negativecontrols pass. Existing40-case original butterfly suite194899checks passes. Actual original-body C# CPU execution, no shader/Unity/device execution, intermediate half precision or all-channel proof. WATER/RENDER/FFT OPEN, NOT_READY0/3. Next use this completed reference for recovered arithmetic comparisons; avoid further incremental oracle cases without a demonstrated missing behavior. W1's independent Depth numerical/raster work is not replaced or duplicated.
