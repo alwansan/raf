@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "username": "raft-20261103T105031Z-4b175384",
+  "display_name": "A3",
+  "session_id": "20261103T105031Z-38508c0b107c186b",
+  "resumed_from": "raft-20261103T100000Z-3a7f2c91",
+  "status": "active",
+  "updated_at": "2026-11-03T10:50:31Z",
+  "base_sha": "aa5f0b6d236a5bbac8cadadd3e2278ec2acb6df4",
+  "current_work": [
+    "HAPTICS-008"
+  ],
+  "last_commit": null,
+  "next_step": "Make original Haptics 29/29 manifest validation mandatory in stage_original_streaming_assets before copying any assets; isolated synthetic tests/CPU CI; do not touch A5 runtime",
+  "memory_path": "prompt/coordination/clients/raft-20261103T105031Z-4b175384/MEMORY.md"
+}

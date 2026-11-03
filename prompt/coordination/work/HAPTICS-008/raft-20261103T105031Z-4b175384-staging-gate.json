@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T105031Z-4b175384",
+  "issue_id": "HAPTICS-008",
+  "status": "active",
+  "updated_at": "2026-11-03T10:50:31Z",
+  "base_sha": "aa5f0b6d236a5bbac8cadadd3e2278ec2acb6df4",
+  "resumed_from": "raft-20261103T100000Z-3a7f2c91",
+  "hypothesis": "Native source staging currently checks banks and Data.rgd but not mandatory complete 29 original WAV Haptics set; deleting a WAV and making a new HEAD can pass the pre-copy required-name gate even with A3 manifest CI separate.",
+  "intended_files": [
+    "scripts/stage_original_streaming_assets.py",
+    "tests/test_stage_original_streaming_assets.py",
+    ".github/workflows/raft-a3-haptics-staging-gate.yml",
+    "prompt/coordination/clients/raft-20261103T105031Z-4b175384/",
+    "prompt/coordination/work/HAPTICS-008/raft-20261103T105031Z-4b175384-staging-gate.json",
+    "prompt/coordination/experiments/raft-20261103T105031Z-4b175384/staging-gate.json",
+    "prompt/STATUS.md",
+    "docs/WORK_SESSION_HANDOFF_2026-11-03_LEFT_TOUCH_AND_RESUME.md"
+  ],
+  "related_work": [
+    "raft-20261103T100000Z-3a7f2c91: source manifest 29/29 CI41616535073",
+    "raft-20261103T100200Z-a5c842e1: actual AndroidStreamingAssets adapter/ZIP CI41617621699 (completed)"
+  ],
+  "excluded_files": [
+    "android-port/Runtime/Platform/AndroidStreamingAssets.cs",
+    "android-port/Tests/Haptics",
+    "Raft/Raft_Data/StreamingAssets/**",
+    ".github/raft-native-build-request.json"
+  ],
+  "safety": "No Unity, no LFS hydration, no native request/APK/OBB/XAPK/Release, no schedule changes, strict expected_sha lease",
+  "next_step": "Read latest staging code and native invocation, implement manifest audit before copy and regression tests on synthetic Git fixture."
+}
