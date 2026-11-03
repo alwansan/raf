@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T145805Z-a7c2f809",
+  "status": "active",
+  "hypothesis": "After OnDisable -> Suspend(true), the next AndroidTouchPointer.OnEnable does not clear suspended, swallowing all gameplay touch events.",
+  "input_hashes": [
+    "AndroidTouchPointer.cs blob c71b95e395a78bb7051d8b172e776d6b83f15e8d",
+    "Old touch-routing harness blob f95ebfed51c5b12b53b47632eedd934fbed64ac2"
+  ],
+  "commands": [
+    "python3 -m scripts.verify_touch_pointer_packet_routing --output \"$RUNNER_TEMP/touch-packet-router\"",
+    "dotnet run --project \"$RUNNER_TEMP/touch-packet-router/Router.csproj\" --configuration Release --nologo"
+  ],
+  "expected_signal": "RED: actual OnEnable/OnDisable/Suspend/OnEvent harness reports reenable-clears-stale-suspension; GREEN: minimal reset, prior 14 raw routing assertions preserved.",
+  "negative_controls": [
+    "First enable accepts gameplay touch",
+    "Disable ends active gesture",
+    "Re-enable accepts new raw gameplay touch instead of consuming without action",
+    "Secondary raw touch/UGUI tests remain green"
+  ],
+  "workflow_path": ".github/workflows/raft-android-platform-tests.yml",
+  "concurrency_group": null,
+  "artifact_prefix": null,
+  "budget": "Existing push CI CPU no LFS no Unity timeout 10m",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41659146129",
+  "source_sha": "bbecc37ebee01949300d508d0fd2b73315c3146b",
+  "result": "Initial test-only CI failed at harness compilation CS0128 local name; harness corrected at 34dcdb06; behavioral red not yet confirmed.",
+  "limitations": [
+    "Actual Unity Engine not executed",
+    "Test stubs input event dispatch and UI geometry"
+  ],
+  "next_step": "Verify proper red, patch runtime, green CI, document exact results."
+}
