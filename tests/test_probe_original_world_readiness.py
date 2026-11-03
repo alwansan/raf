@@ -79,6 +79,36 @@ class WorldReadinessProbeTests(unittest.TestCase):
         self.assertEqual(report['scene_broadcast_calls'], 1)
         self.assertEqual(report['received_true_assignments'], 1)
 
+    def test_conditional_compilation_cannot_certify_world(self):
+        # The text may exist but be excluded by the Android define set.
+        cases = (
+            fixture(event=False).replace(
+                'WorldHasBeenRecieved = true;',
+                '#if false\nHelper.BroadCastToScene(secretEvent);\n#endif\n'
+                'WorldHasBeenRecieved = true;'),
+            fixture(received=False).replace(
+                ' }\n}',
+                '#if false\nWorldHasBeenRecieved = true;\n#endif\n }\n}'),
+            fixture().replace(
+                'WorldHasBeenRecieved = true;',
+                '#if DEBUG\nWorldHasBeenRecieved = true;\n'
+                '#else\nWorldHasBeenRecieved = true;\n#endif'),
+        )
+        for index, sample in enumerate(cases):
+            with self.subTest(index=index):
+                with self.assertRaisesRegex(ValueError, 'conditional compilation'):
+                    self.inspect_fixture(sample)
+
+    def test_preprocessor_like_text_in_comments_and_verbatim_strings(self):
+        source = fixture().replace(
+            'WorldHasBeenRecieved = true;',
+            '/*\n#if false\n#endif\n*/\n'
+            'string text = @"first\n#if DEBUG\n#endif\nlast";\n'
+            'WorldHasBeenRecieved = true;')
+        report = self.inspect_fixture(source)
+        self.assertEqual(report['scene_broadcast_calls'], 1)
+        self.assertEqual(report['received_true_assignments'], 1)
+
     def test_source_revision_and_ambiguity_fail_closed(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
