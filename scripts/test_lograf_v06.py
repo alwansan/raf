@@ -12,6 +12,8 @@ signing=(root/"app/build.gradle").read_text()
 checks={
     "pidof probe bounded to 2 seconds": 'p.waitFor(2000,java.util.concurrent.TimeUnit.MILLISECONDS)' in remote and 'p.destroyForcibly()' in remote,
     "pidof output capped": 'found.length()<4096' in remote,
+    "reject pidof diagnostic text instead of reporting game absent": 'throw new IOException("pidof_invalid_output")' in remote and 'if(!item.matches("[0-9]+"))' in remote,
+    "reject successful but empty pidof as ambiguous": 'if(exit==0 && current.isEmpty())' in remote and 'throw new IOException("pidof_empty_success")' in remote,
     "pidof exit status checked after completion": 'int exit=p.exitValue();' in remote,
     "stable Android app identity": "applicationId 'com.alwansan.lograf'" in signing,
     "stable update signing key": "signing/lograf-public-test.p12" in signing,
