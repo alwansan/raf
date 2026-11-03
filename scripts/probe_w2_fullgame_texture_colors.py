@@ -59,10 +59,21 @@ def expected_git_identity(repo: Path, repo_rel: str) -> str | None:
 
 
 def verify_and_hash(owner: Path, repo: Path, repo_rel: str) -> dict:
+    """Verify a local owner against its registered Git identity.
+
+    The registered side always comes from ``git show HEAD:<path>`` (the
+    committed blob): an LFS pointer's ``oid sha256:`` for LFS-tracked files,
+    or the raw blob bytes for regular tracked files. Reading the *committed*
+    object rather than the worktree copy is what makes this stable whether or
+    not the worktree happens to be LFS-hydrated.
+    """
     digest = sha256_file(owner)
     size = owner.stat().st_size
-    registered_path = repo / repo_rel
-    registered_bytes = registered_path.read_bytes()
+    registered_bytes = subprocess.run(
+        ["git", "-C", str(repo), "show", f"HEAD:{repo_rel}"],
+        capture_output=True,
+        check=True,
+    ).stdout
     info = {
         "sha256": digest,
         "byte_count": size,
@@ -78,13 +89,8 @@ def verify_and_hash(owner: Path, repo: Path, repo_rel: str) -> dict:
         info["registered_sha256"] = match.group(1)
     else:
         # regular tracked file: compare against the git-registered blob content
-        blob_bytes = subprocess.run(
-            ["git", "-C", str(repo), "show", f"HEAD:{repo_rel}"],
-            capture_output=True,
-            check=True,
-        ).stdout
         info["identity_kind"] = "tracked-regular-blob"
-        info["registered_sha256"] = hashlib.sha256(blob_bytes).hexdigest()
+        info["registered_sha256"] = hashlib.sha256(registered_bytes).hexdigest()
     if info["registered_sha256"] != digest:
         raise ValueError(
             f"owner identity mismatch against registered object: {repo_rel} "

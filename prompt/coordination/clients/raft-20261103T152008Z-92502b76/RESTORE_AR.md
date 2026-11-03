@@ -21,3 +21,9 @@
 - **حلقة 4 (material props):** probe_w2_material_property_stats + 8 اختبارات; 163+351=514 مطابقة A13/W3; 35 من قيد الطابور أُصلياً (2450×29، 3000×5، 5000×1، 2000×2); علم lightmap 4 السائد (140/210); instancing 141/163 & 266/351; DoubleSidedGI 36/9; أشكال الكلمات متباينة لكل المالك; docs/W2_MATERIAL_PROPERTY_STATS_2026-11-03.md; CI 41676717657 (مُسترَجَ أن يأتي).
 - **قاعدة التنسيق الثابتة:** أرقام aggregate فقط، لا أسماء مواد/شيدرات/كلمات/IDs؛ هوية W2 <w2@raft-local.example>؛ لا touch لملفات W1/W3/كلون CL؛ نفس نمط النسخ السابقة للاستمرارية.
 - **قيود ما بعدها:** NOT_READY / WATER-001 / RENDER-002 / FFT-FORMAT-009 مفتوحة؛ 0/3 reviews؛ المتبقي: امتداد محتمل خامات شخصية مجمّع أو إغلاق heartbeat.
+
+## استرجاع الحلقة الخامسة (19:30Z) — التقسيم اللوني كامل اللعبة
+- `scripts/probe_w2_fullgame_texture_colors.py` + 8/8 اختبارات + `raft-w2-fullgame-texture-colors.yml` + `docs/W2_FULLGAME_TEXTURE_COLORS_2026-11-03.{md,json}`.
+- 82 مالكاً (42 `*.assets` + 40 مستوى بلا امتداد) متحقق هوية من المستودع نفسه: 3 LFS pointer-oid + 79 tracked-regular blob؛ أي خلاف هويّة يفشل فوراً دون أي مخرجات.
+- النتيجة: 37 مالكاً فقط يحمل خامات، **4,050** خامة (1,173 sRGB / 2,877 linear)؛ التقسيم يمتد للخامات في ملفات مستويات levelN.
+- CI 41682133693 @ 8e0c9dc: عبر كاش W1 للمالكين الاثنين + تهيئة fresh لـ`sharedassets36.assets` (110MB)؛ الاختبارات قبل any serializer (استيراد UnityPy مؤجل داخل aggregate_owner).

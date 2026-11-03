@@ -61,6 +61,24 @@ def _sample_env(textures=2):
     )
 
 
+def _make_real_repo(root: Path, rel: str, committed: bytes, worktree: bytes) -> Path:
+    """Create a real git repo committing ``committed`` at ``rel``, then set the
+    worktree copy to ``worktree`` (simulating an LFS-hydrated worktree)."""
+    import subprocess
+    repo_dir = Path(root) / "repo"
+    repo_dir.mkdir()
+    blob_path = repo_dir / rel
+    blob_path.parent.mkdir(parents=True, exist_ok=True)
+    blob_path.write_bytes(committed)
+    subprocess.run(["git", "-C", str(repo_dir), "init", "-q", "-b", "main"], check=True)
+    subprocess.run(["git", "-C", str(repo_dir), "config", "user.email", "t@example"], check=True)
+    subprocess.run(["git", "-C", str(repo_dir), "config", "user.name", "t"], check=True)
+    subprocess.run(["git", "-C", str(repo_dir), "add", "-A"], check=True)
+    subprocess.run(["git", "-C", str(repo_dir), "commit", "-q", "-m", "init"], check=True)
+    blob_path.write_bytes(worktree)
+    return repo_dir
+
+
 class ContractTests(unittest.TestCase):
     def test_schema_and_enum(self):
         self.assertEqual(SCHEMA_VERSION, 1)
@@ -105,32 +123,68 @@ class ContractTests(unittest.TestCase):
     def test_probe_mismatched_lfs_pointer_hard_fails(self):
         with tempfile.TemporaryDirectory() as td:
             src = Path(td) / "src"
-            repo = Path(td) / "repo" / "Raft" / "Raft_Data"
-            repo.mkdir(parents=True)
             src.mkdir(parents=True)
             owner = src / "small.assets"
             owner.write_bytes(b"data")
-            pointer = repo / "small.assets"
-            pointer.write_text("version https://git-lfs\noid sha256:" + "0" * 64 + "\n")
+            pointer = "version https://git-lfs\noid sha256:" + "0" * 64 + "\n"
+            repo_dir = _make_real_repo(
+                td,
+                "Raft/Raft_Data/small.assets",
+                pointer.encode(),
+                pointer.encode(),
+            )
             with fake_unitypy(_sample_env()):
                 with self.assertRaises(ValueError):
-                    probe([owner], Path(td) / "repo", "Raft/Raft_Data")
+                    probe([owner], repo_dir, "Raft/Raft_Data")
 
-    def test_probe_lfs_pointer_match_passes_identity(self):
+    def test_probe_lfs_pointer_match_passes_identity_even_hydrated(self):
         with tempfile.TemporaryDirectory() as td:
             src = Path(td) / "src"
-            repo = Path(td) / "repo" / "Raft" / "Raft_Data"
-            repo.mkdir(parents=True)
             src.mkdir(parents=True)
             owner = src / "small.assets"
             owner.write_bytes(b"payload")
             import hashlib
             digest = hashlib.sha256(b"payload").hexdigest()
-            pointer = repo / "small.assets"
-            pointer.write_text(f"version https://git-lfs\noid sha256:{digest}\n")
+            pointer = f"version https://git-lfs\noid sha256:{digest}\n"
+            repo_dir = _make_real_repo(
+                td,
+                "Raft/Raft_Data/small.assets",
+                pointer.encode(),
+                b"payload",
+            )
             with fake_unitypy(_sample_env()):
-                result = probe([owner], Path(td) / "repo", "Raft/Raft_Data")
+                result = probe([owner], repo_dir, "Raft/Raft_Data")
         self.assertEqual(result["owner_manifest"]["small.assets"]["identity_kind"], "lfs-pointer-oid")
+
+    def test_probe_regular_tracked_blob_match_and_mismatch(self):
+        with tempfile.TemporaryDirectory() as td:
+            src = Path(td) / "src"
+            src.mkdir(parents=True)
+            owner = src / "small.assets"
+            owner.write_bytes(b"payload")
+            repo_dir = _make_real_repo(
+                td,
+                "Raft/Raft_Data/small.assets",
+                b"payload",
+                b"payload",
+            )
+            with fake_unitypy(_sample_env()):
+                result = probe([owner], repo_dir, "Raft/Raft_Data")
+            self.assertEqual(result["owner_manifest"]["small.assets"]["identity_kind"], "tracked-regular-blob")
+        with tempfile.TemporaryDirectory() as td:
+            src = Path(td) / "src"
+            src.mkdir(parents=True)
+            owner = src / "small.assets"
+            owner.write_bytes(b"different")
+            repo_dir = _make_real_repo(
+                td,
+                "Raft/Raft_Data/small.assets",
+                b"payload",
+                b"payload",
+            )
+            with fake_unitypy(_sample_env()):
+                with self.assertRaises(ValueError):
+                    probe([owner], repo_dir, "Raft/Raft_Data")
 
 
 if __name__ == "__main__":
