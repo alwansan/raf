@@ -8,6 +8,7 @@ import hashlib
 import struct
 from collections import Counter
 from scripts.blur_cb_instruction import read, ARITY
+from scripts.blur_cb_lane_map import build, lookup
 import json
 from pathlib import Path
 
@@ -65,7 +66,7 @@ def observe(common):
     return sorted(result, key=lambda cb: cb["slot"])
 
 
-def instruction_census(code):
+def instruction_census(code, layout):
     # declarations(code) has already authenticated the DXBC container ranges.
     chunks=[]
     for i in range(struct.unpack_from("<I",code,28)[0]):
@@ -98,7 +99,18 @@ def instruction_census(code):
                     dynamic_reads+=int(item.get("dynamic_index",False))
                     offsets.update((item["slot"],o) for o in item["byte_offsets"])
         at+=n
-    return {"opcode_counts":dict(counts),"arithmetic_failure_categories":dict(reasons),"cb_source_modifier_counts":dict(modifiers),"arithmetic_parse_failures":dict(errors),
+    models={cb["slot"]:build(cb) for cb in layout}
+    classified=Counter()
+    for slot,offset in offsets:
+        if slot not in models:
+            classified["missing_slot"]+=1
+            continue
+        try: member=lookup(models[slot],offset//16,(offset%16)//4)
+        except ValueError: classified["outside_allocation"]+=1
+        else: classified["known_member" if member is not None else "unmapped_partial_metadata"]+=1
+    return {"source_swizzle_address_classification":dict(classified),
+            "address_classification_is_consumption_or_binding_proof":False,
+            "opcode_counts":dict(counts),"arithmetic_failure_categories":dict(reasons),"cb_source_modifier_counts":dict(modifiers),"arithmetic_parse_failures":dict(errors),
             "decoded_arithmetic_cb_reads":reads,"symbolic_dynamic_cb_reads":dynamic_reads,"unique_cb_scalar_addresses":len(offsets),
             "complete_program_operand_coverage":False}
 
@@ -139,7 +151,7 @@ def main(source, repo, out):
                         m["candidate_within_compiled_span"] = (
                             cb["compiled_declared_bytes"] is not None
                             and m["candidate_byte_end"] <= cb["compiled_declared_bytes"])
-                rows.append({"pass": pi, "stage": st, "buffers": layout, "instruction_census": instruction_census(code)})
+                rows.append({"pass": pi, "stage": st, "buffers": layout, "instruction_census": instruction_census(code, layout)})
         report.update(status="observed", stages=rows, original_object_sha256=digest,
                       member_semantics_verified=False,
                       original_member_layout_preserved=True)
