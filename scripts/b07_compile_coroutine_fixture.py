@@ -82,8 +82,15 @@ def build(output: Path):
     if adapted.replace(adapted.split("#if UNITY_ANDROID")[1].split("#endif")[0], "", 1) == SOURCE:
         raise ValueError("Invalid bounded diagnostic fixture assertion")
     (output / "Fixture.cs").write_text(adapted + "\n" + SUPPORT, encoding="utf-8")
-    (output / "B07Harness.csproj").write_text(CSPROJ, encoding="utf-8")
-    return output / "B07Harness.csproj"
+    (output / "B07HarnessAndroid.csproj").write_text(
+        CSPROJ.replace("</PropertyGroup>", "<DefineConstants>UNITY_ANDROID</DefineConstants></PropertyGroup>"),
+        encoding="utf-8",
+    )
+    (output / "B07HarnessOther.csproj").write_text(
+        CSPROJ.replace("</PropertyGroup>", "<DefineConstants>NON_ANDROID</DefineConstants></PropertyGroup>"),
+        encoding="utf-8",
+    )
+    return output / "B07HarnessAndroid.csproj"
 
 
 if __name__ == "__main__":
