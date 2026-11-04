@@ -5,13 +5,15 @@
   "session_id": "20261104T225100Z-B18-map2",
   "issue_id": "WATER-001",
   "track": "water-fft",
-  "status": "active",
+  "status": "completed",
   "base_sha": "fc42e65b458ea317b2dea4e494671e978effc153",
   "approach": "Investigate exact individual original DXBC t0/t1/u0 -> translated SPIR-V binding pair, beyond prior successful type and count preservation.",
   "intended_files": [
+    "scripts/b18_vkd3d_explicit_bindings.c",
     "scripts/b18_fft_spirv_descriptor_identity.py",
     "tests/test_b18_fft_spirv_descriptor_identity.py",
-    ".github/workflows/raft-b18-fft-descriptor-identity.yml"
+    ".github/workflows/raft-b18-fft-descriptor-identity.yml",
+    "docs/B18_FFT_RDEF_PARITY_2026-11-04.md"
   ],
   "hypothesis": "The individual DXBC register-to-SPIR-V descriptor mapping may be derived and independently authenticated from the translated metadata, not assumed based on ordering.",
   "related_work": [
@@ -19,9 +21,30 @@
     "B18 41923703800",
     "B48 selector mapping still unknown"
   ],
-  "experiment_ids": [],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Inspect vkd3d translation bindings on safe synthetic test cases, then source-verified private original 20 slots; reject unsupported semantics.",
-  "updated_at": "2026-11-04T22:50:52Z"
+  "experiment_ids": [
+    "prompt/coordination/experiments/B18/20261104T230540Z-explicit-dxbc-spv-map.json"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41929970296",
+    "https://github.com/alwansan/raf/actions/runs/41930064868",
+    "https://github.com/alwansan/raf/actions/runs/41930156298",
+    "https://github.com/alwansan/raf/actions/runs/41930350091",
+    "https://github.com/alwansan/raf/actions/runs/41930607853",
+    "https://github.com/alwansan/raf/actions/runs/41930824777"
+  ],
+  "result": {
+    "status": "SOURCE_EXPLICIT_VKD3D_INTERFACE_VERIFIED",
+    "source_authenticated_programs": 20,
+    "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "source_object_sha256": "9d934f5c99183c6df5cf2f1fefc9d3e5ec4bce5da5f96a86e4c02910d5322247",
+    "synthetic_tests_passed": 10,
+    "explicit_target_interface_A_programs": 20,
+    "explicit_target_interface_B_programs": 20,
+    "distinct_target_bindings_honored_by_compiler": true,
+    "behavioral_t0_vs_t1_source_input_proven": false,
+    "unity_kernel_lookup_or_android_render_proven": false,
+    "final_run_url": "https://github.com/alwansan/raf/actions/runs/41930824777"
+  },
+  "next_step": "Explicit vkd3d interface contract proven for all original 20 programs under two chosen target descriptor layouts; NEXT distinguish t0 from t1 at runtime / material native .compute importer; do not equate to actual original kernel/Unity render restoration.",
+  "updated_at": "2026-11-04T23:06:56.528Z"
 }
