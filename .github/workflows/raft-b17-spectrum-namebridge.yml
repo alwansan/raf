@@ -1,0 +1,71 @@
+name: B17 WATER-001 Spectrum HLSL namebridge (source only)
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/b17_spectrum_namebridge.py
+      - tests/test_b17_spectrum_namebridge.py
+      - .github/workflows/raft-b17-spectrum-namebridge.yml
+permissions:
+  contents: read
+concurrency:
+  group: b17-namebridge-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  synthetic:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Test synthetic binding cases
+        run: python3 -m unittest discover -s tests -p test_b17_spectrum_namebridge.py -v
+  original:
+    needs: synthetic
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Source parts
+        uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: .source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/sharedassets0.assets
+      - name: Reassemble authenticated original
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/b17-original"
+          python3 -m scripts.stage_zip2_fft_owner --zip2-checkout .source-zip2 --destination "$RUNNER_TEMP/b17-original/sharedassets0.assets"
+      - name: Source toolchain
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
+      - name: Compare one original fragment resource name bridge
+        run: |
+          set -euo pipefail
+          timeout 900s python3 -m scripts.b17_spectrum_namebridge --source "$RUNNER_TEMP/b17-original" --out "$RUNNER_TEMP/b17-summary.json"
+      - name: Cleanup original staging
+        if: always()
+        run: rm -rf -- "$RUNNER_TEMP/b17-original" .source-zip2
+      - name: Upload numeric summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: b17-hlsl-bridge-${{ github.run_id }}
+          path: ${{ runner.temp }}/b17-summary.json
+          if-no-files-found: ignore
+          retention-days: 7
