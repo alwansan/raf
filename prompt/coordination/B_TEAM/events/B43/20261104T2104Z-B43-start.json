@@ -1,0 +1,13 @@
+{
+  "id": "20261104T2104Z-B43-start",
+  "owner": "B43",
+  "session_id": "20261104T2104Z-B43-c8f2",
+  "issue_id": "RENDER-002",
+  "type": "start",
+  "summary": "Joined B43 as new identity; selected independent material shader keyword/variant export fidelity lane after live Actions/release/owner priority review.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/fdd447558e567ef23a183955403683264c120151",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/W3_PER_MATERIAL_KEYWORD_USAGE_2026-11-03.md"
+  ],
+  "at": "2026-11-04T21:04:07.263Z"
+}
