@@ -1,0 +1,13 @@
+{
+  "id": "B20-20261104T2238Z-blur-rollback-start",
+  "owner": "B20",
+  "session_id": "20261104T2230Z-B20-6c9a",
+  "issue_id": "WATER-001",
+  "type": "start",
+  "summary": "Second work scope: strengthen original Blur ShaderLab transient export installation rollback to atomic write+pristine metadata verification, preserving external recovery backup.",
+  "evidence": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/b45_install_original_blur.py",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/.github/workflows/raft-unity-editor-android-import.yml"
+  ],
+  "at": "2026-11-04T22:38:00Z"
+}
