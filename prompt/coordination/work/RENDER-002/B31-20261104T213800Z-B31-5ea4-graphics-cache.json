@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "owner": "B31",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T213800Z-B31-5ea4",
+  "issue_id": "RENDER-002",
+  "track": "graphics-source-provenance",
+  "approach": "Re-use authenticated pre-staged ZIP2 original graphics owners in native hydration only after independent SHA256+size verification; harden file provenance, no shared-workflow modifications.",
+  "status": "active",
+  "base_sha": "c9b4ff0dff06335402a39c4cfe1d9a039990c2cb",
+  "intended_files": [
+    "scripts/hydrate_render_payloads.py",
+    "tests/test_b31_graphics_hydration.py",
+    "docs/B31_ORIGINAL_GRAPHICS_REUSE_2026-11-04.md"
+  ],
+  "hypothesis": "W1-staged SHA-authenticated original graphics owners can replace a redundant LFS fetch for matching paths without changing image bytes, LFS pins or .meta/GUIDs; unsafe links or corrupt cache must fail closed.",
+  "related_work": [
+    "W1 original engine source SHA-authenticated staging",
+    "B04 Mesh source path integrity",
+    "BuildFix original graphics reuse"
+  ],
+  "experiment_ids": [],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Inspect staging contracts, code paths and existing tests; implement independently verifiable bounded reuse and negative controls.",
+  "updated_at": "2026-11-04T21:38:29.509Z"
+}
