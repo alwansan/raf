@@ -26,7 +26,7 @@ concurrency:
 
 jobs:
   synthetic-suites:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
@@ -56,7 +56,7 @@ jobs:
           PYEOF
 
   lfs-pin-verification:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
@@ -69,9 +69,7 @@ jobs:
             --exclude ""
       - name: Run pin verification probe
         working-directory: scripts
-        run: python w3_probe_pin_verification.py \
-               --repo-root .. \
-               --out ../w3_lfs_pin_verification.json
+        run: python w3_probe_pin_verification.py --repo-root .. --out ../w3_lfs_pin_verification.json
       - name: Surface result in summary
         if: always()
         run: |
