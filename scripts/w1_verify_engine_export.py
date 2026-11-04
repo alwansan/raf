@@ -14,6 +14,9 @@ from scripts.w1_match_embedded_engine_shaders import index_records
 from scripts.w1_audit_export_material_shaders import inventory
 from scripts.w1_stage_zip2_owners import fingerprint
 
+EXACT_RECORDS_DIGEST = 'eb97d9e75992a9b90afad6101cf6d914c15ec73131d7d7f31333ded29650513b'
+# Canonical196-record digest observed from the pinned generated assembly in
+# CPU run41745779746. A forged summary cannot bless different private rows.
 READER_PINS = {
     'sourcegenerated_version': '1.3.2.0',
     'generated_assembly_sha256': '7aedba39a03b7d3fa4837a4a47fb2795780c1670a71b2c4dbca88613b8d231fd',
@@ -40,6 +43,8 @@ def exact_table(rows, reader):
     kinds = Counter(row.get('engine_kind') for row in rows)
     if kinds != Counter(default=6, extra=190):
         raise ValueError('Exact engine dataset partition changed')
+    if digest(rows) != EXACT_RECORDS_DIGEST:
+        raise ValueError('Exact private engine records fingerprint changed')
     return index_records(rows, reader)
 
 

@@ -2,8 +2,9 @@ import copy
 import tempfile
 from pathlib import Path
 import unittest
+from unittest.mock import patch
 from scripts.w1_verify_engine_export import (READER_PINS, exact_table, original_binding_map,
-                                            verify_histogram, verify_export)
+                                            verify_histogram, verify_export, digest)
 
 
 class EngineExportProof(unittest.TestCase):
@@ -59,7 +60,12 @@ class EngineExportProof(unittest.TestCase):
     def test_exact_reader_hashes_and_partition_required(self):
         rows = [{'name': 'Public%d' % i, 'properties': [], 'file_id': i,
                  'engine_kind': 'default' if i < 6 else 'extra'} for i in range(196)]
-        self.assertEqual(len(exact_table(rows, READER_PINS)), 196)
+        with patch('scripts.w1_verify_engine_export.EXACT_RECORDS_DIGEST', digest(rows)):
+            self.assertEqual(len(exact_table(rows, READER_PINS)), 196)
+            changed = copy.deepcopy(rows)
+            changed[20]['file_id'] = 9999
+            with self.assertRaises(ValueError):
+                exact_table(changed, READER_PINS)
         for key in ('tpk_sha256', 'dataset_json_sha256', 'generated_assembly_sha256'):
             reader = dict(READER_PINS, **{key: 'a' * 64})
             with self.assertRaises(ValueError):
