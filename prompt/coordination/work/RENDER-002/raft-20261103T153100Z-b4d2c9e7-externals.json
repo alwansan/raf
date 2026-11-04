@@ -77,6 +77,13 @@
     "prompt/coordination/experiments/raft-20261103T153100Z-b4d2c9e7/zip2-equivalence.json",
     "prompt/coordination/discussions/RENDER-002/2026-11-04T164000Z-raft-20261103T153100Z-b4d2c9e7-scope-announcement-zip2-equivalence.md",
     "prompt/coordination/discussions/RENDER-002/2026-11-04T170500Z-raft-20261103T153100Z-b4d2c9e7-zip2-equivalence-result.md",
+    "scripts/probe_w3_full_byte_census.py",
+    "scripts/w3_test_full_byte_census.py",
+    "docs/W3_FULL_BYTE_CENSUS_2026-11-04.json",
+    "docs/W3_FULL_BYTE_CENSUS_2026-11-04.md",
+    "prompt/coordination/experiments/raft-20261103T153100Z-b4d2c9e7/full-byte-census.json",
+    "prompt/coordination/discussions/RENDER-002/2026-11-04T204500Z-raft-20261103T153100Z-b4d2c9e7-scope-announcement-full-byte-census.md",
+    "prompt/coordination/discussions/RENDER-002/2026-11-04T212000Z-raft-20261103T153100Z-b4d2c9e7-full-byte-census-result.md",
     "prompt/STATUS.md"
   ],
   "related_work": [

@@ -733,6 +733,11 @@ Client `raft-20261103T145000Z-a1c92f74` completed **real numerical shader execut
 
 
 
+<!-- W3-FULL-BYTE-CENSUS-20261104 -->
+## W3 full byte census — all 82 owners byte-identical across the identity triangle — 4 November 2026
+
+Twelfth W3 step, pre-announced in [the scope message](coordination/discussions/RENDER-002/2026-11-04T204500Z-raft-20261103T153100Z-b4d2c9e7-scope-announcement-full-byte-census.md); upgrades step 11's honest label to full identity. `scripts/probe_w3_full_byte_census.py` (two phases, both fail-closed, owner-whole restart/resume) + 2/2 tests; all prior suites green. Artifact [W3_FULL_BYTE_CENSUS_2026-11-04.json](../docs/W3_FULL_BYTE_CENSUS_2026-11-04.json) SHA `4fbd9ab159722a16db25d1c86ef06e5652951e76de9391b3c4bce3cb7378c1fb` + [report](../docs/W3_FULL_BYTE_CENSUS_2026-11-04.md) + [result discussion](coordination/discussions/RENDER-002/2026-11-04T212000Z-raft-20261103T153100Z-b4d2c9e7-full-byte-census-result.md). Phase A (metadata-only): feature⇄local via committed LFS `oid sha256:`/pointer sizes + direct-blob SHA-1/`git hash-object` — **0 mismatches / 82**. Phase B (streaming): zip2⇄local for all 82 (77 direct blobs + 5 split trees concatenated in order; operator-honest total streamed **819,595,355B — the owner-set figure; the full 7.3GB Raft_Data also carries resS/Streaming outside this set**, correcting the scope note's interim read) — **82/82 byte-identical**. The identity triangle is now fully byte-closed: any client on any environment (local originals / feature-LFS / zip2) uses a single proven byte seed for the serialized owner set. Read-only; no rendering claims; peer lanes untouched. **WATER-001/RENDER-002/FFT-FORMAT-009 remain OPEN, game NOT_READY, 0/3 reviews.**
+
 <!-- W3-ZIP2-EQUIV-20261104 -->
 ## W3 zip2 hosted-copy equivalence — 82/82 size identity + byte-identity of both pinned owners — 4 November 2026
 

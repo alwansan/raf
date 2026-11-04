@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T153100Z-b4d2c9e7",
+  "status": "completed",
+  "hypothesis": "Upgrading step 11's 'size-equal only (80 owners)' label to full byte identity: every one of the 82 owners is byte-identical across local originals, feature-branch committed content, and the zip2 hosted copy.",
+  "input_hashes": [
+    "commit environment: W3 eleven-step chain, source state a4b3d83 (before push of this step)",
+    "pins: sha256(resources.assets)=87493249f1adfc0c..., sha256(sharedassets0.assets)=0498f738dc86e90e...",
+    "phase A evidence source: committed LFS pointer texts (oid sha256 + size) and direct blob SHA-1s via local git (no network)",
+    "phase B evidence source: streamed zip2 blobs/parts via raw.githubusercontent (77 direct + 5 split trees, 819,595,355B total)"
+  ],
+  "commands": [
+    "python3.14 scripts/probe_w3_full_byte_census.py --repo-root . --local-root <Raft_Data> --phase a --out census_phaseA.json",
+    "python3.14 scripts/probe_w3_full_byte_census.py --repo-root . --local-root <Raft_Data> --phase b --progress byte_census_progress.json --out census_phaseB.json",
+    "python3.14 scripts/w3_test_full_byte_census.py"
+  ],
+  "expected_signal": "phase A: 0 mismatches (82/82); phase B: all 82 zip2_local verified, exit 0; per-owner sha equality reproduced in the durable artifact",
+  "negative_controls": [
+    "phaseA_fail_closed_zero_mismatch (any mismatch aborts)",
+    "phaseB_all_verified_fail_closed (any mismatch aborts via failures list)",
+    "per_owner_fresh_hasher_on_restart (no partial-byte reuse after transport aborts)",
+    "resume_by_owner_only_never_partial_merge",
+    "aggregate_only_publication (public repo paths; no shader/asset names)"
+  ],
+  "workflow_path": null,
+  "concurrency_group": null,
+  "budget": "phase A seconds; phase B ~10 minutes streamed 819,595,355B; no Unity/CI",
+  "run_url": null,
+  "source_sha": "cb9ec39",
+  "result": "completed. Durable artifact docs/W3_FULL_BYTE_CENSUS_2026-11-04.json sha256 4fbd9ab159722a16db25d1c86ef06e5652951e76de9391b3c4bce3cb7378c1fb. Phase A: 0/0 mismatches over 82 owners (feature commit crypto-identity vs local files). Phase B: all 82 zip2<->local byte-identical (77 direct blobs + 5 split trees concatenated in order; total streamed 819,595,355B across the 82 owners - the honest owner-set figure, not the full 7.3GB Raft_Data which also carries resS/Streaming outside this set). Identity triangle fully byte-closed for every owner across all three hosted sources. Resume discipline verified: per-owner whole-hash restarts after transport aborts; never partial-byte merge.",
+  "limitations": [
+    "read-only provenance only: no unpacking/rendering claims; only the 82 serialized owners are covered (resS/StreamingAssets outside scope, honestly excluded)",
+    "no visual/GPU/phone claim; WATER-001/RENDER-002/FFT-FORMAT-009 remain OPEN; NOT_READY; 0/3 reviews"
+  ],
+  "next_step": "publish STATUS section + result discussion; then paused - coordination cadence or newly-announced peer lane decides next"
+}
