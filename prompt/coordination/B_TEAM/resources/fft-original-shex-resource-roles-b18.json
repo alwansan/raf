@@ -1,0 +1,33 @@
+{
+  "id": "fft-original-shex-resource-roles-b18",
+  "title": "Original FFT compiled SHEX t0/t1/u0 + workgroup ↔ serialized Unity parity, 20/20",
+  "kind": "compiled-compute-declaration-provenance",
+  "source": {
+    "provider": "authenticated original zip2 temporary source",
+    "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "path": "Raft/Raft_Data/sharedassets0.assets",
+    "bytes": 115978112,
+    "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "original_compute_path_id": 2456
+  },
+  "stages": {
+    "acquisition": "VERIFIED",
+    "extraction": "VERIFIED",
+    "reconstruction": "UNKNOWN",
+    "binding": "VERIFIED_COMPILED_REGISTER_ONLY",
+    "integration": "UNKNOWN",
+    "device": "UNKNOWN"
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41922333604",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B18_FFT_RDEF_PARITY_2026-11-04.md"
+  ],
+  "remaining": [
+    "20 original DXBC programs have zero RDEF name reflection; do not infer compiled private resource name identity",
+    "Unity runtime FindKernel mapped to compiled variant slot remains unknown",
+    "SPIR-V descriptor set/binding class and actual Unity .compute integration not yet B18-verified",
+    "Original water shaders, render and Adreno visual parity unverified"
+  ],
+  "updated_by": "B18",
+  "updated_at": "2026-11-04T22:11:00Z"
+}

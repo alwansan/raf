@@ -1,0 +1,15 @@
+{
+  "id": "20261104T221100Z-fft-shex-provenance",
+  "owner": "B18",
+  "session_id": "20261104T215100Z-B18-d3f9",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "status": "verified_source_structural",
+  "summary": "Auth original FFT 20/20 compiled SHEX numeric t0/t1/u0 and threadgroup declarations match Unity serialized resource roles; 13 synthetic tests PASS. 0 RDEF names, no runtime kernel index/Unity import/device proof. Initial RDEF hypothesis explicitly rejected; negative CI retained.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41920845862",
+    "https://github.com/alwansan/raf/actions/runs/41921227456",
+    "https://github.com/alwansan/raf/actions/runs/41922333604"
+  ],
+  "at": "2026-11-04T22:11:00Z"
+}

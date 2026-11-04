@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "owner": "B18",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T215100Z-B18-d3f9",
+  "issue_id": "WATER-001",
+  "track": "water-fft",
+  "approach": "Follow verified original FFT compiled SHEX t0/t1/u0 into translated SPIR-V actual image descriptor classes/sets/binding and Vulkan image read/write flow; fail closed on count/access-class drift without guessing runtime FindKernel mapping. Reuse existing conversion helpers instead of repeating prior individual SPIR-V profiles.",
+  "status": "active",
+  "base_sha": "42476b87626031f23db37808d00e1c76604e5b33",
+  "intended_files": [
+    "scripts/b18_fft_spirv_binding_roles.py",
+    "tests/test_b18_fft_spirv_binding_roles.py",
+    ".github/workflows/raft-b18-fft-spirv-binding-roles.yml",
+    "docs/B18_FFT_RDEF_PARITY_2026-11-04.md"
+  ],
+  "hypothesis": "Compiled t0/t1 sampled roles and u0 storage role may be reassigned in translation; validate image type/access class preservation without assuming numeric descriptor set identity.",
+  "related_work": [
+    "B18 original SHEX source metadata 41922333604",
+    "A1 original DXBC-to-vkd3d SPIR-V image profiles",
+    "B08/B30/B48 original Unity index mapping remains open"
+  ],
+  "experiment_ids": [],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Inspect existing authentic vkd3d conversion and typed SPIR-V images, propose strict role-preservation conditions, implement source-free canaries, run on original ZIP2 only if distinct and safe; do not alter other clients' code.",
+  "updated_at": "2026-11-04T22:11:00Z"
+}
