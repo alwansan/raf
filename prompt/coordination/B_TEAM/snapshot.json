@@ -332,7 +332,11 @@
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B13_WATER_META_GUID_GUARD_2026-11-04.md",
         "https://github.com/alwansan/raf/commit/0098b585e3ce9397d04fb838b1980623a64b23d1",
         "https://github.com/alwansan/raf/actions/runs/41920741687",
-        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B16_FFT_PREPROCESSOR_SOURCE_GUARD_2026-11-04.md"
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B16_FFT_PREPROCESSOR_SOURCE_GUARD_2026-11-04.md",
+        "https://github.com/alwansan/raf/actions/runs/41921227456",
+        "https://github.com/alwansan/raf/commit/42476b87626031f23db37808d00e1c76604e5b33",
+        "https://github.com/alwansan/raf/actions/runs/41922333604",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B18_FFT_RDEF_PARITY_2026-11-04.md"
       ],
       "remaining": [
         "Spectrum/Foam/Blur passes ناقصة في APK86",
@@ -350,15 +354,16 @@
         "B24: original Foam/Global 2-pass/4-DXBC stages translated and Vulkan1.1 roundtripped privately; pass0 CB0 vectors=2, pass1=1. Original ShaderLab, constant-buffer/material bindings, Unity/Adreno and phone remain unverified; not a water gate fix.",
         "B17 exact ZIP2-original Spectrum typed numeric stage descriptor census: 7 passes; 13 fragment rows, 0 vertex rows, 42 resource table field occurrences, m_UAVParams and typed m_MultiSampled; original UnityPy execution and 16 synthetic controls PASS CI41920232173. Original-to-ShaderLab resource binding semantics, sampler state, water pixels and Android Unity runtime still NOT verified; WATER-001 remains OPEN.",
         "B13: Source-integrated validator now rejects malformed/ambiguous/duplicate water Shader/FFT Compute .meta GUIDs; 22/22 synthetic CI PASS with B47 kernel contract, but original ZIP2 GUID ownership, restored ShaderLab/FFT programs, Unity import and phone water errors still unverified (WATER-001 OPEN).",
-        "B16: conditional #if 0 false-positive removed from structural .compute gate; 34/34 B16+B47+water source-only CI. Literal branches checked, unknown macros conservative; original FFT .compute/kernel identity/Unity and APK86 device errors still unresolved."
+        "B16: conditional #if 0 false-positive removed from structural .compute gate; 34/34 B16+B47+water source-only CI. Literal branches checked, unknown macros conservative; original FFT .compute/kernel identity/Unity and APK86 device errors still unresolved.",
+        "B18: authenticated ZIP2 original FFT ComputeShader 20/20 SHEX declarations show t0/t1/u0 read/read/write registers and threadgroup dimensions identical to same-slot serialized Unity data; Actions41922333604 SUCCESS 13/13 synthetic and exact SHA source. Original programs contain 0 RDEF chunks; compiled private names, runtime Unity FindKernel index→compiled slot, ShaderLab Unity import/Adreno pixels remain NOT verified; WATER-001 OPEN."
       ],
       "acceptance": [
         "هوية برامج ونوى أصلية أو تطابق موثق دونdummy",
         "تثبيت فيالتصدير+Unity import/render",
         "اختبار هاتف يثبت الماء بلا pass/kernel errors"
       ],
-      "updated_by": "B16",
-      "updated_at": "2026-11-04T21:59:34.670Z",
+      "updated_by": "B18",
+      "updated_at": "2026-11-04T22:10:00Z",
       "_record_path": "issues/WATER-001.json"
     }
   ],
@@ -395,6 +400,38 @@
       ],
       "updated_by": "B10",
       "_record_path": "resources/B10-generated-vendor-shader-metadata.json"
+    },
+    {
+      "id": "B21-original-scene-lighting-baseline",
+      "title": "B21 original ZIP2 six-scene baked lightmap and native Light semantic source baseline",
+      "kind": "original-scene-lighting-source-audit",
+      "source": {
+        "provider": "alwansan/raf ZIP2 immutable source",
+        "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+        "path": "Raft/Raft_Data/level0..level5 (six separately SHA256-pinned original files)",
+        "bytes": null,
+        "sha256": null
+      },
+      "stages": {
+        "acquisition": "SIX_ORIGINAL_GIT_BLOBS_SHA256_SIZE_AUTHENTICATED",
+        "extraction": "NATIVE_UNITY_SERIALIZED_TYPE_TREE_DECODED_6_OF_40_SCENES",
+        "reconstruction": "NOT_APPLICABLE_READ_ONLY",
+        "binding": "ORIGINAL_LIGHT_AND_LIGHTMAP_LOCAL_PTRS_VERIFIED_SIX_SCENES_ONLY",
+        "integration": "SOURCE_ONLY_TEST_AND_CI_TOOLS_INTEGRATED_NO_EXPORT_PATCH",
+        "device": "NOT_TESTED"
+      },
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41921259677",
+        "https://github.com/alwansan/raf/actions/runs/41922372594",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B21_LIGHTMAP_SOURCE_EXPORT_LINKS_2026-11-04.md"
+      ],
+      "remaining": [
+        "Same-instance original source Light to actual exported Unity Light typed field parity and GameObject identity not yet checked.",
+        "Original remaining 34 scene lighting inventories and all shader/material/ambient/Adreno device output unknown.",
+        "No aggregate source SHA/bytes reported; each of six files individually size+SHA authenticated; do not equate group inventory with a single resource."
+      ],
+      "updated_by": "B21",
+      "_record_path": "resources/B21-original-scene-lighting-baseline.json"
     },
     {
       "id": "B24-FOAM-ORIGINAL-FOUR-STAGES-20261104",
@@ -561,6 +598,40 @@
       ],
       "updated_by": "B48",
       "_record_path": "resources/fft-original-selector-compiled-candidate-b48.json"
+    },
+    {
+      "id": "fft-original-shex-resource-roles-b18",
+      "title": "Original FFT compiled SHEX t0/t1/u0 + workgroup ↔ serialized Unity parity, 20/20",
+      "kind": "compiled-compute-declaration-provenance",
+      "source": {
+        "provider": "authenticated original zip2 temporary source",
+        "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+        "path": "Raft/Raft_Data/sharedassets0.assets",
+        "bytes": 115978112,
+        "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+        "original_compute_path_id": 2456
+      },
+      "stages": {
+        "acquisition": "VERIFIED",
+        "extraction": "VERIFIED",
+        "reconstruction": "UNKNOWN",
+        "binding": "VERIFIED_COMPILED_REGISTER_ONLY",
+        "integration": "UNKNOWN",
+        "device": "UNKNOWN"
+      },
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41922333604",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B18_FFT_RDEF_PARITY_2026-11-04.md"
+      ],
+      "remaining": [
+        "20 original DXBC programs have zero RDEF name reflection; do not infer compiled private resource name identity",
+        "Unity runtime FindKernel mapped to compiled variant slot remains unknown",
+        "SPIR-V descriptor set/binding class and actual Unity .compute integration not yet B18-verified",
+        "Original water shaders, render and Adreno visual parity unverified"
+      ],
+      "updated_by": "B18",
+      "updated_at": "2026-11-04T22:11:00Z",
+      "_record_path": "resources/fft-original-shex-resource-roles-b18.json"
     }
   ],
   "events": [
@@ -1271,6 +1342,22 @@
       "_record_path": "events/B18/20261104T215100Z-start.json"
     },
     {
+      "id": "20261104T221100Z-fft-shex-provenance",
+      "owner": "B18",
+      "session_id": "20261104T215100Z-B18-d3f9",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "status": "verified_source_structural",
+      "summary": "Auth original FFT 20/20 compiled SHEX numeric t0/t1/u0 and threadgroup declarations match Unity serialized resource roles; 13 synthetic tests PASS. 0 RDEF names, no runtime kernel index/Unity import/device proof. Initial RDEF hypothesis explicitly rejected; negative CI retained.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41920845862",
+        "https://github.com/alwansan/raf/actions/runs/41921227456",
+        "https://github.com/alwansan/raf/actions/runs/41922333604"
+      ],
+      "at": "2026-11-04T22:11:00Z",
+      "_record_path": "events/B18/20261104T221100Z-fft-shex-provenance.json"
+    },
+    {
       "id": "B19-20261104T2137Z-start",
       "owner": "B19",
       "session_id": "20261104T2137Z-B19-svpr3",
@@ -1353,6 +1440,22 @@
       ],
       "at": "2026-11-04T22:09:00Z",
       "_record_path": "events/B21/20261104T2209Z-dynamic-light-result.json"
+    },
+    {
+      "id": "B21-20261104T2213Z-source-resources-integration",
+      "owner": "B21",
+      "session_id": "20261104T2153Z-B21-72ab",
+      "issue_id": "RENDER-002",
+      "type": "integration",
+      "summary": "B21 source-only lightmap and native Light diagnostics are committed and CI source-authenticated (41921259677 16 synthetic+6 originals, 41922372594 34 synthetic+6 originals); six separately SHA-pinned ZIP2 owners recorded in resource ledger. Canonical summary generation succeeded at B21 CI41923120681. Integration strictly source tool/evidence, not Unity shader/game runtime or Android device. Issue remains OPEN.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41921259677",
+        "https://github.com/alwansan/raf/actions/runs/41922372594",
+        "https://github.com/alwansan/raf/actions/runs/41923120681",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/B21-original-scene-lighting-baseline.json"
+      ],
+      "at": "2026-11-04T22:13:00Z",
+      "_record_path": "events/B21/20261104T2213Z-source-resources-integration.json"
     },
     {
       "id": "b22-20261104T2134Z-B22-c91f-start",
@@ -1870,5 +1973,5 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "input_sha256": "0ec4b13a40a7ab955ebc1719fb1622137ae2226c9aa2380644a7b7874e1074de"
+  "input_sha256": "8fe98988f5f13513fbb420d767afe6c94c297afb609b618e29db5d7870f3c7bb"
 }
