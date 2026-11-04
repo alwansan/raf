@@ -437,7 +437,8 @@
         "https://github.com/alwansan/raf/commit/b780d000dc5157c19078511927e681924907575a",
         "https://github.com/alwansan/raf/actions/runs/41930936302",
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B19_WATER_SUBSHADER_PASS_GATE_2026-11-04.md",
-        "https://github.com/alwansan/raf/actions/runs/41930824777"
+        "https://github.com/alwansan/raf/actions/runs/41930824777",
+        "https://github.com/alwansan/raf/actions/runs/41931883517"
       ],
       "remaining": [
         "Spectrum/Foam/Blur passes ناقصة في APK86",
@@ -471,7 +472,8 @@
         "B09 source-pinned Spectrum PathID2432 exact seven-pass/28 references/18 distinct original blob-slot provenance and private translator code integrated, 23/23 exact-blob local synthetic tests passed. B09 actual original ZIP2/Vulkan CI run and ShaderLab/Unity/Android proof UNKNOWN; issue remains OPEN.",
         "B20 genuine ZIP2 original Foam 4/4 compiled stage translations +2/2 source states +8 source CB links co-staged privately; CI41930578292 SUCCESS. Original CB0 HLSL alias, resource/sampler binding, actual ShaderLab and Unity/Adreno pixels still NOT proven. Do not mark WATER-001 ready.",
         "B19 per-SubShader authored pass-count guard is SOURCE_FIXED CI41930936302 24/24; prevents summing alternate shader passes but not original Spectrum/FFT shader reconstruction, Android selected SubShader, device pixels or source-authenticated binding.",
-        "B18 CI41930824777 source-authentic FFT 20/20 programs each mapped by libvkd3d-shader to two different CHOSEN descriptor layouts (20x2 passes), using SRV t0/t1 and UAV u0 explicit IMAGE flags; 10/10 synthetic controls PASS. This proves explicit target interface binding support, NOT original per-input numeric t0/t1 behavior, Unity FindKernel/index mapping, original ShaderLab restored passes or Adreno water pixels. WATER-001 remains OPEN."
+        "B18 CI41930824777 source-authentic FFT 20/20 programs each mapped by libvkd3d-shader to two different CHOSEN descriptor layouts (20x2 passes), using SRV t0/t1 and UAV u0 explicit IMAGE flags; 10/10 synthetic controls PASS. This proves explicit target interface binding support, NOT original per-input numeric t0/t1 behavior, Unity FindKernel/index mapping, original ShaderLab restored passes or Adreno water pixels. WATER-001 remains OPEN.",
+        "B18 CI41931883517 source-authentic original FFT SPIR-V identity: 20/20 compiled programs × two explicit target maps have stable 3 resource variable IDs and entire SPIR-V code byte-equivalent after masking only intended descriptor set/binding OpDecorate literals; 20/20 synthetic tests PASS. No independent t0 vs t1 numerical pixel behavior, authored shader import, Unity runtime FindKernel mapping or Adreno device proof; water remains broken in APK86, WATER-001 OPEN."
       ],
       "acceptance": [
         "هوية برامج ونوى أصلية أو تطابق موثق دونdummy",
@@ -479,7 +481,7 @@
         "اختبار هاتف يثبت الماء بلا pass/kernel errors"
       ],
       "updated_by": "B18",
-      "updated_at": "2026-11-04T23:08:10.066Z",
+      "updated_at": "2026-11-04T23:14:38.568Z",
       "_record_path": "issues/WATER-001.json"
     }
   ],
@@ -978,7 +980,8 @@
         "https://github.com/alwansan/raf/actions/runs/41922333604",
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B18_FFT_RDEF_PARITY_2026-11-04.md",
         "https://github.com/alwansan/raf/actions/runs/41923703800",
-        "https://github.com/alwansan/raf/actions/runs/41930824777"
+        "https://github.com/alwansan/raf/actions/runs/41930824777",
+        "https://github.com/alwansan/raf/actions/runs/41931883517"
       ],
       "remaining": [
         "20 original DXBC programs have zero RDEF name reflection; do not infer compiled private resource name identity",
@@ -986,10 +989,11 @@
         "SPIR-V descriptor set/binding class and actual Unity .compute integration not yet B18-verified",
         "Original water shaders, render and Adreno visual parity unverified",
         "Translation stage B18: all 20 original DXBC->SPIR-V typed image role counts preserved, not per-source-register exact descriptor mapping or Unity runtime binding.",
-        "Explicit mapping controls TARGET set/binding through library API. B18 two original FFT read inputs have same SPIR-V type, so independent behavioral t0 vs t1 differentiation remains open; Unity source-to-kernel selection and device not proven."
+        "Explicit mapping controls TARGET set/binding through library API. B18 two original FFT read inputs have same SPIR-V type, so independent behavioral t0 vs t1 differentiation remains open; Unity source-to-kernel selection and device not proven.",
+        "B18 exact SPIR-V profile normalized parity across 20 original programs VERIFIED, but numeric differentiation between two same-class sampled input texture values remains unproved."
       ],
       "updated_by": "B18",
-      "updated_at": "2026-11-04T23:08:10.066Z",
+      "updated_at": "2026-11-04T23:14:38.568Z",
       "translated_spirv": {
         "verified_original_fft_programs": 20,
         "expected_sampled_texture2d_per_program": 2,
@@ -1006,6 +1010,19 @@
         "same_class_two_input_behavior_distinguished": false,
         "unity_import_or_android_device_render": false,
         "source_object_sha256": "9d934f5c99183c6df5cf2f1fefc9d3e5ec4bce5da5f96a86e4c02910d5322247"
+      },
+      "spirv_variable_identity": {
+        "status": "VERIFIED_SHA_PINNED_ORIGINAL_20_OF_20",
+        "source_registers": [
+          "t0",
+          "t1",
+          "u0"
+        ],
+        "profiles": "A and B",
+        "non_descriptor_instruction_parity_verified": true,
+        "variable_ids_stable_across_profiles": true,
+        "independent_input_value_numeric_proof": false,
+        "unity_device_proven": false
       },
       "_record_path": "resources/fft-original-shex-resource-roles-b18.json"
     },
@@ -2297,6 +2314,19 @@
       "_record_path": "events/B17/20261104T2304Z-spectrum-compiled-slots-result.json"
     },
     {
+      "id": "B17-spectrum-all-fragments-20261104T2313Z",
+      "owner": "B17",
+      "session_id": "20261104T2249Z-B17-cbind",
+      "issue_id": "WATER-001",
+      "type": "start",
+      "summary": "After authentic one-fragment HLSL symbol rebind and Vulkan1.1 recompile success CI41931666175, extend the same original-source guarded private process to all 7 Spectrum fragment passes and 2 variants each, without modifying source game assets or B09 translator.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41931666175"
+      ],
+      "at": "2026-11-04T23:13:00Z",
+      "_record_path": "events/B17/20261104T2313Z-spectrum-all-fragments-start.json"
+    },
+    {
       "id": "20261104T215100Z-start",
       "owner": "B18",
       "session_id": "20261104T215100Z-B18-d3f9",
@@ -2368,6 +2398,20 @@
       ],
       "at": "2026-11-04T23:07:00Z",
       "_record_path": "events/B18/20261104T230700Z-exact-target-map.json"
+    },
+    {
+      "id": "20261104T231350Z-B18-spv-identity",
+      "owner": "B18",
+      "session_id": "20261104T225100Z-B18-map2",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "summary": "Authenticated original FFT 20/20 DXBC compiled with two explicitly chosen vkd3d target descriptor layouts yield same 3 resource variable IDs and exact whole SPIR-V instructions after excluding only intended OpDecorate set/binding values. Two suites 20/20 synthetic tests PASS CI41931883517. Runtime t0/t1 numeric behavior, Unity kernel mapping, native import and Adreno visuals not verified.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41931883517",
+        "https://github.com/alwansan/raf/commit/693ace285c0598db17339e067e9a1f1c8014d8a4"
+      ],
+      "at": "2026-11-04T23:14:11.727Z",
+      "_record_path": "events/B18/20261104T231350Z-spv-identity.json"
     },
     {
       "id": "B19-20261104T2137Z-start",
@@ -2660,6 +2704,21 @@
       ],
       "at": "2026-11-04T23:10:00Z",
       "_record_path": "events/B21/20261104T2310Z-start-original-light-owner.json"
+    },
+    {
+      "id": "B21-20261104T2315Z-original-light-owner-parity",
+      "owner": "B21",
+      "session_id": "20261104T2257Z-B21-8e72",
+      "issue_id": "RENDER-002",
+      "type": "integration",
+      "summary": "B21 bounded real ZIP29 original sources + private same-export AssetRipper W1/B02/B21 traces: two native Light108 values and their two original GameObject1 owners match actual generated Unity YAML by exact source→export GUID/fileID, 0 changed fields, 0 misattached, 0 unresolved; 11+17+12 synthetic controls PASSED, .NET9 compiled and export succeeded. Source/export fidelity only; no Android/Unity runtime pixel proof.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41931942755",
+        "https://github.com/alwansan/raf/actions/runs/41930891466",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B21_LIGHT_EXPORT_LINEAGE_2026-11-04.md"
+      ],
+      "at": "2026-11-04T23:15:00Z",
+      "_record_path": "events/B21/20261104T2315Z-original-owner-result.json"
     },
     {
       "id": "b22-20261104T2134Z-B22-c91f-start",
@@ -3295,5 +3354,5 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "input_sha256": "e91d5f27eea91ed74baf0245ed9768c10d83d3c0ef4f29649b4f664fc6d1dafe"
+  "input_sha256": "dfa3b22f5e3b86d738c8c9032b217620aca401b60ef8cea2579e7c3846471d27"
 }
