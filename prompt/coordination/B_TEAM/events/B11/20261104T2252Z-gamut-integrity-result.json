@@ -1,0 +1,14 @@
+{
+  "id": "20261104T2252Z-gamut-integrity-result",
+  "owner": "B11",
+  "session_id": "20261104T2244Z-B11-54cf",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "Two B11 source-integrity regressions fixed: Unicode code-point/UTF-8 byte mismatch in gamut edit whitelist, plus ancestor symlink/traversal exported ProjectSettings write. Local production-source-blob identical Python with B04 stub passed 16/16 synthetic cases; real export/CI/device unverified.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/72839f79701b617cea37832bfb924c2d865521a9",
+    "https://github.com/alwansan/raf/commit/7363a3b444347ea14c1bf3a08c13c5cd764a2095",
+    "https://github.com/alwansan/raf/commit/87e6045d6198ce05b9e644414b2bd122ded6dab7"
+  ],
+  "at": "2026-11-04T22:52:00Z"
+}
