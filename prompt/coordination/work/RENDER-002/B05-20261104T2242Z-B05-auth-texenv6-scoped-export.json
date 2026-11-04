@@ -6,7 +6,7 @@
   "issue_id": "RENDER-002",
   "track": "colors-materials",
   "approach": "Allow B05 original SHA-verified Material m_TexEnvs comparer to compare one authenticated source owner against same-instance full Unity export while not mistaking other source owners for missing traces; preserve default strict full-object behavior.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "b862398f9a9e06c351bbfb1a5c5b8612319e5d45",
   "intended_files": [
     "scripts/b05_verify_material_texenv_bindings.py",
@@ -22,8 +22,11 @@
   "experiment_ids": [
     "20261104T2242Z-B05-auth-texenv6-scoped"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Add --owner restricted to pinned authentic source, verify selected-owner trace uniqueness and object mapping; fail on missing selected material, reject external-owner guessing, add negative controls.",
-  "updated_at": "2026-11-04T22:47:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41928852363",
+    "https://github.com/alwansan/raf/actions/runs/41929077930"
+  ],
+  "result": "Scoped original-owner -> full-export source verifier integrated, same-owner checks remain strict; final CI41928852363 18/18 synthetic controls SUCCESS; on source CI41929077930 source-selected reader tested against 41 original Materials. Two transient failed CI runs due import order/missing heavyweight A12 in minimal sparse test fixed. No genuine same-instance exported Unity project/trace fed to compare, so no actual material/visual fix claimed.",
+  "next_step": "At next already-approved Unity export run read actual private same-instance trace, original+exported Materials, compare only proven matching source and fix any genuine drift.",
+  "updated_at": "2026-11-04T22:54:00Z"
 }
