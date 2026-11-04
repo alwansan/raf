@@ -48,6 +48,13 @@ def adapt(text, expected=ORIGINAL, inventory=EXPECTED):
 
 
 def apply(project, backup, write=False):
+    # Both source and backup roots must be physical paths, including parents.
+    # Assets.is_symlink() alone misses a symlinked project (and its descendants);
+    # resolve().is_relative_to() alone misses a linked backup outside project.
+    if any(node.is_symlink() for node in (project, *project.parents)):
+        raise ValueError('Unsafe redirected Unity project root')
+    if any(node.is_symlink() for node in (backup, *backup.parents)):
+        raise ValueError('Unsafe redirected original backup root')
     # Only the decompiled game assembly is authoritative. SDKs may contain a
     # different SaveAndLoad.cs; never adapt an SDK homonym or mark it ambiguous.
     assets = project / 'Assets'
