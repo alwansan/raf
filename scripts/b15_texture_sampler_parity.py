@@ -14,7 +14,18 @@ import math
 from pathlib import Path, PurePosixPath
 import re
 
-from scripts.verify_targeted_lfs_compute_sources import EXPECTED as SOURCE_PINS
+from scripts.verify_targeted_lfs_compute_sources import EXPECTED as COMPUTE_SOURCE_PINS
+
+# Extra small original owner independently SHA-confirmed in B05 real ZIP2
+# CI41929077930, also consistent with W2 original inventory (87 textures).
+# Keep the global compute-source pinset unchanged.
+SOURCE_PINS = {
+    **COMPUTE_SOURCE_PINS,
+    "sharedassets6.assets": (
+        6_607_272,
+        "0476792cfeffac19d16e920011ed8d2fb2da62973c2f09a8689bc59e1ac4b632",
+    ),
+}
 
 ZIP2_COMMIT = "15964ea8f246b6e076ce26b60931ee2e1a9a2385"
 GUID = re.compile(r"[0-9a-f]{32}\Z")
