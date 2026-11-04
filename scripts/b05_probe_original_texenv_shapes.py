@@ -11,7 +11,7 @@ from collections import Counter
 import json
 from pathlib import Path
 
-from scripts.b05_verify_material_texenv_bindings import normalize_texenvs, B05_SMALL_OWNER_PINS
+from scripts.b05_verify_material_texenv_bindings import normalize_texenvs, B05_SMALL_OWNER_PINS, original_texenvs
 from scripts.w1_stage_zip2_owners import fingerprint
 
 OWNER = "sharedassets6.assets"
@@ -98,7 +98,15 @@ def inspect(root: Path) -> dict:
         if not isinstance(saved, dict):
             raise ValueError("Original Material saved properties missing")
         records.append(saved)
-    return classify_original(records)
+    report = classify_original(records)
+    # Acceptance of the exact same selected-owner API used by future
+    # source-to-same-export comparison; no private identifiers are published.
+    selected = original_texenvs(root, owner_names={OWNER})
+    if (len(selected) != report["materials"] or
+            sum(len(slots) for slots in selected.values()) != report["texenv_slots"]):
+        raise ValueError("Scoped original-source adapter disagrees with direct read")
+    report["pinned_scoped_accessor_verified"] = True
+    return report
 
 
 def main(argv=None) -> int:
