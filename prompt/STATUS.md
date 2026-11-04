@@ -1,3 +1,7 @@
+## B14 — LOCAL-005 offline source/backup path integrity (4 November 2026)
+
+[SaveAndLoad source-stage correction 02e7eef](https://github.com/alwansan/raf/commit/02e7eefb614044861eae2cfee32157e50a126378) and [Android offline startup correction cca6e1e](https://github.com/alwansan/raf/commit/cca6e1e8f6c3a07327f811cf788a8d5d6668c099) reject linked Unity project roots and linked backup paths/ancestors before original source or backup writes; preserve original save schema, Steam/identity behavior, .meta/GUID and phone Settings/audio. [Isolated B14 CI41918579185](https://github.com/alwansan/raf/actions/runs/41918579185) **SUCCESS**: existing and six new synthetic path negative controls **32/32** (Save 13/13, startup 19/19). [Report](../docs/B14_OFFLINE_SAVE_STAGE_PATH_PROVENANCE_2026-11-04.md), [B14 session checkpoint](coordination/clients/B14/MEMORY.md). This is staging source-integrity hardening, **not** proof of local world creation/SteamStats recovery/.rgd roundtrip on Android; APK86 predates the source repairs. **LOCAL-005 OPEN**, WATER-001/RENDER-002 OPEN, **NOT_READY, 0/3** full reviews. No Unity/native build or APK requested; touch/layout remains deferred.
+
 <!-- B10-VENDOR-META-FIDELITY-20261104 -->
 ## B10 — RENDER-002 generated vendor ShaderImporter .meta integrity (4 November 2026)
 
