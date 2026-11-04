@@ -7,6 +7,7 @@ on:
       - scripts/b07_world_coroutine_trace.py
       - scripts/b07_compile_coroutine_fixture.py
       - scripts/adapt_android_offline_startup.py
+      - config/runtime-operation-traces.json
       - tests/test_b07_world_coroutine_trace.py
       - .github/workflows/raft-b07-world-coroutine.yml
 permissions:
@@ -24,6 +25,7 @@ jobs:
           persist-credentials: false
           lfs: false
           sparse-checkout: |
+            config/runtime-operation-traces.json
             scripts
             tests/test_b07_world_coroutine_trace.py
             tests/test_android_offline_startup.py
@@ -53,6 +55,7 @@ jobs:
           timeout 360s "$RUNNER_TEMP/b07/ilspy/ilspycmd" -p -lv CSharp9_0 -o "$RUNNER_TEMP/b07/original" Raft/Raft_Data/Managed/Assembly-CSharp.dll > "$RUNNER_TEMP/b07/private-decompile.log" 2>&1
           python3 - <<'PY'
           import os
+          import json
           from pathlib import Path
           from scripts.adapt_android_offline_startup import adapt
           from scripts.b07_probe_original_world_callbacks import assert_original_dll, _source, method_body
@@ -68,6 +71,9 @@ jobs:
           changed = adapt('Raft_Network', source)
           if changed.count(TRACE_OPERATION) != 1:
               raise ValueError('B07 offline staging lost coroutine trace')
+          manifest = json.loads(Path('config/runtime-operation-traces.json').read_text())
+          if adapted_fingerprint(changed) != manifest['sources']['Raft_Network']['sha256']:
+              raise ValueError('B07 staging/operation trace manifest hash mismatch')
           print('B07_PRIVATE_ORIGINAL_COROUTINE sourcePin=' + digest + ' adaptedSha=' + adapted_fingerprint(changed) + ' sourceEntryPreserved=true stagedTrace=true sourcePublished=false')
           PY
           # Private C# and ILSpy output never enter artifacts.
