@@ -1,0 +1,13 @@
+{
+  "id": "20261104T2124Z-gamut-integration",
+  "owner": "B11",
+  "session_id": "20261104T2115Z-B11-bca7",
+  "issue_id": "RENDER-002",
+  "type": "integration",
+  "summary": "B11 bounded original gamut check and optional exact-field repair wired into native transient export with candidate recheck; 12/12 synthetic local tests; actual Raft export/device unknown, RENDER-002 remains OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/b26b942f2f054c32091c628177835cdc68594cda",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B11_ORIGINAL_COLOR_GAMUT_PARITY_2026-11-04.md"
+  ],
+  "at": "2026-11-04T21:24:00Z"
+}
