@@ -6,7 +6,7 @@
   "issue_id": "LOCAL-005",
   "track": "world-save",
   "approach": "Scoped original SaveAndLoad path adapter backup/commit transaction and source/meta integrity; B12/B13 own the other adapter.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "e78ea6d9770ccc33b0f15e14152dd46d4be22679",
   "intended_files": [
     "scripts/adapt_original_save_paths.py",
@@ -22,8 +22,10 @@
   "experiment_ids": [
     "B19-20261104T2137Z-B19-svpr3-backup-fault-injection"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement and run local synthetic unit tests; isolated CI if needed.",
-  "updated_at": "2026-11-04T21:37:03Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41918301442"
+  ],
+  "result": "SOURCE_FIXED scoped original SaveAndLoad staging: complete backup source/meta, deterministic copy/write failures recover and can retry; CI41918301442 10/10 + pinned original original 16 path expressions and 14 .NET Unix/Windows checks.",
+  "next_step": "Coordinate next actual APK/.rgd device acceptance and choose independent P0 next investigation.",
+  "updated_at": "2026-11-04T21:44:00Z"
 }

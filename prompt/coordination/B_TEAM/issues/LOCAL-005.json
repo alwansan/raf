@@ -20,7 +20,10 @@
     "https://github.com/alwansan/raf/actions/runs/41916497902",
     "https://github.com/alwansan/raf/commit/5cfd0544af9808dbd0326a7394a99283846d7ed4",
     "https://github.com/alwansan/raf/actions/runs/41918579185",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B14_OFFLINE_SAVE_STAGE_PATH_PROVENANCE_2026-11-04.md"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B14_OFFLINE_SAVE_STAGE_PATH_PROVENANCE_2026-11-04.md",
+    "https://github.com/alwansan/raf/commit/5a977b3812cc597aaa790ae66bce54e85a965fc8",
+    "https://github.com/alwansan/raf/actions/runs/41918301442",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B19_ORIGINAL_SAVE_PATH_TRANSACTION_2026-11-04.md"
   ],
   "remaining": [
     "Original Cheat.AllowCheatsForLocalPlayer SteamUser.GetSteamID direct object call now source-guarded in B50 2bb6c2; no native/phone verification. Do not infer all Steam callbacks are removed.",
@@ -28,13 +31,14 @@
     "تتبع OnWorldRecieved والتحميل والحفظ واللاعب دون أعلام نجاح وهمية",
     "B07 pinned GameManager.OnWorldRecieved original 3 SaveGame callsites and source-integrated Android world Begin/End/exception instrumentation in native import config (CI41915466470 SUCCESS 15 synthetic + original pin/wrapper). Not Unity/IL2CPP/device tested; actual local .rgd create-save-reload and any other error remain unverified.",
     "B24: authenticated GameManager.OnWorldRecieved callback instrumentation is now included in original managed compile (CI PASS); Android Unity/device world creation and .rgd roundtrip remain untested.",
-    "B14 source staging safety: project/backup and ancestor symlinks now fail closed in SaveAndLoad and offline startup adapters; CI41918579185 32/32 synthetic passes. Actual SteamStats recovery and native .rgd create/save/reload not proven."
+    "B14 source staging safety: project/backup and ancestor symlinks now fail closed in SaveAndLoad and offline startup adapters; CI41918579185 32/32 synthetic passes. Actual SteamStats recovery and native .rgd create/save/reload not proven.",
+    "B19 original SaveAndLoad path-adapter backup transaction source-fixed CI41918301442; not APK/device/.rgd evidence and not repair of Steam StoreStats exception."
   ],
   "acceptance": [
     "دخول عالم جديد محلي قابل للعب بلا Steam أو سيرفر خارجي",
     "حفظ .rgd ثم إعادة تحميله فعلياً",
     "لا يكفي إخفاء رسالة الاتصال"
   ],
-  "updated_by": "B14",
-  "updated_at": "2026-11-04T21:44:04.892Z"
+  "updated_by": "B19",
+  "updated_at": "2026-11-04T21:44:00Z"
 }
