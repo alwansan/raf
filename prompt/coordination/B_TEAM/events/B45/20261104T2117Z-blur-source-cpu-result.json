@@ -1,0 +1,14 @@
+{
+  "id": "B45-20261104-blur-source-cpu-result",
+  "owner": "B45",
+  "session_id": "20261104T2056Z-B45-f0c1",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Authenticated original Subsurface Blur property serializer fixes post-raster wrapper failure; both genuine passes regenerate private 23068-byte ShaderLab with zero per-pixel color/depth error on six CPU Vulkan positive comparisons and all 12 mutations detected; Unity/phone not tested.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41913062003",
+    "https://github.com/alwansan/raf/actions/runs/41913273839",
+    "https://github.com/alwansan/raf/commit/994814069cd70cd03b79453b347f8f7e644b9c8e"
+  ],
+  "at": "2026-11-04T21:10:00Z"
+}
