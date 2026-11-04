@@ -1,0 +1,38 @@
+name: B02 RENDER-002 texture import sRGB provenance unit checks
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-b02-texture-import-fidelity.yml'
+      - 'scripts/b02_texture_import_color_guard.py'
+      - 'tests/test_b02_texture_import_color_guard.py'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: raft-b02-render-texture-import-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  isolated-negative-controls:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Prove no guessed GUIDs and no silent sRGB normalization
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_b02_texture_import_color_guard.py -v
+          python3 -m py_compile scripts/b02_texture_import_color_guard.py tests/test_b02_texture_import_color_guard.py
+      - name: Record scope boundary
+        run: |
+          echo "B02 structure/source-verification and synthetic repair only; real same-export sidecar, Unity, GPU and device pending"
