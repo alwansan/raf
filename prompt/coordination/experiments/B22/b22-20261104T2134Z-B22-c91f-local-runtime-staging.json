@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "owner": "B22",
+  "session_id": "20261104T2134Z-B22-c91f",
+  "issue_id": "LOCAL-005",
+  "hypothesis": "Operation tracing apply() did not refuse linked project/backup ancestry and had partial-copy and failed-rollback backup loss risks.",
+  "source_commit": "2f50776dfe51a5d856f3d0484a8b788ee09c04bd",
+  "input_hashes": [
+    "Synthetic source only; no original bytes fetched"
+  ],
+  "tool_versions": {
+    "python": "Ubuntu 24.04 Python3"
+  },
+  "commands": [
+    "python3 -m py_compile scripts/instrument_android_runtime_operations.py",
+    "python3 -m unittest discover -s tests -p test_b22_runtime_stage_integrity.py -v",
+    "python3 -m unittest discover -s tests -p test_runtime_operation_traces.py -v"
+  ],
+  "negative_controls": [
+    "symlinked project/Assets/backup ancestors",
+    "symlinked metadata",
+    "backup within project/collision",
+    "partial copy failure",
+    "failed install rollback and retention upon rollback failure",
+    "original revision mismatch"
+  ],
+  "workflow_path": ".github/workflows/raft-b22-runtime-stage-integrity.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41920661518",
+  "artifact_urls": [],
+  "budget": "8 minute CPU-only test",
+  "status": "completed",
+  "observed_result": "CI41920661518 SUCCESS; 14 new source-free synthetic cases plus existing tests pass, original Unity/device not tested.",
+  "rejected_hypotheses": [
+    "Leaf-only symlink check proves root provenance (false)",
+    "Backup outside try block safely survives partial copy failure (false)"
+  ],
+  "limitations": [
+    "No real APK/device world/save",
+    "No original asset payload loaded"
+  ],
+  "integration_commit": "2f50776dfe51a5d856f3d0484a8b788ee09c04bd",
+  "next_step": "Verify staging on next permitted original Unity export and test .rgd on device."
+}
