@@ -49,10 +49,21 @@ class FoamNameTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"duplicate CB name"):
             original_name_registry([["CB0",0],["CB0",1]])
 
-    def test_reject_unsafe_name(self):
-        for value in ("bad name", "1name", "evil]\n", "", "x"*257):
+    def test_reject_unsafe_registry_name(self):
+        for value in ("evil]\n", "", "x"*257, "contains\\0NUL", "bad\\rcontrol"):
             with self.assertRaises(ValueError):
                 original_name_registry([[value,0]])
+
+    def test_unreferenced_nonidentifier_property_name_allowed(self):
+        names = original_name_registry([["bad name",12],["1name",13],["CB0",0]])
+        self.assertEqual(names[0],"CB0")
+        self.assertEqual(len(names),3)
+
+    def test_referenced_nonidentifier_cb_name_rejected(self):
+        x=fixture()
+        x["m_SubShaders"][0]["m_Passes"][0]["m_NameIndices"][0][0]="bad name"
+        with self.assertRaisesRegex(ValueError,"CB name is not an HLSL identifier"):
+            inspect_parsed(x)
 
     def test_reject_bad_row(self):
         for row in (["one"], {"x":"FoamCB0","y":0}, "name", [None,0]):
