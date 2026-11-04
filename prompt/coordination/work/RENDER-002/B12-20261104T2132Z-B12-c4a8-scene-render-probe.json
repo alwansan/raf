@@ -28,7 +28,7 @@
     "https://github.com/alwansan/raf/actions/runs/41918822038",
     "https://github.com/alwansan/raf/actions/runs/41919089409"
   ],
-  "result": "Source integrated 70edac4; tests committed 354a8d9; isolated workflow 8b7e304; original managed integration run41918822038 SUCCESS on source commit. B12 isolated run initial observation IN_PROGRESS; no Unity or device shader/white material result.",
+  "result": "B12 scene probe C# source 70edac4 integrated, unit tests 354a8d9, dedicated workflow 8b7e304; B12 CI41919089409 SUCCESS and existing original managed CI41918822038 SUCCESS. No device or shader correctness claim.",
   "next_step": "Verify isolated B12 CI result; on next coordinated new APK+OBB test inspect render.scene_shader_snapshot log for scene, shader pass, support/colorSpace and correlate with screenshots, without inferring missing meshes from whites.",
-  "updated_at": "2026-11-04T21:46:37.651Z"
+  "updated_at": "2026-11-04T21:47:19.203Z"
 }
