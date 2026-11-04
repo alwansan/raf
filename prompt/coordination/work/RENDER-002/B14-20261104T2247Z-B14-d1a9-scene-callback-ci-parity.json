@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "owner": "B14",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2247Z-B14-d1a9",
+  "issue_id": "RENDER-002",
+  "track": "render-scene-telemetry-validation",
+  "approach": "Repair stale Android offline platform CI test SceneLoaded callback signature while preserving B12's bounded render/material/mesh scene telemetry.",
+  "status": "active",
+  "base_sha": "1ecd5e56186147a438b9069774d2d465f1fb7e4f",
+  "intended_files": [
+    "tests/test_android_diagnostics_policy.py",
+    "docs/B14_SCENE_BOUNDARY_RENDER_TELEMETRY_CI_2026-11-04.md"
+  ],
+  "hypothesis": "CI41918822026 expects static SceneLoaded and fails before it can check the real instance callback which runs bounded delayed post-scene shader/material/mesh scan.",
+  "related_work": [
+    "B12 RENDER-002 scene shader snapshot"
+  ],
+  "experiment_ids": [
+    "B14-20261104T2247Z-scene-telemetry-ci"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41918822026"
+  ],
+  "result": null,
+  "next_step": "Update test for current source code, verify existing CI and preserve live GPU/device caveats.",
+  "updated_at": "2026-11-04T22:48:39.367Z"
+}
