@@ -193,5 +193,47 @@ class WaterRenderGateTests(unittest.TestCase):
                 inspect(root)
 
 
+    def test_water_passes_cannot_be_summed_across_alternate_subshaders(self):
+        with tempfile.TemporaryDirectory() as temp:
+            assets = Path(temp) / 'Assets'
+            assets.mkdir()
+            name, minimum = next((n, m) for n, m in REQUIRED_PASS_COUNT.items()
+                                 if m >= 4)
+            def subshader(count):
+                return 'SubShader { ' + (
+                    'Pass { CGPROGRAM\\nvoid main() {}\\nENDCG } ' * count
+                ) + ' }'
+            shader = assets / 'split-water.shader'
+            shader.write_text('Shader "' + name + '" { ' +
+                              subshader(2) + subshader(minimum - 2) + ' }')
+            Path(str(shader) + '.meta').write_text('guid: ' + 'a' * 32)
+            row = inspect(Path(temp))['shader_contracts'][name]
+            self.assertEqual(row['observed']['pass_count'], minimum)
+            self.assertEqual(row['observed']['subshader_pass_counts'],
+                             [2, minimum - 2])
+            self.assertTrue(row['observed']['all_passes_programmed'])
+            self.assertFalse(row['contract_satisfied'])
+            self.assertFalse(row['observed']['active_subshader_runtime_verified'])
+
+    def test_water_alternative_with_too_few_passes_fails_conservatively(self):
+        with tempfile.TemporaryDirectory() as temp:
+            assets = Path(temp) / 'Assets'
+            assets.mkdir()
+            name, minimum = next((n, m) for n, m in REQUIRED_PASS_COUNT.items()
+                                 if m >= 4)
+            def subshader(count):
+                return 'SubShader { ' + (
+                    'Pass { HLSLPROGRAM\\nvoid main() {}\\nENDHLSL } ' * count
+                ) + ' }'
+            shader = assets / 'mixed-water.shader'
+            shader.write_text('Shader "' + name + '" { ' +
+                              subshader(minimum) + subshader(1) + ' }')
+            Path(str(shader) + '.meta').write_text('guid: ' + 'b' * 32)
+            row = inspect(Path(temp))['shader_contracts'][name]
+            self.assertEqual(row['observed']['subshader_pass_counts'],
+                             [minimum, 1])
+            self.assertFalse(row['contract_satisfied'])
+
+
 if __name__ == "__main__":
     unittest.main()
