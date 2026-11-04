@@ -32,6 +32,18 @@ class B12Probe(unittest.TestCase):
                   'shader.name == "Hidden/InternalErrorShader"'):
             self.assertIn(s,PART)
 
+
+    def test_shared_mesh_presence_without_geometry_readback(self):
+        for term in ("renderer as MeshRenderer", "renderer as SkinnedMeshRenderer",
+                     "GetComponent<MeshFilter>()", "filter.sharedMesh",
+                     "skinnedRenderer.sharedMesh", "mesh_renderers=",
+                     "missing_mesh_filters=", "missing_mesh_assets=",
+                     "skinned_renderers=", "missing_skinned_meshes="):
+            self.assertIn(term, PART)
+        for term in ("mesh.triangles", "mesh.vertices", "new Mesh(",
+                     ".mesh =", ".sharedMesh =", "GetMesh("):
+            self.assertNotIn(term, PART)
+
     def test_ambient_and_error_reporting(self):
         for s in ("QualitySettings.activeColorSpace", "RenderSettings.ambientMode",
                   "RenderSettings.fog", "RenderSettings.skybox",
