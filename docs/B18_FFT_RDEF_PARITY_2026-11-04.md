@@ -102,3 +102,30 @@ FindKernel index to compiled variant, original authenticated ShaderLab
 pass installation and material linking, Vulkan driver/Unity/Adreno execution,
 or improved water pixels in APK86. No APK rebuilt. WATER-001 remains OPEN.
 Private source/code/translated modules stay in CI temporary directories.
+
+## Follow-up 4: source image variable identity across two descriptor profiles
+
+2026-11-04 [CI41931883517](https://github.com/alwansan/raf/actions/runs/41931883517) **SUCCESS**,
+source commit [693ace2](https://github.com/alwansan/raf/commit/693ace285c0598db17339e067e9a1f1c8014d8a4).
+20/20 original SHA-proven compiled FFT DXBC programs were compiled privately
+under two different explicit mapping profiles. For every original program,
+the result SPIR-V modules' image variable IDs remained the same across
+both mappings, and the **entire SPIR-V module was byte-for-byte identical
+after replacing only the numeric operands of the three intended
+`OpDecorate DescriptorSet/Binding` pairs with a fixed canary**. No other
+OpName, SSA, type, instruction, entrypoint or variable ID changed.
+
+Separate source-free suite 10/10 PASS (including a deliberate t0/t1 swap
+of two same-class sampled images that must fail, and a changed non-binding
+type instruction that must fail). Existing source-free explicit map suite
+10/10 PASS. This stronger, source-authenticated **structural program
+identity** proof means the translator honored target descriptor relocation
+without changing the compiled program graph on these twenty candidates.
+
+No original source/program bytes, private identifiers, SPIR-V instructions
+or image pixels were published. No physical device, Unity Editor, actual
+Raft `.compute` import or authored ShaderLab restoration was executed.
+The runtime **numerical contents** independently read from original
+t0 versus t1 were not tested, and Unity kernel-index selector remains
+unknown. The source-proven compiler mapping is reusable for future private
+shader staging, not a user-playable water fix. WATER-001 OPEN.
