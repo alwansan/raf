@@ -1,3 +1,7 @@
+## B07 — LOCAL-005 original world coroutine first-MoveNext trace (4 November 2026, 23:00 UTC)
+
+[B07 source integration](https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B07_LOCAL_WORLD_COROUTINE_2026-11-04.md) adds original SHA-locked Android-only `Raft_Network.WorldHasBeenLoaded.firstMoveNext` logging while preserving the original `IEnumerator`/yield body and world readiness/save flags. [CI41929041686](https://github.com/alwansan/raf/actions/runs/41929041686) PASS: 9 new B07 controls, 19 existing offline tests, Android/nonAndroid synthetic .NET iterator behavior, original private source SHA and production staging. Cross-workflow [CI41928829509](https://github.com/alwansan/raf/actions/runs/41928829509) initially refused a stale adapted-source operation manifest SHA; [verified new source pin fix354e478a](https://github.com/alwansan/raf/commit/354e478a9ec46aaff758cb8110154d64b8298bea) restored strict agreement, without bypassing verification. [Original adapted full managed/RPC/save CI41929721761](https://github.com/alwansan/raf/actions/runs/41929721761) **SUCCESS**, and [B07 manifest parity CI41929910850](https://github.com/alwansan/raf/actions/runs/41929910850) **SUCCESS**. No Unity/IL2CPP/APK/device test; actual local .rgd create/save/reopen and water/shader/rendering still unresolved. LOCAL-005/WATER-001/RENDER-002 **OPEN**, readiness **NOT_READY 0/3**. Sound/Settings and deferred touch unchanged.
+
 <!-- B12-20261104-BOUNDED-SCENE-TREE-MANAGED-PASS -->
 ## B12 — bounded scene diagnostics memory-source fix (4 November 2026)
 
