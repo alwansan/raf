@@ -4,10 +4,10 @@
   "generation": "B-2026-11-04",
   "session_id": "20261104T2247Z-B13-builtin-atomic",
   "resumed_from_session": "20261104T2132Z-B13-7e6b",
-  "status": "active",
+  "status": "completed",
   "base_sha": "2fa36d110cbaf1693cd61fbede26e7ce3e8f8d36",
-  "last_commit": "ac3152230c62be054a2cece1750ddb01be42791b",
-  "updated_at": "2026-11-04T22:47:00Z",
+  "last_commit": "20c94103edc9d10352560d473656f7004208268b",
+  "updated_at": "2026-11-04T22:57:00Z",
   "tracks": [
     "world-save",
     "water-fft",
@@ -25,8 +25,9 @@
     "https://github.com/alwansan/raf/actions/runs/41920455834",
     "https://github.com/alwansan/raf/actions/runs/41920734179",
     "https://github.com/alwansan/raf/actions/runs/41920753737",
-    "https://github.com/alwansan/raf/actions/runs/41921236140"
+    "https://github.com/alwansan/raf/actions/runs/41921236140",
+    "https://github.com/alwansan/raf/actions/runs/41928703661"
   ],
-  "next_step": "B13 RENDER-002 new scope: protect exact built-in shader source originals in production restorer against pre-publish concurrent source edits, truncated direct writes, partial rollback. Synthetic regression first; no engine shader identity bypass, no native build, no audio/Settings/touch. Register before source changes.",
+  "next_step": "B13 source-only RENDER-002 builtin ShaderLab restoration transaction SOURCE_FIXED; 14/14 CI41928703661. Water FFT, authentic shaders, original export/material lineage and Android pixels UNVERIFIED. Next independent scope source-authenticated binding rather than duplicate synthetic tests; project NOT_READY 0/3.",
   "memory_path": "prompt/coordination/clients/B13/MEMORY.md"
 }
