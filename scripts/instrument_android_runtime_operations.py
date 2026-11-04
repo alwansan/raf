@@ -129,36 +129,84 @@ def instrument(name, text, manifest):
     return result
 
 
+def _reject_linked_ancestors(path, kind):
+    if any(p.is_symlink() for p in (path, *path.parents)):
+        raise ValueError('Linked operation ' + kind + ' refused')
+
+
 def apply(project, backup, manifest, write=False):
+    # Do not silently resolve symlinks into an unrelated source/backup tree.
+    _reject_linked_ancestors(project, 'project')
+    _reject_linked_ancestors(backup, 'backup')
     if backup.resolve().is_relative_to(project.resolve()):
         raise ValueError('Backup must be outside imported project')
+    assets = project / 'Assets'
+    if assets.is_symlink() or not assets.is_dir():
+        raise ValueError('Missing or redirected Unity Assets')
+    if backup.exists() and not backup.is_dir():
+        raise ValueError('Invalid operation backup directory')
     plans = []
     for name in manifest['sources']:
-        matches = [p for p in (project / 'Assets').rglob(name + '.cs') if 'Assembly-CSharp' in p.parts]
-        if len(matches) != 1: raise ValueError('Original operation source is ambiguous')
+        matches = [p for p in assets.rglob(name + '.cs') if 'Assembly-CSharp' in p.parts]
+        if len(matches) != 1:
+            raise ValueError('Original operation source is ambiguous')
         path = matches[0]
         meta = path.with_suffix('.cs.meta')
-        if path.is_symlink() or meta.is_symlink(): raise ValueError('No linked operation sources')
+        _reject_linked_ancestors(path, 'source')
+        _reject_linked_ancestors(meta, 'meta')
+        if not path.is_file() or (meta.exists() and not meta.is_file()):
+            raise ValueError('Original operation source/meta must be regular')
         raw = path.read_bytes()
         text = instrument(name, raw.decode('utf-8-sig'), manifest)
         data = (b'\xef\xbb\xbf' if raw.startswith(b'\xef\xbb\xbf') else b'') + text.encode()
-        if (backup / path.name).exists() or (backup / meta.name).exists():
+        if any(p.exists() or p.is_symlink() for p in (backup / path.name, backup / meta.name)):
             raise ValueError('Original operation backup already exists')
         plans.append((path, meta, raw, meta.read_bytes() if meta.exists() else None, data))
     if write:
+        prior_backup = backup.exists()
         backup.mkdir(parents=True, exist_ok=True)
-        for p,m,r,metadata,d in plans:
-            shutil.copy2(p, backup / p.name)
-            if metadata is not None: shutil.copy2(m, backup / m.name)
+        targets = [backup / n for path, meta, raw, metadata, data in plans
+                   for n in ((path.name, meta.name) if metadata is not None else (path.name,))]
+        mutations_started = False
         try:
-            for p,m,r,metadata,d in plans:
-                p.write_bytes(d)
-                if p.read_bytes() != d or (m.read_bytes() if m.exists() else None) != metadata:
+            for path, meta, raw, metadata, data in plans:
+                shutil.copy2(path, backup / path.name)
+                if metadata is not None:
+                    shutil.copy2(meta, backup / meta.name)
+            for path, meta, raw, metadata, data in plans:
+                if ((backup / path.name).read_bytes() != raw
+                    or (metadata is not None and (backup / meta.name).read_bytes() != metadata)):
+                    raise ValueError('Original operation backup is not byte-identical')
+            mutations_started = True
+            for path, meta, raw, metadata, data in plans:
+                path.write_bytes(data)
+                if (path.read_bytes() != data
+                    or (meta.read_bytes() if meta.exists() else None) != metadata):
                     raise ValueError('Installed operation/meta changed')
-        except Exception:
-            for p,m,r,metadata,d in plans: p.write_bytes(r)
+        except BaseException as error:
+            if mutations_started:
+                # Preserve all original backups if rollback itself fails.
+                try:
+                    for path, meta, raw, metadata, data in plans:
+                        path.write_bytes(raw)
+                    for path, meta, raw, metadata, data in plans:
+                        if (path.read_bytes() != raw
+                            or (meta.read_bytes() if meta.exists() else None) != metadata):
+                            raise ValueError('Original operation restoration mismatch')
+                except BaseException:
+                    raise ValueError('Original operation rollback failed; backups retained') from error
+            for target in targets:
+                if target.is_symlink():
+                    raise ValueError('Unsafe backup appeared; backups retained') from error
+                if target.exists():
+                    target.unlink()
+            if not prior_backup:
+                backup.rmdir()
             raise
-    return dict(applied=write, sourceFiles=len(plans), operations=sum(len(x['methods']) for x in manifest['sources'].values()), originalMetasUnchanged=True, perFrameLoopsInstrumented=False)
+    return dict(applied=write, sourceFiles=len(plans),
+                operations=sum(len(x['methods']) for x in manifest['sources'].values()),
+                originalMetasUnchanged=True, perFrameLoopsInstrumented=False)
+
 
 
 if __name__ == '__main__':
