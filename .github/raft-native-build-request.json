@@ -1,5 +1,5 @@
 {
-  "request_id": "owner-xapk-followup-9eeb447f-20261104",
-  "reason": "Latest explicit owner request: attempt full project APK/OBB/XAPK from current source while preserving all strict authenticity and delivery gates. Experimental NOT_READY 0/3; unresolved source-to-export shader lineage remains a known likely blocker. Inspect actual first failure; do not claim a repair or readiness.",
-  "requested_from_sha": "99367402abb5366341786ee1dcca34296df9757e"
+  "request_id": "w4-lineage-fix-full-xapk-20261104",
+  "reason": "W4 experimental attempt after verified same-instance lineage fix (run 41804737856 SUCCESS) and instrumented engine-owned builtin gate wiring (5e28572b). NOT_READY 0/3; strict water gate may be the next blocker. Inspect the first failure; do not claim a repair or readiness.",
+  "requested_from_sha": "5e28572badf38b3e09693f875d1f18aff6e4432d"
 }
