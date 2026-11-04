@@ -4,17 +4,19 @@
   "generation": "B-2026-11-04",
   "session_id": "20261104T2130Z-B08-b71c",
   "resumed_from_session": null,
-  "status": "active",
+  "status": "completed",
   "base_sha": "169c0a7bceca9fde2f458a4a4d8dcbab7ac119b7",
-  "last_commit": null,
-  "updated_at": "2026-11-04T21:30:35Z",
+  "last_commit": "8787a9d7b2a5f815cdbd0907c4e979316dedf977",
+  "updated_at": "2026-11-04T21:43:25.686Z",
   "tracks": [
     "water-fft:original-compute-registry-identity"
   ],
   "work_ids": [
     "B08-20261104T2130Z-B08-b71c-fft-runtime-identity"
   ],
-  "run_urls": [],
-  "next_step": "Test whether SHA-authenticated Unity ComputeShader serialized kernel-name/variant registry identifies actual FindKernel runtime IDs; refuse compiled-slot=runtime-index assumptions and do not patch kernel identity flags.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41917369953"
+  ],
+  "next_step": "B08 scoped experiment finished; re-open new session with a new session_id, review current HEAD/active peers and original Unity runtime ComputeShader name-to-compiled variant selector; WATER-001 OPEN and NOT_READY 0/3.",
   "memory_path": "prompt/coordination/clients/B08/MEMORY.md"
 }
