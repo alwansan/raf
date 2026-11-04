@@ -1,0 +1,10 @@
+{
+  "username": "raft-20261104T110000Z-9eb447fa",
+  "client_label": "W1-build-followup",
+  "session_id": "9eeb447f-a805-45d3-b22e-18491e98f634",
+  "state": "active",
+  "source_sha": "99367402abb5366341786ee1dcca34296df9757e",
+  "current_work": "Owner explicit latest-source experimental XAPK attempt; preserve strict gates; inspect first failure",
+  "resumed_from": "W1",
+  "readiness": "NOT_READY"
+}

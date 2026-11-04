@@ -1,0 +1,14 @@
+{
+  "username": "raft-20261104T110000Z-9eb447fa",
+  "state": "active",
+  "issue": "RENDER-002",
+  "plan": [
+    "Request owner-authorized latest-source full delivery attempt without gate changes",
+    "Inspect first failure and source/export lineage",
+    "Recover signed outputs if packaging alone fails"
+  ],
+  "intended_files": [
+    ".github/raft-native-build-request.json"
+  ],
+  "source_sha": "99367402abb5366341786ee1dcca34296df9757e"
+}

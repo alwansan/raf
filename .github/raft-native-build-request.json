@@ -1,5 +1,5 @@
 {
-  "request_id": "owner-full-xapk-w1-zip2-material-20261103T234108697Z",
-  "reason": "Owner explicitly requests full project/XAPK attempt. New source stages three original scene owners from SHA-verified ZIP2 cache with feature pointer checks and captures actual full-export Material Shader references plus water contract. Experimental NOT_READY 0/3; retain all strict authenticity, compilation, signature and complete delivery gates.",
-  "requested_from_sha": "a2e143246ff29dfdfb9f2a68301d3aae6a38eeeb"
+  "request_id": "owner-xapk-followup-9eeb447f-20261104",
+  "reason": "Latest explicit owner request: attempt full project APK/OBB/XAPK from current source while preserving all strict authenticity and delivery gates. Experimental NOT_READY 0/3; unresolved source-to-export shader lineage remains a known likely blocker. Inspect actual first failure; do not claim a repair or readiness.",
+  "requested_from_sha": "99367402abb5366341786ee1dcca34296df9757e"
 }
