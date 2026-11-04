@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "owner": "B02",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2101Z-B02-e5cd",
+  "issue_id": "RENDER-002",
+  "track": "colors-materials",
+  "approach": "Implement fail-closed sRGB/Linear texture-import mapping verification based only on an explicit original-source-to-export identity manifest, with synthetic malformed/missing/changed .meta controls.",
+  "status": "active",
+  "base_sha": "3f493b17adfd",
+  "intended_files": [
+    "scripts/b02_texture_import_color_guard.py",
+    "tests/test_b02_texture_import_color_guard.py",
+    "docs/B02_TEXTURE_IMPORT_COLOR_FIDELITY_2026-11-04.md"
+  ],
+  "hypothesis": "The original Linear project contains both gamma/sRGB albedo and linear data textures; if export importer sRGB flags are reset, color fidelity degrades. A source-authenticated mapping is needed to detect rather than infer each lost flag.",
+  "related_work": [
+    "B44-20261104T2059Z-B44-f0ac-material-values",
+    "B46-20261104T2058Z-B46-6e3d-texture-export-links"
+  ],
+  "experiment_ids": [],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Read current material import and color-space source probes, implement guard and synthetic tests; wire safe preflight only when original/export identity data exists.",
+  "updated_at": "2026-11-04T21:01:00Z"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "20261104T2101Z-B02-e5cd-start",
+  "owner": "B02",
+  "session_id": "20261104T2101Z-B02-e5cd",
+  "issue_id": "RENDER-002",
+  "type": "start",
+  "summary": "B02 registered independent P0 texture sRGB/Linear importer provenance check; explicit original/export identity required, no guessed GUID or value overwrite.",
+  "evidence": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/probe_w2_texture_color_formats.py",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/issues/RENDER-002.json"
+  ],
+  "at": "2026-11-04T21:01:00Z"
+}
