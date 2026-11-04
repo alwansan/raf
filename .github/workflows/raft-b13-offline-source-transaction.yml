@@ -38,3 +38,46 @@ jobs:
           name: b13-offline-transaction-${{ github.run_id }}
           path: ${{ runner.temp }}/b13-results/
           retention-days: 7
+
+  evidence-summary:
+    name: Regenerate B-team summary after B13 source validation
+    needs: fault-injection
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: feature/android-native-port
+          persist-credentials: true
+          lfs: false
+          fetch-depth: 1
+          sparse-checkout: |
+            scripts/refresh_b_team.py
+            prompt/coordination/B_TEAM
+      - name: Refresh B-team from latest records with fast-forward lease
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'raft-b13-evidence-checkpoint'
+          git config user.email 'raft-b13-evidence-checkpoint@users.noreply.github.com'
+          for attempt in 1 2 3 4 5; do
+            git fetch -q --no-tags origin feature/android-native-port
+            git reset --hard -q FETCH_HEAD
+            python3 scripts/refresh_b_team.py
+            git add -- prompt/coordination/B_TEAM/SUMMARY.md prompt/coordination/B_TEAM/snapshot.json
+            if git diff --cached --quiet; then
+              echo 'B13_SUMMARY_CHECKPOINT current=true'
+              exit 0
+            fi
+            git commit -q -m 'coord(B13): regenerate B-team summary from current records'
+            if git push --quiet origin HEAD:feature/android-native-port; then
+              echo 'B13_SUMMARY_CHECKPOINT refreshed=true fast_forward=true'
+              exit 0
+            fi
+            echo 'B13_SUMMARY_CHECKPOINT concurrent update, refresh and retry'
+            sleep 1
+          done
+          echo 'B13_SUMMARY_CHECKPOINT blocked by concurrent updates, no force push' >&2
+          exit 1
