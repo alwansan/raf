@@ -1,0 +1,34 @@
+{
+  "id": "B24-FOAM-ORIGINAL-FOUR-STAGES-20261104",
+  "title": "B24 — original Foam/Global two-pass four-stage DXBC↔Vulkan private translation",
+  "kind": "water-original-compiled-program-translation",
+  "source": {
+    "provider": "ZIP2 pinned original (without LFS)",
+    "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "path": "Raft/Raft_Data/sharedassets0.assets",
+    "bytes": 115978112,
+    "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "object_path_id": 2420,
+    "object_sha256": "67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1"
+  },
+  "stages": {
+    "acquisition": "SHA_PIN_VERIFIED",
+    "extraction": "ORIGINAL_TWO_PASSES_FOUR_STAGES_LINKED",
+    "reconstruction": "FOUR_PRIVATE_DXBC_SPIRV_HLSL_ROUNDTRIPS_VALID",
+    "binding": "PARTIAL_CB_LAYOUT_AUTHENTICATED_NOT_UPLOADED",
+    "integration": "NOT_EXECUTED",
+    "device": "NOT_TESTED"
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41919758958",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B24_ORIGINAL_FOAM_PROGRAM_TRANSLATION_2026-11-04.md",
+    "https://github.com/alwansan/raf/actions/runs/41920166966"
+  ],
+  "remaining": [
+    "Exact original per-pass partial constant buffer and stage name/slot rebinding",
+    "Real ShaderLab two-pass source, material GUID and .meta preservation",
+    "Unity Android shader importer, Vulkan/Adreno device renderer and color parity, texture/sampler binding"
+  ],
+  "updated_by": "B24",
+  "updated_at": "2026-11-04T21:54:06.640Z"
+}
