@@ -9,9 +9,9 @@ from scripts.a12_probe_original_blur_passes import TARGET
 from scripts.b45_install_original_blur import install
 
 
-META = "fileFormatVersion: 2\\nguid: " + "a" * 32 + "\\n"
-PLACEHOLDER = 'Shader "' + TARGET + '" { SubShader { Pass { } } }\\n'
-CANDIDATE = 'Shader "' + TARGET + '" { Properties { _Synthetic ("Test", 2D) = "white" {} } SubShader { Pass { } Pass { } } }\\n'
+META = "fileFormatVersion: 2\nguid: " + "a" * 32 + "\n"
+PLACEHOLDER = 'Shader "' + TARGET + '" { SubShader { Pass { } } }\n'
+CANDIDATE = 'Shader "' + TARGET + '" { Properties { _Synthetic ("Test", 2D) = "white" {} } SubShader { Pass { } Pass { } } }\n'
 
 
 def fixture(root):
@@ -30,7 +30,7 @@ def fixture(root):
 
 class OriginalBlurInstallTests(unittest.TestCase):
     def install_fixture(self, project, candidate, backup):
-        with mock.patch("scripts.b45_install_original_blur.CANDIDATE_SHA256", hashlib.sha256(CANDIDATE.encode()).hexdigest()), \\
+        with mock.patch("scripts.b45_install_original_blur.CANDIDATE_SHA256", hashlib.sha256(CANDIDATE.encode()).hexdigest()), \
              mock.patch("scripts.b45_install_original_blur.CANDIDATE_BYTES", len(CANDIDATE.encode())):
             return install(project, candidate, backup)
 
