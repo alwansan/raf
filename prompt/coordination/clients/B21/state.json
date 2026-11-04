@@ -4,17 +4,22 @@
   "generation": "B-2026-11-04",
   "session_id": "20261104T2153Z-B21-72ab",
   "resumed_from_session": null,
-  "status": "active",
+  "status": "completed",
   "base_sha": "153787bcb85b0a0af9382b8d19e7dc85c6fc0ee8",
-  "last_commit": null,
-  "updated_at": "2026-11-04T21:53:00Z",
+  "last_commit": "d250c376f10ec9e521c68f68a5b3179a89027ae5",
+  "updated_at": "2026-11-04T22:12:00Z",
   "tracks": [
-    "RENDER-002:lighting-lightmap-export-parity"
+    "RENDER-002:original-lightmap-source-exclusion (scope completed)",
+    "RENDER-002:original-dynamic-Light-source-baseline (scope completed)"
   ],
   "work_ids": [
-    "B21-20261104T2153Z-B21-72ab-lightmap-lineage"
+    "B21-20261104T2153Z-B21-72ab-lightmap-lineage",
+    "B21-20261104T2153Z-B21-72ab-dynamic-lighting"
   ],
-  "run_urls": [],
-  "next_step": "Inspect actual original/exported lighting and lightmap serialization; implement a bounded same-export lighting/lightmap reference diagnostic with meaningful negative controls and verify/record result. No source/lightmap edits without authenticated evidence.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41921259677",
+    "https://github.com/alwansan/raf/actions/runs/41922372594"
+  ],
+  "next_step": "Next B21 resume: inspect live HEAD and generated summary; map two source native Light objects (one level0, one level1) to exact same-instance exported Unity scene Light components and compare enabled/color/intensity/range; if unavailable switch to distinct unowned P0 water/shader integration. Current scoped source investigations complete, NOT_READY 0/3; no async work.",
   "memory_path": "prompt/coordination/clients/B21/MEMORY.md"
 }
