@@ -59,13 +59,34 @@ public final class DiagnosticRegression {
         eq(0,count(c,"other_invalid_compute_kernel"),"no flood duplicate");
         expect(MemoryTelemetryQuality.classify(1000L,1050L,200),"validated_recent");
         expect(MemoryTelemetryQuality.classify(1000L,1050L,11000),"validated_cached");
-        expect(MemoryTelemetryQuality.classify(20000L,1000L,11000),"rejected_pss_exceeds_rss");
+        expect(MemoryTelemetryQuality.classify(20000L,1000L,11000),"android_meminfo_reported_above_proc_rss");
         expect(MemoryTelemetryQuality.classify(1000L,null,200),"unverified_no_reference_rss");
         expect(MemoryTelemetryQuality.classify(null,1000L,200),"unavailable");
         if(!MemoryTelemetryQuality.usable("validated_cached"))
             throw new AssertionError("Aged but validated PSS must be explicit, not false null");
-        if(MemoryTelemetryQuality.usable("rejected_pss_exceeds_rss"))
-            throw new AssertionError("Unverified PSS must remain null");
-        System.out.println("Diagnostic regression PASS: FFT, OBB/GUID, FMOD, PSS, 17178-event replay");
+        if(!MemoryTelemetryQuality.usable("android_meminfo_reported_above_proc_rss"))
+            throw new AssertionError("Android framework reported PSS must remain available with caveat");
+        if(MemoryTelemetryQuality.comparableToProcRss("android_meminfo_reported_above_proc_rss"))
+            throw new AssertionError("GPU-inclusive memory must not be certified equal to Linux RSS");
+        if(MemoryTelemetryQuality.usable("unverified_no_reference_rss"))
+            throw new AssertionError("No reference means only a candidate can be exported");
+                c.reset();
+        c.observe(EVENT+"Custom cursor: Attempt to set a custom cursor that is not RGBA32 format failed.");
+        c.observe(EVENT+"The referenced script on this Behaviour (Game Object 'test') is missing!");
+        c.observe(EVENT+"There can be only one active Event System.");
+        c.observe(EVENT+"DllNotFoundException: Unable to load DLL 'steam_api64'");
+        c.observe(EVENT+"Couldn't create a Convex Mesh from source mesh within the maximum polygons limit (256).");
+        eq(1,count(c,"unity_cursor_rgba32_required"),"cursor format");
+        eq(1,count(c,"unity_missing_mono_script"),"missing script");
+        eq(1,count(c,"unity_duplicate_event_system"),"duplicate UI EventSystem");
+        eq(1,count(c,"steam_api64_unavailable"),"Steam library dependency");
+        eq(1,count(c,"unity_convex_mesh_polygon_limit"),"convex geometry limit");
+        c.observe(EVENT+"Custom cursor applied RGBA32 successfully");
+        eq(1,count(c,"unity_cursor_rgba32_required"),"benign cursor success");
+        eq(PidProbeObservation.UNKNOWN,PidProbeObservation.gamePid(-1,"pidof_probe_failed"),"probe failure unknown");
+        eq(PidProbeObservation.UNKNOWN,PidProbeObservation.gamePid(-1,"main_cmdline_unverified"),"cmdline inaccessible unknown");
+        eq(PidProbeObservation.NOT_RUNNING,PidProbeObservation.gamePid(-1,"pidof_empty"),"verified no process");
+        eq(2345,PidProbeObservation.gamePid(2345,"main_pid_verified"),"verified process");
+        System.out.println("Diagnostic regression PASS: FFT/OBB/FM​​OD/PSS/PID/gameplay categories + 17178-event replay");
     }
 }

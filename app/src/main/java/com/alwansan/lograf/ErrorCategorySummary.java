@@ -48,7 +48,12 @@ final class ErrorCategorySummary {
                 "java_fatal_exception",
                 "native_fatal_signal",
                 "java_out_of_memory",
-                "graphics_context_lost"
+                "graphics_context_lost",
+                "unity_cursor_rgba32_required",
+                "unity_missing_mono_script",
+                "unity_duplicate_event_system",
+                "steam_api64_unavailable",
+                "unity_convex_mesh_polygon_limit"
         }) groups.put(name,new Group());
     }
 
@@ -145,6 +150,20 @@ final class ErrorCategorySummary {
         }else if(nullRef){
             // Classify only when a later stack frame proves FMOD origin.
             beginPending("fmod_null",line);
+        }else if(line.contains("Custom cursor: Attempt to set a custom cursor") &&
+                line.contains("RGBA32")){
+            category="unity_cursor_rgba32_required";
+        }else if(line.contains("The referenced script on this Behaviour") &&
+                line.contains("is missing")){
+            category="unity_missing_mono_script";
+        }else if(line.contains("There can be only one active Event System")){
+            category="unity_duplicate_event_system";
+        }else if(line.contains("DllNotFoundException") &&
+                line.contains("steam_api64")){
+            category="steam_api64_unavailable";
+        }else if(line.contains("Couldn't create a Convex Mesh") &&
+                line.contains("maximum polygons limit")){
+            category="unity_convex_mesh_polygon_limit";
         }else if(line.contains("FATAL EXCEPTION")){
             category="java_fatal_exception";
         }else if(line.contains("Fatal signal") || line.contains("SIGSEGV") ||

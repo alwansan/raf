@@ -33,7 +33,7 @@ final class SessionMetricsSummary {
         }
     }
     private final LinkedHashMap<String,Stats> fields=new LinkedHashMap<>();
-    private long total,unreadable,gameRunning,gameAbsent,fpsStale;
+    private long total,unreadable,gameRunning,gameAbsent,gameUnknown,fpsStale,meminfoAboveProcRss;
     private long lastFpsUnavailableDurationMs=0,maxFpsUnavailableDurationMs=0;
     private String lastFpsStatus="not_sampled";
     private long firstTimestamp=-1,lastTimestamp=-1;
@@ -52,7 +52,7 @@ final class SessionMetricsSummary {
                 "last_present_progress_age_ms"}){
             fields.put(key,new Stats());
         }
-        total=0;unreadable=0;gameRunning=0;gameAbsent=0;fpsStale=0;
+        total=0;unreadable=0;gameRunning=0;gameAbsent=0;gameUnknown=0;fpsStale=0;meminfoAboveProcRss=0;
         lastFpsUnavailableDurationMs=0;maxFpsUnavailableDurationMs=0;
         lastFpsStatus="not_sampled";
         firstTimestamp=-1;lastTimestamp=-1;firstFpsAt=-1;lastFpsAt=-1;
@@ -69,6 +69,9 @@ final class SessionMetricsSummary {
             lastTimestamp=t;
             if("game_running".equals(row.optString("state")))gameRunning++;
             if("game_not_running".equals(row.optString("state")))gameAbsent++;
+            if("game_process_state_unknown".equals(row.optString("state")))gameUnknown++;
+            if("android_meminfo_reported_above_proc_rss".equals(row.optString("process_pss_quality")))
+                meminfoAboveProcRss++;
             if(row.optBoolean("frame_telemetry_stale",false))fpsStale++;
             long age=row.optLong("fps_unavailable_duration_ms",-1);
             if(age>=0){
@@ -94,7 +97,9 @@ final class SessionMetricsSummary {
         JSONObject o=new JSONObject();
         try{
             o.put("total_samples",total).put("unreadable_samples",unreadable);
-            o.put("game_running_samples",gameRunning).put("game_absent_samples",gameAbsent);
+            o.put("game_running_samples",gameRunning).put("game_absent_samples",gameAbsent)
+                    .put("game_process_state_unknown_samples",gameUnknown)
+                    .put("android_meminfo_pss_above_proc_rss_samples",meminfoAboveProcRss);
             o.put("frame_telemetry_stale_samples",fpsStale);
             o.put("last_fps_tracking_status",lastFpsStatus);
             o.put("last_fps_unavailable_duration_ms",lastFpsUnavailableDurationMs);

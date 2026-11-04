@@ -11,10 +11,14 @@ final class MemoryTelemetryQuality {
         if(referenceRssKb==null || referenceRssKb<=0)
             return "unverified_no_reference_rss";
         if(pssKb>referenceRssKb+8192L)
-            return "rejected_pss_exceeds_rss";
+            return "android_meminfo_reported_above_proc_rss";
         return ageMs>5000?"validated_cached":"validated_recent";
     }
     static boolean usable(String quality){
+        return "validated_recent".equals(quality) || "validated_cached".equals(quality)
+                || "android_meminfo_reported_above_proc_rss".equals(quality);
+    }
+    static boolean comparableToProcRss(String quality){
         return "validated_recent".equals(quality) || "validated_cached".equals(quality);
     }
 }

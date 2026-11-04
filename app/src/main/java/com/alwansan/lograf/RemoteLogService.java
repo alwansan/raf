@@ -85,7 +85,7 @@ public final class RemoteLogService extends IRemoteLog.Stub {
     private int currentPid() {
         // A HashSet iteration is nondeterministic. The sampler must never
         // switch to a :worker process or invent a PID on an unreadable /proc.
-        return primaryGamePid.get();
+        return PidProbeObservation.gamePid(primaryGamePid.get(),pidProbeStatus);
     }
 
     private static String processCmdline(int pid) {

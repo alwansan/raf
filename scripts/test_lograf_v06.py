@@ -33,7 +33,7 @@ checks={
     "aggregate observed samples": 'readable_samples' in metrics,
     "stale FPS distinguished": '"frame_telemetry_stale"' in sampler and '"fps_tracking_status"' in sampler,
     "do not fake zero for missing fps": 'return 0.0' not in sampler[sampler.index('private Double presentedFps'):],
-    "PSS rejection marker": '"rejected_pss_exceeds_rss"' in sampler,
+    "PSS source mismatch distinguished": '"android_meminfo_reported_above_proc_rss"' in sampler and 'android_meminfo_total_pss_kb' in sampler,
     "queue stats visible in UI": "writer_pending_bytes" in ui and "frame_telemetry_stale" in ui,
     "count only exact game process death events": 'processDeathEvents.incrementAndGet();' in remote[remote.index('packageName.equals(died.group(2).trim())'):] and remote.index('packageName.equals(died.group(2).trim())') < remote.index('processDeathEvents.incrementAndGet();'),
     "no false death on colon worker process": 'packageName.equals(died.group(2).trim())' in remote,
@@ -42,7 +42,7 @@ checks={
     "stop-time exit evidence": 'remote.finalExitEvidence()' in capture and 'stop_time_android_process_exit_info' in capture,
     "system context rejects substring package names": 'containsExactPackage(line,packageName)' in remote and 'isPackageCharacter(line.charAt(end))' in remote,
     "system context still accepts tracked PID": 'gamePids.contains(m.group(1))' in remote,
-    "telemetry uses exact main process": 'return primaryGamePid.get();' in remote and 'packageName.equals(processCmdline(pid))' in remote,
+    "telemetry uses exact main process": 'PidProbeObservation.gamePid(primaryGamePid.get(),pidProbeStatus)' in remote and 'packageName.equals(processCmdline(pid))' in remote,
     "no HashSet PID sampling": 'for(String pid:gamePids)' not in remote,
     "no guessed process PID when proc inaccessible": 'return selected;' in remote and 'int selected=-1;' in remote,
     "pidof failure invalidates stale process telemetry": 'primaryGamePid.set(-1);\n                synchronized(gamePids){gamePids.clear();}' in remote,
@@ -65,6 +65,9 @@ checks={
     "raw Logcat unchanged target": '"--uid=" + gameUid' in remote,
     "FMOD init errors classified from device evidence": '"fmod_initialization_failed"' in (src/"ErrorCategorySummary.java").read_text() and 'line.contains("[FMOD] Initialization failed")' in (src/"ErrorCategorySummary.java").read_text(),
     "FMOD missing events classified": '"fmod_event_not_found"' in (src/"ErrorCategorySummary.java").read_text() and 'line.contains("EventNotFoundException")' in (src/"ErrorCategorySummary.java").read_text(),
+    "unknown PID never counted as proven game exit": 'pid!=lastObservedPid && !pidUnknown' in sampler and '"game_process_state_unknown"' in sampler,
+    "SurfaceFlinger raw timestamp count surfaced": '"surface_latency_valid_timestamp_count"' in sampler,
+    "Android total PSS retains provenance": '"process_pss_source"' in sampler and 'pss_validated_against_rss' in sampler,
     "error classes tracked without raw text": '"error_groups"' in remote and (src/"ErrorCategorySummary.java").exists(),
 }
 bad=[name for name,valid in checks.items() if not valid]

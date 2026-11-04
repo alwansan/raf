@@ -162,8 +162,9 @@ public final class MainActivity extends Activity {
             performanceLabel.setText("قراءات Raft المباشرة (تتحدث كل 3 ثوانٍ):"+
                 "\nCPU process: "+metric(m,"process_cpu_percent_one_core","% of one core")+
                 "\nRAM RSS: "+metric(m,"process_rss_kb","KiB")+
-                "\nRAM PSS: "+metric(m,"process_pss_kb","KiB")+
+                "\nAndroid-reported RAM PSS: "+metric(m,"process_pss_kb","KiB")+
                 "\nPSS quality: "+m.optString("process_pss_quality","unavailable")+
+                "\nPSS RSS reference: "+metric(m,"pss_reference_rss_kb","KiB")+
                 "\nAvailable RAM: "+metric(m,"device_mem_available_kb","KiB")+
                 "\nGPU busy (device-wide): "+metric(m,"gpu_busy_percent","%")+
                 "\nCPU frequencies: "+frequencySummary(m)+
@@ -171,6 +172,7 @@ public final class MainActivity extends Activity {
                 "\nGPU clock: "+metric(m,"gpu_clock_hz","Hz")+
                 "\nDisplayed FPS estimate: "+metric(m,"presented_fps_estimate","fps")+
                 "\nFPS measurement state: "+m.optString("fps_tracking_status","unknown")+
+                "\nSurfaceFlinger latency stamps: "+metric(m,"surface_latency_valid_timestamp_count","")+
                 "\nFPS unavailable for: "+metric(m,"fps_unavailable_duration_ms","ms")+
                 "\nValid FPS measurements: "+metric(m,"fps_valid_sample_count","")+
                 "\nFPS gap: "+m.optString("frame_telemetry_gap_kind","unknown")+

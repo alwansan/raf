@@ -41,6 +41,7 @@ public final class PerformanceSampler implements Runnable {
     private long validFpsSamples=0;
     private Double lastPresentedP95Ms=null, lastPresentedWorstMs=null;
     private int lastPresentedFrameCount=0;
+    private int lastLatencyValidTimestampCount=0;
     private static final String GPU="/sys/class/kgsl/kgsl-3d0/";
     private final long ticksPerSecond;
     private final int cpuCount=Math.max(1,Runtime.getRuntime().availableProcessors());
@@ -66,11 +67,12 @@ public final class PerformanceSampler implements Runnable {
     private JSONObject sample() throws Exception {
         long now=SystemClock.elapsedRealtime();
         int pid=pidSupplier.getAsInt();
+        boolean pidUnknown=pid==PidProbeObservation.UNKNOWN;
         JSONObject row=new JSONObject();
         row.put("schema",1).put("source","lograf_shell").put("timestamp_unix_ms",System.currentTimeMillis())
                 .put("elapsed_ms",now).put("sample",++sample).put("package",target)
                 .put("pid",pid>0?pid:JSONObject.NULL).put("cpu_cores_online",cpuCount);
-        if(pid!=lastObservedPid) {
+        if(pid!=lastObservedPid && !pidUnknown) {
             row.put("process_transition",pid>0?"game_started":lastObservedPid>0?"game_exited":"none");
             row.put("previous_pid",lastObservedPid>0?lastObservedPid:JSONObject.NULL);
             if(pid<=0 && lastObservedPid>0) {
@@ -98,7 +100,8 @@ public final class PerformanceSampler implements Runnable {
             lastObservedPid=pid;
         }
         if(pid<=0) {
-            row.put("state","game_not_running");
+            row.put("state",pidUnknown?"game_process_state_unknown":"game_not_running");
+            if(pidUnknown)row.put("process_transition","pid_tracking_lost_unverified");
             previousPid=-1; previousTicks=-1; previousAt=-1; previousPresent=-1;
         } else {
             row.put("state","game_running");
@@ -138,13 +141,15 @@ public final class PerformanceSampler implements Runnable {
             row.put("process_pss_kb",validPss?pssCache:JSONObject.NULL);
             row.put("process_pss_candidate_kb",pssCache==null?JSONObject.NULL:pssCache);
             row.put("process_pss_quality",pssQuality);
-            row.put("process_pss_note","PSS compared to RSS bracketing collection; cached values are aged; candidate may include vendor GPU accounting");
-            row.put("pss_validated_against_rss",validPss);
+            row.put("process_pss_note","Android dumpsys meminfo TOTAL PSS may include GPU memtrack or other accounting not represented in /proc VmRSS; source mismatch is not proof of corrupt PSS");
+            row.put("pss_validated_against_rss",MemoryTelemetryQuality.comparableToProcRss(pssQuality));
+            row.put("process_pss_source","Android dumpsys meminfo <verified main pid> TOTAL PSS");
+            row.put("android_meminfo_total_pss_kb",pssCache==null?JSONObject.NULL:pssCache);
             row.put("pss_reference_rss_kb",pssReferenceRssKb==null?JSONObject.NULL:pssReferenceRssKb);
             row.put("pss_collected_unix_ms",pssCollectedUnixMs==null?JSONObject.NULL:pssCollectedUnixMs);
             row.put("pss_sample_age_ms",pssAge<0?JSONObject.NULL:pssAge);
-            if("rejected_pss_exceeds_rss".equals(pssQuality))
-                row.put("pss_rejection_reason","exceeds_bracketed_rss; could reflect vendor GPU allocations");
+            if("android_meminfo_reported_above_proc_rss".equals(pssQuality))
+                row.put("pss_rss_comparison_note","not directly comparable; Android meminfo PSS can include graphics allocations excluded from /proc VmRSS");
             row.put("memory_sources","/proc/pid/status; dumpsys meminfo pid when available");
             JSONObject io=processIo(pid);
             row.put("process_io_read_bytes",io.opt("read_bytes")==null?JSONObject.NULL:io.opt("read_bytes"));
@@ -183,11 +188,13 @@ public final class PerformanceSampler implements Runnable {
         long unavailableForMs=pid>0&&observedFrom>=0?Math.max(0,now-observedFrom):-1;
         row.put("fps_unavailable_duration_ms",unavailableForMs<0?JSONObject.NULL:unavailableForMs);
         row.put("fps_has_ever_been_readable",validFpsSamples>0);
-        row.put("fps_tracking_status",pid>0?fpsStatus:"game_not_running");
+        row.put("fps_tracking_status",pid>0?fpsStatus:
+                pidUnknown?"pid_tracking_unverified":"game_not_running");
         row.put("fps_quality",fps==null?"unavailable":"surface_presentation_estimate");
         row.put("presented_frame_p95_ms",lastPresentedP95Ms==null?JSONObject.NULL:lastPresentedP95Ms);
         row.put("presented_frame_worst_ms",lastPresentedWorstMs==null?JSONObject.NULL:lastPresentedWorstMs);
         row.put("presented_frame_window_count",lastPresentedFrameCount);
+        row.put("surface_latency_valid_timestamp_count",pid>0?lastLatencyValidTimestampCount:JSONObject.NULL);
         long stallAge=lastFrameProgressMs<0?-1:Math.max(0,now-lastFrameProgressMs);
         row.put("last_present_progress_age_ms",stallAge<0?JSONObject.NULL:stallAge);
         // Never reset last readable FPS age merely because a SurfaceView was
@@ -376,6 +383,7 @@ public final class PerformanceSampler implements Runnable {
 
     private Double presentedFps(long now){
         lastPresentedP95Ms=null;lastPresentedWorstMs=null;lastPresentedFrameCount=0;
+        lastLatencyValidTimestampCount=0;
         if(surfaceLayer==null || surfaceLayer.isEmpty()){
             fpsStatus="surface_unavailable";return null;
         }
@@ -396,6 +404,7 @@ public final class PerformanceSampler implements Runnable {
                     if(stamp>newest)newest=stamp;
                 }
             }
+            lastLatencyValidTimestampCount=presents.size();
             if(presents.size()<2){fpsStatus="insufficient_presentation_samples";return null;}
             if(newest==previousPresent){
                 fpsStatus="no_new_present_timestamps";
