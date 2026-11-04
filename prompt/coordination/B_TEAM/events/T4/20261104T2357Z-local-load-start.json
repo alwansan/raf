@@ -1,0 +1,13 @@
+{
+  "id": "T4-20261104T2357Z-local-load-start",
+  "owner": "T4",
+  "session_id": "20261104T2357Z-T4-lw01",
+  "issue_id": "LOCAL-005",
+  "type": "start",
+  "summary": "T4 takes over original RGD loader/assembly compatibility investigation, preserving B50 Steam guards and B37 RGD evidence; no native or canceled job.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41928767833",
+    "https://github.com/alwansan/raf/actions/runs/41929777877"
+  ],
+  "at": "2026-11-04T23:57:00Z"
+}
