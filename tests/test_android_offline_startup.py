@@ -75,6 +75,58 @@ class AndroidOfflineStartupTests(unittest.TestCase):
             self.assertEqual((root / 'backup/Settings.cs').read_text(), original)
 
 
+    def test_cheat_original_steam_object_guard_is_local_only_and_preserves_others(self):
+        from scripts.probe_original_scene_audio import method_body
+        original = (
+            'public class Cheat { public bool AllowCheatsForLocalPlayer() { '
+            'string comment = "SteamUser.GetSteamID()"; '
+            'return SteamUser.GetSteamID() == LocalPlayer.SteamID; } '
+            'public bool Other() { return SteamUser.GetSteamID() == RemoteId; } }'
+        )
+        body = method_body(original, 'AllowCheatsForLocalPlayer')[1]
+        with patch.dict('scripts.adapt_android_offline_startup.PINS',
+                        {'Cheat': fingerprint(original)}, clear=True), patch(
+                'scripts.adapt_android_offline_startup.CHEAT_METHOD_SHA256', fingerprint(body)):
+            changed = adapt('Cheat', original)
+        guard = '(RaftAndroid.Platform.LocalPlayerIdentity.Enabled ? ' + (
+            'new Steamworks.CSteamID(RaftAndroid.Platform.LocalPlayerIdentity.Current) : '
+            'SteamUser.GetSteamID())')
+        self.assertIn('return ' + guard + ' == LocalPlayer.SteamID;', changed)
+        self.assertIn('public bool Other() { return SteamUser.GetSteamID() == RemoteId; }', changed)
+        self.assertIn('"SteamUser.GetSteamID()"', changed)
+        self.assertEqual(changed.count(guard), 1)
+        self.assertEqual(changed.replace(guard, 'SteamUser.GetSteamID()', 1), original)
+
+    def test_cheat_unknown_original_method_and_duplicate_real_calls_are_refused(self):
+        from scripts.probe_original_scene_audio import method_body
+        original = (
+            'public class Cheat { public bool AllowCheatsForLocalPlayer() { '
+            'var left = SteamUser.GetSteamID(); '
+            'var right = SteamUser.GetSteamID(); return left == right; } }'
+        )
+        body = method_body(original, 'AllowCheatsForLocalPlayer')[1]
+        with patch.dict('scripts.adapt_android_offline_startup.PINS',
+                        {'Cheat': fingerprint(original)}, clear=True):
+            with self.assertRaisesRegex(ValueError, 'Unrecognized original Cheat'):
+                adapt('Cheat', original)
+            with patch('scripts.adapt_android_offline_startup.CHEAT_METHOD_SHA256', fingerprint(body)):
+                with self.assertRaisesRegex(ValueError, 'Cheat Steam identity callsite drift'):
+                    adapt('Cheat', original)
+
+    def test_cheat_nonboolean_method_type_is_rejected_even_when_source_digest_matches(self):
+        from scripts.probe_original_scene_audio import method_body
+        original = (
+            'public class Cheat { public int AllowCheatsForLocalPlayer() { '
+            'var sid = SteamUser.GetSteamID(); return 0; } }'
+        )
+        body = method_body(original, 'AllowCheatsForLocalPlayer')[1]
+        with patch.dict('scripts.adapt_android_offline_startup.PINS',
+                        {'Cheat': fingerprint(original)}, clear=True), patch(
+                'scripts.adapt_android_offline_startup.CHEAT_METHOD_SHA256', fingerprint(body)):
+            with self.assertRaisesRegex(ValueError, 'Unrecognized original Cheat'):
+                adapt('Cheat', original)
+
+
     def test_symlinked_assets_root_cannot_redirect_original_offline_source(self):
         original = 'class Settings { int v = SteamApps.GetAppBuildId(); }'
         with tempfile.TemporaryDirectory() as tmp:
