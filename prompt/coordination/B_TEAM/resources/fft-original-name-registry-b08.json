@@ -1,0 +1,30 @@
+{
+  "id": "fft-original-name-registry-b08",
+  "title": "B08 original FFT ComputeShader one-name/twenty compiled-program aliases",
+  "kind": "authenticated-compute-kernel-name-registry",
+  "source": {
+    "provider": "ZIP2 immutable original Unity serialized owner",
+    "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "path": "Raft/Raft_Data/sharedassets0.assets",
+    "bytes": 115978112,
+    "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3"
+  },
+  "stages": {
+    "acquisition": "VERIFIED",
+    "extraction": "VERIFIED",
+    "reconstruction": "UNKNOWN",
+    "binding": "UNKNOWN",
+    "integration": "UNKNOWN",
+    "device": "UNKNOWN"
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41917369953",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B08_FFT_KERNEL_REGISTRY_2026-11-04.md"
+  ],
+  "remaining": [
+    "One serialized name across 20 compiled programs means no independent proof of 20 FindKernel runtime IDs.",
+    "Independently recover original Unity runtime kernel lookup and variant selection.",
+    "Restore Android-authentic authored compute source and validate Unity/Adreno and real water output."
+  ],
+  "updated_by": "B08"
+}
