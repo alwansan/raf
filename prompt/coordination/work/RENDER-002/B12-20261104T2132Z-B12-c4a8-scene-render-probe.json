@@ -6,7 +6,7 @@
   "issue_id": "RENDER-002",
   "track": "colors-materials",
   "approach": "Bounded delayed read-only Android scene renderer and shader state snapshot, separate from material-source/export comparators",
-  "status": "completed",
+  "status": "active",
   "base_sha": "70edac4f5406efdb971e987c0e104682d8cefd42",
   "intended_files": [
     "android-port/Runtime/Platform/AndroidTestDiagnostics.cs",
@@ -26,9 +26,12 @@
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41918822038",
-    "https://github.com/alwansan/raf/actions/runs/41919089409"
+    "https://github.com/alwansan/raf/actions/runs/41919089409",
+    "https://github.com/alwansan/raf/actions/runs/41920015979",
+    "https://github.com/alwansan/raf/actions/runs/41920048140",
+    "https://github.com/alwansan/raf/actions/runs/41920015985"
   ],
-  "result": "B12 scene probe C# source 70edac4 integrated, unit tests 354a8d9, dedicated workflow 8b7e304; B12 CI41919089409 SUCCESS and existing original managed CI41918822038 SUCCESS. No device or shader correctness claim.",
-  "next_step": "Verify isolated B12 CI result; on next coordinated new APK+OBB test inspect render.scene_shader_snapshot log for scene, shader pass, support/colorSpace and correlate with screenshots, without inferring missing meshes from whites.",
-  "updated_at": "2026-11-04T21:47:19.203Z"
+  "result": "Extended source a324eb6 to count missing MeshFilter/sharedMesh and missing SkinnedMeshRenderer.sharedMesh within same capped scene sample, without actual geometry readback; tests extended acd3514. CI41920015985 source-policy SUCCESS for C# change, CI41920048140 (updated tests) queued at checkpoint; original managed CI41920015979 in progress. Previous CI41919089409 and 41918822038 SUCCESS.",
+  "next_step": "Confirm 41920048140 and 41920015979; preserve no-phone claim; then use device snapshot to distinguish missing mesh bindings from white shader materials.",
+  "updated_at": "2026-11-04T21:52:27.308Z"
 }
