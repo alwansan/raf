@@ -1,6 +1,6 @@
 {
   "id": "B21-original-scene-lighting-baseline",
-  "title": "B21 original ZIP2 six-scene baked lightmap and native Light semantic source baseline",
+  "title": "B21 SHA-pinned original six-scene lighting baseline and two same-instance Light export value matches",
   "kind": "original-scene-lighting-source-audit",
   "source": {
     "provider": "alwansan/raf ZIP2 immutable source",
@@ -13,19 +13,24 @@
     "acquisition": "SIX_ORIGINAL_GIT_BLOBS_SHA256_SIZE_AUTHENTICATED",
     "extraction": "NATIVE_UNITY_SERIALIZED_TYPE_TREE_DECODED_6_OF_40_SCENES",
     "reconstruction": "NOT_APPLICABLE_READ_ONLY",
-    "binding": "ORIGINAL_LIGHT_AND_LIGHTMAP_LOCAL_PTRS_VERIFIED_SIX_SCENES_ONLY",
-    "integration": "SOURCE_ONLY_TEST_AND_CI_TOOLS_INTEGRATED_NO_EXPORT_PATCH",
+    "binding": "TWO_SOURCE_NATIVE_LIGHT108_OBJECTS_MAPPED_BY_PRIVATE_EXPORTER_GUID_TO_REAL_UNITY_YAML_VALUES_2_OF_2",
+    "integration": "B21_PRIVATE_TOOL_AND_PARITY_VALIDATOR_COMPILE_AND_REAL_BOUND11_ORIGINAL_EXPORT_MATCHES_NO_UNITY_RUNTIME",
     "device": "NOT_TESTED"
   },
   "evidence": [
     "https://github.com/alwansan/raf/actions/runs/41921259677",
     "https://github.com/alwansan/raf/actions/runs/41922372594",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B21_LIGHTMAP_SOURCE_EXPORT_LINKS_2026-11-04.md"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B21_LIGHTMAP_SOURCE_EXPORT_LINKS_2026-11-04.md",
+    "https://github.com/alwansan/raf/actions/runs/41929975841",
+    "https://github.com/alwansan/raf/actions/runs/41930580691",
+    "https://github.com/alwansan/raf/actions/runs/41930891466",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B21_LIGHT_EXPORT_LINEAGE_2026-11-04.md"
   ],
   "remaining": [
-    "Same-instance original source Light to actual exported Unity Light typed field parity and GameObject identity not yet checked.",
     "Original remaining 34 scene lighting inventories and all shader/material/ambient/Adreno device output unknown.",
-    "No aggregate source SHA/bytes reported; each of six files individually size+SHA authenticated; do not equate group inventory with a single resource."
+    "No aggregate source SHA/bytes reported; each of six files individually size+SHA authenticated; do not equate group inventory with a single resource.",
+    "Native source Light->GameObject owner exact same-export GameObject identity unverified (only both owners locally valid).",
+    "Nine-provider source subset is not all 40 scenes, nor ShaderLab/Adreno pixel equivalence; game source and active Unity runtime unchanged."
   ],
   "updated_by": "B21"
 }
