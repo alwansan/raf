@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T103610Z-4e91b2cd",
+  "status": "completed",
+  "issue_id": "WATER-001",
+  "hypothesis": "Retain partial CB holes instead of packing known members into register0",
+  "intended_files": [
+    "scripts/blur_cb_lane_map.py",
+    "tests/test_blur_cb_lane_map.py"
+  ],
+  "result": "4 local tests pass; no original operand or runtime proof",
+  "next_step": "Decode original DXBC accesses before integration"
+}

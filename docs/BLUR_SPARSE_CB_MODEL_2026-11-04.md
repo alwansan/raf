@@ -1,0 +1,5 @@
+# Sparse original Blur CB address model — 4 November 2026
+
+Follow-up to original member observation41742032440. Added private-rebinding helper scripts/blur_cb_lane_map.py: preserve entire original allocation and unmapped padding; map register/component addresses to member/component ordinals; fail closed on overlap, trimming, unknown array/type. Four local tests pass using earlier authenticated numeric observations, not a new original extraction. In 368-byte vertex CB, matrix offset272 occupies registers17–20;304bytes remain unmapped. In 80-byte fragment CB, scalar index32 and dimension3 index48 leave64bytes unmapped. Holes are unknown source coverage, never zero-valued uniforms. No array/matrix orientation semantics, real DXBC operands, ShaderLab or GPU execution verified. Helper is deliberately not installed into production shader path until source semantics are independently established. No download, Unity or workflow triggered.
+
+Next: decode actual operand masks and privately match original names before shader emission. WATER/RENDER remain OPEN, NOT_READY.

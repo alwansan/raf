@@ -1077,3 +1077,7 @@ The25engine+140non-engine split agrees with the old native export's140initial lo
 
 ## Live export failure follow-up — 4 November
 [Evidence](../docs/BLUR_EXPORT_FOLLOWUP_2026-11-04.md):41741108965 failed before Unity; material inventory2missing shader metas and subsequent builtin0/142identitymatches. No retry/gatechange. Blur candidate register arithmetic18checks passes, not operand or runtime proof. NOT_READY.
+
+
+## Sparse Blur CB reconstruction model — 4 November
+[Handoff](../docs/BLUR_SPARSE_CB_MODEL_2026-11-04.md): added allocation/hole-preserving register-component model;4localtests pass. Uses previously authenticated numeric member observations; not operand/GPU proof, not production integration. No source downloads or repeated workflow. NOT_READY.

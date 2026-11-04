@@ -1,15 +1,15 @@
 {
   "schema_version": 1,
   "username": "raft-20261103T103610Z-4e91b2cd",
-  "session_id": "20261104-blur-member-layout",
+  "session_id": "20261104-sparse-cb-model",
   "resumed_from": null,
   "status": "completed",
   "updated_at": "2026-11-03T23:50:22Z",
-  "base_sha": "138010dd1d36708a74feef9526b8a16714709510",
+  "base_sha": "81429bf23a9b588068cfc1d80f6a2863697c36de",
   "current_work": [
     "WATER-001"
   ],
   "last_commit": "7bbc443c02b5a0169072ea67f773af06537af72b",
-  "next_step": "Correlate actual DXBC CB operand masks and translator offsets with the seven original partial-CB members before any named uniform/ShaderLab rewrite; do not repeat unchanged observation.",
+  "next_step": "Decode actual DXBC operand masks against sparse model before private named rebinding",
   "memory_path": "prompt/coordination/clients/raft-20261103T103610Z-4e91b2cd/MEMORY.md"
 }
