@@ -6,7 +6,7 @@ on:
     branches: [feature/android-native-port]
     paths:
       - '.github/workflows/raft-b30-fft-variantmap.yml'
-      - 'scripts/b30_probe_fft_variantmap_routing.py'
+      - 'scripts/b30_fft_variantmap_routing.py'
       - 'tests/test_b30_fft_variantmap_routing.py'
 
 permissions:
@@ -58,7 +58,7 @@ jobs:
         run: |
           set -euo pipefail
           python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4 -q
-          timeout 180s python3 -m scripts.b30_probe_fft_variantmap_routing \
+          timeout 180s python3 -m scripts.b30_fft_variantmap_routing \
             --source "$RUNNER_TEMP/b30/original/Raft_Data"
           echo 'RAFT_B30_BOUNDARY route_discriminator_is_not_runtime_kernel_id=true unity_runtime_kernel_lookup_unverified=true'
           # Proprietary source and shader bytes stay under runner temp.
