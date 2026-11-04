@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "owner": "B06",
+  "session_id": "20261104T224512Z-B06-wg7a3",
+  "issue_id": "WATER-001",
+  "hypothesis": "Unity maxComputeWorkGroupSizeX/Y/Z dispatch-count maxima were ambiguously labeled local group dimensions; original FFT 64..1024 local invocation requests should be compared only to maxComputeWorkGroupSize with unavailable preserved.",
+  "source_commit": "2fa36d110cbaf1693cd61fbede26e7ce3e8f8d36",
+  "input_hashes": [
+    "ZIP2 original source pin 15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "Original source-correlated FFT compiled local threads X=[64,64,128,128,256,256,512,512,1024,1024] doubled in separate bank, B48 CI41912422220/B18 CI41922333604"
+  ],
+  "tool_versions": {
+    "dotnet": "8.0.x github hosted Ubuntu 24.04",
+    "unity_api": "Unity 2021.3 source docs (not Unity compiled)"
+  },
+  "commands": [
+    "dotnet run --project tests/b06_fft_caps_smoke/B06FftCaps.csproj --configuration Release --nologo"
+  ],
+  "negative_controls": [
+    "1024 theoretical includes equality",
+    "512 theoretical rejects 1024 but not 512",
+    "dispatch Y property exception stays unavailable without dropping format rows",
+    "max local invocations exception stays unavailable without inventing rejection",
+    "zero limit stays unavailable, not measured zero",
+    "actual kernel mapping/dispatch remains unverified"
+  ],
+  "workflow_path": ".github/workflows/raft-b06-fft-capabilities.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41928357485",
+  "artifact_urls": [],
+  "budget": "Reused B06 isolated workflow, 8 minute timeout, no LFS/native Unity/secret/private assets.",
+  "status": "completed",
+  "observed_result": "SUCCESS job 126918624071; synthetic execution of real C# logger captured formats=4 compiled_groups=5, 512/1024 cutoff, unavailable safety and logger resilience; no device or Unity test.",
+  "rejected_hypotheses": [
+    "Unity X/Y/Z properties denote per-group local invocation counts: false; they limit maximum dispatched workgroups along each axis.",
+    "Failure of one SystemInfo capability query must disable all FFT diagnostics: false, per-field isolation retained.",
+    "Synthetic CI proves working original ComputeShader: false; neither Unity kernel identity nor device compiled program is checked."
+  ],
+  "limitations": [
+    "No Unity 2021.3 Editor import or Android/Adreno graphics execution.",
+    "No actual Unity runtime kernel index mapping, shader binding, original ComputeShader restoration or pixels.",
+    "Only theoretical limit comparison with previously authenticated original group dimensions."
+  ],
+  "integration_commit": "f9e34ee647e8eb841fa3a960f01cef5eb2a6be87",
+  "next_step": "On coordinated new native APK, collect real startup water capability logs and compare with actual FFT kernel identity/quality; preserve all strict authentication gates."
+}
