@@ -153,20 +153,41 @@ def apply(project, backup, write=False):
                 raise ValueError('Original backup exists; refuse reapplication')
         plans.append((path, meta, raw, meta.read_bytes() if meta.exists() else None, result))
     if write:
+        # Backups are the only safe recovery path if a later source rollback
+        # fails. Never leave a half-copied backup that blocks the next import.
+        if backup.is_symlink() or (backup.exists() and not backup.is_dir()):
+            raise ValueError('Original backup directory must be regular')
+        backup_existed = backup.exists()
         backup.mkdir(parents=True, exist_ok=True)
-        for path, meta, raw, metadata, result in plans:
-            shutil.copy2(path, backup / path.name)
-            if metadata is not None:
-                shutil.copy2(meta, backup / meta.name)
+        targets = [backup / p.name for path, meta, raw, metadata, result in plans
+                   for p in ((path, meta) if metadata is not None else (path,))]
+        mutation_started = False
         try:
+            for path, meta, raw, metadata, result in plans:
+                shutil.copy2(path, backup / path.name)
+                if metadata is not None:
+                    shutil.copy2(meta, backup / meta.name)
+            mutation_started = True
             for path, meta, raw, metadata, result in plans:
                 path.write_bytes(result)
                 if ((metadata is not None and meta.read_bytes() != metadata) or
                     (metadata is None and meta.exists()) or path.read_bytes() != result):
                     raise ValueError('Installed source/meta validation failed')
-        except Exception:
-            for path, meta, raw, metadata, result in plans:
-                path.write_bytes(raw)
+        except BaseException:
+            # If restoration itself fails, retain *all* backups for recovery;
+            # never delete the only known original copies.
+            if mutation_started:
+                for path, meta, raw, metadata, result in plans:
+                    path.write_bytes(raw)
+                for path, meta, raw, metadata, result in plans:
+                    if path.read_bytes() != raw or (metadata is not None and meta.read_bytes() != metadata):
+                        raise ValueError('Original rollback verification failed; backup retained')
+            for target in targets:
+                if target.is_symlink():
+                    raise ValueError('Unsafe linked backup during cleanup')
+                target.unlink(missing_ok=True)
+            if not backup_existed:
+                backup.rmdir()
             raise
     return dict(applied=write, originalSources=len(plans), originalMetasUnchanged=True,
                 existingOriginalMetas=sum(p[3] is not None for p in plans), manufacturedMetas=0,

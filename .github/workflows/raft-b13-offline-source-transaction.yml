@@ -1,0 +1,40 @@
+name: B13 LOCAL-005 offline source transaction failure rollback
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/adapt_android_offline_startup.py
+      - scripts/adapt_original_save_paths.py
+      - tests/test_android_offline_startup.py
+      - .github/workflows/raft-b13-offline-source-transaction.yml
+permissions:
+  contents: read
+concurrency:
+  group: raft-b13-offline-source-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  fault-injection:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests/test_android_offline_startup.py
+      - name: Test original-free transaction failure and existing offline contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "${{ runner.temp }}/b13-results"
+          python3 -m unittest discover -s tests -p test_android_offline_startup.py -v 2>&1 | tee "${{ runner.temp }}/b13-results/synthetic-tests.txt"
+          printf 'source_sha=%s\noriginal_game_sources_in_artifact=false\nunity_or_device_tested=false\n' "${{ github.sha }}" > "${{ runner.temp }}/b13-results/scope.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: b13-offline-transaction-${{ github.run_id }}
+          path: ${{ runner.temp }}/b13-results/
+          retention-days: 7
