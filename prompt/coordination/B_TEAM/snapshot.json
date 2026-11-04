@@ -135,7 +135,11 @@
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B14_OFFLINE_SAVE_STAGE_PATH_PROVENANCE_2026-11-04.md",
         "https://github.com/alwansan/raf/commit/5a977b3812cc597aaa790ae66bce54e85a965fc8",
         "https://github.com/alwansan/raf/actions/runs/41918301442",
-        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B19_ORIGINAL_SAVE_PATH_TRANSACTION_2026-11-04.md"
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B19_ORIGINAL_SAVE_PATH_TRANSACTION_2026-11-04.md",
+        "https://github.com/alwansan/raf/commit/4ba1439378e2ea8133d0afb9d99e5de1acce0d43",
+        "https://github.com/alwansan/raf/commit/0d31686f58b0276c089425e764fa5e3b377d38e6",
+        "https://github.com/alwansan/raf/actions/runs/41918235557",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B13_OFFLINE_SOURCE_TRANSACTION_2026-11-04.md"
       ],
       "remaining": [
         "Original Cheat.AllowCheatsForLocalPlayer SteamUser.GetSteamID direct object call now source-guarded in B50 2bb6c2; no native/phone verification. Do not infer all Steam callbacks are removed.",
@@ -144,15 +148,16 @@
         "B07 pinned GameManager.OnWorldRecieved original 3 SaveGame callsites and source-integrated Android world Begin/End/exception instrumentation in native import config (CI41915466470 SUCCESS 15 synthetic + original pin/wrapper). Not Unity/IL2CPP/device tested; actual local .rgd create-save-reload and any other error remain unverified.",
         "B24: authenticated GameManager.OnWorldRecieved callback instrumentation is now included in original managed compile (CI PASS); Android Unity/device world creation and .rgd roundtrip remain untested.",
         "B14 source staging safety: project/backup and ancestor symlinks now fail closed in SaveAndLoad and offline startup adapters; CI41918579185 32/32 synthetic passes. Actual SteamStats recovery and native .rgd create/save/reload not proven.",
-        "B19 original SaveAndLoad path-adapter backup transaction source-fixed CI41918301442; not APK/device/.rgd evidence and not repair of Steam StoreStats exception."
+        "B19 original SaveAndLoad path-adapter backup transaction source-fixed CI41918301442; not APK/device/.rgd evidence and not repair of Steam StoreStats exception.",
+        "B13: Android offline source adapter backup/rollback SOURCE_FIXED with 16/16 synthetic CI twice, but true Unity/IL2CPP/phone local world create-save-reload unverified. A concurrent-tree loss was recovered at 0d31686f; recheck live files after later merges."
       ],
       "acceptance": [
         "دخول عالم جديد محلي قابل للعب بلا Steam أو سيرفر خارجي",
         "حفظ .rgd ثم إعادة تحميله فعلياً",
         "لا يكفي إخفاء رسالة الاتصال"
       ],
-      "updated_by": "B19",
-      "updated_at": "2026-11-04T21:44:00Z",
+      "updated_by": "B13",
+      "updated_at": "2026-11-04T21:46:00Z",
       "_record_path": "issues/LOCAL-005.json"
     },
     {
@@ -215,7 +220,11 @@
         "https://github.com/alwansan/raf/commit/064f4d68c65ed2f3ce83926e71dab7b1f620681e",
         "https://github.com/alwansan/raf/actions/runs/41918404573",
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B22_MATERIAL_SCALAR_EXPORT_PARITY_2026-11-04.md",
-        "https://github.com/alwansan/raf/actions/runs/41919089409"
+        "https://github.com/alwansan/raf/actions/runs/41919089409",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B31_ORIGINAL_GRAPHICS_REUSE_2026-11-04.md",
+        "https://github.com/alwansan/raf/actions/runs/41919225658",
+        "https://github.com/alwansan/raf/commit/9eb71aa4c967ac2cef5f447e21d6d0f32d1efccc",
+        "https://github.com/alwansan/raf/actions/runs/41919146580"
       ],
       "remaining": [
         "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -232,15 +241,17 @@
         "B11 original source-pinned m_ColorGamuts=[0] exact-field restoration integrated into native temporary export and candidate recheck; 12 synthetic local tests passed. Actual Raft exported YAML format and mismatch, remote CI result, Unity import/device visuals unverified; reject mismatches outside recognized one-element layouts, retain RENDER-002 OPEN.",
         "B10: source-only generated vendor fallback ShaderImporter .meta GUID/rollback integrated, isolated CI41917602226 PASS 22/22 and A3 CI41917602139 PASS; original Shader GUIDs unchanged in synthetic tests. Exact two missing metas in native41741108965 not identified; next verified real export, zero missing metas and Unity/device visuals remain unproven.",
         "B22 original m_Floats/m_Ints same-instance float32 parity tool CI41918404573: 14 synthetic controls PASS, original Raft->same-export paired data NOT run, 14-owner bounded scope not full 82; material scalar loss remains unproven hypothesis.",
-        "B12: Android scene_shader_snapshot bounded post-load read-only instrumentation now source-integrated (70edac4; CI41919089409 + original-managed CI41918822038 PASS). No diagnostic output exists from a new actual Raft APK/device yet. Compare future 512-renderer bounded counts and ambient/colorSpace against same-scene screenshots; do not equate this to water/shader/color restoration."
+        "B12: Android scene_shader_snapshot bounded post-load read-only instrumentation now source-integrated (70edac4; CI41919089409 + original-managed CI41918822038 PASS). No diagnostic output exists from a new actual Raft APK/device yet. Compare future 512-renderer bounded counts and ambient/colorSpace against same-scene screenshots; do not equate this to water/shader/color restoration.",
+        "B31 production-original Texture2D stream coverage now rejects symlink/hardlink provider/owner aliases and unsafe negative inline extent, source-only CI 41919225658 SUCCESS 26/26; this guards provenance, not actual white materials or device pixels. Initial hypothesis of W1 cache reducing LFS is rejected for current build: 11/14 original shader owners raw, 3/14 LFS pointers already staged. RENDER-002 remains OPEN.",
+        "B38: duplicate mapping-key handling in exported Material m_TexEnvs/UV checker source-fixed; CI41919146580 (14+7 synthetic) PASS. Actual Raft ZIP2 original-to-same-export parity and Android colors still unverified."
       ],
       "acceptance": [
         "مطابقة روابط ومراجع الأصل",
         "مقارنةصوريةلنفسالمشهد",
         "نجاحعلىالهاتف"
       ],
-      "updated_by": "B12",
-      "updated_at": "2026-11-04T21:48:09.668Z",
+      "updated_by": "B38",
+      "updated_at": "2026-11-04T21:51:00Z",
       "_record_path": "issues/RENDER-002.json"
     },
     {
@@ -1156,6 +1167,36 @@
       "_record_path": "events/B30/20261104T2140Z-B30-water-start.json"
     },
     {
+      "id": "B31-20261104-reuse-hypothesis",
+      "owner": "B31",
+      "session_id": "20261104T213800Z-B31-5ea4",
+      "issue_id": "RENDER-002",
+      "type": "discovery",
+      "summary": "Current W1 ZIP2 cache reuse has zero independently established LFS saving: 11/14 shader owners are ordinary Git blobs; the 3 LFS-pointer owners are staged by native pipeline before hydration. Reject original redundant-download hypothesis for this layout.",
+      "evidence": [
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/w1_full_engine_sources.py",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/.github/workflows/raft-unity-editor-android-import.yml",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B31_ORIGINAL_GRAPHICS_REUSE_2026-11-04.md"
+      ],
+      "at": "2026-11-04T21:49:56.384Z",
+      "_record_path": "events/B31/20261104T215300Z-reuse-discovery.json"
+    },
+    {
+      "id": "B31-20261104-provider-guard",
+      "owner": "B31",
+      "session_id": "20261104T213800Z-B31-5ea4",
+      "issue_id": "RENDER-002",
+      "type": "integration",
+      "summary": "Production native-used Texture2D external provider coverage now fails closed for symlink/hardlink originals, with 26/26 SHA-pinned synthetic/legacy CI tests. No Unity or device result, colors unchanged until further proof.",
+      "evidence": [
+        "https://github.com/alwansan/raf/commit/9eb71aa4c967ac2cef5f447e21d6d0f32d1efccc",
+        "https://github.com/alwansan/raf/actions/runs/41919225658",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B31_ORIGINAL_GRAPHICS_REUSE_2026-11-04.md"
+      ],
+      "at": "2026-11-04T21:49:56.384Z",
+      "_record_path": "events/B31/20261104T215301Z-provider-result.json"
+    },
+    {
       "id": "B38-20261104T2142Z-start-material-texenv",
       "owner": "B38",
       "session_id": "20261104T2142Z-B38-f31a",
@@ -1168,6 +1209,21 @@
       ],
       "at": "2026-11-04T21:42:00Z",
       "_record_path": "events/B38/20261104T2142Z-start-material-texenv.json"
+    },
+    {
+      "id": "B38-20261104T2147Z-material-yaml-result",
+      "owner": "B38",
+      "session_id": "20261104T2142Z-B38-f31a",
+      "issue_id": "RENDER-002",
+      "type": "result",
+      "summary": "B38 source-integrated strict duplicate YAML map-key rejection for original-to-export Material texture/UV verifier; final 14+7 synthetic GitHub CI PASS, actual ZIP2 same-instance/device fidelity pending.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41919146580",
+        "https://github.com/alwansan/raf/commit/f3b709e47421e210fbb0863ac5b920a7d843e1cb",
+        "https://github.com/alwansan/raf/actions/runs/41918990785"
+      ],
+      "at": "2026-11-04T21:47:00Z",
+      "_record_path": "events/B38/20261104T2147Z-material-yaml-result.json"
     },
     {
       "id": "20261104T2104Z-B43-start",
@@ -1457,5 +1513,5 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "input_sha256": "27d03b17736594c1573cd93204c36688e0dd0d297ca6e700b6c8fd427a949957"
+  "input_sha256": "5a48bf4af44b493305a467a11d63e8c27a56b8988190ce5148bc610fbf5a817e"
 }
