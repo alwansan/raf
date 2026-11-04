@@ -1,0 +1,15 @@
+{
+  "id": "B21-20261104T2308Z-real-light-parity",
+  "owner": "B21",
+  "session_id": "20261104T2257Z-B21-8e72",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "B21 actual SHA-pinned ZIP2 NINE-provider AssetRipper export SUCCEEDED, 42 original Material and 18 Shader objects loaded, exactly two original scene Lights matched same-instance exported Unity YAML by private W1+B21 GUID/fileID and all enabled/type/RGBA/intensity/range values identical; zero changed fields. 11 staging +17 parity synthetic tests and exact public tool compile passed. Does NOT prove pixel/Adreno or preserve original GameObject identity.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41930891466",
+    "https://github.com/alwansan/raf/actions/runs/41929975841",
+    "https://github.com/alwansan/raf/actions/runs/41930580691",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B21_LIGHT_EXPORT_LINEAGE_2026-11-04.md"
+  ],
+  "at": "2026-11-04T23:08:00Z"
+}
