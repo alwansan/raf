@@ -6,15 +6,18 @@
   "resumed_from_session": null,
   "status": "active",
   "base_sha": "ef0846d094a769b20f3408db44d06aea56f668d9",
-  "last_commit": null,
-  "updated_at": "2026-11-04T20:55:10Z",
+  "last_commit": "52e9b812d5e77c0d0afb7a05b2334bb28cad281c",
+  "updated_at": "2026-11-04T21:07:00Z",
   "tracks": [
     "water-fft"
   ],
   "work_ids": [
-    "B47-20261104T2055Z-B47-c4e7-water-pass-gate"
+    "B47-20261104T2055Z-B47-c4e7-water-pass-gate",
+    "B47-20261104T2055Z-B47-c4e7-compute-kernel-entrypoint"
   ],
-  "run_urls": [],
-  "next_step": "Validate shader-pass gate against genuine per-Pass programs; preserve source identity requirements, then add bounded regression and integrate gate.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41912450062"
+  ],
+  "next_step": "Structural ComputeShader guard tested green; original serialized FFT kernel index -> compiled program mapping is next; no GPU/phone proof.",
   "memory_path": "prompt/coordination/clients/B47/MEMORY.md"
 }
