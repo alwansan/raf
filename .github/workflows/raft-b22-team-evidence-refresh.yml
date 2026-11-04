@@ -1,0 +1,57 @@
+name: B22 B-team generated evidence snapshot checkpoint (source only)
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-b22-team-evidence-refresh.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# Exactly the existing B48/B10 shared summary writer group, never cancel others.
+concurrency:
+  group: raft-b48-team-summary-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  refresh-b-team-evidence:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: feature/android-native-port
+          persist-credentials: true
+          lfs: false
+          fetch-depth: 1
+          sparse-checkout: |
+            scripts/refresh_b_team.py
+            prompt/coordination/B_TEAM
+      - name: Run canonical generator on latest live records and push without force
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'raft-b22-evidence-checkpoint'
+          git config user.email 'raft-b22-evidence-checkpoint@users.noreply.github.com'
+          for attempt in 1 2 3 4 5 6; do
+            git fetch -q --no-tags origin feature/android-native-port
+            # Disposable CI checkout; never reset a collaborator's worktree.
+            git reset --hard -q FETCH_HEAD
+            python3 scripts/refresh_b_team.py
+            git add -- prompt/coordination/B_TEAM/SUMMARY.md prompt/coordination/B_TEAM/snapshot.json
+            if git diff --cached --quiet; then
+              echo 'B22_TEAM_EVIDENCE already_current=true'
+              exit 0
+            fi
+            git commit -q -m 'coord(B22): regenerate B-team summary from latest evidence'
+            if git push --quiet origin HEAD:feature/android-native-port; then
+              echo 'B22_TEAM_EVIDENCE regenerated=true fast_forward_only=true'
+              exit 0
+            fi
+            echo "B22_TEAM_EVIDENCE lease-conflict attempt=$attempt; refresh current HEAD"
+            sleep 1
+          done
+          echo 'B22_TEAM_EVIDENCE unresolved concurrent writers; no force' >&2
+          exit 1
