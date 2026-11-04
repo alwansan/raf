@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "owner": "B10",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2132Z-B10-a6e1",
+  "issue_id": "RENDER-002",
+  "track": "colors-materials/shader-export-lineage",
+  "approach": "Restore deterministic .meta for newly added SHA-authenticated vendor shader fallbacks; fail-closed on existing GUID or symlink conflict and preserve exact original metadata",
+  "status": "active",
+  "base_sha": "e6484daffbaef7dca57da63e1cb4869f9095078a",
+  "intended_files": [
+    "scripts/restore_tmp_shaders.py",
+    "tests/test_restore_tmp_shaders.py",
+    "tests/test_a3_vendor_shader_restore_transaction.py",
+    ".github/workflows/raft-b10-vendor-shader-meta.yml"
+  ],
+  "hypothesis": "Actual native41741108965 reported two shader .meta omissions introduced after TMP vendor fallback writes; missing generated-asset metadata is preventable without touching original asset identity.",
+  "related_work": [
+    "W1 original shader object links",
+    "A3 transactional vendor shader restorer",
+    "A14 exported meta GUID preflight"
+  ],
+  "experiment_ids": [
+    "B10-20261104T2132Z-B10-a6e1-meta-regression"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Source patch and negative tests, then cheap isolated CI; only later check on actual authorized same-instance export",
+  "updated_at": "2026-11-04T21:31:48.375Z"
+}
