@@ -1,0 +1,70 @@
+name: B21 RENDER-002 same-export native Light value parity guard (no actual export)
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-b21-light-parity-source.yml'
+      - 'scripts/b21_compare_export_lights.py'
+      - 'tests/test_b21_compare_export_lights.py'
+permissions:
+  contents: read
+concurrency:
+  group: raft-b21-original-light-parity-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  synthetic:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Exact-source identity, same-instance, YAML, and mismatch negative controls
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/b21_compare_export_lights.py tests/test_b21_compare_export_lights.py
+          python3 -m unittest discover -s tests -p 'test_b21_compare_export_lights.py' -v
+  authenticated-original:
+    needs: synthetic
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+      - name: Checkout immutable ZIP2 six original scenes without LFS
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: .source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            Raft/Raft_Data/level0
+            Raft/Raft_Data/level1
+            Raft/Raft_Data/level2
+            Raft/Raft_Data/level3
+            Raft/Raft_Data/level4
+            Raft/Raft_Data/level5
+      - name: Install pinned bounded UnityPy reader
+        run: python3 -m pip install --user --disable-pip-version-check 'UnityPy==1.23.0'
+      - name: Authenticated ORIGINAL source Light value model, never publish originals
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          from scripts.b21_compare_export_lights import original_lights
+          source = original_lights(Path(".source-zip2/Raft/Raft_Data"))
+          assert len(source) == 2
+          print("RAFT_B21_AUTHENTIC_SOURCE_LIGHT_MODEL count=2 source_sha_verified=true actual_export_checked=false")
+          PY
+          echo 'RAFT_B21_SOURCE_BOUNDARY same_export_trace_provided=false unity_render=false device=false'
