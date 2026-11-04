@@ -3,7 +3,7 @@ import struct
 import unittest
 
 from scripts.b08_fft_spirv_descriptor_abi import (
-    describe_pair, require_shared_abi, EXPECTED_COUNT,
+    describe_pair, require_shared_abi, check_executable_image_roles, EXPECTED_COUNT,
 )
 
 
@@ -24,7 +24,9 @@ def source(groups=(64, 1, 1), registers=(0, 1, 0)):
 
 
 def target(sets=(0, 0, 0), bindings=(0, 1, 2), sampled=(1, 1, 2),
-           scalar_bits=32, group=(64, 1, 1), additional_entry=False):
+           scalar_bits=32, group=(64, 1, 1), additional_entry=False,
+           executable=False, fetched=(0, 1), written=True,
+           unknown_read=False, storage_read=False):
     """Synthetic SPIR-V image descriptors with stable numeric type metadata."""
     words = []
 
@@ -45,6 +47,17 @@ def target(sets=(0, 0, 0), bindings=(0, 1, 2), sampled=(1, 1, 2),
         put(59, pointer_id, var_id, 0)
         put(71, var_id, 34, set_number)
         put(71, var_id, 33, slot)
+    if executable:
+        for i in range(3):
+            put(61, 11 + i*3, 80+i, 13+i*3)  # OpLoad image variable
+        for i in fetched:
+            put(95, 10, 100+i, 80+i, 42)    # OpImageFetch
+        if written:
+            put(99, 82, 42, 43)               # OpImageWrite
+        if unknown_read:
+            put(95, 10, 145, 199, 42)         # Unresolved dynamic ID
+        if storage_read:
+            put(95, 10, 146, 82, 42)          # Incorrect sampled read from UAV
     words = [0x07230203, 0x10000, 0, 200, 0] + words
     return struct.pack("<" + "I" * len(words), *words)
 
@@ -129,6 +142,33 @@ class B08DescriptorABI(unittest.TestCase):
             row["runtime_unity_kernel_id_mapping_verified"] = True
         with self.assertRaises(ValueError):
             require_shared_abi(rows)
+
+
+    def test_executable_image_uses_cover_all_three_declared_resources(self):
+        r = check_executable_image_roles(target(executable=True), good())
+        self.assertTrue(r["both_sampled_descriptor_candidates_actively_read"])
+        self.assertTrue(r["sole_storage_output_descriptor_actively_written"])
+        self.assertFalse(r["source_DXBC_t0_t1_semantic_binding_verified"])
+
+    def test_unused_original_source_input_fails_closed(self):
+        with self.assertRaises(ValueError):
+            check_executable_image_roles(target(executable=True, fetched=(0,)), good())
+
+    def test_declared_but_unwritten_storage_fails_closed(self):
+        with self.assertRaises(ValueError):
+            check_executable_image_roles(target(executable=True, written=False), good())
+
+    def test_unresolved_executable_spirv_image_use_fails_closed(self):
+        with self.assertRaises(ValueError):
+            check_executable_image_roles(target(executable=True, unknown_read=True), good())
+
+    def test_unexpected_storage_read_as_sampled_input_fails_closed(self):
+        with self.assertRaises(ValueError):
+            check_executable_image_roles(target(executable=True, storage_read=True), good())
+
+    def test_declarations_without_image_operations_do_not_prove_readiness(self):
+        with self.assertRaises(ValueError):
+            check_executable_image_roles(target(), good())
 
 
 if __name__ == "__main__":
