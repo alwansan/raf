@@ -1,0 +1,13 @@
+{
+  "id": "20261104T2244Z-rgd-root-start",
+  "owner": "B37",
+  "session_id": "20261104T2226Z-B37-cursor01",
+  "issue_id": "LOCAL-005",
+  "type": "start",
+  "summary": "After completed PERF cursor source-only proof, B37 begins distinct A10 follow-up: original ZIP2 Data.rgd root one-member/no-direct-field-match source-authentic inherited-fields and Serializable metadata investigation. No deserialization or save schema mutation.",
+  "evidence": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/A10_ZIP2_ORIGINAL_RGD_SCHEMA_2026-11-04.md",
+    "https://github.com/alwansan/raf/actions/runs/41734609973"
+  ],
+  "at": "2026-11-04T22:44:00Z"
+}
