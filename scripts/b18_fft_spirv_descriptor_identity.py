@@ -110,6 +110,19 @@ def inspect_original(root: Path, executable: Path) -> dict:
                 raise ValueError("Original DXBC per-slot SHA mismatch")
             src = folder / (str(n) + ".dxbc")
             src.write_bytes(original)
+            if n == 0:
+                # Default-compiler control proves this C ABI/API path can
+                # compile the same exact original DXBC before testing bindings.
+                baseline = folder / "control-default.spv"
+                default = subprocess.run(
+                    [str(executable), str(src), str(baseline), "D"],
+                    stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL, check=False, timeout=25)
+                if default.returncode:
+                    raise ValueError("Public default compiler result code " + str(default.returncode))
+                if not baseline.is_file() or not 20 <= baseline.stat().st_size <= 1048576:
+                    raise ValueError("Default compiler returned invalid SPIR-V output")
+                check_image_role_classes(original, baseline.read_bytes())
             for profile in INTERFACES:
                 dst = folder / (str(n) + "-" + profile + ".spv")
                 try:
@@ -120,7 +133,9 @@ def inspect_original(root: Path, executable: Path) -> dict:
                     )
                 except (subprocess.TimeoutExpired, OSError):
                     raise ValueError("Private vkd3d interface compiler unavailable") from None
-                if proc.returncode or not dst.is_file() or dst.is_symlink() or not 20 <= dst.stat().st_size <= 1048576:
+                if proc.returncode:
+                    raise ValueError("Public explicit compiler result code " + str(proc.returncode))
+                if not dst.is_file() or dst.is_symlink() or not 20 <= dst.stat().st_size <= 1048576:
                     raise ValueError("Explicit compiler translation failed or module malformed")
                 verify_explicit_descriptor_layout(original, dst.read_bytes(), profile)
                 verified[profile] += 1
@@ -167,6 +182,10 @@ def main():
             "Compiled interface must contain exactly three images": "SPIRV_IMAGE_COUNT",
             "Not all original FFT programs met explicit interface mapping": "PROGRAM_COUNT",
         }.get(str(exc), type(exc).__name__)
+        if str(exc).startswith("Public default compiler result code "):
+            reason = "DEFAULT_VKD3D_RC_" + str(exc).rsplit(" ", 1)[-1]
+        elif str(exc).startswith("Public explicit compiler result code "):
+            reason = "EXPLICIT_VKD3D_RC_" + str(exc).rsplit(" ", 1)[-1]
         print("RAFT_B18_FFT_EXPLICIT_MAP " + json.dumps({
             "status": "REJECTED", "reason_code": reason,
             "original_explicit_mapping_proven": False
