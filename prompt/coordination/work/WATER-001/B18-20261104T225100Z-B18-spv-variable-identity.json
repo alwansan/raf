@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "owner": "B18",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T225100Z-B18-map2",
+  "issue_id": "WATER-001",
+  "track": "water-fft",
+  "status": "active",
+  "base_sha": "59cff77bd87aeeb4483597f8ef782cef0c7f3975",
+  "approach": "Independently prove original FFT source-register-target-image SPIR-V variable identity is stable across two explicitly mapped translations by checking variable descriptor IDs and normalized full SPIR-V program instructions, masking only sanctioned set/binding literals. Fail closed on any other drift; do not equate structure to runtime pixel behavior.",
+  "intended_files": [
+    "scripts/b18_fft_spirv_descriptor_identity.py",
+    "tests/test_b18_fft_spirv_descriptor_identity.py",
+    ".github/workflows/raft-b18-fft-descriptor-identity.yml",
+    "docs/B18_FFT_RDEF_PARITY_2026-11-04.md"
+  ],
+  "hypothesis": "When explicit descriptor target maps differ, compiler changes only OpDecorate DescriptorSet/Binding literals, not sampled image variable identity or other SPIR-V code for the SHA-authentic 20 original FFT programs.",
+  "related_work": [
+    "B18 41930824777 explicit source-target interface layouts 40/40 PASS",
+    "B08 original two-read SSA use CI41929513820 PASS",
+    "A1 original CPU Vulkan numerical FFT proof",
+    "WATER-001 actual Unity kernel selector unresolved"
+  ],
+  "experiment_ids": [],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement source-free SPIR-V normalization/variable ID correspondence tests, run original 20 with both profiles, reject other code drift; no asset or Unity changes.",
+  "updated_at": "2026-11-04T23:09:53.356Z"
+}
