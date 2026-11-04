@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "owner": "B47",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2055Z-B47-c4e7",
+  "issue_id": "WATER-001",
+  "track": "water-fft",
+  "approach": "Harden ShaderLab per-pass program detection in production water render gate; fail on empty dummy passes even when another program is present",
+  "status": "active",
+  "base_sha": "ef0846d094a769b20f3408db44d06aea56f668d9",
+  "intended_files": [
+    "scripts/verify_water_render_contract.py",
+    "tests/test_b47_water_render_contract.py"
+  ],
+  "hypothesis": "Current regex Pass count plus one global CGPROGRAM/HLSLPROGRAM permits fake empty pass blocks to satisfy logged multi-pass minimums.",
+  "related_work": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/W1_ORIGINAL_SHADER_OBJECT_LINKS_2026-11-04.md"
+  ],
+  "experiment_ids": [
+    "B47-20261104T2055Z-B47-c4e7-water-pass-false-positive"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Demonstrate false-positive with synthetic source and fix parser; test without game assets; retain fail-closed source-authenticity requirement.",
+  "updated_at": "2026-11-04T20:55:10Z"
+}
