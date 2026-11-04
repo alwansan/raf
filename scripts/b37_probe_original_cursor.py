@@ -70,12 +70,47 @@ def code_only(source):
     return "".join(output)
 
 
+
+def classify_first_arguments(live):
+    """Classify exact call shape without exposing expressions, names or arguments.
+
+    This is a lexical balance check, not runtime source execution.
+    """
+    flags = []
+    for match in DIRECT.finditer(live):
+        position = match.end()
+        start = position
+        nested = 0
+        commas = []
+        while position < len(live):
+            ch = live[position]
+            if ch in "([{":
+                nested += 1
+            elif ch in ")]}":
+                if ch == ")" and nested == 0:
+                    break
+                if nested == 0:
+                    raise ValueError("Unbalanced original cursor invocation")
+                nested -= 1
+            elif ch == "," and nested == 0:
+                commas.append(position)
+            position += 1
+        if position == len(live) or len(commas) != 2:
+            raise ValueError("Noncanonical original Cursor.SetCursor arity")
+        argument = live[start:commas[0]].strip()
+        if not argument:
+            raise ValueError("Empty original cursor texture argument")
+        flags.append(argument == "null")
+    return flags
+
+
 def scan(root, dll, *, size=ORIGINAL_DLL_SIZE, sha=ORIGINAL_DLL_SHA256):
     digest = verify_dll(dll, size, sha)
     if root.is_symlink() or not root.is_dir():
         raise ValueError("Unsafe private source root")
     callers = []
-    total = aliases = unqualified = count = 0
+    total = aliases = unqualified = count = null_args = 0
+    per_source_sha = []
     for path in sorted(root.rglob("*.cs")):
         if path.is_symlink() or not path.is_file() or path.stat().st_size > 2 * 1024 * 1024:
             raise ValueError("Unsafe or oversized private source")
@@ -92,6 +127,11 @@ def scan(root, dll, *, size=ORIGINAL_DLL_SIZE, sha=ORIGINAL_DLL_SHA256):
         total += hits
         count += 1
         if hits:
+            flags = classify_first_arguments(live)
+            if len(flags) != hits:
+                raise ValueError('Cursor invocation classification drift')
+            null_args += sum(flags)
+            per_source_sha.append({'source_sha256': hashlib.sha256(text.encode()).hexdigest(), 'calls': hits, 'literal_null_first_arguments': sum(flags)})
             identity = hashlib.sha256((str(path.relative_to(root)) + "\0" +
                 hashlib.sha256(text.encode()).hexdigest()).encode()).hexdigest()
             callers.append((identity, hits))
@@ -102,6 +142,9 @@ def scan(root, dll, *, size=ORIGINAL_DLL_SIZE, sha=ORIGINAL_DLL_SHA256):
         "source_files_scanned": count,
         "direct_cursor_setcursor_calls": total,
         "direct_callsite_source_files": len(callers),
+        "direct_literal_null_texture_arguments": null_args,
+        "direct_nonliteral_cursor_texture_arguments": total - null_args,
+        "source_digest_callsite_counts": sorted(per_source_sha, key=lambda row: row['source_sha256']),
         "unqualified_setcursor_tokens_including_direct": unqualified,
         "unity_cursor_alias_directives": aliases,
         "caller_identity_digest": hashlib.sha256(json.dumps(sorted(callers)).encode()).hexdigest(),
