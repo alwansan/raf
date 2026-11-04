@@ -1,0 +1,13 @@
+{
+  "id": "B38-20261104T2155Z-render-queue-start",
+  "owner": "B38",
+  "session_id": "20261104T2142Z-B38-f31a",
+  "issue_id": "RENDER-002",
+  "type": "start",
+  "summary": "B38 begins independent top-level original Material queue/GI/instancing parity comparison lane; existing B22/B43/B44/B05 cover other properties, real export and Unity pixels still unknown.",
+  "evidence": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/b22_verify_material_scalars.py",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/b43_material_keyword_fidelity.py"
+  ],
+  "at": "2026-11-04T21:55:07.403Z"
+}
