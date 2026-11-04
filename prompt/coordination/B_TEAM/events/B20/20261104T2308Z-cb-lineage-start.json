@@ -1,0 +1,13 @@
+{
+  "id": "B20-20261104T2308Z-cb-lineage-start",
+  "owner": "B20",
+  "session_id": "20261104T2257Z-B20-fmp3",
+  "issue_id": "WATER-001",
+  "type": "start",
+  "summary": "Follow-up to source-verified private 4-stage Foam packet: inspect genuine SPIR-V/HLSL numeric CB b-slots against B25 typed original slot sets, without claiming CB0 alias or runtime upload.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41930578292",
+    "https://github.com/alwansan/raf/actions/runs/41928183838"
+  ],
+  "at": "2026-11-04T23:08:17.896Z"
+}
