@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "owner": "B17",
+  "session_id": "20261104T2249Z-B17-cbind",
+  "issue_id": "WATER-001",
+  "hypothesis": "An authenticated original Spectrum shader program's compiled D3D11 t/s/u register declarations match the corresponding Unity per-pass common resource tables, including texture-associated sampler indices.",
+  "source_commit": "15d42b479fe569126a5f6aa9a88c204f603c7ff8",
+  "input_hashes": [
+    {
+      "provider": "zip2",
+      "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+      "file": "Raft_Data/sharedassets0.assets",
+      "bytes": 115978112,
+      "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3"
+    }
+  ],
+  "tool_versions": {
+    "UnityPy": "1.25.4",
+    "python": "ubuntu-24.04 runner"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_b17_spectrum_compiled_bindings.py -v",
+    "python3 -m scripts.stage_zip2_fft_owner --zip2-checkout .source-zip2 --destination $RUNNER_TEMP/b17-original/sharedassets0.assets",
+    "python3 -m scripts.b17_spectrum_compiled_bindings --source $RUNNER_TEMP/b17-original --out $RUNNER_TEMP/b17-spectrum-compiled-numeric.json"
+  ],
+  "negative_controls": [
+    "Malformed/nonunique DXBC executable declaration",
+    "Unsupported direct resource instructions",
+    "Stage and variant mismatch",
+    "Missing/duplicate serialized t/s/u slot",
+    "Sampler implicit and sentinel behavior"
+  ],
+  "workflow_path": ".github/workflows/raft-b17-spectrum-compiled-bindings.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41929877074",
+  "artifact_urls": [],
+  "budget": "Two CPU jobs <=6m synthetic and <=22m original; one SHA-pinned owner 116MB; no Unity, game build, secrets or private asset artifacts",
+  "status": "active",
+  "observed_result": "Synthetic 17/17 PASS run 41929705240; first authentic original run source SHA passed but parser rejected (safe reason pending). Diagnostic classification run 41929877074 queued. No correspondence proven yet.",
+  "rejected_hypotheses": [
+    "17 synthetic green tests do not prove original Unity metadata and executable slot matching."
+  ],
+  "limitations": [
+    "Compiled register slot parity does not prove original sampler state or named material property binding.",
+    "No Unity/Adreno/device execution; latest phone game still APK86."
+  ],
+  "integration_commit": null,
+  "next_step": "Check classified original failure; adjust only exact schema evidence, preserve failures and rerun bounded original."
+}
