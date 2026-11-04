@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "owner": "B01",
+  "session_id": "20261104T2105Z-B01-water-contract",
+  "issue_id": "WATER-001",
+  "hypothesis": "Regex on unmasked SHA-pinned C# source yields false ComputeShader callsite provenance from comments and quoted literals.",
+  "source_commit": "938dd139de855d41614f046cb8c2a6871501b2e5",
+  "input_hashes": [],
+  "tool_versions": {
+    "python": "GitHub Actions ubuntu-24.04 Python3"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_probe_original_fft_kernel_callsites.py -v",
+    "python3 -m scripts.probe_original_fft_kernel_callsites --source $RUNNER_TEMP/private-fft-original"
+  ],
+  "negative_controls": [
+    "commented Dispatch/SetTexture",
+    "quoted FindKernel/Dispatch",
+    "unterminated block comment"
+  ],
+  "workflow_path": ".github/workflows/raft-original-fft-managed-links.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41911972796",
+  "artifact_urls": [],
+  "budget": "Existing managed caller CI; no Unity, no LFS hydration or full native build",
+  "status": "running",
+  "observed_result": "Initial preceding 41911886307 SUCCESS; final commit workflow pending. Do not claim final results.",
+  "rejected_hypotheses": [],
+  "limitations": [
+    "Regex lexical structure does not infer runtime kernel identity",
+    "No original private code printed",
+    "No Android water GPU test"
+  ],
+  "integration_commit": "938dd139de855d41614f046cb8c2a6871501b2e5",
+  "next_step": "Inspect final workflow conclusion and provenance metrics."
+}
