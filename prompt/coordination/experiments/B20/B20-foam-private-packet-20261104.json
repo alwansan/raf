@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "owner": "B20",
+  "session_id": "20261104T2257Z-B20-fmp3",
+  "issue_id": "WATER-001",
+  "hypothesis": "Four independently authenticated Foam stage translations and two source-authenticated ShaderLab pass states can be retained as a single all-or-nothing private packet, preserving CB0 alias as unresolved rather than synthesizing a ShaderLab candidate.",
+  "source_commit": "b2268908186bf9d41c1727a9269e047835dd12e8",
+  "input_hashes": [
+    {
+      "provider": "ZIP2",
+      "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+      "path": "Raft_Data/sharedassets0.assets",
+      "bytes": 115978112,
+      "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3"
+    }
+  ],
+  "tool_versions": {
+    "UnityPy": "1.25.4",
+    "vkd3d": "apt ubuntu24.04 pinned by runner distro (record CI version)",
+    "spirv-tools": "apt ubuntu24.04",
+    "spirv-cross": "apt ubuntu24.04",
+    "glslang-tools": "apt ubuntu24.04"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_b20_private_foam_packet.py -v",
+    "python3 -m scripts.b20_private_foam_packet --source \"$RUNNER_TEMP/b20-original\" --repo . --private \"$RUNNER_TEMP/b20-foam-packet\" --out \"$RUNNER_TEMP/b20-safe-report.json\""
+  ],
+  "negative_controls": [
+    "per-pass metadata drift",
+    "missing/rejected stage translation",
+    "private output inside checkout",
+    "symlinked original provider",
+    "original CB0 unresolved runtime alias remains explicit",
+    "failures clean all private partials"
+  ],
+  "workflow_path": ".github/workflows/raft-b20-private-foam-packet.yml",
+  "run_url": null,
+  "artifact_urls": [],
+  "budget": "One 115,978,112-byte original ZIP2 owner, 30-minute standard Ubuntu runner, no Unity/Android native build, no secrets or raw shader artifacts.",
+  "status": "planned",
+  "observed_result": null,
+  "rejected_hypotheses": [],
+  "limitations": [
+    "Retained input packet is not runnable ShaderLab; CB0 alias and exact Unity upload remain unproven.",
+    "Actual source authentication and translation only established by successful CI, not the plan."
+  ],
+  "integration_commit": null,
+  "next_step": "Implement source-private packet writer then run original-data CI."
+}
