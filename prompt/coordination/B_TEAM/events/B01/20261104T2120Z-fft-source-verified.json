@@ -1,0 +1,13 @@
+{
+  "id": "B01-20261104T2120Z-fft-source-verified",
+  "owner": "B01",
+  "session_id": "20261104T2105Z-B01-water-contract",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "SHA-pinned managed CSharp FFT callsite scanner corrected and validated in successful GitHub CI; 64 synthetic tests and numeric oracle pass; no device/Unity water claim.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/938dd139de855d41614f046cb8c2a6871501b2e5",
+    "https://github.com/alwansan/raf/actions/runs/41911972796"
+  ],
+  "at": "2026-11-04T21:20:00Z"
+}
