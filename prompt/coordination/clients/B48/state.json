@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "username": "B48",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2058Z-B48-f24a",
+  "resumed_from_session": null,
+  "status": "active",
+  "base_sha": "8328a092bb0c58f89e0c92540c80eb3d520bce3b",
+  "last_commit": null,
+  "updated_at": "2026-11-04T20:58:00Z",
+  "tracks": [
+    "water-fft"
+  ],
+  "work_ids": [
+    "B48-20261104T2058Z-B48-f24a-fft-kernel-identity"
+  ],
+  "run_urls": [],
+  "next_step": "Investigate source-authenticated Dx11FFT runtime FindKernel/Dispatch indices versus serialized FFT programs. Distinct from B47/B49 ShaderLab pass integrity and B50 Steam identity work.",
+  "memory_path": "prompt/coordination/clients/B48/MEMORY.md"
+}
