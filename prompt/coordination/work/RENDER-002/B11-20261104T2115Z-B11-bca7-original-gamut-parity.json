@@ -6,7 +6,7 @@
   "issue_id": "RENDER-002",
   "track": "colors-materials",
   "approach": "Probe original m_ColorGamuts=[0] versus exported PlayerSettings; implement separate one-field fail-closed verifier from B04 color-space repair.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "801ae95b08e2495d46e2a440a413af6bf8303d3a",
   "intended_files": [
     "scripts/b11_restore_original_color_gamuts.py",
@@ -19,9 +19,19 @@
     "B44 original material colors",
     "B46 texture references"
   ],
-  "experiment_ids": [],
+  "experiment_ids": [
+    "20261104T2124Z-B11-original-gamut-local"
+  ],
   "run_urls": [],
-  "result": null,
-  "next_step": "Develop bounded parser and adversarial controls; integrate only corroborated serialization.",
-  "updated_at": "2026-11-04T21:15:00Z"
+  "result": {
+    "scope": "SOURCE_INTEGRATED only; no verified actual export mismatch or Android pixels",
+    "source_commit": "b26b942f2f054c32091c628177835cdc68594cda",
+    "local_synthetic_tests_passed": 12,
+    "remote_ci_result": null,
+    "original_source_b11_run": false,
+    "actual_unity_export_checked": false,
+    "device_checked": false
+  },
+  "next_step": "Evaluate aggregate RAFT_B11_ORIGINAL_COLOR_GAMUT in next independently justified authenticated actual export; falsify mismatch if already sRGB; Unity and device acceptance separate.",
+  "updated_at": "2026-11-04T21:29:00Z"
 }
