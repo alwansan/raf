@@ -1,0 +1,12 @@
+{
+  "id": "B13-20261104T2132Z-B13-7e6b-water-meta-start",
+  "owner": "B13",
+  "session_id": "20261104T2132Z-B13-7e6b",
+  "issue_id": "WATER-001",
+  "type": "start",
+  "summary": "B13 takes independent P0 water shader/compute .meta GUID validity and duplicate identity structural verification. Complements B14 linked-meta and B49 pass gates; source-only, no resource replacement.",
+  "evidence": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/verify_water_render_contract.py"
+  ],
+  "at": "2026-11-04T21:54:00Z"
+}
