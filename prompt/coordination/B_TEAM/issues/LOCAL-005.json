@@ -30,7 +30,9 @@
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B13_OFFLINE_SOURCE_TRANSACTION_2026-11-04.md",
     "https://github.com/alwansan/raf/commit/2f50776dfe51a5d856f3d0484a8b788ee09c04bd",
     "https://github.com/alwansan/raf/actions/runs/41920661518",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B22_LOCAL_RUNTIME_STAGING_INTEGRITY_2026-11-04.md"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B22_LOCAL_RUNTIME_STAGING_INTEGRITY_2026-11-04.md",
+    "https://github.com/alwansan/raf/actions/runs/41928767833",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B37_ORIGINAL_RGD_INHERITED_FIELD_2026-11-04.md"
   ],
   "remaining": [
     "Original Cheat.AllowCheatsForLocalPlayer SteamUser.GetSteamID direct object call now source-guarded in B50 2bb6c2; no native/phone verification. Do not infer all Steam callbacks are removed.",
@@ -41,13 +43,14 @@
     "B14 source staging safety: project/backup and ancestor symlinks now fail closed in SaveAndLoad and offline startup adapters; CI41918579185 32/32 synthetic passes. Actual SteamStats recovery and native .rgd create/save/reload not proven.",
     "B19 original SaveAndLoad path-adapter backup transaction source-fixed CI41918301442; not APK/device/.rgd evidence and not repair of Steam StoreStats exception.",
     "B13: Android offline source adapter backup/rollback SOURCE_FIXED with 16/16 synthetic CI twice, but true Unity/IL2CPP/phone local world create-save-reload unverified. A concurrent-tree loss was recovered at 0d31686f; recheck live files after later merges.",
-    "B22 operation instrumentation source/backup symlink and transactional rollback guard integrated and CI41920661518 SUCCESS synthetic; still no actual Unity/native stage or phone new world .rgd roundtrip; Steam stats B50 source fix not yet device confirmed."
+    "B22 operation instrumentation source/backup symlink and transactional rollback guard integrated and CI41920661518 SUCCESS synthetic; still no actual Unity/native stage or phone new world .rgd roundtrip; Steam stats B50 source fix not yet device confirmed.",
+    "B37 authentic original ZIP2 shipped Data.rgd metadata CI41928767833 PASS: exact source SHA, original NRBF root has one member/one eligible field but 0 matching names; no inherited fields after complete base chain; stored assembly simple name matches original Assembly-CSharp but version differs. This is real source compatibility evidence, not proof the APK world save is corrupt or that Android load/save failed. No original save schema edits, no Unity/device roundtrip; LOCAL-005 stays OPEN."
   ],
   "acceptance": [
     "دخول عالم جديد محلي قابل للعب بلا Steam أو سيرفر خارجي",
     "حفظ .rgd ثم إعادة تحميله فعلياً",
     "لا يكفي إخفاء رسالة الاتصال"
   ],
-  "updated_by": "B22",
-  "updated_at": "2026-11-04T22:09:00Z"
+  "updated_by": "B37",
+  "updated_at": "2026-11-04T22:54:00Z"
 }
