@@ -6,18 +6,21 @@
   "resumed_from_session": null,
   "status": "completed",
   "base_sha": "5fc5c4838247c33669bba8b67e988893f22cd28e",
-  "last_commit": "261a7f8786e673a7ff0786e3139ea03c370ee140",
-  "updated_at": "2026-11-04T22:35:00Z",
+  "last_commit": "436d3c70ac60dfa83c663c7a7efd0abb0cc7b01f",
+  "updated_at": "2026-11-04T22:40:10Z",
   "tracks": [
     "water-fft"
   ],
   "work_ids": [
-    "B20-20261104T2230Z-B20-6c9a-shaderlab-scope"
+    "B20-20261104T2230Z-B20-6c9a-shaderlab-scope",
+    "B20-20261104T2230Z-B20-6c9a-blur-atomic-rollback"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41926202371",
-    "https://github.com/alwansan/raf/actions/runs/41926043987"
+    "https://github.com/alwansan/raf/actions/runs/41926043987",
+    "https://github.com/alwansan/raf/actions/runs/41927169542",
+    "https://github.com/alwansan/raf/actions/runs/41927095232"
   ],
-  "next_step": "Validated scoped ShaderLab source gate; next engineering task: original authenticated water/FFT pass integration and Unity/device verification. No background execution.",
+  "next_step": "Both B20 source-only scopes complete and CI validated; next barrier authentic original Spectrum/Foam/FFT Unity/Adreno verification, not another gate census. Nothing runs asynchronously outside this turn.",
   "memory_path": "prompt/coordination/clients/B20/MEMORY.md"
 }
