@@ -1,3 +1,7 @@
 # B13 session 20261104T2247Z-B13-builtin-atomic
 
 Identity B13; branch feature/android-native-port only. Base HEAD 2fa36d110cbaf1693cd61fbede26e7ce3e8f8d36. Resume previous completed 20261104T2132Z-B13-7e6b. P0 RENDER-002, source provenance & atomic installation of authentic Unity builtin shader fallbacks. Scoped source path `scripts/restore_builtin_shaders.py`, tests `tests/test_restore_builtin_shaders.py`; no shader code/assets/GUID/audio/Settings/touch edits. Hypothesis: in-place `Path.write_bytes` can truncate originals on mid-write failure, and preflight source can be overwritten after concurrent mutation. Inject negative controls. STATUS active pending measured tests. Water and local-world P0 remain open; NOT_READY 0/3.
+
+## Final checkpoint — source-only RENDER-002 transaction
+
+Production source fix [20c94103](https://github.com/alwansan/raf/commit/20c94103edc9d10352560d473656f7004208268b), injected tests [253ea8e](https://github.com/alwansan/raf/commit/253ea8e536829b3c57a698cb68e09490d034d0a3); isolated CI [41928703661](https://github.com/alwansan/raf/actions/runs/41928703661) SUCCESS 14/14. Readback verifies exact backup before source modification; prepublication recheck refuses changed source; same-directory fsynced atomic swap avoids truncate; rollback protects prior source or retains backup if impossible. No original shader/FFT recovery, Unity compile, Android pixels, new .rgd/world or APK; WATER/RENDER/LOCAL OPEN and NOT_READY 0/3. See docs/B13_BUILTIN_SHADER_ATOMIC_INSTALL_2026-11-04.md. Session scope completed, no background execution.
