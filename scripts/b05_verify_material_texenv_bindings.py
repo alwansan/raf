@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 from pathlib import Path
 import re
 
@@ -43,6 +44,36 @@ def _export_pointer(value):
     return fid, guid.lower(), kind
 
 
+
+def _uv_transform(value):
+    """Extract UV scale/offset; reject partial and nonfinite values."""
+    names = {'m_Scale', 'm_Offset'} & set(value)
+    if not names:
+        return None
+    if names != {'m_Scale', 'm_Offset'}:
+        raise ValueError('Incomplete texture UV transform')
+    values = []
+    for key in ('m_Scale', 'm_Offset'):
+        vec = value[key]
+        if not isinstance(vec, dict) or set(vec) != {'x', 'y'}:
+            raise ValueError('Malformed texture UV vector')
+        for comp in ('x', 'y'):
+            num = vec[comp]
+            if type(num) not in (int, float) or not math.isfinite(num):
+                raise ValueError('Nonfinite texture UV component')
+            values.append(float(num))
+    return tuple(values)
+
+
+def _slot(value):
+    """Support pointer-only synthetic fixtures but report missing UV evidence."""
+    if not isinstance(value, tuple) or len(value) != 2:
+        raise ValueError('Invalid normalized Material texture slot')
+    if isinstance(value[0], tuple):
+        return value
+    return value, None
+
+
 def normalize_texenvs(entries, *, exported=False):
     """Keep private property names only in-memory; reject duplicates and drift."""
     if not isinstance(entries, list):
@@ -59,7 +90,7 @@ def normalize_texenvs(entries, *, exported=False):
             raise ValueError('Unsupported texture slot entry shape')
         if not isinstance(name, str) or not name or name in slots or not isinstance(val, dict) or 'm_Texture' not in val:
             raise ValueError('Malformed or duplicate Material texture slot')
-        slots[name] = _export_pointer(val['m_Texture']) if exported else _original_pointer(val['m_Texture'])
+        slots[name] = (_export_pointer(val['m_Texture']) if exported else _original_pointer(val['m_Texture']), _uv_transform(val))
     return slots
 
 
@@ -193,7 +224,8 @@ def compare(trace: dict, original: dict, exported: dict):
              missing_slots=0, extra_slots=0, null_to_bound=0, bound_to_null=0,
              exact_internal_targets_compared=0, wrong_internal_targets=0,
              unresolved_internal_targets=0, external_targets_not_proven=0,
-             source_null_bindings=0)
+             source_null_bindings=0, uv_transform_slots_compared=0,
+             uv_transform_missing_or_unproven=0, uv_transform_value_mismatches=0)
     for dst, src in mapped_materials.items():
         before, after = original[src], exported[dst]
         c['materials_compared'] += 1
@@ -202,8 +234,16 @@ def compare(trace: dict, original: dict, exported: dict):
         c['extra_slots'] += len(after.keys() - before.keys())
         for name in before.keys() & after.keys():
             c['slots_compared'] += 1
-            src_file, src_path = before[name]
-            dst_file, _, _ = actual = after[name]
+            original_pointer, src_uv = _slot(before[name])
+            exported_pointer, dst_uv = _slot(after[name])
+            src_file, src_path = original_pointer
+            dst_file, _, _ = actual = exported_pointer
+            if src_uv is None or dst_uv is None:
+                c['uv_transform_missing_or_unproven'] += 1
+            else:
+                c['uv_transform_slots_compared'] += 1
+                if any(not math.isclose(x, y, abs_tol=1e-6, rel_tol=1e-6) for x, y in zip(src_uv, dst_uv)):
+                    c['uv_transform_value_mismatches'] += 1
             src_bound = src_path != 0
             dst_bound = dst_file != 0
             if not src_bound:
@@ -222,7 +262,8 @@ def compare(trace: dict, original: dict, exported: dict):
                     else:
                         c['exact_internal_targets_compared'] += 1
                         c['wrong_internal_targets'] += expected != actual
-    c['source_slots_faithful_with_resolved_scope'] = not any(c[k] for k in ('missing_slots','extra_slots','null_to_bound','bound_to_null','wrong_internal_targets','unresolved_internal_targets'))
+    c['source_slots_faithful_with_resolved_scope'] = not any(c[k] for k in ('missing_slots','extra_slots','null_to_bound','bound_to_null','wrong_internal_targets','unresolved_internal_targets','uv_transform_value_mismatches'))
+    c['all_uv_transforms_verified'] = (c['uv_transform_slots_compared'] == c['slots_compared'] and c['uv_transform_missing_or_unproven'] == 0 and c['missing_slots'] == 0 and c['extra_slots'] == 0 and c['uv_transform_value_mismatches'] == 0)
     c['all_texture_targets_proven'] = bool(c['exact_internal_targets_compared']) and c['external_targets_not_proven'] == 0 and c['source_slots_faithful_with_resolved_scope']
     c.update(schema_version=1,excluded_engine_materials=excluded_engine,excluded_font_materials=excluded_font,
              original_values_or_names_disclosed=False,unity_shader_or_android_pixels_proven=False)
