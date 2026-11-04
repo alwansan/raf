@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "owner": "B38",
+  "session_id": "20261104T2142Z-B38-f31a",
+  "issue_id": "RENDER-002",
+  "hypothesis": "PyYAML safe_load silently last-wins duplicate nested mapping keys in B05 exported Material TexEnvs and can falsely pass a noncanonical export.",
+  "source_commit": "f3b709e47421e210fbb0863ac5b920a7d843e1cb",
+  "input_hashes": [],
+  "tool_versions": {
+    "Python": "3.11",
+    "PyYAML": "6.0.3"
+  },
+  "commands": [
+    "python -m py_compile scripts/b05_verify_material_texenv_bindings.py tests/test_b38_material_yaml_uniqueness.py",
+    "python -m unittest discover -s tests -p 'test_b05_verify_material_texenv_bindings.py' -v",
+    "python -m unittest discover -s tests -p 'test_b38_material_yaml_uniqueness.py' -v"
+  ],
+  "negative_controls": [
+    "duplicate root Material",
+    "duplicate m_SavedProperties",
+    "duplicate m_TexEnvs",
+    "duplicate pointer fileID",
+    "duplicate m_Scale.x",
+    "duplicate slot list separately rejected by normalizer"
+  ],
+  "workflow_path": ".github/workflows/raft-b38-material-yaml-uniqueness.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41919146580",
+  "artifact_urls": [],
+  "budget": "ubuntu-24.04, 8min timeout, no LFS, synthetic-only, no secret or artifact",
+  "status": "completed",
+  "observed_result": "safe_load last-wins reproduced locally. Final remote CI41919146580 SUCCESS 14/14 B05 plus 7/7 B38 controls. New strict parser prevents false-positive same-export YAML acceptance, but not a game rendering fix.",
+  "rejected_hypotheses": [
+    "Duplicate texture list entries are duplicated YAML mapping keys: false. Existing B05 normalizer rejects repeated list slot names."
+  ],
+  "limitations": [
+    "No actual original ZIP2 same-export comparison",
+    "No Unity or Adreno/device validation",
+    "RENDER-002 OPEN; NOT_READY 0/3"
+  ],
+  "integration_commit": "f3b709e47421e210fbb0863ac5b920a7d843e1cb",
+  "next_step": "Use source-authenticated private ZIP2 and same-instance Unity export trace; apply guard to actual materials and repair only proven drift."
+}
