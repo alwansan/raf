@@ -6,7 +6,7 @@
   "issue_id": "LOCAL-005",
   "track": "world-save-source-integrity",
   "approach": "Reject original SaveAndLoad.cs and .meta hardlinked aliases before backup and source mutation, with synthetic inode-alias negative regression.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "6663c6c817b25969d256e8a5e93cd8f6b578ff42",
   "intended_files": [
     "scripts/adapt_original_save_paths.py",
@@ -21,8 +21,10 @@
   "experiment_ids": [
     "B19-20261104T2256Z-hardlink-source-alias"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Add stat.st_nlink preflight, negative test, validate source-authentic CI.",
-  "updated_at": "2026-11-04T22:56:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41929845587"
+  ],
+  "result": "SOURCE_FIXED: inode-alias write primitive reproduced; guards added to original SaveAndLoad.cs and .meta before backup+mutate. CI41929845587 SUCCESS 15/15 save-path + 11/11 pinned-provider + 4/4 selector tests, authentic 16 source expressions and .NET10 14 path checks. Does not prove .rgd/device.",
+  "next_step": "Shift to distinct P0 water/local-world blocker; preserve tested source code and coordinate actual native world/.rgd verification when candidate ready.",
+  "updated_at": "2026-11-04T23:01:00Z"
 }
