@@ -1,0 +1,66 @@
+name: B14 LOCAL-005 authenticated original save call order (no Unity)
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - scripts/b14_original_save_call_order.py
+      - tests/test_b14_original_save_call_order.py
+      - .github/workflows/raft-b14-original-save-order.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: raft-b14-original-save-order-\${{ github.ref }}
+  cancel-in-progress: false
+  queue: max
+
+jobs:
+  original-save-order:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - name: Checkout pinned original managed provider without LFS
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests/test_b14_original_save_call_order.py
+            Raft/Raft_Data/Managed/Assembly-CSharp.dll
+      - name: Run synthetic source-free negative controls first
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_b14_original_save_call_order.py -v
+          python3 -m py_compile scripts/b14_original_save_call_order.py
+      - name: Prepare exact private ILSpy11.2 CSharp9 toolchain
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Authenticate original DLL and privately inspect SaveGame methods
+        shell: bash
+        env:
+          DOTNET_PROCESSOR_COUNT: '2'
+        run: |
+          set -euo pipefail
+          test "$(df -Pk . | awk 'NR==2 {print $4}')" -gt 1200000
+          python3 - <<'PY'
+          from pathlib import Path
+          from scripts.b07_probe_original_world_callbacks import assert_original_dll
+          print("B14 ORIGINAL_SAVE_PROVIDER sha256_verified=" + assert_original_dll(
+              Path("Raft/Raft_Data/Managed/Assembly-CSharp.dll")))
+          PY
+          mkdir -p "$RUNNER_TEMP/b14-ilspy" "$RUNNER_TEMP/b14-original"
+          dotnet tool install ilspycmd --version 11.2.0.10050 \
+            --tool-path "$RUNNER_TEMP/b14-ilspy" >/dev/null
+          timeout 360s "$RUNNER_TEMP/b14-ilspy/ilspycmd" -p -lv CSharp9_0 \
+            -o "$RUNNER_TEMP/b14-original" \
+            Raft/Raft_Data/Managed/Assembly-CSharp.dll \
+            > "$RUNNER_TEMP/b14-original-decompile.log" 2>&1
+          timeout 120s python3 -m scripts.b14_original_save_call_order \
+            --original-managed-dll Raft/Raft_Data/Managed/Assembly-CSharp.dll \
+            --source "$RUNNER_TEMP/b14-original"
+          # No extracted original game source or decompile logs are uploaded.
