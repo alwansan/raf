@@ -6,6 +6,8 @@ on:
     branches: [feature/android-native-port]
     paths:
       - scripts/b09_stage_original_spectrum.py
+      - scripts/b09_spectrum_topology_contract.py
+      - tests/test_b09_spectrum_topology_contract.py
       - tests/test_b09_stage_original_spectrum.py
       - .github/workflows/raft-b09-spectrum-extraction.yml
 
@@ -31,9 +33,10 @@ jobs:
         run: |
           set -euo pipefail
           python3 -m unittest discover -s tests -p test_b09_stage_original_spectrum.py -v
-          python3 -m py_compile scripts/b09_stage_original_spectrum.py
+          python3 -m unittest discover -s tests -p test_b09_spectrum_topology_contract.py -v
+          python3 -m py_compile scripts/b09_stage_original_spectrum.py scripts/b09_spectrum_topology_contract.py
 
-      - name: Retrieve only two exact original ZIP2 Shader owners
+      - name: Retrieve exact B17-verified original ZIP2 Spectrum owner
         uses: actions/checkout@v4
         with:
           repository: alwansan/raf
@@ -41,7 +44,6 @@ jobs:
           path: b09-pinned-zip2
           sparse-checkout: |
             RAFT_FILE_MANIFEST.tsv
-            Raft/Raft_Data/resources.assets/
             Raft/Raft_Data/sharedassets0.assets/
           sparse-checkout-cone-mode: false
           persist-credentials: false
@@ -54,7 +56,7 @@ jobs:
           df -h /
           dest="$RUNNER_TEMP/b09-original"
           mkdir -p "$dest"
-          for name in resources.assets sharedassets0.assets; do
+          for name in sharedassets0.assets; do
             chunks="$GITHUB_WORKSPACE/b09-pinned-zip2/Raft/Raft_Data/$name"
             test -d "$chunks" && test ! -L "$chunks"
             test -f "$chunks/part-00000"
@@ -64,8 +66,7 @@ jobs:
           python3 - <<'PY'
           import hashlib, pathlib, os
           pin={
-            'resources.assets': (111533516,'87493249f1adfc0c5eb8b82e4e199e208cd2c95eabe9796cab82116c4838595c'),
-            'sharedassets0.assets':(115978112,'0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3')}
+            'sharedassets0.assets': (115978112,'0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3')}
           root=pathlib.Path(os.environ['RUNNER_TEMP'])/'b09-original'
           for name,(size,sha) in pin.items():
             path=root/name
@@ -75,7 +76,7 @@ jobs:
                 digest.update(data)
             if path.stat().st_size!=size or digest.hexdigest()!=sha:
               raise SystemExit('Authenticated original ZIP2 provider mismatch')
-          print('RAFT_B09_ZIP2_SOURCE_AUTH owners=2 bytes=227511628 success=true')
+          print('RAFT_B09_ZIP2_SOURCE_AUTH owners=1 bytes=115978112 success=true')
           PY
 
       - name: Parse original serialized Spectrum programs without public source artifacts
