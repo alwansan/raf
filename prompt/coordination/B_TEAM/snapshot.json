@@ -264,7 +264,13 @@
         "https://github.com/alwansan/raf/actions/runs/41928592399",
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B10_VOLUMETRIC_NOTICE_TRANSACTION_2026-11-04.md",
         "https://github.com/alwansan/raf/commit/8f51565362f0d26d0d413cbf87f6e2e1c631883d",
-        "https://github.com/alwansan/raf/actions/runs/41929031892"
+        "https://github.com/alwansan/raf/actions/runs/41929031892",
+        "https://github.com/alwansan/raf/commit/20c94103edc9d10352560d473656f7004208268b",
+        "https://github.com/alwansan/raf/actions/runs/41928703661",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B13_BUILTIN_SHADER_ATOMIC_INSTALL_2026-11-04.md",
+        "https://github.com/alwansan/raf/actions/runs/41929077930",
+        "https://github.com/alwansan/raf/actions/runs/41928852363",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/B05-sharedassets6-texenv.json"
       ],
       "remaining": [
         "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -294,15 +300,17 @@
         "B11 resumed: UTF-8 byte-offset and ancestor symlink/traversal failure modes SOURCE_FIXED; 16 local synthetic tests with exact source Git blob pass (B04 stub, no original-source verification). Current remote CI/actual same-instance export/device colors still unknown. No claim of a white-material fix.",
         "B04 read-only Android quality tier/pixel light/texture AA/shadow per-scene snapshot source-integrated in original managed CI; requires new real APK86+ candidate and phone logs to compare with original W2 tiers; not proof quality mismatch or white-material fix.",
         "B10 continued: production volumetric Lighting BSD NOTICE now commits/rolls back in the same authenticated shader restoration transaction with fail-closed paths. B10 final source CI41928744660 SUCCESS 27 distinct tests and real pinned vendor temporary restoration CI41928592399 SUCCESS; no actual Raft Unity/Adreno/Android colors or original Material→Shader equivalence shown. RENDER-002 remains OPEN.",
-        "B15 continuation: corrected a provable false sampler-drift report for Unity TextureImporter mipBias=-100 unset, required matching B02/W1 paired trace export_instance when supplied, rejected arbitrary source folder aliases with trusted ZIP2 basename; CI41929031892 23/23 synthetic PASS. This is diagnostic source fidelity only: 0 real original-vs-export texture pairs tested, no Unity/GPU/device colors proof."
+        "B15 continuation: corrected a provable false sampler-drift report for Unity TextureImporter mipBias=-100 unset, required matching B02/W1 paired trace export_instance when supplied, rejected arbitrary source folder aliases with trusted ZIP2 basename; CI41929031892 23/23 synthetic PASS. This is diagnostic source fidelity only: 0 real original-vs-export texture pairs tested, no Unity/GPU/device colors proof.",
+        "B13 source-fixed builtin ShaderLab restorer safety: verified exact backups, concurrent source edit rejection and fsynced atomic replacement/rollback; CI41928703661 14/14 synthetic. NOT authentic shader programs or same-export Material/Unity/Adreno proof.",
+        "B05 actual original ZIP2 sharedassets6 source parser and bounded owner accessor PASS (CI41929077930, 41 real Materials/227 TexEnv slots/227 UV sets; 89 same-file,25 external,113 null), and scoped source-to-full-export comparator 18/18 synthetic CI41928852363. No genuine same-instance Unity export/Material PPtr+UV match or Adreno/phone color restoration yet. RENDER-002 OPEN."
       ],
       "acceptance": [
         "مطابقة روابط ومراجع الأصل",
         "مقارنةصوريةلنفسالمشهد",
         "نجاحعلىالهاتف"
       ],
-      "updated_by": "B15",
-      "updated_at": "2026-11-04T22:54:23.146Z",
+      "updated_by": "B05",
+      "updated_at": "2026-11-04T22:55:00Z",
       "_record_path": "issues/RENDER-002.json"
     },
     {
@@ -1191,6 +1199,34 @@
       "_record_path": "events/B05/20261104T2124Z-uv-fidelity-result.json"
     },
     {
+      "id": "20261104T2242Z-B05-auth-texenv-start",
+      "owner": "B05",
+      "session_id": "20261104T2242Z-B05-auth-texenv6",
+      "issue_id": "RENDER-002",
+      "type": "start",
+      "summary": "Resumed B05 source-to-export texture/UV scope on new session after user Stay in Chat; selected exact SHA-pinned sharedassets6 original Material field shape and safer selected-owner parity over full export as two independent work items.",
+      "evidence": [
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/work/RENDER-002/B05-20261104T2242Z-B05-auth-texenv6-original-texenv-shape.json"
+      ],
+      "at": "2026-11-04T22:42:00Z",
+      "_record_path": "events/B05/20261104T2242Z-auth-texenv-start.json"
+    },
+    {
+      "id": "20261104T2254Z-B05-auth-texenv-result",
+      "owner": "B05",
+      "session_id": "20261104T2242Z-B05-auth-texenv6",
+      "issue_id": "RENDER-002",
+      "type": "result",
+      "summary": "Verified authentic ZIP2 sharedassets6 original (6,607,272 bytes exact SHA): real 41 Material/227 TexEnv; 89 internal,25 external,113 null, 227 complete UV. Production selected source accessor and 7 controls succeeded CI41929077930; scoped original-to-full-export compare code 18 synthetic tests succeeded CI41928852363. No genuine export/device pixel acceptance, RENDER still OPEN.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41929077930",
+        "https://github.com/alwansan/raf/actions/runs/41928852363",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B05_MATERIAL_TEXENV_LINEAGE_2026-11-04.md"
+      ],
+      "at": "2026-11-04T22:54:00Z",
+      "_record_path": "events/B05/20261104T2254Z-auth-texenv-result.json"
+    },
+    {
       "id": "20261104T210726Z-B06-fmt6a2-dispatch-lexical-sourcefixed",
       "owner": "B06",
       "session_id": "20261104T210726Z-B06-fmt6a2",
@@ -1389,6 +1425,20 @@
       ],
       "at": "2026-11-04T22:54:29.467Z",
       "_record_path": "events/B08/20261104T2255Z-image-uses-start.json"
+    },
+    {
+      "id": "B08-20261104T2256Z-image-uses-result",
+      "owner": "B08",
+      "session_id": "20261104T2246Z-B08-7d2a",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "summary": "B08 authentic original all20 compiled FFT programs have both sampled SPIR-V descriptor candidate reads and storage write in executable image instructions, with all scanned operands uniquely traced; final CI41929513820 SUCCESS 20/20 synthetic controls and 20/20 original source programs. t0/t1 and Unity runtime index remains unproven. WATER-001 OPEN.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41929513820",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B08_FFT_DESCRIPTOR_ABI_2026-11-04.md"
+      ],
+      "at": "2026-11-04T22:56:25Z",
+      "_record_path": "events/B08/20261104T2256Z-image-uses-result.json"
     },
     {
       "id": "B09-spectrum-start-20261104T213740Z",
@@ -2054,6 +2104,19 @@
       "_record_path": "events/B19/20261104T2143Z-result.json"
     },
     {
+      "id": "B19-20261104T2256Z-save-hardlink-start",
+      "owner": "B19",
+      "session_id": "20261104T2256Z-B19-hl7",
+      "issue_id": "LOCAL-005",
+      "type": "start",
+      "summary": "B19 resumed: test hardlinked SaveAndLoad.cs source/.meta aliases bypassing symlink safety guard.",
+      "evidence": [
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/adapt_original_save_paths.py"
+      ],
+      "at": "2026-11-04T22:56:00Z",
+      "_record_path": "events/B19/20261104T2256Z-save-hardlink-start.json"
+    },
+    {
       "id": "B20-20261104T2230Z-start",
       "owner": "B20",
       "session_id": "20261104T2230Z-B20-6c9a",
@@ -2183,6 +2246,21 @@
       ],
       "at": "2026-11-04T22:13:00Z",
       "_record_path": "events/B21/20261104T2213Z-source-resources-integration.json"
+    },
+    {
+      "id": "B21-20261104T2257Z-light-export-start",
+      "owner": "B21",
+      "session_id": "20261104T2257Z-B21-8e72",
+      "issue_id": "RENDER-002",
+      "type": "start",
+      "summary": "Resumed B21 and selected optional same-instance source/export native Light class108 identity gap. Stage isolated SHA-pinned W1+B02 helper without editing shared tracer or changing Unity game; test public compiler and preserve original private source boundaries.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41922372594",
+        "https://github.com/alwansan/raf/actions/runs/41927712988",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/android-port/Experiments/ExportLineage/RaftExportLineage.cs"
+      ],
+      "at": "2026-11-04T22:57:00Z",
+      "_record_path": "events/B21/20261104T2257Z-start-light-export.json"
     },
     {
       "id": "b22-20261104T2134Z-B22-c91f-start",
@@ -2818,5 +2896,5 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "input_sha256": "814c604ebcf99dbb7c14fb479e8d7a8f5a35f07cd18450ede293cee7d80ff6dc"
+  "input_sha256": "dd035534e3ee665a02788a945d3e97f8f348f62b134d855e032c7437197060c2"
 }
