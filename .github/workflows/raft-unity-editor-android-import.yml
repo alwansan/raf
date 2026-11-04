@@ -263,6 +263,28 @@ jobs:
           echo "Source serialized files staged: $count"
           test "$count" -gt 110
           du -sh "$root"
+      - name: Stage authenticated engine resources into the export input set
+        shell: bash
+        run: |
+          set -euo pipefail
+          # The instrumented export must load exactly the engine provider files
+          # whose shaders are authenticated in w1-original; otherwise the
+          # original source graph and the same-instance trace diverge.
+          python3 - <<'PY'
+          import os,shutil
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import PINS, fingerprint
+          source_root=Path(os.environ['RUNNER_TEMP'])/'w1-original/Raft_Data/Resources'
+          target_root=Path(os.environ['RUNNER_TEMP'])/'input/Raft_Data/Resources'
+          target_root.mkdir(parents=True, exist_ok=True)
+          for name in ('unity default resources','unity_builtin_extra'):
+              relative='Raft_Data/Resources/'+name
+              source=source_root/name
+              if fingerprint(source)!=PINS[relative]:
+                  raise SystemExit('Engine resource provider fingerprint mismatch')
+              shutil.copyfile(source, target_root/name)
+              print('RAFT_ENGINE_RESOURCE_STAGED size=%d sha256Verified=true' % PINS[relative][0])
+          PY
       - name: Restore every pinned external Mesh buffer while retaining original serialized identities
         if: ${{ (github.event_name == 'workflow_dispatch' && inputs.build_mode == 'native') || (github.event_name == 'push' && contains(github.event.head_commit.message, '[raft-native-build]')) }}
         env:
@@ -277,33 +299,72 @@ jobs:
             --root "$RUNNER_TEMP/input/Raft_Data" --manifest config/mesh-stream-ranges.json \
             --cache "$RUNNER_TEMP/verified-original-mesh-ranges"
           python3 -m scripts.audit_original_mesh_positions --root "$RUNNER_TEMP/input/Raft_Data" --manifest config/mesh-stream-ranges.json
-      - name: Obtain SHA256-pinned AssetRipperCLI v1.0.1
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - uses: actions/checkout@v4
+        with:
+          repository: nowl-it/AssetRipperCLI
+          ref: 036098ab525a3f9f693dc101edeb21faad4d32d8
+          path: ar-host
+          persist-credentials: false
+          sparse-checkout: Source
+      - name: Build read-only instrumentation into the pinned public exporter
         shell: bash
         run: |
           set -euo pipefail
-          curl -fL --retry 2 --max-time 240 \
-            'https://github.com/nowl-it/AssetRipperCLI/releases/download/v1.0.1/AssetRipper_linux_x64.zip' \
-            -o "$RUNNER_TEMP/assetripper.zip"
-          echo "b48292e40948ce2634e9187d4724fb4f45c01fa6f4fea2a5f4775aa611def17b  $RUNNER_TEMP/assetripper.zip" | sha256sum -c -
-          mkdir -p "$RUNNER_TEMP/ar"
-          unzip -q "$RUNNER_TEMP/assetripper.zip" -d "$RUNNER_TEMP/ar"
-          chmod +x "$RUNNER_TEMP/ar/AssetRipper.GUI.Free"
-          python3 -m scripts.configure_assetripper_export --directory "$RUNNER_TEMP/ar"
+          python3 -m scripts.patch_export_lineage --tool-source ar-host --helper android-port/Experiments/ExportLineage/RaftExportLineage.cs
+          # Publish the CLI and its matching transitive assemblies together;
+          # replacing one DLL cannot instrument an AOT or bundled executable.
+          dotnet publish android-port/Experiments/ExportLineage/ExportLineage.csproj -c Release -p:PublishAot=false -p:PublishTrimmed=false -p:EnableTrimAnalyzer=false -p:EnableAotAnalyzer=false --self-contained false -o "$RUNNER_TEMP/ar" > "$RUNNER_TEMP/public-tool-build.log" 2>&1 || { tail -60 "$RUNNER_TEMP/public-tool-build.log"; exit 1; }
+          # No original inputs are present in this smoke command; diagnostics
+          # therefore contain public tool types/options only.
+          dotnet "$RUNNER_TEMP/ar/ExportLineage.dll" --probe-tool > "$RUNNER_TEMP/public-tool-smoke.log" 2>&1 || { cat "$RUNNER_TEMP/public-tool-smoke.log"; exit 1; }
       - name: Export 40 scenes into a Unity Editor project with correct MonoScript metadata
         env:
           DOTNET_PROCESSOR_COUNT: '2'
+          RAFT_PRIVATE_EXPORT_LINEAGE: ${{ runner.temp }}/private-export-lineage.json
         shell: bash
         run: |
           set -euo pipefail
-          timeout 1200s "$RUNNER_TEMP/ar/AssetRipper.GUI.Free" \
-            --cli --input "$RUNNER_TEMP/input" \
-            --output "$RUNNER_TEMP/project" --mode unity \
-            --script-content-level Level1 --ignore-streaming-assets \
-            > "$RUNNER_TEMP/export.log" 2>&1
+          timeout 1200s dotnet "$RUNNER_TEMP/ar/ExportLineage.dll" "$RUNNER_TEMP/input" "$RUNNER_TEMP/project" --full-install > "$RUNNER_TEMP/export.log" 2>&1 || {
+            python3 - <<'PYDIAG'
+          import os,re,json
+          from pathlib import Path
+          text=(Path(os.environ['RUNNER_TEMP'])/'export.log').read_text(errors='replace')
+          # Keep original filenames/names and all log text private.
+          report={'export_completed':False,'exception_types':sorted(set(re.findall(r'\b(?:System|AssetRipper)\.[A-Za-z.]+Exception\b',text))),
+                  'has_missing_assembly': 'Could not load file or assembly' in text,
+                  'argument_error': bool(re.search(r'unknown argument|unexpected argument|missing value|requires a value', text, re.I)),
+                  'loading_started':'Processing loaded assets' in text,'export_started':'Starting export' in text,
+                  'log_bytes':len(text.encode()),'trace_created':(Path(os.environ['RUNNER_TEMP'])/'private-export-lineage.json').exists()}
+          print('RAFT_EXPORT_FAILURE '+json.dumps(report,sort_keys=True))
+          PYDIAG
+            exit 1
+          }
+          test -s "$RUNNER_TEMP/private-export-lineage.json"
           python3 -m scripts.verify_assetripper_script_import --log "$RUNNER_TEMP/export.log"
           test -d "$RUNNER_TEMP/project/ExportedProject/Assets"
           test -d "$RUNNER_TEMP/project/ExportedProject/ProjectSettings"
           df -h /
+      - name: Re-read exact embedded engine database for the production builtin gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          dotnet run --project android-port/Experiments/W1EngineDatabase/W1EngineDatabase.csproj -c Release -- "$RUNNER_TEMP/private-engine-database.json" "$RUNNER_TEMP/engine-reader-summary.json"
+      - name: Restore exact-name Unity 2021.3.45f2 built-in material and particle programs with original GUIDs
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Runs at the complete export boundary, before shader restorers add
+          # files, so the same-instance trace joins the unmodified material
+          # YAML; engine ownership is re-read from originals, database and
+          # actual export instead of trusting a summary receipt.
+          python3 -m scripts.restore_builtin_shaders --project "$RUNNER_TEMP/project/ExportedProject" --backup "$RUNNER_TEMP/original-builtin-shaders" \
+            --engine-source "$RUNNER_TEMP/w1-original" \
+            --private-export-trace "$RUNNER_TEMP/private-export-lineage.json" \
+            --private-engine-database "$RUNNER_TEMP/private-engine-database.json" \
+            --engine-reader-summary "$RUNNER_TEMP/engine-reader-summary.json"
       - name: Restore scene-owned ScriptableObjects before Unity can import invalid cross-scene assets
         shell: bash
         run: |
@@ -435,11 +496,6 @@ jobs:
             ${{ runner.temp }}/w1-native-water-contract-summary.json
           if-no-files-found: ignore
           retention-days: 7
-      - name: Restore exact-name Unity 2021.3.45f2 built-in material and particle programs with original GUIDs
-        shell: bash
-        run: |
-          set -euo pipefail
-          python3 -m scripts.restore_builtin_shaders --project "$RUNNER_TEMP/project/ExportedProject" --backup "$RUNNER_TEMP/original-builtin-shaders"
       - name: Fail early if authentic water shaders and FFT kernel source are still missing
         shell: bash
         run: |
