@@ -1,0 +1,14 @@
+{
+  "id": "20261104T210726Z-B06-fmt6a2-fft-capabilities-sourcefixed",
+  "owner": "B06",
+  "session_id": "20261104T210726Z-B06-fmt6a2",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Added startup-only original FFT format/render-target random-write + compute-group capability logging to AndroidRuntimeLog; real C# logger compiled and executed against synthetic failure controls, CI SUCCESS. No Unity/device claim.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/24f360712732c2dd4ef056751687ac3c1099e7fa",
+    "https://github.com/alwansan/raf/actions/runs/41913854292",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B06_FFT_ANDROID_CAPABILITY_PROBE_2026-11-04.md"
+  ],
+  "at": "2026-11-04T21:14:08.582Z"
+}
