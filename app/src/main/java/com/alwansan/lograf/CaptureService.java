@@ -35,6 +35,7 @@ public final class CaptureService extends Service {
     private final AtomicLong pendingBytes=new AtomicLong(),peakPendingBytes=new AtomicLong();
     private final AtomicLong receivedBatches=new AtomicLong(),writtenBatches=new AtomicLong();
     private final AtomicLong failedBatches=new AtomicLong(),maxQueueDelayMs=new AtomicLong();
+    private final AtomicLong markerEnqueued=new AtomicLong(),markerWritten=new AtomicLong();
     private volatile Thread writerThread;
     private volatile String writerFailure="";
     private volatile String stopExitEvidence="";
@@ -47,7 +48,7 @@ public final class CaptureService extends Service {
         LogChunk(String source,String content){
             this.source=source;
             this.content=content;
-            this.bytes=("METRICS".equals(source)?content:"["+source+"]\n"+content)
+            this.bytes=(("METRICS".equals(source) || "MARKER".equals(source))?content:"["+source+"]\n"+content)
                     .getBytes(StandardCharsets.UTF_8);
             this.enqueuedAt=SystemClock.elapsedRealtime();
         }
@@ -67,21 +68,25 @@ public final class CaptureService extends Service {
         }
         peakPendingBytes.accumulateAndGet(pending,Math::max);
         boolean added=false;
-        try {added=writeQueue.offer(chunk,1200,TimeUnit.MILLISECONDS);}
+        try {added=writeQueue.offer(chunk,"MARKER".equals(source)?0:1200,TimeUnit.MILLISECONDS);}
         catch(InterruptedException e){Thread.currentThread().interrupt();}
         if(!added){
             pendingBytes.addAndGet(-chunk.bytes.length);
             failedBatches.incrementAndGet();
             fatal("LOG BUFFER OVERFLOW: writer fell behind SAF storage; recording stopped "+
                     "with an explicit gap warning.");
-        }else receivedBatches.incrementAndGet();
+        }else {
+            receivedBatches.incrementAndGet();
+            if("MARKER".equals(source))markerEnqueued.incrementAndGet();
+        }
     }
 
     private void startWriter() {
         writeQueue.clear();
         pendingBytes.set(0);peakPendingBytes.set(0);
         receivedBatches.set(0);writtenBatches.set(0);failedBatches.set(0);
-        maxQueueDelayMs.set(0);writerFailure="";stopExitEvidence="";
+        maxQueueDelayMs.set(0);markerEnqueued.set(0);markerWritten.set(0);
+        writerFailure="";stopExitEvidence="";
         sessionMetrics.reset();
         writerThread=new Thread(()->{
             // Stop only after remote.stop() has finished sending tail batches
@@ -117,12 +122,16 @@ public final class CaptureService extends Service {
                                 openSegment();
                             output.write(item.bytes);
                             segmentBytes+=item.bytes.length;totalBytes+=item.bytes.length;
-                            if(SystemClock.elapsedRealtime()-lastWriterFlush>1200){
+                            if("MARKER".equals(item.source) || SystemClock.elapsedRealtime()-lastWriterFlush>1200){
                                 output.flush();
                                 lastWriterFlush=SystemClock.elapsedRealtime();
                             }
                         }
                         writtenBatches.incrementAndGet();
+                        if("MARKER".equals(item.source)){
+                            markerWritten.incrementAndGet();
+                            saveStatus("Issue marker written to session log");
+                        }
                         if(System.currentTimeMillis()-lastStatus>1500){
                             Config.prefs(CaptureService.this).edit()
                                     .putLong("writer_pending_bytes",pendingBytes.get())
@@ -297,16 +306,14 @@ public final class CaptureService extends Service {
     }
 
     private void appendMarker() {
-        synchronized(writeLock) {
-            if(!active || output==null)return;
-            try {
-                String marker="[USER MARKER] "+new Date().toString()+" : User noticed an issue while playing Raft\n";
-                byte[] data=marker.getBytes(StandardCharsets.UTF_8);
-                if(segmentBytes+data.length>SEGMENT_BYTES)openSegment();
-                output.write(data);output.flush();segmentBytes+=data.length;totalBytes+=data.length;
-                saveStatus("Issue marker saved at "+new Date());
-            }catch(Exception e){fatal("Cannot save marker: "+e);}
-        }
+        // Do not write directly to SAF ahead of the reader FIFO. A marker
+        // captures both wall and monotonic time so offline analysis can align
+        // it with raw Logcat even when a remote batch arrives afterwards.
+        // A single marker uses a non-blocking enqueue on the service thread.
+        if(!active || stopping || failed)return;
+        long unixMs=System.currentTimeMillis();
+        long elapsedMs=SystemClock.elapsedRealtime();
+        enqueue("MARKER",CaptureEventMarker.encode(unixMs,elapsedMs));
     }
 
     private void openMetricSegment() throws IOException {
@@ -355,6 +362,9 @@ public final class CaptureService extends Service {
             report.put("writer_received_batches",receivedBatches.get());
             report.put("writer_written_batches",writtenBatches.get());
             report.put("writer_failed_batches",failedBatches.get());
+            report.put("user_markers_enqueued",markerEnqueued.get());
+            report.put("user_markers_written",markerWritten.get());
+            report.put("user_marker_delivery_note","Accepted markers share the FIFO with Logcat batches; remote batches can arrive after a marker with older event timestamps");
             report.put("writer_pending_bytes_at_stop",pendingBytes.get());
             report.put("writer_peak_pending_bytes",peakPendingBytes.get());
             report.put("writer_max_queue_delay_ms",maxQueueDelayMs.get());

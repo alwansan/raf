@@ -87,6 +87,15 @@ public final class DiagnosticRegression {
         eq(PidProbeObservation.UNKNOWN,PidProbeObservation.gamePid(-1,"main_cmdline_unverified"),"cmdline inaccessible unknown");
         eq(PidProbeObservation.NOT_RUNNING,PidProbeObservation.gamePid(-1,"pidof_empty"),"verified no process");
         eq(2345,PidProbeObservation.gamePid(2345,"main_pid_verified"),"verified process");
-        System.out.println("Diagnostic regression PASS: FFT/OBB/FM​​OD/PSS/PID/gameplay categories + 17178-event replay");
+        String marker=CaptureEventMarker.encode(1793816123000L,104500L);
+        if(!marker.startsWith("[USER MARKER] timestamp_unix_ms=1793816123000 elapsed_realtime_ms=104500"))
+            throw new AssertionError("Marker must include explicit wall/monotonic time");
+        if(marker.contains("password") || marker.contains("/Android/"))
+            throw new AssertionError("No private user strings may be recorded in marker");
+        try {
+            CaptureEventMarker.encode(0L,4L);
+            throw new AssertionError("Invalid wall time should be rejected");
+        }catch(IllegalArgumentException expected){}
+        System.out.println("Diagnostic regression PASS: FFT/OBB/FM​​OD/PSS/PID/gameplay categories, FIFO marker + 17178-event replay");
     }
 }
