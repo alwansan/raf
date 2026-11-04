@@ -1,0 +1,62 @@
+name: B37 PERF-007 authenticated original cursor callsite probe
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/b37_probe_original_cursor.py
+      - tests/test_b37_probe_original_cursor.py
+      - .github/workflows/raft-b37-original-cursor-probe.yml
+permissions:
+  contents: read
+concurrency:
+  group: raft-b37-original-cursor-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  original-cursor:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests/test_b37_probe_original_cursor.py
+            Raft/Raft_Data/Managed/Assembly-CSharp.dll
+      - name: Source-free negative controls and bounded storage budget
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_b37_probe_original_cursor.py -v
+          python3 - <<'PY'
+          import shutil
+          assert shutil.disk_usage(".").free > 2 * 1024**3
+          PY
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Private original source, authentic SHA and aggregate Cursor.SetCursor inventory
+        shell: bash
+        env:
+          DOTNET_PROCESSOR_COUNT: '2'
+          DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/b37/ilspy" "$RUNNER_TEMP/b37/original"
+          dotnet tool install ilspycmd --version 11.2.0.10050 --tool-path "$RUNNER_TEMP/b37/ilspy" >/dev/null
+          timeout 360s "$RUNNER_TEMP/b37/ilspy/ilspycmd" -p -lv CSharp9_0 \
+            -o "$RUNNER_TEMP/b37/original" Raft/Raft_Data/Managed/Assembly-CSharp.dll \
+            > "$RUNNER_TEMP/b37/private-decompile.log" 2>&1
+          python3 -m scripts.b37_probe_original_cursor \
+            --original-managed-dll Raft/Raft_Data/Managed/Assembly-CSharp.dll \
+            --source "$RUNNER_TEMP/b37/original" --out "$RUNNER_TEMP/b37-public-summary.json"
+          # Private original source and ILSpy/compiler logs are never uploaded.
+      - name: Upload ONLY count and digest evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: b37-cursor-source-summary-${{ github.sha }}
+          path: ${{ runner.temp }}/b37-public-summary.json
+          retention-days: 7
+          if-no-files-found: error
