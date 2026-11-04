@@ -1,0 +1,14 @@
+{
+  "id": "B03-20261104T2111Z-archive-result",
+  "owner": "B03",
+  "session_id": "20261104T2101Z-B03-a419",
+  "issue_id": "SOURCE-ARCHIVE-001",
+  "type": "result",
+  "summary": "Added strict SHA-pinned raw/singlepart multipart source staging intake; 16 synthetic CI tests pass; real private archive payload remains unverified and issue OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/e8c312541b8139f2e889ff8921de8128146dcc84",
+    "https://github.com/alwansan/raf/actions/runs/41913405572",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B03_ARCHIVE_PAYLOAD_VERIFICATION_2026-11-04.md"
+  ],
+  "at": "2026-11-04T21:11:45.687Z"
+}
