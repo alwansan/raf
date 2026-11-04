@@ -195,9 +195,40 @@ def main():
             "numeric_slot_parity": report["compiled_vs_serialized_numeric_register_parity"],
             "game_assets_modified": False, "device_verified": False}, sort_keys=True))
         return 0 if report["compiled_vs_serialized_numeric_register_parity"] else 3
-    except (ValueError, TypeError, KeyError, OSError, struct.error):
+    except (ValueError, TypeError, KeyError, OSError, struct.error) as error:
+        # Only fixed, source-free parser diagnostics. Never display unknown
+        # serializer metadata, program strings, paths or exception tracebacks.
+        safe_codes = {
+            "Unbounded or noninteger resource register": "BAD_SLOT",
+            "Unique aligned executable shader stage required": "EXEC_STAGE",
+            "Compiled shader stage/version/length mismatch": "EXEC_VERSION",
+            "Invalid executable instruction boundary": "EXEC_BOUNDARY",
+            "Unsupported compiled resource declaration": "EXEC_EXTRA_RESOURCE",
+            "Unexpected resource declaration encoding": "EXEC_DECLARATION",
+            "Unsupported register indexing declaration": "EXEC_INDEX_FORM",
+            "Duplicate compiled resource register": "EXEC_DUPLICATE",
+            "Invalid compiled sampler mode": "EXEC_SAMPLER_MODE",
+            "Invalid compiled texture/UAV dimension": "EXEC_DIMENSION",
+            "Missing original Unity common resource metadata": "UNITY_COMMON",
+            "Missing or ambiguous serialized resource table": "UNITY_TABLE",
+            "Malformed serialized resource rows": "UNITY_ROWS",
+            "Malformed serialized resource entry": "UNITY_ROW",
+            "Duplicate serialized resource slot": "UNITY_DUPLICATE",
+            "Invalid original texture sampler index": "UNITY_SAMPLER",
+            "Unsafe original source path": "SOURCE_PATH",
+            "Missing unique pinned original D3D11 platform": "SOURCE_PLATFORM",
+            "Pinned original Spectrum passes drifted": "SOURCE_PASSES",
+            "Missing original program stage": "SOURCE_STAGE",
+            "Duplicated source variant permutation": "SOURCE_VARIANT_DUPLICATE",
+            "Original stage permutation count drifted": "SOURCE_VARIANT_COUNT",
+            "Unpaired original Spectrum permutation keys": "SOURCE_PAIRING",
+            "Refuse to overwrite report": "REPORT_EXISTS",
+        }
         print("RAFT_B17_COMPILED_BINDINGS " + json.dumps({
-            "status": "REJECTED", "private_content_disclosed": False,
+            "status": "REJECTED",
+            "reason_code": safe_codes.get(str(error), "UPSTREAM_OR_UNMODELED"),
+            "exception_class": type(error).__name__,
+            "private_content_disclosed": False,
             "numeric_register_parity_verified": False}, sort_keys=True))
         return 2
 
