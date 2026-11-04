@@ -1,0 +1,13 @@
+{
+  "id": "B01-20261104T2116Z-fft-lexical-result",
+  "owner": "B01",
+  "session_id": "20261104T2105Z-B01-water-contract",
+  "issue_id": "WATER-001",
+  "type": "integration",
+  "summary": "Source-level FFT CSharp scanner now masks comments and strings before discovering compute calls; negative tests added. Final managed CI not yet complete, no kernel restoration/device claims.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/938dd139de855d41614f046cb8c2a6871501b2e5",
+    "https://github.com/alwansan/raf/actions/runs/41911972796"
+  ],
+  "at": "2026-11-04T21:16:00Z"
+}
