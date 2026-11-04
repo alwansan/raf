@@ -6,7 +6,7 @@
   "issue_id": "LOCAL-005",
   "track": "world-save",
   "approach": "Fix non-atomic backup behavior in native Android offline managed-source adapter, preserving original CSharp and metadata.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "e6484daffbaef7dca57da63e1cb4869f9095078a",
   "intended_files": [
     "scripts/adapt_android_offline_startup.py",
@@ -18,9 +18,21 @@
     "B07 callback",
     "B24 managed parity"
   ],
-  "experiment_ids": [],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement synthetic fault injection and scoped rollback then test.",
-  "updated_at": "2026-11-04T21:32:00Z"
+  "experiment_ids": [
+    "20261104T2132Z-B13-7e6b-backup-transaction"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41917684686",
+    "https://github.com/alwansan/raf/actions/runs/41918235557"
+  ],
+  "result": {
+    "scope": "SOURCE_FIXED",
+    "source_commit": "4ba1439378e2ea8133d0afb9d99e5de1acce0d43",
+    "restoration_commit": "0d31686f58b0276c089425e764fa5e3b377d38e6",
+    "tests": "16/16 source-free passed twice",
+    "device": "NOT_TESTED",
+    "gameplay": "NOT_VERIFIED"
+  },
+  "next_step": "Verify live B13 three paths and investigate unrelated water/render issue, avoid B19/B14 work.",
+  "updated_at": "2026-11-04T21:46:00Z"
 }
