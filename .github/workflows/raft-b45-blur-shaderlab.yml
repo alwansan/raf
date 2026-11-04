@@ -6,6 +6,7 @@ on:
       - '.github/workflows/raft-b45-blur-shaderlab.yml'
       - 'scripts/b45_blur_wrapper_preflight.py'
       - 'scripts/b45_blur_properties.py'
+      - 'scripts/b45_stage_original_blur.py'
       - 'scripts/a12_build_original_blur_wrapper.py'
       - 'tests/test_b45_blur_wrapper_preflight.py'
       - 'tests/test_b45_blur_properties.py'
@@ -86,7 +87,7 @@ jobs:
           set -euo pipefail
           export VK_DRIVER_FILES="$(find /usr/share/vulkan/icd.d -maxdepth 1 -name '*lvp*.json' -print -quit)"
           test -n "$VK_DRIVER_FILES"
-          timeout 600s python3 -m scripts.w5_blur_recovery --source "$RUNNER_TEMP/w1-original/Raft_Data" --repo . --runner "$RUNNER_TEMP/b45/w5-raster" --out "$RUNNER_TEMP/b45/blur-raster.json"
+          timeout 600s python3 -m scripts.b45_stage_original_blur --source "$RUNNER_TEMP/w1-original/Raft_Data" --repo . --runner "$RUNNER_TEMP/b45/w5-raster" --private-shader "$RUNNER_TEMP/b45/private-original-blur.shader" --out "$RUNNER_TEMP/b45/blur-raster.json"
       - name: Publish aggregate-only classification
         if: always()
         uses: actions/upload-artifact@v4
