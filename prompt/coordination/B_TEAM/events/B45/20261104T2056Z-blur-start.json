@@ -1,0 +1,13 @@
+{
+  "id": "B45-20261104-blur-start",
+  "owner": "B45",
+  "session_id": "20261104T2056Z-B45-f0c1",
+  "issue_id": "WATER-001",
+  "type": "start",
+  "summary": "Started SHA-pinned original Blur post-raster ShaderLab state diagnostic; work/test isolation from B49 and B50.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41821419074",
+    "https://github.com/alwansan/raf/actions/runs/41911866092"
+  ],
+  "at": "2026-11-04T20:56:00Z"
+}
