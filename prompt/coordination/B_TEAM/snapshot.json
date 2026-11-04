@@ -251,7 +251,15 @@
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B14_SCENE_BOUNDARY_RENDER_TELEMETRY_CI_2026-11-04.md",
         "https://github.com/alwansan/raf/commit/72839f79701b617cea37832bfb924c2d865521a9",
         "https://github.com/alwansan/raf/commit/7363a3b444347ea14c1bf3a08c13c5cd764a2095",
-        "https://github.com/alwansan/raf/commit/87e6045d6198ce05b9e644414b2bd122ded6dab7"
+        "https://github.com/alwansan/raf/commit/87e6045d6198ce05b9e644414b2bd122ded6dab7",
+        "https://github.com/alwansan/raf/actions/runs/41928607504",
+        "https://github.com/alwansan/raf/actions/runs/41928576383",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B04_ORIGINAL_QUALITY_RUNTIME_EVIDENCE_2026-11-04.md",
+        "https://github.com/alwansan/raf/commit/2a38dfb2d6ffe3af50f5f3a04bd2fc3ca3524bda",
+        "https://github.com/alwansan/raf/commit/b6efa50948cb388d1a006d482676d6f693bb51d6",
+        "https://github.com/alwansan/raf/actions/runs/41928744660",
+        "https://github.com/alwansan/raf/actions/runs/41928592399",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B10_VOLUMETRIC_NOTICE_TRANSACTION_2026-11-04.md"
       ],
       "remaining": [
         "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -278,15 +286,17 @@
         "B21 follow-on CI41922372594 source-authentic original Light components: level0 and level1 each have one enabled local-owner-valid Light with finite colored RGB and positive intensity/range; level2..5 none. 16+18 tests PASS, 6 original SHA reverified. Same-instance Unity export light identity/values and Adreno pixels not compared, RENDER-002 OPEN; do not infer lighting was restored.",
         "B02 real texture lineage gap partly closed in source: pinned optional class28 exporter hook compiled with original W1 class21/48 preserved; importer reads nested mipmaps.sRGBTexture and derives true typed colorspace from SHA source. Still requires one actual same-instance original/export trace and Unity/device pixel evidence; no Raft asset was changed.",
         "B14 repaired stale test contract for B12 instance SceneLoaded and bounded renderer/material/mesh snapshot; offline platform CI41928677980 SUCCESS. This is source diagnostic CI parity, not actual original colors/pixel proof.",
-        "B11 resumed: UTF-8 byte-offset and ancestor symlink/traversal failure modes SOURCE_FIXED; 16 local synthetic tests with exact source Git blob pass (B04 stub, no original-source verification). Current remote CI/actual same-instance export/device colors still unknown. No claim of a white-material fix."
+        "B11 resumed: UTF-8 byte-offset and ancestor symlink/traversal failure modes SOURCE_FIXED; 16 local synthetic tests with exact source Git blob pass (B04 stub, no original-source verification). Current remote CI/actual same-instance export/device colors still unknown. No claim of a white-material fix.",
+        "B04 read-only Android quality tier/pixel light/texture AA/shadow per-scene snapshot source-integrated in original managed CI; requires new real APK86+ candidate and phone logs to compare with original W2 tiers; not proof quality mismatch or white-material fix.",
+        "B10 continued: production volumetric Lighting BSD NOTICE now commits/rolls back in the same authenticated shader restoration transaction with fail-closed paths. B10 final source CI41928744660 SUCCESS 27 distinct tests and real pinned vendor temporary restoration CI41928592399 SUCCESS; no actual Raft Unity/Adreno/Android colors or original Material→Shader equivalence shown. RENDER-002 remains OPEN."
       ],
       "acceptance": [
         "مطابقة روابط ومراجع الأصل",
         "مقارنةصوريةلنفسالمشهد",
         "نجاحعلىالهاتف"
       ],
-      "updated_by": "B11",
-      "updated_at": "2026-11-04T22:52:00Z",
+      "updated_by": "B10",
+      "updated_at": "2026-11-04T22:53:56.979Z",
       "_record_path": "issues/RENDER-002.json"
     },
     {
@@ -1771,6 +1781,22 @@
       "_record_path": "events/B15/20261104T224800Z-sampler-defaults-start.json"
     },
     {
+      "id": "20261104T225300Z-sampler-defaults-result",
+      "owner": "B15",
+      "session_id": "20261104T224800Z-B15-defaults-32f1",
+      "issue_id": "RENDER-002",
+      "type": "result",
+      "summary": "B15 source-fixed Unity mipMapBias=-100 unset importer false mismatch, B02/W1 export_instance coherence and original source-owner basename alias; CI41929031892 23/23 synthetic PASS. No real Raft original/export texture or GPU result; RENDER-002 OPEN, NOT_READY0/3.",
+      "evidence": [
+        "https://docs.unity.cn/Documentation/ScriptReference/TextureImporter-mipMapBias.html",
+        "https://github.com/alwansan/raf/commit/8f51565362f0d26d0d413cbf87f6e2e1c631883d",
+        "https://github.com/alwansan/raf/actions/runs/41929031892",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B15_TEXTURE_SAMPLER_PARITY_2026-11-04.md"
+      ],
+      "at": "2026-11-04T22:53:55.450Z",
+      "_record_path": "events/B15/20261104T225300Z-sampler-defaults-result.json"
+    },
+    {
       "id": "B16-20261104T2151Z-kernel-conditional-start",
       "owner": "B16",
       "session_id": "20261104T2151Z-B16-6e2a",
@@ -2330,6 +2356,22 @@
       "_record_path": "events/B37/20261104T2244Z-rgd-root-start.json"
     },
     {
+      "id": "20261104T2255Z-rgd-original-result",
+      "owner": "B37",
+      "session_id": "20261104T2226Z-B37-cursor01",
+      "issue_id": "LOCAL-005",
+      "type": "result",
+      "summary": "B37 second independent source-authentic original ZIP2 RGD study completed, final CI41928767833 SUCCESS: original Data.rgd one Serializable root member, one direct eligible field zero direct name match, zero inherited fields and complete base chain; original serialized assembly name matches but version differs. Four negative controls passed. No unsafe BinaryFormatter, no save schema rewrite, no Android/Unity world save/reload or readiness claim. This does not establish corruption.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41928767833",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B37_ORIGINAL_RGD_INHERITED_FIELD_2026-11-04.md",
+        "https://github.com/alwansan/raf/commit/fc42e65b458ea317b2dea4e494671e978effc153"
+      ],
+      "next_step": "Trace original SaveAndLoad.Load<T> binder/version compatibility; coordinated actual newer APK .rgd create/save/reload; overall LOCAL-005/WATER-001/RENDER-002 OPEN.",
+      "at": "2026-11-04T22:55:00Z",
+      "_record_path": "events/B37/20261104T2255Z-rgd-original-result.json"
+    },
+    {
       "id": "B38-20261104T2142Z-start-material-texenv",
       "owner": "B38",
       "session_id": "20261104T2142Z-B38-f31a",
@@ -2675,5 +2717,5 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "input_sha256": "38907da947a2f99e7cd39374160afa283fb7712b151809057abf99fc88923945"
+  "input_sha256": "32ad90d0715aabd80dec1bc1bc701eb4444487312f810c089a2284565aedf797"
 }
