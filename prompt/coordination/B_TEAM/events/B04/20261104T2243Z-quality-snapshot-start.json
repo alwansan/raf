@@ -1,0 +1,13 @@
+{
+  "id": "20261104T2243Z-B04-quality-snapshot-start",
+  "owner": "B04",
+  "session_id": "20261104T2243Z-B04-6b7c",
+  "issue_id": "RENDER-002",
+  "type": "start",
+  "summary": "After prior B04 source fixes, start scoped read-only Android runtime QualitySettings tier/pixel-light/texture-quality evidence inside existing bounded B12 scene snapshot; preserve color/sound/Settings UI/touch.",
+  "evidence": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/W2_COLOR_SPACE_SETTINGS_2026-11-03.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/android-port/Runtime/Platform/AndroidTestDiagnostics.cs"
+  ],
+  "at": "2026-11-04T22:43:00Z"
+}
