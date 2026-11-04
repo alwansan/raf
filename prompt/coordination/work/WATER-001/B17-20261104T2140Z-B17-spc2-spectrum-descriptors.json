@@ -6,7 +6,7 @@
   "issue_id": "WATER-001",
   "track": "water-fft",
   "approach": "Complement existing original Spectrum pass/CB topology with authenticated per-stage texture/sampler descriptors for ShaderLab restoration, bounded no-source-disclosure probe and negative controls; do not duplicate B24 Foam or B08 FFT runtime identity.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "5a977b3812cc597aaa790ae66bce54e85a965fc8",
   "intended_files": [
     "scripts/b17_spectrum_stage_descriptors.py",
@@ -22,8 +22,10 @@
   "experiment_ids": [
     "b17-spectrum-descriptor-source-probe"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement synthetic controls, then original ZIP2 source provider probe; do not mark RESTORED without Unity device evidence.",
-  "updated_at": "2026-11-04T21:41:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41920232173"
+  ],
+  "result": "SOURCE_VERIFIED numeric descriptors: original 7 Spectrum passes; 13 fragment rows, zero vertex rows, 42 observed resource table fields. Authentic ZIP2 source SHA verified; 16/16 synthetic and original execution PASS CI41920232173; no shader restoration or device acceptance.",
+  "next_step": "Coordinate source-verified per-pass descriptor tables with original Spectrum ShaderLab program translation lane; investigate actual sampler/texture associations before any project change.",
+  "updated_at": "2026-11-04T21:57:00Z"
 }
