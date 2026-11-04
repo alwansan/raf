@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "owner": "B14",
+  "session_id": "20261104T2247Z-B14-d1a9",
+  "issue_id": "RENDER-002",
+  "hypothesis": "The offline platform CI failure was a stale static SceneLoaded test after the source now uses an instance callback for delayed bounded render diagnostics.",
+  "source_commit": "9ba6990cbd30fe5f6fdc97c000b7cd24a57333e6",
+  "input_hashes": [],
+  "tool_versions": {
+    "python": "GitHub ubuntu-24.04 system Python 3"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_android_diagnostics_policy.py -v",
+    "GitHub Actions full offline platform adapter - source-only tests"
+  ],
+  "negative_controls": [
+    "Still require scene-loaded and scene-unloaded graphics-memory boundary samples",
+    "Require 3-second delayed bounded post-scene snapshot not per-frame graphics-memory call",
+    "Require low-memory write before flush and preserve existing Android platform smoke tests"
+  ],
+  "workflow_path": null,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41928677980",
+  "artifact_urls": [],
+  "budget": "Existing source-only platform CI; no Unity/LFS/private game asset",
+  "status": "completed",
+  "observed_result": "The stale static callback lookup was corrected; initial own overbroad test scope failed at 41928540784, corrected in 9ba6990c; final offline platform job 126919715017 and Android diagnostic policy PASS, no production game code changed.",
+  "rejected_hypotheses": [
+    "The failing test proves the new coroutine broke actual Android diagnostics",
+    "GraphicsMemoryAtBoundary must be absent from SceneLoaded rather than only absent from delayed coroutine"
+  ],
+  "limitations": [
+    "No new actual Raft Android APK/device log after this test correction",
+    "Original shader/material appearance and water/FFT remain unresolved"
+  ],
+  "integration_commit": "9ba6990cbd30fe5f6fdc97c000b7cd24a57333e6",
+  "next_step": "Keep RENDER-002 open; on next device APK use scene_shader_snapshot and original same-instance shader/material evidence to diagnose colors."
+}
