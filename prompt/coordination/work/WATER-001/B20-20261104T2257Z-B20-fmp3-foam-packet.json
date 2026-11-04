@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "owner": "B20",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2257Z-B20-fmp3",
+  "issue_id": "WATER-001",
+  "track": "water-fft",
+  "approach": "Authentic original Foam end-to-end private 2-pass assembly-input packet: 4 translated stage programs + source-state + original CB bridge with strict provenance and no publication",
+  "status": "active",
+  "base_sha": "b2268908186bf9d41c1727a9269e047835dd12e8",
+  "intended_files": [
+    "scripts/b20_private_foam_packet.py",
+    "tests/test_b20_private_foam_packet.py",
+    ".github/workflows/raft-b20-private-foam-packet.yml",
+    "docs/B20_FOAM_PRIVATE_PACKET_2026-11-04.md"
+  ],
+  "hypothesis": "B24 stage translator discards ephemeral private HLSL while B25 staging holds render state separately; a single authenticated private packet can retain exact stage/pass identities as an actionable ShaderLab integration input, without guessing CB0 aliases.",
+  "related_work": [
+    "B24 original four Foam DXBC stages and Vulkan SPIR-V/HLSL roundtrip",
+    "B25 authenticated Foam render-state and CB0 name/slot fingerprints",
+    "B09 Spectrum passes separately staged"
+  ],
+  "experiment_ids": [
+    "B20-foam-private-packet-20261104"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement fail-closed private stage source+render-state staging and unit controls; run genuine pinned ZIP2+vkd3d CI, keep CB runtime unverified.",
+  "updated_at": "2026-11-04T22:57:30Z"
+}
