@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "username": "B12",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2132Z-B12-c4a8",
+  "resumed_from_session": null,
+  "status": "active",
+  "base_sha": "f8028d15b2401d1fd8c73b2316e5bf76fef88eae",
+  "last_commit": null,
+  "updated_at": "2026-11-04T21:33:58.649Z",
+  "tracks": [
+    "world-save"
+  ],
+  "work_ids": [
+    "B12-20261104T2132Z-B12-c4a8-steam-stats-save"
+  ],
+  "run_urls": [],
+  "next_step": "Patch SHA-pinned original SaveAndLoad.StoreStats call on Android-local only; add synthetic negative/positive tests; execute test and CI; preserve SaveGame/.rgd behavior and Windows native semantics.",
+  "memory_path": "prompt/coordination/clients/B12/MEMORY.md"
+}
