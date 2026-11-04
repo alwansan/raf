@@ -6,8 +6,8 @@
   "resumed_from_session": "20261104T215100Z-B18-d3f9",
   "status": "active",
   "base_sha": "fc42e65b458ea317b2dea4e494671e978effc153",
-  "last_commit": null,
-  "updated_at": "2026-11-04T22:50:52.207Z",
+  "last_commit": "04b080630c9f8f0308212b3c8fe18aac34469130",
+  "updated_at": "2026-11-04T23:06:56.528Z",
   "tracks": [
     "water-fft",
     "SPIRV-resource-bindings"
@@ -23,8 +23,9 @@
     "https://github.com/alwansan/raf/actions/runs/41921950901",
     "https://github.com/alwansan/raf/actions/runs/41922116469",
     "https://github.com/alwansan/raf/actions/runs/41922333604",
-    "https://github.com/alwansan/raf/actions/runs/41923703800"
+    "https://github.com/alwansan/raf/actions/runs/41923703800",
+    "https://github.com/alwansan/raf/actions/runs/41930824777"
   ],
-  "next_step": "Independently verify exact original FFT t0/t1/u0 resource-to-translated-SPIR-V descriptor binding correspondence or document a negative result, without changing original source or other agents' work.",
+  "next_step": "B18 original source explicit DXBC-to-SPIR-V descriptor mappings verified 20/20 under each of 2 chosen sets (CI41930824777), but t0/t1 distinct numeric behavior, Unity runtime FindKernel and Adreno device remain unverified. Next P0: behaviorally distinguish two source reads via original FFT numerical CPU test or target same-instance shader export; avoid duplicate B08/B09/B24 tests.",
   "memory_path": "prompt/coordination/clients/B18/MEMORY.md"
 }
