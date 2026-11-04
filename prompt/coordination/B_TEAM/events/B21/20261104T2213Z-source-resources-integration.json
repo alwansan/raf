@@ -1,0 +1,15 @@
+{
+  "id": "B21-20261104T2213Z-source-resources-integration",
+  "owner": "B21",
+  "session_id": "20261104T2153Z-B21-72ab",
+  "issue_id": "RENDER-002",
+  "type": "integration",
+  "summary": "B21 source-only lightmap and native Light diagnostics are committed and CI source-authenticated (41921259677 16 synthetic+6 originals, 41922372594 34 synthetic+6 originals); six separately SHA-pinned ZIP2 owners recorded in resource ledger. Canonical summary generation succeeded at B21 CI41923120681. Integration strictly source tool/evidence, not Unity shader/game runtime or Android device. Issue remains OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41921259677",
+    "https://github.com/alwansan/raf/actions/runs/41922372594",
+    "https://github.com/alwansan/raf/actions/runs/41923120681",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/B21-original-scene-lighting-baseline.json"
+  ],
+  "at": "2026-11-04T22:13:00Z"
+}
