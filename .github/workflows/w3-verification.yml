@@ -1,0 +1,85 @@
+# W3 verification — second-environment synthetic suites + LFS pin re-derivation (owner-authorized experiments lane)
+#
+# Read-only verification lane for client raft-20261103T153100Z-b4d2c9e7 (W3):
+#   Job A: run every W3 synthetic test suite with the pinned UnityPy version.
+#   Job B: sparse-LFS pull of ONLY the two byte-pinned owners and re-derive
+#          their SHA-256/size against the committed pins.
+# No Unity Editor, no builds, no releases, no platform/runtime claims.
+# Aggregate outputs only; no decompiled content, no shader/asset name lists.
+name: w3-verification
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/w3-verification.yml'
+      - 'scripts/w3_test_*.py'
+      - 'scripts/w3_probe_pin_verification.py'
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: w3-verification-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  synthetic-suites:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned UnityPy
+        run: python -m pip install --disable-pip-version-check "UnityPy==1.25.4"
+      - name: Run all W3 synthetic test suites
+        working-directory: scripts
+        run: |
+          set -euo pipefail
+          suites=()
+          for f in w3_test_*.py; do suites+=("$f"); done
+          printf 'found %d suites\n' "${#suites[@]}"
+          for s in "${suites[@]}"; do
+            echo "=== $s ==="
+            python "$s"
+          done
+      - name: Emit suite aggregate
+        if: always()
+        run: |
+          python - <<'PYEOF'
+          import glob, json
+          print(json.dumps({"lane": "w3-synthetic-suites",
+                            "suites_attempted": len(glob.glob("scripts/w3_test_*.py"))}))
+          PYEOF
+
+  lfs-pin-verification:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+      - name: Sparse LFS pull of the two pinned owners
+        run: |
+          git lfs pull \
+            --include "Raft/Raft_Data/resources.assets,Raft/Raft_Data/sharedassets0.assets" \
+            --exclude ""
+      - name: Run pin verification probe
+        working-directory: scripts
+        run: python w3_probe_pin_verification.py \
+               --repo-root .. \
+               --out ../w3_lfs_pin_verification.json
+      - name: Surface result in summary
+        if: always()
+        run: |
+          test -f w3_lfs_pin_verification.json && cat w3_lfs_pin_verification.json || true
+      - name: Upload verification artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w3-lfs-pin-verification
+          if-no-files-found: warn
+          path: w3_lfs_pin_verification.json
