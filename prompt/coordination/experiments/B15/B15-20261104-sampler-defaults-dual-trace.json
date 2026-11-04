@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "owner": "B15",
+  "session_id": "20261104T224800Z-B15-defaults-32f1",
+  "issue_id": "RENDER-002",
+  "hypothesis": "Unity TextureImporter -100 mipMapBias is invalid/unset, not a proven drift; different exporter trace instances and foreign-path source-owner basename aliases must not pass as one authentic Raft source identity.",
+  "source_commit": "8f51565362f0d26d0d413cbf87f6e2e1c631883d",
+  "input_hashes": [
+    "ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385 (expected, not actually hydrated)",
+    "resources.assets size111533516 sha256:87493249f1adfc0c5eb8b82e4e199e208cd2c95eabe9796cab82116c4838595c (trusted pin)",
+    "sharedassets0.assets size115978112 sha256:0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3 (trusted pin)",
+    "sharedassets36.assets size110149324 sha256:b32fcd9d327c8926b2309ffc1b5645a0c23d64ed95be37ed94e96f34736530c8 (trusted pin)"
+  ],
+  "tool_versions": {
+    "python": "3.11",
+    "PyYAML": "6.0.3",
+    "UnityPy": "mocked synthetic only"
+  },
+  "commands": [
+    "python -m unittest discover -s tests -p 'test_b15_texture_sampler_parity.py' -v"
+  ],
+  "negative_controls": [
+    "mipBias=-100 treated unknown, not concrete mismatch",
+    "non-sentinel mipBias=-0.5 still concrete mismatch",
+    "B02 Texture28 and W1 Material21/Shader48 same export instance accepted with original trace field schema",
+    "mismatched export_instance rejected",
+    "wrong W1 classID, bool source path ID, missing W1 objects and schema drift rejected",
+    "symlinked private trace rejected",
+    "DifferentGame/trusted-original-owner-basename rejected, plain owner and Raft_Data/owner accepted"
+  ],
+  "workflow_path": ".github/workflows/raft-b15-texture-sampler-parity.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41929031892",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41929031892"
+  ],
+  "budget": "8 minute public ubuntu-24.04 runner, Python only, no game data, Unity or GPU",
+  "status": "completed",
+  "observed_result": "Original source-only 16/16 prior; new 22/22 CI41928528901 SUCCESS, final 23/23 CI41929031892 job126920899871 SUCCESS on exact test SHA 8f515653. Corrected a false-positive for Unity importer mip bias unset; reject unrelated export instances and foreign owner aliases. No original Raft texture/export combination compared.",
+  "rejected_hypotheses": [
+    "Importer mipMapBias=-100 necessarily means a true numeric mismatch: Unity documents it as invalid default.",
+    "A shared original asset basename in an untrusted trace path alone proves ZIP2 owner identity.",
+    "Matching user-provided export_instance labels proves the producer processes are independently authenticated; still false."
+  ],
+  "limitations": [
+    "All new checks are synthetic only, zero real original/export Texture2D parity checks",
+    "Only 3 trusted source owners supported by B15; ZIP2 provider not downloaded in this run",
+    "No original bytes, shaders/compute, gameplay save, Unity/Adreno/Android or device pixels tested",
+    "Owner audio/Settings untouched; touch/layout intentionally deferred",
+    "RENDER-002, WATER-001, LOCAL-005 remain OPEN, NOT_READY 0/3"
+  ],
+  "integration_commit": "8f51565362f0d26d0d413cbf87f6e2e1c631883d",
+  "next_step": "For real parity, capture B02/W1 dual export traces with shared instance from the same actual private exporter run, materialize exact three SHA-pinned original ZIP2 owners + same project, run B15 auditor read-only with --trace and --companion-trace. If no such artifacts, move to independent P0 water or local-world bottleneck."
+}
