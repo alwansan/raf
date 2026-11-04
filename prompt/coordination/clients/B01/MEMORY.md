@@ -16,3 +16,6 @@ Session: `20261104T2105Z-B01-water-contract`. Track WATER-001 / FFT original man
 ## Checkpoint / outstanding
 - Branch only feature/android-native-port; no force, no cancellation, no build request, no raw private game source publication. Audio/Settings untouched; touch deferred.
 - Next check final CI 41911972796; if failures, inspect test failures and fix. Check whether mask should support verbatim C# escaped quotes in argument parser, interpolation and raw strings before broad trust. Compare sanitized original callsite counts to pre-change report; changes may be false-positive removals. For actual kernelCount=0, B48 runtime serialization correlation and shader restoration still open; WATER-001 remains OPEN, NOT_READY. Preserve exact .meta/GUID and original FFT programs.
+
+## Verified final CI (2026-11-04)
+[CI 41911972796](https://github.com/alwansan/raf/actions/runs/41911972796) completed success on final source 938dd13, job 126861846260. 64 synthetic tests; original SHA-pinned managed callers Dx11FFT Dispatch=2 SetTexture=6 (affine offsets 0/1), WavesRendererFFT SetTexture=10; FFT numeric oracle exit=0. The B01 scanner scope is complete, but WATER-001 and real Android GPU rendering remain unresolved. Next follow B48 kernel identity and B49 pass guards or pick different meaningful blocker.
