@@ -85,7 +85,9 @@ def correlate(tree, source, expected_source_sha):
     if passes[0]['source'] == passes[0]['target'] or passes[1]['target'] == passes[1]['source']:
         raise ValueError('Original FFT pass aliases intermediate with original input/output')
     raw_calls = []
-    # This secondary shape validator must use the same executable-only offsets\n    # as analyze_source. A Dispatch token in comments/strings is not a call.\n    for match in CALL.finditer(mask_noncode(source)):
+    # This secondary shape validator uses executable-only offsets like analyze_source.
+    # A Dispatch token in comments/strings is not a call.
+    for match in CALL.finditer(mask_noncode(source)):
         args, _ = parse_original_args(source, match.end()-1)
         if match.group(1) == 'Dispatch': raw_calls.append(args)
     for args in raw_calls:
