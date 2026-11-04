@@ -18,6 +18,12 @@ from scripts.b44_verify_material_colors import (
 
 HEX32 = re.compile(r'[0-9a-fA-F]{32}\Z')
 TEXTURE_TYPES = frozenset((28, 84, 89, 117, 187))
+# Independently immutable ZIP2 pin used for bounded authentic B05 acceptance.
+# Larger full 14-provider source mode still uses the separate W1/A12 inventory.
+B05_SMALL_OWNER_PINS = {
+    "sharedassets6.assets": (6607272,
+        "0476792cfeffac19d16e920011ed8d2fb2da62973c2f09a8689bc59e1ac4b632"),
+}
 
 
 def _original_pointer(value):
@@ -98,18 +104,25 @@ def normalize_texenvs(entries, *, exported=False):
 
 def original_texenvs(root: Path, owner_names=None):
     """SHA/byte-authenticated original providers; use no speculative archive mapping."""
-    from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
-    from scripts.w1_stage_zip2_owners import fingerprint
-    result = {}
-    owners = set(SHADER_OWNERS) if owner_names is None else set(owner_names)
-    if not owners or not owners.issubset(SHADER_OWNERS):
+    if owner_names is None:
+        from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
+        pins = SHADER_OWNERS
+        owners = set(pins)
+    else:
+        # One genuinely source-tested owner is supported in small selected
+        # mode. Future owners must be independently authenticated and pinned.
+        pins = B05_SMALL_OWNER_PINS
+        owners = set(owner_names)
+    if not owners or not owners.issubset(pins):
         raise ValueError('Unpinned or empty original Material owner selection')
     if root.is_symlink() or (root / 'Raft_Data').is_symlink():
         raise ValueError('Linked original source root')
-    # Reject unpinned or redirected owners before loading a private-data parser.
+    # Refuse malformed owner selection before loading optional serializer code.
+    from scripts.w1_stage_zip2_owners import fingerprint
     import UnityPy
+    result = {}
     for name in sorted(owners):
-        expected = SHADER_OWNERS[name]
+        expected = pins[name]
         path = root / 'Raft_Data' / name
         if path.is_symlink() or not path.is_file() or fingerprint(path) != expected:
             raise ValueError('Original Material owner size/SHA mismatch')
