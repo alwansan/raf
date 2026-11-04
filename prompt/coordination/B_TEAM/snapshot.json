@@ -293,7 +293,10 @@
         "https://github.com/alwansan/raf/actions/runs/41928799663",
         "https://github.com/alwansan/raf/actions/runs/41929367655",
         "https://github.com/alwansan/raf/actions/runs/41930267873",
-        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B03_ORIGINAL_RENDERER_MATERIALS_2026-11-04.md"
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B03_ORIGINAL_RENDERER_MATERIALS_2026-11-04.md",
+        "https://github.com/alwansan/raf/actions/runs/41930891466",
+        "https://github.com/alwansan/raf/actions/runs/41931942755",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B21_LIGHT_EXPORT_LINEAGE_2026-11-04.md"
       ],
       "remaining": [
         "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -327,15 +330,16 @@
         "B13 source-fixed builtin ShaderLab restorer safety: verified exact backups, concurrent source edit rejection and fsynced atomic replacement/rollback; CI41928703661 14/14 synthetic. NOT authentic shader programs or same-export Material/Unity/Adreno proof.",
         "B05 actual original ZIP2 sharedassets6 source parser and bounded owner accessor PASS (CI41929077930, 41 real Materials/227 TexEnv slots/227 UV sets; 89 same-file,25 external,113 null), and scoped source-to-full-export comparator 18/18 synthetic CI41928852363. No genuine same-instance Unity export/Material PPtr+UV match or Adreno/phone color restoration yet. RENDER-002 OPEN.",
         "B15 actual original: ZIP2 SHA-verified sharedassets6 (6,607,272B) read via production original_sampler() 87/87 actual Texture2D settings, 87 filter and 261 wrap, all mip biases 0, CI41930143093 SUCCESS with 8 synthetic negative controls. This does NOT establish any real original-to-export importer equivalence (0 paired records) or restore white shaders/device pixels.",
-        "B03 verified 1635/1635 source-only non-null Renderer Material target class links across 6 original ZIP2 scenes and three SHA-pinned owners (4 original null). Actual same-instance Unity Renderer→Material GUID/fileID export preservation and Android white/pixel fix remain unproven."
+        "B03 verified 1635/1635 source-only non-null Renderer Material target class links across 6 original ZIP2 scenes and three SHA-pinned owners (4 original null). Actual same-instance Unity Renderer→Material GUID/fileID export preservation and Android white/pixel fix remain unproven.",
+        "B21 actual 9-provider ZIP2 bounded original Raft AssetRipper same-instance export: 2/2 native Light108 values preserved and 2/2 exact Light.m_GameObject→GameObject1 owner pointers preserved in actual Unity YAML; 0 drift/misattached, CI41930891466 and 41931942755 both SUCCESS (40 owner-trial synthetic controls). This excludes Light value/owner export loss for these two scenes only; shader/material/ambient/Unity GPU pixels, remaining 34 scenes and phone not verified. RENDER-002 OPEN."
       ],
       "acceptance": [
         "مطابقة روابط ومراجع الأصل",
         "مقارنةصوريةلنفسالمشهد",
         "نجاحعلىالهاتف"
       ],
-      "updated_by": "B03",
-      "updated_at": "2026-11-04T23:05:25.614Z",
+      "updated_by": "B21",
+      "updated_at": "2026-11-04T23:17:00Z",
       "_record_path": "issues/RENDER-002.json"
     },
     {
@@ -438,7 +442,11 @@
         "https://github.com/alwansan/raf/actions/runs/41930936302",
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B19_WATER_SUBSHADER_PASS_GATE_2026-11-04.md",
         "https://github.com/alwansan/raf/actions/runs/41930824777",
-        "https://github.com/alwansan/raf/actions/runs/41931883517"
+        "https://github.com/alwansan/raf/actions/runs/41931883517",
+        "https://github.com/alwansan/raf/actions/runs/41931585626",
+        "https://github.com/alwansan/raf/actions/runs/41932300308",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B20_FOAM_CB_DESCRIPTOR_SIZE_2026-11-04.md",
+        "https://github.com/alwansan/raf/commit/c5bb92083d8a704977ac5a8495dec29f1c6958e6"
       ],
       "remaining": [
         "Spectrum/Foam/Blur passes ناقصة في APK86",
@@ -473,15 +481,16 @@
         "B20 genuine ZIP2 original Foam 4/4 compiled stage translations +2/2 source states +8 source CB links co-staged privately; CI41930578292 SUCCESS. Original CB0 HLSL alias, resource/sampler binding, actual ShaderLab and Unity/Adreno pixels still NOT proven. Do not mark WATER-001 ready.",
         "B19 per-SubShader authored pass-count guard is SOURCE_FIXED CI41930936302 24/24; prevents summing alternate shader passes but not original Spectrum/FFT shader reconstruction, Android selected SubShader, device pixels or source-authenticated binding.",
         "B18 CI41930824777 source-authentic FFT 20/20 programs each mapped by libvkd3d-shader to two different CHOSEN descriptor layouts (20x2 passes), using SRV t0/t1 and UAV u0 explicit IMAGE flags; 10/10 synthetic controls PASS. This proves explicit target interface binding support, NOT original per-input numeric t0/t1 behavior, Unity FindKernel/index mapping, original ShaderLab restored passes or Adreno water pixels. WATER-001 remains OPEN.",
-        "B18 CI41931883517 source-authentic original FFT SPIR-V identity: 20/20 compiled programs × two explicit target maps have stable 3 resource variable IDs and entire SPIR-V code byte-equivalent after masking only intended descriptor set/binding OpDecorate literals; 20/20 synthetic tests PASS. No independent t0 vs t1 numerical pixel behavior, authored shader import, Unity runtime FindKernel mapping or Adreno device proof; water remains broken in APK86, WATER-001 OPEN."
+        "B18 CI41931883517 source-authentic original FFT SPIR-V identity: 20/20 compiled programs × two explicit target maps have stable 3 resource variable IDs and entire SPIR-V code byte-equivalent after masking only intended descriptor set/binding OpDecorate literals; 20/20 synthetic tests PASS. No independent t0 vs t1 numerical pixel behavior, authored shader import, Unity runtime FindKernel mapping or Adreno device proof; water remains broken in APK86, WATER-001 OPEN.",
+        "B20 original Foam CI41931585626: all four HLSL b-register and SPIRV set0-binding slot sets numerically equal B25 authentic original CB register sets (8 links). But original partial CB m_Size vs reflected SPIRV block_size numerically differ 7/8; original member offset/type equivalence and opaque CB0 source→HLSL alias/Unity material upload remain UNPROVEN. CI41932300308 source-only size checker PASS9/9. Not original ShaderLab render or Android device proof."
       ],
       "acceptance": [
         "هوية برامج ونوى أصلية أو تطابق موثق دونdummy",
         "تثبيت فيالتصدير+Unity import/render",
         "اختبار هاتف يثبت الماء بلا pass/kernel errors"
       ],
-      "updated_by": "B18",
-      "updated_at": "2026-11-04T23:14:38.568Z",
+      "updated_by": "B20",
+      "updated_at": "2026-11-04T23:17:56.711Z",
       "_record_path": "issues/WATER-001.json"
     }
   ],
@@ -685,6 +694,43 @@
       "_record_path": "resources/B15-sharedassets6-original-sampler-source.json"
     },
     {
+      "id": "B20-FOAM-ORIGINAL-PRIVATE-PACKET-20261104",
+      "title": "B20 original Foam/Global two-pass 4-stage private integration packet and numeric CBuffer descriptor evidence",
+      "kind": "water-original-shader-private-packet-and-CB-descriptor-provenance",
+      "source": {
+        "provider": "ZIP2 immutable SHA-pinned no LFS",
+        "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+        "path": "Raft/Raft_Data/sharedassets0.assets",
+        "bytes": 115978112,
+        "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+        "original_shader_object_path_id": 2420,
+        "original_shader_object_sha256": "67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1"
+      },
+      "stages": {
+        "acquisition": "SHA_PINNED_ORIGINAL_ZIP2_OWNER_VERIFIED_NO_LFS",
+        "extraction": "ORIGINAL_FOUR_STAGE_TWO_PASS_DXBC_AND_RENDER_STATE_VERIFIED",
+        "reconstruction": "ALL_FOUR_HLSL_SPIRV_ROUNDTRIPS_AND_TWO_247B_RENDER_STATES_STAGED_PRIVATE",
+        "binding": "HLSL_AND_SPIRV_NUMERIC_CB_SLOTS_MATCH_ORIGINAL;_7_OF_8_REFLECTED_BLOCK_SIZES_DIFFER;_ORIGINAL_CB0_ALIAS_NOT_VERIFIED",
+        "integration": "SOURCE_TO_PRIVATE_PACKET_TOOL_AND_CI_PASS;_NO_SHADERLAB_INSTALL_OR_GAME_PROJECT_CHANGE",
+        "device": "NOT_TESTED"
+      },
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41930578292",
+        "https://github.com/alwansan/raf/actions/runs/41931585626",
+        "https://github.com/alwansan/raf/actions/runs/41932300308",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B20_FOAM_PRIVATE_PACKET_2026-11-04.md",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B20_FOAM_CB_DESCRIPTOR_SIZE_2026-11-04.md"
+      ],
+      "remaining": [
+        "Original serialized typed partial CB member offsets/types vs SPIRV reflected UBO member layout parity, especially CB0 opaque source compiler symbol",
+        "HLSL/ShaderLab original alias and Unity material property/texture/sampler bindings",
+        "Actual two-pass ShaderLab compile and Android Adreno water pixels, no dummy flags"
+      ],
+      "updated_by": "B20",
+      "updated_at": "2026-11-04T23:17:26.009Z",
+      "_record_path": "resources/B20-foam-original-private-packet.json"
+    },
+    {
       "id": "B21-original-scene-lighting-baseline",
       "title": "B21 SHA-pinned original six-scene lighting baseline and two same-instance Light export value matches",
       "kind": "original-scene-lighting-source-audit",
@@ -699,8 +745,8 @@
         "acquisition": "SIX_ORIGINAL_GIT_BLOBS_SHA256_SIZE_AUTHENTICATED",
         "extraction": "NATIVE_UNITY_SERIALIZED_TYPE_TREE_DECODED_6_OF_40_SCENES",
         "reconstruction": "NOT_APPLICABLE_READ_ONLY",
-        "binding": "TWO_SOURCE_NATIVE_LIGHT108_OBJECTS_MAPPED_BY_PRIVATE_EXPORTER_GUID_TO_REAL_UNITY_YAML_VALUES_2_OF_2",
-        "integration": "B21_PRIVATE_TOOL_AND_PARITY_VALIDATOR_COMPILE_AND_REAL_BOUND11_ORIGINAL_EXPORT_MATCHES_NO_UNITY_RUNTIME",
+        "binding": "EXACT_SAME_EXPORT_2_OF_2_LIGHT108_SOURCE_VALUES_AND_TWO_NATIVE_GAMEOBJECT1_OWNER_PTRS_MATCHED_REAL_YAML",
+        "integration": "SOURCE_AND_BOUNDED_ACTUAL_EXPORT_VERIFIED_IN_B21_PRIVATE_TOOL_NO_GAME_RUNTIME_OR_PIXELS",
         "device": "NOT_TESTED"
       },
       "evidence": [
@@ -710,13 +756,15 @@
         "https://github.com/alwansan/raf/actions/runs/41929975841",
         "https://github.com/alwansan/raf/actions/runs/41930580691",
         "https://github.com/alwansan/raf/actions/runs/41930891466",
-        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B21_LIGHT_EXPORT_LINEAGE_2026-11-04.md"
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B21_LIGHT_EXPORT_LINEAGE_2026-11-04.md",
+        "https://github.com/alwansan/raf/actions/runs/41931942755"
       ],
       "remaining": [
         "Original remaining 34 scene lighting inventories and all shader/material/ambient/Adreno device output unknown.",
         "No aggregate source SHA/bytes reported; each of six files individually size+SHA authenticated; do not equate group inventory with a single resource.",
-        "Native source Light->GameObject owner exact same-export GameObject identity unverified (only both owners locally valid).",
-        "Nine-provider source subset is not all 40 scenes, nor ShaderLab/Adreno pixel equivalence; game source and active Unity runtime unchanged."
+        "Nine-provider source subset is not all 40 scenes, nor ShaderLab/Adreno pixel equivalence; game source and active Unity runtime unchanged.",
+        "Full 40 original scenes and dependent prefab hierarchies, dynamic lighting/shader/pixel correctness and Adreno device run remain unverified.",
+        "Actual source/export Light and GameObject fidelity limited to original level0 and level1 and nine-provider bounded export; no runtime scene load/graphics promise."
       ],
       "updated_by": "B21",
       "_record_path": "resources/B21-original-scene-lighting-baseline.json"
@@ -2327,6 +2375,19 @@
       "_record_path": "events/B17/20261104T2313Z-spectrum-all-fragments-start.json"
     },
     {
+      "id": "B17-spectrum-namebridge-14-20261104T2315Z",
+      "owner": "B17",
+      "session_id": "20261104T2249Z-B17-cbind",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "summary": "All 14 original Spectrum fragment variants across seven original passes privately rebind source Unity texture/sampler symbol names and recompile Vulkan1.1; source CI41932008860 success. Not Unity/ShaderLab/GPU/device proof.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41932008860"
+      ],
+      "at": "2026-11-04T23:15:00Z",
+      "_record_path": "events/B17/20261104T2315Z-spectrum-namebridge-14-result.json"
+    },
+    {
       "id": "20261104T215100Z-start",
       "owner": "B18",
       "session_id": "20261104T215100Z-B18-d3f9",
@@ -2587,6 +2648,23 @@
       ],
       "at": "2026-11-04T23:08:17.896Z",
       "_record_path": "events/B20/20261104T2308Z-cb-lineage-start.json"
+    },
+    {
+      "id": "B20-20261104T2320Z-foam-cb-integration-result",
+      "owner": "B20",
+      "session_id": "20261104T2257Z-B20-fmp3",
+      "issue_id": "WATER-001",
+      "type": "integration",
+      "summary": "SOURCE_AUTHENTIC_PRIVATE_INPUT: 2 original Foam passes/4 original DXBC→HLSL/SPIRV stage roundtrips co-staged with 2 original states, 8 CB source links; all 4 HLSL/SPIRV CB numeric slot sets agree with original, but serialized partial CB m_Size vs reflected SPIRV block_size differ 7/8. CB0 alias/ShaderLab/Unity/Adreno remain unverified.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41930578292",
+        "https://github.com/alwansan/raf/actions/runs/41931585626",
+        "https://github.com/alwansan/raf/actions/runs/41932300308",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B20_FOAM_PRIVATE_PACKET_2026-11-04.md",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B20_FOAM_CB_DESCRIPTOR_SIZE_2026-11-04.md"
+      ],
+      "at": "2026-11-04T23:18:53.283Z",
+      "_record_path": "events/B20/20261104T2320Z-foam-cb-integration-result.json"
     },
     {
       "id": "B21-20261104T2153Z-lightmap-start",
@@ -3354,5 +3432,5 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "input_sha256": "dfa3b22f5e3b86d738c8c9032b217620aca401b60ef8cea2579e7c3846471d27"
+  "input_sha256": "645346e5b722e22356192b22c074bdf6cc7df17995597539a818c454d7c7f90e"
 }
