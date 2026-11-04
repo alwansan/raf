@@ -1,0 +1,13 @@
+{
+  "id": "20261104T2155Z-B30-fft-variantmap-original-result",
+  "owner": "B30",
+  "session_id": "20261104T2140Z-B30-7c29",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Original SHA-authenticated ZIP2 FFT ComputeShader: all 20 compiled positions share ONE opaque variantMap header signature and ONE combined keyword signature, so these fields cannot distinguish candidate passes/banks; 12 synthetic controls and original report CI PASS; no runtime kernel selection proven.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41920323250",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B30_ORIGINAL_FFT_VARIANTMAP_ROUTING_2026-11-04.md"
+  ],
+  "at": "2026-11-04T21:55:00Z"
+}
