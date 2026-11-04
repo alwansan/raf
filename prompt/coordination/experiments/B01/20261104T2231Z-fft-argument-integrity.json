@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "owner": "B01",
+  "session_id": "20261104T2231Z-B01-fft-args",
+  "issue_id": "WATER-001",
+  "hypothesis": "Raw argument separator scan incorrectly interprets commas/closing delimiters in original CSharp comments and verbatim string literals as code.",
+  "source_commit": "ec4f8cef6fc1c028d3e8df519fc08494e8442161",
+  "input_hashes": [],
+  "tool_versions": {
+    "python": "GitHub Actions ubuntu-24.04 Python3"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_probe_original_fft_kernel_callsites.py -v",
+    "python3 -m scripts.probe_original_fft_kernel_callsites --source $RUNNER_TEMP/private-fft-original"
+  ],
+  "negative_controls": [
+    "comment with comma and unmatched closing delimiters inside Dispatch args",
+    "verbatim CSharp double-quote and comma inside SetTexture args",
+    "mask newline-offset equality"
+  ],
+  "workflow_path": ".github/workflows/raft-original-fft-managed-links.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41926033893",
+  "artifact_urls": [],
+  "budget": "Existing source-only managed CI; no Unity/LFS hydration or new heavy workflow",
+  "status": "running",
+  "observed_result": null,
+  "rejected_hypotheses": [],
+  "limitations": [
+    "Bounded lexical model, not a full CSharp parser",
+    "Does not authenticate Unity runtime kernel binding, GPU FFT values or game render"
+  ],
+  "integration_commit": "ec4f8cef6fc1c028d3e8df519fc08494e8442161",
+  "next_step": "Read final CI and verify SHA-pinned original caller counts against previous 41911972796."
+}
