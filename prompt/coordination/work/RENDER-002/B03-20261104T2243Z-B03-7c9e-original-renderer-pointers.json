@@ -15,7 +15,10 @@
     "docs/B03_ORIGINAL_RENDERER_MATERIALS_2026-11-04.md",
     "scripts/b03_original_renderer_target_resolution.py",
     "tests/test_b03_original_renderer_target_resolution.py",
-    ".github/workflows/raft-b03-original-renderer-target-resolution.yml"
+    ".github/workflows/raft-b03-original-renderer-target-resolution.yml",
+    "scripts/b03_remaining_renderer_material_owners.py",
+    "tests/test_b03_remaining_renderer_material_owners.py",
+    ".github/workflows/raft-b03-remaining-renderer-owners.yml"
   ],
   "hypothesis": "Six original scenes provide evidence for expected Renderer material slot topology and source pointers, enabling future same-instance source/export comparison; null/externals cannot be considered fixed without authenticated corresponding owner.",
   "related_work": [
@@ -24,11 +27,13 @@
   ],
   "experiment_ids": [
     "B03-20261104-original-renderer-pointers",
-    "B03-20261104-original-renderer-targets"
+    "B03-20261104-original-renderer-targets",
+    "B03-20261104-remaining-owner-selection"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41928128357",
-    "https://github.com/alwansan/raf/actions/runs/41928799663"
+    "https://github.com/alwansan/raf/actions/runs/41928799663",
+    "https://github.com/alwansan/raf/actions/runs/41929367655"
   ],
   "result": {
     "phase1": {
@@ -41,8 +46,15 @@
       "external_owner_names_declared_in_zip2_manifest": 1635,
       "external_owner_payload_bytes_verified": false,
       "ci": "https://github.com/alwansan/raf/actions/runs/41928799663"
+    },
+    "phase2": {
+      "selected_original_owners_sha256_verified": 2,
+      "external_staged_material_objects": 1609,
+      "other_external_original_provider_unverified": 26,
+      "original_null_slots": 4,
+      "ci": "https://github.com/alwansan/raf/actions/runs/41929367655"
     }
   },
-  "next_step": "Stage SHA-pinned resources.assets and sharedassets0.assets split ZIP2 originals; resolve material target identities for six original scenes with no export/phone claims.",
-  "updated_at": "2026-11-04T22:53:31.737Z"
+  "next_step": "Dynamically select and authenticate only the remaining original external provider(s) referenced by 26 level1 slots; SHA-check exact ZIP2 bytes, verify Material object classes, do not re-fetch the two already proven owners.",
+  "updated_at": "2026-11-04T22:58:16.910Z"
 }
