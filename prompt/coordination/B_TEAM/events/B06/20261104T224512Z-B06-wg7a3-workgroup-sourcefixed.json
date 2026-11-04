@@ -1,0 +1,14 @@
+{
+  "id": "20261104T224512Z-B06-wg7a3-workgroup-sourcefixed",
+  "owner": "B06",
+  "session_id": "20261104T224512Z-B06-wg7a3",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Correct Unity 2021 FFT GPU limit semantics and source-authenticated group-size theoretical comparisons; C# logger synthetic CI41928357485 SUCCESS. Also found real original authenticated source CI41914575997 passing B06 earlier Dispatch source parser. No Unity/device/kernel restored.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/f9e34ee647e8eb841fa3a960f01cef5eb2a6be87",
+    "https://github.com/alwansan/raf/actions/runs/41928357485",
+    "https://github.com/alwansan/raf/actions/runs/41914575997"
+  ],
+  "at": "2026-11-04T22:49:48.652Z"
+}
