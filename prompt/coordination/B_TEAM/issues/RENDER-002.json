@@ -40,7 +40,8 @@
     "https://github.com/alwansan/raf/actions/runs/41919089409",
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B31_ORIGINAL_GRAPHICS_REUSE_2026-11-04.md",
     "https://github.com/alwansan/raf/actions/runs/41919225658",
-    "https://github.com/alwansan/raf/commit/9eb71aa4c967ac2cef5f447e21d6d0f32d1efccc"
+    "https://github.com/alwansan/raf/commit/9eb71aa4c967ac2cef5f447e21d6d0f32d1efccc",
+    "https://github.com/alwansan/raf/actions/runs/41919146580"
   ],
   "remaining": [
     "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -58,13 +59,14 @@
     "B10: source-only generated vendor fallback ShaderImporter .meta GUID/rollback integrated, isolated CI41917602226 PASS 22/22 and A3 CI41917602139 PASS; original Shader GUIDs unchanged in synthetic tests. Exact two missing metas in native41741108965 not identified; next verified real export, zero missing metas and Unity/device visuals remain unproven.",
     "B22 original m_Floats/m_Ints same-instance float32 parity tool CI41918404573: 14 synthetic controls PASS, original Raft->same-export paired data NOT run, 14-owner bounded scope not full 82; material scalar loss remains unproven hypothesis.",
     "B12: Android scene_shader_snapshot bounded post-load read-only instrumentation now source-integrated (70edac4; CI41919089409 + original-managed CI41918822038 PASS). No diagnostic output exists from a new actual Raft APK/device yet. Compare future 512-renderer bounded counts and ambient/colorSpace against same-scene screenshots; do not equate this to water/shader/color restoration.",
-    "B31 production-original Texture2D stream coverage now rejects symlink/hardlink provider/owner aliases and unsafe negative inline extent, source-only CI 41919225658 SUCCESS 26/26; this guards provenance, not actual white materials or device pixels. Initial hypothesis of W1 cache reducing LFS is rejected for current build: 11/14 original shader owners raw, 3/14 LFS pointers already staged. RENDER-002 remains OPEN."
+    "B31 production-original Texture2D stream coverage now rejects symlink/hardlink provider/owner aliases and unsafe negative inline extent, source-only CI 41919225658 SUCCESS 26/26; this guards provenance, not actual white materials or device pixels. Initial hypothesis of W1 cache reducing LFS is rejected for current build: 11/14 original shader owners raw, 3/14 LFS pointers already staged. RENDER-002 remains OPEN.",
+    "B38: duplicate mapping-key handling in exported Material m_TexEnvs/UV checker source-fixed; CI41919146580 (14+7 synthetic) PASS. Actual Raft ZIP2 original-to-same-export parity and Android colors still unverified."
   ],
   "acceptance": [
     "مطابقة روابط ومراجع الأصل",
     "مقارنةصوريةلنفسالمشهد",
     "نجاحعلىالهاتف"
   ],
-  "updated_by": "B31",
-  "updated_at": "2026-11-04T21:50:29.565Z"
+  "updated_by": "B38",
+  "updated_at": "2026-11-04T21:51:00Z"
 }
