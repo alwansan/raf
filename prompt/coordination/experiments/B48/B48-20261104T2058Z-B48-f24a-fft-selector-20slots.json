@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "owner": "B48",
+  "session_id": "20261104T2058Z-B48-f24a",
+  "issue_id": "WATER-001",
+  "hypothesis": "Original inherited FFT selector covers 20 independently SHA-authenticated compiled programs as 10 two-pass candidate pairs, with per-pair original workgroup x = 2*source FFT size. Does not prove Unity runtime index mapping.",
+  "source_commit": "7be4c3365d4297a06abf502ceea504fee507f9c4",
+  "input_hashes": [
+    {
+      "path": "zip2 original sharedassets0.assets",
+      "bytes": 115978112,
+      "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3"
+    },
+    {
+      "path": "ComputeShader pathID2456",
+      "sha256": "9d934f5c99183c6df5cf2f1fefc9d3e5ec4bce5da5f96a86e4c02910d5322247"
+    },
+    {
+      "path": "private Dx11FFT.cs SHA-pinned CSharp9",
+      "sha256": "8aa32937d4235f0f1ae0a180b8099fd647558689ad65208a9f37956c69e90fb0"
+    },
+    {
+      "path": "private GpuFFT.cs SHA-pinned CSharp9",
+      "sha256": "2f866cbe58836da8260461fe6406793f35d868eba94e816e593209544b4ba704"
+    }
+  ],
+  "tool_versions": {
+    "UnityPy": "1.25.4",
+    "ILSpy": "11.2.0.10050",
+    "dotnet": "10.0.x"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_probe_b48_fft_selector_program_compat.py -v",
+    "python3 -m unittest discover -s tests -p test_probe_original_fft_inherited_seed.py -v",
+    "python3 -m unittest discover -s tests -p test_probe_fft_variant_table.py -v",
+    "python3 -m scripts.stage_zip2_fft_owner --zip2-checkout <private> --destination <private>/Raft_Data/sharedassets0.assets",
+    "ilspycmd -p -lv CSharp9_0 -o <private> Raft/Raft_Data/Managed/Assembly-CSharp.dll",
+    "python3 -m scripts.probe_b48_fft_selector_program_compat --source <private>/Raft_Data --managed <private>"
+  ],
+  "negative_controls": [
+    "Reject forged Unity index mapping flags",
+    "Reject wrong bank, inherited seed or second-pass offset",
+    "Reject reordered/missing/invalid compiled slot witnesses",
+    "Reject mismatched source-resolution/threadgroup contract"
+  ],
+  "workflow_path": ".github/workflows/raft-b48-fft-kernel-identity.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41912422220",
+  "artifact_urls": [],
+  "budget": "isolated 18 minute CPU-only CI, no native Unity/APK, actual completed in under 1 minute",
+  "status": "completed",
+  "observed_result": {
+    "synthetic_tests_passed": 15,
+    "real_zip2_sha_verification": true,
+    "original_compiled_slots_verified": 20,
+    "authentic_source_selected_candidate_pairs_verified": 10,
+    "workgroup_size_contract": "original x=2*source FFT r for r=32,64,128,256,512 in both banks",
+    "original_runtime_kernel_mapping_proven": false,
+    "unity_or_android_execution": false,
+    "first_fixture_error_run": "https://github.com/alwansan/raf/actions/runs/41912253262"
+  },
+  "rejected_hypotheses": [
+    "Compiled position alone proves Unity Dispatch kernel ID; not proven",
+    "First red B48 run is original FFT shader failure; it was test fixture defect"
+  ],
+  "limitations": [
+    "No Unity 2021 ComputeShader kernel ID runtime mapping",
+    "No .compute original shader staged to Unity or rendered on device",
+    "Large original 1024-thread workgroup requires target GPU capability evidence",
+    "No input, audio, Settings or pass modifications"
+  ],
+  "integration_commit": "7be4c3365d4297a06abf502ceea504fee507f9c4",
+  "next_step": "Authenticated Unity kernel index mapping and restored .compute source; WATER remains OPEN."
+}
