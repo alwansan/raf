@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "owner": "B05",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2107Z-B05-9e24",
+  "issue_id": "RENDER-002",
+  "track": "colors-materials",
+  "approach": "Prevent false-positive Material texture fidelity when m_TexEnvs UV m_Scale/m_Offset transforms drift; extend B05 original-to-export verifier and synthetic negative controls.",
+  "status": "active",
+  "base_sha": "2d0825b53af9ead194febed01e9fd6e54cf3f0c2",
+  "intended_files": [
+    "scripts/b05_verify_material_texenv_bindings.py",
+    "tests/test_b05_verify_material_texenv_bindings.py",
+    "docs/B05_MATERIAL_TEXENV_LINEAGE_2026-11-04.md"
+  ],
+  "hypothesis": "Texture PPtr can match while m_Scale/m_Offset differ, causing wrong material appearance; existing pointer-only summary should not imply transform fidelity.",
+  "related_work": [
+    "B05 pointer test CI41914198631"
+  ],
+  "experiment_ids": [
+    "B05-20261104T2118Z-uv-transform"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement strict finite 2D UV scale/offset parsing, add mutation tests and CI, do not assert actual texture degradation without same-instance data.",
+  "updated_at": "2026-11-04T21:18:00Z"
+}
