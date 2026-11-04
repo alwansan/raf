@@ -4,21 +4,23 @@
   "generation": "B-2026-11-04",
   "session_id": "20261104T2132Z-B13-7e6b",
   "resumed_from_session": null,
-  "status": "completed",
+  "status": "active",
   "base_sha": "e6484daffbaef7dca57da63e1cb4869f9095078a",
   "last_commit": "0d31686f58b0276c089425e764fa5e3b377d38e6",
-  "updated_at": "2026-11-04T21:51:00Z",
+  "updated_at": "2026-11-04T21:54:00Z",
   "tracks": [
-    "world-save"
+    "world-save",
+    "water-fft"
   ],
   "work_ids": [
-    "LOCAL-005/B13-20261104T2132Z-B13-7e6b-offline-source-transaction"
+    "LOCAL-005/B13-20261104T2132Z-B13-7e6b-offline-source-transaction",
+    "WATER-001/B13-20261104T2132Z-B13-7e6b-shader-meta-guid"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41917684686",
     "https://github.com/alwansan/raf/actions/runs/41918235557",
     "https://github.com/alwansan/raf/actions/runs/41919807903"
   ],
-  "next_step": "Scope completed; re-read live HEAD and latest B-team coverage on resume. Verify B13 code/tests/workflow survived concurrent commits. B19 and B14 own adjacent local save work; P0 water/FFT/white materials remain open. Device acceptance requires a new coordinated signed build.",
+  "next_step": "Implement strict .meta GUID identity proof for original water shader and compute structural preflight. No asset mutation, no native/device claim.",
   "memory_path": "prompt/coordination/clients/B13/MEMORY.md"
 }
