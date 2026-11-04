@@ -39,10 +39,12 @@
   ],
   "workflow_path": ".github/workflows/raft-b21-original-light-export.yml",
   "run_url": "https://github.com/alwansan/raf/actions/runs/41930891466",
-  "artifact_urls": [],
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41930891466/artifacts"
+  ],
   "budget": "Public tool compile max18m; parity source check12m; isolated bounded real export max25m, CPU 2 cores, 9 SHA-pinned original providers, no Unity or APK, separate concurrency and no artifact carrying private source.",
-  "status": "in_progress",
-  "observed_result": "CI41929975841 SUCCESS 11/11 staging controls, exact pinned .NET9 public exporter compile and tool smoke; CI41930580691 SUCCESS 17/17 parity controls and authentic six original scenes/two Lights. Real bounded export41930891466 running; NO real Light pairing/GPU proof at this checkpoint.",
+  "status": "completed",
+  "observed_result": "CI41929975841 SUCCESS: 11/11 staging safeguards and pinned public AssetRipper .NET9 compiler. CI41930580691 SUCCESS: 17/17 value/YAML/identity tests plus real SHA-pinned 6/6 originals (2 source Lights). CI41930891466 COMPLETED SUCCESS: 9/9 exact original sources authenticated; 42 original Materials, 18 original Shaders; one bounded real private AssetRipper export completed; PRIVATE W1/B21 same export_instance validated; 2/2 original Light108 source identities matched actual export GUID/fileID, enabled/type/RGBA/intensity/range unchanged, mismatches={}. Output safe aggregate only. No GameObject owner identity equivalence, Unity/Adreno pixels or phone validation.",
   "rejected_hypotheses": [
     "Original source Light pathID alone can be treated as exported fileID/GUID: rejected; explicit same-process trace required.",
     "Identical Light count means pixel equivalence: rejected; raw typed value parity plus Unity/device evidence still missing."
@@ -53,6 +55,6 @@
     "Chosen minimal 9-provider export may not recreate all external scene dependencies",
     "No Unity/Adreno/phone acceptance and no gameplay repair"
   ],
-  "integration_commit": "37f7354af3bf068caf067b59591c8bf0d12bc38d",
-  "next_step": "Review bounded run41930891466; fix demonstrated source/compiler errors only. If original Light source/export pairing succeeds, compare and document actual values and any discrepancies before proposing production resource repair."
+  "integration_commit": "8c47919a7a65aac5a73d98c3eb9fed21e0ad085b",
+  "next_step": "Source-only scoped Light108 value parity achieved. Follow on with original native Light→GameObject owner source/export class1 pointer proof, or use this verified rendering exclusion to investigate shaders/ambient/pixel path. Never mark RENDER-002 complete."
 }
