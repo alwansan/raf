@@ -18,7 +18,7 @@ class TestB21LightLineage(unittest.TestCase):
         rendered = m.render(before).decode("utf-8")
         self.assertIn('if (asset.ClassID is not (21 or 48))', rendered)
         self.assertIn('if (asset.ClassID != 28)', rendered)
-        self.assertIn('if (asset.ClassID != 108)', rendered)
+        self.assertIn('if (asset.ClassID is not (1 or 108))', rendered)
         self.assertIn('RAFT_PRIVATE_EXPORT_LIGHT_LINEAGE', rendered)
         self.assertIn('RAFT_PRIVATE_EXPORT_TEXTURE_LINEAGE', rendered)
         self.assertIn('RAFT_PRIVATE_EXPORT_LINEAGE', rendered)
@@ -40,8 +40,9 @@ class TestB21LightLineage(unittest.TestCase):
     def test_non_exportable_not_equated_to_absent(self):
         rendered = m.render(BASE.read_bytes()).decode()
         self.assertIn('nonexportable_light_objects_skipped', rendered)
+        self.assertIn('nonexportable_gameobjects_skipped', rendered)
         self.assertIn('if (!collection.Exportable)', rendered)
-        self.assertIn('Ambiguous Light source identity', rendered)
+        self.assertIn('Ambiguous native scene object source identity', rendered)
 
     def test_tampered_w1_source_fails_closed(self):
         with self.assertRaisesRegex(ValueError, 'untrusted W1'):
@@ -68,6 +69,8 @@ class TestB21LightLineage(unittest.TestCase):
             self.assertTrue(path.is_file())
             self.assertTrue(report['original_w1_helper_sha1_verified'])
             self.assertTrue(report['same_export_instance_with_w1_and_b02'])
+            self.assertEqual(report['native_gameobject_class_id'], 1)
+            self.assertFalse(report['same_export_gameobject_owner_verified'])
             self.assertFalse(report['shared_helpers_modified'])
             self.assertFalse(report['actual_raft_light_export_captured'])
             self.assertEqual(before, BASE.read_bytes())
