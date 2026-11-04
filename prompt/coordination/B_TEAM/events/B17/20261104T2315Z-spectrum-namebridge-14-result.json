@@ -1,0 +1,12 @@
+{
+  "id": "B17-spectrum-namebridge-14-20261104T2315Z",
+  "owner": "B17",
+  "session_id": "20261104T2249Z-B17-cbind",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "All 14 original Spectrum fragment variants across seven original passes privately rebind source Unity texture/sampler symbol names and recompile Vulkan1.1; source CI41932008860 success. Not Unity/ShaderLab/GPU/device proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41932008860"
+  ],
+  "at": "2026-11-04T23:15:00Z"
+}
