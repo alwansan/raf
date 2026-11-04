@@ -72,7 +72,7 @@ class FoamNameTests(unittest.TestCase):
 
     def test_missing_original_index_rejected(self):
         x=fixture()
-        x["m_SubShaders"][0]["m_NameIndices"]=[["other",3]]
+        x["m_SubShaders"][0]["m_Passes"][0]["m_NameIndices"]=[["other",3]]
         with self.assertRaisesRegex(ValueError,"name index"):
             inspect_parsed(x)
 
