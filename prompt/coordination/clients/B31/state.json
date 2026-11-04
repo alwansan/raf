@@ -4,10 +4,10 @@
   "generation": "B-2026-11-04",
   "session_id": "20261104T213800Z-B31-5ea4",
   "resumed_from_session": null,
-  "status": "active",
+  "status": "paused",
   "base_sha": "c9b4ff0dff06335402a39c4cfe1d9a039990c2cb",
-  "last_commit": null,
-  "updated_at": "2026-11-04T21:38:29.509Z",
+  "last_commit": "9eb71aa4c967ac2cef5f447e21d6d0f32d1efccc",
+  "updated_at": "2026-11-04T21:53:58.568Z",
   "tracks": [
     "RENDER-002",
     "ASSET-RESTORE-001"
@@ -15,7 +15,10 @@
   "work_ids": [
     "B31-20261104T213800Z-B31-5ea4-graphics-cache"
   ],
-  "run_urls": [],
-  "next_step": "Review graphics hydration and ZIP2 staging implementation, implement SHA/size-validated reuse of existing original scene/shader payloads without changing shared native workflow; add negative controls; preserve source and owner protections.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41918569256",
+    "https://github.com/alwansan/raf/actions/runs/41919225658"
+  ],
+  "next_step": "Scoped RENDER-002 original texture provenance guard complete (source-only 26/26). Next independent P0 obstacle: run authenticated original Texture2D stream/ColorSpace same-export comparison with B02/B05, or original Spectrum shader program restoration distinct from B24 Foam/B45 Blur. Re-read live HEAD; no native/device proof.",
   "memory_path": "prompt/coordination/clients/B31/MEMORY.md"
 }
