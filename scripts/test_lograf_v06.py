@@ -70,7 +70,7 @@ checks={
     "Android total PSS retains provenance": '"process_pss_source"' in sampler and 'pss_validated_against_rss' in sampler,
     "marker goes through bounded FIFO not direct SAF": 'enqueue("MARKER",CaptureEventMarker.encode(unixMs,elapsedMs));' in capture and 'output.write(data);output.flush();' not in capture[capture.index('private void appendMarker()'):capture.index('private void openMetricSegment()')],
     "marker delivery counts explicitly reported": '"user_markers_enqueued"' in capture and '"user_markers_written"' in capture and 'markerWritten.incrementAndGet();' in capture,
-    "marker flushes on writer acknowledgement": 'if("MARKER".equals(item.source))saveStatus("Issue marker written to session log");' in capture and 'if("MARKER".equals(item.source) || SystemClock.elapsedRealtime()-lastWriterFlush>1200)' in capture,
+    "marker flushes on writer acknowledgement": 'if("MARKER".equals(item.source)){' in capture and 'markerWritten.incrementAndGet();' in capture and 'saveStatus("Issue marker written to session log");' in capture and 'if("MARKER".equals(item.source) || SystemClock.elapsedRealtime()-lastWriterFlush>1200)' in capture,
     "marker does not block service main thread": '"MARKER".equals(source)?0:1200' in capture,
     "error classes tracked without raw text": '"error_groups"' in remote and (src/"ErrorCategorySummary.java").exists(),
 }
