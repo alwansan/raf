@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "session_id": "20261104T2354Z-T2-foamabi01",
+  "issue_id": "WATER-001",
+  "hypothesis": "Original serialized constant-buffer member offsets/types can be compared with translated SPIR-V reflection to distinguish ABI differences from optimizer-driven m_Size mismatch without leaking source names.",
+  "source_commit": "b56ebc3847f251cee2539e9797471417d32698d2",
+  "input_hashes": [
+    "zip2:15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "sharedassets0:0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3"
+  ],
+  "tool_versions": {},
+  "commands": [],
+  "negative_controls": [
+    "reject forged offsets, duplicate bindings, malformed reflected types and source packet SHA"
+  ],
+  "workflow_path": ".github/workflows/raft-t2-foam-member-abi.yml",
+  "run_url": null,
+  "artifact_urls": [],
+  "budget": "single private-source bounded CI <=25m, no Unity/APK; no raw sources or shader HLSL in artifact",
+  "status": "planned",
+  "observed_result": null,
+  "rejected_hypotheses": [],
+  "limitations": [
+    "No Unity/ShaderLab/device evidence until actual build",
+    "No opaque CB0 identifier guessing"
+  ],
+  "integration_commit": null,
+  "next_step": "Implement source-authenticated member ABI probe and execute on original private packet."
+}
