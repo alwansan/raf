@@ -1,0 +1,13 @@
+{
+  "id": "20261104T230000Z-original-sampler-start",
+  "owner": "B15",
+  "session_id": "20261104T224800Z-B15-defaults-32f1",
+  "issue_id": "RENDER-002",
+  "type": "start",
+  "summary": "B15 starts real original selected ZIP2 sharedassets6.assets (6,607,272B, SHA pinned) validation of B15 typed Texture2D source parser across 87 known original Texture2Ds, no same-export claim.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41929077930",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/W2_FULLGAME_TEXTURE_COLORS_2026-11-03.json"
+  ],
+  "at": "2026-11-04T22:58:05.263Z"
+}
