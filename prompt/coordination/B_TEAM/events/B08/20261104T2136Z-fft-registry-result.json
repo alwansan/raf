@@ -1,0 +1,14 @@
+{
+  "id": "B08-20261104T2136Z-fft-registry-result",
+  "owner": "B08",
+  "session_id": "20261104T2130Z-B08-b71c",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Authenticated original FFT ComputeShader pathID2456 has 20 compiled DXBC slots but one distinct serialized kernel name (all slot positions 0..19 alias). 11 synthetic controls and original ZIP2 SHA/order checks passed in B08 CI41917369953. Reject 20 independent runtime FindKernel ID hypothesis; source/runtime integration remains unproven and WATER-001 OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41917369953",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B08_FFT_KERNEL_REGISTRY_2026-11-04.md",
+    "https://github.com/alwansan/raf/commit/c24dba47cd49d9af4ae241de5032541b1a41e918"
+  ],
+  "at": "2026-11-04T21:36:00Z"
+}
