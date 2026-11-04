@@ -1,0 +1,15 @@
+{
+  "id": "20261104T2251Z-volumetric-source-fixed",
+  "owner": "B10",
+  "session_id": "20261104T2242Z-B10-vlm1",
+  "issue_id": "RENDER-002",
+  "type": "integration",
+  "summary": "Volumetric Lighting BSD NOTICE is now part of the same safely validated and rollback-tested shader restoration transaction. B10 source-only 27 distinct tests PASS 41928744660, authentic pinned vendor 3-shader/notice CI41928592399 PASS. Earlier notice conflict-precedence failure corrected. Does not prove actual Unity/pixels.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/2a38dfb2d6ffe3af50f5f3a04bd2fc3ca3524bda",
+    "https://github.com/alwansan/raf/commit/b6efa50948cb388d1a006d482676d6f693bb51d6",
+    "https://github.com/alwansan/raf/actions/runs/41928744660",
+    "https://github.com/alwansan/raf/actions/runs/41928592399"
+  ],
+  "at": "2026-11-04T22:52:17.416Z"
+}
