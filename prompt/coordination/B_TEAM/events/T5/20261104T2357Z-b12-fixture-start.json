@@ -1,0 +1,14 @@
+{
+  "id": "T5-20261104T2357Z-b12-fixture-start",
+  "owner": "T5",
+  "session_id": "20261104T2357Z-T5-b12-fixture-7e2",
+  "issue_id": "INTEGRATION-001",
+  "type": "start",
+  "summary": "Starting integration repair of failed B12 exact production CLR diagnostics after B18 loaded-compute helper; failed run41933025319 missing ComputeShader/Resources/Encoding stubs, prior B12 8-case run PASS; no Unity or phone verification claimed.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41933025319",
+    "https://github.com/alwansan/raf/actions/runs/41929419050",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/b12_scene_render_harness.py"
+  ],
+  "at": "2026-11-04T23:58:36.308Z"
+}
