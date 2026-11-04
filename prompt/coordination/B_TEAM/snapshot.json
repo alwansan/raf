@@ -117,11 +117,14 @@
         "https://github.com/alwansan/CL/blob/5394407b5cd0a0ca1848ff0902f8d2133bf6ea29/raft%20log/lf/LogRaft-20261104-225757-156/session-summary.json",
         "https://github.com/alwansan/raf/commit/c06acd1da46e729a42f8b9bbf2f280a3b05921cc",
         "https://github.com/alwansan/raf/actions/runs/41909535306",
-        "https://github.com/alwansan/raf/actions/runs/41909535307"
+        "https://github.com/alwansan/raf/actions/runs/41909535307",
+        "https://github.com/alwansan/raf/actions/runs/41911354402",
+        "https://github.com/alwansan/raf/commit/2bb6c2bd0f14553ac002ff7b98cc2d83b8d53c72",
+        "https://github.com/alwansan/raf/actions/runs/41911949540"
       ],
       "remaining": [
+        "Original Cheat.AllowCheatsForLocalPlayer SteamUser.GetSteamID direct object call now source-guarded in B50 2bb6c2; no native/phone verification. Do not infer all Steam callbacks are removed.",
         "APK86 SaveGame -> steam_api64 StoreStats failure is source-guarded in B50 commit c06acd1, not yet retested in a native APK/device; preserve original .rgd and verify create/save/reload on newer build",
-        "راجع Cheat.AllowCheatsForLocalPlayer ومسارات Steam المتبقية",
         "تتبع OnWorldRecieved والتحميل والحفظ واللاعب دون أعلام نجاح وهمية"
       ],
       "acceptance": [
@@ -130,7 +133,7 @@
         "لا يكفي إخفاء رسالة الاتصال"
       ],
       "updated_by": "B50",
-      "updated_at": "2026-11-04T20:47:00Z",
+      "updated_at": "2026-11-04T21:03:00Z",
       "_record_path": "issues/LOCAL-005.json"
     },
     {
@@ -276,6 +279,22 @@
       "_record_path": "events/B50/20261104T2047Z-local-steamstats-sourcefixed.json"
     },
     {
+      "id": "B50-20261104T2102Z-local-cheat-steamid",
+      "owner": "B50",
+      "session_id": "20261104T2039Z-B50-d7a3",
+      "issue_id": "LOCAL-005",
+      "type": "integration",
+      "summary": "Original ZIP2-pin-backed Cheat.AllowCheatsForLocalPlayer SteamUser.GetSteamID() call uses Android-local stable managed CSteamID only, Windows path preserved; six private source-probe negative controls and final original managed compilation CI pass; phone world create/save/reload still unverified.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41911354402",
+        "https://github.com/alwansan/raf/commit/2bb6c2bd0f14553ac002ff7b98cc2d83b8d53c72",
+        "https://github.com/alwansan/raf/actions/runs/41911949540",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/experiments/B50/B50-20261104T2039Z-cheat-steamid-adapter.json"
+      ],
+      "at": "2026-11-04T21:02:00Z",
+      "_record_path": "events/B50/20261104T2102Z-local-cheat-steamid-sourcefixed.json"
+    },
+    {
       "id": "20261104-b-generation",
       "owner": "owner-team-bootstrap",
       "session_id": "b-team-setup-20261104",
@@ -291,5 +310,5 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "input_sha256": "9020396e3fc324b55424de01a3aebbd1d2bbcacb0fcddc982889128e3c0ffa78"
+  "input_sha256": "0b0ff37fba84c7fa3c5df3ab41d8e17f4906663d05031da09f352b6623eac10c"
 }
