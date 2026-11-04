@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "owner": "B08",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2246Z-B08-7d2a",
+  "issue_id": "WATER-001",
+  "track": "water-fft",
+  "approach": "Use existing bounded SPIR-V SSA image lineage to prove each of the two original FFT sampled descriptor candidates participates in executable image reads and the unique storage output is actually written, across all20 authentic original translations.",
+  "status": "active",
+  "base_sha": "fab58cfd0d2435df604f6e4a8199ea5eb0545d70",
+  "intended_files": [
+    "scripts/b08_fft_spirv_descriptor_abi.py",
+    "tests/test_b08_fft_spirv_descriptor_abi.py",
+    ".github/workflows/raft-b08-fft-descriptor-abi.yml",
+    "docs/B08_FFT_DESCRIPTOR_ABI_2026-11-04.md"
+  ],
+  "hypothesis": "All original FFT translated shaders actively read both declared sampled descriptors and write the single storage descriptor; declared-resource-only check does not prove active image usage.",
+  "related_work": [
+    "B08 FFT exact descriptor ABI CI41928583281",
+    "Original SPIR-V image_slot_dataflow verifier and existing independent tests",
+    "A1 original two-pass CPU Vulkan output comparisons"
+  ],
+  "experiment_ids": [
+    "B08-fft-active-image-20261104"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Add source-free synthetic OpImageFetch/OpImageWrite/SSA negative controls and check real original 20 SPIR-V programs with existing SHA-pinned workflow.",
+  "updated_at": "2026-11-04T22:54:29.467Z"
+}
