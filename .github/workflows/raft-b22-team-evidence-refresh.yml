@@ -5,6 +5,7 @@ on:
     branches: [feature/android-native-port]
     paths:
       - '.github/workflows/raft-b22-team-evidence-refresh.yml'
+      - 'prompt/coordination/B_TEAM/events/B22/**'
   workflow_dispatch:
 
 permissions:
