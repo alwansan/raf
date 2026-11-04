@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "owner": "B17",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2140Z-B17-spc2",
+  "issue_id": "WATER-001",
+  "track": "water-fft",
+  "approach": "Complement existing original Spectrum pass/CB topology with authenticated per-stage texture/sampler descriptors for ShaderLab restoration, bounded no-source-disclosure probe and negative controls; do not duplicate B24 Foam or B08 FFT runtime identity.",
+  "status": "active",
+  "base_sha": "5a977b3812cc597aaa790ae66bce54e85a965fc8",
+  "intended_files": [
+    "scripts/b17_spectrum_stage_descriptors.py",
+    "tests/test_b17_spectrum_stage_descriptors.py",
+    ".github/workflows/raft-b17-spectrum-descriptors.yml",
+    "docs/B17_SPECTRUM_STAGE_DESCRIPTORS_2026-11-04.md"
+  ],
+  "hypothesis": "Original shader pass texture/sampler resource tables are needed and currently unverified in actual Android shader restoration; exact serialized numeric slot contracts may be proven from SHA-pinned original Spectrum Shader.",
+  "related_work": [
+    "prompt/coordination/work/WATER-001/raft-20261103T152008Z-92502b76-water-shader-stage-bindings.json",
+    "prompt/coordination/work/WATER-001/B24-20261104T2126Z-B24-6f19-foam-original-stage-translation.json"
+  ],
+  "experiment_ids": [
+    "b17-spectrum-descriptor-source-probe"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement synthetic controls, then original ZIP2 source provider probe; do not mark RESTORED without Unity device evidence.",
+  "updated_at": "2026-11-04T21:41:00Z"
+}
