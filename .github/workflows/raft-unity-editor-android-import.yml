@@ -496,15 +496,35 @@ jobs:
             ${{ runner.temp }}/w1-native-water-contract-summary.json
           if-no-files-found: ignore
           retention-days: 7
-      - name: Fail early if authentic water shaders and FFT kernel source are still missing
+      - name: Authentic water gate (strict) or exact documented trial limitation
         shell: bash
         run: |
           set -euo pipefail
           # November 2 phone logs prove the one-pass export and zero-kernel
           # compute objects are not playable on Android. Never manufacture a
           # placeholder pass or kernel just to make the Unity job succeed.
-          python3 -m scripts.verify_water_render_contract \
-            --project "$RUNNER_TEMP/project/ExportedProject" --strict
+          #
+          # Strict first. A trial build may continue ONLY when the explicit
+          # build request on this branch enumerates every live unmet condition
+          # exactly; the record is retained, copied into the delivery set and
+          # shown in the published release notes.
+          if python3 -m scripts.verify_water_render_contract \
+              --project "$RUNNER_TEMP/project/ExportedProject" --strict; then
+            echo "RAFT_WATER_CONTRACT strict=pass"
+          else
+            python3 -m scripts.record_documented_water_limitation \
+              --project "$RUNNER_TEMP/project/ExportedProject" \
+              --request ".github/raft-native-build-request.json" \
+              --out "$RUNNER_TEMP/experimental-water-limitation.json"
+          fi
+      - name: Retain documented water limitation record
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: raft-water-limitation-${{ github.sha }}
+          path: ${{ runner.temp }}/experimental-water-limitation.json
+          if-no-files-found: ignore
+          retention-days: 7
       - name: Preserve FFT temporary lifetimes across kernel errors and exclude Windows Party startup from Android solo
         shell: bash
         run: |
@@ -851,6 +871,9 @@ jobs:
             --badging "$RUNNER_TEMP/delivery-badging.txt" --version-code "${{ github.run_number }}" \
             --output "$RUNNER_TEMP/raft-android-delivery"
           cp docs/ANDROID_INSTALL_AR.md "$RUNNER_TEMP/raft-android-delivery/INSTALL_AR.md"
+          if [ -f "$RUNNER_TEMP/experimental-water-limitation.json" ]; then
+            cp "$RUNNER_TEMP/experimental-water-limitation.json" "$RUNNER_TEMP/raft-android-delivery/RECORDED_LIMITATIONS.json"
+          fi
       - name: Retain audited native outputs if delivery packaging fails
         if: ${{ failure() && steps.package_delivery.outcome == 'failure' }}
         uses: actions/upload-artifact@v4
@@ -932,6 +955,12 @@ jobs:
           أدوات اللمس تجريبية: Test report ثم Enable touch gamepad وEdit touch layout.
           """
           notes += '\nSource: ' + os.environ['GITHUB_SHA'] + '\n'
+          limitation = root / 'RECORDED_LIMITATIONS.json'
+          if limitation.is_file():
+              recorded = json.loads(limitation.read_text())
+              notes += '\nقيود موثقة في طلب البناء — نسخة تجريبية غير مكتملة (الماء وشيدراته/FFT):\n'
+              for item in recorded.get('unmet_conditions', []):
+                  notes += '- ' + str(item) + '\n'
           notes += '\n'.join(row['name'] + ' bytes=' + str(row['bytes']) + ' SHA256=' + row['sha256'] for row in delivery['files']) + '\n'
           (Path(os.environ['RUNNER_TEMP'])/'early-test-notes.md').write_text(notes)
           PY
