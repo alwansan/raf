@@ -14,7 +14,7 @@
   "stages": {
     "acquisition": "SHA_PIN_VERIFIED",
     "extraction": "ORIGINAL_TWO_PASSES_FOUR_STAGES_LINKED",
-    "reconstruction": "FOUR_PRIVATE_DXBC_SPIRV_HLSL_ROUNDTRIPS_VALID",
+    "reconstruction": "ORIGINAL_4_OF_4_DXBC_VULKAN1_1_ROUNDTRIPS_VERIFIED",
     "binding": "PARTIAL_CB_LAYOUT_AUTHENTICATED_NOT_UPLOADED",
     "integration": "NOT_EXECUTED",
     "device": "NOT_TESTED"
@@ -30,5 +30,5 @@
     "Unity Android shader importer, Vulkan/Adreno device renderer and color parity, texture/sampler binding"
   ],
   "updated_by": "B24",
-  "updated_at": "2026-11-04T21:54:06.640Z"
+  "updated_at": "2026-11-04T21:56:24.790Z"
 }
