@@ -42,7 +42,8 @@
     "https://github.com/alwansan/raf/actions/runs/41919225658",
     "https://github.com/alwansan/raf/commit/9eb71aa4c967ac2cef5f447e21d6d0f32d1efccc",
     "https://github.com/alwansan/raf/actions/runs/41919146580",
-    "https://github.com/alwansan/raf/actions/runs/41920048140"
+    "https://github.com/alwansan/raf/actions/runs/41920048140",
+    "https://github.com/alwansan/raf/actions/runs/41920784251"
   ],
   "remaining": [
     "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -62,13 +63,14 @@
     "B12: Android scene_shader_snapshot bounded post-load read-only instrumentation now source-integrated (70edac4; CI41919089409 + original-managed CI41918822038 PASS). No diagnostic output exists from a new actual Raft APK/device yet. Compare future 512-renderer bounded counts and ambient/colorSpace against same-scene screenshots; do not equate this to water/shader/color restoration.",
     "B31 production-original Texture2D stream coverage now rejects symlink/hardlink provider/owner aliases and unsafe negative inline extent, source-only CI 41919225658 SUCCESS 26/26; this guards provenance, not actual white materials or device pixels. Initial hypothesis of W1 cache reducing LFS is rejected for current build: 11/14 original shader owners raw, 3/14 LFS pointers already staged. RENDER-002 remains OPEN.",
     "B38: duplicate mapping-key handling in exported Material m_TexEnvs/UV checker source-fixed; CI41919146580 (14+7 synthetic) PASS. Actual Raft ZIP2 original-to-same-export parity and Android colors still unverified.",
-    "B12 mesh-vs-shader source extension a324eb6+acd3514: 512 active-renderer cap now reports missing MeshFilter/Mesh.sharedMesh and SkinnedMeshRenderer.sharedMesh separately from material shader errors. CI41920048140 PASS source tests, original managed CI41920015979 pending; no real phone evidence/mesh loss cause yet."
+    "B12 mesh-vs-shader source extension a324eb6+acd3514: 512 active-renderer cap now reports missing MeshFilter/Mesh.sharedMesh and SkinnedMeshRenderer.sharedMesh separately from material shader errors. CI41920048140 PASS source tests, original managed CI41920015979 pending; no real phone evidence/mesh loss cause yet.",
+    "B38 source-integrated top-level Material queue, lightmap, instancing, and double-sided GI verifier, CI41920784251 9/9 synthetic PASS; real ZIP2 source-to-same-export parity, Unity/Adreno and phone remain unverified."
   ],
   "acceptance": [
     "مطابقة روابط ومراجع الأصل",
     "مقارنةصوريةلنفسالمشهد",
     "نجاحعلىالهاتف"
   ],
-  "updated_by": "B12",
-  "updated_at": "2026-11-04T21:53:32.656Z"
+  "updated_by": "B38",
+  "updated_at": "2026-11-04T21:59:10.168Z"
 }
