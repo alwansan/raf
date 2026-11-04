@@ -7,7 +7,7 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
-from scripts.probe_original_fft_kernel_callsites import analyze_source, CALL, parse_original_args, sha
+from scripts.probe_original_fft_kernel_callsites import analyze_source, CALL, parse_original_args, sha, mask_noncode
 from scripts.probe_original_fft_inherited_seed import inspect as inspect_seed
 from scripts.probe_original_water_compute import ORIGINAL_SOURCE_SHA256
 from scripts.verify_targeted_lfs_compute_sources import EXPECTED, verify_sources
@@ -85,7 +85,7 @@ def correlate(tree, source, expected_source_sha):
     if passes[0]['source'] == passes[0]['target'] or passes[1]['target'] == passes[1]['source']:
         raise ValueError('Original FFT pass aliases intermediate with original input/output')
     raw_calls = []
-    for match in CALL.finditer(source):
+    # This secondary shape validator must use the same executable-only offsets\n    # as analyze_source. A Dispatch token in comments/strings is not a call.\n    for match in CALL.finditer(mask_noncode(source)):
         args, _ = parse_original_args(source, match.end()-1)
         if match.group(1) == 'Dispatch': raw_calls.append(args)
     for args in raw_calls:
