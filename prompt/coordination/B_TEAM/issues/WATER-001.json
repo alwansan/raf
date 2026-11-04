@@ -44,7 +44,10 @@
     "https://github.com/alwansan/raf/commit/a21d66bc9122bba432c2c6d021e096b7f988abcc",
     "https://github.com/alwansan/raf/actions/runs/41926202371",
     "https://github.com/alwansan/raf/actions/runs/41926043987",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B20_SHADERLAB_SCOPE_INTEGRATION_2026-11-04.md"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B20_SHADERLAB_SCOPE_INTEGRATION_2026-11-04.md",
+    "https://github.com/alwansan/raf/actions/runs/41926521683",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B25_ORIGINAL_FOAM_RENDER_STATE_2026-11-04.md",
+    "https://github.com/alwansan/raf/commit/e9218c865aff845361f588aa4b000629619f1560"
   ],
   "remaining": [
     "Spectrum/Foam/Blur passes ناقصة في APK86",
@@ -66,13 +69,14 @@
     "B18: authenticated ZIP2 original FFT ComputeShader 20/20 SHEX declarations show t0/t1/u0 read/read/write registers and threadgroup dimensions identical to same-slot serialized Unity data; Actions41922333604 SUCCESS 13/13 synthetic and exact SHA source. Original programs contain 0 RDEF chunks; compiled private names, runtime Unity FindKernel index→compiled slot, ShaderLab Unity import/Adreno pixels remain NOT verified; WATER-001 OPEN.",
     "B18 second authenticated original FFT proof CI41923703800 SUCCESS: 20/20 translated DXBC->SPIR-V image role classes preserved (2 read sampled Texture2D, 1 write storage Texture2D) plus local workgroup size; 10 synthetic controls PASS. Mapping each original t register to one concrete SPIR-V set/binding, real Unity .compute import and Adreno render remain UNKNOWN. No game patch or new APK.",
     "B01: source-only managed FFT argument parser now ignores quoted/commented delimiters; CI41926033893 67 synthetic tests plus SHA-pinned private Dx11FFT and numeric oracle PASS; original caller counts unchanged. Runtime kernels/ShaderLab/Adreno remain unverified.",
-    "B20 source-only ShaderLab scope gate (a21d66b, CI41926202371 PASS): orphan/Properties/top-level Pass no longer inflates water Pass counts; this is NOT original program, Unity import, runtime pixels or kernel recovery. Original ShaderLab/FFT identity still open."
+    "B20 source-only ShaderLab scope gate (a21d66b, CI41926202371 PASS): orphan/Properties/top-level Pass no longer inflates water Pass counts; this is NOT original program, Unity import, runtime pixels or kernel recovery. Original ShaderLab/FFT identity still open.",
+    "B25 original SHA-pinned Foam/Global render-state verification: both of the two genuine pass m_State fragments are identical (247B and SHA256 19b4753c... each), source-only CI41926521683 SUCCESS 11/11 synthetic plus genuine ZIP2 object SHA. Hypothesis that original pass render states differ rejected; pass programs/partial CB texture bindings, author ShaderLab installation, exported .meta/GUID lineage, Unity/Adreno and phone STILL unverified."
   ],
   "acceptance": [
     "هوية برامج ونوى أصلية أو تطابق موثق دونdummy",
     "تثبيت فيالتصدير+Unity import/render",
     "اختبار هاتف يثبت الماء بلا pass/kernel errors"
   ],
-  "updated_by": "B20",
-  "updated_at": "2026-11-04T22:35:00Z"
+  "updated_by": "B25",
+  "updated_at": "2026-11-04T22:39:04.699Z"
 }
