@@ -4,22 +4,25 @@
   "generation": "B-2026-11-04",
   "session_id": "20261104T2039Z-B50-d7a3",
   "resumed_from_session": null,
-  "status": "active",
+  "status": "paused",
   "base_sha": "4086cd508c154ad081d2e3931e6775c622f37c3d",
-  "last_commit": "7af9a080c668ec504103fd73965fe5d823e0742a",
-  "updated_at": "2026-11-04T20:48:00Z",
+  "last_commit": "2e3b76e9da00b82bc50e3b1797639f659ce9e5fa",
+  "updated_at": "2026-11-04T21:05:00Z",
   "tracks": [
     "world-save",
     "steam-offline-fallback"
   ],
   "work_ids": [
     "B50-20261104T2039Z-B50-d7a3-steamstats-offline",
-    "B50-20261104T2039Z-B50-d7a3-cheat-steamid-probe"
+    "B50-20261104T2039Z-B50-d7a3-cheat-steamid-probe",
+    "B50-20261104T2039Z-B50-d7a3-cheat-steamid-adapter"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41909535307",
-    "https://github.com/alwansan/raf/actions/runs/41909535306"
+    "https://github.com/alwansan/raf/actions/runs/41909535306",
+    "https://github.com/alwansan/raf/actions/runs/41911354402",
+    "https://github.com/alwansan/raf/actions/runs/41911949540"
   ],
-  "next_step": "Probe authentic Cheat.AllowCheatsForLocalPlayer Steam identity and other post-world-load calls without changing flags or touching audio/Settings/deferred touch; original managed offline compile SUCCESS, device not tested.",
+  "next_step": "Both B50 original Steam native entrypoint scopes source-validated/managed compiled; LOCAL-005 device world-create/save/.rgd reload remains OPEN. Re-read live B_TEAM prompt, HEAD/Actions/CL at next session; coordinate with water/shader workers before native APK, do not touch audio/Settings/touch.",
   "memory_path": "prompt/coordination/clients/B50/MEMORY.md"
 }
