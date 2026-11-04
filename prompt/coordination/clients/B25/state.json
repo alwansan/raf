@@ -4,17 +4,21 @@
   "generation": "B-2026-11-04",
   "session_id": "20261104T222931Z-B25-foam-state",
   "resumed_from_session": null,
-  "status": "active",
+  "status": "completed",
   "base_sha": "c0dd09b0ca9738906449dcbe0047e71284106adf",
-  "last_commit": null,
-  "updated_at": "2026-11-04T22:29:31.916Z",
+  "last_commit": "afc9a403db9e0c8db08bda9b7fd8df3b91a580ea",
+  "updated_at": "2026-11-04T22:50:38.774Z",
   "tracks": [
-    "WATER-001: original Foam/Global two-pass ShaderLab render-state binding"
+    "WATER-001: authentic original Foam two-pass render states, CB names/slots, future shader alias"
   ],
   "work_ids": [
-    "B25-20261104T222931Z-B25-foam-state-foam-pass-state"
+    "B25-20261104T222931Z-B25-foam-state-foam-pass-state",
+    "B25-20261104T222931Z-B25-foam-state-foam-cb-namebridge"
   ],
-  "run_urls": [],
-  "next_step": "Implement exact SHA-authenticated original Foam pass render-state extractor, fail-closed tests and bounded original ZIP2 workflow. No raw shader source published; no Unity build.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41926521683",
+    "https://github.com/alwansan/raf/actions/runs/41928183838"
+  ],
+  "next_step": "On a new B25 cycle, inspect live HEAD/CI/CL and owner feedback. Authenticate original CB0 shader descriptor symbol and resource/texture bindings in PRIVATE four-stage reflection, preserve 2 pass program identities and SHA. Then genuine ShaderLab/Unity/Adreno proof; no fake alias/ready flags. Latest Raft APK86 predates work; preserve audio/Settings and deferred touch. No background execution.",
   "memory_path": "prompt/coordination/clients/B25/MEMORY.md"
 }
