@@ -172,9 +172,10 @@ def recover(root, repo, runner, private, progress=None):
                 private_command(['spirv-val', '--target-env', 'vulkan1.1', str(output)])
                 binaries[(stage, rebuilt)] = output
                 interfaces[(stage, rebuilt)] = {key: interface_rows(ref, key) for key in ('inputs', 'outputs')}
-            stages.append(dict(pass_index=pass_index, stage_code=stage, **uniform_summary,
-                **public_summary(plan), resources=resources, original_dxbc_sha256=translated['dxbc_sha256'],
-                rebound_hlsl_sha256=hashlib.sha256(source.encode()).hexdigest(), vulkan11_valid=True))
+            stages.append({**uniform_summary, **public_summary(plan),
+                'pass_index': pass_index, 'stage_code': stage, 'resources': resources,
+                'original_dxbc_sha256': translated['dxbc_sha256'],
+                'rebound_hlsl_sha256': hashlib.sha256(source.encode()).hexdigest(), 'vulkan11_valid': True})
         for rebuilt in (False, True):
             if not interfaces_match(interfaces[(1, rebuilt)], interfaces[(0, rebuilt)]):
                 raise ValueError('Original/reconstructed varying interface mismatch')
