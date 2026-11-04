@@ -1,0 +1,13 @@
+{
+  "id": "20261104T210726Z-B06-fmt6a2-dispatch-lexical-sourcefixed",
+  "owner": "B06",
+  "session_id": "20261104T210726Z-B06-fmt6a2",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Hardens secondary authenticated FFT resource Dispatch shape parser against comment/string false positives using shared B01 executable-only masking; 8/8 synthetic tests passed; original-private/Unity/device pending.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/df784a6ab821f3dbbfbe7ea47293e16f3edba11e",
+    "https://github.com/alwansan/raf/actions/runs/41914612977"
+  ],
+  "at": "2026-11-04T21:18:03.365Z"
+}
