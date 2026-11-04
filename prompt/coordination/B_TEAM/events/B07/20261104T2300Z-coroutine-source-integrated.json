@@ -1,0 +1,15 @@
+{
+  "id": "20261104T2300Z-b07-coroutine-source-integration",
+  "owner": "B07",
+  "session_id": "20261104T2242Z-B07-c7ea",
+  "issue_id": "LOCAL-005",
+  "type": "integration",
+  "summary": "Authenticated original Raft_Network first MoveNext Android log integrated; original adapted managed compiler/RPC/save harness CI41929721761 passed after source-authenticated trace manifest pin correction; B07 9+19 units and CLR Android/nonAndroid yield tests plus manifest parity CI41929910850 passed. No Unity/device or .rgd test.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41929721761",
+    "https://github.com/alwansan/raf/actions/runs/41929910850",
+    "https://github.com/alwansan/raf/commit/354e478a9ec46aaff758cb8110154d64b8298bea",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B07_LOCAL_WORLD_COROUTINE_2026-11-04.md"
+  ],
+  "at": "2026-11-04T23:00:00Z"
+}
