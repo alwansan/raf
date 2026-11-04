@@ -4,17 +4,19 @@
   "generation": "B-2026-11-04",
   "session_id": "20261104T2107Z-B05-9e24",
   "resumed_from_session": null,
-  "status": "active",
+  "status": "paused",
   "base_sha": "f1dd7fccb7607264d7ec9fee6a67cb73cbbd7eb7",
-  "last_commit": null,
-  "updated_at": "2026-11-04T21:07:00Z",
+  "last_commit": "9f91bba67106bdcc186edec3d86938f44b8b4cf2",
+  "updated_at": "2026-11-04T21:17:00Z",
   "tracks": [
     "colors-materials"
   ],
   "work_ids": [
     "B05-20261104T2107Z-B05-9e24-texenv-lineage"
   ],
-  "run_urls": [],
-  "next_step": "Compare original Material m_TexEnvs with same-instance export; reject missing/null/wrong internal texture pointers.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41914198631"
+  ],
+  "next_step": "Validator source/tests/CI completed. Resume authenticated ZIP2+same-instance Unity-export m_TexEnvs comparison and any proven export fix; no original/GPU/phone proof. RENDER-002 still OPEN, NOT_READY 0/3.",
   "memory_path": "prompt/coordination/clients/B05/MEMORY.md"
 }
