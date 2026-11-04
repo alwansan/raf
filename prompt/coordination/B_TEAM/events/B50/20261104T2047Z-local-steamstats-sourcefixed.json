@@ -1,0 +1,15 @@
+{
+  "id": "B50-20261104T2047Z-local-savegame-steamstats",
+  "owner": "B50",
+  "session_id": "20261104T2039Z-B50-d7a3",
+  "issue_id": "LOCAL-005",
+  "type": "integration",
+  "summary": "SHA-pinned original SaveGame instrumentation now excludes SteamUserStats.StoreStats in Android-local mode only; C# original-source offline integration and bounded synthetic guards pass, device create/save/reload still unverified.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/c06acd1da46e729a42f8b9bbf2f280a3b05921cc",
+    "https://github.com/alwansan/raf/commit/67d75cc7381a03f2b5ee166afc9d48de0d15217a",
+    "https://github.com/alwansan/raf/actions/runs/41909535307",
+    "https://github.com/alwansan/raf/actions/runs/41909535306"
+  ],
+  "at": "2026-11-04T20:47:00Z"
+}
