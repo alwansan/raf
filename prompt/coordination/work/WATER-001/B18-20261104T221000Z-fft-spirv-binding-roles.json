@@ -6,7 +6,7 @@
   "issue_id": "WATER-001",
   "track": "water-fft",
   "approach": "Follow verified original FFT compiled SHEX t0/t1/u0 into translated SPIR-V actual image descriptor classes/sets/binding and Vulkan image read/write flow; fail closed on count/access-class drift without guessing runtime FindKernel mapping. Reuse existing conversion helpers instead of repeating prior individual SPIR-V profiles.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "42476b87626031f23db37808d00e1c76604e5b33",
   "intended_files": [
     "scripts/b18_fft_spirv_binding_roles.py",
@@ -20,9 +20,25 @@
     "A1 original DXBC-to-vkd3d SPIR-V image profiles",
     "B08/B30/B48 original Unity index mapping remains open"
   ],
-  "experiment_ids": [],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Inspect existing authentic vkd3d conversion and typed SPIR-V images, propose strict role-preservation conditions, implement source-free canaries, run on original ZIP2 only if distinct and safe; do not alter other clients' code.",
-  "updated_at": "2026-11-04T22:11:00Z"
+  "experiment_ids": [
+    "prompt/coordination/experiments/B18/20261104T221600Z-original-fft-spv-resource-classes.json"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41923703800"
+  ],
+  "result": {
+    "status": "SOURCE_TRANSLATION_STRUCTURAL_VERIFIED",
+    "pinned_zip2_original_authenticated": true,
+    "original_fft_object_SHA_authenticated": true,
+    "source_programs_verified": 20,
+    "spv_converted_with_two_sampled_one_storage_image_types_and_workgroup_preserved": 20,
+    "synthetic_positive_and_negative_controls_passed": 10,
+    "each_DXBC_register_to_SPV_descriptor_unique_identity_verified": false,
+    "unity_editor_import_verified": false,
+    "android_gpu_pixels_verified": false,
+    "ci_run": "41923703800",
+    "source_commit": "ea07d9d1c8d6009df460a102ee95dbdf25792a91"
+  },
+  "next_step": "Source-to-converted SPIR-V image role class/count preservation completed; pass is structural only. Continue RENDER-002 source-to-same Unity export shader/mat/pass link or authoritative FFT kernel ID staging, not another duplicate SPV census.",
+  "updated_at": "2026-11-04T22:19:00Z"
 }

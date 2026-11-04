@@ -4,13 +4,14 @@
   "generation": "B-2026-11-04",
   "session_id": "20261104T215100Z-B18-d3f9",
   "resumed_from_session": null,
-  "status": "active",
+  "status": "completed",
   "base_sha": "22c021f33d2a843e2af99e49cfcbffd2e78afde4",
-  "last_commit": "42476b87626031f23db37808d00e1c76604e5b33",
-  "updated_at": "2026-11-04T22:10:00Z",
+  "last_commit": "ea07d9d1c8d6009df460a102ee95dbdf25792a91",
+  "updated_at": "2026-11-04T22:19:00Z",
   "tracks": [
     "water-fft",
-    "shader-resource-binding"
+    "shader-resource-binding",
+    "colors-materials-triage"
   ],
   "work_ids": [
     "prompt/coordination/work/WATER-001/B18-20261104T215100Z-B18-d3f9-fft-resource-bindings.json",
@@ -21,8 +22,9 @@
     "https://github.com/alwansan/raf/actions/runs/41921227456",
     "https://github.com/alwansan/raf/actions/runs/41921950901",
     "https://github.com/alwansan/raf/actions/runs/41922116469",
-    "https://github.com/alwansan/raf/actions/runs/41922333604"
+    "https://github.com/alwansan/raf/actions/runs/41922333604",
+    "https://github.com/alwansan/raf/actions/runs/41923703800"
   ],
-  "next_step": "WATER-001 second independent subtask: inspect original DXBC t0/t1/u0 --> VKD3D SPIR-V translated image role/descriptor semantics with fail-closed synthetic+SHA-authenticated original checks; no Unity runtime, preserve earlier successful 20/20 SHEX declaration result.",
+  "next_step": "Current B18 scope completed (not Raft done). Next independently useful P0: RENDER-002 investigate exact original shader-pass/material to same-export Unity identity, with actual APK86 CL water pass failures (Spectrum 12557, FoamGlobal 22216, SubsurfaceBlur 5554). Existing B44/B46/B05/B03/B43 validators synthetic only; do not repeat; need authenticated same-instance export and shader pass restoration via approved workflows. Runtime Unity FindKernel6 index and phone water remain unverified. Preserve working audio/Settings; touch deferred.",
   "memory_path": "prompt/coordination/clients/B18/MEMORY.md"
 }
