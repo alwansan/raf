@@ -103,9 +103,9 @@ def wrap_original_world_callback(text, method_name, expected_body_sha, area):
         raise ValueError('Unrecognized original GameManager callback body')
     executable = _executable_positions(text)
     declaration = re.compile(
-        r'(?m)^\\s*(?:public|private|protected|internal)\\s+'
-        r'(?:(?:static|virtual|override|sealed|new|async)\\s+)*'
-        r'void\\s+' + re.escape(method_name) + r'\\s*\\([^;{}]*\\)\\s*\\{'
+        r'(?m)^\s*(?:public|private|protected|internal)\s+'
+        r'(?:(?:static|virtual|override|sealed|new|async)\s+)*'
+        r'void\s+' + re.escape(method_name) + r'\s*\([^;{}]*\)\s*\{'
     )
     matches = list(declaration.finditer(executable))
     if len(matches) != 1:
