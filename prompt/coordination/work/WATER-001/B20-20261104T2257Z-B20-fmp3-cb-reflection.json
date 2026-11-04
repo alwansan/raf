@@ -6,7 +6,7 @@
   "issue_id": "WATER-001",
   "track": "water-fft",
   "approach": "Inspect source-authenticated original Foam four-stage private SPIR-V UBO descriptors and recovered HLSL cbuffer b-slot declarations vs independently pinned B25 original CB0/1/2 partial buffer slots",
-  "status": "active",
+  "status": "completed",
   "base_sha": "6e3ddf26c6080a630a786f1afee6abccc62e017a",
   "intended_files": [
     "scripts/b20_foam_cb_descriptor_lineage.py",
@@ -22,8 +22,25 @@
   "experiment_ids": [
     "B20-foam-cb-reflection-20261104"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement numeric-only reflection and HLSL lexical source-slot probe, negative tests and original ZIP2 job; do not infer Unity binding.",
-  "updated_at": "2026-11-04T23:08:17.896Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41931585626",
+    "https://github.com/alwansan/raf/actions/runs/41932300308"
+  ],
+  "result": {
+    "stage": "SOURCE_AUTHENTIC_NUMERIC_DESCRIPTOR_PARITY",
+    "genuine_source_sha": "00ca84050300ab01a1dd3396ea863c12f5e14520",
+    "source_report_sha256": "2ffb3f1b5f03e742e3c6b42502172f378a0c62e566452ea95768e7a721370135",
+    "original_cb_links_verified": 8,
+    "hlsl_numeric_slot_matches": 8,
+    "spirv_numeric_slot_matches": 8,
+    "original_vs_reflected_size_matches": 1,
+    "original_vs_reflected_size_mismatches": 7,
+    "cb0_alias_verified": false,
+    "unity_or_android_tested": false,
+    "report": "docs/B20_FOAM_CB_DESCRIPTOR_SIZE_2026-11-04.md",
+    "numeric_test_ci": "41932300308",
+    "original_ci": "41931585626"
+  },
+  "next_step": "Authenticate original serialized partial CB member offsets/types and SPIRV UBO member offsets; then CB0 alias, material upload, real ShaderLab/Unity/Adreno.",
+  "updated_at": "2026-11-04T23:17:56.711Z"
 }
