@@ -6,7 +6,7 @@
   "issue_id": "WATER-001",
   "track": "water-fft",
   "approach": "Strict SHA-authentic per-original-Foam-pass m_NameIndices registry to verify CB slot→real original name SHA mapping, per-stage/per-pass CB roles; private original strings never leave runner; complementary to B24 CB count guard.",
-  "status": "active",
+  "status": "completed",
   "base_sha": null,
   "intended_files": [
     "scripts/b25_foam_cb_namebridge.py",
@@ -23,8 +23,33 @@
   "experiment_ids": [
     "B25-20261104T222931Z-B25-foam-state-foam-cb-namebridge"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement lexical/table type guard with 10+ negative controls, use private original ZIP2 workflow at unchanged pinned owner, then record authentic result or rejection.",
-  "updated_at": "2026-11-04T22:39:38.864Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41928183838"
+  ],
+  "result": {
+    "conclusion": "success",
+    "source_commit": "afc9a403db9e0c8db08bda9b7fd8df3b91a580ea",
+    "original_provider_verified": true,
+    "source_object_verified": true,
+    "synthetic_tests": "26/26 PASS",
+    "original_passes": 2,
+    "authentic_stage_count": 4,
+    "matched_cb_index_slot_links": 8,
+    "cb0_requires_verified_alias": 4,
+    "original_registry_records_by_pass": [
+      14,
+      8
+    ],
+    "same_cb_name_hashes_across_passes": true,
+    "private_source_published": false,
+    "shaderlab_or_unity_installed": false,
+    "phone_tested": false,
+    "report": "docs/B25_ORIGINAL_FOAM_CB_NAMEBRIDGE_2026-11-04.md",
+    "negative_hypotheses": [
+      "All original name-registry entries valid direct HLSL identifiers",
+      "All original CB0 names valid direct HLSL identifiers"
+    ]
+  },
+  "next_step": "A new bounded private original DXBC/SPIR-V reflection task must map CB0 opaque original name SHA to actual shader descriptor and permit a verified alias; then genuine ShaderLab stages, Material GUID/Unity/Android. No source/phone acceptance yet.",
+  "updated_at": "2026-11-04T22:49:45.491Z"
 }
