@@ -4,10 +4,10 @@
   "generation": "B-2026-11-04",
   "session_id": "20261104T224512Z-B06-wg7a3",
   "resumed_from_session": "20261104T210726Z-B06-fmt6a2",
-  "status": "active",
+  "status": "completed",
   "base_sha": "664100d4b976802a3463aa4ee5c0fe5254c7d28f",
-  "last_commit": "f4b9520c367bf8e78fcfebba673f20b465edb720",
-  "updated_at": "2026-11-04T22:45:35.546Z",
+  "last_commit": "2fa36d110cbaf1693cd61fbede26e7ce3e8f8d36",
+  "updated_at": "2026-11-04T22:53:13.647Z",
   "tracks": [
     "water-fft",
     "fft-format-integration",
@@ -20,8 +20,10 @@
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41913854292",
-    "https://github.com/alwansan/raf/actions/runs/41914612977"
+    "https://github.com/alwansan/raf/actions/runs/41914612977",
+    "https://github.com/alwansan/raf/actions/runs/41914575997",
+    "https://github.com/alwansan/raf/actions/runs/41928357485"
   ],
-  "next_step": "Correct FFT capability semantics and test new source-backed group-theory logging; no Unity/device proof.",
+  "next_step": "Resumed scope complete. Read B06 MEMORY and docs/B06_FFT_DEVICE_WORKGROUP_LIMITS_2026-11-04.md; source-only C# synthetic CI41928357485 SUCCESS, earlier B06 original-source CI41914575997 SUCCESS. Water authentic ShaderLab/Unity ComputeShader runtime kernel ID mapping still open; coordinate B08/B48/B18 and B09/B24/B45. Latest Raft APK86 lacks changes; validate device capability rows only on a later legitimate builder APK. Keep WATER-001 OPEN, NOT_READY 0/3.",
   "memory_path": "prompt/coordination/clients/B06/MEMORY.md"
 }
