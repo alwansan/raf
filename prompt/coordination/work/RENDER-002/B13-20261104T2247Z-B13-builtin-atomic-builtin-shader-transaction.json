@@ -6,7 +6,7 @@
   "issue_id": "RENDER-002",
   "track": "colors-materials",
   "approach": "Atomic, fail-closed production builtin ShaderLab replacement preserving original bytes and source metadata; synthetic injected-write/concurrent-mutation proof.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "2fa36d110cbaf1693cd61fbede26e7ce3e8f8d36",
   "intended_files": [
     "scripts/restore_builtin_shaders.py",
@@ -22,8 +22,10 @@
   "experiment_ids": [
     "B13-builtin-atomic-20261104T2247Z-B13-builtin-atomic"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Patch source, run source-only fault tests, remote CI, record limitations; leave engine/water/native authenticity gates intact.",
-  "updated_at": "2026-11-04T22:47:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41928703661"
+  ],
+  "result": "SOURCE_FIXED production restorer at 20c94103; isolated CI41928703661 SUCCESS 14/14 synthetic including four injected-failure controls; not original ShaderLab/Unity/device evidence.",
+  "next_step": "Original source-to-same-export shader GUID and material lineage proof without weakening water gates.",
+  "updated_at": "2026-11-04T22:56:00Z"
 }
