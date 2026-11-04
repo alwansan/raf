@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "username": "B14",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2131Z-B14-a71c",
+  "resumed_from_session": null,
+  "status": "active",
+  "base_sha": "f8028d15b2401d1fd8c73b2316e5bf76fef88eae",
+  "last_commit": null,
+  "updated_at": "2026-11-04T21:32:36.932Z",
+  "tracks": [
+    "WATER-001/water-source-integrity"
+  ],
+  "work_ids": [
+    "B14-20261104T2131Z-B14-a71c-water-path-identity"
+  ],
+  "run_urls": [],
+  "next_step": "Harden water render pass/compute provenance against linked Assets and metadata; add negative controls without touching original resources.",
+  "memory_path": "prompt/coordination/clients/B14/MEMORY.md"
+}
