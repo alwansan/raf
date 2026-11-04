@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "owner": "B25",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T222931Z-B25-foam-state",
+  "issue_id": "WATER-001",
+  "track": "water-fft",
+  "approach": "Strict SHA-authentic per-original-Foam-pass m_NameIndices registry to verify CB slot→real original name SHA mapping, per-stage/per-pass CB roles; private original strings never leave runner; complementary to B24 CB count guard.",
+  "status": "active",
+  "base_sha": null,
+  "intended_files": [
+    "scripts/b25_foam_cb_namebridge.py",
+    "tests/test_b25_foam_cb_namebridge.py",
+    ".github/workflows/raft-b25-foam-pass-state.yml",
+    "docs/B25_ORIGINAL_FOAM_CB_NAMEBRIDGE_2026-11-04.md"
+  ],
+  "hypothesis": "Original m_NameIndices table can resolve per-stage CB m_NameIndex to unique original names and validate that same register slot across stages/passes binds a stable or explicitly distinct original name.",
+  "related_work": [
+    "B24 original four stages/partial CB slot counts and vector member differences",
+    "B25 original two identical pass render-state fragments",
+    "W1 ShaderLab Depth Copy original name/texture rebind"
+  ],
+  "experiment_ids": [
+    "B25-20261104T222931Z-B25-foam-state-foam-cb-namebridge"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement lexical/table type guard with 10+ negative controls, use private original ZIP2 workflow at unchanged pinned owner, then record authentic result or rejection.",
+  "updated_at": "2026-11-04T22:39:38.864Z"
+}
