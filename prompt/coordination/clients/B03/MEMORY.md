@@ -14,3 +14,6 @@ Implemented read-only exported Renderer.m_Materials to Material YAML GUID/fileID
 
 ## Generator checkpoint limitation
 The B_TEAM/SUMMARY.md generated index was last checked at SHA c5dd3cb22e1f8753307a33f916c97d78faea3b0b and has not yet included the B03 result events added afterward. The team-owned workflow raft-b48-refresh-team-summary.yml exists and successfully ran at 41915050060 before latest B03 event insertion, but has not been re-run by B03 to avoid interfering with another agent. Re-run python scripts/refresh_b_team.py against latest committed records at next safe integration checkpoint; do not manually override generated summary/snapshot.
+
+## Resumed source-side renderer audit 2026-11-04T22:44:18.837Z
+Session `20261104T2243Z-B03-7c9e` entered on HEAD `fc50a7d065a865d99d580c726b5807e25f09965b` (live current may advance). Prior `20261104T2101Z-B03-a419` paused. This session reads original six signed-off PIN SHA-level0..5 sources to count actual native Renderer→Material pointer categories and report aggregate source commitment. Avoid overlapping B21 lightmap/light work. Do not assert root cause or source/export parity from source baseline alone. See sessions/20261104T2243Z-B03-7c9e.md and work/B03-20261104T2243Z-B03-7c9e-original-renderer-pointers.json.
