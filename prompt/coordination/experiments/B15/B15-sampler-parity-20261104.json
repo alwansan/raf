@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "owner": "B15",
+  "session_id": "20261104T215400Z-B15-7b2c",
+  "issue_id": "RENDER-002",
+  "hypothesis": "Given trusted original Texture2D owner bytes and exact same-export object mapping, a read-only source/importer sampler comparison can expose individual wrap/filter/aniso/mip-bias drift without guessing identities; upstream exporter originally calls TextureSettings.CopyValues, so drift in real project is unproven.",
+  "source_commit": "4035b13251f3fffcb8c4f0257174528f58c298ce",
+  "input_hashes": [
+    "zip2=15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "resources.assets:111533516:sha256:87493249f1adfc0c5eb8b82e4e199e208cd2c95eabe9796cab82116c4838595c",
+    "sharedassets0.assets:115978112:sha256:0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "sharedassets36.assets:110149324:sha256:b32fcd9d327c8926b2309ffc1b5645a0c23d64ed95be37ed94e96f34736530c8"
+  ],
+  "tool_versions": {
+    "python": "3.11",
+    "PyYAML": "6.0.3",
+    "UnityPy": "not installed, stubbed in synthetic tests"
+  },
+  "commands": [
+    "python -m unittest discover -s tests -p test_b15_texture_sampler_parity.py -v"
+  ],
+  "negative_controls": [
+    "all-six importer sampler fields modified independently",
+    "-1 unknown importer overrides",
+    "same-size source-byte tamper",
+    "source pin drift and wrong source commit/export instance",
+    "forged GUID/wrong PPtr type",
+    "traversal/symlink to outside metadata",
+    "duplicate source/export identities and YAML keys",
+    "missing fields/non-finite mip bias",
+    "original object not Texture2D/missing pathID",
+    "non-TextureImporter same-GUID target"
+  ],
+  "workflow_path": ".github/workflows/raft-b15-texture-sampler-parity.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41921429305",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41921429305"
+  ],
+  "budget": "8-minute ubuntu-24.04 CPU-only public workflow; no assets, LFS, Unity, APK or secrets",
+  "status": "completed",
+  "observed_result": "16/16 synthetic unit controls PASS in CI41921429305/job126894628835 at exact SHA4035b132; baseline12/12 CI41920884155 PASS; exact GUID trace bridge implemented, not executed against an actual authenticated Raft export; real original comparisons=0.",
+  "rejected_hypotheses": [
+    "It is not yet demonstrated that AssetRipper discards sampler values: pinned upstream ImporterFactory invokes TextureSettings.CopyValues.",
+    "A matching export GUID label or filename alone does not independently prove same-instance original-to-export provenance.",
+    "Synthetic test successes establish neither Unity/GPU image parity nor root cause of white materials."
+  ],
+  "limitations": [
+    "Zero authenticated real Texture2D same-export comparisons; trace witness is supplied by caller, not independently attested",
+    "Only three trusted source owner files in current pinset",
+    "No game files, GUIDs, .meta, shaders, audio, Settings, touch modified",
+    "Unity/Adreno/device/FFT, gameplay and final readiness unverified"
+  ],
+  "integration_commit": "4035b13251f3fffcb8c4f0257174528f58c298ce",
+  "next_step": "Obtain authentic same-export Unity export + exporter trace and ZIP2 source owners; run B15 audit privately and separate importer mismatches from white-shader errors."
+}
