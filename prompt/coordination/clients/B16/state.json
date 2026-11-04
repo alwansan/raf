@@ -6,8 +6,8 @@
   "resumed_from_session": null,
   "status": "completed",
   "base_sha": "29242464003fcf2dcfd0fcc120770b7f2839ce15",
-  "last_commit": "214fb6544d7e7d5ac0e561e74ffbe9964efb5327",
-  "updated_at": "2026-11-04T22:04:41.318Z",
+  "last_commit": "97cd4b26ab96a856d70a749d545559d90930bae7",
+  "updated_at": "2026-11-04T22:07:38.738Z",
   "tracks": [
     "WATER-001: inactive-preprocessor kernel structure"
   ],
@@ -18,6 +18,6 @@
     "https://github.com/alwansan/raf/actions/runs/41920741687",
     "https://github.com/alwansan/raf/actions/runs/41921849148"
   ],
-  "next_step": "B16 scope complete. Source CI41920741687 PASS34/34; summary refresh CI41921849148 PASS and B16 event present in generated SUMMARY. WATER-001 still OPEN: authentic ZIP2 FFT program/Unity define and pass binding/GPU/device unresolved. No background execution.",
+  "next_step": "Scoped B16 compute conditional guard complete: CI41920741687 SUCCESS 34/34, canonical summary refresh CI41921849148 SUCCESS. Future scope should address authentic original water/FFT shader program/resource integration, coordinating with ongoing B18/B24/B17/B30; no active B16 background task. Water and world/local save remain OPEN.",
   "memory_path": "prompt/coordination/clients/B16/MEMORY.md"
 }
