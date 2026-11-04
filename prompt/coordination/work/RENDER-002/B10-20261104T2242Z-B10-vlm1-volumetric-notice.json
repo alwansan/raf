@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "owner": "B10",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2242Z-B10-vlm1",
+  "issue_id": "RENDER-002",
+  "track": "colors-materials/volumetric-effects",
+  "approach": "Make secondary volumetric BSD redistribution NOTICE part of shared vendor shader restore transaction, reject path redirect and preserve original shader GUIDs",
+  "status": "active",
+  "base_sha": "664100d4b976802a3463aa4ee5c0fe5254c7d28f",
+  "intended_files": [
+    "scripts/restore_tmp_shaders.py",
+    "scripts/restore_volumetric_shaders.py",
+    "tests/test_restore_volumetric_shaders.py",
+    "tests/test_a3_vendor_shader_restore_transaction.py",
+    ".github/workflows/raft-b10-volumetric-transaction.yml"
+  ],
+  "hypothesis": "Late standalone write of volumetric NOTICE can fail after shaders already changed; integrated transaction prevents partial successful mutation on that failure",
+  "related_work": [
+    "B10-generated-vendor-shader-metadata",
+    "B20 authenticated Blur installer rollback (separate installer)"
+  ],
+  "experiment_ids": [
+    "20261104T2242Z-B10-vlm1-transaction"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement staged extra notice addition; test synthetic I/O rejection and path safety; run independent source CI and existing authentic vendor contract",
+  "updated_at": "2026-11-04T22:45:12.019Z"
+}
