@@ -40,6 +40,11 @@ jobs:
           sparse-checkout: |
             Source/AssetRipper.Assets
             Source/AssetRipper.IO.Files
+      - name: Reuse public exact-reader NuGet dependencies across CPU probes
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: w1-exact-reader-nuget-${{ runner.os }}-036098ab-v1-${{ hashFiles('android-port/Experiments/W1EngineDatabase/*.csproj', 'android-port/Experiments/W1EngineDatabase/Program.cs') }}
       - name: Obtain private exact embedded database from pinned generated assembly
         run: dotnet run --project android-port/Experiments/W1EngineDatabase/W1EngineDatabase.csproj -c Release -- "$RUNNER_TEMP/w1-engine-database-private.json" "$RUNNER_TEMP/w1-exact-reader-summary.json"
       - name: Reuse authenticated full original shader-owner cache first

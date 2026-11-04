@@ -64,6 +64,7 @@ def link_materials(materials, shaders, table):
     counts = Counter()
     engine_refs = Counter()
     per_object = Counter()
+    known_owners = {identity[0] for identity in shaders}
     for owner, external, pointer in materials:
         counts['original_material_objects'] += 1
         target = resolve_pointer(owner, external, pointer)
@@ -73,6 +74,15 @@ def link_materials(materials, shaders, table):
         row = shaders.get(target)
         if row is None:
             counts['shader_refs_outside_authenticated_shader_objects'] += 1
+            if target[0] in known_owners:
+                counts['shader_refs_to_known_owner_missing_shader_object'] += 1
+            elif target[0].lower() in ('unity_builtin_extra', 'unity default resources', 'unity_default_resources'):
+                counts['shader_refs_to_engine_resource_owner_not_loaded'] += 1
+            elif target[0].lower() in {name.lower() for name in known_owners}:
+                # Observe a case mismatch; do not silently change resolver semantics.
+                counts['shader_refs_with_owner_case_mismatch'] += 1
+            else:
+                counts['shader_refs_to_other_owner_not_loaded'] += 1
             continue
         per_object[target] += 1
         choices = table.get(row['key'], [])

@@ -61,6 +61,19 @@ class OriginalShaderLinks(unittest.TestCase):
         self.assertFalse(refs)
         self.assertFalse(objects)
 
+    def test_unresolved_sources_are_classified_without_fabricating_shader_links(self):
+        materials = [('one.assets', [], {'m_FileID': 0, 'm_PathID': 99})]
+        for owner in ('unity_builtin_extra', 'unity default resources', 'One.assets', 'unknown.assets'):
+            materials.append(('one.assets', [owner], {'m_FileID': 1, 'm_PathID': 1}))
+        counts, refs, objects = link_materials(materials, self.rows, {})
+        self.assertEqual(counts['shader_refs_outside_authenticated_shader_objects'], 5)
+        self.assertEqual(counts['shader_refs_to_known_owner_missing_shader_object'], 1)
+        self.assertEqual(counts['shader_refs_to_engine_resource_owner_not_loaded'], 2)
+        self.assertEqual(counts['shader_refs_with_owner_case_mismatch'], 1)
+        self.assertEqual(counts['shader_refs_to_other_owner_not_loaded'], 1)
+        self.assertFalse(refs)
+        self.assertFalse(objects)
+
 
 if __name__ == '__main__':
     unittest.main()
