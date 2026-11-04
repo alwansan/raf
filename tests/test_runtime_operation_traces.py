@@ -1,6 +1,6 @@
 import hashlib
 import unittest
-from scripts.instrument_android_runtime_operations import body_bounds, wrap, instrument
+from scripts.instrument_android_runtime_operations import body_bounds, wrap, instrument, guard_android_local_savegame_stats
 
 
 class OperationTraceTests(unittest.TestCase):
@@ -68,3 +68,56 @@ class OperationTraceTests(unittest.TestCase):
         result = instrument('Demo', text, manifest)
         with self.assertRaises(ValueError): instrument('Demo', result, manifest)
         with self.assertRaises(ValueError): wrap(text + text, 'void Start()', 'startup')
+
+
+    def test_android_local_savegame_skips_only_stats_upload(self):
+        source = (
+            'class SaveAndLoad { public void SaveGame(bool sendRemoteMessage) { '
+            'SaveWorld(); SteamUserStats.StoreStats(); SaveUser(); } '
+            'public void Other() { SteamUserStats.StoreStats(); } }'
+        )
+        result = guard_android_local_savegame_stats(source)
+        self.assertIn(
+            'SaveWorld(); if (!RaftAndroid.Platform.LocalPlayerIdentity.Enabled) '
+            '{ SteamUserStats.StoreStats(); } SaveUser();', result)
+        self.assertIn('public void Other() { SteamUserStats.StoreStats(); }', result)
+        self.assertEqual(result.count('SteamUserStats.StoreStats();'), 2)
+        self.assertEqual(
+            result.replace('if (!RaftAndroid.Platform.LocalPlayerIdentity.Enabled) '
+                           '{ SteamUserStats.StoreStats(); }',
+                           'SteamUserStats.StoreStats();', 1), source)
+
+    def test_savegame_stats_isolation_fails_closed_on_missing_duplicate_or_comment(self):
+        for source in (
+            'public void SaveGame(bool sendRemoteMessage) { SaveWorld(); SaveUser(); }',
+            'public void SaveGame(bool sendRemoteMessage) { '
+            'SteamUserStats.StoreStats(); SteamUserStats.StoreStats(); }',
+            'public void SaveGame(bool sendRemoteMessage) { '
+            '// SteamUserStats.StoreStats();\\n SaveWorld(); }',
+            'public void SaveGame(bool sendRemoteMessage) { SaveWorld(); } '
+            'void Other() { SteamUserStats.StoreStats(); }',
+        ):
+            with self.subTest(source=source):
+                with self.assertRaisesRegex(ValueError, 'exactly one executable'):
+                    guard_android_local_savegame_stats(source)
+
+    def test_savegame_stats_guard_is_after_authenticated_sha_and_before_traces(self):
+        source = (
+            'class SaveAndLoad { public void SaveGame(bool sendRemoteMessage) { '
+            'SaveWorld(); SteamUserStats.StoreStats(); SaveUser(); } }'
+        )
+        signature = 'public void SaveGame(bool sendRemoteMessage)'
+        manifest = {'sources': {'SaveAndLoad': {
+            'sha256': hashlib.sha256(source.encode()).hexdigest(),
+            'area': 'save', 'methods': [{'signature': signature}],
+        }}}
+        result = instrument('SaveAndLoad', source, manifest)
+        self.assertIn('RaftAndroid.Platform.LocalPlayerIdentity.Enabled', result)
+        self.assertIn('BeginOperation(', result)
+        self.assertEqual(result.count('SteamUserStats.StoreStats();'), 1)
+        self.assertIn('SaveWorld();', result)
+        self.assertIn('SaveUser();', result)
+        with self.assertRaisesRegex(ValueError, 'Unknown adapted original revision'):
+            instrument('SaveAndLoad', source.replace('SaveWorld()', 'EraseWorld()'), manifest)
+        with self.assertRaisesRegex(ValueError, 'Unknown adapted original revision'):
+            instrument('SaveAndLoad', result, manifest)
