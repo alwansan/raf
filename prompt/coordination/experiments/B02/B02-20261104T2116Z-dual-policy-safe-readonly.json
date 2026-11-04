@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "owner": "B02",
+  "session_id": "20261104T2101Z-B02-e5cd",
+  "issue_id": "RENDER-002",
+  "hypothesis": "Original texture ColorSpace enum0->sRGB true assumption may be wrong: pinned AssetRipper maps ColorSpace.Linear(enum1)->sRGBTexture true; a fix based on the opposite interpretation risks changing colors incorrectly.",
+  "source_commit": "0d5002faccd5f4304b2274cbada752ce122ff5e0",
+  "input_hashes": [
+    "Pinned public exporter source commit 036098ab525a3f9f693dc101edeb21faad4d32d8: Source/AssetRipper.Export.UnityProjects/Textures/ImporterFactory.cs",
+    "Raft original source provider ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385 not downloaded"
+  ],
+  "tool_versions": {
+    "python": "ubuntu-24.04 GitHub runner python3, stdlib"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_b02_texture_import_color_guard.py -v",
+    "python3 -m py_compile scripts/b02_texture_import_color_guard.py tests/test_b02_texture_import_color_guard.py"
+  ],
+  "negative_controls": [
+    "Exact pinned exporter Linear1=>sRGB1 versus hypothesized Gamma0=>sRGB1 reported separately",
+    "Even SHA-authenticated test fixture cannot --repair",
+    "Strict cannot claim original/export lineage or semantics",
+    "Gamma/Linear branches 0 and 1",
+    "GUID mismatch, source hash pin mismatch, bool enum, duplicated and missing flags, path traversal, symlink, aggregate-only"
+  ],
+  "workflow_path": ".github/workflows/raft-b02-texture-import-fidelity.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41915207812",
+  "artifact_urls": [],
+  "budget": "one path-triggered 5min max ubuntu24.04 run; no proprietary asset download, no Unity/runner GPU, no APK",
+  "status": "completed",
+  "observed_result": "12/12 synthetic PASS, exact 0d5002fa; --repair code removed/refused regardless of original source; original/importer semantics discrepant, comparison only; zero real game changes.",
+  "rejected_hypotheses": [
+    "Original B02 policy Source Gamma0->sRGB1 is demonstrated by pinned AssetRipper exporter: REJECTED, pinned source does opposite",
+    "One source enum proves final desired texture sampling independent of format, asset role and Unity pixel test: UNPROVEN",
+    "Synthetic 11/11 previous run validates safe game .meta repair: REJECTED and superseded"
+  ],
+  "limitations": [
+    "Pinned public source comparison, not actual original Raft reimport",
+    "No source-to-export mapping witness, original Texture2D data samples or GPU pixel measurements",
+    "No actual metadata corrections and no Android/device test"
+  ],
+  "integration_commit": "0d5002faccd5f4304b2274cbada752ce122ff5e0",
+  "next_step": "Capture same-instance exporter identity and exact original per-object pixel role/format, compare Unity rendered pixels; only then design narrowly scoped correction and new unit/integration gates."
+}
