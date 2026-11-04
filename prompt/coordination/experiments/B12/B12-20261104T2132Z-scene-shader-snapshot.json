@@ -4,7 +4,7 @@
   "session_id": "20261104T2132Z-B12-c4a8",
   "issue_id": "RENDER-002",
   "hypothesis": "A bounded delayed Android scene sample can classify null/unsupported/zero-pass/error materials to guide real white-surface fixes, without modifying game renderer/materials or guessing shader restoration.",
-  "source_commit": "70edac4f5406efdb971e987c0e104682d8cefd42",
+  "source_commit": "a324eb6208f9edc3f4587aa4c8236192e13d6684",
   "input_hashes": [],
   "tool_versions": {
     "python": "GitHub-hosted Ubuntu 24.04 Python3",
@@ -12,7 +12,8 @@
   },
   "commands": [
     "python3 -m unittest discover -s tests -p test_b12_scene_render_snapshot.py -v",
-    "python3 -m unittest discover -s tests -p test_runtime_operation_traces.py -v"
+    "python3 -m unittest discover -s tests -p test_runtime_operation_traces.py -v",
+    "Check original Android offline integration run 41920015979 on exact source SHA a324eb6"
   ],
   "negative_controls": [
     "rejects per-frame material sampling",
@@ -22,11 +23,11 @@
     "source has 512 visible-renderer bound"
   ],
   "workflow_path": ".github/workflows/raft-b12-scene-render-snapshot.yml",
-  "run_url": "https://github.com/alwansan/raf/actions/runs/41919089409",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41920048140",
   "artifact_urls": [],
   "budget": "6-minute Ubuntu 24.04 source-policy job, LFS=false; no Unity/player build",
   "status": "completed",
-  "observed_result": "B12 source-policy CI 41919089409 COMPLETED SUCCESS on 8b7e304, including new 5 source tests and existing operation-trace tests; original offline startup managed compile and adapter CI 41918822038 SUCCESS on 70edac4. No Unity/IL2CPP/phone white-surface equivalence.",
+  "observed_result": "B12 isolated test workflow 41920048140 SUCCESS on test acd3514, and real original managed startup integration 41920015979 SUCCESS on C# a324eb6. No Unity full player or GPU/phone shader equivalence.",
   "rejected_hypotheses": [
     "B12 must add SaveGame StoreStats guard: already implemented and managed-validated by B50, no duplicate patch",
     "B12 should compare Material scalar parity: B22 already performing same track"
@@ -37,9 +38,10 @@
     "Three-second delayed sample does not prove shader variants loaded afterward",
     "No Unity-specific graphics GPU compilation/device execution proof"
   ],
-  "integration_commit": "70edac4f5406efdb971e987c0e104682d8cefd42",
-  "next_step": "Inspect isolated CI; correlate next device render.scene_shader_snapshot with image and existing invalid-pass/kernel errors; only then choose shader restoration.",
+  "integration_commit": "a324eb6208f9edc3f4587aa4c8236192e13d6684",
+  "next_step": "On next authorized real Raft APK correlate bounded mesh/shader counters and screenshot; no synthetic material fixes.",
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41919089409"
-  ]
+  ],
+  "updated_at": "2026-11-04T21:54:27.389Z"
 }
