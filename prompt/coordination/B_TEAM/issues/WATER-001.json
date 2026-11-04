@@ -26,7 +26,12 @@
     "https://github.com/alwansan/raf/actions/runs/41920166966",
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B24_ORIGINAL_FOAM_PROGRAM_TRANSLATION_2026-11-04.md",
     "https://github.com/alwansan/raf/actions/runs/41920232173",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B17_SPECTRUM_STAGE_DESCRIPTORS_2026-11-04.md"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B17_SPECTRUM_STAGE_DESCRIPTORS_2026-11-04.md",
+    "https://github.com/alwansan/raf/commit/2db5078f38d1cbd36ea20d351b9033bd88ffd29a",
+    "https://github.com/alwansan/raf/commit/ccefdd7151726155ed592376d6e6311797521ce3",
+    "https://github.com/alwansan/raf/actions/runs/41920753737",
+    "https://github.com/alwansan/raf/actions/runs/41920734179",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B13_WATER_META_GUID_GUARD_2026-11-04.md"
   ],
   "remaining": [
     "Spectrum/Foam/Blur passes ناقصة في APK86",
@@ -42,13 +47,14 @@
     "B09 Spectrum private original DXBC stage/variant extractor and SHA-pinned selective ZIP2 workflow integrated, 10/10 synthetic tests pass; authentic original extraction outcome, ShaderLab assembly, Unity/Adreno and phone unverified.",
     "B30 authenticated original FFT variantMap/keyword probe (12 synthetic tests + original ZIP2/DXBC CI 41920323250): all 20 compiled program entries share one opaque map header and one global/local keyword bundle; these fields cannot route source candidate pairs. Runtime kernel ID/variant selector mechanism remains OPEN; do not manufacture 20 FindKernel IDs.",
     "B24: original Foam/Global 2-pass/4-DXBC stages translated and Vulkan1.1 roundtripped privately; pass0 CB0 vectors=2, pass1=1. Original ShaderLab, constant-buffer/material bindings, Unity/Adreno and phone remain unverified; not a water gate fix.",
-    "B17 exact ZIP2-original Spectrum typed numeric stage descriptor census: 7 passes; 13 fragment rows, 0 vertex rows, 42 resource table field occurrences, m_UAVParams and typed m_MultiSampled; original UnityPy execution and 16 synthetic controls PASS CI41920232173. Original-to-ShaderLab resource binding semantics, sampler state, water pixels and Android Unity runtime still NOT verified; WATER-001 remains OPEN."
+    "B17 exact ZIP2-original Spectrum typed numeric stage descriptor census: 7 passes; 13 fragment rows, 0 vertex rows, 42 resource table field occurrences, m_UAVParams and typed m_MultiSampled; original UnityPy execution and 16 synthetic controls PASS CI41920232173. Original-to-ShaderLab resource binding semantics, sampler state, water pixels and Android Unity runtime still NOT verified; WATER-001 remains OPEN.",
+    "B13: Source-integrated validator now rejects malformed/ambiguous/duplicate water Shader/FFT Compute .meta GUIDs; 22/22 synthetic CI PASS with B47 kernel contract, but original ZIP2 GUID ownership, restored ShaderLab/FFT programs, Unity import and phone water errors still unverified (WATER-001 OPEN)."
   ],
   "acceptance": [
     "هوية برامج ونوى أصلية أو تطابق موثق دونdummy",
     "تثبيت فيالتصدير+Unity import/render",
     "اختبار هاتف يثبت الماء بلا pass/kernel errors"
   ],
-  "updated_by": "B17",
-  "updated_at": "2026-11-04T21:58:00Z"
+  "updated_by": "B13",
+  "updated_at": "2026-11-04T21:59:00Z"
 }
