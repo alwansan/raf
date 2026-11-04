@@ -1,0 +1,43 @@
+name: B31 RENDER-002 authenticated original graphics cache reuse (source-only)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/hydrate_render_payloads.py
+      - tests/test_b31_graphics_hydration.py
+      - tests/test_texture_stream_coverage.py
+      - .github/workflows/raft-b31-graphics-cache-reuse.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: b31-render-original-graphics-cache-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  b31-source-only-regression:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Assert source SHA and run isolated graphics pin integrity controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "B31_SOURCE_SHA=${GITHUB_SHA}"
+          python3 -m unittest -v tests.test_b31_graphics_hydration tests.test_texture_stream_coverage 2>&1 | tee "$RUNNER_TEMP/b31-graphics-tests.log"
+      - name: Preserve safe test evidence only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: b31-render-source-regression-${{ github.run_id }}
+          path: ${{ runner.temp }}/b31-graphics-tests.log
+          if-no-files-found: ignore
+          retention-days: 5
