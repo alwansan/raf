@@ -1,0 +1,13 @@
+{
+  "id": "B08-20261104T2250Z-descriptor-result",
+  "owner": "B08",
+  "session_id": "20261104T2246Z-B08-7d2a",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Authenticated exact ZIP2 original FFT 20 compiled DXBC slots translate with uniform SPIR-V float32 Texture2D ABI: sampled (set0,binding0/1), storage (set0,binding2); numeric interface SHA5bea50a9..., CI41928583281 success 14 synthetic controls plus source-authentic 20/20. t0/t1 identity, Unity FindKernel IDs and Android pixels unproven; WATER-001 OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41928583281",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B08_FFT_DESCRIPTOR_ABI_2026-11-04.md"
+  ],
+  "at": "2026-11-04T22:50:00Z"
+}
