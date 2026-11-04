@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "owner": "B13",
+  "session_id": "20261104T2247Z-B13-builtin-atomic",
+  "issue_id": "RENDER-002",
+  "hypothesis": "In-place source replacement can truncate original shaders or clobber concurrent source after preflight",
+  "source_commit": "20c94103edc9d10352560d473656f7004208268b",
+  "input_hashes": [],
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_restore_builtin_shaders.py -v",
+    "python3 -m compileall -q scripts/restore_builtin_shaders.py"
+  ],
+  "negative_controls": [
+    "rename failure",
+    "late source change",
+    "second replacement failure",
+    "corrupt backup"
+  ],
+  "workflow_path": ".github/workflows/raft-b13-builtin-atomic.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41928703661",
+  "artifact_urls": [],
+  "budget": "8 min CPU no Unity/LFS",
+  "status": "completed",
+  "observed_result": "14/14 synthetic tests passed including 4 injected failures; real CI job 126919799327 SUCCESS",
+  "rejected_hypotheses": [
+    "External backup by itself guarantees in-place overwrites safe"
+  ],
+  "limitations": [
+    "No actual shader program authored",
+    "No same-instance source/export or Unity/device proof",
+    "Not an OS filesystem lock"
+  ],
+  "integration_commit": "20c94103edc9d10352560d473656f7004208268b",
+  "next_step": "Original water FFT/ShaderLab source→export binding or authentic Unity render test"
+}
