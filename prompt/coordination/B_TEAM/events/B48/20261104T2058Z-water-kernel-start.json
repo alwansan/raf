@@ -1,0 +1,13 @@
+{
+  "id": "20261104T2058Z-B48-water-kernel-start",
+  "owner": "B48",
+  "session_id": "20261104T2058Z-B48-f24a",
+  "issue_id": "WATER-001",
+  "type": "start",
+  "summary": "Investigate missing source-to-runtime FFT kernel identity link independent of current water ShaderLab pass work.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41737548860",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/A1_FFT_TWO_PASS_ORIGINAL_VULKAN_2026-11-04.md"
+  ],
+  "at": "2026-11-04T20:58:00Z"
+}
