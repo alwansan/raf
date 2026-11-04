@@ -1,0 +1,31 @@
+{
+  "all_byte_identical": true,
+  "negative_controls": {
+    "aggregate_only_publication": true,
+    "fail_closed_on_any_mismatch": true,
+    "streamed_no_full_checkout": true
+  },
+  "probe": "w3-zip2-pinned-owner-byte-identity",
+  "schema_version": 1,
+  "tool_versions": {
+    "python": "3.14.8"
+  },
+  "verification": {
+    "resources.assets": {
+      "bytes_match": true,
+      "expected_bytes": 111533516,
+      "expected_sha256": "87493249f1adfc0c5eb8b82e4e199e208cd2c95eabe9796cab82116c4838595c",
+      "sha_match": true,
+      "streamed_bytes": 111533516,
+      "streamed_sha256": "87493249f1adfc0c5eb8b82e4e199e208cd2c95eabe9796cab82116c4838595c"
+    },
+    "sharedassets0.assets": {
+      "bytes_match": true,
+      "expected_bytes": 115978112,
+      "expected_sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+      "sha_match": true,
+      "streamed_bytes": 115978112,
+      "streamed_sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3"
+    }
+  }
+}

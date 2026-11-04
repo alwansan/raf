@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T153100Z-b4d2c9e7",
+  "status": "completed",
+  "hypothesis": "The zip2 branch's hosted game-data copy (Raft/Raft_Data) is size-identical for all 82 owners to the byte-authenticated feature-branch/local set, and the two byte-pinned owners re-derive their committed SHA-256 pins from zip2's split parts by streaming.",
+  "input_hashes": [
+    "feature-branch content sizes via committed LFS pointer texts / direct blob sizes (local git, no network)",
+    "zip2 tree via public GitHub API (read-only)",
+    "split part sizes: resources.assets 111,533,516 / sharedassets0.assets 115,978,112 / sharedassets36.assets 110,149,324 / level30 70,435,196 / level34 52,351,536",
+    "pins: sha256(resources.assets)=87493249f1adfc0c..., sha256(sharedassets0.assets)=0498f738dc86e90e..."
+  ],
+  "commands": [
+    "python3.14 scripts/probe_w3_zip2_hosted_copy_equiv.py --repo-root . --aggregate-json docs/W3_ZIP2_HOSTED_COPY_EQUIV_2026-11-04.json",
+    "python3.14 scripts/probe_w3_zip2_pin_bytes.py --aggregate-json docs/W3_ZIP2_PIN_BYTES_2026-11-04.json",
+    "python3.14 scripts/w3_test_zip2_equivalence.py"
+  ],
+  "expected_signal": "82/82 size-equal fail-closed; split-owner set exactly {resources, sharedassets0, sharedassets36, level30, level34}; sha_match=true for both pinned owners streamed from zip2 parts",
+  "negative_controls": [
+    "fail_closed_on_any_mismatch (probe aborts, verified by an intentional mismatch case pre-fix)",
+    "no_bulk_download_performed (metadata pass)",
+    "streamed_no_full_checkout, no LFS smudge of the 7.3GB set (byte pass: only the two pinned owners streamed)",
+    "aggregate_only_publication (public repo paths only; no shader/asset names)",
+    "empty_size_never_matches (None sizes excluded from equality)"
+  ],
+  "workflow_path": null,
+  "concurrency_group": null,
+  "budget": "metadata pass: minutes; byte pass: ~227MB streamed over 8 parts, minutes; no Unity, no CI",
+  "run_url": null,
+  "source_sha": "a4b3d83",
+  "result": "completed. Metadata artifact docs/W3_ZIP2_HOSTED_COPY_EQUIV_2026-11-04.json sha256 7ba7d51a02cddc9ce90c6fa935069a2f5f0d05da59a05df23fd4601b239bfdbe - 82/82 owners size-equal (fail-closed); split trees exactly 5: resources.assets, sharedassets0.assets, sharedassets36.assets, level30, level34 (part sums match pinned sizes exactly). Byte artifact docs/W3_ZIP2_PIN_BYTES_2026-11-04.json sha256 46e281cc123c87b05cdb44e7efc95567dccc22743326e6f2aac024dd129da176 - streaming concatenation of zip2 parts re-derives BOTH committed pins: sha_match=true (resources.assets, sharedassets0.assets). Triangle closed: local originals - repo LFS (CI run 41828539269) - zip2 hosted copies (this step). Discovery notes documented in-report: levels are bare-named on BOTH branches (interim wrong claim corrected pre-publication); level30/level34 are direct binary blobs on feature and split trees on zip2. Honesty: byte probe first execution aborted mid-stream on a host link error; re-run with per-owner clean-restart (fresh hasher, no partial reuse) completed exit 0; only that run is durable.",
+  "limitations": [
+    "byte identity proven only for the two pinned owners; the other 80 are size-equal only (labeled honestly)",
+    "read-only equivalence: no unpacking, no rendering claims of any kind; peer lanes untouched (zip2 never modified)",
+    "no visual/GPU/phone claim; WATER-001/RENDER-002/FFT-FORMAT-009 remain OPEN; NOT_READY; 0/3 reviews"
+  ],
+  "next_step": "publish STATUS section + result discussion; then paused - awaiting coordination cadence or a peer-announced scoped lane"
+}

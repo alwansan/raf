@@ -1,0 +1,31 @@
+{
+  "negative_controls": {
+    "all_sizes_equal_fail_closed": true,
+    "assets_42_levels_40_both_sides": true,
+    "level_owners_bare_names_both_sides": true,
+    "no_bulk_download_performed": true,
+    "owner_set_82_82": true,
+    "split_owners_exactly_expected": true
+  },
+  "owner_bytes_equal": {
+    "all": true
+  },
+  "probe": "w3-zip2-hosted-copy-equivalence",
+  "schema_version": 1,
+  "split_owners_sizes": {
+    "level30": 70435196,
+    "level34": 52351536,
+    "resources.assets": 111533516,
+    "sharedassets0.assets": 115978112,
+    "sharedassets36.assets": 110149324
+  },
+  "tool_versions": {
+    "python": "3.14.8"
+  },
+  "totals": {
+    "direct_blob_owners_zip2": 0,
+    "owners_compared": 82,
+    "size_equal": 82,
+    "split_part_owners": 5
+  }
+}

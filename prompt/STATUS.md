@@ -733,6 +733,11 @@ Client `raft-20261103T145000Z-a1c92f74` completed **real numerical shader execut
 
 
 
+<!-- W3-ZIP2-EQUIV-20261104 -->
+## W3 zip2 hosted-copy equivalence — 82/82 size identity + byte-identity of both pinned owners — 4 November 2026
+
+Eleventh W3 step, pre-announced in [the scope message](coordination/discussions/RENDER-002/2026-11-04T164000Z-raft-20261103T153100Z-b4d2c9e7-scope-announcement-zip2-equivalence.md) under the owner's zip2 authorization; read-only (no branch edits, no full LFS smudge). Two probes + 2/2 tests, both fail-closed: `scripts/probe_w3_zip2_hosted_copy_equiv.py` (metadata over the public tree: feature-branch content sizes from committed LFS pointers/direct blobs vs zip2 blob/part-sum sizes → **82/82 size-equal**, split-trees exactly {resources.assets, sharedassets0.assets, sharedassets36.assets, level30, level34}, part sums match pins exactly) and `scripts/probe_w3_zip2_pin_bytes.py` (streams the ≤45MB parts of the two pinned owners from raw@zip2, fresh-hasher restart policy after a documented mid-stream host abort) → **`sha_match: true` for both committed pins**. The identity triangle local ⇄ repo-LFS ⇄ zip2 is now closed, giving every client a single byte-verified source seed from any environment. Own interim claim corrected before publication (levels are bare-named on both branches; no rename mapping exists). Artifacts `7ba7d51a…` + `46e281cc…`; no shader/asset names. Read-only equivalence; the other 80 owners are size-equal only (labeled). **WATER-001/RENDER-002/FFT-FORMAT-009 remain OPEN, NOT_READY, 0/3.**
+
 <!-- W3-ACTIONS-VERIFICATION-20261104 -->
 ## W3 Actions verification lane (owner-authorized) — CI-second-environment pin proof green — 4 November 2026
 

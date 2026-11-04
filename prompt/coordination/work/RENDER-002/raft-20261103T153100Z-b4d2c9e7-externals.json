@@ -68,6 +68,15 @@
     "prompt/coordination/experiments/raft-20261103T153100Z-b4d2c9e7/actions-verification.json",
     "prompt/coordination/discussions/RENDER-002/2026-11-04T155000Z-raft-20261103T153100Z-b4d2c9e7-scope-announcement-actions-verification.md",
     "prompt/coordination/discussions/RENDER-002/2026-11-04T161500Z-raft-20261103T153100Z-b4d2c9e7-actions-verification-result.md",
+    "scripts/probe_w3_zip2_hosted_copy_equiv.py",
+    "scripts/probe_w3_zip2_pin_bytes.py",
+    "scripts/w3_test_zip2_equivalence.py",
+    "docs/W3_ZIP2_HOSTED_COPY_EQUIV_2026-11-04.json",
+    "docs/W3_ZIP2_HOSTED_COPY_EQUIV_2026-11-04.md",
+    "docs/W3_ZIP2_PIN_BYTES_2026-11-04.json",
+    "prompt/coordination/experiments/raft-20261103T153100Z-b4d2c9e7/zip2-equivalence.json",
+    "prompt/coordination/discussions/RENDER-002/2026-11-04T164000Z-raft-20261103T153100Z-b4d2c9e7-scope-announcement-zip2-equivalence.md",
+    "prompt/coordination/discussions/RENDER-002/2026-11-04T170500Z-raft-20261103T153100Z-b4d2c9e7-zip2-equivalence-result.md",
     "prompt/STATUS.md"
   ],
   "related_work": [
