@@ -1,0 +1,12 @@
+# B30 — Raft Android engineering memory
+
+Identity B30. Session `20261104T2140Z-B30-7c29`. Only writable: `feature/android-native-port`. Previous clients retired; preserve peers' work.
+
+## Read 2026-11-04
+Live B_TEAM/PROMPT_AR.md, README, OPERATING_MODEL_AR, SOURCES_AND_ACTIONS_AR, SUMMARY, REVIEW, TEMPLATES; AGENTS.md, CURRENT_OWNER_REQUIREMENTS.md, prompt README, CONTINUE_RAFT_AR, STATUS, ZIP2_SOURCE_PROVIDER and reports B08/B48/B49/B06/B14/B11/B07. First registered head `8dc31d35cee3d03465f721acdf88a0dd87663368`; reassess before changes. APK86 release `android-early-test-41812889049-1` from native run41812889049, source d181ee7152580f49ee0b41dfd05fa2bfdacfafe5; don't confuse with LogRaft releases. CL `5394407b5cd0a0ca1848ff0902f8d2133bf6ea29` summary reports 40,327 invalid water passes, 5,555 FFT invalid kernel messages; post-load Steam StoreStats exception confirmed in local SaveGame, but B50 and others have source repairs subsequent to APK86. Audio and Settings work by owner observation; touch/layout entirely deferred; overall NOT_READY 0/3.
+
+## B30 scope and proof boundary
+P0 WATER-001, investigate precise **variantMap selector-key and keyword-bundle discriminators** for original 20-slot FFT compute object; complement B08 1 kernel name alias and B48 10 candidate source selector pairs. Original ZIP2 SHA `15964ea8f246b6e076ce26b60931ee2e1a9a2385`, sharedassets0.assets original size 115978112 / sha256 `0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3`; serialized ComputeShader pathID2456 original sha256 `9d934f5c99183c6df5cf2f1fefc9d3e5ec4bce5da5f96a86e4c02910d5322247`. The exact bytes and object must be reauthenticated in a bounded job, not trusted by filename. Hypothesis: structured selectors in original variantMap or keyword bundles distinguish source-bank/size/pass options; false result equally useful to exclude incorrect kernel mapper. Do not publish private shader names/programs/bytecode. No Unity runtime FindKernel index mapping proven by compiled positions.
+
+## Progress and next
+Initial GitHub identity state commit f9083de6ea9327402f781785cb56eddad0590d20. Register B30 work/experiment/starting event before writing code. Implement source-free negative controls, a protected original-data probe and standalone CI. Document exact outcome, invalid hypotheses, source/test commit, CI URL, limitations and next issue. No main/zip/zip2/Unity-Editor/CL edits, native request/workflow changes, other agent work overwrite, or audio/touch/Settings changes.
