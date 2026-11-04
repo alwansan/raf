@@ -6,7 +6,7 @@
   "issue_id": "LOCAL-005",
   "track": "world-save",
   "approach": "Source SHA-pinned, coroutine-yield preserving first MoveNext operation log in offline network staging; separate executable managed fixture",
-  "status": "active",
+  "status": "completed",
   "base_sha": "c37646a21902135eca4ea591f2026c200783128d",
   "intended_files": [
     "scripts/b07_world_coroutine_trace.py",
@@ -23,8 +23,10 @@
   "experiment_ids": [
     "20261104T2242Z-coroutine-entry"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement strict source-body-authenticated probe and synthetic CLR yield equivalence; run private original source CI. No Unity/APK request.",
-  "updated_at": "2026-11-04T22:45:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41929041686"
+  ],
+  "result": "SOURCE_INTEGRATED: original pinned WorldHasBeenLoaded first MoveNext entry log staged in offline Android source, unit 9/9, existing offline regression 19/19, synthetic real CLR two platforms passed, private SHA-pin source/staging proof CI41929041686 SUCCESS; NOT Unity/IL2CPP/device world/.rgd proof.",
+  "next_step": "Coordinated new native build/device: correlate firstMoveNext with OnWorldRecieved callback and save exception; verify create/save/exit/reload .rgd. LOCAL-005 OPEN, NOT_READY 0/3.",
+  "updated_at": "2026-11-04T22:53:20Z"
 }
