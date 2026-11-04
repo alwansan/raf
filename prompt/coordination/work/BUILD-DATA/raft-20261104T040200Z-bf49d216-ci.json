@@ -1,0 +1,11 @@
+{
+  "status": "active",
+  "plan": [
+    "Verify cheap workflow excludes new hydrator test",
+    "Add trigger and regression command",
+    "Retain native queue and shader gates"
+  ],
+  "files": [
+    ".github/workflows/raft-reconstruction-preflight.yml"
+  ]
+}

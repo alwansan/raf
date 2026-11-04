@@ -1,0 +1,8 @@
+{
+  "client_label": "BuildFix",
+  "username": "raft-20261104T040200Z-bf49d216",
+  "session_id": "buildfix-040200-bf49d216",
+  "state": "active",
+  "source_sha": "c16db9ad6e09aaba74d84b3f945315f4a584f532",
+  "current_work": "Wire missing graphics-acquisition regressions into cheap CI; no native duplication"
+}
