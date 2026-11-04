@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "username": "B06",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T210726Z-B06-fmt6a2",
+  "resumed_from_session": null,
+  "status": "active",
+  "base_sha": "e8c312541b8139f2e889ff8921de8128146dcc84",
+  "last_commit": null,
+  "updated_at": "2026-11-04T21:07:26.584Z",
+  "tracks": [
+    "water-fft",
+    "fft-format-integration"
+  ],
+  "work_ids": [
+    "B06-20261104T210726Z-B06-fmt6a2-fft-target-binding"
+  ],
+  "run_urls": [],
+  "next_step": "Inspect pinned FFT target-format data and current runtime binding/compute code; isolate real mismatch or negative evidence before implementing an exact non-dummy improvement.",
+  "memory_path": "prompt/coordination/clients/B06/MEMORY.md"
+}
