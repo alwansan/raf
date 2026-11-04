@@ -6,7 +6,7 @@ shader programs with the matching installed-package version; no atlas/font edits
 import argparse
 import hashlib
 import io
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import re
 import shutil
 import tarfile
@@ -111,7 +111,7 @@ def _require_safe_vendor_asset_path(assets, target):
         raise ValueError('Unsafe redirected Unity vendor shader asset path')
 
 
-def restore(project, backup, shaders, includes, license, *, shader_prefix="TextMeshPro/", include_root=ROOT, label="TMP", vendor_version="3.0.6"):
+def restore(project, backup, shaders, includes, license, *, shader_prefix="TextMeshPro/", include_root=ROOT, label="TMP", vendor_version="3.0.6", extra_additions=None):
     # TMP, official PostFX and Volumetric shaders all use this shared path.
     # Stage vendor additions and original export overwrites as one recoverable
     # operation. Never remove pre-existing byte-identical dependencies.
@@ -176,6 +176,24 @@ def restore(project, backup, shaders, includes, license, *, shader_prefix="TextM
         generated_meta[guid] = meta
         additions.append((meta, metadata))
     additions.append((include_directory / 'LICENSE.md', license))
+
+    # Some authenticated vendor restorers require a second redistribution
+    # notice under StreamingAssets. Publish it in the SAME write/rollback
+    # transaction as the shader replacements, never after their commit.
+    # Accept only strict, lexical paths under Assets; reject aliases and links
+    # before creating the external backup or changing any source file.
+    if extra_additions is not None:
+        if type(extra_additions) is not dict:
+            raise ValueError('Invalid vendor extra additions manifest')
+        for relative, payload in sorted(extra_additions.items()):
+            if type(relative) is not str or '\\' in relative or '\x00' in relative:
+                raise ValueError('Unsafe vendor additional asset path')
+            parsed = PurePosixPath(relative)
+            if (parsed.is_absolute() or not parsed.parts or parsed.parts[0] != 'Assets'
+                    or '..' in parsed.parts or parsed.as_posix() != relative
+                    or type(payload) is not bytes or len(payload) > 1024 * 1024):
+                raise ValueError('Unsafe vendor additional asset manifest')
+            additions.append((project.joinpath(*parsed.parts), payload))
 
     existing_guids = existing_asset_guids(assets)
     for guid, meta in generated_meta.items():
