@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "username": "B43",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2104Z-B43-c8f2",
+  "resumed_from_session": null,
+  "status": "active",
+  "base_sha": "fdd447558e567ef23a183955403683264c120151",
+  "last_commit": null,
+  "updated_at": "2026-11-04T21:04:07.263Z",
+  "tracks": [
+    "RENDER-002",
+    "colors-materials",
+    "material-keyword-fidelity"
+  ],
+  "work_ids": [
+    "B43-20261104T2104Z-B43-c8f2-material-keyword-fidelity"
+  ],
+  "run_urls": [],
+  "next_step": "Read current material export trace and original keyword evidence, build a source/export preservation guard or repair only when a mismatch is demonstrated; test negative controls; preserve water/Steam/audio/Settings/touch.",
+  "memory_path": "prompt/coordination/clients/B43/MEMORY.md"
+}
