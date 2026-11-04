@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "owner": "B17",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2249Z-B17-cbind",
+  "issue_id": "WATER-001",
+  "track": "water-fft",
+  "approach": "Source-indexed original Spectrum fragment texture/sampler symbols to private translated HLSL, after B17 original DXBC numeric slot proof.",
+  "status": "active",
+  "base_sha": null,
+  "intended_files": [
+    "scripts/b17_spectrum_namebridge.py",
+    "tests/test_b17_spectrum_namebridge.py",
+    ".github/workflows/raft-b17-spectrum-namebridge.yml"
+  ],
+  "hypothesis": "Original Unity property name-index table and compiled numeric sampler registers can reconstruct a bounded private translated-HLSL symbol mapping without guessing by program order.",
+  "related_work": [
+    "B17-20261104T2249Z-B17-cbind-compiled-parity.json",
+    "B09 private Spectrum translated packets"
+  ],
+  "experiment_ids": [
+    "b17-spectrum-original-namebridge"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Source-free checks; sample authentic SHA-pinned fragment program; private translation and rename; never upload source/names, test shader compilation later.",
+  "updated_at": "2026-11-04T23:06:00Z"
+}
