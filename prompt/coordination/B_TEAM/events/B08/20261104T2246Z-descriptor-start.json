@@ -1,0 +1,13 @@
+{
+  "id": "B08-20261104T2246Z-descriptor-start",
+  "owner": "B08",
+  "session_id": "20261104T2246Z-B08-7d2a",
+  "issue_id": "WATER-001",
+  "type": "start",
+  "summary": "New B08 session tests original FFT 20-program SPIR-V numerical descriptor ABI (not native kernel mapping), complementing B18 resource-class proof and B30 variantMap discriminator result.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41923703800",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B30_ORIGINAL_FFT_VARIANTMAP_ROUTING_2026-11-04.md"
+  ],
+  "at": "2026-11-04T22:46:00Z"
+}
