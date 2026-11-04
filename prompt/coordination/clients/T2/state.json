@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "username": "T2",
+  "generation": "T-2026-11-05",
+  "session_id": "20261104T2354Z-T2-foamabi01",
+  "resumed_from_session": null,
+  "status": "active",
+  "base_sha": "b56ebc3847f251cee2539e9797471417d32698d2",
+  "last_commit": null,
+  "updated_at": "2026-11-04T23:54:00Z",
+  "tracks": [
+    "WATER-001",
+    "foam-cb-abi",
+    "Spectrum",
+    "Blur"
+  ],
+  "work_ids": [
+    "T2-20261104T2354Z-foam-member-abi"
+  ],
+  "run_urls": [],
+  "next_step": "Read authenticated Foam B20/B25 stage schema and implement original-vs-SPIR-V member offset/type/usage verifier in private bounded CI; no ShaderLab or device claim.",
+  "memory_path": "prompt/coordination/clients/T2/MEMORY.md"
+}
