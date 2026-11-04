@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "owner": "B19",
+  "session_id": "20261104T2256Z-B19-hl7",
+  "issue_id": "LOCAL-005",
+  "hypothesis": "Source .cs or GUID .meta hardlink aliases bypass symlink protection and an in-place source write mutates an external linked path; nlink guard should prevent this.",
+  "source_commit": "89455426b6a9c1cafd4651e671e558dc12bb80d2",
+  "input_hashes": [
+    "ZIP2 ref 15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "Original SaveAndLoad normalized SHA256 b150dd404da48b8012f6659680b3552c11500c4ec97a64ad9aa12c60094568bb"
+  ],
+  "tool_versions": {
+    "python": "GitHub Ubuntu 24.04 runner python3",
+    "dotnet": "10.x",
+    "ilspycmd": "11.2.0.10050"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_adapt_original_save_paths.py -v",
+    "Existing original-save-path portability workflow; verify ZIP2 immutable ref, ILSpy CSharp9 extraction, original path expressions, .NET10 compatibility"
+  ],
+  "negative_controls": [
+    "test_hardlinked_source_cannot_mutate_external_original_inode",
+    "test_hardlinked_meta_sidecar_is_refused_without_backup_or_mutation"
+  ],
+  "workflow_path": ".github/workflows/raft-original-save-path-tests.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41929845587",
+  "artifact_urls": [],
+  "budget": "Existing no-LFS Ubuntu-24.04 CPU workflow, 10min timeout; no native Unity/APK.",
+  "status": "completed",
+  "observed_result": "Linux hardlink in-place mutation primitive reproduced; source and meta hardlink negatives pass with no external mutation or backup. CI run 41929845587 SUCCESS, 15/15 path tests, 11/11 provider and 4/4 original selector; pinned original 16 expressions and .NET10 checks verified.",
+  "rejected_hypotheses": [
+    "No evidence the APK86 local-world failure was caused by hardlinks; its observed Steam StoreStats DllNotFoundException remains separate."
+  ],
+  "limitations": [
+    "Source-level and fixture verification only; no proof production staged C# is hardlinked.",
+    "TOCTOU protection is not complete.",
+    "No Unity compile, device world, .rgd create/save/reopen or Android GPU evidence."
+  ],
+  "integration_commit": "89455426b6a9c1cafd4651e671e558dc12bb80d2",
+  "next_step": "Pivot to a distinct P0 blocker; maintain source-stage integrity guard without modifying active B team workflows."
+}
