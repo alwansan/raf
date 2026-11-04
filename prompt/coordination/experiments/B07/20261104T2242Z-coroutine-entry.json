@@ -14,7 +14,12 @@
     "ilspy": "11.2.0.10050"
   },
   "commands": [
-    "python3 -m unittest discover -s tests -p test_b07_world_coroutine_trace.py -v"
+    "python3 -m unittest discover -s tests -p test_b07_world_coroutine_trace.py -v",
+    "python3 -m unittest discover -s tests -p test_android_offline_startup.py -v",
+    "python3 -m scripts.b07_compile_coroutine_fixture --output \"$RUNNER_TEMP/b07-managed\"",
+    "dotnet run --project \"$RUNNER_TEMP/b07-managed/B07HarnessAndroid.csproj\" --configuration Release",
+    "dotnet run --project \"$RUNNER_TEMP/b07-managed/B07HarnessOther.csproj\" --configuration Release",
+    "SHA-pinned ILSpy original Raft_Network source check + production adapt('Raft_Network',source)"
   ],
   "negative_controls": [
     "unverified source",
@@ -24,15 +29,19 @@
     "double trace injection"
   ],
   "workflow_path": ".github/workflows/raft-b07-world-coroutine.yml",
-  "run_url": null,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41929041686",
   "artifact_urls": [],
   "budget": "Ubuntu 24.04 CPU <=10 minutes, no Unity/full APK, no original published assets",
-  "status": "planned",
-  "observed_result": null,
-  "rejected_hypotheses": [],
-  "limitations": [
-    "This is source-level diagnostics; cannot prove runtime host/create/save/reload"
+  "status": "completed",
+  "observed_result": "SUCCESS CI41929041686 job126920934945 source d5c3b1fe: 9 B07 negative controls + 19 startup regressions passed, actual synthetic C# Android yields2 exceptionRethrown entries1 vs nonAndroid entries0, authenticated original private source/body unchanged except prepended Android log, production adapter inserted exactly one firstMoveNext marker.",
+  "rejected_hypotheses": [
+    "IEnumerator construction is equivalent to iterator execution: rejected by CLR fixture; no event until first MoveNext."
   ],
-  "integration_commit": null,
-  "next_step": "Implement SHA-locked source trace and executable synthetic iterator test."
+  "limitations": [
+    "All CLR data synthetic; no original game coroutine runtime, Unity/IL2CPP, APK or installed phone reproduction.",
+    "Log indicates first iteration entry only; no completion or .rgd proof.",
+    "Existing audio/Settings unchanged; deferred touch untouched."
+  ],
+  "integration_commit": "ebad75bad1325cf247bd04cc18ed5121cc17fd91",
+  "next_step": "Retest on future coordinated APK; compare firstMoveNext, OnWorldRecieved, errors and real .rgd create/save/reopen."
 }
