@@ -1,0 +1,103 @@
+name: B20 WATER-001 original Foam private integration packet
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/b20_private_foam_packet.py
+      - tests/test_b20_private_foam_packet.py
+      - .github/workflows/raft-b20-private-foam-packet.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: b20-foam-packet-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  original-foam:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Synthetic negative controls and syntax
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p 'test_b20_private_foam_packet.py' -v
+          python3 -m py_compile scripts/b20_private_foam_packet.py
+      - name: Check disk
+        run: python3 -c 'import shutil; assert shutil.disk_usage(".").free > 3*1024**3'
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: b20-pinned-zip2
+          lfs: false
+          persist-credentials: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/sharedassets0.assets/*
+      - name: Reassemble exact source owner with SHA, no LFS
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os, subprocess
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import ZIP2_SHA, PINS, stage
+          source=Path("b20-pinned-zip2")
+          assert subprocess.check_output(["git","-C",str(source),"rev-parse","HEAD"], text=True).strip()==ZIP2_SHA
+          dest=Path(os.environ["RUNNER_TEMP"])/"b20-original-foam"
+          result=stage(source,dest,{"Raft_Data/sharedassets0.assets":PINS["Raft_Data/sharedassets0.assets"]})
+          assert result["verified_bytes"]==115978112 and result["lfs_used"] is False
+          print("B20_PINNED_FOAM original_sha_verified=true bytes=115978112 lfs=false")
+          PY
+      - name: Install translation and original asset tools
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
+          dpkg-query -W vkd3d-compiler spirv-tools spirv-cross glslang-tools
+      - name: Retain four HLSL stages and two original pass states privately
+        run: |
+          set -euo pipefail
+          timeout 600s python3 -m scripts.b20_private_foam_packet \
+            --source "$RUNNER_TEMP/b20-original-foam" \
+            --repo "$GITHUB_WORKSPACE" \
+            --private "$RUNNER_TEMP/b20-foam-private-packet" \
+            --out "$RUNNER_TEMP/b20-safe.json"
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          r=json.loads((Path(os.environ["RUNNER_TEMP"])/"b20-safe.json").read_text())
+          assert r["status"]=="private_two_pass_inputs_staged"
+          assert r["original_passes"]==2 and r["original_stage_programs"]==4
+          assert r["original_cb_name_slot_links_verified"]==8
+          assert r["opaque_cb0_aliases_still_require_authentication"]==4
+          assert r["private_packet_staged"] is True
+          assert r["private_original_program_published"] is False
+          assert r["shaderlab_constructed"] is False
+          assert r["unity_or_device_verified"] is False
+          assert r["water_ready"] is False
+          PY
+      - name: Delete private sources regardless of success
+        if: always()
+        run: rm -rf -- "$RUNNER_TEMP/b20-original-foam" "$RUNNER_TEMP/b20-foam-private-packet" "$GITHUB_WORKSPACE/b20-pinned-zip2"
+      - name: Upload aggregate only
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: b20-foam-safe-${{ github.run_id }}
+          path: ${{ runner.temp }}/b20-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
