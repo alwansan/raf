@@ -63,6 +63,8 @@ checks={
     "remote sink loss visible in metrics and status": '"remote_sink_failed_batches"' in remote and '"remote_sink_failed_bytes"' in remote and '" sinkFailedBatches="' in remote,
     "remote sink failure is not claimed as definite loss": 'raw batch delivery unverified' in remote,
     "raw Logcat unchanged target": '"--uid=" + gameUid' in remote,
+    "FMOD init errors classified from device evidence": '"fmod_initialization_failed"' in (src/"ErrorCategorySummary.java").read_text() and 'line.contains("[FMOD] Initialization failed")' in (src/"ErrorCategorySummary.java").read_text(),
+    "FMOD missing events classified": '"fmod_event_not_found"' in (src/"ErrorCategorySummary.java").read_text() and 'line.contains("EventNotFoundException")' in (src/"ErrorCategorySummary.java").read_text(),
     "error classes tracked without raw text": '"error_groups"' in remote and (src/"ErrorCategorySummary.java").exists(),
 }
 bad=[name for name,valid in checks.items() if not valid]
