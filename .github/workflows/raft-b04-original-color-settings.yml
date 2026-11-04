@@ -1,0 +1,44 @@
+name: B04 RENDER-002 original Linear settings parity
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/b04_restore_original_color_settings.py'
+      - 'tests/test_b04_restore_original_color_settings.py'
+      - '.github/workflows/raft-b04-original-color-settings.yml'
+permissions:
+  contents: read
+concurrency:
+  group: raft-b04-colorspace-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  original-color-parity:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+            Raft/Raft_Data/globalgamemanagers
+      - name: Synthetic fail-closed tests
+        run: |
+          python3 -m unittest discover -s tests -p test_b04_restore_original_color_settings.py -v
+          python3 -m py_compile scripts/b04_restore_original_color_settings.py
+      - name: Original metadata serializer (CPU only)
+        run: python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+      - name: SHA-pinned original to synthetic exported ProjectSettings
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/b04-project/ProjectSettings"
+          printf '%%YAML 1.1\n--- !u!129 &1\nPlayerSettings:\n  m_ActiveColorSpace: 0\n  m_TestPreserve: 19\n' > "$RUNNER_TEMP/b04-project/ProjectSettings/ProjectSettings.asset"
+          python3 -m scripts.b04_restore_original_color_settings --original Raft/Raft_Data/globalgamemanagers --project "$RUNNER_TEMP/b04-project" --apply
+          python3 -m scripts.b04_restore_original_color_settings --original Raft/Raft_Data/globalgamemanagers --project "$RUNNER_TEMP/b04-project"
+          grep -q '^  m_ActiveColorSpace: 1$' "$RUNNER_TEMP/b04-project/ProjectSettings/ProjectSettings.asset"
+          grep -q '^  m_TestPreserve: 19$' "$RUNNER_TEMP/b04-project/ProjectSettings/ProjectSettings.asset"
+          echo 'B04 original-source parity checked; no Unity/GPU/device proof'
