@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "owner": "B18",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T225100Z-B18-map2",
+  "issue_id": "WATER-001",
+  "track": "water-fft",
+  "status": "active",
+  "base_sha": "fc42e65b458ea317b2dea4e494671e978effc153",
+  "approach": "Investigate exact individual original DXBC t0/t1/u0 -> translated SPIR-V binding pair, beyond prior successful type and count preservation.",
+  "intended_files": [
+    "scripts/b18_fft_spirv_descriptor_identity.py",
+    "tests/test_b18_fft_spirv_descriptor_identity.py",
+    ".github/workflows/raft-b18-fft-descriptor-identity.yml"
+  ],
+  "hypothesis": "The individual DXBC register-to-SPIR-V descriptor mapping may be derived and independently authenticated from the translated metadata, not assumed based on ordering.",
+  "related_work": [
+    "B18 41922333604",
+    "B18 41923703800",
+    "B48 selector mapping still unknown"
+  ],
+  "experiment_ids": [],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Inspect vkd3d translation bindings on safe synthetic test cases, then source-verified private original 20 slots; reject unsupported semantics.",
+  "updated_at": "2026-11-04T22:50:52Z"
+}
