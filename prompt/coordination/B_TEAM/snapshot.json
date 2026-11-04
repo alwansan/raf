@@ -336,7 +336,13 @@
         "https://github.com/alwansan/raf/actions/runs/41921227456",
         "https://github.com/alwansan/raf/commit/42476b87626031f23db37808d00e1c76604e5b33",
         "https://github.com/alwansan/raf/actions/runs/41922333604",
-        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B18_FFT_RDEF_PARITY_2026-11-04.md"
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B18_FFT_RDEF_PARITY_2026-11-04.md",
+        "https://github.com/alwansan/raf/actions/runs/41923703800",
+        "https://github.com/alwansan/raf/actions/runs/41926033893",
+        "https://github.com/alwansan/raf/commit/a21d66bc9122bba432c2c6d021e096b7f988abcc",
+        "https://github.com/alwansan/raf/actions/runs/41926202371",
+        "https://github.com/alwansan/raf/actions/runs/41926043987",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B20_SHADERLAB_SCOPE_INTEGRATION_2026-11-04.md"
       ],
       "remaining": [
         "Spectrum/Foam/Blur passes ناقصة في APK86",
@@ -355,15 +361,18 @@
         "B17 exact ZIP2-original Spectrum typed numeric stage descriptor census: 7 passes; 13 fragment rows, 0 vertex rows, 42 resource table field occurrences, m_UAVParams and typed m_MultiSampled; original UnityPy execution and 16 synthetic controls PASS CI41920232173. Original-to-ShaderLab resource binding semantics, sampler state, water pixels and Android Unity runtime still NOT verified; WATER-001 remains OPEN.",
         "B13: Source-integrated validator now rejects malformed/ambiguous/duplicate water Shader/FFT Compute .meta GUIDs; 22/22 synthetic CI PASS with B47 kernel contract, but original ZIP2 GUID ownership, restored ShaderLab/FFT programs, Unity import and phone water errors still unverified (WATER-001 OPEN).",
         "B16: conditional #if 0 false-positive removed from structural .compute gate; 34/34 B16+B47+water source-only CI. Literal branches checked, unknown macros conservative; original FFT .compute/kernel identity/Unity and APK86 device errors still unresolved.",
-        "B18: authenticated ZIP2 original FFT ComputeShader 20/20 SHEX declarations show t0/t1/u0 read/read/write registers and threadgroup dimensions identical to same-slot serialized Unity data; Actions41922333604 SUCCESS 13/13 synthetic and exact SHA source. Original programs contain 0 RDEF chunks; compiled private names, runtime Unity FindKernel index→compiled slot, ShaderLab Unity import/Adreno pixels remain NOT verified; WATER-001 OPEN."
+        "B18: authenticated ZIP2 original FFT ComputeShader 20/20 SHEX declarations show t0/t1/u0 read/read/write registers and threadgroup dimensions identical to same-slot serialized Unity data; Actions41922333604 SUCCESS 13/13 synthetic and exact SHA source. Original programs contain 0 RDEF chunks; compiled private names, runtime Unity FindKernel index→compiled slot, ShaderLab Unity import/Adreno pixels remain NOT verified; WATER-001 OPEN.",
+        "B18 second authenticated original FFT proof CI41923703800 SUCCESS: 20/20 translated DXBC->SPIR-V image role classes preserved (2 read sampled Texture2D, 1 write storage Texture2D) plus local workgroup size; 10 synthetic controls PASS. Mapping each original t register to one concrete SPIR-V set/binding, real Unity .compute import and Adreno render remain UNKNOWN. No game patch or new APK.",
+        "B01: source-only managed FFT argument parser now ignores quoted/commented delimiters; CI41926033893 67 synthetic tests plus SHA-pinned private Dx11FFT and numeric oracle PASS; original caller counts unchanged. Runtime kernels/ShaderLab/Adreno remain unverified.",
+        "B20 source-only ShaderLab scope gate (a21d66b, CI41926202371 PASS): orphan/Properties/top-level Pass no longer inflates water Pass counts; this is NOT original program, Unity import, runtime pixels or kernel recovery. Original ShaderLab/FFT identity still open."
       ],
       "acceptance": [
         "هوية برامج ونوى أصلية أو تطابق موثق دونdummy",
         "تثبيت فيالتصدير+Unity import/render",
         "اختبار هاتف يثبت الماء بلا pass/kernel errors"
       ],
-      "updated_by": "B18",
-      "updated_at": "2026-11-04T22:10:00Z",
+      "updated_by": "B20",
+      "updated_at": "2026-11-04T22:35:00Z",
       "_record_path": "issues/WATER-001.json"
     }
   ],
@@ -621,16 +630,26 @@
       },
       "evidence": [
         "https://github.com/alwansan/raf/actions/runs/41922333604",
-        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B18_FFT_RDEF_PARITY_2026-11-04.md"
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B18_FFT_RDEF_PARITY_2026-11-04.md",
+        "https://github.com/alwansan/raf/actions/runs/41923703800"
       ],
       "remaining": [
         "20 original DXBC programs have zero RDEF name reflection; do not infer compiled private resource name identity",
         "Unity runtime FindKernel mapped to compiled variant slot remains unknown",
         "SPIR-V descriptor set/binding class and actual Unity .compute integration not yet B18-verified",
-        "Original water shaders, render and Adreno visual parity unverified"
+        "Original water shaders, render and Adreno visual parity unverified",
+        "Translation stage B18: all 20 original DXBC->SPIR-V typed image role counts preserved, not per-source-register exact descriptor mapping or Unity runtime binding."
       ],
       "updated_by": "B18",
-      "updated_at": "2026-11-04T22:11:00Z",
+      "updated_at": "2026-11-04T22:19:00Z",
+      "translated_spirv": {
+        "verified_original_fft_programs": 20,
+        "expected_sampled_texture2d_per_program": 2,
+        "expected_storage_texture2d_per_program": 1,
+        "original_compute_workgroup_preserved": true,
+        "per_source_register_to_destination_descriptor_exact_pair_proven": false,
+        "unity_or_android_gpu_verified": false
+      },
       "_record_path": "resources/fft-original-shex-resource-roles-b18.json"
     }
   ],
@@ -676,6 +695,33 @@
       ],
       "at": "2026-11-04T21:20:00Z",
       "_record_path": "events/B01/20261104T2120Z-fft-source-verified.json"
+    },
+    {
+      "id": "B01-20261104T2231Z-args-start",
+      "owner": "B01",
+      "session_id": "20261104T2231Z-B01-fft-args",
+      "issue_id": "WATER-001",
+      "type": "start",
+      "summary": "B01 resumes original FFT managed CSharp structural provenance to guard raw argument tokenization against comments/verbatim strings, without changing water shaders or other agents' work.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41911972796"
+      ],
+      "at": "2026-11-04T22:31:00Z",
+      "_record_path": "events/B01/20261104T2231Z-args-start.json"
+    },
+    {
+      "id": "B01-20261104T2235Z-fft-args-verified",
+      "owner": "B01",
+      "session_id": "20261104T2231Z-B01-fft-args",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "summary": "Hardened private original CSharp FFT argument parser against comments, quote and comma ambiguity; 67 synthetic tests plus SHA-pinned original caller and FFT numeric oracle success; water GPU still unverified.",
+      "evidence": [
+        "https://github.com/alwansan/raf/commit/ec4f8cef6fc1c028d3e8df519fc08494e8442161",
+        "https://github.com/alwansan/raf/actions/runs/41926033893"
+      ],
+      "at": "2026-11-04T22:35:00Z",
+      "_record_path": "events/B01/20261104T2235Z-fft-args-verified.json"
     },
     {
       "id": "20261104T2101Z-B02-e5cd-start",
@@ -1358,6 +1404,20 @@
       "_record_path": "events/B18/20261104T221100Z-fft-shex-provenance.json"
     },
     {
+      "id": "20261104T222000Z-spv-role-verified",
+      "owner": "B18",
+      "session_id": "20261104T215100Z-B18-d3f9",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "summary": "CI41923703800 success: 10/10 synthetic negative/positive controls and 20/20 SHA-auth original DXBC->vkd3d SPIR-V preserve 2 sampled + 1 storage Texture2D and workgroup. Exact t/u register→descriptor, Unity kernel runtime and Adreno phone unproven.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41923703800",
+        "https://github.com/alwansan/raf/commit/ea07d9d1c8d6009df460a102ee95dbdf25792a91"
+      ],
+      "at": "2026-11-04T22:20:00Z",
+      "_record_path": "events/B18/20261104T222000Z-spv-role-verified.json"
+    },
+    {
       "id": "B19-20261104T2137Z-start",
       "owner": "B19",
       "session_id": "20261104T2137Z-B19-svpr3",
@@ -1384,6 +1444,36 @@
       ],
       "at": "2026-11-04T21:43:25Z",
       "_record_path": "events/B19/20261104T2143Z-result.json"
+    },
+    {
+      "id": "B20-20261104T2230Z-start",
+      "owner": "B20",
+      "session_id": "20261104T2230Z-B20-6c9a",
+      "issue_id": "WATER-001",
+      "type": "start",
+      "summary": "Started source-only guarded ShaderLab subshader-scope check to reject off-scope fake water passes; no asset restoration or device proof claimed.",
+      "evidence": [
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/b49_shaderlab_pass_contract.py",
+        "https://github.com/alwansan/raf/actions/runs/41923703800"
+      ],
+      "at": "2026-11-04T22:30:00Z",
+      "_record_path": "events/B20/20261104T2230Z-start.json"
+    },
+    {
+      "id": "B20-20261104T2236Z-shaderlab-scope-result",
+      "owner": "B20",
+      "session_id": "20261104T2230Z-B20-6c9a",
+      "issue_id": "WATER-001",
+      "type": "integration",
+      "summary": "SOURCE_FIXED scoped water ShaderLab Pass counting to Shader/SubShader and fail-closed enclosing brace check; B20 synthetic+upstream source CI PASS, no original water programs or GPU/device restoration.",
+      "evidence": [
+        "https://github.com/alwansan/raf/commit/a21d66bc9122bba432c2c6d021e096b7f988abcc",
+        "https://github.com/alwansan/raf/actions/runs/41926202371",
+        "https://github.com/alwansan/raf/actions/runs/41926043987",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B20_SHADERLAB_SCOPE_INTEGRATION_2026-11-04.md"
+      ],
+      "at": "2026-11-04T22:36:00Z",
+      "_record_path": "events/B20/20261104T2236Z-shaderlab-scope-result.json"
     },
     {
       "id": "B21-20261104T2153Z-lightmap-start",
@@ -1570,6 +1660,21 @@
       "_record_path": "events/B24/20261104T2153Z-foam-original-translation.json"
     },
     {
+      "id": "20261104T222931Z-B25-foam-state-start",
+      "owner": "B25",
+      "session_id": "20261104T222931Z-B25-foam-state",
+      "issue_id": "WATER-001",
+      "type": "start",
+      "summary": "B25 takes authenticated Foam/Global original pass render-state fidelity complementary to B24 four-stage translation; no fake shader/Unity/device claim.",
+      "evidence": [
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B24_ORIGINAL_FOAM_PROGRAM_TRANSLATION_2026-11-04.md",
+        "https://github.com/alwansan/raf/actions/runs/41920166966",
+        "https://github.com/alwansan/CL/tree/5394407b5cd0a0ca1848ff0902f8d2133bf6ea29/raft%20log"
+      ],
+      "at": "2026-11-04T22:29:31.916Z",
+      "_record_path": "events/B25/20261104T222931Z-start.json"
+    },
+    {
       "id": "20261104T2140Z-B30-water-start",
       "owner": "B30",
       "session_id": "20261104T2140Z-B30-7c29",
@@ -1626,6 +1731,20 @@
       ],
       "at": "2026-11-04T21:49:56.384Z",
       "_record_path": "events/B31/20261104T215301Z-provider-result.json"
+    },
+    {
+      "id": "20261104T2226Z-start",
+      "owner": "B37",
+      "session_id": "20261104T2226Z-B37-cursor01",
+      "issue_id": "PERF-007",
+      "type": "start",
+      "summary": "B37 registered distinct Android cursor RGBA32 warning root investigation (1449 APK86 CL occurrences); touch postponed, no fix claimed. WATER-001/RENDER-002/LOCAL-005 remain OPEN.",
+      "evidence": [
+        "https://github.com/alwansan/CL/blob/5394407b5cd0a0ca1848ff0902f8d2133bf6ea29/raft%20log/lf/LogRaft-20261104-225757-156/session-summary.json",
+        "https://github.com/alwansan/raf/releases/tag/android-early-test-41812889049-1"
+      ],
+      "at": "2026-11-04T22:26:00Z",
+      "_record_path": "events/B37/20261104T2226Z-start.json"
     },
     {
       "id": "B38-20261104T2142Z-start-material-texenv",
@@ -1973,5 +2092,5 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "input_sha256": "8fe98988f5f13513fbb420d767afe6c94c297afb609b618e29db5d7870f3c7bb"
+  "input_sha256": "8d31736d71a5cc16d6b1069b55c4d1f6e001d3670f0ba1d36d207abf770f48ec"
 }
