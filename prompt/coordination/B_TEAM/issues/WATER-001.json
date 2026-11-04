@@ -53,7 +53,10 @@
     "https://github.com/alwansan/raf/actions/runs/41927095232",
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B20_AUTHENTIC_BLUR_ATOMIC_ROLLBACK_2026-11-04.md",
     "https://github.com/alwansan/raf/actions/runs/41928183838",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B25_ORIGINAL_FOAM_CB_NAMEBRIDGE_2026-11-04.md"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B25_ORIGINAL_FOAM_CB_NAMEBRIDGE_2026-11-04.md",
+    "https://github.com/alwansan/raf/actions/runs/41914575997",
+    "https://github.com/alwansan/raf/actions/runs/41928357485",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B06_FFT_DEVICE_WORKGROUP_LIMITS_2026-11-04.md"
   ],
   "remaining": [
     "Spectrum/Foam/Blur passes ناقصة في APK86",
@@ -78,13 +81,15 @@
     "B20 source-only ShaderLab scope gate (a21d66b, CI41926202371 PASS): orphan/Properties/top-level Pass no longer inflates water Pass counts; this is NOT original program, Unity import, runtime pixels or kernel recovery. Original ShaderLab/FFT identity still open.",
     "B25 original SHA-pinned Foam/Global render-state verification: both of the two genuine pass m_State fragments are identical (247B and SHA256 19b4753c... each), source-only CI41926521683 SUCCESS 11/11 synthetic plus genuine ZIP2 object SHA. Hypothesis that original pass render states differ rejected; pass programs/partial CB texture bindings, author ShaderLab installation, exported .meta/GUID lineage, Unity/Adreno and phone STILL unverified.",
     "B20 original-derived Blur transient export rollback now atomic with retained verified external backup; source CI41927169542 PASS on injected failures. Actual original candidate in Unity/Adreno pixels and game water still NOT tested, WATER-001 OPEN.",
-    "B25 authentic original Foam CB name/slot bridge: CI41928183838 26/26 synthetic + pinned ZIP2 SHA PASS, 8 original CB name SHA/index/register associations across two passes/four stages, same 3 CB identities across passes; CB0 has 4 references requiring verified HLSL alias (original compiled name not literal identifier). Original source names NOT disclosed. Future CB alias/descriptor and actual shader, textures, materials/GUID, Unity/Adreno unverified; WATER-001 OPEN."
+    "B25 authentic original Foam CB name/slot bridge: CI41928183838 26/26 synthetic + pinned ZIP2 SHA PASS, 8 original CB name SHA/index/register associations across two passes/four stages, same 3 CB identities across passes; CB0 has 4 references requiring verified HLSL alias (original compiled name not literal identifier). Original source names NOT disclosed. Future CB alias/descriptor and actual shader, textures, materials/GUID, Unity/Adreno unverified; WATER-001 OPEN.",
+    "B06 corrected Unity 2021 local invocation max vs X/Y/Z dispatch-group maximum semantics; source-authenticated 64..1024 local-group theoretical cap is now logged at startup; synthetic C# CI41928357485 SUCCESS, Android device and real kernel mapping still UNVERIFIED.",
+    "B06 earlier original FFT resource Dispatch scanner lexical fix independently passed SHA-authenticated original managed CSharp + ComputeShader CI41914575997, 20 original compiled slots/caller resource names matched; Unity runtime FindKernel identity still OPEN."
   ],
   "acceptance": [
     "هوية برامج ونوى أصلية أو تطابق موثق دونdummy",
     "تثبيت فيالتصدير+Unity import/render",
     "اختبار هاتف يثبت الماء بلا pass/kernel errors"
   ],
-  "updated_by": "B25",
-  "updated_at": "2026-11-04T22:49:56.951Z"
+  "updated_by": "B06",
+  "updated_at": "2026-11-04T22:50:19.370Z"
 }
