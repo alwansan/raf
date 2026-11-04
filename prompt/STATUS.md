@@ -1125,3 +1125,7 @@ BuildFix changed graphics acquisition to reuse regular files only after original
 
 ## Original Blur SAMPLE binding pairs — 4 November
 [Evidence](../docs/BLUR_ORIGINAL_SAMPLE_BINDINGS_2026-11-04.md):41793495493SUCCESS,6/6originalfragmentSAMPLEinstructions matchunique serialized texture/samplerpairs;0parsefailures.14CItests pass,20CBreads/69knownaddresses unchanged. Numericlinkageonly;samplerstate/namedwrapper/runtimeunverified. NOT_READY.
+
+
+## Private original named Blur plans — 4 November
+[Handoff](../docs/BLUR_PRIVATE_NAMED_BINDING_PLANS_2026-11-04.md):41793920272SUCCESS17tests;4privateplans preserve authenticnames/offsets for6CB7members2textures. Vertexplanhashesidentical;no private namespublished. Sourceconstructiononly;samplerstate/upload/HLSL/GPUunverified. NOT_READY.

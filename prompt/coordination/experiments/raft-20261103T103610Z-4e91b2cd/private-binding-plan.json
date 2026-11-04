@@ -1,0 +1,59 @@
+{
+  "owner": "raft-20261103T103610Z-4e91b2cd",
+  "status": "completed",
+  "source_sha": "c2afba795bf7ef1aea7402542d26a4f618586af0",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41793920272",
+  "result": [
+    {
+      "pass": 0,
+      "stage": 1,
+      "summary": {
+        "named_buffers": 2,
+        "named_members": 2,
+        "named_textures": 0,
+        "private_named_plan_sha256": "c38899496ff6214b59dce78116d2316cc0b479d5806c47acbb79d65f5c90a84d",
+        "private_names_published": false,
+        "upload_layout_or_gpu_verified": false
+      }
+    },
+    {
+      "pass": 0,
+      "stage": 0,
+      "summary": {
+        "named_buffers": 1,
+        "named_members": 2,
+        "named_textures": 1,
+        "private_named_plan_sha256": "03c7130aefab210652e47a7cc9f754c96aa4f71c5067c8ff7c4a6251def6fed6",
+        "private_names_published": false,
+        "upload_layout_or_gpu_verified": false
+      }
+    },
+    {
+      "pass": 1,
+      "stage": 1,
+      "summary": {
+        "named_buffers": 2,
+        "named_members": 2,
+        "named_textures": 0,
+        "private_named_plan_sha256": "c38899496ff6214b59dce78116d2316cc0b479d5806c47acbb79d65f5c90a84d",
+        "private_names_published": false,
+        "upload_layout_or_gpu_verified": false
+      }
+    },
+    {
+      "pass": 1,
+      "stage": 0,
+      "summary": {
+        "named_buffers": 1,
+        "named_members": 1,
+        "named_textures": 1,
+        "private_named_plan_sha256": "3458d2246c6de6b561ab847c9c0b2adfea2ef4ab8680124697caec31b13f6f5c",
+        "private_names_published": false,
+        "upload_layout_or_gpu_verified": false
+      }
+    }
+  ],
+  "limitations": [
+    "Private source binding plan only;no HLSLinstall/upload/samplerstate/GPUproof"
+  ]
+}
