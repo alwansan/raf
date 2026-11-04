@@ -6,7 +6,7 @@
   "issue_id": "LOCAL-005",
   "track": "world-save",
   "approach": "Execute B07 Android original-callback wrapper semantics in a synthetic compiled C#10 managed harness, with three branch cases and throw/rethrow/finally evidence; no private source published",
-  "status": "active",
+  "status": "completed",
   "base_sha": "0a08683f09bdad8ef795fff8f59a21c6724b0661",
   "intended_files": [
     "scripts/b07_compile_world_callback_fixture.py",
@@ -20,8 +20,10 @@
   "experiment_ids": [
     "20261104T2127Z-world-callback-managed"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Add synthetic executable C# net10 fixture using production Python wrapper, compile/execute in bounded B07 GitHub CI, then persist negative/result.",
-  "updated_at": "2026-11-04T21:27:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41916347469"
+  ],
+  "result": "CI41916347469 SUCCESS: synthetic .NET10 C# execution of production GameManager callback wrapper, 3 branch SaveGame calls, exact Begin/End counters, caught exception and finally flag; original-private source probe/adapter also PASSED; no Unity/phone/.rgd evidence.",
+  "next_step": "Monitor a future coordinated APK/CL for OnWorldRecieved events and real .rgd roundtrip, without restarting this bounded managed fixture.",
+  "updated_at": "2026-11-04T21:29:00Z"
 }
