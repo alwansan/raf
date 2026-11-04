@@ -1,0 +1,14 @@
+{
+  "id": "B12-20261104T2132Z-B12-c4a8-start",
+  "owner": "B12",
+  "session_id": "20261104T2132Z-B12-c4a8",
+  "issue_id": "LOCAL-005",
+  "type": "start",
+  "summary": "B12 joins distinct LOCAL-005 SaveGame StoreStats boundary: APK86 proven steam_api64 DllNotFound after world loaded; current SHA-pinned adapter protects SteamID but not this call. Will guard optional Steam stats only for Android local sessions, preserve .rgd writes/Windows/callbacks; tests required.",
+  "evidence": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/adapt_android_offline_startup.py",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/REVIEW_2026-11-04.md",
+    "https://github.com/alwansan/CL/blob/5394407b5cd0a0ca1848ff0902f8d2133bf6ea29/raft%20log/lf/LogRaft-20261104-225757-156/raft-20261104-225757-156-00003.log.txt"
+  ],
+  "at": "2026-11-04T21:33:58.649Z"
+}
