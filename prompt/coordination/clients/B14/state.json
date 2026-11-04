@@ -4,19 +4,22 @@
   "generation": "B-2026-11-04",
   "session_id": "20261104T2131Z-B14-a71c",
   "resumed_from_session": null,
-  "status": "active",
+  "status": "paused",
   "base_sha": "f8028d15b2401d1fd8c73b2316e5bf76fef88eae",
-  "last_commit": "1aebdfba4502fe0a86fc4986867ec32e207a8cd6",
-  "updated_at": "2026-11-04T21:38:58.604Z",
+  "last_commit": "86a7ea1700550d2f535b12574ad7437ced271f5e",
+  "updated_at": "2026-11-04T21:46:03.972Z",
   "tracks": [
-    "WATER-001/water-source-integrity"
+    "WATER-001/water-source-integrity",
+    "LOCAL-005/offline-save-stage-path-integrity"
   ],
   "work_ids": [
-    "B14-20261104T2131Z-B14-a71c-water-path-identity"
+    "B14-20261104T2131Z-B14-a71c-water-path-identity",
+    "B14-20261104T2131Z-B14-a71c-save-stage-roots"
   ],
   "run_urls": [
-    "https://github.com/alwansan/raf/actions/runs/41917493634"
+    "https://github.com/alwansan/raf/actions/runs/41917493634",
+    "https://github.com/alwansan/raf/actions/runs/41918579185"
   ],
-  "next_step": "WATER path guard complete; investigate separate LOCAL-005 save-stage project/backup root redirects without overlapping B50's SteamStats semantics.",
+  "next_step": "Both scoped path integrity repairs source-verified; on resumed session refresh HEAD/Actions, then prioritize real shader/FFT original integration and Android local .rgd create/save/reopen evidence; NOT_READY 0/3.",
   "memory_path": "prompt/coordination/clients/B14/MEMORY.md"
 }
