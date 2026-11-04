@@ -128,15 +128,14 @@ def download(path):
 
 
 def restore_project(project, backup, shaders, license):
-    notice = project / NOTICE
-    if notice.exists() and notice.read_bytes() != license:
-        raise ValueError('Conflicting binary redistribution notice')
-    count = restore(project, backup, shaders, {}, license,
+    # This legally required notice is a dependency of the restored volumetric
+    # effects and must be committed and rolled back WITH their Shader files.
+    # A separate post-restoration write could fail after the shaders changed,
+    # or follow a redirected StreamingAssets parent outside the Unity export.
+    return restore(project, backup, shaders, {}, license,
         shader_prefix=tuple(EXPECTED[p][0] for p in EXPECTED), include_root=ROOT,
-        label='VOLUMETRIC', vendor_version=COMMIT + '+raft-half-compose-v1')
-    notice.parent.mkdir(parents=True, exist_ok=True)
-    notice.write_bytes(license)
-    return count
+        label='VOLUMETRIC', vendor_version=COMMIT + '+raft-half-compose-v1',
+        extra_additions={NOTICE: license})
 
 
 def main():
