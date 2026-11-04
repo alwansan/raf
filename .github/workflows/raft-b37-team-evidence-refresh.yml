@@ -1,0 +1,52 @@
+name: B37 B-team evidence checkpoint (source only)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-b37-team-evidence-refresh.yml'
+      - 'prompt/coordination/B_TEAM/events/B37/**'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: raft-b48-team-summary-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  refresh-summary:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: feature/android-native-port
+          persist-credentials: true
+          lfs: false
+          fetch-depth: 1
+          sparse-checkout: |
+            scripts/refresh_b_team.py
+            prompt/coordination/B_TEAM
+      - name: Regenerate team evidence from latest HEAD with fast-forward lease only
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'raft-b37-evidence-checkpoint'
+          git config user.email 'raft-b37-evidence-checkpoint@users.noreply.github.com'
+          for attempt in 1 2 3 4 5 6; do
+            git fetch -q --no-tags origin feature/android-native-port
+            git reset --hard -q FETCH_HEAD
+            python3 scripts/refresh_b_team.py
+            git add -- prompt/coordination/B_TEAM/SUMMARY.md prompt/coordination/B_TEAM/snapshot.json
+            if git diff --cached --quiet; then
+              echo 'B37_TEAM_EVIDENCE already_current=true'
+              exit 0
+            fi
+            git commit -q -m 'coord(B37): regenerate team evidence summary from latest records'
+            if git push --quiet origin HEAD:feature/android-native-port; then
+              echo 'B37_TEAM_EVIDENCE regenerated=true fast_forward_only=true'
+              exit 0
+            fi
+            echo "B37_TEAM_EVIDENCE lease_conflict attempt=$attempt; fetch live HEAD"
+            sleep 1
+          done
+          echo 'B37_TEAM_EVIDENCE could not publish without force; preserve records for retry' >&2
+          exit 1
