@@ -13,18 +13,22 @@
     "UnityPy": "1.25.4",
     "Python": "3.12 on ubuntu-24.04"
   },
-  "commands": [],
+  "commands": [
+    "python3 -m unittest discover -s tests -p 'test_b45_blur_wrapper_preflight.py' -v",
+    "python3 -m scripts.w1_full_engine_sources --zip2-checkout zip2-original --destination $RUNNER_TEMP/w1-original",
+    "python3 -m scripts.b45_blur_wrapper_preflight --source $RUNNER_TEMP/w1-original/Raft_Data --repo . --out $RUNNER_TEMP/b45/blur-state.json"
+  ],
   "negative_controls": [
     "synthetic parsed missing pass rejected",
     "unresolved original metadata rejected",
     "do not publish original text"
   ],
   "workflow_path": ".github/workflows/raft-b45-blur-shaderlab.yml",
-  "run_url": null,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41911866092",
   "artifact_urls": [],
   "budget": "CPU-only, ubuntu-24.04 10 min timeout, SHA-pinned ZIP2 provider/cache, no Unity/APK",
-  "status": "planned",
-  "observed_result": null,
+  "status": "in_progress",
+  "observed_result": "CI run dispatched; result pending; stage decoder only, no shader installation",
   "rejected_hypotheses": [],
   "limitations": [
     "No Unity compile/Adreno",
