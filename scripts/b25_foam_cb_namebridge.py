@@ -59,7 +59,16 @@ def inspect_parsed(parsed, diag=None):
         diag.update(phase="original-name-registry", pass_index=pi)
         if not isinstance(p, dict) or p.get("m_Type") != 0:
             raise ValueError("Foam original pass type unsupported")
-        names = original_name_registry(p.get("m_NameIndices"))
+        source_names = p.get("m_NameIndices")
+        # Safe schema-only diagnostics; never log original CB names/values.
+        diag["registry_container_type"] = type(source_names).__name__
+        diag["registry_record_count"] = len(source_names) if isinstance(source_names, (list, dict)) else None
+        diag["registry_first_row_type"] = (
+            type(source_names[0]).__name__ if isinstance(source_names, list) and source_names else None)
+        diag["registry_first_row_length"] = (
+            len(source_names[0]) if isinstance(source_names, list) and source_names
+            and isinstance(source_names[0], (list, dict, tuple)) else None)
+        names = original_name_registry(source_names)
         stage_rows = []
         for stage, field in ((1, "progVertex"), (0, "progFragment")):
             diag.update(phase="original-CB-index-resolution", stage_code=stage)
@@ -146,6 +155,10 @@ def main():
                         "failure_pass": diag.get("pass_index"),
                         "failure_stage": diag.get("stage_code"),
                         "failure_cb_slot": diag.get("cb_slot"),
+                        "registry_container_type": diag.get("registry_container_type"),
+                        "registry_record_count": diag.get("registry_record_count"),
+                        "registry_first_row_type": diag.get("registry_first_row_type"),
+                        "registry_first_row_length": diag.get("registry_first_row_length"),
                         "private_name_values_published": False,
                         "unity_or_android_verified": False}, 2
     args.report.parent.mkdir(parents=True, exist_ok=True)
