@@ -1,0 +1,14 @@
+{
+  "id": "B38-20261104T2158Z-material-render-state-result",
+  "owner": "B38",
+  "session_id": "20261104T2142Z-B38-f31a",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "Integrated read-only original Material draw queue/lighting/instancing state parity checker, CI41920784251 SUCCESS 9/9 synthetic; original source vs same-instance export and phone unverified.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41920784251",
+    "https://github.com/alwansan/raf/commit/bd58522fd126391478a90101813e78096eb3f18e",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B38_MATERIAL_RENDER_STATE_FIDELITY_2026-11-04.md"
+  ],
+  "at": "2026-11-04T21:58:17.610Z"
+}
