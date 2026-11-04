@@ -38,6 +38,9 @@ def matching_close_brace(source: str, open_index: int) -> bool:
 # masked unless separately authenticated with the actual Unity defines.
 # This must never be confused with a compiled-kernel/identity verifier.
 CONDITIONAL = re.compile(r'^[ \t]*#[ \t]*(if|ifdef|ifndef|elif|else|endif)\b([^\r\n]*)')
+# A reachable #error makes the source impossible to compile, even if its
+# pragma/entrypoint text otherwise looks structurally complete.
+ERROR_DIRECTIVE = re.compile(r'^[ \t]*#[ \t]*error\b')
 
 
 def mask_inactive_preprocessor(clean: str) -> str:
@@ -46,9 +49,11 @@ def mask_inactive_preprocessor(clean: str) -> str:
     Source diagnostics must not count #pragma/kernel entrypoints that the HLSL
     preprocessor cannot compile. Preserve newlines for anchored regexes.
     Unknown conditions fail closed rather than guessing Android defines.
+    Potentially reachable #error directives reject compile-blocked candidates.
     """
     stack = []
     active = True
+    possible = True  # Could Unity enter this branch with unknown defines?
     kept = []
     for line in clean.splitlines(keepends=True):
         match = CONDITIONAL.match(line)
@@ -60,9 +65,12 @@ def mask_inactive_preprocessor(clean: str) -> str:
                     raise ValueError("Missing compute conditional expression")
                 value = operand == "1" if directive == "if" and operand in ("0", "1") else None
                 frame = {"parent": active, "seen": value is True,
-                         "unknown": value is None, "else": False}
+                         "unknown": value is None, "else": False,
+                         "possible_parent": possible,
+                         "possible_following": possible and value is not True}
                 stack.append(frame)
                 active = active and value is True
+                possible = possible and value is not False
             elif directive == "elif":
                 if not stack or stack[-1]["else"] or not operand:
                     raise ValueError("Malformed compute #elif")
@@ -73,18 +81,26 @@ def mask_inactive_preprocessor(clean: str) -> str:
                 active = frame["parent"] and not frame["seen"] and not frame["unknown"] and value is True
                 if value is True:
                     frame["seen"] = True
+                possible = frame["possible_following"] and value is not False
+                frame["possible_following"] = frame["possible_following"] and value is not True
             elif directive == "else":
                 if not stack or stack[-1]["else"] or operand:
                     raise ValueError("Malformed compute #else")
                 frame = stack[-1]
                 frame["else"] = True
                 active = frame["parent"] and not frame["seen"] and not frame["unknown"]
+                possible = frame["possible_following"]
             else:
                 if not stack or operand:
                     raise ValueError("Malformed compute #endif")
-                active = stack.pop()["parent"]
+                frame = stack.pop()
+                active = frame["parent"]
+                possible = frame["possible_parent"]
             kept.append("".join(c if c in "\r\n" else " " for c in line))
         else:
+            if possible and ERROR_DIRECTIVE.match(line):
+                # Do not disclose a possibly private compiler error message.
+                raise ValueError("Potentially active compute #error directive")
             kept.append(line if active else "".join(c if c in "\r\n" else " " for c in line))
     if stack:
         raise ValueError("Unclosed compute preprocessor conditional")
