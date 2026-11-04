@@ -30,6 +30,32 @@ from scripts.w5_blur_uniform_rebinding import rebind as rebind_uniforms
 
 def normalize_uniforms(binary, reflected, plan, stage, rebuilt):
     """Join by original slot symbol or exact named CB identity, never table order."""
+    words = list(struct.unpack('<%dI' % (len(binary) // 4), binary))
+    if len(words) < 5 or words[0] != 0x07230203:
+        raise ValueError('Invalid SPIR-V uniform module')
+    names, pointers, variables, instructions = {}, {}, {}, []
+    position = 5
+    while position < len(words):
+        count, opcode = words[position] >> 16, words[position] & 65535
+        if not count or position + count > len(words):
+            raise ValueError('Invalid SPIR-V uniform instruction')
+        row = words[position:position + count]
+        instructions.append((position, count, opcode))
+        if opcode == 5 and count >= 3:
+            names[row[1]] = struct.pack('<%dI' % (count - 2), *row[2:]).split(b'\0', 1)[0].decode()
+        if opcode == 32 and count == 4 and row[2] == 2:
+            pointers[row[1]] = row[3]
+        if opcode == 59 and count >= 4 and row[3] == 2:
+            variables[row[2]] = row[1]
+        position += count
+    original_slots_by_type = {}
+    for variable, pointer in variables.items():
+        match = re.fullmatch(r'cb(\d+)_0', names.get(variable, ''))
+        if not rebuilt and pointer in pointers and match:
+            type_id = pointers[pointer]
+            if type_id in original_slots_by_type:
+                raise ValueError('Ambiguous translated uniform type')
+            original_slots_by_type[type_id] = int(match[1])
     slots = {buffer['slot']: buffer for buffer in plan['buffers']}
     wanted_types, seen = {}, set()
     for resource in reflected.get('ubos', []):
@@ -38,8 +64,12 @@ def normalize_uniforms(binary, reflected, plan, stage, rebuilt):
             possible = [slot for slot, buffer in slots.items()
                         if resource['name'] == ('__raft_w5_Globals' if buffer['name'] == '$Globals' else buffer['name'])]
         else:
-            match = re.fullmatch(r'cb(\d+)_0_m0', members[0]['name']) if len(members) == 1 else None
-            possible = [int(match[1])] if match else []
+            # SPIRV-Cross JSON names the struct member `_m0`, NOT the HLSL
+            # flattened `cb0_0_m0`. Original slot belongs to OpName of the
+            # actual Uniform variable; resolve through its pointer/struct ID.
+            type_match = re.fullmatch(r'_(\d+)', resource['type'])
+            slot = original_slots_by_type.get(int(type_match[1])) if type_match else None
+            possible = [slot] if slot is not None else []
         if len(possible) != 1 or possible[0] not in slots or possible[0] in seen:
             raise ValueError('Original uniform descriptor identity unresolved')
         slot = possible[0]
@@ -62,18 +92,11 @@ def normalize_uniforms(binary, reflected, plan, stage, rebuilt):
         wanted_types[int(resource['type'][1:])] = 4 + slot if stage == 1 else 6 + slot
     if seen != set(slots):
         raise ValueError('Original uniform slots not fully mapped')
-    words = list(struct.unpack('<%dI' % (len(binary) // 4), binary))
-    pointer_types, targets, instructions = {}, {}, []
-    position = 5
-    while position < len(words):
-        count, opcode = words[position] >> 16, words[position] & 65535
-        if not count or position + count > len(words):
-            raise ValueError('Invalid SPIR-V uniform instruction')
+    pointer_types, targets = {}, {}
+    for position, count, opcode in instructions:
         row = words[position:position + count]
-        instructions.append((position, count, opcode))
         if opcode == 32 and count == 4 and row[2] == 2 and row[3] in wanted_types:
             pointer_types[row[1]] = wanted_types[row[3]]
-        position += count
     for position, count, opcode in instructions:
         if opcode == 59 and count >= 4 and words[position + 1] in pointer_types:
             targets[words[position + 2]] = pointer_types[words[position + 1]]
