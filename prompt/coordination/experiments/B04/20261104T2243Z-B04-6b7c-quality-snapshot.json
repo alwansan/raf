@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "owner": "B04",
+  "session_id": "20261104T2243Z-B04-6b7c",
+  "issue_id": "RENDER-002",
+  "hypothesis": "Existing per-scene shader snapshot misses active Android QualitySettings, limiting diagnosis of pale materials vs original Linear five-tier source; a bounded, read-only getter-only snapshot can disambiguate on next APK without forcing quality.",
+  "source_commit": "bc63f59de0875bee6fdff71f21f5a9dd991f5045",
+  "input_hashes": [
+    "original Unity 2021 globalgamemanagers size:1914356 sha256:6d1288cd08b91d8c321ed2526503404b64b978819985b9b7fa5a9a146c29a8f5",
+    "source ZIP2 commit:15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+  ],
+  "tool_versions": {
+    "runner": "ubuntu-24.04",
+    "CSharp managed": "dotnet 10 original reconstructed Assembly-CSharp validation",
+    "Unity target": "2021.3.45f2 (NOT RUN)"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_b04_runtime_quality_snapshot.py -v",
+    "python3 -m py_compile tests/test_b04_runtime_quality_snapshot.py",
+    "existing GitHub Actions .github/workflows/raft-android-offline-integration-tests.yml original managed CSharp compile"
+  ],
+  "negative_controls": [
+    "Reject uncalled helper after B12 concurrent traversal rewrite",
+    "Reject quality SetQualityLevel/field writes and Screen.SetResolution, PlayerPrefs.Set",
+    "Reject duplicate quality getters and duplicate/missing marker expression",
+    "Reject loss of delayed 3-second scene-loaded probe",
+    "Reject missing quality getter exception-safe fallback",
+    "Preserve B12 renderer/material/mesh and ambient/color_space fields"
+  ],
+  "workflow_path": ".github/workflows/raft-b04-runtime-quality-snapshot.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41928607504",
+  "artifact_urls": [],
+  "budget": "isolated 6-minute CPU-only synthetic workflow; existing original managed offline CI used once with user-authorized normal push, no Unity/native build",
+  "status": "completed",
+  "observed_result": "9/9 final B04 source policy tests pass on 6b9390a at CI41928607504; actual adapted original managed CSharp compile on bc63f59 (after reattaching B04 into B12 bounded traversal) SUCCESS CI41928576383. Initial CI41928410376 detected missing runtime invocation from concurrent B12 2c15dfb source replacement, subsequent CI41928576465 only had B04 negative test assertion ordering; fixed without reverting B12. B04 logs are not yet captured from actual Android device.",
+  "rejected_hypotheses": [
+    "A present quality helper definition alone guarantees telemetry executes: false, callsite omitted in concurrent B12 refactor",
+    "The first failed CI was proof of a Unity/device quality regression: false, missing source invocation and synthetic assertion order",
+    "Force a high quality level to restore white surfaces without source/pixel evidence: explicitly rejected"
+  ],
+  "limitations": [
+    "No Unity Editor, IL2CPP, Android GPU or APK device test; last APK86 does not contain this code",
+    "Quality indices/source tier names may differ on Android, so compare original source semantically, not blindly",
+    "Quality telemetry cannot restore water FFT missing shader passes or prove Material texture identity",
+    "W2 original source quality tiers were previously authenticated; B04 did not reparse full ZIP2 in its isolated tests"
+  ],
+  "integration_commit": "bc63f59de0875bee6fdff71f21f5a9dd991f5045",
+  "next_step": "On next coordinated actual APK, inspect delayed scene_shader_snapshot quality_level_index/quality_tier_count/pixel_light_count/master_texture_limit/shadows etc alongside color_space, B12 shader and mesh counts and original W2 values; only then choose quality or renderer fix."
+}
