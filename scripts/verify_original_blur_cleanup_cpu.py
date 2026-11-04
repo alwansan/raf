@@ -3,7 +3,7 @@ import argparse,hashlib,subprocess,tempfile
 from pathlib import Path
 from scripts.blur_pixel_cleanup import protect
 from scripts.verify_blur_pixel_cleanup_cpu import STUBS
-PIN="f03ff7a771e866a84591daf030c2648029efb15851bd63b3df0bc7a67dd8c08f"
+PIN="67242ca043c8f659dba4ea833a8f5fe072b282f6ddc65ced16a2cf422e6f5b13"
 def main(root):
  paths=list(root.rglob("Blur.cs"))
  if len(paths)!=1:raise ValueError("ambiguous original Blur")

@@ -8,7 +8,7 @@ from scripts.instrument_android_runtime_operations import body_bounds
 from scripts.blur_pixel_cleanup import protect as protect_blur_pixel
 
 PINS={
-'Blur':('f03ff7a771e866a84591daf030c2648029efb15851bd63b3df0bc7a67dd8c08f',0),
+'Blur':('67242ca043c8f659dba4ea833a8f5fe072b282f6ddc65ced16a2cf422e6f5b13',0),
 'MyInput':('66517cd6df549991014002acdfd462e0d883ee76da81193920a31362385e9b6c',0),
 'HapticAudio':('ac0ac86f62d05c774cb8b24cc8454df2b5356e50c6720395137df1730430fe9c',0),
 'SoundManager':('fe5378c4375e9609c3f9bf9c35f51abecff266148f35588a5df2eb358a745d38',0),
