@@ -4,18 +4,23 @@
   "generation": "B-2026-11-04",
   "session_id": "20261104T210726Z-B06-fmt6a2",
   "resumed_from_session": null,
-  "status": "active",
+  "status": "completed",
   "base_sha": "e8c312541b8139f2e889ff8921de8128146dcc84",
-  "last_commit": null,
-  "updated_at": "2026-11-04T21:07:26.584Z",
+  "last_commit": "f4b9520c367bf8e78fcfebba673f20b465edb720",
+  "updated_at": "2026-11-04T21:19:33.905Z",
   "tracks": [
     "water-fft",
-    "fft-format-integration"
+    "fft-format-integration",
+    "source-audit-integrity"
   ],
   "work_ids": [
-    "B06-20261104T210726Z-B06-fmt6a2-fft-target-binding"
+    "B06-20261104T210726Z-B06-fmt6a2-fft-target-binding",
+    "B06-20261104T210726Z-B06-fmt6a2-fft-dispatch-lexical"
   ],
-  "run_urls": [],
-  "next_step": "Inspect pinned FFT target-format data and current runtime binding/compute code; isolate real mismatch or negative evidence before implementing an exact non-dummy improvement.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41913854292",
+    "https://github.com/alwansan/raf/actions/runs/41914612977"
+  ],
+  "next_step": "B06 narrow session scopes completed. On resume read docs/B06_FFT_ANDROID_CAPABILITY_PROBE_2026-11-04.md and docs/B06_FFT_DISPATCH_LEXICAL_GUARD_2026-11-04.md; verify live HEAD/Actions/CL, coordinate authentic Unity shader/kernel integration, and validate new FFT device capability logs only when a legitimately new APK is produced; WATER-001 remains OPEN, 0/3 full readiness reviews.",
   "memory_path": "prompt/coordination/clients/B06/MEMORY.md"
 }
