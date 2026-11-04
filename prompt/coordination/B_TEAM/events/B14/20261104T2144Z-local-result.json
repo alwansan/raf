@@ -1,0 +1,14 @@
+{
+  "id": "B14-20261104T2144Z-local-result",
+  "owner": "B14",
+  "session_id": "20261104T2131Z-B14-a71c",
+  "issue_id": "LOCAL-005",
+  "type": "result",
+  "summary": "Two existing offline original source adapters now reject symlinked project/backup roots and ancestors; 32/32 source-only tests in isolated GitHub Actions 41918579185 SUCCESS; no .rgd device claim.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41918579185",
+    "https://github.com/alwansan/raf/commit/02e7eefb614044861eae2cfee32157e50a126378",
+    "https://github.com/alwansan/raf/commit/cca6e1e8f6c3a07327f811cf788a8d5d6668c099"
+  ],
+  "at": "2026-11-04T21:43:48.860Z"
+}
