@@ -4,7 +4,7 @@
   "session_id": "20261104T2059Z-B44-f0ac",
   "issue_id": "RENDER-002",
   "hypothesis": "Original material color/tint values can be lost even if original/export shader PPtrs match; a SHA-pinned source-vs-same-export YAML value comparison will catch this without exposing raw assets.",
-  "source_commit": "f1dd7fccb7607264d7ec9fee6a67cb73cbbd7eb7",
+  "source_commit": "dda05b1638480f4a2d9ab37149ac792500cfec5b",
   "input_hashes": [
     "ZIP2=15964ea8f246b6e076ce26b60931ee2e1a9a2385; original SHA/size per SHADER_OWNERS; no original payload acquired or tested during this session"
   ],
@@ -26,14 +26,15 @@
     "duplicate source identity",
     "NaN/malformed RGBA/duplicate slot",
     "malformed YAML",
-    "symlinked output parent"
+    "symlinked output parent",
+    "duplicate YAML mapping keys rejected instead of overwritten by standard PyYAML safe_load"
   ],
   "workflow_path": ".github/workflows/raft-b44-material-colors.yml",
-  "run_url": "https://github.com/alwansan/raf/actions/runs/41912783093",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41913494314",
   "artifact_urls": [],
   "budget": "ubuntu-24.04 single 8-min timeout, no original data, no Unity, no LFS, no native or signing",
   "status": "completed",
-  "observed_result": "10/10 local synthetic tests PASS; Github Actions 41912783093 COMPLETED SUCCESS at source f1dd7fcc; tool implemented as self-contained SHA-pinned original Material m_Colors vs actual same-export YAML per-Material comparator, not yet run against authentic native export/phone.",
+  "observed_result": "11/11 local synthetic tests PASS; independent GitHub Actions 41913494314 COMPLETED SUCCESS on dda05b1638480f4a2d9ab37149ac792500cfec5b (10 predecessor tests SUCCESS run 41912783093). Added strict duplicate-key YAML loader regression. Tool checks SHA-pinned original Material m_Colors versus actual same-export YAML, but AUTHENTIC full-export comparison was not executed; no demonstrated gameplay fix or color pixel equivalence.",
   "rejected_hypotheses": [
     "Shader PPtr identity alone proves preservation of Material tint values (counterexample: same pointer, changed/dropped color, detected in synthetic controls)."
   ],
@@ -42,6 +43,6 @@
     "No Unity/Adreno/device image proof; no claim white visuals repaired.",
     "Any private source and per-object color data must remain ephemeral, only aggregate integer JSON safe to publish."
   ],
-  "integration_commit": null,
+  "integration_commit": "dda05b1638480f4a2d9ab37149ac792500cfec5b",
   "next_step": "During next coordinated authentic full export, run python3 -m scripts.b44_verify_material_colors --source $RUNNER_TEMP/w1-original --private-export-trace $RUNNER_TEMP/private-export-lineage.json --project $RUNNER_TEMP/project/ExportedProject --out $RUNNER_TEMP/b44-material-colors-aggregate.json after same-instance exporter; if mismatch, localize and repair exact lost Material SavedProperties in exporter, otherwise investigate custom shader/texture/render branch."
 }
