@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261104T090500Z-w4c3f1a9",
+  "issue_id": "BUILD-004",
+  "status": "active",
+  "updated_at": "2026-11-04T09:05:00Z",
+  "base_sha": "2008a5fb94d7df16bdcc1966a00955025e5fbded",
+  "hypothesis": "verify_export_lineage keyed material documents with a hardcoded reference type 3 while the exporter records AssetType.Serialized (2) for YAML-exported materials; every key misses (1524/1524) exactly as observed in run 41799635147.",
+  "intended_files": [
+    "scripts/verify_export_lineage.py",
+    "tests/test_export_lineage.py",
+    ".github/workflows/raft-unity-editor-android-import.yml"
+  ],
+  "related_work": [
+    "prompt/coordination/clients/raft-20261104T080541Z-eb004764/state.json"
+  ],
+  "experiment_ids": [],
+  "evidence": [
+    "run 41799635147 RAFT_LINEAGE_MISMATCH missing_actual=1524 unexpected_actual=1524 different_shader_pointers=0",
+    "AssetRipperCLI 036098ab DefaultYamlExporter.ToExportType=Serialized(2)",
+    "local unit tests 12/12 + 2/2 + 10/10 OK"
+  ],
+  "result": null,
+  "next_step": "Push fix with expected-SHA leases, watch raft-w1-export-lineage, then wire full-build builtin ownership inputs."
+}

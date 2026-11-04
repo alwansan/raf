@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "username": "raft-20261104T090500Z-w4c3f1a9",
+  "client_label": "W4-build-delivery",
+  "role": "W4 - independent Raft Android build/delivery repair agent",
+  "session_id": "6d1f0e42-8b17-4c9a-b0f2-e2d73a91c550",
+  "resumed_from": null,
+  "status": "active",
+  "updated_at": "2026-11-04T09:05:00Z",
+  "base_sha": "2008a5fb94d7df16bdcc1966a00955025e5fbded",
+  "current_work": "Establish same-instance material document identity fix and drive the full APK/OBB/XAPK build through the builtin ownership gate.",
+  "last_commit": null,
+  "next_step": "Push verifier fix, watch raft-w1-export-lineage, then wire engine ownership evidence into the full build.",
+  "memory_path": "prompt/coordination/clients/raft-20261104T090500Z-w4c3f1a9/MEMORY.md"
+}
