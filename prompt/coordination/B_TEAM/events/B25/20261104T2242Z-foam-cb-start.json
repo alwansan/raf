@@ -1,0 +1,13 @@
+{
+  "id": "20261104T2242Z-B25-foam-cb-start",
+  "owner": "B25",
+  "session_id": "20261104T222931Z-B25-foam-state",
+  "issue_id": "WATER-001",
+  "type": "start",
+  "summary": "Following authenticated identical Foam pass render states, B25 probes original partial CB name-index→slot mapping for genuine private ShaderLab source assembly; avoids B24 four-stage translation duplication.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41926521683",
+    "https://github.com/alwansan/raf/actions/runs/41920166966"
+  ],
+  "at": "2026-11-04T22:39:38.864Z"
+}
