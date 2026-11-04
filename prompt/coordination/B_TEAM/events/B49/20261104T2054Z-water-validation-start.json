@@ -1,0 +1,12 @@
+{
+  "id": "20261104T2054Z-B49-water-validation-start",
+  "owner": "B49",
+  "session_id": "20261104T2054Z-B49-c81f",
+  "issue_id": "WATER-001",
+  "type": "start",
+  "summary": "Started distinct WATER-001 per-pass source gate false-positive repair and independent synthetic controls.",
+  "evidence": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/verify_water_render_contract.py"
+  ],
+  "at": "2026-11-04T20:54:00Z"
+}
