@@ -1,0 +1,19 @@
+# B25 — authenticated original Foam/Global two-pass render-state staging (2026-11-04)
+
+## Source and scope
+WATER-001: complementary to [B24's original 4-stage DXBC proof](https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B24_ORIGINAL_FOAM_PROGRAM_TRANSLATION_2026-11-04.md). Original source immutable ZIP2 commit `15964ea8f246b6e076ce26b60931ee2e1a9a2385`, single owner `Raft_Data/sharedassets0.assets`, exact 115,978,112 bytes/SHA-256 `0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3`. Authenticated original Shader object PathID 2420, raw SHA-256 `67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1`.
+
+[B25 integration source](https://github.com/alwansan/raf/commit/e9218c865aff845361f588aa4b000629619f1560) `scripts/b25_foam_pass_state.py` reuses existing W1 `render_state` ShaderLab serialization, refusing unsupported original state enums, dynamic names, non-finite numbers or unsafe project paths. SHA-verified original reader stages pass-state fragments **only into private runner scratch**, never commits the private text, shader programs, original materials or assets. Source and tests do not edit Unity files, GUID, .meta, original binary or app behavior.
+
+## Real original result
+[Source-authenticated B25 workflow 41926521683](https://github.com/alwansan/raf/actions/runs/41926521683), immutable input commit `d2c0ba2ee2c848325fe909d191a07879c94b9c75`, job `126912237610`: **completed SUCCESS**; all 11 synthetic positive/negative tests passed; original owner SHA/size and original Foam serialized object SHA matched. Original m_ParsedForm has **one subshader, two ordinary pass states**, both serialized successfully. Both private-state fragments are **247 bytes** and produce the **SAME SHA-256** `19b4753ccc0393a8ebe4f804aded5e5c8363d9b641cac1870d2d6d0c73b50170`. Safe aggregate artifact ID `13368828648`, 432 bytes. The private state texts are intentionally not uploaded.
+
+**Rejected hypothesis (original-source scope):** the two Foam/Global passes differ in these ShaderLab render-state fields. They do not. This is independent of the authentic B24 **different CB0 partial vector-member counts (2 vs 1)** and original vertex/fragment programs; it does not prove why device pixels differ. The equality removes one source-level unknown and permits a single SHA-checked render-state reference when assembling original two-pass ShaderLab, with *two real per-pass programs* retained. It does **not** permit coalescing passes or substituting one program.
+
+## Engineering integration and limitations
+B25 integrated a reusable SHA/object-verified private reconstruction staging utility plus isolated CI; the original state fragment can be consumed in a **future coordinated private ShaderLab assembler** only after original CB/resource/sampler/texture bindings and exported shader GUID lineage have been reconstructed. No original ShaderLab compiled/installed, no Unity importer/Adreno run and no Android game patch: WATER-001 remains OPEN; RENDER-002 and LOCAL-005 remain OPEN; NOT_READY and 0/3 independent full readiness reviews. Latest game APK86 predates all B25 code.
+
+Audio and Settings owner-confirmed working; unchanged. Touch/button/layout deferred; unchanged. No full Unity build, release, native request, scheduler, or protected branch modified.
+
+## Reproduce safely
+On source commit: `python3 -m unittest discover -s tests -p test_b25_foam_pass_state.py -v` and `python3 -m py_compile scripts/b25_foam_pass_state.py`. Run `.github/workflows/raft-b25-foam-pass-state.yml` on pinned ZIP2 checkout; workflow reconstructs exact original owner using `scripts/w1_stage_zip2_owners.py`, keeps private fragments exclusively under `RUNNER_TEMP` and publishes only aggregate evidence. The stage order/byte identities are stable inputs to future authentic ShaderLab work, **not GPU pixel proofs**.
