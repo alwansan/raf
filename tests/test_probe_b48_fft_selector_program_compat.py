@@ -49,8 +49,8 @@ class B48FftCandidateTests(unittest.TestCase):
         self.assertFalse(report['native_unity_compilation_or_android_gpu_execution'])
         pairs = report['candidate_groups']
         self.assertEqual(pairs[0]['compiled_candidate_first_slot'], 0)
-        self.assertEqual(pairs[4]['compiled_candidate_second_slot'], 9)
-        self.assertEqual(pairs[5]['compiled_candidate_first_slot'], 10)
+        self.assertEqual(pairs[8]['compiled_candidate_second_slot'], 9)
+        self.assertEqual(pairs[1]['compiled_candidate_first_slot'], 10)
         self.assertEqual(pairs[-1]['compiled_candidate_second_slot'], 19)
         self.assertEqual(pairs[-1]['serialized_threads_per_group'], [1024, 1, 1])
 
@@ -74,7 +74,7 @@ class B48FftCandidateTests(unittest.TestCase):
                            ('derived_second_int_forwarded_to_base_first_int', False)):
             bad = copy.deepcopy(seed); bad[key] = wrong
             with self.assertRaises(ValueError): verify_candidate_pair_contract(bad, programs)
-        bad = copy.deepcopy(seed); bad['algebraic_examples_only'][2]['bank1'] = [14, 15]
+        bad = copy.deepcopy(seed); bad['algebraic_examples_only'][2]['bank1'] = [12, 13]
         with self.assertRaises(ValueError): verify_candidate_pair_contract(bad, programs)
 
     def test_reject_swapped_missing_or_forged_compiled_slot(self):
@@ -92,7 +92,7 @@ class B48FftCandidateTests(unittest.TestCase):
         seed, programs = original_fixture()
         for index in (0, 1, 9, 10, 19):
             bad = copy.deepcopy(programs)
-            bad['ordered_compiled_programs'][index]['original_serialized_workgroup_xyz'] = [64, 1, 1] if index > 1 else [32, 1, 1]
+            bad['ordered_compiled_programs'][index]['original_serialized_workgroup_xyz'] = [1, 1, 1]
             with self.subTest(index=index), self.assertRaisesRegex(ValueError, 'workgroup'):
                 verify_candidate_pair_contract(seed, bad)
 
