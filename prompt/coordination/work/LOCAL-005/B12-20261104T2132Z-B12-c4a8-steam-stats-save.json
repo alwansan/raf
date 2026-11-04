@@ -6,7 +6,7 @@
   "issue_id": "LOCAL-005",
   "track": "world-save",
   "approach": "SHA-pinned SaveAndLoad.SaveGame optional Steam stats boundary; preserve local file writes and callback semantics",
-  "status": "active",
+  "status": "paused",
   "base_sha": "f8028d15b2401d1fd8c73b2316e5bf76fef88eae",
   "intended_files": [
     "scripts/adapt_android_offline_startup.py",
@@ -21,8 +21,11 @@
   "experiment_ids": [
     "B12-20261104T2132Z-B12-c4a8-storestats-boundary"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement isolated, source-fingerprint-guarded callsite transformation; run synthetic negative and positive controls.",
-  "updated_at": "2026-11-04T21:33:58.649Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41909535307",
+    "https://github.com/alwansan/raf/actions/runs/41909535306"
+  ],
+  "result": "Duplicate candidate rejected after inspecting B50 commit c06acd1 and passing original-managed CI41909535306 plus isolated CI41909535307. B12 made no second StoreStats modification.",
+  "next_step": "Leave B50 guard intact; only revisit LOCAL-005 upon distinct device evidence from a new APK.",
+  "updated_at": "2026-11-04T21:46:23.044Z"
 }
