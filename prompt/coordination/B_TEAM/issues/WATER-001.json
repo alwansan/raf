@@ -18,7 +18,8 @@
     "https://github.com/alwansan/raf/actions/runs/41914612977",
     "https://github.com/alwansan/raf/commit/cfb97bf58e6c2736268df5aa8ecc9e54f3789ef6",
     "https://github.com/alwansan/raf/actions/runs/41917493634",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B14_WATER_PATH_PROVENANCE_2026-11-04.md"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B14_WATER_PATH_PROVENANCE_2026-11-04.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B09_SPECTRUM_PASS_STAGING_2026-11-04.md"
   ],
   "remaining": [
     "Spectrum/Foam/Blur passes ناقصة في APK86",
@@ -30,13 +31,14 @@
     "B45 original Subsurface Blur two-pass CPU proof complete, native staging wired but has not run; Unity/Adreno verification and other FFT/water kernels remain open",
     "B06 source-only: startup diagnostic now queries original FFT RGHalf/RGFloat/ARGBHalf/ARGBFloat RenderTexture/random-write and compute-group capability; CI synthetic passed, future APK/device results unknown.",
     "B06 original FFT secondary Dispatch parser now excludes comment/string fake calls; 8/8 synthetic tests pass, original-data rerun and runtime shader import still unverified.",
-    "B14 structural source-integrity guard: linked project/Assets/shader or compute .meta paths now fail closed; 10/10 existing+new synthetic CI tests passed (41917493634). Real original shader/FFT kernel identities and device rendering remain unverified."
+    "B14 structural source-integrity guard: linked project/Assets/shader or compute .meta paths now fail closed; 10/10 existing+new synthetic CI tests passed (41917493634). Real original shader/FFT kernel identities and device rendering remain unverified.",
+    "B09 Spectrum private original DXBC stage/variant extractor and SHA-pinned selective ZIP2 workflow integrated, 10/10 synthetic tests pass; authentic original extraction outcome, ShaderLab assembly, Unity/Adreno and phone unverified."
   ],
   "acceptance": [
     "هوية برامج ونوى أصلية أو تطابق موثق دونdummy",
     "تثبيت فيالتصدير+Unity import/render",
     "اختبار هاتف يثبت الماء بلا pass/kernel errors"
   ],
-  "updated_by": "B14",
-  "updated_at": "2026-11-04T21:38:02.114Z"
+  "updated_by": "B09",
+  "updated_at": "2026-11-04T21:48:08.555Z"
 }
