@@ -4,10 +4,10 @@
   "generation": "B-2026-11-04",
   "session_id": "20261104T2257Z-B20-fmp3",
   "resumed_from_session": "20261104T2230Z-B20-6c9a",
-  "status": "active",
+  "status": "completed",
   "base_sha": "b2268908186bf9d41c1727a9269e047835dd12e8",
-  "last_commit": "3090839cc4d031314165db98502a74b388e729ec",
-  "updated_at": "2026-11-04T23:08:17.896Z",
+  "last_commit": "f5bad2f5fc7bc06e9657fa42ee9735a11b9451c0",
+  "updated_at": "2026-11-04T23:17:56.711Z",
   "tracks": [
     "water-fft"
   ],
@@ -22,8 +22,10 @@
     "https://github.com/alwansan/raf/actions/runs/41926043987",
     "https://github.com/alwansan/raf/actions/runs/41927169542",
     "https://github.com/alwansan/raf/actions/runs/41927095232",
-    "https://github.com/alwansan/raf/actions/runs/41930578292"
+    "https://github.com/alwansan/raf/actions/runs/41930578292",
+    "https://github.com/alwansan/raf/actions/runs/41931585626",
+    "https://github.com/alwansan/raf/actions/runs/41932300308"
   ],
-  "next_step": "Probe authentic B24-produced Foam SPIR-V UBO descriptors and recovered HLSL b-slot declarations vs B25 original CB slots, numeric-only report; never assume CB0 alias or Unity upload.",
+  "next_step": "New verified original Foam private packet and 4/4 HLSL/SPIRV numeric CB slot parity, but 7/8 unequal CB sizes. Next genuinely useful: original CB member offset/type vs SPIRV UBO layout and authentic CB0 alias; no Unity/Adreno or phone proof yet. Do not claim asynchronous work.",
   "memory_path": "prompt/coordination/clients/B20/MEMORY.md"
 }
