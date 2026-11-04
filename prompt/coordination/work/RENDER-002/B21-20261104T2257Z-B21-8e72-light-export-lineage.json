@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "owner": "B21",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2257Z-B21-8e72",
+  "issue_id": "RENDER-002",
+  "track": "colors-materials:source-export-dynamic-light-lineage",
+  "approach": "SHA-locked B21-only optional Unity class 108 trace staged alongside already approved W1 Material/Shader and B02 Texture lineages in disposable exact pinned public AssetRipper exporter, with same export_instance and real build check. Keep original source untouched and private output unuploaded.",
+  "status": "active",
+  "base_sha": "cdcef7f2b38ae21030992cf1e52ccc77c55a79f4",
+  "intended_files": [
+    "scripts/b21_stage_light_lineage.py",
+    "tests/test_b21_stage_light_lineage.py",
+    ".github/workflows/raft-b21-light-trace-compile.yml",
+    "docs/B21_LIGHT_EXPORT_LINEAGE_2026-11-04.md"
+  ],
+  "hypothesis": "The existing export trace lacks native class108 Light identity; extending it in one export instance will make B21's verified two original Lights comparable to actual export YAML without guessing pathIDs or names.",
+  "related_work": [
+    "B21 initial light source CI41922372594",
+    "W1 helper RaftExportLineage.cs",
+    "B02 staged optional Texture2D capture CI41927712988"
+  ],
+  "experiment_ids": [
+    "B21-20261104T2257Z-class108-private-trace"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Stage safe tracer, test source pin and negative cases, compile exact pinned exporter, then document ability/limitations and only proceed to real export evidence after coordination.",
+  "updated_at": "2026-11-04T22:57:00Z"
+}
