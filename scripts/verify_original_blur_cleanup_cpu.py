@@ -11,7 +11,11 @@ def main(root):
  observed=hashlib.sha256(source.encode()).hexdigest()
  print("RAFT_ORIGINAL_BLUR_SOURCE sha256="+observed)
  if observed!=PIN:raise ValueError("original Blur source pin differs; refuse guessed transformation")
- changed=protect(source)
+ try: changed=protect(source)
+ except ValueError:
+  import re,json
+  print("RAFT_BLUR_CONTRACT_COUNTS "+json.dumps({k:source.count(k) for k in ["FilterMode filterMode = target.filterMode;","RenderTexture temporary = RenderTexture.GetTemporary(","target.filterMode = filterMode;","RenderTexture.ReleaseTemporary(temporary);"]},sort_keys=True))
+  raise
  signature="protected void ApplyPixelShader(RenderTexture target)"
  at=changed.index(signature);opening=changed.index("{",at);end=opening+1;depth=1
  while depth:
