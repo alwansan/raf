@@ -1,0 +1,15 @@
+{
+  "id": "B20-20261104T2236Z-shaderlab-scope-result",
+  "owner": "B20",
+  "session_id": "20261104T2230Z-B20-6c9a",
+  "issue_id": "WATER-001",
+  "type": "integration",
+  "summary": "SOURCE_FIXED scoped water ShaderLab Pass counting to Shader/SubShader and fail-closed enclosing brace check; B20 synthetic+upstream source CI PASS, no original water programs or GPU/device restoration.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/a21d66bc9122bba432c2c6d021e096b7f988abcc",
+    "https://github.com/alwansan/raf/actions/runs/41926202371",
+    "https://github.com/alwansan/raf/actions/runs/41926043987",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B20_SHADERLAB_SCOPE_INTEGRATION_2026-11-04.md"
+  ],
+  "at": "2026-11-04T22:36:00Z"
+}
