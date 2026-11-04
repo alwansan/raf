@@ -73,7 +73,14 @@ def stage_profile(program):
                              and any(s in key.lower() for s in ("texture", "sampler", "uav"))
                              and key not in RESOURCE_FIELDS]
     if unknown_resource_keys:
-        raise ValueError("Unknown texture/sampler resource table schema")
+        # These are bounded standard serialized structural key labels, not
+        # shader property names, program bytes, object IDs or raw values.
+        safe = sorted(key for key in unknown_resource_keys
+                      if key.startswith("m_") and len(key) <= 64 and
+                      all(ch.isascii() and (ch.isalnum() or ch == "_") for ch in key))
+        if len(safe) != len(unknown_resource_keys) or len(safe) > 32:
+            raise ValueError("Unknown texture/sampler resource table schema")
+        raise ValueError("Unmodeled structural resource fields: " + ",".join(safe))
     rows_by_field = {}
     signature_fields = {}
     for key in RESOURCE_FIELDS:
@@ -202,7 +209,13 @@ def main(argv=None):
         }
         print("RAFT_B17_SPECTRUM_DESCRIPTORS " + json.dumps({
             "status": "REJECTED", "error_kind": type(error).__name__,
-            "reason_code": str(error) if str(error) in safe_reasons else "other_provider_schema_failure",
+            "reason_code": (str(error) if str(error) in safe_reasons else
+                            "unmodeled_resource_schema" if str(error).startswith(
+                                "Unmodeled structural resource fields: ") else
+                            "other_provider_schema_failure"),
+            "unmodeled_unity_structural_fields": (
+                str(error).split(": ", 1)[1].split(",")
+                if str(error).startswith("Unmodeled structural resource fields: ") else []),
             "unity_gpu_or_android_verified": False, "ready_for_build": False,
         }, sort_keys=True))
         return 2
