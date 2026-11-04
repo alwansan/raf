@@ -16,7 +16,8 @@ from pathlib import Path, PurePosixPath
 import re
 import tempfile
 
-ZIP2_SHA = "15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+from scripts.verify_targeted_lfs_compute_sources import EXPECTED as PINNED_SOURCE
+\nZIP2_SHA = "15964ea8f246b6e076ce26b60931ee2e1a9a2385"
 HEX32 = re.compile(r"^[0-9a-f]{32}$")
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
 GUID = re.compile(r"^guid:[ \t]*([a-fA-F0-9]{32})[ \t]*$", re.M)
@@ -76,6 +77,9 @@ def load_map(payload: dict) -> list[dict]:
             raise ValueError("invalid original owner byte count")
         if not isinstance(row["source_owner_sha256"], str) or not HEX64.fullmatch(row["source_owner_sha256"]):
             raise ValueError("invalid original SHA256")
+        expected_pin = PINNED_SOURCE.get(row["source_owner"])
+        if expected_pin != (row["source_owner_bytes"], row["source_owner_sha256"]):
+            raise ValueError("source owner is not in the original SHA/size trusted pinset")
         if not isinstance(row["export_guid"], str) or not HEX32.fullmatch(row["export_guid"]):
             raise ValueError("invalid exported GUID")
         for key in ("source_owner", "export_asset"):
@@ -122,7 +126,8 @@ def _source_verified(rows: list[dict], root: Path) -> None:
                     raise ValueError("original source identity is not unique Texture2D")
                 indexed[obj.path_id] = obj.read_typetree().get("m_ColorSpace")
         for row in member_rows:
-            if indexed.get(row["source_path_id"]) != row["source_color_space"]:
+            color = indexed.get(row["source_path_id"])
+            if type(color) is not int or color != row["source_color_space"]:
                 raise ValueError("source Texture2D color space disagrees with sidecar")
 
 

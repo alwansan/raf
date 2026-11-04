@@ -15,6 +15,9 @@ SHA = hashlib.sha256(b"original").hexdigest()
 
 class TestB02TextureImport(TestCase):
     def setUp(self):
+        self.pinned = mock.patch.dict(m.PINNED_SOURCE, {"source.assets": (8, SHA)})
+        self.pinned.start()
+        self.addCleanup(self.pinned.stop)
         self.work = tempfile.TemporaryDirectory()
         self.addCleanup(self.work.cleanup)
         self.root = Path(self.work.name)
@@ -60,6 +63,26 @@ class TestB02TextureImport(TestCase):
         self.map["textures"][0]["source_color_space"] = 1
         self.set_meta(0)
         self.assertEqual(self.run_audit()["matching_before"], 1)
+
+    def test_unpinned_source_digest_and_owner_are_rejected(self):
+        self.map["textures"][0]["source_owner_sha256"] = "0" * 64
+        with self.assertRaisesRegex(ValueError, "trusted pinset"):
+            self.run_audit()
+        self.map["textures"][0]["source_owner_sha256"] = SHA
+        self.map["textures"][0]["source_owner"] = "unknown.assets"
+        with self.assertRaisesRegex(ValueError, "trusted pinset"):
+            self.run_audit()
+
+    def test_source_color_boolean_is_not_valid_integer_enum(self):
+        source = self.root / "source"
+        source.mkdir()
+        (source / "source.assets").write_bytes(b"original")
+        obj = types.SimpleNamespace(path_id=123, type=types.SimpleNamespace(name="Texture2D"),
+                                    read_typetree=lambda: {"m_ColorSpace": False})
+        module = types.SimpleNamespace(load=lambda path: types.SimpleNamespace(objects=[obj]))
+        with mock.patch.dict(sys.modules, {"UnityPy": module}):
+            with self.assertRaisesRegex(ValueError, "disagrees"):
+                self.run_audit(original=source)
 
     def test_missing_and_duplicate_importer_flags_are_rejected(self):
         self.meta.write_text(f"fileFormatVersion: 2\nguid: {self.guid}\nTextureImporter:\n")
