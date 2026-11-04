@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "owner": "B08",
+  "session_id": "20261104T2246Z-B08-7d2a",
+  "issue_id": "WATER-001",
+  "hypothesis": "Source-authenticated original translated FFT modules must executably read both numeric sampled image descriptors and write the sole storage image, not merely declare an apparently correct interface.",
+  "source_commit": "ac98030e51148a6a1b7e2203d9d8bdc2f327704f",
+  "input_hashes": [
+    {
+      "provider": "ZIP2 original",
+      "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+      "path": "Raft_Data/sharedassets0.assets",
+      "bytes": 115978112,
+      "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3"
+    },
+    {
+      "object": "original FFT ComputeShader pathID2456",
+      "sha256": "9d934f5c99183c6df5cf2f1fefc9d3e5ec4bce5da5f96a86e4c02910d5322247"
+    }
+  ],
+  "tool_versions": {
+    "vkd3d_compiler": "1.2-15build1",
+    "UnityPy": "1.25.4",
+    "runner": "ubuntu-24.04"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_b08_fft_spirv_descriptor_abi.py -v",
+    "python3 -m scripts.stage_zip2_fft_owner --zip2-checkout $RUNNER_TEMP/b08/zip2 --destination $RUNNER_TEMP/b08/original/Raft_Data/sharedassets0.assets",
+    "python3 -m scripts.b08_fft_spirv_descriptor_abi --source $RUNNER_TEMP/b08/original/Raft_Data"
+  ],
+  "negative_controls": [
+    "sampled descriptor declared but never read",
+    "storage descriptor declared but never written",
+    "unresolved SPIR-V SSA image operand",
+    "attempted sampled read via storage output descriptor",
+    "resource image declared without executable image operations",
+    "wrong original DXBC source texture register",
+    "input vs storage descriptor changed/aliased",
+    "false Unity runtime index/t0-t1 identity proof"
+  ],
+  "workflow_path": ".github/workflows/raft-b08-fft-descriptor-abi.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41929513820",
+  "artifact_urls": [],
+  "budget": "20-minute standard Ubuntu public runner; exact ZIP2 116MB original SHA; isolated single workflow; no Unity/native/APK/private program upload",
+  "status": "completed",
+  "observed_result": {
+    "workflow_conclusion": "success",
+    "synthetic_tests_passed": 20,
+    "original_compiled_slots": 20,
+    "original_programs_both_sampled_targets_actively_read": 20,
+    "original_programs_storage_target_actively_written": 20,
+    "all_supported_spirv_image_operations_traced": true,
+    "numeric_descriptor_abi_sha256": "5bea50a922c423edde59ea0346541a4ba2a4db437e3a764bdf26b756f5c47aca",
+    "original_source_register_to_spirv_binding_proven": false,
+    "unity_or_phone_tested": false
+  },
+  "rejected_hypotheses": [
+    "Correct declaration-only image resource count and ABI are sufficient evidence that both source textures are read and the FFT target is written.",
+    "Executable SPIR-V image operand linkage alone proves original DXBC t0/t1 association or original Unity kernel IDs."
+  ],
+  "limitations": [
+    "Supported SPIR-V SSA image opcodes only; future/unrecognized image opcode semantics not independently proven",
+    "Original DXBC t0/t1 source-to-converter descriptor semantic link not independently verified",
+    "Not authoring .compute or testing GPU/Unity/Adreno/phone"
+  ],
+  "integration_commit": "3723744fb77ce9a31ef81735b0f05b1e9e7aaba8",
+  "next_step": "Independent original DXBC-to-SPIRV read-input register provenance and actual runtime kernel selection; do not accept name/slot guesses."
+}
