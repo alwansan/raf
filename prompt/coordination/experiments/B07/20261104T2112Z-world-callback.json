@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "owner": "B07",
+  "session_id": "20261104T2112Z-B07-6e51",
+  "issue_id": "LOCAL-005",
+  "hypothesis": "Original WorldHasBeenLoaded scene broadcast occurs before completion; GameManager.OnWorldRecieved calls SaveGame, where the APK86 Steam StoreStats exception can interrupt callback. Independent SHA-pinned original-source inspection can establish this structural chain and report GameManager original SHA without exposing proprietary code.",
+  "source_commit": "f5733da684102e3c6e50e2f1d2a0c981cacace97",
+  "input_hashes": [
+    "Assembly-CSharp.dll size=3211776 sha256=0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "Raft_Network.cs sha256=080035c137e446828226ed84a23190656b6f235d274436cafb477feaf93caa03",
+    "SaveAndLoad.cs sha256=b150dd404da48b8012f6659680b3552c11500c4ec97a64ad9aa12c60094568bb"
+  ],
+  "tool_versions": {
+    "python": "3.x",
+    "ilspycmd": "11.2.0.10050",
+    "dotnet": "10.0.x"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_b07_probe_original_world_callbacks.py -v",
+    "python3 -m scripts.b07_probe_original_world_callbacks --original-managed-dll Raft/Raft_Data/Managed/Assembly-CSharp.dll --source $RUNNER_TEMP/b07/original"
+  ],
+  "negative_controls": [
+    "reordered world completion",
+    "quoted decoy SaveGame",
+    "missing StoreStats",
+    "mismatched original SHA",
+    "wrong original DLL",
+    "duplicate GameManager source"
+  ],
+  "workflow_path": ".github/workflows/raft-b07-world-callback-chain.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41913966195",
+  "artifact_urls": [],
+  "budget": "ubuntu-24.04, one 12min timeout, sparse source, no LFS or Unity builds, raw private source remains ephemeral",
+  "status": "running",
+  "observed_result": "7/7 synthetic tests passed in isolated local scratch; original CI in progress; no source/runtime conclusion yet",
+  "rejected_hypotheses": [],
+  "limitations": [
+    "Lexical chain is not executed world delivery or .rgd roundtrip",
+    "No new phone APK evidence",
+    "Only source and synthetic tests until CI verifies original"
+  ],
+  "integration_commit": null,
+  "next_step": "Read CI, address precise failures, pin GameManager SHA and decide if safe targeted world callback runtime diagnostics are justified."
+}
