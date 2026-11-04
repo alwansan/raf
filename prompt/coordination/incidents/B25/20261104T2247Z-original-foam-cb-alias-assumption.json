@@ -1,0 +1,27 @@
+{
+  "id": "B25-FOAM-NAME-TABLE-LEXICAL-ASSUMPTION-20261104",
+  "owner": "B25",
+  "session_id": "20261104T222931Z-B25-foam-state",
+  "issue_id": "WATER-001",
+  "severity": "experiment-fixture-or-model-correction",
+  "status": "resolved",
+  "original_failure": "Strict full-registry HLSL identifier check rejected authentic first-pass table despite 24 synthetic tests. Original bounded registry shape 14 pairs; referenced CB0 compiler symbol itself also not direct HLSL identifier.",
+  "causes": [
+    "Overbroad assumption that all original names are HLSL literals.",
+    "Overbroad assumption that all referenced CB names can be copied unchanged into generated HLSL."
+  ],
+  "corrective_action": "Keep all authentic raw names opaque and only SHA-256 hash them for source provenance. Bind real original m_NameIndex→register slot, classify CB0 as alias-required; never invent alias. Add 15 targeted synthetic controls. Caution: no ShaderLab compile until matching actual reflection.",
+  "negative_runs": [
+    "https://github.com/alwansan/raf/actions/runs/41927469783",
+    "https://github.com/alwansan/raf/actions/runs/41927610381",
+    "https://github.com/alwansan/raf/actions/runs/41927765070",
+    "https://github.com/alwansan/raf/actions/runs/41928029023"
+  ],
+  "resolution_run": "https://github.com/alwansan/raf/actions/runs/41928183838",
+  "resolved_at": "2026-11-04T22:48:28.078Z",
+  "origin_shaders_published": false,
+  "unity_device_verified": false,
+  "impact": "Original private CB name-index experiment failed in a stricter-than-source identifier validator; no project/game files or metadata were modified. No genuine shader program or game regression.",
+  "recovery": "Changed gate from requiring every registry/CB string to be literal HLSL to preserving the actual original opaque CB symbol SHA/index/slot and explicitly requiring a future verified alias. Final source-authenticated CI41928183838 succeeded.",
+  "closed_reason": "Authenticated original parsing now passes 26/26 synthetic and 8 CB source links, failures retained as negative hypotheses; real ShaderLab/Unity remains open."
+}
