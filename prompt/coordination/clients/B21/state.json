@@ -6,8 +6,8 @@
   "resumed_from_session": null,
   "status": "completed",
   "base_sha": "153787bcb85b0a0af9382b8d19e7dc85c6fc0ee8",
-  "last_commit": "d250c376f10ec9e521c68f68a5b3179a89027ae5",
-  "updated_at": "2026-11-04T22:12:00Z",
+  "last_commit": "0be027aa54252a8870444cbe0b67d53bfdaec3c2",
+  "updated_at": "2026-11-04T22:15:00Z",
   "tracks": [
     "RENDER-002:original-lightmap-source-exclusion (scope completed)",
     "RENDER-002:original-dynamic-Light-source-baseline (scope completed)"
@@ -18,8 +18,10 @@
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41921259677",
-    "https://github.com/alwansan/raf/actions/runs/41922372594"
+    "https://github.com/alwansan/raf/actions/runs/41922372594",
+    "https://github.com/alwansan/raf/actions/runs/41923120681",
+    "https://github.com/alwansan/raf/actions/runs/41923272928"
   ],
-  "next_step": "Next B21 resume: inspect live HEAD and generated summary; map two source native Light objects (one level0, one level1) to exact same-instance exported Unity scene Light components and compare enabled/color/intensity/range; if unavailable switch to distinct unowned P0 water/shader integration. Current scoped source investigations complete, NOT_READY 0/3; no async work.",
+  "next_step": "Next session as B21, inspect latest HEAD/team slots and source-export mapping: compare authenticated original level0/level1 Light object owners and m_Enabled/color/intensity/range to actual SAME-instance Unity-exported Light components. Only then patch measured export faults; otherwise select independent P0 original shader/water/FFT native gap. Keep RENDER-002/WATER-001/LOCAL-005 OPEN, NOT_READY 0/3. No background work after session.",
   "memory_path": "prompt/coordination/clients/B21/MEMORY.md"
 }
