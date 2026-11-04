@@ -1,0 +1,76 @@
+name: B18 WATER-001 authentic FFT explicit DirectX register to SPIR-V descriptor mapping
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-b18-fft-descriptor-identity.yml'
+      - 'scripts/b18_vkd3d_explicit_bindings.c'
+      - 'scripts/b18_fft_spirv_descriptor_identity.py'
+      - 'tests/test_b18_fft_spirv_descriptor_identity.py'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: raft-b18-fft-exact-resource-map
+  cancel-in-progress: false
+
+jobs:
+  original-explicit-dxbc-spv-map:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      DEBIAN_FRONTEND: noninteractive
+      ZIP2_SOURCE_SHA: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+    steps:
+      - name: Checkout only harmless source and source-free controls
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Synthetic layout/negative controls before obtaining proprietary input
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_b18_fft_spirv_descriptor_identity.py -v
+          python3 -m py_compile scripts/b18_fft_spirv_descriptor_identity.py
+      - name: Install distribution-pinned vkd3d-shader API and compile private translator
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends libvkd3d-dev pkg-config build-essential
+          printf 'B18_PUBLIC_TOOLCHAIN %s\n' "$(pkg-config --modversion vkd3d-shader)"
+          cc -std=c11 -O2 -Wall -Wextra -Werror \
+            scripts/b18_vkd3d_explicit_bindings.c \
+            $(pkg-config --cflags --libs vkd3d-shader) \
+            -o "$RUNNER_TEMP/b18-vkd3d-explicit-interface"
+      - name: Reconstruct SHA-pinned original FFT asset owner from immutable ZIP2
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/b18-map/zip2"
+          git -C "$RUNNER_TEMP/b18-map/zip2" init -q
+          git -C "$RUNNER_TEMP/b18-map/zip2" remote add origin https://github.com/alwansan/raf.git
+          git -C "$RUNNER_TEMP/b18-map/zip2" -c protocol.version=2 fetch -q --depth=1 --filter=blob:none origin zip2
+          test "$(git -C "$RUNNER_TEMP/b18-map/zip2" rev-parse FETCH_HEAD)" = "$ZIP2_SOURCE_SHA"
+          git -C "$RUNNER_TEMP/b18-map/zip2" sparse-checkout init --no-cone
+          printf '%s\n' '/RAFT_FILE_MANIFEST.tsv' '/Raft/Raft_Data/sharedassets0.assets/' |
+            git -C "$RUNNER_TEMP/b18-map/zip2" sparse-checkout set --no-cone --stdin
+          git -C "$RUNNER_TEMP/b18-map/zip2" checkout -q --detach FETCH_HEAD
+          python3 -m scripts.stage_zip2_fft_owner \
+            --zip2-checkout "$RUNNER_TEMP/b18-map/zip2" \
+            --destination "$RUNNER_TEMP/b18-map/original/Raft_Data/sharedassets0.assets"
+      - name: Compile 20 original DXBC programs using two distinct explicit descriptor maps
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4 -q
+          timeout 180s python3 -m scripts.b18_fft_spirv_descriptor_identity \
+            --source "$RUNNER_TEMP/b18-map/original/Raft_Data" \
+            --compiler "$RUNNER_TEMP/b18-vkd3d-explicit-interface"
+          echo 'RAFT_B18_MAP_BOUNDARY 2layouts_original_source_but_no_input_behavior_or_Unity_phone_proof=true'
+          # No private source, DXBC/SPIR-V, original names, images or APK artifacts uploaded.
