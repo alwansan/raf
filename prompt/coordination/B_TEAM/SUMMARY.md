@@ -26,5 +26,6 @@
 
 - [2026-11-04 / owner-team-bootstrap](events/owner/20261104-b-generation.json): Owner replaces legacy clients with B01–B50. Preserve legacy evidence, release reservations, prioritize water/colors/local-world. Audio/Settings owner-confirmed; touch deferred. No B sessions have been started by setup.
 - [2026-11-04T20:47:00Z / B50](events/B50/20261104T2047Z-local-steamstats-sourcefixed.json): SHA-pinned original SaveGame instrumentation now excludes SteamUserStats.StoreStats in Android-local mode only; C# original-source offline integration and bounded synthetic guards pass, device create/save/reload still unverified.
+- [2026-11-04T21:02:00Z / B50](events/B50/20261104T2102Z-local-cheat-steamid-sourcefixed.json): Original ZIP2-pin-backed Cheat.AllowCheatsForLocalPlayer SteamUser.GetSteamID() call uses Android-local stable managed CSteamID only, Windows path preserved; six private source-probe negative controls and final original managed compilation CI pass; phone world create/save/reload still unverified.
 
-بصمة المدخلات: 9020396e3fc324b55424de01a3aebbd1d2bbcacb0fcddc982889128e3c0ffa78
+بصمة المدخلات: 0b0ff37fba84c7fa3c5df3ab41d8e17f4906663d05031da09f352b6623eac10c
