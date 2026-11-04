@@ -1,0 +1,13 @@
+{
+  "id": "20261104T2115Z-color-guard-11-ci-pass",
+  "owner": "B44",
+  "session_id": "20261104T2059Z-B44-f0ac",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "B44 Material m_Colors same-instance export fidelity guard hardened against duplicate YAML keys; 11 synthetic controls and independent GitHub CI41913494314 SUCCESS. Source tool integrated to branch, original Raft/full export comparison still unknown; no device fix or closure claimed.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41913494314",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B44_ORIGINAL_MATERIAL_COLOR_LINEAGE_2026-11-04.md"
+  ],
+  "at": "2026-11-04T21:15:00Z"
+}
