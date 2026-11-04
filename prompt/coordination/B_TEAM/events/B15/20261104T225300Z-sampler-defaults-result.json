@@ -1,0 +1,15 @@
+{
+  "id": "20261104T225300Z-sampler-defaults-result",
+  "owner": "B15",
+  "session_id": "20261104T224800Z-B15-defaults-32f1",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "B15 source-fixed Unity mipMapBias=-100 unset importer false mismatch, B02/W1 export_instance coherence and original source-owner basename alias; CI41929031892 23/23 synthetic PASS. No real Raft original/export texture or GPU result; RENDER-002 OPEN, NOT_READY0/3.",
+  "evidence": [
+    "https://docs.unity.cn/Documentation/ScriptReference/TextureImporter-mipMapBias.html",
+    "https://github.com/alwansan/raf/commit/8f51565362f0d26d0d413cbf87f6e2e1c631883d",
+    "https://github.com/alwansan/raf/actions/runs/41929031892",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B15_TEXTURE_SAMPLER_PARITY_2026-11-04.md"
+  ],
+  "at": "2026-11-04T22:53:55.450Z"
+}
