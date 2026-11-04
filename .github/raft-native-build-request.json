@@ -1,5 +1,12 @@
 {
-  "request_id": "w4-lineage-fix-full-xapk-20261104",
-  "reason": "W4 experimental attempt after verified same-instance lineage fix (run 41804737856 SUCCESS) and instrumented engine-owned builtin gate wiring (5e28572b). NOT_READY 0/3; strict water gate may be the next blocker. Inspect the first failure; do not claim a repair or readiness.",
-  "requested_from_sha": "5e28572badf38b3e09693f875d1f18aff6e4432d"
+  "request_id": "w4-documented-water-trial-20261104",
+  "reason": "Owner-directed trial continuation after run 41808015938: builtin ownership gate passes on the full export; authentic water/FFT reconstruction is still incomplete and is exactly acknowledged below so the experimental early-test package can be produced with recorded limitations in its notes. Strict water gate remains the default; no fake kernels and no identity-flag toggle. NOT_READY 0/3; inspect first failure.",
+  "requested_from_sha": "8dc58ec185177608591c7332f7c63c16e80ea8a0",
+  "documented_water_limitations": [
+    "authentic_water_kernel_identity",
+    "shader_pass_contract:UltimateWater/Foam/Global",
+    "shader_pass_contract:UltimateWater/Spectrum/Water Spectrum",
+    "shader_pass_contract:UltimateWater/Utilities/Blur (Subsurface Scattering)",
+    "water_compute_source_candidate"
+  ]
 }
