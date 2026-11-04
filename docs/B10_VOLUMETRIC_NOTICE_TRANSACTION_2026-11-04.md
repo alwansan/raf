@@ -1,0 +1,26 @@
+# B10 RENDER-002 — Volumetric ShaderLab notice rollback transaction (2026-11-04)
+
+Session `20261104T2242Z-B10-vlm1`. Original input policy unchanged: Raft ZIP2 source pinned `15964ea8f246b6e076ce26b60931ee2e1a9a2385`. Upstream volumetric vendor remains `SlightlyMad/VolumetricLights@d20b6f9a47ae857e1d313b147db2df3ef44b9196`; its three source programs and legally required BSD notice are authenticated by existing `config/volumetric-shader-sources.json` Git blob fingerprints. No proprietary game shader, original `.meta`/GUID, texture or material was published or altered.
+
+## Original production defect
+
+Before B10, `scripts/restore_volumetric_shaders.py:restore_project` called shared `scripts.restore_tmp_shaders.restore()`, which **committed authentic vendor .shader replacements first**, then called `notice.parent.mkdir(...)` and `notice.write_bytes(license)` outside the transaction. Late I/O failure or linked notice path could leave a modified temporary Unity export with an incomplete/foreign license sidecar, despite a failed restorer. This is a **source-derived failure case**, not an observed Android bug or proven cause of white visuals. This is a separate pipeline from B20's original Subsurface Blur private installer.
+
+## Exact integrated correction
+
+- [Shared transaction 2a38dfb2](https://github.com/alwansan/raf/commit/2a38dfb2d6ffe3af50f5f3a04bd2fc3ca3524bda) adds opt-in `extra_additions`: strictly normalized relative `Assets/` paths, exact byte payloads limited to 1 MiB, no NUL/backslash/path traversal/duplicate output aliases. Validated destinations use existing path/symlink protection, exclusive file creation, and existing staged rollback before/after shader writes. Unmodified TMP/PostFX callers retain their previous API behavior.
+- [Volumetric integration c3e91f67](https://github.com/alwansan/raf/commit/c3e91f67624d89f501d41b354db195318f17d7c0) passes `{NOTICE: license}` as a transactional addition, removing the unsafe post-commit `write_bytes`.
+- [Fail-fast preservation b6efa509](https://github.com/alwansan/raf/commit/b6efa50948cb388d1a006d482676d6f693bb51d6) retains the prior early refusal of a conflicting NOTICE even if source Shader files are absent, but first validates project and parent symlinks. A matched existing notice is never rewritten.
+- [Unique test registration 92522dc](https://github.com/alwansan/raf/commit/92522dc98bd273fd48eb169871ab7414b0a86a4d) prevents unittest from counting imported legacy TestCase methods twice. The test cases use the production restore function and only synthetic Unity export files; no original game content.
+
+## Reproducible validation and rejected assumptions
+
+- [B10 isolated CI41928744660](https://github.com/alwansan/raf/actions/runs/41928744660) **SUCCESS, 27 distinct Python tests** on immutable source `92522dc98bd273fd48eb169871ab7414b0a86a4d`; includes 8 new B10 cases, 6 preexisting volumetric, 4 TMP and 9 A3 transaction regressions. New controls inject failure before and after notice open (partial bytes), symlinked notice parent/leaf, conflict/equal existing notice and malformed extra paths. No fake pass flags; source files and original metadata preserved after injected failure.
+- [Existing official vendor CI41928592399](https://github.com/alwansan/raf/actions/runs/41928592399) **SUCCESS**, verified pinned vendor originals and 6 preexisting source tests, restored the three actual vendor shaders in a temporary fixture, checked unchanged original `.meta` and binary notice. No Unity Editor/player build.
+- Initial [volumetric CI41928192262](https://github.com/alwansan/raf/actions/runs/41928192262) and [B10 CI41928491688](https://github.com/alwansan/raf/actions/runs/41928491688) **FAILED** because moving conflicting-notice detection into the normal restorer temporarily changed error precedence when no Shader files existed. Rejected hypothesis: generic no-shader failure safely replaces the old explicit conflicting-notice refusal. Corrected with early secure preflight in `b6efa509`, not by weakening existing tests. [B10 intermediate CI41928592204](https://github.com/alwansan/raf/actions/runs/41928592204) was SUCCESS but ran 6 legacy tests twice because the new test module imported the original `unittest.TestCase` directly; final count uses the corrected **27 unique** run.
+
+## What remains
+
+These are **source-integrated transactional guarantees**, not authentic game-world, ShaderLab pixels, FFT runtime/FindKernel mapping, Unity/Adreno acceptance or proof that volumetric lighting causes the main-menu whiteness. RENDER-002, WATER-001 and LOCAL-005 remain **OPEN**; last actual Android game evidence is APK86 from [native41812889049](https://github.com/alwansan/raf/actions/runs/41812889049), and full independent readiness reviews remain **0/3**, NOT_READY. Sound and Settings left untouched; touch/layout deferred. No Unity/native/full game build, APK, release, workflow cancellation, original Raft/ZIP2 changes, LFS download, or private output publication.
+
+Next practical integration: when a **coordinated authenticated full Unity export** becomes available, check actual volumetric restored `.shader` programs and both license sidecars, ShaderImporter compile/import and scene render values. It is invalid to claim actual shading/pixel fidelity from the source-only transaction tests.
