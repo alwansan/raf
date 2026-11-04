@@ -36,7 +36,8 @@
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B10_VENDOR_SHADER_META_FIDELITY_2026-11-04.md",
     "https://github.com/alwansan/raf/commit/064f4d68c65ed2f3ce83926e71dab7b1f620681e",
     "https://github.com/alwansan/raf/actions/runs/41918404573",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B22_MATERIAL_SCALAR_EXPORT_PARITY_2026-11-04.md"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B22_MATERIAL_SCALAR_EXPORT_PARITY_2026-11-04.md",
+    "https://github.com/alwansan/raf/actions/runs/41919089409"
   ],
   "remaining": [
     "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -52,13 +53,14 @@
     "B05 now checks texture PPtrs AND m_Scale/m_Offset with 14 source-free tests; original source-to-same-export shader/material texture/UV comparison and real color pixels remain unproven.",
     "B11 original source-pinned m_ColorGamuts=[0] exact-field restoration integrated into native temporary export and candidate recheck; 12 synthetic local tests passed. Actual Raft exported YAML format and mismatch, remote CI result, Unity import/device visuals unverified; reject mismatches outside recognized one-element layouts, retain RENDER-002 OPEN.",
     "B10: source-only generated vendor fallback ShaderImporter .meta GUID/rollback integrated, isolated CI41917602226 PASS 22/22 and A3 CI41917602139 PASS; original Shader GUIDs unchanged in synthetic tests. Exact two missing metas in native41741108965 not identified; next verified real export, zero missing metas and Unity/device visuals remain unproven.",
-    "B22 original m_Floats/m_Ints same-instance float32 parity tool CI41918404573: 14 synthetic controls PASS, original Raft->same-export paired data NOT run, 14-owner bounded scope not full 82; material scalar loss remains unproven hypothesis."
+    "B22 original m_Floats/m_Ints same-instance float32 parity tool CI41918404573: 14 synthetic controls PASS, original Raft->same-export paired data NOT run, 14-owner bounded scope not full 82; material scalar loss remains unproven hypothesis.",
+    "B12: Android scene_shader_snapshot bounded post-load read-only instrumentation now source-integrated (70edac4; CI41919089409 + original-managed CI41918822038 PASS). No diagnostic output exists from a new actual Raft APK/device yet. Compare future 512-renderer bounded counts and ambient/colorSpace against same-scene screenshots; do not equate this to water/shader/color restoration."
   ],
   "acceptance": [
     "مطابقة روابط ومراجع الأصل",
     "مقارنةصوريةلنفسالمشهد",
     "نجاحعلىالهاتف"
   ],
-  "updated_by": "B22",
-  "updated_at": "2026-11-04T21:44:30Z"
+  "updated_by": "B12",
+  "updated_at": "2026-11-04T21:48:09.668Z"
 }
