@@ -5,14 +5,17 @@
   "session_id": "20261104T2243Z-B03-7c9e",
   "issue_id": "RENDER-002",
   "track": "colors-materials",
-  "approach": "Read original Unity serialized Renderer.m_Materials PPtrs from six exact-SHA ZIP2 scene files using UnityPy, classify local Material targets vs external source transport and nulls with immutable aggregate edge commitment; integrate source evidence with prior B03 exported YAML guard without guessing links.",
+  "approach": "Read original Unity serialized Renderer.m_Materials PPtrs from six exact-SHA ZIP2 scene files using UnityPy, classify local Material targets vs external source transport and nulls with immutable aggregate edge commitment; integrate source evidence with prior B03 exported YAML guard without guessing links. Phase 2: verify real six-scene Renderer Material targets against two SHA-pinned original split ZIP2 owner files, preserving unknown external owner destinations.",
   "status": "active",
   "base_sha": "fc50a7d065a865d99d580c726b5807e25f09965b",
   "intended_files": [
     "scripts/b03_original_renderer_materials.py",
     "tests/test_b03_original_renderer_materials.py",
     ".github/workflows/raft-b03-original-renderer-materials.yml",
-    "docs/B03_ORIGINAL_RENDERER_MATERIALS_2026-11-04.md"
+    "docs/B03_ORIGINAL_RENDERER_MATERIALS_2026-11-04.md",
+    "scripts/b03_original_renderer_target_resolution.py",
+    "tests/test_b03_original_renderer_target_resolution.py",
+    ".github/workflows/raft-b03-original-renderer-target-resolution.yml"
   ],
   "hypothesis": "Six original scenes provide evidence for expected Renderer material slot topology and source pointers, enabling future same-instance source/export comparison; null/externals cannot be considered fixed without authenticated corresponding owner.",
   "related_work": [
@@ -20,10 +23,26 @@
     "docs/B21_LIGHTMAP_SOURCE_EXPORT_LINKS_2026-11-04.md"
   ],
   "experiment_ids": [
-    "B03-20261104-original-renderer-pointers"
+    "B03-20261104-original-renderer-pointers",
+    "B03-20261104-original-renderer-targets"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Run 12+ synthetic strict PPtr and owner tests then source-authenticated six-scene CI; report baseline without exposing proprietary IDs.",
-  "updated_at": "2026-11-04T22:44:18.837Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41928128357",
+    "https://github.com/alwansan/raf/actions/runs/41928799663"
+  ],
+  "result": {
+    "phase1": {
+      "original_sha_verified": true,
+      "scenes": 6,
+      "renderer_objects": 1495,
+      "material_slots": 1639,
+      "external_slots": 1635,
+      "null_slots": 4,
+      "external_owner_names_declared_in_zip2_manifest": 1635,
+      "external_owner_payload_bytes_verified": false,
+      "ci": "https://github.com/alwansan/raf/actions/runs/41928799663"
+    }
+  },
+  "next_step": "Stage SHA-pinned resources.assets and sharedassets0.assets split ZIP2 originals; resolve material target identities for six original scenes with no export/phone claims.",
+  "updated_at": "2026-11-04T22:53:31.737Z"
 }
