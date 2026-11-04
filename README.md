@@ -1,44 +1,48 @@
-# Raft — مرصد الأدلة والتقدم (العميل up)
+# Raft — مرصد أدلة المشروع / العميل up
 
-[اللوحة العربية المستقلة](dashboard/index.html) · [البيانات](dashboard/data.json) · [لقطة 4 نوفمبر](snapshots/2026-11-04T130329Z.json) · [تعليمات up](prompt/UP_AR.md) · [الاستعادة](prompt/RESTORE_UP_AR.md)
+[اللوحة العربية](dashboard/index.html) · [JSON](dashboard/data.json) · [لقطة 2026-11-04T23:42:00Z](snapshots/2026-11-04T234200Z.json) · [UP instructions](prompt/UP_AR.md) · [استعادة up](prompt/RESTORE_UP_AR.md)
 
-## الحالة عند لقطة 2026-11-04T13:03:29Z
+## النتيجة عند قراءة المصدر
 
-**`NOT_READY`** حسب السجل المقروء من `feature/android-native-port` عند SHA `cb9ec39f28db9015c32fe089f83ddf21e04107fe`. ليس هناك مقياس كلي موثوق لاكتمال اللعبة أو استعادة المصدر، والمجهول `null` وليس `0%`. المصدر الجديد المفضل للبيانات الأصلية `zip2` مثبت عند `15964ea8f246b6e076ce26b60931ee2e1a9a2385`.
+**المشروع `NOT_READY`، و0/3 مراجعات كاملة للمرشح الثابت.** المصدر المقروء من `feature/android-native-port` SHA `58047d3b293f04547e36536518fd936ad328f4d1`، وفرع `zip2` المثبت `15964ea8f246b6e076ce26b60931ee2e1a9a2385`. لا نسبة كلية موثوقة للعبة أو استعادة المصدر أو قبول الهاتف؛ قيمها **`null`**.
 
-**تجربة W4:** [run41812889049](https://github.com/alwansan/raf/actions/runs/41812889049) وصلت بالفعل إلى خطوة **Unity Editor 2021.3.45f2 Android import and compile** وكانت **in_progress** عند الفحص، بعد نجاح طلب التشغيل والترخيص وتجهيز المشروع. هذه **محاولة تجريبية مصرّح بها مع قيود ماء موثقة** في [build request](https://github.com/alwansan/raf/blob/cb9ec39f28db9015c32fe089f83ddf21e04107fe/.github/raft-native-build-request.json)، وليست إعلان جاهزية أو نجاح APK. الاختبار السابق [41808015938](https://github.com/alwansan/raf/actions/runs/41808015938) تجاوز بوابة ملكية built-in (750 refs/11 pointers) ثم أخفق في strict water gate. الإقرار الحالي يحتفظ بالفجوات ولا يحوّل `authentic_water_kernel_identity_verified` إلى true، والمراجعات المستقلة للمرشح ما زالت **0/3**.
+### أول نجاح بناء تجريبي حديث: APK86
+[W4 run41812889049](https://github.com/alwansan/raf/actions/runs/41812889049) **completed/success** في خمس وظائف: request/license/reconstruct/publish/delivery result. [Game Release APK86](https://github.com/alwansan/raf/releases/tag/android-early-test-41812889049-1) بتاريخ 4 نوفمبر 13:59 UTC، source `d181ee7152580f49ee0b41dfd05fa2bfdacfafe5`، يحتوي12 assets:
+- APK: **672,894,330 B**، SHA256 `b6e6ca15f039b4640381bc7cf10b4dd1774fea36d4bdf3183696d82374587077`.
+- OBB: **2,301,202,061 B**، SHA256 `72db0510ef8dde20a4a8efef946c2bd7d8a7cf9be96d633aa9b7c158ac9c23a5`.
+- XAPK: **2,974,097,643 B**، SHA256 `89090c451b0f0c0f81bd8f6d74f671481ac6b8bcf9cc07ee7e36d168234e10a9`.
+- تشمل SHA256SUMS و`RECORDED_LIMITATIONS.json` وأجزاء النقل. لا تجمع XAPK وأجزاءه كنُسخ لعبة إضافية. [APK80](https://github.com/alwansan/raf/releases/tag/android-early-test-41448086401-1) تاريخي منفصل؛ [lograf-88](https://github.com/alwansan/raf/releases/tag/lograf-88) يخص تطبيق تسجيل اللوغات لا اللعبة.
 
-## ما تحقق في مصدر اللعبة فعلياً
+**نجاح التسليم ليس قبول اللعب.** حزمة APK86 تحمل خمس فجوات ماء وشيدرات معلنة. مصدر اللعبة الحالي أحدث بكثير من source SHA للبناء. لم يُقرأ SHA256 للـAPK المثبت على الهاتف، وإن كان B_TEAM راجع versionCode86.
 
-- [ZIP2 provider](https://github.com/alwansan/raf/blob/cb9ec39f28db9015c32fe089f83ddf21e04107fe/docs/ZIP2_SOURCE_PROVIDER.md): قائمة **366 ملفاً أصلياً** مجموع أحجامها **7,789,295,609 بايت**، بينها **22 ملفاً مجزأً**. فحص بنية/أحجام الأجزاء وليس SHA256 لجميع المحتويات أو إثبات كامل Android.
-- [W2 original resource census](https://github.com/alwansan/raf/blob/cb9ec39f28db9015c32fe089f83ddf21e04107fe/docs/W2_RESOURCE_CENSUS_2026-11-04.md): **82 ملف موارد، 66 صنفاً، 1,209,137 كائناً تسلسلياً** في الأصل، تشمل 4,708 Mesh و4,050 Texture2D و1,556 Material و165 Shader و9 ComputeShader. CI [41831551847](https://github.com/alwansan/raf/actions/runs/41831551847) ناجح. **هذا جرد أصل PC، وليس نسبة الاستعادة في Android.**
-- [W2 compute inventory](https://github.com/alwansan/raf/blob/cb9ec39f28db9015c32fe089f83ddf21e04107fe/docs/W2_COMPUTE_KERNEL_INVENTORY_2026-11-04.md): **42 kernel row عبر 9 ComputeShader providers** (20 FFT،12 Blur،10 أخرى)، تحقق CPU [41830374791](https://github.com/alwansan/raf/actions/runs/41830374791). لا يثبت أن برامج GPU استُعيدت أو تعمل على Adreno.
-- [Spectrum/Foam topology](https://github.com/alwansan/raf/blob/cb9ec39f28db9015c32fe089f83ddf21e04107fe/docs/W2_WATER_SHADER_STAGE_BINDINGS_2026-11-04.md): 7 passes لـSpectrum و2 لـFoam مع CB partial؛ CI [41828808987](https://github.com/alwansan/raf/actions/runs/41828808987) ناجح، لكن shader/water source الكامل لا يزال مفتوحاً.
-- [A9 أصل FMOD عبر ZIP2](https://github.com/alwansan/raf/blob/cb9ec39f28db9015c32fe089f83ddf21e04107fe/docs/A9_ZIP2_MASTERBANK_NO_LFS_2026-11-04.md): MasterBank الأصلي 101,600,960 بايت و36 StreamingAssets بإجمالي 156,555,363 بايت تحققت في CI [41733666911](https://github.com/alwansan/raf/actions/runs/41733666911)، لكن سماع الصوت على الهاتف وOBB النهائي غير مثبتين.
-- [A8 حفظ الأصل عبر ZIP2](https://github.com/alwansan/raf/blob/cb9ec39f28db9015c32fe089f83ddf21e04107fe/docs/A8_ZIP2_ORIGINAL_SAVE_NO_LFS_2026-11-04.md): CI [41733872815](https://github.com/alwansan/raf/actions/runs/41733872815) نجح للمصدر/مسارات SaveAndLoad، وليس إنشاء عالم أو حفظ لاعب حقيقي.
-- A1 وW1 يحتفظان بنتائج CPU Vulkan محددة (60/60 FFT عددياً و27/27 Depth Copy لون/عمق) لا تعني اكتمال رسوم الهاتف.
+### نتائج الهاتف — 4 نوفمبر
+ظهرت **6 جلسات CL جديدة** (أصبح المجموع10). قرأت5 ملفات `session-summary.json` حديثة؛ جلسة 17:38:23 لها مجلد لكن بلا summary. [أحدث جلسة 22:57:57](https://github.com/alwansan/CL/blob/main/raft%20log/lf/LogRaft-20261104-225757-156/session-summary.json) تسجل في final: **40,327** `ultimate_water_invalid_pass`؛ منها Spectrum12,557/Foam22,216/Blur5,554؛ و**5,555** `water_fft_invalid_compute_kernel` index6. ظهر `World has been loaded` مرة، وFMOD startup، وتحذيرات cursor، OBB GUID مرتين، MonoScript/EventSystem وSteam API.
 
-## العملاء، الإصدارات واللوغات
+[فريق B حلل Logcat الأصلي](https://github.com/alwansan/raf/blob/58047d3b293f04547e36536518fd936ad328f4d1/prompt/coordination/B_TEAM/REVIEW_2026-11-04.md): بعد رسالة تحميل العالم وقع `DllNotFoundException steam_api64` في `SteamUserStats.StoreStats → SaveAndLoad.SaveGame → GameManager.OnWorldRecieved`. هذا **عائق حقيقي للحفظ/الدخول** وليس إثباتاً أنه السبب الوحيد لشاشة Connecting. لا يجوز تزوير نجاح world flag. تظهر صور المالك مجسمات شاحبة وبيضاء. `SurfaceFlinger FPS` ليست Unity FPS، وبعض `PSS` يشمل GPU allocations لا يقارن مباشرة بـVmRSS. لا تجمع counts الخاصة بـlast_sample مع final ولا تجمع جلسات مختلفة على أنها معدل واحد.
 
-**74 مجلد عميل** في المصدر المثبّت: **28 ملف state أُعيدت قراءته مباشرة**، و**46 صفاً تاريخياً** من اللقطة السابقة، مع تمييز ذلك لكل صف. كلمة `active` أو heartbeat قديم لا تثبت جلسة حية. W2 وW3 لهما طوابع تحديث لاحقة لوقت هذه القراءة، فحُفظت كتعـارض زمني لا نشاط مثبت.
+**ملاحظة المالك الأحدث:** الصوت وSettings يعملان ضمن التجربة المكتملة، مع حماية عدم التراجع. التاتش والأزرار وlayout **مؤجلة**. الأولويات P0: WATER-001/RENDER-002/LOCAL-005، ثم اكتمال موارد/دمج المصدر. آخر Game APK من قبل تحسينات B الجديدة، ولا يصح وصف اختبارات B على أنها موجودة في APK86.
 
-**آخر إصدار لعبة مؤكد:** [APK80](https://github.com/alwansan/raf/releases/tag/android-early-test-41448086401-1) عند SHA `9462f8edd8cdb5becbccb96521f2876ef9924410` (11 assets). **أحدث إصدار لسجل LogRaft:** [lograf-80](https://github.com/alwansan/raf/releases/tag/lograf-80)، منفصل عن اللعبة. ملف [CL القديم](https://github.com/alwansan/CL/tree/main/raft%20log/lf) يحوي أربع جلسات 2 نوفمبر؛ لا قبول هاتف جديد للإصلاحات.
+### عملاء فريق B والدليل
+[TEAM.json](https://github.com/alwansan/raf/blob/58047d3b293f04547e36536518fd936ad328f4d1/prompt/coordination/B_TEAM/TEAM.json) يسجل **50 اسماً مؤهلاً**، عند SHA المقروء يوجد **36 مجلداً مستقلاً** قرأت جميع حالات `state.json` لها، و14 اسماً لا يوجد له مجلد. **74 عميلاً قديماً متقاعداً** وفق توجيه المالك، أبقيت حالاتهم كمرجع تاريخي. لا تعتبر `active` أو heartbeat ضمان استمرار جلسة. [B_TEAM/SUMMARY](https://github.com/alwansan/raf/blob/58047d3b293f04547e36536518fd936ad328f4d1/prompt/coordination/B_TEAM/SUMMARY.md) مصدر فهرس القضية، وليس مصدراً مستقلاً لنجاح الاختبارات.
 
-## عرض اللوحة والتحقق
+أدلة مصدرية حديثة محددة النطاق: B03 فحص1,635/1,635 مراجع target Material لستة مشاهد أصلية؛ B21 تطابق Light value/owner لـ2/2 في export محدود؛ B20 جهّز private Foam 2-pass/4-stage packet ووجد CB size اختلافاً في7/8 مراجع يحتاج تفسيراً؛ B17 namebridge لـSpectrum. نجاح GitHub CI source أو private Vulkan/Unity دون تكامل الجهاز **لا يعني تصحيح الماء أو ألوان الصور**.
 
-الصفحة HTML مستقلة ومناسبة للهاتف، تضم مسارات source/water/audio/world/input/build/phone قابلة للتوسيع، وقيود كل دليل وSHA، بطاقات أحدث نتائج وتجربة W4، رسوماً لتعداد الأصل وجداول Actions والعملاء وتاريخ snapshots. لتشغيلها نزّل `dashboard/index.html` وافتحه في متصفح بدلاً من معاينته كمصدر داخل GitHub.
+### المقاييس ومبدأ القراءة
+اللوحة بها **7 مسارات** منفصلة، **11 مقياس جرد/حالات محددة**، جداول Actions، ملخص W4، رسوم تعداد الأصل وجلسات الهاتف، حالات B والقدامى، تاريخ snapshots. `3/3` لصيغ APK/OBB/XAPK يعني **تغطية تسليم الصيغ فقط**، و`0/3` مراجعات الجاهزية الحقيقية بقيت. لا تجمع المقامات إلى نسبة إنجاز وهمية.
+
+### التحديث والتحقق
 
 ```bash
 python scripts/update_dashboard.py
 python -m json.tool dashboard/data.json >/dev/null
 ```
 
-فحوص Python المتاحة في هذه الجلسة نُفّذت على **fixture محلي** بنفس سكربت التحقق. البيانات المرحلية الحقيقية فُحصت بمنطق مستقل قبل commit للتطابق والمقامات والروابط واللقطات؛ لم يُنفذ Python على checkout كامل للمستودع لأن الوصول المباشر للشبكة من الحاوية غير متاح. اللقطات السابقة محفوظة دون استبدال.
+السكريبت يفحص SHA المصدر والمقامات، الروابط، حالات unknown، سجل اللعبة، وسجل الهاتف، وجود snapshot منفصل وتساوي JSON المضمن. في هذه الجلسة تمت اختبارات مستقلة على blob GitHub الحقيقي؛ لا أدعي تشغيل Python على checkout كامل لم يُتاح للحاوية. اللقطات القديمة محفوظة.
 
-هذا **عميل تحليل**، لا يغيّر فرع اللعبة أو ZIP2 أو CL أو مهام العملاء أو workflows أو طلبات البناء، ولا يعمل في الخلفية.
+عميل up يكتب **فقط** في فرع `update`؛ لم يغيّر كود اللعبة أو ZIP2 أو CL أو build request أو أتمتة أو ملفات عملاء آخرين، ولا يعمل بين الرسائل.
 
 ---
 
-## README التاريخي
+## README السابق
 
 # raf

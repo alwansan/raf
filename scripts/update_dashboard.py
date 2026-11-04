@@ -38,12 +38,25 @@ assert measure("RESOURCE-CENSUS")["total"] == data["inventory"]["owners"]
 assert measure("COMPUTE-CENSUS")["total"] == data["kernel_inventory"]["kernel_rows"]
 assert data["kernel_inventory"]["fft_rows"] + data["kernel_inventory"]["blur_rows"] + data["kernel_inventory"]["other_rows"] == data["kernel_inventory"]["kernel_rows"]
 assert data["inventory"]["count"] >= max(x["count"] for x in data["inventory"]["top_classes"])
-assert data["trial"]["status"] == "in_progress" and data["trial"]["conclusion"] is None
-assert data["trial"]["package_signed"] is None and data["trial"]["package_delivered"] is None
-assert any(r["id"] == data["trial"]["run_id"] and r["status"] == "in_progress" for r in data["runs"])
+assert data["trial"]["status"] == "completed" and data["trial"]["conclusion"] == "success"
+assert data["trial"]["package_signed"] is True and data["trial"]["package_delivered"] is True
+assert data["trial"]["device_acceptance"] is None
+assert data["trial"]["game_release"] == data["release_checks"]["game"]["url"]
+assert any(r["id"] == data["trial"]["run_id"] and r["status"] == "completed" and r["conclusion"] == "success" for r in data["runs"])
 assert len({r["id"] for r in data["runs"]}) == len(data["runs"])
 assert data["release_checks"]["logger"]["game"] is False
 assert data["release_checks"]["game"]["tag"] != data["release_checks"]["logger"]["tag"]
+assert data["release_checks"]["game"]["asset_count"] == len(data["release_checks"]["game"]["assets"]) == 12
+assert data["previous_game_release"]["tag"].startswith("android-early-test-")
+assert data["phone_evidence"]["apk_version_code"] == 86
+assert data["phone_evidence"]["source_sha"] is None and data["phone_evidence"]["installed_apk_sha256"] is None
+assert data["phone_evidence"]["shader_pass"] == 40327 and data["phone_evidence"]["compute"] == 5555
+assert data["team"]["eligible_count"] == 50
+assert data["team"]["source_state_directories"] == 36
+assert len(data["team"]["not_started_without_directory"]) == 14
+assert data["team"]["legacy_retired_count"] == 74
+assert len(data["clients"]) == 110
+assert len(data["phone_sessions"]) == 6 and sum(p["session_summary_available"] for p in data["phone_sessions"]) == 5
 
 clients = data["clients"]
 verification = data["verification"]
@@ -89,7 +102,7 @@ payload = json.dumps(data,ensure_ascii=False,separators=(",",":")).replace("<",r
 result = re.sub(pattern,lambda m:m.group(1)+payload+m.group(2),html)
 embedded = re.search(pattern,result).group(0).split(">",1)[1].rsplit("</script>",1)[0]
 assert json.loads(embedded) == data
-for element in ("trial","inventory-tiles","inventory-bars","metrics","milestones","areas","clients","runs","delivery","history","next","sources","limits"):
+for element in ("trial","bteam","inventory-tiles","inventory-bars","phone-bars","metrics","milestones","areas","clients","runs","delivery","history","next","sources","limits"):
     assert f'id="{element}"' in result
 page.write_text(result,encoding="utf-8")
 print("PASS: scoped denominators, null unknowns, fixed SHA, 7 tracks, current trial, client evidence, internal/external links, snapshot equality and offline JSON embed")
