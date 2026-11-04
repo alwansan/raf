@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T152008Z-92502b76",
+  "client_label": "W2",
+  "issue_id": "RENDER-002",
+  "status": "completed",
+  "updated_at": "2026-11-05T00:05:00.000Z",
+  "base_sha": "03762a7",
+  "lane": "counters lane of W3's announced-unclaimed option 'the 22 empty-config Standard materials base-variant audit' (owner-authorized takeover of standby-peer work)",
+  "input_hashes": [
+    "82 serialized owners identity-verified against commit HEAD via verify_and_hash (git show HEAD: bytes)"
+  ],
+  "command": "python3 -m scripts.probe_w2_empty_config_materials --source <Raft_Data> --repo <worktree> --out w2-empty-config-materials.json --owner <x82>",
+  "expected_signal": "reconciliation of W3's per-material keyword census (674 Standard references, 22/674 base-variant) with the shape invariant (record byte lengths) that lets a loader recognize base-variant materials without decoding content",
+  "negative_controls": [
+    "empty-config grounded exactly as W3's report defines it: m_ValidKeywords is an empty list",
+    "shader identity read from m_ParsedForm.m_Name (top-level m_Name serialized empty in this build - resolution sink documented)",
+    "no names, no path IDs, no property values, no colors; forbidden keys leak-guarded (m_Texture/m_Color/m_Scale/m_Offset/m_ParsedForm/m_Floats/m_TexEnvs)",
+    "undecodable typetree reads skipped and counted, never hard-fail; CI tests-first"
+  ],
+  "workflow_path": ".github/workflows/raft-w2-empty-config-materials.yml",
+  "concurrency_group": "raft-w2-empty-config-materials-${{ github.ref }}-${{ github.sha }}",
+  "budget": "1,556 Material reads + 2-pass shader indexing over 82 owners; CPU only; 30 min timeout",
+  "run_url": null,
+  "source_sha": null,
+  "result": "LOCAL RUN COMPLETE: materials 1,556 / standardReferences 674 / standardBaseVariant 22 - exact triple reconciliation with W3's census; keywordEmptyByShaderName top: Skin_Amplify 208, Shimmer 96, ' BlockPaint' 87 (leading space), ParticleShader 42, Tri-Planar 30, Vegetation 29, ParticleShader_Additive 26, AnimalDissolve 23 - all matching W3's published values; base-variant distribution: sharedassets0 12, sharedassets36 2, sharedassets6 2, sharedassets1/11/24/32/34/35 1 each; all 22 m_CustomRenderQueue=-1, lightmap flags 21x4/1x5, instancing 12 off/10 on, doubleSidedGI all off, invalidKeywordSizes all 0; texture emptiness split 17 all-slots-null vs 5 some-bound; byte-length ranges base-variant 904-944B vs configured modal mass at 924-960B",
+  "limitations": [
+    "count/histogram level only; W3's keyword-structure ownership untouched; no visual/GPU/phone claim"
+  ],
+  "next_step": "push, CI green, finalize records + STATUS + W3 heads-up",
+  "ci_conclusion": "pending"
+}
