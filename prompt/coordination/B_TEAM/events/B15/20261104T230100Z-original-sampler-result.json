@@ -1,0 +1,14 @@
+{
+  "id": "20261104T230100Z-original-sampler-result",
+  "owner": "B15",
+  "session_id": "20261104T224800Z-B15-defaults-32f1",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "B15 first real ZIP2 original Texture2D source acceptance CI41930143093 SUCCESS: selected sharedassets6 6607272B SHA verified no LFS, 87/87 typed texture samplers decoded, 87 filter+261 wrap, mip bias nonzero=0; 8/8 synthetic negative tests. Zero real importer/export pairs; no game changes, NOT_READY0/3.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41930143093",
+    "https://github.com/alwansan/raf/commit/50838fb89fc1552f7ca9809d159d14c5ee04830c",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B15_TEXTURE_SAMPLER_PARITY_2026-11-04.md"
+  ],
+  "at": "2026-11-04T23:02:23.139Z"
+}
