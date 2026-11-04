@@ -1,0 +1,13 @@
+{
+  "id": "20261104T2141Z-B17-start-spectrum",
+  "owner": "B17",
+  "session_id": "20261104T2140Z-B17-spc2",
+  "issue_id": "WATER-001",
+  "type": "start",
+  "summary": "B17 registered original Spectrum shader per-pass texture/sampler descriptor provenance track. Independent of B24 Foam/B45 Blur/B08 FFT, no game code changed, authentic source and device not yet tested.",
+  "evidence": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/probe_w2_water_shader_stage_bindings.py",
+    "https://github.com/alwansan/raf/releases/tag/android-early-test-41812889049-1"
+  ],
+  "at": "2026-11-04T21:41:00Z"
+}
