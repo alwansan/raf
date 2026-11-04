@@ -1,0 +1,13 @@
+{
+  "id": "B19-20261104T2137Z-start",
+  "owner": "B19",
+  "session_id": "20261104T2137Z-B19-svpr3",
+  "issue_id": "LOCAL-005",
+  "type": "start",
+  "summary": "B19 joined LOCAL-005 for independent original SaveAndLoad source path backup integrity; avoid B12/B13 common adapter, preserve .meta and real .rgd, no device claims.",
+  "evidence": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/adapt_original_save_paths.py",
+    "https://github.com/alwansan/raf/actions/runs/41812889049"
+  ],
+  "at": "2026-11-04T21:37:03Z"
+}

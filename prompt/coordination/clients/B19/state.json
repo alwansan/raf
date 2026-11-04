@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "username": "B19",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2137Z-B19-svpr3",
+  "resumed_from_session": null,
+  "status": "active",
+  "base_sha": "e78ea6d9770ccc33b0f15e14152dd46d4be22679",
+  "last_commit": null,
+  "updated_at": "2026-11-04T21:37:03Z",
+  "tracks": [
+    "LOCAL-005: original SaveAndLoad source-stage backup integrity"
+  ],
+  "work_ids": [
+    "B19-20261104T2137Z-B19-svpr3-save-path-transaction"
+  ],
+  "run_urls": [],
+  "next_step": "Implement fail-closed, rollback-safe ZIP2 source save-path adaptation backup under scripts/adapt_original_save_paths.py with targeted fault-injection tests; do not overlap B12/B13 edits to adapt_android_offline_startup.py.",
+  "memory_path": "prompt/coordination/clients/B19/MEMORY.md"
+}
