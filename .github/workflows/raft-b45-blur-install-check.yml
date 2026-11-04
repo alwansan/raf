@@ -1,0 +1,28 @@
+name: B45 WATER-001 original Blur installer rollback guards (no Unity)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-b45-blur-install-check.yml'
+      - 'scripts/b45_install_original_blur.py'
+      - 'tests/test_b45_install_original_blur.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raft-b45-blur-install-synthetic-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Run synthetic original texture ShaderLab install and rollback controls
+        run: python3 -m unittest discover -s tests -p 'test_b45_install_original_blur.py' -v
