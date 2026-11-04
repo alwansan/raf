@@ -1,0 +1,34 @@
+name: B04 ASSET-RESTORE-001 safe mesh source links
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/repair_exported_mesh_vertices.py'
+      - 'tests/test_repair_exported_mesh_vertices.py'
+      - '.github/workflows/raft-b04-mesh-source-safety.yml'
+permissions:
+  contents: read
+concurrency:
+  group: raft-b04-mesh-source-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  mesh-source-safety:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Pin CPU-only YAML parser
+        run: python3 -m pip install --user --disable-pip-version-check PyYAML==6.0.2
+      - name: Synthetic authentic Mesh layout and source-boundary regressions
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_repair_exported_mesh_vertices.py -v
+          python3 -m py_compile scripts/repair_exported_mesh_vertices.py
+          echo 'B04 source-path safety only; no original meshes exported or gameplay/device verified'
