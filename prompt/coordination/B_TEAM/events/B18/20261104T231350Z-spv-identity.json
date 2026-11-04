@@ -1,0 +1,13 @@
+{
+  "id": "20261104T231350Z-B18-spv-identity",
+  "owner": "B18",
+  "session_id": "20261104T225100Z-B18-map2",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Authenticated original FFT 20/20 DXBC compiled with two explicitly chosen vkd3d target descriptor layouts yield same 3 resource variable IDs and exact whole SPIR-V instructions after excluding only intended OpDecorate set/binding values. Two suites 20/20 synthetic tests PASS CI41931883517. Runtime t0/t1 numeric behavior, Unity kernel mapping, native import and Adreno visuals not verified.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41931883517",
+    "https://github.com/alwansan/raf/commit/693ace285c0598db17339e067e9a1f1c8014d8a4"
+  ],
+  "at": "2026-11-04T23:14:11.727Z"
+}
