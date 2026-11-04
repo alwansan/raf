@@ -1,0 +1,14 @@
+{
+  "id": "B16-20261104T2157Z-kernel-conditional-result",
+  "owner": "B16",
+  "session_id": "20261104T2151Z-B16-6e2a",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Source-integrated conditional compute guard excludes disabled/unknown preprocessor kernel candidates and preserves literal active alternatives; CI41920741687 SUCCESS 34/34 (12 B16 +8 B47 +14 water), no original FFT/Unity/device proof, WATER-001 remains OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/0098b585e3ce9397d04fb838b1980623a64b23d1",
+    "https://github.com/alwansan/raf/actions/runs/41920741687",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B16_FFT_PREPROCESSOR_SOURCE_GUARD_2026-11-04.md"
+  ],
+  "at": "2026-11-04T22:00:34.895Z"
+}
