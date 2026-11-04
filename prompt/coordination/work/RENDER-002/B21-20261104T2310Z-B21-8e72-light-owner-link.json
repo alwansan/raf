@@ -6,7 +6,7 @@
   "issue_id": "RENDER-002",
   "track": "colors-materials:original-light-owner-same-export-identity",
   "approach": "Extend only B21 optional private Light trace to include class1 GameObject exact native source→export MetaPtr; verify original Light.m_GameObject local PPtr targets the SAME actual exported GameObject referenced by exported Light in authenticated bounded Raft export. Retain 2/2 value proof, do not touch shared B02/W1.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "2a89780b3e7cd57eae439f6bfeb1897a47300e9b",
   "intended_files": [
     "scripts/b21_stage_light_lineage.py",
@@ -24,8 +24,10 @@
   "experiment_ids": [
     "B21-20261104T2310Z-light-owner-same-export"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Add optional class1 capture, pass original owner PPtr mapping and exported local GameObject pointer to parity tool; negative controls, rerun bounded real original export; keep all pixels/device claims false.",
-  "updated_at": "2026-11-04T23:10:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41931942755"
+  ],
+  "result": "Actual 9-provider exact ZIP2 original AssetRipper source export and private native class1+108 lineage: 2/2 original Light values preserved and 2/2 exact original GameObject owners mapped to actual Unity exported GO pointers, 0 missing/misattached. All 40 synthetic tests pass; .NET9 exact pinned exporter compiled and ran. Not Unity/Adreno pixel/device evidence.",
+  "next_step": "Avoid repeating Light census. Shift to a distinct P0 source shader/material/ambient/GPU fidelity gap; RENDER-002 still OPEN.",
+  "updated_at": "2026-11-04T23:16:00Z"
 }
