@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "owner": "B18",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T225100Z-B18-map2",
+  "issue_id": "WATER-001",
+  "track": "water-fft",
+  "status": "active",
+  "base_sha": "17b86ca9ad6bb7a9ce2b0ec557debf41c960cbde",
+  "approach": "Integrate one-shot bounded read-only Android loaded-ComputeShader inventory at existing post-scene visual diagnostic boundary, with privacy-preserving hashed ComputeShader asset names and explicit incomplete coverage; never enumerate/dispatch unverified kernel indices or adjust water, audio, Settings or touch.",
+  "intended_files": [
+    "android-port/Runtime/Platform/AndroidTestDiagnostics.cs",
+    "tests/test_b18_android_compute_inventory_source.py",
+    ".github/workflows/raft-b18-fft-device-inventory-source.yml",
+    "docs/B18_FFT_RDEF_PARITY_2026-11-04.md"
+  ],
+  "hypothesis": "Even before original FFT .compute restoration, next APK can distinguish no currently loaded ComputeShader assets from loaded assets via a one-shot on-device source-integrated diagnostic without adding invalid kernel errors.",
+  "related_work": [
+    "W4 native water gate: 0 .compute, APK86 kernelIndex6 with kernelCount0",
+    "B06 original FFT GPU format/device capability logs",
+    "B12 scene_shader_snapshot renderer/material inventory",
+    "B18 41931883517 compiled program identity proof"
+  ],
+  "experiment_ids": [],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Patch existing scene-loaded single snapshot with bounded currently loaded ComputeShader name hashes (no raw names), verify guarded source and synthetic checks in isolated CI; do not claim this identifies original FFT or proves kernelCount without a new real phone run.",
+  "updated_at": "2026-11-04T23:20:17.257Z"
+}
