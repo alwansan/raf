@@ -48,13 +48,13 @@ class KernelCallsiteTests(unittest.TestCase):
             parse_original_args('foo(1, nested(3, 4)', 3)
 
     def test_fake_calls_in_comments_and_literals_do_not_count(self):
-        src = ('class F {\\n'
-               ' // hidden.Dispatch(900, 1, 1, 1);\\n'
-               ' /* hidden.SetTexture(9, "X", y); */\\n'
-               ' string s = "hidden.FindKernel(\\\\"Bad\\\\")";\\n'
-               ' string verbatim = @"hidden.Dispatch(9, 9, 9, 9)";\\n'
-               ' void Go() { fft.Dispatch(3, 1, 1, 1); }\\n'
-               '}\\n')
+        src = ('class F {\n'
+               ' // hidden.Dispatch(900, 1, 1, 1);\n'
+               ' /* hidden.SetTexture(9, "X", y); */\n'
+               ' string s = "hidden.FindKernel(\\"Bad\\")";\n'
+               ' string verbatim = @"hidden.Dispatch(9, 9, 9, 9)";\n'
+               ' void Go() { fft.Dispatch(3, 1, 1, 1); }\n'
+               '}\n')
         report = analyze_source(src, hashlib.sha256(src.encode()).hexdigest())
         self.assertEqual(report["calls_by_api"], {"Dispatch": 1})
         self.assertEqual(report["compute_api_callsites"][0]["kernel_or_first_arg"]["value"], 3)
