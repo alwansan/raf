@@ -101,3 +101,7 @@
 - **W4 full build 41808015938 => completed/failure @ 6ed699c** (jobs: gate+license preflight نجحا، reconstruct فشل، delivery failure). مراقبة سلبية فقط؛ لا تدخل. خط الأساس الصبغي يبقى صالحًا لأي إعادة محاولة بناء.
 - نشاط ليلي آخر: W3 fallback/custom-editor enumeration على 165 shaders؛ إصلاحات Blur-4e91 جارية لعملاء آخرين.
 - مسار W2 السابع: baseline إعدادات أخذ عينات الخامات (wrap/filter/aniso/mip) — أرقام فقط، غير متداخل.
+
+## تحديث 10:35Z (4 نوفمبر) — الحلقة السابعة: إعدادات أخذ العينات
+- 4,050 خامة: Repeat 3,434 / **Clamp 616 (15.2%)** (sharedassets0 603, sharedassets1 230, resources 184)؛ Bilinear 3,979؛ aniso=16 على 54؛ **mipbias صفر وmips stripped صفر لكل الوحي** (سرية fail-closed مباشرة)؛ 7 مالكين بwrap غير موحّد لكل محور.
+- بناء W4 الكامل فشل (41808015938, reconstruct) — مراقبة سلبية فقط.
