@@ -96,13 +96,19 @@ def normalize_texenvs(entries, *, exported=False):
     return slots
 
 
-def original_texenvs(root: Path):
+def original_texenvs(root: Path, owner_names=None):
     """SHA/byte-authenticated original providers; use no speculative archive mapping."""
     import UnityPy
     from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
     from scripts.w1_stage_zip2_owners import fingerprint
     result = {}
-    for name, expected in SHADER_OWNERS.items():
+    owners = set(SHADER_OWNERS) if owner_names is None else set(owner_names)
+    if not owners or not owners.issubset(SHADER_OWNERS):
+        raise ValueError('Unpinned or empty original Material owner selection')
+    if root.is_symlink() or (root / 'Raft_Data').is_symlink():
+        raise ValueError('Linked original source root')
+    for name in sorted(owners):
+        expected = SHADER_OWNERS[name]
         path = root / 'Raft_Data' / name
         if path.is_symlink() or not path.is_file() or fingerprint(path) != expected:
             raise ValueError('Original Material owner size/SHA mismatch')
@@ -201,18 +207,31 @@ def _trace_export(row):
     return _export_pointer({'fileID':ptr['file_id'], 'guid':ptr['guid'], 'type':ptr['type']})
 
 
-def compare(trace: dict, original: dict, exported: dict):
+def compare(trace: dict, original: dict, exported: dict, *, selected_owners=None):
     if (trace.get('schema_version') != 1 or not isinstance(trace.get('export_instance'), str)
             or not HEX32.fullmatch(trace['export_instance']) or not isinstance(trace.get('objects'), list)):
         raise ValueError('Missing same-instance export trace')
+    owner_filter = None if selected_owners is None else set(selected_owners)
+    if owner_filter is not None and (not owner_filter or
+            any(src[0] not in owner_filter for src in original)):
+        raise ValueError('Invalid selected-original Material scope')
     mapped_materials = {}
     mapped_textures = {}
     traced_sources = set()
+    external_material_ptrs = set()
+    other_trace_materials = 0
     excluded_engine = excluded_font = 0
     for row in trace['objects']:
         if row.get('class_id') not in {21, *TEXTURE_TYPES}:
             continue
         src = _trace_source(row)
+        if owner_filter is not None and src[0] not in owner_filter:
+            if row['class_id'] == 21:
+                other_trace_materials += 1
+                outsider = _trace_export(row)
+                if outsider[0] and outsider[2] in (2, 3):
+                    external_material_ptrs.add(outsider[:2])
+            continue
         if src in traced_sources:
             raise ValueError('Duplicated original object in trace')
         traced_sources.add(src)
@@ -237,8 +256,14 @@ def compare(trace: dict, original: dict, exported: dict):
                 raise ValueError('Unusable duplicate Texture object trace')
             mapped_textures[src] = ptr
     covered = {s for s in traced_sources if s in original}
-    if covered != set(original) or not mapped_materials or set(mapped_materials) != set(exported):
+    exported_set = set(exported)
+    material_set = set(mapped_materials)
+    if (covered != set(original) or not mapped_materials or
+            not material_set.issubset(exported_set) or
+            (owner_filter is None and material_set != exported_set)):
         raise ValueError('Original/export Material identities do not match same-instance trace')
+    if material_set & external_material_ptrs:
+        raise ValueError('Original Material export pointer collides with out-of-scope Material')
     c = dict(materials_compared=0, source_texture_slots=0, slots_compared=0,
              missing_slots=0, extra_slots=0, null_to_bound=0, bound_to_null=0,
              exact_internal_targets_compared=0, wrong_internal_targets=0,
@@ -283,7 +308,13 @@ def compare(trace: dict, original: dict, exported: dict):
                         c['wrong_internal_targets'] += expected != actual
     c['source_slots_faithful_with_resolved_scope'] = not any(c[k] for k in ('missing_slots','extra_slots','null_to_bound','bound_to_null','wrong_internal_targets','unresolved_internal_targets','uv_transform_value_mismatches'))
     c['all_uv_transforms_verified'] = (c['uv_transform_slots_compared'] == c['slots_compared'] and c['uv_transform_missing_or_unproven'] == 0 and c['missing_slots'] == 0 and c['extra_slots'] == 0 and c['uv_transform_value_mismatches'] == 0)
-    c['all_texture_targets_proven'] = bool(c['exact_internal_targets_compared']) and c['external_targets_not_proven'] == 0 and c['source_slots_faithful_with_resolved_scope']
+    c['selected_texture_targets_proven'] = bool(c['exact_internal_targets_compared']) and c['external_targets_not_proven'] == 0 and c['source_slots_faithful_with_resolved_scope']
+    c['all_texture_targets_proven'] = owner_filter is None and c['selected_texture_targets_proven']
+    c['source_scope'] = 'selected-owner' if owner_filter is not None else 'all-pinned-owners'
+    c['selected_original_owner_count'] = len({owner for owner, _ in original})
+    c['outside_scope_export_materials'] = len(exported_set - material_set)
+    c['outside_scope_trace_materials'] = other_trace_materials
+    c['full_game_source_coverage_verified'] = False
     c.update(schema_version=1,excluded_engine_materials=excluded_engine,excluded_font_materials=excluded_font,
              original_values_or_names_disclosed=False,unity_shader_or_android_pixels_proven=False)
     return c
@@ -292,13 +323,18 @@ def compare(trace: dict, original: dict, exported: dict):
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument('--original',required=True,type=Path,help='SHA-verified reconstructed ZIP2 root')
+    ap.add_argument('--owner', action='append', default=None,
+                    help='Optional SHA-pinned original owner filename for bounded same-export comparison; omit for strict all-pinned scope')
     ap.add_argument('--project',required=True,type=Path,help='same-instance Unity export')
     ap.add_argument('--trace',required=True,type=Path,help='private exporter trace from that same run')
     ap.add_argument('--out',required=True,type=Path,help='aggregate JSON outside exported assets')
     a=ap.parse_args(argv)
     if a.out.resolve().is_relative_to(a.project.resolve()):
         raise ValueError('Report must be outside export')
-    result = compare(json.loads(a.trace.read_text(encoding='utf-8')),original_texenvs(a.original),exported_texenvs(a.project))
+    owners = set(a.owner) if a.owner else None
+    result = compare(json.loads(a.trace.read_text(encoding='utf-8')),
+                     original_texenvs(a.original, owner_names=owners),
+                     exported_texenvs(a.project), selected_owners=owners)
     a.out.write_text(json.dumps(result,indent=2,sort_keys=True)+'\n',encoding='utf-8')
     print('RAFT_B05_MATERIAL_TEXENV_FIDELITY '+json.dumps(result,sort_keys=True))
     if not result['source_slots_faithful_with_resolved_scope']:
