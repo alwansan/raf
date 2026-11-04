@@ -6,7 +6,7 @@
   "issue_id": "WATER-001",
   "track": "water-fft",
   "approach": "Source-indexed original Spectrum fragment texture/sampler symbols to private translated HLSL, after B17 original DXBC numeric slot proof.",
-  "status": "active",
+  "status": "completed",
   "base_sha": null,
   "intended_files": [
     "scripts/b17_spectrum_namebridge.py",
@@ -21,8 +21,11 @@
   "experiment_ids": [
     "b17-spectrum-original-namebridge"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Source-free checks; sample authentic SHA-pinned fragment program; private translation and rename; never upload source/names, test shader compilation later.",
-  "updated_at": "2026-11-04T23:06:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41931666175",
+    "https://github.com/alwansan/raf/actions/runs/41932008860"
+  ],
+  "result": "Source-authentic 14/14 original Spectrum fragment variants private texture/sampler symbol rebind and Vulkan1.1 HLSL recompile PASS; synthetic 7/7. No game ShaderLab/CB/device integration.",
+  "next_step": "Preserve all original pass render states, CB and sampler modes/ShaderLab via B09; Unity/Adreno device test requires separate integration.",
+  "updated_at": "2026-11-04T23:15:00Z"
 }
