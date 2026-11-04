@@ -53,7 +53,7 @@ jobs:
           DOTNET_PROCESSOR_COUNT: '2'
         run: |
           set -euo pipefail
-          timeout 300s dotnet run --configuration Release --nologo \
+          timeout 300s dotnet run --configuration Release \
             --project tests/b37-rgd-inherited-field/B37RgdInheritedField.csproj -- \
             --file zip2-original/Raft/Raft_Data/StreamingAssets/Data.rgd \
             --sha256 b2785187aa11e33872698adfa79ab252cf65a824d92bee7e88773ce4aa11cbba \
