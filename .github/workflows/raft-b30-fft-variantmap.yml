@@ -1,0 +1,65 @@
+name: B30 WATER-001 original FFT serialized variantMap collision evidence
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-b30-fft-variantmap.yml'
+      - 'scripts/b30_probe_fft_variantmap_routing.py'
+      - 'tests/test_b30_fft_variantmap_routing.py'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: raft-b30-fft-variantmap-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  authentic-original-compute-registry:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      ZIP2_SOURCE_SHA: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+    steps:
+      - name: Checkout B30 source, synthetic tests and authenticated-stage helpers
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Validate negative controls before private acquisition
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_b30_fft_variantmap_routing.py -v
+      - name: Authenticate single original FFT compute owner from pinned ZIP2
+        shell: bash
+        run: |
+          set -euo pipefail
+          df -h .
+          mkdir -p "$RUNNER_TEMP/b30/zip2"
+          git -C "$RUNNER_TEMP/b30/zip2" init -q
+          git -C "$RUNNER_TEMP/b30/zip2" remote add origin https://github.com/alwansan/raf.git
+          git -C "$RUNNER_TEMP/b30/zip2" -c protocol.version=2 fetch -q --depth=1 --filter=blob:none origin zip2
+          test "$(git -C "$RUNNER_TEMP/b30/zip2" rev-parse FETCH_HEAD)" = "$ZIP2_SOURCE_SHA"
+          git -C "$RUNNER_TEMP/b30/zip2" sparse-checkout init --no-cone
+          printf '%s\n' '/RAFT_FILE_MANIFEST.tsv' '/Raft/Raft_Data/sharedassets0.assets/' |
+            git -C "$RUNNER_TEMP/b30/zip2" sparse-checkout set --no-cone --stdin
+          git -C "$RUNNER_TEMP/b30/zip2" checkout -q --detach FETCH_HEAD
+          test "$(git -C "$RUNNER_TEMP/b30/zip2" rev-parse HEAD)" = "$ZIP2_SOURCE_SHA"
+          python3 -m scripts.stage_zip2_fft_owner \
+            --zip2-checkout "$RUNNER_TEMP/b30/zip2" \
+            --destination "$RUNNER_TEMP/b30/original/Raft_Data/sharedassets0.assets"
+      - name: Check original FFT map/keyword collisions against authenticated compiled slots
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4 -q
+          timeout 180s python3 -m scripts.b30_probe_fft_variantmap_routing \
+            --source "$RUNNER_TEMP/b30/original/Raft_Data"
+          echo 'RAFT_B30_BOUNDARY route_discriminator_is_not_runtime_kernel_id=true unity_runtime_kernel_lookup_unverified=true'
+          # Proprietary source and shader bytes stay under runner temp.
+          # No artifact upload or native game build.
