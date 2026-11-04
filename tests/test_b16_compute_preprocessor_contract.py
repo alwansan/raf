@@ -84,5 +84,76 @@ class B16ConditionalComputeTests(unittest.TestCase):
             self.assertFalse(report["authentic_water_kernel_identity_verified"])
             self.assertFalse(report["device_execution_verified"])
 
+
+    def test_reachable_error_fails_structural_candidate(self):
+        complete = "#pragma kernel Good\n" + function()
+        for directives in (
+            "#error PRIVATE_COMPILE_MESSAGE\n",
+            "#if 1\n#error PRIVATE_COMPILE_MESSAGE\n#endif\n",
+            "#if 0\n#else\n#error PRIVATE_COMPILE_MESSAGE\n#endif\n",
+            "#if 0\n#elif 1\n#error PRIVATE_COMPILE_MESSAGE\n#endif\n",
+            "#if 1\n#if 1\n#error PRIVATE_COMPILE_MESSAGE\n#endif\n#endif\n",
+        ):
+            with self.subTest(directives=directives[:20]):
+                with self.assertRaisesRegex(ValueError, "Potentially active compute"):
+                    kernel_entrypoint_profile(complete + directives)
+
+    def test_unknown_conditional_error_fails_closed(self):
+        complete = "#pragma kernel Good\n" + function()
+        for directives in (
+            "#ifdef UNITY_ANDROID\n#error MAYBE\n#endif\n",
+            "#ifndef UNITY_ANDROID\n#error MAYBE\n#endif\n",
+            "#if UNKNOWN_FLAG\n#error MAYBE\n#endif\n",
+            "#if 0\n#elif UNKNOWN_FLAG\n#error MAYBE\n#endif\n",
+            "#if UNKNOWN_FLAG\n#else\n#error MAYBE\n#endif\n",
+            "#if 0\n#elif UNKNOWN_FLAG\n#else\n#error MAYBE\n#endif\n",
+        ):
+            with self.subTest(directives=directives[:27]):
+                with self.assertRaisesRegex(ValueError, "Potentially active compute"):
+                    kernel_entrypoint_profile(complete + directives)
+
+    def test_provably_inactive_error_does_not_reject(self):
+        complete = "#pragma kernel Good\n" + function()
+        for directives in (
+            "#if 0\n#error NEVER_ACTIVE\n#endif\n",
+            "#if 1\n#else\n#error NEVER_ACTIVE\n#endif\n",
+            "#if 1\n#elif UNKNOWN_FLAG\n#error NEVER_ACTIVE\n#endif\n",
+            "#if 0\n#elif 0\n#error NEVER_ACTIVE\n#endif\n",
+            "#if 0\n#if UNKNOWN_FLAG\n#error NEVER_ACTIVE\n#endif\n#endif\n",
+            "#if UNKNOWN_FLAG\n#elif 1\n#else\n#error NEVER_ACTIVE\n#endif\n",
+        ):
+            with self.subTest(directives=directives[:29]):
+                self.assertTrue(kernel_entrypoint_profile(complete + directives)["all_kernel_entrypoints_structural"])
+
+    def test_comments_strings_and_non_directives_not_errors(self):
+        source = (
+            "#pragma kernel Good\n" + function()
+            + "// #error commented\n"
+            + "/*\n#error blocked\n*/\n"
+            + 'static const char* note = "#error literal";\n'
+            + "#errorish not_a_directive\n"
+        )
+        self.assertTrue(kernel_entrypoint_profile(source)["all_kernel_entrypoints_structural"])
+
+    def test_compilation_error_diagnostics_redact_message(self):
+        with self.assertRaises(ValueError) as observed:
+            kernel_entrypoint_profile(
+                "#pragma kernel Good\n" + function()
+                + "#error NEVER_PUBLISH_ORIGINAL_SHADER_TEXT\n"
+            )
+        self.assertNotIn("NEVER_PUBLISH_ORIGINAL_SHADER_TEXT", str(observed.exception))
+
+    def test_water_gate_rejects_compile_blocked_compute(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            assets = Path(tmp) / "Assets"
+            assets.mkdir()
+            (assets / "FFT.compute").write_text(
+                "#pragma kernel Good\n" + function()
+                + "#if UNITY_ANDROID\n#error WILL_FAIL_ON_ANDROID\n#endif\n"
+            )
+            (assets / "FFT.compute.meta").write_text("guid: " + "b"*32)
+            with self.assertRaisesRegex(ValueError, "Potentially active compute"):
+                inspect(Path(tmp))
+
 if __name__ == "__main__":
     unittest.main()
