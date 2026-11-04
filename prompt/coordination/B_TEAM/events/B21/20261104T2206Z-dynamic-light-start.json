@@ -1,0 +1,12 @@
+{
+  "id": "B21-20261104T2206Z-dynamic-light-start",
+  "owner": "B21",
+  "session_id": "20261104T2153Z-B21-72ab",
+  "issue_id": "RENDER-002",
+  "type": "start",
+  "summary": "After authentic six-scene baked-lightmap hypothesis exclusion B21 starts a distinct source-authenticated dynamic Light component typed-field and reference baseline diagnostic, with no changes to shaders/Unity source/materials/touch/audio/Settings.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41921259677"
+  ],
+  "at": "2026-11-04T22:06:00Z"
+}
