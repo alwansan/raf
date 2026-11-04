@@ -120,3 +120,7 @@
 ## تحديث 14:35Z (4 نوفمبر) — الحلقة التاسعة: الخصائص العددية
 - 1,556 مادة: 33,899 float عبر 486 اسمًا؛ **رباعية وضع الرندر** (_Mode/_SrcBlend/_DstBlend/_ZWrite) ×1,438؛ _Cutoff 1,457؛ **m_Ints فارغة في اللعبة كلها** (سرية fail-closed)؛ لا sentinels؛ 19 مادة بلا scalars. CI قيد الدفع.
 - تنبيه بيئة: UnityPy يعمل تحت python3.14 (Termux) وليس usr/bin/python3.12 — استدعاء صريح بالمفسر 3.14 مهم.
+
+## تحديث 15:30Z (4 نوفمبر) — الحلقة التاسعة أخضر
+- material-scalar-properties CI 41824352163 SUCCESS @ 5adc7bc. سلسلة W2 الآن **تسع حلقات** كلها CI-verified؛ اكتملة كل التجميعات المادية في نطاقي.
+- المرايا التسع على أي بناء/تصدير: refs، Linear، sRGB split (2+game-wide)، queue/keywords، صبغات 494/514، أخذ عينات (Clamp 616، mipbias 0، aniso16=54)، bindings 4,583+417 خارجي، scalars 33,899/486+m_Ints=∅.

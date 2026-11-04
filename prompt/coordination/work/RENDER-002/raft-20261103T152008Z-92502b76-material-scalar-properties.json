@@ -3,10 +3,12 @@
   "owner": "raft-20261103T152008Z-92502b76",
   "client_label": "W2",
   "task": "RENDER-002 original material scalar-property recovery support",
-  "status": "in_progress",
-  "updated_at": "2026-11-04T14:30:00.000Z",
+  "status": "completed",
+  "updated_at": "2026-11-04T15:30:00.000Z",
   "base_sha": "32f6dbe",
-  "experiment_ids": ["material-scalar-properties"],
+  "experiment_ids": [
+    "material-scalar-properties"
+  ],
   "deliverables": [
     "scripts/probe_w2_material_scalar_properties.py",
     "tests/test_w2_material_scalar_properties.py (9/9 pass)",
@@ -15,5 +17,7 @@
   ],
   "result": "33,899 float entries / 486 names; m_Ints absent game-wide; render-mode quad on 1,438 materials; _Cutoff 1,457 - scalar coverage invariants for material-document exports. CI pending.",
   "full_base_sha": "32f6dbe",
-  "next_step": "push, verify green CI, update STATUS + coordination messages"
+  "next_step": "push, verify green CI, update STATUS + coordination messages",
+  "ci_url": "https://github.com/alwansan/raf/actions/runs/41824352163",
+  "ci_conclusion": "success"
 }
