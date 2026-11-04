@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "owner": "B05",
+  "session_id": "20261104T2242Z-B05-auth-texenv6",
+  "issue_id": "RENDER-002",
+  "hypothesis": "Authentic original sharedassets6 Material TexEnv entry types/UV transforms are parseable by B05 source verifier; no guessing absent genuine fields.",
+  "source_commit": null,
+  "input_hashes": [
+    "zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "Raft_Data/sharedassets6.assets size 6607272 SHA256 0476792cfeffac19d16e920011ed8d2fb2da62973c2f09a8689bc59e1ac4b632"
+  ],
+  "tool_versions": {
+    "UnityPy": "1.25.4 pinned candidate",
+    "Python": "3.11"
+  },
+  "commands": [],
+  "negative_controls": [
+    "missing SHA verified owner rejected",
+    "synthetic invalid pointer rejected by production B05 parser",
+    "partial/nonfinite UV rejected",
+    "redacted report excludes original material names/ids/UV float values"
+  ],
+  "workflow_path": ".github/workflows/raft-b05-original-texenv-shapes.yml",
+  "run_url": null,
+  "artifact_urls": [],
+  "budget": "Single original <=7 MB plus pinned manifest via non-LFS GitHub Actions ubuntu-24.04, timeout 12 min, no Unity/game package",
+  "status": "planned",
+  "observed_result": null,
+  "rejected_hypotheses": [],
+  "limitations": [
+    "This confirms original parser shape only, not same-instance export equivalence or device colors"
+  ],
+  "integration_commit": null,
+  "next_step": "Execute small actual ZIP2 input probe and record exact CI."
+}
