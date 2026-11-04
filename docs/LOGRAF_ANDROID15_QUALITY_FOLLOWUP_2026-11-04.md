@@ -19,3 +19,11 @@ When SurfaceFlinger provides fewer than two present timestamps, `presented_fps_e
 - Verify exact applicationId `com.alwansan.lograf`, unchanged repository test keystore `signing/lograf-public-test.p12`, automatic Actions versionCode bump, signed APK upload and release; distinguish successful CI from actual Poco F5 Pro runtime evidence.
 
 **Remaining intrinsic limitations:** no external Android logger can observe private Unity FrameTimingManager, internal water/FFT shader object IDs or FMOD bank path resolution if the game emits no accessible Logcat markers. The game branch's original ZIP2 source restoration (FFT/water/materials/FM​​OD/OBB) and latest experimental APK+split OBB are separate work streams. Any new runtime test must report source/version and exact symptom, not imply game remediation from logger changes.
+
+## Verified CI outcome — 4 November 2026
+
+- Source commit: [`65602cf57e154de3b0eeb860d40c1dc0c671e3a3`](https://github.com/alwansan/raf/commit/65602cf57e154de3b0eeb860d40c1dc0c671e3a3).
+- [GitHub Actions run `41890403277`](https://github.com/alwansan/raf/actions/runs/41890403277): **COMPLETED SUCCESS**, including original structural checks, actual JVM diagnostic regression with a synthetic 17,178-FFT-error replay, Android release Gradle build in 37 seconds, persistent test-keystore signature verification and release upload.
+- Published signed artifact: [`lograf-84/LogRaft-signed.apk`](https://github.com/alwansan/raf/releases/download/lograf-84/LogRaft-signed.apk), 159,692 bytes. Version `0.6.84`, versionCode `1084`, applicationId `com.alwansan.lograf`. SHA-256 sidecar accompanies the APK.
+- Certificate SHA-256 is `bdb27cfad1fd9a6ac14bd47317206ce4df462040f45ddb1fdbb66a0974043149` (same pinned public test signing certificate). This is not the APK file's content hash.
+- **Device status:** No 0.6.84 phone test exists yet. This is software test/build evidence, not a claim that Raft's shaders, water, OBB or input are fixed. 0.6.82 metrics and logs were the diagnostic input.
