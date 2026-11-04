@@ -142,7 +142,9 @@
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B13_OFFLINE_SOURCE_TRANSACTION_2026-11-04.md",
         "https://github.com/alwansan/raf/commit/2f50776dfe51a5d856f3d0484a8b788ee09c04bd",
         "https://github.com/alwansan/raf/actions/runs/41920661518",
-        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B22_LOCAL_RUNTIME_STAGING_INTEGRITY_2026-11-04.md"
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B22_LOCAL_RUNTIME_STAGING_INTEGRITY_2026-11-04.md",
+        "https://github.com/alwansan/raf/actions/runs/41928767833",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B37_ORIGINAL_RGD_INHERITED_FIELD_2026-11-04.md"
       ],
       "remaining": [
         "Original Cheat.AllowCheatsForLocalPlayer SteamUser.GetSteamID direct object call now source-guarded in B50 2bb6c2; no native/phone verification. Do not infer all Steam callbacks are removed.",
@@ -153,15 +155,16 @@
         "B14 source staging safety: project/backup and ancestor symlinks now fail closed in SaveAndLoad and offline startup adapters; CI41918579185 32/32 synthetic passes. Actual SteamStats recovery and native .rgd create/save/reload not proven.",
         "B19 original SaveAndLoad path-adapter backup transaction source-fixed CI41918301442; not APK/device/.rgd evidence and not repair of Steam StoreStats exception.",
         "B13: Android offline source adapter backup/rollback SOURCE_FIXED with 16/16 synthetic CI twice, but true Unity/IL2CPP/phone local world create-save-reload unverified. A concurrent-tree loss was recovered at 0d31686f; recheck live files after later merges.",
-        "B22 operation instrumentation source/backup symlink and transactional rollback guard integrated and CI41920661518 SUCCESS synthetic; still no actual Unity/native stage or phone new world .rgd roundtrip; Steam stats B50 source fix not yet device confirmed."
+        "B22 operation instrumentation source/backup symlink and transactional rollback guard integrated and CI41920661518 SUCCESS synthetic; still no actual Unity/native stage or phone new world .rgd roundtrip; Steam stats B50 source fix not yet device confirmed.",
+        "B37 authentic original ZIP2 shipped Data.rgd metadata CI41928767833 PASS: exact source SHA, original NRBF root has one member/one eligible field but 0 matching names; no inherited fields after complete base chain; stored assembly simple name matches original Assembly-CSharp but version differs. This is real source compatibility evidence, not proof the APK world save is corrupt or that Android load/save failed. No original save schema edits, no Unity/device roundtrip; LOCAL-005 stays OPEN."
       ],
       "acceptance": [
         "دخول عالم جديد محلي قابل للعب بلا Steam أو سيرفر خارجي",
         "حفظ .rgd ثم إعادة تحميله فعلياً",
         "لا يكفي إخفاء رسالة الاتصال"
       ],
-      "updated_by": "B22",
-      "updated_at": "2026-11-04T22:09:00Z",
+      "updated_by": "B37",
+      "updated_at": "2026-11-04T22:54:00Z",
       "_record_path": "issues/LOCAL-005.json"
     },
     {
@@ -242,7 +245,13 @@
         "https://github.com/alwansan/raf/actions/runs/41922372594",
         "https://github.com/alwansan/raf/actions/runs/41927008905",
         "https://github.com/alwansan/raf/actions/runs/41927712988",
-        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B02_TEXTURE_EXPORT_LINEAGE_HOOK_2026-11-04.md"
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B02_TEXTURE_EXPORT_LINEAGE_HOOK_2026-11-04.md",
+        "https://github.com/alwansan/raf/actions/runs/41928677980",
+        "https://github.com/alwansan/raf/commit/9ba6990cbd30fe5f6fdc97c000b7cd24a57333e6",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B14_SCENE_BOUNDARY_RENDER_TELEMETRY_CI_2026-11-04.md",
+        "https://github.com/alwansan/raf/commit/72839f79701b617cea37832bfb924c2d865521a9",
+        "https://github.com/alwansan/raf/commit/7363a3b444347ea14c1bf3a08c13c5cd764a2095",
+        "https://github.com/alwansan/raf/commit/87e6045d6198ce05b9e644414b2bd122ded6dab7"
       ],
       "remaining": [
         "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -267,15 +276,17 @@
         "B21: authentic original ZIP2 level0..level5 SHA/size-pinned LightmapSettings scan CI41921259677 PASS (16 synthetic, 6 real originals): 0 baked lightmaps and 1497 unassigned renderer indices (0 out-of-range) in these six only; reject lost baked lightmap as white-surface explanation for this subset. Other 34 scenes, same-export dynamic lighting, shader/texture/phone remain UNKNOWN; no game patch.",
         "B15: read-only source-pinned Texture2D sampler -> exact same-export TextureImporter GUID/parity checker and in-memory exporter trace bridge are code-integrated, 16/16 synthetic CI PASS (41921429305); zero actual Raft textures compared until independently authenticated same-export trace+original bytes/project; no source asset edits, no Unity/pixel/device evidence.",
         "B21 follow-on CI41922372594 source-authentic original Light components: level0 and level1 each have one enabled local-owner-valid Light with finite colored RGB and positive intensity/range; level2..5 none. 16+18 tests PASS, 6 original SHA reverified. Same-instance Unity export light identity/values and Adreno pixels not compared, RENDER-002 OPEN; do not infer lighting was restored.",
-        "B02 real texture lineage gap partly closed in source: pinned optional class28 exporter hook compiled with original W1 class21/48 preserved; importer reads nested mipmaps.sRGBTexture and derives true typed colorspace from SHA source. Still requires one actual same-instance original/export trace and Unity/device pixel evidence; no Raft asset was changed."
+        "B02 real texture lineage gap partly closed in source: pinned optional class28 exporter hook compiled with original W1 class21/48 preserved; importer reads nested mipmaps.sRGBTexture and derives true typed colorspace from SHA source. Still requires one actual same-instance original/export trace and Unity/device pixel evidence; no Raft asset was changed.",
+        "B14 repaired stale test contract for B12 instance SceneLoaded and bounded renderer/material/mesh snapshot; offline platform CI41928677980 SUCCESS. This is source diagnostic CI parity, not actual original colors/pixel proof.",
+        "B11 resumed: UTF-8 byte-offset and ancestor symlink/traversal failure modes SOURCE_FIXED; 16 local synthetic tests with exact source Git blob pass (B04 stub, no original-source verification). Current remote CI/actual same-instance export/device colors still unknown. No claim of a white-material fix."
       ],
       "acceptance": [
         "مطابقة روابط ومراجع الأصل",
         "مقارنةصوريةلنفسالمشهد",
         "نجاحعلىالهاتف"
       ],
-      "updated_by": "B02",
-      "updated_at": "2026-11-04T22:48:00Z",
+      "updated_by": "B11",
+      "updated_at": "2026-11-04T22:52:00Z",
       "_record_path": "issues/RENDER-002.json"
     },
     {
@@ -362,7 +373,9 @@
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B25_ORIGINAL_FOAM_CB_NAMEBRIDGE_2026-11-04.md",
         "https://github.com/alwansan/raf/actions/runs/41914575997",
         "https://github.com/alwansan/raf/actions/runs/41928357485",
-        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B06_FFT_DEVICE_WORKGROUP_LIMITS_2026-11-04.md"
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B06_FFT_DEVICE_WORKGROUP_LIMITS_2026-11-04.md",
+        "https://github.com/alwansan/raf/actions/runs/41928583281",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B08_FFT_DESCRIPTOR_ABI_2026-11-04.md"
       ],
       "remaining": [
         "Spectrum/Foam/Blur passes ناقصة في APK86",
@@ -389,15 +402,16 @@
         "B20 original-derived Blur transient export rollback now atomic with retained verified external backup; source CI41927169542 PASS on injected failures. Actual original candidate in Unity/Adreno pixels and game water still NOT tested, WATER-001 OPEN.",
         "B25 authentic original Foam CB name/slot bridge: CI41928183838 26/26 synthetic + pinned ZIP2 SHA PASS, 8 original CB name SHA/index/register associations across two passes/four stages, same 3 CB identities across passes; CB0 has 4 references requiring verified HLSL alias (original compiled name not literal identifier). Original source names NOT disclosed. Future CB alias/descriptor and actual shader, textures, materials/GUID, Unity/Adreno unverified; WATER-001 OPEN.",
         "B06 corrected Unity 2021 local invocation max vs X/Y/Z dispatch-group maximum semantics; source-authenticated 64..1024 local-group theoretical cap is now logged at startup; synthetic C# CI41928357485 SUCCESS, Android device and real kernel mapping still UNVERIFIED.",
-        "B06 earlier original FFT resource Dispatch scanner lexical fix independently passed SHA-authenticated original managed CSharp + ComputeShader CI41914575997, 20 original compiled slots/caller resource names matched; Unity runtime FindKernel identity still OPEN."
+        "B06 earlier original FFT resource Dispatch scanner lexical fix independently passed SHA-authenticated original managed CSharp + ComputeShader CI41914575997, 20 original compiled slots/caller resource names matched; Unity runtime FindKernel identity still OPEN.",
+        "B08 source-authenticated 20/20 original FFT DXBC→SPIR-V programs have identical numeric image descriptor ABI (read candidates set0/bindings0&1, storage set0/binding2, float32); 14 synthetic controls plus real ZIP2 source CI41928583281 SUCCESS. Exact original t0 versus t1 input-image binding and Unity runtime kernel/variant selector remain UNPROVEN, so no .compute/native/device restoration or closure."
       ],
       "acceptance": [
         "هوية برامج ونوى أصلية أو تطابق موثق دونdummy",
         "تثبيت فيالتصدير+Unity import/render",
         "اختبار هاتف يثبت الماء بلا pass/kernel errors"
       ],
-      "updated_by": "B06",
-      "updated_at": "2026-11-04T22:50:19.370Z",
+      "updated_by": "B08",
+      "updated_at": "2026-11-04T22:52:27.651Z",
       "_record_path": "issues/WATER-001.json"
     }
   ],
@@ -434,6 +448,39 @@
       ],
       "updated_by": "B10",
       "_record_path": "resources/B10-generated-vendor-shader-metadata.json"
+    },
+    {
+      "id": "B10-volumetric-notice-transaction",
+      "title": "B10 — original vendor Volumetric Lighting notice and Shader rollback transaction",
+      "kind": "restoration-transaction",
+      "source": {
+        "provider": "pinned SlightlyMad/VolumetricLights official vendor",
+        "commit": "d20b6f9a47ae857e1d313b147db2df3ef44b9196",
+        "path": "config/volumetric-shader-sources.json",
+        "bytes": null,
+        "sha256": null
+      },
+      "stages": {
+        "acquisition": "UPSTREAM_GIT_BLOB_PIN_VERIFIED_CI",
+        "extraction": "THREE_VENDOR_PROGRAMS_VERIFIED_IN_EPHEMERAL_CI",
+        "reconstruction": "SOURCE_TRANSACTION_PATCH_TESTED",
+        "binding": "SYNTHETIC_EXPORT_BYTES_AND_META_PRESERVED",
+        "integration": "PRODUCTION_SHARED_RESTORE_AND_VOLUMETRIC_WRAPPER_WITH_CI",
+        "device": "NOT_TESTED"
+      },
+      "evidence": [
+        "https://github.com/alwansan/raf/commit/2a38dfb2d6ffe3af50f5f3a04bd2fc3ca3524bda",
+        "https://github.com/alwansan/raf/commit/c3e91f67624d89f501d41b354db195318f17d7c0",
+        "https://github.com/alwansan/raf/commit/b6efa50948cb388d1a006d482676d6f693bb51d6",
+        "https://github.com/alwansan/raf/actions/runs/41928744660",
+        "https://github.com/alwansan/raf/actions/runs/41928592399"
+      ],
+      "remaining": [
+        "No native Unity imported or Android GPU rendering evidence for volumetric Shader programs",
+        "Original Raft game resources/materials and pixel fidelity not validated; source transaction not gameplay restoration"
+      ],
+      "updated_by": "B10",
+      "_record_path": "resources/B10-volumetric-notice-transaction.json"
     },
     {
       "id": "B21-original-scene-lighting-baseline",
@@ -745,6 +792,37 @@
         "unity_or_android_gpu_verified": false
       },
       "_record_path": "resources/fft-original-shex-resource-roles-b18.json"
+    },
+    {
+      "id": "fft-original-spirv-descriptor-abi-b08",
+      "title": "Original FFT 20-program uniform translated sampled/storage DescriptorSet/Binding interface",
+      "kind": "authenticated-compiled-compute-numeric-interface",
+      "source": {
+        "provider": "read-only ZIP2 original",
+        "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+        "path": "Raft/Raft_Data/sharedassets0.assets",
+        "bytes": 115978112,
+        "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3"
+      },
+      "stages": {
+        "acquisition": "VERIFIED",
+        "extraction": "VERIFIED",
+        "reconstruction": "COMPILED_PROGRAM_SPIRV_TRANSLATION_VERIFIED_NOT_AUTHORED_SOURCE",
+        "binding": "NUMERIC_DESCRIPTOR_ABI_VERIFIED_REGISTER_ROLE_IDENTITY_UNKNOWN",
+        "integration": "UNKNOWN",
+        "device": "UNKNOWN"
+      },
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41928583281",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B08_FFT_DESCRIPTOR_ABI_2026-11-04.md"
+      ],
+      "remaining": [
+        "Read t0 versus t1 source input semantics not matched to target sampled bindings0/1",
+        "Original Unity runtime kernel-index/compiled variant correspondence missing",
+        "Actual .compute/ShaderLab import and Adreno/phone water remain untested"
+      ],
+      "updated_by": "B08",
+      "_record_path": "resources/fft-original-spirv-descriptor-abi-b08.json"
     }
   ],
   "events": [
@@ -1015,6 +1093,22 @@
       "_record_path": "events/B04/20261104T2243Z-quality-snapshot-start.json"
     },
     {
+      "id": "20261104T2251Z-B04-quality-snapshot-source-integrated",
+      "owner": "B04",
+      "session_id": "20261104T2243Z-B04-6b7c",
+      "issue_id": "RENDER-002",
+      "type": "integration",
+      "summary": "Read-only active Android QualitySettings tier/texture/light/shadow snapshot integrated with B12 bounded scene shader evidence; B04 CI 9/9 and actual original-managed CSharp CI success; device unknown.",
+      "evidence": [
+        "https://github.com/alwansan/raf/commit/bc63f59de0875bee6fdff71f21f5a9dd991f5045",
+        "https://github.com/alwansan/raf/actions/runs/41928607504",
+        "https://github.com/alwansan/raf/actions/runs/41928576383",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B04_ORIGINAL_QUALITY_RUNTIME_EVIDENCE_2026-11-04.md"
+      ],
+      "at": "2026-11-04T22:51:00Z",
+      "_record_path": "events/B04/20261104T2251Z-quality-snapshot-result.json"
+    },
+    {
       "id": "20261104T2115Z-B05-material-texenv-result",
       "owner": "B05",
       "session_id": "20261104T2107Z-B05-9e24",
@@ -1217,6 +1311,20 @@
       "_record_path": "events/B08/20261104T2246Z-descriptor-start.json"
     },
     {
+      "id": "B08-20261104T2250Z-descriptor-result",
+      "owner": "B08",
+      "session_id": "20261104T2246Z-B08-7d2a",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "summary": "Authenticated exact ZIP2 original FFT 20 compiled DXBC slots translate with uniform SPIR-V float32 Texture2D ABI: sampled (set0,binding0/1), storage (set0,binding2); numeric interface SHA5bea50a9..., CI41928583281 success 14 synthetic controls plus source-authentic 20/20. t0/t1 identity, Unity FindKernel IDs and Android pixels unproven; WATER-001 OPEN.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41928583281",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B08_FFT_DESCRIPTOR_ABI_2026-11-04.md"
+      ],
+      "at": "2026-11-04T22:50:00Z",
+      "_record_path": "events/B08/20261104T2250Z-descriptor-result.json"
+    },
+    {
       "id": "B09-spectrum-start-20261104T213740Z",
       "owner": "B09",
       "session_id": "20261104T213740719Z-B09-28fc",
@@ -1305,6 +1413,22 @@
       "_record_path": "events/B10/20261104T2242Z-volumetric-start.json"
     },
     {
+      "id": "20261104T2251Z-volumetric-source-fixed",
+      "owner": "B10",
+      "session_id": "20261104T2242Z-B10-vlm1",
+      "issue_id": "RENDER-002",
+      "type": "integration",
+      "summary": "Volumetric Lighting BSD NOTICE is now part of the same safely validated and rollback-tested shader restoration transaction. B10 source-only 27 distinct tests PASS 41928744660, authentic pinned vendor 3-shader/notice CI41928592399 PASS. Earlier notice conflict-precedence failure corrected. Does not prove actual Unity/pixels.",
+      "evidence": [
+        "https://github.com/alwansan/raf/commit/2a38dfb2d6ffe3af50f5f3a04bd2fc3ca3524bda",
+        "https://github.com/alwansan/raf/commit/b6efa50948cb388d1a006d482676d6f693bb51d6",
+        "https://github.com/alwansan/raf/actions/runs/41928744660",
+        "https://github.com/alwansan/raf/actions/runs/41928592399"
+      ],
+      "at": "2026-11-04T22:52:17.416Z",
+      "_record_path": "events/B10/20261104T2251Z-volumetric-source-fixed.json"
+    },
+    {
       "id": "20261104T2115Z-gamut-start",
       "owner": "B11",
       "session_id": "20261104T2115Z-B11-bca7",
@@ -1356,6 +1480,21 @@
       ],
       "at": "2026-11-04T22:50:00Z",
       "_record_path": "events/B11/20261104T2250Z-gamut-ancestor-discovery.json"
+    },
+    {
+      "id": "20261104T2252Z-gamut-integrity-result",
+      "owner": "B11",
+      "session_id": "20261104T2244Z-B11-54cf",
+      "issue_id": "RENDER-002",
+      "type": "result",
+      "summary": "Two B11 source-integrity regressions fixed: Unicode code-point/UTF-8 byte mismatch in gamut edit whitelist, plus ancestor symlink/traversal exported ProjectSettings write. Local production-source-blob identical Python with B04 stub passed 16/16 synthetic cases; real export/CI/device unverified.",
+      "evidence": [
+        "https://github.com/alwansan/raf/commit/72839f79701b617cea37832bfb924c2d865521a9",
+        "https://github.com/alwansan/raf/commit/7363a3b444347ea14c1bf3a08c13c5cd764a2095",
+        "https://github.com/alwansan/raf/commit/87e6045d6198ce05b9e644414b2bd122ded6dab7"
+      ],
+      "at": "2026-11-04T22:52:00Z",
+      "_record_path": "events/B11/20261104T2252Z-gamut-integrity-result.json"
     },
     {
       "id": "B12-20261104T2132Z-B12-c4a8-start",
@@ -1572,6 +1711,20 @@
       ],
       "at": "2026-11-04T22:48:14.763Z",
       "_record_path": "events/B14/20261104T2247Z-resume.json"
+    },
+    {
+      "id": "B14-20261104T2251Z-scene-ci-result",
+      "owner": "B14",
+      "session_id": "20261104T2247Z-B14-d1a9",
+      "issue_id": "RENDER-002",
+      "type": "result",
+      "summary": "Fixed stale Android diagnostic source-policy test for instance SceneLoaded + delayed bounded shader/material/mesh snapshot; corrected first overbroad assertion; CI41928677980 SUCCESS. No game/runtime shader/device proof.",
+      "evidence": [
+        "https://github.com/alwansan/raf/commit/9ba6990cbd30fe5f6fdc97c000b7cd24a57333e6",
+        "https://github.com/alwansan/raf/actions/runs/41928677980"
+      ],
+      "at": "2026-11-04T22:51:57.271Z",
+      "_record_path": "events/B14/20261104T2251Z-scene-ci-result.json"
     },
     {
       "id": "20261104T215400Z-sampler-start",
@@ -2522,5 +2675,5 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "input_sha256": "0faf0aa435e26f39751a292c8f3d044e9f8c8ff6370068209a72f7354fe2750d"
+  "input_sha256": "38907da947a2f99e7cd39374160afa283fb7712b151809057abf99fc88923945"
 }
