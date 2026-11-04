@@ -1,0 +1,13 @@
+{
+  "id": "20261104T2129Z-world-callback-managed-executed",
+  "owner": "B07",
+  "session_id": "20261104T2112Z-B07-6e51",
+  "issue_id": "LOCAL-005",
+  "type": "result",
+  "summary": "B07 production Android callback tracing compiler-executed through synthetic .NET10 C# project under UNITY_ANDROID: 3 SaveGame branches, 3 begin/end events, 1 thrown/rethrown exception and finally failure marker. CI41916347469 SUCCESS; exact original source probe still passes privately. NOT Unity/device/.rgd proof, LOCAL-005 OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41916347469",
+    "https://github.com/alwansan/raf/commit/9f71f1722f11bd136e0deeac0ba7cefa3d72dc71"
+  ],
+  "at": "2026-11-04T21:29:00Z"
+}
