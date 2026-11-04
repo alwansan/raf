@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "owner": "B20",
+  "session_id": "20261104T2230Z-B20-6c9a",
+  "issue_id": "WATER-001",
+  "hypothesis": "Source-only Pass scanner accepts false-positive tokens outside true ShaderLab SubShader contexts.",
+  "source_commit": "5fc5c4838247c33669bba8b67e988893f22cd28e",
+  "input_hashes": [],
+  "tool_versions": {
+    "python": "3 (planned, ubuntu-24.04 runner)"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_b20_shaderlab_scope.py -v"
+  ],
+  "negative_controls": [
+    "Pass in Properties",
+    "Pass in top-level Shader body",
+    "Pass in CGINCLUDE",
+    "orphan Pass outside Shader",
+    "unbalanced scope"
+  ],
+  "workflow_path": ".github/workflows/raft-b20-shaderlab-scope.yml",
+  "run_url": null,
+  "artifact_urls": [],
+  "budget": "Ubuntu standard runner; 5-min timeout; no Unity, LFS, private assets or device.",
+  "status": "planned",
+  "observed_result": null,
+  "rejected_hypotheses": [],
+  "limitations": [
+    "Structural source-only gate cannot authenticate serialized shaders or GPU program pixels."
+  ],
+  "integration_commit": null,
+  "next_step": "Implement source scope and deterministic negative tests."
+}
