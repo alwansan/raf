@@ -81,3 +81,74 @@ class VertexRestorationTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'non-finite'):
                 repair(root / 'target', root / 'provider', {'A'}, root / 'snapshot')
             self.assertEqual(original.read_bytes(), before)
+
+    def test_refuse_symlinked_target_mesh_and_meta_before_snapshot(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            target, provider = root / 'target', root / 'provider'
+            original = mesh(target, 'A', 'a' * 32)
+            external = root / 'external.asset'
+            external.write_bytes(original.read_bytes())
+            original.unlink()
+            original.symlink_to(external)
+            with self.assertRaisesRegex(ValueError, 'Unsafe Mesh YAML asset link'):
+                repair(target, provider, {'A'}, root / 'snapshot')
+            self.assertEqual(external.read_bytes(), original.read_bytes())
+            self.assertFalse((root / 'snapshot').exists())
+            original.unlink()
+            original.write_bytes(external.read_bytes())
+            meta = original.with_suffix('.asset.meta')
+            external_meta = root / 'external.meta'
+            external_meta.write_bytes(meta.read_bytes())
+            meta.unlink()
+            meta.symlink_to(external_meta)
+            with self.assertRaisesRegex(ValueError, 'unsafe Mesh .meta link'):
+                repair(target, provider, {'A'}, root / 'snapshot')
+            self.assertEqual(external_meta.read_bytes(), meta.read_bytes())
+            self.assertFalse((root / 'snapshot').exists())
+
+    def test_refuse_symlinked_provider_and_unowned_hardlink(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            target, provider = root / 'target', root / 'provider'
+            mesh(target, 'A', 'a' * 32)
+            original = mesh(provider, 'A', 'b' * 32, struct.pack('<9f', *([0.] * 9)))
+            original_meta = original.with_suffix('.asset.meta')
+            outside = root / 'original-other-copy'
+            outside.write_bytes(original.read_bytes())
+            original.unlink()
+            original.symlink_to(outside)
+            with self.assertRaisesRegex(ValueError, 'Unsafe Mesh YAML asset link'):
+                repair(target, provider, {'A'}, root / 'snapshot')
+            original.unlink()
+            original.hardlink_to(outside)
+            with self.assertRaisesRegex(ValueError, 'Unsafe Mesh YAML asset link'):
+                repair(target, provider, {'A'}, root / 'snapshot')
+            original.unlink()
+            original.write_bytes(outside.read_bytes())
+            external_meta = root / 'meta-other-copy'
+            external_meta.write_bytes(original_meta.read_bytes())
+            original_meta.unlink()
+            original_meta.hardlink_to(external_meta)
+            with self.assertRaisesRegex(ValueError, 'unsafe Mesh .meta link'):
+                repair(target, provider, {'A'}, root / 'snapshot')
+            self.assertFalse((root / 'snapshot').exists())
+
+    def test_refuse_symlinked_mesh_directory_and_dangling_snapshot(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            target, provider = root / 'target', root / 'provider'
+            original = mesh(target, 'A', 'a' * 32)
+            mesh(provider, 'A', 'b' * 32, struct.pack('<9f', *([0.] * 9)))
+            directory = original.parent
+            external = root / 'foreign-mesh-directory'
+            directory.rename(external)
+            directory.symlink_to(external, target_is_directory=True)
+            with self.assertRaisesRegex(ValueError, 'Unsafe Mesh directory symlink'):
+                repair(target, provider, {'A'}, root / 'snapshot')
+            directory.unlink()
+            external.rename(directory)
+            snapshot = root / 'snapshot'
+            snapshot.symlink_to(root / 'missing-snapshot', target_is_directory=True)
+            with self.assertRaisesRegex(ValueError, 'Snapshot destination'):
+                repair(target, provider, {'A'}, snapshot)
