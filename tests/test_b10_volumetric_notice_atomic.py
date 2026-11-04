@@ -7,7 +7,7 @@ from scripts.restore_tmp_shaders import restore
 from scripts.restore_volumetric_shaders import (
     COMMIT, EXPECTED, NOTICE, ROOT, restore_project, sources,
 )
-from tests.test_restore_volumetric_shaders import VolumetricTests
+from tests import test_restore_volumetric_shaders as fixture_module
 
 
 class B10VolumetricNoticeAtomicTests(unittest.TestCase):
@@ -17,7 +17,7 @@ class B10VolumetricNoticeAtomicTests(unittest.TestCase):
         self.root = Path(temp.name)
         self.project = self.root / "project"
         self.backup = self.root / "external-backup"
-        manifest, blobs = VolumetricTests().fixture()
+        manifest, blobs = fixture_module.VolumetricTests().fixture()
         self.shaders, self.license = sources(manifest, blobs.__getitem__)
         self.notice = self.project / NOTICE
         self.originals = {}
