@@ -1,0 +1,88 @@
+name: Raft W5 original Blur named-uniform raster recovery (CPU Vulkan only)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-w5-blur-recovery.yml'
+      - 'scripts/w5_blur_*.py'
+      - 'tests/test_w5_blur_*.py'
+permissions:
+  contents: read
+concurrency:
+  group: raft-w5-blur-recovery-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  recover:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Test reconstruction and corruption controls before original access
+        run: |
+          python3 -m unittest discover -s tests -p 'test_w5_blur_*.py' -v
+          python3 -m unittest discover -s tests -p 'test_blur_private_binding_plan.py' -v
+      - name: Restore original verified cache (read-only cache consumer)
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ runner.temp }}/w1-original
+          key: w1-zip2-15964ea8-shader-and-engine-owners-v1
+          restore-keys: |
+            w1-zip2-15964ea8-full-shader-owners-v1
+      - name: Plan only missing providers and check disk budget
+        id: needed
+        run: |
+          python3 - <<'PY'
+          import os, shutil
+          from pathlib import Path
+          from scripts.w1_full_engine_sources import acquisition_plan
+          assert shutil.disk_usage('.').free > 3*1024**3
+          paths, missing = acquisition_plan(Path(os.environ['RUNNER_TEMP'])/'w1-original')
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as out:
+              out.write('paths<<W5_SOURCE_PATHS\n'+'\n'.join(paths)+'\nW5_SOURCE_PATHS\n')
+          print('RAFT_W5_ORIGINAL_ACQUISITION missing='+str(missing))
+          PY
+      - uses: actions/checkout@v4
+        with:
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-original
+          filter: blob:none
+          lfs: false
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: ${{ steps.needed.outputs.paths }}
+      - name: Authenticate source providers without LFS
+        run: python3 -m scripts.w1_full_engine_sources --zip2-checkout zip2-original --destination "$RUNNER_TEMP/w1-original"
+      - name: Install bounded public tools
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools libvulkan-dev mesa-vulkan-drivers vulkan-validationlayers g++
+          dpkg-query -W vkd3d-compiler spirv-tools spirv-cross glslang-tools mesa-vulkan-drivers vulkan-validationlayers
+      - name: Generate isolated W5 UBO host without modifying W1 source
+        run: |
+          python3 -m scripts.w5_blur_raster_host --template scripts/w1_depth_raster_vulkan.cpp --output "$RUNNER_TEMP/w5-raster.cpp"
+          g++ -O2 -std=c++17 "$RUNNER_TEMP/w5-raster.cpp" -lvulkan -o "$RUNNER_TEMP/w5-raster"
+      - name: Recover real original stages and compare raster with named uniform layouts
+        run: |
+          set -euo pipefail
+          export VK_DRIVER_FILES="$(find /usr/share/vulkan/icd.d -maxdepth 1 -name '*lvp*.json' -print -quit)"
+          test -n "$VK_DRIVER_FILES"
+          timeout 600s python3 -m scripts.w5_blur_recovery --source "$RUNNER_TEMP/w1-original/Raft_Data" --repo . --runner "$RUNNER_TEMP/w5-raster" --out "$RUNNER_TEMP/w5-blur-aggregate.json"
+      - name: Retain aggregate evidence only (never source, shaders, names or pixels)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w5-blur-recovery-aggregate-${{ github.sha }}
+          path: ${{ runner.temp }}/w5-blur-aggregate.json
+          if-no-files-found: ignore
+          retention-days: 7
