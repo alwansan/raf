@@ -1,0 +1,15 @@
+{
+  "id": "B12-20261104T2132Z-B12-c4a8-scene-shader-result",
+  "owner": "B12",
+  "session_id": "20261104T2132Z-B12-c4a8",
+  "issue_id": "RENDER-002",
+  "type": "integration",
+  "summary": "B12 integrated a bounded Android scene shader/material-status diagnostic (3s delayed, max512 active renderers; counts null, unsupported, zero-pass, error shader, color-space/lighting) without mutating Materials or touching audio, Settings, touch, .rgd, original assets. Source-policy CI41919089409 SUCCESS, original managed integration CI41918822038 SUCCESS. This observes future real device state only; source graphics restoration and phone white-material cause still OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/70edac4f5406efdb971e987c0e104682d8cefd42",
+    "https://github.com/alwansan/raf/commit/354a8d996e130a80ccdff999216e44af8e6e6b5a",
+    "https://github.com/alwansan/raf/actions/runs/41919089409",
+    "https://github.com/alwansan/raf/actions/runs/41918822038"
+  ],
+  "at": "2026-11-04T21:47:35.699Z"
+}
