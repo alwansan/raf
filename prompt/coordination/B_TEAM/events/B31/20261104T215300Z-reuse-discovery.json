@@ -1,0 +1,14 @@
+{
+  "id": "B31-20261104-reuse-hypothesis",
+  "owner": "B31",
+  "session_id": "20261104T213800Z-B31-5ea4",
+  "issue_id": "RENDER-002",
+  "type": "discovery",
+  "summary": "Current W1 ZIP2 cache reuse has zero independently established LFS saving: 11/14 shader owners are ordinary Git blobs; the 3 LFS-pointer owners are staged by native pipeline before hydration. Reject original redundant-download hypothesis for this layout.",
+  "evidence": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/w1_full_engine_sources.py",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/.github/workflows/raft-unity-editor-android-import.yml",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B31_ORIGINAL_GRAPHICS_REUSE_2026-11-04.md"
+  ],
+  "at": "2026-11-04T21:49:56.384Z"
+}
