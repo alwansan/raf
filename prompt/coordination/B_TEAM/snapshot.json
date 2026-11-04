@@ -1922,6 +1922,20 @@
       "_record_path": "events/B15/20261104T225300Z-sampler-defaults-result.json"
     },
     {
+      "id": "20261104T230000Z-original-sampler-start",
+      "owner": "B15",
+      "session_id": "20261104T224800Z-B15-defaults-32f1",
+      "issue_id": "RENDER-002",
+      "type": "start",
+      "summary": "B15 starts real original selected ZIP2 sharedassets6.assets (6,607,272B, SHA pinned) validation of B15 typed Texture2D source parser across 87 known original Texture2Ds, no same-export claim.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41929077930",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/W2_FULLGAME_TEXTURE_COLORS_2026-11-03.json"
+      ],
+      "at": "2026-11-04T22:58:05.263Z",
+      "_record_path": "events/B15/20261104T230000Z-original-sampler-start.json"
+    },
+    {
       "id": "B16-20261104T2151Z-kernel-conditional-start",
       "owner": "B16",
       "session_id": "20261104T2151Z-B16-6e2a",
@@ -2914,5 +2928,5 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "input_sha256": "6746d9564c512653cc6166de31931f0b553598ce0458ecccb945d81695878153"
+  "input_sha256": "25afbcd14aab45b9361c33679f52f91bc0c527ae725151c4ab67458d420b5c4c"
 }
