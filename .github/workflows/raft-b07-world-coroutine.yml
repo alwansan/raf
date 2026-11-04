@@ -64,8 +64,10 @@ jobs:
           traced = instrument_original_coroutine(source)
           if method_body(traced, 'WorldHasBeenLoaded')[1] != ENTRY + original:
               raise ValueError('B07 original coroutine mutation detected')
-          if adapt('Raft_Network', source).count(TRACE_OPERATION) != 1:
+          from scripts.adapt_android_offline_startup import fingerprint as adapted_fingerprint
+          changed = adapt('Raft_Network', source)
+          if changed.count(TRACE_OPERATION) != 1:
               raise ValueError('B07 offline staging lost coroutine trace')
-          print('B07_PRIVATE_ORIGINAL_COROUTINE sourcePin=' + digest + ' sourceEntryPreserved=true stagedTrace=true sourcePublished=false')
+          print('B07_PRIVATE_ORIGINAL_COROUTINE sourcePin=' + digest + ' adaptedSha=' + adapted_fingerprint(changed) + ' sourceEntryPreserved=true stagedTrace=true sourcePublished=false')
           PY
           # Private C# and ILSpy output never enter artifacts.
