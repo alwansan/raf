@@ -31,7 +31,7 @@ def mask_noncode(source):
     while i < len(source):
         start = i
         if source.startswith("//", i):
-            end = source.find("\\n", i)
+            end = source.find("\n", i)
             i = len(source) if end == -1 else end
         elif source.startswith("/*", i):
             end = source.find("*/", i + 2)
@@ -50,7 +50,7 @@ def mask_noncode(source):
                 elif source[i] == quote:
                     i += 1
                     break
-                elif not verbatim and source[i] == "\\\\":
+                elif not verbatim and source[i] == "\\":
                     i += 2
                 else:
                     i += 1
