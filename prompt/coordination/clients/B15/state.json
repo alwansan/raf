@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "username": "B15",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T215400Z-B15-7b2c",
+  "resumed_from_session": null,
+  "status": "active",
+  "base_sha": "16c966badad3b8e217e57f93936dedb453e79609",
+  "last_commit": null,
+  "updated_at": "2026-11-04T21:54:00Z",
+  "tracks": [
+    "RENDER-002:sampler-fidelity"
+  ],
+  "work_ids": [
+    "B15-20261104T215400Z-B15-7b2c-sampler-parity"
+  ],
+  "run_urls": [],
+  "next_step": "Verify exact Texture2D sampler settings against same-export TextureImporter metadata without guessing object links or editing assets; synthetic tests then source provenance.",
+  "memory_path": "prompt/coordination/clients/B15/MEMORY.md"
+}
