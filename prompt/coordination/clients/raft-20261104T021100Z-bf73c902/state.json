@@ -2,8 +2,8 @@
   "client_label": "BuildFix",
   "username": "raft-20261104T021100Z-bf73c902",
   "session_id": "buildfix-021100-bf73c902",
-  "state": "active",
-  "source_sha": "ef88609b2169441688554713d39e0767be128ca2",
-  "current_work": "Avoid reacquiring already authenticated graphics owners",
-  "heartbeat": "2026-11-04T02:11:00Z"
+  "state": "paused",
+  "source_sha": "3edd1e857ad43e033a0951f32c1509998461e10f",
+  "heartbeat": "2026-11-04T02:15:00Z",
+  "next": "Resolve export lineage; migrate remaining graphics acquisition to ZIP2"
 }

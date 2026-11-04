@@ -1,2 +1,4 @@
-# BuildFix
-Native41741108965 failed before Unity at builtin restoration. W1 source linkage is not export lineage. Do not repeat native until meaningful gate repair. Independent scope: graphics hydrator currently fetches ALL planned LFS objects, including ZIP2-staged authenticated owners. Preserve gates and other clients.
+
+
+## BuildFix authenticated graphics reuse — 4 November 2026
+BuildFix changed graphics acquisition to reuse regular files only after original size AND SHA256 match; missing/tampered files remain acquisition candidates, symlinks fail closed, and full final authentication remains mandatory. Two local regression tests passed (valid reuse, same-size tamper, missing/truncated and symlink rejection). No Unity/native request or new APK. Native41741108965 shader/export-lineage blocker remains OPEN; NOT_READY. Next integrate ZIP2 for remaining missing graphics owners and resolve original-to-export shader lineage with W1/We.

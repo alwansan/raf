@@ -29,14 +29,33 @@ def plan():
     if not rows or total > 10 * 1024**3: raise ValueError('Missing or over-budget original graphics payload plan')
     return rows
 
+def missing_payloads(rows):
+    """Reuse only regular working files matching BOTH original size and SHA."""
+    missing = []
+    for name, digest, size in rows:
+        path = Path(name)
+        if path.is_symlink():
+            raise ValueError('Unsafe original graphics payload symlink')
+        if not path.is_file() or path.stat().st_size != size:
+            missing.append((name, digest, size))
+            continue
+        with path.open('rb') as source:
+            actual = hashlib.file_digest(source, 'sha256').hexdigest()
+        if actual != digest:
+            missing.append((name, digest, size))
+    return missing
+
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--apply',action='store_true');p.add_argument('--release-cache',action='store_true');args=p.parse_args()
     rows=plan()
     print('RAFT_FULL_GRAPHICS_PLAN objects='+str(len(rows))+' original_bytes='+str(sum(r[2] for r in rows)))
     if not args.apply: return
-    subprocess.run(['git','lfs','install','--local'],check=True)
-    subprocess.run(['git','lfs','fetch','origin','HEAD','--include='+','.join(r[0] for r in rows),'--exclude='],check=True)
-    subprocess.run(['git','lfs','checkout']+[r[0] for r in rows],check=True)
+    missing = missing_payloads(rows)
+    print('RAFT_FULL_GRAPHICS_REUSED objects='+str(len(rows)-len(missing)))
+    if missing:
+        subprocess.run(['git','lfs','install','--local'],check=True)
+        subprocess.run(['git','lfs','fetch','origin','HEAD','--include='+','.join(r[0] for r in missing),'--exclude='],check=True)
+        subprocess.run(['git','lfs','checkout']+[r[0] for r in missing],check=True)
     for name,digest,size in rows:
         path=Path(name)
         if path.is_symlink() or path.stat().st_size != size: raise ValueError('Original graphics payload size mismatch')
