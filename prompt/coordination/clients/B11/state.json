@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "username": "B11",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2115Z-B11-bca7",
+  "resumed_from_session": null,
+  "status": "active",
+  "base_sha": "801ae95b08e2495d46e2a440a413af6bf8303d3a",
+  "last_commit": null,
+  "updated_at": "2026-11-04T21:15:00Z",
+  "tracks": [
+    "RENDER-002 original color-gamut parity"
+  ],
+  "work_ids": [
+    "B11-20261104T2115Z-B11-bca7-original-gamut-parity"
+  ],
+  "run_urls": [],
+  "next_step": "Inspect original authenticated PlayerSettings [0] and exported Unity YAML gamut serialization; build fail-closed gamut parity guard and synthetic tests without modifying B04 color-space or audio/Settings/touch. Coordinate integration after authentic observed format.",
+  "memory_path": "prompt/coordination/clients/B11/MEMORY.md"
+}
