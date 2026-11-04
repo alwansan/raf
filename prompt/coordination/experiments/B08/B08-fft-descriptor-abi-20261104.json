@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "owner": "B08",
+  "session_id": "20261104T2246Z-B08-7d2a",
+  "issue_id": "WATER-001",
+  "hypothesis": "The original 20 SHA-verified FFT DXBC compiled slots translate with one identical numeric DescriptorSet/Binding image ABI, independent of differing workgroup sizes. An identical layout is only a binding precondition and does not prove t0/t1 or Unity kernel-ID mapping.",
+  "source_commit": "2c9ffdd5bf27b8b67465431d23dc75e01a586f60",
+  "input_hashes": [
+    {
+      "provider": "read-only ZIP2",
+      "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+      "path": "Raft_Data/sharedassets0.assets",
+      "size_bytes": 115978112,
+      "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3"
+    },
+    {
+      "object": "ComputeShader pathID2456",
+      "sha256": "9d934f5c99183c6df5cf2f1fefc9d3e5ec4bce5da5f96a86e4c02910d5322247"
+    }
+  ],
+  "tool_versions": {
+    "vkd3d_compiler": "1.2-15build1",
+    "UnityPy": "1.25.4",
+    "runner": "ubuntu-24.04",
+    "python": "GitHub hosted Python 3"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_b08_fft_spirv_descriptor_abi.py -v",
+    "python3 -m scripts.stage_zip2_fft_owner --zip2-checkout $RUNNER_TEMP/b08/zip2 --destination $RUNNER_TEMP/b08/original/Raft_Data/sharedassets0.assets",
+    "python3 -m scripts.b08_fft_spirv_descriptor_abi --source $RUNNER_TEMP/b08/original/Raft_Data"
+  ],
+  "negative_controls": [
+    "changed input or storage descriptor set/binding in one source slot",
+    "input t1 source register missing",
+    "sampled/storage type switch",
+    "SPIR-V duplicate descriptor",
+    "single-slot scalar precision change",
+    "different compute workgroup",
+    "second compute entrypoint",
+    "20-slot coverage missing/extra",
+    "forged source t0/t1 mapping attestation",
+    "forged Unity runtime index identity",
+    "source image declaration order swap remains ambiguous"
+  ],
+  "workflow_path": ".github/workflows/raft-b08-fft-descriptor-abi.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41928583281",
+  "artifact_urls": [],
+  "budget": "20 minute Ubuntu 24.04 standard runner, ~116 MB SHA-pinned owner, vkd3d-compiler 1.2-15build1, no LFS/Unity/APK/raw asset artifact",
+  "status": "completed",
+  "observed_result": {
+    "synthetic_tests_passed": 14,
+    "authenticated_compiled_slots": 20,
+    "all_translated_descriptors_uniform": true,
+    "descriptor_abi_sha256": "5bea50a922c423edde59ea0346541a4ba2a4db437e3a764bdf26b756f5c47aca",
+    "sampled_image_descriptor_candidates": [
+      [
+        0,
+        0,
+        "float",
+        32,
+        0,
+        null
+      ],
+      [
+        0,
+        1,
+        "float",
+        32,
+        0,
+        null
+      ]
+    ],
+    "storage_image_descriptor": [
+      0,
+      2,
+      "float",
+      32,
+      0,
+      null
+    ],
+    "runtime_source_t0_t1_to_spv_binding_verified": false,
+    "unity_runtime_kernel_id_verified": false,
+    "unity_gpu_or_device_tested": false,
+    "conclusion": "success"
+  },
+  "rejected_hypotheses": [
+    "The two target sampled image numeric binding order alone proves original DXBC t0 and t1 semantic correspondence.",
+    "A stable source-to-SPIRV descriptor interface proves original Unity compiled slot runtime kernel ID or phone water rendering."
+  ],
+  "limitations": [
+    "Original t0/t1 per-input operand linkage unproven",
+    "Original one-name FFT 20 compiled variants not mapped to Unity runtime IDs",
+    "No original authored .compute installed, Unity compile, Android GPU or visual evidence"
+  ],
+  "integration_commit": "8948cace2d49d98dc208c0d3cd8d7749c412b83c",
+  "next_step": "Use independent original DXBC operand and SPIRV SSA image-use trace or controlled CPU Vulkan comparison to establish source t0 versus t1 identity without guessing; integrate only with proven shader runtime selection."
+}
