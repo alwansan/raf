@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "owner": "B43",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2104Z-B43-c8f2",
+  "issue_id": "RENDER-002",
+  "track": "colors-materials",
+  "approach": "Investigate and enforce original Material valid/invalid shader keyword state and variant semantics across export with source-authenticated identity; disjoint from B02 importer sRGB, B44 property color values, B46 texture GUID links.",
+  "status": "active",
+  "base_sha": "fdd447558e567ef23a183955403683264c120151",
+  "intended_files": [
+    "scripts/b43_material_keywords_guard.py",
+    "tests/test_b43_material_keywords_guard.py",
+    "docs/B43_MATERIAL_KEYWORD_EXPORT_2026-11-04.md",
+    "prompt/coordination/clients/B43/",
+    "prompt/coordination/experiments/B43/"
+  ],
+  "hypothesis": "Lost or malformed per-Material shader keywords can select incorrect shader variants and may contribute to white/pale visuals even when source texture bindings/values are intact.",
+  "related_work": [
+    "docs/W3_PER_MATERIAL_KEYWORD_USAGE_2026-11-03.md",
+    "B02 texture-import-fidelity",
+    "B44 material-values",
+    "B46 texture-export-links"
+  ],
+  "experiment_ids": [],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Inspect exporter and available provenance; define fail-closed identity-preserving original/export keyword comparator with negative controls, integrate only when evidence supports it.",
+  "updated_at": "2026-11-04T21:04:07.263Z"
+}
