@@ -4,13 +4,15 @@
   "session_id": "20261104T2230Z-B20-6c9a",
   "issue_id": "WATER-001",
   "hypothesis": "Source-only Pass scanner accepts false-positive tokens outside true ShaderLab SubShader contexts.",
-  "source_commit": "5fc5c4838247c33669bba8b67e988893f22cd28e",
+  "source_commit": "a21d66bc9122bba432c2c6d021e096b7f988abcc",
   "input_hashes": [],
   "tool_versions": {
     "python": "3 (planned, ubuntu-24.04 runner)"
   },
   "commands": [
-    "python3 -m unittest discover -s tests -p test_b20_shaderlab_scope.py -v"
+    "python3 -m unittest discover -s tests -p 'test_b20_shaderlab_scope.py' -v",
+    "python3 -m unittest discover -s tests -p 'test_b49_shaderlab_pass_contract.py' -v",
+    "python3 -m unittest discover -s tests -p 'test_verify_water_render_contract.py' -v"
   ],
   "negative_controls": [
     "Pass in Properties",
@@ -20,15 +22,17 @@
     "unbalanced scope"
   ],
   "workflow_path": ".github/workflows/raft-b20-shaderlab-scope.yml",
-  "run_url": null,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41926202371",
   "artifact_urls": [],
   "budget": "Ubuntu standard runner; 5-min timeout; no Unity, LFS, private assets or device.",
-  "status": "planned",
-  "observed_result": null,
-  "rejected_hypotheses": [],
+  "status": "completed",
+  "observed_result": "B20 scope+B49+water gate regression SUCCESS in source-only Actions 41926202371; B49 prior-source 41926043987 SUCCESS; no original game data, Unity or phone executed.",
+  "rejected_hypotheses": [
+    "Global unscoped Pass matching represents authored ShaderLab pass count; Properties/orphan/top-level tokens now yield zero extra authored Passes."
+  ],
   "limitations": [
     "Structural source-only gate cannot authenticate serialized shaders or GPU program pixels."
   ],
-  "integration_commit": null,
-  "next_step": "Implement source scope and deterministic negative tests."
+  "integration_commit": "a21d66bc9122bba432c2c6d021e096b7f988abcc",
+  "next_step": "Original verified water programs and kernel mapping in actual pipeline, then Unity/Adreno test."
 }
