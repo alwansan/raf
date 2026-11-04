@@ -37,7 +37,7 @@ This scope concerns only global project color-space parity.
   `unity-candidate` before Unity Editor import.
 
 ## Reproduction, proof and limits
-- 13 B04 local synthetic tests passed; exercised a one-byte edit,
+- 9/9 synthetic tests passed in isolated CI (no local run claimed); exercised a one-byte edit,
   idempotence, no-write preview, malformed/duplicate YAML, CRLF/UTF-8,
   symlink/hardlink and size/SHA/enum fail-closed controls.
 - Isolated actual-original-source CI
