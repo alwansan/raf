@@ -6,7 +6,7 @@
   "issue_id": "ASSET-RESTORE-001",
   "track": "resources",
   "approach": "Fail closed on symlinked original/exported mesh YAML or .meta before reading/copying/writing; keep verified source and GUID fidelity.",
-  "status": "active",
+  "status": "completed",
   "base_sha": null,
   "intended_files": [
     "scripts/repair_exported_mesh_vertices.py",
@@ -19,9 +19,13 @@
     "scripts/repair_exported_mesh_vertices.py",
     "docs/ZIP2_SOURCE_PROVIDER.md"
   ],
-  "experiment_ids": [],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Add pre-read symlink/metafiles guard and adversarial negative controls; bounded isolated CI, not full Unity build.",
-  "updated_at": "2026-11-04T21:14:58.288Z"
+  "experiment_ids": [
+    "20261104T2118Z-B04-7c20-mesh-source-links"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41914505411"
+  ],
+  "result": "Source path-fidelity guard added (f0afb598): rejects linked Mesh directory/asset/meta and dangling snapshot before original mesh YAML restoration; isolated CI41914505411 SUCCESS 6/6 tests incl original valid restoration, identity and non-finite controls. Not part of full native pipeline or on-device proof.",
+  "next_step": "Real original mesh bytes, providers, exported GUIDs and visible device geometry require independent tests; maintain ASSET-RESTORE-001 OPEN.",
+  "updated_at": "2026-11-04T21:18:26.107Z"
 }
