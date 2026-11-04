@@ -6,7 +6,7 @@
   "issue_id": "RENDER-002",
   "track": "colors-materials",
   "approach": "Read-only SHA-pinned original Texture2D sampler versus same-instance exported TextureImporter fidelity. No guessed GUIDs, changes to assets or sRGB policy.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "02035ed05d11e016ed8c7e91845e1ba9da37bee9",
   "intended_files": [
     "scripts/b15_texture_sampler_parity.py",
@@ -24,8 +24,22 @@
   "experiment_ids": [
     "B15-sampler-parity-20261104"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Source read-only verifier, synthetic and isolated CI controls; authenticated source + same-export trace required for real comparison.",
-  "updated_at": "2026-11-04T21:54:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41920884155",
+    "https://github.com/alwansan/raf/actions/runs/41921429305"
+  ],
+  "result": {
+    "source_fixed": true,
+    "scope": "read-only parity diagnostic, not game asset repair",
+    "source_commit": "4035b13251f3fffcb8c4f0257174528f58c298ce",
+    "synthetic_tests_passed": 16,
+    "real_raft_texture_comparisons": 0,
+    "actual_unity_import": false,
+    "gpu_or_device": false,
+    "trace_structural_bridge": true,
+    "independent_export_trace_provenance": false,
+    "evidence": "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B15_TEXTURE_SAMPLER_PARITY_2026-11-04.md"
+  },
+  "next_step": "Acquire independently validated same-generation Raft export trace and three SHA-verified ZIP2 source owners to run actual original/importer parity; do not infer white-material cause or write .meta.",
+  "updated_at": "2026-11-04T22:06:00Z"
 }
