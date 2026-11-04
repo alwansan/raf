@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "owner": "B50",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2039Z-B50-d7a3",
+  "issue_id": "LOCAL-005",
+  "track": "world-save",
+  "approach": "Audit & eliminate Windows SteamUserStats.StoreStats native DLL dependency from Android local SaveGame without altering original .rgd serialization, local-world state flags or Steam behavior on Windows.",
+  "status": "active",
+  "base_sha": "4086cd508c154ad081d2e3931e6775c622f37c3d",
+  "intended_files": [
+    "Raft/Assets/Scripts/**/SaveAndLoad.cs",
+    "Raft/Assets/Scripts/**/Steam*",
+    "tests/**",
+    "prompt/STATUS.md"
+  ],
+  "hypothesis": "SaveAndLoad.SaveGame has an unconditional Stats API path that raises DllNotFoundException steam_api64 on Android, aborting OnWorldRecieved after scene load; Android-local mode must bypass only stats integration, not the real saving operation.",
+  "related_work": [],
+  "experiment_ids": [],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Read exact source and existing Android offline adapter; then implement and test targeted guard.",
+  "updated_at": "2026-11-04T20:39:16Z"
+}
