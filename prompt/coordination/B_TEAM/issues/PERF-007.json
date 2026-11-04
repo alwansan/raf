@@ -8,17 +8,22 @@
     "https://github.com/alwansan/CL/blob/5394407b5cd0a0ca1848ff0902f8d2133bf6ea29/raft%20log/lf/LogRaft-20261104-225757-156/session-summary.json",
     "https://github.com/alwansan/raf/actions/runs/41926487471",
     "https://github.com/alwansan/raf/actions/runs/41926892044",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B37_ORIGINAL_CURSOR_RGBA32_PROVENANCE_2026-11-04.md"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B37_ORIGINAL_CURSOR_RGBA32_PROVENANCE_2026-11-04.md",
+    "https://github.com/alwansan/raf/commit/2c15dfbf8ccc356eaebef3102a7f79c583ebadda",
+    "https://github.com/alwansan/raf/commit/cdec4c65add78518942fc8609d32687c1257637d",
+    "https://github.com/alwansan/raf/actions/runs/41929419050",
+    "https://github.com/alwansan/raf/actions/runs/41928807641"
   ],
   "remaining": [
     "إصلاحجذرerrorfloodقبلنسبتحسنFPS",
     "قياسذاكرةمتسقوصورمتماثلة",
-    "B37 private source-authenticated Cursor.SetCursor scan in CI41926892044, seven tests PASS: 3 direct calls from 2 original files, 1 literal-null and 2 nonliteral cursor texture expressions. 1449 APK86 RGBA32 warnings still not source-causally linked; no new device format/readability/pixel/performance evidence. No texture conversion or touch modifications made."
+    "B37 private source-authenticated Cursor.SetCursor scan in CI41926892044, seven tests PASS: 3 direct calls from 2 original files, 1 literal-null and 2 nonliteral cursor texture expressions. 1449 APK86 RGBA32 warnings still not source-causally linked; no new device format/readability/pixel/performance evidence. No texture conversion or touch modifications made.",
+    "B12 diagnostic allocation sub-scope source-integrated only: root-hierarchy GetComponentsInChildren Renderer[] removed in favor of bounded roots1024/transforms4096/pending1024/renderers512/material slots4096 and reusable Renderer/Material lists; exact C# synthetic 8-case plus 22 source CI41929419050 PASS, original-managed CI41928807641 PASS. No measured phone heap/GC/FPS/GPU OOM improvement; original graphics error-flood cause and actual device performance still OPEN."
   ],
   "acceptance": [
     "قياسقبلوبعدمصدرونسخةمعلومة",
     "لاخسارةمحتوىأوجودة"
   ],
-  "updated_by": "B37",
-  "updated_at": "2026-11-04T22:41:00Z"
+  "updated_by": "B12",
+  "updated_at": "2026-11-04T22:58:48.754Z"
 }
