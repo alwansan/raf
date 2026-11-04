@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "owner": "B03",
+  "session_id": "20261104T2101Z-B03-a419",
+  "issue_id": "SOURCE-ARCHIVE-001",
+  "hypothesis": "The private release payload may be an RFC2046 one-part multipart wrapper around original source bytes; exact original ZIP2 SHA+size is necessary and sufficient to accept extracted bytes, without trusting wrapper metadata.",
+  "source_commit": "5d46863154a83d14c755c4600b56b765202a99c9",
+  "input_hashes": [
+    "zip2 commit 15964ea8f246b6e076ce26b60931ee2e1a9a2385; canonical manifest RAFT_FILE_MANIFEST.tsv"
+  ],
+  "tool_versions": {
+    "python": "3.12 (CI)",
+    "github_runner": "ubuntu-24.04"
+  },
+  "commands": [
+    "python3 -m py_compile scripts/b03_verify_archive_payload.py",
+    "python3 -m unittest discover -s tests -p test_b03_verify_archive_payload.py -v"
+  ],
+  "negative_controls": [
+    "same-length SHA tamper raw",
+    "wrapped tamper",
+    "truncation",
+    "trailing epilogue/second part",
+    "invalid/duplicate headers",
+    "bad boundary",
+    "too large/short source",
+    "traversal",
+    "duplicate/absent manifest entry",
+    "symlink input/output parent",
+    "overwrite",
+    "input under stage",
+    "OS error path redaction"
+  ],
+  "workflow_path": ".github/workflows/raft-b03-archive-payload.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41913405572",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41913405572"
+  ],
+  "budget": "6 min standard public ubuntu-24.04, no private asset download, no LFS/Unity",
+  "status": "completed",
+  "observed_result": "16 synthetic cases PASS in CI 41913405572. Stage only after full original SHA+size. No real private release asset tested.",
+  "rejected_hypotheses": [
+    "Initial workflow 41912886532 failure reflected parser failure (false; 15 test cases PASSED, report path contained escaped RUNNER_TEMP).",
+    "Release metadata overhead proves real multipart payload (unproven; cannot be inferred from size)."
+  ],
+  "limitations": [
+    "No private archive byte payload verification",
+    "No original graphics restored or Unity/device acceptance",
+    "Multipart parser deliberately restricts single part and strict CRLF; other legitimate envelope shapes require independent source evidence."
+  ],
+  "integration_commit": "5d46863154a83d14c755c4600b56b765202a99c9",
+  "next_step": "Verify one small private release asset with canonical manifest and record external SHA/bytes; otherwise keep ZIP2 primary."
+}
