@@ -6,6 +6,9 @@ on:
     paths:
       - scripts/b07_probe_original_world_callbacks.py
       - tests/test_b07_probe_original_world_callbacks.py
+      - tests/test_b07_world_callback_trace.py
+      - scripts/instrument_android_runtime_operations.py
+      - config/runtime-operation-traces.json
       - .github/workflows/raft-b07-world-callback-chain.yml
 permissions:
   contents: read
@@ -23,13 +26,17 @@ jobs:
           lfs: false
           sparse-checkout: |
             scripts/b07_probe_original_world_callbacks.py
+            scripts/instrument_android_runtime_operations.py
             tests/test_b07_probe_original_world_callbacks.py
+            tests/test_b07_world_callback_trace.py
+            config/runtime-operation-traces.json
             Raft/Raft_Data/Managed/Assembly-CSharp.dll
       - name: Synthetic negative controls and original SHA gate
         shell: bash
         run: |
           set -euo pipefail
           python3 -m unittest discover -s tests -p test_b07_probe_original_world_callbacks.py -v
+          python3 -m unittest discover -s tests -p test_b07_world_callback_trace.py -v
           python3 - <<'PY'
           from pathlib import Path
           from scripts.b07_probe_original_world_callbacks import assert_original_dll
@@ -53,4 +60,27 @@ jobs:
           python3 -m scripts.b07_probe_original_world_callbacks \
             --original-managed-dll Raft/Raft_Data/Managed/Assembly-CSharp.dll \
             --source "$RUNNER_TEMP/b07/original"
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          from scripts.instrument_android_runtime_operations import instrument
+          from scripts.b07_probe_original_world_callbacks import (
+              ORIGINAL_GAME_MANAGER_SHA256, fingerprint
+          )
+          root = Path(os.environ['RUNNER_TEMP']) / 'b07/original'
+          matches = list(root.rglob('GameManager.cs'))
+          if len(matches) != 1 or matches[0].is_symlink():
+              raise SystemExit('Original GameManager source missing/ambiguous')
+          source = matches[0].read_text(encoding='utf-8-sig').replace('\\r\\n', '\\n')
+          if fingerprint(source) != ORIGINAL_GAME_MANAGER_SHA256:
+              raise SystemExit('Original GameManager SHA changed')
+          manifest = json.loads(Path('config/runtime-operation-traces.json').read_text())
+          changed = instrument('GameManager', source, manifest)
+          if changed.count('SaveGame(') != source.count('SaveGame('):
+              raise SystemExit('SaveGame callsite changed by instrumentation')
+          if 'OnWorldRecieved.exception' not in changed:
+              raise SystemExit('Android world callback tracing missing')
+          print('B07_ORIGINAL_CALLBACK_TRACING verified=true method=OnWorldRecieved originalSha=' + ORIGINAL_GAME_MANAGER_SHA256 + ' noRuntimeExecution=true')
+          PY
           # Never publish private original source, binary, ILSpy logs or credentials.
