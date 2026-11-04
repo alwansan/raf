@@ -22,13 +22,13 @@
   "run_url": "https://github.com/alwansan/raf/actions/runs/41926033893",
   "artifact_urls": [],
   "budget": "Existing source-only managed CI; no Unity/LFS hydration or new heavy workflow",
-  "status": "running",
-  "observed_result": null,
+  "status": "completed",
+  "observed_result": "CI41926033893 job126910773877 success, 67 synthetic tests; exact private managed original source Dx11FFT Dispatch=2, SetTexture=6 and [0,1], WavesRendererFFT SetTexture=10; all original caller counts unchanged vs previous CI41911972796. Numeric FFT oracle exit0 errorCodes=[].",
   "rejected_hypotheses": [],
   "limitations": [
     "Bounded lexical model, not a full CSharp parser",
     "Does not authenticate Unity runtime kernel binding, GPU FFT values or game render"
   ],
   "integration_commit": "ec4f8cef6fc1c028d3e8df519fc08494e8442161",
-  "next_step": "Read final CI and verify SHA-pinned original caller counts against previous 41911972796."
+  "next_step": "This scanner false-positive class closed at source level, not original water rendering; GPU/Unity/Adreno verification still open."
 }
