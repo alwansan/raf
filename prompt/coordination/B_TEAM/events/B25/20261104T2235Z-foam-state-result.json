@@ -1,0 +1,14 @@
+{
+  "id": "20261104T2235Z-B25-original-foam-state-result",
+  "owner": "B25",
+  "session_id": "20261104T222931Z-B25-foam-state",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Original SHA-pinned Foam/Global two pass render states both serialized privately to identical 247B SHA256; 11/11 synthetic and authentic source CI 41926521683 SUCCESS; disproves render-state difference hypothesis, not CB/ShaderLab/Unity/device proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41926521683",
+    "https://github.com/alwansan/raf/commit/d2c0ba2ee2c848325fe909d191a07879c94b9c75",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B25_ORIGINAL_FOAM_RENDER_STATE_2026-11-04.md"
+  ],
+  "at": "2026-11-04T22:37:37.769Z"
+}
