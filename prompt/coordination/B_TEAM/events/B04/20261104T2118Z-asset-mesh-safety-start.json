@@ -1,0 +1,12 @@
+{
+  "id": "20261104T2118Z-B04-mesh-source-start",
+  "owner": "B04",
+  "session_id": "20261104T2102Z-B04-7c20",
+  "issue_id": "ASSET-RESTORE-001",
+  "type": "start",
+  "summary": "Investigate Mesh vertex restoration source path safety, especially symlinked .asset/.meta; preserve original .meta/GUID and fail closed",
+  "evidence": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/repair_exported_mesh_vertices.py"
+  ],
+  "at": "2026-11-04T21:14:58.288Z"
+}
