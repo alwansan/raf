@@ -1,0 +1,92 @@
+name: B15 RENDER-002 real ZIP2 selected Texture2D sampler source probe
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/b15_texture_sampler_parity.py
+      - scripts/b15_probe_authentic_original_sampler.py
+      - tests/test_b15_probe_authentic_original_sampler.py
+      - .github/workflows/raft-b15-original-sampler-source.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: raft-b15-original-texture-sampler-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  original-typed-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 14
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - name: Checkout B15 source tests and isolated ZIP2 stage helper only
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            scripts/b15_texture_sampler_parity.py
+            scripts/b15_probe_authentic_original_sampler.py
+            scripts/verify_targeted_lfs_compute_sources.py
+            scripts/w1_stage_zip2_owners.py
+            tests/test_b15_probe_authentic_original_sampler.py
+      - name: Synthetic original parser positive and negative controls first
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_b15_probe_authentic_original_sampler.py -v
+          python3 -m py_compile scripts/b15_probe_authentic_original_sampler.py
+          python3 - <<'PY'
+          import shutil
+          assert shutil.disk_usage('.').free > 5 * 1024**3
+          PY
+      - name: Checkout immutable ZIP2 owner without LFS
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-original
+          filter: blob:none
+          lfs: false
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/sharedassets6.assets
+      - name: Exact ZIP2 pin, manifest and original bytes verification
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C zip2-original rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import stage
+          from scripts.b15_probe_authentic_original_sampler import OWNER, PIN
+          from scripts.b15_texture_sampler_parity import SOURCE_PINS
+          assert SOURCE_PINS[OWNER] == PIN
+          result = stage(Path('zip2-original'), Path(os.environ['RUNNER_TEMP']) / 'b15-original', {'Raft_Data/' + OWNER: PIN})
+          assert result['verified_bytes'] == PIN[0] and result['lfs_used'] is False
+          print('B15_ORIGINAL_OWNER_VERIFIED=1')
+          print('B15_LFS_DOWNLOADED=0')
+          PY
+      - name: Parse real original Texture2D settings through B15 production decoder
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m pip install --disable-pip-version-check UnityPy==1.25.4
+          python3 -m scripts.b15_probe_authentic_original_sampler \
+            --original "$RUNNER_TEMP/b15-original/Raft_Data/sharedassets6.assets" \
+            --out "$RUNNER_TEMP/b15-original-sampler-aggregate.json"
+      - name: Retain numeric aggregate only, never original game bytes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: b15-original-sampler-aggregate-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/b15-original-sampler-aggregate.json
+          retention-days: 7
+          if-no-files-found: ignore
