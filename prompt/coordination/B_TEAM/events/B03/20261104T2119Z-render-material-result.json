@@ -1,0 +1,14 @@
+{
+  "id": "B03-20261104T2119Z-render-material-result",
+  "owner": "B03",
+  "session_id": "20261104T2101Z-B03-a419",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "Implemented read-only exported Renderer→Material identity integrity checker; 17 synthetic CI tests pass, no actual full export or device-color evidence; RENDER-002 remains OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/4aaa1a17d22bca07791f975590636fa7d9724b9e",
+    "https://github.com/alwansan/raf/actions/runs/41914562432",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B03_RENDERER_MATERIAL_LINKS_2026-11-04.md"
+  ],
+  "at": "2026-11-04T21:20:45.386Z"
+}
