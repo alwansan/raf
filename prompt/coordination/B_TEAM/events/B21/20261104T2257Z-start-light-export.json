@@ -1,0 +1,14 @@
+{
+  "id": "B21-20261104T2257Z-light-export-start",
+  "owner": "B21",
+  "session_id": "20261104T2257Z-B21-8e72",
+  "issue_id": "RENDER-002",
+  "type": "start",
+  "summary": "Resumed B21 and selected optional same-instance source/export native Light class108 identity gap. Stage isolated SHA-pinned W1+B02 helper without editing shared tracer or changing Unity game; test public compiler and preserve original private source boundaries.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41922372594",
+    "https://github.com/alwansan/raf/actions/runs/41927712988",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/android-port/Experiments/ExportLineage/RaftExportLineage.cs"
+  ],
+  "at": "2026-11-04T22:57:00Z"
+}
