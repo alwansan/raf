@@ -59,4 +59,48 @@ class KeywordFidelity(unittest.TestCase):
         for text in ("!obj","FOO BAR","FOO # comment"):
             with self.subTest(text=text),self.assertRaises(GuardError): scalar(text)
 
+class ExportedYamlFileControls(unittest.TestCase):
+    def test_real_yaml_path_and_same_instance_document_key(self):
+        from pathlib import Path
+        from tempfile import TemporaryDirectory
+        from scripts.b43_material_keyword_fidelity import exported_materials
+        with TemporaryDirectory() as td:
+            assets=Path(td)/"Assets"
+            assets.mkdir()
+            mat=assets/"unit.mat"
+            mat.write_text("%YAML 1.1\n%TAG !u! tag:unity3d.com,2011:\n--- !u!21 &2100000\nMaterial:\n"
+                           "  m_ValidKeywords:\n  - FOO\n  - BAR\n"
+                           "  m_InvalidKeywords:\n  - OLD\n"
+                           "  disabledShaderPasses: []\n  m_SavedProperties:\n",encoding="utf-8")
+            (assets/"unit.mat.meta").write_text("fileFormatVersion: 2\nguid: "+"b"*32+"\n",encoding="utf-8")
+            self.assertEqual(exported_materials(Path(td)),{D:K})
+            self.assertTrue(compare(T,{S:K},exported_materials(Path(td)))["keyword_state_equal"])
+
+    def test_yaml_loss_of_keyword_fails_after_parsing_actual_document(self):
+        from pathlib import Path
+        from tempfile import TemporaryDirectory
+        from scripts.b43_material_keyword_fidelity import exported_materials
+        with TemporaryDirectory() as td:
+            assets=Path(td)/"Assets"
+            assets.mkdir()
+            mat=assets/"unit.mat"
+            mat.write_text("%YAML 1.1\n--- !u!21 &2100000\nMaterial:\n"
+                           "  m_ValidKeywords:\n  - FOO\n"
+                           "  m_InvalidKeywords:\n  - OLD\n"
+                           "  disabledShaderPasses: []\n  m_SavedProperties:\n",encoding="utf-8")
+            (assets/"unit.mat.meta").write_text("fileFormatVersion: 2\nguid: "+"b"*32+"\n",encoding="utf-8")
+            with self.assertRaisesRegex(GuardError,"mismatch"):
+                compare(T,{S:K},exported_materials(Path(td)))
+
+    def test_unsafe_export_symlink_is_rejected(self):
+        from pathlib import Path
+        from tempfile import TemporaryDirectory
+        from scripts.b43_material_keyword_fidelity import exported_materials
+        with TemporaryDirectory() as td:
+            project=Path(td)
+            (project/"Assets").mkdir()
+            (project/"Assets"/"dangling.mat").symlink_to(project/"missing.mat")
+            with self.assertRaisesRegex(GuardError,"symlink"):
+                exported_materials(project)
+
 if __name__=="__main__":unittest.main()
