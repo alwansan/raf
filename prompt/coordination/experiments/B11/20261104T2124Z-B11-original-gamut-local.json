@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "owner": "B11",
+  "session_id": "20261104T2115Z-B11-bca7",
+  "issue_id": "RENDER-002",
+  "hypothesis": "A source-pinned one-element gamut correction can be made in exported ProjectSettings while retaining all other bytes; actual export gamut mismatch remains unknown.",
+  "source_commit": "b26b942f2f054c32091c628177835cdc68594cda",
+  "input_hashes": [
+    "globalgamemanagers:size=1914356,sha256=6d1288cd08b91d8c321ed2526503404b64b978819985b9b7fa5a9a146c29a8f5 (B04 source pin; B11 remote original recheck not run)"
+  ],
+  "tool_versions": {
+    "python_local": "3.13",
+    "unity": "not executed"
+  },
+  "commands": [
+    "PYTHONPATH=/mnt/data/b11_work python3 -m unittest discover -s tests -p test_b11_restore_original_color_gamuts.py -v",
+    "python3 -m py_compile scripts/b11_restore_original_color_gamuts.py tests/test_b11_restore_original_color_gamuts.py"
+  ],
+  "negative_controls": [
+    "duplicate/missing/malformed and non-8byte gamut",
+    "unknown enum / wrong byte order",
+    "invalid UTF-8 / NUL",
+    "symbolic and hard link target",
+    "source pin fails before mutation",
+    "other settings must not change",
+    "idempotent no-op / alternate enum bounded atomic edit"
+  ],
+  "workflow_path": ".github/workflows/raft-b11-gamut-parity.yml",
+  "run_url": null,
+  "artifact_urls": [],
+  "budget": "5-minute isolated ubuntu-24.04 synthetic job, no LFS/private data; native job not requested",
+  "status": "completed",
+  "observed_result": "12/12 local synthetic tests and py_compile PASS; real B04 source SHA check NOT executed locally (test stub). Production export/candidate integration commit b26b942f, no tested Unity output, independent workflow conclusion unavailable.",
+  "rejected_hypotheses": [
+    "YAML commented m_ColorGamuts must count as duplicate: incorrect test expectation; YAML comments do not create fields, fixed test.",
+    "Original export gamut mismatch is already proven: NOT supported; only original value and separate public YAML format observed.",
+    "Source parity proves fixed white objects: NOT supported; shader/material/device evidence absent."
+  ],
+  "limitations": [
+    "No original private data downloaded or locally verified by B11; B04 CI previously authenticated source.",
+    "No exact Raft exported ProjectSettings YAML captured; unknown layout refuses correction.",
+    "No Unity Editor/GPU/Adreno/phone/visual equivalence.",
+    "No verified remote CI run ID through connector; workflow configured and pushed only."
+  ],
+  "integration_commit": "b26b942f2f054c32091c628177835cdc68594cda",
+  "next_step": "On justified next source-authenticated full export inspect RAFT_B11_ORIGINAL_COLOR_GAMUT and verify native Unity candidate; reject mismatch hypothesis if field already 00000000."
+}
