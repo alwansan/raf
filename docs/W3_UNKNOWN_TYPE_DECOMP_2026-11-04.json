@@ -1,0 +1,686 @@
+{
+  "negative_controls": {
+    "aggregate_outside_equals_step9_unknown": true,
+    "empty_histograms_never_asserted": true,
+    "no_name_assertion_beyond_published_four": true,
+    "no_values_read": true,
+    "per_target_total_matches_step9": true
+  },
+  "per_target": {
+    "globalgamemanagers.assets:12": {
+      "outside_published_occurrences": 0,
+      "property_count": 1,
+      "published_type_occurrences": 1,
+      "raw_type_histogram": {
+        "4": 1
+      }
+    },
+    "globalgamemanagers.assets:15": {
+      "outside_published_occurrences": 0,
+      "property_count": 0,
+      "published_type_occurrences": 0,
+      "raw_type_histogram": {}
+    },
+    "resources.assets:852": {
+      "outside_published_occurrences": 0,
+      "property_count": 1,
+      "published_type_occurrences": 1,
+      "raw_type_histogram": {
+        "4": 1
+      }
+    },
+    "resources.assets:853": {
+      "outside_published_occurrences": 0,
+      "property_count": 0,
+      "published_type_occurrences": 0,
+      "raw_type_histogram": {}
+    },
+    "resources.assets:854": {
+      "outside_published_occurrences": 0,
+      "property_count": 9,
+      "published_type_occurrences": 9,
+      "raw_type_histogram": {
+        "0": 1,
+        "2": 3,
+        "3": 2,
+        "4": 3
+      }
+    },
+    "resources.assets:855": {
+      "outside_published_occurrences": 0,
+      "property_count": 2,
+      "published_type_occurrences": 2,
+      "raw_type_histogram": {
+        "2": 1,
+        "4": 1
+      }
+    },
+    "resources.assets:865": {
+      "outside_published_occurrences": 0,
+      "property_count": 6,
+      "published_type_occurrences": 6,
+      "raw_type_histogram": {
+        "2": 5,
+        "4": 1
+      }
+    },
+    "resources.assets:884": {
+      "outside_published_occurrences": 0,
+      "property_count": 10,
+      "published_type_occurrences": 10,
+      "raw_type_histogram": {
+        "2": 5,
+        "4": 5
+      }
+    },
+    "resources.assets:886": {
+      "outside_published_occurrences": 1,
+      "property_count": 10,
+      "published_type_occurrences": 9,
+      "raw_type_histogram": {
+        "0": 1,
+        "1": 1,
+        "2": 7,
+        "4": 1
+      }
+    },
+    "resources.assets:887": {
+      "outside_published_occurrences": 0,
+      "property_count": 3,
+      "published_type_occurrences": 3,
+      "raw_type_histogram": {
+        "0": 1,
+        "2": 1,
+        "4": 1
+      }
+    },
+    "resources.assets:890": {
+      "outside_published_occurrences": 1,
+      "property_count": 19,
+      "published_type_occurrences": 18,
+      "raw_type_histogram": {
+        "0": 3,
+        "1": 1,
+        "2": 6,
+        "3": 5,
+        "4": 4
+      }
+    },
+    "resources.assets:895": {
+      "outside_published_occurrences": 0,
+      "property_count": 23,
+      "published_type_occurrences": 23,
+      "raw_type_histogram": {
+        "0": 2,
+        "2": 4,
+        "3": 12,
+        "4": 5
+      }
+    },
+    "sharedassets0.assets:2400": {
+      "outside_published_occurrences": 0,
+      "property_count": 3,
+      "published_type_occurrences": 3,
+      "raw_type_histogram": {
+        "0": 1,
+        "3": 1,
+        "4": 1
+      }
+    },
+    "sharedassets0.assets:2401": {
+      "outside_published_occurrences": 0,
+      "property_count": 2,
+      "published_type_occurrences": 2,
+      "raw_type_histogram": {
+        "3": 1,
+        "4": 1
+      }
+    },
+    "sharedassets0.assets:2402": {
+      "outside_published_occurrences": 0,
+      "property_count": 3,
+      "published_type_occurrences": 3,
+      "raw_type_histogram": {
+        "0": 1,
+        "3": 1,
+        "4": 1
+      }
+    },
+    "sharedassets0.assets:2403": {
+      "outside_published_occurrences": 3,
+      "property_count": 30,
+      "published_type_occurrences": 27,
+      "raw_type_histogram": {
+        "0": 2,
+        "1": 3,
+        "2": 20,
+        "3": 2,
+        "4": 3
+      }
+    },
+    "sharedassets0.assets:2404": {
+      "outside_published_occurrences": 1,
+      "property_count": 7,
+      "published_type_occurrences": 6,
+      "raw_type_histogram": {
+        "0": 2,
+        "1": 1,
+        "2": 2,
+        "4": 2
+      }
+    },
+    "sharedassets0.assets:2406": {
+      "outside_published_occurrences": 0,
+      "property_count": 28,
+      "published_type_occurrences": 28,
+      "raw_type_histogram": {
+        "0": 5,
+        "2": 9,
+        "3": 9,
+        "4": 5
+      }
+    },
+    "sharedassets0.assets:2409": {
+      "outside_published_occurrences": 0,
+      "property_count": 8,
+      "published_type_occurrences": 8,
+      "raw_type_histogram": {
+        "2": 2,
+        "3": 1,
+        "4": 5
+      }
+    },
+    "sharedassets0.assets:2410": {
+      "outside_published_occurrences": 0,
+      "property_count": 13,
+      "published_type_occurrences": 13,
+      "raw_type_histogram": {
+        "0": 2,
+        "2": 1,
+        "3": 4,
+        "4": 6
+      }
+    },
+    "sharedassets0.assets:2411": {
+      "outside_published_occurrences": 0,
+      "property_count": 8,
+      "published_type_occurrences": 8,
+      "raw_type_histogram": {
+        "2": 2,
+        "3": 2,
+        "4": 4
+      }
+    },
+    "sharedassets0.assets:2412": {
+      "outside_published_occurrences": 0,
+      "property_count": 8,
+      "published_type_occurrences": 8,
+      "raw_type_histogram": {
+        "0": 2,
+        "3": 2,
+        "4": 4
+      }
+    },
+    "sharedassets0.assets:2415": {
+      "outside_published_occurrences": 0,
+      "property_count": 11,
+      "published_type_occurrences": 11,
+      "raw_type_histogram": {
+        "2": 3,
+        "3": 2,
+        "4": 6
+      }
+    },
+    "sharedassets0.assets:2421": {
+      "outside_published_occurrences": 0,
+      "property_count": 11,
+      "published_type_occurrences": 11,
+      "raw_type_histogram": {
+        "2": 4,
+        "3": 3,
+        "4": 4
+      }
+    },
+    "sharedassets0.assets:2422": {
+      "outside_published_occurrences": 0,
+      "property_count": 20,
+      "published_type_occurrences": 20,
+      "raw_type_histogram": {
+        "0": 1,
+        "2": 4,
+        "3": 11,
+        "4": 4
+      }
+    },
+    "sharedassets0.assets:2427": {
+      "outside_published_occurrences": 0,
+      "property_count": 4,
+      "published_type_occurrences": 4,
+      "raw_type_histogram": {
+        "0": 2,
+        "2": 1,
+        "3": 1
+      }
+    },
+    "sharedassets0.assets:2429": {
+      "outside_published_occurrences": 0,
+      "property_count": 6,
+      "published_type_occurrences": 6,
+      "raw_type_histogram": {
+        "0": 1,
+        "2": 1,
+        "3": 2,
+        "4": 2
+      }
+    },
+    "sharedassets0.assets:2430": {
+      "outside_published_occurrences": 0,
+      "property_count": 9,
+      "published_type_occurrences": 9,
+      "raw_type_histogram": {
+        "0": 1,
+        "2": 4,
+        "4": 4
+      }
+    },
+    "sharedassets0.assets:2433": {
+      "outside_published_occurrences": 3,
+      "property_count": 64,
+      "published_type_occurrences": 61,
+      "raw_type_histogram": {
+        "0": 7,
+        "1": 3,
+        "2": 21,
+        "3": 28,
+        "4": 5
+      }
+    },
+    "sharedassets0.assets:2434": {
+      "outside_published_occurrences": 0,
+      "property_count": 12,
+      "published_type_occurrences": 12,
+      "raw_type_histogram": {
+        "0": 1,
+        "2": 3,
+        "3": 4,
+        "4": 4
+      }
+    },
+    "sharedassets0.assets:2438": {
+      "outside_published_occurrences": 0,
+      "property_count": 9,
+      "published_type_occurrences": 9,
+      "raw_type_histogram": {
+        "0": 1,
+        "2": 2,
+        "3": 1,
+        "4": 5
+      }
+    },
+    "sharedassets0.assets:2441": {
+      "outside_published_occurrences": 0,
+      "property_count": 9,
+      "published_type_occurrences": 9,
+      "raw_type_histogram": {
+        "0": 1,
+        "2": 1,
+        "3": 4,
+        "4": 3
+      }
+    },
+    "sharedassets0.assets:2442": {
+      "outside_published_occurrences": 0,
+      "property_count": 13,
+      "published_type_occurrences": 13,
+      "raw_type_histogram": {
+        "0": 1,
+        "2": 3,
+        "3": 7,
+        "4": 2
+      }
+    },
+    "sharedassets0.assets:2443": {
+      "outside_published_occurrences": 0,
+      "property_count": 21,
+      "published_type_occurrences": 21,
+      "raw_type_histogram": {
+        "0": 3,
+        "2": 6,
+        "3": 3,
+        "4": 9
+      }
+    },
+    "sharedassets0.assets:2444": {
+      "outside_published_occurrences": 0,
+      "property_count": 6,
+      "published_type_occurrences": 6,
+      "raw_type_histogram": {
+        "2": 1,
+        "3": 1,
+        "4": 4
+      }
+    },
+    "sharedassets0.assets:2448": {
+      "outside_published_occurrences": 0,
+      "property_count": 7,
+      "published_type_occurrences": 7,
+      "raw_type_histogram": {
+        "0": 1,
+        "2": 1,
+        "3": 1,
+        "4": 4
+      }
+    },
+    "sharedassets0.assets:2452": {
+      "outside_published_occurrences": 0,
+      "property_count": 9,
+      "published_type_occurrences": 9,
+      "raw_type_histogram": {
+        "0": 1,
+        "2": 2,
+        "3": 5,
+        "4": 1
+      }
+    },
+    "sharedassets0.assets:2454": {
+      "outside_published_occurrences": 1,
+      "property_count": 46,
+      "published_type_occurrences": 45,
+      "raw_type_histogram": {
+        "0": 6,
+        "1": 1,
+        "2": 13,
+        "3": 21,
+        "4": 5
+      }
+    },
+    "sharedassets0.assets:2455": {
+      "outside_published_occurrences": 1,
+      "property_count": 34,
+      "published_type_occurrences": 33,
+      "raw_type_histogram": {
+        "0": 3,
+        "1": 1,
+        "2": 21,
+        "3": 8,
+        "4": 1
+      }
+    },
+    "sharedassets1.assets:706": {
+      "outside_published_occurrences": 0,
+      "property_count": 2,
+      "published_type_occurrences": 2,
+      "raw_type_histogram": {
+        "3": 1,
+        "4": 1
+      }
+    },
+    "sharedassets1.assets:718": {
+      "outside_published_occurrences": 3,
+      "property_count": 15,
+      "published_type_occurrences": 12,
+      "raw_type_histogram": {
+        "1": 3,
+        "3": 2,
+        "4": 10
+      }
+    },
+    "sharedassets1.assets:719": {
+      "outside_published_occurrences": 0,
+      "property_count": 8,
+      "published_type_occurrences": 8,
+      "raw_type_histogram": {
+        "2": 5,
+        "3": 1,
+        "4": 2
+      }
+    },
+    "sharedassets1.assets:720": {
+      "outside_published_occurrences": 0,
+      "property_count": 0,
+      "published_type_occurrences": 0,
+      "raw_type_histogram": {}
+    },
+    "sharedassets1.assets:721": {
+      "outside_published_occurrences": 0,
+      "property_count": 15,
+      "published_type_occurrences": 15,
+      "raw_type_histogram": {
+        "2": 6,
+        "3": 4,
+        "4": 5
+      }
+    },
+    "sharedassets1.assets:722": {
+      "outside_published_occurrences": 0,
+      "property_count": 6,
+      "published_type_occurrences": 6,
+      "raw_type_histogram": {
+        "0": 2,
+        "2": 1,
+        "3": 2,
+        "4": 1
+      }
+    },
+    "sharedassets1.assets:724": {
+      "outside_published_occurrences": 2,
+      "property_count": 14,
+      "published_type_occurrences": 12,
+      "raw_type_histogram": {
+        "1": 2,
+        "3": 2,
+        "4": 10
+      }
+    },
+    "sharedassets1.assets:726": {
+      "outside_published_occurrences": 0,
+      "property_count": 0,
+      "published_type_occurrences": 0,
+      "raw_type_histogram": {}
+    },
+    "sharedassets1.assets:727": {
+      "outside_published_occurrences": 0,
+      "property_count": 8,
+      "published_type_occurrences": 8,
+      "raw_type_histogram": {
+        "0": 4,
+        "2": 3,
+        "4": 1
+      }
+    },
+    "sharedassets1.assets:729": {
+      "outside_published_occurrences": 0,
+      "property_count": 6,
+      "published_type_occurrences": 6,
+      "raw_type_histogram": {
+        "2": 3,
+        "3": 1,
+        "4": 2
+      }
+    },
+    "sharedassets24.assets:660": {
+      "outside_published_occurrences": 0,
+      "property_count": 9,
+      "published_type_occurrences": 9,
+      "raw_type_histogram": {
+        "0": 1,
+        "2": 3,
+        "4": 5
+      }
+    },
+    "sharedassets29.assets:574": {
+      "outside_published_occurrences": 0,
+      "property_count": 8,
+      "published_type_occurrences": 8,
+      "raw_type_histogram": {
+        "0": 2,
+        "2": 5,
+        "4": 1
+      }
+    },
+    "sharedassets29.assets:575": {
+      "outside_published_occurrences": 0,
+      "property_count": 15,
+      "published_type_occurrences": 15,
+      "raw_type_histogram": {
+        "2": 1,
+        "3": 6,
+        "4": 8
+      }
+    },
+    "sharedassets29.assets:576": {
+      "outside_published_occurrences": 2,
+      "property_count": 14,
+      "published_type_occurrences": 12,
+      "raw_type_histogram": {
+        "1": 2,
+        "3": 2,
+        "4": 10
+      }
+    },
+    "sharedassets30.assets:1047": {
+      "outside_published_occurrences": 2,
+      "property_count": 31,
+      "published_type_occurrences": 29,
+      "raw_type_histogram": {
+        "0": 2,
+        "1": 2,
+        "2": 19,
+        "3": 4,
+        "4": 4
+      }
+    },
+    "sharedassets34.assets:695": {
+      "outside_published_occurrences": 0,
+      "property_count": 4,
+      "published_type_occurrences": 4,
+      "raw_type_histogram": {
+        "0": 1,
+        "2": 1,
+        "4": 2
+      }
+    },
+    "sharedassets35.assets:938": {
+      "outside_published_occurrences": 0,
+      "property_count": 12,
+      "published_type_occurrences": 12,
+      "raw_type_histogram": {
+        "2": 6,
+        "3": 1,
+        "4": 5
+      }
+    },
+    "sharedassets35.assets:939": {
+      "outside_published_occurrences": 3,
+      "property_count": 15,
+      "published_type_occurrences": 12,
+      "raw_type_histogram": {
+        "1": 3,
+        "3": 2,
+        "4": 10
+      }
+    },
+    "sharedassets36.assets:879": {
+      "outside_published_occurrences": 0,
+      "property_count": 19,
+      "published_type_occurrences": 19,
+      "raw_type_histogram": {
+        "0": 1,
+        "2": 4,
+        "3": 9,
+        "4": 5
+      }
+    },
+    "sharedassets6.assets:229": {
+      "outside_published_occurrences": 0,
+      "property_count": 15,
+      "published_type_occurrences": 15,
+      "raw_type_histogram": {
+        "2": 3,
+        "3": 6,
+        "4": 6
+      }
+    },
+    "sharedassets6.assets:230": {
+      "outside_published_occurrences": 1,
+      "property_count": 9,
+      "published_type_occurrences": 8,
+      "raw_type_histogram": {
+        "0": 1,
+        "1": 1,
+        "2": 3,
+        "4": 4
+      }
+    },
+    "sharedassets6.assets:231": {
+      "outside_published_occurrences": 0,
+      "property_count": 16,
+      "published_type_occurrences": 16,
+      "raw_type_histogram": {
+        "2": 2,
+        "3": 5,
+        "4": 9
+      }
+    },
+    "sharedassets8.assets:104": {
+      "outside_published_occurrences": 0,
+      "property_count": 8,
+      "published_type_occurrences": 8,
+      "raw_type_histogram": {
+        "0": 2,
+        "2": 1,
+        "3": 2,
+        "4": 3
+      }
+    },
+    "sharedassets8.assets:105": {
+      "outside_published_occurrences": 0,
+      "property_count": 6,
+      "published_type_occurrences": 6,
+      "raw_type_histogram": {
+        "0": 2,
+        "3": 2,
+        "4": 2
+      }
+    },
+    "sharedassets8.assets:106": {
+      "outside_published_occurrences": 0,
+      "property_count": 14,
+      "published_type_occurrences": 14,
+      "raw_type_histogram": {
+        "2": 3,
+        "3": 6,
+        "4": 5
+      }
+    },
+    "sharedassets9.assets:21": {
+      "outside_published_occurrences": 0,
+      "property_count": 7,
+      "published_type_occurrences": 7,
+      "raw_type_histogram": {
+        "0": 2,
+        "2": 1,
+        "3": 4
+      }
+    }
+  },
+  "probe": "w3-unknown-type-decomp",
+  "schema_version": 1,
+  "tool_versions": {
+    "python": "3.12.3",
+    "unitypy": "1.25.4"
+  },
+  "totals": {
+    "aggregate_raw_type_histogram": {
+      "0": 73,
+      "1": 24,
+      "2": 229,
+      "3": 206,
+      "4": 229
+    },
+    "outside_published_total": 24,
+    "properties": 761,
+    "step9_unknown_bucket": 24,
+    "targets": 65
+  }
+}

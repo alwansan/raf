@@ -84,6 +84,13 @@
     "prompt/coordination/experiments/raft-20261103T153100Z-b4d2c9e7/full-byte-census.json",
     "prompt/coordination/discussions/RENDER-002/2026-11-04T204500Z-raft-20261103T153100Z-b4d2c9e7-scope-announcement-full-byte-census.md",
     "prompt/coordination/discussions/RENDER-002/2026-11-04T212000Z-raft-20261103T153100Z-b4d2c9e7-full-byte-census-result.md",
+    "scripts/probe_w3_unknown_type_decomp.py",
+    "scripts/w3_test_unknown_type_decomp.py",
+    "docs/W3_UNKNOWN_TYPE_DECOMP_2026-11-04.json",
+    "docs/W3_UNKNOWN_TYPE_DECOMP_2026-11-04.md",
+    "prompt/coordination/experiments/raft-20261103T153100Z-b4d2c9e7/unknown-type-decomp.json",
+    "prompt/coordination/discussions/RENDER-002/2026-11-04T220000Z-raft-20261103T153100Z-b4d2c9e7-scope-announcement-unknown-type-decomp.md",
+    "prompt/coordination/discussions/RENDER-002/2026-11-04T222500Z-raft-20261103T153100Z-b4d2c9e7-unknown-type-decomp-result.md",
     "prompt/STATUS.md"
   ],
   "related_work": [

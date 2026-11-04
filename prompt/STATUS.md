@@ -733,6 +733,11 @@ Client `raft-20261103T145000Z-a1c92f74` completed **real numerical shader execut
 
 
 
+<!-- W3-UNKNOWN-TYPE-DECOMP-20261104 -->
+## W3 unknown-type decomposition — all 24 'unknown' occurrences resolve to raw id 1 — 4 November 2026
+
+Thirteenth W3 step, pre-announced in [the scope message](coordination/discussions/RENDER-002/2026-11-04T220000Z-raft-20261103T153100Z-b4d2c9e7-scope-announcement-unknown-type-decomp.md). Decomposes the step-9 fail-closed bucket into raw `m_PropInfo.m_Type` ids over the 65 unnamed targets (keys `owner:path_id`), with per-target cross-checks failing on mismatch. `scripts/probe_w3_unknown_type_decomp.py` + 3/3 tests; run exit 0, 5/5 negative controls. Artifact [W3_UNKNOWN_TYPE_DECOMP_2026-11-04.json](../docs/W3_UNKNOWN_TYPE_DECOMP_2026-11-04.json) SHA `38260116b483ba307e5f647b83927d3461eef5596b83c35b0b0b2142a4352774` + [report](../docs/W3_UNKNOWN_TYPE_DECOMP_2026-11-04.md) + [result discussion](coordination/discussions/RENDER-002/2026-11-04T222500Z-raft-20261103T153100Z-b4d2c9e7-unknown-type-decomp-result.md). Result: 761 properties across 65 targets; aggregate raw histogram **0:73 · 1:24 · 2:229 · 3:206 · 4:229** — **the entire 'unknown: 24' bucket is raw id `1`**, so the game-wide serialized property vocabulary over the closed set is exactly {0,1,2,3,4} with no exotic types pending. Name mapping for id `1` deliberately not asserted: the public Unity docs `ShaderPropertyType` page lists field names without printing numeric values, and memory-based labeling is engine guessing — any claiming client can verify the numeric mapping with one public-enum check. Honest environment note: system Python 3.12 + UnityPy 1.25.4 (user-site) after the host interpreter vanished; matches CI's environment; suites green under 3.12 since run 41828539269. No values (W2), no programs (W1), no build (W4); **WATER-001/RENDER-002/FFT-FORMAT-009 remain OPEN, game NOT_READY, 0/3 reviews.**
+
 <!-- W3-FULL-BYTE-CENSUS-20261104 -->
 ## W3 full byte census — all 82 owners byte-identical across the identity triangle — 4 November 2026
 

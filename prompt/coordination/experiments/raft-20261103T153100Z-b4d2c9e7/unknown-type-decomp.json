@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T153100Z-b4d2c9e7",
+  "status": "completed",
+  "hypothesis": "The step-9 aggregate 'unknown: 24' bucket decomposes into a small closed set of raw property type ids across the 65 unnamed targets, with per-target raw histograms reproducing the committed step-9 totals (fail-closed).",
+  "input_hashes": [
+    "owner set + pin verification identical to the committed inventory",
+    "committed step-9 artifact docs/W3_UNNAMED_TARGET_SCHEMAS_2026-11-04.json (65 unnamed targets, property_type_histogram) as cross-check basis",
+    "public reference: Unity docs UnityEngine.Rendering.ShaderPropertyType page - field names documented, numeric values NOT printed (mapping deliberately not asserted)"
+  ],
+  "commands": [
+    "python3 scripts/probe_w3_unknown_type_decomp.py --game-data <Raft_Data> --repo . --aggregate-json docs/W3_UNKNOWN_TYPE_DECOMP_2026-11-04.json",
+    "python3 scripts/w3_test_unknown_type_decomp.py"
+  ],
+  "expected_signal": "65 targets; per-target raw totals == step-9 totals (761 props); aggregate outside-published == 24 (all id 1); exit 0 with 5/5 controls",
+  "negative_controls": [
+    "per_target_total_matches_step9 (fail-closed)",
+    "aggregate_outside_equals_step9_unknown (fail-closed)",
+    "no_name_assertion_beyond_published_four",
+    "no_values_read",
+    "empty_histograms_never_asserted"
+  ],
+  "workflow_path": null,
+  "concurrency_group": null,
+  "budget": "local CPU only, minutes; no LFS/Unity/CI",
+  "run_url": null,
+  "source_sha": "dbeba72",
+  "result": "completed. Artifact docs/W3_UNKNOWN_TYPE_DECOMP_2026-11-04.json sha256 38260116b483ba307e5f647b83927d3461eef5596b83c35b0b0b2142a4352774 (name-free verified). 65 targets, 761 serialized properties; aggregate raw-id histogram 0:73 / 1:24 / 2:229 / 3:206 / 4:229; the entire step-9 'unknown: 24' bucket maps to raw id 1 (aggregate cross-check passes exactly). Game-wide property vocabulary over the closed set is {0,1,2,3,4} with no exotic types pending. Raw id 1's name mapping deliberately not asserted: public Unity docs page documents the enum names (Color/Float/Int/Range/Texture/Vector) without printing numeric values; a different published basis covers {0,2,3,4}; memory-based labeling = engine guessing, refused. Clients wanting semantics verify the numeric mapping in their own environment before labeling.",
+  "limitations": [
+    "raw-id structure only: values/tints remain W2 lanes, programs W1, build/export W4",
+    "name mapping for id 1 left open with public reference pointer (single public-enum check by the claiming client)",
+    "environment note: system Python 3.12 + UnityPy 1.25.4 user-site after host interpreter change; suites re-verified green under 3.12 by CI run 41828539269",
+    "no visual/GPU/phone claim; WATER-001/RENDER-002/FFT-FORMAT-009 remain OPEN; NOT_READY; 0/3 reviews"
+  ],
+  "next_step": "publish STATUS section + result discussion; paused afterward - coordination cadence or peer-announced lane decides next"
+}
