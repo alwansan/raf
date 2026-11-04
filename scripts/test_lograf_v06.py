@@ -72,6 +72,9 @@ checks={
     "marker delivery counts explicitly reported": '"user_markers_enqueued"' in capture and '"user_markers_written"' in capture and 'markerWritten.incrementAndGet();' in capture,
     "marker flushes on writer acknowledgement": 'if("MARKER".equals(item.source)){' in capture and 'markerWritten.incrementAndGet();' in capture and 'saveStatus("Issue marker written to session log");' in capture and 'if("MARKER".equals(item.source) || SystemClock.elapsedRealtime()-lastWriterFlush>1200)' in capture,
     "marker does not block service main thread": '"MARKER".equals(source)?0:1200' in capture,
+    "world milestones sample only game UID logcat": 'gameMilestones.observe(line);' in remote and 'gameMilestones.reset();' in remote and '"game_milestones"' in remote,
+    "stop-time milestones survive last sample": '"final_game_milestones"' in remote and '"final_game_milestones"' in capture,
+    "milestone classifier is fixed vocabulary": (src/"GameMilestoneSummary.java").exists() and 'world_loaded_message_observed' in (src/"GameMilestoneSummary.java").read_text(),
     "error classes tracked without raw text": '"error_groups"' in remote and (src/"ErrorCategorySummary.java").exists(),
 }
 bad=[name for name,valid in checks.items() if not valid]

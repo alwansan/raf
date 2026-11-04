@@ -96,6 +96,30 @@ public final class DiagnosticRegression {
             CaptureEventMarker.encode(0L,4L);
             throw new AssertionError("Invalid wall time should be rejected");
         }catch(IllegalArgumentException expected){}
-        System.out.println("Diagnostic regression PASS: FFT/OBB/FM​​OD/PSS/PID/gameplay categories, FIFO marker + 17178-event replay");
+        GameMilestoneSummary milestones = new GameMilestoneSummary();
+        milestones.observe(EVENT + "RAFT_FMOD_ANDROID_BOOTSTRAP javaInitialized=true nativeVersion=00020215");
+        milestones.observe(EVENT + "RAFT_ANDROID_DEVICE_TEST earlyStartupCandidate=true gameplayVerified=false");
+        milestones.observe(EVENT + "Raft_Network:OnSceneLoaded(Scene, LoadSceneMode)");
+        milestones.observe(EVENT + "Raft_Network:OnSceneLoaded(Scene, LoadSceneMode)");
+        milestones.observe(EVENT + "Raft_Network:InternalAddPlayer(Network_UserId, RGD_Settings_Character)");
+        milestones.observe(EVENT + "World has been loaded :> 04/11/2026");
+        milestones.observe(EVENT + "Opened OBB successfully");
+        milestones.observe(EVENT + "World loaded was not confirmed");
+        eq(1, milestones.snapshot().getJSONObject("fmod_bootstrap_log_observed").getLong("count"),
+                "FMOD boot marker");
+        eq(1, milestones.snapshot().getJSONObject("raft_android_early_startup_log_observed").getLong("count"),
+                "early startup is not playable proof");
+        eq(2, milestones.snapshot().getJSONObject("unity_scene_callback_log_observed").getLong("count"),
+                "scene callback line count");
+        eq(1, milestones.snapshot().getJSONObject("player_add_callback_log_observed").getLong("count"),
+                "player callback reference");
+        eq(1, milestones.snapshot().getJSONObject("world_loaded_message_observed").getLong("count"),
+                "exact world loaded message");
+        if(milestones.snapshot().has("fmod_banks_loaded"))
+            throw new AssertionError("Never infer bank loading from a single Logcat bootstrap message");
+        milestones.reset();
+        if(milestones.snapshot().has("world_loaded_message_observed"))
+            throw new AssertionError("Milestones must reset between recording sessions");
+        System.out.println("Diagnostic regression PASS: FFT/OBB/FMOD/PSS/PID, FIFO marker, milestones + 17178-event replay");
     }
 }

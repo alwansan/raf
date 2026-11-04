@@ -24,6 +24,7 @@ public final class RemoteLogService extends IRemoteLog.Stub {
     private final AtomicLong gameLogLines=new AtomicLong(),systemContextLines=new AtomicLong(),reconnections=new AtomicLong();
     private final AtomicLong shaderPassErrors=new AtomicLong(),kernelErrors=new AtomicLong(),missingAssetPaths=new AtomicLong();
     private final ErrorCategorySummary errorGroups=new ErrorCategorySummary();
+    private final GameMilestoneSummary gameMilestones=new GameMilestoneSummary();
     private final AtomicLong javaFatalMarkers=new AtomicLong(),nativeFatalMarkers=new AtomicLong(),processDeathEvents=new AtomicLong();
     private volatile Process gameProcess, systemProcess;
     private volatile ILogSink listener;
@@ -58,6 +59,7 @@ public final class RemoteLogService extends IRemoteLog.Stub {
         shaderPassErrors.set(0);kernelErrors.set(0);missingAssetPaths.set(0);
         javaFatalMarkers.set(0);nativeFatalMarkers.set(0);processDeathEvents.set(0);
         errorGroups.reset();
+        gameMilestones.reset();
         lastDeathPid.set(-1);lastKnownPid.set(-1);lastDeathAtUnixMs.set(-1);
         primaryGamePid.set(-1);
         sinkFailedBatches.set(0);sinkFailedBytes.set(0);
@@ -161,6 +163,8 @@ public final class RemoteLogService extends IRemoteLog.Stub {
                 data.put("game_process_death_events_total",processDeathEvents.get());
                 data.put("process_exit_reason","unknown; process death alone is not a crash");
                 data.put("error_groups",errorGroups.snapshot());
+                data.put("game_milestones",gameMilestones.snapshot());
+                data.put("game_milestones_scope","observed game UID Logcat messages only; not proof of successful runtime operations");
                 data.put("error_groups_note","fixed categories only; original messages remain in raw Logcat");
                 data.put("logcat_unobserved_losses","unknown");
                 data.put("remote_sink_failed_batches",sinkFailedBatches.get());
@@ -335,6 +339,7 @@ public final class RemoteLogService extends IRemoteLog.Stub {
                             } else {
                                 gameLogLines.incrementAndGet();
                                 errorGroups.observe(line);
+                                gameMilestones.observe(line);
                                 if(line.contains("Invalid pass number") && line.contains("Graphics.Blit"))
                                     shaderPassErrors.incrementAndGet();
                                 if(line.contains("Invalid kernelIndex"))
@@ -420,6 +425,7 @@ public final class RemoteLogService extends IRemoteLog.Stub {
             int pid=lastDeathPid.get();
             evidence.put("target_package",Config.PACKAGE);
             evidence.put("final_error_groups",errorGroups.snapshot());
+            evidence.put("final_game_milestones",gameMilestones.snapshot());
             evidence.put("final_game_log_lines",gameLogLines.get());
             evidence.put("final_shader_pass_errors_total",shaderPassErrors.get());
             evidence.put("final_compute_kernel_errors_total",kernelErrors.get());
