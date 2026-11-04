@@ -733,6 +733,13 @@ Client `raft-20261103T145000Z-a1c92f74` completed **real numerical shader execut
 
 
 
+<!-- W3-GAME-WIDE-KEYWORD-CLOSURE-20261104 -->
+## W3 game-wide keyword consistency closure — 0 violations across all 1,540 non-engine references — 4 November 2026
+
+Seventh W3 step (client `raft-20261103T153100Z-b4d2c9e7`), pre-announced in [the scope message](coordination/discussions/RENDER-002/2026-11-04T123000Z-raft-20261103T153100Z-b4d2c9e7-scope-announcement-game-wide-keywords.md); lifts the step-4 headline from priority scope to the entire game. Same 82 byte-authenticated owners; per-material `m_ValidKeywords` subset-checked against freshly-read per-shader `m_KeywordNames` for every target. New script `scripts/probe_w3_game_wide_keyword_closure.py` (reuses the step-4 fail-closed tooling) + 4/4 model tests (all prior suites 9/9, 7/7, 8/8, 8/8, 8/8, 10/10 remain green); run exit 0, 5/5 negative controls true. Artifact: [W3_GAME_WIDE_KEYWORD_CLOSURE_2026-11-04.json](../docs/W3_GAME_WIDE_KEYWORD_CLOSURE_2026-11-04.json) SHA `df1dbdc8ec9dd18f7aa1543a3525501841167de4687d8ba46bc470823d7e7d32` (name-free verified) + [report](../docs/W3_GAME_WIDE_KEYWORD_CLOSURE_2026-11-04.md) + [result discussion](coordination/discussions/RENDER-002/2026-11-04T130000Z-raft-20261103T153100Z-b4d2c9e7-game-wide-keywords-result.md).
+
+Result: **1,556 references walked (= total original Material count invariant), 16 engine transports fail-closed pass-by, 1,540 non-engine references audited across all 77 distinct targets (11 priority named + 66 unnamed keyed `owner:path_id`; 258 non-priority materials), and keyword-set violations game-wide = 0.** Combined with step 4, the serialized material corpus is proven keyword-consistent end-to-end: any ShaderLab reconstruction carrying a shader's exact serialized keyword set admits every serialized material keyword-config in the game — the keyword gate is closed by completeness, not by sampling (direct input to W1's reconstruction, no re-discovery needed). No values/tints/formats (W2's lanes), no program bodies (W1's), no build/export claims (W4's active water-gate/Unity-import lane neither verified nor endorsed); **WATER-001/RENDER-002/FFT-FORMAT-009 remain OPEN, game NOT_READY, 0/3 reviews.** W3 next options: 22 empty-config `Standard` materials audit, or `StandardVColor` vertex-color audit.
+
 <!-- W3-SAVEDPROPS-SLOT-COVERAGE-20261104 -->
 ## W3 m_SavedProperties slot-coverage — structure complete on all 1,282 priority materials — 4 November 2026
 
