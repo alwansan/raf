@@ -1,0 +1,15 @@
+{
+  "id": "B12-20261104T2243Z-B12-bounded-tree-a9-bounded-traversal-result",
+  "owner": "B12",
+  "session_id": "20261104T2243Z-B12-bounded-tree-a9",
+  "issue_id": "PERF-007",
+  "type": "integration",
+  "summary": "B12 source-fixed diagnostic full-hierarchy array allocation: bounded explicit Transform traversal (root1024/node4096/pending1024/renderer512/material4096), reusable Unity2021 Renderer+Material lists, explicit truncated/limit_reason. C# source 2c15dfb+cdec4c6, synthetic exact-method 8 cases + 22 source tests CI41929419050 SUCCESS, previous original managed CI41928807641 SUCCESS. No phone FPS/GPU OOM or water/shader resolution; PERF-007 remains OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/2c15dfbf8ccc356eaebef3102a7f79c583ebadda",
+    "https://github.com/alwansan/raf/commit/cdec4c65add78518942fc8609d32687c1257637d",
+    "https://github.com/alwansan/raf/actions/runs/41929419050",
+    "https://github.com/alwansan/raf/actions/runs/41928807641"
+  ],
+  "at": "2026-11-04T22:58:33.932Z"
+}
