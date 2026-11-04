@@ -7,6 +7,7 @@ on:
     paths:
       - '.github/workflows/raft-b48-refresh-team-summary.yml'
 
+# B45 WATER-001 source/CPU-Vulkan private recovery evidence checkpoint (no readiness claim).
 permissions:
   contents: write
 
