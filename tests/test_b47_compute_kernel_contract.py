@@ -97,8 +97,10 @@ class B47KernelContractTests(unittest.TestCase):
             meta = Path(str(path) + ".meta")
             meta.unlink()
             meta.symlink_to(path)
-            report = inspect(root)
-            self.assertFalse(report["water_compute_source_candidate_present"])
+            # B14's fail-closed source-path contract rejects linked original
+            # metadata rather than silently reporting a missing FFT candidate.
+            with self.assertRaisesRegex(ValueError, "linked"):
+                inspect(root)
 
 
 if __name__ == "__main__":
