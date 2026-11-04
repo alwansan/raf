@@ -1,0 +1,12 @@
+{
+  "id": "20261104T2245Z-gamut-utf8-start",
+  "owner": "B11",
+  "session_id": "20261104T2244Z-B11-54cf",
+  "issue_id": "RENDER-002",
+  "type": "start",
+  "summary": "B11 resumed on reproducible UTF-8 character-index versus byte-index misalignment in gamut correction whitelist; exact source tests planned, without Unity/phone inference.",
+  "evidence": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/b11_restore_original_color_gamuts.py"
+  ],
+  "at": "2026-11-04T22:45:00Z"
+}
