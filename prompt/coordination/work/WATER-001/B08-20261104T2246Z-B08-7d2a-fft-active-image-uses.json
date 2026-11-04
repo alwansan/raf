@@ -6,7 +6,7 @@
   "issue_id": "WATER-001",
   "track": "water-fft",
   "approach": "Use existing bounded SPIR-V SSA image lineage to prove each of the two original FFT sampled descriptor candidates participates in executable image reads and the unique storage output is actually written, across all20 authentic original translations.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "fab58cfd0d2435df604f6e4a8199ea5eb0545d70",
   "intended_files": [
     "scripts/b08_fft_spirv_descriptor_abi.py",
@@ -23,8 +23,20 @@
   "experiment_ids": [
     "B08-fft-active-image-20261104"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Add source-free synthetic OpImageFetch/OpImageWrite/SSA negative controls and check real original 20 SPIR-V programs with existing SHA-pinned workflow.",
-  "updated_at": "2026-11-04T22:54:29.467Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41929448442",
+    "https://github.com/alwansan/raf/actions/runs/41929513820"
+  ],
+  "result": {
+    "synthetic_tests_passed": 20,
+    "source_authenticated_compiled_slots": 20,
+    "active_sampled_resource_reads_proven": 20,
+    "active_storage_resource_writes_proven": 20,
+    "all_supported_spirv_image_operands_uniquely_traced": true,
+    "source_dxbc_t0_t1_to_target_binding_verified": false,
+    "unity_editor_android_tested": false,
+    "evidence": "https://github.com/alwansan/raf/actions/runs/41929513820"
+  },
+  "next_step": "Source-authenticated executable descriptor-use subset completed; exact original t0↔t1 mapping and native Unity program still missing.",
+  "updated_at": "2026-11-04T22:58:07.863Z"
 }
