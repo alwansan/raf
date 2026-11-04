@@ -9,19 +9,23 @@
       "track": "resources",
       "evidence": [
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/ZIP2_SOURCE_PROVIDER.md",
-        "https://github.com/alwansan/CL/blob/5394407b5cd0a0ca1848ff0902f8d2133bf6ea29/raft%20log/lf/LogRaft-20261104-225757-156/session-summary.json"
+        "https://github.com/alwansan/CL/blob/5394407b5cd0a0ca1848ff0902f8d2133bf6ea29/raft%20log/lf/LogRaft-20261104-225757-156/session-summary.json",
+        "https://github.com/alwansan/raf/actions/runs/41914505411",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B04_MESH_SOURCE_PATH_SAFETY_2026-11-04.md",
+        "https://github.com/alwansan/raf/commit/f0afb5983694cec91a61bcd6f9825ca1cf658f7e"
       ],
       "remaining": [
         "تحقق stream ranges/format/sRGB/normalmaps وGUIDs",
         "missingMonoScript وconvexmeshwarnings أسبابغيرمحسومة",
-        "جردنطاقمحددومرحلةاستعادةلكلمورد"
+        "جردنطاقمحددومرحلةاستعادةلكلمورد",
+        "B04 linked-path source provenance guarded for YAML Mesh utility (CI synthetic only); still need actual original Mesh source and device geometry binding verification"
       ],
       "acceptance": [
         "تغطيةmanifestوالتبعياتالمطلوبة",
         "اكتمالgeometry/bindingsمعاختباروظيفي"
       ],
-      "updated_by": "owner-team-bootstrap",
-      "updated_at": "2026-11-04",
+      "updated_by": "B04",
+      "updated_at": "2026-11-04T21:18:26.107Z",
       "_record_path": "issues/ASSET-RESTORE-001.json"
     },
     {
@@ -173,7 +177,14 @@
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B44_ORIGINAL_MATERIAL_COLOR_LINEAGE_2026-11-04.md",
         "https://github.com/alwansan/raf/commit/04d7e054b4186ae192b3e740c0cba5ec71306b0c",
         "https://github.com/alwansan/raf/actions/runs/41913591959",
-        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B46_EXPORTED_TEXTURE_LINKS_2026-11-04.md"
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B46_EXPORTED_TEXTURE_LINKS_2026-11-04.md",
+        "https://github.com/alwansan/raf/commit/0d33268645106e7bc28fcaa786d90683fe93de19",
+        "https://github.com/alwansan/raf/actions/runs/41913145660",
+        "https://github.com/alwansan/raf/commit/8398553c2e4d58863998bc329ecf332af08fa0b2",
+        "https://github.com/alwansan/raf/actions/runs/41914198631",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B05_MATERIAL_TEXENV_LINEAGE_2026-11-04.md",
+        "https://github.com/alwansan/raf/actions/runs/41914188268",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B43_MATERIAL_KEYWORD_EXPORT_2026-11-04.md"
       ],
       "remaining": [
         "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -181,15 +192,18 @@
         "حفظ الأصل وألوانه",
         "B04 الأصل Linear مع أداة تصحيح مؤقتة مثبتة في CI؛ يلزم إثبات إعداد مشروع Unity المُصدَّر الفعلي وفحص ألوان الجهاز بعد البناء، ولا يكفي لإغلاق RENDER-002",
         "B44 source-vs-export Material m_Colors synthetic guard CI PASS; authentic SHA-verified original vs actual same-instance exported YAML not yet tested. Repair precise mismatch if any, otherwise investigate shader/texture/sRGB.",
-        "B46: exported Material m_TexEnvs -> Texture GUID+fileID structural guard 21 synthetic tests PASS (CI 41913591959); real same-instance full export NOT checked, no texture loss cause proven; run guard and source-export PPtr comparison before material repair."
+        "B46: exported Material m_TexEnvs -> Texture GUID+fileID structural guard 21 synthetic tests PASS (CI 41913591959); real same-instance full export NOT checked, no texture loss cause proven; run guard and source-export PPtr comparison before material repair.",
+        "B02 source importer colorspace guard: 11/11 synthetic PASS; original Texture2D(owner,pathID) -> same-export image/meta GUID witness and real original bytes still required before any game repair or visual claim.",
+        "B05 now has a source-authenticating same-instance Material m_TexEnvs checker (11/11 synthetic CI); actual ZIP2-to-Unity-export texture PPtr comparison, external-owner mapping and pixel/phone validation NOT YET performed.",
+        "B43: material valid/invalid shader keyword + disabled-pass same-instance export verifier 17/17 synthetic CI PASS at 41914188268, but not run on authenticated real ZIP2 original and private same-process export; no proof of actual white-material cause or phone GPU correction."
       ],
       "acceptance": [
         "مطابقة روابط ومراجع الأصل",
         "مقارنةصوريةلنفسالمشهد",
         "نجاحعلىالهاتف"
       ],
-      "updated_by": "B46",
-      "updated_at": "2026-11-04T21:16:00Z",
+      "updated_by": "B43",
+      "updated_at": "2026-11-04T21:19:30.005Z",
       "_record_path": "issues/RENDER-002.json"
     },
     {
@@ -230,7 +244,12 @@
         "https://github.com/alwansan/raf/commit/50702470954774ba96fe27509f1f9eddfd1aa4ea",
         "https://github.com/alwansan/raf/actions/runs/41911824567",
         "https://github.com/alwansan/raf/actions/runs/41912422220",
-        "https://github.com/alwansan/raf/actions/runs/41912450062"
+        "https://github.com/alwansan/raf/actions/runs/41912450062",
+        "https://github.com/alwansan/raf/actions/runs/41913273839",
+        "https://github.com/alwansan/raf/actions/runs/41914193733",
+        "https://github.com/alwansan/raf/commit/348990da5c7864bfbbc39e2f4fbe3e4969795d81",
+        "https://github.com/alwansan/raf/actions/runs/41913854292",
+        "https://github.com/alwansan/raf/actions/runs/41914612977"
       ],
       "remaining": [
         "Spectrum/Foam/Blur passes ناقصة في APK86",
@@ -238,15 +257,18 @@
         "ربط kernels/resources/original programs وUnity/Adreno",
         "B49 original ShaderLab pass structural gate fixed/11 synthetic tests pass; real original Spectrum/Foam/Blur programs and compute kernels still unverified and APK86 unchanged",
         "B48 source-authenticated CSharp selector/20 compiled FFT program candidate workgroup match verified (10 pairs); actual Unity runtime kernel-ID-to-compiled-slot mapping still missing, no .compute import or Adreno device proof.",
-        "Original serialized FFT FindKernel/Dispatch kernel index to compiled program identity and Android GPU runtime remain unverified after B47 source-only entrypoint guard."
+        "Original serialized FFT FindKernel/Dispatch kernel index to compiled program identity and Android GPU runtime remain unverified after B47 source-only entrypoint guard.",
+        "B45 original Subsurface Blur two-pass CPU proof complete, native staging wired but has not run; Unity/Adreno verification and other FFT/water kernels remain open",
+        "B06 source-only: startup diagnostic now queries original FFT RGHalf/RGFloat/ARGBHalf/ARGBFloat RenderTexture/random-write and compute-group capability; CI synthetic passed, future APK/device results unknown.",
+        "B06 original FFT secondary Dispatch parser now excludes comment/string fake calls; 8/8 synthetic tests pass, original-data rerun and runtime shader import still unverified."
       ],
       "acceptance": [
         "هوية برامج ونوى أصلية أو تطابق موثق دونdummy",
         "تثبيت فيالتصدير+Unity import/render",
         "اختبار هاتف يثبت الماء بلا pass/kernel errors"
       ],
-      "updated_by": "B47",
-      "updated_at": "2026-11-04T21:08:00Z",
+      "updated_by": "B06",
+      "updated_at": "2026-11-04T21:18:33.615Z",
       "_record_path": "issues/WATER-001.json"
     }
   ],
@@ -268,23 +290,26 @@
       "stages": {
         "acquisition": "SHA_PIN_VERIFIED",
         "extraction": "SHA_PIN_VERIFIED",
-        "reconstruction": "SOURCE_STRUCTURAL_VERIFIED",
+        "reconstruction": "CPU_VULKAN_NUMERIC_AND_PRIVATE_SHADERLAB_VERIFIED",
         "binding": "NOT_VERIFIED",
-        "integration": "NOT_INSTALLED",
+        "integration": "GATED_NATIVE_STAGING_WIRED_NOT_EXECUTED",
         "device": "NOT_TESTED"
       },
       "evidence": [
         "https://github.com/alwansan/raf/actions/runs/41912390029",
         "https://github.com/alwansan/raf/actions/runs/41913062003",
-        "https://github.com/alwansan/raf/commit/994814069cd70cd03b79453b347f8f7e644b9c8e"
+        "https://github.com/alwansan/raf/commit/994814069cd70cd03b79453b347f8f7e644b9c8e",
+        "https://github.com/alwansan/raf/actions/runs/41913273839",
+        "https://github.com/alwansan/raf/actions/runs/41914193733",
+        "https://github.com/alwansan/raf/commit/348990da5c7864bfbbc39e2f4fbe3e4969795d81"
       ],
       "remaining": [
-        "Run original-vs-rebuilt CPU Vulkan two-pass raster and confirm private ShaderLab recovery end-to-end (B45 run 41913273839)",
-        "Authentic serialized property/material GUID rebind and Unity 2021.3 import (no synthetic asset)",
-        "Adreno and owner device visual comparison; water FFT/other passes still OPEN"
+        "Real exported one-object shader GUID/.meta install and Unity compiler have not been executed",
+        "Original sampler state and material uniform upload on Unity/Adreno not verified",
+        "Other water and FFT shader and compute kernels not reconstructed"
       ],
       "updated_by": "B45",
-      "updated_at": "2026-11-04T21:08:00Z",
+      "updated_at": "2026-11-04T21:16:00Z",
       "_record_path": "resources/B45-blur-original-property.json"
     },
     {
@@ -450,6 +475,19 @@
       "_record_path": "events/B03/20261104T2111Z-archive-result.json"
     },
     {
+      "id": "B03-20261104T2115Z-render-material-start",
+      "owner": "B03",
+      "session_id": "20261104T2101Z-B03-a419",
+      "issue_id": "RENDER-002",
+      "type": "start",
+      "summary": "Investigate missing/incorrect exported Renderer.m_Materials identity separately from Shader and texture checks; no changes to original assets.",
+      "evidence": [
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/w1_audit_export_material_shaders.py"
+      ],
+      "at": "2026-11-04T21:13:18.875Z",
+      "_record_path": "events/B03/20261104T2115Z-render-material-start.json"
+    },
+    {
       "id": "20261104T2102Z-B04-start",
       "owner": "B04",
       "session_id": "20261104T2102Z-B04-7c20",
@@ -476,6 +514,77 @@
       ],
       "at": "2026-11-04T21:10:20.156Z",
       "_record_path": "events/B04/20261104T2110Z-colorspace-integrated.json"
+    },
+    {
+      "id": "20261104T2118Z-B04-mesh-source-start",
+      "owner": "B04",
+      "session_id": "20261104T2102Z-B04-7c20",
+      "issue_id": "ASSET-RESTORE-001",
+      "type": "start",
+      "summary": "Investigate Mesh vertex restoration source path safety, especially symlinked .asset/.meta; preserve original .meta/GUID and fail closed",
+      "evidence": [
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/repair_exported_mesh_vertices.py"
+      ],
+      "at": "2026-11-04T21:14:58.288Z",
+      "_record_path": "events/B04/20261104T2118Z-asset-mesh-safety-start.json"
+    },
+    {
+      "id": "20261104T2120Z-B04-mesh-source-integrity",
+      "owner": "B04",
+      "session_id": "20261104T2102Z-B04-7c20",
+      "issue_id": "ASSET-RESTORE-001",
+      "type": "result",
+      "summary": "Mesh source path guard rejects linked YAML/.meta/providers/snapshot; isolated 6-test CI success; original game/device geometry still unverified.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41914505411",
+        "https://github.com/alwansan/raf/commit/f0afb5983694cec91a61bcd6f9825ca1cf658f7e"
+      ],
+      "at": "2026-11-04T21:17:51.568Z",
+      "_record_path": "events/B04/20261104T2120Z-asset-mesh-source-integrity.json"
+    },
+    {
+      "id": "20261104T2115Z-B05-material-texenv-result",
+      "owner": "B05",
+      "session_id": "20261104T2107Z-B05-9e24",
+      "issue_id": "RENDER-002",
+      "type": "result",
+      "summary": "Integrated SHA-pinned-original-aware Material m_TexEnvs-to-same-export pointer fidelity verifier and 11 synthetic controls; CI41914198631 SUCCESS, no source or device rendering claim.",
+      "evidence": [
+        "https://github.com/alwansan/raf/commit/8398553c2e4d58863998bc329ecf332af08fa0b2",
+        "https://github.com/alwansan/raf/commit/94f47acffd185820445fbb9df1b2b52e0288c687",
+        "https://github.com/alwansan/raf/actions/runs/41914198631"
+      ],
+      "at": "2026-11-04T21:15:00Z",
+      "_record_path": "events/B05/20261104T2115Z-source-contract-result.json"
+    },
+    {
+      "id": "20261104T210726Z-B06-fmt6a2-dispatch-lexical-sourcefixed",
+      "owner": "B06",
+      "session_id": "20261104T210726Z-B06-fmt6a2",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "summary": "Hardens secondary authenticated FFT resource Dispatch shape parser against comment/string false positives using shared B01 executable-only masking; 8/8 synthetic tests passed; original-private/Unity/device pending.",
+      "evidence": [
+        "https://github.com/alwansan/raf/commit/df784a6ab821f3dbbfbe7ea47293e16f3edba11e",
+        "https://github.com/alwansan/raf/actions/runs/41914612977"
+      ],
+      "at": "2026-11-04T21:18:03.365Z",
+      "_record_path": "events/B06/20261104T210726Z-B06-fmt6a2-dispatch-lexical-sourcefixed.json"
+    },
+    {
+      "id": "20261104T210726Z-B06-fmt6a2-fft-capabilities-sourcefixed",
+      "owner": "B06",
+      "session_id": "20261104T210726Z-B06-fmt6a2",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "summary": "Added startup-only original FFT format/render-target random-write + compute-group capability logging to AndroidRuntimeLog; real C# logger compiled and executed against synthetic failure controls, CI SUCCESS. No Unity/device claim.",
+      "evidence": [
+        "https://github.com/alwansan/raf/commit/24f360712732c2dd4ef056751687ac3c1099e7fa",
+        "https://github.com/alwansan/raf/actions/runs/41913854292",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B06_FFT_ANDROID_CAPABILITY_PROBE_2026-11-04.md"
+      ],
+      "at": "2026-11-04T21:14:08.582Z",
+      "_record_path": "events/B06/20261104T210726Z-B06-fmt6a2-fft-capabilities-sourcefixed.json"
     },
     {
       "id": "20261104T210726Z-B06-fmt6a2-start",
@@ -506,6 +615,19 @@
       "_record_path": "events/B07/20261104T2112Z-joined.json"
     },
     {
+      "id": "20261104T2115Z-gamut-start",
+      "owner": "B11",
+      "session_id": "20261104T2115Z-B11-bca7",
+      "issue_id": "RENDER-002",
+      "type": "start",
+      "summary": "Independent gamut parity scope: original [0] authenticated by B04; actual export unknown; device whiteness not attributed.",
+      "evidence": [
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B04_ORIGINAL_COLOR_SPACE_PARITY_2026-11-04.md"
+      ],
+      "at": "2026-11-04T21:15:00Z",
+      "_record_path": "events/B11/20261104T2115Z-gamut-start.json"
+    },
+    {
       "id": "20261104T2104Z-B43-start",
       "owner": "B43",
       "session_id": "20261104T2104Z-B43-c8f2",
@@ -518,6 +640,21 @@
       ],
       "at": "2026-11-04T21:04:07.263Z",
       "_record_path": "events/B43/20261104T2104Z-B43-start.json"
+    },
+    {
+      "id": "20261104T2117Z-B43-keyword-tests",
+      "owner": "B43",
+      "session_id": "20261104T2104Z-B43-c8f2",
+      "issue_id": "RENDER-002",
+      "type": "result",
+      "summary": "Original-to-export Material keyword/pass state verifier and synthetic YAML/meta controls completed; CI 17/17 PASS; no real export/device claim.",
+      "evidence": [
+        "https://github.com/alwansan/raf/commit/9a918009c18332fa3bc176ebd008c6dd5eba7baa",
+        "https://github.com/alwansan/raf/commit/8f9ecde1fc82808af79fdc6194a211c2560c1398",
+        "https://github.com/alwansan/raf/actions/runs/41914188268"
+      ],
+      "at": "2026-11-04T21:17:54.375Z",
+      "_record_path": "events/B43/20261104T2117Z-B43-keyword-tests.json"
     },
     {
       "id": "20261104T2059Z-start-material-values",
@@ -548,6 +685,20 @@
       "_record_path": "events/B44/20261104T2107Z-material-colors-tested.json"
     },
     {
+      "id": "20261104T2115Z-color-guard-11-ci-pass",
+      "owner": "B44",
+      "session_id": "20261104T2059Z-B44-f0ac",
+      "issue_id": "RENDER-002",
+      "type": "result",
+      "summary": "B44 Material m_Colors same-instance export fidelity guard hardened against duplicate YAML keys; 11 synthetic controls and independent GitHub CI41913494314 SUCCESS. Source tool integrated to branch, original Raft/full export comparison still unknown; no device fix or closure claimed.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41913494314",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B44_ORIGINAL_MATERIAL_COLOR_LINEAGE_2026-11-04.md"
+      ],
+      "at": "2026-11-04T21:15:00Z",
+      "_record_path": "events/B44/20261104T2115Z-color-guard-11-ci-pass.json"
+    },
+    {
       "id": "B45-20261104-blur-start",
       "owner": "B45",
       "session_id": "20261104T2056Z-B45-f0c1",
@@ -562,6 +713,48 @@
       "_record_path": "events/B45/20261104T2056Z-blur-start.json"
     },
     {
+      "id": "B45-20261104-blur-native-wiring",
+      "owner": "B45",
+      "session_id": "20261104T2056Z-B45-f0c1",
+      "issue_id": "WATER-001",
+      "type": "integration",
+      "summary": "Bounded private ShaderLab recovery plus exact-candidate SHA, exported target/GUID backup rollback logic added to explicitly requested native workflow; 9 synthetic installer/staging tests pass. Native Unity import has not executed and strict WATER/FFT gates remain enabled.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41914193733",
+        "https://github.com/alwansan/raf/commit/348990da5c7864bfbbc39e2f4fbe3e4969795d81"
+      ],
+      "at": "2026-11-04T21:15:00Z",
+      "_record_path": "events/B45/20261104T2117Z-blur-native-wiring.json"
+    },
+    {
+      "id": "B45-20261104-blur-private-stage-result",
+      "owner": "B45",
+      "session_id": "20261104T2056Z-B45-f0c1",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "summary": "Private exact Blur source SHA 5886dc36... staged successfully in isolated CI from authenticated ZIP2 with six zero-difference color/depth comparisons and all raster mutation guards. Source not published; external native project not modified; Unity/Adreno acceptance pending.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41914205988"
+      ],
+      "at": "2026-11-04T21:17:00Z",
+      "_record_path": "events/B45/20261104T2117Z-blur-private-stage-result.json"
+    },
+    {
+      "id": "B45-20261104-blur-source-cpu-result",
+      "owner": "B45",
+      "session_id": "20261104T2056Z-B45-f0c1",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "summary": "Authenticated original Subsurface Blur property serializer fixes post-raster wrapper failure; both genuine passes regenerate private 23068-byte ShaderLab with zero per-pixel color/depth error on six CPU Vulkan positive comparisons and all 12 mutations detected; Unity/phone not tested.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41913062003",
+        "https://github.com/alwansan/raf/actions/runs/41913273839",
+        "https://github.com/alwansan/raf/commit/994814069cd70cd03b79453b347f8f7e644b9c8e"
+      ],
+      "at": "2026-11-04T21:10:00Z",
+      "_record_path": "events/B45/20261104T2117Z-blur-source-cpu-result.json"
+    },
+    {
       "id": "20261104T2058Z-join-render-texture-links",
       "owner": "B46",
       "session_id": "20261104T2058Z-B46-6e3d",
@@ -574,6 +767,21 @@
       ],
       "at": "2026-11-04T20:58:00Z",
       "_record_path": "events/B46/20261104T2058Z-join-render-texture-links.json"
+    },
+    {
+      "id": "20261104T2117Z-render-texture-links-ci",
+      "owner": "B46",
+      "session_id": "20261104T2058Z-B46-6e3d",
+      "issue_id": "RENDER-002",
+      "type": "integration",
+      "summary": "B46 authored source checker and negative fileID controls, integrated into isolated CI; 21 checks PASS on source 04d7e05. Real game export/device not verified and RENDER remains OPEN.",
+      "evidence": [
+        "https://github.com/alwansan/raf/commit/04d7e054b4186ae192b3e740c0cba5ec71306b0c",
+        "https://github.com/alwansan/raf/actions/runs/41913591959",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B46_EXPORTED_TEXTURE_LINKS_2026-11-04.md"
+      ],
+      "at": "2026-11-04T21:17:00Z",
+      "_record_path": "events/B46/20261104T2117Z-render-texture-links-ci.json"
     },
     {
       "id": "20261104T2100Z-b47-scope-collision",
@@ -707,5 +915,5 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "input_sha256": "d8343b8f2e91554f29824ab8a8346b68b457af5ee32865f639b8b4e6b022b360"
+  "input_sha256": "feb72314022c05c1ed536b8c09783d05d60476ff4ff8b8342d846878ba697aeb"
 }
