@@ -1,0 +1,82 @@
+name: B24 WATER-001 original Foam four-stage Vulkan probe
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/b24_original_foam_stage_translation.py
+      - tests/test_b24_original_foam_stage_translation.py
+      - .github/workflows/raft-b24-original-foam-stages.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raft-b24-original-foam-safe
+  cancel-in-progress: false
+jobs:
+  original-foam:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests/test_b24_original_foam_stage_translation.py
+      - name: B24 synthetic negative controls and source compile
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_b24_original_foam_stage_translation.py -v
+          python3 -m py_compile scripts/b24_original_foam_stage_translation.py
+      - name: Check disk for exact ZIP2 original provider
+        run: python3 -c 'import shutil; assert shutil.disk_usage(".").free > 3*1024**3'
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-original
+          filter: blob:none
+          lfs: false
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/sharedassets0.assets/*
+      - name: SHA-verify and stage one authentic source without LFS
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/b24-foam-source"
+          python3 - <<'PY'
+          import os, subprocess
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import stage, PINS, ZIP2_SHA
+          root = Path("zip2-original")
+          assert subprocess.check_output(["git", "-C", str(root), "rev-parse", "HEAD"], text=True).strip() == ZIP2_SHA
+          result = stage(root, Path(os.environ["RUNNER_TEMP"])/"b24-foam-source",
+                         {"Raft_Data/sharedassets0.assets": PINS["Raft_Data/sharedassets0.assets"]})
+          assert result["verified_bytes"] == 115978112 and result["lfs_used"] is False
+          print("B24_FOAM_OWNER authenticated=true lfs=false bytes=115978112")
+          PY
+      - name: Install original D3D11 translation utilities
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
+      - name: Link four original Foam programs and translate only privately
+        run: |
+          set -euo pipefail
+          mkdir -p b24-foam-evidence
+          timeout 420s python3 -m scripts.b24_original_foam_stage_translation --source "$RUNNER_TEMP/b24-foam-source" --out b24-foam-evidence/aggregate.json
+      - name: Publish only redacted aggregate (never shaders/HLSL/DXBC)
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: b24-foam-aggregate-safe
+          path: b24-foam-evidence/aggregate.json
+          if-no-files-found: ignore
+          retention-days: 7
