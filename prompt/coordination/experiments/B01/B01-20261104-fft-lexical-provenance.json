@@ -22,8 +22,8 @@
   "run_url": "https://github.com/alwansan/raf/actions/runs/41911972796",
   "artifact_urls": [],
   "budget": "Existing managed caller CI; no Unity, no LFS hydration or full native build",
-  "status": "running",
-  "observed_result": "Initial preceding 41911886307 SUCCESS; final commit workflow pending. Do not claim final results.",
+  "status": "completed",
+  "observed_result": "GitHub CI 41911972796 success final source 938dd13, job 126861846260. 64 synthetic tests passed; private SHA-pinned original CSharp Dx11FFT: Dispatch=2, SetTexture=6, offsets=[0,1]; WavesRendererFFT SetTexture=10. FFT numeric oracle exit=0 errorCodes=[]. Not a GPU/device rendering result.",
   "rejected_hypotheses": [],
   "limitations": [
     "Regex lexical structure does not infer runtime kernel identity",
@@ -31,5 +31,5 @@
     "No Android water GPU test"
   ],
   "integration_commit": "938dd139de855d41614f046cb8c2a6871501b2e5",
-  "next_step": "Inspect final workflow conclusion and provenance metrics."
+  "next_step": "Move to original shader/kernel authenticity integration; WATER-001 remains OPEN."
 }
