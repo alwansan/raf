@@ -1,0 +1,14 @@
+{
+  "id": "T1-20261104T235355Z-T1-9fca-start",
+  "owner": "T1",
+  "session_id": "20261104T235355Z-T1-9fca",
+  "issue_id": "WATER-001",
+  "type": "start",
+  "summary": "T1 takes over FFT runtime FindKernel/Dispatch/.compute integration from B01/B06/B08/B18/B30/B48, preserving their original compiled-program proof but not claiming Unity/runtime correctness. Baseline cde13f783e5274d5898703459e8178e2485ef9db",
+  "evidence": [
+    "prompt/coordination/clients/B18/MEMORY.md",
+    "prompt/coordination/clients/B48/MEMORY.md",
+    "https://github.com/alwansan/raf/actions/runs/41931883517"
+  ],
+  "at": "2026-11-04T23:54:43.431Z"
+}

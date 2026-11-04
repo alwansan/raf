@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "generation": "T-2026-11-05",
+  "session_id": "20261104T235355Z-T1-9fca",
+  "issue_id": "WATER-001",
+  "track": "P0 FFT runtime FindKernel/Dispatch and original .compute asset integration",
+  "approach": "Trace original original-byte SHA-pinned Dx11FFT/GpuFFT dispatch path, existing Unity-exported compute resources and current loader; address one demonstrated runtime/kernel integration defect instead of repeating 20-program DXBC census.",
+  "status": "active",
+  "base_sha": "cde13f783e5274d5898703459e8178e2485ef9db",
+  "intended_files": [
+    "scripts/t1_fft_runtime_contract.py",
+    "tests/test_t1_fft_runtime_contract.py",
+    "prompt/coordination/clients/T1/*",
+    "prompt/coordination/work/WATER-001/*",
+    "prompt/coordination/experiments/T1/*",
+    "prompt/coordination/B_TEAM/events/T1/*"
+  ],
+  "hypothesis": "Available original compiled-slot identity is insufficient to infer Unity runtime kernel indices; a runtime caller/serialized asset comparison can identify the missing binding and support a fail-closed integration fix.",
+  "related_work": [
+    "prompt/coordination/work/WATER-001/B18-20261104T225100Z-B18-device-loaded-compute-inventory.json"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/B01/MEMORY.md",
+    "prompt/coordination/clients/B06/MEMORY.md",
+    "prompt/coordination/clients/B08/MEMORY.md",
+    "prompt/coordination/clients/B18/MEMORY.md",
+    "prompt/coordination/clients/B30/MEMORY.md",
+    "prompt/coordination/clients/B48/MEMORY.md",
+    "https://github.com/alwansan/raf/actions/runs/41931883517",
+    "https://github.com/alwansan/raf/actions/runs/41912422220"
+  ],
+  "last_verified_result": "B18 41931883517: 20 original compiled programs translated with identical SSA under two explicit descriptor maps, not Unity runtime kernel equivalence; APK86 original device FFT invalid kernels remain.",
+  "experiment_ids": [],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Read original call-graph source and exported compute asset; implement and test a concrete authenticity/runtime binding gate in isolated code.",
+  "updated_at": "2026-11-04T23:54:43.431Z"
+}

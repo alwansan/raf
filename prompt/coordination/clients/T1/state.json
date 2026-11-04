@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "username": "T1",
+  "generation": "T-2026-11-05",
+  "session_id": "20261104T235355Z-T1-9fca",
+  "resumed_from_session": null,
+  "status": "active",
+  "base_sha": "cde13f783e5274d5898703459e8178e2485ef9db",
+  "last_commit": null,
+  "updated_at": "2026-11-04T23:54:43.431Z",
+  "tracks": [
+    "WATER-001: original FFT runtime program-to-kernel selection and genuine compute staging"
+  ],
+  "work_ids": [
+    "T1-20261104T235355Z-T1-9fca-runtime-kernel-provenance"
+  ],
+  "run_urls": [],
+  "next_step": "Inspect authenticated original Dx11FFT/GpuFFT call sites versus current exported Unity ComputeShader; implement a fail-closed source-to-runtime integration check or source fix without fabricated kernel identities.",
+  "memory_path": "prompt/coordination/clients/T1/MEMORY.md"
+}
