@@ -12,3 +12,10 @@ Planned test: fixture using actual structural gate plus symlinked Assets, shader
 
 ## Checkpoint 2026-11-04T21:39:01.943Z
 Water provenance scope integrated at cfb97bf; new tests 4e0ce04. Actual preflight 41917493634 SUCCESS, job 126880924437: 10/10 tests including all five new path controls. Source-only validator; not authentic water/FFT pixel proof. WATER-001 OPEN, NOT_READY 0/3. Next independent scope considered: check project/backup redirect protection in SaveAndLoad stage, not duplicate B50's SteamStats repair.
+
+## Session checkpoint 2026-11-04T21:46:03.972Z
+- WATER-001 path provenance: source fix cfb97bf, tests 4e0ce04, preflight CI41917493634 SUCCESS (10/10). Metadata/project/Assets symlinks rejected. Source-only, original FFT/pass & phone unverified.
+- LOCAL-005 staging provenance: original-save adapter 02e7eef and Android-offline startup adapter cca6e1e. Fixture tests ab77a53 + 6b8c7be; independent bounded workflow 090a03b. CI41918579185 job126884721688 SUCCESS: 13/13 + 19/19 = 32/32, six new root/backup link negative controls. No native .rgd roundtrip, no proof of Steam runtime fix.
+- Details: docs/B14_WATER_PATH_PROVENANCE_2026-11-04.md and docs/B14_OFFLINE_SAVE_STAGE_PATH_PROVENANCE_2026-11-04.md; experiments and B_TEAM result events saved.
+- Owner: APK86 is older than repairs; water invalid pass/kernel and Steam StoreStats were observed there. B50's separate SteamStats repair and B07/B24 callback instrumentation await newer native/device confirmation. Sound/Settings owner-working, touch deferred.
+- Both B14 scopes finished SOURCE_FIXED, parent issues WATER-001, LOCAL-005 and RENDER-002 OPEN, NOT_READY, 0/3 readiness reviews. Pause session rather than claiming autonomous out-of-session work. Next check active original startup CI and future actual game/graphics integration.
