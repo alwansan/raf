@@ -21,23 +21,23 @@ from scripts.w1_depth_shaderlab import (
     decode_empty_parameters, render_state, quoted, tags, stage_body,
 )
 from scripts.run_original_dxbc_translation_probe import version_tokens
+from scripts.b45_blur_properties import serialize_properties
 
 OBJECT_SHA256 = "c9341848367eaedb12e551ce9061b1eea728f54f2069ef1a3c12c4a4a2e9bb52"
 PARSED_SHA256 = "865e5529986469f18fd3158612f925647599e8b5126187be0c87d490ff6d2aa3"
 
 
 def wrapper(parsed, stage_sources):
-    """Only exact original 1-subshader, 2-pass and empty-props layout permitted."""
+    """Only exact original one-texture-property and two-pass layout permitted."""
     if not isinstance(parsed, dict) or parsed.get("m_Name") != TARGET:
         raise ValueError("Blur ShaderLab original name changed")
-    if parsed.get("m_PropInfo", {}).get("m_Props"):
-        raise ValueError("Nonempty original property block needs exact serializer")
+    properties = serialize_properties(parsed)
     subs = parsed.get("m_SubShaders")
     if not isinstance(subs, list) or [len(s["m_Passes"]) for s in subs] != [2]:
         raise ValueError("Original Blur two-pass topology changed")
     if set(stage_sources) != {(0, 0), (0, 1)}:
         raise ValueError("Missing original Blur pass stage pairs")
-    lines = ["Shader " + quoted(TARGET) + " {", "Properties {}"]
+    lines = ["Shader " + quoted(TARGET) + " {", properties]
     for si, sub in enumerate(subs):
         lines.extend(["SubShader {", "LOD " + str(sub["m_LOD"]), tags(sub["m_Tags"])])
         for pi, p in enumerate(sub["m_Passes"]):
