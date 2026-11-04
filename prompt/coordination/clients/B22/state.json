@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "username": "B22",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2134Z-B22-c91f",
+  "resumed_from_session": null,
+  "status": "active",
+  "base_sha": "03ecf8ffda13347c9ffb17ef4c5aea3a4eb86b48",
+  "last_commit": null,
+  "updated_at": "2026-11-04T21:34:30Z",
+  "tracks": [
+    "colors-materials"
+  ],
+  "work_ids": [
+    "B22-20261104T2134Z-B22-c91f-scalar-parity"
+  ],
+  "run_urls": [],
+  "next_step": "Implement SHA-authenticated same-export Material m_Floats/m_Ints preservation comparison and negative controls; no original changes.",
+  "memory_path": "prompt/coordination/clients/B22/MEMORY.md"
+}

@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "owner": "B22",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2134Z-B22-c91f",
+  "issue_id": "RENDER-002",
+  "track": "colors-materials",
+  "approach": "Extend W2 name-only aggregate with source-authenticated per-instance original->exported m_Floats/m_Ints VALUE check using existing private trace; no source bytes or values disclosed.",
+  "status": "active",
+  "base_sha": "03ecf8ffda13347c9ffb17ef4c5aea3a4eb86b48",
+  "intended_files": [
+    "scripts/b22_verify_material_scalars.py",
+    "tests/test_b22_verify_material_scalars.py",
+    ".github/workflows/raft-b22-material-scalars.yml",
+    "docs/B22_MATERIAL_SCALAR_EXPORT_PARITY_2026-11-04.md"
+  ],
+  "hypothesis": "Export may alter Material scalar blend/cutout values while preserving shader and m_Colors, explaining some pale/opaque content; only comparison can distinguish.",
+  "related_work": [
+    "prompt/coordination/work/RENDER-002/raft-20261103T152008Z-92502b76-material-scalar-properties.json",
+    "prompt/coordination/work/RENDER-002/B44-20261104T2059Z-B44-f0ac-material-values.json"
+  ],
+  "experiment_ids": [
+    "b22-20261104T2134Z-B22-c91f-scalar-parity"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement tests and isolated CI; avoid redundant Unity full build.",
+  "updated_at": "2026-11-04T21:34:30Z"
+}

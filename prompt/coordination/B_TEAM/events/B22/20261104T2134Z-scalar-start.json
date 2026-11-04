@@ -1,0 +1,13 @@
+{
+  "id": "b22-20261104T2134Z-B22-c91f-start",
+  "owner": "B22",
+  "session_id": "20261104T2134Z-B22-c91f",
+  "issue_id": "RENDER-002",
+  "type": "start",
+  "summary": "Registered distinct P0 same-instance Material m_Floats/m_Ints VALUE fidelity investigation; not another W2 census or B44 color check.",
+  "evidence": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/W2_MATERIAL_SCALAR_PROPERTIES_2026-11-04.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B44_ORIGINAL_MATERIAL_COLOR_LINEAGE_2026-11-04.md"
+  ],
+  "at": "2026-11-04T21:34:30Z"
+}
