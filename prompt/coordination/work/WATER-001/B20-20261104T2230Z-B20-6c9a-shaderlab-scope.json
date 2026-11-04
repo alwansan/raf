@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "owner": "B20",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2230Z-B20-6c9a",
+  "issue_id": "WATER-001",
+  "track": "water-fft",
+  "approach": "source-only strict ShaderLab SubShader/Pass lexical-scope enforcement against out-of-context false positives",
+  "status": "active",
+  "base_sha": "5fc5c4838247c33669bba8b67e988893f22cd28e",
+  "intended_files": [
+    "scripts/b49_shaderlab_pass_contract.py",
+    "tests/test_b20_shaderlab_scope.py",
+    ".github/workflows/raft-b20-shaderlab-scope.yml"
+  ],
+  "hypothesis": "Global ShaderLab Pass regex matches non-SubShader Pass text and can miscount water source-pass readiness.",
+  "related_work": [
+    "B49 WATER-001 per-pass source contract, synthetic CI 41911824567"
+  ],
+  "experiment_ids": [
+    "B20-shaderlab-scope-20261104"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement scoped parser and negative-control tests; no GPU/Unity/phone claims.",
+  "updated_at": "2026-11-04T22:30:00Z"
+}
