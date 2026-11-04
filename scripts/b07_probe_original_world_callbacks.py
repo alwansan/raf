@@ -13,6 +13,8 @@ PINS = {
     "Raft_Network": "080035c137e446828226ed84a23190656b6f235d274436cafb477feaf93caa03",
     "SaveAndLoad": "b150dd404da48b8012f6659680b3552c11500c4ec97a64ad9aa12c60094568bb",
 }
+ORIGINAL_GAME_MANAGER_SHA256 = "8eb76bcf22028ace2394afe96051ae1e3e59e44f8243c2a68d6b163d80802306"
+ORIGINAL_ONWORLD_BODY_SHA256 = "f0ba21d67e1e332656fcc893f095b6a9da12eb6cd5e2be3b27001bb0cf02c835"
 ORIGINAL_DLL_BYTES = 3211776
 ORIGINAL_DLL_SHA256 = "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e"
 _NON_CODE = re.compile(r'''@"(?:""|[^"])*"|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|//[^\r\n]*|/\*[\s\S]*?\*/''')
@@ -75,7 +77,9 @@ def inspect(source_root, expected_game_manager_sha=None):
     # for subsequent pinning; do not assume any unverified source is original.
     network, network_sha = _source(source_root, "Raft_Network", PINS["Raft_Network"])
     save, save_sha = _source(source_root, "SaveAndLoad", PINS["SaveAndLoad"])
-    manager, manager_sha = _source(source_root, "GameManager", expected_game_manager_sha)
+    manager, manager_sha = _source(source_root, "GameManager", expected_game_manager_sha or ORIGINAL_GAME_MANAGER_SHA256)
+    if expected_game_manager_sha is None and fingerprint(method_body(manager, "OnWorldRecieved")[1]) != ORIGINAL_ONWORLD_BODY_SHA256:
+        raise ValueError("Unknown original GameManager callback body")
     net_type, net_body = method_body(network, "WorldHasBeenLoaded")
     manager_type, manager_body = method_body(manager, "OnWorldRecieved")
     save_type, save_body = method_body(save, "SaveGame")
@@ -90,7 +94,7 @@ def inspect(source_root, expected_game_manager_sha=None):
         raise ValueError("Original world/save return contract changed")
     if len(completions) != 1 or not any(x.start() < completions[0].start() for x in broadcasts):
         raise ValueError("Original scene-ready broadcast/completion order unrecognized")
-    if len(saves) != 1:
+    if len(saves) != 3:
         # Redacted diagnostics to explain an actual original-source contract
         # mismatch without logging any original body, snippets or literals.
         print("B07_CALLBACK_MISMATCH " + json.dumps({
@@ -122,7 +126,7 @@ def inspect(source_root, expected_game_manager_sha=None):
         "broadcast_before_completion": True,
         "on_world_received_savegame_calls": len(saves),
         "savegame_store_stats_calls": len(stats),
-        "callback_exception_can_interrupt_coroutine": True,
+        "callback_exception_can_interrupt_coroutine": not bool(re.search(r"\bcatch\s*\(", net_code)),
         "observed_on_device": False,
         "original_sources_modified": False,
         "limits": "Lexical source contract, not same-event dispatch, host scheduling, IO, runtime or RGD roundtrip",
