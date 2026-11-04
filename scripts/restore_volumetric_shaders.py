@@ -12,7 +12,7 @@ from pathlib import Path
 import re
 import time
 import urllib.request
-from scripts.restore_tmp_shaders import DECL, restore
+from scripts.restore_tmp_shaders import DECL, restore, _require_safe_vendor_asset_path
 
 REPO = 'SlightlyMad/VolumetricLights'
 COMMIT = 'd20b6f9a47ae857e1d313b147db2df3ef44b9196'
@@ -128,10 +128,19 @@ def download(path):
 
 
 def restore_project(project, backup, shaders, license):
-    # This legally required notice is a dependency of the restored volumetric
-    # effects and must be committed and rolled back WITH their Shader files.
-    # A separate post-restoration write could fail after the shaders changed,
-    # or follow a redirected StreamingAssets parent outside the Unity export.
+    # Keep the historical conflicting-notice rejection BEFORE any shader
+    # reconstruction, even when no original vendor shader is present. Unlike
+    # the old read-first check, this refuses redirected notice paths.
+    project = Path(project)
+    if any(candidate.is_symlink() for candidate in (project, *project.parents)):
+        raise ValueError('Unsafe symlinked Unity project ancestor')
+    assets = project / 'Assets'
+    notice = project / NOTICE
+    _require_safe_vendor_asset_path(assets, notice)
+    if notice.exists() and (not notice.is_file() or notice.read_bytes() != license):
+        raise ValueError('Conflicting binary redistribution notice')
+    # Write the validated notice only inside the shared shader transaction:
+    # it is an all-or-rollback addition, never a post-commit mutation.
     return restore(project, backup, shaders, {}, license,
         shader_prefix=tuple(EXPECTED[p][0] for p in EXPECTED), include_root=ROOT,
         label='VOLUMETRIC', vendor_version=COMMIT + '+raft-half-compose-v1',
