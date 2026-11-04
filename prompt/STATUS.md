@@ -1117,3 +1117,7 @@ BuildFix changed graphics acquisition to reuse regular files only after original
 
 ## Original Blur arithmetic operand gaps closed — 4 November
 [Evidence](../docs/BLUR_ORIGINAL_ARITHMETIC_OPERANDS_2026-11-04.md):41783146659SUCCESS,7synthetictests;recursive index parsing closes2remainingoriginalgaps.20staticCBreads,zero supported arithmetic parse failures in4stages. Relative index in another operand;originalCBdynamiccount0. Fullcoveragefalse,ShaderLab/GPUunverified;NOT_READY.
+
+
+## Original Blur member correlation — 4 November
+[Evidence](../docs/BLUR_ORIGINAL_MEMBER_CORRELATION_2026-11-04.md):41787401484SUCCESS,20CBreads;69per-stage scalar source addresses all match known original members;0unmapped/outside/missingslot. Address model supported by actual source, not runtime/consumption proof. Preserve partialCBallocations. Next texture/sampler/load bindings. NOT_READY.

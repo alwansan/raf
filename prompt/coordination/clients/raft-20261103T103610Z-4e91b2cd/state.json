@@ -1,15 +1,15 @@
 {
   "schema_version": 1,
   "username": "raft-20261103T103610Z-4e91b2cd",
-  "session_id": "20261104-recursive-index",
+  "session_id": "20261104-original-member-correlation",
   "resumed_from": null,
   "status": "completed",
   "updated_at": "2026-11-04T01:30:00Z",
-  "base_sha": "459bf0986e9fca0e271ca72e4d11c3ed1b344aa7",
+  "base_sha": "c56ab9c92ba2d404c1784a96b00739dba9494d9d",
   "current_work": [
     "WATER-001"
   ],
-  "last_commit": "459bf0986e9fca0e271ca72e4d11c3ed1b344aa7",
-  "next_step": "Correlate20originalstaticCBreads with private namedmembers; inspect nonarithmetic resource operands",
+  "last_commit": "c56ab9c92ba2d404c1784a96b00739dba9494d9d",
+  "next_step": "Validate original texture/sampler/load bindings before private wrapper integration;do not repeat arithmetic correlation",
   "memory_path": "prompt/coordination/clients/raft-20261103T103610Z-4e91b2cd/MEMORY.md"
 }
