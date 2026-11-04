@@ -6,7 +6,7 @@
   "issue_id": "RENDER-002",
   "track": "render-scene-telemetry-validation",
   "approach": "Repair stale Android offline platform CI test SceneLoaded callback signature while preserving B12's bounded render/material/mesh scene telemetry.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "1ecd5e56186147a438b9069774d2d465f1fb7e4f",
   "intended_files": [
     "tests/test_android_diagnostics_policy.py",
@@ -20,9 +20,11 @@
     "B14-20261104T2247Z-scene-telemetry-ci"
   ],
   "run_urls": [
-    "https://github.com/alwansan/raf/actions/runs/41918822026"
+    "https://github.com/alwansan/raf/actions/runs/41918822026",
+    "https://github.com/alwansan/raf/actions/runs/41928540784",
+    "https://github.com/alwansan/raf/actions/runs/41928677980"
   ],
-  "result": null,
-  "next_step": "Update test for current source code, verify existing CI and preserve live GPU/device caveats.",
-  "updated_at": "2026-11-04T22:48:39.367Z"
+  "result": "SOURCE_TEST_FIXED: Android instance SceneLoaded coroutine test updated, initial overbroad test assertion fixed; real offline platform workflow 41928677980 SUCCESS at 9ba6990c; no game C# modified or device proof.",
+  "next_step": "Scope complete; proceed to independent LOCAL-005 authentic original SaveGame ordering/dependency proof, preserving gameplay and B50 source guard.",
+  "updated_at": "2026-11-04T22:52:49.367Z"
 }
