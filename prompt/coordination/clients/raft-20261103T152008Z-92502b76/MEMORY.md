@@ -105,3 +105,6 @@
 ## تحديث 10:35Z (4 نوفمبر) — الحلقة السابعة: إعدادات أخذ العينات
 - 4,050 خامة: Repeat 3,434 / **Clamp 616 (15.2%)** (sharedassets0 603, sharedassets1 230, resources 184)؛ Bilinear 3,979؛ aniso=16 على 54؛ **mipbias صفر وmips stripped صفر لكل الوحي** (سرية fail-closed مباشرة)؛ 7 مالكين بwrap غير موحّد لكل محور.
 - بناء W4 الكامل فشل (41808015938, reconstruct) — مراقبة سلبية فقط.
+
+## تحديث 11:45Z (4 نوفمبر) — الحلقة السابعة أخضر
+- texture-sampler-settings: CI 41811800655 SUCCESS @ 1bfbbc8. سلسلة W2 الآن سبع حلقات كلها CI-verified (refs→Linear→split-خامات→queue/keywords→4,650 لعبة-كاملة→صبغات→أخذ عينات).
