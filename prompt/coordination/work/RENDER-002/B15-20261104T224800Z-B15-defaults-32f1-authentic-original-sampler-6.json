@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "owner": "B15",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T224800Z-B15-defaults-32f1",
+  "issue_id": "RENDER-002",
+  "track": "original-texture-sampler",
+  "approach": "Independent authentic ZIP2 sharedassets6.assets (6,607,272 B exact SHA) typed Texture2D→B15 original_sampler input acceptance, using existing B05 verified source pin and W2 confirmed 87 textures; 12min CPU-only job, aggregate-only, no game bytes emitted.",
+  "status": "active",
+  "base_sha": "fb83b45b04696fb07bdaecd02a735a0d92310995",
+  "intended_files": [
+    "scripts/b15_probe_authentic_original_sampler.py",
+    "tests/test_b15_probe_authentic_original_sampler.py",
+    ".github/workflows/raft-b15-original-sampler-source.yml",
+    "scripts/b15_texture_sampler_parity.py",
+    "docs/B15_TEXTURE_SAMPLER_PARITY_2026-11-04.md"
+  ],
+  "hypothesis": "Existing B15 tests stubbed UnityPy; a real SHA-verified original 6.6MB owner will exercise typed importer source extraction for 87 actual Texture2D objects and may expose schema/enumeration incompatibilities before same-export comparison. This is selected-owner source acceptance, not a false original-export equivalence claim.",
+  "related_work": [
+    "B05 actual original CI41929077930",
+    "W2 fullgame sampler baseline (87 Texture2D in sharedassets6)",
+    "B02 optional same-process texture trace compiled CI41927712988"
+  ],
+  "experiment_ids": [
+    "B15-20261104-original-sampler6"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement independent SHA/size-pinned selected owner parser, synthetic tests, source-only CI; interpret actual count, limitations, then use future same-export trace for importer parity.",
+  "updated_at": "2026-11-04T22:58:05.263Z"
+}
