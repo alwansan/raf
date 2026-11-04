@@ -14,7 +14,9 @@
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B44_ORIGINAL_MATERIAL_COLOR_LINEAGE_2026-11-04.md",
     "https://github.com/alwansan/raf/commit/04d7e054b4186ae192b3e740c0cba5ec71306b0c",
     "https://github.com/alwansan/raf/actions/runs/41913591959",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B46_EXPORTED_TEXTURE_LINKS_2026-11-04.md"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B46_EXPORTED_TEXTURE_LINKS_2026-11-04.md",
+    "https://github.com/alwansan/raf/commit/0d33268645106e7bc28fcaa786d90683fe93de19",
+    "https://github.com/alwansan/raf/actions/runs/41913145660"
   ],
   "remaining": [
     "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -22,13 +24,14 @@
     "حفظ الأصل وألوانه",
     "B04 الأصل Linear مع أداة تصحيح مؤقتة مثبتة في CI؛ يلزم إثبات إعداد مشروع Unity المُصدَّر الفعلي وفحص ألوان الجهاز بعد البناء، ولا يكفي لإغلاق RENDER-002",
     "B44 source-vs-export Material m_Colors synthetic guard CI PASS; authentic SHA-verified original vs actual same-instance exported YAML not yet tested. Repair precise mismatch if any, otherwise investigate shader/texture/sRGB.",
-    "B46: exported Material m_TexEnvs -> Texture GUID+fileID structural guard 21 synthetic tests PASS (CI 41913591959); real same-instance full export NOT checked, no texture loss cause proven; run guard and source-export PPtr comparison before material repair."
+    "B46: exported Material m_TexEnvs -> Texture GUID+fileID structural guard 21 synthetic tests PASS (CI 41913591959); real same-instance full export NOT checked, no texture loss cause proven; run guard and source-export PPtr comparison before material repair.",
+    "B02 source importer colorspace guard: 11/11 synthetic PASS; original Texture2D(owner,pathID) -> same-export image/meta GUID witness and real original bytes still required before any game repair or visual claim."
   ],
   "acceptance": [
     "مطابقة روابط ومراجع الأصل",
     "مقارنةصوريةلنفسالمشهد",
     "نجاحعلىالهاتف"
   ],
-  "updated_by": "B46",
-  "updated_at": "2026-11-04T21:16:00Z"
+  "updated_by": "B02",
+  "updated_at": "2026-11-04T21:13:00Z"
 }
