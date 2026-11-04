@@ -1,0 +1,12 @@
+{
+  "id": "20261104T2059Z-start-material-values",
+  "owner": "B44",
+  "session_id": "20261104T2059Z-B44-f0ac",
+  "issue_id": "RENDER-002",
+  "type": "start",
+  "summary": "B44 registered independent RENDER-002 Material SavedProperties color/texture value path investigation, separate from B47/B49 pass and B48 FFT work. No fix claimed.",
+  "evidence": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/REVIEW_2026-11-04.md"
+  ],
+  "at": "2026-11-04T20:59:00Z"
+}
