@@ -138,8 +138,10 @@ class B20FoamSourcePacketTest(unittest.TestCase):
                 link.unlink()
                 link.symlink_to(original)
                 return rows
+            packet_dir = Path(path) / "packet"
+            packet_dir.mkdir()
             with self.assertRaisesRegex(ValueError, "HLSL"):
-                self._stage(Path(path) / "packet", stages=bad)
+                self._stage(packet_dir, stages=bad)
 
     def test_private_directory_symlink_rejected(self):
         with tempfile.TemporaryDirectory() as path:
