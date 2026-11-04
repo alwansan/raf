@@ -23,16 +23,20 @@
     "Duplicate method, symlink and ambiguous Cheat.cs rejected"
   ],
   "workflow_path": ".github/workflows/raft-b50-cheat-steam-identity.yml",
-  "run_url": "https://github.com/alwansan/raf/actions/runs/41911081809",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41911354402",
   "artifact_urls": [],
   "budget": "12 minute CPU-only Ubuntu runner; no LFS, private-source artifact, Unity, Android APK or other clients' workflows.",
-  "status": "running",
-  "observed_result": "Synthetic negative controls passed; authentic original Cheat method probe currently running in step 5 (20:54Z).",
+  "status": "completed",
+  "observed_result": "Authenticated ZIP2-origin managed Assembly-CSharp.dll SHA 0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e / 3211776 bytes. Original Cheat source SHA 8137618061888b90d79af6dcca8c16aa5128bb5306ae07cab4e87d4a98ffe772 and AllowCheatsForLocalPlayer method SHA e89739ba461b65b03e78c388193dcfff44a19a41842af9b665a434c39fef1a09; one executable SteamUser.GetSteamID() call, zero direct m_SteamID field reads, zero preprocessor branches, bool method. Six synthetic tests and private original ILSpy probe SUCCESS on CI 41911354402. This proves a real original Steam identity caller but not necessarily a logged exception or Android failure.",
   "rejected_hypotheses": [],
   "limitations": [
     "Read-only structural original C# proof, not Android execution or verified call stack path",
     "Does not modify the game's original source or fabricated world-load flags"
   ],
   "integration_commit": null,
-  "next_step": "Read final CI, review source SHA, direct authentic callsite count, decide bounded Android-only identity fix or identify no direct call."
+  "next_step": "Object-typed Android-local CSteamID fallback adapter in B50-20261104T2039Z-B50-d7a3-cheat-steamid-adapter.json, validate original no-LFS C# compile and source tests; then coordinated native phone verification.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41911354402"
+  ],
+  "updated_at": "2026-11-04T21:01:00Z"
 }
