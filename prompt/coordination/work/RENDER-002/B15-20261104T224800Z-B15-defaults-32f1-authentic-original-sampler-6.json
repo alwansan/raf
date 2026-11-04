@@ -6,7 +6,7 @@
   "issue_id": "RENDER-002",
   "track": "original-texture-sampler",
   "approach": "Independent authentic ZIP2 sharedassets6.assets (6,607,272 B exact SHA) typed Texture2D→B15 original_sampler input acceptance, using existing B05 verified source pin and W2 confirmed 87 textures; 12min CPU-only job, aggregate-only, no game bytes emitted.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "fb83b45b04696fb07bdaecd02a735a0d92310995",
   "intended_files": [
     "scripts/b15_probe_authentic_original_sampler.py",
@@ -24,8 +24,23 @@
   "experiment_ids": [
     "B15-20261104-original-sampler6"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement independent SHA/size-pinned selected owner parser, synthetic tests, source-only CI; interpret actual count, limitations, then use future same-export trace for importer parity.",
-  "updated_at": "2026-11-04T22:58:05.263Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41930143093"
+  ],
+  "result": {
+    "source_sha_verified": true,
+    "source_owner": "sharedassets6.assets",
+    "bytes": 6607272,
+    "typed_source_texture2d": 87,
+    "filter_slots": 87,
+    "wrap_slots": 261,
+    "nonzero_mip_bias": 0,
+    "synthetic_tests_passed": 8,
+    "CI": "COMPLETED SUCCESS",
+    "source_commit": "50838fb89fc1552f7ca9809d159d14c5ee04830c",
+    "exported_importers_compared": 0,
+    "unity_or_android_pixels": false
+  },
+  "next_step": "Only test original-to-export when independently verified same-instance project and B02/W1 dual trace are present; otherwise work next distinct P0 blocker. No new build or replacement resource necessary.",
+  "updated_at": "2026-11-04T23:02:46.875Z"
 }
