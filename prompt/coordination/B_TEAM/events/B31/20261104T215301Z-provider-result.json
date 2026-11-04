@@ -1,0 +1,14 @@
+{
+  "id": "B31-20261104-provider-guard",
+  "owner": "B31",
+  "session_id": "20261104T213800Z-B31-5ea4",
+  "issue_id": "RENDER-002",
+  "type": "integration",
+  "summary": "Production native-used Texture2D external provider coverage now fails closed for symlink/hardlink originals, with 26/26 SHA-pinned synthetic/legacy CI tests. No Unity or device result, colors unchanged until further proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/9eb71aa4c967ac2cef5f447e21d6d0f32d1efccc",
+    "https://github.com/alwansan/raf/actions/runs/41919225658",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B31_ORIGINAL_GRAPHICS_REUSE_2026-11-04.md"
+  ],
+  "at": "2026-11-04T21:49:56.384Z"
+}
