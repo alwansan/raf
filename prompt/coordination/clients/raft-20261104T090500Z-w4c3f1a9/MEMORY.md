@@ -38,3 +38,8 @@ Independent W4 agent authorized by the owner to edit code/resources/workflows, b
 - Owner said fix all + continue. Implemented a strict-by-default water step with an exact-match documented limitation: `scripts/record_documented_water_limitation.py` (+3 tests) lets an explicit trial continue only when `.github/raft-native-build-request.json` enumerates exactly the live unmet conditions. Record retained as artifact, copied into the delivery set (`RECORDED_LIMITATIONS.json`) and shown in release notes. No fake kernels; `authentic_water_kernel_identity_verified` untouched.
 - Files: commit 4a7e18af (workflow 713fdd82), ef5cdb77 (script 29a527f7), 8dc58ec1 (test 0360e0c0), d181ee71 (request, ack 5 conditions).
 - Trial build 41812889049 in progress from d181ee71; next failures to inspect if any.
+
+## 10:43Z — water gate passed; Unity running
+- Run 41812889049 (request d181ee71): steps 1–56 all success, including step 38 "Authentic water gate (strict) or exact documented trial limitation" and step 39 retention. Unity 2021.3.45f2 Android import/compile (step 57) is IN PROGRESS.
+- This is the furthest since APK80; the trial proceeds with the five acknowledged water conditions recorded and will be surfaced in the release notes.
+- Next: monitor step 57; then Gradle, APK audits, signature, packaging, publish.
