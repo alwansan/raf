@@ -1,0 +1,38 @@
+name: B06 WATER-001 FFT capability logger synthetic execution
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'android-port/Runtime/Platform/AndroidRuntimeLog.cs'
+      - 'tests/b06_fft_caps_smoke/**'
+      - '.github/workflows/raft-b06-fft-capabilities.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: raft-b06-fft-caps-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  synthetic:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            android-port/Runtime/Platform/AndroidRuntimeLog.cs
+            tests/b06_fft_caps_smoke
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Execute real Android logger with synthetic Unity API and failure controls
+        run: |
+          set -euo pipefail
+          dotnet run --project tests/b06_fft_caps_smoke/B06FftCaps.csproj --configuration Release --nologo
+          echo 'Synthetic-only: not a Unity import, hardware Vulkan, or device water test.'
