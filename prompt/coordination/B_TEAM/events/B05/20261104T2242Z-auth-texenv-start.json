@@ -1,0 +1,12 @@
+{
+  "id": "20261104T2242Z-B05-auth-texenv-start",
+  "owner": "B05",
+  "session_id": "20261104T2242Z-B05-auth-texenv6",
+  "issue_id": "RENDER-002",
+  "type": "start",
+  "summary": "Resumed B05 source-to-export texture/UV scope on new session after user Stay in Chat; selected exact SHA-pinned sharedassets6 original Material field shape and safer selected-owner parity over full export as two independent work items.",
+  "evidence": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/work/RENDER-002/B05-20261104T2242Z-B05-auth-texenv6-original-texenv-shape.json"
+  ],
+  "at": "2026-11-04T22:42:00Z"
+}
