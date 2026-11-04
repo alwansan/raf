@@ -1,15 +1,15 @@
 {
   "schema_version": 1,
   "username": "raft-20261103T103610Z-4e91b2cd",
-  "session_id": "20261104-private-named-plans",
+  "session_id": "20261104-pixel-exception-cleanup",
   "resumed_from": null,
   "status": "completed",
   "updated_at": "2026-11-04T01:30:00Z",
-  "base_sha": "c2afba795bf7ef1aea7402542d26a4f618586af0",
+  "base_sha": "a726d3863ff177c3666cee735b92082e4b3a02f7",
   "current_work": [
     "WATER-001"
   ],
-  "last_commit": "c2afba795bf7ef1aea7402542d26a4f618586af0",
-  "next_step": "Establish samplerstate semantics, then consume private named plans in originalwrapper preserving registers/partialallocations",
+  "last_commit": "a726d3863ff177c3666cee735b92082e4b3a02f7",
+  "next_step": "Verify originalBlurSSS sampler state; integrateprivate named wrapper;futureexport mustmatch Blur source pin",
   "memory_path": "prompt/coordination/clients/raft-20261103T103610Z-4e91b2cd/MEMORY.md"
 }

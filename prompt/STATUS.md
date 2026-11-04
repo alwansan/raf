@@ -1133,3 +1133,7 @@ BuildFix changed graphics acquisition to reuse regular files only after original
 
 ## Private original named Blur plans — 4 November
 [Handoff](../docs/BLUR_PRIVATE_NAMED_BINDING_PLANS_2026-11-04.md):41793920272SUCCESS17tests;4privateplans preserve authenticnames/offsets for6CB7members2textures. Vertexplanhashesidentical;no private namespublished. Sourceconstructiononly;samplerstate/upload/HLSL/GPUunverified. NOT_READY.
+
+
+## Blur pixel cleanup source repair — 4 November
+[Evidence](../docs/BLUR_PIXEL_EXCEPTION_CLEANUP_2026-11-04.md):41809389136SUCCESS actualCSharp14stubcases+12existingtests;preflight41809388872SUCCESS. SHA-locked productionadapter now restoresfilter/releases temporary under exceptions, preservingdrawloop. NoUnity/device/allBlurSSSproof. Native41808015938untouched. NOT_READY.
