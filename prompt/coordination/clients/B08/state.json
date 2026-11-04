@@ -2,21 +2,21 @@
   "schema_version": 1,
   "username": "B08",
   "generation": "B-2026-11-04",
-  "session_id": "20261104T2130Z-B08-b71c",
-  "resumed_from_session": null,
-  "status": "completed",
-  "base_sha": "169c0a7bceca9fde2f458a4a4d8dcbab7ac119b7",
+  "session_id": "20261104T2246Z-B08-7d2a",
+  "resumed_from_session": "20261104T2130Z-B08-b71c",
+  "status": "active",
+  "base_sha": "3c866416159cdb87740e8d465bfc5d58d78313f6",
   "last_commit": "b9ed68c7002757516c6db4e3d116183f4f955bd7",
-  "updated_at": "2026-11-04T21:46:40.157Z",
+  "updated_at": "2026-11-04T22:46:26.818Z",
   "tracks": [
-    "water-fft:original-compute-registry-identity"
+    "water-fft:compiled-spirv-descriptor-abi"
   ],
   "work_ids": [
-    "B08-20261104T2130Z-B08-b71c-fft-runtime-identity"
+    "B08-20261104T2246Z-B08-7d2a-fft-descriptor-abi"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41917369953"
   ],
-  "next_step": "B08 scoped experiment finished; re-open new session with a new session_id, review current HEAD/active peers and original Unity runtime ComputeShader name-to-compiled variant selector; WATER-001 OPEN and NOT_READY 0/3.",
+  "next_step": "Verify per-original-program SPIR-V descriptor ABI and negative mutated variants; source t0/t1 mapping and Unity runtime IDs remain unknown.",
   "memory_path": "prompt/coordination/clients/B08/MEMORY.md"
 }
