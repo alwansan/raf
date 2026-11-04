@@ -1,7 +1,7 @@
 from pathlib import Path
 import tempfile
 import unittest
-from scripts.restore_tmp_shaders import restore,rewrite_includes,ROOT
+from scripts.restore_tmp_shaders import restore,rewrite_includes,ROOT,generated_vendor_shader_meta
 
 class ShaderTests(unittest.TestCase):
     def fixture(self,root,name='TextMeshPro/Distance Field'):
@@ -38,4 +38,7 @@ class ShaderTests(unittest.TestCase):
             added=list((root/'project'/ROOT).glob('*.shader'))
             self.assertEqual(len(added),1)
             self.assertIn('Shader "TextMeshPro/Mobile/Distance Field"',added[0].read_text())
+            generated_guid, generated_meta = generated_vendor_shader_meta('TextMeshPro/Mobile/Distance Field', ROOT)
+            self.assertEqual(Path(str(added[0])+'.meta').read_bytes(), generated_meta)
+            self.assertIn(('guid: ' + generated_guid).encode(), generated_meta)
             self.assertEqual(Path(str(target)+'.meta').read_bytes(),meta)
