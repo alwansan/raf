@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "owner": "B21",
+  "session_id": "20261104T2257Z-B21-8e72",
+  "issue_id": "RENDER-002",
+  "hypothesis": "A third source-authentic optional native Light 108 trace sharing W1/B02 export_instance allows Light source→same-export YAML identity and typed value comparisons without guessing Unity GUIDs or changing the original exporter.",
+  "source_commit": "37f7354af3bf068caf067b59591c8bf0d12bc38d",
+  "input_hashes": [
+    "W1 helper Git blob 8e64093f5d1cd283f34163e2527c414b3f86b7a7",
+    "B02 rendered helper SHA256 c99c6e163ee20d9ff72e2180ed72ce94b5c608e20dc1095c3c81d3e678532c1e",
+    "B21 staged helper SHA256 25b1846284242293d314626fdcd40497bad3be03f275c8a94068f384f76467ee",
+    "ZIP2 immutable pin 15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+  ],
+  "tool_versions": {
+    "dotnet": "9.0.x",
+    "UnityPy": "1.23.0",
+    "AssetRipperCLI": "036098ab525a3f9f693dc101edeb21faad4d32d8",
+    "runner": "ubuntu-24.04"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_b21_stage_light_lineage.py -v",
+    "python3 -m scripts.b21_stage_light_lineage --base-helper android-port/Experiments/ExportLineage/RaftExportLineage.cs --destination $RUNNER_TEMP/b21/RaftExportLineage.cs",
+    "python3 -m scripts.patch_export_lineage --tool-source ar-host --helper $RUNNER_TEMP/b21/RaftExportLineage.cs",
+    "dotnet publish android-port/Experiments/ExportLineage/ExportLineage.csproj -c Release --self-contained false ...",
+    "python3 -m unittest discover -s tests -p test_b21_compare_export_lights.py -v",
+    "python3 -m scripts.b21_compare_export_lights --original ORIGINAL --project SAME_EXPORT --light-trace PRIVATE_B21 --w1-trace PRIVATE_W1"
+  ],
+  "negative_controls": [
+    "Wrong W1 Git blob rejected",
+    "Changed B02 helper SHA rejected",
+    "Missing export hook anchor rejected",
+    "Double/linked staging destination rejected",
+    "Absent/mismatched export_instance rejected",
+    "Original Light missing in trace rejected",
+    "Distinct Light collision rejected",
+    "Invalid export YAML owner rejected",
+    "Color/intensity/range changes detected without writes",
+    "Zero GUID or malformed pointer rejected"
+  ],
+  "workflow_path": ".github/workflows/raft-b21-original-light-export.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41930891466",
+  "artifact_urls": [],
+  "budget": "Public tool compile max18m; parity source check12m; isolated bounded real export max25m, CPU 2 cores, 9 SHA-pinned original providers, no Unity or APK, separate concurrency and no artifact carrying private source.",
+  "status": "in_progress",
+  "observed_result": "CI41929975841 SUCCESS 11/11 staging controls, exact pinned .NET9 public exporter compile and tool smoke; CI41930580691 SUCCESS 17/17 parity controls and authentic six original scenes/two Lights. Real bounded export41930891466 running; NO real Light pairing/GPU proof at this checkpoint.",
+  "rejected_hypotheses": [
+    "Original source Light pathID alone can be treated as exported fileID/GUID: rejected; explicit same-process trace required.",
+    "Identical Light count means pixel equivalence: rejected; raw typed value parity plus Unity/device evidence still missing."
+  ],
+  "limitations": [
+    "Original source and private export trace cannot be uploaded public",
+    "Source-only compiler and synthetic tests are not real Raft export proof",
+    "Chosen minimal 9-provider export may not recreate all external scene dependencies",
+    "No Unity/Adreno/phone acceptance and no gameplay repair"
+  ],
+  "integration_commit": "37f7354af3bf068caf067b59591c8bf0d12bc38d",
+  "next_step": "Review bounded run41930891466; fix demonstrated source/compiler errors only. If original Light source/export pairing succeeds, compare and document actual values and any discrepancies before proposing production resource repair."
+}
