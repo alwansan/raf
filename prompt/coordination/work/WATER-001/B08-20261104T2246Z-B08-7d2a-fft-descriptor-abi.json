@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "owner": "B08",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2246Z-B08-7d2a",
+  "issue_id": "WATER-001",
+  "track": "water-fft",
+  "approach": "Authenticated all20 original DXBC→SPIR-V per-slot DescriptorSet/Binding ABI stability with negative mutation controls; unique storage-vs-two-sampled descriptors, but no assumed source t0/t1 identity.",
+  "status": "active",
+  "base_sha": "3c866416159cdb87740e8d465bfc5d58d78313f6",
+  "intended_files": [
+    "scripts/b08_fft_spirv_descriptor_abi.py",
+    "tests/test_b08_fft_spirv_descriptor_abi.py",
+    ".github/workflows/raft-b08-fft-descriptor-abi.yml",
+    "docs/B08_FFT_DESCRIPTOR_ABI_2026-11-04.md"
+  ],
+  "hypothesis": "All 20 authentic compiled FFT programs share a stable numerically verifiable SPIR-V image descriptor ABI despite differing workgroup sizes; drifts can be rejected before source integration.",
+  "related_work": [
+    "B08 FFT original one-name alias CI41917369953",
+    "B18 authentic FFT 20 source-to-SPIRV image classes CI41923703800",
+    "B30 variantMap disambiguator rejected CI41920323250"
+  ],
+  "experiment_ids": [
+    "B08-fft-descriptor-abi-20261104"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Use B18 SHA-authenticated original ZIP2 translation; add strict descriptor layout auditor and synthetic mutations before CI; preserve unknown t0/t1 semantics.",
+  "updated_at": "2026-11-04T22:46:00Z"
+}
