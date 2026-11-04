@@ -1,0 +1,14 @@
+{
+  "id": "20261104T2105Z-B48-fft-candidate-result",
+  "owner": "B48",
+  "session_id": "20261104T2058Z-B48-f24a",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Authentic original CSharp selector and 20 SHA-verified compiled FFT programs agree structurally for 10 candidate two-pass operations (original workgroup x=2*resolution). 15/15 tests and real-data CI pass. Runtime kernel mapping not proven; WATER-001 OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41912422220",
+    "https://github.com/alwansan/raf/commit/7be4c3365d4297a06abf502ceea504fee507f9c4",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B48_ORIGINAL_FFT_SELECTOR_COMPILED_CANDIDATES_2026-11-04.md"
+  ],
+  "at": "2026-11-04T21:05:46Z"
+}
