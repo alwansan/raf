@@ -1,0 +1,39 @@
+name: B10 RENDER-002 volumetric shader license notice transaction
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/restore_volumetric_shaders.py'
+      - 'scripts/restore_tmp_shaders.py'
+      - 'tests/test_b10_volumetric_notice_atomic.py'
+      - 'tests/test_restore_volumetric_shaders.py'
+      - 'tests/test_a3_vendor_shader_restore_transaction.py'
+      - '.github/workflows/raft-b10-volumetric-transaction.yml'
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: b10-volumetric-transaction-${{ github.ref }}-${{ github.workflow }}
+  cancel-in-progress: false
+
+jobs:
+  test-notice-failure-atomicity:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Python compile
+        run: python3 -m py_compile scripts/restore_tmp_shaders.py scripts/restore_volumetric_shaders.py tests/test_b10_volumetric_notice_atomic.py
+      - name: Production source transaction and existing vendor regressions
+        run: python3 -m unittest -v tests.test_b10_volumetric_notice_atomic tests.test_restore_volumetric_shaders tests.test_restore_tmp_shaders tests.test_a3_vendor_shader_restore_transaction
+      - name: Limit of evidence
+        run: echo 'B10 source-only recovery transaction; no actual Raft export, ShaderLab pixel equality, Unity or Android device acceptance.'
