@@ -1,0 +1,12 @@
+{
+  "id": "20261104T2153Z-B24-foam-original-translation",
+  "owner": "B24",
+  "issue_id": "WATER-001",
+  "type": "experiment-result",
+  "summary": "B24 restored four source-pinned original Foam DXBC program stage links (2 original passes) and proved all Vulkan1.1 private HLSL/roundtrips, first vs second pass original CB0 vector counts 2 vs 1. ShaderLab/CB runtime and device still unproven.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41919758958",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B24_ORIGINAL_FOAM_PROGRAM_TRANSLATION_2026-11-04.md"
+  ],
+  "at": "2026-11-04T21:54:06.640Z"
+}
