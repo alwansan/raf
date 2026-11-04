@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "owner": "B10",
+  "session_id": "20261104T2132Z-B10-a6e1",
+  "issue_id": "RENDER-002",
+  "hypothesis": "Paired deterministic .shader.meta for new vendor fallbacks removes known structural missing-meta class without changing any original shader GUID or pixels",
+  "source_commit": "e6484daffbaef7dca57da63e1cb4869f9095078a",
+  "input_hashes": [],
+  "tool_versions": {
+    "python": "3.x GitHub standard ubuntu runner"
+  },
+  "commands": [
+    "python -m unittest tests.test_restore_tmp_shaders tests.test_a3_vendor_shader_restore_transaction"
+  ],
+  "negative_controls": [
+    "existing original metadata preserved byte-identical",
+    "collision with any original .meta GUID rejects before mutation",
+    "conflicting pre-existing vendor fallback metadata rejects",
+    "late write failure rolls back generated shader and .meta"
+  ],
+  "workflow_path": ".github/workflows/raft-b10-vendor-shader-meta.yml",
+  "run_url": null,
+  "artifact_urls": [],
+  "budget": "public standard ubuntu runner, <=4 minutes, no Unity/LFS/original ZIP2 download",
+  "status": "planned",
+  "observed_result": null,
+  "rejected_hypotheses": [],
+  "limitations": [
+    "does not prove those exact 2 paths in native41741108965",
+    "cannot claim original Unity/Android program, colors or pixels"
+  ],
+  "integration_commit": null,
+  "next_step": "Implement synthetic regression and run isolated source CI"
+}
