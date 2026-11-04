@@ -13,18 +13,20 @@
     "acquisition": "VERIFIED",
     "extraction": "VERIFIED",
     "reconstruction": "COMPILED_PROGRAM_SPIRV_TRANSLATION_VERIFIED_NOT_AUTHORED_SOURCE",
-    "binding": "NUMERIC_DESCRIPTOR_ABI_VERIFIED_REGISTER_ROLE_IDENTITY_UNKNOWN",
+    "binding": "NUMERIC_ABI_AND_EXECUTABLE_SSA_IMAGE_USE_VERIFIED_T0_T1_IDENTITY_UNKNOWN",
     "integration": "UNKNOWN",
     "device": "UNKNOWN"
   },
   "evidence": [
     "https://github.com/alwansan/raf/actions/runs/41928583281",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B08_FFT_DESCRIPTOR_ABI_2026-11-04.md"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B08_FFT_DESCRIPTOR_ABI_2026-11-04.md",
+    "https://github.com/alwansan/raf/actions/runs/41929513820"
   ],
   "remaining": [
     "Read t0 versus t1 source input semantics not matched to target sampled bindings0/1",
     "Original Unity runtime kernel-index/compiled variant correspondence missing",
-    "Actual .compute/ShaderLab import and Adreno/phone water remain untested"
+    "Actual .compute/ShaderLab import and Adreno/phone water remain untested",
+    "B08 further source-authentic SSA image-use trace: all20 modules actively read both sampled image candidates and write the storage image; source DXBC t0/t1 mapping still unverified."
   ],
   "updated_by": "B08"
 }
