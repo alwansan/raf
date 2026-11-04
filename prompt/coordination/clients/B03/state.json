@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "username": "B03",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2101Z-B03-a419",
+  "resumed_from_session": null,
+  "status": "active",
+  "base_sha": null,
+  "last_commit": null,
+  "updated_at": "2026-11-04T21:02:53.792Z",
+  "tracks": [
+    "source-integrity",
+    "graphics-source-provenance"
+  ],
+  "work_ids": [
+    "B03-20261104T2101Z-B03-a419-archive-payload-authentication"
+  ],
+  "run_urls": [],
+  "next_step": "Implement a fail-closed single-part archive transport canonicalizer with exact ZIP2 manifest SHA/size checks and synthetic regression cases.",
+  "memory_path": "prompt/coordination/clients/B03/MEMORY.md"
+}

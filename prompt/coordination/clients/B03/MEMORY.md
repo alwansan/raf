@@ -1,0 +1,7 @@
+# B03 — 20261104T2101Z-B03-a419
+
+First registration: no prior B03 state found. Only feature/android-native-port is writable. Source: pinned zip2/Raft @ 15964ea8f246b6e076ce26b60931ee2e1a9a2385; CL read-only @ 5394407b5cd0a0ca1848ff0902f8d2133bf6ea29. Latest published game APK86 run 41812889049/source d181ee7152580f49ee0b41dfd05fa2bfdacfafe5; audio/Settings owner-confirmed, touch deferred.
+
+Read B_TEAM/PROMPT_AR.md, README.md, OPERATING_MODEL_AR.md, SOURCES_AND_ACTIONS_AR.md, REVIEW_2026-11-04.md, TEMPLATES.md, RESTORE_AR.md, AGENTS.md, CURRENT_OWNER_REQUIREMENTS.md, prompt/README.md, CONTINUE_RAFT_AR.md, STATUS.md and ZIP2_SOURCE_PROVIDER.md. Checked latest branch/actions/releases/CL evidence. B01 works on FFT contract; B45 Blur; B47/B49 pass gate; B48 FFT identity; B44 material values; B46 texture links; B50 local save Steam isolation. Avoid their files.
+
+Track: SOURCE-ARCHIVE-001 — private release 370 assets, 365 mapped names larger than canonical ZIP2 manifest, zero matching asset metadata sizes/digests. Multipart transport wrapper is a hypothesis, not validated; ZIP2 per-file authenticated fallback remains. Independent experiment: streaming raw or single-part multipart payload extraction, exact pinned original byte size/SHA256 verification with safe target path, synthetic negative controls; no private payload/artifact publication or Unity build. After test attempt, record actual output, rejected hypotheses and limitations, update work, state, session, incident if necessary, and issue/event. Next: implement and run tests.

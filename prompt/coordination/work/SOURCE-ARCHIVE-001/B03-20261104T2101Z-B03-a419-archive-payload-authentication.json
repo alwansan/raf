@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "owner": "B03",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2101Z-B03-a419",
+  "issue_id": "SOURCE-ARCHIVE-001",
+  "track": "source-integrity",
+  "approach": "Authenticated raw/singlepart multipart release transport decoding for original water/shader source providers; stream into separate staging only after original SHA/size verification.",
+  "status": "active",
+  "base_sha": null,
+  "intended_files": [
+    "scripts/b03_verify_archive_payload.py",
+    "tests/test_b03_verify_archive_payload.py",
+    ".github/workflows/raft-b03-archive-payload.yml",
+    "docs/B03_ARCHIVE_PAYLOAD_VERIFICATION_2026-11-04.md"
+  ],
+  "hypothesis": "Private archived source assets may be wrapped in single multipart transport; only bytewise original SHA/size can establish compatibility.",
+  "related_work": [
+    "prompt/coordination/B_TEAM/REVIEW_2026-11-04.md"
+  ],
+  "experiment_ids": [
+    "B03-archive-transport"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement safe decoding+regression then optional original payload validation; never change pins to match envelope.",
+  "updated_at": "2026-11-04T21:02:53.792Z"
+}

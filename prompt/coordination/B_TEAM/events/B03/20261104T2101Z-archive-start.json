@@ -1,0 +1,12 @@
+{
+  "id": "B03-20261104T2101Z-archive-start",
+  "owner": "B03",
+  "session_id": "20261104T2101Z-B03-a419",
+  "issue_id": "SOURCE-ARCHIVE-001",
+  "type": "start",
+  "summary": "Started exact canonical-byte SHA-verified archive source transport verification; private wrapper hypothesis not yet proven; ZIP2 fallback retained.",
+  "evidence": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/REVIEW_2026-11-04.md"
+  ],
+  "at": "2026-11-04T21:02:53.792Z"
+}
