@@ -124,6 +124,23 @@ def original_texenvs(root: Path):
 def exported_texenvs(project: Path):
     """Parse actual exported Material YAML documents, including embedded ones."""
     import yaml
+    # Unity YAML may carry duplicate keys at any nesting level. PyYAML's
+    # default safe_load silently keeps the last value, so a conflicting
+    # texture/UV pointer could appear faithful to the original. Fail closed.
+    class UniqueMappingSafeLoader(yaml.SafeLoader):
+        def construct_mapping(self, node, deep=False):
+            mapping = {}
+            for key_node, value_node in node.value:
+                key = self.construct_object(key_node, deep=deep)
+                try:
+                    duplicate = key in mapping
+                except TypeError:
+                    raise ValueError('Unhashable exported Material YAML mapping key') from None
+                if duplicate:
+                    raise ValueError('Duplicate exported Material YAML mapping key')
+                mapping[key] = self.construct_object(value_node, deep=deep)
+            return mapping
+
     assets = project / 'Assets'
     if assets.is_symlink() or not assets.is_dir():
         raise ValueError('Missing/redirected Unity Assets root')
@@ -154,7 +171,7 @@ def exported_texenvs(project: Path):
             if match is None:
                 continue
             try:
-                doc = yaml.safe_load(text[header.end():headers[i+1].start() if i+1 < len(headers) else len(text)])
+                doc = yaml.load(text[header.end():headers[i+1].start() if i+1 < len(headers) else len(text)], Loader=UniqueMappingSafeLoader)
             except yaml.YAMLError:
                 raise ValueError('Malformed private Material YAML') from None
             mat = doc.get('Material') if isinstance(doc, dict) else None
