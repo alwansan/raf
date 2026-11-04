@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "username": "B38",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2142Z-B38-f31a",
+  "resumed_from_session": null,
+  "status": "active",
+  "base_sha": null,
+  "last_commit": null,
+  "updated_at": "2026-11-04T21:42:00Z",
+  "tracks": [
+    "colors-materials"
+  ],
+  "work_ids": [
+    "B38-20261104T2142Z-f31a-material-yaml-uniqueness"
+  ],
+  "run_urls": [],
+  "next_step": "Harden duplicate Unity Material YAML keys in B05 texture/UV verifier, add negative controls and isolated CI; original export/device evidence remains unknown.",
+  "memory_path": "prompt/coordination/clients/B38/MEMORY.md"
+}

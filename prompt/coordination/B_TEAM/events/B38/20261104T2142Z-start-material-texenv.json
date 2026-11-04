@@ -1,0 +1,13 @@
+{
+  "id": "B38-20261104T2142Z-start-material-texenv",
+  "owner": "B38",
+  "session_id": "20261104T2142Z-B38-f31a",
+  "issue_id": "RENDER-002",
+  "type": "start",
+  "summary": "B38 registers independent P0 Material texture/UV YAML duplicate-key safety gap; B05 prior work complete/paused, B44 color verifier separate; no phone/build claim.",
+  "evidence": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/b05_verify_material_texenv_bindings.py",
+    "https://github.com/alwansan/raf/actions/runs/41915726289"
+  ],
+  "at": "2026-11-04T21:42:00Z"
+}

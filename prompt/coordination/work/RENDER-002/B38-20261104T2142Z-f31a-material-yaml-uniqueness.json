@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "owner": "B38",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2142Z-B38-f31a",
+  "issue_id": "RENDER-002",
+  "track": "colors-materials",
+  "approach": "Fail closed on duplicate mapping keys in existing B05 same-instance Material texture/UV YAML verifier, with negative synthetic controls and isolated CI.",
+  "status": "active",
+  "base_sha": null,
+  "intended_files": [
+    "scripts/b05_verify_material_texenv_bindings.py",
+    "tests/test_b38_material_yaml_uniqueness.py",
+    ".github/workflows/raft-b38-material-yaml-uniqueness.yml",
+    "docs/B38_MATERIAL_YAML_DUPLICATE_KEY_SAFETY_2026-11-04.md"
+  ],
+  "hypothesis": "yaml.safe_load silently selects last duplicate Unity Material m_SavedProperties/m_TexEnvs or nested pointer key; a tampered export could appear equal.",
+  "related_work": [
+    "B05-20261104T2107Z-B05-9e24-uv-transform",
+    "B44-20261104T2059Z-B44-f0ac-material-values"
+  ],
+  "experiment_ids": [
+    "B38-20261104T2142Z-yaml-duplicate-false-positive"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Reproduce duplicate key acceptance, implement fail-closed loader and tests. Preserve all original assets and private source.",
+  "updated_at": "2026-11-04T21:42:00Z"
+}
