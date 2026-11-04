@@ -4,10 +4,10 @@
   "generation": "B-2026-11-04",
   "session_id": "20261104T2101Z-B02-e5cd",
   "resumed_from_session": null,
-  "status": "active",
+  "status": "paused",
   "base_sha": "3f493b17adfd",
-  "last_commit": null,
-  "updated_at": "2026-11-04T21:01:00Z",
+  "last_commit": "0d33268645106e7bc28fcaa786d90683fe93de19",
+  "updated_at": "2026-11-04T21:11:00Z",
   "tracks": [
     "colors-materials",
     "RENDER-002:texture-import-colorspace"
@@ -15,7 +15,11 @@
   "work_ids": [
     "B02-20261104T2101Z-B02-e5cd-texture-import-fidelity"
   ],
-  "run_urls": [],
-  "next_step": "Implement independent, explicit original-to-export TextureImporter sRGB/Linear fidelity guard with negative controls; no GUID inference, gameplay changes or Unity build.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41912709058",
+    "https://github.com/alwansan/raf/actions/runs/41913016998",
+    "https://github.com/alwansan/raf/actions/runs/41913145660"
+  ],
+  "next_step": "Same-export Texture2D(owner,pathID)->TextureImporter(asset,GUID) provenance and real original asset SHA are needed to run the guard on actual Raft export; do not guess GUIDs or modify live textures. Continue other P0 work when possible.",
   "memory_path": "prompt/coordination/clients/B02/MEMORY.md"
 }
