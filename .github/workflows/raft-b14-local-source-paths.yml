@@ -1,0 +1,34 @@
+name: B14 LOCAL-005 offline source staging path integrity (no Unity)
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - 'scripts/adapt_original_save_paths.py'
+      - 'scripts/adapt_android_offline_startup.py'
+      - 'tests/test_adapt_original_save_paths.py'
+      - 'tests/test_android_offline_startup.py'
+      - '.github/workflows/raft-b14-local-source-paths.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: b14-local-paths-${{ github.ref }}
+  cancel-in-progress: false
+  queue: max
+
+jobs:
+  original-source-path-integrity:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4.2.2
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Verify original SaveAndLoad path portability without game data
+        run: python3 -m unittest discover -s tests -p test_adapt_original_save_paths.py -v
+      - name: Verify Android offline adapter project and backups cannot redirect
+        run: python3 -m unittest discover -s tests -p test_android_offline_startup.py -v
