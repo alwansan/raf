@@ -1,0 +1,10 @@
+# B08 — session 20261104T2130Z-B08-b71c
+
+- Owner identity: B08, B TEAM (2026-11-04), new client; no previous B08 record observed at entry.
+- Branch: `feature/android-native-port` only. Initial observed HEAD: `169c0a7bceca9fde2f458a4a4d8dcbab7ac119b7`. Source ZIP2 commit: `15964ea8f246b6e076ce26b60931ee2e1a9a2385`. CL read-only snapshot `5394407b5cd0a0ca1848ff0902f8d2133bf6ea29`.
+- Read owner prompt, B_TEAM README/OPERATING_MODEL/SOURCES/TEMPLATES/SUMMARY/REVIEW, current requirements, AGENTS, permanent prompt/status, ZIP2 source, WATER/RENDER/LOCAL issues and original FFT probes.
+- Latest identified Android release: `android-early-test-41812889049-1` (APK86); later `lograf-*` releases belong to logger. 2026-11-04 phone logs establish water pass/kernels failures and Local SaveGame Steam stats stack; owner confirms audio and Settings currently working, touch deferred.
+- Work: WATER-001 independent exact original ComputeShader serialized kernel *name/registry* and variant mapping, complement B48 20 compiled selector candidate pairs and B01/B47 source diagnostics. Hypothesis: serialized registry may contain identifiable kernel names or indices sufficient to prove runtime mapping; if it does not, reject compiled-slot↔FindKernel-ID inference. No raw shaders/assets/bytecode published.
+- No Unity/APK build or production-source changes during registration; no experimental result claimed.
+- Current pending experiment: pinned `sharedassets0.assets` 115978112 bytes SHA256 `0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3`, ComputeShader pathID2456 SHA256 `9d934f5c99183c6df5cf2f1fefc9d3e5ec4bce5da5f96a86e4c02910d5322247`; stage exact ZIP2 owner only in isolated CI; check typed registry and ambiguity using strict synthetic controls.
+- Next: implement probe + positive/negative tests, isolated B08 workflow, evaluate real original and retain uncertainty; update issue/resource and handoff if useful. NOT_READY 0/3; original .meta/GUID/RGD/audio/Settings/touch untouched.
