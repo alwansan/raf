@@ -74,10 +74,23 @@ jobs:
       - name: Selectively acquire only manifest-authenticated remaining provider paths
         run: |
           set -euo pipefail
+          # Git cone-mode sparse-checkout only accepts directories. Original
+          # ZIP2 provider may be a plain .assets file, so switch to explicit
+          # no-cone patterns while preserving the six authenticated scenes.
+          patterns=(
+            '/RAFT_FILE_MANIFEST.tsv'
+            '/Raft/Raft_Data/level0'
+            '/Raft/Raft_Data/level1'
+            '/Raft/Raft_Data/level2'
+            '/Raft/Raft_Data/level3'
+            '/Raft/Raft_Data/level4'
+            '/Raft/Raft_Data/level5'
+          )
           while IFS= read -r rel; do
             [[ "$rel" == Raft/Raft_Data/* ]] || exit 1
-            git -C .b03-source-zip2 sparse-checkout add -- "$rel"
+            patterns+=("/$rel")
           done < "$RUNNER_TEMP/b03-private-owner-paths.txt"
+          git -C .b03-source-zip2 sparse-checkout set --no-cone -- "${patterns[@]}"
       - name: Reassemble and SHA-verify only residual provider(s); check Material class IDs
         run: |
           set -euo pipefail
