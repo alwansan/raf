@@ -6,6 +6,8 @@ on:
     paths:
       - 'scripts/b21_scene_lightmap_links.py'
       - 'tests/test_b21_scene_lightmap_links.py'
+      - 'scripts/b21_original_dynamic_lights.py'
+      - 'tests/test_b21_original_dynamic_lights.py'
       - '.github/workflows/raft-b21-scene-lightmap-links.yml'
 permissions:
   contents: read
@@ -29,6 +31,8 @@ jobs:
           set -euo pipefail
           python3 -m py_compile scripts/b21_scene_lightmap_links.py tests/test_b21_scene_lightmap_links.py
           python3 -m unittest discover -s tests -p 'test_b21_scene_lightmap_links.py' -v
+          python3 -m py_compile scripts/b21_original_dynamic_lights.py tests/test_b21_original_dynamic_lights.py
+          python3 -m unittest discover -s tests -p 'test_b21_original_dynamic_lights.py' -v
 
   six-authenticated-scenes:
     needs: synthetic
@@ -70,12 +74,15 @@ jobs:
         run: |
           set -euo pipefail
           python3 -m scripts.b21_scene_lightmap_links --source .source-zip2/Raft/Raft_Data --report "$RUNNER_TEMP/b21-original-scene-lightmaps-aggregate.json"
+          python3 -m scripts.b21_original_dynamic_lights --source .source-zip2/Raft/Raft_Data --report "$RUNNER_TEMP/b21-original-scene-dynamic-lights-aggregate.json"
           echo 'RAFT_B21_SCOPE source_only=true real_scene_count=6 full_40_scenes=false export_checked=false unity_or_android=false'
       - name: Publish numeric aggregates only (no original source assets)
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: b21-original-lightmap-numeric-${{ github.run_id }}
-          path: ${{ runner.temp }}/b21-original-scene-lightmaps-aggregate.json
+          path: |
+            ${{ runner.temp }}/b21-original-scene-lightmaps-aggregate.json
+            ${{ runner.temp }}/b21-original-scene-dynamic-lights-aggregate.json
           retention-days: 7
           if-no-files-found: ignore
