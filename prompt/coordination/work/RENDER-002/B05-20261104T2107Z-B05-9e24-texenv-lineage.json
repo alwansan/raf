@@ -6,7 +6,7 @@
   "issue_id": "RENDER-002",
   "track": "colors-materials",
   "approach": "Original Material m_TexEnvs vs same-instance exported YAML; SHA-pinned owners, exact internal target trace, no external guesses.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "f1dd7fccb7607264d7ec9fee6a67cb73cbbd7eb7",
   "intended_files": [
     "scripts/b05_verify_material_texenv_bindings.py",
@@ -23,8 +23,10 @@
   "experiment_ids": [
     "B05-20261104T2107Z-texenv"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Commit source checker + 11 negative/positive tests; try actual SHA-verified export; never claim pixel/phone proof from synthetic.",
-  "updated_at": "2026-11-04T21:07:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41914198631"
+  ],
+  "result": "Verifier integrated at commit 8398553; isolated CI41914198631 COMPLETED SUCCESS with 11 source-free synthetic tests (on SHA5948d0d). No authentic game source/export comparison run; RENDER-002 remains OPEN.",
+  "next_step": "Follow-up work: run original ZIP2 SHA-validated 14-owner input and same-export object trace for full m_TexEnvs comparison, prove actual error before changing exporter; external references remain unresolved.",
+  "updated_at": "2026-11-04T21:17:00Z"
 }
