@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "owner": "B05",
+  "session_id": "20261104T2107Z-B05-9e24",
+  "issue_id": "RENDER-002",
+  "hypothesis": "A dropped, nulled or misdirected Material texture pointer in original-to-Unity export may cause pale surfaces independent of m_Colors/sRGB.",
+  "source_commit": "5948d0d5041424bb175e007481b38bc0c9f19a18",
+  "input_hashes": [
+    "zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385 (provider pinned only; original payload not run in B05 experiment)"
+  ],
+  "tool_versions": {
+    "python": "3.11 in CI",
+    "PyYAML": "6.0.3"
+  },
+  "commands": [
+    "python -m py_compile scripts/b05_verify_material_texenv_bindings.py",
+    "python -m unittest discover -s tests -p 'test_b05_verify_material_texenv_bindings.py' -v"
+  ],
+  "negative_controls": [
+    "bound original -> null export",
+    "internal PPtr target rewritten",
+    "source slot omitted",
+    "extra exported slot",
+    "original null -> bound",
+    "missing internal Texture trace",
+    "duplicate original object trace",
+    "wrong same-instance Material identity",
+    "malformed original PPtr",
+    "symlinked export path"
+  ],
+  "workflow_path": ".github/workflows/raft-b05-material-texenv-fidelity.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41914198631",
+  "artifact_urls": [],
+  "budget": "Ubuntu 24.04 public GitHub hosted job <=8 minutes, Python unit tests only; no Unity, original assets, GPU, package or native build",
+  "status": "completed",
+  "observed_result": "Isolated GitHub Actions 41914198631 COMPLETED SUCCESS at SHA 5948d0d; 11/11 source-free synthetic tests. No original/export comparison executed, no pale-material root cause proven.",
+  "rejected_hypotheses": [
+    "An original external Texture PPtr can be resolved by matching bare m_PathID or filename in a different owner: unsafe; counted as unresolved rather than assumed identity.",
+    "Passing original m_Colors or importer sRGB audits alone establishes Texture PPtr fidelity: not established; separate binding contract added."
+  ],
+  "limitations": [
+    "No real ZIP2 Material or same-instance Unity export consumed by this synthetic CI",
+    "No original-vs-export mismatch report yet",
+    "No material restore nor ShaderLab/pixel/Unity/device proof",
+    "External targets deliberately unresolved absent authenticated dependency mapping",
+    "Original texture scale/offset and sampling semantics are outside current comparison"
+  ],
+  "integration_commit": "5948d0d5041424bb175e007481b38bc0c9f19a18",
+  "next_step": "Run against same-instance authenticated source/export trace, then fix proven drift in export path; keep issue open."
+}
