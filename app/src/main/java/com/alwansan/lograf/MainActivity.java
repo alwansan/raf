@@ -188,6 +188,7 @@ public final class MainActivity extends Activity {
                 "\nWriter worst wait: "+writerStatus("writer_max_lag_ms","ms")+
                 "\nWriter failed batches: "+writerStatus("writer_failed_batches","")+
                 "\nLog lines/sec: "+metric(m,"game_log_lines_per_second","")+
+                "\nRender error roots/sec: "+metric(m,"render_error_roots_per_second","")+
                 "\nTop recurring errors: "+topErrors(m)+
                 "\nShader pass errors: "+metric(m,"shader_pass_errors_total","")+
                 "\nCompute kernel errors: "+metric(m,"invalid_compute_kernel_total","")+
@@ -228,6 +229,7 @@ public final class MainActivity extends Activity {
     private String metricWarnings(JSONObject obj){
         StringBuilder status=new StringBuilder();
         if(obj.optBoolean("error_flood_warning"))status.append("Log flood; ");
+        if(obj.optBoolean("render_error_flood_warning"))status.append("Sustained shader/compute error flood; ");
         if(obj.optBoolean("frame_telemetry_stale"))status.append("FRAME_TELEMETRY_STALE (not proof of freeze); ");
         if(Config.prefs(this).getLong("writer_failed_batches",0)>0)
             status.append("RECORDER BUFFER LOSS: inspect summary; ");

@@ -382,6 +382,9 @@ public final class CaptureService extends Service {
                     if(finalEvidence.has("final_game_milestones"))
                         report.put("final_game_milestones",
                                 finalEvidence.getJSONObject("final_game_milestones"));
+                    if(finalEvidence.has("final_render_failure_breakdown"))
+                        report.put("final_render_failure_breakdown",
+                                finalEvidence.getJSONObject("final_render_failure_breakdown"));
                     if(finalEvidence.has("final_game_log_lines"))
                         report.put("final_game_log_lines",
                                 finalEvidence.getLong("final_game_log_lines"));

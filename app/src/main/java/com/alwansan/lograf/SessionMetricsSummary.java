@@ -33,7 +33,7 @@ final class SessionMetricsSummary {
         }
     }
     private final LinkedHashMap<String,Stats> fields=new LinkedHashMap<>();
-    private long total,unreadable,gameRunning,gameAbsent,gameUnknown,fpsStale,meminfoAboveProcRss;
+    private long total,unreadable,gameRunning,gameAbsent,gameUnknown,fpsStale,meminfoAboveProcRss,renderFloodSamples;
     private long lastFpsUnavailableDurationMs=0,maxFpsUnavailableDurationMs=0;
     private String lastFpsStatus="not_sampled";
     private long firstTimestamp=-1,lastTimestamp=-1;
@@ -49,10 +49,11 @@ final class SessionMetricsSummary {
                 "gpu_busy_percent","gpu_clock_hz",
                 "device_mem_available_kb","battery_temp_c",
                 "game_log_lines_per_second","game_log_lines_session_average_per_second",
+                "render_error_roots_per_second",
                 "last_present_progress_age_ms"}){
             fields.put(key,new Stats());
         }
-        total=0;unreadable=0;gameRunning=0;gameAbsent=0;gameUnknown=0;fpsStale=0;meminfoAboveProcRss=0;
+        total=0;unreadable=0;gameRunning=0;gameAbsent=0;gameUnknown=0;fpsStale=0;meminfoAboveProcRss=0;renderFloodSamples=0;
         lastFpsUnavailableDurationMs=0;maxFpsUnavailableDurationMs=0;
         lastFpsStatus="not_sampled";
         firstTimestamp=-1;lastTimestamp=-1;firstFpsAt=-1;lastFpsAt=-1;
@@ -73,6 +74,7 @@ final class SessionMetricsSummary {
             if("android_meminfo_reported_above_proc_rss".equals(row.optString("process_pss_quality")))
                 meminfoAboveProcRss++;
             if(row.optBoolean("frame_telemetry_stale",false))fpsStale++;
+            if(row.optBoolean("render_error_flood_warning",false))renderFloodSamples++;
             long age=row.optLong("fps_unavailable_duration_ms",-1);
             if(age>=0){
                 lastFpsUnavailableDurationMs=age;
@@ -101,6 +103,7 @@ final class SessionMetricsSummary {
                     .put("game_process_state_unknown_samples",gameUnknown)
                     .put("android_meminfo_pss_above_proc_rss_samples",meminfoAboveProcRss);
             o.put("frame_telemetry_stale_samples",fpsStale);
+            o.put("render_error_flood_warning_samples",renderFloodSamples);
             o.put("last_fps_tracking_status",lastFpsStatus);
             o.put("last_fps_unavailable_duration_ms",lastFpsUnavailableDurationMs);
             o.put("max_fps_unavailable_duration_ms",maxFpsUnavailableDurationMs);

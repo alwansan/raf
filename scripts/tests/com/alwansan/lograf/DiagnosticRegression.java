@@ -120,6 +120,37 @@ public final class DiagnosticRegression {
         milestones.reset();
         if(milestones.snapshot().has("world_loaded_message_observed"))
             throw new AssertionError("Milestones must reset between recording sessions");
-        System.out.println("Diagnostic regression PASS: FFT/OBB/FMOD/PSS/PID, FIFO marker, milestones + 17178-event replay");
+        RenderFailureSummary render = new RenderFailureSummary();
+        String waterPass = "Invalid pass number (3) for Graphics.Blit (Material ";
+        render.observe(EVENT + waterPass + "\"UltimateWater/Spectrum/Water Spectrum\" with 1 passes)");
+        render.observe(EVENT + waterPass + "\"UltimateWater/Foam/Global\" with 1 passes)");
+        render.observe(EVENT + waterPass + "\"UltimateWater/Utilities/Blur (Subsurface Scattering)\" with 1 passes)");
+        render.observe(EVENT + waterPass + "\"UltimateWater/Utility/Noise\" with 1 passes)");
+        render.observe(EVENT + waterPass + "\"UltimateWater/Experimental\" with 1 passes)");
+        render.observe(EVENT + waterPass + "\"PostFX - Bloom\" with 1 passes)");
+        render.observe(EVENT + "Loaded UltimateWater/Spectrum/Water Spectrum successfully");
+        render.observe(EVENT + "IndexOutOfRangeException: Invalid kernelIndex (6) passed");
+        render.observe(EVENT + "IndexOutOfRangeException: Invalid kernelIndex (6) passed");
+        render.observe(EVENT + "IndexOutOfRangeException: Invalid kernelIndex (0) passed");
+        JSONObject water = render.snapshot().getJSONObject("ultimate_water_invalid_pass_by_material");
+        eq(1,water.getLong("spectrum"),"Spectrum failures");
+        eq(1,water.getLong("foam_global"),"Foam failures");
+        eq(1,water.getLong("subsurface_blur"),"Subsurface blur failures");
+        eq(1,water.getLong("utility_noise"),"Noise failures");
+        eq(1,water.getLong("other_ultimate_water"),"Other water pass failures");
+        JSONObject indexes = render.snapshot().getJSONObject("invalid_kernel_index_root_lines");
+        eq(2,indexes.getLong("index_6"),"Kernel index 6");
+        eq(1,indexes.getLong("other_index"),"Other kernel index");
+        if(RenderFailureSummary.renderErrorFlood(99.99))
+            throw new AssertionError("Below threshold is not a root-line flood");
+        if(!RenderFailureSummary.renderErrorFlood(100.0))
+            throw new AssertionError("100+ shader/compute root lines/sec is a flood");
+        if(RenderFailureSummary.renderErrorFlood(Double.NaN) ||
+                RenderFailureSummary.renderErrorFlood(Double.NEGATIVE_INFINITY))
+            throw new AssertionError("Unavailable render rate must not trigger a warning");
+        render.reset();
+        eq(0,render.snapshot().getJSONObject("ultimate_water_invalid_pass_by_material")
+                .getLong("spectrum"),"Render stats reset per session");
+        System.out.println("Diagnostic regression PASS: FFT/OBB/FMOD/PSS/PID, FIFO marker, milestones, per-material render flood + 17178-event replay");
     }
 }

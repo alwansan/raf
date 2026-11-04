@@ -25,6 +25,7 @@ public final class RemoteLogService extends IRemoteLog.Stub {
     private final AtomicLong shaderPassErrors=new AtomicLong(),kernelErrors=new AtomicLong(),missingAssetPaths=new AtomicLong();
     private final ErrorCategorySummary errorGroups=new ErrorCategorySummary();
     private final GameMilestoneSummary gameMilestones=new GameMilestoneSummary();
+    private final RenderFailureSummary renderFailures=new RenderFailureSummary();
     private final AtomicLong javaFatalMarkers=new AtomicLong(),nativeFatalMarkers=new AtomicLong(),processDeathEvents=new AtomicLong();
     private volatile Process gameProcess, systemProcess;
     private volatile ILogSink listener;
@@ -45,6 +46,7 @@ public final class RemoteLogService extends IRemoteLog.Stub {
     private static final Pattern CRASH_MARK = Pattern.compile("(?i)(FATAL EXCEPTION|Fatal signal|tombstone|crash_dump|am_crash|am_anr|Force finishing|ANR in|native crash|Fatal Java|Process:)");
     private static final int BATCH = 32768;
     private volatile long metricPreviousAt=-1, metricPreviousGameLines=0, metricPreviousSystemLines=0;
+    private volatile long metricPreviousRenderErrors=0;
     private volatile long sessionStartedElapsedMs=-1;
 
     public RemoteLogService() {}
@@ -60,12 +62,14 @@ public final class RemoteLogService extends IRemoteLog.Stub {
         javaFatalMarkers.set(0);nativeFatalMarkers.set(0);processDeathEvents.set(0);
         errorGroups.reset();
         gameMilestones.reset();
+        renderFailures.reset();
         lastDeathPid.set(-1);lastKnownPid.set(-1);lastDeathAtUnixMs.set(-1);
         primaryGamePid.set(-1);
         sinkFailedBatches.set(0);sinkFailedBytes.set(0);
         pidProbeFailures.set(0);pidProbeSuccesses.set(0);pidProbeStatus="not_started";pidProbeFailureReason="none";
         synchronized(gamePids){gamePids.clear();}
         metricPreviousAt=-1;metricPreviousGameLines=0;metricPreviousSystemLines=0;
+        metricPreviousRenderErrors=0;
         sessionStartedElapsedMs=android.os.SystemClock.elapsedRealtime();
         running.set(true);
         gameThread = new Thread(() -> pump("RAFT", new String[]{
@@ -122,16 +126,21 @@ public final class RemoteLogService extends IRemoteLog.Stub {
                 long now=android.os.SystemClock.elapsedRealtime();
                 long gameLines=gameLogLines.get();
                 long systemLines=systemContextLines.get();
+                long renderErrorRoots=shaderPassErrors.get()+kernelErrors.get();
                 if(metricPreviousAt>0 && now>metricPreviousAt){
                     double seconds=(now-metricPreviousAt)/1000.0;
                     double rate=Math.max(0,gameLines-metricPreviousGameLines)/seconds;
                     data.put("game_log_lines_per_second",Math.round(rate*100.0)/100.0);
                     data.put("error_flood_warning",rate>=10000);
+                    double renderRate=Math.max(0,renderErrorRoots-metricPreviousRenderErrors)/seconds;
+                    data.put("render_error_roots_per_second",Math.round(renderRate*100.0)/100.0);
+                    data.put("render_error_flood_warning",RenderFailureSummary.renderErrorFlood(renderRate));
                     data.put("system_context_lines_per_second",Math.round(Math.max(0,systemLines-metricPreviousSystemLines)/seconds*100.0)/100.0);
                 }
                 metricPreviousAt=now;
                 metricPreviousGameLines=gameLines;
                 metricPreviousSystemLines=systemLines;
+                metricPreviousRenderErrors=renderErrorRoots;
                 data.put("game_log_lines",gameLines);
                 data.put("game_log_lines_per_second_scope","previous_telemetry_interval");
                 long sessionMs=now-sessionStartedElapsedMs;
@@ -164,6 +173,8 @@ public final class RemoteLogService extends IRemoteLog.Stub {
                 data.put("process_exit_reason","unknown; process death alone is not a crash");
                 data.put("error_groups",errorGroups.snapshot());
                 data.put("game_milestones",gameMilestones.snapshot());
+                data.put("render_failure_breakdown",renderFailures.snapshot());
+                data.put("render_error_flood_scope","rate from previous telemetry interval; 100 render error root lines/s is a heuristic, not a GPU crash");
                 data.put("game_milestones_scope","observed game UID Logcat messages only; not proof of successful runtime operations");
                 data.put("error_groups_note","fixed categories only; original messages remain in raw Logcat");
                 data.put("logcat_unobserved_losses","unknown");
@@ -340,6 +351,7 @@ public final class RemoteLogService extends IRemoteLog.Stub {
                                 gameLogLines.incrementAndGet();
                                 errorGroups.observe(line);
                                 gameMilestones.observe(line);
+                                renderFailures.observe(line);
                                 if(line.contains("Invalid pass number") && line.contains("Graphics.Blit"))
                                     shaderPassErrors.incrementAndGet();
                                 if(line.contains("Invalid kernelIndex"))
@@ -426,6 +438,7 @@ public final class RemoteLogService extends IRemoteLog.Stub {
             evidence.put("target_package",Config.PACKAGE);
             evidence.put("final_error_groups",errorGroups.snapshot());
             evidence.put("final_game_milestones",gameMilestones.snapshot());
+            evidence.put("final_render_failure_breakdown",renderFailures.snapshot());
             evidence.put("final_game_log_lines",gameLogLines.get());
             evidence.put("final_shader_pass_errors_total",shaderPassErrors.get());
             evidence.put("final_compute_kernel_errors_total",kernelErrors.get());

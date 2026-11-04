@@ -9,5 +9,6 @@ javac -encoding UTF-8 -d "$DIR" \
   app/src/main/java/com/alwansan/lograf/PidProbeObservation.java \
   app/src/main/java/com/alwansan/lograf/CaptureEventMarker.java \
   app/src/main/java/com/alwansan/lograf/GameMilestoneSummary.java \
+  app/src/main/java/com/alwansan/lograf/RenderFailureSummary.java \
   scripts/tests/com/alwansan/lograf/DiagnosticRegression.java
 java -cp "$DIR" com.alwansan.lograf.DiagnosticRegression

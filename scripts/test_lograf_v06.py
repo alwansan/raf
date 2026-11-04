@@ -75,6 +75,9 @@ checks={
     "world milestones sample only game UID logcat": 'gameMilestones.observe(line);' in remote and 'gameMilestones.reset();' in remote and '"game_milestones"' in remote,
     "stop-time milestones survive last sample": '"final_game_milestones"' in remote and '"final_game_milestones"' in capture,
     "milestone classifier is fixed vocabulary": (src/"GameMilestoneSummary.java").exists() and 'world_loaded_message_observed' in (src/"GameMilestoneSummary.java").read_text(),
+    "water shader material root counters from game UID only": (src/"RenderFailureSummary.java").exists() and 'renderFailures.observe(line);' in remote and '"render_failure_breakdown"' in remote,
+    "water shader breakdown included at recording stop": '"final_render_failure_breakdown"' in remote and '"final_render_failure_breakdown"' in capture,
+    "render flood warning is rate based not logline based": '"render_error_roots_per_second"' in remote and 'renderErrorFlood(renderRate)' in remote,
     "error classes tracked without raw text": '"error_groups"' in remote and (src/"ErrorCategorySummary.java").exists(),
 }
 bad=[name for name,valid in checks.items() if not valid]
