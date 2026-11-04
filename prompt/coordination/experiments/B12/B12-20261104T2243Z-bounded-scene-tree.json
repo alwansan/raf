@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "owner": "B12",
+  "session_id": "20261104T2243Z-B12-bounded-tree-a9",
+  "issue_id": "PERF-007",
+  "hypothesis": "The previous 512-renderer bound still preallocated a full root-hierarchy Renderer[] and each renderer.sharedMaterials allocated an array. Replace with capped explicit Transform traversal plus reusable Renderer and Material lists, while preserving classification and clear truncation.",
+  "source_commit": "cdec4c65add78518942fc8609d32687c1257637d",
+  "input_hashes": [
+    {
+      "kind": "production_renderer_source_blob",
+      "sha_git_blob": "f8fa0dd36a27282ec9de54a6f8abe7d1356eb738"
+    },
+    {
+      "kind": "original_zip2_source_pin",
+      "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+      "downloaded": false
+    }
+  ],
+  "tool_versions": {
+    "unity_api": "Unity 2021.3 (GetSharedMaterials list and Component.GetComponents list)",
+    "synthetic_managed": ".NET 10, GitHub runner ubuntu-24.04",
+    "python": "Runner Python3"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_b12_scene_render_snapshot.py -v",
+    "python3 -m unittest discover -s tests -p test_runtime_operation_traces.py -v",
+    "python3 -m scripts.b12_scene_render_harness --output \"$RUNNER_TEMP/b12-render-bounds\"",
+    "dotnet run --project \"$RUNNER_TEMP/b12-render-bounds/B12Harness.csproj\" --configuration Release --nologo --verbosity quiet"
+  ],
+  "negative_controls": [
+    "1025 roots refuse fetching root array and set root_limit",
+    "1025 siblings cap pending stack at1024",
+    "5000 deep transforms cap 4096 visited",
+    "515 renderers cap 512",
+    "4100 material slots cap 4096",
+    "inactive objects omitted",
+    "unloaded scene emits no report",
+    "source-specific executable-only scanner rejects full-hierarchy API call without false comment-positive"
+  ],
+  "workflow_path": ".github/workflows/raft-b12-scene-render-snapshot.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41929419050",
+  "artifact_urls": [],
+  "budget": "6-minute dedicated standard ubuntu-24.04 CI, no original ZIP2/LFS transfer, no Unity/player build, no artifacts",
+  "status": "completed",
+  "observed_result": "CI 41929419050 SUCCESS source 02030b21: 8 executable synthetic C# scene tests run with exact extracted production coroutine and co-located quality helper; 11 B12 source-policy unit tests + 11 existing operation-trace tests passed. Original-managed compile CI41928807641 SUCCESS on source cdec4c6. Two earlier source-only CI tests failed on stale fixture/comments and an initial synthetic harness missed a concurrent OriginalQualityStateSnapshot helper; corrected, no claimed production failure.",
+  "rejected_hypotheses": [
+    "A 512-Renderer loop cap prevents full-hierarchy allocations: rejected, GetComponentsInChildren creates array before loop",
+    "All early CI failures demonstrate production C# defects: rejected, fixture read comments as code and synthetic harness omitted a concurrently added helper"
+  ],
+  "limitations": [
+    "No Unity Editor GPU shader import, Android IL2CPP device, FPS/GC allocation profiling or real frame-time comparison",
+    "GetComponents/Material list overloads can still resize for unusually many components on one GameObject; per-object list size not externally prechecked",
+    "RootLimit>1024 skips sampling and sets truncated instead of partial roots; intentionally avoids oversized allocation",
+    "Synthetic GameObject hierarchy does not reproduce native Unity engine allocation behavior or full scene geometry"
+  ],
+  "integration_commit": "cdec4c65add78518942fc8609d32687c1257637d",
+  "next_step": "Observe first real new Raft game APK containing source cdec4c6+, compare render.scene_shader_snapshot truncation/mesh/shader counts with same-scene screenshot and GC memory, and fix genuine WATER/RENDER source as independent next task; do not claim resolved device OOM."
+}
