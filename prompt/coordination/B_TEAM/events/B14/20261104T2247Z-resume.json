@@ -1,0 +1,12 @@
+{
+  "id": "B14-20261104T2247Z-resume",
+  "owner": "B14",
+  "session_id": "20261104T2247Z-B14-d1a9",
+  "issue_id": "RENDER-002",
+  "type": "start",
+  "summary": "Resumed B14 and registered source-only repair of stale SceneLoaded callback assertion after bounded scene shader/material/mesh telemetry became a coroutine.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41918822026"
+  ],
+  "at": "2026-11-04T22:48:14.763Z"
+}
