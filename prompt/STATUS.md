@@ -1069,3 +1069,7 @@ The25engine+140non-engine split agrees with the old native export's140initial lo
 <!-- BLUR_PARTIAL_CB_MEMBERS_4E91 -->
 ## Original Blur partial CB members — 4 November 2026
 [Source handoff](../docs/ORIGINAL_BLUR_PARTIAL_CB_MEMBERS_2026-11-04.md), [CPU run41742032440](https://github.com/alwansan/raf/actions/runs/41742032440) **SUCCESS**, source7bbc443c02b5a0169072ea67f773af06537af72b. All14 original providers488439356bytes verified from pinned ZIP2 without LFS; four test methods pass. New fact: all6 original CB records explicitlypartial;7 matrix/vector member indices/dimensions observed. Candidate byte-offset spans fit compiled declarations without overlap, but interpretation, values, named bindings and runtime remain unverified. No shader rewritten or GUID changed. Follow original operand masks/translator offsets next. WATER/RENDER/FFT OPEN; NOT_READY,0/3. Existing native41741108965 observed in progress and left untouched; no new build/request/task.
+
+
+## Live export failure follow-up — 4 November
+[Evidence](../docs/BLUR_EXPORT_FOLLOWUP_2026-11-04.md):41741108965 failed before Unity; material inventory2missing shader metas and subsequent builtin0/142identitymatches. No retry/gatechange. Blur candidate register arithmetic18checks passes, not operand or runtime proof. NOT_READY.
