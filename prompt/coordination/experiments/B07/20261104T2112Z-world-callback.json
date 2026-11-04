@@ -4,11 +4,13 @@
   "session_id": "20261104T2112Z-B07-6e51",
   "issue_id": "LOCAL-005",
   "hypothesis": "Original WorldHasBeenLoaded scene broadcast occurs before completion; GameManager.OnWorldRecieved calls SaveGame, where the APK86 Steam StoreStats exception can interrupt callback. Independent SHA-pinned original-source inspection can establish this structural chain and report GameManager original SHA without exposing proprietary code.",
-  "source_commit": "f5733da684102e3c6e50e2f1d2a0c981cacace97",
+  "source_commit": "2def39082d2b9d473062dc3604b9646d02768553",
   "input_hashes": [
     "Assembly-CSharp.dll size=3211776 sha256=0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
     "Raft_Network.cs sha256=080035c137e446828226ed84a23190656b6f235d274436cafb477feaf93caa03",
-    "SaveAndLoad.cs sha256=b150dd404da48b8012f6659680b3552c11500c4ec97a64ad9aa12c60094568bb"
+    "SaveAndLoad.cs sha256=b150dd404da48b8012f6659680b3552c11500c4ec97a64ad9aa12c60094568bb",
+    "GameManager.cs sha256=8eb76bcf22028ace2394afe96051ae1e3e59e44f8243c2a68d6b163d80802306",
+    "OnWorldRecieved method body sha256=f0ba21d67e1e332656fcc893f095b6a9da12eb6cd5e2be3b27001bb0cf02c835"
   ],
   "tool_versions": {
     "python": "3.x",
@@ -17,7 +19,9 @@
   },
   "commands": [
     "python3 -m unittest discover -s tests -p test_b07_probe_original_world_callbacks.py -v",
-    "python3 -m scripts.b07_probe_original_world_callbacks --original-managed-dll Raft/Raft_Data/Managed/Assembly-CSharp.dll --source $RUNNER_TEMP/b07/original"
+    "python3 -m scripts.b07_probe_original_world_callbacks --original-managed-dll Raft/Raft_Data/Managed/Assembly-CSharp.dll --source $RUNNER_TEMP/b07/original",
+    "python3 -m unittest discover -s tests -p test_b07_world_callback_trace.py -v",
+    "python3 -m scripts.instrument_android_runtime_operations --project \"$RUNNER_TEMP/project/ExportedProject\" --manifest config/runtime-operation-traces.json --apply"
   ],
   "negative_controls": [
     "reordered world completion",
@@ -25,20 +29,27 @@
     "missing StoreStats",
     "mismatched original SHA",
     "wrong original DLL",
-    "duplicate GameManager source"
+    "duplicate GameManager source",
+    "original GameManager only two SaveGame sites fails strict count",
+    "original GameManager body SHA mismatch rejects Android trace",
+    "non-void callback, unknown original revision and duplicate instrumentation refused"
   ],
   "workflow_path": ".github/workflows/raft-b07-world-callback-chain.yml",
-  "run_url": "https://github.com/alwansan/raf/actions/runs/41913966195",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41915466470",
   "artifact_urls": [],
   "budget": "ubuntu-24.04, one 12min timeout, sparse source, no LFS or Unity builds, raw private source remains ephemeral",
-  "status": "running",
-  "observed_result": "7/7 synthetic tests passed in isolated local scratch; original CI in progress; no source/runtime conclusion yet",
-  "rejected_hypotheses": [],
-  "limitations": [
-    "Lexical chain is not executed world delivery or .rgd roundtrip",
-    "No new phone APK evidence",
-    "Only source and synthetic tests until CI verifies original"
+  "status": "completed",
+  "observed_result": "Original pin tests CI41914637539 SUCCESS (8/8 synthetic, original GameManager 3 SaveGame callsites, one original SaveGame StoreStats). Final CI41915466470 SUCCESS on immutable 0a08683f: 8/8 probe plus 7/7 diagnostic-wrapper tests, SHA-verified original DLL private extraction and actual original GameManager callback wrapper/source-preservation verification. Source integration in native import manifest; no Unity or device execution.",
+  "rejected_hypotheses": [
+    "Original GameManager.OnWorldRecieved contains exactly one SaveGame call (rejected by verified original source: exactly three, CI41914364998).",
+    "Initial diagnostic regex escaping accepted literal double backslash (rejected by CI41914221999; corrected)."
   ],
-  "integration_commit": null,
-  "next_step": "Read CI, address precise failures, pin GameManager SHA and decide if safe targeted world callback runtime diagnostics are justified."
+  "limitations": [
+    "Original managed/source verification is not Unity/IL2CPP integration or native runtime execution",
+    "Lexical cross-method structure does not prove synchronous callback dispatch, exception propagation on device or .rgd roundtrip",
+    "APK86 predates source fixes; local-world gameplay and newer phone acceptance remain open"
+  ],
+  "integration_commit": "0a08683f09bdad8ef795fff8f59a21c6724b0661",
+  "next_step": "In next coordinated APK after water/readiness progress inspect world/OnWorldRecieved operation Begin/End/exception, verify local world create/save/reopen .rgd; do not modify readiness flags or call sound/touch.",
+  "updated_at": "2026-11-04T21:24:00Z"
 }
