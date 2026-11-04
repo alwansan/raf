@@ -32,6 +32,21 @@ def pointer(row):
     return row['file_id'], row['guid'].lower(), str(row['type'])
 
 
+def document_key(export_pointer):
+    """Identity of an exported YAML document: anchor fileID and asset GUID.
+
+    A document's reference type lives in the PPtrs that point at it, never in
+    the document itself. Loose exported assets legitimately use Serialized (2)
+    through YamlExporterBase (materials) or Meta (3) through binary exporters
+    (shaders, fonts). Any other type is an engine/localization pointer and can
+    never denote a loose exported material document.
+    """
+    file_id, guid, reference_type = export_pointer
+    if reference_type not in ('2', '3'):
+        raise ValueError('Unexpected exported material reference type')
+    return file_id, guid
+
+
 def check(trace, original_edges, original_shaders, actual, fonts=None, source_fonts=None):
     if trace.get('schema_version') != 1 or not re.fullmatch('[0-9a-f]{32}', trace.get('export_instance', '')):
         raise ValueError('Missing same-instance export trace')
@@ -44,6 +59,7 @@ def check(trace, original_edges, original_shaders, actual, fonts=None, source_fo
     material_shader_pointers = []
     redirects = 0
     implicit_fonts = 0
+    actual_materials = {document_key(key): value for key, value in actual.items()}
     for row in trace['objects']:
         key = identity(row['source'])
         if key in seen:
@@ -75,24 +91,25 @@ def check(trace, original_edges, original_shaders, actual, fonts=None, source_fo
             font_source = identity(row['font_source'])
             sha = row['font_data_sha256']
             if (font != (12800000, target[1], '3') or target[0] != 2100000 or target[2] != '3' or
-                    target in actual or not isinstance(sha, str) or not re.fullmatch('[0-9a-f]{64}', sha) or
+                    document_key(target) in actual_materials or not isinstance(sha, str) or not re.fullmatch('[0-9a-f]{64}', sha) or
                     fonts is None or fonts.get(font) != sha or source_fonts is None or source_fonts.get(font_source) != sha):
                 raise ValueError('Implicit font material lacks matching original font bytes and TrueType importer')
             implicit_fonts += 1
             continue
-        if target in exports:
+        material = document_key(target)
+        if material in exports:
             raise ValueError('Two distinct original materials share one export pointer')
-        exports[target] = shader
+        exports[material] = shader
     if selected_materials != set(original_edges) or selected_shaders != set(original_shaders):
         raise ValueError('Original Material or Shader omitted from trace')
     if any(shader_exports.get(key) != target for key, target in material_shader_pointers):
         raise ValueError('Material export pointer does not target its traced source Shader')
-    if not actual or actual != exports:
+    if not actual_materials or actual_materials != exports:
         print('RAFT_LINEAGE_MISMATCH ' + json.dumps({
-            'traced_yaml_materials': len(exports), 'actual_yaml_materials': len(actual),
-            'missing_actual': len(exports.keys() - actual.keys()),
-            'unexpected_actual': len(actual.keys() - exports.keys()),
-            'different_shader_pointers': sum(exports[k] != actual[k] for k in exports.keys() & actual.keys()),
+            'traced_yaml_materials': len(exports), 'actual_yaml_materials': len(actual_materials),
+            'missing_actual': len(exports.keys() - actual_materials.keys()),
+            'unexpected_actual': len(actual_materials.keys() - exports.keys()),
+            'different_shader_pointers': sum(exports[k] != actual_materials[k] for k in exports.keys() & actual_materials.keys()),
             'implicit_font_materials': implicit_fonts, 'engine_material_redirects': redirects}, sort_keys=True))
         raise ValueError('Actual YAML material pointers differ from same-instance export trace')
     return {'source_material_edges_verified': len(selected_materials),
