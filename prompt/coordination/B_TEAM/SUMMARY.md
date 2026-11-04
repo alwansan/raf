@@ -32,11 +32,10 @@
 - [B08 original FFT ComputeShader one-name/twenty compiled-program aliases](resources/fft-original-name-registry-b08.json): acquisition=VERIFIED; extraction=VERIFIED; reconstruction=UNKNOWN; binding=UNKNOWN; integration=UNKNOWN; device=UNKNOWN
 - [Original FFT 10 source-selector/compiled-slot candidate pairs (not runtime kernel IDs)](resources/fft-original-selector-compiled-candidate-b48.json): acquisition=VERIFIED; extraction=VERIFIED; reconstruction=UNKNOWN; binding=UNKNOWN; integration=UNKNOWN; device=UNKNOWN
 - [Original FFT compiled SHEX t0/t1/u0 + workgroup ↔ serialized Unity parity, 20/20](resources/fft-original-shex-resource-roles-b18.json): acquisition=VERIFIED; extraction=VERIFIED; reconstruction=UNKNOWN; binding=VERIFIED_COMPILED_REGISTER_ONLY; integration=UNKNOWN; device=UNKNOWN
-- [Original FFT 20-program uniform translated sampled/storage DescriptorSet/Binding interface](resources/fft-original-spirv-descriptor-abi-b08.json): acquisition=VERIFIED; extraction=VERIFIED; reconstruction=COMPILED_PROGRAM_SPIRV_TRANSLATION_VERIFIED_NOT_AUTHORED_SOURCE; binding=NUMERIC_DESCRIPTOR_ABI_VERIFIED_REGISTER_ROLE_IDENTITY_UNKNOWN; integration=UNKNOWN; device=UNKNOWN
+- [Original FFT 20-program uniform translated sampled/storage DescriptorSet/Binding interface](resources/fft-original-spirv-descriptor-abi-b08.json): acquisition=VERIFIED; extraction=VERIFIED; reconstruction=COMPILED_PROGRAM_SPIRV_TRANSLATION_VERIFIED_NOT_AUTHORED_SOURCE; binding=NUMERIC_ABI_AND_EXECUTABLE_SSA_IMAGE_USE_VERIFIED_T0_T1_IDENTITY_UNKNOWN; integration=UNKNOWN; device=UNKNOWN
 
 ## الأحداث
 
-- [2026-11-04T22:45:00Z / B11](events/B11/20261104T2245Z-gamut-utf8-start.json): B11 resumed on reproducible UTF-8 character-index versus byte-index misalignment in gamut correction whitelist; exact source tests planned, without Unity/phone inference.
 - [2026-11-04T22:45:04.636Z / B09](events/B09/20261104T2245Z-spectrum-resume.json): B09 resumed same identity to harden original Spectrum seven-pass structural proof using B17 verified PathID2432 and W2 authentic topology, avoiding redundant source data download.
 - [2026-11-04T22:45:12.019Z / B10](events/B10/20261104T2242Z-volumetric-start.json): B10 resumed after completed vendor metadata scope; now hardening volumetric Lighting BSD NOTICE transaction to prevent modified shaders after a late notice I/O failure. Scope distinct from B20 original Blur rollback.
 - [2026-11-04T22:45:35.546Z / B06](events/B06/20261104T224512Z-B06-wg7a3-start.json): B06 resumes FFT work to distinguish Unity maximum local workgroup invocation count from dispatch-group X/Y/Z limits and verify source-authenticated 5 original FFT group sizes against this theoretical device cap; does not change FFT shaders/kernels.
@@ -66,5 +65,6 @@
 - [2026-11-04T22:56:00Z / B19](events/B19/20261104T2256Z-save-hardlink-start.json): B19 resumed: test hardlinked SaveAndLoad.cs source/.meta aliases bypassing symlink safety guard.
 - [2026-11-04T22:56:25Z / B08](events/B08/20261104T2256Z-image-uses-result.json): B08 authentic original all20 compiled FFT programs have both sampled SPIR-V descriptor candidate reads and storage write in executable image instructions, with all scanned operands uniquely traced; final CI41929513820 SUCCESS 20/20 synthetic controls and 20/20 original source programs. t0/t1 and Unity runtime index remains unproven. WATER-001 OPEN.
 - [2026-11-04T22:57:00Z / B21](events/B21/20261104T2257Z-start-light-export.json): Resumed B21 and selected optional same-instance source/export native Light class108 identity gap. Stage isolated SHA-pinned W1+B02 helper without editing shared tracer or changing Unity game; test public compiler and preserve original private source boundaries.
+- [2026-11-04T22:57:30Z / B20](events/B20/20261104T2257Z-foam-packet-start.json): Resumed B20 to integrate original two-pass Foam program stage recovery and state into a coherent private artifact, without fake ShaderLab, inferred CB0 aliases or device-readiness claims.
 
-بصمة المدخلات: dd035534e3ee665a02788a945d3e97f8f348f62b134d855e032c7437197060c2
+بصمة المدخلات: 6746d9564c512653cc6166de31931f0b553598ce0458ecccb945d81695878153
