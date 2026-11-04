@@ -1,0 +1,32 @@
+{
+  "id": "B10-generated-vendor-shader-metadata",
+  "title": "B10 — reproducible ShaderImporter GUID sidecars for newly added vendor-only shader fallbacks",
+  "kind": "generated-export-metadata",
+  "source": {
+    "provider": "pinned official TMP/PostFX/Volumetric vendor shaders through shared restore helper",
+    "commit": "1f76e243c067b77a507a81e603f1ce90e5b68dc0",
+    "path": "scripts/restore_tmp_shaders.py",
+    "bytes": null,
+    "sha256": null
+  },
+  "stages": {
+    "acquisition": "EXISTING_PINNED_VENDOR_SOURCES_NO_NEW_DOWNLOAD",
+    "extraction": "NOT_APPLICABLE",
+    "reconstruction": "GENERATED_META_SCHEMA_SOURCE_FIXED_SYNTHETIC_TESTED",
+    "binding": "SOURCE_META_GUID_COLLISION_GUARDED_NOT_REAL_EXPORT_VERIFIED",
+    "integration": "PRODUCTION_HELPER_INTEGRATED_CPU_CI_PASS_22_22",
+    "device": "NOT_TESTED"
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/46b9fb69d0e63526717e010bf9d7eb487fe9e2c5",
+    "https://github.com/alwansan/raf/commit/1f76e243c067b77a507a81e603f1ce90e5b68dc0",
+    "https://github.com/alwansan/raf/actions/runs/41917602226",
+    "https://github.com/alwansan/raf/actions/runs/41917602139",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B10_VENDOR_SHADER_META_FIDELITY_2026-11-04.md"
+  ],
+  "remaining": [
+    "Native41741108965 missing shader metas exact paths not observed; verify next actual export after vendor restoration",
+    "This does not restore any authored ShaderLab program, authentic FFT kernel, render pixels, material identity, or game world runtime"
+  ],
+  "updated_by": "B10"
+}
