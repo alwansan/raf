@@ -8,6 +8,7 @@ on:
       - scripts/b49_shaderlab_pass_contract.py
       - scripts/b47_compute_kernel_contract.py
       - tests/test_verify_water_render_contract.py
+      - tests/test_b47_compute_kernel_contract.py
       - .github/workflows/raft-b13-water-meta-guid.yml
 permissions:
   contents: read
@@ -26,9 +27,11 @@ jobs:
           sparse-checkout: |
             scripts
             tests/test_verify_water_render_contract.py
+            tests/test_b47_compute_kernel_contract.py
       - name: Test water GUID negative controls and existing ShaderLab/FFT structural policy
         shell: bash
         run: |
           set -euo pipefail
           python3 -m unittest discover -s tests -p test_verify_water_render_contract.py -v
+          python3 -m unittest discover -s tests -p test_b47_compute_kernel_contract.py -v
           echo 'B13_WATER_GUID source_only=true game_assets_uploaded=false authentic_shader_restored=false unity_device_tested=false'
