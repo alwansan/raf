@@ -7,11 +7,13 @@ import re
 import shutil
 
 from scripts.adapt_original_save_paths import SUFFIX as PATH_SUFFIX
+from scripts.probe_original_scene_audio import method_body, _executable_positions
 
 LOCAL = 'RaftAndroid.Platform.LocalPlayerIdentity'
 PINS = {
     'SteamManager': '8b45cf7af0e623ec11b5800f18550640334a9ff9705cdae917719d94cca5e3cf',
     'SaveAndLoad': 'b150dd404da48b8012f6659680b3552c11500c4ec97a64ad9aa12c60094568bb',
+    'Cheat': '8137618061888b90d79af6dcca8c16aa5128bb5306ae07cab4e87d4a98ffe772',
     'RGD_User': '13f9afdd66f542d122e59558b3cb7b6c404b1950c903a9518aebe0599a59eef6',
     'RGD_Users': '039e902c194b10bca6b8b66f01a48b2673165cb75ffcb7c50ea65a953532903e',
     'Raft_Network': '080035c137e446828226ed84a23190656b6f235d274436cafb477feaf93caa03',
@@ -58,6 +60,26 @@ def adapt(name, text):
             result = replace_exact(result, attribute,
                 attribute + '\n\t[Conditional("UNITY_ANDROID")]')
 
+    elif name == 'Cheat':
+        # Authenticated ZIP2 Assembly-CSharp.dll (3211776 B), ILSpy11.2
+        # exact original Cheat source/method fingerprints from B50 CI.
+        # The original call returns a Steamworks.CSteamID *object*, not a
+        # numeric m_SteamID property, so retain its object type on Android.
+        return_type, body = method_body(result, 'AllowCheatsForLocalPlayer')
+        if return_type != 'bool' or hashlib.sha256(body.replace('\\r\\n', '\\n').encode()).hexdigest() != (
+                'e89739ba461b65b03e78c388193dcfff44a19a41842af9b665a434c39fef1a09'):
+            raise ValueError('Unrecognized original Cheat Steam identity method')
+        executable = _executable_positions(body)
+        calls = list(re.finditer(r'\\bSteamUser\\s*\\.\\s*GetSteamID\\s*\\(\\s*\\)', executable))
+        if len(calls) != 1 or result.count(body) != 1:
+            raise ValueError('Original Cheat Steam identity callsite drift')
+        match = calls[0]
+        call = body[match.start():match.end()]
+        guard = '(' + LOCAL + '.Enabled ? new Steamworks.CSteamID(' + LOCAL + '.Current) : ' + call + ')'
+        updated_body = body[:match.start()] + guard + body[match.end():]
+        result = result.replace(body, updated_body, 1)
+        if result.replace(guard, call, 1) != text:
+            raise ValueError('Cheat identity guard modified unrelated original source')
     elif name == 'SteamManager':
         anchor = 'UnityEngine.Object.DontDestroyOnLoad(gameObject);'
         result = replace_exact(result, anchor, anchor + '\n        if (' + LOCAL + '.Enabled) { _ = ' + LOCAL + '.Current; m_bInitialized = false; return; }')
