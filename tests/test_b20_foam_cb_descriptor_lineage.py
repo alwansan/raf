@@ -58,7 +58,7 @@ class B20CBDescriptorLineageTest(unittest.TestCase):
                 reflected_ubos({"ubos": [entry]})
 
     def test_ambiguous_missing_cb_is_not_promoted_to_verified_alias(self):
-        actual = analyze_pair("", {"ubos": []}, expected_slots=(0,))
+        actual = analyze_pair("void main() {}", {"ubos": []}, expected_slots=(0,))
         self.assertFalse(actual["hlsl_source_slot_set_coincides"])
         self.assertFalse(actual["spirv_set0_binding_set_coincides"])
         self.assertFalse(actual["original_name_to_hlsl_cb0_identifier_verified"])
