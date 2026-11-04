@@ -17,7 +17,8 @@ import re
 import tempfile
 
 from scripts.verify_targeted_lfs_compute_sources import EXPECTED as PINNED_SOURCE
-\nZIP2_SHA = "15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+
+ZIP2_SHA = "15964ea8f246b6e076ce26b60931ee2e1a9a2385"
 HEX32 = re.compile(r"^[0-9a-f]{32}$")
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
 GUID = re.compile(r"^guid:[ \t]*([a-fA-F0-9]{32})[ \t]*$", re.M)
