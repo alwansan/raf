@@ -37,8 +37,49 @@ namespace RaftAndroid.Diagnostics
                     "; gpu_vendor=" + SystemInfo.graphicsDeviceVendor + "; compute=" + SystemInfo.supportsComputeShaders +
                     "; shader_level=" + SystemInfo.graphicsShaderLevel + "; cpu=" + SystemInfo.processorType +
                     "; cpu_count=" + SystemInfo.processorCount + "; system_memory_mb=" + SystemInfo.systemMemorySize, true);
+                // Lightweight, read-only FFT hardware contract for APK diagnostics.
+                // A supported format does NOT prove that a recovered Unity kernel exists.
+                try { ReportFftDeviceCapabilities(); }
+                catch (Exception ex)
+                {
+                    Write("water", "fft_device_capabilities.unavailable", ex.GetType().Name, true);
+                }
             }
             catch (Exception ex) { StorageError = ex.GetType().Name + ": " + ex.Message; }
+        }
+
+        // Original GpuFFT uses RGHalf/RGFloat/ARGBHalf/ARGBFloat targets. Report
+        // only Unity's queried capability flags; never allocate a RenderTexture,
+        // change a fallback format, or infer a working shader from these values.
+        private static void ReportFftDeviceCapabilities()
+        {
+            Write("water", "fft_device_compute_limits",
+                "supports_compute=" + SystemInfo.supportsComputeShaders +
+                "; max_group_invocations=" + SystemInfo.maxComputeWorkGroupSize +
+                "; max_group_x=" + SystemInfo.maxComputeWorkGroupSizeX +
+                "; max_group_y=" + SystemInfo.maxComputeWorkGroupSizeY +
+                "; max_group_z=" + SystemInfo.maxComputeWorkGroupSizeZ +
+                "; unity_compute_kernel_identity=unverified", true);
+            RenderTextureFormat[] formats = {
+                RenderTextureFormat.RGHalf,
+                RenderTextureFormat.RGFloat,
+                RenderTextureFormat.ARGBHalf,
+                RenderTextureFormat.ARGBFloat
+            };
+            foreach (RenderTextureFormat format in formats)
+            {
+                string supported = "unavailable";
+                string randomWrite = "unavailable";
+                try { supported = SystemInfo.SupportsRenderTextureFormat(format).ToString(); }
+                catch (Exception) { }
+                try { randomWrite = SystemInfo.SupportsRandomWriteOnRenderTextureFormat(format).ToString(); }
+                catch (Exception) { }
+                Write("water", "fft_device_target_format",
+                    "original_requested_format=" + format +
+                    "; render_texture_supported=" + supported +
+                    "; random_write_supported=" + randomWrite +
+                    "; actual_image_view=unverified; actual_fft_dispatch=unverified", true);
+            }
         }
 
         public static void Write(string area, string operation, string detail = "", bool critical = false)
