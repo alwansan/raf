@@ -2,12 +2,12 @@
   "schema_version": 1,
   "username": "B06",
   "generation": "B-2026-11-04",
-  "session_id": "20261104T210726Z-B06-fmt6a2",
-  "resumed_from_session": null,
-  "status": "completed",
-  "base_sha": "e8c312541b8139f2e889ff8921de8128146dcc84",
+  "session_id": "20261104T224512Z-B06-wg7a3",
+  "resumed_from_session": "20261104T210726Z-B06-fmt6a2",
+  "status": "active",
+  "base_sha": "664100d4b976802a3463aa4ee5c0fe5254c7d28f",
   "last_commit": "f4b9520c367bf8e78fcfebba673f20b465edb720",
-  "updated_at": "2026-11-04T21:19:33.905Z",
+  "updated_at": "2026-11-04T22:45:35.546Z",
   "tracks": [
     "water-fft",
     "fft-format-integration",
@@ -15,12 +15,13 @@
   ],
   "work_ids": [
     "B06-20261104T210726Z-B06-fmt6a2-fft-target-binding",
-    "B06-20261104T210726Z-B06-fmt6a2-fft-dispatch-lexical"
+    "B06-20261104T210726Z-B06-fmt6a2-fft-dispatch-lexical",
+    "B06-20261104T224512Z-B06-wg7a3-fft-workgroup-semantic"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41913854292",
     "https://github.com/alwansan/raf/actions/runs/41914612977"
   ],
-  "next_step": "B06 narrow session scopes completed. On resume read docs/B06_FFT_ANDROID_CAPABILITY_PROBE_2026-11-04.md and docs/B06_FFT_DISPATCH_LEXICAL_GUARD_2026-11-04.md; verify live HEAD/Actions/CL, coordinate authentic Unity shader/kernel integration, and validate new FFT device capability logs only when a legitimately new APK is produced; WATER-001 remains OPEN, 0/3 full readiness reviews.",
+  "next_step": "Correct FFT capability semantics and test new source-backed group-theory logging; no Unity/device proof.",
   "memory_path": "prompt/coordination/clients/B06/MEMORY.md"
 }
