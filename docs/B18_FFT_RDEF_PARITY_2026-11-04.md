@@ -52,3 +52,24 @@ Android device render. No ShaderLab, Unity/game source, textures, .meta/GUID,
 
 Public format reference:
 https://github.com/tpn/winsdk-10/blob/master/Include/10.0.10240.0/um/d3d11TokenizedProgramFormat.hpp
+
+## Follow-up: source authentic DXBC -> SPIR-V image role verification
+
+B18 second separate workflow:
+https://github.com/alwansan/raf/actions/runs/41923703800
+Source commit: ea07d9d1c8d6009df460a102ee95dbdf25792a91
+
+Original pinned ZIP2 source owner and original FFT object re-authenticated.
+10/10 independent synthetic tests PASS. Twenty of twenty real compiled
+original DXBC programs translated privately by vkd3d-compiler; each
+generated SPIR-V program has exactly two *sampled* Texture2D input images,
+one *storage* Texture2D output image and the same compute local-workgroup
+shape as the input DXBC declarations. No proprietary module uploaded.
+
+This adds evidence that **image resource class/count** survived a
+DXBC-to-SPIR-V translation across the original 20 slots, but does not
+establish which exact source t0/t1/u0 register maps to which destination
+SPIR-V DescriptorSet/Binding. The translated modules are not installed
+into Unity. Native Unity FindKernel, texture SetTexture call binding,
+correct actual ShaderLab reconstruction, phone Adreno output, source
+materials and full 3D scene pixels remain UNTESTED. WATER-001 OPEN.

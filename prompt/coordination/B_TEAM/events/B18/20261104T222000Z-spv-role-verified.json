@@ -1,0 +1,13 @@
+{
+  "id": "20261104T222000Z-spv-role-verified",
+  "owner": "B18",
+  "session_id": "20261104T215100Z-B18-d3f9",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "CI41923703800 success: 10/10 synthetic negative/positive controls and 20/20 SHA-auth original DXBC->vkd3d SPIR-V preserve 2 sampled + 1 storage Texture2D and workgroup. Exact t/u register→descriptor, Unity kernel runtime and Adreno phone unproven.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41923703800",
+    "https://github.com/alwansan/raf/commit/ea07d9d1c8d6009df460a102ee95dbdf25792a91"
+  ],
+  "at": "2026-11-04T22:20:00Z"
+}

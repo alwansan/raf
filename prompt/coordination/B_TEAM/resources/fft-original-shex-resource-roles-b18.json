@@ -20,14 +20,24 @@
   },
   "evidence": [
     "https://github.com/alwansan/raf/actions/runs/41922333604",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B18_FFT_RDEF_PARITY_2026-11-04.md"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B18_FFT_RDEF_PARITY_2026-11-04.md",
+    "https://github.com/alwansan/raf/actions/runs/41923703800"
   ],
   "remaining": [
     "20 original DXBC programs have zero RDEF name reflection; do not infer compiled private resource name identity",
     "Unity runtime FindKernel mapped to compiled variant slot remains unknown",
     "SPIR-V descriptor set/binding class and actual Unity .compute integration not yet B18-verified",
-    "Original water shaders, render and Adreno visual parity unverified"
+    "Original water shaders, render and Adreno visual parity unverified",
+    "Translation stage B18: all 20 original DXBC->SPIR-V typed image role counts preserved, not per-source-register exact descriptor mapping or Unity runtime binding."
   ],
   "updated_by": "B18",
-  "updated_at": "2026-11-04T22:11:00Z"
+  "updated_at": "2026-11-04T22:19:00Z",
+  "translated_spirv": {
+    "verified_original_fft_programs": 20,
+    "expected_sampled_texture2d_per_program": 2,
+    "expected_storage_texture2d_per_program": 1,
+    "original_compute_workgroup_preserved": true,
+    "per_source_register_to_destination_descriptor_exact_pair_proven": false,
+    "unity_or_android_gpu_verified": false
+  }
 }

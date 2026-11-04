@@ -38,7 +38,8 @@
     "https://github.com/alwansan/raf/actions/runs/41921227456",
     "https://github.com/alwansan/raf/commit/42476b87626031f23db37808d00e1c76604e5b33",
     "https://github.com/alwansan/raf/actions/runs/41922333604",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B18_FFT_RDEF_PARITY_2026-11-04.md"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B18_FFT_RDEF_PARITY_2026-11-04.md",
+    "https://github.com/alwansan/raf/actions/runs/41923703800"
   ],
   "remaining": [
     "Spectrum/Foam/Blur passes ناقصة في APK86",
@@ -57,7 +58,8 @@
     "B17 exact ZIP2-original Spectrum typed numeric stage descriptor census: 7 passes; 13 fragment rows, 0 vertex rows, 42 resource table field occurrences, m_UAVParams and typed m_MultiSampled; original UnityPy execution and 16 synthetic controls PASS CI41920232173. Original-to-ShaderLab resource binding semantics, sampler state, water pixels and Android Unity runtime still NOT verified; WATER-001 remains OPEN.",
     "B13: Source-integrated validator now rejects malformed/ambiguous/duplicate water Shader/FFT Compute .meta GUIDs; 22/22 synthetic CI PASS with B47 kernel contract, but original ZIP2 GUID ownership, restored ShaderLab/FFT programs, Unity import and phone water errors still unverified (WATER-001 OPEN).",
     "B16: conditional #if 0 false-positive removed from structural .compute gate; 34/34 B16+B47+water source-only CI. Literal branches checked, unknown macros conservative; original FFT .compute/kernel identity/Unity and APK86 device errors still unresolved.",
-    "B18: authenticated ZIP2 original FFT ComputeShader 20/20 SHEX declarations show t0/t1/u0 read/read/write registers and threadgroup dimensions identical to same-slot serialized Unity data; Actions41922333604 SUCCESS 13/13 synthetic and exact SHA source. Original programs contain 0 RDEF chunks; compiled private names, runtime Unity FindKernel index→compiled slot, ShaderLab Unity import/Adreno pixels remain NOT verified; WATER-001 OPEN."
+    "B18: authenticated ZIP2 original FFT ComputeShader 20/20 SHEX declarations show t0/t1/u0 read/read/write registers and threadgroup dimensions identical to same-slot serialized Unity data; Actions41922333604 SUCCESS 13/13 synthetic and exact SHA source. Original programs contain 0 RDEF chunks; compiled private names, runtime Unity FindKernel index→compiled slot, ShaderLab Unity import/Adreno pixels remain NOT verified; WATER-001 OPEN.",
+    "B18 second authenticated original FFT proof CI41923703800 SUCCESS: 20/20 translated DXBC->SPIR-V image role classes preserved (2 read sampled Texture2D, 1 write storage Texture2D) plus local workgroup size; 10 synthetic controls PASS. Mapping each original t register to one concrete SPIR-V set/binding, real Unity .compute import and Adreno render remain UNKNOWN. No game patch or new APK."
   ],
   "acceptance": [
     "هوية برامج ونوى أصلية أو تطابق موثق دونdummy",
@@ -65,5 +67,5 @@
     "اختبار هاتف يثبت الماء بلا pass/kernel errors"
   ],
   "updated_by": "B18",
-  "updated_at": "2026-11-04T22:10:00Z"
+  "updated_at": "2026-11-04T22:19:00Z"
 }

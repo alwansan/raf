@@ -39,5 +39,49 @@
     "https://github.com/alwansan/raf/commit/42476b87626031f23db37808d00e1c76604e5b33"
   ],
   "next_step": "Use independent SPIR-V translation image binding cross-check; stop before Unity/game or device claims.",
-  "updated_at": "2026-11-04T22:11:00Z"
+  "updated_at": "2026-11-04T22:11:00Z",
+  "hypothesis": "Original compiled SHA-authenticated DXBC 20 slots declare t0/t1/u0 read/read/write and same workgroup as serialized Unity shader (RDEF-only assumption rejected, SHEX proved).",
+  "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "input_hashes": [
+    "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "9d934f5c99183c6df5cf2f1fefc9d3e5ec4bce5da5f96a86e4c02910d5322247"
+  ],
+  "tool_versions": {
+    "UnityPy": "1.25.4",
+    "python": "3.x"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_b18_fft_compiled_rdef_bindings.py -v",
+    "python3 -m scripts.b18_fft_compiled_rdef_bindings --source $RUNNER_TEMP/b18/original/Raft_Data"
+  ],
+  "negative_controls": [
+    "wrong resource register",
+    "duplicate register",
+    "wrong resource kind/dimension",
+    "corrupt length/chunk",
+    "missing RDEF (actual original source)"
+  ],
+  "workflow_path": ".github/workflows/raft-b18-fft-rdef-parity.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41922333604",
+  "artifact_urls": [],
+  "budget": "18m isolated CPU source verification; no Unity, GPU, APK, or artifacts",
+  "observed_result": {
+    "synthetic_tests_passed": 13,
+    "compiled_dxbc_programs_authenticated": 20,
+    "shex_t0_t1_u0_and_group_parity_matched": 20,
+    "rdef_reflections_found": 0,
+    "compiled_resource_names_derived_from_binary": false,
+    "runtime_unity_kernel_id_mapping_verified": false,
+    "unity_import_verified": false,
+    "android_pixels_verified": false
+  },
+  "rejected_hypotheses": [
+    "Original FFT compiled 20 DXBC contain RDEF reflection resource names (all 20 authentic are RDEF-absent)."
+  ],
+  "limitations": [
+    "Original binary resource names cannot be verified absent RDEF",
+    "Unity runtime FindKernel index-to-DXBC slot and actual .compute import unknown",
+    "Device Adreno pixels/visuals and game world remain unverified"
+  ],
+  "integration_commit": "42476b87626031f23db37808d00e1c76604e5b33"
 }
