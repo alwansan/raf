@@ -5,6 +5,9 @@ on:
     paths:
       - 'scripts/patch_export_lineage.py'
       - 'scripts/verify_export_lineage.py'
+      - 'scripts/verify_builtin_export_ownership.py'
+      - 'scripts/restore_builtin_shaders.py'
+      - 'tests/test_builtin_engine_ownership.py'
       - 'tests/test_export_lineage.py'
       - 'android-port/Experiments/ExportLineage/**'
       - '.github/workflows/raft-w1-export-lineage.yml'
@@ -26,9 +29,12 @@ jobs:
             scripts
             tests
             android-port/Experiments/ExportLineage
+            android-port/Experiments/W1EngineDatabase
       - name: Negative identity and graph controls before acquisition
         run: |
           python3 -m unittest discover -s tests -p test_export_lineage.py -v
+          python3 -m unittest discover -s tests -p test_builtin_engine_ownership.py -v
+          python3 -m unittest discover -s tests -p test_restore_builtin_shaders.py -v
           python3 -c "import shutil; assert shutil.disk_usage('.').free > 8 * 1024**3"
       - uses: actions/setup-dotnet@v4
         with:
@@ -131,6 +137,11 @@ jobs:
         run: |
           python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
           python3 -m scripts.verify_export_lineage --source "$RUNNER_TEMP/w1-original" --private-trace "$RUNNER_TEMP/private-export-lineage.json" --project "$RUNNER_TEMP/lineage-project/ExportedProject" --out "$RUNNER_TEMP/export-lineage-summary.json"
+      - name: Re-read exact embedded engine database for production gate trial
+        run: dotnet run --project android-port/Experiments/W1EngineDatabase/W1EngineDatabase.csproj -c Release -- "$RUNNER_TEMP/private-engine-database.json" "$RUNNER_TEMP/engine-reader-summary.json"
+      - name: Exercise builtin restorer against actual traced original export without a receipt waiver
+        run: |
+          python3 -m scripts.restore_builtin_shaders --project "$RUNNER_TEMP/lineage-project/ExportedProject" --backup "$RUNNER_TEMP/builtin-backup" --engine-source "$RUNNER_TEMP/w1-original" --private-export-trace "$RUNNER_TEMP/private-export-lineage.json" --private-engine-database "$RUNNER_TEMP/private-engine-database.json" --engine-reader-summary "$RUNNER_TEMP/engine-reader-summary.json"
       - name: Retain aggregate result only; never upload private trace or assets
         if: always()
         uses: actions/upload-artifact@v4

@@ -126,7 +126,7 @@ def _require_safe_asset_path(assets, path):
         raise ValueError('Unsafe Unity Assets path')
 
 
-def restore_project(project, backup, shaders, files, license):
+def restore_project(project, backup, shaders, files, license, engine_inputs=None):
     project = project.resolve()
     assets = project / 'Assets'
     backup = backup.resolve()
@@ -185,7 +185,16 @@ def restore_project(project, backup, shaders, files, license):
         'unparseable_declarations': shader_files - declared_identities,
     }, sort_keys=True))
     if not plan:
-        raise ValueError('No exported built-in shader identities matched; custom shaders cannot be substituted')
+        if engine_inputs is None:
+            raise ValueError('No exported built-in shader identities matched; custom shaders cannot be substituted')
+        # Some exact exporter collections redirect authored engine Shaders to
+        # Unity's internal GUID/fileID instead of emitting loose .shader files.
+        # Re-read source bytes, collection trace and actual YAML here. A JSON
+        # summary/boolean alone is never accepted as permission to skip work.
+        from scripts.verify_builtin_export_ownership import verify
+        coverage = verify(project, *engine_inputs)
+        print('RAFT_BUILTIN_ENGINE_OWNERSHIP ' + json.dumps(coverage, sort_keys=True))
+        return 0
     additions = {project / NOTICE: license, project / ROOT / 'license.txt': license}
     pending = list(dependencies)
     done = set()
@@ -274,13 +283,22 @@ def main():
     p.add_argument('--project', type=Path)
     p.add_argument('--backup', type=Path)
     p.add_argument('--verify-only', action='store_true')
+    p.add_argument('--engine-source', type=Path)
+    p.add_argument('--private-export-trace', type=Path)
+    p.add_argument('--private-engine-database', type=Path)
+    p.add_argument('--engine-reader-summary', type=Path)
     args = p.parse_args()
     sources = archive_sources(download())
     if args.verify_only:
         return
     if not args.project or not args.backup:
         raise ValueError('Project and external backup required')
-    restore_project(args.project, args.backup, *sources)
+    engine_inputs = (args.engine_source, args.private_export_trace,
+                     args.private_engine_database, args.engine_reader_summary)
+    if any(p is not None for p in engine_inputs) and not all(p is not None for p in engine_inputs):
+        raise ValueError('All original source/trace/database/reader inputs are required together')
+    restore_project(args.project, args.backup, *sources,
+                    engine_inputs=engine_inputs if all(p is not None for p in engine_inputs) else None)
 
 
 if __name__ == '__main__':

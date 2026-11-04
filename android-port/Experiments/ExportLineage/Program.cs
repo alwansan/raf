@@ -8,7 +8,8 @@ if (args.Length == 1 && args[0] == "--probe-tool")
     Console.WriteLine("RAFT_EXPORTER_HOST exactSource=036098ab sameExportHandler=true");
     return;
 }
-if (args.Length != 2)
+bool fullInstall = args.Length == 3 && args[2] == "--full-install";
+if (args.Length != 2 && !fullInstall)
     throw new ArgumentException("Expected original source and private export destination");
 Logger.Add(new ConsoleLogger());
 LibraryConfiguration settings = new();
@@ -21,7 +22,7 @@ ExportHandler handler = new(settings);
 // The cache is a bounded provider set, not a complete install with Raft.exe and
 // globalgamemanagers. Load its authenticated files explicitly so game-directory
 // discovery cannot silently select an empty bundle.
-string[] files = Directory.GetFiles(Path.Combine(args[0], "Raft_Data"), "*", SearchOption.AllDirectories);
+string[] files = fullInstall ? [args[0]] : Directory.GetFiles(Path.Combine(args[0], "Raft_Data"), "*", SearchOption.AllDirectories);
 var gameData = handler.LoadAndProcess(files);
 var counts = gameData.GameBundle.FetchAssets().GroupBy(asset => asset.ClassID)
     .ToDictionary(group => group.Key, group => group.Count());
