@@ -1,0 +1,14 @@
+{
+  "id": "20261104T2112Z-B02-import-guard",
+  "owner": "B02",
+  "session_id": "20261104T2101Z-B02-e5cd",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "B02 source guard for original TextureImporter Gamma/Linear fidelity completed (synthetic 11/11, CI41913145660), with exact original SHA pins; no real exported mapping/asset repair/Unity/device evidence.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/0d33268645106e7bc28fcaa786d90683fe93de19",
+    "https://github.com/alwansan/raf/actions/runs/41913145660",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B02_TEXTURE_IMPORT_COLOR_FIDELITY_2026-11-04.md"
+  ],
+  "at": "2026-11-04T21:12:00Z"
+}
