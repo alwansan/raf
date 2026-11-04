@@ -6,7 +6,7 @@
   "issue_id": "WATER-001",
   "track": "water-fft",
   "approach": "Use masked CSharp lexical view for argument delimiter/brace analysis, original source for exact argument values. Defend against commented commas and verbatim strings; preserve SHA-pinned caller inventory.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "66aa4afe1f177d381a3be2aa36e6ec2258ed8a9e",
   "intended_files": [
     "scripts/probe_original_fft_kernel_callsites.py",
@@ -16,9 +16,13 @@
   "related_work": [
     "B01-20261104T2105Z-B01-water-contract-fft-kernel-contract"
   ],
-  "experiment_ids": [],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Apply source hardening with tests and run existing managed FFT CI; no GPU claims.",
-  "updated_at": "2026-11-04T22:31:00Z"
+  "experiment_ids": [
+    "20261104T2231Z-fft-argument-integrity"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41926033893"
+  ],
+  "result": "Source fix ec4f8ce; final CI41926033893 SUCCESS job126910773877: 67 synthetic tests, original managed SHA-pinned Dx11FFT Dispatch=2 SetTexture=6, offsets=[0,1], WavesRendererFFT SetTexture=10 (unchanged from prior CI41911972796), numeric original FFT oracle exit0 errorCodes=[]. No Unity/Adreno device/render claim.",
+  "next_step": "Look for authentic GPU shader resource integration or other P0 blocker not covered by live B agents.",
+  "updated_at": "2026-11-04T22:35:00Z"
 }
