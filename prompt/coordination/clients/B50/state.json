@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "username": "B50",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2039Z-B50-d7a3",
+  "resumed_from_session": null,
+  "status": "active",
+  "base_sha": "4086cd508c154ad081d2e3931e6775c622f37c3d",
+  "last_commit": null,
+  "updated_at": "2026-11-04T20:39:16Z",
+  "tracks": [
+    "world-save",
+    "render-regression-review"
+  ],
+  "work_ids": [
+    "B50-20261104T2039Z-B50-d7a3-steamstats-offline"
+  ],
+  "run_urls": [],
+  "next_step": "Audit exact SaveAndLoad/SteamUserStats and local-world adapter, patch genuine offline storage dependency with regression tests; preserve audio/Settings/touch and P0 water work.",
+  "memory_path": "prompt/coordination/clients/B50/MEMORY.md"
+}
