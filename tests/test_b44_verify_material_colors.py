@@ -106,6 +106,17 @@ class MaterialColorsTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'Malformed exported Material YAML'):
                 exported_colors(root)
 
+    def test_duplicate_yaml_key_fails_closed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            assets = root/'Assets'
+            assets.mkdir()
+            path = assets/'bad.mat'
+            path.write_text('%YAML 1.1\\n--- !u!21 &2100000\\nMaterial:\\n  m_SavedProperties:\\n    m_Colors: []\\n    m_Colors: []\\n'.replace('\\n', '\n'))
+            (assets/'bad.mat.meta').write_text('guid: ' + 'a'*32 + '\n')
+            with self.assertRaisesRegex(ValueError, 'Duplicate YAML'):
+                exported_colors(root)
+
     def test_symlink_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
