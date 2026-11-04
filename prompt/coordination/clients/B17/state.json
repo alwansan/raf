@@ -4,10 +4,10 @@
   "generation": "B-2026-11-04",
   "session_id": "20261104T2140Z-B17-spc2",
   "resumed_from_session": null,
-  "status": "active",
+  "status": "paused",
   "base_sha": null,
-  "last_commit": null,
-  "updated_at": "2026-11-04T21:41:00Z",
+  "last_commit": "6afb4e1280f6691e3b47ac810f479409f94a9e58",
+  "updated_at": "2026-11-04T21:57:00Z",
   "tracks": [
     "water-fft",
     "spectrum-pass-resource-bindings"
@@ -15,7 +15,9 @@
   "work_ids": [
     "B17-20261104T2140Z-B17-spc2-spectrum-descriptors"
   ],
-  "run_urls": [],
-  "next_step": "Implement original Spectrum serialized pass resource-binding extraction with bounded synthetic controls and SHA-pinned ZIP2 acceptance; do not alter original shaders or Unity native request.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41920232173"
+  ],
+  "next_step": "Scoped B17 Spectrum original descriptor provenance complete: 7 original passes, 13 fragment rows, 0 vertex rows, 42 observed fields; CI41920232173 source-verified. Continue with authentic original/translated Spectrum program sampler mapping, no dummy/pass clamping, and preserve owner audio/Settings; no background job.",
   "memory_path": "prompt/coordination/clients/B17/MEMORY.md"
 }
