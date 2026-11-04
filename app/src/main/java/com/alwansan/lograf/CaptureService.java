@@ -363,9 +363,18 @@ public final class CaptureService extends Service {
             report.put("performance_statistics",sessionMetrics.toJson());
             report.put("game_process_exit_cause","unknown unless explicitly supported by exit evidence");
             if(!stopExitEvidence.isEmpty()){
-                try{report.put("stop_time_android_process_exit_info",
-                        new org.json.JSONObject(stopExitEvidence));}
-                catch(org.json.JSONException e){report.put("stop_time_exit_info_status","unreadable");}
+                try {
+                    org.json.JSONObject finalEvidence=new org.json.JSONObject(stopExitEvidence);
+                    report.put("stop_time_android_process_exit_info",finalEvidence);
+                    if(finalEvidence.has("final_error_groups"))
+                        report.put("final_error_category_breakdown",
+                                finalEvidence.getJSONObject("final_error_groups"));
+                    if(finalEvidence.has("final_game_log_lines"))
+                        report.put("final_game_log_lines",
+                                finalEvidence.getLong("final_game_log_lines"));
+                    report.put("final_totals_scope",
+                            "remote reader observed lines; Android Logcat ring losses remain unknown");
+                }catch(org.json.JSONException e){report.put("stop_time_exit_info_status","unreadable");}
             }
             String raw=Config.prefs(this).getString("metrics_last","");
             if(!raw.trim().isEmpty()) {

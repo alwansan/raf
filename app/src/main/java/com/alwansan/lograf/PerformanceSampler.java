@@ -26,6 +26,8 @@ public final class PerformanceSampler implements Runnable {
     private long previousTicks=-1, previousAt=-1, previousPresent=-1, previousFrameAt=-1;
     private long pssLast=0, batteryLast=0, layersLast=0, thermalLast=0;
     private Long pssCache=null;
+    private Long pssReferenceRssKb=null;
+    private Long pssCollectedUnixMs=null;
     private int pssPid=-1;
     private int lastObservedPid=-1;
     private Integer batteryLevel=null, batteryStatus=null, thermalStatus=null;
@@ -88,7 +90,7 @@ public final class PerformanceSampler implements Runnable {
                     row.put("exit_history_status","unavailable:"+err.getClass().getSimpleName());
                 }
             }
-            if(pid!=pssPid){pssCache=null;pssPid=-1;pssLast=0;}
+            if(pid!=pssPid){pssCache=null;pssReferenceRssKb=null;pssCollectedUnixMs=null;pssPid=-1;pssLast=0;}
             surfaceLayer=null;layersLast=0;previousPresent=-1;lastFrameProgressMs=-1;
             firstTrackingMs=pid>0?now:-1;
             lastReadableFpsMs=-1;consecutiveUnavailableFps=0;validFpsSamples=0;
@@ -111,17 +113,38 @@ public final class PerformanceSampler implements Runnable {
             row.put("process_rss_peak_kb",proc.opt("VmHWM")==null?JSONObject.NULL:proc.opt("VmHWM"));
             row.put("process_threads",proc.opt("Threads")==null?JSONObject.NULL:proc.opt("Threads"));
             if(now-pssLast>15000 || pssPid!=pid) {
-                pssLast=now; pssPid=pid; pssCache=readPss(pid);
+                // Bracket the slow dumpsys PSS collection with RSS readings.
+                // Never reject a cached PSS against a much later RSS sample.
+                long rssBefore=proc.optLong("VmRSS",-1);
+                Long candidate=readPss(pid);
+                long rssAfter=processStatus(pid).optLong("VmRSS",-1);
+                if(pidSupplier.getAsInt()==pid){
+                    pssCache=candidate;
+                    long reference=Math.max(rssBefore,rssAfter);
+                    pssReferenceRssKb=reference>=0?reference:null;
+                    pssPid=pid;
+                    pssLast=SystemClock.elapsedRealtime();
+                    pssCollectedUnixMs=System.currentTimeMillis();
+                }else{
+                    // Do not attribute results to a PID that changed mid-dumpsys.
+                    pssCache=null;pssReferenceRssKb=null;pssCollectedUnixMs=null;
+                    pssPid=-1;pssLast=0;
+                }
             }
-            long rss=proc.optLong("VmRSS",-1);
-            boolean validPss=pssCache!=null && (rss<0 || pssCache<=rss+8192);
+            long pssAge=pssCache==null?-1:Math.max(0,SystemClock.elapsedRealtime()-pssLast);
+            String pssQuality=MemoryTelemetryQuality.classify(
+                    pssCache,pssReferenceRssKb,pssAge);
+            boolean validPss=MemoryTelemetryQuality.usable(pssQuality);
             row.put("process_pss_kb",validPss?pssCache:JSONObject.NULL);
             row.put("process_pss_candidate_kb",pssCache==null?JSONObject.NULL:pssCache);
-            row.put("process_pss_quality",pssCache==null?"unavailable":
-                    validPss?"validated_estimate":"rejected_pss_exceeds_rss");
-            row.put("process_pss_note","PSS is sampled less often than RSS, may be stale or vendor-limited");
+            row.put("process_pss_quality",pssQuality);
+            row.put("process_pss_note","PSS compared to RSS bracketing collection; cached values are aged; candidate may include vendor GPU accounting");
             row.put("pss_validated_against_rss",validPss);
-            row.put("pss_sample_age_ms",pssCache==null?JSONObject.NULL:Math.max(0,now-pssLast));
+            row.put("pss_reference_rss_kb",pssReferenceRssKb==null?JSONObject.NULL:pssReferenceRssKb);
+            row.put("pss_collected_unix_ms",pssCollectedUnixMs==null?JSONObject.NULL:pssCollectedUnixMs);
+            row.put("pss_sample_age_ms",pssAge<0?JSONObject.NULL:pssAge);
+            if("rejected_pss_exceeds_rss".equals(pssQuality))
+                row.put("pss_rejection_reason","exceeds_bracketed_rss; could reflect vendor GPU allocations");
             row.put("memory_sources","/proc/pid/status; dumpsys meminfo pid when available");
             JSONObject io=processIo(pid);
             row.put("process_io_read_bytes",io.opt("read_bytes")==null?JSONObject.NULL:io.opt("read_bytes"));

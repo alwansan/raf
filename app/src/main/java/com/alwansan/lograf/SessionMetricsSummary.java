@@ -48,7 +48,8 @@ final class SessionMetricsSummary {
                 "process_rss_kb","process_pss_kb","process_threads",
                 "gpu_busy_percent","gpu_clock_hz",
                 "device_mem_available_kb","battery_temp_c",
-                "game_log_lines_per_second","last_present_progress_age_ms"}){
+                "game_log_lines_per_second","game_log_lines_session_average_per_second",
+                "last_present_progress_age_ms"}){
             fields.put(key,new Stats());
         }
         total=0;unreadable=0;gameRunning=0;gameAbsent=0;fpsStale=0;

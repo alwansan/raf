@@ -10,6 +10,8 @@ on:
       - '.github/workflows/lograf-apk.yml'
       - 'signing/**'
       - 'scripts/test_lograf_v06.py'
+      - 'scripts/test_lograf_diagnostics.sh'
+      - 'scripts/tests/**'
   workflow_dispatch:
 
 permissions:
@@ -36,6 +38,9 @@ jobs:
 
       - name: Verify recorder v0.6 safety invariants
         run: python3 scripts/test_lograf_v06.py
+
+      - name: Execute JVM diagnostics regression tests
+        run: bash scripts/test_lograf_diagnostics.sh
 
       - name: Verify pinned public test signing identity
         shell: bash

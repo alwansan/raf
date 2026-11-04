@@ -44,6 +44,7 @@ public final class RemoteLogService extends IRemoteLog.Stub {
     private static final Pattern CRASH_MARK = Pattern.compile("(?i)(FATAL EXCEPTION|Fatal signal|tombstone|crash_dump|am_crash|am_anr|Force finishing|ANR in|native crash|Fatal Java|Process:)");
     private static final int BATCH = 32768;
     private volatile long metricPreviousAt=-1, metricPreviousGameLines=0, metricPreviousSystemLines=0;
+    private volatile long sessionStartedElapsedMs=-1;
 
     public RemoteLogService() {}
 
@@ -63,6 +64,7 @@ public final class RemoteLogService extends IRemoteLog.Stub {
         pidProbeFailures.set(0);pidProbeSuccesses.set(0);pidProbeStatus="not_started";pidProbeFailureReason="none";
         synchronized(gamePids){gamePids.clear();}
         metricPreviousAt=-1;metricPreviousGameLines=0;metricPreviousSystemLines=0;
+        sessionStartedElapsedMs=android.os.SystemClock.elapsedRealtime();
         running.set(true);
         gameThread = new Thread(() -> pump("RAFT", new String[]{
                 "logcat", "-b", "main", "-b", "system", "-b", "crash", "-b", "events",
@@ -129,6 +131,11 @@ public final class RemoteLogService extends IRemoteLog.Stub {
                 metricPreviousGameLines=gameLines;
                 metricPreviousSystemLines=systemLines;
                 data.put("game_log_lines",gameLines);
+                data.put("game_log_lines_per_second_scope","previous_telemetry_interval");
+                long sessionMs=now-sessionStartedElapsedMs;
+                data.put("game_log_lines_session_average_per_second",sessionMs>0?
+                        Math.round(100000.0*gameLines/sessionMs)/100.0:JSONObject.NULL);
+                data.put("game_log_lines_session_elapsed_ms",sessionMs>=0?sessionMs:JSONObject.NULL);
                 data.put("pid_probe_status",pidProbeStatus);
                 data.put("pid_probe_failure_reason",pidProbeFailureReason);
                 data.put("pid_probe_failures_total",pidProbeFailures.get());
@@ -403,6 +410,7 @@ public final class RemoteLogService extends IRemoteLog.Stub {
             }
         }
         gameProcess = null; systemProcess = null;
+        errorGroups.finish(); // Include unmatched final root exceptions.
         primaryGamePid.set(-1);
     }
 
@@ -411,6 +419,12 @@ public final class RemoteLogService extends IRemoteLog.Stub {
         try {
             int pid=lastDeathPid.get();
             evidence.put("target_package",Config.PACKAGE);
+            evidence.put("final_error_groups",errorGroups.snapshot());
+            evidence.put("final_game_log_lines",gameLogLines.get());
+            evidence.put("final_shader_pass_errors_total",shaderPassErrors.get());
+            evidence.put("final_compute_kernel_errors_total",kernelErrors.get());
+            evidence.put("final_remote_sink_failed_batches",sinkFailedBatches.get());
+            evidence.put("final_remote_sink_failed_bytes",sinkFailedBytes.get());
             evidence.put("source","Shizuku shell / Android ActivityManager exit-info");
             evidence.put("last_system_death_pid",pid>0?pid:JSONObject.NULL);
             evidence.put("last_system_death_observed_unix_ms",
