@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "owner": "B05",
+  "session_id": "20261104T2107Z-B05-9e24",
+  "issue_id": "RENDER-002",
+  "hypothesis": "Matching original Texture PPtr does not ensure UV m_Scale/m_Offset fidelity; a fail-closed test should detect missing, wrong or nonfinite transforms.",
+  "source_commit": "93aaee8df9d17f0a646e46d98a71d525f5e3c82b",
+  "input_hashes": [
+    "Synthetic material slots only; ZIP2 pinned provider 15964ea8f246b6e076ce26b60931ee2e1a9a2385 not downloaded"
+  ],
+  "tool_versions": {
+    "Python": "3.11",
+    "PyYAML": "6.0.3"
+  },
+  "commands": [
+    "python -m py_compile scripts/b05_verify_material_texenv_bindings.py",
+    "python -m unittest discover -s tests -p test_b05_verify_material_texenv_bindings.py -v"
+  ],
+  "negative_controls": [
+    "same texture target but changed offset/scale",
+    "original UV present but exported missing",
+    "partial transform (scale without offset)",
+    "nonfinite UV NaN",
+    "source-free pointer fixture without actual UV marked unverified"
+  ],
+  "workflow_path": ".github/workflows/raft-b05-material-texenv-fidelity.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41915604221",
+  "artifact_urls": [],
+  "budget": "isolated Ubuntu-24.04 job <8 minutes; zero original assets or native builds",
+  "status": "completed",
+  "observed_result": "Run 41915604221 COMPLETED SUCCESS on SHA93aaee8; 14/14 synthetic controls. Earlier runs 41915487156 (6 errors, 2 fixture fails) and 41915549118 (2 fixture fails) were expected staging failures from pointer tuple migration and old assertion shapes, not original game evidence. Fixed in bf3b23d and 93aaee8.",
+  "rejected_hypotheses": [
+    "A matching Texture PPtr automatically proves UV transform fidelity.",
+    "Absent UV metadata in a synthetic fixture is equivalent to verified Unity UV values."
+  ],
+  "limitations": [
+    "Original/export Material inputs never compared; UV and texture correctness on device unproven",
+    "External owner pointers unresolved; scale offset has no pixel/GPU acceptance yet"
+  ],
+  "integration_commit": "93aaee8df9d17f0a646e46d98a71d525f5e3c82b",
+  "next_step": "Use one SHA-authenticated original ZIP2 to same-export YAML trace and probe original UV scale/offset with source exactness."
+}
