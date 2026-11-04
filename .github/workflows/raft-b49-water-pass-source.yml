@@ -1,0 +1,45 @@
+name: B49 WATER-001 authored ShaderLab pass guard (synthetic)
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/b49_shaderlab_pass_contract.py'
+      - 'scripts/verify_water_render_contract.py'
+      - 'tests/test_b49_shaderlab_pass_contract.py'
+      - 'tests/test_verify_water_render_contract.py'
+      - '.github/workflows/raft-b49-water-pass-source.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: b49-water-pass-source-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  synthetic-per-pass:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Authenticate source commit and run isolated negative controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf 'B49 source SHA: %s\n' "$GITHUB_SHA"
+          python3 -m unittest discover -s tests -p 'test_b49_shaderlab_pass_contract.py' -v 2>&1 | tee b49-water-pass-test.log
+          python3 -m unittest discover -s tests -p 'test_verify_water_render_contract.py' -v 2>&1 | tee -a b49-water-pass-test.log
+          printf 'Source-only; no ZIP2 payload, Unity, GPU or device execution.\n' >> b49-water-pass-test.log
+      - name: Retain source-only test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: b49-water-pass-${{ github.run_id }}
+          path: b49-water-pass-test.log
+          if-no-files-found: ignore
+          retention-days: 7
