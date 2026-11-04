@@ -1,0 +1,60 @@
+name: T4 LOCAL-005 exact original RGD load-path contract
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/t4_original_rgd_load_contract.py'
+      - 'tests/test_t4_original_rgd_load_contract.py'
+      - '.github/workflows/raft-t4-original-rgd-load.yml'
+permissions:
+  contents: read
+concurrency:
+  group: raft-t4-rgd-loader-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  original-loader-contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - name: Checkout source-only T4 test harness
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests/test_t4_original_rgd_load_contract.py
+      - name: Run T4 syntax and adversarial negative controls first
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t4_original_rgd_load_contract.py
+          python3 -m unittest discover -s tests -p test_t4_original_rgd_load_contract.py -v
+      - name: Checkout exact original managed DLL separately
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-original
+          lfs: false
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            Raft/Raft_Data/Managed/Assembly-CSharp.dll
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Authenticate original game code and inspect private loader path
+        shell: bash
+        env:
+          DOTNET_PROCESSOR_COUNT: '2'
+          DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+        run: |
+          set -euo pipefail
+          test "$(git -C zip2-original rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          test "$(df -Pk . | awk 'NR==2 {print $4}')" -gt 1200000
+          mkdir -p "$RUNNER_TEMP/t4-ilspy" "$RUNNER_TEMP/t4-private-source"
+          dotnet tool install ilspycmd --version 11.2.0.10050 --tool-path "$RUNNER_TEMP/t4-ilspy" >/dev/null
+          timeout 360s "$RUNNER_TEMP/t4-ilspy/ilspycmd" -p -lv CSharp9_0 -o "$RUNNER_TEMP/t4-private-source" zip2-original/Raft/Raft_Data/Managed/Assembly-CSharp.dll >"$RUNNER_TEMP/t4-private-ilspy.log" 2>&1
+          timeout 120s python3 -m scripts.t4_original_rgd_load_contract --original-managed-dll zip2-original/Raft/Raft_Data/Managed/Assembly-CSharp.dll --source "$RUNNER_TEMP/t4-private-source"
+          # No private original source, RGD payload, or decompiler logs uploaded.
