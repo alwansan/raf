@@ -1,0 +1,100 @@
+"""B05 synthetic negative controls; success does not prove on-device colors."""
+import copy
+import json
+from pathlib import Path
+import tempfile
+import unittest
+
+from scripts.b05_verify_material_texenv_bindings import compare, normalize_texenvs, exported_texenvs
+
+SRC=('sharedassets0.assets',100)
+MAT=(2100000,'a'*32)
+TEX=(2800000,'b'*32,3)
+
+def fixture():
+    trace={'schema_version':1,'export_instance':'f'*32,'objects':[
+        {'class_id':21,'source':{'owner':SRC[0],'path_id':SRC[1]},
+         'export':{'file_id':MAT[0],'guid':MAT[1],'type':2},'exportable':True},
+        {'class_id':28,'source':{'owner':SRC[0],'path_id':101},
+         'export':{'file_id':TEX[0],'guid':TEX[1],'type':TEX[2]},'exportable':True},
+    ]}
+    original={SRC:{'_MainTex':(0,101),'_Normal':(0,0),'_External':(1,209)}}
+    exported={MAT:{'_MainTex':TEX,'_Normal':(0,'0'*32,0),'_External':(2800000,'e'*32,3)}}
+    return trace,original,exported
+
+class B05TexEnvTests(unittest.TestCase):
+    def test_original_internal_exact_and_external_unproved(self):
+        t,s,a=fixture()
+        r=compare(t,s,a)
+        self.assertEqual((r['exact_internal_targets_compared'],r['external_targets_not_proven']),(1,1))
+        self.assertTrue(r['source_slots_faithful_with_resolved_scope'])
+        self.assertFalse(r['all_texture_targets_proven'])
+        self.assertFalse(r['unity_shader_or_android_pixels_proven'])
+        self.assertNotIn('_MainTex',json.dumps(r))
+        self.assertNotIn('sharedassets0',json.dumps(r))
+
+    def test_bound_to_null_rejected(self):
+        t,s,a=fixture();a[MAT]['_MainTex']=(0,'0'*32,0)
+        r=compare(t,s,a)
+        self.assertEqual(r['bound_to_null'],1)
+        self.assertFalse(r['source_slots_faithful_with_resolved_scope'])
+
+    def test_wrong_internal_target_detected(self):
+        t,s,a=fixture();a[MAT]['_MainTex']=(2800000,'c'*32,3)
+        self.assertEqual(compare(t,s,a)['wrong_internal_targets'],1)
+
+    def test_missing_or_extra_slots_detected(self):
+        t,s,a=fixture();del a[MAT]['_MainTex']
+        self.assertEqual(compare(t,s,a)['missing_slots'],1)
+        a[MAT]['_Extra']=(0,'0'*32,0)
+        self.assertEqual(compare(t,s,a)['extra_slots'],1)
+
+    def test_null_to_bound_detected(self):
+        t,s,a=fixture();a[MAT]['_Normal']=TEX
+        self.assertEqual(compare(t,s,a)['null_to_bound'],1)
+
+    def test_missing_internal_trace_never_guessed(self):
+        t,s,a=fixture();t['objects'].pop()
+        r=compare(t,s,a)
+        self.assertEqual(r['unresolved_internal_targets'],1)
+        self.assertFalse(r['source_slots_faithful_with_resolved_scope'])
+
+    def test_duplicate_trace_source_rejected(self):
+        t,s,a=fixture();t['objects'].append(copy.deepcopy(t['objects'][1]))
+        with self.assertRaisesRegex(ValueError,'Duplicated original'):
+            compare(t,s,a)
+
+    def test_same_instance_material_identity_required(self):
+        t,s,a=fixture();t['export_instance']='bad'
+        with self.assertRaisesRegex(ValueError,'same-instance'):
+            compare(t,s,a)
+        t,s,a=fixture();a[MAT[0],'d'*32]=a.pop(MAT)
+        with self.assertRaisesRegex(ValueError,'identities'):
+            compare(t,s,a)
+
+    def test_original_shapes_null_and_duplicate(self):
+        self.assertEqual(normalize_texenvs([('_MainTex',{'m_Texture':{'m_FileID':0,'m_PathID':101}})]),{'_MainTex':(0,101)})
+        with self.assertRaisesRegex(ValueError,'duplicate'):
+            normalize_texenvs([('_MainTex',{'m_Texture':{'m_FileID':0,'m_PathID':1}})]*2)
+        with self.assertRaisesRegex(ValueError,'no target'):
+            normalize_texenvs([('_External',{'m_Texture':{'m_FileID':2,'m_PathID':0}})])
+        with self.assertRaisesRegex(ValueError,'Invalid original PPtr'):
+            normalize_texenvs([('_MainTex',{'m_Texture':{'m_FileID':False,'m_PathID':1}})])
+
+    def test_exported_yaml_embedded_material(self):
+        with tempfile.TemporaryDirectory() as td:
+            assets=Path(td)/'Assets';assets.mkdir()
+            asset=assets/'embedded.asset'
+            asset.write_text('%YAML 1.1\n--- !u!128 &12800000\nFont: {m_Name: dummy}\n--- !u!21 &2100000\nMaterial:\n  m_SavedProperties:\n    m_TexEnvs:\n    - _MainTex:\n        m_Texture: {fileID: 2800000, guid: '+ 'b'*32 +', type: 3}\n')
+            (assets/'embedded.asset.meta').write_text('fileFormatVersion: 2\nguid: '+'a'*32+'\n')
+            self.assertEqual(exported_texenvs(Path(td)),{MAT:{'_MainTex':TEX}})
+
+    def test_symlink_export_rejected(self):
+        with tempfile.TemporaryDirectory() as td:
+            assets=Path(td)/'Assets';assets.mkdir()
+            (assets/'link').symlink_to(Path(td),target_is_directory=True)
+            with self.assertRaisesRegex(ValueError,'Linked'):
+                exported_texenvs(Path(td))
+
+if __name__=='__main__':
+    unittest.main()
