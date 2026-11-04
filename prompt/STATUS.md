@@ -1403,3 +1403,9 @@ B02 [source 0d332686](https://github.com/alwansan/raf/commit/0d33268645106e7bc28
 
 
 B13 generated team summary checkpoint [41919807903](https://github.com/alwansan/raf/actions/runs/41919807903) **SUCCESS**: original-free tests and `python3 scripts/refresh_b_team.py` ran against latest HEAD, fast-forward published B_TEAM/SUMMARY.md and snapshot.json. No native game build or phone validation; scope remains SOURCE_FIXED staging only, LOCAL-005 OPEN and NOT_READY 0/3.
+
+
+<!-- B24 FOAM 4-STAGE VULKAN PROOF -->
+## B24 WATER-001 original Foam/Global four-stage private translation — 4 November 2026
+
+[Final CI 41920166966](https://github.com/alwansan/raf/actions/runs/41920166966) **SUCCESS**: 9 bounded B24 synthetic controls, genuine original SHA-pinned Foam PathID2420, 2 passes/4 linked DXBC vertex+fragment stages, all Vulkan 1.1 roundtrips validated; original CB0 vector member count first pass 2 vs second pass 1 per stage. [Full authenticated report](docs/B24_ORIGINAL_FOAM_PROGRAM_TRANSLATION_2026-11-04.md). Source-only proof: *no* rebuilt ShaderLab, actual Unity CB/material upload, Android/Adreno rendering or owner acceptance. Water and LOCAL-005 remain OPEN, NOT_READY 0/3; latest game APK86 unchanged. Audio and Settings untouched, touch/layout deferred.
