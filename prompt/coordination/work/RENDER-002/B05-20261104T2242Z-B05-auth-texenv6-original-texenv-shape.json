@@ -6,7 +6,7 @@
   "issue_id": "RENDER-002",
   "track": "colors-materials",
   "approach": "First authentic small ZIP2 Material m_TexEnvs parser/UV shape execution using B05 production normalizer; exact pinned sharedassets6 owner and fail-closed scalar-only metrics.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "27b148d2e2cff0f745b21e12565a878ee99775e4",
   "intended_files": [
     "scripts/b05_probe_original_texenv_shapes.py",
@@ -24,8 +24,11 @@
   "experiment_ids": [
     "20261104T2242Z-B05-auth-texenv6-shape"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Register plan, integrate bounded probe and CI, run authentic SHA-verified sharedassets6 input; record actual findings and next real export dependence.",
-  "updated_at": "2026-11-04T22:42:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41928076197",
+    "https://github.com/alwansan/raf/actions/runs/41929077930"
+  ],
+  "result": "Authenticated ZIP2 sharedassets6 source EXACT size/SHA (6607272, 0476792cfeffac19d16e920011ed8d2fb2da62973c2f09a8689bc59e1ac4b632) parsed 41 actual Material objects and 227 genuine TexEnv slots (89 internal, 25 external, 113 null), 227/227 UV complete; first CI41928076197 and final CI41929077930 both SUCCESS; latter re-exercised production selected original accessor. 7/7 synthetic safeguards; no exported Unity/phone proof.",
+  "next_step": "Use same-instance private Unity export/object trace with selected source and B46 target checker; no raw game publication.",
+  "updated_at": "2026-11-04T22:54:00Z"
 }
