@@ -11,8 +11,10 @@ import os
 from pathlib import Path
 import tempfile
 
-TARGET = "UltimateWater/Spectrum/Water Spectrum"
-MIN_LOGGED_PASSES = 6
+from scripts.b09_spectrum_topology_contract import (
+    TARGET, OWNER, PATH_ID, PASSES, BLOB_SEQUENCES, attest_spectrum,
+)
+
 
 
 def _safe(path: Path) -> Path:
@@ -79,30 +81,32 @@ def stage_pairs(pass_data: dict, entries: list, *, linked_program, stage_variant
     return result
 
 
-def _selected_original(owners, target: str):
+def _selected_original(source):
+    """Only the B17/W2-verified PathID2432 in the SHA-pinned original owner."""
     import UnityPy
-    found = []
-    for name, path in owners:
-        environment = UnityPy.load(str(path))
-        try:
-            for obj in environment.file.objects.values():
-                if obj.type.name != "Shader":
-                    continue
-                tree = obj.read_typetree()
-                if tree.get("m_ParsedForm", {}).get("m_Name") == target:
-                    found.append((name, int(obj.path_id), hashlib.sha256(obj.get_raw_data()).hexdigest(), tree))
-                    if len(found) > 1:
-                        raise ValueError("Original Spectrum identity ambiguous")
-        finally:
-            del environment
-    if len(found) != 1:
-        raise ValueError("Exactly one original Spectrum object required")
-    return found[0]
+    from scripts.probe_w2_water_shader_stage_bindings import extract_shader
+    from scripts.b17_spectrum_stage_descriptors import summarize_passes
+
+    environment = UnityPy.load(str(source / OWNER))
+    original = [obj for obj in environment.objects
+                if obj.type.name == "Shader" and int(obj.path_id) == PATH_ID]
+    if len(original) != 1:
+        raise ValueError("Original Spectrum PathID identity is missing or ambiguous")
+    shader = original[0]
+    tree = shader.read_typetree()
+    topology = extract_shader({PATH_ID: shader}, PATH_ID, "Spectrum-graph")
+    parsed = tree.get("m_ParsedForm", {})
+    subs = parsed.get("m_SubShaders", [])
+    if not isinstance(subs, list) or len(subs) != 1 or not isinstance(subs[0], dict):
+        raise ValueError("Original Spectrum subshader shape changed")
+    descriptors = summarize_passes(subs[0].get("m_Passes"))
+    attestation = attest_spectrum(tree, topology, descriptors)
+    return PATH_ID, hashlib.sha256(shader.get_raw_data()).hexdigest(), tree, attestation
 
 
 def stage(source: Path, repo: Path, private: Path, report: Path):
-    from scripts.verify_targeted_lfs_compute_sources import verify_sources
-    from scripts.w1_recover_graphics_programs import OWNERS, decoded_platforms, records
+    from scripts.verify_targeted_lfs_compute_sources import verify_sources, EXPECTED
+    from scripts.w1_recover_graphics_programs import decoded_platforms, records
     from scripts.w1_recover_depth_passes import linked_program, stage_variants
 
     source, repo, private, report = (_safe(path) for path in (source, repo, private, report))
@@ -112,20 +116,21 @@ def stage(source: Path, repo: Path, private: Path, report: Path):
         raise ValueError("Private or original data must remain outside working checkout")
     if private.exists() or report.exists():
         raise ValueError("Refusing to overwrite private data or report")
-    verify_sources(source, expected=OWNERS)
-    owner, path_id, object_sha, tree = _selected_original([(n, source / n) for n in OWNERS], TARGET)
+    verify_sources(source, expected={OWNER: EXPECTED[OWNER]})
+    path_id, object_sha, tree, attestation = _selected_original(source)
     parsed = tree.get("m_ParsedForm", {})
     subshaders = parsed.get("m_SubShaders")
     if not isinstance(subshaders, list):
         raise ValueError("Missing serialized Spectrum subshaders")
     counts = [len(sub.get("m_Passes", [])) for sub in subshaders]
-    if sum(counts) < MIN_LOGGED_PASSES:
-        raise ValueError("Original Spectrum has fewer passes than device requested")
+    if counts != [PASSES]:
+        raise ValueError("Original Spectrum exact seven-pass proof changed")
     tables = [(platform, records(segments)) for platform, segments in decoded_platforms(tree) if platform == 4]
     if len(tables) != 1:
         raise ValueError("Require a unique original D3D11 program table")
     entries = tables[0][1]
-    aggregate = {"original_owner": owner, "original_owner_sha256": OWNERS[owner][1],
+    aggregate = {"original_owner": OWNER, "original_owner_sha256": EXPECTED[OWNER][1],
+                 "source_topology_attestation": attestation,
                  "original_object_path_id": path_id, "original_object_sha256": object_sha,
                  "original_subshader_pass_counts": counts, "original_passes": sum(counts),
                  "program_entry_count": len(entries), "stages": [], "private_packet_staged": False,
@@ -140,6 +145,13 @@ def stage(source: Path, repo: Path, private: Path, report: Path):
                 packet.mkdir()
                 pairs = stage_pairs(shader_pass, entries, linked_program=linked_program,
                                     stage_variants=stage_variants, output_dir=packet)
+                if len(pairs) != 2:
+                    raise ValueError("Original Spectrum two-per-stage permutation proof changed")
+                for stage, stage_name in ((1, "progVertex"), (0, "progFragment")):
+                    actual = sorted(row["stages"][str(stage)]["original_blob_index"] for row in pairs)
+                    expected = sorted(BLOB_SEQUENCES[stage_name][2 * pi:2 * pi + 2])
+                    if actual != expected:
+                        raise ValueError("Original Spectrum blob-to-pass stage lineage changed")
                 aggregate["stages"].append({"subshader": si, "pass_index": pi, "variant_pairs": pairs})
         # Run a second-stage byte-for-byte check of every freshly staged original.
         for row in aggregate["stages"]:
