@@ -1,0 +1,14 @@
+{
+  "id": "20261104T222931Z-B25-foam-state-start",
+  "owner": "B25",
+  "session_id": "20261104T222931Z-B25-foam-state",
+  "issue_id": "WATER-001",
+  "type": "start",
+  "summary": "B25 takes authenticated Foam/Global original pass render-state fidelity complementary to B24 four-stage translation; no fake shader/Unity/device claim.",
+  "evidence": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B24_ORIGINAL_FOAM_PROGRAM_TRANSLATION_2026-11-04.md",
+    "https://github.com/alwansan/raf/actions/runs/41920166966",
+    "https://github.com/alwansan/CL/tree/5394407b5cd0a0ca1848ff0902f8d2133bf6ea29/raft%20log"
+  ],
+  "at": "2026-11-04T22:29:31.916Z"
+}

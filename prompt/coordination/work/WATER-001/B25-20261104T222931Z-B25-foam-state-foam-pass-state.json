@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "owner": "B25",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T222931Z-B25-foam-state",
+  "issue_id": "WATER-001",
+  "track": "water-fft",
+  "approach": "Authenticate original Foam/Global object, decode per-pass render states for genuine ShaderLab; complement B24 four-program DXBC translation without modifying shaders yet.",
+  "status": "active",
+  "base_sha": "c0dd09b0ca9738906449dcbe0047e71284106adf",
+  "intended_files": [
+    "scripts/b25_foam_pass_state.py",
+    "tests/test_b25_foam_pass_state.py",
+    ".github/workflows/raft-b25-foam-pass-state.yml",
+    "docs/B25_ORIGINAL_FOAM_RENDER_STATE_2026-11-04.md"
+  ],
+  "hypothesis": "Original Foam pass render states can be serialized through bounded source-authenticated ShaderLab render-state logic without unsupported dynamic fields or invented defaults.",
+  "related_work": [
+    "B24 original Foam four-stage translation (41920166966)",
+    "W1 Depth Copy render_state serializer"
+  ],
+  "experiment_ids": [
+    "B25-20261104T222931Z-B25-foam-state-original-foam-render-states"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Write source-only synthetic controls; execute SHA-verified original ZIP2 data probe in isolated workflow.",
+  "updated_at": "2026-11-04T22:29:31.916Z"
+}
