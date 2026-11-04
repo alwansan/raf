@@ -1,0 +1,15 @@
+{
+  "id": "B19-20261104T2300Z-save-hardlink-result",
+  "owner": "B19",
+  "session_id": "20261104T2256Z-B19-hl7",
+  "issue_id": "LOCAL-005",
+  "type": "integration",
+  "summary": "Original SaveAndLoad source-stage hardlink alias preflight integrated; synthetic external inode mutation reproduced and guarded. CI41929845587 passed 15/15 save path cases plus original ZIP2 source checks. No world/.rgd device claim.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/2d59494d4c77c715ab76ef0b5ac21b566059c6d5",
+    "https://github.com/alwansan/raf/commit/89455426b6a9c1cafd4651e671e558dc12bb80d2",
+    "https://github.com/alwansan/raf/actions/runs/41929845587",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B19_SAVE_HARDLINK_ALIAS_GUARD_2026-11-04.md"
+  ],
+  "at": "2026-11-04T23:00:00Z"
+}
