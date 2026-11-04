@@ -1,0 +1,60 @@
+name: B50 LOCAL-005 original Cheat Steam identity boundary
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - scripts/b50_probe_original_cheat_steam.py
+      - tests/test_b50_probe_original_cheat_steam.py
+      - .github/workflows/raft-b50-cheat-steam-identity.yml
+permissions:
+  contents: read
+concurrency:
+  group: raft-b50-cheat-steam-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  original-cheat-boundary:
+    name: B50 / authenticated private original Cheat
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - name: Checkout pinned original CSharp provider without LFS
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+            Raft/Raft_Data/Managed/Assembly-CSharp.dll
+      - name: Run isolated negative controls
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_b50_probe_original_cheat_steam.py -v
+      - name: Setup exact ILSpy toolchain
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Validate original bytes BEFORE private extraction and inspect only metadata
+        shell: bash
+        env:
+          DOTNET_PROCESSOR_COUNT: "2"
+        run: |
+          set -euo pipefail
+          df -h /
+          python3 - <<'PY'
+          from pathlib import Path
+          from scripts.b50_probe_original_cheat_steam import authenticated
+          p = Path("Raft/Raft_Data/Managed/Assembly-CSharp.dll")
+          print("B50 original provider SHA256 authenticated", authenticated(p))
+          PY
+          mkdir -p "$RUNNER_TEMP/b50" "$RUNNER_TEMP/b50/ilspy"
+          dotnet tool install ilspycmd --version 11.2.0.10050 --tool-path "$RUNNER_TEMP/b50/ilspy" >/dev/null
+          timeout 360s "$RUNNER_TEMP/b50/ilspy/ilspycmd" -p -lv CSharp9_0 \
+            -o "$RUNNER_TEMP/b50/original" Raft/Raft_Data/Managed/Assembly-CSharp.dll \
+            > "$RUNNER_TEMP/b50/decompile-private.log" 2>&1
+          python3 -m scripts.b50_probe_original_cheat_steam \
+            --original-managed-dll Raft/Raft_Data/Managed/Assembly-CSharp.dll \
+            --source "$RUNNER_TEMP/b50/original"
+          # Original source and ILSpy logs are never uploaded.
