@@ -1,0 +1,15 @@
+{
+  "id": "B19-20261104T2307Z-subshader-result",
+  "owner": "B19",
+  "session_id": "20261104T2256Z-B19-hl7",
+  "issue_id": "WATER-001",
+  "type": "integration",
+  "summary": "Water ShaderLab source gate no longer sums passes across alternative SubShaders; synthetic 2+4 false positive rejected. CI41930936302 24/24 source-only tests. No original water source/device proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/2c640cada195c377962492e243352fe4f39b71f0",
+    "https://github.com/alwansan/raf/commit/b780d000dc5157c19078511927e681924907575a",
+    "https://github.com/alwansan/raf/actions/runs/41930936302",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B19_WATER_SUBSHADER_PASS_GATE_2026-11-04.md"
+  ],
+  "at": "2026-11-04T23:07:00Z"
+}
