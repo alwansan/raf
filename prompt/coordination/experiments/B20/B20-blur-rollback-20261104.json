@@ -4,7 +4,7 @@
   "session_id": "20261104T2230Z-B20-6c9a",
   "issue_id": "WATER-001",
   "hypothesis": "Post-install synthetic verification failure followed by partial Path.write_bytes can corrupt exported original ShaderLab rollback.",
-  "source_commit": "3174c165803a66529976b8944523bc049dbf2a23",
+  "source_commit": "9387b48176fc89aa99b0ebbd9aa2ad4666564515",
   "input_hashes": [],
   "tool_versions": {
     "python": "3, Ubuntu 24.04 (planned)"
@@ -19,15 +19,17 @@
     "prepromotion os.replace failure leaves original byte-identical"
   ],
   "workflow_path": ".github/workflows/raft-b20-blur-rollback.yml",
-  "run_url": null,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41927169542",
   "artifact_urls": [],
   "budget": "4-min source-only CI; no ZIP2/Unity/Adreno/private shader bytes",
-  "status": "planned",
-  "observed_result": null,
-  "rejected_hypotheses": [],
+  "status": "completed",
+  "observed_result": "CI41927169542 SUCCESS B20 injected failure controls and existing B45 regression; the installer now renames original bytes atomically on rollback and preserves external verified recovery backup if rename fails.",
+  "rejected_hypotheses": [
+    "Path.write_bytes non-atomic in-place rollback is failure-atomic after an already promoted ShaderLab candidate."
+  ],
   "limitations": [
     "No actual original Blur candidate or GPU rendering is executed by synthetic CI."
   ],
-  "integration_commit": null,
-  "next_step": "Implement and validate transactional rollback."
+  "integration_commit": "9387b48176fc89aa99b0ebbd9aa2ad4666564515",
+  "next_step": "Source-fixed safety only; original real shader/Unity/device remains unverified."
 }
