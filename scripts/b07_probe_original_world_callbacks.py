@@ -91,6 +91,21 @@ def inspect(source_root, expected_game_manager_sha=None):
     if len(completions) != 1 or not any(x.start() < completions[0].start() for x in broadcasts):
         raise ValueError("Original scene-ready broadcast/completion order unrecognized")
     if len(saves) != 1:
+        # Redacted diagnostics to explain an actual original-source contract
+        # mismatch without logging any original body, snippets or literals.
+        print("B07_CALLBACK_MISMATCH " + json.dumps({
+            "manager_sha256": manager_sha,
+            "onworld_body_sha256": fingerprint(manager_body),
+            "onworld_body_length": len(manager_body),
+            "savegame_call_tokens_in_body": len(saves),
+            "savegame_identifiers_in_body": len(re.findall(r"\\bSaveGame\\b", manager_code)),
+            "savegame_identifiers_in_class": len(re.findall(r"\\bSaveGame\\b", _executable_positions(manager))),
+            "saveandload_identifiers_in_body": len(re.findall(r"\\bSaveAndLoad\\b", manager_code)),
+            "world_savegame_identifiers_in_body": len(re.findall(r"\\bSaveWorld\\b", manager_code)),
+            "world_received_signatures_in_class": len(re.findall(r"\\bOnWorldRecieved\\s*\\(", _executable_positions(manager))),
+            "literal_or_comment_span_masked": sum(a != b for a, b in zip(manager_body, manager_code)),
+            "diagnostic_only": True,
+        }, sort_keys=True))
         raise ValueError("Original OnWorldRecieved SaveGame callsite unrecognized")
     if len(stats) != 1:
         raise ValueError("Original SaveGame stats boundary unrecognized")
