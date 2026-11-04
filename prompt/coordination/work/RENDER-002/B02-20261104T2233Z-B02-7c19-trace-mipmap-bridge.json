@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "owner": "B02",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2233Z-B02-7c19",
+  "issue_id": "RENDER-002",
+  "track": "colors-materials",
+  "approach": "Use B15 exact-export trace bridge, authenticate original typed Texture2D m_ColorSpace and verify nested TextureImporter.mipmaps.sRGBTexture rather than incorrect top-level regex; read-only.",
+  "status": "active",
+  "base_sha": "6c1a4407a4a4409b4cc28ed721c76bd65e0f6375",
+  "intended_files": [
+    "scripts/b02_texture_import_color_guard.py",
+    "tests/test_b02_texture_import_color_guard.py",
+    ".github/workflows/raft-b02-texture-import-fidelity.yml",
+    "docs/B02_TEXTURE_IMPORT_COLOR_FIDELITY_2026-11-04.md"
+  ],
+  "hypothesis": "Pinned AssetRipper writes MipMaps.SRGBTexture in nested YAML; existing B02 parser cannot inspect actual export. Reuse B15 trace, no guessed GUID or color.",
+  "related_work": [
+    "B15-20261104T215400Z-B15-7b2c-sampler-parity"
+  ],
+  "experiment_ids": [],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement and verify CPU controls in B02 isolated CI; keep --repair disabled.",
+  "updated_at": "2026-11-04T22:33:00Z"
+}
