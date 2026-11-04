@@ -6,7 +6,7 @@
   "issue_id": "WATER-001",
   "track": "water-fft",
   "approach": "Correct Unity-reported per-workgroup invocation limit vs X/Y/Z dispatch group-count semantics and correlate the immutable 20-entry original FFT workgroup sizes to theoretical device cutoff, preserving no-kernel-proof boundary.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "664100d4b976802a3463aa4ee5c0fe5254c7d28f",
   "intended_files": [
     "android-port/Runtime/Platform/AndroidRuntimeLog.cs",
@@ -20,9 +20,14 @@
     "B08 20 compiled slots one name 41917369953",
     "B06 earlier logger 41913854292"
   ],
-  "experiment_ids": [],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Read source and patch bounded fail-safe group-cap comparison with source-pinned five distinct workloads, then run actual C# synthetic CI.",
-  "updated_at": "2026-11-04T22:45:35.546Z"
+  "experiment_ids": [
+    "20261104T224512Z-B06-wg7a3-workgroup-limits"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41928357485",
+    "https://github.com/alwansan/raf/actions/runs/41914575997"
+  ],
+  "result": "Original FFT group support theoretical-device cutoff integrated in AndroidRuntimeLog (f9e34ee); Unity max local group invocation limit distinguished from max dispatch group counts. Synthetic real logger CI41928357485 SUCCESS, five 64..1024 groups checked incl 512 cap rejection and unavailable controls. Previous B06 source scanner additionally authenticated original CSharp/DXBC in green CI41914575997. No Unity/device kernels restored, WATER open.",
+  "next_step": "At next signed APK source using this code, inspect actual 4 texture format and 5 workgroup diagnostics, then correlate with original Unity kernel routing and original Spectrum/Foam/Blur pass restoration; no false GPU or gameplay readiness.",
+  "updated_at": "2026-11-04T22:51:36.963Z"
 }
