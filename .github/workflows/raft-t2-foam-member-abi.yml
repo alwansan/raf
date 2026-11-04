@@ -1,0 +1,114 @@
+name: T2 WATER-001 authenticated Foam member ABI (private source)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t2_foam_member_abi.py
+      - tests/test_t2_foam_member_abi.py
+      - .github/workflows/raft-t2-foam-member-abi.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: t2-foam-member-abi-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  authenticated-member-layout:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Source-free adversarial member ABI controls
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t2_foam_member_abi.py
+          python3 -m unittest discover -s tests -p 'test_t2_foam_member_abi.py' -v
+      - name: Runner budget guard
+        run: |
+          python3 - <<'PY'
+          import shutil
+          assert shutil.disk_usage(".").free > 3*1024**3
+          PY
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: t2-pinned-zip2
+          lfs: false
+          persist-credentials: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/sharedassets0.assets/*
+      - name: SHA-authenticate original provider without LFS
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os, subprocess
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import ZIP2_SHA, PINS, stage
+          root=Path("t2-pinned-zip2")
+          assert subprocess.check_output(["git","-C",str(root),"rev-parse","HEAD"], text=True).strip()==ZIP2_SHA
+          output=Path(os.environ["RUNNER_TEMP"])/"t2-foam-source"
+          result=stage(root,output,{"Raft_Data/sharedassets0.assets": PINS["Raft_Data/sharedassets0.assets"]})
+          assert result["verified_bytes"]==115978112 and result["lfs_used"] is False
+          print("T2_SOURCE authenticated_sha=true bytes=115978112 lfs=false")
+          PY
+      - name: Install pinned Unity reader and Vulkan reflection dependencies
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
+          dpkg-query -W vkd3d-compiler spirv-tools spirv-cross glslang-tools
+      - name: Reuse genuine B20 four-stage private packet, then audit member layout
+        run: |
+          set -euo pipefail
+          timeout 600s python3 -m scripts.b20_private_foam_packet \
+            --source "$RUNNER_TEMP/t2-foam-source" \
+            --repo "$GITHUB_WORKSPACE" \
+            --private "$RUNNER_TEMP/t2-foam-private-packet" \
+            --out "$RUNNER_TEMP/t2-foam-manifest.json"
+          timeout 180s python3 -m scripts.t2_foam_member_abi \
+            --source "$RUNNER_TEMP/t2-foam-source" \
+            --packet "$RUNNER_TEMP/t2-foam-private-packet" \
+            --manifest "$RUNNER_TEMP/t2-foam-manifest.json" \
+            --out "$RUNNER_TEMP/t2-safe.json"
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          r=json.loads((Path(os.environ["RUNNER_TEMP"])/"t2-safe.json").read_text())
+          assert r["status"]=="original_foam_member_index_and_translated_offset_observed"
+          assert r["authenticated_original_foam_stage_count"]==4
+          assert r["audited_membership_links"]==8
+          assert r["partial_vs_reflected_extent_equal"]==1
+          assert not r["opaque_cb0_alias_verified"]
+          assert not r["source_to_translated_member_identity_verified"]
+          assert not r["unity_constant_buffer_upload_verified"]
+          assert not r["shaderlab_installed"] and not r["android_pixels_verified"]
+          assert not r["private_source_published"]
+          PY
+      - name: Remove private source and translated programs even on failure
+        if: always()
+        run: |
+          rm -rf -- "$RUNNER_TEMP/t2-foam-source" "$RUNNER_TEMP/t2-foam-private-packet" \
+            "$RUNNER_TEMP/t2-foam-manifest.json" "$GITHUB_WORKSPACE/t2-pinned-zip2"
+      - name: Publish numeric aggregates only
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: t2-foam-member-safe-${{ github.run_id }}
+          path: ${{ runner.temp }}/t2-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
