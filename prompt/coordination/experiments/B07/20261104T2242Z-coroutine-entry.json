@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "owner": "B07",
+  "session_id": "20261104T2242Z-B07-c7ea",
+  "issue_id": "LOCAL-005",
+  "hypothesis": "World coroutine construction may happen without its first MoveNext. Authentic-source-locked Android-only entry log can distinguish the iterator step without modifying yields or readiness flags.",
+  "source_commit": "c37646a21902135eca4ea591f2026c200783128d",
+  "input_hashes": [
+    "Raft_Network SHA256 080035c137e446828226ed84a23190656b6f235d274436cafb477feaf93caa03",
+    "WorldHasBeenLoaded original method body SHA256 cbd74c24f1c6a86dd50e8d320f4f4142f5b3f3fc5bf8f64ded04710c30c3a140"
+  ],
+  "tool_versions": {
+    "dotnet": "10.0",
+    "ilspy": "11.2.0.10050"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_b07_world_coroutine_trace.py -v"
+  ],
+  "negative_controls": [
+    "unverified source",
+    "unverified iterator body",
+    "non-IEnumerator",
+    "adapted method body mutation",
+    "double trace injection"
+  ],
+  "workflow_path": ".github/workflows/raft-b07-world-coroutine.yml",
+  "run_url": null,
+  "artifact_urls": [],
+  "budget": "Ubuntu 24.04 CPU <=10 minutes, no Unity/full APK, no original published assets",
+  "status": "planned",
+  "observed_result": null,
+  "rejected_hypotheses": [],
+  "limitations": [
+    "This is source-level diagnostics; cannot prove runtime host/create/save/reload"
+  ],
+  "integration_commit": null,
+  "next_step": "Implement SHA-locked source trace and executable synthetic iterator test."
+}
