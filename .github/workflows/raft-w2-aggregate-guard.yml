@@ -1,0 +1,36 @@
+name: Raft W2 aggregate guard - full ten-ring synthetic battery (CPU only)
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/probe_w2_*'
+      - 'tests/test_w2_*'
+      - '.github/workflows/raft-w2-*'
+permissions:
+  contents: read
+concurrency:
+  group: raft-w2-aggregate-guard-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  aggregate-guard:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Compile every W2 probe (fail fast on drift)
+        run: |
+          set -euo pipefail
+          for f in scripts/probe_w2_*.py; do python3 -m py_compile "$f"; done
+          echo "compiled $(ls scripts/probe_w2_*.py | wc -l) W2 probes"
+      - name: Run the full W2 fail-closed test battery
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p 'test_w2_*.py' -v 2>&1 | tail -5
+          echo 'RAFT_W2_AGGREGATE_GUARD aggregateOnly=true noPayloadPublished=true unityRan=false androidBuildRan=false'
