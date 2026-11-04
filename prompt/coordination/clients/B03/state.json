@@ -7,17 +7,18 @@
   "status": "active",
   "base_sha": null,
   "last_commit": "5d46863154a83d14c755c4600b56b765202a99c9",
-  "updated_at": "2026-11-04T21:10:44.351Z",
+  "updated_at": "2026-11-04T21:13:18.875Z",
   "tracks": [
     "source-integrity",
-    "graphics-source-provenance"
+    "colors-materials"
   ],
   "work_ids": [
-    "B03-20261104T2101Z-B03-a419-archive-payload-authentication"
+    "B03-20261104T2101Z-B03-a419-archive-payload-authentication",
+    "B03-20261104T2101Z-B03-a419-renderer-material-reference"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41913405572"
   ],
-  "next_step": "Archive utility source scope completed with 16 synthetic tests/CI; actual private asset bytes remain unverified. Start distinct P0 RENDER-002 Renderer->Material YAML reference integrity audit before suspecting material loss.",
+  "next_step": "Implement exported Renderer-to-Material source reference integrity checks, keeping original game and source unchanged; run synthetic CI.",
   "memory_path": "prompt/coordination/clients/B03/MEMORY.md"
 }
