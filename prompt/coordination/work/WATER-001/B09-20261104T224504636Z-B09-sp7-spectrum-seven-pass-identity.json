@@ -6,22 +6,27 @@
   "issue_id": "WATER-001",
   "track": "spectrum-authentic-identity",
   "approach": "Enforce independently verified W2/B17 Spectrum PathID2432 seven-pass graph and reduce source acquisition to one ZIP2 source with SHA authentication.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "a614843821e677347b83ecea43bfc52a832da71c",
   "intended_files": [
-    "scripts/b09_stage_original_spectrum.py",
     "scripts/b09_spectrum_topology_contract.py",
     "tests/test_b09_spectrum_topology_contract.py",
-    ".github/workflows/raft-b09-spectrum-extraction.yml"
+    "scripts/b09_stage_original_spectrum.py",
+    "scripts/b09_translate_original_spectrum.py",
+    "tests/test_b09_translate_original_spectrum.py",
+    ".github/workflows/raft-b09-spectrum-extraction.yml",
+    "docs/B09_SPECTRUM_PASS_STAGING_2026-11-04.md"
   ],
   "hypothesis": "Earlier B09 >=6-pass criterion could accept unauthenticated source; B17 verified original seven-pass variants and numeric descriptors. A stricter gate should reject drift.",
   "related_work": [
     "B17 CI41920232173",
     "W2 Spectrum-graph topology"
   ],
-  "experiment_ids": [],
+  "experiment_ids": [
+    "20261104T224504Z-spectrum-seven-pass-roundtrip"
+  ],
   "run_urls": [],
-  "result": null,
-  "next_step": "Implement seven-pass original graph guard and locally tested negative controls.",
-  "updated_at": "2026-11-04T22:46:11.907Z"
+  "result": "Source provenance gate and private Vulkan structural experiment code integrated; 13 topology+10 translation synthetic tests PASS locally against GitHub blob-identical bytes. Genuine Spectrum original stage extraction and vkd3d roundtrips, Unity/material binding and phone remain UNKNOWN, so WATER-001 OPEN.",
+  "next_step": "Fetch exact B09 GitHub Actions run and safe 7-pass/18-slot original aggregate then build actual shader with no dummy passes.",
+  "updated_at": "2026-11-04T22:58:40.816Z"
 }
