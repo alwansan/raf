@@ -187,9 +187,12 @@ def main(argv=None) -> int:
     args = ap.parse_args(argv)
     try:
         result = intake(args.input, args.manifest, args.relative_path, args.stage)
-    except (IntakeError, OSError) as exc:
-        # Errors identify the check, never expose bytes or content-derived text.
+    except IntakeError as exc:
         print(json.dumps({"verified": False, "error": str(exc)}))
+        return 1
+    except OSError:
+        # Operating-system errors can embed private input/staging paths.
+        print(json.dumps({"verified": False, "error": "file_io_failure"}))
         return 1
     print(json.dumps(result, sort_keys=True))
     return 0
