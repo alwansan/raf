@@ -50,13 +50,19 @@ def probe(source_root, dll, *, expected_bytes=ORIGINAL_DLL_BYTES, expected_sha=O
     executable = _executable_positions(body)
     # If the method uses preprocessor branches, a lexical call count cannot
     # establish what Android will run. Report only branch presence, not success.
-    call_count = len(STEAM_ID.findall(executable))
+    calls = list(STEAM_ID.finditer(executable))
+    call_count = len(calls)
+    # Is the result consumed as its ulong m_SteamID field? Exact typed
+    # continuation distinguishes a safe ulong local-identity fallback from
+    # constructing an unproven Steamworks CSteamID in Android.
+    numeric_id_fields = sum(bool(re.match(r"\s*\.\s*m_SteamID\b", executable[m.end():])) for m in calls)
     return {
         "provider_sha256": provider_sha,
         "cheat_source_sha256": hashlib.sha256(text.encode()).hexdigest(),
         "cheat_method_sha256": hashlib.sha256(body.encode()).hexdigest(),
         "method_returns_bool": ret == "bool",
         "direct_steam_getid_calls": call_count,
+        "direct_getid_ulong_member_reads": numeric_id_fields,
         "has_preprocessor_branches": bool(CONDITIONAL.search(executable)),
         "other_steam_named_tokens": len(re.findall(r"\bSteam[A-Za-z0-9_]*\s*\.", executable)),
         "source_changed": False,
