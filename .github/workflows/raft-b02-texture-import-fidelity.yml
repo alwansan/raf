@@ -28,6 +28,8 @@ jobs:
           sparse-checkout: |
             scripts
             tests
+      - name: Install pinned YAML parser for genuine importer nesting
+        run: python3 -m pip install --user --disable-pip-version-check PyYAML==6.0.3
       - name: Prove no guessed GUIDs and no silent sRGB normalization
         run: |
           set -euo pipefail
