@@ -261,6 +261,15 @@ class SamplerFixture(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "PPtr"):
             self.generate_from_trace(trace)
 
+    def test_foreign_source_owner_folder_cannot_alias_pinned_source(self):
+        trace = self.make_trace()
+        trace["objects"][0]["source"]["owner"] = "DifferentGame/" + self.owner
+        with self.assertRaisesRegex(ValueError, "unrecognized original source owner path"):
+            self.generate_from_trace(trace)
+        trace["objects"][0]["source"]["owner"] = self.owner
+        result = self.generate_from_trace(trace)
+        self.assertEqual(result["textures"][0]["source_owner"], self.owner)
+
     def test_trace_duplicate_source_and_export_rejected(self):
         trace = self.make_trace()
         trace["objects"].append(trace["objects"][0].copy())
