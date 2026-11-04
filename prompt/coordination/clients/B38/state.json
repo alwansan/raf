@@ -4,10 +4,10 @@
   "generation": "B-2026-11-04",
   "session_id": "20261104T2142Z-B38-f31a",
   "resumed_from_session": null,
-  "status": "active",
+  "status": "completed",
   "base_sha": null,
-  "last_commit": "f3b709e47421e210fbb0863ac5b920a7d843e1cb",
-  "updated_at": "2026-11-04T21:55:07.403Z",
+  "last_commit": "bd58522fd126391478a90101813e78096eb3f18e",
+  "updated_at": "2026-11-04T21:58:43.886Z",
   "tracks": [
     "colors-materials"
   ],
@@ -16,8 +16,9 @@
     "B38-20261104T2155Z-queue-state"
   ],
   "run_urls": [
-    "https://github.com/alwansan/raf/actions/runs/41919146580"
+    "https://github.com/alwansan/raf/actions/runs/41919146580",
+    "https://github.com/alwansan/raf/actions/runs/41920784251"
   ],
-  "next_step": "Implement top-level Material render-queue/GI/instancing source-to-export parity with same-instance trace; no original data or native build",
+  "next_step": "Two B38 source-checker scopes completed, CI21/21 +9/9. Compare against authenticated private ZIP2 same-export trace; original game graphics and device untouched. RENDER OPEN; NOT_READY 0/3.",
   "memory_path": "prompt/coordination/clients/B38/MEMORY.md"
 }
