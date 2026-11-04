@@ -2,20 +2,20 @@
   "schema_version": 1,
   "username": "B18",
   "generation": "B-2026-11-04",
-  "session_id": "20261104T215100Z-B18-d3f9",
-  "resumed_from_session": null,
-  "status": "completed",
-  "base_sha": "22c021f33d2a843e2af99e49cfcbffd2e78afde4",
-  "last_commit": "ea07d9d1c8d6009df460a102ee95dbdf25792a91",
-  "updated_at": "2026-11-04T22:19:00Z",
+  "session_id": "20261104T225100Z-B18-map2",
+  "resumed_from_session": "20261104T215100Z-B18-d3f9",
+  "status": "active",
+  "base_sha": "fc42e65b458ea317b2dea4e494671e978effc153",
+  "last_commit": null,
+  "updated_at": "2026-11-04T22:50:52.207Z",
   "tracks": [
     "water-fft",
-    "shader-resource-binding",
-    "colors-materials-triage"
+    "SPIRV-resource-bindings"
   ],
   "work_ids": [
     "prompt/coordination/work/WATER-001/B18-20261104T215100Z-B18-d3f9-fft-resource-bindings.json",
-    "prompt/coordination/work/WATER-001/B18-20261104T221000Z-fft-spirv-binding-roles.json"
+    "prompt/coordination/work/WATER-001/B18-20261104T221000Z-fft-spirv-binding-roles.json",
+    "prompt/coordination/work/WATER-001/B18-20261104T225100Z-B18-map2-descriptor-map.json"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41920845862",
@@ -25,6 +25,6 @@
     "https://github.com/alwansan/raf/actions/runs/41922333604",
     "https://github.com/alwansan/raf/actions/runs/41923703800"
   ],
-  "next_step": "Current B18 scope completed (not Raft done). Next independently useful P0: RENDER-002 investigate exact original shader-pass/material to same-export Unity identity, with actual APK86 CL water pass failures (Spectrum 12557, FoamGlobal 22216, SubsurfaceBlur 5554). Existing B44/B46/B05/B03/B43 validators synthetic only; do not repeat; need authenticated same-instance export and shader pass restoration via approved workflows. Runtime Unity FindKernel6 index and phone water remain unverified. Preserve working audio/Settings; touch deferred.",
+  "next_step": "Independently verify exact original FFT t0/t1/u0 resource-to-translated-SPIR-V descriptor binding correspondence or document a negative result, without changing original source or other agents' work.",
   "memory_path": "prompt/coordination/clients/B18/MEMORY.md"
 }
