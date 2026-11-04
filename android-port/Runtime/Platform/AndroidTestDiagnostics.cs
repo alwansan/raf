@@ -316,10 +316,63 @@ namespace RaftAndroid.Platform
             SceneManager.sceneUnloaded -= SceneUnloaded;
             SceneManager.activeSceneChanged -= ActiveSceneChanged;
         }
-        private static void SceneLoaded(Scene scene, LoadSceneMode mode)
+        private void SceneLoaded(Scene scene, LoadSceneMode mode)
         {
             RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("scene", "loaded",
                 scene.name + "; mode=" + mode + "; " + GraphicsMemoryAtBoundary(), true);
+            // Diagnostic only. Do not sample or instantiate materials every frame.
+            StartCoroutine(ReportSceneShaderSnapshot(scene));
+        }
+        private System.Collections.IEnumerator ReportSceneShaderSnapshot(Scene scene)
+        {
+            yield return new WaitForSecondsRealtime(3f);
+            if (!scene.isLoaded) yield break;
+            try
+            {
+                const int RendererLimit = 512;
+                int sampled = 0, empty = 0, slots = 0, nullMaterials = 0, nullShaders = 0;
+                int unsupported = 0, zeroPass = 0, errorShaders = 0;
+                bool truncated = false;
+                foreach (GameObject root in scene.GetRootGameObjects())
+                {
+                    if (!root) continue;
+                    foreach (Renderer renderer in root.GetComponentsInChildren<Renderer>(true))
+                    {
+                        if (!renderer || !renderer.enabled || !renderer.gameObject.activeInHierarchy) continue;
+                        if (sampled >= RendererLimit) { truncated = true; break; }
+                        sampled++;
+                        Material[] materials = renderer.sharedMaterials;
+                        if (materials == null || materials.Length == 0) { empty++; continue; }
+                        foreach (Material material in materials)
+                        {
+                            slots++;
+                            if (!material) { nullMaterials++; continue; }
+                            Shader shader = material.shader;
+                            if (!shader) { nullShaders++; continue; }
+                            if (!shader.isSupported) unsupported++;
+                            if (material.passCount == 0) zeroPass++;
+                            if (shader.name == "Hidden/InternalErrorShader") errorShaders++;
+                        }
+                    }
+                    if (truncated) break;
+                }
+                RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("render", "scene_shader_snapshot",
+                    "scene=" + scene.name + "; delay_seconds=3; renderer_limit=" + RendererLimit +
+                    "; visible_renderers_sampled=" + sampled + "; truncated=" + truncated +
+                    "; empty_material_renderers=" + empty + "; material_slots=" + slots +
+                    "; null_materials=" + nullMaterials + "; null_shaders=" + nullShaders +
+                    "; unsupported_shaders=" + unsupported + "; zero_pass_materials=" + zeroPass +
+                    "; internal_error_shaders=" + errorShaders +
+                    "; color_space=" + QualitySettings.activeColorSpace +
+                    "; ambient_mode=" + RenderSettings.ambientMode + "; fog=" + RenderSettings.fog +
+                    "; skybox_assigned=" + (RenderSettings.skybox != null) +
+                    "; original_shader_pixels_verified=false", true);
+            }
+            catch (Exception ex)
+            {
+                RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("render", "scene_shader_snapshot.unavailable",
+                    "scene=" + scene.name + "; error_type=" + ex.GetType().Name, true);
+            }
         }
         private static void SceneUnloaded(Scene scene)
         {
