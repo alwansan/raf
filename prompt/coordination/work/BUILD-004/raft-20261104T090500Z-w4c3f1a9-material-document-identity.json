@@ -3,23 +3,26 @@
   "owner": "raft-20261104T090500Z-w4c3f1a9",
   "issue_id": "BUILD-004",
   "status": "active",
-  "updated_at": "2026-11-04T09:05:00Z",
-  "base_sha": "2008a5fb94d7df16bdcc1966a00955025e5fbded",
+  "updated_at": "2026-11-04T09:40:00Z",
+  "base_sha": "5e28572badf38b3e09693f875d1f18aff6e4432d",
   "hypothesis": "verify_export_lineage keyed material documents with a hardcoded reference type 3 while the exporter records AssetType.Serialized (2) for YAML-exported materials; every key misses (1524/1524) exactly as observed in run 41799635147.",
   "intended_files": [
     "scripts/verify_export_lineage.py",
     "tests/test_export_lineage.py",
+    "android-port/Experiments/ExportLineage/Program.cs",
     ".github/workflows/raft-unity-editor-android-import.yml"
   ],
   "related_work": [
-    "prompt/coordination/clients/raft-20261104T080541Z-eb004764/state.json"
+    "prompt/coordination/clients/raft-20261104T080541Z-eb004764/state.json",
+    "docs/W1_OWNER_FULL_BUILD_ATTEMPT_2026-11-04.md"
   ],
   "experiment_ids": [],
   "evidence": [
-    "run 41799635147 RAFT_LINEAGE_MISMATCH missing_actual=1524 unexpected_actual=1524 different_shader_pointers=0",
-    "AssetRipperCLI 036098ab DefaultYamlExporter.ToExportType=Serialized(2)",
-    "local unit tests 12/12 + 2/2 + 10/10 OK"
+    "run 41799635147 mismatch signature",
+    "run 41804737856 SUCCESS lineage + engine ownership",
+    "run 41807302060 SUCCESS with instrumented host markers",
+    "aux workflows green on 5e28572b"
   ],
-  "result": null,
-  "next_step": "Push fix with expected-SHA leases, watch raft-w1-export-lineage, then wire full-build builtin ownership inputs."
+  "result": "Hypothesis confirmed and fixed; instrumented full-build wiring pushed and validated; experimental full build requested.",
+  "next_step": "Inspect the triggered run; record and fix the next demonstrated failure (expected: strict water gate)."
 }

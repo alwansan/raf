@@ -6,10 +6,10 @@
   "session_id": "6d1f0e42-8b17-4c9a-b0f2-e2d73a91c550",
   "resumed_from": null,
   "status": "active",
-  "updated_at": "2026-11-04T09:05:00Z",
+  "updated_at": "2026-11-04T09:40:00Z",
   "base_sha": "2008a5fb94d7df16bdcc1966a00955025e5fbded",
-  "current_work": "Establish same-instance material document identity fix and drive the full APK/OBB/XAPK build through the builtin ownership gate.",
-  "last_commit": null,
-  "next_step": "Push verifier fix, watch raft-w1-export-lineage, then wire engine ownership evidence into the full build.",
+  "current_work": "Lineage fix verified green (run 41804737856); full build wired to source-instrumented exporter and engine-owned builtin gate; requesting the experimental full build from 5e28572b.",
+  "last_commit": "5e28572badf38b3e09693f875d1f18aff6e4432d",
+  "next_step": "Watch the triggered request run; record the next demonstrated failure (expected: strict water gate) and continue recovery without bypassing authenticity gates.",
   "memory_path": "prompt/coordination/clients/raft-20261104T090500Z-w4c3f1a9/MEMORY.md"
 }
