@@ -1,0 +1,57 @@
+name: B10 B-team generated evidence checkpoint (safe source only)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-b10-b-team-evidence-refresh.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  # One summary writer; shared with existing B48 checkpoint to avoid racing it.
+  group: raft-b48-team-summary-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  refresh-current-team-evidence:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: feature/android-native-port
+          persist-credentials: true
+          lfs: false
+          fetch-depth: 1
+          sparse-checkout: |
+            scripts/refresh_b_team.py
+            prompt/coordination/B_TEAM
+      - name: Re-generate from live records with branch-fast-forward-only retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'raft-b10-evidence-checkpoint'
+          git config user.email 'raft-b10-evidence-checkpoint@users.noreply.github.com'
+          for attempt in 1 2 3 4 5 6 7 8; do
+            git fetch -q --no-tags origin feature/android-native-port
+            # This is a throwaway, sparse CI checkout, not an agent worktree.
+            git reset --hard -q FETCH_HEAD
+            python3 scripts/refresh_b_team.py
+            git add -- prompt/coordination/B_TEAM/snapshot.json prompt/coordination/B_TEAM/SUMMARY.md
+            if git diff --cached --quiet; then
+              echo 'RAFT_B10_TEAM_SUMMARY up_to_date=true; no change'
+              exit 0
+            fi
+            git commit -q -m 'coord(B10): refresh generated B-team snapshot from current evidence records'
+            if git push --quiet origin HEAD:feature/android-native-port; then
+              echo 'RAFT_B10_TEAM_SUMMARY source_current=true push_fast_forward=true'
+              exit 0
+            fi
+            echo 'RAFT_B10_TEAM_SUMMARY optimistic update conflict; retry from latest HEAD'
+            sleep 1
+          done
+          echo 'RAFT_B10_TEAM_SUMMARY deferred because concurrent writers never allowed safe fast-forward' >&2
+          exit 1
