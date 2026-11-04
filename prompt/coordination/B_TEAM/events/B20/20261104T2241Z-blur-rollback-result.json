@@ -1,0 +1,14 @@
+{
+  "id": "B20-20261104T2241Z-blur-rollback-result",
+  "owner": "B20",
+  "session_id": "20261104T2230Z-B20-6c9a",
+  "issue_id": "WATER-001",
+  "type": "integration",
+  "summary": "SOURCE_FIXED: original Blur ShaderLab installer uses fsynced atomic rollback with pristine external backup retained on failure. B20+B45 synthetic CI passed. No Unity/Adreno/phone water proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/9387b48176fc89aa99b0ebbd9aa2ad4666564515",
+    "https://github.com/alwansan/raf/actions/runs/41927169542",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B20_AUTHENTIC_BLUR_ATOMIC_ROLLBACK_2026-11-04.md"
+  ],
+  "at": "2026-11-04T22:41:00Z"
+}
