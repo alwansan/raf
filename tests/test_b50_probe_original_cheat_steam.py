@@ -38,6 +38,7 @@ class B50CheatSteamProbeTests(unittest.TestCase):
             self.assertTrue(x["method_returns_bool"])
             self.assertEqual(x["direct_steam_getid_calls"], 1)
             self.assertEqual(x["other_steam_named_tokens"], 1)
+            self.assertEqual(x["direct_getid_ulong_member_reads"], 0)
             self.assertFalse(x["world_load_verified"])
             self.assertFalse(x["source_changed"])
             self.assertNotIn("SteamUser.GetSteamID", str(x))
@@ -78,6 +79,16 @@ class B50CheatSteamProbeTests(unittest.TestCase):
             source, dll, size, sha = self.setup_tree(Path(temp), source=empty)
             x = probe(source, dll, expected_bytes=size, expected_sha=sha)
             self.assertEqual(x["direct_steam_getid_calls"], 0)
+
+    def test_exact_numeric_steam_id_field_consumption_detected(self):
+        original = original_fixture().replace(
+            "var user = SteamUser.GetSteamID(); return user.IsValid();",
+            "ulong user = SteamUser.GetSteamID().m_SteamID; return user != 0;")
+        with tempfile.TemporaryDirectory() as temp:
+            source, dll, size, sha = self.setup_tree(Path(temp), source=original)
+            result = probe(source, dll, expected_bytes=size, expected_sha=sha)
+            self.assertEqual(result["direct_steam_getid_calls"], 1)
+            self.assertEqual(result["direct_getid_ulong_member_reads"], 1)
 
     def test_duplicate_declared_original_method_refused(self):
         sample = original_fixture().replace(
