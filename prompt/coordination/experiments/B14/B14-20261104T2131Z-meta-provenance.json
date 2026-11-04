@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "owner": "B14",
+  "session_id": "20261104T2131Z-B14-a71c",
+  "issue_id": "WATER-001",
+  "hypothesis": "The existing scanner follows a linked source/meta sidecar or Assets root and can misstate source-structural water coverage.",
+  "source_commit": "4e0ce04441e64e95439f8023cead5b2a9da025b3",
+  "input_hashes": [],
+  "tool_versions": {
+    "python": "GitHub Actions ubuntu-24.04 Python 3 (system)"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_verify_water_render_contract.py -v",
+    "GitHub Actions: Raft reconstruction unit preflight (no Unity or LFS)"
+  ],
+  "negative_controls": [
+    "Assets root symlink",
+    "Unity project root symlink",
+    "Shader .meta symlink to external",
+    "FFT compute .meta symlink to external",
+    "Absent non-symlink .meta remains unsatisfied"
+  ],
+  "workflow_path": ".github/workflows/raft-reconstruction-preflight.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41917493634",
+  "artifact_urls": [],
+  "budget": "Existing preflight job, no Unity/LFS/network assets",
+  "status": "completed",
+  "observed_result": "Current production inspector now rejects linked sidecars and redirected roots; 10/10 original-free tests PASS in job 126880924437. Baseline POSIX is_file/is_dir follow links.",
+  "rejected_hypotheses": [
+    "POSIX Path.is_file/is_dir proves that a source/sidecar is physically inside the Unity Assets directory",
+    "Passing structural water path contracts proves original water/FFT identity or valid mobile pixels"
+  ],
+  "limitations": [
+    "Original Raft ZIP2 shader bytes and Unity exporter were not run for this scoped guard",
+    "No native Unity, Android GPU, or device test",
+    "No evidence that APK86 contains linked sources"
+  ],
+  "integration_commit": "cfb97bf58e6c2736268df5aa8ecc9e54f3789ef6",
+  "next_step": "Keep WATER-001 OPEN; coordinate original shader/compute provenance and kernel identity with B47/B48/W1 rather than rerun this completed fixture."
+}
