@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "owner": "B14",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2131Z-B14-a71c",
+  "issue_id": "WATER-001",
+  "track": "water-gate-file-provenance",
+  "approach": "Fail-closed physical path and sidecar provenance around existing water ShaderLab/FFT compute contract scan, including real/symlink negative-control fixtures.",
+  "status": "active",
+  "base_sha": "f8028d15b2401d1fd8c73b2316e5bf76fef88eae",
+  "intended_files": [
+    "scripts/verify_water_render_contract.py",
+    "tests/test_b14_water_path_provenance.py",
+    "docs/B14_WATER_PATH_PROVENANCE_2026-11-04.md"
+  ],
+  "hypothesis": "Following an external Assets root or .meta symlink can falsely classify an untrusted source as having an original metadata sidecar.",
+  "related_work": [
+    "B49-20261104T2054Z-B49-c81f-water-pass-guard.json",
+    "B47-20261104T2055Z-B47-c4e7-compute-kernel-entrypoint.json"
+  ],
+  "experiment_ids": [
+    "B14-20261104T2131Z-meta-provenance"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement bounded Python symlink/ancestor tests and guard without changing original shader semantics.",
+  "updated_at": "2026-11-04T21:33:06.790Z"
+}
