@@ -67,7 +67,10 @@
     "https://github.com/alwansan/raf/actions/runs/41928592399",
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B10_VOLUMETRIC_NOTICE_TRANSACTION_2026-11-04.md",
     "https://github.com/alwansan/raf/commit/8f51565362f0d26d0d413cbf87f6e2e1c631883d",
-    "https://github.com/alwansan/raf/actions/runs/41929031892"
+    "https://github.com/alwansan/raf/actions/runs/41929031892",
+    "https://github.com/alwansan/raf/commit/20c94103edc9d10352560d473656f7004208268b",
+    "https://github.com/alwansan/raf/actions/runs/41928703661",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B13_BUILTIN_SHADER_ATOMIC_INSTALL_2026-11-04.md"
   ],
   "remaining": [
     "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -97,13 +100,14 @@
     "B11 resumed: UTF-8 byte-offset and ancestor symlink/traversal failure modes SOURCE_FIXED; 16 local synthetic tests with exact source Git blob pass (B04 stub, no original-source verification). Current remote CI/actual same-instance export/device colors still unknown. No claim of a white-material fix.",
     "B04 read-only Android quality tier/pixel light/texture AA/shadow per-scene snapshot source-integrated in original managed CI; requires new real APK86+ candidate and phone logs to compare with original W2 tiers; not proof quality mismatch or white-material fix.",
     "B10 continued: production volumetric Lighting BSD NOTICE now commits/rolls back in the same authenticated shader restoration transaction with fail-closed paths. B10 final source CI41928744660 SUCCESS 27 distinct tests and real pinned vendor temporary restoration CI41928592399 SUCCESS; no actual Raft Unity/Adreno/Android colors or original Material→Shader equivalence shown. RENDER-002 remains OPEN.",
-    "B15 continuation: corrected a provable false sampler-drift report for Unity TextureImporter mipBias=-100 unset, required matching B02/W1 paired trace export_instance when supplied, rejected arbitrary source folder aliases with trusted ZIP2 basename; CI41929031892 23/23 synthetic PASS. This is diagnostic source fidelity only: 0 real original-vs-export texture pairs tested, no Unity/GPU/device colors proof."
+    "B15 continuation: corrected a provable false sampler-drift report for Unity TextureImporter mipBias=-100 unset, required matching B02/W1 paired trace export_instance when supplied, rejected arbitrary source folder aliases with trusted ZIP2 basename; CI41929031892 23/23 synthetic PASS. This is diagnostic source fidelity only: 0 real original-vs-export texture pairs tested, no Unity/GPU/device colors proof.",
+    "B13 source-fixed builtin ShaderLab restorer safety: verified exact backups, concurrent source edit rejection and fsynced atomic replacement/rollback; CI41928703661 14/14 synthetic. NOT authentic shader programs or same-export Material/Unity/Adreno proof."
   ],
   "acceptance": [
     "مطابقة روابط ومراجع الأصل",
     "مقارنةصوريةلنفسالمشهد",
     "نجاحعلىالهاتف"
   ],
-  "updated_by": "B15",
-  "updated_at": "2026-11-04T22:54:23.146Z"
+  "updated_by": "B13",
+  "updated_at": "2026-11-04T22:57:00Z"
 }
