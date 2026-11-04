@@ -40,3 +40,29 @@ The initial bounded tool could report preserved texture pointers while silently 
 - Two earlier red runs [41915487156](https://github.com/alwansan/raf/actions/runs/41915487156) and [41915549118](https://github.com/alwansan/raf/actions/runs/41915549118) resulted from the test fixture migration from raw PPtr to `(PPtr, UV)`, not evidence of original game damage. Exact cause and successful fix are archived in [B05 incident](../prompt/coordination/incidents/B05/20261104T2122Z-uv-fixture-migration.md).
 
 The new checker has still **not run on actual original ZIP2 Materials and same-instance Unity export**; there is no measured actual UV mismatch or visible color/game improvement. Texture transforms are now included in the planned acceptance, but external links, shader programs, lighting and device pixels remain unverified. RENDER-002 stays OPEN; NOT_READY 0/3. Preserve audio, Settings and deferred touch.
+
+## Resumed B05: first REAL ZIP2 Material + UV source acceptance — 4 November 2026, 22:53 UTC
+
+**New true-original input, not another synthetic-only result.** [CI41929077930](https://github.com/alwansan/raf/actions/runs/41929077930) COMPLETED SUCCESS at source [d6fa219c](https://github.com/alwansan/raf/commit/d6fa219c769e3c4d11f798f41bfc0cbd8451465b); job126921056144. It checked out immutable ZIP2 commit `15964ea8f246b6e076ce26b60931ee2e1a9a2385`, read only `Raft/Raft_Data/sharedassets6.assets` (6,607,272 bytes, SHA256 `0476792cfeffac19d16e920011ed8d2fb2da62973c2f09a8689bc59e1ac4b632`), staged via manifest-verified no-LFS reader, rechecked SHA, and parsed *actual* UnityPy 1.25.4 `Material.m_SavedProperties.m_TexEnvs` fields. Output is counts only.
+
+| Original source metric, this owner only | Observed |
+|---|---:|
+| Material objects | 41 |
+| Texture slots | 227 |
+| Bound same-owner PPtrs | 89 |
+| Bound external-owner PPtrs | 25 |
+| Legitimate null texture slots | 113 |
+| Original scale+offset UV sets fully decoded | 227/227 |
+| Materials with at least one bound Texture | 40 |
+
+**New explicit integration proof:** The same CI read the file through B05's *production* `original_texenvs(root, owner_names={'sharedassets6.assets'})` source selector and independently reconciled 41 Material/227 slot counts with the direct original parsing. `pinned_scoped_accessor_verified=true`. Seven source-free failure controls passed before acquisition. [Previous authentic run41928076197](https://github.com/alwansan/raf/actions/runs/41928076197) gave the same 41/227/89/25/113 result. No original source file was committed or altered.
+
+### Scoped source-to-full-export comparator
+
+B05 added `--owner sharedassets6.assets` to the existing source-to-export verifier. It permits selecting the exact SHA-verified owner above while retaining every exported `.mat` / embedded Material document and every outside-owner traced Material; nonselected original material rows are **explicitly excluded**, not falsely flagged missing. Selected Materials still require a unique exact same-instance trace, no missing selected objects, no changed texture target/UV and no pointer collisions with excluded sources. Published summary includes `source_scope=selected-owner`, `outside_scope_export_materials`, `selected_original_owner_count` and `full_game_source_coverage_verified=false`. Global `all_texture_targets_proven` stays **false** for partial selection even if all selected pointers match. With no `--owner`, original full pinned-source strictness remains the default.
+
+[B05 scoped source c6ae0cd](https://github.com/alwansan/raf/commit/c6ae0cd855ad2423f0e46e7ad598bcae00ef81c9), [18 original-vs-export synthetic controls fd35126](https://github.com/alwansan/raf/commit/fd351264810b805d31299ccc9cc8d2d26c39155e), [final green CI41928852363](https://github.com/alwansan/raf/actions/runs/41928852363) COMPLETED SUCCESS, **18/18**. Source owner allowlist independently pinned in [bd14417](https://github.com/alwansan/raf/commit/bd14417a7038180fe7f3f3ab2550fc0b26ca154c); original probe shares the pin in [15edb76](https://github.com/alwansan/raf/commit/15edb7662faa569dcff06d040ca5ea776e43614b). The selected original accessor is proven at source-input level in final authentic CI.
+
+Two intermediate synthetic red runs [41928537671](https://github.com/alwansan/raf/actions/runs/41928537671) and [41928655703](https://github.com/alwansan/raf/actions/runs/41928655703) exposed optional import dependencies (`UnityPy` then heavyweight A12 inventory missing from sparse checkout) *before* the negative unknown-owner rejection. B05 moved authorization ahead of serializer import and pinned the selected genuine owner locally, retaining separate 14-owner default. [Incident record](../prompt/coordination/incidents/B05/20261104T2251Z-scoped-import-recovery.md). No game data was accessed by the red tests. Final 18/18 synthetic and 7/7 source-side tests succeeded.
+
+**Critical limitation:** no actual SAME-INSTANCE exported Raft Unity project/object trace was supplied to this B05 test, so the original-vs-export comparison has **not** run on an authentic pair; no lost texture/UV, color repair or playable scene is proven. Scoped source acceptance is not global 82-owner coverage (known full-game 1,556 Materials); the 41/227 figures refer only to sharedassets6. The GitHub team [coordination message](../prompt/coordination/discussions/RENDER-002/20261104T2253Z-B05-authentic-scoped-export.md) requests this check in the next already-authorized shared export, not a duplicate Unity build. RENDER-002 OPEN; NOT_READY, three independent readiness reviews 0/3; sound/Settings owner-confirmed, touch deferred.
