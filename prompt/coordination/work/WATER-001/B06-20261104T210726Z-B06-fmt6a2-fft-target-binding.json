@@ -6,13 +6,14 @@
   "issue_id": "WATER-001",
   "track": "water-fft",
   "approach": "Independently correlate original FFT storage image Unknown format, target RenderTexture creation and Android materialized GPU-binding path; produce proven non-dummy integration fix or falsify with executable negative controls.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "e8c312541b8139f2e889ff8921de8128146dcc84",
   "intended_files": [
-    "scripts/",
-    "tests/",
-    "docs/",
-    "prompt/coordination/"
+    "android-port/Runtime/Platform/AndroidRuntimeLog.cs",
+    "tests/b06_fft_caps_smoke/Program.cs",
+    "tests/b06_fft_caps_smoke/B06FftCaps.csproj",
+    ".github/workflows/raft-b06-fft-capabilities.yml",
+    "docs/B06_FFT_ANDROID_CAPABILITY_PROBE_2026-11-04.md"
   ],
   "hypothesis": "Compiler-roundtrip storage format Rgba32f is not interchangeable with original formatless writes across all RGHalf/RGFloat/ARGBHalf targets, and runtime entrypoints may bind incompatible views.",
   "related_work": [
@@ -21,9 +22,13 @@
     "B47 compute entrypoint",
     "B45 original Blur"
   ],
-  "experiment_ids": [],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Read current source and authentic format matrix; narrow fix to actual file with independent validation.",
-  "updated_at": "2026-11-04T21:07:26.584Z"
+  "experiment_ids": [
+    "20261104T210726Z-B06-fmt6a2-fft-capabilities"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41913854292"
+  ],
+  "result": "SOURCE_FIXED instrumentation: Android startup logs four original FFT RenderTexture capabilities (support/random-write) and GPU workgroup limits; actual AndroidRuntimeLog.cs compiled and executed with synthetic Unity API/negative controls. CI 41913854292 job126868198656 completed success on 9735146. Unity/device original kernels and pixels remain unverified, WATER-001 OPEN.",
+  "next_step": "Runtime capability data will be observable only in a future coordinated APK; independently improve existing original FFT binding diagnostic fail-closed lexical dispatch parsing; do not infer missing water kernels fixed.",
+  "updated_at": "2026-11-04T21:15:35.472Z"
 }
