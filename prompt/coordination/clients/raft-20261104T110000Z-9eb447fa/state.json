@@ -2,9 +2,12 @@
   "username": "raft-20261104T110000Z-9eb447fa",
   "client_label": "W1-build-followup",
   "session_id": "9eeb447f-a805-45d3-b22e-18491e98f634",
-  "state": "active",
+  "state": "paused",
   "source_sha": "99367402abb5366341786ee1dcca34296df9757e",
   "current_work": "Owner explicit latest-source experimental XAPK attempt; preserve strict gates; inspect first failure",
   "resumed_from": "W1",
-  "readiness": "NOT_READY"
+  "readiness": "NOT_READY",
+  "run_id": 41795800392,
+  "build_source_sha": "9a95ee496c12c401a424c27ff7ee8494695d9fc5",
+  "next_action": "Inspect actual first failure of 41795800392; source/export lineage unresolved. Hourly BuildFix remains enabled."
 }
