@@ -27,6 +27,9 @@ FIELDS = (
     ("m_WrapW", "wrapW"),
 )
 MAX_META_BYTES = 256_000
+# Unity TextureImporter.mipMapBias documents -100 as an INVALID/UNSET importer
+# override. Comparing it numerically to source Texture2D would fabricate drift.
+MIP_BIAS_UNSET = -100.0
 
 
 def regular_child(root: Path, relative: str) -> Path:
@@ -197,8 +200,9 @@ def inspect(original_root: Path, project: Path, sidecar: dict) -> dict:
         expected = original[row["source_owner"], row["source_path_id"]]
         for i, (field, _) in enumerate(FIELDS):
             target = exported[i]
-            # -1 is Unity import override sentinel; do not infer original.
-            if field != "m_MipBias" and target == -1:
+            # Unity importer -1 enum overrides and -100 mipMapBias are
+            # UNSET defaults (not evidence of source mismatch or equivalence).
+            if (field != "m_MipBias" and target == -1) or (field == "m_MipBias" and target == MIP_BIAS_UNSET):
                 unknown_importer_fields[field] += 1
             elif (not math.isclose(expected[i], target, rel_tol=0, abs_tol=1e-6)
                   if field == "m_MipBias" else expected[i] != target):
@@ -301,6 +305,41 @@ def sidecar_from_export_trace(project: Path, trace: dict) -> dict:
     }
 
 
+def validate_export_pair(texture_trace: dict, companion_trace: dict) -> None:
+    """Check B02 Texture2D28 and W1 Material21/Shader48 trace session IDs.
+
+    Equal UUIDs are necessary for a joint same-export analysis, but caller
+    supplied metadata is NOT independently attested process provenance.
+    """
+    if (not isinstance(texture_trace, dict) or not isinstance(companion_trace, dict)
+            or texture_trace.get("schema_version") != 1
+            or companion_trace.get("schema_version") != 1):
+        raise ValueError("invalid paired export trace schemas")
+    a, b = texture_trace.get("export_instance"), companion_trace.get("export_instance")
+    if not isinstance(a, str) or not GUID.fullmatch(a) or a != b:
+        raise ValueError("Texture2D and Material/Shader traces from different export instances")
+    objects = companion_trace.get("objects")
+    if not isinstance(objects, list) or not objects:
+        raise ValueError("missing W1 companion Material/Shader objects")
+    for row in objects:
+        if not isinstance(row, dict) or row.get("class_id") not in (21, 48):
+            raise ValueError("companion trace contains non-W1 object type")
+        source = row.get("source")
+        if (not isinstance(source, dict) or set(source) != {"owner", "path_id"}
+                or not isinstance(source["owner"], str) or not source["owner"]
+                or type(source["path_id"]) is not int or source["path_id"] <= 0):
+            raise ValueError("malformed W1 companion source identity")
+
+
+def read_private_trace(path: Path) -> dict:
+    if path.is_symlink() or not path.is_file() or path.stat().st_size > 16 * 1024 * 1024:
+        raise ValueError("missing, linked or oversized private trace")
+    obj = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(obj, dict):
+        raise ValueError("private trace must be a JSON object")
+    return obj
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--original-root", type=Path, required=True)
@@ -308,15 +347,22 @@ def main() -> None:
     inputs = ap.add_mutually_exclusive_group(required=True)
     inputs.add_argument("--sidecar", type=Path)
     inputs.add_argument("--trace", type=Path, help="private SAME-EXPORT object trace; never emitted")
+    ap.add_argument("--companion-trace", type=Path, help="optional private W1 Material/Shader trace; requires --trace")
     args = ap.parse_args()
     # Never write repairs or reveal original object names/path IDs in output.
+    if args.companion_trace and not args.trace:
+        raise ValueError("--companion-trace requires --trace")
     path = args.trace if args.trace else args.sidecar
-    if path.stat().st_size > 16 * 1024 * 1024:
-        raise ValueError("oversized private identity witness")
-    witness = json.loads(path.read_text(encoding="utf-8"))
+    witness = read_private_trace(path)
+    paired = False
+    if args.companion_trace:
+        validate_export_pair(witness, read_private_trace(args.companion_trace))
+        paired = True
     sidecar = sidecar_from_export_trace(args.project, witness) if args.trace else witness
     report = inspect(args.original_root, args.project, sidecar)
     report["same_export_trace_structurally_consumed"] = bool(args.trace)
+    report["companion_export_instance_matched"] = paired
+    report["paired_trace_provenance_independently_verified"] = False
     print("RAFT_B15_TEXTURE_SAMPLER_PARITY " + json.dumps(report, sort_keys=True))
 
 
