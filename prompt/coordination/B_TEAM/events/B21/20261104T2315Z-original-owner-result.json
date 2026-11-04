@@ -1,0 +1,14 @@
+{
+  "id": "B21-20261104T2315Z-original-light-owner-parity",
+  "owner": "B21",
+  "session_id": "20261104T2257Z-B21-8e72",
+  "issue_id": "RENDER-002",
+  "type": "integration",
+  "summary": "B21 bounded real ZIP29 original sources + private same-export AssetRipper W1/B02/B21 traces: two native Light108 values and their two original GameObject1 owners match actual generated Unity YAML by exact source→export GUID/fileID, 0 changed fields, 0 misattached, 0 unresolved; 11+17+12 synthetic controls PASSED, .NET9 compiled and export succeeded. Source/export fidelity only; no Android/Unity runtime pixel proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41931942755",
+    "https://github.com/alwansan/raf/actions/runs/41930891466",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B21_LIGHT_EXPORT_LINEAGE_2026-11-04.md"
+  ],
+  "at": "2026-11-04T23:15:00Z"
+}
