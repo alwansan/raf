@@ -122,6 +122,58 @@ class B05TexEnvTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'Nonfinite'):
             normalize_texenvs([('_MainTex',invalid)])
 
+
+    def test_scoped_owner_full_export_superset_never_claims_global_proof(self):
+        t, s, a = fixture()
+        other_mat = (2100111, 'c'*32)
+        t['objects'].append(dict(class_id=21,
+            source=dict(owner='sharedassets36.assets', path_id=721),
+            export=dict(file_id=other_mat[0], guid=other_mat[1], type=2),
+            exportable=True))
+        a[other_mat] = {'_Other': (0, '0'*32, 0)}
+        scoped = compare(t, s, a, selected_owners={SRC[0]})
+        self.assertEqual((scoped['materials_compared'], scoped['outside_scope_export_materials'],
+                          scoped['outside_scope_trace_materials']), (1, 1, 1))
+        self.assertEqual(scoped['source_scope'], 'selected-owner')
+        self.assertTrue(scoped['source_slots_faithful_with_resolved_scope'])
+        self.assertFalse(scoped['all_texture_targets_proven'])
+        self.assertFalse(scoped['full_game_source_coverage_verified'])
+        with self.assertRaisesRegex(ValueError, 'Unverified traced original'):
+            compare(t, s, a)
+
+    def test_scoped_owner_missing_and_extra_selected_material_rejected(self):
+        t, s, a = fixture()
+        t['objects'] = [row for row in t['objects'] if row['class_id'] != 21]
+        with self.assertRaisesRegex(ValueError, 'identities'):
+            compare(t, s, a, selected_owners={SRC[0]})
+        t, s, a = fixture()
+        t['objects'].append(dict(class_id=21,
+            source=dict(owner=SRC[0], path_id=999),
+            export=dict(file_id=2100111, guid='c'*32, type=2),
+            exportable=True))
+        with self.assertRaisesRegex(ValueError, 'Unverified traced original'):
+            compare(t, s, a, selected_owners={SRC[0]})
+
+    def test_scoped_owner_collision_with_unchecked_source_rejected(self):
+        t, s, a = fixture()
+        t['objects'].append(dict(class_id=21,
+            source=dict(owner='sharedassets36.assets', path_id=999),
+            export=dict(file_id=MAT[0], guid=MAT[1], type=2),
+            exportable=True))
+        with self.assertRaisesRegex(ValueError, 'collides'):
+            compare(t, s, a, selected_owners={SRC[0]})
+
+    def test_scoped_owner_filter_and_pin_allowlist_rejected(self):
+        t, s, a = fixture()
+        with self.assertRaisesRegex(ValueError, 'Invalid selected-original'):
+            compare(t, s, a, selected_owners={'untrusted.assets'})
+        with self.assertRaisesRegex(ValueError, 'Invalid selected-original'):
+            compare(t, s, a, selected_owners=set())
+        from scripts.b05_verify_material_texenv_bindings import original_texenvs
+        with tempfile.TemporaryDirectory() as tmp:
+            with self.assertRaisesRegex(ValueError, 'Unpinned'):
+                original_texenvs(Path(tmp), owner_names={'../outside'})
+
     def test_symlink_export_rejected(self):
         with tempfile.TemporaryDirectory() as td:
             assets=Path(td)/'Assets';assets.mkdir()
