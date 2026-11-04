@@ -29,19 +29,20 @@
     "double trace injection"
   ],
   "workflow_path": ".github/workflows/raft-b07-world-coroutine.yml",
-  "run_url": "https://github.com/alwansan/raf/actions/runs/41929041686",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41929910850",
   "artifact_urls": [],
   "budget": "Ubuntu 24.04 CPU <=10 minutes, no Unity/full APK, no original published assets",
   "status": "completed",
-  "observed_result": "SUCCESS CI41929041686 job126920934945 source d5c3b1fe: 9 B07 negative controls + 19 startup regressions passed, actual synthetic C# Android yields2 exceptionRethrown entries1 vs nonAndroid entries0, authenticated original private source/body unchanged except prepended Android log, production adapter inserted exactly one firstMoveNext marker.",
+  "observed_result": "SUCCESS CI41929041686 job126920934945 source d5c3b1fe: 9 B07 negative controls + 19 startup regressions passed, actual synthetic C# Android yields2 exceptionRethrown entries1 vs nonAndroid entries0, authenticated original private source/body unchanged except prepended Android log, production adapter inserted exactly one firstMoveNext marker. Full original adapted managed compiler/RPC/identity CI41929721761 success after strict manifest pin correction; B07 CI41929910850 success additionally enforces manifest SHA parity. Initial CI41928829509 failed on expected SHA manifest drift; see incident B07/20261104T2251Z-adapted-sha-mismatch.md.",
   "rejected_hypotheses": [
-    "IEnumerator construction is equivalent to iterator execution: rejected by CLR fixture; no event until first MoveNext."
+    "IEnumerator construction is equivalent to iterator execution: rejected by CLR fixture; no event until first MoveNext.",
+    "B07 standalone source/CLR tests guarantee integration with operation manifest: rejected by CI41928829509; strictly pinned SHA contract must match adapted original source."
   ],
   "limitations": [
     "All CLR data synthetic; no original game coroutine runtime, Unity/IL2CPP, APK or installed phone reproduction.",
     "Log indicates first iteration entry only; no completion or .rgd proof.",
     "Existing audio/Settings unchanged; deferred touch untouched."
   ],
-  "integration_commit": "ebad75bad1325cf247bd04cc18ed5121cc17fd91",
-  "next_step": "Retest on future coordinated APK; compare firstMoveNext, OnWorldRecieved, errors and real .rgd create/save/reopen."
+  "integration_commit": "354e478a9ec46aaff758cb8110154d64b8298bea",
+  "next_step": "No further CPU-only duplicate trace tests. Coordinate subsequent Android native build/device; compare firstMoveNext and callback/error and actual .rgd save/exit/reload. LOCAL-005 still open."
 }
