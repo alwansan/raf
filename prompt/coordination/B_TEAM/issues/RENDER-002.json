@@ -48,7 +48,10 @@
     "https://github.com/alwansan/raf/commit/4035b13251f3fffcb8c4f0257174528f58c298ce",
     "https://github.com/alwansan/raf/actions/runs/41921429305",
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B15_TEXTURE_SAMPLER_PARITY_2026-11-04.md",
-    "https://github.com/alwansan/raf/actions/runs/41922372594"
+    "https://github.com/alwansan/raf/actions/runs/41922372594",
+    "https://github.com/alwansan/raf/actions/runs/41927008905",
+    "https://github.com/alwansan/raf/actions/runs/41927712988",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B02_TEXTURE_EXPORT_LINEAGE_HOOK_2026-11-04.md"
   ],
   "remaining": [
     "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -72,13 +75,14 @@
     "B38 source-integrated top-level Material queue, lightmap, instancing, and double-sided GI verifier, CI41920784251 9/9 synthetic PASS; real ZIP2 source-to-same-export parity, Unity/Adreno and phone remain unverified.",
     "B21: authentic original ZIP2 level0..level5 SHA/size-pinned LightmapSettings scan CI41921259677 PASS (16 synthetic, 6 real originals): 0 baked lightmaps and 1497 unassigned renderer indices (0 out-of-range) in these six only; reject lost baked lightmap as white-surface explanation for this subset. Other 34 scenes, same-export dynamic lighting, shader/texture/phone remain UNKNOWN; no game patch.",
     "B15: read-only source-pinned Texture2D sampler -> exact same-export TextureImporter GUID/parity checker and in-memory exporter trace bridge are code-integrated, 16/16 synthetic CI PASS (41921429305); zero actual Raft textures compared until independently authenticated same-export trace+original bytes/project; no source asset edits, no Unity/pixel/device evidence.",
-    "B21 follow-on CI41922372594 source-authentic original Light components: level0 and level1 each have one enabled local-owner-valid Light with finite colored RGB and positive intensity/range; level2..5 none. 16+18 tests PASS, 6 original SHA reverified. Same-instance Unity export light identity/values and Adreno pixels not compared, RENDER-002 OPEN; do not infer lighting was restored."
+    "B21 follow-on CI41922372594 source-authentic original Light components: level0 and level1 each have one enabled local-owner-valid Light with finite colored RGB and positive intensity/range; level2..5 none. 16+18 tests PASS, 6 original SHA reverified. Same-instance Unity export light identity/values and Adreno pixels not compared, RENDER-002 OPEN; do not infer lighting was restored.",
+    "B02 real texture lineage gap partly closed in source: pinned optional class28 exporter hook compiled with original W1 class21/48 preserved; importer reads nested mipmaps.sRGBTexture and derives true typed colorspace from SHA source. Still requires one actual same-instance original/export trace and Unity/device pixel evidence; no Raft asset was changed."
   ],
   "acceptance": [
     "مطابقة روابط ومراجع الأصل",
     "مقارنةصوريةلنفسالمشهد",
     "نجاحعلىالهاتف"
   ],
-  "updated_by": "B21",
-  "updated_at": "2026-11-04T22:10:30Z"
+  "updated_by": "B02",
+  "updated_at": "2026-11-04T22:48:00Z"
 }
