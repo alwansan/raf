@@ -54,7 +54,10 @@ def validate_stage(program, stage):
 
 
 def inspect(parsed, entries, scratch, *,
-            link=linked_program, translator=translate, parse=parse_parameter_blob):
+            link=linked_program, translator=translate, parse=parse_parameter_blob,
+            diagnostic=None):
+    diagnostic = diagnostic if diagnostic is not None else {}
+    diagnostic["phase"] = "original-two-pass-shape"
     if not isinstance(parsed, dict) or parsed.get("m_Name") != TARGET:
         raise ValueError("Foam original shader identity mismatch")
     subs = parsed.get("m_SubShaders")
@@ -67,21 +70,28 @@ def inspect(parsed, entries, scratch, *,
         raise ValueError("Foam original compressed program table invalid")
     results = []
     for pass_index, p in enumerate(passes):
+        diagnostic["original_pass"] = pass_index
+        diagnostic["phase"] = "original-pass-type"
         if not isinstance(p, dict) or p.get("m_Type") != 0:
             raise ValueError("Foam original pass kind unsupported")
         for stage, name in ((1, "progVertex"), (0, "progFragment")):
+            diagnostic["stage_code"] = stage
+            diagnostic["phase"] = "original-partial-cb-and-parameter-index"
             metadata, index = validate_stage(p.get(name), stage)
             if index >= len(entries) or not isinstance(entries[index][1], bytes):
                 raise ValueError("Foam original parameter entry absent")
             raw = entries[index][1]
+            diagnostic["phase"] = "original-parameter-decode"
             parameter = parse(raw)
             if not isinstance(parameter, dict):
                 raise ValueError("Foam original parameter decoder returned no shape")
+            diagnostic["phase"] = "original-dxbc-stage-link"
             dxbc, binding = link(metadata, entries, stage)
             if not isinstance(dxbc, bytes) or len(dxbc) < 32:
                 raise ValueError("Foam original linked GPU program invalid")
             dest = scratch / ("pass%d-stage%d" % (pass_index, stage))
             dest.mkdir()
+            diagnostic["phase"] = "private-stage-translation"
             converted = translator(dxbc, stage, dest)
             results.append({
                 "pass": pass_index, "stage_code": stage,
@@ -100,11 +110,14 @@ def inspect(parsed, entries, scratch, *,
     return results
 
 
-def probe(source):
+def probe(source, diagnostic=None):
+    diagnostic = diagnostic if diagnostic is not None else {}
+    diagnostic["phase"] = "owner-sha-verification"
     import UnityPy
     path = source / OWNER
     if not path.is_file() or path.is_symlink() or fingerprint(path) != PINS[OWNER]:
         raise ValueError("Foam original ZIP2 owner authentication failed")
+    diagnostic["phase"] = "original-unity-object-read"
     env = UnityPy.load(str(path))
     objs = [x for x in env.file.objects.values()
             if x.type.name == "Shader" and int(x.path_id) == OBJECT_ID]
@@ -112,12 +125,14 @@ def probe(source):
         raise ValueError("Foam original asset object missing")
     original = objs[0]
     original_sha = hashlib.sha256(original.get_raw_data()).hexdigest()
+    diagnostic["phase"] = "original-parsed-form"
     tree = original.read_typetree()
+    diagnostic["phase"] = "original-d3d11-platform-table"
     tables = [(platform, records(segments)) for platform, segments in decoded_platforms(tree) if platform == 4]
     if len(tables) != 1:
         raise ValueError("Foam original D3D11 table missing")
     with tempfile.TemporaryDirectory(prefix="b24-foam-private-") as dirname:
-        stages = inspect(tree.get("m_ParsedForm"), tables[0][1], Path(dirname))
+        stages = inspect(tree.get("m_ParsedForm"), tables[0][1], Path(dirname), diagnostic=diagnostic)
     return {
         "authentic_source_sha256": PINS[OWNER][1],
         "object_sha256": original_sha,
@@ -140,14 +155,18 @@ def main():
     p.add_argument("--source", type=Path, required=True)
     p.add_argument("--out", type=Path, required=True)
     args = p.parse_args()
+    diagnostic = {}
     try:
-        report = probe(args.source)
+        report = probe(args.source, diagnostic=diagnostic)
         args.out.write_text(json.dumps(report, sort_keys=True) + "\n")
         print("B24_FOAM_PROBE " + json.dumps(report, sort_keys=True))
         return 0 if report["all_rebuilt_spirv_valid"] else 2
     except Exception as exc:
         # Exception class only: do not echo private paths, names or shader text.
         report = {"status": "incomplete", "error_type": type(exc).__name__,
+                  "bounded_failure_phase": diagnostic.get("phase", "unknown"),
+                  "bounded_failure_pass": diagnostic.get("original_pass"),
+                  "bounded_failure_stage": diagnostic.get("stage_code"),
                   "original_gpu_source_published": False, "shaderlab_restored": False,
                   "unity_or_phone_verified": False}
         args.out.parent.mkdir(parents=True, exist_ok=True)
