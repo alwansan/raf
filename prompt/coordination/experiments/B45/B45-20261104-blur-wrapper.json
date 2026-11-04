@@ -16,7 +16,11 @@
   "commands": [
     "python3 -m unittest discover -s tests -p 'test_b45_blur_wrapper_preflight.py' -v",
     "python3 -m scripts.w1_full_engine_sources --zip2-checkout zip2-original --destination $RUNNER_TEMP/w1-original",
-    "python3 -m scripts.b45_blur_wrapper_preflight --source $RUNNER_TEMP/w1-original/Raft_Data --repo . --out $RUNNER_TEMP/b45/blur-state.json"
+    "python3 -m scripts.b45_blur_wrapper_preflight --source $RUNNER_TEMP/w1-original/Raft_Data --repo . --out $RUNNER_TEMP/b45/blur-state.json",
+    "python3 -m unittest discover -s tests -p 'test_b45_blur_*.py' -v",
+    "python3 -m unittest discover -s tests -p 'test_a12_original_blur_wrapper.py' -v",
+    "python3 -m scripts.w5_blur_recovery --source AUTHENTICATED_ZIP2_SOURCE --repo . --runner CPU_VULKAN_HOST --out SAFE_AGGREGATE_ONLY",
+    "python3 -m unittest discover -s tests -p 'test_b45_*original_blur.py' -v"
   ],
   "negative_controls": [
     "synthetic parsed missing pass rejected",
@@ -24,16 +28,41 @@
     "do not publish original text"
   ],
   "workflow_path": ".github/workflows/raft-b45-blur-shaderlab.yml",
-  "run_url": "https://github.com/alwansan/raf/actions/runs/41911866092",
-  "artifact_urls": [],
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41913273839",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41913273839"
+  ],
   "budget": "CPU-only, ubuntu-24.04 10 min timeout, SHA-pinned ZIP2 provider/cache, no Unity/APK",
-  "status": "in_progress",
-  "observed_result": "CI run dispatched; result pending; stage decoder only, no shader installation",
-  "rejected_hypotheses": [],
+  "status": "passed_cpu_vulkan_not_unity",
+  "observed_result": {
+    "fix": "Preserve sole original m_Type=4 texture property; no flags/attributes; original state of both passes serializes.",
+    "original_object_sha256": "c9341848367eaedb12e551ce9061b1eea728f54f2069ef1a3c12c4a4a2e9bb52",
+    "property_sha256": "a8ee7ea1663c61c62b3cf6bd99b303f0f62434223cf285462dfc599c97bdc59c",
+    "private_shaderlab_sha256": "5886dc362fc1a4a237aa05f6b4244ec30af4daad4089edea008f95d760945e14",
+    "private_shaderlab_bytes": 23068,
+    "pass_count": 2,
+    "original_rebuilt_raster_seed_checks": 6,
+    "maximum_color_abs": 0,
+    "maximum_depth_abs": 0,
+    "coverage_mismatch": 0,
+    "negative_mutations_detected": 12,
+    "validation_errors": 0,
+    "unity_compiled": false,
+    "installed_to_game": false
+  },
+  "rejected_hypotheses": [
+    "Original DXBC vertex/fragment translation is failing after W5 raster: falsified by W5 CPU Vulkan six zero-difference comparisons.",
+    "Original Blur has empty material property block: falsified by authenticated m_Props length one, texture m_Type=4.",
+    "Original pass state serializer fails: both states serialize successfully; old wrapper rejected nonempty property block.",
+    "ShaderLab complete source cannot be formed from authentic two passes: falsified by private SHA-pinned 23068-byte candidate, no public source released."
+  ],
   "limitations": [
     "No Unity compile/Adreno",
-    "Only isolated original source state serializer, not all variants/resources"
+    "Only isolated original source state serializer, not all variants/resources",
+    "Private source builder result does not prove Unity 2021.3 compiler, texture/sampler state upload, original material GUID binding or phone visual fidelity",
+    "Native build workflow wiring exists but has NOT run; cannot mark Unity/game integration or Adreno acceptance",
+    "No original private shader bytes committed or uploaded to CI artifacts"
   ],
-  "integration_commit": null,
-  "next_step": "Collect exact post-raster wrapper outcome safely"
+  "integration_commit": "348990da5c7864bfbbc39e2f4fbe3e4969795d81",
+  "next_step": "Private staging CI 41914205988 then next owner-requested native Unity run; verify original exported Shader identity and GUID, compile and phone visuals; GPU water FFT still open."
 }
