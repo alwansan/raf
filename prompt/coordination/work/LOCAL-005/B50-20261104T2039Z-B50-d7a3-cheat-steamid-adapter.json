@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "owner": "B50",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2039Z-B50-d7a3",
+  "issue_id": "LOCAL-005",
+  "track": "world-save",
+  "approach": "Pin original C# Cheat.cs SHA 813761..., isolate its one original AllowCheatsForLocalPlayer SteamUser.GetSteamID object call to Android-local CSteamID constructed from stable local profile identity; leave original Windows behavior intact and compile original managed sources.",
+  "status": "active",
+  "base_sha": "a5c837fab177d87f5737cedc9410833c2176feaa",
+  "intended_files": [
+    "scripts/adapt_android_offline_startup.py",
+    "tests/test_android_offline_startup.py",
+    "prompt/coordination/B_TEAM/issues/LOCAL-005.json"
+  ],
+  "hypothesis": "Using managed Steamworks.CSteamID constructed from LocalPlayerIdentity.Current for Android-local-only Cheat identity check preserves object type and avoids native steam_api64; exact method known from authenticated ZIP2 3211776 byte DLL, source sha 813761..., method SHA e89739...; Windows retains original SteamUser.GetSteamID.",
+  "related_work": [
+    "B50-20261104T2039Z-B50-d7a3-cheat-steamid-probe"
+  ],
+  "experiment_ids": [],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement fail-closed original callsite adaptation and source tests, obtain actual original no-LFS managed compile CI; reject if CSteamID constructor unsupported.",
+  "updated_at": "2026-11-04T20:58:00Z"
+}
