@@ -6,7 +6,7 @@
   "issue_id": "WATER-001",
   "track": "water-fft",
   "approach": "Bounded source-level ComputeShader kernel pragma->numthreads entrypoint validation, independent of B49 per-Pass ShaderLab repair",
-  "status": "active",
+  "status": "completed",
   "base_sha": "171605c5760c3b4194491799a07ebe64793fe667",
   "intended_files": [
     "scripts/b47_compute_kernel_contract.py",
@@ -21,8 +21,10 @@
   "experiment_ids": [
     "B47-20261104T2055Z-B47-c4e7-compute-entrypoint-guard"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Demonstrate a real false-positive in currently integrated compute audit, add independent lexical and signature tests, integrate fail-closed candidate count with existing water kernel identity kept false.",
-  "updated_at": "2026-11-04T21:00:04Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41912450062"
+  ],
+  "result": "Source integrity fix 52e9b812; synthetic CI 41912450062 green (8 new, 5 existing), no authentic Unity/FFT or device proof",
+  "next_step": "Original FFT serialized kernel dispatch index-to-program identity, independent of structural source-guard work.",
+  "updated_at": "2026-11-04T21:07:00Z"
 }
