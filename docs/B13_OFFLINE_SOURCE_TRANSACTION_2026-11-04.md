@@ -15,3 +15,7 @@ After first green CI, later branch commits lost B13's three files (script, test 
 ## Limits / handoff
 
 This is SOURCE_FIXED **for staging only**. Latest genuine game APK86 ([release](https://github.com/alwansan/raf/releases/tag/android-early-test-41812889049-1)); CL baseline `5394407b5cd0a0ca1848ff0902f8d2133bf6ea29` still includes Steam StoreStats and water shader/FFT failures on old installed source. No new native player, world create, .rgd save/reload, shader pixel or phone proof. Overall **LOCAL-005 OPEN, WATER-001 OPEN, NOT_READY 0/3**. B19 independently owns `adapt_original_save_paths.py` backup work; B14 another save stage root safety lane. B13 must not duplicate their changes. Next check live adapter/test/workflow content and startup CI, then select unoccupied WATER-001/RENDER-002 work.
+
+## Final B13 ledger generation proof (2026-11-04 21:50 UTC)
+
+[Actions 41919807903](https://github.com/alwansan/raf/actions/runs/41919807903) **COMPLETED SUCCESS**: source-free B13 regression job passed and subsequent `evidence-summary` job executed `python3 scripts/refresh_b_team.py` on latest fetched HEAD, then wrote the generated `B_TEAM/SUMMARY.md` and `snapshot.json` by fast-forward Git push. Job log explicitly reports `B13_SUMMARY_CHECKPOINT refreshed=true fast_forward=true`. This verifies deterministic checkpoint generation at that moment, not any live-running monitor or game readiness.
