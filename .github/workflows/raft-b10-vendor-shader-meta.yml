@@ -1,0 +1,36 @@
+name: B10 RENDER-002 vendor Shader fallback .meta fidelity
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/restore_tmp_shaders.py'
+      - 'tests/test_restore_tmp_shaders.py'
+      - 'tests/test_a3_vendor_shader_restore_transaction.py'
+      - 'tests/test_restore_postfx_shaders.py'
+      - 'tests/test_restore_volumetric_shaders.py'
+      - '.github/workflows/raft-b10-vendor-shader-meta.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: b10-vendor-shader-meta-${{ github.ref }}-${{ github.workflow }}
+  cancel-in-progress: false
+
+jobs:
+  vendor-shader-source-metadata:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+      - name: Check patched Python syntax
+        run: python -m py_compile scripts/restore_tmp_shaders.py tests/test_restore_tmp_shaders.py tests/test_a3_vendor_shader_restore_transaction.py
+      - name: Test production vendor shader metadata and rollback
+        run: python -m unittest -v tests.test_restore_tmp_shaders tests.test_a3_vendor_shader_restore_transaction tests.test_restore_postfx_shaders tests.test_restore_volumetric_shaders
+      - name: Record limited scope
+        run: echo 'B10 source-only synthetic metadata tests; no original Unity export, APK or device graphics proof.'
