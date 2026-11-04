@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "owner": "B38",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2142Z-B38-f31a",
+  "issue_id": "RENDER-002",
+  "track": "colors-materials",
+  "approach": "Independent original-to-same-export Material draw-order/render-state parity guard for top-level m_CustomRenderQueue, lightmap, instancing and double-sided GI flags, complementary to B22 scalars/B43 keywords/B44 colors/B05 textures.",
+  "status": "active",
+  "base_sha": null,
+  "intended_files": [
+    "scripts/b38_material_render_state.py",
+    "tests/test_b38_material_render_state.py",
+    ".github/workflows/raft-b38-material-render-state.yml",
+    "docs/B38_MATERIAL_RENDER_STATE_FIDELITY_2026-11-04.md"
+  ],
+  "hypothesis": "Exporter may preserve Material shader/texture/scalars but alter top-level draw queue/instancing/GI flags; existing guards do not compare these fields. Private same-instance source/export trace can detect drift without guessing GUIDs.",
+  "related_work": [
+    "B22-20261104T2134Z-B22-c91f-scalar-parity",
+    "B43-20261104T2104Z-B43-c8f2-material-keyword-fidelity",
+    "B05-20261104T2107Z-B05-9e24-texenv-lineage"
+  ],
+  "experiment_ids": [
+    "B38-20261104T2155Z-render-state"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Build strict SHA-pinned read-only original/export comparator with negative controls; no real source data/candidate modification until original same-export trace exists.",
+  "updated_at": "2026-11-04T21:55:07.403Z"
+}
