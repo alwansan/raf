@@ -1,0 +1,85 @@
+name: B17 WATER-001 original Spectrum descriptor lineage (ZIP2 CPU)
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/b17_spectrum_stage_descriptors.py'
+      - 'tests/test_b17_spectrum_stage_descriptors.py'
+      - '.github/workflows/raft-b17-spectrum-descriptors.yml'
+permissions:
+  contents: read
+concurrency:
+  group: raft-b17-spectrum-descriptors-${{ github.ref }}-${{ github.workflow }}
+  cancel-in-progress: false
+jobs:
+  synthetic:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Compile + negative-control tests (no original data)
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/b17_spectrum_stage_descriptors.py tests/test_b17_spectrum_stage_descriptors.py
+          python3 -m unittest discover -s tests -p 'test_b17_spectrum_stage_descriptors.py' -v
+  original:
+    needs: synthetic
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+      - name: Disk capacity safety
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import shutil
+          assert shutil.disk_usage('.').free > 8*1024**3
+          print('RAFT_B17_DISC_CAPACITY_SAFE')
+          PY
+      - name: Checkout immutable original ZIP2 chunk provider (no LFS)
+        uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: .source-zip2
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/sharedassets0.assets
+      - name: Reassemble and SHA-verify original Spectrum owner
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/original"
+          python3 -m scripts.stage_zip2_fft_owner \
+            --zip2-checkout .source-zip2 \
+            --destination "$RUNNER_TEMP/original/sharedassets0.assets"
+      - name: Install bounded CPU-only original Unity serializer
+        run: python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+      - name: Verify genuine Spectrum resource tables without content publication
+        run: |
+          set -euo pipefail
+          timeout 900s python3 -m scripts.b17_spectrum_stage_descriptors \
+            --source "$RUNNER_TEMP/original" \
+            --out "$RUNNER_TEMP/b17-spectrum-safe-aggregate.json"
+          echo 'RAFT_B17_DESCRIPTOR_BOUNDARY no_shader_source=true no_apk=true'
+      - name: Retain numerical evidence only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: b17-spectrum-numeric-contract-${{ github.run_id }}
+          path: ${{ runner.temp }}/b17-spectrum-safe-aggregate.json
+          retention-days: 7
+          if-no-files-found: ignore
