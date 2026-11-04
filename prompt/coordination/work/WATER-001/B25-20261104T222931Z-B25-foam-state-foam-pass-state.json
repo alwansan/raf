@@ -6,7 +6,7 @@
   "issue_id": "WATER-001",
   "track": "water-fft",
   "approach": "Authenticate original Foam/Global object, decode per-pass render states for genuine ShaderLab; complement B24 four-program DXBC translation without modifying shaders yet.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "c0dd09b0ca9738906449dcbe0047e71284106adf",
   "intended_files": [
     "scripts/b25_foam_pass_state.py",
@@ -22,8 +22,22 @@
   "experiment_ids": [
     "B25-20261104T222931Z-B25-foam-state-original-foam-render-states"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Write source-only synthetic controls; execute SHA-verified original ZIP2 data probe in isolated workflow.",
-  "updated_at": "2026-11-04T22:29:31.916Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41926521683"
+  ],
+  "result": {
+    "source_commit": "d2c0ba2ee2c848325fe909d191a07879c94b9c75",
+    "CI": "https://github.com/alwansan/raf/actions/runs/41926521683",
+    "conclusion": "success",
+    "synthetic_tests": "11/11 PASS",
+    "original_owner_sha_verified": true,
+    "original_object_sha_verified": true,
+    "original_foam_passes": 2,
+    "state_fragment_bytes_per_pass": 247,
+    "identical_state_sha256": "19b4753ccc0393a8ebe4f804aded5e5c8363d9b641cac1870d2d6d0c73b50170",
+    "rejected": "Per-pass original m_State render-state difference",
+    "limitations": "Private ShaderLab fragments only; four programs not assembled/Unity imported; no phone/GPU test, water still open"
+  },
+  "next_step": "Independent follow-up on B24 authentic Foam per-pass constant buffer and sampler bindings; do not infer from identical render states. Next assembler must combine B24 four original stages and B25 exact two states in private instance before any Unity install.",
+  "updated_at": "2026-11-04T22:38:03.316Z"
 }
