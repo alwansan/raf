@@ -1,0 +1,14 @@
+{
+  "id": "20261104T2117Z-render-texture-links-ci",
+  "owner": "B46",
+  "session_id": "20261104T2058Z-B46-6e3d",
+  "issue_id": "RENDER-002",
+  "type": "integration",
+  "summary": "B46 authored source checker and negative fileID controls, integrated into isolated CI; 21 checks PASS on source 04d7e05. Real game export/device not verified and RENDER remains OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/04d7e054b4186ae192b3e740c0cba5ec71306b0c",
+    "https://github.com/alwansan/raf/actions/runs/41913591959",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B46_EXPORTED_TEXTURE_LINKS_2026-11-04.md"
+  ],
+  "at": "2026-11-04T21:17:00Z"
+}
