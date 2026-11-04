@@ -1,0 +1,126 @@
+name: Raft W1 same-instance Material Shader export lineage (CPU only)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/patch_export_lineage.py'
+      - 'scripts/verify_export_lineage.py'
+      - 'tests/test_export_lineage.py'
+      - 'android-port/Experiments/ExportLineage/**'
+      - '.github/workflows/raft-w1-export-lineage.yml'
+permissions:
+  contents: read
+concurrency:
+  group: raft-w1-export-lineage-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  original-pointer-proof:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+            android-port/Experiments/ExportLineage
+      - name: Negative identity and graph controls before acquisition
+        run: |
+          python3 -m unittest discover -s tests -p test_export_lineage.py -v
+          python3 -c "import shutil; assert shutil.disk_usage('.').free > 8 * 1024**3"
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - uses: actions/checkout@v4
+        with:
+          repository: nowl-it/AssetRipperCLI
+          ref: 036098ab525a3f9f693dc101edeb21faad4d32d8
+          path: ar-host
+          persist-credentials: false
+          sparse-checkout: Source
+      - name: Build read-only instrumentation into the pinned public exporter
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.patch_export_lineage --tool-source ar-host --helper android-port/Experiments/ExportLineage/RaftExportLineage.cs
+          dotnet build ar-host/Source/AssetRipper.Export.UnityProjects/AssetRipper.Export.UnityProjects.csproj -c Release -p:EnableTrimAnalyzer=false -p:EnableAotAnalyzer=false > "$RUNNER_TEMP/public-tool-build.log" 2>&1 || { tail -60 "$RUNNER_TEMP/public-tool-build.log"; exit 1; }
+          curl -fL --retry 2 --max-time 240 https://github.com/nowl-it/AssetRipperCLI/releases/download/v1.0.1/AssetRipper_linux_x64.zip -o "$RUNNER_TEMP/ar.zip"
+          echo "b48292e40948ce2634e9187d4724fb4f45c01fa6f4fea2a5f4775aa611def17b  $RUNNER_TEMP/ar.zip" | sha256sum -c -
+          mkdir "$RUNNER_TEMP/ar"
+          unzip -q "$RUNNER_TEMP/ar.zip" -d "$RUNNER_TEMP/ar"
+          cp ar-host/Source/0Bins/Other/AssetRipper.Export.UnityProjects/Release/AssetRipper.Export.UnityProjects.dll "$RUNNER_TEMP/ar/AssetRipper.Export.UnityProjects.dll"
+          chmod +x "$RUNNER_TEMP/ar/AssetRipper.GUI.Free"
+          python3 -m scripts.configure_assetripper_export --directory "$RUNNER_TEMP/ar"
+      - name: Reuse authenticated full original shader-owner cache first
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/w1-original
+          key: w1-zip2-15964ea8-shader-and-engine-owners-v1
+          restore-keys: |
+            w1-zip2-15964ea8-full-shader-owners-v1
+            w1-zip2-15964ea8-four-owners-v1
+      - name: Plan only missing original providers
+        id: needed
+        run: |
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          from scripts.w1_full_engine_sources import acquisition_plan
+          from scripts.w1_stage_zip2_owners import PINS,fingerprint
+          root=Path(os.environ['RUNNER_TEMP'])/'w1-original'
+          paths,missing=acquisition_plan(root)
+          for relative,pin in PINS.items():
+              if '/Resources/' not in relative: continue
+              cached=root/relative
+              if cached.exists():
+                  if cached.is_symlink() or fingerprint(cached)!=pin:
+                      raise SystemExit('Conflicting cached original engine provider')
+              else:
+                  paths.append('Raft/'+relative)
+          with open(os.environ['GITHUB_OUTPUT'],'a') as out:
+              out.write('paths<<W1_SOURCE_PATHS\n'+'\n'.join(paths)+'\nW1_SOURCE_PATHS\n')
+          print('RAFT_W1_SHADER_ENGINE_PLAN sourceOwners=16 missing='+str(len(paths)-1))
+          PY
+      - uses: actions/checkout@v4
+        with:
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-original
+          filter: blob:none
+          lfs: false
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: ${{ steps.needed.outputs.paths }}
+      - name: Authenticate all original shader providers without LFS
+        run: |
+          python3 -m scripts.w1_full_engine_sources --zip2-checkout zip2-original --destination "$RUNNER_TEMP/w1-original"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import PINS,stage
+          selected={relative:pin for relative,pin in PINS.items() if '/Resources/' in relative}
+          result=stage(Path('zip2-original'),Path(os.environ['RUNNER_TEMP'])/'w1-original',selected)
+          print('RAFT_W1_CANONICAL_SHADER_SOURCE '+json.dumps(result,sort_keys=True))
+          PY
+      - name: Capture actual collection pointers during a bounded original-data export
+        env:
+          DOTNET_PROCESSOR_COUNT: '2'
+          RAFT_PRIVATE_EXPORT_LINEAGE: ${{ runner.temp }}/private-export-lineage.json
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s "$RUNNER_TEMP/ar/AssetRipper.GUI.Free" --cli --input "$RUNNER_TEMP/w1-original" --output "$RUNNER_TEMP/lineage-project" --mode unity --disable-script-import --ignore-streaming-assets > "$RUNNER_TEMP/private-export.log" 2>&1
+          test -s "$RUNNER_TEMP/private-export-lineage.json"
+      - name: Compare source PPtrs and actual YAML GUIDs from this export instance
+        run: |
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 -m scripts.verify_export_lineage --source "$RUNNER_TEMP/w1-original" --private-trace "$RUNNER_TEMP/private-export-lineage.json" --project "$RUNNER_TEMP/lineage-project/ExportedProject" --out "$RUNNER_TEMP/export-lineage-summary.json"
+      - name: Retain aggregate result only; never upload private trace or assets
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w1-export-lineage-${{ github.sha }}
+          path: ${{ runner.temp }}/export-lineage-summary.json
+          if-no-files-found: ignore
+          retention-days: 7
