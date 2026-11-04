@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "username": "raft-20261103T162900Z-73e8c2a1",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "started_at": "2026-11-04T00:33:53.658Z",
+  "base_sha": "e0ba9100c163459bbfb5c9bed465895d1af8b09c",
+  "paths": [
+    "scripts/w1_probe_original_shader_links.py",
+    "tests/test_w1_original_shader_links.py",
+    ".github/workflows/raft-w1-original-shader-links.yml"
+  ],
+  "approach": "14pinned original sources,165distinct source Shader objects; group duplicate keys without collapsing source identity, compare raw/parsed/decompressed program fingerprints, resolve original Material PPtrs with1-based external file lookup and keep unresolved owners explicit. Exporter AssetExportCollection.GUID is UnityGuid.NewGuid(), not derivable from source pathID.",
+  "budget": "CPU-only12minutes,noUnity,noLFS,no native request; reuse full14cache and exactDBreader."
+}

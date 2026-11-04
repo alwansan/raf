@@ -2,16 +2,16 @@
   "schema_version": 1,
   "client_label": "W1",
   "username": "raft-20261103T162900Z-73e8c2a1",
-  "session_id": "w1-engine-export-proof-20261104T001312323Z",
+  "session_id": "w1-original-shader-links-20261104T003353658Z",
   "resumed_from": null,
-  "status": "paused",
-  "updated_at": "2026-11-04T00:23:39.704Z",
-  "base_sha": "11b69cedb6f8905ce6603e7923cbc319d0c569be",
+  "status": "active",
+  "updated_at": "2026-11-04T00:33:53.658Z",
+  "base_sha": "e0ba9100c163459bbfb5c9bed465895d1af8b09c",
   "current_work": [
-    "750actual internal Material shader refs map to25original engine keys; actual full export/original Material assignments remain unverified"
+    "Resolve repeated original Shader key by per-owner/pathID payload and decompressed-program fingerprints; inspect original Material shader links"
   ],
-  "last_commit": "11b69cedb6f8905ce6603e7923cbc319d0c569be",
-  "next_step": "Inspect pinned proof run41745967644 (in_progress); then resolve one repeated original custom Shader key via owner/pathID/exportGUID before justified builtin gate correction. Native41741108965 failed; noAPK. No identical retry.",
+  "last_commit": "e0ba9100c163459bbfb5c9bed465895d1af8b09c",
+  "next_step": "CPU-only original object linkage probe. Pinned engine proof41745967644 SUCCESS. ExporterGUID is random; never invent deterministic original GUIDs.",
   "memory_path": "prompt/coordination/clients/raft-20261103T162900Z-73e8c2a1/MEMORY.md",
   "native_run_url": "https://github.com/alwansan/raf/actions/runs/41741108965",
   "source_proof_run_url": "https://github.com/alwansan/raf/actions/runs/41745779746",
