@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "owner": "B21",
+  "session_id": "20261104T2153Z-B21-72ab",
+  "issue_id": "RENDER-002",
+  "hypothesis": "First six original Unity scenes contain native Light components with stable, correctly owned typed color/intensity/range source data; establishes original dynamic-lighting baseline after original baked lightmaps absent.",
+  "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "input_hashes": [
+    "Six SHA256+size pinned original Raft_Data/level0..level5 from immutable ZIP2 manifest, exact mapping retained in scripts/b21_scene_lightmap_links.py"
+  ],
+  "tool_versions": {
+    "Python": "3.12",
+    "UnityPy": "1.23.0"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p 'test_b21_original_dynamic_lights.py' -v",
+    "python3 -m scripts.b21_original_dynamic_lights --source .source-zip2/Raft/Raft_Data --report $RUNNER_TEMP/b21-original-scene-dynamic-lights-aggregate.json"
+  ],
+  "negative_controls": [
+    "local owner present vs missing/external",
+    "malformed owner pointer is unknown",
+    "black, unit white, other finite, negative and NaN colors separated",
+    "nonfinite/bool/negative intensity untrusted",
+    "disabled light not counted enabled",
+    "duplicate native path IDs refused",
+    "original SHA tamper or symlink source refused before parsing"
+  ],
+  "workflow_path": ".github/workflows/raft-b21-scene-lightmap-links.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41922372594",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41922372594"
+  ],
+  "budget": "Reuses existing six small authenticated source files, Ubuntu24.04 standard hosted runner 6min synthetic and 12min source jobs; no Unity or APK build, no LFS.",
+  "status": "completed",
+  "observed_result": "CI41922372594 SUCCESS 16 previous + 18 new synthetic tests and six true ZIP2 source scene scans. level0 one Light component, level1 one Light, both enabled and local owner valid, finite non-white RGB with positive intensity/range; level2..level5 no native Light component observed. No original raw light values emitted.",
+  "rejected_hypotheses": [
+    "Six examined original scenes have no native Light components: rejected for level0/level1 (one each), not generalized beyond these six.",
+    "White visible objects necessarily mean absent baked Lightmap or all dynamic Light: not supported by original baseline."
+  ],
+  "limitations": [
+    "The original source having a Light does not prove actual same-instance exported Unity scene retained it, runtime enabled it, or produced identical pixels.",
+    "Other Unity illumination sources (reflection probes, ambient, materials and shaders) and 34 other scenes not examined.",
+    "No gameplay/source ShaderLab changes, no Unity or Android build or phone evidence."
+  ],
+  "integration_commit": "ba809982a01e7c3d2b412b24b9f675340d2d485a",
+  "next_step": "Use this original per-scene native Light baseline to compare matching exported scene Light IDs, enable/color/intensity/range, with authenticated provenance. Integrate precise mismatch correction only if proven; RENDER-002 still OPEN."
+}
