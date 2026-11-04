@@ -70,5 +70,81 @@
   "unity_shaderlab_installed": false,
   "android_executed": false,
   "private_original_names_disclosed": false,
-  "next_step": "Private original DXBC/SPIR-V reflection mapping CB0 source symbol to actual descriptor/register before authentic ShaderLab/HLSL alias, then compile on Unity and test Android."
+  "next_step": "Private original DXBC/SPIR-V reflection mapping CB0 source symbol to actual descriptor/register before authentic ShaderLab/HLSL alias, then compile on Unity and test Android.",
+  "input_hashes": [
+    "ZIP2 original provider commit 15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "Raft_Data/sharedassets0.assets bytes=115978112 sha256=0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "Foam PathID2420 raw sha256=67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1"
+  ],
+  "tool_versions": {
+    "Python": "ubuntu-24.04 hosted Python3",
+    "UnityPy": "1.25.4",
+    "original_b24_stage_shape_guard": "scripts.b24_original_foam_stage_translation.validate_stage"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_b25_foam_cb_namebridge.py -v",
+    "python3 -m unittest discover -s tests -p test_b25_foam_pass_state.py -v",
+    "python3 -m scripts.b25_foam_cb_namebridge --source $RUNNER_TEMP/b25-foam-source --report b25-aggregate/cb-namebridge.json"
+  ],
+  "negative_controls": [
+    "Original malformed/duplicated CB name/index registry",
+    "Bad ZIP2 shader identity and pass/stage count",
+    "Missing true CB source index/register mismatch",
+    "Wrong original pass1 CB0 vector count",
+    "Unsafe line/control symbols and private source leakage",
+    "Opaque CB0 compiler symbol must require independently verified HLSL alias"
+  ],
+  "workflow_path": ".github/workflows/raft-b25-foam-pass-state.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41928183838",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41928183838"
+  ],
+  "budget": "ubuntu-24.04 ordinary runner, 18min timeout, SHA-pinned ~116MB ZIP2 original-only, no LFS or full Unity/Android",
+  "observed_result": {
+    "passes": 2,
+    "stage_programs": 4,
+    "matching_original_cb_bindings": 8,
+    "original_pass_registry_entries": [
+      14,
+      8
+    ],
+    "cb_slots_by_stage": {
+      "vertex": [
+        0,
+        1,
+        2
+      ],
+      "fragment": [
+        0
+      ]
+    },
+    "referenced_cb_names_requiring_verified_alias": 4,
+    "cb_name_sha_by_register": {
+      "0": "812aa05b293f131a08f99707b3f8979993ac2a19acfce16a94d6da67cc993d06",
+      "1": "ea1518ee9277b12e444777ac75092b0525855de7c2dc06cd8b842ed446c74acd",
+      "2": "8cf6b4d3f239bcc59e67194ae749f6532862116484d759a7a5fe209ea34fafe4"
+    },
+    "cb_size_bytes": {
+      "0": 160,
+      "1": 176,
+      "2": 368
+    },
+    "cb0_vector_count_by_pass": [
+      2,
+      1
+    ],
+    "tests": {
+      "passed": 26,
+      "total": 26
+    },
+    "success": true,
+    "source_only": true,
+    "unity_or_android_verified": false
+  },
+  "limitations": [
+    "Original source CB index/slot and private name hashes do not establish GPU runtime binding",
+    "CB0 needs independently authenticated shader compiler alias",
+    "No Unity ShaderLab, original material GUID link, texture/sampler, GPU/Android proof"
+  ],
+  "integration_commit": "afc9a403db9e0c8db08bda9b7fd8df3b91a580ea"
 }
