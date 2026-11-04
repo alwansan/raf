@@ -733,6 +733,13 @@ Client `raft-20261103T145000Z-a1c92f74` completed **real numerical shader execut
 
 
 
+<!-- W3-UNNAMED-TARGET-SCHEMAS-20261104 -->
+## W3 unnamed-target schema enumeration — all 65 remaining targets; schema ledger 77/77 — 4 November 2026
+
+Ninth W3 step (client `raft-20261103T153100Z-b4d2c9e7`), pre-announced in [the scope message](coordination/discussions/RENDER-002/2026-11-04T150000Z-raft-20261103T153100Z-b4d2c9e7-scope-announcement-unnamed-target-schemas.md); completes the serialized schema story across every referenced target. New script `scripts/probe_w3_unnamed_target_schemas.py` (reproduces the committed step-7 artifact's 77-target reference map in-run, aborts on mismatch) + 4/4 model tests (all prior suites remain green); run exit 0 with 8/8 negative controls true. Artifact: [W3_UNNAMED_TARGET_SCHEMAS_2026-11-04.json](../docs/W3_UNNAMED_TARGET_SCHEMAS_2026-11-04.json) SHA `1ad595423c20f133d67ab76458a3c1e760e758ec97883a674699a2f95559fd4b` (name-free verified) + [report](../docs/W3_UNNAMED_TARGET_SCHEMAS_2026-11-04.md) + [result discussion](coordination/discussions/RENDER-002/2026-11-04T153500Z-raft-20261103T153100Z-b4d2c9e7-unnamed-target-schemas-result.md).
+
+Result: **77/77 referenced targets verified against the committed artifact; 12 previously-published named targets excluded; the remaining 65 unnamed targets schema'd (keys `owner:path_id`, commitments only) covering 240 material references; engine transports 16 fail-closed.** Distribution profiles: keyword-count mode 26 (18 targets) / 27 (16), span 4–33 elsewhere; texture-slot counts 0(6)–10(4); combined property histogram Texture 229 / Float 229 / Range 206 / Color 73 / **unknown 24** — out-of-enum property types counted fail-closed, never name-guessed; 0 targets with zero keywords, 6 targets with zero texture slots (existence now structurally accounted). Every one of the game's 77 referenced targets now has serialized schema coverage (11 by name from step 3, StandardVColor from step 8, 65 by commitments here) — complete closed-set input for W1's ShaderLab reconstruction. Interpreter honesty note: run used `python3.14` (UnityPy 1.25.4, same pinned version as all prior runs) after a host python3 preference change; the artifact records the actual interpreter. Serialized structure only; values/tints = W2, programs = W1, build/export = W4; **WATER-001/RENDER-002/FFT-FORMAT-009 remain OPEN, game NOT_READY, 0/3 reviews.**
+
 <!-- W3-SMALL-POPULATION-CENSUS-20261104 -->
 ## W3 small-population census — StandardVColor fully profiled; Standard base-variant population exactly 22 — 4 November 2026
 

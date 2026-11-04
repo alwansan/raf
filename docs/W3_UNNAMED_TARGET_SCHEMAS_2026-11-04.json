@@ -1,0 +1,1357 @@
+{
+  "negative_controls": {
+    "77_targets_accounted": true,
+    "empty_strings_never_committed": true,
+    "engine_refs_fail_closed_only": true,
+    "excluded_named_equals_12": true,
+    "no_values_or_colors_read": true,
+    "target_key_set_matches_step7": true,
+    "target_reference_map_matches_step7_committed": true,
+    "unnamed_equals_65": true
+  },
+  "owners": {
+    "globalgamemanagers.assets": {
+      "bytes": 758412,
+      "pinned": false,
+      "sha256": "b549af329d48244d80f28cb3cce6cd0b17769176081c249dc4646e1d62c58e28"
+    },
+    "level0": {
+      "bytes": 3927436,
+      "pinned": false,
+      "sha256": "33e7855a700ae0d90d04f50d8ea75ab6f14e9d5aa0314a32e91b96fb1f6a3a62"
+    },
+    "level1": {
+      "bytes": 2001504,
+      "pinned": false,
+      "sha256": "9ca3a83f4d8841d4052a4899d0855a2bb0fcc87d5378b8c50fb17902cd2418a0"
+    },
+    "level10": {
+      "bytes": 4915736,
+      "pinned": false,
+      "sha256": "2f058038da957e7ccd120767c6431b05331da694a1328d760ff5c60e52e6522b"
+    },
+    "level11": {
+      "bytes": 2515548,
+      "pinned": false,
+      "sha256": "38bee0a59f85f7be06650f92aebe7e9bd3dc90fea0062a7b22d64bd0fec8efc6"
+    },
+    "level12": {
+      "bytes": 6408532,
+      "pinned": false,
+      "sha256": "99529b95eb7231351604790f6c280bd48814c1b55d932d5ea77d33fe379f9542"
+    },
+    "level13": {
+      "bytes": 2176744,
+      "pinned": false,
+      "sha256": "ee814a41a2730f928b69965f67095f1fe1f9d12c4a666a03914a896b3cbd999d"
+    },
+    "level14": {
+      "bytes": 2161764,
+      "pinned": false,
+      "sha256": "59c97a1466b3ea12367312f45e4cf32d8effee4a3569d07a5e69f3828370aaf7"
+    },
+    "level15": {
+      "bytes": 2020260,
+      "pinned": false,
+      "sha256": "2fc77a305b478b3a3c94471fa7502ce72f6684486460930d668b155c7931a348"
+    },
+    "level16": {
+      "bytes": 1816296,
+      "pinned": false,
+      "sha256": "d84076456bd693c7bfd4f7413e3011bf378e61a2b2e64379181996cc03c740f9"
+    },
+    "level17": {
+      "bytes": 976896,
+      "pinned": false,
+      "sha256": "2b800cd36b0af51abd24366fff12da71e697d076394e474f627e846552e42235"
+    },
+    "level18": {
+      "bytes": 1181636,
+      "pinned": false,
+      "sha256": "7c3f8b466c51837ff5cc9a420d8b8797233aaa38fe334c1fac2f0437dc92c30e"
+    },
+    "level19": {
+      "bytes": 1312144,
+      "pinned": false,
+      "sha256": "6c725b9aff205589bc1d22d7bb36b8027bd42c39986986f10c59fe5f6dc98f5f"
+    },
+    "level2": {
+      "bytes": 22204,
+      "pinned": false,
+      "sha256": "3ed1e89bbdb4509af723fd6e7b37c4ffa0e92a8de548940e1fd7db6e90bf7c8b"
+    },
+    "level20": {
+      "bytes": 1318340,
+      "pinned": false,
+      "sha256": "569099da77a687652a52fc07bca52e97bbc348afc4ba9c5d261e7660e68d840f"
+    },
+    "level21": {
+      "bytes": 1435756,
+      "pinned": false,
+      "sha256": "ac474618209dcab566cec0f974fe0acfd5203df84026c49b29df59cc42cb71d3"
+    },
+    "level22": {
+      "bytes": 1516824,
+      "pinned": false,
+      "sha256": "e8775ebe247f3e8cb5c035090197009afda4454b11cdf6d65f6f876a32a4b06d"
+    },
+    "level23": {
+      "bytes": 1430612,
+      "pinned": false,
+      "sha256": "9c01895caf7e232c6d0c047d074f45a87f0e2419fab3cccf30e98ac4d66630f2"
+    },
+    "level24": {
+      "bytes": 2803016,
+      "pinned": false,
+      "sha256": "6a06f3e95da765e89ded81c13837cd3de5844969c131ea02e59c38dbda22fc5d"
+    },
+    "level25": {
+      "bytes": 8507616,
+      "pinned": false,
+      "sha256": "a1f194f103818a855ceabf317e333081517e3c6ad2b2e6b1611af2d69453dd31"
+    },
+    "level26": {
+      "bytes": 1153248,
+      "pinned": false,
+      "sha256": "e6b40ae4a8f86cbcef553230bd25e40b589e5b885adb49bf18644f37091f76cd"
+    },
+    "level27": {
+      "bytes": 1306904,
+      "pinned": false,
+      "sha256": "5e12b60b087367f3aa19ad66a906385bf4b592867bb7e7721e53997c847815be"
+    },
+    "level28": {
+      "bytes": 994008,
+      "pinned": false,
+      "sha256": "033ca631126eb09672d722deac7e2ce78f406c14bd131c6c886e99325d2f8fbe"
+    },
+    "level29": {
+      "bytes": 27323532,
+      "pinned": false,
+      "sha256": "7ce3680b92c90279f368e91837e3ae3558b67961c42062aa81776bf6085bd62b"
+    },
+    "level3": {
+      "bytes": 20388,
+      "pinned": false,
+      "sha256": "0bbeece712333cc3119995a7db34abe79a2c1a371825f559dc486b944a5031a4"
+    },
+    "level30": {
+      "bytes": 70435196,
+      "pinned": false,
+      "sha256": "53eb88c75c3a7d63333536e26b199dbfdcfd5ba8fb656ce843f24e45c3d9c94f"
+    },
+    "level31": {
+      "bytes": 2428320,
+      "pinned": false,
+      "sha256": "240fa2926afce581b03ae85cc09601c6ad8aec6aad9e2666253cb98bae3dfe2e"
+    },
+    "level32": {
+      "bytes": 1317544,
+      "pinned": false,
+      "sha256": "c527c55f9ee411b9db8d36cb4ab5d0b7f2e82a5f8c99388a1ef8b11307ea8da6"
+    },
+    "level33": {
+      "bytes": 2507592,
+      "pinned": false,
+      "sha256": "859a97705cb0570fcd8d4bd894c5b87e6b4c4f8e1e92752a16a43a7518b8126c"
+    },
+    "level34": {
+      "bytes": 52351536,
+      "pinned": false,
+      "sha256": "6ebcf37fe3d2c07305d1b8091b0284c213537e860e0ff068d9d8ea0692c749d4"
+    },
+    "level35": {
+      "bytes": 5678944,
+      "pinned": false,
+      "sha256": "b4a5e83f4b80a0be23603f4e38640364c801b567fc072b5a42aa234a3fe77a0e"
+    },
+    "level36": {
+      "bytes": 8235320,
+      "pinned": false,
+      "sha256": "8d312d883a44d0bde6ee68470c007b9a93a413c4d9babdd2b88b3449e0ae4041"
+    },
+    "level37": {
+      "bytes": 293840,
+      "pinned": false,
+      "sha256": "6b6276d92ef94d7729239c730525721e392e551c0d23a40cdb3b103e2cf3e1a6"
+    },
+    "level38": {
+      "bytes": 178892,
+      "pinned": false,
+      "sha256": "205515429d83c0e502987f6c917fadd56bf3e8d5af18f6b38e95059db54a2932"
+    },
+    "level39": {
+      "bytes": 202252,
+      "pinned": false,
+      "sha256": "8be4fd42f444ab37c58a4eef9ddb7e196bfde7ad186d9edf5cd2d9d4b2e0cf07"
+    },
+    "level4": {
+      "bytes": 30668,
+      "pinned": false,
+      "sha256": "a62b5ac7b80f8a906c9744ec457be8816663da4a2e8bb2a38924122448522511"
+    },
+    "level5": {
+      "bytes": 19496,
+      "pinned": false,
+      "sha256": "28875e384d1c470e9215f89de0ef1bd8f1ef155a78dcfaea47dcd3ca70dbadf1"
+    },
+    "level6": {
+      "bytes": 2470032,
+      "pinned": false,
+      "sha256": "fcafc8d31a023b539076bd64c08089a4d1b4d475fdf46b7aa20c76141c7b76c9"
+    },
+    "level7": {
+      "bytes": 38380,
+      "pinned": false,
+      "sha256": "40c9fa15c03e9f04997ba41dda6184cc890fd5401d0473dde8434d693c7e29f9"
+    },
+    "level8": {
+      "bytes": 3432968,
+      "pinned": false,
+      "sha256": "1e20c7c3508f03f3736c2b685e51359d7ef4ef59144bce695d7654c7ef8882ae"
+    },
+    "level9": {
+      "bytes": 4370048,
+      "pinned": false,
+      "sha256": "2d53731b5645722d985b3108e6714f5f56b65c2fddb4de33730fdbdd98cea46f"
+    },
+    "resources.assets": {
+      "bytes": 111533516,
+      "pin_verified": true,
+      "pinned": true,
+      "sha256": "87493249f1adfc0c5eb8b82e4e199e208cd2c95eabe9796cab82116c4838595c"
+    },
+    "sharedassets0.assets": {
+      "bytes": 115978112,
+      "pin_verified": true,
+      "pinned": true,
+      "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3"
+    },
+    "sharedassets1.assets": {
+      "bytes": 34888388,
+      "pinned": false,
+      "sha256": "c6bdf49f7d38ab060872fcb298770bc7113959f85ea2fd1a42dc663323d7660a"
+    },
+    "sharedassets10.assets": {
+      "bytes": 4912068,
+      "pinned": false,
+      "sha256": "acf445834adf92c0c9720055624a941270f3d728a4aca0264d736afb8358a313"
+    },
+    "sharedassets11.assets": {
+      "bytes": 3818268,
+      "pinned": false,
+      "sha256": "c29b47be055642500406c7f6e0cfad386a92875492406d1a848b68aa941ba7d6"
+    },
+    "sharedassets12.assets": {
+      "bytes": 4352984,
+      "pinned": false,
+      "sha256": "af58ae345e4e5f4e2bc49c21deb364f6c89acef8a4205b57133bf8d2790bad77"
+    },
+    "sharedassets13.assets": {
+      "bytes": 5001500,
+      "pinned": false,
+      "sha256": "c40e4bb2372b01d32a4edb199990a6f4e613e860816288e5fa8cd4e30a8d0188"
+    },
+    "sharedassets14.assets": {
+      "bytes": 3892416,
+      "pinned": false,
+      "sha256": "a81187215f53602d3ef03b9d09d4bbde6db32c573b32941f3ec7ef7005367c1f"
+    },
+    "sharedassets15.assets": {
+      "bytes": 3794788,
+      "pinned": false,
+      "sha256": "d95868e623fab88f26eaff553ad50597f14ab23d06cab92dacacd23df7a5a1db"
+    },
+    "sharedassets16.assets": {
+      "bytes": 3984744,
+      "pinned": false,
+      "sha256": "de85cd82aca1cc6931a11dc94a5e2ff9f485ca3d672d0c88fd25c813be7e3de8"
+    },
+    "sharedassets17.assets": {
+      "bytes": 3944220,
+      "pinned": false,
+      "sha256": "8eaba9948ad005eaef193838d5b215de871ce7fa4df013ec79e1084d47b392d6"
+    },
+    "sharedassets18.assets": {
+      "bytes": 3979640,
+      "pinned": false,
+      "sha256": "6c78fa11180cc1b0206e16864c48d4264932f042d862e2143a3a0300bfbefc13"
+    },
+    "sharedassets19.assets": {
+      "bytes": 3995944,
+      "pinned": false,
+      "sha256": "6a0563a7921edf26bcbf22dc1df9fe616a23159a62585fd0be6b9052d1a25895"
+    },
+    "sharedassets2.assets": {
+      "bytes": 260488,
+      "pinned": false,
+      "sha256": "eddf1dd6d3ef1da79c9ac216365203b9c9ba2e672a3a9d8cb83ba055edeb6aa8"
+    },
+    "sharedassets20.assets": {
+      "bytes": 3851064,
+      "pinned": false,
+      "sha256": "e5e82cf6155f692026c22804b90c1a55f4a3c27c3c32dd4104f72ce1b8aebbb1"
+    },
+    "sharedassets21.assets": {
+      "bytes": 3723112,
+      "pinned": false,
+      "sha256": "6060d8667c1799b50e7954b8c93c0132bedf41e540decc1998e646e48800225f"
+    },
+    "sharedassets22.assets": {
+      "bytes": 3809536,
+      "pinned": false,
+      "sha256": "b2e7b3489bf12c01075a678cf0f900311d3080cf5b76321549fafce8b4410581"
+    },
+    "sharedassets23.assets": {
+      "bytes": 3814852,
+      "pinned": false,
+      "sha256": "e9b84d43a3b85c5027149c91e037e272ada031e98e0bf6ce71aa59aad119be63"
+    },
+    "sharedassets24.assets": {
+      "bytes": 7987136,
+      "pinned": false,
+      "sha256": "a28921562b0d64a0c5aeddfabd7a50c2695d9e9422725c19df9c786f8fdd6bdc"
+    },
+    "sharedassets25.assets": {
+      "bytes": 17611892,
+      "pinned": false,
+      "sha256": "b29ec028607fe74f9b0ac6fe55d0e565e26b29ac520bd80732c5a3bc851f7f67"
+    },
+    "sharedassets26.assets": {
+      "bytes": 4715876,
+      "pinned": false,
+      "sha256": "ced979b94e37e2b53704ee452e89300e447f95a0b8375ce23450139a48f6c783"
+    },
+    "sharedassets27.assets": {
+      "bytes": 4915836,
+      "pinned": false,
+      "sha256": "24314ead4fe4255e15a818b5d162f1db6ff316ac3e28794409ebc6ee55e9d796"
+    },
+    "sharedassets28.assets": {
+      "bytes": 4214456,
+      "pinned": false,
+      "sha256": "8e520c05c667aab52cb816fbedd57d42eb23f078df7fdfeebc18457b79fbcbd9"
+    },
+    "sharedassets29.assets": {
+      "bytes": 9198256,
+      "pinned": false,
+      "sha256": "1d1e3e9047e5d67df2dade7f85e32ff2873f1d07dc75611ade3e7d4be2bd8e8e"
+    },
+    "sharedassets3.assets": {
+      "bytes": 207032,
+      "pinned": false,
+      "sha256": "098a20faae4859e8c875ece30df252958f2376cad4677cda314359bd17623435"
+    },
+    "sharedassets30.assets": {
+      "bytes": 19568972,
+      "pinned": false,
+      "sha256": "0cacdad92d1f1c94e9b8f4c971619851908a0305a0d32f66e6d67b8068320b26"
+    },
+    "sharedassets31.assets": {
+      "bytes": 4124548,
+      "pinned": false,
+      "sha256": "00f686f4f6e62d9059a47edd24434954f4d0b081b8205c9847e2e08ce93ab955"
+    },
+    "sharedassets32.assets": {
+      "bytes": 3909716,
+      "pinned": false,
+      "sha256": "8d472472cdc88e5c5d5436392418b53fce6286fd4aed38d24b4fc953f4d824bc"
+    },
+    "sharedassets33.assets": {
+      "bytes": 3867576,
+      "pinned": false,
+      "sha256": "4f0da67bb1594da4a529d598ce914ced3b0116e29ebdef0095d090035b6cc051"
+    },
+    "sharedassets34.assets": {
+      "bytes": 13612772,
+      "pinned": false,
+      "sha256": "c422af7ca6e4153ef9abe8e6522123ee089b82b90d85b29223db011987dcdb9e"
+    },
+    "sharedassets35.assets": {
+      "bytes": 26845236,
+      "pinned": false,
+      "sha256": "6e52bc4588605289c00b95dd3d4b2ad15a427c40c7f857ea52fb36a5d73a00e5"
+    },
+    "sharedassets36.assets": {
+      "bytes": 110149324,
+      "pinned": false,
+      "sha256": "b32fcd9d327c8926b2309ffc1b5645a0c23d64ed95be37ed94e96f34736530c8"
+    },
+    "sharedassets37.assets": {
+      "bytes": 5464060,
+      "pinned": false,
+      "sha256": "c93e4b7e9579a5385835b3b0fd85611402622f2f20d9b37e6171904202d1dd3f"
+    },
+    "sharedassets38.assets": {
+      "bytes": 4444508,
+      "pinned": false,
+      "sha256": "c9f6f9e5f2910ed830f7e4bd24a67729303cf878da4e2078f587c6568b596012"
+    },
+    "sharedassets39.assets": {
+      "bytes": 4309804,
+      "pinned": false,
+      "sha256": "218564a191697b42304780da2499b35aa923bebaf49cd4010c8e867dbcde793d"
+    },
+    "sharedassets4.assets": {
+      "bytes": 202985,
+      "pinned": false,
+      "sha256": "60604a93885faf4d7f3827f714e9238ce26ec0424b04e1ea9a80ded19a4f1066"
+    },
+    "sharedassets5.assets": {
+      "bytes": 202961,
+      "pinned": false,
+      "sha256": "2ab7aff3c64ac8c727d2eb215a221121be03062085ff26bd75c4d881d16a5d63"
+    },
+    "sharedassets6.assets": {
+      "bytes": 6607272,
+      "pinned": false,
+      "sha256": "0476792cfeffac19d16e920011ed8d2fb2da62973c2f09a8689bc59e1ac4b632"
+    },
+    "sharedassets7.assets": {
+      "bytes": 203045,
+      "pinned": false,
+      "sha256": "6a8e2f2dfe9eee79db739af8c57c5f571c3b9f4e221a6c498b3cc9129137a59f"
+    },
+    "sharedassets8.assets": {
+      "bytes": 9257796,
+      "pinned": false,
+      "sha256": "55477662f824670d0e38e8b9811e55850c7d25bb4e6aff837d08d933aa3e1823"
+    },
+    "sharedassets9.assets": {
+      "bytes": 4442272,
+      "pinned": false,
+      "sha256": "a7ce9c85095d19712100c61329f198a54ff0c8a077426c2acc4f2b96af13c54c"
+    }
+  },
+  "probe": "w3-unnamed-target-schemas",
+  "schema_version": 1,
+  "tool_versions": {
+    "python": "3.14.8",
+    "unitypy": "1.25.4"
+  },
+  "totals": {
+    "distinct_targets": 77,
+    "engine_transport_references": 16,
+    "material_references_covered_by_unnamed_schemas": 240,
+    "named_published_previously_excluded": 12,
+    "unnamed_schema_targets": 65
+  },
+  "unnamed_target_schemas": [
+    {
+      "keyword_count": 5,
+      "keywords_commitment": "2e88d1c9ee8c6080553d596a59fa396c6d9df2fd6af8097ce551e00c243c1ef3",
+      "material_references": 1,
+      "owner": "globalgamemanagers.assets",
+      "path_id": 12,
+      "property_type_histogram": {
+        "Texture": 1
+      },
+      "texture_slot_count": 1,
+      "texture_slots_commitment": "4c2f9d5f9f05746bcfc33b07c05f3e70520d5df4e24683a419c5c84eeef41f3e"
+    },
+    {
+      "keyword_count": 4,
+      "keywords_commitment": "ad4d395fd033f2962a0cb1c9162724baa736d1b0b4708a647dad474bc713323f",
+      "material_references": 1,
+      "owner": "globalgamemanagers.assets",
+      "path_id": 15,
+      "property_type_histogram": {},
+      "texture_slot_count": 0,
+      "texture_slots_commitment": null
+    },
+    {
+      "keyword_count": 7,
+      "keywords_commitment": "6a4898b077a61cc4184f0d343fb92bca992c43a38c1a5c82c00dc8140f0dd2ae",
+      "material_references": 2,
+      "owner": "resources.assets",
+      "path_id": 852,
+      "property_type_histogram": {
+        "Texture": 1
+      },
+      "texture_slot_count": 1,
+      "texture_slots_commitment": "4c2f9d5f9f05746bcfc33b07c05f3e70520d5df4e24683a419c5c84eeef41f3e"
+    },
+    {
+      "keyword_count": 4,
+      "keywords_commitment": "ad4d395fd033f2962a0cb1c9162724baa736d1b0b4708a647dad474bc713323f",
+      "material_references": 1,
+      "owner": "resources.assets",
+      "path_id": 853,
+      "property_type_histogram": {},
+      "texture_slot_count": 0,
+      "texture_slots_commitment": null
+    },
+    {
+      "keyword_count": 25,
+      "keywords_commitment": "112bd1b625eee584a9b1ffc94c294898cfa5504b1bf0134032cf59d07b7abc52",
+      "material_references": 3,
+      "owner": "resources.assets",
+      "path_id": 854,
+      "property_type_histogram": {
+        "Color": 1,
+        "Float": 3,
+        "Range": 2,
+        "Texture": 3
+      },
+      "texture_slot_count": 3,
+      "texture_slots_commitment": "1e89687fd877b843f11dfdb81db9772d46883509823d36d00548cab2f1d63f8d"
+    },
+    {
+      "keyword_count": 4,
+      "keywords_commitment": "ad4d395fd033f2962a0cb1c9162724baa736d1b0b4708a647dad474bc713323f",
+      "material_references": 1,
+      "owner": "resources.assets",
+      "path_id": 855,
+      "property_type_histogram": {
+        "Float": 1,
+        "Texture": 1
+      },
+      "texture_slot_count": 1,
+      "texture_slots_commitment": "4c2f9d5f9f05746bcfc33b07c05f3e70520d5df4e24683a419c5c84eeef41f3e"
+    },
+    {
+      "keyword_count": 5,
+      "keywords_commitment": "bc4b8661e3f416f4df8d7d951b956941601909c3cf6f029386a10ea1212854ef",
+      "material_references": 1,
+      "owner": "resources.assets",
+      "path_id": 865,
+      "property_type_histogram": {
+        "Float": 5,
+        "Texture": 1
+      },
+      "texture_slot_count": 1,
+      "texture_slots_commitment": "838f0ce1d7d5aedf0b63d6c2d9e12735715d6d0bd0aee611eeec801a80dca68a"
+    },
+    {
+      "keyword_count": 4,
+      "keywords_commitment": "ad4d395fd033f2962a0cb1c9162724baa736d1b0b4708a647dad474bc713323f",
+      "material_references": 1,
+      "owner": "resources.assets",
+      "path_id": 884,
+      "property_type_histogram": {
+        "Float": 5,
+        "Texture": 5
+      },
+      "texture_slot_count": 5,
+      "texture_slots_commitment": "be2607f13da866d11d5bf66b4df58bd8b6173c198b2dceeb291d68cb6c502b1c"
+    },
+    {
+      "keyword_count": 6,
+      "keywords_commitment": "d8cbfb35c73e9ba6aa24463fb14ec609a3cc547b37ff9f322db2c8725f4dfa3a",
+      "material_references": 1,
+      "owner": "resources.assets",
+      "path_id": 886,
+      "property_type_histogram": {
+        "Color": 1,
+        "Float": 7,
+        "Texture": 1,
+        "unknown": 1
+      },
+      "texture_slot_count": 1,
+      "texture_slots_commitment": "4c2f9d5f9f05746bcfc33b07c05f3e70520d5df4e24683a419c5c84eeef41f3e"
+    },
+    {
+      "keyword_count": 4,
+      "keywords_commitment": "ad4d395fd033f2962a0cb1c9162724baa736d1b0b4708a647dad474bc713323f",
+      "material_references": 1,
+      "owner": "resources.assets",
+      "path_id": 887,
+      "property_type_histogram": {
+        "Color": 1,
+        "Float": 1,
+        "Texture": 1
+      },
+      "texture_slot_count": 1,
+      "texture_slots_commitment": "4c2f9d5f9f05746bcfc33b07c05f3e70520d5df4e24683a419c5c84eeef41f3e"
+    },
+    {
+      "keyword_count": 13,
+      "keywords_commitment": "7e192ed415a1d7c2f250afff81939c79fe4d773314829294964fd0dfd9b17279",
+      "material_references": 23,
+      "owner": "resources.assets",
+      "path_id": 890,
+      "property_type_histogram": {
+        "Color": 3,
+        "Float": 6,
+        "Range": 5,
+        "Texture": 4,
+        "unknown": 1
+      },
+      "texture_slot_count": 4,
+      "texture_slots_commitment": "9d57d2f97bfee57da39b6671f6e047545432890bf6007bf3c72e1f1dd940bd0b"
+    },
+    {
+      "keyword_count": 27,
+      "keywords_commitment": "3283a4b3a79b19eca929dc34ddf989b4f29f1cc20e81c936db3de57370939a2a",
+      "material_references": 15,
+      "owner": "resources.assets",
+      "path_id": 895,
+      "property_type_histogram": {
+        "Color": 2,
+        "Float": 4,
+        "Range": 12,
+        "Texture": 5
+      },
+      "texture_slot_count": 5,
+      "texture_slots_commitment": "931a27f802e6ac1f7e2da251dc87bf734031b584ccafb7dd6ff303e85cf59617"
+    },
+    {
+      "keyword_count": 8,
+      "keywords_commitment": "e6898e927f0ea12f27c0ff386895a92426dcc0a67b9823f599d8861c5238938a",
+      "material_references": 4,
+      "owner": "sharedassets0.assets",
+      "path_id": 2400,
+      "property_type_histogram": {
+        "Color": 1,
+        "Range": 1,
+        "Texture": 1
+      },
+      "texture_slot_count": 1,
+      "texture_slots_commitment": "4c2f9d5f9f05746bcfc33b07c05f3e70520d5df4e24683a419c5c84eeef41f3e"
+    },
+    {
+      "keyword_count": 8,
+      "keywords_commitment": "e6898e927f0ea12f27c0ff386895a92426dcc0a67b9823f599d8861c5238938a",
+      "material_references": 2,
+      "owner": "sharedassets0.assets",
+      "path_id": 2401,
+      "property_type_histogram": {
+        "Range": 1,
+        "Texture": 1
+      },
+      "texture_slot_count": 1,
+      "texture_slots_commitment": "4c2f9d5f9f05746bcfc33b07c05f3e70520d5df4e24683a419c5c84eeef41f3e"
+    },
+    {
+      "keyword_count": 8,
+      "keywords_commitment": "e6898e927f0ea12f27c0ff386895a92426dcc0a67b9823f599d8861c5238938a",
+      "material_references": 1,
+      "owner": "sharedassets0.assets",
+      "path_id": 2402,
+      "property_type_histogram": {
+        "Color": 1,
+        "Range": 1,
+        "Texture": 1
+      },
+      "texture_slot_count": 1,
+      "texture_slots_commitment": "4c2f9d5f9f05746bcfc33b07c05f3e70520d5df4e24683a419c5c84eeef41f3e"
+    },
+    {
+      "keyword_count": 26,
+      "keywords_commitment": "c208cfa455c0faa9bb3c0158fc4a3525d7b5b535002d33cf55301e9df78eb34d",
+      "material_references": 2,
+      "owner": "sharedassets0.assets",
+      "path_id": 2403,
+      "property_type_histogram": {
+        "Color": 2,
+        "Float": 20,
+        "Range": 2,
+        "Texture": 3,
+        "unknown": 3
+      },
+      "texture_slot_count": 3,
+      "texture_slots_commitment": "3db06847016425f459f1e0c2374e9f14bdbe85b567fdc9c59f4e6cd4efdf1140"
+    },
+    {
+      "keyword_count": 19,
+      "keywords_commitment": "5594fa5d17c831a4d11faa8579d5cac4b0273df56b2b80f01e85ea607634526d",
+      "material_references": 1,
+      "owner": "sharedassets0.assets",
+      "path_id": 2404,
+      "property_type_histogram": {
+        "Color": 2,
+        "Float": 2,
+        "Texture": 2,
+        "unknown": 1
+      },
+      "texture_slot_count": 2,
+      "texture_slots_commitment": "c8d265225053d50658860acfa3858f2cadcdfe1e4e73885ec48215985e89af06"
+    },
+    {
+      "keyword_count": 27,
+      "keywords_commitment": "3283a4b3a79b19eca929dc34ddf989b4f29f1cc20e81c936db3de57370939a2a",
+      "material_references": 4,
+      "owner": "sharedassets0.assets",
+      "path_id": 2406,
+      "property_type_histogram": {
+        "Color": 5,
+        "Float": 9,
+        "Range": 9,
+        "Texture": 5
+      },
+      "texture_slot_count": 5,
+      "texture_slots_commitment": "7104f8ebeece2ba2d59a3d9dcccd3d6e467aa216bd6cbc1086f889c8d917137d"
+    },
+    {
+      "keyword_count": 26,
+      "keywords_commitment": "55d5155539e7bb65fea30068795eb0d7c29977c96d4c192f58664b49fbca7e91",
+      "material_references": 2,
+      "owner": "sharedassets0.assets",
+      "path_id": 2409,
+      "property_type_histogram": {
+        "Float": 2,
+        "Range": 1,
+        "Texture": 5
+      },
+      "texture_slot_count": 5,
+      "texture_slots_commitment": "d06e6c2810d975f5ed1865c28f4b22720fbcf8991b256f6846b68587c839a738"
+    },
+    {
+      "keyword_count": 26,
+      "keywords_commitment": "55d5155539e7bb65fea30068795eb0d7c29977c96d4c192f58664b49fbca7e91",
+      "material_references": 1,
+      "owner": "sharedassets0.assets",
+      "path_id": 2410,
+      "property_type_histogram": {
+        "Color": 2,
+        "Float": 1,
+        "Range": 4,
+        "Texture": 6
+      },
+      "texture_slot_count": 6,
+      "texture_slots_commitment": "2ba33d6f43b6d10466de876cee4082618222ca8d70360256b69dd23d6e000835"
+    },
+    {
+      "keyword_count": 26,
+      "keywords_commitment": "55d5155539e7bb65fea30068795eb0d7c29977c96d4c192f58664b49fbca7e91",
+      "material_references": 1,
+      "owner": "sharedassets0.assets",
+      "path_id": 2411,
+      "property_type_histogram": {
+        "Float": 2,
+        "Range": 2,
+        "Texture": 4
+      },
+      "texture_slot_count": 4,
+      "texture_slots_commitment": "a87dd0fb795e39d4dea332d1fb55336fa3a6d0d2dd761c7bedde977fd56dfe2c"
+    },
+    {
+      "keyword_count": 26,
+      "keywords_commitment": "55d5155539e7bb65fea30068795eb0d7c29977c96d4c192f58664b49fbca7e91",
+      "material_references": 1,
+      "owner": "sharedassets0.assets",
+      "path_id": 2412,
+      "property_type_histogram": {
+        "Color": 2,
+        "Range": 2,
+        "Texture": 4
+      },
+      "texture_slot_count": 4,
+      "texture_slots_commitment": "4f70d92a3f12ea5bd6d87dc43c8a95d34f99550191452b50bbe77166211e46d8"
+    },
+    {
+      "keyword_count": 26,
+      "keywords_commitment": "55d5155539e7bb65fea30068795eb0d7c29977c96d4c192f58664b49fbca7e91",
+      "material_references": 2,
+      "owner": "sharedassets0.assets",
+      "path_id": 2415,
+      "property_type_histogram": {
+        "Float": 3,
+        "Range": 2,
+        "Texture": 6
+      },
+      "texture_slot_count": 6,
+      "texture_slots_commitment": "3894e747652895e8f3446c6679cd16405d02e463a5b332c5668c2ac2c1380a7c"
+    },
+    {
+      "keyword_count": 26,
+      "keywords_commitment": "55d5155539e7bb65fea30068795eb0d7c29977c96d4c192f58664b49fbca7e91",
+      "material_references": 3,
+      "owner": "sharedassets0.assets",
+      "path_id": 2421,
+      "property_type_histogram": {
+        "Float": 4,
+        "Range": 3,
+        "Texture": 4
+      },
+      "texture_slot_count": 4,
+      "texture_slots_commitment": "b8ef4a53815f7bd4e8ebefb994cf931c1b25bae52f4e33c0ebf1e7aeb37f0e2c"
+    },
+    {
+      "keyword_count": 27,
+      "keywords_commitment": "3283a4b3a79b19eca929dc34ddf989b4f29f1cc20e81c936db3de57370939a2a",
+      "material_references": 1,
+      "owner": "sharedassets0.assets",
+      "path_id": 2422,
+      "property_type_histogram": {
+        "Color": 1,
+        "Float": 4,
+        "Range": 11,
+        "Texture": 4
+      },
+      "texture_slot_count": 4,
+      "texture_slots_commitment": "b8ef4a53815f7bd4e8ebefb994cf931c1b25bae52f4e33c0ebf1e7aeb37f0e2c"
+    },
+    {
+      "keyword_count": 27,
+      "keywords_commitment": "3283a4b3a79b19eca929dc34ddf989b4f29f1cc20e81c936db3de57370939a2a",
+      "material_references": 3,
+      "owner": "sharedassets0.assets",
+      "path_id": 2427,
+      "property_type_histogram": {
+        "Color": 2,
+        "Float": 1,
+        "Range": 1
+      },
+      "texture_slot_count": 0,
+      "texture_slots_commitment": null
+    },
+    {
+      "keyword_count": 20,
+      "keywords_commitment": "fc10a8d62379d08c50db87108782b5c3ec8490e9cc8f121d6aaab45eba4e8929",
+      "material_references": 5,
+      "owner": "sharedassets0.assets",
+      "path_id": 2429,
+      "property_type_histogram": {
+        "Color": 1,
+        "Float": 1,
+        "Range": 2,
+        "Texture": 2
+      },
+      "texture_slot_count": 2,
+      "texture_slots_commitment": "cb883010af25475d0a86747a6e8b997e05c5c3fd92713a6c82b44646c638dede"
+    },
+    {
+      "keyword_count": 27,
+      "keywords_commitment": "3283a4b3a79b19eca929dc34ddf989b4f29f1cc20e81c936db3de57370939a2a",
+      "material_references": 10,
+      "owner": "sharedassets0.assets",
+      "path_id": 2430,
+      "property_type_histogram": {
+        "Color": 1,
+        "Float": 4,
+        "Texture": 4
+      },
+      "texture_slot_count": 4,
+      "texture_slots_commitment": "56d3185329027e8ee9df34fe2b49f9ba3c3a7e7e189b5a7478049d5e611c735a"
+    },
+    {
+      "keyword_count": 11,
+      "keywords_commitment": "b3748b8001ce649d571937b5d3628d71d51fc276fff7e8227521c3b2a5306713",
+      "material_references": 4,
+      "owner": "sharedassets0.assets",
+      "path_id": 2433,
+      "property_type_histogram": {
+        "Color": 7,
+        "Float": 21,
+        "Range": 28,
+        "Texture": 5,
+        "unknown": 3
+      },
+      "texture_slot_count": 5,
+      "texture_slots_commitment": "8466ff73d53ddb753282e89ce7155ef9ef87ba04fc77a5d67e9b52650dd666f3"
+    },
+    {
+      "keyword_count": 26,
+      "keywords_commitment": "234768733b412479dbe8d7bef0b2033e987df90de1772e6413469dd06f07dff4",
+      "material_references": 7,
+      "owner": "sharedassets0.assets",
+      "path_id": 2434,
+      "property_type_histogram": {
+        "Color": 1,
+        "Float": 3,
+        "Range": 4,
+        "Texture": 4
+      },
+      "texture_slot_count": 4,
+      "texture_slots_commitment": "b8ef4a53815f7bd4e8ebefb994cf931c1b25bae52f4e33c0ebf1e7aeb37f0e2c"
+    },
+    {
+      "keyword_count": 26,
+      "keywords_commitment": "55d5155539e7bb65fea30068795eb0d7c29977c96d4c192f58664b49fbca7e91",
+      "material_references": 5,
+      "owner": "sharedassets0.assets",
+      "path_id": 2438,
+      "property_type_histogram": {
+        "Color": 1,
+        "Float": 2,
+        "Range": 1,
+        "Texture": 5
+      },
+      "texture_slot_count": 5,
+      "texture_slots_commitment": "931a27f802e6ac1f7e2da251dc87bf734031b584ccafb7dd6ff303e85cf59617"
+    },
+    {
+      "keyword_count": 26,
+      "keywords_commitment": "55d5155539e7bb65fea30068795eb0d7c29977c96d4c192f58664b49fbca7e91",
+      "material_references": 4,
+      "owner": "sharedassets0.assets",
+      "path_id": 2441,
+      "property_type_histogram": {
+        "Color": 1,
+        "Float": 1,
+        "Range": 4,
+        "Texture": 3
+      },
+      "texture_slot_count": 3,
+      "texture_slots_commitment": "9867c28f18ada7a921225b6e30d74d076271017c5762de12a684e7a3da218be4"
+    },
+    {
+      "keyword_count": 8,
+      "keywords_commitment": "e6898e927f0ea12f27c0ff386895a92426dcc0a67b9823f599d8861c5238938a",
+      "material_references": 2,
+      "owner": "sharedassets0.assets",
+      "path_id": 2442,
+      "property_type_histogram": {
+        "Color": 1,
+        "Float": 3,
+        "Range": 7,
+        "Texture": 2
+      },
+      "texture_slot_count": 2,
+      "texture_slots_commitment": "4fe2d0ca10b898310fd922c32a808fc5e61ffc555052cb23ae9bdf8b7f7017af"
+    },
+    {
+      "keyword_count": 27,
+      "keywords_commitment": "3283a4b3a79b19eca929dc34ddf989b4f29f1cc20e81c936db3de57370939a2a",
+      "material_references": 2,
+      "owner": "sharedassets0.assets",
+      "path_id": 2443,
+      "property_type_histogram": {
+        "Color": 3,
+        "Float": 6,
+        "Range": 3,
+        "Texture": 9
+      },
+      "texture_slot_count": 9,
+      "texture_slots_commitment": "9e8e1054356ba07389fe4c17909b045f5de475fe20fd0f1ce43ef9cc4d73812f"
+    },
+    {
+      "keyword_count": 26,
+      "keywords_commitment": "55d5155539e7bb65fea30068795eb0d7c29977c96d4c192f58664b49fbca7e91",
+      "material_references": 1,
+      "owner": "sharedassets0.assets",
+      "path_id": 2444,
+      "property_type_histogram": {
+        "Float": 1,
+        "Range": 1,
+        "Texture": 4
+      },
+      "texture_slot_count": 4,
+      "texture_slots_commitment": "165bba244b9cb3f2db3097079dcca51bc6ad53fce6c4c64ad5f6ab2daa4ec1a0"
+    },
+    {
+      "keyword_count": 26,
+      "keywords_commitment": "55d5155539e7bb65fea30068795eb0d7c29977c96d4c192f58664b49fbca7e91",
+      "material_references": 9,
+      "owner": "sharedassets0.assets",
+      "path_id": 2448,
+      "property_type_histogram": {
+        "Color": 1,
+        "Float": 1,
+        "Range": 1,
+        "Texture": 4
+      },
+      "texture_slot_count": 4,
+      "texture_slots_commitment": "731d6eafc6f953a3e199a761bcb665d844d5e19432da821dbc150f30677741e2"
+    },
+    {
+      "keyword_count": 20,
+      "keywords_commitment": "cb4865d4b73950eb02cb7199ff137ebf305060d6d86a3397cd87275819ea5ddc",
+      "material_references": 1,
+      "owner": "sharedassets0.assets",
+      "path_id": 2452,
+      "property_type_histogram": {
+        "Color": 1,
+        "Float": 2,
+        "Range": 5,
+        "Texture": 1
+      },
+      "texture_slot_count": 1,
+      "texture_slots_commitment": "4c2f9d5f9f05746bcfc33b07c05f3e70520d5df4e24683a419c5c84eeef41f3e"
+    },
+    {
+      "keyword_count": 18,
+      "keywords_commitment": "10971dd85a45a004e135e1d243dad2f2cb37773f5610569eac54892a1fdce7f5",
+      "material_references": 8,
+      "owner": "sharedassets0.assets",
+      "path_id": 2454,
+      "property_type_histogram": {
+        "Color": 6,
+        "Float": 13,
+        "Range": 21,
+        "Texture": 5,
+        "unknown": 1
+      },
+      "texture_slot_count": 5,
+      "texture_slots_commitment": "8466ff73d53ddb753282e89ce7155ef9ef87ba04fc77a5d67e9b52650dd666f3"
+    },
+    {
+      "keyword_count": 9,
+      "keywords_commitment": "3d9600706684190260ee75aee76685e18047bd5c73152edd33ffd1d90403f4ed",
+      "material_references": 3,
+      "owner": "sharedassets0.assets",
+      "path_id": 2455,
+      "property_type_histogram": {
+        "Color": 3,
+        "Float": 21,
+        "Range": 8,
+        "Texture": 1,
+        "unknown": 1
+      },
+      "texture_slot_count": 1,
+      "texture_slots_commitment": "4c2f9d5f9f05746bcfc33b07c05f3e70520d5df4e24683a419c5c84eeef41f3e"
+    },
+    {
+      "keyword_count": 5,
+      "keywords_commitment": "984c00602a04d605badd5af6829625716742d1bf114fea872b5ebb573d5527dd",
+      "material_references": 1,
+      "owner": "sharedassets1.assets",
+      "path_id": 706,
+      "property_type_histogram": {
+        "Range": 1,
+        "Texture": 1
+      },
+      "texture_slot_count": 1,
+      "texture_slots_commitment": "4c2f9d5f9f05746bcfc33b07c05f3e70520d5df4e24683a419c5c84eeef41f3e"
+    },
+    {
+      "keyword_count": 27,
+      "keywords_commitment": "be3810f7fcf66489fae24a5ee01ada951b0ca25ffb0214e5d40bd1b3d009fde6",
+      "material_references": 1,
+      "owner": "sharedassets1.assets",
+      "path_id": 718,
+      "property_type_histogram": {
+        "Range": 2,
+        "Texture": 10,
+        "unknown": 3
+      },
+      "texture_slot_count": 10,
+      "texture_slots_commitment": "5918feee8b98161b610cd5a2285e63b55a4dd62f0a42e2c8af17fc0ce3707838"
+    },
+    {
+      "keyword_count": 20,
+      "keywords_commitment": "fc10a8d62379d08c50db87108782b5c3ec8490e9cc8f121d6aaab45eba4e8929",
+      "material_references": 4,
+      "owner": "sharedassets1.assets",
+      "path_id": 719,
+      "property_type_histogram": {
+        "Float": 5,
+        "Range": 1,
+        "Texture": 2
+      },
+      "texture_slot_count": 2,
+      "texture_slots_commitment": "7e0db19dc5bbaa119905ccd07801c4d4fbf8a3a9cfae5c0fca65de135b3c3ddd"
+    },
+    {
+      "keyword_count": 7,
+      "keywords_commitment": "6a4898b077a61cc4184f0d343fb92bca992c43a38c1a5c82c00dc8140f0dd2ae",
+      "material_references": 1,
+      "owner": "sharedassets1.assets",
+      "path_id": 720,
+      "property_type_histogram": {},
+      "texture_slot_count": 0,
+      "texture_slots_commitment": null
+    },
+    {
+      "keyword_count": 27,
+      "keywords_commitment": "3283a4b3a79b19eca929dc34ddf989b4f29f1cc20e81c936db3de57370939a2a",
+      "material_references": 3,
+      "owner": "sharedassets1.assets",
+      "path_id": 721,
+      "property_type_histogram": {
+        "Float": 6,
+        "Range": 4,
+        "Texture": 5
+      },
+      "texture_slot_count": 5,
+      "texture_slots_commitment": "931a27f802e6ac1f7e2da251dc87bf734031b584ccafb7dd6ff303e85cf59617"
+    },
+    {
+      "keyword_count": 26,
+      "keywords_commitment": "cae9311394f9fc876e672f06bae0ac9c18191c1190fad64eaa51dec4e115cfef",
+      "material_references": 1,
+      "owner": "sharedassets1.assets",
+      "path_id": 722,
+      "property_type_histogram": {
+        "Color": 2,
+        "Float": 1,
+        "Range": 2,
+        "Texture": 1
+      },
+      "texture_slot_count": 1,
+      "texture_slots_commitment": "4c2f9d5f9f05746bcfc33b07c05f3e70520d5df4e24683a419c5c84eeef41f3e"
+    },
+    {
+      "keyword_count": 27,
+      "keywords_commitment": "be3810f7fcf66489fae24a5ee01ada951b0ca25ffb0214e5d40bd1b3d009fde6",
+      "material_references": 1,
+      "owner": "sharedassets1.assets",
+      "path_id": 724,
+      "property_type_histogram": {
+        "Range": 2,
+        "Texture": 10,
+        "unknown": 2
+      },
+      "texture_slot_count": 10,
+      "texture_slots_commitment": "5918feee8b98161b610cd5a2285e63b55a4dd62f0a42e2c8af17fc0ce3707838"
+    },
+    {
+      "keyword_count": 7,
+      "keywords_commitment": "6a4898b077a61cc4184f0d343fb92bca992c43a38c1a5c82c00dc8140f0dd2ae",
+      "material_references": 1,
+      "owner": "sharedassets1.assets",
+      "path_id": 726,
+      "property_type_histogram": {},
+      "texture_slot_count": 0,
+      "texture_slots_commitment": null
+    },
+    {
+      "keyword_count": 5,
+      "keywords_commitment": "84883fc1a915d2c93c53429e39cd6dc1d32ecf31f7bc56f89a3dd77370d46e72",
+      "material_references": 6,
+      "owner": "sharedassets1.assets",
+      "path_id": 727,
+      "property_type_histogram": {
+        "Color": 4,
+        "Float": 3,
+        "Texture": 1
+      },
+      "texture_slot_count": 1,
+      "texture_slots_commitment": "4c2f9d5f9f05746bcfc33b07c05f3e70520d5df4e24683a419c5c84eeef41f3e"
+    },
+    {
+      "keyword_count": 26,
+      "keywords_commitment": "234768733b412479dbe8d7bef0b2033e987df90de1772e6413469dd06f07dff4",
+      "material_references": 1,
+      "owner": "sharedassets1.assets",
+      "path_id": 729,
+      "property_type_histogram": {
+        "Float": 3,
+        "Range": 1,
+        "Texture": 2
+      },
+      "texture_slot_count": 2,
+      "texture_slots_commitment": "7e0db19dc5bbaa119905ccd07801c4d4fbf8a3a9cfae5c0fca65de135b3c3ddd"
+    },
+    {
+      "keyword_count": 26,
+      "keywords_commitment": "55d5155539e7bb65fea30068795eb0d7c29977c96d4c192f58664b49fbca7e91",
+      "material_references": 7,
+      "owner": "sharedassets24.assets",
+      "path_id": 660,
+      "property_type_histogram": {
+        "Color": 1,
+        "Float": 3,
+        "Texture": 5
+      },
+      "texture_slot_count": 5,
+      "texture_slots_commitment": "cbbbdfae5a71a21454cdb6265d196a8805291610ccc91994d4cddd9b847be632"
+    },
+    {
+      "keyword_count": 21,
+      "keywords_commitment": "28e0395577d0554b6c58ca45de79c4ef675b704e788c230c9a2fbc08995d22e3",
+      "material_references": 3,
+      "owner": "sharedassets29.assets",
+      "path_id": 574,
+      "property_type_histogram": {
+        "Color": 2,
+        "Float": 5,
+        "Texture": 1
+      },
+      "texture_slot_count": 1,
+      "texture_slots_commitment": "a51163284d4c2c79a95d6e55aef315c5fac22e11206ffda741a39dfa9fc8e382"
+    },
+    {
+      "keyword_count": 27,
+      "keywords_commitment": "3283a4b3a79b19eca929dc34ddf989b4f29f1cc20e81c936db3de57370939a2a",
+      "material_references": 10,
+      "owner": "sharedassets29.assets",
+      "path_id": 575,
+      "property_type_histogram": {
+        "Float": 1,
+        "Range": 6,
+        "Texture": 8
+      },
+      "texture_slot_count": 8,
+      "texture_slots_commitment": "340a98369a8274fcab97e8ddbe813cb963f3801a934aef1be1843f912810684b"
+    },
+    {
+      "keyword_count": 27,
+      "keywords_commitment": "be3810f7fcf66489fae24a5ee01ada951b0ca25ffb0214e5d40bd1b3d009fde6",
+      "material_references": 1,
+      "owner": "sharedassets29.assets",
+      "path_id": 576,
+      "property_type_histogram": {
+        "Range": 2,
+        "Texture": 10,
+        "unknown": 2
+      },
+      "texture_slot_count": 10,
+      "texture_slots_commitment": "5918feee8b98161b610cd5a2285e63b55a4dd62f0a42e2c8af17fc0ce3707838"
+    },
+    {
+      "keyword_count": 31,
+      "keywords_commitment": "f8c3456bf850162b2267d10457692e2d5c1148059d1f38e1e35fda954ea54cb7",
+      "material_references": 1,
+      "owner": "sharedassets30.assets",
+      "path_id": 1047,
+      "property_type_histogram": {
+        "Color": 2,
+        "Float": 19,
+        "Range": 4,
+        "Texture": 4,
+        "unknown": 2
+      },
+      "texture_slot_count": 4,
+      "texture_slots_commitment": "c3d0bc5d88ee728c5c90b9fbeb8ea84edabdab21c2a8d3a19f97af942f3b7690"
+    },
+    {
+      "keyword_count": 20,
+      "keywords_commitment": "fc10a8d62379d08c50db87108782b5c3ec8490e9cc8f121d6aaab45eba4e8929",
+      "material_references": 1,
+      "owner": "sharedassets34.assets",
+      "path_id": 695,
+      "property_type_histogram": {
+        "Color": 1,
+        "Float": 1,
+        "Texture": 2
+      },
+      "texture_slot_count": 2,
+      "texture_slots_commitment": "7e0db19dc5bbaa119905ccd07801c4d4fbf8a3a9cfae5c0fca65de135b3c3ddd"
+    },
+    {
+      "keyword_count": 27,
+      "keywords_commitment": "3283a4b3a79b19eca929dc34ddf989b4f29f1cc20e81c936db3de57370939a2a",
+      "material_references": 1,
+      "owner": "sharedassets35.assets",
+      "path_id": 938,
+      "property_type_histogram": {
+        "Float": 6,
+        "Range": 1,
+        "Texture": 5
+      },
+      "texture_slot_count": 5,
+      "texture_slots_commitment": "7a6110cecd5774f068e3e412235b2979c4c467e6480f36b0fa08c9878f982347"
+    },
+    {
+      "keyword_count": 27,
+      "keywords_commitment": "be3810f7fcf66489fae24a5ee01ada951b0ca25ffb0214e5d40bd1b3d009fde6",
+      "material_references": 1,
+      "owner": "sharedassets35.assets",
+      "path_id": 939,
+      "property_type_histogram": {
+        "Range": 2,
+        "Texture": 10,
+        "unknown": 3
+      },
+      "texture_slot_count": 10,
+      "texture_slots_commitment": "5918feee8b98161b610cd5a2285e63b55a4dd62f0a42e2c8af17fc0ce3707838"
+    },
+    {
+      "keyword_count": 27,
+      "keywords_commitment": "3283a4b3a79b19eca929dc34ddf989b4f29f1cc20e81c936db3de57370939a2a",
+      "material_references": 1,
+      "owner": "sharedassets36.assets",
+      "path_id": 879,
+      "property_type_histogram": {
+        "Color": 1,
+        "Float": 4,
+        "Range": 9,
+        "Texture": 5
+      },
+      "texture_slot_count": 5,
+      "texture_slots_commitment": "4f2983cb29d5918514bac7be9769a44736f98cbc602ee0ac2b40d5cff3e0526c"
+    },
+    {
+      "keyword_count": 27,
+      "keywords_commitment": "3283a4b3a79b19eca929dc34ddf989b4f29f1cc20e81c936db3de57370939a2a",
+      "material_references": 17,
+      "owner": "sharedassets6.assets",
+      "path_id": 229,
+      "property_type_histogram": {
+        "Float": 3,
+        "Range": 6,
+        "Texture": 6
+      },
+      "texture_slot_count": 6,
+      "texture_slots_commitment": "5335d117aac238c59d1bfcd479e98717c5a431553b7cf68d8f005eaac82c1cc1"
+    },
+    {
+      "keyword_count": 26,
+      "keywords_commitment": "55d5155539e7bb65fea30068795eb0d7c29977c96d4c192f58664b49fbca7e91",
+      "material_references": 11,
+      "owner": "sharedassets6.assets",
+      "path_id": 230,
+      "property_type_histogram": {
+        "Color": 1,
+        "Float": 3,
+        "Texture": 4,
+        "unknown": 1
+      },
+      "texture_slot_count": 4,
+      "texture_slots_commitment": "a2ef9365185b62797bbce6f549b27ce7b56759c511637ec640130ad95b8cb924"
+    },
+    {
+      "keyword_count": 27,
+      "keywords_commitment": "3283a4b3a79b19eca929dc34ddf989b4f29f1cc20e81c936db3de57370939a2a",
+      "material_references": 5,
+      "owner": "sharedassets6.assets",
+      "path_id": 231,
+      "property_type_histogram": {
+        "Float": 2,
+        "Range": 5,
+        "Texture": 9
+      },
+      "texture_slot_count": 9,
+      "texture_slots_commitment": "efffd643e29c9725b0381d9336f30c39938057a8109cc6ba6e0ae2dc87dfe28e"
+    },
+    {
+      "keyword_count": 33,
+      "keywords_commitment": "8a54524c3d5dac6bc9ddd6e6b1ae3808d48d9035f419d93feebe63b032ef5baf",
+      "material_references": 11,
+      "owner": "sharedassets8.assets",
+      "path_id": 104,
+      "property_type_histogram": {
+        "Color": 2,
+        "Float": 1,
+        "Range": 2,
+        "Texture": 3
+      },
+      "texture_slot_count": 3,
+      "texture_slots_commitment": "85056af19af135f30b0428518d3396f8f4a64c2cd3aa29f3f5207aaf6141e9ef"
+    },
+    {
+      "keyword_count": 26,
+      "keywords_commitment": "445060476c877a3b88cf7e77c51973a6cef3bb7698875d155dd7f8906640f51c",
+      "material_references": 4,
+      "owner": "sharedassets8.assets",
+      "path_id": 105,
+      "property_type_histogram": {
+        "Color": 2,
+        "Range": 2,
+        "Texture": 2
+      },
+      "texture_slot_count": 2,
+      "texture_slots_commitment": "11793d08ec734a63eec929905867e9d351e8c117f6533c9e414b12e4211d22bd"
+    },
+    {
+      "keyword_count": 26,
+      "keywords_commitment": "55d5155539e7bb65fea30068795eb0d7c29977c96d4c192f58664b49fbca7e91",
+      "material_references": 5,
+      "owner": "sharedassets8.assets",
+      "path_id": 106,
+      "property_type_histogram": {
+        "Float": 3,
+        "Range": 6,
+        "Texture": 5
+      },
+      "texture_slot_count": 5,
+      "texture_slots_commitment": "931a27f802e6ac1f7e2da251dc87bf734031b584ccafb7dd6ff303e85cf59617"
+    },
+    {
+      "keyword_count": 7,
+      "keywords_commitment": "7e80228393223e5a28cab618f88bb5bfca1ca0a1c6e42c004a0a8b9b44d78000",
+      "material_references": 1,
+      "owner": "sharedassets9.assets",
+      "path_id": 21,
+      "property_type_histogram": {
+        "Color": 2,
+        "Float": 1,
+        "Range": 4
+      },
+      "texture_slot_count": 0,
+      "texture_slots_commitment": null
+    }
+  ]
+}
