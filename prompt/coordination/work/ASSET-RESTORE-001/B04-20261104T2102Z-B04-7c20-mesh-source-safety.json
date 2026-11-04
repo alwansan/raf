@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "owner": "B04",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2102Z-B04-7c20",
+  "issue_id": "ASSET-RESTORE-001",
+  "track": "resources",
+  "approach": "Fail closed on symlinked original/exported mesh YAML or .meta before reading/copying/writing; keep verified source and GUID fidelity.",
+  "status": "active",
+  "base_sha": null,
+  "intended_files": [
+    "scripts/repair_exported_mesh_vertices.py",
+    "tests/test_repair_exported_mesh_vertices.py",
+    ".github/workflows/raft-b04-mesh-source-safety.yml",
+    "docs/B04_MESH_SOURCE_PATH_SAFETY_2026-11-04.md"
+  ],
+  "hypothesis": "index_export currently follows symlink to asset content and repair follows symlink to asset .meta; unsafe external data may be loaded/written during restoration.",
+  "related_work": [
+    "scripts/repair_exported_mesh_vertices.py",
+    "docs/ZIP2_SOURCE_PROVIDER.md"
+  ],
+  "experiment_ids": [],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Add pre-read symlink/metafiles guard and adversarial negative controls; bounded isolated CI, not full Unity build.",
+  "updated_at": "2026-11-04T21:14:58.288Z"
+}
