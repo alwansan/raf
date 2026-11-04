@@ -1,3 +1,10 @@
+# B02 latest integration checkpoint — 4 November 2026
+
+- [CI41927008905](https://github.com/alwansan/raf/actions/runs/41927008905) SUCCESS16/16: strict nested TextureImporter.mipmaps.sRGBTexture importer parsing and reuse of the B15 class28 same-export trace, with SHA-authenticated original m_ColorSpace read rather than a supplied color assertion.
+- [CI41927712988](https://github.com/alwansan/raf/actions/runs/41927712988) SUCCESS: six staging safety tests and actual .NET9 pinned AssetRipper publish/smoke of optional class28 trace compiled at 477344ea3a903736761ffd4e9dd534604d08bc89. See [B02 trace handoff](B02_TEXTURE_EXPORT_LINEAGE_HOOK_2026-11-04.md).
+- The B02 tool remains READ-ONLY with --repair disabled; real Raft original texture bytes, exported same-instance GUID witness, Unity/Android pixels remain UNTESTED; RENDER-002 OPEN / NOT_READY, 0/3.
+
+---
 # B02 correction — conflicting source import policies (supersedes earlier repair claim)
 
 **SAFETY UPDATE:** The original B02 mapping/repair routine is **superseded and deliberately disabled**. Pinned [AssetRipperCLI ImporterFactory.cs](https://github.com/nowl-it/AssetRipperCLI/blob/036098ab525a3f9f693dc101edeb21faad4d32d8/Source/AssetRipper.Export.UnityProjects/Textures/ImporterFactory.cs) from exporter source SHA 036098ab assigns `TextureImporter.sRGBTexture` when `Texture2D.ColorSpace_C28E == ColorSpace.Linear` (serialized enum1). B02's earlier assumption set sRGB for enum0 instead. Unity's [TextureImporter.sRGBTexture documentation](https://docs.unity.com/en-us/engine/6000.6/script-reference/unityeditor/textureimporter/srgbtexture) explains how color textures and data textures require different sampling, but does NOT establish original exported bytes/Unity property semantics for each Raft texture. **Neither policy may be auto-applied to game assets from the current evidence.**
