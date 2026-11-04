@@ -89,6 +89,21 @@ def exported_colors(project: Path):
     """
     import yaml
 
+    class StrictSafeLoader(yaml.SafeLoader):
+        """Reject duplicate YAML keys instead of silently overwriting colors."""
+        def construct_mapping(self, node, deep=False):
+            result = {}
+            for key_node, value_node in node.value:
+                key = self.construct_object(key_node, deep=deep)
+                try:
+                    duplicate = key in result
+                except TypeError:
+                    raise ValueError('Unhashable YAML Material mapping key') from None
+                if duplicate:
+                    raise ValueError('Duplicate YAML Material mapping key')
+                result[key] = self.construct_object(value_node, deep=deep)
+            return result
+
     assets = project / 'Assets'
     if assets.is_symlink() or not assets.is_dir():
         raise ValueError('Missing or redirected Unity Assets')
@@ -119,7 +134,7 @@ def exported_colors(project: Path):
             if match is None:
                 continue
             try:
-                data = yaml.safe_load(content[header.end():headers[index + 1].start() if index + 1 < len(headers) else len(content)])
+                data = yaml.load(content[header.end():headers[index + 1].start() if index + 1 < len(headers) else len(content)], Loader=StrictSafeLoader)
             except yaml.YAMLError:
                 # Parser traceback may embed proprietary Material names/values.
                 raise ValueError('Malformed exported Material YAML') from None
