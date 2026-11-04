@@ -6,6 +6,8 @@ on:
     paths:
       - scripts/b25_foam_pass_state.py
       - tests/test_b25_foam_pass_state.py
+      - scripts/b25_foam_cb_namebridge.py
+      - tests/test_b25_foam_cb_namebridge.py
       - .github/workflows/raft-b25-foam-pass-state.yml
 
 permissions:
@@ -35,6 +37,8 @@ jobs:
           set -euo pipefail
           python3 -m unittest discover -s tests -p test_b25_foam_pass_state.py -v
           python3 -m py_compile scripts/b25_foam_pass_state.py
+          python3 -m unittest discover -s tests -p test_b25_foam_cb_namebridge.py -v
+          python3 -m py_compile scripts/b25_foam_cb_namebridge.py
       - name: Verify disk budget
         run: python3 -c 'import shutil; assert shutil.disk_usage(".").free > 3*1024**3'
       - name: Checkout immutable ZIP2 source
@@ -81,6 +85,21 @@ jobs:
           assert data["status"]=="source_staged" and data["original_passes"]==2
           assert not data["state_source_published"] and not data["device_verified"]
           assert not data["shaderlab_installed"] and not data["cb_resource_binding_verified"]
+          PY
+      - name: Resolve original per-pass CB name indexes without publishing names
+        run: |
+          set -euo pipefail
+          timeout 300s python3 -m scripts.b25_foam_cb_namebridge \
+            --source "$RUNNER_TEMP/b25-foam-source" \
+            --report b25-aggregate/cb-namebridge.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          data=json.loads(Path("b25-aggregate/cb-namebridge.json").read_text())
+          assert data["status"]=="original_binding_names_verified"
+          assert data["authenticated_stage_count"]==4 and data["original_passes"]==2
+          assert not data["private_name_values_published"]
+          assert not data["shaderlab_cb_rebinding_installed"] and not data["unity_or_android_verified"]
           PY
       - name: Publish safe SHA/count report only
         if: always()
