@@ -6,7 +6,7 @@
   "issue_id": "WATER-001",
   "track": "water-gate-file-provenance",
   "approach": "Fail-closed physical path and sidecar provenance around existing water ShaderLab/FFT compute contract scan, including real/symlink negative-control fixtures.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "f8028d15b2401d1fd8c73b2316e5bf76fef88eae",
   "intended_files": [
     "scripts/verify_water_render_contract.py",
@@ -21,8 +21,10 @@
   "experiment_ids": [
     "B14-20261104T2131Z-meta-provenance"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement bounded Python symlink/ancestor tests and guard without changing original shader semantics.",
-  "updated_at": "2026-11-04T21:33:06.790Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41917493634"
+  ],
+  "result": "Production source guard cfb97bf and 5 new path negative controls 4e0ce04 integrated; GitHub Actions CI 41917493634 SUCCESS, real scanner 10/10 tests; source-only, no original Raft shader or device proof.",
+  "next_step": "Scope complete, shift independently to local save-stage root provenance; leave WATER original shader/FFT identity + device OPEN.",
+  "updated_at": "2026-11-04T21:38:55.399Z"
 }
