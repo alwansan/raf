@@ -67,11 +67,13 @@ def _uv_transform(value):
 
 def _slot(value):
     """Support pointer-only synthetic fixtures but report missing UV evidence."""
-    if not isinstance(value, tuple) or len(value) != 2:
+    if not isinstance(value, tuple):
         raise ValueError('Invalid normalized Material texture slot')
-    if isinstance(value[0], tuple):
+    if len(value) == 2 and isinstance(value[0], tuple):
         return value
-    return value, None
+    if len(value) in (2, 3) and type(value[0]) is int:
+        return value, None
+    raise ValueError('Invalid original/export texture slot')
 
 
 def normalize_texenvs(entries, *, exported=False):
