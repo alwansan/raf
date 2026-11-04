@@ -6,7 +6,7 @@
   "issue_id": "RENDER-002",
   "track": "colors-materials",
   "approach": "Trace exported MeshRenderer/SkinnedMeshRenderer material slots to original exported Material YAML document+meta GUID identities with strict shape and missing-reference checks; preserve null/builtin distinctions without inventing matches.",
-  "status": "active",
+  "status": "completed",
   "base_sha": null,
   "intended_files": [
     "scripts/b03_verify_renderer_material_links.py",
@@ -23,8 +23,18 @@
   "experiment_ids": [
     "B03-renderer-material-structural"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Build synthetic fixtures and fail-closed read-only validator; run on real export only with appropriate source workspace; do not claim device colors restored from structure alone.",
-  "updated_at": "2026-11-04T21:13:18.875Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41914562432"
+  ],
+  "result": {
+    "scope": "read-only exported Renderer.m_Materials->Material GUID/fileID structural guard",
+    "source_commit": "77810606899ab9a16248ab17540dc7cd538bcac9",
+    "synthetic_test_count": 17,
+    "synthetic_ci": "https://github.com/alwansan/raf/actions/runs/41914562432",
+    "real_original_export_checked": false,
+    "source_linkage_verified": false,
+    "on_device_colors_verified": false
+  },
+  "next_step": "Use authentic complete export staging to run guard, then compare actual renderer material graph with original serialized Renderer PPtrs and W1 same-instance traced Material links before modifying source.",
+  "updated_at": "2026-11-04T21:18:19.957Z"
 }
