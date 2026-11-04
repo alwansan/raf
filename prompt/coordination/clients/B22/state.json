@@ -4,10 +4,10 @@
   "generation": "B-2026-11-04",
   "session_id": "20261104T2134Z-B22-c91f",
   "resumed_from_session": null,
-  "status": "active",
+  "status": "completed",
   "base_sha": "03ecf8ffda13347c9ffb17ef4c5aea3a4eb86b48",
-  "last_commit": "e1d95ca6b44ef38d77b6e14dee5b7617eb4a0750",
-  "updated_at": "2026-11-04T21:56:00Z",
+  "last_commit": "2f50776dfe51a5d856f3d0484a8b788ee09c04bd",
+  "updated_at": "2026-11-04T22:09:00Z",
   "tracks": [
     "colors-materials",
     "world-save"
@@ -17,8 +17,9 @@
     "B22-20261104T2134Z-B22-c91f-operation-staging"
   ],
   "run_urls": [
-    "https://github.com/alwansan/raf/actions/runs/41918404573"
+    "https://github.com/alwansan/raf/actions/runs/41918404573",
+    "https://github.com/alwansan/raf/actions/runs/41920661518"
   ],
-  "next_step": "Harden separate runtime instrumentation source/backup staging, add synthetic rollback and symlink controls; preserve original SaveGame/Steam behavior.",
+  "next_step": "Tool/staging scopes source-fixed. Next run original ZIP2 same-export scalar check alongside B44; native import/phone world create/save/.rgd required and not proven. No work outside active session.",
   "memory_path": "prompt/coordination/clients/B22/MEMORY.md"
 }
