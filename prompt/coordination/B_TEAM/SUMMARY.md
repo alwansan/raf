@@ -29,8 +29,6 @@
 
 ## الأحداث
 
-- [2026-11-04T21:38:14.359Z / B09](events/B09/20261104T213740Z-spectrum-start.json): B09 joined WATER-001 to isolate original Spectrum/Water Spectrum six-pass authenticated source-to-native staging; complements B24 Foam, B45 Blur and B48 FFT; no game build or shader claim.
-- [2026-11-04T21:38:37.770Z / B10](events/B10/20261104T2138Z-vendor-meta-integration.json): Production vendor shader fallback path now generates stable collision-checked ShaderImporter .meta sidecars with rollback and preserves original .meta bytes. Exact earlier native missing-meta paths unproven; source/CI only. B10 isolated CI22/22 and A3 transaction CI9/9 success.
 - [2026-11-04T21:40:00Z / B30](events/B30/20261104T2140Z-B30-water-start.json): B30 registered independent original FFT serialized variantMap and keyword selector investigation after B08/B48; no Unity runtime or device proof claimed.
 - [2026-11-04T21:40:24.035Z / B14](events/B14/20261104T2139Z-local-start.json): Started staged Unity original SaveAndLoad/Android offline adapter root redirection safety repair after completed WATER scope; no RGD or Steam semantics changes.
 - [2026-11-04T21:41:00Z / B17](events/B17/20261104T2141Z-start-spectrum.json): B17 registered original Spectrum shader per-pass texture/sampler descriptor provenance track. Independent of B24 Foam/B45 Blur/B08 FFT, no game code changed, authentic source and device not yet tested.
@@ -58,6 +56,8 @@
 - [2026-11-04T21:56:00Z / B22](events/B22/20261104T2156Z-local-staging-start.json): After completed scalar tool, B22 independently audits runtime instrumentation apply() path and backup transaction in LOCAL-005, distinct from B14 adapter hardening.
 - [2026-11-04T21:58:17.610Z / B38](events/B38/20261104T2158Z-material-render-state-result.json): Integrated read-only original Material draw queue/lighting/instancing state parity checker, CI41920784251 SUCCESS 9/9 synthetic; original source vs same-instance export and phone unverified.
 - [2026-11-04T21:59:00Z / B13](events/B13/20261104T2159Z-water-meta-result.json): Water/FFT Shader/Compute .meta GUID syntax/uniqueness fail-closed validation source-integrated: B13 22/22 combined CI and B47 regression fixed; original water programs/GPU/device still OPEN.
+- [2026-11-04T22:00:34.895Z / B16](events/B16/20261104T2157Z-kernel-conditional-result.json): Source-integrated conditional compute guard excludes disabled/unknown preprocessor kernel candidates and preserves literal active alternatives; CI41920741687 SUCCESS 34/34 (12 B16 +8 B47 +14 water), no original FFT/Unity/device proof, WATER-001 remains OPEN.
+- [2026-11-04T22:02:00Z / B21](events/B21/20261104T2202Z-lightmap-result.json): 16 synthetic tests PASS and 6 source-authenticated original scenes verified in CI41921259677: exactly one LightmapSettings each, zero baked lightmap entries and 1497 unassigned renderer lightmap indices, no out of range. Reject baked-lightmap-loss explanation in six-scene scope, do not generalize to 34 other scenes/export/pixels; recorded two corrected CI failures and no gameplay changes.
 - [2026-11-04T22:05:00Z / B22](events/B22/20261104T2205Z-local-staging-result.json): B22 guards runtime tracing source/backup against linked roots, authenticates backups and restores originals transactionally; source fixed 2f50776d, CI41920661518 passed synthetic; actual world .rgd and phone OPEN.
 
-بصمة المدخلات: 147e57e267c4e40383ac164d851f2feabf0685e49c26038f99a2f1bb86cd3bce
+بصمة المدخلات: 9933862bbc59430c17c25b7c41560024eb8dbecb382fe978e779d525abcb56db

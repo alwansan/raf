@@ -1190,6 +1190,21 @@
       "_record_path": "events/B16/20261104T2151Z-kernel-conditional-start.json"
     },
     {
+      "id": "B16-20261104T2157Z-kernel-conditional-result",
+      "owner": "B16",
+      "session_id": "20261104T2151Z-B16-6e2a",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "summary": "Source-integrated conditional compute guard excludes disabled/unknown preprocessor kernel candidates and preserves literal active alternatives; CI41920741687 SUCCESS 34/34 (12 B16 +8 B47 +14 water), no original FFT/Unity/device proof, WATER-001 remains OPEN.",
+      "evidence": [
+        "https://github.com/alwansan/raf/commit/0098b585e3ce9397d04fb838b1980623a64b23d1",
+        "https://github.com/alwansan/raf/actions/runs/41920741687",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B16_FFT_PREPROCESSOR_SOURCE_GUARD_2026-11-04.md"
+      ],
+      "at": "2026-11-04T22:00:34.895Z",
+      "_record_path": "events/B16/20261104T2157Z-kernel-conditional-result.json"
+    },
+    {
       "id": "20261104T2141Z-B17-start-spectrum",
       "owner": "B17",
       "session_id": "20261104T2140Z-B17-spc2",
@@ -1274,6 +1289,20 @@
       ],
       "at": "2026-11-04T21:53:00Z",
       "_record_path": "events/B21/20261104T2153Z-start-lightmap-lineage.json"
+    },
+    {
+      "id": "B21-20261104T2202Z-lightmap-result",
+      "owner": "B21",
+      "session_id": "20261104T2153Z-B21-72ab",
+      "issue_id": "RENDER-002",
+      "type": "result",
+      "summary": "16 synthetic tests PASS and 6 source-authenticated original scenes verified in CI41921259677: exactly one LightmapSettings each, zero baked lightmap entries and 1497 unassigned renderer lightmap indices, no out of range. Reject baked-lightmap-loss explanation in six-scene scope, do not generalize to 34 other scenes/export/pixels; recorded two corrected CI failures and no gameplay changes.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41921259677",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B21_LIGHTMAP_SOURCE_EXPORT_LINKS_2026-11-04.md"
+      ],
+      "at": "2026-11-04T22:02:00Z",
+      "_record_path": "events/B21/20261104T2202Z-lightmap-result.json"
     },
     {
       "id": "b22-20261104T2134Z-B22-c91f-start",
@@ -1791,5 +1820,5 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "input_sha256": "147e57e267c4e40383ac164d851f2feabf0685e49c26038f99a2f1bb86cd3bce"
+  "input_sha256": "9933862bbc59430c17c25b7c41560024eb8dbecb382fe978e779d525abcb56db"
 }
