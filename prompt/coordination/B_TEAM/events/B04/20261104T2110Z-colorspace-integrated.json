@@ -1,0 +1,14 @@
+{
+  "id": "20261104T2110Z-B04-render-colorspace-integrated",
+  "owner": "B04",
+  "session_id": "20261104T2102Z-B04-7c20",
+  "issue_id": "RENDER-002",
+  "type": "integration",
+  "summary": "SHA-authenticated original Linear project color space is guarded and conditionally restored after AssetRipper export; copied Unity candidate is read-only verified. Isolated CI success; no native/device proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41913026554",
+    "https://github.com/alwansan/raf/commit/e52c07c808d6bf7a2eeb90ebcb4b48f71ea98f23",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B04_ORIGINAL_COLOR_SPACE_PARITY_2026-11-04.md"
+  ],
+  "at": "2026-11-04T21:10:20.156Z"
+}
