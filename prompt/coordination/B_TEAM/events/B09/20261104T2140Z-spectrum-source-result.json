@@ -1,0 +1,15 @@
+{
+  "id": "B09-spectrum-source-stage-result-20261104",
+  "owner": "B09",
+  "session_id": "20261104T213740719Z-B09-28fc",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Committed a SHA-pinned private Spectrum DXBC pass-stage extraction/variant pairing tool, 10/10 local synthetic tests passed, and an isolated ZIP2-only CI workflow. Actual original Shader result and workflow conclusion unknown; no water shader reconstruction or device fix claimed.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/7ee586f3749913e6c02fa2e2763656f860fe2e97",
+    "https://github.com/alwansan/raf/commit/5511675ccda4c39ac68c4a8c48f257e65bdcef56",
+    "https://github.com/alwansan/raf/commit/5256ac018f7f2da932a34938e99fbb27cca2f1f0",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B09_SPECTRUM_PASS_STAGING_2026-11-04.md"
+  ],
+  "at": "2026-11-04T21:47:37.589Z"
+}
