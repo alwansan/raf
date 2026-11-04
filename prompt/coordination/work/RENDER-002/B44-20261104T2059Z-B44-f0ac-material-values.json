@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "owner": "B44",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2059Z-B44-f0ac",
+  "issue_id": "RENDER-002",
+  "track": "colors-materials",
+  "approach": "Verify and correct authenticated Material SavedProperties color/tint/texture value preservation across export; identify semantic loss rather than re-run resource census",
+  "status": "active",
+  "base_sha": "4072288020d7a42daf6d235af6549f8b43d89132",
+  "intended_files": [
+    "scripts/",
+    "tests/",
+    "prompt/coordination/clients/B44/",
+    "prompt/coordination/work/RENDER-002/",
+    "prompt/coordination/experiments/B44/"
+  ],
+  "hypothesis": "At least one reported white Material has lost original color/texture shader-property values or references in export; pinpoint and repair only with source/output-evidenced mismatch.",
+  "related_work": [],
+  "experiment_ids": [],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Read existing original Material probes and production exporter/material restoration; develop bounded negative/positive controls; preserve auth metadata and detect regression",
+  "updated_at": "2026-11-04T20:59:00Z"
+}
