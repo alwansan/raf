@@ -1,0 +1,29 @@
+name: B12 RENDER-002 bounded scene shader snapshot
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - android-port/Runtime/Platform/AndroidTestDiagnostics.cs
+      - tests/test_b12_scene_render_snapshot.py
+      - .github/workflows/raft-b12-scene-render-snapshot.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raft-b12-scene-render-snapshot-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  source-policy:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: B12 bounded source-policy regression tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_b12_scene_render_snapshot.py -v
+          python3 -m unittest discover -s tests -p test_runtime_operation_traces.py -v
