@@ -1,0 +1,1 @@
+{"owner":"raft-20261103T103610Z-4e91b2cd","status":"active","issue_id":"WATER-001","hypothesis":"Execute exact SHA-pinned decompiled original pixelBlur method after cleanuptransform,with CPUAPIstubs","next_step":"Verify sourcepinand14cases;no Unity"}
