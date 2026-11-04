@@ -1,0 +1,15 @@
+{
+  "id": "20261104T2124Z-original-world-callback-source-integrated",
+  "owner": "B07",
+  "session_id": "20261104T2112Z-B07-6e51",
+  "issue_id": "LOCAL-005",
+  "type": "integration",
+  "summary": "Verified 3 original GameManager.OnWorldRecieved SaveGame branches and exact SHA-pinned Android operation trace, preserving original body/exception propagation. CI41915466470 SUCCESS 8/8 probe + 7/7 wrapper cases and private original instrumentation; no Unity/device/.rgd evidence. LOCAL-005 remains OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41914637539",
+    "https://github.com/alwansan/raf/actions/runs/41915466470",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B07_LOCAL_WORLD_CALLBACK_CHAIN_2026-11-04.md",
+    "https://github.com/alwansan/raf/commit/0a08683f09bdad8ef795fff8f59a21c6724b0661"
+  ],
+  "at": "2026-11-04T21:24:00Z"
+}
