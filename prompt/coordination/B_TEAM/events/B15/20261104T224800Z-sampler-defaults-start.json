@@ -1,0 +1,14 @@
+{
+  "id": "20261104T224800Z-sampler-defaults-start",
+  "owner": "B15",
+  "session_id": "20261104T224800Z-B15-defaults-32f1",
+  "issue_id": "RENDER-002",
+  "type": "start",
+  "summary": "Resumed B15 after prior 16/16 CI; investigate Unity documented TextureImporter mipBias=-100 unset default and same-export instance bridging of B02 Texture28/W1 Material traces; ensure no false sampler mismatch claim.",
+  "evidence": [
+    "https://docs.unity.cn/Documentation/ScriptReference/TextureImporter-mipMapBias.html",
+    "https://github.com/alwansan/raf/actions/runs/41927712988",
+    "https://github.com/alwansan/raf/actions/runs/41921429305"
+  ],
+  "at": "2026-11-04T22:47:25.577Z"
+}
