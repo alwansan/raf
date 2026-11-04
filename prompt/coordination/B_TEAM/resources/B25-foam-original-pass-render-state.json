@@ -1,0 +1,35 @@
+{
+  "id": "B25-FOAM-ORIGINAL-PASS-STATE-20261104",
+  "title": "B25 authentic original Foam/Global two-pass ShaderLab render-state fragments",
+  "kind": "water-original-renderstate-private-reconstruction",
+  "source": {
+    "provider": "Pinned original ZIP2 (no LFS)",
+    "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "path": "Raft/Raft_Data/sharedassets0.assets",
+    "bytes": 115978112,
+    "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "object_path_id": 2420,
+    "object_sha256": "67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1"
+  },
+  "stages": {
+    "acquisition": "SHA_PIN_VERIFIED",
+    "extraction": "ORIGINAL_2_OF_2_RENDER_STATES_DECODED_PRIVATE",
+    "reconstruction": "SHADERLAB_RENDER_STATES_SERIALIZED_247B_EACH_IDENTICAL_SHA",
+    "binding": "ORIGINAL_CB_SAMPLER_TEXTURE_BINDING_NOT_VERIFIED",
+    "integration": "REUSABLE_PRIVATE_STATE_STAGING_SOURCE_CI_PASS_NO_UNITY_INSTALL",
+    "device": "NOT_TESTED"
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/e9218c865aff845361f588aa4b000629619f1560",
+    "https://github.com/alwansan/raf/commit/1659cd7edf82df07960c3f708e53c9f61b81aaee",
+    "https://github.com/alwansan/raf/actions/runs/41926521683",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B25_ORIGINAL_FOAM_RENDER_STATE_2026-11-04.md"
+  ],
+  "remaining": [
+    "Assemble genuine two-pass ShaderLab with B24 exact four authentic program stages and original resource/CB/texture bindings",
+    "Prove export Shader GUID/Material lineage without replacing original metadata",
+    "Unity GPU compilation and Android render pixel/FFT runtime confirmation"
+  ],
+  "updated_by": "B25",
+  "updated_at": "2026-11-04T22:37:37.769Z"
+}
