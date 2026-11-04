@@ -103,7 +103,6 @@ class OperationStageIntegrityTests(unittest.TestCase):
         self.meta.symlink_to(target)
         with self.staged(), self.assertRaises(ValueError):
             op.apply(self.project, self.backup, self.manifest, write=True)
-        self.assert_original_intact if False else None
         self.assertEqual(self.source.read_bytes(), ORIGINAL)
 
     def test_backup_inside_project_rejected(self):
