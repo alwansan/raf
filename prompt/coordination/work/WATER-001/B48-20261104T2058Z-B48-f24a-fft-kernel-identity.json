@@ -6,20 +6,34 @@
   "issue_id": "WATER-001",
   "track": "water-fft",
   "approach": "Source-authenticated original runtime kernel name/index -> serialized FFT compiled program identity analysis with fail-closed negative controls; integrate verified mapping into existing private validation",
-  "status": "active",
+  "status": "completed",
   "base_sha": "8328a092bb0c58f89e0c92540c80eb3d520bce3b",
   "intended_files": [
-    "scripts/probe_original_water_compute.py",
-    "tests/test_probe_original_water_compute.py",
-    ".github/workflows/raft-b48-fft-kernel-identity.yml"
+    "scripts/probe_b48_fft_selector_program_compat.py",
+    "tests/test_probe_b48_fft_selector_program_compat.py",
+    ".github/workflows/raft-b48-fft-kernel-identity.yml",
+    "docs/B48_ORIGINAL_FFT_SELECTOR_COMPILED_CANDIDATES_2026-11-04.md"
   ],
   "hypothesis": "Original managed Dx11FFT and original ComputeShader serialized kernel table can anchor Unity runtime dispatch index to exact original compiled program stage, resolving a missing provenance edge of prior two-pass comparison.",
   "related_work": [
     "raft-20261103T230900Z-a1f608bd-two-pass-vulkan"
   ],
-  "experiment_ids": [],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Read A1 private source parsing code and exact original managed dispatch sites; avoid claiming identity without binary witness.",
-  "updated_at": "2026-11-04T20:58:00Z"
+  "experiment_ids": [
+    "B48-20261104T2058Z-B48-f24a-fft-selector-20slots"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41912253262",
+    "https://github.com/alwansan/raf/actions/runs/41912422220"
+  ],
+  "result": {
+    "class": "source-authenticated candidate selector compatibility, not game restore",
+    "result": "10/10 source-selected candidate two-pass pairs compatible with 20/20 SHA-authenticated serialized DXBC compiled program workgroups, 15/15 synthetic tests pass, no .compute staged",
+    "scoped_success": true,
+    "runtime_kernel_mapping_proven": false,
+    "unity_compiled": false,
+    "android_device_proven": false,
+    "report": "docs/B48_ORIGINAL_FFT_SELECTOR_COMPILED_CANDIDATES_2026-11-04.md"
+  },
+  "next_step": "Unity 2021 typed/runtime kernel enumeration or private test to tie Dispatch kernel indices to authenticated compiled variants and restore original compute source; WATER issue stays OPEN.",
+  "updated_at": "2026-11-04T21:08:11.963Z"
 }
