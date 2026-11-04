@@ -1,0 +1,3 @@
+# B13 session 20261104T2247Z-B13-builtin-atomic
+
+Identity B13; branch feature/android-native-port only. Base HEAD 2fa36d110cbaf1693cd61fbede26e7ce3e8f8d36. Resume previous completed 20261104T2132Z-B13-7e6b. P0 RENDER-002, source provenance & atomic installation of authentic Unity builtin shader fallbacks. Scoped source path `scripts/restore_builtin_shaders.py`, tests `tests/test_restore_builtin_shaders.py`; no shader code/assets/GUID/audio/Settings/touch edits. Hypothesis: in-place `Path.write_bytes` can truncate originals on mid-write failure, and preflight source can be overwritten after concurrent mutation. Inject negative controls. STATUS active pending measured tests. Water and local-world P0 remain open; NOT_READY 0/3.
