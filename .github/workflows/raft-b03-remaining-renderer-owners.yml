@@ -1,0 +1,101 @@
+name: B03 RENDER-002 residual ZIP2 Renderer Material targets (source-only)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/b03_remaining_renderer_material_owners.py'
+      - 'tests/test_b03_remaining_renderer_material_owners.py'
+      - '.github/workflows/raft-b03-remaining-renderer-owners.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raft-b03-remaining-renderer-owners-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  synthetic:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Validate fail-closed original owner selection and staging
+        run: |
+          python3 -m py_compile scripts/b03_remaining_renderer_material_owners.py
+          python3 -m unittest discover -s tests -p test_b03_remaining_renderer_material_owners.py -v
+  original-residual-owners:
+    needs: synthetic
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+      - name: Verify staging disk budget
+        run: |
+          python3 - <<'PY'
+          import shutil
+          assert shutil.disk_usage('.').free > 1024**3
+          PY
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: .b03-source-zip2
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/level0
+            Raft/Raft_Data/level1
+            Raft/Raft_Data/level2
+            Raft/Raft_Data/level3
+            Raft/Raft_Data/level4
+            Raft/Raft_Data/level5
+      - name: Pin original Unity type-tree decoder
+        run: python3 -m pip install --disable-pip-version-check 'UnityPy==1.23.0'
+      - name: Plan exact residual owner(s) from 6 SHA-pinned original scenes
+        run: |
+          set -euo pipefail
+          python3 -m scripts.b03_remaining_renderer_material_owners \
+            --phase plan \
+            --source .b03-source-zip2/Raft/Raft_Data \
+            --manifest .b03-source-zip2/RAFT_FILE_MANIFEST.tsv \
+            --plan "$RUNNER_TEMP/b03-private-owner-plan.json" \
+            --sparse-paths "$RUNNER_TEMP/b03-private-owner-paths.txt"
+      - name: Selectively acquire only manifest-authenticated remaining provider paths
+        run: |
+          set -euo pipefail
+          while IFS= read -r rel; do
+            [[ "$rel" == Raft/Raft_Data/* ]] || exit 1
+            git -C .b03-source-zip2 sparse-checkout add -- "$rel"
+          done < "$RUNNER_TEMP/b03-private-owner-paths.txt"
+      - name: Reassemble and SHA-verify only residual provider(s); check Material class IDs
+        run: |
+          set -euo pipefail
+          mkdir -p -- "$RUNNER_TEMP/b03-remaining-stage"
+          python3 -m scripts.b03_remaining_renderer_material_owners \
+            --phase verify \
+            --source .b03-source-zip2/Raft/Raft_Data \
+            --manifest .b03-source-zip2/RAFT_FILE_MANIFEST.tsv \
+            --plan "$RUNNER_TEMP/b03-private-owner-plan.json" \
+            --checkout .b03-source-zip2 \
+            --stage "$RUNNER_TEMP/b03-remaining-stage" \
+            --report "$RUNNER_TEMP/b03-remaining-targets-numeric.json"
+          echo 'B03 source_SHA_only=true no_LFS=true prior_1609_not_redownloaded=true UnityPlayer=false Android=false'
+      - name: Retain aggregate numeric proof only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: b03-remaining-original-targets-${{ github.run_id }}
+          path: ${{ runner.temp }}/b03-remaining-targets-numeric.json
+          retention-days: 7
+          if-no-files-found: ignore
