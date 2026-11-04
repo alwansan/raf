@@ -1,0 +1,42 @@
+{
+  "owner": "B16",
+  "session_id": "20261104T2151Z-B16-6e2a",
+  "issue_id": "WATER-001",
+  "hypothesis": "The preflight counts #pragma and function definitions in definitely inactive #if 0; that creates a false structural water/FFT compute-candidate positive despite no enabled entrypoint.",
+  "source_commit": "0098b585e3ce9397d04fb838b1980623a64b23d1",
+  "input_hashes": [],
+  "tool_versions": {
+    "python": "ubuntu-24.04 runner python3 (exact version not logged)",
+    "workflow": "GitHub Actions ubuntu-24.04"
+  },
+  "commands": [
+    "python3 -m unittest -v tests.test_b16_compute_preprocessor_contract tests.test_b47_compute_kernel_contract tests.test_verify_water_render_contract"
+  ],
+  "negative_controls": [
+    "#if 0 disabled pragma+body",
+    "active pragma with #if 0 disabled body",
+    "#ifdef/#ifndef and symbolic #if unknown both branches masked",
+    "#elif unknown prevents later else claiming active",
+    "#else and #elif 1 legitimate active branch",
+    "#if 1 duplicate inactive else masked",
+    "malformed #endif/#else/#elif rejected",
+    "real verify_water_render_contract inspect on synthetically generated FFT.compute + meta"
+  ],
+  "workflow_path": ".github/workflows/raft-b16-compute-preprocessor.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41920741687",
+  "artifact_urls": [],
+  "budget": "5-minute ubuntu-24.04 standard public runner; no private input, checkout lfs:false; no native build or GPU.",
+  "status": "completed",
+  "observed_result": "SUCCESS on e0318a101ee477605f63ec3514c4d5a9eb987c3a: 34/34 tests (12 B16 + 8 B47 + 14 water gate). B16 source fix 0098b585, test commit 86a55d59, workflow e0318a10. Disabled/unknown conditional source does not clear structural gate; active literal alternatives remain accepted structurally; authentic_water_kernel_identity_verified=false in integrated controls.",
+  "rejected_hypotheses": [
+    "Counting a pragma text in disabled #if 0 means a Unity kernel exists",
+    "Passing source-only syntax gate proves original FFT identity or Android GPU pixels"
+  ],
+  "limitations": [
+    "Synthetic only; no ZIP2 original .compute sample, shader/HLSL variant compile, Unity importer, kernelCount on APK, or device test.",
+    "Unknown symbolic preprocessor branches fail closed, may require authenticated Unity defines or compiled proof to avoid false negatives.",
+    "An unrelated B47 CI 41920543082 failed on prior SHA due preexisting symlink-test expectation drift against concurrent strict metadata guard; the same B47 8 controls succeeded in B16 41920741687 (not evidence of game compile)."
+  ],
+  "integration_commit": "0098b585e3ce9397d04fb838b1980623a64b23d1",
+  "next_step": "Use actual authenticated restored .compute with recorded Unity compile defines, verify numeric/integration and mobile pixels; pursue original Spectrum/Foam/Blur and kernel mapping separately."
+}
