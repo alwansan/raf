@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "username": "B21",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2153Z-B21-72ab",
+  "resumed_from_session": null,
+  "status": "active",
+  "base_sha": "153787bcb85b0a0af9382b8d19e7dc85c6fc0ee8",
+  "last_commit": null,
+  "updated_at": "2026-11-04T21:53:00Z",
+  "tracks": [
+    "RENDER-002:lighting-lightmap-export-parity"
+  ],
+  "work_ids": [
+    "B21-20261104T2153Z-B21-72ab-lightmap-lineage"
+  ],
+  "run_urls": [],
+  "next_step": "Inspect actual original/exported lighting and lightmap serialization; implement a bounded same-export lighting/lightmap reference diagnostic with meaningful negative controls and verify/record result. No source/lightmap edits without authenticated evidence.",
+  "memory_path": "prompt/coordination/clients/B21/MEMORY.md"
+}
