@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "owner": "B50",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2039Z-B50-d7a3",
+  "issue_id": "LOCAL-005",
+  "track": "world-save",
+  "approach": "Independent bounded private source investigation of post-world-load Cheat.AllowCheatsForLocalPlayer native Steam identity call; source authenticity via exact SHA256 of pinned original Assembly-CSharp DLL; publish only structural counters and hashes.",
+  "status": "active",
+  "base_sha": "649ec8e5b227ecae970b161ceb3339e2be1929c2",
+  "intended_files": [
+    "scripts/b50_probe_original_cheat_steam.py",
+    "tests/test_b50_probe_original_cheat_steam.py",
+    ".github/workflows/raft-b50-cheat-steam-identity.yml"
+  ],
+  "hypothesis": "Historical CL Cheat.AllowCheatsForLocalPlayer -> SteamUser.GetSteamID path remains an Android-local Steam DLL dependency; determine exact original method and call count before any guarded adaptation.",
+  "related_work": [
+    "B50-20261104T2039Z-B50-d7a3-steamstats-offline"
+  ],
+  "experiment_ids": [
+    "B50-20261104T2039Z-cheat-identity"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Add bounded parser, synthetic negative controls, private authenticated original DLL source CI; do not change world flags or guessed callsites.",
+  "updated_at": "2026-11-04T20:50:00Z"
+}
