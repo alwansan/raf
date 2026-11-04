@@ -50,7 +50,7 @@
       ]
     },
     "Raft_Network": {
-      "sha256": "a0aac2a68f598455d6ecd6c5d74c7b105e8ba4d8e0a7fb8712284145a9bf9180",
+      "sha256": "996e4c4c2bcf593436af6ef895116dbdfe4a13c99b5618971c91bf2c1626385f",
       "area": "session",
       "methods": [
         {
