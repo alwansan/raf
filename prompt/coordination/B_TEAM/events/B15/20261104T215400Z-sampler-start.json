@@ -1,0 +1,13 @@
+{
+  "id": "20261104T215400Z-sampler-start",
+  "owner": "B15",
+  "session_id": "20261104T215400Z-B15-7b2c",
+  "issue_id": "RENDER-002",
+  "type": "start",
+  "summary": "B15 starts independent original/export sampler fidelity coverage; existing source-only aggregate cannot prove exported per-object parity.",
+  "evidence": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/probe_w2_texture_sampler_settings.py",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B02_TEXTURE_IMPORT_COLOR_FIDELITY_2026-11-04.md"
+  ],
+  "at": "2026-11-04T21:54:00Z"
+}
