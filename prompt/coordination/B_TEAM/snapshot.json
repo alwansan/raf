@@ -478,6 +478,42 @@
       "_record_path": "resources/B24-foam-original-stage-translation.json"
     },
     {
+      "id": "B25-FOAM-ORIGINAL-PASS-STATE-20261104",
+      "title": "B25 authentic original Foam/Global two-pass ShaderLab render-state fragments",
+      "kind": "water-original-renderstate-private-reconstruction",
+      "source": {
+        "provider": "Pinned original ZIP2 (no LFS)",
+        "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+        "path": "Raft/Raft_Data/sharedassets0.assets",
+        "bytes": 115978112,
+        "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+        "object_path_id": 2420,
+        "object_sha256": "67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1"
+      },
+      "stages": {
+        "acquisition": "SHA_PIN_VERIFIED",
+        "extraction": "ORIGINAL_2_OF_2_RENDER_STATES_DECODED_PRIVATE",
+        "reconstruction": "SHADERLAB_RENDER_STATES_SERIALIZED_247B_EACH_IDENTICAL_SHA",
+        "binding": "ORIGINAL_CB_SAMPLER_TEXTURE_BINDING_NOT_VERIFIED",
+        "integration": "REUSABLE_PRIVATE_STATE_STAGING_SOURCE_CI_PASS_NO_UNITY_INSTALL",
+        "device": "NOT_TESTED"
+      },
+      "evidence": [
+        "https://github.com/alwansan/raf/commit/e9218c865aff845361f588aa4b000629619f1560",
+        "https://github.com/alwansan/raf/commit/1659cd7edf82df07960c3f708e53c9f61b81aaee",
+        "https://github.com/alwansan/raf/actions/runs/41926521683",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B25_ORIGINAL_FOAM_RENDER_STATE_2026-11-04.md"
+      ],
+      "remaining": [
+        "Assemble genuine two-pass ShaderLab with B24 exact four authentic program stages and original resource/CB/texture bindings",
+        "Prove export Shader GUID/Material lineage without replacing original metadata",
+        "Unity GPU compilation and Android render pixel/FFT runtime confirmation"
+      ],
+      "updated_by": "B25",
+      "updated_at": "2026-11-04T22:37:37.769Z",
+      "_record_path": "resources/B25-foam-original-pass-render-state.json"
+    },
+    {
       "id": "B45-BLUR-PROPERTY-RESTORE-20261104",
       "title": "B45 — authenticated original Subsurface Blur one-texture ShaderLab property preservation",
       "kind": "shaderlab-original-property-recovery",
@@ -1476,6 +1512,20 @@
       "_record_path": "events/B20/20261104T2236Z-shaderlab-scope-result.json"
     },
     {
+      "id": "B20-20261104T2238Z-blur-rollback-start",
+      "owner": "B20",
+      "session_id": "20261104T2230Z-B20-6c9a",
+      "issue_id": "WATER-001",
+      "type": "start",
+      "summary": "Second work scope: strengthen original Blur ShaderLab transient export installation rollback to atomic write+pristine metadata verification, preserving external recovery backup.",
+      "evidence": [
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/b45_install_original_blur.py",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/.github/workflows/raft-unity-editor-android-import.yml"
+      ],
+      "at": "2026-11-04T22:38:00Z",
+      "_record_path": "events/B20/20261104T2238Z-blur-rollback-start.json"
+    },
+    {
       "id": "B21-20261104T2153Z-lightmap-start",
       "owner": "B21",
       "session_id": "20261104T2153Z-B21-72ab",
@@ -1673,6 +1723,21 @@
       ],
       "at": "2026-11-04T22:29:31.916Z",
       "_record_path": "events/B25/20261104T222931Z-start.json"
+    },
+    {
+      "id": "20261104T2235Z-B25-original-foam-state-result",
+      "owner": "B25",
+      "session_id": "20261104T222931Z-B25-foam-state",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "summary": "Original SHA-pinned Foam/Global two pass render states both serialized privately to identical 247B SHA256; 11/11 synthetic and authentic source CI 41926521683 SUCCESS; disproves render-state difference hypothesis, not CB/ShaderLab/Unity/device proof.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41926521683",
+        "https://github.com/alwansan/raf/commit/d2c0ba2ee2c848325fe909d191a07879c94b9c75",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B25_ORIGINAL_FOAM_RENDER_STATE_2026-11-04.md"
+      ],
+      "at": "2026-11-04T22:37:37.769Z",
+      "_record_path": "events/B25/20261104T2235Z-foam-state-result.json"
     },
     {
       "id": "20261104T2140Z-B30-water-start",
@@ -2092,5 +2157,5 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "input_sha256": "8d31736d71a5cc16d6b1069b55c4d1f6e001d3670f0ba1d36d207abf770f48ec"
+  "input_sha256": "a455e04873397a4832ee19d5fe2cbd09dc640fbc65bcb5b7579802d49137c77e"
 }
