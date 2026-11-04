@@ -61,7 +61,8 @@
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B08_FFT_DESCRIPTOR_ABI_2026-11-04.md",
     "https://github.com/alwansan/raf/commit/9a65bf3332b92f87ba8d560c04553ad0a0034532",
     "https://github.com/alwansan/raf/actions/runs/41929071692",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B16_FFT_PREPROCESSOR_SOURCE_GUARD_2026-11-04.md"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B16_FFT_PREPROCESSOR_SOURCE_GUARD_2026-11-04.md",
+    "https://github.com/alwansan/raf/actions/runs/41929513820"
   ],
   "remaining": [
     "Spectrum/Foam/Blur passes ناقصة في APK86",
@@ -90,13 +91,14 @@
     "B06 corrected Unity 2021 local invocation max vs X/Y/Z dispatch-group maximum semantics; source-authenticated 64..1024 local-group theoretical cap is now logged at startup; synthetic C# CI41928357485 SUCCESS, Android device and real kernel mapping still UNVERIFIED.",
     "B06 earlier original FFT resource Dispatch scanner lexical fix independently passed SHA-authenticated original managed CSharp + ComputeShader CI41914575997, 20 original compiled slots/caller resource names matched; Unity runtime FindKernel identity still OPEN.",
     "B08 source-authenticated 20/20 original FFT DXBC→SPIR-V programs have identical numeric image descriptor ABI (read candidates set0/bindings0&1, storage set0/binding2, float32); 14 synthetic controls plus real ZIP2 source CI41928583281 SUCCESS. Exact original t0 versus t1 input-image binding and Unity runtime kernel/variant selector remain UNPROVEN, so no .compute/native/device restoration or closure.",
-    "B16 source-only ComputeShader validator now rejects potentially reachable HLSL #error, while provably inactive #error does not block; source commit9a65bf3 CI41929071692 SUCCESS40/40 synthetic. Original FFT program identity/Unity shader compilation/GPU phone still UNKNOWN and WATER-001 OPEN."
+    "B16 source-only ComputeShader validator now rejects potentially reachable HLSL #error, while provably inactive #error does not block; source commit9a65bf3 CI41929071692 SUCCESS40/40 synthetic. Original FFT program identity/Unity shader compilation/GPU phone still UNKNOWN and WATER-001 OPEN.",
+    "B08 additional full original FFT program SPIR-V SSA use check CI41929513820 SUCCESS: 20 synthetic controls and all20 translated compiled programs actively read both sampled descriptor candidates and write storage descriptor, supported image operands uniquely traced. Unknown original DXBC t0↔SPV binding0/1 association, native Unity kernel-ID mapping and device visuals; WATER-001 stays OPEN."
   ],
   "acceptance": [
     "هوية برامج ونوى أصلية أو تطابق موثق دونdummy",
     "تثبيت فيالتصدير+Unity import/render",
     "اختبار هاتف يثبت الماء بلا pass/kernel errors"
   ],
-  "updated_by": "B16",
-  "updated_at": "2026-11-04T22:55:17.298Z"
+  "updated_by": "B08",
+  "updated_at": "2026-11-04T22:58:13.349Z"
 }
