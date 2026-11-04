@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "owner": "B06",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T224512Z-B06-wg7a3",
+  "issue_id": "WATER-001",
+  "track": "water-fft",
+  "approach": "Correct Unity-reported per-workgroup invocation limit vs X/Y/Z dispatch group-count semantics and correlate the immutable 20-entry original FFT workgroup sizes to theoretical device cutoff, preserving no-kernel-proof boundary.",
+  "status": "active",
+  "base_sha": "664100d4b976802a3463aa4ee5c0fe5254c7d28f",
+  "intended_files": [
+    "android-port/Runtime/Platform/AndroidRuntimeLog.cs",
+    "tests/b06_fft_caps_smoke/Program.cs",
+    "docs/B06_FFT_ANDROID_CAPABILITY_PROBE_2026-11-04.md",
+    ".github/workflows/raft-b06-fft-capabilities.yml"
+  ],
+  "hypothesis": "Current logging names max_group_x/y/z imply invocation dimensions although Unity 2021.3 documents them as maximum dispatch group counts; without source-grounded local-group comparison the Adreno capability evidence can be misread.",
+  "related_work": [
+    "B48 authentic 20-slot local workgroup order 41912422220",
+    "B08 20 compiled slots one name 41917369953",
+    "B06 earlier logger 41913854292"
+  ],
+  "experiment_ids": [],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Read source and patch bounded fail-safe group-cap comparison with source-pinned five distinct workloads, then run actual C# synthetic CI.",
+  "updated_at": "2026-11-04T22:45:35.546Z"
+}
