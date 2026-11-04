@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "owner": "B13",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2132Z-B13-7e6b",
+  "issue_id": "WATER-001",
+  "track": "water-fft",
+  "approach": "Bound original water structural gate to a single valid lowercase-normalized Unity .meta GUID per shader/compute, detecting malformed/duplicate sidecars without manufacturing identities.",
+  "status": "active",
+  "base_sha": null,
+  "intended_files": [
+    "scripts/verify_water_render_contract.py",
+    "tests/test_verify_water_render_contract.py"
+  ],
+  "hypothesis": "Current structural pass/kernel gate counts any regular .meta as present, including malformed GUID or duplicate Unity identities. Strict GUID validation prevents a false-positive export-asset binding signal.",
+  "related_work": [
+    "B14 WATER-001 linked-metadata path safety (completed)",
+    "B49 WATER-001 structural shader pass gate",
+    "B47 WATER-001 compute entrypoint check"
+  ],
+  "experiment_ids": [],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Failing synthetic controls for malformed and duplicate GUID sidecars; minimal non-mutating source guard and dedicated no-LFS CI test.",
+  "updated_at": "2026-11-04T21:54:00Z"
+}
