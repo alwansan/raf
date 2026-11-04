@@ -1,0 +1,15 @@
+{
+  "id": "20261104T2251Z-B04-quality-snapshot-source-integrated",
+  "owner": "B04",
+  "session_id": "20261104T2243Z-B04-6b7c",
+  "issue_id": "RENDER-002",
+  "type": "integration",
+  "summary": "Read-only active Android QualitySettings tier/texture/light/shadow snapshot integrated with B12 bounded scene shader evidence; B04 CI 9/9 and actual original-managed CSharp CI success; device unknown.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/bc63f59de0875bee6fdff71f21f5a9dd991f5045",
+    "https://github.com/alwansan/raf/actions/runs/41928607504",
+    "https://github.com/alwansan/raf/actions/runs/41928576383",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B04_ORIGINAL_QUALITY_RUNTIME_EVIDENCE_2026-11-04.md"
+  ],
+  "at": "2026-11-04T22:51:00Z"
+}
