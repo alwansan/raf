@@ -1,0 +1,72 @@
+name: B08 WATER-001 original FFT SPIR-V numerical descriptor ABI
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-b08-fft-descriptor-abi.yml'
+      - 'scripts/b08_fft_spirv_descriptor_abi.py'
+      - 'tests/test_b08_fft_spirv_descriptor_abi.py'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: raft-b08-fft-descriptor-abi-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  authenticate-original-fft-descriptors:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      ZIP2_SOURCE_SHA: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+      DEBIAN_FRONTEND: noninteractive
+    steps:
+      - name: Checkout safe B08 source and tests (no original assets)
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Prove strict positive, drift and forged-identity controls
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_b08_fft_spirv_descriptor_abi.py -v
+          python3 -m py_compile scripts/b08_fft_spirv_descriptor_abi.py
+      - name: Authenticate pinned original FFT source without LFS
+        shell: bash
+        run: |
+          set -euo pipefail
+          df -h .
+          mkdir -p "$RUNNER_TEMP/b08/zip2"
+          git -C "$RUNNER_TEMP/b08/zip2" init -q
+          git -C "$RUNNER_TEMP/b08/zip2" remote add origin https://github.com/alwansan/raf.git
+          git -C "$RUNNER_TEMP/b08/zip2" -c protocol.version=2 fetch -q --depth=1 --filter=blob:none origin zip2
+          test "$(git -C "$RUNNER_TEMP/b08/zip2" rev-parse FETCH_HEAD)" = "$ZIP2_SOURCE_SHA"
+          git -C "$RUNNER_TEMP/b08/zip2" sparse-checkout init --no-cone
+          printf '%s\n' '/RAFT_FILE_MANIFEST.tsv' '/Raft/Raft_Data/sharedassets0.assets/' |
+            git -C "$RUNNER_TEMP/b08/zip2" sparse-checkout set --no-cone --stdin
+          git -C "$RUNNER_TEMP/b08/zip2" checkout -q --detach FETCH_HEAD
+          test "$(git -C "$RUNNER_TEMP/b08/zip2" rev-parse HEAD)" = "$ZIP2_SOURCE_SHA"
+          python3 -m scripts.stage_zip2_fft_owner \
+            --zip2-checkout "$RUNNER_TEMP/b08/zip2" \
+            --destination "$RUNNER_TEMP/b08/original/Raft_Data/sharedassets0.assets"
+      - name: Install bounded private converter and original Unity parser
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4 -q
+          vkd3d-compiler --version || true
+      - name: Authenticate all 20 original DXBC to SPIR-V numeric descriptor ABIs
+        run: |
+          set -euo pipefail
+          timeout 210s python3 -m scripts.b08_fft_spirv_descriptor_abi \
+            --source "$RUNNER_TEMP/b08/original/Raft_Data"
+          echo 'RAFT_B08_ABI_BOUNDARY sampled_t0_t1_identity_unproven=true unity_runtime_id_unproven=true no_native_build=true'
+          # Private DXBC and translated SPIR-V are temporary and never uploaded.
