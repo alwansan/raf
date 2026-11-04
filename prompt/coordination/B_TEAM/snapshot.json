@@ -1710,6 +1710,21 @@
       "_record_path": "events/B13/20261104T2247Z-builtin-atomic-start.json"
     },
     {
+      "id": "B13-builtin-atomic-result",
+      "owner": "B13",
+      "session_id": "20261104T2247Z-B13-builtin-atomic",
+      "issue_id": "RENDER-002",
+      "type": "result",
+      "summary": "Source-integrated exact original built-in shader backup, prepublish source recheck, fsynced atomic replacement and conditional rollback. Isolated CI41928703661 succeeded 14/14 synthetic; no authentic water/engine shader program or Unity/device proof.",
+      "evidence": [
+        "https://github.com/alwansan/raf/commit/20c94103edc9d10352560d473656f7004208268b",
+        "https://github.com/alwansan/raf/actions/runs/41928703661",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B13_BUILTIN_SHADER_ATOMIC_INSTALL_2026-11-04.md"
+      ],
+      "at": "2026-11-04T22:51:00Z",
+      "_record_path": "events/B13/20261104T2251Z-builtin-atomic-result.json"
+    },
+    {
       "id": "B14-20261104T2131Z-start",
       "owner": "B14",
       "session_id": "20261104T2131Z-B14-a71c",
@@ -2803,5 +2818,5 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "input_sha256": "6112b1fcd980d2a42f8252e95fd6db33ece093f8bd01535f9ac924899be4b6ab"
+  "input_sha256": "814c604ebcf99dbb7c14fb479e8d7a8f5a35f07cd18450ede293cee7d80ff6dc"
 }
