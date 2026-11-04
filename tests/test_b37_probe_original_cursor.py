@@ -3,7 +3,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from scripts.b37_probe_original_cursor import code_only, scan
+from scripts.b37_probe_original_cursor import code_only, scan, classify_first_arguments
 
 
 class CursorOriginalCallsiteTests(unittest.TestCase):
@@ -21,6 +21,16 @@ class CursorOriginalCallsiteTests(unittest.TestCase):
         text = 'string a=@"a "" Cursor.SetCursor()"" ";\nchar c=\'x\';\nUnityEngine.Cursor.SetCursor(x,y,z);'
         live = code_only(text)
         self.assertEqual(live.count('Cursor.SetCursor'), 1)
+
+    def test_classify_nullable_and_live_texture_call_arguments(self):
+        source = ('Cursor.SetCursor(null, V2.Zero, CursorMode.Auto);\n'
+                  'UnityEngine.Cursor.SetCursor(cursor, center, CursorMode.Auto);\n'
+                  'Cursor.SetCursor(CreateTexture(a, b), center, CursorMode.Auto);\n')
+        self.assertEqual(classify_first_arguments(code_only(source)), [True, False, False])
+        for invalid in ('Cursor.SetCursor();', 'Cursor.SetCursor(x, y);',
+                        'Cursor.SetCursor(x, y, z, extra);'):
+            with self.assertRaises(ValueError):
+                classify_first_arguments(code_only(invalid))
 
     def test_unknown_unterminated_tokens_fail_closed(self):
         for s in ('/* incomplete', '"incomplete', "'incomplete"):
