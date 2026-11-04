@@ -6,6 +6,7 @@
  * This verifies source t0/t1/u0 -> *chosen* descriptor mapping, not Unity
  * runtime FindKernel lookup nor Android import/driver execution.
  */
+#include <stddef.h>
 #include <vkd3d_shader.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -118,8 +119,11 @@ int main(int argc, char **argv)
         vkd3d_shader_free_shader_code(&spv);
         return 5;
     }
-    rc = fwrite(spv.code, 1, spv.size, output) == spv.size
-        && !fclose(output) ? 0 : 6;
+    {
+        size_t written = fwrite(spv.code, 1, spv.size, output);
+        int closed = fclose(output);
+        rc = written == spv.size && closed == 0 ? 0 : 6;
+    }
     vkd3d_shader_free_shader_code(&spv);
     return rc;
 }
