@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "username": "B20",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2230Z-B20-6c9a",
+  "resumed_from_session": null,
+  "status": "active",
+  "base_sha": "5fc5c4838247c33669bba8b67e988893f22cd28e",
+  "last_commit": null,
+  "updated_at": "2026-11-04T22:30:00Z",
+  "tracks": [
+    "water-fft"
+  ],
+  "work_ids": [
+    "B20-20261104T2230Z-B20-6c9a-shaderlab-scope"
+  ],
+  "run_urls": [],
+  "next_step": "Implement and source-test fail-closed ShaderLab Pass/subshader lexical scope; no raw original game shader or runtime claim.",
+  "memory_path": "prompt/coordination/clients/B20/MEMORY.md"
+}
