@@ -42,7 +42,7 @@ def original_name_registry(raw, diagnostic=None):
         # as HLSL CB identifiers. Check HLSL identifier grammar only at an
         # authenticated CB m_NameIndex reference below.
         if (not isinstance(name, str) or not 0 < len(name) <= 256
-                or any(ch in name for ch in ("\\0", "\\r", "\\n"))):
+                or any(ch in name for ch in (chr(0), chr(13), chr(10)))):
             diagnostic["registry_rejection"] = "invalid-registry-name"
             raise ValueError("Original Foam property registry string malformed")
         if type(idx) is not int or idx < 0 or idx >= 1 << 20 or idx in names:
