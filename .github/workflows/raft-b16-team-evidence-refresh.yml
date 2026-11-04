@@ -1,0 +1,54 @@
+name: "B16 WATER-001 evidence checkpoint (source only)"
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-b16-team-evidence-refresh.yml'
+      - 'prompt/coordination/B_TEAM/events/B16/**'
+  workflow_dispatch:
+permissions:
+  contents: write
+# Serialize against the already-running canonical B48/B22 summary writers.
+concurrency:
+  group: raft-b48-team-summary-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  refresh-summary:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: feature/android-native-port
+          persist-credentials: true
+          lfs: false
+          fetch-depth: 1
+          sparse-checkout: |
+            scripts/refresh_b_team.py
+            prompt/coordination/B_TEAM
+      - name: Regenerate canonical B-team evidence at live HEAD (fast-forward only)
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'raft-b16-evidence-checkpoint'
+          git config user.email 'raft-b16-evidence-checkpoint@users.noreply.github.com'
+          for attempt in 1 2 3 4 5 6; do
+            git fetch -q --no-tags origin feature/android-native-port
+            # New disposable CI checkout only; never another agent's workspace.
+            git reset --hard -q FETCH_HEAD
+            python3 scripts/refresh_b_team.py
+            git add -- prompt/coordination/B_TEAM/SUMMARY.md prompt/coordination/B_TEAM/snapshot.json
+            if git diff --cached --quiet; then
+              echo 'B16_TEAM_EVIDENCE already_current=true'
+              exit 0
+            fi
+            git commit -q -m 'coord(B16): regenerate B-team evidence from latest records'
+            if git push --quiet origin HEAD:feature/android-native-port; then
+              echo 'B16_TEAM_EVIDENCE regenerated=true fast_forward_only=true'
+              exit 0
+            fi
+            echo "B16_TEAM_EVIDENCE lease-conflict attempt=$attempt; read new HEAD"
+            sleep 1
+          done
+          echo 'B16_TEAM_EVIDENCE unresolved writers; no force' >&2
+          exit 1
