@@ -6,16 +6,23 @@
   "resumed_from_session": null,
   "status": "active",
   "base_sha": "5fc5c4838247c33669bba8b67e988893f22cd28e",
-  "last_commit": null,
-  "updated_at": "2026-11-04T22:26:00Z",
+  "last_commit": "2a3e38b1d2ca8bedba825aa60506f664cf3758c3",
+  "updated_at": "2026-11-04T22:47:00Z",
   "tracks": [
     "integration",
-    "render-errors"
+    "render-errors",
+    "world-save"
   ],
   "work_ids": [
-    "B37-20261104T2226Z-cursor-rgba32"
+    "B37-20261104T2226Z-cursor-rgba32",
+    "B37-20261104T2244Z-rgd-root-inheritance"
   ],
-  "run_urls": [],
-  "next_step": "Investigate source-authenticated Android Unity Cursor.SetCursor RGBA32 warnings (1449 in APK86), identify exact original callsites and stage narrowly scoped no-loss source fix/tests if proven; do not touch deferred touch/layout, audio or Settings.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41926487471",
+    "https://github.com/alwansan/raf/actions/runs/41926892044",
+    "https://github.com/alwansan/raf/actions/runs/41928084203",
+    "https://github.com/alwansan/raf/actions/runs/41928221064"
+  ],
+  "next_step": "B37 cursor source-only scope completed; investigate A10 Data.rgd original inherited-field and serializable metadata mismatch. First .NET10 CI failed on warning-as-error obsolete enum names; fix ECMA metadata bit constants committed 2a3e38; check CI41928221064, record exact result, preserve game .rgd schema and audio/Settings/touch.",
   "memory_path": "prompt/coordination/clients/B37/MEMORY.md"
 }
