@@ -34,6 +34,7 @@ class FoamNameTests(unittest.TestCase):
         self.assertEqual(x["matched_constant_buffer_bindings"],8)
         self.assertFalse(x["private_name_values_published"])
         self.assertFalse(x["shaderlab_cb_rebinding_installed"])
+        self.assertEqual(x["referenced_cb_names_requiring_alias"],0)
         sha=hashlib.sha256(b"FoamCB0").hexdigest()
         self.assertEqual(x["passes"][0]["stages"][0]["constant_buffers"][0]["name_sha256"],sha)
         self.assertEqual(x["passes"][1]["stages"][0]["constant_buffers"][0]["vector_member_count"],1)
@@ -59,11 +60,16 @@ class FoamNameTests(unittest.TestCase):
         self.assertEqual(names[0],"CB0")
         self.assertEqual(len(names),3)
 
-    def test_referenced_nonidentifier_cb_name_rejected(self):
+    def test_referenced_opaque_cb_name_classified_not_rewritten(self):
         x=fixture()
         x["m_SubShaders"][0]["m_Passes"][0]["m_NameIndices"][0][0]="bad name"
-        with self.assertRaisesRegex(ValueError,"CB name is not an HLSL identifier"):
-            inspect_parsed(x)
+        report=inspect_parsed(x)
+        row=report["passes"][0]["stages"][0]["constant_buffers"][0]
+        self.assertEqual(row["name_sha256"], hashlib.sha256(b"bad name").hexdigest())
+        self.assertFalse(row["literal_hlsl_identifier_usable"])
+        self.assertTrue(row["requires_verified_shaderlab_alias"])
+        self.assertGreaterEqual(report["referenced_cb_names_requiring_alias"],1)
+        self.assertFalse(report["shaderlab_cb_rebinding_installed"])
 
     def test_reject_bad_row(self):
         for row in (["one"], {"x":"FoamCB0","y":0}, "name", [None,0]):
