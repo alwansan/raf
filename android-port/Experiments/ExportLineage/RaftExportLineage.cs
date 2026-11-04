@@ -2,6 +2,8 @@
 // No asset mutation, GUID assignment or replacement exporter is performed.
 using AssetRipper.Assets;
 using AssetRipper.SourceGenerated.Classes.ClassID_21;
+using AssetRipper.SourceGenerated.Classes.ClassID_128;
+using System.Security.Cryptography;
 using System.Text.Json;
 
 namespace AssetRipper.Export.UnityProjects;
@@ -35,6 +37,12 @@ internal static class RaftExportLineage
                 Pointer(json, "export", collection.CreateExportPointer(container, asset, false));
                 if (asset is IMaterial material)
                 {
+                    if (asset.MainAsset is IFont font && collection.GetType().FullName == "AssetRipper.Export.UnityProjects.Miscellaneous.FontAssetExportCollection")
+                    {
+                        Identity(json, "font_source", font);
+                        Pointer(json, "font_export", collection.CreateExportPointer(container, font, false));
+                        json.WriteString("font_data_sha256", Convert.ToHexStringLower(SHA256.HashData(font.FontData)));
+                    }
                     // Resolve the actual source PPtr, not a name/property guess.
                     IUnityObjectBase? shader = material.Shader_C21P;
                     if (shader is null)

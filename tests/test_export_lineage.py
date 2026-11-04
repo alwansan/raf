@@ -63,6 +63,23 @@ class ExportLineageTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'traced source Shader'):
             check(trace, edges, shaders, actual)
 
+    def test_implicit_font_requires_original_bytes_and_actual_importer(self):
+        trace, edges, shaders, actual = self.fixture()
+        row = trace['objects'][0]
+        row['collection_type'] = 'AssetRipper.Export.UnityProjects.Miscellaneous.FontAssetExportCollection'
+        row['font_source'] = {'owner': 'owner.assets', 'path_id': 50}
+        row['font_export'] = {'file_id': 12800000, 'guid': '3' * 32, 'type': 3}
+        row['font_data_sha256'] = 'f' * 64
+        del actual[(2100000, '3' * 32, '3')]
+        fonts = {(12800000, '3' * 32, '3'): 'f' * 64}
+        original = {('owner.assets', 50): 'f' * 64}
+        result = check(trace, edges, shaders, actual, fonts, original)
+        self.assertEqual(result['original_font_importer_materials_verified'], 1)
+        self.assertFalse(result['font_importer_runtime_shader_assignment_verified'])
+        fonts[(12800000, '3' * 32, '3')] = 'e' * 64
+        with self.assertRaisesRegex(ValueError, 'original font bytes'):
+            check(trace, edges, shaders, actual, fonts, original)
+
     def test_mixed_instance_duplicate_source_rejected(self):
         trace, edges, shaders, actual = self.fixture()
         trace['objects'].append(copy.deepcopy(trace['objects'][0]))

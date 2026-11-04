@@ -5,6 +5,7 @@ No names or object IDs are emitted. This proves assignments, not shader programs
 import argparse
 from collections import Counter
 import json
+import hashlib
 from pathlib import Path, PurePosixPath
 import re
 
@@ -31,7 +32,7 @@ def pointer(row):
     return row['file_id'], row['guid'].lower(), str(row['type'])
 
 
-def check(trace, original_edges, original_shaders, actual):
+def check(trace, original_edges, original_shaders, actual, fonts=None, source_fonts=None):
     if trace.get('schema_version') != 1 or not re.fullmatch('[0-9a-f]{32}', trace.get('export_instance', '')):
         raise ValueError('Missing same-instance export trace')
     seen = set()
@@ -42,6 +43,7 @@ def check(trace, original_edges, original_shaders, actual):
     custom_shader_pointers = set()
     material_shader_pointers = []
     redirects = 0
+    implicit_fonts = 0
     for row in trace['objects']:
         key = identity(row['source'])
         if key in seen:
@@ -68,6 +70,16 @@ def check(trace, original_edges, original_shaders, actual):
             continue
         shader = pointer(row['shader_export'])
         material_shader_pointers.append((identity(row['shader_source']), shader))
+        if row.get('collection_type') == 'AssetRipper.Export.UnityProjects.Miscellaneous.FontAssetExportCollection':
+            font = pointer(row['font_export'])
+            font_source = identity(row['font_source'])
+            sha = row['font_data_sha256']
+            if (font != (12800000, target[1], '3') or target[0] != 2100000 or target[2] != '3' or
+                    target in actual or not isinstance(sha, str) or not re.fullmatch('[0-9a-f]{64}', sha) or
+                    fonts is None or fonts.get(font) != sha or source_fonts is None or source_fonts.get(font_source) != sha):
+                raise ValueError('Implicit font material lacks matching original font bytes and TrueType importer')
+            implicit_fonts += 1
+            continue
         if target in exports:
             raise ValueError('Two distinct original materials share one export pointer')
         exports[target] = shader
@@ -76,22 +88,30 @@ def check(trace, original_edges, original_shaders, actual):
     if any(shader_exports.get(key) != target for key, target in material_shader_pointers):
         raise ValueError('Material export pointer does not target its traced source Shader')
     if not actual or actual != exports:
+        print('RAFT_LINEAGE_MISMATCH ' + json.dumps({
+            'traced_yaml_materials': len(exports), 'actual_yaml_materials': len(actual),
+            'missing_actual': len(exports.keys() - actual.keys()),
+            'unexpected_actual': len(actual.keys() - exports.keys()),
+            'different_shader_pointers': sum(exports[k] != actual[k] for k in exports.keys() & actual.keys()),
+            'implicit_font_materials': implicit_fonts, 'engine_material_redirects': redirects}, sort_keys=True))
         raise ValueError('Actual YAML material pointers differ from same-instance export trace')
     return {'source_material_edges_verified': len(selected_materials),
             'source_shader_objects_traced': len(selected_shaders),
             'actual_material_documents_verified': len(actual),
             'predefined_material_redirects_observed': redirects,
+            'original_font_importer_materials_verified': implicit_fonts,
+            'font_importer_runtime_shader_assignment_verified': False,
             'original_exported_material_shader_assignments_verified': True,
             'predefined_material_runtime_equivalence_verified': False,
             'shader_program_equivalence_verified': False}
 
 
-def source_graph(source):
+def source_graph(source, include_fonts=False):
     import UnityPy
     from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
     pins = {'Raft_Data/' + k: v for k, v in SHADER_OWNERS.items()}
     pins.update({k: v for k, v in PINS.items() if '/Resources/' in k})
-    materials, shaders = {}, set()
+    materials, shaders, fonts = {}, set(), {}
     for relative, pin in pins.items():
         path = source / relative
         if path.is_symlink() or fingerprint(path) != pin:
@@ -100,12 +120,39 @@ def source_graph(source):
         for obj in UnityPy.load(str(path)).objects:
             if obj.type.name == 'Shader':
                 shaders.add((owner, obj.path_id))
+            elif obj.type.name == 'Font':
+                fonts[owner, obj.path_id] = hashlib.sha256(bytes(obj.read_typetree()['m_FontData'])).hexdigest()
             elif obj.type.name == 'Material' and '/Resources/' not in relative:
                 external = [x.path for x in obj.assets_file.externals]
                 materials[owner, obj.path_id] = resolve_pointer(owner, external, obj.read_typetree()['m_Shader'])
     if any(target not in shaders for target in materials.values()):
         raise ValueError('Original material graph has unresolved source shaders')
-    return materials, shaders
+    return (materials, shaders, fonts) if include_fonts else (materials, shaders)
+
+
+def font_importers(project):
+    result = {}
+    assets = project / 'Assets'
+    for path in assets.rglob('*'):
+        if path.suffix.lower() not in {'.ttf', '.otf'} or not path.is_file():
+            continue
+        if path.is_symlink() or any(p.is_symlink() for p in path.parents):
+            raise ValueError('Redirected font importer')
+        meta = Path(str(path) + '.meta')
+        if meta.is_symlink():
+            raise ValueError('Redirected font metadata')
+        text = meta.read_text(encoding='utf-8-sig')
+        guids = GUID.findall(text)
+        if len(guids) != 1 or len(re.findall(r'^TrueTypeFontImporter:\s*$', text, re.M)) != 1:
+            raise ValueError('Original font lacks unique TrueType importer metadata')
+        key = 12800000, guids[0].lower(), '3'
+        if key in result:
+            raise ValueError('Duplicate font importer GUID')
+        raw = path.read_bytes()
+        if raw[:4] not in (b'\x00\x01\x00\x00', b'OTTO', b'true', b'ttcf'):
+            raise ValueError('Invalid original font container')
+        result[key] = hashlib.sha256(raw).hexdigest()
+    return result
 
 
 def actual_graph(project):
@@ -157,7 +204,7 @@ if __name__ == '__main__':
     a = p.parse_args()
     if a.out.resolve().is_relative_to(a.project.resolve()):
         raise ValueError('Report must stay outside export')
-    edges, shaders = source_graph(a.source)
-    report = check(json.loads(a.private_trace.read_text()), edges, shaders, actual_graph(a.project))
+    edges, shaders, fonts = source_graph(a.source, include_fonts=True)
+    report = check(json.loads(a.private_trace.read_text()), edges, shaders, actual_graph(a.project), font_importers(a.project), fonts)
     a.out.write_text(json.dumps(report, indent=2, sort_keys=True) + '\n')
     print('RAFT_ORIGINAL_EXPORT_LINEAGE ' + json.dumps(report, sort_keys=True))
