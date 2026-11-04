@@ -1,0 +1,13 @@
+{
+  "id": "B21-20261104T2310Z-start-owner",
+  "owner": "B21",
+  "session_id": "20261104T2257Z-B21-8e72",
+  "issue_id": "RENDER-002",
+  "type": "start",
+  "summary": "Start distinct authenticated original Light→GameObject owner exact same-export identity proof after verified two original Light value fidelity. Extend B21-only class1 trace, no W1/B02 shared edits; no Unity/native APK.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41930891466",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B21_LIGHT_EXPORT_LINEAGE_2026-11-04.md"
+  ],
+  "at": "2026-11-04T23:10:00Z"
+}
