@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "owner": "B09",
+  "session_id": "20261104T224504636Z-B09-sp7",
+  "issue_id": "WATER-001",
+  "hypothesis": "The original verified Spectrum PathID2432 has exactly seven passes, 28 stage references and 18 distinct original DXBC program slots, which can be linked by W2/B17 identity and privately translated without modifying game shaders.",
+  "source_commit": "8cf6e4d3eeab89f5db052546f9b22a999195b723",
+  "input_hashes": [
+    "zip2 source=15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "sharedassets0.assets size=115978112 sha256=0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "B17 authentic CI41920232173"
+  ],
+  "tool_versions": {
+    "Python": "Local Python3 synthetic; Ubuntu24 GH runner pending",
+    "UnityPy": "1.25.4 in workflow",
+    "vkd3d-compiler/spirv-tools/spirv-cross/glslang-tools": "Ubuntu24 apt versions pending real run"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_b09_spectrum_topology_contract.py -v",
+    "python3 -m unittest discover -s tests -p test_b09_translate_original_spectrum.py -v",
+    "python3 -m scripts.b09_stage_original_spectrum --source \"$RUNNER_TEMP/b09-original\" --repo \"$GITHUB_WORKSPACE\" --private \"$RUNNER_TEMP/b09-spectrum-private\" --out \"$RUNNER_TEMP/b09-spectrum-aggregate.json\"",
+    "timeout 900s python3 -m scripts.b09_translate_original_spectrum --private \"$RUNNER_TEMP/b09-spectrum-private\" --stage-report \"$RUNNER_TEMP/b09-spectrum-aggregate.json\" --repo \"$GITHUB_WORKSPACE\" --out \"$RUNNER_TEMP/b09-spectrum-roundtrip-aggregate.json\""
+  ],
+  "negative_controls": [
+    "source 6/8-pass unverified identity fail",
+    "incorrect source original blob order fail",
+    "missing/duplicate original variant fail",
+    "bad DXBC SHA/length fail",
+    "reused blob slot with inconsistent SHA fail",
+    "private symlink/checkout output fail",
+    "failed translator cannot publish success report"
+  ],
+  "workflow_path": ".github/workflows/raft-b09-spectrum-extraction.yml",
+  "run_url": null,
+  "artifact_urls": [],
+  "budget": "One SHA-pinned 115978112-byte owner, ubuntu-24.04 30min CI, vkd3d/spirv private roundtrip timeout 900s; independent cancel-in-progress=false",
+  "status": "source_integrated_original_ci_unknown",
+  "observed_result": "23/23 local synthetic tests PASS (13 topology+10 translator). Git blob hashes verified equal live GitHub for these exact four files. B17 original 7-pass structure authenticated in CI41920232173; B09 actual original DXBC packet/roundtrip output and CI run conclusion remain unknown.",
+  "rejected_hypotheses": [
+    "Six passes observed as device minimum are necessarily entire original shader (original has seven)",
+    "Two original providers needed for Spectrum (PathID2432 in single SHA-pinned sharedassets0.assets)",
+    "Vulkan structural translation alone proves original pixels or gameplay"
+  ],
+  "limitations": [
+    "No B09 original-payload CI outcome yet",
+    "Synthetic fake translator; real vkd3d/glslang runs unknown",
+    "Original ShaderLab, actual CB/sampler/binding and keyword correctness not reconstructed",
+    "Unity GPU/Android/Adreno/phone untested"
+  ],
+  "integration_commit": "8cf6e4d3eeab89f5db052546f9b22a999195b723",
+  "next_step": "Inspect GitHub workflow run and safe aggregates; if authentic roundtrips pass, reconstruct private original shader per-pass states/CB/sampler keyword variants and test Unity+GPU; if failed correct measured stage semantics.",
+  "updated_at": "2026-11-04T22:57:10.776Z"
+}
