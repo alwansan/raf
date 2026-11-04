@@ -6,7 +6,7 @@
   "issue_id": "RENDER-002",
   "track": "colors-materials:original-dynamic-light-serialization",
   "approach": "Source-authenticated built-in Unity Light object field fidelity and diagnostic schema for dynamic-light components, distinct from baked LightmapSettings and shader/material Link/GUID verification. No source or game-code mutations.",
-  "status": "active",
+  "status": "completed",
   "base_sha": null,
   "intended_files": [
     "scripts/b21_original_dynamic_lights.py",
@@ -23,8 +23,10 @@
   "experiment_ids": [
     "B21-20261104T2206Z-original-dynamic-lights"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Bound read-only native Light typed fields, require authenticated original source, test synthetic invalid and valid controls and inspect six real source scenes. Then compare same instance exported Light components if available; no pixels claim.",
-  "updated_at": "2026-11-04T22:06:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41922372594"
+  ],
+  "result": "SUCCESS source-only CI41922372594: 16 lightmap +18 new Light tests pass; six original SHA256-verified scenes, two original active valid native Light objects (one level0, one level1), both linked to real local GameObject and finite non-white RGB/positive intensity and range; levels2..5 no Light objects. Exact same-instance exported Light parity/device pixels UNKNOWN.",
+  "next_step": "Authentically match two original Light object owners to actual same-instance exported Unity Light components and compare fields, only then repair measured mismatches. No other B clients' files touched. No native build/device evidence.",
+  "updated_at": "2026-11-04T22:10:00Z"
 }
