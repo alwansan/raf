@@ -473,6 +473,42 @@ jobs:
             ${{ runner.temp }}/w1-depth-install-summary.json
           if-no-files-found: ignore
           retention-days: 7
+      - name: Stage B45 authenticated original two-pass Blur only if exact imported shader identity is found
+        shell: bash
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_b45_blur_*.py -v
+          python3 -m unittest discover -s tests -p 'test_b45_*original_blur.py' -v
+          python3 -m unittest discover -s tests -p test_a12_original_blur_wrapper.py -v
+          sudo apt-get install -y -qq --no-install-recommends mesa-vulkan-drivers libvulkan-dev vulkan-validationlayers g++
+          mkdir -p "$RUNNER_TEMP/b45"
+          python3 -m scripts.w5_blur_raster_host --template scripts/w1_depth_raster_vulkan.cpp --output "$RUNNER_TEMP/b45/host.cpp"
+          g++ -O2 -std=c++17 "$RUNNER_TEMP/b45/host.cpp" -lvulkan -o "$RUNNER_TEMP/b45/host"
+          export VK_DRIVER_FILES="$(find /usr/share/vulkan/icd.d -maxdepth 1 -name '*lvp*.json' -print -quit)"
+          test -n "$VK_DRIVER_FILES"
+          timeout 600s python3 -m scripts.b45_stage_original_blur \
+            --source "$RUNNER_TEMP/w1-original/Raft_Data" --repo . \
+            --runner "$RUNNER_TEMP/b45/host" \
+            --private-shader "$RUNNER_TEMP/b45/private-original.shader" \
+            --out "$RUNNER_TEMP/b45/aggregate.json"
+          python3 -m scripts.b45_install_original_blur \
+            --project "$RUNNER_TEMP/project/ExportedProject" \
+            --private-shader "$RUNNER_TEMP/b45/private-original.shader" \
+            --backup "$RUNNER_TEMP/b45-exported-blur-backup" \
+            --out "$RUNNER_TEMP/b45/install.json"
+          rm "$RUNNER_TEMP/b45/private-original.shader"
+      - name: Retain B45 aggregate two-pass reconstruction and original-GUID install proof only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: raft-b45-original-blur-native-staging-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/b45/aggregate.json
+            ${{ runner.temp }}/b45/install.json
+          if-no-files-found: ignore
+          retention-days: 7
       - name: Inventory actual exported Material Shader references without modifying assets
         id: w1_material_inventory
         # A diagnostic failure stays visible in the JSON. Existing strict builtin
