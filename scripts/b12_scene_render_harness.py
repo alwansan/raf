@@ -10,6 +10,7 @@ from pathlib import Path
 SOURCE = Path(__file__).resolve().parents[1] / "android-port/Runtime/Platform/AndroidTestDiagnostics.cs"
 START = "        private System.Collections.IEnumerator ReportSceneShaderSnapshot(Scene scene)"
 END = "        private static void SceneUnloaded(Scene scene)"
+QUALITY_START = "        private static string OriginalQualityStateSnapshot()"
 
 CSPROJ = """<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup>
 <OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework>
@@ -22,6 +23,7 @@ STUBS = r"""
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -75,7 +77,16 @@ namespace UnityEngine {
     public class WaitForSecondsRealtime {
         public WaitForSecondsRealtime(float seconds) {}
     }
-    public static class QualitySettings { public static string activeColorSpace = "Linear"; }
+    public static class QualitySettings {
+        public static string activeColorSpace = "Linear";
+        public static string[] names = new[] { "SyntheticQuality" };
+        public static int GetQualityLevel() => 0;
+        public static int pixelLightCount = 4;
+        public static int masterTextureLimit = 0;
+        public static int antiAliasing = 4;
+        public static string shadows = "All";
+        public static float shadowDistance = 50f;
+    }
     public static class RenderSettings {
         public static string ambientMode = "Skybox";
         public static bool fog = false;
@@ -227,6 +238,11 @@ def build(out: Path) -> Path:
     if source.count(START) != 1 or source.count(END) != 1:
         raise ValueError("Unrecognized original B12 renderer diagnostic method")
     method = source[source.index(START):source.index(END)]
+    quality = ""
+    if "OriginalQualityStateSnapshot()" in method:
+        if source.count(QUALITY_START) != 1:
+            raise ValueError("Unknown same-source quality helper integration")
+        quality = source[source.index(QUALITY_START):source.index(START)]
     for required in ("const int RootLimit = 1024;", "const int TransformLimit = 4096;",
                      "const int PendingLimit = 1024;", "const int RendererLimit = 512;",
                      "const int MaterialLimit = 4096;", "renderer.GetSharedMaterials(materials);"):
@@ -234,7 +250,7 @@ def build(out: Path) -> Path:
             raise ValueError("B12 production method budget contract changed")
     out.mkdir(parents=True)
     (out / "B12Harness.csproj").write_text(CSPROJ, encoding="utf-8")
-    (out / "Harness.cs").write_text(STUBS + method + TESTS, encoding="utf-8")
+    (out / "Harness.cs").write_text(STUBS + quality + method + TESTS, encoding="utf-8")
     return out / "B12Harness.csproj"
 
 if __name__ == "__main__":
