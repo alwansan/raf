@@ -1,0 +1,50 @@
+name: B24 B-team evidence summary checkpoint (generated-only)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-b24-team-evidence-checkpoint.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: raft-b24-team-summary-generation
+  cancel-in-progress: false
+jobs:
+  generated-summary:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: feature/android-native-port
+          persist-credentials: true
+          lfs: false
+          sparse-checkout: |
+            scripts/refresh_b_team.py
+            prompt/coordination/B_TEAM
+      - name: Regenerate from current live issues resources and events without force
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name raft-b24-team-checkpoint
+          git config user.email raft-b24-team-checkpoint@users.noreply.github.com
+          for attempt in 1 2 3 4 5 6 7 8; do
+            git fetch --quiet --no-tags origin feature/android-native-port
+            git reset --hard --quiet FETCH_HEAD
+            python3 scripts/refresh_b_team.py
+            git add -- prompt/coordination/B_TEAM/SUMMARY.md prompt/coordination/B_TEAM/snapshot.json
+            if git diff --cached --quiet; then
+              echo "B24_TEAM_SUMMARY current=true"
+              exit 0
+            fi
+            git commit --quiet -m 'coord(B24): refresh team evidence snapshot after authenticated Foam result'
+            if git push --quiet origin HEAD:feature/android-native-port; then
+              echo "B24_TEAM_SUMMARY regenerated=true push_fast_forward=true"
+              exit 0
+            fi
+            echo "B24_TEAM_SUMMARY branch moved, retry regenerated records (no force)"
+            sleep 1
+          done
+          echo "B24_TEAM_SUMMARY conflict: no forced writes" >&2
+          exit 1
