@@ -33,24 +33,26 @@ LIGHT_CAPTURE = """    private static void CaptureLightObjects(
         json.WriteNumber("schema_version", 1);
         json.WriteString("export_instance", exportInstance);
         json.WriteStartArray("objects");
-        var seen = new HashSet<(string Owner, long PathId)>();
+        var seen = new HashSet<(int ClassId, string Owner, long PathId)>();
         int nonExportable = 0;
+        int nonExportableGameObjects = 0;
         foreach (IExportCollection collection in collections)
         {
             container.CurrentCollection = collection;
             foreach (IUnityObjectBase asset in collection.Assets)
             {
-                if (asset.ClassID != 108) // Unity native Light; no name guess.
+                if (asset.ClassID is not (1 or 108)) // Native GameObject1 and Light108 only.
                     continue;
-                if (!seen.Add((asset.Collection.Name, asset.PathID)))
-                    throw new InvalidOperationException("Ambiguous Light source identity in export");
+                if (!seen.Add((asset.ClassID, asset.Collection.Name, asset.PathID)))
+                    throw new InvalidOperationException("Ambiguous native scene object source identity in export");
                 if (!collection.Exportable)
                 {
-                    nonExportable++;
+                    if (asset.ClassID == 108) nonExportable++;
+                    else nonExportableGameObjects++;
                     continue;
                 }
                 json.WriteStartObject();
-                json.WriteNumber("class_id", 108);
+                json.WriteNumber("class_id", asset.ClassID);
                 Identity(json, "source", asset);
                 json.WriteString("collection_type", collection.GetType().FullName);
                 Pointer(json, "export", collection.CreateExportPointer(container, asset, false));
@@ -59,6 +61,7 @@ LIGHT_CAPTURE = """    private static void CaptureLightObjects(
         }
         json.WriteEndArray();
         json.WriteNumber("nonexportable_light_objects_skipped", nonExportable);
+        json.WriteNumber("nonexportable_gameobjects_skipped", nonExportableGameObjects);
         json.WriteEndObject();
         json.Flush();
     }
@@ -84,7 +87,7 @@ def render(base: bytes) -> bytes:
     text = text.replace(METHOD_ANCHOR, LIGHT_CAPTURE + METHOD_ANCHOR)
     if (text.count('if (asset.ClassID is not (21 or 48))') != 1
         or text.count('if (asset.ClassID != 28)') != 1
-        or text.count('if (asset.ClassID != 108)') != 1
+        or text.count('if (asset.ClassID is not (1 or 108))') != 1
         or text.count('CaptureLightObjects(') != 2
         or text.count('json.WriteString("export_instance", exportInstance);') != 3
         or text.count('FileMode.CreateNew') != 3):
@@ -108,6 +111,8 @@ def stage(source: Path, destination: Path) -> dict:
         "b02_composed_helper_sha256_verified": True,
         "b21_composed_sha256": hashlib.sha256(staged).hexdigest(),
         "native_light_class_id": 108,
+        "native_gameobject_class_id": 1,
+        "same_export_gameobject_owner_verified": False,
         "same_export_instance_with_w1_and_b02": True,
         "shared_helpers_modified": False,
         "actual_raft_light_export_captured": False,
