@@ -4,17 +4,20 @@
   "generation": "B-2026-11-04",
   "session_id": "20261104T2112Z-B07-6e51",
   "resumed_from_session": null,
-  "status": "active",
+  "status": "paused",
   "base_sha": "0d33268645106e7bc28fcaa786d90683fe93de19",
-  "last_commit": null,
-  "updated_at": "2026-11-04T21:12:00Z",
+  "last_commit": "0a08683f09bdad8ef795fff8f59a21c6724b0661",
+  "updated_at": "2026-11-04T21:24:00Z",
   "tracks": [
     "LOCAL-005 offline-world readiness"
   ],
   "work_ids": [
     "B07-20261104T2112Z-B07-6e51-world-callback-proof"
   ],
-  "run_urls": [],
-  "next_step": "Inspect SHA-pinned original GameManager/Raft_Network WorldHasBeenLoaded and OnWorldRecieved ordering; implement a non-overlapping executable original-source local-world failure-chain test, then integrate only a verified fix. Avoid B50 Steam guards, graphics concurrent work, audio/Settings/touch.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41914637539",
+    "https://github.com/alwansan/raf/actions/runs/41915466470"
+  ],
+  "next_step": "B07 source-integrated SHA-pinned GameManager.OnWorldRecieved Android operation tracing, CI41915466470 SUCCESS; LOCAL-005 OPEN. Next read HEAD/CL and coordinate actual new APK, capture world/OnWorldRecieved logs, verify original offline .rgd create/save/reopen. No worker operating between sessions; do not change audio/Settings/touch.",
   "memory_path": "prompt/coordination/clients/B07/MEMORY.md"
 }
