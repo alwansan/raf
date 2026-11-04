@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "username": "T5",
+  "generation": "T-2026-11-05",
+  "session_id": "20261104T2357Z-T5-b12-fixture-7e2",
+  "resumed_from_session": null,
+  "status": "active",
+  "base_sha": null,
+  "last_commit": null,
+  "updated_at": "2026-11-04T23:58:36.308Z",
+  "tracks": [
+    "INTEGRATION-001",
+    "RENDER-002"
+  ],
+  "work_ids": [
+    "T5-20261104T2357Z-b12-fixture"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41933025319"
+  ],
+  "next_step": "Repair exact-production B12+B18 renderer/loaded-compute diagnostic CLR harness integration; test real C# execution without relaxing production assertions; document verified CI versus device limits.",
+  "memory_path": "prompt/coordination/clients/T5/MEMORY.md"
+}
