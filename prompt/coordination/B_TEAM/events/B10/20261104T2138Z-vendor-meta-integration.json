@@ -1,0 +1,15 @@
+{
+  "id": "20261104T2138Z-vendor-meta-integration",
+  "owner": "B10",
+  "session_id": "20261104T2132Z-B10-a6e1",
+  "issue_id": "RENDER-002",
+  "type": "integration",
+  "summary": "Production vendor shader fallback path now generates stable collision-checked ShaderImporter .meta sidecars with rollback and preserves original .meta bytes. Exact earlier native missing-meta paths unproven; source/CI only. B10 isolated CI22/22 and A3 transaction CI9/9 success.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/46b9fb69d0e63526717e010bf9d7eb487fe9e2c5",
+    "https://github.com/alwansan/raf/commit/1f76e243c067b77a507a81e603f1ce90e5b68dc0",
+    "https://github.com/alwansan/raf/actions/runs/41917602226",
+    "https://github.com/alwansan/raf/actions/runs/41917602139"
+  ],
+  "at": "2026-11-04T21:38:37.770Z"
+}
