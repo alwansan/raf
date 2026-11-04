@@ -1,0 +1,14 @@
+{
+  "id": "20261104T230700Z-B18-exact-target-map",
+  "owner": "B18",
+  "session_id": "20261104T225100Z-B18-map2",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "B18 CI41930824777 PASS after typed IMAGE flag repair: 10 source-free tests and authentic ZIP2 original FFT 20/20 programs compiled with each of two explicit vkd3d DXBC t0/t1/u0 to SPIR-V descriptor maps. Native Unity kernel mapping/device visuals and independent t0-vs-t1 numerical input effects unproven.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41930824777",
+    "https://github.com/alwansan/raf/commit/04b080630c9f8f0308212b3c8fe18aac34469130",
+    "https://github.com/alwansan/raf/actions/runs/41930607853"
+  ],
+  "at": "2026-11-04T23:07:00Z"
+}
