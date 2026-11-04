@@ -1,0 +1,12 @@
+{
+  "id": "B13-builtin-atomic-start",
+  "owner": "B13",
+  "session_id": "20261104T2247Z-B13-builtin-atomic",
+  "issue_id": "RENDER-002",
+  "type": "start",
+  "summary": "B13 resumes on independent P0 production builtin shader source safety: prepublish concurrency and atomic rollback; preserves original GUIDs and all authenticity gates, source-only.",
+  "evidence": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/restore_builtin_shaders.py"
+  ],
+  "at": "2026-11-04T22:47:00Z"
+}
