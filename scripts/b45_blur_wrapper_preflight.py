@@ -42,6 +42,23 @@ def diagnose(parsed):
         "game_source_or_guid_modified": False,
         "numeric_or_device_equivalence_proven": False,
     }
+    # Safe schema-only diagnosis of the exact original Material property.
+    # Do not log property names, defaults, source, descriptions or attributes.
+    report["property_schema"] = [{
+        "field_keys": sorted(str(k) for k in prop),
+        "value_shape_keys": sorted(str(k) for k in prop.get("m_DefValue", {}))
+            if isinstance(prop.get("m_DefValue"), dict) else None,
+        "texture_shape_keys": sorted(str(k) for k in prop.get("m_DefTexture", {}))
+            if isinstance(prop.get("m_DefTexture"), dict) else None,
+        "serialized_type": prop.get("m_Type") if type(prop.get("m_Type")) is int else None,
+        "serialized_flags": prop.get("m_Flags") if type(prop.get("m_Flags")) is int else None,
+        "attribute_count": len(prop.get("m_Attributes", []))
+            if isinstance(prop.get("m_Attributes"), list) else None,
+        "definition_sha256": hashlib.sha256(json.dumps(prop, sort_keys=True,
+            separators=(",", ":"), ensure_ascii=True).encode()).hexdigest(),
+    } for prop in props if isinstance(prop, dict)]
+    if len(report["property_schema"]) != len(props):
+        raise ValueError("Unknown original property representation")
     for index, shader_pass in enumerate(passes):
         if not isinstance(shader_pass, dict):
             raise ValueError("Invalid original pass schema")
