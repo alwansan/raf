@@ -22,7 +22,8 @@
     "https://github.com/alwansan/raf/actions/runs/41922333604",
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B18_FFT_RDEF_PARITY_2026-11-04.md",
     "https://github.com/alwansan/raf/actions/runs/41923703800",
-    "https://github.com/alwansan/raf/actions/runs/41930824777"
+    "https://github.com/alwansan/raf/actions/runs/41930824777",
+    "https://github.com/alwansan/raf/actions/runs/41931883517"
   ],
   "remaining": [
     "20 original DXBC programs have zero RDEF name reflection; do not infer compiled private resource name identity",
@@ -30,10 +31,11 @@
     "SPIR-V descriptor set/binding class and actual Unity .compute integration not yet B18-verified",
     "Original water shaders, render and Adreno visual parity unverified",
     "Translation stage B18: all 20 original DXBC->SPIR-V typed image role counts preserved, not per-source-register exact descriptor mapping or Unity runtime binding.",
-    "Explicit mapping controls TARGET set/binding through library API. B18 two original FFT read inputs have same SPIR-V type, so independent behavioral t0 vs t1 differentiation remains open; Unity source-to-kernel selection and device not proven."
+    "Explicit mapping controls TARGET set/binding through library API. B18 two original FFT read inputs have same SPIR-V type, so independent behavioral t0 vs t1 differentiation remains open; Unity source-to-kernel selection and device not proven.",
+    "B18 exact SPIR-V profile normalized parity across 20 original programs VERIFIED, but numeric differentiation between two same-class sampled input texture values remains unproved."
   ],
   "updated_by": "B18",
-  "updated_at": "2026-11-04T23:08:10.066Z",
+  "updated_at": "2026-11-04T23:14:38.568Z",
   "translated_spirv": {
     "verified_original_fft_programs": 20,
     "expected_sampled_texture2d_per_program": 2,
@@ -50,5 +52,18 @@
     "same_class_two_input_behavior_distinguished": false,
     "unity_import_or_android_device_render": false,
     "source_object_sha256": "9d934f5c99183c6df5cf2f1fefc9d3e5ec4bce5da5f96a86e4c02910d5322247"
+  },
+  "spirv_variable_identity": {
+    "status": "VERIFIED_SHA_PINNED_ORIGINAL_20_OF_20",
+    "source_registers": [
+      "t0",
+      "t1",
+      "u0"
+    ],
+    "profiles": "A and B",
+    "non_descriptor_instruction_parity_verified": true,
+    "variable_ids_stable_across_profiles": true,
+    "independent_input_value_numeric_proof": false,
+    "unity_device_proven": false
   }
 }
