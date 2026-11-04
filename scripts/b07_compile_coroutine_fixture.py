@@ -7,7 +7,7 @@ import argparse
 from pathlib import Path
 
 from scripts.b07_probe_original_world_callbacks import fingerprint, method_body
-from scripts.b07_world_coroutine_trace import _instrument_pinned
+from scripts.b07_world_coroutine_trace import ENTRY, _instrument_pinned
 
 SOURCE = '''using System;
 using System.Collections;
