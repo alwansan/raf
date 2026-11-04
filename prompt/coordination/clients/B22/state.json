@@ -7,7 +7,7 @@
   "status": "completed",
   "base_sha": "03ecf8ffda13347c9ffb17ef4c5aea3a4eb86b48",
   "last_commit": "2f50776dfe51a5d856f3d0484a8b788ee09c04bd",
-  "updated_at": "2026-11-04T22:09:00Z",
+  "updated_at": "2026-11-04T22:15:00Z",
   "tracks": [
     "colors-materials",
     "world-save"
@@ -18,8 +18,10 @@
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41918404573",
-    "https://github.com/alwansan/raf/actions/runs/41920661518"
+    "https://github.com/alwansan/raf/actions/runs/41920661518",
+    "https://github.com/alwansan/raf/actions/runs/41921049831",
+    "https://github.com/alwansan/raf/actions/runs/41921246829"
   ],
-  "next_step": "Tool/staging scopes source-fixed. Next run original ZIP2 same-export scalar check alongside B44; native import/phone world create/save/.rgd required and not proven. No work outside active session.",
+  "next_step": "Source-only scopes complete. Actual private original Raft Material export same-instance check and later phone local-world/.rgd validation remain. No autonomous work outside active sessions.",
   "memory_path": "prompt/coordination/clients/B22/MEMORY.md"
 }
