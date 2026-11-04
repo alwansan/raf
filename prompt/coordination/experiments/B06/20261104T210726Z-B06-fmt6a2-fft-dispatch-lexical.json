@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "owner": "B06",
+  "session_id": "20261104T210726Z-B06-fmt6a2",
+  "issue_id": "WATER-001",
+  "hypothesis": "Raw secondary Dispatch token scan in original FFT resource audit mistakes comment/string Dispatch for executable call even when primary source audit correctly masks literals.",
+  "source_commit": "f4b9520c367bf8e78fcfebba673f20b465edb720",
+  "input_hashes": [],
+  "tool_versions": {
+    "python": "Python 3 on ubuntu-24.04"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_probe_original_fft_resource_bindings.py -v"
+  ],
+  "negative_controls": [
+    "commented fake Dispatch not counted",
+    "block-comment fake Dispatch not counted",
+    "quoted and verbatim string fake Dispatch not counted",
+    "removed actual second Dispatch rejected despite remaining fake text",
+    "changed real dispatch offsets and y-group/height rejected",
+    "SHA and resource mapping mutation rejected"
+  ],
+  "workflow_path": ".github/workflows/raft-b06-fft-resource-lexical.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41914612977",
+  "artifact_urls": [],
+  "budget": "Single 7-minute capped CPU-only ubuntu-24.04 job with sparse scripts/tests and no LFS.",
+  "status": "completed",
+  "observed_result": "8/8 synthetic tests PASS; true CSharp Dispatch arguments still validated while comment/string fake Dispatch ignored. Source commit df784a6. First intermediate change 78e926f3 mistakenly included escaped literal newlines and was fixed before successful run.",
+  "rejected_hypotheses": [
+    "A fake Dispatch comment is necessarily a real compiled source/runtime error: no, it was a false-positive static diagnostic.",
+    "Synthetic CI proves original ComputeShader/Unity runtime is fixed: not supported."
+  ],
+  "limitations": [
+    "Original private source not rerun in modified scanner in this workflow.",
+    "No actual Unity shader import, GPU execution or device frame evidence.",
+    "Only excludes false positives from secondary Dispatch shape, not actual kernelCount0 failure."
+  ],
+  "integration_commit": "df784a6ab821f3dbbfbe7ea47293e16f3edba11e",
+  "next_step": "If original private input CI becomes necessary, use authenticated ZIP2/managed source and exact pins in isolated run; do not duplicate equivalent heavy tests. Focus separate original kernel import and pass restoration."
+}
