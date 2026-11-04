@@ -1,0 +1,14 @@
+{
+  "id": "B14-20261104T2137Z-result",
+  "owner": "B14",
+  "session_id": "20261104T2131Z-B14-a71c",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Water scanner source-integrity fix for linked project/Assets/shader/compute metadata: integrated at cfb97bf and verified at CI41917493634 with 10/10 source-only tests; no authentic water/device claim.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/cfb97bf58e6c2736268df5aa8ecc9e54f3789ef6",
+    "https://github.com/alwansan/raf/commit/4e0ce04441e64e95439f8023cead5b2a9da025b3",
+    "https://github.com/alwansan/raf/actions/runs/41917493634"
+  ],
+  "at": "2026-11-04T21:37:39.145Z"
+}
