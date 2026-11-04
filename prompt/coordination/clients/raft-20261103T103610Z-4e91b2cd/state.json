@@ -1,15 +1,15 @@
 {
   "schema_version": 1,
   "username": "raft-20261103T103610Z-4e91b2cd",
-  "session_id": "20261104-sparse-cb-model",
+  "session_id": "20261104-authenticated-address-model",
   "resumed_from": null,
   "status": "completed",
-  "updated_at": "2026-11-03T23:50:22Z",
-  "base_sha": "81429bf23a9b588068cfc1d80f6a2863697c36de",
+  "updated_at": "2026-11-04T00:53:25Z",
+  "base_sha": "71552faa6cabdd01c154c0d078bb2f644f49c69a",
   "current_work": [
     "WATER-001"
   ],
   "last_commit": "7bbc443c02b5a0169072ea67f773af06537af72b",
-  "next_step": "Decode actual DXBC operand masks against sparse model before private named rebinding",
+  "next_step": "Bounded original DXBC operand decoding; metadata/model consistency is complete, do not repeat",
   "memory_path": "prompt/coordination/clients/raft-20261103T103610Z-4e91b2cd/MEMORY.md"
 }

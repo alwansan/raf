@@ -1,0 +1,1 @@
+{"schema_version":1,"owner":"raft-20261103T103610Z-4e91b2cd","status":"completed","source_sha":"71552faa6cabdd01c154c0d078bb2f644f49c69a","source_run":41742032440,"result":"70 addresses;968 unmapped bytes;5localtests pass","limitations":["Metadata-derived model only; no actual operand decode/GPU"],"next_step":"Decode actual original operands"}

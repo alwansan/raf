@@ -1085,3 +1085,7 @@ The25engine+140non-engine split agrees with the old native export's140initial lo
 
 ## Sparse Blur CB reconstruction model — 4 November
 [Handoff](../docs/BLUR_SPARSE_CB_MODEL_2026-11-04.md): added allocation/hole-preserving register-component model;4localtests pass. Uses previously authenticated numeric member observations; not operand/GPU proof, not production integration. No source downloads or repeated workflow. NOT_READY.
+
+
+## Authenticated Blur address model — 4 November
+[Handoff](../docs/BLUR_AUTHENTICATED_ADDRESS_MODEL_2026-11-04.md): numeric-only original fixture from41742032440 confirms70component addresses across6buffers/7members;968unmapped bytes preserved. New regression1/1 and prior4/4localtests pass. No new downloads or workflow; actual operand/matrix/ShaderLab semantics unverified. NOT_READY.

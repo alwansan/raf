@@ -1,0 +1,176 @@
+{
+  "source_run": 41742032440,
+  "source_sha": "7bbc443c02b5a0169072ea67f773af06537af72b",
+  "source_job": 126285649840,
+  "observation": {
+    "member_semantics_verified": false,
+    "original_member_layout_preserved": true,
+    "original_object_sha256": "c9341848367eaedb12e551ce9061b1eea728f54f2069ef1a3c12c4a4a2e9bb52",
+    "original_verified": true,
+    "private_names_published": false,
+    "runtime_or_shaderlab_verified": false,
+    "stages": [
+      {
+        "buffers": [
+          {
+            "allocation_bytes": 176,
+            "candidate_byte_offset_model_verified": false,
+            "candidate_overlapping_adjacent_members": 0,
+            "compiled_declared_bytes": 64,
+            "members": [
+              {
+                "candidate_byte_end": 64,
+                "candidate_within_allocation": true,
+                "candidate_within_compiled_span": true,
+                "kind": "matrix",
+                "serialized_array_size": 0,
+                "serialized_dimension": 4,
+                "serialized_index": 0,
+                "serialized_type": 0
+              }
+            ],
+            "serialized_partial_cb": true,
+            "slot": 0,
+            "struct_count": 0
+          },
+          {
+            "allocation_bytes": 368,
+            "candidate_byte_offset_model_verified": false,
+            "candidate_overlapping_adjacent_members": 0,
+            "compiled_declared_bytes": 336,
+            "members": [
+              {
+                "candidate_byte_end": 336,
+                "candidate_within_allocation": true,
+                "candidate_within_compiled_span": true,
+                "kind": "matrix",
+                "serialized_array_size": 0,
+                "serialized_dimension": 4,
+                "serialized_index": 272,
+                "serialized_type": 0
+              }
+            ],
+            "serialized_partial_cb": true,
+            "slot": 1,
+            "struct_count": 0
+          }
+        ],
+        "pass": 0,
+        "stage": 1
+      },
+      {
+        "buffers": [
+          {
+            "allocation_bytes": 80,
+            "candidate_byte_offset_model_verified": false,
+            "candidate_overlapping_adjacent_members": 0,
+            "compiled_declared_bytes": 64,
+            "members": [
+              {
+                "candidate_byte_end": 36,
+                "candidate_within_allocation": true,
+                "candidate_within_compiled_span": true,
+                "kind": "vector",
+                "serialized_array_size": 0,
+                "serialized_dimension": 1,
+                "serialized_index": 32,
+                "serialized_type": 0
+              },
+              {
+                "candidate_byte_end": 60,
+                "candidate_within_allocation": true,
+                "candidate_within_compiled_span": true,
+                "kind": "vector",
+                "serialized_array_size": 0,
+                "serialized_dimension": 3,
+                "serialized_index": 48,
+                "serialized_type": 0
+              }
+            ],
+            "serialized_partial_cb": true,
+            "slot": 0,
+            "struct_count": 0
+          }
+        ],
+        "pass": 0,
+        "stage": 0
+      },
+      {
+        "buffers": [
+          {
+            "allocation_bytes": 176,
+            "candidate_byte_offset_model_verified": false,
+            "candidate_overlapping_adjacent_members": 0,
+            "compiled_declared_bytes": 64,
+            "members": [
+              {
+                "candidate_byte_end": 64,
+                "candidate_within_allocation": true,
+                "candidate_within_compiled_span": true,
+                "kind": "matrix",
+                "serialized_array_size": 0,
+                "serialized_dimension": 4,
+                "serialized_index": 0,
+                "serialized_type": 0
+              }
+            ],
+            "serialized_partial_cb": true,
+            "slot": 0,
+            "struct_count": 0
+          },
+          {
+            "allocation_bytes": 368,
+            "candidate_byte_offset_model_verified": false,
+            "candidate_overlapping_adjacent_members": 0,
+            "compiled_declared_bytes": 336,
+            "members": [
+              {
+                "candidate_byte_end": 336,
+                "candidate_within_allocation": true,
+                "candidate_within_compiled_span": true,
+                "kind": "matrix",
+                "serialized_array_size": 0,
+                "serialized_dimension": 4,
+                "serialized_index": 272,
+                "serialized_type": 0
+              }
+            ],
+            "serialized_partial_cb": true,
+            "slot": 1,
+            "struct_count": 0
+          }
+        ],
+        "pass": 1,
+        "stage": 1
+      },
+      {
+        "buffers": [
+          {
+            "allocation_bytes": 80,
+            "candidate_byte_offset_model_verified": false,
+            "candidate_overlapping_adjacent_members": 0,
+            "compiled_declared_bytes": 80,
+            "members": [
+              {
+                "candidate_byte_end": 72,
+                "candidate_within_allocation": true,
+                "candidate_within_compiled_span": true,
+                "kind": "vector",
+                "serialized_array_size": 0,
+                "serialized_dimension": 2,
+                "serialized_index": 64,
+                "serialized_type": 0
+              }
+            ],
+            "serialized_partial_cb": true,
+            "slot": 0,
+            "struct_count": 0
+          }
+        ],
+        "pass": 1,
+        "stage": 0
+      }
+    ],
+    "status": "observed"
+  }
+}
