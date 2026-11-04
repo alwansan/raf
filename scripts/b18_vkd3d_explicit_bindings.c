@@ -55,6 +55,8 @@ static void map_binding(struct vkd3d_shader_resource_binding *record,
     record->register_space = 0;
     record->register_index = source;
     record->shader_visibility = VKD3D_SHADER_VISIBILITY_COMPUTE;
+    /* Without IMAGE the compiler cannot resolve typed Texture2D SRV/UAV. */
+    record->flags = VKD3D_SHADER_BINDING_FLAG_IMAGE;
     record->binding.set = set;
     record->binding.binding = binding;
     record->binding.count = 1;
