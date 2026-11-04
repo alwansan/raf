@@ -57,7 +57,15 @@ def numeric_tree(value, depth=0):
                     len(key) > 64 or not all(x.isascii() and
                     (x.isalnum() or x == "_") for x in key)):
                 raise ValueError("Unsupported resource descriptor schema key")
-            result[key] = numeric_tree(item, depth + 1)
+            if key == "m_MultiSampled":
+                # Unity's serialized TextureParameter has an actual boolean
+                # MultiSampled field. Encode its type distinctly, never let a
+                # boolean satisfy an integer index/slot assertion.
+                if type(item) is not bool:
+                    raise ValueError("Invalid texture multisample boolean")
+                result[key] = {"__typed_multisampled_bool__": int(item)}
+            else:
+                result[key] = numeric_tree(item, depth + 1)
         return {k: result[k] for k in sorted(result)}
     raise ValueError("Unexpected resource descriptor type")
 
@@ -187,6 +195,7 @@ def main(argv=None):
         safe_reasons = {
             "Resource descriptor nesting exceeds bound",
             "Unsupported nonnumeric descriptor value",
+            "Invalid texture multisample boolean",
             "Descriptor integer outside exact bound",
             "Nonfinite or oversized descriptor number",
             "Resource descriptor list too long",
