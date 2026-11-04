@@ -78,11 +78,23 @@ class AndroidDiagnosticsPolicyTests(unittest.TestCase):
         self.assertIn('"; unity_driver_graphics_bytes=" + UnityGraphicsDriverBytes()', helper)
         self.assertIn('"; process_rss=" + ProcessRss()', helper)
         self.assertIn('partial process/driver counters', self.source)
-        scenes = self.source.split("private static void SceneLoaded(", 1)[1]
+        scenes = self.source.split("private void SceneLoaded(Scene scene, LoadSceneMode mode)", 1)[1]
         scenes = scenes.split("private void OnApplicationPause(", 1)[0]
         self.assertEqual(scenes.count("GraphicsMemoryAtBoundary()"), 2)
         self.assertIn('AndroidRuntimeLog.Write("scene", "loaded"', scenes)
         self.assertIn('AndroidRuntimeLog.Write("scene", "unloaded"', scenes)
+        # SceneLoaded is intentionally an instance callback: the bounded
+        # renderer/material/mesh snapshot runs as a coroutine, not in a static
+        # callback or per-frame loop. Do not "fix" CI by removing the snapshot.
+        self.assertIn('StartCoroutine(ReportSceneShaderSnapshot(scene));', scenes)
+        snapshot = scenes.split("private static void SceneUnloaded(", 1)[0]
+        self.assertIn('private System.Collections.IEnumerator ReportSceneShaderSnapshot(Scene scene)', snapshot)
+        self.assertIn('yield return new WaitForSecondsRealtime(3f);', snapshot)
+        self.assertIn('if (!scene.isLoaded) yield break;', snapshot)
+        self.assertIn('const int RendererLimit = 512;', snapshot)
+        self.assertIn('renderer.sharedMaterials', snapshot)
+        self.assertIn('"scene_shader_snapshot"', snapshot)
+        self.assertNotIn('GraphicsMemoryAtBoundary()', snapshot)
         low = self.source.split("private static void LowMemory()", 1)[1]
         low = low.split("private static string ProcessRss()", 1)[0]
         self.assertIn('"; " + GraphicsMemoryAtBoundary(), true)', low)
