@@ -163,5 +163,60 @@ class SamplerFixture(unittest.TestCase):
         self.assertNotIn("synthetic.assets", json.dumps(result))
 
 
+    def make_trace(self):
+        return {
+            "schema_version": 1, "export_instance": "1" * 32,
+            "objects": [{
+                "class_id": 28,
+                "source": {"owner": "Raft_Data/" + self.owner, "path_id": 17},
+                "export": {"file_id": 2800000, "guid": self.guid, "type": 3},
+            }]
+        }
+
+    def generate_from_trace(self, trace=None):
+        with mock.patch.dict(audit.SOURCE_PINS, {self.owner: (len(self.raw), self.digest)}):
+            return audit.sidecar_from_export_trace(self.assets.parent, trace or self.make_trace())
+
+    def test_exact_same_export_trace_maps_guid_to_file(self):
+        sidecar = self.generate_from_trace()
+        self.assertEqual(sidecar["textures"], self.sidecar["textures"])
+        self.assertEqual(sidecar["export_instance"], self.sidecar["export_instance"])
+        with mock.patch.dict(audit.SOURCE_PINS, {self.owner: (len(self.raw), self.digest)}), \
+             mock.patch.dict(sys.modules, {"UnityPy": SimpleNamespace(
+                 load=lambda _: SimpleNamespace(objects=[self.obj]))}):
+            result = audit.inspect(self.source, self.assets.parent, sidecar)
+        self.assertTrue(result["metadata_fields_faithful"])
+        self.assertFalse(result["same_export_provenance_independently_verified"])
+
+    def test_trace_wrong_target_or_unsupported_pptr_rejected(self):
+        trace = self.make_trace()
+        trace["objects"][0]["export"]["guid"] = "c" * 32
+        with self.assertRaisesRegex(ValueError, "missing exact"):
+            self.generate_from_trace(trace)
+        trace = self.make_trace()
+        trace["objects"][0]["export"]["type"] = 99
+        with self.assertRaisesRegex(ValueError, "PPtr"):
+            self.generate_from_trace(trace)
+
+    def test_trace_duplicate_source_and_export_rejected(self):
+        trace = self.make_trace()
+        trace["objects"].append(trace["objects"][0].copy())
+        with self.assertRaisesRegex(ValueError, "ambiguous"):
+            with mock.patch.dict(audit.SOURCE_PINS, {self.owner: (len(self.raw), self.digest)}):
+                audit.check_rows(audit.sidecar_from_export_trace(self.assets.parent, trace))
+
+    def test_trace_unsafe_source_and_wrong_export_meta_rejected(self):
+        trace = self.make_trace()
+        trace["objects"][0]["source"]["owner"] = "../" + self.owner
+        with self.assertRaisesRegex(ValueError, "unsafe trace"):
+            self.generate_from_trace(trace)
+        trace = self.make_trace()
+        meta = self.assets / "image.png.meta"
+        meta.write_text("fileFormatVersion: 2\nguid: " + self.guid + "\nDefaultImporter: {}\n")
+        with self.assertRaisesRegex(ValueError, "TextureImporter"):
+            self.generate_from_trace(trace)
+
+
+
 if __name__ == "__main__":
     unittest.main()
