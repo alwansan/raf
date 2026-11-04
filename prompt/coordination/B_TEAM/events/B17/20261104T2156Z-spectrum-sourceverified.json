@@ -1,0 +1,14 @@
+{
+  "id": "20261104T2156Z-B17-spectrum-sourceverified",
+  "owner": "B17",
+  "session_id": "20261104T2140Z-B17-spc2",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "B17 exact ZIP2 SHA-authenticated original Spectrum shader stages: 7 passes, 13 fragment/0 vertex descriptor rows, 42 resource-table fields, typed m_MultiSampled boolean and m_UAVParams schema. Final real original CI41920232173 SUCCESS, 16/16 synthetic tests; no Unity/native/GPU/device/shader translation, WATER-001 OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41920232173",
+    "https://github.com/alwansan/raf/commit/6afb4e1280f6691e3b47ac810f479409f94a9e58",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B17_SPECTRUM_STAGE_DESCRIPTORS_2026-11-04.md"
+  ],
+  "at": "2026-11-04T21:56:00Z"
+}
