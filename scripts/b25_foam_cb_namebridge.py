@@ -104,10 +104,15 @@ def inspect_parsed(parsed, diag=None):
                 if bind["m_NameIndex"] != idx or bind["m_Index"] != slot:
                     raise ValueError("Foam original CB register identity changed")
                 name = names[idx]
-                if IDENT.fullmatch(name) is None:
-                    diag["cb_rejection"] = "referenced-name-not-hlsl-identifier"
-                    raise ValueError("Referenced original Foam CB name is not an HLSL identifier")
+                # Original compiled constant-buffer symbols are opaque (some
+                # are compiler-generated and cannot be used literally as HLSL
+                # identifiers). Preserve their EXACT SHA identity and register
+                # relationship; a future private rebind must use a validated
+                # alias. Never emit the raw name or invent a Unity property.
+                safe_identifier = IDENT.fullmatch(name) is not None
                 cb_rows.append({
+                    "literal_hlsl_identifier_usable": safe_identifier,
+                    "requires_verified_shaderlab_alias": not safe_identifier,
                     "register_slot": slot,
                     "original_name_index": idx,
                     "name_sha256": hashlib.sha256(name.encode("utf-8")).hexdigest(),
@@ -122,6 +127,9 @@ def inspect_parsed(parsed, diag=None):
         "authenticated_stage_count": 4,
         "matched_constant_buffer_bindings": sum(
             len(s["constant_buffers"]) for p in results for s in p["stages"]),
+        "referenced_cb_names_requiring_alias": sum(
+            int(row["requires_verified_shaderlab_alias"])
+            for p in results for s in p["stages"] for row in s["constant_buffers"]),
         "passes": results,
         "private_name_values_published": False,
         "shaderlab_cb_rebinding_installed": False,
