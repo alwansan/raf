@@ -1,0 +1,12 @@
+{
+  "id": "B19-20261104T2256Z-save-hardlink-start",
+  "owner": "B19",
+  "session_id": "20261104T2256Z-B19-hl7",
+  "issue_id": "LOCAL-005",
+  "type": "start",
+  "summary": "B19 resumed: test hardlinked SaveAndLoad.cs source/.meta aliases bypassing symlink safety guard.",
+  "evidence": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/adapt_original_save_paths.py"
+  ],
+  "at": "2026-11-04T22:56:00Z"
+}
