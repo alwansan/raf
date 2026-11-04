@@ -97,8 +97,10 @@ def compiled_shex_registers(data: bytes) -> tuple[dict, list]:
     while offset < len(tokens):
         op = tokens[offset]
         code = op & 0x7ff
-        width = (op >> 24) & 0x7f
-        if op >> 31 or width == 0 or offset + width > len(tokens):
+        width = tokens[offset + 1] if code == 53 and offset + 1 < len(tokens) else (op >> 24) & 0x7f
+        # CustomData has its own DWORD count; unrelated instructions may carry
+        # extended-opcode tokens and remain safely skippable by declared length.
+        if width < (2 if code == 53 else 1) or offset + width > len(tokens):
             raise ValueError("Unknown extended/invalid DXBC instruction")
         if code in (88, 156):
             if width != 4 or ((op >> 11) & 31) != 3:

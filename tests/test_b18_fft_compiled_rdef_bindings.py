@@ -50,9 +50,13 @@ def fixture():
 
 
 
-def shex_dx(dst=ROLES, group=(64, 1, 1), *, extra_cb=False, corrupted=False):
+def shex_dx(dst=ROLES, group=(64, 1, 1), *, extra_cb=False, corrupted=False, customdata=False, extended=False):
     """Public synthetic SM5 tokenized instructions: real ordinal layout only."""
     instructions = []
+    if customdata:
+        instructions.extend([53, 4, 0xdeadbeef, 0x12345678])
+    if extended:
+        instructions.extend([(2 << 24) | (1 << 31) | 58, 0])
     for _, kind, dimension, register in dst:
         op_id = 88 if kind == 2 else 156
         operand_type = 7 if kind == 2 else 30
@@ -111,6 +115,12 @@ class B18RDEFTests(unittest.TestCase):
         for candidate in candidates:
             with self.subTest(candidate=candidate), self.assertRaises(ValueError):
                 compiled_binding_hashes(dxbc(candidate))
+
+    def test_customdata_and_unrelated_extended_opcode_are_skipped_by_lengths(self):
+        original = shex_dx(customdata=True, extended=True)
+        slots, group = compiled_shex_registers(original)
+        self.assertEqual(set(slots), {("input", 0), ("input", 1), ("output", 0)})
+        self.assertEqual(group, [64, 1, 1])
 
     def test_bad_rdef_offset_duplicate_and_bad_container(self):
         for candidate in (dxbc(bad_offset=True), dxbc(extra_rdef=True), dxbc()[:-1],
