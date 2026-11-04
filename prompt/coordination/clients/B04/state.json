@@ -2,24 +2,26 @@
   "schema_version": 1,
   "username": "B04",
   "generation": "B-2026-11-04",
-  "session_id": "20261104T2102Z-B04-7c20",
-  "resumed_from_session": null,
-  "status": "completed",
-  "base_sha": "09480c40be3ccf65c0a8661142c6d5f78e519b39",
+  "session_id": "20261104T2243Z-B04-6b7c",
+  "resumed_from_session": "20261104T2102Z-B04-7c20",
+  "status": "active",
+  "base_sha": "9e1b249414df77c1d8906fdf61574094371b0003",
   "last_commit": "a4c2f86c07ebc3364e813a915ef036a5e6c3d0ad",
-  "updated_at": "2026-11-04T21:18:26.107Z",
+  "updated_at": "2026-11-04T22:43:00Z",
   "tracks": [
     "RENDER-002-color-space",
-    "ASSET-RESTORE-001-mesh-source-integrity"
+    "ASSET-RESTORE-001-mesh-source-integrity",
+    "RENDER-002-runtime-quality-evidence"
   ],
   "work_ids": [
     "B04-20261104T2102Z-B04-7c20-original-colorspace",
-    "B04-20261104T2102Z-B04-7c20-mesh-source-safety"
+    "B04-20261104T2102Z-B04-7c20-mesh-source-safety",
+    "B04-20261104T2243Z-B04-6b7c-quality-snapshot"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41913026554",
     "https://github.com/alwansan/raf/actions/runs/41914505411"
   ],
-  "next_step": "B04 scoped tasks completed: Linear original colorspace export adapter (CI41913026554) and Mesh source symlink guard (CI41914505411). Restart with latest HEAD/Actions/CL and assign non-overlapping P0 issue; native/device not tested, NOT_READY 0/3.",
+  "next_step": "Test and integrate bounded read-only Android QualitySettings evidence with original W2 tier metadata; do not force mobile quality or claim phone pixels fixed.",
   "memory_path": "prompt/coordination/clients/B04/MEMORY.md"
 }
