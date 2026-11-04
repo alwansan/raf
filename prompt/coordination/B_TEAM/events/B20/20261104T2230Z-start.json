@@ -1,0 +1,13 @@
+{
+  "id": "B20-20261104T2230Z-start",
+  "owner": "B20",
+  "session_id": "20261104T2230Z-B20-6c9a",
+  "issue_id": "WATER-001",
+  "type": "start",
+  "summary": "Started source-only guarded ShaderLab subshader-scope check to reject off-scope fake water passes; no asset restoration or device proof claimed.",
+  "evidence": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/b49_shaderlab_pass_contract.py",
+    "https://github.com/alwansan/raf/actions/runs/41923703800"
+  ],
+  "at": "2026-11-04T22:30:00Z"
+}
