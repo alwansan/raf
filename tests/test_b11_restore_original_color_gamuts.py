@@ -116,6 +116,30 @@ class ExportGamutTests(unittest.TestCase):
                 restore_gamut(project, apply=True)
             self.assertEqual(outside.read_bytes(), fixture('01000000'))
 
+    def test_ancestor_symlink_refuses_external_project_write(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            actual_project, outside = self._project(root / 'outside', fixture('01000000'))
+            alias = root / 'alias'
+            try:
+                alias.symlink_to(root / 'outside', target_is_directory=True)
+            except (OSError, NotImplementedError):
+                self.skipTest('symlink unavailable')
+            redirected = alias / 'project'
+            self.assertFalse(redirected.is_symlink())
+            with self.assertRaisesRegex(ValueError, 'Unsafe symlink'):
+                restore_gamut(redirected, apply=True)
+            self.assertEqual(outside.read_bytes(), fixture('01000000'))
+
+    def test_parent_traversal_refused_even_when_target_exists(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            project, target = self._project(root, fixture('01000000'))
+            indirect = root / 'project' / '..' / 'project'
+            with self.assertRaisesRegex(ValueError, 'Unsafe traversal'):
+                restore_gamut(indirect, apply=True)
+            self.assertEqual(target.read_bytes(), fixture('01000000'))
+
     def test_hardlink_rejected(self):
         with tempfile.TemporaryDirectory() as d:
             root = Path(d)
