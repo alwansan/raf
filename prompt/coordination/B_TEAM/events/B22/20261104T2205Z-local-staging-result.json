@@ -1,0 +1,13 @@
+{
+  "id": "b22-20261104T2134Z-B22-c91f-local-result",
+  "owner": "B22",
+  "session_id": "20261104T2134Z-B22-c91f",
+  "issue_id": "LOCAL-005",
+  "type": "result",
+  "summary": "B22 guards runtime tracing source/backup against linked roots, authenticates backups and restores originals transactionally; source fixed 2f50776d, CI41920661518 passed synthetic; actual world .rgd and phone OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/2f50776dfe51a5d856f3d0484a8b788ee09c04bd",
+    "https://github.com/alwansan/raf/actions/runs/41920661518"
+  ],
+  "at": "2026-11-04T22:05:00Z"
+}
