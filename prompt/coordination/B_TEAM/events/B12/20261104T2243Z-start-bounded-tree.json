@@ -1,0 +1,13 @@
+{
+  "id": "B12-20261104T2243Z-B12-bounded-tree-a9-start",
+  "owner": "B12",
+  "session_id": "20261104T2243Z-B12-bounded-tree-a9",
+  "issue_id": "PERF-007",
+  "type": "start",
+  "summary": "B12 resumed and found full-hierarchy GetComponentsInChildren<Renderer>(true) array allocation inside 512-renderer-limited diagnostic. Starting bounded scene traversal repair to avoid extra diagnostic memory/GC pressure; preserve existing mesh/shader counters. No device claim.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/a324eb6208f9edc3f4587aa4c8236192e13d6684",
+    "https://github.com/alwansan/raf/actions/runs/41920015979"
+  ],
+  "at": "2026-11-04T22:45:46.977Z"
+}
