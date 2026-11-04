@@ -1,0 +1,13 @@
+{
+  "id": "20261104T2140Z-B30-water-start",
+  "owner": "B30",
+  "session_id": "20261104T2140Z-B30-7c29",
+  "issue_id": "WATER-001",
+  "type": "start",
+  "summary": "B30 registered independent original FFT serialized variantMap and keyword selector investigation after B08/B48; no Unity runtime or device proof claimed.",
+  "evidence": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B08_FFT_KERNEL_REGISTRY_2026-11-04.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B48_ORIGINAL_FFT_SELECTOR_COMPILED_CANDIDATES_2026-11-04.md"
+  ],
+  "at": "2026-11-04T21:40:00Z"
+}
