@@ -48,11 +48,37 @@ def _regular_unlinked_asset(path: Path, assets: Path) -> bool:
     return path.is_file()
 
 
+def _verified_water_meta(path: Path, assets: Path, seen_guids: set[str]) -> bool:
+    """Structurally validate an original water .meta identity without publishing it.
+
+    Physical existence is not enough: malformed, missing, ambiguous or duplicate
+    Unity GUIDs cannot establish reliable Shader/Compute asset binding. This
+    verifies syntax and uniqueness only, NOT original export provenance.
+    """
+    if not _regular_unlinked_asset(path, assets):
+        return False
+    if path.stat().st_size > 65536:
+        raise ValueError("Oversized water shader/compute GUID metadata")
+    lines = path.read_bytes().splitlines()
+    guid_lines = [line for line in lines if line.startswith(b"guid:")]
+    if len(guid_lines) != 1:
+        raise ValueError("Missing or ambiguous water shader/compute GUID metadata")
+    match = re.fullmatch(rb"guid:[ \t]*([0-9a-fA-F]{32})[ \t]*", guid_lines[0])
+    if match is None:
+        raise ValueError("Malformed water shader/compute GUID metadata")
+    identity = match.group(1).decode("ascii").lower()
+    if identity in seen_guids:
+        raise ValueError("Duplicate water shader/compute GUID metadata")
+    seen_guids.add(identity)
+    return True
+
+
 def inspect(project: Path) -> dict:
     assets = project / "Assets"
     if project.is_symlink() or assets.is_symlink() or not assets.is_dir():
         raise ValueError("Unity exported Assets folder missing or redirected")
     found = {}
+    seen_water_guids = set()
     for path in assets.rglob("*.shader"):
         if not _regular_unlinked_asset(path, assets):
             raise ValueError("Unsafe source shader path")
@@ -69,7 +95,7 @@ def inspect(project: Path) -> dict:
         found[name] = {
             **coverage,
             "has_program": coverage["passes_with_complete_program"] > 0,
-            "original_meta_present": _regular_unlinked_asset(Path(str(path) + ".meta"), assets),
+            "original_meta_present": _verified_water_meta(Path(str(path) + ".meta"), assets, seen_water_guids),
             "export_placeholder": "No subprograms found" in raw,
         }
     shader_rows = {}
@@ -95,7 +121,9 @@ def inspect(project: Path) -> dict:
         computes.append({
             **profile,
             "is_water_or_fft_named": bool(re.search(r'(water|fft|spectrum|foam)', path.name, re.IGNORECASE)),
-            "original_meta_present": _regular_unlinked_asset(meta, assets),
+            "original_meta_present": (_verified_water_meta(meta, assets, seen_water_guids)
+                                      if re.search(r"(water|fft|spectrum|foam)", path.name, re.IGNORECASE)
+                                      else _regular_unlinked_asset(meta, assets)),
         })
     water_compute = [
         row for row in computes

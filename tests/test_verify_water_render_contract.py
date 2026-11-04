@@ -142,5 +142,56 @@ class WaterRenderGateTests(unittest.TestCase):
             self.assertFalse(result["shader_contracts"][name]["observed"]["original_meta_present"])
 
 
+    def test_b13_rejects_malformed_water_shader_metadata_guid(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            assets = root / "Assets"
+            assets.mkdir()
+            name = next(iter(REQUIRED_PASS_COUNT))
+            shader = write_shader(assets, name, REQUIRED_PASS_COUNT[name])
+            meta = Path(str(shader) + ".meta")
+            meta.write_text("guid: not-a-32-character-unity-identity\n")
+            with self.assertRaisesRegex(ValueError, "Malformed.*GUID"):
+                inspect(root)
+
+    def test_b13_rejects_duplicate_water_shader_guid_identity(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            assets = root / "Assets"
+            assets.mkdir()
+            names = list(REQUIRED_PASS_COUNT)[:2]
+            first = write_shader(assets, names[0], REQUIRED_PASS_COUNT[names[0]])
+            second = write_shader(assets, names[1], REQUIRED_PASS_COUNT[names[1]])
+            Path(str(second) + ".meta").write_bytes(Path(str(first) + ".meta").read_bytes())
+            with self.assertRaisesRegex(ValueError, "Duplicate.*GUID"):
+                inspect(root)
+
+    def test_b13_rejects_duplicate_shader_and_water_compute_guid_identity(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            assets = root / "Assets"
+            assets.mkdir()
+            name = next(iter(REQUIRED_PASS_COUNT))
+            shader = write_shader(assets, name, REQUIRED_PASS_COUNT[name])
+            compute = assets / "FFT.compute"
+            compute.write_text("#pragma kernel Horizontal\n[numthreads(8,8,1)]\nvoid Horizontal() {}\n")
+            Path(str(compute) + ".meta").write_bytes(Path(str(shader) + ".meta").read_bytes())
+            with self.assertRaisesRegex(ValueError, "Duplicate.*GUID"):
+                inspect(root)
+
+    def test_b13_rejects_ambiguous_water_compute_guid_fields(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            assets = root / "Assets"
+            assets.mkdir()
+            compute = assets / "FFT.compute"
+            compute.write_text("#pragma kernel Horizontal\n[numthreads(8,8,1)]\nvoid Horizontal() {}\n")
+            Path(str(compute) + ".meta").write_text(
+                "guid: " + "a"*32 + "\nguid: " + "b"*32 + "\n"
+            )
+            with self.assertRaisesRegex(ValueError, "ambiguous.*GUID"):
+                inspect(root)
+
+
 if __name__ == "__main__":
     unittest.main()
