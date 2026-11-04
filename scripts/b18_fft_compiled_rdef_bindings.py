@@ -138,8 +138,27 @@ def main():
     args = p.parse_args()
     try:
         result = inspect(args.source)
-    except (ValueError, TypeError, KeyError, OSError, struct.error):
-        print("RAFT_B18_FFT_RDEF " + json.dumps({"status": "REJECTED", "original_parity_proven": False}, sort_keys=True))
+    except (ValueError, TypeError, KeyError, OSError, struct.error) as exc:
+        # Never log unknown exceptions or dynamic private names/paths.
+        safe_codes = {
+            "Original DXBC must contain exactly one RDEF": "RDEF_ABSENT_OR_DUPLICATE",
+            "Truncated RDEF": "RDEF_TRUNCATED",
+            "Unexpected compiled FFT binding table": "RDEF_TABLE_SHAPE",
+            "Original DXBC image type/count/dimension/register differs": "RDEF_RESOURCE_TYPE_OR_DIMENSION",
+            "Original DXBC resource register duplicated": "RDEF_DUPLICATE_REGISTER",
+            "RDEF name pointer outside declared string region": "RDEF_NAME_OFFSET",
+            "RDEF name absent, invalid or unbounded": "RDEF_NAME_UNTERMINATED",
+            "RDEF name invalid encoding": "RDEF_NAME_ENCODING",
+            "Compiled DXBC binding register layout changed": "RDEF_REGISTER_LAYOUT",
+            "Compiled DXBC RDEF disagrees with original serialized Unity resource roles": "RDEF_UNITY_MISMATCH",
+            "Ambiguous original per-slot DXBC": "ORIGINAL_DXBC_AMBIGUOUS",
+            "Original FFT object authentication failed": "ORIGINAL_OBJECT_SHA",
+        }
+        print("RAFT_B18_FFT_RDEF " + json.dumps({
+            "status": "REJECTED",
+            "reason_code": safe_codes.get(str(exc), type(exc).__name__),
+            "original_parity_proven": False,
+        }, sort_keys=True))
         return 2
     print("RAFT_B18_FFT_RDEF " + json.dumps({"status": "PASS", **result}, sort_keys=True))
     return 0
