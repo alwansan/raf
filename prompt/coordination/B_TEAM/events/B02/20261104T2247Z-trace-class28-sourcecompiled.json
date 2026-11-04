@@ -1,0 +1,14 @@
+{
+  "id": "B02-20261104T2247Z-trace-class28-sourcecompiled",
+  "owner": "B02",
+  "session_id": "20261104T2233Z-B02-7c19",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "B02 corrected nested TextureImporter.mipmaps.sRGBTexture, B15 SHA-pinned source-color trace bridge CI41927008905 PASS16/16; SHA-pinned public AssetRipper class28 optional private trace compiled/smoke CI41927712988 PASS6/6. No real game/export/Unity pixels, no meta/game changes; RENDER-002 OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41927008905",
+    "https://github.com/alwansan/raf/actions/runs/41927712988",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B02_TEXTURE_EXPORT_LINEAGE_HOOK_2026-11-04.md"
+  ],
+  "at": "2026-11-04T22:47:00Z"
+}
