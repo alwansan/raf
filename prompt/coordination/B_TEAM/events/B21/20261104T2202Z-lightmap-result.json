@@ -1,0 +1,13 @@
+{
+  "id": "B21-20261104T2202Z-lightmap-result",
+  "owner": "B21",
+  "session_id": "20261104T2153Z-B21-72ab",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "16 synthetic tests PASS and 6 source-authenticated original scenes verified in CI41921259677: exactly one LightmapSettings each, zero baked lightmap entries and 1497 unassigned renderer lightmap indices, no out of range. Reject baked-lightmap-loss explanation in six-scene scope, do not generalize to 34 other scenes/export/pixels; recorded two corrected CI failures and no gameplay changes.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41921259677",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B21_LIGHTMAP_SOURCE_EXPORT_LINKS_2026-11-04.md"
+  ],
+  "at": "2026-11-04T22:02:00Z"
+}
