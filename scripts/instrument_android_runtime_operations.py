@@ -88,6 +88,33 @@ def guard_android_local_savegame_stats(text):
     return result
 
 
+
+def wrap_original_world_callback(text, method_name, expected_body_sha, area):
+    """Wrap an authenticated original void callback without changing its body.
+
+    Do not wrap IEnumerator WorldHasBeenLoaded: a C# yield method cannot
+    legally place its yield instructions inside a catch-bearing try block.
+    """
+    from scripts.b07_probe_original_world_callbacks import (
+        fingerprint, method_body, _executable_positions
+    )
+    return_type, body = method_body(text, method_name)
+    if return_type != 'void' or fingerprint(body) != expected_body_sha:
+        raise ValueError('Unrecognized original GameManager callback body')
+    executable = _executable_positions(text)
+    declaration = re.compile(
+        r'(?m)^\\s*(?:public|private|protected|internal)\\s+'
+        r'(?:(?:static|virtual|override|sealed|new|async)\\s+)*'
+        r'void\\s+' + re.escape(method_name) + r'\\s*\\([^;{}]*\\)\\s*\\{'
+    )
+    matches = list(declaration.finditer(executable))
+    if len(matches) != 1:
+        raise ValueError('Ambiguous original GameManager callback declaration')
+    signature = text[matches[0].start():matches[0].end() - 1].strip()
+    return wrap(text, signature, area)
+
+
+
 def instrument(name, text, manifest):
     row = manifest['sources'][name]
     digest = hashlib.sha256(text.replace('\r\n', '\n').encode()).hexdigest()
@@ -95,7 +122,10 @@ def instrument(name, text, manifest):
         raise ValueError('Unknown adapted original revision: ' + name)
     result = guard_android_local_savegame_stats(text) if name == 'SaveAndLoad' else text
     for method in row['methods']:
-        result = wrap(result, method['signature'], row['area'], method.get('detail', '""'))
+        if name == 'GameManager' and method.get('name') == 'OnWorldRecieved':
+            result = wrap_original_world_callback(result, method['name'], method['body_sha256'], row['area'])
+        else:
+            result = wrap(result, method['signature'], row['area'], method.get('detail', '""'))
     return result
 
 
