@@ -17,7 +17,8 @@ OBJECT_ID = 2420
 CB = {1: ((160, 2, 0), (176, 0, 1), (368, 0, 1)), 0: ((160, 2, 0),)}
 
 
-def validate_stage(program, stage):
+def validate_stage(program, stage, diagnostic=None):
+    diagnostic = diagnostic if diagnostic is not None else {}
     if not isinstance(program, dict):
         raise ValueError("Original Foam stage absent")
     variants = stage_variants(program)
@@ -43,13 +44,22 @@ def validate_stage(program, stage):
     if not isinstance(buffers, list) or not isinstance(bindings, list) or len(buffers) != len(expected) or len(bindings) != len(expected):
         raise ValueError("Foam original CB counts mismatch")
     for slot, ((size, vec, mat), b, ref) in enumerate(zip(expected, buffers, bindings)):
-        if (not isinstance(b, dict) or not isinstance(ref, dict) or
-                b.get("m_Size") != size or b.get("m_IsPartialCB") is not True or
-                len(b.get("m_VectorParams", [])) != vec or
-                len(b.get("m_MatrixParams", [])) != mat or
-                b.get("m_NameIndex") != slot or ref.get("m_NameIndex") != slot or
-                ref.get("m_Index") != slot or ref.get("m_ArraySize") != 1):
-            raise ValueError("Foam original partial-CB size/slot/member drift")
+        diagnostic["cb_index"] = slot
+        tests = (
+            ("record-shape", isinstance(b, dict) and isinstance(ref, dict)),
+            ("buffer-size", isinstance(b, dict) and b.get("m_Size") == size),
+            ("partial-flag", isinstance(b, dict) and b.get("m_IsPartialCB") is True),
+            ("vector-count", isinstance(b, dict) and len(b.get("m_VectorParams", [])) == vec),
+            ("matrix-count", isinstance(b, dict) and len(b.get("m_MatrixParams", [])) == mat),
+            ("buffer-name-index", isinstance(b, dict) and b.get("m_NameIndex") == slot),
+            ("binding-name-index", isinstance(ref, dict) and ref.get("m_NameIndex") == slot),
+            ("binding-register", isinstance(ref, dict) and ref.get("m_Index") == slot),
+            ("binding-array", isinstance(ref, dict) and ref.get("m_ArraySize") == 1),
+        )
+        for reason, ok in tests:
+            if not ok:
+                diagnostic["cb_rejection_reason"] = reason
+                raise ValueError("Foam original partial-CB size/slot/member drift")
     return metadata, parameter_index
 
 
@@ -77,7 +87,7 @@ def inspect(parsed, entries, scratch, *,
         for stage, name in ((1, "progVertex"), (0, "progFragment")):
             diagnostic["stage_code"] = stage
             diagnostic["phase"] = "original-partial-cb-and-parameter-index"
-            metadata, index = validate_stage(p.get(name), stage)
+            metadata, index = validate_stage(p.get(name), stage, diagnostic)
             if index >= len(entries) or not isinstance(entries[index][1], bytes):
                 raise ValueError("Foam original parameter entry absent")
             raw = entries[index][1]
@@ -167,6 +177,8 @@ def main():
                   "bounded_failure_phase": diagnostic.get("phase", "unknown"),
                   "bounded_failure_pass": diagnostic.get("original_pass"),
                   "bounded_failure_stage": diagnostic.get("stage_code"),
+                  "bounded_cb_slot": diagnostic.get("cb_index"),
+                  "bounded_cb_reason": diagnostic.get("cb_rejection_reason"),
                   "original_gpu_source_published": False, "shaderlab_restored": False,
                   "unity_or_phone_verified": False}
         args.out.parent.mkdir(parents=True, exist_ok=True)
