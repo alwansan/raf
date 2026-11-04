@@ -2,19 +2,21 @@
   "schema_version": 1,
   "username": "B21",
   "generation": "B-2026-11-04",
-  "session_id": "20261104T2153Z-B21-72ab",
-  "resumed_from_session": null,
-  "status": "completed",
-  "base_sha": "153787bcb85b0a0af9382b8d19e7dc85c6fc0ee8",
+  "session_id": "20261104T2257Z-B21-8e72",
+  "resumed_from_session": "20261104T2153Z-B21-72ab",
+  "status": "active",
+  "base_sha": "cdcef7f2b38ae21030992cf1e52ccc77c55a79f4",
   "last_commit": "0be027aa54252a8870444cbe0b67d53bfdaec3c2",
-  "updated_at": "2026-11-04T22:15:00Z",
+  "updated_at": "2026-11-04T22:57:00Z",
   "tracks": [
     "RENDER-002:original-lightmap-source-exclusion (scope completed)",
-    "RENDER-002:original-dynamic-Light-source-baseline (scope completed)"
+    "RENDER-002:original-dynamic-Light-source-baseline (scope completed)",
+    "RENDER-002:private-same-instance-native-light-lineage"
   ],
   "work_ids": [
     "B21-20261104T2153Z-B21-72ab-lightmap-lineage",
-    "B21-20261104T2153Z-B21-72ab-dynamic-lighting"
+    "B21-20261104T2153Z-B21-72ab-dynamic-lighting",
+    "B21-20261104T2257Z-B21-8e72-light-export-lineage"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41921259677",
@@ -22,6 +24,6 @@
     "https://github.com/alwansan/raf/actions/runs/41923120681",
     "https://github.com/alwansan/raf/actions/runs/41923272928"
   ],
-  "next_step": "Next session as B21, inspect latest HEAD/team slots and source-export mapping: compare authenticated original level0/level1 Light object owners and m_Enabled/color/intensity/range to actual SAME-instance Unity-exported Light components. Only then patch measured export faults; otherwise select independent P0 original shader/water/FFT native gap. Keep RENDER-002/WATER-001/LOCAL-005 OPEN, NOT_READY 0/3. No background work after session.",
+  "next_step": "Complete B21 optional original Light 108 same-instance export capture staged on exact B02+W1 helper, compile/negative tests, then authenticate real export Light pairing before any asset mutation.",
   "memory_path": "prompt/coordination/clients/B21/MEMORY.md"
 }
