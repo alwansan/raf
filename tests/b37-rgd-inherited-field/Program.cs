@@ -44,7 +44,8 @@ static object Check(byte[] payload, byte[] gameDll)
     if (!NrbfDecoder.StartsWithPayloadHeader(payload))
         throw new InvalidDataException("Original RGD has no NRBF header");
     using var stream = new MemoryStream(payload, writable: false);
-    var root = NrbfDecoder.DecodeClassRecord(stream);
+    var root = NrbfDecoder.Decode(stream, leaveOpen: true) as ClassRecord
+        ?? throw new InvalidDataException("Original NRBF root must be ClassRecord");
     if (stream.Position != stream.Length)
         throw new InvalidDataException("Original NRBF trailing bytes");
     var members = root.MemberNames.ToHashSet(StringComparer.Ordinal);
