@@ -4,10 +4,10 @@
   "generation": "B-2026-11-04",
   "session_id": "20261104T2231Z-B01-fft-args",
   "resumed_from_session": "20261104T2105Z-B01-water-contract",
-  "status": "active",
+  "status": "completed",
   "base_sha": "66aa4afe1f177d381a3be2aa36e6ec2258ed8a9e",
-  "last_commit": "938dd139de855d41614f046cb8c2a6871501b2e5",
-  "updated_at": "2026-11-04T22:31:00Z",
+  "last_commit": "ec4f8cef6fc1c028d3e8df519fc08494e8442161",
+  "updated_at": "2026-11-04T22:35:00Z",
   "tracks": [
     "water-fft"
   ],
@@ -16,8 +16,9 @@
     "B01-20261104T2231Z-B01-fft-args-lexical-args"
   ],
   "run_urls": [
-    "https://github.com/alwansan/raf/actions/runs/41911972796"
+    "https://github.com/alwansan/raf/actions/runs/41911972796",
+    "https://github.com/alwansan/raf/actions/runs/41926033893"
   ],
-  "next_step": "Repair FFT CSharp structural argument parser comment/verbatim-literal separator false positives and prove SHA-pinned original unchanged counts.",
+  "next_step": "WATER-001 remains OPEN. Continue authenticated original compiled FFT GPU/Unity kernel identity or water ShaderLab integration; coordinate B18/B48/B25. Do not treat source-only counts as GPU/phone proof.",
   "memory_path": "prompt/coordination/clients/B01/MEMORY.md"
 }
