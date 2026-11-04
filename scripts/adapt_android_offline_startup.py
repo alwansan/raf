@@ -27,6 +27,8 @@ PINS = {
 }
 
 
+CHEAT_METHOD_SHA256 = 'e89739ba461b65b03e78c388193dcfff44a19a41842af9b665a434c39fef1a09'
+
 def fingerprint(text):
     return hashlib.sha256(text.replace('\r\n', '\n').encode()).hexdigest()
 
@@ -66,8 +68,7 @@ def adapt(name, text):
         # The original call returns a Steamworks.CSteamID *object*, not a
         # numeric m_SteamID property, so retain its object type on Android.
         return_type, body = method_body(result, 'AllowCheatsForLocalPlayer')
-        if return_type != 'bool' or hashlib.sha256(body.replace('\r\n', '\n').encode()).hexdigest() != (
-                'e89739ba461b65b03e78c388193dcfff44a19a41842af9b665a434c39fef1a09'):
+        if return_type != 'bool' or hashlib.sha256(body.replace('\r\n', '\n').encode()).hexdigest() != CHEAT_METHOD_SHA256:
             raise ValueError('Unrecognized original Cheat Steam identity method')
         executable = _executable_positions(body)
         calls = list(re.finditer(r'\bSteamUser\s*\.\s*GetSteamID\s*\(\s*\)', executable))
