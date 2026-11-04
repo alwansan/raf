@@ -1,0 +1,13 @@
+{
+  "id": "20261104T2242Z-volumetric-start",
+  "owner": "B10",
+  "session_id": "20261104T2242Z-B10-vlm1",
+  "issue_id": "RENDER-002",
+  "type": "start",
+  "summary": "B10 resumed after completed vendor metadata scope; now hardening volumetric Lighting BSD NOTICE transaction to prevent modified shaders after a late notice I/O failure. Scope distinct from B20 original Blur rollback.",
+  "evidence": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/restore_volumetric_shaders.py",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/restore_tmp_shaders.py"
+  ],
+  "at": "2026-11-04T22:45:12.019Z"
+}
