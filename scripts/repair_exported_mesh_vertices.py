@@ -59,8 +59,22 @@ def replace_payload(text, provider):
 
 
 def index_export(project, wanted):
+    # A verified Mesh restoration must not follow links out of the temporary
+    # exported project or its SHA-authenticated provider. Even a same-content
+    # symlink makes ownership/provenance and target mutation ambiguous.
+    directory = project / 'Assets' / 'Mesh'
+    if any(path.is_symlink() for path in
+           (project, project / 'Assets', directory)):
+        raise ValueError('Unsafe Mesh directory symlink')
+    if not directory.is_dir():
+        raise ValueError('Original Mesh directory missing')
     result = {}
-    for path in sorted((project / 'Assets/Mesh').glob('*.asset')):
+    for path in sorted(directory.glob('*.asset')):
+        meta = path.with_suffix('.asset.meta')
+        if path.is_symlink() or not path.is_file() or path.stat().st_nlink != 1:
+            raise ValueError('Unsafe Mesh YAML asset link')
+        if meta.is_symlink() or not meta.is_file() or meta.stat().st_nlink != 1:
+            raise ValueError('Missing or unsafe Mesh .meta link')
         text = path.read_bytes().decode('utf8')
         tree = load_mesh(text)
         name = tree.get('m_Name')
@@ -75,8 +89,8 @@ def index_export(project, wanted):
 
 
 def repair(target, provider, wanted, snapshot):
-    if snapshot.exists():
-        raise ValueError('Snapshot destination already exists')
+    if snapshot.is_symlink() or snapshot.exists():
+        raise ValueError('Snapshot destination already exists or is a symlink')
     originals = index_export(target, wanted)
     providers = index_export(provider, wanted)
     plans = []
