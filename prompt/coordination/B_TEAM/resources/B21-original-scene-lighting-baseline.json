@@ -1,0 +1,31 @@
+{
+  "id": "B21-original-scene-lighting-baseline",
+  "title": "B21 original ZIP2 six-scene baked lightmap and native Light semantic source baseline",
+  "kind": "original-scene-lighting-source-audit",
+  "source": {
+    "provider": "alwansan/raf ZIP2 immutable source",
+    "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "path": "Raft/Raft_Data/level0..level5 (six separately SHA256-pinned original files)",
+    "bytes": null,
+    "sha256": null
+  },
+  "stages": {
+    "acquisition": "SIX_ORIGINAL_GIT_BLOBS_SHA256_SIZE_AUTHENTICATED",
+    "extraction": "NATIVE_UNITY_SERIALIZED_TYPE_TREE_DECODED_6_OF_40_SCENES",
+    "reconstruction": "NOT_APPLICABLE_READ_ONLY",
+    "binding": "ORIGINAL_LIGHT_AND_LIGHTMAP_LOCAL_PTRS_VERIFIED_SIX_SCENES_ONLY",
+    "integration": "SOURCE_ONLY_TEST_AND_CI_TOOLS_INTEGRATED_NO_EXPORT_PATCH",
+    "device": "NOT_TESTED"
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41921259677",
+    "https://github.com/alwansan/raf/actions/runs/41922372594",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B21_LIGHTMAP_SOURCE_EXPORT_LINKS_2026-11-04.md"
+  ],
+  "remaining": [
+    "Same-instance original source Light to actual exported Unity Light typed field parity and GameObject identity not yet checked.",
+    "Original remaining 34 scene lighting inventories and all shader/material/ambient/Adreno device output unknown.",
+    "No aggregate source SHA/bytes reported; each of six files individually size+SHA authenticated; do not equate group inventory with a single resource."
+  ],
+  "updated_by": "B21"
+}
