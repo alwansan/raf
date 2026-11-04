@@ -32,11 +32,11 @@
     "symlink exported scene refused"
   ],
   "workflow_path": ".github/workflows/raft-b21-original-light-export.yml",
-  "run_url": null,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41931942755",
   "artifact_urls": [],
   "budget": "One repeat of 9-provider CPU-only exact original export, justified by new class1 ownership identity proof (not identical previous experiment); 25m isolated workflow, no Unity/Adreno/APK, temporary private traces not uploaded.",
-  "status": "in_progress",
-  "observed_result": null,
+  "status": "completed",
+  "observed_result": "CI41931942755 COMPLETED SUCCESS: SHA256+size authenticated all 9 pinned ZIP2 original owners, 42 real Materials/18 real Shaders/2 real Lights, same-instance W1/B21 Light108+GameObject1 exporter trace and real Unity exported YAML. 11 source-stage +17 value-parity +12 GameObject owner controls = 40/40 synthetic PASS; 2/2 native Light values match (enabled,type,RGBA,intensity,range), both original native GameObject owners match exactly exported GameObject GUID/fileID with 0 missing/0 misattached. No Unity/Adreno/device pixels or full original game export. Original assets untouched.",
   "rejected_hypotheses": [
     "Matching Light field values alone proves same GameObject association: rejected; explicit native class1 source→export lineage required."
   ],
@@ -45,6 +45,6 @@
     "No shader/lighting pixels/phone proof",
     "Private traces may contain original identities and must not be uploaded"
   ],
-  "integration_commit": null,
-  "next_step": "Check new bounded original experiment run, correct observed code failures only, update work/resource/issue/STATUS and preserve result."
+  "integration_commit": "36bdd295ce9a498a33f9f264ca6e66153b62547a",
+  "next_step": "Scoped Light value and owner fidelity complete. Shift to actual shader/material/ambient source or Unity GPU pipeline for whites; no equivalent Light export rerun without changed hypothesis. Keep RENDER-002 OPEN."
 }
