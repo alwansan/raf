@@ -1,0 +1,13 @@
+{
+  "id": "20261104T225100Z-B18-resume",
+  "owner": "B18",
+  "session_id": "20261104T225100Z-B18-map2",
+  "issue_id": "WATER-001",
+  "type": "start",
+  "summary": "Resumed in Chat to address unverified original per-register DXBC to translated SPIR-V binding identity. Prior original count/type/workgroup results retained.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41922333604",
+    "https://github.com/alwansan/raf/actions/runs/41923703800"
+  ],
+  "at": "2026-11-04T22:51:00Z"
+}
