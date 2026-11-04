@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261104T2357Z-T4-lw01",
+  "issue_id": "LOCAL-005",
+  "hypothesis": "The verified original RGD version/member mismatch may be intentional old seed schema; determine the real original SaveAndLoad.Load<T> formatter binding and error behavior with pinned SHA rather than automatically migrating data.",
+  "source_commit": "902b67ba05c6a303072ff6511576e026e67e3c0d",
+  "input_hashes": [
+    "zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "Assembly-CSharp.dll:0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "Data.rgd:b2785187aa11e33872698adfa79ab252cf65a824d92bee7e88773ce4aa11cbba"
+  ],
+  "tool_versions": {},
+  "commands": [],
+  "negative_controls": [
+    "Wrong original DLL SHA",
+    "Wrong Data.rgd SHA",
+    "Unknown SaveAndLoad source revision",
+    "Missing or duplicate loader method"
+  ],
+  "workflow_path": ".github/workflows/raft-t4-original-rgd-load.yml",
+  "run_url": null,
+  "artifact_urls": [],
+  "budget": "No LFS/full Unity; 12 minute ubuntu runner at most, SHA-pinned original small inputs; no raw original bytes in artifacts.",
+  "status": "planned",
+  "observed_result": null,
+  "rejected_hypotheses": [],
+  "limitations": [
+    "No Unity/IL2CPP/Android .rgd roundtrip; cannot assert on-device world success."
+  ],
+  "integration_commit": null,
+  "next_step": "Run original source retrieval/staging and bounded authentic loader test."
+}
