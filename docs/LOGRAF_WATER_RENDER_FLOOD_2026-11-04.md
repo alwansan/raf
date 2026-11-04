@@ -29,3 +29,16 @@ Over approximately **334 seconds**, there were roughly **276 shader/compute erro
 ## Acceptance and limits
 
 CI must pass structural recorder checks, actual JVM tests, Android Release Gradle build, stable public test signing-certificate verification and GitHub Release publication. The game branch `feature/android-native-port` remains read-only at reviewed SHA `6b60c35e845a3bc8e559a7df7e408363032697cb`. Rendering must be fixed in the game, not by the logger; on-device acceptance of any new LogRaft APK remains independent of CI success.
+
+## Verified deliveries
+
+1. [Commit `0025858d`](https://github.com/alwansan/raf/commit/0025858dcede41a50028eed9583828da9b7ecf14) added fixed Logcat-only milestones for FMOD bootstrap, Android startup, scene callback, player callback and `World has been loaded`. [Actions **41895148905**](https://github.com/alwansan/raf/actions/runs/41895148905) **COMPLETED SUCCESS** and [signed LogRaft 0.6.87](https://github.com/alwansan/raf/releases/tag/lograf-87) was released.
+2. [Commit `90ac2dca`](https://github.com/alwansan/raf/commit/90ac2dca6b44defd8085941b028b83a07a2737fd) added water-material breakdown, kernel-index grouping, dedicated render-error flood rate and UI/session summaries. [Actions **41896005067**](https://github.com/alwansan/raf/actions/runs/41896005067) **COMPLETED SUCCESS**: structural guard checks, actual JVM regression for FFT/OBB/FM​​OD/PSS/PID/FIFO marker/milestones/render material buckets, Gradle `BUILD SUCCESSFUL in 57s`, signature verification and Release publication.
+3. Latest signed APK: [`lograf-88/LogRaft-signed.apk`](https://github.com/alwansan/raf/releases/download/lograf-88/LogRaft-signed.apk), 164,672 bytes; SHA-256 sidecar exists. Version `0.6.88`, automatic `versionCode=1088`, `applicationId=com.alwansan.lograf`. Existing public test certificate SHA-256: `bdb27cfad1fd9a6ac14bd47317206ce4df462040f45ddb1fdbb66a0974043149` (certificate fingerprint, not APK-file hash).
+4. **Owner's file was from 0.6.86, NOT 0.6.88.** The new milestone and water-material summary implementation is verified in CI but its accuracy under actual Android 15 Shizuku capture still requires a new phone session. Do not describe the newest build as installed-device-verified.
+
+## External FPS cross-check
+
+A read-only offline comparison used the user's private Unity `raft-logs` alongside timestamp-proximate LogRaft 0.6.86 SurfaceFlinger samples. Of 96 pairs within 2.5 seconds, mean presented FPS was approximately **41.10**, mean Unity-reported FPS approximately **40.72**, median absolute difference **1.76 FPS**. These are **different sampling windows**, with some startup outliers; this only supports plausibility of the SurfaceFlinger *estimate* in that recording, not universal equivalence or guaranteed per-frame correctness. No private telemetry ZIP was committed.
+
+No game branch, other repository, automation schedule, saved game, signing key or original resource was modified.
