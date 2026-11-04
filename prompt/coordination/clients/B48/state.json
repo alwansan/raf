@@ -4,17 +4,20 @@
   "generation": "B-2026-11-04",
   "session_id": "20261104T2058Z-B48-f24a",
   "resumed_from_session": null,
-  "status": "active",
+  "status": "paused",
   "base_sha": "8328a092bb0c58f89e0c92540c80eb3d520bce3b",
-  "last_commit": null,
-  "updated_at": "2026-11-04T20:58:00Z",
+  "last_commit": "7be4c3365d4297a06abf502ceea504fee507f9c4",
+  "updated_at": "2026-11-04T21:08:11.963Z",
   "tracks": [
     "water-fft"
   ],
   "work_ids": [
-    "B48-20261104T2058Z-B48-f24a-fft-kernel-identity"
+    "prompt/coordination/work/WATER-001/B48-20261104T2058Z-B48-f24a-fft-kernel-identity.json"
   ],
-  "run_urls": [],
-  "next_step": "Investigate source-authenticated Dx11FFT runtime FindKernel/Dispatch indices versus serialized FFT programs. Distinct from B47/B49 ShaderLab pass integrity and B50 Steam identity work.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41912253262",
+    "https://github.com/alwansan/raf/actions/runs/41912422220"
+  ],
+  "next_step": "Scoped B48 source/compiled candidate gate verified and saved. Next blocker authentic Unity runtime kernel ID mapping and .compute import; never assume compiled slot=runtime kernel ID; coordinate B47/B49 ShaderLab. WATER OPEN NOT_READY 0/3.",
   "memory_path": "prompt/coordination/clients/B48/MEMORY.md"
 }
