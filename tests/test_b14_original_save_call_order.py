@@ -2,7 +2,7 @@
 import unittest
 
 from scripts.b07_probe_original_world_callbacks import fingerprint
-from scripts.b14_original_save_call_order import inspect_original_text
+from scripts.b14_original_save_call_order import inspect_original_text, require_authenticated_baseline
 
 
 SAMPLE = """
@@ -74,6 +74,33 @@ class OriginalSaveCallOrderTests(unittest.TestCase):
         report = self.inspect(SAMPLE)
         self.assertEqual(report["savegame_steam_stats_calls"], 1)
         self.assertEqual(report["other_direct_platform_calls"]["SaveGame"], 0)
+
+
+    def test_authentic_provider_gate_rejects_wrong_order_or_missing_persistence(self):
+        # Only the pinned real original provider must have the independently
+        # observed world->user->SteamStats order. Synthetic scan remains generic.
+        original = SAMPLE.replace(
+            "SaveUser();\n        SteamUserStats.StoreStats();\n        SaveWorld();",
+            "SaveWorld();\n        SaveUser();\n        SteamUserStats.StoreStats();"
+        )
+        baseline = self.inspect(original)
+        self.assertTrue(require_authenticated_baseline(baseline))
+        for key, value in (
+            ("savegame_direct_order", ["save_user", "steam_store_stats", "save_world"]),
+            ("original_world_method_save_calls", 0),
+            ("original_save_uses_file_manager", False),
+            ("android_save_calls_preserved_in_order", False),
+        ):
+            changed = dict(baseline)
+            changed[key] = value
+            with self.subTest(key=key), self.assertRaisesRegex(ValueError, "contract drift"):
+                require_authenticated_baseline(changed)
+        changed = dict(baseline)
+        changed["other_direct_platform_calls"] = dict(baseline["other_direct_platform_calls"])
+        changed["other_direct_platform_calls"]["SaveWorld"] = 1
+        with self.assertRaisesRegex(ValueError, "contract drift"):
+            require_authenticated_baseline(changed)
+
 
     def test_wrong_return_or_preprocessor_branch_fails_closed(self):
         bad = SAMPLE.replace("private void SaveWorld()", "private int SaveWorld()")
