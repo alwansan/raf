@@ -6,7 +6,7 @@
   "issue_id": "WATER-001",
   "track": "water-fft",
   "approach": "Harden ShaderLab per-pass program detection in production water render gate; fail on empty dummy passes even when another program is present",
-  "status": "active",
+  "status": "blocked",
   "base_sha": "ef0846d094a769b20f3408db44d06aea56f668d9",
   "intended_files": [
     "scripts/verify_water_render_contract.py",
@@ -20,7 +20,7 @@
     "B47-20261104T2055Z-B47-c4e7-water-pass-false-positive"
   ],
   "run_urls": [],
-  "result": null,
-  "next_step": "Demonstrate false-positive with synthetic source and fix parser; test without game assets; retain fail-closed source-authenticity requirement.",
-  "updated_at": "2026-11-04T20:55:10Z"
+  "result": "B49 independently merged same per-Pass ShaderLab fix 5070247 during B47 trial; B47 did not overwrite. Scope superseded; seven standalone synthetic trials were not merged.",
+  "next_step": "Use independent compute kernel verifier B47-20261104T2055Z-B47-c4e7-compute-kernel-entrypoint.json instead.",
+  "updated_at": "2026-11-04T21:07:00Z"
 }
