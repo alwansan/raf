@@ -4,26 +4,32 @@
   "generation": "B-2026-11-04",
   "session_id": "20261104T2257Z-B21-8e72",
   "resumed_from_session": "20261104T2153Z-B21-72ab",
-  "status": "active",
+  "status": "completed",
   "base_sha": "cdcef7f2b38ae21030992cf1e52ccc77c55a79f4",
-  "last_commit": "0be027aa54252a8870444cbe0b67d53bfdaec3c2",
-  "updated_at": "2026-11-04T22:57:00Z",
+  "last_commit": "d929e604292f725fa270d0dbc0eec5de1ae535cb",
+  "updated_at": "2026-11-04T23:18:00Z",
   "tracks": [
     "RENDER-002:original-lightmap-source-exclusion (scope completed)",
     "RENDER-002:original-dynamic-Light-source-baseline (scope completed)",
-    "RENDER-002:private-same-instance-native-light-lineage"
+    "RENDER-002:private-same-instance-native-light-lineage",
+    "RENDER-002:exact-source-export-Light108-GameObject1-link-2-of-2"
   ],
   "work_ids": [
     "B21-20261104T2153Z-B21-72ab-lightmap-lineage",
     "B21-20261104T2153Z-B21-72ab-dynamic-lighting",
-    "B21-20261104T2257Z-B21-8e72-light-export-lineage"
+    "B21-20261104T2257Z-B21-8e72-light-export-lineage",
+    "B21-20261104T2310Z-B21-8e72-light-owner-link"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41921259677",
     "https://github.com/alwansan/raf/actions/runs/41922372594",
     "https://github.com/alwansan/raf/actions/runs/41923120681",
-    "https://github.com/alwansan/raf/actions/runs/41923272928"
+    "https://github.com/alwansan/raf/actions/runs/41923272928",
+    "https://github.com/alwansan/raf/actions/runs/41929975841",
+    "https://github.com/alwansan/raf/actions/runs/41930580691",
+    "https://github.com/alwansan/raf/actions/runs/41930891466",
+    "https://github.com/alwansan/raf/actions/runs/41931942755"
   ],
-  "next_step": "Complete B21 optional original Light 108 same-instance export capture staged on exact B02+W1 helper, compile/negative tests, then authenticate real export Light pairing before any asset mutation.",
+  "next_step": "B21 scoped original Light→real AssetRipper export values and GameObject owners 2/2 proven for six original scene subset; do not rerun. On next session inspect live HEAD/Actions and choose unowned actual shader/material/ambient/GPU white-pixel or water/FFT implementation lane, make real source fix with authentic evidence. RENDER-002/WATER-001/LOCAL-005 OPEN, NOT_READY 0/3, APK86 latest known.",
   "memory_path": "prompt/coordination/clients/B21/MEMORY.md"
 }
