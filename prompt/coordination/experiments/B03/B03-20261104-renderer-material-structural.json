@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "owner": "B03",
+  "session_id": "20261104T2101Z-B03-a419",
+  "issue_id": "RENDER-002",
+  "hypothesis": "Pale/white rendered meshes can result from missing, nulled, or misbound Renderer.m_Materials GUID/fileID even when Material-to-Shader and Material-to-Texture graphs appear complete; a strict exported YAML guard can diagnose the graph without guessing.",
+  "source_commit": "77810606899ab9a16248ab17540dc7cd538bcac9",
+  "input_hashes": [],
+  "tool_versions": {
+    "python": "3.12 (CI)",
+    "github_runner": "ubuntu-24.04"
+  },
+  "commands": [
+    "python3 -m py_compile scripts/b03_verify_renderer_material_links.py",
+    "python3 -m unittest discover -s tests -p test_b03_verify_renderer_material_links.py -v"
+  ],
+  "negative_controls": [
+    "absent target Material GUID",
+    "unresolved target material fileID",
+    "wrong type for source pointer",
+    "null pointer retained as unverified",
+    "Unity builtin Material retained as unverified",
+    "duplicate m_Materials field",
+    "wrong renderer class label",
+    "duplicated YAML anchor",
+    "duplicate metadata GUID",
+    "missing meta",
+    "non YAML Material",
+    "symlinked project entry",
+    "malformed GUID and duplicate PPtr key",
+    "unrelated MonoBehaviour m_Materials field ignored",
+    "read-only no mutation and aggregate-only report"
+  ],
+  "workflow_path": ".github/workflows/raft-b03-renderer-material-links.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41914562432",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41914562432"
+  ],
+  "budget": "6 minutes public standard runner, no LFS, no private game asset, no Unity/native",
+  "status": "completed",
+  "observed_result": "17 synthetic YAML test cases PASS and CI SUCCESS. Tool resolves valid local/exported Renderer Material reference graph, but actual original Raft export not exercised.",
+  "rejected_hypotheses": [
+    "All valid Renderer Material slots imply original authored Renderer assignment parity — unsupported without source identity trace; no such claim made.",
+    "Null/builtin Material slot can be called restored or healthy — deliberately classified unverified."
+  ],
+  "limitations": [
+    "No actual original ZIP2 Unity export access in this synthetic workflow.",
+    "No original-to-export Renderer material identity mapping yet.",
+    "No Shader variant, texture/sRGB, GPU image/pixel equivalence or phone validation."
+  ],
+  "integration_commit": "77810606899ab9a16248ab17540dc7cd538bcac9",
+  "next_step": "On SHA-pinned complete export, run guard and source/export same-instance Renderer->Material edge comparison, then repair only genuine mismatch; RENDER-002 remains OPEN."
+}
