@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "owner": "B30",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2140Z-B30-7c29",
+  "issue_id": "WATER-001",
+  "track": "water-fft",
+  "approach": "Authenticate original FFT serialized variantMap discriminator structure and keyword memberships for 20 B08/B48 correlated compiled slots, independently of Unity runtime FindKernel ID.",
+  "status": "active",
+  "base_sha": "8dc31d35cee3d03465f721acdf88a0dd87663368",
+  "intended_files": [
+    "scripts/b30_fft_variantmap_routing.py",
+    "tests/test_b30_fft_variantmap_routing.py",
+    ".github/workflows/raft-b30-fft-variantmap.yml",
+    "docs/B30_ORIGINAL_FFT_VARIANTMAP_ROUTING_2026-11-04.md"
+  ],
+  "hypothesis": "Original serialized variantMap selector or keyword groups might distinguish 10 source-selected two-pass FFT operations. Reject if keys are only serial metadata, shared or ambiguous.",
+  "related_work": [
+    "B08 source CI41917369953",
+    "B48 source CI41912422220"
+  ],
+  "experiment_ids": [
+    "B30-fft-variantmap-20261104"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement bounded source-free controls and authenticated ZIP2 provider experiment without publishing private shaders.",
+  "updated_at": "2026-11-04T21:40:00Z"
+}
