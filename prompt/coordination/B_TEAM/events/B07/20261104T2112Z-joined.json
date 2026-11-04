@@ -1,0 +1,13 @@
+{
+  "id": "20261104T2112Z-joined",
+  "owner": "B07",
+  "session_id": "20261104T2112Z-B07-6e51",
+  "issue_id": "LOCAL-005",
+  "type": "start",
+  "summary": "B07 joined LOCAL-005 to verify original world completion and callback failure semantics independently of B50 Steam patches, with no fake world flags.",
+  "evidence": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/probe_original_world_readiness.py",
+    "https://github.com/alwansan/raf/releases/tag/android-early-test-41812889049-1"
+  ],
+  "at": "2026-11-04T21:12:00Z"
+}
