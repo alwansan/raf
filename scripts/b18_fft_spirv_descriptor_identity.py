@@ -148,9 +148,28 @@ def main():
     args = p.parse_args()
     try:
         result = inspect_original(args.source, args.compiler)
-    except (ValueError, OSError, KeyError, TypeError, subprocess.SubprocessError):
+    except (ValueError, OSError, KeyError, TypeError, subprocess.SubprocessError) as exc:
+        # Only literal, source-free failure codes may leave the private runner.
+        reason = {
+            "Private explicit interface translation tool unavailable": "COMPILER_MISSING",
+            "Original FFT ComputeShader pathID not unique": "SOURCE_OBJECT_MISSING",
+            "Original FFT ComputeShader object SHA mismatch": "SOURCE_OBJECT_SHA",
+            "Original typed compiled slot inventory changed": "SOURCE_COMPILED_ORDER",
+            "Original DXBC per-slot SHA mismatch": "SOURCE_SLOT_SHA",
+            "Private vkd3d interface compiler unavailable": "COMPILER_INVOCATION",
+            "Explicit compiler translation failed or module malformed": "COMPILER_TRANSLATION",
+            "Targeted vkd3d interface descriptor sets/bindings were not respected": "SPIRV_BINDING_MAP_DIFFERENT",
+            "Missing numeric SPIR-V descriptor set or binding": "SPIRV_DESCRIPTOR_ABSENT",
+            "Duplicate explicit SPIR-V binding": "SPIRV_DESCRIPTOR_DUPLICATE",
+            "Original FFT group changed": "SPIRV_GROUP_MISMATCH",
+            "Translated descriptor is not a two-dimensional image": "SPIRV_IMAGE_DIMENSION",
+            "SPIR-V descriptor has ambiguous read/write role": "SPIRV_IMAGE_ACCESS",
+            "Compiled interface must contain exactly three images": "SPIRV_IMAGE_COUNT",
+            "Not all original FFT programs met explicit interface mapping": "PROGRAM_COUNT",
+        }.get(str(exc), type(exc).__name__)
         print("RAFT_B18_FFT_EXPLICIT_MAP " + json.dumps({
-            "status": "REJECTED", "original_explicit_mapping_proven": False
+            "status": "REJECTED", "reason_code": reason,
+            "original_explicit_mapping_proven": False
         }, sort_keys=True))
         return 2
     print("RAFT_B18_FFT_EXPLICIT_MAP " + json.dumps({"status": "PASS", **result}, sort_keys=True))
