@@ -71,7 +71,7 @@ int main(int argc, char **argv)
     unsigned int set, a, b, c;
     FILE *output;
     int rc;
-    if (argc != 4 || (strcmp(argv[3], "A") && strcmp(argv[3], "B")))
+    if (argc != 4 || (strcmp(argv[3], "A") && strcmp(argv[3], "B") && strcmp(argv[3], "D")))
         return 2;
     if (!strcmp(argv[3], "A"))
     {
@@ -97,7 +97,8 @@ int main(int argc, char **argv)
     interface.bindings = mapped;
     interface.binding_count = 3;
     info.type = VKD3D_SHADER_STRUCTURE_TYPE_COMPILE_INFO;
-    info.next = &interface;
+    /* D is a private baseline control with no explicit mapping. */
+    info.next = strcmp(argv[3], "D") ? &interface : NULL;
     info.source.code = input;
     info.source.size = bytes;
     info.source_type = VKD3D_SHADER_SOURCE_DXBC_TPF;
@@ -111,7 +112,8 @@ int main(int argc, char **argv)
     if (rc != 0 || !spv.code || spv.size < 20 || spv.size > MAX_SPV_BYTES)
     {
         if (spv.code) vkd3d_shader_free_shader_code(&spv);
-        return 4;
+        /* Public numeric vkd3d return code ONLY; no private diagnostic text. */
+        return rc < 0 ? (unsigned int)(40 + ((-rc) > 50 ? 50 : -rc)) : 4;
     }
     output = fopen(argv[2], "wb");
     if (!output)
