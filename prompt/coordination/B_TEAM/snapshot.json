@@ -287,7 +287,13 @@
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B13_BUILTIN_SHADER_ATOMIC_INSTALL_2026-11-04.md",
         "https://github.com/alwansan/raf/actions/runs/41929077930",
         "https://github.com/alwansan/raf/actions/runs/41928852363",
-        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/B05-sharedassets6-texenv.json"
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/B05-sharedassets6-texenv.json",
+        "https://github.com/alwansan/raf/commit/50838fb89fc1552f7ca9809d159d14c5ee04830c",
+        "https://github.com/alwansan/raf/actions/runs/41930143093",
+        "https://github.com/alwansan/raf/actions/runs/41928799663",
+        "https://github.com/alwansan/raf/actions/runs/41929367655",
+        "https://github.com/alwansan/raf/actions/runs/41930267873",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B03_ORIGINAL_RENDERER_MATERIALS_2026-11-04.md"
       ],
       "remaining": [
         "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -319,15 +325,17 @@
         "B10 continued: production volumetric Lighting BSD NOTICE now commits/rolls back in the same authenticated shader restoration transaction with fail-closed paths. B10 final source CI41928744660 SUCCESS 27 distinct tests and real pinned vendor temporary restoration CI41928592399 SUCCESS; no actual Raft Unity/Adreno/Android colors or original Material→Shader equivalence shown. RENDER-002 remains OPEN.",
         "B15 continuation: corrected a provable false sampler-drift report for Unity TextureImporter mipBias=-100 unset, required matching B02/W1 paired trace export_instance when supplied, rejected arbitrary source folder aliases with trusted ZIP2 basename; CI41929031892 23/23 synthetic PASS. This is diagnostic source fidelity only: 0 real original-vs-export texture pairs tested, no Unity/GPU/device colors proof.",
         "B13 source-fixed builtin ShaderLab restorer safety: verified exact backups, concurrent source edit rejection and fsynced atomic replacement/rollback; CI41928703661 14/14 synthetic. NOT authentic shader programs or same-export Material/Unity/Adreno proof.",
-        "B05 actual original ZIP2 sharedassets6 source parser and bounded owner accessor PASS (CI41929077930, 41 real Materials/227 TexEnv slots/227 UV sets; 89 same-file,25 external,113 null), and scoped source-to-full-export comparator 18/18 synthetic CI41928852363. No genuine same-instance Unity export/Material PPtr+UV match or Adreno/phone color restoration yet. RENDER-002 OPEN."
+        "B05 actual original ZIP2 sharedassets6 source parser and bounded owner accessor PASS (CI41929077930, 41 real Materials/227 TexEnv slots/227 UV sets; 89 same-file,25 external,113 null), and scoped source-to-full-export comparator 18/18 synthetic CI41928852363. No genuine same-instance Unity export/Material PPtr+UV match or Adreno/phone color restoration yet. RENDER-002 OPEN.",
+        "B15 actual original: ZIP2 SHA-verified sharedassets6 (6,607,272B) read via production original_sampler() 87/87 actual Texture2D settings, 87 filter and 261 wrap, all mip biases 0, CI41930143093 SUCCESS with 8 synthetic negative controls. This does NOT establish any real original-to-export importer equivalence (0 paired records) or restore white shaders/device pixels.",
+        "B03 verified 1635/1635 source-only non-null Renderer Material target class links across 6 original ZIP2 scenes and three SHA-pinned owners (4 original null). Actual same-instance Unity Renderer→Material GUID/fileID export preservation and Android white/pixel fix remain unproven."
       ],
       "acceptance": [
         "مطابقة روابط ومراجع الأصل",
         "مقارنةصوريةلنفسالمشهد",
         "نجاحعلىالهاتف"
       ],
-      "updated_by": "B05",
-      "updated_at": "2026-11-04T22:55:00Z",
+      "updated_by": "B03",
+      "updated_at": "2026-11-04T23:05:25.614Z",
       "_record_path": "issues/RENDER-002.json"
     },
     {
@@ -465,6 +473,40 @@
     }
   ],
   "resources": [
+    {
+      "id": "B03-original-renderer-material-source-graph",
+      "title": "B03 original six-scene Renderer→Material class target graph across SHA-verified source owners",
+      "kind": "serialized_source_material_reference_graph",
+      "source": {
+        "provider": "raf zip2 immutable original Raft_Data",
+        "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+        "path": "Raft/Raft_Data/level0..level5 and three independently validated external Material owner files",
+        "bytes": null,
+        "sha256": null
+      },
+      "stages": {
+        "acquisition": "VERIFIED_EXACT_ORIGINAL_BYTES_SHA256_SIX_SCENES_AND_THREE_OWNERS",
+        "extraction": "UNITYPY_ORIGINAL_SERIALIZED_TYPETREES_1495_RENDERERS",
+        "reconstruction": "NOT_APPLICABLE_REFERENCE_GRAPH_READ_ONLY",
+        "binding": "SOURCE_ONLY_1635_OF_1635_NONNULL_EXTERNAL_MATERIAL_TARGET_CLASSES_VERIFIED_FOUR_ORIGINAL_NULL",
+        "integration": "SOURCE_ONLY_VERIFIERS_AND_INDEPENDENT_GITHUB_CI_INTEGRATED_NO_EXPORT_PATCH",
+        "device": "UNKNOWN"
+      },
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41928799663",
+        "https://github.com/alwansan/raf/actions/runs/41929367655",
+        "https://github.com/alwansan/raf/actions/runs/41930267873",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B03_ORIGINAL_RENDERER_MATERIALS_2026-11-04.md"
+      ],
+      "remaining": [
+        "34 other original scenes not checked",
+        "Same-instance original Renderer to actual exported Material GUID/fileID identity not captured/verified",
+        "Real Unity shader/texture/color/pixel and Adreno device rendering not verified"
+      ],
+      "updated_by": "B03",
+      "updated_at": "2026-11-04T23:03:09.495Z",
+      "_record_path": "resources/B03-original-renderer-material-source-graph.json"
+    },
     {
       "id": "B05-SHAREDASSETS6-TEXENV",
       "title": "B05 authenticated original sharedassets6 Material texture and UV records",
@@ -1171,6 +1213,22 @@
       ],
       "at": "2026-11-04T22:44:18.837Z",
       "_record_path": "events/B03/20261104T2243Z-original-renderer-start.json"
+    },
+    {
+      "id": "B03-20261104T2304Z-original-renderer-source-verified",
+      "owner": "B03",
+      "session_id": "20261104T2243Z-B03-7c9e",
+      "issue_id": "RENDER-002",
+      "type": "result",
+      "summary": "SHA-authenticated original six scenes and three selected owner payloads; all 1635 non-null Renderer material slots map to original Material class objects (1609+26 across independent CI), 4 original null; real export/pixels still OPEN.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41928799663",
+        "https://github.com/alwansan/raf/actions/runs/41929367655",
+        "https://github.com/alwansan/raf/actions/runs/41930267873",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B03_ORIGINAL_RENDERER_MATERIALS_2026-11-04.md"
+      ],
+      "at": "2026-11-04T23:04:11.474Z",
+      "_record_path": "events/B03/20261104T2304Z-original-renderer-source-verified.json"
     },
     {
       "id": "20261104T2102Z-B04-start",
@@ -2198,6 +2256,20 @@
       "_record_path": "events/B17/20261104T2249Z-spectrum-binding-start.json"
     },
     {
+      "id": "B17-spectrum-compiled-slot-parity-20261104T2304Z",
+      "owner": "B17",
+      "session_id": "20261104T2249Z-B17-cbind",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "summary": "Original Spectrum DXBC executable t/s/u numeric resource slots match authenticated Unity per-stage tables: 7 passes, 14 permutation pairs, 28 stage programs, 17 synthetic tests and genuine ZIP2 source CI41930225633 PASS. No ShaderLab/Unity/Adreno or APK.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41930225633",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B17_SPECTRUM_COMPILED_REGISTER_PARITY_2026-11-04.md"
+      ],
+      "at": "2026-11-04T23:04:00Z",
+      "_record_path": "events/B17/20261104T2304Z-spectrum-compiled-slots-result.json"
+    },
+    {
       "id": "20261104T215100Z-start",
       "owner": "B18",
       "session_id": "20261104T215100Z-B18-d3f9",
@@ -2311,6 +2383,21 @@
       ],
       "at": "2026-11-04T23:00:00Z",
       "_record_path": "events/B19/20261104T2300Z-save-hardlink-result.json"
+    },
+    {
+      "id": "B19-20261104T2305Z-water-pass-start",
+      "owner": "B19",
+      "session_id": "20261104T2256Z-B19-hl7",
+      "issue_id": "WATER-001",
+      "type": "start",
+      "summary": "Detected potential false positive: Unity passCount is per active SubShader, but water source gate sums authored passes across alternate SubShaders. Plan conservative per-SubShader source guard.",
+      "evidence": [
+        "https://docs.unity.cn/2022.3/Documentation/ScriptReference/Shader-passCount.html",
+        "https://docs.unity.cn/2021.3/Documentation/ScriptReference/ShaderData.Subshader.PassCount.html",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/verify_water_render_contract.py"
+      ],
+      "at": "2026-11-04T23:05:00Z",
+      "_record_path": "events/B19/20261104T2305Z-subshader-pass-count-start.json"
     },
     {
       "id": "B20-20261104T2230Z-start",
@@ -3106,5 +3193,5 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "input_sha256": "ac805653a8f6e3b54e2154bade9ac1c96a6de57e2504a7bc6666419c16880c45"
+  "input_sha256": "3c27d5b2001148ac0809ad850dfef46b3febf5d9771e2044c5464171bc1b4a54"
 }
