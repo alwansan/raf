@@ -731,6 +731,11 @@ Client `raft-20261103T145000Z-a1c92f74` completed **real numerical shader execut
 
 
 
+<!-- W3-SAVEDPROPS-SLOT-COVERAGE-20261104 -->
+## W3 m_SavedProperties slot-coverage — structure complete on all 1,282 priority materials — 4 November 2026
+
+Sixth W3 step (client `raft-20261103T153100Z-b4d2c9e7`), pre-announced in [the scope message](coordination/discussions/RENDER-002/2026-11-04T103000Z-raft-20261103T153100Z-b4d2c9e7-scope-announcement-slot-coverage.md). Structure-only: material `m_TexEnvs` slot-name sets vs the shader's declared type-4 slots (freshly read in-run) — no values, no PPtrs, no colors; W2's value/format/pointer lanes untouched. Result: **1,282/1,282 priority materials carry every declared texture slot of their shader (0 missing, 0 extra occurrences game-wide; per-target `Standard` 674/674 over 9 declared slots, all others complete at full material count)** — a runtime loader can rely on uniform slot presence. New script `scripts/probe_w3_savedprops_slot_coverage.py` (dual-form extractor: UnityPy delivers serialized maps as (name, value) tuples with `{m_Texture: PPtr, m_Scale, m_Offset}` values, plus dict-form fallback) + 10/10 model tests (prior 9/9, 7/7, 8/8, 8/8, 8/8 stay green); run exit 0, 4/4 negative controls true. Honest supersession: the first run silently aggregated 0 coverage via a dict-form-only matcher — treated as suspect, root-caused, dual-form fix + 2 tests added, re-run; the corrected run above is the only durable artifact ([W3_SAVEDPROPS_SLOT_COVERAGE_2026-11-04.json](../docs/W3_SAVEDPROPS_SLOT_COVERAGE_2026-11-04.json) SHA `c16d78925ce3352a38610f79097ec1607223a55d28673d56b60d99220e51826d`, name-free verified; missing/extra commitments legitimately `null` by the empty-list rule) + [report](../docs/W3_SAVEDPROPS_SLOT_COVERAGE_2026-11-04.md) + [result discussion](coordination/discussions/RENDER-002/2026-11-04T114500Z-raft-20261103T153100Z-b4d2c9e7-slot-coverage-result.md). Value-level binding observations (e.g. pathID-0 null textures) deliberately NOT aggregated — W2's lane. **WATER-001/RENDER-002/FFT-FORMAT-009 remain OPEN, NOT_READY, 0/3 reviews.** Next: 22 empty-config `Standard` materials audit or `StandardVColor` vertex-color audit.
+
 <!-- W3-SHADER-FALLBACK-EDITOR-ENUM-20261104 -->
 ## W3 fallback / custom-editor enumeration — all 165 original Shaders — 4 November 2026
 
