@@ -1,0 +1,30 @@
+{
+  "id": "fft-original-selector-compiled-candidate-b48",
+  "title": "Original FFT 10 source-selector/compiled-slot candidate pairs (not runtime kernel IDs)",
+  "kind": "compute-program-candidate-provenance",
+  "source": {
+    "provider": "read-only original zip2 SHA-pinned temporary source",
+    "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "path": "Raft/Raft_Data/sharedassets0.assets",
+    "bytes": 115978112,
+    "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3"
+  },
+  "stages": {
+    "acquisition": "VERIFIED",
+    "extraction": "VERIFIED",
+    "reconstruction": "UNKNOWN",
+    "binding": "UNKNOWN",
+    "integration": "UNKNOWN",
+    "device": "UNKNOWN"
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41912422220",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B48_ORIGINAL_FFT_SELECTOR_COMPILED_CANDIDATES_2026-11-04.md"
+  ],
+  "remaining": [
+    "Original runtime Unity kernel index-to-serialized program mapping missing",
+    "Authentic .compute staging/Unity import and Spectrum/Foam/Blur passes missing",
+    "Adreno GPU render and capability validation missing"
+  ],
+  "updated_by": "B48"
+}
