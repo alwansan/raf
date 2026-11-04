@@ -1,0 +1,14 @@
+{
+  "id": "20261104T2254Z-B05-auth-texenv-result",
+  "owner": "B05",
+  "session_id": "20261104T2242Z-B05-auth-texenv6",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "Verified authentic ZIP2 sharedassets6 original (6,607,272 bytes exact SHA): real 41 Material/227 TexEnv; 89 internal,25 external,113 null, 227 complete UV. Production selected source accessor and 7 controls succeeded CI41929077930; scoped original-to-full-export compare code 18 synthetic tests succeeded CI41928852363. No genuine export/device pixel acceptance, RENDER still OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41929077930",
+    "https://github.com/alwansan/raf/actions/runs/41928852363",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B05_MATERIAL_TEXENV_LINEAGE_2026-11-04.md"
+  ],
+  "at": "2026-11-04T22:54:00Z"
+}
