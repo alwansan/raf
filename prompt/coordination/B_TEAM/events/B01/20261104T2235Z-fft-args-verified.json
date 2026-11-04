@@ -1,0 +1,13 @@
+{
+  "id": "B01-20261104T2235Z-fft-args-verified",
+  "owner": "B01",
+  "session_id": "20261104T2231Z-B01-fft-args",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Hardened private original CSharp FFT argument parser against comments, quote and comma ambiguity; 67 synthetic tests plus SHA-pinned original caller and FFT numeric oracle success; water GPU still unverified.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/ec4f8cef6fc1c028d3e8df519fc08494e8442161",
+    "https://github.com/alwansan/raf/actions/runs/41926033893"
+  ],
+  "at": "2026-11-04T22:35:00Z"
+}
