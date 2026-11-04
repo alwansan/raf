@@ -53,6 +53,19 @@ class Routing(unittest.TestCase):
         f=fixture();f["variants"][0]["kernels"][3]["name"]="other-name"
         with self.assertRaises(ValueError): summarize_routing(f)
 
+    def test_opaque_structured_header_preserves_collision_classes(self):
+        f=fixture()
+        for row in f["variants"][0]["kernels"]:
+            row["variantMap"][0]=(("<opaque>", [1,2], {"v":3}), row["variantMap"][0][1])
+        result=summarize_routing(f)
+        self.assertEqual(result["original_variant_map_header_unique_values"],1)
+        self.assertFalse(result["opaque_map_header_meaning_inferred"])
+
+    def test_custom_unstable_header_is_rejected(self):
+        f=fixture()
+        f["variants"][0]["kernels"][0]["variantMap"][0]=(object(),f["variants"][0]["kernels"][0]["variantMap"][0][1])
+        with self.assertRaises(ValueError): summarize_routing(f)
+
     def test_invalid_binary_payload_rejected(self):
         f=fixture();f["variants"][0]["kernels"][2]["variantMap"][0][1]["bin"]=list(b"FAKE"+bytes([2])*60)
         with self.assertRaises(ValueError): summarize_routing(f)
