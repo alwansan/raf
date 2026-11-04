@@ -4,17 +4,20 @@
   "generation": "B-2026-11-04",
   "session_id": "20261104T2059Z-B44-f0ac",
   "resumed_from_session": null,
-  "status": "active",
+  "status": "paused",
   "base_sha": "4072288020d7a42daf6d235af6549f8b43d89132",
-  "last_commit": null,
-  "updated_at": "2026-11-04T20:59:00Z",
+  "last_commit": "dda05b1638480f4a2d9ab37149ac792500cfec5b",
+  "updated_at": "2026-11-04T21:10:00Z",
   "tracks": [
     "colors-materials"
   ],
   "work_ids": [
     "B44-20261104T2059Z-B44-f0ac-material-values"
   ],
-  "run_urls": [],
-  "next_step": "Compare original serialized Material saved properties with export/YAML handling; find a concrete value/texture/binding loss and fix with bounded tests. Avoid B47/B49 per-pass and B48 FFT identity overlap.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41912783093",
+    "https://github.com/alwansan/raf/actions/runs/41913494314"
+  ],
+  "next_step": "Original-to-export Material color comparisons require same-instance W1 full-export staging. B44 11 synthetic positive/negative tests added and local PASS; CI 41913494314 pending at this checkpoint; inspect before labeling success. Coordinate one future original SHA-authenticated export; if mismatch fix exact material serializer, else shift to authentic shader/texture path. Preserve RENDER-002 OPEN, no full build or device claim.",
   "memory_path": "prompt/coordination/clients/B44/MEMORY.md"
 }
