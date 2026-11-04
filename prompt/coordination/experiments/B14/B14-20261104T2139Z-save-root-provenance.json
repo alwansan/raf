@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "owner": "B14",
+  "session_id": "20261104T2131Z-B14-a71c",
+  "issue_id": "LOCAL-005",
+  "hypothesis": "Project directory alias and backup root/parent symlinks bypass the existing Assets-only and resolved-containment-only staging checks.",
+  "source_commit": "090a03b34e77ea0817208e7e41ca646286379d63",
+  "input_hashes": [],
+  "tool_versions": {
+    "python": "GitHub Actions ubuntu-24.04 Python 3 (system)"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_adapt_original_save_paths.py -v",
+    "python3 -m unittest discover -s tests -p test_android_offline_startup.py -v"
+  ],
+  "negative_controls": [
+    "Project root link: descendant Assets.is_symlink false but root linked",
+    "Backup directory link to external",
+    "Backup parent link to external",
+    "Normal synthetic source stage remains valid"
+  ],
+  "workflow_path": ".github/workflows/raft-b14-local-source-paths.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41918579185",
+  "artifact_urls": [],
+  "budget": "5 minutes ubuntu-24.04, no LFS, no Unity, no proprietary source",
+  "status": "completed",
+  "observed_result": "Production original save and offline startup adapters reject linked project and backup ancestors; 13/13 and 19/19 source-only Python tests PASS, 32 total, run 41918579185 job 126884721688.",
+  "rejected_hypotheses": [
+    "Checking only Assets.is_symlink() proves an unlinked Unity project root",
+    "Checking only that backup.resolve() is outside project proves an unlinked backup destination"
+  ],
+  "limitations": [
+    "No authentic original game source/Unity imported/exported source exercised in this test",
+    "Not a runtime SteamStats fix, no .rgd serialize/reopen and no Android device test",
+    "No evidence such symlinks existed in APK86 build"
+  ],
+  "integration_commit": "cca6e1e8f6c3a07327f811cf788a8d5d6668c099",
+  "next_step": "Leave LOCAL-005 OPEN; reproduce actual world enter/save/reopen in newer coordinated native test while preserving working audio/Settings and deferred touch."
+}
