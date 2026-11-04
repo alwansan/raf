@@ -6,8 +6,8 @@
   "resumed_from_session": null,
   "status": "completed",
   "base_sha": "29242464003fcf2dcfd0fcc120770b7f2839ce15",
-  "last_commit": "e93910090da88b100080cd3efa3dc19d2736fedb",
-  "updated_at": "2026-11-04T22:00:08.679Z",
+  "last_commit": "214fb6544d7e7d5ac0e561e74ffbe9964efb5327",
+  "updated_at": "2026-11-04T22:04:41.318Z",
   "tracks": [
     "WATER-001: inactive-preprocessor kernel structure"
   ],
@@ -15,8 +15,9 @@
     "B16-20261104T2151Z-B16-6e2a-conditional-kernel"
   ],
   "run_urls": [
-    "https://github.com/alwansan/raf/actions/runs/41920741687"
+    "https://github.com/alwansan/raf/actions/runs/41920741687",
+    "https://github.com/alwansan/raf/actions/runs/41921849148"
   ],
-  "next_step": "Scoped WATER-001 structural helper fix complete, source tests 34/34. Next session choose an unowned authentic program-binding or original shader integration issue; do not repeat source census; no background execution.",
+  "next_step": "B16 scope complete. Source CI41920741687 PASS34/34; summary refresh CI41921849148 PASS and B16 event present in generated SUMMARY. WATER-001 still OPEN: authentic ZIP2 FFT program/Unity define and pass binding/GPU/device unresolved. No background execution.",
   "memory_path": "prompt/coordination/clients/B16/MEMORY.md"
 }
