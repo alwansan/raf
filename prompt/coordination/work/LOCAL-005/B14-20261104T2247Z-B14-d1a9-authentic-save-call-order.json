@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "owner": "B14",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2247Z-B14-d1a9",
+  "issue_id": "LOCAL-005",
+  "track": "world-save-authenticated-call-order",
+  "approach": "SHA-authenticate original Assembly-CSharp.dll/ILSpy SaveAndLoad source, verify executable SaveGame -> SaveUser/SaveWorld -> original Save(RGD) call order and distinct SteamStats external side effect, then assert production Android stats guard preserves actual save calls; original data private/no Unity.",
+  "status": "active",
+  "base_sha": "2925383e4721aa2cd50e55467d2fe2e1b20c3557",
+  "intended_files": [
+    "scripts/b14_original_save_call_order.py",
+    "tests/test_b14_original_save_call_order.py",
+    ".github/workflows/raft-b14-original-save-order.yml",
+    "docs/B14_ORIGINAL_LOCAL_SAVE_ORDER_2026-11-04.md"
+  ],
+  "hypothesis": "The original SaveGame's relative .rgd save calls and native SteamUserStats side effect can be independently proven and production Android local guard shown not to bypass either SaveUser/SaveWorld; any other Steam direct calls in these methods must remain explicit unresolved dependencies.",
+  "related_work": [
+    "B50-20261104T2039Z-B50-d7a3-steamstats-offline.json",
+    "B07-20261104T2112Z-B07-6e51-world-callback-proof.json"
+  ],
+  "experiment_ids": [
+    "B14-20261104T2253Z-auth-save-call-order"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Inspect original-source authenticated SaveAndLoad method lexical call order via private no-LFS ILSpy CI, verify actual data vs synthetic tests; do not claim game save/reload without APK.",
+  "updated_at": "2026-11-04T22:53:19.747Z"
+}
