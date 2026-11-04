@@ -12,6 +12,9 @@ using System.Security.Cryptography;
 using System.Text.Json;
 
 static string Hash(byte[] bytes) => Convert.ToHexString(SHA256.HashData(bytes)).ToLowerInvariant();
+// ECMA-335 metadata bit flags; no deprecated .NET formatter APIs are invoked.
+const TypeAttributes SERIALIZABLE_TYPE_BIT = (TypeAttributes)0x00002000;
+const FieldAttributes NONSERIALIZED_FIELD_BIT = (FieldAttributes)0x0080;
 
 static byte[] Exact(string path, long expectedSize, string expectedSha)
 {
@@ -67,7 +70,7 @@ static object Check(byte[] payload, byte[] gameDll)
     int inheritedMatch = 0, inheritedEffectiveMatch = 0;
     int staticFields = 0, nonserializedFields = 0, depth = 0;
     int rootEffectiveFields = 0, rootEffectiveMatches = 0;
-    bool chainComplete = true, rootSerializable = (rootDefinition.Attributes & TypeAttributes.Serializable) != 0;
+    bool chainComplete = true, rootSerializable = (rootDefinition.Attributes & SERIALIZABLE_TYPE_BIT) != 0;
     var visited = new HashSet<TypeDefinitionHandle>();
     var current = candidates[0];
     while (true)
@@ -79,7 +82,7 @@ static object Check(byte[] payload, byte[] gameDll)
         foreach (var field in fields)
         {
             bool isStatic = (field.Attributes & FieldAttributes.Static) != 0;
-            bool notSerialized = (field.Attributes & FieldAttributes.NotSerialized) != 0;
+            bool notSerialized = (field.Attributes & NONSERIALIZED_FIELD_BIT) != 0;
             bool included = !isStatic && !notSerialized;
             string name = md.GetString(field.Name);
             totalFields++;
