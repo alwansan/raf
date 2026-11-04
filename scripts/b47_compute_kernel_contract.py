@@ -33,6 +33,65 @@ def matching_close_brace(source: str, open_index: int) -> bool:
     return False
 
 
+# Only literal #if 0 / #if 1 conditions are resolved. #ifdef, #ifndef,
+# symbolic expressions and macros are intentionally *unknown*; both sides are
+# masked unless separately authenticated with the actual Unity defines.
+# This must never be confused with a compiled-kernel/identity verifier.
+CONDITIONAL = re.compile(r'^[ \t]*#[ \t]*(if|ifdef|ifndef|elif|else|endif)\b([^\r\n]*)')
+
+
+def mask_inactive_preprocessor(clean: str) -> str:
+    """Retain definitely enabled conditional branches; mask ambiguous ones.
+
+    Source diagnostics must not count #pragma/kernel entrypoints that the HLSL
+    preprocessor cannot compile. Preserve newlines for anchored regexes.
+    Unknown conditions fail closed rather than guessing Android defines.
+    """
+    stack = []
+    active = True
+    kept = []
+    for line in clean.splitlines(keepends=True):
+        match = CONDITIONAL.match(line)
+        if match:
+            directive, tail = match.groups()
+            operand = tail.strip()
+            if directive in ("if", "ifdef", "ifndef"):
+                if not operand:
+                    raise ValueError("Missing compute conditional expression")
+                value = operand == "1" if directive == "if" and operand in ("0", "1") else None
+                frame = {"parent": active, "seen": value is True,
+                         "unknown": value is None, "else": False}
+                stack.append(frame)
+                active = active and value is True
+            elif directive == "elif":
+                if not stack or stack[-1]["else"] or not operand:
+                    raise ValueError("Malformed compute #elif")
+                frame = stack[-1]
+                value = operand == "1" if operand in ("0", "1") else None
+                if value is None:
+                    frame["unknown"] = True
+                active = frame["parent"] and not frame["seen"] and not frame["unknown"] and value is True
+                if value is True:
+                    frame["seen"] = True
+            elif directive == "else":
+                if not stack or stack[-1]["else"] or operand:
+                    raise ValueError("Malformed compute #else")
+                frame = stack[-1]
+                frame["else"] = True
+                active = frame["parent"] and not frame["seen"] and not frame["unknown"]
+            else:
+                if not stack or operand:
+                    raise ValueError("Malformed compute #endif")
+                active = stack.pop()["parent"]
+            kept.append("".join(c if c in "\r\n" else " " for c in line))
+        else:
+            kept.append(line if active else "".join(c if c in "\r\n" else " " for c in line))
+    if stack:
+        raise ValueError("Unclosed compute preprocessor conditional")
+    return "".join(kept)
+
+
+
 def kernel_entrypoint_profile(source: str) -> dict:
     """Aggregate only: match each declared kernel to a bounded authored body.
 
@@ -40,7 +99,7 @@ def kernel_entrypoint_profile(source: str) -> dict:
     This intentionally conservative structural gate cannot verify compiled
     Unity kernels or the original serialized ComputeShader identity.
     """
-    clean = mask_comments_and_strings(source)
+    clean = mask_inactive_preprocessor(mask_comments_and_strings(source))
     kernels = [match.group(1) for match in PRAGMA.finditer(clean)]
     declarations = {}
     for match in ENTRY.finditer(clean):
