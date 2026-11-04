@@ -4,17 +4,19 @@
   "generation": "B-2026-11-04",
   "session_id": "20261104T2054Z-B49-c81f",
   "resumed_from_session": null,
-  "status": "active",
+  "status": "paused",
   "base_sha": "649ec8e5b227ecae970b161ceb3339e2be1929c2",
-  "last_commit": null,
-  "updated_at": "2026-11-04T20:56:00Z",
+  "last_commit": "3c4c6e3b350b611e5d364ae3fdc3c6837a11d4ea",
+  "updated_at": "2026-11-04T21:03:00Z",
   "tracks": [
     "water-fft"
   ],
   "work_ids": [
     "B49-20261104T2054Z-B49-c81f-water-pass-guard"
   ],
-  "run_urls": [],
-  "next_step": "Implement fail-closed per-pass ShaderLab program contract, synthetic negative controls; preserve all original resources.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41911824567"
+  ],
+  "next_step": "Resume authentic Spectrum/Foam/FFT pass and kernel recovery after reading live HEAD/current B work; B49 per-pass source gate is closed, WATER-001 remains OPEN.",
   "memory_path": "prompt/coordination/clients/B49/MEMORY.md"
 }
