@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "owner": "B49",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2054Z-B49-c81f",
+  "issue_id": "WATER-001",
+  "track": "water-fft",
+  "approach": "Prevent ShaderLab source validation from qualifying all passes via one program or string/comment decoys.",
+  "status": "active",
+  "base_sha": "649ec8e5b227ecae970b161ceb3339e2be1929c2",
+  "intended_files": [
+    "scripts/verify_water_render_contract.py",
+    "tests/test_verify_water_render_contract.py"
+  ],
+  "hypothesis": "Current independent pass count and shader-global has_program allow false-positive multi-pass structural validation.",
+  "related_work": [],
+  "experiment_ids": [],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Patch and run synthetic controls, then status/issue/event checkpoint.",
+  "updated_at": "2026-11-04T20:56:00Z"
+}
