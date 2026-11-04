@@ -6,7 +6,7 @@
   "issue_id": "WATER-001",
   "track": "water-fft",
   "approach": "Reject source-candidate evidence from definitely disabled HLSL/Unity conditional preprocessor branches and unknown conditional branches; preserve active alternative branches.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "29242464003fcf2dcfd0fcc120770b7f2839ce15",
   "intended_files": [
     "scripts/b47_compute_kernel_contract.py",
@@ -20,8 +20,10 @@
   "experiment_ids": [
     "B16-20261104T2151Z-B16-6e2a-preprocessor-contract"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement guarded scanner, tests and scoped CI, document exact scope/evidence.",
-  "updated_at": "2026-11-04T21:53:34.379Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41920741687"
+  ],
+  "result": "B16 production b47 source preprocessor guard 0098b585: source-only CI 41920741687 SUCCESS 34/34 synthetic cases (12 new B16, 8 B47, 14 water). Native gate identity remains false; no original .compute or Unity/device proof. Prior B47 CI41920543082 old SHA failed outdated meta-symlink expectation amid separate concurrent metadata hardening; B47 suite green in B16 CI.",
+  "next_step": "Use an authenticated original compute source and actual Unity define-set for kernel map; independent Spectrum/Foam/Blur restoration remains P0; APK86 unchanged.",
+  "updated_at": "2026-11-04T22:00:08.679Z"
 }
