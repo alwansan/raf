@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "owner": "B21",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2153Z-B21-72ab",
+  "issue_id": "RENDER-002",
+  "track": "colors-materials:original-dynamic-light-serialization",
+  "approach": "Source-authenticated built-in Unity Light object field fidelity and diagnostic schema for dynamic-light components, distinct from baked LightmapSettings and shader/material Link/GUID verification. No source or game-code mutations.",
+  "status": "active",
+  "base_sha": null,
+  "intended_files": [
+    "scripts/b21_original_dynamic_lights.py",
+    "tests/test_b21_original_dynamic_lights.py",
+    ".github/workflows/raft-b21-scene-lightmap-links.yml",
+    "docs/B21_LIGHTMAP_SOURCE_EXPORT_LINKS_2026-11-04.md"
+  ],
+  "hypothesis": "Dynamic scene Light components and their original enabled/color/intensity/owner semantics may be relevant to missing/white rendering, independently of zero baked lightmaps; decode original data to establish baseline and fail-closed cross-export test contract.",
+  "related_work": [
+    "B21 six-scene baked lightmap verification 41921259677",
+    "B04 original global color space",
+    "B12 bounded scene shader snapshot"
+  ],
+  "experiment_ids": [
+    "B21-20261104T2206Z-original-dynamic-lights"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Bound read-only native Light typed fields, require authenticated original source, test synthetic invalid and valid controls and inspect six real source scenes. Then compare same instance exported Light components if available; no pixels claim.",
+  "updated_at": "2026-11-04T22:06:00Z"
+}
