@@ -4,17 +4,19 @@
   "generation": "B-2026-11-04",
   "session_id": "20261104T2249Z-B16-8c2e",
   "resumed_from_session": "20261104T2151Z-B16-6e2a",
-  "status": "active",
+  "status": "completed",
   "base_sha": "2c9ffdd5bf27b8b67465431d23dc75e01a586f60",
-  "last_commit": null,
-  "updated_at": "2026-11-04T22:50:22.736Z",
+  "last_commit": "1d7fe33081c2340075d9d0f1bb7ffd7d0cf21fc2",
+  "updated_at": "2026-11-04T22:56:18.426Z",
   "tracks": [
     "WATER-001: potential HLSL #error compile blocker source guard"
   ],
   "work_ids": [
     "B16-20261104T2249Z-B16-8c2e-error-gate"
   ],
-  "run_urls": [],
-  "next_step": "Test currently ignored potentially active HLSL #error in source-only ComputeShader kernel contract; add safe fail-closed gate and negative controls, verify in CI; no Unity/device claims.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41929071692"
+  ],
+  "next_step": "B16 scoped source-check #error fix complete/tested 40/40 in CI41929071692. Next independent task should investigate actual original FFT serialized Unity variant/runtime kernel mapping or unowned local-world step; avoid duplicate B08/B18/B24/B30 experiments. WATER/RENDER/LOCAL still open; NOT_READY 0/3. No background task.",
   "memory_path": "prompt/coordination/clients/B16/MEMORY.md"
 }
