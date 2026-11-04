@@ -5,15 +5,17 @@
   "session_id": "20261104T213800Z-B31-5ea4",
   "issue_id": "RENDER-002",
   "track": "graphics-source-provenance",
-  "approach": "Re-use authenticated pre-staged ZIP2 original graphics owners in native hydration only after independent SHA256+size verification; harden file provenance, no shared-workflow modifications.",
+  "approach": "Re-use authenticated pre-staged ZIP2 original graphics owners in native hydration only after independent SHA256+size verification; harden file provenance, no shared-workflow modifications.; fail-close external Texture2D stream coverage when payload is linked outside verified original source root.",
   "status": "active",
   "base_sha": "c9b4ff0dff06335402a39c4cfe1d9a039990c2cb",
   "intended_files": [
     "scripts/hydrate_render_payloads.py",
     "tests/test_b31_graphics_hydration.py",
-    "docs/B31_ORIGINAL_GRAPHICS_REUSE_2026-11-04.md"
+    "docs/B31_ORIGINAL_GRAPHICS_REUSE_2026-11-04.md",
+    "scripts/audit_texture_stream_coverage.py",
+    "tests/test_b31_texture_provider_provenance.py"
   ],
-  "hypothesis": "W1-staged SHA-authenticated original graphics owners can replace a redundant LFS fetch for matching paths without changing image bytes, LFS pins or .meta/GUIDs; unsafe links or corrupt cache must fail closed.",
+  "hypothesis": "W1-staged SHA-authenticated original graphics owners can replace a redundant LFS fetch for matching paths without changing image bytes, LFS pins or .meta/GUIDs; unsafe links or corrupt cache must fail closed. Secondary: texture coverage currently reports 'covered' for symlinked .resS sources or no-provider nonzero extents; this can create false readiness of textures.",
   "related_work": [
     "W1 original engine source SHA-authenticated staging",
     "B04 Mesh source path integrity",
@@ -22,6 +24,6 @@
   "experiment_ids": [],
   "run_urls": [],
   "result": null,
-  "next_step": "Inspect staging contracts, code paths and existing tests; implement independently verifiable bounded reuse and negative controls.",
-  "updated_at": "2026-11-04T21:38:29.509Z"
+  "next_step": "Test and integrate external Texture2D stream safety guard; current 14 W1 shader owners contain only three LFS pointers (already staged); original redundant LFS benefit not established.",
+  "updated_at": "2026-11-04T21:44:55.591Z"
 }
