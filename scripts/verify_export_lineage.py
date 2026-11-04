@@ -38,6 +38,9 @@ def check(trace, original_edges, original_shaders, actual):
     exports = {}
     selected_materials = set()
     selected_shaders = set()
+    shader_exports = {}
+    custom_shader_pointers = set()
+    material_shader_pointers = []
     redirects = 0
     for row in trace['objects']:
         key = identity(row['source'])
@@ -48,6 +51,11 @@ def check(trace, original_edges, original_shaders, actual):
         if row['class_id'] == 48:
             if key in original_shaders:
                 selected_shaders.add(key)
+            shader_exports[key] = target
+            if target[1] not in ENGINE:
+                if target in custom_shader_pointers:
+                    raise ValueError('Distinct custom Shader objects collapsed into one export pointer')
+                custom_shader_pointers.add(target)
             continue
         if row['class_id'] != 21:
             raise ValueError('Unexpected trace class')
@@ -59,11 +67,14 @@ def check(trace, original_edges, original_shaders, actual):
             redirects += 1
             continue
         shader = pointer(row['shader_export'])
+        material_shader_pointers.append((identity(row['shader_source']), shader))
         if target in exports:
             raise ValueError('Two distinct original materials share one export pointer')
         exports[target] = shader
     if selected_materials != set(original_edges) or selected_shaders != set(original_shaders):
         raise ValueError('Original Material or Shader omitted from trace')
+    if any(shader_exports.get(key) != target for key, target in material_shader_pointers):
+        raise ValueError('Material export pointer does not target its traced source Shader')
     if not actual or actual != exports:
         raise ValueError('Actual YAML material pointers differ from same-instance export trace')
     return {'source_material_edges_verified': len(selected_materials),

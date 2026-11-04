@@ -51,6 +51,18 @@ class ExportLineageTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'omitted'):
             check(trace, edges, shaders, actual)
 
+    def test_distinct_custom_shaders_cannot_share_export_pointer(self):
+        trace, edges, shaders, actual = self.fixture()
+        trace['objects'][3]['export'] = copy.deepcopy(trace['objects'][1]['export'])
+        with self.assertRaisesRegex(ValueError, 'collapsed'):
+            check(trace, edges, shaders, actual)
+
+    def test_material_pointer_must_match_traced_shader_object(self):
+        trace, edges, shaders, actual = self.fixture()
+        trace['objects'][0]['shader_export'] = copy.deepcopy(trace['objects'][3]['export'])
+        with self.assertRaisesRegex(ValueError, 'traced source Shader'):
+            check(trace, edges, shaders, actual)
+
     def test_mixed_instance_duplicate_source_rejected(self):
         trace, edges, shaders, actual = self.fixture()
         trace['objects'].append(copy.deepcopy(trace['objects'][0]))
