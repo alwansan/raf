@@ -64,7 +64,12 @@ class B12Probe(unittest.TestCase):
             self.assertIn(item, PART)
 
     def test_no_material_clone_or_render_mutation(self):
-        self.assertIn("renderer.sharedMaterials", PART)
+        self.assertIn("var materials = new List<Material>(4);", PART)
+        self.assertIn("materials.Clear();", PART)
+        self.assertIn("renderer.GetSharedMaterials(materials);", PART)
+        executable = re.sub(r"//[^\n]*|/\*[\s\S]*?\*/", "", PART)
+        self.assertNotIn("renderer.sharedMaterials", executable)
+        self.assertNotIn("Material[]", executable)
         for forbidden in ("renderer.material;", "new Material(", "new Mesh(", "SetPass(",
                           "SetShader(", "WorldHasBeenRecieved =", "SteamUserStats.StoreStats",
                           "mesh.vertices", "mesh.triangles", ".sharedMesh ="):
