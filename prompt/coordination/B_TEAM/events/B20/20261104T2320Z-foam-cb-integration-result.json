@@ -1,0 +1,16 @@
+{
+  "id": "B20-20261104T2320Z-foam-cb-integration-result",
+  "owner": "B20",
+  "session_id": "20261104T2257Z-B20-fmp3",
+  "issue_id": "WATER-001",
+  "type": "integration",
+  "summary": "SOURCE_AUTHENTIC_PRIVATE_INPUT: 2 original Foam passes/4 original DXBC→HLSL/SPIRV stage roundtrips co-staged with 2 original states, 8 CB source links; all 4 HLSL/SPIRV CB numeric slot sets agree with original, but serialized partial CB m_Size vs reflected SPIRV block_size differ 7/8. CB0 alias/ShaderLab/Unity/Adreno remain unverified.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41930578292",
+    "https://github.com/alwansan/raf/actions/runs/41931585626",
+    "https://github.com/alwansan/raf/actions/runs/41932300308",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B20_FOAM_PRIVATE_PACKET_2026-11-04.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B20_FOAM_CB_DESCRIPTOR_SIZE_2026-11-04.md"
+  ],
+  "at": "2026-11-04T23:18:53.283Z"
+}
