@@ -6,17 +6,20 @@
   "track": "source-integrity",
   "evidence": [
     "https://github.com/alwansan/raf-archive/releases/tag/Raft-zip2-reconstructed",
-    "https://github.com/alwansan/raf/blob/15964ea8f246b6e076ce26b60931ee2e1a9a2385/RAFT_FILE_MANIFEST.tsv"
+    "https://github.com/alwansan/raf/blob/15964ea8f246b6e076ce26b60931ee2e1a9a2385/RAFT_FILE_MANIFEST.tsv",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B03_ARCHIVE_PAYLOAD_VERIFICATION_2026-11-04.md",
+    "https://github.com/alwansan/raf/actions/runs/41913405572"
   ],
   "remaining": [
     "365 اسماً مطابقاً للـmanifest لها حجم وdigest مختلفان؛ اسم واحد يحتاج مطابقة",
     "قرينة multipart تحتاج فحص payload بايتياً، لا استنتاج تلف الأصل",
-    "ZIP2 بديل مثبت؛ لا ينتظر باقي الفريق اعتماد الأرشيف"
+    "ZIP2 بديل مثبت؛ لا ينتظر باقي الفريق اعتماد الأرشيف",
+    "B03 streaming intake helper is synthetic CI tested; small real private asset payload fingerprint remains unverified"
   ],
   "acceptance": [
     "كل payload مستعمل يطابق حجم وSHA الملف الأصلي",
     "توثيق فصل غلاف النقل إذا ثبت، دون تغيير البصمات الأصلية"
   ],
-  "updated_by": "owner-team-bootstrap",
-  "updated_at": "2026-11-04"
+  "updated_by": "B03",
+  "updated_at": "2026-11-04T21:10:44.351Z"
 }
