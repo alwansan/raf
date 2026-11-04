@@ -1,0 +1,81 @@
+name: B21 RENDER-002 pinned original Light108 export lineage compile (no game data)
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-b21-light-trace-compile.yml'
+      - 'scripts/b21_stage_light_lineage.py'
+      - 'tests/test_b21_stage_light_lineage.py'
+permissions:
+  contents: read
+concurrency:
+  group: raft-b21-class108-source-tool-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  pinned-public-tool-compiler:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - name: Checkout only B21/B02 instrumentation and W1 SHA-pinned helper
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            android-port/Experiments/ExportLineage
+            scripts
+            tests
+      - name: Source-only optional Light lineage adversarial tests
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/b21_stage_light_lineage.py tests/test_b21_stage_light_lineage.py
+          python3 -m unittest discover -s tests -p 'test_b21_stage_light_lineage.py' -v
+      - name: Check runner capacity
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import shutil
+          assert shutil.disk_usage('.').free > 3 * 1024**3
+          print('RAFT_B21_DISK_SAFE')
+          PY
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+      - name: Checkout exact public AssetRipper source only
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: nowl-it/AssetRipperCLI
+          ref: 036098ab525a3f9f693dc101edeb21faad4d32d8
+          path: ar-host
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            Source
+      - name: Stage B21-only helper in runner temp and patch disposable public tool
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/b21"
+          python3 -m scripts.b21_stage_light_lineage \
+            --base-helper android-port/Experiments/ExportLineage/RaftExportLineage.cs \
+            --destination "$RUNNER_TEMP/b21/RaftExportLineage.cs"
+          python3 -m scripts.patch_export_lineage \
+            --tool-source ar-host \
+            --helper "$RUNNER_TEMP/b21/RaftExportLineage.cs"
+      - name: Compile pinned exporter with original Material/Shader, Texture2D and Light capture
+        run: |
+          set -euo pipefail
+          timeout 780s dotnet publish android-port/Experiments/ExportLineage/ExportLineage.csproj \
+            -c Release -p:PublishAot=false -p:PublishTrimmed=false \
+            -p:EnableTrimAnalyzer=false -p:EnableAotAnalyzer=false \
+            --self-contained false -o "$RUNNER_TEMP/b21-compiled" \
+            > "$RUNNER_TEMP/b21-compile.log" 2>&1 || { tail -65 "$RUNNER_TEMP/b21-compile.log"; exit 1; }
+          test -s "$RUNNER_TEMP/b21-compiled/ExportLineage.dll"
+          dotnet "$RUNNER_TEMP/b21-compiled/ExportLineage.dll" --probe-tool \
+            > "$RUNNER_TEMP/b21-smoke.log" 2>&1 || { tail -40 "$RUNNER_TEMP/b21-smoke.log"; exit 1; }
+          echo 'B21_W1_B02_LIGHT_PINNED_EXPORTER_COMPILED=true'
+          echo 'B21_ORIGINAL_LIGHT_OBJECTS_EXPORTED=0'
+          echo 'B21_ACTUAL_EXPORT_MATCHED=false'
+          echo 'B21_PHONE_LIGHT_PIXELS_VERIFIED=false'
