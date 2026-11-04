@@ -37,10 +37,14 @@ def original_name_registry(raw, diagnostic=None):
             raise ValueError("Original Foam name row schema unsupported")
         diagnostic["registry_name_value_type"] = type(name).__name__
         diagnostic["registry_index_value_type"] = type(idx).__name__
+        # m_NameIndices is the *whole* original property registry, not a CB-only
+        # table; non-CB entries may contain punctuation and are never emitted
+        # as HLSL CB identifiers. Check HLSL identifier grammar only at an
+        # authenticated CB m_NameIndex reference below.
         if (not isinstance(name, str) or not 0 < len(name) <= 256
-                or IDENT.fullmatch(name) is None):
-            diagnostic["registry_rejection"] = "invalid-hlsl-identifier"
-            raise ValueError("Original CB name cannot be represented as HLSL identifier")
+                or any(ch in name for ch in ("\\0", "\\r", "\\n"))):
+            diagnostic["registry_rejection"] = "invalid-registry-name"
+            raise ValueError("Original Foam property registry string malformed")
         if type(idx) is not int or idx < 0 or idx >= 1 << 20 or idx in names:
             diagnostic["registry_rejection"] = "invalid-duplicate-index"
             raise ValueError("Original Foam ambiguous name index")
@@ -100,6 +104,9 @@ def inspect_parsed(parsed, diag=None):
                 if bind["m_NameIndex"] != idx or bind["m_Index"] != slot:
                     raise ValueError("Foam original CB register identity changed")
                 name = names[idx]
+                if IDENT.fullmatch(name) is None:
+                    diag["cb_rejection"] = "referenced-name-not-hlsl-identifier"
+                    raise ValueError("Referenced original Foam CB name is not an HLSL identifier")
                 cb_rows.append({
                     "register_slot": slot,
                     "original_name_index": idx,
@@ -173,6 +180,7 @@ def main():
                         "registry_rejection_row_index": diag.get("registry_rejection_row_index"),
                         "registry_name_value_type": diag.get("registry_name_value_type"),
                         "registry_index_value_type": diag.get("registry_index_value_type"),
+                        "cb_rejection": diag.get("cb_rejection"),
                         "private_name_values_published": False,
                         "unity_or_android_verified": False}, 2
     args.report.parent.mkdir(parents=True, exist_ok=True)
