@@ -4,24 +4,25 @@
   "generation": "B-2026-11-04",
   "session_id": "20261104T2249Z-B17-cbind",
   "resumed_from_session": "20261104T2140Z-B17-spc2",
-  "status": "active",
+  "status": "paused",
   "base_sha": "5057bd4663054e1912c89c4847fcd95498ae0c96",
-  "last_commit": "078dd64d2b4487840e251f0714033c4f5fd9fce1",
-  "updated_at": "2026-11-04T23:02:00Z",
+  "last_commit": "c4016fdb3c5137422c1a202f3b4b95e2e38e8ce6",
+  "updated_at": "2026-11-04T23:16:00Z",
   "tracks": [
     "water-fft",
     "spectrum-compiled-register-parity"
   ],
   "work_ids": [
     "B17-20261104T2140Z-B17-spc2-spectrum-descriptors",
-    "B17-20261104T2249Z-B17-cbind-spectrum-compiled-registers"
+    "B17-20261104T2249Z-B17-cbind-compiled-parity",
+    "B17-20261104T2249Z-B17-cbind-source-namebridge"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41920232173",
-    "https://github.com/alwansan/raf/actions/runs/41929705240",
-    "https://github.com/alwansan/raf/actions/runs/41930060613",
-    "https://github.com/alwansan/raf/actions/runs/41930225633"
+    "https://github.com/alwansan/raf/actions/runs/41930225633",
+    "https://github.com/alwansan/raf/actions/runs/41931666175",
+    "https://github.com/alwansan/raf/actions/runs/41932008860"
   ],
-  "next_step": "17/17 synthetic PASS; initial real ZIP2 source rejected UNITY_SAMPLER_TABLE. Corrected B17-known table aliases now under authenticated original CI41930225633. Diagnose source outcome, preserve traces, never infer Unity/phone parity.",
+  "next_step": "B17 authentic source numeric ABI 7 passes/14 pairs and private 14 fragment original-index HLSL texture/sampler rebinding Vulkan1.1 verified. B09 owns Spectrum ShaderLab program assembly; inspect live HEAD and coordinate original CB/sampler render states, Unity/Adreno and native/device before any readiness. No continuing worker outside sessions.",
   "memory_path": "prompt/coordination/clients/B17/MEMORY.md"
 }
