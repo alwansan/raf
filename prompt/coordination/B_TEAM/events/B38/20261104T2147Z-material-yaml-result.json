@@ -1,0 +1,14 @@
+{
+  "id": "B38-20261104T2147Z-material-yaml-result",
+  "owner": "B38",
+  "session_id": "20261104T2142Z-B38-f31a",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "B38 source-integrated strict duplicate YAML map-key rejection for original-to-export Material texture/UV verifier; final 14+7 synthetic GitHub CI PASS, actual ZIP2 same-instance/device fidelity pending.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41919146580",
+    "https://github.com/alwansan/raf/commit/f3b709e47421e210fbb0863ac5b920a7d843e1cb",
+    "https://github.com/alwansan/raf/actions/runs/41918990785"
+  ],
+  "at": "2026-11-04T21:47:00Z"
+}
