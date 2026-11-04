@@ -15,21 +15,24 @@
   "stages": {
     "acquisition": "SHA_PIN_VERIFIED",
     "extraction": "SHA_PIN_VERIFIED",
-    "reconstruction": "SOURCE_STRUCTURAL_VERIFIED",
+    "reconstruction": "CPU_VULKAN_NUMERIC_AND_PRIVATE_SHADERLAB_VERIFIED",
     "binding": "NOT_VERIFIED",
-    "integration": "NOT_INSTALLED",
+    "integration": "GATED_NATIVE_STAGING_WIRED_NOT_EXECUTED",
     "device": "NOT_TESTED"
   },
   "evidence": [
     "https://github.com/alwansan/raf/actions/runs/41912390029",
     "https://github.com/alwansan/raf/actions/runs/41913062003",
-    "https://github.com/alwansan/raf/commit/994814069cd70cd03b79453b347f8f7e644b9c8e"
+    "https://github.com/alwansan/raf/commit/994814069cd70cd03b79453b347f8f7e644b9c8e",
+    "https://github.com/alwansan/raf/actions/runs/41913273839",
+    "https://github.com/alwansan/raf/actions/runs/41914193733",
+    "https://github.com/alwansan/raf/commit/348990da5c7864bfbbc39e2f4fbe3e4969795d81"
   ],
   "remaining": [
-    "Run original-vs-rebuilt CPU Vulkan two-pass raster and confirm private ShaderLab recovery end-to-end (B45 run 41913273839)",
-    "Authentic serialized property/material GUID rebind and Unity 2021.3 import (no synthetic asset)",
-    "Adreno and owner device visual comparison; water FFT/other passes still OPEN"
+    "Real exported one-object shader GUID/.meta install and Unity compiler have not been executed",
+    "Original sampler state and material uniform upload on Unity/Adreno not verified",
+    "Other water and FFT shader and compute kernels not reconstructed"
   ],
   "updated_by": "B45",
-  "updated_at": "2026-11-04T21:08:00Z"
+  "updated_at": "2026-11-04T21:16:00Z"
 }
