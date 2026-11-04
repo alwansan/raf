@@ -6,13 +6,13 @@ from unittest.mock import patch
 from scripts.b07_probe_original_world_callbacks import fingerprint, inspect, assert_original_dll
 
 
-def make_fixture(root, *, fake_call=False, early_completion=False, no_stats=False, missing_save=False):
+def make_fixture(root, *, fake_call=False, early_completion=False, no_stats=False, missing_save=False, missing_one_branch=False):
     n = ('class Raft_Network {\nprivate IEnumerator WorldHasBeenLoaded() { '
          + ('WorldHasBeenRecieved = true; Helper.BroadCastToScene(evt);' if early_completion else
             'Helper.BroadCastToScene(evt); WorldHasBeenRecieved = true;') + ' }\n}')
     m = ('class GameManager {\npublic void OnWorldRecieved() { '
          + ('string fake="SaveGame();";' if fake_call else '')
-         + ('' if missing_save else 'save.SaveGame(true);') + ' }\n}')
+         + ('' if missing_save else ('save.SaveGame(true); save.SaveGame(false);' if missing_one_branch else 'save.SaveGame(true); save.SaveGame(false); save.SaveGame(true);')) + ' }\n}')
     s = ('class SaveAndLoad {\npublic void SaveGame(bool b) { SaveWorld(); '
          + ('' if no_stats else 'SteamUserStats.StoreStats();') + ' }\n}')
     for name, val in [('Raft_Network', n), ('GameManager', m), ('SaveAndLoad', s)]:
@@ -31,7 +31,7 @@ class B07WorldCallbackTests(TestCase):
 
     def test_positive_is_structural_not_device(self):
         r = self.run_fixture()
-        self.assertEqual(r['on_world_received_savegame_calls'], 1)
+        self.assertEqual(r['on_world_received_savegame_calls'], 3)
         self.assertEqual(r['savegame_store_stats_calls'], 1)
         self.assertTrue(r['broadcast_before_completion'])
         self.assertFalse(r['observed_on_device'])
@@ -45,6 +45,10 @@ class B07WorldCallbackTests(TestCase):
     def test_quoted_false_save_does_not_count(self):
         with self.assertRaisesRegex(ValueError, 'SaveGame callsite'):
             self.run_fixture(fake_call=True, missing_save=True)
+
+    def test_partial_three_branch_coverage_is_refused(self):
+        with self.assertRaisesRegex(ValueError, 'SaveGame callsite'):
+            self.run_fixture(missing_one_branch=True)
 
     def test_missing_stats_refused(self):
         with self.assertRaisesRegex(ValueError, 'stats boundary'):
