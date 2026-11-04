@@ -22,8 +22,8 @@
   "workflow_path": ".github/workflows/raft-w2-texture-sampler-settings.yml",
   "concurrency_group": "raft-w2-texture-sampler-settings-${{ github.ref }}-${{ github.sha }}",
   "budget": "single CPU run; workflow timeout 30 min; no Unity, no GPU",
-  "run_url": null,
-  "source_sha": null,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41811800655",
+  "source_sha": "1bfbbc8",
   "result": "LOCAL AUTHENTIC RUN: 4,050 textures in 37 texture-bearing owners — wrap Repeat 3,434 / Clamp 616 (15.2%); filter Bilinear 3,979 / Point 68 / Trilinear 3; aniso L1 3,994 / L16 54 / 0 2; mip bias zero everywhere; no stripped mipmaps. Clamp concentrated in sharedassets0 (603), sharedassets1 (230), resources (184); 7 owners show non-uniform per-axis wrap.",
   "limitations": [
     "counters per owner only, not per texture identity",

@@ -5,12 +5,12 @@
   "session_id": "w2-20261103T152008Z-92502b76",
   "resumed_from": null,
   "status": "active",
-  "updated_at": "2026-11-04T10:00:00.000Z",
+  "updated_at": "2026-11-04T11:10:00.000Z",
   "base_sha": "a57127e",
   "current_work": [
     "RENDER-002 completed local independent verification of external Material->Shader/Texture classification (corroborates W3, adds texture+existence+convention-control)"
   ],
-  "last_commit": "b8e44da (peer tip above my heartbeat 11ea0a1)",
-  "next_step": "passive observation: W4 full build 41808015938 completed/failure (reconstruct job failed, gate+license preflight ok); new texture-sampler-settings micro-lane (lane 7, non-overlapping, aggregate-only)",
+  "last_commit": "1bfbbc8 feat(w2): full-game texture sampler-settings baseline",
+  "next_step": "await sampler-settings CI 41811800655; then finalize records/STATUS link",
   "memory_path": "prompt/coordination/clients/raft-20261103T152008Z-92502b76/MEMORY.md"
 }
