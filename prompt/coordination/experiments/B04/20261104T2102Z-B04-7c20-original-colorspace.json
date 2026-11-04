@@ -32,7 +32,7 @@
   "artifact_urls": [],
   "budget": "one isolated ubuntu-24.04 job, timeout 8 min, no Unity/LFS/game APK",
   "status": "completed",
-  "observed_result": "SUCCESS on SHA-pinned authentic globalgamemanagers plus synthetic exported Gamma fixture; 13 local synthetic tests passed; source-only main native workflow integration commit e52c07c guards source and copied candidate. Actual export color value and device rendering remain unobserved.",
+  "observed_result": "SUCCESS on SHA-pinned authentic globalgamemanagers plus synthetic exported Gamma fixture; 9/9 synthetic CI tests passed; source-only main native workflow integration commit e52c07c guards source and copied candidate. Actual export color value and device rendering remain unobserved.",
   "rejected_hypotheses": [
     "Synthetic source generated from unverified bytes suffices: rejected by original SHA/size enforcement",
     "An arbitrary project YAML update can be accepted: rejected by exact single-scalar edit and negative controls",
