@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "owner": "B15",
+  "session_id": "20261104T224800Z-B15-defaults-32f1",
+  "issue_id": "RENDER-002",
+  "hypothesis": "B15's synthetic-only typed original_sampler() should also accept real SHA-pinned ZIP2 Texture2D objects without schema breaks or fabricated source-to-export parity.",
+  "source_commit": "50838fb89fc1552f7ca9809d159d14c5ee04830c",
+  "input_hashes": [
+    "ZIP2 source commit 15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "Raft_Data/sharedassets6.assets bytes6607272 sha256:0476792cfeffac19d16e920011ed8d2fb2da62973c2f09a8689bc59e1ac4b632"
+  ],
+  "tool_versions": {
+    "UnityPy": "1.25.4",
+    "python": "3.11",
+    "git": "GitHub Actions checkout from immutable commit"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_b15_probe_authentic_original_sampler.py -v",
+    "python3 -m scripts.b15_probe_authentic_original_sampler --original \"$RUNNER_TEMP/b15-original/Raft_Data/sharedassets6.assets\" --out \"$RUNNER_TEMP/b15-original-sampler-aggregate.json\""
+  ],
+  "negative_controls": [
+    "same-size original bytes tamper rejected by SHA",
+    "wrong original Texture2D count fails closed",
+    "nonzero mip bias conflicts with original W2 baseline and fails closed",
+    "invalid filtering enum rejected",
+    "duplicate or boolean original path IDs rejected",
+    "non-Texture2D objects ignored",
+    "symlinked original owner rejected",
+    "aggregate report excludes original object identities and private sampler values"
+  ],
+  "workflow_path": ".github/workflows/raft-b15-original-sampler-source.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41930143093",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41930143093"
+  ],
+  "budget": "14min ubuntu-24.04 CPU-only, one original 6.6MB ZIP2 owner, Git LFS disabled, artifact contains aggregate counts only",
+  "status": "completed",
+  "observed_result": {
+    "run_status": "COMPLETED SUCCESS",
+    "job": 126924667327,
+    "synthetic_controls_passed": 8,
+    "real_source_bytes_verified": 6607272,
+    "actual_original_texture2d_count": 87,
+    "typed_source_sampler_count": 87,
+    "filter_settings": 87,
+    "wrap_settings": 261,
+    "mip_bias_nonzero": 0,
+    "real_exported_importers_compared": 0,
+    "pixels_verified": false
+  },
+  "rejected_hypotheses": [
+    "B15 typed original_sampler cannot decode source Texture2D serialized settings: REJECTED for this one SHA-authenticated owner (87/87).",
+    "The source-only acceptance establishes exporter per-texture parity: REJECTED, no actual export witness supplied."
+  ],
+  "limitations": [
+    "One selected original owner only, not full original corpus",
+    "Real same-instance TextureImporter/exporter trace unavailable; 0 original-to-export pairs compared",
+    "Original B05 41 Material/227 TexEnv source findings are distinct and not newly reproduced",
+    "No actual pixel, Unity, Adreno, phone, water/FFT gameplay or local world/save proof"
+  ],
+  "integration_commit": "50838fb89fc1552f7ca9809d159d14c5ee04830c",
+  "next_step": "Provide authenticated B02/W1 paired private same-export traces and same Unity exported project; run B15 importer parity on 87 original textures, retaining aggregate-only logs. If absent, choose a different uncovered P0 issue."
+}
