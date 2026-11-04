@@ -1,7 +1,7 @@
 """Execute transformed authentic original Blur method using CPU Unity API stubs."""
 import argparse,hashlib,subprocess,tempfile
 from pathlib import Path
-from scripts.blur_pixel_cleanup import protect
+from scripts.adapt_android_render_lifetimes import adapt
 from scripts.verify_blur_pixel_cleanup_cpu import STUBS
 PIN="67242ca043c8f659dba4ea833a8f5fe072b282f6ddc65ced16a2cf422e6f5b13"
 def main(root):
@@ -11,7 +11,7 @@ def main(root):
  observed=hashlib.sha256(source.encode()).hexdigest()
  print("RAFT_ORIGINAL_BLUR_SOURCE sha256="+observed)
  if observed!=PIN:raise ValueError("original Blur source pin differs; refuse guessed transformation")
- try: changed=protect(source)
+ try: changed=adapt('Blur',source)
  except ValueError:
   import re,json
   print("RAFT_BLUR_CONTRACT_COUNTS "+json.dumps({k:source.count(k) for k in ["FilterMode filterMode = target.filterMode;","RenderTexture temporary = RenderTexture.GetTemporary(","target.filterMode = filterMode;","RenderTexture.ReleaseTemporary(temporary);"]},sort_keys=True))

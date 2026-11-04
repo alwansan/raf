@@ -19,6 +19,8 @@ PINS={
 'Dx11FFT':('8aa32937d4235f0f1ae0a180b8099fd647558689ad65208a9f37956c69e90fb0',1),
 'WavesRendererFFT':('e7f6b8fd477f321120fc626781f0653fe1168f0e86daad0cdf8d9c4e56b323e9',3),
 'PlayFabMultiplayerManager':('e71cd10249c028c7ae0b13e06e4cbe8826ec87d39a1c54778d6e288e97ca6087',0)}
+BLUR_SOURCE_VARIANTS=frozenset(('67242ca043c8f659dba4ea833a8f5fe072b282f6ddc65ced16a2cf422e6f5b13',
+'f03ff7a771e866a84591daf030c2648029efb15851bd63b3df0bc7a67dd8c08f'))
 DECL=r'(?P<indent>[ \t]*)TemporaryRenderTexture (?P<name>temporary\d*) = [\w.]+\.GetTemporary\(\);\n'
 
 
@@ -234,7 +236,8 @@ def guard_dynamic_resolution_timings(normalized):
 def adapt(stem,text):
     digest,expected=PINS[stem]
     normalized=text.replace('\r\n','\n')
-    if hashlib.sha256(normalized.encode()).hexdigest()!=digest: raise ValueError('Unknown original source revision: '+stem)
+    observed=hashlib.sha256(normalized.encode()).hexdigest()
+    if observed!=digest and not (stem=='Blur' and observed in BLUR_SOURCE_VARIANTS): raise ValueError('Unknown original source revision: '+stem)
     if expected: normalized=protect_temporaries(normalized,expected)
     elif stem == 'Blur':
         normalized=protect_blur_pixel(normalized)
