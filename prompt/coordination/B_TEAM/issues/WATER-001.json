@@ -21,7 +21,10 @@
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B14_WATER_PATH_PROVENANCE_2026-11-04.md",
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B09_SPECTRUM_PASS_STAGING_2026-11-04.md",
     "https://github.com/alwansan/raf/actions/runs/41920323250",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B30_ORIGINAL_FFT_VARIANTMAP_ROUTING_2026-11-04.md"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B30_ORIGINAL_FFT_VARIANTMAP_ROUTING_2026-11-04.md",
+    "https://github.com/alwansan/raf/actions/runs/41919758958",
+    "https://github.com/alwansan/raf/actions/runs/41920166966",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B24_ORIGINAL_FOAM_PROGRAM_TRANSLATION_2026-11-04.md"
   ],
   "remaining": [
     "Spectrum/Foam/Blur passes ناقصة في APK86",
@@ -35,13 +38,14 @@
     "B06 original FFT secondary Dispatch parser now excludes comment/string fake calls; 8/8 synthetic tests pass, original-data rerun and runtime shader import still unverified.",
     "B14 structural source-integrity guard: linked project/Assets/shader or compute .meta paths now fail closed; 10/10 existing+new synthetic CI tests passed (41917493634). Real original shader/FFT kernel identities and device rendering remain unverified.",
     "B09 Spectrum private original DXBC stage/variant extractor and SHA-pinned selective ZIP2 workflow integrated, 10/10 synthetic tests pass; authentic original extraction outcome, ShaderLab assembly, Unity/Adreno and phone unverified.",
-    "B30 authenticated original FFT variantMap/keyword probe (12 synthetic tests + original ZIP2/DXBC CI 41920323250): all 20 compiled program entries share one opaque map header and one global/local keyword bundle; these fields cannot route source candidate pairs. Runtime kernel ID/variant selector mechanism remains OPEN; do not manufacture 20 FindKernel IDs."
+    "B30 authenticated original FFT variantMap/keyword probe (12 synthetic tests + original ZIP2/DXBC CI 41920323250): all 20 compiled program entries share one opaque map header and one global/local keyword bundle; these fields cannot route source candidate pairs. Runtime kernel ID/variant selector mechanism remains OPEN; do not manufacture 20 FindKernel IDs.",
+    "B24: original Foam/Global 2-pass/4-DXBC stages translated and Vulkan1.1 roundtripped privately; pass0 CB0 vectors=2, pass1=1. Original ShaderLab, constant-buffer/material bindings, Unity/Adreno and phone remain unverified; not a water gate fix."
   ],
   "acceptance": [
     "هوية برامج ونوى أصلية أو تطابق موثق دونdummy",
     "تثبيت فيالتصدير+Unity import/render",
     "اختبار هاتف يثبت الماء بلا pass/kernel errors"
   ],
-  "updated_by": "B30",
-  "updated_at": "2026-11-04T21:56:00Z"
+  "updated_by": "B24",
+  "updated_at": "2026-11-04T21:56:24.790Z"
 }
