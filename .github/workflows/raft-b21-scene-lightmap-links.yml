@@ -1,0 +1,81 @@
+name: B21 RENDER-002 source-authenticated scene lightmap provenance
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/b21_scene_lightmap_links.py'
+      - 'tests/test_b21_scene_lightmap_links.py'
+      - '.github/workflows/raft-b21-scene-lightmap-links.yml'
+permissions:
+  contents: read
+concurrency:
+  group: raft-b21-lightmap-${{ github.ref }}-${{ github.workflow }}
+  cancel-in-progress: false
+jobs:
+  synthetic:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Source-only schema negative controls
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/b21_scene_lightmap_links.py tests/test_b21_scene_lightmap_links.py
+          python3 -m unittest discover -s tests -p 'test_b21_scene_lightmap_links.py' -v
+
+  six-authenticated-scenes:
+    needs: synthetic
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+      - name: Verify disk budget before immutable source checkout
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import shutil
+          assert shutil.disk_usage('.').free > 1024**3
+          print('RAFT_B21_DISK_AVAILABLE')
+          PY
+      - name: Checkout immutable ZIP2 six original plaintext scene blobs
+        uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: .source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            Raft/Raft_Data/level0
+            Raft/Raft_Data/level1
+            Raft/Raft_Data/level2
+            Raft/Raft_Data/level3
+            Raft/Raft_Data/level4
+            Raft/Raft_Data/level5
+      - name: Install original Unity serialized reader
+        run: python3 -m pip install --user --disable-pip-version-check 'UnityPy==1.23.0'
+      - name: SHA256 verify six real originals and audit scene lightmap indices
+        run: |
+          set -euo pipefail
+          python3 -m scripts.b21_scene_lightmap_links --source .source-zip2/Raft/Raft_Data --report "$RUNNER_TEMP/b21-original-scene-lightmaps-aggregate.json"
+          echo 'RAFT_B21_SCOPE source_only=true real_scene_count=6 full_40_scenes=false export_checked=false unity_or_android=false'
+      - name: Publish numeric aggregates only (no original source assets)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: b21-original-lightmap-numeric-${{ github.run_id }}
+          path: ${{ runner.temp }}/b21-original-scene-lightmaps-aggregate.json
+          retention-days: 7
+          if-no-files-found: ignore
