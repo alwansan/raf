@@ -39,7 +39,11 @@
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B14_ORIGINAL_LOCAL_SAVE_ORDER_2026-11-04.md",
     "https://github.com/alwansan/raf/actions/runs/41929721761",
     "https://github.com/alwansan/raf/actions/runs/41929910850",
-    "https://github.com/alwansan/raf/commit/354e478a9ec46aaff758cb8110154d64b8298bea"
+    "https://github.com/alwansan/raf/commit/354e478a9ec46aaff758cb8110154d64b8298bea",
+    "https://github.com/alwansan/raf/commit/2d59494d4c77c715ab76ef0b5ac21b566059c6d5",
+    "https://github.com/alwansan/raf/commit/89455426b6a9c1cafd4651e671e558dc12bb80d2",
+    "https://github.com/alwansan/raf/actions/runs/41929845587",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B19_SAVE_HARDLINK_ALIAS_GUARD_2026-11-04.md"
   ],
   "remaining": [
     "Original Cheat.AllowCheatsForLocalPlayer SteamUser.GetSteamID direct object call now source-guarded in B50 2bb6c2; no native/phone verification. Do not infer all Steam callbacks are removed.",
@@ -54,13 +58,14 @@
     "B37 authentic original ZIP2 shipped Data.rgd metadata CI41928767833 PASS: exact source SHA, original NRBF root has one member/one eligible field but 0 matching names; no inherited fields after complete base chain; stored assembly simple name matches original Assembly-CSharp but version differs. This is real source compatibility evidence, not proof the APK world save is corrupt or that Android load/save failed. No original save schema edits, no Unity/device roundtrip; LOCAL-005 stays OPEN.",
     "B07 first-MoveNext diagnostic source-integrated after original Raft_Network SHA/body gate; CI41929041686 proves 9+19 Python cases, synthetic CLR Android/nonAndroid yield invariance and original-source staging. No Unity/device world/.rgd confirmation; this log indicates entry, NOT world completion.",
     "B14 original ZIP2-managed source proves SaveGame direct call order SaveWorld -> SaveUser -> SteamUserStats.StoreStats, exactly one each, SaveUser/World each call original Save; Android stats-only guard retains order and has no other direct Steam/PlayFab in these three methods. Strict source CI41929777877 SUCCESS 9/9 synthetic plus authentic original. File .rgd durability and phone world create/save/reopen NOT proven.",
-    "B07 source-integrated iterator firstMoveNext diagnostics now pass real adapted original managed .NET compile and RPC/identity harness (CI41929721761); strict adapted SHA manifest parity CI41929910850 passes after stale-manifest incident closure. No Unity IL2CPP/APK/device or real .rgd roundtrip evidence."
+    "B07 source-integrated iterator firstMoveNext diagnostics now pass real adapted original managed .NET compile and RPC/identity harness (CI41929721761); strict adapted SHA manifest parity CI41929910850 passes after stale-manifest incident closure. No Unity IL2CPP/APK/device or real .rgd roundtrip evidence.",
+    "B19 SaveAndLoad original C# and .meta source-stage hardlink alias guard is SOURCE_FIXED with CI41929845587 15/15 path tests plus authentic 16 path expressions; synthetic safety proof only, not root cause of APK86 world/Steam stats or .rgd device result."
   ],
   "acceptance": [
     "دخول عالم جديد محلي قابل للعب بلا Steam أو سيرفر خارجي",
     "حفظ .rgd ثم إعادة تحميله فعلياً",
     "لا يكفي إخفاء رسالة الاتصال"
   ],
-  "updated_by": "B07",
-  "updated_at": "2026-11-04T23:00:00Z"
+  "updated_by": "B19",
+  "updated_at": "2026-11-04T23:02:00Z"
 }
