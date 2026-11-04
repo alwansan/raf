@@ -34,7 +34,9 @@
     "https://github.com/alwansan/raf/actions/runs/41928767833",
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B37_ORIGINAL_RGD_INHERITED_FIELD_2026-11-04.md",
     "https://github.com/alwansan/raf/actions/runs/41929041686",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B07_LOCAL_WORLD_COROUTINE_2026-11-04.md"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B07_LOCAL_WORLD_COROUTINE_2026-11-04.md",
+    "https://github.com/alwansan/raf/actions/runs/41929777877",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B14_ORIGINAL_LOCAL_SAVE_ORDER_2026-11-04.md"
   ],
   "remaining": [
     "Original Cheat.AllowCheatsForLocalPlayer SteamUser.GetSteamID direct object call now source-guarded in B50 2bb6c2; no native/phone verification. Do not infer all Steam callbacks are removed.",
@@ -47,13 +49,14 @@
     "B13: Android offline source adapter backup/rollback SOURCE_FIXED with 16/16 synthetic CI twice, but true Unity/IL2CPP/phone local world create-save-reload unverified. A concurrent-tree loss was recovered at 0d31686f; recheck live files after later merges.",
     "B22 operation instrumentation source/backup symlink and transactional rollback guard integrated and CI41920661518 SUCCESS synthetic; still no actual Unity/native stage or phone new world .rgd roundtrip; Steam stats B50 source fix not yet device confirmed.",
     "B37 authentic original ZIP2 shipped Data.rgd metadata CI41928767833 PASS: exact source SHA, original NRBF root has one member/one eligible field but 0 matching names; no inherited fields after complete base chain; stored assembly simple name matches original Assembly-CSharp but version differs. This is real source compatibility evidence, not proof the APK world save is corrupt or that Android load/save failed. No original save schema edits, no Unity/device roundtrip; LOCAL-005 stays OPEN.",
-    "B07 first-MoveNext diagnostic source-integrated after original Raft_Network SHA/body gate; CI41929041686 proves 9+19 Python cases, synthetic CLR Android/nonAndroid yield invariance and original-source staging. No Unity/device world/.rgd confirmation; this log indicates entry, NOT world completion."
+    "B07 first-MoveNext diagnostic source-integrated after original Raft_Network SHA/body gate; CI41929041686 proves 9+19 Python cases, synthetic CLR Android/nonAndroid yield invariance and original-source staging. No Unity/device world/.rgd confirmation; this log indicates entry, NOT world completion.",
+    "B14 original ZIP2-managed source proves SaveGame direct call order SaveWorld -> SaveUser -> SteamUserStats.StoreStats, exactly one each, SaveUser/World each call original Save; Android stats-only guard retains order and has no other direct Steam/PlayFab in these three methods. Strict source CI41929777877 SUCCESS 9/9 synthetic plus authentic original. File .rgd durability and phone world create/save/reopen NOT proven."
   ],
   "acceptance": [
     "دخول عالم جديد محلي قابل للعب بلا Steam أو سيرفر خارجي",
     "حفظ .rgd ثم إعادة تحميله فعلياً",
     "لا يكفي إخفاء رسالة الاتصال"
   ],
-  "updated_by": "B07",
-  "updated_at": "2026-11-04T22:53:40Z"
+  "updated_by": "B14",
+  "updated_at": "2026-11-04T22:59:28.241Z"
 }
