@@ -6,17 +6,19 @@
   "resumed_from_session": null,
   "status": "paused",
   "base_sha": "f1dd7fccb7607264d7ec9fee6a67cb73cbbd7eb7",
-  "last_commit": "9f91bba67106bdcc186edec3d86938f44b8b4cf2",
-  "updated_at": "2026-11-04T21:17:00Z",
+  "last_commit": "86e3158491ffb0de0cd2aae432b770e61994572f",
+  "updated_at": "2026-11-04T21:26:00Z",
   "tracks": [
     "colors-materials"
   ],
   "work_ids": [
-    "B05-20261104T2107Z-B05-9e24-texenv-lineage"
+    "B05-20261104T2107Z-B05-9e24-texenv-lineage",
+    "B05-20261104T2107Z-B05-9e24-uv-transform"
   ],
   "run_urls": [
-    "https://github.com/alwansan/raf/actions/runs/41914198631"
+    "https://github.com/alwansan/raf/actions/runs/41914198631",
+    "https://github.com/alwansan/raf/actions/runs/41915726289"
   ],
-  "next_step": "Validator source/tests/CI completed. Resume authenticated ZIP2+same-instance Unity-export m_TexEnvs comparison and any proven export fix; no original/GPU/phone proof. RENDER-002 still OPEN, NOT_READY 0/3.",
+  "next_step": "Both material texture pointer and UV source-fidelity tools pass 14 synthetic CI checks; obtain original authenticated ZIP2-to-same-export trace and run real comparison, then repair demonstrated drift. OPEN RENDER, NOT_READY 0/3.",
   "memory_path": "prompt/coordination/clients/B05/MEMORY.md"
 }
