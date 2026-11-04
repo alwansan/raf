@@ -98,7 +98,6 @@ def normalize_texenvs(entries, *, exported=False):
 
 def original_texenvs(root: Path, owner_names=None):
     """SHA/byte-authenticated original providers; use no speculative archive mapping."""
-    import UnityPy
     from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
     from scripts.w1_stage_zip2_owners import fingerprint
     result = {}
@@ -107,6 +106,8 @@ def original_texenvs(root: Path, owner_names=None):
         raise ValueError('Unpinned or empty original Material owner selection')
     if root.is_symlink() or (root / 'Raft_Data').is_symlink():
         raise ValueError('Linked original source root')
+    # Reject unpinned or redirected owners before loading a private-data parser.
+    import UnityPy
     for name in sorted(owners):
         expected = SHADER_OWNERS[name]
         path = root / 'Raft_Data' / name
