@@ -1,0 +1,13 @@
+{
+  "id": "T2-20261104T2354Z-start-foamabi",
+  "owner": "T2",
+  "session_id": "20261104T2354Z-T2-foamabi01",
+  "issue_id": "WATER-001",
+  "type": "start",
+  "summary": "T2 takes over B20/B24/B25 genuine Foam 4-stage packet and B17/B09/B45 spectrum/blur, targeting member ABI of original CB vs SPIRV; no existing source proof repeated or build requested.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41931585626",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B20_FOAM_CB_DESCRIPTOR_SIZE_2026-11-04.md"
+  ],
+  "at": "2026-11-04T23:54:00Z"
+}
