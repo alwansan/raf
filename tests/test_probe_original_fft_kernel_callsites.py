@@ -47,6 +47,23 @@ class KernelCallsiteTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "Unterminated"):
             parse_original_args('foo(1, nested(3, 4)', 3)
 
+    def test_fake_calls_in_comments_and_literals_do_not_count(self):
+        src = ('class F {\\n'
+               ' // hidden.Dispatch(900, 1, 1, 1);\\n'
+               ' /* hidden.SetTexture(9, "X", y); */\\n'
+               ' string s = "hidden.FindKernel(\\\\"Bad\\\\")";\\n'
+               ' string verbatim = @"hidden.Dispatch(9, 9, 9, 9)";\\n'
+               ' void Go() { fft.Dispatch(3, 1, 1, 1); }\\n'
+               '}\\n')
+        report = analyze_source(src, hashlib.sha256(src.encode()).hexdigest())
+        self.assertEqual(report["calls_by_api"], {"Dispatch": 1})
+        self.assertEqual(report["compute_api_callsites"][0]["kernel_or_first_arg"]["value"], 3)
+
+    def test_unterminated_block_comment_fails_closed(self):
+        src = "fft.Dispatch(2, 1, 1, 1); /* never closed"
+        with self.assertRaisesRegex(ValueError, "Unterminated"):
+            analyze_source(src, hashlib.sha256(src.encode()).hexdigest())
+
     def test_original_argument_values_are_not_source_code(self):
         self.assertEqual(sanitized_argument("2048")["value"], 2048)
         self.assertEqual(sanitized_argument("ComputeFFT")["kind"], "identifier_or_member")
