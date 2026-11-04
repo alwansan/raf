@@ -49,7 +49,7 @@ class OriginalFoamCBSizeParityControls(unittest.TestCase):
         self.assertFalse(result["source_and_translated_sizes_are_semantically_interchangeable_proven"])
         self.assertFalse(result["original_cb0_name_alias_verified"])
         self.assertFalse(result["android_gpu_pixels_verified"])
-        self.assertNotIn("name", str(result))
+        self.assertNotIn("SyntheticPrivateIdentifier", str(result))
 
     def test_swapped_stage_order_rejected(self):
         source = source_fixture()
