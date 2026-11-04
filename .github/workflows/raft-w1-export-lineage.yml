@@ -47,11 +47,10 @@ jobs:
           python3 -m scripts.patch_export_lineage --tool-source ar-host --helper android-port/Experiments/ExportLineage/RaftExportLineage.cs
           # Publish the CLI and its matching transitive assemblies together;
           # replacing one DLL cannot instrument an AOT or bundled executable.
-          dotnet publish ar-host/Source/AssetRipper.GUI.Free/AssetRipper.GUI.Free.csproj -c Release -p:PublishAot=false -p:PublishTrimmed=false -p:EnableTrimAnalyzer=false -p:EnableAotAnalyzer=false --self-contained false -o "$RUNNER_TEMP/ar" > "$RUNNER_TEMP/public-tool-build.log" 2>&1 || { tail -60 "$RUNNER_TEMP/public-tool-build.log"; exit 1; }
-          python3 -m scripts.configure_assetripper_export --directory "$RUNNER_TEMP/ar"
+          dotnet publish android-port/Experiments/ExportLineage/ExportLineage.csproj -c Release -p:PublishAot=false -p:PublishTrimmed=false -p:EnableTrimAnalyzer=false -p:EnableAotAnalyzer=false --self-contained false -o "$RUNNER_TEMP/ar" > "$RUNNER_TEMP/public-tool-build.log" 2>&1 || { tail -60 "$RUNNER_TEMP/public-tool-build.log"; exit 1; }
           # No original inputs are present in this smoke command; diagnostics
           # therefore contain public tool types/options only.
-          "$RUNNER_TEMP/ar/AssetRipper.GUI.Free" --help > "$RUNNER_TEMP/public-tool-smoke.log" 2>&1 || { cat "$RUNNER_TEMP/public-tool-smoke.log"; exit 1; }
+          dotnet "$RUNNER_TEMP/ar/ExportLineage.dll" --probe-tool > "$RUNNER_TEMP/public-tool-smoke.log" 2>&1 || { cat "$RUNNER_TEMP/public-tool-smoke.log"; exit 1; }
       - name: Reuse authenticated full original shader-owner cache first
         uses: actions/cache@v4
         with:
@@ -109,7 +108,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          timeout 900s "$RUNNER_TEMP/ar/AssetRipper.GUI.Free" --cli --input "$RUNNER_TEMP/w1-original" --output "$RUNNER_TEMP/lineage-project" --mode unity --script-content-level Level1 --ignore-streaming-assets=true > "$RUNNER_TEMP/private-export.log" 2>&1 && test -s "$RUNNER_TEMP/private-export-lineage.json" || {
+          timeout 900s dotnet "$RUNNER_TEMP/ar/ExportLineage.dll" "$RUNNER_TEMP/w1-original" "$RUNNER_TEMP/lineage-project" > "$RUNNER_TEMP/private-export.log" 2>&1 && test -s "$RUNNER_TEMP/private-export-lineage.json" || {
             python3 - <<'PYDIAG'
           import os,re,json
           from pathlib import Path
