@@ -22,7 +22,7 @@ PASSES = 7
 RESOURCE_FIELDS = (
     "m_TextureParameters", "m_TextureParams", "m_Textures", "m_TextureBindings",
     "m_SamplerParameters", "m_SamplerParams", "m_Samplers", "m_SamplerBindings",
-    "m_UAVParameters", "m_UAVs", "m_UAVBindings",
+    "m_UAVParameters", "m_UAVParams", "m_UAVs", "m_UAVBindings",
 )
 MAX_ROWS = 256
 MAX_FIELDS = 32
