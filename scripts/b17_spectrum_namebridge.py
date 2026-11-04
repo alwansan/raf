@@ -67,49 +67,67 @@ def inspect(source: Path) -> dict:
     tables = [(p, records(parts)) for p, parts in decoded_platforms(tree) if p == 4]
     if len(tables) != 1:
         raise ValueError("Missing source D3D11 platform")
-    shader_pass = tree["m_ParsedForm"]["m_SubShaders"][0]["m_Passes"][0]
-    program = shader_pass["progFragment"]
-    variants = stage_variants(program)
-    if len(variants) != 2:
-        raise ValueError("Original Spectrum pass fragment variants changed")
-    code, link = linked_program(variants[0][2], tables[0][1], 0)
-    abi = compare_program(program, code, 0)
-    if not all(abi["numeric_slot_parity"].values()):
-        raise ValueError("Source executable register ABI differs from Unity metadata")
-    # Authenticate/translate only ONE representative original fragment.
+    passes = tree["m_ParsedForm"]["m_SubShaders"][0]["m_Passes"]
+    if len(passes) != 7:
+        raise ValueError("Original seven-pass stage scope changed")
+    rows = []
     with tempfile.TemporaryDirectory(prefix="b17-spectrum-private-hlsl-") as tmp:
-        folder = Path(tmp)
-        translated = translate(code, 0, folder)
-        if not all(translated.get(x) for x in (
-                "vulkan11_valid", "hlsl_recovered", "roundtrip_vulkan11_valid")):
-            raise ValueError("Private original source translation rejected")
-        hlsl = (folder / "private.hlsl").read_text(encoding="utf-8")
-        renamed, counts = rebind_resource_symbols(hlsl, program, shader_pass["m_NameIndices"])
-        candidate = folder / "source-name-rebound.hlsl"
-        target = folder / "source-name-rebound.spv"
-        candidate.write_text(renamed, encoding="utf-8")
-        for command in (
-            ["glslangValidator", "-V", "-D", "-S", "frag", "-e", "main",
-             "-o", str(target), str(candidate)],
-            ["spirv-val", "--target-env", "vulkan1.1", str(target)],
-        ):
-            result = subprocess.run(command, stdin=subprocess.DEVNULL,
-                                    stdout=subprocess.DEVNULL,
-                                    stderr=subprocess.DEVNULL, timeout=60, check=False)
-            if result.returncode:
-                raise ValueError("Rebound private HLSL Vulkan1.1 compilation failed")
-        return {
-            "original_owner_sha256": EXPECTED[OWNER][1],
-            "original_object_sha256": original_object_sha,
-            "original_passes_attested": topology["authenticated_original_passes"],
-            "verified_private_original_fragment_blob_index": link["blob_index"],
-            "source_compiled_numeric_register_parity": True,
-            "private_symbol_bridge": counts,
-            "rebound_hlsl_sha256": hashlib.sha256(renamed.encode("utf-8")).hexdigest(),
-            "private_rebound_vulkan11_valid": True,
-            "original_names_or_hlsl_disclosed": False,
-            "complete_spectrum_shaderlab_or_device_verified": False,
-        }
+        root = Path(tmp)
+        for pass_index, shader_pass in enumerate(passes):
+            program = shader_pass["progFragment"]
+            variants = stage_variants(program)
+            if len(variants) != 2:
+                raise ValueError("Original Spectrum fragment variants changed")
+            for variant_index, (_, _, metadata) in enumerate(variants):
+                code, link = linked_program(metadata, tables[0][1], 0)
+                abi = compare_program(program, code, 0)
+                if not all(abi["numeric_slot_parity"].values()):
+                    raise ValueError("Original executable register ABI differs from Unity")
+                folder = root / ("p%02d-v%02d" % (pass_index, variant_index))
+                folder.mkdir()
+                translated = translate(code, 0, folder)
+                if not all(translated.get(x) for x in (
+                        "vulkan11_valid", "hlsl_recovered", "roundtrip_vulkan11_valid")):
+                    raise ValueError("Original fragment private translation rejected")
+                hlsl = (folder / "private.hlsl").read_text(encoding="utf-8")
+                renamed, counts = rebind_resource_symbols(hlsl, program, shader_pass["m_NameIndices"])
+                candidate = folder / "source-name-rebound.hlsl"
+                target = folder / "source-name-rebound.spv"
+                candidate.write_text(renamed, encoding="utf-8")
+                for command in (
+                    ["glslangValidator", "-V", "-D", "-S", "frag", "-e", "main",
+                     "-o", str(target), str(candidate)],
+                    ["spirv-val", "--target-env", "vulkan1.1", str(target)],
+                ):
+                    ran = subprocess.run(command, stdin=subprocess.DEVNULL,
+                                         stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                                         timeout=60, check=False)
+                    if ran.returncode:
+                        raise ValueError("Original fragment rebound HLSL Vulkan1.1 invalid")
+                rows.append({
+                    "pass_index": pass_index, "variant_index": variant_index,
+                    "original_blob_index": link["blob_index"],
+                    "rebound_numeric_counts": counts,
+                    "private_rebound_hlsl_sha256": hashlib.sha256(
+                        renamed.encode("utf-8")).hexdigest(),
+                    "private_vulkan11_valid": True,
+                })
+    if len(rows) != 14:
+        raise ValueError("Original fragment namebridge coverage incomplete")
+    return {
+        "original_owner_sha256": EXPECTED[OWNER][1],
+        "original_object_sha256": original_object_sha,
+        "original_passes_attested": topology["authenticated_original_passes"],
+        "original_fragment_stage_variants_rebound": len(rows),
+        "per_pass_fragment_stage_numeric_evidence": rows,
+        "total_texture_symbol_bindings": sum(
+            x["rebound_numeric_counts"]["renamed_textures"] for x in rows),
+        "total_sampler_symbol_bindings": sum(
+            x["rebound_numeric_counts"]["renamed_samplers"] for x in rows),
+        "all_private_rebound_hlsl_vulkan11_valid": True,
+        "original_names_or_hlsl_disclosed": False,
+        "complete_spectrum_shaderlab_or_device_verified": False,
+    }
 
 
 def main():
@@ -123,9 +141,10 @@ def main():
             raise ValueError("Output exists")
         args.out.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
         print("RAFT_B17_HLSL_NAMEBRIDGE " + json.dumps({
-            "status": "PRIVATE_ONE_FRAGMENT_SOURCE_REBOUND",
+            "status": "PRIVATE_ALL_FRAGMENT_STAGES_REBOUND",
             "numeric_parity": True,
             "translated_hlsl_recompiled_vulkan11": True,
+            "original_fragment_programs": report["original_fragment_stage_variants_rebound"],
             "original_names_disclosed": False,
             "unity_or_android_verified": False}, sort_keys=True))
         return 0
