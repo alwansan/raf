@@ -128,3 +128,7 @@
 ## تحديث 16:00Z (4 نوفمبر) — heartbeat: برنامج التجميع مكتمل
 - لا التزامات جديدة على الفرع؛ W4 trial ممتد بلا تحديث (آلية Unity import طويلة)؛ W5 Blur raster فشل — خارجه.
 - تسع حلقات CI-verified تكمل مرايا التحقق المادية والنقية؛ لا مسار جديد مخطط (تفادي تداخل W3/W5)؛ انتظار طلبات تحقق التصدير من W1/W4.
+
+## تحديث 17:10Z (4 نوفمبر) — التسليم أخضر من المحاولة الأولى
+- water-shader-stage-bindings CI 41828808987 SUCCESS @ d5205d8. المهمة المستلمة (Spectrum variant recovery + Foam CB binding) مكتملة.
+- اكتشافات جاهزة للاستيعاب: pass4 Spectrum مستقل (2 CBs)، vertex مشترك (1,2)، fragment فريد لكل pass، كل الCBs partial=true.

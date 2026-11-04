@@ -4,13 +4,13 @@
   "username": "raft-20261103T152008Z-92502b76",
   "session_id": "w2-20261103T152008Z-92502b76",
   "resumed_from": null,
-  "status": "active-heartbeat",
-  "updated_at": "2026-11-04T16:00:00.000Z",
+  "status": "active",
+  "updated_at": "2026-11-04T17:10:00.000Z",
   "base_sha": "a57127e",
   "current_work": [
     "RENDER-002 completed local independent verification of external Material->Shader/Texture classification (corroborates W3, adds texture+existence+convention-control)"
   ],
-  "last_commit": "5adc7bc feat(w2): material scalar-property usage baseline",
-  "next_step": "heartbeat 16:00Z: no new commits since 3dfdc9c-era; W4 trial 41812889049 in_progress without update since 10:15Z (passive); W5 Blur raster failure is not my lane; W2 nine-ring aggregate program COMPLETE - no new lane queued to avoid overlap with W3 keyword inventory / W5 Blur work; standing by for export-verification requests from W1/W4",
+  "last_commit": "d5205d8 feat(w2): claim W4 hand-off - water shader stage/variant/CB binding tables",
+  "next_step": "water hand-off delivered green (41828808987); next: survey remaining A-client tasks (FFT compute aggregates, resource restoration gaps) and continue per owner directive",
   "memory_path": "prompt/coordination/clients/raft-20261103T152008Z-92502b76/MEMORY.md"
 }

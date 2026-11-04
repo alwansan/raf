@@ -3,7 +3,7 @@
   "owner": "raft-20261103T152008Z-92502b76",
   "client_label": "W2",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "updated_at": "2026-11-04T16:40:00.000Z",
   "base_sha": "953c221",
   "lane": "claimed+completed the unclaimed W4 hand-off: serialized stage/variant/CB binding tables for Spectrum and Foam (Blur stays with A12/W5); water-gate recovery inputs",
@@ -22,13 +22,14 @@
   "workflow_path": ".github/workflows/raft-w2-water-shader-stage-bindings.yml",
   "concurrency_group": "raft-w2-water-shader-stage-bindings-${{ github.ref }}-${{ github.sha }}",
   "budget": "single LFS owner hydration (W1 cache), CPU only, 30 min timeout",
-  "run_url": null,
-  "source_sha": null,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41828808987",
+  "source_sha": "d5205d8",
   "result": "REAL RUN COMPLETE: Spectrum 7 passes all verified - fragment unique per pass (blobs 5..12+16..21), vertex SHARED 0-3/5-6 (blobs 1,2) with pass-4 UNIQUE (14,15) and 2 CBs instead of 3; variant tuples ((),(4,)) with keyword index 4 on variant 2; every CB partial=true: vertex slots {112:1vec,176:1mat,368:1mat}, fragment {112:4vec}. Foam verified: 2 passes, single variant, no keywords; vertex CBs {160:2vec, 176:1mat, 368:1mat}, fragment {160:2vec}; DepthCopy control: 6 passes, blob 1 shared vertex, fragments 2..7, ZERO CBs.",
   "limitations": [
     "numeric tables only - keyword strings and shader source are not published by W2 (W1's lane)",
     "does not construct ShaderLab or validate GPU behavior; supplies exact recovery targets",
     "Blur gate untouched (A12/W5 own its rebinding)"
   ],
-  "next_step": "push, CI green, notify A12/W1/W5 + record in STATUS"
+  "next_step": "claim delivered: Spectrum/Foam binding tables green; await A12/W1/W5 consumption",
+  "ci_conclusion": "success (41828808987 @ d5205d8)"
 }
