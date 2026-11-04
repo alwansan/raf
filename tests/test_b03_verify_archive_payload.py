@@ -1,9 +1,12 @@
 import hashlib
+from contextlib import redirect_stdout
+from io import StringIO
+from unittest.mock import patch
 from pathlib import Path
 import tempfile
 import unittest
 
-from scripts.b03_verify_archive_payload import IntakeError, intake, manifest_record, safe_relative
+from scripts.b03_verify_archive_payload import IntakeError, intake, manifest_record, safe_relative, main
 
 
 class ArchiveIntakeTests(unittest.TestCase):
@@ -111,6 +114,16 @@ class ArchiveIntakeTests(unittest.TestCase):
         with self.assertRaises(IntakeError):
             intake(self.source, self.manifest, self.path, self.stage)
         self.assertEqual((self.stage / self.path).read_bytes(), self.payload)
+
+    def test_os_error_never_prints_private_paths(self):
+        self.source.write_bytes(self.payload)
+        output = StringIO()
+        argv = ["--input", str(self.source), "--manifest", str(self.manifest),
+                "--relative-path", self.path, "--stage", str(self.stage)]
+        with patch("scripts.b03_verify_archive_payload.os.link", side_effect=OSError("PRIVATE_STAGING_PATH")), redirect_stdout(output):
+            self.assertEqual(main(argv), 1)
+        self.assertNotIn("PRIVATE_STAGING_PATH", output.getvalue())
+        self.assertIn("file_io_failure", output.getvalue())
 
     def test_input_within_stage_refused(self):
         nested = self.stage / "input.bin"
