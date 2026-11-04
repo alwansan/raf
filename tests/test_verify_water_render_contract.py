@@ -84,5 +84,63 @@ class WaterRenderGateTests(unittest.TestCase):
                 inspect(Path(temp))
 
 
+    def test_rejects_external_assets_root_symlink(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            (root / "project").mkdir()
+            (root / "outside").mkdir()
+            (root / "project" / "Assets").symlink_to(root / "outside", target_is_directory=True)
+            with self.assertRaisesRegex(ValueError, "redirected"):
+                inspect(root / "project")
+
+    def test_rejects_linked_project_root(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            (root / "real" / "Assets").mkdir(parents=True)
+            (root / "redirected-project").symlink_to(root / "real", target_is_directory=True)
+            with self.assertRaisesRegex(ValueError, "redirected"):
+                inspect(root / "redirected-project")
+
+    def test_rejects_external_shader_meta_instead_of_counting_it(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            assets = root / "Assets"
+            assets.mkdir()
+            name = next(iter(REQUIRED_PASS_COUNT))
+            shader = write_shader(assets, name, REQUIRED_PASS_COUNT[name])
+            external = root / "external.meta"
+            external.write_text("guid: " + "f" * 32)
+            meta = Path(str(shader) + ".meta")
+            meta.unlink()
+            meta.symlink_to(external)
+            with self.assertRaisesRegex(ValueError, "linked"):
+                inspect(root)
+
+    def test_rejects_external_compute_meta_instead_of_counting_it(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            assets = root / "Assets"
+            assets.mkdir()
+            source = assets / "FFT.compute"
+            source.write_text("#pragma kernel Horizontal\\n[numthreads(8,8,1)]\\nvoid Horizontal() {}\\n")
+            external = root / "outside.meta"
+            external.write_text("guid: " + "b" * 32)
+            Path(str(source) + ".meta").symlink_to(external)
+            with self.assertRaisesRegex(ValueError, "linked"):
+                inspect(root)
+
+    def test_absent_unlinked_sidecar_remains_unmet_not_forged(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            assets = root / "Assets"
+            assets.mkdir()
+            name = next(iter(REQUIRED_PASS_COUNT))
+            shader = write_shader(assets, name, REQUIRED_PASS_COUNT[name])
+            Path(str(shader) + ".meta").unlink()
+            result = inspect(root)
+            self.assertFalse(result["shader_contracts"][name]["contract_satisfied"])
+            self.assertFalse(result["shader_contracts"][name]["observed"]["original_meta_present"])
+
+
 if __name__ == "__main__":
     unittest.main()
