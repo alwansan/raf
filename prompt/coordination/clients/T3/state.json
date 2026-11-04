@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "username": "T3",
+  "generation": "T-2026-11-05",
+  "session_id": "20261104T2354Z-T3-render-harness",
+  "resumed_from_session": null,
+  "status": "active",
+  "base_sha": "b56ebc3847f251cee2539e9797471417d32698d2",
+  "last_commit": null,
+  "updated_at": "2026-11-04T23:54:00Z",
+  "tracks": [
+    "RENDER-002",
+    "ASSET-RESTORE-001"
+  ],
+  "work_ids": [
+    "T3-20261104T2354Z-T3-render-harness-b12-csharp-fixture"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41933025319"
+  ],
+  "next_step": "Fix B12 synthetic scene runner to compile exact production quality+compute helper without omitting runtime calls; then verify and resume same-instance material lineage.",
+  "memory_path": "prompt/coordination/clients/T3/MEMORY.md"
+}
