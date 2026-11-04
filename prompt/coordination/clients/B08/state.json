@@ -4,10 +4,10 @@
   "generation": "B-2026-11-04",
   "session_id": "20261104T2246Z-B08-7d2a",
   "resumed_from_session": "20261104T2130Z-B08-b71c",
-  "status": "active",
+  "status": "completed",
   "base_sha": "3c866416159cdb87740e8d465bfc5d58d78313f6",
-  "last_commit": "b9ed68c7002757516c6db4e3d116183f4f955bd7",
-  "updated_at": "2026-11-04T22:54:29.467Z",
+  "last_commit": "7518156578b888cf7d076f8bfd130fa1c474d257",
+  "updated_at": "2026-11-04T23:00:21.565Z",
   "tracks": [
     "water-fft:compiled-spirv-descriptor-abi"
   ],
@@ -16,8 +16,9 @@
     "B08-20261104T2246Z-B08-7d2a-fft-active-image-uses"
   ],
   "run_urls": [
-    "https://github.com/alwansan/raf/actions/runs/41917369953"
+    "https://github.com/alwansan/raf/actions/runs/41928583281",
+    "https://github.com/alwansan/raf/actions/runs/41929513820"
   ],
-  "next_step": "Add source-free synthetic OpImageFetch/OpImageWrite/SSA negative controls and check real original 20 SPIR-V programs with existing SHA-pinned workflow.",
+  "next_step": "Both B08 scoped original FFT numeric descriptor ABI + active image uses investigations completed with source-authenticated CI. Next independent proof is original DXBC t0 vs t1 source-register→translated SPIR-V binding and Unity runtime FindKernel selection; WATER-001 OPEN; NOT_READY 0/3. No background work.",
   "memory_path": "prompt/coordination/clients/B08/MEMORY.md"
 }
