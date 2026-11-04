@@ -1,0 +1,34 @@
+name: B22 RENDER-002 Material scalar export parity (synthetic)
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-b22-material-scalars.yml'
+      - 'scripts/b22_verify_material_scalars.py'
+      - 'tests/test_b22_verify_material_scalars.py'
+permissions:
+  contents: read
+concurrency:
+  group: raft-b22-scalar-parity-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  scalar-fidelity-contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Install pinned YAML dependency
+        run: python3 -m pip install --disable-pip-version-check PyYAML==6.0.3
+      - name: Compile and run synthetic positive/negative controls
+        run: |
+          python3 -m py_compile scripts/b22_verify_material_scalars.py
+          python3 -m unittest discover -s tests -p 'test_b22_verify_material_scalars.py' -v
+      - name: Scope of result
+        run: echo 'B22 synthetic only - no private original payload, Unity, GPU, phone or APK test'
