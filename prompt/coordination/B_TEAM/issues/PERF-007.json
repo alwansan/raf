@@ -5,16 +5,20 @@
   "status": "OPEN",
   "track": "integration",
   "evidence": [
-    "https://github.com/alwansan/CL/blob/5394407b5cd0a0ca1848ff0902f8d2133bf6ea29/raft%20log/lf/LogRaft-20261104-225757-156/session-summary.json"
+    "https://github.com/alwansan/CL/blob/5394407b5cd0a0ca1848ff0902f8d2133bf6ea29/raft%20log/lf/LogRaft-20261104-225757-156/session-summary.json",
+    "https://github.com/alwansan/raf/actions/runs/41926487471",
+    "https://github.com/alwansan/raf/actions/runs/41926892044",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B37_ORIGINAL_CURSOR_RGBA32_PROVENANCE_2026-11-04.md"
   ],
   "remaining": [
     "إصلاحجذرerrorfloodقبلنسبتحسنFPS",
-    "قياسذاكرةمتسقوصورمتماثلة"
+    "قياسذاكرةمتسقوصورمتماثلة",
+    "B37 private source-authenticated Cursor.SetCursor scan in CI41926892044, seven tests PASS: 3 direct calls from 2 original files, 1 literal-null and 2 nonliteral cursor texture expressions. 1449 APK86 RGBA32 warnings still not source-causally linked; no new device format/readability/pixel/performance evidence. No texture conversion or touch modifications made."
   ],
   "acceptance": [
     "قياسقبلوبعدمصدرونسخةمعلومة",
     "لاخسارةمحتوىأوجودة"
   ],
-  "updated_by": "owner-team-bootstrap",
-  "updated_at": "2026-11-04"
+  "updated_by": "B37",
+  "updated_at": "2026-11-04T22:41:00Z"
 }
