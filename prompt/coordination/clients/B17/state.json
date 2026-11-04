@@ -2,22 +2,26 @@
   "schema_version": 1,
   "username": "B17",
   "generation": "B-2026-11-04",
-  "session_id": "20261104T2140Z-B17-spc2",
-  "resumed_from_session": null,
-  "status": "paused",
-  "base_sha": null,
-  "last_commit": "6afb4e1280f6691e3b47ac810f479409f94a9e58",
-  "updated_at": "2026-11-04T21:57:00Z",
+  "session_id": "20261104T2249Z-B17-cbind",
+  "resumed_from_session": "20261104T2140Z-B17-spc2",
+  "status": "active",
+  "base_sha": "5057bd4663054e1912c89c4847fcd95498ae0c96",
+  "last_commit": "078dd64d2b4487840e251f0714033c4f5fd9fce1",
+  "updated_at": "2026-11-04T23:02:00Z",
   "tracks": [
     "water-fft",
-    "spectrum-pass-resource-bindings"
+    "spectrum-compiled-register-parity"
   ],
   "work_ids": [
-    "B17-20261104T2140Z-B17-spc2-spectrum-descriptors"
+    "B17-20261104T2140Z-B17-spc2-spectrum-descriptors",
+    "B17-20261104T2249Z-B17-cbind-spectrum-compiled-registers"
   ],
   "run_urls": [
-    "https://github.com/alwansan/raf/actions/runs/41920232173"
+    "https://github.com/alwansan/raf/actions/runs/41920232173",
+    "https://github.com/alwansan/raf/actions/runs/41929705240",
+    "https://github.com/alwansan/raf/actions/runs/41930060613",
+    "https://github.com/alwansan/raf/actions/runs/41930225633"
   ],
-  "next_step": "Scoped B17 Spectrum original descriptor provenance complete: 7 original passes, 13 fragment rows, 0 vertex rows, 42 observed fields; CI41920232173 source-verified. Continue with authentic original/translated Spectrum program sampler mapping, no dummy/pass clamping, and preserve owner audio/Settings; no background job.",
+  "next_step": "17/17 synthetic PASS; initial real ZIP2 source rejected UNITY_SAMPLER_TABLE. Corrected B17-known table aliases now under authenticated original CI41930225633. Diagnose source outcome, preserve traces, never infer Unity/phone parity.",
   "memory_path": "prompt/coordination/clients/B17/MEMORY.md"
 }
