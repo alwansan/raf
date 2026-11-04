@@ -44,7 +44,7 @@ class BlurMaterialPropertyTests(unittest.TestCase):
     def test_reject_unrecognized_semantics_without_defaults(self):
         for field, value in (("m_Type", 3), ("m_Flags", 1),
                              ("m_Attributes", ["HDR"]), ("m_Name", "bad Name"),
-                             ("m_Description", "evil\\nnew line"),
+                             ("m_Description", "evil\nnew line"),
                              ("m_DefValue[0]", math.nan)):
             instance = fixture()
             instance["m_PropInfo"]["m_Props"][0][field] = value
