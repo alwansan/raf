@@ -1,0 +1,14 @@
+{
+  "id": "B13-builtin-atomic-result",
+  "owner": "B13",
+  "session_id": "20261104T2247Z-B13-builtin-atomic",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "Source-integrated exact original built-in shader backup, prepublish source recheck, fsynced atomic replacement and conditional rollback. Isolated CI41928703661 succeeded 14/14 synthetic; no authentic water/engine shader program or Unity/device proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/20c94103edc9d10352560d473656f7004208268b",
+    "https://github.com/alwansan/raf/actions/runs/41928703661",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B13_BUILTIN_SHADER_ATOMIC_INSTALL_2026-11-04.md"
+  ],
+  "at": "2026-11-04T22:51:00Z"
+}
