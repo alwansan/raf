@@ -63,7 +63,10 @@
     "https://github.com/alwansan/raf/actions/runs/41929071692",
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B16_FFT_PREPROCESSOR_SOURCE_GUARD_2026-11-04.md",
     "https://github.com/alwansan/raf/actions/runs/41929513820",
-    "https://github.com/alwansan/raf/commit/8cf6e4d3eeab89f5db052546f9b22a999195b723"
+    "https://github.com/alwansan/raf/commit/8cf6e4d3eeab89f5db052546f9b22a999195b723",
+    "https://github.com/alwansan/raf/actions/runs/41930578292",
+    "https://github.com/alwansan/raf/commit/46649737f6db52d56beaf2d29ba452df2a5f1af9",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B20_FOAM_PRIVATE_PACKET_2026-11-04.md"
   ],
   "remaining": [
     "Spectrum/Foam/Blur passes ناقصة في APK86",
@@ -94,13 +97,14 @@
     "B08 source-authenticated 20/20 original FFT DXBC→SPIR-V programs have identical numeric image descriptor ABI (read candidates set0/bindings0&1, storage set0/binding2, float32); 14 synthetic controls plus real ZIP2 source CI41928583281 SUCCESS. Exact original t0 versus t1 input-image binding and Unity runtime kernel/variant selector remain UNPROVEN, so no .compute/native/device restoration or closure.",
     "B16 source-only ComputeShader validator now rejects potentially reachable HLSL #error, while provably inactive #error does not block; source commit9a65bf3 CI41929071692 SUCCESS40/40 synthetic. Original FFT program identity/Unity shader compilation/GPU phone still UNKNOWN and WATER-001 OPEN.",
     "B08 additional full original FFT program SPIR-V SSA use check CI41929513820 SUCCESS: 20 synthetic controls and all20 translated compiled programs actively read both sampled descriptor candidates and write storage descriptor, supported image operands uniquely traced. Unknown original DXBC t0↔SPV binding0/1 association, native Unity kernel-ID mapping and device visuals; WATER-001 stays OPEN.",
-    "B09 source-pinned Spectrum PathID2432 exact seven-pass/28 references/18 distinct original blob-slot provenance and private translator code integrated, 23/23 exact-blob local synthetic tests passed. B09 actual original ZIP2/Vulkan CI run and ShaderLab/Unity/Android proof UNKNOWN; issue remains OPEN."
+    "B09 source-pinned Spectrum PathID2432 exact seven-pass/28 references/18 distinct original blob-slot provenance and private translator code integrated, 23/23 exact-blob local synthetic tests passed. B09 actual original ZIP2/Vulkan CI run and ShaderLab/Unity/Android proof UNKNOWN; issue remains OPEN.",
+    "B20 genuine ZIP2 original Foam 4/4 compiled stage translations +2/2 source states +8 source CB links co-staged privately; CI41930578292 SUCCESS. Original CB0 HLSL alias, resource/sampler binding, actual ShaderLab and Unity/Adreno pixels still NOT proven. Do not mark WATER-001 ready."
   ],
   "acceptance": [
     "هوية برامج ونوى أصلية أو تطابق موثق دونdummy",
     "تثبيت فيالتصدير+Unity import/render",
     "اختبار هاتف يثبت الماء بلا pass/kernel errors"
   ],
-  "updated_by": "B09",
-  "updated_at": "2026-11-04T22:59:52.981Z"
+  "updated_by": "B20",
+  "updated_at": "2026-11-04T23:06:38.202Z"
 }
