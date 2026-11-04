@@ -85,6 +85,22 @@ def require_shared_abi(profiles):
     if not isinstance(profiles, list) or len(profiles) != EXPECTED_COUNT:
         raise ValueError("Original FFT compiled slot coverage incomplete")
     first = profiles[0]
+    for row in profiles:
+        if (not isinstance(row, dict)
+                or row.get("src_t0_vs_t1_mapping_verified") is not False
+                or row.get("runtime_unity_kernel_id_mapping_verified") is not False):
+            raise ValueError("Forged source-register or Unity-runtime identity claim")
+        sampled = row.get("sampled_image_descriptor_candidates_unordered_t0_t1")
+        storage = row.get("storage_output_image_descriptor_from_unique_uav_class")
+        if (not isinstance(sampled, list) or len(sampled) != 2
+                or any(not isinstance(v, tuple) or len(v) != len(IMAGE_FIELDS)
+                       for v in sampled)
+                or not isinstance(storage, tuple)
+                or len(storage) != len(IMAGE_FIELDS)):
+            raise ValueError("Unverified translated numeric descriptor ABI shape")
+        keys = [(v[0], v[1]) for v in sampled] + [(storage[0], storage[1])]
+        if len(set(keys)) != 3 or keys[:2] != sorted(keys[:2]):
+            raise ValueError("Aliased or unordered numerical image descriptor ABI")
     if any(row != first for row in profiles):
         raise ValueError("Original FFT translated numeric descriptor ABI differs by compiled slot")
     safe = {
