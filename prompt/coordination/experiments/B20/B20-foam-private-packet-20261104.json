@@ -4,7 +4,7 @@
   "session_id": "20261104T2257Z-B20-fmp3",
   "issue_id": "WATER-001",
   "hypothesis": "Four independently authenticated Foam stage translations and two source-authenticated ShaderLab pass states can be retained as a single all-or-nothing private packet, preserving CB0 alias as unresolved rather than synthesizing a ShaderLab candidate.",
-  "source_commit": "b2268908186bf9d41c1727a9269e047835dd12e8",
+  "source_commit": "6e3ddf26c6080a630a786f1afee6abccc62e017a",
   "input_hashes": [
     {
       "provider": "ZIP2",
@@ -34,16 +34,20 @@
     "failures clean all private partials"
   ],
   "workflow_path": ".github/workflows/raft-b20-private-foam-packet.yml",
-  "run_url": null,
-  "artifact_urls": [],
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41930578292",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41930578292/artifacts/13369929607"
+  ],
   "budget": "One 115,978,112-byte original ZIP2 owner, 30-minute standard Ubuntu runner, no Unity/Android native build, no secrets or raw shader artifacts.",
-  "status": "planned",
-  "observed_result": null,
-  "rejected_hypotheses": [],
+  "status": "completed",
+  "observed_result": "SUCCESS: 10 synthetic tests, original ZIP2 115978112B SHA pinned, original four DXBC stages HLSL/spirv roundtrip + two genuine pass-state fragments + 8 original CB name/slot links staged in one private packet, deleted before safe artifact upload. No CB0 alias, Unity ShaderLab, Adreno pixels or phone accepted.",
+  "rejected_hypotheses": [
+    "Original source-authentic Foam four stage/state inputs cannot coexist in one private all-or-nothing staging packet."
+  ],
   "limitations": [
     "Retained input packet is not runnable ShaderLab; CB0 alias and exact Unity upload remain unproven.",
     "Actual source authentication and translation only established by successful CI, not the plan."
   ],
-  "integration_commit": null,
-  "next_step": "Implement source-private packet writer then run original-data CI."
+  "integration_commit": "46649737f6db52d56beaf2d29ba452df2a5f1af9",
+  "next_step": "Original CB0-to-translated HLSL register lineage then material GUID and Unity verification."
 }
