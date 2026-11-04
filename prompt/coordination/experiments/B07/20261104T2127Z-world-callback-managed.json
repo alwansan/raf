@@ -27,14 +27,15 @@
   "run_url": "https://github.com/alwansan/raf/actions/runs/41916347469",
   "artifact_urls": [],
   "budget": "single ubuntu-24.04 CI, max12min, synthetic C#, no Unity/LFS/private asset/release",
-  "status": "running",
-  "observed_result": null,
+  "status": "completed",
+  "observed_result": "CI41916347469 completed SUCCESS on source 9f71f172. Prior 8+7 Python negative controls and pinned private GameManager source instrumentation PASS. A real .NET10 CLR synthetic fixture (UNITY_ANDROID defined) compiled, executed original-free GameManager 3 branches: saved=3; BeginOperation=3, EndOperation=3, caught synthetic original exception=1, finally_failed=1; exception propagates; no false world-ready flags. This is NOT original Raft native/device or .rgd data.",
   "rejected_hypotheses": [],
   "limitations": [
     "CLR synthetic is not actual Raft managed source semantics outside the traced callback",
     "Not Unity IL2CPP or Android device",
     "No original .rgd read/write in this harness"
   ],
-  "integration_commit": null,
-  "next_step": "Read CI, fix precise defects if any, preserve evidence and close only bounded .NET fixture scope."
+  "integration_commit": "9f71f1722f11bd136e0deeac0ba7cefa3d72dc71",
+  "next_step": "Preserve bounded evidence; next coordinated native source/Unity/phone test must confirm actual callback and .rgd data. Move to other P0 blocker with live HEAD.",
+  "updated_at": "2026-11-04T21:29:00Z"
 }
