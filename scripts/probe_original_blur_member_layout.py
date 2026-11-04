@@ -77,7 +77,7 @@ def instruction_census(code):
     raw=chunks[0]
     tokens=struct.unpack("<"+"I"*(len(raw)//4),raw)
     if tokens[1]!=len(tokens): raise ValueError("token length")
-    at=2;counts=Counter();errors=Counter();modifiers=Counter();reads=0;offsets=set()
+    at=2;counts=Counter();reasons=Counter();errors=Counter();modifiers=Counter();reads=0;offsets=set()
     while at<len(tokens):
         h=tokens[at];op=h&2047;n=(h>>24)&127
         if not n and op==53 and at+1<len(tokens):n=tokens[at+1]
@@ -85,15 +85,19 @@ def instruction_census(code):
         counts[op]+=1
         if op in ARITY:
             try: decoded=read(tokens[at:at+n])
-            except ValueError:
+            except ValueError as error:
                 errors[op]+=1
+                reason=str(error)
+                if reason.startswith('operand_type_') and reason[13:].isdigit(): reasons[reason]+=1
+                elif reason in ('relative operand','unsupported extension','instruction','trailing words','truncated payload','source selection mode','unsupported CB shape','unsupported CB indexing'): reasons[reason]+=1
+                else: reasons['other_bounded_failure']+=1
             else:
                 reads+=len(decoded)
                 for item in decoded:
                     modifiers[item.get("source_modifier",0)]+=1
                     offsets.update((item["slot"],o) for o in item["byte_offsets"])
         at+=n
-    return {"opcode_counts":dict(counts),"cb_source_modifier_counts":dict(modifiers),"arithmetic_parse_failures":dict(errors),
+    return {"opcode_counts":dict(counts),"arithmetic_failure_categories":dict(reasons),"cb_source_modifier_counts":dict(modifiers),"arithmetic_parse_failures":dict(errors),
             "decoded_arithmetic_cb_reads":reads,"unique_cb_scalar_addresses":len(offsets),
             "complete_program_operand_coverage":False}
 

@@ -24,7 +24,7 @@ def read(words):
   if typ==4:
    if dim or t&3 not in (1,2):raise ValueError('immediate shape')
    at+=1 if t&3==1 else 4
-  elif typ not in (0,1,2,8):raise ValueError('operand type')
+  elif typ not in (0,1,2,8):raise ValueError('operand_type_'+str(typ))
   if at>len(words):raise ValueError('truncated payload')
   if typ==8:
    if ordinal==0:raise ValueError('CB destination')

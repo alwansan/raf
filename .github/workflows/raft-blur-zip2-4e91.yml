@@ -1,4 +1,4 @@
-name: Modified-source Original Blur instruction census ZIP2 CPU only 4e91
+name: Operand-category Original Blur instruction census ZIP2 CPU only 4e91
 on:
   push:
     branches: [feature/android-native-port]
