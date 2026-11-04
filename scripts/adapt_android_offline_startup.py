@@ -66,11 +66,11 @@ def adapt(name, text):
         # The original call returns a Steamworks.CSteamID *object*, not a
         # numeric m_SteamID property, so retain its object type on Android.
         return_type, body = method_body(result, 'AllowCheatsForLocalPlayer')
-        if return_type != 'bool' or hashlib.sha256(body.replace('\\r\\n', '\\n').encode()).hexdigest() != (
+        if return_type != 'bool' or hashlib.sha256(body.replace('\r\n', '\n').encode()).hexdigest() != (
                 'e89739ba461b65b03e78c388193dcfff44a19a41842af9b665a434c39fef1a09'):
             raise ValueError('Unrecognized original Cheat Steam identity method')
         executable = _executable_positions(body)
-        calls = list(re.finditer(r'\\bSteamUser\\s*\\.\\s*GetSteamID\\s*\\(\\s*\\)', executable))
+        calls = list(re.finditer(r'\bSteamUser\s*\.\s*GetSteamID\s*\(\s*\)', executable))
         if len(calls) != 1 or result.count(body) != 1:
             raise ValueError('Original Cheat Steam identity callsite drift')
         match = calls[0]
