@@ -19,7 +19,7 @@ concurrency:
 jobs:
   probe:
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 20
     env:
       GIT_LFS_SKIP_SMUDGE: '1'
     steps:
@@ -71,11 +71,29 @@ jobs:
         run: |
           mkdir -p "$RUNNER_TEMP/b45"
           python3 -m scripts.b45_blur_wrapper_preflight --source "$RUNNER_TEMP/w1-original/Raft_Data" --repo . --out "$RUNNER_TEMP/b45/blur-state.json"
+      - name: Install bounded original two-pass software Vulkan tools
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools libvulkan-dev mesa-vulkan-drivers vulkan-validationlayers g++
+      - name: Compile original-vs-rebuilt two-pass shader raster host
+        run: |
+          python3 -m scripts.w5_blur_raster_host --template scripts/w1_depth_raster_vulkan.cpp --output "$RUNNER_TEMP/b45/w5-raster.cpp"
+          g++ -O2 -std=c++17 "$RUNNER_TEMP/b45/w5-raster.cpp" -lvulkan -o "$RUNNER_TEMP/b45/w5-raster"
+      - name: Exercise pinned original Blur stages and negative raster controls
+        run: |
+          set -euo pipefail
+          export VK_DRIVER_FILES="$(find /usr/share/vulkan/icd.d -maxdepth 1 -name '*lvp*.json' -print -quit)"
+          test -n "$VK_DRIVER_FILES"
+          timeout 600s python3 -m scripts.w5_blur_recovery --source "$RUNNER_TEMP/w1-original/Raft_Data" --repo . --runner "$RUNNER_TEMP/b45/w5-raster" --out "$RUNNER_TEMP/b45/blur-raster.json"
       - name: Publish aggregate-only classification
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: b45-water001-blur-state-${{ github.sha }}
-          path: ${{ runner.temp }}/b45/blur-state.json
+          path: |
+            ${{ runner.temp }}/b45/blur-state.json
+            ${{ runner.temp }}/b45/blur-raster.json
           if-no-files-found: ignore
           retention-days: 7
