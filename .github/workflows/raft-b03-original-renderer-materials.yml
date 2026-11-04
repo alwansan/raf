@@ -54,6 +54,7 @@ jobs:
           persist-credentials: false
           lfs: false
           sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
             Raft/Raft_Data/level0
             Raft/Raft_Data/level1
             Raft/Raft_Data/level2
@@ -65,7 +66,7 @@ jobs:
       - name: Verify original six SHA256 then count real Renderer Material PPtrs
         run: |
           set -euo pipefail
-          python3 -m scripts.b03_original_renderer_materials --source .b03-source-zip2/Raft/Raft_Data --report "$RUNNER_TEMP/b03-renderer-original-aggregate.json"
+          python3 -m scripts.b03_original_renderer_materials --source .b03-source-zip2/Raft/Raft_Data --manifest .b03-source-zip2/RAFT_FILE_MANIFEST.tsv --report "$RUNNER_TEMP/b03-renderer-original-aggregate.json"
           echo 'B03 source=true original_verified_scenes=6 full_export=false UnityPlayer=false Android=false'
       - name: Upload only aggregate graph commitments (not source)
         if: always()

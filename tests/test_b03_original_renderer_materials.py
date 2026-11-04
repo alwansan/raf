@@ -1,4 +1,5 @@
 import hashlib
+from collections import Counter
 from pathlib import Path
 from types import SimpleNamespace
 import tempfile
@@ -6,6 +7,7 @@ import unittest
 
 from scripts.b03_original_renderer_materials import (
     SourceError, analyze_scene, pointer_shape, probe,
+    manifest_provider_basename_counts, declared_provider_kind,
 )
 
 
@@ -105,6 +107,42 @@ class OriginalRendererMaterialTests(unittest.TestCase):
         self.assertNotIn("1\t0\t", str(r))
         self.assertFalse(r["same_export_renderer_material_lineage_verified"])
         self.assertFalse(r["shader_program_or_device_pixels_verified"])
+
+    def test_manifest_provider_name_match_never_promotes_target(self):
+        scene = [item(1, "MeshRenderer", {"m_Materials": [
+            {"m_FileID": 1, "m_PathID": 888}]})]
+        r = analyze_scene(scene, 1, ["path\\sharedassets0.assets"],
+                          Counter({"sharedassets0.assets": 1}))
+        self.assertEqual(r["counts"]["external_provider_name_declared_in_zip2_manifest"], 1)
+        self.assertEqual(r["counts"]["distinct_manifest_declared_external_provider_names"], 1)
+        self.assertFalse(r["external_material_target_object_verified"])
+
+    def test_unlisted_or_ambiguous_external_owner_not_guessed(self):
+        scene = [item(1, "MeshRenderer", {"m_Materials": [
+            {"m_FileID": 1, "m_PathID": 8},
+            {"m_FileID": 2, "m_PathID": 9}]})]
+        r = analyze_scene(scene, 2, ["other.assets", "duplicate.assets"],
+                          Counter({"duplicate.assets": 2}))
+        self.assertEqual(r["counts"]["external_provider_name_not_in_zip2_manifest"], 1)
+        self.assertEqual(r["counts"]["external_ambiguous_manifest_provider_basename"], 1)
+
+    def test_manifest_tsv_fails_on_duplicate_unverified_paths(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "manifest.tsv"
+            path.write_text("kind\tbytes\tsha256\tmode\trelative_path_under_Raft\n" +
+                            "plain\t19\t" + "a" * 64 + "\t660\tRaft_Data/primary.assets\n" +
+                            "plain\t22\t" + "b" * 64 + "\t660\tRaft_Data/other/primary.assets\n")
+            rows = manifest_provider_basename_counts(path)
+            self.assertEqual(rows["primary.assets"], 2)
+            self.assertEqual(declared_provider_kind("primary.assets", rows),
+                             "ambiguous_manifest_provider_basename")
+
+    def test_external_table_mismatch_is_rejected(self):
+        scene = [item(1, "MeshRenderer", {"m_Materials": []})]
+        with self.assertRaises(SourceError):
+            analyze_scene(scene, 2, ["owner.assets"], Counter({"owner.assets": 1}))
+        with self.assertRaises(SourceError):
+            analyze_scene(scene, 1, ["owner.assets"], None)
 
     def test_symlinked_source_root_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:
