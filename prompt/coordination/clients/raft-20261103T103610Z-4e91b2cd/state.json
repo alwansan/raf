@@ -1,15 +1,15 @@
 {
   "schema_version": 1,
   "username": "raft-20261103T103610Z-4e91b2cd",
-  "session_id": "20261104-pixel-exception-cleanup",
+  "session_id": "20261104-authentic-blur-cleanup",
   "resumed_from": null,
-  "status": "completed",
-  "updated_at": "2026-11-04T01:30:00Z",
-  "base_sha": "a726d3863ff177c3666cee735b92082e4b3a02f7",
+  "status": "paused",
+  "updated_at": "2026-11-04T10:03:00Z",
+  "base_sha": "4b1cf0a9b0771dd16ffb7aa3dc86fb9071ae1a40",
   "current_work": [
     "WATER-001"
   ],
-  "last_commit": "a726d3863ff177c3666cee735b92082e4b3a02f7",
-  "next_step": "Verify originalBlurSSS sampler state; integrateprivate named wrapper;futureexport mustmatch Blur source pin",
+  "last_commit": "4b1cf0a9b0771dd16ffb7aa3dc86fb9071ae1a40",
+  "next_step": "Inspect startup41811356943; original41811356895 passed14 cases. Then BlurSSS sampler topology/private wrapper; no unchanged repeat.",
   "memory_path": "prompt/coordination/clients/raft-20261103T103610Z-4e91b2cd/MEMORY.md"
 }
