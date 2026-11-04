@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "owner": "B18",
+  "session_id": "20261104T225100Z-B18-map2",
+  "issue_id": "WATER-001",
+  "hypothesis": "For each original compiled FFT DXBC, two explicitly different vkd3d source register-to-target descriptor maps yield SPIR-V modules whose only differences are allowed OpDecorate DescriptorSet/Binding literals; the exact three image variable IDs and all non-descriptor instructions stay identical.",
+  "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "input_hashes": [
+    "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "9d934f5c99183c6df5cf2f1fefc9d3e5ec4bce5da5f96a86e4c02910d5322247"
+  ],
+  "tool_versions": {
+    "Ubuntu": "24.04",
+    "libvkd3d-shader": "1.2-15build1",
+    "UnityPy": "1.25.4"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_b18_fft_spirv_descriptor_identity.py -v",
+    "python3 -m unittest discover -s tests -p test_b18_spirv_variable_identity.py -v",
+    "python3 -m scripts.b18_fft_spirv_descriptor_identity --source \"$RUNNER_TEMP/b18-map/original/Raft_Data\" --compiler \"$RUNNER_TEMP/b18-vkd3d-explicit-interface\""
+  ],
+  "negative_controls": [
+    "swapped same-class input descriptor target IDs between profiles",
+    "changed non-descriptor SPIR-V type instruction",
+    "missing OpVariable",
+    "duplicate OpDecorate Binding",
+    "extra descriptor",
+    "truncated instructions",
+    "invalid SPIR-V magic",
+    "unknown profile"
+  ],
+  "workflow_path": ".github/workflows/raft-b18-fft-descriptor-identity.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41931883517",
+  "artifact_urls": [],
+  "budget": "18m runner CPU only, original private shader binaries and compiled SPIR-V remain in temp, no Unity/Android build",
+  "status": "completed",
+  "observed_result": {
+    "source_free_tests_passed": 20,
+    "original_fft_programs_authenticated": 20,
+    "original_programs_matching_same_variable_IDs_in_both_explicit_profiles": 20,
+    "original_spirv_programs_identical_after_masking_only_sanctioned_descriptor_literals": 20,
+    "independent_t0_t1_numeric_input_effects_proven": false,
+    "unity_editor_or_android_device_render_proven": false
+  },
+  "rejected_hypotheses": [
+    "A compiler-generated semantic or image variable difference is required between two distinct explicit Vulkan target mappings: rejected for these 20 original FFT programs; only requested decoration literals changed."
+  ],
+  "limitations": [
+    "Original compiled SPIR-V variable ID stability is a structural compiler experiment; private source-level name-to-kernel and Unity runtime mapping remain unknown.",
+    "Same-class sampled t0 and t1 numerical input contributions were not separately executed or measured.",
+    "No original GPU water/ShaderLab passes installed, no Unity import or Android Adreno test; WATER-001 stays OPEN."
+  ],
+  "integration_commit": "693ace285c0598db17339e067e9a1f1c8014d8a4",
+  "next_step": "Apply verified mapping infrastructure to safe Unity private .compute import experiment; then numeric Vulkan or phone water screenshot evidence, no dummy shader or fake success."
+}
