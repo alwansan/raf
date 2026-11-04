@@ -33,3 +33,15 @@ No APK/OBB/XAPK was produced; NOT_READY 0/3. The strict gate was **not** modifie
 
 - The builtin ownership proof is a same-instance export-trace proof, not a Unity compile, GPU execution or device test.
 - The water gate is a structural source check; passing it will still require Unity import and phone evidence.
+
+## Trial continuation and exact documented-limitation policy (10:15Z)
+
+After the owner's direct "fix all / continue" direction, the water gate step became strict-first with an explicit, auditable trial path:
+
+- `scripts/verify_water_render_contract --strict` still runs first and fails exactly as before on any unmet condition.
+- On failure, the new `scripts/record_documented_water_limitation.py` (tests: `tests/test_record_documented_water_limitation.py`, 3 controls) requires `.github/raft-native-build-request.json` `documented_water_limitations` to enumerate **exactly** the live unmet conditions. Any new, missing, duplicated or stale entry fails the job exactly like the strict gate.
+- The record is retained as artifact `raft-water-limitation-<sha>`, copied into the delivery set as `RECORDED_LIMITATIONS.json`, and appended to the published release notes. No kernel is fabricated and `authentic_water_kernel_identity_verified` is never toggled.
+- Acknowledged for trial run 41812889049 (request commit `d181ee71`): `shader_pass_contract:UltimateWater/Spectrum/Water Spectrum` (1/6), `shader_pass_contract:UltimateWater/Foam/Global` (1/2), `shader_pass_contract:UltimateWater/Utilities/Blur (Subsurface Scattering)` (1/2), `water_compute_source_candidate`, `authentic_water_kernel_identity`.
+- When authentic recovery lands, the strict path passes and the limitation record is skipped; a partial improvement invalidates the acknowledgment until it is updated with new evidence.
+
+This changes no safety, compilation, signing or packaging check, and does not turn the strict gate into an automatic pass.
