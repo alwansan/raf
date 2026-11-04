@@ -60,7 +60,7 @@ def mask_noncode(source):
             i += 1
             continue
         for j in range(start, min(i, len(source))):
-            if chars[j] not in ("\\n", "\\r"):
+            if chars[j] not in ("\n", "\r"):
                 chars[j] = " "
     return "".join(chars)
 
@@ -69,31 +69,27 @@ def sha(text):
     return hashlib.sha256(text.encode("utf8")).hexdigest()
 
 
-def parse_original_args(source, start):
-    """Bounded balanced call parser with nested expressions and strings."""
-    if source[start] != "(":
+def parse_original_args(source, start, masked=None):
+    """Split balanced C# arguments without treating comments/literals as syntax.
+
+    Structural decisions use an offset-preserving lexical mask; returned
+    arguments still refer to the original SHA-verified source, not rewritten
+    expressions. This is a bounded lexical check, not full C# parsing.
+    """
+    if start < 0 or start >= len(source) or source[start] != "(":
         raise ValueError("Expected CSharp call opening parenthesis")
-    start_offset = start
+    if masked is None:
+        masked = mask_noncode(source)
+    if len(masked) != len(source) or masked[start] != "(":
+        raise ValueError("CSharp lexical view or invocation offset differs")
     level = 0
     square = 0
     curly = 0
-    quote = None
-    escaped = False
     arg_start = start + 1
     args = []
     for idx in range(start, min(len(source), start + 16_384)):
-        char = source[idx]
-        if quote is not None:
-            if escaped:
-                escaped = False
-            elif char == "\\":
-                escaped = True
-            elif char == quote:
-                quote = None
-            continue
-        if char in ('"', "'"):
-            quote = char
-        elif char == "(":
+        char = masked[idx]
+        if char == "(":
             level += 1
         elif char == ")":
             level -= 1
@@ -117,7 +113,9 @@ def parse_original_args(source, start):
         elif char == "," and level == 1 and square == 0 and curly == 0:
             args.append(source[arg_start:idx].strip())
             arg_start = idx + 1
-    raise ValueError("Unterminated original compute API call at " + str(start_offset))
+        if square < 0 or curly < 0:
+            raise ValueError("Unbalanced original CSharp argument delimiters")
+    raise ValueError("Unterminated original compute API call at " + str(start))
 
 
 def sanitized_argument(arg):
@@ -167,7 +165,7 @@ def analyze_source(source, expected_sha):
         if len(rows) >= MAX_CALLS:
             raise ValueError("Unbounded original compute API calls")
         op = match.group(1)
-        args, end = parse_original_args(source, match.end()-1)
+        args, end = parse_original_args(source, match.end()-1, masked=masked)
         raw_kernel_args.append(args[0] if args else "")
         previous = masked[max(0, match.start()-180):match.start()]
         receiver_match = RECEIVER.search(previous)
