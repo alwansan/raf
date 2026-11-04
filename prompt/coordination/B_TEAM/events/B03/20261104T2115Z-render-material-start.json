@@ -1,0 +1,12 @@
+{
+  "id": "B03-20261104T2115Z-render-material-start",
+  "owner": "B03",
+  "session_id": "20261104T2101Z-B03-a419",
+  "issue_id": "RENDER-002",
+  "type": "start",
+  "summary": "Investigate missing/incorrect exported Renderer.m_Materials identity separately from Shader and texture checks; no changes to original assets.",
+  "evidence": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/w1_audit_export_material_shaders.py"
+  ],
+  "at": "2026-11-04T21:13:18.875Z"
+}
