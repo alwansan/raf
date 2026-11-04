@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "username": "B07",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2112Z-B07-6e51",
+  "resumed_from_session": null,
+  "status": "active",
+  "base_sha": "0d33268645106e7bc28fcaa786d90683fe93de19",
+  "last_commit": null,
+  "updated_at": "2026-11-04T21:12:00Z",
+  "tracks": [
+    "LOCAL-005 offline-world readiness"
+  ],
+  "work_ids": [
+    "B07-20261104T2112Z-B07-6e51-world-callback-proof"
+  ],
+  "run_urls": [],
+  "next_step": "Inspect SHA-pinned original GameManager/Raft_Network WorldHasBeenLoaded and OnWorldRecieved ordering; implement a non-overlapping executable original-source local-world failure-chain test, then integrate only a verified fix. Avoid B50 Steam guards, graphics concurrent work, audio/Settings/touch.",
+  "memory_path": "prompt/coordination/clients/B07/MEMORY.md"
+}
