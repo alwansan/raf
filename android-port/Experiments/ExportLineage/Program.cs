@@ -16,6 +16,9 @@ LibraryConfiguration settings = new();
 settings.ImportSettings.ScriptContentLevel = ScriptContentLevel.Level1;
 settings.ImportSettings.IgnoreStreamingAssets = true;
 settings.ExportSettings.ScriptExportMode = ScriptExportMode.Decompiled;
+// Report the effective export settings the same way the CLI front end does;
+// the production log verifier asserts this exact fact before Unity starts.
+Logger.Info(LogCategory.General, $"ScriptExportMode: {settings.ExportSettings.ScriptExportMode}");
 // This is the CLI's unchanged Load -> Process -> ProjectExporter -> PostExport
 // pipeline, with typed arguments and no GUI/localization build dependency.
 ExportHandler handler = new(settings);
@@ -30,3 +33,5 @@ Console.WriteLine($"RAFT_LINEAGE_LOADED materials={counts.GetValueOrDefault(21)}
 if (counts.GetValueOrDefault(21) == 0 || counts.GetValueOrDefault(48) == 0)
     throw new InvalidDataException("No original material/shader graph loaded");
 handler.Export(gameData, args[1]);
+// Mirrors the CLI front end's completion marker for the same export pipeline.
+Logger.Info(LogCategory.General, "=== COMPLETED ===");
