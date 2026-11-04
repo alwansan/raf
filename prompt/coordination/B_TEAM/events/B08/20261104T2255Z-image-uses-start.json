@@ -1,0 +1,13 @@
+{
+  "id": "B08-20261104T2255Z-image-uses-start",
+  "owner": "B08",
+  "session_id": "20261104T2246Z-B08-7d2a",
+  "issue_id": "WATER-001",
+  "type": "start",
+  "summary": "After B08 uniform descriptor ABI success, extend same authenticated stage to require executable SSA image reads from both target sampled resources and writes to sole target storage resource, rejecting declared-but-unused fake descriptor readiness.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41928583281",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B08_FFT_DESCRIPTOR_ABI_2026-11-04.md"
+  ],
+  "at": "2026-11-04T22:54:29.467Z"
+}
