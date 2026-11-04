@@ -74,6 +74,30 @@ class ResourceBindingTests(unittest.TestCase):
                       source.replace('Dispatch(index+1, 1, source.height','Dispatch(index+1, 1, other.height')):
             with self.assertRaises(ValueError):correlate(tree,wrong,sha(wrong))
 
+    def test_secondary_dispatch_shape_ignores_comments_strings_and_chars(self):
+        tree, source = self.fixture()
+        # The primary callsite audit masks non-code, but the secondary
+        # dispatch-shape audit previously searched the raw original C# text.
+        fake = (
+            '  // cs.Dispatch(index, 99, fake.height, 9);\n'
+            '  /* cs.Dispatch(index, 3, fake.height, 4); */\n'
+            '  string quoted = "cs.Dispatch(index, 77, fake.height, 7)";\n'
+            "  char example = 'D';\n"
+            '  string verbatim = @"cs.Dispatch(index, 88, fake.height, 8)";\n'
+        )
+        marked = source.replace('  cs.Dispatch(index, 1, source.height, 1);',
+                                fake + '  cs.Dispatch(index, 1, source.height, 1);')
+        result = correlate(tree, marked, sha(marked))
+        self.assertEqual(result['dispatch_x_groups'], 1)
+        self.assertEqual(result['dispatch_z_groups'], 1)
+        self.assertTrue(result['dispatch_y_same_original_texture_height_expression'])
+
+        # An inert commented Dispatch must never replace a missing real call.
+        missing = marked.replace('cs.Dispatch(index+1, 1, source.height, 1);',
+                                 'cs.NoDispatch(index+1, 1, source.height, 1);')
+        with self.assertRaises(ValueError):
+            correlate(tree, missing, sha(missing))
+
     def test_slot_workgroup_order_is_required(self):
         tree, source = self.fixture();wrong=copy.deepcopy(tree)
         wrong['variants'][0]['kernels'][2]['variantMap'][0][1]['threadGroupSize']=[64,1,1]
