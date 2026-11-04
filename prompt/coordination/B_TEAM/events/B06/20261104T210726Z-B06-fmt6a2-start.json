@@ -1,0 +1,13 @@
+{
+  "id": "20261104T210726Z-B06-fmt6a2-start",
+  "owner": "B06",
+  "session_id": "20261104T210726Z-B06-fmt6a2",
+  "issue_id": "WATER-001",
+  "type": "start",
+  "summary": "B06 begins complementary original GpuFFT storage-format/RenderTexture binding investigation; no device, Unity or game build validation yet.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/e8c312541b8139f2e889ff8921de8128146dcc84",
+    "https://github.com/alwansan/raf/releases/tag/android-early-test-41812889049-1"
+  ],
+  "at": "2026-11-04T21:07:26.584Z"
+}
