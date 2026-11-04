@@ -17,7 +17,7 @@ from pathlib import Path
 # RAFT_FILE_MANIFEST.tsv, original Raft_Data/level0..level5 (all plain blobs).
 PIN = {
     "level0": (3927436, "33e7855a700ae0d90d04f50d8ea75ab6f14e9d5aa0314a32e91b96fb1f6a3a62"),
-    "level1": (2001504, "9ca3a83f4d8841d4052a4899d0855a2bb0fcc87d5378b8d7004bcd7bff33963"),
+    "level1": (2001504, "9ca3a83f4d8841d4052a4899d0855a2bb0fcc87d5378b8c50fb17902cd2418a0"),
     "level2": (22204, "3ed1e89bbdb4509af723fd6e7b37c4ffa0e92a8de548940e1fd7db6e90bf7c8b"),
     "level3": (20388, "0bbeece712333cc3119995a7db34abe79a2c1a371825f559dc486b944a5031a4"),
     "level4": (30668, "a62b5ac7b80f8a906c9744ec457be8816663da4a2e8bb2a38924122448522511"),
@@ -142,7 +142,10 @@ def probe(root: Path, loader=None) -> dict:
     if any(p.is_symlink() for p in (root, *root.parents)) or not root.is_dir():
         raise SourceError("unsafe_scene_root")
     for name, expected in PIN.items():
-        verify_source(root / name, expected)
+        try:
+            verify_source(root / name, expected)
+        except SourceError as exc:
+            raise SourceError(f'{name}: {exc}') from exc
     if loader is None:
         import UnityPy
         loader = lambda path: UnityPy.load(str(path))
