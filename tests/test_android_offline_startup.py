@@ -287,3 +287,57 @@ class AndroidOfflineStartupTests(unittest.TestCase):
                         stage.apply(root / 'project', backup, write=True)
             self.assertEqual((backup / 'Settings.cs').read_text(), original)
             self.assertEqual((backup / 'Settings.cs.meta').read_text(), 'guid: synthetic-settings')
+
+
+    def test_linked_project_root_is_rejected_for_original_offline_adapter(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            real = root / 'real-project'
+            source = real / 'Assets/Assembly-CSharp/Settings.cs'
+            source.parent.mkdir(parents=True)
+            original = b'class Settings {}'
+            source.write_bytes(original)
+            alias = root / 'project-alias'
+            try:
+                alias.symlink_to(real, target_is_directory=True)
+            except (OSError, NotImplementedError):
+                self.skipTest('Directory symlinks unavailable')
+            self.assertFalse((alias / 'Assets').is_symlink())
+            with self.assertRaisesRegex(ValueError, 'project root'):
+                apply(alias, root / 'backup', write=True)
+            self.assertEqual(source.read_bytes(), original)
+            self.assertFalse((root / 'backup').exists())
+
+    def test_linked_backup_root_is_rejected_for_original_offline_adapter(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            source = root / 'project/Assets/Assembly-CSharp/Settings.cs'
+            source.parent.mkdir(parents=True)
+            original = b'class Settings {}'
+            source.write_bytes(original)
+            outside = root / 'outside'
+            outside.mkdir()
+            backup = root / 'linked-backup'
+            try:
+                backup.symlink_to(outside, target_is_directory=True)
+            except (OSError, NotImplementedError):
+                self.skipTest('Directory symlinks unavailable')
+            with self.assertRaisesRegex(ValueError, 'backup root'):
+                apply(root / 'project', backup, write=True)
+            self.assertEqual(source.read_bytes(), original)
+            self.assertEqual(list(outside.iterdir()), [])
+
+    def test_linked_backup_parent_is_rejected_for_original_offline_adapter(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            (root / 'project/Assets').mkdir(parents=True)
+            outside = root / 'outside'
+            outside.mkdir()
+            alias = root / 'backup-parent-alias'
+            try:
+                alias.symlink_to(outside, target_is_directory=True)
+            except (OSError, NotImplementedError):
+                self.skipTest('Directory symlinks unavailable')
+            with self.assertRaisesRegex(ValueError, 'backup root'):
+                apply(root / 'project', alias / 'backups', write=True)
+            self.assertFalse((outside / 'backups').exists())
