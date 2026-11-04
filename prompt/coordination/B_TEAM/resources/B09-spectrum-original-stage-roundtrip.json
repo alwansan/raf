@@ -1,0 +1,32 @@
+{
+  "id": "B09-spectrum-original-stage-roundtrip",
+  "title": "B09 source-pinned seven-pass Spectrum stage variant/18-slot Vulkan roundtrip experiment",
+  "kind": "shader-stage-translation-experiment",
+  "source": {
+    "provider": "zip2",
+    "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "path": "Raft/Raft_Data/sharedassets0.assets",
+    "bytes": 115978112,
+    "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3"
+  },
+  "stages": {
+    "acquisition": "SOURCE_SHA_VERIFIED_BY_B17_CI41920232173",
+    "extraction": "AUTHENTIC_SPECTRUM_7_PASS_W2_B17_VERIFIED_B09_STAGE_PACKET_UNTESTED",
+    "reconstruction": "B09_TRANSLATOR_SOURCE_AND_SYNTHETIC_23_TESTS_PASS_GENUINE_SPIRV_ROUNDTRIP_UNKNOWN",
+    "binding": "UNKNOWN",
+    "integration": "NOT_EXECUTED",
+    "device": "NOT_TESTED"
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41920232173",
+    "https://github.com/alwansan/raf/commit/8cf6e4d3eeab89f5db052546f9b22a999195b723",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B09_SPECTRUM_PASS_STAGING_2026-11-04.md"
+  ],
+  "remaining": [
+    "Inspect first B09 workflow run and two aggregate JSONs before claiming original DXBC stage success",
+    "Build exact private seven-pass Spectrum ShaderLab with proven CB/texture/sampler/keyword resources",
+    "Unity Android Vulkan and device numeric/color/functional proof"
+  ],
+  "updated_by": "B09",
+  "updated_at": "2026-11-04T22:59:31.649Z"
+}
