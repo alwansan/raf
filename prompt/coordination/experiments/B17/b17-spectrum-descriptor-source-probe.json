@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "owner": "B17",
+  "session_id": "20261104T2140Z-B17-spc2",
+  "issue_id": "WATER-001",
+  "hypothesis": "Original Spectrum source's per-stage texture/sampler tables can be enumerated and authenticated without the original shader program/source leaving CI; resource semantics remain unproven.",
+  "source_commit": "5054982907884bf273a70c5346806a9e50207ace",
+  "input_hashes": [
+    {
+      "provider": "zip2",
+      "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+      "file": "Raft_Data/sharedassets0.assets",
+      "bytes": 115978112,
+      "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3"
+    }
+  ],
+  "tool_versions": {
+    "UnityPy": "1.25.4",
+    "python": "runner-hosted",
+    "ubuntu": "24.04"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p 'test_b17_spectrum_stage_descriptors.py' -v",
+    "python3 -m scripts.stage_zip2_fft_owner --zip2-checkout .source-zip2 --destination $RUNNER_TEMP/original/sharedassets0.assets",
+    "python3 -m scripts.b17_spectrum_stage_descriptors --source $RUNNER_TEMP/original --out $RUNNER_TEMP/b17-spectrum-safe-aggregate.json"
+  ],
+  "negative_controls": [
+    "original pass count drift",
+    "missing stage",
+    "nonnumeric resource value",
+    "bool-as-int",
+    "nonfinite float",
+    "unsafe field names",
+    "oversized/nested source tables",
+    "unknown resource schema",
+    "synthetic numeric index mutation changes fingerprint"
+  ],
+  "workflow_path": ".github/workflows/raft-b17-spectrum-descriptors.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41919077512",
+  "artifact_urls": [],
+  "budget": "2 jobs: synthetic <=6m and pinned source <=20m; no Unity/APK, no LFS, no raw source artifact",
+  "status": "in_progress",
+  "observed_result": "CI41919077512: synthetic PASS, ZIP2 115978112-byte owner SHA PASS, real probe FAIL closed (ValueError); CI41919278787: synthetic PASS, real probe FAIL closed (unmodeled original texture/sampler schema). Precise structural key diagnostic staged in commit 50549829; no authentic descriptor binding result yet.",
+  "rejected_hypotheses": [
+    "Previously assumed finite descriptor field alias whitelist covers exact original Spectrum schema — rejected by original ZIP2-owner test.",
+    "Synthetic-only successful parser tests establish source restoration — rejected; authentic source probe did not pass."
+  ],
+  "limitations": [
+    "No actual shader translation, ShaderLab integration, Unity import or Adreno/phone proof.",
+    "Serialized descriptor presence is not runtime semantic equivalence.",
+    "No proof that spectrum descriptor mismatch caused white materials."
+  ],
+  "integration_commit": null,
+  "next_step": "Read bounded resource schema labels from CI after commit 50549829; add precise original field types with fail-closed tests, rerun ZIP2 probe, then record numeric signature evidence."
+}
