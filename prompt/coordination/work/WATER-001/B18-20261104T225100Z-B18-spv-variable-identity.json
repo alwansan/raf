@@ -5,12 +5,13 @@
   "session_id": "20261104T225100Z-B18-map2",
   "issue_id": "WATER-001",
   "track": "water-fft",
-  "status": "active",
+  "status": "completed",
   "base_sha": "59cff77bd87aeeb4483597f8ef782cef0c7f3975",
   "approach": "Independently prove original FFT source-register-target-image SPIR-V variable identity is stable across two explicitly mapped translations by checking variable descriptor IDs and normalized full SPIR-V program instructions, masking only sanctioned set/binding literals. Fail closed on any other drift; do not equate structure to runtime pixel behavior.",
   "intended_files": [
+    "scripts/b18_spirv_variable_identity.py",
+    "tests/test_b18_spirv_variable_identity.py",
     "scripts/b18_fft_spirv_descriptor_identity.py",
-    "tests/test_b18_fft_spirv_descriptor_identity.py",
     ".github/workflows/raft-b18-fft-descriptor-identity.yml",
     "docs/B18_FFT_RDEF_PARITY_2026-11-04.md"
   ],
@@ -21,9 +22,25 @@
     "A1 original CPU Vulkan numerical FFT proof",
     "WATER-001 actual Unity kernel selector unresolved"
   ],
-  "experiment_ids": [],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement source-free SPIR-V normalization/variable ID correspondence tests, run original 20 with both profiles, reject other code drift; no asset or Unity changes.",
-  "updated_at": "2026-11-04T23:09:53.356Z"
+  "experiment_ids": [
+    "prompt/coordination/experiments/B18/20261104T231315Z-original-spv-variable-identity.json"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41931883517"
+  ],
+  "result": {
+    "status": "ORIGINAL_TRANSLATED_VARIABLE_IDENTITY_VERIFIED",
+    "source_original_zip2_SHA_verified": true,
+    "original_fft_object_sha256": "9d934f5c99183c6df5cf2f1fefc9d3e5ec4bce5da5f96a86e4c02910d5322247",
+    "original_programs": 20,
+    "explicit_target_profiles": 2,
+    "distinct_source_register_variable_id_stable_programs": 20,
+    "normalized_complete_spirv_program_exact_except_binding_literal_programs": 20,
+    "source_free_tests_passed": 20,
+    "independent_t0_t1_runtime_numeric_behavior_proven": false,
+    "unity_import_or_android_gpu_proven": false,
+    "ci_run": "41931883517"
+  },
+  "next_step": "Source-to-target compiler SPIR-V variable identity proven in two profiles for all 20, not real Unity ComputeShader import or device numeric output. Next P0 integration: exact authoritative .compute staging/Unity batchmode validation with no original asset publication.",
+  "updated_at": "2026-11-04T23:13:48.407Z"
 }
