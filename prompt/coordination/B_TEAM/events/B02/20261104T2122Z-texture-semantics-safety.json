@@ -1,0 +1,14 @@
+{
+  "id": "20261104T2122Z-B02-texture-import-semantics-safety",
+  "owner": "B02",
+  "session_id": "20261104T2101Z-B02-e5cd",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "Pinned AssetRipper importer SRGBTexture uses ColorSpace.Linear, opposite B02 initial guess; unsafe repair path fully disabled, read-only dual interpretation and 12/12 safe CI. No game assets modified; RENDER-002 OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/0d5002faccd5f4304b2274cbada752ce122ff5e0",
+    "https://github.com/alwansan/raf/actions/runs/41915207812",
+    "https://github.com/nowl-it/AssetRipperCLI/blob/036098ab525a3f9f693dc101edeb21faad4d32d8/Source/AssetRipper.Export.UnityProjects/Textures/ImporterFactory.cs"
+  ],
+  "at": "2026-11-04T21:22:00Z"
+}
