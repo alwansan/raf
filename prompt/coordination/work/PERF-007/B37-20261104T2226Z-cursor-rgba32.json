@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "owner": "B37",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2226Z-B37-cursor01",
+  "issue_id": "PERF-007",
+  "track": "integration/render-errors",
+  "approach": "Source-authenticate and, if safe, eliminate the APK86 repeated Cursor.SetCursor RGBA32 texture incompatibility without touching deferred touch layout; original color/texture fidelity must survive",
+  "status": "active",
+  "base_sha": "5fc5c4838247c33669bba8b67e988893f22cd28e",
+  "intended_files": [
+    "scripts/b37_*",
+    "tests/test_b37_*",
+    "docs/B37_CURSOR_RGBA32_ANDROID_2026-11-04.md"
+  ],
+  "hypothesis": "1449 repeated Unity cursor-format errors are rooted in unsupported cursor Texture2D format/readability and may admit an exact Android-only color-preserving conversion; must verify authentic callsite before mutation.",
+  "related_work": [
+    "B12 postload shader status",
+    "B31 texture external-provider integrity",
+    "B50 Steam guard",
+    "B21 source lighting"
+  ],
+  "experiment_ids": [],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Inspect original caller; implement only source-authenticated patch with regression tests, otherwise document rejected hypothesis and switch to authentic water gap.",
+  "updated_at": "2026-11-04T22:26:00Z"
+}
