@@ -1,0 +1,12 @@
+{
+  "id": "20261104T2242Z-coroutine-entry-start",
+  "owner": "B07",
+  "session_id": "20261104T2242Z-B07-c7ea",
+  "issue_id": "LOCAL-005",
+  "type": "start",
+  "summary": "B07 resumed; original-source-authenticated first IEnumerator MoveNext entry log planned for WorldHasBeenLoaded, preserving coroutine yield and all world/save semantics.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41916347469"
+  ],
+  "at": "2026-11-04T22:45:00Z"
+}
