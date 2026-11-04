@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "owner": "B15",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T215400Z-B15-7b2c",
+  "issue_id": "RENDER-002",
+  "track": "colors-materials",
+  "approach": "Read-only SHA-pinned original Texture2D sampler versus same-instance exported TextureImporter fidelity. No guessed GUIDs, changes to assets or sRGB policy.",
+  "status": "active",
+  "base_sha": "02035ed05d11e016ed8c7e91845e1ba9da37bee9",
+  "intended_files": [
+    "scripts/b15_texture_sampler_parity.py",
+    "tests/test_b15_texture_sampler_parity.py",
+    ".github/workflows/raft-b15-texture-sampler-parity.yml",
+    "docs/B15_TEXTURE_SAMPLER_PARITY_2026-11-04.md"
+  ],
+  "hypothesis": "TextureImporter defaults or exporter drift may alter tiling/filter/aniso/mip-bias, contributing to visually inaccurate restored water/materials; require original/export per-object identity before claiming equivalence.",
+  "related_work": [
+    "W2 sampler aggregate",
+    "B02 sRGB guard",
+    "B05 texture UV parity",
+    "B31 texture stream validation"
+  ],
+  "experiment_ids": [
+    "B15-sampler-parity-20261104"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Source read-only verifier, synthetic and isolated CI controls; authenticated source + same-export trace required for real comparison.",
+  "updated_at": "2026-11-04T21:54:00Z"
+}
