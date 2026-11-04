@@ -1,0 +1,12 @@
+{
+  "id": "B45-20261104-blur-private-stage-result",
+  "owner": "B45",
+  "session_id": "20261104T2056Z-B45-f0c1",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Private exact Blur source SHA 5886dc36... staged successfully in isolated CI from authenticated ZIP2 with six zero-difference color/depth comparisons and all raster mutation guards. Source not published; external native project not modified; Unity/Adreno acceptance pending.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41914205988"
+  ],
+  "at": "2026-11-04T21:17:00Z"
+}
