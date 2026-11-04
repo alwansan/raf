@@ -79,7 +79,7 @@ def compiled_shex_registers(data: bytes) -> tuple[dict, list]:
     """
     inspect_dxbc(data)
     chunks = []
-    for off in struct.unpack_from("<" + "I" * struct.unpack_from("<I", data, 28), data, 32):
+    for off in struct.unpack_from("<" + "I" * struct.unpack_from("<I", data, 28)[0], data, 32):
         size = struct.unpack_from("<I", data, off + 4)[0]
         if data[off:off + 4] in (b"SHEX", b"SHDR"):
             chunks.append(data[off + 8:off + 8 + size])
@@ -129,7 +129,7 @@ def compiled_resource_evidence(data: bytes) -> tuple[dict, str, list | None]:
     """Prefer name-preserving RDEF; accept name-free executable declarations."""
     inspect_dxbc(data)
     tags = []
-    for off in struct.unpack_from("<" + "I" * struct.unpack_from("<I", data, 28), data, 32):
+    for off in struct.unpack_from("<" + "I" * struct.unpack_from("<I", data, 28)[0], data, 32):
         tags.append(data[off:off + 4])
     rdef_count = tags.count(b"RDEF")
     if rdef_count > 1:
