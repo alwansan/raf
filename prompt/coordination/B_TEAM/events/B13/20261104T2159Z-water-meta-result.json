@@ -1,0 +1,15 @@
+{
+  "id": "B13-20261104T2132Z-B13-7e6b-water-meta-result",
+  "owner": "B13",
+  "session_id": "20261104T2132Z-B13-7e6b",
+  "issue_id": "WATER-001",
+  "type": "integration",
+  "summary": "Water/FFT Shader/Compute .meta GUID syntax/uniqueness fail-closed validation source-integrated: B13 22/22 combined CI and B47 regression fixed; original water programs/GPU/device still OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/2db5078f38d1cbd36ea20d351b9033bd88ffd29a",
+    "https://github.com/alwansan/raf/commit/ccefdd7151726155ed592376d6e6311797521ce3",
+    "https://github.com/alwansan/raf/actions/runs/41920753737",
+    "https://github.com/alwansan/raf/actions/runs/41920734179"
+  ],
+  "at": "2026-11-04T21:59:00Z"
+}
