@@ -118,7 +118,8 @@ jobs:
                   'has_missing_assembly': 'Could not load file or assembly' in text,
                   'has_missing_dependency': 'dependency' in text.lower(),
                   'argument_error': bool(re.search(r'unknown argument|missing value|unrecognized|not recognized|requires a value', text, re.I)),
-                  'loading_started':'PHASE 1: LOADING' in text,'export_started':'PHASE 2: EXPORTING' in text,
+                  'loading_started':'Processing loaded assets' in text,'export_started':'Starting export' in text,
+                  'loaded_counts':re.findall(r'RAFT_LINEAGE_LOADED materials=\d+ shaders=\d+',text),
                   'log_bytes':len(text.encode()),'trace_created':(Path(os.environ['RUNNER_TEMP'])/'private-export-lineage.json').exists()}
           print('RAFT_EXPORT_FAILURE '+json.dumps(report,sort_keys=True))
           (Path(os.environ['RUNNER_TEMP'])/'export-lineage-summary.json').write_text(json.dumps(report,indent=2)+'\n')
