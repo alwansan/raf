@@ -55,6 +55,26 @@ class ExportGamutTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             patch_gamut_bytes(duplicate)
 
+    def test_utf8_arabic_prefix_preserves_exact_raw_byte_boundaries(self):
+        # Sixteen non-ASCII glyphs shift UTF-8 byte offsets enough that
+        # the old Unicode-character-index whitelist rejected this valid edit.
+        before = (HEADER + '  m_CompanyName: ' + 'ع' * 16 +
+                  '\\n  m_ColorGamuts: 01000000\\n' + TAIL).encode('utf-8')
+        after, observed = patch_gamut_bytes(before)
+        self.assertEqual(observed, '01000000')
+        self.assertEqual(after, before.replace(b'm_ColorGamuts: 01000000',
+                                               b'm_ColorGamuts: 00000000'))
+        self.assertEqual(after.count('ع'.encode('utf-8')), 16)
+        self.assertEqual(len(after), len(before))
+
+    def test_utf8_emoji_prefix_crlf_preserves_exact_unrelated_bytes(self):
+        before = (HEADER + '  m_CompanyName: ' + '🎮🌊' * 16 +
+                  '\\n  m_ColorGamuts: 02000000\\n' + TAIL).replace('\\n', '\\r\\n').encode('utf-8')
+        after, _ = patch_gamut_bytes(before)
+        self.assertEqual(after, before.replace(b'm_ColorGamuts: 02000000',
+                                               b'm_ColorGamuts: 00000000'))
+        self.assertEqual(before.count(b'\\r\\n'), after.count(b'\\r\\n'))
+
     def _project(self, root, content):
         p = root / 'project' / 'ProjectSettings'
         p.mkdir(parents=True)
