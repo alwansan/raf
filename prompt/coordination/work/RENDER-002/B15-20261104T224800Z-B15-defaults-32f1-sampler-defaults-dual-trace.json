@@ -6,7 +6,7 @@
   "issue_id": "RENDER-002",
   "track": "colors-materials",
   "approach": "Correct Unity TextureImporter mipMapBias=-100 unset sentinel misclassified as proven source drift; optionally match B02 texture export instance with W1 Material/Shader trace, rejecting mismatched, malformed or truncated dual traces; keep report aggregate/read-only.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "b5d8de01257f3d3171f8e930de557343a49e8205",
   "intended_files": [
     "scripts/b15_texture_sampler_parity.py",
@@ -23,8 +23,23 @@
   "experiment_ids": [
     "B15-20261104-sampler-defaults-dual-trace"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement test-first synthetic negative controls for -100 default and dual trace export_instance; CI then preserve result and limits.",
-  "updated_at": "2026-11-04T22:47:25.577Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41928528901",
+    "https://github.com/alwansan/raf/actions/runs/41929031892"
+  ],
+  "result": {
+    "scope": "source diagnostic correctness only",
+    "source_commit": "8f51565362f0d26d0d413cbf87f6e2e1c631883d",
+    "test_count": 23,
+    "ci": "SUCCESS",
+    "real_original_export_comparisons": 0,
+    "visual_or_device_proof": false,
+    "fixes": [
+      "Unity -100 mipBias unknown not mismatch",
+      "B02 Texture28/W1 Material21/Shader48 paired trace export_instance validation",
+      "foreign original source directory basename alias rejection"
+    ]
+  },
+  "next_step": "Obtain exact private same-generation exporter dual traces and original SHA-authenticated ZIP2 files, then actual read-only sampler parity. Or switch to separate useful P0 scope on next B15 session.",
+  "updated_at": "2026-11-04T22:54:23.146Z"
 }
