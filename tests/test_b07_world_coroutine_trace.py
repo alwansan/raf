@@ -67,7 +67,7 @@ class B07WorldCoroutineTraceTests(unittest.TestCase):
             adapt(s)
 
     def test_ambiguous_declarations_rejected(self):
-        s = SOURCE + "\npublic class Extra { public IEnumerator WorldHasBeenLoaded() { yield return null; } }"
+        s = SOURCE + "\npublic class Extra {\n public IEnumerator WorldHasBeenLoaded() { yield return null; }\n}"
         # Original-method finder rejects ambiguity on its own, not via source pin.
         with self.assertRaisesRegex(ValueError, "one original"):
             adapt(s)
