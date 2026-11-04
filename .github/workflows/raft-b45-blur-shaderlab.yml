@@ -27,7 +27,7 @@ jobs:
             scripts
             tests
       - name: B45 bounded synthetic positive and rejection controls
-        run: python3 -m unittest tests.test_b45_blur_wrapper_preflight -v
+        run: python3 -m unittest discover -s tests -p 'test_b45_blur_wrapper_preflight.py' -v
       - name: Reuse independently authenticated ZIP2 source cache
         uses: actions/cache/restore@v4
         with:
