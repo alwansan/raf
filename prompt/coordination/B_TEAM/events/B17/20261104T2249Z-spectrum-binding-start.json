@@ -1,0 +1,13 @@
+{
+  "id": "B17-spectrum-binding-start-20261104T2249Z",
+  "owner": "B17",
+  "session_id": "20261104T2249Z-B17-cbind",
+  "issue_id": "WATER-001",
+  "type": "start",
+  "summary": "Resume B17 on source-authentic per-pass Spectrum compiled DXBC texture/sampler register parity; no prior census rerun, no gameplay/shader asset mutation.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41920232173",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/b09_stage_original_spectrum.py"
+  ],
+  "at": "2026-11-04T22:49:36Z"
+}
