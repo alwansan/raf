@@ -1,0 +1,9 @@
+# B10 — synthetic regression fixture literal-newline failure (closed)
+
+- Actor/session: B10 / `20261104T2132Z-B10-a6e1`; discovered 2026-11-04T21:35Z; closed 2026-11-04T21:38:37.770Z.
+- Impact: initial source-only CI returned FAILED on two newly added regression cases, **not** on a device, Unity export, original assets or main game build. No deployed game was affected.
+- Runs: [A3 failure 41917392549](https://github.com/alwansan/raf/actions/runs/41917392549), [B10 failure 41917440764](https://github.com/alwansan/raf/actions/runs/41917440764).
+- Root cause: Python fixtures in `tests/test_a3_vendor_shader_restore_transaction.py` mistakenly used a double-escaped literal `\\\\n` where the temporary YAML/text fixture required a newline escape `\\n`. Collision fixture's GUID was not recognized, and the retry fixture differed in content from its expected vendor include, so the negative tests correctly exposed erroneous test preparation.
+- Recovery: [fixture correction 1f76e243](https://github.com/alwansan/raf/commit/1f76e243c067b77a507a81e603f1ce90e5b68dc0) corrected five occurrences without weakening production checks or expected assertions. [B10 run 41917602226](https://github.com/alwansan/raf/actions/runs/41917602226) SUCCESS **22/22**, [A3 run 41917602139](https://github.com/alwansan/raf/actions/runs/41917602139) SUCCESS **9/9** in the transactional subset (and existing TMP, PostFX, volumetric regressions).
+- Rejected hypothesis: the two initial CI failures **do not** establish a production GUID collision bug or an idempotency bug in `restore_tmp_shaders.py`; they were caused by synthetically invalid test fixture contents. The new success is synthetic/source evidence only, not native Unity pixel proof.
+- Closed reason: same assertions passed in independent CI on the corrected immutable source commit.
