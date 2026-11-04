@@ -1,0 +1,13 @@
+{
+  "id": "B14-20261104T2251Z-scene-ci-result",
+  "owner": "B14",
+  "session_id": "20261104T2247Z-B14-d1a9",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "Fixed stale Android diagnostic source-policy test for instance SceneLoaded + delayed bounded shader/material/mesh snapshot; corrected first overbroad assertion; CI41928677980 SUCCESS. No game/runtime shader/device proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/9ba6990cbd30fe5f6fdc97c000b7cd24a57333e6",
+    "https://github.com/alwansan/raf/actions/runs/41928677980"
+  ],
+  "at": "2026-11-04T22:51:57.271Z"
+}
