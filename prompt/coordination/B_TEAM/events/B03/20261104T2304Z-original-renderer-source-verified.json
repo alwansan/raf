@@ -1,0 +1,15 @@
+{
+  "id": "B03-20261104T2304Z-original-renderer-source-verified",
+  "owner": "B03",
+  "session_id": "20261104T2243Z-B03-7c9e",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "SHA-authenticated original six scenes and three selected owner payloads; all 1635 non-null Renderer material slots map to original Material class objects (1609+26 across independent CI), 4 original null; real export/pixels still OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41928799663",
+    "https://github.com/alwansan/raf/actions/runs/41929367655",
+    "https://github.com/alwansan/raf/actions/runs/41930267873",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B03_ORIGINAL_RENDERER_MATERIALS_2026-11-04.md"
+  ],
+  "at": "2026-11-04T23:04:11.474Z"
+}
