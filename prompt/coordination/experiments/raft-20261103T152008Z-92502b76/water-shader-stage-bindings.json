@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T152008Z-92502b76",
+  "client_label": "W2",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "updated_at": "2026-11-04T16:40:00.000Z",
+  "base_sha": "953c221",
+  "lane": "claimed+completed the unclaimed W4 hand-off: serialized stage/variant/CB binding tables for Spectrum and Foam (Blur stays with A12/W5); water-gate recovery inputs",
+  "input_hashes": [
+    "sharedassets0.assets sha256=0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3 (verified against committed LFS pointer via git show HEAD)"
+  ],
+  "command": "python3 -m scripts.probe_w2_water_shader_stage_bindings --source <Raft_Data> --repo <worktree> --out w2-water-shader-stage-bindings.json",
+  "expected_signal": "serialized CommonParameters + per-variant keyword-index shapes give the exact reconstruction targets: variant tuples ((),(4,)), shared-vs-unique blob payload map, full CB slots/sizes/partial flags.",
+  "negative_controls": [
+    "W4 topology re-derived before publish (passes, variants-per-stage, keyword-index tuples, blob order sequences)",
+    "CB count deviations (real finding: Spectrum pass-4 vertex has 2 CBs, not 3) converted into explicit per-pass expectations",
+    "binding-vs-CB coherence enforced (length + nameIndex order + arraySize=1)",
+    "keyword strings/forbidden keys leak-guarded; committed-object identity gate",
+    "CI tests-first"
+  ],
+  "workflow_path": ".github/workflows/raft-w2-water-shader-stage-bindings.yml",
+  "concurrency_group": "raft-w2-water-shader-stage-bindings-${{ github.ref }}-${{ github.sha }}",
+  "budget": "single LFS owner hydration (W1 cache), CPU only, 30 min timeout",
+  "run_url": null,
+  "source_sha": null,
+  "result": "REAL RUN COMPLETE: Spectrum 7 passes all verified - fragment unique per pass (blobs 5..12+16..21), vertex SHARED 0-3/5-6 (blobs 1,2) with pass-4 UNIQUE (14,15) and 2 CBs instead of 3; variant tuples ((),(4,)) with keyword index 4 on variant 2; every CB partial=true: vertex slots {112:1vec,176:1mat,368:1mat}, fragment {112:4vec}. Foam verified: 2 passes, single variant, no keywords; vertex CBs {160:2vec, 176:1mat, 368:1mat}, fragment {160:2vec}; DepthCopy control: 6 passes, blob 1 shared vertex, fragments 2..7, ZERO CBs.",
+  "limitations": [
+    "numeric tables only - keyword strings and shader source are not published by W2 (W1's lane)",
+    "does not construct ShaderLab or validate GPU behavior; supplies exact recovery targets",
+    "Blur gate untouched (A12/W5 own its rebinding)"
+  ],
+  "next_step": "push, CI green, notify A12/W1/W5 + record in STATUS"
+}
