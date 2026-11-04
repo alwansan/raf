@@ -92,6 +92,69 @@ class SamplerFixture(unittest.TestCase):
         self.assertFalse(result["metadata_fields_faithful"])
         self.assertEqual(sum(result["field_mismatches"].values()), 0)
 
+    def test_unset_minus_100_mip_bias_is_unknown_not_proven_drift(self):
+        self.write_meta(mipBias=-100.0)
+        report = self.run_audit()
+        self.assertEqual(report["unresolved_importer_defaults"]["m_MipBias"], 1)
+        self.assertEqual(report["field_mismatches"]["m_MipBias"], 0)
+        self.assertFalse(report["metadata_fields_faithful"])
+        self.assertFalse(report["same_export_provenance_independently_verified"])
+
+    def test_non_sentinel_negative_mip_bias_remains_drift(self):
+        self.write_meta(mipBias=-0.5)
+        report = self.run_audit()
+        self.assertEqual(report["unresolved_importer_defaults"]["m_MipBias"], 0)
+        self.assertEqual(report["field_mismatches"]["m_MipBias"], 1)
+
+    def test_w1_companion_matching_instance_with_real_trace_schema(self):
+        texture = self.make_trace()
+        companion = {
+            "schema_version": 1, "export_instance": texture["export_instance"],
+            "objects": [
+                {"class_id": 21, "source": {"owner": self.owner, "path_id": 41},
+                 "exportable": True, "collection_type": "synthetic Material"},
+                {"class_id": 48, "source": {"owner": self.owner, "path_id": 42},
+                 "exportable": True, "collection_type": "synthetic Shader"},
+            ],
+        }
+        audit.validate_export_pair(texture, companion)
+        self.assertEqual(self.generate_from_trace(texture)["export_instance"], companion["export_instance"])
+
+    def test_w1_companion_different_export_instance_fails_closed(self):
+        texture = self.make_trace()
+        companion = {
+            "schema_version": 1, "export_instance": "2" * 32,
+            "objects": [{"class_id": 21, "source": {"owner": self.owner, "path_id": 41}}],
+        }
+        with self.assertRaisesRegex(ValueError, "different export instances"):
+            audit.validate_export_pair(texture, companion)
+        companion["export_instance"] = texture["export_instance"]
+        companion["objects"][0]["class_id"] = 28
+        with self.assertRaisesRegex(ValueError, "non-W1"):
+            audit.validate_export_pair(texture, companion)
+        companion["objects"][0]["class_id"] = 21
+        companion["objects"][0]["source"]["path_id"] = True
+        with self.assertRaisesRegex(ValueError, "malformed W1"):
+            audit.validate_export_pair(texture, companion)
+
+    def test_w1_companion_bad_schema_or_missing_objects_fails_closed(self):
+        texture = self.make_trace()
+        companion = {"schema_version": 0, "export_instance": texture["export_instance"], "objects": []}
+        with self.assertRaisesRegex(ValueError, "schemas"):
+            audit.validate_export_pair(texture, companion)
+        companion["schema_version"] = 1
+        with self.assertRaisesRegex(ValueError, "missing W1"):
+            audit.validate_export_pair(texture, companion)
+
+    def test_private_trace_file_symlink_refused(self):
+        target = self.root / "trace.json"
+        target.write_text(json.dumps(self.make_trace()), encoding="utf-8")
+        linked = self.root / "linked.json"
+        linked.symlink_to(target)
+        with self.assertRaisesRegex(ValueError, "linked"):
+            audit.read_private_trace(linked)
+        self.assertEqual(audit.read_private_trace(target)["schema_version"], 1)
+
     def test_source_bytes_tampering_rejected(self):
         (self.source / self.owner).write_bytes(self.raw[::-1])
         with self.assertRaisesRegex(ValueError, "SHA256"):
