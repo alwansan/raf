@@ -40,7 +40,7 @@ def manifest_provider_basename_counts(manifest: Path) -> Counter:
             if None in row or any(x is None for x in row.values()):
                 raise SourceError("malformed_original_manifest_entry")
             path = row["relative_path_under_Raft"]
-            if ("\\\" in path or not path.startswith("Raft_Data/") or
+            if ("\\" in path or not path.startswith("Raft_Data/") or
                 any(x in ("", ".", "..") for x in path.split("/"))):
                 # Root executable and non-data entries can exist; only Raft_Data
                 # members are candidates. Unsafe Raft_Data paths are never used.
