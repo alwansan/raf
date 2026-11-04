@@ -354,54 +354,132 @@ namespace RaftAndroid.Platform
             if (!scene.isLoaded) yield break;
             try
             {
+                // Cap traversal work BEFORE collecting renderers. An entire Raft
+                // hierarchy can have far more than 512 components; creating a
+                // root.GetComponentsInChildren<Renderer>(true) array first was
+                // not memory-bounded even when the result loop was truncated.
+                const int RootLimit = 1024;
+                const int TransformLimit = 4096;
+                const int PendingLimit = 1024;
                 const int RendererLimit = 512;
-                int sampled = 0, empty = 0, slots = 0, nullMaterials = 0, nullShaders = 0;
-                int unsupported = 0, zeroPass = 0, errorShaders = 0;
-                int meshRenderers = 0, missingMeshFilters = 0, missingMeshAssets = 0;
+                const int MaterialLimit = 4096;
+                int rootCount = scene.rootCount;
+                int visitedTransforms = 0, sampled = 0, empty = 0, slots = 0;
+                int nullMaterials = 0, nullShaders = 0, unsupported = 0;
+                int zeroPass = 0, errorShaders = 0, meshRenderers = 0;
+                int missingMeshFilters = 0, missingMeshAssets = 0;
                 int skinnedRenderers = 0, missingSkinnedMeshes = 0;
                 bool truncated = false;
-                foreach (GameObject root in scene.GetRootGameObjects())
+                string limitReason = "none";
+                if (rootCount > RootLimit)
                 {
-                    if (!root) continue;
-                    foreach (Renderer renderer in root.GetComponentsInChildren<Renderer>(true))
+                    // Do not fetch an unbounded scene root array merely to
+                    // sample a small subset; report an explicitly partial scan.
+                    truncated = true;
+                    limitReason = "root_limit";
+                }
+                else
+                {
+                    var roots = new List<GameObject>(rootCount);
+                    scene.GetRootGameObjects(roots);
+                    var pending = new Transform[PendingLimit];
+                    var renderers = new List<Renderer>(4);
+                    foreach (GameObject root in roots)
                     {
-                        if (!renderer || !renderer.enabled || !renderer.gameObject.activeInHierarchy) continue;
-                        if (sampled >= RendererLimit) { truncated = true; break; }
-                        sampled++;
-                        // Shared mesh references only; no mesh.vertex/triangle readback,
-                        // no instantiation of meshes and no geometry changes.
-                        MeshRenderer meshRenderer = renderer as MeshRenderer;
-                        if (meshRenderer != null)
+                        if (!root || !root.activeInHierarchy) continue;
+                        int pendingCount = 0;
+                        pending[pendingCount++] = root.transform;
+                        while (pendingCount > 0)
                         {
-                            meshRenderers++;
-                            MeshFilter filter = meshRenderer.GetComponent<MeshFilter>();
-                            if (!filter) missingMeshFilters++;
-                            else if (!filter.sharedMesh) missingMeshAssets++;
+                            Transform current = pending[--pendingCount];
+                            pending[pendingCount] = null;
+                            if (!current || !current.gameObject.activeInHierarchy) continue;
+                            if (visitedTransforms >= TransformLimit)
+                            {
+                                truncated = true;
+                                limitReason = "transform_limit";
+                                break;
+                            }
+                            visitedTransforms++;
+                            // Unity's list overload reuses this collection;
+                            // do not call GetComponentsInChildren on whole roots.
+                            renderers.Clear();
+                            current.GetComponents<Renderer>(renderers);
+                            foreach (Renderer renderer in renderers)
+                            {
+                                if (!renderer || !renderer.enabled ||
+                                    !renderer.gameObject.activeInHierarchy) continue;
+                                if (sampled >= RendererLimit)
+                                {
+                                    truncated = true;
+                                    limitReason = "renderer_limit";
+                                    break;
+                                }
+                                sampled++;
+                                MeshRenderer meshRenderer = renderer as MeshRenderer;
+                                if (meshRenderer != null)
+                                {
+                                    meshRenderers++;
+                                    MeshFilter filter = meshRenderer.GetComponent<MeshFilter>();
+                                    if (!filter) missingMeshFilters++;
+                                    else if (!filter.sharedMesh) missingMeshAssets++;
+                                }
+                                SkinnedMeshRenderer skinnedRenderer = renderer as SkinnedMeshRenderer;
+                                if (skinnedRenderer != null)
+                                {
+                                    skinnedRenderers++;
+                                    if (!skinnedRenderer.sharedMesh) missingSkinnedMeshes++;
+                                }
+                                // No material/mesh instance or geometry readback.
+                                Material[] materials = renderer.sharedMaterials;
+                                if (materials == null || materials.Length == 0)
+                                {
+                                    empty++;
+                                    continue;
+                                }
+                                foreach (Material material in materials)
+                                {
+                                    if (slots >= MaterialLimit)
+                                    {
+                                        truncated = true;
+                                        limitReason = "material_limit";
+                                        break;
+                                    }
+                                    slots++;
+                                    if (!material) { nullMaterials++; continue; }
+                                    Shader shader = material.shader;
+                                    if (!shader) { nullShaders++; continue; }
+                                    if (!shader.isSupported) unsupported++;
+                                    if (material.passCount == 0) zeroPass++;
+                                    if (shader.name == "Hidden/InternalErrorShader") errorShaders++;
+                                }
+                                if (truncated) break;
+                            }
+                            if (truncated) break;
+                            // Explicit fixed-size stack also prevents allocation
+                            // growth in extremely wide hierarchies.
+                            for (int child = current.childCount - 1; child >= 0; child--)
+                            {
+                                if (pendingCount >= PendingLimit)
+                                {
+                                    truncated = true;
+                                    limitReason = "pending_limit";
+                                    break;
+                                }
+                                pending[pendingCount++] = current.GetChild(child);
+                            }
+                            if (truncated) break;
                         }
-                        SkinnedMeshRenderer skinnedRenderer = renderer as SkinnedMeshRenderer;
-                        if (skinnedRenderer != null)
-                        {
-                            skinnedRenderers++;
-                            if (!skinnedRenderer.sharedMesh) missingSkinnedMeshes++;
-                        }
-                        Material[] materials = renderer.sharedMaterials;
-                        if (materials == null || materials.Length == 0) { empty++; continue; }
-                        foreach (Material material in materials)
-                        {
-                            slots++;
-                            if (!material) { nullMaterials++; continue; }
-                            Shader shader = material.shader;
-                            if (!shader) { nullShaders++; continue; }
-                            if (!shader.isSupported) unsupported++;
-                            if (material.passCount == 0) zeroPass++;
-                            if (shader.name == "Hidden/InternalErrorShader") errorShaders++;
-                        }
+                        if (truncated) break;
                     }
-                    if (truncated) break;
                 }
                 RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("render", "scene_shader_snapshot",
-                    "scene=" + scene.name + "; delay_seconds=3; renderer_limit=" + RendererLimit +
+                    "scene=" + scene.name + "; delay_seconds=3; root_count=" + rootCount +
+                    "; root_limit=" + RootLimit + "; visited_transforms=" + visitedTransforms +
+                    "; transform_limit=" + TransformLimit + "; pending_limit=" + PendingLimit +
+                    "; renderer_limit=" + RendererLimit + "; material_limit=" + MaterialLimit +
                     "; visible_renderers_sampled=" + sampled + "; truncated=" + truncated +
+                    "; limit_reason=" + limitReason +
                     "; empty_material_renderers=" + empty + "; material_slots=" + slots +
                     "; null_materials=" + nullMaterials + "; null_shaders=" + nullShaders +
                     "; unsupported_shaders=" + unsupported + "; zero_pass_materials=" + zeroPass +
@@ -409,7 +487,6 @@ namespace RaftAndroid.Platform
                     "; mesh_renderers=" + meshRenderers + "; missing_mesh_filters=" + missingMeshFilters +
                     "; missing_mesh_assets=" + missingMeshAssets +
                     "; skinned_renderers=" + skinnedRenderers + "; missing_skinned_meshes=" + missingSkinnedMeshes +
-                    OriginalQualityStateSnapshot() +
                     "; color_space=" + QualitySettings.activeColorSpace +
                     "; ambient_mode=" + RenderSettings.ambientMode + "; fog=" + RenderSettings.fog +
                     "; skybox_assigned=" + (RenderSettings.skybox != null) +
