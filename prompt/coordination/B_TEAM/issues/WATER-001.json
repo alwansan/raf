@@ -6,18 +6,21 @@
   "track": "water-fft",
   "evidence": [
     "https://github.com/alwansan/CL/blob/5394407b5cd0a0ca1848ff0902f8d2133bf6ea29/raft%20log/lf/LogRaft-20261104-225757-156/session-summary.json",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/W4_BUILTIN_GATE_AND_WATER_FRONTIER_2026-11-04.md"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/W4_BUILTIN_GATE_AND_WATER_FRONTIER_2026-11-04.md",
+    "https://github.com/alwansan/raf/commit/50702470954774ba96fe27509f1f9eddfd1aa4ea",
+    "https://github.com/alwansan/raf/actions/runs/41911824567"
   ],
   "remaining": [
     "Spectrum/Foam/Blur passes ناقصة في APK86",
     "kernelIndex6 مع kernelCount0",
-    "ربط kernels/resources/original programs وUnity/Adreno"
+    "ربط kernels/resources/original programs وUnity/Adreno",
+    "B49 original ShaderLab pass structural gate fixed/11 synthetic tests pass; real original Spectrum/Foam/Blur programs and compute kernels still unverified and APK86 unchanged"
   ],
   "acceptance": [
     "هوية برامج ونوى أصلية أو تطابق موثق دونdummy",
     "تثبيت فيالتصدير+Unity import/render",
     "اختبار هاتف يثبت الماء بلا pass/kernel errors"
   ],
-  "updated_by": "owner-team-bootstrap",
-  "updated_at": "2026-11-04"
+  "updated_by": "B49",
+  "updated_at": "2026-11-04T21:02:00Z"
 }
