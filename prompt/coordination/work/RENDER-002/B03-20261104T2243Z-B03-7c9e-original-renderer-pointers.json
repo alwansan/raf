@@ -6,7 +6,7 @@
   "issue_id": "RENDER-002",
   "track": "colors-materials",
   "approach": "Read original Unity serialized Renderer.m_Materials PPtrs from six exact-SHA ZIP2 scene files using UnityPy, classify local Material targets vs external source transport and nulls with immutable aggregate edge commitment; integrate source evidence with prior B03 exported YAML guard without guessing links. Phase 2: verify real six-scene Renderer Material targets against two SHA-pinned original split ZIP2 owner files, preserving unknown external owner destinations.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "fc50a7d065a865d99d580c726b5807e25f09965b",
   "intended_files": [
     "scripts/b03_original_renderer_materials.py",
@@ -33,28 +33,29 @@
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41928128357",
     "https://github.com/alwansan/raf/actions/runs/41928799663",
-    "https://github.com/alwansan/raf/actions/runs/41929367655"
+    "https://github.com/alwansan/raf/actions/runs/41929367655",
+    "https://github.com/alwansan/raf/actions/runs/41930267873"
   ],
   "result": {
-    "phase1": {
-      "original_sha_verified": true,
-      "scenes": 6,
-      "renderer_objects": 1495,
-      "material_slots": 1639,
-      "external_slots": 1635,
-      "null_slots": 4,
-      "external_owner_names_declared_in_zip2_manifest": 1635,
-      "external_owner_payload_bytes_verified": false,
-      "ci": "https://github.com/alwansan/raf/actions/runs/41928799663"
-    },
-    "phase2": {
-      "selected_original_owners_sha256_verified": 2,
-      "external_staged_material_objects": 1609,
-      "other_external_original_provider_unverified": 26,
-      "original_null_slots": 4,
-      "ci": "https://github.com/alwansan/raf/actions/runs/41929367655"
-    }
+    "six_scene_original_source_sha_pinned": true,
+    "original_renderers": 1495,
+    "original_material_slots": 1639,
+    "external_original_material_targets_verified": 1635,
+    "null_slots_from_original": 4,
+    "original_owner_files_sha_verified": 3,
+    "CI_six_scenes": "https://github.com/alwansan/raf/actions/runs/41928799663",
+    "CI_selected_two_owners": "https://github.com/alwansan/raf/actions/runs/41929367655",
+    "CI_remaining_owner": "https://github.com/alwansan/raf/actions/runs/41930267873",
+    "source_graph_scope_closed": true,
+    "original_to_export_parity_verified": false,
+    "water_shader_or_device_colors_fixed": false,
+    "related_files": [
+      "scripts/b03_original_renderer_materials.py",
+      "scripts/b03_original_renderer_target_resolution.py",
+      "scripts/b03_remaining_renderer_material_owners.py",
+      "docs/B03_ORIGINAL_RENDERER_MATERIALS_2026-11-04.md"
+    ]
   },
-  "next_step": "Dynamically select and authenticate only the remaining original external provider(s) referenced by 26 level1 slots; SHA-check exact ZIP2 bytes, verify Material object classes, do not re-fetch the two already proven owners.",
-  "updated_at": "2026-11-04T22:58:16.910Z"
+  "next_step": "B03 original six-scene source graph scope completed; next investigate same-instance export mapping for Renderer->Material PPtrs and stage actual export to run existing exported YAML guard. RENDER-002 remains OPEN/NOT_READY 0/3; avoid repeating source owners already verified.",
+  "updated_at": "2026-11-04T23:05:13.499Z"
 }
