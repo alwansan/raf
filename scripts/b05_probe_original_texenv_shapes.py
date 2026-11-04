@@ -11,12 +11,11 @@ from collections import Counter
 import json
 from pathlib import Path
 
-from scripts.b05_verify_material_texenv_bindings import normalize_texenvs
+from scripts.b05_verify_material_texenv_bindings import normalize_texenvs, B05_SMALL_OWNER_PINS
 from scripts.w1_stage_zip2_owners import fingerprint
 
 OWNER = "sharedassets6.assets"
-OWNER_BYTES = 6607272
-OWNER_SHA256 = "0476792cfeffac19d16e920011ed8d2fb2da62973c2f09a8689bc59e1ac4b632"
+OWNER_BYTES, OWNER_SHA256 = B05_SMALL_OWNER_PINS[OWNER]
 
 
 def classify_original(material_records: list) -> dict:
