@@ -31,7 +31,11 @@ def main(root):
   (p/"Program.cs").write_text(stubs.replace("METHOD_PLACEHOLDER",method))
   # Compiler output may include source context on failures: retain privately.
   result=subprocess.run(["dotnet","run","--project",str(p/"test.csproj"),"-c","Release"],capture_output=True,text=True)
-  if result.returncode:raise ValueError("private original CSharp compile/execution failed")
+  if result.returncode:
+   import re,json
+   output=result.stdout+result.stderr
+   print("RAFT_BLUR_CPU_FAILURE "+json.dumps({"compiler_codes":sorted(set(re.findall(r"CS[0-9]{4}",output))),"known_API_tokens":[x for x in ["Texture","RenderTexture","Graphics","Vector4","ShaderVariables","Material","FilterMode","Mathf","Color","RenderTextureFormat"] if x in output],"synthetic_assertions":[x for x in ["exception propagation","cleanup count","restore filter","original iteration order"] if x in output]}))
+   raise ValueError("private original CSharp compile/execution failed")
   if "cases=14 passed" not in result.stdout:raise ValueError("missing actual execution evidence")
   print("RAFT_ORIGINAL_BLUR_CLEANUP source_verified=true original_method_executed=true cases=14 original_loop_draws=4 CPU_stubs_only=true")
 if __name__=="__main__":
