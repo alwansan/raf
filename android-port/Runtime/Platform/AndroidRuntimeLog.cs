@@ -51,15 +51,63 @@ namespace RaftAndroid.Diagnostics
         // Original GpuFFT uses RGHalf/RGFloat/ARGBHalf/ARGBFloat targets. Report
         // only Unity's queried capability flags; never allocate a RenderTexture,
         // change a fallback format, or infer a working shader from these values.
+        // MaxComputeWorkGroupSize is local-group INVOCATIONS. The X/Y/Z values
+        // are max DISPATCH GROUP COUNTS on Unity 2021, not local [numthreads]
+        // dimensions (see Unity 2021.3 SystemInfo API). Never interchange them.
+        private static int? QueryPositiveLimit(Func<int> query)
+        {
+            try
+            {
+                int value = query();
+                return value > 0 ? (int?)value : null;
+            }
+            catch (Exception) { return null; }
+        }
+
+        private static string ReportLimit(int? value)
+        {
+            return value.HasValue
+                ? value.Value.ToString(System.Globalization.CultureInfo.InvariantCulture)
+                : "unavailable";
+        }
+
+        // Original SHA-authenticated FFT compiled slots (B48 source+serial proof)
+        // request local group sizes 64,128,256,512,1024 with Y=Z=1 at
+        // resolutions 32,64,128,256,512. They are COMPILED candidates, not
+        // proven Unity FindKernel IDs or active settings on this device.
         private static void ReportFftDeviceCapabilities()
         {
+            bool? supportsCompute = null;
+            try { supportsCompute = SystemInfo.supportsComputeShaders; }
+            catch (Exception) { }
+            int? maxLocalInvocations = QueryPositiveLimit(() => SystemInfo.maxComputeWorkGroupSize);
+            int? maxDispatchX = QueryPositiveLimit(() => SystemInfo.maxComputeWorkGroupSizeX);
+            int? maxDispatchY = QueryPositiveLimit(() => SystemInfo.maxComputeWorkGroupSizeY);
+            int? maxDispatchZ = QueryPositiveLimit(() => SystemInfo.maxComputeWorkGroupSizeZ);
             Write("water", "fft_device_compute_limits",
-                "supports_compute=" + SystemInfo.supportsComputeShaders +
-                "; max_group_invocations=" + SystemInfo.maxComputeWorkGroupSize +
-                "; max_group_x=" + SystemInfo.maxComputeWorkGroupSizeX +
-                "; max_group_y=" + SystemInfo.maxComputeWorkGroupSizeY +
-                "; max_group_z=" + SystemInfo.maxComputeWorkGroupSizeZ +
-                "; unity_compute_kernel_identity=unverified", true);
+                "supports_compute=" + (supportsCompute.HasValue ? supportsCompute.ToString() : "unavailable") +
+                "; max_group_invocations=" + ReportLimit(maxLocalInvocations) +
+                "; max_dispatch_groups_x=" + ReportLimit(maxDispatchX) +
+                "; max_dispatch_groups_y=" + ReportLimit(maxDispatchY) +
+                "; max_dispatch_groups_z=" + ReportLimit(maxDispatchZ) +
+                "; reported_max_is_theoretical=true" +
+                "; original_runtime_kernel_mapping=unverified", true);
+
+            int[] originalFftLocalGroupX = { 64, 128, 256, 512, 1024 };
+            foreach (int groupX in originalFftLocalGroupX)
+            {
+                string assessment = !maxLocalInvocations.HasValue ? "unavailable" :
+                    groupX > maxLocalInvocations.Value ? "exceeds_reported_theoretical_invocation_limit" :
+                    "within_reported_theoretical_invocation_limit";
+                Write("water", "fft_original_compiled_group_limit",
+                    "original_source_resolution=" + (groupX / 2) +
+                    "; compiled_local_group_x=" + groupX +
+                    "; compiled_local_group_y=1; compiled_local_group_z=1" +
+                    "; theoretical_invocation_assessment=" + assessment +
+                    "; actual_unity_kernel_mapping=unverified" +
+                    "; actual_fft_dispatch=unverified", true);
+            }
+
             RenderTextureFormat[] formats = {
                 RenderTextureFormat.RGHalf,
                 RenderTextureFormat.RGFloat,
