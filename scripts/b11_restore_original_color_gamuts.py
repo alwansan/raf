@@ -50,8 +50,14 @@ def patch_gamut_bytes(before: bytes) -> tuple[bytes, str]:
     result = replaced.encode("utf-8")
     if len(result) != len(before):
         raise ValueError("Gamut edit changed file size")
-    change_at = set(range(m.start(2), m.end(2)))
-    if any(a != b and i not in change_at for i, (a, b) in enumerate(zip(before, result))):
+    # Regex spans are Python Unicode character offsets, not UTF-8 byte
+    # offsets. A non-ASCII ProjectSettings field before m_ColorGamuts must
+    # never cause an unrelated-byte false positive (or widen the edit scope).
+    byte_start = len(source[:m.start(2)].encode("utf-8"))
+    byte_end = byte_start + len(current)  # The matched gamut is ASCII hex.
+    if (before[:byte_start] != result[:byte_start]
+            or before[byte_end:] != result[byte_end:]
+            or result[byte_start:byte_end] != EXPECTED_GAMUT.encode("ascii")):
         raise ValueError("Gamut edit changed unrelated ProjectSettings bytes")
     return result, current
 
