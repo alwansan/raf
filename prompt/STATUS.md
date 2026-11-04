@@ -1,3 +1,9 @@
+## B08 — executable image-use proof for 20 original FFT programs (2026-11-04)
+
+Expanded [B08 original-data CI41929513820](https://github.com/alwansan/raf/actions/runs/41929513820) **COMPLETED SUCCESS** on source `ac98030e51148a6a1b7e2203d9d8bdc2f327704f`, with **20/20 synthetic controls** and pinned ZIP2 original `ComputeShader` 20/20 compiled programs. Beyond the prior numeric SPIR-V descriptor ABI proof, all20 real translated programs have executable read uses of both sampled Texture2D descriptor candidates `set0/binding0`, `set0/binding1` and executable write uses of the storage image `set0/binding2`; all supported inspected image operands uniquely trace to declared numeric bindings. [B08 verified handoff](../docs/B08_FFT_DESCRIPTOR_ABI_2026-11-04.md). Tests reject unused declared image, missing write, unresolvable SSA alias, sampled use of storage or false identity claim. Prior [ABI-only CI41928583281](https://github.com/alwansan/raf/actions/runs/41928583281) also remains independently green.
+
+Not shader/data integration or device proof: exact DXBC `t0` versus `t1` source-register to SPIR-V sampled binding correspondence, native Unity runtime `FindKernel` indices and authentic Android `.compute` program installation remain **unverified**. No original shader/asset/GUID, .rgd, audio/Settings/touch, protected branch, native build request or release changed. WATER-001 still **OPEN**, game **NOT_READY 0/3**; next independent source operand/image semantic correlation and Unity/Adreno validation after true program staging.
+
 <!-- B09 SEVEN PASS SPECTRUM 20261104T2252Z -->
 ## B09 — seven-pass original Spectrum and private Vulkan pipeline (4 November 2026)
 
