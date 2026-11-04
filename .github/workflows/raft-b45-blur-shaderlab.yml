@@ -1,0 +1,75 @@
+name: B45 WATER-001 original Blur ShaderLab state proof (CPU only)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-b45-blur-shaderlab.yml'
+      - 'scripts/b45_blur_wrapper_preflight.py'
+      - 'tests/test_b45_blur_wrapper_preflight.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raft-b45-water001-blur-shaderlab-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: B45 bounded synthetic positive and rejection controls
+        run: python3 -m unittest tests.test_b45_blur_wrapper_preflight -v
+      - name: Reuse independently authenticated ZIP2 source cache
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ runner.temp }}/w1-original
+          key: w1-zip2-15964ea8-shader-and-engine-owners-v1
+          restore-keys: |
+            w1-zip2-15964ea8-full-shader-owners-v1
+      - name: Select only missing SHA-pinned original provider paths
+        id: needed
+        run: |
+          python3 - <<'PY'
+          import os, shutil
+          from pathlib import Path
+          from scripts.w1_full_engine_sources import acquisition_plan
+          assert shutil.disk_usage('.').free > 3*1024**3
+          paths, missing = acquisition_plan(Path(os.environ['RUNNER_TEMP'])/'w1-original')
+          with open(os.environ['GITHUB_OUTPUT'],'a') as f:
+              f.write('paths<<B45_ORIGINAL\n'+'\n'.join(paths)+'\nB45_ORIGINAL\n')
+          print('RAFT_B45_ORIGINAL missing='+str(missing))
+          PY
+      - uses: actions/checkout@v4
+        with:
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-original
+          filter: blob:none
+          lfs: false
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: ${{ steps.needed.outputs.paths }}
+      - name: Verify only source owners by pinned SHA without LFS
+        run: python3 -m scripts.w1_full_engine_sources --zip2-checkout zip2-original --destination "$RUNNER_TEMP/w1-original"
+      - name: Install pinned source decoder only
+        run: python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+      - name: Diagnose original pass state without emitting shader source
+        run: |
+          mkdir -p "$RUNNER_TEMP/b45"
+          python3 -m scripts.b45_blur_wrapper_preflight --source "$RUNNER_TEMP/w1-original/Raft_Data" --repo . --out "$RUNNER_TEMP/b45/blur-state.json"
+      - name: Publish aggregate-only classification
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: b45-water001-blur-state-${{ github.sha }}
+          path: ${{ runner.temp }}/b45/blur-state.json
+          if-no-files-found: ignore
+          retention-days: 7
