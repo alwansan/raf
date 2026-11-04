@@ -110,7 +110,9 @@ def main():
     p.add_argument("--source",required=True,type=Path)
     try: report=inspect(p.parse_args().source)
     except (ValueError,KeyError,TypeError,OSError) as e:
-        print("RAFT_B30_FFT_VARIANTMAP "+json.dumps({"status":"REJECTED","reason":type(e).__name__,"runtime_findkernel_id_to_compiled_slot_verified":False},sort_keys=True))
+        safe_reasons={"Original variantMap cardinality drift","Invalid variantMap tuple","Invalid variantMap header or fields","Invalid original keyword bundle","Invalid original keyword element","Duplicate original keywords","Invalid private name","Invalid private field key","Ambiguous original typed workgroup or DXBC","Original compiled workgroup order drift","Original one-name alias drift","Original variant sets drift","Original compiled slot count drift","Original asset SHA verification absent","Original FFT ComputeShader identity absent","Original ComputeShader object SHA changed","Original DXBC compiled order not authenticated"}
+        reason=str(e) if str(e) in safe_reasons else "unclassified_authenticity_or_structure"
+        print("RAFT_B30_FFT_VARIANTMAP "+json.dumps({"status":"REJECTED","reason":reason,"runtime_findkernel_id_to_compiled_slot_verified":False},sort_keys=True))
         return 2
     print("RAFT_B30_FFT_VARIANTMAP "+json.dumps(report,sort_keys=True))
     return 0
