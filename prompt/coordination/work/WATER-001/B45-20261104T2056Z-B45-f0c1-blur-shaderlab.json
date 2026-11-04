@@ -11,7 +11,14 @@
   "intended_files": [
     "scripts/b45_blur_wrapper_preflight.py",
     "tests/test_b45_blur_wrapper_preflight.py",
-    ".github/workflows/raft-b45-blur-shaderlab.yml"
+    ".github/workflows/raft-b45-blur-shaderlab.yml",
+    "scripts/b45_blur_properties.py",
+    "scripts/b45_install_original_blur.py",
+    "scripts/b45_stage_original_blur.py",
+    ".github/workflows/raft-unity-editor-android-import.yml",
+    "tests/test_b45_blur_properties.py",
+    "tests/test_b45_install_original_blur.py",
+    "tests/test_b45_stage_original_blur.py"
   ],
   "hypothesis": "Original W5 41821419074 passes both-pass numerical raster but fails in wrapper due to unsupported serialized ShaderLab state; a bounded exact-source preflight will identify fail stage without exposing game source.",
   "related_work": [
@@ -20,8 +27,25 @@
   "experiment_ids": [
     "B45-20261104-blur-wrapper"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement and test safe original ShaderLab preflight, dispatch isolated CI, then repair identified cause",
-  "updated_at": "2026-11-04T20:56:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41913062003",
+    "https://github.com/alwansan/raf/actions/runs/41913273839",
+    "https://github.com/alwansan/raf/actions/runs/41914193733",
+    "https://github.com/alwansan/raf/actions/runs/41914205988"
+  ],
+  "result": {
+    "status": "SOURCE_CPU_VULKAN_VERIFIED_NATIVE_WIRING_UNEXECUTED",
+    "passes": 2,
+    "cpu_seed_comparisons": 6,
+    "zero_error_color_depth": true,
+    "negative_mutation_controls_passed": 12,
+    "shaderlab_sha256": "5886dc362fc1a4a237aa05f6b4244ec30af4daad4089edea008f95d760945e14",
+    "source_property_type": 4,
+    "original_property_count": 1,
+    "private_shader_released": false,
+    "unity_or_phone_verified": false,
+    "original_export_metadata_changed": false
+  },
+  "next_step": "Check B45 private staging 41914205988, then original exported target/.meta and Unity shader compilation in an explicitly gated run; do not claim integrated device without proof.",
+  "updated_at": "2026-11-04T21:16:00Z"
 }
