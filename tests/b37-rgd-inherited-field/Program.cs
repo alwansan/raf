@@ -208,6 +208,11 @@ try
 }
 catch (Exception e)
 {
-    Console.Error.WriteLine("B37_ORIGINAL_RGD_INHERITED_FIELDS_FAILED " + e.GetType().Name);
+    var frames = new System.Diagnostics.StackTrace(e, fNeedFileInfo: true).GetFrames();
+    var ownLines = frames == null ? Array.Empty<int>() : frames
+        .Where(f => f.GetFileName()?.Replace('\\', '/').EndsWith("/tests/b37-rgd-inherited-field/Program.cs", StringComparison.Ordinal) == true)
+        .Select(f => f.GetFileLineNumber()).Where(n => n > 0).ToArray();
+    Console.Error.WriteLine("B37_ORIGINAL_RGD_INHERITED_FIELDS_FAILED kind=" + e.GetType().Name +
+        " authoredCodeLines=" + string.Join(",", ownLines));
     return 1;
 }
