@@ -1,0 +1,36 @@
+{
+  "id": "B20-FOAM-ORIGINAL-PRIVATE-PACKET-20261104",
+  "title": "B20 original Foam/Global two-pass 4-stage private integration packet and numeric CBuffer descriptor evidence",
+  "kind": "water-original-shader-private-packet-and-CB-descriptor-provenance",
+  "source": {
+    "provider": "ZIP2 immutable SHA-pinned no LFS",
+    "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "path": "Raft/Raft_Data/sharedassets0.assets",
+    "bytes": 115978112,
+    "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "original_shader_object_path_id": 2420,
+    "original_shader_object_sha256": "67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1"
+  },
+  "stages": {
+    "acquisition": "SHA_PINNED_ORIGINAL_ZIP2_OWNER_VERIFIED_NO_LFS",
+    "extraction": "ORIGINAL_FOUR_STAGE_TWO_PASS_DXBC_AND_RENDER_STATE_VERIFIED",
+    "reconstruction": "ALL_FOUR_HLSL_SPIRV_ROUNDTRIPS_AND_TWO_247B_RENDER_STATES_STAGED_PRIVATE",
+    "binding": "HLSL_AND_SPIRV_NUMERIC_CB_SLOTS_MATCH_ORIGINAL;_7_OF_8_REFLECTED_BLOCK_SIZES_DIFFER;_ORIGINAL_CB0_ALIAS_NOT_VERIFIED",
+    "integration": "SOURCE_TO_PRIVATE_PACKET_TOOL_AND_CI_PASS;_NO_SHADERLAB_INSTALL_OR_GAME_PROJECT_CHANGE",
+    "device": "NOT_TESTED"
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41930578292",
+    "https://github.com/alwansan/raf/actions/runs/41931585626",
+    "https://github.com/alwansan/raf/actions/runs/41932300308",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B20_FOAM_PRIVATE_PACKET_2026-11-04.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B20_FOAM_CB_DESCRIPTOR_SIZE_2026-11-04.md"
+  ],
+  "remaining": [
+    "Original serialized typed partial CB member offsets/types vs SPIRV reflected UBO member layout parity, especially CB0 opaque source compiler symbol",
+    "HLSL/ShaderLab original alias and Unity material property/texture/sampler bindings",
+    "Actual two-pass ShaderLab compile and Android Adreno water pixels, no dummy flags"
+  ],
+  "updated_by": "B20",
+  "updated_at": "2026-11-04T23:17:26.009Z"
+}
