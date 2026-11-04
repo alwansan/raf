@@ -4,17 +4,20 @@
   "generation": "B-2026-11-04",
   "session_id": "20261104T2140Z-B30-7c29",
   "resumed_from_session": null,
-  "status": "active",
+  "status": "completed",
   "base_sha": "8dc31d35cee3d03465f721acdf88a0dd87663368",
-  "last_commit": null,
-  "updated_at": "2026-11-04T21:40:00Z",
+  "last_commit": "b3c59194da362e1b30e27e55c87588a5481b1581",
+  "updated_at": "2026-11-04T21:58:00Z",
   "tracks": [
     "water-fft"
   ],
   "work_ids": [
     "B30-20261104T2140Z-B30-7c29-fft-variantmap-routing"
   ],
-  "run_urls": [],
-  "next_step": "Authenticate original FFT variantMap selector and keyword profiles across 20 compiled candidates; implement bounded tests and isolated CI; never assert runtime Unity IDs.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41920289281",
+    "https://github.com/alwansan/raf/actions/runs/41920323250"
+  ],
+  "next_step": "B30 scoped original FFT header/keyword selector investigation completed: authenticated 20/20 collisions reject discriminator-router hypothesis. Follow up with separate original Unity runtime-specialization mapping; WATER-001 OPEN, no authored .compute/device proof.",
   "memory_path": "prompt/coordination/clients/B30/MEMORY.md"
 }
