@@ -36,7 +36,7 @@ final class ErrorCategorySummary {
                 "java_fatal_exception",
                 "native_fatal_signal",
                 "java_out_of_memory",
-                "graphics_context_lost"
+                "graphics_context_lost", "fmod_initialization_failed", "fmod_event_not_found"
         }) groups.put(name,new Group());
     }
     void reset(){
@@ -61,6 +61,10 @@ final class ErrorCategorySummary {
                 line.contains("FileNotFoundException")){
             category=line.contains("Haptics")?"haptics_asset_path_not_found":
                     "other_file_path_missing";
+        }else if(line.contains("[FMOD] Initialization failed") || line.contains("SystemNotInitializedException")){
+            category="fmod_initialization_failed";
+        }else if(line.contains("EventNotFoundException") || (line.contains("FMOD") && line.contains("Event not found"))){
+            category="fmod_event_not_found";
         }else if(line.contains("FATAL EXCEPTION")){
             category="java_fatal_exception";
         }else if(line.contains("Fatal signal") || line.contains("SIGSEGV") ||
