@@ -9,11 +9,14 @@
     "https://github.com/alwansan/CL/blob/5394407b5cd0a0ca1848ff0902f8d2133bf6ea29/raft%20log/lf/LogRaft-20261104-225757-156/session-summary.json",
     "https://github.com/alwansan/raf/commit/c06acd1da46e729a42f8b9bbf2f280a3b05921cc",
     "https://github.com/alwansan/raf/actions/runs/41909535306",
-    "https://github.com/alwansan/raf/actions/runs/41909535307"
+    "https://github.com/alwansan/raf/actions/runs/41909535307",
+    "https://github.com/alwansan/raf/actions/runs/41911354402",
+    "https://github.com/alwansan/raf/commit/2bb6c2bd0f14553ac002ff7b98cc2d83b8d53c72",
+    "https://github.com/alwansan/raf/actions/runs/41911949540"
   ],
   "remaining": [
+    "Original Cheat.AllowCheatsForLocalPlayer SteamUser.GetSteamID direct object call now source-guarded in B50 2bb6c2; no native/phone verification. Do not infer all Steam callbacks are removed.",
     "APK86 SaveGame -> steam_api64 StoreStats failure is source-guarded in B50 commit c06acd1, not yet retested in a native APK/device; preserve original .rgd and verify create/save/reload on newer build",
-    "راجع Cheat.AllowCheatsForLocalPlayer ومسارات Steam المتبقية",
     "تتبع OnWorldRecieved والتحميل والحفظ واللاعب دون أعلام نجاح وهمية"
   ],
   "acceptance": [
@@ -22,5 +25,5 @@
     "لا يكفي إخفاء رسالة الاتصال"
   ],
   "updated_by": "B50",
-  "updated_at": "2026-11-04T20:47:00Z"
+  "updated_at": "2026-11-04T21:03:00Z"
 }
