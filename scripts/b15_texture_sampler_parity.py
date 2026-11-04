@@ -218,15 +218,105 @@ def inspect(original_root: Path, project: Path, sidecar: dict) -> dict:
     }
 
 
+
+def sidecar_from_export_trace(project: Path, trace: dict) -> dict:
+    """Derive GUID->file mapping from ONE exporter trace, never from names.
+
+    The trace remains a caller-supplied witness. Its export_instance label
+    cannot independently establish provenance or visual equivalence.
+    """
+    if (not isinstance(trace, dict) or trace.get("schema_version") != 1
+            or not isinstance(trace.get("export_instance"), str)
+            or not GUID.fullmatch(trace["export_instance"])
+            or not isinstance(trace.get("objects"), list)):
+        raise ValueError("invalid same-instance exporter trace")
+    rows = []
+    wanted_guids = set()
+    for item in trace["objects"]:
+        if not isinstance(item, dict) or item.get("class_id") != 28:
+            continue  # Only Texture2D; never infer other texture class settings.
+        source, target = item.get("source"), item.get("export")
+        if (not isinstance(source, dict) or set(source) != {"owner", "path_id"}
+                or not isinstance(target, dict) or set(target) != {"file_id", "guid", "type"}):
+            raise ValueError("incomplete original/export Texture2D trace")
+        original_owner = source["owner"]
+        if not isinstance(original_owner, str) or "\\" in original_owner or ":" in original_owner:
+            raise ValueError("unsafe trace owner")
+        pure = PurePosixPath(original_owner)
+        if pure.is_absolute() or any(p in ("", ".", "..") for p in original_owner.split("/")):
+            raise ValueError("unsafe trace owner")
+        owner = pure.name
+        if owner not in SOURCE_PINS:
+            continue  # Unsupported original owner; do not guess its bytes.
+        if type(source["path_id"]) is not int or source["path_id"] <= 0:
+            raise ValueError("invalid original path ID")
+        guid = target["guid"]
+        if (type(target["file_id"]) is not int or target["file_id"] <= 0
+                or type(target["type"]) is not int or target["type"] not in (2, 3)
+                or not isinstance(guid, str) or not GUID.fullmatch(guid)):
+            raise ValueError("unsafe exported Texture2D PPtr")
+        size, digest = SOURCE_PINS[owner]
+        rows.append({
+            "source_owner": owner, "source_path_id": source["path_id"],
+            "source_bytes": size, "source_sha256": digest,
+            "export_asset": None, "export_guid": guid,
+        })
+        wanted_guids.add(guid)
+    if not rows:
+        raise ValueError("no pinned Texture2D identities in exporter trace")
+    assets = project / "Assets"
+    if project.is_symlink() or assets.is_symlink() or not assets.is_dir():
+        raise ValueError("unsafe exported Unity project")
+    guid_paths = {}
+    for meta in assets.rglob("*.meta"):
+        rel = meta.relative_to(assets).as_posix()
+        regular_child(assets, rel)  # Reject linked meta or ancestor.
+        if meta.stat().st_size > MAX_META_BYTES:
+            raise ValueError("oversized exported metadata")
+        contents = meta.read_text(encoding="utf-8-sig")
+        hits = re.findall(r"^guid:\s*([0-9a-f]{32})\s*$", contents, re.MULTILINE)
+        if len(hits) != 1:
+            if any(g in contents for g in wanted_guids):
+                raise ValueError("ambiguous target export metadata GUID")
+            continue
+        guid = hits[0]
+        if guid not in wanted_guids:
+            continue
+        candidate_rel = rel[:-5]  # Strip .meta only, preserve .png/.asset.
+        regular_child(assets, candidate_rel)
+        # Only an actual TextureImporter for the exact target GUID qualifies.
+        found_guid, _ = read_importer(meta)
+        if found_guid != guid or guid in guid_paths:
+            raise ValueError("duplicate/wrong TextureImporter GUID mapping")
+        guid_paths[guid] = candidate_rel
+    if guid_paths.keys() != wanted_guids:
+        raise ValueError("missing exact exported TextureImporter GUID target")
+    for row in rows:
+        row["export_asset"] = guid_paths[row["export_guid"]]
+    return {
+        "schema_version": 1,
+        "source_commit": ZIP2_COMMIT,
+        "export_instance": trace["export_instance"],
+        "textures": rows,
+    }
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--original-root", type=Path, required=True)
     ap.add_argument("--project", type=Path, required=True)
-    ap.add_argument("--sidecar", type=Path, required=True)
+    inputs = ap.add_mutually_exclusive_group(required=True)
+    inputs.add_argument("--sidecar", type=Path)
+    inputs.add_argument("--trace", type=Path, help="private SAME-EXPORT object trace; never emitted")
     args = ap.parse_args()
     # Never write repairs or reveal original object names/path IDs in output.
-    report = inspect(args.original_root, args.project,
-                     json.loads(args.sidecar.read_text(encoding="utf-8")))
+    path = args.trace if args.trace else args.sidecar
+    if path.stat().st_size > 16 * 1024 * 1024:
+        raise ValueError("oversized private identity witness")
+    witness = json.loads(path.read_text(encoding="utf-8"))
+    sidecar = sidecar_from_export_trace(args.project, witness) if args.trace else witness
+    report = inspect(args.original_root, args.project, sidecar)
+    report["same_export_trace_structurally_consumed"] = bool(args.trace)
     print("RAFT_B15_TEXTURE_SAMPLER_PARITY " + json.dumps(report, sort_keys=True))
 
 
