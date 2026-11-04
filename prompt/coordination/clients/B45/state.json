@@ -4,10 +4,10 @@
   "generation": "B-2026-11-04",
   "session_id": "20261104T2056Z-B45-f0c1",
   "resumed_from_session": null,
-  "status": "active",
+  "status": "paused",
   "base_sha": "f835f66c67fba9cf36fdbc9f49793b7b8f06b12a",
-  "last_commit": "348990da5c7864bfbbc39e2f4fbe3e4969795d81",
-  "updated_at": "2026-11-04T21:16:00Z",
+  "last_commit": "b506e5693ed70cad3507c712ac419c108e41ba87",
+  "updated_at": "2026-11-04T21:21:00Z",
   "tracks": [
     "water-fft",
     "shaderlab-original-blur"
@@ -20,8 +20,9 @@
     "https://github.com/alwansan/raf/actions/runs/41913062003",
     "https://github.com/alwansan/raf/actions/runs/41913273839",
     "https://github.com/alwansan/raf/actions/runs/41914193733",
-    "https://github.com/alwansan/raf/actions/runs/41914205988"
+    "https://github.com/alwansan/raf/actions/runs/41914205988",
+    "https://github.com/alwansan/raf/actions/runs/41915050060"
   ],
-  "next_step": "Check staged private reconstruction run 41914205988; verify original-genuine `.shader` identity/.meta at the next owner-requested gated native run; Unity and device untested. Continue shaders/resources independent of B50/B07 local work.",
+  "next_step": "B45 original Blur two-pass source/CPU Vulkan (6 positives/12 negatives), private stage, rollback guard and native gated wiring done. Do NOT claim Unity or Adreno. Next owner-requested gated native build must inspect exported unique Shader identity/.meta and Unity compiler output; separately probe original sampler/uniform upload. WATER-001 OPEN, touch deferred, audio/Settings preserved.",
   "memory_path": "prompt/coordination/clients/B45/MEMORY.md"
 }
