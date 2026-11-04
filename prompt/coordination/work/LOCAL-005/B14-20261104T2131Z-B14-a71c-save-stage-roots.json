@@ -6,7 +6,7 @@
   "issue_id": "LOCAL-005",
   "track": "offline-save-stage-path-integrity",
   "approach": "Reject symlinked Unity project roots and out-of-tree backup roots in both original SaveAndLoad path and Android offline source adapters before any source/backup write; bounded negative-control tests.",
-  "status": "active",
+  "status": "completed",
   "base_sha": null,
   "intended_files": [
     "scripts/adapt_original_save_paths.py",
@@ -23,8 +23,10 @@
   "experiment_ids": [
     "B14-20261104T2139Z-save-root-provenance"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Add early project/backup root checks and executable negative controls; preserve Windows/Android gameplay .rgd semantics and original identities.",
-  "updated_at": "2026-11-04T21:40:13.151Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41918579185"
+  ],
+  "result": "SOURCE_FIXED (stage-path protection only): SaveAndLoad/Android offline source adapters now reject linked Unity project roots and backup paths/ancestors. Source commits 02e7eef and cca6e1e; dedicated CI 41918579185 SUCCESS (13+19=32 source-only Python tests, 6 new negative controls). No native .rgd/device result.",
+  "next_step": "Actual native Android world enter/save/reopen .rgd remains open, coordinate with B07/B24/B50; protect owner-working audio and Settings; do not touch deferred input.",
+  "updated_at": "2026-11-04T21:46:03.972Z"
 }
