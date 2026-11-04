@@ -5,8 +5,10 @@ from pathlib import Path
 import re
 
 from scripts.instrument_android_runtime_operations import body_bounds
+from scripts.blur_pixel_cleanup import protect as protect_blur_pixel
 
 PINS={
+'Blur':('f03ff7a771e866a84591daf030c2648029efb15851bd63b3df0bc7a67dd8c08f',0),
 'MyInput':('66517cd6df549991014002acdfd462e0d883ee76da81193920a31362385e9b6c',0),
 'HapticAudio':('ac0ac86f62d05c774cb8b24cc8454df2b5356e50c6720395137df1730430fe9c',0),
 'SoundManager':('fe5378c4375e9609c3f9bf9c35f51abecff266148f35588a5df2eb358a745d38',0),
@@ -234,6 +236,8 @@ def adapt(stem,text):
     normalized=text.replace('\r\n','\n')
     if hashlib.sha256(normalized.encode()).hexdigest()!=digest: raise ValueError('Unknown original source revision: '+stem)
     if expected: normalized=protect_temporaries(normalized,expected)
+    elif stem == 'Blur':
+        normalized=protect_blur_pixel(normalized)
     elif stem == 'MyInput':
         marker='public class MyInput : MonoBehaviour'
         if normalized.count(marker)!=1 or tuple(normalized.count('Input.'+name+'(') for name in ('GetKey', 'GetKeyDown', 'GetKeyUp'))!=(4,2,2):
@@ -335,7 +339,7 @@ def apply(root,backup):
     except BaseException:
         for p,raw,changed,meta,meta_bytes in plan:p.write_bytes(raw)
         raise
-    print('RAFT_ANDROID_RENDER_LIFETIMES temporaryResources=4 exceptionSafe=true androidDesktopResolutionBypassed=true windowsPartyInitializationBypassed=true originalMetasUnchanged=true')
+    print('RAFT_ANDROID_RENDER_LIFETIMES temporaryResources=4 blurPixelTemporaryProtected=true exceptionSafe=true androidDesktopResolutionBypassed=true windowsPartyInitializationBypassed=true originalMetasUnchanged=true')
 
 if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--source',type=Path,required=True);p.add_argument('--backup',type=Path,required=True);args=p.parse_args();apply(args.source,args.backup)

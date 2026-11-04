@@ -1,0 +1,27 @@
+name: Blur pixel exception cleanup CPU CSharp 4e91
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths: [scripts/blur_pixel_cleanup.py, scripts/verify_blur_pixel_cleanup_cpu.py, .github/workflows/raft-blur-cleanup-4e91.yml]
+permissions:
+  contents: read
+concurrency:
+  group: blur-cleanup-4e91-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  cleanup:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - run: python3 -m scripts.verify_blur_pixel_cleanup_cpu
+      - run: python3 -m unittest discover -s tests -p test_android_render_lifetimes.py -v
