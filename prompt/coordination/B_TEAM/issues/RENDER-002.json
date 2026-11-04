@@ -11,20 +11,24 @@
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B04_ORIGINAL_COLOR_SPACE_PARITY_2026-11-04.md",
     "https://github.com/alwansan/raf/commit/e52c07c808d6bf7a2eeb90ebcb4b48f71ea98f23",
     "https://github.com/alwansan/raf/actions/runs/41913494314",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B44_ORIGINAL_MATERIAL_COLOR_LINEAGE_2026-11-04.md"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B44_ORIGINAL_MATERIAL_COLOR_LINEAGE_2026-11-04.md",
+    "https://github.com/alwansan/raf/commit/04d7e054b4186ae192b3e740c0cba5ec71306b0c",
+    "https://github.com/alwansan/raf/actions/runs/41913591959",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B46_EXPORTED_TEXTURE_LINKS_2026-11-04.md"
   ],
   "remaining": [
     "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
     "تمييز غياب اللون عن فقدان mesh",
     "حفظ الأصل وألوانه",
     "B04 الأصل Linear مع أداة تصحيح مؤقتة مثبتة في CI؛ يلزم إثبات إعداد مشروع Unity المُصدَّر الفعلي وفحص ألوان الجهاز بعد البناء، ولا يكفي لإغلاق RENDER-002",
-    "B44 source-vs-export Material m_Colors synthetic guard CI PASS; authentic SHA-verified original vs actual same-instance exported YAML not yet tested. Repair precise mismatch if any, otherwise investigate shader/texture/sRGB."
+    "B44 source-vs-export Material m_Colors synthetic guard CI PASS; authentic SHA-verified original vs actual same-instance exported YAML not yet tested. Repair precise mismatch if any, otherwise investigate shader/texture/sRGB.",
+    "B46: exported Material m_TexEnvs -> Texture GUID+fileID structural guard 21 synthetic tests PASS (CI 41913591959); real same-instance full export NOT checked, no texture loss cause proven; run guard and source-export PPtr comparison before material repair."
   ],
   "acceptance": [
     "مطابقة روابط ومراجع الأصل",
     "مقارنةصوريةلنفسالمشهد",
     "نجاحعلىالهاتف"
   ],
-  "updated_by": "B44",
-  "updated_at": "2026-11-04T21:15:00Z"
+  "updated_by": "B46",
+  "updated_at": "2026-11-04T21:16:00Z"
 }
