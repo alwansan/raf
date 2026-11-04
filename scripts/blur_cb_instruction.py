@@ -9,7 +9,7 @@ def operand(words,at,depth=0):
   ext=words[at];at+=1;modifier=(ext>>6)&255
   if ext&63!=1 or modifier>3 or ext&~(63|(255<<6)):raise ValueError('unsupported extension')
  typ=(t>>12)&255;dim=(t>>20)&3;indices=[]
- if typ not in (0,1,2,4,8,9):raise ValueError('operand_type_'+str(typ))
+ if typ not in (0,1,2,4,6,7,8,9):raise ValueError('operand_type_'+str(typ))
  for i in range(dim):
   kind=(t>>(22+3*i))&7
   if kind not in (0,2,3):raise ValueError('unsupported index')
