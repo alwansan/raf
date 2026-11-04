@@ -6,22 +6,24 @@
   "resumed_from_session": "20261104T2230Z-B20-6c9a",
   "status": "active",
   "base_sha": "b2268908186bf9d41c1727a9269e047835dd12e8",
-  "last_commit": "436d3c70ac60dfa83c663c7a7efd0abb0cc7b01f",
-  "updated_at": "2026-11-04T22:57:30Z",
+  "last_commit": "3090839cc4d031314165db98502a74b388e729ec",
+  "updated_at": "2026-11-04T23:08:17.896Z",
   "tracks": [
     "water-fft"
   ],
   "work_ids": [
     "B20-20261104T2230Z-B20-6c9a-shaderlab-scope",
     "B20-20261104T2230Z-B20-6c9a-blur-atomic-rollback",
-    "B20-20261104T2257Z-B20-fmp3-foam-packet"
+    "B20-20261104T2257Z-B20-fmp3-foam-packet",
+    "B20-20261104T2257Z-B20-fmp3-cb-reflection"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41926202371",
     "https://github.com/alwansan/raf/actions/runs/41926043987",
     "https://github.com/alwansan/raf/actions/runs/41927169542",
-    "https://github.com/alwansan/raf/actions/runs/41927095232"
+    "https://github.com/alwansan/raf/actions/runs/41927095232",
+    "https://github.com/alwansan/raf/actions/runs/41930578292"
   ],
-  "next_step": "Integrate immutable original Foam DXBC→private HLSL stage outputs with authenticated B25 render-state and CB source bridge into single private 2-pass packet for future real ShaderLab assembler, source-only CI first.",
+  "next_step": "Probe authentic B24-produced Foam SPIR-V UBO descriptors and recovered HLSL b-slot declarations vs B25 original CB slots, numeric-only report; never assume CB0 alias or Unity upload.",
   "memory_path": "prompt/coordination/clients/B20/MEMORY.md"
 }
