@@ -32,6 +32,7 @@ jobs:
           python3 -c "import shutil; assert shutil.disk_usage('.').free > 8 * 1024**3"
           python3 -m unittest discover -s tests -p 'test_b21_stage_light_lineage.py' -v
           python3 -m unittest discover -s tests -p 'test_b21_compare_export_lights.py' -v
+          python3 -m unittest discover -s tests -p 'test_b21_compare_light_owners.py' -v
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '9.0.x'
@@ -148,21 +149,26 @@ jobs:
           PY
             exit 2
           fi
-      - name: Compare two authentic original Light values with actual same-process output
+      - name: Compare two authentic original Light values and GameObject owners with actual same-process output
         run: |
           set -euo pipefail
           python3 - <<'PY'
           import os,json
           from pathlib import Path
           from scripts import b21_compare_export_lights as m
+          from scripts import b21_compare_light_owners as owner_check
           base=Path(os.environ['RUNNER_TEMP'])
           try:
               original=m.original_lights(base/'b21-original/Raft_Data')
               actual=m.exported_lights(base/'b21-private-export/ExportedProject')
               l=json.loads((base/'b21-light-private.json').read_text())
               w=json.loads((base/'b21-w1-private.json').read_text())
-              report=m.compare(original,actual,l,w)
-              status=0 if report['same_export_light_value_parity'] else 2
+              value_report=m.compare(original,actual,l,w)
+              source_edges=owner_check.source_owner_edges(base/'b21-original/Raft_Data')
+              actual_edges=owner_check.actual_owner_edges(base/'b21-private-export/ExportedProject')
+              owner_report=owner_check.check_owners(source_edges,actual_edges,l,value_report)
+              report={'light_values':value_report,'original_light_owner':owner_report}
+              status=0 if value_report['same_export_light_value_parity'] and owner_report['exact_same_export_light_gameobject_owner_parity'] else 2
           except Exception as exc:
               report={'actual_export_checked':False,'status':'INCONCLUSIVE','error_category':type(exc).__name__,
                       'no_game_assets_changed':True,'android_render_executed':False}
