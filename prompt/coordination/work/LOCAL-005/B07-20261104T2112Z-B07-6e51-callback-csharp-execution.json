@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "owner": "B07",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2112Z-B07-6e51",
+  "issue_id": "LOCAL-005",
+  "track": "world-save",
+  "approach": "Execute B07 Android original-callback wrapper semantics in a synthetic compiled C#10 managed harness, with three branch cases and throw/rethrow/finally evidence; no private source published",
+  "status": "active",
+  "base_sha": "0a08683f09bdad8ef795fff8f59a21c6724b0661",
+  "intended_files": [
+    "scripts/b07_compile_world_callback_fixture.py",
+    ".github/workflows/raft-b07-world-callback-chain.yml",
+    "tests/test_b07_world_callback_trace.py"
+  ],
+  "hypothesis": "SHA-verified diagnostic wrapper source is C#-compiler compatible and preserves all three branch executions, exceptions and finally operation logs under UNITY_ANDROID without changing world state.",
+  "related_work": [
+    "B07-20261104T2112Z-B07-6e51-world-callback-proof"
+  ],
+  "experiment_ids": [
+    "20261104T2127Z-world-callback-managed"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Add synthetic executable C# net10 fixture using production Python wrapper, compile/execute in bounded B07 GitHub CI, then persist negative/result.",
+  "updated_at": "2026-11-04T21:27:00Z"
+}
