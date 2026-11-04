@@ -2,19 +2,21 @@
   "schema_version": 1,
   "username": "B09",
   "generation": "B-2026-11-04",
-  "session_id": "20261104T213740719Z-B09-28fc",
-  "resumed_from_session": null,
+  "session_id": "20261104T224504636Z-B09-sp7",
+  "resumed_from_session": "20261104T213740719Z-B09-28fc",
   "status": "paused",
   "base_sha": "1aebdfba4502fe0a86fc4986867ec32e207a8cd6",
-  "last_commit": "def0f30f0cec0f0f30a32ef8de278a51aabb4646",
-  "updated_at": "2026-11-04T21:48:42.836Z",
+  "last_commit": "431a1214824b0f97a7f219bf3bf09f5d5a1da8fb",
+  "updated_at": "2026-11-04T22:58:40.816Z",
   "tracks": [
-    "WATER-001/spectrum-authentic-pass-staging"
+    "WATER-001/spectrum-authentic-pass-staging",
+    "WATER-001/spectrum-seven-pass-provenance-private-vulkan"
   ],
   "work_ids": [
-    "B09-20261104T213740719Z-B09-28fc-spectrum-pass-staging"
+    "B09-20261104T213740719Z-B09-28fc-spectrum-pass-staging",
+    "B09-20261104T224504636Z-B09-sp7-spectrum-seven-pass-identity"
   ],
   "run_urls": [],
-  "next_step": "Inspect first raft-b09-spectrum-extraction workflow run (run ID/conclusion currently unavailable via connected GitHub Actions read tool) and safe aggregate. If authentic pair extraction passes, reconstruct Spectrum ShaderLab with exact original state/variant bindings; if blocked, fix actual parser fault. No native/device claim.",
+  "next_step": "Inspect first B09 spectrum workflow actual run and two safe aggregates. 23/23 local synthetic tests verified and source/CI integrated, but actual ZIP2 18 original Vulkan roundtrips UNVERIFIED. If pass, construct authentic per-pass ShaderLab with CB/sampler bindings; if fail, fix measured stage/variant issue. Avoid audio, Settings and touch.",
   "memory_path": "prompt/coordination/clients/B09/MEMORY.md"
 }
