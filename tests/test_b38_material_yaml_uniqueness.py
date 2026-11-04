@@ -46,8 +46,13 @@ class MaterialYamlUniqueness(unittest.TestCase):
         self.assert_rejected('  m_SavedProperties:\n    m_TexEnvs: []\n'
                              '    m_TexEnvs:\n' + SLOT)
 
-    def test_duplicate_texture_slot_is_rejected(self):
-        self.assert_rejected('  m_SavedProperties:\n    m_TexEnvs:\n' + SLOT + SLOT)
+    def test_duplicate_texture_slot_is_rejected_by_existing_normalizer(self):
+        # Two list entries are not duplicate YAML *mapping* keys; the existing
+        # slot normalizer rightly rejects the duplicate property name.
+        with TemporaryDirectory() as tmp:
+            yaml_file(tmp, '  m_SavedProperties:\n    m_TexEnvs:\n' + SLOT + SLOT)
+            with self.assertRaisesRegex(ValueError, 'Malformed or duplicate Material texture slot'):
+                exported_texenvs(Path(tmp))
 
     def test_duplicate_nested_texture_pointer_key_is_rejected(self):
         s = SLOT.replace('fileID: 2800000,', 'fileID: 0, fileID: 2800000,')
