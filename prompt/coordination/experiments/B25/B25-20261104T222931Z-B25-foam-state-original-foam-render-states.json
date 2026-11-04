@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "owner": "B25",
+  "session_id": "20261104T222931Z-B25-foam-state",
+  "issue_id": "WATER-001",
+  "hypothesis": "Authentic original Foam/Global pass states can be decoded to exact private ShaderLab fragments; possible pass-state differences could explain visual differences.",
+  "source_commit": "d2c0ba2ee2c848325fe909d191a07879c94b9c75",
+  "input_hashes": [
+    "Raft_Data/sharedassets0.assets 115978112B SHA256 0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "Shader PathID2420 raw SHA256 67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1"
+  ],
+  "tool_versions": {
+    "UnityPy": "1.25.4",
+    "Python": "ubuntu-24.04 hosted runner Python3",
+    "original_state_serializer": "scripts.w1_depth_shaderlab.render_state"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_b25_foam_pass_state.py -v",
+    "python3 -m py_compile scripts/b25_foam_pass_state.py",
+    "python3 -m scripts.b25_foam_pass_state --source $RUNNER_TEMP/b25-foam-source --private-dir $RUNNER_TEMP/b25-private-foam --report b25-aggregate/report.json"
+  ],
+  "negative_controls": [
+    "Incorrect identity/subshader/two-pass topology",
+    "Unsupported pass kind/missing render state",
+    "Invalid ColorMask, NaN and dangerous dynamic state name",
+    "Symlink private scratch and output overwrite"
+  ],
+  "workflow_path": ".github/workflows/raft-b25-foam-pass-state.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41926521683",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41926521683/artifacts/13368828648"
+  ],
+  "budget": "ubuntu-24.04 standard public runner, 18-min timeout, source-only CPU, one original provider ~116MB, no Unity build or LFS",
+  "status": "completed",
+  "observed_result": {
+    "run_status": "completed",
+    "conclusion": "success",
+    "synthetic_tests": {
+      "passed": 11,
+      "total": 11
+    },
+    "source_owner_bytes": 115978112,
+    "original_foam_passes": 2,
+    "serialized_state_bytes": [
+      247,
+      247
+    ],
+    "state_sha256": [
+      "19b4753ccc0393a8ebe4f804aded5e5c8363d9b641cac1870d2d6d0c73b50170",
+      "19b4753ccc0393a8ebe4f804aded5e5c8363d9b641cac1870d2d6d0c73b50170"
+    ],
+    "original_state_values_published": false,
+    "device_verified": false
+  },
+  "rejected_hypotheses": [
+    "Pass0 and pass1 have different serialized m_State ShaderLab fields at this authenticated object SHA.",
+    "B24's pass0/pass1 CB0 vector differences necessarily imply different ShaderLab Blend/ZWrite/raster states."
+  ],
+  "limitations": [
+    "No original four-stage ShaderLab assembly/Unity importer yet.",
+    "No CB/sampler/texture runtime binding and no material GUID export lineage.",
+    "No Android/Adreno pixels or actual render event proof.",
+    "No changes to game behavior or WATER native readiness."
+  ],
+  "integration_commit": "e9218c865aff845361f588aa4b000629619f1560",
+  "next_step": "Combine the SHA-verified two identical original state fragments with B24's original four stage programs and authenticated per-pass CB/texture bindings in a private ShaderLab assembler; verify same-export GUID before Unity import."
+}
