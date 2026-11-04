@@ -230,8 +230,11 @@ def compare(original: dict, actual: dict, b21trace: dict, w1trace: dict) -> dict
     covered = set()
     ignored = 0
     for row in b21trace["objects"]:
-        if not isinstance(row, dict) or row.get("class_id") != 108:
+        if not isinstance(row, dict) or row.get("class_id") not in (1, 108):
             raise ParityError("unexpected_private_light_trace_class")
+        if row["class_id"] == 1:
+            # Optional GameObject lineage is checked separately; never count it as a Light.
+            continue
         key = trace_key(row.get("source"))
         if key is None:
             ignored += 1
