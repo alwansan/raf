@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "owner": "B31",
+  "session_id": "20261104T213800Z-B31-5ea4",
+  "issue_id": "RENDER-002",
+  "hypothesis": "Prior W1 ZIP2 staging can eliminate redundant LFS owners only when a still-unhydrated feature LFS pointer matches the authenticated source size/SHA. External stream coverage cannot be trusted when .resS file or owner is redirected/aliased.",
+  "source_commit": "d086ce981e7e51463e8b753b0666742156d40cd7",
+  "input_hashes": [
+    "ZIP2 commit 15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "14 W1 source owner fingerprints declared by scripts/a12_probe_original_blur_passes.py; 3 feature blobs are 134-byte LFS pointers already staged upstream; 11 are full Git blobs"
+  ],
+  "tool_versions": {
+    "runner": "GitHub Actions ubuntu-24.04",
+    "python": "runner Python 3 (stdlib)"
+  },
+  "commands": [
+    "python3 -m unittest -v tests.test_b31_graphics_hydration tests.test_b31_texture_provider_provenance tests.test_texture_stream_coverage",
+    "read HEAD Git tree blob sizes and the exact native W1 ZIP2 stage source"
+  ],
+  "negative_controls": [
+    "bad staged SHA",
+    "wrong source byte size",
+    "mismatched feature LFS pointer",
+    "unrelated destination",
+    "linked source or target",
+    "linked parent directory",
+    "hardlinked source or destination",
+    "absent source retains LFS fallback",
+    "texture .resS symlink/dangling/parent link/hardlink",
+    "linked/hardlinked serialized Texture2D owner",
+    "negative inline offset"
+  ],
+  "workflow_path": ".github/workflows/raft-b31-graphics-cache-reuse.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41919225658",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41919225658"
+  ],
+  "budget": "6 minutes, one Ubuntu 24.04 stdlib-only job; zero LFS, original assets, Unity, Android APK and external transport",
+  "status": "completed",
+  "observed_result": "26/26 synthetic and existing source-only tests passed on SHA d086ce98. Production texture coverage now rejects symlink/hardlink redirection; no current LFS traffic reduction, no pixel/device proof.",
+  "rejected_hypotheses": [
+    "Current 14 W1 shader-owner staged originals would eliminate additional LFS pulls: 11 are full Git blobs and remaining 3 LFS pointers were already staged before hydration."
+  ],
+  "limitations": [
+    "No real 7.79GB ZIP2 data hydrated during B31 tests",
+    "No Unity Editor/Android/Adreno/pixel or gameplay validation",
+    "No actual white-texture material cause resolved",
+    "No new native APK or saved .rgd roundtrip"
+  ],
+  "integration_commit": "9eb71aa4c967ac2cef5f447e21d6d0f32d1efccc",
+  "next_step": "Coordinate actual original-to-export Texture2D .resS/ColorSpace provenance and pixel comparison; preserve RENDER-002 open."
+}
