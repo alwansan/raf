@@ -27,8 +27,10 @@ class B12Probe(unittest.TestCase):
             self.assertIn(item, PART)
         # The previous source cap was misleading: the whole root hierarchy
         # Renderer[] was allocated before the 512-renderer loop limit.
-        self.assertNotIn("GetComponentsInChildren<Renderer>", PART)
-        self.assertNotIn("GetComponentsInChildren(", PART)
+        # Scan executable source only: the source comment names the retired API.
+        executable = re.sub(r"//[^\\n]*|/\\*[\\s\\S]*?\\*/", "", PART)
+        self.assertNotIn("GetComponentsInChildren<Renderer>", executable)
+        self.assertNotIn("GetComponentsInChildren(", executable)
         self.assertNotIn("scene.GetRootGameObjects()", PART)
         self.assertIn("scene.GetRootGameObjects(roots);", PART)
         self.assertIn("current.GetComponents<Renderer>(renderers);", PART)
