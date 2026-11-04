@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "owner": "B45",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2056Z-B45-f0c1",
+  "issue_id": "WATER-001",
+  "track": "water-fft",
+  "approach": "Authenticate original two-pass Blur, isolate post-raster ShaderLab serializer failure using safe aggregate shape probes and strict synthetic controls; repair only evidenced mismatch",
+  "status": "active",
+  "base_sha": "f835f66c67fba9cf36fdbc9f49793b7b8f06b12a",
+  "intended_files": [
+    "scripts/b45_blur_wrapper_preflight.py",
+    "tests/test_b45_blur_wrapper_preflight.py",
+    ".github/workflows/raft-b45-blur-shaderlab.yml"
+  ],
+  "hypothesis": "Original W5 41821419074 passes both-pass numerical raster but fails in wrapper due to unsupported serialized ShaderLab state; a bounded exact-source preflight will identify fail stage without exposing game source.",
+  "related_work": [
+    "https://github.com/alwansan/raf/actions/runs/41821419074"
+  ],
+  "experiment_ids": [
+    "B45-20261104-blur-wrapper"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement and test safe original ShaderLab preflight, dispatch isolated CI, then repair identified cause",
+  "updated_at": "2026-11-04T20:56:00Z"
+}
