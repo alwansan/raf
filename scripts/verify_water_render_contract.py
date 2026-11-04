@@ -10,7 +10,7 @@ import json
 from pathlib import Path
 import re
 
-from scripts.b49_shaderlab_pass_contract import pass_coverage, remove_comments, mask_quoted_strings
+from scripts.b49_shaderlab_pass_contract import pass_coverage, remove_comments\nfrom scripts.b47_compute_kernel_contract import kernel_entrypoint_profile
 
 # Unity logs show requests for these maximum pass indices. Valid index N
 # requires a restored ShaderLab source with at least N+1 authored passes.
@@ -69,15 +69,16 @@ def inspect(project: Path) -> dict:
         if path.is_symlink() or not path.is_file():
             raise ValueError("Unsafe source compute shader path")
         raw = path.read_text(encoding="utf-8-sig", errors="replace")
-        kernels = KERNEL.findall(mask_quoted_strings(raw))
+        profile = kernel_entrypoint_profile(raw)
+        meta = Path(str(path) + ".meta")
         computes.append({
-            "kernel_count": len(kernels),
+            **profile,
             "is_water_or_fft_named": bool(re.search(r'(water|fft|spectrum|foam)', path.name, re.IGNORECASE)),
-            "original_meta_present": Path(str(path) + ".meta").is_file(),
+            "original_meta_present": meta.is_file() and not meta.is_symlink(),
         })
     water_compute = [
         row for row in computes
-        if row["is_water_or_fft_named"] and row["kernel_count"] > 0
+        if row["is_water_or_fft_named"] and row["all_kernel_entrypoints_structural"]
         and row["original_meta_present"]
     ]
     # This is a structural source check, not proof of authentic ownership,
@@ -88,6 +89,7 @@ def inspect(project: Path) -> dict:
             row["contract_satisfied"] for row in shader_rows.values()),
         "compute_source_files": len(computes),
         "compute_files_with_kernels": sum(x["kernel_count"] > 0 for x in computes),
+        "compute_files_with_structural_entrypoints": sum(x["all_kernel_entrypoints_structural"] for x in computes),
         "water_named_compute_sources_with_kernels": len(water_compute),
         "water_compute_source_candidate_present": bool(water_compute),
         "authentic_water_kernel_identity_verified": False,

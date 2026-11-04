@@ -1,0 +1,38 @@
+name: B47 WATER-001 ComputeShader kernel entrypoint structural guard
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - scripts/b47_compute_kernel_contract.py
+      - scripts/verify_water_render_contract.py
+      - tests/test_b47_compute_kernel_contract.py
+      - .github/workflows/raft-b47-water-kernel-integrity.yml
+
+concurrency:
+  group: raft-b47-water-kernel-integrity-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  synthetic-source-guard:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Synthetic entrypoint and existing water source gates
+        run: |
+          python3 -m unittest discover -s tests -p test_b47_compute_kernel_contract.py -v
+          python3 -m unittest discover -s tests -p test_verify_water_render_contract.py -v
+      - name: Bytecode syntax and clean source checkout
+        run: |
+          python3 -m py_compile scripts/b47_compute_kernel_contract.py scripts/verify_water_render_contract.py
+          git diff --exit-code
