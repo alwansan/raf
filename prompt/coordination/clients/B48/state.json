@@ -6,8 +6,8 @@
   "resumed_from_session": null,
   "status": "paused",
   "base_sha": "8328a092bb0c58f89e0c92540c80eb3d520bce3b",
-  "last_commit": "7be4c3365d4297a06abf502ceea504fee507f9c4",
-  "updated_at": "2026-11-04T21:08:11.963Z",
+  "last_commit": "e2a401c840f6b590eba3b651d3716f71a6198672",
+  "updated_at": "2026-11-04T21:13:48.565Z",
   "tracks": [
     "water-fft"
   ],
@@ -16,8 +16,9 @@
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41912253262",
-    "https://github.com/alwansan/raf/actions/runs/41912422220"
+    "https://github.com/alwansan/raf/actions/runs/41912422220",
+    "https://github.com/alwansan/raf/actions/runs/41913921971"
   ],
-  "next_step": "Scoped B48 source/compiled candidate gate verified and saved. Next blocker authentic Unity runtime kernel ID mapping and .compute import; never assume compiled slot=runtime kernel ID; coordinate B47/B49 ShaderLab. WATER OPEN NOT_READY 0/3.",
+  "next_step": "B48 scoped original FFT selector-candidate contract and generated team checkpoint complete (CI41912422220/41913921971). Next authenticate Unity runtime kernel index mapping and real .compute staging without fabricated flags; WATER OPEN, NOT_READY 0/3.",
   "memory_path": "prompt/coordination/clients/B48/MEMORY.md"
 }
