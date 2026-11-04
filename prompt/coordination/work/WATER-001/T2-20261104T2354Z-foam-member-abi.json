@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "generation": "T-2026-11-05",
+  "session_id": "20261104T2354Z-T2-foamabi01",
+  "issue_id": "WATER-001",
+  "track": "water-foam-member-abi",
+  "approach": "Reuse B20 SHA-pinned four-stage private source packet; inspect serialized original per-stage partial CB members and reflected UBO member layouts; compare evidence without equating distinct size domains; stage and run isolated guarded CI; do not publish source/program/opaque names.",
+  "status": "active",
+  "base_sha": "b56ebc3847f251cee2539e9797471417d32698d2",
+  "intended_files": [
+    "scripts/t2_foam_member_abi.py",
+    "tests/test_t2_foam_member_abi.py",
+    ".github/workflows/raft-t2-foam-member-abi.yml",
+    "prompt/coordination/clients/T2/*",
+    "prompt/coordination/experiments/T2/*",
+    "prompt/coordination/B_TEAM/events/T2/*"
+  ],
+  "hypothesis": "Original member offset/type/usage comparison can narrow Foam CB0 and material upload ambiguity beyond B20's slot-only proof without fake padding, and detect failed assumptions.",
+  "related_work": [
+    "https://github.com/alwansan/raf/actions/runs/41931585626"
+  ],
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/B20/MEMORY.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/B25/MEMORY.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/B24/MEMORY.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/B17/MEMORY.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/B09/MEMORY.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/B45/MEMORY.md"
+  ],
+  "experiment_ids": [
+    "T2-foam-members-original-20261104"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Inspect original m_ConstantBuffers member schema; implement original and reflected type/offset audit and bounded private workflow.",
+  "updated_at": "2026-11-04T23:54:00Z"
+}
