@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "owner": "B47",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2055Z-B47-c4e7",
+  "issue_id": "WATER-001",
+  "track": "water-fft",
+  "approach": "Bounded source-level ComputeShader kernel pragma->numthreads entrypoint validation, independent of B49 per-Pass ShaderLab repair",
+  "status": "active",
+  "base_sha": "171605c5760c3b4194491799a07ebe64793fe667",
+  "intended_files": [
+    "scripts/b47_compute_kernel_contract.py",
+    "tests/test_b47_compute_kernel_contract.py",
+    "scripts/verify_water_render_contract.py",
+    ".github/workflows/raft-b47-water-kernel-integrity.yml"
+  ],
+  "hypothesis": "Current render gate counts bare #pragma kernel lines even when no entrypoint body or numthreads exists; a fake candidate can be reported in zero-kernel water/FFT failures.",
+  "related_work": [
+    "https://github.com/alwansan/raf/commit/50702470954774ba96fe27509f1f9eddfd1aa4ea"
+  ],
+  "experiment_ids": [
+    "B47-20261104T2055Z-B47-c4e7-compute-entrypoint-guard"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Demonstrate a real false-positive in currently integrated compute audit, add independent lexical and signature tests, integrate fail-closed candidate count with existing water kernel identity kept false.",
+  "updated_at": "2026-11-04T21:00:04Z"
+}
