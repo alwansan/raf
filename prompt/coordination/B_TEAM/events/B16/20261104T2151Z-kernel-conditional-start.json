@@ -1,0 +1,12 @@
+{
+  "id": "B16-20261104T2151Z-kernel-conditional-start",
+  "owner": "B16",
+  "session_id": "20261104T2151Z-B16-6e2a",
+  "issue_id": "WATER-001",
+  "type": "start",
+  "summary": "Registered distinct WATER-001 conditional-preprocessing guard; no original kernel, shader or device fixes claimed.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41912450062"
+  ],
+  "at": "2026-11-04T21:53:34.379Z"
+}
