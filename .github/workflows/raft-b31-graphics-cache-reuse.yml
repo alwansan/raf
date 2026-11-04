@@ -6,7 +6,9 @@ on:
     branches: [feature/android-native-port]
     paths:
       - scripts/hydrate_render_payloads.py
+      - scripts/audit_texture_stream_coverage.py
       - tests/test_b31_graphics_hydration.py
+      - tests/test_b31_texture_provider_provenance.py
       - tests/test_texture_stream_coverage.py
       - .github/workflows/raft-b31-graphics-cache-reuse.yml
 
@@ -32,7 +34,7 @@ jobs:
         run: |
           set -euo pipefail
           echo "B31_SOURCE_SHA=${GITHUB_SHA}"
-          python3 -m unittest -v tests.test_b31_graphics_hydration tests.test_texture_stream_coverage 2>&1 | tee "$RUNNER_TEMP/b31-graphics-tests.log"
+          python3 -m unittest -v tests.test_b31_graphics_hydration tests.test_b31_texture_provider_provenance tests.test_texture_stream_coverage 2>&1 | tee "$RUNNER_TEMP/b31-graphics-tests.log"
       - name: Preserve safe test evidence only
         if: always()
         uses: actions/upload-artifact@v4
