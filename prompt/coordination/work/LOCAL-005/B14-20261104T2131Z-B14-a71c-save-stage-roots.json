@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "owner": "B14",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2131Z-B14-a71c",
+  "issue_id": "LOCAL-005",
+  "track": "offline-save-stage-path-integrity",
+  "approach": "Reject symlinked Unity project roots and out-of-tree backup roots in both original SaveAndLoad path and Android offline source adapters before any source/backup write; bounded negative-control tests.",
+  "status": "active",
+  "base_sha": null,
+  "intended_files": [
+    "scripts/adapt_original_save_paths.py",
+    "scripts/adapt_android_offline_startup.py",
+    "tests/test_adapt_original_save_paths.py",
+    "tests/test_android_offline_startup.py",
+    "docs/B14_OFFLINE_SAVE_STAGE_PATH_PROVENANCE_2026-11-04.md"
+  ],
+  "hypothesis": "Existing Assets.is_symlink() check fails when the project directory itself is a symlink, and backup.resolve().is_relative_to() permits an out-of-tree backup symlink; original offline code can be redirected outside the intended staging roots.",
+  "related_work": [
+    "B50-20261104T2039Z-B50-d7a3-steamstats-offline.json",
+    "B24-20261104T2126Z-B24-6f19-world-callback-compile-parity.json"
+  ],
+  "experiment_ids": [
+    "B14-20261104T2139Z-save-root-provenance"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Add early project/backup root checks and executable negative controls; preserve Windows/Android gameplay .rgd semantics and original identities.",
+  "updated_at": "2026-11-04T21:40:13.151Z"
+}
