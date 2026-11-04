@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "owner": "B22",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2134Z-B22-c91f",
+  "issue_id": "LOCAL-005",
+  "track": "world-save",
+  "approach": "Harden original operation instrumentation source-and-backup path provenance and transactional original rollback; do not change SaveGame or Steam logic.",
+  "status": "active",
+  "base_sha": null,
+  "intended_files": [
+    "scripts/instrument_android_runtime_operations.py",
+    "tests/test_b22_runtime_stage_integrity.py",
+    ".github/workflows/raft-b22-runtime-stage-integrity.yml",
+    "docs/B22_LOCAL_RUNTIME_STAGING_INTEGRITY_2026-11-04.md"
+  ],
+  "hypothesis": "Current apply() can traverse symlinked Unity project/Assets/backup ancestors and can leave partial backup on pre-try copy failures; could redirect/misstage SaveAndLoad diagnostic adapter or block import.",
+  "related_work": [
+    "https://github.com/alwansan/raf/commit/cca6e1e8f6c3a07327f811cf788a8d5d6668c099",
+    "https://github.com/alwansan/raf/commit/c06acd1da46e729a42f8b9bbf2f280a3b05921cc"
+  ],
+  "experiment_ids": [
+    "b22-20261104T2134Z-B22-c91f-local-runtime-staging"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Source guard with staged rollback, synthetic failures and isolated CI; avoid new Unity/native test.",
+  "updated_at": "2026-11-04T21:56:00Z"
+}
