@@ -1,0 +1,92 @@
+name: B25 WATER-001 original Foam pass render state
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/b25_foam_pass_state.py
+      - tests/test_b25_foam_pass_state.py
+      - .github/workflows/raft-b25-foam-pass-state.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: raft-b25-original-foam-state-single
+  cancel-in-progress: false
+
+jobs:
+  original-foam-state:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - name: Checkout feature source without credentials
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests/test_b25_foam_pass_state.py
+      - name: Run local-source negative controls
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_b25_foam_pass_state.py -v
+          python3 -m py_compile scripts/b25_foam_pass_state.py
+      - name: Verify disk budget
+        run: python3 -c 'import shutil; assert shutil.disk_usage(".").free > 3*1024**3'
+      - name: Checkout immutable ZIP2 source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-original
+          filter: blob:none
+          lfs: false
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/sharedassets0.assets/*
+      - name: Authenticate and reassemble only original Foam owner
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os, subprocess
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import stage, PINS, ZIP2_SHA
+          root=Path("zip2-original")
+          assert subprocess.check_output(["git","-C",str(root),"rev-parse","HEAD"],text=True).strip()==ZIP2_SHA
+          verified=stage(root,Path(os.environ["RUNNER_TEMP"])/"b25-foam-source",
+                         {"Raft_Data/sharedassets0.assets":PINS["Raft_Data/sharedassets0.assets"]})
+          assert verified["verified_bytes"]==115978112 and verified["lfs_used"] is False
+          print("B25_FOAM_ORIGINAL_PROVIDER sha256_verified=true bytes=115978112 lfs=false")
+          PY
+      - name: Install pinned original Unity object reader
+        run: python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+      - name: Stage authentic two-pass state text privately
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/b25-private-foam" b25-aggregate
+          trap 'rm -rf "$RUNNER_TEMP/b25-private-foam"' EXIT
+          timeout 300s python3 -m scripts.b25_foam_pass_state \
+            --source "$RUNNER_TEMP/b25-foam-source" \
+            --private-dir "$RUNNER_TEMP/b25-private-foam" \
+            --report b25-aggregate/report.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          data=json.loads(Path("b25-aggregate/report.json").read_text())
+          assert data["status"]=="source_staged" and data["original_passes"]==2
+          assert not data["state_source_published"] and not data["device_verified"]
+          assert not data["shaderlab_installed"] and not data["cb_resource_binding_verified"]
+          PY
+      - name: Publish safe SHA/count report only
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: b25-foam-safe-state-report
+          path: b25-aggregate/report.json
+          if-no-files-found: ignore
+          retention-days: 7
