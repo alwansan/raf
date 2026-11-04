@@ -82,6 +82,23 @@ class OriginalFoamStageTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "keyword"):
             validate_stage(data, 0)
 
+    def test_two_original_passes_have_distinct_exact_vector_member_counts(self):
+        for stage_code in (0, 1):
+            baseline = program(stage_code)
+            self.assertIsNotNone(validate_stage(baseline, stage_code,
+                                                {"original_pass": 0}))
+            second = program(stage_code)
+            second["m_CommonParameters"]["m_ConstantBuffers"][0]["m_VectorParams"] = [0]
+            diag = {"original_pass": 1}
+            self.assertIsNotNone(validate_stage(second, stage_code, diag))
+            self.assertEqual(diag["original_second_pass_vector_members"], 1)
+            for count in (0, 2, 3, 10):
+                second["m_CommonParameters"]["m_ConstantBuffers"][0]["m_VectorParams"] = [0] * count
+                with self.assertRaisesRegex(ValueError, "partial-CB"):
+                    validate_stage(second, stage_code, {"original_pass": 1})
+            with self.assertRaisesRegex(ValueError, "partial-CB"):
+                validate_stage(second, stage_code, {"original_pass": 0})
+
     def test_reject_missing_parameter_table(self):
         data = program(1)
         data["m_ParameterBlobIndices"] = []
