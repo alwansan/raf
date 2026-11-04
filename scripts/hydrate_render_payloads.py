@@ -1,6 +1,9 @@
 """Fetch only tracked serialized/graphics LFS payloads, with a bounded authenticated plan."""
 import argparse
 import hashlib
+import os
+import stat
+import tempfile
 from pathlib import Path
 import re
 import subprocess
@@ -29,13 +32,25 @@ def plan():
     if not rows or total > 10 * 1024**3: raise ValueError('Missing or over-budget original graphics payload plan')
     return rows
 
+def _check_regular_path(path):
+    """Reject redirects and aliased file inodes before graphics source I/O."""
+    path = Path(path)
+    if any(part.is_symlink() for part in (path, *path.parents)):
+        raise ValueError('Unsafe graphics source or destination path redirect')
+    if path.exists():
+        mode = path.stat().st_mode
+        if not (stat.S_ISDIR(mode) or stat.S_ISREG(mode)):
+            raise ValueError('Unsafe graphics source or destination file type')
+        if stat.S_ISREG(mode) and path.stat().st_nlink != 1:
+            raise ValueError('Unsafe hardlinked graphics payload')
+
+
 def missing_payloads(rows):
-    """Reuse only regular working files matching BOTH original size and SHA."""
+    """Reuse only ordinary working files matching BOTH original size and SHA."""
     missing = []
     for name, digest, size in rows:
         path = Path(name)
-        if path.is_symlink():
-            raise ValueError('Unsafe original graphics payload symlink')
+        _check_regular_path(path)
         if not path.is_file() or path.stat().st_size != size:
             missing.append((name, digest, size))
             continue
@@ -45,12 +60,85 @@ def missing_payloads(rows):
             missing.append((name, digest, size))
     return missing
 
+
+def reuse_verified_staged_sources(rows, source_root, work_root=Path('.')):
+    """Atomically reuse W1's SHA-verified ZIP2 owners when LFS pins match exactly.
+
+    Only files in the caller's LFS-pointer plan are candidates. The source is
+    checked again against the independent feature-branch LFS SHA and byte size.
+    Missing cache objects are left for the original LFS route. A conflicting
+    source, linked path or unexpected destination fails closed; no raw game
+    asset is included in the emitted diagnostics.
+    """
+    source_root, work_root = Path(source_root), Path(work_root)
+    _check_regular_path(source_root)
+    _check_regular_path(work_root)
+    if not source_root.exists():
+        return 0, 0
+    if not source_root.is_dir():
+        raise ValueError('Staged graphics source root is not a directory')
+    reused, reused_bytes = 0, 0
+    for name, digest, size in rows:
+        if not PATTERN.fullmatch(name):
+            raise ValueError('Staged graphics source is outside original allowlist')
+        source = source_root / Path(name).relative_to('Raft/Raft_Data')
+        _check_regular_path(source)
+        if not source.exists():
+            continue
+        if not source.is_file() or source.stat().st_size != size:
+            raise ValueError('Staged graphics original has unexpected type or length')
+        target = work_root / name
+        _check_regular_path(target)
+        if target.exists():
+            if not target.is_file() or target.stat().st_size > 1024:
+                raise ValueError('Refusing to replace nonpointer graphics destination')
+            if pointer(target.read_bytes()) != (digest, size):
+                raise ValueError('Original destination pointer does not match source pin')
+        if not target.parent.is_dir():
+            raise ValueError('Missing original graphics destination parent')
+        temporary = None
+        try:
+            with tempfile.NamedTemporaryFile(
+                dir=target.parent, prefix='.verified-zip2-graphics-', delete=False
+            ) as output:
+                temporary = Path(output.name)
+                copied, sha = 0, hashlib.sha256()
+                with source.open('rb') as original:
+                    while chunk := original.read(2 * 1024 * 1024):
+                        copied += len(chunk)
+                        if copied > size:
+                            raise ValueError('Staged original exceeded pinned length')
+                        sha.update(chunk)
+                        output.write(chunk)
+                output.flush()
+                os.fsync(output.fileno())
+            if copied != size or sha.hexdigest() != digest:
+                raise ValueError('Staged original failed independent LFS SHA verification')
+            os.chmod(temporary, 0o644)
+            os.replace(temporary, target)
+            temporary = None
+        finally:
+            if temporary is not None:
+                temporary.unlink(missing_ok=True)
+        reused += 1
+        reused_bytes += size
+    return reused, reused_bytes
+
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--apply',action='store_true');p.add_argument('--release-cache',action='store_true');args=p.parse_args()
     rows=plan()
     print('RAFT_FULL_GRAPHICS_PLAN objects='+str(len(rows))+' original_bytes='+str(sum(r[2] for r in rows)))
     if not args.apply: return
     missing = missing_payloads(rows)
+    # W1 has already staged authentic, independently SHA-pinned ZIP2 owners
+    # at this exact runner location. Reuse only paths matching this LFS plan;
+    # absent owners retain the existing Git LFS fetch/checkout fallback.
+    if os.environ.get('RUNNER_TEMP'):
+        source_root = Path(os.environ['RUNNER_TEMP']) / 'w1-original' / 'Raft_Data'
+        reused, reused_bytes = reuse_verified_staged_sources(missing, source_root)
+        print('RAFT_FULL_GRAPHICS_ZIP2_REUSED objects=' + str(reused)
+              + ' original_bytes=' + str(reused_bytes) + ' sha256=true')
+        missing = missing_payloads(rows)
     print('RAFT_FULL_GRAPHICS_REUSED objects='+str(len(rows)-len(missing)))
     if missing:
         subprocess.run(['git','lfs','install','--local'],check=True)
