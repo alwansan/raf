@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "owner": "B05",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2107Z-B05-9e24",
+  "issue_id": "RENDER-002",
+  "track": "colors-materials",
+  "approach": "Original Material m_TexEnvs vs same-instance exported YAML; SHA-pinned owners, exact internal target trace, no external guesses.",
+  "status": "active",
+  "base_sha": "f1dd7fccb7607264d7ec9fee6a67cb73cbbd7eb7",
+  "intended_files": [
+    "scripts/b05_verify_material_texenv_bindings.py",
+    "tests/test_b05_verify_material_texenv_bindings.py",
+    "docs/B05_MATERIAL_TEXENV_LINEAGE_2026-11-04.md"
+  ],
+  "hypothesis": "Export might lose or redirect Material texture pointers and cause flat or pale surfaces independent of shader color, m_Colors, sRGB.",
+  "related_work": [
+    "W2 m_TexEnvs aggregate",
+    "W1 same-instance trace",
+    "B02 sRGB",
+    "B44 tint"
+  ],
+  "experiment_ids": [
+    "B05-20261104T2107Z-texenv"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Commit source checker + 11 negative/positive tests; try actual SHA-verified export; never claim pixel/phone proof from synthetic.",
+  "updated_at": "2026-11-04T21:07:00Z"
+}
