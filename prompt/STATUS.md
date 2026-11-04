@@ -128,6 +128,11 @@ This closes **B50's single StoreStats boundary scope**, not full **LOCAL-005**. 
 
 # Current Raft checkpoint — 3 November 2026
 
+<!-- B12-RENDER-002-SNAPSHOT-20261104 -->
+## B12 bounded Android renderer snapshot — 4 November 2026
+B12 source-integrated read-only delayed (3s, at most 512 visible renderers) scene Material/Shader status logger in [70edac4](https://github.com/alwansan/raf/commit/70edac4f5406efdb971e987c0e104682d8cefd42); [B12 isolated source-policy CI41919089409](https://github.com/alwansan/raf/actions/runs/41919089409) **SUCCESS** and [existing original Android managed compile CI41918822038](https://github.com/alwansan/raf/actions/runs/41918822038) **SUCCESS**. It samples missing/null/unsupported/zero-pass/error shaders and color-space/lighting without modifying materials. Not an actual Unity GPU rendering, water/shader restoration or phone test. B50 already guarded Steam StoreStats, so B12 rejected a duplicate fix; local playable world and save/reload are still not device-confirmed. RENDER-002/LOCAL-005/WATER-001 OPEN, NOT_READY 0/3. [B12 work](coordination/work/RENDER-002/B12-20261104T2132Z-B12-c4a8-scene-render-probe.json).
+
+
 <!-- A11_STAGE_IDENTITY_V3_20261103 -->
 ## A11 RENDER-002 scoped shader-identity audit v3 (2026-11-03)
 
