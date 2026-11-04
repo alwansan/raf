@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "owner": "B21",
+  "session_id": "20261104T2257Z-B21-8e72",
+  "issue_id": "RENDER-002",
+  "hypothesis": "The original Light values match exported YAML but same native GameObject ownership is unproven; class1 source→export MetaPtr from SAME private export_instance can authenticate Light.m_GameObject owner relationship and detect silent scene attachment drift.",
+  "source_commit": "36bdd295ce9a498a33f9f264ca6e66153b62547a",
+  "input_hashes": [
+    "ZIP2 SHA15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "B21 value proof CI41930891466",
+    "W1 immutable helper Git blob 8e64093f5d1cd283f34163e2527c414b3f86b7a7",
+    "B02 staged hash c99c6e163ee20d9ff72e2180ed72ce94b5c608e20dc1095c3c81d3e678532c1e"
+  ],
+  "tool_versions": {
+    "AssetRipperCLI": "036098ab525a3f9f693dc101edeb21faad4d32d8",
+    "dotnet": "9.0.x",
+    "UnityPy": "1.23.0"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_b21_compare_light_owners.py -v",
+    "python3 -m scripts.b21_stage_light_lineage --base-helper SHA_LOCKED_W1 --destination PRIVATE_TEMP",
+    "dotnet publish pinned public exporter tool and run 9-provider bounded original game export with W1/B02/B21 private traces",
+    "python3 -m scripts.b21_compare_light_owners --original PRIVATE_VERIFIED --project PRIVATE_SAME_EXPORT --light-trace PRIVATE_B21 --w1-trace PRIVATE_W1"
+  ],
+  "negative_controls": [
+    "Light value mismatches do not imply owner correctness",
+    "owner pointer to wrong exported GameObject produces drift",
+    "missing actual exported GameObject fails",
+    "two distinct original GameObjects collapsed to same pointer refused",
+    "owner missing from exact same-instance class1 trace refused",
+    "extra scene class1 objects ignored, not guessed into original scope",
+    "symlink exported scene refused"
+  ],
+  "workflow_path": ".github/workflows/raft-b21-original-light-export.yml",
+  "run_url": null,
+  "artifact_urls": [],
+  "budget": "One repeat of 9-provider CPU-only exact original export, justified by new class1 ownership identity proof (not identical previous experiment); 25m isolated workflow, no Unity/Adreno/APK, temporary private traces not uploaded.",
+  "status": "in_progress",
+  "observed_result": null,
+  "rejected_hypotheses": [
+    "Matching Light field values alone proves same GameObject association: rejected; explicit native class1 source→export lineage required."
+  ],
+  "limitations": [
+    "Only 2 Lights in selected original six scenes, not complete world or runtime",
+    "No shader/lighting pixels/phone proof",
+    "Private traces may contain original identities and must not be uploaded"
+  ],
+  "integration_commit": null,
+  "next_step": "Check new bounded original experiment run, correct observed code failures only, update work/resource/issue/STATUS and preserve result."
+}
