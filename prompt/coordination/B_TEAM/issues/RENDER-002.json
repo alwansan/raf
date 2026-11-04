@@ -29,7 +29,11 @@
     "https://github.com/nowl-it/AssetRipperCLI/blob/036098ab525a3f9f693dc101edeb21faad4d32d8/Source/AssetRipper.Export.UnityProjects/Textures/ImporterFactory.cs",
     "https://github.com/alwansan/raf/actions/runs/41915726289",
     "https://github.com/alwansan/raf/commit/b26b942f2f054c32091c628177835cdc68594cda",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B11_ORIGINAL_COLOR_GAMUT_PARITY_2026-11-04.md"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B11_ORIGINAL_COLOR_GAMUT_PARITY_2026-11-04.md",
+    "https://github.com/alwansan/raf/commit/46b9fb69d0e63526717e010bf9d7eb487fe9e2c5",
+    "https://github.com/alwansan/raf/actions/runs/41917602226",
+    "https://github.com/alwansan/raf/actions/runs/41917602139",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B10_VENDOR_SHADER_META_FIDELITY_2026-11-04.md"
   ],
   "remaining": [
     "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -43,13 +47,14 @@
     "B03 exported Renderer.m_Materials→Material GUID/fileID identity guard: 17 synthetic CI cases PASS (41914562432); actual source-authenticated full Unity export and same-instance renderer source assignment remain unverified; no device-color repair proven.",
     "B02: مصدر AssetRipper المثبت يضبط sRGBTexture عندما يكون m_ColorSpace=Linear، بخلاف فرضية B02 الأولى؛ تم تعطيل --repair تماماً، مع مقارنة قراءتين دون تعديل بيانات. يلزم إثبات هوية المصدر→تصدير ومعنى المخرجات بصور Unity قبل الإصلاح. CI41915207812 PASS12/12 اصطناعي فقط.",
     "B05 now checks texture PPtrs AND m_Scale/m_Offset with 14 source-free tests; original source-to-same-export shader/material texture/UV comparison and real color pixels remain unproven.",
-    "B11 original source-pinned m_ColorGamuts=[0] exact-field restoration integrated into native temporary export and candidate recheck; 12 synthetic local tests passed. Actual Raft exported YAML format and mismatch, remote CI result, Unity import/device visuals unverified; reject mismatches outside recognized one-element layouts, retain RENDER-002 OPEN."
+    "B11 original source-pinned m_ColorGamuts=[0] exact-field restoration integrated into native temporary export and candidate recheck; 12 synthetic local tests passed. Actual Raft exported YAML format and mismatch, remote CI result, Unity import/device visuals unverified; reject mismatches outside recognized one-element layouts, retain RENDER-002 OPEN.",
+    "B10: source-only generated vendor fallback ShaderImporter .meta GUID/rollback integrated, isolated CI41917602226 PASS 22/22 and A3 CI41917602139 PASS; original Shader GUIDs unchanged in synthetic tests. Exact two missing metas in native41741108965 not identified; next verified real export, zero missing metas and Unity/device visuals remain unproven."
   ],
   "acceptance": [
     "مطابقة روابط ومراجع الأصل",
     "مقارنةصوريةلنفسالمشهد",
     "نجاحعلىالهاتف"
   ],
-  "updated_by": "B11",
-  "updated_at": "2026-11-04T21:27:00Z"
+  "updated_by": "B10",
+  "updated_at": "2026-11-04T21:39:23.050Z"
 }
