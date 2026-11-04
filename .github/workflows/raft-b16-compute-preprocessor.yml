@@ -1,0 +1,31 @@
+name: "B16 WATER-001 compute preprocessor source guards"
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/b47_compute_kernel_contract.py
+      - tests/test_b16_compute_preprocessor_contract.py
+      - tests/test_b47_compute_kernel_contract.py
+      - .github/workflows/raft-b16-compute-preprocessor.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: b16-compute-preprocessor-${{ github.ref }}-${{ github.run_id }}
+  cancel-in-progress: false
+jobs:
+  source-contract:
+    name: "B16 structural-only compute gate (no game data)"
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+      - name: Validate synthetic preprocessor and prior water gate controls
+        run: |
+          python3 -m unittest -v \
+            tests.test_b16_compute_preprocessor_contract \
+            tests.test_b47_compute_kernel_contract \
+            tests.test_verify_water_render_contract
