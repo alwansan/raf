@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "owner": "B07",
+  "session_id": "20261104T2112Z-B07-6e51",
+  "issue_id": "LOCAL-005",
+  "hypothesis": "A bounded synthetic GameManager.OnWorldRecieved callback compiled/executed with UNITY_ANDROID verifies actual CLR branch delivery, catch-rethrow and finally operation closing of production B07 instrumentation. Neither original source nor Unity runtime executed.",
+  "source_commit": "9f71f1722f11bd136e0deeac0ba7cefa3d72dc71",
+  "input_hashes": [
+    "Synthetic original-free GameManager fixture, generated at CI runtime",
+    "SHA-verified production Python adapter scripts/instrument_android_runtime_operations.py, config/runtime-operation-traces.json"
+  ],
+  "tool_versions": {
+    "python": "3.x",
+    "dotnet": "10.0.x"
+  },
+  "commands": [
+    "python3 -m scripts.b07_compile_world_callback_fixture --output $RUNNER_TEMP/b07-compiled",
+    "dotnet run --project $RUNNER_TEMP/b07-compiled/B07Harness.csproj --configuration Release --nologo"
+  ],
+  "negative_controls": [
+    "branch0 success",
+    "branch1 success",
+    "branch2 SaveGame throws synthetic InvalidOperationException requiring rethrow and finally",
+    "Begin/End/exception counters must match exact values"
+  ],
+  "workflow_path": ".github/workflows/raft-b07-world-callback-chain.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41916347469",
+  "artifact_urls": [],
+  "budget": "single ubuntu-24.04 CI, max12min, synthetic C#, no Unity/LFS/private asset/release",
+  "status": "running",
+  "observed_result": null,
+  "rejected_hypotheses": [],
+  "limitations": [
+    "CLR synthetic is not actual Raft managed source semantics outside the traced callback",
+    "Not Unity IL2CPP or Android device",
+    "No original .rgd read/write in this harness"
+  ],
+  "integration_commit": null,
+  "next_step": "Read CI, fix precise defects if any, preserve evidence and close only bounded .NET fixture scope."
+}
