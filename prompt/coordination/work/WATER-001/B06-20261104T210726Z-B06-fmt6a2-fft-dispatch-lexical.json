@@ -6,7 +6,7 @@
   "issue_id": "WATER-001",
   "track": "water-fft",
   "approach": "Eliminate comment/string fake Dispatch calls in authenticated FFT serialized-resource correlation; share existing tested B01 mask_noncode code, preserve SHA pins and reject mutated real calls.",
-  "status": "active",
+  "status": "completed",
   "base_sha": null,
   "intended_files": [
     "scripts/probe_original_fft_resource_bindings.py",
@@ -18,9 +18,13 @@
     "B01 already hardened probe_original_fft_kernel_callsites.py (reuse, do not change)",
     "B48 selector identity active"
   ],
-  "experiment_ids": [],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement masked raw Dispatch source pass, new synthetic adversarial tests and isolated CI; do not claim kernel identity.",
-  "updated_at": "2026-11-04T21:15:55.084Z"
+  "experiment_ids": [
+    "20261104T210726Z-B06-fmt6a2-fft-dispatch-lexical"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41914612977"
+  ],
+  "result": "SOURCE_FIXED df784a6: secondary original FFT resource-binding Dispatch shape parser uses existing executable-only C# mask and cannot count commented/quoted fake calls. Synthetic unit tests 8/8 PASS in 41914612977 on source f4b9520; original private-data and Unity/device remain unverified.",
+  "next_step": "Follow original private source CI only if independent confirmation needed (no repeat budget), then real authored .compute/ShaderLab shader import and Android runtime validation with B47/B48; no fake kernel indices.",
+  "updated_at": "2026-11-04T21:18:53.107Z"
 }
