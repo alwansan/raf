@@ -6,7 +6,7 @@
   "issue_id": "RENDER-002",
   "track": "colors-materials",
   "approach": "Use B15 exact-export trace bridge, authenticate original typed Texture2D m_ColorSpace and verify nested TextureImporter.mipmaps.sRGBTexture rather than incorrect top-level regex; read-only.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "6c1a4407a4a4409b4cc28ed721c76bd65e0f6375",
   "intended_files": [
     "scripts/b02_texture_import_color_guard.py",
@@ -18,9 +18,20 @@
   "related_work": [
     "B15-20261104T215400Z-B15-7b2c-sampler-parity"
   ],
-  "experiment_ids": [],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement and verify CPU controls in B02 isolated CI; keep --repair disabled.",
-  "updated_at": "2026-11-04T22:33:00Z"
+  "experiment_ids": [
+    "B02-20261104T2233Z-mipmap-trace-bridge"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41927008905"
+  ],
+  "result": {
+    "source_commit": "ee12d1c349167e7012a8cee7ea1f8d9e8adb4c75",
+    "synthetic_cases_passed": 16,
+    "real_original_data_consumed": false,
+    "actual_export_tested": false,
+    "game_resources_modified": 0,
+    "result": "Nested importer parsed with unique-key YAML; B15 same-instance trace consumed and original typed color reread from SHA-pinned source when provided. --repair remains prohibited."
+  },
+  "next_step": "Use newly compiled B02 class28 capture with authentic same-generation export and original bytes; then source/export parity and Unity pixel test.",
+  "updated_at": "2026-11-04T22:45:00Z"
 }
