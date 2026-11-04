@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "owner": "B43",
+  "session_id": "20261104T2104Z-B43-c8f2",
+  "issue_id": "RENDER-002",
+  "hypothesis": "Compare authenticated original Material valid/invalid keywords and disabled shader passes against actual exported YAML by same-instance trace identity; reject malformed or changed state.",
+  "source_commit": "8f9ecde1fc82808af79fdc6194a211c2560c1398",
+  "input_hashes": [
+    "ZIP2 pinned 15964ea8f246b6e076ce26b60931ee2e1a9a2385; authentic bytes not loaded in this synthetic run"
+  ],
+  "tool_versions": {
+    "python": "3.11.17",
+    "os": "Ubuntu 24.04"
+  },
+  "commands": [
+    "python3 -m compileall -q scripts/b43_material_keyword_fidelity.py tests/test_b43_material_keyword_fidelity.py",
+    "python3 -m unittest discover -s tests -p test_b43_material_keyword_fidelity.py -v"
+  ],
+  "negative_controls": [
+    "missing/wrong export GUID",
+    "duplicate trace source",
+    "lost enabled keyword",
+    "lost invalid keyword",
+    "modified disabledShaderPasses",
+    "wrong engine redirect",
+    "malformed or duplicate YAML fields",
+    "unsafe scalar",
+    "symlinked export path",
+    "end-to-end synthetic YAML/meta path mutation"
+  ],
+  "workflow_path": ".github/workflows/raft-b43-material-keyword-fidelity.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41914188268",
+  "artifact_urls": [],
+  "budget": "5min ubuntu24.04 public runner no LFS/Unity/original assets",
+  "status": "completed",
+  "observed_result": "B43 read-only comparator implemented, synthetic CI 14/14 PASS (41913711656), expanded 17/17 PASS (41914188268). No genuine source-vs-same-instance full export comparison performed.",
+  "rejected_hypotheses": [
+    "Synthetic tests demonstrate APK86 white colors caused by keyword corruption (unsupported)",
+    "YAML pointer identity implies GPU program equivalence (false)"
+  ],
+  "limitations": [
+    "Exact exported YAML schema not observed from authentic complete Raft export",
+    "No source-to-actual game export comparison or Unity/Adreno test",
+    "Not integrated as production blocking gate",
+    "No shader source or material appearance changed"
+  ],
+  "integration_commit": "9a918009c18332fa3bc176ebd008c6dd5eba7baa",
+  "next_step": "Coordinate with W4 existing complete export and run private original/trace/YAML comparator, repair only proven mismatch."
+}

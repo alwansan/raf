@@ -1,0 +1,14 @@
+{
+  "id": "20261104T2117Z-B43-keyword-tests",
+  "owner": "B43",
+  "session_id": "20261104T2104Z-B43-c8f2",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "Original-to-export Material keyword/pass state verifier and synthetic YAML/meta controls completed; CI 17/17 PASS; no real export/device claim.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/9a918009c18332fa3bc176ebd008c6dd5eba7baa",
+    "https://github.com/alwansan/raf/commit/8f9ecde1fc82808af79fdc6194a211c2560c1398",
+    "https://github.com/alwansan/raf/actions/runs/41914188268"
+  ],
+  "at": "2026-11-04T21:17:54.375Z"
+}
