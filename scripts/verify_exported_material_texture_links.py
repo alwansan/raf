@@ -79,10 +79,14 @@ def texenv(doc):
     if len(TEX.findall(region))!=len(result): fail("orphan_texture_pointer")
     return result
 
-def is_texture(path,meta):
-    if path.suffix.lower() in IMAGES: return bool(re.search(r"(?m)^TextureImporter:[ \t]*$",meta))
+def is_texture(path,meta,fid):
+    # Imported Texture2D has an exact Unity fileID. A valid GUID paired with
+    # a non-existent sub-object is a dangling reference too.
+    if path.suffix.lower() in IMAGES:
+        return fid==2800000 and bool(re.search(r"(?m)^TextureImporter:[ \t]*$",meta))
     if path.suffix.lower() in {".asset",".cubemap",".rendertexture"}:
-        return bool(re.search(r"(?m)^---[ \t]+!u!(?:28|84|86|89|117|187|188|205)[ \t]+&-?\d+",read(path)))
+        return any(int(h[2])==fid and int(h[1]) in CLASSES
+                   for h in HEADER.finditer(read(path)))
     return False
 
 def audit(project,expected_materials=None):
@@ -125,8 +129,9 @@ def audit(project,expected_materials=None):
                 else:
                     if kind not in (2,3): fail("invalid_external_texture_type")
                     if guid not in targets: fail("missing_texture_guid")
-                    if guid not in verified: verified[guid]=is_texture(*targets[guid])
-                    if not verified[guid]: fail("reference_target_not_verified_texture")
+                    key=(guid,fid)
+                    if key not in verified: verified[key]=is_texture(*targets[guid],fid)
+                    if not verified[key]: fail("reference_target_not_verified_texture")
                     counts["resolved"]+=1
     if expected_materials is not None and (expected_materials<=0 or expected_materials!=counts["materials"]):
         fail("expected_material_count_mismatch")
