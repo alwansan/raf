@@ -6,8 +6,8 @@
   "issue_id": "LOCAL-005",
   "track": "world-save",
   "approach": "Harden original operation instrumentation source-and-backup path provenance and transactional original rollback; do not change SaveGame or Steam logic.",
-  "status": "active",
-  "base_sha": null,
+  "status": "completed",
+  "base_sha": "0d9d2f3f205bc59fe0b7be332611076883012ee0",
   "intended_files": [
     "scripts/instrument_android_runtime_operations.py",
     "tests/test_b22_runtime_stage_integrity.py",
@@ -22,8 +22,10 @@
   "experiment_ids": [
     "b22-20261104T2134Z-B22-c91f-local-runtime-staging"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Source guard with staged rollback, synthetic failures and isolated CI; avoid new Unity/native test.",
-  "updated_at": "2026-11-04T21:56:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41920661518"
+  ],
+  "result": "Runtime-operation staging source path/backup transaction hardened in 2f50776d; CI41920661518 SUCCESS 14 synthetic rollback/redirect controls plus existing operation checks; no original world phone acceptance.",
+  "next_step": "At next coordinated authenticated native import confirm operation stages original and metadata, then test create/save/load .rgd on phone.",
+  "updated_at": "2026-11-04T22:09:00Z"
 }
