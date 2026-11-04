@@ -89,14 +89,14 @@ class TestB02TextureImport(TestCase):
                                     read_typetree=lambda: {"m_ColorSpace": False})
         module = types.SimpleNamespace(load=lambda path: types.SimpleNamespace(objects=[obj]))
         with mock.patch.dict(sys.modules, {"UnityPy": module}):
-            with self.assertRaisesRegex(ValueError, "disagrees"):
+            with self.assertRaisesRegex(ValueError, "invalid original"):
                 self.run_audit(original=source)
 
     def test_missing_and_duplicate_importer_flags_are_rejected(self):
         self.meta.write_text(f"fileFormatVersion: 2\nguid: {self.guid}\nTextureImporter:\n")
         with self.assertRaises(ValueError):
             self.run_audit()
-        self.set_meta(1, "    sRGBTexture: 0\n")
+        self.set_meta(1, "  mipmaps: {}\n")
         with self.assertRaises(ValueError):
             self.run_audit()
 
