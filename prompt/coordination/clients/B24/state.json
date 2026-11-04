@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "username": "B24",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2126Z-B24-6f19",
+  "resumed_from_session": null,
+  "status": "active",
+  "base_sha": "6bd9026e63b0147f3bb995188a1aa79d956533b3",
+  "last_commit": null,
+  "updated_at": "2026-11-04T21:27:28.998Z",
+  "tracks": [
+    "LOCAL-005",
+    "world-compile-parity"
+  ],
+  "work_ids": [
+    "B24-20261104T2126Z-B24-6f19-world-callback-compile-parity"
+  ],
+  "run_urls": [],
+  "next_step": "Compare native GameManager operation instrumentation with the SHA-authenticated cheap managed compilation; add fail-closed source-selection and synthetic tests.",
+  "memory_path": "prompt/coordination/clients/B24/MEMORY.md"
+}

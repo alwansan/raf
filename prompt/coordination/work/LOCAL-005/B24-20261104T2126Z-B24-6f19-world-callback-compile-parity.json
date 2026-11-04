@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "owner": "B24",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2126Z-B24-6f19",
+  "issue_id": "LOCAL-005",
+  "track": "world-compile-parity",
+  "approach": "Include SHA-locked GameManager trace-only original in existing offline managed candidate, matching native pipeline; assert exact selection, no source bypass and compile in existing CI.",
+  "status": "active",
+  "base_sha": "6bd9026e63b0147f3bb995188a1aa79d956533b3",
+  "intended_files": [
+    "scripts/verify_android_offline_candidate.py",
+    "tests/test_b24_offline_candidate_trace_parity.py",
+    ".github/workflows/raft-android-offline-integration-tests.yml"
+  ],
+  "hypothesis": "Real native GameManager OnWorldRecieved instrumentation is not covered by cheap actual-original managed compile, allowing untested callback source compilation regressions.",
+  "related_work": [
+    "B07-20261104T2112Z-B07-6e51-world-callback-proof.json",
+    "B50-20261104T2039Z-B50-d7a3-steamstats-offline.json"
+  ],
+  "experiment_ids": [
+    "B24-20261104T2126Z-managed-trace-parity"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Register source only, patch and run tests without Unity/APK; keep world issue OPEN.",
+  "updated_at": "2026-11-04T21:27:28.998Z"
+}

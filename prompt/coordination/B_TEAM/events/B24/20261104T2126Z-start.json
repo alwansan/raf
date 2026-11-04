@@ -1,0 +1,14 @@
+{
+  "id": "20261104T2126Z-B24-start",
+  "owner": "B24",
+  "session_id": "20261104T2126Z-B24-6f19",
+  "issue_id": "LOCAL-005",
+  "type": "start",
+  "summary": "B24 selected independent GameManager world-callback instrumentation parity: native path instruments GameManager; cheap managed candidate skips trace-only original GameManager. Patching fail-closed, source-pinned coverage without changing real game behavior.",
+  "evidence": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/.github/workflows/raft-unity-editor-android-import.yml",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/verify_android_offline_candidate.py",
+    "https://github.com/alwansan/raf/actions/runs/41915466470"
+  ],
+  "at": "2026-11-04T21:27:28.998Z"
+}

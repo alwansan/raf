@@ -1,0 +1,17 @@
+# B24 — independent Raft Android engineering memory
+
+Session: `20261104T2126Z-B24-6f19` (2026-11-04T21:27:28.998Z); generation B-2026-11-04. No prior B24 state found; new identity. Writing only `feature/android-native-port`. Current reviewed initial branch head `6bd9026e63b0147f3bb995188a1aa79d956533b3` (live branch may move). ZIP2 source pin: `15964ea8f246b6e076ce26b60931ee2e1a9a2385` (not downloaded in this scope).
+
+## Read and verified
+
+B team PROMPT_AR, README, OPERATING_MODEL_AR, SOURCES_AND_ACTIONS_AR, TEMPLATES, REVIEW, SUMMARY; AGENTS, current owner requirements, prompt README/CONTINUE/STATUS, ZIP2 provider and RESTORE. Read live branch, Actions, Releases, CL index, WATER-001/RENDER-002/LOCAL-005 issues, local world adapter/instrumentation code, B07 original callback probe and CI, main offline CI and native workflow.
+
+Latest published real Raft APK86: run https://github.com/alwansan/raf/actions/runs/41812889049; newer LogRaft release tags are not game releases. CL original APK86 logs/summary linked by REVIEW_2026-11-04 demonstrate SteamUserStats.StoreStats DllNotFoundException after WorldHasBeenLoaded, plus invalid water passes/kernelCount0. Owner reports FMOD audio and Settings working, touch/layout deferred.
+
+## Chosen gap and plan
+
+Work `B24-20261104T2126Z-B24-6f19-world-callback-compile-parity` / issue LOCAL-005. Main native workflow calls `instrument_android_runtime_operations --apply` with trace manifest including `GameManager.OnWorldRecieved`; cheap `verify_android_offline_candidate.prepare()` selects only `adapt_android_offline_startup.PINS`, which excludes `GameManager`. B07 confirms source SHA and standalone wrapper lexical correctness, but that does not exercise full managed compilation of instrumented original GameManager. Correct preflight/actual-native parity, not game behavior. Need add SHA authenticated trace-only source selection and candidate write in fail-closed stage, synthetic negative controls, then inspect real CI. No Unity build or touch/audio changes. Do not claim WorldHasBeenRecieved or .rgd/device fixed.
+
+## Followup/checkpoints
+
+Read concurrent HEAD before writes; do not overwrite others. At finish record actual commit and CI URL/status, limitations and next move. Identity belongs only to B24.
