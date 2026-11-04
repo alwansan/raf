@@ -15,19 +15,23 @@
     "https://github.com/alwansan/raf/actions/runs/41911949540",
     "https://github.com/alwansan/raf/actions/runs/41914637539",
     "https://github.com/alwansan/raf/actions/runs/41915466470",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B07_LOCAL_WORLD_CALLBACK_CHAIN_2026-11-04.md"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B07_LOCAL_WORLD_CALLBACK_CHAIN_2026-11-04.md",
+    "https://github.com/alwansan/raf/actions/runs/41916497807",
+    "https://github.com/alwansan/raf/actions/runs/41916497902",
+    "https://github.com/alwansan/raf/commit/5cfd0544af9808dbd0326a7394a99283846d7ed4"
   ],
   "remaining": [
     "Original Cheat.AllowCheatsForLocalPlayer SteamUser.GetSteamID direct object call now source-guarded in B50 2bb6c2; no native/phone verification. Do not infer all Steam callbacks are removed.",
     "APK86 SaveGame -> steam_api64 StoreStats failure is source-guarded in B50 commit c06acd1, not yet retested in a native APK/device; preserve original .rgd and verify create/save/reload on newer build",
     "تتبع OnWorldRecieved والتحميل والحفظ واللاعب دون أعلام نجاح وهمية",
-    "B07 pinned GameManager.OnWorldRecieved original 3 SaveGame callsites and source-integrated Android world Begin/End/exception instrumentation in native import config (CI41915466470 SUCCESS 15 synthetic + original pin/wrapper). Not Unity/IL2CPP/device tested; actual local .rgd create-save-reload and any other error remain unverified."
+    "B07 pinned GameManager.OnWorldRecieved original 3 SaveGame callsites and source-integrated Android world Begin/End/exception instrumentation in native import config (CI41915466470 SUCCESS 15 synthetic + original pin/wrapper). Not Unity/IL2CPP/device tested; actual local .rgd create-save-reload and any other error remain unverified.",
+    "B24: authenticated GameManager.OnWorldRecieved callback instrumentation is now included in original managed compile (CI PASS); Android Unity/device world creation and .rgd roundtrip remain untested."
   ],
   "acceptance": [
     "دخول عالم جديد محلي قابل للعب بلا Steam أو سيرفر خارجي",
     "حفظ .rgd ثم إعادة تحميله فعلياً",
     "لا يكفي إخفاء رسالة الاتصال"
   ],
-  "updated_by": "B07",
-  "updated_at": "2026-11-04T21:24:00Z"
+  "updated_by": "B24",
+  "updated_at": "2026-11-04T21:32:10.807Z"
 }

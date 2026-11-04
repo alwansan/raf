@@ -6,7 +6,7 @@
   "issue_id": "LOCAL-005",
   "track": "world-compile-parity",
   "approach": "Include SHA-locked GameManager trace-only original in existing offline managed candidate, matching native pipeline; assert exact selection, no source bypass and compile in existing CI.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "6bd9026e63b0147f3bb995188a1aa79d956533b3",
   "intended_files": [
     "scripts/verify_android_offline_candidate.py",
@@ -21,8 +21,11 @@
   "experiment_ids": [
     "B24-20261104T2126Z-managed-trace-parity"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Register source only, patch and run tests without Unity/APK; keep world issue OPEN.",
-  "updated_at": "2026-11-04T21:27:28.998Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41916497807",
+    "https://github.com/alwansan/raf/actions/runs/41916497902"
+  ],
+  "result": "SOURCE_FIXED/CI_VERIFIED only: SHA-authenticated original trace-only GameManager now included and instrumented in cheap managed compile; six B24 synthetic negative controls PASS, original managed compile and local RPC harness PASS. No Unity/native APK/device or world fix proven.",
+  "next_step": "Check actual next Android native candidate's original callback trace and create/save/reload; continue parallel P0 graphics work.",
+  "updated_at": "2026-11-04T21:32:10.807Z"
 }

@@ -1,0 +1,14 @@
+{
+  "id": "20261104T2131Z-B24-compile-parity-result",
+  "owner": "B24",
+  "session_id": "20261104T2126Z-B24-6f19",
+  "issue_id": "LOCAL-005",
+  "type": "integration",
+  "summary": "B24 source-integrated SHA-locked GameManager callback instrumentation in original offline compile. 6 B24 synthetic controls and original managed compilation+local RPC CI successful; no Unity/device or world-save closure.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/5cfd0544af9808dbd0326a7394a99283846d7ed4",
+    "https://github.com/alwansan/raf/actions/runs/41916497807",
+    "https://github.com/alwansan/raf/actions/runs/41916497902"
+  ],
+  "at": "2026-11-04T21:32:10.807Z"
+}

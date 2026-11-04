@@ -15,3 +15,10 @@ Work `B24-20261104T2126Z-B24-6f19-world-callback-compile-parity` / issue LOCAL-0
 ## Followup/checkpoints
 
 Read concurrent HEAD before writes; do not overwrite others. At finish record actual commit and CI URL/status, limitations and next move. Identity belongs only to B24.
+
+## Verified checkpoint 2026-11-04T21:32:10.807Z
+
+- Integration commit: https://github.com/alwansan/raf/commit/5cfd0544af9808dbd0326a7394a99283846d7ed4. Modified only `scripts/verify_android_offline_candidate.py`; new B24 synthetic tests and isolated workflow. The original `GameManager` SHA `8eb76bcf22028ace2394afe96051ae1e3e59e44f8243c2a68d6b163d80802306` is pinned by `config/runtime-operation-traces.json` and matched by the B07 authentic-original source proof. Late write gate authenticates trace-only sources using that SHA (no PINS bypass).
+- B24 CI https://github.com/alwansan/raf/actions/runs/41916497807 **SUCCESS**, 6/6 targeted synthetic (missing, duplicate, changed post-selection, unregistered and SDK homonym controls plus preserve meta).
+- Existing full real-original managed CI https://github.com/alwansan/raf/actions/runs/41916497902 **SUCCESS** on the exact integration source; original ILSpy recovery, adapted local RPC harness, original managed C# compilation passed. Native Unity Editor, ARM64, pixels and phone **NOT TESTED**. No claimed fix for Steam loaded-world failure or .rgd roundtrip. Audio and Settings untouched; touch deferred. Latest published Raft APK86 predates this.
+- Work completed for callback compilation parity only. Next: move to distinct P0 blocker; recheck live HEAD, current teammates' work before writing.
