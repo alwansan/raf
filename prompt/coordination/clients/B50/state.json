@@ -6,16 +6,20 @@
   "resumed_from_session": null,
   "status": "active",
   "base_sha": "4086cd508c154ad081d2e3931e6775c622f37c3d",
-  "last_commit": null,
-  "updated_at": "2026-11-04T20:39:16Z",
+  "last_commit": "7af9a080c668ec504103fd73965fe5d823e0742a",
+  "updated_at": "2026-11-04T20:48:00Z",
   "tracks": [
     "world-save",
-    "render-regression-review"
+    "steam-offline-fallback"
   ],
   "work_ids": [
-    "B50-20261104T2039Z-B50-d7a3-steamstats-offline"
+    "B50-20261104T2039Z-B50-d7a3-steamstats-offline",
+    "B50-20261104T2039Z-B50-d7a3-cheat-steamid-probe"
   ],
-  "run_urls": [],
-  "next_step": "Audit exact SaveAndLoad/SteamUserStats and local-world adapter, patch genuine offline storage dependency with regression tests; preserve audio/Settings/touch and P0 water work.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41909535307",
+    "https://github.com/alwansan/raf/actions/runs/41909535306"
+  ],
+  "next_step": "Probe authentic Cheat.AllowCheatsForLocalPlayer Steam identity and other post-world-load calls without changing flags or touching audio/Settings/deferred touch; original managed offline compile SUCCESS, device not tested.",
   "memory_path": "prompt/coordination/clients/B50/MEMORY.md"
 }
