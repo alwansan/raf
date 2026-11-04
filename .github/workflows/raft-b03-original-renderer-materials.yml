@@ -1,0 +1,77 @@
+name: B03 RENDER-002 pinned ZIP2 original Renderer Material PPtrs
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/b03_original_renderer_materials.py'
+      - 'tests/test_b03_original_renderer_materials.py'
+      - '.github/workflows/raft-b03-original-renderer-materials.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raft-b03-original-renderer-source-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  source-shape-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Boundaries and synthetic data checks
+        run: |
+          python3 -m py_compile scripts/b03_original_renderer_materials.py
+          python3 -m unittest discover -s tests -p test_b03_original_renderer_materials.py -v
+  original-six-scenes:
+    needs: source-shape-tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+      - name: Check staging capacity
+        run: |
+          python3 - <<'PY'
+          import shutil
+          assert shutil.disk_usage('.').free >= 1024**3, "Insufficient free disk"
+          PY
+      - name: Checkout immutable six original ZIP2 scene blobs, no LFS
+        uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: .b03-source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            Raft/Raft_Data/level0
+            Raft/Raft_Data/level1
+            Raft/Raft_Data/level2
+            Raft/Raft_Data/level3
+            Raft/Raft_Data/level4
+            Raft/Raft_Data/level5
+      - name: Install pinned serialized reader
+        run: python3 -m pip install --disable-pip-version-check 'UnityPy==1.23.0'
+      - name: Verify original six SHA256 then count real Renderer Material PPtrs
+        run: |
+          set -euo pipefail
+          python3 -m scripts.b03_original_renderer_materials --source .b03-source-zip2/Raft/Raft_Data --report "$RUNNER_TEMP/b03-renderer-original-aggregate.json"
+          echo 'B03 source=true original_verified_scenes=6 full_export=false UnityPlayer=false Android=false'
+      - name: Upload only aggregate graph commitments (not source)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: b03-original-renderer-aggregate-${{ github.run_id }}
+          path: ${{ runner.temp }}/b03-renderer-original-aggregate.json
+          retention-days: 7
+          if-no-files-found: ignore
