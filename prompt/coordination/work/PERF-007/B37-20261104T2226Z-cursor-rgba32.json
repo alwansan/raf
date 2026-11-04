@@ -6,7 +6,7 @@
   "issue_id": "PERF-007",
   "track": "integration/render-errors",
   "approach": "Source-authenticate and, if safe, eliminate the APK86 repeated Cursor.SetCursor RGBA32 texture incompatibility without touching deferred touch layout; original color/texture fidelity must survive",
-  "status": "active",
+  "status": "completed",
   "base_sha": "5fc5c4838247c33669bba8b67e988893f22cd28e",
   "intended_files": [
     "scripts/b37_*",
@@ -20,9 +20,15 @@
     "B50 Steam guard",
     "B21 source lighting"
   ],
-  "experiment_ids": [],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Inspect original caller; implement only source-authenticated patch with regression tests, otherwise document rejected hypothesis and switch to authentic water gap.",
-  "updated_at": "2026-11-04T22:26:00Z"
+  "experiment_ids": [
+    "B37-20261104T2226Z-original-cursor-args"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41926487471",
+    "https://github.com/alwansan/raf/actions/runs/41926866328",
+    "https://github.com/alwansan/raf/actions/runs/41926892044"
+  ],
+  "result": "Source-provenance scope COMPLETE: original SHA-authenticated 2394 files/3 direct cursor calls/2 original files/1 literal null/2 nonliteral arguments; final CI 7/7 PASS. Not a device game fix, root of 1449 warnings unverified.",
+  "next_step": "Leave original cursor assets and deferred touch unchanged. Capture real callsite texture format/readability only with independently justified future new game build; move B37 effort to independent LOCAL-005 original RGD inherited-field compat gap.",
+  "updated_at": "2026-11-04T22:43:00Z"
 }
