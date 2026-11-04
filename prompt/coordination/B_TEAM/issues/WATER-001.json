@@ -9,20 +9,22 @@
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/W4_BUILTIN_GATE_AND_WATER_FRONTIER_2026-11-04.md",
     "https://github.com/alwansan/raf/commit/50702470954774ba96fe27509f1f9eddfd1aa4ea",
     "https://github.com/alwansan/raf/actions/runs/41911824567",
-    "https://github.com/alwansan/raf/actions/runs/41912422220"
+    "https://github.com/alwansan/raf/actions/runs/41912422220",
+    "https://github.com/alwansan/raf/actions/runs/41912450062"
   ],
   "remaining": [
     "Spectrum/Foam/Blur passes ناقصة في APK86",
     "kernelIndex6 مع kernelCount0",
     "ربط kernels/resources/original programs وUnity/Adreno",
     "B49 original ShaderLab pass structural gate fixed/11 synthetic tests pass; real original Spectrum/Foam/Blur programs and compute kernels still unverified and APK86 unchanged",
-    "B48 source-authenticated CSharp selector/20 compiled FFT program candidate workgroup match verified (10 pairs); actual Unity runtime kernel-ID-to-compiled-slot mapping still missing, no .compute import or Adreno device proof."
+    "B48 source-authenticated CSharp selector/20 compiled FFT program candidate workgroup match verified (10 pairs); actual Unity runtime kernel-ID-to-compiled-slot mapping still missing, no .compute import or Adreno device proof.",
+    "Original serialized FFT FindKernel/Dispatch kernel index to compiled program identity and Android GPU runtime remain unverified after B47 source-only entrypoint guard."
   ],
   "acceptance": [
     "هوية برامج ونوى أصلية أو تطابق موثق دونdummy",
     "تثبيت فيالتصدير+Unity import/render",
     "اختبار هاتف يثبت الماء بلا pass/kernel errors"
   ],
-  "updated_by": "B48",
-  "updated_at": "2026-11-04T21:08:11.963Z"
+  "updated_by": "B47",
+  "updated_at": "2026-11-04T21:08:00Z"
 }
