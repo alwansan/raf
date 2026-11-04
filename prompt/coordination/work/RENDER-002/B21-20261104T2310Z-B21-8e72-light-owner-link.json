@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "owner": "B21",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2257Z-B21-8e72",
+  "issue_id": "RENDER-002",
+  "track": "colors-materials:original-light-owner-same-export-identity",
+  "approach": "Extend only B21 optional private Light trace to include class1 GameObject exact native source→export MetaPtr; verify original Light.m_GameObject local PPtr targets the SAME actual exported GameObject referenced by exported Light in authenticated bounded Raft export. Retain 2/2 value proof, do not touch shared B02/W1.",
+  "status": "active",
+  "base_sha": "2a89780b3e7cd57eae439f6bfeb1897a47300e9b",
+  "intended_files": [
+    "scripts/b21_stage_light_lineage.py",
+    "scripts/b21_compare_export_lights.py",
+    "tests/test_b21_stage_light_lineage.py",
+    "tests/test_b21_compare_export_lights.py",
+    ".github/workflows/raft-b21-original-light-export.yml",
+    "docs/B21_LIGHT_EXPORT_LINEAGE_2026-11-04.md"
+  ],
+  "hypothesis": "Equal exported Light values do not ensure same GameObject attachment; exact source original native GameObject class1 to exported MetaPtr trace can validate Light.m_GameObject graph without guessed fileIDs.",
+  "related_work": [
+    "B21 2/2 original Light values CI41930891466",
+    "B03 source Renderer→Material PPtrs, different lane"
+  ],
+  "experiment_ids": [
+    "B21-20261104T2310Z-light-owner-same-export"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Add optional class1 capture, pass original owner PPtr mapping and exported local GameObject pointer to parity tool; negative controls, rerun bounded real original export; keep all pixels/device claims false.",
+  "updated_at": "2026-11-04T23:10:00Z"
+}
