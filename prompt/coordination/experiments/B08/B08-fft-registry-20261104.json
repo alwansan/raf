@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "owner": "B08",
+  "session_id": "20261104T2130Z-B08-b71c",
+  "issue_id": "WATER-001",
+  "hypothesis": "20 original serialized FFT compiled positions have separately identifiable runtime FindKernel IDs if their typed registry names uniquely distinguish them.",
+  "source_commit": "c24dba47cd49d9af4ae241de5032541b1a41e918",
+  "input_hashes": [
+    {
+      "provider": "alwansan/raf zip2",
+      "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+      "path": "Raft_Data/sharedassets0.assets",
+      "bytes": 115978112,
+      "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3"
+    },
+    {
+      "object": "original ComputeShader pathID 2456",
+      "sha256": "9d934f5c99183c6df5cf2f1fefc9d3e5ec4bce5da5f96a86e4c02910d5322247"
+    }
+  ],
+  "tool_versions": {
+    "python": "ubuntu-24.04 hosted Python3",
+    "UnityPy": "1.25.4"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_b08_fft_kernel_registry.py -v",
+    "python3 -m scripts.stage_zip2_fft_owner --zip2-checkout $RUNNER_TEMP/b08/zip2 --destination $RUNNER_TEMP/b08/original/Raft_Data/sharedassets0.assets",
+    "python3 -m scripts.b08_probe_fft_kernel_registry --source $RUNNER_TEMP/b08/original/Raft_Data"
+  ],
+  "negative_controls": [
+    "missing/unsafe kernel name",
+    "non-singular variantMap",
+    "missing/invalid keyword bundles",
+    "unexpected compiled count",
+    "reordered compiled positions",
+    "false Unity runtime index attestation",
+    "false individual runtime index provenance",
+    "unique names still not automatically runtime mapped"
+  ],
+  "workflow_path": ".github/workflows/raft-b08-fft-registry.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41917369953",
+  "artifact_urls": [],
+  "budget": "18 minutes max Ubuntu public standard runner; SHA-pinned ~116 MB original owner; no LFS, Unity, or APK; no private artifact",
+  "status": "completed",
+  "observed_result": {
+    "synthetic_tests_passed": 11,
+    "workflow_conclusion": "success",
+    "verified_original_variants": 1,
+    "compiled_entries": 20,
+    "distinct_original_kernel_names": 1,
+    "all_entries_alias_single_name": true,
+    "actual_runtime_kernel_id_to_compiled_slot_verified": false
+  },
+  "rejected_hypotheses": [
+    "20 compiled FFT variants are necessarily 20 separately named runtime Unity ComputeShader kernels",
+    "one serialized compiled program position is itself a verified FindKernel runtime index"
+  ],
+  "limitations": [
+    "Original Unity runtime kernel lookup/select mechanism not observed",
+    "No authored compatible .compute source restored",
+    "Not a Unity native build, GPU test, phone evidence or WATER-001 closure"
+  ],
+  "integration_commit": "835f2d9ef68258e91e7ce8a925dae6ff030e376c",
+  "next_step": "Independently recover original Unity kernel-name-to-variant selection mechanism and observe real Dispatch behavior; coordinate with B48 selector candidate mapping."
+}
