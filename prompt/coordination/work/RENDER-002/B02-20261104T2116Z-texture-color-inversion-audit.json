@@ -6,7 +6,7 @@
   "issue_id": "RENDER-002",
   "track": "colors-materials",
   "approach": "Compare pinned AssetRipper SRGBTexture equation against initial B02 mapping, eliminate unsafe repair before visual semantics proven, add dual interpretation read-only output and negative tests",
-  "status": "active",
+  "status": "completed",
   "base_sha": null,
   "intended_files": [
     "scripts/b02_texture_import_color_guard.py",
@@ -17,9 +17,22 @@
   "related_work": [
     "B02-20261104T2101Z-B02-e5cd-texture-import-fidelity"
   ],
-  "experiment_ids": [],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Fail-closed report and unit tests; no repair until original/export identity and semantic policy independently verified",
-  "updated_at": "2026-11-04T21:16:00Z"
+  "experiment_ids": [
+    "B02-20261104T2116Z-dual-policy-safe-readonly"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41915207812"
+  ],
+  "result": {
+    "source_commit": "0d5002faccd5f4304b2274cbada752ce122ff5e0",
+    "synthetic_tests": "12/12 PASSED",
+    "red_flag": "Original B02 direct Gamma->sRGB assumption opposes pinned AssetRipper ImporterFactory.cs (ColorSpace.Linear => SRGBTexture true)",
+    "source_guard": "Unsafe --repair path removed; source/edit unchanged; dual-policy read-only comparison",
+    "actual_original_tested": false,
+    "real_game_files_modified": 0,
+    "original_to_export_provenance_verified": false,
+    "unity_device_evidence": false
+  },
+  "next_step": "Verify exact same-export identity and actual original texture semantics/format with controlled import on Unity before re-enabling ANY write path; retain read-only audit.",
+  "updated_at": "2026-11-04T21:22:00Z"
 }
