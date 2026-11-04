@@ -1,0 +1,13 @@
+{
+  "id": "20261104T2132Z-start-vendor-meta",
+  "owner": "B10",
+  "session_id": "20261104T2132Z-B10-a6e1",
+  "issue_id": "RENDER-002",
+  "type": "start",
+  "summary": "B10 active P0 shader export metadata lane: native41741108965 reported two missing .shader.meta after authenticated TMP fallback additions; repairing only newly generated vendor shader metadata, original GUIDs untouched.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41741108965",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/W1_NATIVE_FAILURE_AND_ENGINE_REFERENCE_PROOF_2026-11-04.md"
+  ],
+  "at": "2026-11-04T21:31:48.375Z"
+}
