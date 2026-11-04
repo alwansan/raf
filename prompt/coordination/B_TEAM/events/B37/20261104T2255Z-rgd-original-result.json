@@ -1,0 +1,15 @@
+{
+  "id": "20261104T2255Z-rgd-original-result",
+  "owner": "B37",
+  "session_id": "20261104T2226Z-B37-cursor01",
+  "issue_id": "LOCAL-005",
+  "type": "result",
+  "summary": "B37 second independent source-authentic original ZIP2 RGD study completed, final CI41928767833 SUCCESS: original Data.rgd one Serializable root member, one direct eligible field zero direct name match, zero inherited fields and complete base chain; original serialized assembly name matches but version differs. Four negative controls passed. No unsafe BinaryFormatter, no save schema rewrite, no Android/Unity world save/reload or readiness claim. This does not establish corruption.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41928767833",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B37_ORIGINAL_RGD_INHERITED_FIELD_2026-11-04.md",
+    "https://github.com/alwansan/raf/commit/fc42e65b458ea317b2dea4e494671e978effc153"
+  ],
+  "next_step": "Trace original SaveAndLoad.Load<T> binder/version compatibility; coordinated actual newer APK .rgd create/save/reload; overall LOCAL-005/WATER-001/RENDER-002 OPEN.",
+  "at": "2026-11-04T22:55:00Z"
+}
