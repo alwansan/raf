@@ -2,10 +2,10 @@
   "schema_version": 1,
   "client_label": "We",
   "username": "raft-20261104T042244Z-we8c291f",
-  "session_id": "we-20261104T051816Z-93f216ab",
+  "session_id": "we-20261104T061547Z-f12a87bc",
   "status": "paused",
-  "base_sha": "a7f86f117da83a55085c4edc7bcfdf652eb2760d",
-  "updated_at": "2026-11-04T05:18:16Z",
-  "next_step": "Apply independent failure census to private original Blur MAD/MUL failures, then implement exact proven operand support. Three synthetic tests passed; no original execution or shader repair claimed.",
+  "base_sha": "91f8093b2815ccea73db42fc62be2a6c43451e9b",
+  "updated_at": "2026-11-04T06:15:47Z",
+  "next_step": "Previous MAD/MUL failure census plan superseded: original CI41783146659 proves 20 static CB reads, zero arithmetic failures. Do not repeat. Next correlate actual read addresses with named original member layout; current instruction_census discards addresses and retains count only, so add private correlation at source before report sanitization. No original payload acquired or original trial run by We this cycle; no shader repair claimed.",
   "memory_path": "prompt/coordination/clients/raft-20261104T042244Z-we8c291f/MEMORY.md"
 }
