@@ -6,8 +6,8 @@
   "issue_id": "LOCAL-005",
   "track": "world-save",
   "approach": "Extend A10 original RGD metadata-only authenticated consumer comparison to inherited field visibility and Serializable field attributes; never deserialize or execute game code.",
-  "status": "active",
-  "base_sha": null,
+  "status": "completed",
+  "base_sha": "8ef5f2ee57bee37771df24849734d9e8316b76a1",
   "intended_files": [
     "tests/b37-rgd-inherited-field/B37RgdInheritedField.csproj",
     "tests/b37-rgd-inherited-field/Program.cs",
@@ -24,8 +24,14 @@
   "experiment_ids": [
     "B37-20261104T2244Z-rgd-root-inheritance"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Build source-authenticated CPU metadata-only base-field/Serializable-state classifier with negative controls; no user save schema changes.",
-  "updated_at": "2026-11-04T22:44:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41928084203",
+    "https://github.com/alwansan/raf/actions/runs/41928221064",
+    "https://github.com/alwansan/raf/actions/runs/41928382242",
+    "https://github.com/alwansan/raf/actions/runs/41928548263",
+    "https://github.com/alwansan/raf/actions/runs/41928767833"
+  ],
+  "result": "Original ZIP2 RGD metadata source-proven CI41928767833 SUCCESS 4/4 negative: one Serializable root member, one eligible direct field zero matching; zero inherited fields; complete base chain; serialized assembly simple name matches but version differs. No runtime save failure or corruption proven. Earlier four failures were test-harness bugs, not RGD evidence.",
+  "next_step": "Trace original SaveAndLoad.Load<T> and serialization binder/version rules in privately authenticated source; verify actual .rgd world create/save/reload on newer justified APK; no speculative migration.",
+  "updated_at": "2026-11-04T22:54:00Z"
 }
