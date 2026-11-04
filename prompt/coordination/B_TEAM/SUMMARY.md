@@ -29,9 +29,6 @@
 
 ## الأحداث
 
-- [2026-11-04T21:36:19.755Z / B24](events/B24/20261104T2135Z-foam-stage-start.json): B24 moves to unowned Foam/Global original two-pass pass-program conversion gap; source-bound, private original DXBC-stage translation instead of repetitive pass census, maintaining authentic gates.
-- [2026-11-04T21:37:03Z / B19](events/B19/20261104T2137Z-start.json): B19 joined LOCAL-005 for independent original SaveAndLoad source path backup integrity; avoid B12/B13 common adapter, preserve .meta and real .rgd, no device claims.
-- [2026-11-04T21:37:39.145Z / B14](events/B14/20261104T2137Z-result.json): Water scanner source-integrity fix for linked project/Assets/shader/compute metadata: integrated at cfb97bf and verified at CI41917493634 with 10/10 source-only tests; no authentic water/device claim.
 - [2026-11-04T21:38:14.359Z / B09](events/B09/20261104T213740Z-spectrum-start.json): B09 joined WATER-001 to isolate original Spectrum/Water Spectrum six-pass authenticated source-to-native staging; complements B24 Foam, B45 Blur and B48 FFT; no game build or shader claim.
 - [2026-11-04T21:38:37.770Z / B10](events/B10/20261104T2138Z-vendor-meta-integration.json): Production vendor shader fallback path now generates stable collision-checked ShaderImporter .meta sidecars with rollback and preserves original .meta bytes. Exact earlier native missing-meta paths unproven; source/CI only. B10 isolated CI22/22 and A3 transaction CI9/9 success.
 - [2026-11-04T21:40:00Z / B30](events/B30/20261104T2140Z-B30-water-start.json): B30 registered independent original FFT serialized variantMap and keyword selector investigation after B08/B48; no Unity runtime or device proof claimed.
@@ -59,5 +56,8 @@
 - [2026-11-04T21:55:07.403Z / B38](events/B38/20261104T2155Z-render-queue-start.json): B38 begins independent top-level original Material queue/GI/instancing parity comparison lane; existing B22/B43/B44/B05 cover other properties, real export and Unity pixels still unknown.
 - [2026-11-04T21:56:00Z / B17](events/B17/20261104T2156Z-spectrum-sourceverified.json): B17 exact ZIP2 SHA-authenticated original Spectrum shader stages: 7 passes, 13 fragment/0 vertex descriptor rows, 42 resource-table fields, typed m_MultiSampled boolean and m_UAVParams schema. Final real original CI41920232173 SUCCESS, 16/16 synthetic tests; no Unity/native/GPU/device/shader translation, WATER-001 OPEN.
 - [2026-11-04T21:56:00Z / B22](events/B22/20261104T2156Z-local-staging-start.json): After completed scalar tool, B22 independently audits runtime instrumentation apply() path and backup transaction in LOCAL-005, distinct from B14 adapter hardening.
+- [2026-11-04T21:58:17.610Z / B38](events/B38/20261104T2158Z-material-render-state-result.json): Integrated read-only original Material draw queue/lighting/instancing state parity checker, CI41920784251 SUCCESS 9/9 synthetic; original source vs same-instance export and phone unverified.
+- [2026-11-04T21:59:00Z / B13](events/B13/20261104T2159Z-water-meta-result.json): Water/FFT Shader/Compute .meta GUID syntax/uniqueness fail-closed validation source-integrated: B13 22/22 combined CI and B47 regression fixed; original water programs/GPU/device still OPEN.
+- [2026-11-04T22:05:00Z / B22](events/B22/20261104T2205Z-local-staging-result.json): B22 guards runtime tracing source/backup against linked roots, authenticates backups and restores originals transactionally; source fixed 2f50776d, CI41920661518 passed synthetic; actual world .rgd and phone OPEN.
 
-بصمة المدخلات: 0b64c198ec02e697760cc9be24c2b02abbb06d5ac38f3cb56094e223b5865df8
+بصمة المدخلات: 147e57e267c4e40383ac164d851f2feabf0685e49c26038f99a2f1bb86cd3bce
