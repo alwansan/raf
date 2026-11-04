@@ -1,0 +1,14 @@
+{
+  "id": "20261104T2101Z-B49-water-pass-guard-result",
+  "owner": "B49",
+  "session_id": "20261104T2054Z-B49-c81f",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Source-integrated per-pass ShaderLab gate correction; independent synthetic+existing CI11/11 success; WATER-001 still OPEN, no GPU or original program restored.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/50702470954774ba96fe27509f1f9eddfd1aa4ea",
+    "https://github.com/alwansan/raf/actions/runs/41911824567",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B49_WATER_SHADERLAB_PASS_CONTRACT_2026-11-04.md"
+  ],
+  "at": "2026-11-04T21:01:00Z"
+}
