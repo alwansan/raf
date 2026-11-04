@@ -332,6 +332,8 @@ namespace RaftAndroid.Platform
                 const int RendererLimit = 512;
                 int sampled = 0, empty = 0, slots = 0, nullMaterials = 0, nullShaders = 0;
                 int unsupported = 0, zeroPass = 0, errorShaders = 0;
+                int meshRenderers = 0, missingMeshFilters = 0, missingMeshAssets = 0;
+                int skinnedRenderers = 0, missingSkinnedMeshes = 0;
                 bool truncated = false;
                 foreach (GameObject root in scene.GetRootGameObjects())
                 {
@@ -341,6 +343,22 @@ namespace RaftAndroid.Platform
                         if (!renderer || !renderer.enabled || !renderer.gameObject.activeInHierarchy) continue;
                         if (sampled >= RendererLimit) { truncated = true; break; }
                         sampled++;
+                        // Shared mesh references only; no mesh.vertex/triangle readback,
+                        // no instantiation of meshes and no geometry changes.
+                        MeshRenderer meshRenderer = renderer as MeshRenderer;
+                        if (meshRenderer != null)
+                        {
+                            meshRenderers++;
+                            MeshFilter filter = meshRenderer.GetComponent<MeshFilter>();
+                            if (!filter) missingMeshFilters++;
+                            else if (!filter.sharedMesh) missingMeshAssets++;
+                        }
+                        SkinnedMeshRenderer skinnedRenderer = renderer as SkinnedMeshRenderer;
+                        if (skinnedRenderer != null)
+                        {
+                            skinnedRenderers++;
+                            if (!skinnedRenderer.sharedMesh) missingSkinnedMeshes++;
+                        }
                         Material[] materials = renderer.sharedMaterials;
                         if (materials == null || materials.Length == 0) { empty++; continue; }
                         foreach (Material material in materials)
@@ -363,6 +381,9 @@ namespace RaftAndroid.Platform
                     "; null_materials=" + nullMaterials + "; null_shaders=" + nullShaders +
                     "; unsupported_shaders=" + unsupported + "; zero_pass_materials=" + zeroPass +
                     "; internal_error_shaders=" + errorShaders +
+                    "; mesh_renderers=" + meshRenderers + "; missing_mesh_filters=" + missingMeshFilters +
+                    "; missing_mesh_assets=" + missingMeshAssets +
+                    "; skinned_renderers=" + skinnedRenderers + "; missing_skinned_meshes=" + missingSkinnedMeshes +
                     "; color_space=" + QualitySettings.activeColorSpace +
                     "; ambient_mode=" + RenderSettings.ambientMode + "; fog=" + RenderSettings.fog +
                     "; skybox_assigned=" + (RenderSettings.skybox != null) +
