@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "owner": "B12",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2132Z-B12-c4a8",
+  "issue_id": "LOCAL-005",
+  "track": "world-save",
+  "approach": "SHA-pinned SaveAndLoad.SaveGame optional Steam stats boundary; preserve local file writes and callback semantics",
+  "status": "active",
+  "base_sha": "f8028d15b2401d1fd8c73b2316e5bf76fef88eae",
+  "intended_files": [
+    "scripts/adapt_android_offline_startup.py",
+    "tests/test_android_offline_startup.py"
+  ],
+  "hypothesis": "The APK86 SaveGame exception is due to unconditional SteamUserStats.StoreStats; skipping this optional network stats call for Android local mode while retaining disk writes eliminates this specific exception without fabricating world readiness.",
+  "related_work": [
+    "B50 Cheat SteamUser.GetSteamID patch",
+    "B07 original callback callchain probe",
+    "B24 managed callback parity"
+  ],
+  "experiment_ids": [
+    "B12-20261104T2132Z-B12-c4a8-storestats-boundary"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement isolated, source-fingerprint-guarded callsite transformation; run synthetic negative and positive controls.",
+  "updated_at": "2026-11-04T21:33:58.649Z"
+}
