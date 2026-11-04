@@ -6,7 +6,7 @@
   "issue_id": "RENDER-002",
   "track": "colors-materials",
   "approach": "Prevent false-positive Material texture fidelity when m_TexEnvs UV m_Scale/m_Offset transforms drift; extend B05 original-to-export verifier and synthetic negative controls.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "2d0825b53af9ead194febed01e9fd6e54cf3f0c2",
   "intended_files": [
     "scripts/b05_verify_material_texenv_bindings.py",
@@ -20,8 +20,11 @@
   "experiment_ids": [
     "B05-20261104T2118Z-uv-transform"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement strict finite 2D UV scale/offset parsing, add mutation tests and CI, do not assert actual texture degradation without same-instance data.",
-  "updated_at": "2026-11-04T21:18:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41915604221",
+    "https://github.com/alwansan/raf/actions/runs/41915726289"
+  ],
+  "result": "Actual B05 texture pointer/UV checker integrated; isolated final CI41915726289 SUCCESS on SHA dd7d20f with 14/14 synthetic tests. Two temporary fixture migration failures recorded and resolved; no actual game source/export comparison or phone proof.",
+  "next_step": "Run checker on SHA-authenticated original ZIP2 owners and exact same-instance Unity Material YAML + lineage trace; diagnose and fix only proven mismatches.",
+  "updated_at": "2026-11-04T21:26:00Z"
 }
