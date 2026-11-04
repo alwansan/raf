@@ -20,9 +20,14 @@ STAGES = {"progVertex": 1, "progFragment": 0}
 DECLARATIONS = {88: ("texture", 7, 4), 90: ("sampler", 6, 3),
                 156: ("uav", 30, 4)}
 UNSUPPORTED_RESOURCES = {157, 158, 161, 162}
-SLOTS = {"texture": ("m_TextureParams", "m_TextureParameters"),
-         "sampler": ("m_SamplerParams", "m_SamplerParameters"),
-         "uav": ("m_UAVParams", "m_UAVParameters")}
+# Identical structural alias whitelist to the original B17 stage-table census.
+# No texture or sampler descriptor is guessed from an unlisted field.
+SLOTS = {"texture": ("m_TextureParams", "m_TextureParameters",
+                      "m_Textures", "m_TextureBindings"),
+         "sampler": ("m_SamplerParams", "m_SamplerParameters",
+                      "m_Samplers", "m_SamplerBindings"),
+         "uav": ("m_UAVParams", "m_UAVParameters",
+                 "m_UAVs", "m_UAVBindings")}
 MAX_SLOTS = 256
 
 
