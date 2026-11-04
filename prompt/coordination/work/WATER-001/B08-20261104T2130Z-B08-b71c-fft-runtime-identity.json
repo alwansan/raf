@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "owner": "B08",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2130Z-B08-b71c",
+  "issue_id": "WATER-001",
+  "track": "water-fft",
+  "approach": "Authenticate exact original FFT ComputeShader object and inspect typed Unity kernel-name/variant registry to test whether compiled positions are runtime FindKernel IDs; classify ambiguity without invented kernels.",
+  "status": "active",
+  "base_sha": "169c0a7bceca9fde2f458a4a4d8dcbab7ac119b7",
+  "intended_files": [
+    "scripts/b08_probe_fft_kernel_registry.py",
+    "tests/test_b08_fft_kernel_registry.py",
+    ".github/workflows/raft-b08-fft-registry.yml",
+    "docs/B08_FFT_KERNEL_REGISTRY_2026-11-04.md"
+  ],
+  "hypothesis": "Original kernel-name / serialized variant table might establish or disprove 20 distinct runtime kernel IDs; mere serialized 20 compiled positions must not be equated to Unity runtime IDs.",
+  "related_work": [
+    "B48 source-authenticated selector/compiled pairs CI41912422220",
+    "B01 source kernel calls CI41914612977",
+    "B47 structural compute entrypoint CI41912450062"
+  ],
+  "experiment_ids": [
+    "B08-fft-registry-20261104"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement strict typed registry inspector, negative tests and run authenticated ZIP2-only original probe without raw proprietary outputs.",
+  "updated_at": "2026-11-04T21:30:35Z"
+}
