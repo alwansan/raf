@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "owner": "B02",
+  "session_id": "20261104T2233Z-B02-7c19",
+  "issue_id": "RENDER-002",
+  "hypothesis": "Existing W1 exporter trace only records classIDs21/48, so B02/B15 cannot obtain class28 original->export identity; a SHA-pinned disposable helper can produce class28 trace without changing W1 output or source assets.",
+  "source_commit": "477344ea3a903736761ffd4e9dd534604d08bc89",
+  "input_hashes": [
+    "W1 helper exact Git blob 8e64093f5d1cd283f34163e2527c414b3f86b7a7",
+    "Pinned AssetRipperCLI source commit 036098ab525a3f9f693dc101edeb21faad4d32d8",
+    "Temporary generated helper SHA256 c99c6e163ee20d9ff72e2180ed72ce94b5c608e20dc1095c3c81d3e678532c1e"
+  ],
+  "tool_versions": {
+    "dotnet": "SDK9.0.x",
+    "python": "GitHub Ubuntu24.04 runner Python3"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_b02_stage_texture_lineage.py -v",
+    "python3 -m scripts.b02_stage_texture_lineage --base-helper android-port/Experiments/ExportLineage/RaftExportLineage.cs --destination $RUNNER_TEMP/b02/RaftExportLineage.cs",
+    "python3 -m scripts.patch_export_lineage --tool-source ar-host --helper $RUNNER_TEMP/b02/RaftExportLineage.cs",
+    "dotnet publish android-port/Experiments/ExportLineage/ExportLineage.csproj -c Release ...",
+    "dotnet ExportLineage.dll --probe-tool"
+  ],
+  "negative_controls": [
+    "wrong pinned Git blob",
+    "changed exporter anchor",
+    "existing output file",
+    "symlinked output",
+    "symlinked source",
+    "staging shared W1 source untouched"
+  ],
+  "workflow_path": ".github/workflows/raft-b02-texture-trace-compile.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41927712988",
+  "artifact_urls": [],
+  "budget": "Ubuntu24 CPU public tool compile <=18min, no source assets/LFS/Unity/native build",
+  "status": "completed",
+  "observed_result": "6/6 unit tests PASS; real pinned AssetRipper .NET9 publish + probe-tool SUCCESS; optional class28 trace source compiled, W1 original class21/48 path untouched. No real game texture capture occurred.",
+  "rejected_hypotheses": [
+    "Existing W1 trace includes Texture2D class28: rejected by exact original helper.",
+    "Compiled trace code proves original/export mapping or pixels: rejected; only source compatibility proved."
+  ],
+  "limitations": [
+    "No actual source Texture2D exported",
+    "No private original / exported project paired test",
+    "No Unity editor GPU/Adreno pixel evidence"
+  ],
+  "integration_commit": "477344ea3a903736761ffd4e9dd534604d08bc89",
+  "next_step": "Coordinate single existing real export to activate RAFT_PRIVATE_EXPORT_TEXTURE_LINEAGE along with W1 private trace, verify GUID and SHA, run B15/B02 read-only parity."
+}
