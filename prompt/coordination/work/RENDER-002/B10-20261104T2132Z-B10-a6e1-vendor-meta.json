@@ -6,7 +6,7 @@
   "issue_id": "RENDER-002",
   "track": "colors-materials/shader-export-lineage",
   "approach": "Restore deterministic .meta for newly added SHA-authenticated vendor shader fallbacks; fail-closed on existing GUID or symlink conflict and preserve exact original metadata",
-  "status": "active",
+  "status": "completed",
   "base_sha": "e6484daffbaef7dca57da63e1cb4869f9095078a",
   "intended_files": [
     "scripts/restore_tmp_shaders.py",
@@ -23,8 +23,21 @@
   "experiment_ids": [
     "B10-20261104T2132Z-B10-a6e1-meta-regression"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Source patch and negative tests, then cheap isolated CI; only later check on actual authorized same-instance export",
-  "updated_at": "2026-11-04T21:31:48.375Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41917602226",
+    "https://github.com/alwansan/raf/actions/runs/41917602139"
+  ],
+  "result": {
+    "code_source_commit": "46b9fb69d0e63526717e010bf9d7eb487fe9e2c5",
+    "test_fixture_commit": "1f76e243c067b77a507a81e603f1ce90e5b68dc0",
+    "isolated_tests": "22/22 SUCCESS",
+    "transaction_tests": "9/9 SUCCESS",
+    "source_fixed": true,
+    "unity_export_tested": false,
+    "android_pixels_tested": false,
+    "original_missing_paths_verified": false,
+    "full_issue_closed": false
+  },
+  "next_step": "At next coordinated actual native export, run pre/post-fallback shader meta inventory and preserve original GUIDs; water/render/world gates remain open. Do not duplicate heavy native runs.",
+  "updated_at": "2026-11-04T21:40:15.143Z"
 }
