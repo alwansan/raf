@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "owner": "B16",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2249Z-B16-8c2e",
+  "issue_id": "WATER-001",
+  "track": "compute-source-compile-blocker-preflight",
+  "approach": "Fail-closed structural scanner for possibly active HLSL #error without altering original kernels or conservative unknown branches",
+  "status": "active",
+  "base_sha": "2c9ffdd5bf27b8b67465431d23dc75e01a586f60",
+  "intended_files": [
+    "scripts/b47_compute_kernel_contract.py",
+    "tests/test_b16_compute_preprocessor_contract.py",
+    "docs/B16_FFT_PREPROCESSOR_SOURCE_GUARD_2026-11-04.md"
+  ],
+  "hypothesis": "A possibly active #error causes compilation failure but is ignored by source-only water kernel gate, allowing false structural source readiness",
+  "related_work": [
+    "B16-20261104T2151Z-B16-6e2a-conditional-kernel"
+  ],
+  "experiment_ids": [
+    "B16-20261104T2249Z-B16-8c2e-error-directive"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Reproduce compile-error false positive; fix, test, verify CI.",
+  "updated_at": "2026-11-04T22:49:09.898Z"
+}
