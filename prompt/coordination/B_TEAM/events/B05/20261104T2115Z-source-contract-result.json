@@ -1,0 +1,14 @@
+{
+  "id": "20261104T2115Z-B05-material-texenv-result",
+  "owner": "B05",
+  "session_id": "20261104T2107Z-B05-9e24",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "Integrated SHA-pinned-original-aware Material m_TexEnvs-to-same-export pointer fidelity verifier and 11 synthetic controls; CI41914198631 SUCCESS, no source or device rendering claim.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/8398553c2e4d58863998bc329ecf332af08fa0b2",
+    "https://github.com/alwansan/raf/commit/94f47acffd185820445fbb9df1b2b52e0288c687",
+    "https://github.com/alwansan/raf/actions/runs/41914198631"
+  ],
+  "at": "2026-11-04T21:15:00Z"
+}
