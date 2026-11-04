@@ -201,7 +201,7 @@ class WaterRenderGateTests(unittest.TestCase):
                                  if m >= 4)
             def subshader(count):
                 return 'SubShader { ' + (
-                    'Pass { CGPROGRAM\\nvoid main() {}\\nENDCG } ' * count
+                    'Pass { CGPROGRAM\nvoid main() {}\nENDCG } ' * count
                 ) + ' }'
             shader = assets / 'split-water.shader'
             shader.write_text('Shader "' + name + '" { ' +
@@ -223,7 +223,7 @@ class WaterRenderGateTests(unittest.TestCase):
                                  if m >= 4)
             def subshader(count):
                 return 'SubShader { ' + (
-                    'Pass { HLSLPROGRAM\\nvoid main() {}\\nENDHLSL } ' * count
+                    'Pass { HLSLPROGRAM\nvoid main() {}\nENDHLSL } ' * count
                 ) + ' }'
             shader = assets / 'mixed-water.shader'
             shader.write_text('Shader "' + name + '" { ' +
