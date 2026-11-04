@@ -6,7 +6,7 @@
   "issue_id": "RENDER-002",
   "track": "graphics-source-provenance",
   "approach": "Re-use authenticated pre-staged ZIP2 original graphics owners in native hydration only after independent SHA256+size verification; harden file provenance, no shared-workflow modifications.; fail-close external Texture2D stream coverage when payload is linked outside verified original source root.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "c9b4ff0dff06335402a39c4cfe1d9a039990c2cb",
   "intended_files": [
     "scripts/hydrate_render_payloads.py",
@@ -21,9 +21,26 @@
     "B04 Mesh source path integrity",
     "BuildFix original graphics reuse"
   ],
-  "experiment_ids": [],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Test and integrate external Texture2D stream safety guard; current 14 W1 shader owners contain only three LFS pointers (already staged); original redundant LFS benefit not established.",
-  "updated_at": "2026-11-04T21:44:55.591Z"
+  "experiment_ids": [
+    "b31-20261104T213800Z-B31-5ea4-graphics-source-and-streams"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41918569256",
+    "https://github.com/alwansan/raf/actions/runs/41919225658"
+  ],
+  "result": {
+    "status": "SOURCE_FIXED_PROVENANCE_ONLY",
+    "source_commit": "9eb71aa4c967ac2cef5f447e21d6d0f32d1efccc",
+    "test_source_sha": "d086ce981e7e51463e8b753b0666742156d40cd7",
+    "tests_passed": 26,
+    "tests_total": 26,
+    "current_cache_lfs_savings_verified": false,
+    "original_binaries_examined": false,
+    "device_verified": false,
+    "white_colors_fixed": false,
+    "render_issue_open": true,
+    "report": "docs/B31_ORIGINAL_GRAPHICS_REUSE_2026-11-04.md"
+  },
+  "next_step": "Use authenticated real source→same-export texture stream/GUID and color parity or original Spectrum program restoration as a separate independent scope; preserve B31 test and wait for functional image proof before claiming RENDER-002 fixed.",
+  "updated_at": "2026-11-04T21:53:05.244Z"
 }
