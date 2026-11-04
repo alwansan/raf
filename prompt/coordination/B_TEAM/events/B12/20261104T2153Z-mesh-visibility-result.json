@@ -1,0 +1,15 @@
+{
+  "id": "B12-20261104T2132Z-B12-c4a8-mesh-visibility-extension",
+  "owner": "B12",
+  "session_id": "20261104T2132Z-B12-c4a8",
+  "issue_id": "RENDER-002",
+  "type": "integration",
+  "summary": "B12 expanded bounded scene shader snapshot to classify missing MeshFilter/sharedMesh and SkinnedMeshRenderer.sharedMesh in same <=512 enabled renderer sample; no vertex/index/mesh payload readback or material mutation. C# commit a324eb6, synthetic tests acd3514, isolated CI41920048140 SUCCESS; original managed integration41920015979 still in progress at event time, so no Unity/device/actual Mesh evidence claimed.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/a324eb6208f9edc3f4587aa4c8236192e13d6684",
+    "https://github.com/alwansan/raf/commit/acd3514d2d0123ea3f3910de55ba4a79ad5bba63",
+    "https://github.com/alwansan/raf/actions/runs/41920048140",
+    "https://github.com/alwansan/raf/actions/runs/41920015979"
+  ],
+  "at": "2026-11-04T21:52:54.631Z"
+}
