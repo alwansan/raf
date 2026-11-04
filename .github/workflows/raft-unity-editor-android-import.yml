@@ -347,6 +347,14 @@ jobs:
           test -d "$RUNNER_TEMP/project/ExportedProject/Assets"
           test -d "$RUNNER_TEMP/project/ExportedProject/ProjectSettings"
           df -h /
+      - name: B04 restore original Linear color space in transient exported PlayerSettings
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_b04_restore_original_color_settings.py -v
+          python3 -m scripts.b04_restore_original_color_settings \
+            --original "$RUNNER_TEMP/input/Raft_Data/globalgamemanagers" \
+            --project "$RUNNER_TEMP/project/ExportedProject" --apply
       - name: Re-read exact embedded engine database for the production builtin gate
         shell: bash
         run: |
@@ -694,6 +702,10 @@ jobs:
           set -euo pipefail
           mkdir -p "$GITHUB_WORKSPACE/unity-candidate"
           cp -a "$RUNNER_TEMP/project/ExportedProject/." "$GITHUB_WORKSPACE/unity-candidate/"
+          # Guard against later staging steps silently reverting Linear to Gamma.
+          python3 -m scripts.b04_restore_original_color_settings \
+            --original "$RUNNER_TEMP/input/Raft_Data/globalgamemanagers" \
+            --project "$GITHUB_WORKSPACE/unity-candidate"
           du -sh "$GITHUB_WORKSPACE/unity-candidate"
           df -h /
       - name: Reserve bounded swap and record host memory before full-data Unity build
