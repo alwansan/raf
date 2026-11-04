@@ -1,0 +1,13 @@
+{
+  "id": "B19-20261104T2143Z-result",
+  "owner": "B19",
+  "session_id": "20261104T2137Z-B19-svpr3",
+  "issue_id": "LOCAL-005",
+  "type": "integration",
+  "summary": "Original SaveAndLoad C#/.meta backup staging and verified rollback integrated; isolated CI41918301442 SUCCESS (10 synthetic tests, private SHA-pinned original 16 path expressions, 14 .NET path checks). No gameplay/device claim.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/5a977b3812cc597aaa790ae66bce54e85a965fc8",
+    "https://github.com/alwansan/raf/actions/runs/41918301442"
+  ],
+  "at": "2026-11-04T21:43:25Z"
+}

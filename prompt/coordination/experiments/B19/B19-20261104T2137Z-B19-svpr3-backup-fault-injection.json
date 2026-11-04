@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "owner": "B19",
+  "session_id": "20261104T2137Z-B19-svpr3",
+  "issue_id": "LOCAL-005",
+  "hypothesis": "Interrupted copying of original SaveAndLoad source and .meta strands incomplete backup, preventing legitimate retry; staging both before publish and verified source rollback prevents that deterministic failure.",
+  "source_commit": "5a977b3812cc597aaa790ae66bce54e85a965fc8",
+  "input_hashes": [
+    {
+      "provider": "ZIP2 pinned source",
+      "sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+    },
+    {
+      "kind": "original normalized SaveAndLoad source sha256",
+      "sha256": "b150dd404da48b8012f6659680b3552c11500c4ec97a64ad9aa12c60094568bb"
+    }
+  ],
+  "tool_versions": {
+    "runner": "ubuntu-24.04",
+    "dotnet": "10.0.x",
+    "ilspycmd": "11.2.0.10050"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_adapt_original_save_paths.py -v",
+    "python3 -m scripts.verify_a8_zip2_local_save_provider --zip2-checkout original-zip2"
+  ],
+  "negative_controls": [
+    "fault on second backup copy; no stranded backup; retry works",
+    "partial modified-source write raises; original source/meta restored and retry works",
+    "reject existing backup and symlinked path",
+    "original SHA/inventory drift rejects changes"
+  ],
+  "workflow_path": ".github/workflows/raft-original-save-path-tests.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41918301442",
+  "artifact_urls": [],
+  "budget": "Existing no-LFS source CI with job timeout 10 minutes; no Unity build",
+  "status": "completed",
+  "observed_result": "CI SUCCESS: 10/10 scoped unit tests; exact authentic original source 16 path expressions; 14 Unix/Windows .NET path-expression checks. Proved deterministic source-staging backup and rollback behavior, not in-device save functionality.",
+  "rejected_hypotheses": [
+    "This is not proof that the APK86 SteamUserStats StoreStats failure was caused by source staging."
+  ],
+  "limitations": [
+    "synthetic failures only; actual APK86 device no new build",
+    "original ZIP2 source adaptation checked, native Unity staging not executed",
+    "managed prechecks do not prevent malicious concurrent swap"
+  ],
+  "integration_commit": "5a977b3812cc597aaa790ae66bce54e85a965fc8",
+  "next_step": "Coordinate actual Unity/package build with latest fixes and test create/save/reopen .rgd; move B19 to next independent P0 blocker."
+}

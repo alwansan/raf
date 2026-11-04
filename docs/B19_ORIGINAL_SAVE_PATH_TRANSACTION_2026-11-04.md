@@ -1,0 +1,15 @@
+# B19 — Original SaveAndLoad backup transaction, 2026-11-04
+
+Session `20261104T2137Z-B19-svpr3`, issue LOCAL-005. [Source integration](https://github.com/alwansan/raf/commit/5a977b3812cc597aaa790ae66bce54e85a965fc8) and [CI https://github.com/alwansan/raf/actions/runs/41918301442](https://github.com/alwansan/raf/actions/runs/41918301442): **SUCCESS** at `5a977b3812cc597aaa790ae66bce54e85a965fc8`, 10/10 `test_adapt_original_save_paths.py` tests. The CI also authenticated SHA-pinned original ZIP2 `SaveAndLoad` and its 16 path-expression locations (non-path source unchanged/idempotent), plus 14 .NET10 Unix/Windows path checks. Original provider pin: `15964ea8f246b6e076ce26b60931ee2e1a9a2385`; normalized private source SHA256 `b150dd404da48b8012f6659680b3552c11500c4ec97a64ad9aa12c60094568bb`.
+
+## Reproduced deterministic staging failure
+
+Before this fix, `adapt_original_save_paths.apply` copied original `SaveAndLoad.cs` and `.meta` directly into a destination backup. If the second copy failed, a partial backup was stranded and subsequent adaptation refused to retry. A torn output write could likewise leave a backup after successfully reverting the source. B19's synthetic fault injection reproduced these conditions; **no evidence the APK86 world error was caused by staging backups**.
+
+## Integrated behavior
+
+Now both original source and GUID-preserving `.meta` are staged beside the backup in a separate temporary directory, verified byte-for-byte, and published by directory rename only before modifying the original source. An interrupted copy cleans the staging directory and leaves the source untouched. An interrupted source write restores original bytes and removes only this newly-published backup after verified rollback; if rollback fails, the complete backup is intentionally retained for recovery. Existing destination backups, linked backup roots or linked source paths fail closed. No proprietary original source, new GUID, modified serializer, network completion flag, audio/Settings/touch, native workflow request, or raw asset was changed.
+
+## Evidence boundaries
+
+Test method: `python3 -m unittest discover -s tests -p test_adapt_original_save_paths.py -v`; 10/10 positive/negative synthetic cases, including second-copy failure, partial write failure, existing backup and symlink rejection. Private pinned-original source extraction and path expression compatibility were also exercised in CI. Managed path checks cannot defeat a hostile concurrent filesystem swap; this is not a claim of full atomic filesystem security. CI does **not** establish Unity compilation, APK install or actual `.rgd` create/save/reopen. B12 and B13 independently edit the other adapter `adapt_android_offline_startup.py`; B19 did not overwrite it. Last real game APK86 predates these source fixes, and its Steam stats/steam_api64 failure remains a separate current-device observation. LOCAL-005/WATER-001/RENDER-002 **OPEN**, NOT_READY 0/3. Next coordinated device build must verify world callback and real .rgd roundtrip.
