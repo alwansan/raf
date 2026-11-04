@@ -3,7 +3,7 @@
   "owner": "raft-20261103T152008Z-92502b76",
   "client_label": "W2",
   "issue_id": "FFT-FORMAT-009",
-  "status": "active",
+  "status": "completed",
   "updated_at": "2026-11-04T18:00:00.000Z",
   "base_sha": "ed8b4f5",
   "lane": "continued from WATER-001 hand-off: recover the compute-kernel dispatch inventory W4 left open (kernel tables readable from serialized variants, no blob parsing needed)",
@@ -24,13 +24,14 @@
   "workflow_path": ".github/workflows/raft-w2-compute-kernel-inventory.yml",
   "concurrency_group": "raft-w2-compute-kernel-inventory-${{ github.ref }}-${{ github.sha }}",
   "budget": "two LFS owners (W1 cache) + one regular blob; CPU only; 30 min timeout",
-  "run_url": null,
-  "source_sha": null,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41830374791",
+  "source_sha": "c376faf",
   "result": "REAL RUN COMPLETE: 9 providers / 42 kernels - DX11 FFT 20x Butterfly kernels (serialized CBs 0), Blurs 12 kernels across 4 names, Ripples 5 kernels in 3 providers, Gauss 2, RenderTextureToBuffer/Full, EyeHistogram/KEyeHistogram, ConvertDepthToArray/CSMain; ALL variantMap depth 1 and zero keyboard flags.",
   "limitations": [
     "compiled DXBC blob contents and thread-group sizes remain with device lanes (A12/W1/W5)",
     "kernel table is the dispatch surface only; no GPU behavior claimed",
     "FFT-FORMAT-009 not closed; NOT_READY/0-of-3 unchanged"
   ],
-  "next_step": "push, CI green, STATUS + continue to next client task"
+  "next_step": "push, CI green, STATUS + continue to next client task",
+  "ci_conclusion": "success (41830374791 @ c376faf)"
 }

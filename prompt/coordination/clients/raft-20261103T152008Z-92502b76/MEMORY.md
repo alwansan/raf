@@ -136,3 +136,7 @@
 ## تحديث 18:00Z (4 نوفمبر) — جرد دوال compute اكتمل
 - 9 مزودات/42 kernel بالأسماء ( routable): DX11 FFT=20×Butterfly (0 CBs serialized)، Blurs=12/4 أسماء، Ripples=5/3، … كلها variantMap depth1 + صفر كلمات → ربط بالاسم يكفي.
 - W4's "kernel tables read as zero" كانت مسار قراءة مختلفًا — التصحيح موثق.
+
+## تحديث 18:30Z (4 نوفمبر) — جرد compute أخضر
+- compute-kernel-inventory CI 41830374791 SUCCESS @ c376faf (من المحاولة الأولى). 9 مزودات/42 kernel؛ ربط بالاسم فقط.
+- مهمتان مسلّمتان بالتسلسل حسب توجيه المالك: Spectrum/Foam ثم الجرد.
