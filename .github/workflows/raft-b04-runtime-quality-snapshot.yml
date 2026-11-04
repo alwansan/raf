@@ -1,0 +1,33 @@
+name: B04 RENDER-002 runtime quality-state snapshot
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'android-port/Runtime/Platform/AndroidTestDiagnostics.cs'
+      - 'tests/test_b04_runtime_quality_snapshot.py'
+      - '.github/workflows/raft-b04-runtime-quality-snapshot.yml'
+permissions:
+  contents: read
+concurrency:
+  group: raft-b04-quality-snapshot-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  quality-telemetry-synthetic:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            android-port/Runtime/Platform/AndroidTestDiagnostics.cs
+            tests/test_b04_runtime_quality_snapshot.py
+      - name: Negative/positive read-only QualitySettings source controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_b04_runtime_quality_snapshot.py -v
+          python3 -m py_compile tests/test_b04_runtime_quality_snapshot.py
+          echo 'B04 QualitySettings probe source-only. Actual managed compile in existing offline integration workflow; Unity/GPU/device not run.'
