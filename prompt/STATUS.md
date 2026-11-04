@@ -1105,3 +1105,7 @@ BuildFix changed graphics acquisition to reuse regular files only after original
 
 ## Authentic Blur instruction census — 4 November
 [Handoff](../docs/BLUR_ORIGINAL_INSTRUCTION_CENSUS_2026-11-04.md): CPU41774974730SUCCESS,4authentic stages18arithmeticCBreads. Vertex subset0failures;fragment3unsupported operands explicit. Fullcoveragefalse;NOT_READY. No shader/runtime claim.
+
+
+## Original Blur modifier trial — 4 November
+[Evidence](../docs/BLUR_ORIGINAL_MODIFIER_TRIAL_2026-11-04.md):41775565136SUCCESS;5synthetictests. Explicit source modifier closes1originalfragmentfailure;2remain,18CBreadsunchanged. All3modifierhypothesis rejected. Coveragefalse;NOT_READY.
