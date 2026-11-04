@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "owner": "B19",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2256Z-B19-hl7",
+  "issue_id": "LOCAL-005",
+  "track": "world-save-source-integrity",
+  "approach": "Reject original SaveAndLoad.cs and .meta hardlinked aliases before backup and source mutation, with synthetic inode-alias negative regression.",
+  "status": "active",
+  "base_sha": "6663c6c817b25969d256e8a5e93cd8f6b578ff42",
+  "intended_files": [
+    "scripts/adapt_original_save_paths.py",
+    "tests/test_adapt_original_save_paths.py"
+  ],
+  "hypothesis": "Hardlinked SaveAndLoad source bypasses symlink checks and write_bytes mutates second external path to same inode.",
+  "related_work": [
+    "B19 5a977b38 transaction",
+    "B14 staging source paths",
+    "B12/B13 other offline adapter"
+  ],
+  "experiment_ids": [
+    "B19-20261104T2256Z-hardlink-source-alias"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Add stat.st_nlink preflight, negative test, validate source-authentic CI.",
+  "updated_at": "2026-11-04T22:56:00Z"
+}
