@@ -89,7 +89,7 @@ def serialized_slots(program: dict) -> dict:
     for kind, aliases in SLOTS.items():
         hits = [key for key in aliases if key in common]
         if len(hits) != 1:
-            raise ValueError("Missing or ambiguous serialized resource table")
+            raise ValueError("Missing or ambiguous serialized %s resource table" % kind)
         entries = common[hits[0]]
         if not isinstance(entries, list) or len(entries) > MAX_SLOTS:
             raise ValueError("Malformed serialized resource rows")
@@ -211,6 +211,9 @@ def main():
             "Invalid compiled texture/UAV dimension": "EXEC_DIMENSION",
             "Missing original Unity common resource metadata": "UNITY_COMMON",
             "Missing or ambiguous serialized resource table": "UNITY_TABLE",
+            "Missing or ambiguous serialized texture resource table": "UNITY_TEXTURE_TABLE",
+            "Missing or ambiguous serialized sampler resource table": "UNITY_SAMPLER_TABLE",
+            "Missing or ambiguous serialized uav resource table": "UNITY_UAV_TABLE",
             "Malformed serialized resource rows": "UNITY_ROWS",
             "Malformed serialized resource entry": "UNITY_ROW",
             "Duplicate serialized resource slot": "UNITY_DUPLICATE",
