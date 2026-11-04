@@ -4,14 +4,16 @@
   "username": "raft-20261103T162900Z-73e8c2a1",
   "session_id": "w1-engine-export-proof-20261104T001312323Z",
   "resumed_from": null,
-  "status": "active",
-  "updated_at": "2026-11-04T00:13:12.323Z",
-  "base_sha": "a554533cad2c69069ac920b2a2e8b112c7f1f3c3",
+  "status": "paused",
+  "updated_at": "2026-11-04T00:23:39.704Z",
+  "base_sha": "11b69cedb6f8905ce6603e7923cbc319d0c569be",
   "current_work": [
-    "Authenticate actual750engine references against full165 original keys and exact exporter DB; leave production gates unchanged"
+    "750actual internal Material shader refs map to25original engine keys; actual full export/original Material assignments remain unverified"
   ],
-  "last_commit": "a554533cad2c69069ac920b2a2e8b112c7f1f3c3",
-  "next_step": "CPU-only source-linked engine export verifier and negative controls. Native41741108965 failed builtin0/142; no APK.",
+  "last_commit": "11b69cedb6f8905ce6603e7923cbc319d0c569be",
+  "next_step": "Inspect pinned proof run41745967644 (in_progress); then resolve one repeated original custom Shader key via owner/pathID/exportGUID before justified builtin gate correction. Native41741108965 failed; noAPK. No identical retry.",
   "memory_path": "prompt/coordination/clients/raft-20261103T162900Z-73e8c2a1/MEMORY.md",
-  "native_run_url": "https://github.com/alwansan/raf/actions/runs/41741108965"
+  "native_run_url": "https://github.com/alwansan/raf/actions/runs/41741108965",
+  "source_proof_run_url": "https://github.com/alwansan/raf/actions/runs/41745779746",
+  "pinned_validation_run_url": "https://github.com/alwansan/raf/actions/runs/41745967644"
 }

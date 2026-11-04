@@ -2,15 +2,14 @@
   "schema_version": 1,
   "username": "raft-20261103T162900Z-73e8c2a1",
   "issue_id": "RENDER-002",
-  "status": "active",
-  "started_at": "2026-11-04T00:13:12.323Z",
-  "base_sha": "a554533cad2c69069ac920b2a2e8b112c7f1f3c3",
-  "paths": [
-    "scripts/w1_verify_engine_export.py",
-    "tests/test_w1_verify_engine_export.py",
-    ".github/workflows/raft-w1-engine-export-proof.yml",
-    "docs/W1_NATIVE_EXPORT_REFERENCE_EVIDENCE_2026-11-04.json"
-  ],
-  "approach": "Validate exact reader/TPK pins,165original shader keys/14ZIP2owners; compare750actual engine references to uniquely mapped original keys. Implement full-export140nonengine Shader/meta+Material closure checker for pre-restoration boundary. No change to production gates or native request.",
-  "budget": "CPU-only12minutes,noUnity,noLFS"
+  "status": "paused",
+  "updated_at": "2026-11-04T00:23:39.704Z",
+  "implementation_sha": "11b69cedb6f8905ce6603e7923cbc319d0c569be",
+  "local_tests": 52,
+  "source_proof_run_id": 41745779746,
+  "source_proof_result": "success",
+  "pinned_validation_run_id": 41745967644,
+  "pinned_validation_status": "in_progress",
+  "scope_result": "All750actual internal pointers map to25original keys. Full export/original assignments notverified; one repeated original custom key blocks name-only checker. Production gates unchanged.",
+  "next_step": "Inspect pinned proof run41745967644 (in_progress); then resolve one repeated original custom Shader key via owner/pathID/exportGUID before justified builtin gate correction. Native41741108965 failed; noAPK. No identical retry."
 }

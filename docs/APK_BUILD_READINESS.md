@@ -1,6 +1,10 @@
+## W1 current result — native failed;750engine references source-linked (4 November 2026)
+
+[Full evidence and next step](../docs/W1_NATIVE_FAILURE_AND_ENGINE_REFERENCE_PROOF_2026-11-04.md). Native[41741108965](https://github.com/alwansan/raf/actions/runs/41741108965) **FAILED beforeUnity**, builtin0/142matches, **noAPK/OBB/XAPK**. ZIP2/cache staging succeeded. New source-linked engine verifier: CPU[41745779746](https://github.com/alwansan/raf/actions/runs/41745779746) **SUCCESS**, all750observed engine references/11pointers map to25original engine keys; one repeated custom key remains unresolved for per-object export proof. Local52W1 tests PASS. Exact196record digest pinned in11b69ced; its follow-up[41745967644](https://github.com/alwansan/raf/actions/runs/41745967644) is **IN_PROGRESS at last observation**. Production builtin/water gates unchanged; originalMaterial assignments/full-export closure still unproved. **NOT_READY,0/3**. No new native request or scheduler change.
+
 ## W1 latest owner-authorized full XAPK attempt (2026-11-04)
 
-[Actual native run41741108965](https://github.com/alwansan/raf/actions/runs/41741108965) source `2cb893434d7c819f085d52b34fad1e6568db4ae8`: **IN_PROGRESS**, not a readiness pass or produced XAPK. Inspect before further build requests.
+[Actual native run41741108965](https://github.com/alwansan/raf/actions/runs/41741108965) source `2cb893434d7c819f085d52b34fad1e6568db4ae8`: **FAILED beforeUnity**, noAPK/OBB/XAPK; not a readiness pass. Inspect before further build requests.
 
 [Build-attempt handoff](../docs/W1_OWNER_FULL_BUILD_ATTEMPT_2026-11-04.md). Code [a2e143246](https://github.com/alwansan/raf/commit/a2e143246ff29dfdfb9f2a68301d3aae6a38eeeb): native scene owners now use verified pinned ZIP2/cache rather than the selected3 LFS fetch; actual full-export Material Shader references and water source contract are retained before strict gates. Local45/45 W1 tests PASS. Latest explicit owner request authorizes ONE experimental full APK+OBB+XAPK attempt now. **NOT_READY,0/3**; existing builtin/water gates unchanged, no new APK or phone result claimed. Refresh Actions for its immutable request commit; do not duplicate/cancel or alter schedules.
 

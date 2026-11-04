@@ -1,3 +1,5 @@
+**Final actual outcome:** native41741108965 FAILED beforeUnity at strict builtin0/142matches; noAPK/OBB/XAPK. See [follow-up source proof](W1_NATIVE_FAILURE_AND_ENGINE_REFERENCE_PROOF_2026-11-04.md). Historical in-progress observations below are superseded.
+
 # W1 owner-authorized full delivery attempt — 4 November 2026
 
 Latest explicit owner request asks to continue engineering and attempt a complete project/XAPK build through the existing native workflow. This authorizes this single experimental attempt despite historical build-hold instructions. It does not close any readiness blocker: **NOT_READY, 0/3**.

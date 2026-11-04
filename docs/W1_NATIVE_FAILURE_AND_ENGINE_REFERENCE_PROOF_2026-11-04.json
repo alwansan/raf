@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "native": {
+    "run_id": 41741108965,
+    "job_id": 126282703102,
+    "source_sha": "2cb893434d7c819f085d52b34fad1e6568db4ae8",
+    "result": "failure_before_Unity",
+    "failure": "zero loose vendor matches among142exportedShader declarations",
+    "apk_xapk_produced": false
+  },
+  "proof": {
+    "run_id": 41745779746,
+    "job_id": 126298273932,
+    "source_sha": "2f5c2f337ed3002246e9aed570bf2f84656ac42c",
+    "result": "success",
+    "summary": {
+      "actual_export_reference_closure_verified": false,
+      "compiled_program_equivalence_verified": false,
+      "exact_engine_records": 196,
+      "exact_engine_records_digest": "eb97d9e75992a9b90afad6101cf6d914c15ec73131d7d7f31333ded29650513b",
+      "observed_inventory_errors": {
+        "shader_missing_meta": 2
+      },
+      "observed_run_id": 41741108965,
+      "observed_source_sha": "2cb893434d7c819f085d52b34fad1e6568db4ae8",
+      "original_engine_binding_digest": "8bea40f258ee1e0d5efa028929021164d9b66da30e0f8d2e55d631ea219dde94",
+      "original_engine_shader_keys": 25,
+      "original_material_associations_verified": false,
+      "original_non_engine_empty_names": 0,
+      "original_non_engine_repeated_keys": 1,
+      "original_non_engine_shader_keys": 140,
+      "original_shader_objects": 165,
+      "production_gates_changed": false,
+      "source_mapped_internal_references": 750,
+      "source_mapped_unique_engine_pointers": 11,
+      "unity_or_device_executed": false
+    }
+  },
+  "pinned_validation": {
+    "run_id": 41745967644,
+    "source_sha": "11b69cedb6f8905ce6603e7923cbc319d0c569be",
+    "result": "in_progress",
+    "job_id": 126298918916
+  },
+  "local_w1_tests": 52,
+  "initial_experiment": {
+    "run_id": 41745566630,
+    "result": "failed",
+    "reason": "Overly strict experiment rejected legitimate repeated original custom keys. Corrected to retain duplicates; full export still rejects name-only ambiguity."
+  },
+  "production_builtin_water_gates_changed": false,
+  "readiness": "NOT_READY",
+  "full_readiness_reviews": 0,
+  "recorded_at": "2026-11-04T00:23:39.704Z"
+}
