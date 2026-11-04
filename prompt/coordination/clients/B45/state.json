@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "username": "B45",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2056Z-B45-f0c1",
+  "resumed_from_session": null,
+  "status": "active",
+  "base_sha": "f835f66c67fba9cf36fdbc9f49793b7b8f06b12a",
+  "last_commit": null,
+  "updated_at": "2026-11-04T20:56:00Z",
+  "tracks": [
+    "water-fft",
+    "shaderlab-original-blur"
+  ],
+  "work_ids": [
+    "B45-20261104T2056Z-B45-f0c1-blur-shaderlab"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41821419074"
+  ],
+  "next_step": "Isolate W5 original two-pass Blur post-raster ShaderLab failure using source-authenticated, aggregate-only diagnostic; repair only proven serializer mismatch.",
+  "memory_path": "prompt/coordination/clients/B45/MEMORY.md"
+}
