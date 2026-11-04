@@ -1,0 +1,35 @@
+name: B06 WATER-001 FFT original dispatch lexical guard (synthetic)
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/probe_original_fft_resource_bindings.py'
+      - 'tests/test_probe_original_fft_resource_bindings.py'
+      - '.github/workflows/raft-b06-fft-resource-lexical.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: raft-b06-fft-resource-lexical-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  synthetic-source-guard:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Run FFT original-source synthetic positive and negative tests
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_probe_original_fft_resource_bindings.py -v
+          echo 'B06 synthetic test only; no Unity, original LFS, shader or device execution.'
