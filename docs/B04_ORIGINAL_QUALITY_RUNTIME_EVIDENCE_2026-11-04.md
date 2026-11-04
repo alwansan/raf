@@ -64,10 +64,12 @@ quality/lighting mismatch separately from missing ShaderLab programs.
   Checks include read-only getters, exact one append, B12 existing
   renderer/mesh fields, no per-frame capture, missing/injected setter,
   duplicate output, missing delay and missing fallback.
-- Rebased actual-original managed compile: run
+- **Rebased original-managed compile SUCCESS:**
   [41928576383](https://github.com/alwansan/raf/actions/runs/41928576383)
-  was IN_PROGRESS at this document's initial creation. Verify conclusion
-  before calling the **reconnected invocation** C# compile-proven.
+  built source bc63f59 after the quality invocation was reconnected to
+  B12's new traversal; original-adapted gameplay validation, RPC harness
+  and CSharp compile steps all passed. This is still NOT Unity/IL2CPP
+  nor on-device ShaderLab/pixel proof.
 - No Unity Editor/IL2CPP Android device execution, no actual new phone
   logs, no current quality/lighting evidence yet. Last real phone report
   belongs to APK86/run41812889049 and predates these changes.
