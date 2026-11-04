@@ -6,8 +6,8 @@
   "issue_id": "WATER-001",
   "track": "water-fft",
   "approach": "Bound original water structural gate to a single valid lowercase-normalized Unity .meta GUID per shader/compute, detecting malformed/duplicate sidecars without manufacturing identities.",
-  "status": "active",
-  "base_sha": null,
+  "status": "completed",
+  "base_sha": "2db5078f38d1cbd36ea20d351b9033bd88ffd29a",
   "intended_files": [
     "scripts/verify_water_render_contract.py",
     "tests/test_verify_water_render_contract.py"
@@ -18,9 +18,24 @@
     "B49 WATER-001 structural shader pass gate",
     "B47 WATER-001 compute entrypoint check"
   ],
-  "experiment_ids": [],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Failing synthetic controls for malformed and duplicate GUID sidecars; minimal non-mutating source guard and dedicated no-LFS CI test.",
-  "updated_at": "2026-11-04T21:54:00Z"
+  "experiment_ids": [
+    "20261104T2132Z-B13-7e6b-water-meta-guid"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41920455834",
+    "https://github.com/alwansan/raf/actions/runs/41920753737",
+    "https://github.com/alwansan/raf/actions/runs/41920734179"
+  ],
+  "result": {
+    "scope": "SOURCE_FIXED_STRUCTURAL_VALIDATOR_ONLY",
+    "source_fix": "2db5078f38d1cbd36ea20d351b9033bd88ffd29a",
+    "compat_test": "ccefdd7151726155ed592376d6e6311797521ce3",
+    "combined_workflow": "ac3152230c62be054a2cece1750ddb01be42791b",
+    "tests": "14/14 water guard + 8/8 B47 combined CI 41920753737 SUCCESS",
+    "original_source": "NOT_TESTED",
+    "unity_device": "NOT_TESTED",
+    "required_pass_and_fft_shader_recovery": "OPEN"
+  },
+  "next_step": "Check actual exported .meta GUID to original ZIP2 asset PPtr mapping and phone runtime only with authenticated source; keep missing water passes/FFT kernels OPEN.",
+  "updated_at": "2026-11-04T21:59:00Z"
 }
