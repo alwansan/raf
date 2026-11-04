@@ -6,7 +6,7 @@
   "issue_id": "RENDER-002",
   "track": "colors-materials",
   "approach": "Read-only exported m_TexEnvs -> Texture GUID integrity guard, complement Shader link audit.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "0484260051916587e102359d6a3ccb820358c7e5",
   "intended_files": [
     "scripts/verify_exported_material_texture_links.py",
@@ -23,8 +23,11 @@
   "experiment_ids": [
     "B46-20261104T2058Z-B46-6e3d-texture-link-synthetic"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement negative controls and validate using independent CI; don't imply real export check until it runs.",
-  "updated_at": "2026-11-04T20:58:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41913365590",
+    "https://github.com/alwansan/raf/actions/runs/41913591959"
+  ],
+  "result": "Scoped reusable exported Material texture GUID+fileID checker implemented and source CI 21/21 synthetic checks PASS on 04d7e05; real export not yet run and RENDER-002 remains OPEN.",
+  "next_step": "Have export owner run read-only check on SHA-pinned complete same-instance AssetRipper export; investigate real failures and compare source texture PPtrs if any. No game readiness claimed.",
+  "updated_at": "2026-11-04T21:18:00Z"
 }
