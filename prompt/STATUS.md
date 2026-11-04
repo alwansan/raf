@@ -1,3 +1,9 @@
+## B47 — WATER-001 ComputeShader source integrity (4 November 2026)
+
+[B47 source fix 52e9b81](https://github.com/alwansan/raf/commit/52e9b812d5e77c0d0afb7a05b2334bb28cad281c) strengthens `scripts/verify_water_render_contract.py`: a bare `#pragma kernel` no longer qualifies as a water ComputeShader candidate without a distinct complete literal `[numthreads]` HLSL entrypoint and safe `.meta` file. [B47 CI 41912450062](https://github.com/alwansan/raf/actions/runs/41912450062) **SUCCESS** (8 new plus 5 existing synthetic checks, syntax and clean source). Earlier [41912297055](https://github.com/alwansan/raf/actions/runs/41912297055) **FAILED** due a B47 import-newline syntax error, corrected in 52e9b81. B49 independently fixed ShaderLab per-pass detection at [5070247](https://github.com/alwansan/raf/commit/50702470954774ba96fe27509f1f9eddfd1aa4ea), so B47 abandoned its overlapping patch and left B49's work intact. [Complete B47 report](../docs/B47_COMPUTE_KERNEL_SOURCE_GUARD_2026-11-04.md) and [session memory](coordination/clients/B47/MEMORY.md).
+
+**Source-only structural check**, not original kernel provenance, Unity compilation, GPU FFT pixels, restored water materials or on-phone evidence. WATER-001 remains **OPEN**, game **NOT_READY 0/3**. Audio and Settings unchanged; touch/layout deferred.
+
 ## B50 — LOCAL-005 original Cheat SteamID caller now guarded (4 November 2026, 21:03 UTC)
 
 ## B49 — WATER-001 strict ShaderLab per-pass source contract (4 November 2026, 21:03 UTC)
