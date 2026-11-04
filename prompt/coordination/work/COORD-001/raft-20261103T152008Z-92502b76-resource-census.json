@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T152008Z-92502b76",
+  "client_label": "W2",
+  "task": "full-resource-restoration support: original build census (per-owner type counters) as the count-equivalence restoration gate",
+  "status": "in_progress",
+  "updated_at": "2026-11-04T19:00:00.000Z",
+  "base_sha": "2384b35",
+  "experiment_ids": ["resource-census"],
+  "deliverables": [
+    "scripts/probe_w2_resource_census.py",
+    "tests/test_w2_resource_census.py (5/5 pass)",
+    ".github/workflows/raft-w2-resource-census.yml",
+    "docs/W2_RESOURCE_CENSUS_2026-11-04.md"
+  ],
+  "result": "1,209,137 objects / 66 classes / 82 owners mapped; internally consistent with every previous W2 lane (4050/1556/165/9). CI pending.",
+  "full_base_sha": "2384b35",
+  "next_step": "push, verify CI, update STATUS"
+}

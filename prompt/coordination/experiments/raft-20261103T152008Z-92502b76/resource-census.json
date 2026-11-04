@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T152008Z-92502b76",
+  "client_label": "W2",
+  "issue_id": "COORD-001",
+  "status": "active",
+  "updated_at": "2026-11-04T19:00:00.000Z",
+  "base_sha": "2384b35",
+  "lane": "owner-directed full-resource-restoration support: complete per-owner serialized type census of the original build (counters only, no typetree parse)",
+  "input_hashes": [
+    "82 serialized owners, identity verified against commit HEAD via git show (3 LFS pointers + 79 tracked blobs)"
+  ],
+  "command": "python3 -m scripts.probe_w2_resource_census --source <Raft_Data> --repo <worktree> --out w2-resource-census.json --owner <x82>",
+  "expected_signal": "the original's exact class census is the count-equivalence gate for full resource restoration: any restored class row can be diffed by count alone.",
+  "negative_controls": [
+    "zero-object owners hard-fail; unsafe owner names rejected",
+    "no typetree parse (counts only) - no payload exposure path",
+    "forbidden keys leak-guarded; committed-object identity gate",
+    "CI tests-first"
+  ],
+  "workflow_path": ".github/workflows/raft-w2-resource-census.yml",
+  "concurrency_group": "raft-w2-resource-census-${{ github.ref }}-${{ github.sha }}",
+  "budget": "82-owner enumerate; CPU only; 30 min timeout",
+  "run_url": null,
+  "source_sha": null,
+  "result": "REAL RUN COMPLETE (82/82 owners verified): 1,209,137 serialized objects, 66 distinct classes; GameObject 294,045, Transform 286,722, MeshRenderer 176,432, MeshFilter 176,345 (renderer/transform symmetry as port invariant), Mesh 4,708, Texture2D 4,050, Material 1,556, Shader 165, MonoBehaviour 76,161, Sprite 1,018, AnimationClip 679, AudioClip 0 (FMOD banks), Font 14, TextAsset 6, ComputeShader 9, Camera 3, AudioListener 1, ReflectionProbe 4, Terrain 33; largest owners level30 253,566 / level34 145,220 / level25 73,739. Rows are internally consistent with all previous W2 lanes (4050/1556/165/9).",
+  "limitations": [
+    "count-only census; content quality is out of scope",
+    "AudioClip/TextAsset absence reflects serialization location (banks/streaming), not any restoration gap",
+    "no device verification; NOT_READY/0-of-3 unchanged"
+  ],
+  "next_step": "push, CI green, STATUS + reconcile-restore gate announcement"
+}
