@@ -175,8 +175,34 @@ def main(argv=None):
         }, sort_keys=True))
         return 0
     except (ValueError, KeyError, TypeError, OSError) as error:
+        # Only literal source-free diagnostic reasons are publishable; do not
+        # forward arbitrary UnityPy exceptions, paths or original metadata.
+        safe_reasons = {
+            "Resource descriptor nesting exceeds bound",
+            "Unsupported nonnumeric descriptor value",
+            "Descriptor integer outside exact bound",
+            "Nonfinite or oversized descriptor number",
+            "Resource descriptor list too long",
+            "Resource descriptor structure too large",
+            "Unsupported resource descriptor schema key",
+            "Unexpected resource descriptor type",
+            "Missing original stage",
+            "Missing original stage common parameter table",
+            "Unknown texture/sampler resource table schema",
+            "Resource table is not a bounded list",
+            "Original Spectrum 7-pass count differs",
+            "Malformed original pass",
+            "No recognizable serialized resource table schema",
+            "Original source root is missing or redirected",
+            "Original Spectrum Shader identity missing or ambiguous",
+            "Original Shader serialized tree malformed",
+            "Missing original parsed Shader data",
+            "Original Spectrum subshader count changed",
+            "Refuse to overwrite experiment result",
+        }
         print("RAFT_B17_SPECTRUM_DESCRIPTORS " + json.dumps({
             "status": "REJECTED", "error_kind": type(error).__name__,
+            "reason_code": str(error) if str(error) in safe_reasons else "other_provider_schema_failure",
             "unity_gpu_or_android_verified": False, "ready_for_build": False,
         }, sort_keys=True))
         return 2
