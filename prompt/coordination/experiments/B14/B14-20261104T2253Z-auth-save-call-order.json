@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "owner": "B14",
+  "session_id": "20261104T2247Z-B14-d1a9",
+  "issue_id": "LOCAL-005",
+  "hypothesis": "The original SaveGame call order and Android stats-only source guard can be verified on SHA-authenticated original input without leaking private source.",
+  "source_commit": "e4ea42c05fbd9f9c25bc850e23bc6ab082dc8cfa",
+  "input_hashes": [
+    "Original DLL 3211776 bytes SHA256 0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "Original ILSpy SaveAndLoad SHA256 b150dd404da48b8012f6659680b3552c11500c4ec97a64ad9aa12c60094568bb"
+  ],
+  "tool_versions": {
+    "ILSpy": "11.2.0.10050",
+    "CSharp": "9.0",
+    "Python": "Ubuntu 24.04 system python3"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_b14_original_save_call_order.py -v",
+    "python3 -m scripts.b14_original_save_call_order --original-managed-dll Raft/Raft_Data/Managed/Assembly-CSharp.dll --source \"$RUNNER_TEMP/b14-original\""
+  ],
+  "negative_controls": [
+    "Unknown original source SHA",
+    "Extra StoreStats",
+    "Missing SaveWorld or SaveUser",
+    "String/comment fake calls",
+    "Unexpected original call ordering",
+    "Other direct platform calls in SaveWorld or SaveUser",
+    "Original Save method no FileManager"
+  ],
+  "workflow_path": ".github/workflows/raft-b14-original-save-order.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41929777877",
+  "artifact_urls": [],
+  "budget": "Ubuntu24.04 12min; no Unity/LFS; no proprietary artifacts",
+  "status": "completed",
+  "observed_result": "SUCCESS 9 synthetic + SHA-authenticated genuine source. Original direct order SaveWorld->SaveUser->SteamUserStats.StoreStats. SaveUser and SaveWorld each call original Save helper; it uses FileManager.CreateFile. Zero other direct Steam/PlayFab calls in these methods. Android stats guard preserves call order and methods. No .rgd write/device proof.",
+  "rejected_hypotheses": [
+    "SteamStats precedes actual SaveWorld/User direct callsites",
+    "Android stats-only guard removes original SaveWorld/User source calls",
+    "Generic fixture success alone proves original"
+  ],
+  "limitations": [
+    "Only direct static source callsites, not branch runtime success or transitive dependency graph",
+    "No Android/Unity/IL2CPP or .rgd create-save-reopen test"
+  ],
+  "integration_commit": "016c365282f65cc131bd42062f3b3f364e7d3f90",
+  "next_step": "Keep LOCAL-005 open. After appropriate coordinated Android build verify real .rgd create/save/close/reopen and local world gameplay."
+}
