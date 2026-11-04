@@ -65,7 +65,14 @@ def patch_gamut_bytes(before: bytes) -> tuple[bytes, str]:
 def restore_gamut(project: Path, apply: bool = False) -> dict:
     parent = project / "ProjectSettings"
     target = parent / "ProjectSettings.asset"
-    if project.is_symlink() or parent.is_symlink() or target.is_symlink():
+    # Check every lexical ancestor before any write. Checking only the
+    # project/ProjectSettings/asset leaves ancestor symlinks able to redirect
+    # an exported project into another tree. Do not resolve away that evidence.
+    if ".." in project.parts:
+        raise ValueError("Unsafe traversal in project path")
+    absolute_project = project.absolute()
+    if any(node.is_symlink() for node in (*absolute_project.parents,
+                                          absolute_project, parent, target)):
         raise ValueError("Unsafe symlink in project path")
     if not parent.is_dir() or not target.is_file():
         raise ValueError("ProjectSettings.asset not available")
