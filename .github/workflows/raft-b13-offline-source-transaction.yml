@@ -8,6 +8,7 @@ on:
       - scripts/adapt_original_save_paths.py
       - tests/test_android_offline_startup.py
       - .github/workflows/raft-b13-offline-source-transaction.yml
+      - 'prompt/coordination/B_TEAM/events/B13/**'
 permissions:
   contents: read
 concurrency:
