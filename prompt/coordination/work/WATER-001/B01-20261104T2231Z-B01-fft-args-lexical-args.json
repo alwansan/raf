@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "owner": "B01",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2231Z-B01-fft-args",
+  "issue_id": "WATER-001",
+  "track": "water-fft",
+  "approach": "Use masked CSharp lexical view for argument delimiter/brace analysis, original source for exact argument values. Defend against commented commas and verbatim strings; preserve SHA-pinned caller inventory.",
+  "status": "active",
+  "base_sha": "66aa4afe1f177d381a3be2aa36e6ec2258ed8a9e",
+  "intended_files": [
+    "scripts/probe_original_fft_kernel_callsites.py",
+    "tests/test_probe_original_fft_kernel_callsites.py"
+  ],
+  "hypothesis": "CSharp comments and verbatim quotes within the original managed FFT compute invocation arguments can be incorrectly split by current raw-text parser.",
+  "related_work": [
+    "B01-20261104T2105Z-B01-water-contract-fft-kernel-contract"
+  ],
+  "experiment_ids": [],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Apply source hardening with tests and run existing managed FFT CI; no GPU claims.",
+  "updated_at": "2026-11-04T22:31:00Z"
+}
