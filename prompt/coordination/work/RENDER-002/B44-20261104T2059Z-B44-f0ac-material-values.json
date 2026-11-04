@@ -6,20 +6,26 @@
   "issue_id": "RENDER-002",
   "track": "colors-materials",
   "approach": "Verify and correct authenticated Material SavedProperties color/tint/texture value preservation across export; identify semantic loss rather than re-run resource census",
-  "status": "active",
+  "status": "completed",
   "base_sha": "4072288020d7a42daf6d235af6549f8b43d89132",
   "intended_files": [
-    "scripts/",
-    "tests/",
+    "scripts/b44_verify_material_colors.py",
+    "tests/test_b44_verify_material_colors.py",
+    ".github/workflows/raft-b44-material-colors.yml",
     "prompt/coordination/clients/B44/",
     "prompt/coordination/work/RENDER-002/",
     "prompt/coordination/experiments/B44/"
   ],
-  "hypothesis": "At least one reported white Material has lost original color/texture shader-property values or references in export; pinpoint and repair only with source/output-evidenced mismatch.",
+  "hypothesis": "Same source shader PPtr does NOT imply same color saved properties; structural fail-closed comparator detects altered/dropped m_Colors values. Original actual export mismatch remains unknown.",
   "related_work": [],
-  "experiment_ids": [],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Read existing original Material probes and production exporter/material restoration; develop bounded negative/positive controls; preserve auth metadata and detect regression",
-  "updated_at": "2026-11-04T20:59:00Z"
+  "experiment_ids": [
+    "20261104T2059Z-B44-f0ac-color-lineage"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41912783093",
+    "https://github.com/alwansan/raf/actions/runs/41913494314"
+  ],
+  "result": "Scoped source-integrity tool integrated to branch, 11/11 synthetic tests PASS locally and CI 41913494314 SUCCESS. Strong negative control: identical shader PPtr but changed/dropped tint is detected. No verified original Raft material export diff and no rendering fix; RENDER-002 stays OPEN.",
+  "next_step": "Coordinate with exporter owner at next actual same-instance export to run B44 comparator on pinned ZIP2 original and actual YAML; on nonzero errors prove exact serializer path and fix it; if 0 proceed custom shader/texture links. Do not repeat native build just for synthetic test.",
+  "updated_at": "2026-11-04T21:12:00Z"
 }
