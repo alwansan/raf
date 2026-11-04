@@ -7,6 +7,8 @@ on:
       - feature/android-native-port
     paths:
       - '.github/workflows/raft-unity-editor-android-import.yml'
+      - 'scripts/hydrate_render_payloads.py'
+      - 'tests/test_buildfix_hydrated_graphics.py'
       - 'scripts/overlay_ilspy_gameplay.py'
       - 'scripts/reembed_scene_bound_assets.py'
       - 'tests/test_reembed_scene_bound_assets.py'
@@ -84,6 +86,8 @@ jobs:
         with:
           lfs: false
           persist-credentials: false
+      - name: Verify authenticated graphics reuse before acquisition
+        run: python3 -m unittest discover -s tests -p test_buildfix_hydrated_graphics.py -v
       - name: Validate native queue isolation and delivery obligations
         run: python3 -m unittest discover -s tests -p test_native_workflow_isolation.py -v
       - name: Run original reconstruction unit fixtures without Unity or original downloads

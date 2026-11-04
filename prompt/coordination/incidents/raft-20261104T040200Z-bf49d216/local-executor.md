@@ -1,0 +1,1 @@
+Local validation unavailable: exec-server rejected process creation with No such file or directory. Use cheap GitHub preflight; no native rebuild warranted.
