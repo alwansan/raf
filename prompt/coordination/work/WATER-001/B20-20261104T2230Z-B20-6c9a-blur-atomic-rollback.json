@@ -6,7 +6,7 @@
   "issue_id": "WATER-001",
   "track": "water-fft",
   "approach": "Make authenticated original Blur ShaderLab transient-project rollback atomic and verify failure without losing pristine backup",
-  "status": "active",
+  "status": "completed",
   "base_sha": "3174c165803a66529976b8944523bc049dbf2a23",
   "intended_files": [
     "scripts/b45_install_original_blur.py",
@@ -21,8 +21,18 @@
   "experiment_ids": [
     "B20-blur-rollback-20261104"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Add same-directory atomic rollback, preserve outside authenticated backup on rollback failure, inject rollback errors in CI.",
-  "updated_at": "2026-11-04T22:38:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41927169542"
+  ],
+  "result": {
+    "stage": "SOURCE_FIXED",
+    "integration_commit": "9387b48176fc89aa99b0ebbd9aa2ad4666564515",
+    "tests_commit": "49f83ff4203eb4b6f0680d6542c1943363080ada",
+    "ci_success": true,
+    "report": "docs/B20_AUTHENTIC_BLUR_ATOMIC_ROLLBACK_2026-11-04.md",
+    "private_shader_tested": false,
+    "unity_or_device_verified": false
+  },
+  "next_step": "Actual original Blur staging then Unity/Adreno pixel confirmation; WATER-001 remains OPEN.",
+  "updated_at": "2026-11-04T22:40:10Z"
 }
