@@ -1,0 +1,32 @@
+{
+  "id": "B25-FOAM-ORIGINAL-CB-NAME-BRIDGE-20261104",
+  "title": "B25: source-authenticated Foam original 2-pass/4-stage CB property-name SHA and register binding",
+  "kind": "water-original-cb-binding-identity",
+  "source": {
+    "provider": "ZIP2 original no LFS",
+    "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "bytes": 115978112,
+    "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "object_path_id": 2420,
+    "object_sha256": "67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1"
+  },
+  "stages": {
+    "acquisition": "SHA_PIN_VERIFIED",
+    "extraction": "ORIGINAL_TWO_PASS_FOUR_STAGE_CB_NAME_INDEX_REGISTRY_VERIFIED",
+    "reconstruction": "EIGHT_CB_NAME_SHA_SLOT_BINDINGS_VERIFIED; FOUR_NEED_HLSL_ALIAS",
+    "binding": "CB_SERIALIZED_NAME_INDEX_AND_REGISTER_ONLY; GPU_RUNTIME_UNVERIFIED",
+    "integration": "SOURCE_VERIFIER_COMMITTED_AND_PRIVATE_ORIGINAL_CI_SUCCESS; NO_SHADERLAB_INSTALL",
+    "device": "NOT_TESTED"
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41928183838",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B25_ORIGINAL_FOAM_CB_NAMEBRIDGE_2026-11-04.md"
+  ],
+  "remaining": [
+    "Original compiler-symbol to HLSL alias/descriptor and CB layout upload exactness",
+    "Sampler/texture binding and full four-stage ShaderLab compile",
+    "Original .meta/GUID and Android Adreno rendering"
+  ],
+  "updated_by": "B25",
+  "updated_at": "2026-11-04T22:48:28.078Z"
+}
