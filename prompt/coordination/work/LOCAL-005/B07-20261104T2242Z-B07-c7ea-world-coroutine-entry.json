@@ -24,9 +24,13 @@
     "20261104T2242Z-coroutine-entry"
   ],
   "run_urls": [
-    "https://github.com/alwansan/raf/actions/runs/41929041686"
+    "https://github.com/alwansan/raf/actions/runs/41929041686",
+    "https://github.com/alwansan/raf/actions/runs/41928829509",
+    "https://github.com/alwansan/raf/actions/runs/41929589315",
+    "https://github.com/alwansan/raf/actions/runs/41929721761",
+    "https://github.com/alwansan/raf/actions/runs/41929910850"
   ],
-  "result": "SOURCE_INTEGRATED: original pinned WorldHasBeenLoaded first MoveNext entry log staged in offline Android source, unit 9/9, existing offline regression 19/19, synthetic real CLR two platforms passed, private SHA-pin source/staging proof CI41929041686 SUCCESS; NOT Unity/IL2CPP/device world/.rgd proof.",
-  "next_step": "Coordinated new native build/device: correlate firstMoveNext with OnWorldRecieved callback and save exception; verify create/save/exit/reload .rgd. LOCAL-005 OPEN, NOT_READY 0/3.",
-  "updated_at": "2026-11-04T22:53:20Z"
+  "result": "SOURCE_INTEGRATED + MANAGED_COMPILE_VALIDATED: 9 B07 +19 offline synthetic tests; original SHA pinned entry source and CLR Android/nonAndroid yield semantics; CI41929721761 original full adapted managed build and RPC/save harness PASS; CI41929910850 adapted SHA manifest parity PASS. Initial CI41928829509 failed on stale trace manifest, fixed by source-verified new hash in 354e478a, documented incident. NO Unity/IL2CPP/phone/.rgd acceptance.",
+  "next_step": "New coordinated Android device test of WorldHasBeenLoaded.firstMoveNext / OnWorldRecieved Begin-End and actual local .rgd roundtrip; WATER-001/RENDER-002 still prevent ready. No duplicate CPU test.",
+  "updated_at": "2026-11-04T23:00:00Z"
 }
