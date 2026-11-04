@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "owner": "B37",
+  "session_id": "20261104T2226Z-B37-cursor01",
+  "issue_id": "LOCAL-005",
+  "status": "completed",
+  "source_commit": "fc42e65b458ea317b2dea4e494671e978effc153",
+  "zip2_ref": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "original_rgd_sha256": "b2785187aa11e33872698adfa79ab252cf65a824d92bee7e88773ce4aa11cbba",
+  "original_managed_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+  "workflow_path": ".github/workflows/raft-b37-original-rgd-inheritance.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41928767833",
+  "prior_failures": [
+    41928084203,
+    41928221064,
+    41928382242,
+    41928548263
+  ],
+  "result": {
+    "original_authentic": true,
+    "root_members": 1,
+    "root_serializable": true,
+    "declared_fields": 1,
+    "direct_member_matches": 0,
+    "eligible_fields": 1,
+    "inherited_type_definitions": 1,
+    "inherited_fields": 0,
+    "inherited_member_matches": 0,
+    "base_chain_complete": true,
+    "assembly_simple_name_matches": true,
+    "assembly_version_matches": false,
+    "negative_controls": "4/4",
+    "original_save_roundtrip_verified": false,
+    "android_unity_executed": false,
+    "source_modified": false
+  },
+  "rejected_hypotheses": [
+    "A matching root member is inherited: no inherited fields",
+    "CI harness warnings, forwarding --nologo or stream dispose prove original save corruption: no, all harness defects"
+  ],
+  "next_step": "Trace authentic SaveAndLoad.Load<T> and binder/version-compat, no forced schema edit; only device create/save/reload can close LOCAL-005.",
+  "updated_at": "2026-11-04T22:52:00Z"
+}
