@@ -4,7 +4,7 @@
   "session_id": "20261104T2140Z-B30-7c29",
   "issue_id": "WATER-001",
   "hypothesis": "Authentic serialized variantMap/keyword keys may distinguish 20 source-selected compiled slots; test this instead of guessing runtime kernel indices.",
-  "source_commit": null,
+  "source_commit": "c3a0a02cecf5782ab472a5b10bfd8cf134e50f75",
   "input_hashes": [
     "zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "sharedassets0.assets:0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
@@ -16,7 +16,7 @@
   },
   "commands": [
     "python3 -m unittest discover -s tests -p test_b30_fft_variantmap_routing.py -v",
-    "python3 -m scripts.b30_fft_variantmap_routing --source <verified-source-root>"
+    "python3 -m scripts.b30_fft_variantmap_routing --source \"$RUNNER_TEMP/b30/original/Raft_Data\""
   ],
   "negative_controls": [
     "duplicate route fingerprints",
@@ -25,15 +25,33 @@
     "false runtime index proof"
   ],
   "workflow_path": ".github/workflows/raft-b30-fft-variantmap.yml",
-  "run_url": null,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41920323250",
   "artifact_urls": [],
   "budget": "ubuntu-24.04 <=18min, source pinned, no LFS/native/Unity/asset artifacts",
-  "status": "planned",
-  "observed_result": null,
-  "rejected_hypotheses": [],
-  "limitations": [
-    "No runtime FindKernel/Unity GPU/device claim"
+  "status": "completed",
+  "observed_result": {
+    "source_sha_verified": true,
+    "synthetic_pass": 12,
+    "original_compiled_slots": 20,
+    "original_header_classes": 1,
+    "original_keyword_classes": 1,
+    "composite_discriminator_classes": 1,
+    "collision_size": 20,
+    "adjacent_pairs_same": 10,
+    "cross_bank_pairs_same": 10,
+    "original_dxbc_order_verified": true,
+    "unity_runtime_selection_proven": false,
+    "device_tested": false
+  },
+  "rejected_hypotheses": [
+    "Original variantMap headers or global/local keywords distinguish the compiled slot or source-bank/pass: all 20 original entries collide.",
+    "Original variantMap header is necessarily an integer: authenticated source required opaque structured header handling.",
+    "Serialized compiled slot indexes are Unity FindKernel runtime IDs: still not proven; avoid assumption."
   ],
-  "integration_commit": null,
-  "next_step": "Implement safe structural parser, test synthetic and original-data source CI."
+  "limitations": [
+    "Original source serialized-program identity does not establish Unity runtime kernel selection, authored .compute, pixels or Android rendering.",
+    "No original assets/GUID or native build request modified; no private shader/program bytes exported."
+  ],
+  "integration_commit": "fd6fdfc5e897a9a0132515f73d58b86e2a8ff6f5",
+  "next_step": "Different runtime selection mechanism required, beyond original kernel-name/variantMap/keyword signatures; coordinate with B08/B48."
 }
