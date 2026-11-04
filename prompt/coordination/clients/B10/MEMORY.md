@@ -1,0 +1,11 @@
+# B10 — persistent engineering memory
+
+Session: `20261104T2132Z-B10-a6e1`; started 2026-11-04T21:31:48.375Z. Branch: `feature/android-native-port` only; base HEAD `e6484daffbaef7dca57da63e1cb4869f9095078a`.
+
+Read live: B_TEAM/PROMPT_AR.md, README.md, OPERATING_MODEL_AR.md, SOURCES_AND_ACTIONS_AR.md, TEMPLATES.md, REVIEW_2026-11-04.md, SUMMARY.md, AGENTS.md, CURRENT_OWNER_REQUIREMENTS.md, prompt/README.md, CONTINUE_RAFT_AR.md, STATUS.md, docs/ZIP2_SOURCE_PROVIDER.md, W1 shader-linkage/native-failure reports, source restoration code/tests. Read GitHub Actions, release inventory, CL evidence links from review. Actual APK86 published from native41812889049; last verified CL Android session shows water invalid passes and SaveGame Steam failure; no new device results assumed. Sound and Settings owner-confirmed working; touch deferred.
+
+Track RENDER-002: W1 actual native41741108965 post-restoration inventory identified TWO shader files without .meta before Unity import; `scripts/restore_tmp_shaders.py` adds authenticated vendor fallback .shader files without paired metadata. Hypothesis: missing sidecars for new vendor-only shader outputs cause this isolated structural error (specific two filenames not proven). Avoid any GUID guessed for original assets. Current original exported .shader/.meta replacements preserved; no shader program/pixels restored by metadata alone. Existing `scripts/verify_export_lineage.py` covers same-export pointer validation and is not to be duplicated.
+
+Planned production change: deterministic domain-separated GUID for each newly generated vendor Shader only; collision check vs existing .meta, paired atomic staging and rollback; explicit source/identity and duplicate metadata negative tests. Preserve original asset .meta byte-for-byte, vendor source pins, all shader programs/passes. Work record `B10-20261104T2132Z-B10-a6e1-vendor-meta`. Source input pins remain ZIP2 `15964ea8f246b6e076ce26b60931ee2e1a9a2385`; native report `41741108965`; APK86 unchanged. No source/private game assets downloaded.
+
+Next: implement targeted code+tests and run CI, record failures/hypotheses and integration evidence; validate actual newly added shader metadata in next **coordinated** export without starting/duplicating full APK build. Keep RENDER-002/WATER-001/LOCAL-005 OPEN and NOT_READY 0/3.
