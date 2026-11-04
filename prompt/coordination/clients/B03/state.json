@@ -2,24 +2,25 @@
   "schema_version": 1,
   "username": "B03",
   "generation": "B-2026-11-04",
-  "session_id": "20261104T2101Z-B03-a419",
-  "resumed_from_session": null,
-  "status": "paused",
-  "base_sha": "4dd8c9dceb32bed34c1cda4292c0b71389f16f20",
+  "session_id": "20261104T2243Z-B03-7c9e",
+  "resumed_from_session": "20261104T2101Z-B03-a419",
+  "status": "active",
+  "base_sha": "fc50a7d065a865d99d580c726b5807e25f09965b",
   "last_commit": "77810606899ab9a16248ab17540dc7cd538bcac9",
-  "updated_at": "2026-11-04T21:18:19.957Z",
+  "updated_at": "2026-11-04T22:44:18.837Z",
   "tracks": [
     "source-integrity",
     "colors-materials"
   ],
   "work_ids": [
     "B03-20261104T2101Z-B03-a419-archive-payload-authentication",
-    "B03-20261104T2101Z-B03-a419-renderer-material-reference"
+    "B03-20261104T2101Z-B03-a419-renderer-material-reference",
+    "B03-20261104T2243Z-B03-7c9e-original-renderer-pointers"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41913405572",
     "https://github.com/alwansan/raf/actions/runs/41914562432"
   ],
-  "next_step": "Run B03 renderer-to-material guard on actual isolated Raft Unity export; reconcile any unresolved references with source-linked same-instance Material PPtrs and B44/B46. No device results. Source_archive small private asset validation also OPEN.",
+  "next_step": "Run 12+ synthetic strict PPtr and owner tests then source-authenticated six-scene CI; report baseline without exposing proprietary IDs.",
   "memory_path": "prompt/coordination/clients/B03/MEMORY.md"
 }
