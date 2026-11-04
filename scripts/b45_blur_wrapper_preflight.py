@@ -71,7 +71,7 @@ def diagnose(parsed):
             # Never emit arbitrary original data or exception text; only type.
             entry["failure_type"] = type(exc).__name__
         report["render_state"].append(entry)
-    if len(props) == 0 and all(p["render_state_serialized"] and
+    if len(props) == 1 and all(p["render_state_serialized"] and
                                  p["original_pass_type"] == 0 for p in report["render_state"]):
         # Diagnostic inert text only: NO original program or synthesized shader
         # is installed, written or included in artifact.
