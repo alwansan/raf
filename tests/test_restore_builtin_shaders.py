@@ -1,6 +1,8 @@
 from pathlib import Path
+import os
 import tempfile
 import unittest
+from unittest import mock
 from scripts.restore_builtin_shaders import archive_sources, restore_project, rewrite, ROOT, NOTICE
 
 
@@ -106,3 +108,97 @@ class BuiltinShaderTests(unittest.TestCase):
             project, path, custom, shaders, files = self.fixture(root)
             with self.assertRaisesRegex(ValueError, 'outside'):
                 restore_project(project, project / 'backup', shaders, files, b'notice')
+
+    def test_b13_rename_failure_cannot_truncate_original_shader(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            project, path, custom, shaders, files = self.fixture(root)
+            original = path.read_bytes()
+            metadata = Path(str(path) + '.meta').read_bytes()
+            with mock.patch('scripts.restore_builtin_shaders.os.replace',
+                            side_effect=OSError('injected shader rename failure')):
+                with self.assertRaisesRegex(OSError, 'injected shader rename failure'):
+                    restore_project(project, root / 'backup', shaders, files, b'notice')
+            self.assertEqual(path.read_bytes(), original)
+            self.assertEqual(Path(str(path) + '.meta').read_bytes(), metadata)
+            self.assertEqual((root / 'backup/Shader/standard.shader').read_bytes(), original)
+            self.assertEqual((root / 'backup/Shader/standard.shader.meta').read_bytes(), metadata)
+            self.assertFalse(list(path.parent.glob('*.b13.tmp')))
+            self.assertFalse(list(path.parent.glob('.*.b13.tmp')))
+            self.assertFalse((project / NOTICE).exists())
+            self.assertTrue(custom.is_file())
+
+    def test_b13_concurrent_source_edit_after_backup_is_never_overwritten(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            project, path, custom, shaders, files = self.fixture(root)
+            before = path.read_bytes()
+            outside_change = b'Shader "Standard" { /* external post-backup edit */ }'
+            backup_meta = root / 'backup/Shader/standard.shader.meta'
+            saved_write = Path.write_bytes
+
+            def inject_change(target, content):
+                result = saved_write(target, content)
+                if target == backup_meta:
+                    saved_write(path, outside_change)
+                return result
+
+            with mock.patch.object(Path, 'write_bytes', autospec=True,
+                                   side_effect=inject_change):
+                with self.assertRaisesRegex(ValueError, 'changed after backup'):
+                    restore_project(project, root / 'backup', shaders, files, b'notice')
+            self.assertEqual(path.read_bytes(), outside_change)
+            self.assertEqual((root / 'backup/Shader/standard.shader').read_bytes(), before)
+            self.assertFalse((project / NOTICE).exists())
+            self.assertFalse(list(path.parent.glob('.*.b13.tmp')))
+
+    def test_b13_second_shader_failure_rolls_back_first_atomically(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            project, path, custom, shaders, files = self.fixture(root)
+            second = path.parent / 'z_second.shader'
+            second.write_text('Shader "Diffuse" { SubShader { Pass {} } }')
+            Path(str(second) + '.meta').write_bytes(b'guid: ' + b'b' * 32 + b'\n')
+            shaders['Diffuse'] = 'DefaultResourcesExtra/Diffuse.shader'
+            files['DefaultResourcesExtra/Diffuse.shader'] = 'Shader "Diffuse" { HLSLPROGRAM\nENDHLSL }'
+            first_original, second_original = path.read_bytes(), second.read_bytes()
+            original_replace = os.replace
+
+            def fail_second(source, target):
+                if Path(target) == second:
+                    raise OSError('injected second shader failure')
+                return original_replace(source, target)
+
+            with mock.patch('scripts.restore_builtin_shaders.os.replace',
+                            side_effect=fail_second):
+                with self.assertRaisesRegex(OSError, 'injected second shader failure'):
+                    restore_project(project, root / 'backup', shaders, files, b'notice')
+            self.assertEqual(path.read_bytes(), first_original)
+            self.assertEqual(second.read_bytes(), second_original)
+            self.assertEqual((root / 'backup/Shader/standard.shader').read_bytes(), first_original)
+            self.assertEqual((root / 'backup/Shader/z_second.shader').read_bytes(), second_original)
+            self.assertFalse((project / NOTICE).exists())
+            self.assertFalse(list(path.parent.glob('.*.b13.tmp')))
+
+    def test_b13_corrupt_backup_fails_before_any_shader_source_mutation(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            project, path, custom, shaders, files = self.fixture(root)
+            original = path.read_bytes()
+            backup_meta = root / 'backup/Shader/standard.shader.meta'
+            backed_shader = root / 'backup/Shader/standard.shader'
+            saved_write = Path.write_bytes
+
+            def corrupt_backup(target, content):
+                result = saved_write(target, content)
+                if target == backup_meta:
+                    saved_write(backed_shader, b'corrupted backup')
+                return result
+
+            with mock.patch.object(Path, 'write_bytes', autospec=True,
+                                   side_effect=corrupt_backup):
+                with self.assertRaisesRegex(ValueError, 'Incomplete original.*backup'):
+                    restore_project(project, root / 'backup', shaders, files, b'notice')
+            self.assertEqual(path.read_bytes(), original)
+            self.assertFalse((root / 'backup').exists())
+            self.assertFalse((project / NOTICE).exists())
