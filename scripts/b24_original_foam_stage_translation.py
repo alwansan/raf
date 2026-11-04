@@ -14,6 +14,7 @@ from scripts.a12_shader_parameter_decode import parse_parameter_blob
 TARGET = "UltimateWater/Foam/Global"
 OWNER = "Raft_Data/sharedassets0.assets"
 OBJECT_ID = 2420
+ORIGINAL_OBJECT_SHA256 = "67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1"
 CB = {1: ((160, 2, 0), (176, 0, 1), (368, 0, 1)), 0: ((160, 2, 0),)}
 
 
@@ -50,7 +51,7 @@ def validate_stage(program, stage, diagnostic=None):
         # member counts onto another authentic original pass.
         measured = len(b.get("m_VectorParams", [])) if isinstance(b, dict) else -1
         varied = (slot == 0 and diagnostic.get("original_pass") == 1)
-        vectors_valid = (0 <= measured <= size // 16) if varied else measured == vec
+        vectors_valid = (measured == 1) if varied else measured == vec
         if varied:
             diagnostic["original_second_pass_vector_members"] = measured
         tests = (
@@ -144,6 +145,8 @@ def probe(source, diagnostic=None):
         raise ValueError("Foam original asset object missing")
     original = objs[0]
     original_sha = hashlib.sha256(original.get_raw_data()).hexdigest()
+    if original_sha != ORIGINAL_OBJECT_SHA256:
+        raise ValueError("Original Foam shader object SHA256 changed")
     diagnostic["phase"] = "original-parsed-form"
     tree = original.read_typetree()
     diagnostic["phase"] = "original-d3d11-platform-table"
