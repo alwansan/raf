@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "owner": "B02",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2101Z-B02-e5cd",
+  "issue_id": "RENDER-002",
+  "track": "colors-materials",
+  "approach": "Compare pinned AssetRipper SRGBTexture equation against initial B02 mapping, eliminate unsafe repair before visual semantics proven, add dual interpretation read-only output and negative tests",
+  "status": "active",
+  "base_sha": null,
+  "intended_files": [
+    "scripts/b02_texture_import_color_guard.py",
+    "tests/test_b02_texture_import_color_guard.py",
+    "docs/B02_TEXTURE_IMPORT_COLOR_FIDELITY_2026-11-04.md"
+  ],
+  "hypothesis": "Pinned AssetRipper importer assigns SRGBTexture if original ColorSpace==Linear, opposite initial B02 expected mapping; indiscriminate .meta rewrite can invert color sampling",
+  "related_work": [
+    "B02-20261104T2101Z-B02-e5cd-texture-import-fidelity"
+  ],
+  "experiment_ids": [],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Fail-closed report and unit tests; no repair until original/export identity and semantic policy independently verified",
+  "updated_at": "2026-11-04T21:16:00Z"
+}
