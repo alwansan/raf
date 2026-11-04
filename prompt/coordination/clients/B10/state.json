@@ -4,10 +4,10 @@
   "generation": "B-2026-11-04",
   "session_id": "20261104T2242Z-B10-vlm1",
   "resumed_from_session": "20261104T2132Z-B10-a6e1",
-  "status": "active",
+  "status": "completed",
   "base_sha": "e6484daffbaef7dca57da63e1cb4869f9095078a",
-  "last_commit": "1f76e243c067b77a507a81e603f1ce90e5b68dc0",
-  "updated_at": "2026-11-04T22:45:36.466Z",
+  "last_commit": "92522dc98bd273fd48eb169871ab7414b0a86a4d",
+  "updated_at": "2026-11-04T22:54:57.975Z",
   "tracks": [
     "RENDER-002 vendor shader fallback metadata preservation",
     "RENDER-002 volumetric NOTICE shader transaction"
@@ -18,8 +18,10 @@
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41917602226",
-    "https://github.com/alwansan/raf/actions/runs/41917602139"
+    "https://github.com/alwansan/raf/actions/runs/41917602139",
+    "https://github.com/alwansan/raf/actions/runs/41928744660",
+    "https://github.com/alwansan/raf/actions/runs/41928592399"
   ],
-  "next_step": "Make volumetric license NOTICE part of shared shader restore transaction, negative tests on failure/symlink; then update CI and issue with scope constraints.",
+  "next_step": "B10 volumetric NOTICE transaction source fix verified (27 unique tests and 3 authentic vendor shader stages), no Unity/Adreno/device. Next new active session: source-authenticated Spectrum/Foam/FFT ShaderLab/compute binding and same-export Material associations with B09/B24/B25/B45 peers; do not repeat source-only transaction audits. No background continuation.",
   "memory_path": "prompt/coordination/clients/B10/MEMORY.md"
 }
