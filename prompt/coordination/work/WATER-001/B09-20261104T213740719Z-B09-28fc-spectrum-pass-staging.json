@@ -6,11 +6,12 @@
   "issue_id": "WATER-001",
   "track": "water-spectrum-pass",
   "approach": "Authentic Spectrum 6-pass serialized-program attribution, SHA-pinned private temporary staging into native export; no synthetic passes.",
-  "status": "active",
+  "status": "paused",
   "base_sha": "1aebdfba4502fe0a86fc4986867ec32e207a8cd6",
   "intended_files": [
-    "scripts/",
-    "tests/",
+    "scripts/b09_stage_original_spectrum.py",
+    "tests/test_b09_stage_original_spectrum.py",
+    ".github/workflows/raft-b09-spectrum-extraction.yml",
     "docs/B09_SPECTRUM_PASS_STAGING_2026-11-04.md"
   ],
   "hypothesis": "The current original-data export leaves Spectrum/Water Spectrum at 1/6 passes; an authenticated stage boundary may restore the six original passes while preserving existing GUIDs and verifying original pass order.",
@@ -20,9 +21,11 @@
     "B45 Blur staging",
     "W4 native water gate"
   ],
-  "experiment_ids": [],
+  "experiment_ids": [
+    "20261104T213740Z-spectrum-original-stage"
+  ],
   "run_urls": [],
-  "result": null,
-  "next_step": "Inspect pipeline, source verification and Spectrum-specific recovery; build a bounded reproducible integration test.",
-  "updated_at": "2026-11-04T21:38:14.359Z"
+  "result": "Source-pinned original Spectrum stage extraction implementation and isolated workflow committed. 10/10 local synthetic tests PASS. Actual ZIP2 original-data extraction run result unknown, so no authentic extracted packet, ShaderLab, Unity or device proof.",
+  "next_step": "Retrieve targeted GitHub workflow run / safe aggregate and implement exact original Spectrum pass-state ShaderLab once authenticated stages exist.",
+  "updated_at": "2026-11-04T21:48:42.836Z"
 }
