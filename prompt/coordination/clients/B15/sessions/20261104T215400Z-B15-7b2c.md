@@ -1,0 +1,9 @@
+# B15 — 20261104T215400Z-B15-7b2c
+
+First known B15 repository session; keep this name across restores. Scope: RENDER-002 (Texture2D sampler authenticity/exporter parity), independent of B02 sRGB, B05 material UV, B31 texture streaming, B43 keyword and B44 color values. Branch feature/android-native-port only. Do not change audio, Settings, touch, native requests, scheduler, protected branches or CL.
+
+Read B_TEAM/PROMPT_AR.md, README.md, OPERATING_MODEL_AR.md, SOURCES_AND_ACTIONS_AR.md, REVIEW_2026-11-04.md, TEMPLATES.md, SUMMARY.md, RESTORE_AR.md; AGENTS.md; docs/CURRENT_OWNER_REQUIREMENTS.md, ZIP2_SOURCE_PROVIDER.md; prompt/README.md, CONTINUE_RAFT_AR.md, STATUS.md; WATER-001 and LOCAL-005 issues. Reviewed latest Actions and APK86 provenance per B-team review. Original source pinned ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385. W2 sampler aggregate and B02 safe sRGB guard reviewed. Several concurrent B Actions running; do not cancel.
+
+Hypothesis: recovered Texture2D bytes alone do not ensure original wrap/filter/aniso/mip-bias behavior if export TextureImporter metadata drifts. Current W2-only aggregates cannot prove same-instance per-object parity. Build B15-owned READ-ONLY verifier requiring pinned original owner SHA/bytes and explicit same-export identity sidecar; detect/quantify deltas without private details, never guess links by name or edit .meta. Test negative controls (cross-export mix, SHA mismatch, symlinks, duplicates, missing fields, bias drift). Stage verified tests and note that no same-export source sidecar or device image exists yet.
+
+Status: active. Work id B15-20261104T215400Z-B15-7b2c-sampler-parity. Do not claim DEVICE_CONFIRMED, shader restoration, or READY (0/3). Next action: implement tool/test, run local CPU and isolated B15 CI; report limitations, record event, resume other P0 gap if done.
