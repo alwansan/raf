@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "session_id": "20261104T2357Z-T5-b12-fixture-7e2",
+  "issue_id": "INTEGRATION-001",
+  "track": "integration-render-diagnostics",
+  "approach": "Fix actual B12 failed CLR executable harness to cover B18 LoadedComputeShaderSnapshot imported into B12 production coroutine; run original extracted code and preserve independent render bounds checks.",
+  "status": "active",
+  "base_sha": null,
+  "intended_files": [
+    "scripts/b12_scene_render_harness.py",
+    "tests/test_b12_scene_render_harness.py",
+    "prompt/coordination/clients/T5/state.json",
+    "prompt/coordination/clients/T5/MEMORY.md",
+    "prompt/coordination/B_TEAM/events/T5/",
+    "prompt/coordination/T_TEAM/SUMMARY.md",
+    "prompt/STATUS.md"
+  ],
+  "hypothesis": "Earlier B12 source extraction appended the new B18 genuine compute helper, but test stub lacked read-only Unity Resources/ComputeShader + Encoding and discarded the new water log; adding exact stub support restores executable integration coverage without lowering source strictness.",
+  "related_work": [
+    "https://github.com/alwansan/raf/actions/runs/41929419050"
+  ],
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/B12/MEMORY.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/B03/MEMORY.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/B10/MEMORY.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/B13/MEMORY.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/B16/MEMORY.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/B19/MEMORY.md"
+  ],
+  "experiment_ids": [
+    "T5-20261104T2357Z-b12-b18-exact-clr"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41933025319"
+  ],
+  "result": null,
+  "next_step": "Correct test shim against exact production B12+B18 methods; retain negative assertions; test and use existing isolated workflow, do not force/disable.",
+  "updated_at": "2026-11-04T23:58:36.308Z"
+}
