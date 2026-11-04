@@ -1,0 +1,13 @@
+{
+  "id": "B09-spectrum-start-20261104T213740Z",
+  "owner": "B09",
+  "session_id": "20261104T213740719Z-B09-28fc",
+  "issue_id": "WATER-001",
+  "type": "start",
+  "summary": "B09 joined WATER-001 to isolate original Spectrum/Water Spectrum six-pass authenticated source-to-native staging; complements B24 Foam, B45 Blur and B48 FFT; no game build or shader claim.",
+  "evidence": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/W4_BUILTIN_GATE_AND_WATER_FRONTIER_2026-11-04.md",
+    "https://github.com/alwansan/raf/actions/runs/41812889049"
+  ],
+  "at": "2026-11-04T21:38:14.359Z"
+}
