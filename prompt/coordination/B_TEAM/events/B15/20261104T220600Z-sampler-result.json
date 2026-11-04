@@ -1,0 +1,14 @@
+{
+  "id": "20261104T220600Z-sampler-result",
+  "owner": "B15",
+  "session_id": "20261104T215400Z-B15-7b2c",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "B15 read-only original Texture2D sampler vs same-export TextureImporter GUID parity and trace bridge integrated, 16/16 synthetic cases PASS on CI41921429305. Zero original Raft textures compared; no game fix or device proof; RENDER-002 OPEN, NOT_READY 0/3.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/4035b13251f3fffcb8c4f0257174528f58c298ce",
+    "https://github.com/alwansan/raf/actions/runs/41921429305",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B15_TEXTURE_SAMPLER_PARITY_2026-11-04.md"
+  ],
+  "at": "2026-11-04T22:06:00Z"
+}
