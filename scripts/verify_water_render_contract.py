@@ -101,8 +101,14 @@ def inspect(project: Path) -> dict:
     shader_rows = {}
     for name, minimum in REQUIRED_PASS_COUNT.items():
         observed = found.get(name)
-        valid = bool(observed and observed["pass_count"] >= minimum
-                     and observed["all_passes_programmed"]
+        # Shader.passCount is per active SubShader (Unity 2021.3); the
+        # diagnostic sum of passes across alternate SubShaders is insufficient.
+        # Selection is platform-dependent and unverified at source-check time:
+        # fail closed unless every authored candidate meets the device index.
+        valid = bool(observed and observed["subshader_pass_counts"]
+                     and all(count >= minimum
+                             for count in observed["subshader_pass_counts"])
+                     and observed["all_subshaders_programmed"]
                      and observed["original_meta_present"]
                      and not observed["export_placeholder"])
         shader_rows[name] = {
