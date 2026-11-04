@@ -39,7 +39,8 @@
     "https://github.com/alwansan/raf/commit/42476b87626031f23db37808d00e1c76604e5b33",
     "https://github.com/alwansan/raf/actions/runs/41922333604",
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B18_FFT_RDEF_PARITY_2026-11-04.md",
-    "https://github.com/alwansan/raf/actions/runs/41923703800"
+    "https://github.com/alwansan/raf/actions/runs/41923703800",
+    "https://github.com/alwansan/raf/actions/runs/41926033893"
   ],
   "remaining": [
     "Spectrum/Foam/Blur passes ناقصة في APK86",
@@ -59,13 +60,14 @@
     "B13: Source-integrated validator now rejects malformed/ambiguous/duplicate water Shader/FFT Compute .meta GUIDs; 22/22 synthetic CI PASS with B47 kernel contract, but original ZIP2 GUID ownership, restored ShaderLab/FFT programs, Unity import and phone water errors still unverified (WATER-001 OPEN).",
     "B16: conditional #if 0 false-positive removed from structural .compute gate; 34/34 B16+B47+water source-only CI. Literal branches checked, unknown macros conservative; original FFT .compute/kernel identity/Unity and APK86 device errors still unresolved.",
     "B18: authenticated ZIP2 original FFT ComputeShader 20/20 SHEX declarations show t0/t1/u0 read/read/write registers and threadgroup dimensions identical to same-slot serialized Unity data; Actions41922333604 SUCCESS 13/13 synthetic and exact SHA source. Original programs contain 0 RDEF chunks; compiled private names, runtime Unity FindKernel index→compiled slot, ShaderLab Unity import/Adreno pixels remain NOT verified; WATER-001 OPEN.",
-    "B18 second authenticated original FFT proof CI41923703800 SUCCESS: 20/20 translated DXBC->SPIR-V image role classes preserved (2 read sampled Texture2D, 1 write storage Texture2D) plus local workgroup size; 10 synthetic controls PASS. Mapping each original t register to one concrete SPIR-V set/binding, real Unity .compute import and Adreno render remain UNKNOWN. No game patch or new APK."
+    "B18 second authenticated original FFT proof CI41923703800 SUCCESS: 20/20 translated DXBC->SPIR-V image role classes preserved (2 read sampled Texture2D, 1 write storage Texture2D) plus local workgroup size; 10 synthetic controls PASS. Mapping each original t register to one concrete SPIR-V set/binding, real Unity .compute import and Adreno render remain UNKNOWN. No game patch or new APK.",
+    "B01: source-only managed FFT argument parser now ignores quoted/commented delimiters; CI41926033893 67 synthetic tests plus SHA-pinned private Dx11FFT and numeric oracle PASS; original caller counts unchanged. Runtime kernels/ShaderLab/Adreno remain unverified."
   ],
   "acceptance": [
     "هوية برامج ونوى أصلية أو تطابق موثق دونdummy",
     "تثبيت فيالتصدير+Unity import/render",
     "اختبار هاتف يثبت الماء بلا pass/kernel errors"
   ],
-  "updated_by": "B18",
-  "updated_at": "2026-11-04T22:19:00Z"
+  "updated_by": "B01",
+  "updated_at": "2026-11-04T22:35:00Z"
 }
