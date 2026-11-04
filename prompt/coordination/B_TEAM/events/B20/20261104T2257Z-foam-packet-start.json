@@ -1,0 +1,13 @@
+{
+  "id": "B20-20261104T2257Z-foam-packet-start",
+  "owner": "B20",
+  "session_id": "20261104T2257Z-B20-fmp3",
+  "issue_id": "WATER-001",
+  "type": "start",
+  "summary": "Resumed B20 to integrate original two-pass Foam program stage recovery and state into a coherent private artifact, without fake ShaderLab, inferred CB0 aliases or device-readiness claims.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41920166966",
+    "https://github.com/alwansan/raf/actions/runs/41928183838"
+  ],
+  "at": "2026-11-04T22:57:30Z"
+}
