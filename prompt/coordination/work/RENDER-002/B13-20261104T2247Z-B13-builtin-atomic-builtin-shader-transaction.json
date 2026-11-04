@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "owner": "B13",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2247Z-B13-builtin-atomic",
+  "issue_id": "RENDER-002",
+  "track": "colors-materials",
+  "approach": "Atomic, fail-closed production builtin ShaderLab replacement preserving original bytes and source metadata; synthetic injected-write/concurrent-mutation proof.",
+  "status": "active",
+  "base_sha": "2fa36d110cbaf1693cd61fbede26e7ce3e8f8d36",
+  "intended_files": [
+    "scripts/restore_builtin_shaders.py",
+    "tests/test_restore_builtin_shaders.py",
+    "docs/B13_BUILTIN_SHADER_ATOMIC_INSTALL_2026-11-04.md"
+  ],
+  "hypothesis": "Current in-place overwrite can truncate original exported .shader on I/O failure and can clobber a source modified after preflight; external backup alone is not sufficient recovery guarantee.",
+  "related_work": [
+    "B20 Blur rollback",
+    "B13 offline source rollback",
+    "W1 built-in identity proof"
+  ],
+  "experiment_ids": [
+    "B13-builtin-atomic-20261104T2247Z-B13-builtin-atomic"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Patch source, run source-only fault tests, remote CI, record limitations; leave engine/water/native authenticity gates intact.",
+  "updated_at": "2026-11-04T22:47:00Z"
+}
