@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "owner": "B21",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2153Z-B21-72ab",
+  "issue_id": "RENDER-002",
+  "track": "colors-materials:scene-lightmaps",
+  "approach": "Inspect source-vs-export lightmap/light-probe reference provenance; use a strict isolated diagnostic/real export proof, repair only authenticated broken edges. Complement existing Material/Shader/Texture checks.",
+  "status": "active",
+  "base_sha": "153787bcb85b0a0af9382b8d19e7dc85c6fc0ee8",
+  "intended_files": [
+    "scripts/b21_scene_lightmap_links.py",
+    "tests/test_b21_scene_lightmap_links.py",
+    ".github/workflows/raft-b21-scene-lightmap-links.yml",
+    "docs/B21_LIGHTMAP_SOURCE_EXPORT_LINKS_2026-11-04.md"
+  ],
+  "hypothesis": "An incomplete scene LightmapSettings/lightmap texture/renderer index transfer could explain flat or white rendering independently of Material/Shader links.",
+  "related_work": [
+    "B03 renderer-material links",
+    "B46 material-texture links",
+    "B04 color-space provenance",
+    "W1 original shader programs"
+  ],
+  "experiment_ids": [
+    "B21-20261104T2153Z-lightmap-chain"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Inspect real scene/export lighting data before editing; implement bounded read-only checker and synthetic negatives, then attempt actual same-export validation if available.",
+  "updated_at": "2026-11-04T21:53:00Z"
+}
