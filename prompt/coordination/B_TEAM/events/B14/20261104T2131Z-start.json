@@ -1,0 +1,12 @@
+{
+  "id": "B14-20261104T2131Z-start",
+  "owner": "B14",
+  "session_id": "20261104T2131Z-B14-a71c",
+  "issue_id": "WATER-001",
+  "type": "start",
+  "summary": "Registered WATER-001 path-provenance source repair; sidecar/Assets symlink acceptance is the specific hypothesis, not a claim of restored water.",
+  "evidence": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/verify_water_render_contract.py"
+  ],
+  "at": "2026-11-04T21:33:06.790Z"
+}
