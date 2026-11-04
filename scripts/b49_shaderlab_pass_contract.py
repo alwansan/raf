@@ -47,6 +47,7 @@ def pass_coverage(source):
 
     stack = []
     bodies = []
+    subshader_bodies = []
     balanced = True
     for index, char in enumerate(masked):
         if char == "{":
@@ -56,33 +57,52 @@ def pass_coverage(source):
                     kind == "subshader" and parent != "shader" or
                     kind == "pass" and parent != "subshader"):
                 kind = "other"
-            stack.append((kind, index + 1))
+            stack.append([kind, index + 1, []])
         elif char == "}":
             if not stack:
                 balanced = False
                 continue
-            kind, start = stack.pop()
+            kind, start, contained = stack.pop()
             if kind == "pass":
-                bodies.append(masked[start:index])
+                body = masked[start:index]
+                bodies.append(body)
+                # A runtime-selected SubShader owns its passes. Summing the
+                # passes of alternate SubShaders is NOT a valid passCount.
+                if stack and stack[-1][0] == "subshader":
+                    stack[-1][2].append(body)
+            elif kind == "subshader":
+                subshader_bodies.append(contained)
     if stack:
         balanced = False
 
-    authored = 0
-    for body in bodies:
+    def programmed(body):
         starts = list(PROGRAM_START.finditer(body))
         ends = list(PROGRAM_END.finditer(body))
         if len(starts) != len(ends) or len(starts) != 1:
-            continue
+            return False
         start, end = starts[0], ends[0]
         correct = ((start.group() == "CGPROGRAM" and end.group() == "ENDCG")
                    or (start.group() == "HLSLPROGRAM" and end.group() == "ENDHLSL"))
-        authored += bool(correct and start.end() < end.start()
-                        and body[start.end():end.start()].strip())
+        return bool(correct and start.end() < end.start()
+                    and body[start.end():end.start()].strip())
 
     count = len(bodies)
+    authored = sum(programmed(body) for body in bodies)
+    per_subshader_count = [len(group) for group in subshader_bodies]
+    per_subshader_programmed = [
+        sum(programmed(body) for body in group) for group in subshader_bodies
+    ]
     return {
-        "pass_count": count,
+        "pass_count": count,  # diagnostic aggregate only; not Shader.passCount
         "passes_with_complete_program": authored,
         "all_passes_programmed": balanced and count > 0 and authored == count,
         "pass_braces_balanced": balanced,
+        "subshader_pass_counts": per_subshader_count,
+        "subshader_programmed_pass_counts": per_subshader_programmed,
+        "all_subshaders_programmed": (
+            balanced and bool(per_subshader_count)
+            and all(count > 0 and count == ready for count, ready in
+                    zip(per_subshader_count, per_subshader_programmed))
+        ),
+        "active_subshader_runtime_verified": False,
     }
