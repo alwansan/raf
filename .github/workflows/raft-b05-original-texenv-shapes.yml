@@ -1,0 +1,84 @@
+name: B05 RENDER-002 authenticated original Material TexEnv parser
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/b05_probe_original_texenv_shapes.py
+      - tests/test_b05_probe_original_texenv_shapes.py
+      - .github/workflows/raft-b05-original-texenv-shapes.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raft-b05-original-texenv-${{ github.ref_name }}
+  cancel-in-progress: false
+jobs:
+  sha-verified-original-material:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            scripts/b05_probe_original_texenv_shapes.py
+            scripts/b05_verify_material_texenv_bindings.py
+            scripts/b44_verify_material_colors.py
+            scripts/w1_stage_zip2_owners.py
+            tests/test_b05_probe_original_texenv_shapes.py
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Synthetic fail-closed checks (original is not yet acquired)
+        run: |
+          python -m py_compile scripts/b05_probe_original_texenv_shapes.py
+          python -m unittest discover -s tests -p test_b05_probe_original_texenv_shapes.py -v
+          python - <<'PY'
+          import shutil
+          assert shutil.disk_usage('.').free > 5 * 1024**3, 'Insufficient staging disk'
+          PY
+      - uses: actions/checkout@v4
+        with:
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-original
+          filter: blob:none
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/sharedassets6.assets
+      - name: Verify immutable ZIP2 source and reconstruct one original owner
+        run: |
+          set -euo pipefail
+          test "$(git -C zip2-original rev-parse HEAD)" = '15964ea8f246b6e076ce26b60931ee2e1a9a2385'
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          from scripts.b05_probe_original_texenv_shapes import OWNER, OWNER_BYTES, OWNER_SHA256
+          from scripts.w1_stage_zip2_owners import stage
+          pins={'Raft_Data/'+OWNER:(OWNER_BYTES,OWNER_SHA256)}
+          result=stage(Path('zip2-original'),Path(os.environ['RUNNER_TEMP'])/'b05-auth-original',pins)
+          assert result['verified_bytes'] == OWNER_BYTES and not result['lfs_used']
+          print('B05_VERIFIED_ORIGINAL_OWNER count=1 bytes='+str(OWNER_BYTES)+' lfs=false')
+          PY
+      - name: Read exact Material TexEnv field-shape from real original bytes
+        run: |
+          python -m pip install --disable-pip-version-check UnityPy==1.25.4 PyYAML==6.0.3
+          python -m scripts.b05_probe_original_texenv_shapes \
+            --original "$RUNNER_TEMP/b05-auth-original" \
+            --out "$RUNNER_TEMP/b05-original-texenv-aggregate.json"
+      - name: Retain counts only, never private serialized game content
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: b05-original-texenv-aggregate-${{ github.run_id }}
+          path: ${{ runner.temp }}/b05-original-texenv-aggregate.json
+          retention-days: 7
+          if-no-files-found: ignore
+
+# Never collect proprietary original names, texture IDs, UV float values or raw assets.
+# Does not perform a same-instance export or Unity/device pixel comparison.
