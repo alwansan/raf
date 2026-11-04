@@ -1,0 +1,13 @@
+{
+  "id": "B17-spectrum-compiled-slot-parity-20261104T2304Z",
+  "owner": "B17",
+  "session_id": "20261104T2249Z-B17-cbind",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Original Spectrum DXBC executable t/s/u numeric resource slots match authenticated Unity per-stage tables: 7 passes, 14 permutation pairs, 28 stage programs, 17 synthetic tests and genuine ZIP2 source CI41930225633 PASS. No ShaderLab/Unity/Adreno or APK.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41930225633",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B17_SPECTRUM_COMPILED_REGISTER_PARITY_2026-11-04.md"
+  ],
+  "at": "2026-11-04T23:04:00Z"
+}
