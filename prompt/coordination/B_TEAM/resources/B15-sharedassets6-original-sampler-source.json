@@ -1,0 +1,32 @@
+{
+  "id": "B15-sharedassets6-original-sampler-source",
+  "title": "Authentic selected ZIP2 Texture2D sampler source (87 objects, B15)",
+  "kind": "original-texture2d-sampler-typed-source",
+  "source": {
+    "provider": "ZIP2 exact authenticated source",
+    "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "path": "Raft/Raft_Data/sharedassets6.assets",
+    "bytes": 6607272,
+    "sha256": "0476792cfeffac19d16e920011ed8d2fb2da62973c2f09a8689bc59e1ac4b632"
+  },
+  "stages": {
+    "acquisition": "VERIFIED",
+    "extraction": "VERIFIED",
+    "reconstruction": "UNKNOWN",
+    "binding": "UNKNOWN",
+    "integration": "UNKNOWN",
+    "device": "UNKNOWN"
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41930143093",
+    "https://github.com/alwansan/raf/commit/50838fb89fc1552f7ca9809d159d14c5ee04830c",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B15_TEXTURE_SAMPLER_PARITY_2026-11-04.md"
+  ],
+  "remaining": [
+    "87 real original Texture2D typed sampler rows parsed and validated; this is source-only; no same-instance exported Unity importer has been compared.",
+    "Authenticated paired B02/W1 exporter traces and actual same-export private Unity project needed before per-texture parity.",
+    "No pixel/Unity/Adreno/phone output measured; no original content or .meta was modified."
+  ],
+  "updated_by": "B15",
+  "updated_at": "2026-11-04T23:01:52.635Z"
+}
