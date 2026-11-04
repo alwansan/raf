@@ -355,6 +355,14 @@ jobs:
           python3 -m scripts.b04_restore_original_color_settings \
             --original "$RUNNER_TEMP/input/Raft_Data/globalgamemanagers" \
             --project "$RUNNER_TEMP/project/ExportedProject" --apply
+      - name: B11 restore original sRGB display gamut in transient exported PlayerSettings
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_b11_restore_original_color_gamuts.py -v
+          python3 -m scripts.b11_restore_original_color_gamuts \
+            --original "$RUNNER_TEMP/input/Raft_Data/globalgamemanagers" \
+            --project "$RUNNER_TEMP/project/ExportedProject" --apply
       - name: Re-read exact embedded engine database for the production builtin gate
         shell: bash
         run: |
@@ -740,6 +748,9 @@ jobs:
           cp -a "$RUNNER_TEMP/project/ExportedProject/." "$GITHUB_WORKSPACE/unity-candidate/"
           # Guard against later staging steps silently reverting Linear to Gamma.
           python3 -m scripts.b04_restore_original_color_settings \
+            --original "$RUNNER_TEMP/input/Raft_Data/globalgamemanagers" \
+            --project "$GITHUB_WORKSPACE/unity-candidate"
+          python3 -m scripts.b11_restore_original_color_gamuts \
             --original "$RUNNER_TEMP/input/Raft_Data/globalgamemanagers" \
             --project "$GITHUB_WORKSPACE/unity-candidate"
           du -sh "$GITHUB_WORKSPACE/unity-candidate"
