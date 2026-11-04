@@ -5,6 +5,7 @@ on:
     branches: [feature/android-native-port]
     paths:
       - scripts/b07_probe_original_world_callbacks.py
+      - scripts/b07_compile_world_callback_fixture.py
       - tests/test_b07_probe_original_world_callbacks.py
       - tests/test_b07_world_callback_trace.py
       - scripts/instrument_android_runtime_operations.py
@@ -26,6 +27,7 @@ jobs:
           lfs: false
           sparse-checkout: |
             scripts/b07_probe_original_world_callbacks.py
+            scripts/b07_compile_world_callback_fixture.py
             scripts/instrument_android_runtime_operations.py
             tests/test_b07_probe_original_world_callbacks.py
             tests/test_b07_world_callback_trace.py
@@ -45,6 +47,14 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '10.0.x'
+      - name: Compile and execute synthetic Android world callback in real CLR
+        shell: bash
+        env:
+          DOTNET_PROCESSOR_COUNT: '2'
+        run: |
+          set -euo pipefail
+          python3 -m scripts.b07_compile_world_callback_fixture --output "$RUNNER_TEMP/b07-compiled"
+          timeout 90s dotnet run --project "$RUNNER_TEMP/b07-compiled/B07Harness.csproj" --configuration Release --nologo
       - name: Private original world callback probe
         shell: bash
         env:
