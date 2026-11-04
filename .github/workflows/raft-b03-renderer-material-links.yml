@@ -1,0 +1,44 @@
+name: B03 RENDER-002 Renderer Material GUID structural tests (CPU only)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/b03_verify_renderer_material_links.py'
+      - 'tests/test_b03_verify_renderer_material_links.py'
+      - '.github/workflows/raft-b03-renderer-material-links.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raft-b03-renderer-links-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  b03-renderer-yaml:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Source syntax and 17 synthetic Renderer-Material cases
+        run: |
+          python3 -m py_compile scripts/b03_verify_renderer_material_links.py
+          python3 -m unittest discover -s tests -p test_b03_verify_renderer_material_links.py -v
+      - name: Disclose scope, not private game contents
+        if: always()
+        run: |
+          printf 'B03 renderer-material synthetic YAML only; real export NOT checked.\n' > "$RUNNER_TEMP/b03-renderer-links.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: b03-renderer-links-${{ github.run_id }}
+          path: ${{ runner.temp }}/b03-renderer-links.txt
+          retention-days: 7
+          if-no-files-found: ignore
