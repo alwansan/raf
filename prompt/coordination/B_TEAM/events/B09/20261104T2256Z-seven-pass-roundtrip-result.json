@@ -1,0 +1,15 @@
+{
+  "id": "B09-spectrum-seven-pass-source-result-20261104",
+  "owner": "B09",
+  "session_id": "20261104T224504636Z-B09-sp7",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "SHA-pinned original Spectrum seven-pass source provenance and 18-distinct-blob private roundtrip experiment integrated; 13+10 exact-GitHub-blob local synthetic tests PASS. Original B09 ZIP2/vkd3d CI run, real ShaderLab, Unity/Adreno/phone remain UNVERIFIED.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41920232173",
+    "https://github.com/alwansan/raf/commit/07496c7831ef03b18969a23da87cc34a206e54d7",
+    "https://github.com/alwansan/raf/commit/8cf6e4d3eeab89f5db052546f9b22a999195b723",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B09_SPECTRUM_PASS_STAGING_2026-11-04.md"
+  ],
+  "at": "2026-11-04T22:59:31.649Z"
+}
