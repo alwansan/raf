@@ -60,7 +60,7 @@ def install(project, candidate, backup):
         raise ValueError("Require one original exported shader .meta")
     original, metadata = target.read_bytes(), meta.read_bytes()
     lines = [line for line in metadata.splitlines() if line.startswith(b"guid:")]
-    if len(lines) != 1 or not re.fullmatch(rb"guid:[ \\t]*[0-9a-fA-F]{32}[ \\t]*", lines[0]):
+    if len(lines) != 1 or not re.fullmatch(rb"guid: *[0-9a-fA-F]{32} *", lines[0]):
         raise ValueError("Original exported shader GUID malformed or ambiguous")
     backup.mkdir(parents=True, exist_ok=False)
     try:
