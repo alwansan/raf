@@ -1,0 +1,32 @@
+{
+  "id": "B10-volumetric-notice-transaction",
+  "title": "B10 — original vendor Volumetric Lighting notice and Shader rollback transaction",
+  "kind": "restoration-transaction",
+  "source": {
+    "provider": "pinned SlightlyMad/VolumetricLights official vendor",
+    "commit": "d20b6f9a47ae857e1d313b147db2df3ef44b9196",
+    "path": "config/volumetric-shader-sources.json",
+    "bytes": null,
+    "sha256": null
+  },
+  "stages": {
+    "acquisition": "UPSTREAM_GIT_BLOB_PIN_VERIFIED_CI",
+    "extraction": "THREE_VENDOR_PROGRAMS_VERIFIED_IN_EPHEMERAL_CI",
+    "reconstruction": "SOURCE_TRANSACTION_PATCH_TESTED",
+    "binding": "SYNTHETIC_EXPORT_BYTES_AND_META_PRESERVED",
+    "integration": "PRODUCTION_SHARED_RESTORE_AND_VOLUMETRIC_WRAPPER_WITH_CI",
+    "device": "NOT_TESTED"
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/2a38dfb2d6ffe3af50f5f3a04bd2fc3ca3524bda",
+    "https://github.com/alwansan/raf/commit/c3e91f67624d89f501d41b354db195318f17d7c0",
+    "https://github.com/alwansan/raf/commit/b6efa50948cb388d1a006d482676d6f693bb51d6",
+    "https://github.com/alwansan/raf/actions/runs/41928744660",
+    "https://github.com/alwansan/raf/actions/runs/41928592399"
+  ],
+  "remaining": [
+    "No native Unity imported or Android GPU rendering evidence for volumetric Shader programs",
+    "Original Raft game resources/materials and pixel fidelity not validated; source transaction not gameplay restoration"
+  ],
+  "updated_by": "B10"
+}
