@@ -1,0 +1,56 @@
+name: B48 B-team deterministic evidence summary checkpoint (source only)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-b48-refresh-team-summary.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: raft-b48-team-summary-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  safe-refresh:
+    name: Refresh generated B-team snapshot without overwriting client records
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: feature/android-native-port
+          persist-credentials: true
+          lfs: false
+          fetch-depth: 1
+          sparse-checkout: |
+            scripts/refresh_b_team.py
+            prompt/coordination/B_TEAM
+      - name: Rebase generated-only summary on live branch and push without force
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'raft-b48-checkpoint-bot'
+          git config user.email 'raft-b48-checkpoint-bot@users.noreply.github.com'
+          for attempt in 1 2 3 4 5; do
+            git fetch -q --no-tags origin feature/android-native-port
+            git reset --hard -q FETCH_HEAD
+            python3 scripts/refresh_b_team.py
+            git add -- prompt/coordination/B_TEAM/snapshot.json prompt/coordination/B_TEAM/SUMMARY.md
+            if git diff --cached --quiet; then
+              echo 'RAFT_B48_TEAM_SUMMARY no-change; already current'
+              exit 0
+            fi
+            git commit -q -m 'coord(B48): regenerate team summary from current issue/resource/event records'
+            if git push --quiet origin HEAD:feature/android-native-port; then
+              echo 'RAFT_B48_TEAM_SUMMARY regenerated=true push_fast_forward=true'
+              exit 0
+            fi
+            echo 'RAFT_B48_TEAM_SUMMARY optimistic lease failed; retry current branch'
+            sleep 1
+          done
+          echo 'RAFT_B48_TEAM_SUMMARY blocked by concurrent writes; no force push' >&2
+          exit 1
