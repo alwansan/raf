@@ -79,7 +79,10 @@
     "https://github.com/alwansan/raf/actions/runs/41928799663",
     "https://github.com/alwansan/raf/actions/runs/41929367655",
     "https://github.com/alwansan/raf/actions/runs/41930267873",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B03_ORIGINAL_RENDERER_MATERIALS_2026-11-04.md"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B03_ORIGINAL_RENDERER_MATERIALS_2026-11-04.md",
+    "https://github.com/alwansan/raf/actions/runs/41930891466",
+    "https://github.com/alwansan/raf/actions/runs/41931942755",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B21_LIGHT_EXPORT_LINEAGE_2026-11-04.md"
   ],
   "remaining": [
     "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -113,13 +116,14 @@
     "B13 source-fixed builtin ShaderLab restorer safety: verified exact backups, concurrent source edit rejection and fsynced atomic replacement/rollback; CI41928703661 14/14 synthetic. NOT authentic shader programs or same-export Material/Unity/Adreno proof.",
     "B05 actual original ZIP2 sharedassets6 source parser and bounded owner accessor PASS (CI41929077930, 41 real Materials/227 TexEnv slots/227 UV sets; 89 same-file,25 external,113 null), and scoped source-to-full-export comparator 18/18 synthetic CI41928852363. No genuine same-instance Unity export/Material PPtr+UV match or Adreno/phone color restoration yet. RENDER-002 OPEN.",
     "B15 actual original: ZIP2 SHA-verified sharedassets6 (6,607,272B) read via production original_sampler() 87/87 actual Texture2D settings, 87 filter and 261 wrap, all mip biases 0, CI41930143093 SUCCESS with 8 synthetic negative controls. This does NOT establish any real original-to-export importer equivalence (0 paired records) or restore white shaders/device pixels.",
-    "B03 verified 1635/1635 source-only non-null Renderer Material target class links across 6 original ZIP2 scenes and three SHA-pinned owners (4 original null). Actual same-instance Unity Renderer→Material GUID/fileID export preservation and Android white/pixel fix remain unproven."
+    "B03 verified 1635/1635 source-only non-null Renderer Material target class links across 6 original ZIP2 scenes and three SHA-pinned owners (4 original null). Actual same-instance Unity Renderer→Material GUID/fileID export preservation and Android white/pixel fix remain unproven.",
+    "B21 actual 9-provider ZIP2 bounded original Raft AssetRipper same-instance export: 2/2 native Light108 values preserved and 2/2 exact Light.m_GameObject→GameObject1 owner pointers preserved in actual Unity YAML; 0 drift/misattached, CI41930891466 and 41931942755 both SUCCESS (40 owner-trial synthetic controls). This excludes Light value/owner export loss for these two scenes only; shader/material/ambient/Unity GPU pixels, remaining 34 scenes and phone not verified. RENDER-002 OPEN."
   ],
   "acceptance": [
     "مطابقة روابط ومراجع الأصل",
     "مقارنةصوريةلنفسالمشهد",
     "نجاحعلىالهاتف"
   ],
-  "updated_by": "B03",
-  "updated_at": "2026-11-04T23:05:25.614Z"
+  "updated_by": "B21",
+  "updated_at": "2026-11-04T23:17:00Z"
 }
