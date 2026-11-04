@@ -20,3 +20,15 @@ class Instruction(unittest.TestCase):
   dest=2|(15<<4)|(1<<20);cb=2|(1<<2)|(8<<12)|(2<<20)|(1<<31)
   for ext in (1|(1<<31),1|(1<<14),2):
    with self.assertRaises(ValueError):read([54|(7<<24),dest,0,cb,ext,0,0])
+
+ def test_relative_cb_index_is_not_immediate_zero(self):
+  dest=2|(15<<4)|(1<<20)
+  cb=2|(1<<2)|(228<<4)|(8<<12)|(2<<20)|(2<<25)
+  relative=2|(2<<2)|(1<<4)|(1<<20)
+  r=read([54|(7<<24),dest,0,cb,1,relative,7])[0]
+  self.assertTrue(r['dynamic_index'])
+  self.assertEqual(r['byte_offsets'],[])
+  self.assertEqual(r['index_expression'][1]['relative']['indices'][0]['immediate'],7)
+ def test_relative_payload_truncated_rejected(self):
+  dest=2|(15<<4)|(1<<20);cb=2|(1<<2)|(8<<12)|(2<<20)|(2<<25)
+  with self.assertRaises(ValueError):read([54|(5<<24),dest,0,cb,1])

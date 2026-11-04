@@ -77,7 +77,7 @@ def instruction_census(code):
     raw=chunks[0]
     tokens=struct.unpack("<"+"I"*(len(raw)//4),raw)
     if tokens[1]!=len(tokens): raise ValueError("token length")
-    at=2;counts=Counter();reasons=Counter();errors=Counter();modifiers=Counter();reads=0;offsets=set()
+    at=2;counts=Counter();reasons=Counter();errors=Counter();modifiers=Counter();reads=0;dynamic_reads=0;offsets=set()
     while at<len(tokens):
         h=tokens[at];op=h&2047;n=(h>>24)&127
         if not n and op==53 and at+1<len(tokens):n=tokens[at+1]
@@ -95,10 +95,11 @@ def instruction_census(code):
                 reads+=len(decoded)
                 for item in decoded:
                     modifiers[item.get("source_modifier",0)]+=1
+                    dynamic_reads+=int(item.get("dynamic_index",False))
                     offsets.update((item["slot"],o) for o in item["byte_offsets"])
         at+=n
     return {"opcode_counts":dict(counts),"arithmetic_failure_categories":dict(reasons),"cb_source_modifier_counts":dict(modifiers),"arithmetic_parse_failures":dict(errors),
-            "decoded_arithmetic_cb_reads":reads,"unique_cb_scalar_addresses":len(offsets),
+            "decoded_arithmetic_cb_reads":reads,"symbolic_dynamic_cb_reads":dynamic_reads,"unique_cb_scalar_addresses":len(offsets),
             "complete_program_operand_coverage":False}
 
 def main(source, repo, out):

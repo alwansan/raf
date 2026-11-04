@@ -1,4 +1,4 @@
-name: Operand-category Original Blur instruction census ZIP2 CPU only 4e91
+name: Dynamic-index Original Blur instruction census ZIP2 CPU only 4e91
 on:
   push:
     branches: [feature/android-native-port]

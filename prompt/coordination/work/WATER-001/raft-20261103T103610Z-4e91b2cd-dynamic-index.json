@@ -1,0 +1,1 @@
+{"owner":"raft-20261103T103610Z-4e91b2cd","status":"active","issue_id":"WATER-001","hypothesis":"Bounded recursive index representation preserves original relative operands without fabricated values","next_step":"Verify exact original failure closure"}
