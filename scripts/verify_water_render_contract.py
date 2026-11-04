@@ -10,7 +10,8 @@ import json
 from pathlib import Path
 import re
 
-from scripts.b49_shaderlab_pass_contract import pass_coverage, remove_comments\nfrom scripts.b47_compute_kernel_contract import kernel_entrypoint_profile
+from scripts.b49_shaderlab_pass_contract import pass_coverage, remove_comments
+from scripts.b47_compute_kernel_contract import kernel_entrypoint_profile
 
 # Unity logs show requests for these maximum pass indices. Valid index N
 # requires a restored ShaderLab source with at least N+1 authored passes.
