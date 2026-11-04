@@ -68,12 +68,32 @@ def wrap(text, signature, area, detail='""'):
     return result
 
 
+# The APK86 stack proves the Windows-only Steam stats upload is reached from
+# SaveGame after the real local scene load. Keep every original save/RGD call,
+# but do not load steam_api64 for the Android offline profile.
+def guard_android_local_savegame_stats(text):
+    signature = 'public void SaveGame(bool sendRemoteMessage)'
+    start, end = body_bounds(text, signature)
+    executable = executable_only(text)
+    call = re.compile(r'\bSteamUserStats\s*\.\s*StoreStats\s*\(\s*\)\s*;')
+    found = list(call.finditer(executable[start:end]))
+    if len(found) != 1:
+        raise ValueError('Require exactly one executable original SaveGame StoreStats call')
+    before, after = start + found[0].start(), start + found[0].end()
+    statement = text[before:after]
+    guard = 'if (!RaftAndroid.Platform.LocalPlayerIdentity.Enabled) { ' + statement + ' }'
+    result = text[:before] + guard + text[after:]
+    if result.replace(guard, statement, 1) != text:
+        raise ValueError('SaveGame Steam stats isolation changed original source')
+    return result
+
+
 def instrument(name, text, manifest):
     row = manifest['sources'][name]
     digest = hashlib.sha256(text.replace('\r\n', '\n').encode()).hexdigest()
     if digest != row['sha256']:
         raise ValueError('Unknown adapted original revision: ' + name)
-    result = text
+    result = guard_android_local_savegame_stats(text) if name == 'SaveAndLoad' else text
     for method in row['methods']:
         result = wrap(result, method['signature'], row['area'], method.get('detail', '""'))
     return result
