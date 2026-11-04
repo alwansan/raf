@@ -4,17 +4,19 @@
   "generation": "B-2026-11-04",
   "session_id": "20261104T2142Z-B38-f31a",
   "resumed_from_session": null,
-  "status": "active",
+  "status": "completed",
   "base_sha": null,
-  "last_commit": null,
-  "updated_at": "2026-11-04T21:42:00Z",
+  "last_commit": "f3b709e47421e210fbb0863ac5b920a7d843e1cb",
+  "updated_at": "2026-11-04T21:50:00Z",
   "tracks": [
     "colors-materials"
   ],
   "work_ids": [
     "B38-20261104T2142Z-f31a-material-yaml-uniqueness"
   ],
-  "run_urls": [],
-  "next_step": "Harden duplicate Unity Material YAML keys in B05 texture/UV verifier, add negative controls and isolated CI; original export/device evidence remains unknown.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41919146580"
+  ],
+  "next_step": "Source-only YAML anti-duplicate fix completed and 14+7 CI PASS. Next run actual pinned ZIP2 same-export private material parity; RENDER OPEN, NOT_READY 0/3.",
   "memory_path": "prompt/coordination/clients/B38/MEMORY.md"
 }
