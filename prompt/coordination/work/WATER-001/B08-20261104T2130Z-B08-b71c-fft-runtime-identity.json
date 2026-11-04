@@ -6,7 +6,7 @@
   "issue_id": "WATER-001",
   "track": "water-fft",
   "approach": "Authenticate exact original FFT ComputeShader object and inspect typed Unity kernel-name/variant registry to test whether compiled positions are runtime FindKernel IDs; classify ambiguity without invented kernels.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "169c0a7bceca9fde2f458a4a4d8dcbab7ac119b7",
   "intended_files": [
     "scripts/b08_probe_fft_kernel_registry.py",
@@ -23,8 +23,19 @@
   "experiment_ids": [
     "B08-fft-registry-20261104"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement strict typed registry inspector, negative tests and run authenticated ZIP2-only original probe without raw proprietary outputs.",
-  "updated_at": "2026-11-04T21:30:35Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41917369953"
+  ],
+  "result": {
+    "source_verified": true,
+    "unit_tests": 11,
+    "original_compiled_slots": 20,
+    "distinct_serialized_kernel_names": 1,
+    "compiled_slot_to_unity_runtime_kernel_id_verified": false,
+    "source_fixed": "diagnostic-probe-integrated",
+    "device_tested": false,
+    "evidence": "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B08_FFT_KERNEL_REGISTRY_2026-11-04.md"
+  },
+  "next_step": "Complete new scope: original kernel name lookup/variant router identity remains unresolved; shift to independent P0 review and hand off single-name alias constraint to B48/WATER workers.",
+  "updated_at": "2026-11-04T21:36:45.954Z"
 }
