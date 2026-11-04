@@ -5,7 +5,9 @@ on:
     paths:
       - '.github/workflows/raft-b45-blur-install-check.yml'
       - 'scripts/b45_install_original_blur.py'
+      - 'scripts/b45_stage_original_blur.py'
       - 'tests/test_b45_install_original_blur.py'
+      - 'tests/test_b45_stage_original_blur.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -25,4 +27,4 @@ jobs:
             scripts
             tests
       - name: Run synthetic original texture ShaderLab install and rollback controls
-        run: python3 -m unittest discover -s tests -p 'test_b45_install_original_blur.py' -v
+        run: python3 -m unittest discover -s tests -p 'test_b45_*original_blur.py' -v
