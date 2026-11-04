@@ -4,7 +4,7 @@
   "session_id": "20261104T2242Z-B05-auth-texenv6",
   "issue_id": "RENDER-002",
   "hypothesis": "Verified 41 original Materials from sharedassets6 can be compared safely to future complete same-instance export while treating nonselected original owners as explicitly unverified, not as missing or completed.",
-  "source_commit": null,
+  "source_commit": "bd14417a7038180fe7f3f3ab2550fc0b26ca154c",
   "input_hashes": [
     "sharedassets6.assets 6,607,272 bytes SHA256 0476792cfeffac19d16e920011ed8d2fb2da62973c2f09a8689bc59e1ac4b632"
   ],
@@ -12,7 +12,10 @@
     "Python": "3.11",
     "PyYAML": "6.0.3"
   },
-  "commands": [],
+  "commands": [
+    "python -m unittest discover -s tests -p test_b05_verify_material_texenv_bindings.py -v",
+    "python -m scripts.b05_probe_original_texenv_shapes --original $RUNNER_TEMP/b05-auth-original --out $RUNNER_TEMP/b05-original-texenv-aggregate.json"
+  ],
   "negative_controls": [
     "default comparison still rejects absent full-original identities",
     "selected-owner material missing from trace fails",
@@ -21,15 +24,21 @@
     "nonselected external owner trace does not count as verified"
   ],
   "workflow_path": ".github/workflows/raft-b05-material-texenv-fidelity.yml",
-  "run_url": null,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41928852363",
   "artifact_urls": [],
   "budget": "incremental B05 synthetic CI only; no new source acquisition",
-  "status": "planned",
-  "observed_result": null,
-  "rejected_hypotheses": [],
-  "limitations": [
-    "A same-instance Unity export is still absent; scoped control cannot assert Raft material parity or GPU quality"
+  "status": "completed",
+  "observed_result": "18/18 synthetic source/export selected scope controls PASS in CI41928852363; real selected original accessor on SHA-pinned sharedassets6 PASS in CI41929077930; no full-game export matching / pixel execution.",
+  "rejected_hypotheses": [
+    "Failed one-owner CI indicated original game asset drift: two failures were optional Python import unavailable in minimal sparse workflow before source read; fixed and CI green.",
+    "A selected-owner subset can be reported as all-game material fidelity: rejected; explicit outside-scope counts and global proof false."
   ],
-  "integration_commit": null,
-  "next_step": "Implement CLI and compare scoped behavior, run regression and update status."
+  "limitations": [
+    "No same-instance Unity export trace or YAML executed",
+    "Other 81 original serialized owners out of scope",
+    "Original external owner texture target paths not proven",
+    "No ShaderLab/GPU/device visual confirmation"
+  ],
+  "integration_commit": "bd14417a7038180fe7f3f3ab2550fc0b26ca154c",
+  "next_step": "Coordinate with current export owner W1/W4 using separate team discussion and same-source trace."
 }
