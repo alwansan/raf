@@ -1,0 +1,12 @@
+{
+  "id": "B17-spectrum-all-fragments-20261104T2313Z",
+  "owner": "B17",
+  "session_id": "20261104T2249Z-B17-cbind",
+  "issue_id": "WATER-001",
+  "type": "start",
+  "summary": "After authentic one-fragment HLSL symbol rebind and Vulkan1.1 recompile success CI41931666175, extend the same original-source guarded private process to all 7 Spectrum fragment passes and 2 variants each, without modifying source game assets or B09 translator.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41931666175"
+  ],
+  "at": "2026-11-04T23:13:00Z"
+}
