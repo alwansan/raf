@@ -2,22 +2,23 @@
   "schema_version": 1,
   "username": "B15",
   "generation": "B-2026-11-04",
-  "session_id": "20261104T215400Z-B15-7b2c",
-  "resumed_from_session": null,
-  "status": "paused",
-  "base_sha": "16c966badad3b8e217e57f93936dedb453e79609",
+  "session_id": "20261104T224800Z-B15-defaults-32f1",
+  "resumed_from_session": "20261104T215400Z-B15-7b2c",
+  "status": "active",
+  "base_sha": "b5d8de01257f3d3171f8e930de557343a49e8205",
   "last_commit": "4035b13251f3fffcb8c4f0257174528f58c298ce",
-  "updated_at": "2026-11-04T22:06:00Z",
+  "updated_at": "2026-11-04T22:47:25.577Z",
   "tracks": [
-    "RENDER-002:sampler-fidelity"
+    "RENDER-002:sampler-default-safety-and-trace-coherence"
   ],
   "work_ids": [
-    "B15-20261104T215400Z-B15-7b2c-sampler-parity"
+    "B15-20261104T215400Z-B15-7b2c-sampler-parity",
+    "B15-20261104T224800Z-B15-defaults-32f1-sampler-defaults-dual-trace"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41920884155",
     "https://github.com/alwansan/raf/actions/runs/41921429305"
   ],
-  "next_step": "Scoped B15 read-only sampler trace bridge integrated and CI41921429305 16/16 PASS; requires authentic same-export trace + original ZIP2 bytes + real Unity project to obtain any real mismatch. RENDER-002 remains OPEN; move to independent P0 graphics/world issue on resume, with new session_id.",
+  "next_step": "Implement -100 mipBias default UNKNOWN and exact W1/B02 same-export-instance cross-check, CI and handoff.",
   "memory_path": "prompt/coordination/clients/B15/MEMORY.md"
 }
