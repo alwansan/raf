@@ -1,0 +1,13 @@
+{
+  "id": "20261104T2135Z-B24-foam-stage-start",
+  "owner": "B24",
+  "session_id": "20261104T2126Z-B24-6f19",
+  "issue_id": "WATER-001",
+  "type": "start",
+  "summary": "B24 moves to unowned Foam/Global original two-pass pass-program conversion gap; source-bound, private original DXBC-stage translation instead of repetitive pass census, maintaining authentic gates.",
+  "evidence": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/W2_WATER_SHADER_STAGE_BINDINGS_2026-11-04.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/W4_BUILTIN_GATE_AND_WATER_FRONTIER_2026-11-04.md"
+  ],
+  "at": "2026-11-04T21:36:19.755Z"
+}

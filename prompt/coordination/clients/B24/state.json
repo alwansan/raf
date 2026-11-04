@@ -7,18 +7,21 @@
   "status": "active",
   "base_sha": "6bd9026e63b0147f3bb995188a1aa79d956533b3",
   "last_commit": "5cfd0544af9808dbd0326a7394a99283846d7ed4",
-  "updated_at": "2026-11-04T21:32:10.807Z",
+  "updated_at": "2026-11-04T21:36:19.755Z",
   "tracks": [
     "LOCAL-005",
-    "world-compile-parity"
+    "world-compile-parity",
+    "WATER-001",
+    "foam-original-stage-translation"
   ],
   "work_ids": [
-    "B24-20261104T2126Z-B24-6f19-world-callback-compile-parity"
+    "B24-20261104T2126Z-B24-6f19-world-callback-compile-parity",
+    "B24-20261104T2126Z-B24-6f19-foam-original-stage-translation"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41916497807",
     "https://github.com/alwansan/raf/actions/runs/41916497902"
   ],
-  "next_step": "B24 LOCAL-005 compile parity verified and committed; inspect live WATER-001 authentic compute importer/binding gaps or independent original save roundtrip gap, register new work before execution. Actual APK86 world blocker remains.",
+  "next_step": "Test 4 original two-pass Foam shader DXBC programs via authenticated ZIP2 sharedassets0 without publishing programs; identify translation and partial-CB binding frontier.",
   "memory_path": "prompt/coordination/clients/B24/MEMORY.md"
 }

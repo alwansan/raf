@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "owner": "B24",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2126Z-B24-6f19",
+  "issue_id": "WATER-001",
+  "track": "foam-authentic-translation",
+  "approach": "Original ZIP2 SHA-pinned sharedassets0 pathID2420: link four authentic Foam DXBC stage programs to two passes, parse exact parameter envelopes, translate privately through VKD3D-SPIRV/spirv-cross/glslang and report fail-closed sanitized stage results (not shaderlab install).",
+  "status": "active",
+  "base_sha": null,
+  "intended_files": [
+    "scripts/b24_original_foam_stage_translation.py",
+    "tests/test_b24_original_foam_stage_translation.py",
+    ".github/workflows/raft-b24-original-foam-stages.yml"
+  ],
+  "hypothesis": "Original Foam has 4 singly-varied original DXBC stages with complete source-linked parameter bindings and is translatable to Vulkan SPIR-V/HLSL, providing a grounded base for next authentic two-pass ShaderLab reconstruction.",
+  "related_work": [
+    "docs/W2_WATER_SHADER_STAGE_BINDINGS_2026-11-04.md",
+    "docs/B45_ORIGINAL_SUBSURFACE_BLUR_SHADERLAB_2026-11-04.md"
+  ],
+  "experiment_ids": [
+    "B24-20261104T2135Z-original-foam-stages"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Build source-pinned no-LFS ZIP2 private translation CI and validate 4 stages with no raw shader published; do not integrate if any cannot be proven.",
+  "updated_at": "2026-11-04T21:36:19.755Z"
+}

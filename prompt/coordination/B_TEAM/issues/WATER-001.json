@@ -15,9 +15,7 @@
     "https://github.com/alwansan/raf/actions/runs/41914193733",
     "https://github.com/alwansan/raf/commit/348990da5c7864bfbbc39e2f4fbe3e4969795d81",
     "https://github.com/alwansan/raf/actions/runs/41913854292",
-    "https://github.com/alwansan/raf/actions/runs/41914612977",
-    "https://github.com/alwansan/raf/actions/runs/41917369953",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B08_FFT_KERNEL_REGISTRY_2026-11-04.md"
+    "https://github.com/alwansan/raf/actions/runs/41914612977"
   ],
   "remaining": [
     "Spectrum/Foam/Blur passes ناقصة في APK86",
@@ -28,14 +26,13 @@
     "Original serialized FFT FindKernel/Dispatch kernel index to compiled program identity and Android GPU runtime remain unverified after B47 source-only entrypoint guard.",
     "B45 original Subsurface Blur two-pass CPU proof complete, native staging wired but has not run; Unity/Adreno verification and other FFT/water kernels remain open",
     "B06 source-only: startup diagnostic now queries original FFT RGHalf/RGFloat/ARGBHalf/ARGBFloat RenderTexture/random-write and compute-group capability; CI synthetic passed, future APK/device results unknown.",
-    "B06 original FFT secondary Dispatch parser now excludes comment/string fake calls; 8/8 synthetic tests pass, original-data rerun and runtime shader import still unverified.",
-    "B08 original SHA-verified FFT ComputeShader has 20 compiled program entries but exactly ONE distinct serialized kernel name (all 20 aliased); CI41917369953 passes 11 synthetic plus real original authentication. 20 compiled positions must NOT be treated as 20 Unity runtime FindKernel IDs; original name-to-variant runtime mapping and .compute/Adreno remain unproven."
+    "B06 original FFT secondary Dispatch parser now excludes comment/string fake calls; 8/8 synthetic tests pass, original-data rerun and runtime shader import still unverified."
   ],
   "acceptance": [
     "هوية برامج ونوى أصلية أو تطابق موثق دونdummy",
     "تثبيت فيالتصدير+Unity import/render",
     "اختبار هاتف يثبت الماء بلا pass/kernel errors"
   ],
-  "updated_by": "B08",
-  "updated_at": "2026-11-04T21:36:33.194Z"
+  "updated_by": "B06",
+  "updated_at": "2026-11-04T21:18:33.615Z"
 }
