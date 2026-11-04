@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "owner": "B02",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2233Z-B02-7c19",
+  "issue_id": "RENDER-002",
+  "track": "colors-materials",
+  "approach": "Add B02-only SHA-locked staged instrumenter to existing pinned W1 AssetRipper exporter helper. New optional private Texture2D class28 trace, sharing exporter instance ID with W1 material/shader trace, while leaving W1 shared helper/runner unchanged. Test safe staging and actual pinned C# compilation.",
+  "status": "active",
+  "base_sha": null,
+  "intended_files": [
+    "scripts/b02_stage_texture_lineage.py",
+    "tests/test_b02_stage_texture_lineage.py",
+    ".github/workflows/raft-b02-texture-trace-compile.yml",
+    "docs/B02_TEXTURE_IMPORT_COLOR_FIDELITY_2026-11-04.md"
+  ],
+  "hypothesis": "The common exporter only captures original Material21/Shader48; B15/B02 require authentic Texture2D28 source->export metadata from the same exporter instance. A SHA-verified transient patch can capture it without modifying original assets or existing shared W1 output.",
+  "related_work": [
+    "B02-20261104T2233Z-B02-7c19-trace-mipmap-bridge",
+    "B15-20261104T215400Z-B15-7b2c-sampler-parity",
+    "raft-20261104T080541Z-eb004764-export-lineage"
+  ],
+  "experiment_ids": [],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement safe temporary exporter hook staging; red/green synthetic tests; isolated pinned source dotnet compile, no original assets or Unity build.",
+  "updated_at": "2026-11-04T22:40:00Z"
+}
