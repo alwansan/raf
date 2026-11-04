@@ -26,10 +26,15 @@ def _tag_group(vm):
     if not isinstance(vm,list) or len(vm)!=1:
         raise ValueError("Original variantMap cardinality drift")
     row=vm[0]
-    if not isinstance(row,tuple) or len(row)!=2 or type(row[0]) is not int:
+    if not isinstance(row,tuple) or len(row)!=2:
         raise ValueError("Invalid variantMap tuple")
-    tag,items=row
-    if not 0<=tag<2**31 or not isinstance(items,dict) or len(items)>32:
+    header,items=row
+    # Original UnityPy typed header is opaque, not necessarily an integer.
+    # Compare bounded type/value fingerprints ONLY; do not assign runtime semantics.
+    if type(header) not in (str,int,bytes,list,tuple,dict) or len(repr(header))>4096:
+        raise ValueError("Invalid variantMap header type or size")
+    tag=hashlib.sha256(repr(header).encode("utf-8")).hexdigest()
+    if not isinstance(items,dict) or len(items)>32:
         raise ValueError("Invalid variantMap header or fields")
     group=[]; binaries=0
     for key,value in items.items():
@@ -110,7 +115,7 @@ def main():
     p.add_argument("--source",required=True,type=Path)
     try: report=inspect(p.parse_args().source)
     except (ValueError,KeyError,TypeError,OSError) as e:
-        safe_reasons={"Original variantMap cardinality drift","Invalid variantMap tuple","Invalid variantMap header or fields","Invalid original keyword bundle","Invalid original keyword element","Duplicate original keywords","Invalid private name","Invalid private field key","Ambiguous original typed workgroup or DXBC","Original compiled workgroup order drift","Original one-name alias drift","Original variant sets drift","Original compiled slot count drift","Original asset SHA verification absent","Original FFT ComputeShader identity absent","Original ComputeShader object SHA changed","Original DXBC compiled order not authenticated"}
+        safe_reasons={"Original variantMap cardinality drift","Invalid variantMap tuple","Invalid variantMap header type or size","Invalid variantMap header or fields","Invalid original keyword bundle","Invalid original keyword element","Duplicate original keywords","Invalid private name","Invalid private field key","Ambiguous original typed workgroup or DXBC","Original compiled workgroup order drift","Original one-name alias drift","Original variant sets drift","Original compiled slot count drift","Original asset SHA verification absent","Original FFT ComputeShader identity absent","Original ComputeShader object SHA changed","Original DXBC compiled order not authenticated"}
         reason=str(e) if str(e) in safe_reasons else "unclassified_authenticity_or_structure"
         print("RAFT_B30_FFT_VARIANTMAP "+json.dumps({"status":"REJECTED","reason":reason,"runtime_findkernel_id_to_compiled_slot_verified":False},sort_keys=True))
         return 2
