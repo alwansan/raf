@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "owner": "B50",
+  "session_id": "20261104T2039Z-B50-d7a3",
+  "issue_id": "LOCAL-005",
+  "hypothesis": "Original Cheat.AllowCheatsForLocalPlayer invokes SteamUser.GetSteamID returning CSteamID object on Android and risks loading steam_api64; a managed CSteamID built from the stable local profile identity can replace it only in Android-local mode without disrupting Windows or caller type.",
+  "source_commit": "9458368779434f26fa6564c6e066d3c9d8f765bb",
+  "input_hashes": [
+    "Original Assembly-CSharp.dll 3211776 B SHA256 0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "original Cheat.cs source SHA256 8137618061888b90d79af6dcca8c16aa5128bb5306ae07cab4e87d4a98ffe772",
+    "original Cheat.AllowCheatsForLocalPlayer method SHA256 e89739ba461b65b03e78c388193dcfff44a19a41842af9b665a434c39fef1a09"
+  ],
+  "tool_versions": {
+    "ilspycmd": "11.2.0.10050",
+    "dotnet": "10.0.x",
+    "runner": "ubuntu-24.04"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_android_offline_startup.py -v",
+    "python3 -m scripts.verify_android_offline_candidate --source $RUNNER_TEMP/original --managed Raft/Raft_Data/Managed --runtime android-port/Runtime/Platform --output $RUNNER_TEMP/offline-check",
+    "dotnet build $RUNNER_TEMP/original/Candidate.csproj --configuration Release --nologo -v:q"
+  ],
+  "negative_controls": [
+    "Only exactly pinned original Cheat.cs and original method SHA may be adapted",
+    "Require sole executable SteamUser.GetSteamID call inside AllowCheatsForLocalPlayer (reject missing/duplicates/comments and other methods)",
+    "Preserve original call for Windows/local off, do not alter .rgd, flags, audio, Settings or deferred touch",
+    "Use managed CSteamID object rather than incorrectly substituting ulong without type-compatible construction"
+  ],
+  "workflow_path": ".github/workflows/raft-android-offline-integration-tests.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41911949540",
+  "artifact_urls": [],
+  "budget": "Existing 12-min private original no-LFS CPU managed compile, no Unity/phone build",
+  "status": "completed",
+  "observed_result": "Authentic source read-only probe 41911354402 SUCCESS (six tests; one direct call, no .m_SteamID member read). Original managed source integration 41911771386 SUCCESS after escape correction. Final CI41911949540 SUCCESS on 945836... including three new source adapter tests, original RPC/identity harness, and original C# candidate compilation. No Android IL2CPP/phone verification.",
+  "rejected_hypotheses": [
+    "Replace SteamUser.GetSteamID with numeric ulong current ID: rejected due authentic call's object-typed consumption (0 direct .m_SteamID reads).",
+    "Initial strict regex escaped twice caused original-source adaptation failure (CI41911656845); corrected source-only in 85734f and CI41911771386 SUCCESS.",
+    "Initial synthetic test declared method inline after class opening and could not match ILSpy's line-based method recognizer (CI41911830635); fixture only corrected in 945836, final CI success."
+  ],
+  "limitations": [
+    "No actual Unity editor import or IL2CPP compile; managed source compilation is a narrower check",
+    "Cannot claim local world create/save/reload or Steam DLL absent universally",
+    "Local CSteamID value is derived from stable profile and may be considered invalid as a genuine Steam platform account; only offline local identity intended",
+    "WATER-001 / RENDER-002 still primary readiness blockers"
+  ],
+  "integration_commit": "2bb6c2bd0f14553ac002ff7b98cc2d83b8d53c72",
+  "next_step": "Device trial on new coordinated APK when graphics frontiers yield valid original resources; diagnose any next native Steam call without disabling save or real world state."
+}
