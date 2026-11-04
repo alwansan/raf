@@ -4,18 +4,22 @@
   "generation": "B-2026-11-04",
   "session_id": "20261104T2233Z-B02-7c19",
   "resumed_from_session": "20261104T2101Z-B02-e5cd",
-  "status": "active",
+  "status": "paused",
   "base_sha": "6c1a4407a4a4409b4cc28ed721c76bd65e0f6375",
-  "last_commit": "0d5002faccd5f4304b2274cbada752ce122ff5e0",
-  "updated_at": "2026-11-04T22:33:00Z",
+  "last_commit": "477344ea3a903736761ffd4e9dd534604d08bc89",
+  "updated_at": "2026-11-04T22:46:00Z",
   "tracks": [
     "colors-materials",
     "RENDER-002:authentic source and nested mipmaps"
   ],
   "work_ids": [
-    "B02-20261104T2233Z-B02-7c19-trace-mipmap-bridge"
+    "B02-20261104T2233Z-B02-7c19-trace-mipmap-bridge",
+    "B02-20261104T2240Z-B02-7c19-texture-export-trace"
   ],
-  "run_urls": [],
-  "next_step": "Reuse B15 export trace to derive true original source color enum and validate nested TextureImporter.mipmaps.sRGBTexture with strict negative controls; no changes to original or .meta.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41927008905",
+    "https://github.com/alwansan/raf/actions/runs/41927712988"
+  ],
+  "next_step": "B02 SOURCE/C# tool complete but no real source/export evidence: in one existing coordinated ZIP2-pinned AssetRipper export set RAFT_PRIVATE_EXPORT_LINEAGE and RAFT_PRIVATE_EXPORT_TEXTURE_LINEAGE to PRIVATE temp filenames; then B02 --trace --original, B15 sampler and B05 material trace checks; report aggregate-only and verify Unity pixels, no automatic metadata repair. Other WATER/LOCAL P0 still open; avoid duplicate full build.",
   "memory_path": "prompt/coordination/clients/B02/MEMORY.md"
 }
