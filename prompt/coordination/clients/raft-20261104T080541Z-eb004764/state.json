@@ -1,0 +1,10 @@
+{
+  "username": "raft-20261104T080541Z-eb004764",
+  "client_label": "W1-export-lineage",
+  "session_id": "8bdfde65-450b-4063-b66f-ad731e47a958",
+  "resumed_from": "raft-20261103T162900Z-73e8c2a1",
+  "status": "active",
+  "updated_at": "2026-11-04T08:05:41.365228+00:00",
+  "base_sha": "f127d0c13d1fb2cd7d422e8920b59c83d2999152",
+  "current_work": "Capture same-instance original material/shader export pointers; validate GUID edges before correcting builtin gate; owner authorizes subsequent full build."
+}

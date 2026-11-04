@@ -1,0 +1,15 @@
+{
+  "username": "raft-20261104T080541Z-eb004764",
+  "state": "active",
+  "plan": [
+    "Instrument constructor of exact pinned exporter to record collection GUIDs without modifying assets",
+    "Verify original source material edges against actual YAML export",
+    "Correct only demonstrated builtin gate failure then request one owner-authorized build"
+  ],
+  "intended_files": [
+    "android-port/Experiments/ExportLineage",
+    "scripts/verify_export_lineage.py",
+    ".github/workflows/raft-w1-export-lineage.yml"
+  ],
+  "budget": "one bounded CPU export probe, no duplicate native build while prior run active"
+}
