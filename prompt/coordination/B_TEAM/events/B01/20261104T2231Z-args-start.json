@@ -1,0 +1,12 @@
+{
+  "id": "B01-20261104T2231Z-args-start",
+  "owner": "B01",
+  "session_id": "20261104T2231Z-B01-fft-args",
+  "issue_id": "WATER-001",
+  "type": "start",
+  "summary": "B01 resumes original FFT managed CSharp structural provenance to guard raw argument tokenization against comments/verbatim strings, without changing water shaders or other agents' work.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41911972796"
+  ],
+  "at": "2026-11-04T22:31:00Z"
+}
