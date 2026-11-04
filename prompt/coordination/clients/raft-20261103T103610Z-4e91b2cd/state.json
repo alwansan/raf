@@ -1,15 +1,15 @@
 {
   "schema_version": 1,
   "username": "raft-20261103T103610Z-4e91b2cd",
-  "session_id": "20261104-original-modifiers",
+  "session_id": "20261104-relative-address-blocker",
   "resumed_from": null,
   "status": "completed",
   "updated_at": "2026-11-04T01:30:00Z",
-  "base_sha": "20a9aed9d909edc1be1707465ad72e91ac89c11f",
+  "base_sha": "e766f7494c1c79d9807c5e365b8428a752ed858c",
   "current_work": [
     "WATER-001"
   ],
-  "last_commit": "20a9aed9d909edc1be1707465ad72e91ac89c11f",
-  "next_step": "Classify exact remaining pass0fragment MAD/MUL operand types; do not guess or rerun unchanged",
+  "last_commit": "e766f7494c1c79d9807c5e365b8428a752ed858c",
+  "next_step": "Implement bounded recursive relative-index operand representation;never substitute immediate0",
   "memory_path": "prompt/coordination/clients/raft-20261103T103610Z-4e91b2cd/MEMORY.md"
 }

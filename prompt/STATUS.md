@@ -1109,3 +1109,7 @@ BuildFix changed graphics acquisition to reuse regular files only after original
 
 ## Original Blur modifier trial — 4 November
 [Evidence](../docs/BLUR_ORIGINAL_MODIFIER_TRIAL_2026-11-04.md):41775565136SUCCESS;5synthetictests. Explicit source modifier closes1originalfragmentfailure;2remain,18CBreadsunchanged. All3modifierhypothesis rejected. Coveragefalse;NOT_READY.
+
+
+## Original Blur relative-address blocker — 4 November
+[Source evidence](../docs/BLUR_RELATIVE_ADDRESS_BLOCKER_2026-11-04.md):41780976069SUCCESS explicitly classifies both remainingMAD/MULfailures as relative operands. Static-address map insufficient; preserve dynamic index expression next.18partialreads,coveragefalse,NOT_READY.
