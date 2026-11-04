@@ -30,6 +30,23 @@ def check_safe_ancestors(path):
     return path
 
 
+
+def _atomic_replace_bytes(path, data, prefix):
+    """Same-directory fsynced rename; never truncate an existing .shader."""
+    temporary = None
+    try:
+        with tempfile.NamedTemporaryFile(
+                mode="wb", prefix=prefix, dir=path.parent, delete=False) as output:
+            temporary = Path(output.name)
+            output.write(data)
+            output.flush()
+            os.fsync(output.fileno())
+        os.replace(temporary, path)
+        temporary = None
+    finally:
+        if temporary is not None:
+            temporary.unlink(missing_ok=True)
+
 def install(project, candidate, backup):
     """Install only after exact identity and SHA; backup remains outside project."""
     project, candidate, backup = [
@@ -71,31 +88,32 @@ def install(project, candidate, backup):
     except BaseException:
         shutil.rmtree(backup)
         raise
-    temp = None
     changed = False
     try:
         _require_safe_asset_path(assets, target)
         if target.read_bytes() != original or meta.read_bytes() != metadata:
             raise ValueError("Exported Blur source changed during installation")
-        with tempfile.NamedTemporaryFile(mode="wb", prefix=".b45-blur-", dir=target.parent,
-                                         delete=False) as output:
-            temp = Path(output.name)
-            output.write(content)
-            output.flush()
-            os.fsync(output.fileno())
-        os.replace(temp, target)
-        temp = None
+        _atomic_replace_bytes(target, content, ".b45-blur-")
         changed = True
         if target.read_bytes() != content or meta.read_bytes() != metadata:
             raise ValueError("Installed original Blur source or metadata mismatch")
     except BaseException:
         if changed:
-            # Restore exactly the pristine exported bytes, never dummy shader.
-            target.write_bytes(original)
+            try:
+                # Preserve the external verified backup on *every* outcome.
+                # In-place Path.write_bytes could truncate the only active
+                # exported shader if the rollback itself fails.
+                _require_safe_asset_path(assets, target)
+                if meta.read_bytes() != metadata:
+                    raise ValueError("Original Blur metadata changed during rollback")
+                _atomic_replace_bytes(target, original, ".b20-blur-restore-")
+                if target.read_bytes() != original or meta.read_bytes() != metadata:
+                    raise ValueError("Original Blur rollback bytes not restored")
+            except BaseException as rollback_error:
+                raise RuntimeError(
+                    "Original Blur rollback failed; external pristine backup retained"
+                ) from rollback_error
         raise
-    finally:
-        if temp is not None:
-            temp.unlink(missing_ok=True)
     return {
         "installed_exported_blur_targets": 1,
         "private_original_derived_shader_sha256": CANDIDATE_SHA256,
