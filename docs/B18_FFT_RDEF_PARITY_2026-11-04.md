@@ -73,3 +73,32 @@ SPIR-V DescriptorSet/Binding. The translated modules are not installed
 into Unity. Native Unity FindKernel, texture SetTexture call binding,
 correct actual ShaderLab reconstruction, phone Adreno output, source
 materials and full 3D scene pixels remain UNTESTED. WATER-001 OPEN.
+
+## Follow-up 3: explicit DXBC-to-SPIR-V target descriptor control
+
+2026-11-04 source commit: [04b0806](https://github.com/alwansan/raf/commit/04b080630c9f8f0308212b3c8fe18aac34469130).
+[CI41930824777](https://github.com/alwansan/raf/actions/runs/41930824777) **SUCCESS**
+with 10/10 source-free tests. Original SHA-pinned ZIP2 source owner and
+ComputeShader object were re-authenticated before using any bytecode.
+Each of the 20 original compiled FFT DXBC programs was translated privately
+by the **vkd3d-shader 1.2 public C API** with TWO different explicit source
+register-to-target descriptor interface profiles. 20/20 program outputs
+respected chosen profile A (set3/bindings11,17,23); 20/20 respected
+profile B (set4/bindings29,13,31), preserving resource kind and local workgroup.
+In all, 40/40 compiler target-interface executions passed. The original
+programs have 0 RDEF resource-name chunks.
+
+A critical native API requirement: `VKD3D_SHADER_BINDING_FLAG_IMAGE` must
+mark typed SRV and UAV Texture2D resources, else explicit-interface
+translation returns public `VKD3D_ERROR_INVALID_SHADER` (-4).
+We caught and fixed that in source, preserving the failing logs
+41929970296 / 41930064868 / 41930156298 / 41930350091 / 41930607853.
+This is a useful **reusable source-to-target register mapping contract**
+for future private shader staging, not a change to the Raft game export.
+
+**Not proved:** numeric runtime read content of DXBC t0 versus t1 independently
+(two sampled roles have the same SPIR-V image type), original Unity
+FindKernel index to compiled variant, original authenticated ShaderLab
+pass installation and material linking, Vulkan driver/Unity/Adreno execution,
+or improved water pixels in APK86. No APK rebuilt. WATER-001 remains OPEN.
+Private source/code/translated modules stay in CI temporary directories.
