@@ -6,7 +6,7 @@
   "issue_id": "RENDER-002",
   "track": "colors-materials",
   "approach": "Independent original-to-same-export Material draw-order/render-state parity guard for top-level m_CustomRenderQueue, lightmap, instancing and double-sided GI flags, complementary to B22 scalars/B43 keywords/B44 colors/B05 textures.",
-  "status": "active",
+  "status": "completed",
   "base_sha": null,
   "intended_files": [
     "scripts/b38_material_render_state.py",
@@ -23,8 +23,10 @@
   "experiment_ids": [
     "B38-20261104T2155Z-render-state"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Build strict SHA-pinned read-only original/export comparator with negative controls; no real source data/candidate modification until original same-export trace exists.",
-  "updated_at": "2026-11-04T21:55:07.403Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41920784251"
+  ],
+  "result": "New source-authenticating read-only top-level Material draw queue/lightmap/instancing/GI fidelity comparator integrated (script e93e1ae; final CI41920784251 SUCCESS, 9/9 synthetic tests); no actual Raft exported file or device tested.",
+  "next_step": "Private same-export authenticated ZIP2 material comparison; if a mismatch exists, repair exact exporter and prove Unity/device separately. RENDER OPEN; NOT_READY0/3.",
+  "updated_at": "2026-11-04T21:58:43.886Z"
 }
