@@ -1,0 +1,13 @@
+{
+  "id": "B45-20261104-blur-native-wiring",
+  "owner": "B45",
+  "session_id": "20261104T2056Z-B45-f0c1",
+  "issue_id": "WATER-001",
+  "type": "integration",
+  "summary": "Bounded private ShaderLab recovery plus exact-candidate SHA, exported target/GUID backup rollback logic added to explicitly requested native workflow; 9 synthetic installer/staging tests pass. Native Unity import has not executed and strict WATER/FFT gates remain enabled.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41914193733",
+    "https://github.com/alwansan/raf/commit/348990da5c7864bfbbc39e2f4fbe3e4969795d81"
+  ],
+  "at": "2026-11-04T21:15:00Z"
+}
