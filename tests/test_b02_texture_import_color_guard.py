@@ -43,7 +43,10 @@ class TestB02TextureImport(TestCase):
 
     def set_meta(self, srgb, extra=""):
         self.meta.write_text(
-            f"fileFormatVersion: 2\nguid: {self.guid}\nTextureImporter:\n  sRGBTexture: {srgb}\n" + extra,
+            f"fileFormatVersion: 2\nguid: {self.guid}\nTextureImporter:\n"
+            f"  mipmaps:\n    sRGBTexture: {srgb}\n"
+            "  textureSettings:\n    filterMode: 2\n    aniso: 2\n    mipBias: 0.0\n"
+            "    wrapU: 0\n    wrapV: 0\n    wrapW: 0\n" + extra,
             encoding="utf-8",
         )
 
@@ -57,7 +60,7 @@ class TestB02TextureImport(TestCase):
         self.assertFalse(r["semantic_policy_verified_for_original"])
         self.assertFalse(r["same_export_linkage_independently_verified"])
         self.assertFalse(r["repair_available"])
-        self.assertIn("sRGBTexture: 0", self.meta.read_text())
+        self.assertIn("    sRGBTexture: 0", self.meta.read_text())
 
     def test_pinned_assetripper_linear_true_gamma_false_baseline(self):
         self.set_meta(1)
@@ -93,9 +96,68 @@ class TestB02TextureImport(TestCase):
         self.meta.write_text(f"fileFormatVersion: 2\nguid: {self.guid}\nTextureImporter:\n")
         with self.assertRaises(ValueError):
             self.run_audit()
-        self.set_meta(1, "  sRGBTexture: 0\n")
+        self.set_meta(1, "    sRGBTexture: 0\n")
         with self.assertRaises(ValueError):
             self.run_audit()
+
+    def test_top_level_srgb_is_not_authentic_nested_mipmaps(self):
+        self.meta.write_text(
+            f"fileFormatVersion: 2\nguid: {self.guid}\nTextureImporter:\n  sRGBTexture: 1\n",
+            encoding="utf-8"
+        )
+        with self.assertRaisesRegex(ValueError, "top-level"):
+            self.run_audit()
+
+    def test_nested_srgb_boolean_and_alias_rejected(self):
+        self.set_meta("true")
+        with self.assertRaisesRegex(ValueError, "mipmaps.sRGBTexture"):
+            self.run_audit()
+        self.set_meta(0, "  mipmaps: {}\n")
+        with self.assertRaisesRegex(ValueError, "duplicate"):
+            self.run_audit()
+
+    def test_reuse_b15_trace_reads_original_color_from_verified_bytes(self):
+        source = self.root / "source"
+        source.mkdir()
+        (source / "source.assets").write_bytes(b"original")
+        obj = types.SimpleNamespace(path_id=123, type=types.SimpleNamespace(name="Texture2D"),
+                                    read_typetree=lambda: {"m_ColorSpace": 1})
+        module = types.SimpleNamespace(load=lambda path: types.SimpleNamespace(objects=[obj]))
+        trace = {
+            "schema_version": 1, "export_instance": "b" * 32,
+            "objects": [{
+                "class_id": 28,
+                "source": {"owner": "Raft_Data/source.assets", "path_id": 123},
+                "export": {"file_id": 2800000, "guid": self.guid, "type": 3},
+            }],
+        }
+        with mock.patch.dict(sys.modules, {"UnityPy": module}):
+            derived = m.map_from_export_trace(self.root / "export", source, trace)
+            self.assertEqual(derived["textures"][0]["source_color_space"], 1)
+            report = m.inspect(self.root / "export", derived, source)
+        self.assertEqual(report["assetripper_pinned_policy_mismatches"], 1)
+        self.assertFalse(report["same_export_linkage_independently_verified"])
+        self.assertFalse(report["semantic_policy_verified_for_original"])
+        self.assertFalse(report["repair_available"])
+        self.assertIn("    sRGBTexture: 0", self.meta.read_text())
+        trace["objects"][0]["source"]["owner"] = "forged/source.assets"
+        with self.assertRaisesRegex(ValueError, "collection path"):
+            m.map_from_export_trace(self.root / "export", source, trace)
+
+    def test_trace_bad_guid_cannot_be_guessed_by_filename(self):
+        source = self.root / "source"
+        source.mkdir()
+        (source / "source.assets").write_bytes(b"original")
+        trace = {
+            "schema_version": 1, "export_instance": "b" * 32,
+            "objects": [{
+                "class_id": 28,
+                "source": {"owner": "Raft_Data/source.assets", "path_id": 123},
+                "export": {"file_id": 2800000, "guid": "c" * 32, "type": 3},
+            }],
+        }
+        with self.assertRaisesRegex(ValueError, "missing exact"):
+            m.map_from_export_trace(self.root / "export", source, trace)
 
     def test_untrusted_mapping_guid_and_duplicate_source_rejected(self):
         self.map["textures"][0]["export_guid"] = "b" * 32
