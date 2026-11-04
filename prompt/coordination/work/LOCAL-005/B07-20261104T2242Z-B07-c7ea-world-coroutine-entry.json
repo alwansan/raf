@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "owner": "B07",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2242Z-B07-c7ea",
+  "issue_id": "LOCAL-005",
+  "track": "world-save",
+  "approach": "Source SHA-pinned, coroutine-yield preserving first MoveNext operation log in offline network staging; separate executable managed fixture",
+  "status": "active",
+  "base_sha": "c37646a21902135eca4ea591f2026c200783128d",
+  "intended_files": [
+    "scripts/b07_world_coroutine_trace.py",
+    "scripts/adapt_android_offline_startup.py",
+    "tests/test_b07_world_coroutine_trace.py",
+    ".github/workflows/raft-b07-world-coroutine.yml",
+    "docs/B07_LOCAL_WORLD_COROUTINE_2026-11-04.md"
+  ],
+  "hypothesis": "Existing OnWorldRecieved callback trace cannot distinguish an IEnumerator never entered MoveNext; a strict coroutine entry diagnostic logs first iterator execution without altering yield/save/world flags.",
+  "related_work": [
+    "B07-20261104T2112Z-B07-6e51-world-callback-proof",
+    "B50-20261104T2039Z-B50-d7a3-steamstats-offline"
+  ],
+  "experiment_ids": [
+    "20261104T2242Z-coroutine-entry"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement strict source-body-authenticated probe and synthetic CLR yield equivalence; run private original source CI. No Unity/APK request.",
+  "updated_at": "2026-11-04T22:45:00Z"
+}
