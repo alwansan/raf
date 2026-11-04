@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "owner": "B03",
+  "session_id": "20261104T2243Z-B03-7c9e",
+  "issue_id": "RENDER-002",
+  "hypothesis": "Six authentic original scenes contain source Renderer material slots that can be fully decoded without content mutation, permitting a stable provenance baseline.",
+  "source_commit": "83b7398b61ee5e67bbc7ec68833566960d568d2f",
+  "input_hashes": [
+    "raf zip2 15964ea8f246b6e076ce26b60931ee2e1a9a2385 original six scene pins per B21 and additional owner SHA pins in respective scripts"
+  ],
+  "tool_versions": {
+    "python": "3.12",
+    "unitypy": "1.23.0",
+    "runner": "ubuntu-24.04"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_b03_original_renderer_materials.py -v",
+    "python3 -m scripts.b03_original_renderer_materials --source .b03-source-zip2/Raft/Raft_Data --manifest .b03-source-zip2/RAFT_FILE_MANIFEST.tsv --report $RUNNER_TEMP/source-aggregate.json"
+  ],
+  "negative_controls": [
+    "wrong local Material type",
+    "bad external table index",
+    "null pointer malformed",
+    "duplicate original objects",
+    "symlinked root",
+    "unparsed field retained unknown",
+    "name matching manifest not source object target"
+  ],
+  "workflow_path": ".github/workflows/raft-b03-original-renderer-materials.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41928799663",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41928799663"
+  ],
+  "budget": "Public ubuntu-24.04 with 5-20 minute job caps; no LFS and no native Unity/APK; SHA-verified selective immutable ZIP2 only",
+  "status": "completed",
+  "observed_result": "22 synthetic PASS; six original scenes SHA256 authenticated; 1495 decoded Renderer material arrays; 1639 slots; 1635 external referenced owner names uniquely in pinned ZIP2 manifest; 4 original null; source graph object identities not yet proven",
+  "rejected_hypotheses": [
+    "A successful source provider filename match proves external Material target identity (false)."
+  ],
+  "limitations": [
+    "Six/40 original scenes only",
+    "No real exported Unity scene or device evidence"
+  ],
+  "integration_commit": "83b7398b61ee5e67bbc7ec68833566960d568d2f",
+  "next_step": "Compare source graph against actual same-instance exported Renderer→Material GUID/PPtr identities and preserve original slot semantics."
+}
