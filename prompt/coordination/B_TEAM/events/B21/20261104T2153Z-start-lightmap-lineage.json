@@ -1,0 +1,14 @@
+{
+  "id": "B21-20261104T2153Z-lightmap-start",
+  "owner": "B21",
+  "session_id": "20261104T2153Z-B21-72ab",
+  "issue_id": "RENDER-002",
+  "type": "start",
+  "summary": "B21 registered independent scene lighting/lightmap provenance investigation; hypothesis unverified, preserve source GUIDs, no overlap with active Material/Shader/FFT or local repair files.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/153787bcb85b0a0af9382b8d19e7dc85c6fc0ee8",
+    "https://github.com/alwansan/raf/actions/runs/41812889049",
+    "https://github.com/alwansan/CL/tree/5394407b5cd0a0ca1848ff0902f8d2133bf6ea29/raft%20log"
+  ],
+  "at": "2026-11-04T21:53:00Z"
+}
