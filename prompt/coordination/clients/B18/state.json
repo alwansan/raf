@@ -7,7 +7,7 @@
   "status": "active",
   "base_sha": "fc42e65b458ea317b2dea4e494671e978effc153",
   "last_commit": "04b080630c9f8f0308212b3c8fe18aac34469130",
-  "updated_at": "2026-11-04T23:06:56.528Z",
+  "updated_at": "2026-11-04T23:10:05.748Z",
   "tracks": [
     "water-fft",
     "SPIRV-resource-bindings"
@@ -15,7 +15,8 @@
   "work_ids": [
     "prompt/coordination/work/WATER-001/B18-20261104T215100Z-B18-d3f9-fft-resource-bindings.json",
     "prompt/coordination/work/WATER-001/B18-20261104T221000Z-fft-spirv-binding-roles.json",
-    "prompt/coordination/work/WATER-001/B18-20261104T225100Z-B18-map2-descriptor-map.json"
+    "prompt/coordination/work/WATER-001/B18-20261104T225100Z-B18-map2-descriptor-map.json",
+    "prompt/coordination/work/WATER-001/B18-20261104T225100Z-B18-spv-variable-identity.json"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41920845862",
@@ -26,6 +27,6 @@
     "https://github.com/alwansan/raf/actions/runs/41923703800",
     "https://github.com/alwansan/raf/actions/runs/41930824777"
   ],
-  "next_step": "B18 original source explicit DXBC-to-SPIR-V descriptor mappings verified 20/20 under each of 2 chosen sets (CI41930824777), but t0/t1 distinct numeric behavior, Unity runtime FindKernel and Adreno device remain unverified. Next P0: behaviorally distinguish two source reads via original FFT numerical CPU test or target same-instance shader export; avoid duplicate B08/B09/B24 tests.",
+  "next_step": "Subtask source-auth original FFT two-profile SPIR-V variable identity normalization in progress, CI41930824777 successfully proved 20x2 targeted binding interfaces. Preserve exact program instruction source and fail on drift. Runtime numerical t0/t1 and Unity phone still unverified.",
   "memory_path": "prompt/coordination/clients/B18/MEMORY.md"
 }
