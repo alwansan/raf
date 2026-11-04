@@ -2,22 +2,19 @@
   "schema_version": 1,
   "username": "B16",
   "generation": "B-2026-11-04",
-  "session_id": "20261104T2151Z-B16-6e2a",
-  "resumed_from_session": null,
-  "status": "completed",
-  "base_sha": "29242464003fcf2dcfd0fcc120770b7f2839ce15",
-  "last_commit": "97cd4b26ab96a856d70a749d545559d90930bae7",
-  "updated_at": "2026-11-04T22:07:38.738Z",
+  "session_id": "20261104T2249Z-B16-8c2e",
+  "resumed_from_session": "20261104T2151Z-B16-6e2a",
+  "status": "active",
+  "base_sha": "2c9ffdd5bf27b8b67465431d23dc75e01a586f60",
+  "last_commit": null,
+  "updated_at": "2026-11-04T22:50:22.736Z",
   "tracks": [
-    "WATER-001: inactive-preprocessor kernel structure"
+    "WATER-001: potential HLSL #error compile blocker source guard"
   ],
   "work_ids": [
-    "B16-20261104T2151Z-B16-6e2a-conditional-kernel"
+    "B16-20261104T2249Z-B16-8c2e-error-gate"
   ],
-  "run_urls": [
-    "https://github.com/alwansan/raf/actions/runs/41920741687",
-    "https://github.com/alwansan/raf/actions/runs/41921849148"
-  ],
-  "next_step": "Scoped B16 compute conditional guard complete: CI41920741687 SUCCESS 34/34, canonical summary refresh CI41921849148 SUCCESS. Future scope should address authentic original water/FFT shader program/resource integration, coordinating with ongoing B18/B24/B17/B30; no active B16 background task. Water and world/local save remain OPEN.",
+  "run_urls": [],
+  "next_step": "Test currently ignored potentially active HLSL #error in source-only ComputeShader kernel contract; add safe fail-closed gate and negative controls, verify in CI; no Unity/device claims.",
   "memory_path": "prompt/coordination/clients/B16/MEMORY.md"
 }
