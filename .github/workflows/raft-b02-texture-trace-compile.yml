@@ -1,0 +1,79 @@
+name: B02 RENDER-002 pinned Texture2D export trace compiler (no game data)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-b02-texture-trace-compile.yml'
+      - 'scripts/b02_stage_texture_lineage.py'
+      - 'tests/test_b02_stage_texture_lineage.py'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: raft-b02-texture-export-trace-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  pinned-tool-compiler:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - name: Checkout B02 staging/test and original W1 helper only
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            android-port/Experiments/ExportLineage
+            scripts
+            tests
+      - name: Prove SHA-locked isolated exporter injection and negative controls
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_b02_stage_texture_lineage.py -v
+          python3 -m py_compile scripts/b02_stage_texture_lineage.py
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+      - name: Checkout exact public AssetRipper exporter, separate directory
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: nowl-it/AssetRipperCLI
+          ref: 036098ab525a3f9f693dc101edeb21faad4d32d8
+          path: ar-host
+          persist-credentials: false
+          sparse-checkout: |
+            Source
+      - name: Stage B02-only private trace hook; preserve shared W1 code
+        shell: bash
+        run: |
+          set -euo pipefail
+          df -h .
+          mkdir -p "$RUNNER_TEMP/b02"
+          python3 -m scripts.b02_stage_texture_lineage \
+            --base-helper android-port/Experiments/ExportLineage/RaftExportLineage.cs \
+            --destination "$RUNNER_TEMP/b02/RaftExportLineage.cs"
+          python3 -m scripts.patch_export_lineage \
+            --tool-source ar-host \
+            --helper "$RUNNER_TEMP/b02/RaftExportLineage.cs"
+      - name: Compile exact pinned public tool with optional Texture2D28 trace
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 780s dotnet publish android-port/Experiments/ExportLineage/ExportLineage.csproj \
+            -c Release -p:PublishAot=false -p:PublishTrimmed=false \
+            -p:EnableTrimAnalyzer=false -p:EnableAotAnalyzer=false \
+            --self-contained false -o "$RUNNER_TEMP/b02-compiled" \
+            > "$RUNNER_TEMP/b02-compile.log" 2>&1 || { tail -70 "$RUNNER_TEMP/b02-compile.log"; exit 1; }
+          test -s "$RUNNER_TEMP/b02-compiled/ExportLineage.dll"
+          dotnet "$RUNNER_TEMP/b02-compiled/ExportLineage.dll" --probe-tool \
+            > "$RUNNER_TEMP/b02-smoke.log" 2>&1 || { tail -40 "$RUNNER_TEMP/b02-smoke.log"; exit 1; }
+          echo "B02_PINNED_TOOL_COMPILED=1"
+          echo "B02_EXPORT_ORIGINAL_TEXTURES_READ=0"
+          echo "B02_REAL_TRACE_CAPTURED=0"
+          echo "B02_UNITY_OR_ANDROID_PIXELS_VERIFIED=0"
