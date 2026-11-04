@@ -1,0 +1,15 @@
+{
+  "id": "B50-20261104T2102Z-local-cheat-steamid",
+  "owner": "B50",
+  "session_id": "20261104T2039Z-B50-d7a3",
+  "issue_id": "LOCAL-005",
+  "type": "integration",
+  "summary": "Original ZIP2-pin-backed Cheat.AllowCheatsForLocalPlayer SteamUser.GetSteamID() call uses Android-local stable managed CSteamID only, Windows path preserved; six private source-probe negative controls and final original managed compilation CI pass; phone world create/save/reload still unverified.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41911354402",
+    "https://github.com/alwansan/raf/commit/2bb6c2bd0f14553ac002ff7b98cc2d83b8d53c72",
+    "https://github.com/alwansan/raf/actions/runs/41911949540",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/experiments/B50/B50-20261104T2039Z-cheat-steamid-adapter.json"
+  ],
+  "at": "2026-11-04T21:02:00Z"
+}
