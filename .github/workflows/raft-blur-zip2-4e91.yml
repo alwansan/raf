@@ -1,4 +1,4 @@
-name: Original Blur member layout ZIP2 CPU only 4e91
+name: Original Blur instruction census ZIP2 CPU only 4e91
 on:
   push:
     branches: [feature/android-native-port]
@@ -44,7 +44,9 @@ jobs:
             Raft/Raft_Data/sharedassets8.assets
             Raft/Raft_Data/sharedassets9.assets
       - name: Test source decoding before original access
-        run: python3 -m unittest discover -s tests -p 'test_original_blur_member_layout.py' -v
+        run: |
+          python3 -m unittest discover -s tests -p 'test_original_blur_member_layout.py' -v
+          python3 -m unittest discover -s tests -p 'test_blur_cb_instruction.py' -v
       - name: Stage fourteen exact original providers without LFS
         run: |
           python3 - <<'PY'

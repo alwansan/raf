@@ -5,6 +5,9 @@ offset model below is explicitly a hypothesis, not evidence of GPU semantics.
 """
 import argparse
 import hashlib
+import struct
+from collections import Counter
+from scripts.blur_cb_instruction import read, ARITY
 import json
 from pathlib import Path
 
@@ -62,6 +65,37 @@ def observe(common):
     return sorted(result, key=lambda cb: cb["slot"])
 
 
+def instruction_census(code):
+    # declarations(code) has already authenticated the DXBC container ranges.
+    chunks=[]
+    for i in range(struct.unpack_from("<I",code,28)[0]):
+        at=struct.unpack_from("<I",code,32+4*i)[0]
+        if code[at:at+4] in (b"SHDR",b"SHEX"):
+            n=struct.unpack_from("<I",code,at+4)[0]
+            chunks.append(code[at+8:at+8+n])
+    if len(chunks)!=1: raise ValueError("shader chunk")
+    raw=chunks[0]
+    tokens=struct.unpack("<"+"I"*(len(raw)//4),raw)
+    if tokens[1]!=len(tokens): raise ValueError("token length")
+    at=2;counts=Counter();errors=Counter();reads=0;offsets=set()
+    while at<len(tokens):
+        h=tokens[at];op=h&2047;n=(h>>24)&127
+        if not n and op==53 and at+1<len(tokens):n=tokens[at+1]
+        if n<1 or at+n>len(tokens):raise ValueError("instruction extent")
+        counts[op]+=1
+        if op in ARITY:
+            try: decoded=read(tokens[at:at+n])
+            except ValueError:
+                errors[op]+=1
+            else:
+                reads+=len(decoded)
+                for item in decoded:
+                    offsets.update((item["slot"],o) for o in item["byte_offsets"])
+        at+=n
+    return {"opcode_counts":dict(counts),"arithmetic_parse_failures":dict(errors),
+            "decoded_arithmetic_cb_reads":reads,"unique_cb_scalar_addresses":len(offsets),
+            "complete_program_operand_coverage":False}
+
 def main(source, repo, out):
     from scripts.a12_probe_original_blur_passes import original_shader
     from scripts.w1_recover_depth_passes import stage_variants, linked_program
@@ -99,7 +133,7 @@ def main(source, repo, out):
                         m["candidate_within_compiled_span"] = (
                             cb["compiled_declared_bytes"] is not None
                             and m["candidate_byte_end"] <= cb["compiled_declared_bytes"])
-                rows.append({"pass": pi, "stage": st, "buffers": layout})
+                rows.append({"pass": pi, "stage": st, "buffers": layout, "instruction_census": instruction_census(code)})
         report.update(status="observed", stages=rows, original_object_sha256=digest,
                       member_semantics_verified=False,
                       original_member_layout_preserved=True)
