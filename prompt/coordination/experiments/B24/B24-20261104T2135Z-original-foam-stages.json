@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "id": "B24-20261104T2135Z-original-foam-stages",
+  "owner": "B24",
+  "issue": "WATER-001",
+  "status": "source-translations-verified",
+  "tested_source": "ZIP2 15964ea8f246b6e076ce26b60931ee2e1a9a2385, original sharedassets0 115978112 bytes SHA 0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3, Foam obj 67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1",
+  "hypothesis": "Both original Foam pass programs are recoverable and Vulkan 1.1-translatable with exact original source identity; original partial CB member layout differs between passes.",
+  "result": "PASS original 2 passes x vertex+fragment = 4 stage DXBC→Vulkan SPIR-V→private HLSL→Vulkan SPIR-V validated; both original pass0 CB0 vector counts=2 and pass1=1, original nonempty 3 vertex / 1 fragment partial buffers; no ShaderLab or Unity claims.",
+  "workflow": ".github/workflows/raft-b24-original-foam-stages.yml",
+  "source_paths": [
+    "scripts/b24_original_foam_stage_translation.py",
+    "tests/test_b24_original_foam_stage_translation.py"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41918667270",
+    "https://github.com/alwansan/raf/actions/runs/41919019272",
+    "https://github.com/alwansan/raf/actions/runs/41919331051",
+    "https://github.com/alwansan/raf/actions/runs/41919628947",
+    "https://github.com/alwansan/raf/actions/runs/41919758958",
+    "https://github.com/alwansan/raf/actions/runs/41920166966"
+  ],
+  "rejected_hypotheses": [
+    "Original Foam pass0/pass1 CB0 vector record counts equal (false; 2 vs 1 for both stages)",
+    "Original source owner missing from ZIP2 (false; 115978112 bytes SHA verified)",
+    "Original DXBC programs cannot be translated to Vulkan 1.1 (false for these four stage translations, not equivalent game rendering)"
+  ],
+  "negative_controls": [
+    "original source SHA",
+    "original shader object SHA",
+    "missing extra original passes",
+    "forged original target shader name",
+    "modified CB sizes, partial flags, register indices, arrays and matrix widths",
+    "second-pass CB exact member count difference",
+    "duplicate shader keyword variants",
+    "missing parameter blob table"
+  ],
+  "artifact_policy": "Only redacted numeric/hashed JSON, no shader/HLSL/SPIR-V/DXBC published",
+  "limitations": [
+    "Original ShaderLab and runtime CB name/slot bindings are not reconstructed",
+    "Unity import and device render untested",
+    "No APK produced, no claim of repaired water visuals"
+  ],
+  "next_step": "Build authentic per-pass constant-buffer resource binding and shader wrapper from original metadata with private Vulkan/Unity evidence, retaining exact passes and GUID.",
+  "updated_at": "2026-11-04T21:54:06.640Z"
+}
