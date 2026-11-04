@@ -1,0 +1,13 @@
+{
+  "id": "B01-20261104T2105Z-start-fft",
+  "owner": "B01",
+  "session_id": "20261104T2105Z-B01-water-contract",
+  "issue_id": "WATER-001",
+  "type": "start",
+  "summary": "B01 joined water-FFT source kernel/dispatch binding validation; preserve owner-confirmed audio and Settings and defer touch.",
+  "evidence": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/REVIEW_2026-11-04.md",
+    "https://github.com/alwansan/raf/actions/runs/41911656507"
+  ],
+  "at": "2026-11-04T21:05:00Z"
+}
