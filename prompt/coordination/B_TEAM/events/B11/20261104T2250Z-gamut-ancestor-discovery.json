@@ -1,0 +1,12 @@
+{
+  "id": "20261104T2250Z-gamut-ancestor-symlink",
+  "owner": "B11",
+  "session_id": "20261104T2244Z-B11-54cf",
+  "issue_id": "RENDER-002",
+  "type": "discovery",
+  "summary": "Actual local synthetic filesystem reproduction: passing exported project through a symlink in an ancestor directory bypasses B11's leaf-only path checks, and --apply mutates ProjectSettings.asset in the outside directory. Fail-closed ancestor check needed.",
+  "evidence": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/b11_restore_original_color_gamuts.py"
+  ],
+  "at": "2026-11-04T22:50:00Z"
+}
