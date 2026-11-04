@@ -1,0 +1,11 @@
+{
+  "owner": "raft-20261104T042244Z-we8c291f",
+  "status": "paused",
+  "hypothesis": "Remaining Blur MAD/MUL failures can be classified without exposing source or guessing support.",
+  "intended_files": [
+    "scripts/we_blur_failure_categories.py",
+    "tests/test_we_blur_failure_categories.py"
+  ],
+  "result": "3 synthetic tests pass. Original instruction inputs not executed; exact two failure reasons still unknown.",
+  "next_step": "Integrate private census in original probe after reading owner plan."
+}

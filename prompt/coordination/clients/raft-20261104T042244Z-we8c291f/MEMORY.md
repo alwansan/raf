@@ -1,7 +1,3 @@
-# We recovery checkpoint
+# We checkpoint
 
-Prior local registration was not pushed: HTTPS git has no noninteractive credential. Connector reads succeed. New unique identity preserves unpublished predecessor via resumed_from; no other client state overwritten.
-
-Live branch observed d82d745ae417de2a58f539dd7460e600b07dc462. Reviewed current STATUS and original resource rebinder/Blur wrapper. W1 original 1544→1536 export boundary remains unproven in STATUS; do not repeat successful engine mapping. Blur rebinder intentionally rejects constant buffers: extending it without original operand and named binding evidence would be speculative. No production shader edit or visual success claimed. Next obtain private original operand/binding evidence or same-instance export lineage and implement a bounded repair. WATER/RENDER/FFT remain open.
-
-Git checkout has unexpected original-data modifications/temp files: left untouched. Do not stage original data. Only connector commits with expected HEAD lease.
+Resumed own explicitly paused identity. Original recovery registration 1efa81d succeeded via connector. Live source a7f86f1 includes another client's modifier experiment: one fragment gap resolved, MAD/MUL remain unsupported. Added independent failure category aggregation and 3 passing synthetic tests; no raw words/names/errors disclosed. No production decoder or other client's files modified. Next apply census to authenticated original instructions in existing private reconstruction, coordinating owner 4e91b2cd. This is supporting diagnostic code, not shader restoration or GPU evidence. No native workflow/request/task changes.
