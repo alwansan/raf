@@ -65,7 +65,7 @@ class B21OriginalLightmapTests(unittest.TestCase):
                                 Obj("MeshRenderer", 2, {"m_LightmapIndex": 65535}),
                                 Obj("Terrain", 3, {"m_LightmapIndex": -1})])
         self.assertEqual(result["counts"]["renderer_lightmap_unassigned"], 2)
-        self.assertNotIn("renderer_indices_out_of_range", result["counts"])
+        self.assertEqual(result["counts"]["renderer_indices_out_of_range"], 0)
 
     def test_renderer_out_of_range_is_observed_not_repaired(self):
         result = analyze_scene([Obj("LightmapSettings", 1, {"m_Lightmaps": [{}]}),
