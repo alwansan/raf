@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "generation": "T-2026-11-05",
+  "session_id": "20261104T2354Z-T3-render-harness",
+  "issue_id": "RENDER-002",
+  "track": "colors-materials/textures",
+  "approach": "Run one genuine bounded original ZIP2 -> AssetRipper export using the already-proven B21 W1+B02 same-process Material21/Texture2D28 trace instrumentation, combine only identical export_instance identifiers, authenticate sharedassets6 original bytes, and exercise existing B05 material texture pointer/UV comparator against actual exported .mat YAML. Never publish raw sources/traces.",
+  "status": "active",
+  "base_sha": "bf3d876201751447fae149ea32fc275df98f91b0",
+  "intended_files": [
+    "scripts/t3_same_export_material_texenv.py",
+    "tests/test_t3_same_export_material_texenv.py",
+    ".github/workflows/raft-t3-real-material-texenv-export.yml",
+    "prompt/coordination/clients/T3/MEMORY.md"
+  ],
+  "hypothesis": "Same-instance original Material TexEnv and UV drift (if any) can be measured with W1+B02 traces and B05 checker; legacy original-only 41/227 proof is insufficient to infer export or pixel fidelity.",
+  "related_work": [
+    "T3-20261104T2354Z-T3-render-harness-b12-csharp-fixture"
+  ],
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/actions/runs/41931942755",
+    "prompt/coordination/clients/B05/MEMORY.md",
+    "https://github.com/alwansan/raf/actions/runs/41929077930",
+    "scripts/b05_verify_material_texenv_bindings.py",
+    "scripts/b21_stage_light_lineage.py",
+    "prompt/coordination/clients/B21/MEMORY.md"
+  ],
+  "experiment_ids": [
+    "T3-small-original-same-export-texenv-20261105"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Write fail-closed same-export trace combiner and tests; run one bounded authentic ZIP2 source+AssetRipper private export and compare B05 41 original Materials/227 TexEnvs against exported YAML; if a reproducible drift is found, identify responsible integration source and patch exact mismatch.",
+  "updated_at": "2026-11-04T23:59:00Z"
+}
