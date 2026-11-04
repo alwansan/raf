@@ -1152,3 +1152,5 @@ BuildFix changed graphics acquisition to reuse regular files only after original
 
 ## Authentic Blur cleanup production verification — 4 November
 [Evidence](../docs/BLUR_PIXEL_EXCEPTION_CLEANUP_2026-11-04.md):41811356895SUCCESS on 4b1cf0a9b0771dd16ffb7aa3dc86fb9071ae1a40, original ZIP2 DLL/private CSharp9 Blur/production adapter,14actual-method CPU stub cases and4normal draws. Exact two observed source fingerprints accepted, unknown refused; earlier startup pin rejection corrected. Startup41811356943pending;preflight41811356954SUCCESS. Not Unity/water/colors/device proof;NOT_READY0/3. Next startup result then BlurSSS sampler topology/private wrapper. No native request.
+
+Final checkpoint: [original startup41811356943](https://github.com/alwansan/raf/actions/runs/41811356943) COMPLETED SUCCESS on same code4b1cf0a9b0771dd16ffb7aa3dc86fb9071ae1a40. Supersedes pending status above; confirms no-LFS managed startup/compile integration after exact fingerprint compatibility repair, not Unity/device evidence. Next authentic BlurSSS/sampler topology and private wrapper.

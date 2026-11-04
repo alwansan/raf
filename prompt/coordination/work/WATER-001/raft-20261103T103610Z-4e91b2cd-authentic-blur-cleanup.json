@@ -10,8 +10,9 @@
   "workflow_path": ".github/workflows/raft-original-blur-cleanup-4e91.yml",
   "budget": "15min CPU, original managed DLL only",
   "evidence": [
-    "https://github.com/alwansan/raf/actions/runs/41811356895"
+    "https://github.com/alwansan/raf/actions/runs/41811356895",
+    "https://github.com/alwansan/raf/actions/runs/41811356943"
   ],
   "result": "14original-method CPU cases pass,4normal draws; Unity/device unverified",
-  "next_step": "Inspect startup41811356943; original41811356895 passed14 cases. Then BlurSSS sampler topology/private wrapper; no unchanged repeat."
+  "next_step": "Authentic BlurSSS/sampler topology and private named wrapper; startup41811356943 and original cleanup41811356895 both passed; no equivalent repeat."
 }
