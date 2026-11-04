@@ -6,17 +6,21 @@
   "track": "resources",
   "evidence": [
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/ZIP2_SOURCE_PROVIDER.md",
-    "https://github.com/alwansan/CL/blob/5394407b5cd0a0ca1848ff0902f8d2133bf6ea29/raft%20log/lf/LogRaft-20261104-225757-156/session-summary.json"
+    "https://github.com/alwansan/CL/blob/5394407b5cd0a0ca1848ff0902f8d2133bf6ea29/raft%20log/lf/LogRaft-20261104-225757-156/session-summary.json",
+    "https://github.com/alwansan/raf/actions/runs/41914505411",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B04_MESH_SOURCE_PATH_SAFETY_2026-11-04.md",
+    "https://github.com/alwansan/raf/commit/f0afb5983694cec91a61bcd6f9825ca1cf658f7e"
   ],
   "remaining": [
     "تحقق stream ranges/format/sRGB/normalmaps وGUIDs",
     "missingMonoScript وconvexmeshwarnings أسبابغيرمحسومة",
-    "جردنطاقمحددومرحلةاستعادةلكلمورد"
+    "جردنطاقمحددومرحلةاستعادةلكلمورد",
+    "B04 linked-path source provenance guarded for YAML Mesh utility (CI synthetic only); still need actual original Mesh source and device geometry binding verification"
   ],
   "acceptance": [
     "تغطيةmanifestوالتبعياتالمطلوبة",
     "اكتمالgeometry/bindingsمعاختباروظيفي"
   ],
-  "updated_by": "owner-team-bootstrap",
-  "updated_at": "2026-11-04"
+  "updated_by": "B04",
+  "updated_at": "2026-11-04T21:18:26.107Z"
 }
