@@ -23,3 +23,12 @@ Authentic original `zip2` assets are being verified and staged for FFT and FMOD 
 ## Testing and limitations
 
 CI runs `python3 scripts/test_lograf_v06.py`, `bash scripts/test_lograf_diagnostics.sh` (JVM regression), and Gradle signing verification. Device test is still required for Shizuku/Binder interruption, long sessions, actual memory quality, FPS data availability and full APK installation. Raw logs and segmented storage are retained; no auto uploads, private game data access, developer secrets, guessed FPS, or game branch changes are introduced. Device functionality must not be asserted from CI alone.
+
+## CI and release evidence (confirmed)
+
+- Code commit: `136e52d8ac0f0a2c71b03e0ee522f0f58f9e9e06`.
+- GitHub Actions: [41887820451](https://github.com/alwansan/raf/actions/runs/41887820451), **COMPLETED SUCCESS**. Structural recorder checks, actual JVM diagnostic regression (including 17,178 synthetic FFT events), Gradle release build, signature/certificate matching, artifact upload, and Release publication all succeeded.
+- Release: [lograf-83](https://github.com/alwansan/raf/releases/tag/lograf-83). Signed asset: `LogRaft-signed.apk` (157,508 bytes), plus SHA-256 sidecar. Exact package identity remains `com.alwansan.lograf`; build sets versionCode `1083` and versionName `0.6.83`.
+- Pinned public test certificate SHA-256: `bdb27cfad1fd9a6ac14bd47317206ce4df462040f45ddb1fdbb66a0974043149`. This is **the signing certificate fingerprint**, not the APK-file hash.
+- Separate local read-only raw-log correlation check: 17,192 root `Invalid kernelIndex` lines across the complete 0.6.82 raw segments, **all 17,192** had a same-event water FFT stack frame in the next 24 lines. The previous metric sample reported 17,178 because it preceded Stop; the new final category summary is designed to include tail observations.
+- **Not yet device tested**: no claim that LogRaft 0.6.83 fixes the game's shader, OBB or FMOD faults, or that SurfaceFlinger FPS is always available.
