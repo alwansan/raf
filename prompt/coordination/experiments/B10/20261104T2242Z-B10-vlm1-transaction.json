@@ -4,13 +4,15 @@
   "session_id": "20261104T2242Z-B10-vlm1",
   "issue_id": "RENDER-002",
   "hypothesis": "A bounded extra-additions parameter for existing transactional restorer makes volumetric license NOTICE failure-atomic with shader files",
-  "source_commit": "664100d4b976802a3463aa4ee5c0fe5254c7d28f",
+  "source_commit": "92522dc98bd273fd48eb169871ab7414b0a86a4d",
   "input_hashes": [],
   "tool_versions": {
     "python": "3.x, ubuntu-24.04 runner"
   },
   "commands": [
-    "python -m unittest tests.test_restore_volumetric_shaders tests.test_restore_tmp_shaders tests.test_a3_vendor_shader_restore_transaction"
+    "python3 -m py_compile scripts/restore_tmp_shaders.py scripts/restore_volumetric_shaders.py tests/test_b10_volumetric_notice_atomic.py",
+    "python3 -m unittest -v tests.test_b10_volumetric_notice_atomic tests.test_restore_volumetric_shaders tests.test_restore_tmp_shaders tests.test_a3_vendor_shader_restore_transaction",
+    "Existing raft-volumetric-shader-tests authentic source and temporary restoration"
   ],
   "negative_controls": [
     "NOTICE symlink parent fails before any shader writes",
@@ -20,16 +22,19 @@
     "unsafe extra output path rejected"
   ],
   "workflow_path": ".github/workflows/raft-b10-volumetric-transaction.yml",
-  "run_url": null,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41928744660",
   "artifact_urls": [],
   "budget": "public runner source-only 4 min; no Unity or full game download",
-  "status": "planned",
-  "observed_result": null,
-  "rejected_hypotheses": [],
+  "status": "completed",
+  "observed_result": "SUCCESS 27 distinct source-only tests on 92522dc, including 8 new failure-atomic NOTICE tests, 6 original volumetric contract tests, 4 TMP tests, 9 A3 transaction tests. Existing authenticated official vendor CI41928592399 passed 3 shader restorations, source Git blob pins, metadata and NOTICE in an ephemeral fixture. Code integrated into production shared restorer and volumetric wrapper.",
+  "rejected_hypotheses": [
+    "Moving conflicting notice check into shared restore is always equivalent to early check (false: no original Shader case changes failure precedence; restored early secure preflight)",
+    "33/33 previous B10 run represented 33 distinct test cases (false: imported original TestCase class ran same 6 legacy tests twice; final CI has 27 unique)"
+  ],
   "limitations": [
     "does not establish actual Unity/Adreno volumetric rendering",
     "not original water FFT shader recovery"
   ],
-  "integration_commit": null,
-  "next_step": "Execute regression with production actual helper, then verify CI"
+  "integration_commit": "b6efa50948cb388d1a006d482676d6f693bb51d6",
+  "next_step": "Actual Unity import+device pixels and Raft-original material bindings remain UNKNOWN; do not infer playable graphics or close RENDER-002."
 }
