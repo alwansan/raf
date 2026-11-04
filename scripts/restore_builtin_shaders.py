@@ -7,8 +7,11 @@ import argparse
 import hashlib
 import io
 import json
+import os
 from pathlib import Path, PurePosixPath
 import posixpath
+import stat
+import tempfile
 import re
 import shutil
 import time
@@ -126,6 +129,31 @@ def _require_safe_asset_path(assets, path):
         raise ValueError('Unsafe Unity Assets path')
 
 
+def _replace_original_shader_atomically(path, content):
+    """Replace an existing exported shader without ever truncating it in place.
+
+    This is a source-file transaction, not a new shader or an authenticity gate.
+    The temporary file lives on the same filesystem and is always removed if
+    the write, sync, permissions copy, or rename fails.
+    """
+    staged = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode='wb', prefix='.' + path.name + '.', suffix='.b13.tmp',
+            dir=path.parent, delete=False
+        ) as stream:
+            staged = Path(stream.name)
+            stream.write(content)
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.chmod(staged, stat.S_IMODE(path.stat().st_mode))
+        os.replace(staged, path)
+        staged = None
+    finally:
+        if staged is not None:
+            staged.unlink(missing_ok=True)
+
+
 def restore_project(project, backup, shaders, files, license, engine_inputs=None):
     project = project.resolve()
     assets = project / 'Assets'
@@ -216,7 +244,10 @@ def restore_project(project, backup, shaders, files, license, engine_inputs=None
             saved = backup / path.relative_to(assets)
             saved.parent.mkdir(parents=True, exist_ok=True)
             saved.write_bytes(original)
-            Path(str(saved) + '.meta').write_bytes(metadata)
+            saved_meta = Path(str(saved) + '.meta')
+            saved_meta.write_bytes(metadata)
+            if saved.read_bytes() != original or saved_meta.read_bytes() != metadata:
+                raise ValueError('Incomplete original built-in shader backup')
     except BaseException:
         # We exclusively created this external backup directory and have not
         # changed any exported shader yet. Never strand partially copied
@@ -242,22 +273,42 @@ def restore_project(project, backup, shaders, files, license, engine_inputs=None
                 created_additions.append(path)
                 stream.write(content)
         for path, content, original, meta, metadata in plan:
-            # Append before writing: write_bytes can fail after truncating.
-            replaced_shaders.append((path, original))
-            path.write_bytes(content)
-            if meta.read_bytes() != metadata:
-                raise ValueError('Original built-in shader metadata changed')
+            # All source bytes were snapshotted before the backup. A separate
+            # exporter/agent may have changed them while dependencies staged:
+            # never silently overwrite that newer source with an older plan.
+            if (path.is_symlink() or not path.is_file() or
+                    path.read_bytes() != original or meta.read_bytes() != metadata):
+                raise ValueError('Original built-in shader changed after backup')
+            _replace_original_shader_atomically(path, content)
+            replaced_shaders.append((path, original, content))
+            if path.read_bytes() != content or meta.read_bytes() != metadata:
+                raise ValueError('Built-in shader publish bytes or metadata changed')
     except BaseException:
+        rollback_errors = []
+        # A failed rename before publication leaves the old file intact; only
+        # successfully replaced shaders need rollback. Do not clobber an
+        # external change after publication; keep the verified backup instead.
         try:
-            # Exact exported bytes and metadata remain in the external backup.
-            for path, original in reversed(replaced_shaders):
-                path.write_bytes(original)
+            for path, original, installed in reversed(replaced_shaders):
+                try:
+                    if path.is_symlink() or path.read_bytes() != installed:
+                        raise ValueError('Published built-in shader changed before rollback')
+                    _replace_original_shader_atomically(path, original)
+                    if path.read_bytes() != original:
+                        raise ValueError('Built-in shader rollback bytes mismatch')
+                except BaseException as error:
+                    rollback_errors.append(error)
         finally:
-            # Also remove partial newly-created include/license files. Never
-            # remove pre-existing identical files or a concurrently added file.
+            # Remove temporary dependencies created by this attempt, not
+            # pre-existing files which were never rewritten.
             for path in reversed(created_additions):
                 if path.is_file() and not path.is_symlink():
                     path.unlink()
+        if rollback_errors:
+            raise RuntimeError(
+                'Built-in shader rollback incomplete; exact originals retained '
+                'in external backup for manual recovery'
+            ) from rollback_errors[0]
         raise
     print('RAFT_BUILTIN_SHADER_RESTORATION matchedShaders=' + str(len(plan)) +
           ' includes=' + str(len(done)) + ' originalMetasUnchanged=true customShadersChanged=false deviceExecution=false')
