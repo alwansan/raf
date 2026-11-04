@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "owner": "B02",
+  "session_id": "20261104T2233Z-B02-7c19",
+  "issue_id": "RENDER-002",
+  "hypothesis": "Pinned AssetRipper writes nested MipMaps.SRGBTexture and B15 class28 trace can supply original/export identities, with original color independently read from SHA-authenticated bytes.",
+  "source_commit": "ee12d1c349167e7012a8cee7ea1f8d9e8adb4c75",
+  "input_hashes": [
+    "ZIP2 commit 15964ea8f246b6e076ce26b60931ee2e1a9a2385 (real original not mounted)"
+  ],
+  "tool_versions": {
+    "python": "ubuntu-24.04 Python3",
+    "PyYAML": "6.0.3"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_b02_texture_import_color_guard.py -v"
+  ],
+  "negative_controls": [
+    "nested vs top-level sRGB",
+    "duplicate YAML",
+    "fake original SHA",
+    "GUID drift",
+    "forged source trace path",
+    "no repair"
+  ],
+  "workflow_path": ".github/workflows/raft-b02-texture-import-fidelity.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41927008905",
+  "artifact_urls": [],
+  "budget": "Ubuntu24 5min cap, no game data/Unity",
+  "status": "completed",
+  "observed_result": "16/16 synthetic PASS; import read and B15 trace integration source-complete; real original source/export not run",
+  "rejected_hypotheses": [
+    "Top-level sRGBTexture from pinned exporter rejected",
+    "Prior RED CIs 41926757034/41926874635 were fixture migration not game errors"
+  ],
+  "limitations": [
+    "No real Raft trace",
+    "No real source texture",
+    "No Unity/GPU/Android pixel comparison"
+  ],
+  "integration_commit": "ee12d1c349167e7012a8cee7ea1f8d9e8adb4c75",
+  "next_step": "Run with actual same-export trace and authenticated original owner then compare real metadata and pixels."
+}
