@@ -2,26 +2,20 @@
   "schema_version": 1,
   "username": "B02",
   "generation": "B-2026-11-04",
-  "session_id": "20261104T2101Z-B02-e5cd",
-  "resumed_from_session": null,
-  "status": "paused",
-  "base_sha": "3f493b17adfd",
+  "session_id": "20261104T2233Z-B02-7c19",
+  "resumed_from_session": "20261104T2101Z-B02-e5cd",
+  "status": "active",
+  "base_sha": "6c1a4407a4a4409b4cc28ed721c76bd65e0f6375",
   "last_commit": "0d5002faccd5f4304b2274cbada752ce122ff5e0",
-  "updated_at": "2026-11-04T21:22:00Z",
+  "updated_at": "2026-11-04T22:33:00Z",
   "tracks": [
     "colors-materials",
-    "RENDER-002:texture-import-colorspace"
+    "RENDER-002:authentic source and nested mipmaps"
   ],
   "work_ids": [
-    "B02-20261104T2101Z-B02-e5cd-texture-import-fidelity",
-    "B02-20261104T2116Z-texture-color-inversion-audit"
+    "B02-20261104T2233Z-B02-7c19-trace-mipmap-bridge"
   ],
-  "run_urls": [
-    "https://github.com/alwansan/raf/actions/runs/41912709058",
-    "https://github.com/alwansan/raf/actions/runs/41913016998",
-    "https://github.com/alwansan/raf/actions/runs/41913145660",
-    "https://github.com/alwansan/raf/actions/runs/41915207812"
-  ],
-  "next_step": "IMPORTANT: old Gamma-to-sRGB repair model superseded. B02 is READ-ONLY; --repair always disabled. Capture same-export Texture2D GUID lineage and prove original importer semantics via original format & Unity pixel test, then solve RENDER-002 without guessed flag inversion.",
+  "run_urls": [],
+  "next_step": "Reuse B15 export trace to derive true original source color enum and validate nested TextureImporter.mipmaps.sRGBTexture with strict negative controls; no changes to original or .meta.",
   "memory_path": "prompt/coordination/clients/B02/MEMORY.md"
 }
