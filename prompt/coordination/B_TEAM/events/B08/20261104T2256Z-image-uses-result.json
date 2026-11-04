@@ -1,0 +1,13 @@
+{
+  "id": "B08-20261104T2256Z-image-uses-result",
+  "owner": "B08",
+  "session_id": "20261104T2246Z-B08-7d2a",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "B08 authentic original all20 compiled FFT programs have both sampled SPIR-V descriptor candidate reads and storage write in executable image instructions, with all scanned operands uniquely traced; final CI41929513820 SUCCESS 20/20 synthetic controls and 20/20 original source programs. t0/t1 and Unity runtime index remains unproven. WATER-001 OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41929513820",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B08_FFT_DESCRIPTOR_ABI_2026-11-04.md"
+  ],
+  "at": "2026-11-04T22:56:25Z"
+}
