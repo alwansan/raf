@@ -78,7 +78,8 @@ class AndroidOfflineStartupTests(unittest.TestCase):
     def test_cheat_original_steam_object_guard_is_local_only_and_preserves_others(self):
         from scripts.probe_original_scene_audio import method_body
         original = (
-            'public class Cheat { public bool AllowCheatsForLocalPlayer() { '
+            'public class Cheat {\n'
+            '  public bool AllowCheatsForLocalPlayer() { '
             'string comment = "SteamUser.GetSteamID()"; '
             'return SteamUser.GetSteamID() == LocalPlayer.SteamID; } '
             'public bool Other() { return SteamUser.GetSteamID() == RemoteId; } }'
@@ -100,7 +101,8 @@ class AndroidOfflineStartupTests(unittest.TestCase):
     def test_cheat_unknown_original_method_and_duplicate_real_calls_are_refused(self):
         from scripts.probe_original_scene_audio import method_body
         original = (
-            'public class Cheat { public bool AllowCheatsForLocalPlayer() { '
+            'public class Cheat {\n'
+            '  public bool AllowCheatsForLocalPlayer() { '
             'var left = SteamUser.GetSteamID(); '
             'var right = SteamUser.GetSteamID(); return left == right; } }'
         )
@@ -116,7 +118,8 @@ class AndroidOfflineStartupTests(unittest.TestCase):
     def test_cheat_nonboolean_method_type_is_rejected_even_when_source_digest_matches(self):
         from scripts.probe_original_scene_audio import method_body
         original = (
-            'public class Cheat { public int AllowCheatsForLocalPlayer() { '
+            'public class Cheat {\n'
+            '  public int AllowCheatsForLocalPlayer() { '
             'var sid = SteamUser.GetSteamID(); return 0; } }'
         )
         body = method_body(original, 'AllowCheatsForLocalPlayer')[1]
