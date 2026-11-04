@@ -1,0 +1,1004 @@
+name: Raft full native APK OBB XAPK build and delivery
+
+on:
+  workflow_dispatch:
+    inputs:
+      build_mode:
+        description: Full native ARM64 build; lightweight tests use separate workflows
+        type: choice
+        options: [native]
+        default: native
+      publish_early_test:
+        description: Publish complete APK OBB XAPK after all delivery gates pass
+        type: boolean
+        default: true
+  workflow_call:
+    inputs:
+      build_mode:
+        type: string
+        default: native
+      publish_early_test:
+        type: boolean
+        default: true
+      build_lane:
+        type: string
+        default: delivery
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - '.github/raft-native-build-request.json'
+
+# Preserve the existing delivery mutex so current immutable builds stay protected.
+# Dedicated request file prevents ordinary source/test pushes entering this queue.
+concurrency:
+  group: ${{ inputs.build_lane == 'experiment' && 'raft-unity-android-experiment' || 'raft-unity-editor-android' }}-${{ github.ref }}
+  cancel-in-progress: false
+  queue: max
+
+permissions:
+  contents: read
+
+jobs:
+  native-request-gate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Require an explicit full native request on the owner branch
+        env:
+          NATIVE_REQUESTED: ${{ (github.event_name == 'workflow_dispatch' && inputs.build_mode == 'native') || (github.event_name == 'push' && contains(github.event.head_commit.message, '[raft-native-build]')) }}
+          DELIVERY_REQUESTED: ${{ (github.event_name == 'workflow_dispatch' && inputs.publish_early_test) || (github.event_name == 'push' && contains(github.event.head_commit.message, '[raft-device-test]')) }}
+          BUILD_LANE: ${{ inputs.build_lane || 'delivery' }}
+          REQUEST_EVENT: ${{ github.event_name }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF" = "refs/heads/feature/android-native-port"
+          test "$NATIVE_REQUESTED" = "true"
+          if [ "$BUILD_LANE" = "experiment" ]; then
+            test "$REQUEST_EVENT" = "workflow_dispatch" || test "$REQUEST_EVENT" = "push"
+            test "$DELIVERY_REQUESTED" != "true"
+          else
+            test "$BUILD_LANE" = "delivery"
+            test "$DELIVERY_REQUESTED" = "true"
+          fi
+          if [ "$REQUEST_EVENT" = "push" ]; then
+            python3 - <<'PY'
+          import json,os,re
+          from pathlib import Path
+          path='.github/raft-native-experiment-request.json' if os.environ['BUILD_LANE']=='experiment' else '.github/raft-native-build-request.json'
+          request=json.loads(Path(path).read_text())
+          assert isinstance(request.get('request_id'),str) and 1 <= len(request['request_id']) <= 128
+          assert isinstance(request.get('reason'),str) and 1 <= len(request['reason']) <= 512
+          assert re.fullmatch('[a-f0-9]{40}',request.get('requested_from_sha',''))
+          print('RAFT_NATIVE_REQUEST accepted=true event=push')
+          PY
+          fi
+
+  unity-license-preflight:
+    needs: native-request-gate
+    environment: UNITY_LICENSE
+    runs-on: ubuntu-24.04
+    outputs:
+      ready: ${{ steps.check.outputs.ready }}
+    steps:
+      - name: Check whether Unity activation is available without exposing secrets
+        id: check
+        shell: bash
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        run: |
+          if [ -n "$UNITY_EMAIL" ] && [ -n "$UNITY_PASSWORD" ] && { [ -n "$UNITY_LICENSE" ] || [ -n "$UNITY_SERIAL" ]; }; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+            echo "Unity activation secrets found; attempting private project import and Android build."
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "Unity activation unavailable; will not download LFS or Docker image."
+            echo '::error::Unity activation unavailable for this explicit native request; no APK produced.'
+            exit 1
+          fi
+
+  reconstruct:
+    # Both native lanes serialize actual Editor work to avoid license contention.
+    concurrency:
+      group: raft-native-engine-${{ github.ref }}
+      cancel-in-progress: false
+      queue: max
+    needs: unity-license-preflight
+    environment: UNITY_LICENSE
+    if: ${{ needs.unity-license-preflight.outputs.ready == 'true' && ((github.event_name == 'workflow_dispatch' && inputs.build_mode == 'native') || (github.event_name == 'push' && contains(github.event.head_commit.message, '[raft-native-build]'))) }}
+    runs-on: ubuntu-24.04
+    # Restored Mono fields now require a substantially larger first-import budget.
+    # Previous 65-minute job expired during active asset import, before Build().
+    timeout-minutes: 240
+    steps:
+      - name: Disk safety gate before dependencies / LFS download
+        shell: bash
+        run: |
+          set -euo pipefail
+          df -h /
+          free_kb=$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')
+          test "$free_kb" -gt 36700160
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          fetch-depth: 1
+          persist-credentials: true
+      - name: Run synthetic code-overlay tests before touching original data
+        run: |
+          python3 -m unittest discover -s tests -p test_w1_export_material_shaders.py -v
+          python3 -m unittest discover -s tests -p test_android_render_lifetimes.py -v
+          python3 -m unittest discover -s tests -p test_gradle_payload_audit.py -v
+          python3 -m unittest discover -s tests -p test_android_expansion_audit.py -v
+          python3 -m unittest discover -s tests -p test_restore_postfx_shaders.py -v
+          python3 -m unittest discover -s tests -p test_restore_postfx_compute.py -v
+          python3 -m unittest discover -s tests -p test_restore_volumetric_shaders.py -v
+          python3 -m unittest discover -s tests -p test_restore_builtin_shaders.py -v
+          python3 -m unittest discover -s tests -p test_restore_tmp_shaders.py -v
+          python3 -m unittest discover -s tests -p test_runtime_operation_traces.py -v
+          python3 -m unittest discover -s tests -p test_android_offline_startup.py -v
+          python3 -m unittest discover -s tests -p test_adapt_original_save_paths.py -v
+          python3 -m unittest discover -s tests -p test_reembed_scene_bound_assets.py -v
+          python3 -m unittest discover -s tests -p test_fmod_resource_path_policy.py -v
+          python3 -m unittest discover -s tests -p test_csharp_overlay.py -v
+          python3 -m unittest discover -s tests -p test_supplement_ilspy_gameplay.py -v
+          python3 -m unittest discover -s tests -p test_repair_assetripper_stubs.py -v
+          python3 -m unittest discover -s tests -p test_stage_raft_managed_dlls.py -v
+          python3 -m unittest discover -s tests -p test_resolve_managed_closure.py -v
+          python3 -m unittest discover -s tests -p test_build_sdk_script_manifest.py -v
+          python3 -m unittest discover -s tests -p test_exported_font_materials.py -v
+          python3 -m unittest discover -s tests -p test_isolate_sdk_source_assemblies.py -v
+          python3 -m unittest discover -s tests -p test_mesh_range_manifest.py -v
+          python3 -m unittest discover -s tests -p test_verified_mesh_ranges.py -v
+          python3 -m unittest discover -s tests -p test_inline_mesh_ranges.py -v
+          python3 -m unittest discover -s tests -p test_original_mesh_positions.py -v
+          python3 -m unittest discover -s tests -p test_scene_stream_restoration.py -v
+          python3 -m unittest discover -s tests -p test_exported_font_materials.py -v
+          python3 -m unittest discover -s tests -p test_recover_empty_ilspy_sources.py -v
+      - name: Validate original CLR providers before any LFS transfer
+        run: |
+          python3 -m unittest discover -s tests -p test_export_managed_providers.py -v
+          python3 -m unittest discover -s tests -p test_assetripper_script_import.py -v
+          python3 -m pip install --user --disable-pip-version-check dnfile==0.18.0
+          python3 -m scripts.stage_export_managed_providers \
+            --source "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed" \
+            --destination "$RUNNER_TEMP/input/Raft_Data/Managed"
+      - name: Reuse authenticated ZIP2 shader-owner cache before acquisition
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/w1-original
+          key: w1-zip2-15964ea8-full-shader-owners-v1
+          restore-keys: w1-zip2-15964ea8-four-owners-v1
+      - name: Select only missing SHA-pinned ZIP2 owners
+        id: w1_zip2_needed
+        run: python3 -m scripts.w1_full_engine_sources --plan --destination "$RUNNER_TEMP/w1-original"
+      - name: Read pinned ZIP2 provider without LFS
+        uses: actions/checkout@v4
+        with:
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-original
+          filter: blob:none
+          lfs: false
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: ${{ steps.w1_zip2_needed.outputs.paths }}
+      - name: Authenticate ZIP2 owners and stage three original scene dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.w1_full_engine_sources --zip2-checkout zip2-original --destination "$RUNNER_TEMP/w1-original"
+          python3 - <<'PY'
+          import os,re,shutil,subprocess
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import fingerprint
+          from scripts.w1_full_engine_sources import pins
+          source=Path(os.environ['RUNNER_TEMP'])/'w1-original'
+          # Preserve feature-branch pointer identity as an independent check.
+          # Only these three working-tree pointers are hydrated here; Git and ZIP2 stay unchanged.
+          for name in ('resources.assets','sharedassets0.assets','sharedassets36.assets'):
+              relative='Raft_Data/'+name
+              target=Path('Raft')/relative
+              pointer=subprocess.check_output(['git','show','HEAD:'+target.as_posix()],text=True)
+              sha=re.search(r'^oid sha256:([0-9a-f]{64})$',pointer,re.M)
+              size=re.search(r'^size (\d+)$',pointer,re.M)
+              expected=pins()[relative]
+              if not sha or not size or (int(size[1]),sha[1])!=expected:
+                  raise SystemExit('Feature pointer and authenticated ZIP2 provider disagree')
+              original=source/relative
+              if fingerprint(original)!=expected:
+                  raise SystemExit('Cached ZIP2 original changed before staging')
+              if target.is_symlink():
+                  raise SystemExit('Unsafe original scene owner target')
+              shutil.copyfile(original,target)
+              if fingerprint(target)!=expected:
+                  raise SystemExit('Staged original scene owner fingerprint mismatch')
+              print('RAFT_NATIVE_ZIP2_SCENE_OWNER size='+str(expected[0])+' sha256Verified=true')
+          PY
+          df -h /
+      - name: Restore every original graphics payload before exporting textures and shaders
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_texture_stream_coverage.py -v
+          python3 -m scripts.hydrate_render_payloads --apply --release-cache
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 -m scripts.audit_texture_stream_coverage --root Raft/Raft_Data
+      - name: Audit original compute kernel containers before any shader reconstruction
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Read only the nine original ComputeShader objects already hydrated
+          # and SHA-checked above. Do not publish HLSL/DXBC/serialized bytes.
+          python3 -m scripts.audit_original_compute_metadata --source Raft/Raft_Data --expected-objects 9
+      - name: Audit original mesh stream requirements without downloading additional LFS
+        shell: bash
+        run: |
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4 dnfile==0.18.0
+          python3 scripts/audit_mesh_stream_dependencies.py --root Raft/Raft_Data --max-per-file 50000 --out "$RUNNER_TEMP/mesh-stream-audit.json"
+      - name: Stage selected Unity game files only, never execute Windows binaries
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="$RUNNER_TEMP/input/Raft_Data"
+          mkdir -p "$root/Managed"
+          test -f "$root/Managed/Assembly-CSharp.dll"
+          test ! -e "$root/Managed/PlayFab_o.dll"
+          cp Raft/Raft_Data/boot.config "$root/"
+          shopt -s nullglob
+          count=0
+          for src in Raft/Raft_Data/globalgamemanagers Raft/Raft_Data/globalgamemanagers.assets* Raft/Raft_Data/resources.assets* Raft/Raft_Data/sharedassets*.assets* Raft/Raft_Data/level*; do
+            [ -f "$src" ] || continue
+            if head -c 48 "$src" | grep -q '^version https://git-lfs.github.com/spec/v1'; then continue; fi
+            cp "$src" "$root/"
+            count=$((count+1))
+          done
+          echo "Source serialized files staged: $count"
+          test "$count" -gt 110
+          du -sh "$root"
+      - name: Stage authenticated engine resources into the export input set
+        shell: bash
+        run: |
+          set -euo pipefail
+          # The instrumented export must load exactly the engine provider files
+          # whose shaders are authenticated in w1-original; otherwise the
+          # original source graph and the same-instance trace diverge.
+          python3 - <<'PY'
+          import os,shutil
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import PINS, fingerprint
+          source_root=Path(os.environ['RUNNER_TEMP'])/'w1-original/Raft_Data/Resources'
+          target_root=Path(os.environ['RUNNER_TEMP'])/'input/Raft_Data/Resources'
+          target_root.mkdir(parents=True, exist_ok=True)
+          for name in ('unity default resources','unity_builtin_extra'):
+              relative='Raft_Data/Resources/'+name
+              source=source_root/name
+              if fingerprint(source)!=PINS[relative]:
+                  raise SystemExit('Engine resource provider fingerprint mismatch')
+              shutil.copyfile(source, target_root/name)
+              print('RAFT_ENGINE_RESOURCE_STAGED size=%d sha256Verified=true' % PINS[relative][0])
+          PY
+      - name: Restore every pinned external Mesh buffer while retaining original serialized identities
+        if: ${{ (github.event_name == 'workflow_dispatch' && inputs.build_mode == 'native') || (github.event_name == 'push' && contains(github.event.head_commit.message, '[raft-native-build]')) }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.fetch_verified_mesh_ranges \
+            --manifest config/mesh-stream-ranges.json --source-root "$GITHUB_WORKSPACE/Raft/Raft_Data" \
+            --cache "$RUNNER_TEMP/verified-original-mesh-ranges"
+          python3 -m scripts.inline_verified_mesh_ranges \
+            --root "$RUNNER_TEMP/input/Raft_Data" --manifest config/mesh-stream-ranges.json \
+            --cache "$RUNNER_TEMP/verified-original-mesh-ranges"
+          python3 -m scripts.audit_original_mesh_positions --root "$RUNNER_TEMP/input/Raft_Data" --manifest config/mesh-stream-ranges.json
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - uses: actions/checkout@v4
+        with:
+          repository: nowl-it/AssetRipperCLI
+          ref: 036098ab525a3f9f693dc101edeb21faad4d32d8
+          path: ar-host
+          persist-credentials: false
+          sparse-checkout: Source
+      - name: Build read-only instrumentation into the pinned public exporter
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.patch_export_lineage --tool-source ar-host --helper android-port/Experiments/ExportLineage/RaftExportLineage.cs
+          # Publish the CLI and its matching transitive assemblies together;
+          # replacing one DLL cannot instrument an AOT or bundled executable.
+          dotnet publish android-port/Experiments/ExportLineage/ExportLineage.csproj -c Release -p:PublishAot=false -p:PublishTrimmed=false -p:EnableTrimAnalyzer=false -p:EnableAotAnalyzer=false --self-contained false -o "$RUNNER_TEMP/ar" > "$RUNNER_TEMP/public-tool-build.log" 2>&1 || { tail -60 "$RUNNER_TEMP/public-tool-build.log"; exit 1; }
+          # No original inputs are present in this smoke command; diagnostics
+          # therefore contain public tool types/options only.
+          dotnet "$RUNNER_TEMP/ar/ExportLineage.dll" --probe-tool > "$RUNNER_TEMP/public-tool-smoke.log" 2>&1 || { cat "$RUNNER_TEMP/public-tool-smoke.log"; exit 1; }
+      - name: Export 40 scenes into a Unity Editor project with correct MonoScript metadata
+        env:
+          DOTNET_PROCESSOR_COUNT: '2'
+          RAFT_PRIVATE_EXPORT_LINEAGE: ${{ runner.temp }}/private-export-lineage.json
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 1200s dotnet "$RUNNER_TEMP/ar/ExportLineage.dll" "$RUNNER_TEMP/input" "$RUNNER_TEMP/project" --full-install > "$RUNNER_TEMP/export.log" 2>&1 || {
+            python3 - <<'PYDIAG'
+          import os,re,json
+          from pathlib import Path
+          text=(Path(os.environ['RUNNER_TEMP'])/'export.log').read_text(errors='replace')
+          # Keep original filenames/names and all log text private.
+          report={'export_completed':False,'exception_types':sorted(set(re.findall(r'\b(?:System|AssetRipper)\.[A-Za-z.]+Exception\b',text))),
+                  'has_missing_assembly': 'Could not load file or assembly' in text,
+                  'argument_error': bool(re.search(r'unknown argument|unexpected argument|missing value|requires a value', text, re.I)),
+                  'loading_started':'Processing loaded assets' in text,'export_started':'Starting export' in text,
+                  'log_bytes':len(text.encode()),'trace_created':(Path(os.environ['RUNNER_TEMP'])/'private-export-lineage.json').exists()}
+          print('RAFT_EXPORT_FAILURE '+json.dumps(report,sort_keys=True))
+          PYDIAG
+            exit 1
+          }
+          test -s "$RUNNER_TEMP/private-export-lineage.json"
+          python3 -m scripts.verify_assetripper_script_import --log "$RUNNER_TEMP/export.log"
+          test -d "$RUNNER_TEMP/project/ExportedProject/Assets"
+          test -d "$RUNNER_TEMP/project/ExportedProject/ProjectSettings"
+          df -h /
+      - name: Re-read exact embedded engine database for the production builtin gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          dotnet run --project android-port/Experiments/W1EngineDatabase/W1EngineDatabase.csproj -c Release -- "$RUNNER_TEMP/private-engine-database.json" "$RUNNER_TEMP/engine-reader-summary.json"
+      - name: Restore exact-name Unity 2021.3.45f2 built-in material and particle programs with original GUIDs
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Runs at the complete export boundary, before shader restorers add
+          # files, so the same-instance trace joins the unmodified material
+          # YAML; engine ownership is re-read from originals, database and
+          # actual export instead of trusting a summary receipt.
+          python3 -m scripts.restore_builtin_shaders --project "$RUNNER_TEMP/project/ExportedProject" --backup "$RUNNER_TEMP/original-builtin-shaders" \
+            --engine-source "$RUNNER_TEMP/w1-original" \
+            --private-export-trace "$RUNNER_TEMP/private-export-lineage.json" \
+            --private-engine-database "$RUNNER_TEMP/private-engine-database.json" \
+            --engine-reader-summary "$RUNNER_TEMP/engine-reader-summary.json"
+      - name: Restore scene-owned ScriptableObjects before Unity can import invalid cross-scene assets
+        shell: bash
+        run: |
+          python3 -m scripts.reembed_scene_bound_assets \
+            --project "$RUNNER_TEMP/project/ExportedProject" \
+            --apply --backup-dir "$RUNNER_TEMP/original-scene-bound-files"
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Install ILSpyCmd 11.2.0.10050
+        shell: bash
+        run: |
+          set -euo pipefail
+          dotnet tool install ilspycmd --version 11.2.0.10050 --tool-path "$RUNNER_TEMP/ilspy"
+      - name: Decompile gameplay source to private ephemeral temp directory
+        env:
+          DOTNET_PROCESSOR_COUNT: '2'
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/ilspy-src"
+          timeout 360s "$RUNNER_TEMP/ilspy/ilspycmd" \
+            -p -lv CSharp9_0 -o "$RUNNER_TEMP/ilspy-src" \
+            "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed/Assembly-CSharp.dll" \
+            > "$RUNNER_TEMP/ilspy.log" 2>&1
+          python3 -m scripts.recover_empty_ilspy_sources \
+            --root "$RUNNER_TEMP/ilspy-src" \
+            --assembly "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed/Assembly-CSharp.dll" \
+            --ilspy "$RUNNER_TEMP/ilspy/ilspycmd"
+      - name: Record original SDK type identities before template repairs
+        shell: bash
+        run: |
+          python3 -m unittest discover -s tests -p test_build_sdk_script_manifest.py -v
+          python3 -m scripts.build_sdk_script_manifest --project "$RUNNER_TEMP/project/ExportedProject" --managed "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed" --out "$RUNNER_TEMP/project/ExportedProject/Assets/Editor/RaftAndroid/sdk-script-manifest.json"
+          python3 -m scripts.audit_exported_font_materials \
+            --project "$RUNNER_TEMP/project/ExportedProject" \
+            --manifest "$RUNNER_TEMP/project/ExportedProject/Assets/Editor/RaftAndroid/sdk-script-manifest.json" --require-valid --expected-fonts 13
+      - name: Overlay uniquely identified real CSharp gameplay into Unity project
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/overlay_ilspy_gameplay.py \
+            --project "$RUNNER_TEMP/project/ExportedProject" \
+            --ilspy "$RUNNER_TEMP/ilspy-src" \
+            --report "$RUNNER_TEMP/overlay-report.json" \
+            --recover-unqualified-stubs --recover-unlinked-decompiled --apply
+      - name: Recover CSharp helper types absent from AssetRipper MonoScript output
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_supplement_ilspy_gameplay.py -v
+          python3 scripts/supplement_ilspy_gameplay.py \
+            --project "$RUNNER_TEMP/project/ExportedProject" \
+            --ilspy "$RUNNER_TEMP/ilspy-src" \
+            --report "$RUNNER_TEMP/ilspy-supplement.json" \
+            --coverage-mode decompiled --min-original-sources 2393 --apply
+      - name: Restore original FMOD runtime platform resource topology without changing GUIDs
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.audit_render_input_contracts --project "$RUNNER_TEMP/project/ExportedProject"
+          python3 -m unittest discover -s tests -p test_restore_fmod_resource_layout.py -v
+          python3 -m scripts.restore_fmod_resource_layout --project "$RUNNER_TEMP/project/ExportedProject" --apply
+      - name: Restore authenticated TMP 3.0.6 shader programs while retaining original shader GUIDs
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.restore_tmp_shaders --project "$RUNNER_TEMP/project/ExportedProject" --backup "$RUNNER_TEMP/original-tmp-shaders"
+      - name: Restore authenticated Unity PostFX v1 shader programs with original exported GUIDs
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.restore_postfx_shaders --project "$RUNNER_TEMP/project/ExportedProject" --backup "$RUNNER_TEMP/original-postfx-shaders"
+          python3 -m scripts.restore_postfx_compute --project "$RUNNER_TEMP/project/ExportedProject" --backup "$RUNNER_TEMP/original-postfx-compute"
+      - name: Restore authenticated volumetric programs and Raft half-resolution composition with original GUIDs
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.restore_volumetric_shaders --project "$RUNNER_TEMP/project/ExportedProject" --backup "$RUNNER_TEMP/original-volumetric-shaders"
+      - name: Stage bounded W1 Depth Copy reconstruction with original exported GUID
+        shell: bash
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_w1_depth_install.py -v
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
+          timeout 600s python3 -m scripts.w1_build_depth_wrapper --source Raft/Raft_Data --out "$RUNNER_TEMP/w1-depth-wrapper-summary.json" --private-shader "$RUNNER_TEMP/w1-private-depth.shader"
+          python3 -m scripts.w1_install_depth_copy --project "$RUNNER_TEMP/project/ExportedProject" --private-shader "$RUNNER_TEMP/w1-private-depth.shader" --backup "$RUNNER_TEMP/w1-original-depth" --out "$RUNNER_TEMP/w1-depth-install-summary.json"
+      - name: Retain W1 aggregate staging evidence even when a later authenticity gate fails
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w1-native-depth-staging-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/w1-depth-wrapper-summary.json
+            ${{ runner.temp }}/w1-depth-install-summary.json
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Inventory actual exported Material Shader references without modifying assets
+        id: w1_material_inventory
+        # A diagnostic failure stays visible in the JSON. Existing strict builtin
+        # and water gates below remain authoritative and are never skipped.
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.w1_audit_export_material_shaders --project "$RUNNER_TEMP/project/ExportedProject" --out "$RUNNER_TEMP/w1-native-material-shader-summary.json"
+      - name: Record actual water source contract before the first strict authenticity gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          from scripts.verify_water_render_contract import inspect
+          root=Path(os.environ['RUNNER_TEMP'])
+          report=inspect(root/'project/ExportedProject')
+          (root/'w1-native-water-contract-summary.json').write_text(json.dumps(report,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Retain aggregate Material and water diagnostic evidence on prebuild failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w1-native-export-reference-audit-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/w1-native-material-shader-summary.json
+            ${{ runner.temp }}/w1-native-water-contract-summary.json
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Authentic water gate (strict) or exact documented trial limitation
+        shell: bash
+        run: |
+          set -euo pipefail
+          # November 2 phone logs prove the one-pass export and zero-kernel
+          # compute objects are not playable on Android. Never manufacture a
+          # placeholder pass or kernel just to make the Unity job succeed.
+          #
+          # Strict first. A trial build may continue ONLY when the explicit
+          # build request on this branch enumerates every live unmet condition
+          # exactly; the record is retained, copied into the delivery set and
+          # shown in the published release notes.
+          if python3 -m scripts.verify_water_render_contract \
+              --project "$RUNNER_TEMP/project/ExportedProject" --strict; then
+            echo "RAFT_WATER_CONTRACT strict=pass"
+          else
+            python3 -m scripts.record_documented_water_limitation \
+              --project "$RUNNER_TEMP/project/ExportedProject" \
+              --request ".github/raft-native-build-request.json" \
+              --out "$RUNNER_TEMP/experimental-water-limitation.json"
+          fi
+      - name: Retain documented water limitation record
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: raft-water-limitation-${{ github.sha }}
+          path: ${{ runner.temp }}/experimental-water-limitation.json
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Preserve FFT temporary lifetimes across kernel errors and exclude Windows Party startup from Android solo
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.adapt_android_render_lifetimes --source "$RUNNER_TEMP/project/ExportedProject" --backup "$RUNNER_TEMP/original-render-lifetimes"
+      - name: Adapt original local startup and RGD paths without replacing game serialization
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.adapt_original_save_paths \
+            --project "$RUNNER_TEMP/project/ExportedProject" \
+            --backup "$RUNNER_TEMP/original-save-path-source" --apply
+          python3 -m scripts.adapt_android_offline_startup \
+            --project "$RUNNER_TEMP/project/ExportedProject" \
+            --backup "$RUNNER_TEMP/original-offline-startup-source" --apply
+          python3 -m scripts.instrument_android_runtime_operations \
+            --project "$RUNNER_TEMP/project/ExportedProject" \
+            --backup "$RUNNER_TEMP/original-operation-trace-source" \
+            --manifest config/runtime-operation-traces.json --apply
+          mkdir -p "$RUNNER_TEMP/project/ExportedProject/Assets/RaftAndroid/Platform"
+          for name in AndroidStreamingAssets.cs TouchPointerGesture.cs TouchPointerButtons.cs AndroidTouchPointer.cs AndroidTouchUiPanel.cs LocalProfileStore.cs LocalPlayerIdentity.cs AndroidTestDiagnostics.cs AndroidTouchGamepadOverlay.cs PersistentDiagnosticLog.cs AndroidRuntimeLog.cs; do
+            cp "android-port/Runtime/Platform/$name" "$RUNNER_TEMP/project/ExportedProject/Assets/RaftAndroid/Platform/"
+          done
+      - name: Preserve asset-owned meshes during original Editor collector cleanup
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_adapt_editor_mesh_cleanup.py -v
+          python3 -m scripts.adapt_editor_mesh_cleanup \
+            --project "$RUNNER_TEMP/project/ExportedProject" \
+            --backup "$RUNNER_TEMP/original-mesh-collector" --apply
+      - name: Restore twenty-one original compile-time DLLs without platform-provided UI/TMP/InputSystem assemblies
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_stage_raft_managed_dlls.py -v
+          python3 -m unittest discover -s tests -p test_resolve_managed_closure.py -v
+          python3 -m scripts.resolve_managed_closure --managed "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed" --sdk-manifest "$RUNNER_TEMP/project/ExportedProject/Assets/Editor/RaftAndroid/sdk-script-manifest.json" --out "$RUNNER_TEMP/sdk-dependency-plan.json"
+          python3 scripts/stage_raft_managed_dlls.py \
+            --managed "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed" \
+            --project "$RUNNER_TEMP/project/ExportedProject" \
+            --report "$RUNNER_TEMP/managed-refs.json" --plan "$RUNNER_TEMP/sdk-dependency-plan.json" --apply
+      - name: Restore Unity 2021 UGUI and TextMeshPro packages in temporary project
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_add_unity_packages.py -v
+          python3 scripts/add_unity_packages.py --project "$RUNNER_TEMP/project/ExportedProject" --apply
+      - name: Resolve AssetRipper SDK asmdef name collisions without touching GUIDs
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_sdk_asmdef_rename.py -v
+          python3 scripts/rename_conflicting_sdk_asmdefs.py --project "$RUNNER_TEMP/project/ExportedProject" --apply
+      - name: Adapt original URL form codecs to Unity .NET Standard
+        shell: bash
+        run: |
+          python3 -m unittest discover -s tests -p test_adapt_unity_url_codecs.py -v
+          python3 scripts/adapt_unity_url_codecs.py --project "$RUNNER_TEMP/project/ExportedProject" --apply
+      - name: Keep generated SDK source templates out of the Android player
+        shell: bash
+        run: |
+          python3 -m unittest discover -s tests -p test_isolate_sdk_source_assemblies.py -v
+          python3 scripts/isolate_sdk_source_assemblies.py --project "$RUNNER_TEMP/project/ExportedProject" --manifest "$RUNNER_TEMP/project/ExportedProject/Assets/Editor/RaftAndroid/sdk-script-manifest.json" --apply --disable-template-compilation
+      - name: Downgrade ILSpy CSharp 10 file-scoped namespaces to Unity 2021 CSharp 9
+        shell: bash
+        run: |
+          python3 -m unittest discover -s tests -p test_csharp_namespace_compat.py -v
+          python3 scripts/normalize_csharp_namespaces.py \
+            --root "$RUNNER_TEMP/project/ExportedProject/Assets" \
+            --apply --require-clean
+      - name: Audit real Decompiled SDK scripts; repair only synthetic invalid AssetRipper stubs
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_repair_assetripper_stubs.py -v
+          python3 scripts/repair_assetripper_stub_classnames.py \
+            --assets "$RUNNER_TEMP/project/ExportedProject/Assets" \
+            --apply --require-clean --repair-timeline
+      - name: Repair exported asset case collisions while preserving GUID metadata
+        shell: bash
+        run: |
+          python3 -m unittest discover -s tests -p test_repair_asset_case_collisions.py -v
+          python3 scripts/repair_asset_case_collisions.py --project "$RUNNER_TEMP/project/ExportedProject" --apply
+      - name: Stage authenticated original FMOD Android runtime and narrow Java startup bridge
+        shell: bash
+        env:
+          FMOD_ANDROID_RUNTIME_KEY: ${{ secrets.FMOD_ANDROID_RUNTIME_KEY }}
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check cryptography==50.0.2
+          python3 -m unittest discover -s tests -p test_stage_fmod_android_runtime.py -v
+          python3 -m scripts.stage_fmod_android_runtime \
+            --cipher android-port/Dependencies/fmod-2.02.15-android-arm64.aesgcm \
+            --manifest config/fmod-android-runtime.json \
+            --project "$RUNNER_TEMP/project/ExportedProject" --apply
+          mkdir -p "$RUNNER_TEMP/project/ExportedProject/Assets/RaftAndroid/Audio"
+          cp android-port/Runtime/Audio/*.cs "$RUNNER_TEMP/project/ExportedProject/Assets/RaftAndroid/Audio/"
+      - name: Restore original banks and StreamingAssets using tracked Git and pinned LFS identities
+        if: ${{ (github.event_name == 'workflow_dispatch' && inputs.build_mode == 'native') || (github.event_name == 'push' && contains(github.event.head_commit.message, '[raft-native-build]')) }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_stage_original_streaming_assets.py -v
+          git lfs fetch origin HEAD --include='Raft/Raft_Data/StreamingAssets/MasterBank.bank' --exclude=''
+          git lfs checkout Raft/Raft_Data/StreamingAssets/MasterBank.bank
+          python3 -m scripts.stage_original_streaming_assets \
+            --repo "$GITHUB_WORKSPACE" \
+            --project "$RUNNER_TEMP/project/ExportedProject" \
+            --report "$RUNNER_TEMP/original-streaming-assets.json" --apply
+      - name: Stage native ARM64 build entry point without changing original scenes
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/project/ExportedProject/Assets/Editor/RaftAndroid"
+          cp android-port/Editor/*.cs "$RUNNER_TEMP/project/ExportedProject/Assets/Editor/RaftAndroid/"
+          cp android-port/Recovery/PropertyTextures/*.cs "$RUNNER_TEMP/project/ExportedProject/Assets/Editor/RaftAndroid/"
+      - name: Validate reconstructed editor project structure and GUID references
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import os,re,json,collections
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])/"project/ExportedProject"
+          scenes=list(root.rglob("*.unity"))
+          source=list(root.rglob("*.cs"))
+          metas=list(root.rglob("*.cs.meta"))
+          expected_script_guids=set()
+          for f in metas:
+              m=re.search(r"(?m)^guid:\s*([0-9a-fA-F]{32})",f.read_text(errors="replace")[:500])
+              if m:expected_script_guids.add(m.group(1).lower())
+          refs=[]
+          unknown_guid=collections.Counter()
+          for f in scenes:
+              payload=f.read_text(errors="replace")
+              refs+=re.findall(r"m_Script:\s*\{[^\n}]*guid:\s*([a-fA-F0-9]{32})",payload)
+              unknown_guid.update(x.lower() for x in re.findall(r"guid:\s*([a-fA-F0-9]{32})",payload) if x.lower()=="0000000deadbeef15deadf00d0000000")
+          linked=sum(g.lower() in expected_script_guids for g in refs)
+          overlay=json.loads((Path(os.environ["RUNNER_TEMP"])/"overlay-report.json").read_text())
+          exts=collections.Counter(p.suffix for p in root.rglob("*") if p.is_file())
+          manifest=root/"Packages/manifest.json"
+          manifest_data=json.loads(manifest.read_text()) if manifest.exists() else {}
+          print("Editor project scenes:",len(scenes))
+          print("Editor project CSharp files:",len(source))
+          print("Editor project CSharp metas:",len(metas))
+          print("Scene script GUID matched:",linked,"/",len(refs))
+          print("Other deadbeef GUID sentinel uses:",sum(unknown_guid.values()))
+          print("ILSpy CSharp gameplay class overlays:",overlay["replacements"])
+          print("ILSpy namespace mismatch rejects:",overlay["namespace_mismatches"])
+          print("Unity source asset suffix counts:",dict(exts.most_common(14)))
+          print("Project package dependency names:",sorted(manifest_data.get("dependencies",{}))[:50])
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
+              f.write("## Integrated Unity project candidate (NO Unity Editor import yet)\n")
+              f.write(f"- Unity scenes: {len(scenes)}; CSharp files: {len(source)}; CSharp metas: {len(metas)}\n")
+              f.write(f"- Script refs linked: {linked}/{len(refs)}; deadbeef sentinels: {sum(unknown_guid.values())}\n")
+              f.write(f"- Gameplay source overlays: {overlay['replacements']}; namespace rejects: {overlay['namespace_mismatches']}\n")
+              f.write(f"- Project package dependency names: {sorted(manifest_data.get('dependencies',{}))[:30]}\n")
+              f.write("No generated game source, original assets or APK published. Compilation / runtime / stream content remains unverified.\n")
+          if len(scenes)!=40 or not refs or linked!=len(refs):raise SystemExit("Unity scene or script linkage regression")
+          if sum(unknown_guid.values())!=0:raise SystemExit("Unresolved Unity scene GUID references remain")
+          if overlay["replacements"]<1500:raise SystemExit("Insufficient ILSpy source integration")
+          if not manifest.exists():raise SystemExit("Missing Unity Packages manifest")
+          PY
+
+      - name: Stage private Unity project candidate inside runner workspace
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$GITHUB_WORKSPACE/unity-candidate"
+          cp -a "$RUNNER_TEMP/project/ExportedProject/." "$GITHUB_WORKSPACE/unity-candidate/"
+          du -sh "$GITHUB_WORKSPACE/unity-candidate"
+          df -h /
+      - name: Reserve bounded swap and record host memory before full-data Unity build
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Unity supplies NDK/platforms in its container; retain host build-tools for apksigner.
+          sudo rm -rf /usr/local/lib/android/sdk/ndk /usr/local/lib/android/sdk/platforms /usr/local/lib/android/sdk/system-images /usr/local/lib/android/sdk/cmake /opt/hostedtoolcache/CodeQL
+          sdk_root="${ANDROID_SDK_ROOT:-${ANDROID_HOME:-/usr/local/lib/android/sdk}}"
+          test -d "$sdk_root/build-tools"
+          test "$(df -Pk /mnt | awk 'NR==2 {print $4}')" -gt 12582912
+          test ! -e /mnt/raft-unity.swap
+          sudo fallocate -l 8G /mnt/raft-unity.swap
+          sudo chmod 600 /mnt/raft-unity.swap
+          sudo mkswap /mnt/raft-unity.swap
+          sudo swapon /mnt/raft-unity.swap
+          free -m
+          df -h / /mnt
+          python3 -m scripts.ci_memory_watch --output "$RUNNER_TEMP/unity-memory.jsonl" --interval 10 --samples 1440 > /dev/null 2>&1 &
+          echo "$!" > "$RUNNER_TEMP/unity-memory.pid"
+      - name: Unity Editor 2021.3.45f2 Android import and compile
+        id: unity_build
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2021.3.45f2
+          projectPath: unity-candidate
+          targetPlatform: Android
+          # Pushes use SDK validation unless an intentional [raft-native-build] commit requests one native run.
+          # workflow_dispatch also supports its explicit build_mode=native choice.
+          dockerMemoryLimit: 12g
+          customParameters: -job-worker-count 2 -raftPackageLayout split -raftTextureProfile fidelity
+          buildMethod: ${{ ((github.event_name == 'workflow_dispatch' && inputs.build_mode == 'native') || (github.event_name == 'push' && contains(github.event.head_commit.message, '[raft-native-build]'))) && 'RaftAndroid.Editor.AndroidNativeBuild.Build' || 'RaftAndroid.Editor.AndroidNativeBuild.ValidateSdkBindings' }}
+          androidExportType: androidPackage
+          buildName: RaftAndroidExperimental
+          buildsPath: builds
+          # This workflow reconstructs a Unity project in the workspace after checkout.
+          # Those generated files are intentionally not committed, so Semantic versioning
+          # rejects the build as a dirty git branch before Unity Editor starts.
+          versioning: None
+          androidVersionCode: ${{ github.run_number }}
+      - name: Capture private Gradle payload sizes after Unity even if packaging fails
+        if: ${{ always() && steps.unity_build.outcome != 'skipped' }}
+        continue-on-error: true
+        shell: bash
+        run: |
+          python3 -m scripts.audit_gradle_asset_payload --project "$GITHUB_WORKSPACE/unity-candidate"
+      - name: Summarize actual memory and kernel OOM evidence even after Unity failure
+        if: always()
+        env:
+          UNITY_STEP_OUTCOME: ${{ steps.unity_build.outcome }}
+        shell: bash
+        run: |
+          if [ -f "$RUNNER_TEMP/unity-memory.pid" ]; then
+            kill "$(cat "$RUNNER_TEMP/unity-memory.pid")" 2>/dev/null || true
+          fi
+          echo "RAFT_UNITY_STEP_OUTCOME ${UNITY_STEP_OUTCOME:-not_started}"
+          python3 -m scripts.ci_memory_watch --output "$RUNNER_TEMP/unity-memory.jsonl" --summarize
+          sudo dmesg --notime > "$RUNNER_TEMP/unity-kernel-private.log" 2>/dev/null || true
+          python3 - <<'PY'
+          import os,re
+          from pathlib import Path
+          path=Path(os.environ['RUNNER_TEMP'])/'unity-kernel-private.log'
+          text=path.read_text(errors='replace') if path.exists() else ''
+          print('RAFT_CI_KERNEL_OOM_EVIDENCE kernelReadable=' + str(bool(text)) + ' oomKillOccurrences=' + str(len(re.findall(r'Out of memory: Killed process|Memory cgroup out of memory|oom-kill:',text))))
+          PY
+      - name: Audit private native APK payload and ARM64 IL2CPP structure
+        if: ${{ (github.event_name == 'workflow_dispatch' && inputs.build_mode == 'native') || (github.event_name == 'push' && contains(github.event.head_commit.message, '[raft-native-build]')) }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_android_apk_audit.py -v
+          python3 scripts/audit_android_apk.py \
+            --apk "$GITHUB_WORKSPACE/builds/Android/RaftAndroidExperimental.apk" \
+            --report "$RUNNER_TEMP/private-android-apk-audit.json"
+          if [ -f "$GITHUB_WORKSPACE/builds/Android/RaftAndroidExperimental.main.obb" ]; then
+            python3 scripts/audit_android_expansion.py \
+              --apk "$GITHUB_WORKSPACE/builds/Android/RaftAndroidExperimental.apk" \
+              --obb "$GITHUB_WORKSPACE/builds/Android/RaftAndroidExperimental.main.obb" \
+              --verify-crc \
+              --haptics-manifest "$GITHUB_WORKSPACE/config/original-haptics-manifest.json" \
+              --report "$RUNNER_TEMP/private-android-obb-audit.json"
+          fi
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          d=json.loads((Path(os.environ["RUNNER_TEMP"])/"private-android-apk-audit.json").read_text())
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as out:
+              out.write("## Native APK structure (not gameplay verification)\n")
+              for name in ("apk_bytes","zip_members","unity_data_files","unity_data_uncompressed_bytes","abis","arm64_il2cpp","fmod_native_library_present","apk_sha256"):
+                  out.write(f"- {name}: {d[name]}\n")
+              out.write("APK kept private on disposable CI runner; no source/game assets uploaded. Signature/install/gameplay still unverified.\n")
+          PY
+      - name: Verify actual APK FMOD libraries, Java bridge and original bank/data bytes
+        if: ${{ (github.event_name == 'workflow_dispatch' && inputs.build_mode == 'native') || (github.event_name == 'push' && contains(github.event.head_commit.message, '[raft-native-build]')) }}
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import hashlib, json, os, zipfile
+          from contextlib import nullcontext
+          from pathlib import Path
+          from scripts.audit_fmod_unity_package import elf_identity
+          report = json.loads((Path(os.environ['RUNNER_TEMP']) / 'original-streaming-assets.json').read_text())
+          apk = Path('builds/Android/RaftAndroidExperimental.apk')
+          obb = Path('builds/Android/RaftAndroidExperimental.main.obb')
+          exports = set()
+          with zipfile.ZipFile(apk) as archive, (zipfile.ZipFile(obb) if obb.is_file() else nullcontext(None)) as expansion:
+              for name in ('libfmod.so', 'libfmodstudio.so', 'libresonanceaudio.so'):
+                  metadata = elf_identity(archive.read('lib/arm64-v8a/' + name))
+                  assert metadata['abi'] == 'arm64-v8a'
+                  exports |= metadata['exports']
+              assert {'FMOD_System_Create', 'FMOD_System_GetVersion', 'FMOD_Studio_System_Create'} <= exports
+              dexes = [n for n in archive.namelist() if n.startswith('classes') and n.endswith('.dex') and '/' not in n]
+              assert any(b'Lorg/fmod/FMOD;' in archive.read(n) for n in dexes), 'FMOD Java descriptor absent from APK DEX'
+              compressed_banks = 0
+              apk_names = set(archive.namelist())
+              obb_names = set(expansion.namelist()) if expansion is not None else set()
+              for name, expected in report['files'].items():
+                  member = 'assets/' + name
+                  assert member in apk_names or member in obb_names, 'Original StreamingAssets absent from APK/OBB pair'
+                  assert not (member in apk_names and member in obb_names), 'Original StreamingAssets duplicated across APK/OBB'
+                  source_archive = archive if member in apk_names else expansion
+                  item = source_archive.getinfo(member)
+                  assert item.file_size == expected['bytes'], 'Original StreamingAssets size changed'
+                  with source_archive.open(item) as source:
+                      assert hashlib.file_digest(source, 'sha256').hexdigest() == expected['sha256'], 'Original StreamingAssets bytes changed'
+                  if name.endswith('.bank') and item.compress_type != zipfile.ZIP_STORED:
+                      compressed_banks += 1
+          print('RAFT_FMOD_APK_AUDIT ' + json.dumps(dict(arm64RuntimeLibraries=3, requiredExports=True,
+              javaDescriptorPresent=True, exactOriginalStreamingFiles=len(report['files']),
+              compressedBankFiles=compressed_banks, deviceAudioVerified=False), sort_keys=True))
+          PY
+      - name: Verify actual APK signature before any early device-test delivery
+        if: ${{ (github.event_name == 'workflow_dispatch' && inputs.build_mode == 'native') || (github.event_name == 'push' && contains(github.event.head_commit.message, '[raft-native-build]')) }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          sdk_root="${ANDROID_SDK_ROOT:-${ANDROID_HOME:-/usr/local/lib/android/sdk}}"
+          signer=$(find "$sdk_root/build-tools" -mindepth 2 -maxdepth 2 -name apksigner -type f | sort -V | tail -n 1)
+          test -n "$signer" && test -x "$signer"
+          "$signer" verify --verbose "$GITHUB_WORKSPACE/builds/Android/RaftAndroidExperimental.apk" > "$RUNNER_TEMP/apk-signature-private.txt"
+          echo 'RAFT_ANDROID_APK_SIGNATURE verified=true installVerified=false gameplayVerified=false'
+      - name: Checkpoint signed audited APK and OBB before delivery packaging
+        if: ${{ github.ref == 'refs/heads/feature/android-native-port' && ((github.event_name == 'push' && contains(github.event.head_commit.message, '[raft-device-test]')) || (github.event_name == 'workflow_dispatch' && inputs.publish_early_test)) }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: raft-android-signed-output-checkpoint
+          path: |
+            builds/Android/RaftAndroidExperimental.apk
+            builds/Android/RaftAndroidExperimental.main.obb
+          compression-level: 0
+          retention-days: 2
+          if-no-files-found: error
+      - name: Package complete owner-authorized APK OBB and XAPK delivery
+        id: package_delivery
+        if: ${{ github.ref == 'refs/heads/feature/android-native-port' && ((github.event_name == 'push' && contains(github.event.head_commit.message, '[raft-native-build]') && contains(github.event.head_commit.message, '[raft-device-test]')) || (github.event_name == 'workflow_dispatch' && inputs.build_mode == 'native' && inputs.publish_early_test)) }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_android_delivery_package.py -v
+          sdk_root="${ANDROID_SDK_ROOT:-${ANDROID_HOME:-/usr/local/lib/android/sdk}}"
+          aapt=$(find "$sdk_root/build-tools" -mindepth 2 -maxdepth 2 -name aapt -type f | sort -V | tail -n 1)
+          test -n "$aapt" && test -x "$aapt"
+          "$aapt" dump badging builds/Android/RaftAndroidExperimental.apk > "$RUNNER_TEMP/delivery-badging.txt"
+          companion_args=()
+          if [ -f builds/Android/RaftAndroidExperimental.main.obb ]; then
+            companion_args=(--obb builds/Android/RaftAndroidExperimental.main.obb)
+          fi
+          python3 -m scripts.package_android_delivery \
+            --apk builds/Android/RaftAndroidExperimental.apk "${companion_args[@]}" \
+            --badging "$RUNNER_TEMP/delivery-badging.txt" --version-code "${{ github.run_number }}" \
+            --output "$RUNNER_TEMP/raft-android-delivery"
+          cp docs/ANDROID_INSTALL_AR.md "$RUNNER_TEMP/raft-android-delivery/INSTALL_AR.md"
+          if [ -f "$RUNNER_TEMP/experimental-water-limitation.json" ]; then
+            cp "$RUNNER_TEMP/experimental-water-limitation.json" "$RUNNER_TEMP/raft-android-delivery/RECORDED_LIMITATIONS.json"
+          fi
+      - name: Retain audited native outputs if delivery packaging fails
+        if: ${{ failure() && steps.package_delivery.outcome == 'failure' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: raft-android-audited-output-recovery
+          path: |
+            builds/Android/RaftAndroidExperimental.apk
+            builds/Android/RaftAndroidExperimental.main.obb
+          compression-level: 0
+          retention-days: 2
+          if-no-files-found: error
+      - name: Retain complete owner-authorized install packages for release delivery
+        if: ${{ github.ref == 'refs/heads/feature/android-native-port' && ((github.event_name == 'push' && contains(github.event.head_commit.message, '[raft-native-build]') && contains(github.event.head_commit.message, '[raft-device-test]')) || (github.event_name == 'workflow_dispatch' && inputs.build_mode == 'native' && inputs.publish_early_test)) }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: raft-android-test-delivery
+          path: ${{ runner.temp }}/raft-android-delivery/
+          compression-level: 0
+          retention-days: 1
+          if-no-files-found: error
+      - name: Report validation boundary
+        run: |
+          echo 'Review actual native/SDK/APK evidence. No source or reconstructed project is published. Early startup APK delivery is opt-in; device gameplay/audio/save tests remain unverified.' >> "$GITHUB_STEP_SUMMARY"
+
+  # Explicitly requested by the owner: an early test APK after all build,
+  # original-data, native-audio and signature gates pass. Never publish source/project files.
+  publish-early-test:
+    needs: reconstruct
+    if: ${{ needs.reconstruct.result == 'success' && github.ref == 'refs/heads/feature/android-native-port' && ((github.event_name == 'push' && contains(github.event.head_commit.message, '[raft-native-build]') && contains(github.event.head_commit.message, '[raft-device-test]')) || (github.event_name == 'workflow_dispatch' && inputs.build_mode == 'native' && inputs.publish_early_test)) }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: raft-android-test-delivery
+          path: release-apk
+      - name: Publish complete APK OBB XAPK packages and lossless transport parts
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EARLY_TEST_REQUESTED: ${{ (github.event_name == 'push' && contains(github.event.head_commit.message, '[raft-native-build]') && contains(github.event.head_commit.message, '[raft-device-test]')) || (github.event_name == 'workflow_dispatch' && inputs.build_mode == 'native' && inputs.publish_early_test) }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "${EARLY_TEST_REQUESTED:-}" = "true"
+          test "$GITHUB_REF" = "refs/heads/feature/android-native-port"
+          python3 - <<'PY'
+          import hashlib, json, os
+          from pathlib import Path
+          root = Path('release-apk')
+          delivery = json.loads((root/'delivery.json').read_text())
+          assert delivery['package'] == 'com.alwansan.raft.androidtest'
+          assert delivery['version_code'] == os.environ['GITHUB_RUN_NUMBER']
+          for row in delivery['files']:
+              total = hashlib.sha256()
+              size = 0
+              for part in row['parts']:
+                  name = part['name']
+                  assert Path(name).name == name and '/' not in name and chr(92) not in name
+                  path = root/name
+                  assert path.is_file() and 0 < path.stat().st_size < 2147483648
+                  digest = hashlib.sha256()
+                  with path.open('rb') as source:
+                      for block in iter(lambda: source.read(1024*1024), b''):
+                          total.update(block)
+                          digest.update(block)
+                          size += len(block)
+                  assert path.stat().st_size == part['bytes'] and digest.hexdigest() == part['sha256']
+              assert size == row['bytes'] and total.hexdigest() == row['sha256']
+          for path in root.iterdir():
+              assert path.is_file() and 0 < path.stat().st_size < 2147483648
+          notes = """نسخة اختبار Android ARM64 IL2CPP — ليست نسخة لعب مكتملة.
+          اختر XAPK الكامل مع مثبت يدعم OBB، أو APK مع ملف OBB المطابق. APK وحده لا يكفي إذا كانت companion_required=true في delivery.json.
+          الملفات الأكبر من حد GitHub نُشرت كأجزاء نقل مطابقة للبايتات؛ اجمعها بأداة reassemble.py حسب INSTALL_AR.md قبل التثبيت.
+          هذه الأجزاء لا تعني تقسيم بيانات Unity أو حذف مواردها. لا حاجة لتنزيل XAPK وAPK+OBB معاً؛ هما بديلان.
+          لم يتحقق التثبيت أو تركيب OBB أو اللعب أو الصوت أو الحفظ على الهاتف. الماء وشيدراته لا تزال قيد الإصلاح.
+          أدوات اللمس تجريبية: Test report ثم Enable touch gamepad وEdit touch layout.
+          """
+          notes += '\nSource: ' + os.environ['GITHUB_SHA'] + '\n'
+          limitation = root / 'RECORDED_LIMITATIONS.json'
+          if limitation.is_file():
+              recorded = json.loads(limitation.read_text())
+              notes += '\nقيود موثقة في طلب البناء — نسخة تجريبية غير مكتملة (الماء وشيدراته/FFT):\n'
+              for item in recorded.get('unmet_conditions', []):
+                  notes += '- ' + str(item) + '\n'
+          notes += '\n'.join(row['name'] + ' bytes=' + str(row['bytes']) + ' SHA256=' + row['sha256'] for row in delivery['files']) + '\n'
+          (Path(os.environ['RUNNER_TEMP'])/'early-test-notes.md').write_text(notes)
+          PY
+          tag="android-early-test-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          gh release create "$tag" release-apk/* \
+            --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --prerelease \
+            --title "Raft Android — early startup test ${GITHUB_RUN_NUMBER}" \
+            --notes-file "$RUNNER_TEMP/early-test-notes.md" >> "$GITHUB_STEP_SUMMARY"
+          gh release view "$tag" --repo "$GITHUB_REPOSITORY" --json assets,url > "$RUNNER_TEMP/published-delivery.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          local={p.name:p.stat().st_size for p in Path('release-apk').iterdir() if p.is_file()}
+          remote=json.loads((Path(os.environ['RUNNER_TEMP'])/'published-delivery.json').read_text())
+          actual={a['name']:a['size'] for a in remote['assets']}
+          assert actual==local, 'Published release is missing or changed delivery files'
+          with Path(os.environ['GITHUB_STEP_SUMMARY']).open('a') as out:
+              out.write('Verified complete delivery: '+remote['url']+' files='+str(len(actual))+'\n')
+          print('RAFT_PUBLISHED_DELIVERY verifiedFiles='+str(len(actual))+' deviceInstallVerified=false')
+          PY
+
+  delivery-result:
+    if: always()
+    needs: [native-request-gate, unity-license-preflight, reconstruct, publish-early-test]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Refuse green native runs with missing build or delivery
+        env:
+          REQUEST_RESULT: ${{ needs.native-request-gate.result }}
+          NATIVE_RESULT: ${{ needs.reconstruct.result }}
+          RELEASE_RESULT: ${{ needs.publish-early-test.result }}
+          BUILD_LANE: ${{ inputs.build_lane || 'delivery' }}
+        run: |
+          set -eu
+          test "$REQUEST_RESULT" = "success"
+          test "$NATIVE_RESULT" = "success"
+          if [ "$BUILD_LANE" != "experiment" ]; then
+            test "$RELEASE_RESULT" = "success"
+          fi
+          echo "RAFT_NATIVE_DELIVERY_RESULT lane=$BUILD_LANE build=$NATIVE_RESULT release=$RELEASE_RESULT"
