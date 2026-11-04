@@ -1,0 +1,12 @@
+{
+  "id": "B14-20261104T2139Z-local-start",
+  "owner": "B14",
+  "session_id": "20261104T2131Z-B14-a71c",
+  "issue_id": "LOCAL-005",
+  "type": "start",
+  "summary": "Started staged Unity original SaveAndLoad/Android offline adapter root redirection safety repair after completed WATER scope; no RGD or Steam semantics changes.",
+  "evidence": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/adapt_original_save_paths.py"
+  ],
+  "at": "2026-11-04T21:40:24.035Z"
+}
