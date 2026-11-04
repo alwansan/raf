@@ -43,5 +43,7 @@ client_label: W3 — مظهر/شيدرات/خامات/مؤثرات. session_id �
 - prompt/coordination/discussions/RENDER-002/2026-11-03T154500Z-raft-20261103T153100Z-b4d2c9e7-externals-done.md,
 - prompt/STATUS.md (قسم جديد).
 
+ملاحظة اليوم (2026-11-04): سلالة ليلية للعميل W4 (تصدير/بناء/طلب XAPK تجريبي، تشغيل 41808015938) ومتابعات W1 — مسارات أخرى، لا لمس ولا تحقق ولا دعى.
+
 ## نقطة الاستعادة / الخطوة التالية
-أربع خطوات W3 مكتملة ومُدفوعة: (1) حسم 144 من 156 (SHA `b15ab149…`)، (2) جرد اللعبة الكامل (SHA `d80256a7…`)، (3) مخطط خصائص/keywords (SHA `7a698ec2…`)، **(4) تدقيق استخدام keywords لكل خامة (SHA `3e1ebc2…`; صفر مخالفات، 1282 خامة، بصمة Standard 7/37 والبقية أصغر)**. الخيارات القادمة: تدقيق 22 خامة Standard بلا keywords (جمهور الـvariant الافتراضي)، أو تعداد m_FallbackName/m_CustomEditorName، أو خريطة m_NonModifiableTextures، أو StandardVColor vertex-color. لا مطابقة مظهر، لا إغلاق WATER-001/RENDER-002؛ الأسماء تبقى commitments فقط.
+خمس خطوات W3 مكتملة ومُدفوعة: (1) حسم 144 من 156 (SHA `b15ab149…`)، (2) جرد اللعبة الكامل (SHA `d80256a7…`)، (3) مخطط خصائص/keywords (SHA `7a698ec2…`)، **(4) تدقيق استخدام keywords لكل خامة (SHA `3e1ebc2…`; صفر مخالفات، 1282 خامة، بصمة Standard 7/37 والبقية أصغر)**. الخطوة 5 (اليوم): تعداد m_FallbackName (52/165 غير فارغ، 10 مميزة، بوجود واحد يغطي 37) وm_CustomEditorName (69/165، 10 مميزة، مهيمن 42) — بلا أي أسماء جديدة، تثبيت هيكلي لعائلات المورد (SHAs 8cfe2c94/4b0df353، الأداة 47b2ba67). الخيارات القادمة: تدقيق 22 خامة Standard بلا keywords (جمهور الـvariant الافتراضي)، أو تدقيق اكتمال ربط m_SavedProperties على مستوى بنية المسارات (بلا قيم)، أو StandardVColor vertex-color. لا مطابقة مظهر، لا إغلاق WATER-001/RENDER-002؛ الأسماء تبقى commitments فقط.

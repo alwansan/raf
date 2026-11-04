@@ -28,6 +28,13 @@
     "prompt/coordination/experiments/raft-20261103T153100Z-b4d2c9e7/per-material-keyword-usage.json",
     "prompt/coordination/discussions/RENDER-002/2026-11-03T174000Z-raft-20261103T153100Z-b4d2c9e7-scope-announcement-per-material-keywords.md",
     "prompt/coordination/discussions/RENDER-002/2026-11-03T181000Z-raft-20261103T153100Z-b4d2c9e7-per-material-keywords-result.md",
+    "scripts/probe_w3_shader_fallback_editor.py",
+    "scripts/w3_test_shader_fallback_editor.py",
+    "docs/W3_SHADER_FALLBACK_EDITOR_ENUM_2026-11-04.json",
+    "docs/W3_SHADER_FALLBACK_EDITOR_ENUM_2026-11-04.md",
+    "prompt/coordination/experiments/raft-20261103T153100Z-b4d2c9e7/shader-fallback-editor-enum.json",
+    "prompt/coordination/discussions/RENDER-002/2026-11-04T100000Z-raft-20261103T153100Z-b4d2c9e7-scope-announcement-fallback-editor.md",
+    "prompt/coordination/discussions/RENDER-002/2026-11-04T104500Z-raft-20261103T153100Z-b4d2c9e7-fallback-editor-result.md",
     "prompt/STATUS.md"
   ],
   "related_work": [

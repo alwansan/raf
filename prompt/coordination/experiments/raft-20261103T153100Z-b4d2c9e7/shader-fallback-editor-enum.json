@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T153100Z-b4d2c9e7",
+  "status": "completed",
+  "hypothesis": "Every original Shader object's serialized m_ParsedForm.m_FallbackName and m_CustomEditorName can be enumerated across the full 82-owner authenticated local originals, yielding name-free structural profiles (non-empty counts, distinct counts, sorted-list SHA commitments, multiplicity profiles) that close the schema report's fallback caveat and give reconstruction an exactly falsifiable identity check.",
+  "input_hashes": [
+    "owner set + pin verification identical to committed inventory docs/W3_FULL_MATERIAL_SHADER_INVENTORY_2026-11-03.json (d80256a7...)",
+    "sha256(resources.assets,111533516)=87493249f1adfc0c5eb8b82e4e199e208cd2c95eabe9796cab82116c4838595c",
+    "sha256(sharedassets0.assets,115978112)=0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3"
+  ],
+  "commands": [
+    "python3 scripts/probe_w3_shader_fallback_editor.py --game-data <Raft_Data> --aggregate-json docs/W3_SHADER_FALLBACK_EDITOR_ENUM_2026-11-04.json",
+    "python3 scripts/w3_test_shader_fallback_editor.py"
+  ],
+  "expected_signal": "165 shader objects matching the inventory invariant; small distinct distributions (<=10 each); dominant multiplicity values; deterministic commitments; zero raw name strings in the durable artifact",
+  "negative_controls": [
+    "shader_count_matches_inventory: 165 exactly",
+    "pin owners re-verified byte-for-byte before parse",
+    "empty strings never produce commitments",
+    "histograms and locally-collected name spaces must agree",
+    "durable emit is name-free (raw name histograms available only via --print-names-local)"
+  ],
+  "workflow_path": null,
+  "concurrency_group": null,
+  "budget": "local CPU only, minutes; no LFS, no CI, no Unity",
+  "run_url": null,
+  "source_sha": "10ae52c5d4d5e06cf11b1525e93ad3a13c115e29",
+  "result": "completed. Artifact docs/W3_SHADER_FALLBACK_EDITOR_ENUM_2026-11-04.json sha256 47b2ba67eabc0f2686a9406cfde3c4ddd19b583e972003c43bad5ed07e2b6f3e. 165/165 shaders covered (inventory-invariant true, 4/4 NC true). m_FallbackName: 52 non-empty / 10 distinct, commitment 8cfe2c94c22e6d2dad7d771a4b00afddabcc2eb949f222f4e65d670ee8a4f0c4, profile [37,4,3,2,1,1,1,1,1,1], 113 empty. m_CustomEditorName: 69 non-empty / 10 distinct, commitment 4b0df3531b6f7e9791c0e5a40a7a9570810afb24b82f8b11a74ca182950ed628, profile [42,8,7,3,3,2,1,1,1,1], 96 empty. Dominant editor-fallback classes align, name-free, with vendor families already named in the inventory priority set (Amplify-class, MicroSplat-class, SpeedTree-class, TMP-class). Honest supersession: an initial run emitted raw name-keyed histograms into the candidate artifact; the leak check caught it before any commit, emit was narrowed to name-free multiplicity profiles, and the corrected run (identical totals) is the only durable artifact.",
+  "limitations": [
+    "identity metadata enumeration only: no material values/colors (W2 lane), no program bodies (W1 lane), no export/build tooling (W4 lane; the overnight experimental build by another client is out of W3 scope and neither verified nor endorsed)",
+    "no visual/GPU/phone claim; WATER-001/RENDER-002/FFT-FORMAT-009 remain OPEN; NOT_READY; 0/3 reviews"
+  ],
+  "next_step": "publish STATUS section + result discussion; afterward options: (a) 22 empty-config Standard materials base-variant audit, (b) m_SavedProperties slot-name-level binding completeness audit (structure only, no values, leaving W2's texture-value lane untouched), (c) StandardVColor vertex-color audit"
+}
