@@ -1,0 +1,12 @@
+{
+  "id": "20261104T2115Z-gamut-start",
+  "owner": "B11",
+  "session_id": "20261104T2115Z-B11-bca7",
+  "issue_id": "RENDER-002",
+  "type": "start",
+  "summary": "Independent gamut parity scope: original [0] authenticated by B04; actual export unknown; device whiteness not attributed.",
+  "evidence": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B04_ORIGINAL_COLOR_SPACE_PARITY_2026-11-04.md"
+  ],
+  "at": "2026-11-04T21:15:00Z"
+}
