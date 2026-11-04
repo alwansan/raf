@@ -1,0 +1,33 @@
+name: B22 LOCAL-005 operation instrumentation transaction (synthetic)
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-b22-runtime-stage-integrity.yml'
+      - 'scripts/instrument_android_runtime_operations.py'
+      - 'tests/test_b22_runtime_stage_integrity.py'
+permissions:
+  contents: read
+concurrency:
+  group: raft-b22-local-stage-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  source-staging-safety:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Verify Python syntax and synthetic rollback/path controls
+        run: |
+          python3 -m py_compile scripts/instrument_android_runtime_operations.py
+          python3 -m unittest discover -s tests -p 'test_b22_runtime_stage_integrity.py' -v
+          python3 -m unittest discover -s tests -p 'test_runtime_operation_traces.py' -v
+      - name: Explicit test scope
+        run: echo 'No original source asset, native Unity compile, Android phone, save roundtrip or APK was tested'
