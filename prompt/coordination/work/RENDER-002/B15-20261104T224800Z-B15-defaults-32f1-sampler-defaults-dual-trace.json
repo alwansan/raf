@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "owner": "B15",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T224800Z-B15-defaults-32f1",
+  "issue_id": "RENDER-002",
+  "track": "colors-materials",
+  "approach": "Correct Unity TextureImporter mipMapBias=-100 unset sentinel misclassified as proven source drift; optionally match B02 texture export instance with W1 Material/Shader trace, rejecting mismatched, malformed or truncated dual traces; keep report aggregate/read-only.",
+  "status": "active",
+  "base_sha": "b5d8de01257f3d3171f8e930de557343a49e8205",
+  "intended_files": [
+    "scripts/b15_texture_sampler_parity.py",
+    "tests/test_b15_texture_sampler_parity.py",
+    ".github/workflows/raft-b15-texture-sampler-parity.yml",
+    "docs/B15_TEXTURE_SAMPLER_PARITY_2026-11-04.md"
+  ],
+  "hypothesis": "Unity importer default mip bias of -100 signals unassigned override rather than a known original mismatch, and B02 class28 texture and W1 material traces need same export_instance identity before being combined.",
+  "related_work": [
+    "B02 pinned Texture2D28 trace compiler run 41927712988",
+    "B15 prior result run 41921429305",
+    "W1 material shader same-instance export"
+  ],
+  "experiment_ids": [
+    "B15-20261104-sampler-defaults-dual-trace"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement test-first synthetic negative controls for -100 default and dual trace export_instance; CI then preserve result and limits.",
+  "updated_at": "2026-11-04T22:47:25.577Z"
+}
