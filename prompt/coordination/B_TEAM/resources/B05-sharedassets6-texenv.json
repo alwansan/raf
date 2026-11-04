@@ -1,0 +1,31 @@
+{
+  "id": "B05-SHAREDASSETS6-TEXENV",
+  "title": "B05 authenticated original sharedassets6 Material texture and UV records",
+  "kind": "original-material-texenv-owner",
+  "source": {
+    "provider": "ZIP2 pinned Git plain bytes (not LFS)",
+    "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "path": "Raft_Data/sharedassets6.assets",
+    "bytes": 6607272,
+    "sha256": "0476792cfeffac19d16e920011ed8d2fb2da62973c2f09a8689bc59e1ac4b632"
+  },
+  "stages": {
+    "acquisition": "VERIFIED",
+    "extraction": "VERIFIED",
+    "reconstruction": "UNKNOWN",
+    "binding": "UNKNOWN",
+    "integration": "UNKNOWN",
+    "device": "UNKNOWN"
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41928076197",
+    "https://github.com/alwansan/raf/actions/runs/41929077930",
+    "https://github.com/alwansan/raf/commit/d6fa219c769e3c4d11f798f41bfc0cbd8451465b"
+  ],
+  "remaining": [
+    "Only original SHA-verified source parsed; 41 Materials, 227 slots (89 internal, 25 external, 113 null), 227 fully decoded UV.",
+    "Need exact same-instance Unity exported Material/Texture trace to compare source against exported texture PPtrs and UV; external texture targets unproven.",
+    "No Unity/Android shader/pixel verification, no restored source asset and no actual white color cause proven."
+  ],
+  "updated_by": "B05"
+}
