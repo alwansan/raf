@@ -359,7 +359,10 @@
         "https://github.com/alwansan/raf/actions/runs/41927095232",
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B20_AUTHENTIC_BLUR_ATOMIC_ROLLBACK_2026-11-04.md",
         "https://github.com/alwansan/raf/actions/runs/41928183838",
-        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B25_ORIGINAL_FOAM_CB_NAMEBRIDGE_2026-11-04.md"
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B25_ORIGINAL_FOAM_CB_NAMEBRIDGE_2026-11-04.md",
+        "https://github.com/alwansan/raf/actions/runs/41914575997",
+        "https://github.com/alwansan/raf/actions/runs/41928357485",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B06_FFT_DEVICE_WORKGROUP_LIMITS_2026-11-04.md"
       ],
       "remaining": [
         "Spectrum/Foam/Blur passes ناقصة في APK86",
@@ -384,15 +387,17 @@
         "B20 source-only ShaderLab scope gate (a21d66b, CI41926202371 PASS): orphan/Properties/top-level Pass no longer inflates water Pass counts; this is NOT original program, Unity import, runtime pixels or kernel recovery. Original ShaderLab/FFT identity still open.",
         "B25 original SHA-pinned Foam/Global render-state verification: both of the two genuine pass m_State fragments are identical (247B and SHA256 19b4753c... each), source-only CI41926521683 SUCCESS 11/11 synthetic plus genuine ZIP2 object SHA. Hypothesis that original pass render states differ rejected; pass programs/partial CB texture bindings, author ShaderLab installation, exported .meta/GUID lineage, Unity/Adreno and phone STILL unverified.",
         "B20 original-derived Blur transient export rollback now atomic with retained verified external backup; source CI41927169542 PASS on injected failures. Actual original candidate in Unity/Adreno pixels and game water still NOT tested, WATER-001 OPEN.",
-        "B25 authentic original Foam CB name/slot bridge: CI41928183838 26/26 synthetic + pinned ZIP2 SHA PASS, 8 original CB name SHA/index/register associations across two passes/four stages, same 3 CB identities across passes; CB0 has 4 references requiring verified HLSL alias (original compiled name not literal identifier). Original source names NOT disclosed. Future CB alias/descriptor and actual shader, textures, materials/GUID, Unity/Adreno unverified; WATER-001 OPEN."
+        "B25 authentic original Foam CB name/slot bridge: CI41928183838 26/26 synthetic + pinned ZIP2 SHA PASS, 8 original CB name SHA/index/register associations across two passes/four stages, same 3 CB identities across passes; CB0 has 4 references requiring verified HLSL alias (original compiled name not literal identifier). Original source names NOT disclosed. Future CB alias/descriptor and actual shader, textures, materials/GUID, Unity/Adreno unverified; WATER-001 OPEN.",
+        "B06 corrected Unity 2021 local invocation max vs X/Y/Z dispatch-group maximum semantics; source-authenticated 64..1024 local-group theoretical cap is now logged at startup; synthetic C# CI41928357485 SUCCESS, Android device and real kernel mapping still UNVERIFIED.",
+        "B06 earlier original FFT resource Dispatch scanner lexical fix independently passed SHA-authenticated original managed CSharp + ComputeShader CI41914575997, 20 original compiled slots/caller resource names matched; Unity runtime FindKernel identity still OPEN."
       ],
       "acceptance": [
         "هوية برامج ونوى أصلية أو تطابق موثق دونdummy",
         "تثبيت فيالتصدير+Unity import/render",
         "اختبار هاتف يثبت الماء بلا pass/kernel errors"
       ],
-      "updated_by": "B25",
-      "updated_at": "2026-11-04T22:49:56.951Z",
+      "updated_by": "B06",
+      "updated_at": "2026-11-04T22:50:19.370Z",
       "_record_path": "issues/WATER-001.json"
     }
   ],
@@ -1683,6 +1688,20 @@
       "_record_path": "events/B17/20261104T2156Z-spectrum-sourceverified.json"
     },
     {
+      "id": "B17-spectrum-binding-start-20261104T2249Z",
+      "owner": "B17",
+      "session_id": "20261104T2249Z-B17-cbind",
+      "issue_id": "WATER-001",
+      "type": "start",
+      "summary": "Resume B17 on source-authentic per-pass Spectrum compiled DXBC texture/sampler register parity; no prior census rerun, no gameplay/shader asset mutation.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41920232173",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/b09_stage_original_spectrum.py"
+      ],
+      "at": "2026-11-04T22:49:36Z",
+      "_record_path": "events/B17/20261104T2249Z-spectrum-binding-start.json"
+    },
+    {
       "id": "20261104T215100Z-start",
       "owner": "B18",
       "session_id": "20261104T215100Z-B18-d3f9",
@@ -2503,5 +2522,5 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "input_sha256": "0589ddf8e4e145664350015d76dd22d54aa2b7964b5d1d18c96d084a0b70cb8d"
+  "input_sha256": "0faf0aa435e26f39751a292c8f3d044e9f8c8ff6370068209a72f7354fe2750d"
 }

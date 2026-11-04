@@ -33,7 +33,6 @@
 
 ## الأحداث
 
-- [2026-11-04T22:20:00Z / B18](events/B18/20261104T222000Z-spv-role-verified.json): CI41923703800 success: 10/10 synthetic negative/positive controls and 20/20 SHA-auth original DXBC->vkd3d SPIR-V preserve 2 sampled + 1 storage Texture2D and workgroup. Exact t/u register→descriptor, Unity kernel runtime and Adreno phone unproven.
 - [2026-11-04T22:26:00Z / B37](events/B37/20261104T2226Z-start.json): B37 registered distinct Android cursor RGBA32 warning root investigation (1449 APK86 CL occurrences); touch postponed, no fix claimed. WATER-001/RENDER-002/LOCAL-005 remain OPEN.
 - [2026-11-04T22:29:31.916Z / B25](events/B25/20261104T222931Z-start.json): B25 takes authenticated Foam/Global original pass render-state fidelity complementary to B24 four-stage translation; no fake shader/Unity/device claim.
 - [2026-11-04T22:30:00Z / B20](events/B20/20261104T2230Z-start.json): Started source-only guarded ShaderLab subshader-scope check to reject off-scope fake water passes; no asset restoration or device proof claimed.
@@ -61,7 +60,8 @@
 - [2026-11-04T22:48:14.763Z / B14](events/B14/20261104T2247Z-resume.json): Resumed B14 and registered source-only repair of stale SceneLoaded callback assertion after bounded scene shader/material/mesh telemetry became a coroutine.
 - [2026-11-04T22:49:09.898Z / B16](events/B16/20261104T2249Z-error-gate-start.json): B16 resumes independent FFT HLSL structural preflight compile-blocker investigation; no original game asset changes.
 - [2026-11-04T22:49:28.713Z / B25](events/B25/20261104T2247Z-foam-cb-result.json): Source-authentic original Foam/Global: two passes, four stages, eight CB m_NameIndices nameSHA->slot links. CB0 4 references require verified symbolic alias; same source name identity across stages and passes, CB0 vector-count 2 vs1 retained; B25 original ZIP2 CI41928183838 SUCCESS 26/26 synthetic tests. No shader install or device proof.
+- [2026-11-04T22:49:36Z / B17](events/B17/20261104T2249Z-spectrum-binding-start.json): Resume B17 on source-authentic per-pass Spectrum compiled DXBC texture/sampler register parity; no prior census rerun, no gameplay/shader asset mutation.
 - [2026-11-04T22:49:48.652Z / B06](events/B06/20261104T224512Z-B06-wg7a3-workgroup-sourcefixed.json): Correct Unity 2021 FFT GPU limit semantics and source-authenticated group-size theoretical comparisons; C# logger synthetic CI41928357485 SUCCESS. Also found real original authenticated source CI41914575997 passing B06 earlier Dispatch source parser. No Unity/device/kernel restored.
 - [2026-11-04T22:50:00Z / B11](events/B11/20261104T2250Z-gamut-ancestor-discovery.json): Actual local synthetic filesystem reproduction: passing exported project through a symlink in an ancestor directory bypasses B11's leaf-only path checks, and --apply mutates ProjectSettings.asset in the outside directory. Fail-closed ancestor check needed.
 
-بصمة المدخلات: 0589ddf8e4e145664350015d76dd22d54aa2b7964b5d1d18c96d084a0b70cb8d
+بصمة المدخلات: 0faf0aa435e26f39751a292c8f3d044e9f8c8ff6370068209a72f7354fe2750d
