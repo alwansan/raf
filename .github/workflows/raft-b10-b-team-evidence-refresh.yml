@@ -6,6 +6,8 @@ on:
     branches: [feature/android-native-port]
     paths:
       - '.github/workflows/raft-b10-b-team-evidence-refresh.yml'
+      - 'prompt/coordination/B_TEAM/events/B10/**'
+      - 'prompt/coordination/B_TEAM/resources/B10-*'
 
 permissions:
   contents: write
