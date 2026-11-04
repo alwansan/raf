@@ -66,6 +66,17 @@ class ExportedTextureLinks(unittest.TestCase):
     def test_duplicate_pointer_keys(self):
         self.ptr("{fileID: 1, fileID: 2, guid: "+B+", type: 3}")
         self.reject("bad_texture_pointer")
+    def test_valid_guid_wrong_texture_fileid_fails(self):
+        self.ptr("{fileID: 2800001, guid: "+B+", type: 3}")
+        self.reject("reference_target_not_verified_texture")
+    def test_serialized_asset_texture_subobject_fileid(self):
+        target=self.assets/"tex.asset"
+        (self.assets/"t.png").rename(target)
+        (self.assets/"t.png.meta").rename(self.assets/"tex.asset.meta")
+        target.write_text("--- !u!28 &2800000\nTexture2D:\n")
+        self.assertEqual(mod.audit(self.root)["resolved_local_texture_refs"],1)
+        self.ptr("{fileID: 2800001, guid: "+B+", type: 3}")
+        self.reject("reference_target_not_verified_texture")
     def test_wrong_pointer_type(self):
         self.ptr("{fileID: 2800000, guid: "+B+", type: 0}")
         self.reject("invalid_external_texture_type")
