@@ -4,10 +4,10 @@
   "generation": "B-2026-11-04",
   "session_id": "20261104T2226Z-B37-cursor01",
   "resumed_from_session": null,
-  "status": "active",
+  "status": "paused",
   "base_sha": "5fc5c4838247c33669bba8b67e988893f22cd28e",
-  "last_commit": "2a3e38b1d2ca8bedba825aa60506f664cf3758c3",
-  "updated_at": "2026-11-04T22:47:00Z",
+  "last_commit": "fc42e65b458ea317b2dea4e494671e978effc153",
+  "updated_at": "2026-11-04T22:54:00Z",
   "tracks": [
     "integration",
     "render-errors",
@@ -20,9 +20,8 @@
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41926487471",
     "https://github.com/alwansan/raf/actions/runs/41926892044",
-    "https://github.com/alwansan/raf/actions/runs/41928084203",
-    "https://github.com/alwansan/raf/actions/runs/41928221064"
+    "https://github.com/alwansan/raf/actions/runs/41928767833"
   ],
-  "next_step": "B37 cursor source-only scope completed; investigate A10 Data.rgd original inherited-field and serializable metadata mismatch. First .NET10 CI failed on warning-as-error obsolete enum names; fix ECMA metadata bit constants committed 2a3e38; check CI41928221064, record exact result, preserve game .rgd schema and audio/Settings/touch.",
+  "next_step": "B37 completed two source-authentic CI-backed sub-scopes: cursor RGBA32 original callsite provenance and original RGD inherited-field/version identity; neither fixes actual game yet. Next investigate original SaveAndLoad.Load<T> binder/migration for source-version compatibility, or coordinate phone .rgd create/save/reload on newer justified candidate. Do not touch working audio/Settings or deferred touch; never claim work continues while paused.",
   "memory_path": "prompt/coordination/clients/B37/MEMORY.md"
 }
