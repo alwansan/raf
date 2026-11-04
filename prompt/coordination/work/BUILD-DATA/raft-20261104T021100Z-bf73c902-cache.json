@@ -1,0 +1,12 @@
+{
+  "status": "active",
+  "plan": [
+    "Authenticate existing graphics owners before acquisition",
+    "Fetch only missing or invalid owners; retain final full verification",
+    "Test valid, tampered and symlink cases"
+  ],
+  "files": [
+    "scripts/hydrate_render_payloads.py",
+    "tests/test_buildfix_hydrated_graphics.py"
+  ]
+}
