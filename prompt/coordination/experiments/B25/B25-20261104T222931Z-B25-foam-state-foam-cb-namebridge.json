@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "owner": "B25",
+  "session_id": "20261104T222931Z-B25-foam-state",
+  "issue_id": "WATER-001",
+  "status": "completed",
+  "hypothesis": "Original compiled Foam partial-CB name indices can be resolved against original per-pass property name registries, preserving numeric CB slot and name SHA; source names may include compiler/internal symbols that require future HLSL aliases.",
+  "source_commit": "afc9a403db9e0c8db08bda9b7fd8df3b91a580ea",
+  "input": {
+    "zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "original_provider_bytes": 115978112,
+    "original_provider_sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "shader_path_id": 2420,
+    "shader_sha256": "67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1"
+  },
+  "workflow": ".github/workflows/raft-b25-foam-pass-state.yml",
+  "final_run": "https://github.com/alwansan/raf/actions/runs/41928183838",
+  "prior_failed_runs": [
+    "https://github.com/alwansan/raf/actions/runs/41927469783",
+    "https://github.com/alwansan/raf/actions/runs/41927610381",
+    "https://github.com/alwansan/raf/actions/runs/41927765070",
+    "https://github.com/alwansan/raf/actions/runs/41928029023"
+  ],
+  "conclusion": "success",
+  "synthetic_tests": {
+    "passed": 26,
+    "total": 26
+  },
+  "original": {
+    "passes": 2,
+    "stage_programs": 4,
+    "matching_original_cb_bindings": 8,
+    "original_pass_registry_entries": [
+      14,
+      8
+    ],
+    "cb_slots_by_stage": {
+      "vertex": [
+        0,
+        1,
+        2
+      ],
+      "fragment": [
+        0
+      ]
+    },
+    "referenced_cb_names_requiring_verified_alias": 4,
+    "cb_name_sha_by_register": {
+      "0": "812aa05b293f131a08f99707b3f8979993ac2a19acfce16a94d6da67cc993d06",
+      "1": "ea1518ee9277b12e444777ac75092b0525855de7c2dc06cd8b842ed446c74acd",
+      "2": "8cf6b4d3f239bcc59e67194ae749f6532862116484d759a7a5fe209ea34fafe4"
+    },
+    "cb_size_bytes": {
+      "0": 160,
+      "1": 176,
+      "2": 368
+    },
+    "cb0_vector_count_by_pass": [
+      2,
+      1
+    ]
+  },
+  "rejected_hypotheses": [
+    "All original m_NameIndices entries are direct HLSL identifiers.",
+    "All original referenced CB symbol names are direct HLSL identifiers.",
+    "A blind register-only renaming or fake HLSL alias is justified by a source name-table record."
+  ],
+  "source_changed": true,
+  "original_asset_changed": false,
+  "unity_shaderlab_installed": false,
+  "android_executed": false,
+  "private_original_names_disclosed": false,
+  "next_step": "Private original DXBC/SPIR-V reflection mapping CB0 source symbol to actual descriptor/register before authentic ShaderLab/HLSL alias, then compile on Unity and test Android."
+}
