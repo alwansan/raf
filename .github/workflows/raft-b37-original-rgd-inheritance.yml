@@ -1,0 +1,62 @@
+name: B37 LOCAL-005 original RGD base-field identity (no deserialization)
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-b37-original-rgd-inheritance.yml'
+      - 'tests/b37-rgd-inherited-field/**'
+permissions:
+  contents: read
+concurrency:
+  group: raft-b37-rgd-inheritance-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  original-rgd-metadata:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 9
+    steps:
+      - name: Checkout source-only B37 harness
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            tests/b37-rgd-inherited-field
+      - name: Checkout exact original RGD and managed DLL from immutable ZIP2
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-original
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            Raft/Raft_Data/StreamingAssets/Data.rgd
+            Raft/Raft_Data/Managed/Assembly-CSharp.dll
+          sparse-checkout-cone-mode: false
+      - name: Verify source revision and CPU budget
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C zip2-original rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          test "$(wc -c < zip2-original/Raft/Raft_Data/StreamingAssets/Data.rgd)" -eq 2941
+          test "$(wc -c < zip2-original/Raft/Raft_Data/Managed/Assembly-CSharp.dll)" -eq 3211776
+          echo 'B37_RGD_INPUTS exact_zip2_revision=true sha_validation_in_program=true lfs=false'
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Authenticate original NRBF root and inspect inherited metadata without executable BinaryFormatter
+        shell: bash
+        env:
+          DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+          DOTNET_PROCESSOR_COUNT: '2'
+        run: |
+          set -euo pipefail
+          timeout 300s dotnet run --configuration Release --nologo \
+            --project tests/b37-rgd-inherited-field/B37RgdInheritedField.csproj -- \
+            --file zip2-original/Raft/Raft_Data/StreamingAssets/Data.rgd \
+            --sha256 b2785187aa11e33872698adfa79ab252cf65a824d92bee7e88773ce4aa11cbba \
+            --assembly zip2-original/Raft/Raft_Data/Managed/Assembly-CSharp.dll \
+            --assembly-sha256 0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e
+          # Only counts and hashes published, no source, field names or values.
