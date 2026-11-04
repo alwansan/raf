@@ -1,0 +1,13 @@
+{
+  "id": "20261104T2120Z-B04-mesh-source-integrity",
+  "owner": "B04",
+  "session_id": "20261104T2102Z-B04-7c20",
+  "issue_id": "ASSET-RESTORE-001",
+  "type": "result",
+  "summary": "Mesh source path guard rejects linked YAML/.meta/providers/snapshot; isolated 6-test CI success; original game/device geometry still unverified.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41914505411",
+    "https://github.com/alwansan/raf/commit/f0afb5983694cec91a61bcd6f9825ca1cf658f7e"
+  ],
+  "at": "2026-11-04T21:17:51.568Z"
+}
