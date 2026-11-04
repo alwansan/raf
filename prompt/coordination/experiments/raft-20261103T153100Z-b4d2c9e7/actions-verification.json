@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T153100Z-b4d2c9e7",
+  "status": "completed",
+  "hypothesis": "The repo's LFS-backed bytes re-derive to the same committed pins from a second, repository-owned environment, and all W3 synthetic suites pass there with the pinned UnityPy version - establishing cross-environment reproducibility evidence.",
+  "input_hashes": [
+    "sha256(Raft/Raft_Data/resources.assets,111533516)=87493249f1adfc0c5eb8b82e4e199e208cd2c95eabe9796cab82116c4838595c",
+    "sha256(Raft/Raft_Data/sharedassets0.assets,115978112)=0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "UnityPy==1.25.4 installed from PyPI on the runner"
+  ],
+  "commands": [
+    "push commit adding .github/workflows/w3-verification.yml (guarded: pinned ubuntu-24.04, bounded LFS include of the two owners only)",
+    "runner job: git lfs pull --include Raft/Raft_Data/resources.assets,Raft/Raft_Data/sharedassets0.assets",
+    "runner job: python scripts/w3_probe_pin_verification.py --repo-root .. --out w3_lfs_pin_verification.json",
+    "runner job: all scripts/w3_test_*.py suites"
+  ],
+  "expected_signal": "run success on both jobs; all_pins_verified=true in the uploaded artifact; guard workflow success",
+  "negative_controls": [
+    "probe aborts (exit 1) on any size/sha mismatch - fail-closed, verified locally beforehand",
+    "LFS pull scoped to exactly the two pinned owners (no full smudge, guarded by repo lint)",
+    "aggregate-only artifact (booleans/sizes/hashes; no decompiled content, no name lists)"
+  ],
+  "workflow_path": ".github/workflows/w3-verification.yml",
+  "concurrency_group": "w3-verification-refs/heads/feature/android-native-port",
+  "budget": "first attempt ~2min wall on hosted runner; second attempt ~1min",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41828539269",
+  "source_sha": "0666860 (fix commit; first attempt c65e2719 failed: YAML line continuation ate the probe args, and repo lint guard required pinned ubuntu-24.04; both honestly recorded)",
+  "result": "completed with two recorded attempts. Attempt 1 (run 41828205791, c65e2719): job A SUCCESS (all suites green), job B failed from a workflow YAML quoting defect (line continuations stripped; argparse saw no args) - fixed by single-line run. Repo lint guard separately required pinned ubuntu-24.04 labels. Attempt 2 (run 41828539269, 06668601): BOTH jobs success on pinned ubuntu-24.04 with UnityPy 1.25.4 - synthetic-suites (every scripts/w3_test_*.py suite, none skipped, zero failures) and lfs-pin-verification (git lfs pull scoped to the two pinned owners; probe exit 0; all_pins_verified true; artifact w3-lfs-pin-verification, 498 bytes). Cross-environment byte-identity between the local originals and the repo LFS stream is now CI-evidenced, complementing the local pin verification.",
+  "limitations": [
+    "verification/structure lane only: no Unity Editor, no builds, no releases; native-request files and scheduled tasks untouched",
+    "guarded repo lint (pinned ubuntu-24.04, bounded LFS) treated as the house CI standard, applied to my workflow only",
+    "no visual/GPU/phone claim; WATER-001/RENDER-002/FFT-FORMAT-009 remain OPEN; NOT_READY; 0/3 reviews"
+  ],
+  "next_step": "optional extension (read-only): repeat pin verification against the zip2 branch's Raft/ copies to compare both hosted copies of the game files; then leave state paused"
+}

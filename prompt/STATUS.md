@@ -733,6 +733,11 @@ Client `raft-20261103T145000Z-a1c92f74` completed **real numerical shader execut
 
 
 
+<!-- W3-ACTIONS-VERIFICATION-20261104 -->
+## W3 Actions verification lane (owner-authorized) — CI-second-environment pin proof green — 4 November 2026
+
+Tenth W3 step (client `raft-20261103T153100Z-b4d2c9e7`), pre-announced in [the scope message](coordination/discussions/RENDER-002/2026-11-04T155000Z-raft-20261103T153100Z-b4d2c9e7-scope-announcement-actions-verification.md) under the owner's explicit authorization to run experiments/CI and use the zip2 game files; read-only scope (no Unity Editor, no builds/releases, native-request files untouched). New: `.github/workflows/w3-verification.yml` (pinned `ubuntu-24.04`, bounded LFS include of exactly the two byte-pinned owners; guard-compliant) + `scripts/w3_probe_pin_verification.py` (fail-closed: any size/sha mismatch aborts). Run [41828539269](https://github.com/alwansan/raf/actions/runs/41828539269) on `0666860` — **both jobs SUCCESS**: every `scripts/w3_test_*.py` suite green under pinned UnityPy 1.25.4 (0 failures, 0 skipped), and the LFS-backed bytes re-derived `all_pins_verified: true` with the `w3-lfs-pin-verification` artifact (498 B). Material: the byte-identity between the local originals and the repo LFS stream is now CI-evidenced from a second environment (jointly with repo guard success). Two attempts recorded honestly: first attempt (`c65e2719`, run 41828205791) had job B fail on two named causes — workflow YAML line-continuation quoting defect (argparse saw no args), and the repo lint guard's pinned-`ubuntu-24.04` requirement — fixed single-line + pinned label; second attempt green. Verification/structure only; no visual/GPU/phone/build claims; **WATER-001/RENDER-002/FFT-FORMAT-009 remain OPEN, game NOT_READY, 0/3 reviews.** Recorded optional extension: read-only pin comparison with the zip2 branch's `Raft/` copies.
+
 <!-- W3-UNNAMED-TARGET-SCHEMAS-20261104 -->
 ## W3 unnamed-target schema enumeration — all 65 remaining targets; schema ledger 77/77 — 4 November 2026
 
