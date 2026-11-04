@@ -48,14 +48,35 @@ jobs:
       - name: Obtain private exact embedded database from pinned generated assembly
         run: dotnet run --project android-port/Experiments/W1EngineDatabase/W1EngineDatabase.csproj -c Release -- "$RUNNER_TEMP/w1-engine-database-private.json" "$RUNNER_TEMP/w1-exact-reader-summary.json"
       - name: Reuse authenticated full original shader-owner cache first
-        uses: actions/cache/restore@v4
+        uses: actions/cache@v4
         with:
           path: ${{ runner.temp }}/w1-original
-          key: w1-zip2-15964ea8-full-shader-owners-v1
-          restore-keys: w1-zip2-15964ea8-four-owners-v1
+          key: w1-zip2-15964ea8-shader-and-engine-owners-v1
+          restore-keys: |
+            w1-zip2-15964ea8-full-shader-owners-v1
+            w1-zip2-15964ea8-four-owners-v1
       - name: Plan only missing original providers
         id: needed
-        run: python3 -m scripts.w1_full_engine_sources --plan --destination "$RUNNER_TEMP/w1-original"
+        run: |
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          from scripts.w1_full_engine_sources import acquisition_plan
+          from scripts.w1_stage_zip2_owners import PINS,fingerprint
+          root=Path(os.environ['RUNNER_TEMP'])/'w1-original'
+          paths,missing=acquisition_plan(root)
+          for relative,pin in PINS.items():
+              if '/Resources/' not in relative: continue
+              cached=root/relative
+              if cached.exists():
+                  if cached.is_symlink() or fingerprint(cached)!=pin:
+                      raise SystemExit('Conflicting cached original engine provider')
+              else:
+                  paths.append('Raft/'+relative)
+          with open(os.environ['GITHUB_OUTPUT'],'a') as out:
+              out.write('paths<<W1_SOURCE_PATHS\n'+'\n'.join(paths)+'\nW1_SOURCE_PATHS\n')
+          print('RAFT_W1_SHADER_ENGINE_PLAN sourceOwners=16 missing='+str(len(paths)-1))
+          PY
       - uses: actions/checkout@v4
         with:
           ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
@@ -66,7 +87,16 @@ jobs:
           sparse-checkout-cone-mode: false
           sparse-checkout: ${{ steps.needed.outputs.paths }}
       - name: Authenticate all original shader providers without LFS
-        run: python3 -m scripts.w1_full_engine_sources --zip2-checkout zip2-original --destination "$RUNNER_TEMP/w1-original"
+        run: |
+          python3 -m scripts.w1_full_engine_sources --zip2-checkout zip2-original --destination "$RUNNER_TEMP/w1-original"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import PINS,stage
+          selected={relative:pin for relative,pin in PINS.items() if '/Resources/' in relative}
+          result=stage(Path('zip2-original'),Path(os.environ['RUNNER_TEMP'])/'w1-original',selected)
+          print('RAFT_W1_CANONICAL_SHADER_SOURCE '+json.dumps(result,sort_keys=True))
+          PY
       - name: Inspect165original Shader objects and original Material Shader PPtrs
         run: |
           python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4

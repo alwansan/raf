@@ -10,7 +10,12 @@ import json
 from pathlib import Path, PurePosixPath
 
 from scripts.w1_verify_engine_export import digest, exact_table
-from scripts.w1_stage_zip2_owners import fingerprint
+from scripts.w1_stage_zip2_owners import fingerprint, PINS
+
+CANONICAL_OWNERS = {
+    'Resources/unity default resources': 'default',
+    'Resources/unity_builtin_extra': 'extra',
+}
 
 
 def resolve_pointer(owner, external_names, pointer):
@@ -88,6 +93,11 @@ def link_materials(materials, shaders, table):
         choices = table.get(row['key'], [])
         if len(choices) > 1:
             raise ValueError('Ambiguous original material engine shader key')
+        if 'canonical_engine_pointer' in row and choices != [row['canonical_engine_pointer']]:
+            # Preserve the observed original engine object identity, but do not
+            # promote a source-file label into a verified engine shader key.
+            counts['shader_refs_with_unverified_canonical_engine_identity'] += 1
+            continue
         if choices:
             engine_refs[choices[0]] += 1
             counts['original_material_refs_to_engine_keys'] += 1
@@ -143,11 +153,32 @@ def probe(source, database, reader, out):
                 raise ValueError('Duplicate original shader has no platform program data')
             shaders[identity]['program_set_sha256'] = digest(platform_rows)
     pending.clear()
-    counts, engine_refs, object_refs = link_materials(materials, shaders, table)
     duplicates = duplicate_groups(shaders)
+    all_shaders = dict(shaders)
+    canonical_count = 0
+    for relative, kind in CANONICAL_OWNERS.items():
+        pin = PINS['Raft_Data/' + relative]
+        path = source / 'Raft_Data' / relative
+        if path.is_symlink() or fingerprint(path) != pin:
+            raise ValueError('Original canonical engine provider changed')
+        for obj in UnityPy.load(str(path)).objects:
+            if obj.type.name != 'Shader':
+                continue
+            tree = obj.read_typetree()
+            parsed = tree.get('m_ParsedForm')
+            key = (parsed['m_Name'], tuple(p['m_Name'] for p in parsed['m_PropInfo']['m_Props'])) if parsed else None
+            identity = (Path(relative).name, obj.path_id)
+            if identity in all_shaders:
+                raise ValueError('Canonical provider collides with game Shader identity')
+            all_shaders[identity] = {'key': key, 'canonical_engine_pointer': (kind, obj.path_id)}
+            canonical_count += 1
+        owners[relative] = pin[1]
+    counts, engine_refs, object_refs = link_materials(materials, all_shaders, table)
     result = {'schema_version': 1, 'original_owner_count': len(owners),
-              'original_verified_bytes': sum(p[0] for p in SHADER_OWNERS.values()),
+              'original_verified_bytes': sum(p[0] for p in SHADER_OWNERS.values()) +
+                  sum(PINS['Raft_Data/' + name][0] for name in CANONICAL_OWNERS),
               'original_shader_objects': len(shaders), **counts,
+              'canonical_engine_shader_objects': canonical_count,
               'repeated_key_groups': duplicates,
               'material_refs_to_duplicate_shader_objects': [
                   {'key_digest': digest(key), 'source_object_reference_counts': sorted(
@@ -157,7 +188,8 @@ def probe(source, database, reader, out):
                   {'engine_kind': kind, 'file_id': number, 'references': n}
                   for (kind, number), n in sorted(engine_refs.items())],
               'source_graph_complete_within_selected_owners': not (
-                  counts.get('null_shader_refs', 0) or counts.get('shader_refs_outside_authenticated_shader_objects', 0)),
+                  counts.get('null_shader_refs', 0) or counts.get('shader_refs_outside_authenticated_shader_objects', 0)
+                  or counts.get('shader_refs_with_unverified_canonical_engine_identity', 0)),
               'actual_export_guid_associations_verified': False,
               'original_material_assignments_preserved_in_export': False,
               'export_guid_is_deterministic': False,

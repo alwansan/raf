@@ -74,6 +74,17 @@ class OriginalShaderLinks(unittest.TestCase):
         self.assertFalse(refs)
         self.assertFalse(objects)
 
+    def test_canonical_engine_file_still_requires_exact_key_and_pointer(self):
+        target = ('unity_builtin_extra', 46)
+        self.rows[target] = {'key': self.key, 'canonical_engine_pointer': ('extra', 46)}
+        materials = [('one.assets', ['unity_builtin_extra'], {'m_FileID': 1, 'm_PathID': 46})]
+        counts, refs, _ = link_materials(materials, self.rows, {self.key: [('extra', 46)]})
+        self.assertEqual(counts['original_material_refs_to_engine_keys'], 1)
+        self.assertEqual(refs[('extra', 46)], 1)
+        counts, refs, _ = link_materials(materials, self.rows, {self.key: [('extra', 200)]})
+        self.assertEqual(counts['shader_refs_with_unverified_canonical_engine_identity'], 1)
+        self.assertFalse(refs)
+
 
 if __name__ == '__main__':
     unittest.main()
