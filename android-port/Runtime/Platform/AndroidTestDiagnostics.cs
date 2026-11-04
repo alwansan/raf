@@ -487,6 +487,7 @@ namespace RaftAndroid.Platform
                     "; mesh_renderers=" + meshRenderers + "; missing_mesh_filters=" + missingMeshFilters +
                     "; missing_mesh_assets=" + missingMeshAssets +
                     "; skinned_renderers=" + skinnedRenderers + "; missing_skinned_meshes=" + missingSkinnedMeshes +
+                    OriginalQualityStateSnapshot() +
                     "; color_space=" + QualitySettings.activeColorSpace +
                     "; ambient_mode=" + RenderSettings.ambientMode + "; fog=" + RenderSettings.fog +
                     "; skybox_assigned=" + (RenderSettings.skybox != null) +
