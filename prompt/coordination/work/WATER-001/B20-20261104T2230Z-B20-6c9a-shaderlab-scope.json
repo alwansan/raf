@@ -6,7 +6,7 @@
   "issue_id": "WATER-001",
   "track": "water-fft",
   "approach": "source-only strict ShaderLab SubShader/Pass lexical-scope enforcement against out-of-context false positives",
-  "status": "active",
+  "status": "completed",
   "base_sha": "5fc5c4838247c33669bba8b67e988893f22cd28e",
   "intended_files": [
     "scripts/b49_shaderlab_pass_contract.py",
@@ -20,8 +20,20 @@
   "experiment_ids": [
     "B20-shaderlab-scope-20261104"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement scoped parser and negative-control tests; no GPU/Unity/phone claims.",
-  "updated_at": "2026-11-04T22:30:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41926202371",
+    "https://github.com/alwansan/raf/actions/runs/41926043987"
+  ],
+  "result": {
+    "stage": "SOURCE_FIXED",
+    "source_commit": "a21d66bc9122bba432c2c6d021e096b7f988abcc",
+    "tests_commit": "ed059c2fa1ee25c5de3b6cf9a4fe645f08c61ed2",
+    "workflow_commit": "2e4cabd5e8d801dc25f85b1b12e02cdb0a20b7e3",
+    "report": "docs/B20_SHADERLAB_SCOPE_INTEGRATION_2026-11-04.md",
+    "ci_success": true,
+    "android_device_verified": false,
+    "original_shader_restored": false
+  },
+  "next_step": "Authentic Unity export ShaderLab/FFT integration and device verification; WATER-001 remains OPEN.",
+  "updated_at": "2026-11-04T22:35:00Z"
 }
