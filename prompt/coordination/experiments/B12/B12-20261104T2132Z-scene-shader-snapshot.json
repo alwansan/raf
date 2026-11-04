@@ -25,8 +25,8 @@
   "run_url": "https://github.com/alwansan/raf/actions/runs/41919089409",
   "artifact_urls": [],
   "budget": "6-minute Ubuntu 24.04 source-policy job, LFS=false; no Unity/player build",
-  "status": "running",
-  "observed_result": "Managed original startup integration CI41918822038 passed source70edac4; B12 source-policy isolated CI started but not yet confirmed at first read. Source diagnostic accepted on branch; cannot claim device white-material cause.",
+  "status": "completed",
+  "observed_result": "B12 source-policy CI 41919089409 COMPLETED SUCCESS on 8b7e304, including new 5 source tests and existing operation-trace tests; original offline startup managed compile and adapter CI 41918822038 SUCCESS on 70edac4. No Unity/IL2CPP/phone white-surface equivalence.",
   "rejected_hypotheses": [
     "B12 must add SaveGame StoreStats guard: already implemented and managed-validated by B50, no duplicate patch",
     "B12 should compare Material scalar parity: B22 already performing same track"
@@ -38,5 +38,8 @@
     "No Unity-specific graphics GPU compilation/device execution proof"
   ],
   "integration_commit": "70edac4f5406efdb971e987c0e104682d8cefd42",
-  "next_step": "Inspect isolated CI; correlate next device render.scene_shader_snapshot with image and existing invalid-pass/kernel errors; only then choose shader restoration."
+  "next_step": "Inspect isolated CI; correlate next device render.scene_shader_snapshot with image and existing invalid-pass/kernel errors; only then choose shader restoration.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41919089409"
+  ]
 }
