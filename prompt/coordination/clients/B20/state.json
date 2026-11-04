@@ -6,8 +6,8 @@
   "resumed_from_session": "20261104T2230Z-B20-6c9a",
   "status": "completed",
   "base_sha": "b2268908186bf9d41c1727a9269e047835dd12e8",
-  "last_commit": "f5bad2f5fc7bc06e9657fa42ee9735a11b9451c0",
-  "updated_at": "2026-11-04T23:17:56.711Z",
+  "last_commit": "6d3839ca24a3de9be1548962251b5eba19ed24a4",
+  "updated_at": "2026-11-04T23:19:44.305Z",
   "tracks": [
     "water-fft"
   ],
@@ -24,8 +24,9 @@
     "https://github.com/alwansan/raf/actions/runs/41927095232",
     "https://github.com/alwansan/raf/actions/runs/41930578292",
     "https://github.com/alwansan/raf/actions/runs/41931585626",
-    "https://github.com/alwansan/raf/actions/runs/41932300308"
+    "https://github.com/alwansan/raf/actions/runs/41932300308",
+    "https://github.com/alwansan/raf/actions/runs/41932725577"
   ],
-  "next_step": "New verified original Foam private packet and 4/4 HLSL/SPIRV numeric CB slot parity, but 7/8 unequal CB sizes. Next genuinely useful: original CB member offset/type vs SPIRV UBO layout and authentic CB0 alias; no Unity/Adreno or phone proof yet. Do not claim asynchronous work.",
+  "next_step": "Original Foam stage/state packet+4-stage HLSL/SPIRV numeric CB slots SOURCE_AUTHENTIC. 7/8 original partial CB sizes differ from reflected UBO extents (not proof of loss). Next investigate exact original CB member offset/type and SPIRV UBO member layouts, CB0 source-HLSL alias, original material/sampler binding, ShaderLab Unity import then Adreno phone. WATER-001 OPEN; NOT_READY 0/3. No work outside session.",
   "memory_path": "prompt/coordination/clients/B20/MEMORY.md"
 }
