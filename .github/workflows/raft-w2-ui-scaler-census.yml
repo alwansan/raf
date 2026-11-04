@@ -1,0 +1,88 @@
+name: Raft W2 game-wide UI scaler census (count level, CPUs only)
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-w2-ui-scaler-census.yml'
+      - 'scripts/probe_w2_ui_scaler_census.py'
+      - 'tests/test_w2_ui_scaler_census.py'
+permissions:
+  contents: read
+concurrency:
+  group: raft-w2-ui-scaler-census-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  fullgame-texture-colors:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+            Raft/Raft_Data
+      - name: Fail-closed synthetic tests first (no serializer needed)
+        run: python3 -m unittest discover -s tests -p test_w2_ui_scaler_census.py -v
+      - name: Compile probe
+        run: python3 -m py_compile scripts/probe_w2_ui_scaler_census.py
+      - name: Disk check
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import shutil
+          free = shutil.disk_usage('.').free
+          assert free > 10 * 1024**3, f'unexpectedly low disk: {free} bytes'
+          print(f'free bytes={free}')
+          PY
+      - name: Reuse exact W1 two-owner cached LFS
+        uses: actions/cache@v4
+        with:
+          path: .git/lfs/objects
+          key: w1-graphics-87493249-0498f738-v1
+      - name: Hydrate the three LFS payload owners (2 cached + 1 fresh)
+        env:
+          GIT_LFS_SKIP_SMUDGE: '1'
+        run: |
+          set -euo pipefail
+          git lfs install --local
+          git lfs pull \
+            --include='Raft/Raft_Data/resources.assets,Raft/Raft_Data/sharedassets0.assets,Raft/Raft_Data/sharedassets36.assets' \
+            --exclude='' origin
+      - name: Install CPU-only original serializer (typetree reader)
+        run: python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+      - name: Enumerate the 82 original serialized owners and verify + aggregate
+        run: |
+          set -euo pipefail
+          mapfile -t OWNERS < <(python3 - <<'PY'
+          import re
+          from pathlib import Path
+          root = Path('Raft/Raft_Data')
+          names = sorted(
+            p.name for p in root.iterdir()
+            if p.is_file() and not p.is_symlink()
+            and (p.name.endswith('.assets') or re.fullmatch(r'level[0-9]+', p.name))
+          )
+          print('\n'.join(names))
+          PY
+          )
+          echo "owner count: ${#OWNERS[@]}"
+          ARGS=()
+          for o in "${OWNERS[@]}"; do ARGS+=(--owner "$o"); done
+          timeout 1200s python3 -m scripts.probe_w2_ui_scaler_census \
+            --source Raft/Raft_Data \
+            --repo . \
+            --out "$RUNNER_TEMP/w2-ui-scaler-census.json" \
+            "${ARGS[@]}"
+          echo 'RAFT_W2_UI_SCALER_CENSUS aggregateOnly=true noPayloadPublished=true unityRan=false androidBuildRan=false'
+      - name: Retain only the aggregate JSON
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: raft-w2-ui-scaler-census-${{ github.run_id }}
+          path: ${{ runner.temp }}/w2-ui-scaler-census.json
+          retention-days: 7
+          if-no-files-found: ignore

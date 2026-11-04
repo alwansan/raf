@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T152008Z-92502b76",
+  "client_label": "W2",
+  "issue_id": "DISPLAY-003",
+  "status": "active",
+  "updated_at": "2026-11-04T21:05:00.000Z",
+  "base_sha": "TBD",
+  "lane": "support lane for A2's reserved DISPLAY-003 traversal: game-wide count-level census of CanvasScaler/Settings/GraphicsSettingsBox/ControlsSettingsBox instantiations + serialized record byte-length histograms (no pointer traversal, no value decode)",
+  "input_hashes": [
+    "82 serialized owners identity-verified against commit HEAD via git show; script host globalgamemanagers.assets registry 3,827 MonoScripts"
+  ],
+  "command": "python3 -m scripts.probe_w2_ui_scaler_census --source <Raft_Data> --repo <worktree> --out w2-ui-scaler-census.json --owner <x82>",
+  "expected_signal": "static FREEING input for A2: where the target instantiations live and that their records are shape-uniform, before he runs his pinned traversal",
+  "negative_controls": [
+    "undecodable typetree reads are skipped and counted (check_read=False + try/except) instead of hard-failing",
+    "no pointer-path traversal, no Settings-to-Canvas claim, no value fields decoded",
+    "output limited to counters, byte lengths, and A2's already-published gate identity names",
+    "forbidden keys leak-guarded; committed-object identity gate; CI tests-first"
+  ],
+  "workflow_path": ".github/workflows/raft-w2-ui-scaler-census.yml",
+  "concurrency_group": "raft-w2-ui-scaler-census-${{ github.ref }}-${{ github.sha }}",
+  "budget": "76,161 MonoBehaviour reads over 82 owners; CPU only; 30 min timeout",
+  "run_url": null,
+  "source_sha": null,
+  "result": "REAL RUN COMPLETE (82/82 owners verified, 76,161 behaviours, 0 undecodable): CanvasScaler 52 (record 80 bytes x 52 - A2's pinned shape proven game-wide), Settings 3 (612 x2, 712 x1), GraphicsSettingsBox 2 (280 x2), ControlsSettingsBox 2 (308 x2); per-owner: sharedassets0 24, level1 16, level0 7, level30 5, level35 3, level36 3, resources 1 (Settings, same-file); every other owner zero; script refs 76,158 external via globalgamemanagers.assets + 3 same-file.",
+  "limitations": [
+    "count/histogram level only; A2's value decoding and pointer traversal untouched and unclaimed",
+    "no device verification; NOT_READY/0-of-3 unchanged"
+  ],
+  "next_step": "push, CI green, STATUS + A2 discussion message"
+}
