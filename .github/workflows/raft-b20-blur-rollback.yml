@@ -1,0 +1,46 @@
+name: B20 WATER-001 original Blur atomic rollback (source-only)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/b45_install_original_blur.py'
+      - 'tests/test_b20_blur_atomic_rollback.py'
+      - 'tests/test_b45_install_original_blur.py'
+      - '.github/workflows/raft-b20-blur-rollback.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: b20-blur-rollback-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  injected-io-controls:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Verify same-filesystem atomic rollback and existing B45 contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf 'B20 Blur staging source SHA %s\n' "$GITHUB_SHA"
+          python3 -m unittest discover -s tests -p 'test_b20_blur_atomic_rollback.py' -v 2>&1 | tee b20-blur-rollback.log
+          python3 -m unittest discover -s tests -p 'test_b45_install_original_blur.py' -v 2>&1 | tee -a b20-blur-rollback.log
+          printf 'Source-only injected I/O; no actual original shader, Unity or device validation.\n' >> b20-blur-rollback.log
+      - name: Save safe synthetic tests only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: b20-blur-rollback-${{ github.run_id }}
+          path: b20-blur-rollback.log
+          if-no-files-found: ignore
+          retention-days: 7
