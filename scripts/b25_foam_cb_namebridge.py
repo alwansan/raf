@@ -19,27 +19,37 @@ OWNER = "Raft_Data/sharedassets0.assets"
 IDENT = re.compile(r"[A-Za-z_][A-Za-z0-9_]*\Z")
 
 
-def original_name_registry(raw):
+def original_name_registry(raw, diagnostic=None):
+    diagnostic = {} if diagnostic is None else diagnostic
     if not isinstance(raw, list) or not 1 <= len(raw) <= 8192:
+        diagnostic["registry_rejection"] = "invalid-container-bounds"
         raise ValueError("Original Foam name registry absent/oversized")
     names = {}
     seen_values = set()
-    for row in raw:
+    for row_index, row in enumerate(raw):
+        diagnostic["registry_rejection_row_index"] = row_index
         if isinstance(row, (list, tuple)) and len(row) == 2:
             name, idx = row
         elif isinstance(row, dict) and set(row) == {"first", "second"}:
             name, idx = row["first"], row["second"]
         else:
+            diagnostic["registry_rejection"] = "row-schema"
             raise ValueError("Original Foam name row schema unsupported")
+        diagnostic["registry_name_value_type"] = type(name).__name__
+        diagnostic["registry_index_value_type"] = type(idx).__name__
         if (not isinstance(name, str) or not 0 < len(name) <= 256
                 or IDENT.fullmatch(name) is None):
+            diagnostic["registry_rejection"] = "invalid-hlsl-identifier"
             raise ValueError("Original CB name cannot be represented as HLSL identifier")
         if type(idx) is not int or idx < 0 or idx >= 1 << 20 or idx in names:
+            diagnostic["registry_rejection"] = "invalid-duplicate-index"
             raise ValueError("Original Foam ambiguous name index")
         if name in seen_values:
+            diagnostic["registry_rejection"] = "duplicate-name"
             raise ValueError("Original Foam duplicate CB name")
         names[idx] = name
         seen_values.add(name)
+    diagnostic["registry_rejection"] = None
     return names
 
 
@@ -68,7 +78,7 @@ def inspect_parsed(parsed, diag=None):
         diag["registry_first_row_length"] = (
             len(source_names[0]) if isinstance(source_names, list) and source_names
             and isinstance(source_names[0], (list, dict, tuple)) else None)
-        names = original_name_registry(source_names)
+        names = original_name_registry(source_names, diagnostic=diag)
         stage_rows = []
         for stage, field in ((1, "progVertex"), (0, "progFragment")):
             diag.update(phase="original-CB-index-resolution", stage_code=stage)
@@ -159,6 +169,10 @@ def main():
                         "registry_record_count": diag.get("registry_record_count"),
                         "registry_first_row_type": diag.get("registry_first_row_type"),
                         "registry_first_row_length": diag.get("registry_first_row_length"),
+                        "registry_rejection": diag.get("registry_rejection"),
+                        "registry_rejection_row_index": diag.get("registry_rejection_row_index"),
+                        "registry_name_value_type": diag.get("registry_name_value_type"),
+                        "registry_index_value_type": diag.get("registry_index_value_type"),
                         "private_name_values_published": False,
                         "unity_or_android_verified": False}, 2
     args.report.parent.mkdir(parents=True, exist_ok=True)
