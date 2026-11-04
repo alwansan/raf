@@ -1,0 +1,8 @@
+# B31 — engineering memory
+
+- Session: `20261104T213800Z-B31-5ea4`; source HEAD at enrollment: `c9b4ff0dff06335402a39c4cfe1d9a039990c2cb`, branch `feature/android-native-port`.
+- Read before registration: B_TEAM/PROMPT_AR.md, README.md, OPERATING_MODEL_AR.md, SOURCES_AND_ACTIONS_AR.md, TEMPLATES.md, REVIEW_2026-11-04.md; AGENTS.md, docs/CURRENT_OWNER_REQUIREMENTS.md, docs/ZIP2_SOURCE_PROVIDER.md, prompt/README.md, CONTINUE_RAFT_AR.md and STATUS checkpoint; issues RENDER-002/WATER-001/LOCAL-005/ASSET-RESTORE-001. CL HEAD `5394407b5cd0a0ca1848ff0902f8d2133bf6ea29`, reviewed owner-linked log findings; actual Raft APK86 release `android-early-test-41812889049-1` (not LogRaft).
+- Focus and hypothesis: `scripts/hydrate_render_payloads.py` in the existing graphics pipeline may re-fetch original graphics via LFS even after W1 staged authenticated ZIP2 owners. Safely reusing only those current-file SHA256/size-identical sources can eliminate redundant transfer and preserve exactly the same original bytes. Verify remaining hazards: file symlinks/hardlinks and redirected parents.
+- Scope: graphics source reuse and input integrity only; no water kernel/pixel/Adreno claims, no native Unity/XAPK run or protected-branch write. Do not modify audio, Settings, touch or the shared native workflow, or other B agent files.
+- Plan: inspect provider pins/current source; make isolated, fail-closed implementation + tests (valid reuse, wrong SHA/size, links/unsafe path, absent provider), then record local/CI findings and update evidence. If not safe/possible, save rejected hypothesis and seek next independent blocker.
+- Next step: evaluate concrete script and write tests before production change.
