@@ -132,3 +132,7 @@
 ## تحديث 17:10Z (4 نوفمبر) — التسليم أخضر من المحاولة الأولى
 - water-shader-stage-bindings CI 41828808987 SUCCESS @ d5205d8. المهمة المستلمة (Spectrum variant recovery + Foam CB binding) مكتملة.
 - اكتشافات جاهزة للاستيعاب: pass4 Spectrum مستقل (2 CBs)، vertex مشترك (1,2)، fragment فريد لكل pass، كل الCBs partial=true.
+
+## تحديث 18:00Z (4 نوفمبر) — جرد دوال compute اكتمل
+- 9 مزودات/42 kernel بالأسماء ( routable): DX11 FFT=20×Butterfly (0 CBs serialized)، Blurs=12/4 أسماء، Ripples=5/3، … كلها variantMap depth1 + صفر كلمات → ربط بالاسم يكفي.
+- W4's "kernel tables read as zero" كانت مسار قراءة مختلفًا — التصحيح موثق.

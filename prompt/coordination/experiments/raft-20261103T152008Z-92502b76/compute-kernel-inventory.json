@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T152008Z-92502b76",
+  "client_label": "W2",
+  "issue_id": "FFT-FORMAT-009",
+  "status": "active",
+  "updated_at": "2026-11-04T18:00:00.000Z",
+  "base_sha": "ed8b4f5",
+  "lane": "continued from WATER-001 hand-off: recover the compute-kernel dispatch inventory W4 left open (kernel tables readable from serialized variants, no blob parsing needed)",
+  "input_hashes": [
+    "sharedassets0.assets sha256=0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "resources.assets sha256=87493249f1adfc0c5eb8b82e4e199e208cd2c95eabe9796cab82116c4838595c",
+    "sharedassets29.assets (tracked-regular blob, sha256 verified via git show HEAD)"
+  ],
+  "command": "python3 -m scripts.probe_w2_compute_kernel_inventory --source <Raft_Data> --repo <worktree> --out w2-compute-kernel-inventory.json",
+  "expected_signal": "recoverable host dispatch surface: 9 providers / 42 kernels / all variantMap depth 1 / zero keyword flags (name-only binding sufficient) / serialized CB counts per provider",
+  "negative_controls": [
+    "single-variant-row shape enforced per provider",
+    "unexpected kernel fields, empty names, variantMap depth deviations hard-fail",
+    "path IDs/keyword strings/valid-keywords leak-guarded",
+    "committed-object identity gate on all three owners",
+    "CI tests-first"
+  ],
+  "workflow_path": ".github/workflows/raft-w2-compute-kernel-inventory.yml",
+  "concurrency_group": "raft-w2-compute-kernel-inventory-${{ github.ref }}-${{ github.sha }}",
+  "budget": "two LFS owners (W1 cache) + one regular blob; CPU only; 30 min timeout",
+  "run_url": null,
+  "source_sha": null,
+  "result": "REAL RUN COMPLETE: 9 providers / 42 kernels - DX11 FFT 20x Butterfly kernels (serialized CBs 0), Blurs 12 kernels across 4 names, Ripples 5 kernels in 3 providers, Gauss 2, RenderTextureToBuffer/Full, EyeHistogram/KEyeHistogram, ConvertDepthToArray/CSMain; ALL variantMap depth 1 and zero keyboard flags.",
+  "limitations": [
+    "compiled DXBC blob contents and thread-group sizes remain with device lanes (A12/W1/W5)",
+    "kernel table is the dispatch surface only; no GPU behavior claimed",
+    "FFT-FORMAT-009 not closed; NOT_READY/0-of-3 unchanged"
+  ],
+  "next_step": "push, CI green, STATUS + continue to next client task"
+}
