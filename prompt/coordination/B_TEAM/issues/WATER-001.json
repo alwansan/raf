@@ -71,7 +71,8 @@
     "https://github.com/alwansan/raf/commit/b780d000dc5157c19078511927e681924907575a",
     "https://github.com/alwansan/raf/actions/runs/41930936302",
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B19_WATER_SUBSHADER_PASS_GATE_2026-11-04.md",
-    "https://github.com/alwansan/raf/actions/runs/41930824777"
+    "https://github.com/alwansan/raf/actions/runs/41930824777",
+    "https://github.com/alwansan/raf/actions/runs/41931883517"
   ],
   "remaining": [
     "Spectrum/Foam/Blur passes ناقصة في APK86",
@@ -105,7 +106,8 @@
     "B09 source-pinned Spectrum PathID2432 exact seven-pass/28 references/18 distinct original blob-slot provenance and private translator code integrated, 23/23 exact-blob local synthetic tests passed. B09 actual original ZIP2/Vulkan CI run and ShaderLab/Unity/Android proof UNKNOWN; issue remains OPEN.",
     "B20 genuine ZIP2 original Foam 4/4 compiled stage translations +2/2 source states +8 source CB links co-staged privately; CI41930578292 SUCCESS. Original CB0 HLSL alias, resource/sampler binding, actual ShaderLab and Unity/Adreno pixels still NOT proven. Do not mark WATER-001 ready.",
     "B19 per-SubShader authored pass-count guard is SOURCE_FIXED CI41930936302 24/24; prevents summing alternate shader passes but not original Spectrum/FFT shader reconstruction, Android selected SubShader, device pixels or source-authenticated binding.",
-    "B18 CI41930824777 source-authentic FFT 20/20 programs each mapped by libvkd3d-shader to two different CHOSEN descriptor layouts (20x2 passes), using SRV t0/t1 and UAV u0 explicit IMAGE flags; 10/10 synthetic controls PASS. This proves explicit target interface binding support, NOT original per-input numeric t0/t1 behavior, Unity FindKernel/index mapping, original ShaderLab restored passes or Adreno water pixels. WATER-001 remains OPEN."
+    "B18 CI41930824777 source-authentic FFT 20/20 programs each mapped by libvkd3d-shader to two different CHOSEN descriptor layouts (20x2 passes), using SRV t0/t1 and UAV u0 explicit IMAGE flags; 10/10 synthetic controls PASS. This proves explicit target interface binding support, NOT original per-input numeric t0/t1 behavior, Unity FindKernel/index mapping, original ShaderLab restored passes or Adreno water pixels. WATER-001 remains OPEN.",
+    "B18 CI41931883517 source-authentic original FFT SPIR-V identity: 20/20 compiled programs × two explicit target maps have stable 3 resource variable IDs and entire SPIR-V code byte-equivalent after masking only intended descriptor set/binding OpDecorate literals; 20/20 synthetic tests PASS. No independent t0 vs t1 numerical pixel behavior, authored shader import, Unity runtime FindKernel mapping or Adreno device proof; water remains broken in APK86, WATER-001 OPEN."
   ],
   "acceptance": [
     "هوية برامج ونوى أصلية أو تطابق موثق دونdummy",
@@ -113,5 +115,5 @@
     "اختبار هاتف يثبت الماء بلا pass/kernel errors"
   ],
   "updated_by": "B18",
-  "updated_at": "2026-11-04T23:08:10.066Z"
+  "updated_at": "2026-11-04T23:14:38.568Z"
 }
