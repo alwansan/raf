@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "username": "B08",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2130Z-B08-b71c",
+  "resumed_from_session": null,
+  "status": "active",
+  "base_sha": "169c0a7bceca9fde2f458a4a4d8dcbab7ac119b7",
+  "last_commit": null,
+  "updated_at": "2026-11-04T21:30:35Z",
+  "tracks": [
+    "water-fft:original-compute-registry-identity"
+  ],
+  "work_ids": [
+    "B08-20261104T2130Z-B08-b71c-fft-runtime-identity"
+  ],
+  "run_urls": [],
+  "next_step": "Test whether SHA-authenticated Unity ComputeShader serialized kernel-name/variant registry identifies actual FindKernel runtime IDs; refuse compiled-slot=runtime-index assumptions and do not patch kernel identity flags.",
+  "memory_path": "prompt/coordination/clients/B08/MEMORY.md"
+}
