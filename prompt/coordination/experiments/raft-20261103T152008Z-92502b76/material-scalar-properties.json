@@ -22,8 +22,8 @@
   "workflow_path": ".github/workflows/raft-w2-material-scalar-properties.yml",
   "concurrency_group": "raft-w2-material-scalar-properties-${{ github.ref }}-${{ github.sha }}",
   "budget": "single CPU run; workflow timeout 30 min; no Unity, no GPU",
-  "run_url": null,
-  "source_sha": null,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41824352163",
+  "source_sha": "5adc7bc",
   "result": "LOCAL AUTHENTIC RUN: 1,556 materials / 18 owners; 33,899 float entries across 486 distinct names; m_Ints zero across the whole game; render-mode quad (_Mode/_SrcBlend/_DstBlend/_ZWrite) at 1,438 pairs each, _Cutoff 1,457, _Metallic 1,491, _Glossiness 1,487; 19 scalar-free materials; no inf sentinels.",
   "limitations": [
     "name-keyed counters only; no per-material identity or any values",
