@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "owner": "B06",
+  "session_id": "20261104T210726Z-B06-fmt6a2",
+  "issue_id": "WATER-001",
+  "hypothesis": "Unity runtime lacks device-specific FFT RenderTexture random-write and compute-group capability evidence, preventing separation of hardware incompatibility from missing shader/kernel identity.",
+  "source_commit": "973514693569ac123bd87e75ebc1df50c3ae9bdc",
+  "input_hashes": [
+    "Original GpuFFT.cs SHA256 2f866cbe58836da8260461fe6406793f35d868eba94e816e593209544b4ba704"
+  ],
+  "tool_versions": {
+    "dotnet": "8.0.x GitHub Actions ubuntu-24.04",
+    "unity_api": "Unity 2021.3 documented signatures (not Unity compiled)"
+  },
+  "commands": [
+    "dotnet run --project tests/b06_fft_caps_smoke/B06FftCaps.csproj --configuration Release --nologo"
+  ],
+  "negative_controls": [
+    "one format support query throws, its field unavailable while later formats continue",
+    "one random-write query throws independently",
+    "explicit unsupported boolean retained",
+    "compute workgroup query throws, logger remains ready and accepts future writes",
+    "Initialize twice reports only once"
+  ],
+  "workflow_path": ".github/workflows/raft-b06-fft-capabilities.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41913854292",
+  "artifact_urls": [],
+  "budget": "Single ubuntu-24.04 job, timeout 8 minutes, no proprietary data or LFS.",
+  "status": "completed",
+  "observed_result": "COMPLETED SUCCESS job126868198656; compiled actual AndroidRuntimeLog.cs with synthetic Unity API stubs; marker success=true formats=4 failure_isolation=true logger_preserved=true unity_or_gpu_test=false; one-time runtime hardware capability logging integrated in source commit24f3607, not device exercised.",
+  "rejected_hypotheses": [
+    "No device-facing measurement existed for requested FFT storage formats; now source instrumentation exists but results remain unknown until installed."
+  ],
+  "limitations": [
+    "Synthetic API stubs, not Unity Editor 2021 import or Android Adreno GPU",
+    "No original compute shader/kernel or pass modification",
+    "Actual Unity VkImageView and storage write features not measured",
+    "Installed device APK86 predates source change"
+  ],
+  "integration_commit": "24f360712732c2dd4ef056751687ac3c1099e7fa",
+  "next_step": "Coordinate with next full native build owner; inspect fresh on-device FFT capability records and correlate with authentic GPU kernel/pass integration."
+}
