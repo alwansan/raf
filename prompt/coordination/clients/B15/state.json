@@ -4,10 +4,10 @@
   "generation": "B-2026-11-04",
   "session_id": "20261104T224800Z-B15-defaults-32f1",
   "resumed_from_session": "20261104T215400Z-B15-7b2c",
-  "status": "active",
+  "status": "paused",
   "base_sha": "b5d8de01257f3d3171f8e930de557343a49e8205",
-  "last_commit": "8f51565362f0d26d0d413cbf87f6e2e1c631883d",
-  "updated_at": "2026-11-04T22:58:05.263Z",
+  "last_commit": "50838fb89fc1552f7ca9809d159d14c5ee04830c",
+  "updated_at": "2026-11-04T23:02:46.875Z",
   "tracks": [
     "RENDER-002:authentic-original-sampler6"
   ],
@@ -19,8 +19,9 @@
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41920884155",
     "https://github.com/alwansan/raf/actions/runs/41921429305",
-    "https://github.com/alwansan/raf/actions/runs/41929031892"
+    "https://github.com/alwansan/raf/actions/runs/41929031892",
+    "https://github.com/alwansan/raf/actions/runs/41930143093"
   ],
-  "next_step": "Run B15 typed Texture2D source reader against SHA-pinned real ZIP2 sharedassets6 87 texture objects, never upload raw assets. Pair to actual importer only with true same-instance exporter trace.",
+  "next_step": "Two scopes complete: B15 safe importer default/paired-export guard 23/23 CI41929031892, real ZIP2 owner 87/87 typed Texture2D source CI41930143093. No paired real TextureImporter data; on fresh B15 session select actual same-generation export available or another independent P0 graphics/FFT/local world blocker. No background work. NOT_READY 0/3.",
   "memory_path": "prompt/coordination/clients/B15/MEMORY.md"
 }
