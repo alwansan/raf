@@ -4,15 +4,17 @@
   "session_id": "20261104T2257Z-B20-fmp3",
   "issue_id": "WATER-001",
   "hypothesis": "Source-authenticated translated Foam stage SPIR-V UBO set/binding and private HLSL cbuffer b-slots can be boundedly inspected, then compared with original typed CB slot sets without revealing original CB names or inventing runtime shader aliases.",
-  "source_commit": "6e3ddf26c6080a630a786f1afee6abccc62e017a",
+  "source_commit": "00ca84050300ab01a1dd3396ea863c12f5e14520",
   "input_hashes": [],
   "tool_versions": {
     "spirv-cross": "2021.01.15+1.3.239.0-1build1",
     "python": "Ubuntu24.04"
   },
   "commands": [
-    "python3 -m unittest discover -s tests -p test_b20_foam_cb_descriptor_lineage.py -v",
-    "python3 -m scripts.b20_foam_cb_descriptor_lineage --packet \"$RUNNER_TEMP/b20-foam-private-packet\" --manifest \"$RUNNER_TEMP/b20-safe.json\" --out \"$RUNNER_TEMP/b20-foam-cb-safe.json\""
+    "python3 -m unittest discover -s tests -p 'test_b20_foam_cb_descriptor_lineage.py' -v",
+    "python3 -m scripts.b20_foam_cb_descriptor_lineage --packet <private> --manifest <source-authenticated-safe> --out <safe-only>",
+    "python3 -m unittest discover -s tests -p 'test_b20_foam_cb_size_parity.py' -v",
+    "python3 -m scripts.b20_foam_cb_size_parity --safe-source <safe-reflection> --out <safe-comparison>"
   ],
   "negative_controls": [
     "fake cbuffer in comments",
@@ -22,16 +24,23 @@
     "HLSL code never included in output"
   ],
   "workflow_path": ".github/workflows/raft-b20-private-foam-packet.yml",
-  "run_url": null,
-  "artifact_urls": [],
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41931585626",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41931585626/artifacts/13370884370",
+    "https://github.com/alwansan/raf/actions/runs/41932300308"
+  ],
   "budget": "Reuse same original 115MB private source in one bounded 25min Ubuntu workflow, no APK/native build.",
-  "status": "planned",
-  "observed_result": null,
-  "rejected_hypotheses": [],
+  "status": "completed",
+  "observed_result": "Genuine original CI41931585626 SUCCESS 10+11 synthetic controls, 4/4 source-authentic translated Foam stages with original numeric HLSL b-register and SPIRV set0 binding parity. SHA-verified safe artifact numeric comparison: 8 original CB links, 1 matching reflected block size, 7 differing. Source-only fixture CI41932300308 SUCCESS 9/9. CB0 alias/material uploads not proven.",
+  "rejected_hypotheses": [
+    "Exact numeric original/translated CB slot match guarantees identical original serialized partial CB m_Size vs SPIR-V reflected block_size: 7/8 disagree. Cannot infer data loss or correctness from this inequality alone.",
+    "Initial synthetic HLSL-empty-string test was considered valid missing-CB fixture; rejected because source parser correctly rejects zero-length input. Original run41931521584 failed only this synthetic test; corrected at source 00ca8405 and original run41931585626 SUCCESS."
+  ],
   "limitations": [
     "Numeric slot equality is not semantic CBuffer upload identity or valid CB0 alias",
-    "May find missing descriptors; do not silently synthesize one."
+    "May find missing descriptors; do not silently synthesize one.",
+    "Source partial CB m_Size vs SPIRV-Cross block_size are distinct representation domains; seven unequal sizes are NOT GPU visual errors."
   ],
-  "integration_commit": null,
-  "next_step": "Probe bounded authentic descriptor ABI and record exact unknowns."
+  "integration_commit": "c5bb92083d8a704977ac5a8495dec29f1c6958e6",
+  "next_step": "Verify member offset/type and buffer-use semantics before genuine CB0 alias to ShaderLab. Reuse source stage packet, not another original census."
 }
