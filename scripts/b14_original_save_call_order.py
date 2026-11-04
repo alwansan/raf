@@ -101,12 +101,34 @@ def inspect_original_text(source, expected_sha=None):
     }
 
 
+# Independently observed from source-authenticated original CI41929461340.
+# Enforce the real original ordering only at the authenticated provider gate;
+# synthetic tests intentionally exercise other legitimate ordering fixtures.
+ORIGINAL_ORDER = ["save_world", "save_user", "steam_store_stats"]
+
+
+def require_authenticated_baseline(report):
+    if (report["savegame_direct_order"] != ORIGINAL_ORDER
+            or report["savegame_user_save_calls"] != 1
+            or report["savegame_world_save_calls"] != 1
+            or report["savegame_steam_stats_calls"] != 1
+            or report["original_user_method_save_calls"] != 1
+            or report["original_world_method_save_calls"] != 1
+            or not report["original_save_uses_file_manager"]
+            or not report["android_save_calls_preserved_in_order"]
+            or not report["android_stats_guard_source_preserved"]
+            or any(report["other_direct_platform_calls"].values())):
+        raise ValueError("Authenticated original save/Steam boundary contract drift")
+    return True
+
+
 def probe(dll: Path, original_source: Path):
     assert_original_dll(dll)
     if original_source.is_symlink() or not original_source.is_dir():
         raise ValueError("Unsafe private source directory")
     source, _ = _source(original_source, "SaveAndLoad", PINS["SaveAndLoad"])
     report = inspect_original_text(source)
+    require_authenticated_baseline(report)
     return {"authenticated_original_managed_dll": True, **report}
 
 
