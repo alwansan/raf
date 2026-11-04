@@ -114,10 +114,13 @@
       "track": "world-save",
       "evidence": [
         "https://github.com/alwansan/CL/blob/5394407b5cd0a0ca1848ff0902f8d2133bf6ea29/raft%20log/%D8%A7%D9%86%D8%AA%D8%A7%D8%AC%20%D9%85%D8%B3%D8%A7%D8%B1%20/7/com.alwansan.raft.androidtest/files/raft-logs/raft-20261104T190058726-10019eea-0000.jsonl",
-        "https://github.com/alwansan/CL/blob/5394407b5cd0a0ca1848ff0902f8d2133bf6ea29/raft%20log/lf/LogRaft-20261104-225757-156/session-summary.json"
+        "https://github.com/alwansan/CL/blob/5394407b5cd0a0ca1848ff0902f8d2133bf6ea29/raft%20log/lf/LogRaft-20261104-225757-156/session-summary.json",
+        "https://github.com/alwansan/raf/commit/c06acd1da46e729a42f8b9bbf2f280a3b05921cc",
+        "https://github.com/alwansan/raf/actions/runs/41909535306",
+        "https://github.com/alwansan/raf/actions/runs/41909535307"
       ],
       "remaining": [
-        "فشل SaveGame -> SteamUserStats.StoreStats -> steam_api64 بعد تحميل المشهد",
+        "APK86 SaveGame -> steam_api64 StoreStats failure is source-guarded in B50 commit c06acd1, not yet retested in a native APK/device; preserve original .rgd and verify create/save/reload on newer build",
         "راجع Cheat.AllowCheatsForLocalPlayer ومسارات Steam المتبقية",
         "تتبع OnWorldRecieved والتحميل والحفظ واللاعب دون أعلام نجاح وهمية"
       ],
@@ -126,8 +129,8 @@
         "حفظ .rgd ثم إعادة تحميله فعلياً",
         "لا يكفي إخفاء رسالة الاتصال"
       ],
-      "updated_by": "owner-team-bootstrap",
-      "updated_at": "2026-11-04",
+      "updated_by": "B50",
+      "updated_at": "2026-11-04T20:47:00Z",
       "_record_path": "issues/LOCAL-005.json"
     },
     {
@@ -257,6 +260,22 @@
   ],
   "events": [
     {
+      "id": "B50-20261104T2047Z-local-savegame-steamstats",
+      "owner": "B50",
+      "session_id": "20261104T2039Z-B50-d7a3",
+      "issue_id": "LOCAL-005",
+      "type": "integration",
+      "summary": "SHA-pinned original SaveGame instrumentation now excludes SteamUserStats.StoreStats in Android-local mode only; C# original-source offline integration and bounded synthetic guards pass, device create/save/reload still unverified.",
+      "evidence": [
+        "https://github.com/alwansan/raf/commit/c06acd1da46e729a42f8b9bbf2f280a3b05921cc",
+        "https://github.com/alwansan/raf/commit/67d75cc7381a03f2b5ee166afc9d48de0d15217a",
+        "https://github.com/alwansan/raf/actions/runs/41909535307",
+        "https://github.com/alwansan/raf/actions/runs/41909535306"
+      ],
+      "at": "2026-11-04T20:47:00Z",
+      "_record_path": "events/B50/20261104T2047Z-local-steamstats-sourcefixed.json"
+    },
+    {
       "id": "20261104-b-generation",
       "owner": "owner-team-bootstrap",
       "session_id": "b-team-setup-20261104",
@@ -272,5 +291,5 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "input_sha256": "3c38e4e7a9c0d4ee04f2ecb42e33737f2469957793d93f3a6f7f98023139a03d"
+  "input_sha256": "9020396e3fc324b55424de01a3aebbd1d2bbcacb0fcddc982889128e3c0ffa78"
 }
