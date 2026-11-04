@@ -6,7 +6,7 @@
   "issue_id": "WATER-001",
   "track": "water-fft",
   "approach": "Authenticate original FFT serialized variantMap discriminator structure and keyword memberships for 20 B08/B48 correlated compiled slots, independently of Unity runtime FindKernel ID.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "8dc31d35cee3d03465f721acdf88a0dd87663368",
   "intended_files": [
     "scripts/b30_fft_variantmap_routing.py",
@@ -22,8 +22,24 @@
   "experiment_ids": [
     "B30-fft-variantmap-20261104"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement bounded source-free controls and authenticated ZIP2 provider experiment without publishing private shaders.",
-  "updated_at": "2026-11-04T21:40:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41920289281",
+    "https://github.com/alwansan/raf/actions/runs/41920323250"
+  ],
+  "result": {
+    "original_source_verified": true,
+    "original_fft_object_sha_verified": true,
+    "twenty_compiled_entries_same_variantmap_header": true,
+    "twenty_compiled_entries_same_keyword_bundle": true,
+    "route_by_serialized_header_or_keywords_rejected": true,
+    "synthetic_controls_passed": 12,
+    "raw_original_shader_programs_published": false,
+    "runtime_kernel_id_mapping_verified": false,
+    "gameplay_fixed": false,
+    "device_tested": false,
+    "evidence": "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B30_ORIGINAL_FFT_VARIANTMAP_ROUTING_2026-11-04.md",
+    "source_commit": "c3a0a02cecf5782ab472a5b10bfd8cf134e50f75"
+  },
+  "next_step": "Scope completed with new negative original-data evidence. Investigate Unity engine/runtime actual subprogram specialization/linkage separately; coordinate B08/B48. WATER-001 stays OPEN, NOT_READY.",
+  "updated_at": "2026-11-04T21:56:00Z"
 }
