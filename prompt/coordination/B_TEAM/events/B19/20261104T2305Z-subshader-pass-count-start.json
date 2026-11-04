@@ -1,0 +1,14 @@
+{
+  "id": "B19-20261104T2305Z-water-pass-start",
+  "owner": "B19",
+  "session_id": "20261104T2256Z-B19-hl7",
+  "issue_id": "WATER-001",
+  "type": "start",
+  "summary": "Detected potential false positive: Unity passCount is per active SubShader, but water source gate sums authored passes across alternate SubShaders. Plan conservative per-SubShader source guard.",
+  "evidence": [
+    "https://docs.unity.cn/2022.3/Documentation/ScriptReference/Shader-passCount.html",
+    "https://docs.unity.cn/2021.3/Documentation/ScriptReference/ShaderData.Subshader.PassCount.html",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/verify_water_render_contract.py"
+  ],
+  "at": "2026-11-04T23:05:00Z"
+}
