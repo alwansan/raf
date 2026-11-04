@@ -44,7 +44,10 @@
     "https://github.com/alwansan/raf/actions/runs/41919146580",
     "https://github.com/alwansan/raf/actions/runs/41920048140",
     "https://github.com/alwansan/raf/actions/runs/41920784251",
-    "https://github.com/alwansan/raf/actions/runs/41921259677"
+    "https://github.com/alwansan/raf/actions/runs/41921259677",
+    "https://github.com/alwansan/raf/commit/4035b13251f3fffcb8c4f0257174528f58c298ce",
+    "https://github.com/alwansan/raf/actions/runs/41921429305",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B15_TEXTURE_SAMPLER_PARITY_2026-11-04.md"
   ],
   "remaining": [
     "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -66,13 +69,14 @@
     "B38: duplicate mapping-key handling in exported Material m_TexEnvs/UV checker source-fixed; CI41919146580 (14+7 synthetic) PASS. Actual Raft ZIP2 original-to-same-export parity and Android colors still unverified.",
     "B12 mesh-vs-shader source extension a324eb6+acd3514: 512 active-renderer cap now reports missing MeshFilter/Mesh.sharedMesh and SkinnedMeshRenderer.sharedMesh separately from material shader errors. CI41920048140 PASS source tests, original managed CI41920015979 pending; no real phone evidence/mesh loss cause yet.",
     "B38 source-integrated top-level Material queue, lightmap, instancing, and double-sided GI verifier, CI41920784251 9/9 synthetic PASS; real ZIP2 source-to-same-export parity, Unity/Adreno and phone remain unverified.",
-    "B21: authentic original ZIP2 level0..level5 SHA/size-pinned LightmapSettings scan CI41921259677 PASS (16 synthetic, 6 real originals): 0 baked lightmaps and 1497 unassigned renderer indices (0 out-of-range) in these six only; reject lost baked lightmap as white-surface explanation for this subset. Other 34 scenes, same-export dynamic lighting, shader/texture/phone remain UNKNOWN; no game patch."
+    "B21: authentic original ZIP2 level0..level5 SHA/size-pinned LightmapSettings scan CI41921259677 PASS (16 synthetic, 6 real originals): 0 baked lightmaps and 1497 unassigned renderer indices (0 out-of-range) in these six only; reject lost baked lightmap as white-surface explanation for this subset. Other 34 scenes, same-export dynamic lighting, shader/texture/phone remain UNKNOWN; no game patch.",
+    "B15: read-only source-pinned Texture2D sampler -> exact same-export TextureImporter GUID/parity checker and in-memory exporter trace bridge are code-integrated, 16/16 synthetic CI PASS (41921429305); zero actual Raft textures compared until independently authenticated same-export trace+original bytes/project; no source asset edits, no Unity/pixel/device evidence."
   ],
   "acceptance": [
     "مطابقة روابط ومراجع الأصل",
     "مقارنةصوريةلنفسالمشهد",
     "نجاحعلىالهاتف"
   ],
-  "updated_by": "B21",
-  "updated_at": "2026-11-04T22:03:30Z"
+  "updated_by": "B15",
+  "updated_at": "2026-11-04T22:06:00Z"
 }
