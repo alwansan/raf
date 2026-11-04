@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "owner": "B13",
+  "session_id": "20261104T2132Z-B13-7e6b",
+  "issue_id": "LOCAL-005",
+  "hypothesis": "Backup-copy failures outside existing exception handler strand partial backups",
+  "source_commit": "4ba1439378e2ea8133d0afb9d99e5de1acce0d43",
+  "input_hashes": [
+    "adapter original blob SHA583f040c298ee5b180d08ee409e869a70ea13932"
+  ],
+  "tool_versions": {
+    "Python": "Python3 Ubuntu-24.04"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_android_offline_startup.py -v"
+  ],
+  "negative_controls": [
+    "Partial backup copy with incomplete second file and retry",
+    "Partial source write with original byte/metas restoration",
+    "Rollback write failure preserves original backup"
+  ],
+  "workflow_path": ".github/workflows/raft-b13-offline-source-transaction.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41918235557",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41917684686/artifacts/13366250219"
+  ],
+  "budget": "6min Ubuntu runner, no LFS/native/Unity",
+  "status": "completed",
+  "observed_result": "16/16 source-free tests CI41917684686 and restore CI41918235557 SUCCESS; original local startup source CI41917684724 and preflight41917684647 SUCCESS at first code SHA.",
+  "rejected_hypotheses": [
+    "Existing source exception handler protects backup copy: false; starts after copies"
+  ],
+  "limitations": [
+    "Synthetic sources only",
+    "No Unity/IL2CPP or world/save/phone proof",
+    "Concurrent branch tree lost the files, subsequently restored"
+  ],
+  "integration_commit": "0d31686f58b0276c089425e764fa5e3b377d38e6",
+  "next_step": "Check live B13 three paths, preserve B19 and B14 separate save work; pick independent water/render blocker"
+}
