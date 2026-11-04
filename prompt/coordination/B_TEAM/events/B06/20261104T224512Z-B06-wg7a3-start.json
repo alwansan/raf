@@ -1,0 +1,13 @@
+{
+  "id": "20261104T224512Z-B06-wg7a3-start",
+  "owner": "B06",
+  "session_id": "20261104T224512Z-B06-wg7a3",
+  "issue_id": "WATER-001",
+  "type": "start",
+  "summary": "B06 resumes FFT work to distinguish Unity maximum local workgroup invocation count from dispatch-group X/Y/Z limits and verify source-authenticated 5 original FFT group sizes against this theoretical device cap; does not change FFT shaders/kernels.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/664100d4b976802a3463aa4ee5c0fe5254c7d28f",
+    "https://github.com/alwansan/raf/actions/runs/41914575997"
+  ],
+  "at": "2026-11-04T22:45:35.546Z"
+}
