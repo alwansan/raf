@@ -24,6 +24,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Text;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -73,6 +74,19 @@ namespace UnityEngine {
     public class MeshRenderer : Renderer {}
     public class SkinnedMeshRenderer : Renderer { public Mesh sharedMesh; }
     public class Shader : Object { public bool isSupported = true; public string name = "Synthetic"; }
+    // Production B18 snapshot is included with the scene coroutine. These
+    // stubs contain only synthetic loaded objects, never a real FFT program.
+    public class ComputeShader : Object { public string name = "SyntheticCompute"; }
+    public static class Resources {
+        public static int FindCalls;
+        public static ComputeShader[] LoadedComputeShaders = Array.Empty<ComputeShader>();
+        public static T[] FindObjectsOfTypeAll<T>() where T : Object {
+            FindCalls++;
+            if (typeof(T) == typeof(ComputeShader))
+                return (T[])(object)LoadedComputeShaders;
+            return Array.Empty<T>();
+        }
+    }
     public class Material : Object { public Shader shader; public int passCount = 1; }
     public class WaitForSecondsRealtime {
         public WaitForSecondsRealtime(float seconds) {}
@@ -111,15 +125,25 @@ namespace UnityEngine.SceneManagement {
 namespace RaftAndroid.Diagnostics {
     public static class AndroidRuntimeLog {
         public static string Last;
+        public static string LastWater;
+        public static int WaterCalls;
         public static void Write(string area, string operation, string details, bool critical) {
-            if (area != "render") throw new Exception("Unexpected diagnostic area");
-            Last = operation + "|" + details;
+            if (area == "render") { Last = operation + "|" + details; return; }
+            if (area == "water" && operation == "loaded_compute_shader_snapshot") {
+                WaterCalls++;
+                LastWater = operation + "|" + details;
+                return;
+            }
+            throw new Exception("Unexpected diagnostic area/operation");
         }
     }
 }
 public sealed class B12UnderTest {
     public string Probe(Scene scene) {
         RaftAndroid.Diagnostics.AndroidRuntimeLog.Last = null;
+        RaftAndroid.Diagnostics.AndroidRuntimeLog.LastWater = null;
+        RaftAndroid.Diagnostics.AndroidRuntimeLog.WaterCalls = 0;
+        UnityEngine.Resources.FindCalls = 0;
         IEnumerator routine = ReportSceneShaderSnapshot(scene);
         int steps = 0;
         while (routine.MoveNext()) {
@@ -149,6 +173,9 @@ TESTS = r"""
     private static void Has(string report, string field) => Require(report.Contains(field), field);
     public static void Main() {
         B12UnderTest probe = new B12UnderTest();
+        // A synthetic source object verifies that the production B18 helper
+        // executes, not merely compiles; it does not test kernels or GPU pixels.
+        Resources.LoadedComputeShaders = new[] { new ComputeShader { name = "SyntheticFFT" } };
 
         Scene shallow = new Scene();
         GameObject root = Node();
@@ -167,6 +194,11 @@ TESTS = r"""
         Has(report, "zero_pass_materials=1");
         Has(report, "internal_error_shaders=1");
         Require(shallow.rootFetchCalls == 1, "normal root fetch count");
+        Require(Resources.FindCalls == 1, "exactly one loaded compute resource query");
+        Require(RaftAndroid.Diagnostics.AndroidRuntimeLog.WaterCalls == 1,
+            "exactly one read-only water snapshot");
+        Has(RaftAndroid.Diagnostics.AndroidRuntimeLog.LastWater, "loaded_total=1");
+        Has(RaftAndroid.Diagnostics.AndroidRuntimeLog.LastWater, "runtime_kernel_count_verified=false");
 
         Scene tooManyRoots = new Scene();
         for (int i = 0; i < 1025; i++) tooManyRoots.roots.Add(Node());
@@ -224,6 +256,9 @@ TESTS = r"""
         report = probe.Probe(unloaded);
         Require(report == "", "unloaded scene must not log snapshot");
         Require(unloaded.rootFetchCalls == 0, "unloaded scene roots not enumerated");
+        Require(Resources.FindCalls == 0, "unloaded scene must not query compute objects");
+        Require(RaftAndroid.Diagnostics.AndroidRuntimeLog.WaterCalls == 0,
+            "unloaded scene must not emit the water snapshot");
 
         Console.WriteLine("B12_SCENE_BOUNDS_MANAGED cases=8 exactProductionMethod=true originalGameAssets=false unity=false device=false");
     }
@@ -243,6 +278,8 @@ def build(out: Path) -> Path:
         if source.count(QUALITY_START) != 1:
             raise ValueError("Unknown same-source quality helper integration")
         quality = source[source.index(QUALITY_START):source.index(START)]
+    if "LoadedComputeShaderSnapshot()" not in method:
+        raise ValueError("Production B18 loaded-compute evidence was removed from scene snapshot")
     for required in ("const int RootLimit = 1024;", "const int TransformLimit = 4096;",
                      "const int PendingLimit = 1024;", "const int RendererLimit = 512;",
                      "const int MaterialLimit = 4096;", "renderer.GetSharedMaterials(materials);"):
