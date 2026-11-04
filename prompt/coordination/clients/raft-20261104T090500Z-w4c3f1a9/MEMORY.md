@@ -32,3 +32,9 @@ Independent W4 agent authorized by the owner to edit code/resources/workflows, b
 
 ## Local evidence cache (not committed)
 - `/root/test/test/raft/Raft/Raft_Data` matches all 14 ZIP2 shader-owner pins byte-for-byte (verified 2026-11-04), so source-side reproduction needs no downloads.
+
+## Result 10:15Z - owner-directed trial continuation (run 41812889049)
+- Run 41808015938 fixed evidence: builtin ownership gate passed; strict water gate reported exact unmet set (Spectrum 1/6, Foam 1/2, Blur 1/2, no water compute candidate, identity false).
+- Owner said fix all + continue. Implemented a strict-by-default water step with an exact-match documented limitation: `scripts/record_documented_water_limitation.py` (+3 tests) lets an explicit trial continue only when `.github/raft-native-build-request.json` enumerates exactly the live unmet conditions. Record retained as artifact, copied into the delivery set (`RECORDED_LIMITATIONS.json`) and shown in release notes. No fake kernels; `authentic_water_kernel_identity_verified` untouched.
+- Files: commit 4a7e18af (workflow 713fdd82), ef5cdb77 (script 29a527f7), 8dc58ec1 (test 0360e0c0), d181ee71 (request, ack 5 conditions).
+- Trial build 41812889049 in progress from d181ee71; next failures to inspect if any.
