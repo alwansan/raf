@@ -6,7 +6,7 @@
   "issue_id": "WATER-001",
   "track": "water-fft",
   "approach": "Prevent ShaderLab source validation from qualifying all passes via one program or string/comment decoys.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "649ec8e5b227ecae970b161ceb3339e2be1929c2",
   "intended_files": [
     "scripts/verify_water_render_contract.py",
@@ -14,9 +14,21 @@
   ],
   "hypothesis": "Current independent pass count and shader-global has_program allow false-positive multi-pass structural validation.",
   "related_work": [],
-  "experiment_ids": [],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Patch and run synthetic controls, then status/issue/event checkpoint.",
-  "updated_at": "2026-11-04T20:56:00Z"
+  "experiment_ids": [
+    "20261104T2054Z-B49-water-pass-guard"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41911824567"
+  ],
+  "result": {
+    "source_fix_commit": "50702470954774ba96fe27509f1f9eddfd1aa4ea",
+    "unit_test_run": "41911824567",
+    "new_tests_passed": 6,
+    "existing_tests_passed": 5,
+    "scope": "per-pass structural ShaderLab checker only",
+    "water_issue_closed": false,
+    "device_verified": false
+  },
+  "next_step": "Actual original programs and per-pass/FFT kernel authentication and Android pixels; structural gate now guards false positives.",
+  "updated_at": "2026-11-04T21:03:00Z"
 }
