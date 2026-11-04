@@ -4,17 +4,21 @@
   "generation": "B-2026-11-04",
   "session_id": "20261104T2132Z-B12-c4a8",
   "resumed_from_session": null,
-  "status": "active",
+  "status": "paused",
   "base_sha": "f8028d15b2401d1fd8c73b2316e5bf76fef88eae",
-  "last_commit": null,
-  "updated_at": "2026-11-04T21:33:58.649Z",
+  "last_commit": "70edac4f5406efdb971e987c0e104682d8cefd42",
+  "updated_at": "2026-11-04T21:47:47.066Z",
   "tracks": [
-    "world-save"
+    "colors-materials"
   ],
   "work_ids": [
-    "B12-20261104T2132Z-B12-c4a8-steam-stats-save"
+    "B12-20261104T2132Z-B12-c4a8-steam-stats-save",
+    "B12-20261104T2132Z-B12-c4a8-scene-render-probe"
   ],
-  "run_urls": [],
-  "next_step": "Patch SHA-pinned original SaveAndLoad.StoreStats call on Android-local only; add synthetic negative/positive tests; execute test and CI; preserve SaveGame/.rgd behavior and Windows native semantics.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41919089409",
+    "https://github.com/alwansan/raf/actions/runs/41918822038"
+  ],
+  "next_step": "CI passed for bounded renderer shader snapshot. Await NEXT authentic game APK+OBB phone test; inspect render.scene_shader_snapshot against same-scene screenshot; no screen-pixel fix proven. B50 already fixed Steam StoreStats source, avoid duplicate; no background task created.",
   "memory_path": "prompt/coordination/clients/B12/MEMORY.md"
 }
