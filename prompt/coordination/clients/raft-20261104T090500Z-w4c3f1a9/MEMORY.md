@@ -23,6 +23,12 @@ Independent W4 agent authorized by the owner to edit code/resources/workflows, b
 ## Next
 - Triggered experimental full build from 5e28572b; expected frontier: strict water gate (last pre-run report: shaders all 1-pass, computes=0, `authentic_water_kernel_identity_verified` hardcoded false).
 - If water blocks, continue with authentic recovery or an owner-directed lane decision.
+## Result 09:57Z - full build 41808015938
+- Instrumented full export + script-import fidelity passed (managed_provider_count 151).
+- **Builtin ownership gate passed for the first time** on the full export: 750 refs / 11 pointers / 1544 edges / 1536 documents, `changes_to_project: 0`.
+- Run then stopped at the unchanged strict water gate: VolumetricLight 5/5 OK, Depth Copy 9/4 OK, Water Spectrum 1/6, Foam 1/2, Blur 1/2, water compute candidates 0, identity flag false.
+- No APK/OBB/XAPK; NOT_READY 0/3. Next work is authentic water pass/compute recovery (A12/A1 lane), not a gate change.
+- Report: docs/W4_BUILTIN_GATE_AND_WATER_FRONTIER_2026-11-04.md
 
 ## Local evidence cache (not committed)
 - `/root/test/test/raft/Raft/Raft_Data` matches all 14 ZIP2 shader-owner pins byte-for-byte (verified 2026-11-04), so source-side reproduction needs no downloads.

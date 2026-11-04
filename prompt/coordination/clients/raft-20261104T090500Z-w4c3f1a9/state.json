@@ -6,10 +6,10 @@
   "session_id": "6d1f0e42-8b17-4c9a-b0f2-e2d73a91c550",
   "resumed_from": null,
   "status": "active",
-  "updated_at": "2026-11-04T09:40:00Z",
-  "base_sha": "2008a5fb94d7df16bdcc1966a00955025e5fbded",
-  "current_work": "Lineage fix verified green (run 41804737856); full build wired to source-instrumented exporter and engine-owned builtin gate; requesting the experimental full build from 5e28572b.",
+  "updated_at": "2026-11-04T09:58:00Z",
+  "base_sha": "6ed699ca8d7b3cca7a0e6c460bbeebaade258abe",
+  "current_work": "Builtin ownership gate passes (750 refs/11 pointers, 1544 edges on full export); run 41808015938 stops at the unchanged strict water gate (Spectrum 1/6, Foam 1/2, Blur 1/2, 0 compute candidates).",
   "last_commit": "5e28572badf38b3e09693f875d1f18aff6e4432d",
-  "next_step": "Watch the triggered request run; record the next demonstrated failure (expected: strict water gate) and continue recovery without bypassing authenticity gates.",
+  "next_step": "Authentic water pass/compute recovery (A12/A1 lane); do not toggle the water gate; request the next build only after a real fix.",
   "memory_path": "prompt/coordination/clients/raft-20261104T090500Z-w4c3f1a9/MEMORY.md"
 }
