@@ -190,3 +190,60 @@ class SavePathTests(unittest.TestCase):
                     apply(root / 'project', backup, write=True)
             self.assertEqual(source.read_bytes(), original)
             self.assertEqual(list(backup.iterdir()), [])
+
+
+    def test_linked_project_root_cannot_redirect_save_source(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            real = root / 'real-project'
+            source = real / 'Assets/Assembly-CSharp/SaveAndLoad.cs'
+            source.parent.mkdir(parents=True)
+            original = b'class SaveAndLoad {}'
+            source.write_bytes(original)
+            source.with_suffix('.cs.meta').write_bytes(b'guid: synthetic\\n')
+            alias = root / 'linked-project'
+            try:
+                alias.symlink_to(real, target_is_directory=True)
+            except (OSError, NotImplementedError):
+                self.skipTest('Directory symlinks unavailable')
+            self.assertFalse((alias / 'Assets').is_symlink())
+            with self.assertRaisesRegex(ValueError, 'project root'):
+                apply(alias, root / 'backup', write=True)
+            self.assertEqual(source.read_bytes(), original)
+            self.assertFalse((root / 'backup').exists())
+
+    def test_linked_backup_root_cannot_redirect_save_backups(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            source = root / 'project/Assets/Assembly-CSharp/SaveAndLoad.cs'
+            source.parent.mkdir(parents=True)
+            original = b'class SaveAndLoad {}'
+            source.write_bytes(original)
+            source.with_suffix('.cs.meta').write_bytes(b'guid: synthetic\\n')
+            outside = root / 'outside'
+            outside.mkdir()
+            backup = root / 'linked-backup'
+            try:
+                backup.symlink_to(outside, target_is_directory=True)
+            except (OSError, NotImplementedError):
+                self.skipTest('Directory symlinks unavailable')
+            with self.assertRaisesRegex(ValueError, 'backup root'):
+                apply(root / 'project', backup, write=True)
+            self.assertEqual(source.read_bytes(), original)
+            self.assertEqual(list(outside.iterdir()), [])
+
+    def test_linked_backup_ancestor_rejected_before_source_copy(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            project = root / 'project'
+            (project / 'Assets').mkdir(parents=True)
+            outside = root / 'outside'
+            outside.mkdir()
+            linked = root / 'linked-parent'
+            try:
+                linked.symlink_to(outside, target_is_directory=True)
+            except (OSError, NotImplementedError):
+                self.skipTest('Directory symlinks unavailable')
+            with self.assertRaisesRegex(ValueError, 'backup root'):
+                apply(project, linked / 'backup-folder', write=True)
+            self.assertFalse((outside / 'backup-folder').exists())
