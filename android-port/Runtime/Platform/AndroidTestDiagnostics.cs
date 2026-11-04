@@ -384,6 +384,7 @@ namespace RaftAndroid.Platform
                     scene.GetRootGameObjects(roots);
                     var pending = new Transform[PendingLimit];
                     var renderers = new List<Renderer>(4);
+                    var materials = new List<Material>(4);
                     foreach (GameObject root in roots)
                     {
                         if (!root || !root.activeInHierarchy) continue;
@@ -430,9 +431,12 @@ namespace RaftAndroid.Platform
                                     skinnedRenderers++;
                                     if (!skinnedRenderer.sharedMesh) missingSkinnedMeshes++;
                                 }
-                                // No material/mesh instance or geometry readback.
-                                Material[] materials = renderer.sharedMaterials;
-                                if (materials == null || materials.Length == 0)
+                                // 2021.3 list overload avoids the per-renderer array
+                                // allocation of renderer.sharedMaterials; never
+                                // request material instances or mesh geometry.
+                                materials.Clear();
+                                renderer.GetSharedMaterials(materials);
+                                if (materials.Count == 0)
                                 {
                                     empty++;
                                     continue;
