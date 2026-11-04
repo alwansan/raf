@@ -6,7 +6,7 @@
   "issue_id": "SOURCE-ARCHIVE-001",
   "track": "source-integrity",
   "approach": "Authenticated raw/singlepart multipart release transport decoding for original water/shader source providers; stream into separate staging only after original SHA/size verification.",
-  "status": "active",
+  "status": "completed",
   "base_sha": null,
   "intended_files": [
     "scripts/b03_verify_archive_payload.py",
@@ -21,8 +21,17 @@
   "experiment_ids": [
     "B03-archive-transport"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement safe decoding+regression then optional original payload validation; never change pins to match envelope.",
-  "updated_at": "2026-11-04T21:02:53.792Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41913405572"
+  ],
+  "result": {
+    "scope": "staging-only authenticated raw/singlepart multipart verifier",
+    "source_commit": "5d46863154a83d14c755c4600b56b765202a99c9",
+    "synthetic_tests": 16,
+    "synthetic_ci": "https://github.com/alwansan/raf/actions/runs/41913405572",
+    "private_asset_bytes_verified": false,
+    "original_asset_reconstructed": false
+  },
+  "next_step": "For actual archive validation, compare one small private release downloaded payload against pinned source ZIP2 size/SHA; do not infer from metadata or change game gate. Move on to P0 renderer material-link integrity in this session.",
+  "updated_at": "2026-11-04T21:10:44.351Z"
 }
