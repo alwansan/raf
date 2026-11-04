@@ -21,3 +21,12 @@ This is an ordering/diagnostic correctness defect. It does NOT by itself prove t
 Run `python3 scripts/test_lograf_v06.py` and `bash scripts/test_lograf_diagnostics.sh` in Actions, followed by Gradle signed release build. A signed APK build cannot prove phone-level marker latency, Shizuku disconnect tolerance, SAF filesystem full behavior or game replay quality. Validate the next 0.6.x release on Poco F5 Pro: start under high log flood, issue markers while game is active, stop and verify the ZIP includes raw segments and summary with equal marker enqueued/written counts and both clocks.
 
 No new game build is requested, and no game branch, other repo, task, source asset, or signing key is changed.
+
+## Verified delivery — 4 November 2026
+
+- Code and JVM marker regression commit: [`f097836e6fc2c1f5e7cc1efeb7fcdd97384e5295`](https://github.com/alwansan/raf/commit/f097836e6fc2c1f5e7cc1efeb7fcdd97384e5295).
+- First new run [41892089941](https://github.com/alwansan/raf/actions/runs/41892089941) **FAILED** on a structural regression string check that expected the acknowledgment in one Java statement. The production code had correctly added an explicit block and written-counter increment, but this brittle string check needed to be updated; no APK was produced by that failed run.
+- Test correction [`b06b5ef3bab549b0f71470051d2bc113365aecf1`](https://github.com/alwansan/raf/commit/b06b5ef3bab549b0f71470051d2bc113365aecf1).
+- [GitHub Actions 41892190537](https://github.com/alwansan/raf/actions/runs/41892190537): **COMPLETED SUCCESS**, full recorder structural checks, actual JVM diagnostic tests, Android release build (`BUILD SUCCESSFUL in 51s`), APK v2 signature/certificate comparison and publication.
+- [Signed LogRaft 0.6.86 APK](https://github.com/alwansan/raf/releases/download/lograf-86/LogRaft-signed.apk), 160,388 bytes. `applicationId=com.alwansan.lograf`, `versionCode=1086` from the existing Actions numbering, public test keystore unchanged. Pinned certificate SHA-256 `bdb27cfad1fd9a6ac14bd47317206ce4df462040f45ddb1fdbb66a0974043149` (not the APK content hash). Sidecar .sha256 is published.
+- **Not tested on Poco F5 Pro**: No device validation exists yet for marker latency under Shizuku/SAF load; a successful APK and Java test do not prove a game bug is fixed. Correlate marker wall-clock/elapsed timestamps with a real high-flood session.
