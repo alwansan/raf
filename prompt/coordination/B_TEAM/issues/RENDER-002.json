@@ -23,7 +23,10 @@
     "https://github.com/alwansan/raf/actions/runs/41914188268",
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B43_MATERIAL_KEYWORD_EXPORT_2026-11-04.md",
     "https://github.com/alwansan/raf/actions/runs/41914562432",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B03_RENDERER_MATERIAL_LINKS_2026-11-04.md"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B03_RENDERER_MATERIAL_LINKS_2026-11-04.md",
+    "https://github.com/alwansan/raf/commit/0d5002faccd5f4304b2274cbada752ce122ff5e0",
+    "https://github.com/alwansan/raf/actions/runs/41915207812",
+    "https://github.com/nowl-it/AssetRipperCLI/blob/036098ab525a3f9f693dc101edeb21faad4d32d8/Source/AssetRipper.Export.UnityProjects/Textures/ImporterFactory.cs"
   ],
   "remaining": [
     "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -32,16 +35,16 @@
     "B04 الأصل Linear مع أداة تصحيح مؤقتة مثبتة في CI؛ يلزم إثبات إعداد مشروع Unity المُصدَّر الفعلي وفحص ألوان الجهاز بعد البناء، ولا يكفي لإغلاق RENDER-002",
     "B44 source-vs-export Material m_Colors synthetic guard CI PASS; authentic SHA-verified original vs actual same-instance exported YAML not yet tested. Repair precise mismatch if any, otherwise investigate shader/texture/sRGB.",
     "B46: exported Material m_TexEnvs -> Texture GUID+fileID structural guard 21 synthetic tests PASS (CI 41913591959); real same-instance full export NOT checked, no texture loss cause proven; run guard and source-export PPtr comparison before material repair.",
-    "B02 source importer colorspace guard: 11/11 synthetic PASS; original Texture2D(owner,pathID) -> same-export image/meta GUID witness and real original bytes still required before any game repair or visual claim.",
     "B05 now has a source-authenticating same-instance Material m_TexEnvs checker (11/11 synthetic CI); actual ZIP2-to-Unity-export texture PPtr comparison, external-owner mapping and pixel/phone validation NOT YET performed.",
     "B43: material valid/invalid shader keyword + disabled-pass same-instance export verifier 17/17 synthetic CI PASS at 41914188268, but not run on authenticated real ZIP2 original and private same-process export; no proof of actual white-material cause or phone GPU correction.",
-    "B03 exported Renderer.m_Materials→Material GUID/fileID identity guard: 17 synthetic CI cases PASS (41914562432); actual source-authenticated full Unity export and same-instance renderer source assignment remain unverified; no device-color repair proven."
+    "B03 exported Renderer.m_Materials→Material GUID/fileID identity guard: 17 synthetic CI cases PASS (41914562432); actual source-authenticated full Unity export and same-instance renderer source assignment remain unverified; no device-color repair proven.",
+    "B02: مصدر AssetRipper المثبت يضبط sRGBTexture عندما يكون m_ColorSpace=Linear، بخلاف فرضية B02 الأولى؛ تم تعطيل --repair تماماً، مع مقارنة قراءتين دون تعديل بيانات. يلزم إثبات هوية المصدر→تصدير ومعنى المخرجات بصور Unity قبل الإصلاح. CI41915207812 PASS12/12 اصطناعي فقط."
   ],
   "acceptance": [
     "مطابقة روابط ومراجع الأصل",
     "مقارنةصوريةلنفسالمشهد",
     "نجاحعلىالهاتف"
   ],
-  "updated_by": "B03",
-  "updated_at": "2026-11-04T21:20:24.716Z"
+  "updated_by": "B02",
+  "updated_at": "2026-11-04T21:22:00Z"
 }
