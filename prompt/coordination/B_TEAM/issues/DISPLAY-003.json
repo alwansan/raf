@@ -1,0 +1,18 @@
+{
+  "id": "DISPLAY-003",
+  "title": "Settings مستقر بحسب تجربة المالك",
+  "priority": "P2",
+  "status": "OWNER_CONFIRMED",
+  "track": "regression",
+  "evidence": [
+    "owner-message-2026-11-04"
+  ],
+  "remaining": [
+    "حمايةعدم التراجع، لاتحسينUIالآن"
+  ],
+  "acceptance": [
+    "حفظالأبعاد/landscapeالحالية"
+  ],
+  "updated_by": "owner-team-bootstrap",
+  "updated_at": "2026-11-04"
+}

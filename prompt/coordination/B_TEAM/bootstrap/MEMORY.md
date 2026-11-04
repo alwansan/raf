@@ -1,0 +1,4 @@
+# Owner-requested B-team setup checkpoint
+Session b-team-setup-20261104. Not a B worker identity, no B sessions launched.
+Base branch SHA6b60c35e845a3bc8e559a7df7e408363032697cb. Full review/inputs/results/remaining in ../REVIEW_2026-11-04.md. Canonical boot and restore prompts and source/execution policy installed, previous records retained without reservation semantics. Registry lists eligibility only. Summary script validated6localtests. Actual game delivery86/source d181ee7; CL pinned5394407b. Water/colors/localworld remain open. No builds/tasks/token access/private asset uploads.
+Next: owner sends uniform message to existing named B sessions; workers register themselves and pursue P0 with source evidence. Archive payload validation can proceed independently of water/world via ZIP2 fallback. Shared summary is regenerated at checkpoints, not a running service.

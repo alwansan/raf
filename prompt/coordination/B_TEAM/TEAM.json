@@ -1,0 +1,257 @@
+{
+  "schema_version": 1,
+  "generation": "B-2026-11-04",
+  "owner_directive": "Previous clients retired by owner; preserve evidence, disregard reservations. Do not cancel live jobs.",
+  "clients": [
+    {
+      "username": "B01",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B01/MEMORY.md"
+    },
+    {
+      "username": "B02",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B02/MEMORY.md"
+    },
+    {
+      "username": "B03",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B03/MEMORY.md"
+    },
+    {
+      "username": "B04",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B04/MEMORY.md"
+    },
+    {
+      "username": "B05",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B05/MEMORY.md"
+    },
+    {
+      "username": "B06",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B06/MEMORY.md"
+    },
+    {
+      "username": "B07",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B07/MEMORY.md"
+    },
+    {
+      "username": "B08",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B08/MEMORY.md"
+    },
+    {
+      "username": "B09",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B09/MEMORY.md"
+    },
+    {
+      "username": "B10",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B10/MEMORY.md"
+    },
+    {
+      "username": "B11",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B11/MEMORY.md"
+    },
+    {
+      "username": "B12",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B12/MEMORY.md"
+    },
+    {
+      "username": "B13",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B13/MEMORY.md"
+    },
+    {
+      "username": "B14",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B14/MEMORY.md"
+    },
+    {
+      "username": "B15",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B15/MEMORY.md"
+    },
+    {
+      "username": "B16",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B16/MEMORY.md"
+    },
+    {
+      "username": "B17",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B17/MEMORY.md"
+    },
+    {
+      "username": "B18",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B18/MEMORY.md"
+    },
+    {
+      "username": "B19",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B19/MEMORY.md"
+    },
+    {
+      "username": "B20",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B20/MEMORY.md"
+    },
+    {
+      "username": "B21",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B21/MEMORY.md"
+    },
+    {
+      "username": "B22",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B22/MEMORY.md"
+    },
+    {
+      "username": "B23",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B23/MEMORY.md"
+    },
+    {
+      "username": "B24",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B24/MEMORY.md"
+    },
+    {
+      "username": "B25",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B25/MEMORY.md"
+    },
+    {
+      "username": "B26",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B26/MEMORY.md"
+    },
+    {
+      "username": "B27",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B27/MEMORY.md"
+    },
+    {
+      "username": "B28",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B28/MEMORY.md"
+    },
+    {
+      "username": "B29",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B29/MEMORY.md"
+    },
+    {
+      "username": "B30",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B30/MEMORY.md"
+    },
+    {
+      "username": "B31",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B31/MEMORY.md"
+    },
+    {
+      "username": "B32",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B32/MEMORY.md"
+    },
+    {
+      "username": "B33",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B33/MEMORY.md"
+    },
+    {
+      "username": "B34",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B34/MEMORY.md"
+    },
+    {
+      "username": "B35",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B35/MEMORY.md"
+    },
+    {
+      "username": "B36",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B36/MEMORY.md"
+    },
+    {
+      "username": "B37",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B37/MEMORY.md"
+    },
+    {
+      "username": "B38",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B38/MEMORY.md"
+    },
+    {
+      "username": "B39",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B39/MEMORY.md"
+    },
+    {
+      "username": "B40",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B40/MEMORY.md"
+    },
+    {
+      "username": "B41",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B41/MEMORY.md"
+    },
+    {
+      "username": "B42",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B42/MEMORY.md"
+    },
+    {
+      "username": "B43",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B43/MEMORY.md"
+    },
+    {
+      "username": "B44",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B44/MEMORY.md"
+    },
+    {
+      "username": "B45",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B45/MEMORY.md"
+    },
+    {
+      "username": "B46",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B46/MEMORY.md"
+    },
+    {
+      "username": "B47",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B47/MEMORY.md"
+    },
+    {
+      "username": "B48",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B48/MEMORY.md"
+    },
+    {
+      "username": "B49",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B49/MEMORY.md"
+    },
+    {
+      "username": "B50",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/B50/MEMORY.md"
+    }
+  ]
+}

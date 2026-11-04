@@ -1,0 +1,22 @@
+{
+  "id": "INTEGRATION-001",
+  "title": "دمج الإصلاحات والتحقق وتسليم تشخيصي منسق",
+  "priority": "P1",
+  "status": "OPEN",
+  "track": "integration",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41812889049",
+    "https://github.com/alwansan/raf/releases/tag/android-early-test-41812889049-1"
+  ],
+  "remaining": [
+    "APK86/source d181ee7152580f49ee0b41dfd05fa2bfdacfafe5 آخرلعبةمنشورةمراجعة",
+    "إصلاحاتHEADلاحقةليستهاتفاً",
+    "قيودwaterالمعلنةمفتوحة"
+  ],
+  "acceptance": [
+    "دمجالتغييرمعاختبارودليلومصدرنسخة",
+    "لاتسميةREADYإلا3مراجعاتكاملةلنفسSHAوإغلاقالعوائق"
+  ],
+  "updated_by": "owner-team-bootstrap",
+  "updated_at": "2026-11-04"
+}

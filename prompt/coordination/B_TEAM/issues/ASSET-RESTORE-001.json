@@ -1,0 +1,22 @@
+{
+  "id": "ASSET-RESTORE-001",
+  "title": "اكتمال meshes/textures/Resources/روابطالأصل",
+  "priority": "P1",
+  "status": "OPEN",
+  "track": "resources",
+  "evidence": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/ZIP2_SOURCE_PROVIDER.md",
+    "https://github.com/alwansan/CL/blob/5394407b5cd0a0ca1848ff0902f8d2133bf6ea29/raft%20log/lf/LogRaft-20261104-225757-156/session-summary.json"
+  ],
+  "remaining": [
+    "تحقق stream ranges/format/sRGB/normalmaps وGUIDs",
+    "missingMonoScript وconvexmeshwarnings أسبابغيرمحسومة",
+    "جردنطاقمحددومرحلةاستعادةلكلمورد"
+  ],
+  "acceptance": [
+    "تغطيةmanifestوالتبعياتالمطلوبة",
+    "اكتمالgeometry/bindingsمعاختباروظيفي"
+  ],
+  "updated_by": "owner-team-bootstrap",
+  "updated_at": "2026-11-04"
+}

@@ -1,0 +1,23 @@
+{
+  "id": "LOCAL-005",
+  "title": "العالم المحلي يتوقف بعد تحميل المشهد",
+  "priority": "P0",
+  "status": "OPEN",
+  "track": "world-save",
+  "evidence": [
+    "https://github.com/alwansan/CL/blob/5394407b5cd0a0ca1848ff0902f8d2133bf6ea29/raft%20log/%D8%A7%D9%86%D8%AA%D8%A7%D8%AC%20%D9%85%D8%B3%D8%A7%D8%B1%20/7/com.alwansan.raft.androidtest/files/raft-logs/raft-20261104T190058726-10019eea-0000.jsonl",
+    "https://github.com/alwansan/CL/blob/5394407b5cd0a0ca1848ff0902f8d2133bf6ea29/raft%20log/lf/LogRaft-20261104-225757-156/session-summary.json"
+  ],
+  "remaining": [
+    "فشل SaveGame -> SteamUserStats.StoreStats -> steam_api64 بعد تحميل المشهد",
+    "راجع Cheat.AllowCheatsForLocalPlayer ومسارات Steam المتبقية",
+    "تتبع OnWorldRecieved والتحميل والحفظ واللاعب دون أعلام نجاح وهمية"
+  ],
+  "acceptance": [
+    "دخول عالم جديد محلي قابل للعب بلا Steam أو سيرفر خارجي",
+    "حفظ .rgd ثم إعادة تحميله فعلياً",
+    "لا يكفي إخفاء رسالة الاتصال"
+  ],
+  "updated_by": "owner-team-bootstrap",
+  "updated_at": "2026-11-04"
+}

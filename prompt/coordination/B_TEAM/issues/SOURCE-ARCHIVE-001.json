@@ -1,0 +1,22 @@
+{
+  "id": "SOURCE-ARCHIVE-001",
+  "title": "اعتماد payload الأرشيف الخاص مقابلZIP2",
+  "priority": "P1",
+  "status": "OPEN",
+  "track": "source-integrity",
+  "evidence": [
+    "https://github.com/alwansan/raf-archive/releases/tag/Raft-zip2-reconstructed",
+    "https://github.com/alwansan/raf/blob/15964ea8f246b6e076ce26b60931ee2e1a9a2385/RAFT_FILE_MANIFEST.tsv"
+  ],
+  "remaining": [
+    "365 اسماً مطابقاً للـmanifest لها حجم وdigest مختلفان؛ اسم واحد يحتاج مطابقة",
+    "قرينة multipart تحتاج فحص payload بايتياً، لا استنتاج تلف الأصل",
+    "ZIP2 بديل مثبت؛ لا ينتظر باقي الفريق اعتماد الأرشيف"
+  ],
+  "acceptance": [
+    "كل payload مستعمل يطابق حجم وSHA الملف الأصلي",
+    "توثيق فصل غلاف النقل إذا ثبت، دون تغيير البصمات الأصلية"
+  ],
+  "updated_by": "owner-team-bootstrap",
+  "updated_at": "2026-11-04"
+}

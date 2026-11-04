@@ -1,0 +1,276 @@
+{
+  "schema_version": 1,
+  "issues": [
+    {
+      "id": "ASSET-RESTORE-001",
+      "title": "اكتمال meshes/textures/Resources/روابطالأصل",
+      "priority": "P1",
+      "status": "OPEN",
+      "track": "resources",
+      "evidence": [
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/ZIP2_SOURCE_PROVIDER.md",
+        "https://github.com/alwansan/CL/blob/5394407b5cd0a0ca1848ff0902f8d2133bf6ea29/raft%20log/lf/LogRaft-20261104-225757-156/session-summary.json"
+      ],
+      "remaining": [
+        "تحقق stream ranges/format/sRGB/normalmaps وGUIDs",
+        "missingMonoScript وconvexmeshwarnings أسبابغيرمحسومة",
+        "جردنطاقمحددومرحلةاستعادةلكلمورد"
+      ],
+      "acceptance": [
+        "تغطيةmanifestوالتبعياتالمطلوبة",
+        "اكتمالgeometry/bindingsمعاختباروظيفي"
+      ],
+      "updated_by": "owner-team-bootstrap",
+      "updated_at": "2026-11-04",
+      "_record_path": "issues/ASSET-RESTORE-001.json"
+    },
+    {
+      "id": "AUDIO-REGRESSION",
+      "title": "الصوت يعمل بحسب تجربة المالك",
+      "priority": "P2",
+      "status": "OWNER_CONFIRMED",
+      "track": "regression",
+      "evidence": [
+        "owner-message-2026-11-04"
+      ],
+      "remaining": [
+        "حماية عدم التراجع فقط؛ ملاحظة المالك لا تثبت كل حدث صوتي في كل مشهد",
+        "لا تعِد فتح الأولوية بسبب logs قديمة قبل اكتمال OBB"
+      ],
+      "acceptance": [
+        "الحفاظ على العمل الحالي وإعادة الفحص فقط بدليل تراجع جديد"
+      ],
+      "updated_by": "owner-team-bootstrap",
+      "updated_at": "2026-11-04",
+      "_record_path": "issues/AUDIO-REGRESSION.json"
+    },
+    {
+      "id": "DISPLAY-003",
+      "title": "Settings مستقر بحسب تجربة المالك",
+      "priority": "P2",
+      "status": "OWNER_CONFIRMED",
+      "track": "regression",
+      "evidence": [
+        "owner-message-2026-11-04"
+      ],
+      "remaining": [
+        "حمايةعدم التراجع، لاتحسينUIالآن"
+      ],
+      "acceptance": [
+        "حفظالأبعاد/landscapeالحالية"
+      ],
+      "updated_by": "owner-team-bootstrap",
+      "updated_at": "2026-11-04",
+      "_record_path": "issues/DISPLAY-003.json"
+    },
+    {
+      "id": "INPUT-005",
+      "title": "التاتش والأزرار واللاي آوت مؤجلة",
+      "priority": "DEFERRED",
+      "status": "DEFERRED",
+      "track": "deferred",
+      "evidence": [
+        "owner-message-2026-11-04"
+      ],
+      "remaining": [
+        "لا تطوير أو تجارب مخصصة للتاتش والأزرار واللاي آوت حالياً",
+        "حافظ على LEFT/Mouse0 وhold500ms ومنع الازدواج"
+      ],
+      "acceptance": [
+        "توجيه جديد من المالك لإعادة العمل عليه"
+      ],
+      "updated_by": "owner-team-bootstrap",
+      "updated_at": "2026-11-04",
+      "_record_path": "issues/INPUT-005.json"
+    },
+    {
+      "id": "INTEGRATION-001",
+      "title": "دمج الإصلاحات والتحقق وتسليم تشخيصي منسق",
+      "priority": "P1",
+      "status": "OPEN",
+      "track": "integration",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41812889049",
+        "https://github.com/alwansan/raf/releases/tag/android-early-test-41812889049-1"
+      ],
+      "remaining": [
+        "APK86/source d181ee7152580f49ee0b41dfd05fa2bfdacfafe5 آخرلعبةمنشورةمراجعة",
+        "إصلاحاتHEADلاحقةليستهاتفاً",
+        "قيودwaterالمعلنةمفتوحة"
+      ],
+      "acceptance": [
+        "دمجالتغييرمعاختبارودليلومصدرنسخة",
+        "لاتسميةREADYإلا3مراجعاتكاملةلنفسSHAوإغلاقالعوائق"
+      ],
+      "updated_by": "owner-team-bootstrap",
+      "updated_at": "2026-11-04",
+      "_record_path": "issues/INTEGRATION-001.json"
+    },
+    {
+      "id": "LOCAL-005",
+      "title": "العالم المحلي يتوقف بعد تحميل المشهد",
+      "priority": "P0",
+      "status": "OPEN",
+      "track": "world-save",
+      "evidence": [
+        "https://github.com/alwansan/CL/blob/5394407b5cd0a0ca1848ff0902f8d2133bf6ea29/raft%20log/%D8%A7%D9%86%D8%AA%D8%A7%D8%AC%20%D9%85%D8%B3%D8%A7%D8%B1%20/7/com.alwansan.raft.androidtest/files/raft-logs/raft-20261104T190058726-10019eea-0000.jsonl",
+        "https://github.com/alwansan/CL/blob/5394407b5cd0a0ca1848ff0902f8d2133bf6ea29/raft%20log/lf/LogRaft-20261104-225757-156/session-summary.json"
+      ],
+      "remaining": [
+        "فشل SaveGame -> SteamUserStats.StoreStats -> steam_api64 بعد تحميل المشهد",
+        "راجع Cheat.AllowCheatsForLocalPlayer ومسارات Steam المتبقية",
+        "تتبع OnWorldRecieved والتحميل والحفظ واللاعب دون أعلام نجاح وهمية"
+      ],
+      "acceptance": [
+        "دخول عالم جديد محلي قابل للعب بلا Steam أو سيرفر خارجي",
+        "حفظ .rgd ثم إعادة تحميله فعلياً",
+        "لا يكفي إخفاء رسالة الاتصال"
+      ],
+      "updated_by": "owner-team-bootstrap",
+      "updated_at": "2026-11-04",
+      "_record_path": "issues/LOCAL-005.json"
+    },
+    {
+      "id": "PERF-007",
+      "title": "أداء وذاكرة تحت تدفق أخطاء الرسم",
+      "priority": "P1",
+      "status": "OPEN",
+      "track": "integration",
+      "evidence": [
+        "https://github.com/alwansan/CL/blob/5394407b5cd0a0ca1848ff0902f8d2133bf6ea29/raft%20log/lf/LogRaft-20261104-225757-156/session-summary.json"
+      ],
+      "remaining": [
+        "إصلاحجذرerrorfloodقبلنسبتحسنFPS",
+        "قياسذاكرةمتسقوصورمتماثلة"
+      ],
+      "acceptance": [
+        "قياسقبلوبعدمصدرونسخةمعلومة",
+        "لاخسارةمحتوىأوجودة"
+      ],
+      "updated_by": "owner-team-bootstrap",
+      "updated_at": "2026-11-04",
+      "_record_path": "issues/PERF-007.json"
+    },
+    {
+      "id": "RENDER-002",
+      "title": "الألوان البيضاء والخامات والتكستشر والمؤثرات",
+      "priority": "P0",
+      "status": "OPEN",
+      "track": "colors-materials",
+      "evidence": [
+        "https://github.com/alwansan/CL/blob/5394407b5cd0a0ca1848ff0902f8d2133bf6ea29/raft%20log/lf/LogRaft-20261104-225757-156/session-summary.json",
+        "https://github.com/alwansan/CL/blob/5394407b5cd0a0ca1848ff0902f8d2133bf6ea29/raft%20log/img/Screenshot_%D9%A2%D9%A0%D9%A2%D9%A6-%D9%A1%D9%A1-%D9%A0%D9%A4-%D9%A2%D9%A1-%D9%A0%D9%A9-%D9%A1%D9%A2-%D9%A0%D9%A0%D9%A4_com.alwansan.raft.androidtest.jpg"
+      ],
+      "remaining": [
+        "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
+        "تمييز غياب اللون عن فقدان mesh",
+        "حفظ الأصل وألوانه"
+      ],
+      "acceptance": [
+        "مطابقة روابط ومراجع الأصل",
+        "مقارنةصوريةلنفسالمشهد",
+        "نجاحعلىالهاتف"
+      ],
+      "updated_by": "owner-team-bootstrap",
+      "updated_at": "2026-11-04",
+      "_record_path": "issues/RENDER-002.json"
+    },
+    {
+      "id": "SOURCE-ARCHIVE-001",
+      "title": "اعتماد payload الأرشيف الخاص مقابلZIP2",
+      "priority": "P1",
+      "status": "OPEN",
+      "track": "source-integrity",
+      "evidence": [
+        "https://github.com/alwansan/raf-archive/releases/tag/Raft-zip2-reconstructed",
+        "https://github.com/alwansan/raf/blob/15964ea8f246b6e076ce26b60931ee2e1a9a2385/RAFT_FILE_MANIFEST.tsv"
+      ],
+      "remaining": [
+        "365 اسماً مطابقاً للـmanifest لها حجم وdigest مختلفان؛ اسم واحد يحتاج مطابقة",
+        "قرينة multipart تحتاج فحص payload بايتياً، لا استنتاج تلف الأصل",
+        "ZIP2 بديل مثبت؛ لا ينتظر باقي الفريق اعتماد الأرشيف"
+      ],
+      "acceptance": [
+        "كل payload مستعمل يطابق حجم وSHA الملف الأصلي",
+        "توثيق فصل غلاف النقل إذا ثبت، دون تغيير البصمات الأصلية"
+      ],
+      "updated_by": "owner-team-bootstrap",
+      "updated_at": "2026-11-04",
+      "_record_path": "issues/SOURCE-ARCHIVE-001.json"
+    },
+    {
+      "id": "WATER-001",
+      "title": "الماء وFFT وبرامج الشيدرات الأصلية",
+      "priority": "P0",
+      "status": "OPEN",
+      "track": "water-fft",
+      "evidence": [
+        "https://github.com/alwansan/CL/blob/5394407b5cd0a0ca1848ff0902f8d2133bf6ea29/raft%20log/lf/LogRaft-20261104-225757-156/session-summary.json",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/W4_BUILTIN_GATE_AND_WATER_FRONTIER_2026-11-04.md"
+      ],
+      "remaining": [
+        "Spectrum/Foam/Blur passes ناقصة في APK86",
+        "kernelIndex6 مع kernelCount0",
+        "ربط kernels/resources/original programs وUnity/Adreno"
+      ],
+      "acceptance": [
+        "هوية برامج ونوى أصلية أو تطابق موثق دونdummy",
+        "تثبيت فيالتصدير+Unity import/render",
+        "اختبار هاتف يثبت الماء بلا pass/kernel errors"
+      ],
+      "updated_by": "owner-team-bootstrap",
+      "updated_at": "2026-11-04",
+      "_record_path": "issues/WATER-001.json"
+    }
+  ],
+  "resources": [
+    {
+      "id": "blur-original-cleanup",
+      "title": "إصلاح cleanup في دالةBlur الأصلية — دليل سابق محفوظ",
+      "kind": "source-adaptation",
+      "source": {
+        "provider": "zip2",
+        "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+        "path": "Raft/Raft_Data/Managed/Assembly-CSharp.dll",
+        "bytes": 3211776,
+        "sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e"
+      },
+      "stages": {
+        "acquisition": "VERIFIED",
+        "extraction": "VERIFIED",
+        "reconstruction": "CPU_TESTED",
+        "binding": "NOT_APPLICABLE",
+        "integration": "MANAGED_TESTED",
+        "device": "UNKNOWN"
+      },
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41811356895",
+        "https://github.com/alwansan/raf/actions/runs/41811356943"
+      ],
+      "remaining": [
+        "لايثبتشيدرBlurSSSأوpixelsأوالماء",
+        "قبولالهاتفغيرمثبت"
+      ],
+      "updated_by": "bootstrap-import-of-attributed-legacy-evidence",
+      "_record_path": "resources/blur-original-cleanup.json"
+    }
+  ],
+  "events": [
+    {
+      "id": "20261104-b-generation",
+      "owner": "owner-team-bootstrap",
+      "session_id": "b-team-setup-20261104",
+      "issue_id": "TEAM",
+      "type": "start",
+      "summary": "Owner replaces legacy clients with B01–B50. Preserve legacy evidence, release reservations, prioritize water/colors/local-world. Audio/Settings owner-confirmed; touch deferred. No B sessions have been started by setup.",
+      "evidence": [
+        "owner-message-2026-11-04"
+      ],
+      "at": "2026-11-04",
+      "_record_path": "events/owner/20261104-b-generation.json"
+    }
+  ],
+  "overall_percent": null,
+  "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
+  "input_sha256": "3c38e4e7a9c0d4ee04f2ecb42e33737f2469957793d93f3a6f7f98023139a03d"
+}

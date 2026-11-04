@@ -1,8 +1,2 @@
-
-> **Owner update 2026-11-04:** Prefer original game data from `zip2/Raft`, pinned15964ea8f246b6e076ce26b60931ee2e1a9a2385. Read `docs/ZIP2_SOURCE_PROVIDER.md` before acquisition. Reassemble split files and verify size/SHA; avoid new LFS pulls. Keep current Raft tree and existing fingerprints until consumers are migrated. Focus on water/shaders/colors/materials and original-data restoration. This updates source acquisition, not this role's build permissions.
-
-استكمل العمل الهندسي الفعلي على https://github.com/alwansan/raf داخل feature/android-native-port فقط. ابدأ بالملفات الحية prompt/README.md وprompt/CONTINUE_RAFT_AR.md وprompt/STATUS.md وdocs/CURRENT_OWNER_REQUIREMENTS.md وAGENTS.md، ثم prompt/coordination/README.md وأحدث التسليم والتقارير والكود. راجع HEAD وcommits وActions بجميع الحالات غير النهائية والإصدارات ولوغات CL للقراءة فقط.
-
-سجل نفسك باسم فريد حسب بروتوكول coordination في clients/ وملف عمل مستقل قبل التنفيذ. اطلع على جميع العملاء والخطط والتجارب المتعلقة بمشكلتك؛ العمل على نفس المشكلة مسموح، لكن نسّق الملفات المشتركة ولا تكتب فوق عمل غيرك. استعمل expected SHA lease وأعد الدمج عند تغير HEAD. سجل التجارب والرسائل والذاكرة والأعطال في مساراتك المستقلة. لا تلغِ عملاً جارياً. فروع main وzip وUnity-Editor ممنوعة.
-
-نفذ إصلاحاً أو تجربة حقيقية مناسبة، اختبرها ووثق الأدلة والحدود. حافظ على GUID/.meta والمحتوى الكامل واللمس LEFT Mouse0 و500ms وautomatic touch-to-mouse=false وUGUI والأجهزة الخارجية. لا تزور kernels أو flags. لا تبدأ Unity/APK/OBB/XAPK أو Release في دور الاستعادة؛ البناء الكامل عبر المنسق بعد إغلاق العوائق وثلاث مراجعات كاملة لنفس SHA. لا تنشئ مهام مجدولة تلقائياً. حدّث ذاكرتك وstate وخطة العمل وprompt/STATUS.md والتسليم عند نتائج مهمة. لا تدّع استمرار التنفيذ بين الجلسات.
+# الرسالة الموحدة الحالية
+تعليماتالجيلالحالي كاملة في [B_TEAM/PROMPT_AR.md](B_TEAM/PROMPT_AR.md)، والتنسيق في [B_TEAM/README.md](B_TEAM/README.md). الاسم الذي عينه المالك B01–B50 هو الهوية؛ لا تولد اسماً عشوائياً. العملاء السابقون متوقفون ونتائجهم محفوظة، لا حجوزات لهم. اقرأ الملفات الحية ثم نفّذ عملاً هندسياً حسب الرسالة. [الاستعادة](B_TEAM/RESTORE_AR.md).

@@ -1,0 +1,19 @@
+{
+  "id": "AUDIO-REGRESSION",
+  "title": "الصوت يعمل بحسب تجربة المالك",
+  "priority": "P2",
+  "status": "OWNER_CONFIRMED",
+  "track": "regression",
+  "evidence": [
+    "owner-message-2026-11-04"
+  ],
+  "remaining": [
+    "حماية عدم التراجع فقط؛ ملاحظة المالك لا تثبت كل حدث صوتي في كل مشهد",
+    "لا تعِد فتح الأولوية بسبب logs قديمة قبل اكتمال OBB"
+  ],
+  "acceptance": [
+    "الحفاظ على العمل الحالي وإعادة الفحص فقط بدليل تراجع جديد"
+  ],
+  "updated_by": "owner-team-bootstrap",
+  "updated_at": "2026-11-04"
+}

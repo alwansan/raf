@@ -1,0 +1,23 @@
+{
+  "id": "RENDER-002",
+  "title": "الألوان البيضاء والخامات والتكستشر والمؤثرات",
+  "priority": "P0",
+  "status": "OPEN",
+  "track": "colors-materials",
+  "evidence": [
+    "https://github.com/alwansan/CL/blob/5394407b5cd0a0ca1848ff0902f8d2133bf6ea29/raft%20log/lf/LogRaft-20261104-225757-156/session-summary.json",
+    "https://github.com/alwansan/CL/blob/5394407b5cd0a0ca1848ff0902f8d2133bf6ea29/raft%20log/img/Screenshot_%D9%A2%D9%A0%D9%A2%D9%A6-%D9%A1%D9%A1-%D9%A0%D9%A4-%D9%A2%D9%A1-%D9%A0%D9%A9-%D9%A1%D9%A2-%D9%A0%D9%A0%D9%A4_com.alwansan.raft.androidtest.jpg"
+  ],
+  "remaining": [
+    "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
+    "تمييز غياب اللون عن فقدان mesh",
+    "حفظ الأصل وألوانه"
+  ],
+  "acceptance": [
+    "مطابقة روابط ومراجع الأصل",
+    "مقارنةصوريةلنفسالمشهد",
+    "نجاحعلىالهاتف"
+  ],
+  "updated_by": "owner-team-bootstrap",
+  "updated_at": "2026-11-04"
+}

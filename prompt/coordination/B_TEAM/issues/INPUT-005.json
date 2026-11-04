@@ -1,0 +1,19 @@
+{
+  "id": "INPUT-005",
+  "title": "التاتش والأزرار واللاي آوت مؤجلة",
+  "priority": "DEFERRED",
+  "status": "DEFERRED",
+  "track": "deferred",
+  "evidence": [
+    "owner-message-2026-11-04"
+  ],
+  "remaining": [
+    "لا تطوير أو تجارب مخصصة للتاتش والأزرار واللاي آوت حالياً",
+    "حافظ على LEFT/Mouse0 وhold500ms ومنع الازدواج"
+  ],
+  "acceptance": [
+    "توجيه جديد من المالك لإعادة العمل عليه"
+  ],
+  "updated_by": "owner-team-bootstrap",
+  "updated_at": "2026-11-04"
+}

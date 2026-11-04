@@ -1,0 +1,29 @@
+{
+  "id": "blur-original-cleanup",
+  "title": "إصلاح cleanup في دالةBlur الأصلية — دليل سابق محفوظ",
+  "kind": "source-adaptation",
+  "source": {
+    "provider": "zip2",
+    "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "path": "Raft/Raft_Data/Managed/Assembly-CSharp.dll",
+    "bytes": 3211776,
+    "sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e"
+  },
+  "stages": {
+    "acquisition": "VERIFIED",
+    "extraction": "VERIFIED",
+    "reconstruction": "CPU_TESTED",
+    "binding": "NOT_APPLICABLE",
+    "integration": "MANAGED_TESTED",
+    "device": "UNKNOWN"
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41811356895",
+    "https://github.com/alwansan/raf/actions/runs/41811356943"
+  ],
+  "remaining": [
+    "لايثبتشيدرBlurSSSأوpixelsأوالماء",
+    "قبولالهاتفغيرمثبت"
+  ],
+  "updated_by": "bootstrap-import-of-attributed-legacy-evidence"
+}
