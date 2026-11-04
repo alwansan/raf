@@ -83,6 +83,21 @@ class SpectrumDescriptorTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             numeric_tree({"m_Index": True})
 
+    def test_original_multisampled_bool_is_typed_not_integer_slot(self):
+        base = numeric_tree({"m_NameIndex": 1, "m_Index": 2,
+                             "m_MultiSampled": False})
+        changed = numeric_tree({"m_NameIndex": 1, "m_Index": 2,
+                                "m_MultiSampled": True})
+        self.assertNotEqual(base, changed)
+        self.assertEqual(base["m_MultiSampled"], {"__typed_multisampled_bool__": 0})
+        self.assertEqual(changed["m_MultiSampled"], {"__typed_multisampled_bool__": 1})
+
+    def test_original_multisampled_rejects_integer_substitution(self):
+        with self.assertRaises(ValueError):
+            numeric_tree({"m_MultiSampled": 1})
+        with self.assertRaises(ValueError):
+            numeric_tree({"m_MultiSampled": "false"})
+
     def test_fail_closed_nonfinite_float(self):
         with self.assertRaises(ValueError):
             numeric_tree({"m_Value": math.inf})
