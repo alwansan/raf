@@ -4,10 +4,10 @@
   "generation": "B-2026-11-04",
   "session_id": "20261104T2247Z-B14-d1a9",
   "resumed_from_session": "20261104T2131Z-B14-a71c",
-  "status": "active",
+  "status": "paused",
   "base_sha": "1ecd5e56186147a438b9069774d2d465f1fb7e4f",
-  "last_commit": "3a54c52833b0cc4c8aa5b574695e57ee9443963b",
-  "updated_at": "2026-11-04T22:56:20.945Z",
+  "last_commit": "f50fab945afe87b19ad7966f6c3360cfa4b3e04f",
+  "updated_at": "2026-11-04T23:01:47.772Z",
   "tracks": [
     "WATER-001/water-source-integrity",
     "LOCAL-005/offline-save-stage-path-integrity",
@@ -24,8 +24,9 @@
     "https://github.com/alwansan/raf/actions/runs/41917493634",
     "https://github.com/alwansan/raf/actions/runs/41918579185",
     "https://github.com/alwansan/raf/actions/runs/41928677980",
-    "https://github.com/alwansan/raf/actions/runs/41929461340"
+    "https://github.com/alwansan/raf/actions/runs/41929461340",
+    "https://github.com/alwansan/raf/actions/runs/41929777877"
   ],
-  "next_step": "Existing Android source policy fixed and CI41928677980 PASS. Current B14 source-authenticated SaveGame ordering CI41929461340 active; inspect conclusion/output and repair actual original method-contract mismatch if demonstrated. No device claim.",
+  "next_step": "Session two scopes source-completed. Original authentic local SaveGame order and Android stats-only guard verified but .rgd/device still OPEN; future coordinated native APK for create/save/reopen, plus P0 authentic water/FFT/shader binding first. Recheck HEAD/Actions/CL; preserve working audio/Settings and deferred touch, no background execution.",
   "memory_path": "prompt/coordination/clients/B14/MEMORY.md"
 }
