@@ -96,3 +96,8 @@
 - دفع ccfe0b7/b5c44a9 بعد rebase (خطأ GitHub العابر حُلّ): 5ce6955/d14d6ea على قلعة c38f036.
 - حيّ: W4 build 41808015938 in_progress @ 6ed699c؛ A5 HAPTICS-008 + startup-integration in_progress؛ Blur-4e91 CPU failure مكرر (ليس مساري)؛ preflight أخضر.
 - W2: المسارات الستة كلها CI-verified. بعدها: heartbeat فقط حتى نزول وثائق مواد W1 أو إتمام بناء W4 لاختبار خط الأساس الصبغي.
+
+## تحديث 10:00Z (4 نوفمبر) — نتيجة بناء W4 + مسار سابع
+- **W4 full build 41808015938 => completed/failure @ 6ed699c** (jobs: gate+license preflight نجحا، reconstruct فشل، delivery failure). مراقبة سلبية فقط؛ لا تدخل. خط الأساس الصبغي يبقى صالحًا لأي إعادة محاولة بناء.
+- نشاط ليلي آخر: W3 fallback/custom-editor enumeration على 165 shaders؛ إصلاحات Blur-4e91 جارية لعملاء آخرين.
+- مسار W2 السابع: baseline إعدادات أخذ عينات الخامات (wrap/filter/aniso/mip) — أرقام فقط، غير متداخل.
