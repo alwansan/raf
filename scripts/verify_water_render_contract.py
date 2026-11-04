@@ -28,13 +28,33 @@ PROGRAM = re.compile(r'\b(?:CGPROGRAM|HLSLPROGRAM)\b')
 KERNEL = re.compile(r'^\s*#\s*pragma\s+kernel\s+\w+', re.MULTILINE)
 
 
+def _regular_unlinked_asset(path: Path, assets: Path) -> bool:
+    """Require a physical in-Assets file; do not follow linked metadata.
+
+    A linked shader meta previously satisfied is_file() and could make an
+    external sidecar appear to belong to an original water shader. Check
+    every path component without resolving away symbolic link evidence.
+    Missing ordinary sidecars still mean unsatisfied coverage, not an error.
+    """
+    try:
+        path.relative_to(assets)
+    except ValueError as error:
+        raise ValueError("Water source path escapes Unity Assets") from error
+    cursor = path
+    while cursor != assets:
+        if cursor.is_symlink():
+            raise ValueError("Unsafe linked water source or metadata path")
+        cursor = cursor.parent
+    return path.is_file()
+
+
 def inspect(project: Path) -> dict:
     assets = project / "Assets"
-    if not assets.is_dir():
-        raise ValueError("Unity exported Assets folder absent")
+    if project.is_symlink() or assets.is_symlink() or not assets.is_dir():
+        raise ValueError("Unity exported Assets folder missing or redirected")
     found = {}
     for path in assets.rglob("*.shader"):
-        if path.is_symlink() or not path.is_file():
+        if not _regular_unlinked_asset(path, assets):
             raise ValueError("Unsafe source shader path")
         raw = path.read_text(encoding="utf-8-sig", errors="replace")
         without_comments = remove_comments(raw)
@@ -49,7 +69,7 @@ def inspect(project: Path) -> dict:
         found[name] = {
             **coverage,
             "has_program": coverage["passes_with_complete_program"] > 0,
-            "original_meta_present": Path(str(path) + ".meta").is_file(),
+            "original_meta_present": _regular_unlinked_asset(Path(str(path) + ".meta"), assets),
             "export_placeholder": "No subprograms found" in raw,
         }
     shader_rows = {}
@@ -67,7 +87,7 @@ def inspect(project: Path) -> dict:
 
     computes = []
     for path in assets.rglob("*.compute"):
-        if path.is_symlink() or not path.is_file():
+        if not _regular_unlinked_asset(path, assets):
             raise ValueError("Unsafe source compute shader path")
         raw = path.read_text(encoding="utf-8-sig", errors="replace")
         profile = kernel_entrypoint_profile(raw)
@@ -75,7 +95,7 @@ def inspect(project: Path) -> dict:
         computes.append({
             **profile,
             "is_water_or_fft_named": bool(re.search(r'(water|fft|spectrum|foam)', path.name, re.IGNORECASE)),
-            "original_meta_present": meta.is_file() and not meta.is_symlink(),
+            "original_meta_present": _regular_unlinked_asset(meta, assets),
         })
     water_compute = [
         row for row in computes
