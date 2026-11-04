@@ -64,6 +64,35 @@ class KernelCallsiteTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "Unterminated"):
             analyze_source(src, hashlib.sha256(src.encode()).hexdigest())
 
+    def test_commas_and_braces_in_comment_do_not_split_original_args(self):
+        src = ('class F {\n'
+               '  void Go() { fft.Dispatch(6, /* x, ), ], } */ div(10, 2), 1, 1); }\n'
+               '}\n')
+        report = analyze_source(src, hashlib.sha256(src.encode()).hexdigest())
+        calls = report["compute_api_callsites"]
+        self.assertEqual(len(calls), 1)
+        self.assertEqual(calls[0]["argument_count"], 4)
+        self.assertEqual(calls[0]["kernel_or_first_arg"]["value"], 6)
+        self.assertEqual(calls[0]["last_arg"]["value"], 1)
+
+    def test_verbatim_doubled_quote_comma_preserves_argument_boundaries(self):
+        src = ('class F {\n'
+               '  void Go() { fft.SetTexture(1, @"Alpha""Beta, Gamma", texture); }\n'
+               '}\n')
+        report = analyze_source(src, hashlib.sha256(src.encode()).hexdigest())
+        self.assertEqual(report["calls_by_api"], {"SetTexture": 1})
+        self.assertEqual(report["compute_api_callsites"][0]["argument_count"], 3)
+        args, _ = parse_original_args(src, src.index("(", src.index("SetTexture")))
+        self.assertEqual(args[1], '@"Alpha""Beta, Gamma"')
+
+    def test_mask_preserves_line_breaks_and_offsets(self):
+        from scripts.probe_original_fft_kernel_callsites import mask_noncode
+        src = "/* first\nsecond */\nfft.Dispatch(2, 1, 1, 1);\n"
+        masked = mask_noncode(src)
+        self.assertEqual(len(masked), len(src))
+        self.assertEqual(masked.count("\n"), src.count("\n"))
+        self.assertEqual(masked.index("fft.Dispatch"), src.index("fft.Dispatch"))
+
     def test_original_argument_values_are_not_source_code(self):
         self.assertEqual(sanitized_argument("2048")["value"], 2048)
         self.assertEqual(sanitized_argument("ComputeFFT")["kind"], "identifier_or_member")
