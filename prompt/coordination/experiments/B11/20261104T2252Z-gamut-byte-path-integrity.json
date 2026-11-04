@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "owner": "B11",
+  "session_id": "20261104T2244Z-B11-54cf",
+  "issue_id": "RENDER-002",
+  "hypothesis": "B11's gamut patch falsely rejects valid Unicode-prefix ProjectSettings because Python character offsets are used to guard raw bytes; symlinked exported project ancestor can redirect mutation outside the target tree.",
+  "source_commit": "3c866416159cdb87740e8d465bfc5d58d78313f6",
+  "input_hashes": [
+    "published production source Git blob:b7564b405e6c72a7766e1192df164c99aa29b77f (identical to locally executed script copy)",
+    "original globalgamemanagers:size=1914356 sha256=6d1288cd08b91d8c321ed2526503404b64b978819985b9b7fa5a9a146c29a8f5 (prior B04 pin; NOT rerun here)"
+  ],
+  "tool_versions": {
+    "python": "3.13.5",
+    "unity": "not run"
+  },
+  "commands": [
+    "python3 -m py_compile scripts/b11_restore_original_color_gamuts.py tests/test_b11_restore_original_color_gamuts.py",
+    "python3 -m unittest discover -s tests -p test_b11_restore_original_color_gamuts.py -v",
+    "git hash-object scripts/b11_restore_original_color_gamuts.py"
+  ],
+  "negative_controls": [
+    "16 Arabic glyphs before 01000000; original character index whitelist fails without changing other bytes",
+    "16 pairs of emoji and CRLF, patch correct exactly only allowed 8-byte field",
+    "ancestor symlink redirects --apply to external ProjectSettings in old code; final code rejects and preserves target bytes",
+    "lexical .. traversal now refused",
+    "existing malformed/missing/duplicate/unknown value, symlink target/hardlink, UTF-8 invalid, atomic idempotent tests retained"
+  ],
+  "workflow_path": ".github/workflows/raft-b11-gamut-parity.yml",
+  "run_url": null,
+  "artifact_urls": [],
+  "budget": "Local CPU 0.02 s test; dedicated push-triggered 5 minute workflow may run; GitHub run ID unavailable from connector",
+  "status": "completed",
+  "observed_result": "Local copy of production Python source has EXACT current Git blob b7564b405e6c72a7766e1192df164c99aa29b77f; 16/16 local synthetic tests and py_compile PASS with B04-only stub; test-file local copy not blob-identical, but same 16 test methods. Old source reproduces both false rejection and symlink ancestor outside-tree mutation; patched source rejects outside-tree write.",
+  "rejected_hypotheses": [
+    "Unicode str regex offsets may be used unchanged as UTF-8 byte-range: rejected by Arabic prefix 16-glyph repro.",
+    "Checking only exported project and leaf symlink nodes suffices: rejected; ancestor-link outside-tree write reproduced."
+  ],
+  "limitations": [
+    "Full GitHub Actions run conclusion unavailable; combined commit statuses empty and connector commit-workflow lookup limited to pull_request runs.",
+    "No original private input re-fetch or same-instance Raft export ProjectSettings run.",
+    "No actual Unity import/graphics/pixels/device, no claim of repaired white materials.",
+    "Local tests use an explicit B04 stub; original SHA verification is NOT exercised in local suite."
+  ],
+  "integration_commit": "7363a3b444347ea14c1bf3a08c13c5cd764a2095",
+  "next_step": "Observe dedicated B11 workflow conclusion; inspect next justified authentic Raft export's gamut aggregate; reject exporter mismatch hypothesis if original 00000000 already seen."
+}
