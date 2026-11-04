@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "owner": "B05",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2242Z-B05-auth-texenv6",
+  "issue_id": "RENDER-002",
+  "track": "colors-materials",
+  "approach": "Allow B05 original SHA-verified Material m_TexEnvs comparer to compare one authenticated source owner against same-instance full Unity export while not mistaking other source owners for missing traces; preserve default strict full-object behavior.",
+  "status": "active",
+  "base_sha": "b862398f9a9e06c351bbfb1a5c5b8612319e5d45",
+  "intended_files": [
+    "scripts/b05_verify_material_texenv_bindings.py",
+    "tests/test_b05_verify_material_texenv_bindings.py",
+    "docs/B05_MATERIAL_TEXENV_LINEAGE_2026-11-04.md"
+  ],
+  "hypothesis": "Full-scope original checker currently requires all 14 original providers and exact all-export material set, blocking a legitimate verified one-owner material-to-full-export check. Explicit owner filter and scoped trace coverage should enable authentic parity without claiming global coverage.",
+  "related_work": [
+    "B05 authentic original CI41928076197",
+    "B46 exported GUID integrity",
+    "B38 YAML duplicate keys"
+  ],
+  "experiment_ids": [
+    "20261104T2242Z-B05-auth-texenv6-scoped"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Add --owner restricted to pinned authentic source, verify selected-owner trace uniqueness and object mapping; fail on missing selected material, reject external-owner guessing, add negative controls.",
+  "updated_at": "2026-11-04T22:47:00Z"
+}
