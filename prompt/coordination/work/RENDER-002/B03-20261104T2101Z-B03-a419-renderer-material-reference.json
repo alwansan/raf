@@ -7,7 +7,7 @@
   "track": "colors-materials",
   "approach": "Trace exported MeshRenderer/SkinnedMeshRenderer material slots to original exported Material YAML document+meta GUID identities with strict shape and missing-reference checks; preserve null/builtin distinctions without inventing matches.",
   "status": "completed",
-  "base_sha": null,
+  "base_sha": "4dd8c9dceb32bed34c1cda4292c0b71389f16f20",
   "intended_files": [
     "scripts/b03_verify_renderer_material_links.py",
     "tests/test_b03_verify_renderer_material_links.py",
