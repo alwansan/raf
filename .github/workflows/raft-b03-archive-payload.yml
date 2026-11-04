@@ -34,7 +34,7 @@ jobs:
       - name: Safe synthetic-only result
         if: always()
         run: |
-          printf 'B03 original payload intake: synthetic tests only; private archive NOT byte-verified.\n' > "\$RUNNER_TEMP/b03-summary.txt"
+          printf 'B03 original payload intake: synthetic tests only; private archive NOT byte-verified.\n' > "$RUNNER_TEMP/b03-summary.txt"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
