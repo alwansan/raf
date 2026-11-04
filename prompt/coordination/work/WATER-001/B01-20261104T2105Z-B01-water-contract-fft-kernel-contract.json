@@ -5,18 +5,25 @@
   "session_id": "20261104T2105Z-B01-water-contract",
   "issue_id": "WATER-001",
   "track": "water-fft",
-  "approach": "Trace source-to-runtime original FFT kernel count and dispatch contract, check authentic binding and validated fail-closed handling; implement targeted proven fix without dummy.",
-  "status": "active",
+  "approach": "Harden SHA-pinned original managed FFT compute callsite lexical provenance against comments/string false positives without changing original runtime kernels.",
+  "status": "paused",
   "base_sha": "6c966c63ba2eb303fc8a419ef7dd629230e81450",
   "intended_files": [
-    "water FFT original/source scripts subject to verified path",
-    "tests/ dedicated FFT regression where appropriate"
+    "scripts/probe_original_fft_kernel_callsites.py",
+    "tests/test_probe_original_fft_kernel_callsites.py"
   ],
-  "hypothesis": "Android kernelCount=0 may be caused by runtime missing authentic compute asset or mismatched program/kernel binding; isolate with source trace before changing.",
-  "related_work": [],
-  "experiment_ids": [],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Inspect current shader/material resources and FFT call chain to select reproducible test.",
-  "updated_at": "2026-11-04T21:05:00Z"
+  "hypothesis": "Unfiltered regex can treat commented or quoted API names as real original FFT kernel callsites, yielding unreliable downstream serialization correlation.",
+  "related_work": [
+    "B48 runtime compute kernel identity (separate)"
+  ],
+  "experiment_ids": [
+    "B01-20261104-fft-lexical-provenance"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41911886307",
+    "https://github.com/alwansan/raf/actions/runs/41911972796"
+  ],
+  "result": "Lexical mask and two synthetic negative tests committed in 938dd139de855d41614f046cb8c2a6871501b2e5. Initial CI passed earlier source; final CI pending. Not water shader restoration or device evidence.",
+  "next_step": "Check final CI 41911972796, fix failing tests if needed, then review original SHA-pinned caller counts.",
+  "updated_at": "2026-11-04T21:16:00Z"
 }
