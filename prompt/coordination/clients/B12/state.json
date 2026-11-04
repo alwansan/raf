@@ -4,10 +4,10 @@
   "generation": "B-2026-11-04",
   "session_id": "20261104T2243Z-B12-bounded-tree-a9",
   "resumed_from_session": "20261104T2132Z-B12-c4a8",
-  "status": "active",
+  "status": "completed",
   "base_sha": "f8028d15b2401d1fd8c73b2316e5bf76fef88eae",
-  "last_commit": "a324eb6208f9edc3f4587aa4c8236192e13d6684",
-  "updated_at": "2026-11-04T22:46:12.884Z",
+  "last_commit": "cdec4c65add78518942fc8609d32687c1257637d",
+  "updated_at": "2026-11-04T23:00:18.910Z",
   "tracks": [
     "integration",
     "colors-materials"
@@ -21,8 +21,10 @@
     "https://github.com/alwansan/raf/actions/runs/41919089409",
     "https://github.com/alwansan/raf/actions/runs/41918822038",
     "https://github.com/alwansan/raf/actions/runs/41920048140",
-    "https://github.com/alwansan/raf/actions/runs/41920015979"
+    "https://github.com/alwansan/raf/actions/runs/41920015979",
+    "https://github.com/alwansan/raf/actions/runs/41929419050",
+    "https://github.com/alwansan/raf/actions/runs/41928807641"
   ],
-  "next_step": "Source-fix B12 diagnostic unbounded GetComponentsInChildren allocation with explicit traversal and work caps; test source policy + original managed compile; no native build.",
+  "next_step": "B12 source/managed scene diagnostic GC allocation sub-scope finished (CI41929419050 8 CLR cases + 22 unit tests PASS). Next new authentic Raft APK + corresponding CL screenshots/log to classify limit_reason/mesh/shader/GC; broader PERF/WATER/RENDER/LOCAL OPEN; do not run duplicate native build or claim background work.",
   "memory_path": "prompt/coordination/clients/B12/MEMORY.md"
 }
