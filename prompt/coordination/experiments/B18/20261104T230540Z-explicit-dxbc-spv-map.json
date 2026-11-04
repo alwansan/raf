@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "owner": "B18",
+  "session_id": "20261104T225100Z-B18-map2",
+  "issue_id": "WATER-001",
+  "hypothesis": "SHA-authentic 20 DXBC compiled FFT programs can be translated by vkd3d-shader with two explicitly chosen DXBC source t0,t1,u0 register-to-target SPIR-V descriptor maps, retaining sample/storage type and local workgroup.",
+  "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "input_hashes": [
+    "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "9d934f5c99183c6df5cf2f1fefc9d3e5ec4bce5da5f96a86e4c02910d5322247"
+  ],
+  "tool_versions": {
+    "Ubuntu": "24.04",
+    "libvkd3d-shader": "1.2-15build1",
+    "UnityPy": "1.25.4"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_b18_fft_spirv_descriptor_identity.py -v",
+    "cc -std=c11 -O2 -Wall -Wextra -Werror -I/usr/include/vkd3d scripts/b18_vkd3d_explicit_bindings.c -lvkd3d-shader -o \"$RUNNER_TEMP/b18-vkd3d-explicit-interface\"",
+    "python3 -m scripts.stage_zip2_fft_owner --zip2-checkout \"$RUNNER_TEMP/b18-map/zip2\" --destination \"$RUNNER_TEMP/b18-map/original/Raft_Data/sharedassets0.assets\"",
+    "python3 -m scripts.b18_fft_spirv_descriptor_identity --source \"$RUNNER_TEMP/b18-map/original/Raft_Data\" --compiler \"$RUNNER_TEMP/b18-vkd3d-explicit-interface\""
+  ],
+  "negative_controls": [
+    "invalid source register inventory",
+    "wrong explicit target descriptor set or binding",
+    "cross-profile target mismatch",
+    "wrong sampled/storage access role",
+    "duplicate and extra image descriptor",
+    "wrong workgroup dimensions",
+    "unknown profile",
+    "invalid DXBC program"
+  ],
+  "workflow_path": ".github/workflows/raft-b18-fft-descriptor-identity.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41930824777",
+  "artifact_urls": [],
+  "budget": "18m isolated CPU source provenance + vkd3d library shader translation; no Unity Editor, GPU, original game asset artifact or APK",
+  "status": "completed",
+  "observed_result": {
+    "original_source_SHA_verified": true,
+    "original_fft_path_id": 2456,
+    "source_program_count": 20,
+    "explicit_map_A_source_programs_honored": 20,
+    "explicit_map_B_source_programs_honored": 20,
+    "source_free_synthetic_tests_passed": 10,
+    "same_class_source_t0_t1_independently_behavioral_verified": false,
+    "unity_import_or_android_device_gpu_verified": false,
+    "actual_game_code_resources_modified": false
+  },
+  "rejected_hypotheses": [
+    "RDEF absence precludes compiled resource binding control: false; source-specific vkd3d interface maps work without RDEF.",
+    "Compiler interface can omit IMAGE flag for typed Texture2D: rejected; vkd3d returned INVALID_SHADER(-4), fixed with VKD3D_SHADER_BINDING_FLAG_IMAGE."
+  ],
+  "limitations": [
+    "Chosen explicit destination descriptor maps are tests for library mapping; original default compiler maps and source game Unity index-to-program selection remain separate.",
+    "Identical sampled image classes mean the 20x2 structural checks do not independently prove which numerical input content from t0/t1 caused output pixels.",
+    "Unity .compute import, actual game water ShaderLab, rendering on Adreno and phone acceptance remain UNVERIFIED.",
+    "Private original compiled assets or translated SPIR-V never uploaded or printed."
+  ],
+  "integration_commit": "04b080630c9f8f0308212b3c8fe18aac34469130",
+  "next_step": "Preserve verified source-to-target interface map; use exact original numerical t0/t1 input discrimination or real Unity shader import, not repeated structure census."
+}
