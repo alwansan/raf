@@ -5,7 +5,7 @@
   "session_id": "20261104T2101Z-B03-a419",
   "resumed_from_session": null,
   "status": "paused",
-  "base_sha": null,
+  "base_sha": "4dd8c9dceb32bed34c1cda4292c0b71389f16f20",
   "last_commit": "77810606899ab9a16248ab17540dc7cd538bcac9",
   "updated_at": "2026-11-04T21:18:19.957Z",
   "tracks": [
