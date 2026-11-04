@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "username": "B16",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2151Z-B16-6e2a",
+  "resumed_from_session": null,
+  "status": "active",
+  "base_sha": "29242464003fcf2dcfd0fcc120770b7f2839ce15",
+  "last_commit": null,
+  "updated_at": "2026-11-04T21:52:12.606Z",
+  "tracks": [
+    "WATER-001: inactive-preprocessor kernel structure"
+  ],
+  "work_ids": [
+    "B16-20261104T2151Z-B16-6e2a-conditional-kernel"
+  ],
+  "run_urls": [],
+  "next_step": "Extend source gate to exclude literal-inactive conditional HLSL/Unity #pragma kernels, write negative/positive tests, run source-only CI; do not claim original FFT or device correctness.",
+  "memory_path": "prompt/coordination/clients/B16/MEMORY.md"
+}
