@@ -1,0 +1,56 @@
+name: B20 WATER-001 team evidence checkpoint (source-only)
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-b20-evidence-refresh.yml'
+      - 'prompt/coordination/B_TEAM/events/B20/**'
+
+permissions:
+  contents: write
+
+concurrency:
+  # Share the existing B-team summary writer mutex; never replace pending jobs.
+  group: raft-b48-team-summary-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  update-canonical-snapshot:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: feature/android-native-port
+          persist-credentials: true
+          lfs: false
+          fetch-depth: 1
+          sparse-checkout: |
+            scripts/refresh_b_team.py
+            prompt/coordination/B_TEAM
+      - name: Regenerate from latest HEAD with fast-forward lease, never force
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'raft-b20-evidence-checkpoint'
+          git config user.email 'raft-b20-evidence-checkpoint@users.noreply.github.com'
+          for attempt in 1 2 3 4; do
+            git fetch -q --no-tags origin feature/android-native-port
+            git reset --hard -q FETCH_HEAD
+            python3 scripts/refresh_b_team.py
+            git add -- prompt/coordination/B_TEAM/SUMMARY.md prompt/coordination/B_TEAM/snapshot.json
+            if git diff --cached --quiet; then
+              echo 'B20_TEAM_EVIDENCE already_current=true'
+              exit 0
+            fi
+            git commit -q -m 'coord(B20): regenerate B-team evidence snapshot'
+            if git push --quiet origin HEAD:feature/android-native-port; then
+              echo 'B20_TEAM_EVIDENCE regenerated=true fast_forward_only=true'
+              exit 0
+            fi
+            echo "B20_TEAM_EVIDENCE concurrent branch update; refresh attempt=$attempt"
+            sleep 1
+          done
+          echo 'B20_TEAM_EVIDENCE unresolved concurrent HEAD, no force' >&2
+          exit 1
