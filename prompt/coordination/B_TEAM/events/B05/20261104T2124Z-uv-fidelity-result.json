@@ -1,0 +1,14 @@
+{
+  "id": "20261104T2124Z-B05-material-uv-result",
+  "owner": "B05",
+  "session_id": "20261104T2107Z-B05-9e24",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "B05 extended original Material texture PPtr lineage validator with UV m_Scale/m_Offset finite and drift checks; CI41915604221 SUCCESS (14 synthetic tests). Two transient fixture migration failures diagnosed and closed. No original material or device proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41915604221",
+    "https://github.com/alwansan/raf/commit/93aaee8df9d17f0a646e46d98a71d525f5e3c82b",
+    "https://github.com/alwansan/raf/actions/runs/41915549118"
+  ],
+  "at": "2026-11-04T21:24:00Z"
+}
