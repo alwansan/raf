@@ -97,6 +97,24 @@ def select_original_source(source: Path, name: str, expected_sha256: str):
     return found[0]
 
 
+def include_original_trace_only_sources(source, changed, traces):
+    """Match the native pipeline: trace-only originals need compilation too.
+
+    The native Unity project instruments every manifest source, including
+    GameManager.OnWorldRecieved; the cheap original-managed compile previously
+    selected only the offline-adapter PINS and silently missed GameManager.
+    Select remaining originals by their authenticated trace SHA, without
+    adapting or publishing their source. Preflight all selections atomically.
+    """
+    additions = {}
+    for name, entry in traces['sources'].items():
+        if name in changed:
+            continue
+        path, original = select_original_source(source, name, entry['sha256'])
+        additions[name] = (path, original)
+    return {**changed, **additions}
+
+
 def install_adapted_originals(changed, traces):
     """Preflight all adapted originals before altering any private ILSpy C#.
 
@@ -109,7 +127,15 @@ def install_adapted_originals(changed, traces):
         if path.is_symlink() or not path.is_file():
             raise ValueError('Require regular original source before instrumentation: ' + name)
         before = path.read_bytes()
-        if fingerprint(before.decode('utf-8-sig')) != PINS[name]:
+        # Both offline-adapted and trace-only originals must be independently
+        # pinned. Never let a new trace-only source bypass the final write gate.
+        pinned = PINS.get(name)
+        if pinned is None:
+            row = traces.get('sources', {}).get(name)
+            if row is None:
+                raise ValueError('Unregistered original trace-only source: ' + name)
+            pinned = row['sha256']
+        if fingerprint(before.decode('utf-8-sig')) != pinned:
             raise ValueError('Original source changed after SHA selection: ' + name)
         result = instrument(name, text, traces) if name in traces['sources'] else text
         plans.append((path, before, result.encode('utf-8')))
@@ -134,6 +160,9 @@ def prepare(source, managed, runtime, output):
         if name == 'SaveAndLoad': text = adapt_paths(text)
         changed[name] = (path, adapt(name, text))
     traces = json.loads(Path('config/runtime-operation-traces.json').read_text())
+    # Native instrumentation touches the trace-only GameManager too; include
+    # the exact original body in managed compile, not just the B07 lexical CI.
+    changed = include_original_trace_only_sources(source, changed, traces)
     output.mkdir(parents=True, exist_ok=True)
     refs = '\n'.join('<Reference Include="' + html.escape(p.stem) + '"><HintPath>' + html.escape(str(p.resolve())) + '</HintPath><Private>false</Private></Reference>'
                      for p in sorted(managed.glob('*.dll')) if p.name != 'Assembly-CSharp.dll')
