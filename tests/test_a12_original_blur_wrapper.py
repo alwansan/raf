@@ -8,7 +8,13 @@ from scripts.a12_build_original_blur_wrapper import TARGET, wrapper
 def original():
     return {
         "m_Name": TARGET,
-        "m_PropInfo": {"m_Props": []},
+        "m_PropInfo": {"m_Props": [{
+            "m_Name": "_SyntheticTexture", "m_Description": "Original test texture",
+            "m_Attributes": [], "m_Type": 4, "m_Flags": 0,
+            "m_DefValue[0]": 0.0, "m_DefValue[1]": 0.0,
+            "m_DefValue[2]": 0.0, "m_DefValue[3]": 0.0,
+            "m_DefTexture": {"m_DefaultName": "white", "m_TexDim": 2},
+        }]},
         "m_SubShaders": [{
             "m_LOD": 0,
             "m_Tags": {"tags": []},
@@ -43,7 +49,7 @@ class OriginalBlurShaderLabTests(unittest.TestCase):
         self.assertEqual(result.count("#pragma target 5.0"), 2)
         self.assertEqual(result.count("#pragma vertex main"), 2)
         self.assertEqual(result.count("#pragma fragment main"), 2)
-        self.assertIn("Properties {}", result)
+        self.assertIn('_SyntheticTexture ("Original test texture", 2D) = "white" {}', result)
         self.assertTrue(result.endswith("}\n"))
 
     def test_original_name_cannot_be_switched(self):
@@ -52,11 +58,13 @@ class OriginalBlurShaderLabTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "name"):
             self.wrap(p)
 
-    def test_original_nonempty_properties_cannot_be_discarded(self):
-        p = original()
-        p["m_PropInfo"]["m_Props"] = [{"m_Name": "_SyntheticTexture"}]
-        with self.assertRaisesRegex(ValueError, "property"):
-            self.wrap(p)
+    def test_original_property_cannot_be_discarded_or_incompletely_recovered(self):
+        for mode in ("missing", "incomplete"):
+            p = original()
+            p["m_PropInfo"]["m_Props"] = ([] if mode == "missing" else
+                                           [{"m_Name": "_SyntheticTexture"}])
+            with self.subTest(mode=mode), self.assertRaisesRegex(ValueError, "property"):
+                self.wrap(p)
 
     def test_original_pass_count_must_be_exact(self):
         for n in (0, 1, 3):
