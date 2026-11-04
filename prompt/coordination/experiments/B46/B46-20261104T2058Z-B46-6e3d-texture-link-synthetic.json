@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "owner": "B46",
+  "session_id": "20261104T2058Z-B46-6e3d",
+  "issue_id": "RENDER-002",
+  "hypothesis": "A valid exported shader/material pointer can coexist with a dangling Material saved m_TexEnvs target GUID or subobject fileID; independently validate exported texture links.",
+  "source_commit": "04d7e054b4186ae192b3e740c0cba5ec71306b0c",
+  "input_hashes": [],
+  "tool_versions": {
+    "python": "3.11 in GitHub Actions; stdlib only",
+    "runner": "ubuntu-24.04"
+  },
+  "commands": [
+    "python -W error -m unittest discover -s tests -p test_verify_exported_material_texture_links.py -v",
+    "python -m scripts.verify_exported_material_texture_links --project /absolute/verified/export [--expected-materials SAME_STAGE_COUNT]"
+  ],
+  "negative_controls": [
+    "missing texture GUID",
+    "valid GUID with wrong sub-object fileID",
+    "wrong asset category or importer",
+    "duplicate meta GUID",
+    "wrong PPtr type",
+    "malformed slot",
+    "unsafe symlink",
+    "mismatched exported Material count"
+  ],
+  "workflow_path": ".github/workflows/raft-b46-render-texture-links.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41913591959",
+  "artifact_urls": [],
+  "budget": "Workflow no original/private files, no LFS, Ubuntu standard runner timeout 5m; no full Unity/native build.",
+  "status": "completed_scoped_synthetic_only",
+  "observed_result": "Initial 19 synthetic checks PASS in run 41913365590; updated 21 cases covering exact texture subobject fileID PASS in run 41913591959, job 126867393744, source 04d7e05. No actual AssetRipper export used, so whether any real material texture link is broken remains unknown.",
+  "rejected_hypotheses": [
+    "Existing Material-to-Shader proof necessarily proves Material-to-Texture references; invalid because these are independent pointers.",
+    "Valid GUID alone suffices to validate a texture reference; disproved by wrong-fileID negative control."
+  ],
+  "limitations": [
+    "No actual authenticated complete same-instance export was passed to checker.",
+    "Imported image identification assumes standard TextureImporter/Texture2D subasset ID; exotic exporter serialization must be investigated if rejected.",
+    "No original vs exported texture slot/value mapping, ShaderLab pass, sRGB/pixel/GPU or on-device evidence.",
+    "No source asset repair claimed and no private original payload uploaded."
+  ],
+  "integration_commit": "04d7e054b4186ae192b3e740c0cba5ec71306b0c",
+  "next_step": "In a coordinated W1/W4 authenticated full export, run this nonmutating checker after .mat/.meta export and before Unity import. If rejects, inspect private original/export identity and repair only demonstrated edge; otherwise move to shader/texture sampling or color variant issue."
+}
