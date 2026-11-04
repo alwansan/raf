@@ -87,8 +87,9 @@ class AndroidDiagnosticsPolicyTests(unittest.TestCase):
         # renderer/material/mesh snapshot runs as a coroutine, not in a static
         # callback or per-frame loop. Do not "fix" CI by removing the snapshot.
         self.assertIn('StartCoroutine(ReportSceneShaderSnapshot(scene));', scenes)
-        snapshot = scenes.split("private static void SceneUnloaded(", 1)[0]
-        self.assertIn('private System.Collections.IEnumerator ReportSceneShaderSnapshot(Scene scene)', snapshot)
+        self.assertIn('private System.Collections.IEnumerator ReportSceneShaderSnapshot(Scene scene)', scenes)
+        snapshot = scenes.split("private System.Collections.IEnumerator ReportSceneShaderSnapshot(Scene scene)", 1)[1]
+        snapshot = snapshot.split("private static void SceneUnloaded(", 1)[0]
         self.assertIn('yield return new WaitForSecondsRealtime(3f);', snapshot)
         self.assertIn('if (!scene.isLoaded) yield break;', snapshot)
         self.assertIn('const int RendererLimit = 512;', snapshot)
