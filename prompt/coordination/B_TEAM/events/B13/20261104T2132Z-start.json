@@ -1,0 +1,12 @@
+{
+  "id": "B13-20261104T2132Z-B13-7e6b-start",
+  "owner": "B13",
+  "session_id": "20261104T2132Z-B13-7e6b",
+  "issue_id": "LOCAL-005",
+  "type": "start",
+  "summary": "Start LOCAL-005 Android offline adapter failure-atomicity source repair; maintain original CSharp/metas and no touch, FMOD or Settings edits.",
+  "evidence": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/adapt_android_offline_startup.py"
+  ],
+  "at": "2026-11-04T21:32:00Z"
+}

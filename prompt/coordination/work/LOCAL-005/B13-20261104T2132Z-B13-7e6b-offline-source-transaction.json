@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "owner": "B13",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2132Z-B13-7e6b",
+  "issue_id": "LOCAL-005",
+  "track": "world-save",
+  "approach": "Fix non-atomic backup behavior in native Android offline managed-source adapter, preserving original CSharp and metadata.",
+  "status": "active",
+  "base_sha": "e6484daffbaef7dca57da63e1cb4869f9095078a",
+  "intended_files": [
+    "scripts/adapt_android_offline_startup.py",
+    "tests/test_android_offline_startup.py"
+  ],
+  "hypothesis": "Partial backup copying before source mutation can strand invalid backup, preventing retry; fault injection validates cleanup and original-byte integrity.",
+  "related_work": [
+    "B50 offline Steam",
+    "B07 callback",
+    "B24 managed parity"
+  ],
+  "experiment_ids": [],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement synthetic fault injection and scoped rollback then test.",
+  "updated_at": "2026-11-04T21:32:00Z"
+}

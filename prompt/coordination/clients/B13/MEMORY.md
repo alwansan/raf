@@ -1,0 +1,5 @@
+# B13 memory — 20261104T2132Z-B13-7e6b
+
+Original user-assigned identity B13; branch feature/android-native-port only; entry HEAD e6484daffbaef7dca57da63e1cb4869f9095078a.
+Read live B_TEAM instructions, AGENTS/current requirements, status, review, original source provider, LOCAL-005/WATER-001/RENDER-002, scripts/tests, Actions and releases. CL latest 5394407b5cd0a0ca1848ff0902f8d2133bf6ea29; last real Android game android-early-test-41812889049-1 (APK86) with Steam StoreStats issue and separate water pass/kernel issues. B50/B07/B24 handle offline Steam guards and callback; B13 owns separate source-adapter failure rollback.
+Plan: synthetic multi-source original CSharp and meta fixtures; verify partial backup-copy failure leaves source unchanged and backups removable/retriable, and write failure restores originals; patch only adapters, no game behavior changes. Source original ZIP2 provider SHA 15964ea8f246b6e076ce26b60931ee2e1a9a2385, no private payload accessed. No Unity/device validation. NOT_READY 0/3. Work file LOCAL-005/B13-20261104T2132Z-B13-7e6b-offline-source-transaction.json.

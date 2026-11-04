@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "username": "B13",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2132Z-B13-7e6b",
+  "resumed_from_session": null,
+  "status": "active",
+  "base_sha": "e6484daffbaef7dca57da63e1cb4869f9095078a",
+  "last_commit": null,
+  "updated_at": "2026-11-04T21:32:00Z",
+  "tracks": [
+    "world-save"
+  ],
+  "work_ids": [
+    "LOCAL-005/B13-20261104T2132Z-B13-7e6b-offline-source-transaction"
+  ],
+  "run_urls": [],
+  "next_step": "Test original-code adapter rollback with synthetic source, patch and report.",
+  "memory_path": "prompt/coordination/clients/B13/MEMORY.md"
+}
