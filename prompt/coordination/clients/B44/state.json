@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "username": "B44",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2059Z-B44-f0ac",
+  "resumed_from_session": null,
+  "status": "active",
+  "base_sha": "4072288020d7a42daf6d235af6549f8b43d89132",
+  "last_commit": null,
+  "updated_at": "2026-11-04T20:59:00Z",
+  "tracks": [
+    "colors-materials"
+  ],
+  "work_ids": [
+    "B44-20261104T2059Z-B44-f0ac-material-values"
+  ],
+  "run_urls": [],
+  "next_step": "Compare original serialized Material saved properties with export/YAML handling; find a concrete value/texture/binding loss and fix with bounded tests. Avoid B47/B49 per-pass and B48 FFT identity overlap.",
+  "memory_path": "prompt/coordination/clients/B44/MEMORY.md"
+}
