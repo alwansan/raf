@@ -54,6 +54,17 @@ class SpectrumDescriptorTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             stage_profile(p)
 
+    def test_authenticated_uavparams_field_is_numeric_only(self):
+        p = program()
+        p["m_CommonParameters"]["m_UAVParams"] = [
+            {"m_NameIndex": 1, "m_Index": 2, "m_ArraySize": 1},
+        ]
+        profile = stage_profile(p)
+        self.assertEqual(profile["table_rows"]["m_UAVParams"], 1)
+        self.assertEqual(profile["descriptor_rows"], 3)
+        self.assertNotIn("m_Index", str(profile))
+
+
     def test_fail_closed_unknown_all_tables(self):
         for item in passes():
             for stage in ("progVertex", "progFragment"):
