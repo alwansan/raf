@@ -21,6 +21,6 @@ Use the manifest's *actual* relative path rather than the illustrative one above
 
 ## Test boundaries
 
-15 local synthetic Python unittest cases passed: raw and multipart positives, SHA-tampered raw and wrapped payloads, truncation, extra multipart data/part, malformed header/boundary, overlong or short payload, traversal, duplicate/missing manifest records, symlink input/parent and overwrite protections. Tests do **not** validate Unity import, framebuffer pixels, FFT kernels, or Android devices.
+16 local synthetic Python unittest cases passed: raw and multipart positives, SHA-tampered raw and wrapped payloads, truncation, extra multipart data/part, malformed header/boundary, overlong or short payload, traversal, duplicate/missing manifest records, symlink input/parent and overwrite protections. Tests do **not** validate Unity import, framebuffer pixels, FFT kernels, or Android devices.
 
 The next authoritative step is to download **one small** approved release asset in an authorized private environment, retain its outer asset id/size/digest, parse and compare its *canonical* payload to the pinned ZIP2 manifest. If it fails, record exact safe failure category; continue using ZIP2 without changing original pins. Don't spend CI minutes or bandwidth on 370 downloads before a small sample passes.
