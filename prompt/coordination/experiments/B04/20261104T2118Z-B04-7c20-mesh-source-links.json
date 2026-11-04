@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "owner": "B04",
+  "session_id": "20261104T2102Z-B04-7c20",
+  "issue_id": "ASSET-RESTORE-001",
+  "hypothesis": "Original Mesh repair follows symlinked YAML/meta or hardlinked content, violating source provenance and potentially modifying external files.",
+  "source_commit": "b4a222b22174aba78c0feb376961b760ccccc543",
+  "input_hashes": [],
+  "tool_versions": {
+    "runner": "ubuntu-24.04",
+    "PyYAML": "6.0.2",
+    "Python": "GitHub runner system Python"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_repair_exported_mesh_vertices.py -v",
+    "python3 -m py_compile scripts/repair_exported_mesh_vertices.py"
+  ],
+  "negative_controls": [
+    "Target Mesh .asset symlink, external content unchanged, no snapshot",
+    "Target .asset.meta symlink, external meta unchanged, no snapshot",
+    "Provider mesh .asset symlink and hardlink rejected",
+    "Provider .asset.meta hardlink rejected",
+    "Mesh source directory symlink rejected",
+    "Dangling snapshot symlink rejected",
+    "Prior valid original vertex replay, GUID/meta and irrelevant fields preserved",
+    "Wrong geometry identity and nonfinite vertex provider data rejected"
+  ],
+  "workflow_path": ".github/workflows/raft-b04-mesh-source-safety.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41914505411",
+  "artifact_urls": [],
+  "budget": "1 independent CPU job, ubuntu-24.04 timeout 6m; no Unity, LFS, private payload, no full native build",
+  "status": "completed",
+  "observed_result": "CI SUCCESS 6/6 tests; all new symlink/hardlink negative controls and existing valid vertex/identity/nonfinite cases PASS. Source commit f0afb598; isolated test workflow commit b4a222b. This helper is not currently a new step in the full native pipeline.",
+  "rejected_hypotheses": [
+    "Matching content through a symlink is safe enough to trust as an original Mesh owner: rejected; explicit path ownership required",
+    "Symlinked snapshot path can be detected with exists() alone: rejected; dangling symlink needs is_symlink()"
+  ],
+  "limitations": [
+    "This is a path-safety and provenance guard, not proof original Mesh resources are fully recovered",
+    "No authentic game source or Unity exported geometry run in this isolated test",
+    "No new APK/device visual validation",
+    "Does not change current native Mesh inline pipeline"
+  ],
+  "integration_commit": "f0afb5983694cec91a61bcd6f9825ca1cf658f7e",
+  "next_step": "Any future use of YAML Mesh repair must authenticate original provider bytes and replay source identity+GUID checks; run live export separately and confirm device geometry."
+}
