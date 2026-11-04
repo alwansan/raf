@@ -6,7 +6,7 @@
   "issue_id": "WATER-001",
   "track": "water-fft",
   "approach": "Authentic original Foam end-to-end private 2-pass assembly-input packet: 4 translated stage programs + source-state + original CB bridge with strict provenance and no publication",
-  "status": "active",
+  "status": "completed",
   "base_sha": "b2268908186bf9d41c1727a9269e047835dd12e8",
   "intended_files": [
     "scripts/b20_private_foam_packet.py",
@@ -23,8 +23,22 @@
   "experiment_ids": [
     "B20-foam-private-packet-20261104"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement fail-closed private stage source+render-state staging and unit controls; run genuine pinned ZIP2+vkd3d CI, keep CB runtime unverified.",
-  "updated_at": "2026-11-04T22:57:30Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41930578292"
+  ],
+  "result": {
+    "stage": "SOURCE_FIXED_PRIVATE_PACKET_INPUT",
+    "source_commit": "6e3ddf26c6080a630a786f1afee6abccc62e017a",
+    "report": "docs/B20_FOAM_PRIVATE_PACKET_2026-11-04.md",
+    "source_original_bytes": 115978112,
+    "original_stage_programs_verified": 4,
+    "original_render_states_verified": 2,
+    "original_cb_source_links_verified": 8,
+    "private_CB0_alias_verified": false,
+    "unity_device_verified": false,
+    "run_conclusion": "success",
+    "artifact_id": 13369929607
+  },
+  "next_step": "Prove exact translated HLSL CB register source lineage; assemble real ShaderLab only after authentic CB0/material alias evidence.",
+  "updated_at": "2026-11-04T23:06:38.202Z"
 }
