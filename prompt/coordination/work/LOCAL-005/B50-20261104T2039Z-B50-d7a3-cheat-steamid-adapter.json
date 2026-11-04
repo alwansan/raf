@@ -6,7 +6,7 @@
   "issue_id": "LOCAL-005",
   "track": "world-save",
   "approach": "Pin original C# Cheat.cs SHA 813761..., isolate its one original AllowCheatsForLocalPlayer SteamUser.GetSteamID object call to Android-local CSteamID constructed from stable local profile identity; leave original Windows behavior intact and compile original managed sources.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "a5c837fab177d87f5737cedc9410833c2176feaa",
   "intended_files": [
     "scripts/adapt_android_offline_startup.py",
@@ -17,9 +17,16 @@
   "related_work": [
     "B50-20261104T2039Z-B50-d7a3-cheat-steamid-probe"
   ],
-  "experiment_ids": [],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement fail-closed original callsite adaptation and source tests, obtain actual original no-LFS managed compile CI; reject if CSteamID constructor unsupported.",
-  "updated_at": "2026-11-04T20:58:00Z"
+  "experiment_ids": [
+    "B50-20261104T2039Z-cheat-identity",
+    "B50-20261104T2039Z-cheat-steamid-adapter"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41911354402",
+    "https://github.com/alwansan/raf/actions/runs/41911771386",
+    "https://github.com/alwansan/raf/actions/runs/41911949540"
+  ],
+  "result": "Exact authenticated original Cheat.cs source SHA 813761... and method SHA e897... pinned. Its sole original object-typed SteamUser.GetSteamID inside AllowCheatsForLocalPlayer now uses managed CSteamID(LocalPlayerIdentity.Current) on Android-local only, original call preserved for Windows and no other method changed. Original-source C# compile and adapter/identity regression on 41911949540 SUCCESS. No Unity/phone/create/save/reload proof.",
+  "next_step": "Coordinated device APK86+ source successor with real local new-world play / .rgd save / reopen and graphics gates, review any further Steam DLL callsites from new phone logs. Do not forge flags.",
+  "updated_at": "2026-11-04T21:02:00Z"
 }
