@@ -1,0 +1,96 @@
+name: B03 RENDER-002 original scene Material object targets (ZIP2 CPU)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/b03_original_renderer_target_resolution.py'
+      - 'tests/test_b03_original_renderer_target_resolution.py'
+      - '.github/workflows/raft-b03-original-renderer-target-resolution.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raft-b03-renderer-material-targets-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  synthetic:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Validate authentic owner target resolver controls
+        run: |
+          python3 -m py_compile scripts/b03_original_renderer_target_resolution.py
+          python3 -m unittest discover -s tests -p test_b03_original_renderer_target_resolution.py -v
+  verified-owners:
+    needs: synthetic
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+      - name: Confirm disk capacity before selectively staging original owners
+        run: |
+          python3 - <<'PY'
+          import shutil
+          assert shutil.disk_usage('.').free >= 1024**3, "No staging budget"
+          PY
+      - uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: .b03-source-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/level0
+            Raft/Raft_Data/level1
+            Raft/Raft_Data/level2
+            Raft/Raft_Data/level3
+            Raft/Raft_Data/level4
+            Raft/Raft_Data/level5
+            Raft/Raft_Data/resources.assets
+            Raft/Raft_Data/sharedassets0.assets
+      - name: Assemble only 2 original SHA-pinned split owners into isolated staging
+        run: |
+          set -euo pipefail
+          stage="$RUNNER_TEMP/b03-source-owner-stage"
+          mkdir -p -- "$stage"
+          for name in resources.assets sharedassets0.assets; do
+            source=".b03-source-zip2/Raft/Raft_Data/$name"
+            test -d "$source"
+            shopt -s nullglob
+            parts=("$source"/part-*)
+            test "${#parts[@]}" -ge 2
+            cat -- "${parts[@]}" > "$stage/$name"
+          done
+      - name: Install pinned Unity serialized reader
+        run: python3 -m pip install --disable-pip-version-check 'UnityPy==1.23.0'
+      - name: Authenticate original bytes and verify material target class IDs
+        run: |
+          set -euo pipefail
+          python3 -m scripts.b03_original_renderer_target_resolution \
+            --source .b03-source-zip2/Raft/Raft_Data \
+            --owners "$RUNNER_TEMP/b03-source-owner-stage" \
+            --manifest .b03-source-zip2/RAFT_FILE_MANIFEST.tsv \
+            --report "$RUNNER_TEMP/b03-original-renderer-material-targets.json"
+          echo 'B03_ORIGINAL_SCOPE 6_scenes=true 2_selected_owner_bytes_verified=true full_export=false phone=false'
+      - name: Retain only aggregate counts and original manifest SHA references
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: b03-original-material-targets-${{ github.run_id }}
+          path: ${{ runner.temp }}/b03-original-renderer-material-targets.json
+          retention-days: 7
+          if-no-files-found: ignore
