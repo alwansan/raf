@@ -6,16 +6,23 @@
   "resumed_from_session": null,
   "status": "active",
   "base_sha": "22c021f33d2a843e2af99e49cfcbffd2e78afde4",
-  "last_commit": null,
-  "updated_at": "2026-11-04T21:51:00Z",
+  "last_commit": "42476b87626031f23db37808d00e1c76604e5b33",
+  "updated_at": "2026-11-04T22:10:00Z",
   "tracks": [
     "water-fft",
     "shader-resource-binding"
   ],
   "work_ids": [
-    "prompt/coordination/work/WATER-001/B18-20261104T215100Z-B18-d3f9-fft-resource-bindings.json"
+    "prompt/coordination/work/WATER-001/B18-20261104T215100Z-B18-d3f9-fft-resource-bindings.json",
+    "prompt/coordination/work/WATER-001/B18-20261104T221000Z-fft-spirv-binding-roles.json"
   ],
-  "run_urls": [],
-  "next_step": "Inspect current FFT export and staging code, source-authenticated compute compiled-slot and binding metadata; implement a distinct fail-closed, testable resource-binding fix, not repeated slot/name census.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41920845862",
+    "https://github.com/alwansan/raf/actions/runs/41921227456",
+    "https://github.com/alwansan/raf/actions/runs/41921950901",
+    "https://github.com/alwansan/raf/actions/runs/41922116469",
+    "https://github.com/alwansan/raf/actions/runs/41922333604"
+  ],
+  "next_step": "WATER-001 second independent subtask: inspect original DXBC t0/t1/u0 --> VKD3D SPIR-V translated image role/descriptor semantics with fail-closed synthetic+SHA-authenticated original checks; no Unity runtime, preserve earlier successful 20/20 SHEX declaration result.",
   "memory_path": "prompt/coordination/clients/B18/MEMORY.md"
 }

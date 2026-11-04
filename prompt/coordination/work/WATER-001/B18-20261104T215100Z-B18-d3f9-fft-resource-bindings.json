@@ -6,13 +6,13 @@
   "issue_id": "WATER-001",
   "track": "water-fft",
   "approach": "Find and close an actual fail-open per-compiled-slot resource descriptor/binding mismatch in original FFT shader staging, with source-free negative test controls. Distinct from B08 kernel names, B30 variants, B47 entrypoint and B48 slot/workgroup matching.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "22c021f33d2a843e2af99e49cfcbffd2e78afde4",
   "intended_files": [
-    "scripts/ (inspect actual native FFT staging tooling before selecting exact patch)",
-    "tests/ (focused synthetic regression)",
-    "prompt/coordination/clients/B18/*",
-    "prompt/coordination/B_TEAM/events/B18/*"
+    "scripts/b18_fft_compiled_rdef_bindings.py",
+    "tests/test_b18_fft_compiled_rdef_bindings.py",
+    ".github/workflows/raft-b18-fft-rdef-parity.yml",
+    "docs/B18_FFT_RDEF_PARITY_2026-11-04.md"
   ],
   "hypothesis": "A missing validator may permit original FFT texture/image/sampler/CB descriptor identities to drift during reconstruction or staging despite matching code-stage counts.",
   "related_work": [
@@ -23,9 +23,29 @@
     "B06 GPU capabilities",
     "A1 two-pass Vulkan fidelity"
   ],
-  "experiment_ids": [],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Inspect live repository scripts and CI before claiming a gap; if the hypothesis is already covered, log rejection and pivot to an uncovered P0 subproblem.",
-  "updated_at": "2026-11-04T21:51:00Z"
+  "experiment_ids": [
+    "prompt/coordination/experiments/B18/20261104T220700Z-authentic-fft-shex-declarations.json"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41920845862",
+    "https://github.com/alwansan/raf/actions/runs/41921227456",
+    "https://github.com/alwansan/raf/actions/runs/41921950901",
+    "https://github.com/alwansan/raf/actions/runs/41922116469",
+    "https://github.com/alwansan/raf/actions/runs/41922333604"
+  ],
+  "result": {
+    "original_zip2_sha_authenticated": true,
+    "original_fft_compute_object_sha_authenticated": true,
+    "original_compiled_slot_order_authenticated": true,
+    "original_shex_programs_with_matched_resource_registers_and_workgroup": 20,
+    "original_fft_compiled_slots_total": 20,
+    "original_rdef_chunks_present": 0,
+    "source_free_synthetic_tests_passed": 13,
+    "real_unity_or_android_render_verified": false,
+    "status": "SOURCE_STRUCTURAL_VERIFIED",
+    "validated_at": "2026-11-04T22:07:13Z",
+    "negative_hypothesis": "No RDEF reflection in authentic 20 original FFT compiled programs; RDEF-only assumption rejected."
+  },
+  "next_step": "Original SHEX-to-Unified serialized source binding step COMPLETE. Continue as separate SPIR-V descriptor-role provenance task, not original runtime kernel ID/phone proof.",
+  "updated_at": "2026-11-04T22:10:00Z"
 }
