@@ -4,19 +4,22 @@
   "generation": "B-2026-11-04",
   "session_id": "20261104T2102Z-B04-7c20",
   "resumed_from_session": null,
-  "status": "active",
+  "status": "completed",
   "base_sha": "09480c40be3ccf65c0a8661142c6d5f78e519b39",
-  "last_commit": "e52c07c808d6bf7a2eeb90ebcb4b48f71ea98f23",
-  "updated_at": "2026-11-04T21:10:58.726Z",
+  "last_commit": "a4c2f86c07ebc3364e813a915ef036a5e6c3d0ad",
+  "updated_at": "2026-11-04T21:18:26.107Z",
   "tracks": [
-    "RENDER-002-color-space"
+    "RENDER-002-color-space",
+    "ASSET-RESTORE-001-mesh-source-integrity"
   ],
   "work_ids": [
-    "B04-20261104T2102Z-B04-7c20-original-colorspace"
+    "B04-20261104T2102Z-B04-7c20-original-colorspace",
+    "B04-20261104T2102Z-B04-7c20-mesh-source-safety"
   ],
   "run_urls": [
-    "https://github.com/alwansan/raf/actions/runs/41913026554"
+    "https://github.com/alwansan/raf/actions/runs/41913026554",
+    "https://github.com/alwansan/raf/actions/runs/41914505411"
   ],
-  "next_step": "Completed isolated B04 original Linear parity scope, inspect another independent P0/P1 gap; full native pipeline and device evidence untested; preserve W2/other B work.",
+  "next_step": "B04 scoped tasks completed: Linear original colorspace export adapter (CI41913026554) and Mesh source symlink guard (CI41914505411). Restart with latest HEAD/Actions/CL and assign non-overlapping P0 issue; native/device not tested, NOT_READY 0/3.",
   "memory_path": "prompt/coordination/clients/B04/MEMORY.md"
 }
