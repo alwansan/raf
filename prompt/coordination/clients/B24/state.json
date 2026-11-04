@@ -4,10 +4,10 @@
   "generation": "B-2026-11-04",
   "session_id": "20261104T2126Z-B24-6f19",
   "resumed_from_session": null,
-  "status": "active",
+  "status": "paused",
   "base_sha": "6bd9026e63b0147f3bb995188a1aa79d956533b3",
-  "last_commit": "5cfd0544af9808dbd0326a7394a99283846d7ed4",
-  "updated_at": "2026-11-04T21:36:19.755Z",
+  "last_commit": "a43ba5b8cf337ea053581102aa45c2efaefe3537",
+  "updated_at": "2026-11-04T21:56:24.790Z",
   "tracks": [
     "LOCAL-005",
     "world-compile-parity",
@@ -20,8 +20,10 @@
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41916497807",
-    "https://github.com/alwansan/raf/actions/runs/41916497902"
+    "https://github.com/alwansan/raf/actions/runs/41916497902",
+    "https://github.com/alwansan/raf/actions/runs/41919758958",
+    "https://github.com/alwansan/raf/actions/runs/41920166966"
   ],
-  "next_step": "Test 4 original two-pass Foam shader DXBC programs via authenticated ZIP2 sharedassets0 without publishing programs; identify translation and partial-CB binding frontier.",
+  "next_step": "B24 2 scoped tasks completed: original GameManager instrumentation managed-compile parity and authentic original Foam/Global 2-pass 4-stage Vulkan translation. Next unblock authentic Foam partial-CB resource mapping + ShaderLab/Unity import; keep WATER-001/LOCAL-005 open, no APK/device acceptance. Preserve Audio/Settings, touch deferred.",
   "memory_path": "prompt/coordination/clients/B24/MEMORY.md"
 }
