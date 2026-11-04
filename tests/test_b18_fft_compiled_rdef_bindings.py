@@ -4,7 +4,7 @@ import json
 import struct
 import unittest
 
-from scripts.b18_fft_compiled_rdef_bindings import compare, compiled_binding_hashes
+from scripts.b18_fft_compiled_rdef_bindings import compare, compiled_binding_hashes, compiled_shex_registers
 from scripts.probe_fft_variant_table import EXPECTED_FFT_WORKGROUP_X_BY_COMPILED_SLOT
 
 
@@ -47,6 +47,34 @@ def fixture():
         kernels.append({"variantMap": [(0, fields)]})
     return {"variants": [{"kernels": kernels}]}
 
+
+
+
+def shex_dx(dst=ROLES, group=(64, 1, 1), *, extra_cb=False, corrupted=False):
+    """Public synthetic SM5 tokenized instructions: real ordinal layout only."""
+    instructions = []
+    for _, kind, dimension, register in dst:
+        op_id = 88 if kind == 2 else 156
+        operand_type = 7 if kind == 2 else 30
+        instructions.extend([(4 << 24) | (dimension - 1) << 11 | op_id,
+                             (operand_type << 12) | (1 << 20), register, 0x5555])
+    instructions.extend([(4 << 24) | 155, *group])
+    if extra_cb:
+        instructions.extend([(3 << 24) | 89, (8 << 12) | (1 << 20), 0])
+    tokens = [(5 << 16) | (5 << 4), 2 + len(instructions) + int(corrupted)] + instructions
+    payload = struct.pack("<" + "I" * len(tokens), *tokens)
+    body = b"SHEX" + struct.pack("<I", len(payload)) + payload
+    count = 1
+    header = b"DXBC" + b"\x00"*16 + struct.pack("<3I", 1, 36 + len(body), count)
+    header += struct.pack("<I", 36)
+    return header + body
+
+
+def shex_fixture():
+    tree = fixture()
+    for i, group_x in enumerate(EXPECTED_FFT_WORKGROUP_X_BY_COMPILED_SLOT):
+        tree["variants"][0]["kernels"][i]["variantMap"][0][1]["binaryFixture"] = list(shex_dx(group=(group_x, 1, 1)))
+    return tree
 
 class B18RDEFTests(unittest.TestCase):
     def test_positive_20_programs_no_private_names(self):
@@ -109,6 +137,33 @@ class B18RDEFTests(unittest.TestCase):
         tree["variants"][0]["kernels"][0]["variantMap"][0][1]["secondBinary"] = list(dxbc())
         with self.assertRaisesRegex(ValueError, "Ambiguous"):
             compare(tree)
+
+    def test_shex_without_reflection_has_register_proof_not_name_proof(self):
+        result = compare(shex_fixture())
+        self.assertEqual(result["original_compiled_fft_shex_slots_correlated"], 20)
+        self.assertEqual(result["original_compiled_fft_rdef_slots_correlated"], 0)
+        self.assertFalse(result["rdef_to_unity_t0_t1_u0_identity_matched"])
+        self.assertFalse(result["compiled_resource_names_proven_from_binary_when_no_rdef"])
+
+    def test_shex_wrong_register_dimension_and_group_fail(self):
+        for changed, group in (
+            ((ROLES[0][0], 2, 4, 1), (64, 1, 1)),
+            ((ROLES[0][0], 2, 3, 0), (64, 1, 1)),
+            (ROLES[0], (128, 1, 1)),
+        ):
+            tree = shex_fixture()
+            variant = list(ROLES)
+            variant[0] = changed
+            tree["variants"][0]["kernels"][0]["variantMap"][0][1]["binaryFixture"] = list(
+                shex_dx(dst=variant, group=group))
+            with self.assertRaises(ValueError):
+                compare(tree)
+
+    def test_shex_missing_resource_extra_cb_or_malformed_length_fail(self):
+        for binary in (shex_dx(dst=ROLES[:2]), shex_dx(extra_cb=True),
+                       shex_dx(corrupted=True)):
+            with self.assertRaises(ValueError):
+                compiled_shex_registers(binary)
 
     def test_tampered_unity_metadata_rejected(self):
         tree = fixture()
