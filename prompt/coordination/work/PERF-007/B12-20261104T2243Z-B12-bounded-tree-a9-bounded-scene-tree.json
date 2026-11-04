@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "owner": "B12",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2243Z-B12-bounded-tree-a9",
+  "issue_id": "PERF-007",
+  "track": "integration",
+  "approach": "Replace full-scene Renderer array with bounded Transform walk and reusable same-object renderer component list in B12 read-only snapshot; explicit root/node/pending/material/renderer budgets",
+  "status": "active",
+  "base_sha": "aa92301de75371d4cf49a9e56169a31008bc0c18",
+  "intended_files": [
+    "android-port/Runtime/Platform/AndroidTestDiagnostics.cs",
+    "tests/test_b12_scene_render_snapshot.py"
+  ],
+  "hypothesis": "The current renderer cap checks after GetComponentsInChildren allocates an unbounded root-hierarchy array, adding a diagnostic memory/GC spike in a known OOM game. Explicit bounded traversal avoids the whole array without scene mutation.",
+  "related_work": [
+    "B12 previous RENDER-002 diagnostics, managed CI41920015979",
+    "PERF-007 GPU-memory evidence"
+  ],
+  "experiment_ids": [
+    "B12-20261104T2243Z-B12-bounded-tree-a9-traversal-budget"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Source refactor and negative tests; isolated source CI and original managed compile. Keep audio/Settings/touch unchanged.",
+  "updated_at": "2026-11-04T22:45:46.977Z"
+}
