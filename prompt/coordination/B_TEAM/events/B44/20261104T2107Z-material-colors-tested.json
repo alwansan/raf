@@ -1,0 +1,14 @@
+{
+  "id": "20261104T2107Z-material-colors-tested",
+  "owner": "B44",
+  "session_id": "20261104T2059Z-B44-f0ac",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "Added safe SHA-pinned Material m_Colors fidelity source-vs-export comparator and 10 synthetic positives/negatives. CI run 41912783093 success on f1dd7fcc; actual Raft export value comparison not yet executed, so RENDER-002 OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/1a37eb576229f8060010f7b4ac1f938d86228ca7",
+    "https://github.com/alwansan/raf/commit/50f1e964d5e87b2bd9f5ded457cc4a6f54a25f2a",
+    "https://github.com/alwansan/raf/actions/runs/41912783093"
+  ],
+  "at": "2026-11-04T21:07:00Z"
+}
