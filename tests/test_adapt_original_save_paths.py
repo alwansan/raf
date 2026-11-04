@@ -247,3 +247,57 @@ class SavePathTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'backup root'):
                 apply(project, linked / 'backup-folder', write=True)
             self.assertFalse((outside / 'backup-folder').exists())
+
+    def test_hardlinked_source_cannot_mutate_external_original_inode(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            source = root / 'project/Assets/Assembly-CSharp/SaveAndLoad.cs'
+            source.parent.mkdir(parents=True)
+            original = b'class SaveAndLoad { /* synthetic */ }\n'
+            source.write_bytes(original)
+            meta = source.with_suffix('.cs.meta')
+            meta_bytes = b'guid: synthetic-unchanged\n'
+            meta.write_bytes(meta_bytes)
+            outside = root / 'outside-original.cs'
+            try:
+                outside.hardlink_to(source)
+            except (OSError, NotImplementedError):
+                self.skipTest('Hard links unavailable')
+            self.assertFalse(source.is_symlink())
+            self.assertGreater(source.stat().st_nlink, 1)
+            backup = root / 'backup-original'
+            with patch('scripts.adapt_original_save_paths.adapt',
+                       side_effect=lambda text: text + '\n// adapted'):
+                with self.assertRaisesRegex(ValueError, 'hardlinked'):
+                    apply(root / 'project', backup, write=True)
+            self.assertEqual(outside.read_bytes(), original)
+            self.assertEqual(source.read_bytes(), original)
+            self.assertEqual(meta.read_bytes(), meta_bytes)
+            self.assertFalse(backup.exists())
+
+    def test_hardlinked_meta_sidecar_is_refused_without_backup_or_mutation(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            source = root / 'project/Assets/Assembly-CSharp/SaveAndLoad.cs'
+            source.parent.mkdir(parents=True)
+            source_bytes = b'class SaveAndLoad { /* synthetic */ }\n'
+            source.write_bytes(source_bytes)
+            meta = source.with_suffix('.cs.meta')
+            meta_bytes = b'guid: synthetic-unchanged\n'
+            meta.write_bytes(meta_bytes)
+            outside = root / 'outside-original.cs.meta'
+            try:
+                outside.hardlink_to(meta)
+            except (OSError, NotImplementedError):
+                self.skipTest('Hard links unavailable')
+            self.assertFalse(meta.is_symlink())
+            self.assertGreater(meta.stat().st_nlink, 1)
+            backup = root / 'backup-original'
+            with patch('scripts.adapt_original_save_paths.adapt',
+                       side_effect=lambda text: text + '\n// adapted'):
+                with self.assertRaisesRegex(ValueError, 'hardlinked'):
+                    apply(root / 'project', backup, write=True)
+            self.assertEqual(outside.read_bytes(), meta_bytes)
+            self.assertEqual(source.read_bytes(), source_bytes)
+            self.assertEqual(meta.read_bytes(), meta_bytes)
+            self.assertFalse(backup.exists())
