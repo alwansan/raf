@@ -4,31 +4,37 @@
   "session_id": "20261104T2132Z-B10-a6e1",
   "issue_id": "RENDER-002",
   "hypothesis": "Paired deterministic .shader.meta for new vendor fallbacks removes known structural missing-meta class without changing any original shader GUID or pixels",
-  "source_commit": "e6484daffbaef7dca57da63e1cb4869f9095078a",
+  "source_commit": "1f76e243c067b77a507a81e603f1ce90e5b68dc0",
   "input_hashes": [],
   "tool_versions": {
     "python": "3.x GitHub standard ubuntu runner"
   },
   "commands": [
-    "python -m unittest tests.test_restore_tmp_shaders tests.test_a3_vendor_shader_restore_transaction"
+    "python -m py_compile scripts/restore_tmp_shaders.py tests/test_restore_tmp_shaders.py tests/test_a3_vendor_shader_restore_transaction.py",
+    "python -m unittest -v tests.test_restore_tmp_shaders tests.test_a3_vendor_shader_restore_transaction tests.test_restore_postfx_shaders tests.test_restore_volumetric_shaders"
   ],
   "negative_controls": [
     "existing original metadata preserved byte-identical",
     "collision with any original .meta GUID rejects before mutation",
     "conflicting pre-existing vendor fallback metadata rejects",
-    "late write failure rolls back generated shader and .meta"
+    "late write failure rolls back generated shader and .meta",
+    "same-content repeat restore accepts shader+meta pair",
+    "existing non-generated shader GUID collision prevents any backup or project mutation"
   ],
   "workflow_path": ".github/workflows/raft-b10-vendor-shader-meta.yml",
-  "run_url": null,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41917602226",
   "artifact_urls": [],
   "budget": "public standard ubuntu runner, <=4 minutes, no Unity/LFS/original ZIP2 download",
-  "status": "planned",
-  "observed_result": null,
-  "rejected_hypotheses": [],
+  "status": "completed",
+  "observed_result": "Successful isolated GitHub Actions on source 1f76e243: 22/22 B10 synthetic source tests and 9/9 A3 transactional tests, including collision rejection, paired generated .meta, unchanged originals and rollback. Two earlier red CI runs were fixture escaping errors, corrected.",
+  "rejected_hypotheses": [
+    "Initial two failed synthetic CI cases reflected production GUID collision/idempotency defect (rejected: fake YAML newline backslash escapes in test fixtures; correct fixture passes same assertions).",
+    "Original native 2 shader missing-meta paths necessarily equal vendor fallback files (not proven; exact old native paths unavailable)."
+  ],
   "limitations": [
     "does not prove those exact 2 paths in native41741108965",
     "cannot claim original Unity/Android program, colors or pixels"
   ],
-  "integration_commit": null,
-  "next_step": "Implement synthetic regression and run isolated source CI"
+  "integration_commit": "1f76e243c067b77a507a81e603f1ce90e5b68dc0",
+  "next_step": "Wait for next coordinated same-instance export to validate actual meta count and then Shader→Material identity / Unity pixels; issue not ready."
 }
