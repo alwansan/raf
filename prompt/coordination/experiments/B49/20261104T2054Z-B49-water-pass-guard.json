@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "owner": "B49",
+  "session_id": "20261104T2054Z-B49-c81f",
+  "issue_id": "WATER-001",
+  "hypothesis": "Existing strict water source gate counted Pass declarations and a single global program independently, falsely accepting a multi-pass ShaderLab file with only one executable program.",
+  "source_commit": "3c4c6e3b350b611e5d364ae3fdc3c6837a11d4ea",
+  "input_hashes": [],
+  "tool_versions": {
+    "python": "Python 3 on ubuntu-24.04 GitHub runner"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_b49_shaderlab_pass_contract.py -v",
+    "python3 -m unittest discover -s tests -p test_verify_water_render_contract.py -v"
+  ],
+  "negative_controls": [
+    "Comment and quoted ShaderLab Pass/CGPROGRAM decoys are ignored",
+    "6 authored passes with 1 complete program rejected",
+    "Unterminated CGPROGRAM and unmatched Pass braces rejected",
+    "Empty CGPROGRAM/ENDCG body rejected"
+  ],
+  "workflow_path": ".github/workflows/raft-b49-water-pass-source.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41911824567",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41911824567"
+  ],
+  "budget": "single 5-minute ubuntu-24.04 no Unity/ZIP2/LFS/GPU, 7-day source-only logs",
+  "status": "completed",
+  "observed_result": "11/11 PASS (6 new synthetic +5 legacy). Per-pass structural contract now fails on one-program/multi-pass false positive; strict original identity flag unchanged false.",
+  "rejected_hypotheses": [
+    "Shader-global has_program is sufficient structural evidence for every water shader pass"
+  ],
+  "limitations": [
+    "No original Raft shader source or GPU bytecode executed",
+    "No authentic pass program restoration or kernel identity proof",
+    "No Unity compile or phone rendering evidence",
+    "Other shader programs may use constructs beyond the bounded structural gate"
+  ],
+  "integration_commit": "50702470954774ba96fe27509f1f9eddfd1aa4ea",
+  "next_step": "Recover original program identity and translate/authenticate missing Spectrum/Foam/Blur/FFT shader programs, then verify Unity/Adreno; do not close WATER-001."
+}
