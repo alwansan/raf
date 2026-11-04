@@ -5,6 +5,8 @@ on:
     paths:
       - scripts/b20_private_foam_packet.py
       - tests/test_b20_private_foam_packet.py
+      - scripts/b20_foam_cb_descriptor_lineage.py
+      - tests/test_b20_foam_cb_descriptor_lineage.py
       - .github/workflows/raft-b20-private-foam-packet.yml
   workflow_dispatch:
 
@@ -31,6 +33,8 @@ jobs:
           set -euo pipefail
           python3 -m unittest discover -s tests -p 'test_b20_private_foam_packet.py' -v
           python3 -m py_compile scripts/b20_private_foam_packet.py
+          python3 -m unittest discover -s tests -p 'test_b20_foam_cb_descriptor_lineage.py' -v
+          python3 -m py_compile scripts/b20_foam_cb_descriptor_lineage.py
       - name: Check disk
         run: python3 -c 'import shutil; assert shutil.disk_usage(".").free > 3*1024**3'
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
@@ -90,6 +94,24 @@ jobs:
           assert r["unity_or_device_verified"] is False
           assert r["water_ready"] is False
           PY
+      - name: Probe genuine translated Foam CB numeric descriptor ABI
+        run: |
+          set -euo pipefail
+          python3 -m scripts.b20_foam_cb_descriptor_lineage \
+            --packet "$RUNNER_TEMP/b20-foam-private-packet" \
+            --manifest "$RUNNER_TEMP/b20-safe.json" \
+            --out "$RUNNER_TEMP/b20-foam-cb-safe.json"
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          d=json.loads((Path(os.environ["RUNNER_TEMP"])/"b20-foam-cb-safe.json").read_text())
+          assert d["status"]=="genuine_foam_cb_reflection_observed"
+          assert d["authenticated_original_foam_stage_count"]==4
+          assert d["original_source_cb_links"]==8
+          assert d["original_cb0_name_to_hlsl_alias_verified"] is False
+          assert d["original_material_constant_buffer_upload_verified"] is False
+          assert d["private_hlsl_spirv_names_or_binaries_published"] is False
+          PY
       - name: Delete private sources regardless of success
         if: always()
         run: rm -rf -- "$RUNNER_TEMP/b20-original-foam" "$RUNNER_TEMP/b20-foam-private-packet" "$GITHUB_WORKSPACE/b20-pinned-zip2"
@@ -98,6 +120,8 @@ jobs:
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: b20-foam-safe-${{ github.run_id }}
-          path: ${{ runner.temp }}/b20-safe.json
+          path: |
+            ${{ runner.temp }}/b20-safe.json
+            ${{ runner.temp }}/b20-foam-cb-safe.json
           if-no-files-found: ignore
           retention-days: 7
