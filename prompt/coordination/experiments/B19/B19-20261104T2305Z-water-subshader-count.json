@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "owner": "B19",
+  "session_id": "20261104T2256Z-B19-hl7",
+  "issue_id": "WATER-001",
+  "hypothesis": "Aggregate ShaderLab pass_count across alternative SubShaders may satisfy six despite active SubShader having fewer, falsely clearing source gate.",
+  "source_commit": "33ca35381a2c88247dad928dcb5db0c4d1271ea6",
+  "input_hashes": [],
+  "tool_versions": {
+    "python": "GitHub Ubuntu-24.04 default python3",
+    "unity_docs": "Unity2021.3 ShaderData.Subshader.PassCount and 2022.3 Shader.passCount semantics"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_b49_shaderlab_pass_contract.py -v",
+    "python3 -m unittest discover -s tests -p test_verify_water_render_contract.py -v"
+  ],
+  "negative_controls": [
+    "test_alternate_subshaders_are_not_one_runtime_pass_sequence",
+    "test_unprogrammed_alternative_is_reported_per_subshader",
+    "test_water_passes_cannot_be_summed_across_alternate_subshaders",
+    "test_water_alternative_with_too_few_passes_fails_conservatively"
+  ],
+  "workflow_path": ".github/workflows/raft-b49-water-pass-source.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41930936302",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41930936302"
+  ],
+  "budget": "Existing CPU synthetic-only B49 workflow Ubuntu-24.04 timeout5min; no ZIP2 download, no Unity/native/GPU.",
+  "status": "completed",
+  "observed_result": "Before fix 2+4 alternative SubShaders met aggregate pass_count=6. Fixed parser returns [2,4] and water gate rejects. CI41930936302 success 8+16=24 source-only tests.",
+  "rejected_hypotheses": [
+    "Aggregate ShaderLab Pass count is equivalent to Unity Shader.passCount. Unity documentation and synthetic counterexample reject it.",
+    "Initial CI41930875672 failure was production parser: rejected, caused by double-escaped HLSL newlines in new fixture, fixed in 33ca3538."
+  ],
+  "limitations": [
+    "No authenticated original ShaderLab inspected here; numeric per-SubShader count is source-only structure.",
+    "Conservative rejection of alternative SubShader that might not be active on Android; no hardware capability selection proof.",
+    "No Unity/Adreno GPU, FFT kernel, original program, water pixels or owner acceptance."
+  ],
+  "integration_commit": "b780d000dc5157c19078511927e681924907575a",
+  "next_step": "Integrate per-SubShader original source provenance when available and verify active Android branch; WATER-001 remains OPEN."
+}
