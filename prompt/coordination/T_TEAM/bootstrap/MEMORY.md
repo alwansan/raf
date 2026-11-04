@@ -1,0 +1,7 @@
+# T-team migration checkpoint
+Session t-team-migration-20261105; this is setup evidence, not worker T1/T2/T3/T4/T5.
+Reviewed source58047d3b293f04547e36536518fd936ad328f4d1,36B state files and188canonical records, latest relevant reports/Actions/releases. CL unchanged5394407b. Owner retiresB; reservations released, evidence retained. Native delivery stillAPK86; no newer device acceptance.
+Source guards for Steam already integrated; original FFT/pass binding and graphics integration remain. B12 newest41933025319 failure routedT3/T5. Archive staging helperB03 reused, real private payload not proven. No jobs/tasks/Unity/build launched.
+Next: workers register under their own T names, inherit by reference viaLEGACY_HANDOFF, use existing canonical ledger and refresh_t_team.py, carry out actual implementation/validation. See migration report for limits and tests.
+
+Validation completed:9localtests PASS (6 inherited +3 migration); actual inherited ledger generated10issues/17resources/162events including owner migration. All local T documentation links resolved against reviewed tree plus proposed files. No canonical issue/resource or individual legacy memory/state overwritten. Pending only final expected-SHA publication and verification.

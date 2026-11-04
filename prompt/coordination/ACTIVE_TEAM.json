@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "generation": "T-2026-11-05",
+  "active_team": "T_TEAM",
+  "owner_directive_date": "2026-11-05",
+  "previous_generations_retired_by_owner": [
+    "B01-B50",
+    "earlier-A-W"
+  ],
+  "legacy_reservations": "superseded; preserve evidence and live jobs",
+  "canonical_ledger_root": "prompt/coordination/B_TEAM",
+  "clients": [
+    {
+      "username": "T1",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/T1/MEMORY.md"
+    },
+    {
+      "username": "T2",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/T2/MEMORY.md"
+    },
+    {
+      "username": "T3",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/T3/MEMORY.md"
+    },
+    {
+      "username": "T4",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/T4/MEMORY.md"
+    },
+    {
+      "username": "T5",
+      "status": "eligible_not_started",
+      "memory_path": "prompt/coordination/clients/T5/MEMORY.md"
+    }
+  ]
+}

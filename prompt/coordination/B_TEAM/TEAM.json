@@ -6,252 +6,307 @@
     {
       "username": "B01",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B01/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B01/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B02",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B02/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B02/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B03",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B03/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B03/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B04",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B04/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B04/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B05",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B05/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B05/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B06",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B06/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B06/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B07",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B07/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B07/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B08",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B08/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B08/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B09",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B09/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B09/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B10",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B10/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B10/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B11",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B11/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B11/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B12",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B12/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B12/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B13",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B13/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B13/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B14",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B14/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B14/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B15",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B15/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B15/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B16",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B16/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B16/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B17",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B17/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B17/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B18",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B18/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B18/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B19",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B19/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B19/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B20",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B20/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B20/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B21",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B21/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B21/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B22",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B22/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B22/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B23",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B23/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B23/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B24",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B24/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B24/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B25",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B25/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B25/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B26",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B26/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B26/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B27",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B27/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B27/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B28",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B28/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B28/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B29",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B29/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B29/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B30",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B30/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B30/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B31",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B31/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B31/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B32",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B32/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B32/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B33",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B33/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B33/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B34",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B34/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B34/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B35",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B35/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B35/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B36",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B36/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B36/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B37",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B37/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B37/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B38",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B38/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B38/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B39",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B39/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B39/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B40",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B40/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B40/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B41",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B41/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B41/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B42",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B42/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B42/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B43",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B43/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B43/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B44",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B44/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B44/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B45",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B45/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B45/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B46",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B46/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B46/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B47",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B47/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B47/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B48",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B48/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B48/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B49",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B49/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B49/MEMORY.md",
+      "eligible_for_new_work": false
     },
     {
       "username": "B50",
       "status": "eligible_not_started",
-      "memory_path": "prompt/coordination/clients/B50/MEMORY.md"
+      "memory_path": "prompt/coordination/clients/B50/MEMORY.md",
+      "eligible_for_new_work": false
     }
-  ]
+  ],
+  "superseded_by": "T-2026-11-05",
+  "active_team": "T_TEAM",
+  "eligible_for_new_work": false,
+  "owner_directive_date": "2026-11-05",
+  "note": "Owner retired all B workers; individual historical state/MEMORY retained unchanged. Ledger remains canonical for T."
 }

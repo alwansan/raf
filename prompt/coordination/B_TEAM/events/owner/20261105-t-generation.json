@@ -1,0 +1,12 @@
+{
+  "id": "20261105-t-generation",
+  "owner": "owner-team-bootstrap",
+  "session_id": "t-team-migration-20261105",
+  "issue_id": "TEAM",
+  "type": "result",
+  "summary": "Owner retired all B workers and earlier clients; T1-T5 now inherit work, source, evidence and canonical ledger. Old reservations superseded, individual memories preserved. No jobs cancelled, no workers or schedules launched by migration.",
+  "evidence": [
+    "owner-message-2026-11-05"
+  ],
+  "at": "2026-11-05"
+}

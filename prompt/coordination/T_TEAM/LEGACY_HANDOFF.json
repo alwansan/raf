@@ -1,0 +1,376 @@
+{
+  "schema_version": 1,
+  "reviewed_sha": "58047d3b293f04547e36536518fd936ad328f4d1",
+  "owner_directive_date": "2026-11-05",
+  "note": "Historical state snapshot, not live sessions. All B reservations superseded by owner. Read original MEMORY/code/results before reuse; do not resume their identities.",
+  "donors": [
+    {
+      "path": "prompt/coordination/clients/B01/state.json",
+      "username": "B01",
+      "status": "completed",
+      "next": "WATER-001 remains OPEN. Continue authenticated original compiled FFT GPU/Unity kernel identity or water ShaderLab integration; coordinate B18/B48/B25. Do not treat source-only counts as GPU/phone proof.",
+      "work": [
+        "B01-20261104T2105Z-B01-water-contract-fft-kernel-contract",
+        "B01-20261104T2231Z-B01-fft-args-lexical-args"
+      ]
+    },
+    {
+      "path": "prompt/coordination/clients/B02/state.json",
+      "username": "B02",
+      "status": "paused",
+      "next": "B02 SOURCE/C# tool complete but no real source/export evidence: in one existing coordinated ZIP2-pinned AssetRipper export set RAFT_PRIVATE_EXPORT_LINEAGE and RAFT_PRIVATE_EXPORT_TEXTURE_LINEAGE to PRIVATE temp filenames; then B02 --trace --original, B15 sampler and B05 material trace checks; report aggregate-only and verify Unity pixels, no automatic metadata repair. Other WATER/LOCAL P0 still open; avoid duplicate full build.",
+      "work": [
+        "B02-20261104T2233Z-B02-7c19-trace-mipmap-bridge",
+        "B02-20261104T2240Z-B02-7c19-texture-export-trace"
+      ]
+    },
+    {
+      "path": "prompt/coordination/clients/B03/state.json",
+      "username": "B03",
+      "status": "paused",
+      "next": "Original six-scene Renderer source graph 1635/1635 targets verified; CI 41928799663, 41929367655, 41930267873 all SUCCESS. Generated summary CI41930965521 SUCCESS. Next capture same-instance source→export Renderer m_Materials pointer identity during a coordinated existing full export; actual Unity and phone rendering NOT verified. No new native request.",
+      "work": [
+        "B03-20261104T2101Z-B03-a419-archive-payload-authentication",
+        "B03-20261104T2101Z-B03-a419-renderer-material-reference",
+        "B03-20261104T2243Z-B03-7c9e-original-renderer-pointers"
+      ]
+    },
+    {
+      "path": "prompt/coordination/clients/B04/state.json",
+      "username": "B04",
+      "status": "completed",
+      "next": "Scoped B04 20261104T2243Z resumed quality snapshot completed; actual Android active tier/pixels remain untested. Future B04 session must reread HEAD/Actions/CL and choose next independent P0 barrier. No background work.",
+      "work": [
+        "B04-20261104T2102Z-B04-7c20-original-colorspace",
+        "B04-20261104T2102Z-B04-7c20-mesh-source-safety",
+        "B04-20261104T2243Z-B04-6b7c-quality-snapshot"
+      ]
+    },
+    {
+      "path": "prompt/coordination/clients/B05/state.json",
+      "username": "B05",
+      "status": "paused",
+      "next": "First authenticated original source/selected-owner accessor passed: 41 Material, 227 TexEnv incl 227 UV in sharedassets6, CI41929077930; scoped verifier 18 synthetic CI PASS. Continue only with independently proven same-run Unity-export YAML + private object trace; compare --owner sharedassets6.assets then repair measured mismatch. No full game/render/phone proof, RENDER OPEN NOT_READY 0/3.",
+      "work": [
+        "B05-20261104T2107Z-B05-9e24-texenv-lineage",
+        "B05-20261104T2107Z-B05-9e24-uv-transform",
+        "B05-20261104T2242Z-B05-auth-texenv6-original-texenv-shape",
+        "B05-20261104T2242Z-B05-auth-texenv6-scoped-export"
+      ]
+    },
+    {
+      "path": "prompt/coordination/clients/B06/state.json",
+      "username": "B06",
+      "status": "completed",
+      "next": "Resumed scope complete. Read B06 MEMORY and docs/B06_FFT_DEVICE_WORKGROUP_LIMITS_2026-11-04.md; source-only C# synthetic CI41928357485 SUCCESS, earlier B06 original-source CI41914575997 SUCCESS. Water authentic ShaderLab/Unity ComputeShader runtime kernel ID mapping still open; coordinate B08/B48/B18 and B09/B24/B45. Latest Raft APK86 lacks changes; validate device capability rows only on a later legitimate builder APK. Keep WATER-001 OPEN, NOT_READY 0/3.",
+      "work": [
+        "B06-20261104T210726Z-B06-fmt6a2-fft-target-binding",
+        "B06-20261104T210726Z-B06-fmt6a2-fft-dispatch-lexical",
+        "B06-20261104T224512Z-B06-wg7a3-fft-workgroup-semantic"
+      ]
+    },
+    {
+      "path": "prompt/coordination/clients/B07/state.json",
+      "username": "B07",
+      "status": "paused",
+      "next": "B07 scoped original first-MoveNext trace integrated and validated by actual original adapted .NET compile CI41929721761 plus manifest parity CI41929910850; LOCAL-005/WATER-001/RENDER-002 remain open, no device .rgd. On next resumed session refresh HEAD/Actions/CL and choose distinct P0 graphics blocker, or coordinated newer APK world/save trial once accepted. No outside-session worker.",
+      "work": [
+        "B07-20261104T2242Z-B07-c7ea-world-coroutine-entry"
+      ]
+    },
+    {
+      "path": "prompt/coordination/clients/B08/state.json",
+      "username": "B08",
+      "status": "completed",
+      "next": "Both B08 scoped original FFT numeric descriptor ABI + active image uses investigations completed with source-authenticated CI. Next independent proof is original DXBC t0 vs t1 source-register→translated SPIR-V binding and Unity runtime FindKernel selection; WATER-001 OPEN; NOT_READY 0/3. No background work.",
+      "work": [
+        "B08-20261104T2246Z-B08-7d2a-fft-descriptor-abi",
+        "B08-20261104T2246Z-B08-7d2a-fft-active-image-uses"
+      ]
+    },
+    {
+      "path": "prompt/coordination/clients/B09/state.json",
+      "username": "B09",
+      "status": "paused",
+      "next": "Inspect first B09 spectrum workflow actual run and two safe aggregates. 23/23 local synthetic tests verified and source/CI integrated, but actual ZIP2 18 original Vulkan roundtrips UNVERIFIED. If pass, construct authentic per-pass ShaderLab with CB/sampler bindings; if fail, fix measured stage/variant issue. Avoid audio, Settings and touch.",
+      "work": [
+        "B09-20261104T213740719Z-B09-28fc-spectrum-pass-staging",
+        "B09-20261104T224504636Z-B09-sp7-spectrum-seven-pass-identity"
+      ]
+    },
+    {
+      "path": "prompt/coordination/clients/B10/state.json",
+      "username": "B10",
+      "status": "completed",
+      "next": "B10 volumetric NOTICE transaction source fix verified (27 unique tests and 3 authentic vendor shader stages), no Unity/Adreno/device. Next new active session: source-authenticated Spectrum/Foam/FFT ShaderLab/compute binding and same-export Material associations with B09/B24/B25/B45 peers; do not repeat source-only transaction audits. No background continuation.",
+      "work": [
+        "B10-20261104T2132Z-B10-a6e1-vendor-meta",
+        "B10-20261104T2242Z-B10-vlm1-volumetric-notice"
+      ]
+    },
+    {
+      "path": "prompt/coordination/clients/B11/state.json",
+      "username": "B11",
+      "status": "paused",
+      "next": "B11 scope completed; retrieve isolated gamut Actions run ID/conclusion and actual source-authenticated exported YAML on independently justified export; inspect pixels on newer device APK. No background work.",
+      "work": [
+        "B11-20261104T2115Z-B11-bca7-original-gamut-parity",
+        "B11-20261104T2244Z-B11-54cf-gamut-utf8"
+      ]
+    },
+    {
+      "path": "prompt/coordination/clients/B12/state.json",
+      "username": "B12",
+      "status": "completed",
+      "next": "B12 source/managed scene diagnostic GC allocation sub-scope finished (CI41929419050 8 CLR cases + 22 unit tests PASS). Next new authentic Raft APK + corresponding CL screenshots/log to classify limit_reason/mesh/shader/GC; broader PERF/WATER/RENDER/LOCAL OPEN; do not run duplicate native build or claim background work.",
+      "work": [
+        "B12-20261104T2132Z-B12-c4a8-steam-stats-save",
+        "B12-20261104T2132Z-B12-c4a8-scene-render-probe",
+        "B12-20261104T2243Z-B12-bounded-tree-a9-bounded-scene-tree"
+      ]
+    },
+    {
+      "path": "prompt/coordination/clients/B13/state.json",
+      "username": "B13",
+      "status": "completed",
+      "next": "B13 source-only RENDER-002 builtin ShaderLab restoration transaction SOURCE_FIXED; 14/14 CI41928703661. Water FFT, authentic shaders, original export/material lineage and Android pixels UNVERIFIED. Next independent scope source-authenticated binding rather than duplicate synthetic tests; project NOT_READY 0/3.",
+      "work": [
+        "LOCAL-005/B13-20261104T2132Z-B13-7e6b-offline-source-transaction",
+        "WATER-001/B13-20261104T2132Z-B13-7e6b-shader-meta-guid",
+        "RENDER-002/B13-20261104T2247Z-B13-builtin-atomic-builtin-shader-transaction"
+      ]
+    },
+    {
+      "path": "prompt/coordination/clients/B14/state.json",
+      "username": "B14",
+      "status": "paused",
+      "next": "Session two scopes source-completed. Original authentic local SaveGame order and Android stats-only guard verified but .rgd/device still OPEN; future coordinated native APK for create/save/reopen, plus P0 authentic water/FFT/shader binding first. Recheck HEAD/Actions/CL; preserve working audio/Settings and deferred touch, no background execution.",
+      "work": [
+        "B14-20261104T2131Z-B14-a71c-water-path-identity",
+        "B14-20261104T2131Z-B14-a71c-save-stage-roots",
+        "B14-20261104T2247Z-B14-d1a9-scene-callback-ci-parity",
+        "B14-20261104T2247Z-B14-d1a9-authentic-save-call-order"
+      ]
+    },
+    {
+      "path": "prompt/coordination/clients/B15/state.json",
+      "username": "B15",
+      "status": "paused",
+      "next": "Two scopes complete: B15 safe importer default/paired-export guard 23/23 CI41929031892, real ZIP2 owner 87/87 typed Texture2D source CI41930143093. No paired real TextureImporter data; on fresh B15 session select actual same-generation export available or another independent P0 graphics/FFT/local world blocker. No background work. NOT_READY 0/3.",
+      "work": [
+        "B15-20261104T215400Z-B15-7b2c-sampler-parity",
+        "B15-20261104T224800Z-B15-defaults-32f1-sampler-defaults-dual-trace",
+        "B15-20261104T224800Z-B15-defaults-32f1-authentic-original-sampler-6"
+      ]
+    },
+    {
+      "path": "prompt/coordination/clients/B16/state.json",
+      "username": "B16",
+      "status": "completed",
+      "next": "B16 scoped source-check #error fix complete/tested 40/40 in CI41929071692. Next independent task should investigate actual original FFT serialized Unity variant/runtime kernel mapping or unowned local-world step; avoid duplicate B08/B18/B24/B30 experiments. WATER/RENDER/LOCAL still open; NOT_READY 0/3. No background task.",
+      "work": [
+        "B16-20261104T2249Z-B16-8c2e-error-gate"
+      ]
+    },
+    {
+      "path": "prompt/coordination/clients/B17/state.json",
+      "username": "B17",
+      "status": "paused",
+      "next": "B17 authentic source numeric ABI 7 passes/14 pairs and private 14 fragment original-index HLSL texture/sampler rebinding Vulkan1.1 verified. B09 owns Spectrum ShaderLab program assembly; inspect live HEAD and coordinate original CB/sampler render states, Unity/Adreno and native/device before any readiness. No continuing worker outside sessions.",
+      "work": [
+        "B17-20261104T2140Z-B17-spc2-spectrum-descriptors",
+        "B17-20261104T2249Z-B17-cbind-compiled-parity",
+        "B17-20261104T2249Z-B17-cbind-source-namebridge"
+      ]
+    },
+    {
+      "path": "prompt/coordination/clients/B18/state.json",
+      "username": "B18",
+      "status": "active",
+      "next": "Original FFT two distinct explicit target descriptor maps and 20/20 SPIR-V complete normalized image-variable identity verified CI41931883517. Move from source-only verification to real exported Unity .compute path/kernel identity restoration, do not invent 20 Unity runtime kernel IDs or bypass strict water gate; preserve audio/Settings; defer touch.",
+      "work": [
+        "prompt/coordination/work/WATER-001/B18-20261104T215100Z-B18-d3f9-fft-resource-bindings.json",
+        "prompt/coordination/work/WATER-001/B18-20261104T221000Z-fft-spirv-binding-roles.json",
+        "prompt/coordination/work/WATER-001/B18-20261104T225100Z-B18-map2-descriptor-map.json",
+        "prompt/coordination/work/WATER-001/B18-20261104T225100Z-B18-spv-variable-identity.json"
+      ]
+    },
+    {
+      "path": "prompt/coordination/clients/B19/state.json",
+      "username": "B19",
+      "status": "completed",
+      "next": "B19 2 scoped source fixes complete (save hardlink guard CI41929845587, water per-SubShader pass gate CI41930936302); next choose distinct authentic original water shader/resource binding or actual local .rgd/Steam on next coordinated APK. Re-read latest HEAD and team state; no background work or native request.",
+      "work": [
+        "B19-20261104T2256Z-B19-hl7-save-hardlink-guard",
+        "B19-20261104T2305Z-B19-hl7-subshader-pass-count"
+      ]
+    },
+    {
+      "path": "prompt/coordination/clients/B20/state.json",
+      "username": "B20",
+      "status": "completed",
+      "next": "Original Foam stage/state packet+4-stage HLSL/SPIRV numeric CB slots SOURCE_AUTHENTIC. 7/8 original partial CB sizes differ from reflected UBO extents (not proof of loss). Next investigate exact original CB member offset/type and SPIRV UBO member layouts, CB0 source-HLSL alias, original material/sampler binding, ShaderLab Unity import then Adreno phone. WATER-001 OPEN; NOT_READY 0/3. No work outside session.",
+      "work": [
+        "B20-20261104T2230Z-B20-6c9a-shaderlab-scope",
+        "B20-20261104T2230Z-B20-6c9a-blur-atomic-rollback",
+        "B20-20261104T2257Z-B20-fmp3-foam-packet",
+        "B20-20261104T2257Z-B20-fmp3-cb-reflection"
+      ]
+    },
+    {
+      "path": "prompt/coordination/clients/B21/state.json",
+      "username": "B21",
+      "status": "completed",
+      "next": "B21 scoped original Light→real AssetRipper export values and GameObject owners 2/2 proven for six original scene subset; do not rerun. On next session inspect live HEAD/Actions and choose unowned actual shader/material/ambient/GPU white-pixel or water/FFT implementation lane, make real source fix with authentic evidence. RENDER-002/WATER-001/LOCAL-005 OPEN, NOT_READY 0/3, APK86 latest known.",
+      "work": [
+        "B21-20261104T2153Z-B21-72ab-lightmap-lineage",
+        "B21-20261104T2153Z-B21-72ab-dynamic-lighting",
+        "B21-20261104T2257Z-B21-8e72-light-export-lineage",
+        "B21-20261104T2310Z-B21-8e72-light-owner-link"
+      ]
+    },
+    {
+      "path": "prompt/coordination/clients/B22/state.json",
+      "username": "B22",
+      "status": "completed",
+      "next": "Source-only scopes complete. Actual private original Raft Material export same-instance check and later phone local-world/.rgd validation remain. No autonomous work outside active sessions.",
+      "work": [
+        "B22-20261104T2134Z-B22-c91f-scalar-parity",
+        "B22-20261104T2134Z-B22-c91f-operation-staging"
+      ]
+    },
+    {
+      "path": "prompt/coordination/clients/B24/state.json",
+      "username": "B24",
+      "status": "paused",
+      "next": "B24 2 scoped tasks completed: original GameManager instrumentation managed-compile parity and authentic original Foam/Global 2-pass 4-stage Vulkan translation. Next unblock authentic Foam partial-CB resource mapping + ShaderLab/Unity import; keep WATER-001/LOCAL-005 open, no APK/device acceptance. Preserve Audio/Settings, touch deferred.",
+      "work": [
+        "B24-20261104T2126Z-B24-6f19-world-callback-compile-parity",
+        "B24-20261104T2126Z-B24-6f19-foam-original-stage-translation"
+      ]
+    },
+    {
+      "path": "prompt/coordination/clients/B25/state.json",
+      "username": "B25",
+      "status": "completed",
+      "next": "On a new B25 cycle, inspect live HEAD/CI/CL and owner feedback. Authenticate original CB0 shader descriptor symbol and resource/texture bindings in PRIVATE four-stage reflection, preserve 2 pass program identities and SHA. Then genuine ShaderLab/Unity/Adreno proof; no fake alias/ready flags. Latest Raft APK86 predates work; preserve audio/Settings and deferred touch. No background execution.",
+      "work": [
+        "B25-20261104T222931Z-B25-foam-state-foam-pass-state",
+        "B25-20261104T222931Z-B25-foam-state-foam-cb-namebridge"
+      ]
+    },
+    {
+      "path": "prompt/coordination/clients/B30/state.json",
+      "username": "B30",
+      "status": "completed",
+      "next": "B30 scoped original FFT header/keyword selector investigation completed: authenticated 20/20 collisions reject discriminator-router hypothesis. Follow up with separate original Unity runtime-specialization mapping; WATER-001 OPEN, no authored .compute/device proof.",
+      "work": [
+        "B30-20261104T2140Z-B30-7c29-fft-variantmap-routing"
+      ]
+    },
+    {
+      "path": "prompt/coordination/clients/B31/state.json",
+      "username": "B31",
+      "status": "paused",
+      "next": "Scoped RENDER-002 original texture provenance guard complete (source-only 26/26). Next independent P0 obstacle: run authenticated original Texture2D stream/ColorSpace same-export comparison with B02/B05, or original Spectrum shader program restoration distinct from B24 Foam/B45 Blur. Re-read live HEAD; no native/device proof.",
+      "work": [
+        "B31-20261104T213800Z-B31-5ea4-graphics-cache"
+      ]
+    },
+    {
+      "path": "prompt/coordination/clients/B37/state.json",
+      "username": "B37",
+      "status": "paused",
+      "next": "B37 completed two source-authentic CI-backed sub-scopes: cursor RGBA32 original callsite provenance and original RGD inherited-field/version identity; neither fixes actual game yet. Next investigate original SaveAndLoad.Load<T> binder/migration for source-version compatibility, or coordinate phone .rgd create/save/reload on newer justified candidate. Do not touch working audio/Settings or deferred touch; never claim work continues while paused.",
+      "work": [
+        "B37-20261104T2226Z-cursor-rgba32",
+        "B37-20261104T2244Z-rgd-root-inheritance"
+      ]
+    },
+    {
+      "path": "prompt/coordination/clients/B38/state.json",
+      "username": "B38",
+      "status": "completed",
+      "next": "Two B38 source-checker scopes completed, CI21/21 +9/9. Compare against authenticated private ZIP2 same-export trace; original game graphics and device untouched. RENDER OPEN; NOT_READY 0/3.",
+      "work": [
+        "B38-20261104T2142Z-f31a-material-yaml-uniqueness",
+        "B38-20261104T2155Z-queue-state"
+      ]
+    },
+    {
+      "path": "prompt/coordination/clients/B43/state.json",
+      "username": "B43",
+      "status": "paused",
+      "next": "Source/export material keyword utility and synthetic 17/17 CI completed; next run on authenticated real source + SAME-instance private trace + complete exported YAML through W4. Do not claim pixels/Android, NOT_READY 0/3.",
+      "work": [
+        "B43-20261104T2104Z-B43-c8f2-material-keyword-fidelity"
+      ]
+    },
+    {
+      "path": "prompt/coordination/clients/B44/state.json",
+      "username": "B44",
+      "status": "paused",
+      "next": "11/11 synthetic PASS in successful GitHub CI41913494314 on dda05b; independent material m_Colors source-vs-same-export integrity tool complete. No actual original Material-vs-YAML export evaluated, so RENDER-002 remains OPEN. Next coordinated full W1 export run B44 comparator with private SHA-authenticated original and same-instance trace; investigate mismatches or rule out color property loss. No background work.",
+      "work": [
+        "B44-20261104T2059Z-B44-f0ac-material-values"
+      ]
+    },
+    {
+      "path": "prompt/coordination/clients/B45/state.json",
+      "username": "B45",
+      "status": "paused",
+      "next": "B45 original Blur two-pass source/CPU Vulkan (6 positives/12 negatives), private stage, rollback guard and native gated wiring done. Do NOT claim Unity or Adreno. Next owner-requested gated native build must inspect exported unique Shader identity/.meta and Unity compiler output; separately probe original sampler/uniform upload. WATER-001 OPEN, touch deferred, audio/Settings preserved.",
+      "work": [
+        "B45-20261104T2056Z-B45-f0c1-blur-shaderlab"
+      ]
+    },
+    {
+      "path": "prompt/coordination/clients/B46/state.json",
+      "username": "B46",
+      "status": "completed",
+      "next": "On next available authenticated complete same-instance exported project, run B46 texture GUID+fileID guard; investigate real errors, compare original saved TexEnv PPtrs, or pivot to shader/color variants. No work continues outside sessions.",
+      "work": [
+        "B46-20261104T2058Z-B46-6e3d-texture-export-links"
+      ]
+    },
+    {
+      "path": "prompt/coordination/clients/B47/state.json",
+      "username": "B47",
+      "status": "paused",
+      "next": "Source contract lane complete (CI 41912450062). On next session, read live B48/B01 FFT kernel-index identity results before choosing a non-overlapping integration/GPU validation task. Summary generator pending workspace checkout; do not claim rebuilt index.",
+      "work": [
+        "B47-20261104T2055Z-B47-c4e7-water-pass-gate",
+        "B47-20261104T2055Z-B47-c4e7-compute-kernel-entrypoint"
+      ]
+    },
+    {
+      "path": "prompt/coordination/clients/B48/state.json",
+      "username": "B48",
+      "status": "paused",
+      "next": "B48 scoped original FFT selector-candidate contract and generated team checkpoint complete (CI41912422220/41913921971). Next authenticate Unity runtime kernel index mapping and real .compute staging without fabricated flags; WATER OPEN, NOT_READY 0/3.",
+      "work": [
+        "prompt/coordination/work/WATER-001/B48-20261104T2058Z-B48-f24a-fft-kernel-identity.json"
+      ]
+    },
+    {
+      "path": "prompt/coordination/clients/B49/state.json",
+      "username": "B49",
+      "status": "paused",
+      "next": "Resume authentic Spectrum/Foam/FFT pass and kernel recovery after reading live HEAD/current B work; B49 per-pass source gate is closed, WATER-001 remains OPEN.",
+      "work": [
+        "B49-20261104T2054Z-B49-c81f-water-pass-guard"
+      ]
+    },
+    {
+      "path": "prompt/coordination/clients/B50/state.json",
+      "username": "B50",
+      "status": "paused",
+      "next": "B50 two authentic Steam native boundaries source-guarded and managed CI 41909535306/41911949540 green; LOCAL-005 still OPEN pending real device new-world/.rgd save-reopen test. Continue only after live B_TEAM coordination, new CL and P0 water/shaders status; no background worker active.",
+      "work": [
+        "B50-20261104T2039Z-B50-d7a3-steamstats-offline",
+        "B50-20261104T2039Z-B50-d7a3-cheat-steamid-probe",
+        "B50-20261104T2039Z-B50-d7a3-cheat-steamid-adapter"
+      ]
+    }
+  ]
+}
