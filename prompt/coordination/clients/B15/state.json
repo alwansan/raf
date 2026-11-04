@@ -4,22 +4,23 @@
   "generation": "B-2026-11-04",
   "session_id": "20261104T224800Z-B15-defaults-32f1",
   "resumed_from_session": "20261104T215400Z-B15-7b2c",
-  "status": "paused",
+  "status": "active",
   "base_sha": "b5d8de01257f3d3171f8e930de557343a49e8205",
   "last_commit": "8f51565362f0d26d0d413cbf87f6e2e1c631883d",
-  "updated_at": "2026-11-04T22:54:23.146Z",
+  "updated_at": "2026-11-04T22:58:05.263Z",
   "tracks": [
-    "RENDER-002:sampler-default-safety-and-trace-coherence"
+    "RENDER-002:authentic-original-sampler6"
   ],
   "work_ids": [
     "B15-20261104T215400Z-B15-7b2c-sampler-parity",
-    "B15-20261104T224800Z-B15-defaults-32f1-sampler-defaults-dual-trace"
+    "B15-20261104T224800Z-B15-defaults-32f1-sampler-defaults-dual-trace",
+    "B15-20261104T224800Z-B15-defaults-32f1-authentic-original-sampler-6"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41920884155",
     "https://github.com/alwansan/raf/actions/runs/41921429305",
     "https://github.com/alwansan/raf/actions/runs/41929031892"
   ],
-  "next_step": "Current B15 scope complete (23/23 synthetic), no active background run. New session can use actual same-export B02/W1 private traces and pinned ZIP2 owners for real importer parity; else select separate uncovered P0 water/local-world source blocker. Keep NOT_READY 0/3.",
+  "next_step": "Run B15 typed Texture2D source reader against SHA-pinned real ZIP2 sharedassets6 87 texture objects, never upload raw assets. Pair to actual importer only with true same-instance exporter trace.",
   "memory_path": "prompt/coordination/clients/B15/MEMORY.md"
 }
