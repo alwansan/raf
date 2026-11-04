@@ -25,5 +25,6 @@
 ## الأحداث
 
 - [2026-11-04 / owner-team-bootstrap](events/owner/20261104-b-generation.json): Owner replaces legacy clients with B01–B50. Preserve legacy evidence, release reservations, prioritize water/colors/local-world. Audio/Settings owner-confirmed; touch deferred. No B sessions have been started by setup.
+- [2026-11-04T20:47:00Z / B50](events/B50/20261104T2047Z-local-steamstats-sourcefixed.json): SHA-pinned original SaveGame instrumentation now excludes SteamUserStats.StoreStats in Android-local mode only; C# original-source offline integration and bounded synthetic guards pass, device create/save/reload still unverified.
 
-بصمة المدخلات: 3c38e4e7a9c0d4ee04f2ecb42e33737f2469957793d93f3a6f7f98023139a03d
+بصمة المدخلات: 9020396e3fc324b55424de01a3aebbd1d2bbcacb0fcddc982889128e3c0ffa78
