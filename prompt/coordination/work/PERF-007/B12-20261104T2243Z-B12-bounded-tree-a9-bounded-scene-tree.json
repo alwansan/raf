@@ -6,11 +6,13 @@
   "issue_id": "PERF-007",
   "track": "integration",
   "approach": "Replace full-scene Renderer array with bounded Transform walk and reusable same-object renderer component list in B12 read-only snapshot; explicit root/node/pending/material/renderer budgets",
-  "status": "active",
+  "status": "completed",
   "base_sha": "aa92301de75371d4cf49a9e56169a31008bc0c18",
   "intended_files": [
     "android-port/Runtime/Platform/AndroidTestDiagnostics.cs",
-    "tests/test_b12_scene_render_snapshot.py"
+    "tests/test_b12_scene_render_snapshot.py",
+    "scripts/b12_scene_render_harness.py",
+    ".github/workflows/raft-b12-scene-render-snapshot.yml"
   ],
   "hypothesis": "The current renderer cap checks after GetComponentsInChildren allocates an unbounded root-hierarchy array, adding a diagnostic memory/GC spike in a known OOM game. Explicit bounded traversal avoids the whole array without scene mutation.",
   "related_work": [
@@ -18,10 +20,13 @@
     "PERF-007 GPU-memory evidence"
   ],
   "experiment_ids": [
-    "B12-20261104T2243Z-B12-bounded-tree-a9-traversal-budget"
+    "B12-20261104T2243Z-bounded-scene-tree"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Source refactor and negative tests; isolated source CI and original managed compile. Keep audio/Settings/touch unchanged.",
-  "updated_at": "2026-11-04T22:45:46.977Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41929419050",
+    "https://github.com/alwansan/raf/actions/runs/41928807641"
+  ],
+  "result": "Bounded diagnostic traversal source 2c15dfb + no-alloc list material API cdec4c6 integrated, tests 37f52c9/8e4cbce and generated synthetic exact coroutine harness a5d18dc+02030b2 with B12 workflow1db2c6. CI41929419050 PASS: 8 executable C# cases, 11 B12 source tests, 11 original trace tests; previous managed offline CI41928807641 PASS on C# cdec4c6. Synthetic 1st harness failed only from missing same-source B21 quality helper; corrected. Device runtime and actual FPS/OOM not tested.",
+  "next_step": "New exact game APK and same-scene runtime snapshot required; no duplicate full build. Broader WATER/RENDER/LOCAL remain open. Avoid repeating stats, touch, audio, Settings work.",
+  "updated_at": "2026-11-04T22:57:51.979Z"
 }
