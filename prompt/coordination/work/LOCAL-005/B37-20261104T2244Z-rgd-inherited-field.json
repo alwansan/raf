@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "owner": "B37",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2226Z-B37-cursor01",
+  "issue_id": "LOCAL-005",
+  "track": "world-save",
+  "approach": "Extend A10 original RGD metadata-only authenticated consumer comparison to inherited field visibility and Serializable field attributes; never deserialize or execute game code.",
+  "status": "active",
+  "base_sha": null,
+  "intended_files": [
+    "tests/b37-rgd-inherited-field/B37RgdInheritedField.csproj",
+    "tests/b37-rgd-inherited-field/Program.cs",
+    ".github/workflows/raft-b37-original-rgd-inheritance.yml",
+    "docs/B37_ORIGINAL_RGD_INHERITED_FIELD_2026-11-04.md"
+  ],
+  "hypothesis": "A10's one original serialized Data.rgd root member has zero direct field matches because the original managed type might inherit the field or declare relevant serialization metadata, not necessarily because the original save is corrupt.",
+  "related_work": [
+    "A10 original 2941-byte Data.rgd NRBF metadata CI41734609973",
+    "B50 native Steam StoreStats Android guard",
+    "B07/B24 world callback source compile",
+    "B19 SaveAndLoad path preservation"
+  ],
+  "experiment_ids": [
+    "B37-20261104T2244Z-rgd-root-inheritance"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Build source-authenticated CPU metadata-only base-field/Serializable-state classifier with negative controls; no user save schema changes.",
+  "updated_at": "2026-11-04T22:44:00Z"
+}
