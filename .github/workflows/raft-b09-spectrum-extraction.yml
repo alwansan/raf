@@ -1,0 +1,105 @@
+name: B09 WATER-001 original Spectrum pass-stage extraction
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/b09_stage_original_spectrum.py
+      - tests/test_b09_stage_original_spectrum.py
+      - .github/workflows/raft-b09-spectrum-extraction.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: raft-b09-spectrum-source-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  original-spectrum-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Checkout isolated development source without LFS
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+
+      - name: Run bounded extractor parser and provenance safety tests
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_b09_stage_original_spectrum.py -v
+          python3 -m py_compile scripts/b09_stage_original_spectrum.py
+
+      - name: Retrieve only two exact original ZIP2 Shader owners
+        uses: actions/checkout@v4
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: b09-pinned-zip2
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/resources.assets/
+            Raft/Raft_Data/sharedassets0.assets/
+          sparse-checkout-cone-mode: false
+          persist-credentials: false
+          lfs: false
+
+      - name: Verify ZIP2 transport chunks and reassemble authenticated originals in scratch
+        shell: bash
+        run: |
+          set -euo pipefail
+          df -h /
+          dest="$RUNNER_TEMP/b09-original"
+          mkdir -p "$dest"
+          for name in resources.assets sharedassets0.assets; do
+            chunks="$GITHUB_WORKSPACE/b09-pinned-zip2/Raft/Raft_Data/$name"
+            test -d "$chunks" && test ! -L "$chunks"
+            test -f "$chunks/part-00000"
+            # No shell-generated source code, and no mutation of the ZIP2 source.
+            cat -- "$chunks"/part-* > "$dest/$name"
+          done
+          python3 - <<'PY'
+          import hashlib, pathlib, os
+          pin={
+            'resources.assets': (111533516,'87493249f1adfc0c5eb8b82e4e199e208cd2c95eabe9796cab82116c4838595c'),
+            'sharedassets0.assets':(115978112,'0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3')}
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])/'b09-original'
+          for name,(size,sha) in pin.items():
+            path=root/name
+            digest=hashlib.sha256()
+            with path.open('rb') as stream:
+              for data in iter(lambda:stream.read(4*1024*1024),b''):
+                digest.update(data)
+            if path.stat().st_size!=size or digest.hexdigest()!=sha:
+              raise SystemExit('Authenticated original ZIP2 provider mismatch')
+          print('RAFT_B09_ZIP2_SOURCE_AUTH owners=2 bytes=227511628 success=true')
+          PY
+
+      - name: Parse original serialized Spectrum programs without public source artifacts
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 -m scripts.b09_stage_original_spectrum \
+            --source "$RUNNER_TEMP/b09-original" \
+            --repo "$GITHUB_WORKSPACE" \
+            --private "$RUNNER_TEMP/b09-spectrum-private" \
+            --out "$RUNNER_TEMP/b09-spectrum-aggregate.json"
+
+      - name: Remove private source and temporary bytecode irrespective of extractor result
+        if: always()
+        shell: bash
+        run: |
+          rm -rf -- "$RUNNER_TEMP/b09-spectrum-private" "$RUNNER_TEMP/b09-original" "$GITHUB_WORKSPACE/b09-pinned-zip2"
+
+      - name: Retain only safe original Spectrum structural aggregate
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: raft-b09-spectrum-aggregate-${{ github.sha }}
+          path: ${{ runner.temp }}/b09-spectrum-aggregate.json
+          if-no-files-found: ignore
+          retention-days: 7
