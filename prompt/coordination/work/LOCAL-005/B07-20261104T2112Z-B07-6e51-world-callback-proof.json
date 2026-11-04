@@ -5,24 +5,31 @@
   "session_id": "20261104T2112Z-B07-6e51",
   "issue_id": "LOCAL-005",
   "track": "world-save",
-  "approach": "Original-source WorldHasBeenLoaded callback and OnWorldRecieved sequence/exception propagation; executable synthetic harness and exact SHA guard, disjoint from B50 Steam fixes",
-  "status": "active",
+  "approach": "Bounded original-SHA world callback structure plus native staging trace of GameManager.OnWorldRecieved; no gameplay flags modified, distinct from B50 StoreStats guard",
+  "status": "completed",
   "base_sha": "0d33268645106e7bc28fcaa786d90683fe93de19",
   "intended_files": [
-    "scripts/probe_original_world_readiness.py",
-    "scripts/verify_android_offline_candidate.py",
-    "tests/test_original_world_callback_failure.py",
-    "prompt/coordination/clients/B07/*",
-    "prompt/coordination/work/LOCAL-005/B07-*.json"
+    "scripts/b07_probe_original_world_callbacks.py",
+    "tests/test_b07_probe_original_world_callbacks.py",
+    "scripts/instrument_android_runtime_operations.py",
+    "config/runtime-operation-traces.json",
+    "tests/test_b07_world_callback_trace.py",
+    ".github/workflows/raft-b07-world-callback-chain.yml",
+    "docs/B07_LOCAL_WORLD_CALLBACK_CHAIN_2026-11-04.md"
   ],
   "hypothesis": "Existing world-readiness lexical checks cannot distinguish successful scene completion from callback exception; a pinned method-body harness can verify callback invocation and failure semantics without shipping fake success flags.",
   "related_work": [
     "B50-20261104T2039Z-B50-d7a3-steamstats-offline",
     "B50-20261104T2039Z-B50-d7a3-cheat-steamid-adapter"
   ],
-  "experiment_ids": [],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Inspect original callback/host source and existing original CI, then implement + test a distinct verification.",
-  "updated_at": "2026-11-04T21:12:00Z"
+  "experiment_ids": [
+    "20261104T2112Z-world-callback"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41914637539",
+    "https://github.com/alwansan/raf/actions/runs/41915466470"
+  ],
+  "result": "SOURCE_INTEGRATED; 3 original GameManager SaveGame branches verified with SHA; B07 original CI 41915466470 SUCCESS 15/15 synthetic plus authentic source callback instrumentation. NOT Unity/device verified; LOCAL-005 remains OPEN.",
+  "next_step": "Follow actual coordinated APK device world/save/reload; inspect new callback logs for any exception. Alternative P0 water/rendering when new failure evidence appears.",
+  "updated_at": "2026-11-04T21:24:00Z"
 }
