@@ -20,3 +20,13 @@
 The water/FFT wrong-pass and zero-kernel failures (owner APK86) and Steam SaveGame exception remain open, untested on a newer Android build. This probe is **not** a water shader fix, an exported-material parity result, a device color result, or an APK. RENDER-002 and WATER-001 remain OPEN; project NOT_READY, independent full reviews **0/3**. A distinct follow-up is to inspect **original dynamic lighting/probe references vs same-instance exported scene**; only change export/render resources on authenticated mismatch with `.meta`/GUID preservation. Avoid repeating the existing B03/B05/B22/B44/B46 material and texture census.
 
 Preserve B21 session `20261104T2153Z-B21-72ab`; see [coordination memory](../prompt/coordination/clients/B21/MEMORY.md).
+
+
+<!-- B21_ORIGINAL_DYNAMIC_LIGHT_PROBE_20261104 -->
+## Follow-on P0 lane: actual native scene Light components (distinct source question)
+
+After the first six-scene baked-lightmap hypothesis was rejected, B21 implemented [native Light source reader](../scripts/b21_original_dynamic_lights.py) with [18 targeted synthetic and negative controls](../tests/test_b21_original_dynamic_lights.py), integrated into the same six-SHA-authenticated workflow (no second source download). [CI41922372594](https://github.com/alwansan/raf/actions/runs/41922372594) **SUCCESS**, both jobs; **16 existing + 18 new = 34/34** synthetic controls pass and all six original scene bytes are SHA256 checked again.
+
+**True original result:** `level0` has exactly one typed native `Light`, and `level1` exactly one; each references an existing local GameObject path ID, is enabled, and has finite non-unit-white RGB with positive serialized intensity and range. `level2..level5` have no native Light components in their original serialized object tables. These are numerical/source type classifications only; no original raw light values leave the CI workspace. The original does include native dynamic/light objects in some tested scenes, independently of the total absence of baked maps. Whether current same-instance Unity export preserves these two lights and how they affect Android rendering is **unknown**. Do not generalize to other scenes, other lighting contributors, shader and material fidelity, or pixels.
+
+Current action: compare source Light object lineage and color/intensity/range to actual same-instance exported scene using authenticated mapping, then repair precise observed mismatches if any. Unlike guesses that “a lost lightmap explains white graphics,” this original baseline provides two concrete objects to follow. RENDER-002 **OPEN**, NOT_READY0/3; no APK/device test.
