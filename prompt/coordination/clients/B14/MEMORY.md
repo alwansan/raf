@@ -9,3 +9,6 @@ Scope: WATER-001, independent source-integrity repair. `scripts/verify_water_ren
 Adjacent work: B49 per-pass program structure; B47 entrypoints; B48 numeric kernel identity; B06 capability/dispatch; B07/B24/B50 world path; B02/B05/B11 render color. Do not duplicate. Sound/Settings owner-confirmed, touch deferred. ZIP2 original source provider pinned `15964ea8f246b6e076ce26b60931ee2e1a9a2385`; no asset acquisition required.
 
 Planned test: fixture using actual structural gate plus symlinked Assets, shader .meta and ancestor directories; reject redirected inputs; ensure valid regular fixture still works. Structural source check ONLY, not original shader identities, Unity/Adreno or device validation. WATER/RENDER/LOCAL open, NOT_READY 0/3.
+
+## Checkpoint 2026-11-04T21:39:01.943Z
+Water provenance scope integrated at cfb97bf; new tests 4e0ce04. Actual preflight 41917493634 SUCCESS, job 126880924437: 10/10 tests including all five new path controls. Source-only validator; not authentic water/FFT pixel proof. WATER-001 OPEN, NOT_READY 0/3. Next independent scope considered: check project/backup redirect protection in SaveAndLoad stage, not duplicate B50's SteamStats repair.
