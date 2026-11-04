@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "owner": "B38",
+  "session_id": "20261104T2142Z-B38-f31a",
+  "issue_id": "RENDER-002",
+  "hypothesis": "Top-level Material m_CustomRenderQueue/m_LightmapFlags/m_EnableInstancingVariants/m_DoubleSidedGI may differ between authenticated original objects and same-instance exported YAML even when shader, color, scalars and texture pointers match.",
+  "source_commit": "bd58522fd126391478a90101813e78096eb3f18e",
+  "input_hashes": [],
+  "tool_versions": {
+    "Python": "3.11",
+    "PyYAML": "6.0.3"
+  },
+  "commands": [
+    "python -m py_compile scripts/b38_material_render_state.py tests/test_b38_material_render_state.py",
+    "python -m unittest discover -s tests -p 'test_b38_material_render_state.py' -v"
+  ],
+  "negative_controls": [
+    "render queue drift",
+    "lightmap flags drift",
+    "instancing and double-sided GI drift",
+    "missing and invalid bool/int field",
+    "wrong trace instance",
+    "duplicated source trace object",
+    "duplicate YAML map key",
+    "missing rendered field",
+    "symlink root"
+  ],
+  "workflow_path": ".github/workflows/raft-b38-material-render-state.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41920784251",
+  "artifact_urls": [],
+  "budget": "single standard ubuntu-24.04 job, 8-minute limit, no Unity/LFS, synthetic-only, no private source/artifact",
+  "status": "completed",
+  "observed_result": "CI41920784251 SUCCESS on bd58522fd126391478a90101813e78096eb3f18e; 9/9 synthetic positive/negative render-state controls passed. Source-integrated read-only exact same-export comparator for four original Material top-level properties, no gameplay asset mutation.",
+  "rejected_hypotheses": [
+    "Synthetic test alone can establish actual Raft rendering parity: rejected; source, same-instance exporter trace and actual exported YAML required."
+  ],
+  "limitations": [
+    "No authenticated ZIP2 Materials and same-instance trace comparison",
+    "No Unity shader or Android GPU/pixel test",
+    "No original game resource or material changed",
+    "RENDER-002 OPEN, NOT_READY 0/3"
+  ],
+  "integration_commit": "bd58522fd126391478a90101813e78096eb3f18e",
+  "next_step": "Apply source-authenticated ZIP2 same-instance Material export trace and compare values privately; repair only observed drift."
+}
