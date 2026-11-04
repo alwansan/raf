@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "owner": "B13",
+  "session_id": "20261104T2132Z-B13-7e6b",
+  "issue_id": "WATER-001",
+  "hypothesis": "Physical water Shader/Compute .meta file existence was insufficient: malformed/duplicate GUID could satisfy structural pass/kernel coverage and hide a broken Unity binding identity.",
+  "source_commit": "2db5078f38d1cbd36ea20d351b9033bd88ffd29a",
+  "input_hashes": [
+    "water gate original blob 16fda040bbd0602d567d0598f9bfa69303ae04fb",
+    "existing structural suite original blob d66d34e1ad462c3b692dc9b0c6e46128db1d6b16"
+  ],
+  "tool_versions": {
+    "Python": "Python3 on ubuntu-24.04 GitHub-hosted runner"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_verify_water_render_contract.py -v",
+    "python3 -m unittest discover -s tests -p test_b47_compute_kernel_contract.py -v"
+  ],
+  "negative_controls": [
+    "Malformed 32-hex GUID in ordinary shader meta",
+    "Duplicate GUID across two required water shader identities",
+    "Duplicate GUID between required water shader and FFT.compute",
+    "Ambiguous two GUID fields in compute meta",
+    "Existing B14 symlink source/meta negative controls",
+    "Existing B47 kernel entrypoint and B49 authored pass contracts"
+  ],
+  "workflow_path": ".github/workflows/raft-b13-water-meta-guid.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41920753737",
+  "artifact_urls": [],
+  "budget": "7-minute Ubuntu runner; no LFS or Unity; 22 small source-free tests",
+  "status": "completed",
+  "observed_result": "B13 first source test 41920455834 SUCCESS14/14; B47 old test 41920455700 FAILED because it expected silent symlink skip conflicting with B14 fail-closed; cross-test-only correction ccefdd71, B47 41920734179 SUCCESS; B13 combined 41920753737 SUCCESS22/22.",
+  "rejected_hypotheses": [
+    "Existing water shader meta regular-file check implies valid unique original Unity GUID: false",
+    "B47 old symlink-expectation failure justifies accepting linked metadata silently: rejected; fail-closed error preserved"
+  ],
+  "limitations": [
+    "Metadata syntax and uniqueness only, not authentic ZIP2 source/export mapping",
+    "No Unity import, GPU pixels, Android device, FFT compiled program restoration",
+    "No original shader bytes, materials, GUIDs or game assets altered"
+  ],
+  "integration_commit": "ac3152230c62be054a2cece1750ddb01be42791b",
+  "next_step": "Authenticate original Shader/Compute/Material PPtr-to-GUID lineage in actual full export and perform Unity device proof after true shader/FFT recovery; preserve existing water strict gates."
+}
