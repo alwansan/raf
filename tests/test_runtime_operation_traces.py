@@ -93,7 +93,7 @@ class OperationTraceTests(unittest.TestCase):
             'public void SaveGame(bool sendRemoteMessage) { '
             'SteamUserStats.StoreStats(); SteamUserStats.StoreStats(); }',
             'public void SaveGame(bool sendRemoteMessage) { '
-            '// SteamUserStats.StoreStats();\\n SaveWorld(); }',
+            '// SteamUserStats.StoreStats();\n SaveWorld(); }',
             'public void SaveGame(bool sendRemoteMessage) { SaveWorld(); } '
             'void Other() { SteamUserStats.StoreStats(); }',
         ):
