@@ -6,7 +6,7 @@
   "issue_id": "RENDER-002",
   "track": "colors-materials",
   "approach": "Verify source SHA and enforce original m_ActiveColorSpace within transient Unity ProjectSettings; retain all other bytes",
-  "status": "active",
+  "status": "completed",
   "base_sha": "09480c40be3ccf65c0a8661142c6d5f78e519b39",
   "intended_files": [
     "scripts/b04_restore_original_color_settings.py",
@@ -20,9 +20,13 @@
     "B44 RENDER-002 material values",
     "B46 RENDER-002 texture links"
   ],
-  "experiment_ids": [],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Develop bounded SHA-pinned fail-closed adapter and negative controls",
-  "updated_at": "2026-11-04T21:02:14Z"
+  "experiment_ids": [
+    "20261104T2102Z-B04-7c20-original-colorspace"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41913026554"
+  ],
+  "result": "Isolated original-globalgamemanagers SHA-gated CI passed on synthetic generated Gamma project; exact single-scalar Linear recovery integrated with native temporary export and read-only candidate check at e52c07c; actual export and device not run.",
+  "next_step": "On next coordinated native run capture actual exported color-space and check parity/pixels; do not mark overall RENDER-002 resolved.",
+  "updated_at": "2026-11-04T21:10:58.726Z"
 }
