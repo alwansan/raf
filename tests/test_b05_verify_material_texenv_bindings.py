@@ -73,7 +73,7 @@ class B05TexEnvTests(unittest.TestCase):
             compare(t,s,a)
 
     def test_original_shapes_null_and_duplicate(self):
-        self.assertEqual(normalize_texenvs([('_MainTex',{'m_Texture':{'m_FileID':0,'m_PathID':101}})]),{'_MainTex':(0,101)})
+        self.assertEqual(normalize_texenvs([('_MainTex',{'m_Texture':{'m_FileID':0,'m_PathID':101}})]),{'_MainTex':((0,101),None)})
         with self.assertRaisesRegex(ValueError,'duplicate'):
             normalize_texenvs([('_MainTex',{'m_Texture':{'m_FileID':0,'m_PathID':1}})]*2)
         with self.assertRaisesRegex(ValueError,'no target'):
@@ -87,7 +87,40 @@ class B05TexEnvTests(unittest.TestCase):
             asset=assets/'embedded.asset'
             asset.write_text('%YAML 1.1\n--- !u!128 &12800000\nFont: {m_Name: dummy}\n--- !u!21 &2100000\nMaterial:\n  m_SavedProperties:\n    m_TexEnvs:\n    - _MainTex:\n        m_Texture: {fileID: 2800000, guid: '+ 'b'*32 +', type: 3}\n')
             (assets/'embedded.asset.meta').write_text('fileFormatVersion: 2\nguid: '+'a'*32+'\n')
-            self.assertEqual(exported_texenvs(Path(td)),{MAT:{'_MainTex':TEX}})
+            self.assertEqual(exported_texenvs(Path(td)),{MAT:{'_MainTex':(TEX,None)}})
+
+
+    def test_uv_transforms_same_and_modified(self):
+        t,s,a=fixture()
+        s[SRC]['_MainTex']=((0,101),(2.,1.,.5,0.))
+        a[MAT]['_MainTex']=(TEX,(2.,1.,.5,0.))
+        first=compare(t,s,a)
+        self.assertEqual(first['uv_transform_slots_compared'],1)
+        self.assertEqual(first['uv_transform_value_mismatches'],0)
+        a[MAT]['_MainTex']=(TEX,(2.,1.,.65,0.))
+        result=compare(t,s,a)
+        self.assertEqual(result['uv_transform_value_mismatches'],1)
+        self.assertFalse(result['source_slots_faithful_with_resolved_scope'])
+
+    def test_uv_unknown_not_silently_verified(self):
+        t,s,a=fixture()
+        r=compare(t,s,a)
+        self.assertEqual(r['uv_transform_missing_or_unproven'],3)
+        self.assertFalse(r['all_uv_transforms_verified'])
+        s[SRC]['_MainTex']=((0,101),(1.,1.,0.,0.))
+        self.assertEqual(compare(t,s,a)['uv_transform_missing_or_unproven'],3)
+
+    def test_uv_normalizer_rejects_partial_or_nonfinite(self):
+        pointer={'m_FileID':0,'m_PathID':101}
+        slot={'m_Texture':pointer,'m_Scale':{'x':2,'y':1},'m_Offset':{'x':0.25,'y':0}}
+        actual=normalize_texenvs([('_MainTex',slot)])
+        self.assertEqual(actual,{'_MainTex':((0,101),(2.,1.,.25,0.))})
+        with self.assertRaisesRegex(ValueError,'Incomplete'):
+            normalize_texenvs([('_MainTex',{'m_Texture':pointer,'m_Scale':{'x':1,'y':1}})])
+        invalid=dict(slot)
+        invalid['m_Offset']={'x':float('nan'),'y':0}
+        with self.assertRaisesRegex(ValueError,'Nonfinite'):
+            normalize_texenvs([('_MainTex',invalid)])
 
     def test_symlink_export_rejected(self):
         with tempfile.TemporaryDirectory() as td:
