@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "owner": "B21",
+  "session_id": "20261104T2153Z-B21-72ab",
+  "issue_id": "RENDER-002",
+  "hypothesis": "Original Raft scene baked LightmapSettings->Renderer index transfer may explain white graphics if missing in export.",
+  "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "input_hashes": [
+    "level0 sha256 33e7855a700ae0d90d04f50d8ea75ab6f14e9d5aa0314a32e91b96fb1f6a3a62",
+    "level1 sha256 9ca3a83f4d8841d4052a4899d0855a2bb0fcc87d5378b8c50fb17902cd2418a0",
+    "level2 sha256 3ed1e89bbdb4509af723fd6e7b37c4ffa0e92a8de548940e1fd7db6e90bf7c8b",
+    "level3 sha256 0bbeece712333cc3119995a7db34abe79a2c1a371825f559dc486b944a5031a4",
+    "level4 sha256 a62b5ac7b80f8a906c9744ec457be8816663da4a2e8bb2a38924122448522511",
+    "level5 sha256 28875e384d1c470e9215f89de0ef1bd8f1ef155a78dcfaea47dcd3ca70dbadf1"
+  ],
+  "tool_versions": {
+    "python": "3.12",
+    "UnityPy": "1.23.0"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p 'test_b21_scene_lightmap_links.py' -v",
+    "python3 -m scripts.b21_scene_lightmap_links --source .source-zip2/Raft/Raft_Data --report $RUNNER_TEMP/b21-original-scene-lightmaps-aggregate.json"
+  ],
+  "negative_controls": [
+    "SHA-256 or original size mismatch refuses source",
+    "symlink and duplicate object IDs refused",
+    "double LightmapSettings refused",
+    "local texture missing vs external pointer kept separate",
+    "zero/unassigned renderer index not treated as corrupt",
+    "unknown typetree shape kept unknown"
+  ],
+  "workflow_path": ".github/workflows/raft-b21-scene-lightmap-links.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41921259677",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41921259677"
+  ],
+  "budget": "Ubuntu 24.04 standard public runner: synthetic timeout 6 min, original six-scene timeout 12 min; only ~6MB original blobs, no LFS, no Unity APK.",
+  "status": "completed",
+  "observed_result": "Run 41921259677 both jobs successful, 16/16 synthetic and 6/6 SHA-pinned original scenes. Each original scene decoded exactly one LightmapSettings with zero baked entries; all 1497 renderer lightmap indices unassigned, zero out-of-range. Baked-lightmap-loss cause not supported within six-scene scope.",
+  "rejected_hypotheses": [
+    "Missing exported baked lightmap images explain original scenes 0..5 whites: these originals have zero baked entries, so no source lightmaps to lose in tested scope.",
+    "Treating zero Counter value as absent key (initial synthetic failure).",
+    "Initial transcription of source SHA for level1/2 (corrected against immutable ZIP2 manifest; source verification did not bypass mismatch)."
+  ],
+  "limitations": [
+    "Only six of 40 original scenes; no original-to-export scene mapping proof.",
+    "Native typetree does not validate shader pixels, ambient lights, dynamic lights, texture/sRGB or phone.",
+    "No original Unity Editor, Android build or device render proof.",
+    "Does not repair WATER-001 or LOCAL-005."
+  ],
+  "integration_commit": "c4ab08d2f9d3fa7eb48a063ef27b26701ef13163",
+  "next_step": "Expand distinct diagnostic to original dynamic lighting/probe serialization parity; do not repeat baked lightmap census. Pair exact source objects with same-export Unity YAML only if stable provenance demonstrated."
+}
