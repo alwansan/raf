@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "owner": "B02",
+  "session_id": "20261104T2101Z-B02-e5cd",
+  "issue_id": "RENDER-002",
+  "hypothesis": "A loss of TextureImporter.sRGBTexture relative to exact original Texture2D.m_ColorSpace may explain pale game materials; only source-verified same-export asset identities can safely check or repair it.",
+  "source_commit": "0d33268645106e7bc28fcaa786d90683fe93de19",
+  "input_hashes": [
+    "ZIP2 commit pinned 15964ea8f246b6e076ce26b60931ee2e1a9a2385; three original owner SHA/size pins loaded from scripts.verify_targeted_lfs_compute_sources.EXPECTED (real asset bytes NOT downloaded in B02 unit test)"
+  ],
+  "tool_versions": {
+    "python": "GitHub ubuntu-24.04 system python3"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_b02_texture_import_color_guard.py -v",
+    "python3 -m py_compile scripts/b02_texture_import_color_guard.py tests/test_b02_texture_import_color_guard.py"
+  ],
+  "negative_controls": [
+    "Expected Gamma sRGB=1 and Linear sRGB=0",
+    "wrong sRGB mismatch retained not hidden",
+    "missing/duplicate importer flags",
+    "wrong GUID and duplicate owner/export identity",
+    "symlinks and path traversal",
+    "repair without real source forbidden",
+    "fake SHA and original Texture2D pathID/color mismatches",
+    "untrusted original SHA pin or owner refused",
+    "bool colorspace refused",
+    "aggregate-only outputs"
+  ],
+  "workflow_path": ".github/workflows/raft-b02-texture-import-fidelity.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41913145660",
+  "artifact_urls": [],
+  "budget": "One ubuntu-24.04 runner job <=5min per push; no Unity, no LFS, no original-game payloads, no artifacts",
+  "status": "completed",
+  "observed_result": "Final source 0d332686: 11/11 synthetic tests and py_compile success; no original Raft texture or export identity sidecar supplied; no actual game assets repaired.",
+  "rejected_hypotheses": [
+    "A self-declared hash in sidecar is sufficient original-data authenticity: rejected, require exact pinned SHA/size.",
+    "Synthetic unit success is device/pixel proof: rejected.",
+    "Intermediate dbf3575 passed: rejected, run41913016998 failed on SyntaxError before test execution."
+  ],
+  "limitations": [
+    "Exact original-to-export same-instance identity mapping unavailable",
+    "Only three pre-pinned original owners currently authorized",
+    "No real Unity import, Vulkan pixel comparison, or APK/device validation"
+  ],
+  "integration_commit": "0d33268645106e7bc28fcaa786d90683fe93de19",
+  "next_step": "Capture/verify same-export original Texture2D(owner,pathID) to export asset+GUID mapping, then authenticate bytes and run read-only report; only then consider repair."
+}
