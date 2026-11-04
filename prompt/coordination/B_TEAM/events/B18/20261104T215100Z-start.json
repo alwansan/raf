@@ -1,0 +1,13 @@
+{
+  "id": "20261104T215100Z-start",
+  "owner": "B18",
+  "session_id": "20261104T215100Z-B18-d3f9",
+  "issue_id": "WATER-001",
+  "type": "start",
+  "summary": "B18 registered independent original FFT compiled-program resource-binding integrity investigation; no game fix or device claim yet. Preserve audio/Settings; touch deferred.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/22c021f33d2a843e2af99e49cfcbffd2e78afde4",
+    "https://github.com/alwansan/raf/actions/runs/41812889049"
+  ],
+  "at": "2026-11-04T21:51:00Z"
+}

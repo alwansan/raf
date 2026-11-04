@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "owner": "B18",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T215100Z-B18-d3f9",
+  "issue_id": "WATER-001",
+  "track": "water-fft",
+  "approach": "Find and close an actual fail-open per-compiled-slot resource descriptor/binding mismatch in original FFT shader staging, with source-free negative test controls. Distinct from B08 kernel names, B30 variants, B47 entrypoint and B48 slot/workgroup matching.",
+  "status": "active",
+  "base_sha": "22c021f33d2a843e2af99e49cfcbffd2e78afde4",
+  "intended_files": [
+    "scripts/ (inspect actual native FFT staging tooling before selecting exact patch)",
+    "tests/ (focused synthetic regression)",
+    "prompt/coordination/clients/B18/*",
+    "prompt/coordination/B_TEAM/events/B18/*"
+  ],
+  "hypothesis": "A missing validator may permit original FFT texture/image/sampler/CB descriptor identities to drift during reconstruction or staging despite matching code-stage counts.",
+  "related_work": [
+    "B08 original FFT registry",
+    "B30 serialized variants",
+    "B48 stage pairs",
+    "B47 FindKernel entrypoints",
+    "B06 GPU capabilities",
+    "A1 two-pass Vulkan fidelity"
+  ],
+  "experiment_ids": [],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Inspect live repository scripts and CI before claiming a gap; if the hypothesis is already covered, log rejection and pivot to an uncovered P0 subproblem.",
+  "updated_at": "2026-11-04T21:51:00Z"
+}

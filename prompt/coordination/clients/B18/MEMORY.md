@@ -1,0 +1,13 @@
+# B18 — Raft Android engineering memory
+
+- Identity: **B18**; session `20261104T215100Z-B18-d3f9`; writable branch `feature/android-native-port` only.
+- Baseline HEAD at registration: `22c021f33d2a843e2af99e49cfcbffd2e78afde4` (live 2026-11-04 21:51 UTC). No prior B18 directory found.
+- Owner P0: water FFT/shader/material/colors and local world/save. Preserve owner-working audio and Settings; touch/layout deferred.
+- Read: B_TEAM/PROMPT_AR.md, README.md, OPERATING_MODEL_AR.md, SOURCES_AND_ACTIONS_AR.md, TEMPLATES.md, SUMMARY.md, REVIEW_2026-11-04.md, AGENTS.md, CURRENT_OWNER_REQUIREMENTS, prompt/README.md, CONTINUE_RAFT_AR.md, STATUS.md (large historical latter summarized selectively), docs/ZIP2_SOURCE_PROVIDER.md, WATER-001/RENDER-002/LOCAL-005 records.
+- Original data: prefer immutable ZIP2 `15964ea8f246b6e076ce26b60931ee2e1a9a2385`; staged reassembly + SHA/byte count mandatory; private archive metadata not yet payload-authenticated. No raw shader/game files may be committed to public raf.
+- P0 issue `WATER-001`: original serialized FFT compute source pathID2456 has 20 compiled slots but one observed serialized name (B08), candidate pairs (B48) and a two-pass Vulkan CPU proof (A1), but runtime Unity kernel-slot mapping / texture-resource binding / phone unproved. B09/B17 Spectrum, B24 Foam, B45 Blur, B30 variantMap, B06 runtime capability and B47 kernel checks occupy adjacent lanes; do not repeat their work.
+- Working hypothesis for B18: native staging of recovered original FFT compiled programs may silently lose or reorder per-slot texture/image/sampler/CB identity. Inspect existing code, determine a demonstrable guard or exact fix and add executable controls. Do not claim synthetic checks establish original pixel or device equivalence.
+- Device baseline: latest published actual Raft APK86 from run41812889049 source d181ee7152580f49ee0b41dfd05fa2bfdacfafe5, not current HEAD. CL Nov4 logs demonstrate world loaded then SteamUserStats.StoreStats steam_api64 exception; independent B50 source guard exists, phone not retested. Whites/FFT visual problems remain.
+- Actions as of registration: numerous concurrent B runs, including B24 WATER original Foam41919628947 failed and B17 Spectrum41919556812 failed; do not cancel or launch duplicative heavyweight work.
+- Work: `prompt/coordination/work/WATER-001/B18-20261104T215100Z-B18-d3f9-fft-resource-bindings.json`. Initial state active/planned inspection. No tests/edits/results claimed yet.
+- Next: inspect actual source scripts and explicit source gates, implement a focused safe regression fix with tests; update work/events/issue/status at checkpoint, record CI output and remaining device gaps.

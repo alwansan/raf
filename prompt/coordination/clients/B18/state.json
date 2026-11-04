@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "username": "B18",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T215100Z-B18-d3f9",
+  "resumed_from_session": null,
+  "status": "active",
+  "base_sha": "22c021f33d2a843e2af99e49cfcbffd2e78afde4",
+  "last_commit": null,
+  "updated_at": "2026-11-04T21:51:00Z",
+  "tracks": [
+    "water-fft",
+    "shader-resource-binding"
+  ],
+  "work_ids": [
+    "prompt/coordination/work/WATER-001/B18-20261104T215100Z-B18-d3f9-fft-resource-bindings.json"
+  ],
+  "run_urls": [],
+  "next_step": "Inspect current FFT export and staging code, source-authenticated compute compiled-slot and binding metadata; implement a distinct fail-closed, testable resource-binding fix, not repeated slot/name census.",
+  "memory_path": "prompt/coordination/clients/B18/MEMORY.md"
+}
