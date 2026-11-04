@@ -2,18 +2,20 @@
   "schema_version": 1,
   "username": "B12",
   "generation": "B-2026-11-04",
-  "session_id": "20261104T2132Z-B12-c4a8",
-  "resumed_from_session": null,
-  "status": "completed",
+  "session_id": "20261104T2243Z-B12-bounded-tree-a9",
+  "resumed_from_session": "20261104T2132Z-B12-c4a8",
+  "status": "active",
   "base_sha": "f8028d15b2401d1fd8c73b2316e5bf76fef88eae",
   "last_commit": "a324eb6208f9edc3f4587aa4c8236192e13d6684",
-  "updated_at": "2026-11-04T21:54:29.962Z",
+  "updated_at": "2026-11-04T22:46:12.884Z",
   "tracks": [
+    "integration",
     "colors-materials"
   ],
   "work_ids": [
     "B12-20261104T2132Z-B12-c4a8-steam-stats-save",
-    "B12-20261104T2132Z-B12-c4a8-scene-render-probe"
+    "B12-20261104T2132Z-B12-c4a8-scene-render-probe",
+    "B12-20261104T2243Z-B12-bounded-tree-a9-bounded-scene-tree"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41919089409",
@@ -21,6 +23,6 @@
     "https://github.com/alwansan/raf/actions/runs/41920048140",
     "https://github.com/alwansan/raf/actions/runs/41920015979"
   ],
-  "next_step": "Scope completed source+managed CI. New device/game APK required to classify actual renderer/mesh/shader faults. Preserve B12 identity across resumed session; inspect live HEAD, Actions, CL first. No background execution.",
+  "next_step": "Source-fix B12 diagnostic unbounded GetComponentsInChildren allocation with explicit traversal and work caps; test source policy + original managed compile; no native build.",
   "memory_path": "prompt/coordination/clients/B12/MEMORY.md"
 }
