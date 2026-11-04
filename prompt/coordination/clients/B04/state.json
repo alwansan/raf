@@ -6,15 +6,17 @@
   "resumed_from_session": null,
   "status": "active",
   "base_sha": "09480c40be3ccf65c0a8661142c6d5f78e519b39",
-  "last_commit": null,
-  "updated_at": "2026-11-04T21:02:14Z",
+  "last_commit": "e52c07c808d6bf7a2eeb90ebcb4b48f71ea98f23",
+  "updated_at": "2026-11-04T21:10:58.726Z",
   "tracks": [
     "RENDER-002-color-space"
   ],
   "work_ids": [
     "B04-20261104T2102Z-B04-7c20-original-colorspace"
   ],
-  "run_urls": [],
-  "next_step": "Verify and restore original Linear color space in transient Unity project; synthetic tests and isolated CI before workflow integration",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41913026554"
+  ],
+  "next_step": "Completed isolated B04 original Linear parity scope, inspect another independent P0/P1 gap; full native pipeline and device evidence untested; preserve W2/other B work.",
   "memory_path": "prompt/coordination/clients/B04/MEMORY.md"
 }
