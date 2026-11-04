@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "owner": "B12",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2132Z-B12-c4a8",
+  "issue_id": "RENDER-002",
+  "track": "colors-materials",
+  "approach": "Bounded delayed read-only Android scene renderer and shader state snapshot, separate from material-source/export comparators",
+  "status": "completed",
+  "base_sha": "70edac4f5406efdb971e987c0e104682d8cefd42",
+  "intended_files": [
+    "android-port/Runtime/Platform/AndroidTestDiagnostics.cs",
+    "tests/test_b12_scene_render_snapshot.py",
+    ".github/workflows/raft-b12-scene-render-snapshot.yml"
+  ],
+  "hypothesis": "APK86 white materials may be related to zero-pass, null, or unsupported shaders rather than mesh loss; one delayed sample per scene can distinguish these on a new phone build.",
+  "related_work": [
+    "B50 already-fixed StoreStats",
+    "B22 float parity",
+    "B44 color fidelity",
+    "B05 texture binding",
+    "B43 keywords"
+  ],
+  "experiment_ids": [
+    "B12-20261104T2132Z-B12-c4a8-scene-shader-snapshot"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41918822038",
+    "https://github.com/alwansan/raf/actions/runs/41919089409"
+  ],
+  "result": "Source integrated 70edac4; tests committed 354a8d9; isolated workflow 8b7e304; original managed integration run41918822038 SUCCESS on source commit. B12 isolated run initial observation IN_PROGRESS; no Unity or device shader/white material result.",
+  "next_step": "Verify isolated B12 CI result; on next coordinated new APK+OBB test inspect render.scene_shader_snapshot log for scene, shader pass, support/colorSpace and correlate with screenshots, without inferring missing meshes from whites.",
+  "updated_at": "2026-11-04T21:46:37.651Z"
+}
