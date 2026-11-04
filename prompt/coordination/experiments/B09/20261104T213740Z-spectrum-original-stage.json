@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "owner": "B09",
+  "session_id": "20261104T213740719Z-B09-28fc",
+  "issue_id": "WATER-001",
+  "hypothesis": "Original Spectrum contains >=6 authentic passes with D3D11 vertex/fragment permutations suitable for exact private stage extraction.",
+  "source_commit": "5256ac018f7f2da932a34938e99fbb27cca2f1f0",
+  "input_hashes": [
+    "zip2/raft@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "resources.assets bytes=111533516 sha256=87493249f1adfc0c5eb8b82e4e199e208cd2c95eabe9796cab82116c4838595c",
+    "sharedassets0.assets bytes=115978112 sha256=0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3"
+  ],
+  "tool_versions": {
+    "python": "Python 3",
+    "UnityPy": "1.25.4"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_b09_stage_original_spectrum.py -v",
+    "python3 -m scripts.b09_stage_original_spectrum --source \"$RUNNER_TEMP/b09-original\" --repo \"$GITHUB_WORKSPACE\" --private \"$RUNNER_TEMP/b09-spectrum-private\" --out \"$RUNNER_TEMP/b09-spectrum-aggregate.json\""
+  ],
+  "negative_controls": [
+    "misordered permutation pairing",
+    "duplicate/missing/mismatched original stage",
+    "linked scratch path",
+    "DXBC leakage in report"
+  ],
+  "workflow_path": ".github/workflows/raft-b09-spectrum-extraction.yml",
+  "run_url": null,
+  "artifact_urls": [],
+  "budget": "ubuntu24 30min, selective ZIP2 two 227511628-byte sources; independent concurrency, cancel false",
+  "status": "source_integrated_original_ci_unknown",
+  "observed_result": "10/10 local synthetic unittest PASS. Real ZIP2 source extraction and GitHub workflow outcome not observed.",
+  "rejected_hypotheses": [
+    "Dummy Pass duplication repairs original Spectrum",
+    "vertex/fragment variants must match by array position"
+  ],
+  "limitations": [
+    "No actual source extraction run outcome",
+    "No reconstructed ShaderLab or registered game binding",
+    "No Unity/Adreno phone validation"
+  ],
+  "integration_commit": "5256ac018f7f2da932a34938e99fbb27cca2f1f0",
+  "next_step": "Inspect first B09 CI original-source result and complete private Spectrum pass reconstruction from actual program packet."
+}
