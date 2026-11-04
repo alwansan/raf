@@ -33,6 +33,8 @@ def enforce_read_only_quality_state(source):
                  r"Screen\s*\.\s*SetResolution\s*\(")
     if any(re.search(pattern, method) for pattern in forbidden):
         raise ValueError("B04 must not change Android quality or settings")
+    if "catch (Exception ex)" not in method or 'return "; quality_snapshot_error_type="' not in method:
+        raise ValueError("Quality getter error must not suppress shader snapshot")
     wanted = ("quality_level_index=", "quality_tier_count=", "pixel_light_count=",
               "master_texture_limit=", "anti_aliasing=", "shadow_mode=",
               "shadow_distance=", "quality_snapshot_error_type=")
@@ -46,8 +48,6 @@ def enforce_read_only_quality_state(source):
                         "QualitySettings.shadowDistance")
     if any(method.count(x) != 1 for x in required_getters):
         raise ValueError("Quality getters missing or duplicated")
-    if "catch (Exception ex)" not in method or 'return "; quality_snapshot_error_type="' not in method:
-        raise ValueError("Quality getter error must not suppress shader snapshot")
     if scene.count("OriginalQualityStateSnapshot() +") != 1:
         raise ValueError("Quality evidence must attach exactly once to the existing scene snapshot")
     if scene.count('AndroidRuntimeLog.Write("render", "scene_shader_snapshot",') != 1:
