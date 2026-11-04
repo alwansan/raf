@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T152008Z-92502b76",
+  "client_label": "W2",
+  "issue_id": "DISPLAY-003",
+  "status": "active",
+  "updated_at": "2026-11-04T22:10:00.000Z",
+  "base_sha": "d4f45d2",
+  "lane": "owner-directed A-client takeover: completing A2's paused DISPLAY-003 gap - serialized Settings UI-to-CanvasScaler route proof (count level)",
+  "input_hashes": [
+    "5 owners identity-verified against commit HEAD (globalgamemanagers.assets, level0, level1, resources.assets, sharedassets0.assets)"
+  ],
+  "command": "python3 -m scripts.probe_w2_settings_panel_route --source <Raft_Data> --repo <worktree> --out w2-settings-panel-route.json --owner <x5>",
+  "expected_signal": "the serialized topology of the instantiated Settings panel route, with render-canvas reconciliation against the scaler census",
+  "negative_controls": [
+    "children edges resolved as child RectTransforms via m_GameObject (the wrong-assumption sink that defeated naive scans is tested)",
+    "no names, no path IDs, no settings values published - counters only",
+    "dangling null-GO template instance counted, not traversed",
+    "depth cap 32 + node cap 100k; leak-guarded keys; CI tests-first"
+  ],
+  "workflow_path": ".github/workflows/raft-w2-settings-panel-route.yml",
+  "concurrency_group": "raft-w2-settings-panel-route-${{ github.ref }}-${{ github.sha }}",
+  "budget": "5 owners, ~90k objects; CPU only; 30 min timeout",
+  "run_url": null,
+  "source_sha": null,
+  "result": "REAL RUN COMPLETE: the instantiated route is proven for both scene Settings instances (level0, level1): manager root GameObject (Transform family, canvasAncestorsAbove=0) with a full-page Canvas one hop below carrying CanvasScaler+GraphicRaycaster siblings, and exactly GraphicsSettingsBox+ControlsSettingsBox three hops below that Canvas node. gameWideCanvases=90 (level0 4 / level1 56 / sharedassets0 30 / resources 0), scaler-sibling canvas nodes 41 = exactly the 41 CanvasScaler instantiations in those owners, only 2 with settings-family content. resources.assets Settings instance is a dangling null-GO template.",
+  "limitations": [
+    "A2's typed offsets / TypeTree lengths / orientation-cause remain his; no device claims"
+  ],
+  "next_step": "push, CI green, finalize records + STATUS + A2/wide announcements"
+}
