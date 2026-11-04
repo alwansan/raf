@@ -239,7 +239,10 @@
         "https://github.com/alwansan/raf/commit/4035b13251f3fffcb8c4f0257174528f58c298ce",
         "https://github.com/alwansan/raf/actions/runs/41921429305",
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B15_TEXTURE_SAMPLER_PARITY_2026-11-04.md",
-        "https://github.com/alwansan/raf/actions/runs/41922372594"
+        "https://github.com/alwansan/raf/actions/runs/41922372594",
+        "https://github.com/alwansan/raf/actions/runs/41927008905",
+        "https://github.com/alwansan/raf/actions/runs/41927712988",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B02_TEXTURE_EXPORT_LINEAGE_HOOK_2026-11-04.md"
       ],
       "remaining": [
         "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -263,15 +266,16 @@
         "B38 source-integrated top-level Material queue, lightmap, instancing, and double-sided GI verifier, CI41920784251 9/9 synthetic PASS; real ZIP2 source-to-same-export parity, Unity/Adreno and phone remain unverified.",
         "B21: authentic original ZIP2 level0..level5 SHA/size-pinned LightmapSettings scan CI41921259677 PASS (16 synthetic, 6 real originals): 0 baked lightmaps and 1497 unassigned renderer indices (0 out-of-range) in these six only; reject lost baked lightmap as white-surface explanation for this subset. Other 34 scenes, same-export dynamic lighting, shader/texture/phone remain UNKNOWN; no game patch.",
         "B15: read-only source-pinned Texture2D sampler -> exact same-export TextureImporter GUID/parity checker and in-memory exporter trace bridge are code-integrated, 16/16 synthetic CI PASS (41921429305); zero actual Raft textures compared until independently authenticated same-export trace+original bytes/project; no source asset edits, no Unity/pixel/device evidence.",
-        "B21 follow-on CI41922372594 source-authentic original Light components: level0 and level1 each have one enabled local-owner-valid Light with finite colored RGB and positive intensity/range; level2..5 none. 16+18 tests PASS, 6 original SHA reverified. Same-instance Unity export light identity/values and Adreno pixels not compared, RENDER-002 OPEN; do not infer lighting was restored."
+        "B21 follow-on CI41922372594 source-authentic original Light components: level0 and level1 each have one enabled local-owner-valid Light with finite colored RGB and positive intensity/range; level2..5 none. 16+18 tests PASS, 6 original SHA reverified. Same-instance Unity export light identity/values and Adreno pixels not compared, RENDER-002 OPEN; do not infer lighting was restored.",
+        "B02 real texture lineage gap partly closed in source: pinned optional class28 exporter hook compiled with original W1 class21/48 preserved; importer reads nested mipmaps.sRGBTexture and derives true typed colorspace from SHA source. Still requires one actual same-instance original/export trace and Unity/device pixel evidence; no Raft asset was changed."
       ],
       "acceptance": [
         "مطابقة روابط ومراجع الأصل",
         "مقارنةصوريةلنفسالمشهد",
         "نجاحعلىالهاتف"
       ],
-      "updated_by": "B21",
-      "updated_at": "2026-11-04T22:10:30Z",
+      "updated_by": "B02",
+      "updated_at": "2026-11-04T22:48:00Z",
       "_record_path": "issues/RENDER-002.json"
     },
     {
@@ -353,7 +357,9 @@
         "https://github.com/alwansan/raf/commit/9387b48176fc89aa99b0ebbd9aa2ad4666564515",
         "https://github.com/alwansan/raf/actions/runs/41927169542",
         "https://github.com/alwansan/raf/actions/runs/41927095232",
-        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B20_AUTHENTIC_BLUR_ATOMIC_ROLLBACK_2026-11-04.md"
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B20_AUTHENTIC_BLUR_ATOMIC_ROLLBACK_2026-11-04.md",
+        "https://github.com/alwansan/raf/actions/runs/41928183838",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B25_ORIGINAL_FOAM_CB_NAMEBRIDGE_2026-11-04.md"
       ],
       "remaining": [
         "Spectrum/Foam/Blur passes ناقصة في APK86",
@@ -377,15 +383,16 @@
         "B01: source-only managed FFT argument parser now ignores quoted/commented delimiters; CI41926033893 67 synthetic tests plus SHA-pinned private Dx11FFT and numeric oracle PASS; original caller counts unchanged. Runtime kernels/ShaderLab/Adreno remain unverified.",
         "B20 source-only ShaderLab scope gate (a21d66b, CI41926202371 PASS): orphan/Properties/top-level Pass no longer inflates water Pass counts; this is NOT original program, Unity import, runtime pixels or kernel recovery. Original ShaderLab/FFT identity still open.",
         "B25 original SHA-pinned Foam/Global render-state verification: both of the two genuine pass m_State fragments are identical (247B and SHA256 19b4753c... each), source-only CI41926521683 SUCCESS 11/11 synthetic plus genuine ZIP2 object SHA. Hypothesis that original pass render states differ rejected; pass programs/partial CB texture bindings, author ShaderLab installation, exported .meta/GUID lineage, Unity/Adreno and phone STILL unverified.",
-        "B20 original-derived Blur transient export rollback now atomic with retained verified external backup; source CI41927169542 PASS on injected failures. Actual original candidate in Unity/Adreno pixels and game water still NOT tested, WATER-001 OPEN."
+        "B20 original-derived Blur transient export rollback now atomic with retained verified external backup; source CI41927169542 PASS on injected failures. Actual original candidate in Unity/Adreno pixels and game water still NOT tested, WATER-001 OPEN.",
+        "B25 authentic original Foam CB name/slot bridge: CI41928183838 26/26 synthetic + pinned ZIP2 SHA PASS, 8 original CB name SHA/index/register associations across two passes/four stages, same 3 CB identities across passes; CB0 has 4 references requiring verified HLSL alias (original compiled name not literal identifier). Original source names NOT disclosed. Future CB alias/descriptor and actual shader, textures, materials/GUID, Unity/Adreno unverified; WATER-001 OPEN."
       ],
       "acceptance": [
         "هوية برامج ونوى أصلية أو تطابق موثق دونdummy",
         "تثبيت فيالتصدير+Unity import/render",
         "اختبار هاتف يثبت الماء بلا pass/kernel errors"
       ],
-      "updated_by": "B20",
-      "updated_at": "2026-11-04T22:40:10Z",
+      "updated_by": "B25",
+      "updated_at": "2026-11-04T22:49:56.951Z",
       "_record_path": "issues/WATER-001.json"
     }
   ],
@@ -489,6 +496,39 @@
       "updated_by": "B24",
       "updated_at": "2026-11-04T21:56:24.790Z",
       "_record_path": "resources/B24-foam-original-stage-translation.json"
+    },
+    {
+      "id": "B25-FOAM-ORIGINAL-CB-NAME-BRIDGE-20261104",
+      "title": "B25: source-authenticated Foam original 2-pass/4-stage CB property-name SHA and register binding",
+      "kind": "water-original-cb-binding-identity",
+      "source": {
+        "provider": "ZIP2 original no LFS",
+        "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+        "bytes": 115978112,
+        "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+        "object_path_id": 2420,
+        "object_sha256": "67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1"
+      },
+      "stages": {
+        "acquisition": "SHA_PIN_VERIFIED",
+        "extraction": "ORIGINAL_TWO_PASS_FOUR_STAGE_CB_NAME_INDEX_REGISTRY_VERIFIED",
+        "reconstruction": "EIGHT_CB_NAME_SHA_SLOT_BINDINGS_VERIFIED; FOUR_NEED_HLSL_ALIAS",
+        "binding": "CB_SERIALIZED_NAME_INDEX_AND_REGISTER_ONLY; GPU_RUNTIME_UNVERIFIED",
+        "integration": "SOURCE_VERIFIER_COMMITTED_AND_PRIVATE_ORIGINAL_CI_SUCCESS; NO_SHADERLAB_INSTALL",
+        "device": "NOT_TESTED"
+      },
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41928183838",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B25_ORIGINAL_FOAM_CB_NAMEBRIDGE_2026-11-04.md"
+      ],
+      "remaining": [
+        "Original compiler-symbol to HLSL alias/descriptor and CB layout upload exactness",
+        "Sampler/texture binding and full four-stage ShaderLab compile",
+        "Original .meta/GUID and Android Adreno rendering"
+      ],
+      "updated_by": "B25",
+      "updated_at": "2026-11-04T22:48:28.078Z",
+      "_record_path": "resources/B25-foam-original-cb-namebridge.json"
     },
     {
       "id": "B25-FOAM-ORIGINAL-PASS-STATE-20261104",
@@ -817,6 +857,21 @@
       "_record_path": "events/B02/20261104T2122Z-texture-semantics-safety.json"
     },
     {
+      "id": "B02-20261104T2247Z-trace-class28-sourcecompiled",
+      "owner": "B02",
+      "session_id": "20261104T2233Z-B02-7c19",
+      "issue_id": "RENDER-002",
+      "type": "result",
+      "summary": "B02 corrected nested TextureImporter.mipmaps.sRGBTexture, B15 SHA-pinned source-color trace bridge CI41927008905 PASS16/16; SHA-pinned public AssetRipper class28 optional private trace compiled/smoke CI41927712988 PASS6/6. No real game/export/Unity pixels, no meta/game changes; RENDER-002 OPEN.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41927008905",
+        "https://github.com/alwansan/raf/actions/runs/41927712988",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B02_TEXTURE_EXPORT_LINEAGE_HOOK_2026-11-04.md"
+      ],
+      "at": "2026-11-04T22:47:00Z",
+      "_record_path": "events/B02/20261104T2247Z-trace-class28-sourcecompiled.json"
+    },
+    {
       "id": "B03-20261104T2101Z-archive-start",
       "owner": "B03",
       "session_id": "20261104T2101Z-B03-a419",
@@ -1040,6 +1095,21 @@
       ],
       "at": "2026-11-04T22:45:35.546Z",
       "_record_path": "events/B06/20261104T224512Z-B06-wg7a3-start.json"
+    },
+    {
+      "id": "20261104T224512Z-B06-wg7a3-workgroup-sourcefixed",
+      "owner": "B06",
+      "session_id": "20261104T224512Z-B06-wg7a3",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "summary": "Correct Unity 2021 FFT GPU limit semantics and source-authenticated group-size theoretical comparisons; C# logger synthetic CI41928357485 SUCCESS. Also found real original authenticated source CI41914575997 passing B06 earlier Dispatch source parser. No Unity/device/kernel restored.",
+      "evidence": [
+        "https://github.com/alwansan/raf/commit/f9e34ee647e8eb841fa3a960f01cef5eb2a6be87",
+        "https://github.com/alwansan/raf/actions/runs/41928357485",
+        "https://github.com/alwansan/raf/actions/runs/41914575997"
+      ],
+      "at": "2026-11-04T22:49:48.652Z",
+      "_record_path": "events/B06/20261104T224512Z-B06-wg7a3-workgroup-sourcefixed.json"
     },
     {
       "id": "20261104T2112Z-joined",
@@ -1270,6 +1340,19 @@
       "_record_path": "events/B11/20261104T2245Z-gamut-utf8-start.json"
     },
     {
+      "id": "20261104T2250Z-gamut-ancestor-symlink",
+      "owner": "B11",
+      "session_id": "20261104T2244Z-B11-54cf",
+      "issue_id": "RENDER-002",
+      "type": "discovery",
+      "summary": "Actual local synthetic filesystem reproduction: passing exported project through a symlink in an ancestor directory bypasses B11's leaf-only path checks, and --apply mutates ProjectSettings.asset in the outside directory. Fail-closed ancestor check needed.",
+      "evidence": [
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/b11_restore_original_color_gamuts.py"
+      ],
+      "at": "2026-11-04T22:50:00Z",
+      "_record_path": "events/B11/20261104T2250Z-gamut-ancestor-discovery.json"
+    },
+    {
       "id": "B12-20261104T2132Z-B12-c4a8-start",
       "owner": "B12",
       "session_id": "20261104T2132Z-B12-c4a8",
@@ -1473,6 +1556,19 @@
       "_record_path": "events/B14/20261104T2144Z-local-result.json"
     },
     {
+      "id": "B14-20261104T2247Z-resume",
+      "owner": "B14",
+      "session_id": "20261104T2247Z-B14-d1a9",
+      "issue_id": "RENDER-002",
+      "type": "start",
+      "summary": "Resumed B14 and registered source-only repair of stale SceneLoaded callback assertion after bounded scene shader/material/mesh telemetry became a coroutine.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41918822026"
+      ],
+      "at": "2026-11-04T22:48:14.763Z",
+      "_record_path": "events/B14/20261104T2247Z-resume.json"
+    },
+    {
       "id": "20261104T215400Z-sampler-start",
       "owner": "B15",
       "session_id": "20261104T215400Z-B15-7b2c",
@@ -1543,6 +1639,19 @@
       ],
       "at": "2026-11-04T22:00:34.895Z",
       "_record_path": "events/B16/20261104T2157Z-kernel-conditional-result.json"
+    },
+    {
+      "id": "B16-20261104T2249Z-error-gate-start",
+      "owner": "B16",
+      "session_id": "20261104T2249Z-B16-8c2e",
+      "issue_id": "WATER-001",
+      "type": "start",
+      "summary": "B16 resumes independent FFT HLSL structural preflight compile-blocker investigation; no original game asset changes.",
+      "evidence": [
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/b47_compute_kernel_contract.py"
+      ],
+      "at": "2026-11-04T22:49:09.898Z",
+      "_record_path": "events/B16/20261104T2249Z-error-gate-start.json"
     },
     {
       "id": "20261104T2141Z-B17-start-spectrum",
@@ -1931,6 +2040,21 @@
       ],
       "at": "2026-11-04T22:39:38.864Z",
       "_record_path": "events/B25/20261104T2242Z-foam-cb-start.json"
+    },
+    {
+      "id": "20261104T2247Z-B25-foam-cb-result",
+      "owner": "B25",
+      "session_id": "20261104T222931Z-B25-foam-state",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "summary": "Source-authentic original Foam/Global: two passes, four stages, eight CB m_NameIndices nameSHA->slot links. CB0 4 references require verified symbolic alias; same source name identity across stages and passes, CB0 vector-count 2 vs1 retained; B25 original ZIP2 CI41928183838 SUCCESS 26/26 synthetic tests. No shader install or device proof.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41928183838",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B25_ORIGINAL_FOAM_CB_NAMEBRIDGE_2026-11-04.md",
+        "https://github.com/alwansan/raf/commit/afc9a403db9e0c8db08bda9b7fd8df3b91a580ea"
+      ],
+      "at": "2026-11-04T22:49:28.713Z",
+      "_record_path": "events/B25/20261104T2247Z-foam-cb-result.json"
     },
     {
       "id": "20261104T2140Z-B30-water-start",
@@ -2379,5 +2503,5 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "input_sha256": "d631412f195c8aa6aa03b260081ad2cd110adf41ec768eea87a6f1fbed3560f5"
+  "input_sha256": "0589ddf8e4e145664350015d76dd22d54aa2b7964b5d1d18c96d084a0b70cb8d"
 }
