@@ -1,0 +1,56 @@
+name: B07 LOCAL-005 original world callback failure-chain proof
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/b07_probe_original_world_callbacks.py
+      - tests/test_b07_probe_original_world_callbacks.py
+      - .github/workflows/raft-b07-world-callback-chain.yml
+permissions:
+  contents: read
+concurrency:
+  group: raft-b07-world-callback-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  original-world-callback:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts/b07_probe_original_world_callbacks.py
+            tests/test_b07_probe_original_world_callbacks.py
+            Raft/Raft_Data/Managed/Assembly-CSharp.dll
+      - name: Synthetic negative controls and original SHA gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_b07_probe_original_world_callbacks.py -v
+          python3 - <<'PY'
+          from pathlib import Path
+          from scripts.b07_probe_original_world_callbacks import assert_original_dll
+          print('B07 authenticated source DLL SHA256=' + assert_original_dll(Path('Raft/Raft_Data/Managed/Assembly-CSharp.dll')))
+          PY
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Private original world callback probe
+        shell: bash
+        env:
+          DOTNET_PROCESSOR_COUNT: '2'
+        run: |
+          set -euo pipefail
+          df -h /
+          mkdir -p "$RUNNER_TEMP/b07/ilspy" "$RUNNER_TEMP/b07/original"
+          dotnet tool install ilspycmd --version 11.2.0.10050 --tool-path "$RUNNER_TEMP/b07/ilspy" >/dev/null
+          timeout 360s "$RUNNER_TEMP/b07/ilspy/ilspycmd" -p -lv CSharp9_0 \
+            -o "$RUNNER_TEMP/b07/original" Raft/Raft_Data/Managed/Assembly-CSharp.dll \
+            > "$RUNNER_TEMP/b07/decompile-private.log" 2>&1
+          python3 -m scripts.b07_probe_original_world_callbacks \
+            --original-managed-dll Raft/Raft_Data/Managed/Assembly-CSharp.dll \
+            --source "$RUNNER_TEMP/b07/original"
+          # Never publish private original source, binary, ILSpy logs or credentials.
