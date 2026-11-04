@@ -65,7 +65,9 @@
     "https://github.com/alwansan/raf/commit/b6efa50948cb388d1a006d482676d6f693bb51d6",
     "https://github.com/alwansan/raf/actions/runs/41928744660",
     "https://github.com/alwansan/raf/actions/runs/41928592399",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B10_VOLUMETRIC_NOTICE_TRANSACTION_2026-11-04.md"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B10_VOLUMETRIC_NOTICE_TRANSACTION_2026-11-04.md",
+    "https://github.com/alwansan/raf/commit/8f51565362f0d26d0d413cbf87f6e2e1c631883d",
+    "https://github.com/alwansan/raf/actions/runs/41929031892"
   ],
   "remaining": [
     "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -94,13 +96,14 @@
     "B14 repaired stale test contract for B12 instance SceneLoaded and bounded renderer/material/mesh snapshot; offline platform CI41928677980 SUCCESS. This is source diagnostic CI parity, not actual original colors/pixel proof.",
     "B11 resumed: UTF-8 byte-offset and ancestor symlink/traversal failure modes SOURCE_FIXED; 16 local synthetic tests with exact source Git blob pass (B04 stub, no original-source verification). Current remote CI/actual same-instance export/device colors still unknown. No claim of a white-material fix.",
     "B04 read-only Android quality tier/pixel light/texture AA/shadow per-scene snapshot source-integrated in original managed CI; requires new real APK86+ candidate and phone logs to compare with original W2 tiers; not proof quality mismatch or white-material fix.",
-    "B10 continued: production volumetric Lighting BSD NOTICE now commits/rolls back in the same authenticated shader restoration transaction with fail-closed paths. B10 final source CI41928744660 SUCCESS 27 distinct tests and real pinned vendor temporary restoration CI41928592399 SUCCESS; no actual Raft Unity/Adreno/Android colors or original Material→Shader equivalence shown. RENDER-002 remains OPEN."
+    "B10 continued: production volumetric Lighting BSD NOTICE now commits/rolls back in the same authenticated shader restoration transaction with fail-closed paths. B10 final source CI41928744660 SUCCESS 27 distinct tests and real pinned vendor temporary restoration CI41928592399 SUCCESS; no actual Raft Unity/Adreno/Android colors or original Material→Shader equivalence shown. RENDER-002 remains OPEN.",
+    "B15 continuation: corrected a provable false sampler-drift report for Unity TextureImporter mipBias=-100 unset, required matching B02/W1 paired trace export_instance when supplied, rejected arbitrary source folder aliases with trusted ZIP2 basename; CI41929031892 23/23 synthetic PASS. This is diagnostic source fidelity only: 0 real original-vs-export texture pairs tested, no Unity/GPU/device colors proof."
   ],
   "acceptance": [
     "مطابقة روابط ومراجع الأصل",
     "مقارنةصوريةلنفسالمشهد",
     "نجاحعلىالهاتف"
   ],
-  "updated_by": "B10",
-  "updated_at": "2026-11-04T22:53:56.979Z"
+  "updated_by": "B15",
+  "updated_at": "2026-11-04T22:54:23.146Z"
 }
