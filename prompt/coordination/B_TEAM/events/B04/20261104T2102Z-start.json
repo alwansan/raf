@@ -1,0 +1,12 @@
+{
+  "id": "20261104T2102Z-B04-start",
+  "owner": "B04",
+  "session_id": "20261104T2102Z-B04-7c20",
+  "issue_id": "RENDER-002",
+  "type": "start",
+  "summary": "Register independent original game Linear ProjectSettings parity and guarded transient-export repair",
+  "evidence": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/W2_COLOR_SPACE_SETTINGS_2026-11-03.md"
+  ],
+  "at": "2026-11-04T21:02:14Z"
+}
