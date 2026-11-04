@@ -4,7 +4,7 @@
   "session_id": "20261104T2140Z-B17-spc2",
   "issue_id": "WATER-001",
   "hypothesis": "Original Spectrum source's per-stage texture/sampler tables can be enumerated and authenticated without the original shader program/source leaving CI; resource semantics remain unproven.",
-  "source_commit": "5054982907884bf273a70c5346806a9e50207ace",
+  "source_commit": "6afb4e1280f6691e3b47ac810f479409f94a9e58",
   "input_hashes": [
     {
       "provider": "zip2",
@@ -36,20 +36,24 @@
     "synthetic numeric index mutation changes fingerprint"
   ],
   "workflow_path": ".github/workflows/raft-b17-spectrum-descriptors.yml",
-  "run_url": "https://github.com/alwansan/raf/actions/runs/41919077512",
-  "artifact_urls": [],
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41920232173",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41920232173"
+  ],
   "budget": "2 jobs: synthetic <=6m and pinned source <=20m; no Unity/APK, no LFS, no raw source artifact",
-  "status": "in_progress",
-  "observed_result": "CI41919077512: synthetic PASS, ZIP2 115978112-byte owner SHA PASS, real probe FAIL closed (ValueError); CI41919278787: synthetic PASS, real probe FAIL closed (unmodeled original texture/sampler schema). Precise structural key diagnostic staged in commit 50549829; no authentic descriptor binding result yet.",
+  "status": "completed",
+  "observed_result": "CI41920232173 COMPLETED SUCCESS, synthetic 16/16 tests PASS and genuine ZIP2 original Shader parse SUCCESS. Three original ZIP2 Git parts reassembled to exact 115,978,112 bytes SHA256 0498f738...a3c3; authenticated W2 Spectrum one-subshader seven-pass stage/variant/CB order unchanged. Actual seven Spectrum passes contain 13 fragment resource descriptor rows, 0 vertex descriptor rows, 42 resource table field occurrences; 7 SHA256 numeric typed descriptor stage signatures retained in safe artifact 13367106561; no raw shader source emitted. Earlier reds documented and resolved. Unity runtime/ShaderLab equivalence NOT proven.",
   "rejected_hypotheses": [
-    "Previously assumed finite descriptor field alias whitelist covers exact original Spectrum schema — rejected by original ZIP2-owner test.",
-    "Synthetic-only successful parser tests establish source restoration — rejected; authentic source probe did not pass."
+    "Initial resource table name whitelist covers original serialization — rejected (original contains m_UAVParams).",
+    "All original texture parameter fields are numeric int/float — rejected (m_MultiSampled is true bool).",
+    "Synthetic parser green alone demonstrates original restoration — rejected until ZIP2 source SHA and actual UnityPy read passed.",
+    "Matching source structural resource counts proves GPU water behavior — rejected; Unity/Adreno not tested."
   ],
   "limitations": [
-    "No actual shader translation, ShaderLab integration, Unity import or Adreno/phone proof.",
-    "Serialized descriptor presence is not runtime semantic equivalence.",
-    "No proof that spectrum descriptor mismatch caused white materials."
+    "Original source numeric descriptor table extraction only, not authored ShaderLab or compute program restoration.",
+    "No exact generated shader resource binding translation, sampler states/texture sRGB/pixels verified.",
+    "Unity/Android device not executed; APK86 cannot validate this source-only result."
   ],
-  "integration_commit": null,
-  "next_step": "Read bounded resource schema labels from CI after commit 50549829; add precise original field types with fail-closed tests, rerun ZIP2 probe, then record numeric signature evidence."
+  "integration_commit": "6afb4e1280f6691e3b47ac810f479409f94a9e58",
+  "next_step": "Consumer: compare exact SHA-pinned original per-pass descriptor identities with translated Spectrum source in private staging and only then install preserved authored ShaderLab programs; verify Unity/Adreno and water error counters. WATER-001 remains OPEN."
 }
