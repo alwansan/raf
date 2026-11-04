@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "username": "B01",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2105Z-B01-water-contract",
+  "resumed_from_session": null,
+  "status": "active",
+  "base_sha": "6c966c63ba2eb303fc8a419ef7dd629230e81450",
+  "last_commit": null,
+  "updated_at": "2026-11-04T21:05:00Z",
+  "tracks": [
+    "water-fft"
+  ],
+  "work_ids": [
+    "B01-20261104T2105Z-B01-water-contract-fft-kernel-contract"
+  ],
+  "run_urls": [],
+  "next_step": "Inspect live original FFT shader dispatch and Android guard, produce bounded validation/fix while preserving authenticated resources.",
+  "memory_path": "prompt/coordination/clients/B01/MEMORY.md"
+}
