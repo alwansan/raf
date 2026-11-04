@@ -1,0 +1,35 @@
+{
+  "id": "B45-BLUR-PROPERTY-RESTORE-20261104",
+  "title": "B45 — authenticated original Subsurface Blur one-texture ShaderLab property preservation",
+  "kind": "shaderlab-original-property-recovery",
+  "source": {
+    "provider": "zip2 pinned originals (no LFS)",
+    "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "path": "Raft/Raft_Data (14 authenticated Shader-bearing owners)",
+    "bytes": 488439356,
+    "sha256": null,
+    "selected_original_object_sha256": "c9341848367eaedb12e551ce9061b1eea728f54f2069ef1a3c12c4a4a2e9bb52",
+    "selected_parsed_form_sha256": "865e5529986469f18fd3158612f925647599e8b5126187be0c87d490ff6d2aa3",
+    "selected_property_sha256": "a8ee7ea1663c61c62b3cf6bd99b303f0f62434223cf285462dfc599c97bdc59c"
+  },
+  "stages": {
+    "acquisition": "SHA_PIN_VERIFIED",
+    "extraction": "SHA_PIN_VERIFIED",
+    "reconstruction": "SOURCE_STRUCTURAL_VERIFIED",
+    "binding": "NOT_VERIFIED",
+    "integration": "NOT_INSTALLED",
+    "device": "NOT_TESTED"
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41912390029",
+    "https://github.com/alwansan/raf/actions/runs/41913062003",
+    "https://github.com/alwansan/raf/commit/994814069cd70cd03b79453b347f8f7e644b9c8e"
+  ],
+  "remaining": [
+    "Run original-vs-rebuilt CPU Vulkan two-pass raster and confirm private ShaderLab recovery end-to-end (B45 run 41913273839)",
+    "Authentic serialized property/material GUID rebind and Unity 2021.3 import (no synthetic asset)",
+    "Adreno and owner device visual comparison; water FFT/other passes still OPEN"
+  ],
+  "updated_by": "B45",
+  "updated_at": "2026-11-04T21:08:00Z"
+}
