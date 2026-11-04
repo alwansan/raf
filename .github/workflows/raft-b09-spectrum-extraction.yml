@@ -7,7 +7,9 @@ on:
     paths:
       - scripts/b09_stage_original_spectrum.py
       - scripts/b09_spectrum_topology_contract.py
+      - scripts/b09_translate_original_spectrum.py
       - tests/test_b09_spectrum_topology_contract.py
+      - tests/test_b09_translate_original_spectrum.py
       - tests/test_b09_stage_original_spectrum.py
       - .github/workflows/raft-b09-spectrum-extraction.yml
 
@@ -34,7 +36,8 @@ jobs:
           set -euo pipefail
           python3 -m unittest discover -s tests -p test_b09_stage_original_spectrum.py -v
           python3 -m unittest discover -s tests -p test_b09_spectrum_topology_contract.py -v
-          python3 -m py_compile scripts/b09_stage_original_spectrum.py scripts/b09_spectrum_topology_contract.py
+          python3 -m unittest discover -s tests -p test_b09_translate_original_spectrum.py -v
+          python3 -m py_compile scripts/b09_stage_original_spectrum.py scripts/b09_spectrum_topology_contract.py scripts/b09_translate_original_spectrum.py
 
       - name: Retrieve exact B17-verified original ZIP2 Spectrum owner
         uses: actions/checkout@v4
@@ -90,6 +93,19 @@ jobs:
             --private "$RUNNER_TEMP/b09-spectrum-private" \
             --out "$RUNNER_TEMP/b09-spectrum-aggregate.json"
 
+      - name: Privately roundtrip every authentic Spectrum DXBC stage (no output shader artifact)
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
+          dpkg-query -W vkd3d-compiler spirv-tools spirv-cross glslang-tools
+          timeout 900s python3 -m scripts.b09_translate_original_spectrum \
+            --private "$RUNNER_TEMP/b09-spectrum-private" \
+            --stage-report "$RUNNER_TEMP/b09-spectrum-aggregate.json" \
+            --repo "$GITHUB_WORKSPACE" \
+            --out "$RUNNER_TEMP/b09-spectrum-roundtrip-aggregate.json"
+
       - name: Remove private source and temporary bytecode irrespective of extractor result
         if: always()
         shell: bash
@@ -101,6 +117,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: raft-b09-spectrum-aggregate-${{ github.sha }}
-          path: ${{ runner.temp }}/b09-spectrum-aggregate.json
+          path: |
+            ${{ runner.temp }}/b09-spectrum-aggregate.json
+            ${{ runner.temp }}/b09-spectrum-roundtrip-aggregate.json
           if-no-files-found: ignore
           retention-days: 7
