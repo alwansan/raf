@@ -6,7 +6,7 @@
   "issue_id": "WATER-001",
   "track": "water-fft",
   "approach": "Authenticate original two-pass Blur, isolate post-raster ShaderLab serializer failure using safe aggregate shape probes and strict synthetic controls; repair only evidenced mismatch",
-  "status": "active",
+  "status": "completed",
   "base_sha": "f835f66c67fba9cf36fdbc9f49793b7b8f06b12a",
   "intended_files": [
     "scripts/b45_blur_wrapper_preflight.py",
@@ -31,7 +31,8 @@
     "https://github.com/alwansan/raf/actions/runs/41913062003",
     "https://github.com/alwansan/raf/actions/runs/41913273839",
     "https://github.com/alwansan/raf/actions/runs/41914193733",
-    "https://github.com/alwansan/raf/actions/runs/41914205988"
+    "https://github.com/alwansan/raf/actions/runs/41914205988",
+    "https://github.com/alwansan/raf/actions/runs/41915050060"
   ],
   "result": {
     "status": "SOURCE_CPU_VULKAN_VERIFIED_NATIVE_WIRING_UNEXECUTED",
@@ -44,8 +45,16 @@
     "original_property_count": 1,
     "private_shader_released": false,
     "unity_or_phone_verified": false,
-    "original_export_metadata_changed": false
+    "original_export_metadata_changed": false,
+    "source_cpu_scope_complete": true,
+    "private_exact_candidate_sha_verified": true,
+    "private_stage_run": "https://github.com/alwansan/raf/actions/runs/41914205988",
+    "gated_native_workflow_wiring_added": true,
+    "native_build_invoked": false,
+    "unity_compiler_verified": false,
+    "phone_visual_verified": false,
+    "source_document": "docs/B45_ORIGINAL_SUBSURFACE_BLUR_SHADERLAB_2026-11-04.md"
   },
-  "next_step": "Check B45 private staging 41914205988, then original exported target/.meta and Unity shader compilation in an explicitly gated run; do not claim integrated device without proof.",
-  "updated_at": "2026-11-04T21:16:00Z"
+  "next_step": "Scope complete on source CPU side only; separate future Unity export/GUID/texture sampler proof, NOT_READY gate stays active. No ongoing asynchronous B45 execution.",
+  "updated_at": "2026-11-04T21:21:00Z"
 }
