@@ -68,6 +68,11 @@ def apply(project, backup, write=False):
     meta = path.with_suffix('.cs.meta')
     if path.is_symlink() or meta.is_symlink() or not path.is_file() or not meta.is_file():
         raise ValueError('Require original regular source and meta')
+    # Hard links are regular files, not symlinks. In-place path.write_bytes()
+    # would also rewrite an original source inode aliased outside the project.
+    # Do not change hardlinked source or metadata (including the GUID sidecar).
+    if path.stat().st_nlink != 1 or meta.stat().st_nlink != 1:
+        raise ValueError('Unsafe hardlinked original SaveAndLoad source or meta')
     parent = path.parent
     while parent != assets:
         if parent.is_symlink():
