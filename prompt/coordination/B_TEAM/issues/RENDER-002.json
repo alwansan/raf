@@ -57,7 +57,10 @@
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B14_SCENE_BOUNDARY_RENDER_TELEMETRY_CI_2026-11-04.md",
     "https://github.com/alwansan/raf/commit/72839f79701b617cea37832bfb924c2d865521a9",
     "https://github.com/alwansan/raf/commit/7363a3b444347ea14c1bf3a08c13c5cd764a2095",
-    "https://github.com/alwansan/raf/commit/87e6045d6198ce05b9e644414b2bd122ded6dab7"
+    "https://github.com/alwansan/raf/commit/87e6045d6198ce05b9e644414b2bd122ded6dab7",
+    "https://github.com/alwansan/raf/actions/runs/41928607504",
+    "https://github.com/alwansan/raf/actions/runs/41928576383",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B04_ORIGINAL_QUALITY_RUNTIME_EVIDENCE_2026-11-04.md"
   ],
   "remaining": [
     "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -84,13 +87,14 @@
     "B21 follow-on CI41922372594 source-authentic original Light components: level0 and level1 each have one enabled local-owner-valid Light with finite colored RGB and positive intensity/range; level2..5 none. 16+18 tests PASS, 6 original SHA reverified. Same-instance Unity export light identity/values and Adreno pixels not compared, RENDER-002 OPEN; do not infer lighting was restored.",
     "B02 real texture lineage gap partly closed in source: pinned optional class28 exporter hook compiled with original W1 class21/48 preserved; importer reads nested mipmaps.sRGBTexture and derives true typed colorspace from SHA source. Still requires one actual same-instance original/export trace and Unity/device pixel evidence; no Raft asset was changed.",
     "B14 repaired stale test contract for B12 instance SceneLoaded and bounded renderer/material/mesh snapshot; offline platform CI41928677980 SUCCESS. This is source diagnostic CI parity, not actual original colors/pixel proof.",
-    "B11 resumed: UTF-8 byte-offset and ancestor symlink/traversal failure modes SOURCE_FIXED; 16 local synthetic tests with exact source Git blob pass (B04 stub, no original-source verification). Current remote CI/actual same-instance export/device colors still unknown. No claim of a white-material fix."
+    "B11 resumed: UTF-8 byte-offset and ancestor symlink/traversal failure modes SOURCE_FIXED; 16 local synthetic tests with exact source Git blob pass (B04 stub, no original-source verification). Current remote CI/actual same-instance export/device colors still unknown. No claim of a white-material fix.",
+    "B04 read-only Android quality tier/pixel light/texture AA/shadow per-scene snapshot source-integrated in original managed CI; requires new real APK86+ candidate and phone logs to compare with original W2 tiers; not proof quality mismatch or white-material fix."
   ],
   "acceptance": [
     "مطابقة روابط ومراجع الأصل",
     "مقارنةصوريةلنفسالمشهد",
     "نجاحعلىالهاتف"
   ],
-  "updated_by": "B11",
-  "updated_at": "2026-11-04T22:52:00Z"
+  "updated_by": "B04",
+  "updated_at": "2026-11-04T22:51:20Z"
 }
