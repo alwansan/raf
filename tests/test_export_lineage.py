@@ -45,6 +45,24 @@ class ExportLineageTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'Actual YAML'):
             check(trace, edges, shaders, actual)
 
+    def test_serialized_reference_type_still_identifies_exported_document(self):
+        # DefaultYamlExporter records AssetType.Serialized (2) for materials
+        # while the YAML document is identified by anchor + meta GUID; the
+        # document carries no type of its own.
+        trace, edges, shaders, actual = self.fixture()
+        for row in trace['objects']:
+            if row['class_id'] == 21:
+                row['export']['type'] = 2
+        result = check(trace, edges, shaders, actual)
+        self.assertEqual(result['source_material_edges_verified'], 2)
+        self.assertTrue(result['original_exported_material_shader_assignments_verified'])
+
+    def test_cached_reference_type_is_rejected(self):
+        trace, edges, shaders, actual = self.fixture()
+        trace['objects'][0]['export']['type'] = 1
+        with self.assertRaisesRegex(ValueError, 'reference type'):
+            check(trace, edges, shaders, actual)
+
     def test_omitted_original_shader_rejected(self):
         trace, edges, shaders, actual = self.fixture()
         trace['objects'].pop()
