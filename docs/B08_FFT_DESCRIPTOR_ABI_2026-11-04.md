@@ -29,3 +29,16 @@ No original shader, .meta/GUID, asset content, game/runtime C#, .rgd, audio, Set
 ## Next integration boundary
 
 An independent source+target **resource use/operand lineage** proof or controlled genuine Vulkan numeric comparison must distinguish `t0` from `t1` before adopting descriptor candidate ordering. Then map actual Unity runtime kernel lookup/variant selection, stage the authentic translated program behind existing water authenticity gates and check Unity/Adreno. Avoid repeating B18's source role census or B30's already-falsified `variantMap` discriminators.
+
+## Follow-up: executable SPIR-V image-use verification, not declaration only
+
+**Final expanded CI:** [41929513820](https://github.com/alwansan/raf/actions/runs/41929513820), job [126922530492](https://github.com/alwansan/raf/actions/runs/41929513820/job/126922530492), source [ac98030e](https://github.com/alwansan/raf/commit/ac98030e51148a6a1b7e2203d9d8bdc2f327704f) **COMPLETED SUCCESS**. It supersedes the first run for the stronger validation but does not invalidate the first numeric ABI result.
+
+The guard now applies the already-tested source-agnostic SPIR-V SSA image operand lineage to each authenticated original translated program, in addition to the 20-slot numeric ABI above. For **all 20 original programs**:
+- Both declared sampled image descriptors (set0/binding0 **and** set0/binding1) have executable fetch/read/sample/gather uses.
+- The single declared storage descriptor (set0/binding2) has executable image write uses.
+- Supported SPIR-V image operations in the bounded scanner were uniquely traced to declared descriptor sets/bindings; none were unresolved or multiply bound.
+
+Six additional synthetic mutation controls (20/20 total) reject dead sampled input, never-written storage output, unresolved image operands, incorrectly sampled storage output and declaration-only false positives. The final authentic stage used SHA-pinned original ZIP2 `sharedassets0.assets` and exact FFT object bytes, without private program upload, Unity/native game build or release. The preceding source-only run [41929448442](https://github.com/alwansan/raf/actions/runs/41929448442) also passed its original-data stage with 14 older controls, before the six new mutation tests were added.
+
+**Boundary:** this detects executable *SPIR-V image read/write use*, not source DXBC `t0` versus `t1` binding semantic equality, complete instruction coverage of unknown future SPIR-V opcodes, pixel/FFT numeric correctness, original Unity kernel index or Android GPU support. Do not repurpose these results to claim authored water shaders or real game readiness. WATER-001 **OPEN**, NOT_READY 0/3.
