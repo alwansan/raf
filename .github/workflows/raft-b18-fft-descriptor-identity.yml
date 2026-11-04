@@ -44,10 +44,12 @@ jobs:
           set -euo pipefail
           sudo apt-get update -qq
           sudo apt-get install -y -qq --no-install-recommends libvkd3d-dev pkg-config build-essential
-          printf 'B18_PUBLIC_TOOLCHAIN %s\n' "$(pkg-config --modversion vkd3d-shader)"
+          printf 'B18_PUBLIC_TOOLCHAIN distribution_vkd3d_1.2_dev_headers=true\n'
+          test -f /usr/include/vkd3d/vkd3d_shader.h
           cc -std=c11 -O2 -Wall -Wextra -Werror \
+            -I/usr/include/vkd3d \
             scripts/b18_vkd3d_explicit_bindings.c \
-            $(pkg-config --cflags --libs vkd3d-shader) \
+            -lvkd3d-shader \
             -o "$RUNNER_TEMP/b18-vkd3d-explicit-interface"
       - name: Reconstruct SHA-pinned original FFT asset owner from immutable ZIP2
         shell: bash
