@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "owner": "B06",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T210726Z-B06-fmt6a2",
+  "issue_id": "WATER-001",
+  "track": "water-fft",
+  "approach": "Independently correlate original FFT storage image Unknown format, target RenderTexture creation and Android materialized GPU-binding path; produce proven non-dummy integration fix or falsify with executable negative controls.",
+  "status": "active",
+  "base_sha": "e8c312541b8139f2e889ff8921de8128146dcc84",
+  "intended_files": [
+    "scripts/",
+    "tests/",
+    "docs/",
+    "prompt/coordination/"
+  ],
+  "hypothesis": "Compiler-roundtrip storage format Rgba32f is not interchangeable with original formatless writes across all RGHalf/RGFloat/ARGBHalf targets, and runtime entrypoints may bind incompatible views.",
+  "related_work": [
+    "B01 FFT kernel contract",
+    "B48 kernel identity",
+    "B47 compute entrypoint",
+    "B45 original Blur"
+  ],
+  "experiment_ids": [],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Read current source and authentic format matrix; narrow fix to actual file with independent validation.",
+  "updated_at": "2026-11-04T21:07:26.584Z"
+}
