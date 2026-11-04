@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "run_id": 41741108965,
+  "job_id": 126282703102,
+  "source_sha": "2cb893434d7c819f085d52b34fad1e6568db4ae8",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41741108965",
+  "boundary": "After TMP/PostFX/volumetric/Depth Copy restorers; before builtin restorer",
+  "inventory": {
+    "changes_to_project": 0,
+    "counts": {
+      "internal_engine_references": 750,
+      "material_documents": 1536,
+      "resolved_exported_shader_references": 786,
+      "shader_files": 142
+    },
+    "errors": {
+      "shader_missing_meta": 2
+    },
+    "internal_pointer_authenticity_verified": false,
+    "internal_pointer_histogram": [
+      {
+        "engine_kind": "extra",
+        "file_id": 46,
+        "references": 673
+      },
+      {
+        "engine_kind": "extra",
+        "file_id": 200,
+        "references": 4
+      },
+      {
+        "engine_kind": "extra",
+        "file_id": 202,
+        "references": 2
+      },
+      {
+        "engine_kind": "extra",
+        "file_id": 203,
+        "references": 1
+      },
+      {
+        "engine_kind": "extra",
+        "file_id": 210,
+        "references": 1
+      },
+      {
+        "engine_kind": "extra",
+        "file_id": 211,
+        "references": 1
+      },
+      {
+        "engine_kind": "extra",
+        "file_id": 10750,
+        "references": 2
+      },
+      {
+        "engine_kind": "extra",
+        "file_id": 10800,
+        "references": 1
+      },
+      {
+        "engine_kind": "extra",
+        "file_id": 14000,
+        "references": 11
+      },
+      {
+        "engine_kind": "extra",
+        "file_id": 14001,
+        "references": 4
+      },
+      {
+        "engine_kind": "extra",
+        "file_id": 14002,
+        "references": 50
+      }
+    ],
+    "original_material_associations_verified": false,
+    "purpose": "read-only exported material shader reference inventory",
+    "reference_inventory_complete": false,
+    "schema_version": 1,
+    "unity_or_device_execution": false
+  },
+  "native_outcome": "failure_before_Unity",
+  "failure": "builtin restorer zero loose vendor matches among142 declarations",
+  "apk_xapk_produced": false
+}

@@ -1,0 +1,81 @@
+name: Raft W1 actual export engine pointer source proof (CPU only)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/w1_verify_engine_export.py'
+      - 'tests/test_w1_verify_engine_export.py'
+      - 'docs/W1_NATIVE_EXPORT_REFERENCE_EVIDENCE_2026-11-04.json'
+      - '.github/workflows/raft-w1-engine-export-proof.yml'
+permissions:
+  contents: read
+concurrency:
+  group: raft-w1-engine-export-proof-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  original-pointer-proof:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+            docs/W1_NATIVE_EXPORT_REFERENCE_EVIDENCE_2026-11-04.json
+            android-port/Experiments/W1EngineDatabase
+      - name: Negative identity and graph controls before acquisition
+        run: |
+          python3 -m unittest discover -s tests -p test_w1_verify_engine_export.py -v
+          python3 -m unittest discover -s tests -p test_w1_export_material_shaders.py -v
+          python3 -c "import shutil; assert shutil.disk_usage('.').free > 3 * 1024**3"
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - uses: actions/checkout@v4
+        with:
+          repository: nowl-it/AssetRipperCLI
+          ref: 036098ab525a3f9f693dc101edeb21faad4d32d8
+          path: ar-host
+          persist-credentials: false
+          sparse-checkout: |
+            Source/AssetRipper.Assets
+            Source/AssetRipper.IO.Files
+      - name: Obtain private exact embedded database from pinned generated assembly
+        run: dotnet run --project android-port/Experiments/W1EngineDatabase/W1EngineDatabase.csproj -c Release -- "$RUNNER_TEMP/w1-engine-database-private.json" "$RUNNER_TEMP/w1-exact-reader-summary.json"
+      - name: Reuse authenticated full original shader-owner cache first
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ runner.temp }}/w1-original
+          key: w1-zip2-15964ea8-full-shader-owners-v1
+          restore-keys: w1-zip2-15964ea8-four-owners-v1
+      - name: Plan only missing original providers
+        id: needed
+        run: python3 -m scripts.w1_full_engine_sources --plan --destination "$RUNNER_TEMP/w1-original"
+      - uses: actions/checkout@v4
+        with:
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-original
+          filter: blob:none
+          lfs: false
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: ${{ steps.needed.outputs.paths }}
+      - name: Authenticate all original shader providers without LFS
+        run: python3 -m scripts.w1_full_engine_sources --zip2-checkout zip2-original --destination "$RUNNER_TEMP/w1-original"
+      - name: Link observed750 internal references to the full165 original shader corpus
+        run: |
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          python3 -m scripts.w1_verify_engine_export --source "$RUNNER_TEMP/w1-original" --private-database "$RUNNER_TEMP/w1-engine-database-private.json" --reader-summary "$RUNNER_TEMP/w1-exact-reader-summary.json" --observed-evidence docs/W1_NATIVE_EXPORT_REFERENCE_EVIDENCE_2026-11-04.json --out "$RUNNER_TEMP/w1-engine-export-source-proof.json"
+      - name: Retain aggregate proof only; no original or private assets
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w1-engine-export-source-proof-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/w1-exact-reader-summary.json
+            ${{ runner.temp }}/w1-engine-export-source-proof.json
+          if-no-files-found: ignore
+          retention-days: 7
