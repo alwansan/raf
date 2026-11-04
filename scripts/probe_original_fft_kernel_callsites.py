@@ -21,6 +21,50 @@ MAX_CALLS = 40
 MAX_SOURCE_CHARS = 700_000
 
 
+def mask_noncode(source):
+    """Preserve offsets/newlines, excluding C# comments and literal bodies.
+
+    Lexical filtering only; this is not a C# syntax or callgraph proof.
+    """
+    chars = list(source)
+    i = 0
+    while i < len(source):
+        start = i
+        if source.startswith("//", i):
+            end = source.find("\\n", i)
+            i = len(source) if end == -1 else end
+        elif source.startswith("/*", i):
+            end = source.find("*/", i + 2)
+            if end < 0:
+                raise ValueError("Unterminated original CSharp block comment")
+            i = end + 2
+        elif source[i] in ('"', "'") or (
+            source[i] == '@' and i + 1 < len(source) and source[i+1] == '"'
+        ):
+            verbatim = source[i] == '@'
+            quote = '"' if verbatim else source[i]
+            i += 2 if verbatim else 1
+            while i < len(source):
+                if verbatim and source.startswith('""', i):
+                    i += 2
+                elif source[i] == quote:
+                    i += 1
+                    break
+                elif not verbatim and source[i] == "\\\\":
+                    i += 2
+                else:
+                    i += 1
+            else:
+                raise ValueError("Unterminated original CSharp literal")
+        else:
+            i += 1
+            continue
+        for j in range(start, min(i, len(source))):
+            if chars[j] not in ("\\n", "\\r"):
+                chars[j] = " "
+    return "".join(chars)
+
+
 def sha(text):
     return hashlib.sha256(text.encode("utf8")).hexdigest()
 
@@ -118,13 +162,14 @@ def analyze_source(source, expected_sha):
         raise ValueError("Original managed FFT callsite source SHA256 mismatch")
     rows = []
     raw_kernel_args = []
-    for match in CALL.finditer(source):
+    masked = mask_noncode(source)
+    for match in CALL.finditer(masked):
         if len(rows) >= MAX_CALLS:
             raise ValueError("Unbounded original compute API calls")
         op = match.group(1)
         args, end = parse_original_args(source, match.end()-1)
         raw_kernel_args.append(args[0] if args else "")
-        previous = source[max(0, match.start()-180):match.start()]
+        previous = masked[max(0, match.start()-180):match.start()]
         receiver_match = RECEIVER.search(previous)
         rows.append({
             "call_kind": op,
