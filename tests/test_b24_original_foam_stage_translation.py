@@ -18,9 +18,12 @@ def program(stage):
 
 
 def original():
+    second = dict(m_Type=0, progVertex=program(1), progFragment=program(0))
+    for key in ("progVertex", "progFragment"):
+        second[key]["m_CommonParameters"]["m_ConstantBuffers"][0]["m_VectorParams"] = [0]
     return dict(m_Name=TARGET, m_SubShaders=[dict(m_Passes=[
         dict(m_Type=0, progVertex=program(1), progFragment=program(0)),
-        dict(m_Type=0, progVertex=program(1), progFragment=program(0))
+        second
     ])])
 
 
