@@ -250,6 +250,8 @@ def sidecar_from_export_trace(project: Path, trace: dict) -> dict:
         if pure.is_absolute() or any(p in ("", ".", "..") for p in original_owner.split("/")):
             raise ValueError("unsafe trace owner")
         owner = pure.name
+        if pure.parts not in ((owner,), ("Raft_Data", owner)):
+            raise ValueError("unrecognized original source owner path")
         if owner not in SOURCE_PINS:
             continue  # Unsupported original owner; do not guess its bytes.
         if type(source["path_id"]) is not int or source["path_id"] <= 0:
