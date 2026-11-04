@@ -18,3 +18,6 @@ One full native/device delivery request follows this source checkpoint. It must 
 Expected useful evidence is the actual full-export Material graph and water report. Existing original built-in zero-loose-file gate can still stop before Unity, and WATER-001/RENDER-002 remain open. Do not repeat an identical attempt; use the new evidence to repair the demonstrated blocker. If the job exceeds10 minutes and only waiting remains, provide the exact run link per owner preference.
 
 Actual run: [41741108965](https://github.com/alwansan/raf/actions/runs/41741108965), immutable source `2cb893434d7c819f085d52b34fad1e6568db4ae8`, **IN_PROGRESS at last observation**. Explicit request gate steps succeeded. Code-source independent reconstruction preflight41740993327, platform41740993260, runner guard41740993213 and A5 OBB CPU contract41740992797 all **SUCCESS**. Native result/XAPK not yet available. Session paused per owner's long-build wait preference; job continues independently in GitHub Actions. First continuation action is inspect this exact run, not request another.
+
+
+Latest source-only continuation: [original source object and Material linkage](W1_ORIGINAL_SHADER_OBJECT_LINKS_2026-11-04.md), CPU41748891281 SUCCESS. Selected-source graph closure does not close actual export lineage or reopen native delivery.

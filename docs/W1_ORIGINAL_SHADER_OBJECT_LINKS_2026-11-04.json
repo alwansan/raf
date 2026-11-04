@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "source_sha": "52e32cebb94011314e1b5761874bcb1102cc8cd4",
+  "run_id": 41748891281,
+  "job_id": 126308732596,
+  "result": "success",
+  "summary": {
+    "actual_export_guid_associations_verified": false,
+    "canonical_engine_shader_objects": 60,
+    "export_guid_is_deterministic": false,
+    "material_refs_to_duplicate_shader_objects": [
+      {
+        "key_digest": "5ac6263e952dcc3bc2acb7a8e3a98bfcdbc4779c675fc894ed26867bebc2f98b",
+        "source_object_reference_counts": [
+          1,
+          1
+        ]
+      }
+    ],
+    "original_engine_pointer_histogram": [
+      {
+        "engine_kind": "default",
+        "file_id": 10101,
+        "references": 14
+      },
+      {
+        "engine_kind": "extra",
+        "file_id": 7,
+        "references": 1
+      },
+      {
+        "engine_kind": "extra",
+        "file_id": 46,
+        "references": 667
+      },
+      {
+        "engine_kind": "extra",
+        "file_id": 106,
+        "references": 1
+      },
+      {
+        "engine_kind": "extra",
+        "file_id": 200,
+        "references": 4
+      },
+      {
+        "engine_kind": "extra",
+        "file_id": 202,
+        "references": 2
+      },
+      {
+        "engine_kind": "extra",
+        "file_id": 203,
+        "references": 1
+      },
+      {
+        "engine_kind": "extra",
+        "file_id": 207,
+        "references": 1
+      },
+      {
+        "engine_kind": "extra",
+        "file_id": 210,
+        "references": 1
+      },
+      {
+        "engine_kind": "extra",
+        "file_id": 211,
+        "references": 2
+      },
+      {
+        "engine_kind": "extra",
+        "file_id": 10750,
+        "references": 2
+      },
+      {
+        "engine_kind": "extra",
+        "file_id": 10753,
+        "references": 1
+      },
+      {
+        "engine_kind": "extra",
+        "file_id": 10800,
+        "references": 1
+      },
+      {
+        "engine_kind": "extra",
+        "file_id": 14000,
+        "references": 11
+      },
+      {
+        "engine_kind": "extra",
+        "file_id": 14001,
+        "references": 4
+      },
+      {
+        "engine_kind": "extra",
+        "file_id": 14002,
+        "references": 50
+      }
+    ],
+    "original_material_assignments_preserved_in_export": false,
+    "original_material_objects": 1544,
+    "original_material_refs_to_custom_shader_objects": 781,
+    "original_material_refs_to_engine_keys": 763,
+    "original_owner_count": 16,
+    "original_shader_objects": 165,
+    "original_verified_bytes": 494208792,
+    "production_gates_changed": false,
+    "repeated_key_groups": [
+      {
+        "byte_identical_parsed_forms_and_programs": false,
+        "distinct_decompressed_program_sets": 2,
+        "distinct_parsed_forms": 2,
+        "distinct_serialized_payloads": 2,
+        "key_digest": "5ac6263e952dcc3bc2acb7a8e3a98bfcdbc4779c675fc894ed26867bebc2f98b",
+        "member_fingerprints": [
+          {
+            "object_identity_digest": "31aefed795ec7ce2a29308c76884a8e375871636208ed34b72d2ec1525237dec",
+            "parsed_form_sha256": "92e314d8c8802e6f714db7b79e8bf388d4f5f8666dae49db17b661449e00b245",
+            "payload_sha256": "3a81f6d9422120a48a0c04eed0be2c5070c6c82626e0f64cf3c35af07890eacd",
+            "program_set_sha256": "86616a6c046325a0f113bad451741cf5ea675d11e4ea1cf3d63583000a3f1377"
+          },
+          {
+            "object_identity_digest": "872372ce128f0642e0edbdc0c90bec5aa2d89c93a2b8cfa0c9055d964f704a08",
+            "parsed_form_sha256": "e5b609b8cd8d4d4811f89966a87b50b7b30128a787f04b9c18b04154384ea6d3",
+            "payload_sha256": "86aa675ee88d6e0fc7c8aca6f1faf5375e507038f55667c4c0458cec4c2a89e3",
+            "program_set_sha256": "46c4e3ecbbfbcbc896a6d440deb73c6fd619f972f480765e993abbfd15fe72a4"
+          }
+        ],
+        "original_objects": 2
+      }
+    ],
+    "schema_version": 1,
+    "shader_objects_merged_or_changed": 0,
+    "source_graph_complete_within_selected_owners": true,
+    "unity_or_device_executed": false
+  },
+  "local_w1_tests": 60,
+  "prior14_runs": [
+    41748009438,
+    41748422989
+  ],
+  "engine196_pinned_proof": {
+    "run_id": 41745967644,
+    "result": "success"
+  },
+  "native_run": {
+    "id": 41741108965,
+    "result": "failed_before_Unity",
+    "apk_xapk_produced": false
+  },
+  "readiness": "NOT_READY",
+  "full_readiness_reviews": 0,
+  "recorded_at": "2026-11-04T00:46:48.367Z"
+}

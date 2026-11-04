@@ -1,3 +1,5 @@
+**Final follow-up:** pinned validation41745967644 confirmedSUCCESS. New [original Shader/Material source graph](W1_ORIGINAL_SHADER_OBJECT_LINKS_2026-11-04.md) resolves1544selected source Materials and proves the repeated custom key has distinct program sets. Actual export lineage remains unverified.
+
 # W1 full native failure and source-linked engine references — 4 November 2026
 
 Full native [41741108965](https://github.com/alwansan/raf/actions/runs/41741108965), job126282703102, immutable source2cb893434d7c819f085d52b34fad1e6568db4ae8 **FAILED before Unity**. The strict builtin restorer matched0 of142parseable declarations. **No new APK/OBB/XAPK**.

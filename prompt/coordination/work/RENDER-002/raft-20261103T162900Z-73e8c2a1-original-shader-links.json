@@ -2,15 +2,12 @@
   "schema_version": 1,
   "username": "raft-20261103T162900Z-73e8c2a1",
   "issue_id": "RENDER-002",
-  "status": "active",
-  "updated_at": "2026-11-04T00:41:28.012Z",
-  "base_sha": "f92e385668e660703776178dea40ec89069bde26",
-  "paths": [
-    "scripts/w1_probe_original_shader_links.py",
-    "tests/test_w1_original_shader_links.py",
-    ".github/workflows/raft-w1-original-shader-links.yml"
-  ],
-  "verified": "41748009438 and41748422989 SUCCESS. Duplicate Shader key is2different parsed/program/rawpayloads, eachreferencedonce.1544originalMaterials,16unresolved refs ALLtargetcanonicalengine resource owners.",
-  "next_step": "Add2independently SHA-pinned canonical engine resource providers (from existing W1PINS) to the authenticated14cache; resolve16original engine resource PPtrs by originalShader object existence and exact embedded DB identity. Keep original165gameShaderobjects separate, no name-only merge, no exporterGUIDguess.",
-  "budget": "One additional CPU-only12minuteprobe, NuGetpublicpackagecache+originalsourcecache; noUnity/LFS/native."
+  "status": "completed",
+  "updated_at": "2026-11-04T00:46:48.367Z",
+  "source_sha": "52e32cebb94011314e1b5761874bcb1102cc8cd4",
+  "run_id": 41748891281,
+  "result": "success",
+  "local_tests": 60,
+  "scope": "Selected16source providers,1544Materials fullyresolved; repeatedkey2distinctprogramobjects preserved. Original→actualexportGUID/Material assignment proof notcompleted.",
+  "next_step": "Capture original owner/pathID→actual collection exportGUID and original Material Shader edge through SAME pinned processor/export instance. Explain1544source→1536export boundary without deduping two distinct programs. Keep strict builtin/water gates until source-linked export proof; no identical native retry."
 }

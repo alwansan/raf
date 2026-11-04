@@ -4,16 +4,17 @@
   "username": "raft-20261103T162900Z-73e8c2a1",
   "session_id": "w1-original-shader-links-20261104T003353658Z",
   "resumed_from": null,
-  "status": "active",
-  "updated_at": "2026-11-04T00:33:53.658Z",
-  "base_sha": "e0ba9100c163459bbfb5c9bed465895d1af8b09c",
+  "status": "paused",
+  "updated_at": "2026-11-04T00:46:48.367Z",
+  "base_sha": "52e32cebb94011314e1b5761874bcb1102cc8cd4",
   "current_work": [
-    "Resolve repeated original Shader key by per-owner/pathID payload and decompressed-program fingerprints; inspect original Material shader links"
+    "Completed selected16provider source graph:1544Materials,165game+60canonicalShaders,0unresolved; distinct repeatedkey pair preserved"
   ],
-  "last_commit": "e0ba9100c163459bbfb5c9bed465895d1af8b09c",
-  "next_step": "CPU-only original object linkage probe. Pinned engine proof41745967644 SUCCESS. ExporterGUID is random; never invent deterministic original GUIDs.",
+  "last_commit": "52e32cebb94011314e1b5761874bcb1102cc8cd4",
+  "next_step": "Capture original owner/pathID→actual collection exportGUID and original Material Shader edge through SAME pinned processor/export instance. Explain1544source→1536export boundary without deduping two distinct programs. Keep strict builtin/water gates until source-linked export proof; no identical native retry.",
   "memory_path": "prompt/coordination/clients/raft-20261103T162900Z-73e8c2a1/MEMORY.md",
   "native_run_url": "https://github.com/alwansan/raf/actions/runs/41741108965",
   "source_proof_run_url": "https://github.com/alwansan/raf/actions/runs/41745779746",
-  "pinned_validation_run_url": "https://github.com/alwansan/raf/actions/runs/41745967644"
+  "pinned_validation_run_url": "https://github.com/alwansan/raf/actions/runs/41745967644",
+  "original_shader_links_run_url": "https://github.com/alwansan/raf/actions/runs/41748891281"
 }
