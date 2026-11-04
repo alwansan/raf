@@ -6,7 +6,7 @@
   "issue_id": "LOCAL-005",
   "track": "world-save",
   "approach": "Independent bounded private source investigation of post-world-load Cheat.AllowCheatsForLocalPlayer native Steam identity call; source authenticity via exact SHA256 of pinned original Assembly-CSharp DLL; publish only structural counters and hashes.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "649ec8e5b227ecae970b161ceb3339e2be1929c2",
   "intended_files": [
     "scripts/b50_probe_original_cheat_steam.py",
@@ -20,8 +20,12 @@
   "experiment_ids": [
     "B50-20261104T2039Z-cheat-identity"
   ],
-  "run_urls": [],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41911354402"
+  ],
   "result": null,
-  "next_step": "Add bounded parser, synthetic negative controls, private authenticated original DLL source CI; do not change world flags or guessed callsites.",
-  "updated_at": "2026-11-04T20:50:00Z"
+  "next_step": "Object-typed Android-local CSteamID fallback adapter in B50-20261104T2039Z-B50-d7a3-cheat-steamid-adapter.json, validate original no-LFS C# compile and source tests; then coordinated native phone verification.",
+  "updated_at": "2026-11-04T21:01:00Z",
+  "observed_result": "Authenticated ZIP2-origin managed Assembly-CSharp.dll SHA 0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e / 3211776 bytes. Original Cheat source SHA 8137618061888b90d79af6dcca8c16aa5128bb5306ae07cab4e87d4a98ffe772 and AllowCheatsForLocalPlayer method SHA e89739ba461b65b03e78c388193dcfff44a19a41842af9b665a434c39fef1a09; one executable SteamUser.GetSteamID() call, zero direct m_SteamID field reads, zero preprocessor branches, bool method. Six synthetic tests and private original ILSpy probe SUCCESS on CI 41911354402. This proves a real original Steam identity caller but not necessarily a logged exception or Android failure.",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41911354402"
 }
