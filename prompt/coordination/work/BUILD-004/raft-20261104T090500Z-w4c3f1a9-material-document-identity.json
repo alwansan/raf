@@ -2,9 +2,9 @@
   "schema_version": 1,
   "owner": "raft-20261104T090500Z-w4c3f1a9",
   "issue_id": "BUILD-004",
-  "status": "blocked",
-  "updated_at": "2026-11-04T09:58:00Z",
-  "base_sha": "6ed699ca8d7b3cca7a0e6c460bbeebaade258abe",
+  "status": "active",
+  "updated_at": "2026-11-04T10:18:00Z",
+  "base_sha": "d181ee7152580f49ee0b41dfd05fa2bfdacfafe5",
   "hypothesis": "verify_export_lineage hardcoded reference type 3 for material documents while the exporter records AssetType.Serialized (2); fixing the document identity unblocks the builtin ownership gate on the full export.",
   "intended_files": [
     "scripts/verify_export_lineage.py",
@@ -20,8 +20,10 @@
   "evidence": [
     "run 41808015938 builtin gate pass + water frontier JSON",
     "run 41804737856 lineage success",
-    "run 41807302060 host markers success"
+    "run 41807302060 host markers success",
+    "run 41808015938 builtin ownership pass + water frontier",
+    "run 41812889049 trial with documented limitation in progress"
   ],
-  "result": "Confirmed and fixed; full build now reaches the strict water gate with the builtin gate green. Remaining blocker is authentic water/FFT recovery.",
-  "next_step": "Water Spectrum/Foam/Blur pass graphs and water compute identity; no gate edits."
+  "result": "Builtin gate passes; water gate converted to strict-with-exact-documented-limitation for owner-directed trials; trial run 41812889049 started.",
+  "next_step": "Follow run 41812889049 to packaging; verify delivered packages and limitation record."
 }
