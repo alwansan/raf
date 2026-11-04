@@ -224,7 +224,8 @@
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B31_ORIGINAL_GRAPHICS_REUSE_2026-11-04.md",
         "https://github.com/alwansan/raf/actions/runs/41919225658",
         "https://github.com/alwansan/raf/commit/9eb71aa4c967ac2cef5f447e21d6d0f32d1efccc",
-        "https://github.com/alwansan/raf/actions/runs/41919146580"
+        "https://github.com/alwansan/raf/actions/runs/41919146580",
+        "https://github.com/alwansan/raf/actions/runs/41920048140"
       ],
       "remaining": [
         "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -243,15 +244,16 @@
         "B22 original m_Floats/m_Ints same-instance float32 parity tool CI41918404573: 14 synthetic controls PASS, original Raft->same-export paired data NOT run, 14-owner bounded scope not full 82; material scalar loss remains unproven hypothesis.",
         "B12: Android scene_shader_snapshot bounded post-load read-only instrumentation now source-integrated (70edac4; CI41919089409 + original-managed CI41918822038 PASS). No diagnostic output exists from a new actual Raft APK/device yet. Compare future 512-renderer bounded counts and ambient/colorSpace against same-scene screenshots; do not equate this to water/shader/color restoration.",
         "B31 production-original Texture2D stream coverage now rejects symlink/hardlink provider/owner aliases and unsafe negative inline extent, source-only CI 41919225658 SUCCESS 26/26; this guards provenance, not actual white materials or device pixels. Initial hypothesis of W1 cache reducing LFS is rejected for current build: 11/14 original shader owners raw, 3/14 LFS pointers already staged. RENDER-002 remains OPEN.",
-        "B38: duplicate mapping-key handling in exported Material m_TexEnvs/UV checker source-fixed; CI41919146580 (14+7 synthetic) PASS. Actual Raft ZIP2 original-to-same-export parity and Android colors still unverified."
+        "B38: duplicate mapping-key handling in exported Material m_TexEnvs/UV checker source-fixed; CI41919146580 (14+7 synthetic) PASS. Actual Raft ZIP2 original-to-same-export parity and Android colors still unverified.",
+        "B12 mesh-vs-shader source extension a324eb6+acd3514: 512 active-renderer cap now reports missing MeshFilter/Mesh.sharedMesh and SkinnedMeshRenderer.sharedMesh separately from material shader errors. CI41920048140 PASS source tests, original managed CI41920015979 pending; no real phone evidence/mesh loss cause yet."
       ],
       "acceptance": [
         "مطابقة روابط ومراجع الأصل",
         "مقارنةصوريةلنفسالمشهد",
         "نجاحعلىالهاتف"
       ],
-      "updated_by": "B38",
-      "updated_at": "2026-11-04T21:51:00Z",
+      "updated_by": "B12",
+      "updated_at": "2026-11-04T21:53:32.656Z",
       "_record_path": "issues/RENDER-002.json"
     },
     {
@@ -301,7 +303,14 @@
         "https://github.com/alwansan/raf/commit/cfb97bf58e6c2736268df5aa8ecc9e54f3789ef6",
         "https://github.com/alwansan/raf/actions/runs/41917493634",
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B14_WATER_PATH_PROVENANCE_2026-11-04.md",
-        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B09_SPECTRUM_PASS_STAGING_2026-11-04.md"
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B09_SPECTRUM_PASS_STAGING_2026-11-04.md",
+        "https://github.com/alwansan/raf/actions/runs/41920323250",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B30_ORIGINAL_FFT_VARIANTMAP_ROUTING_2026-11-04.md",
+        "https://github.com/alwansan/raf/actions/runs/41919758958",
+        "https://github.com/alwansan/raf/actions/runs/41920166966",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B24_ORIGINAL_FOAM_PROGRAM_TRANSLATION_2026-11-04.md",
+        "https://github.com/alwansan/raf/actions/runs/41920232173",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B17_SPECTRUM_STAGE_DESCRIPTORS_2026-11-04.md"
       ],
       "remaining": [
         "Spectrum/Foam/Blur passes ناقصة في APK86",
@@ -314,15 +323,18 @@
         "B06 source-only: startup diagnostic now queries original FFT RGHalf/RGFloat/ARGBHalf/ARGBFloat RenderTexture/random-write and compute-group capability; CI synthetic passed, future APK/device results unknown.",
         "B06 original FFT secondary Dispatch parser now excludes comment/string fake calls; 8/8 synthetic tests pass, original-data rerun and runtime shader import still unverified.",
         "B14 structural source-integrity guard: linked project/Assets/shader or compute .meta paths now fail closed; 10/10 existing+new synthetic CI tests passed (41917493634). Real original shader/FFT kernel identities and device rendering remain unverified.",
-        "B09 Spectrum private original DXBC stage/variant extractor and SHA-pinned selective ZIP2 workflow integrated, 10/10 synthetic tests pass; authentic original extraction outcome, ShaderLab assembly, Unity/Adreno and phone unverified."
+        "B09 Spectrum private original DXBC stage/variant extractor and SHA-pinned selective ZIP2 workflow integrated, 10/10 synthetic tests pass; authentic original extraction outcome, ShaderLab assembly, Unity/Adreno and phone unverified.",
+        "B30 authenticated original FFT variantMap/keyword probe (12 synthetic tests + original ZIP2/DXBC CI 41920323250): all 20 compiled program entries share one opaque map header and one global/local keyword bundle; these fields cannot route source candidate pairs. Runtime kernel ID/variant selector mechanism remains OPEN; do not manufacture 20 FindKernel IDs.",
+        "B24: original Foam/Global 2-pass/4-DXBC stages translated and Vulkan1.1 roundtripped privately; pass0 CB0 vectors=2, pass1=1. Original ShaderLab, constant-buffer/material bindings, Unity/Adreno and phone remain unverified; not a water gate fix.",
+        "B17 exact ZIP2-original Spectrum typed numeric stage descriptor census: 7 passes; 13 fragment rows, 0 vertex rows, 42 resource table field occurrences, m_UAVParams and typed m_MultiSampled; original UnityPy execution and 16 synthetic controls PASS CI41920232173. Original-to-ShaderLab resource binding semantics, sampler state, water pixels and Android Unity runtime still NOT verified; WATER-001 remains OPEN."
       ],
       "acceptance": [
         "هوية برامج ونوى أصلية أو تطابق موثق دونdummy",
         "تثبيت فيالتصدير+Unity import/render",
         "اختبار هاتف يثبت الماء بلا pass/kernel errors"
       ],
-      "updated_by": "B09",
-      "updated_at": "2026-11-04T21:48:08.555Z",
+      "updated_by": "B17",
+      "updated_at": "2026-11-04T21:58:00Z",
       "_record_path": "issues/WATER-001.json"
     }
   ],
@@ -359,6 +371,41 @@
       ],
       "updated_by": "B10",
       "_record_path": "resources/B10-generated-vendor-shader-metadata.json"
+    },
+    {
+      "id": "B24-FOAM-ORIGINAL-FOUR-STAGES-20261104",
+      "title": "B24 — original Foam/Global two-pass four-stage DXBC↔Vulkan private translation",
+      "kind": "water-original-compiled-program-translation",
+      "source": {
+        "provider": "ZIP2 pinned original (without LFS)",
+        "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+        "path": "Raft/Raft_Data/sharedassets0.assets",
+        "bytes": 115978112,
+        "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+        "object_path_id": 2420,
+        "object_sha256": "67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1"
+      },
+      "stages": {
+        "acquisition": "SHA_PIN_VERIFIED",
+        "extraction": "ORIGINAL_TWO_PASSES_FOUR_STAGES_LINKED",
+        "reconstruction": "ORIGINAL_4_OF_4_DXBC_VULKAN1_1_ROUNDTRIPS_VERIFIED",
+        "binding": "PARTIAL_CB_LAYOUT_AUTHENTICATED_NOT_UPLOADED",
+        "integration": "NOT_EXECUTED",
+        "device": "NOT_TESTED"
+      },
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41919758958",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B24_ORIGINAL_FOAM_PROGRAM_TRANSLATION_2026-11-04.md",
+        "https://github.com/alwansan/raf/actions/runs/41920166966"
+      ],
+      "remaining": [
+        "Exact original per-pass partial constant buffer and stage name/slot rebinding",
+        "Real ShaderLab two-pass source, material GUID and .meta preservation",
+        "Unity Android shader importer, Vulkan/Adreno device renderer and color parity, texture/sampler binding"
+      ],
+      "updated_by": "B24",
+      "updated_at": "2026-11-04T21:56:24.790Z",
+      "_record_path": "resources/B24-foam-original-stage-translation.json"
     },
     {
       "id": "B45-BLUR-PROPERTY-RESTORE-20261104",
@@ -955,6 +1002,38 @@
       "_record_path": "events/B12/20261104T2148Z-scene-shader-result.json"
     },
     {
+      "id": "B12-20261104T2132Z-B12-c4a8-mesh-visibility-extension",
+      "owner": "B12",
+      "session_id": "20261104T2132Z-B12-c4a8",
+      "issue_id": "RENDER-002",
+      "type": "integration",
+      "summary": "B12 expanded bounded scene shader snapshot to classify missing MeshFilter/sharedMesh and SkinnedMeshRenderer.sharedMesh in same <=512 enabled renderer sample; no vertex/index/mesh payload readback or material mutation. C# commit a324eb6, synthetic tests acd3514, isolated CI41920048140 SUCCESS; original managed integration41920015979 still in progress at event time, so no Unity/device/actual Mesh evidence claimed.",
+      "evidence": [
+        "https://github.com/alwansan/raf/commit/a324eb6208f9edc3f4587aa4c8236192e13d6684",
+        "https://github.com/alwansan/raf/commit/acd3514d2d0123ea3f3910de55ba4a79ad5bba63",
+        "https://github.com/alwansan/raf/actions/runs/41920048140",
+        "https://github.com/alwansan/raf/actions/runs/41920015979"
+      ],
+      "at": "2026-11-04T21:52:54.631Z",
+      "_record_path": "events/B12/20261104T2153Z-mesh-visibility-result.json"
+    },
+    {
+      "id": "B12-20261104T2132Z-B12-c4a8-final-managed-success",
+      "owner": "B12",
+      "session_id": "20261104T2132Z-B12-c4a8",
+      "issue_id": "RENDER-002",
+      "type": "result",
+      "summary": "B12 final bounded Android scene shader/material + MeshFilter.sharedMesh/SkinnedMeshRenderer.sharedMesh presence diagnostic integrated without mutations: source a324eb6, regression tests acd3514. CI41920048140 source policy PASS and CI41920015979 actual original managed offline integration/compile PASS. NOT Unity player/Adreno/real-game scene device proof; WATER/RENDER/LOCAL stay OPEN.",
+      "evidence": [
+        "https://github.com/alwansan/raf/commit/a324eb6208f9edc3f4587aa4c8236192e13d6684",
+        "https://github.com/alwansan/raf/commit/acd3514d2d0123ea3f3910de55ba4a79ad5bba63",
+        "https://github.com/alwansan/raf/actions/runs/41920048140",
+        "https://github.com/alwansan/raf/actions/runs/41920015979"
+      ],
+      "at": "2026-11-04T21:54:53.938Z",
+      "_record_path": "events/B12/20261104T2158Z-final-managed-ci.json"
+    },
+    {
       "id": "B13-20261104T2132Z-B13-7e6b-start",
       "owner": "B13",
       "session_id": "20261104T2132Z-B13-7e6b",
@@ -981,6 +1060,19 @@
       ],
       "at": "2026-11-04T21:46:00Z",
       "_record_path": "events/B13/20261104T2146Z-result.json"
+    },
+    {
+      "id": "B13-20261104T2132Z-B13-7e6b-water-meta-start",
+      "owner": "B13",
+      "session_id": "20261104T2132Z-B13-7e6b",
+      "issue_id": "WATER-001",
+      "type": "start",
+      "summary": "B13 takes independent P0 water shader/compute .meta GUID validity and duplicate identity structural verification. Complements B14 linked-meta and B49 pass gates; source-only, no resource replacement.",
+      "evidence": [
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/verify_water_render_contract.py"
+      ],
+      "at": "2026-11-04T21:54:00Z",
+      "_record_path": "events/B13/20261104T2154Z-water-meta-start.json"
     },
     {
       "id": "B14-20261104T2131Z-start",
@@ -1039,6 +1131,33 @@
       "_record_path": "events/B14/20261104T2144Z-local-result.json"
     },
     {
+      "id": "20261104T215400Z-sampler-start",
+      "owner": "B15",
+      "session_id": "20261104T215400Z-B15-7b2c",
+      "issue_id": "RENDER-002",
+      "type": "start",
+      "summary": "B15 starts independent original/export sampler fidelity coverage; existing source-only aggregate cannot prove exported per-object parity.",
+      "evidence": [
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/probe_w2_texture_sampler_settings.py",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B02_TEXTURE_IMPORT_COLOR_FIDELITY_2026-11-04.md"
+      ],
+      "at": "2026-11-04T21:54:00Z",
+      "_record_path": "events/B15/20261104T215400Z-sampler-start.json"
+    },
+    {
+      "id": "B16-20261104T2151Z-kernel-conditional-start",
+      "owner": "B16",
+      "session_id": "20261104T2151Z-B16-6e2a",
+      "issue_id": "WATER-001",
+      "type": "start",
+      "summary": "Registered distinct WATER-001 conditional-preprocessing guard; no original kernel, shader or device fixes claimed.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41912450062"
+      ],
+      "at": "2026-11-04T21:53:34.379Z",
+      "_record_path": "events/B16/20261104T2151Z-kernel-conditional-start.json"
+    },
+    {
       "id": "20261104T2141Z-B17-start-spectrum",
       "owner": "B17",
       "session_id": "20261104T2140Z-B17-spc2",
@@ -1051,6 +1170,35 @@
       ],
       "at": "2026-11-04T21:41:00Z",
       "_record_path": "events/B17/20261104T2141Z-start-spectrum.json"
+    },
+    {
+      "id": "20261104T2156Z-B17-spectrum-sourceverified",
+      "owner": "B17",
+      "session_id": "20261104T2140Z-B17-spc2",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "summary": "B17 exact ZIP2 SHA-authenticated original Spectrum shader stages: 7 passes, 13 fragment/0 vertex descriptor rows, 42 resource-table fields, typed m_MultiSampled boolean and m_UAVParams schema. Final real original CI41920232173 SUCCESS, 16/16 synthetic tests; no Unity/native/GPU/device/shader translation, WATER-001 OPEN.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41920232173",
+        "https://github.com/alwansan/raf/commit/6afb4e1280f6691e3b47ac810f479409f94a9e58",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B17_SPECTRUM_STAGE_DESCRIPTORS_2026-11-04.md"
+      ],
+      "at": "2026-11-04T21:56:00Z",
+      "_record_path": "events/B17/20261104T2156Z-spectrum-sourceverified.json"
+    },
+    {
+      "id": "20261104T215100Z-start",
+      "owner": "B18",
+      "session_id": "20261104T215100Z-B18-d3f9",
+      "issue_id": "WATER-001",
+      "type": "start",
+      "summary": "B18 registered independent original FFT compiled-program resource-binding integrity investigation; no game fix or device claim yet. Preserve audio/Settings; touch deferred.",
+      "evidence": [
+        "https://github.com/alwansan/raf/commit/22c021f33d2a843e2af99e49cfcbffd2e78afde4",
+        "https://github.com/alwansan/raf/actions/runs/41812889049"
+      ],
+      "at": "2026-11-04T21:51:00Z",
+      "_record_path": "events/B18/20261104T215100Z-start.json"
     },
     {
       "id": "B19-20261104T2137Z-start",
@@ -1081,6 +1229,21 @@
       "_record_path": "events/B19/20261104T2143Z-result.json"
     },
     {
+      "id": "B21-20261104T2153Z-lightmap-start",
+      "owner": "B21",
+      "session_id": "20261104T2153Z-B21-72ab",
+      "issue_id": "RENDER-002",
+      "type": "start",
+      "summary": "B21 registered independent scene lighting/lightmap provenance investigation; hypothesis unverified, preserve source GUIDs, no overlap with active Material/Shader/FFT or local repair files.",
+      "evidence": [
+        "https://github.com/alwansan/raf/commit/153787bcb85b0a0af9382b8d19e7dc85c6fc0ee8",
+        "https://github.com/alwansan/raf/actions/runs/41812889049",
+        "https://github.com/alwansan/CL/tree/5394407b5cd0a0ca1848ff0902f8d2133bf6ea29/raft%20log"
+      ],
+      "at": "2026-11-04T21:53:00Z",
+      "_record_path": "events/B21/20261104T2153Z-start-lightmap-lineage.json"
+    },
+    {
       "id": "b22-20261104T2134Z-B22-c91f-start",
       "owner": "B22",
       "session_id": "20261104T2134Z-B22-c91f",
@@ -1107,6 +1270,19 @@
       ],
       "at": "2026-11-04T21:44:30Z",
       "_record_path": "events/B22/20261104T2144Z-scalar-result.json"
+    },
+    {
+      "id": "b22-20261104T2134Z-B22-c91f-local-start",
+      "owner": "B22",
+      "session_id": "20261104T2134Z-B22-c91f",
+      "issue_id": "LOCAL-005",
+      "type": "start",
+      "summary": "After completed scalar tool, B22 independently audits runtime instrumentation apply() path and backup transaction in LOCAL-005, distinct from B14 adapter hardening.",
+      "evidence": [
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/instrument_android_runtime_operations.py"
+      ],
+      "at": "2026-11-04T21:56:00Z",
+      "_record_path": "events/B22/20261104T2156Z-local-staging-start.json"
     },
     {
       "id": "20261104T2126Z-B24-start",
@@ -1153,6 +1329,19 @@
       "_record_path": "events/B24/20261104T2135Z-foam-stage-start.json"
     },
     {
+      "id": "20261104T2153Z-B24-foam-original-translation",
+      "owner": "B24",
+      "issue_id": "WATER-001",
+      "type": "experiment-result",
+      "summary": "B24 restored four source-pinned original Foam DXBC program stage links (2 original passes) and proved all Vulkan1.1 private HLSL/roundtrips, first vs second pass original CB0 vector counts 2 vs 1. ShaderLab/CB runtime and device still unproven.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41919758958",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B24_ORIGINAL_FOAM_PROGRAM_TRANSLATION_2026-11-04.md"
+      ],
+      "at": "2026-11-04T21:54:06.640Z",
+      "_record_path": "events/B24/20261104T2153Z-foam-original-translation.json"
+    },
+    {
       "id": "20261104T2140Z-B30-water-start",
       "owner": "B30",
       "session_id": "20261104T2140Z-B30-7c29",
@@ -1165,6 +1354,20 @@
       ],
       "at": "2026-11-04T21:40:00Z",
       "_record_path": "events/B30/20261104T2140Z-B30-water-start.json"
+    },
+    {
+      "id": "20261104T2155Z-B30-fft-variantmap-original-result",
+      "owner": "B30",
+      "session_id": "20261104T2140Z-B30-7c29",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "summary": "Original SHA-authenticated ZIP2 FFT ComputeShader: all 20 compiled positions share ONE opaque variantMap header signature and ONE combined keyword signature, so these fields cannot distinguish candidate passes/banks; 12 synthetic controls and original report CI PASS; no runtime kernel selection proven.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41920323250",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B30_ORIGINAL_FFT_VARIANTMAP_ROUTING_2026-11-04.md"
+      ],
+      "at": "2026-11-04T21:55:00Z",
+      "_record_path": "events/B30/20261104T2155Z-B30-fft-variantmap-original-result.json"
     },
     {
       "id": "B31-20261104-reuse-hypothesis",
@@ -1224,6 +1427,20 @@
       ],
       "at": "2026-11-04T21:47:00Z",
       "_record_path": "events/B38/20261104T2147Z-material-yaml-result.json"
+    },
+    {
+      "id": "B38-20261104T2155Z-render-queue-start",
+      "owner": "B38",
+      "session_id": "20261104T2142Z-B38-f31a",
+      "issue_id": "RENDER-002",
+      "type": "start",
+      "summary": "B38 begins independent top-level original Material queue/GI/instancing parity comparison lane; existing B22/B43/B44/B05 cover other properties, real export and Unity pixels still unknown.",
+      "evidence": [
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/b22_verify_material_scalars.py",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/b43_material_keyword_fidelity.py"
+      ],
+      "at": "2026-11-04T21:55:07.403Z",
+      "_record_path": "events/B38/20261104T2155Z-render-queue-start.json"
     },
     {
       "id": "20261104T2104Z-B43-start",
@@ -1513,5 +1730,5 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "input_sha256": "5a48bf4af44b493305a467a11d63e8c27a56b8988190ce5148bc610fbf5a817e"
+  "input_sha256": "0b64c198ec02e697760cc9be24c2b02abbb06d5ac38f3cb56094e223b5865df8"
 }
