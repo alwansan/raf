@@ -17,6 +17,50 @@ SHA256='1ce172027b906a30be33cefe7b2ee46e1c8d35f729359b8b9785fc120d57b637'
 DECL=re.compile(r'\bShader\s+"([^"\r\n]+)"')
 ROOT='Assets/RaftAndroid/TMPShaderIncludes/'
 
+# B10: GUIDs below belong ONLY to newly added vendor fallbacks, never to
+# original exported shaders. Original .shader.meta bytes remain authoritative.
+META_GUID = re.compile(rb'(?m)^guid:[ \t]*([0-9a-fA-F]{32})[ \t]*\r?$')
+
+
+def generated_vendor_shader_meta(name, include_root):
+    """Create a deterministic Unity ShaderImporter sidecar for a NEW vendor file."""
+    if not isinstance(name, str) or not name or not isinstance(include_root, str) or not include_root.startswith('Assets/'):
+        raise ValueError('Invalid generated vendor Shader identity')
+    identity = b'RaftAndroid/generated-vendor-shader/v1\0' + include_root.encode('utf-8') + b'\0' + name.encode('utf-8')
+    guid = hashlib.sha256(identity).hexdigest()[:32]
+    meta = ('fileFormatVersion: 2\n'
+            'guid: ' + guid + '\n'
+            'ShaderImporter:\n'
+            '  externalObjects: {}\n'
+            '  defaultTextures: []\n'
+            '  nonModifiableTextures: []\n'
+            '  userData: \n'
+            '  assetBundleName: \n'
+            '  assetBundleVariant: \n').encode('utf-8')
+    return guid, meta
+
+
+def existing_asset_guids(assets):
+    """Collect original/export GUIDs without changing or publishing them."""
+    seen = {}
+    for meta in sorted(assets.rglob('*.meta')):
+        _require_safe_vendor_asset_path(assets, meta)
+        if not meta.is_file():
+            raise ValueError('Unsafe existing Unity metadata')
+        with meta.open('rb') as stream:
+            head = stream.read(4096)
+        values = META_GUID.findall(head)
+        if len(values) > 1:
+            raise ValueError('Ambiguous existing Unity metadata GUID')
+        if not values:
+            continue  # Never invent a GUID for unrelated, nonstandard source meta.
+        guid = values[0].decode('ascii').lower()
+        if guid in seen and seen[guid] != meta:
+            raise ValueError('Duplicate existing Unity metadata GUID')
+        seen[guid] = meta
+    return seen
+
+
 
 def vendor_sources(raw):
     if hashlib.sha256(raw).hexdigest()!=SHA256: raise ValueError('Official TMP package fingerprint mismatch')
@@ -84,6 +128,9 @@ def restore(project, backup, shaders, includes, license, *, shader_prefix="TextM
     used = set()
     for target in sorted(assets.rglob('*.shader')):
         _require_safe_vendor_asset_path(assets, target)
+        # A repeated import must not call generated files original exported Shaders.
+        if target.is_relative_to(include_directory):
+            continue
         text = target.read_text(encoding='utf-8-sig')
         match = DECL.search(text)
         if not match or not match[1].startswith(shader_prefix):
@@ -113,6 +160,7 @@ def restore(project, backup, shaders, includes, license, *, shader_prefix="TextM
     # A stripped PC build can omit an official fallback. Add only its exact
     # verified vendor shader identity; never fabricate a substitute pass.
     missing = []
+    generated_meta = {}
     for name, source in shaders.items():
         if name in used:
             continue
@@ -121,7 +169,18 @@ def restore(project, backup, shaders, includes, license, *, shader_prefix="TextM
         content = rewrite_includes(source, includes, include_root).encode('utf-8')
         additions.append((destination, content))
         missing.append((destination, content))
+        guid, metadata = generated_vendor_shader_meta(name, include_root)
+        meta = Path(str(destination) + '.meta')
+        if guid in generated_meta:
+            raise ValueError('Collision between newly generated vendor Shader GUIDs')
+        generated_meta[guid] = meta
+        additions.append((meta, metadata))
     additions.append((include_directory / 'LICENSE.md', license))
+
+    existing_guids = existing_asset_guids(assets)
+    for guid, meta in generated_meta.items():
+        if guid in existing_guids and existing_guids[guid] != meta:
+            raise ValueError('Generated vendor Shader GUID collision with original export metadata')
 
     destinations = set()
     for destination, content in additions:
