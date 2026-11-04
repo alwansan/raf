@@ -6,18 +6,20 @@
   "resumed_from_session": null,
   "status": "paused",
   "base_sha": "0d33268645106e7bc28fcaa786d90683fe93de19",
-  "last_commit": "0a08683f09bdad8ef795fff8f59a21c6724b0661",
-  "updated_at": "2026-11-04T21:24:00Z",
+  "last_commit": "9f71f1722f11bd136e0deeac0ba7cefa3d72dc71",
+  "updated_at": "2026-11-04T21:29:00Z",
   "tracks": [
     "LOCAL-005 offline-world readiness"
   ],
   "work_ids": [
-    "B07-20261104T2112Z-B07-6e51-world-callback-proof"
+    "B07-20261104T2112Z-B07-6e51-world-callback-proof",
+    "B07-20261104T2112Z-B07-6e51-callback-csharp-execution"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41914637539",
-    "https://github.com/alwansan/raf/actions/runs/41915466470"
+    "https://github.com/alwansan/raf/actions/runs/41915466470",
+    "https://github.com/alwansan/raf/actions/runs/41916347469"
   ],
-  "next_step": "B07 source-integrated SHA-pinned GameManager.OnWorldRecieved Android operation tracing, CI41915466470 SUCCESS; LOCAL-005 OPEN. Next read HEAD/CL and coordinate actual new APK, capture world/OnWorldRecieved logs, verify original offline .rgd create/save/reopen. No worker operating between sessions; do not change audio/Settings/touch.",
+  "next_step": "B07 source-integrated original SHA-pinned GameManager callback operation trace plus executable .NET10 synthetic branch/exception proof CI41916347469 SUCCESS; LOCAL-005 OPEN/NOT_READY. Next live HEAD/CL, coordinated Unity and newer APK, actual world/.rgd save/reload. No ongoing work outside session.",
   "memory_path": "prompt/coordination/clients/B07/MEMORY.md"
 }
