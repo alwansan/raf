@@ -1,15 +1,15 @@
 {
   "schema_version": 1,
   "username": "raft-20261103T103610Z-4e91b2cd",
-  "session_id": "20261104-bounded-operands",
+  "session_id": "20261104-instruction-boundaries",
   "resumed_from": null,
   "status": "completed",
   "updated_at": "2026-11-04T01:30:00Z",
-  "base_sha": "68a3088d4aeae2b55b0a4c0d425405cb208b3036",
+  "base_sha": "3dea0a715f9497d853b37239e93ffac10a76dd17",
   "current_work": [
     "WATER-001"
   ],
   "last_commit": "7bbc443c02b5a0169072ea67f773af06537af72b",
-  "next_step": "Establish actual instruction operand boundaries before authentic Blur CB extraction",
+  "next_step": "Run original four-stage instruction census and arithmetic CB extraction; no further synthetic-only increments",
   "memory_path": "prompt/coordination/clients/raft-20261103T103610Z-4e91b2cd/MEMORY.md"
 }

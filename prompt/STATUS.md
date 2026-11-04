@@ -1093,3 +1093,7 @@ The25engine+140non-engine split agrees with the old native export's140initial lo
 
 ## Bounded CB operand decoder — 4 November
 [Handoff](../docs/BLUR_BOUNDED_OPERAND_DECODER_2026-11-04.md): source operand swizzle/select1 decoder,3localtests pass. Explicit operand boundaries required; no raw token scanning, authentic operand or GPU proof yet. NOT_READY.
+
+
+## Blur instruction boundaries — 4 November
+[Handoff](../docs/BLUR_INSTRUCTION_BOUNDARIES_2026-11-04.md): arithmetic-subset parser consumes immediate payload correctly,3synthetic tests pass. Original-stage extraction not executed; next census actual four programs before further increments. NOT_READY.
