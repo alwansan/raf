@@ -50,7 +50,7 @@ class FoamNameTests(unittest.TestCase):
             original_name_registry([["CB0",0],["CB0",1]])
 
     def test_reject_unsafe_registry_name(self):
-        for value in ("evil]\n", "", "x"*257, "contains\\0NUL", "bad\\rcontrol"):
+        for value in ("evil]\n", "", "x"*257, "contains"+chr(0)+"NUL", "bad"+chr(13)+"control"):
             with self.assertRaises(ValueError):
                 original_name_registry([[value,0]])
 
