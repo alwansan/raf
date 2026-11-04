@@ -1,0 +1,12 @@
+{
+  "id": "b22-20261104T2134Z-B22-c91f-local-start",
+  "owner": "B22",
+  "session_id": "20261104T2134Z-B22-c91f",
+  "issue_id": "LOCAL-005",
+  "type": "start",
+  "summary": "After completed scalar tool, B22 independently audits runtime instrumentation apply() path and backup transaction in LOCAL-005, distinct from B14 adapter hardening.",
+  "evidence": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/instrument_android_runtime_operations.py"
+  ],
+  "at": "2026-11-04T21:56:00Z"
+}
