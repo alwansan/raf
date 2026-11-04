@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "owner": "B09",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T213740719Z-B09-28fc",
+  "issue_id": "WATER-001",
+  "track": "water-spectrum-pass",
+  "approach": "Authentic Spectrum 6-pass serialized-program attribution, SHA-pinned private temporary staging into native export; no synthetic passes.",
+  "status": "active",
+  "base_sha": "1aebdfba4502fe0a86fc4986867ec32e207a8cd6",
+  "intended_files": [
+    "scripts/",
+    "tests/",
+    "docs/B09_SPECTRUM_PASS_STAGING_2026-11-04.md"
+  ],
+  "hypothesis": "The current original-data export leaves Spectrum/Water Spectrum at 1/6 passes; an authenticated stage boundary may restore the six original passes while preserving existing GUIDs and verifying original pass order.",
+  "related_work": [
+    "B49 shaderpass contract",
+    "B24 Foam staging",
+    "B45 Blur staging",
+    "W4 native water gate"
+  ],
+  "experiment_ids": [],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Inspect pipeline, source verification and Spectrum-specific recovery; build a bounded reproducible integration test.",
+  "updated_at": "2026-11-04T21:38:14.359Z"
+}
