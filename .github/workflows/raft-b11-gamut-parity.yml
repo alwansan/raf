@@ -1,0 +1,34 @@
+name: B11 RENDER-002 original color gamut parity synthetic checks
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/b11_restore_original_color_gamuts.py
+      - tests/test_b11_restore_original_color_gamuts.py
+      - .github/workflows/raft-b11-gamut-parity.yml
+  workflow_dispatch:
+
+concurrency:
+  group: raft-b11-gamut-parity
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  synthetic-fixtures:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Compile bounded test and production adapter without original assets
+        run: python3 -m py_compile scripts/b11_restore_original_color_gamuts.py tests/test_b11_restore_original_color_gamuts.py
+      - name: B11 negative and positive gamut fixtures
+        run: python3 -m unittest discover -s tests -p test_b11_restore_original_color_gamuts.py -v
+      - name: B04 existing color-space synthetic guard
+        run: python3 -m unittest discover -s tests -p test_b04_restore_original_color_settings.py -v
