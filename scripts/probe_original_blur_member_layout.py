@@ -9,6 +9,7 @@ import struct
 from collections import Counter
 from scripts.blur_cb_instruction import read, ARITY
 from scripts.blur_sample_operands import sample
+from scripts.blur_private_binding_plan import build as named_plan, public_summary
 from scripts.blur_cb_lane_map import build, lookup
 import json
 from pathlib import Path
@@ -151,6 +152,8 @@ def main(source, repo, out):
                 _, _, meta = variants[0]
                 code, _ = linked_program(meta, tables[0], st)
                 layout = observe(program["m_CommonParameters"])
+                private_plan = named_plan(program["m_CommonParameters"], p["m_NameIndices"])
+                named_summary = public_summary(private_plan)
                 compiled = declarations(code)
                 for cb in layout:
                     cb["compiled_declared_bytes"] = compiled.get(cb["slot"])
@@ -158,7 +161,7 @@ def main(source, repo, out):
                         m["candidate_within_compiled_span"] = (
                             cb["compiled_declared_bytes"] is not None
                             and m["candidate_byte_end"] <= cb["compiled_declared_bytes"])
-                rows.append({"pass": pi, "stage": st, "buffers": layout, "instruction_census": instruction_census(code, layout, program['m_CommonParameters'])})
+                rows.append({"pass": pi, "stage": st, "buffers": layout, "named_binding_summary": named_summary, "instruction_census": instruction_census(code, layout, program['m_CommonParameters'])})
         report.update(status="observed", stages=rows, original_object_sha256=digest,
                       member_semantics_verified=False,
                       original_member_layout_preserved=True)

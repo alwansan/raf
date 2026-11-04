@@ -1,4 +1,4 @@
-name: Texture-sampler Original Blur instruction census ZIP2 CPU only 4e91
+name: Private-named-plan Original Blur instruction census ZIP2 CPU only 4e91
 on:
   push:
     branches: [feature/android-native-port]
@@ -48,6 +48,7 @@ jobs:
           python3 -m unittest discover -s tests -p 'test_original_blur_member_layout.py' -v
           python3 -m unittest discover -s tests -p 'test_blur_cb_instruction.py' -v
           python3 -m unittest discover -s tests -p 'test_blur_sample_operands.py' -v
+          python3 -m unittest discover -s tests -p 'test_blur_private_binding_plan.py' -v
       - name: Stage fourteen exact original providers without LFS
         run: |
           python3 - <<'PY'
