@@ -110,6 +110,10 @@ def adapt(name, text):
         if result.count('Input.simulateMouseWithTouches = false;') != 1:
             raise ValueError('Original touch-to-left-mouse policy drift')
     elif name == 'Raft_Network':
+        # B07: log only the first iterator MoveNext on Android. Never wrap yield
+        # with catch, fake world completion, or modify the original iterator body.
+        from scripts.b07_world_coroutine_trace import instrument_original_coroutine
+        result = instrument_original_coroutine(result)
         result = enter(result, 'Platform_Init', 'localSteamID = ' + LOCAL + '.Current; SignedIntoPlayfab = false; return;')
         for method in ('Platform_Update', 'Platform_Shutdown'):
             result = enter(result, method, 'return;')
