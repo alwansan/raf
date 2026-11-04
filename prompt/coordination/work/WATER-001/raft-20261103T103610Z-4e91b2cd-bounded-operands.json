@@ -1,0 +1,1 @@
+{"schema_version":1,"owner":"raft-20261103T103610Z-4e91b2cd","issue_id":"WATER-001","status":"completed","hypothesis":"Preserve source component swizzles when mapping CB reads","result":"3 local synthetic tests pass; no original extraction yet","next_step":"Complete instruction boundary parser"}

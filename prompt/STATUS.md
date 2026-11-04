@@ -1089,3 +1089,7 @@ The25engine+140non-engine split agrees with the old native export's140initial lo
 
 ## Authenticated Blur address model — 4 November
 [Handoff](../docs/BLUR_AUTHENTICATED_ADDRESS_MODEL_2026-11-04.md): numeric-only original fixture from41742032440 confirms70component addresses across6buffers/7members;968unmapped bytes preserved. New regression1/1 and prior4/4localtests pass. No new downloads or workflow; actual operand/matrix/ShaderLab semantics unverified. NOT_READY.
+
+
+## Bounded CB operand decoder — 4 November
+[Handoff](../docs/BLUR_BOUNDED_OPERAND_DECODER_2026-11-04.md): source operand swizzle/select1 decoder,3localtests pass. Explicit operand boundaries required; no raw token scanning, authentic operand or GPU proof yet. NOT_READY.
