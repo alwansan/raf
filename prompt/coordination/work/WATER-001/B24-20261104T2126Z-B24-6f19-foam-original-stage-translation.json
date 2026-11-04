@@ -6,8 +6,8 @@
   "issue_id": "WATER-001",
   "track": "foam-authentic-translation",
   "approach": "Original ZIP2 SHA-pinned sharedassets0 pathID2420: link four authentic Foam DXBC stage programs to two passes, parse exact parameter envelopes, translate privately through VKD3D-SPIRV/spirv-cross/glslang and report fail-closed sanitized stage results (not shaderlab install).",
-  "status": "active",
-  "base_sha": null,
+  "status": "completed",
+  "base_sha": "02b6d499e4f4e4f51cab852cc30ba2bec9079eb2",
   "intended_files": [
     "scripts/b24_original_foam_stage_translation.py",
     "tests/test_b24_original_foam_stage_translation.py",
@@ -21,8 +21,11 @@
   "experiment_ids": [
     "B24-20261104T2135Z-original-foam-stages"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Build source-pinned no-LFS ZIP2 private translation CI and validate 4 stages with no raw shader published; do not integrate if any cannot be proven.",
-  "updated_at": "2026-11-04T21:36:19.755Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41919758958",
+    "https://github.com/alwansan/raf/actions/runs/41920166966"
+  ],
+  "result": "SOURCE_PROGRAMS_VERIFIED: original SHA-pinned Foam/Global PathID2420 and object SHA67bd7a7, 2 original passes/4 authentic DXBC programs; all translated privately to Vulkan1.1 SPIR-V, HLSL, SPIR-V roundtrip; 9 synthetic controls PASS final CI41920166966. Original CB0 vector counts pass0=2 and pass1=1 both stages. No ShaderLab, Unity binding or Adreno/device proof.",
+  "next_step": "Implement exact original Foam partial-CB name/slot/resource bindings and two-pass ShaderLab from private stages, plus Unity/Android evidence; WATER-001 OPEN.",
+  "updated_at": "2026-11-04T21:56:24.790Z"
 }
