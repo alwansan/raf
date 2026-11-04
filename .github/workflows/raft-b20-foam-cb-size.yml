@@ -1,0 +1,63 @@
+name: B20 WATER-001 authenticated Foam CB extent comparison (numeric only)
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/b20_foam_cb_size_parity.py
+      - tests/test_b20_foam_cb_size_parity.py
+      - .github/workflows/raft-b20-foam-cb-size.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: b20-foam-cb-size-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  numeric-source-control:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Negative controls and genuine-artifact numeric fixture comparison
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p 'test_b20_foam_cb_size_parity.py' -v
+          python3 -m py_compile scripts/b20_foam_cb_size_parity.py
+          mkdir -p b20-safe-numeric
+          python3 - <<'PY'
+          import json, sys
+          from pathlib import Path
+          sys.path.insert(0,'tests')
+          from test_b20_foam_cb_size_parity import source_fixture
+          # B20 CI41931585626 source-verified numeric UBO sizes only.
+          Path('b20-safe-numeric/input.json').write_text(json.dumps(source_fixture())+'\n')
+          PY
+          python3 -m scripts.b20_foam_cb_size_parity \
+            --safe-source b20-safe-numeric/input.json \
+            --out b20-safe-numeric/size-comparison.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('b20-safe-numeric/size-comparison.json').read_text())
+          assert r['original_cb_links_compared']==8
+          assert r['exact_numeric_size_matches']==1
+          assert r['different_numeric_size_pairs']==7
+          assert r['original_cb0_name_alias_verified'] is False
+          assert r['android_gpu_pixels_verified'] is False
+          PY
+          rm -f b20-safe-numeric/input.json
+      - name: Upload numeric source-only result, never original programs
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: b20-foam-cb-size-${{ github.run_id }}
+          path: b20-safe-numeric/size-comparison.json
+          if-no-files-found: ignore
+          retention-days: 7
