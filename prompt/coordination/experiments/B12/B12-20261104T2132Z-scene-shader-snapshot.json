@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "owner": "B12",
+  "session_id": "20261104T2132Z-B12-c4a8",
+  "issue_id": "RENDER-002",
+  "hypothesis": "A bounded delayed Android scene sample can classify null/unsupported/zero-pass/error materials to guide real white-surface fixes, without modifying game renderer/materials or guessing shader restoration.",
+  "source_commit": "70edac4f5406efdb971e987c0e104682d8cefd42",
+  "input_hashes": [],
+  "tool_versions": {
+    "python": "GitHub-hosted Ubuntu 24.04 Python3",
+    "unity": "not executed by B12"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_b12_scene_render_snapshot.py -v",
+    "python3 -m unittest discover -s tests -p test_runtime_operation_traces.py -v"
+  ],
+  "negative_controls": [
+    "rejects per-frame material sampling",
+    "no instantiated Materials or new Shader",
+    "never modifies WorldHasBeenRecieved",
+    "records stale scene skipped and capture exception type",
+    "source has 512 visible-renderer bound"
+  ],
+  "workflow_path": ".github/workflows/raft-b12-scene-render-snapshot.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41919089409",
+  "artifact_urls": [],
+  "budget": "6-minute Ubuntu 24.04 source-policy job, LFS=false; no Unity/player build",
+  "status": "running",
+  "observed_result": "Managed original startup integration CI41918822038 passed source70edac4; B12 source-policy isolated CI started but not yet confirmed at first read. Source diagnostic accepted on branch; cannot claim device white-material cause.",
+  "rejected_hypotheses": [
+    "B12 must add SaveGame StoreStats guard: already implemented and managed-validated by B50, no duplicate patch",
+    "B12 should compare Material scalar parity: B22 already performing same track"
+  ],
+  "limitations": [
+    "No shader reconstruction nor actual device screenshot comparison",
+    "May miss inactive/off-screen scene roots and renderer >512; truncated field records cap",
+    "Three-second delayed sample does not prove shader variants loaded afterward",
+    "No Unity-specific graphics GPU compilation/device execution proof"
+  ],
+  "integration_commit": "70edac4f5406efdb971e987c0e104682d8cefd42",
+  "next_step": "Inspect isolated CI; correlate next device render.scene_shader_snapshot with image and existing invalid-pass/kernel errors; only then choose shader restoration."
+}
