@@ -9,3 +9,7 @@ RENDER-002 remains OPEN. Other independent guards already cover shader/keyword s
 - Output: aggregate mismatch counts only; no serialized material/source names or bytes. Read-only checker; no .meta, scenes, render queues, graphics assets or Unity candidate changed.
 - Private authenticated source-to-export run NOT performed in this synthetic experiment. Green tests cannot establish actual Raft Material parity, shader pixels or Adreno, and do not fix white textures automatically.
 - Owner-confirmed audio and Settings preserved, touch/layout deferred; RENDER-002 OPEN, NOT_READY0/3.
+
+## Verified isolated CI
+
+[Run41920784251](https://github.com/alwansan/raf/actions/runs/41920784251) COMPLETED SUCCESS, head bd58522fd126391478a90101813e78096eb3f18e; all 9 independent synthetic/negative unittest cases passed. Three categories of render-state drift detected, malformed YAML/trace/field and symlink rejected; no private source or original game Assets accessed. This verifies comparator semantics only: original/export same-instance Material values not measured, Unity import/Adreno pixels and Android game acceptance unverified. No APK, OBB, XAPK, Release, tasks, audio/Settings or deferred touch modified. RENDER-002 OPEN; NOT_READY 0/3.
