@@ -1539,6 +1539,21 @@
       "_record_path": "events/B20/20261104T2238Z-blur-rollback-start.json"
     },
     {
+      "id": "B20-20261104T2241Z-blur-rollback-result",
+      "owner": "B20",
+      "session_id": "20261104T2230Z-B20-6c9a",
+      "issue_id": "WATER-001",
+      "type": "integration",
+      "summary": "SOURCE_FIXED: original Blur ShaderLab installer uses fsynced atomic rollback with pristine external backup retained on failure. B20+B45 synthetic CI passed. No Unity/Adreno/phone water proof.",
+      "evidence": [
+        "https://github.com/alwansan/raf/commit/9387b48176fc89aa99b0ebbd9aa2ad4666564515",
+        "https://github.com/alwansan/raf/actions/runs/41927169542",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B20_AUTHENTIC_BLUR_ATOMIC_ROLLBACK_2026-11-04.md"
+      ],
+      "at": "2026-11-04T22:41:00Z",
+      "_record_path": "events/B20/20261104T2241Z-blur-rollback-result.json"
+    },
+    {
       "id": "B21-20261104T2153Z-lightmap-start",
       "owner": "B21",
       "session_id": "20261104T2153Z-B21-72ab",
@@ -1852,6 +1867,20 @@
       ],
       "at": "2026-11-04T22:41:00Z",
       "_record_path": "events/B37/20261104T2241Z-cursor-original-result.json"
+    },
+    {
+      "id": "20261104T2244Z-rgd-root-start",
+      "owner": "B37",
+      "session_id": "20261104T2226Z-B37-cursor01",
+      "issue_id": "LOCAL-005",
+      "type": "start",
+      "summary": "After completed PERF cursor source-only proof, B37 begins distinct A10 follow-up: original ZIP2 Data.rgd root one-member/no-direct-field-match source-authentic inherited-fields and Serializable metadata investigation. No deserialization or save schema mutation.",
+      "evidence": [
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/A10_ZIP2_ORIGINAL_RGD_SCHEMA_2026-11-04.md",
+        "https://github.com/alwansan/raf/actions/runs/41734609973"
+      ],
+      "at": "2026-11-04T22:44:00Z",
+      "_record_path": "events/B37/20261104T2244Z-rgd-root-start.json"
     },
     {
       "id": "B38-20261104T2142Z-start-material-texenv",
@@ -2199,5 +2228,5 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "input_sha256": "d1197535e79748b0ed1b2f4eafbacb6b50d949cdee13bcbed76f1f7926b7643f"
+  "input_sha256": "e1d7270ca17f5d4d85e90d658db8e48c87d8ab3b0c72a54c56569dcb6f059f46"
 }

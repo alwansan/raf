@@ -32,8 +32,6 @@
 
 ## الأحداث
 
-- [2026-11-04T21:53:34.379Z / B16](events/B16/20261104T2151Z-kernel-conditional-start.json): Registered distinct WATER-001 conditional-preprocessing guard; no original kernel, shader or device fixes claimed.
-- [2026-11-04T21:54:00Z / B15](events/B15/20261104T215400Z-sampler-start.json): B15 starts independent original/export sampler fidelity coverage; existing source-only aggregate cannot prove exported per-object parity.
 - [2026-11-04T21:54:00Z / B13](events/B13/20261104T2154Z-water-meta-start.json): B13 takes independent P0 water shader/compute .meta GUID validity and duplicate identity structural verification. Complements B14 linked-meta and B49 pass gates; source-only, no resource replacement.
 - [2026-11-04T21:54:06.640Z / B24](events/B24/20261104T2153Z-foam-original-translation.json): B24 restored four source-pinned original Foam DXBC program stage links (2 original passes) and proved all Vulkan1.1 private HLSL/roundtrips, first vs second pass original CB0 vector counts 2 vs 1. ShaderLab/CB runtime and device still unproven.
 - [2026-11-04T21:54:53.938Z / B12](events/B12/20261104T2158Z-final-managed-ci.json): B12 final bounded Android scene shader/material + MeshFilter.sharedMesh/SkinnedMeshRenderer.sharedMesh presence diagnostic integrated without mutations: source a324eb6, regression tests acd3514. CI41920048140 source policy PASS and CI41920015979 actual original managed offline integration/compile PASS. NOT Unity player/Adreno/real-game scene device proof; WATER/RENDER/LOCAL stay OPEN.
@@ -62,5 +60,7 @@
 - [2026-11-04T22:38:00Z / B20](events/B20/20261104T2238Z-blur-rollback-start.json): Second work scope: strengthen original Blur ShaderLab transient export installation rollback to atomic write+pristine metadata verification, preserving external recovery backup.
 - [2026-11-04T22:39:38.864Z / B25](events/B25/20261104T2242Z-foam-cb-start.json): Following authenticated identical Foam pass render states, B25 probes original partial CB name-index→slot mapping for genuine private ShaderLab source assembly; avoids B24 four-stage translation duplication.
 - [2026-11-04T22:41:00Z / B37](events/B37/20261104T2241Z-cursor-original-result.json): B37 source-integrated verified private original Cursor.SetCursor probe, tests/CI41926487471 6/6 and final CI41926892044 7/7 plus authenticated 2394-file original: exactly 3 direct calls in 2 files, 1 literal-null and 2 nonliteral texture expressions. Exact original SHA and bounded digests retained. Did not touch game or deferred input; no evidence of 1449 warning causation or phone performance fix.
+- [2026-11-04T22:41:00Z / B20](events/B20/20261104T2241Z-blur-rollback-result.json): SOURCE_FIXED: original Blur ShaderLab installer uses fsynced atomic rollback with pristine external backup retained on failure. B20+B45 synthetic CI passed. No Unity/Adreno/phone water proof.
+- [2026-11-04T22:44:00Z / B37](events/B37/20261104T2244Z-rgd-root-start.json): After completed PERF cursor source-only proof, B37 begins distinct A10 follow-up: original ZIP2 Data.rgd root one-member/no-direct-field-match source-authentic inherited-fields and Serializable metadata investigation. No deserialization or save schema mutation.
 
-بصمة المدخلات: d1197535e79748b0ed1b2f4eafbacb6b50d949cdee13bcbed76f1f7926b7643f
+بصمة المدخلات: e1d7270ca17f5d4d85e90d658db8e48c87d8ab3b0c72a54c56569dcb6f059f46
