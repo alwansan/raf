@@ -12,3 +12,6 @@ Session: `20261104T2134Z-B22-c91f` (first registration; no pre-existing B22 stat
 - RENDER-002 OPEN and NOT_READY 0/3. No game/native build, source asset modification, .meta/GUID/.rgd, sound/Settings/touch work.
 
 Next: implement and test comparator, write report, update state/work/experiment/event/issue/status with exact evidence.
+
+## Verified tool result at 2026-11-04T21:44:30Z
+Source implementation 064f4d68; tests/workflow e1d95ca6; CI 41918404573 completed SUCCESS job126884115085, 14 independent synthetic cases. Only compare-contract proven: no original ZIP2 game Material+same-instance export were staged. Binary32 value matching, duplicate YAML, swapped identity and report nonleak controls included. Docs/B22_MATERIAL_SCALAR_EXPORT_PARITY_2026-11-04.md holds invocation. Experiment and B44/W1 discussion recorded. Scoped tool completed; RENDER-002 OPEN, NOT_READY 0/3. Next use in a coordinated private export, do not start another equivalent Unity build. Original data, sound, Settings, touch, native requests, releases and scheduled tasks untouched.

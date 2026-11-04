@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "owner": "B22",
+  "session_id": "20261104T2134Z-B22-c91f",
+  "issue_id": "RENDER-002",
+  "hypothesis": "Original Material scalar values may change across export even when property names, shader pointers and tint values are retained; independent same-instance comparator must detect this without data leaks.",
+  "source_commit": "e1d95ca6b44ef38d77b6e14dee5b7617eb4a0750",
+  "input_hashes": [
+    "ZIP2 pin:15964ea8f246b6e076ce26b60931ee2e1a9a2385 (not fetched in synthetic workflow)"
+  ],
+  "tool_versions": {
+    "python": "Ubuntu 24.04 hosted Python 3",
+    "PyYAML": "6.0.3"
+  },
+  "commands": [
+    "python3 -m py_compile scripts/b22_verify_material_scalars.py",
+    "python3 -m unittest discover -s tests -p test_b22_verify_material_scalars.py -v"
+  ],
+  "negative_controls": [
+    "alpha cutoff mutation",
+    "blend scalar mutation",
+    "int scalar mismatch",
+    "missing/extra scalar",
+    "NaN/inf/bool/out-of-range scalar",
+    "duplicate scalar name/YAML key",
+    "swapped GUID/source path ID",
+    "incomplete/duplicate trace",
+    "symlink rejection",
+    "proprietary value and identity excluded from report"
+  ],
+  "workflow_path": ".github/workflows/raft-b22-material-scalars.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41918404573",
+  "artifact_urls": [],
+  "budget": "8 minute GitHub-hosted source-free synthetic test; no LFS, Unity or private data",
+  "status": "completed",
+  "observed_result": "CI 41918404573 SUCCESS on e1d95ca6; 14 synthetic tests passed. Authentic original-versus-export Material comparison and device outcomes remain untested.",
+  "rejected_hypotheses": [
+    "Matching scalar names guarantees scalar values equal (disproven synthetic counterexample)",
+    "Matching shader pointer alone guarantees alpha blend/cutout semantics (disproven synthetic counterexample)"
+  ],
+  "limitations": [
+    "No original or exported Raft Material payload loaded in this run",
+    "Source comparator initial scope 14 owners, not all 82 source owners",
+    "No Unity/GPU/Android gameplay evidence"
+  ],
+  "integration_commit": "064f4d68c65ed2f3ce83926e71dab7b1f620681e",
+  "next_step": "Apply to next already-coordinated private same-process export with authenticated original ZIP2 owners and exact trace; investigate proven mismatches."
+}

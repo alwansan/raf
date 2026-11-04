@@ -1,0 +1,13 @@
+{
+  "id": "b22-20261104T2134Z-B22-c91f-result",
+  "owner": "B22",
+  "session_id": "20261104T2134Z-B22-c91f",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "Source-integrated original Material m_Floats/m_Ints per-instance binary32 parity guard; 14 synthetic CI tests PASS 41918404573; real export and device not tested, RENDER-002 still OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/064f4d68c65ed2f3ce83926e71dab7b1f620681e",
+    "https://github.com/alwansan/raf/actions/runs/41918404573"
+  ],
+  "at": "2026-11-04T21:44:30Z"
+}

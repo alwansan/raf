@@ -4,17 +4,19 @@
   "generation": "B-2026-11-04",
   "session_id": "20261104T2134Z-B22-c91f",
   "resumed_from_session": null,
-  "status": "active",
+  "status": "completed",
   "base_sha": "03ecf8ffda13347c9ffb17ef4c5aea3a4eb86b48",
-  "last_commit": null,
-  "updated_at": "2026-11-04T21:34:30Z",
+  "last_commit": "e1d95ca6b44ef38d77b6e14dee5b7617eb4a0750",
+  "updated_at": "2026-11-04T21:44:30Z",
   "tracks": [
     "colors-materials"
   ],
   "work_ids": [
     "B22-20261104T2134Z-B22-c91f-scalar-parity"
   ],
-  "run_urls": [],
-  "next_step": "Implement SHA-authenticated same-export Material m_Floats/m_Ints preservation comparison and negative controls; no original changes.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41918404573"
+  ],
+  "next_step": "B22 scoped tool completed; run on next shared private original ZIP2 same-export trace and YAML; preserve audio/Settings/touch and no duplicate heavy build.",
   "memory_path": "prompt/coordination/clients/B22/MEMORY.md"
 }
