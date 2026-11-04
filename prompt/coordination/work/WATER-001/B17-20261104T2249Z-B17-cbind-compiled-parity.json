@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "owner": "B17",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2249Z-B17-cbind",
+  "issue_id": "WATER-001",
+  "track": "water-fft",
+  "approach": "Original Spectrum executable numeric slot parity",
+  "status": "completed",
+  "base_sha": "5057bd4663054e1912c89c4847fcd95498ae0c96",
+  "intended_files": [
+    "scripts/b17_spectrum_compiled_bindings.py"
+  ],
+  "hypothesis": "DXBC and Unity numerical stage t/s/u resource slots match.",
+  "related_work": [],
+  "experiment_ids": [
+    "b17-spectrum-compiled-register-parity"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41930225633"
+  ],
+  "result": "SHA-authenticated 7-pass/14-pair numerical slot parity PASS; not GPU proof.",
+  "next_step": "Hand to private Spectrum ShaderLab restoration; B09 owns original translation.",
+  "updated_at": "2026-11-04T23:03:00Z"
+}
