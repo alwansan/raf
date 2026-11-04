@@ -6,7 +6,7 @@
   "issue_id": "WATER-001",
   "track": "water-fft",
   "approach": "Authenticated all20 original DXBC→SPIR-V per-slot DescriptorSet/Binding ABI stability with negative mutation controls; unique storage-vs-two-sampled descriptors, but no assumed source t0/t1 identity.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "3c866416159cdb87740e8d465bfc5d58d78313f6",
   "intended_files": [
     "scripts/b08_fft_spirv_descriptor_abi.py",
@@ -23,8 +23,21 @@
   "experiment_ids": [
     "B08-fft-descriptor-abi-20261104"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Use B18 SHA-authenticated original ZIP2 translation; add strict descriptor layout auditor and synthetic mutations before CI; preserve unknown t0/t1 semantics.",
-  "updated_at": "2026-11-04T22:46:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41928583281"
+  ],
+  "result": {
+    "scope": "Authenticated all20 original compiled DXBC→SPIR-V uniform numeric DescriptorSet/Binding ABI proof",
+    "source_verified": true,
+    "tests_passed": 14,
+    "compiled_programs_checked": 20,
+    "all_descriptor_abi_identical": true,
+    "numeric_abi_sha256": "5bea50a922c423edde59ea0346541a4ba2a4db437e3a764bdf26b756f5c47aca",
+    "source_t0_t1_target_binding_verified": false,
+    "unity_runtime_kernel_identity_verified": false,
+    "unity_or_android_gpu_verified": false,
+    "report": "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B08_FFT_DESCRIPTOR_ABI_2026-11-04.md"
+  },
+  "next_step": "Numeric ABI precondition verified; next independent barrier is provenance of DXBC t0 and t1 to SPIR-V sampled bindings before authentic Unity compute import/phone rendering. WATER-001 remains OPEN.",
+  "updated_at": "2026-11-04T22:53:02.859Z"
 }
