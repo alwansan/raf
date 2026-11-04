@@ -23,3 +23,7 @@ python3 scripts/b03_verify_renderer_material_links.py \
 17 local synthetic tests pass, including a valid external Material, local embedded identity, invalid GUID/fileID/type, duplicate field/anchor/meta, null/builtin distinction, non-Renderer decoy, symlink, binary Material rejection, immutable source and aggregate-only report. Isolated workflow `raft-b03-renderer-material-links.yml` runs the tests without original game content or Unity. **No actual full exported Raft project has been run through this check yet**. This does not establish original Renderer→Material parity (requires original source and same-instance export mapping), correct shader programs/variants, textures/color/pixels, GPU runtime or owner device acceptance. Keep RENDER-002 OPEN until those checks plus on-phone evidence.
 
 Next: run on an authentic complete Unity export and correlate any non-null missing Material IDs to source/export lineage before a repair. Do not remap GUIDs by name, drop slots or substitute white/dummy materials to satisfy a gate.
+
+## CI verification
+
+[41914562432](https://github.com/alwansan/raf/actions/runs/41914562432) completed SUCCESS (17 synthetic tests, syntax, report artifact). This is not an original full-game render test.
