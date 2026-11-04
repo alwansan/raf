@@ -1,0 +1,15 @@
+{
+  "id": "B12-20261104T2132Z-B12-c4a8-final-managed-success",
+  "owner": "B12",
+  "session_id": "20261104T2132Z-B12-c4a8",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "B12 final bounded Android scene shader/material + MeshFilter.sharedMesh/SkinnedMeshRenderer.sharedMesh presence diagnostic integrated without mutations: source a324eb6, regression tests acd3514. CI41920048140 source policy PASS and CI41920015979 actual original managed offline integration/compile PASS. NOT Unity player/Adreno/real-game scene device proof; WATER/RENDER/LOCAL stay OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/a324eb6208f9edc3f4587aa4c8236192e13d6684",
+    "https://github.com/alwansan/raf/commit/acd3514d2d0123ea3f3910de55ba4a79ad5bba63",
+    "https://github.com/alwansan/raf/actions/runs/41920048140",
+    "https://github.com/alwansan/raf/actions/runs/41920015979"
+  ],
+  "at": "2026-11-04T21:54:53.938Z"
+}
