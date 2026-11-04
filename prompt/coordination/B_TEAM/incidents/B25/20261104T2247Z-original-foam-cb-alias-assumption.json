@@ -1,0 +1,24 @@
+{
+  "id": "B25-FOAM-NAME-TABLE-LEXICAL-ASSUMPTION-20261104",
+  "owner": "B25",
+  "session_id": "20261104T222931Z-B25-foam-state",
+  "issue_id": "WATER-001",
+  "severity": "experiment-fixture-or-model-correction",
+  "status": "resolved",
+  "original_failure": "Strict full-registry HLSL identifier check rejected authentic first-pass table despite 24 synthetic tests. Original bounded registry shape 14 pairs; referenced CB0 compiler symbol itself also not direct HLSL identifier.",
+  "causes": [
+    "Overbroad assumption that all original names are HLSL literals.",
+    "Overbroad assumption that all referenced CB names can be copied unchanged into generated HLSL."
+  ],
+  "corrective_action": "Keep all authentic raw names opaque and only SHA-256 hash them for source provenance. Bind real original m_NameIndex→register slot, classify CB0 as alias-required; never invent alias. Add 15 targeted synthetic controls. Caution: no ShaderLab compile until matching actual reflection.",
+  "negative_runs": [
+    "https://github.com/alwansan/raf/actions/runs/41927469783",
+    "https://github.com/alwansan/raf/actions/runs/41927610381",
+    "https://github.com/alwansan/raf/actions/runs/41927765070",
+    "https://github.com/alwansan/raf/actions/runs/41928029023"
+  ],
+  "resolution_run": "https://github.com/alwansan/raf/actions/runs/41928183838",
+  "resolved_at": "2026-11-04T22:48:28.078Z",
+  "origin_shaders_published": false,
+  "unity_device_verified": false
+}
