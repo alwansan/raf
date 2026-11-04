@@ -4,17 +4,23 @@
   "generation": "B-2026-11-04",
   "session_id": "20261104T2242Z-B07-c7ea",
   "resumed_from_session": "20261104T2112Z-B07-6e51",
-  "status": "active",
+  "status": "paused",
   "base_sha": "c37646a21902135eca4ea591f2026c200783128d",
-  "last_commit": "9f71f1722f11bd136e0deeac0ba7cefa3d72dc71",
-  "updated_at": "2026-11-04T22:45:00Z",
+  "last_commit": "b9b4c67bc574de9f701f602795ab2f4dcd940e41",
+  "updated_at": "2026-11-04T23:03:00Z",
   "tracks": [
     "LOCAL-005 world coroutine first-MoveNext diagnostic"
   ],
   "work_ids": [
     "B07-20261104T2242Z-B07-c7ea-world-coroutine-entry"
   ],
-  "run_urls": [],
-  "next_step": "Pinned original Raft_Network.WorldHasBeenLoaded first iterator-step diagnostic; synthetic C# yield preservation + authenticated original CI; no native build.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41929041686",
+    "https://github.com/alwansan/raf/actions/runs/41928829509",
+    "https://github.com/alwansan/raf/actions/runs/41929589315",
+    "https://github.com/alwansan/raf/actions/runs/41929721761",
+    "https://github.com/alwansan/raf/actions/runs/41929910850"
+  ],
+  "next_step": "B07 scoped original first-MoveNext trace integrated and validated by actual original adapted .NET compile CI41929721761 plus manifest parity CI41929910850; LOCAL-005/WATER-001/RENDER-002 remain open, no device .rgd. On next resumed session refresh HEAD/Actions/CL and choose distinct P0 graphics blocker, or coordinated newer APK world/save trial once accepted. No outside-session worker.",
   "memory_path": "prompt/coordination/clients/B07/MEMORY.md"
 }
