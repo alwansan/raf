@@ -123,14 +123,14 @@ class A3VendorShaderTransactionTests(unittest.TestCase):
             self.assertEqual(Path(str(original) + '.meta').read_bytes(), old_meta)
         # Retrying the same temporary export must not treat added vendor files as originals.
         self.assertEqual(restore(self.project, self.root / 'retry-backup', self.shaders,
-                                 {'Fixture.cginc': '// synthetic include only\\n'}, b'synthetic-license'), 2)
+                                 {'Fixture.cginc': '// synthetic include only\n'}, b'synthetic-license'), 2)
         self.assertEqual(Path(str(path) + '.meta').read_bytes(), meta)
 
     def test_original_meta_guid_collision_rejected_before_backup(self):
         name, path = self.add_missing_vendor()
         guid, _ = generated_vendor_shader_meta(name, ROOT)
         other = self.project / 'Assets' / 'unrelated.asset.meta'
-        other.write_text('fileFormatVersion: 2\\nguid: ' + guid + '\\n')
+        other.write_text('fileFormatVersion: 2\nguid: ' + guid + '\n')
         with self.assertRaisesRegex(ValueError, 'GUID collision'):
             self.run_restore()
         self.assert_originals_intact()
@@ -142,13 +142,13 @@ class A3VendorShaderTransactionTests(unittest.TestCase):
         _, path = self.add_missing_vendor()
         path.parent.mkdir(parents=True)
         meta = Path(str(path) + '.meta')
-        meta.write_text('guid: ' + 'f'*32 + '\\n')
+        meta.write_text('guid: ' + 'f'*32 + '\n')
         with self.assertRaisesRegex(ValueError, 'Conflicting vendor'):
             self.run_restore()
         self.assert_originals_intact()
         self.assertFalse(self.backup.exists())
         self.assertFalse(path.exists())
-        self.assertEqual(meta.read_text(), 'guid: ' + 'f'*32 + '\\n')
+        self.assertEqual(meta.read_text(), 'guid: ' + 'f'*32 + '\n')
 
     def test_late_shader_failure_removes_generated_shader_and_meta(self):
         _, path = self.add_missing_vendor()
