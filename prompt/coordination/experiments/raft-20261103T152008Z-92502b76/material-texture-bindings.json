@@ -22,8 +22,8 @@
   "workflow_path": ".github/workflows/raft-w2-material-texture-bindings.yml",
   "concurrency_group": "raft-w2-material-texture-bindings-${{ github.ref }}-${{ github.sha }}",
   "budget": "single CPU run; workflow timeout 30 min; no Unity, no GPU",
-  "run_url": null,
-  "source_sha": null,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41817287992",
+  "source_sha": "0e2342a",
   "result": "LOCAL AUTHENTIC RUN: 1,556 serialized materials in 18 owners (coherent with the 1,544-selected/1,536-exported document scale), 4,583 texture bindings vs 5,663 null slot declarations; bound slots _MainTex 864/_BumpMap 714/_MetallicGlossMap 623/_Diffuse 604/_Normal 569/_Smoothness 234/... ; PPtr fileID of bound entries: self-file 4,166 + external 417 across 11 distinct external indices (2:159, 5:189, 6:24, 7:9, ...); 2 owners carry fully-unbound materials (legitimate originals, must not be 'fixed').",
   "limitations": [
     "per-owner and per-slot counters only; no per-material identity mapping (W2 never publishes object links)",

@@ -5,12 +5,12 @@
   "session_id": "w2-20261103T152008Z-92502b76",
   "resumed_from": null,
   "status": "active",
-  "updated_at": "2026-11-04T11:45:00.000Z",
+  "updated_at": "2026-11-04T12:40:00.000Z",
   "base_sha": "a57127e",
   "current_work": [
     "RENDER-002 completed local independent verification of external Material->Shader/Texture classification (corroborates W3, adds texture+existence+convention-control)"
   ],
-  "last_commit": "1bfbbc8 feat(w2): full-game texture sampler-settings baseline",
-  "next_step": "heartbeat; sampler-settings CI green 41811800655; no new lane queued — await W1/W4 export consumption of tint+sampler baselines",
+  "last_commit": "0e2342a feat(w2): material texture-binding survival baseline",
+  "next_step": "await bindings CI 41817287992; W4 trial 41812889049 passive; then finalize",
   "memory_path": "prompt/coordination/clients/raft-20261103T152008Z-92502b76/MEMORY.md"
 }
