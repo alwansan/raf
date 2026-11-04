@@ -7,7 +7,7 @@ from scripts.a12_probe_original_blur_passes import TARGET
 
 
 def fixture():
-    return {"m_Name": TARGET, "m_PropInfo": {"m_Props": []},
+    return {"m_Name": TARGET, "m_PropInfo": {"m_Props": [{"schema": "synthetic"}]},
             "m_SubShaders": [{"m_Passes": [
                 {"m_Type": 0, "m_State": {}}, {"m_Type": 0, "m_State": {}}]}]}
 
@@ -35,10 +35,10 @@ class OriginalBlurContract(unittest.TestCase):
     @patch("scripts.b45_blur_wrapper_preflight.render_state", return_value="state")
     def test_nonempty_original_properties_fail_closed(self, state, wrapper):
         value = fixture()
-        value["m_PropInfo"]["m_Props"] = [{"private": "do not print"}]
+        value["m_PropInfo"]["m_Props"] = [{"private": "do not print"}, {"other": "invalid count"}]
         result = diagnose(value)
         self.assertFalse(result["wrapper_diagnostic_completed"])
-        self.assertEqual(result["original_property_entries"], 1)
+        self.assertEqual(result["original_property_entries"], 2)
         self.assertNotIn("do not print", repr(result))
         wrapper.assert_not_called()
 
