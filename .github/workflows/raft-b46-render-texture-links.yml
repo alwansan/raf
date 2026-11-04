@@ -1,0 +1,33 @@
+name: B46 RENDER-002 material-texture link guard
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - scripts/verify_exported_material_texture_links.py
+      - tests/test_verify_exported_material_texture_links.py
+      - .github/workflows/raft-b46-render-texture-links.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: raft-b46-render-texture-links
+  cancel-in-progress: false
+
+jobs:
+  synthetic-no-original-data:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: B46 fail-closed fixture tests (no proprietary payload)
+        run: python -W error -m unittest discover -s tests -p test_verify_exported_material_texture_links.py -v
