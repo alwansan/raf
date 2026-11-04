@@ -323,6 +323,31 @@ namespace RaftAndroid.Platform
             // Diagnostic only. Do not sample or instantiate materials every frame.
             StartCoroutine(ReportSceneShaderSnapshot(scene));
         }
+        // One bounded read-only quality sample per loaded scene. Never call
+        // SetQualityLevel or mutate texture quality, shadows, or user Settings:
+        // these values provide evidence against the authenticated original
+        // five-tier baseline, not a forced Android visual configuration.
+        private static string OriginalQualityStateSnapshot()
+        {
+            try
+            {
+                string[] levels = QualitySettings.names;
+                int tierCount = levels == null ? -1 : levels.Length;
+                return "; quality_level_index=" + QualitySettings.GetQualityLevel() +
+                    "; quality_tier_count=" + tierCount +
+                    "; pixel_light_count=" + QualitySettings.pixelLightCount +
+                    "; master_texture_limit=" + QualitySettings.masterTextureLimit +
+                    "; anti_aliasing=" + QualitySettings.antiAliasing +
+                    "; shadow_mode=" + QualitySettings.shadows +
+                    "; shadow_distance=" + QualitySettings.shadowDistance.ToString("R", CultureInfo.InvariantCulture);
+            }
+            catch (Exception ex)
+            {
+                // Preserve B12 renderer/shader evidence even if an unexpected
+                // platform quality getter fails on a particular Android GPU.
+                return "; quality_snapshot_error_type=" + ex.GetType().Name;
+            }
+        }
         private System.Collections.IEnumerator ReportSceneShaderSnapshot(Scene scene)
         {
             yield return new WaitForSecondsRealtime(3f);
@@ -384,6 +409,7 @@ namespace RaftAndroid.Platform
                     "; mesh_renderers=" + meshRenderers + "; missing_mesh_filters=" + missingMeshFilters +
                     "; missing_mesh_assets=" + missingMeshAssets +
                     "; skinned_renderers=" + skinnedRenderers + "; missing_skinned_meshes=" + missingSkinnedMeshes +
+                    OriginalQualityStateSnapshot() +
                     "; color_space=" + QualitySettings.activeColorSpace +
                     "; ambient_mode=" + RenderSettings.ambientMode + "; fog=" + RenderSettings.fog +
                     "; skybox_assigned=" + (RenderSettings.skybox != null) +
