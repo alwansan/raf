@@ -7,7 +7,7 @@
   "track": "source-integrity",
   "approach": "Authenticated raw/singlepart multipart release transport decoding for original water/shader source providers; stream into separate staging only after original SHA/size verification.",
   "status": "completed",
-  "base_sha": null,
+  "base_sha": "4dd8c9dceb32bed34c1cda4292c0b71389f16f20",
   "intended_files": [
     "scripts/b03_verify_archive_payload.py",
     "tests/test_b03_verify_archive_payload.py",
