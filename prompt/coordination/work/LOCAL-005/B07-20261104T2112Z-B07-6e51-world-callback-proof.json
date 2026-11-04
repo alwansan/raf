@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "owner": "B07",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2112Z-B07-6e51",
+  "issue_id": "LOCAL-005",
+  "track": "world-save",
+  "approach": "Original-source WorldHasBeenLoaded callback and OnWorldRecieved sequence/exception propagation; executable synthetic harness and exact SHA guard, disjoint from B50 Steam fixes",
+  "status": "active",
+  "base_sha": "0d33268645106e7bc28fcaa786d90683fe93de19",
+  "intended_files": [
+    "scripts/probe_original_world_readiness.py",
+    "scripts/verify_android_offline_candidate.py",
+    "tests/test_original_world_callback_failure.py",
+    "prompt/coordination/clients/B07/*",
+    "prompt/coordination/work/LOCAL-005/B07-*.json"
+  ],
+  "hypothesis": "Existing world-readiness lexical checks cannot distinguish successful scene completion from callback exception; a pinned method-body harness can verify callback invocation and failure semantics without shipping fake success flags.",
+  "related_work": [
+    "B50-20261104T2039Z-B50-d7a3-steamstats-offline",
+    "B50-20261104T2039Z-B50-d7a3-cheat-steamid-adapter"
+  ],
+  "experiment_ids": [],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Inspect original callback/host source and existing original CI, then implement + test a distinct verification.",
+  "updated_at": "2026-11-04T21:12:00Z"
+}
