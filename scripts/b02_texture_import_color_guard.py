@@ -1,20 +1,18 @@
 #!/usr/bin/env python3
-"""B02: fail-closed original Texture2D -> exported TextureImporter sRGB fidelity.
+"""B02: READ-ONLY source/export sRGB audit with unresolved color semantics.
 
 This is NOT an asset linker. The caller must supply a SAME-EXPORT explicit
 identity sidecar; names, colors and hashes never become invented GUID links.
-Only aggregate counts are printed. Original source verification is mandatory
-for --repair. Nothing in this tool establishes rendered pixels or GPU behavior.
+Only aggregate counts are printed. Repair is DISABLED until trustworthy same-export
+linkage and correct semantics are established. This is not GPU/pixel evidence.
 """
 from __future__ import annotations
 
 import argparse
 import hashlib
 import json
-import os
 from pathlib import Path, PurePosixPath
 import re
-import tempfile
 
 from scripts.verify_targeted_lfs_compute_sources import EXPECTED as PINNED_SOURCE
 
@@ -133,61 +131,47 @@ def _source_verified(rows: list[dict], root: Path) -> None:
 
 
 def inspect(project: Path, sidecar: dict, original: Path | None = None, repair: bool = False) -> dict:
+    # DO NOT WRITE: Pinned AssetRipper ImporterFactory has
+    # SRGBTexture = (Texture2D.ColorSpace_C28E == ColorSpace.Linear),
+    # which conflicts with naïve Unity Gamma->sRGB assumptions.
+    # The serialized m_ColorSpace's meaning in the original game's full
+    # rendering context and same-export mapping have not been proven.
+    if repair:
+        raise ValueError("--repair disabled: unproven original/export linkage and color-space semantics")
     rows = load_map(sidecar)
-    if repair and original is None:
-        raise ValueError("--repair requires original SHA-verified source")
     if original is not None:
         _source_verified(rows, original)
     assets = project / "Assets"
     if not assets.is_dir() or assets.is_symlink():
         raise ValueError("Unity Assets root missing or unsafe")
-    edits = []
-    same = 0
+    upstream_matches = gamma_hypothesis_matches = 0
     for row in rows:
-        asset = _safe_child(assets, row["export_asset"])
+        _safe_child(assets, row["export_asset"])
         meta = _safe_child(assets, row["export_asset"] + ".meta")
-        if asset.parent != meta.parent:
-            raise ValueError("unexpected importer parent")
         content = meta.read_text(encoding="utf-8-sig")
-        guid, actual, span = _parse_importer(content)
+        guid, actual, _ = _parse_importer(content)
         if guid != row["export_guid"]:
             raise ValueError("sidecar export GUID does not match importer")
-        expected = 1 if row["source_color_space"] == 0 else 0
-        if actual == expected:
-            same += 1
-        else:
-            replacement = content[:span.start(1)] + str(expected) + content[span.end(1):]
-            edits.append((meta, content, replacement))
-    changed = 0
-    if repair:
-        staged = []
-        try:
-            for meta, old, new in edits:
-                fd, name = tempfile.mkstemp(prefix=".b02-srgb-", dir=meta.parent)
-                tmp = Path(name)
-                os.fchmod(fd, meta.stat().st_mode & 0o777)
-                with os.fdopen(fd, "w", encoding="utf-8", newline="") as stream:
-                    stream.write(new)
-                staged.append((meta, tmp, old))
-            for meta, tmp, old in staged:
-                os.replace(tmp, meta)
-                changed += 1
-        except BaseException:
-            # Fail closed: restore exact original contents for prior replacements.
-            for meta, tmp, old in staged[:changed]:
-                meta.write_text(old, encoding="utf-8", newline="")
-            raise
-        finally:
-            for _, tmp, _ in staged:
-                tmp.unlink(missing_ok=True)
+        # Original AssetRipper branch 036098ab (ImporterFactory.cs):
+        # original m_ColorSpace = Linear(1) => sRGBTexture true.
+        upstream = int(row["source_color_space"] == 1)
+        # Alternative Unity GAMMA-data interpretation remains a hypothesis
+        # rather than a verified interpretation of original serialized bits.
+        gamma_hypothesis = 1 - upstream
+        upstream_matches += int(actual == upstream)
+        gamma_hypothesis_matches += int(actual == gamma_hypothesis)
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "rows": len(rows),
-        "matching_before": same,
-        "mismatched_before": len(edits),
-        "repaired": changed,
-        "source_bytes_and_colorspace_verified": original is not None,
+        "assetripper_pinned_policy_matches": upstream_matches,
+        "assetripper_pinned_policy_mismatches": len(rows) - upstream_matches,
+        "gamma_semantic_hypothesis_matches": gamma_hypothesis_matches,
+        "gamma_semantic_hypothesis_mismatches": len(rows) - gamma_hypothesis_matches,
+        "semantic_policy_verified_for_original": False,
         "same_export_linkage_independently_verified": False,
+        "source_bytes_and_colorspace_verified": original is not None,
+        "repair_available": False,
+        "repaired": 0,
         "unity_compile_or_gpu_verified": False,
         "android_device_verified": False,
         "no_raw_source_or_guid_in_output": True,
@@ -198,13 +182,16 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--project", type=Path, required=True)
     ap.add_argument("--map", type=Path, required=True, help="Explicit same-export identity sidecar (never guessed from names)")
-    ap.add_argument("--original", type=Path, help="SHA-authenticated original data root, mandatory for --repair")
-    ap.add_argument("--repair", action="store_true")
+    ap.add_argument("--original", type=Path, help="SHA-authenticated original data root (read-only verification)")
+    ap.add_argument("--repair", action="store_true", help="DISABLED until exact source/export lineage and sRGB semantics are verified")
     ap.add_argument("--strict", action="store_true")
     args = ap.parse_args()
     report = inspect(args.project, json.loads(args.map.read_text(encoding="utf-8")), args.original, args.repair)
     print("RAFT_B02_TEXTURE_IMPORT_FIDELITY " + json.dumps(report, sort_keys=True))
-    if args.strict and report["mismatched_before"] and not args.repair:
+    if args.strict and not (report["source_bytes_and_colorspace_verified"] and
+                            report["same_export_linkage_independently_verified"] and
+                            report["semantic_policy_verified_for_original"] and
+                            report["assetripper_pinned_policy_mismatches"] == 0):
         return 2
     return 0
 

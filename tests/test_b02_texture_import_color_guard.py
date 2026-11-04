@@ -50,19 +50,24 @@ class TestB02TextureImport(TestCase):
     def run_audit(self, **kw):
         return m.inspect(self.root / "export", self.map, **kw)
 
-    def test_mismatch_is_reported_not_silently_normalized(self):
+    def test_opposing_policies_reported_without_repair(self):
         r = self.run_audit()
-        self.assertEqual((r["rows"], r["matching_before"], r["mismatched_before"]), (1, 0, 1))
-        self.assertFalse(r["source_bytes_and_colorspace_verified"])
+        self.assertEqual((r["rows"], r["assetripper_pinned_policy_matches"],
+                          r["gamma_semantic_hypothesis_mismatches"]), (1, 1, 1))
+        self.assertFalse(r["semantic_policy_verified_for_original"])
         self.assertFalse(r["same_export_linkage_independently_verified"])
+        self.assertFalse(r["repair_available"])
         self.assertIn("sRGBTexture: 0", self.meta.read_text())
 
-    def test_gamma_expected_srgb_linear_expected_false(self):
+    def test_pinned_assetripper_linear_true_gamma_false_baseline(self):
         self.set_meta(1)
-        self.assertEqual(self.run_audit()["matching_before"], 1)
+        self.assertEqual(self.run_audit()["assetripper_pinned_policy_mismatches"], 1)
+        self.assertEqual(self.run_audit()["gamma_semantic_hypothesis_matches"], 1)
         self.map["textures"][0]["source_color_space"] = 1
+        self.set_meta(1)
+        self.assertEqual(self.run_audit()["assetripper_pinned_policy_matches"], 1)
         self.set_meta(0)
-        self.assertEqual(self.run_audit()["matching_before"], 1)
+        self.assertEqual(self.run_audit()["gamma_semantic_hypothesis_matches"], 1)
 
     def test_unpinned_source_digest_and_owner_are_rejected(self):
         self.map["textures"][0]["source_owner_sha256"] = "0" * 64
@@ -133,17 +138,24 @@ class TestB02TextureImport(TestCase):
             with self.assertRaises(ValueError):
                 self.run_audit(original=source)
 
-    def test_source_authenticated_repair_keeps_guid_and_other_meta(self):
+    def test_even_authenticated_fixture_cannot_repair_unproven_semantics(self):
         source = self.root / "source"
         source.mkdir()
         (source / "source.assets").write_bytes(b"original")
         obj = types.SimpleNamespace(path_id=123, type=types.SimpleNamespace(name="Texture2D"),
                                     read_typetree=lambda: {"m_ColorSpace": 0})
         module = types.SimpleNamespace(load=lambda path: types.SimpleNamespace(objects=[obj]))
+        before = self.meta.read_bytes()
         with mock.patch.dict(sys.modules, {"UnityPy": module}):
-            r = self.run_audit(original=source, repair=True)
-        self.assertEqual((r["repaired"], r["mismatched_before"]), (1, 1))
-        self.assertEqual(m._parse_importer(self.meta.read_text())[:2], (self.guid, 1))
+            with self.assertRaisesRegex(ValueError, "disabled"):
+                self.run_audit(original=source, repair=True)
+        self.assertEqual(self.meta.read_bytes(), before)
+
+    def test_strict_cannot_prove_same_export_lineage_or_color_semantics(self):
+        r = self.run_audit()
+        self.assertFalse(r["same_export_linkage_independently_verified"])
+        self.assertFalse(r["semantic_policy_verified_for_original"])
+        self.assertEqual(r["repaired"], 0)
 
     def test_output_aggregate_only(self):
         r = self.run_audit()

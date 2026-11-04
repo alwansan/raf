@@ -1,3 +1,10 @@
+# B02 correction — conflicting source import policies (supersedes earlier repair claim)
+
+**SAFETY UPDATE:** The original B02 mapping/repair routine is **superseded and deliberately disabled**. Pinned [AssetRipperCLI ImporterFactory.cs](https://github.com/nowl-it/AssetRipperCLI/blob/036098ab525a3f9f693dc101edeb21faad4d32d8/Source/AssetRipper.Export.UnityProjects/Textures/ImporterFactory.cs) from exporter source SHA 036098ab assigns `TextureImporter.sRGBTexture` when `Texture2D.ColorSpace_C28E == ColorSpace.Linear` (serialized enum1). B02's earlier assumption set sRGB for enum0 instead. Unity's [TextureImporter.sRGBTexture documentation](https://docs.unity.com/en-us/engine/6000.6/script-reference/unityeditor/textureimporter/srgbtexture) explains how color textures and data textures require different sampling, but does NOT establish original exported bytes/Unity property semantics for each Raft texture. **Neither policy may be auto-applied to game assets from the current evidence.**
+
+B02 now provides a **read-only dual-policy discrepancy report** (pinned AssetRipper behavior versus alternative gamma-data hypothesis), retains exact original source SHA/size and import GUID checks, and hard-refuses `--repair`, even for SHA-authenticated source fixtures. Strict mode also refuses to claim complete provenance. No actual Raft source, TextureImporter meta, GUID or content was changed by B02. The prior 11/11 green CI applies to an **obsolete proposed repair model**, not validated rendering. This correction requires fresh green CI on its exact code SHA.
+
+---
 # B02 — TextureImporter sRGB fidelity guard for original Raft materials
 
 **Track:** RENDER-002 (P0 colors/materials); **client:** B02; **session:** 20261104T2101Z-B02-e5cd.
