@@ -1,0 +1,52 @@
+name: B15 RENDER-002 original/export sampler fidelity (synthetic)
+on:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - scripts/b15_texture_sampler_parity.py
+      - tests/test_b15_texture_sampler_parity.py
+      - .github/workflows/raft-b15-texture-sampler-parity.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: raft-b15-sampler-fidelity-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  b15-synthetic:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - name: Select public scripts and tests only (no LFS or game data)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned YAML parser only
+        run: python -m pip install --disable-pip-version-check PyYAML==6.0.3
+      - name: Synthetic sampler provenance negative/positive controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PYTHONPATH=.
+          python -m unittest discover -s tests -p 'test_b15_texture_sampler_parity.py' -v 2>&1 | tee b15-sampler-synthetic.log
+      - name: Preserve bounded synthetic report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: raft-b15-sampler-synthetic-${{ github.run_id }}-${{ github.run_attempt }}
+          path: b15-sampler-synthetic.log
+          if-no-files-found: ignore
+          retention-days: 7
