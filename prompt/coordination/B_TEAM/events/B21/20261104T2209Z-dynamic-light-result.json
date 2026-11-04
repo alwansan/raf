@@ -1,0 +1,13 @@
+{
+  "id": "B21-20261104T2209Z-dynamic-lights-result",
+  "owner": "B21",
+  "session_id": "20261104T2153Z-B21-72ab",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "B21 independent original dynamic Light typed-source analysis passed at CI41922372594: 18 new negative controls plus 16 existing; source-verified six original scenes. level0 and level1 each contain exactly one enabled native Light with valid local object owner and finite color/positive intensity/range; levels2..5 none. Does NOT prove same-export Unity pixels or causes of whiteness. No game assets changed.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41922372594",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/b21_original_dynamic_lights.py"
+  ],
+  "at": "2026-11-04T22:09:00Z"
+}
