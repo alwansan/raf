@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "generation": "T-2026-11-05",
+  "session_id": "20261104T2357Z-T4-lw01",
+  "issue_id": "LOCAL-005",
+  "track": "world-save",
+  "approach": "Authenticate original SaveAndLoad.Load<T>, BinaryFormatter binder and RGD version compatibility at the exact ZIP2 source, then implement only a proven Android-compatible load repair or executable contract test.",
+  "status": "active",
+  "base_sha": "902b67ba05c6a303072ff6511576e026e67e3c0d",
+  "intended_files": [
+    "scripts/t4_original_rgd_load_contract.py",
+    "tests/test_t4_original_rgd_load_contract.py",
+    ".github/workflows/raft-t4-original-rgd-load.yml",
+    "docs/T4_ORIGINAL_RGD_LOAD_COMPAT_2026-11-05.md"
+  ],
+  "hypothesis": "Original SaveAndLoad.Load<T> may use a binder or assembly-version handling path that makes B37 seed-version mismatch benign; verify before editing any serialization.",
+  "related_work": [
+    "prompt/coordination/work/LOCAL-005/B14-20261104T2247Z-B14-d1a9-authentic-save-call-order.json"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/B07/MEMORY.md",
+    "prompt/coordination/clients/B14/MEMORY.md",
+    "prompt/coordination/clients/B19/MEMORY.md",
+    "prompt/coordination/clients/B37/MEMORY.md",
+    "prompt/coordination/clients/B50/MEMORY.md",
+    "https://github.com/alwansan/raf/actions/runs/41928767833",
+    "https://github.com/alwansan/raf/actions/runs/41929777877"
+  ],
+  "experiment_ids": [
+    "20261104T2357Z-rgd-loader-original"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Inspect original Load<T> and perform exact pinned source loader test with negative controls; avoid needless StoreStats/Steam and save-order repeats.",
+  "updated_at": "2026-11-04T23:57:00Z"
+}
