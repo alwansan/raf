@@ -1,51 +1,95 @@
-"""Validate evidence-scoped reporting and embed the JSON in offline HTML.
+"""Validate a pinned Raft evidence snapshot, then embed its JSON in offline HTML.
 
-Run: python scripts/update_dashboard.py
+Usage: python scripts/update_dashboard.py
+Requires an existing dashboard/data.json, all immutable snapshots, and dashboard/index.html.
+Never computes a global product-completion percentage.
 """
 import json
 import re
+from datetime import datetime
 from pathlib import Path
 from urllib.parse import urlparse
 
 root = Path(__file__).resolve().parents[1]
-source = root / "dashboard/data.json"
-data = json.loads(source.read_text(encoding="utf-8"))
+p = root / "dashboard/data.json"
+data = json.loads(p.read_text(encoding="utf-8"))
 assert data["schema_version"] == 2
-for key in ("overall_completion_percent", "source_recovery_percent", "phone_acceptance_percent"):
-    assert data[key] is None, f"Global progress must remain unknown: {key}"
 assert data["state"] == "NOT_READY"
-assert re.fullmatch(r"[a-f0-9]{40}", data["source_sha"])
+for key in ("overall_completion_percent", "source_recovery_percent", "phone_acceptance_percent"):
+    assert data.get(key) is None, f"Global unknown must be null: {key}"
+assert re.fullmatch(r"[0-9a-f]{40}", data["source_sha"])
+assert re.fullmatch(r"[0-9a-f]{40}", data["zip2"]["source_sha"])
 assert len(data["areas"]) == 7 and len({a["id"] for a in data["areas"]}) == 7
 assert len({m["id"] for m in data["metrics"]}) == len(data["metrics"])
-assert len(data["clients"]) == data["verification"]["client_folder_count"]
-assert len({c["username"] for c in data["clients"]}) == len(data["clients"])
-assert data["milestones"] and data["snapshot_history"]
 
 for m in data["metrics"]:
     assert type(m["done"]) is int and type(m["total"]) is int
-    assert m["total"] > 0 and 0 <= m["done"] <= m["total"]
-    assert all(m.get(k) for k in ("id", "unit", "scope", "inventory_version", "weighting", "verification", "url"))
+    assert 0 <= m["done"] <= m["total"] and m["total"] > 0
+    assert all(m.get(k) for k in ("id","title","unit","inventory_version","weighting","scope","verification","url"))
 for a in data["areas"]:
-    assert all(a.get(k) for k in ("id", "title", "state", "summary", "verified", "unverified", "blockers", "ongoing", "next", "evidence"))
-for c in data["clients"]:
-    assert c["username"] and c["url"] and c["reported_status"]
-for e in [*data["sources"], *[z for a in data["areas"] for z in a["evidence"]]]:
-    u = urlparse(e["url"])
-    assert (u.scheme, u.hostname) == ("https", "github.com") and u.path.startswith("/alwansan/"), e
-for h in data["snapshot_history"]:
-    file = (root / "dashboard" / h["path"]).resolve()
-    assert file.is_relative_to(root.resolve()) and file.is_file(), h["path"]
-    if h["source_sha"] == data["source_sha"] and h["at"] == data["as_of"]:
-        assert json.loads(file.read_text(encoding="utf-8")) == data, "Current archived snapshot differs"
+    assert all(a.get(k) for k in ("id","title","state","summary","verified","unverified","blockers","ongoing","next","evidence"))
+    assert a["evidence"] and a["state"] in ("partial","blocked","device_pending","unknown")
+for key, attr in (("ZIP2-MANIFEST","manifest_file_count"),("RESOURCE-CENSUS",None),("COMPUTE-CENSUS",None)):
+    assert any(m["id"] == key for m in data["metrics"])
+def measure(i):
+    return next(m for m in data["metrics"] if m["id"] == i)
+assert measure("ZIP2-MANIFEST")["total"] == data["zip2"]["manifest_file_count"]
+assert measure("RESOURCE-CENSUS")["total"] == data["inventory"]["owners"]
+assert measure("COMPUTE-CENSUS")["total"] == data["kernel_inventory"]["kernel_rows"]
+assert data["kernel_inventory"]["fft_rows"] + data["kernel_inventory"]["blur_rows"] + data["kernel_inventory"]["other_rows"] == data["kernel_inventory"]["kernel_rows"]
+assert data["inventory"]["count"] >= max(x["count"] for x in data["inventory"]["top_classes"])
+assert data["trial"]["status"] == "in_progress" and data["trial"]["conclusion"] is None
+assert data["trial"]["package_signed"] is None and data["trial"]["package_delivered"] is None
+assert any(r["id"] == data["trial"]["run_id"] and r["status"] == "in_progress" for r in data["runs"])
+assert len({r["id"] for r in data["runs"]}) == len(data["runs"])
+assert data["release_checks"]["logger"]["game"] is False
+assert data["release_checks"]["game"]["tag"] != data["release_checks"]["logger"]["tag"]
 
-page = root / "dashboard/index.html"
+clients = data["clients"]
+verification = data["verification"]
+assert len(clients) == verification["client_folder_count"]
+assert len({c["username"] for c in clients}) == len(clients)
+assert sum(c["read_status"] == "file_read" for c in clients) == verification["client_files_refreshed"]
+assert sum(c["read_status"] == "previous_snapshot" for c in clients) == verification["client_files_from_prior_snapshot"]
+for c in clients:
+    assert c["url"] and c["username"] and c["reported_status"]
+    assert isinstance(c["work"], list)
+    assert c.get("activity_verified") is None
+    updated = c.get("updated_at")
+    if updated and "T" in updated and re.search(r"(Z|[+-]\d\d:\d\d)$",updated):
+        newer = datetime.fromisoformat(updated.replace("Z","+00:00")) > datetime.fromisoformat(data["as_of"].replace("Z","+00:00"))
+        assert bool(c.get("timestamp_anomaly")) == newer, c["username"]
+
+external = [m["url"] for m in data["metrics"]]
+external += [e["url"] for a in data["areas"] for e in a["evidence"]]
+external += [r["url"] for r in data["runs"]]
+external += [s["url"] for s in data["sources"]]
+external += [c["url"] for c in clients]
+external += [data["trial"]["url"], data["trial"]["request_url"], data["inventory"]["source"], data["kernel_inventory"]["source"], data["zip2"]["provider_note"]]
+for link in external:
+    u = urlparse(link)
+    assert (u.scheme,u.hostname) == ("https","github.com") and u.path.startswith("/alwansan/"),link
+
+history = data["snapshot_history"]
+assert len({h["path"] for h in history}) == len(history)
+current = []
+for h in history:
+    filepath = (root/"dashboard"/h["path"]).resolve()
+    assert filepath.is_relative_to(root.resolve()) and filepath.is_file(),h["path"]
+    if h["source_sha"] == data["source_sha"] and h["at"] == data["as_of"]:
+        current.append(filepath)
+assert len(current) == 1, "A unique immutable current snapshot must exist"
+assert json.loads(current[0].read_text(encoding="utf-8")) == data, "Current snapshot differs from dashboard/data.json"
+
+page = root/"dashboard/index.html"
 html = page.read_text(encoding="utf-8")
 pattern = r'(<script id="snapshot" type="application/json">)[\s\S]*?(</script>)'
-assert len(re.findall(pattern, html)) == 1, "Expected one offline JSON slot"
-encoded = json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("<", r"\u003c")
-result = re.sub(pattern, lambda m: m.group(1) + encoded + m.group(2), html)
-assert json.loads(re.search(pattern, result).group(0).split(">", 1)[1].rsplit("</script>", 1)[0]) == data
-for element in ("metrics", "milestones", "areas", "clients", "runs", "delivery", "history", "next", "sources", "limits"):
+assert len(re.findall(pattern,html)) == 1
+payload = json.dumps(data,ensure_ascii=False,separators=(",",":")).replace("<",r"\u003c")
+result = re.sub(pattern,lambda m:m.group(1)+payload+m.group(2),html)
+embedded = re.search(pattern,result).group(0).split(">",1)[1].rsplit("</script>",1)[0]
+assert json.loads(embedded) == data
+for element in ("trial","inventory-tiles","inventory-bars","metrics","milestones","areas","clients","runs","delivery","history","next","sources","limits"):
     assert f'id="{element}"' in result
-page.write_text(result, encoding="utf-8")
-print("PASS: scoped metrics, explicit unknowns, evidence URLs, 7 tracks, client inventory, archive, embedded JSON")
+page.write_text(result,encoding="utf-8")
+print("PASS: scoped denominators, null unknowns, fixed SHA, 7 tracks, current trial, client evidence, internal/external links, snapshot equality and offline JSON embed")
