@@ -6,7 +6,7 @@
   "issue_id": "RENDER-002",
   "track": "colors-materials",
   "approach": "Correct B11 exact UTF-8 byte-change region for original-gamut YAML patch (no original asset mutation), add realistic Unicode fixture and mutation negative controls",
-  "status": "active",
+  "status": "completed",
   "base_sha": "3c866416159cdb87740e8d465bfc5d58d78313f6",
   "intended_files": [
     "scripts/b11_restore_original_color_gamuts.py",
@@ -17,9 +17,11 @@
   "related_work": [
     "B11-20261104T2115Z-B11-bca7-original-gamut-parity"
   ],
-  "experiment_ids": [],
+  "experiment_ids": [
+    "20261104T2252Z-gamut-byte-path-integrity"
+  ],
   "run_urls": [],
-  "result": null,
-  "next_step": "Add exact byte offset and adversarial Unicode regressions, validate locally and isolated CI, then record integration limits",
-  "updated_at": "2026-11-04T22:45:00Z"
+  "result": "Two source issues reproduced and source-guarded; local 16/16 synthetic unit tests PASS on exact production-script Git blob b7564b405e6c72a7766e1192df164c99aa29b77f but B04 stub, not original source or device validation. Remote GitHub CI conclusion not retrieved.",
+  "next_step": "On already justified real export check RAFT_B11_ORIGINAL_COLOR_GAMUT, verify known Unity YAML format and eventual same-scene phone pixels; CI workflow run should be checked rather than assumed.",
+  "updated_at": "2026-11-04T22:54:00Z"
 }
