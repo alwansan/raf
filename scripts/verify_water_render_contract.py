@@ -10,6 +10,8 @@ import json
 from pathlib import Path
 import re
 
+from scripts.b49_shaderlab_pass_contract import pass_coverage, remove_comments, mask_quoted_strings
+
 # Unity logs show requests for these maximum pass indices. Valid index N
 # requires a restored ShaderLab source with at least N+1 authored passes.
 REQUIRED_PASS_COUNT = {
@@ -34,17 +36,18 @@ def inspect(project: Path) -> dict:
         if path.is_symlink() or not path.is_file():
             raise ValueError("Unsafe source shader path")
         raw = path.read_text(encoding="utf-8-sig", errors="replace")
-        match = DECL.search(raw)
+        without_comments = remove_comments(raw)
+        match = DECL.search(without_comments)
         if not match or match[1] not in REQUIRED_PASS_COUNT:
             continue
         name = match[1]
         if name in found:
             raise ValueError("Duplicate original shader name: " + name)
         # No shader text is printed or copied to this JSON result.
-        without_comments = re.sub(r'/\*[\s\S]*?\*/|//[^\r\n]*', '', raw)
+        coverage = pass_coverage(without_comments)
         found[name] = {
-            "pass_count": len(PASS.findall(without_comments)),
-            "has_program": bool(PROGRAM.search(without_comments)),
+            **coverage,
+            "has_program": coverage["passes_with_complete_program"] > 0,
             "original_meta_present": Path(str(path) + ".meta").is_file(),
             "export_placeholder": "No subprograms found" in raw,
         }
@@ -52,7 +55,7 @@ def inspect(project: Path) -> dict:
     for name, minimum in REQUIRED_PASS_COUNT.items():
         observed = found.get(name)
         valid = bool(observed and observed["pass_count"] >= minimum
-                     and observed["has_program"]
+                     and observed["all_passes_programmed"]
                      and observed["original_meta_present"]
                      and not observed["export_placeholder"])
         shader_rows[name] = {
@@ -66,8 +69,7 @@ def inspect(project: Path) -> dict:
         if path.is_symlink() or not path.is_file():
             raise ValueError("Unsafe source compute shader path")
         raw = path.read_text(encoding="utf-8-sig", errors="replace")
-        without_comments = re.sub(r'/\*[\s\S]*?\*/|//[^\r\n]*', '', raw)
-        kernels = KERNEL.findall(without_comments)
+        kernels = KERNEL.findall(mask_quoted_strings(raw))
         computes.append({
             "kernel_count": len(kernels),
             "is_water_or_fft_named": bool(re.search(r'(water|fft|spectrum|foam)', path.name, re.IGNORECASE)),
