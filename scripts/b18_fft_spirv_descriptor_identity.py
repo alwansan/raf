@@ -100,7 +100,11 @@ def inspect_original(root: Path, executable: Path) -> dict:
     )
     if registry["authentic_compiled_variants_verified_in_original_order"] != 20:
         raise ValueError("Original typed compiled slot inventory changed")
+    # Late import avoids a circular dependency: the pair helper reuses our
+    # explicit interface constants but does not call the compiler.
+    from scripts.b18_spirv_variable_identity import verify_pair
     verified = {key: 0 for key in INTERFACES}
+    verified_variable_pairs = 0
     with tempfile.TemporaryDirectory(prefix="raft-b18-private-explicit-spv-") as tmp:
         folder = Path(tmp)
         for n, item in enumerate(candidates):
@@ -123,6 +127,7 @@ def inspect_original(root: Path, executable: Path) -> dict:
                 if not baseline.is_file() or not 20 <= baseline.stat().st_size <= 1048576:
                     raise ValueError("Default compiler returned invalid SPIR-V output")
                 check_image_role_classes(original, baseline.read_bytes())
+            pair = {}
             for profile in INTERFACES:
                 dst = folder / (str(n) + "-" + profile + ".spv")
                 try:
@@ -137,9 +142,15 @@ def inspect_original(root: Path, executable: Path) -> dict:
                     raise ValueError("Public explicit compiler result code " + str(proc.returncode))
                 if not dst.is_file() or dst.is_symlink() or not 20 <= dst.stat().st_size <= 1048576:
                     raise ValueError("Explicit compiler translation failed or module malformed")
-                verify_explicit_descriptor_layout(original, dst.read_bytes(), profile)
+                module = dst.read_bytes()
+                verify_explicit_descriptor_layout(original, module, profile)
+                pair[profile] = module
                 verified[profile] += 1
-    if verified != {"A": 20, "B": 20}:
+            parity = verify_pair(pair["A"], pair["B"])
+            if not parity["full_spirv_program_equivalent_after_only_descriptor_literal_mask"]:
+                raise ValueError("Unexpected B18 SPIR-V program parity result")
+            verified_variable_pairs += 1
+    if verified != {"A": 20, "B": 20} or verified_variable_pairs != 20:
         raise ValueError("Not all original FFT programs met explicit interface mapping")
     return {
         "original_object_sha256": ORIGINAL_OBJECT_SHA256,
@@ -148,6 +159,8 @@ def inspect_original(root: Path, executable: Path) -> dict:
         "explicit_interface_A_programs_verified": verified["A"],
         "explicit_interface_B_programs_verified": verified["B"],
         "two_distinct_target_descriptor_layouts_honored": True,
+        "full_spirv_programs_identical_except_explicit_descriptor_literals": verified_variable_pairs,
+        "distinct_source_register_variable_IDs_stable_across_maps": verified_variable_pairs,
         "per_class_original_t0_t1_u0_source_roles_verified": True,
         "same_class_t0_t1_runtime_input_behavior_independently_proven": False,
         "unity_runtime_compute_import_verified": False,
@@ -181,6 +194,14 @@ def main():
             "SPIR-V descriptor has ambiguous read/write role": "SPIRV_IMAGE_ACCESS",
             "Compiled interface must contain exactly three images": "SPIRV_IMAGE_COUNT",
             "Not all original FFT programs met explicit interface mapping": "PROGRAM_COUNT",
+            "Invalid SPIR-V instruction bounds": "SPIRV_OPCODE_BOUNDS",
+            "Non-descriptor SPIR-V program or variable IDs changed": "SPIRV_NON_BINDING_DRIFT",
+            "Input image variable identity changed across explicit maps": "SPIRV_SOURCE_VARIABLE_SWAP",
+            "Actual SPIR-V image variable locations differ from chosen profile": "SPIRV_IMAGE_MAPPING_DIFFERENT",
+            "Incomplete explicit FFT image descriptor pairs": "SPIRV_DECORATIONS_ABSENT",
+            "Descriptor does not decorate a declared variable": "SPIRV_VARIABLE_TARGET_ABSENT",
+            "Repeated or out-of-range descriptor decoration": "SPIRV_DUPLICATE_DECORATION",
+            "Ambiguous same-class image variable identity": "SPIRV_IMAGE_VARIABLE_AMBIGUOUS",
         }.get(str(exc), type(exc).__name__)
         if str(exc).startswith("Public default compiler result code "):
             reason = "DEFAULT_VKD3D_RC_" + str(exc).rsplit(" ", 1)[-1]

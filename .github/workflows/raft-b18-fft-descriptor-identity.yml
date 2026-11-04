@@ -8,7 +8,9 @@ on:
       - '.github/workflows/raft-b18-fft-descriptor-identity.yml'
       - 'scripts/b18_vkd3d_explicit_bindings.c'
       - 'scripts/b18_fft_spirv_descriptor_identity.py'
+      - 'scripts/b18_spirv_variable_identity.py'
       - 'tests/test_b18_fft_spirv_descriptor_identity.py'
+      - 'tests/test_b18_spirv_variable_identity.py'
 
 permissions:
   contents: read
@@ -38,7 +40,8 @@ jobs:
         run: |
           set -euo pipefail
           python3 -m unittest discover -s tests -p test_b18_fft_spirv_descriptor_identity.py -v
-          python3 -m py_compile scripts/b18_fft_spirv_descriptor_identity.py
+          python3 -m unittest discover -s tests -p test_b18_spirv_variable_identity.py -v
+          python3 -m py_compile scripts/b18_fft_spirv_descriptor_identity.py scripts/b18_spirv_variable_identity.py
       - name: Install distribution-pinned vkd3d-shader API and compile private translator
         run: |
           set -euo pipefail
