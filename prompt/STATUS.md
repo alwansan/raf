@@ -1,3 +1,7 @@
+## B38 — Material YAML duplicate-key guard (4 November 2026)
+
+[Source correction](https://github.com/alwansan/raf/commit/9fbba8aab8ce45efe6188ad7343691e70e995789), [test correction](https://github.com/alwansan/raf/commit/f3b709e47421e210fbb0863ac5b920a7d843e1cb), [final CI41919146580](https://github.com/alwansan/raf/actions/runs/41919146580) **SUCCESS**:14/14 existing B05 +7/7 new B38 synthetic controls. Original-to-export Material m_TexEnvs parser now rejects duplicate YAML mapping keys instead of last-wins silently. Initial B38 CI41918990785 failed from incorrectly classifying duplicate list items as mapping-key duplicates (the existing normalizer already rejects repeated slots); corrected test is green. This proves validator integrity only; no authenticated full Raft Material source-to-export comparison, Unity pixels or phone proof. RENDER-002 OPEN, NOT_READY 0/3. Owner-confirmed audio/Settings untouched; touch deferred. No native build/release.
+
 <!-- B09 SPECTRUM PASS STAGE 2026-11-04 -->
 ## B09 — WATER-001 original Spectrum pass-stage private extraction (4 November 2026)
 
