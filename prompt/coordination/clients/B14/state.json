@@ -2,24 +2,26 @@
   "schema_version": 1,
   "username": "B14",
   "generation": "B-2026-11-04",
-  "session_id": "20261104T2131Z-B14-a71c",
-  "resumed_from_session": null,
-  "status": "paused",
-  "base_sha": "f8028d15b2401d1fd8c73b2316e5bf76fef88eae",
+  "session_id": "20261104T2247Z-B14-d1a9",
+  "resumed_from_session": "20261104T2131Z-B14-a71c",
+  "status": "active",
+  "base_sha": "1ecd5e56186147a438b9069774d2d465f1fb7e4f",
   "last_commit": "86a7ea1700550d2f535b12574ad7437ced271f5e",
-  "updated_at": "2026-11-04T21:46:03.972Z",
+  "updated_at": "2026-11-04T22:47:26.637Z",
   "tracks": [
     "WATER-001/water-source-integrity",
-    "LOCAL-005/offline-save-stage-path-integrity"
+    "LOCAL-005/offline-save-stage-path-integrity",
+    "RENDER-002/scene-boundary-telemetry-ci"
   ],
   "work_ids": [
     "B14-20261104T2131Z-B14-a71c-water-path-identity",
-    "B14-20261104T2131Z-B14-a71c-save-stage-roots"
+    "B14-20261104T2131Z-B14-a71c-save-stage-roots",
+    "B14-20261104T2247Z-B14-d1a9-scene-callback-ci-parity"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41917493634",
     "https://github.com/alwansan/raf/actions/runs/41918579185"
   ],
-  "next_step": "Both scoped path integrity repairs source-verified; on resumed session refresh HEAD/Actions, then prioritize real shader/FFT original integration and Android local .rgd create/save/reopen evidence; NOT_READY 0/3.",
+  "next_step": "Repair stale static SceneLoaded method-signature assertion after B12's coroutine-based post-scene shader/material/mesh snapshot, add bounded regression checks, run existing Android offline platform CI; no runtime code, touch, audio, Settings changes.",
   "memory_path": "prompt/coordination/clients/B14/MEMORY.md"
 }
