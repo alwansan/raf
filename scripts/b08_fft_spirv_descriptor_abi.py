@@ -15,6 +15,7 @@ import tempfile
 
 from scripts.b18_fft_spirv_binding_roles import check_image_role_classes
 from scripts.probe_fft_spirv_images import image_resource_contracts
+from scripts.probe_fft_spirv_image_flow import image_slot_dataflow
 from scripts.probe_fft_variant_table import (
     correlate_original_variant_bytecode, EXPECTED_FFT_WORKGROUP_X_BY_COMPILED_SLOT,
 )
@@ -77,6 +78,56 @@ def describe_pair(original_dxbc: bytes, translated_spirv: bytes):
         "storage_output_image_descriptor_from_unique_uav_class": writes[0],
         "src_t0_vs_t1_mapping_verified": False,
         "runtime_unity_kernel_id_mapping_verified": False,
+    }
+
+
+def check_executable_image_roles(converted_spirv: bytes, numeric_profile: dict):
+    """Prove *use* of both declared sampled descriptors and written storage.
+
+    This is SPIR-V SSA image operand lineage, not original DXBC t0 versus t1
+    semantic identity or a complete instruction/bitwise equivalence proof.
+    """
+    flow = image_slot_dataflow(converted_spirv)
+    if not flow["all_image_operations_uniquely_traced"]:
+        raise ValueError("Unresolved or ambiguous SPIR-V executable image operand")
+    wanted_reads = {
+        tuple(row[:2])
+        for row in numeric_profile["sampled_image_descriptor_candidates_unordered_t0_t1"]
+    }
+    wanted_write = tuple(numeric_profile[
+        "storage_output_image_descriptor_from_unique_uav_class"][:2])
+    if len(wanted_reads) != 2 or wanted_write in wanted_reads:
+        raise ValueError("Ambiguous declared numeric read/write ABI")
+    uses = flow["image_operand_slot_uses"]
+
+    def counts(names):
+        result = {}
+        for name in names:
+            record = uses[name]
+            if record["unresolved_count"] or record["ambiguous_count"]:
+                raise ValueError("Ambiguous active SPIR-V image resource use")
+            for row in record["resolved_slot_counts"]:
+                key = (row["descriptor_set"], row["binding"])
+                result[key] = result.get(key, 0) + row["calls"]
+        return result
+
+    actual_reads = counts(("fetch", "read", "sample", "gather"))
+    actual_writes = counts(("write",))
+    if (set(actual_reads) != wanted_reads
+            or any(actual_reads[slot] < 1 for slot in wanted_reads)
+            or set(actual_writes) != {wanted_write}
+            or actual_writes[wanted_write] < 1):
+        raise ValueError("Original FFT declared image not used in expected SPIR-V read/write role")
+    # Queries/texel-pointer operations are not ignored just to make coverage
+    # appear complete: they must at least resolve to one declared descriptor.
+    other_uses = counts(("query", "texel_pointer"))
+    if not set(other_uses).issubset(wanted_reads | {wanted_write}):
+        raise ValueError("Unexpected executable image helper operation resource")
+    return {
+        "both_sampled_descriptor_candidates_actively_read": True,
+        "sole_storage_output_descriptor_actively_written": True,
+        "all_image_operations_uniquely_traced": True,
+        "source_DXBC_t0_t1_semantic_binding_verified": False,
     }
 
 
@@ -172,7 +223,10 @@ def inspect_original(root: Path):
             if (converted.returncode or not spv_path.is_file()
                     or not 0 < spv_path.stat().st_size <= 1048576):
                 raise ValueError("Private original DXBC conversion failed")
-            profiles.append(describe_pair(source, spv_path.read_bytes()))
+            converted = spv_path.read_bytes()
+            profile = describe_pair(source, converted)
+            check_executable_image_roles(converted, profile)
+            profiles.append(profile)
             dx_path.unlink()
             spv_path.unlink()
     return {
@@ -181,6 +235,10 @@ def inspect_original(root: Path):
         "original_compute_shader_object_sha256": ORIGINAL_OBJECT_SHA256,
         "original_compiled_program_sha_and_order_authenticated": True,
         **require_shared_abi(profiles),
+        "source_authentic_spirv_programs_with_both_sampled_image_reads": len(profiles),
+        "source_authentic_spirv_programs_with_storage_output_writes": len(profiles),
+        "all_spirv_image_operations_uniquely_traced": True,
+        "source_dxbc_t0_t1_operand_correspondence_verified": False,
     }
 
 
