@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "owner": "B04",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2243Z-B04-6b7c",
+  "issue_id": "RENDER-002",
+  "track": "colors-materials/runtime-quality-evidence",
+  "approach": "Add one bounded, read-only active quality-tier/lighting and texture-quality state to the existing delayed per-scene Android renderer snapshot; match W2's verified original five-tier source at analysis time. No quality setters, no UI/touch edits.",
+  "status": "active",
+  "base_sha": "9e1b249414df77c1d8906fdf61574094371b0003",
+  "intended_files": [
+    "android-port/Runtime/Platform/AndroidTestDiagnostics.cs",
+    "tests/test_b04_runtime_quality_snapshot.py",
+    ".github/workflows/raft-b04-runtime-quality-snapshot.yml",
+    "docs/B04_ORIGINAL_QUALITY_RUNTIME_EVIDENCE_2026-11-04.md",
+    "prompt/coordination/clients/B04/",
+    "prompt/coordination/work/RENDER-002/",
+    "prompt/coordination/experiments/B04/"
+  ],
+  "hypothesis": "APK86 pale rendering may include active device quality-tier divergence from the original five-tier Linear project; the current B12 renderer snapshot lacks the tier and quality knobs to falsify it on a later device build.",
+  "related_work": [
+    "docs/W2_COLOR_SPACE_SETTINGS_2026-11-03.md",
+    "docs/B04_ORIGINAL_COLOR_SPACE_PARITY_2026-11-04.md",
+    "prompt/coordination/work/RENDER-002/B12-20261104T2132Z-B12-c4a8-scene-render-probe.json",
+    "prompt/coordination/work/RENDER-002/B21-20261104T2153Z-B21-72ab-dynamic-lighting.json"
+  ],
+  "experiment_ids": [],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Inspect existing B12 delayed snapshot and Unity2021 properties; add read-only runtime quality fields, synthetic source-safety regressions and actual original-managed CSharp CI; no full Unity build or device proof.",
+  "updated_at": "2026-11-04T22:43:00Z"
+}
