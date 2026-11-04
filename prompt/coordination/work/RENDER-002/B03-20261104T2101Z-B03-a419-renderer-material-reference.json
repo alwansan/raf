@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "owner": "B03",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2101Z-B03-a419",
+  "issue_id": "RENDER-002",
+  "track": "colors-materials",
+  "approach": "Trace exported MeshRenderer/SkinnedMeshRenderer material slots to original exported Material YAML document+meta GUID identities with strict shape and missing-reference checks; preserve null/builtin distinctions without inventing matches.",
+  "status": "active",
+  "base_sha": null,
+  "intended_files": [
+    "scripts/b03_verify_renderer_material_links.py",
+    "tests/test_b03_verify_renderer_material_links.py",
+    ".github/workflows/raft-b03-renderer-material-links.yml",
+    "docs/B03_RENDERER_MATERIAL_LINKS_2026-11-04.md"
+  ],
+  "hypothesis": "White meshes can arise if valid original Material->Shader edges are present but Renderer.m_Materials references are lost, nulled or point to nonexistent exported material GUID/fileID.",
+  "related_work": [
+    "B44-20261104T2059Z-B44-f0ac-material-values",
+    "B46-20261104T2058Z-B46-6e3d-texture-export-links",
+    "scripts/w1_audit_export_material_shaders.py"
+  ],
+  "experiment_ids": [
+    "B03-renderer-material-structural"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Build synthetic fixtures and fail-closed read-only validator; run on real export only with appropriate source workspace; do not claim device colors restored from structure alone.",
+  "updated_at": "2026-11-04T21:13:18.875Z"
+}
