@@ -348,10 +348,77 @@ namespace RaftAndroid.Platform
                 return "; quality_snapshot_error_type=" + ex.GetType().Name;
             }
         }
+        // B18 WATER-001: runtime evidence of *currently loaded* ComputeShader
+        // assets. This is NOT a kernelCount, FindKernel or FFT identity probe.
+        // Never invoke an unknown kernel index: APK86 already floods index6
+        // errors, and a diagnostic must not amplify those errors.
+        private static string LoadedComputeShaderSnapshot()
+        {
+            try
+            {
+                ComputeShader[] loaded = Resources.FindObjectsOfTypeAll<ComputeShader>();
+                if (loaded == null)
+                    return "status=unavailable; loaded_total=unknown; original_fft_identity_verified=false";
+                const int ObjectLimit = 64;
+                const int HashLimit = 8;
+                int inspected = Math.Min(loaded.Length, ObjectLimit);
+                int validObjects = 0;
+                int nullObjects = 0;
+                int emptyNames = 0;
+                int unboundedNames = 0;
+                var nameDigests = new List<string>(HashLimit);
+                using (var digest = System.Security.Cryptography.SHA256.Create())
+                {
+                    for (int index = 0; index < inspected; index++)
+                    {
+                        ComputeShader shader = loaded[index];
+                        if (!shader) { nullObjects++; continue; }
+                        validObjects++;
+                        // The hash is only a local diagnostic correlator.
+                        // No proprietary resource or kernel name is logged.
+                        string name = shader.name;
+                        if (string.IsNullOrEmpty(name)) { emptyNames++; continue; }
+                        if (name.Length > 256) { unboundedNames++; continue; }
+                        if (nameDigests.Count < HashLimit)
+                        {
+                            byte[] sha = digest.ComputeHash(Encoding.UTF8.GetBytes(name));
+                            nameDigests.Add(BitConverter.ToString(sha).Replace("-", "").ToLowerInvariant());
+                        }
+                    }
+                }
+                nameDigests.Sort(StringComparer.Ordinal);
+                return "loaded_total=" + loaded.Length +
+                    "; inspected=" + inspected +
+                    "; object_limit=" + ObjectLimit +
+                    "; hash_limit=" + HashLimit +
+                    "; truncated=" + (loaded.Length > ObjectLimit) +
+                    "; valid_objects=" + validObjects +
+                    "; null_objects=" + nullObjects +
+                    "; empty_name_objects=" + emptyNames +
+                    "; overlong_name_objects=" + unboundedNames +
+                    "; name_sha256_sample=" + string.Join(",", nameDigests.ToArray()) +
+                    "; loaded_only_not_all_exported=true" +
+                    "; fft_original_identity_verified=false" +
+                    "; runtime_kernel_count_verified=false" +
+                    "; original_fft_dispatch_or_phone_water_fixed=false";
+            }
+            catch (Exception ex)
+            {
+                return "status=unavailable; exception_type=" + ex.GetType().Name +
+                    "; fft_original_identity_verified=false" +
+                    "; runtime_kernel_count_verified=false";
+            }
+        }
+
         private System.Collections.IEnumerator ReportSceneShaderSnapshot(Scene scene)
         {
             yield return new WaitForSecondsRealtime(3f);
             if (!scene.isLoaded) yield break;
+            // Same existing one-shot post-scene timing as material diagnostics;
+            // no extra coroutine or per-frame scanning.
+            RaftAndroid.Diagnostics.AndroidRuntimeLog.Write(
+                "water", "loaded_compute_shader_snapshot",
+                "scene=" + scene.name + "; " + LoadedComputeShaderSnapshot(), true);
             try
             {
                 // Cap traversal work BEFORE collecting renderers. An entire Raft
