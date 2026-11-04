@@ -1,0 +1,71 @@
+name: B07 LOCAL-005 original coroutine first MoveNext semantic proof
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/b07_world_coroutine_trace.py
+      - scripts/b07_compile_coroutine_fixture.py
+      - scripts/adapt_android_offline_startup.py
+      - tests/test_b07_world_coroutine_trace.py
+      - .github/workflows/raft-b07-world-coroutine.yml
+permissions:
+  contents: read
+concurrency:
+  group: raft-b07-coroutine-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  pinned-coroutine:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests/test_b07_world_coroutine_trace.py
+            tests/test_android_offline_startup.py
+            Raft/Raft_Data/Managed/Assembly-CSharp.dll
+      - name: B07 negative controls and existing offline compatibility
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_b07_world_coroutine_trace.py -v
+          python3 -m unittest discover -s tests -p test_android_offline_startup.py -v
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: CLR iterator behavior on Android and non-Android paths
+        run: |
+          set -euo pipefail
+          python3 -m scripts.b07_compile_coroutine_fixture --output "$RUNNER_TEMP/b07-managed"
+          timeout 100s dotnet run --project "$RUNNER_TEMP/b07-managed/B07HarnessAndroid.csproj" --configuration Release --nologo
+          timeout 100s dotnet run --project "$RUNNER_TEMP/b07-managed/B07HarnessOther.csproj" --configuration Release --nologo
+      - name: Private SHA-pinned original Raft_Network and offline staging
+        env:
+          DOTNET_PROCESSOR_COUNT: '2'
+        run: |
+          set -euo pipefail
+          df -h /
+          mkdir -p "$RUNNER_TEMP/b07/ilspy" "$RUNNER_TEMP/b07/original"
+          dotnet tool install ilspycmd --version 11.2.0.10050 --tool-path "$RUNNER_TEMP/b07/ilspy" >/dev/null
+          timeout 360s "$RUNNER_TEMP/b07/ilspy/ilspycmd" -p -lv CSharp9_0 -o "$RUNNER_TEMP/b07/original" Raft/Raft_Data/Managed/Assembly-CSharp.dll > "$RUNNER_TEMP/b07/private-decompile.log" 2>&1
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          from scripts.adapt_android_offline_startup import adapt
+          from scripts.b07_probe_original_world_callbacks import assert_original_dll, _source, method_body
+          from scripts.b07_world_coroutine_trace import ENTRY, TRACE_OPERATION, ORIGINAL_NETWORK_SHA256, instrument_original_coroutine
+          assert_original_dll(Path('Raft/Raft_Data/Managed/Assembly-CSharp.dll'))
+          root = Path(os.environ['RUNNER_TEMP']) / 'b07/original'
+          source, digest = _source(root, 'Raft_Network', ORIGINAL_NETWORK_SHA256)
+          original = method_body(source, 'WorldHasBeenLoaded')[1]
+          traced = instrument_original_coroutine(source)
+          if method_body(traced, 'WorldHasBeenLoaded')[1] != ENTRY + original:
+              raise ValueError('B07 original coroutine mutation detected')
+          if adapt('Raft_Network', source).count(TRACE_OPERATION) != 1:
+              raise ValueError('B07 offline staging lost coroutine trace')
+          print('B07_PRIVATE_ORIGINAL_COROUTINE sourcePin=' + digest + ' sourceEntryPreserved=true stagedTrace=true sourcePublished=false')
+          PY
+          # Private C# and ILSpy output never enter artifacts.
