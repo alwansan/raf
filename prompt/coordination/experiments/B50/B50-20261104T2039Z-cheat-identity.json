@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "owner": "B50",
+  "session_id": "20261104T2039Z-B50-d7a3",
+  "issue_id": "LOCAL-005",
+  "hypothesis": "APK86-era Cheat.AllowCheatsForLocalPlayer still uses SteamUser.GetSteamID in the original method and might invoke steam_api64 in offline play; verify source rather than patch guessed callsites.",
+  "source_commit": "0484260051916587e102359d6a3ccb820358c7e5",
+  "input_hashes": [
+    "Raft/Raft_Data/Managed/Assembly-CSharp.dll bytes=3211776 SHA256=0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e"
+  ],
+  "tool_versions": {
+    "ilspycmd": "11.2.0.10050",
+    "runner": "ubuntu-24.04",
+    "dotnet": "10.0.x"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_b50_probe_original_cheat_steam.py -v",
+    "python3 -m scripts.b50_probe_original_cheat_steam --original-managed-dll Raft/Raft_Data/Managed/Assembly-CSharp.dll --source $RUNNER_TEMP/b50/original"
+  ],
+  "negative_controls": [
+    "Wrong SHA or size original DLL rejected before decompile",
+    "Comment and string Steam tokens excluded",
+    "Duplicate method, symlink and ambiguous Cheat.cs rejected"
+  ],
+  "workflow_path": ".github/workflows/raft-b50-cheat-steam-identity.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41911081809",
+  "artifact_urls": [],
+  "budget": "12 minute CPU-only Ubuntu runner; no LFS, private-source artifact, Unity, Android APK or other clients' workflows.",
+  "status": "running",
+  "observed_result": "Synthetic negative controls passed; authentic original Cheat method probe currently running in step 5 (20:54Z).",
+  "rejected_hypotheses": [],
+  "limitations": [
+    "Read-only structural original C# proof, not Android execution or verified call stack path",
+    "Does not modify the game's original source or fabricated world-load flags"
+  ],
+  "integration_commit": null,
+  "next_step": "Read final CI, review source SHA, direct authentic callsite count, decide bounded Android-only identity fix or identify no direct call."
+}
