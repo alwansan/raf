@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "owner": "B50",
+  "session_id": "20261104T2039Z-B50-d7a3",
+  "issue_id": "LOCAL-005",
+  "hypothesis": "APK86 SaveGame calls Windows SteamUserStats.StoreStats after successful world scene load; bypass this third-party stats upload exclusively for Android-local saves while retaining exact RGD save/user/world control flow.",
+  "source_commit": "67d75cc7381a03f2b5ee166afc9d48de0d15217a",
+  "input_hashes": [
+    "scripts/instrument_android_runtime_operations.py SHA blob 865c20eca6840061b1d7122880adfc9d0709c89d",
+    "SaveAndLoad adapted original source pinned by config/runtime-operation-traces.json SHA256 daf835fc2926d138483462d2ebe7ca627efcec6a9b9829dbcc7466b368317a08",
+    "ZIP2 input pinned 15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+  ],
+  "tool_versions": {
+    "ci_runner": "ubuntu-24.04",
+    "python": "GitHub-hosted Python3",
+    "managed": "dotnet CI inherited from original startup workflow"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_runtime_operation_traces.py -v",
+    "python3 -m unittest discover -s tests -p test_android_offline_startup.py -v",
+    "python3 -m unittest discover -s tests -p test_adapt_original_save_paths.py -v"
+  ],
+  "negative_controls": [
+    "Fail closed on absent/duplicated/comment-only/outside-SaveGame StoreStats",
+    "Reject unknown adapted source digest before guarded rewrite",
+    "Do not modify other StoreStats calls or SaveWorld/SaveUser operations",
+    "Original source compiled through existing no-LFS Android offline source workflow"
+  ],
+  "workflow_path": ".github/workflows/raft-b50-offline-storestats.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41909535307",
+  "artifact_urls": [],
+  "budget": "8 minute bounded CPU-only Ubuntu runner, no Unity, LFS or native package.",
+  "status": "completed",
+  "observed_result": "Dedicated 41909535307 SUCCESS. Existing original Android local startup 41909535306 SUCCESS including original managed source recovery, real adapted RPC/identity harness, and managed compile. Earlier 41909268096 and B50 41909431128 failed solely on test fixture comment newline escaping; corrected in 67d75cc. No APK, GPU or device playback result.",
+  "rejected_hypotheses": [
+    "A synthetic negative-case test failure on 1b4404c indicated unsafe production transformation: rejected; log showed malformed test comment literal (double-backslash newline) masking closing brace; corrected without changing production code."
+  ],
+  "limitations": [
+    "No Android Unity compile/IL2CPP/device runtime test",
+    "No claim other Steam DLL entrypoints, world progression, or RGD reload are fixed",
+    "Explicit original callsite formatting fail-closed; requires source review if original revision changes"
+  ],
+  "integration_commit": "c06acd1da46e729a42f8b9bbf2f280a3b05921cc",
+  "next_step": "Inspect remaining phone-evidenced Cheat.AllowCheatsForLocalPlayer Steam identity path; run new phone APK only in coordinated native delivery after P0 graphics blockers."
+}
