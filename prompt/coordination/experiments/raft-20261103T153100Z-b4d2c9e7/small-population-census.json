@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "owner": "raft-20261103T153100Z-b4d2c9e7",
+  "status": "completed",
+  "hypothesis": "The two registered small populations close cleanly: StandardVColor (sharedassets36:880) materials are uniformly keyword-empty with complete slot-name coverage, and the Standard base-variant population re-derives to exactly 22/674 matching the committed step-4 histogram.",
+  "input_hashes": [
+    "owner set + pin verification identical to committed inventory docs/W3_FULL_MATERIAL_SHADER_INVENTORY_2026-11-03.json (d80256a7...)",
+    "sha256(resources.assets,111533516)=87493249f1adfc0c5eb8b82e4e199e208cd2c95eabe9796cab82116c4838595c",
+    "sha256(sharedassets0.assets,115978112)=0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "count assertions vs committed evidence: Standard 674 (inventory), StandardVColor 18 (inventory top-20), empty-config 22 (step-4 histogram)"
+  ],
+  "commands": [
+    "python3 scripts/probe_w3_small_population_census.py --game-data <Raft_Data> --aggregate-json docs/W3_SMALL_POPULATION_CENSUS_2026-11-04.json",
+    "python3 scripts/w3_test_small_population_census.py"
+  ],
+  "expected_signal": "all count assertions true (674/18/22); SVC 18/18 empty keywords + 18/18 complete slot coverage; schema commitments for SVC keyword/slot lists; no values or colors read",
+  "negative_controls": [
+    "standard_ref_count_matches_inventory (674)",
+    "svc_ref_count_matches_inventory (18)",
+    "standard_empty_matches_step4 (22, per-owner distribution derived)",
+    "engine_refs_fail_closed_only",
+    "empty_strings_never_committed",
+    "no_values_or_colors_read"
+  ],
+  "workflow_path": null,
+  "concurrency_group": null,
+  "budget": "local CPU only, minutes; no LFS, no CI, no Unity",
+  "run_url": null,
+  "source_sha": "59a296e",
+  "result": "completed. Artifact docs/W3_SMALL_POPULATION_CENSUS_2026-11-04.json sha256 71ad7665b264c81ffbaa5056da35e295fbe8f7db96fd654a2239d3c610318d35. StandardVColor: 18/18 materials, schema 26 keywords / 5 texture slots / hist {Color1,Float2,Range7,Texture5} (commitments 55d51555... and 931a27f0...); 18/18 empty keyword configs; slot coverage 18/18 complete (0 missing, 0 extra) with the step-6 dual-form extractor. Standard base-variant population: exactly 22/674 empty-config materials (asserted equal to step-4; per-owner counts sharedassets0:12, 36:2, 6:2, and 1 each in 1/11/24/32/34/35; no material names). Both registered follow-ups from steps 4/6 are now exhausted.",
+  "limitations": [
+    "structure/census only: values/tints/formats/binding-nullness = W2 lanes (their texture-bindings CI success is theirs, not re-verified here); programs = W1; build/export = W4",
+    "vertex-color usage is mesh-attribute data; not read, not asserted — geometry lane remains unclaimed and open",
+    "no visual/GPU/phone claim; WATER-001/RENDER-002/FFT-FORMAT-009 remain OPEN; NOT_READY; 0/3 reviews"
+  ],
+  "next_step": "publish STATUS section + result discussion; all recorded W3 follow-up options are exhausted — next planning decision belongs to the coordination cadence or a newly-announced peer-requested lane"
+}

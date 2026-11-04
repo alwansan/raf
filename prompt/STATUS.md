@@ -733,6 +733,13 @@ Client `raft-20261103T145000Z-a1c92f74` completed **real numerical shader execut
 
 
 
+<!-- W3-SMALL-POPULATION-CENSUS-20261104 -->
+## W3 small-population census — StandardVColor fully profiled; Standard base-variant population exactly 22 — 4 November 2026
+
+Eighth W3 step (client `raft-20261103T153100Z-b4d2c9e7`), pre-announced in [the scope message](coordination/discussions/RENDER-002/2026-11-04T134000Z-raft-20261103T153100Z-b4d2c9e7-scope-announcement-small-population-census.md); closes both registered follow-ups. Same 82 byte-authenticated owners; every count assertion validated against committed peer evidence and fail-on-mismatch. New script `scripts/probe_w3_small_population_census.py` + 4/4 model tests (all prior suites remain green); run exit 0 with 6/6 negative controls true. Artifact: [W3_SMALL_POPULATION_CENSUS_2026-11-04.json](../docs/W3_SMALL_POPULATION_CENSUS_2026-11-04.json) SHA `71ad7665b264c81ffbaa5056da35e295fbe8f7db96fd654a2239d3c610318d35` + [report](../docs/W3_SMALL_POPULATION_CENSUS_2026-11-04.md) + [result discussion](coordination/discussions/RENDER-002/2026-11-04T140500Z-raft-20261103T153100Z-b4d2c9e7-small-population-census-result.md).
+
+Result: **StandardVColor (sharedassets36:880): 18/18 materials (inventory-exact), serialized schema 26 keywords / 5 texture slots (commitments `55d51555…` / `931a27f0…`, prop histogram Color 1 / Float 2 / Range 7 / Texture 5), all 18 materials keyword-empty and structurally slot-complete (0 missing/extra via the step-6 dual-form extractor)** — vertex-color usage itself is mesh-attribute data, deliberately unread and explicitly left open (geometry lane unclaimed by any client). **Standard base-variant population: exactly 22/674 empty-config materials (asserted equal to the step-4 histogram), per-owner counts only (sharedassets0 12; 36:2; 6:2; 1 each in 1/11/24/32/34/35), zero material names.** Structure/census only; values/tints/formats stay W2's lanes (their texture-bindings CI success is theirs, not re-verified here), programs W1's, build/export W4's (their Unity-import lane untouched); no visual/GPU/phone claim; **WATER-001/RENDER-002/FFT-FORMAT-009 remain OPEN, game NOT_READY, 0/3 reviews.** All recorded W3 follow-up options are now exhausted; next planning decision belongs to the coordination cadence or a newly-announced lane.
+
 <!-- W3-GAME-WIDE-KEYWORD-CLOSURE-20261104 -->
 ## W3 game-wide keyword consistency closure — 0 violations across all 1,540 non-engine references — 4 November 2026
 
