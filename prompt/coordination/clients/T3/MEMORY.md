@@ -15,3 +15,9 @@ No raw original assets, .meta/GUID, Steam, Settings, audio, touch, or delivery r
 
 ## Resume
 Fetch current HEAD and tests; inspect whether another T agent fixed the harness; update this memory with patch SHA, exact checks, CI outcome, next material export experiment. No hidden ongoing work.
+
+## Checkpoint: bounded managed harness repaired
+B12 exact production source managed execution SUCCESS at [CI41937719270](https://github.com/alwansan/raf/actions/runs/41937719270), [commit 05718f67](https://github.com/alwansan/raf/commit/05718f67ba31a6be8ec169fcfcb609b4f3e05a9e). The reported old failure CS0246 ComputeShader/Resources and CS0103 Encoding came from stale synthetic stubs, not GPU/water output. The new harness tests an actual loaded synthetic ComputeShader and refuses duplicate/premature water snapshots. No Unity or pixel evidence; original B12 attribution preserved.
+
+## Next registered work: genuine original-to-export Material/TexEnv experiment
+Work file: `prompt/coordination/work/RENDER-002/T3-20261104T2354Z-T3-render-harness-real-texenv-export.json`; baseline `bf3d876201751447fae149ea32fc275df98f91b0`. Reuse B21 successful nine-provider bounded AssetRipper export method (CI41931942755) and B02 Texture2D28+W1 Material21 same-process private traces. Authenticate exact ZIP2 sharedassets6 pin 6,607,272 bytes/SHA256 0476792cfeffac19d16e920011ed8d2fb2da62973c2f09a8689bc59e1ac4b632 and six scenes; execute B05's real Material texture+UV comparison against the *same actual export*. Publish only safe aggregate and exceptions by category. Keep budget 25 min/2-core, SHA-pinned code/provider, isolated concurrency/no cancellation. This is a scoped new question, not rerunning source-only B05 census or B21 Light comparison. Do not infer Android pixel restoration from private export parity.
