@@ -1,0 +1,160 @@
+{
+  "owner": "raft-20261103T103610Z-4e91b2cd",
+  "status": "completed",
+  "source_sha": "e170afe0a754d06361a3395d72987eb3ce7ec8ba",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41793495493",
+  "result": [
+    {
+      "pass": 0,
+      "stage": 1,
+      "census": {
+        "address_classification_is_consumption_or_binding_proof": false,
+        "arithmetic_failure_categories": {},
+        "arithmetic_parse_failures": {},
+        "cb_source_modifier_counts": {
+          "0": 8
+        },
+        "complete_program_operand_coverage": false,
+        "decoded_arithmetic_cb_reads": 8,
+        "opcode_counts": {
+          "0": 1,
+          "50": 5,
+          "54": 1,
+          "56": 2,
+          "62": 1,
+          "89": 2,
+          "95": 2,
+          "101": 1,
+          "103": 1,
+          "104": 1
+        },
+        "sample_binding_pair_matches": 0,
+        "sample_instruction_count": 0,
+        "sample_operand_parse_failures": 0,
+        "source_swizzle_address_classification": {
+          "known_member": 32
+        },
+        "symbolic_dynamic_cb_reads": 0,
+        "unique_cb_scalar_addresses": 32
+      }
+    },
+    {
+      "pass": 0,
+      "stage": 0,
+      "census": {
+        "address_classification_is_consumption_or_binding_proof": false,
+        "arithmetic_failure_categories": {},
+        "arithmetic_parse_failures": {},
+        "cb_source_modifier_counts": {
+          "0": 3
+        },
+        "complete_program_operand_coverage": false,
+        "decoded_arithmetic_cb_reads": 3,
+        "opcode_counts": {
+          "3": 1,
+          "15": 1,
+          "22": 1,
+          "25": 1,
+          "30": 1,
+          "33": 1,
+          "48": 1,
+          "50": 2,
+          "53": 1,
+          "54": 2,
+          "56": 4,
+          "62": 1,
+          "69": 1,
+          "75": 1,
+          "88": 1,
+          "89": 1,
+          "90": 1,
+          "98": 1,
+          "101": 1,
+          "104": 1
+        },
+        "sample_binding_pair_matches": 1,
+        "sample_instruction_count": 1,
+        "sample_operand_parse_failures": 0,
+        "source_swizzle_address_classification": {
+          "known_member": 4
+        },
+        "symbolic_dynamic_cb_reads": 0,
+        "unique_cb_scalar_addresses": 4
+      }
+    },
+    {
+      "pass": 1,
+      "stage": 1,
+      "census": {
+        "address_classification_is_consumption_or_binding_proof": false,
+        "arithmetic_failure_categories": {},
+        "arithmetic_parse_failures": {},
+        "cb_source_modifier_counts": {
+          "0": 8
+        },
+        "complete_program_operand_coverage": false,
+        "decoded_arithmetic_cb_reads": 8,
+        "opcode_counts": {
+          "0": 1,
+          "50": 6,
+          "56": 2,
+          "62": 1,
+          "89": 2,
+          "95": 2,
+          "101": 2,
+          "103": 1,
+          "104": 1
+        },
+        "sample_binding_pair_matches": 0,
+        "sample_instruction_count": 0,
+        "sample_operand_parse_failures": 0,
+        "source_swizzle_address_classification": {
+          "known_member": 32
+        },
+        "symbolic_dynamic_cb_reads": 0,
+        "unique_cb_scalar_addresses": 32
+      }
+    },
+    {
+      "pass": 1,
+      "stage": 0,
+      "census": {
+        "address_classification_is_consumption_or_binding_proof": false,
+        "arithmetic_failure_categories": {},
+        "arithmetic_parse_failures": {},
+        "cb_source_modifier_counts": {
+          "0": 1
+        },
+        "complete_program_operand_coverage": false,
+        "decoded_arithmetic_cb_reads": 1,
+        "opcode_counts": {
+          "0": 1,
+          "15": 1,
+          "50": 4,
+          "51": 1,
+          "54": 1,
+          "56": 1,
+          "62": 1,
+          "69": 5,
+          "88": 1,
+          "89": 1,
+          "90": 1,
+          "98": 2,
+          "101": 1,
+          "104": 1
+        },
+        "sample_binding_pair_matches": 5,
+        "sample_instruction_count": 5,
+        "sample_operand_parse_failures": 0,
+        "source_swizzle_address_classification": {
+          "known_member": 1
+        },
+        "symbolic_dynamic_cb_reads": 0,
+        "unique_cb_scalar_addresses": 1
+      }
+    }
+  ],
+  "limitations": [
+    "Numeric binding pairs only;no filtering/state/pixel/runtime proof"
+  ]
+}

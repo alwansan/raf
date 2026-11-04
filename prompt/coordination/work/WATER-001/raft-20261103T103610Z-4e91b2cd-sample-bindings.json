@@ -1,1 +1,1 @@
-{"owner":"raft-20261103T103610Z-4e91b2cd","status":"active","issue_id":"WATER-001","hypothesis":"Original SAMPLE resource/sampler operand pairs match serialized texture binding pairs","next_step":"Check original6sampleinstructions;no runtimeclaim"}
+{"owner":"raft-20261103T103610Z-4e91b2cd","status":"completed","issue_id":"WATER-001","result":"6of6originalSAMPLEinstructionsmatchuniqueserializedtexture/samplerpair;0parsefailures","next_step":"Private named resource/uniform and sampler-state reconstruction"}

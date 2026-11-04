@@ -1121,3 +1121,7 @@ BuildFix changed graphics acquisition to reuse regular files only after original
 
 ## Original Blur member correlation — 4 November
 [Evidence](../docs/BLUR_ORIGINAL_MEMBER_CORRELATION_2026-11-04.md):41787401484SUCCESS,20CBreads;69per-stage scalar source addresses all match known original members;0unmapped/outside/missingslot. Address model supported by actual source, not runtime/consumption proof. Preserve partialCBallocations. Next texture/sampler/load bindings. NOT_READY.
+
+
+## Original Blur SAMPLE binding pairs — 4 November
+[Evidence](../docs/BLUR_ORIGINAL_SAMPLE_BINDINGS_2026-11-04.md):41793495493SUCCESS,6/6originalfragmentSAMPLEinstructions matchunique serialized texture/samplerpairs;0parsefailures.14CItests pass,20CBreads/69knownaddresses unchanged. Numericlinkageonly;samplerstate/namedwrapper/runtimeunverified. NOT_READY.
