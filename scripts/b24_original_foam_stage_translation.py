@@ -49,10 +49,10 @@ def validate_stage(program, stage, diagnostic=None):
         # members. Recover its actual bounded count; never force first-pass
         # member counts onto another authentic original pass.
         measured = len(b.get("m_VectorParams", [])) if isinstance(b, dict) else -1
-        varied = (stage == 1 and slot == 0 and diagnostic.get("original_pass") == 1)
+        varied = (slot == 0 and diagnostic.get("original_pass") == 1)
         vectors_valid = (0 <= measured <= size // 16) if varied else measured == vec
         if varied:
-            diagnostic["original_second_vertex_vector_members"] = measured
+            diagnostic["original_second_pass_vector_members"] = measured
         tests = (
             ("record-shape", isinstance(b, dict) and isinstance(ref, dict)),
             ("buffer-size", isinstance(b, dict) and b.get("m_Size") == size),
@@ -118,7 +118,7 @@ def inspect(parsed, entries, scratch, *,
                 "original_parameter_sha256": hashlib.sha256(raw).hexdigest(),
                 "parameter_bytes": len(raw), "parameter_shape": parameter,
                 "partial_cb_slots": len(CB[stage]),
-                "original_second_vertex_vector_members": diagnostic.get("original_second_vertex_vector_members") if stage == 1 and pass_index == 1 else None,
+                "original_second_pass_vector_members": diagnostic.get("original_second_pass_vector_members") if pass_index == 1 else None,
                 "original_spirv_valid": converted["vulkan11_valid"],
                 "private_hlsl_recovered": converted["hlsl_recovered"],
                 "rebuilt_spirv_valid": converted["roundtrip_vulkan11_valid"],
