@@ -1,0 +1,13 @@
+{
+  "id": "20261104T2226Z-start",
+  "owner": "B37",
+  "session_id": "20261104T2226Z-B37-cursor01",
+  "issue_id": "PERF-007",
+  "type": "start",
+  "summary": "B37 registered distinct Android cursor RGBA32 warning root investigation (1449 APK86 CL occurrences); touch postponed, no fix claimed. WATER-001/RENDER-002/LOCAL-005 remain OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/CL/blob/5394407b5cd0a0ca1848ff0902f8d2133bf6ea29/raft%20log/lf/LogRaft-20261104-225757-156/session-summary.json",
+    "https://github.com/alwansan/raf/releases/tag/android-early-test-41812889049-1"
+  ],
+  "at": "2026-11-04T22:26:00Z"
+}
