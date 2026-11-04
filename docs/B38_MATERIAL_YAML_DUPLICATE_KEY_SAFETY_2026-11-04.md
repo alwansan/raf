@@ -13,3 +13,7 @@ Added a bounded SafeLoader subclass in B05 exported_texenvs to reject duplicate 
 - Tests: 7 synthetic cases in tests/test_b38_material_yaml_uniqueness.py, plus the prior B05 suite; exact CI conclusion and commit to be appended after GitHub run.
 - No authenticated full Raft ZIP2 same-export Material comparison has been run, no pixels/images/shaders generated, no original Material repaired, and no Android device acceptance. RENDER-002 remains OPEN; project NOT_READY and 0/3 independent reviews.
 - Owner-confirmed audio and Settings preserved; touch/layout deferred; no native Unity workflow or release requested.
+
+## Remote CI resolution
+
+[First B38 CI](https://github.com/alwansan/raf/actions/runs/41918990785) failed on an incorrect test expectation: duplicate list entries are NOT duplicate YAML mapping keys; B05 normalizer already rejects them. Corrected in [f3b709e](https://github.com/alwansan/raf/commit/f3b709e47421e210fbb0863ac5b920a7d843e1cb). [Final CI41919146580](https://github.com/alwansan/raf/actions/runs/41919146580) SUCCESS, 14 existing B05 and 7 independent B38 synthetic tests. [B05 parallel CI41918990746](https://github.com/alwansan/raf/actions/runs/41918990746) SUCCESS on production parser change. No actual original material/provider comparison or phone test; RENDER OPEN, NOT_READY0/3.
