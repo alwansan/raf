@@ -1,0 +1,14 @@
+{
+  "id": "B13-20261104T2132Z-B13-7e6b-integration",
+  "owner": "B13",
+  "session_id": "20261104T2132Z-B13-7e6b",
+  "issue_id": "LOCAL-005",
+  "type": "integration",
+  "summary": "Offline source adapter backup rollback fixed and restored after lost-tree regression; B13 CI 16/16 twice; world/device still unverified.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/4ba1439378e2ea8133d0afb9d99e5de1acce0d43",
+    "https://github.com/alwansan/raf/commit/0d31686f58b0276c089425e764fa5e3b377d38e6",
+    "https://github.com/alwansan/raf/actions/runs/41918235557"
+  ],
+  "at": "2026-11-04T21:46:00Z"
+}
