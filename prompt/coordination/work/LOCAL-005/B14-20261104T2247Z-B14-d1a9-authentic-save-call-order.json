@@ -6,7 +6,7 @@
   "issue_id": "LOCAL-005",
   "track": "world-save-authenticated-call-order",
   "approach": "SHA-authenticate original Assembly-CSharp.dll/ILSpy SaveAndLoad source, verify executable SaveGame -> SaveUser/SaveWorld -> original Save(RGD) call order and distinct SteamStats external side effect, then assert production Android stats guard preserves actual save calls; original data private/no Unity.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "2925383e4721aa2cd50e55467d2fe2e1b20c3557",
   "intended_files": [
     "scripts/b14_original_save_call_order.py",
@@ -22,8 +22,12 @@
   "experiment_ids": [
     "B14-20261104T2253Z-auth-save-call-order"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Inspect original-source authenticated SaveAndLoad method lexical call order via private no-LFS ILSpy CI, verify actual data vs synthetic tests; do not claim game save/reload without APK.",
-  "updated_at": "2026-11-04T22:53:19.747Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41929461340",
+    "https://github.com/alwansan/raf/actions/runs/41929729720",
+    "https://github.com/alwansan/raf/actions/runs/41929777877"
+  ],
+  "result": "Source-authenticated original SaveGame direct order SaveWorld -> SaveUser -> SteamUserStats.StoreStats. Each SaveUser/World invokes Save once, Save uses FileManager. Android local stats-only guard preserves original save order and methods. Genuine original CI41929777877 SUCCESS 9 synthetic + exact DLL/source SHA. No actual .rgd durability/mobile proof.",
+  "next_step": "Scoped authentic original call-order complete. LOCAL-005 still OPEN; coordinated APK/device world create/save/reopen required after graphics blockers. B14 can switch to distinct P0 rendering support next session.",
+  "updated_at": "2026-11-04T23:00:30.311Z"
 }
