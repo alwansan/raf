@@ -873,6 +873,19 @@
       "_record_path": "events/B03/20261104T2119Z-render-material-result.json"
     },
     {
+      "id": "B03-20261104T2243Z-original-renderer-start",
+      "owner": "B03",
+      "session_id": "20261104T2243Z-B03-7c9e",
+      "issue_id": "RENDER-002",
+      "type": "start",
+      "summary": "Started immutable ZIP2 six-scene original Renderer→Material typed-source baseline; complements previous export-only synthetic guard, no original game change.",
+      "evidence": [
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B21_LIGHTMAP_SOURCE_EXPORT_LINKS_2026-11-04.md"
+      ],
+      "at": "2026-11-04T22:44:18.837Z",
+      "_record_path": "events/B03/20261104T2243Z-original-renderer-start.json"
+    },
+    {
       "id": "20261104T2102Z-B04-start",
       "owner": "B04",
       "session_id": "20261104T2102Z-B04-7c20",
@@ -926,6 +939,20 @@
       ],
       "at": "2026-11-04T21:17:51.568Z",
       "_record_path": "events/B04/20261104T2120Z-asset-mesh-source-integrity.json"
+    },
+    {
+      "id": "20261104T2243Z-B04-quality-snapshot-start",
+      "owner": "B04",
+      "session_id": "20261104T2243Z-B04-6b7c",
+      "issue_id": "RENDER-002",
+      "type": "start",
+      "summary": "After prior B04 source fixes, start scoped read-only Android runtime QualitySettings tier/pixel-light/texture-quality evidence inside existing bounded B12 scene snapshot; preserve color/sound/Settings UI/touch.",
+      "evidence": [
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/W2_COLOR_SPACE_SETTINGS_2026-11-03.md",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/android-port/Runtime/Platform/AndroidTestDiagnostics.cs"
+      ],
+      "at": "2026-11-04T22:43:00Z",
+      "_record_path": "events/B04/20261104T2243Z-quality-snapshot-start.json"
     },
     {
       "id": "20261104T2115Z-B05-material-texenv-result",
@@ -1001,6 +1028,20 @@
       "_record_path": "events/B06/20261104T210726Z-B06-fmt6a2-start.json"
     },
     {
+      "id": "20261104T224512Z-B06-wg7a3-start",
+      "owner": "B06",
+      "session_id": "20261104T224512Z-B06-wg7a3",
+      "issue_id": "WATER-001",
+      "type": "start",
+      "summary": "B06 resumes FFT work to distinguish Unity maximum local workgroup invocation count from dispatch-group X/Y/Z limits and verify source-authenticated 5 original FFT group sizes against this theoretical device cap; does not change FFT shaders/kernels.",
+      "evidence": [
+        "https://github.com/alwansan/raf/commit/664100d4b976802a3463aa4ee5c0fe5254c7d28f",
+        "https://github.com/alwansan/raf/actions/runs/41914575997"
+      ],
+      "at": "2026-11-04T22:45:35.546Z",
+      "_record_path": "events/B06/20261104T224512Z-B06-wg7a3-start.json"
+    },
+    {
       "id": "20261104T2112Z-joined",
       "owner": "B07",
       "session_id": "20261104T2112Z-B07-6e51",
@@ -1045,6 +1086,19 @@
       "_record_path": "events/B07/20261104T2129Z-world-callback-managed.json"
     },
     {
+      "id": "20261104T2242Z-coroutine-entry-start",
+      "owner": "B07",
+      "session_id": "20261104T2242Z-B07-c7ea",
+      "issue_id": "LOCAL-005",
+      "type": "start",
+      "summary": "B07 resumed; original-source-authenticated first IEnumerator MoveNext entry log planned for WorldHasBeenLoaded, preserving coroutine yield and all world/save semantics.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41916347469"
+      ],
+      "at": "2026-11-04T22:45:00Z",
+      "_record_path": "events/B07/20261104T2242Z-coroutine-entry-start.json"
+    },
+    {
       "id": "B08-20261104T2130Z-start",
       "owner": "B08",
       "session_id": "20261104T2130Z-B08-b71c",
@@ -1072,6 +1126,20 @@
       ],
       "at": "2026-11-04T21:36:00Z",
       "_record_path": "events/B08/20261104T2136Z-fft-registry-result.json"
+    },
+    {
+      "id": "B08-20261104T2246Z-descriptor-start",
+      "owner": "B08",
+      "session_id": "20261104T2246Z-B08-7d2a",
+      "issue_id": "WATER-001",
+      "type": "start",
+      "summary": "New B08 session tests original FFT 20-program SPIR-V numerical descriptor ABI (not native kernel mapping), complementing B18 resource-class proof and B30 variantMap discriminator result.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41923703800",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B30_ORIGINAL_FFT_VARIANTMAP_ROUTING_2026-11-04.md"
+      ],
+      "at": "2026-11-04T22:46:00Z",
+      "_record_path": "events/B08/20261104T2246Z-descriptor-start.json"
     },
     {
       "id": "B09-spectrum-start-20261104T213740Z",
@@ -1104,6 +1172,20 @@
       "_record_path": "events/B09/20261104T2140Z-spectrum-source-result.json"
     },
     {
+      "id": "B09-spectrum-resume-20261104T224504636Z-B09-sp7",
+      "owner": "B09",
+      "session_id": "20261104T224504636Z-B09-sp7",
+      "issue_id": "WATER-001",
+      "type": "start",
+      "summary": "B09 resumed same identity to harden original Spectrum seven-pass structural proof using B17 verified PathID2432 and W2 authentic topology, avoiding redundant source data download.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41920232173",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B17_SPECTRUM_STAGE_DESCRIPTORS_2026-11-04.md"
+      ],
+      "at": "2026-11-04T22:45:04.636Z",
+      "_record_path": "events/B09/20261104T2245Z-spectrum-resume.json"
+    },
+    {
       "id": "20261104T2132Z-start-vendor-meta",
       "owner": "B10",
       "session_id": "20261104T2132Z-B10-a6e1",
@@ -1134,6 +1216,20 @@
       "_record_path": "events/B10/20261104T2138Z-vendor-meta-integration.json"
     },
     {
+      "id": "20261104T2242Z-volumetric-start",
+      "owner": "B10",
+      "session_id": "20261104T2242Z-B10-vlm1",
+      "issue_id": "RENDER-002",
+      "type": "start",
+      "summary": "B10 resumed after completed vendor metadata scope; now hardening volumetric Lighting BSD NOTICE transaction to prevent modified shaders after a late notice I/O failure. Scope distinct from B20 original Blur rollback.",
+      "evidence": [
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/restore_volumetric_shaders.py",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/restore_tmp_shaders.py"
+      ],
+      "at": "2026-11-04T22:45:12.019Z",
+      "_record_path": "events/B10/20261104T2242Z-volumetric-start.json"
+    },
+    {
       "id": "20261104T2115Z-gamut-start",
       "owner": "B11",
       "session_id": "20261104T2115Z-B11-bca7",
@@ -1159,6 +1255,19 @@
       ],
       "at": "2026-11-04T21:24:00Z",
       "_record_path": "events/B11/20261104T2124Z-gamut-integration.json"
+    },
+    {
+      "id": "20261104T2245Z-gamut-utf8-start",
+      "owner": "B11",
+      "session_id": "20261104T2244Z-B11-54cf",
+      "issue_id": "RENDER-002",
+      "type": "start",
+      "summary": "B11 resumed on reproducible UTF-8 character-index versus byte-index misalignment in gamut correction whitelist; exact source tests planned, without Unity/phone inference.",
+      "evidence": [
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/b11_restore_original_color_gamuts.py"
+      ],
+      "at": "2026-11-04T22:45:00Z",
+      "_record_path": "events/B11/20261104T2245Z-gamut-utf8-start.json"
     },
     {
       "id": "B12-20261104T2132Z-B12-c4a8-start",
@@ -1224,6 +1333,20 @@
       "_record_path": "events/B12/20261104T2158Z-final-managed-ci.json"
     },
     {
+      "id": "B12-20261104T2243Z-B12-bounded-tree-a9-start",
+      "owner": "B12",
+      "session_id": "20261104T2243Z-B12-bounded-tree-a9",
+      "issue_id": "PERF-007",
+      "type": "start",
+      "summary": "B12 resumed and found full-hierarchy GetComponentsInChildren<Renderer>(true) array allocation inside 512-renderer-limited diagnostic. Starting bounded scene traversal repair to avoid extra diagnostic memory/GC pressure; preserve existing mesh/shader counters. No device claim.",
+      "evidence": [
+        "https://github.com/alwansan/raf/commit/a324eb6208f9edc3f4587aa4c8236192e13d6684",
+        "https://github.com/alwansan/raf/actions/runs/41920015979"
+      ],
+      "at": "2026-11-04T22:45:46.977Z",
+      "_record_path": "events/B12/20261104T2243Z-start-bounded-tree.json"
+    },
+    {
       "id": "B13-20261104T2132Z-B13-7e6b-start",
       "owner": "B13",
       "session_id": "20261104T2132Z-B13-7e6b",
@@ -1279,6 +1402,19 @@
       ],
       "at": "2026-11-04T21:59:00Z",
       "_record_path": "events/B13/20261104T2159Z-water-meta-result.json"
+    },
+    {
+      "id": "B13-builtin-atomic-start",
+      "owner": "B13",
+      "session_id": "20261104T2247Z-B13-builtin-atomic",
+      "issue_id": "RENDER-002",
+      "type": "start",
+      "summary": "B13 resumes on independent P0 production builtin shader source safety: prepublish concurrency and atomic rollback; preserves original GUIDs and all authenticity gates, source-only.",
+      "evidence": [
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/restore_builtin_shaders.py"
+      ],
+      "at": "2026-11-04T22:47:00Z",
+      "_record_path": "events/B13/20261104T2247Z-builtin-atomic-start.json"
     },
     {
       "id": "B14-20261104T2131Z-start",
@@ -1364,6 +1500,21 @@
       ],
       "at": "2026-11-04T22:06:00Z",
       "_record_path": "events/B15/20261104T220600Z-sampler-result.json"
+    },
+    {
+      "id": "20261104T224800Z-sampler-defaults-start",
+      "owner": "B15",
+      "session_id": "20261104T224800Z-B15-defaults-32f1",
+      "issue_id": "RENDER-002",
+      "type": "start",
+      "summary": "Resumed B15 after prior 16/16 CI; investigate Unity documented TextureImporter mipBias=-100 unset default and same-export instance bridging of B02 Texture28/W1 Material traces; ensure no false sampler mismatch claim.",
+      "evidence": [
+        "https://docs.unity.cn/Documentation/ScriptReference/TextureImporter-mipMapBias.html",
+        "https://github.com/alwansan/raf/actions/runs/41927712988",
+        "https://github.com/alwansan/raf/actions/runs/41921429305"
+      ],
+      "at": "2026-11-04T22:47:25.577Z",
+      "_record_path": "events/B15/20261104T224800Z-sampler-defaults-start.json"
     },
     {
       "id": "B16-20261104T2151Z-kernel-conditional-start",
@@ -2228,5 +2379,5 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "input_sha256": "e1d7270ca17f5d4d85e90d658db8e48c87d8ab3b0c72a54c56569dcb6f059f46"
+  "input_sha256": "d631412f195c8aa6aa03b260081ad2cd110adf41ec768eea87a6f1fbed3560f5"
 }
