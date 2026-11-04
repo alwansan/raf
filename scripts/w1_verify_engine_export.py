@@ -63,11 +63,7 @@ def original_keys(source):
 def original_binding_map(keys, table):
     engine = {}
     custom = []
-    seen = set()
     for key in keys:
-        if not key[0] or key in seen:
-            raise ValueError('Empty or duplicate original shader key')
-        seen.add(key)
         choices = table.get(key, [])
         if len(choices) > 1:
             raise ValueError('Ambiguous original engine identity')
@@ -105,6 +101,12 @@ def verify_histogram(graph, engine):
 
 def verify_export(project, engine, custom):
     from scripts.restore_builtin_shaders import exported_shader_identity
+    original_names = [key[0] for key in custom]
+    if any(not name for name in original_names) or len(set(original_names)) != len(original_names):
+        # Such serialized objects are valid inputs for engine intersection, but
+        # cannot be proved exported by a name-only lookup. Require object-level
+        # exporter identity evidence instead of pretending duplicate keys vanish.
+        raise ValueError('Nameless or repeated original custom names need object-level export identity')
     graph = inventory(project)
     if not graph['reference_inventory_complete']:
         raise ValueError('Actual export shader references or original metadata incomplete')
@@ -143,6 +145,8 @@ def main():
     result = {**verify_histogram(evidence['inventory'], engine),
               'original_shader_objects': len(keys), 'original_engine_shader_keys': len(engine),
               'original_non_engine_shader_keys': len(custom), 'exact_engine_records': len(rows),
+              'original_non_engine_empty_names': sum(not key[0] for key in custom),
+              'original_non_engine_repeated_keys': len(custom) - len(set(custom)),
               'observed_run_id': evidence['run_id'], 'observed_source_sha': evidence['source_sha'],
               'observed_inventory_errors': evidence['inventory']['errors'],
               'exact_engine_records_digest': digest(rows),

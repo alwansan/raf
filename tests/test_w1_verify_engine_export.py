@@ -28,11 +28,19 @@ class EngineExportProof(unittest.TestCase):
         self.assertFalse(engine)
         self.assertEqual(len(custom), 1)
 
-    def test_ambiguous_and_duplicate_original_keys_fail(self):
+    def test_ambiguous_and_duplicate_engine_original_keys_fail(self):
         with self.assertRaises(ValueError):
             original_binding_map([self.key], {self.key: [('extra', 46), ('extra', 200)]})
         with self.assertRaises(ValueError):
-            original_binding_map([self.key, self.key], {})
+            original_binding_map([self.key, self.key], {self.key: [('extra', 46)]})
+
+    def test_nameless_and_duplicate_custom_objects_are_retained_without_false_export_proof(self):
+        engine, custom = original_binding_map([('', ()), self.custom, self.custom], {})
+        self.assertFalse(engine)
+        self.assertEqual(len(custom), 3)
+        with tempfile.TemporaryDirectory() as temp:
+            with self.assertRaises(ValueError):
+                verify_export(Path(temp), self.engine, custom)
 
     def test_histogram_count_duplicate_kind_and_boolean_controls(self):
         for mode in ('count', 'duplicate', 'kind', 'boolean'):
