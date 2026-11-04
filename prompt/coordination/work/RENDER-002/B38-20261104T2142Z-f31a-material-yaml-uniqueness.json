@@ -6,7 +6,7 @@
   "issue_id": "RENDER-002",
   "track": "colors-materials",
   "approach": "Fail closed on duplicate mapping keys in existing B05 same-instance Material texture/UV YAML verifier, with negative synthetic controls and isolated CI.",
-  "status": "active",
+  "status": "completed",
   "base_sha": null,
   "intended_files": [
     "scripts/b05_verify_material_texenv_bindings.py",
@@ -22,8 +22,11 @@
   "experiment_ids": [
     "B38-20261104T2142Z-yaml-duplicate-false-positive"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Reproduce duplicate key acceptance, implement fail-closed loader and tests. Preserve all original assets and private source.",
-  "updated_at": "2026-11-04T21:42:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41919146580",
+    "https://github.com/alwansan/raf/actions/runs/41918990785"
+  ],
+  "result": "Integrated duplicate-key rejection in production B05 YAML Material texture parser; final GitHub CI41919146580 SUCCESS on f3b709e47421e210fbb0863ac5b920a7d843e1cb (14 B05 + 7 B38 synthetic cases). Initial CI41918990785 test expectation mislabeled repeated list entries and was corrected; B05 production suite stayed green. No actual original/Unity/device output verified.",
+  "next_step": "Private ZIP2-authenticated same-export material trace and real source/export value comparison; repair proven drift only.",
+  "updated_at": "2026-11-04T21:50:00Z"
 }
