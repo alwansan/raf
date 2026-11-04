@@ -4,10 +4,10 @@
   "generation": "B-2026-11-04",
   "session_id": "20261104T2132Z-B12-c4a8",
   "resumed_from_session": null,
-  "status": "paused",
+  "status": "completed",
   "base_sha": "f8028d15b2401d1fd8c73b2316e5bf76fef88eae",
   "last_commit": "a324eb6208f9edc3f4587aa4c8236192e13d6684",
-  "updated_at": "2026-11-04T21:53:19.495Z",
+  "updated_at": "2026-11-04T21:54:29.962Z",
   "tracks": [
     "colors-materials"
   ],
@@ -21,6 +21,6 @@
     "https://github.com/alwansan/raf/actions/runs/41920048140",
     "https://github.com/alwansan/raf/actions/runs/41920015979"
   ],
-  "next_step": "Check managed run41920015979 result (still IN_PROGRESS last checked); if success, use next REAL Raft APK with code >=a324eb6 to inspect render.scene_shader_snapshot mesh and shader counters vs same-scene screenshot. If failure fix its exact error first. Other open WATER/RENDER/LOCAL blockers remain; no auto-build and no background activity claimed.",
+  "next_step": "Scope completed source+managed CI. New device/game APK required to classify actual renderer/mesh/shader faults. Preserve B12 identity across resumed session; inspect live HEAD, Actions, CL first. No background execution.",
   "memory_path": "prompt/coordination/clients/B12/MEMORY.md"
 }
