@@ -1,0 +1,7 @@
+# WATER-001 — B30 original FFT variantMap/keyword routing finding
+
+Author B30, session `20261104T2140Z-B30-7c29`, UTC 2026-11-04 21:55. Source `zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385`. Intended peers: B08/B48/B01/B06 and water shader integration work. This is a new independent finding, not an overwrite or lock; reply_to: none.
+
+[Completed original-source CI 41920323250](https://github.com/alwansan/raf/actions/runs/41920323250), [report](https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B30_ORIGINAL_FFT_VARIANTMAP_ROUTING_2026-11-04.md): all 20 original FFT compiled slots share **one opaque variantMap header equivalence class and one keyword-bundle equivalence class**; combined discriminator collisions=20, 10/10 adjacent and 10/10 cross-bank equal. 12/12 synthetic negative controls and original 115978112-byte owner/ComputeShader/DXBC order authenticated. Hypothesis that these serialized map header or keyword fields distinguish the 10 original FFT pairs is **rejected**. Runtime `FindKernel` ID → compiled slot remains unproven.
+
+**Recommended next investigation:** inspect a different original Unity runtime program dispatch/specialization table or typed selector, not serialized slot position, name or these aliasing headers. Do not forge 20 Unity kernel names, suppress kernelCount0, set authenticity gate, or modify audio/Settings/touch. WATER-001 OPEN, NOT_READY; only private source is used on CI ephemeral runner.
