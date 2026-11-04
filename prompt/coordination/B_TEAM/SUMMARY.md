@@ -32,8 +32,6 @@
 
 ## الأحداث
 
-- [2026-11-04T21:52:54.631Z / B12](events/B12/20261104T2153Z-mesh-visibility-result.json): B12 expanded bounded scene shader snapshot to classify missing MeshFilter/sharedMesh and SkinnedMeshRenderer.sharedMesh in same <=512 enabled renderer sample; no vertex/index/mesh payload readback or material mutation. C# commit a324eb6, synthetic tests acd3514, isolated CI41920048140 SUCCESS; original managed integration41920015979 still in progress at event time, so no Unity/device/actual Mesh evidence claimed.
-- [2026-11-04T21:53:00Z / B21](events/B21/20261104T2153Z-start-lightmap-lineage.json): B21 registered independent scene lighting/lightmap provenance investigation; hypothesis unverified, preserve source GUIDs, no overlap with active Material/Shader/FFT or local repair files.
 - [2026-11-04T21:53:34.379Z / B16](events/B16/20261104T2151Z-kernel-conditional-start.json): Registered distinct WATER-001 conditional-preprocessing guard; no original kernel, shader or device fixes claimed.
 - [2026-11-04T21:54:00Z / B15](events/B15/20261104T215400Z-sampler-start.json): B15 starts independent original/export sampler fidelity coverage; existing source-only aggregate cannot prove exported per-object parity.
 - [2026-11-04T21:54:00Z / B13](events/B13/20261104T2154Z-water-meta-start.json): B13 takes independent P0 water shader/compute .meta GUID validity and duplicate identity structural verification. Complements B14 linked-meta and B49 pass gates; source-only, no resource replacement.
@@ -62,5 +60,7 @@
 - [2026-11-04T22:36:00Z / B20](events/B20/20261104T2236Z-shaderlab-scope-result.json): SOURCE_FIXED scoped water ShaderLab Pass counting to Shader/SubShader and fail-closed enclosing brace check; B20 synthetic+upstream source CI PASS, no original water programs or GPU/device restoration.
 - [2026-11-04T22:37:37.769Z / B25](events/B25/20261104T2235Z-foam-state-result.json): Original SHA-pinned Foam/Global two pass render states both serialized privately to identical 247B SHA256; 11/11 synthetic and authentic source CI 41926521683 SUCCESS; disproves render-state difference hypothesis, not CB/ShaderLab/Unity/device proof.
 - [2026-11-04T22:38:00Z / B20](events/B20/20261104T2238Z-blur-rollback-start.json): Second work scope: strengthen original Blur ShaderLab transient export installation rollback to atomic write+pristine metadata verification, preserving external recovery backup.
+- [2026-11-04T22:39:38.864Z / B25](events/B25/20261104T2242Z-foam-cb-start.json): Following authenticated identical Foam pass render states, B25 probes original partial CB name-index→slot mapping for genuine private ShaderLab source assembly; avoids B24 four-stage translation duplication.
+- [2026-11-04T22:41:00Z / B37](events/B37/20261104T2241Z-cursor-original-result.json): B37 source-integrated verified private original Cursor.SetCursor probe, tests/CI41926487471 6/6 and final CI41926892044 7/7 plus authenticated 2394-file original: exactly 3 direct calls in 2 files, 1 literal-null and 2 nonliteral texture expressions. Exact original SHA and bounded digests retained. Did not touch game or deferred input; no evidence of 1449 warning causation or phone performance fix.
 
-بصمة المدخلات: a455e04873397a4832ee19d5fe2cbd09dc640fbc65bcb5b7579802d49137c77e
+بصمة المدخلات: d1197535e79748b0ed1b2f4eafbacb6b50d949cdee13bcbed76f1f7926b7643f

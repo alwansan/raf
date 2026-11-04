@@ -171,18 +171,22 @@
       "status": "OPEN",
       "track": "integration",
       "evidence": [
-        "https://github.com/alwansan/CL/blob/5394407b5cd0a0ca1848ff0902f8d2133bf6ea29/raft%20log/lf/LogRaft-20261104-225757-156/session-summary.json"
+        "https://github.com/alwansan/CL/blob/5394407b5cd0a0ca1848ff0902f8d2133bf6ea29/raft%20log/lf/LogRaft-20261104-225757-156/session-summary.json",
+        "https://github.com/alwansan/raf/actions/runs/41926487471",
+        "https://github.com/alwansan/raf/actions/runs/41926892044",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B37_ORIGINAL_CURSOR_RGBA32_PROVENANCE_2026-11-04.md"
       ],
       "remaining": [
         "إصلاحجذرerrorfloodقبلنسبتحسنFPS",
-        "قياسذاكرةمتسقوصورمتماثلة"
+        "قياسذاكرةمتسقوصورمتماثلة",
+        "B37 private source-authenticated Cursor.SetCursor scan in CI41926892044, seven tests PASS: 3 direct calls from 2 original files, 1 literal-null and 2 nonliteral cursor texture expressions. 1449 APK86 RGBA32 warnings still not source-causally linked; no new device format/readability/pixel/performance evidence. No texture conversion or touch modifications made."
       ],
       "acceptance": [
         "قياسقبلوبعدمصدرونسخةمعلومة",
         "لاخسارةمحتوىأوجودة"
       ],
-      "updated_by": "owner-team-bootstrap",
-      "updated_at": "2026-11-04",
+      "updated_by": "B37",
+      "updated_at": "2026-11-04T22:41:00Z",
       "_record_path": "issues/PERF-007.json"
     },
     {
@@ -342,7 +346,14 @@
         "https://github.com/alwansan/raf/commit/a21d66bc9122bba432c2c6d021e096b7f988abcc",
         "https://github.com/alwansan/raf/actions/runs/41926202371",
         "https://github.com/alwansan/raf/actions/runs/41926043987",
-        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B20_SHADERLAB_SCOPE_INTEGRATION_2026-11-04.md"
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B20_SHADERLAB_SCOPE_INTEGRATION_2026-11-04.md",
+        "https://github.com/alwansan/raf/actions/runs/41926521683",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B25_ORIGINAL_FOAM_RENDER_STATE_2026-11-04.md",
+        "https://github.com/alwansan/raf/commit/e9218c865aff845361f588aa4b000629619f1560",
+        "https://github.com/alwansan/raf/commit/9387b48176fc89aa99b0ebbd9aa2ad4666564515",
+        "https://github.com/alwansan/raf/actions/runs/41927169542",
+        "https://github.com/alwansan/raf/actions/runs/41927095232",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B20_AUTHENTIC_BLUR_ATOMIC_ROLLBACK_2026-11-04.md"
       ],
       "remaining": [
         "Spectrum/Foam/Blur passes ناقصة في APK86",
@@ -364,7 +375,9 @@
         "B18: authenticated ZIP2 original FFT ComputeShader 20/20 SHEX declarations show t0/t1/u0 read/read/write registers and threadgroup dimensions identical to same-slot serialized Unity data; Actions41922333604 SUCCESS 13/13 synthetic and exact SHA source. Original programs contain 0 RDEF chunks; compiled private names, runtime Unity FindKernel index→compiled slot, ShaderLab Unity import/Adreno pixels remain NOT verified; WATER-001 OPEN.",
         "B18 second authenticated original FFT proof CI41923703800 SUCCESS: 20/20 translated DXBC->SPIR-V image role classes preserved (2 read sampled Texture2D, 1 write storage Texture2D) plus local workgroup size; 10 synthetic controls PASS. Mapping each original t register to one concrete SPIR-V set/binding, real Unity .compute import and Adreno render remain UNKNOWN. No game patch or new APK.",
         "B01: source-only managed FFT argument parser now ignores quoted/commented delimiters; CI41926033893 67 synthetic tests plus SHA-pinned private Dx11FFT and numeric oracle PASS; original caller counts unchanged. Runtime kernels/ShaderLab/Adreno remain unverified.",
-        "B20 source-only ShaderLab scope gate (a21d66b, CI41926202371 PASS): orphan/Properties/top-level Pass no longer inflates water Pass counts; this is NOT original program, Unity import, runtime pixels or kernel recovery. Original ShaderLab/FFT identity still open."
+        "B20 source-only ShaderLab scope gate (a21d66b, CI41926202371 PASS): orphan/Properties/top-level Pass no longer inflates water Pass counts; this is NOT original program, Unity import, runtime pixels or kernel recovery. Original ShaderLab/FFT identity still open.",
+        "B25 original SHA-pinned Foam/Global render-state verification: both of the two genuine pass m_State fragments are identical (247B and SHA256 19b4753c... each), source-only CI41926521683 SUCCESS 11/11 synthetic plus genuine ZIP2 object SHA. Hypothesis that original pass render states differ rejected; pass programs/partial CB texture bindings, author ShaderLab installation, exported .meta/GUID lineage, Unity/Adreno and phone STILL unverified.",
+        "B20 original-derived Blur transient export rollback now atomic with retained verified external backup; source CI41927169542 PASS on injected failures. Actual original candidate in Unity/Adreno pixels and game water still NOT tested, WATER-001 OPEN."
       ],
       "acceptance": [
         "هوية برامج ونوى أصلية أو تطابق موثق دونdummy",
@@ -372,7 +385,7 @@
         "اختبار هاتف يثبت الماء بلا pass/kernel errors"
       ],
       "updated_by": "B20",
-      "updated_at": "2026-11-04T22:35:00Z",
+      "updated_at": "2026-11-04T22:40:10Z",
       "_record_path": "issues/WATER-001.json"
     }
   ],
@@ -1740,6 +1753,20 @@
       "_record_path": "events/B25/20261104T2235Z-foam-state-result.json"
     },
     {
+      "id": "20261104T2242Z-B25-foam-cb-start",
+      "owner": "B25",
+      "session_id": "20261104T222931Z-B25-foam-state",
+      "issue_id": "WATER-001",
+      "type": "start",
+      "summary": "Following authenticated identical Foam pass render states, B25 probes original partial CB name-index→slot mapping for genuine private ShaderLab source assembly; avoids B24 four-stage translation duplication.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41926521683",
+        "https://github.com/alwansan/raf/actions/runs/41920166966"
+      ],
+      "at": "2026-11-04T22:39:38.864Z",
+      "_record_path": "events/B25/20261104T2242Z-foam-cb-start.json"
+    },
+    {
       "id": "20261104T2140Z-B30-water-start",
       "owner": "B30",
       "session_id": "20261104T2140Z-B30-7c29",
@@ -1810,6 +1837,21 @@
       ],
       "at": "2026-11-04T22:26:00Z",
       "_record_path": "events/B37/20261104T2226Z-start.json"
+    },
+    {
+      "id": "20261104T2241Z-cursor-original-result",
+      "owner": "B37",
+      "session_id": "20261104T2226Z-B37-cursor01",
+      "issue_id": "PERF-007",
+      "type": "result",
+      "summary": "B37 source-integrated verified private original Cursor.SetCursor probe, tests/CI41926487471 6/6 and final CI41926892044 7/7 plus authenticated 2394-file original: exactly 3 direct calls in 2 files, 1 literal-null and 2 nonliteral texture expressions. Exact original SHA and bounded digests retained. Did not touch game or deferred input; no evidence of 1449 warning causation or phone performance fix.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41926487471",
+        "https://github.com/alwansan/raf/actions/runs/41926892044",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B37_ORIGINAL_CURSOR_RGBA32_PROVENANCE_2026-11-04.md"
+      ],
+      "at": "2026-11-04T22:41:00Z",
+      "_record_path": "events/B37/20261104T2241Z-cursor-original-result.json"
     },
     {
       "id": "B38-20261104T2142Z-start-material-texenv",
@@ -2157,5 +2199,5 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "input_sha256": "a455e04873397a4832ee19d5fe2cbd09dc640fbc65bcb5b7579802d49137c77e"
+  "input_sha256": "d1197535e79748b0ed1b2f4eafbacb6b50d949cdee13bcbed76f1f7926b7643f"
 }
