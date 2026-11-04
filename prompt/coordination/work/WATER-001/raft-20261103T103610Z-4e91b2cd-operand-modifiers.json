@@ -1,0 +1,1 @@
+{"owner":"raft-20261103T103610Z-4e91b2cd","status":"active","issue_id":"WATER-001","hypothesis":"Explicit source modifier extension may explain3originalfragmentparse failures; test original rather than assume","next_step":"Inspect authentic stage result; retain unknown failures"}

@@ -10,7 +10,13 @@ def read(words):
  for ordinal in range(ARITY[opcode]):
   if at>=len(words):raise ValueError('truncated operand')
   start=at;t=words[at];at+=1
-  if t>>31:raise ValueError('extended operand')
+  modifier=0
+  if t>>31:
+   if at>=len(words):raise ValueError('truncated extension')
+   ext=words[at];at+=1
+   modifier=(ext>>6)&255
+   if (ext&63)!=1 or modifier>3 or ext&~(63|(255<<6)):raise ValueError('unsupported extension')
+   if ordinal==0:raise ValueError('destination modifier')
   typ=(t>>12)&255;dim=(t>>20)&3
   for index in range(dim):
    if (t>>(22+3*index))&7:raise ValueError('relative operand')
@@ -22,6 +28,8 @@ def read(words):
   if at>len(words):raise ValueError('truncated payload')
   if typ==8:
    if ordinal==0:raise ValueError('CB destination')
-   reads.append(decode(words[start:at]))
+   item=decode([t&0x7fffffff]+list(words[at-2:at]))
+   item['source_modifier']=modifier
+   reads.append(item)
  if at!=len(words):raise ValueError('trailing words')
  return reads
