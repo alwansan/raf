@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "username": "B46",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2058Z-B46-6e3d",
+  "resumed_from_session": null,
+  "status": "active",
+  "base_sha": "0484260051916587e102359d6a3ccb820358c7e5",
+  "last_commit": null,
+  "updated_at": "2026-11-04T20:58:00Z",
+  "tracks": [
+    "RENDER-002:export-texture-link-integrity"
+  ],
+  "work_ids": [
+    "B46-20261104T2058Z-B46-6e3d-texture-export-links"
+  ],
+  "run_urls": [],
+  "next_step": "Implement exported Material m_TexEnvs texture reference integrity guard, test negatives and optional isolated CI.",
+  "memory_path": "prompt/coordination/clients/B46/MEMORY.md"
+}

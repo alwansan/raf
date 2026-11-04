@@ -1,0 +1,13 @@
+{
+  "id": "20261104T2058Z-join-render-texture-links",
+  "owner": "B46",
+  "session_id": "20261104T2058Z-B46-6e3d",
+  "issue_id": "RENDER-002",
+  "type": "start",
+  "summary": "Registered independent exported material-texture reference integrity lane, distinct from current LOCAL-005 and original shader audits.",
+  "evidence": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/W2_MATERIAL_TEXTURE_BINDINGS_2026-11-04.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/A13_EXPORTED_MATERIAL_SHADER_GUID_GUARD_2026-11-04.md"
+  ],
+  "at": "2026-11-04T20:58:00Z"
+}

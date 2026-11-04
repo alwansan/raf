@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "owner": "B46",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2058Z-B46-6e3d",
+  "issue_id": "RENDER-002",
+  "track": "colors-materials",
+  "approach": "Read-only exported m_TexEnvs -> Texture GUID integrity guard, complement Shader link audit.",
+  "status": "active",
+  "base_sha": "0484260051916587e102359d6a3ccb820358c7e5",
+  "intended_files": [
+    "scripts/verify_exported_material_texture_links.py",
+    "tests/test_verify_exported_material_texture_links.py",
+    ".github/workflows/raft-b46-render-texture-links.yml",
+    "docs/B46_EXPORTED_TEXTURE_LINKS_2026-11-04.md"
+  ],
+  "hypothesis": "Missing/mispointed export texture GUIDs can cause white/flat surfaces despite intact shader references.",
+  "related_work": [
+    "W2 source 4583 bound slots",
+    "A13 shader GUID guard",
+    "W1 1536 traced material documents"
+  ],
+  "experiment_ids": [
+    "B46-20261104T2058Z-B46-6e3d-texture-link-synthetic"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement negative controls and validate using independent CI; don't imply real export check until it runs.",
+  "updated_at": "2026-11-04T20:58:00Z"
+}
