@@ -64,5 +64,24 @@ class B49WaterProgramCoverage(unittest.TestCase):
             self.assertFalse(row['contract_satisfied'])
 
 
+    def test_alternate_subshaders_are_not_one_runtime_pass_sequence(self):
+        first = 'SubShader { ' + ''.join('Pass { ' + GOOD + ' } ' for _ in range(2)) + ' }'
+        second = 'SubShader { ' + ''.join('Pass { ' + GOOD + ' } ' for _ in range(4)) + ' }'
+        profile = pass_coverage('Shader "Fixture" { ' + first + second + ' }')
+        self.assertEqual(profile['pass_count'], 6)  # diagnostic only
+        self.assertEqual(profile['subshader_pass_counts'], [2, 4])
+        self.assertEqual(profile['subshader_programmed_pass_counts'], [2, 4])
+        self.assertTrue(profile['all_subshaders_programmed'])
+        self.assertFalse(profile['active_subshader_runtime_verified'])
+
+    def test_unprogrammed_alternative_is_reported_per_subshader(self):
+        profile = pass_coverage(
+            'Shader "Fixture" { SubShader { Pass { ' + GOOD + ' } } '
+            'SubShader { Pass { /* deliberately blank */ } } }')
+        self.assertEqual(profile['subshader_pass_counts'], [1, 1])
+        self.assertEqual(profile['subshader_programmed_pass_counts'], [1, 0])
+        self.assertFalse(profile['all_subshaders_programmed'])
+
+
 if __name__ == '__main__':
     unittest.main()
