@@ -73,7 +73,9 @@
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B13_BUILTIN_SHADER_ATOMIC_INSTALL_2026-11-04.md",
     "https://github.com/alwansan/raf/actions/runs/41929077930",
     "https://github.com/alwansan/raf/actions/runs/41928852363",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/B05-sharedassets6-texenv.json"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/B05-sharedassets6-texenv.json",
+    "https://github.com/alwansan/raf/commit/50838fb89fc1552f7ca9809d159d14c5ee04830c",
+    "https://github.com/alwansan/raf/actions/runs/41930143093"
   ],
   "remaining": [
     "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -105,13 +107,14 @@
     "B10 continued: production volumetric Lighting BSD NOTICE now commits/rolls back in the same authenticated shader restoration transaction with fail-closed paths. B10 final source CI41928744660 SUCCESS 27 distinct tests and real pinned vendor temporary restoration CI41928592399 SUCCESS; no actual Raft Unity/Adreno/Android colors or original Material→Shader equivalence shown. RENDER-002 remains OPEN.",
     "B15 continuation: corrected a provable false sampler-drift report for Unity TextureImporter mipBias=-100 unset, required matching B02/W1 paired trace export_instance when supplied, rejected arbitrary source folder aliases with trusted ZIP2 basename; CI41929031892 23/23 synthetic PASS. This is diagnostic source fidelity only: 0 real original-vs-export texture pairs tested, no Unity/GPU/device colors proof.",
     "B13 source-fixed builtin ShaderLab restorer safety: verified exact backups, concurrent source edit rejection and fsynced atomic replacement/rollback; CI41928703661 14/14 synthetic. NOT authentic shader programs or same-export Material/Unity/Adreno proof.",
-    "B05 actual original ZIP2 sharedassets6 source parser and bounded owner accessor PASS (CI41929077930, 41 real Materials/227 TexEnv slots/227 UV sets; 89 same-file,25 external,113 null), and scoped source-to-full-export comparator 18/18 synthetic CI41928852363. No genuine same-instance Unity export/Material PPtr+UV match or Adreno/phone color restoration yet. RENDER-002 OPEN."
+    "B05 actual original ZIP2 sharedassets6 source parser and bounded owner accessor PASS (CI41929077930, 41 real Materials/227 TexEnv slots/227 UV sets; 89 same-file,25 external,113 null), and scoped source-to-full-export comparator 18/18 synthetic CI41928852363. No genuine same-instance Unity export/Material PPtr+UV match or Adreno/phone color restoration yet. RENDER-002 OPEN.",
+    "B15 actual original: ZIP2 SHA-verified sharedassets6 (6,607,272B) read via production original_sampler() 87/87 actual Texture2D settings, 87 filter and 261 wrap, all mip biases 0, CI41930143093 SUCCESS with 8 synthetic negative controls. This does NOT establish any real original-to-export importer equivalence (0 paired records) or restore white shaders/device pixels."
   ],
   "acceptance": [
     "مطابقة روابط ومراجع الأصل",
     "مقارنةصوريةلنفسالمشهد",
     "نجاحعلىالهاتف"
   ],
-  "updated_by": "B05",
-  "updated_at": "2026-11-04T22:55:00Z"
+  "updated_by": "B15",
+  "updated_at": "2026-11-04T23:02:46.875Z"
 }
