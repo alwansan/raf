@@ -21,7 +21,8 @@ def main(root):
  while depth:
   depth+=(changed[end]=="{")-(changed[end]=="}");end+=1
  method=changed[at:end]
- stubs=STUBS.replace('class RenderTexture {','class Texture { public virtual FilterMode filterMode {get;set;} public int width=16,height=16; public string name; }\\nclass RenderTexture : Texture {').replace("public bool IsTarget;","public int width=16,height=16,format=0; public string name; public static int Draws; public bool IsTarget;")
+ stubs=STUBS.replace('class RenderTexture {','class Texture { public virtual FilterMode filterMode {get;set;} public int width=16,height=16; public string name; }\nclass RenderTexture : Texture {').replace("public bool IsTarget;","public int width=16,height=16,format=0; public string name; public static int Draws; public bool IsTarget;")
+ stubs=stubs.replace('public FilterMode filterMode {','public override FilterMode filterMode {')
  stubs=stubs.replace("RenderTexture.Fail=fail;RenderTexture.Releases=0;","RenderTexture.Fail=fail;RenderTexture.Releases=0;RenderTexture.Draws=0;")
  stubs=stubs.replace("class Subject {","class Material { public void SetVector(int key,Vector4 value){} }\nstruct Vector4 { public Vector4(float a,float b,float c,float d){} }\nstatic class ShaderVariables { public static int Offset=0; }\nstatic class Graphics { public static void Blit(Texture a,RenderTexture b,Material m,int pass) { RenderTexture.Draws++; if((RenderTexture.Fail==4&&RenderTexture.Draws==1)||(RenderTexture.Fail==5&&RenderTexture.Draws==2))throw new Exception(\"injected\"); } }\nclass Subject { Material BlurMaterial=new Material(); int _Iterations=2,_PassIndex=0;float _Size=0.005f;")
  stubs=stubs.replace("count++;","if(fail==0 && RenderTexture.Draws!=4)throw new Exception(\"original iteration order\");count++;")
