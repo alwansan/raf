@@ -13,8 +13,8 @@
     "acquisition": "SIX_ORIGINAL_GIT_BLOBS_SHA256_SIZE_AUTHENTICATED",
     "extraction": "NATIVE_UNITY_SERIALIZED_TYPE_TREE_DECODED_6_OF_40_SCENES",
     "reconstruction": "NOT_APPLICABLE_READ_ONLY",
-    "binding": "TWO_SOURCE_NATIVE_LIGHT108_OBJECTS_MAPPED_BY_PRIVATE_EXPORTER_GUID_TO_REAL_UNITY_YAML_VALUES_2_OF_2",
-    "integration": "B21_PRIVATE_TOOL_AND_PARITY_VALIDATOR_COMPILE_AND_REAL_BOUND11_ORIGINAL_EXPORT_MATCHES_NO_UNITY_RUNTIME",
+    "binding": "EXACT_SAME_EXPORT_2_OF_2_LIGHT108_SOURCE_VALUES_AND_TWO_NATIVE_GAMEOBJECT1_OWNER_PTRS_MATCHED_REAL_YAML",
+    "integration": "SOURCE_AND_BOUNDED_ACTUAL_EXPORT_VERIFIED_IN_B21_PRIVATE_TOOL_NO_GAME_RUNTIME_OR_PIXELS",
     "device": "NOT_TESTED"
   },
   "evidence": [
@@ -24,13 +24,15 @@
     "https://github.com/alwansan/raf/actions/runs/41929975841",
     "https://github.com/alwansan/raf/actions/runs/41930580691",
     "https://github.com/alwansan/raf/actions/runs/41930891466",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B21_LIGHT_EXPORT_LINEAGE_2026-11-04.md"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B21_LIGHT_EXPORT_LINEAGE_2026-11-04.md",
+    "https://github.com/alwansan/raf/actions/runs/41931942755"
   ],
   "remaining": [
     "Original remaining 34 scene lighting inventories and all shader/material/ambient/Adreno device output unknown.",
     "No aggregate source SHA/bytes reported; each of six files individually size+SHA authenticated; do not equate group inventory with a single resource.",
-    "Native source Light->GameObject owner exact same-export GameObject identity unverified (only both owners locally valid).",
-    "Nine-provider source subset is not all 40 scenes, nor ShaderLab/Adreno pixel equivalence; game source and active Unity runtime unchanged."
+    "Nine-provider source subset is not all 40 scenes, nor ShaderLab/Adreno pixel equivalence; game source and active Unity runtime unchanged.",
+    "Full 40 original scenes and dependent prefab hierarchies, dynamic lighting/shader/pixel correctness and Adreno device run remain unverified.",
+    "Actual source/export Light and GameObject fidelity limited to original level0 and level1 and nine-provider bounded export; no runtime scene load/graphics promise."
   ],
   "updated_by": "B21"
 }
