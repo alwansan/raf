@@ -1113,3 +1113,7 @@ BuildFix changed graphics acquisition to reuse regular files only after original
 
 ## Original Blur relative-address blocker — 4 November
 [Source evidence](../docs/BLUR_RELATIVE_ADDRESS_BLOCKER_2026-11-04.md):41780976069SUCCESS explicitly classifies both remainingMAD/MULfailures as relative operands. Static-address map insufficient; preserve dynamic index expression next.18partialreads,coveragefalse,NOT_READY.
+
+
+## Original Blur arithmetic operand gaps closed — 4 November
+[Evidence](../docs/BLUR_ORIGINAL_ARITHMETIC_OPERANDS_2026-11-04.md):41783146659SUCCESS,7synthetictests;recursive index parsing closes2remainingoriginalgaps.20staticCBreads,zero supported arithmetic parse failures in4stages. Relative index in another operand;originalCBdynamiccount0. Fullcoveragefalse,ShaderLab/GPUunverified;NOT_READY.
