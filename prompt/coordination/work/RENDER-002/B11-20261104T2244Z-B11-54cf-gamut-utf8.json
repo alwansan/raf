@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "owner": "B11",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T2244Z-B11-54cf",
+  "issue_id": "RENDER-002",
+  "track": "colors-materials",
+  "approach": "Correct B11 exact UTF-8 byte-change region for original-gamut YAML patch (no original asset mutation), add realistic Unicode fixture and mutation negative controls",
+  "status": "active",
+  "base_sha": "3c866416159cdb87740e8d465bfc5d58d78313f6",
+  "intended_files": [
+    "scripts/b11_restore_original_color_gamuts.py",
+    "tests/test_b11_restore_original_color_gamuts.py",
+    "docs/B11_ORIGINAL_COLOR_GAMUT_PARITY_2026-11-04.md"
+  ],
+  "hypothesis": "ASCII-only indexing mistakenly uses Unicode character positions for byte change whitelist, so legitimate UTF-8 PlayerSettings with >=8 added bytes before m_ColorGamuts fails closed unnecessarily",
+  "related_work": [
+    "B11-20261104T2115Z-B11-bca7-original-gamut-parity"
+  ],
+  "experiment_ids": [],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Add exact byte offset and adversarial Unicode regressions, validate locally and isolated CI, then record integration limits",
+  "updated_at": "2026-11-04T22:45:00Z"
+}
