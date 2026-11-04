@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "owner": "B06",
+  "generation": "B-2026-11-04",
+  "session_id": "20261104T210726Z-B06-fmt6a2",
+  "issue_id": "WATER-001",
+  "track": "water-fft",
+  "approach": "Eliminate comment/string fake Dispatch calls in authenticated FFT serialized-resource correlation; share existing tested B01 mask_noncode code, preserve SHA pins and reject mutated real calls.",
+  "status": "active",
+  "base_sha": null,
+  "intended_files": [
+    "scripts/probe_original_fft_resource_bindings.py",
+    "tests/test_probe_original_fft_resource_bindings.py",
+    ".github/workflows/raft-b06-fft-resource-lexical.yml"
+  ],
+  "hypothesis": "Existing raw CALL.finditer(source) accepts Dispatch tokens inside C# comments/string literals unlike its primary SHA-pinned callsite audit; a safe parser should ignore non-executable tokens without changing actual argument offsets.",
+  "related_work": [
+    "B01 already hardened probe_original_fft_kernel_callsites.py (reuse, do not change)",
+    "B48 selector identity active"
+  ],
+  "experiment_ids": [],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement masked raw Dispatch source pass, new synthetic adversarial tests and isolated CI; do not claim kernel identity.",
+  "updated_at": "2026-11-04T21:15:55.084Z"
+}
