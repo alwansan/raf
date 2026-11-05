@@ -4,8 +4,8 @@
   "origin": "chat",
   "owner": "T2",
   "issue_id": "WATER-001",
-  "status": "waiting_ci",
-  "updated_at": "2026-11-05T14:36:57.944Z",
+  "status": "completed",
+  "updated_at": "2026-11-05T14:38:32.260Z",
   "base_sha": "e8aea886cbd0ce0667eddf32f1b0ebd0bb2da23b",
   "resumed_from_sessions": [
     "20261105T1408Z-T2-chat-foam-four-i4-uniqueness-4e7a",
@@ -33,11 +33,29 @@
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42046650774"
   ],
-  "next_step": "Read CI42046650774. It prints only privacy-safe metadata plus decoded i4 distinct/sign aggregate. On failure inspect first cause, fix only T2 own code. Metadata alone never proves serialized value or runtime texture. WATER-001 OPEN NOT_READY0/3.",
+  "next_step": "Field lacks public/SerializeField eligibility by modifiers; next investigate original owning type ancestry and indirect field initialization / element writes in managed assembly and scenes; contrast Unity serialized data separately. Four original caller i4 values unique/nonnegative but bounds NOT verified. WATER-001 OPEN NOT_READY0/3.",
   "source_commit": "9b01015a9e3aa47718d9b102d31bd8d39d52b638",
   "result": {
-    "code": "Source-only exact FieldDefinition identity metadata detector, null/visibility/attribute/static/readonly controls, original pinned CI",
-    "original_CI": "in_progress",
-    "original_input_device": "not tested"
+    "original_ci": "42046650774 COMPLETED SUCCESS",
+    "original_sha_authentic": true,
+    "original_dll_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "original_dll_bytes": 3211776,
+    "metadata_exact_definition_count": 1,
+    "declared_public": false,
+    "explicit_serialize_field": false,
+    "nonserialized": false,
+    "static": false,
+    "initonly": false,
+    "eligible_by_field_modifiers_only": false,
+    "owner_direct_base_type_category": "not_proven_unity_owner_by_direct_base",
+    "four_i4_decoded_count": 4,
+    "four_i4_distinct_count": 4,
+    "four_i4_all_nonnegative": true,
+    "runtime_array_length_verified": false,
+    "scene_or_prefab_value_verified": false,
+    "artifact_id": 13424871676,
+    "artifact_sha256": "4fada83b5337702252c61fdb121350418d99db4fb97dc6f0218cbf50e1269c7f",
+    "artifact_size_bytes": 1923,
+    "job_log_id": 127311299326
   }
 }
