@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "origin": "chat",
+  "session_id": "20261105T2109Z-T4-chat-android-mouse-bridge-p6r2",
+  "issue_id": "INPUT-005",
+  "track": "physical-mouse-pointer-capture",
+  "status": "active",
+  "base_sha": "2db482cfb80f2a26f8de7e715d842a1819191990",
+  "updated_at": "2026-11-05T21:09:00Z",
+  "resumed_from_sessions": [
+    "20261105T2050Z-T4-chat-original-mouse-routing-q9c4",
+    "20261105T2040Z-T4-scheduled-p4m8"
+  ],
+  "intended_files": [
+    "prompt/coordination/work/INPUT-005/T4-20261105T2109Z-T4-chat-android-mouse-bridge-p6r2-pointer-capture.json",
+    "prompt/coordination/clients/T4/sessions/20261105T2109Z-T4-chat-android-mouse-bridge-p6r2.md",
+    "android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs",
+    "scripts/t4_adapt_original_mouse_axes.py",
+    "tests/test_t4_adapt_original_mouse_axes.py",
+    ".github/workflows/raft-t4-mouse-capture-bridge.yml",
+    "prompt/coordination/experiments/T4/20261105T2109Z-T4-chat-android-mouse-bridge-p6r2.json",
+    "prompt/coordination/B_TEAM/events/T4/20261105T2109Z-T4-chat-android-mouse-bridge-p6r2.json"
+  ],
+  "experiment_key": "T4-original-legacy-8axis-2cursorlock-ILSpy11.2-ZIP2SHA15964ea8-Unity2021-Android26-captured-listener-v1",
+  "resource_key": "original-ZIP2-ILSpy-CPU-readonly",
+  "hypothesis": "The original compiled game has 8 Input.GetAxis Mouse X/Y consumers and two Cursor.lockState setters; adding an API26 View pointer-capture listener and fail-closed replacement to legacy axis look consumer can remove screen-edge stoppage without injecting duplicate InputSystem movement or altering touch.",
+  "approach": "Build an Android-only captured-pointer adapter with original Cursor.lock intent, Unity main-thread frame snapshots, Android UI-thread request/release, and original-source gated rewrite. Validate source-free negative controls then an independent authenticated ILSpy CI. No full native Unity build without new evidence; preserve current world/save UI and original .meta.",
+  "related_work": [
+    "prompt/coordination/work/INPUT-005/T4-20261105T2040Z-scheduled-mouse-capture.json",
+    "prompt/coordination/work/INPUT-005/T4-20261105T2050Z-T4-chat-original-mouse-routing-q9c4-camera-route.json"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/T4/sessions/20261105T2050Z-T4-chat-original-mouse-routing-q9c4.md",
+    "docs/DEVICE_FEEDBACK_42058825739_AR.md"
+  ],
+  "experiment_ids": [
+    "20261105T2109Z-T4-chat-android-mouse-bridge-p6r2"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Publish bounded C#/Python adapter and original CI controls, then integrate only after authenticated source patch succeeds; native/phone acceptance remains open."
+}
