@@ -1,0 +1,26 @@
+{
+  "session_id": "20261105T1736Z-T4-chat-rgd-return-local-stores-r6n8",
+  "origin": "chat",
+  "owner": "T4",
+  "issue_id": "LOCAL-005",
+  "status": "active",
+  "base_sha": "72e59de980ca8803e08e7ad1ad9edb9b35c54313",
+  "resumed_from_sessions": [
+    "20261105T1713Z-T4-chat-original-rgd-return-sites-j7q4",
+    "20261105T1640Z-T4-scheduled-r8k2"
+  ],
+  "hypothesis": "The exact original SaveAndLoad zero-arg derived-RGD factory return local has direct lexical stloc sites that can be partitioned by immediately preceding typed instruction and offset relative to return. Multiple stores/null literals/branches are structural and do not prove runtime null or nonnull.",
+  "experiment_key": "T4-original-ZIP2-15964ea8-SHA0a6f-zeroarg-SaveAndLoad-derivedRGD-factory-single-ret-local-stloc-value-categories-v1",
+  "resource_key": null,
+  "intended_files": [
+    "android-port/Experiments/T4/OriginalRgdInitContext/Program.cs",
+    "scripts/t4_validate_original_rgd_init_context.py",
+    "tests/test_t4_validate_original_rgd_init_context.py",
+    "docs/T4_ORIGINAL_RGD_RETURN_LOCAL_STORES_2026-11-05.md",
+    "prompt/coordination/work/LOCAL-005/T4-20261105T1736Z-T4-chat-rgd-return-local-stores-r6n8-factory-return-local-stores.json",
+    "prompt/coordination/clients/T4/sessions/20261105T1736Z-T4-chat-rgd-return-local-stores-r6n8.md",
+    "prompt/coordination/discussions/LOCAL-005/20261105T1740Z-T4-original-return-local-stores-to-T5.md"
+  ],
+  "scope": "Add finite original-source read-only return-local direct stloc & immediate source census to existing isolated SHA-verified Mono.Cecil inspector, original-free validator and adversarial tests, reuse source CI; never disclose private members/IL/bytes, never execute Save or Unity, do not touch scheduled T4 JSONL overflow or T5 native.",
+  "updated_at": "2026-11-05T17:36:00Z"
+}
