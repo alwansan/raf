@@ -5,7 +5,7 @@
   "origin": "chat",
   "session_id": "20261105T1402Z-T3-chat-renderer-shader-impact-f63e",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed",
   "base_sha": "63e68355a9eb39cf72170d38ed7ab722772a270e",
   "experiment_key": "T3-ZIP2-15964ea8-sixscene1633-top921-Sh48-name-vs-Unity2021.3.45f2-builtinSHA5cb0f9c4-exactmatch-v1",
   "resource_key": "Unity2021.3.45f2-SHA-pinned-native-builtin-shader-archive-and-ZIP2-sixscene-Shader48",
@@ -22,8 +22,24 @@
     "scripts/t3_original_renderer_shader_impact.py"
   ],
   "hypothesis": "One original SHA-pinned source Shader48 dominates six scene Renderer usage (921 slots) yet remains a default Dummy ShaderLab after TMP/PostFX/Volumetric. Check exact serialized original Shader parsed name against SHA-pinned Unity 2021.3.45f2 built-in runtime archive identities; a true match could be handled by native built-in restorer, a mismatch requires different authentic source reconstruction. Do not disclose original source shader name or claim native compiled output.",
-  "run_urls": [],
-  "result": null,
-  "next_step": "Source-only SHA-verify 6 scenes/4 owner and official Unity built-in 2021.3.45f2 archive SHA, aggregate exact-name match count and 921 high use flag without modifying game assets. Independent short CI no Unity GPU.",
-  "updated_at": "2026-11-05T14:30:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42046329453"
+  ],
+  "result": {
+    "status": "SUCCESS_GENUINE_SIX_ORIGINAL_SCENES_FOUR_SHA_OWNERS_AND_SHA_PINNED_UNITY2021_BUILTIN_ARCHIVE",
+    "source_original_shaders_checked": 21,
+    "original_renderer_material_slots_checked": 1633,
+    "authenticated_vendor_builtin_shader_names": 198,
+    "original_source_Shader48_exact_builtin_name_matches": 3,
+    "original_renderer_slots_matching_builtin_names": 256,
+    "source_top_Shader48_use": 921,
+    "source_top_Shader48_matches_Unity_builtin_archive": false,
+    "original_source_nonmatching_shaders": 18,
+    "original_renderer_slots_nonmatching_builtin": 1377,
+    "source_original_shader_names_or_Guids_published": false,
+    "actual_Unity_Android_shader_import_verified": false,
+    "game_assets_changed": false
+  },
+  "next_step": "Do not try Unity builtin name replacement for highest-use 921 original Shader48; recover actual original D3D11 shader compiled stage/subprogram and pass/variant metadata from SHA-verified sharedassets0 and test Vulkan/HLSL reconstruction privately before Unity Android. Native post-restorer program status/device pixels still unknown; RENDER-002 OPEN.",
+  "updated_at": "2026-11-05T14:36:00Z"
 }
