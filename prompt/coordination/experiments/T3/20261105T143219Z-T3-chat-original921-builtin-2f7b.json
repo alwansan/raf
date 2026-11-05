@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "session_id": "20261105T143219Z-T3-chat-original921-builtin-2f7b",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "status": "completed",
+  "hypothesis": "Authenticated original high-scene-use Shader48 carries reconstructable original D3D11 per-pass Vertex/Fragment programs; test exact source metadata and program stage linkage.",
+  "source_commit": "71276a55afc165102852def8b84ea21995c3ca53",
+  "original_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "workflow_path": ".github/workflows/raft-t3-original-921-dxbc-feasibility.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42047611046",
+  "artifact_id": 13424428008,
+  "result": {
+    "outcome": "SUCCESS",
+    "source_scene_count": 6,
+    "original_owner_count": 4,
+    "original_owner_bytes": 269007288,
+    "original_renderer_slot_weight": 921,
+    "original_subshaders": 1,
+    "original_passes": 4,
+    "normal_passes": 4,
+    "d3d11_program_entries": 120,
+    "vertex_variants": 41,
+    "fragment_variants": 33,
+    "distinct_original_dxbc_programs": 58,
+    "matched_pairs": 33,
+    "unmatched_vertex_variants": 8,
+    "unmatched_fragment_variants": 0,
+    "all_passes_have_at_least_one_pair": true,
+    "tests_passed": 46,
+    "android_gpu_verified": false,
+    "source_modified": false
+  },
+  "failed_prior_ci": "https://github.com/alwansan/raf/actions/runs/42047453578",
+  "failed_prior_reason": "Incorrect synthetic privacy assertion against ordinary public field name; corrected to unique private sentinel before source original CI.",
+  "independent_official_name_ci": "https://github.com/alwansan/raf/actions/runs/42046329453",
+  "original_to_vendor_dummy_ci": "https://github.com/alwansan/raf/actions/runs/42044249541",
+  "workflow_re_run_policy": "manual_only_after_success",
+  "rejected_hypotheses": [
+    "All original Vertex permutations are paired; 8 remain unmatched.",
+    "Exact official Unity builtin name is sufficient to recover original top 921-use shader; independent CI showed no exact official name match."
+  ],
+  "limitations": [
+    "D3D11 original source linkage is not Unity ShaderLab restoration, code translation or Android pixels.",
+    "Only six original scenes and one high-use shader; no full game build."
+  ],
+  "next_step": "Privately translate and test authentic matched original D3D11 Pass stage permutations, preserve 8 unmatched Vertex variants and original render states, no dummy/fake substitutes.",
+  "updated_at": "2026-11-05T14:46:15.645Z"
+}
