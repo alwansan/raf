@@ -1,0 +1,64 @@
+{
+  "provenance": {
+    "github_run_url": "https://github.com/alwansan/raf/actions/runs/42042902522",
+    "run_id": 42042902522,
+    "observation_type": "filtered official GitHub REST/connector metadata, NOT job logs",
+    "source_sha": "753802d75196210d721cca0f4fdec6ce7800bf0d",
+    "assertions": "no release/hash/device claim from job or artifact metadata alone"
+  },
+  "run": {
+    "id": 42042902522,
+    "head_sha": "753802d75196210d721cca0f4fdec6ce7800bf0d",
+    "status": "completed",
+    "conclusion": "cancelled"
+  },
+  "jobs": {
+    "jobs": [
+      {
+        "name": "native-request-gate",
+        "status": "completed",
+        "conclusion": "success",
+        "steps": []
+      },
+      {
+        "name": "unity-license-preflight",
+        "status": "completed",
+        "conclusion": "success",
+        "steps": []
+      },
+      {
+        "name": "reconstruct",
+        "status": "completed",
+        "conclusion": "cancelled",
+        "steps": [
+          {
+            "name": "Restore every pinned external Mesh buffer while retaining original serialized identities",
+            "status": "completed",
+            "conclusion": "cancelled"
+          }
+        ]
+      },
+      {
+        "name": "delivery-result",
+        "status": "completed",
+        "conclusion": "failure",
+        "steps": [
+          {
+            "name": "Refuse green native runs with missing build or delivery",
+            "status": "completed",
+            "conclusion": "failure"
+          }
+        ]
+      },
+      {
+        "name": "publish-early-test",
+        "status": "completed",
+        "conclusion": "skipped",
+        "steps": []
+      }
+    ]
+  },
+  "artifacts": {
+    "artifacts": []
+  }
+}
