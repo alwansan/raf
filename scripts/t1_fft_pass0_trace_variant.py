@@ -63,7 +63,7 @@ def instrument(source):
                 f"    {typ} value = {symbol}.Load(coord);\n"
                 "    uint index;\n"
                 "    InterlockedAdd(T1TraceBuffer[0], 1u, index);\n"
-                "    if (index < 256u)\n    {\n"
+                "    if (index < 512u)\n    {\n"
                 "        uint base = 1u + index * 8u;\n"
                 f"        T1TraceBuffer[base] = {site}u;\n"
                 "        T1TraceBuffer[base + 1u] = asuint(coord.x);\n"
@@ -99,7 +99,7 @@ def main():
     except (OSError, ValueError, subprocess.SubprocessError):
         parser.exit(2, "Private trace variant generation or validation failed\n")
     print("RAFT_T1_PASS0_TRACE_VARIANT " + json.dumps({
-        "compiled_and_validated": True, "trace_sites": 3, "max_records": 256,
+        "compiled_and_validated": True, "trace_sites": 3, "max_records": 512,
         "runtime_capture": False}))
 
 

@@ -14,7 +14,7 @@ from scripts.t1_fft_vulkan_roundtrip_isolation import HEIGHT, WIDTH, capture_hos
 def trace_host(source):
     source = capture_host(source)
     patches = {
-        "std::array<VkDescriptorSetLayoutBinding,3> bindings{};": """constexpr VkDeviceSize traceBytes = 2049 * sizeof(uint32_t);
+        "std::array<VkDescriptorSetLayoutBinding,3> bindings{};": """constexpr VkDeviceSize traceBytes = 4097 * sizeof(uint32_t);
     VkBufferCreateInfo traceCi{VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO};
     traceCi.size = traceBytes;
     traceCi.usage = VK_BUFFER_USAGE_STORAGE_BUFFER_BIT;
@@ -102,10 +102,10 @@ def analyze(project):
         run(["./trace", str(modules / "slot0.spv"), "trace.spv", str(modules / "slot1.spv"),
              str(modules / "slot1.spv"), str(WIDTH), str(HEIGHT), "19", "1", "rgba32f"], work)
         print("RAFT_T1_TRACE_STAGE readback", flush=True)
-        trace = read_image(work / "trace.bin", 2049 * 4)
+        trace = read_image(work / "trace.bin", 4097 * 4)
         (count,) = struct.unpack_from("<I", trace)
         print("RAFT_T1_TRACE_RECORD_COUNT " + str(count), flush=True)
-        if not 0 < count <= 256:
+        if not 0 < count <= 512:
             raise ValueError("Empty or overflowed private trace")
         sites = [0, 0, 0]
         out_of_bounds = [0, 0, 0]

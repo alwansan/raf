@@ -75,7 +75,7 @@ jobs:
           python3 -m scripts.t1_fft_spirv_read_provenance "$TMPDIR/candidates/_private_vulkan/slot0.spv"
           python3 -m scripts.t1_fft_pass0_trace_variant "$TMPDIR/candidates/Assets/T1OriginalDerived/FFT_Candidate_00.compute"
           python3 -m scripts.t1_fft_vulkan_roundtrip_isolation --project "$TMPDIR/candidates"
-          # The trace runner logs bounded stages and record totals.
+          # The trace runner validates capacity for the observed 384 reads.
           python3 -m scripts.t1_fft_pass0_vulkan_trace --project "$TMPDIR/candidates"
       - name: Remove all private inputs and scratch data
         if: always()

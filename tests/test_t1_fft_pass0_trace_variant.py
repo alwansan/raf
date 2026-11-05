@@ -21,7 +21,7 @@ class TraceVariantTests(unittest.TestCase):
         variant = instrument(HLSL)
         self.assertIn("float T1TraceLoad1(int3 coord)", variant)
         self.assertIn("T1TraceLoad0(int3(int2(1, 2), 0))", variant)
-        self.assertIn("if (index < 256u)", variant)
+        self.assertIn("if (index < 512u)", variant)
         self.assertEqual(variant.count("lookupTex.Load(coord)"), 2)
 
     def test_extra_load_parameter_and_binding_collision_rejected(self):
