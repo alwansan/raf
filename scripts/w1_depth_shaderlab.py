@@ -137,7 +137,7 @@ def color_mask(record):
 
 
 
-def render_state(state):
+def render_state(state, *, allow_selective_color_mask=False):
     lines = []
     if state.get('m_Name'):
         lines.append('Name ' + quoted(state['m_Name']))
@@ -150,9 +150,11 @@ def render_state(state):
         lines.append('Blend ' + index + enum(blend['srcBlend'], BLEND) + ' ' + enum(blend['destBlend'], BLEND)
                      + ', ' + enum(blend['srcBlendAlpha'], BLEND) + ' ' + enum(blend['destBlendAlpha'], BLEND))
         lines.append('BlendOp ' + index + enum(blend['blendOp'], BLENDOP) + ', ' + enum(blend['blendOpAlpha'], BLENDOP))
-        # Source Unity 2021.3 ColorWriteMask is A=1, B=2, G=4, R=8.
-        # Preserve selective channels as ShaderLab (e.g. 14 -> RGB).
-        mask = color_mask(blend['colMask'])
+        # Existing W1 Depth/Foam callers stay fail-closed on selective masks
+        # until an authenticated original requires the explicit opt-in.
+        # Unity 2021.3 ColorWriteMask is A=1, B=2, G=4, R=8.
+        mask = (color_mask(blend['colMask']) if allow_selective_color_mask
+                else enum(blend['colMask'], {0: '0', 15: 'RGBA'}))
         lines.append('ColorMask ' + mask + (' ' + str(i) if state['rtSeparateBlend'] else ''))
     lines.append('AlphaToMask ' + enum(state['alphaToMask'], {0: 'Off', 1: 'On'}))
     lines.append('ZClip ' + enum(state['zClip'], {0: 'Off', 1: 'On'}))
