@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T1213Z-T2-foam-return-producer-call-isolated",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "9560bc7c922e70d663f2869f30cffef9c1b90c41",
+  "track": "SHA-authentic original Foam four SetTexture second-argument call-return exact MethodReference typed provenance",
+  "hypothesis": "Four actual original original IL Texture second parameters originate from call results; attach the producing IL MethodReference to the stack value and classify its declared return type/declaring assembly/category/call-vs-callvirt without publishing game symbols, then strengthen CI accepting exact expected evidence but not runtime claims.",
+  "approach": "Edit only T2 original Cecil oracle FoamSetterFlow.cs, Program.cs, and its isolated CI; preserve real first-name argument proof, typed return records from exact tagged stack values, reject unrelated nearby calls, branch and unknown opcodes. Add synthetic positive/negative Cecil call return fixtures, SHA-pin original owner and Assembly-CSharp, publish bounded numeric categories only. No other T clients files/Actions or Unity native build.",
+  "taken_over_from": [
+    "prompt/coordination/work/WATER-001/T2-20261105T1152Z-managed-settexture-value-provenance.json",
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/FoamSetterFlow.cs",
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/Program.cs",
+    "docs/T2_FOAM_ORIGINAL_MATERIAL_SETTEXTURE_ARGUMENT_PROOF_2026-11-05.md"
+  ],
+  "intended_files": [
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/FoamSetterFlow.cs",
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/Program.cs",
+    ".github/workflows/raft-t2-foam-managed-literals.yml"
+  ],
+  "related_run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42022922743"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement exact producer typed IL call stack provenance with public synthetic fixtures, run original SHA-locked CI and archive accurate result. Then if verified, continue toward source Material receiver and original Unity ShaderLab; WATER-001 OPEN NOT_READY0/3.",
+  "updated_at": "2026-11-05T12:13:00Z"
+}
