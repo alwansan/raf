@@ -31,6 +31,7 @@ def valid():
         schema_version=1, source="IMMUTABLE_ORIGINAL_COMPILED_IL",
         exact_dll_size_sha_verified=True, read_target_unique=True,
         write_target_unique=True, original_methods_distinct=True,
+        save_original_filename_directly_forwarded=True,
         read=edge(2, "file_open", ["string", "io_enum"]),
         write=edge(1, "file_create", ["string"]),
         actual_file_io_invoked=False, real_rgd_reopened=False,
@@ -118,6 +119,21 @@ class T4IoFlowSchemaTests(unittest.TestCase):
         summary = validate(x)
         self.assertEqual(summary["read_catch_local_and_external_calls"], 2)
         self.assertFalse(summary["original_device_file_io_executed"])
+
+    def test_original_save_forwarded_argument_source_has_explicit_bool(self):
+        item = valid()
+        self.assertTrue(validate(item)["save_argument_path_matches_original_filemanager_input"])
+        item["save_original_filename_directly_forwarded"] = False
+        self.assertFalse(validate(item)["save_argument_path_matches_original_filemanager_input"])
+        item["save_original_filename_directly_forwarded"] = "TRUE"
+        with self.assertRaisesRegex(ValueError, "original_save_filename_evidence_type"):
+            validate(item)
+
+    def test_missing_original_filemanager_save_argument_proof_rejected(self):
+        item = valid()
+        del item["save_original_filename_directly_forwarded"]
+        with self.assertRaisesRegex(ValueError, "root_schema"):
+            validate(item)
 
     def test_untrusted_file_path_refused(self):
         with tempfile.TemporaryDirectory() as d:
