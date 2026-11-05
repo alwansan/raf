@@ -25,3 +25,9 @@
 - Previous independent safe result preserved: same exact original field private/no SerializeField, four original integer caller inputs all **distinct and nonnegative**. Array allocation/length and contents, actual Scene/Prefab/Unity binding, ShaderLab and Adreno/device pixels remain unproven.
 - Safe-only artifact `13426150452`, SHA256 `6340258c4c983df3bbf8c4ca68845ed7960c4f84e69f95d562ab4e03e7245cca`, 2016 bytes; private field names/method IL/real integer values not published. No original data or game assets modified. Work status `completed`, WATER-001 OPEN NOT_READY 0/3.
 - Next separate T2 experiment: inspect the **one original byref `ldflda` site** and outside-getter read contexts with strict typed IL flow, determine whether any site can write the field or its RenderTexture[] elements, while preserving privacy and avoiding inferred runtime behavior. T1's concurrent Unity job was not cancelled or modified.
+
+## Team ledger cross-client non-source blocker
+
+- Automatic canonical T2 team summary [CI42048265497](https://github.com/alwansan/raf/actions/runs/42048265497) **FAILED** at `scripts/refresh_b_team.py` strict resource/event schema validation, **not** at T2 original managed source. Exact failure: `ValueError: Missing record identity: prompt/coordination/B_TEAM/events/T4/20261105T1443Z-T4-shipped-seed-not-world-save-parameter.json`. The T4 event currently contains `event_id` but lacks canonical `id`; T4 owns this independent record.
+- No cross-client edit or workflow cancellation performed. Suggested T4 action: add `id` equal to its unique event identifier while preserving `event_id` and evidence, then regenerate canonical ledger. T2 original CI42047763379 remains SUCCESS and records/source are committed regardless of summary status.
+- T2 experiment/resource/event under this session persisted, all with required canonical `id` and resource `stages` fields. Overall WATER-001 OPEN / NOT_READY0/3.
