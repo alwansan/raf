@@ -17,7 +17,8 @@ internal static class FoamSetterFlow
                                                  bool SecondProducerHasThis,
                                                  int SecondProducerParameterCount,
                                                  MethodReference? SecondProducerReference,
-                                                 string SecondProducerIndexInt32ArgumentOrigin);
+                                                 string SecondProducerIndexInt32ArgumentOrigin,
+                                                 int? SecondProducerIndexInt32ArgumentLiteral = null);
     private enum Tag {
         Unknown, OriginalNameString, OriginalPropertyId,
         ArgumentLoad, StaticFieldLoad, InstanceFieldLoad,
@@ -38,8 +39,29 @@ internal static class FoamSetterFlow
     private readonly record struct Value(Tag Tag, MethodReference? Producer,
                                          Code ProducerOpcode,
                                          string? ProducerIndexInt32Origin = null,
-                                         bool IsDirectInt32Literal = false);
+                                         bool IsDirectInt32Literal = false,
+                                         int? ProducerIndexInt32Literal = null,
+                                         int? DirectInt32Literal = null);
     private static Value V(Tag tag) => new(tag,null,Code.Nop);
+
+    // Decode only true IL int32 constant forms. No source numeric value is
+    // written to logs, a public JSON report, artifacts, or committed files.
+    private static int? DirectI4Value(Instruction instruction) =>
+        instruction.OpCode.Code switch {
+            Code.Ldc_I4_M1 => -1,
+            Code.Ldc_I4_0 => 0,
+            Code.Ldc_I4_1 => 1,
+            Code.Ldc_I4_2 => 2,
+            Code.Ldc_I4_3 => 3,
+            Code.Ldc_I4_4 => 4,
+            Code.Ldc_I4_5 => 5,
+            Code.Ldc_I4_6 => 6,
+            Code.Ldc_I4_7 => 7,
+            Code.Ldc_I4_8 => 8,
+            Code.Ldc_I4_S when instruction.Operand is sbyte n => n,
+            Code.Ldc_I4 when instruction.Operand is int n => n,
+            _ => null
+        };
 
     // This is the origin of the actual argument popped by a single-int
     // producer call. Never emit the value of an original int literal.
@@ -162,8 +184,9 @@ internal static class FoamSetterFlow
             if (op.StartsWith("ldc.",StringComparison.Ordinal) ||
                 op=="ldtoken")
             {
+                int? direct = DirectI4Value(instruction);
                 stack.Add(new Value(Tag.NumericLiteral,null,Code.Nop,null,
-                    op.StartsWith("ldc.i4",StringComparison.Ordinal)));
+                    direct.HasValue, null, direct));
                 continue;
             }
             if (op=="ldnull")
@@ -240,7 +263,8 @@ internal static class FoamSetterFlow
                             second.Producer?.HasThis ?? false,
                             second.Producer?.Parameters.Count ?? 0,
                             second.Producer,
-                            second.ProducerIndexInt32Origin ?? "unknown");
+                            second.ProducerIndexInt32Origin ?? "unknown",
+                            second.ProducerIndexInt32Literal);
                     }
                 }
                 // Do not accept unrelated methods with the same name or
@@ -255,15 +279,17 @@ internal static class FoamSetterFlow
                 // Exact first formal producer input, not an adjacent opcode
                 // guess. The traced value may remain unknown when its def is
                 // outside this bounded straight-line block.
-                string? oneIntOrigin = pcount==1 &&
-                    methodRef.Parameters[0].ParameterType.FullName=="System.Int32"
-                    ? IndexInt32Origin(args[0]) : null;
+                bool oneInt = pcount==1 &&
+                    methodRef.Parameters[0].ParameterType.FullName=="System.Int32";
+                string? oneIntOrigin = oneInt ? IndexInt32Origin(args[0]) : null;
+                int? originalOneIntLiteral = oneInt && args[0].IsDirectInt32Literal
+                    ? args[0].DirectInt32Literal : null;
                 for (int i=0;i<total;i++)
                     Pop();
                 if (methodRef.ReturnType.FullName!="System.Void")
                     stack.Add(propertyId?V(Tag.OriginalPropertyId):
                         new Value(Tag.CallResult,methodRef,instruction.OpCode.Code,
-                                  oneIntOrigin));
+                                  oneIntOrigin,false,originalOneIntLiteral));
                 continue;
             }
             // Never fake argument dataflow for arithmetic, blocks, Phi-like
