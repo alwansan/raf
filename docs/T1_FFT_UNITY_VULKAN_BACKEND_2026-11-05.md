@@ -1,0 +1,22 @@
+# T1 | Unity 2021 Vulkan backend selection is NOT verified on current GameCI image
+
+**Date:** 5 November 2026, T1 chat, session `20261105T140300Z-T1-chat-vulkan-editor`.
+**Issue:** WATER-001 OPEN, project NOT_READY 0/3.
+
+## Why this experiment matters
+
+Authentic ZIP2 FFT compiled pair0/1 was successfully converted and dispatched under Unity2021 OpenGLCore, but compared against authenticated source DXBC on software Vulkan it differed in **63/64 written pixels in pass0 and 31/32 in pass1** while write coverage and finite checks passed, [CI42025620147](https://github.com/alwansan/raf/actions/runs/42025620147). In contrast, original DXBC translated SPIR-V and HLSL-recompiled SPIR-V on the SAME Vulkan implementation matched 64/64 and32/32 [CI42030877911](https://github.com/alwansan/raf/actions/runs/42030877911). Source/butterfly CPU-uploaded inputs were byte-identical; a real Unity OpenGLCore GPU identity-copy test confirmed **0/32768 mismatches in each sampled input**, while the authentic FFT mismatch remained, [CI42033745802](https://github.com/alwansan/raf/actions/runs/42033745802). Therefore a true Unity Editor Vulkan execution would test whether graphics backend/compiler lowering contributes, but cannot itself prove game/device readiness.
+
+## Source-free licensed Unity2021 Vulkan smoke
+
+Created unique `.github/workflows/raft-t1-fft-sourcefree-force-vulkan.yml` that checks out only authored synthetic code and no original Raft assets; uses official GameCI CLI v0.1.72 exact release SHA256 `1de550a620ee92e05e920b6db7d431621440b60b2577f04b4a997dc92a58cb0a`, Unity Editor 2021.3.45f2 `ubuntu-2021.3.45f2-linux-il2cpp-3`, passes `--customParameters=-force-vulkan` per verified GameCI CLI v0.1.72 source and Unity 2021 CLI documentation, under shared Editor mutex/cancel-in-progress:false. The independent authored synthetic `T1SourceFreeVulkanBackendTests.ActuallyUsesVulkanAndRunsSyntheticCompute` asserts `SystemInfo.graphicsDeviceType == GraphicsDeviceType.Vulkan` BEFORE dispatch and requires 64 mathematically known float outputs of an authored synthetic `.compute`. Result XML is parsed by bounded `scripts/t1_vulkan_editor_smoke_gate.py`, with six source-free adversarial controls; raw Unity logs and NUnit failure body are not published, and all temporary files are deleted.
+
+[CI42042650298](https://github.com/alwansan/raf/actions/runs/42042650298) **FAILED at the expected strict engine runtime gate**, not at project setup: six NUnit-report adversarial Python controls PASSED, four sourcefree Unity project fixture controls PASSED, signed GameCI CLI digest verified, Unity reported **three actual expected synthetic tests** with **2 passed and 1 failed**. Bounded marker `vulkan_editor_backend_and_synthetic_gpu_dispatch_verified=false`, `synthetic_expected_float_texels_checked=0`, `original_raft_data_acquired=false`. This test explicitly requires Vulkan and has no evidence it was selected, so no Vulkan math success can be claimed.
+
+Separately, concurrent T1 source-free transferred RGBA32F workload [CI42042230791](https://github.com/alwansan/raf/actions/runs/42042230791) also FAILED its explicit Vulkan engine gate and recorded `runtime_api=other_backend` despite `--customParameters=-force-vulkan`. This strongly confirms the base GameCI image/runner did not provide a usable Vulkan Editor backend under these conditions; it does **not** pinpoint whether a missing Vulkan loader/ICD, unavailable GPU device, Unity fallback, or an unhandled CLI parameter is responsible.
+
+**No private game data was fetched in either source-free test**. No production game compute resource, audio/Settings/touch, native build request or other client workflow changed.
+
+## Next discrimination
+
+Inspect the exact Unity2021 Linux Docker image's Vulkan loader and Mesa ICD inside an **isolated source-free test**. If missing, optionally install `libvulkan1` and `mesa-vulkan-drivers` in a disposable derived image and repeat the SAME strict Vulkan synthetic float calculation using the correct ICD with a locally pinned container image. If the backend still refuses Vulkan, do not repeatedly download original FFT; investigate OpenGLCore compile lowering / shader sampled-coordinate or arithmetic semantics with already-pinned original comparison fixtures. Explicitly retain [CI42025620147](https://github.com/alwansan/raf/actions/runs/42025620147) as genuine **negative numeric parity**. Do not claim native Android/Adreno or restored water from any source-free smoke.
