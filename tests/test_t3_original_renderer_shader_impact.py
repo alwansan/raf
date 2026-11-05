@@ -96,6 +96,52 @@ class OriginalSceneShaderUsage(unittest.TestCase):
                         <= m.RENDERER_CLASSES)
         self.assertEqual(sum(result["original_renderer_material_slots_by_renderer_class"].values()),8)
 
+    def test_particle_original_source_rank_is_distinct_from_global_shader_use(self):
+        r=self.run_data()
+        self.assertEqual(r["original_particle_typed_Shader48_material_slots"],1)
+        self.assertEqual(r["original_particle_distinct_typed_Shader48_source_targets"],1)
+        self.assertEqual(r["original_particle_Shader48_ranked_material_slot_use_no_identity"],[1])
+        self.assertTrue(r["original_particle_highest_Shader48_unique"])
+        self.assertEqual(r["original_particle_highest_Shader48_particle_class_slots"],1)
+        self.assertEqual(r["original_particle_highest_Shader48_global_renderer_slots"],2)
+        self.assertEqual(r["original_particle_highest_Shader48_nonparticle_renderer_slots"],1)
+        self.assertEqual(r["original_particle_highest_Shader48_original_pass_count"],1)
+        self.assertEqual(r["original_particle_highest_Shader48_distinct_particle_renderers"],1)
+        self.assertTrue(r["particle_Shader_rank_is_not_Blend_state_or_Android_emission_evidence"])
+
+    def test_particle_multiple_renderers_same_shader_do_not_overcount_source(self):
+        data=self.fixture()
+        row=data[0][3]
+        data[0][3]=(row[0],row[1],"ParticleSystemRenderer",row[3])
+        r=self.run_data(data)
+        self.assertEqual(r["original_particle_Shader48_ranked_material_slot_use_no_identity"],[2])
+        self.assertEqual(r["original_particle_highest_Shader48_particle_class_slots"],2)
+        self.assertEqual(r["original_particle_highest_Shader48_distinct_particle_renderers"],2)
+        self.assertEqual(r["original_particle_highest_Shader48_nonparticle_renderer_slots"],0)
+
+    def test_particle_equal_source_rank_rejects_arbitrary_top_shader_identity(self):
+        data=self.fixture()
+        row=data[0][2]
+        data[0][2]=(row[0],row[1],"ParticleSystemRenderer",row[3])
+        r=self.run_data(data)
+        self.assertEqual(r["original_particle_Shader48_ranked_material_slot_use_no_identity"],[1,1])
+        self.assertFalse(r["original_particle_highest_Shader48_unique"])
+        self.assertIsNone(r["original_particle_highest_Shader48_global_renderer_slots"])
+        self.assertIsNone(r["original_particle_highest_Shader48_original_pass_count"])
+        self.assertIsNone(r["original_particle_highest_Shader48_nonparticle_renderer_slots"])
+
+    def test_zero_particle_renderer_slots_cannot_invent_particle_shader(self):
+        data=self.fixture()
+        row=data[0][4]
+        data[0][4]=(row[0],row[1],"MeshRenderer",row[3])
+        r=self.run_data(data)
+        self.assertEqual(r["original_particle_typed_Shader48_material_slots"],0)
+        self.assertEqual(r["original_particle_distinct_typed_Shader48_source_targets"],0)
+        self.assertEqual(r["original_particle_Shader48_ranked_material_slot_use_no_identity"],[])
+        self.assertFalse(r["original_particle_highest_Shader48_unique"])
+        self.assertIsNone(r["original_particle_highest_Shader48_global_renderer_slots"])
+        self.assertIsNone(r["original_particle_highest_Shader48_distinct_particle_renderers"])
+
     def test_same_renderer_multiple_slots_do_not_fake_distinct_renderer_count(self):
         data=self.fixture()
         data[0][1]=("level0",11,"MeshRenderer",("resources.assets",1))
