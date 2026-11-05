@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "session_id": "20261105T1647Z-T5-chat-native-milestone-7b4e",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "status": "completed",
+  "hypothesis": "Native GitHub metadata from active source e9c358ed must prove only completed stages, never a signed Release or actual Android-world acceptance while Unity import is still active. Invalid stage progression and fake artifact claims must fail closed.",
+  "source_commit": "58f66a0fbe898394f8e45a385a57a7a833672c50",
+  "input_hashes": [
+    "official filtered native run42058825739 source e9c358eda01785b65e4eb14f18723da426635628",
+    "official reconstruct job127354763134 exact 9 named gates with step numbers 15 19 43 59 62 65 67 69 71",
+    "4 official GitHub diagnostic artifact name/size/expiration records, not game assets"
+  ],
+  "tool_versions": {
+    "runner": "ubuntu-24.04",
+    "python": "Python3 stdlib",
+    "workflow": "raft-t5-native-milestone-gate.yml path-scoped CPU-only",
+    "Unity": "2021.3.45f2 native original still external"
+  },
+  "commands": [
+    "python3 -m unittest -v tests.test_t5_native_milestone_gate",
+    "python3 -m scripts.t5_native_milestone_gate --snapshot tests/fixtures/t5_native_milestones_42058825739.json --id 42058825739 --sha e9c358eda01785b65e4eb14f18723da426635628"
+  ],
+  "workflow_path": ".github/workflows/raft-t5-native-milestone-gate.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42068527576",
+  "artifact_urls": [],
+  "negative_controls": [
+    "Fake artifact named APK must not establish authentic signature or digest",
+    "Completed workflow success without retained native milestone must fail",
+    "Package step success with missing signature step must fail",
+    "Unity completion without acknowledged water or earlier source gates must fail",
+    "Run ID/SHA mismatches rejected",
+    "Duplicate job or milestone and altered step numbers rejected",
+    "Malformed duplicate/boolean artifact bytes rejected",
+    "Nonterminal run with success conclusion rejected",
+    "Unity pass alone and signature pass alone still leave package/release unverified",
+    "Even all nine source milestones passing do not establish published Release checksums or owner-device world/save/reopen"
+  ],
+  "budget": "Single short source-only ubuntu-24.04 workflow, no ZIP2/LFS/Unity or original binary data; 6 min job limit.",
+  "observed_result": {
+    "ci_run_id": 42068527576,
+    "ci_job_id": 127389485952,
+    "conclusion": "success",
+    "tests_passed": 20,
+    "tests_failed": 0,
+    "actual_native_run_id": 42058825739,
+    "native_immutable_head": "e9c358eda01785b65e4eb14f18723da426635628",
+    "native_in_progress_at_snapshot": true,
+    "real_native_phase": "unity_editor_in_progress",
+    "water_gate_passed_documented_experimentally": true,
+    "authentic_water_fft_verified": false,
+    "stage_numbers": [
+      15,
+      19,
+      43,
+      59,
+      62,
+      65,
+      67,
+      69,
+      71
+    ],
+    "original_workflow_artifacts": 4,
+    "signed_apk_verified": false,
+    "obb_verified": false,
+    "xapk_verified": false,
+    "release_digest_verified": false,
+    "android_world_save_reopen_verified": false
+  },
+  "rejected_hypotheses": [
+    "Real named diagnostic artifact is an installable APK/OBB/XAPK: false.",
+    "Source water trial success proves authentic FFT/Adreno rendering: false.",
+    "Unity Editor stage running establishes completed Unity import and native package: false.",
+    "Published release or on-phone world acceptance follows automatically from all GitHub job steps: false."
+  ],
+  "limitations": [
+    "The official filtered snapshot is pinned to a past in-progress state; re-query actual run/jobs and validate again before any terminal claim.",
+    "Milestone order checks job/step metadata, not the private APK, release digest, signing key, device execution or original game save.",
+    "Any later full native build includes only its own immutable source SHA, not newer T1–T4 diagnostics."
+  ],
+  "integration_commit": "58f66a0fbe898394f8e45a385a57a7a833672c50",
+  "next_step": "Re-query native run42058825739 and inspect actual first failed Unity step if terminal red; if green inspect signed APK/OBB/XAPK + upload/release metadata and verify actual digests. Do not launch a second heavy build until current one terminal."
+}
