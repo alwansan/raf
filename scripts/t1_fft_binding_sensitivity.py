@@ -196,7 +196,13 @@ def run_original(source: Path, runner: Path) -> dict:
                         or parsed["original_written_pixels"] == 0
                         or parsed["nonfinite_components"] != 0
                         or parsed["vulkan_image_format"] != "rgba32f"):
-                    raise ValueError("T1 original pass workload invalid/incomplete")
+                    raise ValueError("T1 original workload incomplete: pair=" + str(first) +
+                                     " profile=" + mode +
+                                     " tolerance=" + str(parsed["within_selected_tolerance"]) +
+                                     " nonfinite=" + str(parsed["nonfinite_components"] > 0) +
+                                     " wrote=" + str(parsed["original_written_pixels"] > 0) +
+                                     " seed=" + str(parsed["input_seed"] == SEED) +
+                                     " format=" + str(parsed["vulkan_image_format"] == "rgba32f"))
                 fingerprints[mode] = read_fingerprint(output, mode)
             assessed = assess(fingerprints)
             results.append({"first_original_compiled_candidate_slot": first,
