@@ -4,8 +4,8 @@
   "origin": "chat",
   "session_id": "20261105T1509Z-T2-chat-original-byref-sink-a83c",
   "issue_id": "WATER-001",
-  "status": "waiting_ci",
-  "updated_at": "2026-11-05T15:16:07.218Z",
+  "status": "completed",
+  "updated_at": "2026-11-05T15:18:05.598Z",
   "base_sha": "a0edf06a3ea50b61c302d468f5a1e1910bd93cdc",
   "resumed_from_sessions": [
     "20261105T1442Z-T2-chat-foam-field-reads-c8d1",
@@ -28,14 +28,28 @@
     "last_original_t2_CI": "42047763379 SUCCESS",
     "T4_ledger_schema_fixed": "e027d6a81b and T1 CI42049042381 SUCCESS"
   },
-  "next_step": "Read original SHA CI42053062181. If pass read safe sink category from completed job log; if fail correct first source-level assertion or compilation. T3/T5 active unrelated, not touched.",
+  "next_step": "Original unique ldflda exact typed byref RenderTexture[] call arg proven; resolve exact source-authentic callee method definition and body or external assembly, then verify whether it writes array via stind/call. No original method identifiers/bytecode. WATER-001 OPEN NOT_READY0/3.",
   "source_commit": "34f840561993b44c59cd7c61b22f1f013e64cd89",
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42053062181"
   ],
   "result": {
-    "code": "Original managed Foo ldflda consumer classification conservative synthetic tests",
-    "CI": "in_progress",
-    "runtime": "not tested"
+    "source_original_ci": "42053062181 COMPLETED SUCCESS",
+    "source_commit": "34f840561993b44c59cd7c61b22f1f013e64cd89",
+    "original_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "exact_original_address_sites": 1,
+    "distinct_original_address_owner_methods": 1,
+    "sink_category_histogram": {
+      "typed_byref_array_call_potential_mutation": 1
+    },
+    "first_following_opcode_class": {
+      "other": 1
+    },
+    "synthetic_controls": "passed",
+    "artifact_id": 13428570089,
+    "artifact_sha256": "153c1a689176b885f3bd62feeeb44bbf986dd7b1ad82108df2f6a627b8cf908b",
+    "field_mutation_executed_proven": false,
+    "callee_body_original_verification": false,
+    "runtime_array_contents_proven": false
   }
 }
