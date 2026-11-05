@@ -1,0 +1,20 @@
+{
+  "id": "20261105T211313Z-T3-chat-particle-shader-rank-4e92",
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T211313Z-T3-chat-particle-shader-rank-4e92",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "at": "2026-11-05T21:15:55Z",
+  "summary": "Actual SHA-pinned 6-scene/4owner original ParticleSystemRenderer 215 typed Shader48 Material slots resolve to six source shaders ranked 108/34/34/20/16/3; unique 108-slot Shader48 has one original pass and 54 distinct ParticleSystemRenderer objects, zero other renderer-class slots. CI42110973101 PASS 41/41 tests, original SHA verified; NO Unity/device proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42110973101",
+    "https://github.com/alwansan/raf/commit/a4a0f31438d65714661f1bd1f779bdc62032f7e7",
+    "https://github.com/alwansan/raf/commit/449b2235acfaa68837d9e8fa6f1495e810a42807",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE_SHADER_RANK_2026-11-05.md"
+  ],
+  "limitations": [
+    "source-only Particle shader rank, not rendered fire/smoke cause",
+    "RENDER-002 stays OPEN"
+  ]
+}
