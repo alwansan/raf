@@ -3,7 +3,7 @@
   "origin": "chat",
   "session_id": "20261105T232830Z-T1-chat-5d3b90",
   "issue_id": "WATER-001",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "d7b5960cf1e3760f579c3fcdcbb143df0ddf6c2f",
   "intended_files": [
     "scripts/t1_sourcefree_dispatch_fixture.py",
@@ -16,5 +16,6 @@
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42129683073"
   ],
-  "next_step": "Read the integer, bitcast-only, subnormal multiply and normal multiply mismatch counts. Even an observed flush is only a candidate until the authentic X address slice shows the same operation."
+  "next_step": "Trace the original slot-0 coordinate OpBitcast back through its typed load. Confirm the affected integer carrier and test a private uint-preserving rewrite against the same Vulkan and Unity output/trace gates, before any production integration.",
+  "result": "Unity 2021 OpenGLCore synthetic control: 0/64 mismatches for bound uint shift/add/mask, 63/64 for bitcast-only asuint(asfloat(address)), 63/64 for subnormal multiply, 0/64 for normal multiply. Exact NUnit 2/2, because the experiment measures carrier mismatches and asserts positive controls. This reproduces loss of low integer address bit patterns without a float multiply in source. It does not prove which output bits were observed or that authentic slot 0 uses this exact path."
 }
