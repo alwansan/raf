@@ -4,7 +4,7 @@
   "session_id": "20261105T1500Z-T4-chat-saveworld-rgd-producer-h5k2",
   "origin": "chat",
   "issue_id": "LOCAL-005",
-  "status": "active",
+  "status": "completed",
   "base_sha": "696ca2f9c933001dd9cb1aac457bccce6db928c4",
   "track": "original-compiled-SaveWorld-RGD-argument-provenance",
   "experiment_key": "local005-original-zip2-sha0a6f-compiled-CIL-SaveWorld-to-SaveRGD-argument-construction-count-v1",
@@ -32,8 +32,33 @@
     "20261105T1440Z-T4-scheduled-q8p3",
     "20261105T1405Z-T4-chat-original-rgd-runtime-k6n8"
   ],
-  "run_urls": [],
-  "result": null,
-  "updated_at": "2026-11-05T15:08:36.266Z",
-  "next_step": "Authenticate original DLL then observe whether SaveWorld itself constructs RGD and passes it to Save; never infer player state/device from IL. Do not edit scheduled JSONL verifier."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42052712119",
+    "https://github.com/alwansan/raf/actions/runs/42053331738",
+    "https://github.com/alwansan/raf/actions/runs/42053882300"
+  ],
+  "result": {
+    "original_exact_assembly_sha_verified": true,
+    "original_SaveWorld_to_Save_string_RGD_exact_direct_calls": 1,
+    "original_SaveUser_to_Save_string_RGD_exact_direct_calls": 1,
+    "original_SaveWorld_rgd_constructor_calls": 0,
+    "original_SaveUser_rgd_constructor_calls": 0,
+    "other_SaveAndLoad_rgd_constructor_calls": 0,
+    "original_SaveWorld_generic_Load_RGD_calls": 0,
+    "original_SaveUser_generic_Load_RGD_calls": 0,
+    "world_immediate_precall_source": "UNKNOWN_PRECALL_SOURCE",
+    "user_immediate_precall_source": "UNKNOWN_PRECALL_SOURCE",
+    "gameplay_RGD_argument_identity_proven": false,
+    "original_save_invoked": false,
+    "game_generated_rgd_written": false,
+    "android_unity_il2cpp_phone_tested": false,
+    "original_game_binary_or_data_published": false,
+    "synthetic_validator_tests": "22/22",
+    "final_ci": "42053882300 SUCCESS",
+    "inspector_source_commit": "2bc356110a4279fcbeb7e7ac53f94a1fb8f173c4",
+    "validator_test_commit": "03978c08dff9cc58a84acea60948bd7d6461d6bf",
+    "report": "docs/T4_ORIGINAL_SAVEWORLD_RGD_PRODUCER_2026-11-05.md"
+  },
+  "updated_at": "2026-11-05T15:21:50.878Z",
+  "next_step": "Trace authentic RGD population outside direct SaveAndLoad constructor/generic Load sites or use new T5 native candidate evidence; actual SaveWorld and SaveUser each target original private Save(string,RGD) but argument identity remains UNKNOWN; no fabricated RGD, no serializer changes. T4 scheduled JSONL UTC inversion scope untouched. LOCAL-005 OPEN NOT_READY 0/3."
 }
