@@ -115,6 +115,9 @@ jobs:
               mkdir -p /root/.local/share/unity3d/Unity
               if [ -n "${UNITY_LICENSE:-}" ]; then
                 printf "%s" "$UNITY_LICENSE" | tr -d "\r" > /root/.local/share/unity3d/Unity/Unity_lic.ulf
+                /opt/unity/Editor/Unity -quit -batchmode -nographics \
+                  -manualLicenseFile /root/.local/share/unity3d/Unity/Unity_lic.ulf \
+                  -logFile /workspace/t1-private-activation.log > /workspace/t1-private-activation-stdout.log 2>&1 || true
               elif [ -n "${UNITY_SERIAL:-}" ] && [ -n "${UNITY_EMAIL:-}" ] && [ -n "${UNITY_PASSWORD:-}" ]; then
                 /opt/unity/Editor/Unity -quit -batchmode -nographics \
                   -username "$UNITY_EMAIL" -password "$UNITY_PASSWORD" -serial "$UNITY_SERIAL" \
@@ -130,6 +133,8 @@ jobs:
           echo 'RAFT_T1_UNITY_EDITOR_INVOKED process_exit_recorded=true raw_logs_private=true'
       - name: Report only guarded aggregate actual Unity import observations
         shell: bash
+        env:
+          UNITY_EXIT_CODE: ${{ steps.private_unity.outputs.unity_process_exit }}
         run: |
           set -euo pipefail
           # The private Docker container writes root-owned mode 0600 logs.
@@ -145,7 +150,12 @@ jobs:
               print("RAFT_T1_UNITY_IMPORT_INCONCLUSIVE "+json.dumps({
                   "unity_result_file_present":False,
                   "private_unity_log_present":bool(log),
+                  "unity_process_exit_code":int(__import__("os").environ.get("UNITY_EXIT_CODE","-1")),
                   "licensing_message_category":bool(re.search(r"licen[cs]|activat",log,re.I)),
+                  "licensing_failure_category":bool(re.search(
+                      r"(?:licen[cs]|entitlement|serial)[^\\n]{0,100}(?:invalid|fail|expired|denied|not activat|missing)|(?:invalid|fail|expired|denied|no valid)[^\\n]{0,100}(?:licen[cs]|entitlement|serial)",log,re.I)),
+                  "execute_method_lookup_failure":bool(re.search(
+                      r"(?:executemethod|execute method)[^\\n]{0,120}(?:not found|not execute|could not|failed)|(?:could not find|cannot find)[^\\n]{0,80}(?:method|class)",log,re.I)),
                   "script_compilation_error_category":bool(re.search(r"error CS[0-9]+",log)),
                   "shader_compilation_error_category":bool(re.search(r"compute shader.*error|shader error",log,re.I)),
                   "original_runtime_kernel_mapping_proven":False,
