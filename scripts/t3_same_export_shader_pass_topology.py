@@ -177,22 +177,39 @@ def compare(source:dict,w1:dict,actual:dict,*,real_links_proven:bool):
     }
 
 
+class SafeStageFailure(ValueError):
+    def __init__(self,stage:str,category:str):
+        super().__init__("bounded source Shader topology inconclusive")
+        self.stage=stage
+        self.category=category
+
+
 def run(root:Path,project:Path,w1path:Path,b02path:Path):
-    # Reuse exact accepted authenticated source+YAML+Shader importer test.
-    links_report=links.run(root,project,w1path,b02path)
-    if not links_report["original_Material_Shader_pptr_target_preserved"]:
-        raise ValueError("same_export_Shader_link_prerequisite_failed")
-    edges,targets=links.original_source(root)
-    if len(edges)!=links.MATERIAL_COUNT:raise ValueError("untrusted_Material41_scope")
-    profiles=source_profiles(root,targets)
-    w1=json.loads(w1path.read_text("utf8"))
-    needed=set()
-    for row in w1["objects"]:
-        if row.get("class_id")==48 and identity(row["source"]) in targets:
-            ptr=pointer(row["export"])
-            if ptr[1] not in BUILTIN:needed.add(ptr[1])
-    meta=exported_profiles(project/"Assets",needed)
-    return compare(profiles,w1,meta,real_links_proven=True)
+    # Never publish raw exception strings: UnityPy's errors may include
+    # proprietary Shader object names / original object PathIDs.
+    stage="authentic_material_Shader_link_prerequisite"
+    try:
+        links_report=links.run(root,project,w1path,b02path)
+        if not links_report["original_Material_Shader_pptr_target_preserved"]:
+            raise ValueError("same_export_Shader_link_prerequisite_failed")
+        stage="authenticated_ten_original_Shader_targets"
+        edges,targets=links.original_source(root)
+        if len(edges)!=links.MATERIAL_COUNT:raise ValueError("untrusted_Material41_scope")
+        stage="original_Shader48_parsed_pass_topology"
+        profiles=source_profiles(root,targets)
+        stage="same_instance_selected_custom_Shader48_target_trace"
+        w1=json.loads(w1path.read_text("utf8"))
+        needed=set()
+        for row in w1["objects"]:
+            if row.get("class_id")==48 and identity(row["source"]) in targets:
+                ptr=pointer(row["export"])
+                if ptr[1] not in BUILTIN:needed.add(ptr[1])
+        stage="actual_exported_nine_ShaderLab_GUID_and_pass_documents"
+        meta=exported_profiles(project/"Assets",needed)
+        stage="per_original_Shader48_to_own_exported_ShaderLab_profile"
+        return compare(profiles,w1,meta,real_links_proven=True)
+    except Exception as exc:
+        raise SafeStageFailure(stage,type(exc).__name__) from None
 
 
 def main(argv=None):
@@ -205,10 +222,15 @@ def main(argv=None):
         or a.out.resolve().is_relative_to(a.project.resolve())):
         raise ValueError("unsafe_report_location")
     try:report=run(a.original,a.project,a.w1_trace,a.b02_trace)
+    except SafeStageFailure as ex:
+        report={"schema_version":1,
+                "experiment":"T3-authentic-Shader48-source-to-export-ShaderLab-structural-topology",
+                "status":"INCONCLUSIVE","phase":ex.stage,"exception_type":ex.category,
+                "original_compiled_variant_program_equivalence_verified":False}
     except Exception as ex:
         report={"schema_version":1,
                 "experiment":"T3-authentic-Shader48-source-to-export-ShaderLab-structural-topology",
-                "status":"INCONCLUSIVE","exception_type":type(ex).__name__,
+                "status":"INCONCLUSIVE","phase":"unclassified","exception_type":type(ex).__name__,
                 "original_compiled_variant_program_equivalence_verified":False}
     a.out.parent.mkdir(parents=True,exist_ok=True)
     a.out.write_text(json.dumps(report,sort_keys=True,indent=2)+"\n",encoding="utf8")
