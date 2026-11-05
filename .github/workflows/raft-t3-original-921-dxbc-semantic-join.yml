@@ -39,7 +39,7 @@ jobs:
           python3 -m py_compile scripts/t3_original_921_dxbc_semantic_join.py scripts/t3_dxbc_signature_contract.py tests/test_t3_original_921_dxbc_semantic_join.py
       - name: Verify exact DXBC signatures semantic join and privacy
         run: |
-          python3 -m unittest discover -s tests -p 'test_t3_original_921_vf_component_bridge.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_original_921_dxbc_semantic_join.py' -v
           PYTHONPATH=scripts python3 -m unittest discover -s tests -p 'test_t3_dxbc_signature_contract.py' -v
   original-genuine-fourpass-DXBC-semantics:
     if: >-
