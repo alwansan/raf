@@ -6,7 +6,7 @@
   "issue_id": "LOCAL-005",
   "track": "world-save",
   "approach": "Execute the actual two SHA-verified original compiled FileManager stream-returning static methods via reflection, selected strictly from compiled SaveAndLoad generic Load and Save call operands; write fixed synthetic bytes in a new private temporary file, close, reopen using original read(FileMode.Open), verify bytes, and delete. Report booleans only; no real .rgd payload, Unity, device, save schema or path assumptions.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "9e69c3a30ce9082dc192dec4bf01b7844b548002",
   "intended_files": [
     "android-port/Experiments/T4/OriginalManagedStreamRoundtrip/OriginalManagedStreamRoundtrip.csproj",
@@ -31,8 +31,25 @@
   "experiment_ids": [
     "20261105T1121Z-original-managed-stream"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Build constrained immutable-Cecil selected reflection invocation of two exact original methods, source-free fake result rejection, isolated test on original DLL; report failed runtime linkage without weakening gates. No Unity/native job requested.",
-  "updated_at": "2026-11-05T11:21:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42018849053",
+    "https://github.com/alwansan/raf/actions/runs/42019254048",
+    "https://github.com/alwansan/raf/actions/runs/42020039305"
+  ],
+  "result": {
+    "original_sha_verified": true,
+    "original_filemanager_methods_actually_invoked": true,
+    "original_managed_sibling_dependencies": 151,
+    "compiled_il_try_path_guard": true,
+    "write_closed_before_open": true,
+    "synthetic_bytes_equal_after_reopen": true,
+    "synthetic_temp_tree_removed": true,
+    "source_free_controls": "15/15 PASS",
+    "real_game_rgd_serialization": false,
+    "android_app_storage_or_unity_il2cpp": false,
+    "world_playable": false,
+    "report": "docs/T4_ORIGINAL_MANAGED_STREAM_ROUNDTRIP_2026-11-05.md"
+  },
+  "next_step": "Coordinate T5 native Android evidence with latest source; test genuine original .rgd save/quit/relaunch/reopen and local world playable; no new native APK yet, keep LOCAL-005 OPEN NOT_READY.",
+  "updated_at": "2026-11-05T11:38:00Z"
 }
