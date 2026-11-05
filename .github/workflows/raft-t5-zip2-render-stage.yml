@@ -1,0 +1,73 @@
+name: T5 ASSET-RESTORE-001 immutable ZIP2 graphics staging
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t5_stage_zip2_render_owners.py
+      - scripts/hydrate_render_payloads.py
+      - tests/test_t5_stage_zip2_render_owners.py
+      - .github/workflows/raft-t5-zip2-render-stage.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raft-t5-zip2-render-stage-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  immutable-original-owner:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Check out feature source without LFS
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Run isolated atomic staged-original negative and consumer controls
+        run: |
+          set -euo pipefail
+          python3 -m unittest -v tests.test_t5_stage_zip2_render_owners
+      - name: Check out pinned ZIP2 original graphics provider (sparse, no LFS)
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-original
+          lfs: false
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/resources.assets
+      - name: Reconstruct one real SHA-pinned graphics owner and consume in feature checkout
+        shell: bash
+        run: |
+          set -euo pipefail
+          df -h "$RUNNER_TEMP"
+          python3 -m scripts.t5_stage_zip2_render_owners \
+            --zip2-checkout zip2-original \
+            --output-root "$RUNNER_TEMP/t5-original-graphics" \
+            --owner Raft_Data/resources.assets \
+            --byte-budget 120000000
+          python3 - <<'PY'
+          import hashlib
+          import os
+          from pathlib import Path
+          from scripts.hydrate_render_payloads import plan, reuse_verified_staged_sources
+          rows = [row for row in plan() if row[0] == 'Raft/Raft_Data/resources.assets']
+          if len(rows) != 1 or rows[0][2] != 111533516:
+              raise SystemExit("Expected authenticated feature LFS graphics owner absent")
+          source = Path(os.environ['RUNNER_TEMP']) / 't5-original-graphics/Raft_Data'
+          reused, count = reuse_verified_staged_sources(rows, source, Path.cwd())
+          if (reused, count) != (1, 111533516):
+              raise SystemExit("Feature-LFS consumer did not accept original ZIP2 graphics owner")
+          target = Path('Raft/Raft_Data/resources.assets')
+          with target.open('rb') as stream:
+              digest = hashlib.file_digest(stream, 'sha256').hexdigest()
+          if digest != rows[0][1] or target.stat().st_size != rows[0][2]:
+              raise SystemExit("Staged original graphics bytes failed independent SHA")
+          print('T5_REAL_ZIP2_GRAPHICS owner_count=1 sha256_verified=true feature_pointer_reused=true lfs_used=false unity=false phone=false')
+          PY
+      - name: Never upload original game payload
+        if: always()
+        run: echo "T5 original graphics staging is not Unity, APK, pixel or phone proof; no raw artifacts uploaded."
