@@ -281,7 +281,7 @@ public sealed class T1PrivateFftGpuDispatchTests
             int pass1 = Dispatch(manifest.resources[1], intermediate, butterfly, final);
             if (File.Exists(Path.Combine(Application.dataPath, "T1TracePass0.compute")))
             {
-                var records = new uint[4097];
+                var records = new uint[1 + 512 * 12];
                 using (var trace = new ComputeBuffer(records.Length, sizeof(uint)))
                 {
                     trace.SetData(records);
