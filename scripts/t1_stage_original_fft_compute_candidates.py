@@ -28,6 +28,7 @@ MAX_DXBC = 1024 * 1024
 MAX_HLSL = 512 * 1024
 ENTRY = "main"
 FILES = 20
+ORIGINAL_FFT_OBJECT_SHA256 = ORIGINAL_OBJECT_SHA256  # Public pin alias for tests/manifest only.
 
 
 def sanitize_translated_compute(hlsl: bytes, workgroup: int) -> bytes:
