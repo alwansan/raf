@@ -4,9 +4,9 @@
   "origin": "chat",
   "session_id": "20261105T1611Z-T2-chat-foam-length-source-9ab4",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "5c45d20d1112e18ca6a544bbcdaed7f1960db18a",
-  "updated_at": "2026-11-05T16:11:00Z",
+  "updated_at": "2026-11-05T16:13:00Z",
   "resumed_from_sessions": [
     "20261105T1540Z-T2-chat-byref-target-b6af",
     "20261105T1520Z-T2-scheduled-e7c1"
@@ -28,5 +28,14 @@
     "last_verified_t2_original_ci": "42060975715 SUCCESS",
     "last_canonical_summary": "42061316352 SUCCESS"
   },
-  "next_step": "Reserve own chat session, implement source-free tests and SHA-pinned original CI. Report actual bounded origin or unknown; no Unity/Adreno claim. WATER-001 OPEN NOT_READY0/3."
+  "next_step": "Read CI42062967598. If success inspect T2_FOAM_LENGTH_LOCAL_ORIGIN_SAFE, distinguish direct size/literal via local from argument/call/arraylen or unresolved. If fail fix first T2-owned error. Never disclose raw original length/indices/digests. WATER-001 OPEN NOT_READY0/3.",
+  "source_commit": "3b968223d951a380485024a7491d8f04ca01bd47",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42062967598"
+  ],
+  "result": {
+    "code": "Typed original exact newarr immediate producer classification and same-basic-block local stloc provenance, original SHA verifier + three public synthetic controls",
+    "CI": "queued",
+    "device": "not tested"
+  }
 }
