@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261105T1540Z-T2-chat-byref-target-b6af",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "76f309602e3456164360c41b8db6e223c3bbee04",
+  "updated_at": "2026-11-05T15:40:00Z",
+  "resumed_from_sessions": [
+    "20261105T1509Z-T2-chat-original-byref-sink-a83c",
+    "20261105T1520Z-T2-scheduled-e7c1"
+  ],
+  "experiment_key": "T2|ZIP2-15964ea8|AssemblyCSharp-0a6f0527|Foam-exact-array-byref-call-target|definition-and-signature-v1",
+  "resource_key": "T2-original-foam-typed-array-byref-callee",
+  "hypothesis": "The exact original Foam ref RenderTexture[] call target can be resolved as an internal managed definition or a standard external library API. A typed reference call alone is not proof of a field write.",
+  "method": "Preserve the precise MethodReference reached by the existing bounded Cecil field-address tracer, check exact signature and definition against original SHA-pinned Assembly-CSharp.dll; output only framework/assembly categories and aggregate opcode counts. Synthetic internal, external and similarly typed decoy controls; no original source names or IL published.",
+  "intended_files": [
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/FoamFieldAddressConsumer.cs",
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/FoamByrefTargetBody.cs",
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/Program.cs",
+    ".github/workflows/raft-t2-foam-managed-literals.yml",
+    "prompt/coordination/work/WATER-001/T2-20261105T1540Z-T2-chat-byref-target-b6af.json",
+    "prompt/coordination/clients/T2/sessions/20261105T1540Z-T2-chat-byref-target-b6af.md"
+  ],
+  "preflight": {
+    "head": "76f309602e3456164360c41b8db6e223c3bbee04",
+    "unrelated_active": "42057399746 T1 FFT",
+    "last_T2_original_CI": "42053062181 success"
+  },
+  "next_step": "Implement and run the private source-authentic original managed classifier, verify output and save handoff. WATER-001 OPEN NOT_READY0/3."
+}
