@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261105T1434Z-T2-chat-rendertexture-serialization-93ad",
+  "issue_id": "WATER-001",
+  "status": "completed",
+  "experiment_key": "T2|zip2-15964ea8|original-dll-0a6f0527|exact-RenderTexture-array-managed-fielddef-serialized-attributes|v1",
+  "source": {
+    "zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "managed_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "managed_bytes": 3211776
+  },
+  "hypothesis": "Exact original Foam RenderTexture[] getter backing field's visibility and attributes may permit or preclude normal Unity field-modifier serialization, which is distinct from evidence of actual serialized values.",
+  "source_commit": "9b01015a9e3aa47718d9b102d31bd8d39d52b638",
+  "tools": "Mono.Cecil 0.11.5 pinned net9 C# source-only fixture and SHA-original managed DLL extraction; no private symbols emitted.",
+  "workflow": "https://github.com/alwansan/raf/actions/runs/42046650774",
+  "artifact": {
+    "id": 13424871676,
+    "size_bytes": 1923,
+    "sha256": "4fada83b5337702252c61fdb121350418d99db4fb97dc6f0218cbf50e1269c7f"
+  },
+  "observed": {
+    "ci": "SUCCESS",
+    "field_definitions_exact": 1,
+    "public": false,
+    "serialize_field": false,
+    "nonserialized": false,
+    "static": false,
+    "initonly": false,
+    "eligible_by_field_modifiers_only": false,
+    "owner_direct_base": "not_proven_unity_owner_by_direct_base",
+    "four_original_i4_arg_values_decoded": 4,
+    "distinct_private_arg_values": 4,
+    "all_private_arg_values_nonnegative": true,
+    "runtime_array_length_verified": false,
+    "serialized_instance_value_verified": false,
+    "original_numeric_values_published": false
+  },
+  "safety_notes": [
+    "Field eligibility is only a compile-time modifier gate; it does not prove scene/prefab value or runtime array fill",
+    "No direct original numeric values, original method/field names, class identifiers, IL or reversible small-domain hashes exposed",
+    "No shader/Unity/Adreno pixels or Android test"
+  ],
+  "next_step": "Trace owner base type ancestry and indirect RenderTexture[] writes/creation using SHA-original managed metadata, while preserving private symbols and no runtime claims. WATER-001 OPEN NOT_READY0/3."
+}
