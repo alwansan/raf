@@ -10,19 +10,21 @@
     "https://github.com/alwansan/raf/actions/runs/41914505411",
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B04_MESH_SOURCE_PATH_SAFETY_2026-11-04.md",
     "https://github.com/alwansan/raf/commit/f0afb5983694cec91a61bcd6f9825ca1cf658f7e",
-    "https://github.com/alwansan/raf/actions/runs/41939143108"
+    "https://github.com/alwansan/raf/actions/runs/41939143108",
+    "https://github.com/alwansan/raf/actions/runs/41940032540"
   ],
   "remaining": [
     "تحقق stream ranges/format/sRGB/normalmaps وGUIDs",
     "missingMonoScript وconvexmeshwarnings أسبابغيرمحسومة",
     "جردنطاقمحددومرحلةاستعادةلكلمورد",
     "B04 linked-path source provenance guarded for YAML Mesh utility (CI synthetic only); still need actual original Mesh source and device geometry binding verification",
-    "T5 restored real original resources.assets 111533516B in isolated ZIP2-to-feature LFS hydration CI41939143108 (11/11 synthetic controls); optional consumer integrated but Unity export, other owners and Android pixels remain unverified"
+    "T5 restored real original resources.assets 111533516B in isolated ZIP2-to-feature LFS hydration CI41939143108 (11/11 synthetic controls); optional consumer integrated but Unity export, other owners and Android pixels remain unverified",
+    "T5 3 original ZIP2 graphics owners exact SHA/size verified and consumed through feature graphics staging at CI41940032540 (337660952B, 13/13 synthetic); full Unity export/Material/ComputeShader binding and Android pixels remain OPEN"
   ],
   "acceptance": [
     "تغطيةmanifestوالتبعياتالمطلوبة",
     "اكتمالgeometry/bindingsمعاختباروظيفي"
   ],
   "updated_by": "T5",
-  "updated_at": "2026-11-05T00:12:07.647Z"
+  "updated_at": "2026-11-05T00:18:04.491Z"
 }
