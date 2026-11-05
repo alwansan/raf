@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261105T1736Z-T2-chat-ret-reason-28ce",
+  "issue_id": "WATER-001",
+  "status": "completed",
+  "experiment_key": "T2|ZIP2-15964ea8|sha-0a6f0527|exact-RT-return-one-stloc-value-source-family-v1",
+  "source_original": {
+    "zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "managed_dll_bytes": 3211776,
+    "managed_dll_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e"
+  },
+  "ci_source_local_writer": "https://github.com/alwansan/raf/actions/runs/42077586809",
+  "ci_source_writer_prior": "https://github.com/alwansan/raf/actions/runs/42078263113",
+  "commits": [
+    "765042f2ee82967b0f1432622e2bf9c28c288a16",
+    "5a9e47a7d3caf835a53a4d2bfb14e66034eb88eb",
+    "2959b575ae8b455f27b5a8caa845778b7e2bfe68",
+    "880d76bb6ec403de62bb696ded7eb4ecb8f662ab",
+    "d3d14d1e98ddd0d5655f845731fe0591c8bfaa2d",
+    "62a405339c877385ca39487f12c85bb7c61897f8"
+  ],
+  "artifacts": [
+    {
+      "id": 13440120178,
+      "zip_sha256": "0213f49bb65973257a884d43c479cf5fc4c2784dfe56b2fd061e3d0731021855",
+      "bytes": 3070
+    },
+    {
+      "id": 13438633085,
+      "zip_sha256": "e165be18752ce4bd17ed2f7a1d42a83140cddf1331120238ade9ec8fab122d51",
+      "bytes": 3091
+    }
+  ],
+  "finding": {
+    "exact_original_rt_return_local_load_sites": 1,
+    "return_local_declared_rendertexture": true,
+    "exact_matching_local_stloc_sites": 1,
+    "direct_null_writer_sites": 0,
+    "direct_newobj_rt_writer_sites": 0,
+    "direct_typed_rt_call_writer_sites": 0,
+    "local_alias_writer_sites": 0,
+    "unresolved_writer_sites": 1,
+    "sole_writer_prior_opcode_family": "call",
+    "sole_writer_is_branch_or_exception_target": false,
+    "actual_value_consumed_from_prior_call_proven": false,
+    "branch_join_or_runtime_value_proven": false,
+    "private_original_names_il_or_numeric_values_disclosed": false
+  },
+  "method": "Strict original RT typed return ldloc mapping to same local exact stloc source-only census, then fixed immediate predecessor opcode family and branch entry status. Synthetic direct null, new RT, typed RT call and wrong-local adversarial controls; preserve original data only in CI scratch.",
+  "next_step": "Find exact prior call signature, check declared return family and bounded typed stack feeding the one stloc; distinguish adjacent call from actual producer, then branch-safe return flow and Unity/Adreno acceptance separately. WATER-001 OPEN NOT_READY0/3."
+}
