@@ -29,10 +29,11 @@
   ],
   "experiment_ids": [],
   "run_urls": [
-    "https://github.com/alwansan/raf/actions/runs/42018235130"
+    "https://github.com/alwansan/raf/actions/runs/42018235130",
+    "https://github.com/alwansan/raf/actions/runs/42018761761"
   ],
-  "result": "New source-free role parser and redacted test-report synthetic tests passed in actual CI; pinned GameCI source-free Unity 2/2 canary passed, original-data translation/deploy stage in progress. No authentic GPU Dispatch result yet.",
-  "next_step": "Build a conservative source-free resource declaration parser with negative controls, then real private Unity GPU execution workflow on selected original-derived slots. If true graphics execution unsupported or translated resource symbols differ, preserve negative evidence without false Unity kernel mapping claim.",
-  "updated_at": "2026-11-05T11:23:08.605Z",
+  "result": "Real CI42018235130 FAILED after synthetic canary, exact original SHA and twenty translated private .compute stage, BEFORE GPU Dispatch: derived HLSL register-role parser rejected one of three declarations as t/u register type/layout mismatch. No original device/Unity dispatch or pixels proven. Updated parser to expose ONLY bounded register-class/index/space profile without property names; diagnostic rerun42018761761 in_progress.",
+  "next_step": "Inspect private safe register profile, independently prove original DXBC register-to-SPIR-V-to-HLSL property identity before binding input0/input1/output and attempting actual Unity GPU Dispatch. Never bypass a role mismatch by guessing aliases.",
+  "updated_at": "2026-11-05T11:26:52.402Z",
   "identity_conflict": "Multiple independent T1 sessions exist; do not overwrite current T1 shared state/peer session/other T2-T5 files."
 }
