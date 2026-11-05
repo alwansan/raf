@@ -59,7 +59,7 @@ jobs:
           python3 -m scripts.stage_zip2_fft_owner \
             --zip2-checkout "$RUNNER_TEMP/t1-private-zip2" \
             --destination "$RUNNER_TEMP/t1-original-verified/Raft_Data/sharedassets0.assets"
-      - name: Stage private FFT pair and compare both passes on the same Vulkan device
+      - name: Inventory private read sites and compare both passes on the same Vulkan device
         run: |
           set -euo pipefail
           export TMPDIR="$RUNNER_TEMP/t1-roundtrip-scratch"

@@ -15,9 +15,10 @@ def inventory(text):
         name = re.escape(symbols[role])
         uses = len(re.findall(rf"\b{name}\b", clean))
         loads = len(re.findall(rf"\b{name}\s*\.\s*Load\s*\(", clean))
-        if not loads or uses != loads + 1:
-            raise ValueError("Unsupported private texture access")
-        counts[role] = loads
+        dimensions = len(re.findall(rf"\b{name}\s*\.\s*GetDimensions\s*\(", clean))
+        subscripts = len(re.findall(rf"\b{name}\s*\[", clean))
+        counts[role] = {"load": loads, "dimensions": dimensions, "subscript": subscripts,
+                        "unclassified": uses - 1 - loads - dimensions - subscripts}
     return counts
 
 

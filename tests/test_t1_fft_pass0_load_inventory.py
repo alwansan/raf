@@ -17,8 +17,10 @@ class LoadInventoryTests(unittest.TestCase):
         float4 a = src.Load(int3(x, y, 0));
         float4 b = src.Load(int3(x, y, 0)) + lookup.Load(int3(x, y, 0));
         """)
-        self.assertEqual(result, {"source": 2, "butterfly": 1})
+        self.assertEqual(result["source"]["load"], 2)
+        self.assertEqual(result["butterfly"]["load"], 1)
 
-    def test_unclassified_access_rejected(self):
-        with self.assertRaises(ValueError):
-            inventory(DECL + "src.Load(p); lookup.Load(p); src.Sample(s, p);")
+    def test_unclassified_access_is_reported(self):
+        result = inventory(DECL + "src.Load(p); lookup[p]; src.Sample(s, p); lookup.GetDimensions(x, y);")
+        self.assertEqual(result["source"]["unclassified"], 1)
+        self.assertEqual(result["butterfly"], {"load": 0, "dimensions": 1, "subscript": 1, "unclassified": 0})
