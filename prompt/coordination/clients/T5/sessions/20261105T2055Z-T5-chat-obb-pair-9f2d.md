@@ -1,0 +1,16 @@
+# T5 chat session — 20261105T2055Z-T5-chat-obb-pair-9f2d
+- session_id: `20261105T2055Z-T5-chat-obb-pair-9f2d`
+- origin: chat
+- status: active
+- base_sha: ace661139f33ee801af500a1dbe212f86d98cfac
+- resumed_from_sessions: 20261105T1738Z-T5-chat-release-manifest-6e91, 20261105T1953Z-T5-scheduled-release-permission-a72e, 20261105T2045Z-T5-scheduled-ui-right-a71
+- work: prompt/coordination/work/INTEGRATION-001/20261105T2055Z-T5-chat-obb-pair-9f2d.json
+- scope: source-only APK+OBB completed-file pair and aapt identity integrity verifier, distinct from scheduled AndroidTouchUiPanel.cs.
+- experiment_key: t5-android-apk-obb-pair-validate-local-complete-bytes-deliveryjson-aapt-zip-integrity-v1
+- resource_key: source-only-CPU-no-game-artifact
+- latest owner phone evidence: docs/DEVICE_FEEDBACK_42058825739_AR.md, original source e9c358eda01785b65e4eb14f18723da426635628, world/save/reopen owner confirmed; OBB GUID warning remains separate.
+- latest native delivery: CI42058825739 reconstruct succeeded, Release POST 403, delivery artifact 13441227298 expires 2026-11-06T18:19:05Z. No release published, no new dispatch.
+- latest scheduled T5 UI commit: 96f41443d8545776b17b1d828fa52be60046c2dd, CI42106538730+42106538822 success. Avoid UI overlap.
+- initial HEAD: ace661139f33ee801af500a1dbe212f86d98cfac; no in_progress native Actions from latest filtered query.
+- planned files: scripts/t5_verify_apk_obb_pair.py, tests/test_t5_verify_apk_obb_pair.py, .github/workflows/raft-t5-apk-obb-pair.yml, docs/T5_APK_OBB_PAIR_VERIFIER_2026-11-05.md.
+- next: implement adversarial bounded test + path-scoped CI, document exact covered bytes and limits. No Unity/REA necessity for file-level packaging hypothesis; no private binary disclosure.
