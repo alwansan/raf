@@ -91,7 +91,8 @@
         "https://github.com/alwansan/raf/commit/02665b11061ccb070bf6e24797d47a2866ef250c",
         "https://github.com/alwansan/raf/actions/runs/42118499200",
         "https://github.com/alwansan/raf/actions/runs/42121598304",
-        "https://github.com/alwansan/raf/actions/runs/42124859112"
+        "https://github.com/alwansan/raf/actions/runs/42124859112",
+        "https://github.com/alwansan/raf/actions/runs/42126395609"
       ],
       "remaining": [
         "معالجة ظهور أشرطة النظام عند حواف اللعبة بالماوس الفعلي واستخدام مؤشر Raft.",
@@ -99,16 +100,18 @@
         "الحفاظ على الكيبورد واللمس الحالي. تطوير تخطيط التاتش العام مؤجل.",
         "T4: تحقق هاتف فعلي من View pointer capture فقدانه/استعادته، حركة الكاميرا دون حواف، مؤشر القائمة، أشرطة النظام، ومنافذ اللمس/الكيبورد، مع اختبار حفظ/إعادة فتح العالم على نفس SHA.",
         "On-device test of SOURCE_MOUSE_RELATIVE vs SOURCE_TOUCHPAD captured motion, batching, cursor lock/release, wheel/buttons and old world/save/exit/reopen on same candidate SHA; source tests do not prove Android behavior.",
-        "Immersive WindowInsetsController/legacy source added; validate on actual POCO F5 Pro whether bars disappear at mouse edges while OS swipes still work and landscape/Settings/game world-save remain stable on same signed candidate."
+        "Immersive WindowInsetsController/legacy source added; validate on actual POCO F5 Pro whether bars disappear at mouse edges while OS swipes still work and landscape/Settings/game world-save remain stable on same signed candidate.",
+        "On-device verify old captured MotionEvent callback cannot move camera after rapid release/reacquire and show requested/lost/relative/released diagnostic state; no device proof yet."
       ],
       "acceptance": [
         "دوران الكاميرا بلا توقف عند الحواف، ومؤشر اللعبة في القوائم، والتحرير الآمن عند الخروج أو تبديل التركيز."
       ],
       "updated_by": "T4",
-      "updated_at": "2026-11-05T22:54:00Z",
+      "updated_at": "2026-11-05T23:03:00Z",
       "source_status": "SOURCE_FIXED_MANAGED_CI_VERIFIED_DEVICE_UNCONFIRMED",
       "latest_T4_source_proof": "SOURCE_INTEGRATED_CI42121598304: API26 relative mouse getX/Y, captured touchpad AXIS_RELATIVE_X/Y, 0..64 historical samples; 28 Python +30 CSharp + original Unity2021 compile PASS; Android physical device unverified",
       "latest_T4_immersive_source": "SOURCE_INTEGRATED_CI42124859112: API30+ WindowInsetsController systemBars transient OS swipes; API26-29 additive legacy IMMERSIVE_STICKY flags; 7 Python and 18 CSharp policy checks; authentic original Unity2021 AndroidJNI/Core compile; NO DEVICE ACCEPTANCE",
+      "latest_T4_listener_epoch_source": "SOURCE_CI_VERIFIED_42126395609: per-request Android captured listener epoch prevents stale prior-capture MOVE after release and reacquire. 32 Python +36 .NET + original Unity2021 managed compile, device unverified.",
       "_record_path": "../B_TEAM/issues/INPUT-005.json"
     },
     {
@@ -446,7 +449,12 @@
         "https://github.com/alwansan/raf/commit/9cf384847fd4bd4e1fc8d1c8ebd67a0afbf788b2",
         "https://github.com/alwansan/raf/actions/runs/42125608932",
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE_STREAM_BYTES_2026-11-06.md",
-        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-original-particle108-image-stream-fullSHA.json"
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-original-particle108-image-stream-fullSHA.json",
+        "https://github.com/alwansan/raf/actions/runs/42130529677",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_PARTICLE108_SAMEINSTANCE_EXPORT_2026-11-06.md",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-particle108-source-sameexport-material-texture-parity.json",
+        "https://github.com/alwansan/raf/actions/runs/42132262184",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_PARTICLE108_B02_NONEXPORTABLE_CAUSE_2026-11-06.md"
       ],
       "remaining": [
         "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -504,7 +512,7 @@
         "نجاحعلىالهاتف"
       ],
       "updated_by": "T3",
-      "updated_at": "2026-11-05T23:01:58.538Z",
+      "updated_at": "2026-11-05T23:55:39.360Z",
       "_record_path": "../B_TEAM/issues/RENDER-002.json"
     },
     {
@@ -2651,6 +2659,66 @@
       "updated_by": "T3",
       "updated_at": "2026-11-05T14:36:00Z",
       "_record_path": "../B_TEAM/resources/T3-original-scene-renderer-shader-postvendor-use.json"
+    },
+    {
+      "id": "T3-PARTICLE108-SOURCE-SAMEINSTANCE-MATERIAL-TEXTURE-PARITY",
+      "title": "Authenticated original 108 Particle Shader48 to same AssetRipper W1 Material21/B02 Texture2D28 exported Unity Material TexEnv identity",
+      "kind": "SHA-authentic-108ParticleShader48-5Material-3Texture-same-instance-source-to-AssetRipper-export-GUID-and-YAML",
+      "owner": "T3",
+      "issue_id": "RENDER-002",
+      "source": {
+        "zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+        "assetripper_sha": "036098ab525a3f9f693dc101edeb21faad4d32d8",
+        "real_original_scene_sha_verified": 6,
+        "original_material_shader_source_owners_sha_verified": 4,
+        "original_runtime_global_source_owners_sha_verified": 2,
+        "resource_stream_providers_full_sha_verified": 1
+      },
+      "stages": {
+        "acquisition": "AUTHENTIC_ZIP2_SIX_SCENE_FOUR_MATERIAL_SHADER_OWNERS_AND_TWO_RUNTIME_GLOBALS_PLUS_ONE_EXTERNAL_RES_S_SOURCE_SHA_VERIFIED",
+        "extraction": "REAL_SOURCE_PARTICLE108_RENDERER_SLOTS_FIVE_MATERIAL21_TEN_NONNULL_LOCAL_TEXENVS_THREE_TYPED_TEXTURE2D28",
+        "reconstruction": "ONE_ACTUAL_PINNED_ASSETRIPPER_CLI_EXPORT_FROM_SAME_SHA_SOURCE_WITH_W1_B02_B21_PRIVATE_TRACES",
+        "binding": "ACTUAL_ONE_ASSETRIPPER_SAMEINSTANCE_W1_B02_EXPORT_FIVE_OF_FIVE_MATERIAL21_TWO_OF_THREE_EXPORTABLE_CLASS28_TEXTURE_TRACES_ONE_OF_THREE_SOURCE_TEXTURE2D28_CONFIRMED_IN_NONEXPORTABLE_COLLECTION_NINE_OF_TEN_MATERIAL_TEXENV_EXACT_TEN_OF_TEN_UV",
+        "integration": "T3_SOURCE_AND_ONE_PINNED_ACTUAL_ASSETRIPPER_CI42130529677_AND_DISPOSABLE_B02_NONEXPORTABLE_AUDIT_CI42132262184_SUCCESS_NO_GAME_ASSETS_CHANGED",
+        "device": "NOT_TESTED"
+      },
+      "counts": {
+        "original_source_particle_material_slots": 108,
+        "distinct_original_materials": 5,
+        "distinct_original_textures": 3,
+        "source_texture_slots": 10,
+        "exported_material_trace_covered": 5,
+        "exported_texture_trace_covered": 2,
+        "matched_source_to_export_texenv_texture_ptrs": 9,
+        "source_texture_to_null": 0,
+        "source_texture_wrong_export_guid": 0,
+        "source_target_absent_from_B02_trace": 1,
+        "source_uv_transforms_matching": 10,
+        "missing_or_extra_exported_material_texenv_slots": 0,
+        "exported_material_guid_collisions": 0,
+        "exported_texture_guid_collisions": 0,
+        "source_free_tests_passed": 93,
+        "real_native_full_game_export_verified": false,
+        "android_pixels_verified": false,
+        "original_texture_source_skipped_due_nonexportable_collection": 1,
+        "original_texture_source_absent_all_export_collections": 0,
+        "original_texture_source_missing_reason_unclassified": 0
+      },
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42130529677",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_PARTICLE108_SAMEINSTANCE_EXPORT_2026-11-06.md",
+        "https://github.com/alwansan/raf/commit/7a8833bfa46c141618df76204d2cf88101c8df36",
+        "https://github.com/alwansan/raf/actions/runs/42132262184",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_PARTICLE108_B02_NONEXPORTABLE_CAUSE_2026-11-06.md"
+      ],
+      "remaining": [
+        "One original Texture2D28 was intentionally omitted from B02 exportable trace due to AssetRipper collection.Exportable=false; it was NOT missing from all actual export collections.",
+        "Need compare actual private nonexportable source class28 container.CreateExportPointer with tenth still-nonnull exported Material TexEnv pointer to prove engine/builtin representation; do not infer wrong Android image.",
+        "Full-native Unity output/Android signed APK/OBB image/fragment alpha and actual device ParticleRenderer pixels remain unverified."
+      ],
+      "updated_by": "T3",
+      "updated_at": "2026-11-05T23:55:29.974Z",
+      "_record_path": "../B_TEAM/resources/T3-particle108-source-sameexport-material-texture-parity.json"
     },
     {
       "id": "T3-SHAREDASSETS6-EXTERNAL-TEXTURE2D-25-REAL-EXPORT",
@@ -7029,6 +7097,45 @@
       "_record_path": "../B_TEAM/events/T3/20261105T225050Z-T3-chat-verified-particle-stream-52bd.json"
     },
     {
+      "id": "20261105T232821Z-T3-chat-particle108-sameexport-68c4",
+      "owner": "T3",
+      "origin": "chat",
+      "session_id": "20261105T232821Z-T3-chat-particle108-sameexport-68c4",
+      "issue_id": "RENDER-002",
+      "type": "source_export_result",
+      "at": "2026-11-05T23:43:48.276Z",
+      "summary": "GENUINE SHA-locked source→ONE AssetRipper W1+B02 export comparison: 5/5 original Material21 traced, 2/3 original Texture2D28 source targets traced, 9/10 exported Material TexEnv texture GUID PPtrs exact, 10/10 UV exact, 1 original Texture2D source B02 trace missing. Source `.resS` fully verified. CI42130529677 SUCCESS 93/93 synthetic; RENDER-002 OPEN, Android pixels unverified.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42130529677",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_PARTICLE108_SAMEINSTANCE_EXPORT_2026-11-06.md",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-particle108-source-sameexport-material-texture-parity.json"
+      ],
+      "limitations": [
+        "one source Texture2D B02 trace absent; reason unclassified",
+        "no native full game/Android pixel proof"
+      ],
+      "_record_path": "../B_TEAM/events/T3/20261105T232821Z-T3-chat-particle108-sameexport-68c4.json"
+    },
+    {
+      "id": "20261105T234531Z-T3-chat-particle-b02-nonexportable-12ab",
+      "owner": "T3",
+      "origin": "chat",
+      "session_id": "20261105T234531Z-T3-chat-particle-b02-nonexportable-12ab",
+      "issue_id": "RENDER-002",
+      "type": "source_export_diagnosis",
+      "at": "2026-11-05T23:55:04.081Z",
+      "summary": "Genuine original 108 ParticleShader48 one missing B02 Texture2D28 target is present inside collection.Exportable=false, not absent from all AssetRipper collections. CI42132262184 PASS 100/100 source-free tests plus same-instance real W1+B02 export: 5/5 Materials, 2/3 exportable Texture source traces, 9/10 exact PPtrs, 10/10 UV, no null/wrong GUID. Last Material pointer to nonexportable source not yet matched to engine pointer; no Android pixel claim.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42132262184",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_PARTICLE108_B02_NONEXPORTABLE_CAUSE_2026-11-06.md"
+      ],
+      "limitations": [
+        "one original nonexportable Texture2D pointer engine mapping unresolved",
+        "not Android device/pixel proof"
+      ],
+      "_record_path": "../B_TEAM/events/T3/20261105T234531Z-T3-chat-particle-b02-nonexportable-12ab.json"
+    },
+    {
       "id": "T4-20261104T2357Z-local-load-start",
       "owner": "T4",
       "session_id": "20261104T2357Z-T4-lw01",
@@ -7555,6 +7662,24 @@
       "_record_path": "../B_TEAM/events/T4/20261105T2241Z-T4-chat-immersive-bars-h8q2.json"
     },
     {
+      "schema_version": 1,
+      "id": "T4-20261105T2258Z-T4-chat-motion-callback-epoch-v6k8",
+      "session_id": "20261105T2258Z-T4-chat-motion-callback-epoch-v6k8",
+      "owner": "T4",
+      "origin": "chat",
+      "issue_id": "INPUT-005",
+      "type": "source_integration",
+      "at": "2026-11-05T23:03:00Z",
+      "summary": "Repaired captured-motion listener cross-request epoch race: distinct AndroidJavaProxy per capture generation, prefilter old MOVE and recheck current generation under captureGate before adding deltas. CI42126395609 SUCCESS 32 Python +36 .NET plus Unity2021 original managed ABI compile and private 4+4+2 original legacy axis validation. No Android APK or POCO phone proof; INPUT-005 stays OPEN.",
+      "evidence": [
+        "https://github.com/alwansan/raf/commit/a5d3ce04e59a0734b689c610da5f65dad8a4b117",
+        "https://github.com/alwansan/raf/actions/runs/42126395609",
+        "prompt/coordination/experiments/T4/20261105T2258Z-T4-chat-motion-callback-epoch-v6k8.json"
+      ],
+      "limitations": "Original world/save/exit/reopen owner confirmation applies only to artifact42058825739 source e9c358e; no native Unity/phone test for new code.",
+      "_record_path": "../B_TEAM/events/T4/20261105T2258Z-T4-chat-motion-callback-epoch-v6k8.json"
+    },
+    {
       "id": "T5-20261104T2357Z-b12-fixture-start",
       "owner": "T5",
       "session_id": "20261104T2357Z-T5-b12-fixture-7e2",
@@ -7957,7 +8082,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "be949ffea1cde0e3f47d57f2deb869e9a7fc76cc84218568146ec4bd16609509",
+  "source_input_sha256": "938fce98b7e456b43415a43487e57c547f5b1875f3315bafda93aaa8460f4da0",
   "generation": "T-2026-11-05",
-  "input_sha256": "f212354ab4b8a7a3c35239b8ecf66aefb7bb0c62dec72eb830057cdb2212eab5"
+  "input_sha256": "e186e3caf931f1bd739614afd93a46d3836425b5aa7adcca72628f529ac7040c"
 }
