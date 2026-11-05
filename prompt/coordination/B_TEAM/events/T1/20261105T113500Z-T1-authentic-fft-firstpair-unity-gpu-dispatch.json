@@ -1,0 +1,15 @@
+{
+  "id": "20261105T113500Z-T1-authentic-fft-firstpair-unity-gpu-dispatch",
+  "owner": "T1",
+  "session_id": "20261105T111600Z-T1-private-fft-gpu-dispatch",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Actual SHA-authentic original compiled FFT DXBC-derived GPU 2-pass execution reached Unity2021.3.45f2 successfully in isolated licensed GameCI CI42019283679: 20/20 .compute imports, original pair slots0/1 generated-main SetTexture via translated resource t0/t1/u2, chained RenderTexture GPU Dispatch both passes, sentinel-initialized output readback changed with finite components. Private Unity NUnit 2/2 passed and all generated HLSL/original source/compiler logs deleted. This is bounded editor GPU-output-write proof only, NOT original authored runtime kernel/keyword/resource names, numerical DXBC parity, Android/Adreno or water gameplay.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42018235130",
+    "https://github.com/alwansan/raf/actions/runs/42018761761",
+    "https://github.com/alwansan/raf/actions/runs/42019283679",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_ORIGINAL_DERIVED_FFT_UNITY_GPU_DISPATCH_2026-11-05.md"
+  ],
+  "at": "2026-11-05T11:35:00Z"
+}
