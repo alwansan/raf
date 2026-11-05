@@ -1028,12 +1028,12 @@ internal static class Program
         allocIl.Append(allocIl.Create(OpCodes.Newarr,renderTextureType));
         allocIl.Append(allocIl.Create(OpCodes.Stind_Ref));
         allocIl.Append(allocIl.Create(OpCodes.Ret));
-        var positive=FoamByrefAllocationFlow.Inspect(
+        var allocationPositiveProof=FoamByrefAllocationFlow.Inspect(
             new[]{syntheticAlloc},syntheticAlloc);
-        if(positive.ExactStindRefSites!=1 ||
-            positive.ProvenNewarrRenderTextureArrayToRefFormalStores!=1 ||
-            positive.StoreSitesWithUnprovenDestinationOrFlow!=0 ||
-            positive.RuntimeExecutionVerified)
+        if(allocationPositiveProof.ExactStindRefSites!=1 ||
+            allocationPositiveProof.ProvenNewarrRenderTextureArrayToRefFormalStores!=1 ||
+            allocationPositiveProof.StoreSitesWithUnprovenDestinationOrFlow!=0 ||
+            allocationPositiveProof.RuntimeExecutionVerified)
             throw new InvalidDataException("Exact positive newarr to ref array store fixture failed");
         var syntheticAmbiguous=new MethodDefinition("SyntheticAcrossBranchUnproven",
             Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,
