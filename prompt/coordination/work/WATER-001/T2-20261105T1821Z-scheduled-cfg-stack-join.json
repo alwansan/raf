@@ -1,0 +1,19 @@
+{
+  "session_id": "20261105T1821Z-T2-scheduled-stackjoin-b4e9",
+  "origin": "scheduled",
+  "baseline_sha": "d00af305e157a4d49f2815afac75cb201ebdc2db",
+  "resumed_from_session": "20261105T1723Z-T2-scheduled-rtcfg-a72e",
+  "taken_over_from": [
+    "20261105T1736Z-T2-chat-ret-reason-28ce"
+  ],
+  "issue": "WATER-001",
+  "status": "in_progress",
+  "scope": [
+    "scripts/t2_rt_return_cfg.py",
+    "tests/test_t2_rt_return_cfg.py"
+  ],
+  "hypothesis": "At a CFG join, mismatched stack heights are invalid IL; currently join converts to UNKNOWN stack and may allow a subsequent pop/overwrite to yield constructed, a false positive.",
+  "experiment_key": "T2-CFG-STACK-HEIGHT-FAIL-CLOSED-20261105",
+  "shared_resource": "none; synthetic-only",
+  "next_step": "Add malformed join negative and fail-closed guard, run tests. No original DLL or Unity evidence."
+}
