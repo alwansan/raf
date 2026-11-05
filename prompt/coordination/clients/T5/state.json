@@ -2,15 +2,16 @@
   "schema_version": 1,
   "username": "T5",
   "generation": "T-2026-11-05",
-  "session_id": "20261105T1021Z-T5-sourcefree-gameci",
-  "resumed_from_session": "20261105T0746Z-T5-t3-syntax-boundary",
-  "status": "active",
-  "base_sha": "02e9fba7fb42b83579595885391be636ee3b56e8",
-  "last_commit": "aee66149b38c462ad7dbd13518e102f5f2a89e24",
-  "updated_at": "2026-11-05T10:22:00Z",
+  "session_id": "20261105T1025Z-T5-filemanager-metadata-bridge",
+  "resumed_from_session": "20261105T1021Z-T5-sourcefree-gameci",
+  "status": "completed",
+  "base_sha": "37c537cdab55f146cab12fe121ba35b5d6bb119c",
+  "last_commit": "7159dba501f4ee2615b92009c2b4622dd8d39f34",
+  "updated_at": "2026-11-05T10:44:00Z",
   "tracks": [
     "INTEGRATION-001",
-    "ASSET-RESTORE-001"
+    "ASSET-RESTORE-001",
+    "LOCAL-005"
   ],
   "work_ids": [
     "T5-20261104T2357Z-b12-fixture",
@@ -25,7 +26,8 @@
     "T5-20261105T0554Z-ci-boundary-forensics",
     "T5-20261105T0647Z-alpha-drift-diagnostic",
     "T5-20261105T0746Z-t3-syntax-boundary",
-    "T5-20261105T1021Z-sourcefree-managed-unity"
+    "T5-20261105T1021Z-sourcefree-managed-unity",
+    "T5-20261105T1025Z-filemanager-call-resolver"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41937719270",
@@ -40,8 +42,9 @@
     "https://github.com/alwansan/raf/actions/runs/41943856117",
     "https://github.com/alwansan/raf/actions/runs/41958001501",
     "https://github.com/alwansan/raf/actions/runs/41968665857",
-    "https://github.com/alwansan/raf/actions/runs/41959712898"
+    "https://github.com/alwansan/raf/actions/runs/41959712898",
+    "https://github.com/alwansan/raf/actions/runs/42012597665"
   ],
-  "next_step": "Work INTEGRATION-001 active: build source-free GameCI-managed Unity 2021 EditMode activation test with authenticated exact fixture XML check, not original game or T1 shaders; no shared workflow edits.",
+  "next_step": "Scoped T5 compiled original FileManager IL oracle CI42012597665 PASS 11/11 + genuine read/write target bodies (14/13 instructions), methods exist, source-only. Coordinate native Android world/.rgd test with T4; no new game APK, NOT_READY 0/3; T1 separately owns GameCI activation.",
   "memory_path": "prompt/coordination/clients/T5/MEMORY.md"
 }
