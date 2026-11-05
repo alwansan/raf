@@ -308,6 +308,37 @@ jobs:
           assert caller['ControlFlowOrPreexistingStackJoinedProven'] is False
           assert caller['OriginalRuntimeArrayLengthOrContentsVerified'] is False
           assert caller['OriginalNumericSourceValuesOrDigestsDisclosed'] is False
+          v=r['original_exact_RenderTexture_array_byref_element_value_source']
+          assert v is not None
+          assert v['ExactMatchingOriginalRecipientDefinitions']==1
+          assert v['ExactStelemRefSites']==f['ExactStelemRefSites']
+          assert v['ImmediateElementValueProducerCategory'] in (
+              'newobj','call','ldnull','ldloc','ldarg','field','indirect_load',
+              'other','value_not_proven_in_block','unverified_array_element',
+              'unresolved_recipient')
+          assert isinstance(v['ResolvedElementValueOriginCategory'],str)
+          assert 1<=len(v['ResolvedElementValueOriginCategory'])<=160
+          assert all(c in 'abcdefghijklmnopqrstuvwxyz0123456789_'
+              for c in v['ResolvedElementValueOriginCategory'])
+          assert type(v['ExactRenderTextureConstructorValueProven']) is bool
+          assert type(v['DeclaredRenderTextureReturnValueProven']) is bool
+          assert type(v['LiteralNullElementValueProven']) is bool
+          assert type(v['SameBlockLocalValueDefinitionProven']) is bool
+          assert v['RuntimeRenderTextureObjectOrPixelsVerified'] is False
+          assert v['OriginalPrivateSymbolOrNumericValueDisclosed'] is False
+          print('T2_FOAM_ELEMENT_VALUE_SOURCE_SAFE '+json.dumps({
+              'exact_stelem_sites':v['ExactStelemRefSites'],
+              'immediate_value_source':v['ImmediateElementValueProducerCategory'],
+              'resolved_value_source':v['ResolvedElementValueOriginCategory'],
+              'construct_rendertexture_proven_in_same_block':
+                  v['ExactRenderTextureConstructorValueProven'],
+              'rendertexture_typed_method_return':
+                  v['DeclaredRenderTextureReturnValueProven'],
+              'literal_null_value_proven':v['LiteralNullElementValueProven'],
+              'same_block_local_definition':v['SameBlockLocalValueDefinitionProven'],
+              'runtime_object_or_pixels_verified':False,
+              'original_private_data_disclosed':False,
+          },sort_keys=True))
           print('T2_FOAM_ACTUAL_CALLER_INT_LENGTH_SAFE '+json.dumps({
               'exact_callsite_count':caller['ExactOriginalByrefCallsites'],
               'source_int32_formal_proven':caller['OriginalNewarrLengthInt32FormalIdentified'],

@@ -151,6 +151,7 @@ internal static class Program
         public FoamByrefArrayBounds.SafeProfile? OriginalByrefArrayBoundsProfile;
         public FoamByrefLengthOrigin.SafeProfile? OriginalByrefLengthOriginProfile;
         public FoamByrefActualCallerLength.SafeProfile? OriginalByrefCallerLengthProfile;
+        public FoamByrefElementValueOrigin.SafeProfile? OriginalElementValueOriginProfile;
         public readonly Dictionary<string,int> TotalSetterCalls = new(StringComparer.Ordinal)
         {
             ["shader_global_texture"] = 0,
@@ -399,6 +400,9 @@ internal static class Program
                 FoamByrefTargetBody.Inspect(sourceMethods,exactByrefRecipients[0]);
             result.OriginalByrefAllocationFlowProfile=
                 FoamByrefAllocationFlow.Inspect(sourceMethods,exactByrefRecipients[0]);
+            result.OriginalElementValueOriginProfile=
+                FoamByrefElementValueOrigin.Inspect(sourceMethods,
+                    exactByrefRecipients[0],result.OriginalByrefAllocationFlowProfile);
             result.OriginalByrefArrayBoundsProfile=
                 FoamByrefArrayBounds.Inspect(sourceMethods,exactByrefRecipients[0],
                     result.OriginalByrefAllocationFlowProfile,
@@ -490,6 +494,7 @@ internal static class Program
             original_exact_RenderTexture_array_byref_compiled_bounds_vs_callers = result.OriginalByrefArrayBoundsProfile,
             original_exact_RenderTexture_array_byref_length_origin_same_block = result.OriginalByrefLengthOriginProfile,
             original_exact_RenderTexture_array_byref_actual_caller_length = result.OriginalByrefCallerLengthProfile,
+            original_exact_RenderTexture_array_byref_element_value_source = result.OriginalElementValueOriginProfile,
             original_exact_Texture_int_producer_body_accepted_same_SHA_definition = result.OriginalSingleProducerBodyProfile is not null,
             original_exact_method_definition_is_original_runtime_called_or_output_proof = false,
             producer_declared_signature_is_actual_runtime_texture_object_proof = false,
@@ -1269,6 +1274,86 @@ internal static class Program
         if(proofArg.ExactActualLengthArgumentSourceCategory!="int32_argument" ||
             proofArg.FourPrivateIndicesWithinThisCompiledCallerLength is not null)
             throw new InvalidDataException("Synthetic argument source must not imply bounds");
+
+        // Public synthetic original-style array member value constructor.
+        // This constructor is a typed IL reference, not an executed Unity API.
+        var t2RtCtor=new MethodReference(".ctor",m.TypeSystem.Void,
+            renderTextureType){HasThis=true};
+        var t2ElementMethod=new MethodDefinition("SyntheticRenderTextureMemberValue",
+            Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,
+            m.TypeSystem.Void);
+        t2ElementMethod.Parameters.Add(new ParameterDefinition(
+            new ByReferenceType(new ArrayType(renderTextureType))));
+        factoryDef.Methods.Add(t2ElementMethod);
+        var t2ElementIl=t2ElementMethod.Body.GetILProcessor();
+        t2ElementIl.Append(t2ElementIl.Create(OpCodes.Ldarg_0));
+        t2ElementIl.Append(t2ElementIl.Create(OpCodes.Ldc_I4_2));
+        t2ElementIl.Append(t2ElementIl.Create(OpCodes.Newarr,renderTextureType));
+        t2ElementIl.Append(t2ElementIl.Create(OpCodes.Stind_Ref));
+        t2ElementIl.Append(t2ElementIl.Create(OpCodes.Ldarg_0));
+        t2ElementIl.Append(t2ElementIl.Create(OpCodes.Ldind_Ref));
+        t2ElementIl.Append(t2ElementIl.Create(OpCodes.Ldc_I4_0));
+        t2ElementIl.Append(t2ElementIl.Create(OpCodes.Newobj,t2RtCtor));
+        t2ElementIl.Append(t2ElementIl.Create(OpCodes.Stelem_Ref));
+        t2ElementIl.Append(t2ElementIl.Create(OpCodes.Ret));
+        var t2ValueFlow=FoamByrefAllocationFlow.Inspect(
+            new[]{t2ElementMethod},t2ElementMethod);
+        var t2ValuePositive=FoamByrefElementValueOrigin.Inspect(
+            new[]{t2ElementMethod},t2ElementMethod,t2ValueFlow);
+        if(!t2ValuePositive.ExactRenderTextureConstructorValueProven ||
+            t2ValuePositive.ResolvedElementValueOriginCategory!="newobj_rendertexture" ||
+            t2ValuePositive.RuntimeRenderTextureObjectOrPixelsVerified)
+            throw new InvalidDataException("Original-style synthetic RT member value fixture failed");
+        var t2NullValueMethod=new MethodDefinition("SyntheticNullArrayMember",
+            Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,
+            m.TypeSystem.Void);
+        t2NullValueMethod.Parameters.Add(new ParameterDefinition(
+            new ByReferenceType(new ArrayType(renderTextureType))));
+        factoryDef.Methods.Add(t2NullValueMethod);
+        var t2NullIl=t2NullValueMethod.Body.GetILProcessor();
+        t2NullIl.Append(t2NullIl.Create(OpCodes.Ldarg_0));
+        t2NullIl.Append(t2NullIl.Create(OpCodes.Ldc_I4_2));
+        t2NullIl.Append(t2NullIl.Create(OpCodes.Newarr,renderTextureType));
+        t2NullIl.Append(t2NullIl.Create(OpCodes.Stind_Ref));
+        t2NullIl.Append(t2NullIl.Create(OpCodes.Ldarg_0));
+        t2NullIl.Append(t2NullIl.Create(OpCodes.Ldind_Ref));
+        t2NullIl.Append(t2NullIl.Create(OpCodes.Ldc_I4_0));
+        t2NullIl.Append(t2NullIl.Create(OpCodes.Ldnull));
+        t2NullIl.Append(t2NullIl.Create(OpCodes.Stelem_Ref));
+        t2NullIl.Append(t2NullIl.Create(OpCodes.Ret));
+        var t2NullFlow=FoamByrefAllocationFlow.Inspect(
+            new[]{t2NullValueMethod},t2NullValueMethod);
+        var t2ValueNull=FoamByrefElementValueOrigin.Inspect(
+            new[]{t2NullValueMethod},t2NullValueMethod,t2NullFlow);
+        if(!t2ValueNull.LiteralNullElementValueProven ||
+            t2ValueNull.ExactRenderTextureConstructorValueProven)
+            throw new InvalidDataException("Synthetic null RT member value must not imply object");
+        var t2WrongCtor=new MethodReference(".ctor",m.TypeSystem.Void,
+            textureType){HasThis=true};
+        var t2WrongValueMethod=new MethodDefinition("SyntheticWrongTextureMember",
+            Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,
+            m.TypeSystem.Void);
+        t2WrongValueMethod.Parameters.Add(new ParameterDefinition(
+            new ByReferenceType(new ArrayType(renderTextureType))));
+        factoryDef.Methods.Add(t2WrongValueMethod);
+        var t2WrongIl=t2WrongValueMethod.Body.GetILProcessor();
+        t2WrongIl.Append(t2WrongIl.Create(OpCodes.Ldarg_0));
+        t2WrongIl.Append(t2WrongIl.Create(OpCodes.Ldc_I4_2));
+        t2WrongIl.Append(t2WrongIl.Create(OpCodes.Newarr,renderTextureType));
+        t2WrongIl.Append(t2WrongIl.Create(OpCodes.Stind_Ref));
+        t2WrongIl.Append(t2WrongIl.Create(OpCodes.Ldarg_0));
+        t2WrongIl.Append(t2WrongIl.Create(OpCodes.Ldind_Ref));
+        t2WrongIl.Append(t2WrongIl.Create(OpCodes.Ldc_I4_0));
+        t2WrongIl.Append(t2WrongIl.Create(OpCodes.Newobj,t2WrongCtor));
+        t2WrongIl.Append(t2WrongIl.Create(OpCodes.Stelem_Ref));
+        t2WrongIl.Append(t2WrongIl.Create(OpCodes.Ret));
+        var t2WrongFlow=FoamByrefAllocationFlow.Inspect(
+            new[]{t2WrongValueMethod},t2WrongValueMethod);
+        var t2ValueWrong=FoamByrefElementValueOrigin.Inspect(
+            new[]{t2WrongValueMethod},t2WrongValueMethod,t2WrongFlow);
+        if(t2ValueWrong.ExactRenderTextureConstructorValueProven ||
+            t2ValueWrong.ResolvedElementValueOriginCategory!="newobj_other_type")
+            throw new InvalidDataException("Wrong typed constructor must not count as RenderTexture");
         var syntheticIndirect=new MethodDefinition("SyntheticFieldReferenceStore",
             Mono.Cecil.MethodAttributes.Public,m.TypeSystem.Void);
         factoryDef.Methods.Add(syntheticIndirect);
@@ -1442,6 +1527,7 @@ internal static class Program
                 private_compiled_allocation_length_inbounds_and_dynamic_negative_controls=true,
                 source_original_length_same_block_local_arg_and_branch_controls=true,
                 original_byref_caller_int_argument_direct_vs_dynamic_controls=true,
+                original_rt_array_element_newobj_null_and_wrong_type_controls=true,
                 four_original_style_Texture_int_argument_origin_controls=true,
                 signed_short_wide_and_duplicate_private_i4_aggregate_controls=true,
                 private_IL_names_or_source_published = false
