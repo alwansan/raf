@@ -5,6 +5,10 @@ name: T3 RENDER-002 genuine original Material and TexEnv same-export trial
 # Follow-up from 41938711186: all 41 original Materials/227 slots parsed,
 # but actual exported Material YAML reader rejects a document. Keep exact
 # SHA-pinned export and classify its static parser reason without exposing IDs.
+# Genuine run 41939065539 proved exported m_TexEnvs mapping container;
+# B05 parser now supports exported YAML dictionary + original array remains strict
+# (production verifier 77d312f5, negative controls 2f1807bd). Verify authentic
+# 41/227 source-vs-same-process-export relations, not just syntax repair.
 on:
   workflow_dispatch:
   push:
