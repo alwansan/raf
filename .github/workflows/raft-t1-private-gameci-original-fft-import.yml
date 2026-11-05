@@ -104,8 +104,12 @@ jobs:
         run: |
           set -euo pipefail
           sudo apt-get update -qq
-          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
-          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4 -q
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools python3-venv
+          # GameCI's Docker test runner may leave host user home paths
+          # root-owned. Never install source tooling with pip --user.
+          python3 -m venv "$RUNNER_TEMP/t1-python-venv"
+          "$RUNNER_TEMP/t1-python-venv/bin/python" -m pip install \
+            --disable-pip-version-check UnityPy==1.25.4 -q
       - name: Recover exact SHA-verified original FFT object from immutable ZIP2
         shell: bash
         run: |
@@ -126,7 +130,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python3 -m scripts.t1_stage_original_fft_compute_candidates \
+          "$RUNNER_TEMP/t1-python-venv/bin/python" -m scripts.t1_stage_original_fft_compute_candidates \
             --original-data "$RUNNER_TEMP/t1-original-verified/Raft_Data" \
             --project "$GITHUB_WORKSPACE/t1-original-derived-unity"
           python3 - <<'PY'
@@ -180,5 +184,5 @@ jobs:
           sudo rm -rf "$GITHUB_WORKSPACE/t1-cli-synthetic" "$GITHUB_WORKSPACE/t1-cli-synthetic-artifacts" \
             "$GITHUB_WORKSPACE/t1-original-derived-unity" "$GITHUB_WORKSPACE/t1-original-private-test-artifacts" \
             "$RUNNER_TEMP/t1-private-zip2" "$RUNNER_TEMP/t1-original-verified"
-          rm -rf "$RUNNER_TEMP/t1-gameci-cli" "$RUNNER_TEMP/t1-gameci-cli.tar.gz" "$RUNNER_TEMP/t1-gameci-exe.txt"
+          rm -rf "$RUNNER_TEMP/t1-gameci-cli" "$RUNNER_TEMP/t1-gameci-cli.tar.gz" "$RUNNER_TEMP/t1-gameci-exe.txt" "$RUNNER_TEMP/t1-python-venv"
           rm -f "$RUNNER_TEMP/t1-synthetic-private-cli.log" "$RUNNER_TEMP/t1-original-private-gameci.log"
