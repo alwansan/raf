@@ -25,3 +25,6 @@
 - No T5 scheduled Resolution, T1/T2 water, T3 materials, T4 mouse, audio, Settings, GUID source, Unity/native build, LFS or release touched. INTEGRATION-001 OPEN, overall NOT_READY 0/3.
 - **next_step**: when device and matched signed APK available, compare installed main.89 exact size+SHA with released package and actual Android mount. Separately prioritize shader/FFT/white materials by actual log root counts; don't fabricate patch OBB or hide Unity warning.
 - status: completed
+
+## Canonical team ledger
+- [T5 one-shot ledger refresh CI42120012326](https://github.com/alwansan/raf/actions/runs/42120012326) COMPLETED SUCCESS: refreshed T_TEAM/SUMMARY.md and snapshot.json from canonical team issues/resources/events on latest permitted feature branch, no force push. Original work and teammate contributions preserved; no game/Unity build.
