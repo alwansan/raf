@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "session_id": "20261105T204947Z-T3-chat-program-coverage-b6f2",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "hypothesis": "A non-Dummy postrestorer ShaderLab target can have a syntactically valid Pass but incomplete sibling SubShader or other missing program Pass; current exact original-921 native classifier labels such source as marker-free, risking misprioritization. Reject incomplete native Pass coverage as inconclusive.",
+  "source_commit": "fcddfca6e9cf0ac42573e4d9e75eeb9dd959415c",
+  "input_hashes": [],
+  "tool_versions": {
+    "python": "GitHub-hosted Ubuntu 24.04 python3",
+    "unity": "not invoked",
+    "source_material": "synthetic only"
+  },
+  "commands": [
+    "python3 -m py_compile scripts/t3_native_original_921_shader_target_audit.py tests/test_t3_native_original_921_shader_target_audit.py",
+    "python3 -m unittest discover -s tests -p 'test_t3_native_original_921_shader_target_audit.py' -v",
+    "python3 -m unittest discover -s tests -p 'test_t3_source_renderer_shader_to_postvendor_export.py' -v",
+    "python3 -m unittest discover -s tests -p 'test_t3_audit_exported_material_programs.py' -v"
+  ],
+  "negative_controls": [
+    "partial_subshader_coverage true marker-free rejected",
+    "programmed 3/4 marker-free rejected",
+    "Dummy marker preserved as explicit negative evidence despite partial programs"
+  ],
+  "workflow_path": ".github/workflows/raft-t3-native-921-guid-source-controls.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42107128075",
+  "artifact_urls": [],
+  "budget": "5 min GH ubuntu-24.04 / existing workflow / no original ZIP2 download",
+  "status": "completed",
+  "observed_result": "CI successful on exact fcddfca6; 23+13+16=52 source-free unit tests passed and py_compile passed",
+  "rejected_hypotheses": [
+    "Previously the classifier guaranteed every Pass/SubShader in marker-free native ShaderLab was program-complete"
+  ],
+  "limitations": [
+    "synthetic only",
+    "original 921 Shader48 to actual full-native W1 trace not run",
+    "no Unity compiled GPU pixels or device visuals",
+    "no real asset changed"
+  ],
+  "integration_commit": "fcddfca6e9cf0ac42573e4d9e75eeb9dd959415c",
+  "next_step": "When T5 provides one SHA-authenticated original six-scene/four-owner + same-export private W1 trace and full post-restorer Assets, run t3_native_original_921_shader_target_audit.py once; report only safe aggregate. If INCONCLUSIVE, inspect fail-closed category privately; if Dummy, prioritize real full-pass shader recovery; then Unity compile and device visuals."
+}

@@ -1,0 +1,18 @@
+{
+  "id": "20261105T204947Z-T3-chat-program-coverage-b6f2",
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T204947Z-T3-chat-program-coverage-b6f2",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "at": "2026-11-05T20:51:00Z",
+  "summary": "Fail closed marker-free ShaderLab partial Pass/SubShader program coverage for native exact original921 source-to-export classification; CI 52/52 synthetic PASS, authentic native original join unrun, graphics issue remains open.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/fcddfca6e9cf0ac42573e4d9e75eeb9dd959415c",
+    "https://github.com/alwansan/raf/actions/runs/42107128075"
+  ],
+  "limitations": [
+    "source-free only",
+    "no device graphics recovery"
+  ]
+}

@@ -6,9 +6,9 @@
   "session_id": "20261105T204947Z-T3-chat-program-coverage-b6f2",
   "issue_id": "RENDER-002",
   "track": "ShaderLab native original921 semantic classification",
-  "status": "active",
+  "status": "completed",
   "base_sha": "bfa62d362244987f4633cf71cc98fdb6c497ca86",
-  "updated_at": "2026-11-05T20:49:47.512Z",
+  "updated_at": "2026-11-05T20:51:00Z",
   "intended_files": [
     "scripts/t3_native_original_921_shader_target_audit.py",
     "tests/test_t3_native_original_921_shader_target_audit.py",
@@ -27,7 +27,10 @@
   "related_work": [
     "prompt/coordination/work/RENDER-002/T3-20261105T2034Z-scheduled-syntax-7c91.json"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Add focused fail-closed branch only for marker-free profiles with incomplete Pass/SubShader coverage; add regression controls; run exact preexisting isolated source-free CI; preserve true Dummy evidence and real export unknown."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42107128075"
+  ],
+  "result": "Added fail-closed marker-free Pass/SubShader incomplete coverage guard, with 3 regression controls; exact SHA fcddfca6 and GitHub Actions 42107128075 SUCCESS 23+13+16=52 source-free tests. No genuine original+private native Shader GUID join or Android pixel proof.",
+  "next_step": "When T5 provides one SHA-authenticated original six-scene/four-owner + same-export private W1 trace and full post-restorer Assets, run t3_native_original_921_shader_target_audit.py once; report only safe aggregate. If INCONCLUSIVE, inspect fail-closed category privately; if Dummy, prioritize real full-pass shader recovery; then Unity compile and device visuals.",
+  "integration_commit": "fcddfca6e9cf0ac42573e4d9e75eeb9dd959415c"
 }
