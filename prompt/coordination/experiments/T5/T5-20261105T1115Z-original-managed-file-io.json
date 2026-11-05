@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "session_id": "20261105T1115Z-T5-filemanager-runtime-sandbox",
+  "issue_id": "LOCAL-005",
+  "hypothesis": "T5 CI42012597665 proved actual original FileManager methods exist with System.IO calls; but neither B19 original path adapter nor T4 probe executed those exact compiled I/O methods. A bounded actual managed CLR invocation against an isolated synthetic temporary path can discriminate original FileManager OS/path behavior and provide a more useful pre-Android execution gate without pretending real .rgd saves.",
+  "source_commit": "b9dccf3264738ff5a462f1ba08d766329b2247af",
+  "input_hashes": [
+    "original ZIP2 sha 15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "Assembly-CSharp.dll 3211776B SHA256 0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e"
+  ],
+  "tool_versions": {
+    "mono_cecil": "0.11.5",
+    "dotnet": "9.0.x",
+    "runner": "ubuntu-24.04"
+  },
+  "commands": [
+    "dotnet publish android-port/Experiments/T5/FileManagerRuntimeSandbox/FileManagerRuntimeSandbox.csproj -c Release",
+    "dotnet FileManagerRuntimeSandbox.dll --assembly SHA-pinned-DLL --scratch fresh-private-dir"
+  ],
+  "negative_controls": [
+    "unknown SHA refuses invocation",
+    "unrecognized original signature refuses invocation",
+    "path must remain inside scratch private root",
+    "no public private symbols/exceptions",
+    "byte-for-byte readback required before success"
+  ],
+  "workflow_path": ".github/workflows/raft-t5-filemanager-runtime-sandbox.yml",
+  "run_url": null,
+  "artifact_urls": [],
+  "budget": "Ubuntu24.04 15min isolated runner; pinned original DLL 3.2MB; no Unity/Native/Git LFS/private source upload",
+  "status": "active",
+  "observed_result": null,
+  "rejected_hypotheses": [],
+  "limitations": [
+    "A successful .NET Linux original FileManager smoke is NOT Unity2021, IL2CPP, Android scoped storage or RGD serialization evidence.",
+    "Failure to load original assembly may be missing Unity deps, not game bug."
+  ],
+  "integration_commit": null,
+  "next_step": "Execute original compiled methods safely on a private sandboxed path, confirm exact bytes persist/read or record unsupported signature/environment; no device claim."
+}
