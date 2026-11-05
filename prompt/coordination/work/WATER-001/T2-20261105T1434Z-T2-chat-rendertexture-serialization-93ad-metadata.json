@@ -4,8 +4,8 @@
   "origin": "chat",
   "owner": "T2",
   "issue_id": "WATER-001",
-  "status": "active",
-  "updated_at": "2026-11-05T14:34:15.962Z",
+  "status": "waiting_ci",
+  "updated_at": "2026-11-05T14:36:57.944Z",
   "base_sha": "e8aea886cbd0ce0667eddf32f1b0ebd0bb2da23b",
   "resumed_from_sessions": [
     "20261105T1408Z-T2-chat-foam-four-i4-uniqueness-4e7a",
@@ -30,6 +30,14 @@
     "previous_sha_original_ci": "https://github.com/alwansan/raf/actions/runs/42043293335"
   },
   "approach": "Conservative exact Cecil field reference vs defining FieldDefinition search in SHA-pinned original managed assembly. Report aggregate booleans for public/[SerializeField]/NonSerialized/static/initonly and exact-definition match; source-free positive/negative synthetic fixtures, original workflow asserts nonexecution. Do not emit name/token/field value, raw source or hash. Preserve all other jobs and no game changes.",
-  "run_urls": [],
-  "next_step": "Create own session, then implement exact metadata oracle in T2-owned files, SHA-private CI, safe summary and handoff. Distinct i4 values still unread; do not claim them before verifying."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42046650774"
+  ],
+  "next_step": "Read CI42046650774. It prints only privacy-safe metadata plus decoded i4 distinct/sign aggregate. On failure inspect first cause, fix only T2 own code. Metadata alone never proves serialized value or runtime texture. WATER-001 OPEN NOT_READY0/3.",
+  "source_commit": "9b01015a9e3aa47718d9b102d31bd8d39d52b638",
+  "result": {
+    "code": "Source-only exact FieldDefinition identity metadata detector, null/visibility/attribute/static/readonly controls, original pinned CI",
+    "original_CI": "in_progress",
+    "original_input_device": "not tested"
+  }
 }
