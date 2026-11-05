@@ -5,7 +5,7 @@
   "session_id": "20261105T225050Z-T3-chat-verified-particle-stream-52bd",
   "issue_id": "RENDER-002",
   "status": "active",
-  "updated_at": "2026-11-05T23:03:47.902Z",
+  "updated_at": "2026-11-05T23:05:12.456Z",
   "base_sha": "4a4e986fa3df4490f69e02c239a2cbde6d8f877f",
   "track": "SOURCE_PARTICLE_TEXTURE_RESOURCE_BYTES_SHA_VERIFICATION",
   "hypothesis": "For the authentic source three Texture2D28 objects used by the original 108-slot Particle Shader48, one ZIP2 manifest listed external .resS provider contains all three ranges. Byte-authenticate that exact provider from SHA-pinned ZIP2 and read each mapped range (private only), rather than assuming missing source image payload.",
@@ -27,9 +27,10 @@
     "docs/T3_ORIGINAL_PARTICLE_STREAM_BYTES_2026-11-06.md",
     ".github/workflows/raft-t3-ledger-refresh.yml",
     "prompt/coordination/B_TEAM/resources/T3-original-particle108-image-stream-fullSHA.json",
-    "prompt/coordination/B_TEAM/events/T4/20261105T2241Z-T4-chat-immersive-bars-h8q2.json"
+    "prompt/coordination/B_TEAM/events/T4/20261105T2241Z-T4-chat-immersive-bars-h8q2.json",
+    "prompt/coordination/discussions/INPUT-005/20261105T225050Z-T3-chat-verified-particle-stream-52bd-to-T4-ledger-compat.md"
   ],
   "result": null,
   "run_urls": [],
-  "next_step": "Source CI42125608932 success; canonical T3 ledger refresh CI42126488112 failed solely because T4 event lacked required id. Make surgical metadata-only id=session_id and at=timestamp correction to that committed T4 event (retain all content), notify T4, rerun canonical ledger, then complete session."
+  "next_step": "Source CI42125608932 full resource SHA success; canonical ledger originally blocked by T4 event missing id/at, minimally repaired on commit d7dcaee5, retry CI42126758778 SUCCESS. Notify T4 via independent discussion, checkpoint session and release task scope."
 }
