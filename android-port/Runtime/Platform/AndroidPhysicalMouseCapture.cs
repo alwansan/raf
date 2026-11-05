@@ -27,9 +27,13 @@ namespace RaftAndroid.Platform
         private sealed class CapturedListener : AndroidJavaProxy
         {
             private readonly AndroidPhysicalMouseCapture owner;
-            public CapturedListener(AndroidPhysicalMouseCapture owner)
+            private readonly int listenerEpoch;
+            public CapturedListener(AndroidPhysicalMouseCapture owner, int listenerEpoch)
                 : base("android.view.View$OnCapturedPointerListener")
-            { this.owner = owner; }
+            {
+                this.owner = owner;
+                this.listenerEpoch = listenerEpoch;
+            }
 
             public bool onCapturedPointer(AndroidJavaObject view, AndroidJavaObject motionEvent)
             {
@@ -37,8 +41,10 @@ namespace RaftAndroid.Platform
                 // Returning false for button/scroll permits View's normal handler.
                 try
                 {
-                    if (!owner.requested || motionEvent.Call<int>("getActionMasked") != 2)
-                        return false; // ACTION_MOVE only.
+                    if (!PhysicalMouseMotionSource.AcceptEpoch(listenerEpoch,
+                            Volatile.Read(ref owner.epoch), owner.requested) ||
+                        motionEvent.Call<int>("getActionMasked") != 2)
+                        return false; // ACTION_MOVE only and current generation.
                     int source = motionEvent.Call<int>("getSource");
                     var kind = PhysicalMouseMotionSource.Classify(source);
                     if (kind == PhysicalMouseMotionSource.Kind.Ignore)
@@ -79,7 +85,7 @@ namespace RaftAndroid.Platform
                         dy += motionEvent.Call<float>("getAxisValue",
                             PhysicalMouseMotionSource.AxisRelativeY);
                     }
-                    return owner.RecordCapturedMotion(dx, dy);
+                    return owner.RecordCapturedMotion(listenerEpoch, dx, dy);
                 }
                 catch (AndroidJavaException)
                 {
@@ -95,11 +101,12 @@ namespace RaftAndroid.Platform
             }
         }
 
-        private bool RecordCapturedMotion(float dx, float dy)
+        private bool RecordCapturedMotion(int listenerEpoch, float dx, float dy)
         {
             lock (captureGate)
             {
-                if (!requested || !PhysicalMouseMotionSource.ValidDelta(dx, dy))
+                if (!PhysicalMouseMotionSource.AcceptEpoch(listenerEpoch, epoch, requested) ||
+                    !PhysicalMouseMotionSource.ValidDelta(dx, dy))
                     return false;
                 deltas.Push(dx, dy);
                 nativeCaptured = nativeHasMotion = true;
@@ -142,7 +149,8 @@ namespace RaftAndroid.Platform
             {
                 using (var version = new AndroidJavaClass("android.os.Build$VERSION"))
                     supported = version.GetStatic<int>("SDK_INT") >= 26;
-                if (supported) listener = new CapturedListener(this);
+                // Each pointer-capture request installs its own generation-bound
+                // proxy. OnEnable has no capture request and no listener yet.
             }
             catch (AndroidJavaException)
             {
@@ -260,6 +268,10 @@ namespace RaftAndroid.Platform
                     "androidApi26=true; nativeAccepted=unknown; requiresDeviceConfirmation=true");
             int currentEpoch;
             lock (captureGate) { requested = true; currentEpoch = ++epoch; }
+            // Do not reuse one listener across release/reacquire. Its token is
+            // captured at install time, not read from a later active request.
+            var requestListener = new CapturedListener(this, currentEpoch);
+            listener = requestListener;
             try
             {
                 OnAndroidUi(() =>
@@ -279,7 +291,7 @@ namespace RaftAndroid.Platform
                                 ObserveNativeCapture(currentEpoch, false);
                                 return;
                             }
-                            view.Call("setOnCapturedPointerListener", listener);
+                            view.Call("setOnCapturedPointerListener", requestListener);
                             if (view.Call<bool>("hasPointerCapture"))
                                 ObserveNativeCapture(currentEpoch, true);
                             else
