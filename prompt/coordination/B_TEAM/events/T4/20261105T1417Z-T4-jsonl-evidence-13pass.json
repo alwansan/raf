@@ -1,0 +1,16 @@
+{
+  "id": "20261105T1417Z-T4-jsonl-evidence-13pass",
+  "owner": "T4",
+  "session_id": "20261105T1408Z-T4-chat-jsonl-evidence-n4r7",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "type": "integration",
+  "summary": "Independent source-free Android app JSONL verifier enforces deduplication of startup/segment lines, sequence completeness, safe snapshot categories and strict cross-session chronological Save-before-Load; synthetic 13/13 CI success. No device acceptance.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/305e8952e4fc91afd0b3f2aef8a83df649d65db4",
+    "https://github.com/alwansan/raf/commit/b383b6e86720369069e7cb61026105b78d6d668d",
+    "https://github.com/alwansan/raf/actions/runs/42043385806",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_DEVICE_LOG_EVIDENCE_CHECKER_2026-11-05.md"
+  ],
+  "at": "2026-11-05T14:18:25.625Z"
+}
