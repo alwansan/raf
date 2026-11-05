@@ -10,6 +10,7 @@ on:
       - tests/test_t3_original_921_vf_component_bridge.py
       - scripts/t3_vf_spirv_component_coverage.py
       - .github/workflows/raft-t3-original-921-vf-component-bridge.yml
+      - .github/t3-original-vf-requests/*.json
   workflow_dispatch:
     inputs:
       run_private_original:
@@ -41,7 +42,7 @@ jobs:
           python3 -m unittest discover -s tests -p 'test_t3_original_921_vf_component_bridge.py' -v
           PYTHONPATH=scripts python3 -m unittest discover -s tests -p 'test_t3_vf_spirv_component_coverage.py' -v
   original-genuine-fourpass-components:
-    if: ${{ github.event_name == 'workflow_dispatch' && inputs.run_private_original }}
+    if: ${{ (github.event_name == 'workflow_dispatch' && inputs.run_private_original) || (github.event_name == 'push' && github.event.head_commit.message == 'experiment(T3): authorize original Shader48 VF component probe') }}
     needs: source-free-security-and-component-controls
     runs-on: ubuntu-24.04
     timeout-minutes: 28
@@ -55,6 +56,28 @@ jobs:
           sparse-checkout: |
             scripts
             tests
+            .github/t3-original-vf-requests
+      - name: Verify explicit push request contains only signed-off marker and pinned code
+        if: ${{ github.event_name == 'push' }}
+        run: |
+          set -euo pipefail
+          marker='.github/t3-original-vf-requests/20261105T1642Z-T3-chat-original-vf-component-bridge-d42e.json'
+          files="$(git diff-tree --no-commit-id --name-only -r HEAD)"
+          test "$files" = "$marker"
+          python3 - <<'PY'
+          import json,subprocess
+          from pathlib import Path
+          p=Path('.github/t3-original-vf-requests/20261105T1642Z-T3-chat-original-vf-component-bridge-d42e.json')
+          d=json.loads(p.read_text())
+          assert d['session_id']=='20261105T1642Z-T3-chat-original-vf-component-bridge-d42e'
+          assert d['origin']=='chat' and d['owner']=='T3'
+          assert d['original_provider_sha']=='15964ea8f246b6e076ce26b60931ee2e1a9a2385'
+          assert len(d['source_blob_shas'])==3
+          for path,sha in d['source_blob_shas'].items():
+              actual=subprocess.check_output(['git','rev-parse','HEAD:'+path],text=True).strip()
+              assert actual==sha, 'tracked source blob changed'
+          print('T3_EXPLICIT_ORIGINAL_PROBE_SHA_CONTRACT_OK=3')
+          PY
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           repository: alwansan/raf
