@@ -9,3 +9,5 @@ Shared identity files are preserved. Baseline 9560bc7c922e70d663f2869f30cffef9c1
 ## Implementation checkpoint
 
 Prepared private CI experiment: Vulkan captures original-derived SPIR-V pair 0/1 source, butterfly, intermediate and final RGBA32F images. Unity uploads the same input bytes with a linear float target, uses one workgroup and captures both passes. The comparator publishes counts and booleans only. Local Python compile, Vulkan host source transform, and workflow YAML parse passed. Actual execution pending.
+
+Launched [paired capture CI](https://github.com/alwansan/raf/actions/runs/42025620147) from `7f79121a6366c0d7ddea89df8c90883b9fda51f1`. Local checks passed; CI result pending.
