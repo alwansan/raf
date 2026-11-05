@@ -2,18 +2,20 @@
   "schema_version": 1,
   "username": "T1",
   "generation": "T-2026-11-05",
-  "session_id": "20261105T002257Z-T1-fft-unity-contract",
-  "resumed_from_session": "20261104T235355Z-T1-9fca",
+  "session_id": "20261105T002850Z-T1-bank1-isolated",
+  "resumed_from_session": "20261105T002257Z-T1-fft-unity-contract",
   "status": "paused",
   "base_sha": "1219f24fbd8d1194e0c913403dd171d70cf03a3b",
-  "last_commit": "ea98fb0fe5ca393d31468df752a262ef777a2fc4",
-  "updated_at": "2026-11-05T00:33:13.144Z",
+  "last_commit": "b7280c3f989e25f7e4385a1dfdeab5a95563df92",
+  "updated_at": "2026-11-05T00:39:00Z",
   "tracks": [
-    "WATER-001: SHA-pinned authored .compute Unity Editor runtime kernel probing; original FFT runtime mapping unverified"
+    "WATER-001: SHA-pinned authored .compute Unity Editor runtime kernel probing; original FFT runtime mapping unverified",
+    "WATER-001: original FFT bank1 Vulkan failure isolation; authentic Unity ComputeShader integration unproven"
   ],
   "work_ids": [
     "T1-20261104T235355Z-T1-9fca-runtime-kernel-provenance",
-    "T1-20261105T002257Z-T1-fft-unity-contract-unity-kernel-runtime-probe"
+    "T1-20261105T002257Z-T1-fft-unity-contract-unity-kernel-runtime-probe",
+    "T1-20261105T002850Z-T1-bank1-isolated-bank1-validator"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41939314440",
@@ -21,8 +23,10 @@
     "https://github.com/alwansan/raf/actions/runs/41939082498",
     "https://github.com/alwansan/raf/actions/runs/41939982067",
     "https://github.com/alwansan/raf/actions/runs/41941690194",
-    "https://github.com/alwansan/raf/actions/runs/41941716641"
+    "https://github.com/alwansan/raf/actions/runs/41941716641",
+    "https://github.com/alwansan/raf/actions/runs/41942024538",
+    "https://github.com/alwansan/raf/actions/runs/41942366020"
   ],
-  "next_step": "Source-only staged Unity 2021 runtime kernel identity tool integrated; next authenticate original-derived authored FFT .compute and private name/keyword manifest, execute real Unity FindKernel/group probe, independently prove original runtime compiled-slot mapping, coordinate native T5; no phone proof. WATER-001 OPEN, NOT_READY 0/3.",
+  "next_step": "Scoped original bank1 Vulkan validator completed: pair18/19 swapped input SIGSEGV reproduced twice, pair10/11 numeric match unstable across two runs. Unity .compute staging probe source-only; next is genuine SHA-authenticated authored original .compute into real Unity 2021 FindKernel/dispatch then Adreno device validation with T5. WATER-001 OPEN; NOT_READY 0/3. Avoid audio/Settings/touch.",
   "memory_path": "prompt/coordination/clients/T1/MEMORY.md"
 }
