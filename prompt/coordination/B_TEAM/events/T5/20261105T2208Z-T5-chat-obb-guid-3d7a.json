@@ -1,0 +1,14 @@
+{
+  "id": "T5-20261105T2208Z-real-cl-patch-guid-identity",
+  "owner": "T5",
+  "session_id": "20261105T2208Z-T5-chat-obb-guid-3d7a",
+  "issue_id": "INTEGRATION-001",
+  "type": "discovery",
+  "summary": "Pinned original CL six log blobs SHA checked and parsed in CI42119428667: all 3 owner phone OBB GUID warnings are optional unshipped patch.89 probes (1+2), none for signed main.89. Source-pinned main APK/OBB signature and SHA separately verified in CI42117471172. Do not fabricate patch asset or hide Unity logs.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42119428667",
+    "https://github.com/alwansan/raf/actions/runs/42117471172",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_REAL_CL_OBB_PATCH_GUID_DIAGNOSIS_2026-11-05.md"
+  ],
+  "at": "2026-11-05T22:14:21.534Z"
+}
