@@ -63,5 +63,48 @@ class AndroidPhysicalMouseIntegrationPolicy(unittest.TestCase):
         self.assertNotIn("WorldHasBeenRecieved", BRIDGE)
 
 
+    def test_unconfirmed_capture_never_hijacks_legacy_axes(self):
+        axis = BRIDGE.split("private static float Axis(string axis, bool raw)", 1)[1].split(
+            "private void OnEnable", 1)[0]
+        self.assertIn("lock (current.captureGate)", axis)
+        self.assertIn("current.requested && current.nativeCaptured && current.nativeHasMotion", axis)
+        self.assertIn("return raw ? Input.GetAxisRaw(axis) : Input.GetAxis(axis);", axis)
+
+    def test_native_revocation_clears_relative_motion_atomically(self):
+        observed = BRIDGE.split("private void ObserveNativeCapture(int token, bool captured)", 1)[1].split(
+            "private void ProbeCapturedPointer()", 1)[0]
+        self.assertIn("lock (captureGate)", observed)
+        self.assertIn("!requested || epoch != token", observed)
+        self.assertIn("nativeCaptured = captured;", observed)
+        self.assertIn("nativeHasMotion = false;", observed)
+        self.assertIn("deltas.Reset();", observed)
+        self.assertIn("if (lost) Interlocked.Increment(ref captureLossCount);", observed)
+
+    def test_capture_status_probed_on_android_ui_thread(self):
+        probe = BRIDGE.split("private void ProbeCapturedPointer()", 1)[1].split(
+            "private void RequestCapture()", 1)[0]
+        self.assertIn("OnAndroidUi(() =>", probe)
+        self.assertIn('activity.Call<AndroidJavaObject>("getCurrentFocus")', probe)
+        self.assertIn('view.Call<bool>("hasPointerCapture")', probe)
+        self.assertIn("ObserveNativeCapture(token, active)", probe)
+        self.assertIn("ObserveNativeCapture(token, false)", probe)
+        self.assertIn("token != Volatile.Read(ref epoch)", probe)
+
+    def test_loss_retries_and_release_cancels_stale_updates(self):
+        update = BRIDGE.split("private void Update()", 1)[1].split(
+            "private static void OnAndroidUi", 1)[0]
+        release = BRIDGE.split("private void ReleaseCapture()", 1)[1].split(
+            "private void OnApplicationPause", 1)[0]
+        self.assertIn("if (!nativeCaptured && Time.unscaledTime >= nextRequestTime)", update)
+        self.assertIn("nextProbeTime = Time.unscaledTime + 0.15f;", update)
+        self.assertIn("ProbeCapturedPointer();", update)
+        self.assertIn("physical_mouse_capture_lost", update)
+        self.assertIn("lock (captureGate)", release)
+        self.assertIn("epoch++;", release)
+        self.assertIn("requested = nativeHasMotion = nativeCaptured = false;", release)
+        self.assertIn("deltas.Reset();", release)
+
+
+
 if __name__ == "__main__":
     unittest.main()
