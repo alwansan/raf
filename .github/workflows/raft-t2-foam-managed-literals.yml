@@ -239,6 +239,29 @@ jobs:
               q['BodyDirectIndirectRefStoreOpcodeCount'])
           assert not q['RuntimeCallExecutionProven']
           assert not q['RuntimeArrayInitializationProven']
+          f=r['original_exact_RenderTexture_array_byref_target_allocation_flow']
+          assert f is not None and f['OriginalMatchingCalleeDefinitions']==1
+          assert f['ExactStindRefSites']==q['BodyDirectIndirectRefStoreOpcodeCount']
+          assert f['ExactStelemRefSites']==q['BodyDirectReferenceElementStoreOpcodeCount']
+          assert f['ProvenNewarrRenderTextureArrayToRefFormalStores'] + (
+              f['RefFormalStoresWithUnprovenValue']) + (
+              f['StoreSitesWithUnprovenDestinationOrFlow'])==f['ExactStindRefSites']
+          assert f['ProvenArrayElementWritesThroughRefFormal'] + (
+              f['ArrayElementStoreSitesNotProven']) == f['ExactStelemRefSites']
+          assert not f['WholeFunctionBranchJoinVerified']
+          assert not f['RuntimeArraySizeOrContentsVerified']
+          assert not f['RuntimeExecutionVerified']
+          print('T2_FOAM_REF_ARRAY_DATAFLOW_SAFE '+json.dumps({
+              'stind_ref_sites':f['ExactStindRefSites'],
+              'newarr_rt_to_ref_array_proven_same_block':f['ProvenNewarrRenderTextureArrayToRefFormalStores'],
+              'ref_array_store_unproven_value':f['RefFormalStoresWithUnprovenValue'],
+              'stind_store_unproven_flow_or_destination':f['StoreSitesWithUnprovenDestinationOrFlow'],
+              'stelem_ref_sites':f['ExactStelemRefSites'],
+              'element_store_from_ref_array_proven_same_block':f['ProvenArrayElementWritesThroughRefFormal'],
+              'element_stores_unproven':f['ArrayElementStoreSitesNotProven'],
+              'branch_joins_verified':False,
+              'runtime_contents_verified':False
+          },sort_keys=True))
           print('T2_FOAM_BYREF_TARGET_SAFE '+json.dumps({
               'original_definition_matches':q['ExactSourceManagedMethodDefinitionMatches'],
               'original_method_body_available':q['ExactOriginalMethodBodyAvailable'],

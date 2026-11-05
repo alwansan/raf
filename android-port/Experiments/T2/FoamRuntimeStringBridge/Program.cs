@@ -147,6 +147,7 @@ internal static class Program
         public FoamFieldReadTopology.SafeProfile? OriginalFieldReadTopologyProfile;
         public FoamFieldAddressConsumer.SafeProfile? OriginalAddressConsumerProfile;
         public FoamByrefTargetBody.SafeProfile? OriginalByrefTargetBodyProfile;
+        public FoamByrefAllocationFlow.SafeProfile? OriginalByrefAllocationFlowProfile;
         public readonly Dictionary<string,int> TotalSetterCalls = new(StringComparer.Ordinal)
         {
             ["shader_global_texture"] = 0,
@@ -387,6 +388,8 @@ internal static class Program
                 throw new InvalidDataException("Original exact field byref target count not one");
             result.OriginalByrefTargetBodyProfile=
                 FoamByrefTargetBody.Inspect(sourceMethods,exactByrefRecipients[0]);
+            result.OriginalByrefAllocationFlowProfile=
+                FoamByrefAllocationFlow.Inspect(sourceMethods,exactByrefRecipients[0]);
             // Resolve the exact original FieldDefinition without publishing
             // private type, token or field identifiers.
             var sourceTypes=sourceMethods.Count==0
@@ -459,6 +462,7 @@ internal static class Program
             original_exact_RenderTexture_array_field_managed_read_topology = result.OriginalFieldReadTopologyProfile,
             original_exact_RenderTexture_array_field_address_consumer = result.OriginalAddressConsumerProfile,
             original_exact_RenderTexture_array_byref_target_body_profile = result.OriginalByrefTargetBodyProfile,
+            original_exact_RenderTexture_array_byref_target_allocation_flow = result.OriginalByrefAllocationFlowProfile,
             original_exact_Texture_int_producer_body_accepted_same_SHA_definition = result.OriginalSingleProducerBodyProfile is not null,
             original_exact_method_definition_is_original_runtime_called_or_output_proof = false,
             producer_declared_signature_is_actual_runtime_texture_object_proof = false,
@@ -1009,6 +1013,64 @@ internal static class Program
         if (wrongRecipient.ExactSourceManagedMethodDefinitionMatches!=0 ||
             wrongRecipient.ExactOriginalMethodBodyAvailable)
             throw new InvalidDataException("Same-named wrong-type recipient falsely matched");
+
+        // Strict source-free same-basic-block proof: ref array formal
+        // receives the actual newarr RenderTexture[] return.
+        var syntheticAlloc=new MethodDefinition("SyntheticDirectAllocateByRef",
+            Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,
+            m.TypeSystem.Void);
+        syntheticAlloc.Parameters.Add(new ParameterDefinition(
+            new ByReferenceType(new ArrayType(renderTextureType))));
+        factoryDef.Methods.Add(syntheticAlloc);
+        var allocIl=syntheticAlloc.Body.GetILProcessor();
+        allocIl.Append(allocIl.Create(OpCodes.Ldarg_0));
+        allocIl.Append(allocIl.Create(OpCodes.Ldc_I4_3));
+        allocIl.Append(allocIl.Create(OpCodes.Newarr,renderTextureType));
+        allocIl.Append(allocIl.Create(OpCodes.Stind_Ref));
+        allocIl.Append(allocIl.Create(OpCodes.Ret));
+        var positive=FoamByrefAllocationFlow.Inspect(
+            new[]{syntheticAlloc},syntheticAlloc);
+        if(positive.ExactStindRefSites!=1 ||
+            positive.ProvenNewarrRenderTextureArrayToRefFormalStores!=1 ||
+            positive.StoreSitesWithUnprovenDestinationOrFlow!=0 ||
+            positive.RuntimeExecutionVerified)
+            throw new InvalidDataException("Exact positive newarr to ref array store fixture failed");
+        var syntheticAmbiguous=new MethodDefinition("SyntheticAcrossBranchUnproven",
+            Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,
+            m.TypeSystem.Void);
+        syntheticAmbiguous.Parameters.Add(new ParameterDefinition(
+            new ByReferenceType(new ArrayType(renderTextureType))));
+        factoryDef.Methods.Add(syntheticAmbiguous);
+        var ambIl=syntheticAmbiguous.Body.GetILProcessor();
+        var sink=ambIl.Create(OpCodes.Stind_Ref);
+        ambIl.Append(ambIl.Create(OpCodes.Ldarg_0));
+        ambIl.Append(ambIl.Create(OpCodes.Ldc_I4_3));
+        ambIl.Append(ambIl.Create(OpCodes.Newarr,renderTextureType));
+        ambIl.Append(ambIl.Create(OpCodes.Br_S,sink));
+        ambIl.Append(sink);
+        ambIl.Append(ambIl.Create(OpCodes.Ret));
+        var unresolved=FoamByrefAllocationFlow.Inspect(
+            new[]{syntheticAmbiguous},syntheticAmbiguous);
+        if(unresolved.ProvenNewarrRenderTextureArrayToRefFormalStores!=0 ||
+            unresolved.StoreSitesWithUnprovenDestinationOrFlow!=1)
+            throw new InvalidDataException("Cross-branch source must remain unproven");
+        var wrongNewarr=new MethodDefinition("SyntheticWrongNewarrElement",
+            Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,
+            m.TypeSystem.Void);
+        wrongNewarr.Parameters.Add(new ParameterDefinition(
+            new ByReferenceType(new ArrayType(renderTextureType))));
+        factoryDef.Methods.Add(wrongNewarr);
+        var wrongIl=wrongNewarr.Body.GetILProcessor();
+        wrongIl.Append(wrongIl.Create(OpCodes.Ldarg_0));
+        wrongIl.Append(wrongIl.Create(OpCodes.Ldc_I4_3));
+        wrongIl.Append(wrongIl.Create(OpCodes.Newarr,textureType));
+        wrongIl.Append(wrongIl.Create(OpCodes.Stind_Ref));
+        wrongIl.Append(wrongIl.Create(OpCodes.Ret));
+        var wrongProof=FoamByrefAllocationFlow.Inspect(
+            new[]{wrongNewarr},wrongNewarr);
+        if(wrongProof.ProvenNewarrRenderTextureArrayToRefFormalStores!=0 ||
+            wrongProof.RefFormalStoresWithUnprovenValue!=1)
+            throw new InvalidDataException("Wrong-element array cannot prove source RT allocation");
         var syntheticIndirect=new MethodDefinition("SyntheticFieldReferenceStore",
             Mono.Cecil.MethodAttributes.Public,m.TypeSystem.Void);
         factoryDef.Methods.Add(syntheticIndirect);
@@ -1178,6 +1240,7 @@ internal static class Program
                 strict_original_field_load_address_typed_decoy_fixture=true,
                 typed_byref_indirect_array_store_length_and_decoy_sink_controls=true,
                 exact_byref_target_internal_body_and_wrong_signature_controls=true,
+                strict_newarr_to_ref_array_same_block_and_cross_branch_negative_controls=true,
                 four_original_style_Texture_int_argument_origin_controls=true,
                 signed_short_wide_and_duplicate_private_i4_aggregate_controls=true,
                 private_IL_names_or_source_published = false
