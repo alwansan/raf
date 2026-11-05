@@ -82,6 +82,8 @@ def _project_objects(project: Path):
                 raise b03.LinkError("non_yaml_exported_Material")
             continue
         owner = b03.source_guids(Path(str(path) + ".meta"))
+        if owner in profiles:
+            raise b03.LinkError("exported_Shader_and_YAML_asset_meta_GUID_collision")
         if owner in seen_owners:
             raise b03.LinkError("duplicate_exported_YAML_meta_guid")
         seen_owners.add(owner)
