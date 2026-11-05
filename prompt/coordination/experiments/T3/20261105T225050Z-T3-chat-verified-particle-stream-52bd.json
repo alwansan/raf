@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T225050Z-T3-chat-verified-particle-stream-52bd",
+  "issue_id": "RENDER-002",
+  "hypothesis": "The source original unique Particle108 Shader48 three typed Texture2D28 .resS ranges are readable from a single full-SHA-verified original resource after exact immutable ZIP2 sparse checkout; previous narrow run was inconclusive solely because external stream provider was not staged.",
+  "source_commit": "276aad3df4b76067e9061b267caf3c12c1616cb3",
+  "input_hashes": [
+    "ZIP2 immutable ref 15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "six original SHA scenes",
+    "four original Material/Shader owner SHA files, 269007288 assembled bytes",
+    "one exact private manifest-selected original resource full size/digest verified but digest and name not exposed"
+  ],
+  "tool_versions": {
+    "UnityPy": "1.23.0",
+    "Python": "GitHub ubuntu-24.04",
+    "UnityEditor": "not invoked",
+    "resourceStager": "scripts/w1_stage_zip2_owners.py shared source"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t3_original_particle_stream_provider.py -v",
+    "python3 -m unittest discover -s tests -p test_t3_stream_extent_guard.py -v",
+    "python3 -m scripts.t3_original_particle_texture_targets --original $RUNNER_TEMP/t3-original-six-scene --manifest zip2-source/RAFT_FILE_MANIFEST.tsv --out $RUNNER_TEMP/t3-source-safe.json --private-plan $RUNNER_TEMP/t3-private-plan.json",
+    "python3 -m scripts.t3_original_particle_stream_provider --private-plan $RUNNER_TEMP/t3-private-plan.json --zip2 zip2-source --original $RUNNER_TEMP/t3-original-six-scene --out $RUNNER_TEMP/t3-payload-safe.json"
+  ],
+  "negative_controls": [
+    "immutable Git SHA and ZIP2 exact manifest provider identity/size/digest",
+    "schema bool masquerading as integer rejected",
+    "only one manifest-selected external provider and exactly three private stream ranges",
+    "strict typed extent and overlap classification with scheduled T3 helper",
+    "no symlinks, no path traversal, explicit disk and size cap",
+    "missing/corrupt staged full provider fail SHA",
+    "private payload names/file paths/digests never published"
+  ],
+  "workflow_path": ".github/workflows/raft-t3-original-renderer-shader-impact.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42125608932",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42125608932/artifacts"
+  ],
+  "budget": "22min CI job, 2GB source-provider cap, sparse one provider only, no Unity build",
+  "status": "completed",
+  "observed_result": {
+    "original_sha_authenticated": true,
+    "source_material21": 5,
+    "material_texenv_pointers": 10,
+    "real_original_texture2d28": 3,
+    "distinct_external_providers_full_sha_verified": 1,
+    "stream_ranges_read": 3,
+    "stream_byte_count": 983052,
+    "range_sha_fingerprints_unique": 3,
+    "nonzero_source_ranges": 3,
+    "partial_overlap": 0,
+    "exact_duplicate_ranges": 0,
+    "synthetic_tests_passed": 106,
+    "android_pixels_verified": false
+  },
+  "rejected_hypotheses": [
+    "Original source 3 typed Texture2D28 streaming provider cannot be obtained/verified from immutable ZIP2",
+    "The three source Texture2D images must reference identical/overlapping or all-zero stream byte slices"
+  ],
+  "limitations": [
+    "source image contents un-decoded; no RGBA/texture visual quality claim",
+    "W1/B02 full native same-instance GUID/Material links untested",
+    "actual Android installed package provider and GPU pixel use unknown",
+    "prior narrow run not staging source provider is not Android missing-resource proof"
+  ],
+  "initial_failed_run": "https://github.com/alwansan/raf/actions/runs/42125435490",
+  "integration_commit": "276aad3df4b76067e9061b267caf3c12c1616cb3",
+  "next_step": "T5 coordinated same-instance W1 Material21/Shader48 + B02 Texture2D28 private source→export GUID check for exact 5 Materials / 3 source images, then actual full native Unity/Android installed APK/OBB TextureImporter/stream content and real particle emitter pixels. Source one .resS full SHA and three private stream spans are now proven; do not redo original-only census or assert Android pixels."
+}
