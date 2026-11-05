@@ -2,12 +2,12 @@
   "schema_version": 1,
   "username": "T4",
   "generation": "T-2026-11-05",
-  "session_id": "20261105T1217Z-T4-android-save-postcheck",
-  "resumed_from_session": "20261105T1121Z-T4-managed-stream",
+  "session_id": "20261105T1405Z-T4-chat-original-rgd-runtime-k6n8",
+  "resumed_from_session": "20261105T1217Z-T4-android-save-postcheck",
   "status": "completed",
-  "base_sha": "5707abc593986d2e0c3dc603cf55ccc62f8f9631",
-  "last_commit": "d3f2aaf97594a6142d3f729c4267ea84fe9946be",
-  "updated_at": "2026-11-05T12:35:00Z",
+  "base_sha": "5eed7b6715a25177e733d17f383bb8735368bdbf",
+  "last_commit": "7608c6a17458f6b13987e2b4af1dbe5a25842c06",
+  "updated_at": "2026-11-05T14:30:00Z",
   "tracks": [
     "LOCAL-005"
   ],
@@ -19,7 +19,9 @@
     "T4-20261105T1113Z-original-io-control-flow",
     "T4-20261105T1121Z-original-managed-stream-roundtrip",
     "T4-20261105T1217Z-android-save-file-postcheck",
-    "T4-20261105T1226Z-save-argument-flow"
+    "T4-20261105T1226Z-save-argument-flow",
+    "T4-20261105T1405Z-chat-original-rgd-runtime-k6n8",
+    "T4-20261105T1417Z-chat-original-loadt-k6n8"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41939908432",
@@ -34,8 +36,10 @@
     "https://github.com/alwansan/raf/actions/runs/42020039305",
     "https://github.com/alwansan/raf/actions/runs/42026271243",
     "https://github.com/alwansan/raf/actions/runs/42026671909",
-    "https://github.com/alwansan/raf/actions/runs/42027197515"
+    "https://github.com/alwansan/raf/actions/runs/42027197515",
+    "https://github.com/alwansan/raf/actions/runs/42042814576",
+    "https://github.com/alwansan/raf/actions/runs/42043768798"
   ],
-  "next_step": "Android-only Save.argumentFileSnapshot now installed after original SHA gated Save body, file exists and size classes at actual forwarded filename arg, guarded against probe/logger exceptions; full 14-source original managed compile CI42026271243 SUCCESS exit0, synthetic UNITY_ANDROID actual C# compile/execute CI42026671909 SUCCESS 15/15, original exact ZIP2 DLL compiled IL direct Save filename forwarding CI42027197515 SUCCESS 21/21. No real Android Unity/IL2CPP, new Raft APK, local world playability, or genuine .rgd serialization/relaunch/reopen evidence. T5 coordinated new native candidate then phone logs B07 firstMoveNext/T4 originalCompletionAssigned, SaveWorld/Save/Save.argumentFileSnapshot and Load.caughtException; LOCAL-005 OPEN and NOT_READY 0/3. Preserve working sound/Settings, deferred touch, no other jobs cancelled.",
+  "next_step": "Original shipped exact Data.rgd 2941B SHA b2785187... actually deserialized into original Assembly-CSharp CLR object via .NET8 BinaryFormatter CI42042814576 SUCCESS 18/18. CI42043768798 SUCCESS 18+18 actually invoked ORIGINAL generic SaveAndLoad.Load<T> on same exact authentic original seed with root original type, returned matching nonnull original object. This resolves seed managed load question, not user world save, Unity/IL2CPP, Android storage or offline playable local host; no newer Raft APK (still APK86). T5 native signed candidate then phone playable offline world, SaveWorld/SaveUser/Save, full process exit, reopen same user-generated .rgd and world, correlate B07/T4 markers and Load.caughtException. LOCAL-005 OPEN, overall NOT_READY 0/3. No jobs canceled, audio/Settings preserved, touch deferred. Authoritative session clients/T4/sessions/20261105T1405Z-T4-chat-original-rgd-runtime-k6n8.md.",
   "memory_path": "prompt/coordination/clients/T4/MEMORY.md"
 }
