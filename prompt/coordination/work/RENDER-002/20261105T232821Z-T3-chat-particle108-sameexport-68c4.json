@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "id": "20261105T232821Z-T3-chat-particle108-sameexport-68c4",
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T232821Z-T3-chat-particle108-sameexport-68c4",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "updated_at": "2026-11-05T23:28:21.132Z",
+  "base_sha": "3e5c14d221b3557c18a7551d26408747d6db748a",
+  "track": "SAME_INSTANCE_SOURCE_108_PARTICLE_SHADER48_5MATERIAL21_3TEXTURE2D28_EXPORT_BINDINGS",
+  "hypothesis": "The exact five original Particle Shader48 Material21 source objects (108 renderer slots; 10 local Texture PPtrs across 3 true source class28 objects) can be mapped by source owner/pathID to the W1 and B02 exported GUIDs from ONE AssetRipper instance, and checked against its real exported .mat TexEnv bindings instead of treating original byte presence as Android parity.",
+  "experiment_key": "T3-zip2-15964-source108-5M21-3T28-singleAssetRipper-W1B02-export-GUID-YAML-TexEnv-sameinstance-v1",
+  "resource_key": "T3-one-original-12owner-one-stream-sameexport-AsssetRipper-50min-alone",
+  "taken_over_from": [
+    "prompt/coordination/clients/T3/sessions/20261105T225050Z-T3-chat-verified-particle-stream-52bd.md",
+    "prompt/coordination/clients/T3/sessions/20261105T2230Z-T3-scheduled-streamrange-9c62.md",
+    "https://github.com/alwansan/raf/actions/runs/42125608932",
+    "https://github.com/alwansan/raf/actions/runs/41941882103"
+  ],
+  "intended_files": [
+    "scripts/t3_original_particle_material_texenv.py",
+    "scripts/t3_particle_same_export_bindings.py",
+    "tests/test_t3_particle_same_export_bindings.py",
+    ".github/workflows/raft-t3-particle108-sameexport.yml",
+    "prompt/coordination/work/RENDER-002/20261105T232821Z-T3-chat-particle108-sameexport-68c4.json",
+    "prompt/coordination/clients/T3/sessions/20261105T232821Z-T3-chat-particle108-sameexport-68c4.md",
+    "prompt/coordination/experiments/T3/20261105T232821Z-T3-chat-particle108-sameexport-68c4.json",
+    "prompt/coordination/B_TEAM/events/T3/20261105T232821Z-T3-chat-particle108-sameexport-68c4.json",
+    "docs/T3_PARTICLE108_SAMEINSTANCE_EXPORT_2026-11-06.md",
+    "prompt/coordination/discussions/RENDER-002/20261105T232821Z-T3-chat-particle108-sameexport-68c4-to-T5.md"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Build strict synthetic source-to-W1+B02 one-instance trace comparator for precisely five SHA-original typed Material21 and three typed Texture2D28, preserve original 10 TexEnv UV/PPtr linkage; use bounded own workflow from authenticated ZIP2 6 scenes/4 owners/one source .resS provider and pinned AssetRipper W1+B02 C# tracing, safe numeric-only result. No .shader/meta/native APK edit. If CI resource unavailable, record INCONCLUSIVE and do not invent equivalence."
+}
