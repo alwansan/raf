@@ -80,6 +80,65 @@ internal static class Program
         };
     }
 
+    private static void RequireBclOnlyOriginalSuccessPath(MethodDefinition method)
+    {
+        var all = method.Body.Instructions;
+        if (method.Body.ExceptionHandlers.Count != 1 ||
+            method.Body.ExceptionHandlers[0].HandlerType != ExceptionHandlerType.Catch)
+            throw new InvalidDataException("unexpected_original_exception_regions");
+        var catchRegion = method.Body.ExceptionHandlers[0];
+        int tryStart = all.IndexOf(catchRegion.TryStart);
+        int tryEnd = catchRegion.TryEnd is null ? all.Count : all.IndexOf(catchRegion.TryEnd);
+        int catchStart = all.IndexOf(catchRegion.HandlerStart);
+        int catchEnd = catchRegion.HandlerEnd is null ? all.Count : all.IndexOf(catchRegion.HandlerEnd);
+        if (tryStart < 0 || tryEnd <= tryStart || catchStart < 0 || catchEnd <= catchStart)
+            throw new InvalidDataException("original_compiled_flow_unresolved");
+        int tryCalls = 0, catchCalls = 0, outsideCalls = 0;
+        for (int i = 0; i < all.Count; i++)
+        {
+            var insn = all[i];
+            if (insn.OpCode.Code != Code.Call && insn.OpCode.Code != Code.Callvirt &&
+                insn.OpCode.Code != Code.Newobj) continue;
+            if (insn.Operand is not MethodReference callee)
+                throw new InvalidDataException("unrecognized_original_call_operand");
+            if (i >= tryStart && i < tryEnd)
+            {
+                tryCalls++;
+                // This is specifically the previous T4 original-CIL proof:
+                // success path has only the ONE File.Open/Create BCL call.
+                if (callee.DeclaringType.FullName != "System.IO.File" ||
+                    (callee.Name != "Open" && callee.Name != "Create"))
+                    throw new InvalidDataException("unsafe_original_try_transitive_call");
+            }
+            else if (i >= catchStart && i < catchEnd) catchCalls++;
+            else outsideCalls++;
+        }
+        // Entire genuine method has 4 calls: 1 original IO within try and
+        // 3 logging/helper dependencies strictly confined to catch. This
+        // restricts which execution path is safe to exercise in the sandbox.
+        if (tryCalls != 1 || catchCalls != 3 || outsideCalls != 0)
+            throw new InvalidDataException("unknown_original_transitive_callee_placement");
+    }
+
+    private static void RegisterPrivateManagedCompanionResolver(string directory)
+    {
+        AssemblyLoadContext.Default.Resolving += (ctx, reference) =>
+        {
+            string? simple = reference.Name;
+            if (string.IsNullOrEmpty(simple) || simple.Length > 128 ||
+                simple.Contains('/') || simple.Contains('\\') ||
+                simple == "." || simple == "..") return null;
+            string candidate = Path.Combine(directory, simple + ".dll");
+            try
+            {
+                if (!File.Exists(candidate) ||
+                    new FileInfo(candidate).LinkTarget is not null) return null;
+                return ctx.LoadFromAssemblyPath(candidate);
+            }
+            catch (Exception) { return null; }
+        };
+    }
+
     private static int Main(string[] args)
     {
         if (args.Length != 4 || args[0] != "--assembly" || args[2] != "--output")
@@ -113,10 +172,14 @@ internal static class Program
             var writeRef = FindOriginalEdge(manager, save.Methods.Where(m => m.Name == "Save"));
             var read = ResolveExact(manager, readRef, "Open", 2);
             var write = ResolveExact(manager, writeRef, "Create", 1);
+            RequireBclOnlyOriginalSuccessPath(read);
+            RequireBclOnlyOriginalSuccessPath(write);
             if (read.MetadataToken.ToInt32() == write.MetadataToken.ToInt32())
                 throw new InvalidDataException("original_read_write_edge_collision");
 
             phase = "runtime_reflection";
+            RegisterPrivateManagedCompanionResolver(
+                Path.GetDirectoryName(original.FullName)!);
             var loaded = AssemblyLoadContext.Default.LoadFromAssemblyPath(original.FullName);
             var type = loaded.GetType(manager.FullName, throwOnError: true)
                 ?? throw new InvalidDataException("missing_reflection_type");
