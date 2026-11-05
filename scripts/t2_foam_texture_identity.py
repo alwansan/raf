@@ -6,6 +6,7 @@ HLSL and shader source never leave process memory. Equality of names is NOT a
 sampler-state, descriptor-to-Unity-material, or Android-pixel proof.
 """
 import argparse
+import hashlib
 import json
 from pathlib import Path
 
@@ -60,6 +61,7 @@ def original_texture_rows(program, registry, expected_count):
         if "m_MultiSampled" in row and type(row["m_MultiSampled"]) is not bool:
             raise ValueError("Invalid original texture multisample shape")
         result.append({"_private_name": name, "_field_presence": present,
+                       "_private_numeric_pair": (row.get("m_Index"), row.get("m_SamplerIndex")),
                        "_multisample_present": "m_MultiSampled" in row})
     return result
 
@@ -100,13 +102,23 @@ def compare_private_names(original_rows, reflected_names):
     source_names = [x["_private_name"] for x in original_rows]
     if len(source_names) != len(set(source_names)) or len(reflected_names) != len(set(reflected_names)):
         raise ValueError("Texture symbol identity ambiguous")
-    matches = sum(name in set(reflected_names) for name in source_names)
+    reflected_set = set(reflected_names)
+    matches = sum(name in reflected_set for name in source_names)
+    numeric_pairs = [x["_private_numeric_pair"] for x in original_rows]
+    # A repeated original pair is ambiguous, not evidence of a translated alias.
+    # Only aggregate counts and a digest leave private scratch.
+    complete_pairs = [p for p in numeric_pairs if all(type(v) is int for v in p)]
+    numeric_pair_digest = hashlib.sha256(json.dumps(sorted(complete_pairs), separators=(",", ":")).encode()).hexdigest()
     presence = {
         k: sum(bool(x["_field_presence"][k]) for x in original_rows)
         for k in ("m_Index", "m_SamplerIndex", "m_Dim", "m_ArraySize")
     }
     return {
         "source_texture_count": len(original_rows),
+        "original_complete_numeric_pairs": len(complete_pairs),
+        "original_distinct_numeric_pairs": len(set(complete_pairs)),
+        "original_numeric_pair_digest_sha256": numeric_pair_digest,
+        "numeric_pair_identity_to_spirv_verified": False,
         "translated_image_count": len(reflected_names),
         "literal_original_to_spirv_image_name_matches": matches,
         "original_numeric_field_presence_counts": presence,
