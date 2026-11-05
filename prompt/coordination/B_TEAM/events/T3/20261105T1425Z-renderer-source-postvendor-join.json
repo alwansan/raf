@@ -1,0 +1,17 @@
+{
+  "id": "T3-20261105T1425Z-renderer-source-postvendor-join",
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T1402Z-T3-chat-renderer-shader-impact-f63e",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "CI42042819113 verified original six scenes with 1,633 typed Shader48 Renderer Material slots and 21 original Shader48. CI42044249541 actual SHA-verified same-instance W1 Shader48 to postvendor GUID and ShaderLab resolved 1,373 original scene Material slots still Dummy, 256 builtin, 4 vendor non-Dummy; highest 921-slot original Shader still Dummy after three vendor restorers. This is source original Renderer-slot weight, not Android GPU/display readiness.",
+  "at": "2026-11-05T14:25:00Z",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42042819113",
+    "https://github.com/alwansan/raf/actions/runs/42044249541",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_SCENE_SHADER_USE_AND_POSTVENDOR_PRIORITY_2026-11-05.md"
+  ],
+  "android_device_confirmed": false,
+  "issue_stays_open": true
+}
