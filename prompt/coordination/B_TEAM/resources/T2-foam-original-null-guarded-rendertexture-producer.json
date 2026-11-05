@@ -1,0 +1,69 @@
+{
+  "id": "T2-foam-original-null-guarded-rendertexture-producer",
+  "owner": "T2",
+  "kind": "verified_genuine_original_Foam_managed_Material_SetTexture_input_to_RenderTexture_array_null_guarded_return",
+  "title": "Original Foam four non-authored DXBC t/s name strings feed Material.SetTexture via single compiled original null-guarded RenderTexture[] integer indexed producer",
+  "source": {
+    "zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "shader_owner": "Raft_Data/sharedassets0.assets",
+    "owner_bytes": 115978112,
+    "owner_sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "foam_original_shader_path_id": 2420,
+    "foam_raw_object_sha256": "67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1",
+    "managed_original": "Raft_Data/Managed/Assembly-CSharp.dll",
+    "managed_bytes": 3211776,
+    "managed_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e"
+  },
+  "stages": {
+    "acquisition": "ORIGINAL_SHADER_OWNER_AND_ORIGINAL_MANAGED_DLL_SHA_SIZE_VERIFIED",
+    "extraction": "ORIGINAL_FOAM_FOUR_SOURCE_T_S_RESOURCE_NAMES_MATCH_ORIGINAL_MANAGED_LDSTR",
+    "reconstruction": "FOUR_EXACT_TYPED_MATERIAL_SETTEXTURE_STRING_NAME_ARGUMENTS_AND_SINGLE_SOURCE_AUTHENTIC_TYPED_TEXTURE_INT_PRODUCER_METHOD_RESOLVED",
+    "binding": "ORIGINAL_COMPILED_PRODUCER_NULL_GUARDED_1D_RENDERTEXTURE_ARRAY_INDEX_RETURN_EXACT_IL_BRANCH_TARGET_VERIFIED",
+    "integration": "PRIVATE_SHA_SOURCE_CECIL_CI_ONLY_NO_GAME_SHADERLAB_OR_UNITY_MATERIAL_PATCH",
+    "device": "NOT_TESTED"
+  },
+  "observed": {
+    "foam_non_authored_texture_names": 4,
+    "material_settexture_first_string_args": 4,
+    "material_settexture_second_UnityEngine_Texture_args": 4,
+    "original_second_callvirt_producers": 4,
+    "distinct_original_managed_producer_method_signatures": 1,
+    "distinct_actual_original_method_definitions_with_body": 1,
+    "original_producer_signature_shape": "UnityEngine.Texture Method(int index)",
+    "producer_declared_in_original_assembly": true,
+    "producer_original_instructions": 10,
+    "producer_instance_field_loads": 2,
+    "producer_original_1D_UnityEngine_RenderTexture_array_field_reads": 2,
+    "producer_array_ref_index_loads": 1,
+    "producer_branches": 1,
+    "producer_return_instructions": 2,
+    "producer_null_guarded_array_index_return_exact_branch_target_verified": true,
+    "producer_null_array_fallback_returns_null": true,
+    "caller_four_int_index_values_verified": false,
+    "texture_array_initialization_and_values_verified": false,
+    "unity_material_receiver_original_foam_shader_binding_verified": false,
+    "actual_game_runtime_call_reachability_verified": false,
+    "genuine_original_Foam_shaderlab_import_or_Adreno_pixel_verified": false
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42021183522",
+    "https://github.com/alwansan/raf/actions/runs/42022922743",
+    "https://github.com/alwansan/raf/actions/runs/42026683133",
+    "https://github.com/alwansan/raf/actions/runs/42028108346",
+    "https://github.com/alwansan/raf/actions/runs/42028369439",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_ORIGINAL_RENDERTEXTURE_ARRAY_PROVENANCE_2026-11-05.md"
+  ],
+  "artifact": {
+    "run_id": 42028369439,
+    "artifact_id": 13413774825,
+    "zip_sha256": "9cd20667c99523fdba6fd859a796d31f7f30c80247d92c15fc72e3e323570acc",
+    "safe_numeric_aggregate_only": true
+  },
+  "remaining": [
+    "Locate real original RenderTexture[] field assignment/init and dimensions/format/content writers",
+    "Prove four original int index argument values/alias and material receiver Foam shader association and runtime reachability",
+    "Restore original sampler/UV/CB upload and genuine Foam ShaderLab with original four stages and B25 render state",
+    "Run Unity shader import/render and native Android Adreno/device water acceptance"
+  ],
+  "updated_at": "2026-11-05T12:34Z"
+}
