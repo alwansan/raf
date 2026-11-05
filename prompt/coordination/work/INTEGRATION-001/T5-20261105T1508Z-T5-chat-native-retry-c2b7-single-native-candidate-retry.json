@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T1508Z-T5-chat-native-retry-c2b7",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "track": "One exact current-source native signed APK+OBB/XAPK diagnostic retry after prior cancellation without code failure",
+  "status": "active",
+  "base_sha": "c491f76077edcf7984cb5de95101edc1aafb000d",
+  "experiment_key": "single-native-feature-head-c491f76077edcf7984cb5de95101edc1aafb000d-old-run42042902522-cancelled-new-t4-rgd-negative-t3-original-d3d11-source-signed-packaging-v1",
+  "resource_key": "raft-native-engine-feature/android-native-port",
+  "hypothesis": "After earlier one-shot native run42042902522 was externally cancelled before Unity without a source failure, a single new immutable latest-feature native reconstruction using existing approved signed delivery workflow may progress to authentic Unity compile and produce current source APK/OBB/XAPK or reveal an actual source gate failure. No readiness claimed from request alone.",
+  "resumed_from_sessions": [
+    "20261105T1431Z-T5-chat-native-cancel-d41e",
+    "20261105T1453Z-T5-scheduled-6e82",
+    "20261105T1404Z-T5-chat-native-diagnostic-3c8e"
+  ],
+  "related_work": [
+    "prompt/coordination/work/INTEGRATION-001/T5-20261105T1431Z-T5-chat-native-cancel-d41e-native-run-verdict.json",
+    "prompt/coordination/work/INTEGRATION-001/T5-20261105T1404Z-T5-chat-native-diagnostic-3c8e-native-diagnostic.json"
+  ],
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/actions/runs/42042902522",
+    "https://github.com/alwansan/raf/actions/runs/42049488845",
+    "https://github.com/alwansan/raf/actions/runs/42047540260",
+    "https://github.com/alwansan/raf/actions/runs/42047611046"
+  ],
+  "intended_files": [
+    ".github/raft-native-build-request.json",
+    "prompt/coordination/work/INTEGRATION-001/T5-20261105T1508Z-T5-chat-native-retry-c2b7-single-native-candidate-retry.json",
+    "prompt/coordination/clients/T5/sessions/20261105T1508Z-T5-chat-native-retry-c2b7.md",
+    "prompt/coordination/experiments/T5/T5-20261105T1508Z-T5-chat-native-retry-c2b7-one-native-current-head.json",
+    "prompt/coordination/B_TEAM/events/T5/20261105T1510Z-one-native-current-source-request.json"
+  ],
+  "preflight": {
+    "head": "c491f76077edcf7984cb5de95101edc1aafb000d",
+    "nonterminal_workflows": 0,
+    "prior_native_run": 42042902522,
+    "prior_native_run_conclusion": "cancelled",
+    "game_release": "android-early-test-41812889049-1 (APK86)",
+    "t4_original_seed_save": "guard refused original Save invocation, native world RGD not verified",
+    "t3_original_shader": "33 matched D3D11 stage pairs of high-use original shader, no Android program proof",
+    "water_limitations": [
+      "authentic_water_kernel_identity",
+      "shader_pass_contract:UltimateWater/Foam/Global",
+      "shader_pass_contract:UltimateWater/Spectrum/Water Spectrum",
+      "shader_pass_contract:UltimateWater/Utilities/Blur (Subsurface Scattering)",
+      "water_compute_source_candidate"
+    ]
+  },
+  "run_urls": [],
+  "observed_result": null,
+  "next_step": "With no other nonterminal Actions and after current branch SHA/RELEASE gate refresh, trigger one existing approved full native request (no workflow gate weaken), record immutable triggered SHA and actual run. Do not repeat if queued/running. Keep work waiting_ci if build takes longer than this chat cycle.",
+  "updated_at": "2026-11-05T15:08:00Z"
+}
