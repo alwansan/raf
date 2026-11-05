@@ -9,6 +9,30 @@ from __future__ import annotations
 from collections import Counter
 from PIL import Image, ImageChops
 
+# Original serialized Unity TextureFormat codes (public Unity enum values).
+# Explicit small allowlist: unrecognized or proprietary formats are pooled,
+# never advertised as verified DXT/BC results from a guessed string.
+SOURCE_FORMAT_CATEGORIES = {
+    3: "RGB24", 4: "RGBA32", 10: "DXT1", 12: "DXT5",
+    25: "BC7", 47: "ETC2_RGBA8", 48: "ASTC_RGBA_4X4",
+}
+
+
+def original_texture_categories(typetree: dict) -> tuple[str, str]:
+    """Read typed source, not .read() attribute display or invented m_IsSRGB.
+
+    The serialized source field m_ColorSpace is 0=Gamma, 1=Linear.
+    Gamma is deliberately reported as GAMMA, not assumed equivalent to
+    GPU sRGB sampling or exported TextureImporter.sRGBTexture.
+    This function never returns raw format IDs, per-asset metadata or names.
+    """
+    if not isinstance(typetree, dict):
+        raise ValueError("missing_authenticated_original_texture_typetree")
+    fmt, space = typetree.get("m_TextureFormat"), typetree.get("m_ColorSpace")
+    if type(fmt) is not int or fmt < 0 or type(space) is not int or space not in (0, 1):
+        raise ValueError("invalid_original_texture_format_or_colorspace")
+    return SOURCE_FORMAT_CATEGORIES.get(fmt, "OTHER_OR_UNKNOWN"), ("gamma" if space == 0 else "linear")
+
 def classify(original: Image.Image, exported: Image.Image, *, texture_format: str = "UNKNOWN",
              srgb: str = "UNKNOWN") -> dict[str, str]:
     if original.mode != "RGBA" or exported.mode != "RGBA" or original.size != exported.size:
@@ -33,7 +57,9 @@ def classify(original: Image.Image, exported: Image.Image, *, texture_format: st
     if fmt not in {"DXT1", "DXT5", "BC7", "RGBA32", "RGB24", "ETC2_RGBA8", "ASTC_RGBA_4X4"}:
         fmt = "OTHER_OR_UNKNOWN"
     cs = str(srgb).lower()
-    color_space = "SRGB" if cs in ("true", "1", "srgb") else ("LINEAR" if cs in ("false", "0", "linear") else "UNKNOWN")
+    color_space = ("GAMMA" if cs == "gamma" else
+                   "SRGB" if cs in ("true", "1", "srgb") else
+                   "LINEAR" if cs in ("false", "0", "linear") else "UNKNOWN")
     return {"format": fmt, "color_space": color_space, "alpha_occupancy": occupancy,
             "max_rgb_delta_bin": magnitude, "alpha_delta": "NONE" if not max_alpha else "NONZERO"}
 
@@ -43,7 +69,7 @@ def aggregate(rows: list[dict[str, str]], *, expected: int) -> dict:
     fields = ("format", "color_space", "alpha_occupancy", "max_rgb_delta_bin", "alpha_delta")
     allowed = {
         "format": {"DXT1", "DXT5", "BC7", "RGBA32", "RGB24", "ETC2_RGBA8", "ASTC_RGBA_4X4", "OTHER_OR_UNKNOWN"},
-        "color_space": {"SRGB", "LINEAR", "UNKNOWN"},
+        "color_space": {"GAMMA", "SRGB", "LINEAR", "UNKNOWN"},
         "alpha_occupancy": {"OPAQUE", "TRANSPARENT", "MIXED"},
         "max_rgb_delta_bin": {"EXACT", "ALPHA_ONLY", "RGB_1", "RGB_2_4", "RGB_5_16", "RGB_17_64", "RGB_65_255"},
         "alpha_delta": {"NONE", "NONZERO"},
@@ -63,7 +89,21 @@ def aggregate(rows: list[dict[str, str]], *, expected: int) -> dict:
         by_format.setdefault(fmt, Counter())[outcome] += 1
     joint = {fmt: {key: counts.get(key, 0) for key in ("EXACT", "ALPHA_ONLY", "RGB_DRIFT")}
              for fmt, counts in sorted(by_format.items())}
-    return {"schema_version": 2, "scope": expected,
+    # A second safe joint aggregate makes a codec-only correlation less
+    # likely to conflate Gamma (albedo) and Linear (data / masks).
+    # Pool small color-space groups before publishing.
+    space_counts = Counter(r["color_space"] for r in rows)
+    by_space = {}
+    for row in rows:
+        space = row["color_space"] if space_counts[row["color_space"]] >= 5 else "POOLED_RARE_COLORSPACES"
+        magnitude = row["max_rgb_delta_bin"]
+        outcome = ("EXACT" if magnitude == "EXACT" else
+                   "ALPHA_ONLY" if magnitude == "ALPHA_ONLY" else "RGB_DRIFT")
+        by_space.setdefault(space, Counter())[outcome] += 1
+    space_joint = {space: {key: counts.get(key, 0) for key in ("EXACT", "ALPHA_ONLY", "RGB_DRIFT")}
+                   for space, counts in sorted(by_space.items())}
+    return {"schema_version": 3, "scope": expected,
             "diagnostics": {f: dict(sorted(Counter(r[f] for r in rows).items())) for f in fields},
             "format_drift_summary": joint,
+            "color_space_drift_summary": space_joint,
             "original_pixels_published": False, "device_validated": False}
