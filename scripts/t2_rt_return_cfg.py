@@ -3,8 +3,8 @@ from collections import deque
 
 UNKNOWN, NULL, CONSTRUCTED = "unknown", "null", "constructed"
 
-def classify(instructions, *, max_states=10000, max_locals=4096):
-    if not instructions or max_states <= 0 or max_locals <= 0:
+def classify(instructions, *, max_states=10000, max_locals=4096, max_stack=256):
+    if not instructions or max_states <= 0 or max_locals <= 0 or max_stack <= 0:
         return UNKNOWN
     n = len(instructions)
     incoming = {0: ((), ())}
@@ -59,6 +59,9 @@ def classify(instructions, *, max_states=10000, max_locals=4096):
             returns[pc] = stack[-1] if len(stack)==1 else UNKNOWN
             continue
         else:
+            return UNKNOWN
+        # Bound straight-line stack growth independently of worklist iteration limits.
+        if len(stack) > max_stack:
             return UNKNOWN
         for target in successors:
             if not 0 <= target < n:
