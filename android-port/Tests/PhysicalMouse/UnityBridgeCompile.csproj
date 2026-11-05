@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="../../Runtime/Platform/PhysicalMouseDeltaAccumulator.cs" />
+    <Compile Include="../../Runtime/Platform/PhysicalMouseMotionSource.cs" />
     <Compile Include="../../Runtime/Platform/AndroidPhysicalMouseCapture.cs" />
     <Compile Include="../../Runtime/Platform/AndroidRuntimeLog.cs" />
     <Compile Include="../../Runtime/Platform/PersistentDiagnosticLog.cs" />
