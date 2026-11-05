@@ -4,9 +4,9 @@
   "origin": "chat",
   "session_id": "20261105T1323Z-T2-chat-index-origin-5c42",
   "issue_id": "WATER-001",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "3d35b501e38bea1468bd696325369fb61069c6ae",
-  "updated_at": "2026-11-05T13:25:57.155Z",
+  "updated_at": "2026-11-05T13:27:31.162Z",
   "resumed_from_sessions": [
     "20261105T1314Z-T2-chat-foam-writers-72c9",
     "20261105T1213Z-T2-foam-return-producer-call-isolated"
@@ -32,11 +32,20 @@
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42035529042"
   ],
-  "next_step": "Read CI42035529042. On pass fetch artifact and inspect four original index-arg source histogram; on failure inspect first error, fix only owned files. Team summary schema fix 0cf6e48 remains separate and should be rechecked.",
+  "next_step": "Trace original indexed RenderTexture array initialization/element writers, actual four private int constants uniqueness and their relation to array size; only report protected aggregate and secure bindings. Source-only proof not runtime device fidelity. WATER-001 OPEN, NOT_READY0/3.",
   "implementation_sha": "afb3e94af6c34a345d8fcfd81e6daaa2c01a89e4",
   "result": {
-    "code": "owned FoamSetterFlow and Program source-only typed actual int-argument classification implemented; 3 synthetic provenance controls",
-    "authentic_original_CI": "in_progress",
-    "device": "unknown"
+    "original_source_sha256_authenticated": true,
+    "original_dll_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "original_managed_method_bodies_scanned": 19118,
+    "original_exact_settexture_arg_uses": 4,
+    "original_direct_ldc_i4_index_operand_sources": 4,
+    "unknown_or_other_index_source_kinds": 0,
+    "artifact_id": 13417228996,
+    "artifact_zip_sha256": "2c9ff99f340c7364044bc5f8cfdcf2875fd1aa86c4b71da4a10c897efe0d0fe9",
+    "CI": "42035529042 SUCCESS",
+    "actual_original_int_values_disclosed": false,
+    "original_indices_unique_or_in_bounds_proven": false,
+    "device": "not tested"
   }
 }
