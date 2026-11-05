@@ -1,0 +1,7 @@
+# T1 | 20261105T111600Z-T1-private-fft-gpu-dispatch
+
+T1 identity retained. Live HEAD baseline `72a16de3f7350a743bd0a0e10c915bedcaeab0f8`. Latest actual game remains Raft APK86; running Actions none, branch has concurrent T2/T3 commits, no active Jobs. Source owner `zip2` pinned `15964ea8f246b6e076ce26b60931ee2e1a9a2385`. Preserve inherited B18 source register t0/t1/u0, B01 original two-pass source/C# alias evidence, B48 pair candidate selectors and true original-derived Unity import 20/20 [CI42014120625](https://github.com/alwansan/raf/actions/runs/42014120625). Original author kernel mapping still unknown. Original compiled shader bytes/private generated HLSL not public.
+
+New test hypothesis beyond import: bind *translated* private HLSL image names from exact t0/t1/u0 register declarations, then run actual Unity Editor GPU Dispatch on a small original-derived compiled pair, inspect finite buffer/writes using bounded results. This is a genuine computed-output gate; does NOT validate original Raft Unity kernel index/keyword selection, original C# resources, Android/Adreno or pixel parity. Keep private name and log disclosure guarded. Reuse existing supported GameCI CLI v0.1.72 SHA verified and shared noncanceling editor concurrency group; no native build request, proprietary artifacts, release, asset replacement, audio/Settings/touch changes.
+
+Plan recorded before implementation; unique work scope, separate files from concurrently running T1 evidence classifier sessions; no shared T1 state overwritten. WATER-001 OPEN; NOT_READY 0/3.
