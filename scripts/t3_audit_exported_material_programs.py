@@ -14,6 +14,7 @@ from __future__ import annotations
 import argparse
 from collections import Counter
 import json
+import re
 from pathlib import Path
 
 from scripts.b49_shaderlab_pass_contract import pass_coverage
@@ -100,7 +101,7 @@ def _material_refs(entries:list[Path]):
             stop=headers[i+1].start() if i+1<len(headers) else len(txt)
             body=txt[header.end():stop]
             fields=SHADER.findall(body)
-            if len(fields)!=1 or body.count("  m_Shader:")!=1:
+            if len(fields)!=1 or len(re.findall(r"(?m)^  m_Shader:",body))!=1:
                 raise ValueError("missing_or_ambiguous_exported_material_Shader")
             file_id,guid,kind=pptr(fields[0])
             if file_id<0:raise ValueError("negative_material_Shader_file_id")
