@@ -1,0 +1,33 @@
+{
+  "id": "20261105T1652Z-T4-original-RGD-init-context-32pass",
+  "owner": "T4",
+  "origin": "chat",
+  "session_id": "20261105T1645Z-T4-chat-original-rgd-init-context-q6m2",
+  "issue_id": "LOCAL-005",
+  "type": "authentic_original_compiled_RGD_initializer_classification",
+  "status": "SOURCE_VERIFIED_ONLY",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42068520588",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_RGD_INIT_CONTEXT_2026-11-05.md"
+  ],
+  "results": {
+    "exact_original_sha_verified": true,
+    "tests": "32/32",
+    "world_producer_owner_scope": "SAVEANDLOAD",
+    "world_producer_arity": "ZERO",
+    "world_producer_invocation_kind": "INSTANCE_CALL",
+    "world_producer_original_method_body_found": true,
+    "user_field_store_sites_saveuser": 1,
+    "user_field_store_sites_other_saveandload": 2,
+    "user_field_store_sites_constructor": 0,
+    "user_field_store_sites_outside_saveandload": 0,
+    "user_store_immediate_derived_typed": 2,
+    "user_store_immediate_unknown": 1,
+    "user_store_immediate_null_literal": 0,
+    "original_method_invoked": false,
+    "gameplay_rgd_durability_proven": false,
+    "Android_Unity_IL2CPP_device_proven": false
+  },
+  "notes": "Static original compiled IL only; 0 immediate null literals does not prove non-null in live world, no path-sensitive SSA. Native T5 run42058825739 at Unity Editor import still running; not cancelled.",
+  "created_at": "2026-11-05T16:52:00Z"
+}
