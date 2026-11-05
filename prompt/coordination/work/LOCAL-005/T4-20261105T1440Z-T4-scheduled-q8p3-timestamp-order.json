@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "origin": "scheduled",
+  "session_id": "20261105T1440Z-T4-scheduled-q8p3",
+  "issue_id": "LOCAL-005",
+  "track": "device-jsonl-evidence-integrity",
+  "status": "active",
+  "base_sha": "39436ed0eac0378b95fe38683ee4648fed687057",
+  "experiment_key": "t4-jsonl-utc-sequence-monotonic-negative-control-v1",
+  "resource_key": null,
+  "hypothesis": "Within a logger session, sequence order should not be allowed to invert UTC ordering and silently support a cross-session save/load hint.",
+  "approach": "Add source-free negative controls and fail-closed timestamp inversion anomaly; avoid modifying active original seed Save experiment or Unity.",
+  "intended_files": [
+    "scripts/t4_verify_device_world_save_log.py",
+    "tests/test_t4_verify_device_world_save_log.py",
+    "prompt/coordination/work/LOCAL-005/T4-20261105T1440Z-T4-scheduled-q8p3-timestamp-order.json",
+    "prompt/coordination/clients/T4/sessions/20261105T1440Z-T4-scheduled-q8p3.md"
+  ],
+  "taken_over_from": [
+    "20261105T1408Z-T4-chat-jsonl-evidence-n4r7",
+    "20261105T1338Z-T4-scheduled-v6n9"
+  ],
+  "updated_at": "2026-11-05T14:40:00Z"
+}
