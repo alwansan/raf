@@ -6,7 +6,7 @@
   "origin": "scheduled",
   "issue_id": "RENDER-002",
   "track": "device-graphics-log-correlation",
-  "status": "active",
+  "status": "completed",
   "base_sha": "df6c913c249c09d4aa7cf58dee6723160e99ddba",
   "intended_files": [
     "prompt/coordination/work/RENDER-002/20261105T213100Z-T3-scheduled-clstage-8b4f.json",
@@ -20,6 +20,19 @@
   ],
   "taken_over_from": [],
   "run_urls": [],
-  "updated_at": "2026-11-05T21:31:00Z",
-  "next_step": "Inspect exact CL log files and classify diagnostic specificity; preserve unknown if logs too large."
+  "updated_at": "2026-11-05T21:34:00Z",
+  "next_step": "Trace square-smoke screenshot emitter through original prefab/material and actual exported shader; coordinate with chat T3 particle state work.",
+  "result": {
+    "actual_CL_sessions": 2,
+    "water_error_onset_before_first_world_loaded_ms": [
+      58038,
+      119653
+    ],
+    "fft_error_onset_before_first_world_loaded_ms": [
+      58036,
+      119651
+    ],
+    "source": "CL immutable 520c4cf; final session-summary.json",
+    "conclusion": "Reject water/FFT error onset exclusively after first observed world-loaded message; no screenshot-to-material causal proof."
+  }
 }
