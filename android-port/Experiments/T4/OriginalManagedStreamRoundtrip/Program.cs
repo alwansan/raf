@@ -58,6 +58,28 @@ internal static class Program
         return method;
     }
 
+    private static string ErrorCategory(Exception problem)
+    {
+        var root = problem is TargetInvocationException tie && tie.InnerException is not null
+            ? tie.InnerException : problem;
+        return root switch
+        {
+            FileNotFoundException => "DEPENDENCY_OR_FILE_MISSING",
+            DirectoryNotFoundException => "DIRECTORY_MISSING",
+            FileLoadException => "DEPENDENCY_LOAD_FAILURE",
+            TypeLoadException => "DEPENDENCY_TYPE_UNAVAILABLE",
+            ReflectionTypeLoadException => "REFLECTION_TYPE_LOAD_FAILURE",
+            MissingMethodException => "METHOD_UNAVAILABLE",
+            BadImageFormatException => "UNSUPPORTED_ORIGINAL_BINARY_RUNTIME",
+            NotSupportedException => "UNSUPPORTED_RUNTIME",
+            PlatformNotSupportedException => "UNSUPPORTED_PLATFORM",
+            UnauthorizedAccessException => "ACCESS_DENIED",
+            IOException => "IO_FAILURE",
+            ArgumentException => "ARGUMENT_MISMATCH",
+            _ => "OTHER_RUNTIME_FAILURE"
+        };
+    }
+
     private static int Main(string[] args)
     {
         if (args.Length != 4 || args[0] != "--assembly" || args[2] != "--output")
@@ -172,12 +194,13 @@ internal static class Program
             Console.WriteLine("T4_ORIGINAL_STREAM_ROUNDTRIP " + JsonSerializer.Serialize(result));
             return 0;
         }
-        catch (Exception)
+        catch (Exception error)
         {
             // A failed private original invocation cannot be presented as
             // proof of incompatibility; do not expose raw stack/symbols/paths.
             Console.WriteLine("T4_ORIGINAL_STREAM_ROUNDTRIP status=INCONCLUSIVE phase=" +
-                phase + " original_game_data_published=false");
+                phase + " category=" + ErrorCategory(error) +
+                " original_game_data_published=false");
             return 2;
         }
         finally
