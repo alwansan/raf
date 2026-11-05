@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "id": "T5-20261105T0149Z-absent-target-rollback",
+  "owner": "T5",
+  "issue": "ASSET-RESTORE-001",
+  "session_id": "20261105T0149Z-T5-rollback-absent-target",
+  "status": "IN_PROGRESS",
+  "baseline_sha": "46adaa1d7f7cbc2b8a104630a307aa36819600cf",
+  "taken_over_from": [
+    "prompt/coordination/clients/T5/MEMORY.md",
+    "https://github.com/alwansan/raf/commit/46adaa1d7f7cbc2b8a104630a307aa36819600cf"
+  ],
+  "last_verified_result": "CI41943856117 successful but predates latest injected rename regression",
+  "approach": "Synthetic negative test of absent first destination and second os.replace failure; no production change unless observed failure",
+  "files": [
+    "tests/test_t5_stage_zip2_render_owners.py"
+  ],
+  "next_step": "Run isolated T5 CI and record result; then Unity integration coordination"
+}
