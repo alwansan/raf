@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T1404Z-T5-chat-native-diagnostic-3c8e",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "track": "one diagnostic native APK OBB XAPK request",
+  "status": "active",
+  "base_sha": "5eed7b6715a25177e733d17f383bb8735368bdbf",
+  "intended_files": [
+    ".github/raft-native-build-request.json",
+    "prompt/coordination/work/INTEGRATION-001/T5-20261105T1404Z-T5-chat-native-diagnostic-3c8e-native-diagnostic.json",
+    "prompt/coordination/experiments/T5/T5-20261105T1404Z-T5-chat-native-diagnostic-3c8e-native-diagnostic.json",
+    "prompt/coordination/clients/T5/sessions/20261105T1404Z-T5-chat-native-diagnostic-3c8e.md"
+  ],
+  "experiment_key": "native-current-feature-original-water-explicit-limit-T4-AndroidSave-snapshot-20261105-v1",
+  "resource_key": "raft-native-engine-feature/android-native-port",
+  "hypothesis": "A single explicitly acknowledged incomplete-water native Unity ARM64 build on current source may produce a new signed APK+OBB/XAPK for device diagnosis of offline world and visuals, or an exact gate failure.",
+  "approach": "Read HEAD, running Actions, old real APK86 release, existing native workflow and strict water limitation contract. Commit only .github/raft-native-build-request.json with [raft-native-build] [raft-device-test] to trigger one controlled release run. Keep exactly documented existing water unmet conditions, no fake flags, no weakening checks, no asset changes, no Unity job cancellation. Current CI may take up to 240 min; run remains waiting_ci if not completed.",
+  "related_work": [
+    "https://github.com/alwansan/raf/actions/runs/41812889049",
+    "https://github.com/alwansan/raf/actions/runs/42014120625",
+    "https://github.com/alwansan/raf/actions/runs/42027197515"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/T5/sessions/20261105T1348Z-T5-scheduled-7c91.md",
+    "prompt/coordination/clients/T5/sessions/20261105T1302Z-T5-chat-delivery-e2e-f72c.md",
+    "prompt/coordination/clients/T4/sessions/20261105T1217Z-T4-android-save-postcheck.md"
+  ],
+  "last_verified_result": "Latest published Raft APK86 (run 41812889049) Nov 4 source d181ee7152580f49ee0b41dfd05fa2bfdacfafe5, newer Save file diagnostics untested on phone; no active Actions at initial check.",
+  "experiment_ids": [
+    "T5-20261105T1404Z-T5-chat-native-diagnostic-3c8e-native"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Trigger exact one native delivery request, record URL and first gate, do not claim device success.",
+  "updated_at": "2026-11-05T14:04:00Z"
+}
