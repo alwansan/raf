@@ -368,7 +368,8 @@
         "https://github.com/alwansan/raf/actions/runs/42042819113",
         "https://github.com/alwansan/raf/actions/runs/42044249541",
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_SCENE_SHADER_USE_AND_POSTVENDOR_PRIORITY_2026-11-05.md",
-        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-original-scene-renderer-shader-postvendor-use.json"
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-original-scene-renderer-shader-postvendor-use.json",
+        "https://github.com/alwansan/raf/actions/runs/42046329453"
       ],
       "remaining": [
         "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -409,7 +410,8 @@
         "T3 authentic source+same-export CI41941363661 SUCCESS: 41 SHA-pinned original Material valid/invalid keyword lists and disabledShaderPasses equal 41 actual export documents; excludes keyword/pass serialization loss in this limited subset, NOT Shader GUID/compiled variant/Adreno or 25 external textures. No game asset edit; RENDER-002 remains OPEN.",
         "T3 immutable ZIP2 original+real AssetRipper same-export CI41942377246: 25/25 external Texture2D references (22 sharedassets0, 3 sharedassets1) typed and GUID/fileID/type retained, zero missing/wrong/null; combined with prior 89 exact internal = 114 bound Texture slot occurrences preserved in the 41 selected original Materials. This rejects selected export pointer loss only; not importer samplers/sRGB/Shader/GPU/device. New scoped B15 sampler trial CI41943122343 INCONCLUSIVE on ValueError before evidence; classified retry launched.",
         "T3 CI42026630845: authentic bounded 12-owner PRE-restorer AssetRipper export has 731 Material docs (511 custom, 220 Unity builtin), all 511 custom docs point to 54 dummy Shader GUIDs and all 126 ShaderLab files carry default-Dummy marker; new native post-restorer quality audit integrated but not executed. Actual Android visual state and authored ShaderLab restoration remain UNKNOWN; RENDER-002 OPEN.",
-        "T3 genuine same-instance ZIP2 6-scene source Renderer->Material->21 typed Shader48 use map: 1633 source material slots, 1373 still target DummyShaderTextExporter after bounded TMP/PostFX/Volumetric vendor restore, 256 Unity builtin, 4 non-Dummy, 2 Shader pointers outside selected typed owner; highest-use 921-slot original source Shader remains Dummy at this bounded stage. No full native post-restorer/Adreno evidence; prioritize authentic program reconstruction but check native builtins stage before claiming 921 device issue."
+        "T3 genuine same-instance ZIP2 6-scene source Renderer->Material->21 typed Shader48 use map: 1633 source material slots, 1373 still target DummyShaderTextExporter after bounded TMP/PostFX/Volumetric vendor restore, 256 Unity builtin, 4 non-Dummy, 2 Shader pointers outside selected typed owner; highest-use 921-slot original source Shader remains Dummy at this bounded stage. No full native post-restorer/Adreno evidence; prioritize authentic program reconstruction but check native builtins stage before claiming 921 device issue.",
+        "T3 source SHA-pinned 6-scene top-921 Renderer-use Shader48 has NO exact match among 198 official Unity2021.3.45f2 SHA-pinned runtime builtin shaders (CI42046329453). Exactly 3 other typed source shaders cover 256 original renderer slots and match builtin-name library (independently corroborates W1 exporter 3 builtins/256 slots). Top 921 still Dummy after TMP/PostFX/Volumetric in bounded export; must target original compiled stage/pass/variants, not archived builtin name substitution. Full native/Adreno pixels unknown; RENDER-002 OPEN."
       ],
       "acceptance": [
         "مطابقة روابط ومراجع الأصل",
@@ -417,7 +419,7 @@
         "نجاحعلىالهاتف"
       ],
       "updated_by": "T3",
-      "updated_at": "2026-11-05T14:25:00Z",
+      "updated_at": "2026-11-05T14:36:00Z",
       "_record_path": "../B_TEAM/issues/RENDER-002.json"
     },
     {
@@ -1921,12 +1923,13 @@
         "asset_ripper_commit": "036098ab525a3f9f693dc101edeb21faad4d32d8",
         "scenes_sha_verified": 6,
         "original_shader_material_owners_sha_verified": 4,
-        "original_same_export_provider_sources_sha_verified": 12
+        "original_same_export_provider_sources_sha_verified": 12,
+        "unity_2021_runtime_builtin_archive_sha256": "5cb0f9c4d022d6054d179778b9b50a0301d6748eaf4abdedd21c93f0c30b10c5"
       },
       "stages": {
         "acquisition": "SHA_PINNED_REAL_6_SCENES_AND_4_MATERIAL_SHADER_OWNERS_CI42042819113_PLUS_12_SAMEEXPORT_ORIGINALS_CI42044249541",
         "extraction": "VERIFIED_1495_ORIGINAL_RENDERERS_1639_SLOTS_1635_NON_NULL_120_MATERIAL_OBJECTS_21_TYPED_Shader48_1633_SLOTS",
-        "reconstruction": "TMP3_POSTFXV1_VOLUMETRIC_VENDOR_ONLY_REAL_EXPORT_STILL_17_OF_21_TYPED_SOURCE_SCENE_SHADERS_DUMMY_NO_NATIVE_BUILTIN_DEPTH_BLUR",
+        "reconstruction": "AUTHENTIC_TMP_POSTFX_VOLUMETRIC_17_SOURCE_SHADER48_STILL_DUMMY; PINNED_2021_BUILTIN_SHADER_ARCHIVE_198_NAMES_VERIFIED_TOP_921_SOURCE_SHADER_NO_NAME_MATCH",
         "binding": "VERIFIED_ORIGINAL_SOURCE_Shader48_POINTER_TO_W1_SAMEINSTANCE_ACTUAL_SHADER_GUID_TO_POSTVENDOR_SHADERLAB_21_OF_21; 1373_ORIGINAL_SCENE_SLOTS_DUMMY_256_ENGINE_4_NONDUMMY_2_UNKNOWN_UNSTAGED",
         "integration": "ISOLATED_ACTUAL_SHA_PINNED_GITHUB_ACTIONS_CI42042819113_AND_42044249541_SUCCESS_NO_GAME_ASSET_EDITS_NO_FULL_NATIVE_BUILD",
         "device": "NOT_TESTED"
@@ -1948,21 +1951,28 @@
         "source_top_shader_material_slot_uses": 921,
         "source_top_shader_after_vendor": "STILL_DUMMY_AFTER_VENDOR_RESTORERS",
         "bounded_export_material_documents": 731,
-        "bounded_export_custom_material_docs_still_dummy_after_vendor": 495
+        "bounded_export_custom_material_docs_still_dummy_after_vendor": 495,
+        "highest_921_source_Shader48_exact_Unity2021_builtin_archive_match": false,
+        "exact_Unity2021_builtin_name_matching_original_source_Shader48": 3,
+        "exact_Unity2021_builtin_name_matching_original_renderer_slots": 256,
+        "original_source_Shader48_without_Unity2021_builtin_name_match": 18,
+        "original_source_Shader48_slots_without_Unity2021_builtin_name_match": 1377
       },
       "evidence": [
         "https://github.com/alwansan/raf/actions/runs/42042819113",
         "https://github.com/alwansan/raf/actions/runs/42044249541",
-        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_SCENE_SHADER_USE_AND_POSTVENDOR_PRIORITY_2026-11-05.md"
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_SCENE_SHADER_USE_AND_POSTVENDOR_PRIORITY_2026-11-05.md",
+        "https://github.com/alwansan/raf/actions/runs/42046329453"
       ],
       "remaining": [
         "Program authenticity and actual full native post-restorer output unproven; this limited experiment excludes Unity builtins/Depth/Blur/FFT/ShaderCompiler",
         "Source Renderer assignment to exported Renderer component and GPU draws/pixels not verified; white-on-phone count cannot be inferred",
         "True source high-use 921-slot shader remains default Dummy after three vendor restorers only; reconstruction needs exact source compiled program/variants",
-        "Two original Shader pointers target unstaged globalgamemanagers.assets; not claimed typed Shader48"
+        "Two original Shader pointers target unstaged globalgamemanagers.assets; not claimed typed Shader48",
+        "Top 921 original scene-use Shader48 name does NOT exist in SHA-authenticated Unity 2021.3.45f2 runtime builtin archive: exact-name builtin restoration alone cannot recover it, original compiled game stages/variants still needed."
       ],
       "updated_by": "T3",
-      "updated_at": "2026-11-05T14:25:00Z",
+      "updated_at": "2026-11-05T14:36:00Z",
       "_record_path": "../B_TEAM/resources/T3-original-scene-renderer-shader-postvendor-use.json"
     },
     {
@@ -5059,6 +5069,21 @@
       "_record_path": "../B_TEAM/events/T1/20261105T140815Z-T1-chat-592ae2.json"
     },
     {
+      "id": "20261105T143200Z-T1-chat-04494d",
+      "owner": "T1",
+      "session_id": "20261105T143200Z-T1-chat-04494d",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "summary": "12/12 synthetic tests passed locally and in CI42046084741 (four spatial, five scheduled channel diagnostic, three parity). No actual FFT captures were used, so real spatial fault remains untested. Base Unity Vulkan smoke CI42042230791 failed with other_backend; separate Mesa Vulkan runner CI42046073285 was in progress at last check.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42046084741",
+        "https://github.com/alwansan/raf/actions/runs/42042230791",
+        "https://github.com/alwansan/raf/actions/runs/42046073285"
+      ],
+      "at": "2026-11-05T14:33:26.900Z",
+      "_record_path": "../B_TEAM/events/T1/20261105T143200Z-T1-chat-04494d.json"
+    },
+    {
       "id": "T2-20261104T2354Z-start-foamabi",
       "owner": "T2",
       "session_id": "20261104T2354Z-T2-foamabi01",
@@ -5453,6 +5478,25 @@
       "_record_path": "../B_TEAM/events/T3/20261105T1425Z-renderer-source-postvendor-join.json"
     },
     {
+      "id": "T3-20261105T1436Z-highuse-Sh48-not-Unity-builtin",
+      "type": "result",
+      "owner": "T3",
+      "origin": "chat",
+      "session_id": "20261105T1402Z-T3-chat-renderer-shader-impact-f63e",
+      "issue_id": "RENDER-002",
+      "summary": "CI42046329453 authentic six-scene original 21 source Shader48 names compared privately against SHA-pinned official Unity2021.3.45f2 builtin archive 198 shader identities. Exactly 3 original Shader names match builtin library covering 256 original Renderer Material slots and independently agree with exact same-instance export builtin pointer transport. Highest original 921-slot source Shader48 has NO exact builtin match, still Dummy after three vendor restorers; prioritization toward authentic original compiled shader subprogram/pass recovery, not white-pixel/device claim.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42046329453",
+        "https://github.com/alwansan/raf/actions/runs/42044249541",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_SCENE_SHADER_USE_AND_POSTVENDOR_PRIORITY_2026-11-05.md"
+      ],
+      "at": "2026-11-05T14:36:00Z",
+      "device_confirmed": false,
+      "original_source_names_disclosed": false,
+      "issue_stays_open": true,
+      "_record_path": "../B_TEAM/events/T3/20261105T1436Z-highuse-Sh48-not-Unity-builtin.json"
+    },
+    {
       "id": "T4-20261104T2357Z-local-load-start",
       "owner": "T4",
       "session_id": "20261104T2357Z-T4-lw01",
@@ -5832,6 +5876,22 @@
       "_record_path": "../B_TEAM/events/T5/20261105T1418Z-crossprocess-profile-window.json"
     },
     {
+      "id": "T5-20261105T1438Z-native-cancel-verdict",
+      "owner": "T5",
+      "session_id": "20261105T1431Z-T5-chat-native-cancel-d41e",
+      "origin": "chat",
+      "issue_id": "INTEGRATION-001",
+      "type": "result",
+      "summary": "Immutable native run42042902522 at source753802d was CANCELLED in original Mesh restoration, following successful request/license gates; delivery-result failure only reflected NATIVE_RESULT=cancelled. No asset failure/Unity/IL2CPP/APK/OBB/XAPK/Release proven. Filtered official metadata plus adversarial classifications passed 16/16 CI42046665995; no cancellation initiator identified. A native retry was not dispatched.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42042902522",
+        "https://github.com/alwansan/raf/actions/runs/42046665995",
+        "https://github.com/alwansan/raf/commit/0186107e2d79622fc934d2430ad94d51e194043e"
+      ],
+      "at": "2026-11-05T14:38:00Z",
+      "_record_path": "../B_TEAM/events/T5/20261105T1438Z-native-cancel-verdict.json"
+    },
+    {
       "id": "20261104-b-generation",
       "owner": "owner-team-bootstrap",
       "session_id": "b-team-setup-20261104",
@@ -5860,7 +5920,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "d75b8ef798880d27be4300f26263af1b190b40679af5f78c639c33b1d604f5f6",
+  "source_input_sha256": "fdb17e6fff56b530c1128d5d4135be61a88b233ee48d7874d29d709285d3a63a",
   "generation": "T-2026-11-05",
-  "input_sha256": "20ba61f4acfbb16f51c0a051300ba6d34c78df66227d42a17df3e149834e2ae2"
+  "input_sha256": "4386c06c8940ca97501eac225512886420b10256f14f0867c67b2794269f46bb"
 }
