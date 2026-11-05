@@ -51,3 +51,15 @@ class LoadInventoryTests(unittest.TestCase):
         """)
         self.assertEqual(result["source"]["argument_reference"], 1)
         self.assertEqual(result["source"]["dimension_helper_arguments"], 0)
+
+    def test_scalar_typed_dimension_helper(self):
+        result = inventory(DECL.replace("Texture2D<float4> src", "Texture2D<float> src") + """
+        uint2 helper(Texture2D<float> tex, uint mip, out uint levels)
+        {
+            uint2 dims;
+            tex.GetDimensions(mip, dims.x, dims.y, levels);
+            return dims;
+        }
+        void main() { uint levels; helper(src, 0, levels); }
+        """)
+        self.assertEqual(result["source"]["dimension_helper_arguments"], 1)

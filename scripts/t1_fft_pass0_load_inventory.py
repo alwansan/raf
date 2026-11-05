@@ -8,10 +8,10 @@ from scripts.t1_fft_unity_gpu_resource_bridge import IMAGE, translated_image_sym
 
 
 
-# Only recognize flat, typed helpers whose first Texture2D<float4> argument
+# Only recognize flat, typed helpers whose first scalar/vector Texture2D argument
 # is used exclusively in GetDimensions. Unknown shapes stay unresolved.
 HELPER = re.compile(
-    r"(?m)^\s*\w+\s+(\w+)\s*\(\s*Texture2D\s*<\s*float4\s*>\s+"
+    r"(?m)^\s*\w+\s+(\w+)\s*\(\s*Texture2D\s*<\s*(?:float|int|uint)[234]?\s*>\s+"
     r"(\w+)\s*(?:,[^(){}]*)?\)\s*\{([^{}]*)\}"
 )
 
