@@ -269,8 +269,8 @@ class ZIP2RenderStageTests(unittest.TestCase):
         later.parent.mkdir(parents=True, exist_ok=True)
         self.assertFalse(first.exists())
         later_pointer = (
-            "version https://git-lfs.github.com/spec/v1\\n"
-            f"oid sha256:{self.digest}\\nsize {len(self.original)}\\n"
+            "version https://git-lfs.github.com/spec/v1\n"
+            f"oid sha256:{self.digest}\nsize {len(self.original)}\n"
         ).encode("ascii")
         later.write_bytes(later_pointer)
         real_replace = hyd.os.replace
