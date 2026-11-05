@@ -1,0 +1,24 @@
+{
+  "owner": "T5",
+  "session_id": "20261105T1611Z-T5-chat-native-provenance-5d7b",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "status": "active",
+  "base_sha": "5c45d20d1112e18ca6a544bbcdaed7f1960db18a",
+  "resumed_from_sessions": [
+    "20261105T1543Z-T5-chat-water-live-ack-f2c9",
+    "20261105T1549Z-T5-scheduled-a8d3"
+  ],
+  "intended_files": [
+    "prompt/coordination/work/INTEGRATION-001/T5-20261105T1611Z-T5-chat-native-provenance-5d7b-native-provenance.json",
+    "prompt/coordination/clients/T5/sessions/20261105T1611Z-T5-chat-native-provenance-5d7b.md"
+  ],
+  "experiment_key": "t5-immutable-native42058825739-source-drift-stage-provenance-v1",
+  "resource_key": "github-metadata-read-only-no-native-dispatch",
+  "hypothesis": "Confirm genuine source gates that passed and remaining Unity packaging status of immutable run, independently classify new branch diagnostics without misattributing them to frozen Android candidate.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42058825739"
+  ],
+  "next_step": "Audit source diff and exact stage/job results; save session and experiment; no native retry while run active.",
+  "updated_at": "2026-11-05T16:11:00Z"
+}
