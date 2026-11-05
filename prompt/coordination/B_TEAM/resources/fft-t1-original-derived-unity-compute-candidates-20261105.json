@@ -14,18 +14,22 @@
     "extraction": "20_COMPILED_SLOTS_SHA_VERIFIED",
     "reconstruction": "PRIVATE_20_HLSL50_COMPUTE_CANDIDATES_ROUNDTRIP_VERIFIED",
     "binding": "ORIGINAL_RUNTIME_MAPPING_UNKNOWN",
-    "integration": "PRIVATE_UNITY_IMPORT_RUNNING",
+    "integration": "BLOCKED_UNITY_ACTIVATION_NO_IMPORT_RESULT",
     "device": "NOT_TESTED"
   },
   "evidence": [
     "https://github.com/alwansan/raf/actions/runs/41957549770",
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_FFT_ORIGINAL_DERIVED_UNITY_CANDIDATES_2026-11-05.md",
-    "https://github.com/alwansan/raf/actions/runs/41737548860"
+    "https://github.com/alwansan/raf/actions/runs/41737548860",
+    "https://github.com/alwansan/raf/actions/runs/41958245907",
+    "https://github.com/alwansan/raf/actions/runs/41958511122",
+    "https://github.com/alwansan/raf/actions/runs/41958963107"
   ],
   "remaining": [
     "Original authored multi-variant .compute kernel and keyword names not recovered; candidate paths and main are generated import handles",
-    "Actual Unity Editor import and compute support under test in CI41958245907",
-    "Original runtime FindKernel/Dispatch mapping, phone Adreno pixels, actual water still unknown"
+    "Original runtime FindKernel/Dispatch mapping, phone Adreno pixels, actual water still unknown",
+    "No Unity imported ComputeShader result: three Editor CI attempts failed before reporting; last 41958963107 Unity exit1/licensing_failure_category=true, no observed C#/shader error",
+    "Need successful authorized Unity 2021 activation on a synthetic project before repeating private source import"
   ],
   "updated_by": "T1"
 }
