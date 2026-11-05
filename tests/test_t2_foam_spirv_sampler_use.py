@@ -5,19 +5,19 @@ from scripts.t2_foam_spirv_sampler_use import trace_sampled_pairs
 
 
 def module(body="", image_binding=6, sampler_binding=1):
-    return """
+    return f"""
 ; private SPIR-V test (not game source)
 OpDecorate %tex DescriptorSet 0
-OpDecorate %tex Binding %d
-OpDecorate %%sampler DescriptorSet 0
-OpDecorate %%sampler Binding %d
-%%tex = OpVariable %%ptrimg UniformConstant
-%%sampler = OpVariable %%ptrsampler UniformConstant
-%%loaded_tex = OpLoad %%img %%tex
-%%loaded_sampler = OpLoad %%samp %%sampler
-%%combined = OpSampledImage %%sampled %%loaded_tex %%loaded_sampler
-%s
-""" % (image_binding, sampler_binding, body)
+OpDecorate %tex Binding {image_binding}
+OpDecorate %sampler DescriptorSet 0
+OpDecorate %sampler Binding {sampler_binding}
+%tex = OpVariable %ptrimg UniformConstant
+%sampler = OpVariable %ptrsampler UniformConstant
+%loaded_tex = OpLoad %img %tex
+%loaded_sampler = OpLoad %samp %sampler
+%combined = OpSampledImage %sampled %loaded_tex %loaded_sampler
+{body}
+"""
 
 
 class UsedSamplerPairsTests(unittest.TestCase):
