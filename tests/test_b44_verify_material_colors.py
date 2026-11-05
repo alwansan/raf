@@ -87,11 +87,11 @@ class MaterialColorsTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             assets=Path(tmp)/'Assets';assets.mkdir()
             path=assets/'material.mat'
-            path.write_text('%YAML 1.1\\n--- !u!21 &2100000\\nMaterial:\\n'
-                            '  m_SavedProperties:\\n'
-                            '    m_Colors:\\n'
-                            '      _Tint: {r: 0.12, g: 0.5, b: 1, a: 1}\\n')
-            (assets/'material.mat.meta').write_text('guid: '+'a'*32+'\\n')
+            path.write_text('%YAML 1.1\n--- !u!21 &2100000\nMaterial:\n'
+                            '  m_SavedProperties:\n'
+                            '    m_Colors:\n'
+                            '      _Tint: {r: 0.12, g: 0.5, b: 1, a: 1}\n')
+            (assets/'material.mat.meta').write_text('guid: '+'a'*32+'\n')
             self.assertEqual(exported_colors(Path(tmp)),
                              {(2100000,'a'*32):{'_Tint':(.12,.5,1.,1.)}})
 
