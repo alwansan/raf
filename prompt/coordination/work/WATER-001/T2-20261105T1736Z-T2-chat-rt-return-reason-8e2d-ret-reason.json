@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261105T1736Z-T2-chat-rt-return-reason-8e2d",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "updated_at": "2026-11-05T17:36:58.599Z",
+  "base_sha": "fb5c198578be00e19e9b093d6150ba0815d46fc9",
+  "resumed_from_sessions": [
+    "20261105T1712Z-T2-chat-return-identity-minimal-4c8f",
+    "20261105T1723Z-T2-scheduled-rtcfg-a72e"
+  ],
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/actions/runs/42073459459"
+  ],
+  "experiment_key": "T2|ZIP2-15964ea8|original-managed-sha0a6f0527|exact-RT-return-unresolved-ret-source-opcode-reason-v1",
+  "resource_key": "T2-foam-actual-return-predecessor-reason-original-Cecil",
+  "hypothesis": "Source-original exact RenderTexture-returning method has one compiled ret classified unresolved. Determine whether ret is a branch/exception entry or an ordinary same-block return with a local, arg, field, call or unsupported producer. No original private identifier or numeric values disclosed.",
+  "method": "Extend existing FoamByrefElementValueOrigin return census with safe fixed enum for unresolved immediate reason, target/exception ownership counts, previous opcode category only where semantically allowed. Synthetic tests ret branch entry, ldloc return, unknown call and safe no-source controls. Re-run original ZIP2 SHA-pinned Mono.Cecil CI, not the scheduled synthetic Python CFG work.",
+  "intended_files": [
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/FoamByrefElementValueOrigin.cs",
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/Program.cs",
+    ".github/workflows/raft-t2-foam-managed-literals.yml",
+    "prompt/coordination/work/WATER-001/T2-20261105T1736Z-T2-chat-rt-return-reason-8e2d-ret-reason.json",
+    "prompt/coordination/clients/T2/sessions/20261105T1736Z-T2-chat-rt-return-reason-8e2d.md"
+  ],
+  "preflight": {
+    "head": "fb5c198578be00e19e9b093d6150ba0815d46fc9",
+    "active_other_work": "T3 raw SPIR-V stage linking; T4 original SaveAndLoad; T1 FFT; T5 native integration",
+    "scheduled_T2_work": "scripts/t2_rt_return_cfg.py and tests/test_t2_rt_return_cfg.py, distinct from T2 own Mono.Cecil files",
+    "prior_source_CI": "42073459459 SUCCESS, 1 ret 3 branch opcodes unresolved"
+  },
+  "next_step": "Create session, commit small own-file source + positive/negative synthetic guards, inspect authentic source CI; if unresolved at branch target, do not claim local value path. WATER-001 OPEN NOT_READY 0/3."
+}
