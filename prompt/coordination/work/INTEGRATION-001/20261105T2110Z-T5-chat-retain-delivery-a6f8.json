@@ -6,7 +6,7 @@
   "origin": "chat",
   "issue_id": "INTEGRATION-001",
   "track": "retained native delivery",
-  "status": "active",
+  "status": "completed",
   "base_sha": "2f065e1524f2723d62e9d4bf142d55767f55258f",
   "intended_files": [
     "scripts/t5_verify_retained_delivery_archive.py",
@@ -32,8 +32,26 @@
   "experiment_ids": [
     "20261105T2110Z-T5-chat-retain-delivery-a6f8"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement source-free archive verifier with adversarial controls; independent source-only rescue workflow pins 42058825739 artifact 13441227298 archive SHA/bytes; if authorized upload succeeds, preserve with short 2-day retention; no Unity rerun.",
-  "updated_at": "2026-11-05T21:07:43.391Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42110297871"
+  ],
+  "result": {
+    "conclusion": "success",
+    "run_id": 42110297871,
+    "job_id": 127535758223,
+    "original_source": "e9c358eda01785b65e4eb14f18723da426635628",
+    "original_artifact_id": 13441227298,
+    "original_archive_bytes": 5948243524,
+    "original_archive_sha256": "29d967c5f1868a10aa0f8f3b9f0306e828c1d32ef3cda2909f7482b5d111eef6",
+    "real_parts_verified": 7,
+    "real_logical_whole_APK_OBB_XAPK_verified": 3,
+    "sourcefree_tests": "18/18 success",
+    "retained_artifact_id": 13454900880,
+    "retained_artifact_expires_at": "2026-11-08T21:12:40Z",
+    "release_published": false,
+    "device_retest": false,
+    "unity_obb_guid_verified": false
+  },
+  "next_step": "Use new artifact13454900880 to check actual aapt/package and OBB internal GUID after unpack/reassembly; debug Release POST403 with authorized maintainer, do not duplicate Unity/native run.",
+  "updated_at": "2026-11-05T21:16:08.968Z"
 }
