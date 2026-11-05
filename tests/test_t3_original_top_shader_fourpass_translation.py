@@ -218,8 +218,12 @@ class FourPassTranslation(unittest.TestCase):
         self.assertTrue(out["source_to_roundtrip_io_drift_all_eight_stages_classified"])
         self.assertEqual(c["io_drift_stage_reflection_pairs_classified"], 8)
         self.assertEqual(c["stage_original_roundtrip_io_location_types_equal"], 0)
-        self.assertEqual(c["io_drift_inputs_added_locations"], 4)
-        self.assertEqual(c["io_drift_outputs_added_locations"], 4)
+        # A relocated field contributes one removed AND one added location.
+        # Each of four passes changes one Vertex and one Fragment side.
+        self.assertEqual(c["io_drift_inputs_added_locations"], 8)
+        self.assertEqual(c["io_drift_outputs_added_locations"], 8)
+        self.assertEqual(c["io_drift_inputs_removed_locations"], 4)
+        self.assertEqual(c["io_drift_outputs_removed_locations"], 4)
         self.assertEqual(c["io_drift_inputs_location_only_remap_candidate"], 4)
         self.assertEqual(c["io_drift_outputs_location_only_remap_candidate"], 4)
         self.assertEqual(c["io_drift_inputs_same_location_type_changes"], 0)
