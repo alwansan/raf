@@ -1,0 +1,119 @@
+name: T2 WATER-001 source-authentic Foam DXBC-to-SPIR-V descriptor variable identity
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t2_foam_explicit_descriptor_map.c
+      - scripts/t2_foam_explicit_descriptor_identity.py
+      - tests/test_t2_foam_explicit_descriptor_identity.py
+      - .github/workflows/raft-t2-foam-explicit-descriptor-identity.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t2-foam-explicit-register-map-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  original-authenticated-dxbc-spv-register-provenance:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      DEBIAN_FRONTEND: noninteractive
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Source-free adversarial typed SPIR-V variable and compiler interface controls
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t2_foam_explicit_descriptor_identity.py
+          python3 -m unittest discover -s tests -p 'test_t2_foam_explicit_descriptor_identity.py' -v
+      - name: CI runner budget guard
+        run: |
+          python3 - <<'PY'
+          import shutil
+          assert shutil.disk_usage('.').free > 3*1024**3
+          PY
+      - name: Install public pinned original conversion and vkd3d-shader C interface toolchain
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends libvkd3d-dev pkg-config build-essential vkd3d-compiler spirv-tools spirv-cross glslang-tools
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+          test -f /usr/include/vkd3d/vkd3d_shader.h
+          cc -std=c11 -O2 -Wall -Wextra -Werror -I/usr/include/vkd3d \
+            scripts/t2_foam_explicit_descriptor_map.c \
+            -lvkd3d-shader -o "$RUNNER_TEMP/t2-foam-explicit-map"
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: t2-foam-explicit-zip2
+          lfs: false
+          persist-credentials: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/sharedassets0.assets/*
+      - name: Stage only immutable original 115978112-byte ZIP2 Shader owner
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os,subprocess
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import ZIP2_SHA,PINS,stage
+          src=Path('t2-foam-explicit-zip2')
+          assert subprocess.check_output(['git','-C',str(src),'rev-parse','HEAD'],text=True).strip()==ZIP2_SHA
+          output=Path(os.environ['RUNNER_TEMP'])/'t2-foam-explicit-source'
+          result=stage(src,output,{'Raft_Data/sharedassets0.assets':PINS['Raft_Data/sharedassets0.assets']})
+          assert result['verified_bytes']==115978112 and result['lfs_used'] is False
+          print('T2_EXPLICIT_SOURCE authentic_sha=true bytes=115978112 lfs=false')
+          PY
+      - name: Build genuine B20 original 4-stage Foam packet privately with exact SHA pins
+        run: |
+          set -euo pipefail
+          timeout 600s python3 -m scripts.b20_private_foam_packet \
+            --source "$RUNNER_TEMP/t2-foam-explicit-source" \
+            --repo "$GITHUB_WORKSPACE" \
+            --private "$RUNNER_TEMP/t2-foam-explicit-private" \
+            --out "$RUNNER_TEMP/t2-foam-explicit-manifest.json"
+      - name: Verify explicit native DXBC tN and sN to original SPIR-V descriptor IDs
+        run: |
+          set -euo pipefail
+          timeout 180s python3 -m scripts.t2_foam_explicit_descriptor_identity \
+            --packet "$RUNNER_TEMP/t2-foam-explicit-private" \
+            --manifest "$RUNNER_TEMP/t2-foam-explicit-manifest.json" \
+            --compiler "$RUNNER_TEMP/t2-foam-explicit-map" \
+            --out "$RUNNER_TEMP/t2-foam-explicit-safe.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          r=json.loads((Path(os.environ['RUNNER_TEMP'])/'t2-foam-explicit-safe.json').read_text())
+          assert r['status']=='original_foam_explicit_native_to_spirv_binding_identity_verified'
+          assert r['source_authentic_original_stages']==4
+          assert r['original_fragments_explicit_verified']==2 and r['original_t_s_pairs_mapped']==6
+          assert all(s.get('full_original_spirv_graph_equal_after_only_descriptor_literals_mask')
+                     for s in r['stages'] if s['stage_code']==0)
+          assert not r['authored_unity_material_texture_sampler_upload_verified']
+          assert not r['unity_shaderlab_or_adreno_pixels_verified']
+          assert not r['proprietary_program_symbols_binaries_published']
+          PY
+      - name: Erase all private original input, DXBC, HLSL, SPIR-V and compiler outputs
+        if: always()
+        run: |
+          rm -rf -- "$RUNNER_TEMP/t2-foam-explicit-source" \
+            "$RUNNER_TEMP/t2-foam-explicit-private" \
+            "$RUNNER_TEMP/t2-foam-explicit-manifest.json" \
+            "$RUNNER_TEMP/t2-foam-explicit-map" \
+            "$GITHUB_WORKSPACE/t2-foam-explicit-zip2"
+      - name: Publish numeric source-register descriptor link report only
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: t2-foam-explicit-mapping-safe-${{ github.run_id }}
+          path: ${{ runner.temp }}/t2-foam-explicit-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
