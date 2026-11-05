@@ -2,12 +2,12 @@
   "schema_version": 1,
   "username": "T3",
   "generation": "T-2026-11-05",
-  "session_id": "20261104T2354Z-T3-render-harness",
-  "resumed_from_session": null,
+  "session_id": "20261105T0024Z-T3-keyword-real-export",
+  "resumed_from_session": "20261104T2354Z-T3-render-harness",
   "status": "paused",
-  "base_sha": "b56ebc3847f251cee2539e9797471417d32698d2",
-  "last_commit": "603138690c6a3b86e7bec69531ec25f194cc2907",
-  "updated_at": "2026-11-05T00:23:00Z",
+  "base_sha": "80cfbe55f2ef647f8c71089ad6115c8d03d317a4",
+  "last_commit": "6940ccf0161a3ea4a52c083702692de74c0c64be",
+  "updated_at": "2026-11-05T00:28:00Z",
   "tracks": [
     "RENDER-002",
     "ASSET-RESTORE-001"
@@ -15,7 +15,8 @@
   "work_ids": [
     "T3-20261104T2354Z-T3-render-harness-b12-csharp-fixture",
     "T3-20261104T2354Z-T3-render-harness-real-texenv-export",
-    "T3-20261104T2354Z-T3-render-harness-real-material-color-export"
+    "T3-20261104T2354Z-T3-render-harness-real-material-color-export",
+    "T3-20261105T0024Z-T3-keyword-real-export-keyword-authentic-parity"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41933025319",
@@ -25,8 +26,9 @@
     "https://github.com/alwansan/raf/actions/runs/41939065539",
     "https://github.com/alwansan/raf/actions/runs/41939404454",
     "https://github.com/alwansan/raf/actions/runs/41940116028",
-    "https://github.com/alwansan/raf/actions/runs/41940350604"
+    "https://github.com/alwansan/raf/actions/runs/41940350604",
+    "https://github.com/alwansan/raf/actions/runs/41941363661"
   ],
-  "next_step": "Source scope 41 Materials exact Texture 227 slots, UV 227 and RGBA 150 values all preserved in actual same-export. 25 external texture links and Shader/subprogram/keyword/sRGB/pixels remain open. Resume by reading docs/T3_AUTHENTIC_MATERIAL_EXPORT_PARITY_2026-11-05.md, inspect current Actions/HEAD and coordinate shader next rather than repeat parity.",
+  "next_step": "Current real source/export Material keywords and disabled-pass parity CI41941363661 in progress after successful synthetic controls. Read safe artifact/result; if inconclusive fix evidence-stage issue, if match redirect to ShaderLab/subprogram/variant/Adreno pixels and external texture refs; RENDER-002 OPEN, NOT_READY. New session is paused pending scheduled resume; no other jobs cancelled.",
   "memory_path": "prompt/coordination/clients/T3/MEMORY.md"
 }
