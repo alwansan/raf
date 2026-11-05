@@ -1,0 +1,83 @@
+name: T1 WATER-001 authentic FFT sampled-input role sensitivity on CPU Vulkan
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-t1-fft-binding-sensitivity.yml
+      - scripts/t1_fft_binding_sensitivity.py
+      - tests/test_t1_fft_binding_sensitivity.py
+
+permissions:
+  contents: read
+
+concurrency:
+  group: raft-t1-fft-original-binding-sensitivity
+  cancel-in-progress: false
+
+jobs:
+  original-fft-register-sensitivity:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 28
+    env:
+      DEBIAN_FRONTEND: noninteractive
+      GIT_LFS_SKIP_SMUDGE: '1'
+      ZIP2_SHA: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+    steps:
+      - name: Checkout only public probes and synthetic tests
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Run negative controls before any original bytes
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_t1_fft_binding_sensitivity.py -v
+          python3 -m py_compile scripts/t1_fft_binding_sensitivity.py
+      - name: Install bounded original translation and CPU Vulkan dependencies
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends g++ libvulkan-dev mesa-vulkan-drivers spirv-tools vkd3d-compiler
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4 -q
+      - name: Build isolated T1 sampled-input permutation runner
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          from scripts.t1_fft_binding_sensitivity import render_host
+          Path("/tmp/t1-original-fft-host.cpp").write_text(
+              render_host(Path("scripts/a1_fft_two_pass_vulkan.cpp").read_text()))
+          print("RAFT_T1_RUNNER_SOURCE original_a1_modified=false")
+          PY
+          g++ -std=c++17 -O2 -Wall -Wextra /tmp/t1-original-fft-host.cpp -lvulkan -o /tmp/t1-original-fft-host
+      - name: Acquire only authenticated original FFT owner from pinned ZIP2
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/t1zip"
+          git -C "$RUNNER_TEMP/t1zip" init -q
+          git -C "$RUNNER_TEMP/t1zip" remote add origin https://github.com/alwansan/raf.git
+          git -C "$RUNNER_TEMP/t1zip" -c protocol.version=2 fetch -q --depth=1 --filter=blob:none origin zip2
+          test "$(git -C "$RUNNER_TEMP/t1zip" rev-parse FETCH_HEAD)" = "$ZIP2_SHA"
+          git -C "$RUNNER_TEMP/t1zip" sparse-checkout init --no-cone
+          printf '%s\n' '/RAFT_FILE_MANIFEST.tsv' '/Raft/Raft_Data/sharedassets0.assets/' |
+            git -C "$RUNNER_TEMP/t1zip" sparse-checkout set --no-cone --stdin
+          git -C "$RUNNER_TEMP/t1zip" checkout -q --detach FETCH_HEAD
+          python3 -m scripts.stage_zip2_fft_owner \
+            --zip2-checkout "$RUNNER_TEMP/t1zip" \
+            --destination "$RUNNER_TEMP/t1original/Raft_Data/sharedassets0.assets"
+      - name: Probe noninterchangeable sampled input roles using actual compiled original FFT
+        run: |
+          set -euo pipefail
+          export VK_DRIVER_FILES="$(find /usr/share/vulkan/icd.d -maxdepth 1 -name '*lvp*.json' -print -quit)"
+          test -n "$VK_DRIVER_FILES"
+          timeout 1000s python3 -m scripts.t1_fft_binding_sensitivity \
+            --source "$RUNNER_TEMP/t1original/Raft_Data" \
+            --runner /tmp/t1-original-fft-host
+          echo 'RAFT_T1_SCOPE no_Unity_kernel_ID_no_Android_Adreno_no_authored_compute_source=true'
+          # Never upload original game bytes, DXBC, SPV, shaders or pixel data.
