@@ -6,7 +6,7 @@
   "issue_id": "ASSET-RESTORE-001",
   "track": "Real production hydration --apply opt-in execution with SHA-pinned 3 owners",
   "approach": "Extend only T5-owned isolated workflow after genuine ZIP2 3-owner direct reuse. Restore exact feature Git LFS pointers in ephemeral checkout, patch production plan() ONLY to a bounded 3-original-owner immutable subset, then invoke REAL hydrate_render_payloads.main() with --apply and RAFT_T5_VERIFIED_ZIP2_RENDER_ROOT. Verify it SHA-hydrates all three, blocks any subprocess.run (enforcing no Git LFS fallback), and logs authentic source count. No shared native workflow changes or Unity build.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "1940a856cc2ee0724bff04d47aba408e10ac7eae",
   "intended_files": [
     ".github/workflows/raft-t5-zip2-render-stage.yml",
@@ -25,8 +25,24 @@
   "experiment_ids": [
     "T5-20261105T0040Z-main-apply-original3"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement isolated T5 workflow exact original 3-pointer restore plus production --apply invoked through guarded entrypoint, check resulting CI, document limitations.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41942815626"
+  ],
+  "result": {
+    "commit": "e5b461837bdcec38b11f74b0d26e2c8d7c52657b",
+    "ci_run_id": 41942815626,
+    "conclusion": "success",
+    "synthetic": "17/17 PASS",
+    "real_source": "3 SHA-authentic ZIP2 owners 337660952B",
+    "production_entrypoint": "hydrate_render_payloads.main() with --apply",
+    "bounded_plan": "exactly 3 independently feature LFS SHA pinned original owners",
+    "observed_logs": [
+      "RAFT_T5_ZIP2_RENDER_REUSED objects=3 original_bytes=337660952 sha256=true",
+      "RAFT_FULL_GRAPHICS_VERIFIED objects=3 original_bytes=337660952 sha256=true",
+      "T5_REAL_HYDRATOR_MAIN_APPLY original_count=3 original_bytes=337660952 git_lfs_calls=0"
+    ],
+    "limitations": "No full 7.79GB plan, real Unity Editor, material/FFT pixels or device game proof."
+  },
+  "next_step": "Coordinate real scoped Unity Editor import/export with T1/T3; do not claim device success or request native build from bounded source test.",
   "updated_at": "2026-11-05T00:40:00Z"
 }
