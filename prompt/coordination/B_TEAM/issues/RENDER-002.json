@@ -84,7 +84,10 @@
     "https://github.com/alwansan/raf/actions/runs/41931942755",
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B21_LIGHT_EXPORT_LINEAGE_2026-11-04.md",
     "https://github.com/alwansan/raf/actions/runs/41939404454",
-    "https://github.com/alwansan/raf/commit/77d312f546f1fc80c72f57a57de5d90699d66302"
+    "https://github.com/alwansan/raf/commit/77d312f546f1fc80c72f57a57de5d90699d66302",
+    "https://github.com/alwansan/raf/actions/runs/41940350604",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_AUTHENTIC_MATERIAL_EXPORT_PARITY_2026-11-05.md",
+    "https://github.com/alwansan/raf/commit/33ae0f760ea9f82a792b04419de1ba7df34d6e5"
   ],
   "remaining": [
     "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -120,7 +123,8 @@
     "B15 actual original: ZIP2 SHA-verified sharedassets6 (6,607,272B) read via production original_sampler() 87/87 actual Texture2D settings, 87 filter and 261 wrap, all mip biases 0, CI41930143093 SUCCESS with 8 synthetic negative controls. This does NOT establish any real original-to-export importer equivalence (0 paired records) or restore white shaders/device pixels.",
     "B03 verified 1635/1635 source-only non-null Renderer Material target class links across 6 original ZIP2 scenes and three SHA-pinned owners (4 original null). Actual same-instance Unity Renderer→Material GUID/fileID export preservation and Android white/pixel fix remain unproven.",
     "B21 actual 9-provider ZIP2 bounded original Raft AssetRipper same-instance export: 2/2 native Light108 values preserved and 2/2 exact Light.m_GameObject→GameObject1 owner pointers preserved in actual Unity YAML; 0 drift/misattached, CI41930891466 and 41931942755 both SUCCESS (40 owner-trial synthetic controls). This excludes Light value/owner export loss for these two scenes only; shader/material/ambient/Unity GPU pixels, remaining 34 scenes and phone not verified. RENDER-002 OPEN.",
-    "T3 actual SHA-pinned ZIP2 original->same-instance export CI41939404454 VERIFIED 41 selected Materials/227 TexEnv+UV with zero mismatches, 89 exact internal Texture targets, but 25 external targets and all shader/pixel/device proof remain unknown; do not treat these scoped materials as white cause."
+    "T3 actual SHA-pinned ZIP2 original->same-instance export CI41939404454 VERIFIED 41 selected Materials/227 TexEnv+UV with zero mismatches, 89 exact internal Texture targets, but 25 external targets and all shader/pixel/device proof remain unknown; do not treat these scoped materials as white cause.",
+    "T3 real SHA-pinned same-export Material m_Colors test CI41940350604: 41 selected original Material identities, 150 RGBA slots, 40 nonidentity originals; zero changed, missing or unexpected m_Colors values. Combined with previous 227 TexEnv/UV matches, this RULES OUT loss of these selected source colors/textures during this AssetRipper export only. Keep RENDER-002 OPEN: shader pass/subprogram, external 25 texture owners, importer/sRGB and Android pixels not proven."
   ],
   "acceptance": [
     "مطابقة روابط ومراجع الأصل",
@@ -128,5 +132,5 @@
     "نجاحعلىالهاتف"
   ],
   "updated_by": "T3",
-  "updated_at": "2026-11-05T00:12:00Z"
+  "updated_at": "2026-11-05T00:21:00Z"
 }
