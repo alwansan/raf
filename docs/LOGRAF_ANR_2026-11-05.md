@@ -23,3 +23,11 @@
 Preserve the `com.alwansan.lograf` package/signing identity, Shizuku permissions, 512-batch/12MiB bounded queue, 32MiB raw segments, original raw Logcat, user markers, .zip exports, metric null semantics and writer flush logic. Existing Python safety checks now assert the service's main-thread command cannot perform SAF document creation, the Binder start is background, STOP/Destroy never join the SAF writer on Android main, late callbacks cannot restart after shutdown and UI refresh stops when hidden. Existing JVM diagnostics and synthetic 17,178-event FFT replay still run. CI must pass compile/sign/release, but **Poco F5 Pro verification is required** with game running, app visible, repeated STOP/START, and Shizuku disconnect to confirm ANR is no longer reproducible.
 
 No game, CP/CL repo, original asset or scheduled automation is modified.
+
+## Verified CI and distribution
+
+- Code commit: [`6c921211678adae6b0b122a6f6bef8f1004252a0`](https://github.com/alwansan/raf/commit/6c921211678adae6b0b122a6f6bef8f1004252a0).
+- GitHub Actions: [run **42098272069**](https://github.com/alwansan/raf/actions/runs/42098272069), **COMPLETED SUCCESS**, head exactly that commit. Structural checks passed the new serial executor, off-main SAF, off-main Binder start, off-main destruction, and background UI refresh guards. The existing actual JVM diagnostic regression also passed, including its 17,178-event synthetic FFT stress replay. Android release Gradle reported **BUILD SUCCESSFUL in 53s**.
+- Test-signing certificate comparison passed with SHA-256 `bdb27cfad1fd9a6ac14bd47317206ce4df462040f45ddb1fdbb66a0974043149`. This is the **certificate fingerprint**, not the APK file hash. Original signing p12 and package identity remain unchanged.
+- Published [signed LogRaft 0.6.89](https://github.com/alwansan/raf/releases/tag/lograf-89): `LogRaft-signed.apk` **167,932 bytes**, automatic `versionCode=1089`, `applicationId=com.alwansan.lograf`, plus matching SHA-256 sidecar.
+- **On-device ANR resolution remains unverified** until Poco F5 Pro 0.6.89 test. Source changes mitigate identified blocking paths but the owner-supplied ActivityManager ANR report contained no main-thread Java trace, so it is not valid to claim a specific root cause was proven or that the ANR is definitively gone.
