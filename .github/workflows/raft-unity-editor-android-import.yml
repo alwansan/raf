@@ -611,8 +611,15 @@ jobs:
             --project "$RUNNER_TEMP/project/ExportedProject" \
             --backup "$RUNNER_TEMP/original-operation-trace-source" \
             --manifest config/runtime-operation-traces.json --apply
+          # T4: the original Mouse X/Y and Cursor.lockState consumers are
+          # rewritten only after exact original DLL SHA/cardinality validation.
+          # This is Android-only and preserves desktop original source/metadata.
+          python3 -m scripts.t4_adapt_original_mouse_axes \
+            --original-dll "$GITHUB_WORKSPACE/Raft/Raft_Data/Managed/Assembly-CSharp.dll" \
+            --project "$RUNNER_TEMP/project/ExportedProject" \
+            --backup "$RUNNER_TEMP/original-physical-mouse-source" --apply
           mkdir -p "$RUNNER_TEMP/project/ExportedProject/Assets/RaftAndroid/Platform"
-          for name in AndroidStreamingAssets.cs TouchPointerGesture.cs TouchPointerButtons.cs AndroidTouchPointer.cs AndroidTouchUiPanel.cs LocalProfileStore.cs LocalPlayerIdentity.cs AndroidTestDiagnostics.cs AndroidTouchGamepadOverlay.cs PersistentDiagnosticLog.cs AndroidRuntimeLog.cs; do
+          for name in AndroidStreamingAssets.cs TouchPointerGesture.cs TouchPointerButtons.cs AndroidTouchPointer.cs AndroidPhysicalMouseCapture.cs PhysicalMouseDeltaAccumulator.cs AndroidTouchUiPanel.cs LocalProfileStore.cs LocalPlayerIdentity.cs AndroidTestDiagnostics.cs AndroidTouchGamepadOverlay.cs PersistentDiagnosticLog.cs AndroidRuntimeLog.cs; do
             cp "android-port/Runtime/Platform/$name" "$RUNNER_TEMP/project/ExportedProject/Assets/RaftAndroid/Platform/"
           done
       - name: Preserve asset-owned meshes during original Editor collector cleanup
