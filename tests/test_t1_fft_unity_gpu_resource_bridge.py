@@ -7,7 +7,7 @@ VALID = """#pragma kernel main
 // Generated identifiers are NOT original Unity resource names.
 Texture2D<float4> _Source: register(t0);
 Texture2D<float4> _Butterfly : register(t1, space0);
-RWTexture2D<float4> _Output : register(u0);
+RWTexture2D<float4> _Output : register(u2);
 [numthreads(64,1,1)]
 void main(uint3 i:SV_DispatchThreadID) {
     _Output[i.xy] = _Source.Load(int3(i.xy,0)) + _Butterfly.Load(int3(i.xy,0));
@@ -33,14 +33,22 @@ class FFTUnityGpuResourceTests(unittest.TestCase):
         for changed in (
             VALID.replace("register(t1, space0)","register(t0)"),
             VALID.replace("register(t1, space0)","register(t2)"),
-            VALID.replace("register(u0)","register(u1)"),
+            VALID.replace("register(u2)","register(u1)"),
             VALID.replace("register(t0)","register(t999)"),
             VALID.replace("RWTexture2D<float4>","Texture2D<float4>"),
-            VALID.replace("register(u0)","register(t0)"),
+            VALID.replace("register(u2)","register(t0)"),
         ):
             with self.subTest(hash=hash(changed)):
                 with self.assertRaises(ValueError):
                     translated_image_symbols(changed)
+
+    def test_original_dx_u0_is_not_the_translated_hlsl_storage_register(self):
+        # The authentic private translation observed a unique generated u2
+        # output; original D3D11 executable independently declares u0.
+        # These are DIFFERENT interfaces and must never be conflated.
+        wrong = VALID.replace("register(u2)", "register(u0)")
+        with self.assertRaises(ValueError):
+            translated_image_symbols(wrong)
 
     def test_reject_nonzero_space_and_private_symbol_alias(self):
         for changed in (
@@ -57,8 +65,8 @@ class FFTUnityGpuResourceTests(unittest.TestCase):
         changed=VALID+"\nTexture2D<float4> _Extra:register(t7);\n"
         with self.assertRaises(ValueError):
             translated_image_symbols(changed)
-        changed=VALID.replace("RWTexture2D<float4> _Output : register(u0);",
-            "/* RWTexture2D<float4> _Output : register(u0); */")
+        changed=VALID.replace("RWTexture2D<float4> _Output : register(u2);",
+            "/* RWTexture2D<float4> _Output : register(u2); */")
         with self.assertRaises(ValueError):
             translated_image_symbols(changed)
 
