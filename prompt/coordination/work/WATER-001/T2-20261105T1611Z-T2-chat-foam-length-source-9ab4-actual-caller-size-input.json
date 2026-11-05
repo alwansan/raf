@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261105T1611Z-T2-chat-foam-length-source-9ab4",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "41880c64b02b16e3ecc561965cd543fecf52814b",
+  "updated_at": "2026-11-05T16:22:00Z",
+  "resumed_from_experiment": "T2|original-ZIP2-15964ea8|DLL-0a6f0527|exact-RT-newarr-length-producer-local-arg-call|bounded-basicblock-v1",
+  "experiment_key": "T2|original-DLL-0a6f0527|exact-Foam-ldflda-refarray-call-int-length-formal|typed-caller-stack-v1",
+  "resource_key": "T2-Foam-original-managed-RenderTexture-array-actual-call-length",
+  "hypothesis": "The actual original ref RenderTexture[] callsite may directly pass a specific int32 literal into the same formal used as newarr length, permitting a private safe structural in-bounds comparison against four original compiled Texture(int) caller indices. A guessed nearby literal must be rejected.",
+  "method": "Capture actual typed ref-array callee callsite only after original proven ldflda address reaches its typed formal. Identify exact int32 formal used for original newarr from source IL. Propagate actual call arg origins along a bounded branch-free stack from field-address load to call; preserve source numeric value only privately. Synthetic direct constant, argument and nearby but wrong formal negative controls. Distinguish unknown pre-existing stack or unsupported IL; log aggregate category only.",
+  "intended_files": [
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/FoamFieldAddressConsumer.cs",
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/FoamByrefActualCallerLength.cs",
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/Program.cs",
+    ".github/workflows/raft-t2-foam-managed-literals.yml",
+    "prompt/coordination/work/WATER-001/T2-20261105T1611Z-T2-chat-foam-length-source-9ab4-actual-caller-size-input.json",
+    "prompt/coordination/clients/T2/sessions/20261105T1611Z-T2-chat-foam-length-source-9ab4.md"
+  ],
+  "preflight": {
+    "head": "41880c64b02b16e3ecc561965cd543fecf52814b",
+    "original_CI": "42063244298 SUCCESS",
+    "independent_running": "T1 FFT actions separate; no T2 scheduled managed CI observed"
+  },
+  "next_step": "Implement strict typed exact actual caller Int32 argument, run original SHA-pinned CI; preserve unknown or proven structural in-bounds (not runtime) and private source constraints. WATER-001 OPEN NOT_READY0/3."
+}
