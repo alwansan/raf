@@ -100,6 +100,9 @@ internal static class Program
         public int NonAuthoredExactMaterialPropertyBlockSetTextureNameArgs;
         public int NonAuthoredExactNameViaPropertyToId;
         public int NonAuthoredExactNameViaDirectString;
+        public readonly Dictionary<string,int> NonAuthoredExactSecondOriginCounts =
+            new(StringComparer.Ordinal);
+        public int NonAuthoredExactSecondDeclaredUnityTexture;
         public readonly Dictionary<string,int> TotalSetterCalls = new(StringComparer.Ordinal)
         {
             ["shader_global_texture"] = 0,
@@ -197,6 +200,11 @@ internal static class Program
                     {
                         result.NonAuthoredExactSetterLiteralUses++;
                         result.NonAuthoredExactSetterArgumentNames.Add(Sha(sourceLiteral));
+                        var origin = exact.Value.SecondTextureOperandOrigin;
+                        result.NonAuthoredExactSecondOriginCounts[origin] =
+                            result.NonAuthoredExactSecondOriginCounts.GetValueOrDefault(origin) + 1;
+                        if (exact.Value.SecondFormalParameterIsUnityTexture)
+                            result.NonAuthoredExactSecondDeclaredUnityTexture++;
                         if (exact.Value.SetterKind=="material_texture")
                             result.NonAuthoredExactMaterialSetTextureNameArgs++;
                         if (exact.Value.SetterKind=="material_propertyblock_texture")
@@ -268,6 +276,10 @@ internal static class Program
             non_authored_exact_name_via_propertytoid = result.NonAuthoredExactNameViaPropertyToId,
             non_authored_exact_name_via_direct_string = result.NonAuthoredExactNameViaDirectString,
             original_four_non_authored_names_exact_setter_name_arg_proven = result.NonAuthoredExactSetterArgumentNames.Count==4,
+            non_authored_exact_second_arg_opcode_origin_histogram = result.NonAuthoredExactSecondOriginCounts,
+            non_authored_exact_second_formal_is_UnityEngine_Texture_count = result.NonAuthoredExactSecondDeclaredUnityTexture,
+            second_argument_origin_label_is_actual_texture_instance_proof = false,
+            material_receiver_identity_or_runtime_reachability_verified = false,
             original_managed_texture_setter_calls_by_kind = result.TotalSetterCalls,
             non_authored_source_literal_and_setter_same_method_by_kind = result.MatchedNonAuthoredSameMethodSetter,
             same_method_cooccurrence_is_argument_dataflow_proof = false,
@@ -311,10 +323,11 @@ internal static class Program
         // Synthetic positive direct Material.SetTexture(string, Texture)
         // and negative same-window coincidence. No game source method names.
         var materialType = new TypeReference("UnityEngine","Material",m,m.TypeSystem.Object.Scope);
+        var textureType = new TypeReference("UnityEngine","Texture",m,m.TypeSystem.Object.Scope);
         var setTexture = new MethodReference("SetTexture",m.TypeSystem.Void,materialType)
             { HasThis=true };
         setTexture.Parameters.Add(new ParameterDefinition(m.TypeSystem.String));
-        setTexture.Parameters.Add(new ParameterDefinition(m.TypeSystem.Object));
+        setTexture.Parameters.Add(new ParameterDefinition(textureType));
         var positive = new MethodDefinition("PositivePublicSetTexture",
             Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,
             m.TypeSystem.Void);
@@ -328,8 +341,46 @@ internal static class Program
         lip.Append(lip.Create(OpCodes.Ret));
         var verified=FoamSetterFlow.Trace(positive,1);
         if (verified is null || verified.Value.SetterKind!="material_texture" ||
-            verified.Value.FirstArgRole!="string")
+            verified.Value.FirstArgRole!="string" ||
+            verified.Value.SecondTextureOperandOrigin!="null_literal" ||
+            !verified.Value.SecondFormalParameterIsUnityTexture)
             throw new InvalidDataException("Direct original marker to SetTexture arg fixture failed");
+        // A real field-load marker is not an executed Texture instance proof:
+        // it identifies just the static IL opcode family and formal Texture type.
+        var field=new FieldDefinition("SyntheticTextureField",
+            Mono.Cecil.FieldAttributes.Public | Mono.Cecil.FieldAttributes.Static,textureType);
+        td.Fields.Add(field);
+        var fieldExample=new MethodDefinition("SyntheticStaticTextureFieldFlow",
+            Mono.Cecil.MethodAttributes.Public | Mono.Cecil.MethodAttributes.Static,
+            m.TypeSystem.Void);
+        fieldExample.Parameters.Add(new ParameterDefinition(materialType));
+        td.Methods.Add(fieldExample);
+        var lif=fieldExample.Body.GetILProcessor();
+        lif.Append(lif.Create(OpCodes.Ldarg_0));
+        lif.Append(lif.Create(OpCodes.Ldstr,"public-second-field-name"));
+        lif.Append(lif.Create(OpCodes.Ldsfld,field));
+        lif.Append(lif.Create(OpCodes.Callvirt,setTexture));
+        lif.Append(lif.Create(OpCodes.Ret));
+        var fieldTrace=FoamSetterFlow.Trace(fieldExample,1);
+        if (fieldTrace is null ||
+            fieldTrace.Value.SecondTextureOperandOrigin!="static_field_load" ||
+            !fieldTrace.Value.SecondFormalParameterIsUnityTexture)
+            throw new InvalidDataException("Static field opcode provenance synthetic fixture failed");
+        var argumentExample=new MethodDefinition("SyntheticArgumentTextureFlow",
+            Mono.Cecil.MethodAttributes.Public | Mono.Cecil.MethodAttributes.Static,
+            m.TypeSystem.Void);
+        argumentExample.Parameters.Add(new ParameterDefinition(materialType));
+        argumentExample.Parameters.Add(new ParameterDefinition(textureType));
+        td.Methods.Add(argumentExample);
+        var lia=argumentExample.Body.GetILProcessor();
+        lia.Append(lia.Create(OpCodes.Ldarg_0));
+        lia.Append(lia.Create(OpCodes.Ldstr,"public-second-arg-name"));
+        lia.Append(lia.Create(OpCodes.Ldarg_1));
+        lia.Append(lia.Create(OpCodes.Callvirt,setTexture));
+        lia.Append(lia.Create(OpCodes.Ret));
+        var argTrace=FoamSetterFlow.Trace(argumentExample,1);
+        if (argTrace is null || argTrace.Value.SecondTextureOperandOrigin!="argument_load")
+            throw new InvalidDataException("Argument opcode provenance synthetic fixture failed");
         var negative = new MethodDefinition("NearbyButWrongPublicSetTexture",
             Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,
             m.TypeSystem.Void);
@@ -348,7 +399,7 @@ internal static class Program
         var idTexture = new MethodReference("SetTexture",m.TypeSystem.Void,materialType)
             { HasThis=true };
         idTexture.Parameters.Add(new ParameterDefinition(m.TypeSystem.Int32));
-        idTexture.Parameters.Add(new ParameterDefinition(m.TypeSystem.Object));
+        idTexture.Parameters.Add(new ParameterDefinition(textureType));
         var numeric = new MethodDefinition("PropertyIdPublicSetTexture",
             Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,
             m.TypeSystem.Void);
@@ -373,6 +424,10 @@ internal static class Program
                 direct_original_name_to_settexture_first_arg_positive_fixture=true,
                 same_window_false_positive_rejected=true,
                 propertytoid_name_id_to_settexture_first_arg_fixture=true,
+                second_operand_null_literal_proven_in_public_fixture=true,
+                second_operand_static_field_load_proven_in_public_fixture=true,
+                second_operand_argument_load_proven_in_public_fixture=true,
+                second_formal_Texture_type_checked_without_runtime_claim=true,
                 private_IL_names_or_source_published = false
             }));
         return 0;
