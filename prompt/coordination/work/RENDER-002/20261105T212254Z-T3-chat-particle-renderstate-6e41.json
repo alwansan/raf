@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T212254Z-T3-chat-particle-renderstate-6e41",
+  "issue_id": "RENDER-002",
+  "track": "original particle Shader48 108-use original Pass Blend/alpha/Z state classification",
+  "status": "active",
+  "base_sha": "72a49f1452b594e0af3deefeba08085e15c6695a",
+  "updated_at": "2026-11-05T21:22:54.503Z",
+  "intended_files": [
+    "scripts/t3_original_renderer_shader_impact.py",
+    "tests/test_t3_original_renderer_shader_impact.py",
+    "scripts/t3_original_particle_shader_state.py",
+    "tests/test_t3_original_particle_shader_state.py",
+    ".github/workflows/raft-t3-original-renderer-shader-impact.yml",
+    "prompt/coordination/work/RENDER-002/20261105T212254Z-T3-chat-particle-renderstate-6e41.json",
+    "prompt/coordination/clients/T3/sessions/20261105T212254Z-T3-chat-particle-renderstate-6e41.md",
+    "prompt/coordination/experiments/T3/20261105T212254Z-T3-chat-particle-renderstate-6e41.json",
+    "prompt/coordination/B_TEAM/events/T3/20261105T212254Z-T3-chat-particle-renderstate-6e41.json",
+    "docs/T3_ORIGINAL_PARTICLE_SHADER_RENDERSTATE_2026-11-05.md"
+  ],
+  "hypothesis": "The SHA-original unique 108-slot ParticleSystemRenderer Shader48 has one parsed Pass; authenticated class-targeted extraction of its m_State can distinguish an alpha blending source contract from opaque replacement and identify dynamic property overrides before touching fake Android shader color/effects.",
+  "experiment_key": "T3-ZIP2-15964-sixscene-4owner-source108-particle-Shader48-pass0-blend-alpha-zwrite-sourceonly-v1",
+  "resource_key": "t3-ZIP2-original-6scene-4owner-source-only-22min",
+  "taken_over_from": [
+    "prompt/coordination/clients/T3/sessions/20261105T211313Z-T3-chat-particle-shader-rank-4e92.md",
+    "https://github.com/alwansan/raf/actions/runs/42110973101"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Extend private per-Particle Shader48 count outparam, select exact unique original 108 target via SHA-original graph; classify m_State using existing verified original render-state reader, fail closed on unsupported dynamic fields, add synthetic controls and one source-only pinned CI. Do not infer active emission or device pixel fidelity."
+}
