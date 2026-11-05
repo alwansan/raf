@@ -4,9 +4,9 @@
   "session_id": "20261105T1745Z-T3-chat-921-shader-material-property-7a6e",
   "origin": "chat",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed",
   "base_sha": "8fa5e35b5b0044f99cd03d56b2afe154e59101b3",
-  "updated_at": "2026-11-05T17:45:00Z",
+  "updated_at": "2026-11-05T18:05:00Z",
   "resumed_from_sessions": [
     "20261105T1728Z-T3-chat-rawspirv-T1-original-3f7c",
     "20261105T1730Z-T3-scheduled-rawspv-gate-c8e1",
@@ -31,5 +31,29 @@
     "prompt/coordination/B_TEAM/events/T3/20261105T1745Z-T3-chat-921-shader-material-property-7a6e.json"
   ],
   "coordination": "Not editing T1 direct SPIRV, T2 Foam/FFT, T4 world/save, T5 integration/native. Source only on independent SHA-authenticated six-scene/four-original-owner CPU job. No exporter/Unity due native resource contention. No private game names/pathIDs/GUID/SHA of payloads in public output. Legacy T3 prior 41 Material export parity not repeated.",
-  "active_jobs_snapshot": []
+  "active_jobs_snapshot": [],
+  "completed_at": "2026-11-05T18:05:00Z",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42080105181",
+  "result": {
+    "conclusion": "SUCCESS",
+    "source_original_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "original_run_head_sha": "228fe29da4015b6741edc2ca3e84ac685f5770ef",
+    "source_free_tests_passed": 37,
+    "source_sha_authenticated_scenes": 6,
+    "source_sha_authenticated_owners": 4,
+    "original_921_use_Material_objects": 43,
+    "renderer_material_slots": 921,
+    "source_shader_declared_properties": 35,
+    "declared_saved_correct_families": 1505,
+    "declared_saved_missing_correct_families": 0,
+    "source_texenvs": 258,
+    "source_texenvs_nonnull": 144,
+    "source_texenvs_null": 114,
+    "source_extra_saved_names_not_declared": 875,
+    "original_crossfamily_names": 1,
+    "original_crossfamily_affected_renderer_slots": 3,
+    "real_native_export_or_Android_device_pixels_verified": false,
+    "game_assets_modified": false
+  },
+  "next_step": "Actual full native ShaderLab/pass/compiled program restoration status of previously bounded Dummy Shader48 affecting original 921 Renderer slots; compare original 4 Pass/33 variants and material type/samplers to actual Unity build, then test Adreno/device. Do not change 43 original Materials on intact source-family evidence."
 }
