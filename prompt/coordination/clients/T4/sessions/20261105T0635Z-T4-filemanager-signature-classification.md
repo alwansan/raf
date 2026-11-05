@@ -14,3 +14,9 @@ Existing `scripts/t4_original_rgd_load_contract.py::METHOD` recognizes a single-
 
 ## Guardrails
 Do not publish original source/names; do not patch runtime FileManager, .rgd schema, Steam guards, .meta, sound, Settings or touch. No heavy Unity job or other Actions cancellation. Keep source SHA gates. Result remains NOT_READY 0/3 until integrated Unity/phone create/save/relaunch/reopen.
+
+## Implemented checkpoint
+- Added isolated source-only diagnostic `scripts/t4_filemanager_declaration_shapes.py` at commit `c3919ed499d17452184ac57ef97a6ab3546b9c0d`; it distinguishes candidate block/expression declarations, unresolved declarations and call-like tokens, with no original source printed. It deliberately does **not** resolve the actual private original method, nor prove runtime callability.
+- Added eight synthetic tests `tests/test_t4_filemanager_declaration_shapes.py` at commit `b133e4d424f491d43ec12c87af93fa9742bb6ea3`. Tests have **not** been executed in this run; no CI or phone claim. The diagnostic needs authenticated original SHA-pinned FileManager input in private staging and validation against real decompiler syntax before any production integration.
+- Existing `METHOD` regex was independently checked on local synthetic cases: block one-line recognized, expression-bodied and newline-before-name and nested-generic-return not recognized. This establishes a parser coverage limitation, **not** which shape original FileManager uses. No runtime files modified.
+- Next: run synthetic tests, correct any false positives, then integrate read-only classifier into bounded original SHA-pinned workflow; only after private original evidence consider a save-path runtime change. Avoid duplicate Unity build with T5. LOCAL-005 OPEN / NOT_READY 0/3.
