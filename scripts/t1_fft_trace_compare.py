@@ -77,6 +77,7 @@ def compare_invocations(reference, observed):
     for left, right in zip(decode_invocations(reference), decode_invocations(observed)):
         shared = left.keys() & right.keys()
         coordinate_mismatches = same_coordinate_value_mismatches = changed_coordinate_value_mismatches = 0
+        axis_mismatches = [0, 0, 0]
         for key in shared:
             left_coord, left_value = left[key]
             right_coord, right_value = right[key]
@@ -84,12 +85,15 @@ def compare_invocations(reference, observed):
                 same_coordinate_value_mismatches += left_value != right_value
             else:
                 coordinate_mismatches += 1
+                for axis, (before, after) in enumerate(zip(left_coord, right_coord)):
+                    axis_mismatches[axis] += before != after
                 changed_coordinate_value_mismatches += left_value != right_value
         reports.append({
             "missing_reads": len(left.keys() - right.keys()),
             "extra_reads": len(right.keys() - left.keys()),
             "paired_reads": len(shared),
             "coordinate_mismatches": coordinate_mismatches,
+            "coordinate_axis_mismatches": dict(zip(("x", "y", "mip"), axis_mismatches)),
             "same_coordinate_value_mismatches": same_coordinate_value_mismatches,
             "changed_coordinate_value_mismatches": changed_coordinate_value_mismatches,
         })
