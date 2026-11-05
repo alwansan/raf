@@ -16,6 +16,7 @@ from scripts.b03_original_renderer_materials import manifest_provider_basename_c
 from scripts.t3_decoded_texture_pixel_parity import compare_pair, aggregate
 from scripts.t3_pixel_drift_diagnostics import (classify as diagnose_pair, aggregate as aggregate_diagnostics,
     original_texture_categories)
+from scripts.t3_normalmap_dxt5_semantic import semantic_rgba_input, NORMALMAP_DXT5NM
 
 GUID = re.compile(r"(?m)^guid: ([0-9a-f]{32})\s*$")
 EXPECTED = 106
@@ -53,6 +54,10 @@ def run(original: Path, manifest: Path, project: Path, w1path: Path, b02path: Pa
     pngs = _safe_png_index(project / "Assets")
     source_by_owner = {}
     categories = []
+    semantic_categories = []
+    normalmap_usage_seen = 0
+    normalmap_exact_after_unwrap = 0
+    normalmap_raw_rgb_drift = 0
     diagnostic_rows = []
     for row in selected["objects"]:
         src = row["source"]
@@ -87,17 +92,49 @@ def run(original: Path, manifest: Path, project: Path, w1path: Path, b02path: Pa
                                     exported_id=guid, authenticated=True)
         # A diagnostic failure is NOT an unsupported source decoder. Let it
         # propagate to main() as INCONCLUSIVE rather than falsifying parity.
+        semantic_category = category
         if category in ('EXACT', 'RGB_DRIFT', 'ALPHA_ONLY_DRIFT'):
-            # Source original typetree has m_TextureFormat as int and
-            # m_ColorSpace 0=Gamma/1=Linear. The previous .read() attribute
-            # display + nonexistent m_IsSRGB yielded 106 UNKNOWN labels.
-            # This diagnostic guard is outside the decoder exception handler:
-            # bad source schema is INCONCLUSIVE, not fake UNSUPPORTED_MODE.
-            fmt, color_space = original_texture_categories(obj.read_typetree())
+            # Typed original source m_TextureFormat/m_ColorSpace and usage=3
+            # identify DXT5nm. The SHA-pinned AssetRipper exporter explicitly
+            # UnpackNormal()s those pixels. Preserve RAW mismatch evidence,
+            # compare a SECOND semantic channel only after exact BGRA mapping.
+            source_tree = obj.read_typetree()
+            fmt, color_space = original_texture_categories(source_tree)
+            mode = source_tree.get("m_LightmapFormat")
+            if type(mode) is not int or not 0 <= mode <= 11:
+                raise ValueError("unsupported_authenticated_original_normalmap_mode")
+            if mode == NORMALMAP_DXT5NM:
+                normalmap_usage_seen += 1
+                normalmap_raw_rgb_drift += int(category == 'RGB_DRIFT')
+                transformed = semantic_rgba_input(
+                    decoded, format_code=source_tree['m_TextureFormat'],
+                    color_space=source_tree['m_ColorSpace'], lightmap_format=mode)
+                semantic_category = compare_pair(transformed, exported_image,
+                    original_id=guid, exported_id=guid, authenticated=True)
+                normalmap_exact_after_unwrap += int(semantic_category == 'EXACT')
             diagnostic_rows.append(diagnose_pair(decoded, exported_image,
                 texture_format=fmt, srgb=color_space))
         categories.append(category)
+        semantic_categories.append(semantic_category)
     report = aggregate(categories, expected=EXPECTED)
+    semantic = aggregate(semantic_categories, expected=EXPECTED)
+    # Exact source cohort of 30 DXT5nm was separately authenticated by
+    # CI42013419416, and 106 selected actual PNG GUIDs by this same-run trace.
+    # Never turn a partial/invalid converter match into a success flag.
+    report['semantic_category_counts'] = semantic['categories']
+    report['original_NormalmapDXT5nm_objects'] = normalmap_usage_seen
+    report['raw_RGB_drifts_in_NormalmapDXT5nm'] = normalmap_raw_rgb_drift
+    report['NormalmapDXT5nm_exact_after_pinned_unpack'] = normalmap_exact_after_unwrap
+    report['normalmap_semantic_pixel_content_exact'] = (
+        normalmap_usage_seen == 30
+        and normalmap_raw_rgb_drift == 30
+        and normalmap_exact_after_unwrap == 30
+        and semantic['decoded_pixel_exact']
+        and report['categories']['EXACT'] == 76)
+    report['normalmap_semantic_status'] = (
+        'ALL_106_SCOPED_NORMALMAP_SEMANTIC_RGBA_EXACT'
+        if report['normalmap_semantic_pixel_content_exact']
+        else 'NORMALMAP_SEMANTIC_MISMATCH_OR_INCOMPLETE')
     if len(diagnostic_rows) == EXPECTED:
         report['pixel_drift_diagnostics'] = aggregate_diagnostics(diagnostic_rows, expected=EXPECTED)
     else:
@@ -113,12 +150,16 @@ def main(argv=None):
     ap = argparse.ArgumentParser()
     for key in ("original", "manifest", "project", "w1-trace", "b02-trace", "out"):
         ap.add_argument("--" + key, required=True, type=Path)
+    ap.add_argument("--verify-normalmap-semantic", action="store_true",
+                    help="Accept only all 106 PNG pixels matching after exact original normal-map unpacking; retain raw drift counts")
     args = ap.parse_args(argv)
     if args.out.exists() or args.out.is_symlink() or args.out.resolve().is_relative_to(args.original.resolve()) or args.out.resolve().is_relative_to(args.project.resolve()):
         raise ValueError("unsafe_report_destination")
     try:
         report = run(args.original, args.manifest, args.project, args.w1_trace, args.b02_trace)
-        status = 0 if report["decoded_pixel_exact"] else 2
+        status = 0 if (report["normalmap_semantic_pixel_content_exact"]
+                       if args.verify_normalmap_semantic
+                       else report["decoded_pixel_exact"]) else 2
     except Exception as exc:
         report = {"schema_version": 1, "experiment": "T3-authentic-decoded-original-to-export-pixels",
                   "status": "INCONCLUSIVE", "exception_type": type(exc).__name__,
