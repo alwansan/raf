@@ -103,6 +103,13 @@ internal static class Program
         public readonly Dictionary<string,int> NonAuthoredExactSecondOriginCounts =
             new(StringComparer.Ordinal);
         public int NonAuthoredExactSecondDeclaredUnityTexture;
+        public readonly Dictionary<string,int> SecondProducerDeclaredReturnTypes = new(StringComparer.Ordinal);
+        public readonly Dictionary<string,int> SecondProducerDeclaringKinds = new(StringComparer.Ordinal);
+        public int SecondProducerStaticCallCount;
+        public int SecondProducerInstanceCallCount;
+        public int SecondProducerCallvirtCount;
+        public int SecondProducerReturnKnownUnityTextureTypeCount;
+        public readonly Dictionary<int,int> SecondProducerParameterCount = new();
         public readonly Dictionary<string,int> TotalSetterCalls = new(StringComparer.Ordinal)
         {
             ["shader_global_texture"] = 0,
@@ -205,6 +212,24 @@ internal static class Program
                             result.NonAuthoredExactSecondOriginCounts.GetValueOrDefault(origin) + 1;
                         if (exact.Value.SecondFormalParameterIsUnityTexture)
                             result.NonAuthoredExactSecondDeclaredUnityTexture++;
+                        var rt=exact.Value.SecondProducerDeclaredReturnClass;
+                        var owner=exact.Value.SecondProducerDeclaringTypeClass;
+                        result.SecondProducerDeclaredReturnTypes[rt] =
+                            result.SecondProducerDeclaredReturnTypes.GetValueOrDefault(rt)+1;
+                        result.SecondProducerDeclaringKinds[owner] =
+                            result.SecondProducerDeclaringKinds.GetValueOrDefault(owner)+1;
+                        if (exact.Value.SecondProducerHasThis)
+                            result.SecondProducerInstanceCallCount++;
+                        else
+                            result.SecondProducerStaticCallCount++;
+                        if (exact.Value.SecondProducerIsCallvirt)
+                            result.SecondProducerCallvirtCount++;
+                        if (rt is "unity_texture" or "unity_texture2d" or "unity_rendertexture" or
+                            "unity_texture3d" or "unity_cubemap" or "unity_texture2darray")
+                            result.SecondProducerReturnKnownUnityTextureTypeCount++;
+                        var argc=exact.Value.SecondProducerParameterCount;
+                        result.SecondProducerParameterCount[argc] =
+                            result.SecondProducerParameterCount.GetValueOrDefault(argc)+1;
                         if (exact.Value.SetterKind=="material_texture")
                             result.NonAuthoredExactMaterialSetTextureNameArgs++;
                         if (exact.Value.SetterKind=="material_propertyblock_texture")
@@ -278,6 +303,14 @@ internal static class Program
             original_four_non_authored_names_exact_setter_name_arg_proven = result.NonAuthoredExactSetterArgumentNames.Count==4,
             non_authored_exact_second_arg_opcode_origin_histogram = result.NonAuthoredExactSecondOriginCounts,
             non_authored_exact_second_formal_is_UnityEngine_Texture_count = result.NonAuthoredExactSecondDeclaredUnityTexture,
+            non_authored_second_exact_producer_return_declared_type_categories = result.SecondProducerDeclaredReturnTypes,
+            non_authored_second_exact_producer_declaring_type_categories = result.SecondProducerDeclaringKinds,
+            non_authored_second_exact_producer_static_calls = result.SecondProducerStaticCallCount,
+            non_authored_second_exact_producer_instance_calls = result.SecondProducerInstanceCallCount,
+            non_authored_second_exact_producer_callvirt_calls = result.SecondProducerCallvirtCount,
+            non_authored_second_exact_producer_known_Unity_Texture_return_types = result.SecondProducerReturnKnownUnityTextureTypeCount,
+            non_authored_second_exact_producer_parameter_count_histogram = result.SecondProducerParameterCount,
+            producer_declared_signature_is_actual_runtime_texture_object_proof = false,
             second_argument_origin_label_is_actual_texture_instance_proof = false,
             material_receiver_identity_or_runtime_reachability_verified = false,
             original_managed_texture_setter_calls_by_kind = result.TotalSetterCalls,
@@ -381,7 +414,47 @@ internal static class Program
         var argTrace=FoamSetterFlow.Trace(argumentExample,1);
         if (argTrace is null || argTrace.Value.SecondTextureOperandOrigin!="argument_load")
             throw new InvalidDataException("Argument opcode provenance synthetic fixture failed");
-        var negative = new MethodDefinition("NearbyButWrongPublicSetTexture",
+        // Exactly track the declared return MethodReference behind a call
+        // result instead of inferring it from a nearby unrelated IL opcode.
+        var publicFactory=new TypeReference("Synthetic","Factory",m,m.TypeSystem.Object.Scope);
+        var producerMethod=new MethodReference("PublicSyntheticTextureProducer",
+            textureType,publicFactory){HasThis=false};
+        var produced=new MethodDefinition("PublicSyntheticProducedTextureFlow",
+            Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,
+            m.TypeSystem.Void);
+        produced.Parameters.Add(new ParameterDefinition(materialType));
+        td.Methods.Add(produced);
+        var liprod=produced.Body.GetILProcessor();
+        liprod.Append(liprod.Create(OpCodes.Ldarg_0));
+        liprod.Append(liprod.Create(OpCodes.Ldstr,"public-direct-typed-producer"));
+        liprod.Append(liprod.Create(OpCodes.Call,producerMethod));
+        liprod.Append(liprod.Create(OpCodes.Callvirt,setTexture));
+        liprod.Append(liprod.Create(OpCodes.Ret));
+        var traced=FoamSetterFlow.Trace(produced,1);
+        if (traced is null || traced.Value.SecondTextureOperandOrigin!="call_return" ||
+            traced.Value.SecondProducerDeclaredReturnClass!="unity_texture" ||
+            traced.Value.SecondProducerDeclaringTypeClass!="other_external_or_unresolved_declaring_type" ||
+            traced.Value.SecondProducerHasThis || traced.Value.SecondProducerIsCallvirt ||
+            traced.Value.SecondProducerParameterCount!=0)
+            throw new InvalidDataException("Exact typed call producer source fixture failed");
+        var wrongProducer=new MethodReference("PublicSyntheticWrongReturn",
+            m.TypeSystem.Object,publicFactory){HasThis=false};
+        var producedWrong=new MethodDefinition("PublicSyntheticNonTextureProducer",
+            Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,
+            m.TypeSystem.Void);
+        producedWrong.Parameters.Add(new ParameterDefinition(materialType));
+        td.Methods.Add(producedWrong);
+        var liwrong=producedWrong.Body.GetILProcessor();
+        liwrong.Append(liwrong.Create(OpCodes.Ldarg_0));
+        liwrong.Append(liwrong.Create(OpCodes.Ldstr,"public-synthetic-unknown-producer"));
+        liwrong.Append(liwrong.Create(OpCodes.Call,wrongProducer));
+        liwrong.Append(liwrong.Create(OpCodes.Callvirt,setTexture));
+        liwrong.Append(liwrong.Create(OpCodes.Ret));
+        var tracedWrong=FoamSetterFlow.Trace(producedWrong,1);
+        if (tracedWrong is null ||
+            tracedWrong.Value.SecondProducerDeclaredReturnClass!="other_unverified_return_type")
+            throw new InvalidDataException("Unknown return type must not be labeled genuine Unity Texture");
+                var negative = new MethodDefinition("NearbyButWrongPublicSetTexture",
             Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,
             m.TypeSystem.Void);
         negative.Parameters.Add(new ParameterDefinition(m.TypeSystem.Object));
@@ -428,6 +501,9 @@ internal static class Program
                 second_operand_static_field_load_proven_in_public_fixture=true,
                 second_operand_argument_load_proven_in_public_fixture=true,
                 second_formal_Texture_type_checked_without_runtime_claim=true,
+                exact_producer_method_declared_return_type_traced=true,
+                wrong_producer_return_type_rejected_as_Unity_Texture=true,
+                producer_runtime_execution_not_claimed=true,
                 private_IL_names_or_source_published = false
             }));
         return 0;
