@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "session_id": "20261105T002257Z-T1-fft-unity-contract",
+  "issue_id": "WATER-001",
+  "hypothesis": "An isolated Unity Editor process can observe authored ComputeShader HasKernel/FindKernel/GetKernelThreadGroupSizes for private SHA-staged source-selected FFT candidates; compiled original slots remain unproven Unity indices.",
+  "source_commit": "602e9963ea8f45e71823412d4b5e35016e370f7c",
+  "input_hashes": [
+    {
+      "kind": "original_owner_expected_sha256",
+      "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+      "bytes": 115978112,
+      "verified_during_CI": false
+    },
+    {
+      "kind": "original_fft_object_candidate_sha256",
+      "sha256": "9d934f5c99183c6df5cf2f1fefc9d3e5ec4bce5da5f96a86e4c02910d5322247",
+      "verified_during_CI": false
+    }
+  ],
+  "tool_versions": {
+    "python": "GitHub ubuntu-24.04 python3 (system)",
+    "unity": "2021.3.45f2 targeted, not run"
+  },
+  "commands": [
+    "python3 -m py_compile scripts/t1_stage_unity_fft_kernel_probe.py",
+    "python3 -m unittest discover -s tests -p test_t1_stage_unity_fft_kernel_probe.py -v",
+    "future private: python3 -m scripts.t1_stage_unity_fft_kernel_probe --original-owner <SHA-verified> --authored-compute <private> --private-manifest <private> --project <new private path>",
+    "future licensed Unity: Unity -batchmode -quit -projectPath <private project> -executeMethod T1FftKernelRuntimeProbe.Run"
+  ],
+  "negative_controls": [
+    "wrong authored .compute SHA",
+    "original FFT object provenance drift",
+    "fake original runtime identity true",
+    "candidate index collision",
+    "resolution/bank/pass mismatch",
+    "group threads mismatch",
+    "private kernel name/keyword invalid",
+    "missing/modified original owner",
+    "existing output project refused",
+    "private kernel names absent from public result"
+  ],
+  "workflow_path": ".github/workflows/raft-t1-fft-unity-kernel-probe.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41941716641",
+  "artifact_urls": [],
+  "budget": "Ubuntu standard runner; path-scoped 6-minute synthetic preflight, no Unity license, no LFS/original private payload downloaded or uploaded",
+  "status": "source_validated_unity_pending",
+  "observed_result": {
+    "synthetic_test_suites": 7,
+    "source_only_green_runs": [
+      41941690194,
+      41941716641
+    ],
+    "unity_executed": false,
+    "real_original_owner_authenticated_in_this_run": false,
+    "authored_source_restored": false,
+    "runtime_mapping_proven": false,
+    "android_device_proven": false
+  },
+  "rejected_hypotheses": [
+    "20 source-compiled FFT programs necessarily imply 20 Unity runtime kernel IDs",
+    "source-only green CI demonstrates Android water rendering"
+  ],
+  "limitations": [
+    "No private original owner acquired by this source-only CI",
+    "No real authored FFT .compute yet",
+    "Unity 2021 Editor FindKernel/GetKernelThreadGroupSizes code authored but not executed",
+    "Original source vs authored mapping, Adreno support, numeric/pixel output and phone all unverified"
+  ],
+  "integration_commit": "602e9963ea8f45e71823412d4b5e35016e370f7c",
+  "next_step": "Obtain genuinely authenticated authored FFT source/binding interface in private staging, construct a private runtime-name and keyword manifest, run isolated Unity 2021 Editor probe with graphics, then independently prove the original engine index relation and coordinate Android integration with T5.",
+  "updated_at": "2026-11-05T00:31:38.599Z"
+}
