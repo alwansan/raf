@@ -1,0 +1,53 @@
+{
+  "id": "20261105T170102Z-T1-chat-af2a33",
+  "session_id": "20261105T170102Z-T1-chat-af2a33",
+  "origin": "chat",
+  "owner": "T1",
+  "issue_id": "WATER-001",
+  "status": "completed",
+  "base_sha": "33ab7672e2fd919e4560c9ab4c60fe64caadda70",
+  "updated_at": "2026-11-05T17:02:15.012Z",
+  "intended_files": [
+    "scripts/t1_fft_trace_compare.py",
+    "tests/test_t1_fft_trace_compare.py",
+    ".github/workflows/raft-t1-fft-paired-diagnostic-checks.yml"
+  ],
+  "experiment_key": "pass0-private-trace-order-independent-coordinate-value-multiset",
+  "resumed_from_sessions": [
+    "20261105T163256Z-T1-chat-dc7c61"
+  ],
+  "implementation_sha": "2213e4f5219bf5cde25d0b11230428f205d7439c",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42066983894",
+    "https://github.com/alwansan/raf/actions/runs/42070524974"
+  ],
+  "result": {
+    "out_of_bounds_by_site": [
+      0,
+      0,
+      0
+    ],
+    "output_parity": [
+      {
+        "compared_written_pixels": 64,
+        "match": true,
+        "nonfinite_pixels": 0,
+        "outside_tolerance_pixels": 0,
+        "write_coverage_mismatch_pixels": 0
+      },
+      {
+        "compared_written_pixels": 32,
+        "match": true,
+        "nonfinite_pixels": 0,
+        "outside_tolerance_pixels": 0,
+        "write_coverage_mismatch_pixels": 0
+      }
+    ],
+    "records_by_site": [
+      64,
+      256,
+      64
+    ]
+  },
+  "next_step": "Bind and zero the trace buffer in the Unity fixture after the native lane is free. Preserve private Vulkan and Unity traces only in the same ephemeral run, verify instrumentation output parity on both backends, then compare per-site coordinate and value multisets. Equal multisets do not prove per-invocation pairing."
+}

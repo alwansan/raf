@@ -1,0 +1,13 @@
+{
+  "id": "20261105T170102Z-T1-chat-af2a33",
+  "owner": "T1",
+  "session_id": "20261105T170102Z-T1-chat-af2a33",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Vulkan 42066983894 captured all 384 records (64/256/64), zero out-of-bounds, and unchanged outputs (0/64 and 0/32 mismatches). CI42070524974 passed source-only trace comparison controls, including repeated records, ordering, coordinate versus value drift, and invalid captures. No Unity trace captured while native Unity job 42058825739 was active.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42066983894",
+    "https://github.com/alwansan/raf/actions/runs/42070524974"
+  ],
+  "at": "2026-11-05T17:02:15.012Z"
+}
