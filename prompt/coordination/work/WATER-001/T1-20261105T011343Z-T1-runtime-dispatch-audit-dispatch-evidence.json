@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T011343Z-T1-runtime-dispatch-audit",
+  "issue_id": "WATER-001",
+  "track": "FFT original caller dispatch provenance",
+  "approach": "Add a bounded fail-closed source auditor for original caller FindKernel/Dispatch evidence; never infer runtime kernel index from compiled slots",
+  "status": "active",
+  "base_sha": "b069b19c8de747be7cf9dac38ab8d25e2e3349d0",
+  "intended_files": [
+    "scripts/t1_fft_dispatch_evidence.py",
+    "tests/test_t1_fft_dispatch_evidence.py"
+  ],
+  "hypothesis": "The current staged Unity probe validates names/groups but has no authenticated original caller dispatch or binding evidence; a negative-first audit can prevent unsupported mapping claims.",
+  "taken_over_from": [
+    "prompt/coordination/clients/T1/MEMORY.md",
+    "https://github.com/alwansan/raf/actions/runs/41941716641",
+    "https://github.com/alwansan/raf/actions/runs/41942366020"
+  ],
+  "related_work": [],
+  "experiment_ids": [],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement and run synthetic negative/positive controls; require authentic original caller evidence before any runtime claim.",
+  "updated_at": "2026-11-05T01:13:43Z"
+}
