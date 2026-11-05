@@ -142,6 +142,11 @@ jobs:
           assert r["source_authentic_stages"]==4 and r["source_texture_rows"]==6
           assert r["translated_image_rows"]==6 and len(r["rows"])==4
           assert 0 <= r["literal_name_matches"] <= 6
+          # Low-domain original numeric pairs must never leave private scratch as
+          # enumerable plain SHA256 (or another public pair digest/hash).
+          assert all(not any("digest" in k.lower() or "hash" in k.lower()
+                             for k in row) for row in r["rows"])
+          assert all("_private_numeric_pair" not in row for row in r["rows"])
           assert not r["source_to_shaderlab_material_binding_verified"]
           assert not r["source_to_sampler_binding_verified"]
           assert not r["original_sampler_state_verified"]

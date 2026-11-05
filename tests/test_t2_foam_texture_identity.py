@@ -150,16 +150,34 @@ class OriginalFoamTextureIdentityTests(unittest.TestCase):
         self.assertEqual(out["original_distinct_numeric_pairs"], 1)
         self.assertFalse(out["numeric_pair_identity_to_spirv_verified"])
 
-    def test_numeric_digest_is_order_independent_within_stage(self):
+    def test_numeric_aggregate_is_order_independent_without_public_digest(self):
         rows = original_texture_rows(program([
             {"m_NameIndex": 1, "m_Index": 3, "m_SamplerIndex": 2},
             {"m_NameIndex": 2, "m_Index": 5, "m_SamplerIndex": -1},
         ]), {1: "SourceA", 2: "SourceB"}, 2)
         forward = compare_private_names(rows, ["CompiledA", "CompiledB"])
         backward = compare_private_names(list(reversed(rows)), ["CompiledB", "CompiledA"])
-        self.assertEqual(forward["original_numeric_pair_digest_sha256"],
-                         backward["original_numeric_pair_digest_sha256"])
-        self.assertFalse(forward["numeric_pair_identity_to_spirv_verified"])
+        self.assertEqual(forward["original_complete_numeric_pairs"],
+                         backward["original_complete_numeric_pairs"])
+        self.assertEqual(forward["original_distinct_numeric_pairs"],
+                         backward["original_distinct_numeric_pairs"])
+        for result in (forward, backward):
+            self.assertFalse(any("digest" in key.lower() or "hash" in key.lower()
+                                 for key in result))
+            self.assertNotIn("_private_numeric_pair", result)
+            self.assertFalse(result["numeric_pair_identity_to_spirv_verified"])
+
+    def test_single_low_domain_pair_never_yields_reversible_public_hash(self):
+        rows = original_texture_rows(program([
+            {"m_NameIndex": 0, "m_Index": 3, "m_SamplerIndex": 2},
+        ]), {0: "SourceSecret"}, 1)
+        report = compare_private_names(rows, ["DifferentGeneratedName"])
+        self.assertEqual(report["original_complete_numeric_pairs"], 1)
+        self.assertEqual(report["original_distinct_numeric_pairs"], 1)
+        self.assertFalse(any("digest" in k.lower() or "hash" in k.lower()
+                             for k in report))
+        self.assertNotIn("_private_numeric_pair", report)
+        self.assertNotIn("SourceSecret", str(report))
 
     def test_reflection_malformed_kind_rejected(self):
         with self.assertRaises(ValueError):

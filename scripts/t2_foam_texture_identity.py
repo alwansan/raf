@@ -6,7 +6,6 @@ HLSL and shader source never leave process memory. Equality of names is NOT a
 sampler-state, descriptor-to-Unity-material, or Android-pixel proof.
 """
 import argparse
-import hashlib
 import json
 from pathlib import Path
 
@@ -106,10 +105,10 @@ def compare_private_names(original_rows, reflected_names):
     matches = sum(name in reflected_set for name in source_names)
     numeric_pairs = [x["_private_numeric_pair"] for x in original_rows]
     # A repeated original pair is ambiguous, not evidence of a translated alias.
-    # Only aggregate counts and a digest leave private scratch.
-    # m_SamplerIndex == -1 is explicitly unknown/disabled; never hash it as a proven pair.
+    # Only aggregate cardinalities leave private scratch. A public digest of
+    # low-domain original indices is enumerable and MUST NOT be emitted.
+    # m_SamplerIndex == -1 is explicitly unknown/disabled, not a proven pair.
     complete_pairs = [p for p in numeric_pairs if (type(p[0]) is int and type(p[1]) is int and p[1] >= 0)]
-    numeric_pair_digest = hashlib.sha256(json.dumps(sorted(complete_pairs), separators=(",", ":")).encode()).hexdigest()
     presence = {
         k: sum(bool(x["_field_presence"][k]) for x in original_rows)
         for k in ("m_Index", "m_SamplerIndex", "m_Dim", "m_ArraySize")
@@ -118,7 +117,6 @@ def compare_private_names(original_rows, reflected_names):
         "source_texture_count": len(original_rows),
         "original_complete_numeric_pairs": len(complete_pairs),
         "original_distinct_numeric_pairs": len(set(complete_pairs)),
-        "original_numeric_pair_digest_sha256": numeric_pair_digest,
         "numeric_pair_identity_to_spirv_verified": False,
         "translated_image_count": len(reflected_names),
         "literal_original_to_spirv_image_name_matches": matches,
