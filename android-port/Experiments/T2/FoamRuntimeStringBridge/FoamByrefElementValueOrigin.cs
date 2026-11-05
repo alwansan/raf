@@ -38,7 +38,9 @@ internal static class FoamByrefElementValueOrigin
         int DirectRenderTextureTypedCallAssignmentSites,
         int LocalAliasAssignmentSites,
         int UnresolvedAssignmentSites,
-        bool BranchJoinOrRuntimeValueVerified=false);
+        bool BranchJoinOrRuntimeValueVerified=false,
+        string SoleWriterImmediatePriorOpcodeCategory="not_examined",
+        bool SoleWriterIsControlFlowEntry=false);
 
     private readonly record struct Origin(string Category,bool NewRt=false,
         bool CallRt=false,bool Null=false,bool Local=false);
@@ -284,6 +286,34 @@ internal static class FoamByrefElementValueOrigin
     }
 
 
+
+    private static string WriterPriorOpcodeFamily(Instruction instruction)
+    {
+        var op=instruction.OpCode.Code;
+        return op switch
+        {
+            Code.Ldnull => "ldnull",
+            Code.Newobj => "newobj",
+            Code.Call or Code.Callvirt => "call",
+            Code.Ldloc or Code.Ldloc_S or Code.Ldloc_0 or Code.Ldloc_1 or
+                Code.Ldloc_2 or Code.Ldloc_3 => "ldloc",
+            Code.Ldarg or Code.Ldarg_S or Code.Ldarg_0 or Code.Ldarg_1 or
+                Code.Ldarg_2 or Code.Ldarg_3 => "ldarg",
+            Code.Ldfld or Code.Ldsfld => "field_load",
+            Code.Ldelem_Ref or Code.Ldind_Ref => "indirect_reference_load",
+            Code.Castclass or Code.Isinst => "reference_type_cast",
+            Code.Dup => "dup",
+            Code.Ldc_I4 or Code.Ldc_I4_S or Code.Ldc_I4_M1 or
+                Code.Ldc_I4_0 or Code.Ldc_I4_1 or Code.Ldc_I4_2 or
+                Code.Ldc_I4_3 or Code.Ldc_I4_4 or Code.Ldc_I4_5 or
+                Code.Ldc_I4_6 or Code.Ldc_I4_7 or Code.Ldc_I4_8
+                    => "integer_literal",
+            _ when instruction.OpCode.FlowControl is FlowControl.Branch or
+                FlowControl.Cond_Branch => "branch_opcode",
+            _ => "other_opcode"
+        };
+    }
+
     // An opcode census, not reaching-definition/CFG proof. Counting a
     // local write never means that path is executed or that a value is live.
     internal static SafeLocalWriters ScanExactReturnLocalWriters(
@@ -317,12 +347,25 @@ internal static class FoamByrefElementValueOrigin
             "UnityEngine.RenderTexture";
         var entries=Entries(method);
         int total=0,nulls=0,newrt=0,rtcalls=0,aliases=0,unknown=0;
+        string soleWriterPrior="not_examined";
+        bool soleWriterIsEntry=false;
         for(int i=0;i<il.Count;i++)
         {
             if(!Store(il[i]) || Local(il[i])!=n)
                 continue;
             total++;
             int previous=Prev(il,0,i);
+            if(total==1)
+            {
+                soleWriterPrior=previous<0?"no_prior_opcode":
+                    WriterPriorOpcodeFamily(il[previous]);
+                soleWriterIsEntry=entries.Contains(il[i]);
+            }
+            else
+            {
+                soleWriterPrior="multiple_writers";
+                soleWriterIsEntry=false;
+            }
             if(previous<0 || entries.Contains(il[i]) ||
                 il[previous].OpCode.FlowControl is FlowControl.Branch or
                     FlowControl.Cond_Branch or FlowControl.Throw)
@@ -349,7 +392,7 @@ internal static class FoamByrefElementValueOrigin
         if(total!=nulls+newrt+rtcalls+aliases+unknown)
             throw new InvalidDataException("Unbalanced original RT local write categories");
         return new SafeLocalWriters(1,typed,total,nulls,newrt,rtcalls,
-            aliases,unknown,false);
+            aliases,unknown,false,soleWriterPrior,soleWriterIsEntry);
     }
 
     internal static SafeProfile Inspect(IEnumerable<MethodDefinition> originals,
