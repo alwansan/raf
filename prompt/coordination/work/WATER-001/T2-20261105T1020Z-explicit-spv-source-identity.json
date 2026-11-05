@@ -5,7 +5,7 @@
   "session_id": "20261105T1020Z-T2-original-foam-explicit-spv-map",
   "issue_id": "WATER-001",
   "track": "Foam original DXBC t/s→SPIR-V descriptor variable identity",
-  "status": "active",
+  "status": "completed",
   "base_sha": "02e9fba7fb42b83579595885391be636ee3b56e8",
   "approach": "Compile SHA-pinned original Foam fragment DXBC via B18 proven libvkd3d interface with default and two distinct explicit source t/s register→target descriptor maps. Decode full SPIR-V binary numeric declarations, enforce category/set/binding and stable per-source variable IDs and exact program equivalence after masking only OpDecorate DescriptorSet/Binding literals. Cross-check B20 original.spv from same original, retain false if drift. Fail closed/no shader publish.",
   "hypothesis": "A/B remaps of exact native t/s registers yield deterministic stable SPIR-V resource variable IDs and graph so explicit source-to-compiler binding map can be anchored to default translated descriptors rather than inferred by ordering.",
@@ -27,8 +27,28 @@
     41942245746,
     42009445569
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Write C remapper, SPV typed variable and masked graph verifier, synthetic regression; run original isolated SHA-pinned CI; document exact known/unknown boundary.",
-  "updated_at": "2026-11-05T10:20Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42011706016",
+    "https://github.com/alwansan/raf/actions/runs/42013590671"
+  ],
+  "result": {
+    "exact_original_four_stage_SHA_authentication": true,
+    "compiled_translated_fragment_stages": 2,
+    "original_nonempty_t_s_pairs": 6,
+    "distinct_vkd3d_explicit_profiles": 2,
+    "original_default_and_B20_SPIRV_full_structure_identical_except_numeric_descriptor_literals": true,
+    "source_register_to_typed_Spirv_variable_identity_verified": true,
+    "source_to_compiled_descriptor_mappings": {
+      "pass0": "t0..4->images set0/b6..10; s0..4->samplers set0/b1..5",
+      "pass1": "t0->image set0/b2; s0->sampler set0/b1"
+    },
+    "synthetic_tests_passed": "16/16",
+    "original_CI42011706016": "SUCCESS",
+    "integrated_CI42013590671": "SUCCESS",
+    "artifact_id": 13407977911,
+    "artifact_zip_sha256": "93046863e5fa788b234b990a613554eb479851d4a9098131c7bd50efe7def0e1",
+    "original_material_sampler_shaderlab_device_proven": false
+  },
+  "next_step": "Resource mapping now source-proven; next original Material property/UV/sampler state and CB upload, then private two-pass Unity ShaderLab, shader import and phone pixels. WATER-001 remains OPEN.",
+  "updated_at": "2026-11-05T10:51Z"
 }
