@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T0024Z-T5-hydration-preflight-a1",
+  "issue_id": "ASSET-RESTORE-001",
+  "track": "T5 graphics staging consumer safety/integration",
+  "approach": "Preflight the entire selected set of SHA-pinned staged graphics source paths, target LFS pointer identities, lengths and linked-path guards before publishing ANY owner's hydrated original. Existing per-owner streaming SHA256 validation remains; no extra full-source hash pass, no new LFS or Unity build. Add T5 two-owner negative test proving a later unsafe/mismatched source cannot cause partial earlier replacement; preserve positive bridge path.",
+  "status": "planned",
+  "base_sha": "e500e0633f0fcda6149e7dffd607a42660435d41",
+  "intended_files": [
+    "scripts/hydrate_render_payloads.py",
+    "tests/test_t5_stage_zip2_render_owners.py",
+    "prompt/coordination/clients/T5/state.json",
+    "prompt/coordination/clients/T5/MEMORY.md"
+  ],
+  "hypothesis": "Current reuse_verified_staged_sources can replace owner 1 feature LFS pointer before rejecting a structurally invalid owner 2. A whole-batch metadata/target preflight is low-overhead and prevents that partial mutation; SHA checks during copy remain mandatory.",
+  "related_work": [
+    "https://github.com/alwansan/raf/actions/runs/41940032540",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/work/ASSET-RESTORE-001/T5-20261105T0015Z-three-owner-batch.json"
+  ],
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/T5/MEMORY.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/B16/MEMORY.md"
+  ],
+  "last_verified_result": "CI41940032540 13/13 synthetic, 337660952 bytes original three-owner staging + independent feature pointer check. This does not prove all-or-nothing consumer on later bad batch owner.",
+  "expected_validation": "Local synthetic two-owner fixture and isolated T5 CI path-trigger, followed by real ZIP2 stage+consume if CI succeeds.",
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement guarded batch source/destination preflight, prove no first target is replaced when second source is invalid, then check CI and persist outcome.",
+  "updated_at": "2026-11-05T00:24:00Z",
+  "updated_by": "T5"
+}
