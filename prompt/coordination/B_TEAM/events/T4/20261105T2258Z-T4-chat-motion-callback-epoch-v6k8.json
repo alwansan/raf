@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "id": "T4-20261105T2258Z-T4-chat-motion-callback-epoch-v6k8",
+  "session_id": "20261105T2258Z-T4-chat-motion-callback-epoch-v6k8",
+  "owner": "T4",
+  "origin": "chat",
+  "issue_id": "INPUT-005",
+  "type": "source_integration",
+  "at": "2026-11-05T23:03:00Z",
+  "summary": "Repaired captured-motion listener cross-request epoch race: distinct AndroidJavaProxy per capture generation, prefilter old MOVE and recheck current generation under captureGate before adding deltas. CI42126395609 SUCCESS 32 Python +36 .NET plus Unity2021 original managed ABI compile and private 4+4+2 original legacy axis validation. No Android APK or POCO phone proof; INPUT-005 stays OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/a5d3ce04e59a0734b689c610da5f65dad8a4b117",
+    "https://github.com/alwansan/raf/actions/runs/42126395609",
+    "prompt/coordination/experiments/T4/20261105T2258Z-T4-chat-motion-callback-epoch-v6k8.json"
+  ],
+  "limitations": "Original world/save/exit/reopen owner confirmation applies only to artifact42058825739 source e9c358e; no native Unity/phone test for new code."
+}
