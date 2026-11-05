@@ -1,0 +1,35 @@
+{
+  "id": "20261105T131036Z-T1-chat-877585",
+  "session_id": "20261105T131036Z-T1-chat-877585",
+  "origin": "chat",
+  "owner": "T1",
+  "issue_id": "WATER-001",
+  "status": "waiting_ci",
+  "base_sha": "cc22a2540dd01960edae9e553f4ce2e208230be8",
+  "updated_at": "2026-11-05T13:13:03.234Z",
+  "intended_files": [
+    "android-port/Experiments/T1/T1PrivateFftInputIdentityTests.cs",
+    "android-port/Experiments/T1/T1FftInputIdentity.compute",
+    ".github/workflows/raft-t1-fft-unity-input-identity.yml"
+  ],
+  "experiment_key": "unity2021.3.45f2-exact-vulkan-paired-source-butterfly-rgba32f-bitwise-load-identity-plus-pass0-signature",
+  "resource_key": "raft-native-engine-feature/android-native-port",
+  "resumed_from_sessions": [
+    "20261105T125100Z-T1-chat-affd1c",
+    "20261105T130700Z-T1-scheduled-a8d4"
+  ],
+  "implementation_sha": "5587d43a8b8b6ed71c599e206c444b84a94521cd",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42033745802",
+    "https://github.com/alwansan/raf/actions/runs/42030877911",
+    "https://github.com/alwansan/raf/actions/runs/42025620147"
+  ],
+  "next_step": "Inspect RAFT_T1_INPUT_IDENTITY and RAFT_T1_PASS0_CHANNEL_COUNTS separately from the inherited end-of-job numeric parity gate. If both input copies match and FFT diverges, trace pass-0 actual shader coordinates and arithmetic on the identified Unity graphics API. If input copies differ, isolate upload vs copy vs readback with source and butterfly mismatch counts.",
+  "hypothesis": "Generic transfer passed, but the exact paired input upload or sampling might still differ. Isolate it from the original-derived FFT code path.",
+  "result": "pending",
+  "extent": [
+    1024,
+    32
+  ],
+  "public_report": "Whitelisted backend and bounded mismatch counts only"
+}

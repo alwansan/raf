@@ -1,0 +1,14 @@
+{
+  "id": "20261105T131036Z-T1-chat-877585",
+  "owner": "T1",
+  "session_id": "20261105T131036Z-T1-chat-877585",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Local signature tests passed; exact Unity sampled-input identity CI started.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42033745802",
+    "https://github.com/alwansan/raf/actions/runs/42030877911",
+    "https://github.com/alwansan/raf/actions/runs/42025620147"
+  ],
+  "at": "2026-11-05T13:13:03.234Z"
+}
