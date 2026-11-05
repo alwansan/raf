@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "session_id": "20261105T1213Z-T3-native-shader-dummy-audit",
+  "issue_id": "RENDER-002",
+  "hypothesis": "Even with authenticated actual original Material→Shader PPtr and matching Unity GUID output, the pinned AssetRipper default-Dummy programs remain behind 511 Material references in an actual bounded original export, and the existing native workflow lacks explicit post-restorer dummy program reference accounting.",
+  "source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "exporter_commit": "036098ab525a3f9f693dc101edeb21faad4d32d8",
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t3_audit_exported_material_programs.py -v",
+    "python3 -m scripts.t3_audit_exported_material_programs --project $RUNNER_TEMP/b21-private-export/ExportedProject --out $RUNNER_TEMP/t3-bounded-material-shader-quality-safe.json"
+  ],
+  "runs": [
+    {
+      "url": "https://github.com/alwansan/raf/actions/runs/42026250167",
+      "status": "FAIL_FIXTURE_ASSUMPTION_ONLY",
+      "detail": "Report path intentionally prohibited under source and aggregate field label is not a private asset value"
+    },
+    {
+      "url": "https://github.com/alwansan/raf/actions/runs/42026343292",
+      "status": "SUCCESS",
+      "detail": "Synthetic Material Shader quality controls"
+    },
+    {
+      "url": "https://github.com/alwansan/raf/actions/runs/42026545273",
+      "status": "SUCCESS",
+      "detail": "PPtr exact-field lexical guard"
+    },
+    {
+      "url": "https://github.com/alwansan/raf/actions/runs/42026630845",
+      "status": "SUCCESS",
+      "detail": "12 SHA-authenticated ZIP2 providers, real same-instance AssetRipper 41 Material Shader target parity and all 731 Material linked Shader source file quality measured"
+    }
+  ],
+  "actual_bounded_pre_restorer": {
+    "materials": 731,
+    "custom_shader_links": 511,
+    "builtin_shader_links": 220,
+    "custom_links_to_dummy": 511,
+    "unique_custom_targets": 54,
+    "unique_dummy_targets": 54,
+    "all_ShaderLab_files": 126,
+    "files_with_dummy": 126
+  },
+  "limitations": [
+    "pre-restoration subset only",
+    "post-restoration native full-project counts unknown",
+    "no Unity compiler execution, GPU pixels or APK acceptance",
+    "original program authenticity unknown, Dummy marker only positive placeholder identification"
+  ],
+  "integration": {
+    "script": "scripts/t3_audit_exported_material_programs.py",
+    "native_workflow": ".github/workflows/raft-unity-editor-android-import.yml",
+    "placement": "after authored ShaderLab restorations and W1 Material GUID inventory, before original water strict gate",
+    "execution": "SOURCE_INTEGRATED_NOT_NATIVE_EXECUTED"
+  },
+  "status": "SCOPED_REAL_EXPORT_VERIFIED_NATIVE_DIAGNOSTIC_SOURCE_INTEGRATED",
+  "next_step": "Observe native post-restorer actual linked Dummy counts, prioritize restoring high-impact original Shader48 programs, never manufacture passes or flag device ready."
+}
