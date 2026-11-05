@@ -421,7 +421,10 @@
         "https://github.com/alwansan/raf/actions/runs/42109994654",
         "https://github.com/alwansan/raf/actions/runs/42110973101",
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_RENDERER_CLASS_SH48_2026-11-05.md",
-        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE_SHADER_RANK_2026-11-05.md"
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE_SHADER_RANK_2026-11-05.md",
+        "https://github.com/alwansan/raf/actions/runs/42112666211",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE_SHADER_RENDERSTATE_2026-11-05.md",
+        "https://github.com/alwansan/raf/commit/9207acc55dfb988a8826ed0725c3fb9032655089"
       ],
       "remaining": [
         "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -479,7 +482,7 @@
         "نجاحعلىالهاتف"
       ],
       "updated_by": "T3",
-      "updated_at": "2026-11-05T21:16:00Z",
+      "updated_at": "2026-11-05T21:27:10Z",
       "_record_path": "../B_TEAM/issues/RENDER-002.json"
     },
     {
@@ -6713,6 +6716,26 @@
       "_record_path": "../B_TEAM/events/T3/20261105T211313Z-T3-chat-particle-shader-rank-4e92.json"
     },
     {
+      "id": "20261105T212254Z-T3-chat-particle-renderstate-6e41",
+      "owner": "T3",
+      "origin": "chat",
+      "session_id": "20261105T212254Z-T3-chat-particle-renderstate-6e41",
+      "issue_id": "RENDER-002",
+      "type": "result",
+      "at": "2026-11-05T21:27:10Z",
+      "summary": "Genuine ZIP2 SHA-original six-scene Particle Shader48 108-slot single Pass: color and alpha blend ALPHA_DEPENDENT, ZWrite OFF, Cull OFF, ColorMask PARTIAL, current render_state translator rejects; CI 42112666211 SUCCESS 52/52 controls. Source-only; no Android pixels or ShaderLab restoration.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42112666211",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE_SHADER_RENDERSTATE_2026-11-05.md"
+      ],
+      "limitations": [
+        "full native Shader GUID unresolved",
+        "original ColorMask serialized-to-ShaderLab bit mapping not yet independently proven",
+        "RENDER-002 OPEN"
+      ],
+      "_record_path": "../B_TEAM/events/T3/20261105T212254Z-T3-chat-particle-renderstate-6e41.json"
+    },
+    {
       "id": "T4-20261104T2357Z-local-load-start",
       "owner": "T4",
       "session_id": "20261104T2357Z-T4-lw01",
@@ -7168,6 +7191,25 @@
       "_record_path": "../B_TEAM/events/T4/20261105T2050Z-T4-chat-original-mouse-routing-q9c4.json"
     },
     {
+      "id": "T4-20261105T2109Z-T4-chat-android-mouse-bridge-p6r2",
+      "owner": "T4",
+      "session_id": "20261105T2109Z-T4-chat-android-mouse-bridge-p6r2",
+      "origin": "chat",
+      "issue_id": "INPUT-005",
+      "type": "integration",
+      "summary": "Android-only original legacy Mouse X/Y -> View.pointer capture source integrated with fail-closed original ZIP2 SHA/4+4+2 call-site gate. CI42111826974 SUCCESS: 20 Python controls +13 managed motion controls + Unity2021 managed compile + private exact original ILSpy patch 5 files. Android original startup CI42111311168 SUCCESS. No Unity native build or device acceptance; INPUT-005 remains OPEN.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42111826974",
+        "https://github.com/alwansan/raf/actions/runs/42111311168",
+        "https://github.com/alwansan/raf/commit/22213d5065d142ce182fa8b98edf245f2113a21b",
+        "https://github.com/alwansan/raf/commit/86ba437270ee9ffaebb1f3739c3cb68f4790eac7",
+        "https://github.com/alwansan/raf/commit/73777a9887dbdde4d688bb1045bb4709d2a6a5e7",
+        "prompt/coordination/experiments/T4/20261105T2109Z-T4-chat-android-mouse-bridge-p6r2.json"
+      ],
+      "at": "2026-11-05T21:22:00Z",
+      "_record_path": "../B_TEAM/events/T4/20261105T2109Z-T4-chat-android-mouse-bridge-p6r2.json"
+    },
+    {
       "id": "T5-20261104T2357Z-b12-fixture-start",
       "owner": "T5",
       "session_id": "20261104T2357Z-T5-b12-fixture-7e2",
@@ -7541,7 +7583,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "e5839797fc22fccb80aa960bff998815f526fe7e46c76e54ade00ab07f2a4290",
+  "source_input_sha256": "ae2ae2f5056757c88b587f5264eefd9d2c9aab9881f6cf67ae2687eb4e17bafb",
   "generation": "T-2026-11-05",
-  "input_sha256": "485f1f9b4602cab200314a1070ddc89df0f36dcc4ef802cad296719ab1aaeb09"
+  "input_sha256": "42e09542fe6d42877f62503a5c7258fa83dd1d40df4569b0bb6692061339e3f8"
 }
