@@ -29,8 +29,14 @@
   "experiment_ids": [
     "T3-small-original-same-export-texenv-20261105"
   ],
-  "run_urls": [],
-  "result": null,
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41938229887"
+  ],
+  "result": {
+    "code_commit": "615f914728cf15f5d60607115ecb7a4a8919d8e5",
+    "workflow_run": "41938229887",
+    "conclusion": "QUEUED_AS_OF_2026-11-05T00:02Z"
+  },
   "next_step": "Write fail-closed same-export trace combiner and tests; run one bounded authentic ZIP2 source+AssetRipper private export and compare B05 41 original Materials/227 TexEnvs against exported YAML; if a reproducible drift is found, identify responsible integration source and patch exact mismatch.",
-  "updated_at": "2026-11-04T23:59:00Z"
+  "updated_at": "2026-11-05T00:02:00Z"
 }
