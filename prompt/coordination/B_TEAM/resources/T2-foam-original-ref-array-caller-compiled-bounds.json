@@ -1,0 +1,29 @@
+{
+  "id": "T2-foam-original-ref-array-caller-compiled-bounds",
+  "owner": "T2",
+  "issue_id": "WATER-001",
+  "title": "SHA-authentic original Foam call passes constant positive RenderTexture[] size that contains all 4 typed Texture(int) indices",
+  "kind": "source-authentic-compiled-allocation-indices-inbounds",
+  "stages": {
+    "acquisition": "ORIGINAL_ZIP2_MANAGED_DLL_SHA_0a6f0527_SIZE_3211776_VERIFIED",
+    "extraction": "EXACT_PRIVATE_FOAM_GETTER_FIELD_LDFLDA_REAL_REF_RENDER_TEXTURE_ARRAY_CALLSITE_AND_SINGLE_TYPED_MANAGED_CALLEE_RESOLVED",
+    "reconstruction": "ONE_SAME_BLOCK_NEWARR_RENDER_TEXTURE_ARRAY_TO_STIND_REF_FORMAL_AND_STELEM_REF_ARRAY_ELEMENT_PROVEN",
+    "binding": "ORIGINAL_CALLSITE_INT32_LENGTH_ARG_DIRECT_LDC_I4_POSITIVE;_4_PRIVATE_DISTINCT_NONNEGATIVE_TEXTURE_INT_INDICES_STRUCTURALLY_IN_BOUNDS",
+    "integration": "T2_ORIGINAL_SHA_CECIL_CI42063244298_AND_42064653958_SUCCESS_SOURCE_ONLY_NO_SHADERLAB_ASSET_EDIT",
+    "device": "NOT_TESTED"
+  },
+  "observed": {
+    "original_int32_length_formal_proven": true,
+    "actual_call_length_direct_i4": true,
+    "all_four_compiled_indices_in_bounds_for_that_length": true,
+    "original_numeric_values_published": false,
+    "runtime_Unity_allocation_and_texture_content_proven": false,
+    "Adreno_pixels_proven": false
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42063244298",
+    "https://github.com/alwansan/raf/actions/runs/42064653958",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/T2/sessions/20261105T1611Z-T2-chat-foam-length-source-9ab4.md"
+  ],
+  "next_step": "Trace original real stelem.ref pushed value to identify constructed RenderTexture vs null/field/call; validate Unity ShaderLab/Android water pixels independently. WATER-001 OPEN NOT_READY 0/3."
+}
