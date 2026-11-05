@@ -6,7 +6,7 @@
   "issue_id": "RENDER-002",
   "track": "colors-materials/shader-keywords",
   "approach": "Reuse B43 verifier with exact B05 sharedassets6 source SHA selection and T3 authenticated W1+B02 single-export lineage; add real run to bounded T3 exporter, publish only safe aggregate.",
-  "status": "active",
+  "status": "paused",
   "base_sha": "80cfbe55f2ef647f8c71089ad6115c8d03d317a4",
   "intended_files": [
     "scripts/b43_material_keyword_fidelity.py",
@@ -29,8 +29,20 @@
   "experiment_ids": [
     "T3-20261105T0024Z-T3-keyword-real-export-authentic-keyword-parity"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement guarded B43 scoped original reader and T3 source/export aggregate wrapper; extend same real one-shot pipeline then examine CI.",
-  "updated_at": "2026-11-05T00:24:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41941363661"
+  ],
+  "result": {
+    "code_changes": [
+      "36cc349c1d2a7744ad37ea13aae59e5074ea87ae",
+      "40ff84fd897efee7e730dc110dde34b7e34b110d",
+      "c77d1c1de07af0526bcc17d00b3fbc5a50a1faf5",
+      "6940ccf0161a3ea4a52c083702692de74c0c64be"
+    ],
+    "synthetic_suite": "SUCCESS in Actions 41941363661 preflight",
+    "real_source_export_comparison": "RUNNING",
+    "device_proof": false
+  },
+  "next_step": "Check CI41941363661 terminal status + safe artifact; if real B43 keywords/pass match, close narrow hypothesis but not RENDER-002 or phone graphics; if inconclusive, identify stage safely and correct verified issue. Coordinate other T agents.",
+  "updated_at": "2026-11-05T00:27:50Z"
 }
