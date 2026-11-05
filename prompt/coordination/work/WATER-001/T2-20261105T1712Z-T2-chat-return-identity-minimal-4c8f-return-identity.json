@@ -4,8 +4,8 @@
   "origin": "chat",
   "session_id": "20261105T1712Z-T2-chat-return-identity-minimal-4c8f",
   "issue_id": "WATER-001",
-  "status": "waiting_ci",
-  "updated_at": "2026-11-05T17:15:00Z",
+  "status": "completed",
+  "updated_at": "2026-11-05T17:16:00Z",
   "base_sha": "528e21018c912f187ed6e0310804b72db9a66288",
   "resumed_from_sessions": [
     "20261105T1648Z-T2-chat-rt-return-definition-f7d2",
@@ -37,7 +37,7 @@
     ],
     "previous_blocked_work": "20261105T1648Z-T2-chat-rt-return-definition-f7d2; complex four-file merge blocked, will not reissue unchanged blocked payload"
   },
-  "next_step": "Read CI42072739153 and safe T2_FOAM_RETURN_SIGNATURE_IDENTITY_SAFE result. If failed at fixture/compiler, fix only T2. Never assert source or runtime success prematurely; WATER-001 OPEN NOT_READY0/3.",
+  "next_step": "Separate test: inspect typed original callee body return instructions and branch / local aliases under fail-closed source dataflow. Do not infer non-null runtime value from signature match or available body. WATER-001 OPEN NOT_READY0/3.",
   "source_commits": [
     "3c77bdc402c6a7dc42c0f82e3ad1e714003eea66",
     "1f77969f3728cf13ec3e033b7e76c1479a5b6667",
@@ -47,10 +47,15 @@
     "https://github.com/alwansan/raf/actions/runs/42072739153"
   ],
   "result": {
-    "source": "Minimal original managed signature declaration classification integrated with previously verified exact stelem.ref call",
-    "ci": "in_progress",
-    "private_values_published": false,
-    "body_return_verification": "not in scope",
-    "device": "not tested"
+    "original_ci": "42072739153 COMPLETED SUCCESS",
+    "original_managed_source_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "source_exact_rt_element_call_target_matches_same_sha_managed_signatures": 1,
+    "matched_definition_has_compiled_body": true,
+    "source_category": "matching_sha_managed_signature",
+    "sourcefree_positive_wrong_signature_external_controls": "PASS",
+    "runtime_nonnull_or_object_proven": false,
+    "android_pixels_proven": false,
+    "artifact_id": 13435558953,
+    "artifact_sha256": "9fa9717b4791bf9b53b63778a53a3f0b3fcd0073cdf946b46b3567cd2b43b8d0"
   }
 }
