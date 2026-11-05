@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "session_id": "20261104T2354Z-T3-render-harness",
+  "issue_id": "RENDER-002",
+  "hypothesis": "Original m_Colors RGBA values in selected 41 authentic sharedassets6 Materials may be lost or changed in AssetRipper actual same-instance exported Material YAML despite TexEnv/UV matches.",
+  "source_commit": "0abfd808f5b17e45e8167681f26ec426adb45be3",
+  "input_hashes": [
+    "zip2 commit 15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "sharedassets6.assets 6607272 bytes SHA256 0476792cfeffac19d16e920011ed8d2fb2da62973c2f09a8689bc59e1ac4b632",
+    "W1 Material21 + B02 Texture2D28 private traces same export_instance"
+  ],
+  "tool_versions": {
+    "AssetRipperCLI_source": "036098ab525a3f9f693dc101edeb21faad4d32d8",
+    "UnityPy": "1.23.0",
+    "PyYAML": "6.0.3",
+    "dotnet": "9.0.x"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p 'test_b44_verify_material_colors.py' -v",
+    "python3 -m unittest discover -s tests -p 'test_b05_verify_material_texenv_bindings.py' -v",
+    "python3 -m unittest discover -s tests -p 'test_t3_same_export_material_colors.py' -v",
+    "python3 -m scripts.b21_stage_light_lineage --base-helper android-port/Experiments/ExportLineage/RaftExportLineage.cs --destination $RUNNER_TEMP/b21/RaftExportLineage.cs",
+    "dotnet $RUNNER_TEMP/b21-compiled/ExportLineage.dll $RUNNER_TEMP/b21-original $RUNNER_TEMP/b21-private-export",
+    "python3 -m scripts.t3_same_export_material_colors --original $RUNNER_TEMP/b21-original --project $RUNNER_TEMP/b21-private-export/ExportedProject --w1-trace $RUNNER_TEMP/b21-w1-private.json --b02-trace $RUNNER_TEMP/b21-b02-private.json --out $RUNNER_TEMP/t3-color-safe-result.json"
+  ],
+  "negative_controls": [
+    "7 new T3 selected source/identity, cross-export-instance, mismatch/no success, privacy controls",
+    "3 new B44 strict original, exported YAML map and pin guard controls",
+    "B05 exported source mapping and strict original negative controls",
+    "Inheriting B21 source lineage controls and native tool pin checks"
+  ],
+  "workflow_path": ".github/workflows/raft-t3-real-material-colors-export.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41940350604",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41940350604"
+  ],
+  "budget": "25m, 2 DOTNET_PROCESSOR_COUNT; SHA-pinned no-LFS 9 small original owners; only safe aggregate public",
+  "status": "SUCCESS_BOUNDED_REAL_SAME_EXPORT_RGBA_MATCH",
+  "observed_result": {
+    "original_source_owner": "sharedassets6.assets",
+    "original_authentic_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "material_source_and_export_identical_identity_count": 41,
+    "color_slots_compared": 150,
+    "materials_with_original_nonidentity_rgba": 40,
+    "missing_color_slots": 0,
+    "unexpected_color_slots": 0,
+    "changed_rgba_value_slots": 0,
+    "mismatched_materials": 0,
+    "real_original_export": true,
+    "android_shader_pixels_verified": false
+  },
+  "rejected_hypotheses": [
+    "Selected 41 Material m_Colors SavedProperties were whitened by this authentic original-to-same-export conversion"
+  ],
+  "limitations": [
+    "Only one selected Material owner with 41 source Materials; no full-game coverage",
+    "Material color equality does not establish actual ShaderPass/keyword/runtime sRGB/Adreno rendering",
+    "25 original externally sourced textures from sibling selected TexEnv scope remain unverified",
+    "No Unity or APK built and no device image acceptance"
+  ],
+  "integration_commit": "33ae0f760ea9f82a792b04419de1ba7df34d6e5d",
+  "next_step": "Measure source-to-export original Material shader pointer/keyword/pass fidelity and 25 external Texture2D original-owner identities; coordinate W1/T1/T2/T5. RENDER-002 remains OPEN."
+}
