@@ -33,6 +33,7 @@ jobs:
         run: |
           test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2{print $4}')" -gt 1048576
           python3 -m unittest discover -s tests -p test_t1_fft_readback_parity.py -v
+          python3 -m unittest discover -s tests -p test_t1_fft_pass0_load_inventory.py -v
       - name: Install Vulkan and DXBC translation tools
         shell: bash
         run: |
@@ -68,6 +69,7 @@ jobs:
           "$RUNNER_TEMP/t1-python-venv/bin/python" -m scripts.t1_stage_original_fft_compute_candidates \
             --original-data "$RUNNER_TEMP/t1-original-verified/Raft_Data" \
             --project "$TMPDIR/candidates" --keep-first-pair-spirv
+          python3 -m scripts.t1_fft_pass0_load_inventory --project "$TMPDIR/candidates"
           python3 -m scripts.t1_fft_vulkan_roundtrip_isolation --project "$TMPDIR/candidates"
       - name: Remove all private inputs and scratch data
         if: always()
