@@ -3,14 +3,15 @@
   "origin": "chat",
   "session_id": "20261105T213200Z-T1-chat-a247e0",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "58c1a809eb3d5ffbc56a936153e8a7259d604666",
-  "intended_files": [
-    "scripts/t1_fft_pass0_trace_variant.py",
-    "tests/test_t1_fft_pass0_trace_variant.py",
-    ".github/workflows/raft-t1-fft-unity-input-identity.yml"
-  ],
+  "intended_files": [],
   "experiment_key": "fft-invocation-keyed-structured-dispatch-semantic",
   "resource_key": "raft-native-engine-feature/android-native-port",
-  "updated_at": "2026-11-05T21:32:00Z"
+  "updated_at": "2026-11-05T21:32:00Z",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42113634484"
+  ],
+  "next_step": "Check the source-free compiler control, then the original trace shader compile and output-parity gates before interpreting invocation counters.",
+  "result": "Prior replay https://github.com/alwansan/raf/actions/runs/42111819138 stopped at the keyed Vulkan shader compile before original Unity dispatch. Compiler diagnostics were intentionally redacted, so the exact failure is unconfirmed. A concrete flaw was fixed: the generator could append a second SV_DispatchThreadID when SPIRV-Cross provides it inside the entry input struct. Reuse the structured member, reject unsupported declarations, and require a source-free glslang plus spirv-val control before acquiring original data. 110 local FFT tests passed; compiler control is pending in CI."
 }
