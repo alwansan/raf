@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "session_id": "20261105T104500Z-T1-private-gameci-import",
+  "issue_id": "WATER-001",
+  "hypothesis": "Pinned official GameCI CLI's previously proven real Unity2021 supported activation can privately import all twenty SHA-verified original FFT compiled DXBC→source-derived .compute candidates and verify generated-main kernel group shapes without logging raw proprietary data.",
+  "source_commit": "9d729b3adba90fc3e7fe6a3317c302267ec5605a",
+  "input_hashes": [
+    "ZIP2 immutable provider commit 15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "original Raft_Data/sharedassets0.assets 115978112 bytes sha256 0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "original serialized FFT ComputeShader pathID2456 raw sha256 9d934f5c99183c6df5cf2f1fefc9d3e5ec4bce5da5f96a86e4c02910d5322247",
+    "GameCI v0.1.72 Linux x64 CLI release tar.gz sha256 1de550a620ee92e05e920b6db7d431621440b60b2577f04b4a997dc92a58cb0a"
+  ],
+  "tool_versions": {
+    "Unity": "2021.3.45f2",
+    "GameCI_CLI": "v0.1.72 official release SHA-pinned",
+    "GameCI_UnityImage": "unityci/editor Ubuntu2021.3.45f2 linux-il2cpp-3",
+    "UnityPy": "1.25.4 in temporary Python venv",
+    "DXBC_SPIRV_tools": "Ubuntu24.04 vkd3d-compiler spirv-tools spirv-cross glslang-tools"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t1_gameci_private_result_gate.py -v",
+    "python3 -m unittest discover -s tests -p test_t1_sourcefree_unity_fixture.py -v",
+    "python3 -m unittest discover -s tests -p test_t1_stage_original_fft_compute_candidates.py -v",
+    "game-ci test --docker --dockerShmSize=1025m --engine=unity t1-cli-synthetic --testPlatforms=editmode --engineVersion=2021.3.45f2 --artifactsPath=t1-cli-synthetic-artifacts --containerRegistryRepository=unityci/editor --containerRegistryImageVersion=3 (all stdout/stderr private)",
+    "python3 -m scripts.t1_stage_original_fft_compute_candidates --original-data $RUNNER_TEMP/t1-original-verified/Raft_Data --project $GITHUB_WORKSPACE/t1-original-derived-unity",
+    "game-ci test --docker --dockerShmSize=1025m --engine=unity t1-original-derived-unity --testPlatforms=editmode --engineVersion=2021.3.45f2 --artifactsPath=t1-original-private-test-artifacts --containerRegistryRepository=unityci/editor --containerRegistryImageVersion=3 (all stdout/stderr private)",
+    "python3 -m scripts.t1_gameci_private_result_gate --stage original_derived --exit-code 0 --result t1-original-private-test-artifacts/editmode-results.xml"
+  ],
+  "negative_controls": [
+    "8 source-free private NUnit report fail-closed tests (missing/wrong/duplicate case, skipped/failed, nonzero process, oversized/malformed XML, no private failure content disclosure)",
+    "4 synthetic project-fixture tests (single author-written fixture, symlink/overwrite/parent invalid)",
+    "7 original-derived .compute staging private SHA/slot/entrypoint rejection tests",
+    "Sourcefree Unity2021 synthetic 2/2 must pass before SHA source acquisition",
+    "Generated main labels NOT interpreted as original runtime kernel identity; original copyrighted shaders stay in runner temp with private logs only"
+  ],
+  "workflow_path": ".github/workflows/raft-t1-private-gameci-original-fft-import.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42014120625",
+  "artifact_urls": [],
+  "budget": "60min isolated runner with shared noncancelling native Editor mutex; read-only permissions, SHA-only ZIP2 original 116MB, no workflow dispatch of playable game or artifacts; source acquired only after synthetic Unity supported CLI success",
+  "status": "completed",
+  "observed_result": {
+    "success": true,
+    "synthetic_genuine_Unity2021_tests": "2/2 Passed",
+    "original_SHA_authenticated_compiled_DXBC_programs": 20,
+    "private_derived_unity_compute_assets_staged": 20,
+    "actual_unity2021_private_import_test": "1/1 Passed: 20/20 AssetDatabase.ImportAsset, LoadAssetAtPath, HasKernel(main), FindKernel(main), group_xyz original 64..1024x1x1",
+    "original_derived_twenty_compute_import_groups_verified": true,
+    "original_authored_compute_source_restored": false,
+    "original_runtime_kernel_identity_mapping_proven": false,
+    "android_adreno_or_water_pixels_proven": false,
+    "private_shader_or_log_export": false
+  },
+  "rejected_hypotheses": [
+    "The old direct manual-license Docker failure means the current CI Unity secrets cannot activate Editor; supported GameCI worked on two source-free and one authenticated original-derived experiments",
+    "A successful authentic original compiled slot import proves it is the original authored Unity ComputeShader or original game's 20 runtime kernel IDs",
+    "CI42013637262 pip --user PermissionError is a shader/import failure; it happened before original source acquisition, then a disposable Python venv fixed it"
+  ],
+  "limitations": [
+    "Only separate translated original-compiled-slot derived .compute assets, each with generated main, no original authored 20-variant Unity asset",
+    "Unity compiled runtime does not verify SetTexture t0/t1/u0 source resource-name parity, original quality/keyword selection, ShaderLab/Materials or actual FFT graphics math",
+    "No valid Adreno/Android device pixels, new game APK or OBB/XAPK, native water renderer or original in-game Dispatch verification",
+    "Original raw HLSL and Unity private logs deleted and never uploaded"
+  ],
+  "integration_commit": "9d729b3adba90fc3e7fe6a3317c302267ec5605a",
+  "next_step": "Derive original Unity ComputeShader authored kernel names/index→serialized variant and C# dispatch/binding, integrate source-authentic shaders with T2 water ShaderLab/materials and T5 native staging in protected branch; then phone Adreno/water screenshot acceptance."
+}
