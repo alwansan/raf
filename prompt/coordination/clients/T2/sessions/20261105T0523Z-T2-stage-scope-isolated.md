@@ -1,0 +1,13 @@
+# T2 isolated stage-scope numeric-join regression — 2026-11-05T05:23Z
+- session_id: 20261105T0523Z-T2-stage-scope-isolated
+- resumed_from_session: 20261105T0423Z-T2-set-aware-isolated
+- status: paused_identity_conflict (other T2 sessions may be concurrent; shared state/MEMORY intentionally unchanged)
+- baseline_sha: 60207e25ad801b00f04d1f4c42bec8c129961487
+- taken_over_from: T2 20261105T0423Z isolated checkpoint, B20 Foam numeric CB evidence, B45 Blur staging, B17 Spectrum; no claim of their authorship.
+- hypothesis: numeric (m_Index,m_SamplerIndex) pairs may repeat between distinct Foam passes. The set-aware checker is intentionally scoped to a single stage/pass, not a whole shader.
+- source: local T2_set_aware_checkpoint.zip previously produced; no private source bytes or shader code involved.
+- experiment: added local adversarial unittest test_t2_stage_scope.py, with repeated original numeric pair across two hypothetical passes but distinct translated descriptor coordinates. A combined call raises ValueError('ambiguous mapping'); individual pass calls each pass. Command: cd /mnt/data/t2run/t2 && python -m unittest discover -v; result 28/28 PASS (previous 27 + new test).
+- interpretation: caller must partition by exact shader pass and stage before numeric join. Do not silently relax uniqueness globally or claim original Foam has this reuse; this is a synthetic boundary proof, not authentic shader evidence. Caller-provided provenance booleans are not cryptographic attestation.
+- GitHub Actions: none launched; prior genuine run https://github.com/alwansan/raf/actions/runs/41958159556 does not prove numeric original→SPIR-V identity. No Unity/GPU/device proof.
+- next_step: pin source stage/pass identity and authentic DXBC t/s register semantics; add stage-keyed real-data schema to the checker and validate source-to-SSA mapping on privately authenticated original, then ShaderLab. WATER-001 OPEN / NOT_READY.
+- scope: no game source, .meta/GUID, audio, Settings, touch, StoreStats, workflow or other branch changed. No actions cancelled.
