@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T2050Z-T4-chat-original-mouse-routing-q9c4",
+  "origin": "chat",
+  "issue_id": "INPUT-005",
+  "track": "physical Android mouse relative look",
+  "status": "active",
+  "approach": "Resolve authentic compiled Raft camera/look mouse-consumer path before choosing event injection. Source-authenticated, read-only original DLL via ZIP2, bounded ILSpy extraction with redacted report and negative controls. No Unity build or gameplay mutation.",
+  "base_sha": "c365d724bb7fe17484a6e6f033e1c7b24f7beb8d",
+  "intended_files": [
+    "prompt/coordination/work/INPUT-005/T4-20261105T2050Z-T4-chat-original-mouse-routing-q9c4-camera-route.json",
+    "prompt/coordination/clients/T4/sessions/20261105T2050Z-T4-chat-original-mouse-routing-q9c4.md",
+    "scripts/t4_original_mouse_routing.py",
+    "tests/test_t4_original_mouse_routing.py",
+    ".github/workflows/raft-t4-original-mouse-routing.yml",
+    "prompt/coordination/experiments/T4/20261105T2050Z-T4-chat-original-mouse-routing-q9c4.json",
+    "prompt/coordination/B_TEAM/events/T4/20261105T2050Z-T4-chat-original-mouse-routing-q9c4.json"
+  ],
+  "hypothesis": "The physical pointer edge stop is not solved by Cursor.lockState alone on Unity Android; we must distinguish original Mouse X/Y consumers from InputSystem and choose an injection path that preserves buttons, touch, UI and native relative event ownership.",
+  "experiment_key": "T4-mouse-ILSpy-originalDLL-zip2-15964ea8-Unity2021-InputSystem1.7-source-routes-v1",
+  "resource_key": "original-zip2-15964ea8-Assembly-CSharp.dll-readonly-cpu",
+  "related_work": [
+    "prompt/coordination/work/INPUT-005/T4-20261105T2040Z-scheduled-mouse-capture.json"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/T4/sessions/20261105T2040Z-T4-scheduled-p4m8.md",
+    "docs/DEVICE_FEEDBACK_42058825739_AR.md"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Add a source-free parser and CI to enumerate the original compiled mouse-look method usage with negative controls, then decide Android pointer-capture and camera bridge changes.",
+  "updated_at": "2026-11-05T20:50:00Z"
+}
