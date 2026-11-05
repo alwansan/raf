@@ -1,0 +1,23 @@
+{
+  "id": "20261105T1552Z-T4-RGD-derived-precall-22pass",
+  "owner": "T4",
+  "origin": "chat",
+  "session_id": "20261105T1544Z-T4-chat-original-rgd-precall-slice-w9c3",
+  "issue_id": "LOCAL-005",
+  "type": "authenticated_original_compiled_IL_evidence",
+  "status": "SOURCE_VERIFIED_ONLY",
+  "summary": "Exact SHA-pinned original Assembly-CSharp.dll compiled IL SaveWorld immediately pushes local whose CLR declared type derives RGD; SaveUser immediately pushes field whose declared type derives RGD. Real source-free CI42058900699 success 22/22. Does not reveal field/object identity or dynamic construction, game Save, phone or Unity.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42058900699",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_RGD_PRECALL_SLICE_2026-11-05.md"
+  ],
+  "claims": {
+    "original_source_sha_verified": true,
+    "saveworld_derived_RGD_local": true,
+    "saveuser_derived_RGD_field": true,
+    "dynamic_argument_identity_proven": false,
+    "world_save_file_proven": false,
+    "Android_or_Unity_proven": false
+  },
+  "created_at": "2026-11-05T15:55:51.056Z"
+}
