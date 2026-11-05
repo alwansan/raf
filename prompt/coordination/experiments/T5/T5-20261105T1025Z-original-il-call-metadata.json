@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "session_id": "20261105T1025Z-T5-filemanager-metadata-bridge",
+  "issue_id": "LOCAL-005",
+  "hypothesis": "T4 original run41942655373 discovered one lexical call token for Load<T> and Save but zero regex block-body declarations. Direct original IL metadata will prove whether both called FileManager target methods are concrete, body-bearing same-module methods, independent of C# ILSpy formatting.",
+  "source_commit": "37c537cdab55f146cab12fe121ba35b5d6bb119c",
+  "input_hashes": [
+    "ZIP2 15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "original managed Assembly-CSharp.dll bytes=3211776 sha256=0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e"
+  ],
+  "tool_versions": {
+    "mono_cecil": "0.11.5",
+    "dotnet": "9.0.x",
+    "runner": "ubuntu-24.04"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t5_validate_filemanager_metadata.py -v",
+    "dotnet publish android-port/Experiments/T5/FileManagerMetadataBridge/FileManagerMetadataBridge.csproj -c Release",
+    "dotnet FileManagerMetadataBridge.dll --assembly [SHA-verified original DLL] --output [runner-private safe JSON]"
+  ],
+  "negative_controls": [
+    "reject unverified SHA",
+    "reject wrong/no FileManager metadata target/call cardinality",
+    "reject empty/duplicate or malicious JSON schema",
+    "reject report implying Unity/device save success",
+    "strict actual source byte count"
+  ],
+  "workflow_path": ".github/workflows/raft-t5-original-filemanager-metadata.yml",
+  "run_url": null,
+  "artifact_urls": [],
+  "budget": "single isolated 15-minute ubuntu-24.04, original managed DLL ~3.2MB, no Unity/asset/LFS/APK",
+  "status": "active",
+  "observed_result": null,
+  "rejected_hypotheses": [],
+  "limitations": [
+    "IL method resolution does not execute code or prove Android runtime path/saves.",
+    "FileManager may delegate to other helpers; direct System.IO calls alone do not prove persistence."
+  ],
+  "integration_commit": null,
+  "next_step": "Implement exact original assembly SHA gated Mono.Cecil metadata lookup; strict report validation and synthetic controls; execute original DLL in own bounded CI; record whether read/write are concrete methods without claiming .rgd save."
+}
