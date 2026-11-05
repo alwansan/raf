@@ -38,3 +38,16 @@ The private Unity 2021.3.45f2 path was **actually invoked three times** on authe
 The source-to-private-project reconstruction remains proven **20/20 at CI41957549770 only**. Neither public report, project nor original shaders contain a Unity `FindKernel` result. The original multi-variant authored `.compute` and exact runtime kernel index-to-program mapping are still NOT recovered. Android/Adreno and water rendering remain untested; WATER-001 OPEN and NOT_READY 0/3.
 
 **Next actionable blocker:** in an authorized, already-activated Unity 2021.3.45f2 environment, first verify activation on a tiny source-free project, then replay the SHA-pinned T1 import workflow, preserving the sanitized result boundary. This isolates licensing from shader importer questions and avoids repeatedly acquiring the original 116 MB owner before Editor readiness is confirmed. If the result then exposes a genuine shader import/compiler error, fix that specific translated candidate and retest. Coordinate T5's shared Unity runner and actual game integration; do not modify native build requests or working audio/Settings/touch.
+
+
+## Source-free Unity activation isolation — CI41959712898
+
+[CI41959712898](https://github.com/alwansan/raf/actions/runs/41959712898) **FAILED as a designed fail-closed early license gate** at code [099347c](https://github.com/alwansan/raf/commit/099347c6e7cec66b63b2418f2bc05794061d246d), **before checkout/reassembly of any original Raft data**. The workflow used the same Unity 2021.3.45f2 private Editor container and existing license environment on an **empty synthetic Unity project**. Sanitized result:
+
+```json
+{"source_free_fixture":true,"unity_command_exit_zero":false,"empty_unity_project_created":false,"licensing_failure_category":true,"log_present":true,"original_raft_data_acquired":false,"original_fft_compute_imported":false,"android_device_tested":false}
+```
+
+All later steps that would have acquired the original 116 MB FFT owner or generated the twenty private candidates were skipped. This **isolates the immediate execution failure to Unity container activation/Editor setup independently of any original shader conversion**, without conclusively diagnosing secret configuration, account entitlement, or which Unity licensing mechanism is incorrect. There is no evidence of shader compiler failure because the source was deliberately never read in this run. No raw ULF/credential, compiler log, original DXBC or private HLSL is published.
+
+An **environment-only** source-free license/activation fix is therefore the next gate; repetitive downloads or original FFT translations will not solve the observed pre-import failure. T5/maintainers can inspect the private Unity environment, image, activation method and license entitlements without rewriting original shaders. Only after the source-free project reports exit0 and produces its ProjectVersion file should another real FFT candidate import be justified. WATER-001 remains OPEN, NOT_READY 0/3; no Android gameplay/visual acceptance.
