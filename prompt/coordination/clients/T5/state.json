@@ -2,12 +2,12 @@
   "schema_version": 1,
   "username": "T5",
   "generation": "T-2026-11-05",
-  "session_id": "20261104T2357Z-T5-b12-fixture-7e2",
-  "resumed_from_session": null,
-  "status": "paused",
-  "base_sha": "711dc94bebe342e07d1f8ffe6e46bc8d79c108b5",
+  "session_id": "20261105T0024Z-T5-hydration-preflight-a1",
+  "resumed_from_session": "20261104T2357Z-T5-b12-fixture-7e2",
+  "status": "active",
+  "base_sha": "e500e0633f0fcda6149e7dffd607a42660435d41",
   "last_commit": "0f3739e38f6b42c92100e75697a314988869cf63",
-  "updated_at": "2026-11-05T00:21:30.225Z",
+  "updated_at": "2026-11-05T00:25:00Z",
   "tracks": [
     "INTEGRATION-001",
     "ASSET-RESTORE-001"
@@ -15,7 +15,8 @@
   "work_ids": [
     "T5-20261104T2357Z-b12-fixture",
     "T5-20261105T0004Z-zip2-render-integration",
-    "T5-20261105T0015Z-three-owner-batch"
+    "T5-20261105T0015Z-three-owner-batch",
+    "T5-20261105T0024Z-hydration-batch-preflight"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41937719270",
@@ -25,6 +26,6 @@
     "https://github.com/alwansan/raf/actions/runs/41940032540",
     "https://github.com/alwansan/raf/actions/runs/41940609086"
   ],
-  "next_step": "Complete 3 exact ZIP2 graphics owners 337660952 bytes CI41940032540 PASS, 13/13; T_TEAM index refreshed/confirmed CI41940609086. Next T5 session: coordinate T1/T3 actual Unity source export and live shader/FFT/material linkage, then game APK/Adreno test as separate gate. Current game NOT_READY; no active jobs at last check.",
+  "next_step": "Registered T5 graphics consumer batch-preflight work. Patch hydrate_render_payloads reuse function and test two-owner unsafe-later preservation; trigger isolated T5 CI, then close session with evidence.",
   "memory_path": "prompt/coordination/clients/T5/MEMORY.md"
 }
