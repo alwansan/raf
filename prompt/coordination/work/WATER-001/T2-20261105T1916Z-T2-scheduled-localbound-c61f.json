@@ -1,0 +1,20 @@
+{
+  "session_id": "20261105T1916Z-T2-scheduled-localbound-c61f",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "baseline_sha": "950bd1899713dd7ee8f55c8bc1bfa70254d7b2f8",
+  "resumed_from_session": [
+    "20261105T1821Z-T2-scheduled-stackjoin-b4e9",
+    "20261105T1736Z-T2-chat-rt-return-reason-8e2d"
+  ],
+  "intended_files": [
+    "scripts/t2_rt_return_cfg.py",
+    "tests/test_t2_rt_return_cfg.py"
+  ],
+  "experiment_key": "synthetic-cil-cfg-local-index-memory-bound-v1",
+  "resource_key": null,
+  "hypothesis": "Malformed stloc with huge local index can allocate unbounded memory despite max_states; fail closed before allocation",
+  "validation": "python -m unittest tests.test_t2_rt_return_cfg; synthetic only, no original DLL/Unity/device",
+  "updated_at": "2026-11-05T19:16:00Z"
+}
