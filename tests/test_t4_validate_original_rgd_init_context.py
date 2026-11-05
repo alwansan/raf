@@ -161,11 +161,14 @@ class TestOriginalRgdInitContext(unittest.TestCase):
         self.assertFalse(out["derived_RGD_runtime_value_initialized_proven"])
         self.assertFalse(out["Android_Unity_IL2CPP_phone_executed"])
 
-    def test_external_unresolved_scope_allowed_without_body(self):
+    def test_external_unresolved_scope_cannot_claim_original_factory_return_sites(self):
+        # Earlier scope-only reports allowed unresolved producers. This experiment
+        # now asserts lexical returns measured from an EXACT original body.
         x = good()
         x["world_producer_declaring_scope"] = "EXTERNAL_OR_UNRESOLVED"
         x["world_producer_compiled_method_body_found"] = False
-        self.assertFalse(validate(x)["world_producer_original_method_body_exists"])
+        with self.assertRaisesRegex(ValueError, "factory_returns_without_exact_original_body"):
+            validate(x)
 
     def test_external_scope_with_body_rejected(self):
         x = good()
