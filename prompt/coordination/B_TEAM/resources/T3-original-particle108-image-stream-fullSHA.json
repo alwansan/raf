@@ -1,0 +1,54 @@
+{
+  "id": "T3-ORIGINAL-PARTICLE108-IMAGE-STREAM-FULLSHA",
+  "title": "Top original Particle Shader48's three Texture2D28 source image ranges verified in one full-SHA authentic ZIP2 streaming provider",
+  "kind": "SHA-original-six-scene-108-ParticleShader48-5Material21-3Texture2D28-stream-provider-byte-fidelity",
+  "owner": "T3",
+  "source": {
+    "provider": "immutable ZIP2 original Raft PC sources; exactly one PRIVATE original resource provider selected from typed Texture2D28 m_StreamData",
+    "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "scene_shas_verified": 6,
+    "serialized_owner_shas_verified": 4,
+    "original_full_resource_provider_count": 1,
+    "resource_provider_sha256_verified": true,
+    "original_provider_name_and_digest_published": false
+  },
+  "stages": {
+    "acquisition": "VERIFIED_SIX_SCENE_AND_FOUR_SERIALIZED_OWNER_SHA_269007288_BYTES_PLUS_ONE_EXTERNAL_SOURCE_STREAM_PROVIDER_FULL_BYTES_SHA256_AUTHENTIC",
+    "extraction": "108_SOURCE_PARTICLE_RENDERER_SLOTS_5_MATERIAL21_10_NONNULL_LOCAL_TEXENVS_3_TYPED_TEXTURE2D28_ALL_THREE_ORIGINAL_BYTE_RANGES_READ_AND_SHA_FINGERPRINTED",
+    "reconstruction": "ORIGINAL_SOURCE_ONE_STREAM_PROVIDER_SPARSE_CHECKED_OUT_AND_RECONSTRUCTED_SHA_PINNED_IN_DISPOSABLE_CI_ONLY_NO_GAME_IMPORT",
+    "binding": "VERIFIED_ORIGINAL_RENDERER_TO_MATERIAL21_TO_TEXTURE2D28_SOURCE_PPTR_GRAPH_SOURCE_ONLY; NATIVE_UNITY_EXPORT_GUID_AND_ANDROID_OBB_BINDING_NOT_VERIFIED",
+    "integration": "T3_SOURCE_ONLY_VERIFIER_AND_PINNED_GITHUB_ACTIONS_42125608932_SUCCESS_106_OF_106_PYTHON_TESTS_NO_EXPORTED_GAME_SHADER_ASSETS",
+    "device": "NOT_TESTED"
+  },
+  "counts": {
+    "original_particle_material_slots": 108,
+    "distinct_original_particle_renderers": 54,
+    "distinct_original_particle_material21": 5,
+    "original_nonnull_local_material_texture_PPtrs": 10,
+    "distinct_original_texture2d28": 3,
+    "original_stream_providers_full_size_sha_verified": 1,
+    "original_typed_stream_ranges_read": 3,
+    "original_source_stream_ranges_total_bytes_read": 983052,
+    "original_nonzero_ranges": 3,
+    "distinct_sha256_range_fingerprints_without_digest_publication": 3,
+    "partial_overlaps": 0,
+    "duplicate_ranges": 0,
+    "source_payload_decoded_to_pixels": false,
+    "same_instance_native_export_texture_guid_verified": false,
+    "android_device_shader_sampler_pixels_verified": false
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42125608932",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE_STREAM_BYTES_2026-11-06.md",
+    "https://github.com/alwansan/raf/commit/6b63f836711de38274db64b2a7e6d1f246015d61",
+    "https://github.com/alwansan/raf/commit/276aad3df4b76067e9061b267caf3c12c1616cb3"
+  ],
+  "remaining": [
+    "Three authentic source Texture2D stream ranges have full-parent SHA and byte-level read proof, NOT a decoded Unity RGBA image or texture importer parity.",
+    "Full-native same-instance original 5 Material21/3 Texture2D28 → emitted Unity GUID and actual material TexEnv references still unproven.",
+    "Actual installed Android APK/OBB/XAPK resource image coverage, shader alpha/fragment source fidelity and device fire/smoke emitter pixels still unverified.",
+    "Do not infer absence from a previously narrow 4-owner run; the exact source resource was deliberately staged only in new 42125608932."
+  ],
+  "updated_by": "T3",
+  "updated_at": "2026-11-05T22:59:58.266Z"
+}
