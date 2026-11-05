@@ -6,7 +6,7 @@
   "issue_id": "WATER-001",
   "track": "foam-actual-compiled-sampler-use-edges",
   "approach": "Independently trace direct SPIR-V SSA OpLoad/OpCopyObject→OpSampledImage→OpImageSample* edges to numeric descriptor slots for B20 authenticated four-stage original Foam. Fail closed on ambiguous resource provenance. Compare against original source-authenticated six resource descriptor slots without assuming Unity Material identity. Private scratch/only safe numeric report.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "491b7a34c281107af30bce7e5021764ef202397a",
   "intended_files": [
     "scripts/t2_foam_spirv_sampler_use.py",
@@ -29,8 +29,47 @@
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41942245746"
   ],
-  "result": null,
-  "next_step": "Inspect actual CI synthetic and authentic source outcome; preserve only numeric pair evidence, reject unsupported SSA rather than invent resource pairing; coordinate current T2 session without overwriting shared memory/state.",
-  "updated_at": "2026-11-05T00:34Z",
+  "result": {
+    "original_CI": "SUCCESS",
+    "source_commit": "329be30d7814324ea6ea3e56a0d90fec7d5152af",
+    "synthetic_tests": "13/13",
+    "compiled_sample_calls": 21,
+    "distinct_used_sampled_image_sampler_pairs": 6,
+    "pass0_fragment_pairs": [
+      [
+        6,
+        1
+      ],
+      [
+        7,
+        2
+      ],
+      [
+        8,
+        3
+      ],
+      [
+        9,
+        4
+      ],
+      [
+        10,
+        5
+      ]
+    ],
+    "pass1_fragment_pairs": [
+      [
+        2,
+        1
+      ]
+    ],
+    "source_to_unity_material_binding_verified": false,
+    "shaderlab_import_verified": false,
+    "device_verified": false,
+    "safe_artifact_id": 13376913366,
+    "safe_artifact_zip_sha256": "36e24d0bad2775337316f28cacc392d446aeb2eef3cbc549bcf59f1cbd72c0f6"
+  },
+  "next_step": "Original serialized m_TextureParams m_Index/m_SamplerIndex to original DXBC registers and compiled SSA descriptor pairs join; authentic ShaderLab only with proven material/upload mapping. Shared T2 state/MEMORY intentionally untouched due active parallel T2 session.",
+  "updated_at": "2026-11-05T00:35Z",
   "identity_conflict": "Shared T2 state/MEMORY not modified; isolated session"
 }
