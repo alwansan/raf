@@ -20,3 +20,9 @@ Load<T> original caught error marker lacks a file state branch. Add bounded Andr
 
 ## Next step
 Implement and test snapshot, then record exact commits, workflow outcomes, limits and handoff.
+
+## Checkpoint — 2026-11-05T12:56:08.539Z
+- Integrated Android-only Load.argumentFileSnapshot in commit a88000086d973adfcb05a85a7ecd0b12133cbf81; old Save snapshot preserved.
+- [CI42030693004](https://github.com/alwansan/raf/actions/runs/42030693004) **SUCCESS** authentic 14-source Android offline original managed integration. [CI42030692728](https://github.com/alwansan/raf/actions/runs/42030692728) **SUCCESS** previous Save synthetic suite on same SHA.
+- [CI42030692961](https://github.com/alwansan/raf/actions/runs/42030692961) **FAILED only at newly compiled synthetic C# runtime step**, after new Python 5/5 PASS; private-log redirection lacked assertion reason. Diagnostic-only workflow patch commit a3e505f4de5acb535d7e697b7404af0949379277 now reruns at [42031209988](https://github.com/alwansan/raf/actions/runs/42031209988), **IN_PROGRESS at checkpoint**. Do not falsely call synthetic proof passed.
+- No Unity/IL2CPP/phone or real .rgd, no team builds canceled. work status waiting_ci. Next: inspect sanitized synthetic-only failure tail; fix bounded fixture or runtime wrapper if evidence identifies fault, then obtain green CI.
