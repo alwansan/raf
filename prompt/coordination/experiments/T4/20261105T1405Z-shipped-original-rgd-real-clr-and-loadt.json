@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "origin": "chat",
+  "session_id": "20261105T1405Z-T4-chat-original-rgd-runtime-k6n8",
+  "issue_id": "LOCAL-005",
+  "experiment_key": "t4-original-rgd-2941-byte-sha-pinned-real-binaryformatter-plus-original-SaveAndLoad.LoadT-dotnet8-151-sibling-v1",
+  "hypothesis": "The authentic original 2941B shipped Data.rgd can instantiate a genuine original Raft CLR object through BinaryFormatter and the genuine compiled original generic SaveAndLoad.Load<T>, despite earlier non-matching serialized metadata and assembly version.",
+  "source_commit": "8786e4c29ee59e754e41028e9bf7bacd6d952154",
+  "input_hashes": [
+    "zip2_original_commit=15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "Data.rgd_original_bytes=2941_sha256=b2785187aa11e33872698adfa79ab252cf65a824d92bee7e88773ce4aa11cbba",
+    "Assembly-CSharp.dll_original_bytes=3211776_sha256=0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "managed_151_siblings_commit=02e9fba7fb42b83579595885391be636ee3b56e8"
+  ],
+  "tool_versions": {
+    "dotnet": "8.0.x",
+    "BinaryFormatter": "System.Runtime.Serialization.Formatters.Binary enabled for exact hash-only shipped seed",
+    "runner": "ubuntu-24.04"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t4_validate_original_rgd_runtime_load.py -v",
+    "python3 -m unittest discover -s tests -p test_t4_validate_original_rgd_loadt.py -v",
+    "dotnet publish android-port/Experiments/T4/OriginalRgdRuntimeLoad/OriginalRgdRuntimeLoad.csproj -c Release",
+    "dotnet OriginalRgdRuntimeLoad.dll --assembly exact-original-managed/Assembly-CSharp.dll --seed exact-original-seed/Data.rgd --output private.json",
+    "dotnet OriginalRgdRuntimeLoad.dll --assembly exact-original-managed/Assembly-CSharp.dll --seed exact-original-seed/Data.rgd --output private-loadt.json --original-loadt",
+    "python3 -m scripts.t4_validate_original_rgd_runtime_load --report private.json",
+    "python3 -m scripts.t4_validate_original_rgd_loadt --report private-loadt.json"
+  ],
+  "negative_controls": [
+    "reject missing or wrong source binary SHA before CLR/formatter execution",
+    "reject arbitrary seed bytes under exact original 2941B hash gate",
+    "reject private CLR type/member/serialized field detail publication",
+    "reject no-execution pretending true original generic loader ran",
+    "reject false native Android, real user-world save/relaunch/playability claims",
+    "reject contradictory formatter or loader categories"
+  ],
+  "workflow_path": ".github/workflows/raft-t4-original-rgd-runtime-load.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42043768798",
+  "artifact_urls": [],
+  "budget": "One isolated ubuntu24.04 10min no LFS/Unity/native, 45s per exact SHA input formatter, no source/game artifacts, no persistent credentials",
+  "status": "completed",
+  "observed_result": {
+    "authentic_original_seed_SHA": true,
+    "authentic_original_DLL_SHA": true,
+    "exact_151_companions": true,
+    "real_direct_BinaryFormatterDeserialize_created_original_game_type": true,
+    "real_compiled_original_SaveAndLoad_LoadT_signature_verified": true,
+    "real_compiled_original_SaveAndLoad_LoadT_invoked": true,
+    "original_LoadT_returned_same_nonnul_original_CLR_type": true,
+    "original_runtime_exception": "NONE",
+    "tests": "18+18 PASS",
+    "bad_seed_SHA_rejected": true,
+    "original_game_user_save_or_process_relaunch": false,
+    "unity_native_device": false,
+    "source_published": false
+  },
+  "failed_early_runs": [
+    {
+      "run": "https://github.com/alwansan/raf/actions/runs/42042350875",
+      "status": "failure",
+      "cause": "test harness ulimit -f 4096 caused SIGXFSZ/exit153 while CLR attempted dump, no deserialize conclusion"
+    },
+    {
+      "run": "https://github.com/alwansan/raf/actions/runs/42042563929",
+      "status": "failure",
+      "cause": "raised but still restrictive file-size cap caused SIGXFSZ/exit153; corrected by removing file cap and disabling dump in new runner"
+    }
+  ],
+  "rejected_hypotheses": [
+    "A10/B37 original seed field-name and stored assembly-version discrepancies necessarily make original runtime seed deserialization impossible — rejected for this specific .NET8 original object type and source pin",
+    "A direct BinaryFormatter success proves original SaveAndLoad.Load<T> works — previously unproven; now independently executed and verified for exact shipped seed",
+    "A shipped seed's successful managed load proves Android player-world or persisted RGD compatibility — NOT established, remains OPEN"
+  ],
+  "limitations": [
+    "Actual original SaveAndLoad.Load<T> tested only for shipped 2941B original Data.rgd seed, not a user-generated Raft .rgd save",
+    "The exact .NET8 runtime may not behave like original Unity Mono or Android IL2CPP",
+    "No actual world construction/player control, SaveGame/SaveWorld/SaveUser, serialization of new save or process restart",
+    "No original private data/type/member names or raw compiler errors published"
+  ],
+  "integration_commit": "8786e4c29ee59e754e41028e9bf7bacd6d952154",
+  "next_step": "Record this as real original Data.rgd seed load compatibility only. T5 next integrated native Unity ARM64 phone candidate must prove offline local host playable, save actual world, exit app, relaunch and reopen same user-generated RGD with expected world state."
+}
