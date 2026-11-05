@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "session_id": "20261104T2357Z-T5-b12-fixture-7e2",
+  "issue_id": "ASSET-RESTORE-001",
+  "track": "authentic FFT-related graphic input source",
+  "approach": "Extend verified single-original graphics stage to a three-owner authentic ZIP2 batch including resources.assets, sharedassets0.assets, sharedassets36.assets. Add multi-owner preflight fail-closed synthetic control and one sparse authentic CI stage/consumer for all three; original SHA/size per owner, not GPU correctness.",
+  "status": "active",
+  "base_sha": null,
+  "intended_files": [
+    "tests/test_t5_stage_zip2_render_owners.py",
+    ".github/workflows/raft-t5-zip2-render-stage.yml",
+    "prompt/coordination/experiments/T5/",
+    "prompt/coordination/clients/T5/"
+  ],
+  "hypothesis": "Real ZIP2 split owner plan and existing SHA-verified consumer should support three important independent graphics/FFT original owners in a single bounded stage, and if second source is linked no first output should be published even though the first requested source is valid.",
+  "related_work": [
+    "https://github.com/alwansan/raf/actions/runs/41939143108",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/w1_stage_zip2_owners.py"
+  ],
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/B03/MEMORY.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/B16/MEMORY.md"
+  ],
+  "experiment_ids": [
+    "T5-20261105T0015Z-original-three-owner-batch"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Add real three-owner staging and multi-file all-or-nothing preflight controls; run isolated CI within 15 min and <400MB source, no Unity or payload publication.",
+  "updated_at": "2026-11-05T00:13:54.841Z"
+}
