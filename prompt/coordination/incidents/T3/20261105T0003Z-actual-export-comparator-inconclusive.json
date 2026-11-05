@@ -22,7 +22,10 @@
     "export_material_trace": 57,
     "export_texture_trace": 92,
     "failure_stage": "actual_exported_material_yaml",
-    "failure_type": "ValueError"
+    "failure_type": "ValueError",
+    "final_run": "https://github.com/alwansan/raf/actions/runs/41939404454",
+    "original_export_parity_41_materials_227_slots": "MATCH",
+    "mismatches": 0
   },
   "rejected_hypotheses": [
     "Original ZIP2 source missing",
@@ -34,6 +37,6 @@
     "Failure stage not recorded in first-safe report; cannot yet distinguish material trace population, original typetree shape, YAML parse or exact B05 pointer mismatch.",
     "No raw paths or private identifiers may enter public artifact."
   ],
-  "recovery": "Run 41939065539 classifies exact static YAML parser reason; adapt parser only to verified exported YAML structure, preserving duplicate-key and private-identity integrity checks. No actual material drift established.",
-  "closed_reason": null
+  "recovery": "Fixed exported Material YAML m_TexEnvs dictionary support in B05 only, kept source strict arrays and duplicate-key rejection, verified same-export 41 Materials/227 TexEnv+UV in CI41939404454.",
+  "closed_reason": "T3 parser wrong shape for authentic AssetRipper YAML. Repaired code 77d312f5 and tested in authentic same-export CI41939404454 SUCCESS. White render issue RENDER-002 remains OPEN."
 }
