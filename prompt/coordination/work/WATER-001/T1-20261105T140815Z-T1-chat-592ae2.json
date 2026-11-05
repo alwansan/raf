@@ -1,0 +1,19 @@
+{
+  "id": "20261105T140815Z-T1-chat-592ae2",
+  "session_id": "20261105T140815Z-T1-chat-592ae2",
+  "origin": "chat",
+  "owner": "T1",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "6b90be5f921bf17cc921c94749be55e0d4ffb4e6",
+  "updated_at": "2026-11-05T14:08:15.026Z",
+  "intended_files": [
+    ".github/workflows/raft-t1-unity-vulkan-smoke.yml"
+  ],
+  "experiment_key": "unity-2021.3.45f2-gameci-v4-force-vulkan-linux-rgba32f-two-pass-source-free",
+  "resource_key": "raft-native-engine-feature/android-native-port",
+  "resumed_from_sessions": [
+    "20261105T131036Z-T1-chat-877585",
+    "20261105T130700Z-T1-scheduled-a8d4"
+  ]
+}
