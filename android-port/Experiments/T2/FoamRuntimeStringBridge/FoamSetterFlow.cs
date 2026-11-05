@@ -8,8 +8,26 @@ using Mono.Cecil.Cil;
 internal static class FoamSetterFlow
 {
     internal readonly record struct VerifiedCall(string SetterKind, string FirstArgRole,
-                                                 int InstructionDistance);
-    private enum Tag { Unknown, OriginalNameString, OriginalPropertyId }
+                                                 int InstructionDistance,
+                                                 string SecondTextureOperandOrigin,
+                                                 bool SecondFormalParameterIsUnityTexture);
+    private enum Tag {
+        Unknown, OriginalNameString, OriginalPropertyId,
+        ArgumentLoad, StaticFieldLoad, InstanceFieldLoad,
+        NullLiteral, NumericLiteral, OtherStringLiteral, CallResult
+    }
+    private static string SecondOrigin(Tag tag) => tag switch {
+        Tag.ArgumentLoad => "argument_load",
+        Tag.StaticFieldLoad => "static_field_load",
+        Tag.InstanceFieldLoad => "instance_field_load",
+        Tag.NullLiteral => "null_literal",
+        Tag.NumericLiteral => "numeric_literal",
+        Tag.OtherStringLiteral => "other_string_literal",
+        Tag.CallResult => "call_return",
+        Tag.OriginalNameString => "source_name_string",
+        Tag.OriginalPropertyId => "source_property_id",
+        _ => "unknown",
+    };
     private const int MaxDistance = 16;
 
     private static int? LocalIndex(Instruction instruction)
@@ -89,17 +107,40 @@ internal static class FoamSetterFlow
                     ? value : Tag.Unknown);
                 continue;
             }
-            if (op.StartsWith("ldarg",StringComparison.Ordinal) ||
-                op.StartsWith("ldc.",StringComparison.Ordinal) ||
-                op is "ldnull" or "ldsfld" or "ldstr" or "ldtoken")
+            if (op.StartsWith("ldarg",StringComparison.Ordinal))
             {
-                stack.Add(Tag.Unknown);
+                stack.Add(Tag.ArgumentLoad);
+                continue;
+            }
+            if (op.StartsWith("ldc.",StringComparison.Ordinal) ||
+                op=="ldtoken")
+            {
+                stack.Add(Tag.NumericLiteral);
+                continue;
+            }
+            if (op=="ldnull")
+            {
+                stack.Add(Tag.NullLiteral);
+                continue;
+            }
+            if (op=="ldsfld")
+            {
+                if (instruction.Operand is not FieldReference)
+                    return null;
+                stack.Add(Tag.StaticFieldLoad);
+                continue;
+            }
+            if (op=="ldstr")
+            {
+                stack.Add(Tag.OtherStringLiteral);
                 continue;
             }
             if (op=="ldfld")
             {
+                if (instruction.Operand is not FieldReference)
+                    return null;
                 Pop();
-                stack.Add(Tag.Unknown);
+                stack.Add(Tag.InstanceFieldLoad);
                 continue;
             }
             if (op=="stfld")
@@ -134,9 +175,18 @@ internal static class FoamSetterFlow
                     var tag=args[0];
                     if ((tag==Tag.OriginalNameString && firstType=="System.String") ||
                         (tag==Tag.OriginalPropertyId && firstType=="System.Int32"))
+                    {
+                        // This validates the actual parameter *declared type*.
+                        // The second value's source is only the preceding IL
+                        // opcode family; this is not proof of a runtime Texture
+                        // instance or its source/pixel contents.
+                        var second = args[1];
+                        string declared = methodRef.Parameters[1].ParameterType.FullName;
                         return new VerifiedCall(setter,
                             tag==Tag.OriginalNameString?"string":"property_id",
-                            pos-literalIndex);
+                            pos-literalIndex,SecondOrigin(second),
+                            declared=="UnityEngine.Texture");
+                    }
                 }
                 // Do not accept unrelated methods with the same name or
                 // a marker that merely resides nearby on the evaluation stack.
@@ -150,7 +200,7 @@ internal static class FoamSetterFlow
                 for (int i=0;i<total;i++)
                     Pop();
                 if (methodRef.ReturnType.FullName!="System.Void")
-                    stack.Add(propertyId?Tag.OriginalPropertyId:Tag.Unknown);
+                    stack.Add(propertyId?Tag.OriginalPropertyId:Tag.CallResult);
                 continue;
             }
             // Never fake argument dataflow for arithmetic, blocks, Phi-like
