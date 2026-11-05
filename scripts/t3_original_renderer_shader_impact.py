@@ -43,7 +43,8 @@ def summarize(original_edges:list, materials:dict, typed_shaders:dict,
               *, expected_slots:int=SCENE_MATERIAL_SLOTS,
               expected_nonnull:int=SCENE_NONNULL_SLOTS,
               source_sha_authenticated:bool=False,
-              private_slot_counts:dict|None=None):
+              private_slot_counts:dict|None=None,
+              private_particle_slot_counts:dict|None=None):
     """Pure original-source join: edge=(scene,pid,renderer-class,material-key|None)."""
     if (not isinstance(original_edges,list) or not isinstance(materials,dict)
         or not isinstance(typed_shaders,dict) or len(original_edges)!=expected_slots
@@ -185,6 +186,13 @@ def summarize(original_edges:list, materials:dict, typed_shaders:dict,
         # PRIVATE IN-MEMORY ONLY. Never print/write/return this dictionary
         # from a CLI. Its (owner, original PathID) keys must remain in runner.
         private_slot_counts.update(slot_by_shader)
+    if private_particle_slot_counts is not None:
+        if (not isinstance(private_particle_slot_counts,dict)
+            or private_particle_slot_counts):
+            raise ValueError("private_original_particle_shader_map_outparam_not_empty")
+        # Only a private, in-memory map with the original owner/pathID keys.
+        # Caller must NEVER JSON-serialize or print this private mapping.
+        private_particle_slot_counts.update(particle_sources)
     return {
         "schema_version":1,
         "experiment":"T3-authentic-original-six-scenes-Renderer-Material-Shader48-impact",
@@ -237,7 +245,8 @@ def summarize(original_edges:list, materials:dict, typed_shaders:dict,
     }
 
 
-def load_original(source:Path, manifest:Path, *, private_slot_counts:dict|None=None):
+def load_original(source:Path, manifest:Path, *, private_slot_counts:dict|None=None,
+                  private_particle_slot_counts:dict|None=None):
     import UnityPy
     root=source/"Raft_Data"
     if any(p.is_symlink() for p in (source,root,*source.parents)):
@@ -332,7 +341,8 @@ def load_original(source:Path, manifest:Path, *, private_slot_counts:dict|None=N
     if set(typed)!=needed:
         raise ValueError("incomplete_typed_original_Shader48_sources")
     return summarize(original_edges,mats,typed,source_sha_authenticated=True,
-                     private_slot_counts=private_slot_counts)
+                     private_slot_counts=private_slot_counts,
+                     private_particle_slot_counts=private_particle_slot_counts)
 
 
 def main(argv=None):
