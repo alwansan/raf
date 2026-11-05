@@ -4,17 +4,20 @@
   "origin": "chat",
   "owner": "T1",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "57cbc77526929db395c1a891705a7d058b326aa1",
   "baseline_sha": "57cbc77526929db395c1a891705a7d058b326aa1",
-  "updated_at": "2026-11-05T12:44:41.404Z",
+  "updated_at": "2026-11-05T12:45:05.511Z",
   "intended_files": [
     "android-port/Experiments/T1/T1FftRgba32fTransferControl.cs",
     ".github/workflows/raft-t1-fft-rgba32f-transfer-control.yml"
   ],
   "experiment_key": "unity2021.3.45f2-gameci0.1.72-rgba32f-1024x32-synthetic-texture-load-uav-readpixels",
   "resource_key": "raft-native-engine-feature/android-native-port",
-  "run_urls": [],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42029739318"
+  ],
   "approach": "Isolate the RGBA32F input and output path of CI42025620147 with a source-free GPU control using known exact channel data and spatial markers across two sampled input textures and one intermediate UAV.",
-  "next_step": "Resolve push-triggered workflow run and record its exact test verdict."
+  "implementation_sha": "3fe976889d153443744525569c0bdde2c720b808",
+  "next_step": "Check exact NUnit control verdict. If passing, isolate original pass 0 with channel counts and private recompiled SPIR-V comparison. If failing, isolate the synthetic failing stage before testing original inputs again."
 }
