@@ -23,16 +23,19 @@
     "second invalid symlink/mismatched pointer must not replace first pointer"
   ],
   "workflow_path": ".github/workflows/raft-t5-zip2-render-stage.yml",
-  "run_url": null,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41942039458",
   "artifact_urls": [],
   "budget": "T5 isolated ubuntu-24.04 15min max, source data 337660952B staged, no Unity/LFS/raw artifact",
-  "status": "active",
-  "observed_result": null,
-  "rejected_hypotheses": [],
+  "status": "completed",
+  "observed_result": "CI41942039458 SUCCESS; 17/17 synthetic controls and authentic 3-owner ZIP2 source stage/hydration, total 337660952 bytes SHA matched; same-length second-owner corruption leaves first original pointer unmodified and temps cleaned. Previous CI41941969217 failed due synthetic fixture newline typo, fixed in 7cf650ca4.",
+  "rejected_hypotheses": [
+    "Metadata-only preflight already prevents same-length late digest corruption from partially hydrating batch (false in prior implementation)",
+    "CI41941969217 failure implies production SHA regression (false: malformed synthetic pointer literal; corrected)"
+  ],
   "limitations": [
     "Multiple os.replace operations are not globally atomic against unexpected OS errors; prevalidation only guarantees no partial publication from source size/SHA validation failure.",
     "Not Unity, pixel, phone or .rgd acceptance"
   ],
-  "integration_commit": null,
-  "next_step": "Implement staged batch SHA verification and failure cleanup, add later corrupt owner negative, run isolated T5 workflow, then update state/issue/evidence."
+  "integration_commit": "7cf650ca49468d061d722446f5735f6e84fc6407",
+  "next_step": "Unity-native source import/export and shader bindings remain unverified; coordinate actual safe original resource use, no changes to audio/Settings/touch."
 }
