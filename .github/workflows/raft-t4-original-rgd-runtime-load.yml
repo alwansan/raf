@@ -107,14 +107,42 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          # Core dumps are not needed, and can exceed the intentionally
-          # limited output quota even before a safe result is printed.
+          # .NET may generate an enormous failure dump independently of
+          # ulimit -c; a prior file-size cap masked the real runtime status.
+          # Capture output privately and classify only a bounded process code.
           ulimit -c 0
-          ulimit -f 262144
-          timeout 90s dotnet "$RUNNER_TEMP/t4-rgd-formatter-runner/OriginalRgdRuntimeLoad.dll" \
+          export DOTNET_DbgEnableMiniDump=0 COMPlus_DbgEnableMiniDump=0 DOTNET_EnableCrashReport=0
+          set +e
+          timeout 45s dotnet "$RUNNER_TEMP/t4-rgd-formatter-runner/OriginalRgdRuntimeLoad.dll" \
             --assembly "$RUNNER_TEMP/t4-rgd-immutable/Assembly-CSharp.dll" \
             --seed "$RUNNER_TEMP/t4-rgd-immutable/Data.rgd" \
-            --output "$RUNNER_TEMP/t4-rgd-source-probe.json"
+            --output "$RUNNER_TEMP/t4-rgd-source-probe.json" \
+            >"$RUNNER_TEMP/t4-rgd-private-runtime.log" 2>&1
+          result=$?
+          set -e
+          if test "$result" -ne 0; then
+            export T4_RGD_RUNTIME_EXIT="$result"
+            python3 - <<'PY'
+          import os
+          from pathlib import Path
+          p=Path(os.environ['RUNNER_TEMP'])/'t4-rgd-private-runtime.log'
+          s=p.read_text(errors='replace')[:100000].lower()
+          flags={
+              'stack_overflow_reported':'stack overflow' in s,
+              'segmentation_fault_reported':'segmentation fault' in s,
+              'fatal_runtime_reported':'fatal error' in s,
+              'managed_error_reported':'exception' in s,
+          }
+          print('T4_ORIGINAL_RGD_CLR_PROCESS_FATAL', {
+              'exit_code':os.environ['T4_RGD_RUNTIME_EXIT'],
+              'diagnostic_flags':flags,
+              'raw_original_error_published':False,
+              'RGD_validity_conclusion':'INCONCLUSIVE'
+          })
+          PY
+            exit 1
+          fi
+          grep '^T4_ORIGINAL_RGD_DESERIALIZE ' "$RUNNER_TEMP/t4-rgd-private-runtime.log"
           python3 -m scripts.t4_validate_original_rgd_runtime_load \
             --report "$RUNNER_TEMP/t4-rgd-source-probe.json"
           # A source mismatch must fail BEFORE the formatter gets untrusted input.
