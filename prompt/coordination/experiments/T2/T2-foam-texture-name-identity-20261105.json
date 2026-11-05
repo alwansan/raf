@@ -28,16 +28,20 @@
   ],
   "workflow_path": ".github/workflows/raft-t2-foam-member-abi.yml",
   "run_url": "https://github.com/alwansan/raf/actions/runs/41941354379",
-  "artifact_urls": [],
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41941354379#artifacts"
+  ],
   "budget": "same isolated SHA-pinned original 115978112-byte provider; 25-minute CI timeout; no Unity/native build",
-  "status": "running",
-  "observed_result": null,
-  "rejected_hypotheses": [],
+  "status": "completed",
+  "observed_result": "CI41941354379 SUCCESS: exact original Foam texture symbols 0/6 match translated SPIRV separate image literal names, while original 6 image+6 sampler cardinality proven. 15 new tests passed (52 total tests). No material upload, sampler state, ShaderLab, Unity import or Android pixels verified.",
+  "rejected_hypotheses": [
+    "All original Unity Foam texture name symbols remain literal-equal in generated SPIR-V separate image reflection (refuted, 0/6)"
+  ],
   "limitations": [
     "Name equality alone cannot authenticate shader material property upload or sampler state",
     "No original shader import, GPU numeric comparison, or phone pixels",
     "Artifact aggregates must not include original symbol values"
   ],
   "integration_commit": "5dd02e7931aedfbb92c5cbcf3cc10ac1a6f9fd7c",
-  "next_step": "Read source-authentic CI output, correct any actual schema assumption with evidence; then work on authenticated private ShaderLab/material sampler mapping."
+  "next_step": "Verify source m_Index/m_SamplerIndex versus translated active sampled-image/sampler use privately before attempting any alias or ShaderLab mapping."
 }
