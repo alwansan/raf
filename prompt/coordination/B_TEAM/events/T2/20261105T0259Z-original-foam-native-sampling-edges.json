@@ -1,0 +1,15 @@
+{
+  "id": "T2-20261105T0259Z-original-foam-native-sampling-edges",
+  "owner": "T2",
+  "session_id": "20261105T0238Z-T2-dxbc-texture-registers",
+  "issue_id": "WATER-001",
+  "type": "integration",
+  "summary": "Source-authentic ZIP2 Foam original compiled D3D11 program SHA verified. 15+16 synthetic controls PASS; real CI41958159556 PASS; four-stage serialized indices match DXBC t/s declarations and all six source t/s pairs are actively referenced by 21 genuine DXBC SAMPLE calls (17+4), zero unhandled sampled variants. Translational SPIRV register variable identity and Unity property/upload/device remain unverified; no ShaderLab, Unity, native build or APK changed.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41957269478",
+    "https://github.com/alwansan/raf/actions/runs/41958159556",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_ORIGINAL_DXBC_TEXTURE_SAMPLER_REGISTERS_2026-11-05.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T2-foam-original-native-dxbc-sample-edges.json"
+  ],
+  "at": "2026-11-05T02:59:00Z"
+}
