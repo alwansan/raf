@@ -2,12 +2,12 @@
   "schema_version": 1,
   "username": "T5",
   "generation": "T-2026-11-05",
-  "session_id": "20261105T1115Z-T5-filemanager-runtime-sandbox",
-  "resumed_from_session": "20261105T1025Z-T5-filemanager-metadata-bridge",
+  "session_id": "20261105T1146Z-T5-platform-smoke-diff",
+  "resumed_from_session": "20261105T1115Z-T5-filemanager-runtime-sandbox",
   "status": "completed",
-  "base_sha": "0da800c16cd641224cca7d50148215f6696b6bbd",
-  "last_commit": "09037918ef284cb57aa7fe40b278b344feb5e0a2",
-  "updated_at": "2026-11-05T11:29:00Z",
+  "base_sha": "ae7a98b870c2ddc3faf2e7a734278be01ff67433",
+  "last_commit": "ebb6583208c3c0ac673ac976ad4e236f5e1c6d96",
+  "updated_at": "2026-11-05T11:51:00Z",
   "tracks": [
     "INTEGRATION-001",
     "ASSET-RESTORE-001",
@@ -28,7 +28,8 @@
     "T5-20261105T0746Z-t3-syntax-boundary",
     "T5-20261105T1021Z-sourcefree-managed-unity",
     "T5-20261105T1025Z-filemanager-call-resolver",
-    "T5-20261105T1115Z-original-managed-file-io"
+    "T5-20261105T1115Z-original-managed-file-io",
+    "T5-20261105T1146Z-platform-smoke-forensics"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41937719270",
@@ -50,8 +51,9 @@
     "https://github.com/alwansan/raf/actions/runs/42018106259",
     "https://github.com/alwansan/raf/actions/runs/42018332386",
     "https://github.com/alwansan/raf/actions/runs/42018587431",
-    "https://github.com/alwansan/raf/actions/runs/42019514287"
+    "https://github.com/alwansan/raf/actions/runs/42019514287",
+    "https://github.com/alwansan/raf/actions/runs/42020924863"
   ],
-  "next_step": "CI42019514287 canonical T-team index SUCCESS with original FileManager CLR negative evidence. T5 scoped runtime experiment BLOCKED at safe original transitive call gate before invocation (CI42018587431 RED), 13/13 synthetic controls pass, no .rgd or Android proof. Resolve authentic local+other callees with T4 or run real device save roundtrip; keep NOT_READY 0/3. T1/T3 genuine Unity shader/texture evidence is peer work.",
+  "next_step": "Platform smoke CI42020924863 failed despite unchanged platform sources vs CI42020751210; exact FAIL assertion missing because job logs unavailable. Obtain logs before deciding on deterministic fixture patch. T4 managed FileManager original evidence is not Android durable .rgd. NOT_READY 0/3.",
   "memory_path": "prompt/coordination/clients/T5/MEMORY.md"
 }
