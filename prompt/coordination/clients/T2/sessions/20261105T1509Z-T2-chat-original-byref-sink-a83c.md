@@ -10,3 +10,10 @@
 - intended files: own `FoamFieldAddressConsumer.cs`, `Program.cs`, `.github/workflows/raft-t2-foam-managed-literals.yml`, work/session/experiment. No scene, original game code, shader/FX, audio, Settings, deferred touch.
 - coordination: at preflight no in-progress/queued Actions; T4 event missing id schema was fixed by `e027d6a81b`, subsequent [T1 ledger refresh CI42049042381](https://github.com/alwansan/raf/actions/runs/42049042381) SUCCESS. No overlapping T2 scheduled Cecil job.
 - next_step: implement bounded source-only Cecil tag flow and discriminating synthetic fixtures; run original SHA-pinned CI and inspect privacy-safe result; save distinct evidence/limits and next concrete integration gate. WATER-001 OPEN NOT_READY0/3.
+
+## Source commit and CI checkpoint
+
+- Published [commit 34f840561993b44c59cd7c61b22f1f013e64cd89](https://github.com/alwansan/raf/commit/34f840561993b44c59cd7c61b22f1f013e64cd89) on refreshed HEAD by expected SHA fast-forward after another agent's concurrent update; no force or files from other clients overwritten.
+- Own files: `FoamFieldAddressConsumer.cs` new, `Program.cs` and own `.github/workflows/raft-t2-foam-managed-literals.yml`. Synthetic fixtures distinguish direct `stind.ref`, typed byref call, `ldind.ref`→array element write, `ldind.ref`→array length read, and equal-typed different-field decoy. Unsupported opcode/branch returns explicit unresolved category; never emit original symbols, IL, names, original indices or small-domain hashes.
+- Original SHA-pinned [CI42053062181](https://github.com/alwansan/raf/actions/runs/42053062181) `in_progress` at checkpoint. Work `waiting_ci`; no original byref sink claim until successful CI and safe JSON read.
+- Separately running [T3 original Shader48 translation CI42052605123](https://github.com/alwansan/raf/actions/runs/42052605123) and [T5 full native package build42052375742](https://github.com/alwansan/raf/actions/runs/42052375742) have separate resource/workflow ownership and were neither cancelled nor changed.
