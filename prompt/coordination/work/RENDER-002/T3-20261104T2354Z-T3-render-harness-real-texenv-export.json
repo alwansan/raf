@@ -30,13 +30,21 @@
     "T3-small-original-same-export-texenv-20261105"
   ],
   "run_urls": [
-    "https://github.com/alwansan/raf/actions/runs/41938229887"
+    "https://github.com/alwansan/raf/actions/runs/41938229887",
+    "https://github.com/alwansan/raf/actions/runs/41938711186",
+    "https://github.com/alwansan/raf/actions/runs/41939065539"
   ],
   "result": {
-    "code_commit": "615f914728cf15f5d60607115ecb7a4a8919d8e5",
-    "workflow_run": "41938229887",
-    "conclusion": "QUEUED_AS_OF_2026-11-05T00:02Z"
+    "code_commit": "3c3f7ada3efa0384ffc81143221a4055c5d0c39a",
+    "stage": "actual_exported_material_yaml",
+    "original_materials": 41,
+    "original_texenvs": 227,
+    "same_export_material_trace": 57,
+    "same_export_texture_trace": 92,
+    "source_export_parity": "UNKNOWN",
+    "run_url": "https://github.com/alwansan/raf/actions/runs/41939065539",
+    "status": "DIAGNOSTIC_RERUN_IN_PROGRESS"
   },
-  "next_step": "Write fail-closed same-export trace combiner and tests; run one bounded authentic ZIP2 source+AssetRipper private export and compare B05 41 original Materials/227 TexEnvs against exported YAML; if a reproducible drift is found, identify responsible integration source and patch exact mismatch.",
+  "next_step": "Read safe YAML reason from 41939065539 and fix parser/schema precisely; no source claims yet.",
   "updated_at": "2026-11-05T00:02:00Z"
 }
