@@ -1,6 +1,7 @@
 import unittest
 from scripts.b07_probe_original_world_callbacks import fingerprint
 from scripts.t4_original_rgd_load_contract import analyze, inspect_original_saveandload_scope, inspect_exact_original_loader_method
+from scripts.instrument_android_runtime_operations import trace_caught_original_load_error
 
 HEADER = """public class SaveAndLoad {
  public T Load<T>(string filename) {
@@ -72,6 +73,46 @@ class OriginalLoaderContractTests(unittest.TestCase):
     def test_authenticated_loader_method_wrong_sha_fails(self):
         with self.assertRaisesRegex(ValueError, "SHA256"):
             inspect_exact_original_loader_method(HEADER, "0" * 64)
+
+    def test_original_load_catch_diagnostic_preserves_handler_and_returns(self):
+        original = (HEADER.replace("public T Load<T>", "public static T Load<T>")
+                    .replace("return (T)formatter.Deserialize(FileManager.OpenFile(filename));",
+                             "try { return (T)formatter.Deserialize(FileManager.OpenFile(filename)); }"
+                             " catch (System.Exception ex) { Report(ex); return default(T); }"))
+        adapted = trace_caught_original_load_error(original)
+        self.assertEqual(adapted.count("Load.caughtException"), 1)
+        self.assertIn("#if UNITY_ANDROID && !UNITY_EDITOR\n", adapted)
+        self.assertIn("return default(T);", adapted)
+        self.assertIn("catch (System.Exception ex)", adapted)
+        self.assertTrue(adapted.index("catch (System.Exception ex)") <
+                        adapted.index("Load.caughtException") <
+                        adapted.index("return default(T);"))
+        begin = adapted.index("\n#if UNITY_ANDROID && !UNITY_EDITOR\n")
+        end = adapted.index("\n#endif\n", begin) + len("\n#endif\n")
+        self.assertEqual(adapted[:begin] + adapted[end:], original)
+        with self.assertRaisesRegex(ValueError, "duplicate"):
+            trace_caught_original_load_error(adapted)
+
+    def test_original_load_catch_diagnostic_rejects_ambiguous_handlers(self):
+        original = (HEADER.replace("public T Load<T>", "public static T Load<T>")
+                    .replace("return (T)formatter.Deserialize(FileManager.OpenFile(filename));",
+                             "try { return (T)formatter.Deserialize(FileManager.OpenFile(filename)); }"))
+        for candidate in (original,
+                          original.replace("try {", "try {", 1).replace(
+                              " }", " } catch (System.Exception) { throw; }"
+                              " catch (System.ArgumentException) { throw; }", 1)):
+            with self.subTest(candidate=candidate):
+                with self.assertRaisesRegex(ValueError, "one original"):
+                    trace_caught_original_load_error(candidate)
+
+    def test_original_load_catch_diagnostic_ignores_comment_handler(self):
+        original = (HEADER.replace("public T Load<T>", "public static T Load<T>")
+                    .replace("return (T)formatter.Deserialize(FileManager.OpenFile(filename));",
+                             "try { return (T)formatter.Deserialize(FileManager.OpenFile(filename)); }"
+                             " /* catch (Exception) { Fake(); } */ "
+                             " catch (System.Exception) { return default(T); }"))
+        adjusted = trace_caught_original_load_error(original)
+        self.assertEqual(adjusted.count("Load.caughtException"), 1)
 
     def test_binder_not_assumed_from_assembly_version(self):
         fixture = HEADER.replace("formatter.Binder = new LegacyBinder();", "")
