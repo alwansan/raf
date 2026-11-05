@@ -1,0 +1,16 @@
+{
+  "id": "T3-20261105T0023Z-authentic-material-parity-results",
+  "owner": "T3",
+  "session_id": "20261104T2354Z-T3-render-harness",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "Genuine source+same-instance AssetRipper export verified SHA-pinned sharedassets6 41 Materials/227 Texture/UV slots (89 exact internal, 25 external unproven, 113 original null) and 41 Materials/150 RGBA m_Colors slots (40 originally tinted). Zero internal texture identity, UV or color drift; this rejects selected export SavedProperties loss only. B05/B44 verifier supports authentic exported YAML mapping, strict original arrays retained. No Android GPU/pixels/FFT/world readiness. Original B05/B44/B03/B21 workers remain credited.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41939404454",
+    "https://github.com/alwansan/raf/actions/runs/41940350604",
+    "https://github.com/alwansan/raf/commit/77d312f546f1fc80c72f57a57de5d90699d66302",
+    "https://github.com/alwansan/raf/commit/33ae0f760ea9f82a792b04419de1ba7df34d6e5",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_AUTHENTIC_MATERIAL_EXPORT_PARITY_2026-11-05.md"
+  ],
+  "at": "2026-11-05T00:23:00Z"
+}
