@@ -16,4 +16,17 @@
 
 ## Results
 
-Pending.
+## Verified original compiled route result — 2026-11-05 20:56 UTC
+
+- Origin chat; resume from scheduled 20261105T2040Z-T4-scheduled-p4m8; issue INPUT-005. Scope registration commit 36057ea09aaf3046301328a797a1f29d235a2071.
+- Code commit fe9a9ae5264821304923d6bac04d21089f3a3df8 adds scripts/t4_original_mouse_routing.py, tests/test_t4_original_mouse_routing.py and dedicated isolated workflow.
+- GitHub Actions https://github.com/alwansan/raf/actions/runs/42107935479 SUCCESS at immutable commit fe9a9ae5; job 127527607675, 7/7 source-free negative controls passed, original Assembly-CSharp.dll 3211776B and SHA256 0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e verified.
+- Private ILSpy 11.2.0.10050 enumerated 2395 C# files: 4 direct Input.GetAxis Mouse X and 4 Mouse Y syntax sites, all 8 in camera/player-named files; 0 MyInput.GetAxis Mouse X/Y, 0 Mouse.current.delta, 2 Cursor.lockState assignments, 30 total GetAxis-family syntax sites.
+- Findings are lexical and file-name heuristic, NOT verified runtime camera call graph. Original private/decompiled game source was not published. Android pointer capture not implemented; no Unity/IL2CPP/device test or new native build; no touch, T5 UI, world/save, audio, Settings or original assets altered.
+- A sole InputSystem virtual Mouse injection is insufficiently supported as a gameplay-camera fix. Design an Android API26+ View.requestPointerCapture relative mouse bridge to original legacy Input.GetAxis consumers, preserving pointer buttons and wheel, original menus, pause/focus loss and navigation.
+- Session scope complete; INPUT-005 OPEN. Owner-confirmed world/save/reopen from phone artifact 42058825739 remains bounded and unchanged.
+
+## Next
+
+Implement and test Java/C# capture lifecycle and exact original legacy axis adaptation on a separate authorized scope. Verify Android API26 view focus, captured event relative motion, release menu/pause/focus loss/unplug, no duplicate touch/physical input, UI cursor, and phone world/save regression. Coordinate with T5 native builds; do not assume success from source-only CI.
+
