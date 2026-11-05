@@ -184,7 +184,8 @@ def summarize(paths):
             "anomalies": anomalies,
         })
     valid_pairs = [(i, j) for i in range(len(out)) for j in range(i + 1, len(out))
-                   if ordered[i]["last"] < ordered[j]["first"]
+                   if not invalid_truncation
+                   and ordered[i]["last"] < ordered[j]["first"]
                    and out[i]["sequence_complete"] and out[j]["sequence_complete"]
                    and out[i]["utc_monotonic"] and out[j]["utc_monotonic"]
                    and out[i]["save_argument_file_classes"].get("nonzero", 0)
@@ -212,6 +213,7 @@ def summarize(paths):
             "two_logger_sessions_do_not_prove_process_restart_or_same_world",
             "snapshot_existence_does_not_prove_serialization_or_durability",
             "session_sequence_gaps_or_dropped_events_prevent_negative_inference",
+            "queue_overflow_suppresses_cross_session_positive_hints",
             "owner_verified_playable_create_save_reopen_required",
         ],
     }
