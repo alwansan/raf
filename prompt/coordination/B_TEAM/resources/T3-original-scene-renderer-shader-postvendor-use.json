@@ -8,12 +8,13 @@
     "asset_ripper_commit": "036098ab525a3f9f693dc101edeb21faad4d32d8",
     "scenes_sha_verified": 6,
     "original_shader_material_owners_sha_verified": 4,
-    "original_same_export_provider_sources_sha_verified": 12
+    "original_same_export_provider_sources_sha_verified": 12,
+    "unity_2021_runtime_builtin_archive_sha256": "5cb0f9c4d022d6054d179778b9b50a0301d6748eaf4abdedd21c93f0c30b10c5"
   },
   "stages": {
     "acquisition": "SHA_PINNED_REAL_6_SCENES_AND_4_MATERIAL_SHADER_OWNERS_CI42042819113_PLUS_12_SAMEEXPORT_ORIGINALS_CI42044249541",
     "extraction": "VERIFIED_1495_ORIGINAL_RENDERERS_1639_SLOTS_1635_NON_NULL_120_MATERIAL_OBJECTS_21_TYPED_Shader48_1633_SLOTS",
-    "reconstruction": "TMP3_POSTFXV1_VOLUMETRIC_VENDOR_ONLY_REAL_EXPORT_STILL_17_OF_21_TYPED_SOURCE_SCENE_SHADERS_DUMMY_NO_NATIVE_BUILTIN_DEPTH_BLUR",
+    "reconstruction": "AUTHENTIC_TMP_POSTFX_VOLUMETRIC_17_SOURCE_SHADER48_STILL_DUMMY; PINNED_2021_BUILTIN_SHADER_ARCHIVE_198_NAMES_VERIFIED_TOP_921_SOURCE_SHADER_NO_NAME_MATCH",
     "binding": "VERIFIED_ORIGINAL_SOURCE_Shader48_POINTER_TO_W1_SAMEINSTANCE_ACTUAL_SHADER_GUID_TO_POSTVENDOR_SHADERLAB_21_OF_21; 1373_ORIGINAL_SCENE_SLOTS_DUMMY_256_ENGINE_4_NONDUMMY_2_UNKNOWN_UNSTAGED",
     "integration": "ISOLATED_ACTUAL_SHA_PINNED_GITHUB_ACTIONS_CI42042819113_AND_42044249541_SUCCESS_NO_GAME_ASSET_EDITS_NO_FULL_NATIVE_BUILD",
     "device": "NOT_TESTED"
@@ -35,19 +36,26 @@
     "source_top_shader_material_slot_uses": 921,
     "source_top_shader_after_vendor": "STILL_DUMMY_AFTER_VENDOR_RESTORERS",
     "bounded_export_material_documents": 731,
-    "bounded_export_custom_material_docs_still_dummy_after_vendor": 495
+    "bounded_export_custom_material_docs_still_dummy_after_vendor": 495,
+    "highest_921_source_Shader48_exact_Unity2021_builtin_archive_match": false,
+    "exact_Unity2021_builtin_name_matching_original_source_Shader48": 3,
+    "exact_Unity2021_builtin_name_matching_original_renderer_slots": 256,
+    "original_source_Shader48_without_Unity2021_builtin_name_match": 18,
+    "original_source_Shader48_slots_without_Unity2021_builtin_name_match": 1377
   },
   "evidence": [
     "https://github.com/alwansan/raf/actions/runs/42042819113",
     "https://github.com/alwansan/raf/actions/runs/42044249541",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_SCENE_SHADER_USE_AND_POSTVENDOR_PRIORITY_2026-11-05.md"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_SCENE_SHADER_USE_AND_POSTVENDOR_PRIORITY_2026-11-05.md",
+    "https://github.com/alwansan/raf/actions/runs/42046329453"
   ],
   "remaining": [
     "Program authenticity and actual full native post-restorer output unproven; this limited experiment excludes Unity builtins/Depth/Blur/FFT/ShaderCompiler",
     "Source Renderer assignment to exported Renderer component and GPU draws/pixels not verified; white-on-phone count cannot be inferred",
     "True source high-use 921-slot shader remains default Dummy after three vendor restorers only; reconstruction needs exact source compiled program/variants",
-    "Two original Shader pointers target unstaged globalgamemanagers.assets; not claimed typed Shader48"
+    "Two original Shader pointers target unstaged globalgamemanagers.assets; not claimed typed Shader48",
+    "Top 921 original scene-use Shader48 name does NOT exist in SHA-authenticated Unity 2021.3.45f2 runtime builtin archive: exact-name builtin restoration alone cannot recover it, original compiled game stages/variants still needed."
   ],
   "updated_by": "T3",
-  "updated_at": "2026-11-05T14:25:00Z"
+  "updated_at": "2026-11-05T14:36:00Z"
 }
