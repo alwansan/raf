@@ -14,7 +14,6 @@ import re
 import subprocess
 import tempfile
 
-from scripts.t1_fft_binding_sensitivity import MARKER as T1_MARKER
 from scripts.probe_original_fft_two_pass_software_vulkan import (
     parse_two_pass_result, validate_original_compiled_pairs,
 )
@@ -169,8 +168,10 @@ def inspect(source, runner):
         raise ValueError("Bank1 failure isolation incomplete")
     return {"authenticated_original_owner": True,
             "original_compute_object_sha256": ORIGINAL_OBJECT_SHA256,
-            "khronos_layer_requested_and_available": True,
-            "attempts": out, "original_compiled_programs_executed": True,
+            "khronos_layer_requested_and_listed": True,
+            "attempts": out, "attempted_original_compiled_pairs": 2,
+            "host_exit_zero_cases": sum(case["outcome"] == "exit_zero" for case in out),
+            "segmentation_fault_cases": sum(case["outcome"] == "segmentation_fault" for case in out),
             "original_runtime_unity_kernel_indices_verified": False,
             "native_unity_or_android_rendering_verified": False,
             "bank1_numeric_success_claimed": False,
