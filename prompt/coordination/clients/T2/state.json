@@ -2,21 +2,23 @@
   "schema_version": 1,
   "username": "T2",
   "generation": "T-2026-11-05",
-  "session_id": "20261104T2354Z-T2-foamabi01",
-  "resumed_from_session": null,
-  "status": "paused",
+  "session_id": "20261105T0023Z-T2-foam-texture-identity",
+  "resumed_from_session": "20261104T2354Z-T2-foamabi01",
+  "status": "active",
   "base_sha": "b56ebc3847f251cee2539e9797471417d32698d2",
   "last_commit": "e203f647d9b678357d52dff8b1099dc025c0258f",
-  "updated_at": "2026-11-05T00:19:00Z",
+  "updated_at": "2026-11-05T00:24:23.912Z",
   "tracks": [
     "WATER-001",
     "foam-cb-abi",
     "Spectrum",
-    "Blur"
+    "Blur",
+    "foam-texture-symbol-identity"
   ],
   "work_ids": [
     "T2-20261104T2354Z-foam-member-abi",
-    "T2-20261105T0013Z-foam-resource-interface"
+    "T2-20261105T0013Z-foam-resource-interface",
+    "T2-20261105T0023Z-T2-foam-texture-identity-texture-identity"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41937996942",
@@ -27,6 +29,6 @@
     "https://github.com/alwansan/raf/actions/runs/41940321740",
     "https://github.com/alwansan/raf/actions/runs/41939553448"
   ],
-  "next_step": "Authenticate each original Foam m_TextureParams name index and implicit sampler state to translated SPIRV/HLSL resource, original material/ShaderLab properties and Unity upload. B20 4 stages, T2 6 image+sampler pair gate already source-authentic. Do not invent aliases, no device success.",
+  "next_step": "Private SHA-authenticated Foam six-source-texture symbol registry↔SPIR-V separate image name comparison; synthetic controls then original-source CI. No alias/material/upload or GPU assumption.",
   "memory_path": "prompt/coordination/clients/T2/MEMORY.md"
 }
