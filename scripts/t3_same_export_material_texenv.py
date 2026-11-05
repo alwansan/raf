@@ -102,13 +102,47 @@ def aggregate(result: dict) -> dict:
     return safe
 
 
+# Exactly enumerated, source-code-defined failure strings from B05 only.
+# Never show arbitrary exception messages: third-party exceptions may contain
+# private YAML keys, material labels, GUIDs or absolute source paths.
+EXPORT_YAML_FAILURES = {
+    "Unhashable exported Material YAML mapping key": "unhashable_yaml_key",
+    "Duplicate exported Material YAML mapping key": "duplicate_yaml_key",
+    "Missing/redirected Unity Assets root": "missing_assets_directory",
+    "Linked export path is unsafe": "symlink_export",
+    "Oversized Material YAML candidate": "oversize_yaml",
+    "Missing or linked Material metadata": "missing_meta",
+    "Invalid exported Material GUID": "invalid_export_guid",
+    "Malformed private Material YAML": "malformed_yaml",
+    "Material texture data absent in export": "no_material_texenv_field",
+    "Duplicated exported Material pointer": "duplicate_export_pointer",
+    "No exported Material texture documents": "no_yaml_material_objects",
+    "Texture environment slots must be an array": "texenv_wrong_container",
+    "Unsupported texture slot entry shape": "texenv_wrong_entry_shape",
+    "Malformed or duplicate Material texture slot": "invalid_texture_slot",
+    "Incomplete texture UV transform": "incomplete_uv",
+    "Malformed texture UV vector": "malformed_uv",
+    "Nonfinite texture UV component": "nonfinite_uv",
+    "Malformed exported texture PPtr": "malformed_tex_pointer",
+    "Invalid exported texture PPtr component": "invalid_tex_pointer",
+    "Ambiguous null exported texture PPtr": "ambiguous_null_tex_pointer",
+}
+
+
+def safe_export_error_reason(stage: str, error: Exception) -> str:
+    if stage != "actual_exported_material_yaml":
+        return "not_export_yaml_stage"
+    return EXPORT_YAML_FAILURES.get(str(error), "unclassified_export_yaml_error")
+
+
 class ScopedStageError(ValueError):
     """Safe public failure category, never original object IDs or source paths."""
-    def __init__(self, stage: str, category: str, counters: dict):
+    def __init__(self, stage: str, category: str, counters: dict, reason: str):
         super().__init__("T3 bounded parity stage inconclusive")
         self.stage = stage
         self.category = category
         self.counters = dict(counters)
+        self.reason = reason
 
 
 def run(source: Path, project: Path, w1_path: Path, b02_path: Path) -> dict:
@@ -146,7 +180,8 @@ def run(source: Path, project: Path, w1_path: Path, b02_path: Path) -> dict:
     except Exception as error:
         # Avoid raw third-party exception text; preserve only a predefined
         # phase, a Python exception class and aggregate unsigned counts.
-        raise ScopedStageError(stage, type(error).__name__, counters) from None
+        raise ScopedStageError(stage, type(error).__name__, counters,
+                               safe_export_error_reason(stage, error)) from None
 
 
 def main(argv=None) -> int:
@@ -166,7 +201,7 @@ def main(argv=None) -> int:
     except ScopedStageError as error:
         result = dict(RESULT_TEMPLATE, status="INCONCLUSIVE",
                       exception_type=error.category, failure_stage=error.stage,
-                      inspected_counts=error.counters)
+                      safe_failure_reason=error.reason, inspected_counts=error.counters)
     except Exception as error:
         # Never output raw error messages: private YAML names and paths can
         # appear in third-party exceptions. Preserve only the exception TYPE.
