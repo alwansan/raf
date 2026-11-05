@@ -5,7 +5,7 @@
   "session_id": "20261105T1104Z-T2-foam-material-property-bridge-isolated",
   "issue_id": "WATER-001",
   "track": "Four original Foam non-authored Texture register names to original Assembly-CSharp compiled IL string/callsite provenance",
-  "status": "active",
+  "status": "completed",
   "base_sha": "cb773b1bbdf567e7de6ca0e8f08a1fe64cc8dfc2",
   "hypothesis": "Some original source-authentic Foam pass0 texture names not declared as authored Shader properties occur as managed ldstr literals and can be associated within a method with Shader/Material/CommandBuffer texture setter or PropertyToID calls; exact source identifiers stay private, method-level co-occurrence is not argument dataflow proof.",
   "taken_over_from": [
@@ -22,8 +22,29 @@
     "tests/test_t2_foam_managed_literal_targets.py",
     ".github/workflows/raft-t2-foam-managed-literals.yml"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement independent original managed literal + typed setter callsite inspection on SHA-pinned source; add unit controls, run isolated CI. Then integrate only verified upload relations and keep WATER-001 OPEN.",
-  "updated_at": "2026-11-05T11:20Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42019245510",
+    "https://github.com/alwansan/raf/actions/runs/42019520567",
+    "https://github.com/alwansan/raf/actions/runs/42019735778"
+  ],
+  "result": {
+    "source_authentic_CI": "42019735778 SUCCESS",
+    "original_shader_owner_bytes": 115978112,
+    "original_managed_dll_bytes": 3211776,
+    "original_4_non_authored_sha_identifiers_found_in_compiled_ldstr": "4/4 distinct",
+    "original_1_authored_property_identifiers_found_in_compiled_ldstr": "1/1 distinct",
+    "original_method_bodies_scanned": 19118,
+    "original_managed_ldstr_scanned": 7246,
+    "non_authored_matched_occurrences": 4,
+    "one_method_contains_all_four": true,
+    "one_method_contains_both_material_and_MPB_settexture": true,
+    "four_literals_near_typed_settexture_within_8_instructions": true,
+    "exact_argument_flow_verified": false,
+    "synthetic_source_tests": "13/13",
+    "mono_cecil_selftest_passed": true,
+    "artifact_id": 13410074764,
+    "artifact_sha256": "f9c76ade62b26c58cd429eb1d627fc9ba7b01646c7e8050d1e0d55f7cb658072"
+  },
+  "next_step": "Prove actual IL stack/argument flow from four original resource string loads to Material.SetTexture or MaterialPropertyBlock.SetTexture, not just literal proximity, then validate runtime Texture object data source and authored ShaderLab. Keep WATER-001 open.",
+  "updated_at": "2026-11-05T11:34Z"
 }
