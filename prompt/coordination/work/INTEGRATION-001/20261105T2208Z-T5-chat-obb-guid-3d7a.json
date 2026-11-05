@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T2208Z-T5-chat-obb-guid-3d7a",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "track": "actual CL phone OBB GUID warning identity",
+  "status": "active",
+  "base_sha": "01cc44242f0abcbae9cb0900eff82c8b4b27bcf8",
+  "intended_files": [
+    "prompt/coordination/work/INTEGRATION-001/20261105T2208Z-T5-chat-obb-guid-3d7a.json",
+    "prompt/coordination/clients/T5/sessions/20261105T2208Z-T5-chat-obb-guid-3d7a.md",
+    "scripts/t5_classify_obb_guid_logs.py",
+    "tests/test_t5_classify_obb_guid_logs.py",
+    ".github/workflows/raft-t5-obb-guid-log-identity.yml",
+    "docs/T5_REAL_CL_OBB_PATCH_GUID_DIAGNOSIS_2026-11-05.md"
+  ],
+  "experiment_key": "t5-CL-pinned-520c4c-guid-warning-version89-patch-vs-main-actual-log-parity-v1",
+  "resource_key": "CL-read-only-20261105-phone-log-sha-blobs",
+  "hypothesis": "All OBB GUID errors in the two phone sessions are exact version89 optional patch OBB probes; source-pinned manifest contains main.89 but no patch. Treat patch probe separately from failures loading main OBB.",
+  "related_work": [
+    "prompt/coordination/work/INTEGRATION-001/20261105T2153Z-T5-chat-signed-pair-4e91.json"
+  ],
+  "taken_over_from": [
+    "docs/DEVICE_FEEDBACK_42058825739_AR.md",
+    "prompt/coordination/clients/T5/sessions/20261105T2153Z-T5-chat-signed-pair-4e91.md"
+  ],
+  "experiment_ids": [
+    "20261105T2208Z-T5-chat-obb-guid-3d7a"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Prove exact CL messages from immutable log blobs and archive manifest; add fail-closed reusable classifier with synthetic controls, distinct patch-vs-main categories; never suppress Unity errors in gameplay.",
+  "updated_at": "2026-11-05T22:08:33.902Z"
+}
