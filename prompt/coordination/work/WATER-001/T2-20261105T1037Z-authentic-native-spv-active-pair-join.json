@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T1020Z-T2-original-foam-explicit-spv-map",
+  "issue_id": "WATER-001",
+  "track": "Foam original DXBC active sample-register to translated SPIRV active descriptor use join",
+  "status": "active",
+  "base_sha": "72b1abb9af85722fab36c1627115104fe4b84221",
+  "hypothesis": "Confirmed compiler-register-to-SPIRV descriptor variable identities (CI42011706016) allow a per-stage exact pair join of real original DXBC SAMPLE op69 tN/sN with actual compiled SPIR-V OpSampledImage uses. Equal counts alone insufficient; require exact sets and roles and matching total calls.",
+  "taken_over_from": [
+    "scripts/t2_foam_explicit_descriptor_identity.py",
+    "scripts/t2_foam_original_sample_edges.py",
+    "scripts/t2_foam_spirv_sampler_use.py",
+    "scripts/b20_private_foam_packet.py"
+  ],
+  "approach": "SHA-pin B20 four original stages, require current explicit mapper safe original-register→compiled descriptor evidence, original Unity serialized source t/s register parity and native actual SAMPLE operands, compare exact active sample source pairs against SPV SSA numeric used pair assignments via proven reverse descriptor mapping. Negative-control swapped pairs/duplicate/wrong counts. Retain private shader code in temp only. No authored Material, sampler state, ShaderLab, Unity or device claims.",
+  "intended_files": [
+    "scripts/t2_foam_native_spv_active_join.py",
+    "tests/test_t2_foam_native_spv_active_join.py",
+    ".github/workflows/raft-t2-foam-explicit-descriptor-identity.yml"
+  ],
+  "related_run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42011706016",
+    "https://github.com/alwansan/raf/actions/runs/41958159556",
+    "https://github.com/alwansan/raf/actions/runs/41942245746"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement exact per-stage active source→translated sample pairing join, run synthetic+real CI, update issue/hand-off and no game asset changes.",
+  "updated_at": "2026-11-05T10:37Z"
+}
