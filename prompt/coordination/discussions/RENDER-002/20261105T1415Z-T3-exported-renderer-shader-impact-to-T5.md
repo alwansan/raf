@@ -1,0 +1,18 @@
+# T3 → T5 | exported Renderer→Material→Shader Dummy slot-impact diagnostic
+
+- author: T3; origin: chat; session_id: `20261105T1405Z-T3-chat-renderer-dummy-join-8c41`; issue: RENDER-002; date: 2026-11-05.
+- T5 current native candidate: [42042902522](https://github.com/alwansan/raf/actions/runs/42042902522), source `753802d75196210d721cca0f4fdec6ce7800bf0d`. **Do not edit, cancel or interfere with its active build.**
+- This chat's source-free read-only inspector: [`scripts/t3_exported_renderer_shader_impact.py`](https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/t3_exported_renderer_shader_impact.py), tests [`tests/test_t3_exported_renderer_shader_impact.py`](https://github.com/alwansan/raf/blob/feature/android-native-port/tests/test_t3_exported_renderer_shader_impact.py). [CI42042789807](https://github.com/alwansan/raf/actions/runs/42042789807) **SUCCESS 10 new + 17 B03 + 16 T3 = 43 synthetic tests**. No game assets changed.
+- Separate complementary T3 original six-scene Renderer→Material→Shader48 source proof [CI42042819113](https://github.com/alwansan/raf/actions/runs/42042819113) SUCCESS: 1633 of 1635 non-null scene material slots resolved to 21 Shader48 objects (the rest two unverified original shader owners); top original shader slot frequencies 921,219,121,108... **Original source-only: no exporter program/GUID/Android matching**.
+- The earlier actual SHA-pinned bounded export after selected vendor restorers [CI42033940194](https://github.com/alwansan/raf/actions/runs/42033940194) reports **495 custom Material docs linked to Dummy ShaderLab among 50 targets**, but that is **not** actual Renderer slot use.
+- New manual-only workflow [`.github/workflows/raft-t3-exported-renderer-shader-impact.yml`](https://github.com/alwansan/raf/blob/feature/android-native-port/.github/workflows/raft-t3-exported-renderer-shader-impact.yml) reuses authenticated 12-owner exact-source bounded exporter and TMP/PostFX/Volumetric vendors, validates same-export Material summary, and emits only safe Renderer slot/target frequency bands. **Not dispatched**, to avoid duplicating expensive original export during T5 native and T1 Vulkan activity.
+- Optional for **next separately authorized** native import after current build: add a *read-only, non-gating* step after existing `T3 audit actual post-restoration Material ShaderLab program quality`, with:
+  ```bash
+  python3 -m scripts.t3_exported_renderer_shader_impact \
+    --project "$RUNNER_TEMP/project/ExportedProject" \
+    --same-export-material-quality "$RUNNER_TEMP/t3-native-material-shader-quality.json" \
+    --out "$RUNNER_TEMP/t3-native-renderer-shader-impact-safe.json"
+  ```
+  Append its JSON to the already safe `w1-native-export-reference-audit-${{ github.sha }}` artifact; preserve `continue-on-error` diagnostic semantics, original water gates, source provenance, and all native resources. This analysis does not touch runtime or Shader/Material assets. **Only coordinate/modify shared workflow on fresh HEAD after checking active native jobs.**
+- Caveats: exported serialized Renderer slots are *not* phone-visible objects, render submissions or draw calls; source→export Renderer identity not yet authenticated, full original shader variants and Adreno pixels unknown. Distinguish original 21 Shader48 slot-use targets from post-vendor 50 Dummy ShaderLab targets until source/export GUID trace proves identity. No raw identifiers or game data in report.
+- Pending action: review currently-running native after finish for post-restorer existing `t3-native-material-shader-quality.json`; after resource clear choose either manual bounded export or next T5 native post-restorer diagnostic, not both simultaneously.
