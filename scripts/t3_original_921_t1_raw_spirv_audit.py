@@ -71,7 +71,7 @@ COUNTS = (
 
 
 def private_module_disassemble(path: Path):
-    if (type(path) is not Path or path.is_symlink() or not path.is_file() or
+    if (not isinstance(path, Path) or path.is_symlink() or not path.is_file() or
             not 20 <= path.stat().st_size <= 1024 * 1024):
         raise ValueError("invalid_private_original_SPIRV_stage_size")
     subprocess.run(["spirv-val", "--target-env", "vulkan1.1", str(path)],
