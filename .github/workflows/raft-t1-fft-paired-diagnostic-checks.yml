@@ -8,6 +8,8 @@ on:
       - .github/workflows/raft-t1-fft-paired-diagnostic-checks.yml
       - scripts/t1_fft_paired_diagnostic.py
       - tests/test_t1_fft_paired_diagnostic.py
+      - scripts/t1_fft_trace_compare.py
+      - tests/test_t1_fft_trace_compare.py
       - .github/workflows/raft-t1-fft-unity-input-identity.yml
 
 permissions:
@@ -29,6 +31,7 @@ jobs:
         run: |
           set -euo pipefail
           python3 -m unittest discover -s tests -p test_t1_fft_paired_diagnostic.py -v
+          python3 -m unittest discover -s tests -p test_t1_fft_trace_compare.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_first_divergence.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_pass0_spatial_diagnostic.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_first_pass_channel_diagnostic.py -v
