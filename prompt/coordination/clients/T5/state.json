@@ -2,12 +2,12 @@
   "schema_version": 1,
   "username": "T5",
   "generation": "T-2026-11-05",
-  "session_id": "20261105T0554Z-T5-ci-boundary-forensics",
-  "resumed_from_session": "20261105T0349Z-T5-unity-integration-boundary",
+  "session_id": "20261105T0647Z-T5-alpha-drift-classifier-review",
+  "resumed_from_session": "20261105T0554Z-T5-ci-boundary-forensics",
   "status": "paused",
-  "base_sha": "a4b215e8fa94f3c7280489297c41c5b8b91d1ffd",
-  "last_commit": "05ba93826fd107c20aa115046b02dcf866de0a09",
-  "updated_at": "2026-11-05T05:59:00Z",
+  "base_sha": "388b5317780f438667cbb62351ba999fbbcc153c",
+  "last_commit": "f96424e213feafa090f95efdb63c44d596c241f2",
+  "updated_at": "2026-11-05T06:49:00Z",
   "tracks": [
     "INTEGRATION-001",
     "ASSET-RESTORE-001"
@@ -22,7 +22,8 @@
     "T5-20261105T0149Z-absent-target-rollback",
     "T5-20261105T0252Z-T5-fix-escaped-pointer-fixture",
     "T5-20261105T0349Z-unity-boundary",
-    "T5-20261105T0554Z-ci-boundary-forensics"
+    "T5-20261105T0554Z-ci-boundary-forensics",
+    "T5-20261105T0647Z-alpha-drift-diagnostic"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41937719270",
@@ -39,6 +40,6 @@
     "https://github.com/alwansan/raf/actions/runs/41968665857",
     "https://github.com/alwansan/raf/actions/runs/41959712898"
   ],
-  "next_step": "T3 genuine 30/106 RGB drift (76 exact, 106 GUID/sampler matches); T1 Unity source-free license gate fails before game/FFT acquisition. Handoff in discussions/INTEGRATION-001/20261105T0554Z-T5-two-independent-native-boundaries.md. No code patch or phone proof; NOT_READY 0/3.",
+  "next_step": "T3: alpha-only diagnostic misclassification reproduced locally and handed off at discussions/RENDER-002/20261105T0647Z-T5-alpha-only-diagnostic-boundary.md; preserve real 30/106 RGB drift, investigate original pixel decoding and Unity activation independently. No game patch, no phone proof; NOT_READY 0/3.",
   "memory_path": "prompt/coordination/clients/T5/MEMORY.md"
 }
