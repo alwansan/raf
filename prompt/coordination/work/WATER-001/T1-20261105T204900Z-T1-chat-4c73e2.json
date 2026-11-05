@@ -6,7 +6,7 @@
   "origin": "chat",
   "issue_id": "WATER-001",
   "base_sha": "66a31358df64c320d62338bdd02d87ade63e16eb",
-  "status": "active",
+  "status": "completed",
   "track": "FFT evidence validation",
   "approach": "Run exact branch comparator controls and wire overflow regression into existing CPU-only GitHub Actions checks",
   "intended_files": [
@@ -14,6 +14,13 @@
     "prompt/coordination/clients/T1/sessions/20261105T204900Z-T1-chat-4c73e2.md"
   ],
   "experiment_key": "fft-paired-python-overflow-fail-closed-bf88bee2-python-unittest",
-  "updated_at": "2026-11-05T20:49:00Z",
-  "run_urls": []
+  "updated_at": "2026-11-05T20:52:00Z",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42106956833"
+  ],
+  "experiment_ids": [
+    "20261105T204900Z-T1-chat-4c73e2"
+  ],
+  "result": "Exact checkout: py_compile passed and 103 T1 FFT tests passed with PYTHONPATH=scripts. All three overflow controls passed separately and paired diagnostic CI succeeded on the workflow change. Synthetic comparator evidence only; no authenticated capture, Unity dispatch or Android test.",
+  "next_step": "Coordinate the existing opt-in paired Unity/Vulkan trace with T1 scheduled and T5, using authenticated private captures to isolate the first divergent pass and verify original FindKernel/Dispatch bindings."
 }
