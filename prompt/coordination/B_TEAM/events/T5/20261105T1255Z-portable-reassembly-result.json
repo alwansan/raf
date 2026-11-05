@@ -1,0 +1,15 @@
+{
+  "id": "T5-20261105T1255Z-portable-reassembly-result",
+  "owner": "T5",
+  "session_id": "20261105T1248Z-T5-chat-linkport-6a19",
+  "origin": "chat",
+  "issue_id": "DELIVERY-013",
+  "type": "integration",
+  "summary": "Android/Termux Python builds missing os.link now use an exclusive no-clobber verified stream fallback while existing hard-link mode/EPERM rejection stays unchanged. 24/24 source synthetic checks passed; not atomic-complete visibility on sudden process loss and not phone install proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/ee12bb7450d993e8cfb42ff17e165ea340aa00c8",
+    "https://github.com/alwansan/raf/actions/runs/42030902212",
+    "https://github.com/alwansan/raf/actions/runs/42030746423"
+  ],
+  "at": "2026-11-05T12:55:00Z"
+}
