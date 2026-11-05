@@ -140,7 +140,9 @@
     "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-original-particle108-image-stream-fullSHA.json",
     "https://github.com/alwansan/raf/actions/runs/42130529677",
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_PARTICLE108_SAMEINSTANCE_EXPORT_2026-11-06.md",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-particle108-source-sameexport-material-texture-parity.json"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-particle108-source-sameexport-material-texture-parity.json",
+    "https://github.com/alwansan/raf/actions/runs/42132262184",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_PARTICLE108_B02_NONEXPORTABLE_CAUSE_2026-11-06.md"
   ],
   "remaining": [
     "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -198,5 +200,5 @@
     "نجاحعلىالهاتف"
   ],
   "updated_by": "T3",
-  "updated_at": "2026-11-05T23:44:47.029Z"
+  "updated_at": "2026-11-05T23:55:39.360Z"
 }
