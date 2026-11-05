@@ -152,6 +152,18 @@ class MaterialPropertyContractTests(unittest.TestCase):
         self.assertEqual(c["source_saved_int_property_entries"],1)
         self.assertEqual(c["source_saved_properties_not_declared"],1)
 
+    def test_safe_original_phase_diagnostic_never_includes_private_names(self):
+        for phase in t3.PHASES:
+            with self.subTest(phase=phase):
+                err=t3.OriginalPropertyPhaseError(phase)
+                self.assertEqual(err.phase,phase)
+                self.assertNotIn(SECRET,str(err))
+                self.assertNotIn(PRIVATE_TEX,str(err))
+
+    def test_unapproved_phase_cannot_be_emitted_in_public_report(self):
+        with self.assertRaisesRegex(ValueError,"unknown_private_original_property_phase"):
+            t3.OriginalPropertyPhaseError(SECRET)
+
     def test_private_property_names_values_never_leave_aggregate(self):
         output=json.dumps(classified(),sort_keys=True)
         for name in (SECRET,PRIVATE_TEX,"PRIVATE_FLOAT_NAME","sharedassets0.assets"):
