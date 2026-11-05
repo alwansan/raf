@@ -51,7 +51,10 @@
     "https://github.com/alwansan/raf/actions/runs/41943357681",
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_WORLD_COMPLETION_TRACE_2026-11-05.md",
     "https://github.com/alwansan/raf/actions/runs/41944365772",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_ILSPY_REPRODUCIBILITY_2026-11-05.md"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_ILSPY_REPRODUCIBILITY_2026-11-05.md",
+    "https://github.com/alwansan/raf/actions/runs/42011353849",
+    "https://github.com/alwansan/raf/actions/runs/42012049920",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ILSPY_REFERENCE_CONTEXT_2026-11-05.md"
   ],
   "remaining": [
     "Original Cheat.AllowCheatsForLocalPlayer SteamUser.GetSteamID direct object call now source-guarded in B50 2bb6c2; no native/phone verification. Do not infer all Steam callbacks are removed.",
@@ -70,7 +73,8 @@
     "B19 SaveAndLoad original C# and .meta source-stage hardlink alias guard is SOURCE_FIXED with CI41929845587 15/15 path tests plus authentic 16 path expressions; synthetic safety proof only, not root cause of APK86 world/Steam stats or .rgd device result.",
     "T4 exact original Load<T> (CI41939908432 PASS, original ZIP2 DLL SHA verified): Deserialize=1, catch=1, FileManager=1, Binder assignments=0; source-only Android Load.caughtException diagnostic integrated (original adapted C# compile CI41939846508 PASS); original Data.rgd compatibility and on-device create/save/reload are unverified. Keep LOCAL-005 OPEN, NOT_READY 0/3, preserve Steam/sound/Settings, defer touch.",
     "T4 original coroutine completion assignment marker is source-integrated: exact original write preserved; 10/10 Python + managed CLR false/true semantic branches PASS, and SHA-authenticated original DLL private method read-only variant PASS (CI41943357681). The original ILSpy class SHA differs between B07 and T4 on the same verified DLL, and T4 run reports production_adapter_exercised=false; Android Unity/IL2CPP/native/device playability and real .rgd roundtrip NOT tested. Do not lower production source gate; maintain LOCAL-005 OPEN.",
-    "T4 CI41944365772 original same-DLL ILSpy reproducibility: SHA-pinned 3211776B original DLL decompiled twice independently in one runner; class/method/masked SHA exactly equal across both passes; 10/10 new source-free controls plus 10/10 original completion controls and real CLR synthetic branches PASS. This excludes same-run nondeterminism in that scope but does not explain older B07 vs T4 cross-run decompiler SHA difference; native production adapter full gate/Unity/IL2CPP/real world/.rgd device still untested. Do not loosen source pin."
+    "T4 CI41944365772 original same-DLL ILSpy reproducibility: SHA-pinned 3211776B original DLL decompiled twice independently in one runner; class/method/masked SHA exactly equal across both passes; 10/10 new source-free controls plus 10/10 original completion controls and real CLR synthetic branches PASS. This excludes same-run nondeterminism in that scope but does not explain older B07 vs T4 cross-run decompiler SHA difference; native production adapter full gate/Unity/IL2CPP/real world/.rgd device still untested. Do not loosen source pin.",
+    "T4 exact original managed-reference context CI42011353849 PASS: 3211776B SHA-verified DLL decompiled twice solo -> old T4 alternate class/body SHA, same DLL alongside 151 siblings -> exact B07 production source SHA. Subsequent CI42012049920 PASS with actual production offline adapt + operation instrument, source/manifest hashes unchanged, firstMoveNext/completion traces present and original assignment/yields preserved. Earlier original C# managed compile CI41942118067 PASS. This resolves source-intake context discrepancy at tested scope, NOT Unity IL2CPP/device playable world or genuine .rgd create-save-relaunch-reopen. LOCAL-005 stays OPEN NOT_READY."
   ],
   "acceptance": [
     "دخول عالم جديد محلي قابل للعب بلا Steam أو سيرفر خارجي",
@@ -78,5 +82,5 @@
     "لا يكفي إخفاء رسالة الاتصال"
   ],
   "updated_by": "T4",
-  "updated_at": "2026-11-05T00:53:00Z"
+  "updated_at": "2026-11-05T10:41:00Z"
 }
