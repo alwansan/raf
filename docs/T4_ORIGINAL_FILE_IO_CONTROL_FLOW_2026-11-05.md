@@ -1,0 +1,21 @@
+# T4 LOCAL-005 — authenticated original FileManager IO/catch flow, 2026-11-05
+
+## Source and scope
+Immutable ZIP2 `alwansan/raf@15964ea8f246b6e076ce26b60931ee2e1a9a2385`: original `Raft/Raft_Data/Managed/Assembly-CSharp.dll` 3,211,776 bytes, SHA256 `0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e`. Continues T5's [compiled original FileManager call-edge proof](T5_ORIGINAL_FILEMANAGER_IL_METADATA_2026-11-05.md) [CI42012597665](https://github.com/alwansan/raf/actions/runs/42012597665). The T4 earlier C# decompiler text regex yielded zero recognized method bodies, but T5 proved both compiled original targets exist. This experiment classifies **BCL operation and catch-handler control-flow**, without revealing private original methods, IL, text or binaries.
+
+## New compiled source oracle
+Source-free `android-port/Experiments/T4/OriginalFileIoFlow/Program.cs` uses `Mono.Cecil 0.11.5` on the exact SHA/size-verified original DLL; refuses ambiguous SaveAndLoad generic-Load or Save direct call, non-FileManager metadata target, non-static/no-body target, parameter-count drift, multiple BCL IO calls, handler-count drift or malformed output. `scripts/t4_validate_original_file_io_flow.py` rejects oversized/untrusted/symlinked report paths, private symbols/extra keys, fake device or .rgd claims, inconsistent catch exit and unknown BCL/type categories. `tests/test_t4_validate_original_file_io_flow.py`: 15 source-free positive/negative controls.
+
+## Actual result
+[Final original CI42018088542](https://github.com/alwansan/raf/actions/runs/42018088542) **COMPLETED SUCCESS**:
+- 15/15 source-free cases; exact original DLL authenticated before reading IL.
+- Original **READ** FileManager target: 2 parameters (string, IO enum), returns a stream, calls **System.IO.File.Open** once, one catch handler and zero finally; handler contains a normal control-flow `leave`, no explicit `throw`/`rethrow` and no `ldnull` literal.
+- Original **WRITE** FileManager target: 1 string parameter, returns a stream, calls **System.IO.File.Create** once, one catch handler and zero finally; handler also has a `leave` and no explicit throw/rethrow and no `ldnull` literal.
+- Neither original FileManager target was executed here; no on-device filesystem, .rgd, Unity/IL2CPP or world playability test. The normal catch exit makes a **non-rethrowing error path possible**, but IL aggregate alone does not establish a particular returned stream value, that an exception occurred in APK86, or reliable error suppression across all possible runtime paths. No original source, method identifiers or private IL was published.
+
+## Rejected interpretation / action
+A SaveAndLoad wrapper `EndOperation(...exceptionEscaped=false)` is **not proof that nested FileManager IO succeeded**, given its own compiled catch handlers. Conversely, a catch handler in compiled source is not evidence of a failed save. Before changing runtime logging or serialization, a test should execute the actual original compiled FileManager helpers on an isolated, non-user synthetic file, close and reopen it, while preserving the pinned DLL and reporting only boolean/hash structural evidence. Next real Android build must still create a playable offline world and save/quit/relaunch/reopen genuine .rgd. Do not add fake `WorldHasBeenRecieved`, change schema, relax source pins or touch owner-working audio/Settings and deferred touch. `LOCAL-005` remains **OPEN**; project **NOT_READY 0/3**.
+
+## CI attempts and recovery
+- Earlier workflow runs [42017637835](https://github.com/alwansan/raf/actions/runs/42017637835), [42017735988](https://github.com/alwansan/raf/actions/runs/42017735988) failed building new diagnostic harness, not original game compilation: wrong nullable return treatment with warnings-as-errors. [42017864339](https://github.com/alwansan/raf/actions/runs/42017864339) failed workflow diagnostic heredoc shell quoting; [42017991721](https://github.com/alwansan/raf/actions/runs/42017991721) safely emitted compiler code `CS8603`, corrected `return calls[0]!` after explicit null cardinality check. All fail records retained. Final verified original CI passes.
+- No active Actions cancelled, no native request/owner device touched, no original binary or private code uploaded.
