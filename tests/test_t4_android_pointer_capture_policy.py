@@ -106,6 +106,20 @@ class AndroidPhysicalMouseIntegrationPolicy(unittest.TestCase):
 
 
 
+    def test_stale_queued_release_cannot_revoke_new_capture(self):
+        release = BRIDGE.split("private void ReleaseCapture()", 1)[1].split(
+            "private void OnApplicationPause", 1)[0]
+        self.assertIn("int releaseEpoch = Volatile.Read(ref epoch);", release)
+        self.assertIn("OnAndroidUi(() =>", release)
+        self.assertIn(
+            "if (releaseEpoch != Volatile.Read(ref epoch) || requested) return;",
+            release,
+        )
+        self.assertLess(
+            release.index("if (releaseEpoch != Volatile.Read(ref epoch) || requested) return;"),
+            release.index('view.Call("releasePointerCapture")'),
+        )
+
     def test_captured_packet_source_contract_matches_android_api26(self):
         source = (ROOT / "android-port/Runtime/Platform/PhysicalMouseMotionSource.cs").read_text()
         self.assertIn("public const int MouseRelative = 131076;", source)
