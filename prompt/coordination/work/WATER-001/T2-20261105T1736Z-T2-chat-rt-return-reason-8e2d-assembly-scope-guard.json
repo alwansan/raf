@@ -4,8 +4,8 @@
   "origin": "chat",
   "session_id": "20261105T1736Z-T2-chat-rt-return-reason-8e2d",
   "issue_id": "WATER-001",
-  "status": "waiting_ci",
-  "updated_at": "2026-11-05T17:48:46.589Z",
+  "status": "completed",
+  "updated_at": "2026-11-05T17:50:08.250Z",
   "base_sha": "a7a94b623eaf6148c36e85c437f453f2fd36f132",
   "resumed_from_sessions": [
     "20261105T1712Z-T2-chat-return-identity-minimal-4c8f",
@@ -28,7 +28,7 @@
     "last_original_CI": "42076713202 SUCCESS",
     "runtime_device_test": "not in scope"
   },
-  "next_step": "Read source-free CI42078113502. If compiler/test fails, correct only standalone new T2 project. If successful, mark synthetic guard passed and retain source original check as separately pending. WATER-001 OPEN NOT_READY0/3.",
+  "next_step": "Integrate strict Cecil declaring+return type assembly scope match into original SHA-pinned T2 Foam RT return signature path only when scheduled T2 return-local-writer changes are settled; add source-free wrong-scope decoys and rerun genuine original SHA managed CI. Keep unresolved/unsupported scopes fail closed. No device/ShaderLab proof; WATER-001 OPEN NOT_READY 0/3.",
   "source_commits": [
     "420b1a5a998aabb6d91cd32eab0abba72a930385",
     "4874be485a8ee9ff1d4e09e71d7dcabbd42bdba9",
@@ -39,10 +39,18 @@
     "https://github.com/alwansan/raf/actions/runs/42078113502"
   ],
   "result": {
-    "ci": "in_progress",
-    "synthetic_csharp_mono_cecil": "sourcefree assembly identity scope negative/positive checks",
-    "original_game_dll_loaded": false,
-    "actual_original_return_target_assembly_resolved": false,
-    "android_test": false
+    "synthetic_cpu_ci": "42078113502 COMPLETED SUCCESS",
+    "job_id": 127423644826,
+    "mono_cecil_version": "0.11.5",
+    "sourcefree_same_signature_other_assembly_collision_demonstrated": true,
+    "same_actual_assembly_accepted": true,
+    "foreign_assembly_same_fullname_rejected": true,
+    "spoofed_Unity_RenderTexture_return_assembly_rejected": true,
+    "other_ModuleDefinition_rejected": true,
+    "unknown_ModuleReference_rejected": true,
+    "wrong_formal_signature_rejected": true,
+    "original_Raft_DLL_processed": false,
+    "actual_Foam_return_target_assembly_verified": false,
+    "runtime_pixels_verified": false
   }
 }
