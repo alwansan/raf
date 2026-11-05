@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "session_id": "20261105T211830Z-T1-chat-c98e42",
+  "issue_id": "WATER-001",
+  "status": "waiting_ci",
+  "source_commit": "413538f60a02c480a0aa5f99251e34ba7f333c7c",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42111819138",
+  "observed_result": "Both capture producers emit 12-word records containing dispatch ID, per-site occurrence, Load coordinates and value bits. Legacy Vulkan capture remains default for its independent workflow. 109 local FFT tests passed and workflow YAML parsed; authentic replay is in progress.",
+  "next_step": "Read the paired per-site counters only after sampled-input identity and both instrumentation output-parity gates. If compilation or a gate fails, diagnose that first. No Adreno inference."
+}
