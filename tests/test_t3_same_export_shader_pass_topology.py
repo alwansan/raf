@@ -1,5 +1,7 @@
 """Source-free T3 Shader48 to same-export ShaderLab per-pass structural deficit."""
 import copy
+import tempfile
+from pathlib import Path
 import unittest
 
 from scripts import t3_same_export_shader_pass_topology as m
@@ -76,6 +78,24 @@ class SameExportShaderTopology(unittest.TestCase):
         self.assertEqual(problem.stage,"original_Shader48_parsed_pass_topology")
         self.assertEqual(problem.category,"LookupError")
         self.assertNotIn("private",str(problem))
+
+    def test_actual_unicode_ShaderLab_and_BOM_meta_codec_is_supported(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            assets=Path(tmp)/"Assets"
+            assets.mkdir()
+            ids=set()
+            for i in range(1,10):
+                guid=f"{i:032x}"
+                ids.add(guid)
+                shader=assets/(f"synthetic-{i}.shader")
+                shader.write_text('Shader "Synthetic" { SubShader { Pass {CGPROGRAM\\nvoid f(){}\\nENDCG} } }',
+                                  encoding="utf-8-sig")
+                (assets/(shader.name+".meta")).write_text("guid: "+guid+"\\nShaderImporter:\\n",
+                                                            encoding="utf-8-sig")
+            results=m.exported_profiles(assets,ids)
+            self.assertEqual(len(results),9)
+            self.assertTrue(all(r["pass_count"]==1 for r in results.values()))
+            self.assertTrue(all(r["programmed_pass_count"]==1 for r in results.values()))
 
     def test_private_names_ids_guid_not_in_result(self):
         result=str(self.call())
