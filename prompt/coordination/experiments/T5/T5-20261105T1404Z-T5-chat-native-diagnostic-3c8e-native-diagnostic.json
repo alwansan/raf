@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "session_id": "20261105T1404Z-T5-chat-native-diagnostic-3c8e",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "hypothesis": "One explicitly documented incomplete-water native Unity ARM64 test build of latest source could produce an APK+OBB/XAPK for new T4 Save snapshot and water diagnostics or a specific failing gate; phone confirmation separate.",
+  "source_commit": "5eed7b6715a25177e733d17f383bb8735368bdbf",
+  "input_hashes": [
+    "ZIP2 15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "Previous installed Raft source d181ee7152580f49ee0b41dfd05fa2bfdacfafe5"
+  ],
+  "tool_versions": {
+    "unity": "2021.3.45f2",
+    "gameci": "unity-builder@v4",
+    "runner": "ubuntu-24.04"
+  },
+  "commands": [
+    "Use existing .github/raft-native-build-request.json trigger with [raft-native-build] [raft-device-test] for exactly one build"
+  ],
+  "negative_controls": [
+    "No fake FFT or water source",
+    "Fail original water limitation if actual unmet differs",
+    "No signed release without audited APK/OBB",
+    "No gameplay/device claim from CI"
+  ],
+  "workflow_path": ".github/workflows/raft-unity-editor-android-import.yml",
+  "run_url": null,
+  "artifact_urls": [],
+  "budget": "One existing diagnostic reconstruct up to 240min plus publishing up to 30min; no retry without new evidence; share engine mutex",
+  "status": "active",
+  "observed_result": null,
+  "rejected_hypotheses": [],
+  "limitations": [
+    "Original shader author identity/runtime parity open",
+    "Any generated package must be tested on owner phone for real .rgd"
+  ],
+  "integration_commit": null,
+  "next_step": "Recheck resource mutex and release request overlap, trigger once if safe; record run URL and pass/fail/waiting."
+}
