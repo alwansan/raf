@@ -1,0 +1,15 @@
+{
+  "session_id": "20261105T1953Z-T5-scheduled-release-permission-a72e",
+  "origin": "scheduled",
+  "issue_id": "INTEGRATION-001",
+  "status": "active",
+  "base_sha": "8a0237aea53c76252bd710d7e939d862296a3d0c",
+  "intended_files": [
+    "prompt/coordination/work/INTEGRATION-001/T5-20261105T1953Z-T5-scheduled-release-permission-a72e-release-permission-forensics.json",
+    "prompt/coordination/clients/T5/sessions/20261105T1953Z-T5-scheduled-release-permission-a72e.md"
+  ],
+  "experiment_key": "t5-release-403-42058825739-token-permissions-and-expiry-readonly-v1",
+  "resource_key": "github-release-api-readonly-no-unity",
+  "hypothesis": "The 403 is token authorization/rules rather than Unity or package failure; verify available API policy and published tag while retaining expiring artifact identifiers.",
+  "updated_at": "2026-11-05T19:53:00Z"
+}
