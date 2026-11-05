@@ -1,0 +1,113 @@
+name: T2 WATER-001 source-authentic Foam private ShaderLab authored Properties candidate
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t2_foam_private_shaderlab_candidate.py
+      - tests/test_t2_foam_private_shaderlab_candidate.py
+      - .github/workflows/raft-t2-foam-private-shaderlab-candidate.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t2-foam-original-2prop-shaderlab-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  source-original-private-candidate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Test no fake properties and 2-pass controls without original
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t2_foam_private_shaderlab_candidate.py
+          python3 -m unittest discover -s tests -p 'test_t2_foam_private_shaderlab_candidate.py' -v
+      - name: Check scratch disk
+        run: python3 -c 'import shutil; assert shutil.disk_usage(".").free>3*1024**3'
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: t2-original-foam-shaderlab-zip2
+          lfs: false
+          persist-credentials: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/sharedassets0.assets/*
+      - name: SHA-pin original Foam shader owner without LFS
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os,subprocess
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import ZIP2_SHA,PINS,stage
+          source=Path("t2-original-foam-shaderlab-zip2")
+          assert subprocess.check_output(["git","-C",str(source),"rev-parse","HEAD"],text=True).strip()==ZIP2_SHA
+          out=Path(os.environ["RUNNER_TEMP"])/"t2-auth-original"
+          result=stage(source,out,{"Raft_Data/sharedassets0.assets":PINS["Raft_Data/sharedassets0.assets"]})
+          assert result["verified_bytes"]==115978112 and result["lfs_used"] is False
+          print("T2_ORIGINAL_FOAM_CANDIDATE owner_sha_authenticated=true")
+          PY
+      - name: Install original reader and translated-stage tools
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4 -q
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
+      - name: Regenerate B20 exact original HLSL stages and two serialized pass states in scratch
+        run: |
+          set -euo pipefail
+          timeout 480s python3 -m scripts.b20_private_foam_packet \
+            --source "$RUNNER_TEMP/t2-auth-original" \
+            --repo "$GITHUB_WORKSPACE" \
+            --private "$RUNNER_TEMP/t2-foam-auth-private" \
+            --out "$RUNNER_TEMP/t2-foam-private-manifest.json"
+      - name: Assemble actual source-authored Foam Properties with 2 genuine passes privately
+        run: |
+          set -euo pipefail
+          timeout 180s python3 -m scripts.t2_foam_private_shaderlab_candidate \
+            --source "$RUNNER_TEMP/t2-auth-original" \
+            --packet "$RUNNER_TEMP/t2-foam-auth-private" \
+            --manifest "$RUNNER_TEMP/t2-foam-private-manifest.json" \
+            --private-dest "$RUNNER_TEMP/t2-authentic-foam-private.shader" \
+            --out "$RUNNER_TEMP/t2-foam-candidate-safe.json"
+          python3 - <<'PY'
+          import os,json
+          from pathlib import Path
+          r=json.loads((Path(os.environ["RUNNER_TEMP"])/"t2-foam-candidate-safe.json").read_text())
+          assert r["status"]=="original_private_foam_two_pass_shaderlab_structural_candidate"
+          assert r["authored_properties"]==2 and r["authored_texture_properties"]==1
+          assert r["original_passes"]==2 and r["original_program_stages"]==4
+          assert r["authentic_pass_states"]==2 and r["complete_structural_passes"]==2
+          assert r["shaderlab_unity_import_verified"] is False
+          assert r["original_cb0_name_or_data_upload_verified"] is False
+          assert r["original_material_sampler_upload_verified"] is False
+          assert r["original_numeric_or_device_pixels_verified"] is False
+          assert r["private_shaderlab_published"] is False
+          PY
+      - name: Erase original and private ShaderLab/HLSL, even on error
+        if: always()
+        run: |
+          rm -rf -- "$RUNNER_TEMP/t2-auth-original" \
+            "$RUNNER_TEMP/t2-foam-auth-private" \
+            "$RUNNER_TEMP/t2-foam-private-manifest.json" \
+            "$RUNNER_TEMP/t2-authentic-foam-private.shader" \
+            "$GITHUB_WORKSPACE/t2-original-foam-shaderlab-zip2"
+      - name: Publish ONLY safe category/numeric report
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: t2-foam-private-shaderlab-safe-${{ github.run_id }}
+          path: ${{ runner.temp }}/t2-foam-candidate-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
