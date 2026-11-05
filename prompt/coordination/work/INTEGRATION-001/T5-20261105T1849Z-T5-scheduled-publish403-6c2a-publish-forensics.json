@@ -2,7 +2,7 @@
   "session_id": "20261105T1849Z-T5-scheduled-publish403-6c2a",
   "origin": "scheduled",
   "issue_id": "INTEGRATION-001",
-  "status": "active",
+  "status": "completed",
   "baseline_sha": "21891344ae3307816db7c4719b1d38085834b238",
   "intended_files": [
     "prompt/coordination/clients/T5/sessions/20261105T1849Z-T5-scheduled-publish403-6c2a.md",
@@ -12,9 +12,14 @@
   "hypothesis": "Native run 42058825739 completed reconstruction but release publication failed due to GitHub token authorization; distinguish packaging from publication failure",
   "experiment_key": "t5-native-42058825739-immutable-e9c358ed-publish-403-artifact-presence-permission-boundary-v1",
   "resource_key": "read-only-GitHub-run-logs-and-API",
-  "updated_at": "2026-11-05T18:49:00Z",
+  "updated_at": "2026-11-05T18:53:00Z",
   "taken_over_from": [
     "prompt/coordination/clients/T5/sessions/20261105T1738Z-T5-chat-release-manifest-6e91.md"
   ],
-  "next_step": "Read immutable run jobs, artifact metadata, release tag and publish log; no native rerun"
+  "next_step": "Recover expiring native artifact via authorized publication-only path; do not rebuild Unity",
+  "result": "reconstruct SUCCESS; publish HTTP 403 on release creation; delivery artifact exists but expires 2026-11-06T18:19:05Z",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42058825739",
+    "https://api.github.com/repos/alwansan/raf/actions/runs/42058825739/artifacts"
+  ]
 }
