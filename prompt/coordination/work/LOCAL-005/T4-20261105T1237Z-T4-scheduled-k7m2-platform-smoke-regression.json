@@ -1,0 +1,24 @@
+{
+  "session_id": "20261105T1237Z-T4-scheduled-k7m2",
+  "origin": "scheduled",
+  "issue_id": "LOCAL-005",
+  "status": "completed",
+  "baseline_sha": "fe25a7356c42d55a56e67836ab5dfa220b9e09b4",
+  "taken_over_from": [
+    "T5 20261105T1146Z platform-smoke-diff",
+    "T4 20261105T1142Z automation-platform-regression-triage"
+  ],
+  "intended_files": [
+    "prompt/coordination/work/LOCAL-005/T4-20261105T1237Z-T4-scheduled-k7m2-platform-smoke-regression.json",
+    "prompt/coordination/clients/T4/sessions/20261105T1237Z-T4-scheduled-k7m2.md"
+  ],
+  "experiment_key": "platform-smoke-process-profile-race-failed42020924863-vs-passed42028108335",
+  "resource_key": null,
+  "updated_at": "2026-11-05T12:37:00Z",
+  "result": "Failure isolated to transient invalid/empty profile.id during cross-process first creation; latest platform smoke 42028108335 passed 17/17 including separate-process identity and offline solo host. Current LocalProfileStore retries incomplete/IO read for 100 attempts (~1s); no new game patch warranted. No native device validation.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42020924863",
+    "https://github.com/alwansan/raf/actions/runs/42028108335"
+  ],
+  "next_step": "T5 coordinated integrated native candidate and device evidence for WorldHasBeenLoaded/Save.argumentFileSnapshot and .rgd save-close-reopen."
+}
