@@ -1,0 +1,19 @@
+{
+  "id": "20261105T232821Z-T3-chat-particle108-sameexport-68c4",
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T232821Z-T3-chat-particle108-sameexport-68c4",
+  "issue_id": "RENDER-002",
+  "type": "source_export_result",
+  "at": "2026-11-05T23:43:48.276Z",
+  "summary": "GENUINE SHA-locked source→ONE AssetRipper W1+B02 export comparison: 5/5 original Material21 traced, 2/3 original Texture2D28 source targets traced, 9/10 exported Material TexEnv texture GUID PPtrs exact, 10/10 UV exact, 1 original Texture2D source B02 trace missing. Source `.resS` fully verified. CI42130529677 SUCCESS 93/93 synthetic; RENDER-002 OPEN, Android pixels unverified.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42130529677",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_PARTICLE108_SAMEINSTANCE_EXPORT_2026-11-06.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-particle108-source-sameexport-material-texture-parity.json"
+  ],
+  "limitations": [
+    "one source Texture2D B02 trace absent; reason unclassified",
+    "no native full game/Android pixel proof"
+  ]
+}
