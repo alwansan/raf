@@ -1,0 +1,15 @@
+{
+  "id": "T4-20261105T2050Z-T4-chat-original-mouse-routing-q9c4",
+  "owner": "T4",
+  "session_id": "20261105T2050Z-T4-chat-original-mouse-routing-q9c4",
+  "origin": "chat",
+  "issue_id": "INPUT-005",
+  "type": "result",
+  "summary": "Source-authenticated original ZIP2 mouse routing: CI42107935479 SUCCESS 7/7 controls, 2395 original ILSpy files, 4 direct Mouse X and 4 direct Mouse Y legacy Input.GetAxis syntax sites in camera/player-like files, no MyInput mouse axis or InputSystem delta sites; pointer capture not implemented and phone test outstanding.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42107935479",
+    "https://github.com/alwansan/raf/commit/fe9a9ae5264821304923d6bac04d21089f3a3df8",
+    "prompt/coordination/clients/T4/sessions/20261105T2050Z-T4-chat-original-mouse-routing-q9c4.md"
+  ],
+  "at": "2026-11-05T20:56:29Z"
+}
