@@ -83,6 +83,36 @@ jobs:
           import json,sys
           from pathlib import Path
           lines=Path(sys.argv[1]).read_text(errors='replace').splitlines()
+          # Only aggregate counts of broad public framework categories; never
+          # emit original symbol names, private IL, log bytes or stack traces.
+          scope_lines=[s[len('T5_ORIGINAL_CIL_SCOPE '):] for s in lines
+                       if s.startswith('T5_ORIGINAL_CIL_SCOPE {')]
+          if len(scope_lines)==1:
+              try:
+                  scope=json.loads(scope_lines[0])
+                  assert set(scope)=={'read','write','original_code_or_symbols_published'}
+                  assert scope['original_code_or_symbols_published'] is False
+                  fields={'system_io','safe_core','unity_or_steam','other',
+                          'total','known_bounded_io_shape'}
+                  for role in ('read','write'):
+                      o=scope[role]
+                      assert type(o)==dict and set(o)==fields
+                      assert all(type(o[x]) is int and 0<=o[x]<=20 for x in
+                                 ('system_io','safe_core','unity_or_steam','other','total'))
+                      assert sum(o[x] for x in
+                                 ('system_io','safe_core','unity_or_steam','other'))==o['total']
+                      assert type(o['known_bounded_io_shape']) is bool
+                  print('T5_ORIGINAL_MANAGED_IO_CALL_SCOPE'
+                        ' read_io='+str(scope['read']['system_io'])+
+                        ' read_core='+str(scope['read']['safe_core'])+
+                        ' read_engine='+str(scope['read']['unity_or_steam'])+
+                        ' read_other='+str(scope['read']['other'])+
+                        ' write_io='+str(scope['write']['system_io'])+
+                        ' write_core='+str(scope['write']['safe_core'])+
+                        ' write_engine='+str(scope['write']['unity_or_steam'])+
+                        ' write_other='+str(scope['write']['other']))
+              except (AssertionError,ValueError,TypeError):
+                  print('T5_ORIGINAL_MANAGED_IO_CALL_SCOPE status=UNVERIFIED')
           allowed=[s[len('T5_FILEMANAGER_RUNTIME '):] for s in lines
                    if s.startswith('T5_FILEMANAGER_RUNTIME {')]
           if len(allowed)!=1:
