@@ -218,6 +218,39 @@ jobs:
           assert set(a['SinkCategories']).issubset(allowed_sinks)
           assert not a['OriginalRuntimeExecutionVerified']
           assert not a['OriginalRuntimeArrayContentsVerified']
+          q=r['original_exact_RenderTexture_array_byref_target_body_profile']
+          assert q is not None
+          assert q['CallFormalContainsExactRefRenderTextureArray'] is True
+          assert q['ExactSourceManagedMethodDefinitionMatches'] in (0,1)
+          assert type(q['OriginalTargetDefinitionCategory']) is str
+          assert q['OriginalTargetDefinitionCategory'] in (
+              'same_sha_managed_definition',
+              'framework_system_array_resize_signature',
+              'not_resolved_in_original_AssemblyCSharp')
+          assert q['ExactOriginalMethodBodyAvailable'] is False or (
+              q['ExactSourceManagedMethodDefinitionMatches']==1)
+          for key in ('BodyDirectIndirectRefStoreOpcodeCount',
+                      'BodyDirectArrayNewarrOpcodeCount',
+                      'BodyDirectReferenceElementStoreOpcodeCount',
+                      'BodyBranchOpcodeCount',
+                      'BodyStrictNullStoreThroughRefArrayFormalCount'):
+              assert type(q[key]) is int and q[key]>=0
+          assert q['BodyStrictNullStoreThroughRefArrayFormalCount'] <= (
+              q['BodyDirectIndirectRefStoreOpcodeCount'])
+          assert not q['RuntimeCallExecutionProven']
+          assert not q['RuntimeArrayInitializationProven']
+          print('T2_FOAM_BYREF_TARGET_SAFE '+json.dumps({
+              'original_definition_matches':q['ExactSourceManagedMethodDefinitionMatches'],
+              'original_method_body_available':q['ExactOriginalMethodBodyAvailable'],
+              'target_definition_category':q['OriginalTargetDefinitionCategory'],
+              'framework_resize_signature':q['RecognizedSystemArrayResizeSignature'],
+              'direct_stind_ref_opcodes':q['BodyDirectIndirectRefStoreOpcodeCount'],
+              'direct_rendertexture_newarr_opcodes':q['BodyDirectArrayNewarrOpcodeCount'],
+              'direct_stelem_ref_opcodes':q['BodyDirectReferenceElementStoreOpcodeCount'],
+              'branch_opcodes':q['BodyBranchOpcodeCount'],
+              'strict_ref_array_null_store_pattern':q['BodyStrictNullStoreThroughRefArrayFormalCount'],
+              'runtime_array_initialized_proven':False,
+          },sort_keys=True))
           print('T2_FOAM_ORIGINAL_FIELD_ADDRESS_SINK_SAFE '+json.dumps({
               'original_exact_address_sites':a['ExactFieldAddressSites'],
               'distinct_address_methods':a['DistinctAddressSiteMethods'],

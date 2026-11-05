@@ -53,7 +53,8 @@ internal static class FoamFieldAddressConsumer
 
     // Trace the exact address after its ldflda; everything originally on the
     // evaluation stack below that address is Other. No branch join is guessed.
-    private static (string Sink,string First) Trace(MethodDefinition method, int site)
+    private static (string Sink,string First) Trace(MethodDefinition method, int site,
+        Action<MethodReference>? onTypedRecipient = null)
     {
         var ops=method.Body.Instructions;
         var stack=new List<Tag>{Tag.ExactFieldAddress};
@@ -221,7 +222,10 @@ internal static class FoamFieldAddressConsumer
                     {
                         if (called.Parameters[i].ParameterType is ByReferenceType br &&
                             IsOriginalRenderTextureArray(br.ElementType))
+                        {
+                            onTypedRecipient?.Invoke(called);
                             return ("typed_byref_array_call_potential_mutation",first);
+                        }
                         return ("address_escaped_to_other_call_argument",first);
                     }
                     if (arg==Tag.ExactFieldArrayValue)
@@ -258,7 +262,8 @@ internal static class FoamFieldAddressConsumer
     }
 
     internal static SafeProfile Scan(IEnumerable<MethodDefinition> methods,
-                                    FieldReference field)
+                                    FieldReference field,
+                                    Action<MethodReference>? onTypedRecipient = null)
     {
         if (methods is null || field is null ||
             !IsOriginalRenderTextureArray(field.FieldType))
@@ -279,7 +284,7 @@ internal static class FoamFieldAddressConsumer
                     continue;
                 total++;
                 owners.Add(method);
-                var (sink,first)=Trace(method,i);
+                var (sink,first)=Trace(method,i,onTypedRecipient);
                 sinks[sink]=sinks.GetValueOrDefault(sink)+1;
                 firsts[first]=firsts.GetValueOrDefault(first)+1;
                 if (total>10000) throw new InvalidDataException("Excess address sites");

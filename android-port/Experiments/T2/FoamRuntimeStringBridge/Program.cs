@@ -146,6 +146,7 @@ internal static class Program
         public FoamFieldSerializationMetadata.SafeProfile? OriginalFieldSerializationProfile;
         public FoamFieldReadTopology.SafeProfile? OriginalFieldReadTopologyProfile;
         public FoamFieldAddressConsumer.SafeProfile? OriginalAddressConsumerProfile;
+        public FoamByrefTargetBody.SafeProfile? OriginalByrefTargetBodyProfile;
         public readonly Dictionary<string,int> TotalSetterCalls = new(StringComparer.Ordinal)
         {
             ["shader_global_texture"] = 0,
@@ -378,8 +379,14 @@ internal static class Program
             result.OriginalFieldReadTopologyProfile=
                 FoamFieldReadTopology.Scan(sourceMethods,exactGetterBackingField,
                     exactOriginalTextureGetter);
+            var exactByrefRecipients=new List<MethodReference>();
             result.OriginalAddressConsumerProfile=
-                FoamFieldAddressConsumer.Scan(sourceMethods,exactGetterBackingField);
+                FoamFieldAddressConsumer.Scan(sourceMethods,exactGetterBackingField,
+                    recipient=>exactByrefRecipients.Add(recipient));
+            if (exactByrefRecipients.Count!=1)
+                throw new InvalidDataException("Original exact field byref target count not one");
+            result.OriginalByrefTargetBodyProfile=
+                FoamByrefTargetBody.Inspect(sourceMethods,exactByrefRecipients[0]);
             // Resolve the exact original FieldDefinition without publishing
             // private type, token or field identifiers.
             var sourceTypes=sourceMethods.Count==0
@@ -451,6 +458,7 @@ internal static class Program
             original_exact_RenderTexture_array_field_serialization_metadata = result.OriginalFieldSerializationProfile,
             original_exact_RenderTexture_array_field_managed_read_topology = result.OriginalFieldReadTopologyProfile,
             original_exact_RenderTexture_array_field_address_consumer = result.OriginalAddressConsumerProfile,
+            original_exact_RenderTexture_array_byref_target_body_profile = result.OriginalByrefTargetBodyProfile,
             original_exact_Texture_int_producer_body_accepted_same_SHA_definition = result.OriginalSingleProducerBodyProfile is not null,
             original_exact_method_definition_is_original_runtime_called_or_output_proof = false,
             producer_declared_signature_is_actual_runtime_texture_object_proof = false,
@@ -955,13 +963,52 @@ internal static class Program
         ilTb.Append(ilTb.Create(OpCodes.Ldflda,renderArray));
         ilTb.Append(ilTb.Create(OpCodes.Call,syntheticByref));
         ilTb.Append(ilTb.Create(OpCodes.Ret));
+        var syntheticCallees=new List<MethodReference>();
         var typedProf=FoamFieldAddressConsumer.Scan(
-            new[]{typedByrefSite},originalField);
+            new[]{typedByrefSite},originalField,
+            recipient=>syntheticCallees.Add(recipient));
+        if (syntheticCallees.Count!=1)
+            throw new InvalidDataException("Exact synthetic call capture failed");
         if (typedProf.ExactFieldAddressSites!=1 ||
             typedProf.SinkCategories.GetValueOrDefault(
                 "typed_byref_array_call_potential_mutation")!=1 ||
             typedProf.OriginalRuntimeExecutionVerified)
             throw new InvalidDataException("Typed original array byref call fixture failed");
+
+        // A precise matching public method body must be distinguished from a
+        // same-named but differently typed method and an unresolved external.
+        var syntheticTargetDef=new MethodDefinition("SyntheticMayWriteArrayByRef",
+            Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,
+            m.TypeSystem.Void);
+        syntheticTargetDef.Parameters.Add(new ParameterDefinition(
+            new ByReferenceType(new ArrayType(renderTextureType))));
+        factoryDef.Methods.Add(syntheticTargetDef);
+        var targetIl=syntheticTargetDef.Body.GetILProcessor();
+        targetIl.Append(targetIl.Create(OpCodes.Ldarg_0));
+        targetIl.Append(targetIl.Create(OpCodes.Ldnull));
+        targetIl.Append(targetIl.Create(OpCodes.Stind_Ref));
+        targetIl.Append(targetIl.Create(OpCodes.Ret));
+        var originalStyleBody=FoamByrefTargetBody.Inspect(
+            new[]{syntheticTargetDef},syntheticCallees[0]);
+        if (originalStyleBody.ExactSourceManagedMethodDefinitionMatches!=1 ||
+            !originalStyleBody.ExactOriginalMethodBodyAvailable ||
+            !originalStyleBody.CallFormalContainsExactRefRenderTextureArray ||
+            originalStyleBody.BodyDirectIndirectRefStoreOpcodeCount!=1 ||
+            originalStyleBody.BodyStrictNullStoreThroughRefArrayFormalCount!=1 ||
+            originalStyleBody.RuntimeCallExecutionProven ||
+            originalStyleBody.RuntimeArrayInitializationProven)
+            throw new InvalidDataException("Exact synthetic typed byref callee body matching failed");
+        var typedWrong=new MethodDefinition("SyntheticMayWriteArrayByRef",
+            Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,
+            m.TypeSystem.Void);
+        typedWrong.Parameters.Add(new ParameterDefinition(
+            new ByReferenceType(new ArrayType(textureType))));
+        factoryDef.Methods.Add(typedWrong);
+        var wrongRecipient=FoamByrefTargetBody.Inspect(
+            new[]{typedWrong},syntheticCallees[0]);
+        if (wrongRecipient.ExactSourceManagedMethodDefinitionMatches!=0 ||
+            wrongRecipient.ExactOriginalMethodBodyAvailable)
+            throw new InvalidDataException("Same-named wrong-type recipient falsely matched");
         var syntheticIndirect=new MethodDefinition("SyntheticFieldReferenceStore",
             Mono.Cecil.MethodAttributes.Public,m.TypeSystem.Void);
         factoryDef.Methods.Add(syntheticIndirect);
@@ -1130,6 +1177,7 @@ internal static class Program
                 strict_original_backing_field_serialization_metadata_fixtures=true,
                 strict_original_field_load_address_typed_decoy_fixture=true,
                 typed_byref_indirect_array_store_length_and_decoy_sink_controls=true,
+                exact_byref_target_internal_body_and_wrong_signature_controls=true,
                 four_original_style_Texture_int_argument_origin_controls=true,
                 signed_short_wide_and_duplicate_private_i4_aggregate_controls=true,
                 private_IL_names_or_source_published = false
