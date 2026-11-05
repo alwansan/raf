@@ -361,6 +361,41 @@ jobs:
           if v['OriginalReturnInstructionSites']==1:
               assert v['OriginalReturnSitePlacementCategory'] in (
                   'branch_exception_or_method_entry','sequential_return_site')
+          lw=v['OriginalReturnLocalWriterCensus']
+          assert lw is not None
+          assert lw['ExactReturnLocalLoadSites'] in (0,1)
+          for key in ('ExactLocalAssignmentSites',
+                      'DirectNullAssignmentSites',
+                      'DirectRenderTextureConstructorAssignmentSites',
+                      'DirectRenderTextureTypedCallAssignmentSites',
+                      'LocalAliasAssignmentSites',
+                      'UnresolvedAssignmentSites'):
+              assert type(lw[key]) is int and lw[key]>=0
+          assert type(lw['ReturnLocalDeclaredRenderTexture']) is bool
+          assert lw['ExactLocalAssignmentSites']==(
+              lw['DirectNullAssignmentSites']+
+              lw['DirectRenderTextureConstructorAssignmentSites']+
+              lw['DirectRenderTextureTypedCallAssignmentSites']+
+              lw['LocalAliasAssignmentSites']+
+              lw['UnresolvedAssignmentSites'])
+          assert lw['BranchJoinOrRuntimeValueVerified'] is False
+          if v['OriginalReturnImmediatePriorOpcodeCategory']=='ldloc':
+              assert lw['ExactReturnLocalLoadSites']==1
+          print('T2_FOAM_RETURN_LOCAL_WRITERS_SAFE '+json.dumps({
+              'return_loads_exact_local':lw['ExactReturnLocalLoadSites'],
+              'return_local_declared_rt':lw['ReturnLocalDeclaredRenderTexture'],
+              'exact_local_writer_sites':lw['ExactLocalAssignmentSites'],
+              'immediate_null_writer_sites':lw['DirectNullAssignmentSites'],
+              'immediate_rt_ctor_writer_sites':
+                  lw['DirectRenderTextureConstructorAssignmentSites'],
+              'immediate_rt_call_writer_sites':
+                  lw['DirectRenderTextureTypedCallAssignmentSites'],
+              'immediate_local_alias_writer_sites':
+                  lw['LocalAliasAssignmentSites'],
+              'unresolved_writer_sites':lw['UnresolvedAssignmentSites'],
+              'branch_join_runtime_verified':False,
+              'raw_original_source_values_or_symbols_disclosed':False,
+          },sort_keys=True))
           print('T2_FOAM_RT_RETURN_REASON_SAFE '+json.dumps({
               'ret_site_placement':v['OriginalReturnSitePlacementCategory'],
               'immediate_predecessor_class':
