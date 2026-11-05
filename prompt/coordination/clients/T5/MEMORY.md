@@ -10,3 +10,13 @@ Work INTEGRATION-001/T5-20261104T2357Z-b12-fixture. Exact production scene snaps
 
 ## Checkpoint
 Status: plan registered before implementation. Next: patch harness with C# stub and explicit helper assertions; run local Python controls; use independent isolated CI (existing B12 workflow trigger via path if available); record errors and evidence, never claim device success from managed tests.
+
+## T5 checkpoint 2026-11-05T00:13:03.950Z — authentic graphics staging
+- Concurrent T3 fixed the B12+B18 CLR harness in commit 05718f67ba31a6be8ec169fcfcb609b4f3e05a9e, CI https://github.com/alwansan/raf/actions/runs/41937719270 PASS; T5 did not duplicate or overwrite.
+- T5 independent ZIP2 adapter: scripts/t5_stage_zip2_render_owners.py, tests/test_t5_stage_zip2_render_owners.py, .github/workflows/raft-t5-zip2-render-stage.yml, and optional production hydration consumer in scripts/hydrate_render_payloads.py at commit 1c68ef8ea8a38b9d92c1e1cc204a6b9c913555a4.
+- Original source ZIP2 immutable commit 15964ea8f246b6e076ce26b60931ee2e1a9a2385; manifest Git blob 4201fda426d80caba36c275ceaddb440b05c5b4e; resource Raft_Data/resources.assets size 111533516 and SHA256 87493249f1adfc0c5eb8b82e4e199e208cd2c95eabe9796cab82116c4838595c equals independent feature LFS.
+- Initial CI https://github.com/alwansan/raf/actions/runs/41938979840 failed at 10/11 synthetic tests: output staging directory was created before rejecting unsafe linked source. Production full source preflight fixed commit https://github.com/alwansan/raf/commit/396eab4d3cd8acc0d462e96b748e56537a49bd01.
+- Final real CI https://github.com/alwansan/raf/actions/runs/41939143108 SUCCESS: 11/11 synthetic negative/positive, original 111533516-byte SHA staging from ZIP2 without LFS and independent feature pointer hydration consumer+SHA pass. No raw original resources uploaded.
+- Opt-in RAFT_T5_VERIFIED_ZIP2_RENDER_ROOT must be absolute stage root with Raft_Data/ assets; existing default LFS/W1 and shared Unity workflow unchanged. No native, Unity, shader, GPU, Android or device/owner proof; game APK86 still latest actual Raft release, water/render/local-world OPEN NOT_READY 0/3.
+- Detailed evidence: prompt/coordination/work/ASSET-RESTORE-001/T5-20261105T0004Z-zip2-render-integration.json; experiments/T5/T5-20261105T0004Z-original-owner-bridge.json; B_TEAM/resources/T5-zip2-original-render-provider.json; B_TEAM/events/T5/20261105T0010Z-zip2-render-success.json. Do not edit B clients memory.
+- Next: substantively verify additional authentic ZIP2 graphics owners / staged batch, coordinate actual Unity material/FFT export with T1/T3. Preserve audio/Settings; touch deferred, world save untouched.
