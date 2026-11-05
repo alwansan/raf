@@ -424,7 +424,10 @@
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE_SHADER_RANK_2026-11-05.md",
         "https://github.com/alwansan/raf/actions/runs/42112666211",
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE_SHADER_RENDERSTATE_2026-11-05.md",
-        "https://github.com/alwansan/raf/commit/9207acc55dfb988a8826ed0725c3fb9032655089"
+        "https://github.com/alwansan/raf/commit/9207acc55dfb988a8826ed0725c3fb9032655089",
+        "https://github.com/alwansan/raf/actions/runs/42116530618",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE_COLORMASK_MAPPING_2026-11-06.md",
+        "https://github.com/alwansan/raf/commit/92b8c5111174cddace33c0944318c1a66f77ba5d"
       ],
       "remaining": [
         "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -482,7 +485,7 @@
         "نجاحعلىالهاتف"
       ],
       "updated_by": "T3",
-      "updated_at": "2026-11-05T21:27:10Z",
+      "updated_at": "2026-11-05T21:53:00Z",
       "_record_path": "../B_TEAM/issues/RENDER-002.json"
     },
     {
@@ -6267,6 +6270,20 @@
       "_record_path": "../B_TEAM/events/T2/20261105T2107Z-T2-chat-writer-call-ab1c-void-return.json"
     },
     {
+      "id": "20261105T2148Z-T2-chat-multiarity-stack-6b31-stack-source-result",
+      "owner": "T2",
+      "session_id": "20261105T2148Z-T2-chat-multiarity-stack-6b31",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "summary": "SHA-original Foam reverse stack slice proves compiled same-block surviving value producer is newobj named UnityEngine.RenderTexture, across multiple void-call operands; no runtime or assembly-scope/device proof. CI42116699643 SUCCESS.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42116699643",
+        "https://github.com/alwansan/raf/commit/0c17397f349789e94aaf8bfa8ec6cc1f75971529"
+      ],
+      "at": "2026-11-05T21:56:00Z",
+      "_record_path": "../B_TEAM/events/T2/20261105T2148Z-T2-chat-multiarity-stack-6b31-stack-source-result.json"
+    },
+    {
       "id": "T2-20261105T2115Z-chat-precall-operand-4be0-result",
       "owner": "T2",
       "session_id": "20261105T2107Z-T2-chat-writer-call-ab1c",
@@ -6734,6 +6751,26 @@
         "RENDER-002 OPEN"
       ],
       "_record_path": "../B_TEAM/events/T3/20261105T212254Z-T3-chat-particle-renderstate-6e41.json"
+    },
+    {
+      "id": "20261105T214810Z-T3-chat-selective-colormask-a82d",
+      "owner": "T3",
+      "origin": "chat",
+      "session_id": "20261105T214810Z-T3-chat-selective-colormask-a82d",
+      "issue_id": "RENDER-002",
+      "type": "integration",
+      "at": "2026-11-05T21:53:00Z",
+      "summary": "UnityCsReference 2021.3 exact ColorWriteMask ABGR-bit mapping added to opt-in original ShaderLab state translator. Real ZIP2 original 108-use ParticleShader48 source ColorMask RGB is accepted in opt-in, rejected by unchanged legacy default. CI42116530618 SUCCESS 72/72 source-free checks plus genuine SHA-original six scene/four-owner read; no Android/Unity compiled pixels.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42116530618",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE_COLORMASK_MAPPING_2026-11-06.md",
+        "https://github.com/Unity-Technologies/UnityCsReference/blob/2021.3/Runtime/Export/Graphics/GraphicsEnums.cs"
+      ],
+      "limitations": [
+        "source-only fixed function, not compiled target",
+        "RENDER-002 remains OPEN"
+      ],
+      "_record_path": "../B_TEAM/events/T3/20261105T214810Z-T3-chat-selective-colormask-a82d.json"
     },
     {
       "id": "T4-20261104T2357Z-local-load-start",
@@ -7583,7 +7620,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "ae2ae2f5056757c88b587f5264eefd9d2c9aab9881f6cf67ae2687eb4e17bafb",
+  "source_input_sha256": "6f4173b4785413d8278bfc32399d5383a875900c2223e2dba0c504affee35b4c",
   "generation": "T-2026-11-05",
-  "input_sha256": "42e09542fe6d42877f62503a5c7258fa83dd1d40df4569b0bb6692061339e3f8"
+  "input_sha256": "3e677b948acc822b838f79b9be6804814c654de174e354dcc0ac80d59b0cd277"
 }
