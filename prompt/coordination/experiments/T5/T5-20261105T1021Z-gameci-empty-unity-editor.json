@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "session_id": "20261105T1021Z-T5-sourcefree-gameci",
+  "issue_id": "INTEGRATION-001",
+  "hypothesis": "The existing main game-ci/unity-builder@v4 successfully activated Unity in native41812889049, but T1 direct docker /opt/unity/Editor/Unity failed source-free activation41959712898; game-ci managed test-runner activation could establish a working Unity Editor validation route without game data. Exact junit/nunit test-case pass must be required to prevent green with zero tests.",
+  "source_commit": "02e9fba7fb42b83579595885391be636ee3b56e8",
+  "input_hashes": [
+    "No original Raft assets or shader inputs. Unity editor version 2021.3.45f2, GameCI v4 managed activation."
+  ],
+  "tool_versions": {
+    "unity": "2021.3.45f2",
+    "gameci": "unity-test-runner@v4",
+    "runner": "ubuntu-24.04"
+  },
+  "commands": [
+    "python3 -m unittest -v tests.test_t5_validate_unity_editmode_result",
+    ".github/workflows/raft-t5-unity-sourcefree-activation.yml path-scoped push"
+  ],
+  "negative_controls": [
+    "Empty XML with no actual test-case must fail",
+    "Passed XML unrelated to T5 exact test must fail",
+    "Failed/skipped/inconclusive exact test must fail",
+    "Malformed or linked XML must fail"
+  ],
+  "workflow_path": ".github/workflows/raft-t5-unity-sourcefree-activation.yml",
+  "run_url": null,
+  "artifact_urls": [],
+  "budget": "One isolated Ubuntu24.04 Unity 2021 GameCI EditMode test, timeout 30 minutes, no game data downloads/LFS/APK, native-engine mutex",
+  "status": "active",
+  "observed_result": null,
+  "rejected_hypotheses": [],
+  "limitations": [
+    "Success confirms Unity Editor source-free GameCI test in its container only, not original T1 generated candidates or game's native build.",
+    "Failure is a classified environment/test-configuration outcome, not proof original shaders are wrong."
+  ],
+  "integration_commit": null,
+  "next_step": "Create source-free self-contained Unity 2021 EditMode project/verified result parser, run synthetic pytest/unittest and isolated GameCI Editor CI; inspect failure categories without secrets and record durable T1 handoff."
+}
