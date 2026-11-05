@@ -6,7 +6,7 @@
   "origin": "chat",
   "issue_id": "INTEGRATION-001",
   "track": "delivery/OBB",
-  "status": "active",
+  "status": "completed_source_only",
   "base_sha": "ace661139f33ee801af500a1dbe212f86d98cfac",
   "intended_files": [
     "scripts/t5_verify_apk_obb_pair.py",
@@ -32,8 +32,30 @@
   "experiment_ids": [
     "20261105T2055Z-T5-chat-obb-pair-9f2d"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement standalone paired-binary verifier and source-free adversarial fixture; run path-scoped CI; do not download 6GB artifacts or change active native workflow.",
-  "updated_at": "2026-11-05T20:53:53.842Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42108354510"
+  ],
+  "result": {
+    "CI_run": 42108354510,
+    "job": 127529069130,
+    "status": "success",
+    "tests": "17/17 source-free synthetic, 0.023s",
+    "files_added": [
+      "scripts/t5_verify_apk_obb_pair.py",
+      "tests/test_t5_verify_apk_obb_pair.py",
+      ".github/workflows/raft-t5-apk-obb-pair.yml",
+      "docs/T5_APK_OBB_PAIR_VERIFIER_2026-11-05.md"
+    ],
+    "commits": [
+      "79c2cd2fcdb4e1225d1e7a0eec8155de523a1e3b",
+      "600ac5990dcb5748e0d886933bbe7094ef543c94",
+      "8bca9e2bff682e3eee0686571b8536ae3a7037a1",
+      "3000c2040cbb2bc5f02d1fdf08c93f0d80fae725"
+    ],
+    "actual_game_apk_obb_checked": false,
+    "actual_obb_guid_verified": false,
+    "actual_apk_crypto_signature_verified": false
+  },
+  "next_step": "Read authenticated native delivery.json + reassembled APK and OBB from retained artifact 13441227298 before 2026-11-06 18:19:05Z; run aapt version+SHA pairing in isolated trusted staging, check OBB GUID warnings separately. No Unity rerun.",
+  "updated_at": "2026-11-05T21:00:41.313Z"
 }
