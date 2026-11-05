@@ -69,7 +69,7 @@ def exported_profiles(assets:Path,guids:set):
         if not file.is_file() or not file.name.endswith(".shader.meta"):
             continue
         if file.stat().st_size>256000:raise ValueError("oversize_ShaderImporter_meta")
-        gids=GUID.findall(file.read_text("utf8-sig"))
+        gids=GUID.findall(file.read_text("utf-8-sig"))
         if len(gids)!=1:raise ValueError("ambiguous_shader_export_meta_GUID")
         gid=gids[0].lower()
         if gid not in guids:continue
@@ -77,7 +77,7 @@ def exported_profiles(assets:Path,guids:set):
         shader=Path(str(file)[:-5])
         if not shader.is_file() or shader.is_symlink() or shader.stat().st_size>8_000_000:
             raise ValueError("missing_selected_export_ShaderLab_source")
-        info=pass_coverage(shader.read_text("utf8-sig"))
+        info=pass_coverage(shader.read_text("utf-8-sig"))
         if not info["pass_braces_balanced"]:
             raise ValueError("unbalanced_selected_ShaderLab_source")
         found[gid]={"pass_count":info["pass_count"],
