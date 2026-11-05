@@ -106,7 +106,11 @@
     "https://github.com/alwansan/raf/actions/runs/41959712898",
     "https://github.com/alwansan/raf/actions/runs/42010878771",
     "https://github.com/alwansan/raf/actions/runs/42011720822",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_GAMECI_SOURCEFREE_UNITY_LICENSE_2026-11-05.md"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_GAMECI_SOURCEFREE_UNITY_LICENSE_2026-11-05.md",
+    "https://github.com/alwansan/raf/actions/runs/42011706016",
+    "https://github.com/alwansan/raf/actions/runs/42013590671",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_ORIGINAL_DXBC_SPIRV_ACTIVE_BRIDGE_2026-11-05.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T2-foam-original-active-sample-descriptor-identity.json"
   ],
   "remaining": [
     "Spectrum/Foam/Blur passes ناقصة في APK86",
@@ -150,16 +154,17 @@
     "T1 authored .compute SHA-bound isolated Unity 2021 runtime kernel probe staged and 7 source-only negative/positive suites PASS (CI41941716641); actual private original-authenticated authored FFT source, Unity Editor HasKernel/FindKernel/threadgroups execution, original program-to-kernel equivalence, Vulkan/Adreno and water pixels all remain unverified. WATER-001 OPEN.",
     "T1 bank1 Vulkan: original pair18/19 swapped-second SIGSEGV reproduced twice and pair10/11 swapped-second same-program numeric comparison varied between runs; no VUID markers; not a Unity/Adreno repair.",
     "Foam original compiled SPIR-V sampler use 21 calls / 6 numeric pairs proven by T2; source m_Index/m_SamplerIndex→material/Unity shader/Adreno remains unverified",
-    "T2 authentic original Foam: source serialized t/s matches genuine native DXBC declarations and all six t/s pairs actively SAMPLE-used in 21 instructions; DXBC→translated SPIRV ID/descriptor identity, Unity original Material upload, authentic ShaderLab and Adreno device remain unverified (CI41958159556).",
+    "HISTORICAL at T2 CI41958159556: native→compiled SPIR-V exact descriptor ID join was then unverified; subsequently source-proven by independent T2 CI42011706016 and actual sampling-pair join CI42013590671. Unity Material upload/ShaderLab/Adreno remain unverified.",
     "T1 original 20/20 compiled FFT private DXBC-derived .compute candidate staging SUCCESS (CI41957549770), but three actual Unity Editor import attempts failed before a result; latest41958963107 Unity exit1 and sanitized licensing_failure_category=true. Verify activation using source-free Unity fixture, then authenticate actual Unity import and original runtime FindKernel/Dispatch. Not a game/device water fix.",
     "T1 source-free Unity 2021 Editor project CI41959712898 failed before Raft acquisition: empty_project_created=false, licensing_failure_category=true, original_raft_data_acquired=false. Resolved shader source is not responsible for this test's failure; actual Editor activation and FindKernel/Adreno remain unknown.",
-    "T1 2026-11-05: Unity2021.3.45f2 activation works via supported GameCI unity-test-runner and synthetic original-free ComputeShader was imported, with actual HasKernel/FindKernel/group(64,1,1) passing 2/2 CI42011720822. Old custom direct Docker licensing failure was not proof account credentials invalid. Authenticated 20 original FFT-derived candidates still not imported by this safe route; authored runtime mapping/pixels/Adreno remain unverified."
+    "T1 2026-11-05: Unity2021.3.45f2 activation works via supported GameCI unity-test-runner and synthetic original-free ComputeShader was imported, with actual HasKernel/FindKernel/group(64,1,1) passing 2/2 CI42011720822. Old custom direct Docker licensing failure was not proof account credentials invalid. Authenticated 20 original FFT-derived candidates still not imported by this safe route; authored runtime mapping/pixels/Adreno remain unverified.",
+    "T2 source-authentic Foam compiler-stage resource identity VERIFIED: two different explicit native DXBC tN/sN→SPIR-V descriptor maps preserve every variable ID and all SPIR-V program words except numeric Binding/DescriptorSet literals; B20 original module matches default normalized graph. Real native DXBC 21 SAMPLE uses and translated SPIR-V 21 OpImageSample uses reconstruct exact six stage-scoped active original t/s pairs, final CI42013590671 PASS (16+17 synthetic tests). **NEXT OPEN:** authored Unity Material texture property/pointer/upload, original sampler state & UV, CB member/upload, authentic ShaderLab import, GPU/Adreno and device visuals. WATER-001 OPEN, NOT_READY0/3."
   ],
   "acceptance": [
     "هوية برامج ونوى أصلية أو تطابق موثق دونdummy",
     "تثبيت فيالتصدير+Unity import/render",
     "اختبار هاتف يثبت الماء بلا pass/kernel errors"
   ],
-  "updated_by": "T1",
-  "updated_at": "2026-11-05T10:37:00Z"
+  "updated_by": "T2",
+  "updated_at": "2026-11-05T10:53Z"
 }
