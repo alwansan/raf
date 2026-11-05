@@ -1,0 +1,65 @@
+{
+  "id": "T3-BOUNDED-POSTVENDOR-MATERIAL-SHADER-RESTORATION",
+  "title": "T3 authenticated original 12-provider same-export before/after TMP PostFX Volumetric shader vendor restoration",
+  "kind": "authenticated-original-bounded-vendor-shaderlab-restoration-differential",
+  "owner": "T3",
+  "source": {
+    "provider": "ZIP2 original twelve serialized owners (not entire game)",
+    "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "bytes": null,
+    "sha256": null,
+    "asset_ripper_cli_commit": "036098ab525a3f9f693dc101edeb21faad4d32d8"
+  },
+  "stages": {
+    "acquisition": "VERIFIED_ORIGINAL_12_ZIP2_OWNER_BYTES_SIZE_SHA_WITH_PINNED_MANIFEST_CI42033940194",
+    "extraction": "VERIFIED_SINGLE_ACTUAL_EXPORT_731_MATERIAL_DOCS_126_INITIAL_SHADER_FILES_511_LOCAL_CUSTOM_SHADER_REFS",
+    "reconstruction": "OFFICIAL_VENDOR_TMP_POSTFX_VOLUMETRIC_SOURCES_REPLACED_4_REFERENCED_SHADER_TARGETS_16_MATERIAL_LINKS_NO_ORIGINAL_SHADER48_AUTHENTICATED",
+    "binding": "EXACT_SAME_EXPORT_511_CUSTOM_LINKS_511_DUMMY_BEFORE_495_DUMMY_AFTER_50_DUMMY_REFERENCED_TARGETS_16_NON_DUMMY; PREEXISTING_MAT_AND_SHADER_META_IDENTICAL",
+    "integration": "ISOLATED_GITHUB_ACTIONS_CI42033940194_SUCCESS; PRODUCTION_NATIVE_FULL_POST_RESTORER_HAS_NOT_RUN; NO_GAME_ASSETS_CHANGED",
+    "device": "NOT_TESTED"
+  },
+  "bounded_counts": {
+    "before": {
+      "materials_total": 731,
+      "builtin_shader_material_refs": 220,
+      "custom_shader_material_refs": 511,
+      "dummy_shader_material_refs": 511,
+      "non_dummy_shader_material_refs": 0,
+      "distinct_dummy_custom_shader_targets": 54,
+      "shader_files_with_dummy_marker": 126,
+      "shader_files_total": 126
+    },
+    "after": {
+      "materials_total": 731,
+      "builtin_shader_material_refs": 220,
+      "custom_shader_material_refs": 511,
+      "dummy_shader_material_refs": 495,
+      "non_dummy_shader_material_refs": 16,
+      "distinct_dummy_custom_shader_targets": 50,
+      "shader_files_with_dummy_marker": 98,
+      "shader_files_total": 128
+    },
+    "authenticated_vendor_restore_steps": [
+      "TMP 3.0.6",
+      "PostFX v1",
+      "Volumetric Lights"
+    ],
+    "preexisting_material_and_shader_meta_identical": true,
+    "material_reference_categories_identical": true,
+    "full_native_import_executed": false
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42033940194",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_BOUNDED_POSTVENDOR_MATERIAL_SHADER_2026-11-05.md",
+    "https://github.com/alwansan/raf/commit/dcb81c72b91817872cacc0fd664d937ea2f9ddef",
+    "https://github.com/alwansan/raf/commit/2fa28c993be93c59c1d15c4586ec62292cccbd88"
+  ],
+  "remaining": [
+    "495 custom Material documents still reference DummyShaderTextExporter among the limited twelve-provider original export after selected three vendors; this is not a device visibility count",
+    "Full native importer also performs engine builtin, W1 Depth Copy, B45 Blur and other stages not covered here; its post-restorer counts remain unknown",
+    "No original Raft Shader48 compiled-pass/variant equivalence, Unity 2021 shader import/Adreno pixel tests or playable local world acceptance",
+    "Bounded experiment initial safe delta artifact may have literal trailing backslash-n; authoritative safe console JSON and valid pre/post counts; fix in later manual-only workflow revision"
+  ],
+  "updated_by": "T3",
+  "updated_at": "2026-11-05T13:20:31.585Z"
+}
