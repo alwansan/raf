@@ -8,13 +8,14 @@ import tempfile
 
 from scripts.t1_fft_pass0_trace_variant import instrument
 from scripts.t1_fft_readback_parity import compare_pass, read_image
+from scripts.t1_fft_trace_compare import CAPACITY, INVOCATION_RECORD, RECORD
 from scripts.t1_fft_vulkan_roundtrip_isolation import HEIGHT, WIDTH, capture_host, run
 
 
-def trace_host(source):
+def trace_host(source, trace_bytes):
     source = capture_host(source)
     patches = {
-        "std::array<VkDescriptorSetLayoutBinding,3> bindings{};": """constexpr VkDeviceSize traceBytes = 4097 * sizeof(uint32_t);
+        "std::array<VkDescriptorSetLayoutBinding,3> bindings{};": """constexpr VkDeviceSize traceBytes = TRACE_BYTE_SIZE;
     VkBufferCreateInfo traceCi{VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO};
     traceCi.size = traceBytes;
     traceCi.usage = VK_BUFFER_USAGE_STORAGE_BUFFER_BIT;
@@ -78,38 +79,42 @@ def trace_host(source):
         if source.count(anchor) != 1:
             raise ValueError("Private trace host anchor changed")
         source = source.replace(anchor, replacement)
-    return source
+    return source.replace("TRACE_BYTE_SIZE", str(trace_bytes))
 
 
-def analyze(project, export=None):
+def analyze(project, export=None, *, keyed=False):
+    record = INVOCATION_RECORD if keyed else RECORD
+    trace_bytes = 4 + CAPACITY * record.size
     with tempfile.TemporaryDirectory(prefix="t1-runtime-trace-") as temp:
         work = Path(temp)
         path = project / "Assets/T1OriginalDerived/FFT_Candidate_00.compute"
         pragma, hlsl = path.read_text(encoding="utf-8").split("\n", 1)
         if pragma != "#pragma kernel main":
             raise ValueError("Unexpected private entry point")
-        (work / "trace.hlsl").write_text(instrument(hlsl))
+        (work / "trace.hlsl").write_text(instrument(hlsl, keyed=keyed))
         print("RAFT_T1_TRACE_STAGE shader_compile", flush=True)
         run(["glslangValidator", "-V", "-D", "-S", "comp", "-e", "main",
              "-o", "trace.spv", "trace.hlsl"], work)
         run(["spirv-val", "--target-env", "vulkan1.1", "trace.spv"], work)
         print("RAFT_T1_TRACE_STAGE host_compile", flush=True)
         host = Path("scripts/a1_fft_two_pass_vulkan.cpp").read_text()
-        (work / "trace.cpp").write_text(trace_host(host))
+        (work / "trace.cpp").write_text(trace_host(host, trace_bytes))
         run(["g++", "-std=c++17", "-O2", "trace.cpp", "-lvulkan", "-o", "trace"], work)
         print("RAFT_T1_TRACE_STAGE dispatch", flush=True)
         modules = project / "_private_vulkan"
         run(["./trace", str(modules / "slot0.spv"), "trace.spv", str(modules / "slot1.spv"),
              str(modules / "slot1.spv"), str(WIDTH), str(HEIGHT), "19", "1", "rgba32f"], work)
         print("RAFT_T1_TRACE_STAGE readback", flush=True)
-        trace = read_image(work / "trace.bin", 4097 * 4)
+        trace = read_image(work / "trace.bin", trace_bytes)
         (count,) = struct.unpack_from("<I", trace)
         print("RAFT_T1_TRACE_RECORD_COUNT " + str(count), flush=True)
-        if not 0 < count <= 512:
+        if not 0 < count <= CAPACITY:
             raise ValueError("Empty or overflowed private trace")
         sites = [0, 0, 0]
         out_of_bounds = [0, 0, 0]
-        for site, x, y, mip, *_ in struct.iter_unpack("<Iiii4I", trace[4:4 + count * 32]):
+        for row in record.iter_unpack(trace[4:4 + count * record.size]):
+            site = row[0]
+            x, y, mip = row[5:8] if keyed else row[1:4]
             if site >= len(sites):
                 print("RAFT_T1_TRACE_STATUS invalid_site", flush=True)
                 raise ValueError("Unknown private trace site")
@@ -133,9 +138,10 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--project", type=Path, required=True)
     parser.add_argument("--export-private-trace", type=Path)
+    parser.add_argument("--invocation-keys", action="store_true")
     args = parser.parse_args()
     try:
-        result = analyze(args.project.resolve(), args.export_private_trace)
+        result = analyze(args.project.resolve(), args.export_private_trace, keyed=args.invocation_keys)
     except (OSError, ValueError, subprocess.SubprocessError):
         parser.exit(2, "Private Vulkan trace execution or validation failed\n")
     print("RAFT_T1_VULKAN_TRACE " + json.dumps(result, sort_keys=True))
