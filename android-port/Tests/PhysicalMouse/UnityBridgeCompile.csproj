@@ -11,7 +11,8 @@
   <ItemGroup>
     <Compile Include="../../Runtime/Platform/PhysicalMouseDeltaAccumulator.cs" />
     <Compile Include="../../Runtime/Platform/AndroidPhysicalMouseCapture.cs" />
-    <Compile Include="DiagnosticsStub.cs" />
+    <Compile Include="../../Runtime/Platform/AndroidRuntimeLog.cs" />
+    <Compile Include="../../Runtime/Platform/PersistentDiagnosticLog.cs" />
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>$(OriginalManagedDir)/UnityEngine.CoreModule.dll</HintPath>
     </Reference>
