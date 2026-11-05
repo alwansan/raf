@@ -94,7 +94,10 @@
     "https://github.com/alwansan/raf/actions/runs/41942366020",
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_FFT_BANK1_VULKAN_VALIDATION_2026-11-05.md",
     "https://github.com/alwansan/raf/actions/runs/41942245746",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_ORIGINAL_USED_SAMPLER_PAIRS_2026-11-05.md"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_ORIGINAL_USED_SAMPLER_PAIRS_2026-11-05.md",
+    "https://github.com/alwansan/raf/actions/runs/41957269478",
+    "https://github.com/alwansan/raf/actions/runs/41958159556",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_ORIGINAL_DXBC_TEXTURE_SAMPLER_REGISTERS_2026-11-05.md"
   ],
   "remaining": [
     "Spectrum/Foam/Blur passes ناقصة في APK86",
@@ -137,7 +140,8 @@
     "T2 source-authentic Foam six original texture name indices ↔ translated image literal symbols 0/6 equal (CI41941354379 SUCCESS); exact texture/sampler alias/material upload/ShaderLab/Unity/Adreno pixels still UNKNOWN; cannot use direct-name bridging.",
     "T1 authored .compute SHA-bound isolated Unity 2021 runtime kernel probe staged and 7 source-only negative/positive suites PASS (CI41941716641); actual private original-authenticated authored FFT source, Unity Editor HasKernel/FindKernel/threadgroups execution, original program-to-kernel equivalence, Vulkan/Adreno and water pixels all remain unverified. WATER-001 OPEN.",
     "T1 bank1 Vulkan: original pair18/19 swapped-second SIGSEGV reproduced twice and pair10/11 swapped-second same-program numeric comparison varied between runs; no VUID markers; not a Unity/Adreno repair.",
-    "Foam original compiled SPIR-V sampler use 21 calls / 6 numeric pairs proven by T2; source m_Index/m_SamplerIndex→material/Unity shader/Adreno remains unverified"
+    "Foam original compiled SPIR-V sampler use 21 calls / 6 numeric pairs proven by T2; source m_Index/m_SamplerIndex→material/Unity shader/Adreno remains unverified",
+    "T2 authentic original Foam: source serialized t/s matches genuine native DXBC declarations and all six t/s pairs actively SAMPLE-used in 21 instructions; DXBC→translated SPIRV ID/descriptor identity, Unity original Material upload, authentic ShaderLab and Adreno device remain unverified (CI41958159556)."
   ],
   "acceptance": [
     "هوية برامج ونوى أصلية أو تطابق موثق دونdummy",
@@ -145,5 +149,5 @@
     "اختبار هاتف يثبت الماء بلا pass/kernel errors"
   ],
   "updated_by": "T2",
-  "updated_at": "2026-11-05T00:37Z"
+  "updated_at": "2026-11-05T02:58Z"
 }
