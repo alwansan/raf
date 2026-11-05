@@ -6,7 +6,7 @@
   "issue_id": "LOCAL-005",
   "track": "world-save",
   "approach": "Inspect only the two exact SHA-verified original compiled FileManager read/write targets previously resolved by T5. Classify public BCL IO call intent, parameter/return shapes, catch-handler presence and fallback path, without publishing game symbols/IL or claiming device success. Use a standalone Cecil oracle and strict source-free validators; choose any subsequent Android instrumentation only from demonstrated behavior.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "72a16de3f7350a743bd0a0e10c915bedcaeab0f8",
   "intended_files": [
     "android-port/Experiments/T4/OriginalFileIoFlow/OriginalFileIoFlow.csproj",
@@ -32,8 +32,22 @@
   "experiment_ids": [
     "20261105T1113Z-compiled-original-io-handler"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Resolve exact compiled original FileManager call edges; produce bounded privacy-safe method shape/exception flow with synthetic adversarial controls; then test in isolated GH Actions at immutable ZIP2 SHA and decide next concrete Android adjustment.",
-  "updated_at": "2026-11-05T11:13:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42018088542",
+    "https://github.com/alwansan/raf/actions/runs/42019696138"
+  ],
+  "result": {
+    "original_sha_verified": true,
+    "original_file_open_read_2_params": true,
+    "original_file_create_write_1_param": true,
+    "normal_try_only_one_system_io_call_per_helper": true,
+    "other_three_original_calls_all_in_catch_per_helper": true,
+    "source_free_controls": "19/19 PASS",
+    "original_catch_leave_without_explicit_throw": true,
+    "actual_managed_stream_followup": "CI42020039305 SUCCESS",
+    "real_rgd_or_android_tested": false,
+    "report": "docs/T4_ORIGINAL_FILE_IO_CONTROL_FLOW_2026-11-05.md"
+  },
+  "next_step": "Actual original managed FileManager stream I/O now proven separately in CI42020039305; T5 next native integrated Android world and genuine .rgd serialization/exit/relaunch/open acceptance; protect sound/Settings, touch deferred.",
+  "updated_at": "2026-11-05T11:38:00Z"
 }
