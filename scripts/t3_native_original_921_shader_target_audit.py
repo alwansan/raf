@@ -58,7 +58,7 @@ def strict_native_top_join(original_counts: dict, source_report: dict,
     if len(rows)!=1:
         raise ValueError("top_original_shader48_not_one_export_source_row")
     fid,guid,typ=pointer(rows[0]["export"])
-    if guid in BUILTIN and typ=="0":
+    if fid>0 and guid in prior.VALID_BUILTIN_GUIDS and typ=="0":
         status="UNITY_BUILTIN_EXPORTED_PROGRAM_AUTHENTICITY_UNPROVEN"
         source_pass_count_compared=False
         native_passes=None
