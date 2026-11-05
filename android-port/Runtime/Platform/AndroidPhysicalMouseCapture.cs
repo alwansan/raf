@@ -307,10 +307,14 @@ namespace RaftAndroid.Platform
             }
             lastLoggedCount = 0;
             nextProbeTime = 0f;
+            // UI-thread dispatch is asynchronous: a new request may supersede
+            // this release before it runs. Never revoke that newer capture.
+            int releaseEpoch = Volatile.Read(ref epoch);
             try
             {
                 OnAndroidUi(() =>
                 {
+                    if (releaseEpoch != Volatile.Read(ref epoch) || requested) return;
                     try
                     {
                         using (var player = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
