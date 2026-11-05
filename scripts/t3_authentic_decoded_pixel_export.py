@@ -69,18 +69,21 @@ def run(original: Path, manifest: Path, project: Path, w1path: Path, b02path: Pa
         obj = source_by_owner[name].get(src["path_id"])
         if obj is None:
             raise ValueError("missing_original_Texture2D")
+        # Only UnityPy source read/decode failures can mean UNSUPPORTED_MODE.
+        # Exported PNG errors and authenticated parity errors are INCONCLUSIVE,
+        # not evidence that the original texture codec is unsupported.
         try:
             texture = obj.read()
             decoded = texture.image
-            if decoded is None:
-                category = "UNSUPPORTED_MODE"
-            else:
-                with Image.open(pngs[guid]) as image:
-                    exported_image = image.copy()
-                    category = compare_pair(decoded, exported_image, original_id=guid,
-                                            exported_id=guid, authenticated=True)
         except (NotImplementedError, ValueError, TypeError, OSError):
+            decoded = None
+        if decoded is None:
             category = "UNSUPPORTED_MODE"
+        else:
+            with Image.open(pngs[guid]) as image:
+                exported_image = image.copy()
+            category = compare_pair(decoded, exported_image, original_id=guid,
+                                    exported_id=guid, authenticated=True)
         # A diagnostic failure is NOT an unsupported source decoder. Let it
         # propagate to main() as INCONCLUSIVE rather than falsifying parity.
         if category in ('EXACT', 'RGB_DRIFT', 'ALPHA_ONLY_DRIFT'):
