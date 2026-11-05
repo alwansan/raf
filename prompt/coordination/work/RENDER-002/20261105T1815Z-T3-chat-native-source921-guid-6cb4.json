@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T1815Z-T3-chat-native-source921-guid-6cb4",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "base_sha": "f95e8d7e2c8fa39182d6781e01ea58b7df62ca2d",
+  "updated_at": "2026-11-05T18:15:00Z",
+  "resumed_from_sessions": [
+    "20261105T1745Z-T3-chat-921-shader-material-property-7a6e",
+    "20261105T1405Z-T3-chat-renderer-dummy-join-8c41"
+  ],
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/actions/runs/42058825739",
+    "https://github.com/alwansan/raf/actions/runs/42044249541",
+    "https://github.com/alwansan/raf/actions/runs/42080105181"
+  ],
+  "experiment_key": "T3-SHA-original-6scene-4owner-top921-source-W1-private-lineage-full-native-postrestorer-ShaderLab-GUID-Pass-Dummy-probe-v1",
+  "resource_key": "T3-small-source-and-private-W1-native-lineage-reader-no-fullbuild",
+  "hypothesis": "Current native full restorer still leaves 110/142 ShaderLab Dummy and 770/1536 Material docs bound to Dummy, but not established whether exact original 921-use source Shader48 remains dummy. Build a fail-closed source→private same-instance W1 GUID→post-restorer ShaderLab read-only probe and handoff to T5 for next authorized build; do not modify active T5 workflow or claim current top identity from aggregate-only report.",
+  "intended_files": [
+    "scripts/t3_native_original_921_shader_target_audit.py",
+    "tests/test_t3_native_original_921_shader_target_audit.py",
+    ".github/workflows/raft-t3-native-921-guid-source-controls.yml",
+    "docs/T3_NATIVE_POSTRESTORER_DUMMY_EVIDENCE_2026-11-05.md",
+    "prompt/coordination/clients/T3/sessions/20261105T1815Z-T3-chat-native-source921-guid-6cb4.md",
+    "prompt/coordination/experiments/T3/20261105T1815Z-T3-chat-native-source921-guid-6cb4.json",
+    "prompt/coordination/B_TEAM/events/T3/20261105T1815Z-T3-chat-native-source921-guid-6cb4.json",
+    "prompt/coordination/discussions/RENDER-002/20261105T1815Z-T3-chat-native-source921-guid-6cb4-T3-to-T5.md"
+  ],
+  "avoid_collision": "T5 current native run 42058825739 at Unity import; no T5 workflow updates/dispatch/cancel. T1 FFT and T2 Foam/T4 world distinct. No source names/IDs/GUIDs/project file paths or compiled text exposed.",
+  "active_work_snapshot": [
+    "T3-20261105T1021Z-T3-original-codec-drift-original-normalmap-usage.json",
+    "T3-20261105T1100Z-T3-original-material-shader-edges-actual-ShaderLab-dummy-marker.json",
+    "T3-20261105T1100Z-T3-original-material-shader-edges-material-shader-pointer-parity.json",
+    "T3-20261105T1100Z-T3-original-material-shader-edges-original-shader-pass-topology.json",
+    "T3-20261105T1100Z-T3-original-material-shader-edges-original-vs-export-shader-pass-deficit.json",
+    "T3-20261105T1100Z-T3-original-material-shader-edges-real-ShaderDecompile-mode-evidence.json",
+    "T3-20261105T1213Z-T3-native-shader-dummy-audit-post-restore-linked-dummy-scan.json",
+    "T3-20261105T124551Z-T3-chat-subshader-coverage-c29b.json",
+    "T3-20261105T131204828Z-T3-chat-bounded-postrestorer-4a8c.json",
+    "T3-20261105T1402Z-T3-chat-renderer-shader-impact-f63e-sameexport-renderer-shader-dummy-join.json",
+    "T3-20261105T1402Z-T3-chat-renderer-shader-impact-f63e-scene-shader-use.json",
+    "T3-20261105T1402Z-T3-chat-renderer-shader-impact-f63e-top921-original-Unity-builtin-coverage.json",
+    "T3-20261105T1405Z-T3-chat-renderer-dummy-join-8c41.json",
+    "T3-20261105T143219Z-T3-chat-original921-builtin-2f7b.json",
+    "T3-20261105T1459Z-T3-chat-921-4pass-translation-c7d2.json",
+    "T3-20261105T1526Z-T3-scheduled-iosem-6c42-stage-io-classification.json",
+    "T3-20261105T1542Z-T3-chat-io-drift-integration-a6d9.json",
+    "T3-20261105T1607Z-T3-chat-spv-name-location-7c2d.json",
+    "T3-20261105T1625Z-T3-scheduled-dxbc-contract-8f2c.json",
+    "T5-20261105T0746Z-t3-syntax-boundary.json"
+  ],
+  "active_jobs_snapshot": []
+}
