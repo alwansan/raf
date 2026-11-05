@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T2055Z-T5-chat-obb-pair-9f2d",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "track": "delivery/OBB",
+  "status": "active",
+  "base_sha": "ace661139f33ee801af500a1dbe212f86d98cfac",
+  "intended_files": [
+    "scripts/t5_verify_apk_obb_pair.py",
+    "tests/test_t5_verify_apk_obb_pair.py",
+    ".github/workflows/raft-t5-apk-obb-pair.yml",
+    "docs/T5_APK_OBB_PAIR_VERIFIER_2026-11-05.md",
+    "prompt/coordination/work/INTEGRATION-001/20261105T2055Z-T5-chat-obb-pair-9f2d.json",
+    "prompt/coordination/clients/T5/sessions/20261105T2055Z-T5-chat-obb-pair-9f2d.md",
+    "prompt/coordination/experiments/T5/20261105T2055Z-T5-chat-obb-pair-9f2d.json",
+    "prompt/coordination/B_TEAM/events/T5/20261105T2055Z-T5-chat-obb-pair-9f2d.json"
+  ],
+  "experiment_key": "t5-android-apk-obb-pair-validate-local-complete-bytes-deliveryjson-aapt-zip-integrity-v1",
+  "resource_key": "source-only-CPU-no-game-artifact",
+  "hypothesis": "Existing delivery.json verifies transport declarations, but field installation can pair signed APK/OBB from different runs; independently stream actual completed APK and OBB and compare AAPT package/version plus OBB filename to detect mismatches without claiming Unity OBB internal GUID integrity.",
+  "related_work": [
+    "prompt/coordination/work/DISPLAY-003/20261105T2045Z-T5-scheduled-ui-right-a71.json"
+  ],
+  "taken_over_from": [
+    "docs/DEVICE_FEEDBACK_42058825739_AR.md",
+    "prompt/coordination/clients/T5/sessions/20261105T1953Z-T5-scheduled-release-permission-a72e.md",
+    "prompt/coordination/clients/T5/sessions/20261105T2045Z-T5-scheduled-ui-right-a71.md"
+  ],
+  "experiment_ids": [
+    "20261105T2055Z-T5-chat-obb-pair-9f2d"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement standalone paired-binary verifier and source-free adversarial fixture; run path-scoped CI; do not download 6GB artifacts or change active native workflow.",
+  "updated_at": "2026-11-05T20:53:53.842Z"
+}
