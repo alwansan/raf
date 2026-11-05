@@ -6,7 +6,7 @@
   "origin": "chat",
   "issue_id": "INTEGRATION-001",
   "track": "One exact current-source native signed APK+OBB/XAPK diagnostic retry after prior cancellation without code failure",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "c491f76077edcf7984cb5de95101edc1aafb000d",
   "experiment_key": "single-native-feature-head-c491f76077edcf7984cb5de95101edc1aafb000d-old-run42042902522-cancelled-new-t4-rgd-negative-t3-original-d3d11-source-signed-packaging-v1",
   "resource_key": "raft-native-engine-feature/android-native-port",
@@ -31,7 +31,8 @@
     "prompt/coordination/work/INTEGRATION-001/T5-20261105T1508Z-T5-chat-native-retry-c2b7-single-native-candidate-retry.json",
     "prompt/coordination/clients/T5/sessions/20261105T1508Z-T5-chat-native-retry-c2b7.md",
     "prompt/coordination/experiments/T5/T5-20261105T1508Z-T5-chat-native-retry-c2b7-one-native-current-head.json",
-    "prompt/coordination/B_TEAM/events/T5/20261105T1510Z-one-native-current-source-request.json"
+    "prompt/coordination/B_TEAM/events/T5/20261105T1510Z-one-native-current-source-request.json",
+    "prompt/coordination/experiments/T5/T5-20261105T1508Z-T5-chat-native-retry-c2b7-one-native-current-head.json"
   ],
   "preflight": {
     "head": "c491f76077edcf7984cb5de95101edc1aafb000d",
@@ -49,8 +50,28 @@
       "water_compute_source_candidate"
     ]
   },
-  "run_urls": [],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42052375742"
+  ],
   "observed_result": null,
-  "next_step": "With no other nonterminal Actions and after current branch SHA/RELEASE gate refresh, trigger one existing approved full native request (no workflow gate weaken), record immutable triggered SHA and actual run. Do not repeat if queued/running. Keep work waiting_ci if build takes longer than this chat cycle.",
-  "updated_at": "2026-11-05T15:08:00Z"
+  "next_step": "Check immutable CI42052375742. If still in_progress, leave waiting_ci; no duplicate dispatch. On terminal failure extract exact first failed job+step and log category; on success verify signed APK/OBB/XAPK hashes and published Release before phone offline world/save/Adreno tests.",
+  "updated_at": "2026-11-05T15:12:00Z",
+  "request_commit": "b0c4b4c05011d915cd845259f06b5f80ee368092",
+  "result": {
+    "run_id": 42052375742,
+    "source_sha": "b0c4b4c05011d915cd845259f06b5f80ee368092",
+    "workflow": "Raft full native APK OBB XAPK build and delivery",
+    "request_gate": "success",
+    "unity_license_preflight": "success",
+    "reconstruct": "in_progress",
+    "asset_restore": "not verified complete",
+    "unity_import": "not reached",
+    "signed_apk": "not yet verified",
+    "obb": "not yet verified",
+    "xapk": "not yet verified",
+    "release": "not yet verified",
+    "device": "not tested",
+    "old_run_cancellation_source_failure_proven": false,
+    "unchanged_water_contract": true
+  }
 }
