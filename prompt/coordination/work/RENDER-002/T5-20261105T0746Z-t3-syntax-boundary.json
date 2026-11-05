@@ -1,0 +1,19 @@
+{
+  "id": "T5-20261105T0746Z-t3-syntax-boundary",
+  "owner": "T5",
+  "session_id": "20261105T0746Z-T5-t3-syntax-boundary",
+  "issue_id": "RENDER-002",
+  "status": "in_progress",
+  "baseline_sha": "520047314a5037ee0f89a45b61d16c64f5775300",
+  "taken_over_from": [
+    "prompt/coordination/discussions/RENDER-002/20261105T0647Z-T5-alpha-only-diagnostic-boundary.md",
+    "https://github.com/alwansan/raf/commit/f6fc6b146"
+  ],
+  "hypothesis": "T3 alpha-only classifier correction has a literal escaped newline creating Python SyntaxError; CI guard does not exercise diagnostic",
+  "plan": [
+    "Confirm exact bytes and syntax locally",
+    "Record evidence to T3 and perform narrow fix only if safe",
+    "Run compile and synthetic tests; preserve no-device-proof"
+  ],
+  "next_step": "Confirm literal escaped newline and run compile."
+}
