@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T1745Z-T3-chat-921-shader-material-property-7a6e",
+  "issue_id": "RENDER-002",
+  "original_provider_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "request_type": "one SHA-original Shader48 921-use real Material SavedProperties reader-category discriminator",
+  "source_blob_shas": {
+    "scripts/t3_original_921_material_property_contract.py": "7b7cfa7b4014d79dfe15afad25b79e5ee3fe8c99",
+    "tests/test_t3_original_921_material_property_contract.py": "792fbb5080bcdf96ca13f9aa1fea0043f71a2615",
+    "scripts/t3_original_renderer_shader_impact.py": "3fe03ad1668d51de59e2195b00ca20dfbb2f3c36"
+  },
+  "reason_for_retry": "Original CI42079152807 verified six scenes/four Shader owners and complete 921 source material pointer population, but private field normalization failed; parser now safely distinguishes SAVED_CONTAINER_SCHEMA/TEXENV_READER/COLORS_READER/SCALARS_READER/OVERLAPPING_PROPERTY_FAMILIES/TEXTURE_POINTER_LAYOUT with no source data disclosure.",
+  "safety": {
+    "game_assets_unmodified": true,
+    "private_names_values_never_emitted": true,
+    "no_other_build_cancel": true
+  },
+  "created_at": "2026-11-05T18:00:00Z"
+}
