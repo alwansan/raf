@@ -79,14 +79,16 @@ def run(original: Path, manifest: Path, project: Path, w1path: Path, b02path: Pa
                     exported_image = image.copy()
                     category = compare_pair(decoded, exported_image, original_id=guid,
                                             exported_id=guid, authenticated=True)
-                    if category in ('EXACT', 'RGB_DRIFT', 'ALPHA_ONLY_DRIFT'):
-                        raw_format = getattr(texture, 'm_TextureFormat', 'UNKNOWN')
-                        fmt = getattr(raw_format, 'name', str(raw_format))
-                        raw_srgb = getattr(texture, 'm_IsSRGB', None)
-                        diagnostic_rows.append(diagnose_pair(decoded, exported_image,
-                            texture_format=fmt, srgb=str(raw_srgb) if raw_srgb is not None else 'UNKNOWN'))
         except (NotImplementedError, ValueError, TypeError, OSError):
             category = "UNSUPPORTED_MODE"
+        # A diagnostic failure is NOT an unsupported source decoder. Let it
+        # propagate to main() as INCONCLUSIVE rather than falsifying parity.
+        if category in ('EXACT', 'RGB_DRIFT', 'ALPHA_ONLY_DRIFT'):
+            raw_format = getattr(texture, 'm_TextureFormat', 'UNKNOWN')
+            fmt = getattr(raw_format, 'name', str(raw_format))
+            raw_srgb = getattr(texture, 'm_IsSRGB', None)
+            diagnostic_rows.append(diagnose_pair(decoded, exported_image,
+                texture_format=fmt, srgb=str(raw_srgb) if raw_srgb is not None else 'UNKNOWN'))
         categories.append(category)
     report = aggregate(categories, expected=EXPECTED)
     if len(diagnostic_rows) == EXPECTED:
