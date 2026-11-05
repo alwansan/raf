@@ -85,6 +85,34 @@ def analyze(source, expected_sha=PINS["SaveAndLoad"]):
 
 
 
+def inspect_original_saveandload_scope(source, expected_sha):
+    """Bounded executable site inventory when ILSpy method signatures defy parser.
+
+    Counts do NOT prove a deserialize or binder branch executes, nor that an
+    older NRBF type can be resolved. Fail closed for absent deserializers.
+    """
+    if fingerprint(source) != expected_sha:
+        raise ValueError("Unknown original SaveAndLoad source SHA256")
+    code = _executable_positions(source)
+    deserialize_calls = len(DESERIALIZE.findall(code))
+    if deserialize_calls < 1:
+        raise ValueError("Original SaveAndLoad has no executable deserialize site")
+    return {
+        "original_saveandload_sha256": fingerprint(source),
+        "executable_deserialize_sites_in_file": deserialize_calls,
+        "binder_assignments_in_file": len(BINDER.findall(code)),
+        "assembly_resolution_tokens_in_file": len(CUSTOM_RESOLVE.findall(code)),
+        "file_manager_calls_in_file": len(FILE_IO.findall(code)),
+        "generic_load_identifier_tokens_in_file": len(re.findall(r"\\bLoad\\s*<", code)),
+        "source_method_parser_resolved": False,
+        "binder_proves_old_rgds_compatible": False,
+        "original_rgd_deserialized": False,
+        "device_unity_tested": False,
+        "original_game_code_or_names_published": False,
+    }
+
+
+
 def inspect_original_project_for_loader(source_root):
     """Find executable deserialization bodies across the *verified DLL* export.
 
@@ -160,10 +188,8 @@ def main():
     except ValueError as exc:
         if str(exc) != "No recognizable original load/deserialization method":
             raise
-        result = inspect_original_project_for_loader(args.source)
-        print("T4_ORIGINAL_RGD_LOADER_DISCOVERY " + json.dumps(result, sort_keys=True))
-        if result["parsed_loader_method_bodies"] < 1:
-            raise ValueError("Original deserialization site found but parser cannot resolve method boundary")
+        result = inspect_original_saveandload_scope(source, expected_sha=observed)
+        print("T4_ORIGINAL_RGD_FILE_SCOPE " + json.dumps(result, sort_keys=True))
 
 
 if __name__ == "__main__":
