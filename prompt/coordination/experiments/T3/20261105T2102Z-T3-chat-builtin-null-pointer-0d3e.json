@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T2102Z-T3-chat-builtin-null-pointer-0d3e",
+  "issue_id": "RENDER-002",
+  "hypothesis": "A malformed source Shader48 export pointer with non-zero fileID and all-zero GUID (or negative built-in fileID) may be promoted to Unity Built-in by old source+native high-use joins, breaking provenance.",
+  "source_commit": "8ff409feafc56188ab7f462b814d13849d576d04",
+  "input_hashes": [],
+  "tool_versions": {
+    "python": "GitHub ubuntu-24.04 python3",
+    "Unity": "not invoked",
+    "original_data": "not fetched"
+  },
+  "commands": [
+    "python3 -m py_compile scripts/t3_native_original_921_shader_target_audit.py tests/test_t3_native_original_921_shader_target_audit.py",
+    "python3 -m unittest discover -s tests -p 'test_t3_native_original_921_shader_target_audit.py' -v",
+    "python3 -m unittest discover -s tests -p 'test_t3_source_renderer_shader_to_postvendor_export.py' -v",
+    "python3 -m unittest discover -s tests -p 'test_t3_audit_exported_material_programs.py' -v"
+  ],
+  "negative_controls": [
+    "builtin fileID=0, valid engine GUID rejected by existing pointer layer",
+    "builtin all-zero GUID with positive fileID rejected by new validation",
+    "negative builtin fileID rejected by new validation",
+    "malformed builtin high-use original 921 and minor original Shader48 rejected",
+    "real nonzero engine GUID with positive fileID accepted"
+  ],
+  "workflow_path": ".github/workflows/raft-t3-native-921-guid-source-controls.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42108532173",
+  "artifact_urls": [],
+  "budget": "existing ubuntu-24.04 source-free CI timeout 5m, no Unity/ZIP2",
+  "status": "completed",
+  "observed_result": "Final run 42108532173 successful, py_compile and 24+14+16=54/54 source-free unit tests PASS. Intermediate 42108313304 and 42108337297 failed from wrong assertion text for already rejected fileID=0; test assertion corrected.",
+  "rejected_hypotheses": [
+    "Malformed built-in pointer with a nonzero fileID and all-zero GUID is valid engine shader",
+    "A fileID=0 entered the previously permissive built-in classifier without rejection from an upstream helper"
+  ],
+  "limitations": [
+    "No real ZIP2 original plus W1 same native export trace execution",
+    "No ShaderLab authored program recovery or Unity/Android pixels",
+    "No game resource or device testing"
+  ],
+  "integration_commit": "8ff409feafc56188ab7f462b814d13849d576d04",
+  "next_step": "When a future authentic same-process T5 native export runs, execute scripts/t3_native_original_921_shader_target_audit.py with independently SHA-verified ZIP2 six scenes/four owners and W1 private trace plus postrestorer exported project. Only publish allowlisted aggregate source→target result. Then recover missing genuine ShaderLab Pass/subprogram/variant links and verify Unity+phone pixels. No duplicate full build."
+}
