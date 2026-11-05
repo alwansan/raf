@@ -10,3 +10,12 @@
 - coordination: T1 smoke run42042230791 and platform adapter42042206739 active at reservation; no T2 managed run active. Existing scheduled T2 test file is distinct.
 - note: GitHub 409 prevented first session-file creation while T1/T3 pushed; checked live HEAD and retried without force or overwriting.
 - next_step: implement, run source-free controls + original SHA CI; document accepted unique/sign finding and gap in backing array length. WATER-001 OPEN / NOT_READY0/3.
+
+## Source publication checkpoint
+
+- To avoid losing unrelated concurrent commits, the original atomic tree push was abandoned after three HEAD-lease failures. The same three scoped files were subsequently published with individual content-SHA leases; the first two source commits included `[skip ci]` to avoid partial compilation runs, and the third is the only planned original-data trigger.
+- `FoamSetterFlow.cs` [37403b9](https://github.com/alwansan/raf/commit/37403b9abe10df9857f39d359288caa434c07822): precise `Code.Ldc_I4` decoding, private int call-argument transfer, old constructor remains backwards-compatible.
+- `Program.cs` [84338ab](https://github.com/alwansan/raf/commit/84338ab8bf89d8af41b0aa3e1fdcda1a4030d391): aggregate-only distinct count and all-nonnegative flag plus synthetic short/long/minus-one and duplicate controls.
+- Own workflow [43a6338](https://github.com/alwansan/raf/commit/43a633869a4185bd0176e139b9abf3b28045bd8e): original SHA-gated positive count and safe JSON boundary assertions.
+- Genuine original SHA-pinned CI [42043293335](https://github.com/alwansan/raf/actions/runs/42043293335) was `in_progress` at this checkpoint. status: `waiting_ci`.
+- Separate full native APK/OBB/XAPK build [42042902522](https://github.com/alwansan/raf/actions/runs/42042902522) is active under T5, not controlled by this T2 source experiment; do not cancel or interfere. No runtime/ShaderLab/device evidence claimed.
