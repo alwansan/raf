@@ -21,3 +21,9 @@ next_step: Check fresh Actions, dispatch one distinct request only if no overlap
 - **No native signed APK, OBB, XAPK, Release asset, phone visuals/offline play/save/reopen, Unity/Adreno GPU or readiness claim.** T4 original seed Save guard still a negative (wrong root for actual Save); T3 exact D3D11 stage pairs do not by themselves prove ShaderLab/Android. Project remains NOT_READY 0/3.
 
 **Next:** check [run42052375742](https://github.com/alwansan/raf/actions/runs/42052375742) first upon resumption, not branch HEAD alone. If terminal failure, inspect exact first failing job/step and job log category; if running, preserve work as waiting_ci. If all green, independently verify published exact APK+OBB+XAPK and SHA before any device claims. Do not dispatch duplicate expensive native runs. Preserve working audio and Settings and deferred touch/layout.
+
+
+## Latest independent read-only progress checkpoint — 2026-11-05 15:15 UTC
+- Native [run42052375742](https://github.com/alwansan/raf/actions/runs/42052375742) still `in_progress`, `conclusion=null`. Confirmed `native-request-gate=success` and `unity-license-preflight=success`; current active `reconstruct` step `Restore every original graphics payload before exporting textures and shaders`, no job failure yet. This is **not** full Unity import or signed-package output.
+- The immutable run's source SHA remains `b0c4b4c05011d915cd845259f06b5f80ee368092`; fresh shared branch HEAD at checkpoint `7e9d2461250924fb0bd40c1e661cf70b8bad89d7` is newer and **does not change the running candidate**. Source SHA matters for candidate acceptance.
+- Shared `prompt/STATUS.md` updated on commit `7e9d2461250924fb0bd40c1e661cf70b8bad89d7` with run and limitations. No new artifact/release and no phone proof; task stays `waiting_ci`. Stop here rather than dispatching a second full import while this one runs.
