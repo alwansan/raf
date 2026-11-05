@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "session_id": "20261105T124551Z-T3-chat-subshader-coverage-c29b",
+  "issue_id": "RENDER-002",
+  "hypothesis": "An any-program ShaderLab tally can hide an incomplete sibling SubShader in the same custom Material target; pass_coverage.all_subshaders_programmed reveals a source-only structural risk.",
+  "experiment_key": "T3-post-restorer-shaderlab-all-subshaders-coverage-source-56d3f6a-b49-structural-pass-coverage-v1",
+  "source_commit": "f0062b39297b1e4953bac2934e479e25fa199a27",
+  "input_hashes": [
+    "script_previous_blob_sha256_not_claimed; git_blob=56d3f6aaf6922de4c6ce916cbd496febe703e52e",
+    "tests_previous_git_blob=6f80d7c09ab9bc5855d33d8790aff5012a083aaf"
+  ],
+  "tool_versions": {
+    "python": "Ubuntu-24.04 GitHub Actions ubuntu-24.04 hosted Python 3",
+    "shaderlab_parser": "scripts/b49_shaderlab_pass_contract.py at workflow commit f0062b3"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p 'test_t3_audit_exported_material_programs.py' -v",
+    "python3 -m unittest discover -s tests -p 'test_w1_export_material_shaders.py' -v",
+    "python3 -m unittest discover -s tests -p 'test_b49_shaderlab_pass_contract.py' -v",
+    "python3 -m py_compile scripts/t3_audit_exported_material_programs.py tests/test_t3_audit_exported_material_programs.py"
+  ],
+  "negative_controls": [
+    "one programmed SubShader plus unprogrammed sibling -> partial coverage=1, even when any-program=3 Material docs",
+    "two fully programmed SubShaders -> partial coverage=0",
+    "unbalanced second SubShader with first valid program -> partial coverage=1"
+  ],
+  "workflow_path": ".github/workflows/raft-t3-native-material-shader-quality.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42030761276",
+  "artifact_urls": [],
+  "budget": "6 min, source-free runner; no Unity/ZIP2, no additional native dispatch",
+  "status": "completed",
+  "observed_result": "CI SUCCESS: 15 T3 tests + 8 W1 tests + 8 B49 tests; py_compile success; two new aggregate counters. No full original post-restorer project has run.",
+  "rejected_hypotheses": [
+    "The any-program count by itself implies all available SubShaders contain structurally complete programs."
+  ],
+  "limitations": [
+    "No source-authentic Shader48 code reconstruction or ABI validation",
+    "No actual post-restorer full export/Unity shader compilation",
+    "No runtime tier choice, Android Adreno visual or playable-world proof",
+    "Source structural all_subshaders_programmed is a heuristic diagnostic, not Shader authenticity"
+  ],
+  "integration_commit": "f0062b39297b1e4953bac2934e479e25fa199a27",
+  "next_step": "At next authorized full native import, inspect post-restorer t3-native-material-shader-quality.json including partial coverage counters; use authentic source/compiled original and Unity/Adreno pixels to prioritize restore. RENDER-002 OPEN; no new native build dispatched."
+}
