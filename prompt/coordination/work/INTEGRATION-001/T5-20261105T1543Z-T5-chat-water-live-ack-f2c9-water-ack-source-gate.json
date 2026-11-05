@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T1543Z-T5-chat-water-live-ack-f2c9",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "track": "Update exact build-request water limitations after live native run renderer restoration changes source contract",
+  "status": "active",
+  "base_sha": "523565b107732b5817056feeac0d90cd3b3877a9",
+  "resumed_from_sessions": [
+    "20261105T1508Z-T5-chat-native-retry-c2b7",
+    "20261105T1453Z-T5-scheduled-6e82"
+  ],
+  "related_work": [
+    "prompt/coordination/work/INTEGRATION-001/T5-20261105T1508Z-T5-chat-native-retry-c2b7-single-native-candidate-retry.json"
+  ],
+  "hypothesis": "CI42052375742 failed only because now-satisfied Blur shader remained incorrectly acknowledged and now-unsatisfied Depth Copy was omitted. An exact recorded five-condition ack matching observed renderer state permits existing experimental water limitation gate without falsely marking original water authentic; all other source constraints stay intact.",
+  "experiment_key": "T5|CI42052375742|original-water-gate-live-v1|DepthCopy-false-Blur-true|exact-ack-to-existing-guard",
+  "resource_key": "t5-isolated-python-water-ack-validation; optional raft-native-engine for single new request after green",
+  "intended_files": [
+    "tests/fixtures/t5_native_water_42052375742.json",
+    "tests/test_t5_live_water_ack.py",
+    ".github/workflows/raft-t5-live-water-ack.yml",
+    ".github/raft-native-build-request.json",
+    "prompt/coordination/work/INTEGRATION-001/T5-20261105T1543Z-T5-chat-water-live-ack-f2c9-water-ack-source-gate.json",
+    "prompt/coordination/clients/T5/sessions/20261105T1543Z-T5-chat-water-live-ack-f2c9.md",
+    "prompt/coordination/experiments/T5/T5-20261105T1543Z-T5-chat-water-live-ack-f2c9-native-water-ack.json",
+    "prompt/coordination/B_TEAM/events/T5/20261105T1550Z-native-water-ack-result.json"
+  ],
+  "preflight": {
+    "head": "523565b107732b5817056feeac0d90cd3b3877a9",
+    "failed_run": 42052375742,
+    "failed_source_sha": "b0c4b4c05011d915cd845259f06b5f80ee368092",
+    "first_failed_job": "reconstruct 127331915972",
+    "first_failed_step": "Authentic water gate (strict) or exact documented trial limitation",
+    "actual_error": "Documented water limitations do not exactly match the live unmet conditions",
+    "reconstruct_issues": {
+      "UltimateWater/Depth/Depth Copy": "fail; per-subshader pass counts [6,3], required 4",
+      "UltimateWater/Utilities/Blur (Subsurface Scattering)": "pass; 2 passes, required 2"
+    },
+    "other_unmet": [
+      "authentic_water_kernel_identity",
+      "shader_pass_contract:UltimateWater/Foam/Global",
+      "shader_pass_contract:UltimateWater/Spectrum/Water Spectrum",
+      "water_compute_source_candidate"
+    ],
+    "early_artifacts": 3,
+    "game_apk_release_latest": "android-early-test-41812889049-1",
+    "game_status": "NOT_READY 0/3"
+  },
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42052375742"
+  ],
+  "next_step": "Write source-free replay against actual guard code using pared-down original CI aggregate, verify original list fails and corrected exact list passes with strict false; launch isolated CI. Only then update existing request file and dispatch exactly one next immutable native diagnostic if no GPU/Unity resource conflict.",
+  "updated_at": "2026-11-05T15:43:00Z"
+}
