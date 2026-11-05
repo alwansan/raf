@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261105T1736Z-T2-chat-ret-reason-28ce",
+  "issue_id": "WATER-001",
+  "status": "completed",
+  "experiment_key": "T2|ZIP2-15964ea8|original-managed-0a6f0527|Foam-exact-RT-return-unresolved-reason|branch-entry-predecessor-v1",
+  "source_original": {
+    "zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "managed_dll_bytes": 3211776,
+    "managed_dll_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e"
+  },
+  "commits": [
+    "b7b249e532eef114e227055d203301ccdfbbe48b",
+    "d707e19112587bf40b5161f59a2b90f0f85cdc9f",
+    "98a83ed9fbd33effaab59608d8a7e6493c2b2630"
+  ],
+  "ci": "https://github.com/alwansan/raf/actions/runs/42076713202",
+  "artifact": {
+    "id": 13438102690,
+    "zip_sha256": "4739cda023de985882e6c776bb757e325d2f7b391e8e092c0a37efe57bf524ff",
+    "bytes": 2999
+  },
+  "finding": {
+    "exact_original_method_return_sites": 1,
+    "immediate_predecessor_family": "ldloc",
+    "ret_site_placement": "sequential_return_site",
+    "method_branch_instructions": 3,
+    "branch_join_dataflow_verified": false,
+    "original_private_symbols_il_int_literals_disclosed": false,
+    "runtime_rendertexture_object_or_pixels_verified": false
+  },
+  "method": "Exact original authenticated managed typed RT return method; source-only Cecil branch/exception ret entry and prior opcode family classification, synthetic direct-null, branch target and local-load controls; no original raw IL output.",
+  "next_step": "Original exact return-local stloc writer and source evaluation; preserve runtime unknown, WATER-001 OPEN NOT_READY0/3."
+}
