@@ -5,7 +5,7 @@
   "session_id": "20261105T1302Z-T5-chat-delivery-e2e-f72c",
   "origin": "chat",
   "issue_id": "DELIVERY-013",
-  "status": "active",
+  "status": "completed",
   "track": "Bundled release reassembler executed end-to-end in synthetic delivery",
   "approach": "Invoke actual package_android_delivery.main with synthetic valid APK/OBB and bounded split parts; verify copied release reassemble.py exact source; run copied standalone script in a new Python process with os.link absent, verify XAPK ZIP and APK/OBB bytes, and negative tests for collision/tamper. No game bytes or Unity.",
   "base_sha": "8d16132dd39d490a2a45f9a8eea855271abfb818",
@@ -29,8 +29,28 @@
     "prompt/coordination/clients/T5/sessions/20261105T1255Z-T5-scheduled-b7c2.md",
     "prompt/coordination/clients/T5/sessions/20261105T1248Z-T5-chat-linkport-6a19.md"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Add real packager-main-to-copied-CLI e2e synthetic controls, run exact isolated existing workflow, capture test count/result and limitations.",
-  "updated_at": "2026-11-05T13:02:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42034420876"
+  ],
+  "result": {
+    "status": "TESTED_INTEGRATION_SOURCE_ONLY",
+    "workflow": "T5 DELIVERY-013 Android Termux Python no-link reassembly",
+    "source_commit": "2d7e2d251cbf0b15f6409afa6a6a2a290dd1eec8",
+    "run_id": 42034420876,
+    "job_id": 127268724365,
+    "conclusion": "success",
+    "passed": 27,
+    "failed": 0,
+    "actual_packaging_main_exercised": true,
+    "release_reassemble_copy_sha_parity": true,
+    "standalone_bundled_cli_without_oslink": true,
+    "xapk_zip_members_crc_and_apk_obb_sha": true,
+    "negative_controls": "no-clobber existing signed output and corrupt-part rejection",
+    "limit": "Synthetic Linux test, no actual Android or native game package, no Unity or water/world phone evidence"
+  },
+  "next_step": "T5 next practical focus should be integration of T1 original FFT/Unity readback and T3 dummy ShaderLab postrestore quality with T4 world save diagnostic into one coordinated native experiment when gates justify it, not more repeating delivery fixtures.",
+  "updated_at": "2026-11-05T13:20:00Z",
+  "experiment_ids": [
+    "prompt/coordination/experiments/T5/T5-20261105T1302Z-T5-chat-delivery-e2e-f72c-bundled-cli-e2e.json"
+  ]
 }
