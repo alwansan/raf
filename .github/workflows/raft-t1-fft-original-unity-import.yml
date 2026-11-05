@@ -97,7 +97,7 @@ jobs:
               "unity_command_exit_zero":rc==0,
               "empty_unity_project_created":project,
               "licensing_failure_category":bool(re.search(
-                  r"(?:licen[cs]|entitlement|serial)[^\\n]{0,100}(?:invalid|fail|expired|denied|not activat|missing)|(?:invalid|fail|expired|denied|no valid)[^\\n]{0,100}(?:licen[cs]|entitlement|serial)",log,re.I)),
+                  r"(?:licen[cs]|entitlement|serial)[^\n]{0,100}(?:invalid|fail|expired|denied|not activat|missing)|(?:invalid|fail|expired|denied|no valid)[^\n]{0,100}(?:licen[cs]|entitlement|serial)",log,re.I)),
               "log_present":bool(log),
               "original_raft_data_acquired":False,
               "original_fft_compute_imported":False,
@@ -211,9 +211,9 @@ jobs:
                   "unity_process_exit_code":int(__import__("os").environ.get("UNITY_EXIT_CODE","-1")),
                   "licensing_message_category":bool(re.search(r"licen[cs]|activat",log,re.I)),
                   "licensing_failure_category":bool(re.search(
-                      r"(?:licen[cs]|entitlement|serial)[^\\n]{0,100}(?:invalid|fail|expired|denied|not activat|missing)|(?:invalid|fail|expired|denied|no valid)[^\\n]{0,100}(?:licen[cs]|entitlement|serial)",log,re.I)),
+                      r"(?:licen[cs]|entitlement|serial)[^\n]{0,100}(?:invalid|fail|expired|denied|not activat|missing)|(?:invalid|fail|expired|denied|no valid)[^\n]{0,100}(?:licen[cs]|entitlement|serial)",log,re.I)),
                   "execute_method_lookup_failure":bool(re.search(
-                      r"(?:executemethod|execute method)[^\\n]{0,120}(?:not found|not execute|could not|failed)|(?:could not find|cannot find)[^\\n]{0,80}(?:method|class)",log,re.I)),
+                      r"(?:executemethod|execute method)[^\n]{0,120}(?:not found|not execute|could not|failed)|(?:could not find|cannot find)[^\n]{0,80}(?:method|class)",log,re.I)),
                   "script_compilation_error_category":bool(re.search(r"error CS[0-9]+",log)),
                   "shader_compilation_error_category":bool(re.search(r"compute shader.*error|shader error",log,re.I)),
                   "original_runtime_kernel_mapping_proven":False,
