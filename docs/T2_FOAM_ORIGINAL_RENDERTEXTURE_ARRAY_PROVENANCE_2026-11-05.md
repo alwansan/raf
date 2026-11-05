@@ -43,3 +43,24 @@ The **proven source-to-Texture lookup** is now specific: four names from origina
 Next T2 could identify exact original assignment sites for that `RenderTexture[]` field and parse four int index argument origins in original IL with branch-aware guards; T1 tests FFT compute separately, T3 texture/material link separately, T4 offline world and T5 main build separately. Do not cancel/restart their jobs.
 
 **Canonical issue `WATER-001` remains OPEN; Raft NOT_READY 0/3.** Last actual phone-tested game APK86, no native Unity Foam build or game asset/.meta/GUID changes. Sound and Settings preserved, touch/layout deferred.
+
+
+## Addendum: exact original field writer and four direct int operands — 2026-11-05T13:28Z
+
+This addendum strengthens the original source-managed contract without changing
+any original gameplay ShaderLab, render state, scene, prefab or GUID. The existing
+original SHA-verified managed `Assembly-CSharp.dll` remains 3,211,776 bytes,
+SHA256 `0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e`.
+
+- **Original field write-site proof:** [CI42034458197](https://github.com/alwansan/raf/actions/runs/42034458197), source commit [d47c739](https://github.com/alwansan/raf/commit/d47c73943b11e3b1d193dc56446fb63632abd47a), SUCCESS, 19,118 original managed methods scanned by Mono.Cecil. The *same exact* original private `UnityEngine.RenderTexture[]` getter backing field is the target of **one direct `stfld`** in one method. Its immediately preceding IL source is **`ldnull`**. There are **zero direct `newarr UnityEngine.RenderTexture`** assignments to that exact field, and zero other/unproven immediate `stfld` sources within this original assembly. Safe aggregate artifact ID `13417637189`, ZIP SHA256 `6f6737164c859f136d7790f995d001658110feba6e4d2d30c0b583277e934128`. This proves compiled clear-assignment existence, *not that it executed*, or how array members were created/filled. Other assemblies, reflection, indirect element writes and native Unity setup were not disproven.
+- **Actual original caller int input source proof:** [CI42035529042](https://github.com/alwansan/raf/actions/runs/42035529042), source commit [afb3e94](https://github.com/alwansan/raf/commit/afb3e94af6c34a345d8fcfd81e6daaa2c01a89e4), SUCCESS. The four authentic Foam source non-authored texture names remain exact `Material.SetTexture` first `string` args; the four second texture values come from the one source-authentic guarded `Texture(int)` method. Bounded exact *actual call argument* IL stack trace proves **4/4 int inputs have direct `ldc.i4` origins**, not inferred from nearby integers, with synthetic argument-load and metadata-token negative controls. Safe artifact ID `13417228996`, ZIP SHA256 `2c9ff99f340c7364044bc5f8cfdcf2875fd1aa86c4b71da4a10c897efe0d0fe9`. No proprietary literal values, method/field/source identifiers, IL bytecode or private hashes were published.
+
+**Still unproven:** literal **values and distinctness** (withheld), range relative to
+the **runtime** `RenderTexture[]` length, array allocation and element content,
+actual original `Material` receiver/Shader binding and runtime reachability,
+sampler/UV/CB upload, true Foam two-pass ShaderLab Unity import, GPU/Adreno pixels
+and phone acceptance. This source evidence is not a runtime shader fix.
+Canonical WATER-001 remains **OPEN**, Raft **NOT_READY 0/3**.
+Next T2 scope: verify original integer distinctness/range *privately* against
+authenticated array-size/element-writer provenance; never invent aliases
+or the original array contents.
