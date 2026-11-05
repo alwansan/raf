@@ -307,7 +307,7 @@ internal static class Program
             if (non.Overlaps(author))
                 throw new InvalidDataException("Ambiguous hashed private source register");
             using var assembly = AssemblyDefinition.ReadAssembly(asmPath,
-                new ReaderParameters { ReadSymbols = false, ReadingMode = ReadingMode.Immediate });
+                new ReaderParameters { ReadSymbols = false, ReadingMode = ReadingMode.Deferred });
             Summary scan = Scan(WalkTypes(assembly.MainModule.Types)
                                     .SelectMany(t => t.Methods),non,author);
             string safe = JsonSerializer.Serialize(PublicReport(scan,true,false));
