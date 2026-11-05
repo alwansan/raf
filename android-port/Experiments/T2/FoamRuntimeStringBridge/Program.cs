@@ -144,6 +144,7 @@ internal static class Program
         public FoamProducerBody.SafeProfile? OriginalSingleProducerBodyProfile;
         public FoamFieldWriterLineage.SafeProfile? OriginalFieldWriterProfile;
         public FoamFieldSerializationMetadata.SafeProfile? OriginalFieldSerializationProfile;
+        public FoamFieldReadTopology.SafeProfile? OriginalFieldReadTopologyProfile;
         public readonly Dictionary<string,int> TotalSetterCalls = new(StringComparer.Ordinal)
         {
             ["shader_global_texture"] = 0,
@@ -169,6 +170,7 @@ internal static class Program
         var result = new Summary();
         var sourceMethods=methods.ToList();
         FieldReference? exactGetterBackingField=null;
+        MethodDefinition? exactOriginalTextureGetter=null;
         // Comparison is entirely private and all original method names remain
         // in CI memory. Only aggregate match cardinalities leave the runner.
         var definitions=sourceMethods.GroupBy(m=>m.FullName,StringComparer.Ordinal)
@@ -322,6 +324,7 @@ internal static class Program
                                                 FoamProducerBody.Inspect(candidates[0]);
                                             exactGetterBackingField=
                                                 FoamFieldWriterLineage.ExactGetterBackingField(candidates[0]);
+                                            exactOriginalTextureGetter=candidates[0];
                                         }
                                     }
                                 }
@@ -369,6 +372,11 @@ internal static class Program
         {
             result.OriginalFieldWriterProfile=
                 FoamFieldWriterLineage.Scan(sourceMethods,exactGetterBackingField);
+            if (exactOriginalTextureGetter is null)
+                throw new InvalidDataException("Missing exact SHA-original texture getter");
+            result.OriginalFieldReadTopologyProfile=
+                FoamFieldReadTopology.Scan(sourceMethods,exactGetterBackingField,
+                    exactOriginalTextureGetter);
             // Resolve the exact original FieldDefinition without publishing
             // private type, token or field identifiers.
             var sourceTypes=sourceMethods.Count==0
@@ -438,6 +446,7 @@ internal static class Program
             original_exact_Texture_int_producer_body_op_classes = result.OriginalSingleProducerBodyProfile,
             original_exact_Texture_int_backing_field_writer_op_classes = result.OriginalFieldWriterProfile,
             original_exact_RenderTexture_array_field_serialization_metadata = result.OriginalFieldSerializationProfile,
+            original_exact_RenderTexture_array_field_managed_read_topology = result.OriginalFieldReadTopologyProfile,
             original_exact_Texture_int_producer_body_accepted_same_SHA_definition = result.OriginalSingleProducerBodyProfile is not null,
             original_exact_method_definition_is_original_runtime_called_or_output_proof = false,
             producer_declared_signature_is_actual_runtime_texture_object_proof = false,
@@ -887,6 +896,47 @@ internal static class Program
         if (missingMeta.ExactOriginalManagedFieldDefinitionCount!=0 ||
             missingMeta.EligibleByFieldModifiersOnly)
             throw new InvalidDataException("Missing field definition must not be invented");
+        // Public synthetic exact backing array read/address topology. The
+        // real guarded getter has two matching field loads; other reader,
+        // address-taking writer candidate, and equal-typed wrong-field decoy
+        // are separate instructions. No field value is read at runtime.
+        var extraReader=new MethodDefinition("SyntheticOtherRead",
+            Mono.Cecil.MethodAttributes.Public,m.TypeSystem.Void);
+        factoryDef.Methods.Add(extraReader);
+        var lir=extraReader.Body.GetILProcessor();
+        lir.Append(lir.Create(OpCodes.Ldarg_0));
+        lir.Append(lir.Create(OpCodes.Ldfld,renderArray));
+        lir.Append(lir.Create(OpCodes.Pop));
+        lir.Append(lir.Create(OpCodes.Ret));
+        var byrefReader=new MethodDefinition("SyntheticAddressRead",
+            Mono.Cecil.MethodAttributes.Public,m.TypeSystem.Void);
+        factoryDef.Methods.Add(byrefReader);
+        var liaf=byrefReader.Body.GetILProcessor();
+        liaf.Append(liaf.Create(OpCodes.Ldarg_0));
+        liaf.Append(liaf.Create(OpCodes.Ldflda,renderArray));
+        liaf.Append(liaf.Create(OpCodes.Pop));
+        liaf.Append(liaf.Create(OpCodes.Ret));
+        var wrongReader=new MethodDefinition("SyntheticWrongFieldRead",
+            Mono.Cecil.MethodAttributes.Public,m.TypeSystem.Void);
+        factoryDef.Methods.Add(wrongReader);
+        var liwr=wrongReader.Body.GetILProcessor();
+        liwr.Append(liwr.Create(OpCodes.Ldarg_0));
+        liwr.Append(liwr.Create(OpCodes.Ldfld,decoyField));
+        liwr.Append(liwr.Create(OpCodes.Pop));
+        liwr.Append(liwr.Create(OpCodes.Ret));
+        var readProof=FoamFieldReadTopology.Scan(
+            new[]{guardedOther,extraReader,byrefReader,wrongReader},
+            originalField,guardedOther);
+        if (readProof.ExactInstanceFieldLoadInstructions!=3 ||
+            readProof.ExactInstanceFieldAddressInstructions!=1 ||
+            readProof.OriginalGetterFieldLoadInstructions!=2 ||
+            readProof.OtherOriginalMethodFieldLoadInstructions!=1 ||
+            readProof.OtherOriginalMethodFieldAddressInstructions!=1 ||
+            readProof.DistinctDirectReaderMethods!=2 ||
+            readProof.DistinctDirectAddressMethods!=1 ||
+            readProof.ActualRuntimeArrayContentsVerified ||
+            readProof.ManagedArrayElementsWrittenOrPopulatedProven)
+            throw new InvalidDataException("Original field access topology fixture must exclude typed decoy");
         var guardedWrong=new MethodDefinition("PublicSyntheticWrongConditionalTarget",
             Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Virtual,
             textureType);
@@ -997,6 +1047,7 @@ internal static class Program
                 early_null_brtrue_guarded_RenderTexture_array_fixture=true,
                 exact_backing_field_writer_newarr_null_decoy_fixture=true,
                 strict_original_backing_field_serialization_metadata_fixtures=true,
+                strict_original_field_load_address_typed_decoy_fixture=true,
                 four_original_style_Texture_int_argument_origin_controls=true,
                 signed_short_wide_and_duplicate_private_i4_aggregate_controls=true,
                 private_IL_names_or_source_published = false

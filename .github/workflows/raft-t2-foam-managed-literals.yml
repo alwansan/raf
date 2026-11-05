@@ -176,6 +176,31 @@ jobs:
               not s['IsInitOnly'])
           assert s['OriginalSceneOrPrefabValueVerified'] is False
           assert s['RuntimeArrayLengthOrMembersVerified'] is False
+          t=r['original_exact_RenderTexture_array_field_managed_read_topology']
+          assert t is not None
+          assert t['OriginalGetterFieldLoadInstructions']==2
+          assert t['ExactInstanceFieldLoadInstructions'] == (
+              t['OriginalGetterFieldLoadInstructions']+
+              t['OtherOriginalMethodFieldLoadInstructions'])
+          assert t['ExactInstanceFieldAddressInstructions'] >= (
+              t['OtherOriginalMethodFieldAddressInstructions'])
+          assert 1 <= t['DistinctDirectReaderMethods'] <= (
+              t['ExactInstanceFieldLoadInstructions'])
+          assert 0 <= t['DistinctDirectAddressMethods'] <= (
+              t['ExactInstanceFieldAddressInstructions'])
+          assert not t['ActualRuntimeArrayContentsVerified']
+          assert not t['ManagedArrayElementsWrittenOrPopulatedProven']
+          print('T2_FOAM_FIELD_TOPOLOGY_SAFE '+json.dumps({
+              'ldfld_exact_total':t['ExactInstanceFieldLoadInstructions'],
+              'ldfld_in_getter':t['OriginalGetterFieldLoadInstructions'],
+              'ldfld_other_methods':t['OtherOriginalMethodFieldLoadInstructions'],
+              'ldflda_exact_total':t['ExactInstanceFieldAddressInstructions'],
+              'ldflda_other_methods':t['OtherOriginalMethodFieldAddressInstructions'],
+              'distinct_reader_methods':t['DistinctDirectReaderMethods'],
+              'distinct_address_methods':t['DistinctDirectAddressMethods'],
+              'actual_runtime_array_contents_verified':False,
+              'array_element_population_proven':False,
+          },sort_keys=True))
           # Print numeric/boolean aggregate only; no original private field name,
           # original int, SHA of small-domain value, token or Cecil IL escapes.
           print('T2_FOAM_FIELD_METADATA_SAFE '+json.dumps({
