@@ -16,6 +16,7 @@ FIELDS = {
     "world_direct_rgd_constructor_calls", "user_direct_rgd_constructor_calls",
     "world_rgd_typed_locals", "user_rgd_typed_locals",
     "world_rgd_field_stores",
+    "world_pre_call_rgd_source_clue", "user_pre_call_rgd_source_clue",
     "direct_constructor_is_dynamically_proven_save_argument",
     "original_save_method_invoked", "game_world_rgd_written_or_loaded",
     "source_or_rgd_payload_published", "android_unity_il2cpp_or_phone_executed",
@@ -34,6 +35,12 @@ NEGATIVE = (
     "source_or_rgd_payload_published",
     "android_unity_il2cpp_or_phone_executed",
 )
+PRODUCER_CLUES = {
+    "RGD_TYPED_INSTANCE_FIELD_LOAD", "RGD_TYPED_STATIC_FIELD_LOAD",
+    "RGD_TYPED_CALL_RETURN", "RGD_TYPED_LOCAL_LOAD",
+    "DIRECT_RGD_CONSTRUCTION", "UNKNOWN_PRECALL_SOURCE",
+}
+
 COUNTS = (
     "world_direct_calls_to_exact_save_rgd",
     "world_other_calls_named_save", "user_direct_calls_to_exact_save_rgd",
@@ -59,6 +66,9 @@ def validate(report):
         x = report[key]
         if type(x) is not int or x < 0 or x > 100:
             raise ValueError("invalid_original_il_count")
+    for label in ("world_pre_call_rgd_source_clue", "user_pre_call_rgd_source_clue"):
+        if type(report[label]) is not str or report[label] not in PRODUCER_CLUES:
+            raise ValueError("unrecognized_original_pre_call_argument_source")
     if report["world_direct_calls_to_exact_save_rgd"] != 1:
         raise ValueError("original_world_persistence_edge_unresolved")
     if report["world_other_calls_named_save"] != 0:
@@ -71,6 +81,8 @@ def validate(report):
             report["world_direct_rgd_constructor_calls"],
         "world_rgd_typed_local_count": report["world_rgd_typed_locals"],
         "world_rgd_field_store_count": report["world_rgd_field_stores"],
+        "world_pre_call_rgd_source_clue": report["world_pre_call_rgd_source_clue"],
+        "user_pre_call_rgd_source_clue": report["user_pre_call_rgd_source_clue"],
         "world_argument_construction_clue": (
             "DIRECT_RGD_CTOR_IN_SAVEWORLD"
             if report["world_direct_rgd_constructor_calls"] > 0
