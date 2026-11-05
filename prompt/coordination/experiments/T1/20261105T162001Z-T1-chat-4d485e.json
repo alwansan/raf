@@ -1,0 +1,72 @@
+{
+  "id": "20261105T162001Z-T1-chat-4d485e",
+  "session_id": "20261105T162001Z-T1-chat-4d485e",
+  "origin": "chat",
+  "owner": "T1",
+  "issue_id": "WATER-001",
+  "status": "completed",
+  "base_sha": "1fe934c89fc0e04b48b0cc4374d261ea34213a39",
+  "updated_at": "2026-11-05T16:22:55.452Z",
+  "intended_files": [
+    "scripts/t1_fft_spirv_read_provenance.py",
+    "tests/test_t1_fft_spirv_read_provenance.py",
+    ".github/workflows/raft-t1-fft-vulkan-roundtrip-isolation.yml"
+  ],
+  "experiment_key": "authenticated-pass0-spirv-read-query-binding-provenance",
+  "resumed_from_sessions": [
+    "20261105T160847Z-T1-chat-7f8aaf",
+    "20261105T161020Z-T1-scheduled-7c92"
+  ],
+  "implementation_sha": "fd4ed986c68fe7991257b2ed2857b7b0a183ac74",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42063448484"
+  ],
+  "result": {
+    "provenance": {
+      "butterfly": {
+        "fetch": 2,
+        "query_size": 0,
+        "query_size_lod": 0
+      },
+      "source": {
+        "fetch": 1,
+        "query_size": 0,
+        "query_size_lod": 0
+      },
+      "unresolved": {
+        "fetch": 0,
+        "query_size": 0,
+        "query_size_lod": 0
+      }
+    },
+    "vulkan_roundtrip": {
+      "pass0": {
+        "compared_written_pixels": 64,
+        "match": true,
+        "nonfinite_pixels": 0,
+        "outside_tolerance_pixels": 0,
+        "rgba_outside_tolerance": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "write_coverage_mismatch_pixels": 0
+      },
+      "pass1": {
+        "compared_written_pixels": 32,
+        "match": true,
+        "nonfinite_pixels": 0,
+        "outside_tolerance_pixels": 0,
+        "rgba_outside_tolerance": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "write_coverage_mismatch_pixels": 0
+      }
+    }
+  },
+  "next_step": "Instrument the three known fetch sites to compare actual coordinate and fetched-value traces across Unity and Vulkan. Audit generated/roundtrip-only helper behavior separately if needed."
+}
