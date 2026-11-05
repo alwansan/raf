@@ -3,7 +3,7 @@
   "session_id": "20261105T1611Z-T5-chat-native-provenance-5d7b",
   "origin": "chat",
   "issue_id": "INTEGRATION-001",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "5c45d20d1112e18ca6a544bbcdaed7f1960db18a",
   "resumed_from_sessions": [
     "20261105T1543Z-T5-chat-water-live-ack-f2c9",
@@ -11,7 +11,9 @@
   ],
   "intended_files": [
     "prompt/coordination/work/INTEGRATION-001/T5-20261105T1611Z-T5-chat-native-provenance-5d7b-native-provenance.json",
-    "prompt/coordination/clients/T5/sessions/20261105T1611Z-T5-chat-native-provenance-5d7b.md"
+    "prompt/coordination/clients/T5/sessions/20261105T1611Z-T5-chat-native-provenance-5d7b.md",
+    "prompt/coordination/experiments/T5/T5-20261105T1611Z-T5-chat-native-provenance-5d7b-immutable-native-progress.json",
+    "prompt/coordination/B_TEAM/events/T5/20261105T1615Z-native-editor-import-started.json"
   ],
   "experiment_key": "t5-immutable-native42058825739-source-drift-stage-provenance-v1",
   "resource_key": "github-metadata-read-only-no-native-dispatch",
@@ -19,6 +21,29 @@
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42058825739"
   ],
-  "next_step": "Audit source diff and exact stage/job results; save session and experiment; no native retry while run active.",
-  "updated_at": "2026-11-05T16:11:00Z"
+  "next_step": "Do NOT dispatch duplicate native run while CI42058825739 is in_progress. Inspect exact Unity Editor step 62 when terminal (error category or success), then packaging/Release/signature/asset evidence. New branch HEAD commits are not included in e9c358ed candidate; verify correct source before phone tests.",
+  "updated_at": "2026-11-05T16:15:00Z",
+  "observed_result": {
+    "native_run": 42058825739,
+    "run_source_sha": "e9c358eda01785b65e4eb14f18723da426635628",
+    "status": "in_progress",
+    "original_mesh_restore": "success",
+    "original_40_scene_export": "success",
+    "strict_water_or_exact_documented_trial": "success (experimental documented only)",
+    "shader_quality_audit": "success as audit, no authentic program validation",
+    "project_guid_checks": "success",
+    "fm0d_banks_sdk_staging": "success",
+    "unity_editor_android_import_step62": "in_progress",
+    "artifact_release_signing": "not verified",
+    "device_acceptance": "not verified",
+    "compare_ahead_58_commits": {
+      "fixed_head": "75382fab995d1e9847d2384b83b8cd157e4b354a",
+      "total_paths": 49,
+      "original_runtime_or_assets": 0,
+      "engine_workflow_or_request": 0,
+      "diagnostic_helper_scripts": 1,
+      "nonruntime_experiments_tests_or_coordination": 48
+    },
+    "no_extra_native_request": true
+  }
 }
