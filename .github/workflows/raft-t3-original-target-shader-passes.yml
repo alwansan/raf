@@ -1,0 +1,80 @@
+name: T3 RENDER-002 original typed ten Shader48 source pass topology
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-t3-original-target-shader-passes.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raft-t3-original-ten-source-Shader-pass-topology-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  original-shader-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Strict source only Shader pass and original material edge controls
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p 'test_t3_original_shader_pass_topology.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_original_material_shader_target.py' -v
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-original
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/sharedassets6.assets
+      - name: Fetch original SHA-pinned four Shader owners, no LFS or resS
+        run: |
+          set -euo pipefail
+          git -C zip2-original sparse-checkout set --no-cone -- \
+            '/RAFT_FILE_MANIFEST.tsv' \
+            '/Raft/Raft_Data/sharedassets6.assets' \
+            '/Raft/Raft_Data/sharedassets0.assets/*' \
+            '/Raft/Raft_Data/sharedassets1.assets' \
+            '/Raft/Raft_Data/resources.assets/*'
+          test "$(git -C zip2-original rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+      - name: Reconstruct exact four original typed Shader48 owner files
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import stage
+          from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
+          selected=['resources.assets','sharedassets0.assets','sharedassets1.assets','sharedassets6.assets']
+          pins={'Raft_Data/'+owner:SHADER_OWNERS[owner] for owner in selected}
+          result=stage(Path('zip2-original'),Path(os.environ['RUNNER_TEMP'])/'t3-typed-source',pins)
+          assert len(result['owners'])==4 and result['verified_bytes']==269007288 and not result['lfs_used']
+          print('RAFT_T3_ORIGINAL_FOUR_SHADER_OWNERS_SHA_VERIFIED=4 bytes=269007288')
+          PY
+      - name: Authenticate original selected 41 Materials and 10 Shader Pass topologies
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.23.0
+          python3 -m scripts.t3_original_shader_pass_topology \
+            --original "$RUNNER_TEMP/t3-typed-source" \
+            --out "$RUNNER_TEMP/t3-original-ten-pass-aggregate.json"
+      - name: Publish aggregate only; no original ShaderLab or program bytes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: t3-authentic-original-10-Shader48-pass-topology-${{ github.run_id }}
+          path: ${{ runner.temp }}/t3-original-ten-pass-aggregate.json
+          if-no-files-found: ignore
+          retention-days: 7
