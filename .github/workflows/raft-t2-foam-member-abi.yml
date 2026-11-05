@@ -8,6 +8,8 @@ on:
       - .github/workflows/raft-t2-foam-member-abi.yml
       - scripts/t2_foam_resource_abi.py
       - tests/test_t2_foam_resource_abi.py
+      - scripts/t2_foam_texture_identity.py
+      - tests/test_t2_foam_texture_identity.py
   workflow_dispatch:
 
 permissions:
@@ -35,6 +37,8 @@ jobs:
           python3 -m unittest discover -s tests -p 'test_t2_foam_member_abi.py' -v
           python3 -m py_compile scripts/t2_foam_resource_abi.py
           python3 -m unittest discover -s tests -p 'test_t2_foam_resource_abi.py' -v
+          python3 -m py_compile scripts/t2_foam_texture_identity.py
+          python3 -m unittest discover -s tests -p 'test_t2_foam_texture_identity.py' -v
       - name: Runner budget guard
         run: |
           python3 - <<'PY'
@@ -122,6 +126,28 @@ jobs:
           assert not r["original_name_register_join_verified"]
           assert not r["private_shader_symbols_published"] and not r["device_pixels_verified"]
           PY
+      - name: Authenticate original Foam texture identities against translated image symbols
+        run: |
+          set -euo pipefail
+          timeout 180s python3 -m scripts.t2_foam_texture_identity \
+            --source "$RUNNER_TEMP/t2-foam-source" \
+            --packet "$RUNNER_TEMP/t2-foam-private-packet" \
+            --manifest "$RUNNER_TEMP/t2-foam-manifest.json" \
+            --out "$RUNNER_TEMP/t2-texture-identity-safe.json"
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          r=json.loads((Path(os.environ["RUNNER_TEMP"])/"t2-texture-identity-safe.json").read_text())
+          assert r["status"]=="original_foam_private_texture_literal_identity_audited"
+          assert r["source_authentic_stages"]==4 and r["source_texture_rows"]==6
+          assert r["translated_image_rows"]==6 and len(r["rows"])==4
+          assert 0 <= r["literal_name_matches"] <= 6
+          assert not r["source_to_shaderlab_material_binding_verified"]
+          assert not r["source_to_sampler_binding_verified"]
+          assert not r["original_sampler_state_verified"]
+          assert not r["shaderlab_import_verified"] and not r["device_pixels_verified"]
+          assert not r["private_shader_symbols_published"]
+          PY
       - name: Remove private source and translated programs even on failure
         if: always()
         run: |
@@ -135,5 +161,6 @@ jobs:
           path: |
             ${{ runner.temp }}/t2-safe.json
             ${{ runner.temp }}/t2-resource-safe.json
+            ${{ runner.temp }}/t2-texture-identity-safe.json
           if-no-files-found: ignore
           retention-days: 7
