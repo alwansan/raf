@@ -4769,6 +4769,35 @@
       "_record_path": "../B_TEAM/events/T1/20261105T121347Z-T1-paired-capture.json"
     },
     {
+      "id": "20261105T124313Z-T1-chat-511e2d",
+      "owner": "T1",
+      "session_id": "20261105T124313Z-T1-chat-511e2d",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "summary": "Local workflow syntax, fixture generation and NUnit gate checks passed; Unity control still running.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42029739318",
+        "https://github.com/alwansan/raf/commit/3fe976889d153443744525569c0bdde2c720b808"
+      ],
+      "at": "2026-11-05T12:46:13.403Z",
+      "_record_path": "../B_TEAM/events/T1/20261105T124313Z-T1-chat-511e2d.json"
+    },
+    {
+      "id": "20261105T125100Z-T1-chat-affd1c",
+      "owner": "T1",
+      "session_id": "20261105T125100Z-T1-chat-affd1c",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "summary": "Synthetic Unity RGBA32F transfer control passed. Exact-workload Vulkan FFT translation experiment is running.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42029739318",
+        "https://github.com/alwansan/raf/actions/runs/42025620147",
+        "https://github.com/alwansan/raf/actions/runs/42030877911"
+      ],
+      "at": "2026-11-05T12:53:13.592Z",
+      "_record_path": "../B_TEAM/events/T1/20261105T125100Z-T1-chat-affd1c.json"
+    },
+    {
       "id": "T2-20261104T2354Z-start-foamabi",
       "owner": "T2",
       "session_id": "20261104T2354Z-T2-foamabi01",
@@ -4934,6 +4963,22 @@
       ],
       "at": "2026-11-05T12:39Z",
       "_record_path": "../B_TEAM/events/T2/20261105T1239Z-foam-source-RenderTexture-array-proven.json"
+    },
+    {
+      "id": "T2-20261105T1254Z-foam-public-numeric-digest-suppression-a6f4",
+      "owner": "T2",
+      "origin": "chat",
+      "session_id": "20261105T1244Z-T2-chat-digest-removal-a6f4",
+      "issue_id": "WATER-001",
+      "type": "source_report_privacy_gate_verified",
+      "at": "2026-11-05T12:54:00Z",
+      "summary": "Removed original bounded Foam m_Index/m_SamplerIndex unkeyed SHA256 from public safe-report producer; preserved authentic numeric cardinality checks, added adversarial singleton privacy regression and original private CI no-digest gate. CI42030329788 completed SUCCESS with four original source-authenticated Foam stages, artifact13416016571 only safe aggregates. Previous artifacts not purged. WATER-001 OPEN NOT_READY0/3, no game asset or Unity/Adreno device change.",
+      "evidence": [
+        "https://github.com/alwansan/raf/commit/e8f3641551c54e7f5cd64bd74b01a9d0fcb3b871",
+        "https://github.com/alwansan/raf/actions/runs/42030329788",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/T2/sessions/20261105T1244Z-T2-chat-digest-removal-a6f4.md"
+      ],
+      "_record_path": "../B_TEAM/events/T2/20261105T1254Z-foam-public-numeric-digest-suppression-a6f4.json"
     },
     {
       "id": "T3-20261105-0002-render-harness-result-and-export-start",
@@ -5329,7 +5374,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "2baebf335c5fe57a9fe169d60771460cd378845e4e4250841265863080683baf",
+  "source_input_sha256": "f1e5447fbdafbc0f285a9045f928d4c095cfe5a4270b0ea99a7004cf94752409",
   "generation": "T-2026-11-05",
-  "input_sha256": "4264e617c22db54cff7642390dd6653a78d33f182c54205599777826411b6782"
+  "input_sha256": "a91b6f8938cfac60c74d8bc90479e674cdcbc2b13972c6cb4a93e02dc5dca037"
 }
