@@ -54,5 +54,20 @@
   "documentation": "docs/T3_NATIVE_POSTRESTORER_DUMMY_EVIDENCE_2026-11-05.md",
   "T5_handoff": "prompt/coordination/discussions/RENDER-002/20261105T1815Z-T3-chat-native-source921-guid-6cb4-T3-to-T5.md",
   "next_step": "At next authorized native rebuild, verify exact original source top-921 Shader48 using SHA-verified original scenes/owners and private native W1 export trace, then actual postrestorer ShaderLab status/pass count. Must not assume top source among 110 dummy from native aggregate alone. RENDER-002 OPEN.",
-  "updated_at": "2026-11-05T18:24:00Z"
+  "updated_at": "2026-11-05T18:30:00Z",
+  "native_run_terminal_observation": {
+    "run_id": 42058825739,
+    "overall_conclusion": "failure",
+    "reconstruct": "success",
+    "publish_early_test": "failure",
+    "publish_failure_reason": "HTTP_403_Resource_not_accessible_by_integration",
+    "delivery_result": "failure",
+    "signed_APK_artifact_id": 13441766832,
+    "combined_test_delivery_artifact_id": 13441227298,
+    "APK_bytes": 672853870,
+    "OBB_bytes": 2301256312,
+    "lossless_transport_parts": 7,
+    "device_install_verified": false,
+    "overall_GAME_READY": false
+  }
 }
