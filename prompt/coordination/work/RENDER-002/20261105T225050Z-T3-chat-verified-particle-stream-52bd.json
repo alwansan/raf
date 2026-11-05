@@ -5,7 +5,7 @@
   "session_id": "20261105T225050Z-T3-chat-verified-particle-stream-52bd",
   "issue_id": "RENDER-002",
   "status": "active",
-  "updated_at": "2026-11-05T22:50:50.686Z",
+  "updated_at": "2026-11-05T23:02:20.314Z",
   "base_sha": "4a4e986fa3df4490f69e02c239a2cbde6d8f877f",
   "track": "SOURCE_PARTICLE_TEXTURE_RESOURCE_BYTES_SHA_VERIFICATION",
   "hypothesis": "For the authentic source three Texture2D28 objects used by the original 108-slot Particle Shader48, one ZIP2 manifest listed external .resS provider contains all three ranges. Byte-authenticate that exact provider from SHA-pinned ZIP2 and read each mapped range (private only), rather than assuming missing source image payload.",
@@ -24,9 +24,11 @@
     "prompt/coordination/clients/T3/sessions/20261105T225050Z-T3-chat-verified-particle-stream-52bd.md",
     "prompt/coordination/experiments/T3/20261105T225050Z-T3-chat-verified-particle-stream-52bd.json",
     "prompt/coordination/B_TEAM/events/T3/20261105T225050Z-T3-chat-verified-particle-stream-52bd.json",
-    "docs/T3_ORIGINAL_PARTICLE_STREAM_BYTES_2026-11-06.md"
+    "docs/T3_ORIGINAL_PARTICLE_STREAM_BYTES_2026-11-06.md",
+    ".github/workflows/raft-t3-ledger-refresh.yml",
+    "prompt/coordination/B_TEAM/resources/T3-original-particle108-image-stream-fullSHA.json"
   ],
   "result": null,
   "run_urls": [],
-  "next_step": "After SHA authenticated six-scene/four-owner source graph selects exactly one private source provider, generate a private runner-only plan; sparse-checkout only that provider from immutable ZIP2, hash-verify whole provider size/SHA, then seek/read exactly three private original image-stream ranges and validate with scheduled T3 stream_extent_guard. Upload no original binary/path/object ID/digest, only safe counts. Never infer signed Android APK/OBB resource availability."
+  "next_step": "T3 now has SHA-verified exact external source provider and three original image ranges; register canonical T_TEAM RENDER-002 resource/proof reference then close work. After this coordinate same-instance T5 native export GUID and Android OBB parity; no duplicate source-only staging."
 }
