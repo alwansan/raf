@@ -13,8 +13,8 @@
     "acquisition": "SHA_VERIFIED",
     "extraction": "20_COMPILED_SLOTS_SHA_VERIFIED",
     "reconstruction": "PRIVATE_20_HLSL50_COMPUTE_CANDIDATES_ROUNDTRIP_VERIFIED",
-    "binding": "ORIGINAL_AUTHORED_RUNTIME_KERNEL_MAPPING_UNPROVEN",
-    "integration": "UNITY2021_GENUINE_IMPORT_20_AUTHENTIC_DERIVED_KERNELS_AND_GROUPS_VERIFIED",
+    "binding": "PRIVATE_HLSL_GENERATED_T0_T1_U2_FIRST_PAIR_ONLY_ORIGINAL_RUNTIME_MAPPING_UNPROVEN",
+    "integration": "UNITY2021_AUTHENTIC_DERIVED_20_IMPORT_AND_FIRST_PAIR_TWO_PASS_GPU_DISPATCH_VERIFIED",
     "device": "NOT_TESTED"
   },
   "evidence": [
@@ -29,15 +29,20 @@
     "https://github.com/alwansan/raf/actions/runs/42011720822",
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_GAMECI_SOURCEFREE_UNITY_LICENSE_2026-11-05.md",
     "https://github.com/alwansan/raf/actions/runs/42014120625",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_GAMECI_ORIGINAL_FFT_IMPORT_2026-11-05.md"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_GAMECI_ORIGINAL_FFT_IMPORT_2026-11-05.md",
+    "https://github.com/alwansan/raf/actions/runs/42018235130",
+    "https://github.com/alwansan/raf/actions/runs/42018761761",
+    "https://github.com/alwansan/raf/actions/runs/42019283679",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_ORIGINAL_DERIVED_FFT_UNITY_GPU_DISPATCH_2026-11-05.md"
   ],
   "remaining": [
     "Original authored multi-variant .compute kernel and keyword names not recovered; candidate paths and main are generated import handles",
     "Original runtime FindKernel/Dispatch mapping, phone Adreno pixels, actual water still unknown",
     "No Unity imported ComputeShader result: three Editor CI attempts failed before reporting; last 41958963107 Unity exit1/licensing_failure_category=true, no observed C#/shader error",
     "Unity 2021.3.45f2 synthetic source-free project itself failed to activate in CI41959712898, before original asset download: licensing_failure_category=true, no derived ComputeShader imported; resolve separate environment gate first.",
-    "CURRENT T1 CI42014120625: all 20 original compiled DXBC-derived private single-kernel .compute candidates imported into licensed Unity2021; generated main HasKernel/FindKernel/groupXYZ(64..1024,1,1) passed. This is NOT original authored multi-variant Unity kernel ID, real in-game source resource binding/Dispatch or Adreno water pixel parity."
+    "CURRENT T1 CI42014120625: all 20 original compiled DXBC-derived private single-kernel .compute candidates imported into licensed Unity2021; generated main HasKernel/FindKernel/groupXYZ(64..1024,1,1) passed. This is NOT original authored multi-variant Unity kernel ID, real in-game source resource binding/Dispatch or Adreno water pixel parity.",
+    "T1 source-authentic original FFT translated pair0/1 in Unity2021 editor did ACTUAL two-pass GPU Dispatch with private generated t0/t1/u2 resource names and output-sentinel finite readback changed both passes, CI42019283679 (2/2 private NUnit); no original author runtime kernel index/property ABI, full original numerical pixel parity, Adreno or in-game water proof. Generated HLSL u2 is distinct from native DXBC u0."
   ],
   "updated_by": "T1",
-  "updated_at": "2026-11-05T10:56:00Z"
+  "updated_at": "2026-11-05T11:35:00Z"
 }
