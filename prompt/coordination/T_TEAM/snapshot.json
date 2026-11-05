@@ -210,7 +210,9 @@
         "https://github.com/alwansan/raf/actions/runs/42068520588",
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_RGD_INIT_CONTEXT_2026-11-05.md",
         "https://github.com/alwansan/raf/actions/runs/42072718216",
-        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_RGD_RETURN_SITES_2026-11-05.md"
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_RGD_RETURN_SITES_2026-11-05.md",
+        "https://github.com/alwansan/raf/actions/runs/42076494669",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_RGD_RETURN_LOCAL_STORES_2026-11-05.md"
       ],
       "remaining": [
         "Original Cheat.AllowCheatsForLocalPlayer SteamUser.GetSteamID direct object call now source-guarded in B50 2bb6c2; no native/phone verification. Do not infer all Steam callbacks are removed.",
@@ -243,7 +245,8 @@
         "T4 exact compiled original SaveWorld/SaveUser RGD precall structural relation CI42058900699 SUCCESS 22/22: immediate original SaveWorld pre-call pushes LOCAL_DERIVED_RGD, SaveUser pre-call pushes FIELD_DERIVED_RGD, with authentic original 3211776B SHA-pinned DLL. These are static derived subtype loading facts, not RGD object initialization/dynamic argument identity, actual Save execution, Android device or same-world reopen. Native CI42052375742 failed strict water gate before delivery (T5/T1), not game Save. Keep LOCAL-005 OPEN NOT_READY 0/3; do not use shipped StreamingAssets/Data.rgd as a user world save.",
         "T4 immutable original RGD-derived data initialization evidence CI42062124798 SUCCESS 36/36: genuine SaveWorld local has one lexical stloc with nearest immediate producer CALL_RETURN_DERIVED_RGD; SaveUser has SaveAndLoad-owned FIELD_DERIVED_RGD with three direct stfld sites across original DLL. Static lexical references/types only, no control-flow/SSA, no proof of actual game-world RGD save durability, Android/IL2CPP, same-world relaunch, or constructor/field runtime execution. Keep LOCAL-005 OPEN; NOT_READY 0/3.",
         "T4 authenticated original RGD initialization-classification CI42068520588 SUCCESS 32/32: exact pinned original compiled SaveWorld derived RGD-producing call is a zero-argument instance method declared by SaveAndLoad with original body; SaveUser SaveAndLoad-owned derived RGD field has 1 lexical store inside SaveUser and 2 inside other SaveAndLoad methods (0 constructors and other types), 2 derived-typed immediate predecessors, one unknown, zero literal-null. Source-only metadata, not executed branch, object nonnull/Save/durable RGD or Android phone proof. T5 CI42058825739 in-progress Unity import at latest check. LOCAL-005 OPEN NOT_READY 0/3.",
-        "T4 exact original SaveAndLoad zeroarg world RGD-producing method compiled factory return-site CI42072718216 SUCCESS 50/50: 1 ret lexically preceded by derived-RGD local, 2 derived-RGD local slots, 1 direct derived-RGD constructor, 1 call with derived-RGD return, 34 conditional branches, 10 ldnull loads and 0 throw/rethrow sites. Original read-only metadata only; no path-sensitive return value, object non-null, actual world Save .rgd durability or Android device/reopen proven. T5 native CI42058825739 was still Unity Editor IN_PROGRESS on latest read. LOCAL-005 OPEN NOT_READY 0/3."
+        "T4 exact original SaveAndLoad zeroarg world RGD-producing method compiled factory return-site CI42072718216 SUCCESS 50/50: 1 ret lexically preceded by derived-RGD local, 2 derived-RGD local slots, 1 direct derived-RGD constructor, 1 call with derived-RGD return, 34 conditional branches, 10 ldnull loads and 0 throw/rethrow sites. Original read-only metadata only; no path-sensitive return value, object non-null, actual world Save .rgd durability or Android device/reopen proven. T5 native CI42058825739 was still Unity Editor IN_PROGRESS on latest read. LOCAL-005 OPEN NOT_READY 0/3.",
+        "T4 authentic original SaveAndLoad RGD world factory returned-local assignment CI42076494669 SUCCESS 67/67: exact original SHA-pinned source IL has one lexical stloc to local loaded before unique ret, immediately preceded by derived-RGD newobj; no other direct literal null, call/local/field store to that slot. Constructor adjacency is not branch execution or device-proven non-null. No actual world/user .rgd durability, local-host play, Android exit/reopen proven. LOCAL-005 remains OPEN NOT_READY 0/3."
       ],
       "acceptance": [
         "دخول عالم جديد محلي قابل للعب بلا Steam أو سيرفر خارجي",
@@ -251,7 +254,7 @@
         "لا يكفي إخفاء رسالة الاتصال"
       ],
       "updated_by": "T4",
-      "updated_at": "2026-11-05T17:19:00Z",
+      "updated_at": "2026-11-05T17:42:00Z",
       "_record_path": "../B_TEAM/issues/LOCAL-005.json"
     },
     {
@@ -397,7 +400,9 @@
         "https://github.com/alwansan/raf/actions/runs/42071059741",
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_921_DXBC_SEMANTIC_MASK_JOIN_2026-11-05.md",
         "https://github.com/alwansan/raf/actions/runs/42073397586",
-        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_921_DXBC_READMASK_SPV_2026-11-05.md"
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_921_DXBC_READMASK_SPV_2026-11-05.md",
+        "https://github.com/alwansan/raf/actions/runs/42076083800",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_921_DIRECT_SPIRV_DISASSEMBLY_2026-11-05.md"
       ],
       "remaining": [
         "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -444,7 +449,8 @@
         "T3 CI42062573338: authentic 921-use original Shader48 source/private HLSL SPIRV roundtrip has 34 original input and 29 original output reflected variable names but 0/34 and 0/29 compiler-reflected names retained after roundtrip. Previous 8/8 stage type-multiset/numeric binding shape preserves still hold; this demonstrates generated naming drift, NOT original semantic preservation/loss or a white-material fix. Original DXBC signature semantic index/register/masks to SPIRV BuiltIn/Location/Component are unverified; Unity/Android pixels UNKNOWN.",
         "T3 921-use original Shader48 authenticated four Passes source+roundtrip VS/FS scalar Location+Component coverage CI42068915602: 4/4 each STRUCTURAL_CANDIDATE_ONLY, 0 missing/typed mismatch, 75 VS vs 44 FS components and 31 unused VS components in each. This excludes sampled structural lane deficit only; original DXBC semantics/interpolation, 29 other linked variants, ShaderLab/texture/lighting and Adreno pixels remain unresolved. NOT_READY.",
         "T3 original SHA-verified Shader48 (921-use, 4 Pass V/F) ISGN/OSGN compiled DXBC semantic name+index masks CI42071059741: all 22/22 original user Fragment semantics match original Vertex output, 75/75 declared mask lanes, no missing lanes/type mismatches. Original DXBC→SPIR-V Location and declared vs used-mask, interpolation, remaining variants and Android pixels OPEN. Source-only 27 synthetic controls pass.",
-        "T3 SHA-original Shader48 exact 4 PS programs CI42073397586: DXBC ISGN 22 original input user semantics allocate 75 scalar mask lanes but ReadWriteMask actually reads 44 (31 unread, 8 whole semantic rows unused). Same four original PS programs source and derived SPIR-V each have 14 user input rows /44 scalar components, DXBC read-mask and both SPIR-V reflection input counts equal for each Pass 4/4. This resolves 75-vs-44 aggregate cardinality gap, NOT original DXBC SemanticNameIndex/register to SPIR-V Location mapping, interpolated values, missing white colors, pixel/device graphics or remaining variants. No gameplay asset changes."
+        "T3 SHA-original Shader48 exact 4 PS programs CI42073397586: DXBC ISGN 22 original input user semantics allocate 75 scalar mask lanes but ReadWriteMask actually reads 44 (31 unread, 8 whole semantic rows unused). Same four original PS programs source and derived SPIR-V each have 14 user input rows /44 scalar components, DXBC read-mask and both SPIR-V reflection input counts equal for each Pass 4/4. This resolves 75-vs-44 aggregate cardinality gap, NOT original DXBC SemanticNameIndex/register to SPIR-V Location mapping, interpolated values, missing white colors, pixel/device graphics or remaining variants. No gameplay asset changes.",
+        "T1 direct instruction-level SPIR-V OpEntryPoint/OpDecorate/typed numeric component validator integrated by T3 on genuine SHA-original Shader48 four V/F Pass pairs CI42076083800: 75 VS output and 44 PS input lanes each source/roundtrip, 0 missing, 0 scalar type mismatches, 31 unused VS components, 4/4 per-Pass numeric compatible both. Crosschecked original DXBC ISGN PS used-mask 44/75. T1 tool and credit preserved, no original semantic-to-Location mapping, stage numeric value/interpolation, authored ShaderLab, native Unity Adreno colors or device proof. Prior inconclusive attempts were local PosixPath type gate bug, now fixed. RENDER-002 stays OPEN."
       ],
       "acceptance": [
         "مطابقة روابط ومراجع الأصل",
@@ -1096,6 +1102,34 @@
       "updated_by": "B45",
       "updated_at": "2026-11-04T21:16:00Z",
       "_record_path": "../B_TEAM/resources/B45-blur-original-property.json"
+    },
+    {
+      "id": "T2-foam-Cecil-assembly-scope-guard-synthetic",
+      "owner": "T2",
+      "issue_id": "WATER-001",
+      "title": "Cecil source-free guard rejects cross-assembly same-signature RenderTexture method aliases",
+      "kind": "synthetic_compiled_method_identity_guard_not_original_game_evidence",
+      "stages": {
+        "acquisition": "SOURCEFREE_SYNTHETIC_ASSEMBLY_A_AND_B_MONO_CECIL_0_11_5",
+        "extraction": "SAME_FULLNAME_RETURN_TYPE_AND_DECLARING_CLASS_ACROSS_DIFFERENT_FAKE_ASSEMBLIES",
+        "reconstruction": "STRICT_DECLARING_ASSEMBLY_AND_RETURN_TYPE_SCOPE_REJECT_FALSE_SOURCE_MATCH",
+        "binding": "PENDING_ORIGINAL_SHA_MANAGED_FOAM_METHODREFERENCE_SCOPE_INTEGRATION",
+        "integration": "OWN_INDEPENDENT_NET9_CI42078113502_SUCCESS_NO_ORIGINAL_GAME_ASSETS",
+        "device": "NOT_TESTED"
+      },
+      "observed": {
+        "CI_success": true,
+        "sourcefree_control_cases_passed": true,
+        "actual_original_target_identity_verified": false,
+        "original_game_data_accessed": false,
+        "runtime_valid_RT_and_pixels_verified": false
+      },
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42078113502",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/android-port/Experiments/T2/FoamAssemblyScopeGuard/Program.cs"
+      ],
+      "next_step": "Actual SHA-original return MethodReference assembly identity needed; do not infer from FullName alone. WATER-001 OPEN NOT_READY0/3.",
+      "_record_path": "../B_TEAM/resources/T2-foam-Cecil-assembly-scope-guard-synthetic.json"
     },
     {
       "id": "T2-foam-member-abi-namebridge",
@@ -5704,6 +5738,46 @@
       "_record_path": "../B_TEAM/events/T1/20261105T171746Z-T1-chat-14461d.json"
     },
     {
+      "id": "20261105T172341Z-T1-chat-18786c",
+      "owner": "T1",
+      "session_id": "20261105T172341Z-T1-chat-18786c",
+      "issue_id": "RENDER-002",
+      "type": "result",
+      "summary": "CI42074345951 passed three synthetic controls for direct 32-bit scalar/vector VS-output to PS-input numeric Location/Component linkage: matching coverage, separate missing-component/type mismatches, and overlap/unsupported-layout rejection. Original shader modules and runtime interpolation were not tested.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42074345951"
+      ],
+      "at": "2026-11-05T17:25:07.518Z",
+      "_record_path": "../B_TEAM/events/T1/20261105T172341Z-T1-chat-18786c.json"
+    },
+    {
+      "id": "20261105T172754Z-T1-chat-44b25e",
+      "owner": "T1",
+      "session_id": "20261105T172754Z-T1-chat-44b25e",
+      "issue_id": "RENDER-002",
+      "type": "result",
+      "summary": "CI42074952878 passed four synthetic unit tests and a glslang-compiled, spirv-val-validated GLSL vertex/fragment pair with explicit Location/Component and gl_PerVertex. The audit ignores all-BuiltIn blocks and rejects mixed unsupported blocks. No authentic Raft shader or renderer was exercised.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42074952878"
+      ],
+      "at": "2026-11-05T17:28:58.718Z",
+      "_record_path": "../B_TEAM/events/T1/20261105T172754Z-T1-chat-44b25e.json"
+    },
+    {
+      "id": "20261105T173738Z-T1-chat-3e271f",
+      "owner": "T1",
+      "session_id": "20261105T173738Z-T1-chat-3e271f",
+      "issue_id": "RENDER-002",
+      "type": "result",
+      "summary": "T3 authentic CI42076083800 confirms 4/4 source and roundtrip pairs numerically link, 44 fragment components, zero missing/type mismatches. Independent CI42076585693 passed exact-key drift controls, detecting a coordinated stage shift that preserves within-pair linkage and lane totals, plus scalar type drift. Compiled GLSL self-check passed. No authentic roundtrip exact-key audit was executed here.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42076585693",
+        "https://github.com/alwansan/raf/actions/runs/42076083800"
+      ],
+      "at": "2026-11-05T17:38:58.873Z",
+      "_record_path": "../B_TEAM/events/T1/20261105T173738Z-T1-chat-3e271f.json"
+    },
+    {
       "id": "T2-20261104T2354Z-start-foamabi",
       "owner": "T2",
       "session_id": "20261104T2354Z-T2-foamabi01",
@@ -6039,6 +6113,21 @@
       "_record_path": "../B_TEAM/events/T2/20261105T1721Z-foam-original-RT-return-body-one-unresolved.json"
     },
     {
+      "id": "T2-20261105T1749Z-foam-Cecil-assembly-scope-synthetic",
+      "owner": "T2",
+      "origin": "chat",
+      "session_id": "20261105T1736Z-T2-chat-rt-return-reason-8e2d",
+      "issue_id": "WATER-001",
+      "type": "sourcefree_Cecil_cross_assembly_malformed_aliased_method_rejection",
+      "at": "2026-11-05T17:49:00Z",
+      "summary": "T2 separate .NET9 Mono.Cecil0.11.5 synthetic CI42078113502 SUCCESS: same FullName RenderTexture method in different assemblies collides under loose signature check but is rejected with exact declaring assembly/return type scope. Module and wrong-formal negative controls pass. No original Raft DLL/source used, so no claim on actual original Foam RT return target scope, runtime nonnull, ShaderLab or device water. Scheduled T2 local-writer work not edited. WATER-001 OPEN NOT_READY0/3.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42078113502",
+        "https://github.com/alwansan/raf/commit/f32c3f744e579eaf7c9b001722efa079618cb715"
+      ],
+      "_record_path": "../B_TEAM/events/T2/20261105T1749Z-foam-Cecil-assembly-scope-synthetic.json"
+    },
+    {
       "id": "T3-20261105-0002-render-harness-result-and-export-start",
       "owner": "T3",
       "session_id": "20261104T2354Z-T3-render-harness",
@@ -6341,6 +6430,22 @@
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_921_DXBC_READMASK_SPV_2026-11-05.md"
       ],
       "_record_path": "../B_TEAM/events/T3/20261105T1715Z-T3-chat-ps-readmask-spv-5e84.json"
+    },
+    {
+      "id": "T3-20261105T1728Z-rawspirv-binary-source-stage-interface-confirmed",
+      "owner": "T3",
+      "origin": "chat",
+      "session_id": "20261105T1728Z-T3-chat-rawspirv-T1-original-3f7c",
+      "issue_id": "RENDER-002",
+      "type": "result",
+      "at": "2026-11-05T17:38:00Z",
+      "summary": "T3 integrated T1's unchanged direct raw SPIR-V numeric Location+Component audit into real SHA-verified ZIP2 original 921-slot-use Shader48 four exact V/F Pass pair/source-and-HLSL-roundtrip stages. Genuine CI42076083800 SUCCESS: source and roundtrip each 75 Vertex/44 Fragment component lanes, zero missing or typed mismatch, 31 unused VS lanes, 4/4 Passes structurally numerically compatible, each PS direct input count matches original DXBC ISGN used-mask. Source-free 39/39 PASS. T1 synthetic tool attribution retained. No DXBC semantic->SPIRV Location, interpolation/pixel, original ShaderLab or Android device proof; original game assets unchanged. Fixed local PosixPath guard, two prior source-only INCONCLUSIVE attempts explained by T3 bridge bug.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42076083800",
+        "https://github.com/alwansan/raf/actions/runs/42075936259",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_921_DIRECT_SPIRV_DISASSEMBLY_2026-11-05.md"
+      ],
+      "_record_path": "../B_TEAM/events/T3/20261105T1728Z-T3-chat-rawspirv-T1-original-3f7c.json"
     },
     {
       "id": "T4-20261104T2357Z-local-load-start",
@@ -6709,6 +6814,35 @@
       "_record_path": "../B_TEAM/events/T4/20261105T1717Z-T4-original-RGD-factory-return-50pass.json"
     },
     {
+      "id": "20261105T1740Z-T4-RGD-return-local-constructor-67pass",
+      "owner": "T4",
+      "origin": "chat",
+      "session_id": "20261105T1736Z-T4-chat-rgd-return-local-stores-r6n8",
+      "issue_id": "LOCAL-005",
+      "type": "exact_original_RGD_factory_return_local_constructor_provenance",
+      "status": "SOURCE_VERIFIED_ONLY",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42076494669",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_RGD_RETURN_LOCAL_STORES_2026-11-05.md"
+      ],
+      "result": {
+        "original_source_sha_verified": true,
+        "sourcefree_tests": "67/67",
+        "returned_local_lexical_store_sites": 1,
+        "returned_local_immediate_constructor_stores": 1,
+        "returned_local_other_immediate_stores": 0,
+        "return_sites": 1,
+        "world_return_type": "DERIVED_RGD",
+        "branch_reachability_proven": false,
+        "original_save_executed": false,
+        "genuine_world_rgd_file_written_or_read": false,
+        "Android_device_executed": false
+      },
+      "notes": "Static exact original Mono.Cecil CIL adjacency only; no control-flow/SSA/object runtime non-null or playable-world/save acceptance. T4 scheduled source-free JSONL scope untouched; no native build cancellation.",
+      "created_at": "2026-11-05T17:40:00Z",
+      "_record_path": "../B_TEAM/events/T4/20261105T1740Z-T4-RGD-return-local-constructor-67pass.json"
+    },
+    {
       "id": "T5-20261104T2357Z-b12-fixture-start",
       "owner": "T5",
       "session_id": "20261104T2357Z-T5-b12-fixture-7e2",
@@ -7008,6 +7142,23 @@
       "_record_path": "../B_TEAM/events/T5/20261105T1718Z-release-metadata-audit.json"
     },
     {
+      "id": "T5-20261105T1744Z-release-manifest-bytes",
+      "owner": "T5",
+      "origin": "chat",
+      "session_id": "20261105T1738Z-T5-chat-release-manifest-6e91",
+      "issue_id": "INTEGRATION-001",
+      "type": "result",
+      "at": "2026-11-05T17:44:00Z",
+      "summary": "Actual old Raft APK86 Release delivery.json (2166 B) and SHA256SUMS (727 B) downloaded and cryptographically verified against official GitHub API asset SHA256 digests in independent T5 CI42077040831; 28/28 source-only synthetic security tests pass. Downloaded manifest's three logical APK/OBB/XAPK declarations and SHA256SUMS 7 part entries bind exactly to current Release public asset size/hash declarations. This proves two real tiny metadata blobs, not actual large game part SHA/bytes, APK signature, XAPK install/OBB mount or gameplay. Current original native CI42058825739 immutable e9c358ed still in_progress in Unity step62; no duplicate native build/cancel and no original game code modified.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42077040831",
+        "https://github.com/alwansan/raf/releases/tag/android-early-test-41812889049-1",
+        "https://github.com/alwansan/raf/actions/runs/42058825739",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/t5_verify_release_manifest_bytes.py"
+      ],
+      "_record_path": "../B_TEAM/events/T5/20261105T1744Z-release-manifest-bytes.json"
+    },
+    {
       "id": "20261104-b-generation",
       "owner": "owner-team-bootstrap",
       "session_id": "b-team-setup-20261104",
@@ -7036,7 +7187,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "107614369b203d206a81adb18acaee55ad95ef4950c280d840ce70c507b99e3c",
+  "source_input_sha256": "35b627153035ee4f54838902d35c28ab9211b39fc286130d5987468ec62588ae",
   "generation": "T-2026-11-05",
-  "input_sha256": "207db64d1cf8d6084583e8eab4a38886e2bc4bf218c1fff3d8946f4cb91d3861"
+  "input_sha256": "e18aadf66b95769c7fb3d73c84518b5a21f60a683f51a416b4748454fd9e2820"
 }
