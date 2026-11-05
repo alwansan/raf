@@ -1,0 +1,30 @@
+{
+  "owner": "T5",
+  "session_id": "20261105T1738Z-T5-chat-release-manifest-6e91",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "status": "active",
+  "base_sha": "380f59958bda4b47895c8239bf5327f48c2ff7fa",
+  "resumed_from_sessions": [
+    "20261105T1713Z-T5-chat-release-metadata-83ac",
+    "20261105T1646Z-T5-scheduled-c71e"
+  ],
+  "experiment_key": "t5-gh-release-apk86-real-small-metadata-bytes-hash-deliveryjson-SHA256SUMS-vs-public-assets-and-7-transport-parts-v1",
+  "resource_key": "t5-release-small-metadata-only-GitHubActions-no-Unity",
+  "hypothesis": "Downloading only the two published small release metadata files and hashing their actual bytes, then binding each part digest and size to public GitHub Release API and release logical claims, upgrades the 28-test metadata-only check to real byte-authenticated manifest/sums provenance. Does not download any full game part or attest its content/signature.",
+  "intended_files": [
+    "scripts/t5_verify_release_manifest_bytes.py",
+    "tests/test_t5_verify_release_manifest_bytes.py",
+    ".github/workflows/raft-t5-release-manifest-bytes.yml",
+    "prompt/coordination/work/INTEGRATION-001/T5-20261105T1738Z-T5-chat-release-manifest-6e91-manifest-byte-bind.json",
+    "prompt/coordination/clients/T5/sessions/20261105T1738Z-T5-chat-release-manifest-6e91.md",
+    "prompt/coordination/experiments/T5/T5-20261105T1738Z-T5-chat-release-manifest-6e91-manifest-authenticity.json",
+    "prompt/coordination/B_TEAM/events/T5/20261105T1744Z-release-manifest-bytes.json"
+  ],
+  "reference_fixture": "tests/fixtures/t5_raft_release_41812889049.json",
+  "previous_verified_run": "https://github.com/alwansan/raf/actions/runs/42072829025",
+  "current_native_run": "https://github.com/alwansan/raf/actions/runs/42058825739",
+  "note": "GitHub REST fetch could read public asset metadata but did not supply downloadable bytes; GitHub runner gh release download will fetch only 2166B delivery.json and 727B SHA256SUMS; tests must limit file names/sizes and explicitly decline all game-byte claims.",
+  "next_step": "Write independent strict validator and synthetic negative controls; execute one source-only CI that reads two actual GitHub Release metadata files; inspect its exact digest and totals; close work if verified. No native build while run42058825739 in_progress.",
+  "updated_at": "2026-11-05T17:38:00Z"
+}
