@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T1248Z-T5-chat-linkport-6a19",
+  "origin": "chat",
+  "issue_id": "DELIVERY-013",
+  "track": "Android/Termux release-part reassembly portability",
+  "approach": "Fix missing os.link in Termux without losing exclusive destination creation, SHA256 verification or owned-temp cleanup; preserve old hardlink path and A3 EPERM rejection; run synthetic isolated tests and targeted CI.",
+  "status": "active",
+  "base_sha": "e8f3641551c54e7f5cd64bd74b01a9d0fcb3b871",
+  "intended_files": [
+    "scripts/reassemble_android_delivery.py",
+    "tests/test_t5_portable_reassembly.py",
+    ".github/workflows/raft-t5-portable-reassembly.yml",
+    "docs/ANDROID_INSTALL_AR.md",
+    "prompt/coordination/work/DELIVERY-013/T5-20261105T1248Z-T5-chat-linkport-6a19-portable-reassembly.json",
+    "prompt/coordination/clients/T5/sessions/20261105T1248Z-T5-chat-linkport-6a19.md"
+  ],
+  "experiment_key": "delivery-reassembly-absent-os.link-android-termux-O_EXCL-v1",
+  "resource_key": "android-delivery-python-reassembler",
+  "hypothesis": "Some Android Python builds do not expose os.link; fallback can safely use exclusive creation, validate exact output hash, and reject preexisting destinations with explicit non-atomic visibility caveat.",
+  "related_work": [
+    "prompt/coordination/work/LOCAL-005/T4-20261105T1237Z-T4-scheduled-k7m2-platform-smoke-regression.json"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/T5/sessions/20261105T1146Z-T5-platform-smoke-diff.md",
+    "docs/A3_RELEASE_REASSEMBLY_ATOMIC_2026-11-03.md",
+    "docs/ANDROID_INSTALL_AR.md"
+  ],
+  "experiment_ids": [],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement isolated missing-os.link fallback, run original A3 and T5 synthetic safety tests, preserve exact bytes and refuse overwrite, then inspect Actions result.",
+  "updated_at": "2026-11-05T12:48:00Z"
+}
