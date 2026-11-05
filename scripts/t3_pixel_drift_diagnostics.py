@@ -23,7 +23,7 @@ def classify(original: Image.Image, exported: Image.Image, *, texture_format: st
     low, high = alpha.getextrema()
     occupancy = "OPAQUE" if low == 255 else ("TRANSPARENT" if high == 0 else "MIXED")
     magnitude = ("EXACT" if not max_rgb and not max_alpha else
-                 "RGB_1" if max_rgb <= 1 else
+                 "ALPHA_ONLY" if not max_rgb else\n                 "RGB_1" if max_rgb <= 1 else
                  "RGB_2_4" if max_rgb <= 4 else
                  "RGB_5_16" if max_rgb <= 16 else
                  "RGB_17_64" if max_rgb <= 64 else "RGB_65_255")
@@ -44,7 +44,7 @@ def aggregate(rows: list[dict[str, str]], *, expected: int) -> dict:
         "format": {"DXT1", "DXT5", "BC7", "RGBA32", "RGB24", "ETC2_RGBA8", "ASTC_RGBA_4X4", "OTHER_OR_UNKNOWN"},
         "color_space": {"SRGB", "LINEAR", "UNKNOWN"},
         "alpha_occupancy": {"OPAQUE", "TRANSPARENT", "MIXED"},
-        "max_rgb_delta_bin": {"EXACT", "RGB_1", "RGB_2_4", "RGB_5_16", "RGB_17_64", "RGB_65_255"},
+        "max_rgb_delta_bin": {"EXACT", "ALPHA_ONLY", "RGB_1", "RGB_2_4", "RGB_5_16", "RGB_17_64", "RGB_65_255"},
         "alpha_delta": {"NONE", "NONZERO"},
     }
     if any(set(r) != set(fields) or any(r[f] not in allowed[f] for f in fields) for r in rows):
