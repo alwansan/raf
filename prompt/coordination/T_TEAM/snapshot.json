@@ -198,7 +198,9 @@
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_DEVICE_LOG_EVIDENCE_CHECKER_2026-11-05.md",
         "https://github.com/alwansan/raf/actions/runs/42042814576",
         "https://github.com/alwansan/raf/actions/runs/42043768798",
-        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_RGD_RUNTIME_LOAD_2026-11-05.md"
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_RGD_RUNTIME_LOAD_2026-11-05.md",
+        "https://github.com/alwansan/raf/actions/runs/42047540260",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_RGD_SAVE_ROUNDTRIP_2026-11-05.md"
       ],
       "remaining": [
         "Original Cheat.AllowCheatsForLocalPlayer SteamUser.GetSteamID direct object call now source-guarded in B50 2bb6c2; no native/phone verification. Do not infer all Steam callbacks are removed.",
@@ -225,7 +227,8 @@
         "T4 Android Save diagnostic integrated after exact adapted SaveAndLoad SHA gate: Save.argumentFileSnapshot in original Save wrapper finally reads File.Exists(filename) and if present FileInfo.Length class, never contents or changing original Save logic; catches only snapshot/logger errors, logs durable_RGD_unverified=true. CI42026271243 PASS original 14-class stage RPC and C# compile exit0, CI42026671909 PASS 15/15 plus actual UNITY_ANDROID-preprocessed synthetic C# runtime tests, CI42027197515 PASS 21/21 plus authentic original DLL Cecil confirms original Save directly forwards filename first argument to FileManager writer. No native Unity/IL2CPP, phone, playable local host or genuine .rgd serialize/quit/relaunch/reopen evidence; LOCAL-005 OPEN NOT_READY.",
         "T4 source-integrated Android-only SaveAndLoad.Load<T> filename argument existence/zero/nonzero observation in finally (commit a88000086d); original managed compile CI42030693004 SUCCESS (14 pinned sources, exit0), synthetic UNITY_ANDROID C# and 5/5 tests CI42031436693 SUCCESS after fixing only fixture's generic Load<T>.exit assertion. Does not read RGD bytes or prove genuine game save/load, offline playable world, Unity/IL2CPP or phone; LOCAL-005 stays OPEN NOT_READY 0/3.",
         "T4 device log JSONL validator source-integrated (commit 305e8952), chronological matching refined b383b6e/fa3d5555, CI42043385806 SUCCESS 13/13 synthetic. Reads actual PersistentDiagnosticLog schema but no new phone log/device was read; even ordered cross-session nonzero Save/Load does not prove restart, same world, valid .rgd or playability. LOCAL-005 OPEN NOT_READY 0/3.",
-        "T4 2026-11-05 original shipped Data.rgd CLR execution, not just NRBF syntax: exact ZIP2 2941B seed and original 3211776B Assembly-CSharp.dll SHA-verified with 151 Managed siblings; CI42042814576 SUCCESS actual .NET8 BinaryFormatter.Deserialize returned nonnull ORIGINAL game assembly CLR type (18/18 controls). CI42043768798 SUCCESS actually invoked compiled ORIGINAL static generic SaveAndLoad.Load<T> with same exact shipped seed and original root T, returned matching nonnull original type, 18+18 controls, changed seed SHA refused. Previous B37/A10 assembly-version and field-name metadata mismatch therefore not necessarily fatal to this .NET8 original seed load. NOT a real user-generated world save, Android/Unity/IL2CPP, playable offline local host or persisted game .rgd save/exit/relaunch/load. LOCAL-005 remains OPEN and overall NOT_READY 0/3."
+        "T4 2026-11-05 original shipped Data.rgd CLR execution, not just NRBF syntax: exact ZIP2 2941B seed and original 3211776B Assembly-CSharp.dll SHA-verified with 151 Managed siblings; CI42042814576 SUCCESS actual .NET8 BinaryFormatter.Deserialize returned nonnull ORIGINAL game assembly CLR type (18/18 controls). CI42043768798 SUCCESS actually invoked compiled ORIGINAL static generic SaveAndLoad.Load<T> with same exact shipped seed and original root T, returned matching nonnull original type, 18+18 controls, changed seed SHA refused. Previous B37/A10 assembly-version and field-name metadata mismatch therefore not necessarily fatal to this .NET8 original seed load. NOT a real user-generated world save, Android/Unity/IL2CPP, playable offline local host or persisted game .rgd save/exit/relaunch/load. LOCAL-005 remains OPEN and overall NOT_READY 0/3.",
+        "T4 exact original CLR seed-vs-serializer shape: CI42047540260 SUCCESS 16/16 demonstrates shipped StreamingAssets/Data.rgd root is NOT the original private Save(string,RGD) parameter. Genuine compiled Save not invoked due protected type mismatch; no game save/roundtrip. Earlier CI42043768798 loaded shipped seed as a different original CLR type, not a real world save. Do not use seed as .rgd Save fixture; verify actual game-generated RGD on owner Android. LOCAL-005 OPEN NOT_READY 0/3."
       ],
       "acceptance": [
         "دخول عالم جديد محلي قابل للعب بلا Steam أو سيرفر خارجي",
@@ -233,7 +236,7 @@
         "لا يكفي إخفاء رسالة الاتصال"
       ],
       "updated_by": "T4",
-      "updated_at": "2026-11-05T14:27:00Z",
+      "updated_at": "2026-11-05T14:44:34.750Z",
       "_record_path": "../B_TEAM/issues/LOCAL-005.json"
     },
     {
@@ -574,7 +577,8 @@
         "https://github.com/alwansan/raf/actions/runs/42028108346",
         "https://github.com/alwansan/raf/actions/runs/42028369439",
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_ORIGINAL_RENDERTEXTURE_ARRAY_PROVENANCE_2026-11-05.md",
-        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T2-foam-original-null-guarded-rendertexture-producer.json"
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T2-foam-original-null-guarded-rendertexture-producer.json",
+        "https://github.com/alwansan/raf/actions/runs/42047391061"
       ],
       "remaining": [
         "Spectrum/Foam/Blur passes ناقصة في APK86",
@@ -626,15 +630,16 @@
         "T1 confirmed genuine Unity2021.3.45f2 imported 20/20 SHA-authenticated original compiled FFT DXBC-derived single-kernel private candidates in CI42014120625, with generated-main HasKernel/FindKernel/group XYZ(64..1024,1,1) matching source and 1/1 original-derived NUnit pass. Remaining: original authored multi-variant shader/Unity runtime kernel indices/keyword selection, exact in-game SetTexture/CB/RenderTexture/Dispatch, ShaderLab linkage and Adreno/water pixels; no native game assets changed.",
         "T1 bounded actual Unity2021 GPU proof CI42019283679: 20 original compiled FFT derived kernels remain imported; exact source-derived pair0/1 actually bound translated t0/t1/u2 names, executed BOTH GPU Dispatch passes with chained float RenderTexture, baseline initialized and GPU readback finite with changed output in both, private Unity NUnit2/2 SUCCESS. NOT source author's original C# runtime kernel IDs/keywords/material names, original FFT numeric pixel parity or Android/Adreno water. Native DXBC original output u0 becomes converter-generated HLSL u2; do not reuse native register as Unity property binding.",
         "T2 original Foam authored texture/material/managed binding: ZIP2 source Shader has one authored Texture property used twice, four pass0 Texture resources not authored; 351 same-owner Material objects show 0 direct local Foam m_Shader PPtr, NOT game-wide. Authenticated original Assembly-CSharp.dll via Mono.Cecil: 4/4 non-authored resource names passed as actual direct System.String first formal argument to UnityEngine.Material.SetTexture, source original CI42021183522 PASS; no Shader.PropertyToID for those four. Original Material instance, second Texture operand origin, runtime reachability, sampler filter/wrap/UV, CB uploads, ShaderLab import and Adreno pixels remain UNKNOWN. WATER-001 OPEN, NOT_READY0/3.",
-        "T2 SHA-authentic original Foam SOURCE SETTEXTURE→RENDERTEXTURE ARRAY VERIFIED: four non-authored Foam DXBC t/s resource names are exact direct string first arguments to Material.SetTexture; each second Texture formal is callvirt result from ONE original defined instance UnityEngine.Texture Method(int index) with genuine IL body; exact 10-instruction method null-checks 1D UnityEngine.RenderTexture[] instance field (same field twice) and returns null if absent or array[index] when available (strict branch target and two returns). Genuine CI42028369439 SUCCESS; not proof of runtime field initialization/texture contents, four int indices, Material receiver Foam association, ShaderLab Unity import, sampler/CB/UV, Adreno pixels. WATER-001 OPEN and NOT_READY0/3."
+        "T2 SHA-authentic original Foam SOURCE SETTEXTURE→RENDERTEXTURE ARRAY VERIFIED: four non-authored Foam DXBC t/s resource names are exact direct string first arguments to Material.SetTexture; each second Texture formal is callvirt result from ONE original defined instance UnityEngine.Texture Method(int index) with genuine IL body; exact 10-instruction method null-checks 1D UnityEngine.RenderTexture[] instance field (same field twice) and returns null if absent or array[index] when available (strict branch target and two returns). Genuine CI42028369439 SUCCESS; not proof of runtime field initialization/texture contents, four int indices, Material receiver Foam association, ShaderLab Unity import, sampler/CB/UV, Adreno pixels. WATER-001 OPEN and NOT_READY0/3.",
+        "T1 source-free CI42047391061: temporary Mesa Unity2021 custom image with Vulkan loader/ICD and vulkaninfo PASS runs genuine licensed Unity synthetic 2/2 normally and with injected VK_ICD_FILENAMES alone (2/2), BUT -force-vulkan alone exits before NUnit and has only bounded license-error textual category. No original Raft data involved; Vulkan original-FFT numeric parity and Adreno/in-game water remain UNPROVEN, previous OpenGLCore mismatch 63/64 and31/32 unchanged."
       ],
       "acceptance": [
         "هوية برامج ونوى أصلية أو تطابق موثق دونdummy",
         "تثبيت فيالتصدير+Unity import/render",
         "اختبار هاتف يثبت الماء بلا pass/kernel errors"
       ],
-      "updated_by": "T2",
-      "updated_at": "2026-11-05T12:36Z",
+      "updated_by": "T1",
+      "updated_at": "2026-11-05T14:45:00Z",
       "_record_path": "../B_TEAM/issues/WATER-001.json"
     }
   ],
@@ -1323,6 +1328,37 @@
       "_record_path": "../B_TEAM/resources/T2-foam-original-authored-shader-property-lineage.json"
     },
     {
+      "id": "T2-foam-original-backing-field-read-topology",
+      "owner": "T2",
+      "issue_id": "WATER-001",
+      "title": "SHA-original Foam RenderTexture[] backing field has eight other compiled reads and one byref address access",
+      "kind": "source_verified_compiled_IL_backing_field_read_address_usage",
+      "stages": {
+        "acquisition": "ZIP2_ORIGINAL_MANAGED_DLL_EXACT_SIZE_SHA_PIN",
+        "extraction": "SAME_PRIVATE_RENDER_TEXTURE_ARRAY_FIELD_REFERENCE_FROM_STRICT_ORIGINAL_NULL_GUARDED_GETTER",
+        "reconstruction": "10_MATCHING_LDFLD_TOTAL_2_IN_GETTER_8_OTHER_AND_1_LDFLDA_IN_OTHER_METHOD",
+        "binding": "ONE_MANAGED_ADDRESS_USE_CANDIDATE_NOT_PROVEN_FIELD_WRITE_OR_ARRAY_ELEMENT_POPULATION",
+        "integration": "T2_ORIGINAL_SHA_CECIL_CI42047763379_SUCCESS_SAFE_AGGREGATES_ONLY_NO_GAME_SHADERLAB_PATCH",
+        "device": "NOT_TESTED"
+      },
+      "observed": {
+        "ldfld_total": 10,
+        "ldfld_getter": 2,
+        "ldfld_non_getter": 8,
+        "reader_methods": 4,
+        "ldflda_total": 1,
+        "ldflda_non_getter": 1,
+        "distinct_address_methods": 1,
+        "original_field_value_runtime_verified": false
+      },
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42047763379",
+        "https://github.com/alwansan/raf/commit/0881f9722f553e01e3694d7d49b964d53d2dff1e"
+      ],
+      "next_step": "Source trace original address-use instruction sink and candidate element-store dataflow; not an Android pixels claim.",
+      "_record_path": "../B_TEAM/resources/T2-foam-original-backing-field-read-topology.json"
+    },
+    {
       "id": "T2-foam-original-four-runtime-index-argument-origins",
       "owner": "T2",
       "issue_id": "WATER-001",
@@ -1614,6 +1650,45 @@
       ],
       "updated_at": "2026-11-05T12:34Z",
       "_record_path": "../B_TEAM/resources/T2-foam-original-null-guarded-rendertexture-producer.json"
+    },
+    {
+      "id": "T2-foam-original-rendertexture-field-serialization-metadata",
+      "owner": "T2",
+      "issue_id": "WATER-001",
+      "title": "Original Foam private RenderTexture[] field and four distinct direct int caller indices",
+      "kind": "source_authentic_managed_compiled_field_metadata",
+      "source": {
+        "zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+        "managed_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e"
+      },
+      "stages": {
+        "acquisition": "ZIP2_ORIGINAL_DLL_SHA_SIZE_PINNED",
+        "extraction": "EXACT_GETTER_BACKING_RENDER_TEXTURE_ARRAY_FIELDDEFINITION_UNIQUE_RESOLUTION",
+        "reconstruction": "PRIVATE_NO_SERIALIZEFIELD_NOT_STATIC_NOT_READONLY; FOUR_ORIGINAL_I4_ARGS_DISTINCT_AND_NONNEGATIVE",
+        "binding": "FIELD_MODIFIER_SERIALIZATION_ELIGIBILITY_FALSE; ACTUAL_UNITY_SCENE_OR_RT_ARRAY_LENGTH_NOT_PROVEN",
+        "integration": "SOURCE_ONLY_PINNED_ORIGINAL_CI42046650774_SUCCESS_NO_GAME_ASSET_EDIT",
+        "device": "NOT_TESTED"
+      },
+      "observed": {
+        "exact_field_definitions": 1,
+        "field_is_public": false,
+        "explicit_serializefield": false,
+        "nonserialized": false,
+        "static": false,
+        "readonly": false,
+        "eligible_by_modifiers_only": false,
+        "original_caller_index_literal_count": 4,
+        "distinct_literal_count": 4,
+        "all_nonnegative": true,
+        "original_values_published": false,
+        "actual_scene_or_runtime_array_verified": false
+      },
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42046650774",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/T2/sessions/20261105T1434Z-T2-chat-rendertexture-serialization-93ad.md"
+      ],
+      "next_step": "Locate original managed indirect RenderTexture[] field uses and owning type hierarchy, then independently authenticate array construction and runtime bounds. WATER-001 OPEN NOT_READY 0/3.",
+      "_record_path": "../B_TEAM/resources/T2-foam-original-rendertexture-field-serialization-metadata.json"
     },
     {
       "schema_version": 1,
@@ -1912,6 +1987,62 @@
       "updated_by": "T3",
       "updated_at": "2026-11-05T12:25:00Z",
       "_record_path": "../B_TEAM/resources/T3-native-export-material-shader-program-quality.json"
+    },
+    {
+      "id": "T3-AUTHENTIC-ORIGINAL-921-RENDERER-SHADER48-D3D11-PASS-VARIANT-LINKAGE",
+      "title": "T3 six-scene highest Renderer-use original Shader48: exact D3D11 pass and variant program linkage",
+      "kind": "source-sha-authenticated-targeted-original-compiled-shader-recovery-feasibility",
+      "owner": "T3",
+      "source": {
+        "provider": "original ZIP2 6 scenes/4 SHA-pinned Shader and Material owners",
+        "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+        "original_material_shader_owner_bytes": 269007288
+      },
+      "stages": {
+        "acquisition": "6 original level scenes and 4 owner files SHA_VERIFIED original ZIP2 source",
+        "extraction": "SELECTED_TRUE_SOURCE_SHADER48_BY_921_RENDERER_MATERIAL_SLOTS_AND_ORIGINAL_TYPED_PTR",
+        "reconstruction": "D3D11_PARSED_SUBSHADER_PASS_PROGRAM_AND_VERTEX_FRAGMENT_VARIANT_LINKAGE_SOURCE_ONLY",
+        "binding": "ALL_FOUR_PASS_HAVE_MATCHED_VERTEX_FRAGMENT_PERMUTATION_PAIR_33_PAIRS_8_UNMATCHED_VERTEX_VARIANTS",
+        "integration": "NOT_INSTALLED_NO_SHADERLAB_NO_ANDROID_FULL_NATIVE",
+        "device": "NOT_TESTED"
+      },
+      "data": {
+        "source_original_scenes": 6,
+        "source_shader_material_owners": 4,
+        "source_shader_material_owner_bytes": 269007288,
+        "renderer_material_slots_to_target": 921,
+        "subshaders": 1,
+        "passes": 4,
+        "normal_passes": 4,
+        "non_normal_passes": 0,
+        "d3d11_program_table_records": 120,
+        "linked_vertex_variant_records": 41,
+        "linked_fragment_variant_records": 33,
+        "distinct_private_dxbc_program_hashes": 58,
+        "exact_matched_vertex_fragment_pairs": 33,
+        "passes_with_at_least_one_pair": 4,
+        "unmatched_vertex_permutations": 8,
+        "unmatched_fragment_permutations": 0,
+        "stage_variants_with_keywords": 72
+      },
+      "source_top_name_exact_Unity2021_builtin": false,
+      "source_top_name_evidence": "https://github.com/alwansan/raf/actions/runs/42046329453",
+      "source_actual_postvendor_Dummy_verified": true,
+      "source_to_postvendor_evidence": "https://github.com/alwansan/raf/actions/runs/42044249541",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42047611046",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_921_SHADER_D3D11_STAGE_FEASIBILITY_2026-11-05.md",
+        "https://github.com/alwansan/raf/commit/71276a55afc165102852def8b84ea21995c3ca53"
+      ],
+      "limitations": [
+        "D3D11 source program linkage only; not original authored HLSL, Android shader, numerical or pixel parity",
+        "Unmatched eight original vertex permutations must not be dropped or given fabricated fragment pairs",
+        "No resource/constant buffer/sampler/texture binding or original pass state shaderlab translation yet",
+        "No game .shader/.meta or GUID edited, no APK/OBB/XAPK or device test"
+      ],
+      "updated_by": "T3",
+      "updated_at": "2026-11-05T14:45:34.592Z",
+      "_record_path": "../B_TEAM/resources/T3-original-highuse-dxbc-source-variants.json"
     },
     {
       "id": "T3-ORIGINAL-SIXSCENE-RENDERER-SHADER-POSTVENDOR-USE",
@@ -5084,6 +5215,25 @@
       "_record_path": "../B_TEAM/events/T1/20261105T143200Z-T1-chat-04494d.json"
     },
     {
+      "id": "20261105T144500Z-T1-unity-vulkan-force-flag-isolated",
+      "owner": "T1",
+      "origin": "chat",
+      "session_id": "20261105T142000Z-T1-chat-lavapipe-unity",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "at": "2026-11-05T14:45:00Z",
+      "summary": "Source-free licensed Unity2021.3.45f2 Mesa software-Vulkan custom image CI42047391061: no-flag actual Unity NUnit2/2 PASS; SAME image+VK_ICD_FILENAMES only NUnit2/2 PASS; SAME image+-force-vulkan only exited before NUnit XML, textual license-error category but no CLI unknown flag/Docker image/container/compiler category. Original image lacked libvulkan loader & lavapipe ICD; overlay vulkaninfo enumerated device. Thus explicit forced-Vulkan Unity launch path correlates with failure, not image alone or ICD env alone. Original SHA-authentic FFT OpenGLCore vs Vulkan numeric mismatch 63/64 and31/32 remains, no original FFT acquired or Android/device proof.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42042650298",
+        "https://github.com/alwansan/raf/actions/runs/42044388619",
+        "https://github.com/alwansan/raf/actions/runs/42045389521",
+        "https://github.com/alwansan/raf/actions/runs/42046073285",
+        "https://github.com/alwansan/raf/actions/runs/42047391061",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_UNITY_VULKAN_MESA_DRIVER_2026-11-05.md"
+      ],
+      "_record_path": "../B_TEAM/events/T1/20261105T144500Z-T1-unity-vulkan-force-flag-isolated.json"
+    },
+    {
       "id": "T2-20261104T2354Z-start-foamabi",
       "owner": "T2",
       "session_id": "20261104T2354Z-T2-foamabi01",
@@ -5328,6 +5478,21 @@
       "_record_path": "../B_TEAM/events/T2/20261105T1438Z-source-original-Foam-serialization-gate.json"
     },
     {
+      "id": "T2-20261105T1445Z-original-foam-private-field-accesses",
+      "owner": "T2",
+      "origin": "chat",
+      "session_id": "20261105T1442Z-T2-chat-foam-field-reads-c8d1",
+      "issue_id": "WATER-001",
+      "type": "original_compiled_field_read_address_provenance",
+      "at": "2026-11-05T14:45:00Z",
+      "summary": "Genuine original ZIP2 SHA-pinned Foam managed IL CI42047763379 SUCCESS: exact private RenderTexture[] getter backing field has 10 direct ldfld (2 in getter, 8 outside), 4 distinct reader methods and one original ldflda outside getter. One address use is NOT by itself proof of field mutation, array init, ShaderLab/Unity import or Android pixels. Private original names/IL/constants withheld. WATER-001 OPEN NOT_READY0/3.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42047763379",
+        "https://github.com/alwansan/raf/commit/0881f9722f553e01e3694d7d49b964d53d2dff1e"
+      ],
+      "_record_path": "../B_TEAM/events/T2/20261105T1445Z-original-foam-private-field-accesses.json"
+    },
+    {
       "id": "T3-20261105-0002-render-harness-result-and-export-start",
       "owner": "T3",
       "session_id": "20261104T2354Z-T3-render-harness",
@@ -5491,6 +5656,20 @@
       "android_device_confirmed": false,
       "issue_stays_open": true,
       "_record_path": "../B_TEAM/events/T3/20261105T1425Z-renderer-source-postvendor-join.json"
+    },
+    {
+      "id": "T3-20261105T143219Z-top921-source-stage-variants",
+      "owner": "T3",
+      "session_id": "20261105T143219Z-T3-chat-original921-builtin-2f7b",
+      "issue_id": "RENDER-002",
+      "type": "result",
+      "summary": "Original six-scene top 921-slot Shader48 authenticated D3D11 program feasibility: 4 normal Passes, 1 SubShader, 41 vertex and 33 fragment variants, 33 matched and 8 unpaired vertex permutations. CPU-only source evidence, not Android rendering.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42047611046",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_921_SHADER_D3D11_STAGE_FEASIBILITY_2026-11-05.md"
+      ],
+      "at": "2026-11-05T14:46:29.142Z",
+      "_record_path": "../B_TEAM/events/T3/20261105T143219Z-T3-chat-original921-builtin-2f7b.json"
     },
     {
       "id": "T3-20261105T1436Z-highuse-Sh48-not-Unity-builtin",
@@ -5706,6 +5885,32 @@
       ],
       "at": "2026-11-05T14:26:00Z",
       "_record_path": "../B_TEAM/events/T4/20261105T1426Z-original-RGD-real-LoadT-success.json"
+    },
+    {
+      "id": "20261105T1443Z-T4-shipped-seed-not-world-save-parameter",
+      "event_id": "20261105T1443Z-T4-shipped-seed-not-world-save-parameter",
+      "owner": "T4",
+      "session_id": "20261105T1433Z-T4-chat-original-seed-save-roundtrip-j2v8",
+      "origin": "chat",
+      "issue_id": "LOCAL-005",
+      "type": "authentic_source_finding",
+      "status": "source_evidence_only",
+      "summary": "Original SHA-pinned shipped StreamingAssets/Data.rgd deserializes into a CLR type different from the authentic SaveAndLoad private Save(string, RGD) argument. IL guard refused invocation; original serializer untouched, no output world file. 16/16 sourcefree tests and managed private CI green; issue OPEN.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42047540260",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_RGD_SAVE_ROUNDTRIP_2026-11-05.md"
+      ],
+      "created_at": "2026-11-05T14:44:16.616Z",
+      "claims": {
+        "original_seed_sha_verified": true,
+        "original_dll_sha_verified": true,
+        "original_Save_RGD_signature_identified": true,
+        "original_seed_root_matches_Save_RGD": false,
+        "original_private_Save_invoked": false,
+        "original_world_save_roundtrip": false,
+        "device_tested": false
+      },
+      "_record_path": "../B_TEAM/events/T4/20261105T1443Z-T4-shipped-seed-not-world-save-parameter.json"
     },
     {
       "id": "T5-20261104T2357Z-b12-fixture-start",
@@ -5935,7 +6140,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "f1accb6b6f07a9dad88de757f94a16a3d0f32df25e3f1fa0cc7d2ca703bb3660",
+  "source_input_sha256": "2e5b4549269de8800af51621d20a3d292f64684f72a3f04242aa5cbe7b5f98fa",
   "generation": "T-2026-11-05",
-  "input_sha256": "959da8d3a46fa0b18c62b4dd6a54c6126b71ca30b1af931e8285c5d8355e0e42"
+  "input_sha256": "1a4a14893846ddf354292fd4d79e620d9d21fe4e16ccef473c531e566b166329"
 }
