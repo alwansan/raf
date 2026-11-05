@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T212254Z-T3-chat-particle-renderstate-6e41",
+  "issue_id": "RENDER-002",
+  "source_commit": "df6c913c249c09d4aa7cf58dee6723160e99ddba",
+  "hypothesis": "SHA-original highest particle Shader48 (108 original ParticleSystemRenderer slots) uses non-opaque fixed-function blending and a potentially unsupported selective ColorMask state.",
+  "input_hashes": [
+    "ZIP2 15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "6 scenes SHA verified",
+    "4 owner SHA verified, 269007288 bytes"
+  ],
+  "tool_versions": {
+    "UnityPy": "1.23.0",
+    "runner": "Ubuntu 24.04",
+    "Unity": "not run"
+  },
+  "commands": [
+    "python3 -m py_compile scripts/t3_original_renderer_shader_impact.py scripts/t3_original_particle_shader_state.py",
+    "python3 -m unittest discover -s tests -p test_t3_original_particle_shader_state.py -v",
+    "python3 -m scripts.t3_original_particle_shader_state --original $RUNNER_TEMP/t3-original-six-scene --manifest zip2-source/RAFT_FILE_MANIFEST.tsv --out $RUNNER_TEMP/t3-original-108particle-pass-state-safe.json"
+  ],
+  "negative_controls": [
+    "shader original identity only in private in-memory outparam",
+    "dynamic blend not assigned guessed numeric",
+    "source zero/multiple pass and malformed enum rejected",
+    "no private names, GUIDs, IDs leave aggregate"
+  ],
+  "workflow_path": ".github/workflows/raft-t3-original-renderer-shader-impact.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42112666211",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42112666211/artifacts"
+  ],
+  "budget": "22 min, source-only ZIP2 no Unity/AssetRipper",
+  "status": "completed",
+  "observed_result": "SHA-original real source 108-use one normal Particle Shader Pass; color+alpha channel Blend ALPHA_DEPENDENT; ZWrite OFF; Cull OFF; ColorMask PARTIAL; translator FALSE; 21+9+22=52/52 synthetic controls PASS",
+  "rejected_hypotheses": [
+    "The original 108 Particle source shader uses opaque replacement blending",
+    "The generic existing render_state translator fully supports this original state"
+  ],
+  "limitations": [
+    "source-only original fixed-function",
+    "no fragment shader alpha/texture fidelity proof",
+    "full native export GUID unknown",
+    "not Android pixel proof"
+  ],
+  "integration_commit": "df6c913c249c09d4aa7cf58dee6723160e99ddba",
+  "next_step": "Verify original ColorWriteMask bit-to-ShaderLab channel mapping with Unity2021 reference; then safe selective-mask translator tests and private same-export native Shader GUID/device pixel proof."
+}
