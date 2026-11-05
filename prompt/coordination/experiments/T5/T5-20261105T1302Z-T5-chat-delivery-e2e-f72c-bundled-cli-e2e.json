@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261105T1302Z-T5-chat-delivery-e2e-f72c",
+  "issue_id": "DELIVERY-013",
+  "hypothesis": "Actual package_android_delivery.main output carries source-exact reassemble.py and its standalone CLI reassembles true split synthetic APK+OBB+XAPK transport under a fresh Python process without os.link.",
+  "source_commit": "2d7e2d251cbf0b15f6409afa6a6a2a290dd1eec8",
+  "input_hashes": [
+    "synthetic ZIP fixtures only; no proprietary APK/OBB"
+  ],
+  "tool_versions": {
+    "runner": "ubuntu-24.04",
+    "python": "GitHub-hosted Python3 runtime"
+  },
+  "commands": [
+    "python3 -m unittest -v tests.test_t5_portable_reassembly tests.test_t5_bundled_reassembly_e2e tests.test_a3_reassembly_publish_race tests.test_android_delivery_package"
+  ],
+  "negative_controls": [
+    "actual bundled CLI existing signed logical XAPK name refuses overwrite",
+    "actual bundled CLI corrupted part SHA rejects before publish",
+    "previous A3 cross-process no-clobber and hardlink failure tests",
+    "direct missing-os.link synthetic SHA/size and injected fsync negative fixture"
+  ],
+  "workflow_path": ".github/workflows/raft-t5-portable-reassembly.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42034420876",
+  "artifact_urls": [],
+  "budget": "ubuntu-24.04; 6-minute cap; synthetic ZIP data; no LFS/Unity/Release native build",
+  "status": "completed",
+  "observed_result": {
+    "conclusion": "success",
+    "tests": 27,
+    "failed": 0,
+    "job": 127268724365,
+    "source_sha": "2d7e2d251cbf0b15f6409afa6a6a2a290dd1eec8",
+    "test_source_commit": "be0f728114f3a02045eb5e516e6ac2946a680e6a",
+    "workflow_commit": "2d7e2d251cbf0b15f6409afa6a6a2a290dd1eec8",
+    "packaged_script_byte_identical": true,
+    "standalone_cli_missing_oslink": true,
+    "split_transport_xapk_apk_obb_sha_and_zip_member_parity": true,
+    "existing_output_protection": true,
+    "corrupt_part_rejected": true
+  },
+  "rejected_hypotheses": [
+    "Static shutil.copy2 source inspection alone is sufficient runtime evidence: the new test now exercises the copied CLI with split output.",
+    "Synthetic Linux success equals phone/Termux installation proof: false."
+  ],
+  "limitations": [
+    "No actual Android Termux interpreter, shared-storage filesystem, installer, native XAPK/OBB or phone logs tested.",
+    "Signed game Release APK86 remains earlier than source patch; no retroactive update.",
+    "Missing-link output uses exclusive create, which does not guarantee atomic complete-file visibility on abrupt process death.",
+    "No water/FFT, ShaderLab, offline world/save or device readiness proof; project NOT_READY 0/3."
+  ],
+  "integration_commit": "2d7e2d251cbf0b15f6409afa6a6a2a290dd1eec8",
+  "next_step": "Coordinate authentic source graphics/native world-save integration with T1–T4 and only test actual Termux full-size delivery when a new owner-device candidate exists."
+}
