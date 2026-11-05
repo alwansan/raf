@@ -12,20 +12,22 @@
         "https://github.com/alwansan/CL/blob/5394407b5cd0a0ca1848ff0902f8d2133bf6ea29/raft%20log/lf/LogRaft-20261104-225757-156/session-summary.json",
         "https://github.com/alwansan/raf/actions/runs/41914505411",
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B04_MESH_SOURCE_PATH_SAFETY_2026-11-04.md",
-        "https://github.com/alwansan/raf/commit/f0afb5983694cec91a61bcd6f9825ca1cf658f7e"
+        "https://github.com/alwansan/raf/commit/f0afb5983694cec91a61bcd6f9825ca1cf658f7e",
+        "https://github.com/alwansan/raf/actions/runs/41939143108"
       ],
       "remaining": [
         "تحقق stream ranges/format/sRGB/normalmaps وGUIDs",
         "missingMonoScript وconvexmeshwarnings أسبابغيرمحسومة",
         "جردنطاقمحددومرحلةاستعادةلكلمورد",
-        "B04 linked-path source provenance guarded for YAML Mesh utility (CI synthetic only); still need actual original Mesh source and device geometry binding verification"
+        "B04 linked-path source provenance guarded for YAML Mesh utility (CI synthetic only); still need actual original Mesh source and device geometry binding verification",
+        "T5 restored real original resources.assets 111533516B in isolated ZIP2-to-feature LFS hydration CI41939143108 (11/11 synthetic controls); optional consumer integrated but Unity export, other owners and Android pixels remain unverified"
       ],
       "acceptance": [
         "تغطيةmanifestوالتبعياتالمطلوبة",
         "اكتمالgeometry/bindingsمعاختباروظيفي"
       ],
-      "updated_by": "B04",
-      "updated_at": "2026-11-04T21:18:26.107Z",
+      "updated_by": "T5",
+      "updated_at": "2026-11-05T00:12:07.647Z",
       "_record_path": "../B_TEAM/issues/ASSET-RESTORE-001.json"
     },
     {
@@ -446,7 +448,10 @@
         "https://github.com/alwansan/raf/actions/runs/41931585626",
         "https://github.com/alwansan/raf/actions/runs/41932300308",
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B20_FOAM_CB_DESCRIPTOR_SIZE_2026-11-04.md",
-        "https://github.com/alwansan/raf/commit/c5bb92083d8a704977ac5a8495dec29f1c6958e6"
+        "https://github.com/alwansan/raf/commit/c5bb92083d8a704977ac5a8495dec29f1c6958e6",
+        "https://github.com/alwansan/raf/actions/runs/41938898381",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_MEMBER_ABI_NAME_BRIDGE_2026-11-05.md",
+        "https://github.com/alwansan/raf/actions/runs/41938551022"
       ],
       "remaining": [
         "Spectrum/Foam/Blur passes ناقصة في APK86",
@@ -482,15 +487,16 @@
         "B19 per-SubShader authored pass-count guard is SOURCE_FIXED CI41930936302 24/24; prevents summing alternate shader passes but not original Spectrum/FFT shader reconstruction, Android selected SubShader, device pixels or source-authenticated binding.",
         "B18 CI41930824777 source-authentic FFT 20/20 programs each mapped by libvkd3d-shader to two different CHOSEN descriptor layouts (20x2 passes), using SRV t0/t1 and UAV u0 explicit IMAGE flags; 10/10 synthetic controls PASS. This proves explicit target interface binding support, NOT original per-input numeric t0/t1 behavior, Unity FindKernel/index mapping, original ShaderLab restored passes or Adreno water pixels. WATER-001 remains OPEN.",
         "B18 CI41931883517 source-authentic original FFT SPIR-V identity: 20/20 compiled programs × two explicit target maps have stable 3 resource variable IDs and entire SPIR-V code byte-equivalent after masking only intended descriptor set/binding OpDecorate literals; 20/20 synthetic tests PASS. No independent t0 vs t1 numerical pixel behavior, authored shader import, Unity runtime FindKernel mapping or Adreno device proof; water remains broken in APK86, WATER-001 OPEN.",
-        "B20 original Foam CI41931585626: all four HLSL b-register and SPIRV set0-binding slot sets numerically equal B25 authentic original CB register sets (8 links). But original partial CB m_Size vs reflected SPIRV block_size numerically differ 7/8; original member offset/type equivalence and opaque CB0 source→HLSL alias/Unity material upload remain UNPROVEN. CI41932300308 source-only size checker PASS9/9. Not original ShaderLab render or Android device proof."
+        "B20 original Foam CI41931585626: all four HLSL b-register and SPIRV set0-binding slot sets numerically equal B25 authentic original CB register sets (8 links). But original partial CB m_Size vs reflected SPIRV block_size numerically differ 7/8; original member offset/type equivalence and opaque CB0 source→HLSL alias/Unity material upload remain UNPROVEN. CI41932300308 source-only size checker PASS9/9. Not original ShaderLab render or Android device proof.",
+        "T2 authenticated original Foam CB member indices + private 3-way CB symbol bridge: original source→translated HLSL name 0/8 equals, translated HLSL→SPIRV name 8/8 equals; source names literal HLSL usable 4/8; 20/20 synthetic controls + real ZIP2 CI41938898381 SUCCESS. Original register identity/byte offsets CB0 alias/Unity material upload and real ShaderLab/Adreno still UNKNOWN (source-only)."
       ],
       "acceptance": [
         "هوية برامج ونوى أصلية أو تطابق موثق دونdummy",
         "تثبيت فيالتصدير+Unity import/render",
         "اختبار هاتف يثبت الماء بلا pass/kernel errors"
       ],
-      "updated_by": "B20",
-      "updated_at": "2026-11-04T23:17:56.711Z",
+      "updated_by": "T2",
+      "updated_at": "2026-11-05T00:08:00Z",
       "_record_path": "../B_TEAM/issues/WATER-001.json"
     }
   ],
@@ -911,6 +917,76 @@
       "updated_by": "B45",
       "updated_at": "2026-11-04T21:16:00Z",
       "_record_path": "../B_TEAM/resources/B45-blur-original-property.json"
+    },
+    {
+      "id": "T2-foam-member-abi-namebridge",
+      "title": "T2 authentic Foam 2-pass CB member/count and source-to-HLSL/SPIRV name bridge (bounded)",
+      "kind": "original_shader_constant_buffer_abi_evidence",
+      "source": {
+        "provider": "zip2 authenticated original",
+        "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+        "path": "Raft_Data/sharedassets0.assets [original Shader PathID2420]",
+        "bytes": 115978112,
+        "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3"
+      },
+      "stages": {
+        "acquisition": "EXACT_ZIP2_SHA_SIZE_VERIFIED_NO_LFS",
+        "extraction": "SOURCE_CB8_MEMBERS_AND_PRIVATE_CB_SYMBOLS_AUTHENTICATED",
+        "reconstruction": "FOUR_B20_VERIFIED_TRANSLATED_PROGRAMS_REFERENCE_ONLY",
+        "binding": "8_8_HLSL_SPIRV_SYMBOL_EQUAL_BUT_0_8_SOURCE_HLSL_SYMBOL_EQUAL;UNITY_UPLOAD_UNVERIFIED",
+        "integration": "SOURCE_ABI_PROBE_AND_PRIVATE_WORKFLOW_VERIFIED_NOT_SHADERLAB_OR_GAME",
+        "device": "NOT_TESTED"
+      },
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41937996942",
+        "https://github.com/alwansan/raf/actions/runs/41938551022",
+        "https://github.com/alwansan/raf/actions/runs/41938898381",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_MEMBER_ABI_NAME_BRIDGE_2026-11-05.md",
+        "https://github.com/alwansan/raf/commit/bed03ac405a628396f12e9ad1ecd5dcc5b690820"
+      ],
+      "remaining": [
+        "Prove source m_Index units, source-to-translated individual member offsets/types/usage",
+        "Prove Unity constant buffer aliases/upload with authentic original material/property semantics",
+        "Construct exact two-pass private ShaderLab and verify pass, sampler, material GUID, Unity import and Adreno pixels",
+        "WATER-001 stays OPEN; FFT and Spectrum remain independent"
+      ],
+      "updated_by": "T2",
+      "updated_at": "2026-11-05T00:08:00Z",
+      "_record_path": "../B_TEAM/resources/T2-foam-member-abi-namebridge.json"
+    },
+    {
+      "id": "T5-zip2-original-render-provider",
+      "title": "T5 SHA-verified ZIP2 graphics source into feature LFS hydration (resources.assets single real original)",
+      "kind": "graphics-source-provider",
+      "source": {
+        "provider": "alwansan/raf zip2 immutable Git checkout",
+        "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+        "path": "Raft/Raft_Data/resources.assets",
+        "bytes": 111533516,
+        "sha256": "87493249f1adfc0c5eb8b82e4e199e208cd2c95eabe9796cab82116c4838595c"
+      },
+      "stages": {
+        "acquisition": "VERIFIED_EXACT_ORIGINAL_BYTES_SHA256_REAL_ZIP2_CI41939143108",
+        "extraction": "SPLIT_PART_REASSEMBLY_EXACT_SHA256_AND_SIZE_REAL_CI",
+        "reconstruction": "NOT_APPLICABLE_ORIGINAL_SERIALIZED_RESOURCE_BYTES_PRESERVED",
+        "binding": "VERIFIED_FEATURE_LFS_POINTER_REUSE_IN_STAGING_ONLY_NO_UNITY_EXPORT",
+        "integration": "OPTIONAL_VERIFIED_SOURCE_CONSUMER_IN_PRODUCTION_HYDRATOR_SOURCE_PATCH_1c68ef8_NOT_TRIGGERED_NATIVE",
+        "device": "UNKNOWN"
+      },
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41939143108",
+        "https://github.com/alwansan/raf/actions/runs/41938979840",
+        "https://github.com/alwansan/raf/commit/396eab4d3cd8acc0d462e96b748e56537a49bd01",
+        "https://github.com/alwansan/raf/commit/1c68ef8ea8a38b9d92c1e1cc204a6b9c913555a4"
+      ],
+      "remaining": [
+        "Test additional original graphics owner providers, byte budget and Unity project actual export integration after coordination",
+        "No original FFT authentic .compute install, ShaderLab, material pixel, Adreno device or world-save confirmation",
+        "Do not mark WATER-001/RENDER-002/LOCAL-005 or ASSET-RESTORE-001 closed"
+      ],
+      "updated_by": "T5",
+      "updated_at": "2026-11-05T00:11:31.625Z",
+      "_record_path": "../B_TEAM/resources/T5-zip2-original-render-provider.json"
     },
     {
       "id": "blur-original-cleanup",
@@ -3417,6 +3493,112 @@
       "_record_path": "../B_TEAM/events/B50/20261104T2102Z-local-cheat-steamid-sourcefixed.json"
     },
     {
+      "id": "T1-20261104T235355Z-T1-9fca-start",
+      "owner": "T1",
+      "session_id": "20261104T235355Z-T1-9fca",
+      "issue_id": "WATER-001",
+      "type": "start",
+      "summary": "T1 takes over FFT runtime FindKernel/Dispatch/.compute integration from B01/B06/B08/B18/B30/B48, preserving their original compiled-program proof but not claiming Unity/runtime correctness. Baseline cde13f783e5274d5898703459e8178e2485ef9db",
+      "evidence": [
+        "prompt/coordination/clients/B18/MEMORY.md",
+        "prompt/coordination/clients/B48/MEMORY.md",
+        "https://github.com/alwansan/raf/actions/runs/41931883517"
+      ],
+      "at": "2026-11-04T23:54:43.431Z",
+      "_record_path": "../B_TEAM/events/T1/20261104T235355Z-T1-9fca-start.json"
+    },
+    {
+      "id": "T2-20261104T2354Z-start-foamabi",
+      "owner": "T2",
+      "session_id": "20261104T2354Z-T2-foamabi01",
+      "issue_id": "WATER-001",
+      "type": "start",
+      "summary": "T2 takes over B20/B24/B25 genuine Foam 4-stage packet and B17/B09/B45 spectrum/blur, targeting member ABI of original CB vs SPIRV; no existing source proof repeated or build requested.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41931585626",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B20_FOAM_CB_DESCRIPTOR_SIZE_2026-11-04.md"
+      ],
+      "at": "2026-11-04T23:54:00Z",
+      "_record_path": "../B_TEAM/events/T2/20261104T2354Z-start-foamabi.json"
+    },
+    {
+      "id": "T2-20261105T0008Z-result-foam-namebridge",
+      "owner": "T2",
+      "session_id": "20261104T2354Z-T2-foamabi01",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "summary": "Original SHA-authenticated Foam 8 CB source partial members vs translated SPIRV UBO offsets audited; only 2/8 candidate index*16 overlaps; original CB names 0/8 equal translated HLSL names, HLSL names 8/8 equal reflected SPIRV names, original HLSL-legal symbols 4/8. 20/20 synthetic controls and three authentic T2 CI runs SUCCESS. No source-to-member identity, CB0 upload alias, ShaderLab, Unity/device or water readiness claimed.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41937996942",
+        "https://github.com/alwansan/raf/actions/runs/41938551022",
+        "https://github.com/alwansan/raf/actions/runs/41938898381",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_MEMBER_ABI_NAME_BRIDGE_2026-11-05.md"
+      ],
+      "at": "2026-11-05T00:08:00Z",
+      "_record_path": "../B_TEAM/events/T2/20261105T0008Z-result-foam-namebridge.json"
+    },
+    {
+      "id": "T3-20261105-0002-render-harness-result-and-export-start",
+      "owner": "T3",
+      "session_id": "20261104T2354Z-T3-render-harness",
+      "issue_id": "RENDER-002",
+      "type": "integration",
+      "summary": "B12 exact production scene diagnostic synthetic harness recovered and CI 41937719270 passed; new independent same-instance genuine ZIP2 Material/TexEnv export comparison implementation integrated, CI 41938229887 queued. No game color/pixel repair or owner confirmation claimed.",
+      "evidence": [
+        "https://github.com/alwansan/raf/commit/05718f67ba31a6be8ec169fcfcb609b4f3e05a9e",
+        "https://github.com/alwansan/raf/actions/runs/41937719270",
+        "https://github.com/alwansan/raf/commit/615f914728cf15f5d60607115ecb7a4a8919d8e5",
+        "https://github.com/alwansan/raf/actions/runs/41938229887"
+      ],
+      "at": "2026-11-05T00:02:00Z",
+      "_record_path": "../B_TEAM/events/T3/20261105T0002Z-render-harness-result-export-start.json"
+    },
+    {
+      "id": "T4-20261104T2357Z-local-load-start",
+      "owner": "T4",
+      "session_id": "20261104T2357Z-T4-lw01",
+      "issue_id": "LOCAL-005",
+      "type": "start",
+      "summary": "T4 takes over original RGD loader/assembly compatibility investigation, preserving B50 Steam guards and B37 RGD evidence; no native or canceled job.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41928767833",
+        "https://github.com/alwansan/raf/actions/runs/41929777877"
+      ],
+      "at": "2026-11-04T23:57:00Z",
+      "_record_path": "../B_TEAM/events/T4/20261104T2357Z-local-load-start.json"
+    },
+    {
+      "id": "T5-20261104T2357Z-b12-fixture-start",
+      "owner": "T5",
+      "session_id": "20261104T2357Z-T5-b12-fixture-7e2",
+      "issue_id": "INTEGRATION-001",
+      "type": "start",
+      "summary": "Starting integration repair of failed B12 exact production CLR diagnostics after B18 loaded-compute helper; failed run41933025319 missing ComputeShader/Resources/Encoding stubs, prior B12 8-case run PASS; no Unity or phone verification claimed.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41933025319",
+        "https://github.com/alwansan/raf/actions/runs/41929419050",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/b12_scene_render_harness.py"
+      ],
+      "at": "2026-11-04T23:58:36.308Z",
+      "_record_path": "../B_TEAM/events/T5/20261104T2357Z-b12-fixture-start.json"
+    },
+    {
+      "id": "T5-20261105T0010Z-zip2-render-success",
+      "owner": "T5",
+      "session_id": "20261104T2357Z-T5-b12-fixture-7e2",
+      "issue_id": "ASSET-RESTORE-001",
+      "type": "integration",
+      "summary": "T5 integrated strict immutable SHA-verified ZIP2 graphics source staging and opt-in hydration consumer. Initial failure41938979840 caught premature output dir before unsafe input; fixed full-batch preflight. Final CI41939143108 PASS 11 synthetic cases plus actual 111533516-byte original resources.assets reconstructed and independently consumed by feature LFS pointer without LFS. No Unity/device/FFT pixel proof.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41939143108",
+        "https://github.com/alwansan/raf/actions/runs/41938979840",
+        "https://github.com/alwansan/raf/commit/396eab4d3cd8acc0d462e96b748e56537a49bd01",
+        "https://github.com/alwansan/raf/commit/1c68ef8ea8a38b9d92c1e1cc204a6b9c913555a4"
+      ],
+      "at": "2026-11-05T00:11:31.625Z",
+      "_record_path": "../B_TEAM/events/T5/20261105T0010Z-zip2-render-success.json"
+    },
+    {
       "id": "20261104-b-generation",
       "owner": "owner-team-bootstrap",
       "session_id": "b-team-setup-20261104",
@@ -3445,7 +3627,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "417ae7fcccba0b48250878a5b46bc428c9f382558919e5ab70852cc11358d2b1",
+  "source_input_sha256": "71e86f7d5aa6584c1cd9bf6ce256cb60506e1fbf6663178b8e30052cd8145f05",
   "generation": "T-2026-11-05",
-  "input_sha256": "2c4e81364ca360ca424fe9cf06bd465dfef71ad0281296f7a1e32c4920f4536b"
+  "input_sha256": "63e92104fc4970be04d5664f10da651c5b50a2971a133f67e5fcaa39b26fcbac"
 }
