@@ -1,0 +1,33 @@
+{
+  "id": "T3-SHAREDASSETS6-EXTERNAL-TEXTURE2D-25-REAL-EXPORT",
+  "title": "Authenticated original Material external Texture2D PPtrs (25 occurrences) exactly preserved in real same-instance export",
+  "kind": "source-authenticated-cross-owner-exact-texture-pptr-parity",
+  "source": {
+    "provider": "ZIP2 immutable Git plaintext + reassembled multipart, exact SHA verified in CI",
+    "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "path": "Raft_Data/sharedassets6.assets (source Material) + sharedassets0.assets + sharedassets1.assets (target Texture2D)",
+    "bytes": null,
+    "sha256": null
+  },
+  "stages": {
+    "acquisition": "VERIFIED_THREE_INDIVIDUALLY_SIZE_SHA_PINNED_OWNER_FILES_FROM_ORIGINAL_ZIP2",
+    "extraction": "AUTHENTIC_ORIGINAL_EXTERNAL_FILEID_TABLE_22_SHAREDASSETS0_3_SHAREDASSETS1",
+    "reconstruction": "NOT_APPLICABLE_DIRECT_ORIGINAL_TO_SAME_EXPORT_POINTER_COMPARISON",
+    "binding": "VERIFIED_25_OF_25_TARGETS_TYPED_TEXTURE2D_AND_EXACT_OWNERS_PATHID_TO_SAMEEXPORT_GUID_FILEID_TYPE",
+    "integration": "READ_ONLY_TYPED_VERIFIER_AND_11_PROVIDER_GENUINE_ASSETRIPPER_CI_SUCCESS_NO_GAME_ASSET_EDITS",
+    "device": "UNKNOWN"
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41941882103",
+    "https://github.com/alwansan/raf/actions/runs/41942377246",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_EXTERNAL_TEXTURE_LINEAGE_2026-11-05.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/t3_external_texture_export.py"
+  ],
+  "remaining": [
+    "Only 25 original external Texture slots from 41 selected Materials: does not establish full game coverage.",
+    "Original texture sampler/format/importer sRGB/default fields remain separate; distinct real B15 source-importer trial 41943122343 in progress.",
+    "No original ShaderLab compiled programs, Unity ARM64 game import, Adreno pixels, water/FFT/world-save readiness proven."
+  ],
+  "updated_by": "T3",
+  "updated_at": "2026-11-05T00:39:00Z"
+}
