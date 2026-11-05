@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "origin": "chat",
+  "session_id": "20261105T1433Z-T4-chat-original-seed-save-roundtrip-j2v8",
+  "status": "active",
+  "issue_id": "LOCAL-005",
+  "track": "original-authentic-save-path",
+  "base_sha": "7058aa34de519c498ce89e41d0ddd2c1c753e298",
+  "experiment_key": "t4-authentic-seed-original-save-private-reflection-guarded-dotnet8-2941-sha-151sibling-v1",
+  "resource_key": null,
+  "hypothesis": "The exact original managed SaveAndLoad.Save(string,RGD) can/cannot serialize an actual CLR root object restored from immutable 2941-byte Data.rgd into a private fresh file, and original Load<T> can/cannot return the same authentic type without Unity. Verify exact signatures plus bounded IL call graph, else fail closed without invoking.",
+  "approach": "New original SHA pinned private-only .NET8 CLR harness; authenticate DLL and shipped seed bytes; only ephemeral temp writes; reflect and IL audit Save method before any invocation; compare original Load<T> from generated file and structural type/byte class, not contents. Source-free negative controls, no game assets/rgd upload, no Unity, no device, no player save.",
+  "intended_files": [
+    "android-port/Experiments/T4/OriginalRgdSaveRoundtrip/OriginalRgdSaveRoundtrip.csproj",
+    "android-port/Experiments/T4/OriginalRgdSaveRoundtrip/Program.cs",
+    "scripts/t4_verify_original_rgd_save_roundtrip.py",
+    "tests/test_t4_verify_original_rgd_save_roundtrip.py",
+    ".github/workflows/raft-t4-original-rgd-save-roundtrip.yml",
+    "docs/T4_ORIGINAL_RGD_SAVE_ROUNDTRIP_2026-11-05.md",
+    "prompt/coordination/work/LOCAL-005/T4-20261105T1433Z-T4-chat-original-seed-save-roundtrip-j2v8-original-seed-save.json",
+    "prompt/coordination/clients/T4/sessions/20261105T1433Z-T4-chat-original-seed-save-roundtrip-j2v8.md"
+  ],
+  "resumed_from_sessions": [
+    "20261105T1405Z-T4-chat-original-rgd-runtime-k6n8",
+    "20261105T1408Z-T4-chat-jsonl-evidence-n4r7",
+    "20261105T1338Z-T4-scheduled-v6n9"
+  ],
+  "run_urls": [],
+  "updated_at": "2026-11-05T14:32:47.763Z",
+  "next_step": "Implement guard and probe, run bounded CI, report whether guarded original private Save can execute or a method/IL safety guard blocks it. If incompatible don't relax source gates or change serializer. LOCAL-005 OPEN NOT_READY 0/3."
+}
