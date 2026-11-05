@@ -105,8 +105,29 @@ class OriginalRawDisassemblyTests(unittest.TestCase):
     def test_T1_unsupported_SPIRV_layout_fails_closed(self):
         def unsupported(path):
             return assembly(path).replace("OpTypeVector %2 2", "OpTypeMatrix %2 2")
-        with self.assertRaisesRegex(ValueError, "Unsupported private interface type"):
+        with self.assertRaises(bridge.PrivateInterfaceUnsupported) as cm:
             self.run_probe(disassembler=unsupported)
+        self.assertEqual(cm.exception.category, "TYPE_UNSUPPORTED")
+        self.assertEqual(cm.exception.original_pass_ordinal, 0)
+        self.assertEqual(cm.exception.source_or_roundtrip, "source")
+        self.assertNotIn(SECRET, str(cm.exception))
+
+    def test_unknown_private_T1_validator_error_does_not_expose_names(self):
+        def leaking_checker(_v, _f):
+            raise ValueError(SECRET)
+        with self.assertRaises(bridge.PrivateInterfaceUnsupported) as cm:
+            self.run_probe(numeric_checker=leaking_checker)
+        self.assertEqual(cm.exception.category, "VALIDATION_OTHER")
+        self.assertNotIn(SECRET, str(cm.exception))
+        self.assertEqual(cm.exception.original_pass_ordinal, 0)
+
+    def test_missing_original_SPIRV_variable_id_has_safe_failure_category(self):
+        def missing_id(_v, _f):
+            raise KeyError("%PRIVATE_ID")
+        with self.assertRaises(bridge.PrivateInterfaceUnsupported) as cm:
+            self.run_probe(numeric_checker=missing_id)
+        self.assertEqual(cm.exception.category, "INTERFACE_DEFINITION_UNRESOLVED")
+        self.assertNotIn("%PRIVATE_ID", str(cm.exception))
 
     def test_roundtrip_input_change_is_preserved_not_hidden(self):
         def shifted_roundtrip(path):
