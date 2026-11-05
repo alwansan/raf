@@ -1,0 +1,28 @@
+{
+  "id": "20261105T1740Z-T4-RGD-return-local-constructor-67pass",
+  "owner": "T4",
+  "origin": "chat",
+  "session_id": "20261105T1736Z-T4-chat-rgd-return-local-stores-r6n8",
+  "issue_id": "LOCAL-005",
+  "type": "exact_original_RGD_factory_return_local_constructor_provenance",
+  "status": "SOURCE_VERIFIED_ONLY",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42076494669",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_RGD_RETURN_LOCAL_STORES_2026-11-05.md"
+  ],
+  "result": {
+    "original_source_sha_verified": true,
+    "sourcefree_tests": "67/67",
+    "returned_local_lexical_store_sites": 1,
+    "returned_local_immediate_constructor_stores": 1,
+    "returned_local_other_immediate_stores": 0,
+    "return_sites": 1,
+    "world_return_type": "DERIVED_RGD",
+    "branch_reachability_proven": false,
+    "original_save_executed": false,
+    "genuine_world_rgd_file_written_or_read": false,
+    "Android_device_executed": false
+  },
+  "notes": "Static exact original Mono.Cecil CIL adjacency only; no control-flow/SSA/object runtime non-null or playable-world/save acceptance. T4 scheduled source-free JSONL scope untouched; no native build cancellation.",
+  "created_at": "2026-11-05T17:40:00Z"
+}
