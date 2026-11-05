@@ -24,3 +24,11 @@ Canonical source-stage resource: https://github.com/alwansan/raf/blob/feature/an
 
 **Next:** T5 coordinated same-instance W1 Material21/Shader48 + B02 Texture2D28 private source→export GUID check for exact 5 Materials / 3 source images, then actual full native Unity/Android installed APK/OBB TextureImporter/stream content and real particle emitter pixels. Source one .resS full SHA and three private stream spans are now proven; do not redo original-only census or assert Android pixels.
 Keep independent T3 scheduled sessions and state/MEMORY unmodified.
+
+## Canonical T-team ledger resolution and T4 notification
+
+- First canonical [CI42126488112](https://github.com/alwansan/raf/actions/runs/42126488112) **FAILED** because a new unrelated T4 historic event had no required `id` (and `at`) fields. This was not a failure of the original Texture2D source or the new T3 resource.
+- Surgically added only `id` from existing `session_id` and `at` from existing `timestamp` to `prompt/coordination/B_TEAM/events/T4/20261105T2241Z-T4-chat-immersive-bars-h8q2.json`, without changing T4's actual event facts, commit `d7dcaee5b901d62c8355affe689c869718314e52`.
+- [Canonical ledger refresh CI42126758778](https://github.com/alwansan/raf/actions/runs/42126758778) **SUCCESS** at workflow source `f6e983b8cab34ef77eddb0a0082ea4aa34eaad80`. It incorporated the T3 original stream resource, retained `RENDER-002 OPEN`, and asserted T4 event metadata identity.
+- T4 was notified in `prompt/coordination/discussions/INPUT-005/20261105T225050Z-T3-chat-verified-particle-stream-52bd-to-T4-ledger-compat.md`. This metadata correction does not change T4 Input acceptance or device pixels.
+- The independent source stream-probe [CI42125608932](https://github.com/alwansan/raf/actions/runs/42125608932) remains the authoritative byte-level result; no full-native export/Android GPU evidence was added by ledger refresh.
