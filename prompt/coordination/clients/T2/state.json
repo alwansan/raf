@@ -4,10 +4,10 @@
   "generation": "T-2026-11-05",
   "session_id": "20261104T2354Z-T2-foamabi01",
   "resumed_from_session": null,
-  "status": "active",
+  "status": "paused",
   "base_sha": "b56ebc3847f251cee2539e9797471417d32698d2",
-  "last_commit": null,
-  "updated_at": "2026-11-04T23:54:00Z",
+  "last_commit": "69a9d876fda83e6363438ef0cfc4b94025276a67",
+  "updated_at": "2026-11-05T00:08:00Z",
   "tracks": [
     "WATER-001",
     "foam-cb-abi",
@@ -17,7 +17,11 @@
   "work_ids": [
     "T2-20261104T2354Z-foam-member-abi"
   ],
-  "run_urls": [],
-  "next_step": "Read authenticated Foam B20/B25 stage schema and implement original-vs-SPIR-V member offset/type/usage verifier in private bounded CI; no ShaderLab or device claim.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41937996942",
+    "https://github.com/alwansan/raf/actions/runs/41938551022",
+    "https://github.com/alwansan/raf/actions/runs/41938898381"
+  ],
+  "next_step": "New independent engineering scope: authenticate Foam original member types/usage & Unity CB alias/material/property upload; privately assemble genuine two-pass ShaderLab only after source binding established, then Unity/Adreno comparison. FFT/Spectrum/Blur remain separate. No game or device success claimed.",
   "memory_path": "prompt/coordination/clients/T2/MEMORY.md"
 }
