@@ -292,6 +292,34 @@ jobs:
               assert h['FourPrivateOriginalIndicesInBoundsForCompiledLength'] is None
           assert h['BranchJoinsOrRuntimeExecutionVerified'] is False
           assert h['OriginalNumericValuesOrDigestsExposed'] is False
+          caller=r['original_exact_RenderTexture_array_byref_actual_caller_length']
+          assert caller is not None
+          assert caller['ExactOriginalByrefCallsites']==1
+          assert caller['OriginalNewarrLengthInt32FormalIdentified'] is True
+          assert isinstance(caller['ExactActualLengthArgumentSourceCategory'],str)
+          assert len(caller['ExactActualLengthArgumentSourceCategory'])<=160
+          assert all(c in 'abcdefghijklmnopqrstuvwxyz0123456789_'
+              for c in caller['ExactActualLengthArgumentSourceCategory'])
+          assert type(caller['ActualLengthArgumentDirectPositiveLiteralProven']) is bool
+          assert caller['FourPrivateIndicesWithinThisCompiledCallerLength'] in (
+              True,False,None)
+          if not caller['ActualLengthArgumentDirectPositiveLiteralProven']:
+              assert caller['FourPrivateIndicesWithinThisCompiledCallerLength'] is None
+          assert caller['ControlFlowOrPreexistingStackJoinedProven'] is False
+          assert caller['OriginalRuntimeArrayLengthOrContentsVerified'] is False
+          assert caller['OriginalNumericSourceValuesOrDigestsDisclosed'] is False
+          print('T2_FOAM_ACTUAL_CALLER_INT_LENGTH_SAFE '+json.dumps({
+              'exact_callsite_count':caller['ExactOriginalByrefCallsites'],
+              'source_int32_formal_proven':caller['OriginalNewarrLengthInt32FormalIdentified'],
+              'actual_caller_length_source':
+                  caller['ExactActualLengthArgumentSourceCategory'],
+              'positive_direct_literal_proven':
+                  caller['ActualLengthArgumentDirectPositiveLiteralProven'],
+              'four_private_indices_in_bounds_if_compiled_call_executes':
+                  caller['FourPrivateIndicesWithinThisCompiledCallerLength'],
+              'runtime_verified':False,
+              'private_values_exposed':False,
+          },sort_keys=True))
           print('T2_FOAM_LENGTH_LOCAL_ORIGIN_SAFE '+json.dumps({
               'immediate_length_producer':h['ImmediateLengthProducerCategory'],
               'resolved_length_source':h['ResolvedLengthSourceCategory'],

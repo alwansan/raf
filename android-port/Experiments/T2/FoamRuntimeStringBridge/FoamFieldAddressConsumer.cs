@@ -54,7 +54,8 @@ internal static class FoamFieldAddressConsumer
     // Trace the exact address after its ldflda; everything originally on the
     // evaluation stack below that address is Other. No branch join is guessed.
     private static (string Sink,string First) Trace(MethodDefinition method, int site,
-        Action<MethodReference>? onTypedRecipient = null)
+        Action<MethodReference>? onTypedRecipient = null,
+        Action<MethodDefinition,Instruction,Instruction,MethodReference,int>? onTypedCallsite = null)
     {
         var ops=method.Body.Instructions;
         var stack=new List<Tag>{Tag.ExactFieldAddress};
@@ -224,6 +225,7 @@ internal static class FoamFieldAddressConsumer
                             IsOriginalRenderTextureArray(br.ElementType))
                         {
                             onTypedRecipient?.Invoke(called);
+                            onTypedCallsite?.Invoke(method,ops[site],instruction,called,i);
                             return ("typed_byref_array_call_potential_mutation",first);
                         }
                         return ("address_escaped_to_other_call_argument",first);
@@ -263,7 +265,8 @@ internal static class FoamFieldAddressConsumer
 
     internal static SafeProfile Scan(IEnumerable<MethodDefinition> methods,
                                     FieldReference field,
-                                    Action<MethodReference>? onTypedRecipient = null)
+                                    Action<MethodReference>? onTypedRecipient = null,
+                                    Action<MethodDefinition,Instruction,Instruction,MethodReference,int>? onTypedCallsite = null)
     {
         if (methods is null || field is null ||
             !IsOriginalRenderTextureArray(field.FieldType))
@@ -284,7 +287,7 @@ internal static class FoamFieldAddressConsumer
                     continue;
                 total++;
                 owners.Add(method);
-                var (sink,first)=Trace(method,i,onTypedRecipient);
+                var (sink,first)=Trace(method,i,onTypedRecipient,onTypedCallsite);
                 sinks[sink]=sinks.GetValueOrDefault(sink)+1;
                 firsts[first]=firsts.GetValueOrDefault(first)+1;
                 if (total>10000) throw new InvalidDataException("Excess address sites");
