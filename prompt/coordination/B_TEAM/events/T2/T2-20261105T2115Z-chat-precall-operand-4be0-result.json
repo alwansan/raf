@@ -1,0 +1,13 @@
+{
+  "id": "T2-20261105T2115Z-chat-precall-operand-4be0-result",
+  "owner": "T2",
+  "session_id": "20261105T2107Z-T2-chat-writer-call-ab1c",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Authentic SHA-pinned Foam RT writer void call consumes multiple operands and immediately pre-call opcode is coarse other; simple 1-operand dup retention not proven. CI42111118348 PASS. No original runtime RT nonnull or water pixel claim.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42111118348",
+    "https://github.com/alwansan/raf/commit/308c4591ac942bf0ec55f2a1be49067cce6f8b7b"
+  ],
+  "at": "2026-11-05T21:19:00Z"
+}

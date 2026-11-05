@@ -6,7 +6,7 @@
   "origin": "chat",
   "issue_id": "WATER-001",
   "track": "original-foam-void-call-retained-reference",
-  "status": "active",
+  "status": "completed",
   "base_sha": "0db81deedfc0bf4994dac29a220dfb1727e7067d",
   "approach": "Separate bounded original CIL test of the exact void call preceding RT stloc: classify consuming operand count and immediately preceding opcode, including synthetic dup-retention and branch bypass guards, without assuming nonnull or runtime.",
   "hypothesis": "One consumed call operand plus immediately preceding dup may leave original duplicated stack reference for stloc; otherwise record unknown safely.",
@@ -29,7 +29,24 @@
     "bytes": 3211776,
     "zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385"
   },
-  "run_urls": [],
-  "updated_at": "2026-11-05T21:15:00Z",
-  "next_step": "Implement and test source-original pre-call instruction/arity categories; never export exact original call symbols/IL or numeric literals."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42111118348"
+  ],
+  "updated_at": "2026-11-05T21:19:00Z",
+  "next_step": "Separate experiment: source-authentic bounded multi-input void-call stack provenance, conservative under unknown IL stack pops/branches; classify exact prior opcode with fail-closed control and only disclose generic categories. Never claim RT non-null.",
+  "source_commits": [
+    "308c4591ac942bf0ec55f2a1be49067cce6f8b7b"
+  ],
+  "result": {
+    "run_id": 42111118348,
+    "conclusion": "success",
+    "job_id": 127538615563,
+    "source_pin_authenticated": true,
+    "precall_opcode_category": "other",
+    "call_consumed_operand_category": "multiple",
+    "retained_duplicate_after_one_input_void_call": false,
+    "original_runtime_stack_or_nonnull_verified": false,
+    "synthetic_controls": "passed",
+    "interpretation": "Simple one-input void-call dup retention condition is false; multiple operands and unclassified immediate pre-call opcode demand branch-aware stack producer tracing."
+  }
 }
