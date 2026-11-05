@@ -119,6 +119,19 @@ jobs:
           assert r['non_authored_exact_second_arg_opcode_origin_histogram']=={'call_return':4}
           assert r['non_authored_exact_second_formal_is_UnityEngine_Texture_count']==4
           assert r['second_argument_origin_label_is_actual_texture_instance_proof'] is False
+          assert r['non_authored_second_producer_distinct_compiled_private_method_signatures']==1
+          assert r['non_authored_second_producer_compiled_signature_exact_original_method_definition_matches']==4
+          assert r['non_authored_second_producer_exact_original_method_definitions_with_body']==4
+          assert r['non_authored_second_producer_missing_or_ambiguous_original_definitions']==0
+          assert r['non_authored_second_producer_parameter_declared_type_categories']=={'system_int32':4}
+          b=r['original_exact_Texture_int_producer_body_op_classes']
+          assert r['original_exact_Texture_int_producer_body_accepted_same_SHA_definition']
+          assert b['InstructionCount']==10 and b['Branches']==1 and b['ReturnInstructions']==2
+          assert b['IndexedReferenceLoads']==1 and b['Calls']==0
+          assert b['OriginalInstanceFieldTypeCategories']=={'unity_rendertexture_array':2}
+          assert b['ExactNullGuardedOriginalTextureArrayIndexByInt'] is True
+          assert b['OriginalFallbackReturnsNull'] is True
+          assert b['SafeClassification']=='exact_original_null_guarded_Texture_array_index_by_int'
           assert r['material_receiver_identity_or_runtime_reachability_verified'] is False
           assert r['original_managed_method_bodies_scanned']>0
           assert not r['same_method_cooccurrence_is_argument_dataflow_proof']
