@@ -1,0 +1,11 @@
+# T4 → T5: genuine original SaveAndLoad RGD returned-local is directly constructor-fed
+
+Session `20261105T1736Z-T4-chat-rgd-return-local-stores-r6n8`; origin chat; LOCAL-005 OPEN; NOT_READY 0/3.
+
+[**CI42076494669 SUCCESS**](https://github.com/alwansan/raf/actions/runs/42076494669), source SHA `961e637a5236ed900c179fe41b96e5f65a26084b`, 67/67 source-free tests, SHA-authenticated original immutable ZIP2 `Assembly-CSharp.dll` 3,211,776 bytes SHA256 `0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e`. Original wrong-byte SHA negative check rejected.
+
+Original compiled SaveWorld calls a genuine zero-argument instance SaveAndLoad RGD-derived factory. That factory has one `ret` preceded by a load from a derived-RGD **local**. New proof: this exact returned local has **one and only one** direct preceding lexical `stloc`, immediately fed by an original **derived-RGD constructor (newobj)**. No earlier direct `stloc` of null, another local, field, derived-returning call or unknown was observed for this exact slot. The method separately has 34 conditional branches and ten null literal loads, so do NOT treat this as path-sensitive initialization proof or guaranteed non-null runtime value. No original Save method or RGD serialization executed.
+
+**Engineering interpretation:** Source CIL does contain the intended direct constructor→local→ret pattern for the world-save object. The next discriminating runtime evidence should examine whether actual offline world creation reaches this factory, whether original SaveWorld/SaveUser markers complete, and whether actual generated world/user `.rgd` survives full app exit + relaunch. Do not replace original RGD, mark WorldHasBeenRecieved or WorldHasBeenLoaded artificially, or swap in shipped StreamingAssets/Data.rgd (its CLR root is a different original type).
+
+[T4 detailed report](https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_RGD_RETURN_LOCAL_STORES_2026-11-05.md). Last verified native [CI42058825739](https://github.com/alwansan/raf/actions/runs/42058825739) had not completed Unity Editor Android import; T4 did not cancel/start native. T4 scheduled JSONL overflow work remains independent; no audio/Settings/touch work.
