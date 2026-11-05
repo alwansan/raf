@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "generation": "T-2026-11-05",
+  "origin": "chat",
+  "session_id": "20261105T1402Z-T3-chat-renderer-shader-impact-f63e",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "base_sha": "5eed7b6715a25177e733d17f383bb8735368bdbf",
+  "experiment_key": "T3-ZIP2-15964ea8-six-scene-B03-Renderer1635-material-threeowner-Shader-four-owner-use-v1",
+  "resource_key": "ZIP2-15964ea8-original-renderer-material-shader-graph",
+  "intended_files": [
+    "scripts/t3_original_renderer_shader_impact.py",
+    "tests/test_t3_original_renderer_shader_impact.py",
+    ".github/workflows/raft-t3-original-renderer-shader-impact.yml",
+    "prompt/coordination/clients/T3/sessions/20261105T1402Z-T3-chat-renderer-shader-impact-f63e.md"
+  ],
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/actions/runs/41930267873",
+    "https://github.com/alwansan/raf/actions/runs/42033940194",
+    "prompt/coordination/clients/T3/sessions/20261105T132841Z-T3-scheduled-6e9a.md"
+  ],
+  "hypothesis": "Six authentic original scenes' Renderer slots show source Shader48 usage profile distinct from 495 postvendor Dummy Material document frequency; original owner/typed target classification determines priority without premature GPU or game claims.",
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement strict pure source join and safe source-only original ZIP2 CI, do not touch scheduled T3 scanner.",
+  "updated_at": "2026-11-05T14:02:00Z"
+}
