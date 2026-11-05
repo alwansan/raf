@@ -6,7 +6,7 @@
   "issue_id": "WATER-001",
   "track": "water-foam-member-abi",
   "approach": "Reuse B20 SHA-pinned four-stage private source packet; inspect serialized original per-stage partial CB members and reflected UBO member layouts; compare evidence without equating distinct size domains; stage and run isolated guarded CI; do not publish source/program/opaque names.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "b56ebc3847f251cee2539e9797471417d32698d2",
   "intended_files": [
     "scripts/t2_foam_member_abi.py",
@@ -31,8 +31,26 @@
   "experiment_ids": [
     "T2-foam-members-original-20261104"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Inspect original m_ConstantBuffers member schema; implement original and reflected type/offset audit and bounded private workflow.",
-  "updated_at": "2026-11-04T23:54:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41937996942",
+    "https://github.com/alwansan/raf/actions/runs/41938551022",
+    "https://github.com/alwansan/raf/actions/runs/41938898381"
+  ],
+  "result": {
+    "scope": "Source-authenticated original Foam CB numeric members and name bridge; exact ZIP2 provenance and private stage work",
+    "original_cb_links": 8,
+    "stage_programs": 4,
+    "source_name_equals_hlsl": 0,
+    "hlsl_name_equals_spirv": 8,
+    "source_lexically_valid_hlsl": 4,
+    "candidate_index16_offset_intersections": 2,
+    "synthetic_tests_passed": 20,
+    "actual_unity_shader_installed": false,
+    "original_alias_verified": false,
+    "device_verified": false,
+    "source_workflow_passed": true,
+    "report": "docs/T2_FOAM_MEMBER_ABI_NAME_BRIDGE_2026-11-05.md"
+  },
+  "next_step": "Move to authenticated original CB member usage vs HLSL compiled field and Unity upload bridge; avoid guessed alias or padding, then private ShaderLab/Unity real test.",
+  "updated_at": "2026-11-05T00:08:00Z"
 }
