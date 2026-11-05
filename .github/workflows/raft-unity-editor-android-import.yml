@@ -135,6 +135,9 @@ jobs:
       - name: Run synthetic code-overlay tests before touching original data
         run: |
           python3 -m unittest discover -s tests -p test_w1_export_material_shaders.py -v
+          # T3 source-free controls: valid Material GUID can still target a
+          # default-Dummy ShaderLab program after partial restoration.
+          python3 -m unittest discover -s tests -p test_t3_audit_exported_material_programs.py -v
           python3 -m unittest discover -s tests -p test_android_render_lifetimes.py -v
           python3 -m unittest discover -s tests -p test_gradle_payload_audit.py -v
           python3 -m unittest discover -s tests -p test_android_expansion_audit.py -v
@@ -526,6 +529,17 @@ jobs:
         run: |
           set -euo pipefail
           python3 -m scripts.w1_audit_export_material_shaders --project "$RUNNER_TEMP/project/ExportedProject" --out "$RUNNER_TEMP/w1-native-material-shader-summary.json"
+      - name: T3 audit actual post-restoration Material ShaderLab program quality (read-only)
+        id: t3_shader_quality
+        # Keep any failure/inconclusive in the aggregate artifact while the
+        # existing original-water and builtin readiness gates remain authoritative.
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.t3_audit_exported_material_programs \
+            --project "$RUNNER_TEMP/project/ExportedProject" \
+            --out "$RUNNER_TEMP/t3-native-material-shader-quality.json"
       - name: Record actual water source contract before the first strict authenticity gate
         shell: bash
         run: |
@@ -545,6 +559,7 @@ jobs:
           name: w1-native-export-reference-audit-${{ github.sha }}
           path: |
             ${{ runner.temp }}/w1-native-material-shader-summary.json
+            ${{ runner.temp }}/t3-native-material-shader-quality.json
             ${{ runner.temp }}/w1-native-water-contract-summary.json
           if-no-files-found: ignore
           retention-days: 7
