@@ -24,6 +24,23 @@ def coordinate_end(text, start):
     raise ValueError("Unexpected private Load argument structure")
 
 
+def dispatch_expression(source, params):
+    semantic = r"\buint3\s+(\w+)\s*:\s*SV_DispatchThreadID\b"
+    direct = re.search(semantic, params, re.I)
+    if direct:
+        return direct[1]
+    # SPIRV-Cross wraps built-in inputs in a struct at the HLSL entry.
+    for struct_type, variable in re.findall(r"\b(\w+)\s+(\w+)\s*(?=,|$)", params):
+        definition = re.search(rf"\bstruct\s+{re.escape(struct_type)}\s*\{{([^{{}}]*)\}}", source)
+        if definition:
+            member = re.search(semantic, definition[1], re.I)
+            if member:
+                return f"{variable}.{member[1]}"
+    if re.search(r"\bSV_DispatchThreadID\b", source, re.I):
+        raise ValueError("Unsupported private dispatch ID declaration")
+    return None
+
+
 def instrument(source, *, keyed=False):
     clean = re.sub(r"/\*[\s\S]*?\*/|//[^\r\n]*", lambda m: re.sub(r"[^\r\n]", " ", m[0]), source)
     roles = translated_image_symbols(clean)
@@ -43,12 +60,8 @@ def instrument(source, *, keyed=False):
         if not entry:
             raise ValueError("Private trace entry point missing")
         params = entry[1]
-        dispatch = re.search(r"\buint3\s+(\w+)\s*:\s*SV_DispatchThreadID\b", params, re.I)
-        if dispatch:
-            dispatch_id = dispatch[1]
-        else:
-            if re.search(r"SV_DispatchThreadID", params, re.I):
-                raise ValueError("Unsupported private dispatch ID declaration")
+        dispatch_id = dispatch_expression(clean, params)
+        if dispatch_id is None:
             dispatch_id = "T1TraceInputID"
             prefix = ", " if params.strip() else ""
             edits.append((entry.end(1), entry.end(1),
