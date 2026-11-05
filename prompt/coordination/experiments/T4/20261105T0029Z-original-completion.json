@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261104T2357Z-T4-lw01",
+  "issue_id": "LOCAL-005",
+  "hypothesis": "B07 first-MoveNext marker does not indicate execution of the original coroutine's world-completion assignment; an Android-only log after the source-authenticated real write can distinguish stuck-before-completion versus post-completion faults without manufacturing the write.",
+  "source_commit": "dec41d580559dc5172538586f5da14c0b06abf4b",
+  "input_hashes": [
+    "original_zip2_commit=15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "original_dll_sha256=0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "B07_original_network_class_sha256=080035c137e446828226ed84a23190656b6f235d274436cafb477feaf93caa03",
+    "B07_original_iterator_body_sha256=cbd74c24f1c6a86dd50e8d320f4f4142f5b3f3fc5bf8f64ded04710c30c3a140",
+    "T4_authenticated_readonly_network_class_sha256=d16c36336a6aec4e23781c135820692a233130a3f1c1d9ab9052d432d76eedef",
+    "T4_authenticated_readonly_iterator_body_sha256=2bf76a189a69d23444c5ede9f00a5444a48f819c64d87ec298ebeedbf5d9088c"
+  ],
+  "tool_versions": {
+    "python": "runner Ubuntu24.04 system Python3",
+    "dotnet": "10.0.x SDK; actual runner SDK 10.0.403",
+    "ilspycmd": "11.2.0.10050"
+  },
+  "commands": [
+    "python3 -m py_compile scripts/instrument_android_runtime_operations.py tests/test_t4_world_completion_trace.py scripts/t4_compile_world_completion_fixture.py",
+    "python3 -m unittest discover -s tests -p test_t4_world_completion_trace.py -v",
+    "python3 -m scripts.t4_compile_world_completion_fixture --output \"$RUNNER_TEMP/t4-clr\"",
+    "timeout 100s dotnet run --project \"$RUNNER_TEMP/t4-clr/T4WorldCompletion.csproj\" --configuration Release --nologo",
+    "git -C t4-original rev-parse HEAD # must match 15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "ilspycmd -p -lv CSharp9_0 -o \"$RUNNER_TEMP/t4-private-source\" t4-original/Raft/Raft_Data/Managed/Assembly-CSharp.dll # private, no published source"
+  ],
+  "negative_controls": [
+    "unknown adapted SHA fails before production observer",
+    "no genuine original write fails",
+    "duplicate write fails",
+    "comment/string fake write ignored",
+    "wrong return type rejects",
+    "first-MoveNext trace required",
+    "broadcast must precede original assignment",
+    "other-method decoy cannot count",
+    "double instrumentation rejected",
+    "real CLR false-ready path reports zero completion markers"
+  ],
+  "workflow_path": ".github/workflows/raft-t4-world-completion-trace.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41943357681",
+  "artifact_urls": [],
+  "budget": "One isolated ubuntu-24.04 job, 12min timeout, no LFS/Unity/native build, temporary private decompiler output, cancel-in-progress:false",
+  "status": "completed",
+  "observed_result": {
+    "synthetic_python_tests": "PASS 10/10",
+    "managed_clr_synthetic": "PASS branches=2 falseCompletion=0 trueCompletion=1 yieldsPreserved=true",
+    "authenticated_original_dll": "PASS exact SHA and 3211776 bytes",
+    "source_variant": "T4 alternate ILSpy class/body exact fingerprints, readonly original-scoped trace PASS",
+    "production_adapter_exercised": false,
+    "device_tested": false,
+    "world_playable": false,
+    "rgd_roundtrip": false,
+    "ci": "COMPLETED SUCCESS 41943357681"
+  },
+  "rejected_hypotheses": [
+    "B07 first MoveNext proves original ready write executed — not established",
+    "Safe to emit a log after bare if-assignment without scoped block — false, else branch control flow hazard",
+    "Initial failing other-method test demonstrated production source bug — rejected, wrong nested fixture",
+    "One original verified DLL guarantees identical ILSpy class hash across every decompilation — refuted by two observed SHA-pinned outputs",
+    "Accept unverified class/body variants in production source gate — explicitly rejected"
+  ],
+  "limitations": [
+    "Alternate SHA-pinned source proved in read-only private workflow only, not full production adapter or Unity stage",
+    "CLR synthetic false/true branches do not run authentic original coroutine or IL2CPP or Android",
+    "No new device logs, new APK, real persistent .rgd or world interaction",
+    "One original assignment marker is necessary diagnostic evidence only and is not gameplay success"
+  ],
+  "integration_commit": "ea98fb0fe5ca393d31468df752a262ef777a2fc4",
+  "next_step": "Coordinate next exact-SHA Unity/native validation with T5; distinguish early iterator from actual completion then record real SaveWorld/SaveUser file writes and .rgd close/reopen, preserve production hashes; resolve decompiler output variance independently."
+}
