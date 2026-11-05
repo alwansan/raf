@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "session_id": "20261105T0028Z-T3-externaltex-7af2",
+  "issue_id": "RENDER-002",
+  "hypothesis": "Even if 114 selected original Material-bound Texture2D PPtrs preserve exact original/export identity, actual Unity TextureImporter sampler/UV wrap/filter/anisotropy/mip bias may differ; compare only distinct original linked typed Texture2Ds across source sharedassets6,0,1 and same actual export using original B15 verifier.",
+  "source_commit": "9769a4e8f32db34a14d487396179862e6aa79ec4",
+  "input_hashes": [
+    "immutable ZIP2 15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "sharedassets6.assets 6607272B SHA256 0476792cfeffac19d16e920011ed8d2fb2da62973c2f09a8689bc59e1ac4b632",
+    "sharedassets0.assets 115978112B SHA256 0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "sharedassets1.assets 34888388B SHA256 c6bdf49f7d38ab060872fcb298770bc7113959f85ea2fd1a42dc663323d7660a"
+  ],
+  "tool_versions": {
+    "AssetRipperCLI": "036098ab525a3f9f693dc101edeb21faad4d32d8",
+    "UnityPy": "1.23.0",
+    "PyYAML": "6.0.3",
+    "dotnet": "9.0.x"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p 'test_t3_linked_texture_sampler_export.py' -v",
+    "python3 -m unittest discover -s tests -p 'test_b15_texture_sampler_parity.py' -v",
+    "python3 -m scripts.t3_linked_texture_sampler_export --original $RUNNER_TEMP/b21-original --manifest zip2-original/RAFT_FILE_MANIFEST.tsv --project $RUNNER_TEMP/b21-private-export/ExportedProject --w1-trace $RUNNER_TEMP/b21-w1-private.json --b02-trace $RUNNER_TEMP/b21-b02-private.json --out $RUNNER_TEMP/t3-linked-sampler-safe.json"
+  ],
+  "negative_controls": [
+    "14 T3 original Material scope, fileID owner, mixed same-instance trace, foreign provider path, source target omitted, duplicate, unknown importer defaults vs actual mismatches, actual six field metadata difference and no private names",
+    "23 inherited B15 source/importer meta and exact trace synthetic controls"
+  ],
+  "workflow_path": ".github/workflows/raft-t3-texture-sampler-sameexport.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41943498076",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41943122343"
+  ],
+  "budget": "30m SHA-pinned 11 original owners, 2 DOTNET processors, private raw source and trace stays in runner, original game build not triggered",
+  "status": "INCONCLUSIVE_SAFE_STAGE_RETRY_ACTIVE",
+  "observed_result": {
+    "first_run": "https://github.com/alwansan/raf/actions/runs/41943122343",
+    "original_zip2_sha_verified_owners": 11,
+    "original_export_completed": true,
+    "synthetic_t3_cases": 14,
+    "synthetic_b15_cases": 23,
+    "material_texture_export_identity_previous_run": "25/25 plus 89/89 verified",
+    "sampler_failure": "ValueError, exact phase not yet classified",
+    "second_run": "https://github.com/alwansan/raf/actions/runs/41943498076",
+    "device_pixels": false
+  },
+  "rejected_hypotheses": [
+    "Original source files absent",
+    "AssetRipper same-instance Material/Texture trace export impossible"
+  ],
+  "limitations": [
+    "Importer sampler values not yet compared due ValueError in first actual attempt",
+    "No true Unity texture sampling, shader passes or Adreno colors",
+    "If TextureImporter uses -1 filter/wrap and -100 mipBias, leave UNKNOWN defaults rather than pretend equal"
+  ],
+  "integration_commit": "15957d90ae52f0339c1b5cd8dd8e4ee283f36d4e",
+  "next_step": "Read classified safe error phase/code from 41943498076. Repair B15 actual importer YAML read only when concrete current-export shape proven. No game asset mutations or fake color recovery."
+}
