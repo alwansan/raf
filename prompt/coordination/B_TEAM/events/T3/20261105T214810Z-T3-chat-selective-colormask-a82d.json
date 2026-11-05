@@ -1,0 +1,19 @@
+{
+  "id": "20261105T214810Z-T3-chat-selective-colormask-a82d",
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T214810Z-T3-chat-selective-colormask-a82d",
+  "issue_id": "RENDER-002",
+  "type": "integration",
+  "at": "2026-11-05T21:53:00Z",
+  "summary": "UnityCsReference 2021.3 exact ColorWriteMask ABGR-bit mapping added to opt-in original ShaderLab state translator. Real ZIP2 original 108-use ParticleShader48 source ColorMask RGB is accepted in opt-in, rejected by unchanged legacy default. CI42116530618 SUCCESS 72/72 source-free checks plus genuine SHA-original six scene/four-owner read; no Android/Unity compiled pixels.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42116530618",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE_COLORMASK_MAPPING_2026-11-06.md",
+    "https://github.com/Unity-Technologies/UnityCsReference/blob/2021.3/Runtime/Export/Graphics/GraphicsEnums.cs"
+  ],
+  "limitations": [
+    "source-only fixed function, not compiled target",
+    "RENDER-002 remains OPEN"
+  ]
+}
