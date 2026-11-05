@@ -89,6 +89,12 @@ def strict_native_top_join(original_counts: dict, source_report: dict,
         # Preserve explicit Dummy attribution; reject ambiguous non-Dummy.
         if not p["dummy"] and (p["unknown_exporter"] or p["unbalanced"]):
             raise ValueError("non_dummy_native_shader_ambiguous_export_profile")
+        # A marker-free ShaderLab profile is not a complete native program
+        # if any Pass lacks a subprogram or a sibling SubShader is incomplete.
+        # Do not promote a single compiled Pass into all-pass recovery.
+        if (not p["dummy"] and (p["partial_subshader_coverage"] or
+                               p["programmed"] != p["pass_count"])):
+            raise ValueError("non_dummy_native_shader_incomplete_program_coverage")
         status=("DUMMY_AFTER_NATIVE_RESTORERS" if p["dummy"] else
                 "NON_DUMMY_NATIVE_PROGRAM_AUTHENTICITY_UNPROVEN")
         source_pass_count_compared=True

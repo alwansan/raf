@@ -188,6 +188,27 @@ class NativeTopShaderJoinTests(unittest.TestCase):
         self.assertEqual(result["native_high_use_source_shader_export_status"],
                          "DUMMY_AFTER_NATIVE_RESTORERS")
 
+    def test_marker_free_partial_subshader_coverage_is_inconclusive(self):
+        args=list(fixture(top_dummy=False, top_passes=4))
+        args[4][f"{1:032x}"]["partial_subshader_coverage"]=True
+        with self.assertRaisesRegex(ValueError, "non_dummy_native_shader_incomplete_program_coverage"):
+            t3.strict_native_top_join(*args)
+
+    def test_marker_free_missing_program_in_pass_is_inconclusive(self):
+        args=list(fixture(top_dummy=False, top_passes=4))
+        args[4][f"{1:032x}"]["programmed"]=3
+        with self.assertRaisesRegex(ValueError, "non_dummy_native_shader_incomplete_program_coverage"):
+            t3.strict_native_top_join(*args)
+
+    def test_dummy_marker_stays_dummy_despite_partial_sibling_or_missing_pass_program(self):
+        args=list(fixture(top_dummy=True, top_passes=4))
+        args[4][f"{1:032x}"]["partial_subshader_coverage"]=True
+        args[4][f"{1:032x}"]["programmed"]=3
+        result=t3.strict_native_top_join(*args)
+        self.assertEqual(result["native_high_use_source_shader_export_status"],
+                         "DUMMY_AFTER_NATIVE_RESTORERS")
+        self.assertTrue(result["native_high_use_shaderlab_partial_subshader_coverage"])
+
     def test_safe_aggregate_does_not_leak_private_identity_or_guid(self):
         result=self.checked()
         encoded=json.dumps(result,sort_keys=True)
