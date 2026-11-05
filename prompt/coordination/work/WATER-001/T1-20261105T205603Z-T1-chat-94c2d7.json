@@ -4,13 +4,16 @@
   "session_id": "20261105T205603Z-T1-chat-94c2d7",
   "origin": "chat",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "ee2460c907ffa084b94a50d450618b3a7229f6a1",
-  "intended_files": [
-    ".github/workflows/raft-t1-fft-unity-input-identity.yml"
-  ],
+  "intended_files": [],
   "resource_key": "raft-native-engine-feature/android-native-port",
   "experiment_key": "zip2-15964ea8-pair0-unity2021-vulkan-pass0-trace-output-parity",
-  "updated_at": "2026-11-05T20:56:03Z",
-  "hypothesis": "Identical sampled inputs and nonperturbing traces localize the earliest divergence between Unity and the independent Vulkan harness."
+  "updated_at": "2026-11-05T20:58:00Z",
+  "hypothesis": "Identical sampled inputs and nonperturbing traces localize the earliest divergence between Unity and the independent Vulkan harness.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42108071145"
+  ],
+  "source_commit": "b31910692683708c6e55f4cd17413f76e4d65e9f",
+  "next_step": "Read aggregate input-identity, Unity instrumented-output parity, per-site coordinate/value counts and first-pass comparison. Interpret trace only after the identity and output-parity gates; if the run fails earlier, preserve the first failing step and do not infer backend divergence."
 }
