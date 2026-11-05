@@ -4,10 +4,10 @@
   "generation": "T-2026-11-05",
   "session_id": "20261104T2354Z-T2-foamabi01",
   "resumed_from_session": null,
-  "status": "active",
+  "status": "paused",
   "base_sha": "b56ebc3847f251cee2539e9797471417d32698d2",
-  "last_commit": "69a9d876fda83e6363438ef0cfc4b94025276a67",
-  "updated_at": "2026-11-05T00:15:30Z",
+  "last_commit": "e203f647d9b678357d52dff8b1099dc025c0258f",
+  "updated_at": "2026-11-05T00:19:00Z",
   "tracks": [
     "WATER-001",
     "foam-cb-abi",
@@ -22,8 +22,11 @@
     "https://github.com/alwansan/raf/actions/runs/41937996942",
     "https://github.com/alwansan/raf/actions/runs/41938551022",
     "https://github.com/alwansan/raf/actions/runs/41938898381",
-    "https://github.com/alwansan/raf/actions/runs/41939956032"
+    "https://github.com/alwansan/raf/actions/runs/41939956032",
+    "https://github.com/alwansan/raf/actions/runs/41940279771",
+    "https://github.com/alwansan/raf/actions/runs/41940321740",
+    "https://github.com/alwansan/raf/actions/runs/41939553448"
   ],
-  "next_step": "Run private source-authenticated Foam stage texture/sampler resource ABI CI41939956032, investigate real original descriptor counts and any reflected slot schema errors; then document truthful next ShaderLab binding task. Preserve B-team sources and T1 FFT.",
+  "next_step": "Authenticate each original Foam m_TextureParams name index and implicit sampler state to translated SPIRV/HLSL resource, original material/ShaderLab properties and Unity upload. B20 4 stages, T2 6 image+sampler pair gate already source-authentic. Do not invent aliases, no device success.",
   "memory_path": "prompt/coordination/clients/T2/MEMORY.md"
 }
