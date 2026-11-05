@@ -6,7 +6,7 @@
   "issue_id": "WATER-001",
   "track": "Original FFT translated Unity ComputeShader actual GPU Dispatch and resource role binding",
   "approach": "From verified 20/20 authentic Unity kernel imports CI42014120625, privately extract exactly three translated HLSL resource declarations by register t0,t1,u0, bind dynamically using names only in an ephemeral Unity EditMode run, execute small selected original-derived FFT kernels with genuine GPU Dispatch and finite output/sentinel checks, never print private names/shader source. Prove GPU execution separately from actual original game resource mapping/pixel fidelity.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "72a16de3f7350a743bd0a0e10c915bedcaeab0f8",
   "intended_files": [
     "scripts/t1_fft_unity_gpu_resource_bridge.py",
@@ -30,10 +30,12 @@
   "experiment_ids": [],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42018235130",
-    "https://github.com/alwansan/raf/actions/runs/42018761761"
+    "https://github.com/alwansan/raf/actions/runs/42018761761",
+    "https://github.com/alwansan/raf/actions/runs/42019246322",
+    "https://github.com/alwansan/raf/actions/runs/42019283679"
   ],
-  "result": "Real CI42018235130 FAILED after synthetic canary, exact original SHA and twenty translated private .compute stage, BEFORE GPU Dispatch: derived HLSL register-role parser rejected one of three declarations as t/u register type/layout mismatch. No original device/Unity dispatch or pixels proven. Updated parser to expose ONLY bounded register-class/index/space profile without property names; diagnostic rerun42018761761 in_progress.",
-  "next_step": "Inspect private safe register profile, independently prove original DXBC register-to-SPIR-V-to-HLSL property identity before binding input0/input1/output and attempting actual Unity GPU Dispatch. Never bypass a role mismatch by guessing aliases.",
-  "updated_at": "2026-11-05T11:26:52.402Z",
+  "result": "Real original SHA-authentic FFT CI42019283679 SUCCESS: source-only tests 8+4+7+8+6 PASS; 20/20 original compiled DXBC-derived .compute import/FindKernel/group verified by real Unity2021; actual original compiled first pair0/1 two sequential GPU Dispatch calls using private translated t0/t1/u2 property roles, ARGBFloat RW RenderTexture sentinel initialized/read back, output writes observed and finite in BOTH passes. Exact two real Unity NUnit tests passed 2/2, full original source and Unity logs cleaned. Previous runs42018235130/42018761761 failed before Dispatch: converter-generated sole UAV HLSL u2 != original DXBC u0, corrected source 223042b5. Intermediate42019246322 failed source-free expected fixture due staged test/script commit ordering. Original author's multi-variant kernel IDs, actual game resource binding, original FFT numeric parity, Adreno/water pixels UNPROVEN.",
+  "next_step": "With T5, compare same deterministic original DXBC Vulkan vs Unity derived pair0/1 numeric output (not only finite writes), recover true authored ComputeShader keyword/runtime IDs, stage exact source-compatible resource binding and validate Android Adreno before WATER-001 closure. Avoid touching working audio/Settings/touch.",
+  "updated_at": "2026-11-05T11:34:00Z",
   "identity_conflict": "Multiple independent T1 sessions exist; do not overwrite current T1 shared state/peer session/other T2-T5 files."
 }
