@@ -37,3 +37,19 @@ class SpatialDiagnosticTests(unittest.TestCase):
         result = analyze(image(1), image(float("inf")), 1, 1)["identity"]
         self.assertEqual(result["nonfinite_pixels"], 1)
         self.assertFalse(result["full_match"])
+
+    def test_reversal_inside_sparse_footprint_preserves_coverage(self):
+        expected = image(None, 1, 2, 3, None, None, None)
+        candidate = image(None, 3, 2, 1, None, None, None)
+        report = analyze(expected, candidate, 7, 1)
+        self.assertFalse(report["flip_x"]["full_match"])
+        self.assertEqual(report["identity"]["coverage_mismatches"], 0)
+        self.assertTrue(report["footprint_flip_x"]["full_match"])
+
+    def test_vertical_footprint_mirror_cannot_hide_extra_writes(self):
+        expected = image(None, 1, 2, None, None)
+        candidate = image(7, 2, 1, None, None)
+        result = analyze(expected, candidate, 1, 5)["footprint_flip_y"]
+        self.assertEqual(result["numeric_mismatches"], 0)
+        self.assertEqual(result["coverage_mismatches"], 1)
+        self.assertFalse(result["full_match"])

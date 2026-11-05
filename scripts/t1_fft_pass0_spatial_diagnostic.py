@@ -32,6 +32,15 @@ def analyze(reference, candidate, width, height):
         "shift_y_minus_one": lambda x, y: (x, y - 1),
         "shift_y_plus_one": lambda x, y: (x, y + 1),
     }
+    # A global image flip can move a sparse footprint entirely. Also test
+    # mirrors around the occupied reference bounds without dropping writes.
+    xs, ys = zip(*expected)
+    x_sum, y_sum = min(xs) + max(xs), min(ys) + max(ys)
+    if min(xs) != max(xs) and x_sum != width - 1:
+        transforms["footprint_flip_x"] = lambda x, y: (x_sum - x, y)
+    if min(ys) != max(ys) and y_sum != height - 1:
+        transforms["footprint_flip_y"] = lambda x, y: (x, y_sum - y)
+
     report = {}
     for name, transform in transforms.items():
         remapped = {transform(*coord): pixel for coord, pixel in actual.items()}
