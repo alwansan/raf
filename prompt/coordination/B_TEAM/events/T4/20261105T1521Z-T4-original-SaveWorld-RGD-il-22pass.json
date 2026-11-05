@@ -1,0 +1,26 @@
+{
+  "id": "20261105T1521Z-T4-original-SaveWorld-RGD-il-22pass",
+  "owner": "T4",
+  "session_id": "20261105T1500Z-T4-chat-saveworld-rgd-producer-h5k2",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "type": "original_source_compiled_il_provenance",
+  "status": "SOURCE_VERIFIED_ONLY",
+  "summary": "Exact SHA pinned original Assembly-CSharp CIL: SaveWorld and SaveUser each call private Save(string,RGD) once; no direct newobj RGD in SaveAndLoad, no generic Load<RGD> in SaveWorld/SaveUser. Immediate producer unresolved. CI42053882300 SUCCESS 22/22. No original game save invoked and no phone proof.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42052712119",
+    "https://github.com/alwansan/raf/actions/runs/42053331738",
+    "https://github.com/alwansan/raf/actions/runs/42053882300"
+  ],
+  "details": {
+    "saveworld_private_save_rgd_direct": 1,
+    "saveuser_private_save_rgd_direct": 1,
+    "all_saveandload_rgd_constructor_calls": 0,
+    "saveworld_generic_load_rgd_calls": 0,
+    "saveuser_generic_load_rgd_calls": 0,
+    "argument_instance_identity_proven": false,
+    "phone_play_save_reload_proven": false,
+    "not_ready_reviews": 0
+  },
+  "created_at": "2026-11-05T15:23:06.160Z"
+}
