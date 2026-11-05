@@ -35,10 +35,11 @@
     "https://github.com/alwansan/raf/actions/runs/41957549770",
     "https://github.com/alwansan/raf/actions/runs/41958245907",
     "https://github.com/alwansan/raf/actions/runs/41958511122",
-    "https://github.com/alwansan/raf/actions/runs/41958963107"
+    "https://github.com/alwansan/raf/actions/runs/41958963107",
+    "https://github.com/alwansan/raf/actions/runs/41959712898"
   ],
-  "result": "20/20 SHA-verified original compiled FFT candidates reconstructed to ephemeral private .compute files (real original run41957549770 SUCCESS, 7 synthetic tests). Three attempted real Unity 2021 Editor runs did not yield an import report; latest 41958963107 exit1 with sanitized licensing-failure category. Original authored source, Unity runtime IDs and Adreno remain unproven.",
-  "next_step": "Paused for activation/licensing gate: verify licensed Unity 2021.3.45f2 editor with tiny source-free fixture before repeating original-data import. Avoid speculative source/secret changes. Coordinate T5; WATER-001 OPEN.",
-  "updated_at": "2026-11-05T03:08:00Z",
+  "result": "20/20 SHA-verified original compiled FFT candidates reconstructed to ephemeral private .compute files (real original run41957549770 SUCCESS, 7 synthetic tests). Three attempted real Unity 2021 Editor runs did not yield an import report; latest 41958963107 exit1 with sanitized licensing-failure category. Original authored source, Unity runtime IDs and Adreno remain unproven. Source-free Unity activation gate CI41959712898 FAILED with unity_command_exit_zero=false, empty_unity_project_created=false, licensing_failure_category=true, original_raft_data_acquired=false. Entire original-data stage skipped, independent of FFT; no Unity shader import observation.",
+  "next_step": "Coordinate T5 to repair verified Unity 2021 licensing/activation in source-free project; do not repeat original-data acquisition until gate PASS. Then actual .compute import, original runtime FindKernel and Adreno. WATER-001 OPEN.",
+  "updated_at": "2026-11-05T03:10:00Z",
   "identity_conflict": "An independent T1 caller-audit work record remains active; separate unique session/file scope without shared state overwrite"
 }
