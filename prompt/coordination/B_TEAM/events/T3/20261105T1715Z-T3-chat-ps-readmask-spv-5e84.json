@@ -1,0 +1,15 @@
+{
+  "id": "T3-20261105T1715Z-original-Shader48-PS-ISGN-readmask-to-SPIRV-accounting",
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T1715Z-T3-chat-ps-readmask-spv-5e84",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "at": "2026-11-05T17:22:00Z",
+  "summary": "Source-authentic ZIP2 Shader48 921 Renderer-slot use, six scenes/four SHA owners, four exactly paired PS programs, genuine CI42073397586 SUCCESS. DXBC PS input 22 original user semantics allocate 75 lanes; ReadWriteMask reads 44 and leaves 31 unused (8 entire semantic records). Original and HLSL roundtrip SPIRV reflect 14 user input records/44 lanes each, and DXBC read-lane count equals source and derived reflection per each original Pass (4/4). This fully accounts for observed 75-vs-44 count difference only; no claim semantic mapping to Location or device color, assets unchanged. Source-free 59/59 PASS.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42073397586",
+    "https://github.com/alwansan/raf/actions/runs/42073255841",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_921_DXBC_READMASK_SPV_2026-11-05.md"
+  ]
+}
