@@ -1,0 +1,15 @@
+{
+  "id": "T3-20261105T1745Z-original921-Material-saved-property-contract",
+  "session_id": "20261105T1745Z-T3-chat-921-shader-material-property-7a6e",
+  "origin": "chat",
+  "owner": "T3",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "at": "2026-11-05T18:04:00Z",
+  "summary": "Genuine SHA-authenticated ZIP2 6-scenes/4owners high-use Shader48 source Material contract CI42080105181 SUCCESS 25+12 tests. Original selected Shader has 35 declared properties (6 textures,5 colors/vectors,24 floats/ranges) and is referenced by 43 distinct class21 Materials across 921 Renderer slots. Exactly 1505/1505 correct-family saved name matches, 0 unrepresented declared properties; 258 original saved texture slots of which 144 nonnull and 114 genuine null. 875 extra saved names and one authentic name across two families (3 Renderer slots) are source observations, not necessarily Android errors. Prior CI42044249541 bounded postvendor high-use Shader was still AssetRipper Dummy. No actual native/Adreno pixels or current ShaderLab value parity, no material/game modifications. Keep RENDER-002 OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42080105181",
+    "https://github.com/alwansan/raf/actions/runs/42044249541",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_921_MATERIAL_SHADER_PROPERTY_CONTRACT_2026-11-05.md"
+  ]
+}
