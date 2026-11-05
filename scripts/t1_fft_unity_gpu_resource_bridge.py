@@ -27,7 +27,12 @@ IMAGE = re.compile(
     r"(?:,\s*space\s*(\d{1,2})\s*)?\)\s*;"
 )
 RESOURCE_DECL = re.compile(r"(?m)^\s*(?:RW)?Texture2D\b")
-ROLES = {("t",0):"source",("t",1):"butterfly",("u",0):"output"}
+# B18 proved source DXBC has native UAV u0. Exact SHA-authenticated
+# SPIRV-Cross HLSL50 output revealed a SINGLE generated RWTexture2D u2
+# in CI42018761761. Do not assume native source registers are unchanged in
+# the generated Unity property interface. This private bridge targets only
+# the observed converted program ABI and fails on any additional drift.
+ROLES = {("t",0):"source",("t",1):"butterfly",("u",2):"output"}
 SLOTS = (0,1)
 
 
@@ -110,6 +115,8 @@ def stage_private_gpu_resources(project: Path):
     return {
         "source_authentic_original_compiled_candidates":len(manifest["rows"]),
         "private_translated_image_property_roles":len(results)*3,
+        "generated_hlsl_uav_register_u2_observed":True,
+        "original_native_dxbc_uav_u0_is_not_generated_property_register":True,
         "selected_pair_slots":list(SLOTS),
         "original_authored_resource_names_proven":False,
         "original_runtime_kernel_mapping_proven":False,
