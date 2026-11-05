@@ -1469,6 +1469,72 @@ internal static class Program
             t2ReasonLocal.Immediate!="ldloc")
             throw new InvalidDataException("Synthetic local-load return source not categorized");
 
+        // Public synthetic local-writer controls distinguish exact return
+        // local from another local and actual assigned source categories.
+        var t2NullWriter=FoamByrefElementValueOrigin.ScanExactReturnLocalWriters(
+            new[]{t2ReasonLocalDef},t2ReasonLocalDef);
+        if(t2NullWriter.ExactReturnLocalLoadSites!=1 ||
+            !t2NullWriter.ReturnLocalDeclaredRenderTexture ||
+            t2NullWriter.ExactLocalAssignmentSites!=1 ||
+            t2NullWriter.DirectNullAssignmentSites!=1 ||
+            t2NullWriter.UnresolvedAssignmentSites!=0)
+            throw new InvalidDataException("Typed return local direct null writer fixture failed");
+        var t2CtorWriterMethod=new MethodDefinition("SyntheticReturnLocalCtorWriter",
+            Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,
+            renderTextureType);
+        factoryDef.Methods.Add(t2CtorWriterMethod);
+        t2CtorWriterMethod.Body.InitLocals=true;
+        t2CtorWriterMethod.Body.Variables.Add(
+            new VariableDefinition(renderTextureType));
+        var t2CtorWriterIl=t2CtorWriterMethod.Body.GetILProcessor();
+        t2CtorWriterIl.Append(t2CtorWriterIl.Create(OpCodes.Newobj,t2RtCtor));
+        t2CtorWriterIl.Append(t2CtorWriterIl.Create(OpCodes.Stloc_0));
+        t2CtorWriterIl.Append(t2CtorWriterIl.Create(OpCodes.Ldloc_0));
+        t2CtorWriterIl.Append(t2CtorWriterIl.Create(OpCodes.Ret));
+        var t2CtorWriter=FoamByrefElementValueOrigin.ScanExactReturnLocalWriters(
+            new[]{t2CtorWriterMethod},t2CtorWriterMethod);
+        if(t2CtorWriter.ExactLocalAssignmentSites!=1 ||
+            t2CtorWriter.DirectRenderTextureConstructorAssignmentSites!=1 ||
+            t2CtorWriter.DirectNullAssignmentSites!=0)
+            throw new InvalidDataException("Synthetic RT constructor return-local writer rejected");
+        var t2CallWriterMethod=new MethodDefinition("SyntheticReturnLocalCallWriter",
+            Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,
+            renderTextureType);
+        factoryDef.Methods.Add(t2CallWriterMethod);
+        t2CallWriterMethod.Body.InitLocals=true;
+        t2CallWriterMethod.Body.Variables.Add(
+            new VariableDefinition(renderTextureType));
+        var t2CallWriterIl=t2CallWriterMethod.Body.GetILProcessor();
+        t2CallWriterIl.Append(t2CallWriterIl.Create(OpCodes.Call,t2ReturnDefinition));
+        t2CallWriterIl.Append(t2CallWriterIl.Create(OpCodes.Stloc_0));
+        t2CallWriterIl.Append(t2CallWriterIl.Create(OpCodes.Ldloc_0));
+        t2CallWriterIl.Append(t2CallWriterIl.Create(OpCodes.Ret));
+        var t2CallWriter=FoamByrefElementValueOrigin.ScanExactReturnLocalWriters(
+            new[]{t2CallWriterMethod},t2CallWriterMethod);
+        if(t2CallWriter.ExactLocalAssignmentSites!=1 ||
+            t2CallWriter.DirectRenderTextureTypedCallAssignmentSites!=1)
+            throw new InvalidDataException("Synthetic RT-typed return-local call writer rejected");
+        var t2OtherWriterMethod=new MethodDefinition("SyntheticWrongReturnLocalWriter",
+            Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,
+            renderTextureType);
+        factoryDef.Methods.Add(t2OtherWriterMethod);
+        t2OtherWriterMethod.Body.InitLocals=true;
+        t2OtherWriterMethod.Body.Variables.Add(
+            new VariableDefinition(renderTextureType));
+        t2OtherWriterMethod.Body.Variables.Add(
+            new VariableDefinition(renderTextureType));
+        var t2WrongLocalIl=t2OtherWriterMethod.Body.GetILProcessor();
+        t2WrongLocalIl.Append(t2WrongLocalIl.Create(OpCodes.Ldnull));
+        t2WrongLocalIl.Append(t2WrongLocalIl.Create(OpCodes.Stloc_1));
+        t2WrongLocalIl.Append(t2WrongLocalIl.Create(OpCodes.Ldloc_0));
+        t2WrongLocalIl.Append(t2WrongLocalIl.Create(OpCodes.Ret));
+        var t2WrongLocalWriter=FoamByrefElementValueOrigin.ScanExactReturnLocalWriters(
+            new[]{t2OtherWriterMethod},t2OtherWriterMethod);
+        if(t2WrongLocalWriter.ExactReturnLocalLoadSites!=1 ||
+            t2WrongLocalWriter.ExactLocalAssignmentSites!=0 ||
+            t2WrongLocalWriter.DirectNullAssignmentSites!=0)
+            throw new InvalidDataException("Wrong local typed decoy was counted as return writer");
+
         var syntheticIndirect=new MethodDefinition("SyntheticFieldReferenceStore",
             Mono.Cecil.MethodAttributes.Public,m.TypeSystem.Void);
         factoryDef.Methods.Add(syntheticIndirect);
@@ -1646,6 +1712,7 @@ internal static class Program
                 exact_original_return_signature_vs_external_type_controls=true,
                 exact_original_return_direct_null_newobj_and_branch_controls=true,
                 synthetic_return_branch_target_and_local_predecessor_classifier=true,
+                synthetic_exact_rt_return_local_writer_and_wrong_local_controls=true,
                 four_original_style_Texture_int_argument_origin_controls=true,
                 signed_short_wide_and_duplicate_private_i4_aggregate_controls=true,
                 private_IL_names_or_source_published = false
