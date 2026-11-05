@@ -1,0 +1,15 @@
+{
+  "id": "T2-20261105T1751Z-foam-rt-return-one-local-call-preceding",
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261105T1736Z-T2-chat-ret-reason-28ce",
+  "issue_id": "WATER-001",
+  "type": "source_original_rt_return_local_writer_instruction_provenance",
+  "at": "2026-11-05T17:51:00Z",
+  "summary": "Original SHA-managed Foam source CIs42076713202,42077586809,42078263113 SUCCESS: exact RT-return method sole sequential ret immediately loads local RenderTexture, with exactly one matching stloc, and that stloc is non-branch target immediately preceded by call opcode. The call's actual typed result to stloc, runtime non-null value and graphics are NOT proven; original typed direct-null/newobj/call writer census zero, one unresolved. Synthetic negative controls pass; source private symbols/IL/index literals withheld. WATER-001 OPEN NOT_READY0/3.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42076713202",
+    "https://github.com/alwansan/raf/actions/runs/42077586809",
+    "https://github.com/alwansan/raf/actions/runs/42078263113"
+  ]
+}
