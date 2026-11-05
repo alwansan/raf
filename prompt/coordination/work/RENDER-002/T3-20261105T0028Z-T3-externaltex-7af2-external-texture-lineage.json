@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T0028Z-T3-externaltex-7af2",
+  "issue_id": "RENDER-002",
+  "track": "colors-materials/external-texture-owners",
+  "approach": "Resolve 25 original sharedassets6 external Texture PPtrs via original Unity serialized external dependency table, SHA-pinned referenced original provider/object class and same-instance W1/B02 export texture lineage with exact exported GUID+fileID; avoid active B43 keywords run.",
+  "status": "active",
+  "base_sha": "6f899a2d2bd03cf74d7f0d8628e09dc59a08811a",
+  "intended_files": [
+    "scripts/t3_external_texture_lineage.py",
+    "tests/test_t3_external_texture_lineage.py",
+    ".github/workflows/raft-t3-external-texenv-export.yml",
+    "prompt/coordination/clients/T3/sessions/20261105T0028Z-T3-externaltex-7af2.md",
+    "prompt/coordination/experiments/T3/"
+  ],
+  "hypothesis": "25 source-external Material TexEnv Texture2D pointers not covered by B05 selected-owner comparison may have changed or disappeared during export; verify only after authentic external-owner target and exact same-export trace, never by bare path IDs.",
+  "related_work": [
+    "https://github.com/alwansan/raf/actions/runs/41939404454",
+    "https://github.com/alwansan/raf/actions/runs/41940350604"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/B05/MEMORY.md",
+    "prompt/coordination/clients/B15/MEMORY.md",
+    "prompt/coordination/clients/B02/MEMORY.md",
+    "docs/T3_AUTHENTIC_MATERIAL_EXPORT_PARITY_2026-11-05.md"
+  ],
+  "experiment_ids": [
+    "T3-external-texenv-20261105"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Build original dependency table and verified cross-owner Texture class resolution; connect to same-process exporter trace, run bounded authentic CI, report counts only; preserve active T3 B43 workflow without edits.",
+  "updated_at": "2026-11-05T00:28:00Z"
+}
