@@ -49,7 +49,18 @@ def translated_image_symbols(text):
         if ((typ=="RWTexture2D") != (bank=="u")
                 or role not in ROLES or role in bindings
                 or space not in (None,"0") or not NAME.fullmatch(name)):
-            raise ValueError("Translated FFT texture register type/drift")
+            # The following is ONLY a bounded public register/type profile,
+            # not the original generated identifier, expression or source.
+            # It identifies an actual translator layout mismatch so that we
+            # do not guess an unverified t0/t1/u0 mapping or touch game files.
+            profile=sorted({
+                (("u" if kind=="RWTexture2D" else "t"),
+                 reg,int(n), int(s or "0"))
+                for kind,identifier,reg,n,s in (m.groups() for m in rows)
+            })
+            raise ValueError(
+                "Translated FFT texture register type/drift profile="+
+                repr(profile))
         bindings[role] = name
     if set(bindings)!=set(ROLES) or len(set(bindings.values())) != 3:
         raise ValueError("Translated FFT image bindings incomplete or aliased")
