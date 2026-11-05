@@ -5,13 +5,13 @@
   "generation": "T-2026-11-05",
   "session_id": "20261105T221843Z-T3-chat-particle28-stream-7c49",
   "issue_id": "RENDER-002",
-  "status": "active",
-  "updated_at": "2026-11-05T22:18:43.313Z",
+  "status": "completed",
+  "updated_at": "2026-11-05T22:23:10Z",
   "base_sha": "04b24a431be8e24204e6ad4bc1471c2460863792",
   "track": "SHA-original 108-use Particle Shader48 three local material Texture PPtrs resolve to class28 and streamed-payload dependencies",
   "hypothesis": "The 10 non-null local original m_TexEnvs from 5 ParticleShader48 materials resolve to three unique original Texture2D objects, whose original m_StreamData may require .resS providers not staged for the bounded export. Verify object type, stream provider extent and missing staged inputs without claiming output pixels.",
   "experiment_key": "T3-zip2-SHA15964-sixscene-4owner-particle108-5material-3target-local-Tex2D28-manifeststream-typed-v1",
-  "resource_key": "t3-ZIP2-sixscene-four-owner-only-22min",
+  "resource_key": null,
   "taken_over_from": [
     "prompt/coordination/clients/T3/sessions/20261105T2204Z-T3-chat-particle108-mattex-a4c6.md",
     "prompt/coordination/clients/T3/sessions/20261105T213100Z-T3-scheduled-clstage-8b4f.md"
@@ -28,7 +28,10 @@
     "prompt/coordination/B_TEAM/events/T3/20261105T221843Z-T3-chat-particle28-stream-7c49.json",
     "docs/T3_ORIGINAL_PARTICLE108_TEXTURE2D_STREAM_2026-11-06.md"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Add private-only source TexEnv Texture PPtr identity output and independent class28/stream provider manifest validator; adversarial type, absent object, malformed stream, missing manifest, out-of-range offset, same target sharing controls; one SHA-original 6scene4owner CI. No game assets/edit, no heavy exporter."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42120918486"
+  ],
+  "result": "Authentic ZIP2 six-scene/4-owner original ParticleShader48 108 Renderer material slots → five Material21 → ten local bound Texture PPtrs → three actual class28 Texture2D objects, all three m_StreamData extents fit one manifest-listed external .resS provider; ZERO provider payloads staged in bounded run; original pixels and actual Android resource parity UNKNOWN. CI42120918486 SUCCESS, 88/88 source-free tests.",
+  "next_step": "Use same-instance W1 Material21 and B02 Texture2D28 export traces + target signed APK/OBB resource manifest to prove five/three source identities exported and stream payload present before treating square fire/smoke rendering as fixed; coordinate T5, no duplicate expensive export.",
+  "integration_commit": "87ca7a76309ef68e69dcb65b1dff9c822482694c"
 }
