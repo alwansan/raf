@@ -81,7 +81,7 @@ def trace_host(source):
     return source
 
 
-def analyze(project):
+def analyze(project, export=None):
     with tempfile.TemporaryDirectory(prefix="t1-runtime-trace-") as temp:
         work = Path(temp)
         path = project / "Assets/T1OriginalDerived/FFT_Candidate_00.compute"
@@ -122,6 +122,9 @@ def analyze(project):
             images = [read_image(work / f"{name}{slot}.rgba32f", WIDTH * HEIGHT * 16)
                       for name in ("original", "roundtrip")]
             passes.append(compare_pass(*images))
+        if export is not None and all(sites) and all(row["match"] for row in passes):
+            with export.open("xb") as stream:
+                stream.write(trace)
         return {"records_by_site": sites, "out_of_bounds_by_site": out_of_bounds,
                 "output_parity": passes}
 
@@ -129,9 +132,10 @@ def analyze(project):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--project", type=Path, required=True)
+    parser.add_argument("--export-private-trace", type=Path)
     args = parser.parse_args()
     try:
-        result = analyze(args.project.resolve())
+        result = analyze(args.project.resolve(), args.export_private_trace)
     except (OSError, ValueError, subprocess.SubprocessError):
         parser.exit(2, "Private Vulkan trace execution or validation failed\n")
     print("RAFT_T1_VULKAN_TRACE " + json.dumps(result, sort_keys=True))

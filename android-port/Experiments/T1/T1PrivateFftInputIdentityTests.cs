@@ -176,13 +176,16 @@ public sealed class T1PrivateFftGpuDispatchTests
         });
     }
 
-    private static int Dispatch(T1GpuResourceRow role, Texture input, Texture butterfly, RenderTexture output)
+    private static int Dispatch(T1GpuResourceRow role, Texture input, Texture butterfly, RenderTexture output,
+        ComputeBuffer trace = null)
     {
         string root = Directory.GetParent(Application.dataPath).FullName;
         string asset = "Assets/T1OriginalDerived/FFT_Candidate_" + role.compiled_slot.ToString("00") + ".compute";
         string source = Path.Combine(root, asset);
         Assert.That(FileSha(source), Is.EqualTo(role.candidate_sha256),
             "Selected original-derived shader SHA mutated");
+        if (trace != null)
+            asset = "Assets/T1TracePass0.compute";
         AssetDatabase.ImportAsset(asset, ImportAssetOptions.ForceSynchronousImport);
         var shader = AssetDatabase.LoadAssetAtPath<ComputeShader>(asset);
         Assert.That(shader, Is.Not.Null, "Private original-derived ComputeShader not imported");
@@ -196,6 +199,8 @@ public sealed class T1PrivateFftGpuDispatchTests
         shader.SetTexture(kernel, role.source_property, input);
         shader.SetTexture(kernel, role.butterfly_property, butterfly);
         shader.SetTexture(kernel, role.output_property, output);
+        if (trace != null)
+            shader.SetBuffer(kernel, "T1TraceBuffer", trace);
         shader.Dispatch(kernel, 1, 1, 1);
         var actual = Read(output);
         int changed = 0;
@@ -208,7 +213,8 @@ public sealed class T1PrivateFftGpuDispatchTests
         Assert.That(changed, Is.GreaterThan(0),
             "GPU Dispatch produced no observed writes to the intended UAV");
         Assert.That(changed, Is.LessThanOrEqualTo(Width * Height));
-        using (var stream = File.Create(CapturePath("T1UnityCapture", "pass" + role.compiled_slot)))
+        string captureName = trace == null ? "pass" + role.compiled_slot : "trace_pass0";
+        using (var stream = File.Create(CapturePath("T1UnityCapture", captureName)))
         using (var writer = new BinaryWriter(stream))
         {
             foreach (var c in actual)
@@ -273,6 +279,23 @@ public sealed class T1PrivateFftGpuDispatchTests
             ClearSentinel(final);
             int pass0 = Dispatch(manifest.resources[0], source, butterfly, intermediate);
             int pass1 = Dispatch(manifest.resources[1], intermediate, butterfly, final);
+            if (File.Exists(Path.Combine(Application.dataPath, "T1TracePass0.compute")))
+            {
+                var records = new uint[4097];
+                using (var trace = new ComputeBuffer(records.Length, sizeof(uint)))
+                {
+                    trace.SetData(records);
+                    ClearSentinel(intermediate);
+                    Dispatch(manifest.resources[0], source, butterfly, intermediate, trace);
+                    trace.GetData(records);
+                }
+                string tracePath = Path.Combine(Directory.GetParent(Application.dataPath).FullName,
+                    "T1UnityCapture", "trace.bin");
+                using (var stream = File.Create(tracePath))
+                using (var writer = new BinaryWriter(stream))
+                    foreach (uint word in records)
+                        writer.Write(word);
+            }
             Assert.That(pass0, Is.GreaterThan(0));
             Assert.That(pass1, Is.GreaterThan(0));
             Debug.Log("RAFT_T1_PRIVATE_FFT_GPU_DISPATCH " +

@@ -168,6 +168,19 @@ jobs:
           export VK_DRIVER_FILES="$(find /usr/share/vulkan/icd.d -maxdepth 1 -name '*lvp*.json' -print -quit)"
           test -f "$VK_DRIVER_FILES"
           python3 -m scripts.t1_fft_vulkan_parity_capture --project t1-original-derived-unity
+          python3 -m scripts.t1_fft_pass0_vulkan_trace --project t1-original-derived-unity \
+            --export-private-trace t1-original-derived-unity/T1VulkanCapture/trace.bin
+          python3 - <<'PY'
+          from pathlib import Path
+          from scripts.t1_fft_pass0_trace_variant import instrument
+
+          assets = Path("t1-original-derived-unity/Assets")
+          candidate = assets/"T1OriginalDerived/FFT_Candidate_00.compute"
+          pragma, hlsl = candidate.read_text(encoding="utf-8").split("\n", 1)
+          if pragma != "#pragma kernel main":
+              raise SystemExit("Unexpected private trace entry point")
+          (assets/"T1TracePass0.compute").write_text(pragma + "\n" + instrument(hlsl))
+          PY
           rm -rf t1-original-derived-unity/_private_vulkan
       - name: Validate privately translated original FFT t0/t1/u2 HLSL resources for first candidate pair
         shell: bash
@@ -199,7 +212,8 @@ jobs:
           python3 - <<'PY'
           import json
           from pathlib import Path
-          from scripts.t1_fft_readback_parity import PIXEL, SENTINEL, read_image
+          from scripts.t1_fft_readback_parity import PIXEL, SENTINEL, compare_pass, read_image
+          from scripts.t1_fft_trace_compare import SIZE, compare
           from scripts.t1_fft_rgba_error_signature import signature
 
           root = Path("t1-original-derived-unity")
@@ -227,6 +241,20 @@ jobs:
               "jointly_written_pixels": len(common),
               "rgba_mismatches": [c["mismatched"] for c in channels],
               "rgba_nonfinite": [c["nonfinite"] for c in channels]}))
+          unity = root/"T1UnityCapture"
+          baseline = read_image(unity/"pass0.rgba32f", 32768 * 16)
+          instrumented = read_image(unity/"trace_pass0.rgba32f", 32768 * 16)
+          trace_parity = compare_pass(baseline, instrumented)
+          print("RAFT_T1_UNITY_TRACE_OUTPUT_PARITY " + json.dumps(trace_parity))
+          if not trace_parity["match"]:
+              raise SystemExit("Unity trace changed pass-zero output")
+          try:
+              paired_trace = compare(
+                  read_image(root/"T1VulkanCapture/trace.bin", SIZE),
+                  read_image(unity/"trace.bin", SIZE))
+          except (OSError, ValueError):
+              raise SystemExit("Invalid private trace comparison") from None
+          print("RAFT_T1_FFT_TRACE_COMPARE " + json.dumps(paired_trace, sort_keys=True))
           PY
           python3 -m scripts.t1_fft_paired_diagnostic \
             t1-original-derived-unity/T1VulkanCapture/pass0.rgba32f \
