@@ -27,11 +27,13 @@ jobs:
       - name: Source-free exact original Renderer and class48 join controls
         run: |
           set -euo pipefail
-          python3 -m py_compile scripts/w1_depth_shaderlab.py scripts/t3_original_renderer_shader_impact.py scripts/t3_original_particle_shader_state.py scripts/t3_original_particle_material_texenv.py scripts/t3_original_particle_texture_targets.py
+          python3 -m py_compile scripts/w1_depth_shaderlab.py scripts/t3_original_renderer_shader_impact.py scripts/t3_original_particle_shader_state.py scripts/t3_original_particle_material_texenv.py scripts/t3_original_particle_texture_targets.py scripts/t3_original_particle_stream_provider.py
           python3 -m unittest discover -s tests -p 'test_t3_original_renderer_shader_impact.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_original_particle_shader_state.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_original_particle_material_texenv.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_original_particle_texture_targets.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_original_particle_stream_provider.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_stream_extent_guard.py' -v
           python3 -m unittest discover -s tests -p 'test_w1_depth_shaderlab.py' -v
           python3 -m unittest discover -s tests -p 'test_b25_foam_pass_state.py' -v
           python3 -m unittest discover -s tests -p 'test_b03_original_renderer_materials.py' -v
@@ -215,7 +217,8 @@ jobs:
           python3 -m scripts.t3_original_particle_texture_targets \
             --original "$RUNNER_TEMP/t3-original-six-scene" \
             --manifest zip2-source/RAFT_FILE_MANIFEST.tsv \
-            --out "$RUNNER_TEMP/t3-original-particle108-texture2d28-stream-safe.json"
+            --out "$RUNNER_TEMP/t3-original-particle108-texture2d28-stream-safe.json" \
+            --private-plan "$RUNNER_TEMP/t3-particle-private-stream-plan.json"
           python3 - <<'PY'
           import os,json
           from pathlib import Path
@@ -233,6 +236,29 @@ jobs:
           assert d['same_export_Texture2D28_GUID_or_Android_sampler_binding_verified'] is False
           print('RAFT_T3_SOURCE_PARTICLE108_THREE_TEXTURE2D28_TYPED_MANIFEST_VERIFIED=true device_pixels_proven=false')
           PY
+      - name: SHA-restore exact ONE original Particle Texture2D stream provider and read 3 private image spans
+        run: |
+          set -euo pipefail
+          python3 -m scripts.t3_original_particle_stream_provider \
+            --private-plan "$RUNNER_TEMP/t3-particle-private-stream-plan.json" \
+            --zip2 zip2-source \
+            --original "$RUNNER_TEMP/t3-original-six-scene" \
+            --out "$RUNNER_TEMP/t3-particle108-stream-provider-verified-safe.json"
+          python3 - <<'PY'
+          import os,json
+          from pathlib import Path
+          d=json.loads((Path(os.environ['RUNNER_TEMP'])/'t3-particle108-stream-provider-verified-safe.json').read_text())
+          assert d['status']=='ZIP2_SHA_ORIGINAL_PARTICLE108_THREE_IMAGE_STREAM_RANGES_READ'
+          assert d['immutable_original_ZIP2_commit_verified'] is True
+          assert d['selected_private_stream_providers']==1
+          assert d['selected_external_stream_provider_size_and_SHA256_verified'] is True
+          assert d['selected_original_Texture2D28_stream_ranges_read']==3
+          assert d['source_original_stream_payload_unstaged_after_this_step'] is False
+          assert d['source_Texture2D_pixels_successfully_decoded'] is False
+          assert d['same_instance_exported_texture_guid_or_Android_pixels_verified'] is False
+          assert d['original_raw_resource_paths_hashes_bytes_or_IDs_published'] is False
+          print('RAFT_T3_REAL_PARTICLE_108_SOURCE_RES_S_SHA_VERIFIED=true three_ranges_read=true mobile_pixels_unverified=true')
+          PY
       - name: Upload only safe numeric source Shader usage bands, never private IDs
         if: always()
         uses: actions/upload-artifact@v4
@@ -245,5 +271,6 @@ jobs:
             ${{ runner.temp }}/t3-original-108particle-pass-state-safe.json
             ${{ runner.temp }}/t3-original-particle108-material-texenv-safe.json
             ${{ runner.temp }}/t3-original-particle108-texture2d28-stream-safe.json
+            ${{ runner.temp }}/t3-particle108-stream-provider-verified-safe.json
           if-no-files-found: ignore
           retention-days: 7
