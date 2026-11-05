@@ -16,6 +16,8 @@ FIELDS = {
     "world_direct_rgd_constructor_calls", "user_direct_rgd_constructor_calls",
     "world_rgd_typed_locals", "user_rgd_typed_locals",
     "world_rgd_field_stores",
+    "other_saveandload_methods_rgd_constructor_calls",
+    "world_original_load_rgd_generic_calls", "user_original_load_rgd_generic_calls",
     "world_pre_call_rgd_source_clue", "user_pre_call_rgd_source_clue",
     "direct_constructor_is_dynamically_proven_save_argument",
     "original_save_method_invoked", "game_world_rgd_written_or_loaded",
@@ -38,7 +40,8 @@ NEGATIVE = (
 PRODUCER_CLUES = {
     "RGD_TYPED_INSTANCE_FIELD_LOAD", "RGD_TYPED_STATIC_FIELD_LOAD",
     "RGD_TYPED_CALL_RETURN", "RGD_TYPED_LOCAL_LOAD",
-    "DIRECT_RGD_CONSTRUCTION", "UNKNOWN_PRECALL_SOURCE",
+    "DIRECT_RGD_CONSTRUCTION", "RGD_GENERIC_LOAD_CALL_RETURN",
+    "UNKNOWN_PRECALL_SOURCE",
 }
 
 COUNTS = (
@@ -48,6 +51,8 @@ COUNTS = (
     "world_direct_rgd_constructor_calls", "user_direct_rgd_constructor_calls",
     "world_rgd_typed_locals", "user_rgd_typed_locals",
     "world_rgd_field_stores",
+    "other_saveandload_methods_rgd_constructor_calls",
+    "world_original_load_rgd_generic_calls", "user_original_load_rgd_generic_calls",
 )
 
 
@@ -81,6 +86,12 @@ def validate(report):
             report["world_direct_rgd_constructor_calls"],
         "world_rgd_typed_local_count": report["world_rgd_typed_locals"],
         "world_rgd_field_store_count": report["world_rgd_field_stores"],
+        "other_saveandload_methods_rgd_constructor_count":
+            report["other_saveandload_methods_rgd_constructor_calls"],
+        "world_original_generic_load_rgd_count":
+            report["world_original_load_rgd_generic_calls"],
+        "user_original_generic_load_rgd_count":
+            report["user_original_load_rgd_generic_calls"],
         "world_pre_call_rgd_source_clue": report["world_pre_call_rgd_source_clue"],
         "user_pre_call_rgd_source_clue": report["user_pre_call_rgd_source_clue"],
         "world_argument_construction_clue": (
