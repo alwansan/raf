@@ -1,0 +1,50 @@
+{
+  "id": "T5-original-filemanager-compiled-il-call-edges",
+  "title": "Original Raft SaveAndLoad→FileManager compiled IL read/write roles",
+  "kind": "original-managed-metadata-execution-contract",
+  "source": {
+    "provider": "alwansan/raf ZIP2 original managed DLL",
+    "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "path": "Raft_Data/Managed/Assembly-CSharp.dll",
+    "bytes": 3211776,
+    "sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e"
+  },
+  "stages": {
+    "acquisition": "ORIGINAL_SHA256_VERIFIED",
+    "extraction": "COMPILED_IL_METADATA_READ_MONO_CECIL",
+    "reconstruction": "NOT_APPLICABLE",
+    "binding": "SAVED_LOAD_AND_SAVE_DIRECT_FILEMANAGER_TARGETS_RESOLVED_IN_ORIGINAL_IL",
+    "integration": "INDEPENDENT_SOURCE_METADATA_ORACLE_CI42012597665_NOT_NATIVE",
+    "device": "UNKNOWN"
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42012597665",
+    "https://github.com/alwansan/raf/commit/7159dba501f4ee2615b92009c2b4622dd8d39f34",
+    "https://github.com/alwansan/raf/actions/runs/41942655373"
+  ],
+  "observed": {
+    "read": {
+      "resolved": true,
+      "parameter_count": 2,
+      "il_instruction_count": 14,
+      "direct_system_io_calls": 1,
+      "exception_handlers": 1
+    },
+    "write": {
+      "resolved": true,
+      "parameter_count": 1,
+      "il_instruction_count": 13,
+      "direct_system_io_calls": 1,
+      "exception_handlers": 1
+    },
+    "same_target": false,
+    "report_test_cases_passed": 11
+  },
+  "remaining": [
+    "ILSpy regex mismatch reason unresolved despite compiled existence proven",
+    "No Android path/durable RGD write/read-back, host world completion or native/phone evidence",
+    "Do not infer source-level parser hit rate or Unity/IL2CPP correctness from compiled original"
+  ],
+  "updated_by": "T5",
+  "updated_at": "2026-11-05T10:42:00Z"
+}
