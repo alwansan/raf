@@ -1,0 +1,21 @@
+# T5 — Android Resolution contract and non-regression boundary (2026-11-05 UTC)
+
+## Pinned observations
+
+Owner [phone report](DEVICE_FEEDBACK_42058825739_AR.md) confirms real world entry, save, exit and reopen on native run 42058825739 (source e9c358eda01785b65e4eb14f18723da426635628). This does not validate the newer UI button source changes. Three diagnostic buttons have already been moved right in commits acc964d0 and 96f41443; do not duplicate. T4 owns physical mouse capture.
+
+Read-only original source audit [ORIGINAL_ANDROID_DISPLAY_AUDIT_2026-11-03.md](ORIGINAL_ANDROID_DISPLAY_AUDIT_2026-11-03.md) establishes **two distinct resolution owners**: GraphicsSettingsBox.cs (original normalized SHA256 e1854d74adbbe0565b586ec749f7de2cc73e3f97f59c388934a3faa0defc9300, Screen.SetResolution at source line 565) and DynamicResolution.cs (SHA256 69f9ab873de44b167deb3d6d00182fd59b0147b27d8365fff64b2849069cedbc, ResizeBuffers at lines 37/55). Existing Android-specific GraphicsSettingsBox adapter early-returns in ApplyCurrentResolutionAndFullscreenMode. Original source CI41561621297 found no direct GraphicsSettingsBox reference to DynamicResolution, and no external explicit qualified scale-field writes in its bounded lexical scan. The two ResizeBuffers expressions are syntactically different but previous private source review showed the internally updated scale factors follow the same arithmetic. No evidence justifies forcing them equal or disabling DynamicResolution.
+
+## Discriminating implementation boundary
+
+A resolution dropdown on Android must not invoke the desktop Screen.SetResolution path merely to select a smaller render target. In Unity 2021.3, physical panel mode / refresh rate, Screen.width/height window dimensions, and dynamic rendering scale are different values. The Android adapter's current early-return is an **orientation safety guard**, not an implemented lower-resolution selector. A second menu is prohibited; changes must bind to the existing GraphicsSettingsBox selection and persistence path, and preserve landscape and physical display aspect.
+
+Before a production change, capture (in private original managed source/IL, with no game source text published) the actual GraphicsSettingsBox resolution option population, selection callback, persistence read/write and ApplyCurrentResolutionAndFullscreenMode path. Distinguish whether the menu stores physical width/height or render scale. Check device-supported render scale range, enforce equal X/Y scale for an aspect-preserving user option only after separating it from existing automatic DynamicResolution, and restore selection on menu reopen without triggering desktop display-mode changes. Record Screen.width/height, Display.main.renderingWidth/Height, refreshRateRatio, requested render scale and measured frame timings separately. No synthetic source test can establish actual Android refresh mode support.
+
+## Current evidence / limits
+
+No original Settings option population/callback/persistence IL was inspected in this cycle; no valid patch to the game Settings can be inferred from existing lexical mutation counts. No Unity import or device regression test was launched. This is a narrowed source-backed integration boundary, **not** an implemented Resolution feature, not an FPS improvement, and not a verified Android APK/OBB pairing. Actual retained delivery archive is already verified in [T5 retention report](T5_NATIVE_DELIVERY_RETENTION_2026-11-05.md), CI42110297871, with artifact13454900880 expiring 2026-11-08 21:12:40 UTC. Do not duplicate that 6GB retrieval without a concrete new binary inspection objective. Release POST403 remains open.
+
+## Next executable experiment
+
+Use the original ZIP2-pinned managed assembly and existing private source/Mono.Cecil harness to report only type/method identifiers, call/field references and fingerprints for GraphicsSettingsBox option binding and persistence. Add adversarial controls proving that a resolution label alone cannot be mistaken for a writable supported render scale. Only after that evidence, patch the narrow Android Settings adapter with a persisted aspect-preserving render-scale option; validate source compile and then an explicitly coordinated Unity/device run. No T1–T4 files or runtime flags should be changed speculatively.
