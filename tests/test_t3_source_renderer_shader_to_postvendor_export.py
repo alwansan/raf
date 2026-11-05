@@ -76,6 +76,18 @@ class RendererShaderRealExportBridge(unittest.TestCase):
         self.assertEqual(result["source_Shader48_unique_targets_by_actual_postvendor_status"][
                         "source_Shader48_targets_with_unity_builtin"],1)
 
+    def test_builtin_transport_rejects_null_fileid_or_all_zero_guid_for_any_original(self):
+        valid="0000000000000000f000000000000000"
+        bad_cases=((0,valid),(0,"0"*32),(46,"0"*32),(-1,valid))
+        for idx in (0,20):
+            for file_id,guid in bad_cases:
+                data=list(self.fixture())
+                data[1]["objects"][idx]["export"]={
+                    "file_id":file_id,"guid":guid,"type":0}
+                with self.subTest(source_row=idx,file_id=file_id,zero_guid=guid=="0"*32):
+                    with self.assertRaisesRegex(ValueError,"unresolved_or_wrong_actual"):
+                        self.call(data)
+
     def test_source_B03_provenance_cannot_be_substituted_by_unchecked_rows(self):
         data=list(self.fixture())
         data[3]["status"]="SYNTHETIC_OR_UNAUTHENTICATED_SOURCE_ONLY"
