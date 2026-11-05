@@ -1,0 +1,27 @@
+{
+  "id": "T2-foam-original-field-ref-array-call-consumer",
+  "owner": "T2",
+  "issue_id": "WATER-001",
+  "title": "Original Foam RenderTexture[] field address is consumed as typed byref RenderTexture[] call argument",
+  "kind": "original_managed_IL_address_consumer_typed_call",
+  "stages": {
+    "acquisition": "ZIP2_MANAGED_DLL_SIZE_SHA_VERIFIED",
+    "extraction": "STRICT_ORIGINAL_GUARDED_TEXTURE_INT_GETTER_EXACT_PRIVATE_RENDER_TEXTURE_ARRAY_FIELD",
+    "reconstruction": "ONE_ORIGINAL_LDFLDA_FLOWS_TO_EXACT_TYPED_REF_RENDER_TEXTURE_ARRAY_METHOD_ARGUMENT",
+    "binding": "BYREF_RECIPIENT_MAY_CHANGE_FIELD_BUT_ACTUAL_CALLEE_BODY_WRITE_AND_RUNTIME_NOT_YET_PROVEN",
+    "integration": "T2_SHA_ORIGINAL_CECIL_WORKFLOW42053062181_SUCCESS_SOURCE_ONLY_NO_SHADERLAB_OR_UNITY_CHANGE",
+    "device": "NOT_TESTED"
+  },
+  "observed": {
+    "original_ldflda_sites": 1,
+    "exact_typed_byref_argument_to_call_sites": 1,
+    "actual_callee_body_present_verified": false,
+    "actual_field_write_verified": false,
+    "runtime_contents_verified": false
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42053062181",
+    "https://github.com/alwansan/raf/commit/34f840561993b44c59cd7c61b22f1f013e64cd89"
+  ],
+  "next_step": "Resolve recipient exact original MethodDefinition and bound mutator opcodes. WATER-001 OPEN NOT_READY 0/3."
+}
