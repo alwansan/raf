@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T1121Z-T4-managed-stream",
+  "issue_id": "LOCAL-005",
+  "track": "world-save",
+  "approach": "Execute the actual two SHA-verified original compiled FileManager stream-returning static methods via reflection, selected strictly from compiled SaveAndLoad generic Load and Save call operands; write fixed synthetic bytes in a new private temporary file, close, reopen using original read(FileMode.Open), verify bytes, and delete. Report booleans only; no real .rgd payload, Unity, device, save schema or path assumptions.",
+  "status": "active",
+  "base_sha": "9e69c3a30ce9082dc192dec4bf01b7844b548002",
+  "intended_files": [
+    "android-port/Experiments/T4/OriginalManagedStreamRoundtrip/OriginalManagedStreamRoundtrip.csproj",
+    "android-port/Experiments/T4/OriginalManagedStreamRoundtrip/Program.cs",
+    "scripts/t4_validate_original_managed_stream_roundtrip.py",
+    "tests/test_t4_validate_original_managed_stream_roundtrip.py",
+    ".github/workflows/raft-t4-original-managed-stream-roundtrip.yml",
+    "docs/T4_ORIGINAL_MANAGED_STREAM_ROUNDTRIP_2026-11-05.md"
+  ],
+  "hypothesis": "The authentic original FileManager File.Create(string) and File.Open(string, FileMode) helpers, whose compiled IL and catch exits are confirmed, can perform a true bounded write-close-reopen-byte-compare in a desktop managed runtime. This tests original methods beyond structural census, not genuine RGD serialization or Android storage.",
+  "related_work": [
+    "prompt/coordination/work/LOCAL-005/T4-20261105T1113Z-original-io-control-flow.json",
+    "docs/T4_ORIGINAL_FILE_IO_CONTROL_FLOW_2026-11-05.md",
+    "docs/T5_ORIGINAL_FILEMANAGER_IL_METADATA_2026-11-05.md"
+  ],
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/actions/runs/42018088542",
+    "https://github.com/alwansan/raf/actions/runs/42012597665",
+    "prompt/coordination/clients/B14/MEMORY.md",
+    "prompt/coordination/clients/B19/MEMORY.md"
+  ],
+  "experiment_ids": [
+    "20261105T1121Z-original-managed-stream"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Build constrained immutable-Cecil selected reflection invocation of two exact original methods, source-free fake result rejection, isolated test on original DLL; report failed runtime linkage without weakening gates. No Unity/native job requested.",
+  "updated_at": "2026-11-05T11:21:00Z"
+}
