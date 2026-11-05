@@ -4,9 +4,9 @@
   "origin": "chat",
   "owner": "T1",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "cd21db83712feeb0d851866f1a104c52f46859de",
-  "updated_at": "2026-11-05T16:26:56.597Z",
+  "updated_at": "2026-11-05T16:29:17.961Z",
   "intended_files": [
     "scripts/t1_fft_pass0_trace_variant.py",
     "tests/test_t1_fft_pass0_trace_variant.py",
@@ -15,5 +15,16 @@
   "experiment_key": "authenticated-pass0-three-load-trace-variant-compile-only",
   "resumed_from_sessions": [
     "20261105T162001Z-T1-chat-4d485e"
-  ]
+  ],
+  "implementation_sha": "cd9058f53c1383156e8c27fd20d5b2646c62e981",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42064723490"
+  ],
+  "result": {
+    "compiled_and_validated": true,
+    "trace_sites": 3,
+    "max_records": 256,
+    "runtime_capture": false
+  },
+  "next_step": "Bind and zero the 2049-word trace buffer in both test runners, compare original and instrumented outputs before accepting trace evidence, reject overflow, and compare order-independent per-site traces. If per-invocation attribution is needed, add an explicit invocation key before interpreting differences."
 }

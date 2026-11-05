@@ -1,0 +1,12 @@
+{
+  "id": "20261105T162656Z-T1-chat-1a2751",
+  "owner": "T1",
+  "session_id": "20261105T162656Z-T1-chat-1a2751",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "CI42064723490 compiled and validated the disposable instrumentation of all three authenticated generated pass-zero Load sites. Each record holds a site, integer coordinate, and fetched component bits; capacity 256. Baseline same-Vulkan parity 0/64 and 0/32 retained. No trace variant dispatch or runtime capture was performed.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42064723490"
+  ],
+  "at": "2026-11-05T16:29:17.961Z"
+}
