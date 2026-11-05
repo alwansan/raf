@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "session_id": "20261104T2357Z-T5-b12-fixture-7e2",
+  "issue_id": "ASSET-RESTORE-001",
+  "hypothesis": "Immutable ZIP2 source staging scales from one owner to three original graphics/FFT-related serialized owners with independent SHA per original and all source preflight checks before any selected output is published; feature LFS consumer independently verifies all 3.",
+  "source_commit": "0f3739e38f6b42c92100e75697a314988869cf63",
+  "input_hashes": [
+    {
+      "source": "ZIP2 source commit",
+      "sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+    },
+    {
+      "source": "ZIP2 manifest Git blob",
+      "sha": "4201fda426d80caba36c275ceaddb440b05c5b4e"
+    },
+    {
+      "name": "resources.assets",
+      "size": 111533516,
+      "sha256": "87493249f1adfc0c5eb8b82e4e199e208cd2c95eabe9796cab82116c4838595c",
+      "source": "Raft_Data/resources.assets"
+    },
+    {
+      "name": "sharedassets0.assets",
+      "size": 115978112,
+      "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+      "source": "Raft_Data/sharedassets0.assets"
+    },
+    {
+      "name": "sharedassets36.assets",
+      "size": 110149324,
+      "sha256": "b32fcd9d327c8926b2309ffc1b5645a0c23d64ed95be37ed94e96f34736530c8",
+      "source": "Raft_Data/sharedassets36.assets"
+    }
+  ],
+  "tool_versions": {
+    "runner": "ubuntu-24.04",
+    "python": "GitHub runner Python3",
+    "Unity": "not run"
+  },
+  "commands": [
+    "python3 -m unittest -v tests.test_t5_stage_zip2_render_owners",
+    "python3 -m scripts.t5_stage_zip2_render_owners --zip2-checkout zip2-original --output-root \"$RUNNER_TEMP/t5-original-graphics\" --owner Raft_Data/resources.assets --owner Raft_Data/sharedassets0.assets --owner Raft_Data/sharedassets36.assets --byte-budget 360000000",
+    "scripts.hydrate_render_payloads.plan and reuse_verified_staged_sources all three owners then hashlib.file_digest original outputs with independent feature SHA"
+  ],
+  "negative_controls": [
+    "Two-owner synthetic selected batch: second original symlink rejected before first output created",
+    "Multi-owner synthetic source exact size/SHA and correct reassembly",
+    "Existing 11 single-owner corruption/manifest/LFS redirect/duplicate/overbudget and integrity tests"
+  ],
+  "workflow_path": ".github/workflows/raft-t5-zip2-render-stage.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41940032540",
+  "artifact_urls": [],
+  "budget": "15-minute ubuntu-24.04; 337660952B actual source verified, sparse ZIP2, 0 LFS, no proprietary artifacts",
+  "status": "completed",
+  "observed_result": {
+    "run_id": 41940032540,
+    "conclusion": "success",
+    "job_id": 126958265002,
+    "synthetic_tests": "13/13",
+    "original_owners_verified": 3,
+    "original_bytes_verified": 337660952,
+    "original_SHA256_verified_per_owner": true,
+    "feature_LFS_pointer_consumed": 3,
+    "no_LFS": true,
+    "actual_Unity_or_GPU_device": false,
+    "earlier_check": "41940016502 also PASSED tests at single-owner workflow revision"
+  },
+  "rejected_hypotheses": [
+    "ZIP2 contains unmodified original but needs fake feature pointer pin: false, independent matching SHA works",
+    "Partial valid stage can be allowed after unsafe later selected owner: rejected by new negative test; full preflight required"
+  ],
+  "limitations": [
+    "Three original serialized asset files are not automatically 3 recovered compute kernels or functional water",
+    "Current workflow only stages source into temporary verified directory; no Unity import/compiled shader or Android test",
+    "Native Unity workflow and existing ART sources untouched; broad LFS source migration requires coordination and exact stage consumer wiring before full use",
+    "Other ZIP2 asset owners and 366-file manifest not all tested; original source reference SHA still pinned"
+  ],
+  "integration_commit": "0f3739e38f6b42c92100e75697a314988869cf63",
+  "next_step": "Coordinate with T1/T3 on actual exported original shader/material ownership and selectively feed verified 3 owner stage into approved Unity pipeline; preserve runtime source authenticity and device gates."
+}
