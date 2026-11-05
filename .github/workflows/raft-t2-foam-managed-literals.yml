@@ -130,6 +130,18 @@ jobs:
                    'call_return','unknown'}
           assert set(o).issubset(allowed) and sum(o.values())==4
           assert all(type(v) is int and v>=0 for v in o.values())
+          assert o=={'direct_ldc_i4_literal':4}
+          assert r['non_authored_actual_i4_index_values_decoded_count']==4
+          d=r['non_authored_actual_i4_index_values_distinct_count']
+          assert type(d) is int and 1 <= d <= 4
+          assert type(r['non_authored_actual_i4_index_values_all_nonnegative']) is bool
+          assert r['original_RenderTexture_array_runtime_length_or_element_validity_verified'] is False
+          assert r['private_original_i4_index_values_or_digests_disclosed'] is False
+          # Presence of raw private integer lists or a reversible small-domain
+          # digest in safe-report JSON is prohibited.
+          forbidden={'original_i4_index_values','private_original_i4_values',
+                     'original_i4_index_digest_sha256'}
+          assert not forbidden.intersection(r)
           b=r['original_exact_Texture_int_producer_body_op_classes']
           assert r['original_exact_Texture_int_producer_body_accepted_same_SHA_definition']
           assert b['InstructionCount']==10 and b['Branches']==1 and b['ReturnInstructions']==2
