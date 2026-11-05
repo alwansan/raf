@@ -2,9 +2,9 @@
   "session_id": "20261105T2045Z-T5-scheduled-ui-right-a71",
   "origin": "scheduled",
   "issue_id": "DISPLAY-003",
-  "status": "active",
+  "status": "completed_source_only",
   "base_sha": "d51b98cccf22ea71f3a334fa89749b5ca782ad05",
-  "updated_at": "2026-11-05T20:45:00Z",
+  "updated_at": "2026-11-05T20:49:00Z",
   "intended_files": [
     "android-port/Runtime/Platform/AndroidTouchUiPanel.cs"
   ],
@@ -12,5 +12,11 @@
   "resource_key": "none",
   "hypothesis": "Existing three diagnostic buttons anchored top-left overlap the HUD/game. Right-edge anchors with negative inward offsets keep controls inside safe area without affecting touch gamepad layout.",
   "taken_over_from": "docs/DEVICE_FEEDBACK_42058825739_AR.md",
-  "constraints": "Do not touch T4 mouse files, T1/T2 water or T3 graphics; do not run Unity; preserve input bindings."
+  "constraints": "Do not touch T4 mouse files, T1/T2 water or T3 graphics; do not run Unity; preserve input bindings.",
+  "commits": [
+    "acc964d03b89ff702c60ecf3e7ff84f9433e9bd1",
+    "96f41443d8545776b17b1d828fa52be60046c2dd"
+  ],
+  "verification": "6 static assertions passed on blob e1c52ea2e5d37a36eceb68ced3ff430f64e27c08; Unity/device unverified",
+  "next_step": "Await existing CI for compile; device test on matched artifact; then Resolution improvement isolated."
 }
