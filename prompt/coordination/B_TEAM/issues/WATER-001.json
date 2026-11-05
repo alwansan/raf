@@ -103,7 +103,10 @@
     "https://github.com/alwansan/raf/actions/runs/41958511122",
     "https://github.com/alwansan/raf/actions/runs/41958963107",
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_FFT_ORIGINAL_DERIVED_UNITY_CANDIDATES_2026-11-05.md",
-    "https://github.com/alwansan/raf/actions/runs/41959712898"
+    "https://github.com/alwansan/raf/actions/runs/41959712898",
+    "https://github.com/alwansan/raf/actions/runs/42010878771",
+    "https://github.com/alwansan/raf/actions/runs/42011720822",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_GAMECI_SOURCEFREE_UNITY_LICENSE_2026-11-05.md"
   ],
   "remaining": [
     "Spectrum/Foam/Blur passes ناقصة في APK86",
@@ -149,7 +152,8 @@
     "Foam original compiled SPIR-V sampler use 21 calls / 6 numeric pairs proven by T2; source m_Index/m_SamplerIndex→material/Unity shader/Adreno remains unverified",
     "T2 authentic original Foam: source serialized t/s matches genuine native DXBC declarations and all six t/s pairs actively SAMPLE-used in 21 instructions; DXBC→translated SPIRV ID/descriptor identity, Unity original Material upload, authentic ShaderLab and Adreno device remain unverified (CI41958159556).",
     "T1 original 20/20 compiled FFT private DXBC-derived .compute candidate staging SUCCESS (CI41957549770), but three actual Unity Editor import attempts failed before a result; latest41958963107 Unity exit1 and sanitized licensing_failure_category=true. Verify activation using source-free Unity fixture, then authenticate actual Unity import and original runtime FindKernel/Dispatch. Not a game/device water fix.",
-    "T1 source-free Unity 2021 Editor project CI41959712898 failed before Raft acquisition: empty_project_created=false, licensing_failure_category=true, original_raft_data_acquired=false. Resolved shader source is not responsible for this test's failure; actual Editor activation and FindKernel/Adreno remain unknown."
+    "T1 source-free Unity 2021 Editor project CI41959712898 failed before Raft acquisition: empty_project_created=false, licensing_failure_category=true, original_raft_data_acquired=false. Resolved shader source is not responsible for this test's failure; actual Editor activation and FindKernel/Adreno remain unknown.",
+    "T1 2026-11-05: Unity2021.3.45f2 activation works via supported GameCI unity-test-runner and synthetic original-free ComputeShader was imported, with actual HasKernel/FindKernel/group(64,1,1) passing 2/2 CI42011720822. Old custom direct Docker licensing failure was not proof account credentials invalid. Authenticated 20 original FFT-derived candidates still not imported by this safe route; authored runtime mapping/pixels/Adreno remain unverified."
   ],
   "acceptance": [
     "هوية برامج ونوى أصلية أو تطابق موثق دونdummy",
@@ -157,5 +161,5 @@
     "اختبار هاتف يثبت الماء بلا pass/kernel errors"
   ],
   "updated_by": "T1",
-  "updated_at": "2026-11-05T03:11:00Z"
+  "updated_at": "2026-11-05T10:37:00Z"
 }
