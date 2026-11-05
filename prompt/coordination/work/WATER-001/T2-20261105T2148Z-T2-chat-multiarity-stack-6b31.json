@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T2148Z-T2-chat-multiarity-stack-6b31",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "track": "source-authentic-Foam-void-multiarg-evaluation-stack",
+  "status": "active",
+  "base_sha": "0f41844a4c95eec07e615cfef7c12f6ea3e1a71c",
+  "resumed_from_sessions": [
+    "20261105T2107Z-T2-chat-writer-call-ab1c",
+    "20261105T2124Z-T2-scheduled-stackcap-6c2e"
+  ],
+  "approach": "Bounded same-basic-block reverse stack-source slice for exact Foam RenderTexture stloc after original multiple-input void call; classify source opcode family of surviving would-be return value; require known CIL stack pop/push, no branch/handler bypass. Existing signed SHA ZIP2 Cecil workflow; source-free positive and malformed controls; no private IL output.",
+  "hypothesis": "When void call consumes multiple operands, its arguments can be skipped by formally modeled evaluation-stack arity and the remaining top-of-stack store source can be classified conditional on straight-line execution; if control flow or unhandled opcode intervene, fail closed.",
+  "intended_files": [
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/FoamReturnWriterStackSlice.cs",
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/FoamReturnWriterCallEvidence.cs",
+    ".github/workflows/raft-t2-foam-managed-literals.yml",
+    "prompt/coordination/work/WATER-001/T2-20261105T2148Z-T2-chat-multiarity-stack-6b31.json",
+    "prompt/coordination/clients/T2/sessions/20261105T2148Z-T2-chat-multiarity-stack-6b31.md",
+    "prompt/coordination/experiments/T2/T2-20261105T2148Z-T2-chat-multiarity-stack-6b31.json",
+    "prompt/coordination/B_TEAM/events/T2/20261105T2148Z-T2-chat-multiarity-stack-6b31-result.json"
+  ],
+  "experiment_key": "sha0a6f0527-multiarg-void-returnlocal-reverse-stack-source-v1",
+  "resource_key": "existing-SHA-pinned-ZIP2-FoamRuntimeStringBridge",
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/actions/runs/42111118348",
+    "https://github.com/alwansan/raf/actions/runs/42112378300",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/T2/sessions/20261105T2124Z-T2-scheduled-stackcap-6c2e.md"
+  ],
+  "source_pin": {
+    "zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "dll_bytes": 3211776,
+    "dll_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e"
+  },
+  "last_verified_result": "CI42111118348 original exact preceding call void, consumes multiple operands, preceding opcode family other, no simple one-input dup retention; source-only CI success. CI42112378300 scheduled CFG independent synthetic success, no device evidence.",
+  "run_urls": [],
+  "experiment_ids": [
+    "T2-20261105T2148Z-T2-chat-multiarity-stack-6b31"
+  ],
+  "updated_at": "2026-11-05T21:48:00Z",
+  "next_step": "Implement separate stack slice with controlled safe aggregate, synthetic adversarial fixtures; observe SHA-original run; no Unity, GPU, or phone acceptance claims."
+}

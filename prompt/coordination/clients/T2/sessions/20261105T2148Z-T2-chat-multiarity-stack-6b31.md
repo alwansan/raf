@@ -1,0 +1,16 @@
+# T2 chat — original Foam multi-operand void-call surviving-stack provenance
+- session_id: `20261105T2148Z-T2-chat-multiarity-stack-6b31`
+- origin: `chat`
+- status: `active`
+- base_sha: `0f41844a4c95eec07e615cfef7c12f6ea3e1a71c`
+- resumed_from_sessions: `20261105T2107Z-T2-chat-writer-call-ab1c`, `20261105T2124Z-T2-scheduled-stackcap-6c2e`
+- work_ids: `prompt/coordination/work/WATER-001/T2-20261105T2148Z-T2-chat-multiarity-stack-6b31.json`
+- experiment_key: `sha0a6f0527-multiarg-void-returnlocal-reverse-stack-source-v1`
+- original source pin: ZIP2 `15964ea8f246b6e076ce26b60931ee2e1a9a2385`, original managed DLL 3,211,776 bytes SHA256 `0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e`.
+- Restored source-authentic [CI42111118348](https://github.com/alwansan/raf/actions/runs/42111118348) success: exact writer prior void call uses multiple operands, immediate pre-call generic `other`, value producer still unresolved.
+- Latest scheduled independent CFG stack cap session `20261105T2124Z-T2-scheduled-stackcap-6c2e` modified only `scripts/t2_rt_return_cfg.py` and scheduled tests; [CI42112378300](https://github.com/alwansan/raf/actions/runs/42112378300) passed source-free checks, separate ownership.
+- Scope: exact compiled call/return-local same-block reverse slice in new C# class, controlled categorical result only. No Unity/full game compile, original IL/method names/small integer values published, no artifacts containing private source. Preserve T1 FFT/T3 render/T4 local/T5 integration.
+- Intended paths: `android-port/Experiments/T2/FoamRuntimeStringBridge/FoamReturnWriterStackSlice.cs`, `FoamReturnWriterCallEvidence.cs`, `.github/workflows/raft-t2-foam-managed-literals.yml`, own work/experiment/event/session records.
+- Hypothesis: skip argument stack consumed by multi-operand void call to identify what feeds `stloc`, fail closed on unknown operations and all branch/handler entry boundaries.
+- Await only source-original CI; if it runs longer, record run link, keep work separate and hand off precise continuation.
+- next_step: new source-safe bounded reverse-slice implementation and adversarial fixtures, then verify real pin and guard in CI.
