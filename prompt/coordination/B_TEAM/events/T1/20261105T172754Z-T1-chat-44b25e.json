@@ -1,0 +1,12 @@
+{
+  "id": "20261105T172754Z-T1-chat-44b25e",
+  "owner": "T1",
+  "session_id": "20261105T172754Z-T1-chat-44b25e",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "CI42074952878 passed four synthetic unit tests and a glslang-compiled, spirv-val-validated GLSL vertex/fragment pair with explicit Location/Component and gl_PerVertex. The audit ignores all-BuiltIn blocks and rejects mixed unsupported blocks. No authentic Raft shader or renderer was exercised.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42074952878"
+  ],
+  "at": "2026-11-05T17:28:58.718Z"
+}

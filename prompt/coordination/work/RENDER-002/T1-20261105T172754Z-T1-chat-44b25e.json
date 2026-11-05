@@ -4,9 +4,9 @@
   "origin": "chat",
   "owner": "T1",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed",
   "base_sha": "308ac41655727f359143996b730eb7bdb8ceb339",
-  "updated_at": "2026-11-05T17:27:54.369Z",
+  "updated_at": "2026-11-05T17:28:58.718Z",
   "intended_files": [
     "scripts/t1_spirv_interface_component_audit.py",
     "tests/test_t1_spirv_interface_component_audit.py",
@@ -15,5 +15,11 @@
   "experiment_key": "spirv-stage-component-audit-compiled-glsl-builtin-block",
   "resumed_from_sessions": [
     "20261105T172341Z-T1-chat-18786c"
-  ]
+  ],
+  "implementation_sha": "e2c3a662751a42962848a345e8beee62d8df0175",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42074952878"
+  ],
+  "result": "CI42074952878 passed four synthetic unit tests and a glslang-compiled, spirv-val-validated GLSL vertex/fragment pair with explicit Location/Component and gl_PerVertex. The audit ignores all-BuiltIn blocks and rejects mixed unsupported blocks. No authentic Raft shader or renderer was exercised.",
+  "next_step": "T3 may apply the CLI to its matched private shader pairs. T1 FFT remains parked while native Unity is occupied."
 }
