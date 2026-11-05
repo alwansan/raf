@@ -20,6 +20,12 @@ import tempfile
 from scripts import t3_original_top_shader_dxbc_feasibility as previous
 from scripts import t3_original_renderer_shader_impact as original
 from scripts.t3_stage_io_drift import classify_stage_io
+from scripts.t3_spirv_interface_name_drift import (
+    BOOLEAN_FIELDS as NAME_BOOLEAN_FIELDS,
+    FIELDS as NAME_FIELDS,
+    classify_reflected_names,
+    read_reflection as read_private_name_reflection,
+)
 from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
 from scripts.w1_stage_zip2_owners import fingerprint
 from scripts.w1_recover_graphics_programs import decoded_platforms, records, translate
@@ -34,6 +40,7 @@ SOURCE_TOTAL_MATCHED_VARIANTS = 33
 SOURCE_UNMATCHED_VERTEX = 8
 SOURCE_UNMATCHED_FRAGMENT = 0
 IO_STATUS = "ORIGINAL_TOP_921_SOURCE_TO_ROUNDTRIP_STAGE_IO_DRIFT_CLASSIFIED"
+NAME_STATUS = "ORIGINAL_TOP_921_SPIRV_CROSS_REFLECTED_NAME_LOCATION_DIAGNOSTIC_ONLY"
 IO_CATEGORY_KEYS = (
     "identical", "original_slots", "roundtrip_slots", "removed_locations",
     "added_locations", "same_location_type_changes", "type_multiset_equal",
@@ -61,6 +68,24 @@ def _safe_io_counts(raw):
             result[label] = value
     return result
 
+
+
+def _safe_name_counts(raw):
+    """Only known numeric aggregate keys escape private per-stage reflections."""
+    expected = {side + "_" + key
+                for side in ("inputs", "outputs") for key in NAME_FIELDS}
+    if type(raw) is not dict or set(raw) != expected:
+        raise ValueError("untrusted_private_SPIRV_name_classifier_output")
+    safe = {}
+    for side in ("inputs", "outputs"):
+        for key in NAME_FIELDS:
+            field = side + "_" + key
+            value = raw[field]
+            if (type(value) is not int or value < 0 or
+                    value > (1 if key in NAME_BOOLEAN_FIELDS else 256)):
+                raise ValueError("invalid_public_SPIRV_name_classifier_counter")
+            safe[field] = value
+    return safe
 
 
 def exact_pass_samples(parsed: dict, table: list,
@@ -132,7 +157,8 @@ def _as_reflection(row):
 
 def evaluate_samples(private_code_pairs, private_root: Path, *,
                      translator=translate, reflector=reflection,
-                     pair_checker=interfaces_match, io_classifier=None) -> dict:
+                     pair_checker=interfaces_match, io_classifier=None,
+                     name_classifier=None, named_reflector=read_private_name_reflection) -> dict:
     """Sample exactly 1 real linked pair/Pass; aggregate booleans only.
 
     Tools produce files solely inside caller's private temporary directory.
@@ -143,6 +169,8 @@ def evaluate_samples(private_code_pairs, private_root: Path, *,
         len(private_code_pairs) != SOURCE_NORMAL_PASSES or
         not private_root.is_dir() or private_root.is_symlink()):
         raise ValueError("bad_private_four_pass_diagnostic_scope")
+    if name_classifier is not None and io_classifier is None:
+        raise ValueError("reflected_name_comparison_requires_concurrent_stage_IO_baseline")
     counters = Counter()
     for index, pair in enumerate(private_code_pairs):
         if (type(pair) is not tuple or len(pair) != 2 or
@@ -192,6 +220,14 @@ def evaluate_samples(private_code_pairs, private_root: Path, *,
                     counters["io_drift_stage_reflection_pairs_classified"] += 1
                     for field, amount in safe.items():
                         counters["io_drift_" + field] += amount
+                if name_classifier is not None:
+                    source_full = named_reflector(dest / "original.spv")
+                    derived_full = named_reflector(dest / "roundtrip.spv")
+                    private_result = name_classifier(source_full, derived_full, a, b)
+                    safe_named = _safe_name_counts(private_result)
+                    counters["name_drift_stage_reflection_pairs_classified"] += 1
+                    for field, amount in safe_named.items():
+                        counters["name_drift_" + field] += amount
         v, f = stages[1], stages[0]
         if v["result"]["vulkan11_valid"] and f["result"]["vulkan11_valid"]:
             counters["passes_with_both_genuine_spirv_stages_valid"] += 1
@@ -228,13 +264,30 @@ def evaluate_samples(private_code_pairs, private_root: Path, *,
         # Failing closed is important: zero classified I/O stages or a partial
         # stage set must never look like resolved cause of a prior 0/8 drift.
         raise ValueError("incomplete_real_original_roundtrip_stage_IO_classification")
+    if name_classifier is not None and (
+        counters["name_drift_stage_reflection_pairs_classified"] !=
+        2 * SOURCE_NORMAL_PASSES):
+        raise ValueError("incomplete_original_vs_roundtrip_reflected_name_classification")
+    if name_classifier is not None:
+        selected += ("name_drift_stage_reflection_pairs_classified",)
+        selected += tuple("name_drift_" + side + "_" + key
+                          for side in ("inputs", "outputs") for key in NAME_FIELDS)
     if io_classifier is not None:
         selected += ("io_drift_stage_reflection_pairs_classified",)
         selected += tuple("io_drift_" + side + "_" + name
                           for side in ("inputs", "outputs") for name in IO_CATEGORY_KEYS)
     return {
-        "schema_version": 1, "status": IO_STATUS if io_classifier is not None else STATUS,
+        "schema_version": 1,
+        "status": (NAME_STATUS if name_classifier is not None else
+                   IO_STATUS if io_classifier is not None else STATUS),
         "scope": "one_original_D3D11_vertex_fragment_pair_per_original_pass",
+        "source_to_roundtrip_reflected_name_comparison_opt_in":
+            name_classifier is not None,
+        "reflected_names_are_NOT_authenticated_source_DXBC_semantics": True,
+        "source_to_roundtrip_reflected_name_all_eight_stages_compared":
+            name_classifier is not None and
+            counters["name_drift_stage_reflection_pairs_classified"] ==
+            2 * SOURCE_NORMAL_PASSES,
         "source_to_roundtrip_io_drift_classification_opt_in": io_classifier is not None,
         "source_to_roundtrip_io_drift_all_eight_stages_classified":
             io_classifier is not None and io_count == 2 * SOURCE_NORMAL_PASSES,
@@ -254,7 +307,8 @@ def evaluate_samples(private_code_pairs, private_root: Path, *,
 
 def probe(source: Path, manifest: Path, *, translate_fn=translate,
           reflect_fn=reflection, pair_check_fn=interfaces_match,
-          io_classifier=None):
+          io_classifier=None, name_classifier=None,
+          named_reflector=read_private_name_reflection):
     for binary in TOOLS:
         if not shutil.which(binary):
             raise ValueError("missing_required_DXBC_SPIRV_tool")
@@ -286,7 +340,9 @@ def probe(source: Path, manifest: Path, *, translate_fn=translate,
     with tempfile.TemporaryDirectory(prefix="t3-original-921-stage-private-") as private_temp:
         report = evaluate_samples(pairs, Path(private_temp),
                                   translator=translate_fn, reflector=reflect_fn,
-                                  pair_checker=pair_check_fn, io_classifier=io_classifier)
+                                  pair_checker=pair_check_fn, io_classifier=io_classifier,
+                                  name_classifier=name_classifier,
+                                  named_reflector=named_reflector)
     report.update({
         "original_scene_sources_SHA_authenticated": 6,
         "original_Shader_or_Material_owners_SHA_authenticated": 4,
@@ -302,6 +358,8 @@ def main(argv=None) -> int:
     p.add_argument("--original", type=Path, required=True)
     p.add_argument("--manifest", type=Path, required=True)
     p.add_argument("--out", type=Path, required=True)
+    p.add_argument("--classify-reflected-names", action="store_true",
+                   help="Private SPIRV-Cross reflected I/O name+type/location comparison; not source DXBC semantics")
     p.add_argument("--classify-io-drift", action="store_true",
                    help="Opt-in: classify original/roundtrip SPIR-V stage I/O location and type drift")
     a = p.parse_args(argv)
@@ -310,7 +368,10 @@ def main(argv=None) -> int:
         raise ValueError("unsafe_private_921_shader_translation_report_destination")
     try:
         r = probe(a.original, a.manifest,
-                  io_classifier=classify_stage_io if a.classify_io_drift else None)
+                  io_classifier=classify_stage_io if
+                      (a.classify_io_drift or a.classify_reflected_names) else None,
+                  name_classifier=classify_reflected_names if
+                      a.classify_reflected_names else None)
     except Exception as err:
         r = {
             "schema_version": 1, "status": "INCONCLUSIVE",
@@ -321,7 +382,8 @@ def main(argv=None) -> int:
     a.out.parent.mkdir(parents=True, exist_ok=True)
     a.out.write_text(json.dumps(r, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print("T3_ORIGINAL_921_FOURPASS_TRANSLATION " + json.dumps(r, sort_keys=True))
-    expected = IO_STATUS if a.classify_io_drift else STATUS
+    expected = (NAME_STATUS if a.classify_reflected_names else
+                IO_STATUS if a.classify_io_drift else STATUS)
     return 0 if r["status"] == expected else 2
 
 
