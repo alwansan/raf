@@ -1,0 +1,14 @@
+{
+  "id": "T5-20261105T0028Z-hydration-batch-source-fix",
+  "owner": "T5",
+  "session_id": "20261105T0024Z-T5-hydration-preflight-a1",
+  "issue_id": "ASSET-RESTORE-001",
+  "type": "integration",
+  "summary": "T5 code-only integration safety patch: preflight all available ZIP2 staged source metadata and feature LFS pointer destinations before publishing first hydrated graphics owner; added positive/two negative multi-owner tests. This is source committed, isolated T5 CI not yet observed; no Unity/Android pixels or world-play proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/e8b63e45983932244c9115ac6f44ce659f21eec6",
+    "https://github.com/alwansan/raf/commit/1648d7b98df1e34511ea24b88de70abdca1cc51b",
+    "https://github.com/alwansan/raf/actions/runs/41940032540"
+  ],
+  "at": "2026-11-05T00:28:00Z"
+}
