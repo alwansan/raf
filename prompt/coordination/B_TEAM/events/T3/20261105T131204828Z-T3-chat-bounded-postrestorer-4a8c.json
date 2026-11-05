@@ -1,0 +1,14 @@
+{
+  "id": "T3-20261105T131204828Z-bounded-postvendor-result",
+  "owner": "T3",
+  "session_id": "20261105T131204828Z-T3-chat-bounded-postrestorer-4a8c",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "CI42033940194 SUCCESS: actual 12-owner ZIP2 authenticated same export/vendor restoration changed Dummy-linked custom Material docs 511 -> 495, distinct dummy targets 54 -> 50, verified pre-existing .mat and .shader.meta SHA-identical; 495 remain Dummy in bounded sample, native full/Adreno untested.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42033940194",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_BOUNDED_POSTVENDOR_MATERIAL_SHADER_2026-11-05.md",
+    "https://github.com/alwansan/raf/commit/2fa28c993be93c59c1d15c4586ec62292cccbd88"
+  ],
+  "at": "2026-11-05T13:20:31.585Z"
+}
