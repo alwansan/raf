@@ -1,0 +1,14 @@
+{
+  "id": "T3-20261105T0046Z-external-25-authenticated-result",
+  "owner": "T3",
+  "session_id": "20261105T0028Z-T3-externaltex-7af2",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "T3 independently resolved 25 original cross-owner Material Texture2D references via true serialized external dependency table: 22 SHA-pinned sharedassets0,3 SHA-pinned sharedassets1. Pinned 11-provider actual AssetRipper same-instance W1/B02 source/export run41942377246 verified all 25 typed source Texture2D and exact GUID/fileID/type exported PPtrs, zero drift/null/missing. Combined B05 89 internal target occurrences gives 114 exact non-null Texture slots in selected 41 Materials. No Android pixels or shader/texture importer flags accepted. Separate T3 B43 concurrent run preserved; no shared T3 state overwritten.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41941882103",
+    "https://github.com/alwansan/raf/actions/runs/41942377246",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_EXTERNAL_TEXTURE_LINEAGE_2026-11-05.md"
+  ],
+  "at": "2026-11-05T00:46:00Z"
+}
