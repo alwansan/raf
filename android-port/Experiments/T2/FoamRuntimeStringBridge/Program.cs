@@ -1354,6 +1354,59 @@ internal static class Program
         if(t2ValueWrong.ExactRenderTextureConstructorValueProven ||
             t2ValueWrong.ResolvedElementValueOriginCategory!="newobj_other_type")
             throw new InvalidDataException("Wrong typed constructor must not count as RenderTexture");
+        // Public-only synthetic method identity: the same actual typed
+        // element call reaches an internal SHA-original-like declaration.
+        var t2ReturnDefinition=new MethodDefinition("SyntheticReturnTargetIdentity",
+            Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,
+            renderTextureType);
+        factoryDef.Methods.Add(t2ReturnDefinition);
+        var t2ReturnIl=t2ReturnDefinition.Body.GetILProcessor();
+        t2ReturnIl.Append(t2ReturnIl.Create(OpCodes.Ldnull));
+        t2ReturnIl.Append(t2ReturnIl.Create(OpCodes.Ret));
+        var t2ReturnStore=new MethodDefinition("SyntheticElementTargetIdentityStore",
+            Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,
+            m.TypeSystem.Void);
+        t2ReturnStore.Parameters.Add(new ParameterDefinition(
+            new ByReferenceType(new ArrayType(renderTextureType))));
+        factoryDef.Methods.Add(t2ReturnStore);
+        var t2IdentityIl=t2ReturnStore.Body.GetILProcessor();
+        t2IdentityIl.Append(t2IdentityIl.Create(OpCodes.Ldarg_0));
+        t2IdentityIl.Append(t2IdentityIl.Create(OpCodes.Ldc_I4_2));
+        t2IdentityIl.Append(t2IdentityIl.Create(OpCodes.Newarr,renderTextureType));
+        t2IdentityIl.Append(t2IdentityIl.Create(OpCodes.Stind_Ref));
+        t2IdentityIl.Append(t2IdentityIl.Create(OpCodes.Ldarg_0));
+        t2IdentityIl.Append(t2IdentityIl.Create(OpCodes.Ldind_Ref));
+        t2IdentityIl.Append(t2IdentityIl.Create(OpCodes.Ldc_I4_0));
+        t2IdentityIl.Append(t2IdentityIl.Create(OpCodes.Call,t2ReturnDefinition));
+        t2IdentityIl.Append(t2IdentityIl.Create(OpCodes.Stelem_Ref));
+        t2IdentityIl.Append(t2IdentityIl.Create(OpCodes.Ret));
+        var t2IdentityFlow=FoamByrefAllocationFlow.Inspect(
+            new[]{t2ReturnStore},t2ReturnStore);
+        var t2OriginalLikeIdentity=FoamByrefElementValueOrigin.Inspect(
+            new[]{t2ReturnStore,t2ReturnDefinition},t2ReturnStore,t2IdentityFlow);
+        if(t2OriginalLikeIdentity.MatchingOriginalReturnMethodDefinitions!=1 ||
+            !t2OriginalLikeIdentity.MatchingOriginalMethodBodyAvailable ||
+            t2OriginalLikeIdentity.ActualReturnTargetDeclarationCategory!=
+                "matching_sha_managed_signature")
+            throw new InvalidDataException("Exact typed synthetic RT declaration identity missed");
+        var t2WrongReturnDefinition=new MethodDefinition(
+            "SyntheticReturnTargetIdentity",
+            Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,
+            renderTextureType);
+        t2WrongReturnDefinition.Parameters.Add(
+            new ParameterDefinition(m.TypeSystem.Int32));
+        var t2WrongIdentity=FoamByrefElementValueOrigin.MatchActualRtCall(
+            new[]{t2WrongReturnDefinition},t2ReturnDefinition);
+        if(t2WrongIdentity.Count!=0 || t2WrongIdentity.Body)
+            throw new InvalidDataException("Wrong-signature synthetic RT target falsely matched");
+        var t2ExternalRtCall=new MethodReference("SyntheticExternal",
+            renderTextureType,renderTextureType){HasThis=false};
+        var t2ExternalIdentity=FoamByrefElementValueOrigin.MatchActualRtCall(
+            new[]{t2ReturnDefinition},t2ExternalRtCall);
+        if(t2ExternalIdentity.Count!=0 ||
+            t2ExternalIdentity.Category!="unresolved_unityengine_declaration")
+            throw new InvalidDataException("Unresolved UnityEngine RT source falsely matched");
+
         var syntheticIndirect=new MethodDefinition("SyntheticFieldReferenceStore",
             Mono.Cecil.MethodAttributes.Public,m.TypeSystem.Void);
         factoryDef.Methods.Add(syntheticIndirect);
@@ -1528,6 +1581,7 @@ internal static class Program
                 source_original_length_same_block_local_arg_and_branch_controls=true,
                 original_byref_caller_int_argument_direct_vs_dynamic_controls=true,
                 original_rt_array_element_newobj_null_and_wrong_type_controls=true,
+                exact_original_return_signature_vs_external_type_controls=true,
                 four_original_style_Texture_int_argument_origin_controls=true,
                 signed_short_wide_and_duplicate_private_i4_aggregate_controls=true,
                 private_IL_names_or_source_published = false
