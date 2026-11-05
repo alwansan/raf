@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T1217Z-T4-android-save-postcheck",
+  "issue_id": "LOCAL-005",
+  "track": "world-save",
+  "status": "active",
+  "base_sha": "5707abc593986d2e0c3dc603cf55ccc62f8f9631",
+  "approach": "Add a constrained Android-only, no-mutation post-operation filesystem snapshot to SHA-pinned original SaveAndLoad.Save wrapper in scripts/instrument_android_runtime_operations.py. Record only whether the exact filename argument exists and whether its file length is nonzero, even when original Save returns early or FileManager catches an exception. Keep probe exceptions non-throwing and never label an IO status as durable RGD/gameplay success. Test source-free adversarial controls then authentic original managed C# compile via existing offline integration workflow; avoid native Unity/Android packaging and changes to source pins.",
+  "hypothesis": "Original FileManager can leave catch normally; existing SaveAndLoad operation exit-with-no-escaped-exception is insufficient to distinguish actual file existence. An Android-only post-Save noninvasive File.Exists/FileInfo probe inside the wrapper's finally will provide needed next-device save evidence without changing serializer or .rgd schema.",
+  "intended_files": [
+    "scripts/instrument_android_runtime_operations.py",
+    "tests/test_runtime_operation_traces.py",
+    "docs/T4_ANDROID_SAVE_FILE_POSTCHECK_2026-11-05.md"
+  ],
+  "related_work": [
+    "docs/T4_ORIGINAL_MANAGED_STREAM_ROUNDTRIP_2026-11-05.md",
+    "docs/T4_ORIGINAL_FILE_IO_CONTROL_FLOW_2026-11-05.md",
+    "https://github.com/alwansan/raf/actions/runs/42020039305"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/T4/MEMORY.md",
+    "prompt/coordination/clients/B14/MEMORY.md",
+    "prompt/coordination/clients/B19/MEMORY.md",
+    "prompt/coordination/clients/B50/MEMORY.md",
+    "docs/T5_FILEMANAGER_MANAGED_RUNTIME_2026-11-05.md"
+  ],
+  "experiment_ids": [],
+  "run_urls": [],
+  "result": null,
+  "updated_at": "2026-11-05T12:17:00Z",
+  "next_step": "Implement scoped Save wrapper post-state probe, synthetic source reconstruction and compile with private authentic original decompiled SaveAndLoad; no game/device success until newer installed APK and real .rgd readback."
+}
