@@ -30,3 +30,22 @@ class SpirvReadProvenanceTests(unittest.TestCase):
     def test_cycles_rejected(self):
         with self.assertRaises(ValueError):
             analyze("%1 = OpCopyObject %2 %1\n%3 = OpImageFetch %2 %1 %4")
+
+    def test_coordinate_slice_excludes_phi_labels_and_extract_indices(self):
+        report = analyze("""
+        OpDecorate %1 DescriptorSet 0
+        OpDecorate %1 Binding 1
+        %2 = OpLoad %20 %1
+        %3 = OpConstant %21 5
+        %4 = OpIAdd %21 %3 %3
+        %5 = OpCompositeExtract %21 %12 0
+        %6 = OpPhi %21 %4 %90 %5 %91
+        %7 = OpCompositeConstruct %22 %6 %3
+        %8 = OpImageFetch %23 %2 %7
+        """, coordinates=True)
+        self.assertEqual(report["coordinate_sites"], [{
+            "role": "butterfly",
+            "producer_opcodes": {"OpCompositeConstruct": 1, "OpPhi": 1,
+                                 "OpIAdd": 1, "OpCompositeExtract": 1,
+                                 "OpConstant": 1, "unresolved": 1},
+        }])
