@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "generation": "T-2026-11-05",
+  "session_id": "20261104T2357Z-T4-lw01",
+  "issue_id": "LOCAL-005",
+  "track": "world-save",
+  "approach": "SHA-pinned Android-only diagnostic immediately after genuine WorldHasBeenLoaded completion assignment, preserving original game flags/yields and independent of T4 FileManager investigation.",
+  "status": "active",
+  "base_sha": "6f899a2d2bd03cf74d7f0d8628e09dc59a08811a",
+  "intended_files": [
+    "scripts/instrument_android_runtime_operations.py",
+    "tests/test_t4_world_completion_trace.py",
+    ".github/workflows/raft-t4-world-completion-trace.yml",
+    "docs/T4_WORLD_COMPLETION_TRACE_2026-11-05.md"
+  ],
+  "hypothesis": "B07 firstMoveNext does not prove actual completion assignment was executed; a marker at the original completion statement can separate a stalled coroutine from later errors without fake success.",
+  "related_work": [
+    "prompt/coordination/work/LOCAL-005/T4-20261104T2357Z-rgd-loader-contract.json",
+    "prompt/coordination/work/LOCAL-005/T4-20261105T0024Z-filemanager-io.json"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/B07/MEMORY.md",
+    "prompt/coordination/clients/B14/MEMORY.md",
+    "prompt/coordination/clients/B50/MEMORY.md",
+    "https://github.com/alwansan/raf/actions/runs/41939908432"
+  ],
+  "experiment_ids": [
+    "20261105T0029Z-original-completion"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement semantic-preserving marker and synthetic tests, then original ZIP2 private-source CI; never claim device success.",
+  "updated_at": "2026-11-05T00:29:00Z"
+}
