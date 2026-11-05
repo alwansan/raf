@@ -1,0 +1,19 @@
+{
+  "id": "T4-20261105T0020Z-local-loader-integrated",
+  "owner": "T4",
+  "session_id": "20261104T2357Z-T4-lw01",
+  "issue_id": "LOCAL-005",
+  "type": "progress",
+  "summary": "Original ZIP2 Load<T> authenticated (1 Deserialize, 1 catch, no binder) and Android catch logging source-integrated. Original adapted managed C# CI PASS; phone .rgd roundtrip unverified.",
+  "commits": [
+    "ed39104941ff9c6880829556fbb6d4a985898d3e",
+    "fa6bd57c4f8d29b17e4d038e18be5ac8c48d42b2"
+  ],
+  "ci": [
+    "https://github.com/alwansan/raf/actions/runs/41939908432",
+    "https://github.com/alwansan/raf/actions/runs/41939846508"
+  ],
+  "evidence": "docs/T4_ORIGINAL_RGD_LOAD_COMPAT_2026-11-05.md",
+  "remaining": "new Unity/IL2CPP/APK/phone world create-save-reload; no false success",
+  "at": "2026-11-05T00:20:00Z"
+}
