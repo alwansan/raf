@@ -81,6 +81,30 @@ class ZIP2RenderStageTests(unittest.TestCase):
         self.assertEqual(second["owners_cached"], 1)
         self.assertEqual(self.destination.read_bytes(), self.original)
 
+    def test_verified_stage_replaces_only_exact_feature_lfs_pointer(self):
+        from scripts.hydrate_render_payloads import reuse_verified_staged_sources
+        self.stage()
+        feature = self.root / "feature"
+        target = feature / self.owner
+        target.parent.mkdir(parents=True)
+        target.write_text(
+            "version https://git-lfs.github.com/spec/v1\n"
+            f"oid sha256:{self.digest}\nsize {len(self.original)}\n",
+            encoding="ascii")
+        reused, size = reuse_verified_staged_sources(
+            self.entries, self.output / "Raft_Data", feature)
+        self.assertEqual((reused, size), (1, len(self.original)))
+        self.assertEqual(target.read_bytes(), self.original)
+        # An incorrect feature branch pointer is never overwritten.
+        target.write_text(
+            "version https://git-lfs.github.com/spec/v1\n"
+            f"oid sha256:{'0' * 64}\nsize {len(self.original)}\n",
+            encoding="ascii")
+        with self.assertRaisesRegex(ValueError, "pointer"):
+            reuse_verified_staged_sources(
+                self.entries, self.output / "Raft_Data", feature)
+        self.assertTrue(target.read_bytes().startswith(b"version https://git-lfs"))
+
     def test_tampered_part_same_size_not_published(self):
         (self.source / "part-00001").write_bytes(b"87654321")
         with self.assertRaisesRegex(ValueError, "sha256"):
