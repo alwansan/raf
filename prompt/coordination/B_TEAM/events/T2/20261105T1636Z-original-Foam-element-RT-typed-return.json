@@ -1,0 +1,14 @@
+{
+  "id": "T2-20261105T1636Z-original-Foam-element-RT-typed-return",
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261105T1611Z-T2-chat-foam-length-source-9ab4",
+  "issue_id": "WATER-001",
+  "type": "source_original_Foam_RenderTexture_array_element_call_result",
+  "at": "2026-11-05T16:36:00Z",
+  "summary": "SHA-original managed Foam CI42065864809 SUCCESS proves exact stelem.ref value is direct call whose declared return is UnityEngine.RenderTexture (not direct null or direct newobj RT). Previous CI42064653958 proved the same original helper's positive compiled length, all four private original Texture(int) indices within allocation bounds. Call return type alone does not prove actual non-null object, uploaded textures, runtime execution or Android water pixels. No original names/IL/numeric literals published. WATER-001 OPEN NOT_READY0/3.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42065864809",
+    "https://github.com/alwansan/raf/commit/d7d4af389d4a5235088055901ced5bf4b4bc084e"
+  ]
+}
