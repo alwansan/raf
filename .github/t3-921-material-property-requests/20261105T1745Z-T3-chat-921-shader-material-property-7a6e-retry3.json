@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T1745Z-T3-chat-921-shader-material-property-7a6e",
+  "issue_id": "RENDER-002",
+  "original_provider_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "request_type": "final SHA-original 921-use Shader property versus linked Material family census after retaining authentic cross-family names",
+  "source_blob_shas": {
+    "scripts/t3_original_921_material_property_contract.py": "a558776036c87cafdae0a4885a5669a10bd76e05",
+    "tests/test_t3_original_921_material_property_contract.py": "c0969d962a2740b2c0dea91c89c660a6f3e43d59",
+    "scripts/t3_original_renderer_shader_impact.py": "3fe03ad1668d51de59e2195b00ca20dfbb2f3c36"
+  },
+  "reason_for_retry": "CI42079640985 SHA-authentic Material parse reached source fields and found genuine duplicate saved names across Material property families. Previous fake uniqueness assumption removed. Now preserve per-name family set, count overlaps, distinguish actual source wrong-family observed from missing declared Shader properties, source-free guards pass.",
+  "safety": {
+    "game_assets_unchanged": true,
+    "no_private_property_names_values_printed": true,
+    "no_native_Unity_build": true,
+    "no_other_actions_cancelled": true
+  },
+  "created_at": "2026-11-05T18:03:00Z"
+}
