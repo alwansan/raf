@@ -4,9 +4,9 @@
   "origin": "chat",
   "owner": "T1",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed",
   "base_sha": "05631bd2fd2de3a3665a148f0e07cda6a799623a",
-  "updated_at": "2026-11-05T17:37:38.551Z",
+  "updated_at": "2026-11-05T17:38:58.873Z",
   "intended_files": [
     "scripts/t1_spirv_interface_roundtrip_drift.py",
     "tests/test_t1_spirv_interface_roundtrip_drift.py",
@@ -16,5 +16,12 @@
   "resumed_from_sessions": [
     "20261105T172754Z-T1-chat-44b25e",
     "20261105T1728Z-T3-chat-rawspirv-T1-original-3f7c"
-  ]
+  ],
+  "implementation_sha": "08cf5203a5f5e05175365f7ceb968f33297928e6",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42076585693",
+    "https://github.com/alwansan/raf/actions/runs/42076083800"
+  ],
+  "result": "T3 authentic CI42076083800 confirms 4/4 source and roundtrip pairs numerically link, 44 fragment components, zero missing/type mismatches. Independent CI42076585693 passed exact-key drift controls, detecting a coordinated stage shift that preserves within-pair linkage and lane totals, plus scalar type drift. Compiled GLSL self-check passed. No authentic roundtrip exact-key audit was executed here.",
+  "next_step": "T3 can run exact-key comparison privately on four SPIR-V modules per matched pair. T1 FFT stays deferred until native Unity lane is free."
 }

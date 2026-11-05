@@ -1,0 +1,13 @@
+{
+  "id": "20261105T173738Z-T1-chat-3e271f",
+  "owner": "T1",
+  "session_id": "20261105T173738Z-T1-chat-3e271f",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "T3 authentic CI42076083800 confirms 4/4 source and roundtrip pairs numerically link, 44 fragment components, zero missing/type mismatches. Independent CI42076585693 passed exact-key drift controls, detecting a coordinated stage shift that preserves within-pair linkage and lane totals, plus scalar type drift. Compiled GLSL self-check passed. No authentic roundtrip exact-key audit was executed here.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42076585693",
+    "https://github.com/alwansan/raf/actions/runs/42076083800"
+  ],
+  "at": "2026-11-05T17:38:58.873Z"
+}
