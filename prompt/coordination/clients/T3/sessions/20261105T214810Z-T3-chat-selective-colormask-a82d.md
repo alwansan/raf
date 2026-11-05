@@ -22,3 +22,7 @@ This is a **source-only fixed-function ShaderLab string translator**, not a rest
 Original exact 108-source shader→same-instance native W1 export GUID and device screenshot emitter/pixel association remain unknown. `RENDER-002` stays OPEN and READY is not implied. Permanent report: https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE_COLORMASK_MAPPING_2026-11-06.md.
 
 **Next:** Use the original 108-use particle Shader48 private ID, same-instance native W1 export GUID, and installed Android package scene/prefab/material trace to compare source ColorMask RGB and Blend to actual compiled ShaderLab and failing pixels. Only then consider editing a game shader. Do not duplicate source-only ZIP2 runs or declare RENDER-002 ready.
+
+## Canonical ledger refresh
+
+- The OPEN RENDER-002 source evidence was appended without changing readiness. [GitHub Actions 42117318733](https://github.com/alwansan/raf/actions/runs/42117318733) **SUCCESS** on `d9065c8529e658d843a76d50faf91fecb60289bd`, regenerating the T-team evidence summary/snapshot with latest issue proofs.
