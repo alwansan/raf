@@ -4,9 +4,9 @@
   "origin": "chat",
   "session_id": "20261105T1611Z-T2-chat-foam-length-source-9ab4",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "41880c64b02b16e3ecc561965cd543fecf52814b",
-  "updated_at": "2026-11-05T16:22:00Z",
+  "updated_at": "2026-11-05T16:29:00Z",
   "resumed_from_experiment": "T2|original-ZIP2-15964ea8|DLL-0a6f0527|exact-RT-newarr-length-producer-local-arg-call|bounded-basicblock-v1",
   "experiment_key": "T2|original-DLL-0a6f0527|exact-Foam-ldflda-refarray-call-int-length-formal|typed-caller-stack-v1",
   "resource_key": "T2-Foam-original-managed-RenderTexture-array-actual-call-length",
@@ -25,5 +25,14 @@
     "original_CI": "42063244298 SUCCESS",
     "independent_running": "T1 FFT actions separate; no T2 scheduled managed CI observed"
   },
-  "next_step": "Implement strict typed exact actual caller Int32 argument, run original SHA-pinned CI; preserve unknown or proven structural in-bounds (not runtime) and private source constraints. WATER-001 OPEN NOT_READY0/3."
+  "next_step": "Inspect CI42064423841 first compile/test and T2_FOAM_ACTUAL_CALLER_INT_LENGTH_SAFE aggregate. If pass classify direct literal and private bounds only when structurally proven. Never publish original values or claim runtime pixel acceptance.",
+  "source_commit": "cd21db83712feeb0d851866f1a104c52f46859de",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42064423841"
+  ],
+  "result": {
+    "code": "actual original ldflda→typed ref RenderTexture[] callsite and exact int32 newarr size formal source stack trace with synthetic direct I4 / int parameter controls",
+    "CI": "in_progress",
+    "original_numeric_values_disclosed": false
+  }
 }
