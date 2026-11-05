@@ -6,7 +6,7 @@
   "issue_id": "WATER-001",
   "track": "actual-authentic-native-dxbc-sample-t-s-operand-use",
   "approach": "Reuse inherited blur_sample_operands.sample plus bounded SM4/5 executable instruction-token parser on B20 SHA-pinned original four Foam stages. Validate each source m_Index/m_SamplerIndex sampled pair against actual native DXBC sample opcode69 tN/sN operand values. Fail closed for ambiguous/dynamic/unlisted opcode; record limited sample family coverage, not ShaderLab/Unity proof.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "c3bc183901411fefc0ec3a977e0ea27ef07c11fc",
   "intended_files": [
     "scripts/t2_foam_original_sample_edges.py",
@@ -27,8 +27,24 @@
   "experiment_ids": [
     "T2-20261105-authentic-dxbc-sample-edges"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement bounded real DXBC executable sample family scanner and inherited parser reuse, synthetic negative controls, execute original SHA-pinned new question in existing isolated T2 workflow.",
-  "updated_at": "2026-11-05T02:49Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41958159556"
+  ],
+  "result": {
+    "original_CI": "SUCCESS",
+    "synthetic_tests": "15/15 declarations + 16/16 native sample opcode controls",
+    "original_owner_and_four_DXBC_stage_SHA_verified": true,
+    "pass0_fragment_native_sample_calls": 17,
+    "pass1_fragment_native_sample_calls": 4,
+    "vertex_sample_calls": 0,
+    "native_distinct_actual_t_s_pairs": 6,
+    "all_original_source_pairs_used": true,
+    "unsupported_sample_variants_70_to_74": 0,
+    "artifact_id": 13383159040,
+    "artifact_zip_sha256": "14f55dd06ca25aa4d1cb83f70ff3ad37d8f2b861758007f82294e1009ca86bbb",
+    "native_dxbc_to_spirv_binding_identity_verified": false,
+    "unity_material_upload_device_verified": false
+  },
+  "next_step": "Translate native DXBC source t/s register identity to actual SPIR-V descriptor variables explicitly; then map original Material property and CB/sampler upload and build authentic two-pass ShaderLab in Unity/Adreno. No number-order inference.",
+  "updated_at": "2026-11-05T02:56Z"
 }
