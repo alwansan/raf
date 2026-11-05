@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261105T181919Z-T4-chat-overflow-ci-9dzc8",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "hypothesis": "The scheduled queue_overflow fail-closed regression controls are absent from the source-only CI's sparse checkout and test invocation; wiring them will produce independently executed negative/positive evidence.",
+  "source_commit": "e8c0d05261529ce5f4a8240a610601db85b52563",
+  "source_baseline_sha": "b855f3b921411deb66d138bf795ff29bb77bda0f",
+  "input_hashes": [
+    {
+      "path": "scripts/t4_verify_device_world_save_log.py",
+      "blob_sha": "d138408b1507769f8417d075b9bc8695ae093b15"
+    },
+    {
+      "path": "scripts/test_t4_overflow_gate.py",
+      "blob_sha": "5fa15e519a6b7009d7713396b772992360371e15"
+    },
+    {
+      "path": ".github/workflows/raft-t4-world-save-log-evidence.yml",
+      "blob_sha": "5cabee56432c5155e66db3379de4147f9bf368af"
+    }
+  ],
+  "tool_versions": {
+    "python": "ubuntu-24.04 runner Python 3; exact patch version unrecorded",
+    "actions_checkout": "11bd71901bbe5b1630ceea73d27597364c9af683"
+  },
+  "commands": [
+    "python3 -m py_compile scripts/t4_verify_device_world_save_log.py scripts/test_t4_overflow_gate.py tests/test_t4_verify_device_world_save_log.py",
+    "python3 -m unittest discover -s tests -p 'test_t4_verify_device_world_save_log.py' -v",
+    "python3 -m unittest scripts.test_t4_overflow_gate -v"
+  ],
+  "negative_controls": [
+    "synthetic global overflow suppresses both cross-session hints",
+    "synthetic non-overflow records can produce weak cross-session hints but never same-world durability acceptance"
+  ],
+  "workflow_path": ".github/workflows/raft-t4-world-save-log-evidence.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42083434118",
+  "artifact_urls": [],
+  "budget": "lightweight source-free ubuntu-24.04 5min timeout; no Unity, no LFS",
+  "status": "completed",
+  "observed_result": {
+    "conclusion": "success",
+    "tests_legacy": 15,
+    "tests_overflow": 2,
+    "job_id": 127442170698,
+    "python_compile_passed": true,
+    "game_device_acceptance": false
+  },
+  "rejected_hypotheses": [
+    "New overflow test already ran in original narrow CI: false; sparse-checkout/test invocation lacked it."
+  ],
+  "limitations": [
+    "All 17 records are synthetic; this verifies evidence classifier behavior only",
+    "No original RGD game data loaded, no phone or Unity runtime proof",
+    "No changed source instrumentation, serializer or build"
+  ],
+  "integration_commit": "e8c0d05261529ce5f4a8240a610601db85b52563",
+  "next_step": "Consume CI output in T4 scheduled workflow; T5 build/owner device end-to-end evidence required."
+}

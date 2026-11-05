@@ -7,7 +7,7 @@
   "issue_id": "LOCAL-005",
   "track": "local-world-save-evidence",
   "approach": "Add the existing synthetic overflow controls to the narrow source-free GitHub Actions workflow. Independently verify the scheduled fail-closed source change; no edits to scheduled-owned analyzer or fixture and no Unity dispatch.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "b855f3b921411deb66d138bf795ff29bb77bda0f",
   "intended_files": [
     ".github/workflows/raft-t4-world-save-log-evidence.yml",
@@ -26,8 +26,25 @@
     "20261105T1737Z-T4-scheduled-h6v2",
     "20261105T1736Z-T4-chat-rgd-return-local-stores-r6n8"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Modify only narrow workflow to include existing two overflow synthetic controls, observe push-run on immutable commit, then record test output and limits.",
-  "updated_at": "2026-11-05T18:19:19Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42083434118"
+  ],
+  "result": {
+    "status": "SOURCE_FREE_CI_PASSED",
+    "commit": "e8c0d05261529ce5f4a8240a610601db85b52563",
+    "workflow": ".github/workflows/raft-t4-world-save-log-evidence.yml",
+    "workflow_blob_sha": "5cabee56432c5155e66db3379de4147f9bf368af",
+    "run_id": 42083434118,
+    "job_id": 127442170698,
+    "conclusion": "success",
+    "tests": 17,
+    "legacy_parser": 15,
+    "overflow_gate": 2,
+    "compiled": true,
+    "real_phone_test": false,
+    "unity": false,
+    "original_rgd_read": false
+  },
+  "next_step": "Scheduled T4 may consume CI17 evidence; await distinct native T5 run42058825739 and owner phone world/save/reopen, never claim device accepted based on these synthetic tests. LOCAL-005 OPEN, NOT_READY 0/3.",
+  "updated_at": "2026-11-05T18:22:00Z"
 }

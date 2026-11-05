@@ -1,0 +1,14 @@
+{
+  "id": "20261105T181919Z-T4-chat-overflow-ci-9dzc8",
+  "owner": "T4",
+  "session_id": "20261105T181919Z-T4-chat-overflow-ci-9dzc8",
+  "issue_id": "LOCAL-005",
+  "type": "integration",
+  "summary": "Wired scheduled T4 global queue-overflow positive/negative synthetic controls into source-free CI; run42083434118 SUCCESS (15 legacy+2 overflow). No device save or playable-world acceptance.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/e8c0d05261529ce5f4a8240a610601db85b52563",
+    "https://github.com/alwansan/raf/actions/runs/42083434118",
+    "prompt/coordination/clients/T4/sessions/20261105T181919Z-T4-chat-overflow-ci-9dzc8.md"
+  ],
+  "at": "2026-11-05T18:22:00Z"
+}
