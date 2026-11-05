@@ -1,0 +1,13 @@
+{
+  "id": "20261105T025000Z-T1-fft-original-derived-private-compute-candidates",
+  "owner": "T1",
+  "session_id": "20261105T024000Z-T1-original-derived-fft-unity",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "SHA-verified 20 original FFT DXBC programs reconstructed privately into 20 single-kernel Unity .compute import candidates with true HLSL50 roundtrip and 7 negative controls; not authored game source nor Unity runtime proof. CI41957549770 success; Unity import pending CI41958245907.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41957549770",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_FFT_ORIGINAL_DERIVED_UNITY_CANDIDATES_2026-11-05.md"
+  ],
+  "at": "2026-11-05T02:50:00Z"
+}
