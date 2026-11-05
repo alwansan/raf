@@ -81,6 +81,17 @@ jobs:
           # This remains original source-only; Unity/Android pixels unproven.
           particle_source_payload_proof="https://github.com/alwansan/raf/actions/runs/42125608932"
           assert particle_source_payload_proof in issue[0]["evidence"]
+          # Real same-instance AssetRipper source→export original Particle:
+          # 5/5 Material, 2/3 exportable Texture2D, 1 source Texture2D
+          # confirmed in nonexportable collection (not missing original).
+          particle_sameexport="https://github.com/alwansan/raf/actions/runs/42130529677"
+          particle_nonexportable="https://github.com/alwansan/raf/actions/runs/42132262184"
+          assert particle_sameexport in issue[0]["evidence"]
+          assert particle_nonexportable in issue[0]["evidence"]
+          assert any(r["id"]=="T3-PARTICLE108-SOURCE-SAMEINSTANCE-MATERIAL-TEXTURE-PARITY"
+                     and r["counts"]["original_texture_source_skipped_due_nonexportable_collection"]==1
+                     and r["stages"]["device"]=="NOT_TESTED"
+                     for r in s["resources"])
           assert any(r["id"]=="T3-ORIGINAL-PARTICLE108-IMAGE-STREAM-FULLSHA"
                      and r["stages"]["device"]=="NOT_TESTED"
                      for r in s["resources"])
