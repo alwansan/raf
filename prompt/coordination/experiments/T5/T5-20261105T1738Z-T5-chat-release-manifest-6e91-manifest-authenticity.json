@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "session_id": "20261105T1738Z-T5-chat-release-manifest-6e91",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "status": "completed",
+  "experiment_key": "t5-gh-release-apk86-real-small-metadata-bytes-hash-deliveryjson-SHA256SUMS-vs-public-assets-and-7-transport-parts-v1",
+  "hypothesis": "The two actually published small metadata blobs can be downloaded within a strict size cap and cryptographically matched to current public GitHub asset digests; their contents can bind each of the seven part size/digest declarations and three logical source claims. Large game bytes and signature remain unverified.",
+  "source_commit": "54adc9b235a56b815095f5de622664bc1fb03144",
+  "input_hashes": [
+    "Raft APK86 release tag android-early-test-41812889049-1, immutable native run41812889049 source d181ee7152580f49ee0b41dfd05fa2bfdacfafe5",
+    "Published delivery.json size 2166, API SHA256 3a672dd06f1b582eb56a670c6b54ddf6296c3f4b62c031af32ee8c3c768c97b9",
+    "Published SHA256SUMS size 727, API SHA256 18eb4be15a90b2b861284eb3179168f8614f60d99412429125f361f882a53daf",
+    "7 transport part official GitHub API public metadata plus frozen T5 source-only snapshot"
+  ],
+  "tool_versions": {
+    "runner": "ubuntu-24.04",
+    "python": "Python3 stdlib",
+    "github_cli": "runner preinstalled gh",
+    "workflow": "raft-t5-release-manifest-bytes.yml CPU-only"
+  },
+  "commands": [
+    "python3 -m unittest -v tests.test_t5_verify_release_manifest_bytes",
+    "gh release download android-early-test-41812889049-1 --repo alwansan/raf --pattern delivery.json --pattern SHA256SUMS --dir $RUNNER_TEMP/t5-release-public-metadata",
+    "gh api repos/alwansan/raf/releases/tags/android-early-test-41812889049-1 --jq filtered_public_asset_fields",
+    "python3 -m scripts.t5_verify_release_manifest_bytes --snapshot tests/fixtures/t5_raft_release_41812889049.json --current-release $RUNNER_TEMP/t5-release-public-metadata/current-release.json --delivery $RUNNER_TEMP/t5-release-public-metadata/delivery.json --sums $RUNNER_TEMP/t5-release-public-metadata/SHA256SUMS"
+  ],
+  "workflow_path": ".github/workflows/raft-t5-release-manifest-bytes.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42077040831",
+  "artifact_urls": [],
+  "budget": "Single small ubuntu-24.04 7-minute CI; only 2,893 bytes of release content fetched, no APK/OBB/XAPK parts downloaded and no Unity resource used.",
+  "negative_controls": [
+    "Synthetic replaced downloaded delivery.json with same-size bytes -> hash mismatch rejected",
+    "Synthetic replaced SHA256SUMS -> hash mismatch rejected",
+    "Live Release asset digest or target disagrees with pinned audit -> rejected",
+    "Re-signed synthetic manifest with wrong version/package/device-installed flags rejected",
+    "Altered logical or part SHA/size, missing/duplicate/reordered parts, unsafe SUMS line, extra SUMS entry all rejected",
+    "No actual large multipart bytes or APK v2/v3 signature or Android install claimed even when small manifests cryptographically verified",
+    "Bounded small-file reader refuses symlink and oversized file"
+  ],
+  "observed_result": {
+    "ci_run_id": 42077040831,
+    "ci_job_id": 127419899287,
+    "ci_conclusion": "success",
+    "tests_passed": 28,
+    "tests_failed": 0,
+    "real_release_tag": "android-early-test-41812889049-1",
+    "original_native_run": 41812889049,
+    "original_native_source": "d181ee7152580f49ee0b41dfd05fa2bfdacfafe5",
+    "actual_small_files_downloaded": [
+      "delivery.json",
+      "SHA256SUMS"
+    ],
+    "actual_small_metadata_sha256_verified": true,
+    "verified_small_metadata_file_count": 2,
+    "transport_part_metadata_bound": 7,
+    "logical_claims_bound": 3,
+    "logical_file_bytes_declared_total": 5948194034,
+    "game_part_content_sha256_verified": false,
+    "signed_apk_verified": false,
+    "OBB_mounted_on_device": false,
+    "XAPK_reassembled_and_installed": false,
+    "offline_world_saved_and_reopened": false,
+    "current_native_run": 42058825739,
+    "current_native_source": "e9c358eda01785b65e4eb14f18723da426635628",
+    "current_native_status": "still in_progress Unity Editor compile step62 at last read"
+  },
+  "rejected_hypotheses": [
+    "API metadata alone sufficient to verify manifest bytes: false; now two downloaded manifest bytes were verified against API SHA256",
+    "Verified small metadata proves file parts contain declared game bytes: false, hashes remain declarations until full downloads",
+    "Native original running at Unity step62 means signed XAPK exists: false"
+  ],
+  "limitations": [
+    "Two small metadata blobs and live Release API can be cryptographically matched, but a maliciously consistent change to both host metadata and blobs would require independent trusted provenance; pinned source used as additional consistency check.",
+    "No entire original game files, W1 shaders, Unity Editor compiled APK, signature, original OBB data or Android device inspected.",
+    "Only published old APK86 Release audited: current native run42058825739 cannot be claimed successful until it completes and publishes distinct source SHA assets."
+  ],
+  "integration_commit": "54adc9b235a56b815095f5de622664bc1fb03144",
+  "next_step": "Follow immutable current native run42058825739; if a new Release publishes, verify its actual small manifest bytes with an adapted pinned release ID/run/source, then separately download and hash all 7 game payload parts, check APK signature and test Android world/OBB."
+}
