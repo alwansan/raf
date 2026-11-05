@@ -3,7 +3,7 @@
   "origin": "chat",
   "session_id": "20261105T220730Z-T1-chat-b70f21",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "05d460d6853397ce6df765a435f21fbe4930435c",
   "intended_files": [
     "scripts/t1_fft_spirv_read_provenance.py",
@@ -11,5 +11,10 @@
     ".github/workflows/raft-t1-fft-vulkan-roundtrip-isolation.yml"
   ],
   "experiment_key": "fft-slot0-fetch-coordinate-producer-original-roundtrip",
-  "updated_at": "2026-11-05T22:07:30Z"
+  "updated_at": "2026-11-05T22:07:30Z",
+  "source_commit": "b4aace68dd908fa6255472be4dcaeed619b2c2d7",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42118867515"
+  ],
+  "next_step": "Compare original and HLSL roundtrip static address producer opcode counts and same-device numerical parity; a matched Vulkan result cannot identify the Unity OpenGLCore backend transformation."
 }
