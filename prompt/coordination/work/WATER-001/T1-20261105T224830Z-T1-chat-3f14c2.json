@@ -3,14 +3,16 @@
   "origin": "chat",
   "session_id": "20261105T224830Z-T1-chat-3f14c2",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "d0f523196ad654ab4ef503469d2e0feecce7f680",
-  "intended_files": [
-    "scripts/t1_fft_trace_compare.py",
-    "tests/test_t1_fft_trace_compare.py",
-    ".github/workflows/raft-t1-fft-unity-input-identity.yml"
-  ],
+  "intended_files": [],
   "experiment_key": "fft-pair0-private-axis-mapping-classification",
   "resource_key": "raft-native-engine-feature/android-native-port",
-  "updated_at": "2026-11-05T22:48:30Z"
+  "updated_at": "2026-11-05T22:48:30Z",
+  "source_commit": "dbde6d1a96ca1fab3db09374c34d7f5d5c8f034f",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42124676507"
+  ],
+  "result": "Added per-axis tests of uniform translation, reflection and collapse to a constant, reporting booleans without addresses or offsets. Constant reference and empty traces cannot certify these hypotheses. 113 local FFT tests passed. Original-backed replay is in progress.",
+  "next_step": "Interpret per-axis mapping flags only with varied reference coordinates and passing input/output instrumentation gates; then build a targeted synthetic shader reproducer."
 }
