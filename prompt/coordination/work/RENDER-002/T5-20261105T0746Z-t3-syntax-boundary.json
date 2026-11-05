@@ -3,7 +3,7 @@
   "owner": "T5",
   "session_id": "20261105T0746Z-T5-t3-syntax-boundary",
   "issue_id": "RENDER-002",
-  "status": "in_progress",
+  "status": "source_fixed_ci_pending",
   "baseline_sha": "520047314a5037ee0f89a45b61d16c64f5775300",
   "taken_over_from": [
     "prompt/coordination/discussions/RENDER-002/20261105T0647Z-T5-alpha-only-diagnostic-boundary.md",
@@ -15,5 +15,12 @@
     "Record evidence to T3 and perform narrow fix only if safe",
     "Run compile and synthetic tests; preserve no-device-proof"
   ],
-  "next_step": "Confirm literal escaped newline and run compile."
+  "next_step": "Run python3 -m py_compile scripts/t3_pixel_drift_diagnostics.py and python3 -m unittest tests.test_t3_pixel_drift_diagnostics, then verify CI. Preserve T3 RGB 30/106 baseline.",
+  "result": {
+    "commit": "70f54acada3378387ac3750b9c15e974459dc51d",
+    "before": "literal backslash-n after else in Python expression",
+    "after": "actual newline verified via fresh GitHub fetch",
+    "validation": "source text structural verification only; Python compilation/CI not yet executed",
+    "risk": "T3-owned file narrowly modified; no change to classification logic"
+  }
 }
