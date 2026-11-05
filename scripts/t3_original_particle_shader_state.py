@@ -16,7 +16,7 @@ from pathlib import Path
 from scripts import t3_original_renderer_shader_impact as original
 from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
 from scripts.w1_stage_zip2_owners import fingerprint
-from scripts.w1_depth_shaderlab import BLEND, BLENDOP, property_name, val, render_state
+from scripts.w1_depth_shaderlab import BLEND, BLENDOP, property_name, val, render_state, color_mask
 
 EXPECTED_RANKS = [108, 34, 34, 20, 16, 3]
 STATUS = "SHA_ORIGINAL_PARTICLE_108_PASS_RENDER_STATE_CLASSIFIED"
@@ -78,12 +78,23 @@ def classify_state(state):
     else:
         color_category=blend_family(src,dst)
         alpha_category=blend_family(src_a,dst_a)
+    # Preserve the old W1/default behavior and prove whether the source is
+    # independently supported by the opt-in Unity 2021.3 ColorWriteMask path.
+    # Keep ShaderLab source text PRIVATE; export only public-safe categories.
     try:
-        render_state(state)  # use exact existing ShaderLab translator; never log text
+        render_state(state)
     except (ValueError,KeyError,TypeError):
         translator=False
     else:
         translator=True
+    try:
+        render_state(state,allow_selective_color_mask=True)
+    except (ValueError,KeyError,TypeError):
+        selective_translator=False
+    else:
+        selective_translator=True
+    channel_subset=(color_mask({"name":"<noninit>","val":mask})
+                    if mask is not None else "PROPERTY_DRIVEN_UNRESOLVED")
     return {
         "original_pass_rt_separate_blend":state["rtSeparateBlend"],
         "original_pass_color_blend_category":color_category,
@@ -92,6 +103,7 @@ def classify_state(state):
         "original_pass_color_mask_category":(
             "PROPERTY_DRIVEN_UNRESOLVED" if mask is None else
             "RGBA" if mask==15 else "NONE" if mask==0 else "PARTIAL"),
+        "original_pass_color_mask_shaderlab_channels":channel_subset,
         "original_pass_depth_write_category":(
             "PROPERTY_DRIVEN_UNRESOLVED" if zwrite is None else
             "ON" if zwrite==1 else "OFF"),
@@ -105,6 +117,8 @@ def classify_state(state):
             "PROPERTY_DRIVEN_UNRESOLVED" if cull is None else
             ("OFF" if cull==0 else "ON")),
         "original_pass_fixed_function_state_translator_accepted":translator,
+        "original_pass_opt_in_selective_colormask_translator_accepted":selective_translator,
+        "serialized_Unity2021_ColorWriteMask_ABGR_bits_not_reversed":True,
         "original_pass_source_fixed_function_only":True,
         "original_fragment_alpha_output_or_discard_not_verified":True,
         "native_ShaderLab_or_Android_pixels_not_verified":True,
