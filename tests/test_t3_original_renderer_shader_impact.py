@@ -96,6 +96,24 @@ class OriginalSceneShaderUsage(unittest.TestCase):
                         <= m.RENDERER_CLASSES)
         self.assertEqual(sum(result["original_renderer_material_slots_by_renderer_class"].values()),8)
 
+    def test_private_particle_source_identity_only_in_caller_owned_outparam(self):
+        private={}
+        data=self.fixture()
+        result=m.summarize(*data,expected_slots=8,expected_nonnull=6,
+                           private_particle_slot_counts=private)
+        self.assertEqual(private,{("sharedassets0.assets",11):1})
+        self.assertNotIn('"path_id"',json.dumps(result,sort_keys=True))
+        self.assertNotIn("sharedassets0.assets",json.dumps(
+            result["original_particle_Shader48_ranked_material_slot_use_no_identity"]))
+        self.assertEqual(result["original_particle_Shader48_ranked_material_slot_use_no_identity"],[1])
+
+    def test_private_particle_outparam_rejects_nonempty_or_wrong_type(self):
+        for bad in ({"stale":1},[],True):
+            with self.subTest(value=repr(bad)):
+                with self.assertRaisesRegex(ValueError,"private_original_particle_shader_map"):
+                    m.summarize(*self.fixture(),expected_slots=8,expected_nonnull=6,
+                                private_particle_slot_counts=bad)
+
     def test_particle_original_source_rank_is_distinct_from_global_shader_use(self):
         r=self.run_data()
         self.assertEqual(r["original_particle_typed_Shader48_material_slots"],1)
