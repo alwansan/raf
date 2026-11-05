@@ -12,3 +12,12 @@
 - planned validation: two-owner negative synthetic that preserves pointer 1 when source 2 is unsafe or target 2 mismatches; positive 3-owner CI remains authenticity checkpoint.
 - constraints: do not alter shared Unity workflow, native requests, private byte payload or other agents' work; track actual CI after push.
 - session initially planning; final evidence to be appended and state set paused on completion.
+
+## Engineering checkpoint — 2026-11-05T00:29Z
+
+- Registered plan before code mutation; no T5 active identity conflict was indicated (prior state paused).
+- Patched batch structural preflight and three tests: production `e8b63e4`, tests `6f899a2` and corrected literal fixture `1648d7b`. Static fresh-file read confirmed the new preflight and exact three test names.
+- Path-trigger CI pending observation, no fabricated results. Prior original source CI41940032540 and ledger CI41940609086 remain the last confirmed T5 pass observations.
+- No known current workflow run was cancelled; a repository-wide current Action listing was not available from connected GitHub tools.
+- Work checkpoint source-fixed/CI-unverified; status paused for next scheduled T5. No Unity/Adreno/device/world evidence, game NOT_READY 0/3.
+- Restore from work `T5-20261105T0024Z-hydration-batch-preflight.json` and experiment `T5-20261105T0024Z-hydration-batch-preflight.json`; read latest HEAD/Actions before anything else.
