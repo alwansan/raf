@@ -40,6 +40,47 @@ def reassemble(root, name):
     # that the complete destination cannot fit. Free space can still change later.
     if shutil.disk_usage(root).free < row['bytes']:
         raise ValueError('Insufficient free disk for assembly')
+    # Android/Termux Python builds may not expose os.link at all. Keep the
+    # existing hard-link path unchanged where it is available: that is the
+    # only path with atomic complete-file publication. In the absent-link
+    # fallback, create the final name EXCLUSIVELY, never with rename('replace').
+    # A process killed without Python cleanup can leave an incomplete final
+    # pathname, so this fallback is no-clobber, not atomic-visibility.
+    if not callable(getattr(os, 'link', None)):
+        digest = hashlib.sha256()
+        size = 0
+        owned_inode = None
+        try:
+            try:
+                with output.open('xb') as target:
+                    owner = os.fstat(target.fileno())
+                    owned_inode = (owner.st_dev, owner.st_ino)
+                    for part in parts:
+                        with (root / part['name']).open('rb') as source:
+                            for block in iter(lambda: source.read(1024 * 1024), b''):
+                                target.write(block)
+                                digest.update(block)
+                                size += len(block)
+                    target.flush()
+                    os.fsync(target.fileno())
+            except FileExistsError as exc:
+                raise ValueError('Refusing to overwrite output') from exc
+            if size != row['bytes'] or digest.hexdigest() != row['sha256']:
+                raise ValueError('Assembled file SHA256 mismatch')
+            return output
+        except BaseException:
+            # Remove only our own exclusive output, if its inode still matches.
+            # This is best-effort cleanup, not a guarantee against power loss.
+            if owned_inode is not None:
+                try:
+                    current = output.lstat()
+                except FileNotFoundError:
+                    pass
+                else:
+                    if (current.st_dev, current.st_ino) == owned_inode and not output.is_symlink():
+                        output.unlink()
+            raise
+
     digest=hashlib.sha256();size=0
     created=False
     try:
