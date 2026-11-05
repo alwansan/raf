@@ -1,0 +1,55 @@
+{
+  "id": "T2-foam-original-authored-shader-property-lineage",
+  "owner": "T2",
+  "kind": "source_sha_authentic_Foam_authored_Shader_texture_property_and_direct_material_scope",
+  "title": "Authenticated Foam original m_PropInfo Texture property ↔ source m_TextureParams names; bounded same-owner Material PPtr negative",
+  "source": {
+    "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "owner": "Raft_Data/sharedassets0.assets",
+    "size": 115978112,
+    "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "shader_path_id": 2420,
+    "shader_raw_sha256": "67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1"
+  },
+  "stages": {
+    "acquisition": "AUTHENTIC_IMMUTABLE_ZIP2_OWNER_115978112_BYTES_AND_SHA",
+    "extraction": "ORIGINAL_FOAM_TYPED_SHADER_m_PropInfo_AND_FOUR_STAGE_m_TextureParams_PRIVATE_NAMES",
+    "reconstruction": "VERIFIED_EXACT_SOURCE_NAME_EQUALITY_OF_AUTHORED_TEXTURE_PROPERTY_2_OF_6_OCCURRENCES",
+    "binding": "SINGLE_ORIGINAL_OWNER_351_MATERIALS_SCANNED_ZERO_DIRECT_LOCAL_PPTR_TO_FOAM;CROSS_OWNER_OR_RUNTIME_UPLOAD_UNKNOWN",
+    "integration": "SOURCE_ONLY_T2_PYTHON_PROBE_AND_ORIGINAL_GITHUB_CI_SUCCESS",
+    "device": "NO_SHADERLAB_UNITY_ADRENO_PIXEL_PROOF"
+  },
+  "observed": {
+    "original_shader_authored_properties": 2,
+    "authored_texture_properties": 1,
+    "source_program_texture_row_count": 6,
+    "source_stage_occurrences_matching_authored_texture_property": 2,
+    "source_stage_occurrences_without_authored_texture_property": 4,
+    "pass0_fragment": "5 source t/s rows; 1 matches authored Texture property, 4 do not",
+    "pass1_fragment": "1 source t/s row; 1 matches authored Texture property",
+    "other_stage_texture_rows": 0,
+    "same_owner_materials_total": 351,
+    "direct_local_material_shader_reference_matches": 0,
+    "verified_local_texenvs_for_foam": 0,
+    "cross_owner_material_search_complete": false,
+    "runtime_global_texture_upload_verified": false,
+    "original_TextureImporter_filter_wrap_verified": false,
+    "shaderlab_import_device_render_verified": false
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42017542487",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_ORIGINAL_AUTHORED_PROPERTIES_AND_MATERIALS_2026-11-05.md"
+  ],
+  "artifact": {
+    "id": 13409313191,
+    "transport_sha256": "07bf2ec8be15eee1a89e63e363c9b33ece3300ab2436bbd072299e69d8cfbd9d",
+    "numeric_only": true
+  },
+  "remaining": [
+    "Exact original managed or native runtime writer/provider of four non-authored Foam source texture names",
+    "Other source owners may contain Materials pointing externally at Foam Shader; same-owner zero is limited scope",
+    "Actual authored one Texture property's Material pointer/upload and ShaderLab/UV/filter/wrap",
+    "CB constant buffer member upload and Unity shader import/Adreno device correctness"
+  ],
+  "updated_at": "2026-11-05T11:18Z"
+}
