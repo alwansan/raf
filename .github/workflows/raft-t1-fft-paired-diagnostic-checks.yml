@@ -11,6 +11,7 @@ on:
       - scripts/t1_fft_rgba_error_signature.py
       - scripts/t1_fft_first_divergence.py
       - tests/test_t1_fft_tolerance_validation.py
+      - tests/test_t1_fft_tolerance_overflow.py
       - tests/test_t1_fft_empty_capture_guard.py
       - tests/test_t1_fft_manifest_relative_paths.py
       - scripts/t1_fft_trace_compare.py
@@ -39,6 +40,7 @@ jobs:
           python3 -m unittest discover -s tests -p test_t1_fft_trace_compare.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_first_divergence.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_tolerance_validation.py -v
+          python3 -m unittest discover -s tests -p test_t1_fft_tolerance_overflow.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_empty_capture_guard.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_manifest_relative_paths.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_pass0_spatial_diagnostic.py -v
