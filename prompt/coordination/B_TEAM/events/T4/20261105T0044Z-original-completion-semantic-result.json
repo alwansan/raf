@@ -1,0 +1,15 @@
+{
+  "id": "20261105T0044Z-T4-world-completion-semantic",
+  "owner": "T4",
+  "session_id": "20261104T2357Z-T4-lw01",
+  "issue_id": "LOCAL-005",
+  "type": "integration",
+  "summary": "Genuine original coroutine completion assignment Android-only marker source-integrated without writing readiness flags; 10/10 Python negative and CLR true/false branches PASS; exact SHA-authenticated original DLL read-only alternate ILSpy body verified (production full adapter NOT exercised due source SHA variance). No native or phone test. LOCAL-005 OPEN and NOT_READY.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/ea98fb0fe5ca393d31468df752a262ef777a2fc4",
+    "https://github.com/alwansan/raf/actions/runs/41943357681",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_WORLD_COMPLETION_TRACE_2026-11-05.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/discussions/LOCAL-005/20261105T0044Z-T4-authentic-ilspy-variant-and-completion-boundary.md"
+  ],
+  "at": "2026-11-05T00:44:00Z"
+}
