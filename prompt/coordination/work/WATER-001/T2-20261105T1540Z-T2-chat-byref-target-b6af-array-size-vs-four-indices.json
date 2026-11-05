@@ -4,9 +4,9 @@
   "origin": "chat",
   "session_id": "20261105T1540Z-T2-chat-byref-target-b6af",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "b83b127d4edc6b6ef857ed03f01e5e08ac45df06",
-  "updated_at": "2026-11-05T16:01:38.838Z",
+  "updated_at": "2026-11-05T16:05:09.746Z",
   "resumed_from_experiment": "T2|original-0a6f0527|exact-ref-RenderTexture-array-callee|newarr-to-stind-same-block-v1",
   "experiment_key": "T2|original-0a6f0527|Foam-ref-RenderTexture-newarr-private-length-vs-four-index-ops-v1",
   "resource_key": "T2-original-managed-Foam-compiled-array-bounds",
@@ -19,5 +19,20 @@
     "prompt/coordination/work/WATER-001/T2-20261105T1540Z-T2-chat-byref-target-b6af-array-size-vs-four-indices.json",
     "prompt/coordination/clients/T2/sessions/20261105T1540Z-T2-chat-byref-target-b6af.md"
   ],
-  "next_step": "Run original source-pinned CI and record bounds only if source-proven. WATER-001 OPEN NOT_READY0/3."
+  "next_step": "Bounded original newarr length operand def-use from local/argument/arithmetic in exact byref callee, with branch-join fail closed; only then compare four original i4 indices to a proven size. No original literals or shader pixels. WATER-001 OPEN NOT_READY0/3.",
+  "implementation_sha": "fa7c0296ddcc2b70fa7d53bc481c3d03ac52c3cc",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42060975715"
+  ],
+  "result": {
+    "original_ci": "42060975715 COMPLETED SUCCESS",
+    "original_dll_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "compiled_newarr_to_exact_ref_store_proven": true,
+    "compiled_newarr_length_operand_category": "length_source_not_direct_i4",
+    "four_index_literals_in_range_under_allocation": null,
+    "original_int_values_published": false,
+    "actual_runtime_array_length_or_allocation_verified": false,
+    "artifact_id": 13430897331,
+    "artifact_zip_sha256": "16ff66202a28f353efd90bf6d42d53c4d4bf36dadcf6b65e756a986549afd3b2"
+  }
 }
