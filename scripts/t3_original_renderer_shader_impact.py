@@ -141,6 +141,32 @@ def summarize(original_edges:list, materials:dict, typed_shaders:dict,
         {kind:len(ids) for kind,ids in sorted(
             typed_shader_class_renderers[winners[0]].items())}
         if high_unique else {})
+    # PRIVATE Shader48 keys are used only to group ParticleSystemRenderer source
+    # slots. Public result has anonymous descending slot counts and, only
+    # where the highest rank is unique, its global slot/pass totals.
+    per_class_source_counts=defaultdict(Counter)
+    for shader,classes in typed_shader_class_slots.items():
+        for kind,n in classes.items():
+            per_class_source_counts[kind][shader]=n
+    particle_sources=per_class_source_counts["ParticleSystemRenderer"]
+    particle_ranked=sorted(particle_sources.values(),reverse=True)
+    particle_high=particle_ranked[0] if particle_ranked else 0
+    particle_winners=[key for key in particle_sources
+                      if particle_sources[key]==particle_high]
+    particle_unique=bool(particle_high and len(particle_winners)==1)
+    particle_top=particle_winners[0] if particle_unique else None
+    particle_global_slots=slot_by_shader[particle_top] if particle_unique else None
+    particle_other_slots=(particle_global_slots-particle_high
+                          if particle_unique else None)
+    particle_distinct=(len(typed_shader_class_renderers[particle_top]["ParticleSystemRenderer"])
+                       if particle_unique else None)
+    particle_passes=typed_shaders[particle_top]["passes"] if particle_unique else None
+    if (sum(sum(d.values()) for d in per_class_source_counts.values())
+            != count["original_slots_to_verified_Shader48"]
+        or (particle_unique and (particle_distinct>particle_high
+                                 or particle_other_slots<0))
+        or (sum(particle_ranked)!=typed_shader_slots_by_class["ParticleSystemRenderer"])):
+        raise ValueError("original_particle_Shader48_source_rank_accounting_mismatch")
     if (sum(source_slots_by_class.values())!=count["original_material_slots"]
         or sum(typed_shader_slots_by_class.values())!=count["original_slots_to_verified_Shader48"]
         or (high_unique and sum(highest_slots_by_class.values())!=high)
@@ -191,6 +217,16 @@ def summarize(original_edges:list, materials:dict, typed_shaders:dict,
         "original_highest_used_typed_Shader48_distinct_renderers_by_class":highest_renderers_by_class,
         # No private shader identity, scene renderer object IDs or names leave.
         "renderer_class_breakdown_is_original_source_only_not_Android_drawcalls":True,
+        "original_particle_typed_Shader48_material_slots":sum(particle_ranked),
+        "original_particle_distinct_typed_Shader48_source_targets":len(particle_sources),
+        "original_particle_Shader48_ranked_material_slot_use_no_identity":particle_ranked,
+        "original_particle_highest_Shader48_unique":particle_unique,
+        "original_particle_highest_Shader48_particle_class_slots":particle_high,
+        "original_particle_highest_Shader48_global_renderer_slots":particle_global_slots,
+        "original_particle_highest_Shader48_nonparticle_renderer_slots":particle_other_slots,
+        "original_particle_highest_Shader48_distinct_particle_renderers":particle_distinct,
+        "original_particle_highest_Shader48_original_pass_count":particle_passes,
+        "particle_Shader_rank_is_not_Blend_state_or_Android_emission_evidence":True,
         "top_ten_original_shader_slot_counts_no_identity":raw_sorted[:10],
         "top_ten_typed_Shader48_slot_counts_no_identity":verified_sorted[:10],
         "source_shader_target_names_guids_ids_hashes_disclosed":False,
