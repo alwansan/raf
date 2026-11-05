@@ -1,0 +1,49 @@
+{
+  "session_id": "20261105T1849Z-T5-scheduled-publish403-6c2a",
+  "origin": "scheduled",
+  "status": "completed",
+  "issue_id": "INTEGRATION-001",
+  "experiment_key": "t5-native-42058825739-immutable-e9c358ed-publish-403-artifact-presence-permission-boundary-v1",
+  "source_sha": "e9c358eda01785b65e4eb14f18723da426635628",
+  "run_id": 42058825739,
+  "run_conclusion": "failure",
+  "reconstruct_job": {
+    "id": 127354763134,
+    "conclusion": "success",
+    "unity_import_step": 62,
+    "signature_step": 67,
+    "package_step": 69,
+    "artifact_upload_step": 71
+  },
+  "publish_job": {
+    "id": 127441439836,
+    "conclusion": "failure",
+    "step": 3,
+    "error": "HTTP 403: Resource not accessible by integration (https://api.github.com/repos/alwansan/raf/releases)",
+    "download_artifact_sha256": "29d967c5f1868a10aa0f8f3b9f0306e828c1d32ef3cda2909f7482b5d111eef6",
+    "download_verified": true
+  },
+  "artifact": {
+    "id": 13441227298,
+    "name": "raft-android-test-delivery",
+    "bytes": 5948243524,
+    "expires_at": "2026-11-06T18:19:05Z",
+    "digest": "sha256:29d967c5f1868a10aa0f8f3b9f0306e828c1d32ef3cda2909f7482b5d111eef6"
+  },
+  "checkpoint": {
+    "id": 13441766832,
+    "name": "raft-android-signed-output-checkpoint",
+    "bytes": 2974110506,
+    "expires_at": "2026-11-07T18:18:17Z"
+  },
+  "release_tag": "android-early-test-42058825739-1",
+  "release_exists": false,
+  "workflow_permission": "publish job contents:write; actions:read",
+  "classification": "delivery publication authorization denied; Unity compile, signature and package steps succeeded",
+  "limitations": [
+    "403 alone does not identify repository policy or integration permission root cause",
+    "No download/re-hash of full signed APK/OBB/XAPK performed here",
+    "No Android install, water FFT or world save validation"
+  ],
+  "next_step": "Preserve artifacts before expiry; inspect GitHub Actions release policy/token permissions, use authorized publish-only recovery of pinned artifact; no native rebuild; verify published asset names/sizes/hashes and signatures"
+}
