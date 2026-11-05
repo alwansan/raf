@@ -23,7 +23,8 @@ class SameExportShaderTopology(unittest.TestCase):
             else:
                 outputs[dest["guid"]]={"pass_count":1,
                                       "programmed_pass_count":1,
-                                      "subshader_pass_counts":[1]}
+                                      "subshader_pass_counts":[1],
+                                      "dummy_exporter_marker":False}
             trace["objects"].append({"class_id":48,"source":{"owner":key[0],"path_id":key[1]},"export":dest})
         trace["objects"].append({"class_id":21,"source":{"owner":"sharedassets6.assets","path_id":999},
                                  "export":{"file_id":2100999,"guid":"b"*32,"type":2}})
@@ -40,6 +41,15 @@ class SameExportShaderTopology(unittest.TestCase):
         self.assertEqual(result["counts"]["exported_custom_ShaderLab_passes"],9)
         self.assertEqual(result["counts"]["missing_original_passes_in_custom_ShaderLab"],25)
         self.assertFalse(result["original_compiled_variant_program_equivalence_verified"])
+    def test_dummy_template_is_detected_without_claiming_real_program(self):
+        values=list(self.fixture())
+        for row in values[2].values():
+            row["dummy_exporter_marker"]=True
+        result=self.call(values)
+        self.assertEqual(result["status"],"SCOPED_DUMMY_SHADERLAB_PASS_DEFICIT")
+        self.assertEqual(result["counts"]["exported_custom_with_DummyShaderTextExporter_marker"],9)
+        self.assertFalse(result["original_compiled_variant_program_equivalence_verified"])
+
     def test_absent_same_export_material_shader_verification_is_rejected(self):
         with self.assertRaisesRegex(ValueError,"links_unproven"):self.call(verified=False)
     def test_missing_export_ShaderLab_meta_target_rejected(self):
@@ -96,6 +106,11 @@ class SameExportShaderTopology(unittest.TestCase):
             self.assertEqual(len(results),9)
             self.assertTrue(all(r["pass_count"]==1 for r in results.values()))
             self.assertTrue(all(r["programmed_pass_count"]==1 for r in results.values()))
+            selected=assets/"synthetic-1.shader"
+            selected.write_text("//DummyShaderTextExporter\n"+selected.read_text("utf-8-sig"),
+                                encoding="utf-8-sig")
+            flagged=m.exported_profiles(assets,ids)
+            self.assertEqual(sum(x["dummy_exporter_marker"] for x in flagged.values()),1)
 
     def test_private_names_ids_guid_not_in_result(self):
         result=str(self.call())
