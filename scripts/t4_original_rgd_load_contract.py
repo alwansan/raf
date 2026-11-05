@@ -84,6 +84,49 @@ def analyze(source, expected_sha=PINS["SaveAndLoad"]):
     }
 
 
+
+def inspect_original_project_for_loader(source_root):
+    """Find executable deserialization bodies across the *verified DLL* export.
+
+    The historic B37 suggestion names SaveAndLoad.Load<T>; absence from that
+    class must not turn into a fabricated compatibility conclusion. No code,
+    class names, filenames or data bytes are printed.
+    """
+    if source_root.is_symlink() or not source_root.is_dir():
+        raise ValueError("Unsafe private ILSpy source root")
+    source_files, deserialize_files, loader_bodies = 0, 0, 0
+    candidate_sha256 = []
+    parser_unresolved = 0
+    for path in sorted(source_root.rglob("*.cs")):
+        if path.is_symlink() or not path.is_file():
+            raise ValueError("Unsafe private ILSpy source leaf")
+        text = path.read_text(encoding="utf-8-sig").replace("\r\n", "\n")
+        source_files += 1
+        if not DESERIALIZE.search(_executable_positions(text)):
+            continue
+        deserialize_files += 1
+        bodies = _bodies(text)
+        direct = sum(bool(DESERIALIZE.search(body)) for _, _, _, body in bodies)
+        if not direct:
+            parser_unresolved += 1
+        loader_bodies += direct
+        candidate_sha256.append(fingerprint(text))
+    if source_files < 1 or deserialize_files < 1:
+        raise ValueError("No authentic original source deserializer found")
+    return {
+        "original_source_files_inspected": source_files,
+        "files_with_executable_deserialize": deserialize_files,
+        "parsed_loader_method_bodies": loader_bodies,
+        "unparsed_deserialize_source_files": parser_unresolved,
+        "deserializer_source_sha256": sorted(candidate_sha256),
+        "saveandload_loader_not_assumed": True,
+        "original_binary_sha_verified": True,
+        "private_source_published": False,
+        "actual_rgd_deserialized": False,
+        "unity_or_device_tested": False,
+    }
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--original-managed-dll", type=Path, required=True)
@@ -111,7 +154,16 @@ def main():
             "production_adapter_pin_unchanged": True,
             "readonly": True,
         }, sort_keys=True))
-    print("T4_ORIGINAL_RGD_LOADER " + json.dumps(analyze(source, expected_sha=observed), sort_keys=True))
+    try:
+        report = analyze(source, expected_sha=observed)
+        print("T4_ORIGINAL_RGD_LOADER " + json.dumps(report, sort_keys=True))
+    except ValueError as exc:
+        if str(exc) != "No recognizable original load/deserialization method":
+            raise
+        result = inspect_original_project_for_loader(args.source)
+        print("T4_ORIGINAL_RGD_LOADER_DISCOVERY " + json.dumps(result, sort_keys=True))
+        if result["parsed_loader_method_bodies"] < 1:
+            raise ValueError("Original deserialization site found but parser cannot resolve method boundary")
 
 
 if __name__ == "__main__":
