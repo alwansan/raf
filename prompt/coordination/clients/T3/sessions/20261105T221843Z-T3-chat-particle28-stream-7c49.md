@@ -22,3 +22,7 @@ Previous [CI 42116530618](https://github.com/alwansan/raf/actions/runs/421165306
 Permanent report: https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_TEXTURE2D_STREAM_2026-11-06.md
 
 Next: T5 joint bounded/real full-native: use same-instance private original W1 Material21 and B02 Texture2D28 export trace to match 5 authenticated original Materials / 3 original Texture2D class28 to exported Unity GUIDs, actual TexEnv source parity and real full pipeline .resS provider bytes; correlate installed signed APK/OBB emitter and alpha/render pixels. Do not launch equivalent heavy export from T3 uncoordinated; source-only checker can be reused.
+
+## Canonical evidence refresh
+
+[GitHub Actions 42121705420](https://github.com/alwansan/raf/actions/runs/42121705420) **SUCCESS** on workflow change `6361e9cc3e97e129f5de67ef6e94f77d94b64252`. Regenerated T-team canonical evidence index with real SHA-original 3 Texture2D28 stream dependencies; issue RENDER-002 remains OPEN, no Android pixel or game acceptance.
