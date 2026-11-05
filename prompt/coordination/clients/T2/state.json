@@ -4,10 +4,10 @@
   "generation": "T-2026-11-05",
   "session_id": "20261104T2354Z-T2-foamabi01",
   "resumed_from_session": null,
-  "status": "paused",
+  "status": "active",
   "base_sha": "b56ebc3847f251cee2539e9797471417d32698d2",
   "last_commit": "69a9d876fda83e6363438ef0cfc4b94025276a67",
-  "updated_at": "2026-11-05T00:08:00Z",
+  "updated_at": "2026-11-05T00:15:30Z",
   "tracks": [
     "WATER-001",
     "foam-cb-abi",
@@ -15,13 +15,15 @@
     "Blur"
   ],
   "work_ids": [
-    "T2-20261104T2354Z-foam-member-abi"
+    "T2-20261104T2354Z-foam-member-abi",
+    "T2-20261105T0013Z-foam-resource-interface"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41937996942",
     "https://github.com/alwansan/raf/actions/runs/41938551022",
-    "https://github.com/alwansan/raf/actions/runs/41938898381"
+    "https://github.com/alwansan/raf/actions/runs/41938898381",
+    "https://github.com/alwansan/raf/actions/runs/41939956032"
   ],
-  "next_step": "New independent engineering scope: authenticate Foam original member types/usage & Unity CB alias/material/property upload; privately assemble genuine two-pass ShaderLab only after source binding established, then Unity/Adreno comparison. FFT/Spectrum/Blur remain separate. No game or device success claimed.",
+  "next_step": "Run private source-authenticated Foam stage texture/sampler resource ABI CI41939956032, investigate real original descriptor counts and any reflected slot schema errors; then document truthful next ShaderLab binding task. Preserve B-team sources and T1 FFT.",
   "memory_path": "prompt/coordination/clients/T2/MEMORY.md"
 }
