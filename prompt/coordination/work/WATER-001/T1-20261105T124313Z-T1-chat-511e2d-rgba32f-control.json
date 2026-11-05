@@ -1,0 +1,19 @@
+{
+  "id": "20261105T124313Z-T1-chat-511e2d",
+  "session_id": "20261105T124313Z-T1-chat-511e2d",
+  "origin": "chat",
+  "owner": "T1",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "57cbc77526929db395c1a891705a7d058b326aa1",
+  "baseline_sha": "57cbc77526929db395c1a891705a7d058b326aa1",
+  "updated_at": "2026-11-05T12:43:29.938Z",
+  "intended_files": [
+    "android-port/Experiments/T1/T1FftRgba32fTransferControl.cs",
+    ".github/workflows/raft-t1-fft-rgba32f-transfer-control.yml"
+  ],
+  "experiment_key": "unity2021.3.45f2-gameci0.1.72-rgba32f-1024x32-synthetic-texture-load-uav-readpixels",
+  "resource_key": "raft-native-engine-feature/android-native-port",
+  "run_urls": [],
+  "approach": "Isolate the RGBA32F input and output path of CI42025620147 with a source-free GPU control using known exact channel data and spatial markers across two sampled input textures and one intermediate UAV."
+}
