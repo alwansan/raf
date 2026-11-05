@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T1104Z-T2-foam-material-property-bridge-isolated",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "eceef5f7725d14e07c2e19394bc8341e30ed184f",
+  "track": "original Foam Material.SetTexture second Texture argument value-source instruction provenance",
+  "hypothesis": "Actual source-authentic original Material.SetTexture calls for four Foam non-authored names may load the second UnityEngine.Texture argument from a typed field/local/argument/return or null, and that origin can be classified by conservative IL stack without leaking source names. No actual texture instance/runtime call verified.",
+  "approach": "Extend existing T2 source-authentic Mono.Cecil single-block IL evaluator to retain a bounded nonprivate stack-opcode provenance marker for the SECOND formal parameter (known UnityEngine.Texture static type) at exactly the four previously proven original name-arg calls. Reject branches/unknown and invalid overloads, classify per-call operand origin only (field/local/argument/method result/null/unknown) and require original source exact 4/4 first-name proof. Add public Cecil fixture for typed field/argument second operand and wrong second type, run same isolated SHA-pinned workflow. Never output IL/method symbols, private fields/names or original shader code; no Unity visual assertion.",
+  "taken_over_from": [
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/FoamSetterFlow.cs",
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/Program.cs",
+    "docs/T2_FOAM_ORIGINAL_MATERIAL_SETTEXTURE_ARGUMENT_PROOF_2026-11-05.md"
+  ],
+  "intended_files": [
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/FoamSetterFlow.cs",
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/Program.cs",
+    ".github/workflows/raft-t2-foam-managed-literals.yml"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement and test actual source IL second Texture operand origin class only; if inconclusive, keep origin unknown and restore original 4 first-name proofs unchanged; then ShaderLab with verified Texture upload.",
+  "updated_at": "2026-11-05T11:52Z"
+}
