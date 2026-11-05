@@ -19,9 +19,10 @@ namespace RaftAndroid.Platform
         private readonly PhysicalMouseDeltaAccumulator deltas = new PhysicalMouseDeltaAccumulator();
         private CapturedListener listener;
         private bool focused = true, paused, supported;
-        private volatile bool nativeHasMotion, requested;
-        private int epoch, lastLoggedCount;
-        private float nextRequestTime;
+        private volatile bool nativeHasMotion, requested, nativeCaptured;
+        private readonly object captureGate = new object();
+        private int epoch, lastLoggedCount, captureLossCount, loggedLossCount;
+        private float nextRequestTime, nextProbeTime;
 
         private sealed class CapturedListener : AndroidJavaProxy
         {
@@ -40,9 +41,7 @@ namespace RaftAndroid.Platform
                         return false; // ACTION_MOVE only.
                     float dx = motionEvent.Call<float>("getX");
                     float dy = motionEvent.Call<float>("getY");
-                    owner.deltas.Push(dx, dy);
-                    owner.nativeHasMotion = true;
-                    return true;
+                    return owner.RecordCapturedMotion(dx, dy);
                 }
                 catch (AndroidJavaException)
                 {
@@ -55,6 +54,17 @@ namespace RaftAndroid.Platform
                     if (motionEvent != null) motionEvent.Dispose();
                     if (view != null) view.Dispose();
                 }
+            }
+        }
+
+        private bool RecordCapturedMotion(float dx, float dy)
+        {
+            lock (captureGate)
+            {
+                if (!requested) return false;
+                deltas.Push(dx, dy);
+                nativeCaptured = nativeHasMotion = true;
+                return true;
             }
         }
 
@@ -73,9 +83,14 @@ namespace RaftAndroid.Platform
         private static float Axis(string axis, bool raw)
         {
             var current = instance;
-            if (current != null && current.nativeHasMotion && current.requested &&
-                (axis == "Mouse X" || axis == "Mouse Y"))
-                return current.deltas.Sample(Time.frameCount, axis == "Mouse X");
+            if (current != null && (axis == "Mouse X" || axis == "Mouse Y"))
+            {
+                lock (current.captureGate)
+                {
+                    if (current.requested && current.nativeCaptured && current.nativeHasMotion)
+                        return current.deltas.Sample(Time.frameCount, axis == "Mouse X");
+                }
+            }
             // No capture => identical legacy Unity input for mouse/keyboard.
             return raw ? Input.GetAxisRaw(axis) : Input.GetAxis(axis);
         }
@@ -119,10 +134,23 @@ namespace RaftAndroid.Platform
                 if (requested || nativeHasMotion) ReleaseCapture();
                 return;
             }
-            if (Time.unscaledTime >= nextRequestTime)
+            if (!nativeCaptured && Time.unscaledTime >= nextRequestTime)
             {
                 nextRequestTime = Time.unscaledTime + 1.5f;
                 RequestCapture();
+            }
+            if (requested && Time.unscaledTime >= nextProbeTime)
+            {
+                nextProbeTime = Time.unscaledTime + 0.15f;
+                ProbeCapturedPointer();
+            }
+            int losses = Volatile.Read(ref captureLossCount);
+            if (losses != loggedLossCount)
+            {
+                loggedLossCount = losses;
+                RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("input",
+                    "physical_mouse_capture_lost",
+                    "lostTransitions=" + losses + "; legacyFallback=true");
             }
             int received = deltas.ReceivedCount;
             if (received >= lastLoggedCount + 120)
@@ -141,14 +169,58 @@ namespace RaftAndroid.Platform
                 activity.Call("runOnUiThread", new AndroidJavaRunnable(() => work()));
         }
 
+        // Android can revoke pointer capture without Unity focus callbacks.
+        // Only an actual focused View.hasPointerCapture result may keep the
+        // legacy mouse-axis override active. Old queued probes are ignored.
+        private void ObserveNativeCapture(int token, bool captured)
+        {
+            lock (captureGate)
+            {
+                if (!requested || epoch != token) return;
+                bool lost = nativeCaptured && !captured;
+                nativeCaptured = captured;
+                if (!captured)
+                {
+                    nativeHasMotion = false;
+                    deltas.Reset();
+                }
+                if (lost) Interlocked.Increment(ref captureLossCount);
+            }
+        }
+
+        private void ProbeCapturedPointer()
+        {
+            int token = Volatile.Read(ref epoch);
+            try
+            {
+                OnAndroidUi(() =>
+                {
+                    if (!requested || token != Volatile.Read(ref epoch)) return;
+                    try
+                    {
+                        using (var player = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+                        using (var activity = player.GetStatic<AndroidJavaObject>("currentActivity"))
+                        using (var view = activity.Call<AndroidJavaObject>("getCurrentFocus"))
+                        {
+                            bool active = view != null && view.Call<bool>("hasWindowFocus") &&
+                                view.Call<bool>("isFocused") && view.Call<bool>("hasPointerCapture");
+                            ObserveNativeCapture(token, active);
+                        }
+                    }
+                    catch (AndroidJavaException) { ObserveNativeCapture(token, false); }
+                });
+            }
+            catch (AndroidJavaException) { ObserveNativeCapture(token, false); }
+        }
+
         private void RequestCapture()
         {
             if (!requested)
                 RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("input",
                     "physical_mouse_capture_requested",
                     "androidApi26=true; nativeAccepted=unknown; requiresDeviceConfirmation=true");
-            requested = true;
-            int currentEpoch = Interlocked.Increment(ref epoch);
+            int currentEpoch;
+            lock (captureGate) { requested = true; currentEpoch = ++epoch; }
             try
             {
                 OnAndroidUi(() =>
@@ -163,21 +235,22 @@ namespace RaftAndroid.Platform
                             // Do not steal focus from Unity, nor trap the user
                             // when activity/menu does not own a focused view.
                             if (view == null || !view.Call<bool>("hasWindowFocus") ||
-                                !view.Call<bool>("isFocused")) return;
+                                !view.Call<bool>("isFocused"))
+                            {
+                                ObserveNativeCapture(currentEpoch, false);
+                                return;
+                            }
                             view.Call("setOnCapturedPointerListener", listener);
-                            if (!view.Call<bool>("hasPointerCapture"))
+                            if (view.Call<bool>("hasPointerCapture"))
+                                ObserveNativeCapture(currentEpoch, true);
+                            else
                                 view.Call("requestPointerCapture");
                         }
                     }
-                    catch (AndroidJavaException) { /* fallback to legacy mouse */ }
+                    catch (AndroidJavaException) { ObserveNativeCapture(currentEpoch, false); }
                 });
             }
-            catch (AndroidJavaException)
-            {
-                requested = false;
-                nativeHasMotion = false;
-                deltas.Reset();
-            }
+            catch (AndroidJavaException) { ObserveNativeCapture(currentEpoch, false); }
         }
 
         private void ReleaseCapture()
@@ -187,11 +260,14 @@ namespace RaftAndroid.Platform
                     "physical_mouse_capture_released",
                     "focus=" + focused + "; paused=" + paused +
                     "; requested=" + requested + "; relativeEvents=" + deltas.ReceivedCount);
-            Interlocked.Increment(ref epoch);
-            requested = false;
-            nativeHasMotion = false;
-            deltas.Reset();
+            lock (captureGate)
+            {
+                epoch++;
+                requested = nativeHasMotion = nativeCaptured = false;
+                deltas.Reset();
+            }
             lastLoggedCount = 0;
+            nextProbeTime = 0f;
             try
             {
                 OnAndroidUi(() =>
