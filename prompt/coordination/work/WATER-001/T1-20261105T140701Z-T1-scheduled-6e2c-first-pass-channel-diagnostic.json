@@ -15,7 +15,13 @@
   "experiment_key": "t1-firstpass-rgba32f-channel-diagnostic-v1-sourcefree",
   "resource_key": null,
   "taken_over_from": "T1 paired capture CI42025620147; separate diagnostic script, no Unity job",
-  "status": "active",
+  "status": "completed_source_unverified_tests",
   "identity_conflict": false,
-  "updated_at": "2026-11-05T14:07:01Z"
+  "updated_at": "2026-11-05T14:07:01Z",
+  "code_commits": [
+    "94a0f6d115e331c6449577dc048251109deec00e",
+    "289ed56f58cdba2b11a370e1338b100c4a5fb98e"
+  ],
+  "session_commit": "c1d9c8fbdc2c9a3155d5002d1de7a8bd3eca3763",
+  "validation": "NOT_RUN: local Python/container runtime unavailable; no original capture applied"
 }
