@@ -6,7 +6,7 @@
   "origin": "chat",
   "issue_id": "INTEGRATION-001",
   "track": "Update exact build-request water limitations after live native run renderer restoration changes source contract",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "523565b107732b5817056feeac0d90cd3b3877a9",
   "resumed_from_sessions": [
     "20261105T1508Z-T5-chat-native-retry-c2b7",
@@ -17,7 +17,7 @@
   ],
   "hypothesis": "CI42052375742 failed only because now-satisfied Blur shader remained incorrectly acknowledged and now-unsatisfied Depth Copy was omitted. An exact recorded five-condition ack matching observed renderer state permits existing experimental water limitation gate without falsely marking original water authentic; all other source constraints stay intact.",
   "experiment_key": "T5|CI42052375742|original-water-gate-live-v1|DepthCopy-false-Blur-true|exact-ack-to-existing-guard",
-  "resource_key": "t5-isolated-python-water-ack-validation; optional raft-native-engine for single new request after green",
+  "resource_key": "raft-native-engine-feature/android-native-port (one run 42058825739 active; strict original water gate unchanged)",
   "intended_files": [
     "tests/fixtures/t5_native_water_42052375742.json",
     "tests/test_t5_live_water_ack.py",
@@ -26,7 +26,8 @@
     "prompt/coordination/work/INTEGRATION-001/T5-20261105T1543Z-T5-chat-water-live-ack-f2c9-water-ack-source-gate.json",
     "prompt/coordination/clients/T5/sessions/20261105T1543Z-T5-chat-water-live-ack-f2c9.md",
     "prompt/coordination/experiments/T5/T5-20261105T1543Z-T5-chat-water-live-ack-f2c9-native-water-ack.json",
-    "prompt/coordination/B_TEAM/events/T5/20261105T1550Z-native-water-ack-result.json"
+    "prompt/coordination/B_TEAM/events/T5/20261105T1550Z-native-water-ack-result.json",
+    ".github/raft-native-build-request.json"
   ],
   "preflight": {
     "head": "523565b107732b5817056feeac0d90cd3b3877a9",
@@ -50,8 +51,46 @@
     "game_status": "NOT_READY 0/3"
   },
   "run_urls": [
-    "https://github.com/alwansan/raf/actions/runs/42052375742"
+    "https://github.com/alwansan/raf/actions/runs/42052375742",
+    "https://github.com/alwansan/raf/actions/runs/42058357801",
+    "https://github.com/alwansan/raf/actions/runs/42058825739"
   ],
-  "next_step": "Write source-free replay against actual guard code using pared-down original CI aggregate, verify original list fails and corrected exact list passes with strict false; launch isolated CI. Only then update existing request file and dispatch exactly one next immutable native diagnostic if no GPU/Unity resource conflict.",
-  "updated_at": "2026-11-05T15:43:00Z"
+  "next_step": "Check immutable run42058825739 first. Keep waiting_ci while reconstruct runs and do not dispatch duplicate. If it reaches water ack, compare exact original live report; if it fails later, diagnose earliest actual failing job/step. If signed APK/OBB/XAPK published, verify source SHA, versions, size, digest and signature before device create/save/relaunch/reopen.",
+  "updated_at": "2026-11-05T15:52:00Z",
+  "experiment_ids": [
+    "prompt/coordination/experiments/T5/T5-20261105T1543Z-T5-chat-water-live-ack-f2c9-native-water-ack.json"
+  ],
+  "result": {
+    "original_failed_run": 42052375742,
+    "original_source_sha": "b0c4b4c05011d915cd845259f06b5f80ee368092",
+    "original_first_failing_step": "Authentic water gate (strict) or exact documented trial limitation",
+    "observed_original_depth_subshader_pass_counts": [
+      6,
+      3
+    ],
+    "depth_required_per_active_subshader": 4,
+    "observed_blur_pass_count": 2,
+    "blur_required": 2,
+    "acknowledgement_error": "Documented water limitations do not exactly match the live unmet conditions",
+    "acknowledged_list_diff": {
+      "removed": "shader_pass_contract:UltimateWater/Utilities/Blur (Subsurface Scattering)",
+      "added": "shader_pass_contract:UltimateWater/Depth/Depth Copy"
+    },
+    "source_only_verified_run": 42058357801,
+    "source_only_tests_passed": 12,
+    "source_only_tests_failed": 0,
+    "updated_request_commit": "e9c358eda01785b65e4eb14f18723da426635628",
+    "new_native_run": 42058825739,
+    "new_native_sha": "e9c358eda01785b65e4eb14f18723da426635628",
+    "request_gate": "success",
+    "unity_license_preflight": "success",
+    "reconstruct": "in_progress at graphics payload restoration",
+    "signed_apk": false,
+    "obb": false,
+    "xapk": false,
+    "published_release": false,
+    "device_tested": false,
+    "readiness": "NOT_READY 0/3",
+    "no_water_gate_or_runtime_source_modified": true
+  }
 }
