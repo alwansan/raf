@@ -7,3 +7,8 @@
 - New independent experiment_key: `T2|ZIP2-15964ea8|original-managed-sha0a6f0527|exact-RT-return-unresolved-ret-source-opcode-reason-v1`. Classify exact reason for unresolved return: branch-target/exception entry vs direct ordinary same-block producer class like local/field/arg/etc, only safe enum categories and counters. Do NOT infer actual value at runtime.
 - Intended edits limited to T2 Mono.Cecil `FoamByrefElementValueOrigin.cs`, its existing `Program.cs` tests and `raft-t2-foam-managed-literals.yml` workflow. Does not touch scheduled `scripts/t2_rt_return_cfg.py` or its tests, T1/T3/T4/T5 source, game assets, .meta, audio/Settings or deferred touch.
 - Next: publish source with expected blob sha guards, verify original SHA CI and safe output; save event, experiment, resource and final handoff. WATER-001 OPEN NOT_READY0/3.
+
+## Concurrent scheduled T2 result and non-overlapping chat pivot
+
+- Scheduled T2 published original return-site source category tests in the same owned C# file at commits `b7b249e532ee` and `d707e1911258`; original [CI42076640591](https://github.com/alwansan/raf/actions/runs/42076640591) and [CI42076713202](https://github.com/alwansan/raf/actions/runs/42076713202) SUCCESS. Its handoff states one sequential original `ldloc` return-site predecessor, not proof of runtime non-null. Scheduled T2 then reserved local-writer dataflow as next scope.
+- Because C# source changed during the chat edit, chat did **not** overwrite it or duplicate its source CI. Own initial return-reason work marked `redirected_overlap`. New independent task: synthetic cross-assembly method identity guard in separate project/workflow, no original source or game files.
