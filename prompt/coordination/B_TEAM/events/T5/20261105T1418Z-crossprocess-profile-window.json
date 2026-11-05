@@ -1,0 +1,15 @@
+{
+  "id": "T5-20261105T1418Z-crossprocess-profile-window",
+  "owner": "T5",
+  "session_id": "20261105T1407Z-T5-chat-profile-reader-window-c8a1",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "type": "result",
+  "summary": "Source-real net8 LocalProfileStore cross-process writer test: holding empty exclusive profile for 300ms allows identical persistent profile; holding for 3500ms exhausts bounded retries with IOException before writer completes, while persistent corruption fails closed unchanged. Distinct from CI42020924863 InvalidDataException and not Android world/save proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42043111968",
+    "https://github.com/alwansan/raf/commit/69fe4aedcdd85f4dc75149f6472a09000b12bf2b",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/discussions/LOCAL-005/20261105T1417Z-T5-original-profile-writer-window-to-T4.md"
+  ],
+  "at": "2026-11-05T14:18:00Z"
+}
