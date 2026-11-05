@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T1701Z-T3-chat-original-dxbc-semantic-join-6d9f",
+  "issue_id": "RENDER-002",
+  "original_provider_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "request_type": "one genuine SHA original Shader48 four-Pass VS-FS DXBC semantic mask source-only probe",
+  "source_blob_shas": {
+    "scripts/t3_original_921_dxbc_semantic_join.py": "8a7b0178f4502d7c163a7c8a313e7f754cd68162",
+    "tests/test_t3_original_921_dxbc_semantic_join.py": "335c9c6dbd66cbbcc7760d1c5128fad029249113",
+    "scripts/t3_dxbc_signature_contract.py": "02f674907abdabac323472bce733f151befda9fe"
+  },
+  "workflow_name": "raft-t3-original-921-dxbc-semantic-join.yml",
+  "resource_key": "T3-921-fourpass-original-DXBC-CPU",
+  "safety": {
+    "private_semantic_names_never_public": true,
+    "cancel_previous_actions": false,
+    "no_Unity_native_build": true
+  },
+  "created_at": "2026-11-05T17:06:00Z"
+}
