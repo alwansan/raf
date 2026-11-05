@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "session_id": "20261105T1104Z-T2-foam-material-property-bridge-isolated",
+  "generation": "T-2026-11-05",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "90646aa2eea80e2034d47863ae8712cd38c765d7",
+  "hypothesis": "The four original non-authored Foam source Texture ldstr strings located in one managed method are actual first arguments of typed Material.SetTexture or MaterialPropertyBlock.SetTexture calls (possibly through Shader.PropertyToID) rather than merely in the same method or within 8 opcode positions.",
+  "approach": "Add conservative bounded basic-block IL marker stack trace in isolated T2 Cecil oracle; follow ldstr string/Shader.PropertyToID return ID through only provably modeled stack/local opcodes; require exact first setter name argument type and reject branches, unknown opcodes, indirect storage and unrelated nearby setters. Add public synthetic positive/negative Cecil bytecode fixtures, retain source original SHA/ZIP2 and only numeric output. Do not execute game or claim runtime setter dispatch or texture object provenance.",
+  "taken_over_from": [
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/Program.cs",
+    "docs/T2_FOAM_ORIGINAL_MANAGED_TEXTURE_CALL_CONTEXT_2026-11-05.md",
+    "scripts/t2_foam_managed_literal_targets.py"
+  ],
+  "intended_files": [
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/FoamSetterFlow.cs",
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/Program.cs",
+    ".github/workflows/raft-t2-foam-managed-literals.yml"
+  ],
+  "related_run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42019735778"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement bounded IL stack verifier with actual first-argument proof and negative controls, execute on same original sha-pinned DLL; preserve no ShaderLab/Unity/Adreno assertion.",
+  "updated_at": "2026-11-05T11:38Z"
+}
