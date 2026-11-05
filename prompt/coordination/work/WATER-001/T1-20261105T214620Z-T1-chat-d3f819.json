@@ -1,0 +1,14 @@
+{
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261105T214620Z-T1-chat-d3f819",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "efa0d75325217a5918ed506c929d2e2748757630",
+  "intended_files": [
+    "scripts/t1_fft_trace_compare.py",
+    "tests/test_t1_fft_trace_compare.py"
+  ],
+  "experiment_key": "fft-invocation-aggregate-coordinate-axis-counts",
+  "updated_at": "2026-11-05T21:46:20Z"
+}
