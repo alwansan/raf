@@ -1,0 +1,32 @@
+{
+  "id": "T3-SHAREDASSETS6-MATERIAL-COLOR-SAME-EXPORT",
+  "title": "T3 original ZIP2 sharedassets6 Material RGBA source-to-actual-same-export",
+  "kind": "authenticated-original-to-real-export-material-rgba-parity",
+  "source": {
+    "provider": "immutable ZIP2 plain Git SHA-pinned bytes via B21 staging",
+    "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "path": "Raft_Data/sharedassets6.assets",
+    "bytes": 6607272,
+    "sha256": "0476792cfeffac19d16e920011ed8d2fb2da62973c2f09a8689bc59e1ac4b632"
+  },
+  "stages": {
+    "acquisition": "VERIFIED_SHA_PINNED_REAL_NINE_PROVIDER_BOUNDED_EXPORT",
+    "extraction": "VERIFIED_41_SOURCE_MATERIALS_150_COLOR_SLOTS",
+    "reconstruction": "NOT_APPLICABLE_DIRECT_ORIGINAL_TO_EXPORT_VALUE_COMPARISON",
+    "binding": "VERIFIED_SAME_EXPORT_41_MATERIAL_IDENTITIES_150_RGBA_COLOR_VALUES_ZERO_DIFF",
+    "integration": "VERIFIER_EXTENDED_SCOPED_REAL_EXPORT_CI_PASS_NO_GAME_ASSETS_MODIFIED",
+    "device": "UNKNOWN"
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41940350604",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_AUTHENTIC_MATERIAL_EXPORT_PARITY_2026-11-05.md",
+    "https://github.com/alwansan/raf/commit/33ae0f760ea9f82a792b04419de1ba7df34d6e5"
+  ],
+  "remaining": [
+    "Only 41 materials from one original owner proven. Full original 14-owners not checked in same export.",
+    "Unknown shader variant/compiled passes/Material shader identity and runtime sRGB/sampler/GPU pixel behavior.",
+    "No Unity Android build or device visual acceptance. White materials may be shader rendering despite preserved RGBA values."
+  ],
+  "updated_by": "T3",
+  "updated_at": "2026-11-05T00:21:00Z"
+}
