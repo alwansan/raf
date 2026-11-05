@@ -45,3 +45,4 @@ jobs:
           done
           echo "::error::T5 index still needs regeneration against current HEAD"
           exit 1
+# T5 one-shot checkpoint: original FileManager compiled IL 2026-11-05T10:45Z
