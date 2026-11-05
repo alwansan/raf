@@ -5853,6 +5853,19 @@
       "_record_path": "../B_TEAM/events/T1/20261105T204900Z-T1-chat-4c73e2.json"
     },
     {
+      "id": "20261105T210230Z-T1-chat-a8dc31",
+      "owner": "T1",
+      "session_id": "20261105T210230Z-T1-chat-a8dc31",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "summary": "Authenticated pair 0: Unity OpenGLCore and Mesa CPU Vulkan. Source and butterfly GPU readbacks each had 0 mismatches across 32,768 texels. Instrumentation preserved output in each backend under existing tolerance. Pass zero: 64 jointly written pixels, RGBA mismatch counts [63,62,63,63], zero nonfinite. Trace missing and extra coordinate records were [63,252,64] each at the three Load sites. Zero records had equal per-coordinate multiplicity for value comparison, so zero value-bit mismatches provides no value-parity evidence. Unity NUnit passed 2/2; final numeric parity gate exited 1. Same-backend Unity Vulkan and Android were not tested.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42108071145"
+      ],
+      "at": "2026-11-05T21:02:30Z",
+      "_record_path": "../B_TEAM/events/T1/20261105T210230Z-T1-chat-a8dc31.json"
+    },
+    {
       "id": "T2-20261104T2354Z-start-foamabi",
       "owner": "T2",
       "session_id": "20261104T2354Z-T2-foamabi01",
@@ -6233,6 +6246,20 @@
       "_record_path": "../B_TEAM/events/T2/20261105T2051Z-T2-chat-cfg-independent-a17f-result.json"
     },
     {
+      "id": "20261105T2107Z-T2-chat-writer-call-ab1c-void-return",
+      "owner": "T2",
+      "session_id": "20261105T2107Z-T2-chat-writer-call-ab1c",
+      "issue_id": "WATER-001",
+      "type": "discovery",
+      "summary": "Exact SHA-original Foam RT return-local stloc is preceded by a void-returning call: it cannot be its own value producer; original pre-call stack still unknown. Source-only CI42110292828 SUCCESS.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42110292828",
+        "https://github.com/alwansan/raf/commit/c65e8dddf7b15f12dda8602165ecad8d41720048"
+      ],
+      "at": "2026-11-05T21:15:00Z",
+      "_record_path": "../B_TEAM/events/T2/20261105T2107Z-T2-chat-writer-call-ab1c-void-return.json"
+    },
+    {
       "id": "T3-20261105-0002-render-harness-result-and-export-start",
       "owner": "T3",
       "session_id": "20261104T2354Z-T3-render-harness",
@@ -6603,6 +6630,48 @@
         "no device graphics recovery"
       ],
       "_record_path": "../B_TEAM/events/T3/20261105T204947Z-T3-chat-program-coverage-b6f2.json"
+    },
+    {
+      "id": "20261105T2102Z-T3-chat-builtin-null-pointer-0d3e",
+      "owner": "T3",
+      "origin": "chat",
+      "session_id": "20261105T2102Z-T3-chat-builtin-null-pointer-0d3e",
+      "issue_id": "RENDER-002",
+      "type": "integration",
+      "at": "2026-11-05T21:00:07Z",
+      "summary": "Closed zero-GUID false Built-in classification in original-21-Shader48→full-native top921 join; source-free CI 42108532173 PASS 54/54. Real shader/Android pixels still unknown.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42108532173",
+        "https://github.com/alwansan/raf/commit/dc3f3ea04347ae98ce8e8ff05517d9fadb795c1c",
+        "https://github.com/alwansan/raf/commit/c52603ff0fd48f747764f908ce957e03335c5522",
+        "https://github.com/alwansan/raf/commit/8ff409feafc56188ab7f462b814d13849d576d04"
+      ],
+      "limitations": [
+        "source-free synthetic control only",
+        "RENDER-002 remains OPEN, no Unity/Android device rendering proof"
+      ],
+      "_record_path": "../B_TEAM/events/T3/20261105T2102Z-T3-chat-builtin-null-pointer-0d3e.json"
+    },
+    {
+      "id": "20261105T210656Z-T3-chat-renderer-class921-7d62",
+      "owner": "T3",
+      "origin": "chat",
+      "session_id": "20261105T210656Z-T3-chat-renderer-class921-7d62",
+      "issue_id": "RENDER-002",
+      "type": "result",
+      "at": "2026-11-05T21:09:38Z",
+      "summary": "Actual SHA-pinned six original Raft scenes: uniquely most-used original Shader48 accounts for 921 Renderer Material slots (914 MeshRenderer, 7 SkinnedMeshRenderer, 0 ParticleSystemRenderer); 215 other verified Shader48 slots belong to ParticleSystemRenderer. CI42109994654 PASS; no Unity/Android proof.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42109994654",
+        "https://github.com/alwansan/raf/commit/6a07848324991973598a45378dd85ff055d279f3",
+        "https://github.com/alwansan/raf/commit/7fb7889b838b71f330dc95c5a7f7c2d95d5167dc",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_RENDERER_CLASS_SH48_2026-11-05.md"
+      ],
+      "limitations": [
+        "actual original source, not full-native Shader GUID/pixel",
+        "RENDER-002 OPEN"
+      ],
+      "_record_path": "../B_TEAM/events/T3/20261105T210656Z-T3-chat-renderer-class921-7d62.json"
     },
     {
       "id": "T4-20261104T2357Z-local-load-start",
@@ -7044,6 +7113,22 @@
       "_record_path": "../B_TEAM/events/T4/20261105T1838Z-T4-chat-cl-rgd-real-9p4s.json"
     },
     {
+      "id": "T4-20261105T2050Z-T4-chat-original-mouse-routing-q9c4",
+      "owner": "T4",
+      "session_id": "20261105T2050Z-T4-chat-original-mouse-routing-q9c4",
+      "origin": "chat",
+      "issue_id": "INPUT-005",
+      "type": "result",
+      "summary": "Source-authenticated original ZIP2 mouse routing: CI42107935479 SUCCESS 7/7 controls, 2395 original ILSpy files, 4 direct Mouse X and 4 direct Mouse Y legacy Input.GetAxis syntax sites in camera/player-like files, no MyInput mouse axis or InputSystem delta sites; pointer capture not implemented and phone test outstanding.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42107935479",
+        "https://github.com/alwansan/raf/commit/fe9a9ae5264821304923d6bac04d21089f3a3df8",
+        "prompt/coordination/clients/T4/sessions/20261105T2050Z-T4-chat-original-mouse-routing-q9c4.md"
+      ],
+      "at": "2026-11-05T20:56:29Z",
+      "_record_path": "../B_TEAM/events/T4/20261105T2050Z-T4-chat-original-mouse-routing-q9c4.json"
+    },
+    {
       "id": "T5-20261104T2357Z-b12-fixture-start",
       "owner": "T5",
       "session_id": "20261104T2357Z-T5-b12-fixture-7e2",
@@ -7360,6 +7445,21 @@
       "_record_path": "../B_TEAM/events/T5/20261105T1744Z-release-manifest-bytes.json"
     },
     {
+      "id": "T5-20261105T2055Z-obb-pair-controls",
+      "owner": "T5",
+      "session_id": "20261105T2055Z-T5-chat-obb-pair-9f2d",
+      "issue_id": "INTEGRATION-001",
+      "type": "integration",
+      "summary": "Added standalone streaming APK/OBB pair verifier; GitHub Actions 42108354510 success 17/17 synthetic controls; unsigned/hash-untrusted full game data not accessed; actual phone OBB GUID remains unknown",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42108354510",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/t5_verify_apk_obb_pair.py",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_APK_OBB_PAIR_VERIFIER_2026-11-05.md"
+      ],
+      "at": "2026-11-05T21:00:10.882Z",
+      "_record_path": "../B_TEAM/events/T5/20261105T2055Z-T5-chat-obb-pair-9f2d.json"
+    },
+    {
       "id": "20261104-b-generation",
       "owner": "owner-team-bootstrap",
       "session_id": "b-team-setup-20261104",
@@ -7388,7 +7488,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "f2edbde166137469004fc6a137efe21b2edf4b88ecb72cce2967365dd10e9fff",
+  "source_input_sha256": "fcfde0e9c0cef4af6b32f0f98134806fb74f2910ffc792d033cef8fcc0079ca0",
   "generation": "T-2026-11-05",
-  "input_sha256": "86f0ecb3e9d5523a6462d99883f2da9ea440e8b5279c6d708778fa64280fbb46"
+  "input_sha256": "c687dc78c6efc664e8fcd628d60c8d0176bb10c64b39fdf10def1084605b9366"
 }
