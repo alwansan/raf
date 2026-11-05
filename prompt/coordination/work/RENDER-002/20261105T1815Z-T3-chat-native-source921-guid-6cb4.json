@@ -4,9 +4,9 @@
   "origin": "chat",
   "session_id": "20261105T1815Z-T3-chat-native-source921-guid-6cb4",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed",
   "base_sha": "f95e8d7e2c8fa39182d6781e01ea58b7df62ca2d",
-  "updated_at": "2026-11-05T18:15:00Z",
+  "updated_at": "2026-11-05T18:26:00Z",
   "resumed_from_sessions": [
     "20261105T1745Z-T3-chat-921-shader-material-property-7a6e",
     "20261105T1405Z-T3-chat-renderer-dummy-join-8c41"
@@ -52,5 +52,24 @@
     "T3-20261105T1625Z-T3-scheduled-dxbc-contract-8f2c.json",
     "T5-20261105T0746Z-t3-syntax-boundary.json"
   ],
-  "active_jobs_snapshot": []
+  "active_jobs_snapshot": [],
+  "completed_at": "2026-11-05T18:26:00Z",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42083469621",
+  "result": {
+    "source_free_tests_passed": 45,
+    "source_free_CI_conclusion": "success",
+    "real_native_ci": "https://github.com/alwansan/raf/actions/runs/42058825739",
+    "real_native_postrestorer_shader_files": 142,
+    "real_native_dummy_shader_files": 110,
+    "real_native_material_documents": 1536,
+    "real_native_material_docs_bound_to_dummy": 770,
+    "real_native_unresolved_material_shader_refs": 0,
+    "actual_native_postrestorer_stage_proven": true,
+    "source_original_921_use_shader_guid_mapped_into_real_native_export": false,
+    "prepared_private_source_to_native_Guid_probe_source_free_only": true,
+    "actual_original_source_and_native_trace_probe_not_executed": true,
+    "game_assets_changed": false,
+    "T5_build_cancelled": false
+  },
+  "next_step": "Run prepared strict SHA original source top921->native W1 private trace->exact actual .shader GUID and Pass count on next authorized post-full-restorer export. Do not infer 921 source identity from 770 native dummy docs. T5 active Unity import 42058825739 must be preserved."
 }
