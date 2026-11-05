@@ -22,6 +22,9 @@ def baseline():
         "world_rgd_typed_locals": 1,
         "user_rgd_typed_locals": 0,
         "world_rgd_field_stores": 3,
+        "other_saveandload_methods_rgd_constructor_calls": 2,
+        "world_original_load_rgd_generic_calls": 1,
+        "user_original_load_rgd_generic_calls": 0,
         "world_pre_call_rgd_source_clue": "RGD_TYPED_INSTANCE_FIELD_LOAD",
         "user_pre_call_rgd_source_clue": "RGD_TYPED_CALL_RETURN",
         "direct_constructor_is_dynamically_proven_save_argument": False,
@@ -65,6 +68,25 @@ class TestOriginalSaveWorldProvenance(unittest.TestCase):
         y=validate(x)
         self.assertFalse(y["actual_argument_instance_identity_proven"])
         self.assertEqual(y["world_pre_call_rgd_source_clue"], "UNKNOWN_PRECALL_SOURCE")
+
+    def test_generic_RGD_load_count_is_source_clue_not_playability(self):
+        x=baseline()
+        x["world_pre_call_rgd_source_clue"]="RGD_GENERIC_LOAD_CALL_RETURN"
+        y=validate(x)
+        self.assertEqual(y["world_original_generic_load_rgd_count"], 1)
+        self.assertFalse(y["game_world_rgd_written_or_reloaded"])
+        self.assertFalse(y["actual_argument_instance_identity_proven"])
+
+    def test_no_generic_RGD_load_is_valid_absence_not_world_failure(self):
+        x=baseline()
+        x["world_original_load_rgd_generic_calls"]=0
+        y=validate(x)
+        self.assertEqual(y["world_original_generic_load_rgd_count"], 0)
+
+    def test_invalid_large_other_ctor_count_rejected(self):
+        x=baseline()
+        x["other_saveandload_methods_rgd_constructor_calls"]=101
+        with self.assertRaises(ValueError):validate(x)
 
     def test_duplicate_direct_save_calls_rejected(self):
         x=baseline()
