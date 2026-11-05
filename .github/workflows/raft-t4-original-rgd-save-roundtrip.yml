@@ -1,0 +1,152 @@
+name: T4 LOCAL-005 guarded original SaveAndLoad Save RGD seed roundtrip
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'android-port/Experiments/T4/OriginalRgdSaveRoundtrip/**'
+      - 'scripts/t4_verify_original_rgd_save_roundtrip.py'
+      - 'tests/test_t4_verify_original_rgd_save_roundtrip.py'
+      - '.github/workflows/raft-t4-original-rgd-save-roundtrip.yml'
+permissions:
+  contents: read
+concurrency:
+  group: raft-t4-authentic-original-rgd-save-once-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  authentic-shipped-rgd-private-save-roundtrip:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 11
+    steps:
+      - name: Checkout independent source-only T4 save experiment
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /android-port/Experiments/T4/OriginalRgdSaveRoundtrip/
+            /scripts/t4_verify_original_rgd_save_roundtrip.py
+            /tests/test_t4_verify_original_rgd_save_roundtrip.py
+            /scripts/t4_validate_original_rgd_loadt.py
+            /scripts/t4_validate_original_rgd_runtime_load.py
+      - name: Run source-free report-safety negative controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t4_verify_original_rgd_save_roundtrip.py tests/test_t4_verify_original_rgd_save_roundtrip.py
+          python3 -m unittest discover -s tests -p test_t4_verify_original_rgd_save_roundtrip.py -v
+          test ! -d Raft
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Compile isolated original save seed .NET8 runner
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 200s dotnet publish \
+            android-port/Experiments/T4/OriginalRgdSaveRoundtrip/OriginalRgdSaveRoundtrip.csproj \
+            -c Release --self-contained false -o "$RUNNER_TEMP/t4-original-save-runner" \
+            >"$RUNNER_TEMP/t4-save-private-compile.log" 2>&1 || {
+              python3 -c "import collections,os,re,pathlib; s=(pathlib.Path(os.environ['RUNNER_TEMP'])/'t4-save-private-compile.log').read_text(errors='replace'); print('T4_ORIGINAL_SAVE_COMPILER_CODES',dict(collections.Counter(re.findall(r'error +((?:CS|NETSDK|NU)[0-9]+)',s))))"
+              exit 1
+            }
+          test -s "$RUNNER_TEMP/t4-original-save-runner/OriginalRgdSaveRoundtrip.dll"
+      - name: Checkout exact original ZIP2 DLL and shipped Data.rgd seed
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: t4-zip2-seed
+          lfs: false
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /Raft/Raft_Data/Managed/Assembly-CSharp.dll
+            /Raft/Raft_Data/StreamingAssets/Data.rgd
+      - name: Checkout exact pinned managed sibling reference context
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 02e9fba7fb42b83579595885391be636ee3b56e8
+          path: t4-original-companions
+          lfs: false
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /Raft/Raft_Data/Managed/
+      - name: Stage exact original bytes privately and check fixed immutable SHA
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C t4-zip2-seed rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          test "$(git -C t4-original-companions rev-parse HEAD)" = 02e9fba7fb42b83579595885391be636ee3b56e8
+          test "$(df -Pk . | awk 'NR==2 {print $4}')" -gt 900000
+          test "$(stat -c '%s' t4-zip2-seed/Raft/Raft_Data/Managed/Assembly-CSharp.dll)" = 3211776
+          test "$(stat -c '%s' t4-zip2-seed/Raft/Raft_Data/StreamingAssets/Data.rgd)" = 2941
+          mkdir -p "$RUNNER_TEMP/t4-rgd-immutable"
+          for dep in t4-original-companions/Raft/Raft_Data/Managed/*.dll; do
+            if [ "$(basename "$dep")" != "Assembly-CSharp.dll" ]; then
+              test ! -L "$dep"
+              cp "$dep" "$RUNNER_TEMP/t4-rgd-immutable/"
+            fi
+          done
+          test "$(find "$RUNNER_TEMP/t4-rgd-immutable" -maxdepth 1 -name '*.dll' | wc -l)" -eq 151
+          cp t4-zip2-seed/Raft/Raft_Data/Managed/Assembly-CSharp.dll "$RUNNER_TEMP/t4-rgd-immutable/Assembly-CSharp.dll"
+          cp t4-zip2-seed/Raft/Raft_Data/StreamingAssets/Data.rgd "$RUNNER_TEMP/t4-rgd-immutable/Data.rgd"
+          python3 - <<'PY'
+          import hashlib,os
+          from pathlib import Path
+          p=Path(os.environ['RUNNER_TEMP'])/'t4-rgd-immutable'
+          expect={'Assembly-CSharp.dll':(3211776,'0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e'),
+                  'Data.rgd':(2941,'b2785187aa11e33872698adfa79ab252cf65a824d92bee7e88773ce4aa11cbba')}
+          for name,(size,digest) in expect.items():
+              f=p/name
+              if f.is_symlink() or f.stat().st_size!=size or hashlib.sha256(f.read_bytes()).hexdigest()!=digest:
+                  raise SystemExit('Authentic original intake mismatch')
+          print('T4_EXACT_ORIGINAL_RGD_INPUT source_verified=true original_binary_bytes_published=false')
+          PY
+      - name: Guarded actual private original Save + Load<T> on disposable seed object
+        shell: bash
+        run: |
+          set -euo pipefail
+          ulimit -c 0
+          export DOTNET_DbgEnableMiniDump=0 COMPlus_DbgEnableMiniDump=0 DOTNET_EnableCrashReport=0
+          set +e
+          timeout 55s dotnet "$RUNNER_TEMP/t4-original-save-runner/OriginalRgdSaveRoundtrip.dll" \
+            --assembly "$RUNNER_TEMP/t4-rgd-immutable/Assembly-CSharp.dll" \
+            --seed "$RUNNER_TEMP/t4-rgd-immutable/Data.rgd" \
+            --output "$RUNNER_TEMP/t4-original-private-save-report.json" \
+            --original-save-roundtrip \
+            >"$RUNNER_TEMP/t4-original-save-private-runtime.log" 2>&1
+          runtime_code=$?
+          set -e
+          if test "$runtime_code" -ne 0; then
+            export T4_ORIGINAL_SAVE_EXIT="$runtime_code"
+            python3 - <<'PY'
+          import os
+          print('T4_ORIGINAL_SAVE_PROCESS_NONZERO', {
+              'exit_code':os.environ.get('T4_ORIGINAL_SAVE_EXIT'),
+              'status':'INCONCLUSIVE',
+              'original_data_published':False})
+          PY
+            exit 1
+          fi
+          python3 -m scripts.t4_verify_original_rgd_save_roundtrip \
+            --report "$RUNNER_TEMP/t4-original-private-save-report.json"
+          # Reuse exactly the fixed intake guard: modified seed is not passed
+          # to formatter or any original method.
+          printf 'wrong-seed' >"$RUNNER_TEMP/t4-rgd-immutable/bad.rgd"
+          if timeout 8s dotnet "$RUNNER_TEMP/t4-original-save-runner/OriginalRgdSaveRoundtrip.dll" \
+              --assembly "$RUNNER_TEMP/t4-rgd-immutable/Assembly-CSharp.dll" \
+              --seed "$RUNNER_TEMP/t4-rgd-immutable/bad.rgd" \
+              --output "$RUNNER_TEMP/t4-wrong-save-probe.json" \
+              --original-save-roundtrip >"$RUNNER_TEMP/t4-bad-seed-private.log" 2>&1; then
+            echo 'T4_UNAUTHENTIC_SEED_WAS_ACCEPTED'
+            exit 1
+          fi
+          test ! -e "$RUNNER_TEMP/t4-wrong-save-probe.json"
+          echo 'T4_ORIGINAL_SAVE wrong_seed_sha_rejected=true user_world_save_proven=false device=false'
+      - name: No payload artifacts, no game source, no Unity/Android acceptance
+        if: always()
+        run: echo 'source_authenticated_ephemeral=true raw_rgd_published=false user_world_save=false Android_device=false'
