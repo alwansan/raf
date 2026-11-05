@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "generation": "T-2026-11-05",
+  "origin": "chat",
+  "session_id": "20261105T1544Z-T4-chat-original-rgd-precall-slice-w9c3",
+  "issue_id": "LOCAL-005",
+  "track": "world-save",
+  "status": "active",
+  "base_sha": "c4858f5de9369a03ea0256f3d8ca97ab1e4b362b",
+  "experiment_key": "t4-zip2-15964-original-sha0a6f-SaveWorld-and-SaveUser-precalls-v1",
+  "resource_key": null,
+  "hypothesis": "Determine independently from authentic compiled original SaveWorld and SaveUser the immediate RGD-argument producer IL opcode family, metadata type relationship (exact RGD, derived, unrelated or unknown), and potential non-direct producer patterns, beyond last source-free generic UNKNOWN. Do not infer runtime flow from adjacency.",
+  "approach": "New separate .NET8/Mono.Cecil 0.11.5 read-only original compiled IL inspector, exact input SHA/size, trusted unique Save(string, RGD) call sites. Classify NOP-skipped producer opcode and operand reference by bounded type relationship, generic Load call count and local/field facts. Never export original code, IL opcode names, identifiers, raw bytes or private CLR member strings. Fail closed for ambiguous targets. Synthetic adversarial validator, isolated CI, wrong SHA negative. No original method execution, no Unity/Android build.",
+  "intended_files": [
+    "android-port/Experiments/T4/OriginalRgdPrecallSlice/OriginalRgdPrecallSlice.csproj",
+    "android-port/Experiments/T4/OriginalRgdPrecallSlice/Program.cs",
+    "scripts/t4_validate_original_rgd_precall_slice.py",
+    "tests/test_t4_validate_original_rgd_precall_slice.py",
+    ".github/workflows/raft-t4-original-rgd-precall-slice.yml",
+    "docs/T4_ORIGINAL_RGD_PRECALL_SLICE_2026-11-05.md",
+    "prompt/coordination/work/LOCAL-005/T4-20261105T1544Z-T4-chat-original-rgd-precall-slice-w9c3-precallslice.json",
+    "prompt/coordination/clients/T4/sessions/20261105T1544Z-T4-chat-original-rgd-precall-slice-w9c3.md"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/T4/sessions/20261105T1500Z-T4-chat-saveworld-rgd-producer-h5k2.md",
+    "prompt/coordination/clients/T4/sessions/20261105T1440Z-T4-scheduled-q8p3.md",
+    "docs/T4_ORIGINAL_SAVEWORLD_RGD_PRODUCER_2026-11-05.md"
+  ],
+  "run_urls": [],
+  "updated_at": "2026-11-05T15:45:09.617Z",
+  "next_step": "Prove exact original immediate Save RGD operand producer family and bounded type relation without game execution. Keep separate from active scheduled JSONL verifier; no interference with T1 water/native T5. LOCAL-005 OPEN NOT_READY 0/3."
+}
