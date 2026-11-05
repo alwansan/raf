@@ -1,0 +1,28 @@
+{
+  "id": "T2-foam-original-typed-ref-array-newarr-member-store",
+  "owner": "T2",
+  "issue_id": "WATER-001",
+  "title": "Foam original managed helper stores new RenderTexture[] via typed ref formal and writes member",
+  "kind": "authenticated_managed_RT_array_allocation_provenance",
+  "stages": {
+    "acquisition": "ORIGINAL_ZIP2_15964ea8_MANAGED_SHA_0a6f0527_AUTHENTICATED",
+    "extraction": "EXACT_GETTER_FIELD_LDFLDA_REF_ARRAY_CALLEE_RESOLVED_ONE_BODY",
+    "reconstruction": "SOURCE_SAME_BLOCK_NEWARR_RENDER_TEXTURE_TO_STIND_REF_FORMAL_AND_STELEM_REF_ARRAY_MEMBER_PROVEN",
+    "binding": "FOUR_CALLER_INDICES_DISTINCT_NONNEGATIVE;_ARRAY_SIZE_DIRECT_I4_ABSENT_AND_RUNTIME_BOUNDS_UNPROVEN",
+    "integration": "SHA_ORIGINAL_CI42060338704_AND_42060975715_SUCCESS_ONLY_NO_GAME_ASSET_OR_UNITY_EDITS",
+    "device": "NOT_TESTED"
+  },
+  "observed": {
+    "exact_managed_callee_body_count": 1,
+    "source_direct_newarr_to_ref_formal_stores": 1,
+    "source_direct_element_stores_via_ref_formal": 1,
+    "compiled_length_operand_category": "not_direct_ldc_i4",
+    "four_caller_index_inbounds_verdict": "unknown",
+    "runtime_array_initialized_verified": false
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42060338704",
+    "https://github.com/alwansan/raf/actions/runs/42060975715"
+  ],
+  "next_step": "Use verified source managed array length dataflow and real Unity shader runtime; source-only not pixels. WATER-001 OPEN NOT_READY 0/3."
+}
