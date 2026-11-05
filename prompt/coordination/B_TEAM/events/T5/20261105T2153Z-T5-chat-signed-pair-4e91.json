@@ -1,0 +1,13 @@
+{
+  "id": "T5-20261105T2153Z-T5-chat-signed-pair-4e91-real-apk-obb-aapt-signed",
+  "owner": "T5",
+  "session_id": "20261105T2153Z-T5-chat-signed-pair-4e91",
+  "issue_id": "INTEGRATION-001",
+  "type": "integration",
+  "summary": "Actual native APK+OBB from pinned CI42058825739 verified in independent CI42117471172; 34/34 synthetic controls, paired 2974110182 real bytes SHA match, aapt package/version89 and apksigner verify PASS, APK31/OBB39 ZIP entries. Unity internal GUID and device mount remain unverified.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42117471172",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_REAL_SIGNED_APK_OBB_IDENTITY_2026-11-05.md"
+  ],
+  "at": "2026-11-05T22:02:54.500Z"
+}
