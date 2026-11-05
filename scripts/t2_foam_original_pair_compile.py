@@ -164,9 +164,10 @@ def main():
     out = a.out.absolute()
     status = None
     try:
+        # The safe JSON is expected inside RUNNER_TEMP, alongside but not
+        # inside the private original packet. It contains no shader bytes.
         if (not out.parent.is_dir() or not _physical(out)
-                or out.exists() or out.is_relative_to(a.packet.absolute())
-                or out.is_relative_to(a.scratch.absolute())):
+                or out.exists() or out.is_relative_to(a.packet.absolute())):
             raise ValueError("unsafe_safe_output")
         status = compile_pairs(a.packet, a.manifest, scratch=a.scratch)
         code = 0 if status["status"] == "original_foam_two_pairs_compiled_vulkan11" else 2
