@@ -1,0 +1,224 @@
+name: T3 RENDER-002 original 108 Particle Shader48 exact five Materials three Textures same-export proof
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-t3-particle108-sameexport.yml'
+permissions:
+  contents: read
+concurrency:
+  group: raft-t3-particle108-sameexport-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  particle108-same-export:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      DOTNET_PROCESSOR_COUNT: '2'
+    steps:
+      - name: Checkout only verification and exporter helper source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+            android-port/Experiments/ExportLineage
+      - name: Run source-free exact source-vs-export and immutable resource contract controls
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t3_particle_same_export_bindings.py scripts/t3_original_particle_material_texenv.py
+          python3 -m unittest discover -s tests -p 'test_t3_particle_same_export_bindings.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_original_particle_material_texenv.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_original_renderer_shader_impact.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_original_particle_texture_targets.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_original_particle_stream_provider.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_stream_extent_guard.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_same_export_material_texenv.py' -v
+          python3 -c "import shutil; assert shutil.disk_usage('.').free > 9*1024**3"
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Checkout immutable public AssetRipper source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: nowl-it/AssetRipperCLI
+          ref: 036098ab525a3f9f693dc101edeb21faad4d32d8
+          path: ar-host
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            Source
+      - name: Build exact W1 Material21 plus B02 Texture2D28 same-instance optional lineage exporter
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/t3-particle-helpers"
+          python3 -m scripts.b21_stage_light_lineage \
+            --base-helper android-port/Experiments/ExportLineage/RaftExportLineage.cs \
+            --destination "$RUNNER_TEMP/t3-particle-helpers/RaftExportLineage.cs"
+          python3 -m scripts.patch_export_lineage \
+            --tool-source ar-host \
+            --helper "$RUNNER_TEMP/t3-particle-helpers/RaftExportLineage.cs"
+          if ! timeout 780s dotnet publish android-port/Experiments/ExportLineage/ExportLineage.csproj \
+            -c Release -p:PublishAot=false -p:PublishTrimmed=false \
+            -p:EnableTrimAnalyzer=false -p:EnableAotAnalyzer=false \
+            --self-contained false -o "$RUNNER_TEMP/t3-particle-compiled" \
+            > "$RUNNER_TEMP/t3-private-exporter-build.log" 2>&1; then
+            echo "::error::T3 original source/export tool compilation failed; private tool log not uploaded"
+            exit 2
+          fi
+          dotnet "$RUNNER_TEMP/t3-particle-compiled/ExportLineage.dll" --probe-tool > /dev/null
+      - name: Checkout exactly six immutable Raft scenes and six serialized owner sources
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-original
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/level0
+            Raft/Raft_Data/level1
+            Raft/Raft_Data/level2
+            Raft/Raft_Data/level3
+            Raft/Raft_Data/level4
+            Raft/Raft_Data/level5
+            Raft/Raft_Data/globalgamemanagers
+            Raft/Raft_Data/globalgamemanagers.assets
+            Raft/Raft_Data/resources.assets
+            Raft/Raft_Data/sharedassets0.assets
+            Raft/Raft_Data/sharedassets1.assets
+            Raft/Raft_Data/sharedassets6.assets
+      - name: Select SHA-authentic plain versus split originals exactly
+        run: |
+          set -euo pipefail
+          git -C zip2-original sparse-checkout set --no-cone -- \
+            '/RAFT_FILE_MANIFEST.tsv' \
+            '/Raft/Raft_Data/level0' '/Raft/Raft_Data/level1' \
+            '/Raft/Raft_Data/level2' '/Raft/Raft_Data/level3' \
+            '/Raft/Raft_Data/level4' '/Raft/Raft_Data/level5' \
+            '/Raft/Raft_Data/globalgamemanagers' \
+            '/Raft/Raft_Data/globalgamemanagers.assets' \
+            '/Raft/Raft_Data/resources.assets/*' \
+            '/Raft/Raft_Data/sharedassets0.assets/*' \
+            '/Raft/Raft_Data/sharedassets1.assets' \
+            '/Raft/Raft_Data/sharedassets6.assets'
+          test "$(git -C zip2-original rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+      - name: SHA-stage exact six scenes four Shader owners and two runtime globals
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import stage
+          from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
+          from scripts.b21_scene_lightmap_links import PIN
+          from scripts.b04_restore_original_color_settings import ORIGINAL_SIZE,ORIGINAL_SHA256
+          root=Path(os.environ["RUNNER_TEMP"])/"t3-particle-original"
+          pins={"Raft_Data/"+name:value for name,value in PIN.items()}
+          pins.update({"Raft_Data/"+name:SHADER_OWNERS[name] for name in (
+              "resources.assets","sharedassets0.assets",
+              "sharedassets1.assets","sharedassets6.assets","globalgamemanagers.assets")})
+          pins["Raft_Data/globalgamemanagers"]=(ORIGINAL_SIZE,ORIGINAL_SHA256)
+          outcome=stage(Path("zip2-original"),root,pins)
+          assert len(outcome["owners"])==12 and outcome["lfs_used"] is False
+          print("RAFT_T3_ORIGINAL_PARTICLE108_SIX_SCENE_SIX_OWNER_SHA_VERIFIED=true")
+          PY
+      - name: Inspect source original typed particle Material and Texture graph and privately choose one external image provider
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.23.0 PyYAML==6.0.3
+          python3 -m scripts.t3_original_particle_texture_targets \
+            --original "$RUNNER_TEMP/t3-particle-original" \
+            --manifest zip2-original/RAFT_FILE_MANIFEST.tsv \
+            --out "$RUNNER_TEMP/t3-particle-safe-source.json" \
+            --private-plan "$RUNNER_TEMP/t3-private-source-stream-plan.json"
+          test -s "$RUNNER_TEMP/t3-private-source-stream-plan.json"
+          test "$(stat -c '%a' "$RUNNER_TEMP/t3-private-source-stream-plan.json")" = 600
+      - name: Reconstruct the single original .resS provider with full SHA and read three real source image ranges
+        run: |
+          set -euo pipefail
+          python3 -m scripts.t3_original_particle_stream_provider \
+            --private-plan "$RUNNER_TEMP/t3-private-source-stream-plan.json" \
+            --zip2 zip2-original \
+            --original "$RUNNER_TEMP/t3-particle-original" \
+            --out "$RUNNER_TEMP/t3-particle-safe-source-bytes.json"
+          python3 - <<'PY'
+          import os,json
+          from pathlib import Path
+          d=json.loads((Path(os.environ["RUNNER_TEMP"])/"t3-particle-safe-source-bytes.json").read_text())
+          assert d["status"]=="ZIP2_SHA_ORIGINAL_PARTICLE108_THREE_IMAGE_STREAM_RANGES_READ"
+          assert d["selected_original_Texture2D28_stream_ranges_read"]==3
+          assert d["selected_external_stream_provider_size_and_SHA256_verified"] is True
+          assert d["same_instance_exported_texture_guid_or_Android_pixels_verified"] is False
+          print("RAFT_T3_PARTICLE_SAMEEXPORT_SOURCE_STREAM_AUTHENTIC=true")
+          PY
+      - name: Export only the bounded SHA-original graph once with W1 and B02 private same-instance traces
+        env:
+          RAFT_PRIVATE_EXPORT_LINEAGE: ${{ runner.temp }}/t3-particle-w1-private.json
+          RAFT_PRIVATE_EXPORT_TEXTURE_LINEAGE: ${{ runner.temp }}/t3-particle-b02-private.json
+          RAFT_PRIVATE_EXPORT_LIGHT_LINEAGE: ${{ runner.temp }}/t3-particle-light-private.json
+        run: |
+          set -euo pipefail
+          if ! timeout 900s dotnet "$RUNNER_TEMP/t3-particle-compiled/ExportLineage.dll" \
+            "$RUNNER_TEMP/t3-particle-original" \
+            "$RUNNER_TEMP/t3-particle-export" \
+            > "$RUNNER_TEMP/t3-particle-private-export.log" 2>&1; then
+            python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])
+          result={"schema_version":1,"status":"INCONCLUSIVE",
+              "phase":"bounded_actual_source_export",
+              "w1_trace_created":(root/"t3-particle-w1-private.json").is_file(),
+              "b02_trace_created":(root/"t3-particle-b02-private.json").is_file(),
+              "actual_unity_export_ready":False,
+              "android_pixels_verified":False}
+          (root/"t3-particle-safe-export-result.json").write_text(json.dumps(result,sort_keys=True)+"\n")
+          print("T3_PARTICLE_EXPORT_INCONCLUSIVE "+json.dumps(result,sort_keys=True))
+          PY
+            exit 2
+          fi
+          test -s "$RAFT_PRIVATE_EXPORT_LINEAGE"
+          test -s "$RAFT_PRIVATE_EXPORT_TEXTURE_LINEAGE"
+          test -d "$RUNNER_TEMP/t3-particle-export/ExportedProject/Assets"
+      - name: Compare exactly five original Material21 and three Texture2D28 GUID bindings to real exported Material YAML
+        run: |
+          set -euo pipefail
+          python3 -m scripts.t3_particle_same_export_bindings \
+            --original "$RUNNER_TEMP/t3-particle-original" \
+            --manifest zip2-original/RAFT_FILE_MANIFEST.tsv \
+            --project "$RUNNER_TEMP/t3-particle-export/ExportedProject" \
+            --w1-trace "$RUNNER_TEMP/t3-particle-w1-private.json" \
+            --b02-trace "$RUNNER_TEMP/t3-particle-b02-private.json" \
+            --out "$RUNNER_TEMP/t3-particle-safe-export-result.json"
+          python3 - <<'PY'
+          import os,json
+          from pathlib import Path
+          d=json.loads((Path(os.environ["RUNNER_TEMP"])/"t3-particle-safe-export-result.json").read_text())
+          assert d["status"] in (
+            "SAME_INSTANCE_SOURCE_PARTICLE108_5M_3T_10_TEXTURE_PPTR_EXACT",
+            "SAME_INSTANCE_SOURCE_PARTICLE108_SCOPED_EXPORT_MISMATCH_OR_INCOMPLETE")
+          assert d["same_export_instance_W1_B02_authenticated"] is True
+          assert d["original_source_materials"]==5 if "original_source_materials" in d else d["original_source_materials"]==5
+          assert d["original_source_texture_targets"]==3
+          assert d["original_source_material_texture_slots"]==10
+          assert d["private_original_export_shader_material_texture_labels_guids_disclosed"] is False
+          assert d["compiled_Unity_ShaderLab_or_Android_pixels_verified"] is False
+          print("RAFT_T3_ACTUAL_SAME_INSTANCE_PARTICLE108_EXPORT_COMPARISON_COMPLETED=true")
+          PY
+      - name: Upload only safe source and export numeric aggregates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: t3-private-particle108-sameexport-safe-result-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/t3-particle-safe-source.json
+            ${{ runner.temp }}/t3-particle-safe-source-bytes.json
+            ${{ runner.temp }}/t3-particle-safe-export-result.json
+          retention-days: 7
+          if-no-files-found: ignore
