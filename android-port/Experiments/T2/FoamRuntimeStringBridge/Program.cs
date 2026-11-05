@@ -1407,6 +1407,39 @@ internal static class Program
             t2ExternalIdentity.Category!="unresolved_unityengine_declaration")
             throw new InvalidDataException("Unresolved UnityEngine RT source falsely matched");
 
+        // Synthetic compiled return controls; no original class or IL published.
+        var t2OriginalNullRet=FoamByrefElementValueOrigin.ScanMatchingReturnBody(
+            new[]{t2ReturnDefinition},t2ReturnDefinition);
+        if(t2OriginalNullRet.Total!=1 || t2OriginalNullRet.Null!=1 ||
+            t2OriginalNullRet.Unknown!=0)
+            throw new InvalidDataException("Synthetic direct null RT return missed");
+        var t2RtNewobjRet=new MethodDefinition("SyntheticNewobjRtReturn",
+            Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,
+            renderTextureType);
+        factoryDef.Methods.Add(t2RtNewobjRet);
+        var t2NewobjIl=t2RtNewobjRet.Body.GetILProcessor();
+        t2NewobjIl.Append(t2NewobjIl.Create(OpCodes.Newobj,t2RtCtor));
+        t2NewobjIl.Append(t2NewobjIl.Create(OpCodes.Ret));
+        var t2OriginalNewobjRet=FoamByrefElementValueOrigin.ScanMatchingReturnBody(
+            new[]{t2RtNewobjRet},t2RtNewobjRet);
+        if(t2OriginalNewobjRet.Total!=1 || t2OriginalNewobjRet.NewRt!=1 ||
+            t2OriginalNewobjRet.Null!=0)
+            throw new InvalidDataException("Synthetic direct RT constructor return missed");
+        var t2BranchRtRet=new MethodDefinition("SyntheticBranchTargetRtReturn",
+            Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,
+            renderTextureType);
+        factoryDef.Methods.Add(t2BranchRtRet);
+        var t2BranchReturnIl=t2BranchRtRet.Body.GetILProcessor();
+        var t2ReturnTarget=t2BranchReturnIl.Create(OpCodes.Ret);
+        t2BranchReturnIl.Append(t2BranchReturnIl.Create(OpCodes.Ldnull));
+        t2BranchReturnIl.Append(t2BranchReturnIl.Create(OpCodes.Br_S,t2ReturnTarget));
+        t2BranchReturnIl.Append(t2ReturnTarget);
+        var t2UnknownTargetRet=FoamByrefElementValueOrigin.ScanMatchingReturnBody(
+            new[]{t2BranchRtRet},t2BranchRtRet);
+        if(t2UnknownTargetRet.Total!=1 || t2UnknownTargetRet.Unknown!=1 ||
+            t2UnknownTargetRet.Null!=0 || t2UnknownTargetRet.Branches!=1)
+            throw new InvalidDataException("Cross-branch synthetic RT return cannot be proven");
+
         var syntheticIndirect=new MethodDefinition("SyntheticFieldReferenceStore",
             Mono.Cecil.MethodAttributes.Public,m.TypeSystem.Void);
         factoryDef.Methods.Add(syntheticIndirect);
@@ -1582,6 +1615,7 @@ internal static class Program
                 original_byref_caller_int_argument_direct_vs_dynamic_controls=true,
                 original_rt_array_element_newobj_null_and_wrong_type_controls=true,
                 exact_original_return_signature_vs_external_type_controls=true,
+                exact_original_return_direct_null_newobj_and_branch_controls=true,
                 four_original_style_Texture_int_argument_origin_controls=true,
                 signed_short_wide_and_duplicate_private_i4_aggregate_controls=true,
                 private_IL_names_or_source_published = false
