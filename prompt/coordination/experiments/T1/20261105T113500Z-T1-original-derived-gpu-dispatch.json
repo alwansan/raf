@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "session_id": "20261105T111600Z-T1-private-fft-gpu-dispatch",
+  "issue_id": "WATER-001",
+  "hypothesis": "An actually imported SHA-authentic DXBC-derived FFT kernel pair can perform chained two-pass GPU ComputeShader.Dispatch on ARGBFloat textures under licensed Unity2021 after dynamically matching generated HLSL t0/t1/u2 resource symbols, without inventing original runtime kernel names.",
+  "source_commit": "223042b50b754d059c912c32580658dc1f9f00b2",
+  "input_hashes": [
+    "ZIP2 immutable source commit 15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "Original Raft_Data/sharedassets0.assets SHA256 0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3, bytes115978112",
+    "Original serialized FFT ComputeShader pathID2456 SHA256 9d934f5c99183c6df5cf2f1fefc9d3e5ec4bce5da5f96a86e4c02910d5322247",
+    "Pinned original-GitHub GameCI v0.1.72 CLI tar SHA256 1de550a620ee92e05e920b6db7d431621440b60b2577f04b4a997dc92a58cb0a"
+  ],
+  "tool_versions": {
+    "Unity": "2021.3.45f2",
+    "GameCI CLI": "v0.1.72 SHA verified",
+    "Unity runner image": "unityci/editor:ubuntu-2021.3.45f2-linux-il2cpp-3",
+    "Python": "Ubuntu 24.04 runner with temporary UnityPy1.25.4 venv",
+    "DXBC/SPIRV": "vkd3d-compiler, spirv-tools, spirv-cross, glslang-tools from Ubuntu 24.04 apt"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t1_gameci_private_result_gate.py -v",
+    "python3 -m unittest discover -s tests -p test_t1_sourcefree_unity_fixture.py -v",
+    "python3 -m unittest discover -s tests -p test_t1_stage_original_fft_compute_candidates.py -v",
+    "python3 -m unittest discover -s tests -p test_t1_fft_unity_gpu_resource_bridge.py -v",
+    "python3 -m unittest discover -s tests -p test_t1_fft_unity_gpu_result_gate.py -v",
+    "python3 -m scripts.stage_zip2_fft_owner --zip2-checkout <pinned-zip2> --destination <private>/Raft_Data/sharedassets0.assets",
+    "python3 -m scripts.t1_stage_original_fft_compute_candidates --original-data <private>/Raft_Data --project <private-unity>",
+    "python3 -m scripts.t1_fft_unity_gpu_resource_bridge --project <private-unity>",
+    "game-ci test --docker --dockerShmSize=1025m --engine=unity <private-unity> --testPlatforms=editmode --engineVersion=2021.3.45f2 --artifactsPath=<private-test-report> --containerRegistryRepository=unityci/editor --containerRegistryImageVersion=3 (stdout/stderr private and deleted)",
+    "python3 -m scripts.t1_fft_unity_gpu_result_gate --exit-code 0 --xml <private-test-report>/editmode-results.xml"
+  ],
+  "negative_controls": [
+    "8 private NUnit XML result-gate tests for spoofing/failure/secret output",
+    "4 original-free fixture controls",
+    "7 original private Unity source conversion controls",
+    "8 generated HLSL register/source role controls and native u0 vs derived HLSL u2 negative",
+    "6 redacted actual GPU 2/2 result gate tests",
+    "Original HLSL name values never logged, HLSL register numeric t0,t1,u2 only",
+    "ARGBFloat output GPU readback sentinel initialized and confirmed before Dispatch; both passes must change pixels and all output channels finite"
+  ],
+  "workflow_path": ".github/workflows/raft-t1-private-original-fft-unity-gpu-dispatch.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42019283679",
+  "artifact_urls": [],
+  "budget": "65 min shared native Editor mutex with cancel-in-progress false, read-only GitHub, SHA pinned single 116MB original asset; no game APK or shared request; raw logs and shader source remain runner-private and wiped",
+  "status": "completed",
+  "observed_result": {
+    "actual_CI": "42019283679 completed success",
+    "original_compiled_slots_authenticated": 20,
+    "unity_actual_kernel_imports_all_20": true,
+    "translated_generated_HLSL_roles_t0_t1_u2_verified_for_slots": [
+      0,
+      1
+    ],
+    "native_DXBC_output_u0_differs_from_translated_HLSL_u2": true,
+    "actual_Unity2021_GPU_Dispatch_passes": 2,
+    "actual_NUnit_passed": 2,
+    "actual_NUnit_failed": 0,
+    "first_pass_GPU_output_changed": true,
+    "second_pass_GPU_output_changed": true,
+    "readback_finite": true,
+    "baseline_sentinel_initialized_and_read_back": true,
+    "original_numeric_pixel_parity_proven": false,
+    "original_runtime_kernel_name_ID_mapping_proven": false,
+    "android_adreno_device_proven": false,
+    "game_assets_modified": false,
+    "shader_or_pixel_data_published": false
+  },
+  "rejected_hypotheses": [
+    "Original native DXBC u0 can be reused unchanged as translated Unity output register: actual generated HLSL output at u2 (safe profile CI42018761761); strict prior gate correctly failed before Dispatch.",
+    "A successful Unity ComputeShader import and HasKernel alone proves GPU writes: new real Dispatch+readback test was necessary.",
+    "Generated private first-pair main aliases original author's runtime indexed ComputeShader variants: no such identity has been established.",
+    "A finite non-sentinel GPU result on a small deterministic workload proves original FFT numerical fidelity: still unverified."
+  ],
+  "limitations": [
+    "Proven GPU execution on Unity Linux CI graphics device, not on Android Adreno",
+    "Only original compiled pair0/1 with one finite synthetic float-image workload and one row, not all pairs/banks/formats",
+    "Output-change and finite/readback assert coverage only, not comparison against original compiled DXBC numerical oracle",
+    "Unique compiled RW image source-native u0 maps to generated HLSL RWTexture2D u2; original Unity source resource/property names and live SetTexture/Dispatch semantics unproven",
+    "Original authored multi-variant ComputeShader and runtime kernel/keyword lookup not recovered",
+    "No new native Raft APK or user phone screenshots, gameplay or water render acceptance"
+  ],
+  "integration_commit": "223042b50b754d059c912c32580658dc1f9f00b2",
+  "next_step": "Compare exact deterministic two-pass output to independent authentic DXBC CPU Vulkan oracle with same texture inputs, then reconcile original in-game renderer kernel indices/SetTexture bindings and run Adreno device test with T5. WATER-001 OPEN NOT_READY 0/3."
+}
