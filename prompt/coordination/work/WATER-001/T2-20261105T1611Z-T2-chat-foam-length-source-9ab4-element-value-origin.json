@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261105T1611Z-T2-chat-foam-length-source-9ab4",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "1a5a48da31a3b7b6532d49eff182dc9c3afbc4e7",
+  "updated_at": "2026-11-05T16:35:00Z",
+  "resumed_from_scope": "T2|original-DLL-0a6f0527|exact-Foam-ldflda-refarray-call-int-length-formal|typed-caller-stack-v1",
+  "experiment_key": "T2|original-DLL-0a6f0527|exact-Foam-ref-array-stelem-ref-value-source|same-block-v1",
+  "resource_key": "T2-Foam-original-stelem-element-value-provenance",
+  "hypothesis": "The one original stelem.ref whose array is loaded through the exact ref RenderTexture[] formal may take an element value directly from newobj UnityEngine.RenderTexture, a typed method return, local, null or unknown; source proof must not be inferred from array type alone.",
+  "method": "Re-use exact original managed callee and prior verified array-source stelem.ref site; classify the immediate value-producing opcode into literal null, newobj RenderTexture, call returning RenderTexture or Texture, local from exact same-block store, arg/field or unknown. Reject branch separated defs and similar typed decoys. Private original symbols/IL remain in original SHA runner; publish category and nullable constructed RenderTexture indicator only.",
+  "intended_files": [
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/FoamByrefElementValueOrigin.cs",
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/Program.cs",
+    ".github/workflows/raft-t2-foam-managed-literals.yml",
+    "prompt/coordination/work/WATER-001/T2-20261105T1611Z-T2-chat-foam-length-source-9ab4-element-value-origin.json",
+    "prompt/coordination/clients/T2/sessions/20261105T1611Z-T2-chat-foam-length-source-9ab4.md"
+  ],
+  "preflight": {
+    "head": "1a5a48da31a3b7b6532d49eff182dc9c3afbc4e7",
+    "previous_original_CI": "42064653958 SUCCESS",
+    "canonical_summary": "42065214295 SUCCESS",
+    "distinct_team_shaders_T3": "disjoint",
+    "distinct_team_water_FFT_T1": "disjoint"
+  },
+  "next_step": "Compile synthetic correct/wrong origin and branch guards; run original SHA-pinned CI; report one real stelem ref value source and remaining runtime gap. WATER-001 OPEN NOT_READY0/3."
+}
