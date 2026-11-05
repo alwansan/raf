@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "session_id": "20261105T2258Z-T4-chat-motion-callback-epoch-v6k8",
+  "origin": "chat",
+  "owner": "T4",
+  "issue_id": "INPUT-005",
+  "status": "active",
+  "base_sha": "27b2d7aca9228e56a678ffbbf2af37546735c97e",
+  "updated_at": "2026-11-05T22:58:00Z",
+  "resumed_from_sessions": [
+    "20261105T2241Z-T4-chat-immersive-bars-h8q2",
+    "20261105T2235Z-T4-scheduled-u8k3",
+    "20261105T2230Z-T4-chat-captured-mouse-sources-r7n5"
+  ],
+  "experiment_key": "T4-native-captured-PhysicalMouseMotionSource-AndroidJavaProxy-old-move-epoch-bound-v1-Unity2021-original0a6f0527",
+  "resource_key": "source-only-T4-original-ZIP2-managed-ABI",
+  "intended_files": [
+    "prompt/coordination/work/INPUT-005/T4-20261105T2258Z-T4-chat-motion-callback-epoch-v6k8-callback-epoch.json",
+    "prompt/coordination/clients/T4/sessions/20261105T2258Z-T4-chat-motion-callback-epoch-v6k8.md",
+    "android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs",
+    "android-port/Runtime/Platform/PhysicalMouseMotionSource.cs",
+    "android-port/Tests/PhysicalMouse/Program.cs",
+    "tests/test_t4_android_pointer_capture_policy.py",
+    "prompt/coordination/experiments/T4/20261105T2258Z-T4-chat-motion-callback-epoch-v6k8.json",
+    "prompt/coordination/B_TEAM/events/T4/20261105T2258Z-T4-chat-motion-callback-epoch-v6k8.json"
+  ],
+  "hypothesis": "The AndroidJavaProxy callback currently observes requested=true at delivery but has no token binding to the request that installed it. An old captured motion callback can be consumed by a new request after ReleaseCapture()/RequestCapture() advances epoch, injecting stale camera movement.",
+  "approach": "Bind a generation token to each Android captured-listener instance installed on View, pass it with each processed MotionEvent and require matching active epoch inside the same captureGate as the motion buffer. Keep scheduled releaseEpoch guard, original legacy mouse axes, touch and T5 UI unchanged. Add executable source helper negative controls, use existing T4 original managed CI source-only.",
+  "running_actions_at_scope": [],
+  "related_runs": [
+    "https://github.com/alwansan/raf/actions/runs/42122830565",
+    "https://github.com/alwansan/raf/actions/runs/42124859112",
+    "https://github.com/alwansan/raf/actions/runs/42121598304"
+  ],
+  "next_step": "Integrate listener-generation check with executable fail-open tests; no native build/device claim",
+  "result": null
+}
