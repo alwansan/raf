@@ -1,0 +1,14 @@
+{
+  "id": "20261105T003630Z-T1-bank1-original-vulkan-negatives",
+  "owner": "T1",
+  "session_id": "20261105T002850Z-T1-bank1-isolated",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Two SHA-authenticated original bank1 CPU Vulkan validation jobs: pair18 swapped-second repeatedly SIGSEGV; pair10 swapped-second comparator changes true to false between jobs; no reported VUID markers, no Unity/Android water fix.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41942024538",
+    "https://github.com/alwansan/raf/actions/runs/41942366020",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_FFT_BANK1_VULKAN_VALIDATION_2026-11-05.md"
+  ],
+  "at": "2026-11-05T00:36:30Z"
+}
