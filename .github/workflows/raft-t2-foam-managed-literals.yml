@@ -349,6 +349,26 @@ jobs:
               v['ReturnSitesWithUnresolvedProducer'])
           if not v['MatchingOriginalMethodBodyAvailable']:
               assert v['OriginalReturnInstructionSites']==0
+          allowed_placement=(
+              'not_examined','unresolved_method','zero_or_multiple_returns',
+              'branch_exception_or_method_entry','sequential_return_site')
+          allowed_predecessor=(
+              'not_examined','unresolved_method','zero_or_multiple_returns',
+              'no_prior_opcode','ldnull','ldloc','ldarg','field_load','call',
+              'newobj','dup','indirect_load','branch_opcode','other_opcode')
+          assert v['OriginalReturnSitePlacementCategory'] in allowed_placement
+          assert v['OriginalReturnImmediatePriorOpcodeCategory'] in allowed_predecessor
+          if v['OriginalReturnInstructionSites']==1:
+              assert v['OriginalReturnSitePlacementCategory'] in (
+                  'branch_exception_or_method_entry','sequential_return_site')
+          print('T2_FOAM_RT_RETURN_REASON_SAFE '+json.dumps({
+              'ret_site_placement':v['OriginalReturnSitePlacementCategory'],
+              'immediate_predecessor_class':
+                  v['OriginalReturnImmediatePriorOpcodeCategory'],
+              'branch_join_dataflow_verified':False,
+              'runtime_rendertexture_nonnull_or_pixels_verified':False,
+              'private_original_il_symbols_numeric_values_disclosed':False,
+          },sort_keys=True))
           print('T2_FOAM_RETURN_BODY_DIRECT_SOURCE_SAFE '+json.dumps({
               'body_available':v['MatchingOriginalMethodBodyAvailable'],
               'return_sites':v['OriginalReturnInstructionSites'],
