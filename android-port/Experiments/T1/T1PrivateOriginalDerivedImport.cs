@@ -32,7 +32,7 @@ internal sealed class T1DerivedManifest
     public bool android_gpu_proven;
 }
 
-internal static class T1PrivateOriginalDerivedImport
+public static class T1PrivateOriginalDerivedImport
 {
     private const int ExpectedSlots = 20;
     private const string Provenance = "DXBC_VKD3D_SPIRVCROSS_ROUNDTRIP_NOT_AUTHORED";
