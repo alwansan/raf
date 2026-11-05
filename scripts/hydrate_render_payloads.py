@@ -139,6 +139,20 @@ def main():
         print('RAFT_FULL_GRAPHICS_ZIP2_REUSED objects=' + str(reused)
               + ' original_bytes=' + str(reused_bytes) + ' sha256=true')
         missing = missing_payloads(rows)
+    # Optional T5 source bridge. The caller must first reconstruct the
+    # immutable ZIP2 owners into a separate directory with
+    # t5_stage_zip2_render_owners; this consumer independently validates
+    # against the feature-branch LFS SHA/length before replacing pointers.
+    # With no explicit staging root, existing W1/LFS behavior is unchanged.
+    t5_root = os.environ.get('RAFT_T5_VERIFIED_ZIP2_RENDER_ROOT')
+    if t5_root:
+        t5_source = Path(t5_root)
+        if not t5_source.is_absolute():
+            raise ValueError('T5 ZIP2 staged graphics root must be absolute')
+        reused, bytes_reused = reuse_verified_staged_sources(missing, t5_source)
+        print('RAFT_T5_ZIP2_RENDER_REUSED objects=' + str(reused)
+              + ' original_bytes=' + str(bytes_reused) + ' sha256=true')
+        missing = missing_payloads(rows)
     print('RAFT_FULL_GRAPHICS_REUSED objects='+str(len(rows)-len(missing)))
     if missing:
         subprocess.run(['git','lfs','install','--local'],check=True)
