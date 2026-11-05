@@ -4,9 +4,9 @@
   "origin": "chat",
   "owner": "T1",
   "issue_id": "WATER-001",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "09195ee895f9280a6c12131efe71b21549fa66ee",
-  "updated_at": "2026-11-05T15:41:00.131Z",
+  "updated_at": "2026-11-05T15:45:35.198Z",
   "intended_files": [
     ".github/workflows/raft-t1-fft-unity-input-identity.yml"
   ],
@@ -21,6 +21,33 @@
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42057399746"
   ],
-  "next_step": "Read RAFT_T1_INPUT_IDENTITY, RAFT_T1_PAIRED_DIAGNOSTIC and final parity aggregates. A failing final parity gate can coexist with a completed diagnostic. If no simple spatial or channel explanation matches, trace actual pass-zero loads and arithmetic.",
-  "result": "pending"
+  "next_step": "Instrument actual pass-zero texture lookup coordinates and pre-arithmetic loaded values privately, with bounded aggregate checks only; keep WATER-001 open. Treat this as evidence against the tested output rearrangements, not all coordinate bugs.",
+  "result": {
+    "unity_backend": "OpenGLCore",
+    "input_texels_each": 32768,
+    "input_mismatches": [
+      0,
+      0
+    ],
+    "outside_tolerance_by_pass": [
+      63,
+      31
+    ],
+    "jointly_written_by_pass": [
+      64,
+      32
+    ],
+    "pass0_rgba_mismatches": [
+      63,
+      62,
+      63,
+      63
+    ],
+    "pass0_channel_identity_mismatch_components": 251,
+    "pass0_best_permutation_mismatch_components": 251,
+    "pass0_footprint_flip_x_mismatch_pixels": 63,
+    "pass0_any_tested_transform_full_match": false,
+    "parity_gate": "failure",
+    "private_cleanup": "success"
+  }
 }

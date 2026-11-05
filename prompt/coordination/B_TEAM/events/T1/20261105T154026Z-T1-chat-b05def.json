@@ -4,9 +4,9 @@
   "session_id": "20261105T154026Z-T1-chat-b05def",
   "issue_id": "WATER-001",
   "type": "result",
-  "summary": "Exact paired FFT replay started after native job released Unity lane.",
+  "summary": "Actual paired FFT replay reproduces numeric divergence after bit-exact GPU input copies. No tested spatial transform fully matches, including footprint X reversal, and none of 24 channel permutations improves 251 component mismatches. Both passes retain zero coverage differences and zero nonfinite values. The strict parity gate failed and private cleanup succeeded.",
   "evidence": [
     "https://github.com/alwansan/raf/actions/runs/42057399746"
   ],
-  "at": "2026-11-05T15:41:00.131Z"
+  "at": "2026-11-05T15:45:35.198Z"
 }
