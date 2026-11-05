@@ -1,0 +1,14 @@
+{
+  "id": "T2-20261105T1517Z-original-foam-byref-call-consumer",
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261105T1509Z-T2-chat-original-byref-sink-a83c",
+  "issue_id": "WATER-001",
+  "at": "2026-11-05T15:17:00Z",
+  "type": "source_exact_foam_rendertexture_array_address_consumed_by_typed_byref_call",
+  "summary": "Original SHA-pinned Foam managed source CI42053062181 SUCCESS: one exact backing RenderTexture[] ldflda flows into typed ref RenderTexture[] formal parameter at actual call. Source proves argument/dataflow only, not the callee method body/write or runtime execution. Strong candidate for indirect array initialization, no original source bytes/names/IL disclosed. WATER-001 OPEN NOT_READY0/3.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42053062181",
+    "https://github.com/alwansan/raf/commit/34f840561993b44c59cd7c61b22f1f013e64cd89"
+  ]
+}
