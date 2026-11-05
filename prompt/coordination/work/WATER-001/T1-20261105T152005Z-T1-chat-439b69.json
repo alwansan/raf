@@ -1,0 +1,23 @@
+{
+  "id": "20261105T152005Z-T1-chat-439b69",
+  "session_id": "20261105T152005Z-T1-chat-439b69",
+  "origin": "chat",
+  "owner": "T1",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "03978c08dff9cc58a84acea60948bd7d6461d6bf",
+  "updated_at": "2026-11-05T15:20:05.962Z",
+  "intended_files": [
+    "scripts/t1_fft_paired_diagnostic.py",
+    "tests/test_t1_fft_paired_diagnostic.py",
+    ".github/workflows/raft-t1-fft-unity-input-identity.yml",
+    ".github/workflows/raft-t1-fft-paired-diagnostic-checks.yml"
+  ],
+  "experiment_key": "unity-openGLCore-exact-paired-fft-private-spatial-and-channel-combined-v1",
+  "resource_key": "raft-native-engine-feature/android-native-port",
+  "resumed_from_sessions": [
+    "20261105T143200Z-T1-chat-04494d",
+    "20261105T151300Z-T1-scheduled-7c2f",
+    "20261105T142000Z-T1-chat-lavapipe-unity"
+  ]
+}
