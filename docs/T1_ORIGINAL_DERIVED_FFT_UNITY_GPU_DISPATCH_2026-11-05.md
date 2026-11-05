@@ -1,0 +1,28 @@
+# T1 — Genuine Unity 2021 GPU two-pass Dispatch on original compiled FFT-derived candidates
+
+Date: 2026-11-05, session `20261105T111600Z-T1-private-fft-gpu-dispatch`. Owner T1. Project `alwansan/raf`, only branch `feature/android-native-port`. WATER-001 remains OPEN, readiness NOT_READY 0/3.
+
+## Prior real baseline, not repeated census
+
+T1 previously [CI42014120625](https://github.com/alwansan/raf/actions/runs/42014120625) **SUCCESS**: authenticated original ZIP2 `sharedassets0.assets` SHA256 `0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3`, serialized original FFT ComputeShader pathID2456 SHA256 `9d934f5c99183c6df5cf2f1fefc9d3e5ec4bce5da5f96a86e4c02910d5322247` and original twenty compiled DXBC programs; private DXBC→SPIR-V→HLSL50→SPIR-V, 20 separately generated `main` .compute assets actually imported in licensed Unity2021, HasKernel/FindKernel/GetKernelThreadGroupSizes for all 20/20; **not** a shader dispatch or pixel proof.
+
+Inherited original B18 and B01 source proof: original compiled FFT declares **two sampled image registers t0/t1 and one writable u0**, and source-authentic managed `Dx11FFT` selects two adjacent passes and binds each declared resource using exactly matching original metadata hashes; intermediate output becomes second-pass input. B48 original selector pairs for bank0 size32 are original compiled candidates0/1. None of these proves the generated HLSL property names match the original author names or that those compiled candidate slots are Unity runtime `FindKernel` IDs.
+
+## New executable hypothesis
+
+A real source-authenticated translated HLSL ComputeShader may be importable but fail GPU dispatch due a missing resource/texture binding, headless graphics format or driver execution. Therefore run a **new actual Editor GPU Dispatch** on a controlled two-pass input using compiled pair0/1, and require observable finite output changes for each pass rather than merely editor import or source-only semantic proof. This is not a source-parity numerical oracle.
+
+New files:
+
+- `scripts/t1_fft_unity_gpu_resource_bridge.py`: parse only bounded `Texture2D` / `RWTexture2D` HLSL50 register declarations of two original compiled programs in verified private `.compute` project and require exact types and register-role mapping t0,t1,u0; reject duplicate/missing/aliased/extra/nonzero-space binding, digest drift. Create ephemeral private sidecar with newly generated HLSL property identifiers (never emitted/logged). `tests/test_t1_fft_unity_gpu_resource_bridge.py` has source-free fake source controls.
+- `android-port/Experiments/T1/T1PrivateFftGpuDispatchTests.cs`: private NUnit test requiring exact source/manifest SHA, Unity2021 supported ComputeShaders, `ARGBFloat` random-write target, and confirmed pixel sentinel baseline. Then bind source+butterfly+target through generated HLSL property names; execute `Dispatch` for original-derived compiled slot0 (64 threads, one row) and slot1 chained on its intermediate; independently read back GPU output and require **finite, changed pixels** in both passes. Does not manufacture author kernel identity, shader source or original numerical parity.
+- `scripts/t1_fft_unity_gpu_result_gate.py` / `tests/test_t1_fft_unity_gpu_result_gate.py`: only accept the exact pair of licensed private real Unity NUnit tests (20/20 prior import plus actual GPU Dispatch). Reject all failure/spoof/missing cases. No private logs, source identifiers, pixels, secrets or XML failure messages emitted.
+- `.github/workflows/raft-t1-private-original-fft-unity-gpu-dispatch.yml` is isolated, reads only pinned ZIP2 `15964ea8f246b6e076ce26b60931ee2e1a9a2385`, pins official GameCI CLI v0.1.72 release SHA256 `1de550a620ee92e05e920b6db7d431621440b60b2577f04b4a997dc92a58cb0a`, and reuses licensed real Unity2021.3.45f2 Editor/private full stdout+stderr capture. Performs original-free synthetic canary before private asset acquisition. Uses existing `raft-native-engine-${{ github.ref }}` mutex, `cancel-in-progress:false`, 65min budget, no game build, no asset replacement, no artifact upload, always wipes private FFT source/compiled shaders/Unity logs.
+
+## Actual result and limits
+
+Initial [CI42018235130](https://github.com/alwansan/raf/actions/runs/42018235130) was **in progress** at this report checkpoint; do not call GPU proof PASS until private NUnit has `fft_derived_two_pass_gpu_dispatch_with_observed_writes=true` with both expected test identities, 0 failures and correct GameCI process exit.
+
+A successful bounded test would verify an actual Unity Editor GPU dispatched original-compiled-program-derived two-pass candidate, writes to intended floating UAV with no sampled NaN/Inf, on *the CI runner's graphics device*. It would still **NOT** prove the result matches original D3D11 numeric FFT on a full dataset, does NOT verify original source-authored keyword kernel/runtime-index mapping, does NOT integrate original ScriptableObject/ShaderLab or material, and does NOT establish Adreno Android water visuals. Unsupported graphics/readback or translated-resource mismatch is legitimate negative evidence; do not bypass it with fake writes, alternate dummy shaders or invalid kernels. WATER-001 remains OPEN and full readiness NOT_READY 0/3. Last owner-tested Raft Android game remains APK86; audio/Settings unchanged; touch/layout deferred.
+
+**Next after result:** if pass, extend independent original Vulkan pixel/texture comparison and typed author binding, then hand off safe integration constraints to T5 and T2. If fail, classify exactly where the source-authentic GPU path failed, preserve the original 20/20 import proof and debug only that stage.
