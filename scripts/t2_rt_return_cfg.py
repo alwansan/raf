@@ -3,8 +3,8 @@ from collections import deque
 
 UNKNOWN, NULL, CONSTRUCTED = "unknown", "null", "constructed"
 
-def classify(instructions, *, max_states=10000):
-    if not instructions:
+def classify(instructions, *, max_states=10000, max_locals=4096):
+    if not instructions or max_states <= 0 or max_locals <= 0:
         return UNKNOWN
     n = len(instructions)
     incoming = {0: ((), ())}
@@ -35,10 +35,10 @@ def classify(instructions, *, max_states=10000):
         elif op == "newobj_rt":
             stack += (CONSTRUCTED,)
             successors = [pc+1]
-        elif op == "ldloc" and isinstance(arg,int) and arg >= 0:
+        elif op == "ldloc" and type(arg) is int and 0 <= arg < max_locals:
             stack += (locals_[arg] if arg < len(locals_) else UNKNOWN,)
             successors = [pc+1]
-        elif op == "stloc" and isinstance(arg,int) and arg >= 0 and stack:
+        elif op == "stloc" and type(arg) is int and 0 <= arg < max_locals and stack:
             value, stack = stack[-1], stack[:-1]
             ls = list(locals_)
             ls.extend([UNKNOWN] * max(0,arg+1-len(ls)))
