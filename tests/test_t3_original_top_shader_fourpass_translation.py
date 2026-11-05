@@ -198,5 +198,79 @@ class FourPassTranslation(unittest.TestCase):
         self.assertEqual(c["passes_with_source_SPIRV_vertex_fragment_interface_compared"], 4)
         self.assertEqual(c["passes_with_source_SPIRV_vertex_fragment_interface_matching"], 0)
 
+    def test_opt_in_scheduled_stage_io_classifier_asymmetric_drift(self):
+        from scripts.t3_stage_io_drift import classify_stage_io
+        def changed(spv):
+            row = fake_reflect(spv)
+            if spv.name == "roundtrip.spv":
+                if spv.parent.name.endswith("stage-1"):
+                    row["inputs"] = [{"location": 3, "type": "vec2"}]
+                    row["outputs"] = [{"location": 4, "type": "vec4"}]
+                else:
+                    row["inputs"] = [{"location": 4, "type": "vec4"}]
+                    row["outputs"] = [{"location": 5, "type": "vec2"}]
+            return row
+        out = t3.evaluate_samples(self.pairs(), self.root,
+                                  translator=fake_translate, reflector=changed,
+                                  io_classifier=classify_stage_io)
+        c = out["counts"]
+        self.assertEqual(out["status"], t3.IO_STATUS)
+        self.assertTrue(out["source_to_roundtrip_io_drift_all_eight_stages_classified"])
+        self.assertEqual(c["io_drift_stage_reflection_pairs_classified"], 8)
+        self.assertEqual(c["stage_original_roundtrip_io_location_types_equal"], 0)
+        self.assertEqual(c["io_drift_inputs_added_locations"], 4)
+        self.assertEqual(c["io_drift_outputs_added_locations"], 4)
+        self.assertEqual(c["io_drift_inputs_location_only_remap_candidate"], 4)
+        self.assertEqual(c["io_drift_outputs_location_only_remap_candidate"], 4)
+        self.assertEqual(c["io_drift_inputs_same_location_type_changes"], 0)
+        self.assertEqual(c["io_drift_outputs_same_location_type_changes"], 0)
+
+    def test_legacy_status_not_relabelled_or_invented_io_counts(self):
+        r = self.evaluate()
+        self.assertEqual(r["status"], t3.STATUS)
+        self.assertFalse(r["source_to_roundtrip_io_drift_classification_opt_in"])
+        self.assertFalse(any(k.startswith("io_drift_") for k in r["counts"]))
+
+    def test_opt_in_partial_reflection_is_inconclusive_not_fake_zero(self):
+        from scripts.t3_stage_io_drift import classify_stage_io
+        def fail(spv):
+            if spv.name == "roundtrip.spv" and spv.parent.name.endswith("stage-1"):
+                raise ValueError("source_private_reflection_error")
+            return fake_reflect(spv)
+        with self.assertRaisesRegex(ValueError, "incomplete_real_original_roundtrip"):
+            t3.evaluate_samples(self.pairs(), self.root,
+                                translator=fake_translate, reflector=fail,
+                                io_classifier=classify_stage_io)
+
+    def test_reject_malicious_classifier_output_and_secret_leakage(self):
+        def leak(_a, _b):
+            return {"private_name": "PRIVATE_SHADER_SECRET"}
+        with self.assertRaisesRegex(ValueError, "untrusted_private_stage_IO_classifier"):
+            t3.evaluate_samples(self.pairs(), self.root,
+                                translator=fake_translate, reflector=fake_reflect,
+                                io_classifier=leak)
+        from scripts.t3_stage_io_drift import classify_stage_io
+        with tempfile.TemporaryDirectory(prefix="t3-private-io-") as tmp:
+            result = t3.evaluate_samples(self.pairs(), Path(tmp),
+                                         translator=fake_translate,
+                                         reflector=fake_reflect,
+                                         io_classifier=classify_stage_io)
+        summary = json.dumps(result)
+        for needle in ("ORIGINAL_SECRET_DXBC_VERTEX_BLOCK_921",
+                       "ORIGINAL_PRIVATE_HASH_NEVER_PUBLISH",
+                       "ORIGINAL_SECRET_SHADER_NAME", "m_BlobIndex"):
+            self.assertNotIn(needle, summary)
+
+    def test_reject_boolean_public_io_metric_value(self):
+        from scripts.t3_stage_io_drift import classify_stage_io
+        def corrupt(a, b):
+            report = classify_stage_io(a, b)
+            report["inputs_original_slots"] = True
+            return report
+        with self.assertRaisesRegex(ValueError, "invalid_public_stage_IO_classifier_counter"):
+            t3.evaluate_samples(self.pairs(), self.root,
+                                translator=fake_translate, reflector=fake_reflect,
+                                io_classifier=corrupt)
+
 if __name__ == "__main__":
     unittest.main()
