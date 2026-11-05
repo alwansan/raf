@@ -7,7 +7,7 @@
   "status": "completed",
   "base_sha": "0da800c16cd641224cca7d50148215f6696b6bbd",
   "last_commit": "09037918ef284cb57aa7fe40b278b344feb5e0a2",
-  "updated_at": "2026-11-05T11:27:00Z",
+  "updated_at": "2026-11-05T11:29:00Z",
   "tracks": [
     "INTEGRATION-001",
     "ASSET-RESTORE-001",
@@ -49,8 +49,9 @@
     "https://github.com/alwansan/raf/actions/runs/42017959763",
     "https://github.com/alwansan/raf/actions/runs/42018106259",
     "https://github.com/alwansan/raf/actions/runs/42018332386",
-    "https://github.com/alwansan/raf/actions/runs/42018587431"
+    "https://github.com/alwansan/raf/actions/runs/42018587431",
+    "https://github.com/alwansan/raf/actions/runs/42019514287"
   ],
-  "next_step": "T5 genuinely SHA-authentic FileManager CLR on synthetic temp file NOT EXECUTED: safety blocker each original target calls 1 IO, 1 core, 1 local helper, 1 other nonwhitelisted; CI42018587431 RED at COMPILED_IL_GUARD, no file write/read. Workflow manual-only pending transitive proof. T4 original IO source classification CI42018088542 belongs to T4; real Android .rgd roundtrip required. T1 FFT 20/20 Unity import and T3 semantic 106/106 export peers success, but NOT_READY 0/3.",
+  "next_step": "CI42019514287 canonical T-team index SUCCESS with original FileManager CLR negative evidence. T5 scoped runtime experiment BLOCKED at safe original transitive call gate before invocation (CI42018587431 RED), 13/13 synthetic controls pass, no .rgd or Android proof. Resolve authentic local+other callees with T4 or run real device save roundtrip; keep NOT_READY 0/3. T1/T3 genuine Unity shader/texture evidence is peer work.",
   "memory_path": "prompt/coordination/clients/T5/MEMORY.md"
 }
