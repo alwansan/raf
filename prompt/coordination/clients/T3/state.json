@@ -6,8 +6,8 @@
   "resumed_from_session": null,
   "status": "active",
   "base_sha": "b56ebc3847f251cee2539e9797471417d32698d2",
-  "last_commit": "615f914728cf15f5d60607115ecb7a4a8919d8e5",
-  "updated_at": "2026-11-05T00:02:00Z",
+  "last_commit": "3c3f7ada3efa0384ffc81143221a4055c5d0c39a",
+  "updated_at": "2026-11-05T00:07:00Z",
   "tracks": [
     "RENDER-002",
     "ASSET-RESTORE-001"
@@ -19,8 +19,10 @@
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41933025319",
     "https://github.com/alwansan/raf/actions/runs/41937719270",
-    "https://github.com/alwansan/raf/actions/runs/41938229887"
+    "https://github.com/alwansan/raf/actions/runs/41938229887",
+    "https://github.com/alwansan/raf/actions/runs/41938711186",
+    "https://github.com/alwansan/raf/actions/runs/41939065539"
   ],
-  "next_step": "Await isolated 25m bounded actual SHA-pinned original ZIP2/export comparison 41938229887; if it fails inspect exact failed step and fix without touching other workflows. If it passes evaluate B05 41/227 scoped texture/UV mismatches and patch proven drift.",
+  "next_step": "Inspect safe export YAML parser reason from run 41939065539; original41/227 and exporter Material57/Texture92 are authentic. Repair only actual compatible YAML shape or report verified export defect. No guessed material loss.",
   "memory_path": "prompt/coordination/clients/T3/MEMORY.md"
 }
