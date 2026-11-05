@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "id": "T2-foam-original-rendertexture-field-writer-lineage",
+  "title": "SHA-authentic exact Foam RenderTexture[] backing-field managed write-site lineage",
+  "owner": "T2",
+  "issue_id": "WATER-001",
+  "kind": "source-authentic-managed-IL-provenance",
+  "acquisition": "ORIGINAL_ZIP2_SHA_AND_DLL_SIZE_SHA256_VERIFIED",
+  "extraction": "EXACT_NULL_GUARDED_10OP_FOAM_GETTER_FIELD_IDENTITY_AND_19118_ORIGINAL_METHOD_BODIES_SCANNED",
+  "reconstruction": "READ_ONLY_TYPED_CECIL_IL_SOURCE_WRITER_HISTOGRAM_ONLY",
+  "binding": "ONE_DIRECT_MATCHING_STFLD_WITH_IMMEDIATE_LDNULL_VALUE; ZERO_DIRECT_NEWARR; NO_RUNTIME_OR_TEXTURE_CONTENTS_PROOF",
+  "integration": "SCOPE_SPECIFIC_SOURCE_VERIFIER_SYNTHETIC_CONTROLS_AND_ORIGINAL_SHA_PINNED_GITHUB_CI42034458197_SUCCESS; NO_GAME_ASSET_OR_SHADERLAB_PATCH",
+  "device": "NOT_TESTED",
+  "source_commit": "d47c73943b11e3b1d193dc56446fb63632abd47a",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42034458197",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/T2/sessions/20261105T1314Z-T2-chat-foam-writers-72c9.md"
+  ],
+  "next_step": "Inspect exact four original caller integer indices, indirect array creation/element assignments, Unity upload and runtime/Adreno separately."
+}
