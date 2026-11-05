@@ -1,0 +1,37 @@
+name: T5 INTEGRATION-001 original profile reader timeout window
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - android-port/Experiments/T5/LocalProfileWindowProbe/**
+      - .github/workflows/raft-t5-local-profile-window.yml
+permissions:
+  contents: read
+concurrency:
+  group: t5-profile-reader-window-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  original-cross-process-profile:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+          fetch-depth: 1
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Build actual original platform adapter and separate-process diagnostic
+        run: |
+          set -euo pipefail
+          dotnet build android-port/Experiments/T5/LocalProfileWindowProbe/LocalProfileWindowProbe.csproj --configuration Release --nologo -v:q
+      - name: Execute short/over-limit exclusive writer windows and corrupt-id negative
+        run: |
+          set -euo pipefail
+          dotnet run --project android-port/Experiments/T5/LocalProfileWindowProbe/LocalProfileWindowProbe.csproj --configuration Release --no-build --nologo
+      - name: Preserve source-only evidence boundaries
+        if: always()
+        run: echo 'T5 exact existing LocalProfileStore source probe with disposable local IDs only; no game save, Unity, Android device, APK, source assets or identity bytes released.'
