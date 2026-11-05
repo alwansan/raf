@@ -28,6 +28,15 @@ def good():
             "factory_throw_or_rethrow_sites": 0,
             "factory_null_literal_load_sites": 0,
             "factory_all_return_paths_proven": False,
+            "factory_return_local_lexical_store_sites": 2,
+            "factory_return_local_store_null_literal": 0,
+            "factory_return_local_store_derived_constructor": 1,
+            "factory_return_local_store_derived_call": 0,
+            "factory_return_local_store_derived_local": 0,
+            "factory_return_local_store_derived_field": 0,
+            "factory_return_local_store_other_or_unknown": 1,
+            "factory_return_local_nearest_lexical_store_source": "OTHER_OR_UNKNOWN",
+            "factory_return_local_store_path_reachability_proven": False,
         },
         "field_write_breakdown": {
             "user_original_direct_write_sites": 3,
@@ -51,6 +60,94 @@ def good():
 
 
 class TestOriginalRgdInitContext(unittest.TestCase):
+    def test_source_real_return_local_stores_remain_lexical(self):
+        result = validate(good())
+        f = result["source_authentic_world_factory_return_site_categories"]
+        self.assertEqual(f["factory_return_local_lexical_store_sites"], 2)
+        self.assertFalse(result["factory_control_flow_paths_or_runtime_values_proven"])
+        self.assertFalse(result["same_world_saved_or_reopened_proven"])
+
+    def test_no_local_store_is_allowed_but_not_proof_of_initializer(self):
+        x = good(); f = x["world_factory_return_metadata"]
+        f["factory_return_local_lexical_store_sites"] = 0
+        f["factory_return_local_store_derived_constructor"] = 0
+        f["factory_return_local_store_other_or_unknown"] = 0
+        f["factory_return_local_nearest_lexical_store_source"] = "NO_STORES"
+        self.assertFalse(validate(x)["derived_RGD_runtime_value_initialized_proven"])
+
+    def test_missing_return_local_source_field_rejected(self):
+        x = good(); del x["world_factory_return_metadata"]["factory_return_local_store_derived_call"]
+        with self.assertRaises(ValueError): validate(x)
+
+    def test_private_source_name_cannot_escape(self):
+        x = good(); x["world_factory_return_metadata"]["private_factory_local_name"] = "WorldSave"
+        with self.assertRaises(ValueError): validate(x)
+
+    def test_return_store_count_must_not_be_boolean(self):
+        x = good(); x["world_factory_return_metadata"]["factory_return_local_lexical_store_sites"] = True
+        with self.assertRaises(ValueError): validate(x)
+
+    def test_return_store_count_cannot_be_negative(self):
+        x = good(); x["world_factory_return_metadata"]["factory_return_local_lexical_store_sites"] = -1
+        with self.assertRaises(ValueError): validate(x)
+
+    def test_return_store_count_cannot_exceed_bound(self):
+        x = good(); x["world_factory_return_metadata"]["factory_return_local_lexical_store_sites"] = 10001
+        with self.assertRaises(ValueError): validate(x)
+
+    def test_return_store_count_sum_must_match(self):
+        x = good(); x["world_factory_return_metadata"]["factory_return_local_store_other_or_unknown"] = 0
+        with self.assertRaises(ValueError): validate(x)
+
+    def test_return_store_nearest_class_is_bounded(self):
+        x = good(); x["world_factory_return_metadata"]["factory_return_local_nearest_lexical_store_source"] = "PlayerWorld.PersonPrivate"
+        with self.assertRaises(ValueError): validate(x)
+
+    def test_return_store_nearest_requires_matching_site(self):
+        x = good(); x["world_factory_return_metadata"]["factory_return_local_nearest_lexical_store_source"] = "NULL_LITERAL"
+        with self.assertRaises(ValueError): validate(x)
+
+    def test_nonzero_stores_cannot_claim_no_stores(self):
+        x = good(); x["world_factory_return_metadata"]["factory_return_local_nearest_lexical_store_source"] = "NO_STORES"
+        with self.assertRaises(ValueError): validate(x)
+
+    def test_zero_stores_cannot_claim_other_nearest(self):
+        x = good(); f=x["world_factory_return_metadata"]
+        f["factory_return_local_lexical_store_sites"] = 0
+        f["factory_return_local_store_derived_constructor"] = 0
+        f["factory_return_local_store_other_or_unknown"] = 0
+        with self.assertRaises(ValueError): validate(x)
+
+    def test_direct_constructor_missing_must_reject_claimed_predecessor(self):
+        x=good(); x["world_factory_return_metadata"]["factory_direct_derived_rgd_constructor_sites"]=0
+        with self.assertRaises(ValueError): validate(x)
+
+    def test_direct_typed_call_store_is_structural_not_real_save(self):
+        x=good(); f=x["world_factory_return_metadata"]
+        f["factory_return_local_store_derived_constructor"]=0
+        f["factory_return_local_store_derived_call"]=1
+        f["factory_direct_derived_rgd_returning_call_sites"]=1
+        f["factory_return_local_nearest_lexical_store_source"]="DERIVED_CALL"
+        report=validate(x)
+        self.assertFalse(report["derived_RGD_runtime_value_initialized_proven"])
+        self.assertFalse(report["Android_Unity_IL2CPP_phone_executed"])
+
+    def test_direct_null_store_no_null_runtime_claim(self):
+        x=good(); f=x["world_factory_return_metadata"]
+        f["factory_return_local_store_derived_constructor"]=0
+        f["factory_return_local_store_null_literal"]=1
+        f["factory_return_local_nearest_lexical_store_source"]="NULL_LITERAL"
+        report=validate(x)
+        self.assertFalse(report["factory_control_flow_paths_or_runtime_values_proven"])
+
+    def test_return_local_path_reachability_claim_rejected(self):
+        x=good(); x["world_factory_return_metadata"]["factory_return_local_store_path_reachability_proven"]=True
+        with self.assertRaises(ValueError): validate(x)
+
+    def test_return_source_bool_not_allowed(self):
+        x=good(); x["world_factory_return_metadata"]["factory_return_local_store_null_literal"]=False
+        with self.assertRaises(ValueError): validate(x)
+
     def test_factory_original_return_partition_still_not_runtime_proof(self):
         out = validate(good())
         f = out["source_authentic_world_factory_return_site_categories"]
