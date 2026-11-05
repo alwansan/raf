@@ -10,3 +10,10 @@
 - intended files: own `FoamFieldReadTopology.cs`, `Program.cs`, own `.github/workflows/raft-t2-foam-managed-literals.yml`, own session/work. No game original asset, ShaderLab, .meta, scenes, audio, Settings, deferred touch.
 - active unrelated at reservation: T1 Vulkan Unity CI42047391061; no overlapping T2 SHA-original managed CI.
 - next_step: implement bounded source-free Cecil synthetic getter/decoy and additional reader/address fixture; SHA-pinned genuine CI, save result and limits in this session. WATER-001 OPEN/NOT_READY0/3.
+
+## Source implementation / original CI pending
+
+- [commit 0881f972](https://github.com/alwansan/raf/commit/0881f9722f553e01e3694d7d49b964d53d2dff1e) published via expected SHA fast-forward: new `FoamFieldReadTopology.cs`, own `Program.cs`, own original managed-literals workflow only.
+- The strict source reads original `ldfld`/`ldflda` by actual field identity and counts distinct methods and outside-exact-getter reads, with synthetic other-reader, byref, and typed decoy. No original field or method names or private numeric contents emitted. Previous four-value distinctness/nonnegative and serialization modifiers remain unchanged.
+- [SHA original CI42047763379](https://github.com/alwansan/raf/actions/runs/42047763379) in progress; waiting_ci. T1 Unity Vulkan separate run42047391061 still running and not touched. No new native build directly launched by T2.
+- If CI succeeds, read `T2_FOAM_FIELD_TOPOLOGY_SAFE` printed numeric counts, save and handoff. If it fails, fix first failure before claiming original read topology.
