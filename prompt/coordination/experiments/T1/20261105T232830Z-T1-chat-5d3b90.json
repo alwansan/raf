@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "session_id": "20261105T232830Z-T1-chat-5d3b90",
+  "issue_id": "WATER-001",
+  "status": "completed",
+  "source_commit": "39351c071b1a8cd53f2cacf9c8d9c5ad0ef77148",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42129683073",
+  "observed_result": "Unity 2021 OpenGLCore synthetic control: 0/64 mismatches for bound uint shift/add/mask, 63/64 for bitcast-only asuint(asfloat(address)), 63/64 for subnormal multiply, 0/64 for normal multiply. Exact NUnit 2/2, because the experiment measures carrier mismatches and asserts positive controls. This reproduces loss of low integer address bit patterns without a float multiply in source. It does not prove which output bits were observed or that authentic slot 0 uses this exact path.",
+  "next_step": "Trace the original slot-0 coordinate OpBitcast back through its typed load. Confirm the affected integer carrier and test a private uint-preserving rewrite against the same Vulkan and Unity output/trace gates, before any production integration."
+}
