@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T1213Z-T3-native-shader-dummy-audit",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "track": "colors-materials/native-post-restore-Material-Shader-dummy-audit",
+  "base_sha": "de2f2a5b3bf9c6bc6f8614ca4b1c1b17dffb0962",
+  "approach": "Native full build currently defaults AssetRipper ShaderExportMode.Dummy, and the W1 Material→Shader GUID inventory ignores actual Shader program quality. Add safe strict read-only post-restorer scan of Material YAML m_Shader→.shader.meta GUID and only aggregate DummyShaderTextExporter/no-program source counts without disclosing proprietary assets; integrate before water strict/limited gate and artifact publish on failure. Unit and genuine bounded export tests; preserve all original shaders, no fake passes.",
+  "taken_over_from": [
+    "scripts/w1_audit_export_material_shaders.py",
+    "scripts/verify_water_render_contract.py",
+    "scripts/probe_a13_exported_material_shader_guids.py",
+    "android-port/Experiments/ExportLineage/Program.cs",
+    "https://github.com/alwansan/raf/actions/runs/42022935055"
+  ],
+  "intended_files": [
+    "scripts/t3_audit_exported_material_programs.py",
+    "tests/test_t3_audit_exported_material_programs.py",
+    ".github/workflows/raft-t3-postrestore-shader-audit.yml",
+    ".github/workflows/raft-unity-editor-android-import.yml",
+    "prompt/coordination/clients/T3/sessions/20261105T1213Z-T3-native-shader-dummy-audit.md"
+  ],
+  "hypothesis": "The native export pipeline may legitimately resolve Material Shader GUID while retaining a large number of default-Dummy actual custom ShaderLab programs after partial restoration; actionable per-project count currently missing.",
+  "run_urls": [],
+  "next_step": "Implement strict bounded scanner; synthetic CI; add non-blocking but explicit native post-restorer evidence step and failure artifact; show no phone claim.",
+  "updated_at": "2026-11-05"
+}
