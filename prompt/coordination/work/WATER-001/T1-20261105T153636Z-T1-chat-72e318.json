@@ -1,0 +1,16 @@
+{
+  "id": "20261105T153636Z-T1-chat-72e318",
+  "session_id": "20261105T153636Z-T1-chat-72e318",
+  "owner": "T1",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "completed",
+  "base_sha": "dcd642d2903019b51a0912ff6bd5ef3b32b0bdb7",
+  "updated_at": "2026-11-05T15:36:36.346Z",
+  "experiment_key": "read-only-native-water-evidence-boundary-42052375742",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42052375742",
+    "https://github.com/alwansan/raf/actions/runs/42056377861"
+  ],
+  "next_step": "When the shared Unity lane is clear, trigger the opt-in exact paired replay and read RAFT_T1_PAIRED_DIAGNOSTIC before the parity gate. Independently review native water source contract / strict gate results once they exist."
+}
