@@ -3,7 +3,7 @@
   "origin": "scheduled",
   "owner": "T3",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed",
   "base_sha": "f48b5f795fac1b05db012593d20e352479fb4710",
   "updated_at": "2026-11-05T17:30:00Z",
   "resumed_from_sessions": [
@@ -20,5 +20,8 @@
   "evidence": [
     "https://github.com/alwansan/raf/actions/runs/42075031892"
   ],
-  "avoid_collision": "T3 chat owns raw SPIRV code and opt-in original workflow; scheduled session audits gate only, no dispatch or edits."
+  "avoid_collision": "T3 chat owns raw SPIRV code and opt-in original workflow; scheduled session audits gate only, no dispatch or edits.",
+  "result": "CI42075031892 source-free SUCCESS; authentic original job SKIPPED by explicit authorization gate; no original execution or repeat",
+  "session_path": "prompt/coordination/clients/T3/sessions/20261105T1730Z-T3-scheduled-rawspv-gate-c8e1.md",
+  "next_step": "Chat T3 checks any existing authorized original run; only if absent, trigger one SHA-pinned genuine opt-in; compare typed lane coverage and keep RENDER-002 OPEN."
 }
