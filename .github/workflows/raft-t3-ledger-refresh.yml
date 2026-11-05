@@ -1,4 +1,6 @@
 name: T3 refresh team source-evidence summary after verified Material parity
+# T3 checkpoint: canonical event now has required stable id/type/at after
+# CI42027754343 exposed missing event id; do not alter old B/T records.
 
 on:
   push:
