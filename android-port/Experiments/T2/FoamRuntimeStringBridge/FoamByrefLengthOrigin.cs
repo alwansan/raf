@@ -109,9 +109,9 @@ internal static class FoamByrefLengthOrigin
         };
         if(raw is int r)
         {
-            int n=r-(method.HasThis?1:0);
-            return new Origin(n>=0 && n<method.Parameters.Count &&
-                method.Parameters[n].ParameterType.FullName=="System.Int32"
+            int parameterIndex=r-(method.HasThis?1:0);
+            return new Origin(parameterIndex>=0 && parameterIndex<method.Parameters.Count &&
+                method.Parameters[parameterIndex].ParameterType.FullName=="System.Int32"
                 ?"int32_argument":"other_argument");
         }
         if(op.OpCode.Code==Code.Ldlen) return new Origin("array_length");
