@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "session_id": "20261105T2148Z-T2-chat-multiarity-stack-6b31",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "hypothesis": "When void call consumes multiple operands, its arguments can be skipped by formally modeled evaluation-stack arity and the remaining top-of-stack store source can be classified conditional on straight-line execution; if control flow or unhandled opcode intervene, fail closed.",
+  "source_commit": "0c17397f349789e94aaf8bfa8ec6cc1f75971529",
+  "input_hashes": [
+    "ZIP2:15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "sha256:0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e"
+  ],
+  "tool_versions": {
+    "Mono.Cecil": "0.11.5",
+    "dotnet": "9.0",
+    "UnityPy": "1.25.4"
+  },
+  "commands": [
+    "dotnet publish android-port/Experiments/T2/FoamRuntimeStringBridge/FoamRuntimeStringBridge.csproj -c Release",
+    "dotnet FoamRuntimeStringBridge.dll --selftest",
+    "SHA-original scan via .github/workflows/raft-t2-foam-managed-literals.yml"
+  ],
+  "negative_controls": [
+    "null survivor",
+    "dup retained reference with two-call operands",
+    "missing survivor unresolved incoming stack",
+    "branch target at call",
+    "unsupported stack opcode",
+    "instruction budget"
+  ],
+  "workflow_path": ".github/workflows/raft-t2-foam-managed-literals.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42116699643",
+  "artifact_urls": [],
+  "status": "completed",
+  "observed_result": "Original SHA-gated successful same-block reverse stack slice found the source CIL newobj with named UnityEngine.RenderTexture type, after modeling all consumed operands of intervening void call. Synthetic controls passed.",
+  "rejected_hypotheses": [
+    "Return-local written value has no identifiable same-block stack producer"
+  ],
+  "limitations": [
+    "Constructor scope identity vs writer local not yet checked.",
+    "No whole-function CFG reachability, runtime successful allocation/non-null, Unity ShaderLab, GPU or phone pixel proof.",
+    "Matching declared type name is not assembly identity."
+  ],
+  "integration_commit": "0c17397f349789e94aaf8bfa8ec6cc1f75971529",
+  "next_step": "New independent scoped work prompt/coordination/work/WATER-001/T2-20261105T2148Z-T2-chat-multiarity-stack-6b31-ctor-scope.json: confirm exact constructor/newobj metadata assembly scope identity to RT returned local type without publishing raw types or private signatures; exclude name-collision false positives. Then source-to-Unity shader binding."
+}

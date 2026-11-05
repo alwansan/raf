@@ -6,7 +6,7 @@
   "origin": "chat",
   "issue_id": "WATER-001",
   "track": "source-authentic-Foam-void-multiarg-evaluation-stack",
-  "status": "active",
+  "status": "completed",
   "base_sha": "0f41844a4c95eec07e615cfef7c12f6ea3e1a71c",
   "resumed_from_sessions": [
     "20261105T2107Z-T2-chat-writer-call-ab1c",
@@ -36,10 +36,26 @@
     "dll_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e"
   },
   "last_verified_result": "CI42111118348 original exact preceding call void, consumes multiple operands, preceding opcode family other, no simple one-input dup retention; source-only CI success. CI42112378300 scheduled CFG independent synthetic success, no device evidence.",
-  "run_urls": [],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42116699643"
+  ],
   "experiment_ids": [
     "T2-20261105T2148Z-T2-chat-multiarity-stack-6b31"
   ],
-  "updated_at": "2026-11-05T21:48:00Z",
-  "next_step": "Implement separate stack slice with controlled safe aggregate, synthetic adversarial fixtures; observe SHA-original run; no Unity, GPU, or phone acceptance claims."
+  "updated_at": "2026-11-05T21:56:00Z",
+  "next_step": "New independent scoped work prompt/coordination/work/WATER-001/T2-20261105T2148Z-T2-chat-multiarity-stack-6b31-ctor-scope.json: confirm exact constructor/newobj metadata assembly scope identity to RT returned local type without publishing raw types or private signatures; exclude name-collision false positives. Then source-to-Unity shader binding.",
+  "integration_commit": "0c17397f349789e94aaf8bfa8ec6cc1f75971529",
+  "result": {
+    "sha_original_verified": true,
+    "run_id": 42116699643,
+    "job_id": 127558122040,
+    "conclusion": "success",
+    "source": "named_rendertexture_constructor",
+    "analysis_status": "same_block_stack_source_found",
+    "multi_input_void_call_consumption_modeled": true,
+    "same_block_source_found": true,
+    "whole_function_branch_join_proven": false,
+    "runtime_nonnull_or_pixels_proven": false,
+    "source_free_synthetic_adversarial_controls": "passed"
+  }
 }

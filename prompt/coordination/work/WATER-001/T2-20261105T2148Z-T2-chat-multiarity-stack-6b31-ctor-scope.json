@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T2148Z-T2-chat-multiarity-stack-6b31",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "track": "source-authentic-RT-constructor-assembly-identity",
+  "status": "active",
+  "base_sha": "f093e804e90c3ba5ee7f7436087c13ebac18025d",
+  "approach": "Use already source-original exact same-block newobj opcode and exact returned RT local; compare Mono.Cecil constructor declaring TypeReference identity and assembly scope to local TypeReference (full assembly name & signature, not name only); fail closed if scope ambiguous/unverifiable; add foreign-assembly same-name fixture and log boolean safe aggregate.",
+  "hypothesis": "Source-original matching newobj RenderTexture by FullName also shares metadata defining assembly with the return-local type; same-named false assembly must be rejected.",
+  "intended_files": [
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/FoamReturnWriterStackSlice.cs",
+    ".github/workflows/raft-t2-foam-managed-literals.yml",
+    "prompt/coordination/work/WATER-001/T2-20261105T2148Z-T2-chat-multiarity-stack-6b31-ctor-scope.json",
+    "prompt/coordination/clients/T2/sessions/20261105T2148Z-T2-chat-multiarity-stack-6b31.md",
+    "prompt/coordination/experiments/T2/T2-20261105T2148Z-T2-chat-multiarity-stack-6b31-ctor-scope.json",
+    "prompt/coordination/B_TEAM/events/T2/20261105T2148Z-T2-chat-multiarity-stack-6b31-ctor-scope-result.json"
+  ],
+  "experiment_key": "sha0a6f0527-foam-RT-ctor-returnlocal-assembly-scope-v1",
+  "resource_key": "existing-SHA-pinned-ZIP2-FoamRuntimeStringBridge",
+  "related_work": [
+    "prompt/coordination/work/WATER-001/T2-20261105T2148Z-T2-chat-multiarity-stack-6b31.json"
+  ],
+  "source_pin": {
+    "zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "dll_bytes": 3211776,
+    "dll_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e"
+  },
+  "run_urls": [],
+  "updated_at": "2026-11-05T21:56:00Z",
+  "next_step": "Implement exact type+metadata assembly scope comparison on source-constructor and returned local in already-authenticated original Cecil process, plus false foreign assembly decoy test."
+}
