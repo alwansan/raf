@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T1408Z-T4-chat-jsonl-evidence-n4r7",
+  "origin": "chat",
+  "status": "active",
+  "issue_id": "LOCAL-005",
+  "base_sha": "87c0e1b9b889a67b245891819d44d4d9c0b18898",
+  "track": "world-save-log-correlation",
+  "hypothesis": "A strict non-mutating parser for exact PersistentDiagnosticLog JSONL operation fields, per-session sequence integrity and cross-relaunch evidence can separate missing traces vs contradictory save/load observations without leaking raw logs, guessing game state or overlapping original RGD CLR runtime experiment.",
+  "experiment_key": "local005-jsonl-trace-contract-persistentDiagnosticLog-v1-20261105",
+  "resource_key": null,
+  "intended_files": [
+    "scripts/t4_verify_device_world_save_log.py",
+    "tests/test_t4_verify_device_world_save_log.py",
+    ".github/workflows/raft-t4-world-save-log-evidence.yml",
+    "docs/T4_DEVICE_LOG_EVIDENCE_CHECKER_2026-11-05.md",
+    "prompt/coordination/work/LOCAL-005/T4-20261105T1408Z-T4-chat-jsonl-evidence-n4r7-jsonl-evidence.json",
+    "prompt/coordination/clients/T4/sessions/20261105T1408Z-T4-chat-jsonl-evidence-n4r7.md"
+  ],
+  "approach": "Use only source-free synthetic JSONL and actual logger source-contract. Read files from explicit path locally, output sanitized flags/categories; reject mixed sessions, duplicates/conflicts, partial sequence, and source-unattested candidate. No game source, .rgd, DLL or existing instrumentation changed; CI cheap Python unittest only.",
+  "related_work": [
+    "prompt/coordination/clients/T4/sessions/20261105T1338Z-T4-scheduled-v6n9.md",
+    "prompt/coordination/clients/T4/sessions/20261105T1246Z-T4-chat-load-file-gate-m8q2.md"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/T4/sessions/20261105T1338Z-T4-scheduled-v6n9.md",
+    "docs/T4_ANDROID_LOAD_ARGUMENT_SNAPSHOT_2026-11-05.md",
+    "docs/B07_LOCAL_WORLD_CALLBACK_CHAIN_2026-11-04.md"
+  ],
+  "run_urls": [],
+  "result": null,
+  "updated_at": "2026-11-05T14:08:57.818Z",
+  "next_step": "Publish safe JSONL session-order semantic classifier, synthetic negative controls and targeted no-LFS CI; use CLI only on approved device exports, T4 original seed CLR experiment remains independently active."
+}
