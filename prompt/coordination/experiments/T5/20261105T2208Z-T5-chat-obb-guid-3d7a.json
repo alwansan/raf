@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261105T2208Z-T5-chat-obb-guid-3d7a",
+  "issue_id": "INTEGRATION-001",
+  "experiment_key": "t5-CL-pinned-520c4c-guid-warning-version89-patch-vs-main-actual-log-parity-v1",
+  "resource_key": "CL-read-only-20261105-phone-log-sha-blobs",
+  "hypothesis": "All three actual phone Unity GUID warnings in owner sessions 220911 and 230108 are optional patch.89 OBB probes, not warnings for the shipped main.89 OBB.",
+  "source_commit": "93ca7ea63c2928514bfac35608725f53a368df55",
+  "input_hashes": [
+    "pinned CL commit 520c4cf409aa20a4db54ff80ed87d8807d9cba57",
+    "220911 seg1 d50b9fde330c425e15d444922c214a5b112bb264; seg2 9a6d3ba358b89ba387217c87e0b410b401fd150e",
+    "230108 seg1 cb3a3318b604c1cfbc43583e05580a39bcb66c81; seg2 5275f859334fa47bcfc74f0ca5f0530e260102e6; seg3 a28d2451af66cfc60a682b3bc22626041eccae2b; seg4 660f9ef6030cd30ae33bbcf5ac7389d85fcd5d4e"
+  ],
+  "tool_versions": {
+    "python": "ubuntu-24.04 system Python3",
+    "git": "git hash-object",
+    "curl": "runner curl"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t5_classify_obb_guid_logs.py -v",
+    "curl pinned CL raw log segments and git hash-object check each SHA",
+    "python3 scripts/t5_classify_obb_guid_logs.py --delivery authenticated-delivery.json --log <each actual CL log file>"
+  ],
+  "negative_controls": [
+    "Real main OBB GUID warnings must not be counted as optional patch",
+    "Foreign package/version not counted as current patch",
+    "Declared actual patch file not counted as unshipped patch",
+    "Malformed/duplicate/unsafe metadata rejected",
+    "Non-OBB/other Unity warnings not misattributed"
+  ],
+  "workflow_path": ".github/workflows/raft-t5-obb-guid-log-identity.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42119428667",
+  "artifact_urls": [],
+  "budget": "6 original CL raw public log segments ~167MB; private contents never uploaded, no game or Unity builds; 12min runner max",
+  "status": "completed_real_phone_log_verified",
+  "observed_result": {
+    "conclusion": "success",
+    "job_id": 127567590987,
+    "synthetic_tests": "16/16",
+    "real_blobs_sha_verified": 6,
+    "real_sessions": [
+      "20261105-220911-559",
+      "20261105-230108-327"
+    ],
+    "session_220911_optional_patch_warnings": 1,
+    "session_230108_optional_patch_warnings": 2,
+    "total_patch_89_warnings": 3,
+    "actual_main_89_guid_warnings": 0,
+    "physical_patch_absent_on_device_proven": false,
+    "real_main_obb_mounted_on_device_verified": false,
+    "source_delivery_main_89_only": true
+  },
+  "rejected_hypotheses": [
+    "All three CL OBB GUID warnings refer to corrupt main.89 OBB",
+    "Phone warning string is sufficient to infer actual OBB file bytes are missing or bad"
+  ],
+  "limitations": [
+    "No phone main.89 installed file hash, Android mount proof or Unity reference GUID parity",
+    "Absence of patch.89 from signed delivery does not prove no third-party patch exists on device",
+    "Cannot infer complete device graphics, water/FFT or local save durability solely from these warnings"
+  ],
+  "integration_commit": "e29d84c43c3d90f0818f565f877b7bf7a547afd9",
+  "next_step": "Reduce incorrect OBB-corrupt hypothesis priority; inspect actual on-device main.89 OBB path/size/hash and only pursue internal Unity GUID if main-specific error appears. Keep water/FFT and materials prioritized by real 23,884/39,132 shader pass errors and 3,850/6,026 FFT kernel errors."
+}
