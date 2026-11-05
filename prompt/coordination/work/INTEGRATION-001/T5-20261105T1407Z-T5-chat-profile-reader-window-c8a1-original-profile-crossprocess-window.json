@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T1407Z-T5-chat-profile-reader-window-c8a1",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "track": "LOCAL-005 independent original compiled platform profile-creation cross-process race reproduction",
+  "status": "active",
+  "base_sha": "0b92538ad46403bc2cdd7c3bf06b403eba88b7a4",
+  "resumed_from_sessions": [
+    "20261105T1302Z-T5-chat-delivery-e2e-f72c",
+    "20261105T1348Z-T5-scheduled-7c91"
+  ],
+  "approach": "Execute real LocalProfileStore in a separate net8 executable with a second process holding the final profile.id empty and exclusively open for either short or beyond original 99x10ms reader limit; distinguish finite writer/readers from permanent corruption, without editing T4-owned platform runtime or smoke suite.",
+  "intended_files": [
+    "android-port/Experiments/T5/LocalProfileWindowProbe/LocalProfileWindowProbe.csproj",
+    "android-port/Experiments/T5/LocalProfileWindowProbe/Program.cs",
+    ".github/workflows/raft-t5-local-profile-window.yml",
+    "prompt/coordination/work/INTEGRATION-001/T5-20261105T1407Z-T5-chat-profile-reader-window-c8a1-original-profile-crossprocess-window.json",
+    "prompt/coordination/clients/T5/sessions/20261105T1407Z-T5-chat-profile-reader-window-c8a1.md"
+  ],
+  "experiment_key": "localprofile-actual-netstandard-lib-multiprocess-exclusive-writer-open-80ms-vs-2500ms-vs-corrupt-99retry-v1",
+  "resource_key": "t5-isolated-dotnet8-profile-race-probe",
+  "hypothesis": "The original ~1s retry window can fail a legitimate first-launch reader if the exclusive writer process holds a visible empty profile.id beyond 99 attempts; the same original code succeeds for a short holder and rejects permanent corruption without overwriting.",
+  "related_work": [
+    "prompt/coordination/work/INTEGRATION-001/T5-20261105T1348Z-T5-scheduled-7c91-multiprocess-identity-log-forensics.json"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/T5/sessions/20261105T1348Z-T5-scheduled-7c91.md",
+    "prompt/coordination/clients/T4/sessions/20261105T1237Z-T4-scheduled-k7m2.md"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement deterministic actual separate-process source harness with bounded waits and safe aggregate outcomes; run isolated CPU CI, classify exact failure, hand off to T4 before any production change.",
+  "updated_at": "2026-11-05T14:07:00Z"
+}
