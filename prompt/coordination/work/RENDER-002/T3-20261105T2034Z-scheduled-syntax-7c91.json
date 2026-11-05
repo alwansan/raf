@@ -2,7 +2,7 @@
   "session_id": "20261105T2034Z-T3-scheduled-7c91",
   "origin": "scheduled",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed",
   "base_sha": "426667abca3a9975b62fbc7b7ba7ff372d3c00e8",
   "intended_files": [
     "scripts/t3_native_original_921_shader_target_audit.py",
@@ -15,5 +15,8 @@
   "taken_over_from": [
     "T3 scheduled 20261105T1933Z",
     "CI 42094853931"
-  ]
+  ],
+  "fix_commit": "87c8658fc6e9c90fa25fe9e55597b9356c5313ac",
+  "ci_url": "https://github.com/alwansan/raf/actions/runs/42104666494",
+  "result": "syntax_compile_and_synthetic_controls_success; original_private_export_not_run"
 }
