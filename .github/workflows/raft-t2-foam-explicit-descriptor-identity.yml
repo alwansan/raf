@@ -6,6 +6,8 @@ on:
       - scripts/t2_foam_explicit_descriptor_map.c
       - scripts/t2_foam_explicit_descriptor_identity.py
       - tests/test_t2_foam_explicit_descriptor_identity.py
+      - scripts/t2_foam_native_spv_active_join.py
+      - tests/test_t2_foam_native_spv_active_join.py
       - .github/workflows/raft-t2-foam-explicit-descriptor-identity.yml
   workflow_dispatch:
 permissions:
@@ -30,6 +32,8 @@ jobs:
           set -euo pipefail
           python3 -m py_compile scripts/t2_foam_explicit_descriptor_identity.py
           python3 -m unittest discover -s tests -p 'test_t2_foam_explicit_descriptor_identity.py' -v
+          python3 -m py_compile scripts/t2_foam_native_spv_active_join.py
+          python3 -m unittest discover -s tests -p 'test_t2_foam_native_spv_active_join.py' -v
       - name: CI runner budget guard
         run: |
           python3 - <<'PY'
@@ -101,6 +105,29 @@ jobs:
           assert not r['unity_shaderlab_or_adreno_pixels_verified']
           assert not r['proprietary_program_symbols_binaries_published']
           PY
+      - name: Join actual original DXBC SAMPLE t/s uses with compiled SPIR-V SSA sampling pairs
+        run: |
+          set -euo pipefail
+          timeout 180s python3 -m scripts.t2_foam_native_spv_active_join \
+            --source "$RUNNER_TEMP/t2-foam-explicit-source" \
+            --packet "$RUNNER_TEMP/t2-foam-explicit-private" \
+            --manifest "$RUNNER_TEMP/t2-foam-explicit-manifest.json" \
+            --mapping "$RUNNER_TEMP/t2-foam-explicit-safe.json" \
+            --out "$RUNNER_TEMP/t2-foam-native-spv-active-safe.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          r=json.loads((Path(os.environ['RUNNER_TEMP'])/'t2-foam-native-spv-active-safe.json').read_text())
+          assert r['status']=='foam_actual_native_sample_to_spirv_resource_pair_identity_verified'
+          assert r['source_authentic_original_stages']==4 and r['verified_sampled_fragment_stages']==2
+          assert r['original_texture_sampler_pairs']==6
+          assert r['authentic_native_sample_calls']==21 and r['translated_spirv_sample_calls']==21
+          assert r['exact_active_native_to_translated_pair_identity_proven']
+          assert not r['unity_material_texture_upload_verified']
+          assert not r['original_sampler_filter_wrap_or_uv_verified']
+          assert not r['authentic_shaderlab_import_or_adreno_pixels_verified']
+          assert not r['proprietary_program_source_identifiers_binaries_published']
+          PY
       - name: Erase all private original input, DXBC, HLSL, SPIR-V and compiler outputs
         if: always()
         run: |
@@ -114,6 +141,8 @@ jobs:
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: t2-foam-explicit-mapping-safe-${{ github.run_id }}
-          path: ${{ runner.temp }}/t2-foam-explicit-safe.json
+          path: |
+            ${{ runner.temp }}/t2-foam-explicit-safe.json
+            ${{ runner.temp }}/t2-foam-native-spv-active-safe.json
           if-no-files-found: ignore
           retention-days: 7
