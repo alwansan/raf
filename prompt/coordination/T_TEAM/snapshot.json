@@ -89,20 +89,23 @@
         "https://github.com/alwansan/CL/tree/520c4cf409aa20a4db54ff80ed87d8807d9cba57/raft%20log",
         "owner-message-2026-11-04",
         "https://github.com/alwansan/raf/commit/02665b11061ccb070bf6e24797d47a2866ef250c",
-        "https://github.com/alwansan/raf/actions/runs/42118499200"
+        "https://github.com/alwansan/raf/actions/runs/42118499200",
+        "https://github.com/alwansan/raf/actions/runs/42121598304"
       ],
       "remaining": [
         "معالجة ظهور أشرطة النظام عند حواف اللعبة بالماوس الفعلي واستخدام مؤشر Raft.",
         "اختبار التقاط الحركة النسبية في اللعب وإفلاتها عند القائمة وفقد التركيز.",
         "الحفاظ على الكيبورد واللمس الحالي. تطوير تخطيط التاتش العام مؤجل.",
-        "T4: تحقق هاتف فعلي من View pointer capture فقدانه/استعادته، حركة الكاميرا دون حواف، مؤشر القائمة، أشرطة النظام، ومنافذ اللمس/الكيبورد، مع اختبار حفظ/إعادة فتح العالم على نفس SHA."
+        "T4: تحقق هاتف فعلي من View pointer capture فقدانه/استعادته، حركة الكاميرا دون حواف، مؤشر القائمة، أشرطة النظام، ومنافذ اللمس/الكيبورد، مع اختبار حفظ/إعادة فتح العالم على نفس SHA.",
+        "On-device test of SOURCE_MOUSE_RELATIVE vs SOURCE_TOUCHPAD captured motion, batching, cursor lock/release, wheel/buttons and old world/save/exit/reopen on same candidate SHA; source tests do not prove Android behavior."
       ],
       "acceptance": [
         "دوران الكاميرا بلا توقف عند الحواف، ومؤشر اللعبة في القوائم، والتحرير الآمن عند الخروج أو تبديل التركيز."
       ],
       "updated_by": "T4",
-      "updated_at": "2026-11-05T22:07:00Z",
+      "updated_at": "2026-11-05T22:30:00Z",
       "source_status": "SOURCE_FIXED_MANAGED_CI_VERIFIED_DEVICE_UNCONFIRMED",
+      "latest_T4_source_proof": "SOURCE_INTEGRATED_CI42121598304: API26 relative mouse getX/Y, captured touchpad AXIS_RELATIVE_X/Y, 0..64 historical samples; 28 Python +30 CSharp + original Unity2021 compile PASS; Android physical device unverified",
       "_record_path": "../B_TEAM/issues/INPUT-005.json"
     },
     {
@@ -1882,6 +1885,37 @@
       ],
       "updated_at": "2026-11-05T12:34Z",
       "_record_path": "../B_TEAM/resources/T2-foam-original-null-guarded-rendertexture-producer.json"
+    },
+    {
+      "id": "T2-foam-original-paired-HLSL-vulkan",
+      "owner": "T2",
+      "issue_id": "WATER-001",
+      "title": "Source-authenticated original Foam 2-pass paired VS/PS HLSL composition validates all 4 Vulkan1.1 stages",
+      "kind": "sha_original_two_pass_stage_pair_vulkan_validation",
+      "stages": {
+        "acquisition": "zip2_sha15964ea8_original_sharedassets0_sha0498f738_verified",
+        "extraction": "shader_path2420_sha67bd7a7f_verified_4_original_stages_2_render_states",
+        "reconstruction": "two_passes_both_have_paired_VS_PS_HLSL_program_text_glslang_and_spirv_val_success",
+        "binding": "source_resource_register_identity_prior_verified;_cb0_alias_and_material_property_runtime_binding_unverified",
+        "integration": "CI42121817207_4_stage_compilations_success;_ShaderLab_not_constructed_or_installed",
+        "device": "NOT_TESTED"
+      },
+      "observed": {
+        "original_pass_count": 2,
+        "authentic_stage_count": 4,
+        "paired_program_text_count": 2,
+        "recompiled_and_validated_stages": 4,
+        "synthetic_controls_passed": 10,
+        "private_hlsl_spirv_published": false,
+        "shaderlab_unity_import_proven": false,
+        "android_water_pixels_proven": false
+      },
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42121817207",
+        "https://github.com/alwansan/raf/commit/a0e1aebcd82b8f780eacea75428ba129a9cf3d07"
+      ],
+      "next_step": "With original 2/2 paired HLSL source compilation proven, integrate exact original 2 authored properties (1 serialized texture, 1 other type) into private ShaderLab template without guessed property defaults; use B25 source states and proper CB0/texture alias, and attempt an isolated Unity importer test if coordinated. Must not install dummy shader or claim pixels. WATER-001 OPEN.",
+      "_record_path": "../B_TEAM/resources/T2-foam-original-paired-HLSL-vulkan.json"
     },
     {
       "id": "T2-foam-original-ref-array-caller-compiled-bounds",
@@ -6318,6 +6352,20 @@
       "_record_path": "../B_TEAM/events/T2/20261105T2200Z-T2-foam-RT-ctor-scope-proven.json"
     },
     {
+      "id": "20261105T2220Z-T2-chat-foam-passpair-f174-result",
+      "owner": "T2",
+      "session_id": "20261105T2220Z-T2-chat-foam-passpair-f174",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "summary": "Original SHA-verified Foam 2/2 VS/PS HLSL pass pairs compile as per-pass joint source with 4/4 SPIR-V Vulkan1.1 validations, 10/10 synthetic tests. Not Unity ShaderLab/Adreno proof.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42121817207",
+        "https://github.com/alwansan/raf/commit/ff938dbe4a0db6e6dac5d2808c944ee882415cf7"
+      ],
+      "at": "2026-11-05T22:31:00Z",
+      "_record_path": "../B_TEAM/events/T2/20261105T2220Z-T2-chat-foam-passpair-f174-result.json"
+    },
+    {
       "id": "T2-20261105T2115Z-chat-precall-operand-4be0-result",
       "owner": "T2",
       "session_id": "20261105T2107Z-T2-chat-writer-call-ab1c",
@@ -7341,6 +7389,24 @@
       "_record_path": "../B_TEAM/events/T4/20261105T2150Z-T4-chat-capture-lease-n5k8.json"
     },
     {
+      "schema_version": 1,
+      "id": "T4-20261105T2230Z-T4-chat-captured-mouse-sources-r7n5",
+      "owner": "T4",
+      "session_id": "20261105T2230Z-T4-chat-captured-mouse-sources-r7n5",
+      "origin": "chat",
+      "type": "source_integration",
+      "issue_id": "INPUT-005",
+      "timestamp": "2026-11-05T22:30:00Z",
+      "summary": "T4 source-integrated Android API26 captured input classifier: SOURCE_MOUSE_RELATIVE gets relative getX/Y; SOURCE_TOUCHPAD gets AXIS_RELATIVE_X/Y, includes 0..64 historical batched samples; invalid/absolute motion fail open. Bounded CI42121598304 SUCCESS: 7+7+14 Python, 30 .NET controls, Unity2021 original managed compile, private original 4+4+2 legacy source. No Android APK or phone acceptance; issue remains OPEN.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42121598304",
+        "https://github.com/alwansan/raf/commit/868eac2784efa1fcf7806a23b32bd1a1a1220fcf",
+        "prompt/coordination/experiments/T4/20261105T2230Z-T4-chat-captured-mouse-sources-r7n5.json"
+      ],
+      "integration_scope": "Captured physical relative motion decoding only; no touch layout, T5 settings, original assets/Unity scenes/.meta/GUID/.rgd or native build request.",
+      "_record_path": "../B_TEAM/events/T4/20261105T2230Z-T4-chat-captured-mouse-sources-r7n5.json"
+    },
+    {
       "id": "T5-20261104T2357Z-b12-fixture-start",
       "owner": "T5",
       "session_id": "20261104T2357Z-T5-b12-fixture-7e2",
@@ -7743,7 +7809,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "a6b7f6c6d7e222f3201fe766778c1131de86e7d2229baa2c749e8c5566fa3e08",
+  "source_input_sha256": "3e4669302680a1b17147099d3e84bbf22b7a95880ce284d16eea0539a45b4301",
   "generation": "T-2026-11-05",
-  "input_sha256": "c1db5d44b36652e72632ba170fc85b23bb78e52a7fc29c2d173b8c9b3a3e1507"
+  "input_sha256": "2321070a3692a5cf4acf8496b8777c0b214d18148f84fc72449892f619159a08"
 }
