@@ -6,7 +6,7 @@
   "status": "active",
   "base_sha": "2be085c362c8c3f0dd57c1c4a94ec5991174b1e4",
   "intended_files": [
-    "scripts/t1_sourcefree_unity_fixture.py",
+    "scripts/t1_sourcefree_dispatch_fixture.py",
     ".github/workflows/raft-t1-fft-unity-input-identity.yml"
   ],
   "experiment_key": "synthetic-unity-structured-dispatch-global-vs-argument",
