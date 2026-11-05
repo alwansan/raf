@@ -8,7 +8,7 @@
   "track": "original-to-native Shader48 builtin pointer integrity",
   "status": "active",
   "base_sha": "fe9a9ae5264821304923d6bac04d21089f3a3df8",
-  "updated_at": "2026-11-05T21:02:00Z",
+  "updated_at": "2026-11-05T21:04:00Z",
   "intended_files": [
     "scripts/t3_source_renderer_shader_to_postvendor_export.py",
     "tests/test_t3_source_renderer_shader_to_postvendor_export.py",
@@ -17,9 +17,10 @@
     "prompt/coordination/work/RENDER-002/20261105T2102Z-T3-chat-builtin-null-pointer-0d3e.json",
     "prompt/coordination/clients/T3/sessions/20261105T2102Z-T3-chat-builtin-null-pointer-0d3e.md",
     "prompt/coordination/experiments/T3/20261105T2102Z-T3-chat-builtin-null-pointer-0d3e.json",
-    "prompt/coordination/B_TEAM/events/T3/20261105T2102Z-T3-chat-builtin-null-pointer-0d3e.json"
+    "prompt/coordination/B_TEAM/events/T3/20261105T2102Z-T3-chat-builtin-null-pointer-0d3e.json",
+    ".github/workflows/raft-t3-native-921-guid-source-controls.yml"
   ],
-  "hypothesis": "Current authentic original source Shader48→W1 native GUID join mistakenly accepts (fileID=0, guid=000...000, type=0) or (fileID=0, engine GUID, type=0) as genuine Unity Built-in, because BUILTIN includes all-zero GUID and join omits a positive fileID check.",
+  "hypothesis": "Current authentic original source Shader48→W1 native GUID join mistakenly accepts (fileID=0, guid=000...000, type=0) or (fileID=0, engine GUID, type=0) as genuine Unity Built-in, because BUILTIN includes all-zero GUID and join omits a positive fileID check. Also the existing CI workflow omits its dependent same-export source and tests from push path filters, so a test-only correction cannot trigger validation.",
   "experiment_key": "t3-source21-shader48-native-top921-builtin-null-zero-fileid-and-guid-contract-v1",
   "resource_key": null,
   "taken_over_from": [
@@ -32,6 +33,6 @@
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42107128075"
   ],
-  "next_step": "Add narrow valid-builtin predicate requiring positive fileID and non-zero engine GUID, fail-close every original typed Shader48 and top921, prove rejection in source-free tests, use existing CI only; save session and T5 handoff.",
+  "next_step": "Extend narrowly-scoped source-free workflow path filters to cover its already-executed dependency test/script; run full source-free CI on final source and tests (including corrected early pointer-layer expectation).",
   "result": null
 }
