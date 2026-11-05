@@ -1,0 +1,104 @@
+name: T5 INTEGRATION-001 retain immutable native delivery (no Unity)
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - .github/workflows/raft-t5-retain-native-delivery.yml
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: raft-t5-native-delivery-artifact-42058825739
+  cancel-in-progress: false
+
+jobs:
+  pinned-artifact-rescue:
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && contains(github.event.head_commit.message, '[t5-rescue-artifact-42058825739]'))
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    env:
+      GH_TOKEN: ${{ github.token }}
+      ARTIFACT_ID: "13441227298"
+      ORIGINAL_RUN_ID: "42058825739"
+      ORIGINAL_SOURCE_SHA: "e9c358eda01785b65e4eb14f18723da426635628"
+      ORIGINAL_VERSION_CODE: "89"
+      ORIGINAL_ARCHIVE_BYTES: "5948243524"
+      ORIGINAL_ARCHIVE_SHA: "29d967c5f1868a10aa0f8f3b9f0306e828c1d32ef3cda2909f7482b5d111eef6"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+      - name: Run source-free archive validator controls first
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p 'test_t5_verify_retained_delivery_archive.py' -v
+          python3 -m py_compile scripts/t5_verify_retained_delivery_archive.py
+      - name: Validate pinned GitHub artifact and immutable original run; check free space
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/$ARTIFACT_ID" > "$RUNNER_TEMP/t5-artifact-metadata.json"
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/$ORIGINAL_RUN_ID" > "$RUNNER_TEMP/t5-original-run.json"
+          python3 - <<'PY'
+          import json,os,shutil
+          from pathlib import Path
+          a=json.loads((Path(os.environ["RUNNER_TEMP"])/"t5-artifact-metadata.json").read_text())
+          run=json.loads((Path(os.environ["RUNNER_TEMP"])/"t5-original-run.json").read_text())
+          assert a["id"]==int(os.environ["ARTIFACT_ID"]) and a["name"]=="raft-android-test-delivery"
+          assert a["size_in_bytes"]==int(os.environ["ORIGINAL_ARCHIVE_BYTES"]) and not a["expired"]
+          assert a.get("digest")=="sha256:"+os.environ["ORIGINAL_ARCHIVE_SHA"]
+          assert run["id"]==int(os.environ["ORIGINAL_RUN_ID"]) and run["run_number"]==int(os.environ["ORIGINAL_VERSION_CODE"])
+          assert run["head_sha"]==os.environ["ORIGINAL_SOURCE_SHA"]
+          assert run["status"]=="completed"
+          free=shutil.disk_usage(os.environ["RUNNER_TEMP"]).free
+          required=int(os.environ["ORIGINAL_ARCHIVE_BYTES"])+2*1024**3
+          if free < required:
+              raise SystemExit("Insufficient free disk space for one verified original archive")
+          print("T5_RESCUE_PRECHECK original_run_pinned=true original_artifact_pinned=true disk_sufficient=true")
+          PY
+      - name: Acquire exact expiring native delivery ZIP and stream-authenticate all parts
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh api -H "Accept: application/vnd.github+json" \
+            "repos/$GITHUB_REPOSITORY/actions/artifacts/$ARTIFACT_ID/zip" \
+            > "$RUNNER_TEMP/raft-native-verified-delivery-original.zip"
+          python3 scripts/t5_verify_retained_delivery_archive.py \
+            --archive "$RUNNER_TEMP/raft-native-verified-delivery-original.zip" \
+            --expected-archive-bytes "$ORIGINAL_ARCHIVE_BYTES" \
+            --expected-archive-sha "$ORIGINAL_ARCHIVE_SHA" \
+            --version-code "$ORIGINAL_VERSION_CODE" \
+            | tee "$RUNNER_TEMP/t5-native-rescue-result.jsonl"
+          echo "T5 native delivery archive source=$ORIGINAL_SOURCE_SHA, original_run=$ORIGINAL_RUN_ID: all physical transport parts and logical APK/OBB/XAPK hashes verified. Android/GPU/device unverified." >> "$GITHUB_STEP_SUMMARY"
+      - name: Retain independently verified original delivery ZIP for limited recovery window
+        id: retain
+        uses: actions/upload-artifact@v4
+        with:
+          name: t5-retained-native-delivery-42058825739
+          path: ${{ runner.temp }}/raft-native-verified-delivery-original.zip
+          compression-level: 0
+          retention-days: 3
+          if-no-files-found: error
+      - name: Report retention handoff and limitations
+        if: success()
+        shell: bash
+        env:
+          NEW_ID: ${{ steps.retain.outputs.artifact-id }}
+          NEW_URL: ${{ steps.retain.outputs.artifact-url }}
+        run: |
+          set -euo pipefail
+          test -n "$NEW_ID"
+          test -n "$NEW_URL"
+          {
+            echo "T5_RETAINED_DELIVERY new_artifact_id=$NEW_ID original_artifact_id=$ARTIFACT_ID expires_independently=true"
+            echo "Retained complete original Actions delivery ZIP (ZIP-inside-new-artifact). It is NOT an APK directly; download and extract once, then use reassemble.py as described by the original delivery."
+            echo "Original run's publish-early-test HTTP403 is NOT repaired. APK signature/Unity OBB GUID/Adreno game validation are NOT proven."
+            echo "Artifact: $NEW_URL"
+          } >> "$GITHUB_STEP_SUMMARY"
