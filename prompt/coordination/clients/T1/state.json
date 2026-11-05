@@ -2,24 +2,27 @@
   "schema_version": 1,
   "username": "T1",
   "generation": "T-2026-11-05",
-  "session_id": "20261104T235355Z-T1-9fca",
-  "resumed_from_session": null,
+  "session_id": "20261105T002257Z-T1-fft-unity-contract",
+  "resumed_from_session": "20261104T235355Z-T1-9fca",
   "status": "paused",
-  "base_sha": "cde13f783e5274d5898703459e8178e2485ef9db",
-  "last_commit": "710e6c3692ffc6290a2d89a5d4af8efef450a491",
-  "updated_at": "2026-11-05T00:19:00.765Z",
+  "base_sha": "1219f24fbd8d1194e0c913403dd171d70cf03a3b",
+  "last_commit": "ea98fb0fe5ca393d31468df752a262ef777a2fc4",
+  "updated_at": "2026-11-05T00:33:13.144Z",
   "tracks": [
-    "WATER-001: original FFT runtime program-to-kernel selection and genuine compute staging"
+    "WATER-001: SHA-pinned authored .compute Unity Editor runtime kernel probing; original FFT runtime mapping unverified"
   ],
   "work_ids": [
-    "T1-20261104T235355Z-T1-9fca-runtime-kernel-provenance"
+    "T1-20261104T235355Z-T1-9fca-runtime-kernel-provenance",
+    "T1-20261105T002257Z-T1-fft-unity-contract-unity-kernel-runtime-probe"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41939314440",
     "https://github.com/alwansan/raf/actions/runs/41938536760",
     "https://github.com/alwansan/raf/actions/runs/41939082498",
-    "https://github.com/alwansan/raf/actions/runs/41939982067"
+    "https://github.com/alwansan/raf/actions/runs/41939982067",
+    "https://github.com/alwansan/raf/actions/runs/41941690194",
+    "https://github.com/alwansan/raf/actions/runs/41941716641"
   ],
-  "next_step": "Resume authentic original FFT authored .compute asset/Unity kernel-index routing. Prior T1 bank0 6/6 lavapipe proof and bank1 negative runs are documented. Coordinate with T5 for native import; do NOT claim device water recovered or alter audio/Settings/touch.",
+  "next_step": "Source-only staged Unity 2021 runtime kernel identity tool integrated; next authenticate original-derived authored FFT .compute and private name/keyword manifest, execute real Unity FindKernel/group probe, independently prove original runtime compiled-slot mapping, coordinate native T5; no phone proof. WATER-001 OPEN, NOT_READY 0/3.",
   "memory_path": "prompt/coordination/clients/T1/MEMORY.md"
 }
