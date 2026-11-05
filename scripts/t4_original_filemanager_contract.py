@@ -61,19 +61,30 @@ def inspect(save, manager, save_sha, manager_sha):
 
 
 def probe(dll: Path, root: Path):
-    assert_original_dll(dll)
-    if root.is_symlink() or not root.is_dir():
-        raise ValueError("Unsafe original ILSpy root")
-    save, save_sha = _source(root, "SaveAndLoad", None)
-    if save_sha not in SAVE_SHA:
-        raise ValueError("Unknown authenticated SaveAndLoad source variant")
-    if save_sha != "b150dd404da48b8012f6659680b3552c11500c4ec97a64ad9aa12c60094568bb":
-        from scripts.b14_original_save_call_order import inspect_original_text, require_authenticated_baseline
-        require_authenticated_baseline(inspect_original_text(save, expected_sha=save_sha))
-    manager, manager_sha = _source(root, "FileManager", None)
-    result = inspect(save, manager, save_sha, manager_sha)
-    result["original_managed_dll_sha256_verified"] = True
-    return result
+    # Report a bounded phase identifier on failure, never the private code,
+    # filename, extracted symbols or exception message from ILSpy.
+    phase = "original_dll_sha"
+    try:
+        assert_original_dll(dll)
+        phase = "private_root"
+        if root.is_symlink() or not root.is_dir():
+            raise ValueError("Unsafe original ILSpy root")
+        phase = "saveandload_source"
+        save, save_sha = _source(root, "SaveAndLoad", None)
+        if save_sha not in SAVE_SHA:
+            raise ValueError("Unknown authenticated SaveAndLoad source variant")
+        phase = "independent_save_order"
+        if save_sha != "b150dd404da48b8012f6659680b3552c11500c4ec97a64ad9aa12c60094568bb":
+            from scripts.b14_original_save_call_order import inspect_original_text, require_authenticated_baseline
+            require_authenticated_baseline(inspect_original_text(save, expected_sha=save_sha))
+        phase = "filemanager_source"
+        manager, manager_sha = _source(root, "FileManager", None)
+        phase = "filemanager_edge_contract"
+        result = inspect(save, manager, save_sha, manager_sha)
+        result["original_managed_dll_sha256_verified"] = True
+        return result
+    except Exception as exc:
+        raise RuntimeError("probe_phase=" + phase + ";cause=" + type(exc).__name__) from None
 
 
 def main():
@@ -85,6 +96,8 @@ def main():
         report, code = probe(args.original_managed_dll, args.source), 0
     except Exception as exc:
         report, code = {"status": "UNRESOLVED", "error_type": type(exc).__name__,
+                        "bounded_failure_phase": str(exc) if isinstance(exc, RuntimeError)
+                            and str(exc).startswith("probe_phase=") else "unclassified",
                         "original_source_disclosed": False, "device_tested": False}, 2
     print("T4_ORIGINAL_FILEMANAGER_IO " + json.dumps(report, sort_keys=True))
     return code
