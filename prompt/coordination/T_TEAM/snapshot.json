@@ -446,7 +446,6 @@
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B08_FFT_DESCRIPTOR_ABI_2026-11-04.md",
         "https://github.com/alwansan/raf/commit/9a65bf3332b92f87ba8d560c04553ad0a0034532",
         "https://github.com/alwansan/raf/actions/runs/41929071692",
-        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B16_FFT_PREPROCESSOR_SOURCE_GUARD_2026-11-04.md",
         "https://github.com/alwansan/raf/actions/runs/41929513820",
         "https://github.com/alwansan/raf/commit/8cf6e4d3eeab89f5db052546f9b22a999195b723",
         "https://github.com/alwansan/raf/actions/runs/41930578292",
@@ -470,7 +469,10 @@
         "https://github.com/alwansan/raf/actions/runs/41939082498",
         "https://github.com/alwansan/raf/actions/runs/41940321740",
         "https://github.com/alwansan/raf/actions/runs/41939956032",
-        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_ORIGINAL_TEXTURE_SAMPLER_ABI_2026-11-05.md"
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_ORIGINAL_TEXTURE_SAMPLER_ABI_2026-11-05.md",
+        "https://github.com/alwansan/raf/actions/runs/41941354379",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_TEXTURE_LITERAL_IDENTITY_2026-11-05.md",
+        "https://github.com/alwansan/raf/commit/5dd02e7931aedfbb92c5cbcf3cc10ac1a6f9fd7c"
       ],
       "remaining": [
         "Spectrum/Foam/Blur passes ناقصة في APK86",
@@ -509,7 +511,8 @@
         "B20 original Foam CI41931585626: all four HLSL b-register and SPIRV set0-binding slot sets numerically equal B25 authentic original CB register sets (8 links). But original partial CB m_Size vs reflected SPIRV block_size numerically differ 7/8; original member offset/type equivalence and opaque CB0 source→HLSL alias/Unity material upload remain UNPROVEN. CI41932300308 source-only size checker PASS9/9. Not original ShaderLab render or Android device proof.",
         "T2 authenticated original Foam CB member indices + private 3-way CB symbol bridge: original source→translated HLSL name 0/8 equals, translated HLSL→SPIRV name 8/8 equals; source names literal HLSL usable 4/8; 20/20 synthetic controls + real ZIP2 CI41938898381 SUCCESS. Original register identity/byte offsets CB0 alias/Unity material upload and real ShaderLab/Adreno still UNKNOWN (source-only).",
         "T1 original bank0 FFT compiled candidate pairs 0/1 and 8/9: 6/6 authentic 2-pass CPU Vulkan runs, both first and second sampled read-input swaps change numeric output (2/2 pairs), CI41939314440. Bank1 pair18 second-swap SIGSEGV in Mesa (CI41938536760), bank1 pair10 second-swap independent identical-program comparator mismatch (CI41939082498); these are explicitly INCONCLUSIVE, not original Unity kernel or source rescue. WATER-001 remains OPEN; Unity .compute/FindKernel/Android pixels untested.",
-        "T2 original Foam texture/sampler CI41940321740 SUCCESS: pass0/1 fragment authentic source m_TextureParams counts 5/1; original m_Samplers=0, compiled SPIRV separate_images=5/1 and separate_samplers=5/1 (total six genuine texture rows, six images, six samplers), vertex none. 20 CB + 17 resource synthetic controls, authentic four-stage numeric card+slot guard integrated. But original texture name/slot/sampler state to translated image/sampler/Unity material identity, private ShaderLab, Adreno pixels still UNPROVEN; WATER-001 OPEN."
+        "T2 original Foam texture/sampler CI41940321740 SUCCESS: pass0/1 fragment authentic source m_TextureParams counts 5/1; original m_Samplers=0, compiled SPIRV separate_images=5/1 and separate_samplers=5/1 (total six genuine texture rows, six images, six samplers), vertex none. 20 CB + 17 resource synthetic controls, authentic four-stage numeric card+slot guard integrated. But original texture name/slot/sampler state to translated image/sampler/Unity material identity, private ShaderLab, Adreno pixels still UNPROVEN; WATER-001 OPEN.",
+        "T2 source-authentic Foam six original texture name indices ↔ translated image literal symbols 0/6 equal (CI41941354379 SUCCESS); exact texture/sampler alias/material upload/ShaderLab/Unity/Adreno pixels still UNKNOWN; cannot use direct-name bridging."
       ],
       "acceptance": [
         "هوية برامج ونوى أصلية أو تطابق موثق دونdummy",
@@ -517,7 +520,7 @@
         "اختبار هاتف يثبت الماء بلا pass/kernel errors"
       ],
       "updated_by": "T2",
-      "updated_at": "2026-11-05T00:19:00Z",
+      "updated_at": "2026-11-05T00:29:14.530Z",
       "_record_path": "../B_TEAM/issues/WATER-001.json"
     }
   ],
@@ -995,7 +998,7 @@
         "acquisition": "SHA_PINNED_ORIGINAL_NO_LFS_VALIDATED",
         "extraction": "AUTHENTIC_FOAM_PASS0_FRAGMENT_5_TEXTURES_PASS1_FRAGMENT_1_TEXTURE;VERTEX_0",
         "reconstruction": "4_B20_REAL_STAGES_TRANSLATED_PRIVATE",
-        "binding": "SIX_SOURCE_TEXTURES_TO_SIX_SPIRV_SEPARATE_IMAGE_AND_SIX_SAMPLER_NUMERIC_CARDINALITY_VERIFIED; NAMES_AND_SAMPLER_STATE_UNKNOWN",
+        "binding": "SOURCE_6_TEXTURES_SPIRV_6_IMAGES_AND_6_SAMPLERS_NUMERIC_CARDINALITY_VERIFIED; SOURCE_TO_SPIRV_LITERAL_IMAGE_SYMBOLS_0_OF_6_EQUAL; UNPROVEN_SAMPLER_ALIAS_UNITY_MATERIAL_UPLOAD",
         "integration": "T2_BOUNDED_SOURCE_VALIDATOR_AND_WORKFLOW_TRUE;NO_SHADERLAB_INSTALLED",
         "device": "NOT_TESTED"
       },
@@ -1040,15 +1043,19 @@
         "https://github.com/alwansan/raf/actions/runs/41939956032",
         "https://github.com/alwansan/raf/actions/runs/41940321740",
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_ORIGINAL_TEXTURE_SAMPLER_ABI_2026-11-05.md",
-        "https://github.com/alwansan/raf/commit/023ae9690bccd2a5c22ee6160a7e397d05b971f7"
+        "https://github.com/alwansan/raf/commit/023ae9690bccd2a5c22ee6160a7e397d05b971f7",
+        "https://github.com/alwansan/raf/actions/runs/41941354379",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_TEXTURE_LITERAL_IDENTITY_2026-11-05.md",
+        "https://github.com/alwansan/raf/commit/5dd02e7931aedfbb92c5cbcf3cc10ac1a6f9fd7c"
       ],
       "remaining": [
         "Auth original m_TextureParams name and sampler/type semantics to translated image and sampler identities privately",
         "Create genuine two-pass Foam ShaderLab with no guessed original binding and import in Unity",
-        "Validate original material/GUID, GPU pixels Adreno and phone pass/kernel errors"
+        "Validate original material/GUID, GPU pixels Adreno and phone pass/kernel errors",
+        "T2 new name-gap: source 6 original texture symbol values vs translated SPIR-V separate image name values equal 0/6 (SHA-authentic); prove numeric source index/sampler/upload association without guessed symbols"
       ],
       "updated_by": "T2",
-      "updated_at": "2026-11-05T00:19:00Z",
+      "updated_at": "2026-11-05T00:29:55.178Z",
       "_record_path": "../B_TEAM/resources/T2-foam-original-texture-sampler-interface.json"
     },
     {
@@ -3782,6 +3789,21 @@
       "_record_path": "../B_TEAM/events/T2/20261105T0023Z-foam-texture-name-start.json"
     },
     {
+      "id": "T2-20261105T0030Z-foam-texture-name-result",
+      "owner": "T2",
+      "session_id": "20261105T0023Z-T2-foam-texture-identity",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "summary": "Original ZIP2 SHA-authenticated Foam 2-pass 4-stage symbol lookup gave original→translated SPIRV separate-image literal matches 0/6, while previous six source textures/six translated images/six samplers numeric cardinality holds. CI41941354379 SUCCESS, 52 source-free tests (15 new). No image sampler/state alias, ShaderLab, Unity or device proof; WATER-001 OPEN.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41941354379",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_TEXTURE_LITERAL_IDENTITY_2026-11-05.md",
+        "https://github.com/alwansan/raf/commit/5dd02e7931aedfbb92c5cbcf3cc10ac1a6f9fd7c"
+      ],
+      "at": "2026-11-05T00:30:44.598Z",
+      "_record_path": "../B_TEAM/events/T2/20261105T0030Z-foam-texture-name-result.json"
+    },
+    {
       "id": "T3-20261105-0002-render-harness-result-and-export-start",
       "owner": "T3",
       "session_id": "20261104T2354Z-T3-render-harness",
@@ -3813,6 +3835,23 @@
       ],
       "at": "2026-11-05T00:23:00Z",
       "_record_path": "../B_TEAM/events/T3/20261105T0023Z-authentic-material-parity-results.json"
+    },
+    {
+      "id": "T3-20261105T0028Z-keyword-original-export",
+      "owner": "T3",
+      "session_id": "20261105T0024Z-T3-keyword-real-export",
+      "issue_id": "RENDER-002",
+      "type": "integration",
+      "summary": "B43's SHA-restricted original Material keyword reader and T3 safe same-instance 41-Material keyword/pass comparator were integrated into an existing genuine bounded exporter workflow; synthetic CI checks passed, genuine source/export comparison was still running. Original 41/227 texture/UV and 150 RGBA parity evidence unaffected; no source GPU/device success claim.",
+      "evidence": [
+        "https://github.com/alwansan/raf/commit/36cc349c1d2a7744ad37ea13aae59e5074ea87ae",
+        "https://github.com/alwansan/raf/commit/40ff84fd897efee7e730dc110dde34b7e34b110d",
+        "https://github.com/alwansan/raf/commit/c77d1c1de07af0526bcc17d00b3fbc5a50a1faf5",
+        "https://github.com/alwansan/raf/commit/6940ccf0161a3ea4a52c083702692de74c0c64be",
+        "https://github.com/alwansan/raf/actions/runs/41941363661"
+      ],
+      "at": "2026-11-05T00:28:00Z",
+      "_record_path": "../B_TEAM/events/T3/20261105T0028Z-keywords-source-export-launch.json"
     },
     {
       "id": "T4-20261104T2357Z-local-load-start",
@@ -3909,6 +3948,21 @@
       "_record_path": "../B_TEAM/events/T5/20261105T0017Z-zip2-three-owner.json"
     },
     {
+      "id": "T5-20261105T0028Z-hydration-batch-source-fix",
+      "owner": "T5",
+      "session_id": "20261105T0024Z-T5-hydration-preflight-a1",
+      "issue_id": "ASSET-RESTORE-001",
+      "type": "integration",
+      "summary": "T5 code-only integration safety patch: preflight all available ZIP2 staged source metadata and feature LFS pointer destinations before publishing first hydrated graphics owner; added positive/two negative multi-owner tests. This is source committed, isolated T5 CI not yet observed; no Unity/Android pixels or world-play proof.",
+      "evidence": [
+        "https://github.com/alwansan/raf/commit/e8b63e45983932244c9115ac6f44ce659f21eec6",
+        "https://github.com/alwansan/raf/commit/1648d7b98df1e34511ea24b88de70abdca1cc51b",
+        "https://github.com/alwansan/raf/actions/runs/41940032540"
+      ],
+      "at": "2026-11-05T00:28:00Z",
+      "_record_path": "../B_TEAM/events/T5/20261105T0028Z-hydration-batch-source-fix.json"
+    },
+    {
       "id": "20261104-b-generation",
       "owner": "owner-team-bootstrap",
       "session_id": "b-team-setup-20261104",
@@ -3937,7 +3991,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "c0060ce5d2cfd65c75e6f1cb951449ab20a5d35b0fc5916013b1aa2b2e7e1b96",
+  "source_input_sha256": "180098291a961d2d33a475619a3a4e6bec29b4466e2d68f5b7dff02be8d15317",
   "generation": "T-2026-11-05",
-  "input_sha256": "9ede5a2ab4789f18fd3351e355db8baeaed356db87d894ede39c5588d7b481fe"
+  "input_sha256": "dd444bd433e28eca99264de416fa4317a21e51be23bb5952df90744de3502f88"
 }
