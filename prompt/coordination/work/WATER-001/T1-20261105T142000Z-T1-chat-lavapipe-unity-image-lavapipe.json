@@ -25,10 +25,12 @@
     "https://github.com/alwansan/raf/actions/runs/42025620147"
   ],
   "run_urls": [
-    "https://github.com/alwansan/raf/actions/runs/42044388619"
+    "https://github.com/alwansan/raf/actions/runs/42044388619",
+    "https://github.com/alwansan/raf/actions/runs/42045389521",
+    "https://github.com/alwansan/raf/actions/runs/42046073285"
   ],
-  "updated_at": "2026-11-05T14:27:00Z",
-  "next_step": "Check CI42044388619 step-level outcome. Only if lavapipe enumerates and exact 3/3 real Unity tests pass claim sourcefree Vulkan enablement; then separately run genuine original pair0/1 same-input numeric parity. On failure classify base libvulkan/ICD vs overlay build vs Vulkan enumeration vs backend and do not download ZIP2.",
+  "updated_at": "2026-11-05T14:35:00Z",
+  "next_step": "Inspect 42046073285 exact custom-image nonforced 2/2 control. If fails pre-NUnit, classify custom-image activation, not Vulkan shader. If passes, inspect forced-vulkan stage and actual 3/3 math. No ZIP2 fetch until actual Vulkan Unity backend verified; preserve prior 63/64 and31/32 negative FFT numeric parity.",
   "identity_conflict": "Multiple T1 scheduled/chat sessions; existing older shared state preserved. Distinct image-only test, no source compilation/production game paths.",
-  "result": "Isolated sourcefree workflow implemented commit22a250e7, fixture redaction/3-case parser already source-only and earlier base image Unity Vulkan failure CI42042650298 confirmed. Exact UnityCI Docker image Mesa-loader/ICD probe and temporary driver overlay CI42044388619 in_progress at last check; no driver or Unity success conclusion claimed. Other T5 native build42042902522 ended cancelled independently; this job does not cancel or rerun it."
+  "result": "Actual base UnityCI image has no libvulkan.so.1 or lavapipe ICD, exact sourcefree CI42044388619. Disposable layer installs loader/mesa-vulkan-drivers/vulkan-tools and vulkaninfo --summary succeeds, but Unity/GameCI custom-image run exits before NUnit XML (42044388619). CI42045389521 repeats failure; private whitelisted CLI log shows no unknown argument, docker launch or image-unavailable text, but license failure-category true, without proving a secret/account problem. Added a no-forced-Vulkan 2/2 Unity test on SAME custom image as causal licensing control, must pass before forced Vulkan; run42046073285 in_progress."
 }
