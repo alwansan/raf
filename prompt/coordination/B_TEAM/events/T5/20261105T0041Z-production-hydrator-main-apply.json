@@ -1,0 +1,13 @@
+{
+  "id": "T5-20261105T0041Z-production-main-apply",
+  "owner": "T5",
+  "session_id": "20261105T0040Z-T5-real-hydrator-entrypoint",
+  "issue_id": "ASSET-RESTORE-001",
+  "type": "integration",
+  "summary": "Actual production hydrate_render_payloads.main() --apply path proved against three SHA-authentic original ZIP2 graphics owners, 337660952 bytes, zero LFS subprocess.run. CI41942815626 PASS 17 synthetic controls and real 3-owner source verification. Plan deliberately limited to exactly three original SHA-pinned pointers; no full project Unity Editor/native/phone proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41942815626",
+    "https://github.com/alwansan/raf/commit/e5b461837bdcec38b11f74b0d26e2c8d7c52657b"
+  ],
+  "at": "2026-11-05T00:41:00Z"
+}
