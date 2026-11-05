@@ -1,0 +1,12 @@
+# T3 scheduled — independent original-run gate audit
+
+- session_id: `20261105T1730Z-T3-scheduled-rawspv-gate-c8e1`; origin: `scheduled`; issue: RENDER-002 OPEN; status: completed / NOT_READY.
+- resumed_from_sessions: `20261105T1715Z-T3-chat-ps-readmask-spv-5e84`, `20261105T1728Z-T3-chat-rawspirv-T1-original-3f7c`.
+- base_sha: `f48b5f795fac1b05db012593d20e352479fb4710` (2026-11-05 17:29 UTC). Scope work: `prompt/coordination/work/RENDER-002/20261105T1730Z-T3-scheduled-rawspv-gate-c8e1.json`, registered in commit `dc1ecdfdfb88a7663105b8c72426af28e7f667c1`.
+- Question: Does [run 42075031892](https://github.com/alwansan/raf/actions/runs/42075031892) prove authentic original DXBC→SPIR-V direct stage linkage, or source-free tests only?
+- Evidence: GitHub Actions jobs API reports `source-free-T1-raw-SPIRV-source-controls` **success**, `original-genuine-fourpass-T1-raw-SPIRV` **skipped**. Workflow `.github/workflows/raft-t3-original-921-t1-raw-spv.yml` intentionally requires either `workflow_dispatch` with `run_private_original=true` or a push with EXACT message `experiment(T3): authorize original Shader48 T1 raw SPIRV stage audit`; normal commit `1df4cde3` message does not satisfy that gate.
+- Consequence: this successful run proves synthetic/source-free contract only, NOT authenticated original linkage. No regression implied by skip. Prior authentic PS read-mask [42073397586](https://github.com/alwansan/raf/actions/runs/42073397586) remains a different, genuine source result: 44 read lanes across four PS, 44 SPIR-V inputs, without semantic mapping.
+- Concurrency: T3 chat owns raw-SPIRV implementation and marker; no duplicate dispatch or edits, no changes to T1 validator. Reviewed latest runs including [42074952878](https://github.com/alwansan/raf/actions/runs/42074952878) T1 source-free audit success.
+- Rejected hypotheses: 'all jobs passed because workflow green' is false; 'skipped original proves failure' is false. Original status **NOT EXECUTED in run 42075031892**.
+- Modified only own work/session records. No original proprietary bytes, assets, shader, Unity or device build touched; no cancellation.
+- Next: chat T3 owner should inspect existing opt-in request/runs and execute exactly one source-authenticated run if not already queued/completed, using pinned SHA and unchanged workflow; review private aggregate and report original/roundtrip VS→PS typed lane coverage. Do not infer semantic mapping or Android pixels from matching counts.
