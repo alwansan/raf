@@ -9,6 +9,10 @@ on:
       - 'android-port/Tests/PhysicalMouse/**'
       - 'scripts/t4_adapt_original_mouse_axes.py'
       - 'tests/test_t4_adapt_original_mouse_axes.py'
+      - 'tests/test_t4_android_pointer_capture_policy.py'
+      - 'android-port/Runtime/Platform/AndroidTestDiagnostics.cs'
+      - 'scripts/verify_android_offline_candidate.py'
+      - '.github/workflows/raft-unity-editor-android-import.yml'
       - '.github/workflows/raft-t4-mouse-capture-bridge.yml'
 
 permissions:
@@ -33,6 +37,11 @@ jobs:
             /scripts/t4_adapt_original_mouse_axes.py
             /tests/test_t4_original_mouse_routing.py
             /tests/test_t4_adapt_original_mouse_axes.py
+            /tests/test_t4_android_pointer_capture_policy.py
+            /.github/workflows/raft-unity-editor-android-import.yml
+            /scripts/verify_android_offline_candidate.py
+            /android-port/Runtime/Platform/AndroidTestDiagnostics.cs
+            /android-port/Runtime/Platform/AndroidTouchPointer.cs
             /android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs
             /android-port/Runtime/Platform/PhysicalMouseDeltaAccumulator.cs
             /android-port/Runtime/Platform/AndroidRuntimeLog.cs
@@ -45,6 +54,7 @@ jobs:
           python3 -m py_compile scripts/t4_original_mouse_routing.py scripts/t4_adapt_original_mouse_axes.py tests/test_t4_original_mouse_routing.py tests/test_t4_adapt_original_mouse_axes.py
           python3 -m unittest discover -s tests -p test_t4_original_mouse_routing.py -v
           python3 -m unittest discover -s tests -p test_t4_adapt_original_mouse_axes.py -v
+          python3 -m unittest discover -s tests -p test_t4_android_pointer_capture_policy.py -v
           test ! -d Raft
       - uses: actions/setup-dotnet@v4
         with:
