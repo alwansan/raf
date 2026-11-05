@@ -1,6 +1,6 @@
 # T3 — chat: actual exported Renderer→Material→Shader Dummy use
 
-- session_id: `20261105T1405Z-T3-chat-renderer-dummy-join-8c41`; origin: `chat`; status: `active`; identity: T3
+- session_id: `20261105T1405Z-T3-chat-renderer-dummy-join-8c41`; origin: `chat`; status: `completed`; identity: T3
 - resumed_from_sessions: `20261105T132841Z-T3-scheduled-6e9a`, `20261105T131204828Z-T3-chat-bounded-postrestorer-4a8c`
 - base_sha: `4a314334bc4313ea017613ae37ad48ffa6a5c44d`; work: `prompt/coordination/work/RENDER-002/T3-20261105T1405Z-T3-chat-renderer-dummy-join-8c41.json`
 - hypothesis: the authenticated 495 post-vendor Dummy-linked Material documents do not establish renderer usage; join actual exported Renderer.material PPtrs through Material Shader PPtrs to real ShaderLab Dummy markers and count safe aggregates, separating unresolved slots.
@@ -9,6 +9,14 @@
 - intended files: `scripts/t3_exported_renderer_shader_impact.py`, `tests/test_t3_exported_renderer_shader_impact.py`, `.github/workflows/raft-t3-original-renderer-shader-impact.yml`, own session/work/experiment/event.
 - experiment_key: `T3-ZIP2-15964ea8f-12-owners-AssetRipper-036098ab5-same-export-TMP3.0.6-PostFX933df236-Volumetricd20b6f9-RendererMaterialShaderFullGuidJoin-v1`; resource_key: `T3-authentic-bounded-12-owner-export-2core-35min`; 35m/2core isolated runner, no cancellation of others, no Unity native build.
 - last proven evidence: [CI42033940194](https://github.com/alwansan/raf/actions/runs/42033940194) genuine same-export vendor-only Dummy-link counts 511→495 / targets 54→50. This never proved which Renderer slots are associated or GPU/device behavior.
-- result: pending
-- run_urls: []
-- next_step: test synthetic join; execute bounded original source GitHub Actions; checkpoint exact result and limits.
+- result: **source-only tool complete**. New exact GUID/Shader profile-safe exported Renderer→Material→Shader join `scripts/t3_exported_renderer_shader_impact.py` commit `3eeda3d50d065ab75aeb2f28a3672d3c04e07315`; tests `c800f946ce543a870d27006fe20ed82409a52373`. [CI42043678564](https://github.com/alwansan/raf/actions/runs/42043678564) SUCCESS **11 T3 + 17 B03 + 16 T3 = 44 synthetic controls**, including cross-type GUID collision. Manual-only SHA-pinned real exporter workflow staged at `7cc724d51e14ceb173686fe42493e0400020d5fe`, **NOT executed** during T5 native 42042902522. Original source test [CI42042819113](https://github.com/alwansan/raf/actions/runs/42042819113) succeeded independently and reported 1633/1635 original nonnull Renderer Material slot→Shader48 refs (21 targets); no same-export Shader Dummy identity claim.
+- run_urls: [https://github.com/alwansan/raf/actions/runs/42043678564]
+- next_step: inspect T5 full native [CI42042902522](https://github.com/alwansan/raf/actions/runs/42042902522) after completion, then add non-gating renderer join on a *new* authorized native build or manually dispatch SHA-pinned isolated 12-owner workflow when resources clear (not both). Genuine exported Renderer slot Dummy counts **UNKNOWN**. RENDER-002 OPEN; no Android pixel proof.
+
+## Final scoped handoff
+
+- [Source-only diagnostic and limitations](https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_EXPORTED_RENDERER_SHADER_IMPACT_INSTRUMENT_2026-11-05.md).
+- [T3 to T5 native integration handoff](https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/discussions/RENDER-002/20261105T1415Z-T3-exported-renderer-shader-impact-to-T5.md), no change to active shared native workflow.
+- Manual-only (not dispatched) `.github/workflows/raft-t3-exported-renderer-shader-impact.yml`; newest synthetic control [CI42043678564](https://github.com/alwansan/raf/actions/runs/42043678564) success. Do not claim original-source or Android integration proof from it.
+- Independent previous T3 original scene evidence [CI42042819113](https://github.com/alwansan/raf/actions/runs/42042819113): 1633 Shader48 original scene slots among 1635 non-null; 21 verified Shader48 source targets and source frequency concentration. Separate population from 495 post-vendor Dummy Material documents/50 target GUIDs. Join only using authenticated source→export trace, not by label or frequency order.
+- No game assets/Shader48 source/.meta/GUID/scenes/prefabs/.rgd modified. No Actions canceled or native build duplicated; preserve audio/Settings and defer touch.
