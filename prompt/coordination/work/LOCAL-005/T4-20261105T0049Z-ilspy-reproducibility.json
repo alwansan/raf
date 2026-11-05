@@ -6,7 +6,7 @@
   "issue_id": "LOCAL-005",
   "track": "world-save",
   "approach": "Re-decompile the same SHA-verified original DLL twice in independent private directories under one pinned Actions job. Compare complete Raft_Network and WorldHasBeenLoaded method hashes plus executor/CLI versions without outputting original code; preserve existing source pins and native staging.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "a0e1fe9323e55c7147e549371553d6e7a3728ce6",
   "intended_files": [
     "scripts/t4_compare_private_ilspy_runs.py",
@@ -26,8 +26,24 @@
   "experiment_ids": [
     "20261105T0049Z-ilspy-reproducibility"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Build read-only source-hash comparison negative controls; run two independent private ILSpy11.2.0.10050 complete exports from same authenticated original DLL in an isolated T4 workflow; publish SHA-only aggregate and no game data.",
-  "updated_at": "2026-11-05T00:49:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41944283588",
+    "https://github.com/alwansan/raf/actions/runs/41944365772"
+  ],
+  "result": {
+    "original_exact_sha_verified": true,
+    "original_ilspy_run1_class_sha": "d16c36336a6aec4e23781c135820692a233130a3f1c1d9ab9052d432d76eedef",
+    "original_ilspy_run2_class_sha": "d16c36336a6aec4e23781c135820692a233130a3f1c1d9ab9052d432d76eedef",
+    "body_sha_equal": true,
+    "masked_body_sha_equal": true,
+    "original_broadcasts": 1,
+    "original_world_completion_assignments": 1,
+    "synthetic_controls": "10/10 PASS new + 10/10 PASS prior",
+    "CLR_conditional": "PASS both branches",
+    "actual_unity_or_device": false,
+    "production_adapter_exercised": false,
+    "report": "docs/T4_ORIGINAL_ILSPY_REPRODUCIBILITY_2026-11-05.md"
+  },
+  "next_step": "Same-run ILSpy source output stable twice on exact original DLL; cross-run B07-vs-T4 class/body difference cause still unknown. Coordinate native source provider with T5, never weaken SHA adaptation gate; real device .rgd roundtrip remains unverified. FileManager other T4 session independent.",
+  "updated_at": "2026-11-05T00:52:00Z"
 }
