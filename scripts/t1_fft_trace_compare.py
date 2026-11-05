@@ -71,6 +71,17 @@ def decode_invocations(data):
     return sites
 
 
+def axis_mapping(pairs):
+    """Classify address mappings without exposing coordinates or offsets."""
+    varied_reference = len({before for before, _ in pairs}) >= 2
+    return {
+        "varied_reference": varied_reference,
+        "constant_observed": varied_reference and len({after for _, after in pairs}) == 1,
+        "uniform_translation": varied_reference and len({after - before for before, after in pairs}) == 1,
+        "uniform_reflection": varied_reference and len({after + before for before, after in pairs}) == 1,
+    }
+
+
 def compare_invocations(reference, observed):
     """Compare corresponding reads without exposing invocation IDs or samples."""
     reports = []
@@ -78,9 +89,12 @@ def compare_invocations(reference, observed):
         shared = left.keys() & right.keys()
         coordinate_mismatches = same_coordinate_value_mismatches = changed_coordinate_value_mismatches = 0
         axis_mismatches = [0, 0, 0]
+        axis_pairs = [[], [], []]
         for key in shared:
             left_coord, left_value = left[key]
             right_coord, right_value = right[key]
+            for axis, pair in enumerate(zip(left_coord, right_coord)):
+                axis_pairs[axis].append(pair)
             if left_coord == right_coord:
                 same_coordinate_value_mismatches += left_value != right_value
             else:
@@ -94,6 +108,8 @@ def compare_invocations(reference, observed):
             "paired_reads": len(shared),
             "coordinate_mismatches": coordinate_mismatches,
             "coordinate_axis_mismatches": dict(zip(("x", "y", "mip"), axis_mismatches)),
+            "coordinate_axis_mapping": {axis: axis_mapping(pairs)
+                                        for axis, pairs in zip(("x", "y", "mip"), axis_pairs)},
             "same_coordinate_value_mismatches": same_coordinate_value_mismatches,
             "changed_coordinate_value_mismatches": changed_coordinate_value_mismatches,
         })
