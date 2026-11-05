@@ -1,0 +1,58 @@
+name: T4 LOCAL-005 original FileManager I/O contract
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/t4_original_filemanager_contract.py'
+      - 'tests/test_t4_original_filemanager_contract.py'
+      - '.github/workflows/raft-t4-original-filemanager-io.yml'
+permissions:
+  contents: read
+concurrency:
+  group: raft-t4-local005-filemanager-original
+  cancel-in-progress: false
+jobs:
+  filemanager-original:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests/test_t4_original_filemanager_contract.py
+      - name: Run fail-closed synthetic controls
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t4_original_filemanager_contract.py
+          python3 -m unittest discover -s tests -p test_t4_original_filemanager_contract.py -v
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-original
+          lfs: false
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            Raft/Raft_Data/Managed/Assembly-CSharp.dll
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Authenticate original managed DLL and inspect FileManager privately
+        shell: bash
+        env:
+          DOTNET_PROCESSOR_COUNT: '2'
+          DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+        run: |
+          set -euo pipefail
+          test "$(git -C zip2-original rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          test "$(df -Pk . | awk 'NR==2 {print $4}')" -gt 1200000
+          mkdir -p "$RUNNER_TEMP/t4-filemanager-tool" "$RUNNER_TEMP/t4-filemanager-source"
+          dotnet tool install ilspycmd --version 11.2.0.10050 --tool-path "$RUNNER_TEMP/t4-filemanager-tool" >/dev/null
+          timeout 360s "$RUNNER_TEMP/t4-filemanager-tool/ilspycmd" -p -lv CSharp9_0 -o "$RUNNER_TEMP/t4-filemanager-source" zip2-original/Raft/Raft_Data/Managed/Assembly-CSharp.dll >"$RUNNER_TEMP/t4-private.log" 2>&1
+          timeout 120s python3 -m scripts.t4_original_filemanager_contract --original-managed-dll zip2-original/Raft/Raft_Data/Managed/Assembly-CSharp.dll --source "$RUNNER_TEMP/t4-filemanager-source"
+          # No raw decompiled source/managed DLL/saved files/logs are uploaded.
