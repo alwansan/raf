@@ -4,9 +4,9 @@
   "origin": "chat",
   "owner": "T1",
   "issue_id": "WATER-001",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "cc22a2540dd01960edae9e553f4ce2e208230be8",
-  "updated_at": "2026-11-05T13:13:03.234Z",
+  "updated_at": "2026-11-05T13:16:45.318Z",
   "intended_files": [
     "android-port/Experiments/T1/T1PrivateFftInputIdentityTests.cs",
     "android-port/Experiments/T1/T1FftInputIdentity.compute",
@@ -24,9 +24,34 @@
     "https://github.com/alwansan/raf/actions/runs/42030877911",
     "https://github.com/alwansan/raf/actions/runs/42025620147"
   ],
-  "next_step": "Inspect RAFT_T1_INPUT_IDENTITY and RAFT_T1_PASS0_CHANNEL_COUNTS separately from the inherited end-of-job numeric parity gate. If both input copies match and FFT diverges, trace pass-0 actual shader coordinates and arithmetic on the identified Unity graphics API. If input copies differ, isolate upload vs copy vs readback with source and butterfly mismatch counts.",
+  "next_step": "Run a source-free Unity Vulkan backend smoke with explicit API verification, then only if viable compare the exact pair under Unity Vulkan and OpenGLCore. If Unity Vulkan is unavailable, instrument the actual pass-zero generated shader to compare sampled coordinates and pre-arithmetic inputs privately. The identity copy proves the tested texture transfer path, not the translated FFT's addressing semantics.",
   "hypothesis": "Generic transfer passed, but the exact paired input upload or sampling might still differ. Isolate it from the original-derived FFT code path.",
-  "result": "pending",
+  "result": {
+    "unity_backend": "OpenGLCore",
+    "texels_per_input": 32768,
+    "source_mismatches": 0,
+    "butterfly_mismatches": 0,
+    "pass0_rgba_mismatches": [
+      63,
+      62,
+      63,
+      63
+    ],
+    "pass0_mismatched_pixels": 63,
+    "pass0_jointly_written_pixels": 64,
+    "pass1_mismatched_pixels": 31,
+    "pass1_jointly_written_pixels": 32,
+    "coverage_mismatches": [
+      0,
+      0
+    ],
+    "nonfinite_pixels": [
+      0,
+      0
+    ],
+    "cleanup": "success",
+    "workflow_conclusion": "failure"
+  },
   "extent": [
     1024,
     32

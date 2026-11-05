@@ -4,11 +4,11 @@
   "session_id": "20261105T131036Z-T1-chat-877585",
   "issue_id": "WATER-001",
   "type": "result",
-  "summary": "Local signature tests passed; exact Unity sampled-input identity CI started.",
+  "summary": "Unity used OpenGLCore. GPU identity copies of both 32,768-texel input images matched bit for bit. The FFT still differed from CPU Vulkan in 63/64 pass-0 and 31/32 pass-1 written pixels. Pass-0 RGBA mismatch counts are 63/62/63/63. The strict numeric parity gate failed as expected for this negative result; diagnostic checks completed.",
   "evidence": [
     "https://github.com/alwansan/raf/actions/runs/42033745802",
     "https://github.com/alwansan/raf/actions/runs/42030877911",
     "https://github.com/alwansan/raf/actions/runs/42025620147"
   ],
-  "at": "2026-11-05T13:13:03.234Z"
+  "at": "2026-11-05T13:16:45.318Z"
 }
