@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261105T140300Z-T1-chat-vulkan-editor",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "5eed7b6715a25177e733d17f383bb8735368bdbf",
+  "resumed_from_sessions": [
+    "20261105T131036Z-T1-chat-877585",
+    "20261105T125100Z-T1-chat-affd1c",
+    "20261105T121347Z-T1-paired-capture"
+  ],
+  "experiment_key": "unity2021.3.45f2-sourcefree-force-vulkan-v0.1.72-synthetic-real-dispatch-smoke",
+  "resource_key": "raft-native-engine-feature/android-native-port",
+  "intended_files": [
+    "android-port/Experiments/T1/T1SourceFreeVulkanBackendTests.cs",
+    "scripts/t1_vulkan_editor_smoke_gate.py",
+    "tests/test_t1_vulkan_editor_smoke_gate.py",
+    ".github/workflows/raft-t1-fft-sourcefree-force-vulkan.yml",
+    "docs/T1_FFT_UNITY_VULKAN_BACKEND_2026-11-05.md",
+    "prompt/coordination/clients/T1/sessions/20261105T140300Z-T1-chat-vulkan-editor.md"
+  ],
+  "hypothesis": "Authentic FFT-derived Unity-on-OpenGLCore vs original-Vulkan pass0 divergence (63/64) may be backend-sensitive. Before another 116MB ZIP2 download, first prove a completely source-free Unity 2021 Editor with GameCI pinned CLI can actually run Vulkan rather than silently falling back to OpenGLCore, and execute an authored deterministic synthetic ComputeShader on that backend.",
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/actions/runs/42025620147",
+    "https://github.com/alwansan/raf/actions/runs/42030877911",
+    "https://github.com/alwansan/raf/actions/runs/42029739318",
+    "https://github.com/alwansan/raf/actions/runs/42033745802"
+  ],
+  "run_urls": [],
+  "updated_at": "2026-11-05T14:03:00Z",
+  "next_step": "Implement real Unity graphicsDeviceType==Vulkan and 64x1 float compute output numerical assertion in entirely synthetic sourcefree EditMode fixture, GameCI v0.1.72 with --customParameters=-force-vulkan in isolated workflow, robust NUnit result gate. If positive, launch genuine same SHA-pinned pair0/1 original Unity Vulkan parity experiment; if not, classify block and switch to shader arithmetic/coordinates. Retain WATER-001 OPEN.",
+  "identity_conflict": "Multiple T1 scheduled/chat sessions; use unique session/work files; no shared T1 state override."
+}
