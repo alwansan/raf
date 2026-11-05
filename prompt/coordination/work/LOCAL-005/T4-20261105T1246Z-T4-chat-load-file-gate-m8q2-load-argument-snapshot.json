@@ -6,7 +6,7 @@
   "origin": "chat",
   "issue_id": "LOCAL-005",
   "track": "world-save",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "c2b4948875748f38cc3bcf5086c4e51d3715ba47",
   "intended_files": [
     "scripts/instrument_android_runtime_operations.py",
@@ -32,8 +32,20 @@
   ],
   "experiment_key": "local005-load-arg-path-presence-classification-pinnedSaveAndLoadSHA-daf835fc-android-only-01",
   "resource_key": null,
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement and run source-free C# UNITY_ANDROID gate; never claim actual .rgd/device, coordinate T5 new native candidate",
-  "updated_at": "2026-11-05T12:46:40.854Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42030692961",
+    "https://github.com/alwansan/raf/actions/runs/42030693004",
+    "https://github.com/alwansan/raf/actions/runs/42031209988"
+  ],
+  "result": {
+    "integration_commit": "a88000086d973adfcb05a85a7ecd0b12133cbf81",
+    "source_gate_sha_unchanged": true,
+    "original_managed_compile": "CI42030693004 SUCCESS",
+    "post_save_regression": "CI42030692728 SUCCESS",
+    "load_python_controls": "CI42030692961 5/5 PASS",
+    "load_compiled_synthetic": "CI42030692961 FAILED, original error hidden by private log; diagnostic-only workflow update a3e505f4, rerun CI42031209988 running",
+    "original_android_device": false
+  },
+  "next_step": "Read 42031209988 synthetic-only failure diagnostics; repair exact assertion/fixture or instrumentation; rerun to PASS; then source-managed CI and handoff, no original RGD/phone proof.",
+  "updated_at": "2026-11-05T12:56:03.841Z"
 }
