@@ -57,7 +57,7 @@ class OriginalLoaderContractTests(unittest.TestCase):
             inspect_original_saveandload_scope(HEADER, "0" * 64)
 
     def test_authenticated_loader_method_multiline_brace_and_binder(self):
-        source = HEADER.replace("public T Load<T>", "public static T Load<T>").replace(") {", ")\\n {", 1)
+        source = HEADER.replace("public T Load<T>", "public static T Load<T>").replace(") {", ")" + chr(10) + " {", 1)
         report = inspect_exact_original_loader_method(source, fingerprint(source))
         self.assertEqual(report["loader_deserialize_call_count"], 1)
         self.assertEqual(report["loader_binder_assignment_count"], 1)
