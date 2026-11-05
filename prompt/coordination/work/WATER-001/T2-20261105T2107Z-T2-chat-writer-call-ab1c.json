@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T2107Z-T2-chat-writer-call-ab1c",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "track": "original-managed-Foam-return-writer-call",
+  "status": "active",
+  "base_sha": "4f34b37babfacbdc52527362d9c83c2eade1404a",
+  "resumed_from_sessions": [
+    "20261105T2051Z-T2-chat-cfg-independent-a17f",
+    "20261105T1736Z-T2-chat-ret-reason-28ce",
+    "20261105T2017Z-T2-scheduled-retfix-7c3a"
+  ],
+  "approach": "Classify SHA-original immediate preceding call to the one exact RenderTexture return-local stloc: declared type, void-vs-value and branch-safe adjacent stack producer category; only if normal execution. Reuse already authenticated ZIP2/Mono.Cecil workflow and source-free adversarial controls. No source names/IL/int values published.",
+  "hypothesis": "The immediate call can be classified into typed CLR return categories without guessing non-null RenderTexture or branch execution; void or nonmatching returns must not be promoted to direct typed RT stack producer.",
+  "intended_files": [
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/FoamReturnWriterCallEvidence.cs",
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/FoamByrefElementValueOrigin.cs",
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/Program.cs",
+    ".github/workflows/raft-t2-foam-managed-literals.yml",
+    "prompt/coordination/work/WATER-001/T2-20261105T2107Z-T2-chat-writer-call-ab1c.json",
+    "prompt/coordination/clients/T2/sessions/20261105T2107Z-T2-chat-writer-call-ab1c.md",
+    "prompt/coordination/experiments/T2/T2-20261105T2107Z-T2-chat-writer-call-ab1c.json",
+    "prompt/coordination/B_TEAM/events/T2/20261105T2107Z-T2-chat-writer-call-ab1c-result.json"
+  ],
+  "experiment_key": "sha0a6f0527-foam-retlocal-sole-preceding-call-return-stack-category-v1",
+  "resource_key": "existing-original-zip2-foam-cecil-source-only-runner",
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/actions/runs/42078263113",
+    "https://github.com/alwansan/raf/actions/runs/42107377757"
+  ],
+  "related_work": [
+    "prompt/coordination/work/WATER-001/T2-20261105T2051Z-T2-chat-cfg-independent-a17f.json"
+  ],
+  "source_pin": {
+    "sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "bytes": 3211776,
+    "zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+  },
+  "last_verified_result": "Original exact one RT-return local writer preceding opcode call (CI42078263113 SUCCESS), but typed call return and stack producer unresolved. Source-free CFG 23/23 PASS (CI42107377757).",
+  "run_urls": [],
+  "experiment_ids": [
+    "T2-20261105T2107Z-T2-chat-writer-call-ab1c"
+  ],
+  "updated_at": "2026-11-05T21:07:00Z",
+  "next_step": "Run SHA-original Cecil call return type/source evidence in own existing T2 workflow; retain only category and strict source proof."
+}

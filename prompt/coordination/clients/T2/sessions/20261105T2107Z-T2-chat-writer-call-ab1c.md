@@ -1,0 +1,15 @@
+# T2 source-authentic Foam writer-call type and stack experiment
+- session_id: `20261105T2107Z-T2-chat-writer-call-ab1c`
+- origin: `chat`
+- status: `active`
+- base_sha: `4f34b37babfacbdc52527362d9c83c2eade1404a`
+- resumed_from_sessions: `20261105T2051Z-T2-chat-cfg-independent-a17f`, `20261105T1736Z-T2-chat-ret-reason-28ce`, `20261105T2017Z-T2-scheduled-retfix-7c3a`
+- work_ids: `prompt/coordination/work/WATER-001/T2-20261105T2107Z-T2-chat-writer-call-ab1c.json`
+- experiment_key: `sha0a6f0527-foam-retlocal-sole-preceding-call-return-stack-category-v1`
+- source pin: immutable ZIP2 `15964ea8f246b6e076ce26b60931ee2e1a9a2385`; original managed `Assembly-CSharp.dll` 3,211,776 bytes SHA256 `0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e`.
+- last proven original: one exact RT returned local `stloc`, immediate previous `call` (CI42078263113) but no typed producer/nullability proof; the synthetic 23/23 CFG CI42107377757 does not read original IL.
+- scope: independent original type/operand classification in C# Cecil oracle + synthetic guards + existing T2 source-authentic CI. Avoid scheduled Python CFG files and all other T1/T3/T4/T5 changes.
+- intended_files: `android-port/Experiments/T2/FoamRuntimeStringBridge/FoamReturnWriterCallEvidence.cs`, `FoamByrefElementValueOrigin.cs`, `Program.cs`, `.github/workflows/raft-t2-foam-managed-literals.yml`, this session, own work/experiment/event.
+- no original symbols/IL/source values are to leave transient CI; no ShaderLab/Unity pixels or device claim.
+- current owner phone report: world created/saved/reentered in run 42058825739; water pass and FFT shader errors persist.
+- next_step: classify previous call return type, prove only conditional CLR stack producer if branch-entry excluded, execute strict SHA-original and synthetic tests; if CI fails fix before accepting.
