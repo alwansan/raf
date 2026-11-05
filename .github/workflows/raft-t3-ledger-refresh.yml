@@ -76,6 +76,10 @@ jobs:
           assert any(e["id"]=="T3-20261105T1542Z-authentic921-IO-location-remap"
                      and e["owner"]=="T3" for e in s["events"])
           assert any(r["resource_key"]=="T3-source-top921-Shader48-fourPass-stageIO-lookup"
+                     and all(k in r["stages"] for k in
+                             ("acquisition", "extraction", "reconstruction",
+                              "binding", "integration", "device"))
+                     and r["stages"]["device"]=="NOT_TESTED"
                      for r in s["resources"])
 
           ev=[e for e in s["events"] if e["id"]=="T3-20261105T0023Z-authentic-material-parity-results"]
