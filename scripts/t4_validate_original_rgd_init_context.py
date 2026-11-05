@@ -10,23 +10,6 @@ from pathlib import Path
 SCOPE = {"SAVEANDLOAD", "OTHER_ORIGINAL_CLASS", "EXTERNAL_OR_UNRESOLVED"}
 ARITY = {"ZERO", "ONE", "MULTIPLE"}
 KIND = {"INSTANCE_CALL", "STATIC_CALL"}
-FACTORY_FIELDS = (
-    "factory_lexical_return_sites",
-    "factory_return_preceded_by_null_literal",
-    "factory_return_preceded_by_derived_local",
-    "factory_return_preceded_by_derived_field",
-    "factory_return_preceded_by_derived_call",
-    "factory_return_preceded_by_derived_constructor",
-    "factory_return_preceded_by_other_or_unknown",
-    "factory_derived_rgd_local_slot_count",
-    "factory_direct_derived_rgd_constructor_sites",
-    "factory_direct_derived_rgd_returning_call_sites",
-    "factory_conditional_branch_sites",
-    "factory_throw_or_rethrow_sites",
-    "factory_null_literal_load_sites",
-    "factory_all_return_paths_proven",
-    *FACTORY_RETURN_LOCAL_FIELDS,
-)
 FACTORY_RETURN_LOCAL_FIELDS = (
     "factory_return_local_lexical_store_sites",
     "factory_return_local_store_null_literal",
@@ -51,6 +34,23 @@ FACTORY_STORE_CATEGORIES = {
     "DERIVED_LOCAL", "DERIVED_FIELD", "OTHER_OR_UNKNOWN", "NO_STORES",
 }
 
+FACTORY_FIELDS = (
+    "factory_lexical_return_sites",
+    "factory_return_preceded_by_null_literal",
+    "factory_return_preceded_by_derived_local",
+    "factory_return_preceded_by_derived_field",
+    "factory_return_preceded_by_derived_call",
+    "factory_return_preceded_by_derived_constructor",
+    "factory_return_preceded_by_other_or_unknown",
+    "factory_derived_rgd_local_slot_count",
+    "factory_direct_derived_rgd_constructor_sites",
+    "factory_direct_derived_rgd_returning_call_sites",
+    "factory_conditional_branch_sites",
+    "factory_throw_or_rethrow_sites",
+    "factory_null_literal_load_sites",
+    "factory_all_return_paths_proven",
+    *FACTORY_RETURN_LOCAL_FIELDS,
+)
 FACTORY_RETURN_PARTITION = (
     "factory_return_preceded_by_null_literal",
     "factory_return_preceded_by_derived_local",
