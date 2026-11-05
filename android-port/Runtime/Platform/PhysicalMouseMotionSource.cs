@@ -24,6 +24,14 @@ namespace RaftAndroid.Platform
             return Kind.Ignore;
         }
 
+        // AndroidJavaProxy callbacks may complete after the Unity thread
+        // releases capture and begins another native capture request.
+        // A previous listener cannot transfer movement to a newer camera frame.
+        public static bool AcceptEpoch(int listenerEpoch, int activeEpoch, bool requested)
+        {
+            return requested && listenerEpoch == activeEpoch;
+        }
+
         public static bool ValidHistory(int size)
         {
             return size >= 0 && size <= MaxHistorySamples;
