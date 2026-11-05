@@ -1,7 +1,7 @@
 {
-  "request_id": "t5-chat-diagnostic-world-save-render-20261105T1404Z-3c8e",
-  "reason": "Owner-authorized one incomplete-water signed APK+OBB/XAPK diagnostic from latest feature branch. Include T4 Android Save.argumentFileSnapshot/local-world traces and existing shader/vendor fixes; preserve B50 offline guards and audio/Settings. Original FFT authored kernel runtime identity, Spectrum/Foam passes and water compute remain unproven and are explicitly acknowledged. Enforce all existing source/Unity/signature/transport checks; NOT_READY 0/3 and device playability unverified.",
-  "requested_from_sha": "19f2af5a7940108ed4d9d6dc40b0cfd565e2644c",
+  "request_id": "t5-chat-current-native-diagnostic-20261105T1508Z-c2b7",
+  "reason": "One updated-source diagnostic retry after run42042902522 was cancelled during Mesh inspection before Unity; no source failure established. Include current source, T4 local-world Save/Load traces, current original material/water recovery and B50 offline guards. Retain strict authenticity, integrity, signature and release checks; water FFT and ShaderLab fidelity and device save/reopen remain unproven. Test build only; NOT_READY 0/3.",
+  "requested_from_sha": "5ed806ea1b8170988ea0f49140511021a8f239d3",
   "documented_water_limitations": [
     "authentic_water_kernel_identity",
     "shader_pass_contract:UltimateWater/Foam/Global",
