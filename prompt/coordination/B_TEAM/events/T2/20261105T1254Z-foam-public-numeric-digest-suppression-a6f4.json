@@ -1,0 +1,15 @@
+{
+  "id": "T2-20261105T1254Z-foam-public-numeric-digest-suppression-a6f4",
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261105T1244Z-T2-chat-digest-removal-a6f4",
+  "issue_id": "WATER-001",
+  "type": "source_report_privacy_gate_verified",
+  "at": "2026-11-05T12:54:00Z",
+  "summary": "Removed original bounded Foam m_Index/m_SamplerIndex unkeyed SHA256 from public safe-report producer; preserved authentic numeric cardinality checks, added adversarial singleton privacy regression and original private CI no-digest gate. CI42030329788 completed SUCCESS with four original source-authenticated Foam stages, artifact13416016571 only safe aggregates. Previous artifacts not purged. WATER-001 OPEN NOT_READY0/3, no game asset or Unity/Adreno device change.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/e8f3641551c54e7f5cd64bd74b01a9d0fcb3b871",
+    "https://github.com/alwansan/raf/actions/runs/42030329788",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/T2/sessions/20261105T1244Z-T2-chat-digest-removal-a6f4.md"
+  ]
+}
