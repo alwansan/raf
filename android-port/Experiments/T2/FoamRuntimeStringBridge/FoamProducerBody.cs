@@ -106,10 +106,32 @@ internal static class FoamProducerBody
             all[7].OpCode.Code==Code.Ret &&
             all[8].OpCode.Code==Code.Ldnull &&
             all[9].OpCode.Code==Code.Ret;
+        // The genuine original may put the null fallback *before* the
+        // non-null branch. This is the dual, equally guarded and strict
+        // 10-instruction form (no synthetic assumptions about branch target).
+        bool guardedOpposite = all.Count==10 &&
+            all[0].OpCode.Code==Code.Ldarg_0 &&
+            all[1].OpCode.Code==Code.Ldfld &&
+            all[1].Operand is FieldReference oppositeFirst &&
+            IsOneDimensionalKnownTextureArray(oppositeFirst) &&
+            (all[2].OpCode.Code is Code.Brtrue or Code.Brtrue_S) &&
+            all[2].Operand is Instruction oppositeDestination &&
+            ReferenceEquals(oppositeDestination,all[5]) &&
+            all[3].OpCode.Code==Code.Ldnull &&
+            all[4].OpCode.Code==Code.Ret &&
+            all[5].OpCode.Code==Code.Ldarg_0 &&
+            all[6].OpCode.Code==Code.Ldfld &&
+            all[6].Operand is FieldReference oppositeSecond &&
+            oppositeFirst.FullName==oppositeSecond.FullName &&
+            all[7].OpCode.Code==Code.Ldarg_1 &&
+            all[8].OpCode.Code==Code.Ldelem_Ref &&
+            all[9].OpCode.Code==Code.Ret;
+        bool anyNullGuard = guarded || guardedOpposite;
         return new SafeProfile(all.Count,returns,fields,staticFields,arrayReads,
             calls,branches,locals,args,typedArray,exact,
             exact?"exact_original_instance_Texture_array_indexed_by_int":
+                  anyNullGuard?"exact_original_null_guarded_Texture_array_index_by_int":
                   "original_compiled_Texture_int_body_requires_deeper_provenance",
-            fieldsByCategory,guarded,guarded);
+            fieldsByCategory,anyNullGuard,anyNullGuard);
     }
 }
