@@ -1,0 +1,14 @@
+{
+  "id": "T5-20261105T1415Z-single-native-diagnostic-request",
+  "owner": "T5",
+  "session_id": "20261105T1404Z-T5-chat-native-diagnostic-3c8e",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "type": "start",
+  "summary": "Requested one authorized incomplete-water signed APK+OBB/XAPK diagnostic native delivery from feature commit 753802d75196210d721cca0f4fdec6ce7800bf0d. CI42042902522 accepted native request gate and Unity-license-preflight; reconstruct pending under shared raft-native-engine lock during active T1 Unity job. No native APK/phone/visual/save proof yet, no cancellations.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42042902522",
+    "https://github.com/alwansan/raf/commit/753802d75196210d721cca0f4fdec6ce7800bf0d"
+  ],
+  "at": "2026-11-05T14:15:00Z"
+}
