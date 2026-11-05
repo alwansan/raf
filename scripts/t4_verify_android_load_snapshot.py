@@ -108,13 +108,13 @@ internal static class Program
             Require(!Has("Load.caughtException"));
             Require(First("save.Load.argumentFileSnapshot|").Contains(
                 "exists_at_filename_argument=True; length_class=nonzero"));
-            Require(First("save.Load.exit|").Contains("failed=False"));
+            Require(First("save.Load<T>.exit|").Contains("failed=False"));
 
             RaftAndroid.Diagnostics.AndroidRuntimeLog.Clear();
             RaftAndroid.Diagnostics.AndroidRuntimeLog.ThrowOnSnapshot = true;
             Require(SaveAndLoad.Load<string>(file) == "synthetic-value");
             RaftAndroid.Diagnostics.AndroidRuntimeLog.ThrowOnSnapshot = false;
-            Require(First("save.Load.exit|").Contains("failed=False"));
+            Require(First("save.Load<T>.exit|").Contains("failed=False"));
             Require(!Has("Load.caughtException"));
             foreach (string item in RaftAndroid.Diagnostics.AndroidRuntimeLog.Events)
                 Require(!item.Contains(file));
@@ -150,6 +150,8 @@ PROJECT = """\
 
 
 def build_source():
+    # Generic source operation name is Load<T>, not Load; the event marker
+    # Load.argumentFileSnapshot intentionally remains non-generic.
     original_with_caught = trace_caught_original_load_error(SYNTHETIC)
     result = wrap(original_with_caught, SIGNATURE, "save", "filename")
     if result.count('"Load.argumentFileSnapshot"') != 1:
