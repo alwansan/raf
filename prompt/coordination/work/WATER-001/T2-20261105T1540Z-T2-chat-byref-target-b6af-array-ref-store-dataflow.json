@@ -4,9 +4,9 @@
   "origin": "chat",
   "session_id": "20261105T1540Z-T2-chat-byref-target-b6af",
   "issue_id": "WATER-001",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "0ad4b376091be2088cd21961e2c45920e10346cb",
-  "updated_at": "2026-11-05T15:53:46.811Z",
+  "updated_at": "2026-11-05T16:00:46.113Z",
   "resumed_from_work": "prompt/coordination/work/WATER-001/T2-20261105T1540Z-T2-chat-byref-target-b6af.json",
   "experiment_key": "T2|original-0a6f0527|exact-ref-RenderTexture-array-callee|newarr-to-stind-same-block-v1",
   "resource_key": "T2-original-sha-managed-Foam-newarr-byref-dataflow",
@@ -20,14 +20,30 @@
     "prompt/coordination/clients/T2/sessions/20261105T1540Z-T2-chat-byref-target-b6af.md"
   ],
   "previous_original_ci": "42058352098 SUCCESS",
-  "next_step": "Read 42059508444, inspect T2_FOAM_REF_ARRAY_DATAFLOW_SAFE on success. Do not infer branch joins or runtime array length. Fix only T2 code on failure.",
+  "next_step": "Check same SHA-original recipient array allocation length operand and compare privately against 4 distinct nonnegative caller i4 values; prove only conditional compiled in-bounds if a supported size literal. Next verify runtime path/texture upload separately. WATER-001 OPEN NOT_READY0/3.",
   "implementation_sha": "81589064359a025cbe268ba74b3c8502f5678517",
   "run_urls": [
-    "https://github.com/alwansan/raf/actions/runs/42059508444"
+    "https://github.com/alwansan/raf/actions/runs/42060338704"
   ],
   "result": {
-    "sourcefree_controls": "committed",
-    "SHA_original_CI": "in_progress",
-    "runtime": "not tested"
-  }
+    "source_original_CI": "42060338704 COMPLETED SUCCESS",
+    "source_original_DLL_SHA256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "actual_stind_ref_sites": 1,
+    "newarr_RenderTexture_to_exact_byref_formal_same_block_proven": 1,
+    "ref_array_value_unproven_stores": 0,
+    "stind_destination_or_flow_unproven": 0,
+    "actual_stelem_ref_sites": 1,
+    "element_write_via_exact_ref_formal_array_same_block_proven": 1,
+    "other_element_stores_unproven": 0,
+    "whole_function_branch_joins_verified": false,
+    "runtime_initialized_proven": false,
+    "synthetic_control_status": "passed",
+    "artifact_id": 13431786317,
+    "artifact_sha256": "091c11ec46f30c8df4c7a6e5aa23ca92bb99cddf1c7cd861a8365ee7499fa4e9"
+  },
+  "fix_commits": [
+    "b348f6b5091eb2468cc86f306a6ca8afd5294893",
+    "e75a7a5ba3ae39cce1018266127c17f238bac9a6",
+    "fc64d43986f3aaad30cab90ce2604ddde3f7fb4e"
+  ]
 }
