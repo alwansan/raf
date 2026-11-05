@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "issue_id": "LOCAL-005",
+  "owner": "T4",
+  "origin": "chat",
+  "session_id": "20261105T1610Z-T4-chat-derived-rgd-write-sites-n3q7",
+  "status": "active",
+  "base_sha": "4f1677b4c84c3f0dce0dcc229a5685c983fada97",
+  "track": "original-RGD-derived-construction-and-state-initialization",
+  "experiment_key": "T4-pinned-ZIP2-15964ea-original-DLL-0a6f-precalls-SaveWorld-local-store-SaveUser-field-write-count-v1",
+  "resource_key": null,
+  "hypothesis": "The genuine original SaveWorld RGD-derived local has preceding lexical local stores and the SaveUser RGD-derived field has in-assembly write sites. Distinguish provenance pattern from actual runtime init/save, without publishing field names or original IL.",
+  "approach": "Extend prior independent read-only Mono.Cecil .NET8 SHA-authenticated original Save precall inspector with bounded local stloc+nearest predecessor category and field stfld site count/declaring-scope. Strengthen source-free exact-schema validator with at least 8 new negative controls, use existing isolated path-scoped CI. Existing verified CI42058900699 is baseline, not re-labeled. No game code execution/new RGD serialization, no native build.",
+  "intended_files": [
+    "android-port/Experiments/T4/OriginalRgdPrecallSlice/Program.cs",
+    "scripts/t4_validate_original_rgd_precall_slice.py",
+    "tests/test_t4_validate_original_rgd_precall_slice.py",
+    "docs/T4_ORIGINAL_RGD_WRITE_SITE_PROVENANCE_2026-11-05.md",
+    "prompt/coordination/work/LOCAL-005/T4-20261105T1610Z-T4-chat-derived-rgd-write-sites-n3q7-original-derived-write-sites.json",
+    "prompt/coordination/clients/T4/sessions/20261105T1610Z-T4-chat-derived-rgd-write-sites-n3q7.md",
+    "prompt/coordination/discussions/LOCAL-005/20261105T1610Z-T4-derived-RGD-store-handoff-to-T5.md"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/T4/sessions/20261105T1544Z-T4-chat-original-rgd-precall-slice-w9c3.md",
+    "prompt/coordination/clients/T4/sessions/20261105T1548Z-T4-scheduled-m7q4.md"
+  ],
+  "related": [
+    "https://github.com/alwansan/raf/actions/runs/42058900699",
+    "https://github.com/alwansan/raf/actions/runs/42052375742"
+  ],
+  "updated_at": "2026-11-05T16:10:00Z",
+  "notes": "T4 scheduled 1548Z owns device JSONL verifier+tests and is waiting on CI. DO NOT edit or duplicate. T1 water/FFT and T5 native integration separate. Re-check all file SHAs before updates. No force pushes."
+}
