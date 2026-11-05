@@ -4,9 +4,9 @@
   "origin": "chat",
   "session_id": "20261105T1540Z-T2-chat-byref-target-b6af",
   "issue_id": "WATER-001",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "76f309602e3456164360c41b8db6e223c3bbee04",
-  "updated_at": "2026-11-05T15:46:48.916Z",
+  "updated_at": "2026-11-05T15:48:27.636Z",
   "resumed_from_sessions": [
     "20261105T1509Z-T2-chat-original-byref-sink-a83c",
     "20261105T1520Z-T2-scheduled-e7c1"
@@ -28,14 +28,26 @@
     "unrelated_active": "42057399746 T1 FFT",
     "last_T2_original_CI": "42053062181 success"
   },
-  "next_step": "Read 42058352098. On success inspect T2_FOAM_BYREF_TARGET_SAFE job log. If failure inspect first broken step and fix only T2 code. Original field contents and runtime execution remain unproven.",
+  "next_step": "Resolve flow of unique newarr RenderTexture and exact byref formal through stind.ref under the two branch instructions; determine on what condition allocation and element store occur. Do not assert runtime execution, contents, or Android pixels. WATER-001 OPEN NOT_READY0/3.",
   "source_commit": "8080364261e1590e8c6db1eb025d756c08506980",
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42058352098"
   ],
   "result": {
-    "code": "Exact typed recipient captured from original bounded byref address stack, original method definition match and per-body direct opcode summaries; source-free matching/decoy controls",
-    "original_CI": "queued",
-    "device": "not tested"
+    "CI": "42058352098 COMPLETED SUCCESS",
+    "original_managed_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "recipient_source_definition_matches": 1,
+    "recipient_has_managed_body": true,
+    "recipient_category": "same_sha_managed_definition",
+    "framework_Array_Resize_signature": false,
+    "body_stind_ref_opcode_count": 1,
+    "body_newarr_RenderTexture_count": 1,
+    "body_stelem_ref_count": 1,
+    "body_branch_opcode_count": 2,
+    "strict_direct_ref_array_null_store_pattern_count": 0,
+    "original_runtime_array_initialized_proven": false,
+    "original_receiver_arg_flow_proven": false,
+    "artifact_id": 13429204614,
+    "artifact_sha256": "dfe1a24dd1b77c56886f8f393443b0e2c1c00e6116ba22a4885ce5ab4365888a"
   }
 }
