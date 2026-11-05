@@ -74,11 +74,22 @@ class T3TraceContract(unittest.TestCase):
         self.assertNotIn("private_material_names",m.aggregate(c))
     def test_failed_stage_exposes_only_safe_class_and_counts(self):
         err=m.ScopedStageError("actual_exported_material_yaml","ValueError",
-                               {"actual_export_materials":19})
+                               {"actual_export_materials":19}, "no_material_texenv_field")
         self.assertEqual(err.stage,"actual_exported_material_yaml")
         self.assertEqual(err.category,"ValueError")
+        self.assertEqual(err.reason,"no_material_texenv_field")
         self.assertEqual(err.counters,{"actual_export_materials":19})
         self.assertNotIn("secret_material_name",str(err))
+    def test_parser_reason_maps_only_static_known_errors(self):
+        self.assertEqual(m.safe_export_error_reason("actual_exported_material_yaml",
+                         ValueError("Material texture data absent in export")),
+                         "no_material_texenv_field")
+        self.assertEqual(m.safe_export_error_reason("actual_exported_material_yaml",
+                         ValueError("private: /tmp/example.mat")),
+                         "unclassified_export_yaml_error")
+        self.assertEqual(m.safe_export_error_reason("b05_same_instance_lineage_compare",
+                         ValueError("Material texture data absent in export")),
+                         "not_export_yaml_stage")
     def test_missing_json_remains_classified_without_original_assets(self):
         from pathlib import Path
         import tempfile
