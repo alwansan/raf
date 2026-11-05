@@ -106,7 +106,7 @@ def aggregate_output(root: Path, selected: dict) -> dict:
     if matched_guid_count == len(source_guids):
         outcome = "ALL_SELECTED_GUIDS_IN_EXPORT_META"
     elif all_output_importer_count == 0 and all_output_image_count == 0 and outputs["embedded_Texture2D_YAML_documents"] == 0:
-        outcome = "NO_TEXTURE_ASSET_FILES_IN_BOUNDED_EXPORT"
+        outcome = "NO_RECOGNIZED_IMAGE_OR_EMBEDDED_TEXTURE_OUTPUT"
     elif all_output_importer_count or all_output_image_count or outputs["embedded_Texture2D_YAML_documents"]:
         outcome = "TEXTURE_ASSETS_PRESENT_GUID_CORRESPONDENCE_UNPROVEN"
     else:
@@ -118,7 +118,7 @@ def aggregate_output(root: Path, selected: dict) -> dict:
         "source_linked_distinct_Texture2D_objects": len(rows),
         "source_linked_distinct_export_pointer_GUIDs": len(source_guids),
         "exact_source_linked_GUIDs_present_once_in_meta": matched_guid_count,
-        "exact_source_linked_GUIDs_absent_from_meta": sum(owner_guids.get(g) == 0 for g in source_guids),
+        "exact_source_linked_GUIDs_absent_from_meta": sum(owner_guids.get(g, 0) == 0 for g in source_guids),
         "exact_source_linked_GUIDs_duplicate_meta": sum(owner_guids.get(g, 0) > 1 for g in source_guids),
         "all_output": dict(sorted(outputs.items())),
         "selected_importer_kinds": dict(sorted(target_importers.items())),
