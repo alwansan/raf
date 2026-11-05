@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T204900Z-T1-chat-4c73e2",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "base_sha": "66a31358df64c320d62338bdd02d87ade63e16eb",
+  "status": "active",
+  "track": "FFT evidence validation",
+  "approach": "Run exact branch comparator controls and wire overflow regression into existing CPU-only GitHub Actions checks",
+  "intended_files": [
+    ".github/workflows/raft-t1-fft-paired-diagnostic-checks.yml",
+    "prompt/coordination/clients/T1/sessions/20261105T204900Z-T1-chat-4c73e2.md"
+  ],
+  "experiment_key": "fft-paired-python-overflow-fail-closed-bf88bee2-python-unittest",
+  "updated_at": "2026-11-05T20:49:00Z",
+  "run_urls": []
+}
