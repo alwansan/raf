@@ -1,0 +1,19 @@
+{
+  "session_id": "20261105T2142Z-T4-scheduled-r6w3",
+  "origin": "scheduled",
+  "issue_id": "INPUT-005",
+  "status": "active",
+  "baseline_sha": "unknown_live_head_connector_does_not_expose_ref_sha",
+  "taken_over_from": [
+    "20261105T2109Z-T4-chat-android-mouse-bridge-p6r2"
+  ],
+  "intended_files": [
+    "prompt/coordination/work/INPUT-005/T4-20261105T2142Z-T4-scheduled-r6w3-native-capture-loss.json",
+    "prompt/coordination/clients/T4/sessions/20261105T2142Z-T4-scheduled-r6w3.md"
+  ],
+  "experiment_key": "T4-native-capture-loss-state-v1-Unity2021-Android26-source-review",
+  "resource_key": null,
+  "hypothesis": "The source bridge tracks requested, not native capture acceptance/loss; an OS capture revocation without focus callback can leave nativeHasMotion=true and replace legacy axes with zeros until a later native motion.",
+  "device_proof": "not_run",
+  "updated_at": "2026-11-05T21:42:00Z"
+}
