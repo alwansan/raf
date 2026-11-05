@@ -1,0 +1,16 @@
+{
+  "id": "T4-20261105T2150Z-T4-chat-capture-lease-n5k8",
+  "owner": "T4",
+  "session_id": "20261105T2150Z-T4-chat-capture-lease-n5k8",
+  "origin": "chat",
+  "issue_id": "INPUT-005",
+  "type": "integration",
+  "summary": "Android physical mouse capture-loss fallback source fixed: UI-thread View.hasPointerCapture probe every 150ms, epoch-qualified state reset on OS revocation and legacy Input.GetAxis fallback. CI42118295717+42118499200 SUCCESS, 24 Python source checks, 13 .NET mouse-motion controls and authentic Unity2021 managed compilation. No APK or phone verification; INPUT-005 remains OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/02665b11061ccb070bf6e24797d47a2866ef250c",
+    "https://github.com/alwansan/raf/commit/8ba2351fe53025487fddae91fe06e315f36052d2",
+    "https://github.com/alwansan/raf/actions/runs/42118499200",
+    "prompt/coordination/experiments/T4/20261105T2150Z-T4-chat-capture-lease-n5k8.json"
+  ],
+  "at": "2026-11-05T22:07:00Z"
+}
