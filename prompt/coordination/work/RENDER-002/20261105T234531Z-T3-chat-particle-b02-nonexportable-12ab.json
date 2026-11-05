@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "id": "20261105T234531Z-T3-chat-particle-b02-nonexportable-12ab",
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T234531Z-T3-chat-particle-b02-nonexportable-12ab",
+  "issue_id": "RENDER-002",
+  "base_sha": "b6a66b64875ec053c05f5204e0cded84d886731a",
+  "status": "active",
+  "updated_at": "2026-11-05T23:45:31.393Z",
+  "track": "T3 exact original ParticleShader48 one missing B02 Texture2D28 export trace classification in disposable C#",
+  "hypothesis": "One of 3 original class28 Texture2D targets has no B02 exported trace despite 10 nonnull exported Material TexEnv slots. B02 intentionally skips nonexportable export collections; classify exact missing source identity as NON_EXPORTABLE_COLLECTION vs ABSENT_FROM_EXPORT_COLLECTION without disclosing private IDs or inventing a missing APK texture.",
+  "experiment_key": "T3-SHA15964-particle108-1missing-B02-Texture2D-class28-nonexportable-vs-uncollected-actual-one-export-v1",
+  "resource_key": "T3-own-dedicated-12owner-one-stream-B02-collection-classification-50min",
+  "taken_over_from": [
+    "prompt/coordination/clients/T3/sessions/20261105T232821Z-T3-chat-particle108-sameexport-68c4.md",
+    "https://github.com/alwansan/raf/actions/runs/42130529677"
+  ],
+  "intended_files": [
+    "scripts/t3_stage_particle_nonexportable_trace.py",
+    "tests/test_t3_stage_particle_nonexportable_trace.py",
+    "scripts/t3_particle_same_export_bindings.py",
+    "tests/test_t3_particle_same_export_bindings.py",
+    ".github/workflows/raft-t3-particle108-sameexport.yml",
+    "prompt/coordination/work/RENDER-002/20261105T234531Z-T3-chat-particle-b02-nonexportable-12ab.json",
+    "prompt/coordination/clients/T3/sessions/20261105T234531Z-T3-chat-particle-b02-nonexportable-12ab.md",
+    "prompt/coordination/experiments/T3/20261105T234531Z-T3-chat-particle-b02-nonexportable-12ab.json",
+    "prompt/coordination/B_TEAM/events/T3/20261105T234531Z-T3-chat-particle-b02-nonexportable-12ab.json",
+    "docs/T3_PARTICLE108_B02_NONEXPORTABLE_CAUSE_2026-11-06.md"
+  ],
+  "result": null,
+  "run_urls": [],
+  "next_step": "Apply exact pinned source-only C# disposable helper annotation to B02: record private original class28 source identities for nonexportable export collections; keep W1/B02 export_instance identical and actual YAML unchanged. Extend safe subset comparator to classify one missing source Texture2D28 as explicitly SKIPPED_NONEXPORTABLE or ABSENT_FROM_ALL_COLLECTIONS or UNKNOWN, strict negative synthetic tests. Rerun isolated CI once; no live game build or shader edit."
+}
