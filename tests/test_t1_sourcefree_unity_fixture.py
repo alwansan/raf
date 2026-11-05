@@ -20,6 +20,8 @@ class T1SourcefreeFixtureTests(unittest.TestCase):
             self.assertFalse(result["private_game_source_used"])
             self.assertFalse(result["original_raft_data_acquired"])
             self.assertFalse(result["original_fft_import_or_device_proven"])
+            self.assertEqual(result["fixture_test_methods"], 2)
+            self.assertEqual(result["synthetic_compute_assets"], 1)
             version = (project/"ProjectSettings/ProjectVersion.txt").read_text()
             self.assertEqual(version, "m_EditorVersion: " + EDITOR_VERSION + "\n")
             manifest = json.loads((project/"Packages/manifest.json").read_text())
@@ -29,9 +31,16 @@ class T1SourcefreeFixtureTests(unittest.TestCase):
             self.assertEqual(asmdef["includePlatforms"], ["Editor"])
             self.assertEqual(asmdef["precompiledReferences"], ["nunit.framework.dll"])
             source = (project/ASSET_PATH/ASSET_FILE).read_text()
-            self.assertEqual(source.count("[Test]"), 1)
+            self.assertEqual(source.count("[Test]"), 2)
             self.assertIn("Application.unityVersion", source)
-            self.assertNotIn("ComputeShader", source)
+            self.assertIn("AssetDatabase.LoadAssetAtPath<ComputeShader>", source)
+            self.assertIn("SystemInfo.supportsComputeShaders", source)
+            self.assertIn("GetKernelThreadGroupSizes", source)
+            synthetic=(project/"Assets/T1Synthetic/FFTCanary.compute").read_text()
+            self.assertIn("#pragma kernel T1Canary", synthetic)
+            self.assertIn("[numthreads(64,1,1)]", synthetic)
+            self.assertNotIn("Dx11FFT", synthetic)
+            self.assertNotIn("WavesRendererFFT", synthetic)
 
     def test_existing_project_never_overwritten(self):
         with tempfile.TemporaryDirectory() as d:
