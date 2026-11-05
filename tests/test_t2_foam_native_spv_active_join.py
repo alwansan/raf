@@ -3,7 +3,7 @@ import copy
 import unittest
 
 from scripts.t2_foam_native_spv_active_join import (
-    exact_native_translated_sample_join, numeric_pair,
+    exact_native_translated_sample_join, numeric_pair, verify_original_stage_rollup,
 )
 
 
@@ -142,6 +142,32 @@ class AuthenticSampleJoinTests(unittest.TestCase):
         m["source_register_to_default_compiled_descriptors"][3]["compiled_binding"]=6
         with self.assertRaises(ValueError):
             exact_native_translated_sample_join(m,n,s,5)
+
+    def test_regression_four_stage_result_uses_one_proof_key(self):
+        vertex = lambda index: {
+            "pass":index,"stage_code":1,"source_texture_pairs":0,
+            "actual_native_and_translated_sample_calls":0,
+            "source_to_translated_active_sample_pair_identity_verified":True,
+        }
+        f0 = {"pass":0,"stage_code":0,"source_texture_pairs":5,
+              **exact_native_translated_sample_join(*fixture(5),5)}
+        f1 = {"pass":1,"stage_code":0,"source_texture_pairs":1,
+              **exact_native_translated_sample_join(*fixture(1),1)}
+        rows=[vertex(0),f0,vertex(1),f1]
+        self.assertTrue(verify_original_stage_rollup(rows))
+        wrong=copy.deepcopy(rows)
+        wrong[1]["source_to_spirv_active_sample_pair_identity_verified"]=True
+        wrong[1].pop("source_to_translated_active_sample_pair_identity_verified")
+        with self.assertRaises(ValueError):
+            verify_original_stage_rollup(wrong)
+        wrong=copy.deepcopy(rows)
+        wrong[3]["native_sample_calls"]=5
+        with self.assertRaises(ValueError):
+            verify_original_stage_rollup(wrong)
+        wrong=copy.deepcopy(rows)
+        wrong[2]["pass"]=0
+        with self.assertRaises(ValueError):
+            verify_original_stage_rollup(wrong)
 
     def test_numeric_source_stage_scope_required_not_global(self):
         # Both genuine Foam passes contain source pair t0/s0. Each stage
