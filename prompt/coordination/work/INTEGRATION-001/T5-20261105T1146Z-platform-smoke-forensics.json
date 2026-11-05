@@ -6,7 +6,7 @@
   "issue_id": "INTEGRATION-001",
   "track": "CI platform smoke regression",
   "approach": "Compare failing platform CI with immediately preceding successful run and audit actual smoke-test code for deterministic failure or nondeterminism; do not edit T4-owned platform implementation.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "ae7a98b870c2ddc3faf2e7a734278be01ff67433",
   "intended_files": [
     "prompt/coordination/work/INTEGRATION-001/T5-20261105T1146Z-platform-smoke-forensics.json",
@@ -22,7 +22,16 @@
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42020924863"
   ],
-  "result": null,
-  "next_step": "Inspect failing job and source changes; isolate exact assertion before patch.",
-  "updated_at": "2026-11-05T11:46:00Z"
+  "result": {
+    "finding": "Five commits between successful CI42020751210 (479935ef) and failed CI42020924863 (92b3e28) changed only T2 Foam experiment code and T4 documentation/ledger; no android-port/Tests/Smoke, Platform library or platform workflow files changed. Failing step was storage/identity/offline-session smoke. Failure is not causally attributable to T2 change from diff alone; exact assertion unavailable from GitHub jobs metadata. Source smoke includes 8x24 concurrent thread launches, 12 parallel processes, and 75ms asynchronous incomplete-ID writer, all possible nondeterministic test surfaces, not proven root causes.",
+    "evidence": [
+      "https://github.com/alwansan/raf/compare/479935efc870598ec6c36139738615b1cc178934...92b3e28e989708b1779a6996866dc50cb455550e",
+      "https://github.com/alwansan/raf/actions/runs/42020924863",
+      "https://github.com/alwansan/raf/actions/runs/42020751210"
+    ],
+    "tests": "Source/commit diff audit only; no .NET runtime in this execution environment; GitHub job logs endpoint not exposed by connected fetch. No CI rerun launched.",
+    "limits": "Cannot identify failed assertion or prove flakiness. No Android .rgd or Unity proof."
+  },
+  "next_step": "Retrieve failed job log through authorized GH Actions artifact/log access; extract exact FAIL line. If concurrency-only, reproduce in T5 isolated bounded workflow with fixed source SHA before editing smoke or platform source; coordinate with T4.",
+  "updated_at": "2026-11-05T11:49:00Z"
 }
