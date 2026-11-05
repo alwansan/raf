@@ -17,6 +17,17 @@ class ProvenanceTests(unittest.TestCase):
         self.assertEqual(classify([("br",0)],max_states=20),"unknown")
     def test_invalid_jump(self):
         self.assertEqual(classify([("br",5)]),"unknown")
+    def test_mismatched_join_height_cannot_be_erased_by_store(self):
+        # Both paths have a value for stloc, but one carries an extra
+        # stack item. A later constructed RT must not mask invalid CIL.
+        il = [
+            ("ldcond",), ("brtrue", 5),
+            ("ldnull",), ("ldnull",), ("br", 7),
+            ("ldnull",), ("br", 7),
+            ("stloc", 0), ("newobj_rt",), ("ret",),
+        ]
+        self.assertEqual(classify(il), "unknown")
+
     def test_uninitialized(self):
         self.assertEqual(classify([("ldloc",0),("ret",)]),"unknown")
 
