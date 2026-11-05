@@ -1,0 +1,21 @@
+{
+  "session_id": "20261105T140701Z-T1-scheduled-6e2c",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "base_sha": "cf0462bae8db8bea702e8d85b1a994826914d377",
+  "resumed_from_sessions": [
+    "20261105T121347Z-T1-paired-capture"
+  ],
+  "hypothesis": "RGBA32F first-pass parity mismatch may be localized by distinguishing channel permutations, constant offsets and nonfinite values without raw pixel publication.",
+  "intended_files": [
+    "scripts/t1_fft_first_pass_channel_diagnostic.py",
+    "tests/test_t1_fft_first_pass_channel_diagnostic.py",
+    "prompt/coordination/clients/T1/sessions/20261105T140701Z-T1-scheduled-6e2c.md"
+  ],
+  "experiment_key": "t1-firstpass-rgba32f-channel-diagnostic-v1-sourcefree",
+  "resource_key": null,
+  "taken_over_from": "T1 paired capture CI42025620147; separate diagnostic script, no Unity job",
+  "status": "active",
+  "identity_conflict": false,
+  "updated_at": "2026-11-05T14:07:01Z"
+}
