@@ -34,6 +34,7 @@ jobs:
           # Source class21 Materials have exactly three valid original
           # owner files; the fourth SHA-authenticated owner is Shader48 only.
           python3 -m unittest discover -s tests -p 'test_t3_particle_same_export_bindings.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_stage_particle_nonexportable_trace.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_original_particle_shader_state.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_original_particle_material_texenv.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_original_renderer_shader_impact.py' -v
@@ -62,6 +63,9 @@ jobs:
           python3 -m scripts.b21_stage_light_lineage \
             --base-helper android-port/Experiments/ExportLineage/RaftExportLineage.cs \
             --destination "$RUNNER_TEMP/t3-particle-helpers/RaftExportLineage.cs"
+          python3 -m scripts.t3_stage_particle_nonexportable_trace \
+            --base-helper android-port/Experiments/ExportLineage/RaftExportLineage.cs \
+            --staged-helper "$RUNNER_TEMP/t3-particle-helpers/RaftExportLineage.cs"
           python3 -m scripts.patch_export_lineage \
             --tool-source ar-host \
             --helper "$RUNNER_TEMP/t3-particle-helpers/RaftExportLineage.cs"
@@ -210,6 +214,9 @@ jobs:
           assert d["original_source_materials"]==5
           assert d["original_source_texture_targets"]==3
           assert d["original_source_material_texture_slots"]==10
+          assert d["selected_texture2d28_missing_export_trace"]==1
+          assert d["selected_missing_texture_reason_unclassified"]==0
+          assert d["selected_missing_texture_skipped_nonexportable_collection"]+d["selected_missing_texture_absent_all_export_collections"]==1
           assert d["private_original_export_shader_material_texture_labels_guids_disclosed"] is False
           assert d["compiled_Unity_ShaderLab_or_Android_pixels_verified"] is False
           print("RAFT_T3_ACTUAL_SAME_INSTANCE_PARTICLE108_EXPORT_COMPARISON_COMPLETED=true")
