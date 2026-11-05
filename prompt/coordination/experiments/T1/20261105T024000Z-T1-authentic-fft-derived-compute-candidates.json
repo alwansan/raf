@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "session_id": "20261105T024000Z-T1-original-derived-fft-unity",
+  "issue_id": "WATER-001",
+  "hypothesis": "Exact SHA-verified original compiled DXBC can be translated to twenty isolated per-slot Unity-importable ComputeShader candidates without conflating compiler slots with original Unity runtime kernel IDs.",
+  "source_commit": "c51b67c4940f44e1417b4b5e106bb4412d454a10",
+  "input_hashes": [
+    "ZIP2 source commit 15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "sharedassets0.assets SHA256 0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "serialized ComputeShader pathID2456 SHA256 9d934f5c99183c6df5cf2f1fefc9d3e5ec4bce5da5f96a86e4c02910d5322247"
+  ],
+  "tool_versions": {
+    "UnityPy": "1.25.4",
+    "EditorTarget": "2021.3.45f2",
+    "CCompiler": "Ubuntu24.04 apt vkd3d-compiler, spirv-tools, spirv-cross, glslang-tools (version output not pinned)"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t1_stage_original_fft_compute_candidates.py -v",
+    "python3 -m scripts.stage_zip2_fft_owner --zip2-checkout <pinned-zip2-checkout> --destination <isolated>/Raft_Data/sharedassets0.assets",
+    "python3 -m scripts.t1_stage_original_fft_compute_candidates --original-data <isolated>/Raft_Data --project <isolated private Unity project>"
+  ],
+  "negative_controls": [
+    "Source-free 7 tests include real single-main, source drift, path traversal, digest mismatch, fake runtime identity, invalid slot, partial output/overwrite rejection",
+    "Initial CI41957453300 failed before source acquisition due missing test-import pin alias; corrected source c51b67c",
+    "Unity import CI41958245907 failed sanitized-report reader permission gate; raw Unity result unknown, corrected workflow9e94d6a"
+  ],
+  "workflow_path": ".github/workflows/raft-t1-fft-original-compute-candidates.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41957549770",
+  "artifact_urls": [],
+  "budget": "Original staging job25min per modified candidate source; Unity 2021 Editor isolated job65min, shared native Editor mutex, owner-provided Unity license, no APK or artifacts.",
+  "status": "active",
+  "observed_result": {
+    "original_staging_run": "41957549770 SUCCESS; 7/7 synthetic tests, 20/20 authentic DXBC to private HLSL50 roundtrip to Unity .compute files; private auto cleanup",
+    "actual_Unity_Editor": "41958511122 IN_PROGRESS at experiment checkpoint; import outcome not yet observed",
+    "game_water_recovered": false
+  },
+  "rejected_hypotheses": [
+    "A generated per-compiled-slot kernel name main is the original authored runtime kernel identity",
+    "A successful glslang SPIR-V roundtrip proves Unity compile or device graphics",
+    "A reported start of Docker image is real imported ComputeShader proof"
+  ],
+  "limitations": [
+    "No original authored .compute or resource names restored",
+    "No evidence Unity has imported genuine FFT compute successfully until sanitized Unity report",
+    "No current Unity 2021 runtime GPU capability or Adreno device test"
+  ],
+  "integration_commit": "c51b67c4940f44e1417b4b5e106bb4412d454a10",
+  "next_step": "Read actual Unity2021 run41958511122 sanitized result, fix only proven stage/import bug; then original names/runtime variant lookup and GPU dispatch before game integration."
+}
