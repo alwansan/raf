@@ -1,0 +1,18 @@
+{
+  "session_id": "20261105T1831Z-T3-scheduled-profileguard-7b2e",
+  "origin": "scheduled",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "base_sha": "e76f703de2d778425154a6f97d0cb64a8a462768",
+  "updated_at": "2026-11-05T18:31:00Z",
+  "intended_files": [
+    "scripts/t3_native_original_921_shader_target_audit.py",
+    "tests/test_t3_native_original_921_shader_target_audit.py",
+    "prompt/coordination/clients/T3/sessions/20261105T1831Z-T3-scheduled-profileguard-7b2e.md",
+    "prompt/coordination/work/RENDER-002/20261105T1831Z-T3-scheduled-profileguard-7b2e.json"
+  ],
+  "experiment_key": "T3-native-921-source-profile-no-subprogram-failclosed-synthetic-v1",
+  "resource_key": null,
+  "taken_over_from": "20261105T1815Z-T3-chat-native-source921-guid-6cb4",
+  "hypothesis": "A non-Dummy ShaderLab with zero subprograms can be falsely labeled non-Dummy usable by current native source identity audit; fail closed on inconsistent profile flags."
+}
