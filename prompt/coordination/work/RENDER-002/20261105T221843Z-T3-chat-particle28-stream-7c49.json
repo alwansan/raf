@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T221843Z-T3-chat-particle28-stream-7c49",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "updated_at": "2026-11-05T22:18:43.313Z",
+  "base_sha": "04b24a431be8e24204e6ad4bc1471c2460863792",
+  "track": "SHA-original 108-use Particle Shader48 three local material Texture PPtrs resolve to class28 and streamed-payload dependencies",
+  "hypothesis": "The 10 non-null local original m_TexEnvs from 5 ParticleShader48 materials resolve to three unique original Texture2D objects, whose original m_StreamData may require .resS providers not staged for the bounded export. Verify object type, stream provider extent and missing staged inputs without claiming output pixels.",
+  "experiment_key": "T3-zip2-SHA15964-sixscene-4owner-particle108-5material-3target-local-Tex2D28-manifeststream-typed-v1",
+  "resource_key": "t3-ZIP2-sixscene-four-owner-only-22min",
+  "taken_over_from": [
+    "prompt/coordination/clients/T3/sessions/20261105T2204Z-T3-chat-particle108-mattex-a4c6.md",
+    "prompt/coordination/clients/T3/sessions/20261105T213100Z-T3-scheduled-clstage-8b4f.md"
+  ],
+  "intended_files": [
+    "scripts/t3_original_particle_material_texenv.py",
+    "tests/test_t3_original_particle_material_texenv.py",
+    "scripts/t3_original_particle_texture_targets.py",
+    "tests/test_t3_original_particle_texture_targets.py",
+    ".github/workflows/raft-t3-original-renderer-shader-impact.yml",
+    "prompt/coordination/work/RENDER-002/20261105T221843Z-T3-chat-particle28-stream-7c49.json",
+    "prompt/coordination/clients/T3/sessions/20261105T221843Z-T3-chat-particle28-stream-7c49.md",
+    "prompt/coordination/experiments/T3/20261105T221843Z-T3-chat-particle28-stream-7c49.json",
+    "prompt/coordination/B_TEAM/events/T3/20261105T221843Z-T3-chat-particle28-stream-7c49.json",
+    "docs/T3_ORIGINAL_PARTICLE108_TEXTURE2D_STREAM_2026-11-06.md"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Add private-only source TexEnv Texture PPtr identity output and independent class28/stream provider manifest validator; adversarial type, absent object, malformed stream, missing manifest, out-of-range offset, same target sharing controls; one SHA-original 6scene4owner CI. No game assets/edit, no heavy exporter."
+}
