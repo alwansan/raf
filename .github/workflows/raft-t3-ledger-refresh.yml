@@ -72,6 +72,10 @@ jobs:
           # objects, 10/10 bound local TexEnv PPtrs; source-only, not pixels.
           particle_texenv_source="https://github.com/alwansan/raf/actions/runs/42119098398"
           assert particle_texenv_source in issue[0]["evidence"]
+          # All three typed original ParticleTexture2D class28 targets source
+          # stream from one manifest provider; no actual mobile pixels verified.
+          particle_texture28_stream_proof="https://github.com/alwansan/raf/actions/runs/42120918486"
+          assert particle_texture28_stream_proof in issue[0]["evidence"]
           # T3 source-only class/particle rankings are real SHA-pinned evidence,
           # not an Android shader restoration/device acceptance.
           for genuine_source_proof in (
