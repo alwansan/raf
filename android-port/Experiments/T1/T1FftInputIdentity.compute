@@ -1,0 +1,8 @@
+#pragma kernel CopyInput
+Texture2D<float4> InputImage;
+RWTexture2D<float4> OutputImage;
+[numthreads(64, 1, 1)]
+void CopyInput(uint3 id : SV_DispatchThreadID)
+{
+    OutputImage[id.xy] = InputImage.Load(int3(id.xy, 0));
+}
