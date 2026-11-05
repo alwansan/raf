@@ -34,20 +34,31 @@ internal static class Program
         return method;
     }
 
-    private static bool SafeCalleeScope(MethodDefinition method)
+    private sealed record Scope(int system_io, int safe_core, int unity_or_steam,
+        int other, int total, bool known_bounded_io_shape);
+
+    private static Scope CalleeScope(MethodDefinition method)
     {
-        // Only permit an extremely small original method with no external
-        // network/Unity/Steam/Process/Environment calls, and no async behavior.
-        // The one direct System.IO call and EH observed at CI42012597665 remain
-        // invariants. Reject unfamiliar opcodes instead of executing guesses.
-        var methods = method.Body.Instructions
+        // Printed values are ONLY public broad runtime groups, never original
+        // method names, member tokens, string constants, or private signatures.
+        var calls = method.Body.Instructions
             .Where(x => x.OpCode.Code == Code.Call || x.OpCode.Code == Code.Callvirt ||
                         x.OpCode.Code == Code.Newobj)
             .Select(x => x.Operand as MethodReference).ToList();
-        return methods.Count == 1 && methods[0] != null &&
-               methods[0]!.DeclaringType.FullName.StartsWith("System.IO.", StringComparison.Ordinal)
-               && method.Body.ExceptionHandlers.Count == 1
-               && method.Body.Instructions.Count <= 20;
+        int io = calls.Count(x => x != null &&
+            x.DeclaringType.FullName.StartsWith("System.IO.", StringComparison.Ordinal));
+        int safe = calls.Count(x => x != null &&
+            (x.DeclaringType.FullName == "System.String" ||
+             x.DeclaringType.FullName == "System.Object" ||
+             x.DeclaringType.FullName == "System.Exception"));
+        int engine = calls.Count(x => x != null &&
+            (x.DeclaringType.FullName.StartsWith("UnityEngine.", StringComparison.Ordinal) ||
+             x.DeclaringType.FullName.StartsWith("Steamworks.", StringComparison.Ordinal)));
+        int other = calls.Count - io - safe - engine;
+        return new Scope(io, safe, engine, other, calls.Count,
+            io >= 1 && engine == 0 && other == 0 &&
+            calls.Count <= 4 && method.Body.ExceptionHandlers.Count == 1 &&
+            method.Body.Instructions.Count <= 20);
     }
 
     private static string Classify(Exception e)
@@ -134,8 +145,14 @@ internal static class Program
             var owner = metadata.MainModule.Types.Single(t => t.Name == "SaveAndLoad");
             var read = SingleEdge(owner, manager, true);
             var write = SingleEdge(owner, manager, false);
+            var readScope = CalleeScope(read);
+            var writeScope = CalleeScope(write);
+            Console.WriteLine("T5_ORIGINAL_CIL_SCOPE " + JsonSerializer.Serialize(new {
+                read = readScope, write = writeScope,
+                original_code_or_symbols_published = false
+            }));
             if (read.MetadataToken.ToInt32() == write.MetadataToken.ToInt32() ||
-                !SafeCalleeScope(read) || !SafeCalleeScope(write))
+                !readScope.known_bounded_io_shape || !writeScope.known_bounded_io_shape)
                 throw new NotSupportedException();
             bounded = true;
             stage = "SCRATCH_GUARD";
