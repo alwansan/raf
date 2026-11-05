@@ -6,12 +6,12 @@
   "origin": "chat",
   "issue_id": "RENDER-002",
   "base_sha": "8b8519327c887b59893fca43a44d9a764fa639eb",
-  "status": "active",
-  "updated_at": "2026-11-05T22:04:00Z",
+  "status": "completed",
+  "updated_at": "2026-11-05T22:11:00Z",
   "track": "original exact ParticleShader48 108-use Renderer↔Material↔Texture slot original binding",
   "hypothesis": "The unique original 108-slot ParticleSystemRenderer Shader48 has a bounded, authentic set of source Material21 objects and texture PPtrs; determine null vs bound original textures and UV/keyword coverage before comparing same-export full-native GUID; never infer real phone texture loss without a same-instance Android export.",
   "experiment_key": "T3-ZIP2-15964-6scene-4owner-source108-particleShader48-material-texenv-private-map-source-bound-v1",
-  "resource_key": "t3-original-6scene-4owner-sourceonly-22min",
+  "resource_key": null,
   "intended_files": [
     "scripts/t3_original_renderer_shader_impact.py",
     "tests/test_t3_original_renderer_shader_impact.py",
@@ -28,7 +28,10 @@
     "prompt/coordination/clients/T3/sessions/20261105T214810Z-T3-chat-selective-colormask-a82d.md",
     "prompt/coordination/clients/T3/sessions/20261105T213100Z-T3-scheduled-clstage-8b4f.md"
   ],
-  "next_step": "Add private-only shader→Particle Material set source join after immutable 6scene4owner SHA, exact type21 m_SavedProperties.m_TexEnvs parsing with existing B05 normalizer; publish safe counters for distinct Material objects, Texture PPtr bounds/null, UV validity and per-Renderer multiplicity. Test adversarial fixtures; integrate source-only existing original workflow once, no AssetRipper full export or Unity build.",
-  "run_urls": [],
-  "result": null
+  "next_step": "Within a SAME-INSTANCE W1 Material21 + B02 Texture2D28 full-native trace, match five private source Materials/three target Texture PPtrs to actual exported Material texture GUID bindings and real fire/smoke emitter before code asset editing; keep RENDER-002 OPEN.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42119098398"
+  ],
+  "result": "Real SHA-pinned six Raft scenes/4 original Material/Shader owners CI42119098398 SUCCESS (81/81 source-free checks). Unique original ParticleShader48 108 renderer Material slots bind exactly FIVE original Material21 source objects with TEN non-null local Texture PPtrs, THREE unique owner-scoped target PPtr shapes and TEN complete UVs; no empty/missing texture slots. Source-only, no Texture2D payload or native exported GUID/device pixel proof.",
+  "integration_commit": "775a18ec59a061783d46e7fbb77125c0929c8d34"
 }
