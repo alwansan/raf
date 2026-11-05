@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261105T1113Z-T4-io-control-flow",
+  "issue_id": "LOCAL-005",
+  "hypothesis": "Original FileManager read and write helpers perform direct File.Open/File.Create and have normal try containing only this IO call, while other three original compiled callees are confined to their catch handlers; therefore SaveAndLoad outer exception success cannot itself prove file durability.",
+  "source_commit": "0404987eb6e01d623f5b2e35fe6cd8b38be6811b",
+  "input_hashes": [
+    "ZIP2_original_commit=15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "original_managed_dll_bytes=3211776",
+    "original_dll_sha256=0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e"
+  ],
+  "tool_versions": {
+    "dotnet": "9.0.x",
+    "Mono.Cecil": "0.11.5",
+    "runner": "ubuntu-24.04"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t4_validate_original_file_io_flow.py -v",
+    "dotnet publish android-port/Experiments/T4/OriginalFileIoFlow/OriginalFileIoFlow.csproj -c Release",
+    "dotnet OriginalFileIoFlow.dll --assembly SHA-pinned-ZIP2-original --output private-json",
+    "python3 -m scripts.t4_validate_original_file_io_flow --report private-json"
+  ],
+  "negative_controls": [
+    "unknown original SHA rejected",
+    "non-static/ambiguous compiled target rejected",
+    "call group count and placement consistency checked",
+    "private identifiers rejected by public schema",
+    "fake device/real RGD or exception swallow proof rejected"
+  ],
+  "workflow_path": ".github/workflows/raft-t4-original-file-io-flow.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42019696138",
+  "artifact_urls": [],
+  "budget": "One bounded ubuntu24.04 source-only 12min no LFS native Unity or game release",
+  "status": "completed",
+  "observed_result": {
+    "original_dll_sha_authenticated": true,
+    "controls": "19/19 PASS",
+    "read": "File.Open(string,FileMode)->stream",
+    "write": "File.Create(string)->stream",
+    "both_try_regions": "ONE BCL file call and ZERO other callsites",
+    "both_catch_regions": "ONE same FileManager helper + ONE System nonIO + ONE external/game, all inside catch",
+    "catch_leave_without_explicit_throw": true,
+    "original_file_io_executed_in_this_scope": false,
+    "unity_device": false
+  },
+  "rejected_hypotheses": [
+    "T5 previously observed three extra callees are necessarily used on normal file success path — rejected by source-authentic handler placement",
+    "Original FileManager stream existence proves actual .rgd Android save — rejected"
+  ],
+  "limitations": [
+    "No actual game save, Unity or Android file persistence",
+    "No proof catch branch executes safely in isolation; exception-exit may not imply thrown/hidden errors"
+  ],
+  "integration_commit": "9d3523d327fd57ab402007706edf949f9ad34320",
+  "next_step": "See T4 original stream managed invocation experiment CI42020039305; T5 coordinated native full Android device world and .rgd acceptance."
+}
