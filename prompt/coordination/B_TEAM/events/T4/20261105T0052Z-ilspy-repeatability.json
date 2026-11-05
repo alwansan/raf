@@ -1,0 +1,14 @@
+{
+  "id": "20261105T0052Z-T4-ilspy-same-run-repeatable",
+  "owner": "T4",
+  "session_id": "20261104T2357Z-T4-lw01",
+  "issue_id": "LOCAL-005",
+  "type": "result",
+  "summary": "SHA-authenticated exact original DLL decompiled twice independently via pinned ILSpy11.2 in same job produced identical Raft_Network class/body/masked-body SHA; new 10/10 controls, old 10/10 controls and CLR two-branch semantic check PASS CI41944365772. B07-vs-T4 cross-run decompiler text discrepancy remains unexplained; production source pins unchanged, full adapter/runtime/device NOT tested. LOCAL-005 OPEN NOT_READY.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41944365772",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_ILSPY_REPRODUCIBILITY_2026-11-05.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/t4_compare_private_ilspy_runs.py"
+  ],
+  "at": "2026-11-05T00:52:00Z"
+}
