@@ -82,8 +82,8 @@ internal static class Program
 
     private static int Main(string[] args)
     {
-        if (args.Length != 6 || args[0] != "--assembly" ||
-            args[2] != "--seed" || args[4] != "--output")
+        if ((args.Length != 6 && (args.Length != 7 || args[6] != "--original-loadt")) ||
+            args[0] != "--assembly" || args[2] != "--seed" || args[4] != "--output")
         {
             Console.WriteLine("T4_ORIGINAL_RGD_DESERIALIZE status=INVALID_ARGUMENTS source_published=false");
             return 2;
@@ -115,6 +115,7 @@ internal static class Program
                 throw new InvalidDataException("unexpected_original_managed_identity");
 
             bool success = false;
+            Type? originalRootType = null;
             bool rootFromOriginalAssembly = false;
             string category = "NONE";
             // Input is *only* the fixed SHA-authenticated 2941 byte shipped
@@ -131,6 +132,7 @@ internal static class Program
 #pragma warning restore SYSLIB0011
                 success = result is not null;
                 rootFromOriginalAssembly = result?.GetType().Assembly == original;
+                if (rootFromOriginalAssembly) originalRootType = result!.GetType();
                 if (!success) category = "DESERIALIZED_NULL";
             }
             catch (Exception e)
@@ -141,25 +143,74 @@ internal static class Program
             // No actual original SaveAndLoad.Load<T> or persistent world file
             // has been executed. Success only pertains to this shipped seed
             // in this isolated .NET 8 runtime, not Unity Mono or Android.
-            var report = new
+            bool exerciseLoadT = args.Length == 7;
+            bool originalLoadMethodFound = false;
+            bool originalLoadInvoked = false;
+            bool originalLoadReturnedMatchingType = false;
+            string originalLoadCategory = "NOT_REQUESTED";
+            if (exerciseLoadT)
             {
-                schema_version = 1,
-                source = "IMMUTABLE_SHA_VERIFIED_ORIGINAL_RGD_SEED",
-                original_dll_sha_verified = true,
-                original_seed_sha_verified = true,
-                managed_reference_siblings = companionPaths.Length,
-                original_CLR_assembly_loaded = true,
-                formatter_runtime = "DOTNET8_BINARYFORMATTER",
-                actual_formatter_deserialize_attempted = true,
-                actual_formatter_deserialize_object_created = success,
-                deserialized_root_defined_in_original_dll = rootFromOriginalAssembly,
-                bounded_runtime_category = category,
-                original_SaveAndLoad_LoadT_invoked = false,
-                user_generated_game_world_loaded = false,
-                real_game_rgd_write_or_roundtrip = false,
-                android_unity_il2cpp_or_phone_executed = false,
-                original_data_or_private_type_names_published = false
+                if (originalRootType is null)
+                    originalLoadCategory = "ORIGINAL_ROOT_TYPE_UNAVAILABLE";
+                else
+                {
+                    try
+                    {
+                        Type? saveAndLoad = original.GetType("SaveAndLoad", throwOnError: false);
+                        var matching = saveAndLoad?.GetMethods(BindingFlags.Public |
+                                BindingFlags.NonPublic | BindingFlags.Static)
+                            .Where(m => m.Name == "Load" && m.IsGenericMethodDefinition &&
+                                m.GetGenericArguments().Length == 1 &&
+                                m.ReturnType.IsGenericParameter &&
+                                m.GetParameters().Length == 1 &&
+                                m.GetParameters()[0].ParameterType == typeof(string))
+                            .ToArray() ?? Array.Empty<MethodInfo>();
+                        originalLoadMethodFound = matching.Length == 1;
+                        if (!originalLoadMethodFound)
+                            originalLoadCategory = "ORIGINAL_METHOD_BINDING_UNAVAILABLE";
+                        else
+                        {
+                            var concrete = matching[0].MakeGenericMethod(originalRootType);
+                            originalLoadInvoked = true;
+                            object? loaded = concrete.Invoke(null, new object[] { seedPath });
+                            originalLoadReturnedMatchingType =
+                                loaded is not null && loaded.GetType() == originalRootType;
+                            originalLoadCategory = originalLoadReturnedMatchingType
+                                ? "NONE" : "RETURNED_DEFAULT_OR_NONMATCHING_TYPE";
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        originalLoadCategory = FailureCategory(ex);
+                    }
+                }
+            }
+
+            var report = new Dictionary<string, object?>
+            {
+                ["schema_version"] = 1,
+                ["source"] = "IMMUTABLE_SHA_VERIFIED_ORIGINAL_RGD_SEED",
+                ["original_dll_sha_verified"] = true,
+                ["original_seed_sha_verified"] = true,
+                ["managed_reference_siblings"] = companionPaths.Length,
+                ["original_CLR_assembly_loaded"] = true,
+                ["formatter_runtime"] = "DOTNET8_BINARYFORMATTER",
+                ["actual_formatter_deserialize_attempted"] = true,
+                ["actual_formatter_deserialize_object_created"] = success,
+                ["deserialized_root_defined_in_original_dll"] = rootFromOriginalAssembly,
+                ["bounded_runtime_category"] = category,
+                ["original_SaveAndLoad_LoadT_invoked"] = originalLoadInvoked,
+                ["user_generated_game_world_loaded"] = false,
+                ["real_game_rgd_write_or_roundtrip"] = false,
+                ["android_unity_il2cpp_or_phone_executed"] = false,
+                ["original_data_or_private_type_names_published"] = false,
             };
+            if (exerciseLoadT)
+            {
+                report["original_LoadT_method_signature_verified"] = originalLoadMethodFound;
+                report["original_LoadT_returned_matching_seed_type"] = originalLoadReturnedMatchingType;
+                report["original_LoadT_result_category"] = originalLoadCategory;
+            }
 
             Directory.CreateDirectory(Path.GetDirectoryName(reportPath)!);
             File.WriteAllText(reportPath, JsonSerializer.Serialize(report));
