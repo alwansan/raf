@@ -1440,6 +1440,35 @@ internal static class Program
             t2UnknownTargetRet.Null!=0 || t2UnknownTargetRet.Branches!=1)
             throw new InvalidDataException("Cross-branch synthetic RT return cannot be proven");
 
+        // Source-free return reason cases. A branch-to-ret is not
+        // interpreted as the value from its textual predecessor.
+        var t2ReasonNull=FoamByrefElementValueOrigin.ExplainRetSite(
+            new[]{t2ReturnDefinition},t2ReturnDefinition);
+        if(t2ReasonNull.Placement!="sequential_return_site" ||
+            t2ReasonNull.Immediate!="ldnull")
+            throw new InvalidDataException("Synthetic direct null return reason mismatch");
+        var t2ReasonBranch=FoamByrefElementValueOrigin.ExplainRetSite(
+            new[]{t2BranchRtRet},t2BranchRtRet);
+        if(t2ReasonBranch.Placement!="branch_exception_or_method_entry" ||
+            t2ReasonBranch.Immediate!="branch_opcode")
+            throw new InvalidDataException("Synthetic branch-return origin was improperly promoted");
+        var t2ReasonLocalDef=new MethodDefinition("SyntheticLocalReturnReason",
+            Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,
+            renderTextureType);
+        t2ReasonLocalDef.Body.Variables.Add(new VariableDefinition(renderTextureType));
+        t2ReasonLocalDef.Body.InitLocals=true;
+        factoryDef.Methods.Add(t2ReasonLocalDef);
+        var t2ReasonLocalIl=t2ReasonLocalDef.Body.GetILProcessor();
+        t2ReasonLocalIl.Append(t2ReasonLocalIl.Create(OpCodes.Ldnull));
+        t2ReasonLocalIl.Append(t2ReasonLocalIl.Create(OpCodes.Stloc_0));
+        t2ReasonLocalIl.Append(t2ReasonLocalIl.Create(OpCodes.Ldloc_0));
+        t2ReasonLocalIl.Append(t2ReasonLocalIl.Create(OpCodes.Ret));
+        var t2ReasonLocal=FoamByrefElementValueOrigin.ExplainRetSite(
+            new[]{t2ReasonLocalDef},t2ReasonLocalDef);
+        if(t2ReasonLocal.Placement!="sequential_return_site" ||
+            t2ReasonLocal.Immediate!="ldloc")
+            throw new InvalidDataException("Synthetic local-load return source not categorized");
+
         var syntheticIndirect=new MethodDefinition("SyntheticFieldReferenceStore",
             Mono.Cecil.MethodAttributes.Public,m.TypeSystem.Void);
         factoryDef.Methods.Add(syntheticIndirect);
@@ -1616,6 +1645,7 @@ internal static class Program
                 original_rt_array_element_newobj_null_and_wrong_type_controls=true,
                 exact_original_return_signature_vs_external_type_controls=true,
                 exact_original_return_direct_null_newobj_and_branch_controls=true,
+                synthetic_return_branch_target_and_local_predecessor_classifier=true,
                 four_original_style_Texture_int_argument_origin_controls=true,
                 signed_short_wide_and_duplicate_private_i4_aggregate_controls=true,
                 private_IL_names_or_source_published = false
