@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261105T1314Z-T2-chat-foam-writers-72c9",
+  "issue_id": "WATER-001",
+  "status": "completed",
+  "hypothesis": "Original managed getter's exact RenderTexture[] field has direct stfld writes whose incoming immediately preceding IL producer can be classified without disclosing original identifiers.",
+  "experiment_key": "T2|ZIP2-15964ea8|managed-dll-0a6f0527|same-field-reference|stfld-producer|strict-pattern-v1",
+  "input_source": {
+    "zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "assembly_csharp_size_bytes": 3211776,
+    "assembly_csharp_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e"
+  },
+  "source_commit": "d47c73943b11e3b1d193dc56446fb63632abd47a",
+  "method": "Mono.Cecil0.11.5 exact source-authenticated previous guarded ten-op getter field reference, scan stfld over actual original managed methods. Classify only immediate newarr RenderTexture, ldnull, or unknown; reject equal-typed wrong-field decoy in synthetic tests. Publish counts only, never private field or method symbols.",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42034458197",
+  "artifact": {
+    "id": 13417637189,
+    "archive_sha256": "6f6737164c859f136d7790f995d001658110feba6e4d2d30c0b583277e934128"
+  },
+  "result": {
+    "genuine_original_CI": "success",
+    "original_managed_method_bodies_scanned": 19118,
+    "exact_direct_stfld": 1,
+    "distinct_writer_methods": 1,
+    "constructor_writer_methods": 0,
+    "immediate_ldnull": 1,
+    "immediate_newarr_rendertexture": 0,
+    "unknown_immediate_value_producer": 0,
+    "original_runtime_execution_proven": false,
+    "original_rendertexture_allocation_or_element_population_proven": false
+  },
+  "limitations": [
+    "Direct managed stfld only in SHA-original Assembly-CSharp.dll. Does not search other original assemblies, reflection, native writers or indirect element writes.",
+    "A compiled ldnull assignment is not evidence that it executed or caused Android water issue.",
+    "No four int index values, Material receiver, ShaderLab/CB/sampler/Unity/Adreno or owner phone proof.",
+    "No private source/IL or resource raw data published."
+  ],
+  "next_step": "Bounded source-authentic actual four Texture(int) index call operand dataflow with strict branch/local/stack provenance, keep numeric values private. WATER-001 OPEN NOT_READY 0/3."
+}
