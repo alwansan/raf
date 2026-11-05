@@ -4,27 +4,61 @@
   "session_id": "20261104T2354Z-T2-foamabi01",
   "issue_id": "WATER-001",
   "hypothesis": "Original serialized constant-buffer member offsets/types can be compared with translated SPIR-V reflection to distinguish ABI differences from optimizer-driven m_Size mismatch without leaking source names.",
-  "source_commit": "b56ebc3847f251cee2539e9797471417d32698d2",
+  "source_commit": "c472f0dd41afe018302572b8ab899ed24434856c",
   "input_hashes": [
     "zip2:15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "sharedassets0:0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3"
   ],
-  "tool_versions": {},
-  "commands": [],
+  "tool_versions": {
+    "python": "GitHub Ubuntu 24.04 system Python3",
+    "UnityPy": "1.25.4",
+    "vkd3d_compiler": "1.2-15build1",
+    "spirv_cross": "2021.01.15+1.3.239.0-1build1",
+    "spirv_tools": "2025.1~rc1-1~ubuntu0.24.04.2",
+    "glslang_tools": "15.1.0-2~ubuntu0.24.04.2"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t2_foam_member_abi.py -v",
+    "python3 -m scripts.b20_private_foam_packet --source $RUNNER_TEMP/t2-foam-source --repo $GITHUB_WORKSPACE --private $RUNNER_TEMP/t2-foam-private-packet --out $RUNNER_TEMP/t2-foam-manifest.json",
+    "python3 -m scripts.t2_foam_member_abi --source $RUNNER_TEMP/t2-foam-source --packet $RUNNER_TEMP/t2-foam-private-packet --manifest $RUNNER_TEMP/t2-foam-manifest.json --out $RUNNER_TEMP/t2-safe.json"
+  ],
   "negative_controls": [
-    "reject forged offsets, duplicate bindings, malformed reflected types and source packet SHA"
+    "20 source-free controls PASS: spoofed comment/string CB, duplicate registered slot, invalid reflected type/offset, missing symbol, private mismatch cannot imply alias, no private names in reports, extent drift rejects"
   ],
   "workflow_path": ".github/workflows/raft-t2-foam-member-abi.yml",
-  "run_url": null,
-  "artifact_urls": [],
-  "budget": "single private-source bounded CI <=25m, no Unity/APK; no raw sources or shader HLSL in artifact",
-  "status": "planned",
-  "observed_result": null,
-  "rejected_hypotheses": [],
-  "limitations": [
-    "No Unity/ShaderLab/device evidence until actual build",
-    "No opaque CB0 identifier guessing"
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41938898381",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41937996942",
+    "https://github.com/alwansan/raf/actions/runs/41938551022"
   ],
-  "integration_commit": null,
-  "next_step": "Implement source-authenticated member ABI probe and execute on original private packet."
+  "budget": "single private-source bounded CI <=25m, no Unity/APK; no raw sources or shader HLSL in artifact",
+  "status": "completed",
+  "observed_result": {
+    "actual_original_ci_success_runs": [
+      41937996942,
+      41938551022,
+      41938898381
+    ],
+    "original_cb_slots": 8,
+    "compiled_stage_count": 4,
+    "partial_size_equals_spirv_block_size": 1,
+    "source_name_equals_hlsl": 0,
+    "hlsl_name_equals_spirv": 8,
+    "original_name_hlsl_grammar_valid": 4,
+    "independent_member_upload_proof": false,
+    "sha_verified_no_lfs": true,
+    "synthetic_test_count_final": 20
+  },
+  "rejected_hypotheses": [
+    "Identical CB b-register numbers prove identical names (rejected: 0/8 source-to-translated HLSL name)",
+    "Original partial CB m_Size must equal reflected SPIR-V block size or lost data (rejected; different representation domains)",
+    "Matching index*16 to member byte offset proves upload binding (rejected; only 2/8 candidate overlaps without original index units/field identity)"
+  ],
+  "limitations": [
+    "Only source/translation numeric member and private exact symbol comparisons; original m_Index unit not authenticated",
+    "Compiled SPIR-V reflected one member in each UBO, without individual original-to-field identity",
+    "No game ShaderLab/Unity import/Adreno or device rendering, FFT program selection and world are unchanged"
+  ],
+  "integration_commit": "c472f0dd41afe018302572b8ab899ed24434856c",
+  "next_step": "Authentic member semantic and CB upload/ShaderLab binding reconstruction; test with original material and real Unity rather than asserting alias."
 }
