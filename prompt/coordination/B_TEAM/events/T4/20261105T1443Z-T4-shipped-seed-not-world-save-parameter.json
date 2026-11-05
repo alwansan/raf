@@ -1,0 +1,24 @@
+{
+  "event_id": "20261105T1443Z-T4-shipped-seed-not-world-save-parameter",
+  "owner": "T4",
+  "session_id": "20261105T1433Z-T4-chat-original-seed-save-roundtrip-j2v8",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "type": "authentic_source_finding",
+  "status": "source_evidence_only",
+  "summary": "Original SHA-pinned shipped StreamingAssets/Data.rgd deserializes into a CLR type different from the authentic SaveAndLoad private Save(string, RGD) argument. IL guard refused invocation; original serializer untouched, no output world file. 16/16 sourcefree tests and managed private CI green; issue OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42047540260",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_RGD_SAVE_ROUNDTRIP_2026-11-05.md"
+  ],
+  "created_at": "2026-11-05T14:44:16.616Z",
+  "claims": {
+    "original_seed_sha_verified": true,
+    "original_dll_sha_verified": true,
+    "original_Save_RGD_signature_identified": true,
+    "original_seed_root_matches_Save_RGD": false,
+    "original_private_Save_invoked": false,
+    "original_world_save_roundtrip": false,
+    "device_tested": false
+  }
+}
