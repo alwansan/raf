@@ -200,7 +200,11 @@
         "https://github.com/alwansan/raf/actions/runs/42043768798",
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_RGD_RUNTIME_LOAD_2026-11-05.md",
         "https://github.com/alwansan/raf/actions/runs/42047540260",
-        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_RGD_SAVE_ROUNDTRIP_2026-11-05.md"
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_RGD_SAVE_ROUNDTRIP_2026-11-05.md",
+        "https://github.com/alwansan/raf/actions/runs/42053882300",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_SAVEWORLD_RGD_PRODUCER_2026-11-05.md",
+        "https://github.com/alwansan/raf/actions/runs/42058900699",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_RGD_PRECALL_SLICE_2026-11-05.md"
       ],
       "remaining": [
         "Original Cheat.AllowCheatsForLocalPlayer SteamUser.GetSteamID direct object call now source-guarded in B50 2bb6c2; no native/phone verification. Do not infer all Steam callbacks are removed.",
@@ -228,7 +232,9 @@
         "T4 source-integrated Android-only SaveAndLoad.Load<T> filename argument existence/zero/nonzero observation in finally (commit a88000086d); original managed compile CI42030693004 SUCCESS (14 pinned sources, exit0), synthetic UNITY_ANDROID C# and 5/5 tests CI42031436693 SUCCESS after fixing only fixture's generic Load<T>.exit assertion. Does not read RGD bytes or prove genuine game save/load, offline playable world, Unity/IL2CPP or phone; LOCAL-005 stays OPEN NOT_READY 0/3.",
         "T4 device log JSONL validator source-integrated (commit 305e8952), chronological matching refined b383b6e/fa3d5555, CI42043385806 SUCCESS 13/13 synthetic. Reads actual PersistentDiagnosticLog schema but no new phone log/device was read; even ordered cross-session nonzero Save/Load does not prove restart, same world, valid .rgd or playability. LOCAL-005 OPEN NOT_READY 0/3.",
         "T4 2026-11-05 original shipped Data.rgd CLR execution, not just NRBF syntax: exact ZIP2 2941B seed and original 3211776B Assembly-CSharp.dll SHA-verified with 151 Managed siblings; CI42042814576 SUCCESS actual .NET8 BinaryFormatter.Deserialize returned nonnull ORIGINAL game assembly CLR type (18/18 controls). CI42043768798 SUCCESS actually invoked compiled ORIGINAL static generic SaveAndLoad.Load<T> with same exact shipped seed and original root T, returned matching nonnull original type, 18+18 controls, changed seed SHA refused. Previous B37/A10 assembly-version and field-name metadata mismatch therefore not necessarily fatal to this .NET8 original seed load. NOT a real user-generated world save, Android/Unity/IL2CPP, playable offline local host or persisted game .rgd save/exit/relaunch/load. LOCAL-005 remains OPEN and overall NOT_READY 0/3.",
-        "T4 exact original CLR seed-vs-serializer shape: CI42047540260 SUCCESS 16/16 demonstrates shipped StreamingAssets/Data.rgd root is NOT the original private Save(string,RGD) parameter. Genuine compiled Save not invoked due protected type mismatch; no game save/roundtrip. Earlier CI42043768798 loaded shipped seed as a different original CLR type, not a real world save. Do not use seed as .rgd Save fixture; verify actual game-generated RGD on owner Android. LOCAL-005 OPEN NOT_READY 0/3."
+        "T4 exact original CLR seed-vs-serializer shape: CI42047540260 SUCCESS 16/16 demonstrates shipped StreamingAssets/Data.rgd root is NOT the original private Save(string,RGD) parameter. Genuine compiled Save not invoked due protected type mismatch; no game save/roundtrip. Earlier CI42043768798 loaded shipped seed as a different original CLR type, not a real world save. Do not use seed as .rgd Save fixture; verify actual game-generated RGD on owner Android. LOCAL-005 OPEN NOT_READY 0/3.",
+        "T4 immutable original SaveWorld RGD producer IL proof CI42053882300 SUCCESS 22/22: original SaveWorld and SaveUser each directly call private Save(string,RGD) once; zero direct RGD newobj across SaveAndLoad, zero original generic Load<RGD> in both methods, immediate RGD argument-source classification unresolved. No actual game Save invoked, RGD contents processed, Unity/IL2CPP/device run, file durability or offline world playability shown. Do not treat shipped StreamingAssets/Data.rgd as a user world save. T4 scheduled JSONL UTC work remains separate; LOCAL-005 OPEN NOT_READY 0/3.",
+        "T4 exact compiled original SaveWorld/SaveUser RGD precall structural relation CI42058900699 SUCCESS 22/22: immediate original SaveWorld pre-call pushes LOCAL_DERIVED_RGD, SaveUser pre-call pushes FIELD_DERIVED_RGD, with authentic original 3211776B SHA-pinned DLL. These are static derived subtype loading facts, not RGD object initialization/dynamic argument identity, actual Save execution, Android device or same-world reopen. Native CI42052375742 failed strict water gate before delivery (T5/T1), not game Save. Keep LOCAL-005 OPEN NOT_READY 0/3; do not use shipped StreamingAssets/Data.rgd as a user world save."
       ],
       "acceptance": [
         "دخول عالم جديد محلي قابل للعب بلا Steam أو سيرفر خارجي",
@@ -236,7 +242,7 @@
         "لا يكفي إخفاء رسالة الاتصال"
       ],
       "updated_by": "T4",
-      "updated_at": "2026-11-05T14:44:34.750Z",
+      "updated_at": "2026-11-05T15:57:21.963Z",
       "_record_path": "../B_TEAM/issues/LOCAL-005.json"
     },
     {
@@ -372,7 +378,9 @@
         "https://github.com/alwansan/raf/actions/runs/42044249541",
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_SCENE_SHADER_USE_AND_POSTVENDOR_PRIORITY_2026-11-05.md",
         "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-original-scene-renderer-shader-postvendor-use.json",
-        "https://github.com/alwansan/raf/actions/runs/42046329453"
+        "https://github.com/alwansan/raf/actions/runs/42046329453",
+        "https://github.com/alwansan/raf/actions/runs/42058881426",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_921_STAGE_IO_DRIFT_CLASSIFICATION_2026-11-05.md"
       ],
       "remaining": [
         "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -414,7 +422,8 @@
         "T3 immutable ZIP2 original+real AssetRipper same-export CI41942377246: 25/25 external Texture2D references (22 sharedassets0, 3 sharedassets1) typed and GUID/fileID/type retained, zero missing/wrong/null; combined with prior 89 exact internal = 114 bound Texture slot occurrences preserved in the 41 selected original Materials. This rejects selected export pointer loss only; not importer samplers/sRGB/Shader/GPU/device. New scoped B15 sampler trial CI41943122343 INCONCLUSIVE on ValueError before evidence; classified retry launched.",
         "T3 CI42026630845: authentic bounded 12-owner PRE-restorer AssetRipper export has 731 Material docs (511 custom, 220 Unity builtin), all 511 custom docs point to 54 dummy Shader GUIDs and all 126 ShaderLab files carry default-Dummy marker; new native post-restorer quality audit integrated but not executed. Actual Android visual state and authored ShaderLab restoration remain UNKNOWN; RENDER-002 OPEN.",
         "T3 genuine same-instance ZIP2 6-scene source Renderer->Material->21 typed Shader48 use map: 1633 source material slots, 1373 still target DummyShaderTextExporter after bounded TMP/PostFX/Volumetric vendor restore, 256 Unity builtin, 4 non-Dummy, 2 Shader pointers outside selected typed owner; highest-use 921-slot original source Shader remains Dummy at this bounded stage. No full native post-restorer/Adreno evidence; prioritize authentic program reconstruction but check native builtins stage before claiming 921 device issue.",
-        "T3 source SHA-pinned 6-scene top-921 Renderer-use Shader48 has NO exact match among 198 official Unity2021.3.45f2 SHA-pinned runtime builtin shaders (CI42046329453). Exactly 3 other typed source shaders cover 256 original renderer slots and match builtin-name library (independently corroborates W1 exporter 3 builtins/256 slots). Top 921 still Dummy after TMP/PostFX/Volumetric in bounded export; must target original compiled stage/pass/variants, not archived builtin name substitution. Full native/Adreno pixels unknown; RENDER-002 OPEN."
+        "T3 source SHA-pinned 6-scene top-921 Renderer-use Shader48 has NO exact match among 198 official Unity2021.3.45f2 SHA-pinned runtime builtin shaders (CI42046329453). Exactly 3 other typed source shaders cover 256 original renderer slots and match builtin-name library (independently corroborates W1 exporter 3 builtins/256 slots). Top 921 still Dummy after TMP/PostFX/Volumetric in bounded export; must target original compiled stage/pass/variants, not archived builtin name substitution. Full native/Adreno pixels unknown; RENDER-002 OPEN.",
+        "T3: SHA-authentic original 921-use Shader48 four-Pass D3D11→SPIR-V→derivative HLSL roundtrip real CI42058881426 passed 71 controls. Per-stage input/output type-multisets preserved 8/8 each; I/O numeric-location relocation candidates inputs 8/8, outputs 4/8, not semantic/output parity. No ShaderLab source installed; Unity Android/phone visuals still unverified. RENDER-002 OPEN."
       ],
       "acceptance": [
         "مطابقة روابط ومراجع الأصل",
@@ -1359,6 +1368,34 @@
       "_record_path": "../B_TEAM/resources/T2-foam-original-backing-field-read-topology.json"
     },
     {
+      "id": "T2-foam-original-field-ref-array-call-consumer",
+      "owner": "T2",
+      "issue_id": "WATER-001",
+      "title": "Original Foam RenderTexture[] field address is consumed as typed byref RenderTexture[] call argument",
+      "kind": "original_managed_IL_address_consumer_typed_call",
+      "stages": {
+        "acquisition": "ZIP2_MANAGED_DLL_SIZE_SHA_VERIFIED",
+        "extraction": "STRICT_ORIGINAL_GUARDED_TEXTURE_INT_GETTER_EXACT_PRIVATE_RENDER_TEXTURE_ARRAY_FIELD",
+        "reconstruction": "ONE_ORIGINAL_LDFLDA_FLOWS_TO_EXACT_TYPED_REF_RENDER_TEXTURE_ARRAY_METHOD_ARGUMENT",
+        "binding": "BYREF_RECIPIENT_MAY_CHANGE_FIELD_BUT_ACTUAL_CALLEE_BODY_WRITE_AND_RUNTIME_NOT_YET_PROVEN",
+        "integration": "T2_SHA_ORIGINAL_CECIL_WORKFLOW42053062181_SUCCESS_SOURCE_ONLY_NO_SHADERLAB_OR_UNITY_CHANGE",
+        "device": "NOT_TESTED"
+      },
+      "observed": {
+        "original_ldflda_sites": 1,
+        "exact_typed_byref_argument_to_call_sites": 1,
+        "actual_callee_body_present_verified": false,
+        "actual_field_write_verified": false,
+        "runtime_contents_verified": false
+      },
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42053062181",
+        "https://github.com/alwansan/raf/commit/34f840561993b44c59cd7c61b22f1f013e64cd89"
+      ],
+      "next_step": "Resolve recipient exact original MethodDefinition and bound mutator opcodes. WATER-001 OPEN NOT_READY 0/3.",
+      "_record_path": "../B_TEAM/resources/T2-foam-original-field-ref-array-call-consumer.json"
+    },
+    {
       "id": "T2-foam-original-four-runtime-index-argument-origins",
       "owner": "T2",
       "issue_id": "WATER-001",
@@ -1987,6 +2024,76 @@
       "updated_by": "T3",
       "updated_at": "2026-11-05T12:25:00Z",
       "_record_path": "../B_TEAM/resources/T3-native-export-material-shader-program-quality.json"
+    },
+    {
+      "id": "T3-ORIGINAL-921-FOURPASS-SPIRV-HLSL-PRIVATE-TRANSLATION",
+      "title": "Original high-use 921-slot Shader48 one genuine D3D11 Vertex Fragment pair per Pass, SPIRV HLSL CPU roundtrip",
+      "owner": "T3",
+      "kind": "source-authentic-compiled-shader-diagnostic",
+      "stages": {
+        "acquisition": "ORIGINAL_ZIP2_PINNED_6_SCENES_AND_4_SHADER_MATERIAL_OWNER_SHA_VERIFIED",
+        "extraction": "ORIGINAL_TYPED_Shader48_SOURCE_SELECTED_BY_921_RENDERER_SLOT_USE_4_NORMAL_PASSES_33_PAIRS",
+        "reconstruction": "CI42052605123_SUCCESS_ONE_EXACT_PAIR_PER_4_PASSES_EIGHT_DXBC_TO_SPIRV_HLSL_ROUNDTRIP_STAGES",
+        "binding": "SOURCE_ROUNDTRIP_NUMERIC_RESOURCE_SLOT_DICTIONARIES_8_OF_8_EQUAL_IO_LOCATION_TYPE_LISTS_0_OF_8_EQUAL_SEMANTICS_UNVERIFIED",
+        "integration": "NOT_INSTALLED_NO_SHADERLAB_UNITY_ANDROID_GPU_RENDERER",
+        "device": "NOT_TESTED"
+      },
+      "schema_version": 1,
+      "status": "evidence_source_only_open_integration",
+      "issue_id": "RENDER-002",
+      "resource_key": "T3-authentic-original-top-921-Shader48-D3D11-fourPass-onePair-each",
+      "source_provider_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+      "experiments": [
+        "prompt/coordination/experiments/T3/20261105T1459Z-T3-chat-921-4pass-translation-c7d2.json"
+      ],
+      "source_translation_ci": "https://github.com/alwansan/raf/actions/runs/42052605123",
+      "source_run_success": true,
+      "original_four_passes": true,
+      "original_selected_compiled_stages_translated": 8,
+      "resource_slot_shape_equality": 8,
+      "roundtrip_io_type_location_equality": 0,
+      "source_variants_coverage": "4 of 33 exactly matched source pairs; original eight unpaired vertex records excluded",
+      "no_game_assets_or_Guids_changed": true,
+      "device_pixels_verified": false,
+      "blocker": "0/8 source-to-HLSL-roundtrip stage input/output location/type identical; actual semantic cause not yet inspected. ShaderLab render-state uniform sampler keyword binding and full Unity/Android acceptance missing.",
+      "updated_at": "2026-11-05T15:19:29.286Z",
+      "_record_path": "../B_TEAM/resources/T3-original-921-fourpass-SPIRV-HLSL.json"
+    },
+    {
+      "id": "T3-ORIGINAL-921-STAGE-IO-DRIFT-CLASSIFICATION",
+      "title": "Original high-use Shader48 SPIRV roundtrip location relocation and type multiset source-only classification",
+      "owner": "T3",
+      "kind": "source-authentic-compiled-shader-diagnostic",
+      "stages": {
+        "acquisition": "ORIGINAL_ZIP2_PINNED_6_SCENES_AND_4_SHADER_MATERIAL_OWNER_SHA_VERIFIED",
+        "extraction": "AUTHENTIC_921_SOURCE_RENDERER_SLOT_Shader48_4_PASSES_8_STAGES_SOURCE_IDENTITIES",
+        "reconstruction": "CI42058881426_SUCCESS_8_OF_8_GENUINE_DXBC_SPIRV_HLSL_ROUNDTRIP_STAGES_71_CONTROLS",
+        "binding": "8_OF_8_INPUT_AND_OUTPUT_TYPE_MULTISETS_EQUAL_BUT_INPUT_LOCATION_REMAP_8_OF_8_OUTPUT_LOCATION_REMAP_4_OF_8_SEMANTICS_UNPROVEN",
+        "integration": "NOT_INSTALLED_NO_SHADERLAB_NO_DEVICE_IMAGE_MATCH",
+        "device": "NOT_TESTED"
+      },
+      "schema_version": 1,
+      "issue_id": "RENDER-002",
+      "status": "source_authentic_cpu_diagnostic_proven_not_render_integrated",
+      "resource_key": "T3-source-top921-Shader48-fourPass-stageIO-lookup",
+      "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+      "source_shader_reference_weight": 921,
+      "source_stage_passes": 4,
+      "stage_pairs_compared": 8,
+      "input_type_multiset_preserved_stage_count": 8,
+      "output_type_multiset_preserved_stage_count": 8,
+      "input_location_remap_candidate_stages": 8,
+      "output_location_remap_candidate_stages": 4,
+      "source_to_derived_semantic_equality": "NOT_PROVEN",
+      "shaderlab_unity_android_compiled": false,
+      "Adreno_pixels_verified": false,
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42058881426",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_921_STAGE_IO_DRIFT_CLASSIFICATION_2026-11-05.md"
+      ],
+      "next_step": "Verify actual source DXBC signature semantics/component mapping to SPIRV builtin and generated HLSL attributes, with private artifacts, before ShaderLab installation.",
+      "updated_at": "2026-11-05T15:53:10.756Z",
+      "_record_path": "../B_TEAM/resources/T3-original-921-stage-IO-drift-source-classification.json"
     },
     {
       "id": "T3-AUTHENTIC-ORIGINAL-921-RENDERER-SHADER48-D3D11-PASS-VARIANT-LINKAGE",
@@ -5234,6 +5341,62 @@
       "_record_path": "../B_TEAM/events/T1/20261105T144500Z-T1-unity-vulkan-force-flag-isolated.json"
     },
     {
+      "id": "20261105T152005Z-T1-chat-439b69",
+      "owner": "T1",
+      "session_id": "20261105T152005Z-T1-chat-439b69",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "summary": "Source-only CI42054085947 passed 20 tests (3 paired, 5 first divergence, 4 spatial, 5 channel, 3 parity) and workflow YAML parse. Unity replay skipped by explicit gate in CI42054085725; no paired capture measured this session.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42054085947",
+        "https://github.com/alwansan/raf/actions/runs/42054085725",
+        "https://github.com/alwansan/raf/actions/runs/42052375742"
+      ],
+      "at": "2026-11-05T15:21:33.872Z",
+      "_record_path": "../B_TEAM/events/T1/20261105T152005Z-T1-chat-439b69.json"
+    },
+    {
+      "id": "20261105T153411Z-T1-chat-8e6351",
+      "owner": "T1",
+      "session_id": "20261105T153411Z-T1-chat-8e6351",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "summary": "CI42056377861 passed all 14 source-only tests (6 spatial, 5 channel and 3 parity). A reversal within sparse reference bounds is detected even with identical written coverage, and extra writes still reject a match. No real paired captures measured.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42056377861",
+        "https://github.com/alwansan/raf/actions/runs/42052375742"
+      ],
+      "at": "2026-11-05T15:35:05.138Z",
+      "_record_path": "../B_TEAM/events/T1/20261105T153411Z-T1-chat-8e6351.json"
+    },
+    {
+      "id": "20261105T154026Z-T1-chat-b05def",
+      "owner": "T1",
+      "session_id": "20261105T154026Z-T1-chat-b05def",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "summary": "Actual paired FFT replay reproduces numeric divergence after bit-exact GPU input copies. No tested spatial transform fully matches, including footprint X reversal, and none of 24 channel permutations improves 251 component mismatches. Both passes retain zero coverage differences and zero nonfinite values. The strict parity gate failed and private cleanup succeeded.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42057399746"
+      ],
+      "at": "2026-11-05T15:45:35.198Z",
+      "_record_path": "../B_TEAM/events/T1/20261105T154026Z-T1-chat-b05def.json"
+    },
+    {
+      "id": "20261105T154754Z-T1-chat-27f40a",
+      "owner": "T1",
+      "session_id": "20261105T154754Z-T1-chat-27f40a",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "summary": "First CI42058800952 staged 20 authenticated candidates but rejected an input use outside its strict Load-only inventory. Revised inventory counts Load, GetDimensions, subscript and unclassified use separately. Revised CI42058996998 started. Counts are static and do not establish runtime coordinates or fetched values.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42058800952",
+        "https://github.com/alwansan/raf/actions/runs/42058996998"
+      ],
+      "at": "2026-11-05T15:51:59.649Z",
+      "_record_path": "../B_TEAM/events/T1/20261105T154754Z-T1-chat-27f40a.json"
+    },
+    {
       "id": "T2-20261104T2354Z-start-foamabi",
       "owner": "T2",
       "session_id": "20261104T2354Z-T2-foamabi01",
@@ -5493,6 +5656,36 @@
       "_record_path": "../B_TEAM/events/T2/20261105T1445Z-original-foam-private-field-accesses.json"
     },
     {
+      "id": "T2-20261105T1517Z-original-foam-byref-call-consumer",
+      "owner": "T2",
+      "origin": "chat",
+      "session_id": "20261105T1509Z-T2-chat-original-byref-sink-a83c",
+      "issue_id": "WATER-001",
+      "at": "2026-11-05T15:17:00Z",
+      "type": "source_exact_foam_rendertexture_array_address_consumed_by_typed_byref_call",
+      "summary": "Original SHA-pinned Foam managed source CI42053062181 SUCCESS: one exact backing RenderTexture[] ldflda flows into typed ref RenderTexture[] formal parameter at actual call. Source proves argument/dataflow only, not the callee method body/write or runtime execution. Strong candidate for indirect array initialization, no original source bytes/names/IL disclosed. WATER-001 OPEN NOT_READY0/3.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42053062181",
+        "https://github.com/alwansan/raf/commit/34f840561993b44c59cd7c61b22f1f013e64cd89"
+      ],
+      "_record_path": "../B_TEAM/events/T2/20261105T1517Z-original-foam-byref-call-consumer.json"
+    },
+    {
+      "id": "T2-20261105T1605Z-original-foam-ref-array-dataflow-proven",
+      "owner": "T2",
+      "origin": "chat",
+      "session_id": "20261105T1540Z-T2-chat-byref-target-b6af",
+      "issue_id": "WATER-001",
+      "type": "original_compiled_typed_RenderTexture_array_write_dataflow",
+      "at": "2026-11-05T16:05:00Z",
+      "summary": "SHA-original Foam managed CI42060338704 SUCCESS proves newarr RenderTexture[] stored into exact ref RenderTexture[] method formal by stind.ref within same straight-line block, plus stelem.ref member write from same formal. Source-only CI42060975715 SUCCESS shows newarr size immediately preceding source is not a direct ldc.i4, so original four distinct nonnegative caller indices cannot yet be proven in bounds. No private original literals/IL/symbols published, no runtime/Unity/Adreno claim. WATER-001 OPEN NOT_READY0/3.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42060338704",
+        "https://github.com/alwansan/raf/actions/runs/42060975715"
+      ],
+      "_record_path": "../B_TEAM/events/T2/20261105T1605Z-original-foam-ref-array-dataflow-proven.json"
+    },
+    {
       "id": "T3-20261105-0002-render-harness-result-and-export-start",
       "owner": "T3",
       "session_id": "20261104T2354Z-T3-render-harness",
@@ -5689,6 +5882,36 @@
       "original_source_names_disclosed": false,
       "issue_stays_open": true,
       "_record_path": "../B_TEAM/events/T3/20261105T1436Z-highuse-Sh48-not-Unity-builtin.json"
+    },
+    {
+      "id": "T3-20261105T1459Z-original921-fourpass-real-translation",
+      "owner": "T3",
+      "session_id": "20261105T1459Z-T3-chat-921-4pass-translation-c7d2",
+      "issue_id": "RENDER-002",
+      "type": "result",
+      "summary": "CI42052605123 SUCCESS true original 921-use 4-pass Shader48 source: one genuine original V/F pair per pass, 8/8 DXBC->Vulkan1.1 SPIRV->derived HLSL->roundtrip SPIRV accepted; 4/4 source and roundtrip Pass V/F interfaces structurally compatible, 8/8 resource slot dictionaries same, but original-vs-roundtrip per-stage IO location/type lists differ 0/8. 61 synthetic controls PASS. No Android, no full variants, no original ShaderLab authored source.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42052605123",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_921_FOURPASS_TRANSLATION_2026-11-05.md"
+      ],
+      "at": "2026-11-05T15:19:29.286Z",
+      "_record_path": "../B_TEAM/events/T3/20261105T1459Z-T3-chat-921-4pass-translation-c7d2.json"
+    },
+    {
+      "id": "T3-20261105T1542Z-authentic921-IO-location-remap",
+      "owner": "T3",
+      "session_id": "20261105T1542Z-T3-chat-io-drift-integration-a6d9",
+      "origin": "chat",
+      "issue_id": "RENDER-002",
+      "type": "result",
+      "summary": "CI42058881426 SUCCESS on real SHA-pinned original Raft 921-slot Shader48 four-Pass source: all 8 SPV/HLSL roundtrip validated and resource slot shape 8/8, but 0/8 I/O location arrays equal; classifier proves stage input and output counts/type multisets equal 8/8, with 8/8 input and 4/8 output location-only remap candidates. 71 source-free tests pass. Semantic/output image parity still unknown.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42058881426",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_921_STAGE_IO_DRIFT_CLASSIFICATION_2026-11-05.md",
+        "https://github.com/alwansan/raf/actions/runs/42058710660"
+      ],
+      "at": "2026-11-05T15:53:10.756Z",
+      "_record_path": "../B_TEAM/events/T3/20261105T1542Z-T3-chat-io-drift-integration-a6d9.json"
     },
     {
       "id": "T4-20261104T2357Z-local-load-start",
@@ -5913,6 +6136,57 @@
       "_record_path": "../B_TEAM/events/T4/20261105T1443Z-T4-shipped-seed-not-world-save-parameter.json"
     },
     {
+      "id": "20261105T1521Z-T4-original-SaveWorld-RGD-il-22pass",
+      "owner": "T4",
+      "session_id": "20261105T1500Z-T4-chat-saveworld-rgd-producer-h5k2",
+      "origin": "chat",
+      "issue_id": "LOCAL-005",
+      "type": "original_source_compiled_il_provenance",
+      "status": "SOURCE_VERIFIED_ONLY",
+      "summary": "Exact SHA pinned original Assembly-CSharp CIL: SaveWorld and SaveUser each call private Save(string,RGD) once; no direct newobj RGD in SaveAndLoad, no generic Load<RGD> in SaveWorld/SaveUser. Immediate producer unresolved. CI42053882300 SUCCESS 22/22. No original game save invoked and no phone proof.",
+      "run_urls": [
+        "https://github.com/alwansan/raf/actions/runs/42052712119",
+        "https://github.com/alwansan/raf/actions/runs/42053331738",
+        "https://github.com/alwansan/raf/actions/runs/42053882300"
+      ],
+      "details": {
+        "saveworld_private_save_rgd_direct": 1,
+        "saveuser_private_save_rgd_direct": 1,
+        "all_saveandload_rgd_constructor_calls": 0,
+        "saveworld_generic_load_rgd_calls": 0,
+        "saveuser_generic_load_rgd_calls": 0,
+        "argument_instance_identity_proven": false,
+        "phone_play_save_reload_proven": false,
+        "not_ready_reviews": 0
+      },
+      "created_at": "2026-11-05T15:23:06.160Z",
+      "_record_path": "../B_TEAM/events/T4/20261105T1521Z-T4-original-SaveWorld-RGD-il-22pass.json"
+    },
+    {
+      "id": "20261105T1552Z-T4-RGD-derived-precall-22pass",
+      "owner": "T4",
+      "origin": "chat",
+      "session_id": "20261105T1544Z-T4-chat-original-rgd-precall-slice-w9c3",
+      "issue_id": "LOCAL-005",
+      "type": "authenticated_original_compiled_IL_evidence",
+      "status": "SOURCE_VERIFIED_ONLY",
+      "summary": "Exact SHA-pinned original Assembly-CSharp.dll compiled IL SaveWorld immediately pushes local whose CLR declared type derives RGD; SaveUser immediately pushes field whose declared type derives RGD. Real source-free CI42058900699 success 22/22. Does not reveal field/object identity or dynamic construction, game Save, phone or Unity.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42058900699",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_RGD_PRECALL_SLICE_2026-11-05.md"
+      ],
+      "claims": {
+        "original_source_sha_verified": true,
+        "saveworld_derived_RGD_local": true,
+        "saveuser_derived_RGD_field": true,
+        "dynamic_argument_identity_proven": false,
+        "world_save_file_proven": false,
+        "Android_or_Unity_proven": false
+      },
+      "created_at": "2026-11-05T15:55:51.056Z",
+      "_record_path": "../B_TEAM/events/T4/20261105T1552Z-T4-RGD-derived-precall-22pass.json"
+    },
+    {
       "id": "T5-20261104T2357Z-b12-fixture-start",
       "owner": "T5",
       "session_id": "20261104T2357Z-T5-b12-fixture-7e2",
@@ -6112,6 +6386,57 @@
       "_record_path": "../B_TEAM/events/T5/20261105T1438Z-native-cancel-verdict.json"
     },
     {
+      "id": "20261105T1455Z-T5-native-cancel-failed-step",
+      "owner": "T5",
+      "event_id": "20261105T1455Z-T5-native-cancel-failed-step",
+      "actor": "T5",
+      "origin": "scheduled",
+      "session_id": "20261105T1453Z-T5-scheduled-6e82",
+      "issue_id": "INTEGRATION-001",
+      "type": "source_test_pass",
+      "status": "SOURCE_FIXED",
+      "source_sha": "de9b8491628bbf680bef496c704f938415784c73",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42049488845"
+      ],
+      "summary": "Cancelled native job with failed step no longer erased by blanket no-source-failure verdict; 19/19 bounded tests PASS; original cancelled job remains no established source failure.",
+      "limits": "No native game build, no signed APK, no Android device test; readiness NOT_READY 0/3.",
+      "_record_path": "../B_TEAM/events/T5/20261105T1455Z-native-cancel-failed-step.json"
+    },
+    {
+      "id": "T5-20261105T1513Z-one-native-current-source-request",
+      "owner": "T5",
+      "session_id": "20261105T1508Z-T5-chat-native-retry-c2b7",
+      "origin": "chat",
+      "issue_id": "INTEGRATION-001",
+      "type": "integration",
+      "summary": "Exactly one approved incomplete-water Unity ARM64 diagnostic signed APK+OBB/XAPK request was issued after prior run42042902522 cancelled pre-Editor without source failure. New immutable source b0c4b4c05011. Run42052375742 request/license checks succeeded; reconstruct in progress at checkpoint. Strict water/authenticity, signatures and transport unchanged; no original game assets or source changed by request, no existing job cancelled; no signed candidate/device proof yet.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42052375742",
+        "https://github.com/alwansan/raf/commit/b0c4b4c05011d915cd845259f06b5f80ee368092",
+        "https://github.com/alwansan/raf/actions/runs/42042902522"
+      ],
+      "at": "2026-11-05T15:13:00Z",
+      "_record_path": "../B_TEAM/events/T5/20261105T1513Z-one-native-current-source-request.json"
+    },
+    {
+      "id": "T5-20261105T1552Z-water-ack-drift-corrected",
+      "owner": "T5",
+      "origin": "chat",
+      "session_id": "20261105T1543Z-T5-chat-water-live-ack-f2c9",
+      "issue_id": "INTEGRATION-001",
+      "type": "integration",
+      "summary": "Native CI42052375742 had first real failure in original water exact documented limitation gate after live sources changed: Blur structural passes now satisfied, Depth Copy remains unsatisfied; old five-entry native request stale. T5 added authentic CI aggregate replay to unchanged guard (12/12 PASS CI42058357801) and updated only request water list with exact Depth replacing Blur. One new native run42058825739 at immutable source e9c358ed passed request/license preflight and reconstruct was in progress at checkpoint; no signed package/device readiness. Strict water authenticity and no-clobber/Unity source checks unchanged.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42052375742",
+        "https://github.com/alwansan/raf/actions/runs/42058357801",
+        "https://github.com/alwansan/raf/actions/runs/42058825739",
+        "https://github.com/alwansan/raf/commit/e9c358eda01785b65e4eb14f18723da426635628"
+      ],
+      "at": "2026-11-05T15:52:00Z",
+      "_record_path": "../B_TEAM/events/T5/20261105T1552Z-water-ack-drift-corrected.json"
+    },
+    {
       "id": "20261104-b-generation",
       "owner": "owner-team-bootstrap",
       "session_id": "b-team-setup-20261104",
@@ -6140,7 +6465,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "2e5b4549269de8800af51621d20a3d292f64684f72a3f04242aa5cbe7b5f98fa",
+  "source_input_sha256": "a9212f9fe0d961a770225b699771aa95fe05aefabf60e24b7c10f07104677d80",
   "generation": "T-2026-11-05",
-  "input_sha256": "1a4a14893846ddf354292fd4d79e620d9d21fe4e16ccef473c531e566b166329"
+  "input_sha256": "f4bf78544eedf5098f1da9323e15dc7d7afd88e2eb16764e3c7f3287a2ab947e"
 }
