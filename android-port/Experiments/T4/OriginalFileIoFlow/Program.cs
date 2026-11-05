@@ -132,7 +132,7 @@ internal static class Program
             .ToArray();
         if (calls.Length != 1 || calls[0] is null)
             throw new InvalidDataException("ambiguous_compiled_original_call_edge");
-        return calls[0];
+        return calls[0]!;
     }
 
     private static int Main(string[] args)
