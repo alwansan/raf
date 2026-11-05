@@ -1,0 +1,14 @@
+{
+  "id": "T3-20261105T1607Z-original921-reflected-name-loss",
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T1607Z-T3-chat-spv-name-location-7c2d",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "Original SHA-verified six-scene 921-use Shader48 four-Pass SPIRV-Cross reflected interface name comparison CI42062573338 SUCCESS 86 controls: 0/34 original-to-roundtrip input names+types retained and 0/29 outputs, despite 8/8 input/output stage type-multisets, numeric resource binding shapes and valid SPIRV/HLSL roundtrip. Compiler name regeneration prevents using reflected labels as original DXBC semantic identity; no Unity/game patch, pixel parity unknown.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42062573338",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_921_SPIRV_INTERFACE_NAME_DRIFT_2026-11-05.md"
+  ],
+  "at": "2026-11-05T16:20:05.265Z"
+}
