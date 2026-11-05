@@ -33,12 +33,17 @@ def join(source_use:dict, w1:dict, shader_profiles:dict, *,
     if (not isinstance(source_use,dict) or len(source_use)!=EXPECTED_TYPED_SOURCES
         or sum(source_use.values())!=EXPECTED_TYPED_SLOT_USE
         or not isinstance(w1,dict) or not isinstance(w1.get("objects"),list)
+        or not isinstance(w1.get("export_instance"),str) or not w1["export_instance"]
         or not isinstance(shader_profiles,dict)
         or verified_source_report.get("status")!=original.STATUS
         or verified_source_report.get("counts",{}).get("original_slots_to_verified_Shader48", -1)!=EXPECTED_TYPED_SLOT_USE):
         raise ValueError("untrusted_original_scene_Shader48_usage_scope")
     # Explicit original typed SourceShader48 identity, never file name matching.
     selected=set(source_use)
+    if any(not isinstance(k,tuple) or len(k)!=2
+           or k[0] not in original.SHADER_OWNERS_SELECTED
+           or type(k[1]) is not int or k[1]<=0 for k in selected):
+        raise ValueError("untrusted_authenticated_original_Shader48_identity")
     by_original={}
     for row in w1["objects"]:
         if row.get("class_id")!=48:continue
