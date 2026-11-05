@@ -1,0 +1,15 @@
+{
+  "id": "T5-20261105T0010Z-zip2-render-success",
+  "owner": "T5",
+  "session_id": "20261104T2357Z-T5-b12-fixture-7e2",
+  "issue_id": "ASSET-RESTORE-001",
+  "type": "integration",
+  "summary": "T5 integrated strict immutable SHA-verified ZIP2 graphics source staging and opt-in hydration consumer. Initial failure41938979840 caught premature output dir before unsafe input; fixed full-batch preflight. Final CI41939143108 PASS 11 synthetic cases plus actual 111533516-byte original resources.assets reconstructed and independently consumed by feature LFS pointer without LFS. No Unity/device/FFT pixel proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41939143108",
+    "https://github.com/alwansan/raf/actions/runs/41938979840",
+    "https://github.com/alwansan/raf/commit/396eab4d3cd8acc0d462e96b748e56537a49bd01",
+    "https://github.com/alwansan/raf/commit/1c68ef8ea8a38b9d92c1e1cc204a6b9c913555a4"
+  ],
+  "at": "2026-11-05T00:11:31.625Z"
+}
