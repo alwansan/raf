@@ -4,8 +4,8 @@
   "origin": "chat",
   "session_id": "20261105T1442Z-T2-chat-foam-field-reads-c8d1",
   "issue_id": "WATER-001",
-  "status": "waiting_ci",
-  "updated_at": "2026-11-05T14:43:59.159Z",
+  "status": "completed",
+  "updated_at": "2026-11-05T14:45:34.625Z",
   "base_sha": "18ca0e65f5cee37f2833757677a1523e36b6b3af",
   "resumed_from_sessions": [
     "20261105T1434Z-T2-chat-rendertexture-serialization-93ad",
@@ -31,11 +31,22 @@
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42047763379"
   ],
-  "next_step": "Read CI42047763379, particularly T2_FOAM_FIELD_TOPOLOGY_SAFE job log for exact managed reader/address counts; on failure inspect first failing step and repair only T2 files. Do not touch T1 Unity CI42047391061.",
+  "next_step": "Trace the single original ldflda address-taking use and eight other ldfld to distinguish candidate indirect initialization from read-only consumption. Do not print original instruction sequences or private symbols. Cross-assembly/native/scene data outside current scan. WATER-001 OPEN NOT_READY 0/3.",
   "implementation_sha": "0881f9722f553e01e3694d7d49b964d53d2dff1e",
   "result": {
-    "code": "Strict Cecil source-original exact matching ldfld and ldflda aggregate, synthetic positive/typed decoy negative tests",
-    "original_sha_CI": "in_progress",
-    "device": "not tested"
+    "original_CI": "42047763379 COMPLETED SUCCESS",
+    "source_commit": "0881f9722f553e01e3694d7d49b964d53d2dff1e",
+    "original_SHA_managed": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "exact_field_ldfld_total": 10,
+    "getter_ldfld": 2,
+    "other_methods_ldfld": 8,
+    "distinct_reader_methods": 4,
+    "exact_field_ldflda_total": 1,
+    "other_method_ldflda": 1,
+    "distinct_address_methods": 1,
+    "safe_artifact_id": 13426150452,
+    "artifact_sha256": "6340258c4c983df3bbf8c4ca68845ed7960c4f84e69f95d562ab4e03e7245cca",
+    "runtime_array_contents_verified": false,
+    "array_population_proven": false
   }
 }
