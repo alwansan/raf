@@ -1,0 +1,13 @@
+{
+  "id": "T5-20261105T1042Z-original-filemanager-compiled-il-result",
+  "owner": "T5",
+  "session_id": "20261105T1025Z-T5-filemanager-metadata-bridge",
+  "issue_id": "LOCAL-005",
+  "type": "result",
+  "summary": "Authentic ZIP2 managed DLL original compiled IL resolves Load<T> and Save call edges to distinct static FileManager body-bearing methods; 1 direct System.IO call and exception handler each. Read 2 params/14 IL instructions, write 1 param/13. Original CI42012597665 SUCCESS, 11/11 schema tests; no Android save proof. T4 decompiler regex zero bodies is not absence.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42012597665",
+    "https://github.com/alwansan/raf/commit/7159dba501f4ee2615b92009c2b4622dd8d39f34"
+  ],
+  "at": "2026-11-05T10:42:00Z"
+}
