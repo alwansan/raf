@@ -1,0 +1,19 @@
+{
+  "session_id": "20261105T2351Z-T5-scheduled-resolution-bind-k7m2",
+  "origin": "scheduled",
+  "issue_id": "INTEGRATION-001",
+  "status": "active",
+  "base_sha": "188839a8bbf35cb96e71971935284206666ae06d",
+  "intended_files": [
+    "prompt/coordination/work/INTEGRATION-001/T5-20261105T2351Z-T5-scheduled-resolution-bind-k7m2.json",
+    "prompt/coordination/clients/T5/sessions/20261105T2351Z-T5-scheduled-resolution-bind-k7m2.md"
+  ],
+  "experiment_key": "resolution-settings-original-IL-option-callback-persistence-e1854d74-no-native",
+  "resource_key": null,
+  "hypothesis": "Existing Android Screen.SetResolution guard prevents mode changes but does not bind persisted render-scale choices; determine option callback and persistence before any runtime edit",
+  "taken_over_from": [
+    "docs/T5_RESOLUTION_ANDROID_POLICY_REVIEW_2026-11-05.md",
+    "docs/DEVICE_FEEDBACK_42058825739_AR.md"
+  ],
+  "updated_at": "2026-11-05T23:51:00Z"
+}
