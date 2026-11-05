@@ -32,6 +32,7 @@ jobs:
           set -euo pipefail
           python3 -m py_compile scripts/t3_particle_same_export_bindings.py scripts/t3_original_particle_material_texenv.py
           python3 -m unittest discover -s tests -p 'test_t3_particle_same_export_bindings.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_original_particle_shader_state.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_original_particle_material_texenv.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_original_renderer_shader_impact.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_original_particle_texture_targets.py' -v
@@ -204,7 +205,7 @@ jobs:
             "SAME_INSTANCE_SOURCE_PARTICLE108_5M_3T_10_TEXTURE_PPTR_EXACT",
             "SAME_INSTANCE_SOURCE_PARTICLE108_SCOPED_EXPORT_MISMATCH_OR_INCOMPLETE")
           assert d["same_export_instance_W1_B02_authenticated"] is True
-          assert d["original_source_materials"]==5 if "original_source_materials" in d else d["original_source_materials"]==5
+          assert d["original_source_materials"]==5
           assert d["original_source_texture_targets"]==3
           assert d["original_source_material_texture_slots"]==10
           assert d["private_original_export_shader_material_texture_labels_guids_disclosed"] is False
