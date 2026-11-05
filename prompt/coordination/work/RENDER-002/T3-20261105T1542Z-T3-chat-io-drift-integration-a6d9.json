@@ -68,5 +68,14 @@
     "artifact_id": 13429604578
   },
   "next_step": "Preserve successful source-on-run IO classification; privately verify exact original DXBC signature semantics vs emitted SPIRV BuiltIn/Location/Component/Interpolation and HLSL roundtrip attributes (not only type multiset), original Pass states/CB/sampler/texture/material keyword binding. Do not claim visual parity or drop 8 unpaired original vertex permutations; RENDER-002 OPEN.",
-  "updated_at": "2026-11-05T15:54:16.524Z"
+  "updated_at": "2026-11-05T16:02:45.602Z",
+  "ledger_refresh": {
+    "issue_evidence": "updated RENDER-002 stays OPEN",
+    "T3_resources_schema": "2 T3 resource records fixed with id/stages",
+    "T5_historical_event_schema": "id/owner aliases added with existing values preserved",
+    "latest_refresh_run": "https://github.com/alwansan/raf/actions/runs/42060764982",
+    "latest_refresh_result": "BLOCKED_BY_REMOTE_CONCURRENT_GITHUB_BRANCH_PUSHES",
+    "details": "Workflow data source and schema validation passed; GitHub remote rejected 3 fast-forward pushes (branch concurrent T2 commit, then two GitHub internal errors). No snapshot claim.",
+    "next_step": "Refresh T_TEAM SUMMARY/snapshot from fresh HEAD on a non-concurrent interval using scripts/refresh_t_team.py; do not force push or discard other agents."
+  }
 }
