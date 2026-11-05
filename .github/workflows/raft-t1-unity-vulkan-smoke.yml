@@ -1,0 +1,127 @@
+name: T1 WATER-001 Unity Vulkan backend smoke
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-t1-unity-vulkan-smoke.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: t1-unity-vulkan-smoke-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  rgba32f-transfer:
+    runs-on: ubuntu-24.04
+    environment: UNITY_LICENSE
+    concurrency:
+      group: raft-native-engine-${{ github.ref }}
+      cancel-in-progress: false
+    timeout-minutes: 25
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      DEBIAN_FRONTEND: noninteractive
+      CLI_SHA256: 1de550a620ee92e05e920b6db7d431621440b60b2577f04b4a997dc92a58cb0a
+      UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+      UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+      UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+      UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+    steps:
+      - name: Require existing license input and isolated disk budget
+        shell: bash
+        run: |
+          set -euo pipefail
+          set +x
+          if [ -z "${UNITY_LICENSE:-}" ] && { [ -z "${UNITY_SERIAL:-}" ] || [ -z "${UNITY_EMAIL:-}" ] || [ -z "${UNITY_PASSWORD:-}" ]; }; then
+            echo 'RAFT_T1_PRIVATE_GAMECI license_inputs_missing=true private_source_not_acquired=true'
+            exit 1
+          fi
+          test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2{print $4}')" -gt 12582912
+          echo 'RAFT_T1_PRIVATE_GAMECI valid_credential_inputs_present=true secrets_not_printed=true'
+      - name: Checkout only public T1 source-free and proprietary-data-safe tools
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+            android-port/Experiments/T1
+      - name: Download exact GameCI CLI v0.1.72 binary used in proven test and verify SHA
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/t1-gameci-cli"
+          curl --fail --location --silent --show-error --retry 3 \
+            "https://github.com/game-ci/cli/releases/download/v0.1.72/game-ci-linux-x64.tar.gz" \
+            --output "$RUNNER_TEMP/t1-gameci-cli.tar.gz"
+          echo "$CLI_SHA256  $RUNNER_TEMP/t1-gameci-cli.tar.gz" | sha256sum --check --status
+          tar -xzf "$RUNNER_TEMP/t1-gameci-cli.tar.gz" -C "$RUNNER_TEMP/t1-gameci-cli"
+          find "$RUNNER_TEMP/t1-gameci-cli" -type f -name game-ci -print -quit > "$RUNNER_TEMP/t1-gameci-exe.txt"
+          test -s "$RUNNER_TEMP/t1-gameci-exe.txt"
+          chmod +x "$(cat "$RUNNER_TEMP/t1-gameci-exe.txt")"
+          echo 'RAFT_T1_PRIVATE_GAMECI exact_official_cli_digest_verified=true'
+      - name: Run source-free RGBA32F transfer with explicit Vulkan
+        id: sourcefree
+        shell: bash
+        run: |
+          set -euo pipefail
+          set +x
+          cli="$(cat "$RUNNER_TEMP/t1-gameci-exe.txt")"
+          python3 -m scripts.t1_sourcefree_unity_fixture --project t1-rgba32f-control
+          rm t1-rgba32f-control/Assets/Tests/Editor/T1SourceFreeEditorTest.cs
+          cp android-port/Experiments/T1/T1FftRgba32fTransferControl.cs t1-rgba32f-control/Assets/Tests/Editor/
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path("t1-rgba32f-control/Assets/Tests/Editor/T1FftRgba32fTransferControl.cs")
+          text = path.read_text()
+          anchor = '        Assert.That(SystemInfo.supportsComputeShaders, Is.True);'
+          if text.count(anchor) != 1:
+              raise SystemExit("Vulkan test assertion anchor changed")
+          path.write_text(text.replace(anchor, """        var api = SystemInfo.graphicsDeviceType;
+                  File.WriteAllText(Path.Combine(Directory.GetParent(Application.dataPath).FullName,
+                      "vulkan-api.txt"), api == UnityEngine.Rendering.GraphicsDeviceType.Vulkan
+                          ? "Vulkan" : "NonVulkan");
+                  Assert.That(api, Is.EqualTo(UnityEngine.Rendering.GraphicsDeviceType.Vulkan));
+          """ + anchor))
+          PY
+          set +e
+          timeout 720s "$cli" test --docker --dockerShmSize=1025m --engine=unity \
+            t1-rgba32f-control --testPlatforms=editmode --engineVersion=2021.3.45f2 \
+            --artifactsPath=t1-rgba32f-control-artifacts \
+            --containerRegistryRepository=unityci/editor --containerRegistryImageVersion=3 \
+            --customParameters=-force-vulkan \
+            > "$RUNNER_TEMP/t1-rgba32f-control-cli.log" 2>&1
+          rc=$?
+          set -e
+          sudo chown -R "$(id -u):$(id -g)" t1-rgba32f-control t1-rgba32f-control-artifacts || true
+          python3 - "$rc" <<'PY'
+          from pathlib import Path
+          import sys
+          from scripts import t1_gameci_private_result_gate as gate
+
+          api_path = Path("t1-rgba32f-control/vulkan-api.txt")
+          api = api_path.read_bytes() if api_path.is_file() and api_path.stat().st_size <= 9 else b""
+          state = {b"Vulkan": "vulkan", b"NonVulkan": "other_backend"}.get(api, "test_not_reached")
+          print("RAFT_T1_UNITY_VULKAN runtime_api=" + state)
+          path = Path("t1-rgba32f-control-artifacts/editmode-results.xml")
+          if not path.is_file() or path.stat().st_size > gate.MAX_XML:
+              raise SystemExit("RGBA32F control: missing or unbounded test report")
+          gate.KNOWN["transfer"] = frozenset({
+              "T1FftRgba32fTransferControl.FloatTextureAndIntermediateUavPreserveCoordinatesAndChannels"
+          })
+          report = gate.classify(path.read_bytes(), int(sys.argv[1]), "transfer")
+          passed = state == "vulkan" and report["all_expected_tests_passed"]
+          print("RAFT_T1_RGBA32F_CONTROL all_expected_tests_passed=" + str(passed).lower())
+          raise SystemExit(0 if passed else 1)
+          PY
+      - name: Remove runner test projects and logs
+        if: always()
+        run: |
+          sudo rm -rf t1-rgba32f-control t1-rgba32f-control-artifacts
+          rm -rf "$RUNNER_TEMP/t1-gameci-cli" "$RUNNER_TEMP/t1-gameci-cli.tar.gz"
+          rm -f "$RUNNER_TEMP/t1-gameci-exe.txt" "$RUNNER_TEMP/t1-rgba32f-control-cli.log"
