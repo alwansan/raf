@@ -1,4 +1,7 @@
 name: T3 RENDER-002 selected original TextureImporter sampler same-export parity
+# T3 diagnostic retry: CI41943122343 compiled/ran real SHA-pinned export,
+# but source→B15 importer comparison raised unclassified ValueError. Stage
+# and static failure reason now captured without private source metadata.
 on:
   workflow_dispatch:
   push:
