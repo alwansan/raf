@@ -1,0 +1,16 @@
+{
+  "id": "20261105T1040Z-T4-original-managed-context",
+  "owner": "T4",
+  "session_id": "20261105T1021Z-T4-ref-context",
+  "issue_id": "LOCAL-005",
+  "type": "integration",
+  "summary": "Original ZIP2 SHA-pinned Assembly-CSharp.dll decompiled solo vs with 151 original Managed sibling DLLs, same exact binary bytes. Solo reproduces T4 class/body pair; with siblings exactly reproduces B07 production SHA and existing manifest. CI42011353849 succeeded A/B/C 10/10; final CI42012049920 succeeded production adapt('Raft_Network') and instrument('Raft_Network'), manifest SHA996e4c..., both original firstMoveNext and completion markers preserved, original assignment and yield count unchanged. Separate real original managed compiler integration CI41942118067 SUCCESS. No Unity/native APK/device, playable world or .rgd roundtrip; LOCAL-005 OPEN NOT_READY 0/3.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42011353849",
+    "https://github.com/alwansan/raf/actions/runs/42012049920",
+    "https://github.com/alwansan/raf/actions/runs/41942118067",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ILSPY_REFERENCE_CONTEXT_2026-11-05.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/t4_probe_ilspy_reference_context.py"
+  ],
+  "at": "2026-11-05T10:40:00Z"
+}
