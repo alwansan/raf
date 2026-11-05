@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T1100Z-T3-original-material-shader-edges",
+  "issue_id": "RENDER-002",
+  "track": "colors-materials/true-original-Material-Shader-target-to-export",
+  "approach": "SHA-pinned original Material21 m_Shader PPtr one-based external-owner resolution followed by W1 same-instance Shader_C21P source and actual Material YAML m_Shader GUID and .shader.meta target verification for selected 41; preserve authored data, publish only counts.",
+  "status": "active",
+  "base_sha": "20741ccc652f94afcc5bb0a1a55b5a0482737e8c",
+  "intended_files": [
+    "scripts/t3_original_material_shader_target.py",
+    "tests/test_t3_original_material_shader_target.py",
+    ".github/workflows/raft-t3-original-material-shader-target.yml",
+    "prompt/coordination/clients/T3/sessions/20261105T1100Z-T3-original-material-shader-edges.md"
+  ],
+  "hypothesis": "Selected 41 source Materials may serialize m_Shader correctly but reference absent/default/dummy Shader assets in actual Unity export; verify exact source/export target pointer and ShaderLab file existence without mistaking keyword/color/texture parity for shader completeness.",
+  "related_work": [
+    "https://github.com/alwansan/raf/actions/runs/42014733420",
+    "android-port/Experiments/ExportLineage/RaftExportLineage.cs",
+    "scripts/probe_a13_exported_material_shader_guids.py",
+    "scripts/w1_probe_original_shader_links.py"
+  ],
+  "taken_over_from": [
+    "scripts/probe_a13_material_shader_links.py",
+    "scripts/probe_a13_exported_material_shader_guids.py",
+    "scripts/w1_probe_original_shader_links.py",
+    "scripts/b43_material_keyword_fidelity.py"
+  ],
+  "experiment_ids": [
+    "T3-real-41-original-Shader-target-source-to-export-20261105"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Source-only SHA-authenticated 41 Material Shader pointer owner census, then only required real Shader provider same-instance export if source target scope supports it.",
+  "updated_at": "2026-11-05"
+}
