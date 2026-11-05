@@ -1,0 +1,13 @@
+{
+  "id": "T3-20261105T0030Z-material-keyword-original-export-match",
+  "owner": "T3",
+  "session_id": "20261105T0024Z-T3-keyword-real-export",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "Genuine SHA-verified ZIP2 nine-provider AssetRipper same-instance export: 41 selected original Material valid/invalid shader keyword arrays and disabledShaderPasses equal 41 actual exported YAML. Zero mismatches, bounded hypothesis rejected, no Unity/Adreno pixel proof; issue remains OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41941363661",
+    "https://github.com/alwansan/raf/commit/6940ccf0161a3ea4a52c083702692de74c0c64be"
+  ],
+  "at": "2026-11-05T00:30:00Z"
+}
