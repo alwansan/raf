@@ -2,7 +2,7 @@
   "session_id": "20261105T132841Z-T3-scheduled-6e9a",
   "origin": "scheduled",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "3011abe28a36a3055c272cf018d385ec9fc954ee",
   "taken_over_from": "T3 chat 20261105T131204828Z; CI42033940194",
   "intended_files": [
@@ -12,5 +12,10 @@
   "hypothesis": "Residual dummy-linked Materials can be prioritized by safe aggregate link-frequency bands without publishing shader identifiers",
   "experiment_key": "T3-residual-dummy-link-frequency-bands-source-v1",
   "resource_key": null,
-  "updated_at": "2026-11-05T13:28:41Z"
+  "updated_at": "2026-11-05T13:31:00Z",
+  "implementation_sha": "eb492c289d1ab19b5313f7d009c9bf79c105000e",
+  "test_fix_sha": "c00c03e3a0230b5fc62635478426a8e4fd8d8aff",
+  "ci_success_before_new_test": "https://github.com/alwansan/raf/actions/runs/42036204600",
+  "ci_failed_fixture": "https://github.com/alwansan/raf/actions/runs/42036226299",
+  "next_step": "Confirm new test CI, then compare safe bands on next authorized original post-restorer export; do not repeat heavy export solely for new metric."
 }
