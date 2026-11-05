@@ -4,7 +4,7 @@
   "session_id": "20261105T1647Z-T5-chat-native-milestone-7b4e",
   "origin": "chat",
   "issue_id": "INTEGRATION-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "cb1d2033e90ae9ccc78556ceb5caa5585831e331",
   "resumed_from_sessions": [
     "20261105T1611Z-T5-chat-native-provenance-5d7b",
@@ -34,11 +34,35 @@
     "prompt/coordination/work/INTEGRATION-001/T5-20261105T1647Z-T5-chat-native-milestone-7b4e-native-milestone-gate.json",
     "prompt/coordination/clients/T5/sessions/20261105T1647Z-T5-chat-native-milestone-7b4e.md",
     "prompt/coordination/experiments/T5/T5-20261105T1647Z-T5-chat-native-milestone-7b4e-native-milestones.json",
-    "prompt/coordination/B_TEAM/events/T5/20261105T1650Z-native-milestone-evidence.json"
+    "prompt/coordination/B_TEAM/events/T5/20261105T1650Z-native-milestone-evidence.json",
+    "tests/fixtures/t5_native_milestones_42058825739.json"
   ],
   "run_urls": [
-    "https://github.com/alwansan/raf/actions/runs/42058825739"
+    "https://github.com/alwansan/raf/actions/runs/42058825739",
+    "https://github.com/alwansan/raf/actions/runs/42068527576"
   ],
-  "next_step": "Create fail-closed source-only official job snapshot milestone contract and adversarial tests. No native job/cancel/production code modifications. Record CI and preserve exact signed-delivery boundary.",
-  "updated_at": "2026-11-05T16:47:00Z"
+  "next_step": "Follow real native CI42058825739 on immutable e9c358ed. If Unity ends in first actual failure, inspect first failed step/log and address only proven gate; if success verify signed APK+OBB+XAPK hashes and actual GitHub Release before phone; no duplicate while in progress.",
+  "updated_at": "2026-11-05T16:53:00Z",
+  "experiment_ids": [
+    "prompt/coordination/experiments/T5/T5-20261105T1647Z-T5-chat-native-milestone-7b4e-native-milestones.json"
+  ],
+  "result": {
+    "source_commit": "58f66a0fbe898394f8e45a385a57a7a833672c50",
+    "original_run": 42058825739,
+    "original_native_source_sha": "e9c358eda01785b65e4eb14f18723da426635628",
+    "original_native_status": "in_progress as last checked",
+    "original_native_stage": "Unity Editor 2021.3.45f2 Android import and compile, step62",
+    "original_water_gate": "success by experimental acknowledged deficits only",
+    "authentic_fft_verified": false,
+    "signed_APK_OBB_XAPK_verified": false,
+    "artifact_records": 4,
+    "artifacts_diagnostic_only": true,
+    "source_test_ci": 42068527576,
+    "source_test_job": 127389485952,
+    "source_test_conclusion": "success",
+    "tests_passed": 20,
+    "tests_failed": 0,
+    "claim_limit": "source-only official metadata milestone status and fail-closed controls, not Unity completion, APK release or device",
+    "native_rebuild_launched": false
+  }
 }
