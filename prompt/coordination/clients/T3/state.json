@@ -6,18 +6,21 @@
   "resumed_from_session": null,
   "status": "active",
   "base_sha": "b56ebc3847f251cee2539e9797471417d32698d2",
-  "last_commit": null,
-  "updated_at": "2026-11-04T23:54:00Z",
+  "last_commit": "615f914728cf15f5d60607115ecb7a4a8919d8e5",
+  "updated_at": "2026-11-05T00:02:00Z",
   "tracks": [
     "RENDER-002",
     "ASSET-RESTORE-001"
   ],
   "work_ids": [
-    "T3-20261104T2354Z-T3-render-harness-b12-csharp-fixture"
+    "T3-20261104T2354Z-T3-render-harness-b12-csharp-fixture",
+    "T3-20261104T2354Z-T3-render-harness-real-texenv-export"
   ],
   "run_urls": [
-    "https://github.com/alwansan/raf/actions/runs/41933025319"
+    "https://github.com/alwansan/raf/actions/runs/41933025319",
+    "https://github.com/alwansan/raf/actions/runs/41937719270",
+    "https://github.com/alwansan/raf/actions/runs/41938229887"
   ],
-  "next_step": "Fix B12 synthetic scene runner to compile exact production quality+compute helper without omitting runtime calls; then verify and resume same-instance material lineage.",
+  "next_step": "Await isolated 25m bounded actual SHA-pinned original ZIP2/export comparison 41938229887; if it fails inspect exact failed step and fix without touching other workflows. If it passes evaluate B05 41/227 scoped texture/UV mismatches and patch proven drift.",
   "memory_path": "prompt/coordination/clients/T3/MEMORY.md"
 }
