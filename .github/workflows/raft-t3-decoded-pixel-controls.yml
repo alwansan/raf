@@ -5,7 +5,9 @@ on:
     branches: [feature/android-native-port]
     paths:
       - scripts/t3_decoded_texture_pixel_parity.py
+      - scripts/t3_pixel_drift_diagnostics.py
       - tests/test_t3_decoded_texture_pixel_parity.py
+      - tests/test_t3_pixel_drift_diagnostics.py
       - .github/workflows/raft-t3-decoded-pixel-controls.yml
 permissions:
   contents: read
@@ -23,8 +25,11 @@ jobs:
           lfs: false
           sparse-checkout: |
             scripts/t3_decoded_texture_pixel_parity.py
+            scripts/t3_pixel_drift_diagnostics.py
             tests/test_t3_decoded_texture_pixel_parity.py
+            tests/test_t3_pixel_drift_diagnostics.py
       - name: Install Pillow and execute adversarial pixel tests
         run: |
           python3 -m pip install --user --disable-pip-version-check Pillow==11.3.0
           python3 -m unittest discover -s tests -p 'test_t3_decoded_texture_pixel_parity.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_pixel_drift_diagnostics.py' -v
