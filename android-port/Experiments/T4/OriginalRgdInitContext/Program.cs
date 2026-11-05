@@ -143,6 +143,107 @@ internal static class Program
         return (scope, arity, kind, body);
     }
 
+
+    // Source-only lexical return-site categories, NOT branch-aware stack value tracing.
+    private static object WorldProducerReturnSites(
+        MethodDefinition world, MethodDefinition save,
+        TypeDefinition[] types, string rgd)
+    {
+        var worldIl = world.Body.Instructions;
+        int saveAt = worldIl.IndexOf(FindSaveCall(world, save));
+        int localLoad = PriorNonNop(world, saveAt);
+        if (localLoad < 0) throw new InvalidDataException("world_local_missing");
+        int slot = LocalSlot(worldIl[localLoad], store: false);
+        if (slot < 0 || slot >= world.Body.Variables.Count ||
+            !DerivesFrom(world.Body.Variables[slot].VariableType, rgd, types))
+            throw new InvalidDataException("world_original_local_shape_drift");
+        var stores = Enumerable.Range(0, saveAt).Where(i =>
+            LocalSlot(worldIl[i], store: true) == slot).ToArray();
+        if (stores.Length != 1) throw new InvalidDataException("world_local_store_shape_drift");
+        int beforeStore = PriorNonNop(world, stores[0]);
+        if (beforeStore < 0 || !IsCall(worldIl[beforeStore]) ||
+            worldIl[beforeStore].Operand is not MethodReference reference ||
+            reference.DeclaringType.FullName != save.DeclaringType.FullName ||
+            reference.Parameters.Count != 0 || !reference.HasThis ||
+            !DerivesFrom(reference.ReturnType, rgd, types))
+            throw new InvalidDataException("world_producer_contract_drift");
+        MethodDefinition? original = null;
+        try { original = reference.Resolve(); } catch (Exception) {}
+        if (original is null || !original.HasBody || original.Module != save.Module ||
+            original.DeclaringType.FullName != save.DeclaringType.FullName ||
+            !DerivesFrom(original.ReturnType, rgd, types))
+            throw new InvalidDataException("world_original_factory_body_not_pinned");
+
+        var il = original.Body.Instructions;
+        int returns = 0, nullPredecessor = 0, localPredecessor = 0,
+            fieldPredecessor = 0, typedCallPredecessor = 0,
+            typedNewPredecessor = 0, otherPredecessor = 0;
+        int typedConstructors = 0, typedCallReturns = 0,
+            conditionalBranches = 0, throwSites = 0, nullLiteralLoads = 0;
+
+        for (int i = 0; i < il.Count; i++)
+        {
+            var ins = il[i];
+            if (ins.OpCode.FlowControl == FlowControl.Cond_Branch)
+                conditionalBranches++;
+            if (ins.OpCode.Code is Code.Throw or Code.Rethrow)
+                throwSites++;
+            if (ins.OpCode.Code == Code.Ldnull)
+                nullLiteralLoads++;
+            if (ins.OpCode.Code == Code.Newobj && ins.Operand is MethodReference ctor &&
+                DerivesFrom(ctor.DeclaringType, rgd, types))
+                typedConstructors++;
+            if (IsCall(ins) && ins.Operand is MethodReference method &&
+                DerivesFrom(method.ReturnType, rgd, types))
+                typedCallReturns++;
+            if (ins.OpCode.Code != Code.Ret) continue;
+            returns++;
+            int before = PriorNonNop(original, i);
+            if (before < 0) { otherPredecessor++; continue; }
+            var prev = il[before];
+            if (prev.OpCode.Code == Code.Ldnull) { nullPredecessor++; continue; }
+            int local = LocalSlot(prev, store: false);
+            if (local >= 0 && local < original.Body.Variables.Count &&
+                DerivesFrom(original.Body.Variables[local].VariableType, rgd, types))
+            { localPredecessor++; continue; }
+            if ((prev.OpCode.Code == Code.Ldfld || prev.OpCode.Code == Code.Ldsfld) &&
+                prev.Operand is FieldReference fld && DerivesFrom(fld.FieldType, rgd, types))
+            { fieldPredecessor++; continue; }
+            if (IsCall(prev) && prev.Operand is MethodReference called &&
+                DerivesFrom(called.ReturnType, rgd, types))
+            { typedCallPredecessor++; continue; }
+            if (prev.OpCode.Code == Code.Newobj &&
+                prev.Operand is MethodReference ctorAtRet &&
+                DerivesFrom(ctorAtRet.DeclaringType, rgd, types))
+            { typedNewPredecessor++; continue; }
+            otherPredecessor++;
+        }
+        if (returns < 1 || returns > 10000 ||
+            nullPredecessor + localPredecessor + fieldPredecessor +
+                typedCallPredecessor + typedNewPredecessor + otherPredecessor != returns)
+            throw new InvalidDataException("original_factory_return_counts_inconsistent");
+
+        int derivedLocals = original.Body.Variables.Count(v =>
+            DerivesFrom(v.VariableType, rgd, types));
+        return new
+        {
+            factory_lexical_return_sites = returns,
+            factory_return_preceded_by_null_literal = nullPredecessor,
+            factory_return_preceded_by_derived_local = localPredecessor,
+            factory_return_preceded_by_derived_field = fieldPredecessor,
+            factory_return_preceded_by_derived_call = typedCallPredecessor,
+            factory_return_preceded_by_derived_constructor = typedNewPredecessor,
+            factory_return_preceded_by_other_or_unknown = otherPredecessor,
+            factory_derived_rgd_local_slot_count = derivedLocals,
+            factory_direct_derived_rgd_constructor_sites = typedConstructors,
+            factory_direct_derived_rgd_returning_call_sites = typedCallReturns,
+            factory_conditional_branch_sites = conditionalBranches,
+            factory_throw_or_rethrow_sites = throwSites,
+            factory_null_literal_load_sites = nullLiteralLoads,
+            factory_all_return_paths_proven = false
+        };
+    }
+
     private static string ImmediateStoreValueCategory(
         MethodDefinition m, Instruction write, TypeDefinition[] types, string rgd)
     {
@@ -258,6 +359,7 @@ internal static class Program
 
             var producer = WorldProducer(world, save, all, rgd);
             var writes = UserFieldWrites(user, save, all, rgd);
+            var factoryReturns = WorldProducerReturnSites(world, save, all, rgd);
             var report = new
             {
                 schema = 1,
@@ -269,6 +371,7 @@ internal static class Program
                 world_producer_invocation_kind = producer.Kind,
                 world_producer_compiled_method_body_found = producer.CompiledBody,
                 field_write_breakdown = writes,
+                world_factory_return_metadata = factoryReturns,
                 direct_game_save_invoked = false,
                 actual_world_data_initialized = false,
                 original_rgd_file_read_or_written = false,
