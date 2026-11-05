@@ -1,0 +1,20 @@
+{
+  "id": "20261105T2204Z-T3-chat-particle108-mattex-a4c6",
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T2204Z-T3-chat-particle108-mattex-a4c6",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "at": "2026-11-05T22:10:29Z",
+  "summary": "SHA-authentic six-scene 108-slot ParticleShader48 source has five distinct Material21 objects, ten complete original TexEnv slots, ALL TEN non-null local Texture PPtrs, exactly three distinct scoped original Texture pointer targets, all ten UV data complete. CI42119098398 SUCCESS 81/81 source-free tests plus original SHA; no exported GUID/phone proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42119098398",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_MATERIAL_TEXENV_2026-11-05.md",
+    "https://github.com/alwansan/raf/commit/02bdaba315805fe48684faafdeedf2a692725f16"
+  ],
+  "limitations": [
+    "source bound PPtr not same-export Texture2D28 GUID",
+    "not Android pixel/particle emitter proof",
+    "RENDER-002 OPEN"
+  ]
+}
