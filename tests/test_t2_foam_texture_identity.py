@@ -118,6 +118,39 @@ class OriginalFoamTextureIdentityTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             compare_private_names(rows, [])
 
+    def test_repeated_original_numeric_pair_is_not_claimed_as_identity(self):
+        rows = original_texture_rows(program([
+            {"m_NameIndex": 1, "m_Index": 3, "m_SamplerIndex": 2},
+            {"m_NameIndex": 2, "m_Index": 3, "m_SamplerIndex": 2},
+        ]), {1: "SourceA", 2: "SourceB"}, 2)
+        out = compare_private_names(rows, ["CompiledA", "CompiledB"])
+        self.assertEqual(out["original_complete_numeric_pairs"], 2)
+        self.assertEqual(out["original_distinct_numeric_pairs"], 1)
+        self.assertFalse(out["numeric_pair_identity_to_spirv_verified"])
+        self.assertNotIn("SourceA", str(out))
+
+    def test_missing_numeric_pair_excluded_from_complete_count(self):
+        rows = original_texture_rows(program([
+            {"m_NameIndex": 1, "m_Index": 3},
+            {"m_NameIndex": 2, "m_Index": 3, "m_SamplerIndex": -1},
+        ]), {1: "SourceA", 2: "SourceB"}, 2)
+        out = compare_private_names(rows, ["CompiledA", "CompiledB"])
+        self.assertEqual(out["original_complete_numeric_pairs"], 1)
+        self.assertEqual(out["original_distinct_numeric_pairs"], 1)
+        self.assertEqual(out["original_numeric_field_presence_counts"]["m_SamplerIndex"], 1)
+        self.assertFalse(out["numeric_pair_identity_to_spirv_verified"])
+
+    def test_numeric_digest_is_order_independent_within_stage(self):
+        rows = original_texture_rows(program([
+            {"m_NameIndex": 1, "m_Index": 3, "m_SamplerIndex": 2},
+            {"m_NameIndex": 2, "m_Index": 5, "m_SamplerIndex": -1},
+        ]), {1: "SourceA", 2: "SourceB"}, 2)
+        forward = compare_private_names(rows, ["CompiledA", "CompiledB"])
+        backward = compare_private_names(list(reversed(rows)), ["CompiledB", "CompiledA"])
+        self.assertEqual(forward["original_numeric_pair_digest_sha256"],
+                         backward["original_numeric_pair_digest_sha256"])
+        self.assertFalse(forward["numeric_pair_identity_to_spirv_verified"])
+
     def test_reflection_malformed_kind_rejected(self):
         with self.assertRaises(ValueError):
             translated_image_names({"separate_images": "bad"}, 1, ())
