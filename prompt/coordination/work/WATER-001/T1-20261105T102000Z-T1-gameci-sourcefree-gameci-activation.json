@@ -6,7 +6,7 @@
   "issue_id": "WATER-001",
   "track": "Independent GameCI-supported source-free Unity 2021 activation pathway",
   "approach": "Probe exact Unity2021.3.45f2 license activation using the official GameCI unity-test-runner v4 on an isolated synthetic EditMode project, before downloading Raft original FFT or emitting proprietary shader bytes. Classify action result separately from custom Docker -manualLicenseFile failures; no native build request.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "02e9fba7fb42b83579595885391be636ee3b56e8",
   "intended_files": [
     ".github/workflows/raft-t1-gameci-unity-activation.yml",
@@ -29,10 +29,12 @@
   ],
   "experiment_ids": [],
   "run_urls": [
-    "https://github.com/alwansan/raf/actions/runs/42010878771"
+    "https://github.com/alwansan/raf/actions/runs/42010878771",
+    "https://github.com/alwansan/raf/actions/runs/42011666916",
+    "https://github.com/alwansan/raf/actions/runs/42011720822"
   ],
-  "result": "Fixture generator and adversarial source-free controls completed successfully in live CI. GameCI unity-test-runner@v4 activation / EditMode stage still in_progress at checkpoint; no Unity activation or FFT execution claimed.",
-  "next_step": "Create exact synthetic Unity EditMode fixture and independent v4 action workflow with existing UNITY_LICENSE environment and build engine mutex. Run first external-activation test and record bounded outcome. No ZIP2 or proprietary assets.",
-  "updated_at": "2026-11-05T10:30:00Z",
+  "result": "CI42010878771 SUCCESS actual GameCI-supported Unity2021.3.45f2 activation and 1/1 synthetic NUnit EditMode. Intermediate 42011666916 failed during fixture/test version mismatch before Unity; corrected source/test commit8f74158. CI42011720822 SUCCESS: 2/2 actual Unity EditMode tests, synthetic .compute recognized as ComputeShader, SystemInfo.supportsComputeShaders=true, HasKernel/FindKernel/group XYZ=(64,1,1) assertions passed. Original FFT not used; no Adreno or original runtime mapping proven.",
+  "next_step": "Use pinned GameCI CLI v0.1.72 to run private original-derived FFT import with redacted stdout/stderr and XML aggregate only. Never directly run old custom base-3 licensing; WATER-001 remains OPEN.",
+  "updated_at": "2026-11-05T10:36:00Z",
   "identity_conflict": "T1 multiple independent sessions; do not overwrite canonical T1 state or prior T1 file scopes."
 }
