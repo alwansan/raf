@@ -1,0 +1,19 @@
+{
+  "id": "20261105T153411Z-T1-chat-8e6351",
+  "session_id": "20261105T153411Z-T1-chat-8e6351",
+  "origin": "chat",
+  "owner": "T1",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "99de98051b20c1f719c0e28ed896b942542ff2e2",
+  "updated_at": "2026-11-05T15:34:11.988Z",
+  "intended_files": [
+    "scripts/t1_fft_pass0_spatial_diagnostic.py",
+    "tests/test_t1_fft_pass0_spatial_diagnostic.py"
+  ],
+  "experiment_key": "pass0-reference-write-footprint-mirror-sparse-rgba32f-synthetic",
+  "resumed_from_sessions": [
+    "20261105T152005Z-T1-chat-439b69",
+    "20261105T143200Z-T1-chat-04494d"
+  ]
+}
