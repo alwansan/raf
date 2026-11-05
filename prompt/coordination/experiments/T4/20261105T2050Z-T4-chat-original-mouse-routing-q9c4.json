@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261105T2050Z-T4-chat-original-mouse-routing-q9c4",
+  "origin": "chat",
+  "issue_id": "INPUT-005",
+  "hypothesis": "Original Raft compiled camera-like source uses direct legacy Unity Mouse X/Y axes rather than necessarily consuming InputSystem.Mouse.current.delta. Preserve the legacy consumer in any Android native capture bridge.",
+  "source_commit": "fe9a9ae5264821304923d6bac04d21089f3a3df8",
+  "input_hashes": [
+    "Assembly-CSharp.dll zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385 sha256:0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e"
+  ],
+  "tool_versions": {
+    "ilspycmd": "11.2.0.10050",
+    "dotnet": "10.0.x",
+    "python": "ubuntu-24.04"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t4_original_mouse_routing.py -v",
+    "ILSpy private decompile -p -lv CSharp9_0",
+    "python3 -m scripts.t4_original_mouse_routing --dll ORIGINAL_DLL --source PRIVATE_SOURCE"
+  ],
+  "negative_controls": [
+    "comment false positives",
+    "source symlink rejection",
+    "file size budget",
+    "incorrect authentic DLL SHA",
+    "no proprietary paths in report"
+  ],
+  "workflow_path": ".github/workflows/raft-t4-original-mouse-routing.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42107935479",
+  "artifact_urls": [],
+  "budget": "12m ubuntu-24.04 source-only, no Unity build, read-only SHA-verified original DLL",
+  "status": "completed",
+  "observed_result": {
+    "run": "SUCCESS",
+    "source_free_tests": "7/7",
+    "original_dll_verified": true,
+    "source_files": 2395,
+    "direct_legacy_mouse_x": 4,
+    "direct_legacy_mouse_y": 4,
+    "camera_player_named_direct_sites": 8,
+    "custom_myinput_mouse_sites": 0,
+    "inputsystem_mouse_delta_sites": 0,
+    "cursor_lock_assignment_sites": 2,
+    "all_getaxis_syntax_sites": 30
+  },
+  "rejected_hypotheses": [
+    "No direct original legacy mouse-axis call sites exist: rejected"
+  ],
+  "limitations": [
+    "Lexical scan is not runtime call-graph proof",
+    "camera-name categorization is heuristic",
+    "no Android pointer capture implementation",
+    "no Unity compilation or device test",
+    "original source not published"
+  ],
+  "integration_commit": "fe9a9ae5264821304923d6bac04d21089f3a3df8",
+  "next_step": "Integrate Android API26+ pointer capture with legacy input-axis route, focus/menu release, no duplicates; run Java/C# then phone regression tests."
+}
