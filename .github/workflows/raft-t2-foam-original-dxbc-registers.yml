@@ -1,0 +1,99 @@
+name: T2 WATER-001 original Foam DXBC texture sampler register parity
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t2_foam_original_dxbc_registers.py
+      - tests/test_t2_foam_original_dxbc_registers.py
+      - .github/workflows/raft-t2-foam-original-dxbc-registers.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: t2-foam-original-dxbc-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  original-dxbc-register-parity:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Adversarial original texture t/s and native DXBC numeric controls
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t2_foam_original_dxbc_registers.py
+          python3 -m unittest discover -s tests -p 'test_t2_foam_original_dxbc_registers.py' -v
+      - name: Available disk before source staging
+        run: |
+          python3 - <<'PY'
+          import shutil
+          assert shutil.disk_usage('.').free > 3 * 1024**3
+          PY
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: t2-foam-original-dxbc-zip2
+          lfs: false
+          persist-credentials: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/sharedassets0.assets/*
+      - name: Reassemble exactly pinned 115978112-byte original owner; no LFS
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os, subprocess
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import ZIP2_SHA, PINS, stage
+          root = Path('t2-foam-original-dxbc-zip2')
+          assert subprocess.check_output(['git', '-C', str(root), 'rev-parse', 'HEAD'], text=True).strip() == ZIP2_SHA
+          target = Path(os.environ['RUNNER_TEMP']) / 't2-foam-original-dxbc-source'
+          evidence = stage(root, target, {'Raft_Data/sharedassets0.assets': PINS['Raft_Data/sharedassets0.assets']})
+          assert evidence['verified_bytes'] == 115978112 and evidence['lfs_used'] is False
+          print('T2_FOAM_ORIGINAL_DXBC original_sha=true bytes=115978112 lfs=false')
+          PY
+      - name: Install exact Unity serialized reader; no native build or translator
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4
+      - name: Join source Foam m_Index and m_SamplerIndex with authentic native DXBC declarations
+        run: |
+          set -euo pipefail
+          timeout 180s python3 -m scripts.t2_foam_original_dxbc_registers \
+            --source "$RUNNER_TEMP/t2-foam-original-dxbc-source" \
+            --out "$RUNNER_TEMP/t2-foam-dxbc-numeric-safe.json"
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          r = json.loads((Path(os.environ['RUNNER_TEMP'])/'t2-foam-dxbc-numeric-safe.json').read_text())
+          assert r['status'] == 'foam_original_source_to_native_dxbc_numeric_registers_audited'
+          assert r['original_stages'] == 4 and r['original_textures'] == 6
+          assert len(r['stages']) == 4
+          assert all(s['exact_original_dxbc_sha_attested'] for s in r['stages'])
+          assert all(not s['native_dxbc_to_translated_spirv_binding_identity_verified'] for s in r['stages'])
+          assert not r['unity_material_upload_or_device_verified']
+          assert not r['private_program_or_shader_names_published']
+          PY
+      - name: Erase private source and ZIP2 checkout even if preceding checks fail
+        if: always()
+        run: |
+          rm -rf -- "$RUNNER_TEMP/t2-foam-original-dxbc-source" "$GITHUB_WORKSPACE/t2-foam-original-dxbc-zip2"
+      - name: Upload bounded numeric original DXBC/Unity parameter comparisons only
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: t2-foam-original-dxbc-safe-${{ github.run_id }}
+          path: ${{ runner.temp }}/t2-foam-dxbc-numeric-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
