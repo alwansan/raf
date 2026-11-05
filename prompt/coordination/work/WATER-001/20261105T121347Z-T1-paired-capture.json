@@ -9,5 +9,13 @@
     "20261105T121028Z-T1-parity-oracle",
     "https://github.com/alwansan/raf/actions/runs/42019283679"
   ],
-  "approach": "Capture one-row authenticated Vulkan source/butterfly and both pass outputs; feed exact RGBA32F input bytes into the licensed private Unity fixture and compare both readbacks."
+  "approach": "Capture one-row authenticated Vulkan source/butterfly and both pass outputs; feed exact RGBA32F input bytes into the licensed private Unity fixture and compare both readbacks.",
+  "files": [
+    ".github/workflows/raft-t1-private-fft-readback-parity.yml",
+    "scripts/t1_fft_vulkan_parity_capture.py",
+    "scripts/t1_stage_original_fft_compute_candidates.py",
+    "android-port/Experiments/T1/T1PrivateFftParityCaptureTests.cs"
+  ],
+  "result": "Prepared private CI experiment: Vulkan captures original-derived SPIR-V pair 0/1 source, butterfly, intermediate and final RGBA32F images. Unity uploads the same input bytes with a linear float target, uses one workgroup and captures both passes. The comparator publishes counts and booleans only. Local Python compile, Vulkan host source transform, and workflow YAML parse passed. Actual execution pending.",
+  "next_step": "Read exact workflow status, inspect bounded stage results, and preserve mismatch evidence if any."
 }

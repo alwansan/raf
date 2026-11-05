@@ -1,0 +1,206 @@
+name: T1 WATER-001 private Unity versus original DXBC Vulkan FFT readback parity
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-t1-private-fft-readback-parity.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: t1-private-fft-readback-parity-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  sha-original-derived-fft-unity:
+    runs-on: ubuntu-24.04
+    environment: UNITY_LICENSE
+    concurrency:
+      group: raft-native-engine-${{ github.ref }}
+      cancel-in-progress: false
+    timeout-minutes: 65
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      DEBIAN_FRONTEND: noninteractive
+      ZIP2_SHA: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+      CLI_SHA256: 1de550a620ee92e05e920b6db7d431621440b60b2577f04b4a997dc92a58cb0a
+      UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+      UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+      UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+      UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+    steps:
+      - name: Require existing license input and isolated disk budget
+        shell: bash
+        run: |
+          set -euo pipefail
+          set +x
+          if [ -z "${UNITY_LICENSE:-}" ] && { [ -z "${UNITY_SERIAL:-}" ] || [ -z "${UNITY_EMAIL:-}" ] || [ -z "${UNITY_PASSWORD:-}" ]; }; then
+            echo 'RAFT_T1_PRIVATE_GAMECI license_inputs_missing=true private_source_not_acquired=true'
+            exit 1
+          fi
+          test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2{print $4}')" -gt 20971520
+          echo 'RAFT_T1_PRIVATE_GAMECI valid_credential_inputs_present=true secrets_not_printed=true'
+      - name: Checkout only public T1 source-free and proprietary-data-safe tools
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+            android-port/Experiments/T1
+      - name: Validate private XML fail-closed controls and public SHA-pinned staging
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_t1_gameci_private_result_gate.py -v
+          python3 -m unittest discover -s tests -p test_t1_sourcefree_unity_fixture.py -v
+          python3 -m unittest discover -s tests -p test_t1_stage_original_fft_compute_candidates.py -v
+          python3 -m unittest discover -s tests -p test_t1_fft_unity_gpu_resource_bridge.py -v
+          python3 -m unittest discover -s tests -p test_t1_fft_unity_gpu_result_gate.py -v
+          python3 -m unittest discover -s tests -p test_t1_fft_readback_parity.py -v
+      - name: Download exact GameCI CLI v0.1.72 binary used in proven test and verify SHA
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/t1-gameci-cli"
+          curl --fail --location --silent --show-error --retry 3 \
+            "https://github.com/game-ci/cli/releases/download/v0.1.72/game-ci-linux-x64.tar.gz" \
+            --output "$RUNNER_TEMP/t1-gameci-cli.tar.gz"
+          echo "$CLI_SHA256  $RUNNER_TEMP/t1-gameci-cli.tar.gz" | sha256sum --check --status
+          tar -xzf "$RUNNER_TEMP/t1-gameci-cli.tar.gz" -C "$RUNNER_TEMP/t1-gameci-cli"
+          find "$RUNNER_TEMP/t1-gameci-cli" -type f -name game-ci -print -quit > "$RUNNER_TEMP/t1-gameci-exe.txt"
+          test -s "$RUNNER_TEMP/t1-gameci-exe.txt"
+          chmod +x "$(cat "$RUNNER_TEMP/t1-gameci-exe.txt")"
+          echo 'RAFT_T1_PRIVATE_GAMECI exact_official_cli_digest_verified=true'
+      - name: Run source-free Unity ComputeShader tests through the same CLI with no raw log output
+        id: sourcefree
+        shell: bash
+        run: |
+          set -euo pipefail
+          set +x
+          cli="$(cat "$RUNNER_TEMP/t1-gameci-exe.txt")"
+          python3 -m scripts.t1_sourcefree_unity_fixture --project t1-cli-synthetic
+          set +e
+          timeout 720s "$cli" test --docker --dockerShmSize=1025m --engine=unity \
+            t1-cli-synthetic --testPlatforms=editmode --engineVersion=2021.3.45f2 \
+            --artifactsPath=t1-cli-synthetic-artifacts \
+            --containerRegistryRepository=unityci/editor --containerRegistryImageVersion=3 \
+            > "$RUNNER_TEMP/t1-synthetic-private-cli.log" 2>&1
+          rc=$?
+          set -e
+          sudo chown -R "$(id -u):$(id -g)" t1-cli-synthetic t1-cli-synthetic-artifacts || true
+          python3 -m scripts.t1_gameci_private_result_gate \
+            --stage synthetic --exit-code "$rc" \
+            --result t1-cli-synthetic-artifacts/editmode-results.xml
+          echo 'RAFT_T1_PRIVATE_GAMECI sourcefree_supports_compute=true original_source_not_yet_acquired=true'
+          sudo rm -rf t1-cli-synthetic t1-cli-synthetic-artifacts
+          rm -f "$RUNNER_TEMP/t1-synthetic-private-cli.log"
+      - name: Install source-authentic DXBC translators only after source-free GameCI proof
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools python3-venv g++ libvulkan-dev mesa-vulkan-drivers
+          # GameCI's Docker test runner may leave host user home paths
+          # root-owned. Never install source tooling with pip --user.
+          python3 -m venv "$RUNNER_TEMP/t1-python-venv"
+          "$RUNNER_TEMP/t1-python-venv/bin/python" -m pip install \
+            --disable-pip-version-check UnityPy==1.25.4 -q
+      - name: Recover exact SHA-verified original FFT object from immutable ZIP2
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/t1-private-zip2"
+          git -C "$RUNNER_TEMP/t1-private-zip2" init -q
+          git -C "$RUNNER_TEMP/t1-private-zip2" remote add origin https://github.com/alwansan/raf.git
+          git -C "$RUNNER_TEMP/t1-private-zip2" -c protocol.version=2 fetch -q --depth=1 --filter=blob:none origin zip2
+          test "$(git -C "$RUNNER_TEMP/t1-private-zip2" rev-parse FETCH_HEAD)" = "$ZIP2_SHA"
+          git -C "$RUNNER_TEMP/t1-private-zip2" sparse-checkout init --no-cone
+          printf '%s\n' '/RAFT_FILE_MANIFEST.tsv' '/Raft/Raft_Data/sharedassets0.assets/' |
+            git -C "$RUNNER_TEMP/t1-private-zip2" sparse-checkout set --no-cone --stdin
+          git -C "$RUNNER_TEMP/t1-private-zip2" checkout -q --detach FETCH_HEAD
+          python3 -m scripts.stage_zip2_fft_owner \
+            --zip2-checkout "$RUNNER_TEMP/t1-private-zip2" \
+            --destination "$RUNNER_TEMP/t1-original-verified/Raft_Data/sharedassets0.assets"
+      - name: Convert 20 SHA-authentic original DXBC programs into ephemeral private Unity compute candidates
+        shell: bash
+        run: |
+          set -euo pipefail
+          "$RUNNER_TEMP/t1-python-venv/bin/python" -m scripts.t1_stage_original_fft_compute_candidates \
+            --original-data "$RUNNER_TEMP/t1-original-verified/Raft_Data" \
+            --project "$GITHUB_WORKSPACE/t1-original-derived-unity" --keep-first-pair-spirv
+          python3 - <<'PY'
+          import json,shutil
+          from pathlib import Path
+          root=Path("t1-original-derived-unity")
+          tests=root/"Assets/Tests/Editor"
+          tests.mkdir(parents=True)
+          shutil.copyfile("android-port/Experiments/T1/T1PrivateFftImportTests.cs",
+                          tests/"T1PrivateFftImportTests.cs")
+          shutil.copyfile("android-port/Experiments/T1/T1PrivateFftParityCaptureTests.cs",
+                          tests/"T1PrivateFftGpuDispatchTests.cs")
+          asmdef=json.loads(Path("t1-cli-synthetic/Assets/Tests/Editor/T1SourceFreeEditorTests.asmdef").read_text()) if Path("t1-cli-synthetic/Assets/Tests/Editor/T1SourceFreeEditorTests.asmdef").exists() else {
+              "name":"T1PrivateFftImportTests","rootNamespace":"","references":[],
+              "includePlatforms":["Editor"],"excludePlatforms":[],"allowUnsafeCode":False,
+              "overrideReferences":True,"precompiledReferences":["nunit.framework.dll"],
+              "optionalUnityReferences":["TestAssemblies"],"autoReferenced":False,
+              "defineConstraints":[],"versionDefines":[],"noEngineReferences":False
+          }
+          asmdef["name"]="T1PrivateFftImportTests"
+          (tests/"T1PrivateFftImportTests.asmdef").write_text(json.dumps(asmdef,sort_keys=True)+"\n")
+          (root/"Packages/manifest.json").write_text(
+              json.dumps({"dependencies":{"com.unity.test-framework":"1.1.33"}},sort_keys=True)+"\n")
+          assert len(list((root/"Assets/T1OriginalDerived").glob("FFT_Candidate_*.compute")))==20
+          print("RAFT_T1_PRIVATE_COMPUTE_STAGING source_auth_verified=true staged_candidates=20 raw_source_published=false")
+          PY
+      - name: Capture both original DXBC pass outputs with Mesa CPU Vulkan
+        shell: bash
+        run: |
+          set -euo pipefail
+          export VK_DRIVER_FILES="$(find /usr/share/vulkan/icd.d -maxdepth 1 -name '*lvp*.json' -print -quit)"
+          test -f "$VK_DRIVER_FILES"
+          python3 -m scripts.t1_fft_vulkan_parity_capture --project t1-original-derived-unity
+          rm -rf t1-original-derived-unity/_private_vulkan
+      - name: Validate privately translated original FFT t0/t1/u2 HLSL resources for first candidate pair
+        shell: bash
+        run: |
+          set -euo pipefail
+          "$RUNNER_TEMP/t1-python-venv/bin/python" -m scripts.t1_fft_unity_gpu_resource_bridge \
+            --project "$GITHUB_WORKSPACE/t1-original-derived-unity"
+      - name: Execute exact original-derived FFT ComputeShader import and two-pass GPU dispatch with PRIVATE captured GameCI logs
+        id: original
+        shell: bash
+        run: |
+          set -euo pipefail
+          set +x
+          cli="$(cat "$RUNNER_TEMP/t1-gameci-exe.txt")"
+          set +e
+          timeout 1200s "$cli" test --docker --dockerShmSize=1025m --engine=unity \
+            t1-original-derived-unity --testPlatforms=editmode --engineVersion=2021.3.45f2 \
+            --artifactsPath=t1-original-private-test-artifacts \
+            --containerRegistryRepository=unityci/editor --containerRegistryImageVersion=3 \
+            > "$RUNNER_TEMP/t1-original-private-gameci.log" 2>&1
+          rc=$?
+          set -e
+          sudo chown -R "$(id -u):$(id -g)" t1-original-derived-unity t1-original-private-test-artifacts || true
+          # Parse NUnit root attributes and exact expected test-case identity;
+          # NEVER display XML messages, compiler logs, shader contents or source paths.
+          python3 -m scripts.t1_fft_unity_gpu_result_gate \
+            --exit-code "$rc" \
+            --xml t1-original-private-test-artifacts/editmode-results.xml
+          python3 -m scripts.t1_fft_readback_parity \
+            t1-original-derived-unity/T1VulkanCapture \
+            t1-original-derived-unity/T1UnityCapture 1024 32
+      - name: Destroy ALL private shader assets, original source, license-adjacent logs and test outputs
+        if: always()
+        shell: bash
+        run: |
+          sudo rm -rf "$GITHUB_WORKSPACE/t1-cli-synthetic" "$GITHUB_WORKSPACE/t1-cli-synthetic-artifacts" \
+            "$GITHUB_WORKSPACE/t1-original-derived-unity" "$GITHUB_WORKSPACE/t1-original-private-test-artifacts" \
+            "$RUNNER_TEMP/t1-private-zip2" "$RUNNER_TEMP/t1-original-verified"
+          rm -rf "$RUNNER_TEMP/t1-gameci-cli" "$RUNNER_TEMP/t1-gameci-cli.tar.gz" "$RUNNER_TEMP/t1-gameci-exe.txt" "$RUNNER_TEMP/t1-python-venv"
+          rm -f "$RUNNER_TEMP/t1-synthetic-private-cli.log" "$RUNNER_TEMP/t1-original-private-gameci.log"

@@ -108,7 +108,7 @@ def validate_import_candidate_manifest(manifest, source_dir: Path):
             "runtime_mapping_proven": False, "private_source_published": False}
 
 
-def stage_original_candidates(original_data: Path, destination: Path):
+def stage_original_candidates(original_data: Path, destination: Path, *, keep_first_pair_spirv: bool = False):
     """All-or-nothing private Unity project staging from authenticated ZIP2 bytes."""
     destination = Path(destination)
     if destination.exists() or destination.is_symlink():
@@ -154,6 +154,9 @@ def stage_original_candidates(original_data: Path, destination: Path):
         (root / "ProjectSettings/ProjectVersion.txt").write_text("m_EditorVersion: 2021.3.45f2\n")
         temp = root / "_private_compiler"
         temp.mkdir()
+        vulkan = root / "_private_vulkan"
+        if keep_first_pair_spirv:
+            vulkan.mkdir(mode=0o700)
         for idx, item in enumerate(original):
             offset, count = item["offset_in_original_object"], item["bytes"]
             if (type(offset) is not int or type(count) is not int or
@@ -198,6 +201,8 @@ def stage_original_candidates(original_data: Path, destination: Path):
                 "expected_group_x": required_group,
                 "runtime_kernel_identity_proven": False,
             })
+            if keep_first_pair_spirv and idx in (0, 1):
+                spv.replace(vulkan / f"slot{idx}.spv")
             for file in (input_path, spv, hlsl_path, check_spv):
                 file.unlink(missing_ok=True)
         if len(manifest["rows"]) != FILES:
@@ -221,8 +226,11 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--original-data", type=Path, required=True)
     parser.add_argument("--project", type=Path, required=True)
+    parser.add_argument("--keep-first-pair-spirv", action="store_true",
+                        help="Retain validated original-derived SPIR-V privately for Vulkan comparison")
     args = parser.parse_args()
-    result = stage_original_candidates(args.original_data, args.project)
+    result = stage_original_candidates(args.original_data, args.project,
+                                       keep_first_pair_spirv=args.keep_first_pair_spirv)
     print("RAFT_T1_ORIGINAL_DERIVED_UNITY_CANDIDATES " +
           json.dumps(result, sort_keys=True))
 
