@@ -5,7 +5,7 @@
   "session_id": "20261105T131204828Z-T3-chat-bounded-postrestorer-4a8c",
   "origin": "chat",
   "issue_id": "RENDER-002",
-  "status": "waiting_ci",
+  "status": "completed",
   "track": "colors-materials/genuine-original-bounded-postvendor-ShaderLab-quality",
   "base_sha": "76b0b1dceab3d6cfdad4f99570a448c9975b3704",
   "experiment_key": "T3-ZIP2-15964ea8f246b6e076ce26b60931ee2e1a9a2385-12-owners-AssetRipperCLI-036098ab5-B21Export-9.0-TMP3.0.6-PostFX933df236-Volumetricd20b6f9-nat-restorer-quality-audit",
@@ -17,7 +17,9 @@
     "prompt/coordination/work/RENDER-002/T3-20261105T131204828Z-T3-chat-bounded-postrestorer-4a8c.json",
     "prompt/coordination/clients/T3/sessions/20261105T131204828Z-T3-chat-bounded-postrestorer-4a8c.md",
     "prompt/coordination/experiments/T3/20261105T131204828Z-T3-chat-bounded-postrestorer-4a8c.json",
-    "prompt/coordination/B_TEAM/events/T3/20261105T131204828Z-T3-chat-bounded-postrestorer-4a8c.json"
+    "prompt/coordination/B_TEAM/events/T3/20261105T131204828Z-T3-chat-bounded-postrestorer-4a8c.json",
+    "docs/T3_BOUNDED_POSTVENDOR_MATERIAL_SHADER_2026-11-05.md",
+    "prompt/coordination/B_TEAM/resources/T3-bounded-postvendor-material-shader-restoration.json"
   ],
   "resumed_from_sessions": [
     "20261105T124551Z-T3-chat-subshader-coverage-c29b",
@@ -33,8 +35,44 @@
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42033940194"
   ],
-  "result": null,
-  "next_step": "CI42033940194 running. Inspect exact jobs/aggregate artifact. If vendor subset has no original target identity, mark bounded inconclusive, do NOT infer full native. After result compare before/after with pre-existing Material/.shader.meta bytes unchanged and distinguish vendor subset from native restorer. No duplicate heavy dispatch.",
-  "updated_at": "2026-11-05T13:15:08.521Z",
-  "workflow_path": ".github/workflows/raft-t3-bounded-postrestorer-shader.yml"
+  "result": {
+    "head_at_run": "dcb81c72b91817872cacc0fd664d937ea2f9ddef",
+    "workflow_ci_conclusion": "success",
+    "bounded_source_owner_count": 12,
+    "before": {
+      "material_docs": 731,
+      "custom_refs": 511,
+      "dummy_linked_material_docs": 511,
+      "distinct_dummy_targets": 54,
+      "dummy_shader_files": 126,
+      "total_shader_files": 126
+    },
+    "after": {
+      "material_docs": 731,
+      "custom_refs": 511,
+      "dummy_linked_material_docs": 495,
+      "distinct_dummy_targets": 50,
+      "dummy_shader_files": 98,
+      "total_shader_files": 128
+    },
+    "vendor_steps_succeeded": [
+      "TMP3.0.6",
+      "PostFXv1",
+      "VolumetricLights"
+    ],
+    "original_preexisting_standalone_mat_and_shader_meta_byte_identical": true,
+    "original_Material_reference_categories_identical": true,
+    "full_production_native_import_run": false,
+    "Shader48_original_authenticity_restored": false,
+    "Unity_GPU_Adreno_device_test": false,
+    "source_fixed_manual_only_and_JSON_newline_commit": "2fa28c993be93c59c1d15c4586ec62292cccbd88",
+    "artifact_id": 13418610210,
+    "artifact_caveat": "Initial run safe delta JSON may contain literal trailing backslash-n; use successful console JSON and valid pre/post aggregate JSON; source fixed without second heavy run."
+  },
+  "next_step": "NEXT: prioritize 495 residual bounded Dummy-linked custom Material docs across 50 Shader targets against authentic original Renderer→Material/Shader48 graph, restore source-authenticated programs instead of dummy; separately review full native post-restorer report on next authorized main Unity import. Keep RENDER-002 OPEN.",
+  "updated_at": "2026-11-05T13:21:39.251Z",
+  "workflow_path": ".github/workflows/raft-t3-bounded-postrestorer-shader.yml",
+  "experiment_ids": [
+    "prompt/coordination/experiments/T3/20261105T131204828Z-T3-chat-bounded-postrestorer-4a8c.json"
+  ]
 }
