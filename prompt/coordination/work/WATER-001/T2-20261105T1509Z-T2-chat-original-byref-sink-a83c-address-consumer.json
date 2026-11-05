@@ -4,8 +4,8 @@
   "origin": "chat",
   "session_id": "20261105T1509Z-T2-chat-original-byref-sink-a83c",
   "issue_id": "WATER-001",
-  "status": "active",
-  "updated_at": "2026-11-05T15:09:22.182Z",
+  "status": "waiting_ci",
+  "updated_at": "2026-11-05T15:16:07.218Z",
   "base_sha": "a0edf06a3ea50b61c302d468f5a1e1910bd93cdc",
   "resumed_from_sessions": [
     "20261105T1442Z-T2-chat-foam-field-reads-c8d1",
@@ -28,5 +28,14 @@
     "last_original_t2_CI": "42047763379 SUCCESS",
     "T4_ledger_schema_fixed": "e027d6a81b and T1 CI42049042381 SUCCESS"
   },
-  "next_step": "Pre-register session; implement conservative typed byref sink with no original source leak; test exact original SHA pinned CI; document whether direct field replacement path is supported. WATER-001 OPEN NOT_READY0/3."
+  "next_step": "Read original SHA CI42053062181. If pass read safe sink category from completed job log; if fail correct first source-level assertion or compilation. T3/T5 active unrelated, not touched.",
+  "source_commit": "34f840561993b44c59cd7c61b22f1f013e64cd89",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42053062181"
+  ],
+  "result": {
+    "code": "Original managed Foo ldflda consumer classification conservative synthetic tests",
+    "CI": "in_progress",
+    "runtime": "not tested"
+  }
 }
