@@ -1,0 +1,13 @@
+{
+  "id": "T2-20261105T0036Z-foam-used-sampler-ssa-result",
+  "owner": "T2",
+  "session_id": "20261105T0030Z-T2-sampler-ssa-isolated",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "CI41942245746 passed original 4-stage Foam: 21 real compiled sample instructions, 6 used numeric image/sampler pairs; original material/upload/ShaderLab/device remain unverified.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41942245746",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_ORIGINAL_USED_SAMPLER_PAIRS_2026-11-05.md"
+  ],
+  "at": "2026-11-05T00:36:00Z"
+}
