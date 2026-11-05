@@ -125,6 +125,32 @@ def exact_native_translated_sample_join(mapping, native, translated, expected_co
     }
 
 
+
+def verify_original_stage_rollup(rows):
+    """Enforce complete four-stage proof, not disjoint status key aliases."""
+    if not isinstance(rows,list) or len(rows)!=4:
+        raise ValueError("Foam four original sample stages missing")
+    count, calls=0,0
+    for row, key in zip(rows,STAGES):
+        if not isinstance(row,dict) or (row.get("pass"),row.get("stage_code"))!=key:
+            raise ValueError("Original stage order/role drift")
+        n=ORIGINAL_TEXTURES_PER_STAGE[key]
+        if (row.get("source_texture_pairs")!=n or
+                row.get("source_to_translated_active_sample_pair_identity_verified") is not True):
+            raise ValueError("Original sample stage not actively proven")
+        if key[1]==0:
+            nc,spc=row.get("native_sample_calls"),row.get("translated_sample_calls")
+            if type(nc) is not int or type(spc) is not int or nc!=spc or nc<=0:
+                raise ValueError("Original fragment sampling count drift")
+            calls+=nc
+        elif row.get("actual_native_and_translated_sample_calls")!=0:
+            raise ValueError("Nonempty original Foam vertex sampling")
+        count+=n
+    if count!=6 or calls!=21:
+        raise ValueError("Original four-stage sampled resource census incomplete")
+    return True
+
+
 def audit(source,packet,manifest,mapping_report):
     source,packet,manifest,mapping_report=map(lambda p:Path(p).absolute(),
                                                (source,packet,manifest,mapping_report))
@@ -179,17 +205,13 @@ def audit(source,packet,manifest,mapping_report):
                 raise ValueError("Vertex source declared unexpected Foam texture sample")
             rows.append({"pass":pi,"stage_code":stage,"source_texture_pairs":0,
                          "actual_native_and_translated_sample_calls":0,
-                         "source_to_spirv_active_sample_pair_identity_verified":True,
+                         "source_to_translated_active_sample_pair_identity_verified":True,
                          "nonempty_tex_sampler_roles_verified":False})
             continue
         pair=exact_native_translated_sample_join(record,native,translated,count)
         rows.append({"pass":pi,"stage_code":stage,"source_texture_pairs":count,
                      **pair})
-    if (len(rows)!=4 or
-            sum(s["source_texture_pairs"] for s in rows)!=6 or
-            sum(s.get("native_sample_calls",0) for s in rows)!=21 or
-            not all(x["source_to_spirv_active_sample_pair_identity_verified"] for x in rows)):
-        raise ValueError("Authentic original-to-compiled active source pair sample census drift")
+    verify_original_stage_rollup(rows)
     return {
         "status":"foam_actual_native_sample_to_spirv_resource_pair_identity_verified",
         "source_authentic_original_stages":4,
