@@ -26,33 +26,40 @@
     "11 same-instance, class/type, missing original, wrong scope, UV drift, no leak tests passed"
   ],
   "workflow_path": ".github/workflows/raft-t3-real-material-texenv-export.yml",
-  "run_url": "https://github.com/alwansan/raf/actions/runs/41939065539",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41939404454",
   "artifact_urls": [
-    "https://github.com/alwansan/raf/actions/runs/41938229887"
+    "https://github.com/alwansan/raf/actions/runs/41938229887",
+    "https://github.com/alwansan/raf/actions/runs/41939404454"
   ],
   "budget": "25 minutes timeout, 2 dotnet processors, no Unity game build, no LFS, only bounded original data",
-  "status": "INCONCLUSIVE",
+  "status": "SUCCESS_BOUNDED_SOURCE_EXPORT_PARITY",
   "observed_result": {
-    "original_sha_locked_providers": 9,
-    "material_sources": 42,
-    "shader_sources": 18,
-    "actual_bounded_export_completed": true,
-    "original_selected_materials": 41,
-    "original_selected_texenvs": 227,
-    "same_export_material_trace": 57,
-    "same_export_texture_trace": 92,
-    "b05_compare_exception_type": "ValueError",
-    "phase": "actual_exported_material_yaml",
-    "root_cause": "UNKNOWN_UNTIL_SAFE_REASON"
+    "source_authenticated": true,
+    "provider_count": 9,
+    "real_export_completed": true,
+    "selected_original_materials": 41,
+    "original_texture_slots": 227,
+    "exported_texture_slots": 227,
+    "exact_internal_texture_targets": 89,
+    "original_null_texture_slots": 113,
+    "external_texture_references_not_proven": 25,
+    "missing_slots": 0,
+    "extra_slots": 0,
+    "wrong_internal_targets": 0,
+    "UV_value_mismatches": 0,
+    "all_UV_value_sets_verified": true,
+    "device_pixels_verified": false
   },
   "rejected_hypotheses": [
     "AssetRipper original input is absent",
-    "Unable to compile instrumented exporter"
+    "Unable to compile instrumented exporter",
+    "Importer lost a selected Material's internal Texture2D identity or UV transform in these 41 Materials"
   ],
   "limitations": [
-    "ValueError stage not yet classified",
-    "No Android GPU/Unity import, color pixels, full exported game links verified"
+    "B05 source/export scope restricted to SHA-pinned sharedassets6.assets, not whole game",
+    "External-owner 25 target identity not proven",
+    "Shader/variant/sRGB/lighting, Unity build and Android pixel results untested"
   ],
-  "integration_commit": "615f914728cf15f5d60607115ecb7a4a8919d8e5",
-  "next_step": "Read run 41939065539 safe_failure_reason; fix true YAML parser structural limitation then compare exact same-process export. Avoid reading/publishing private IDs."
+  "integration_commit": "77d312f546f1fc80c72f57a57de5d90699d66302",
+  "next_step": "Use B44 real same-export selected material color parity; 25 external texture targets require cross-owner authenticated linkage."
 }
