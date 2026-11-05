@@ -1,0 +1,15 @@
+{
+  "id": "T3-20261105-0002-render-harness-result-and-export-start",
+  "owner": "T3",
+  "session_id": "20261104T2354Z-T3-render-harness",
+  "issue_id": "RENDER-002",
+  "type": "integration",
+  "summary": "B12 exact production scene diagnostic synthetic harness recovered and CI 41937719270 passed; new independent same-instance genuine ZIP2 Material/TexEnv export comparison implementation integrated, CI 41938229887 queued. No game color/pixel repair or owner confirmation claimed.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/05718f67ba31a6be8ec169fcfcb609b4f3e05a9e",
+    "https://github.com/alwansan/raf/actions/runs/41937719270",
+    "https://github.com/alwansan/raf/commit/615f914728cf15f5d60607115ecb7a4a8919d8e5",
+    "https://github.com/alwansan/raf/actions/runs/41938229887"
+  ],
+  "at": "2026-11-05T00:02:00Z"
+}
