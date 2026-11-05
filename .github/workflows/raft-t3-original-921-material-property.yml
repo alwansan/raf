@@ -39,7 +39,7 @@ jobs:
           python3 -m py_compile scripts/t3_original_921_material_property_contract.py scripts/t3_original_renderer_shader_impact.py tests/test_t3_original_921_material_property_contract.py
       - name: Verify private Shader Material property contract and original renderer controls
         run: |
-          python3 -m unittest discover -s tests -p 'test_t3_original_921_dxbc_semantic_join.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_original_921_material_property_contract.py' -v
           PYTHONPATH=scripts python3 -m unittest discover -s tests -p 'test_t3_original_renderer_shader_impact.py' -v
   original-genuine-921-material-property:
     if: >-
