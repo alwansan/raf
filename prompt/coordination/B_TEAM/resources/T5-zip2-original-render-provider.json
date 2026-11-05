@@ -14,7 +14,7 @@
     "extraction": "3_SHA_PINNED_SPLIT_GRAPHICS_OWNERS_REASSEMBLED_WITH_MANIFEST_AND_FEATURE_LFS_IDENTITY",
     "reconstruction": "NOT_APPLICABLE_ORIGINAL_SERIALIZED_RESOURCE_BYTES_PRESERVED",
     "binding": "FEATURE_LFS_REUSE_CONSUMER_IN_EXPERIMENT_ALL_3_REAL_OWNER_BYTES_SHA256_VERIFIED_NOT_UNITY",
-    "integration": "T5 3 REAL OWNER OPT-IN HYDRATION VERIFIED PLUS FULL BATCH SHA BEFORE FIRST POINTER PUBLICATION CI41942039458; UNITY IMPORT STILL UNVERIFIED",
+    "integration": "PRODUCTION_HYDRATOR --apply SHA_VETTED_THREE_ORIGINALS_CI41942815626_NO_LFS; ACTUAL UNITY EDITOR_AND_DEVICE_UNVERIFIED",
     "device": "UNKNOWN"
   },
   "evidence": [
@@ -25,17 +25,20 @@
     "https://github.com/alwansan/raf/actions/runs/41940032540",
     "https://github.com/alwansan/raf/commit/0f3739e38f6b42c92100e75697a314988869cf63",
     "https://github.com/alwansan/raf/actions/runs/41942039458",
-    "https://github.com/alwansan/raf/commit/bb4d33e9828bf85873935002ea1c6106d8b87319"
+    "https://github.com/alwansan/raf/commit/bb4d33e9828bf85873935002ea1c6106d8b87319",
+    "https://github.com/alwansan/raf/actions/runs/41942815626",
+    "https://github.com/alwansan/raf/commit/e5b461837bdcec38b11f74b0d26e2c8d7c52657b"
   ],
   "remaining": [
     "Test additional original graphics owner providers, byte budget and Unity project actual export integration after coordination",
     "No original FFT authentic .compute install, ShaderLab, material pixel, Adreno device or world-save confirmation",
     "Do not mark WATER-001/RENDER-002/LOCAL-005 or ASSET-RESTORE-001 closed",
     "3 genuine serialized sources do not establish actual original Unity ComputeShader kernel/program identity, Material/Texture export, native performance or Adreno pixels",
-    "Batch source SHA rejection now prevents partial pointer publication, but os.replace sequence is not an OS-level multi-file transaction if a later rename fails; verify complete working-set before Unity."
+    "Batch source SHA rejection now prevents partial pointer publication, but os.replace sequence is not an OS-level multi-file transaction if a later rename fails; verify complete working-set before Unity.",
+    "CI41942815626 covers only bounded 3-owner production Python entrypoint plan; full asset set Unity native import/export and shader kernel binding still unverified."
   ],
   "updated_by": "T5",
-  "updated_at": "2026-11-05T00:35:00Z",
+  "updated_at": "2026-11-05T00:41:00Z",
   "original_owners": [
     {
       "path": "Raft_Data/resources.assets",
