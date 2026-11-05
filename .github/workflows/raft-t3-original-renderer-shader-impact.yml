@@ -95,11 +95,49 @@ jobs:
             --original "$RUNNER_TEMP/t3-original-six-scene" \
             --manifest zip2-source/RAFT_FILE_MANIFEST.tsv \
             --out "$RUNNER_TEMP/t3-original-six-scene-shader-usage-aggregate.json"
+      - name: Classify exact original 921-use Shader48 by verified Unity Renderer type (no private IDs)
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os,json
+          from pathlib import Path
+          from scripts.b03_original_renderer_materials import RENDERER_CLASSES
+          root=Path(os.environ['RUNNER_TEMP'])
+          r=json.loads((root/'t3-original-six-scene-shader-usage-aggregate.json').read_text())
+          assert r['status']=='AUTHENTIC_SIX_SCENE_RENDERER_SHADER_USE_FREQUENCY_VERIFIED'
+          assert r['six_original_scenes_sha_verified'] is True
+          assert r['original_highest_used_typed_Shader48_unique'] is True
+          assert r['original_highest_used_typed_Shader48_slot_use']==921
+          slots=r['original_renderer_material_slots_by_renderer_class']
+          typed=r['original_verified_Shader48_slots_by_renderer_class']
+          top=r['original_highest_used_typed_Shader48_slots_by_renderer_class']
+          distinct=r['original_highest_used_typed_Shader48_distinct_renderers_by_class']
+          assert all(set(d).issubset(RENDERER_CLASSES) for d in (slots,typed,top,distinct))
+          assert sum(slots.values())==1639
+          assert sum(typed.values())==1633
+          assert sum(top.values())==921
+          assert set(top)==set(distinct)
+          assert all(0 < distinct[k] <= v for k,v in top.items())
+          assert r['source_shader_target_names_guids_ids_hashes_disclosed'] is False
+          assert r['renderer_class_breakdown_is_original_source_only_not_Android_drawcalls'] is True
+          safe={'status':'ZIP2_AUTHENTIC_TOP921_RENDERER_CLASS_COUNTS_VERIFIED',
+                'top921_original_material_slots_by_class':top,
+                'top921_distinct_renderer_objects_by_class':distinct,
+                'all_typed_Shader48_material_slots_by_class':typed,
+                'six_source_scenes':6,'source_shader_owner_files':4,
+                'android_white_pixels_or_particle_emission_proven':False,
+                'native_shader_program_equivalence_proven':False}
+          (root/'t3-top921-renderer-class-safe-aggregate.json').write_text(
+              json.dumps(safe,indent=2,sort_keys=True)+'\n')
+          print('RAFT_T3_AUTHENTIC_ORIGINAL_TOP921_RENDERER_CLASSES '+json.dumps(safe,sort_keys=True))
+          PY
       - name: Upload only safe numeric source Shader usage bands, never private IDs
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: t3-authentic-original-6scene-renderer-shader-use-${{ github.run_id }}
-          path: ${{ runner.temp }}/t3-original-six-scene-shader-usage-aggregate.json
+          path: |
+            ${{ runner.temp }}/t3-original-six-scene-shader-usage-aggregate.json
+            ${{ runner.temp }}/t3-top921-renderer-class-safe-aggregate.json
           if-no-files-found: ignore
           retention-days: 7
