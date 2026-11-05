@@ -2,9 +2,9 @@
   "session_id": "20261105T1642Z-T3-chat-original-vf-component-bridge-d42e",
   "origin": "chat",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed",
   "base_sha": "ad1b1f0d753bcf7a01ebd942dcb048ec7f0c23f8",
-  "updated_at": "2026-11-05T16:42:00Z",
+  "updated_at": "2026-11-05T16:56:00Z",
   "resumed_from_sessions": [
     "20261105T1633Z-T3-chat-vf-component-coverage-b71d",
     "20261105T1625Z-T3-scheduled-dxbc-contract-8f2c"
@@ -21,5 +21,24 @@
   "experiment_key": "T3-ZIP2-15964ea8-6scenes-4owners-Sh48-921-4pass-VF-SPIRVCross-Location-Component-typed-source-v-roundtrip-v1",
   "resource_key": "T3-921-fourpass-original-vkd3d-CPU",
   "hypothesis": "Actual four-pass SHA-proven original Shader48 source and roundtrip VS->FS component coverage may differ even when both previously pass generic reflection. A fail-closed private reflection adapter must reject unsanitized names and unverifiable shapes while reporting counts only.",
-  "avoid_overlap": "Scheduled T3 DXBC signature files never touched. Does not edit common translator or existing workflows. Do not start heavy job if another equivalent T3 921 component job active. T1 Vulkan and T5 Unity builds independent, no cancellation."
+  "avoid_overlap": "Scheduled T3 DXBC signature files never touched. Does not edit common translator or existing workflows. Do not start heavy job if another equivalent T3 921 component job active. T1 Vulkan and T5 Unity builds independent, no cancellation.",
+  "completed_at": "2026-11-05T16:56:00Z",
+  "source_commit": "df1d56d385e6961d8d3442caf8d9a1cc43f190da",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42068915602",
+  "result": {
+    "conclusion": "SUCCESS",
+    "sourcefree_controls_passed": 34,
+    "original_SHA_scenes": 6,
+    "original_SHA_owners": 4,
+    "authentic_VF_pass_pairs": 4,
+    "original_source_structural_candidates": 4,
+    "roundtrip_structural_candidates": 4,
+    "original_source_missing_typed_components": 0,
+    "roundtrip_missing_typed_components": 0,
+    "DXBC_semantic_mapping_proven": false,
+    "device_pixels_proven": false,
+    "game_modified": false
+  },
+  "remaining_issue": "RENDER-002 OPEN; original DXBC semantic name/index/register/mask, interpolation, remaining original variants, ShaderLab/material/texture/sRGB/GPU pixels still unproven.",
+  "next_step": "Join scheduled T3 authentic DXBC signature reader to same exact eight original Shader48 stage SPIR-V Location/Component privately with safe aggregated proof; do not rerun same 4-pair typed structural test unchanged."
 }
