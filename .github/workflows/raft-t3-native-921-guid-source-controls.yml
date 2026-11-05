@@ -1,0 +1,32 @@
+name: T3 RENDER-002 exact original 921 Shader48 to native export source identity controls
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t3_native_original_921_shader_target_audit.py
+      - tests/test_t3_native_original_921_shader_target_audit.py
+      - .github/workflows/raft-t3-native-921-guid-source-controls.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raft-t3-native921-source-guid-check-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  pure-native-original-GUID-contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Compile fail-closed exact source original-to-native W1 Shader48 program reader
+        run: python3 -m py_compile scripts/t3_native_original_921_shader_target_audit.py tests/test_t3_native_original_921_shader_target_audit.py
+      - name: Source-free 921 Shader48 original GUID -> native ShaderLab semantic identity negatives
+        run: |
+          python3 -m unittest discover -s tests -p 'test_t3_native_original_921_shader_target_audit.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_source_renderer_shader_to_postvendor_export.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_audit_exported_material_programs.py' -v
