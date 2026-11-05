@@ -1,0 +1,47 @@
+{
+  "id": "20261105T171746Z-T1-chat-14461d",
+  "session_id": "20261105T171746Z-T1-chat-14461d",
+  "origin": "chat",
+  "owner": "T1",
+  "issue_id": "WATER-001",
+  "status": "completed",
+  "base_sha": "99bd2332e5e50dda949a62eb89a5f45ff8b71c72",
+  "updated_at": "2026-11-05T17:19:14.652Z",
+  "intended_files": [
+    ".github/workflows/raft-t1-fft-vulkan-roundtrip-isolation.yml"
+  ],
+  "experiment_key": "authenticated-vulkan-trace-export-binary-decoder-integration",
+  "resumed_from_sessions": [
+    "20261105T170847Z-T1-chat-015973",
+    "20261105T171319Z-T1-scheduled-a6e4"
+  ],
+  "implementation_sha": "4341c7e533c080cf598c11dc5cda7bc4c40105d4",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42073271649",
+    "https://github.com/alwansan/raf/actions/runs/42058825739"
+  ],
+  "result": {
+    "match": true,
+    "sites": [
+      {
+        "extra_coordinate_records": 0,
+        "missing_coordinate_records": 0,
+        "value_bit_mismatches": 0,
+        "value_records_compared": 64
+      },
+      {
+        "extra_coordinate_records": 0,
+        "missing_coordinate_records": 0,
+        "value_bit_mismatches": 0,
+        "value_records_compared": 256
+      },
+      {
+        "extra_coordinate_records": 0,
+        "missing_coordinate_records": 0,
+        "value_bit_mismatches": 0,
+        "value_records_compared": 64
+      }
+    ]
+  },
+  "next_step": "Once shared Unity is clear, trigger opt-in paired workflow; inspect Unity trace output parity and aggregate cross-backend comparisons."
+}
