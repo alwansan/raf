@@ -99,7 +99,7 @@ jobs:
           assert body.count('WorldHasBeenLoaded.originalCompletionAssigned') == 1
           from scripts.b07_probe_original_world_callbacks import _executable_positions
           import re
-          assignments = r'\\bWorldHasBeenRecieved\\s*=\\s*true\\s*;'
+          assignments = r'\bWorldHasBeenRecieved\s*=\s*true\s*;'
           assert len(re.findall(assignments, _executable_positions(original_body))) == 1
           assert len(re.findall(assignments, _executable_positions(body))) == 1
           assert body.count('yield return') == original_body.count('yield return')
