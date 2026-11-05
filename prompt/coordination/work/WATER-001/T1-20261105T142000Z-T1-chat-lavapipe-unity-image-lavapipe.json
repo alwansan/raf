@@ -4,7 +4,7 @@
   "origin": "chat",
   "session_id": "20261105T142000Z-T1-chat-lavapipe-unity",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "be5b3aab8b12ac22fe93660ba0fcf955615bedff",
   "resumed_from_sessions": [
     "20261105T140300Z-T1-chat-vulkan-editor",
@@ -27,10 +27,11 @@
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42044388619",
     "https://github.com/alwansan/raf/actions/runs/42045389521",
-    "https://github.com/alwansan/raf/actions/runs/42046073285"
+    "https://github.com/alwansan/raf/actions/runs/42046073285",
+    "https://github.com/alwansan/raf/actions/runs/42047391061"
   ],
-  "updated_at": "2026-11-05T14:38:00Z",
-  "next_step": "Run ONE derived-image A/B experiment: A passes explicit VK_ICD_FILENAMES only to 2-case normal Unity project (no -force-vulkan); B passes -force-vulkan only to exact 3-case Vulkan+64 arithmetic project (no injected VK_ICD_FILENAMES). Classify each independently with bounded count/boolean logs, avoid the already-reproduced combined flags and never fetch ZIP2 until true Unity Vulkan 3/3 passes.",
+  "updated_at": "2026-11-05T14:45:00Z",
+  "next_step": "Stop repeating forced Vulkan on unchanged GameCI container. Diagnose new graphics backend/extension/display conditions with a distinct source-free test, or use known OpenGLCore vs Vulkan original-capture mismatch to trace generated shader arithmetic/sampled-coordinate semantics privately. Keep WATER-001 OPEN, NOT_READY0/3, no production asset edits.",
   "identity_conflict": "Multiple T1 scheduled/chat sessions; existing older shared state preserved. Distinct image-only test, no source compilation/production game paths.",
-  "result": "CI42046073285: same disposable Unity2021 Mesa lavapipe customImage passes real 2/2 licensed source-free Unity tests WITHOUT --dockerEnv or -force-vulkan; overlay Vulkan loader/vulkaninfo success. The identical customImage with BOTH --dockerEnv=VK_ICD_FILENAMES and --customParameters=-force-vulkan exits pre-NUnit without test report, license failure text category true but CLI unknown arguments, docker launch and missing image categories false. This disproves broad claim customImage/Unity license is unusable; exact trigger remains ambiguous between env and forced flag."
+  "result": "CI42047391061 source-free genuine Unity2021+Mesa exact image A/B: no additional flags actual Editor NUnit2/2 PASS; same image with ONLY --dockerEnv=VK_ICD_FILENAMES had 2/2 PASS; same image with ONLY --customParameters=-force-vulkan exited pre-NUnit XML, bounded CLI category unity_license_failure=true but no CLI-unknown/Docker/Unity compiler error category. Original Unity base image had no Vulkan loader or lavapipe ICD, derived overlay built and vulkaninfo succeeded. Therefore forced-Vulkan launch path alone triggers pre-NUnit failure, not custom image or injected ICD alone. No original Raft data hydrated; old FFT Unity(OpenGLCore)-vs-Vulkan parity still FAIL 63/64 and31/32."
 }
