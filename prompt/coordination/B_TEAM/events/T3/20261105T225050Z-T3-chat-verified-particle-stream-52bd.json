@@ -1,0 +1,20 @@
+{
+  "id": "20261105T225050Z-T3-chat-verified-particle-stream-52bd",
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T225050Z-T3-chat-verified-particle-stream-52bd",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "at": "2026-11-05T23:01:22.724Z",
+  "summary": "Real SHA-authenticated original Particle108 source material and three Texture2D28 full stream bytes. One immutable ZIP2 provider entirely size+SHA verified; three original ranges read totaling 983052 bytes, nonzero and distinct SHA digests, no overlaps. CI42125608932 SUCCESS 106/106 Python suites; no decode/native GUID/device pixels.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42125608932",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE_STREAM_BYTES_2026-11-06.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-original-particle108-image-stream-fullSHA.json"
+  ],
+  "limitations": [
+    "source-byte payload proof only",
+    "RENDER-002 remains OPEN",
+    "Android renderer pixels unverified"
+  ]
+}
