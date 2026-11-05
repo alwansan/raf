@@ -2,7 +2,7 @@
   "session_id": "20261105T1453Z-T5-scheduled-6e82",
   "origin": "scheduled",
   "issue_id": "INTEGRATION-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "f4dc80ad300380cd29516166ac60d24df4292ee4",
   "resumed_from_sessions": [
     "20261105T1431Z-T5-chat-native-cancel-d41e",
@@ -17,7 +17,10 @@
   "experiment_key": "t5-native-cancelled-job-with-failed-step-vs-cancelled-step-42042902522-metadata-v1",
   "resource_key": null,
   "hypothesis": "Current classifier labels any cancelled reconstruct as no source failure even if a failed step is present; differentiate failed-step evidence without attributing causality.",
-  "updated_at": "2026-11-05T14:53:00Z",
+  "updated_at": "2026-11-05T14:55:00Z",
   "taken_over_from": "T5 chat native verdict CI42046665995",
-  "next_step": "Add synthetic contradictory step controls; validate locally then source-only CI if existing workflow triggers."
+  "next_step": "Use discriminator on future genuine mixed job metadata; independently investigate mesh restoration cancellation initiator if primary evidence becomes available.",
+  "result": "CI42049488845 success 19/19 tests, source-only; cancelled-with-failed-step now distinct; no device or source failure inferred.",
+  "commit": "de9b8491628bbf680bef496c704f938415784c73",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42049488845"
 }
