@@ -1,0 +1,36 @@
+{
+  "id": "20261105T121347Z-T1-paired-capture",
+  "owner": "T1",
+  "session_id": "20261105T121347Z-T1-paired-capture",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "CI 42025620147 completed with a genuine numerical mismatch for pair 0/1 (1024×32 RGBA32F, one group per dispatch). Authenticated original-derived CPU Vulkan capture succeeded, and licensed Unity 2021 passed both private NUnit tests with observed writes. Both input blobs matched byte for byte. Pass 0: 64 written pixels compared, 63 outside tolerance. Pass 1: 32 compared, 31 outside tolerance. Both stages: zero write-coverage mismatches and zero nonfinite pixels. Cleanup succeeded. This is a negative parity result for this fixture.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42025620147",
+    "https://github.com/alwansan/raf/commit/7f79121a6366c0d7ddea89df8c90883b9fda51f1"
+  ],
+  "at": "2026-11-05T12:19:59.835Z",
+  "status": "completed",
+  "hypothesis": "Unity and original-derived Vulkan produce numerically equivalent readbacks for the same uploaded images and pair 0/1.",
+  "result": {
+    "input_bytes_match": true,
+    "write_coverage_mismatch": [
+      0,
+      0
+    ],
+    "nonfinite_pixels": [
+      0,
+      0
+    ],
+    "compared": [
+      64,
+      32
+    ],
+    "outside_tolerance": [
+      63,
+      31
+    ],
+    "both_passes_match": false
+  },
+  "next_step": "Localize pass 0 first: add private per-channel aggregate error and a source-free GPU image upload/readback control on the exact same formats; then compare texture-load/coordinate and arithmetic semantics in original SPIR-V versus Unity-generated code. Preserve the failing baseline. No Android, author kernel identity, or in-game water validation."
+}
