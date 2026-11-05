@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "status": "evidence_source_only_open_integration",
+  "issue_id": "RENDER-002",
+  "resource_key": "T3-authentic-original-top-921-Shader48-D3D11-fourPass-onePair-each",
+  "source_provider_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "experiments": [
+    "prompt/coordination/experiments/T3/20261105T1459Z-T3-chat-921-4pass-translation-c7d2.json"
+  ],
+  "source_translation_ci": "https://github.com/alwansan/raf/actions/runs/42052605123",
+  "source_run_success": true,
+  "original_four_passes": true,
+  "original_selected_compiled_stages_translated": 8,
+  "resource_slot_shape_equality": 8,
+  "roundtrip_io_type_location_equality": 0,
+  "source_variants_coverage": "4 of 33 exactly matched source pairs; original eight unpaired vertex records excluded",
+  "no_game_assets_or_Guids_changed": true,
+  "device_pixels_verified": false,
+  "blocker": "0/8 source-to-HLSL-roundtrip stage input/output location/type identical; actual semantic cause not yet inspected. ShaderLab render-state uniform sampler keyword binding and full Unity/Android acceptance missing.",
+  "updated_at": "2026-11-05T15:19:29.286Z"
+}
