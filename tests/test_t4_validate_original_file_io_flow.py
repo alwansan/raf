@@ -7,13 +7,23 @@ from pathlib import Path
 from scripts.t4_validate_original_file_io_flow import validate, main
 
 
+def groups(io=0, core=0, local=0, external=0):
+    return dict(system_io=io, system_non_io=core,
+                same_original_filemanager=local,
+                other_original_or_external=external)
+
+
 def edge(n, intent, categories):
     return dict(
         parameter_count=n, parameter_categories=categories, return_category="stream",
         direct_io_intent=intent, direct_io_call_count=1, catch_handler_count=1,
         finally_handler_count=0, catch_contains_leave=True,
         catch_contains_explicit_throw=False, catch_contains_null_literal=True,
-        catch_can_exit_normally=True, exception_swallow_on_device_proven=False)
+        catch_can_exit_normally=True, exception_swallow_on_device_proven=False,
+        original_try_calls=groups(io=1, local=1),
+        original_catch_calls=groups(core=1, external=1),
+        original_outside_handler_calls=groups(),
+        original_transitive_callees_executed=False)
 
 
 def valid():
@@ -85,6 +95,29 @@ class T4IoFlowSchemaTests(unittest.TestCase):
     def test_extra_root_text_rejected(self):
         x = valid(); x["original_private_il"] = "do not publish"
         with self.assertRaises(ValueError): validate(x)
+
+    def test_original_transitive_callee_execution_not_claimed(self):
+        x = valid(); x["read"]["original_transitive_callees_executed"] = True
+        with self.assertRaisesRegex(ValueError, "transitive"):
+            validate(x)
+
+    def test_original_callee_group_cardinality_rejected(self):
+        x = valid(); x["read"]["original_try_calls"]["system_io"] = 2
+        with self.assertRaisesRegex(ValueError, "call_group_cardinality"):
+            validate(x)
+
+    def test_public_callee_group_schema_rejects_private_names(self):
+        x = valid(); x["write"]["original_catch_calls"]["private_method_name"] = 1
+        with self.assertRaisesRegex(ValueError, "call_phase_schema"):
+            validate(x)
+
+    def test_phase_specific_handler_calls_preserved(self):
+        x = valid()
+        x["read"]["original_try_calls"] = groups(io=1, core=1)
+        x["read"]["original_catch_calls"] = groups(local=1, external=1)
+        summary = validate(x)
+        self.assertEqual(summary["read_catch_local_and_external_calls"], 2)
+        self.assertFalse(summary["original_device_file_io_executed"])
 
     def test_untrusted_file_path_refused(self):
         with tempfile.TemporaryDirectory() as d:
