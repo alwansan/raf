@@ -100,24 +100,23 @@ def trace_caught_original_load_error(text):
     signature = 'public static T Load<T>(string filename)'
     begin, end = body_bounds(text, signature)
     code = executable_only(text[begin:end])
-    if len(re.findall(r'\\bDeserialize\\s*\\(', code)) != 1:
+    if len(re.findall(r'\bDeserialize\s*\(', code)) != 1:
         raise ValueError('Require one authenticated Load<T> deserialization call')
-    catches = list(re.finditer(r'\\bcatch\\s*(?:\\([^{}]*\\))?\\s*\\{', code))
+    catches = list(re.finditer(r'\bcatch\s*(?:\([^{}]*\))?\s*\{', code))
     if len(catches) != 1:
         raise ValueError('Require one original Load<T> catch handler')
     if 'Load.caughtException' in text:
         raise ValueError('Refuse duplicate Load<T> caught exception diagnostic')
     insertion = begin + catches[0].end()
-    snippet = ('\\n#if UNITY_ANDROID && !UNITY_EDITOR\\n'
+    snippet = ('\n#if UNITY_ANDROID && !UNITY_EDITOR\n'
                'RaftAndroid.Diagnostics.AndroidRuntimeLog.Write('
                '"save", "Load.caughtException", '
                '"Original Load<T> entered its error handler; no world/save success implied", true);'
-               '\\n#endif\\n')
+               '\n#endif\n')
     result = text[:insertion] + snippet + text[insertion:]
     if result.replace(snippet, '', 1) != text:
         raise ValueError('Original Load<T> error handler modified outside diagnostic')
     return result
-
 
 
 def wrap_original_world_callback(text, method_name, expected_body_sha, area):
