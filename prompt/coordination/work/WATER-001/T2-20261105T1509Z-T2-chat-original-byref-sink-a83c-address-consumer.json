@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261105T1509Z-T2-chat-original-byref-sink-a83c",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "updated_at": "2026-11-05T15:09:22.182Z",
+  "base_sha": "a0edf06a3ea50b61c302d468f5a1e1910bd93cdc",
+  "resumed_from_sessions": [
+    "20261105T1442Z-T2-chat-foam-field-reads-c8d1",
+    "20261105T1434Z-T2-chat-rendertexture-serialization-93ad"
+  ],
+  "experiment_key": "T2|ZIP2-sha15964ea8|manageddll-sha0a6f0527|exact-foam-RenderTexture-array-ldflda-consumer|bounded-source-only-v1",
+  "resource_key": "T2-original-Cecil-managed-field-address-consumer",
+  "hypothesis": "The unique original source-authenticated ldflda into Foam's exact private RenderTexture[] may flow into a field write/clear, typed byref call, read-only op, or unknown control path. Distinguish these with conservative branchless typed IL tag propagation; no private methods, original literals or decompiled bodies disclosed.",
+  "method": "Implement isolated Cecil field address consumer trace starting immediately after exact ldflda with bounded evaluation stack tags. Direct stind/stobj/initobj distinguish write, typed call via byref tracked only if actual argument receives address, branch/unsupported operations return unknown; include synthetic positive/negative tests, run original authenticated managed workflow. Additional ldfl[d] other reads remain separate step.",
+  "intended_files": [
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/FoamFieldAddressConsumer.cs",
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/Program.cs",
+    ".github/workflows/raft-t2-foam-managed-literals.yml",
+    "prompt/coordination/work/WATER-001/T2-20261105T1509Z-T2-chat-original-byref-sink-a83c-address-consumer.json",
+    "prompt/coordination/clients/T2/sessions/20261105T1509Z-T2-chat-original-byref-sink-a83c.md"
+  ],
+  "preflight": {
+    "head": "a0edf06a3ea50b61c302d468f5a1e1910bd93cdc",
+    "other_active_actions": [],
+    "last_original_t2_CI": "42047763379 SUCCESS",
+    "T4_ledger_schema_fixed": "e027d6a81b and T1 CI42049042381 SUCCESS"
+  },
+  "next_step": "Pre-register session; implement conservative typed byref sink with no original source leak; test exact original SHA pinned CI; document whether direct field replacement path is supported. WATER-001 OPEN NOT_READY0/3."
+}
