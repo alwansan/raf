@@ -1,0 +1,65 @@
+name: T2 WATER-001 synthetic Cecil declaring assembly scope guard
+
+on:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - 'android-port/Experiments/T2/FoamAssemblyScopeGuard/**'
+      - '.github/workflows/raft-t2-foam-assembly-scope-guard.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: t2-foam-cecil-assembly-scope-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  source-free-assembly-scope-controls:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      DOTNET_NOLOGO: 'true'
+      DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Run pinned source-free Mono.Cecil 0.11.5 scope collision fixture
+        shell: bash
+        run: |
+          set -euo pipefail
+          project=android-port/Experiments/T2/FoamAssemblyScopeGuard/FoamAssemblyScopeGuard.csproj
+          dotnet restore "$project" --verbosity quiet
+          dotnet run --project "$project" --configuration Release --no-restore | tee /tmp/t2-foam-assembly-scope.log
+          grep -q '^T2_FOAM_CECIL_ASSEMBLY_SCOPE_SYNTHETIC_SAFE ' /tmp/t2-foam-assembly-scope.log
+      - name: Explicit synthetic-only acceptance guard
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          rows=[line for line in Path('/tmp/t2-foam-assembly-scope.log').read_text().splitlines()
+                if line.startswith('T2_FOAM_CECIL_ASSEMBLY_SCOPE_SYNTHETIC_SAFE ')]
+          assert len(rows)==1
+          report=json.loads(rows[0].split(' ',1)[1])
+          for key in ('synthetic_only','identical_fullname_cross_assembly_collision_exercised',
+                      'exact_original_style_same_assembly_accepted',
+                      'same_fullname_foreign_assembly_rejected',
+                      'correct_foreign_definition_accepted',
+                      'fake_Unity_RenderTexture_return_assembly_rejected',
+                      'same_module_scope_accepted','foreign_module_scope_rejected',
+                      'unknown_module_reference_rejected',
+                      'wrong_formal_signature_rejected'):
+              assert report[key] is True, key
+          for key in ('original_game_source_or_private_data_loaded',
+                      'actual_Foam_return_target_assembly_resolved',
+                      'android_runtime_or_pixels_verified'):
+              assert report[key] is False, key
+          assert report['cecil_pinned_version']=='0.11.5'
+          print('T2 assembly metadata identity guard: synthetic tests PASS; original target remains unverified')
+          PY
