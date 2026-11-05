@@ -28,12 +28,27 @@ PHASES = frozenset((
     "SAFE_AGGREGATE_REPORT",
 ))
 
+FAMILY_FAILURES = frozenset((
+    "SAVED_CONTAINER_SCHEMA", "TEXENV_READER", "COLORS_READER",
+    "SCALARS_READER", "OVERLAPPING_PROPERTY_FAMILIES",
+    "TEXTURE_POINTER_LAYOUT",
+))
+
+class PrivateFamilyDecodeError(ValueError):
+    """Allowlisted synthetic/source Material family error code only."""
+    def __init__(self, category):
+        if category not in FAMILY_FAILURES:
+            raise ValueError("unknown_original_Material_family_category")
+        self.category = category
+        super().__init__("source_private_Material_family_" + category)
+
 class OriginalPropertyPhaseError(ValueError):
-    """Only a predeclared safe phase, never a source exception message."""
-    def __init__(self, phase):
-        if phase not in PHASES:
+    """Only predeclared safe phase/category, never a source exception message."""
+    def __init__(self, phase, category=None):
+        if phase not in PHASES or (category is not None and category not in FAMILY_FAILURES):
             raise ValueError("unknown_private_original_property_phase")
         self.phase = phase
+        self.category = category
         super().__init__("source_original_Material_property_phase_inconclusive")
 
 MAX_MATERIALS = 120
@@ -87,10 +102,19 @@ def declared_property_families(shader_parsed: dict):
 
 def normalize_private_saved_properties(props: dict):
     if type(props) is not dict or not {"m_TexEnvs","m_Colors","m_Floats","m_Ints"} <= set(props):
-        raise ValueError("missing_original_Material_SavedProperties_family")
-    tex = normalize_texenvs(props["m_TexEnvs"])
-    colors = normalize_colors(props["m_Colors"])
-    numeric = normalize_scalars(props)
+        raise PrivateFamilyDecodeError("SAVED_CONTAINER_SCHEMA")
+    try:
+        tex = normalize_texenvs(props["m_TexEnvs"])
+    except (ValueError, KeyError, TypeError):
+        raise PrivateFamilyDecodeError("TEXENV_READER") from None
+    try:
+        colors = normalize_colors(props["m_Colors"])
+    except (ValueError, KeyError, TypeError):
+        raise PrivateFamilyDecodeError("COLORS_READER") from None
+    try:
+        numeric = normalize_scalars(props)
+    except (ValueError, KeyError, TypeError):
+        raise PrivateFamilyDecodeError("SCALARS_READER") from None
     families = {"texture":set(tex),"color":set(colors),
                 "float":set(numeric["m_Floats"]),"int":set(numeric["m_Ints"])}
     owned = {}
@@ -99,13 +123,13 @@ def normalize_private_saved_properties(props: dict):
             raise ValueError("oversize_original_saved_property_family")
         for name in names:
             if name in owned:
-                raise ValueError("ambiguous_original_property_cross_family")
+                raise PrivateFamilyDecodeError("OVERLAPPING_PROPERTY_FAMILIES")
             owned[name] = kind
     texture_bound = 0
     for name,(ptr,_uv) in tex.items():
         if (type(ptr) is not tuple or len(ptr) != 2 or
             any(type(v) is not int or v < 0 for v in ptr)):
-            raise ValueError("malformed_private_original_texture_pointer")
+            raise PrivateFamilyDecodeError("TEXTURE_POINTER_LAYOUT")
         texture_bound += int(ptr[1] != 0)
     bound_texture_names={name for name,(ptr,_uv) in tex.items() if ptr[1] != 0}
     return owned, {"texture":len(tex),"color":len(colors),
@@ -278,8 +302,9 @@ def probe(original:Path,manifest:Path):
             "original_renderer_Material_slot_count_to_selected_Shader48":EXPECTED_SCENE_MATERIAL_SLOTS,
         })
         return result
-    except Exception:
-        raise OriginalPropertyPhaseError(phase) from None
+    except Exception as error:
+        category=error.category if isinstance(error,PrivateFamilyDecodeError) else None
+        raise OriginalPropertyPhaseError(phase,category) from None
 
 def main(argv=None):
     p=argparse.ArgumentParser(description=__doc__.splitlines()[0])
@@ -297,6 +322,8 @@ def main(argv=None):
                 "original_private_names_values_pathIDs_programs_published":False}
         if isinstance(error,OriginalPropertyPhaseError):
             result["failure_phase"] = error.phase
+            if error.category is not None:
+                result["failure_category"] = error.category
     a.out.parent.mkdir(parents=True,exist_ok=True)
     a.out.write_text(json.dumps(result,indent=2,sort_keys=True)+"\n",encoding="utf8")
     print("T3_ORIGINAL_921_SHADER_MATERIAL_PROPERTIES "+json.dumps(result,sort_keys=True))
