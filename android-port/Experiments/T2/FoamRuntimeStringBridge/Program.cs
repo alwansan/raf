@@ -137,6 +137,7 @@ internal static class Program
         public int SecondProducerExactManagedBodyMatches;
         public int SecondProducerAmbiguousOrMissingMethodDefinitions;
         public FoamProducerBody.SafeProfile? OriginalSingleProducerBodyProfile;
+        public FoamFieldWriterLineage.SafeProfile? OriginalFieldWriterProfile;
         public readonly Dictionary<string,int> TotalSetterCalls = new(StringComparer.Ordinal)
         {
             ["shader_global_texture"] = 0,
@@ -161,6 +162,7 @@ internal static class Program
     {
         var result = new Summary();
         var sourceMethods=methods.ToList();
+        FieldReference? exactGetterBackingField=null;
         // Comparison is entirely private and all original method names remain
         // in CI memory. Only aggregate match cardinalities leave the runner.
         var definitions=sourceMethods.GroupBy(m=>m.FullName,StringComparer.Ordinal)
@@ -298,8 +300,12 @@ internal static class Program
                                         // once; a repeated dictionary-valued record
                                         // is not compared by object identity.
                                         if (result.OriginalSingleProducerBodyProfile is null)
+                                        {
                                             result.OriginalSingleProducerBodyProfile=
                                                 FoamProducerBody.Inspect(candidates[0]);
+                                            exactGetterBackingField=
+                                                FoamFieldWriterLineage.ExactGetterBackingField(candidates[0]);
+                                        }
                                     }
                                 }
                             }
@@ -342,6 +348,9 @@ internal static class Program
                 }
             }
         }
+        if (exactGetterBackingField is not null)
+            result.OriginalFieldWriterProfile=
+                FoamFieldWriterLineage.Scan(sourceMethods,exactGetterBackingField);
         return result;
     }
 
@@ -394,6 +403,7 @@ internal static class Program
             non_authored_second_producer_exact_original_method_definitions_with_body = result.SecondProducerExactManagedBodyMatches,
             non_authored_second_producer_missing_or_ambiguous_original_definitions = result.SecondProducerAmbiguousOrMissingMethodDefinitions,
             original_exact_Texture_int_producer_body_op_classes = result.OriginalSingleProducerBodyProfile,
+            original_exact_Texture_int_backing_field_writer_op_classes = result.OriginalFieldWriterProfile,
             original_exact_Texture_int_producer_body_accepted_same_SHA_definition = result.OriginalSingleProducerBodyProfile is not null,
             original_exact_method_definition_is_original_runtime_called_or_output_proof = false,
             producer_declared_signature_is_actual_runtime_texture_object_proof = false,
@@ -621,7 +631,53 @@ internal static class Program
             !testedOther.OriginalInstanceFieldTypeCategories.TryGetValue("unity_rendertexture_array",out var count) ||
             count!=2)
             throw new InvalidDataException("Opposite branch RenderTexture[] fixture must prove null-indexed path");
-                var guardedWrong=new MethodDefinition("PublicSyntheticWrongConditionalTarget",
+                
+        // Public synthetic exact-field writer, null-clear and same-typed decoy.
+        var originalField=FoamFieldWriterLineage.ExactGetterBackingField(guardedOther);
+        if (originalField is null ||
+            FoamFieldWriterLineage.ExactGetterBackingField(guarded) is not null)
+            throw new InvalidDataException("Conservative getter backing field extraction fixture failed");
+        var writer=new MethodDefinition("SyntheticExactArrayWriter",
+            Mono.Cecil.MethodAttributes.Public,m.TypeSystem.Void);
+        factoryDef.Methods.Add(writer);
+        var iw=writer.Body.GetILProcessor();
+        iw.Append(iw.Create(OpCodes.Ldarg_0));
+        iw.Append(iw.Create(OpCodes.Ldc_I4_2));
+        iw.Append(iw.Create(OpCodes.Newarr,renderTextureType));
+        iw.Append(iw.Create(OpCodes.Stfld,renderArray));
+        iw.Append(iw.Create(OpCodes.Ret));
+        var clear=new MethodDefinition("SyntheticExactArrayClear",
+            Mono.Cecil.MethodAttributes.Public,m.TypeSystem.Void);
+        factoryDef.Methods.Add(clear);
+        var ic=clear.Body.GetILProcessor();
+        ic.Append(ic.Create(OpCodes.Ldarg_0));
+        ic.Append(ic.Create(OpCodes.Ldnull));
+        ic.Append(ic.Create(OpCodes.Stfld,renderArray));
+        ic.Append(ic.Create(OpCodes.Ret));
+        var decoyField=new FieldDefinition("SyntheticDifferentRenderTextureArray",
+            Mono.Cecil.FieldAttributes.Public,new ArrayType(renderTextureType));
+        factoryDef.Fields.Add(decoyField);
+        var decoy=new MethodDefinition("SyntheticDecoyArrayClear",
+            Mono.Cecil.MethodAttributes.Public,m.TypeSystem.Void);
+        factoryDef.Methods.Add(decoy);
+        var id=decoy.Body.GetILProcessor();
+        id.Append(id.Create(OpCodes.Ldarg_0));
+        id.Append(id.Create(OpCodes.Ldnull));
+        id.Append(id.Create(OpCodes.Stfld,decoyField));
+        id.Append(id.Create(OpCodes.Ret));
+        var writerProof=FoamFieldWriterLineage.Scan(
+            new[]{writer,clear,decoy,guardedOther},originalField);
+        if (writerProof.ExactBackingFieldStoreInstructions!=2 ||
+            writerProof.DistinctDirectWriterMethods!=2 ||
+            writerProof.DirectRenderTextureArrayNewarrSources!=1 ||
+            writerProof.DirectNullSources!=1 ||
+            writerProof.OtherOrUnprovenSources!=0 ||
+            !writerProof.ExactOriginalGetterFieldIdentityMatched ||
+            writerProof.OriginalRuntimeWriteExecutedProven ||
+            writerProof.OriginalArrayElementsPopulatedProven)
+            throw new InvalidDataException("Synthetic exact writer/decoy provenance fixture failed");
+
+        var guardedWrong=new MethodDefinition("PublicSyntheticWrongConditionalTarget",
             Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Virtual,
             textureType);
         guardedWrong.Parameters.Add(new ParameterDefinition(m.TypeSystem.Int32));
@@ -729,6 +785,7 @@ internal static class Program
                 guarded_original_texture_array_null_fallback_fixture=true,
                 wrong_branch_target_guarded_texture_array_rejected=true,
                 early_null_brtrue_guarded_RenderTexture_array_fixture=true,
+                exact_backing_field_writer_newarr_null_decoy_fixture=true,
                 private_IL_names_or_source_published = false
             }));
         return 0;

@@ -132,6 +132,13 @@ jobs:
           assert b['ExactNullGuardedOriginalTextureArrayIndexByInt'] is True
           assert b['OriginalFallbackReturnsNull'] is True
           assert b['SafeClassification']=='exact_original_null_guarded_Texture_array_index_by_int'
+          w=r['original_exact_Texture_int_backing_field_writer_op_classes']
+          assert w is not None and w['ExactOriginalGetterFieldIdentityMatched']
+          assert 0 <= w['DistinctDirectWriterMethods'] <= w['ExactBackingFieldStoreInstructions']
+          assert 0 <= w['ConstructorMethodsWithDirectWrite'] <= w['DistinctDirectWriterMethods']
+          assert w['DirectRenderTextureArrayNewarrSources'] + w['DirectNullSources'] + w['OtherOrUnprovenSources'] == w['ExactBackingFieldStoreInstructions']
+          assert not w['OriginalRuntimeWriteExecutedProven']
+          assert not w['OriginalArrayElementsPopulatedProven']
           assert r['material_receiver_identity_or_runtime_reachability_verified'] is False
           assert r['original_managed_method_bodies_scanned']>0
           assert not r['same_method_cooccurrence_is_argument_dataflow_proof']
