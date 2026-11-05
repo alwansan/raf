@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261105T1713Z-T5-chat-release-metadata-83ac",
+  "issue_id": "INTEGRATION-001",
+  "status": "completed",
+  "hypothesis": "The APK86 release's official GitHub run/release/source and transport multipart metadata should agree exactly and remain fail-closed under missing/extra files, renumbered chunks, stale size declarations, or source identity mismatch; syntax-only hashes cannot prove actual downloaded bytes.",
+  "source_commit": "f22e4e772461bd430ff5497a28c1d78956a7188d",
+  "input_hashes": [
+    "Real native CI41812889049 immutable d181ee7152580f49ee0b41dfd05fa2bfdacfafe5",
+    "Raft GitHub Release tag android-early-test-41812889049-1, release id433995856, API official 12 assets",
+    "Release body exact 3 logical file size/SHA256 declarations + signed target source field, with no actual binary downloaded"
+  ],
+  "tool_versions": {
+    "runner": "ubuntu-24.04",
+    "python": "Python3 standard library",
+    "workflow": "raft-t5-published-release-audit.yml no original game assets"
+  },
+  "commands": [
+    "python3 -m unittest -v tests.test_t5_audit_published_raft_release",
+    "python3 -m scripts.t5_audit_published_raft_release --snapshot tests/fixtures/t5_raft_release_41812889049.json --id 41812889049 --sha d181ee7152580f49ee0b41dfd05fa2bfdacfafe5"
+  ],
+  "workflow_path": ".github/workflows/raft-t5-published-release-audit.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42072829025",
+  "artifact_urls": [],
+  "budget": "One small source-only GitHub Actions CPU workflow, ubuntu24.04, six-minute limit; no ZIP2, Unity/LFS/binary download and no native request.",
+  "negative_controls": [
+    "Wrong immutable source/run/tag rejected",
+    "Missing/extra/duplicate auxiliary or transport asset refused",
+    "Malformed asset SHA declaration or body-vs-API APK digest mismatch refused",
+    "OBB and XAPK actual aggregate uploaded part sizes must equal declared logical byte counts",
+    "Multipart indices must be contiguous, unique, and bounded to 1GiB per part",
+    "Both whole and multipart same file rejected",
+    "A valid-looking malicious multipart SHA is NOT verifiable with metadata alone; content cryptographic verification flags always false",
+    "Even an actual successful native workflow plus matching release assets does not prove Android APK signature, OBB mount, XAPK reassembly or phone gameplay"
+  ],
+  "observed_result": {
+    "test_ci": 42072829025,
+    "test_job": 127405035641,
+    "status": "success",
+    "tests_passed": 28,
+    "tests_failed": 0,
+    "release_tag": "android-early-test-41812889049-1",
+    "release_id": 433995856,
+    "native_run": 41812889049,
+    "native_run_conclusion": "success",
+    "source_sha": "d181ee7152580f49ee0b41dfd05fa2bfdacfafe5",
+    "logical_files": 3,
+    "transport_files": 7,
+    "required_auxiliary_files": 5,
+    "release_assets_total": 12,
+    "apk_claimed_bytes": 672894330,
+    "obb_claimed_bytes": 2301202061,
+    "xapk_claimed_bytes": 2974097643,
+    "published_size_and_digest_declarations_consistent": true,
+    "downloaded_bytes_verified": false,
+    "cryptographic_content_sha_verified": false,
+    "actual_signed_apk_verified": false,
+    "actual_OBB_mounted": false,
+    "actual_XAPK_reassembled": false,
+    "android_device_world_save_reopen_verified": false,
+    "current_native_run": 42058825739,
+    "current_native_source": "e9c358eda01785b65e4eb14f18723da426635628",
+    "current_native_status": "in_progress actual Unity import step62 as checked after test"
+  },
+  "rejected_hypotheses": [
+    "An official GitHub API digest string by itself cryptographically proves the multipart uploaded bytes: false; source-only cannot independently verify contents",
+    "APK86 successfully published implies game boots and saves locally on Poco F5 Pro: unsupported",
+    "Existing APK86 is newer than current source: false; current CI42058825739 is a distinct immutable build still running"
+  ],
+  "limitations": [
+    "This audit binds all submitted metadata to the same source/run, but a forged syntactically valid multipart digest remains indistinguishable without downloading part bytes against an independently trusted manifest.",
+    "This experiment does not upload, download, reassemble, test ZIP CRC, inspect APK v2/v3 signatures or invoke Android.",
+    "Pending native Unity CI42058825739 requires fresh terminal check before any delivery conclusion; this older release remains APK86 as of this read."
+  ],
+  "integration_commit": "f22e4e772461bd430ff5497a28c1d78956a7188d",
+  "next_step": "For any new native release, snapshot exact official run+Release metadata and run this gate, then separately download and hash all delivered parts/whole files, verify signature, install/OBB, create local world, save, fully stop app and reopen same world; do not confuse metadata green with device-ready."
+}
