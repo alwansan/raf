@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T1246Z-T4-chat-load-file-gate-m8q2",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "track": "world-save",
+  "status": "active",
+  "base_sha": "c2b4948875748f38cc3bcf5086c4e51d3715ba47",
+  "intended_files": [
+    "scripts/instrument_android_runtime_operations.py",
+    "tests/test_runtime_operation_traces.py",
+    "scripts/t4_verify_android_load_snapshot.py",
+    ".github/workflows/raft-t4-android-load-snapshot.yml",
+    "docs/T4_ANDROID_LOAD_ARGUMENT_SNAPSHOT_2026-11-05.md",
+    "prompt/coordination/work/LOCAL-005/T4-20261105T1246Z-T4-chat-load-file-gate-m8q2-load-argument-snapshot.json",
+    "prompt/coordination/clients/T4/sessions/20261105T1246Z-T4-chat-load-file-gate-m8q2.md"
+  ],
+  "approach": "At authentic SHA-gated SaveAndLoad.Load<T> instrumentation, add Android-only read-only Load argument-path existence/zero/nonzero observation after original load return/error; preserve original Deserialize, catch, flags and return. Verify source-free fail-closed tests and compiled synthetic UNITY_ANDROID fixture, then original managed integration CI.",
+  "hypothesis": "Existing Load.caughtException reports swallowed Deserialize/open failures without distinguishing absent file from present-but-unreadable/corrupt data. File.Exists and FileInfo.Length at the original Load<T> filename argument can distinguish these cases without reading bytes or altering game control flow.",
+  "taken_over_from": [
+    "prompt/coordination/clients/T4/sessions/20261105T1217Z-T4-android-save-postcheck.md",
+    "prompt/coordination/clients/T4/sessions/20261105T1237Z-T4-scheduled-k7m2.md",
+    "prompt/coordination/clients/T4/MEMORY.md",
+    "prompt/coordination/clients/B14/MEMORY.md",
+    "prompt/coordination/clients/B50/MEMORY.md"
+  ],
+  "related_work": [
+    "https://github.com/alwansan/raf/actions/runs/42027197515",
+    "https://github.com/alwansan/raf/actions/runs/42028108335"
+  ],
+  "experiment_key": "local005-load-arg-path-presence-classification-pinnedSaveAndLoadSHA-daf835fc-android-only-01",
+  "resource_key": null,
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement and run source-free C# UNITY_ANDROID gate; never claim actual .rgd/device, coordinate T5 new native candidate",
+  "updated_at": "2026-11-05T12:46:40.854Z"
+}
