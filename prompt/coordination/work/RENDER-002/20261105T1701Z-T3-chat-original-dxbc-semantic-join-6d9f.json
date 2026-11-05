@@ -2,7 +2,7 @@
   "session_id": "20261105T1701Z-T3-chat-original-dxbc-semantic-join-6d9f",
   "origin": "chat",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed",
   "base_sha": "f81f2bfb8ad8be058fd3079fb1f0291e712e5a9f",
   "resumed_from_sessions": [
     "20261105T1642Z-T3-chat-original-vf-component-bridge-d42e",
@@ -25,5 +25,21 @@
     "prompt/coordination/B_TEAM/events/T3/20261105T1701Z-T3-chat-original-dxbc-semantic-join-6d9f.json"
   ],
   "avoid_overlap": "Do not edit scheduled T3 scripts/t3_dxbc_signature_contract.py or its test; no other T workflow; do not start native build or cancel T1/T5. Source private only on distinct explicit SHA-pinned marker. Preserve code/asset and semantic names inside disposable runner.",
-  "updated_at": "2026-11-05T17:01:00Z"
+  "updated_at": "2026-11-05T17:08:00Z",
+  "completed_at": "2026-11-05T17:08:00Z",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42071059741",
+  "result": {
+    "conclusion": "SUCCESS",
+    "source_sha": "f0a02d6e634e3f93ea34f82343f51e5223f07ef0",
+    "sourcefree_tests_passed": 27,
+    "real_original_programs": 8,
+    "original_VF_user_semantics_matched": 22,
+    "original_VF_semantics_unmatched": 0,
+    "original_mask_lanes_each": 75,
+    "original_missing_component_lanes": 0,
+    "original_semantic_to_spirv_location_verified": false,
+    "device_pixels_proven": false,
+    "game_assets_changed": false
+  },
+  "next_step": "Distinct genuine original ISGN fragment input used/read-mask cardinality vs prior original SPIRV 44/75 structural mismatch, then original SemanticNameIndex/Register to SPIR-V Location mapping. No rerun unchanged."
 }
