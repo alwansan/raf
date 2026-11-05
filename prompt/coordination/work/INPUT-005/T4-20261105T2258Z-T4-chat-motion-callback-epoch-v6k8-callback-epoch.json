@@ -4,9 +4,9 @@
   "origin": "chat",
   "owner": "T4",
   "issue_id": "INPUT-005",
-  "status": "active",
+  "status": "completed_source_integrated_device_unverified",
   "base_sha": "27b2d7aca9228e56a678ffbbf2af37546735c97e",
-  "updated_at": "2026-11-05T22:58:00Z",
+  "updated_at": "2026-11-05T23:03:00Z",
   "resumed_from_sessions": [
     "20261105T2241Z-T4-chat-immersive-bars-h8q2",
     "20261105T2235Z-T4-scheduled-u8k3",
@@ -32,6 +32,20 @@
     "https://github.com/alwansan/raf/actions/runs/42124859112",
     "https://github.com/alwansan/raf/actions/runs/42121598304"
   ],
-  "next_step": "Integrate listener-generation check with executable fail-open tests; no native build/device claim",
-  "result": null
+  "next_step": "Physical Android mouse rapid capture->release->recapture on signed T5 exact candidate; assert no late-generation pointer deltas, log source state safely, menu cursor, system bars, wheel/buttons, touch and world/save/reopen regression. Issue remains OPEN.",
+  "result": {
+    "code_commit": "a5d3ce04e59a0734b689c610da5f65dad8a4b117",
+    "source_policy_commit": "bbcc0560f3f784c6b224994771086588522b3f13",
+    "CI_run_id": 42126395609,
+    "CI_result": "COMPLETED SUCCESS",
+    "python": "32/32",
+    "dotnet": "36/36",
+    "real_unity2021_managed_compile": "PASS",
+    "original_legacy_mouse_source_sites": "4+4+2, five original source files, pinned SHA authenticated",
+    "android_player_built": false,
+    "device_tested": false
+  },
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42126395609"
+  ]
 }
