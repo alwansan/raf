@@ -4,9 +4,9 @@
   "origin": "chat",
   "session_id": "20261105T1736Z-T2-chat-ret-reason-28ce",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "9b02920ff126d09e701f0ab342c6a7f59ddae1de",
-  "updated_at": "2026-11-05T17:42:00Z",
+  "updated_at": "2026-11-05T17:46:00Z",
   "resumed_from_work": "prompt/coordination/work/WATER-001/T2-20261105T1736Z-T2-chat-ret-reason-28ce-ret-reason.json",
   "experiment_key": "T2|ZIP2-15964ea8|original-0a6f0527|exact-Foam-RT-return-local-writers-and-immediate-producer-families-v1",
   "resource_key": "T2-Foam-RT-return-local-stloc-private-writer-census",
@@ -24,5 +24,18 @@
     "latest_original_CI": "42076713202 SUCCESS",
     "scheduled_T2_nonoverlap": "synthetic scripts/t2_rt_return_cfg.py and tests/test_t2_rt_return_cfg.py only"
   },
-  "next_step": "Run original SHA-pinned CI to classify exact ret local stloc writer categories, not CFG runtime paths. WATER-001 OPEN NOT_READY0/3."
+  "next_step": "Read final CI42077586809 genuine T2_FOAM_RETURN_LOCAL_WRITERS_SAFE. Interpret writer counts as source existence only; not reachable branch, array content or Android pixels. WATER-001 OPEN NOT_READY0/3.",
+  "source_commits": [
+    "765042f2ee82967b0f1432622e2bf9c28c288a16",
+    "5a9e47a7d3caf835a53a4d2bfb14e66034eb88eb",
+    "2959b575ae8b455f27b5a8caa845778b7e2bfe68"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42077586809"
+  ],
+  "result": {
+    "code": "Exact original RT return sole ldloc local typed writer aggregate with original-return matching and synthetic null/newobj/typed-call/wrong-local decoys",
+    "CI": "queued",
+    "runtime": "not tested"
+  }
 }
