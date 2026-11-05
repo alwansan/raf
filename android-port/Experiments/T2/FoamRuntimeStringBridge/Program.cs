@@ -76,6 +76,25 @@ internal static class Program
         return null;
     }
 
+    private static string PrivateOriginalProducerParamTypeCategory(TypeReference type,
+                                                                    ModuleDefinition owner)
+    {
+        string n=type.FullName;
+        if (n=="System.String") return "system_string";
+        if (n=="System.Int32") return "system_int32";
+        if (n=="System.Single") return "system_float32";
+        if (n=="System.Boolean") return "system_bool";
+        if (n=="UnityEngine.Texture") return "unity_texture";
+        if (n=="UnityEngine.RenderTexture") return "unity_rendertexture";
+        if (type.Namespace=="UnityEngine" ||
+            type.Namespace.StartsWith("UnityEngine.",StringComparison.Ordinal))
+            return "unity_other_type";
+        if (type.Scope==owner || type.Module==owner ||
+            type.Scope?.Name=="Assembly-CSharp")
+            return "original_managed_declared_type";
+        return "other_external_or_unresolved_type";
+    }
+
     private sealed class Summary
     {
         public int MethodCount;
@@ -110,6 +129,13 @@ internal static class Program
         public int SecondProducerCallvirtCount;
         public int SecondProducerReturnKnownUnityTextureTypeCount;
         public readonly Dictionary<int,int> SecondProducerParameterCount = new();
+        public readonly Dictionary<string,int> SecondProducerParameterTypeCategories =
+            new(StringComparer.Ordinal);
+        public readonly HashSet<string> SecondProducerDistinctPrivateSignatures =
+            new(StringComparer.Ordinal);
+        public int SecondProducerExactManagedMethodDefinitionMatches;
+        public int SecondProducerExactManagedBodyMatches;
+        public int SecondProducerAmbiguousOrMissingMethodDefinitions;
         public readonly Dictionary<string,int> TotalSetterCalls = new(StringComparer.Ordinal)
         {
             ["shader_global_texture"] = 0,
@@ -133,7 +159,12 @@ internal static class Program
                                 HashSet<string> authored)
     {
         var result = new Summary();
-        foreach (var method in methods)
+        var sourceMethods=methods.ToList();
+        // Comparison is entirely private and all original method names remain
+        // in CI memory. Only aggregate match cardinalities leave the runner.
+        var definitions=sourceMethods.GroupBy(m=>m.FullName,StringComparer.Ordinal)
+                                     .ToDictionary(g=>g.Key,g=>g.ToList(),StringComparer.Ordinal);
+        foreach (var method in sourceMethods)
         {
             if (!method.HasBody)
                 continue;
@@ -230,6 +261,37 @@ internal static class Program
                         var argc=exact.Value.SecondProducerParameterCount;
                         result.SecondProducerParameterCount[argc] =
                             result.SecondProducerParameterCount.GetValueOrDefault(argc)+1;
+                        var producer=exact.Value.SecondProducerReference;
+                        if (producer is not null)
+                        {
+                            var signature=producer.FullName;
+                            result.SecondProducerDistinctPrivateSignatures.Add(signature);
+                            foreach (var param in producer.Parameters)
+                            {
+                                var kind=PrivateOriginalProducerParamTypeCategory(
+                                    param.ParameterType,method.Module);
+                                result.SecondProducerParameterTypeCategories[kind] =
+                                    result.SecondProducerParameterTypeCategories.GetValueOrDefault(kind)+1;
+                            }
+                            if (definitions.TryGetValue(signature,out var candidates)
+                                && candidates.Count==1
+                                && candidates[0].DeclaringType.FullName==producer.DeclaringType.FullName
+                                && candidates[0].ReturnType.FullName==producer.ReturnType.FullName
+                                && candidates[0].Parameters.Count==producer.Parameters.Count
+                                && candidates[0].HasThis==producer.HasThis
+                                && candidates[0].Parameters.Zip(producer.Parameters,
+                                    (a,b)=>a.ParameterType.FullName==b.ParameterType.FullName).All(x=>x))
+                            {
+                                result.SecondProducerExactManagedMethodDefinitionMatches++;
+                                if (candidates[0].HasBody &&
+                                    candidates[0].Body.Instructions.Count>0)
+                                    result.SecondProducerExactManagedBodyMatches++;
+                            }
+                            else
+                                result.SecondProducerAmbiguousOrMissingMethodDefinitions++;
+                        }
+                        else if (origin=="call_return")
+                            result.SecondProducerAmbiguousOrMissingMethodDefinitions++;
                         if (exact.Value.SetterKind=="material_texture")
                             result.NonAuthoredExactMaterialSetTextureNameArgs++;
                         if (exact.Value.SetterKind=="material_propertyblock_texture")
@@ -310,6 +372,12 @@ internal static class Program
             non_authored_second_exact_producer_callvirt_calls = result.SecondProducerCallvirtCount,
             non_authored_second_exact_producer_known_Unity_Texture_return_types = result.SecondProducerReturnKnownUnityTextureTypeCount,
             non_authored_second_exact_producer_parameter_count_histogram = result.SecondProducerParameterCount,
+            non_authored_second_producer_parameter_declared_type_categories = result.SecondProducerParameterTypeCategories,
+            non_authored_second_producer_distinct_compiled_private_method_signatures = result.SecondProducerDistinctPrivateSignatures.Count,
+            non_authored_second_producer_compiled_signature_exact_original_method_definition_matches = result.SecondProducerExactManagedMethodDefinitionMatches,
+            non_authored_second_producer_exact_original_method_definitions_with_body = result.SecondProducerExactManagedBodyMatches,
+            non_authored_second_producer_missing_or_ambiguous_original_definitions = result.SecondProducerAmbiguousOrMissingMethodDefinitions,
+            original_exact_method_definition_is_original_runtime_called_or_output_proof = false,
             producer_declared_signature_is_actual_runtime_texture_object_proof = false,
             second_argument_origin_label_is_actual_texture_instance_proof = false,
             material_receiver_identity_or_runtime_reachability_verified = false,
@@ -419,6 +487,17 @@ internal static class Program
         var publicFactory=new TypeReference("Synthetic","Factory",m,m.TypeSystem.Object.Scope);
         var producerMethod=new MethodReference("PublicSyntheticTextureProducer",
             textureType,publicFactory){HasThis=false};
+        var factoryDef=new TypeDefinition("Synthetic","Factory",
+            Mono.Cecil.TypeAttributes.Public|Mono.Cecil.TypeAttributes.Class,
+            m.TypeSystem.Object);
+        m.Types.Add(factoryDef);
+        var producerDef=new MethodDefinition("PublicSyntheticTextureProducer",
+            Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,
+            textureType);
+        factoryDef.Methods.Add(producerDef);
+        var producerBody=producerDef.Body.GetILProcessor();
+        producerBody.Append(producerBody.Create(OpCodes.Ldnull));
+        producerBody.Append(producerBody.Create(OpCodes.Ret));
         var produced=new MethodDefinition("PublicSyntheticProducedTextureFlow",
             Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,
             m.TypeSystem.Void);
@@ -437,6 +516,20 @@ internal static class Program
             traced.Value.SecondProducerHasThis || traced.Value.SecondProducerIsCallvirt ||
             traced.Value.SecondProducerParameterCount!=0)
             throw new InvalidDataException("Exact typed call producer source fixture failed");
+        var strict=Scan(new[]{produced,producerDef},
+            new HashSet<string>(StringComparer.Ordinal){Sha("public-direct-typed-producer")},
+            new HashSet<string>(StringComparer.Ordinal));
+        if (strict.SecondProducerDistinctPrivateSignatures.Count!=1 ||
+            strict.SecondProducerExactManagedMethodDefinitionMatches!=1 ||
+            strict.SecondProducerExactManagedBodyMatches!=1 ||
+            strict.SecondProducerAmbiguousOrMissingMethodDefinitions!=0)
+            throw new InvalidDataException("Same exact original method definition synthetic proof failed");
+        var missing=Scan(new[]{produced},
+            new HashSet<string>(StringComparer.Ordinal){Sha("public-direct-typed-producer")},
+            new HashSet<string>(StringComparer.Ordinal));
+        if (missing.SecondProducerExactManagedMethodDefinitionMatches!=0 ||
+            missing.SecondProducerAmbiguousOrMissingMethodDefinitions!=1)
+            throw new InvalidDataException("Unresolved original method definition must not be invented");
         var wrongProducer=new MethodReference("PublicSyntheticWrongReturn",
             m.TypeSystem.Object,publicFactory){HasThis=false};
         var producedWrong=new MethodDefinition("PublicSyntheticNonTextureProducer",
@@ -504,6 +597,8 @@ internal static class Program
                 exact_producer_method_declared_return_type_traced=true,
                 wrong_producer_return_type_rejected_as_Unity_Texture=true,
                 producer_runtime_execution_not_claimed=true,
+                actual_original_method_signature_and_body_fixture=true,
+                source_class_declaring_same_assembly_without_real_definition_rejected=true,
                 private_IL_names_or_source_published = false
             }));
         return 0;
