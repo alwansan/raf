@@ -36,6 +36,59 @@ internal static class Program
         method.Body.Instructions.Count(i => i.OpCode.Code == Code.Stfld &&
             i.Operand is FieldReference f && f.DeclaringType.FullName == rgdType);
 
+
+    // Classify only the immediate non-NOP producer instruction before the
+    // exact Save(string,RGD) call. IL branches and upstream field
+    // initialization are not reconstructed: this is a *local syntax clue*,
+    // never proof of object identity, runtime save execution, or durability.
+    private static string ImmediatePrecallRgdProducer(
+        MethodDefinition caller, TypeDefinition owner, MethodDefinition save,
+        string rgdType)
+    {
+        var instructions = caller.Body.Instructions;
+        var targets = instructions.Where(i => IsCall(i) &&
+            i.Operand is MethodReference callee &&
+            IsPrivateSaveRgdTarget(callee, owner, save, rgdType)).ToArray();
+        if (targets.Length != 1)
+            return "UNKNOWN_PRECALL_SOURCE";
+        int k = instructions.IndexOf(targets[0]) - 1;
+        while (k >= 0 && instructions[k].OpCode.Code == Code.Nop)
+            k--;
+        if (k < 0) return "UNKNOWN_PRECALL_SOURCE";
+        var previous = instructions[k];
+        if (previous.OpCode.Code == Code.Ldfld &&
+            previous.Operand is FieldReference field &&
+            field.FieldType.FullName == rgdType)
+            return "RGD_TYPED_INSTANCE_FIELD_LOAD";
+        if (previous.OpCode.Code == Code.Ldsfld &&
+            previous.Operand is FieldReference staticField &&
+            staticField.FieldType.FullName == rgdType)
+            return "RGD_TYPED_STATIC_FIELD_LOAD";
+        if (IsCall(previous) &&
+            previous.Operand is MethodReference factory &&
+            factory.ReturnType.FullName == rgdType)
+            return "RGD_TYPED_CALL_RETURN";
+        if (previous.OpCode.Code == Code.Newobj &&
+            previous.Operand is MethodReference constructed &&
+            constructed.DeclaringType.FullName == rgdType)
+            return "DIRECT_RGD_CONSTRUCTION";
+        int localIndex = previous.OpCode.Code switch
+        {
+            Code.Ldloc_0 => 0,
+            Code.Ldloc_1 => 1,
+            Code.Ldloc_2 => 2,
+            Code.Ldloc_3 => 3,
+            Code.Ldloc or Code.Ldloc_S when
+                previous.Operand is VariableDefinition => 
+                ((VariableDefinition)previous.Operand).Index,
+            _ => -1
+        };
+        if (localIndex >= 0 && localIndex < caller.Body.Variables.Count &&
+            caller.Body.Variables[localIndex].VariableType.FullName == rgdType)
+            return "RGD_TYPED_LOCAL_LOAD";
+        return "UNKNOWN_PRECALL_SOURCE";
+    }
+
     private static int Main(string[] args)
     {
         if (args.Length != 4 || args[0] != "--assembly" || args[2] != "--output")
@@ -130,6 +183,10 @@ internal static class Program
                 world_rgd_typed_locals = worldRgdLocals,
                 user_rgd_typed_locals = userRgdLocals,
                 world_rgd_field_stores = CountRgdFieldStores(world, rgdType),
+                world_pre_call_rgd_source_clue =
+                    ImmediatePrecallRgdProducer(world, owner, save, rgdType),
+                user_pre_call_rgd_source_clue =
+                    ImmediatePrecallRgdProducer(user, owner, save, rgdType),
                 direct_constructor_is_dynamically_proven_save_argument = false,
                 original_save_method_invoked = false,
                 game_world_rgd_written_or_loaded = false,
