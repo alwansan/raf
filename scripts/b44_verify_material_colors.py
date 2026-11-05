@@ -68,10 +68,8 @@ def original_colors(source_root: Path, *, selected_owners=None):
     bounded selection is allowed only for exact independently SHA-verified
     owners, not arbitrary caller-provided filenames or archive labels.
     """
-    import UnityPy
     from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
     from scripts.b05_verify_material_texenv_bindings import B05_SMALL_OWNER_PINS
-    from scripts.w1_stage_zip2_owners import fingerprint
 
     if selected_owners is None:
         pins = SHADER_OWNERS
@@ -80,6 +78,10 @@ def original_colors(source_root: Path, *, selected_owners=None):
         if not names or not names.issubset(B05_SMALL_OWNER_PINS):
             raise ValueError('Unpinned selected Material color source')
         pins = {name:B05_SMALL_OWNER_PINS[name] for name in names}
+    # Defer optional serialized-asset dependencies until after the caller's
+    # requested source selection has passed the original pin allowlist.
+    import UnityPy
+    from scripts.w1_stage_zip2_owners import fingerprint
     result = {}
     for name, expected in pins.items():
         path = source_root / 'Raft_Data' / name
