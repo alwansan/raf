@@ -6,7 +6,7 @@
   "issue_id": "INTEGRATION-001",
   "track": "integration-render-diagnostics",
   "approach": "Fix actual B12 failed CLR executable harness to cover B18 LoadedComputeShaderSnapshot imported into B12 production coroutine; run original extracted code and preserve independent render bounds checks.",
-  "status": "active",
+  "status": "completed",
   "base_sha": null,
   "intended_files": [
     "scripts/b12_scene_render_harness.py",
@@ -33,9 +33,10 @@
     "T5-20261104T2357Z-b12-b18-exact-clr"
   ],
   "run_urls": [
-    "https://github.com/alwansan/raf/actions/runs/41933025319"
+    "https://github.com/alwansan/raf/actions/runs/41933025319",
+    "https://github.com/alwansan/raf/actions/runs/41937719270"
   ],
-  "result": null,
-  "next_step": "Correct test shim against exact production B12+B18 methods; retain negative assertions; test and use existing isolated workflow, do not force/disable.",
-  "updated_at": "2026-11-04T23:58:36.308Z"
+  "result": "Concurrent T3 commit 05718f67ba31a6be8ec169fcfcb609b4f3e05a9e repaired the same B12+B18 harness before T5 wrote code; actual CI41937719270 completed SUCCESS. T5 did not duplicate or claim T3 work.",
+  "next_step": "Pivot to unique ZIP2 original render-asset staging integration; preserve T3 implementation.",
+  "updated_at": "2026-11-05T00:04:06.546Z"
 }
