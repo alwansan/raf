@@ -4,17 +4,18 @@
   "generation": "T-2026-11-05",
   "session_id": "20261104T2354Z-T3-render-harness",
   "resumed_from_session": null,
-  "status": "active",
+  "status": "paused",
   "base_sha": "b56ebc3847f251cee2539e9797471417d32698d2",
-  "last_commit": "4bd56a47c4836f84ecd02093bd9c5eafdc7c4c1a",
-  "updated_at": "2026-11-05T00:12:00Z",
+  "last_commit": "603138690c6a3b86e7bec69531ec25f194cc2907",
+  "updated_at": "2026-11-05T00:23:00Z",
   "tracks": [
     "RENDER-002",
     "ASSET-RESTORE-001"
   ],
   "work_ids": [
     "T3-20261104T2354Z-T3-render-harness-b12-csharp-fixture",
-    "T3-20261104T2354Z-T3-render-harness-real-texenv-export"
+    "T3-20261104T2354Z-T3-render-harness-real-texenv-export",
+    "T3-20261104T2354Z-T3-render-harness-real-material-color-export"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41933025319",
@@ -22,8 +23,10 @@
     "https://github.com/alwansan/raf/actions/runs/41938229887",
     "https://github.com/alwansan/raf/actions/runs/41938711186",
     "https://github.com/alwansan/raf/actions/runs/41939065539",
-    "https://github.com/alwansan/raf/actions/runs/41939404454"
+    "https://github.com/alwansan/raf/actions/runs/41939404454",
+    "https://github.com/alwansan/raf/actions/runs/41940116028",
+    "https://github.com/alwansan/raf/actions/runs/41940350604"
   ],
-  "next_step": "Actual 41 Materials/227 UV+TexEnv same-export matched (89 internal exact,25 external unverified). Next B44 original->export m_Colors scoped same-instance parity, then address shaders/pixels. Never infer device restored.",
+  "next_step": "Source scope 41 Materials exact Texture 227 slots, UV 227 and RGBA 150 values all preserved in actual same-export. 25 external texture links and Shader/subprogram/keyword/sRGB/pixels remain open. Resume by reading docs/T3_AUTHENTIC_MATERIAL_EXPORT_PARITY_2026-11-05.md, inspect current Actions/HEAD and coordinate shader next rather than repeat parity.",
   "memory_path": "prompt/coordination/clients/T3/MEMORY.md"
 }
