@@ -4,14 +4,14 @@
   "origin": "chat",
   "session_id": "20261105T142000Z-T1-chat-lavapipe-unity",
   "issue_id": "WATER-001",
-  "status": "waiting_ci",
+  "status": "active",
   "base_sha": "be5b3aab8b12ac22fe93660ba0fcf955615bedff",
   "resumed_from_sessions": [
     "20261105T140300Z-T1-chat-vulkan-editor",
     "20261105T140815Z-T1-chat-592ae2",
     "20261105T131036Z-T1-chat-877585"
   ],
-  "experiment_key": "sourcefree-unity2021.3.45f2-gameci-v0.1.72-mesa-lavapipe-vulkan-driver-overlay",
+  "experiment_key": "t1-sourcefree-mesa-lavapipe-exact-custom-image-icd-env-only-vs-force-vulkan-only-orthogonal",
   "resource_key": "raft-native-engine-feature/android-native-port",
   "intended_files": [
     ".github/workflows/raft-t1-sourcefree-mesa-vulkan-overlay.yml",
@@ -29,8 +29,8 @@
     "https://github.com/alwansan/raf/actions/runs/42045389521",
     "https://github.com/alwansan/raf/actions/runs/42046073285"
   ],
-  "updated_at": "2026-11-05T14:35:00Z",
-  "next_step": "Inspect 42046073285 exact custom-image nonforced 2/2 control. If fails pre-NUnit, classify custom-image activation, not Vulkan shader. If passes, inspect forced-vulkan stage and actual 3/3 math. No ZIP2 fetch until actual Vulkan Unity backend verified; preserve prior 63/64 and31/32 negative FFT numeric parity.",
+  "updated_at": "2026-11-05T14:38:00Z",
+  "next_step": "Run ONE derived-image A/B experiment: A passes explicit VK_ICD_FILENAMES only to 2-case normal Unity project (no -force-vulkan); B passes -force-vulkan only to exact 3-case Vulkan+64 arithmetic project (no injected VK_ICD_FILENAMES). Classify each independently with bounded count/boolean logs, avoid the already-reproduced combined flags and never fetch ZIP2 until true Unity Vulkan 3/3 passes.",
   "identity_conflict": "Multiple T1 scheduled/chat sessions; existing older shared state preserved. Distinct image-only test, no source compilation/production game paths.",
-  "result": "Actual base UnityCI image has no libvulkan.so.1 or lavapipe ICD, exact sourcefree CI42044388619. Disposable layer installs loader/mesa-vulkan-drivers/vulkan-tools and vulkaninfo --summary succeeds, but Unity/GameCI custom-image run exits before NUnit XML (42044388619). CI42045389521 repeats failure; private whitelisted CLI log shows no unknown argument, docker launch or image-unavailable text, but license failure-category true, without proving a secret/account problem. Added a no-forced-Vulkan 2/2 Unity test on SAME custom image as causal licensing control, must pass before forced Vulkan; run42046073285 in_progress."
+  "result": "CI42046073285: same disposable Unity2021 Mesa lavapipe customImage passes real 2/2 licensed source-free Unity tests WITHOUT --dockerEnv or -force-vulkan; overlay Vulkan loader/vulkaninfo success. The identical customImage with BOTH --dockerEnv=VK_ICD_FILENAMES and --customParameters=-force-vulkan exits pre-NUnit without test report, license failure text category true but CLI unknown arguments, docker launch and missing image categories false. This disproves broad claim customImage/Unity license is unusable; exact trigger remains ambiguous between env and forced flag."
 }
