@@ -40,24 +40,31 @@
   ],
   "workflow_path": ".github/workflows/raft-t3-external-texenv-export.yml",
   "run_url": "https://github.com/alwansan/raf/actions/runs/41942377246",
-  "artifact_urls": [],
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41942377246"
+  ],
   "budget": "30min timeout, 2 DOTNET_PROCESSOR_COUNT, 11 SHA-pinned selected original game files (~9 B21 + 2 external providers), no LFS/game Unity build, raw trace ephemeral, aggregate artifacts only",
-  "status": "RUNNING",
+  "status": "SUCCESS_BOUNDED_SOURCE_SAME_EXPORT_TEXTURE_TARGETS",
   "observed_result": {
-    "source_external_provider_probe_run": "https://github.com/alwansan/raf/actions/runs/41941882103",
-    "authenticated_source_distribution": {
-      "sharedassets0.assets": 22,
-      "sharedassets1.assets": 3
-    },
-    "export_comparison": "UNKNOWN_IN_PROGRESS"
+    "original_source_owner_count": 3,
+    "original_provider_count_for_actual_export": 11,
+    "source_41_materials": 41,
+    "external_texenv_slots": 25,
+    "source_typed_Texture2D_targets": 25,
+    "exact_same_exported_GUID_FileID_matches": 25,
+    "wrong": 0,
+    "missing": 0,
+    "null_transition": 0,
+    "phone_pixels_verified": false
   },
   "rejected_hypotheses": [
-    "25 external source owners arbitrary or unlisted; original fileID table and manifest pin prove exactly two public owners"
+    "25 external source owners arbitrary or unlisted; original fileID table and manifest pin prove exactly two public owners",
+    "Original 25 external Texture pointers from these 41 Materials lost or changed during authentic same-instance export"
   ],
   "limitations": [
     "Source dependency table verified but original target Texture2D class and actual exporter PPtr parity unknown pending 41942377246",
     "No Unity/Adreno device pixels or full game source scope"
   ],
   "integration_commit": "6191b4721ba7b9e37a198a763d41df2ae52cd6ca",
-  "next_step": "Read actual synthetic and original/export pipeline log. If inconclusive, record exact stage and fix without rerunning source-only mapping. Maintain simultaneous B43 keyword Actions/no shared state edits."
+  "next_step": "Test actual exported TextureImporter sampler/default semantics or shader source program fidelity; no arbitrary texture repair."
 }
