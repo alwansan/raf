@@ -4,9 +4,9 @@
   "origin": "chat",
   "session_id": "20261105T1611Z-T2-chat-foam-length-source-9ab4",
   "issue_id": "WATER-001",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "5c45d20d1112e18ca6a544bbcdaed7f1960db18a",
-  "updated_at": "2026-11-05T16:13:00Z",
+  "updated_at": "2026-11-05T16:21:00Z",
   "resumed_from_sessions": [
     "20261105T1540Z-T2-chat-byref-target-b6af",
     "20261105T1520Z-T2-scheduled-e7c1"
@@ -28,14 +28,28 @@
     "last_verified_t2_original_ci": "42060975715 SUCCESS",
     "last_canonical_summary": "42061316352 SUCCESS"
   },
-  "next_step": "Read CI42062967598. If success inspect T2_FOAM_LENGTH_LOCAL_ORIGIN_SAFE, distinguish direct size/literal via local from argument/call/arraylen or unresolved. If fail fix first T2-owned error. Never disclose raw original length/indices/digests. WATER-001 OPEN NOT_READY0/3.",
+  "next_step": "Trace actual original ldflda-containing caller numeric argument passed to the exact byref recipient System.Int32 length formal, with same-stack typed Cecil dataflow and 4 private original caller indices. Only report conditional in-bounds when literal provenance proven. WATER-001 OPEN NOT_READY0/3.",
   "source_commit": "3b968223d951a380485024a7491d8f04ca01bd47",
   "run_urls": [
-    "https://github.com/alwansan/raf/actions/runs/42062967598"
+    "https://github.com/alwansan/raf/actions/runs/42063244298"
   ],
   "result": {
-    "code": "Typed original exact newarr immediate producer classification and same-basic-block local stloc provenance, original SHA verifier + three public synthetic controls",
-    "CI": "queued",
-    "device": "not tested"
-  }
+    "original_CI": "42063244298 SUCCESS",
+    "original_managed_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "exact_recipient_definitions": 1,
+    "exact_RT_newarr_sites": 1,
+    "immediate_length_producer": "ldarg",
+    "resolved_length_source": "int32_argument",
+    "same_block_local_definition": false,
+    "source_proven_positive_length": false,
+    "original_four_index_literals_within_length": null,
+    "branch_joins_or_runtime_verified": false,
+    "original_numeric_values_exposed": false,
+    "artifact_id": 13432533553,
+    "artifact_sha256": "d76e1fd4f1ee2717e14a5de83d6e3b4f421ac0c2503fee1c693ef9cf2d9c45f8"
+  },
+  "source_commits": [
+    "3b968223d951a380485024a7491d8f04ca01bd47",
+    "ddba7cabf67b922c1239642cbe24889cff8462f9"
+  ]
 }
