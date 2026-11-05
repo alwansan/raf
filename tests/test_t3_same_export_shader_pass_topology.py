@@ -88,9 +88,9 @@ class SameExportShaderTopology(unittest.TestCase):
                 guid=f"{i:032x}"
                 ids.add(guid)
                 shader=assets/(f"synthetic-{i}.shader")
-                shader.write_text('Shader "Synthetic" { SubShader { Pass {CGPROGRAM\\nvoid f(){}\\nENDCG} } }',
+                shader.write_text('Shader "Synthetic" { SubShader { Pass {CGPROGRAM\nvoid f(){}\nENDCG} } }',
                                   encoding="utf-8-sig")
-                (assets/(shader.name+".meta")).write_text("guid: "+guid+"\\nShaderImporter:\\n",
+                (assets/(shader.name+".meta")).write_text("guid: "+guid+"\nShaderImporter:\n",
                                                             encoding="utf-8-sig")
             results=m.exported_profiles(assets,ids)
             self.assertEqual(len(results),9)
