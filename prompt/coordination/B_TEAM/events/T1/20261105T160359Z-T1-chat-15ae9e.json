@@ -1,0 +1,12 @@
+{
+  "id": "20261105T160359Z-T1-chat-15ae9e",
+  "owner": "T1",
+  "session_id": "20261105T160359Z-T1-chat-15ae9e",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "CI42061138927 passed: one source Load, two butterfly Loads, all with direct integer-vector constructors; one bare argument per role, no unclassified references. Static only. Next resolve helper semantics and compare actual lookup coordinates and fetched values across backends.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42061138927"
+  ],
+  "at": "2026-11-05T16:06:35.010Z"
+}
