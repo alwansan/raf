@@ -39,6 +39,36 @@ static class Program
         Check(motion.ReceivedCount == 50, "UI-thread concurrent event safety");
         Check(Math.Abs(motion.Sample(13, true) - 5f) < 1e-6f, "Concurrent sum X");
         Check(Math.Abs(motion.Sample(13, false) + 5f) < 1e-6f, "Concurrent sum Y");
+
+        // Android API26 captured sources must not treat absolute touch
+        // or an uncaptured SOURCE_MOUSE coordinate as a relative delta.
+        Check(PhysicalMouseMotionSource.Classify(131076) ==
+            PhysicalMouseMotionSource.Kind.Mouse, "SOURCE_MOUSE_RELATIVE");
+        Check(PhysicalMouseMotionSource.Classify(1048584) ==
+            PhysicalMouseMotionSource.Kind.Touchpad, "SOURCE_TOUCHPAD");
+        Check(PhysicalMouseMotionSource.Classify(8194) ==
+            PhysicalMouseMotionSource.Kind.Ignore, "Uncaptured SOURCE_MOUSE");
+        Check(PhysicalMouseMotionSource.Classify(4098) ==
+            PhysicalMouseMotionSource.Kind.Ignore, "SOURCE_TOUCHSCREEN");
+        Check(PhysicalMouseMotionSource.Classify(0) ==
+            PhysicalMouseMotionSource.Kind.Ignore, "Unknown source");
+        Check(PhysicalMouseMotionSource.Classify(-1) ==
+            PhysicalMouseMotionSource.Kind.Ignore, "Invalid source bits");
+        Check(PhysicalMouseMotionSource.AxisRelativeX == 27 &&
+              PhysicalMouseMotionSource.AxisRelativeY == 28, "Android relative axis IDs");
+        Check(PhysicalMouseMotionSource.ValidHistory(0), "Unbatched MOVE");
+        Check(PhysicalMouseMotionSource.ValidHistory(64), "Bounded historical samples");
+        Check(!PhysicalMouseMotionSource.ValidHistory(65), "Reject oversized MOVE history");
+        Check(!PhysicalMouseMotionSource.ValidHistory(-1), "Reject invalid history size");
+        Check(PhysicalMouseMotionSource.ValidDelta(4f, 0f), "Horizontal-only movement");
+        Check(PhysicalMouseMotionSource.ValidDelta(0f, -3f), "Vertical-only movement");
+        Check(!PhysicalMouseMotionSource.ValidDelta(0f, 0f), "Ignore zero delta packets");
+        Check(!PhysicalMouseMotionSource.ValidDelta(float.NaN, 1f), "Reject NaN delta");
+        Check(!PhysicalMouseMotionSource.ValidDelta(float.NegativeInfinity, 1f),
+            "Reject infinite delta");
+        Check(!PhysicalMouseMotionSource.ValidDelta(10001f, 1f),
+            "Reject out-of-range delta");
+
         Console.WriteLine("T4_PHYSICAL_MOUSE_DELTA_CONTROLS passed=" + tests +
             " AndroidJavaBridgeCompiled=false DeviceVerified=false");
         return 0;
