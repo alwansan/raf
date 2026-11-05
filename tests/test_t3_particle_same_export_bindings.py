@@ -89,6 +89,42 @@ class OriginalParticleSameInstanceExport(unittest.TestCase):
         self.assertEqual(r["selected_texture2d28_missing_export_trace"],1)
         self.assertLess(r["selected_exact_material_texenv_pointer_matches"],10)
 
+    def test_untraced_original_texture_explicitly_skipped_nonexportable_collection(self):
+        s,t,w,b,exp=build()
+        missed=b["objects"].pop()
+        b["nonexportable_texture_sources"]=[{"source":missed["source"]}]
+        b["nonexportable_texture_objects_skipped"]=1
+        r=m.assess(s,t,w,b,exp)
+        self.assertEqual(r["status"],m.STATUS_MISMATCH)
+        self.assertEqual(r["selected_texture2d28_missing_export_trace"],1)
+        self.assertEqual(r["selected_missing_texture_skipped_nonexportable_collection"],1)
+        self.assertEqual(r["selected_missing_texture_absent_all_export_collections"],0)
+        self.assertEqual(r["selected_missing_texture_reason_unclassified"],0)
+        self.assertEqual(r["selected_exact_material_texenv_pointer_matches"],9)
+        safe=json.dumps(r)
+        self.assertNotIn(missed["source"]["owner"],safe)
+        self.assertNotIn('"path_id"',safe)
+
+    def test_untraced_original_texture_absent_all_collections_is_distinct(self):
+        s,t,w,b,exp=build()
+        b["objects"].pop()
+        b["nonexportable_texture_sources"]=[]
+        b["nonexportable_texture_objects_skipped"]=0
+        r=m.assess(s,t,w,b,exp)
+        self.assertEqual(r["selected_missing_texture_skipped_nonexportable_collection"],0)
+        self.assertEqual(r["selected_missing_texture_absent_all_export_collections"],1)
+        self.assertEqual(r["selected_missing_texture_reason_unclassified"],0)
+
+    def test_nonexportable_source_trace_malformed_or_overlap_rejected(self):
+        s,t,w,b,exp=build()
+        b["nonexportable_texture_sources"]="wrong"
+        with self.assertRaisesRegex(ValueError,"malformed_private_B02"):
+            m.assess(s,t,w,b,exp)
+        s,t,w,b,exp=build()
+        b["nonexportable_texture_sources"]=[{"source":b["objects"][0]["source"]}]
+        with self.assertRaisesRegex(ValueError,"both_exportable_and_nonexportable"):
+            m.assess(s,t,w,b,exp)
+
     def test_missing_material_trace_is_not_called_a_verified_match(self):
         s,t,w,b,exp=build()
         w["objects"].pop()
