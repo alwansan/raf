@@ -4,21 +4,36 @@ import json
 from pathlib import Path
 import re
 
-from scripts.t1_fft_unity_gpu_resource_bridge import translated_image_symbols
+from scripts.t1_fft_unity_gpu_resource_bridge import IMAGE, translated_image_symbols
 
 
 def inventory(text):
     clean = re.sub(r"/\*[\s\S]*?\*/|//[^\r\n]*", " ", text)
     symbols = translated_image_symbols(clean)
+    declarations = {m.start(2) for m in IMAGE.finditer(clean)}
     counts = {}
     for role in ("source", "butterfly"):
         name = re.escape(symbols[role])
-        uses = len(re.findall(rf"\b{name}\b", clean))
-        loads = len(re.findall(rf"\b{name}\s*\.\s*Load\s*\(", clean))
-        dimensions = len(re.findall(rf"\b{name}\s*\.\s*GetDimensions\s*\(", clean))
-        subscripts = len(re.findall(rf"\b{name}\s*\[", clean))
-        counts[role] = {"load": loads, "dimensions": dimensions, "subscript": subscripts,
-                        "unclassified": uses - 1 - loads - dimensions - subscripts}
+        counts[role] = dict(load=0, dimensions=0, subscript=0, unclassified=0,
+                            argument_reference=0, coordinate_constructor=0)
+        row = counts[role]
+        for ref in re.finditer(rf"\b{name}\b", clean):
+            if ref.start() in declarations:
+                continue
+            tail = clean[ref.end():].lstrip()
+            load = re.match(r"\.\s*Load\s*\(\s*", tail)
+            if load:
+                row["load"] += 1
+                if re.match(r"u?int[234]\s*\(", tail[load.end():]):
+                    row["coordinate_constructor"] += 1
+            elif re.match(r"\.\s*GetDimensions\s*\(", tail):
+                row["dimensions"] += 1
+            elif tail.startswith("["):
+                row["subscript"] += 1
+            elif clean[:ref.start()].rstrip().endswith(("(", ",")) and tail.startswith((",", ")")):
+                row["argument_reference"] += 1
+            else:
+                row["unclassified"] += 1
     return counts
 
 
