@@ -50,7 +50,15 @@ jobs:
           from pathlib import Path
           log=(Path(os.environ['RUNNER_TEMP'])/'t2-foam-cecil-build.log').read_text(errors='replace')
           codes=dict(collections.Counter(re.findall(r'error\s+((?:CS|NU|NETSDK)[0-9]+)',log)))
-          print('T2_FOAM_CECIL_BUILD_BLOCKED '+json.dumps({'public_diagnostic_codes':codes,'private_compiler_text_published':False}))
+          # Source-only T2 compiler diagnostics; never emit proprietary ZIP2 source.
+          locs=re.findall(r'(FoamByrefAllocationFlow\\.cs|Program\\.cs)\\((\\d+),(\\d+)\\):\\s+error\\s+(CS\\d+)',log)
+          safe=[{'file':name,'line':int(line),'column':int(col),'code':code}
+                for name,line,col,code in locs[:16]]
+          print('T2_FOAM_CECIL_BUILD_BLOCKED '+json.dumps({
+              'public_diagnostic_codes':codes,
+              't2_owned_source_error_locations':safe,
+              'private_compiler_text_published':False
+          }))
           PY
               exit 1
             }
