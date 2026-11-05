@@ -6,6 +6,8 @@ on:
     paths:
       - scripts/t3_decoded_texture_pixel_parity.py
       - scripts/t3_pixel_drift_diagnostics.py
+      - scripts/t3_authentic_decoded_pixel_export.py
+      - tests/test_t3_pixel_diagnostic_boundary.py
       - tests/test_t3_decoded_texture_pixel_parity.py
       - tests/test_t3_pixel_drift_diagnostics.py
       - .github/workflows/raft-t3-decoded-pixel-controls.yml
@@ -26,6 +28,8 @@ jobs:
           sparse-checkout: |
             scripts/t3_decoded_texture_pixel_parity.py
             scripts/t3_pixel_drift_diagnostics.py
+            scripts/t3_authentic_decoded_pixel_export.py
+            tests/test_t3_pixel_diagnostic_boundary.py
             tests/test_t3_decoded_texture_pixel_parity.py
             tests/test_t3_pixel_drift_diagnostics.py
       - name: Install Pillow and execute adversarial pixel tests
@@ -33,3 +37,4 @@ jobs:
           python3 -m pip install --user --disable-pip-version-check Pillow==11.3.0
           python3 -m unittest discover -s tests -p 'test_t3_decoded_texture_pixel_parity.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_pixel_drift_diagnostics.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_pixel_diagnostic_boundary.py' -v
