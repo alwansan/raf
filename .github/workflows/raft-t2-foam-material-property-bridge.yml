@@ -1,0 +1,100 @@
+name: T2 WATER-001 source-authentic Foam Shader texture property to original Material TexEnv bridge
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t2_foam_material_property_bridge.py
+      - tests/test_t2_foam_material_property_bridge.py
+      - .github/workflows/raft-t2-foam-material-property-bridge.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t2-foam-material-property-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  source-original-foam-property-material-lineage:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 17
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+      - name: Synthetic original Shader Property and Material TexEnv/PPtr anti-spoof controls
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t2_foam_material_property_bridge.py
+          python3 -m unittest discover -s tests -p 'test_t2_foam_material_property_bridge.py' -v
+      - name: Check original one-owner staging headroom
+        run: |
+          python3 - <<'PY'
+          import shutil
+          assert shutil.disk_usage('.').free > 3 * 1024**3
+          PY
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: t2-original-material-zip2
+          lfs: false
+          persist-credentials: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/sharedassets0.assets/*
+      - name: Reconstruct authentic original Foam Shader owner without LFS
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os,subprocess
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import ZIP2_SHA,PINS,stage
+          root=Path('t2-original-material-zip2')
+          assert subprocess.check_output(['git','-C',str(root),'rev-parse','HEAD'],text=True).strip()==ZIP2_SHA
+          target=Path(os.environ['RUNNER_TEMP'])/'t2-original-material-source'
+          result=stage(root,target,{'Raft_Data/sharedassets0.assets':PINS['Raft_Data/sharedassets0.assets']})
+          assert result['verified_bytes']==115978112 and result['lfs_used'] is False
+          print('T2_ORIGINAL_FOAM_PROPERTY_SOURCE sha_verified=true bytes=115978112 lfs=false')
+          PY
+      - name: Read private source with pinned Unity serialized typetree reader
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4 -q
+      - name: Verify authored Foam shader texture names and same-owner Material TexEnv pointers
+        run: |
+          set -euo pipefail
+          timeout 180s python3 -m scripts.t2_foam_material_property_bridge \
+            --source "$RUNNER_TEMP/t2-original-material-source" \
+            --out "$RUNNER_TEMP/t2-foam-material-property-safe.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          data=json.loads((Path(os.environ['RUNNER_TEMP'])/'t2-foam-material-property-safe.json').read_text())
+          assert data['status']=='original_foam_authored_texture_properties_and_direct_material_texenvs_scoped'
+          assert data['original_stages']==4 and data['original_source_texture_rows']==6
+          assert len(data['stages'])==4
+          assert data['original_owner_sha256']=='0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3'
+          assert data['original_shader_raw_object_sha256']=='67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1'
+          assert not data['original_all_game_material_providers_examined']
+          assert not data['original_material_runtime_property_upload_verified']
+          assert not data['original_sampler_textureimporter_wrap_filter_verified']
+          assert not data['shaderlab_unity_import_or_adreno_pixels_verified']
+          assert not data['private_shader_material_texture_names_ids_values_published']
+          PY
+      - name: Remove all original source and ZIP2 staging even on failure
+        if: always()
+        run: |
+          rm -rf -- "$RUNNER_TEMP/t2-original-material-source" \
+            "$GITHUB_WORKSPACE/t2-original-material-zip2"
+      - name: Publish safe aggregate source-property and typed PPtr evidence only
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: t2-foam-material-property-safe-${{ github.run_id }}
+          path: ${{ runner.temp }}/t2-foam-material-property-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
