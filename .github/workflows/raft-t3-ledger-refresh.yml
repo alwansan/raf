@@ -68,6 +68,10 @@ jobs:
           # translator was source-only; it does not imply device readiness.
           color_mask_proof="https://github.com/alwansan/raf/actions/runs/42116530618"
           assert color_mask_proof in issue[0]["evidence"]
+          # Original 108-use ParticleShader48 Materials: five source Material21
+          # objects, 10/10 bound local TexEnv PPtrs; source-only, not pixels.
+          particle_texenv_source="https://github.com/alwansan/raf/actions/runs/42119098398"
+          assert particle_texenv_source in issue[0]["evidence"]
           # T3 source-only class/particle rankings are real SHA-pinned evidence,
           # not an Android shader restoration/device acceptance.
           for genuine_source_proof in (
