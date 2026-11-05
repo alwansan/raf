@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "origin": "chat",
+  "session_id": "20261105T2258Z-T4-chat-motion-callback-epoch-v6k8",
+  "issue_id": "INPUT-005",
+  "status": "completed_source_integrated_device_unverified",
+  "hypothesis": "A captured Android MotionEvent callback could begin under a prior captured listener, then finish after ReleaseCapture followed by a new RequestCapture. Only checking requested=true in RecordCapturedMotion was insufficient and could inject stale deltas into the new camera.",
+  "original_game_provenance": {
+    "zip2_ref": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "original_assembly_size_bytes": 3211776,
+    "original_assembly_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "private_original_source_published": false
+  },
+  "exact_source_change": {
+    "source": "android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs",
+    "implementation_commit": "a5d3ce04e59a0734b689c610da5f65dad8a4b117",
+    "helper": "android-port/Runtime/Platform/PhysicalMouseMotionSource.cs",
+    "helper_commit": "f3c2abb20abcc967e20fa7ca03595469a3054e1b",
+    "source_guard": "Each RequestCapture increments epoch, constructs a distinct CapturedListener carrying that generation, and installs that listener on Android View. Every MOVE prefilters token against current epoch and requested; RecordCapturedMotion checks same token again while holding captureGate before moving any delta. Old listener can never forward motion from a previous generation.",
+    "preserves": "Scheduled T4 releaseEpoch UI stale-release guard, native capture-loss probe, original legacy GetAxis X/Y bridge, touchscreen and virtual controller, wheel/buttons, existing original game assets and .rgd."
+  },
+  "tests": {
+    "workflow": ".github/workflows/raft-t4-mouse-capture-bridge.yml",
+    "successful_run": "https://github.com/alwansan/raf/actions/runs/42126395609",
+    "job_id": 127591581668,
+    "source_commit": "bbcc0560f3f784c6b224994771086588522b3f13",
+    "python": {
+      "original_routing": 7,
+      "original_rewrite": 7,
+      "source_policy": 18,
+      "total": 32
+    },
+    "csharp": {
+      "total": 36,
+      "added_generation_checks": 6
+    },
+    "original_Unity2021_managed_compile": "SUCCESS",
+    "original_private_ILSpy_rewrite": {
+      "mouse_x": 4,
+      "mouse_y": 4,
+      "cursor_lock": 2,
+      "source_files_changed": 5,
+      "output_contains_game_source": false
+    },
+    "full_unity_editor_android_player_build": false,
+    "device_tested": false
+  },
+  "partial_failures": [
+    {
+      "run": "https://github.com/alwansan/raf/actions/runs/42126170243",
+      "status": "failed before updated source-policy assertions"
+    },
+    {
+      "run": "https://github.com/alwansan/raf/actions/runs/42126238081",
+      "status": "failed during intermediate old string assertion"
+    },
+    {
+      "run": "https://github.com/alwansan/raf/actions/runs/42126279302",
+      "status": "failed due two pre-existing static assertions expecting old method signature/comment; corrected without weakening behavior"
+    }
+  ],
+  "negative_controls": [
+    "Old captured listener generation 17 rejected when active epoch=18 and requested=true.",
+    "No generation accepted when requested=false after release.",
+    "New generation accepted after a new request.",
+    "Same generation checked both at JNI callback entry and under the Unity input captureGate immediately before recording movement.",
+    "Existing scheduled stale native release callback guard retained unchanged.",
+    "Mouse source classification, batched history and relative-axis behavior intact; original source SHA/site counts fail-closed."
+  ],
+  "limitations": [
+    "This race was discovered by source inspection and interleaving reasoning, not reproduced on POCO F5 Pro.",
+    "Source-only CI/managed assembly compile does not execute AndroidJavaProxy or real Unity IL2CPP on hardware.",
+    "Full mouse cursor, OS system bars, menu/focus transitions, physical wheel/buttons, touch, world/save/reopen for this newer source SHA remain unverified.",
+    "No native build, signed APK/OBB/XAPK release or owner phone test was performed by T4.",
+    "Owner world/save/exit/reopen confirmation on run42058825739 is bounded to older source SHA e9c358eda0."
+  ],
+  "next_step": "T5 next coordinated signed APK candidate (exact SHA/APK/OBB manifest): run rapid gameplay/menu/game pointer capture transitions with physical mouse, loss/reacquire and prior-listener stale movement checks, observed input diagnostic logs, fullscreen UI bars and exact world/save/exit/reopen regression; do not claim device success from source CI."
+}
