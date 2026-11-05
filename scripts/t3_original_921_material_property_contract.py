@@ -67,7 +67,11 @@ COUNTERS = (
     "source_saved_null_texture_entries", "source_saved_color_property_entries",
     "source_saved_float_property_entries", "source_saved_int_property_entries",
     "source_declared_property_saved_matches", "source_declared_property_unsaved_uses_default_possible",
+    "source_declared_properties_without_matching_saved_family",
     "source_saved_properties_not_declared", "source_saved_wrong_family_entries",
+    "source_saved_names_repeated_across_families",
+    "source_Materials_with_cross_family_name_overlap",
+    "source_renderer_slots_with_cross_family_name_overlap",
     "source_materials_with_saved_wrong_family",
     "source_materials_with_saved_not_declared",
     "source_materials_with_at_least_one_unsaved_declared",
@@ -122,9 +126,11 @@ def normalize_private_saved_properties(props: dict):
         if len(names) > 256:
             raise ValueError("oversize_original_saved_property_family")
         for name in names:
-            if name in owned:
-                raise PrivateFamilyDecodeError("OVERLAPPING_PROPERTY_FAMILIES")
-            owned[name] = kind
+            # Real original Unity Material typetrees may retain a property
+            # name in several serialized families. Preserve all kinds rather
+            # than silently choose one, or reject authentic material bytes.
+            owned.setdefault(name,set()).add(kind)
+    owned = {name:frozenset(kinds) for name,kinds in owned.items()}
     texture_bound = 0
     for name,(ptr,_uv) in tex.items():
         if (type(ptr) is not tuple or len(ptr) != 2 or
@@ -173,21 +179,28 @@ def classify_private_921_materials(declared: dict, source_materials: dict,
                 counts["source_saved_null_texture_entries"]+=stats["texture"]-value
             else:
                 counts["source_saved_"+name+"_property_entries"]+=value
-        matched={p for p in owned if declared.get(p)==owned[p]}
-        wrong={p for p in owned if p in declared and declared[p]!=owned[p]}
+        matched={p for p,kind in declared.items() if kind in owned.get(p,())}
+        wrong_entries=sum(len(kinds-{declared[p]})
+                          for p,kinds in owned.items() if p in declared)
+        overlaps=sum(len(kinds)>1 for kinds in owned.values())
         extras=set(owned)-set(declared)
-        unsaved=set(declared)-set(owned)
+        absent=set(declared)-set(owned)
+        unmatched=set(declared)-matched
         counts["source_declared_property_saved_matches"]+=len(matched)
-        counts["source_declared_property_unsaved_uses_default_possible"]+=len(unsaved)
+        counts["source_declared_property_unsaved_uses_default_possible"]+=len(absent)
+        counts["source_declared_properties_without_matching_saved_family"]+=len(unmatched)
         counts["source_saved_properties_not_declared"]+=len(extras)
-        counts["source_saved_wrong_family_entries"]+=len(wrong)
-        counts["source_materials_with_saved_wrong_family"]+=bool(wrong)
+        counts["source_saved_wrong_family_entries"]+=wrong_entries
+        counts["source_saved_names_repeated_across_families"]+=overlaps
+        counts["source_Materials_with_cross_family_name_overlap"]+=bool(overlaps)
+        counts["source_renderer_slots_with_cross_family_name_overlap"]+=weight*bool(overlaps)
+        counts["source_materials_with_saved_wrong_family"]+=bool(wrong_entries)
         counts["source_materials_with_saved_not_declared"]+=bool(extras)
-        counts["source_materials_with_at_least_one_unsaved_declared"]+=bool(unsaved)
-        counts["source_renderer_slots_with_saved_wrong_family"]+=weight*bool(wrong)
+        counts["source_materials_with_at_least_one_unsaved_declared"]+=bool(unmatched)
+        counts["source_renderer_slots_with_saved_wrong_family"]+=weight*bool(wrong_entries)
         counts["source_renderer_slots_with_saved_not_declared"]+=weight*bool(extras)
-        counts["source_renderer_slots_with_at_least_one_unsaved_declared"]+=weight*bool(unsaved)
-        counts["source_Materials_with_all_declared_properties_explicitly_saved"]+=not bool(unsaved)
+        counts["source_renderer_slots_with_at_least_one_unsaved_declared"]+=weight*bool(unmatched)
+        counts["source_Materials_with_all_declared_properties_explicitly_saved"]+=not bool(unmatched)
         counts["source_Materials_with_no_declared_props_saved"]+=not bool(matched)
         counts["source_Materials_with_any_declared_texture_bound"]+=any(
             declared.get(name)=="texture" for name in bound_texture_names
