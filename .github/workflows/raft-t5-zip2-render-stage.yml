@@ -78,6 +78,55 @@ jobs:
                   raise SystemExit("Staged original graphics bytes failed independent SHA")
           print('T5_REAL_ZIP2_GRAPHICS owner_count=3 original_bytes_verified=337660952 sha256_verified=true feature_pointer_reused=true lfs_used=false unity=false phone=false')
           PY
+      - name: Exercise real production graphics hydrator --apply with verified three-owner subset
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib
+          import os
+          import subprocess
+          import sys
+          from pathlib import Path
+          from unittest import mock
+          from scripts import hydrate_render_payloads as hyd
+
+          expected = {
+              'Raft/Raft_Data/resources.assets': 111533516,
+              'Raft/Raft_Data/sharedassets0.assets': 115978112,
+              'Raft/Raft_Data/sharedassets36.assets': 110149324,
+          }
+          # The production entrypoint normally plans every graphics LFS owner.
+          # This isolated test bounds it to the three genuine ZIP2 originals:
+          # running full --apply on all assets would trigger large unrelated LFS.
+          rows = [row for row in hyd.plan() if row[0] in expected]
+          if len(rows) != 3 or any(expected[p] != size for p, _, size in rows):
+              raise SystemExit('Missing independently pinned original graphics plan')
+          for pathname, digest, size in rows:
+              pointer_bytes = subprocess.check_output(['git', 'show', 'HEAD:' + pathname])
+              if hyd.pointer(pointer_bytes) != (digest, size):
+                  raise SystemExit('Expected immutable feature LFS pointer not found')
+              Path(pathname).write_bytes(pointer_bytes)
+          staged = Path(os.environ['RUNNER_TEMP']) / 't5-original-graphics/Raft_Data'
+          if not staged.is_absolute() or not staged.is_dir():
+              raise SystemExit('Verified real ZIP2 source directory absent')
+
+          # Invoke the ACTUAL argument/environment consumer and final SHA
+          # verifier; block any accidental Git LFS fallback in this trial.
+          with mock.patch.object(hyd, 'plan', return_value=rows), \
+               mock.patch.dict(os.environ, {'RAFT_T5_VERIFIED_ZIP2_RENDER_ROOT': str(staged)}), \
+               mock.patch.object(sys, 'argv', ['hydrate_render_payloads.py', '--apply']), \
+               mock.patch.object(hyd.subprocess, 'run', side_effect=AssertionError('Unexpected LFS fallback')):
+              hyd.main()
+
+          for pathname, digest, size in rows:
+              target = Path(pathname)
+              with target.open('rb') as source:
+                  actual = hashlib.file_digest(source, 'sha256').hexdigest()
+              if actual != digest or target.stat().st_size != size:
+                  raise SystemExit('Real production --apply failed immutable original SHA verification')
+          print('T5_REAL_HYDRATOR_MAIN_APPLY original_count=3 original_bytes=337660952 feature_pointers_replaced=true source_sha256=true git_lfs_calls=0 unity=false phone=false')
+          PY
       - name: Never upload original game payload
         if: always()
         run: echo "T5 original graphics staging is not Unity, APK, pixel or phone proof; no raw artifacts uploaded."
