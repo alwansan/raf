@@ -336,6 +336,32 @@ jobs:
           assert type(v['MatchingOriginalMethodBodyAvailable']) is bool
           if v['MatchingOriginalMethodBodyAvailable']:
               assert v['MatchingOriginalReturnMethodDefinitions']==1
+          for key in ('OriginalReturnInstructionSites','DirectNullReturnSites',
+                      'DirectRenderTextureConstructorReturnSites',
+                      'DirectRenderTextureCallReturnSites',
+                      'ReturnSitesWithUnresolvedProducer',
+                      'BodyBranchInstructionCount'):
+              assert type(v[key]) is int and v[key]>=0
+          assert v['OriginalReturnInstructionSites']==(
+              v['DirectNullReturnSites']+
+              v['DirectRenderTextureConstructorReturnSites']+
+              v['DirectRenderTextureCallReturnSites']+
+              v['ReturnSitesWithUnresolvedProducer'])
+          if not v['MatchingOriginalMethodBodyAvailable']:
+              assert v['OriginalReturnInstructionSites']==0
+          print('T2_FOAM_RETURN_BODY_DIRECT_SOURCE_SAFE '+json.dumps({
+              'body_available':v['MatchingOriginalMethodBodyAvailable'],
+              'return_sites':v['OriginalReturnInstructionSites'],
+              'direct_null_return_sites':v['DirectNullReturnSites'],
+              'direct_RenderTexture_constructor_return_sites':
+                  v['DirectRenderTextureConstructorReturnSites'],
+              'direct_RenderTexture_call_return_sites':
+                  v['DirectRenderTextureCallReturnSites'],
+              'unresolved_return_sites':v['ReturnSitesWithUnresolvedProducer'],
+              'body_branch_opcodes':v['BodyBranchInstructionCount'],
+              'runtime_return_nonnull_verified':False,
+              'private_symbols_il_int_values_disclosed':False,
+          },sort_keys=True))
           print('T2_FOAM_RETURN_SIGNATURE_IDENTITY_SAFE '+json.dumps({
               'matches_original_sha_managed_signatures':
                   v['MatchingOriginalReturnMethodDefinitions'],
