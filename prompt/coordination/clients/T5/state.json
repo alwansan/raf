@@ -2,12 +2,12 @@
   "schema_version": 1,
   "username": "T5",
   "generation": "T-2026-11-05",
-  "session_id": "20261105T0252Z-T5-fix-escaped-pointer-fixture",
-  "resumed_from_session": "20261105T0149Z-T5-rollback-absent-target",
-  "status": "paused_ci_pending",
-  "base_sha": "bf3b2e278e7b82cc6c0e58ea7ee51f2050b408b5",
-  "last_commit": "1eec3608b3dba9bffd4b8969838f4099d0d4e21b",
-  "updated_at": "2026-11-05T02:53:00Z",
+  "session_id": "20261105T0349Z-T5-unity-integration-boundary",
+  "resumed_from_session": "20261105T0252Z-T5-fix-escaped-pointer-fixture",
+  "status": "paused",
+  "base_sha": "b780c69bbf786fd30ef5693768a59305594fc30f",
+  "last_commit": "05ba93826fd107c20aa115046b02dcf866de0a09",
+  "updated_at": "2026-11-05T03:59:00Z",
   "tracks": [
     "INTEGRATION-001",
     "ASSET-RESTORE-001"
@@ -20,7 +20,8 @@
     "T5-20261105T0032Z-batch-digest-prepublish",
     "T5-20261105T0040Z-real-hydrator-entrypoint",
     "T5-20261105T0149Z-absent-target-rollback",
-    "T5-20261105T0252Z-T5-fix-escaped-pointer-fixture"
+    "T5-20261105T0252Z-T5-fix-escaped-pointer-fixture",
+    "T5-20261105T0349Z-unity-boundary"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41937719270",
@@ -32,8 +33,9 @@
     "https://github.com/alwansan/raf/actions/runs/41942039458",
     "https://github.com/alwansan/raf/actions/runs/41941969217",
     "https://github.com/alwansan/raf/actions/runs/41942815626",
-    "https://github.com/alwansan/raf/actions/runs/41943856117"
+    "https://github.com/alwansan/raf/actions/runs/41943856117",
+    "https://github.com/alwansan/raf/actions/runs/41958001501"
   ],
-  "next_step": "CI41951215380 FAILED on malformed synthetic pointer; fixture LF repaired at 1eec3608. Verify post-fix isolated CI, then move to real Unity import integration. NOT_READY 0/3.",
+  "next_step": "CI41958001501 SUCCESS at 1eec3608 proves repaired rollback fixture; native workflow authenticates 3 ZIP2 owners then runs full hydrate/LFS before export. Next: identify bounded native Unity import blocker and coordinate T1/T3; no phone/FFT proof. NOT_READY 0/3.",
   "memory_path": "prompt/coordination/clients/T5/MEMORY.md"
 }
