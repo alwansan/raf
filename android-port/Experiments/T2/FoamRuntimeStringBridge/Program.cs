@@ -591,7 +591,37 @@ internal static class Program
             guardProfile.InstanceFieldLoads!=2 ||
             guardProfile.InstructionCount!=10)
             throw new InvalidDataException("Original null-guarded Texture[] return fixture failed");
-        var guardedWrong=new MethodDefinition("PublicSyntheticWrongConditionalTarget",
+        // Opposite branch layout: null is returned immediately when the
+        // RenderTexture[] backing field is absent, else array[index].
+        var renderTextureType=new TypeReference("UnityEngine","RenderTexture",
+            m,m.TypeSystem.Object.Scope);
+        var renderArray=new FieldDefinition("PublicSyntheticRenderTextureArray",
+            Mono.Cecil.FieldAttributes.Public,new ArrayType(renderTextureType));
+        factoryDef.Fields.Add(renderArray);
+        var guardedOther=new MethodDefinition("PublicSyntheticEarlyNullRenderTextureArray",
+            Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Virtual,
+            textureType);
+        guardedOther.Parameters.Add(new ParameterDefinition(m.TypeSystem.Int32));
+        factoryDef.Methods.Add(guardedOther);
+        var ilother=guardedOther.Body.GetILProcessor();
+        var nonNull=ilother.Create(OpCodes.Ldarg_0);
+        ilother.Append(ilother.Create(OpCodes.Ldarg_0));
+        ilother.Append(ilother.Create(OpCodes.Ldfld,renderArray));
+        ilother.Append(ilother.Create(OpCodes.Brtrue_S,nonNull));
+        ilother.Append(ilother.Create(OpCodes.Ldnull));
+        ilother.Append(ilother.Create(OpCodes.Ret));
+        ilother.Append(nonNull);
+        ilother.Append(ilother.Create(OpCodes.Ldfld,renderArray));
+        ilother.Append(ilother.Create(OpCodes.Ldarg_1));
+        ilother.Append(ilother.Create(OpCodes.Ldelem_Ref));
+        ilother.Append(ilother.Create(OpCodes.Ret));
+        var testedOther=FoamProducerBody.Inspect(guardedOther);
+        if (!testedOther.ExactNullGuardedOriginalTextureArrayIndexByInt ||
+            !testedOther.OriginalFallbackReturnsNull ||
+            !testedOther.OriginalInstanceFieldTypeCategories.TryGetValue("unity_rendertexture_array",out var count) ||
+            count!=2)
+            throw new InvalidDataException("Opposite branch RenderTexture[] fixture must prove null-indexed path");
+                var guardedWrong=new MethodDefinition("PublicSyntheticWrongConditionalTarget",
             Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Virtual,
             textureType);
         guardedWrong.Parameters.Add(new ParameterDefinition(m.TypeSystem.Int32));
@@ -698,6 +728,7 @@ internal static class Program
                 altered_extra_instruction_return_body_shape_rejected=true,
                 guarded_original_texture_array_null_fallback_fixture=true,
                 wrong_branch_target_guarded_texture_array_rejected=true,
+                early_null_brtrue_guarded_RenderTexture_array_fixture=true,
                 private_IL_names_or_source_published = false
             }));
         return 0;
