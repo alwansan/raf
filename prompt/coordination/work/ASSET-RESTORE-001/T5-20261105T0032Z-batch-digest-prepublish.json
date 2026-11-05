@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T0032Z-T5-content-batch-preflight",
+  "issue_id": "ASSET-RESTORE-001",
+  "track": "Verified original graphics: all-batch content integrity before any hydration publication",
+  "status": "active",
+  "base_sha": "087bd9f58d586559272b50c71aed9c2164ebb7f4",
+  "approach": "Current metadata preflight rejects invalid second owner metadata, but same-length second SHA mismatch occurs only during copy after first pointer has been replaced. Verify and stage ALL owners to per-target private temp files (streaming size+SHA once each) before first os.replace, then publish; cleanup staged temps on failure, preserving original pointers. Keep zero extra original-copy budget, paths/links/sha safety, existing W1/T5 source bridges and LFS fallback. Test adversarial later same-size bad digest and two-owner success; use isolated T5 CI real source stage.",
+  "intended_files": [
+    "scripts/hydrate_render_payloads.py",
+    "tests/test_t5_stage_zip2_render_owners.py",
+    "prompt/coordination/clients/T5/MEMORY.md",
+    "prompt/coordination/clients/T5/state.json",
+    "prompt/coordination/experiments/T5/T5-20261105T0032Z-all-source-digest-prepublish.json"
+  ],
+  "hypothesis": "On current code, a structurally valid but same-size second staged source with wrong SHA publishes first verified owner before raising on second. Streaming all candidates into validated temp files before any move prevents that partial content-integrity failure.",
+  "related_work": [
+    "https://github.com/alwansan/raf/actions/runs/41941435790",
+    "https://github.com/alwansan/raf/actions/runs/41941327382"
+  ],
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/T5/MEMORY.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/work/ASSET-RESTORE-001/T5-20261105T0024Z-hydration-batch-preflight.json"
+  ],
+  "last_verified_result": "T5 CI41941435790 PASS after metadata preflight and fixed synthetic LFS pointer; 3 real ZIP2 source SHA-verified owners, 337660952 bytes, no Unity/device success.",
+  "experiment_ids": [
+    "T5-20261105T0032Z-all-source-digest-prepublish"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement staged batch SHA verification and failure cleanup, add later corrupt owner negative, run isolated T5 workflow, then update state/issue/evidence.",
+  "updated_at": "2026-11-05T00:32:00Z"
+}
