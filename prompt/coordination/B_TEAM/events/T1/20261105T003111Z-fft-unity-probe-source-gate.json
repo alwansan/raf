@@ -1,0 +1,15 @@
+{
+  "id": "T1-fft-unity-probe-source-gate-2026-11-05T00:31:11.513Z",
+  "owner": "T1",
+  "session_id": "20261105T002257Z-T1-fft-unity-contract",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Integrated isolated SHA-bound authored .compute staging and real Unity Editor runtime lookup probe, guarded against fabricated compiled-slot↔runtime index identity; isolated source-only GitHub CI 41941690194 and 41941716641 SUCCESS; Unity/Adreno/device not tested; WATER-001 OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41941690194",
+    "https://github.com/alwansan/raf/actions/runs/41941716641",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_UNITY_FFT_RUNTIME_PROBE_2026-11-05.md",
+    "https://github.com/alwansan/raf/commit/602e9963ea8f45e71823412d4b5e35016e370f7c"
+  ],
+  "at": "2026-11-05T00:31:11.513Z"
+}
