@@ -6,7 +6,7 @@
   "origin": "chat",
   "issue_id": "WATER-001",
   "track": "foam-rendertexture-cfg-synthetic-validation",
-  "status": "active",
+  "status": "completed",
   "base_sha": "b6c65407a97b91a55aa05a516bd0a59b68904069",
   "resumed_from_sessions": [
     "20261105T2017Z-T2-scheduled-retfix-7c3a",
@@ -36,7 +36,27 @@
   "experiment_ids": [
     "T2-20261105T2051Z-T2-chat-cfg-independent-a17f"
   ],
-  "run_urls": [],
-  "updated_at": "2026-11-05T20:51:00Z",
-  "next_step": "Create separate source-free test+CI workflow, inspect results, record strict scope and outcome. Do not modify existing scheduled files or run heavy Unity build."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42107377757"
+  ],
+  "updated_at": "2026-11-05T20:55:00Z",
+  "next_step": "Use passing CI42107377757 as source-free CFG guard; independently inspect exact preceding original managed MethodReference and stack producer in pinned original private ZIP2 assembly. Do not repeat this CI unless inputs change; WATER-001 remains OPEN.",
+  "integration_commit": "192661eab59810d1aada8ffab4003457e8049f41",
+  "result": {
+    "status": "success",
+    "test_count": 23,
+    "passed": 23,
+    "failed": 0,
+    "prior_tests": 13,
+    "new_tests": 10,
+    "python": "3.12.3",
+    "job_id": 127525647859,
+    "proof_scope": "source-free synthetic Python CFG only",
+    "non_proofs": [
+      "original managed Foam CIL",
+      "RenderTexture runtime nonnull",
+      "Unity/Adreno water pixels",
+      "device"
+    ]
+  }
 }
