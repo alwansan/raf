@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T2110Z-T5-chat-retain-delivery-a6f8",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "track": "retained native delivery",
+  "status": "active",
+  "base_sha": "2f065e1524f2723d62e9d4bf142d55767f55258f",
+  "intended_files": [
+    "scripts/t5_verify_retained_delivery_archive.py",
+    "tests/test_t5_verify_retained_delivery_archive.py",
+    ".github/workflows/raft-t5-retain-native-delivery.yml",
+    "docs/T5_NATIVE_DELIVERY_RETENTION_2026-11-05.md",
+    "prompt/coordination/work/INTEGRATION-001/20261105T2110Z-T5-chat-retain-delivery-a6f8.json",
+    "prompt/coordination/clients/T5/sessions/20261105T2110Z-T5-chat-retain-delivery-a6f8.md",
+    "prompt/coordination/experiments/T5/20261105T2110Z-T5-chat-retain-delivery-a6f8.json",
+    "prompt/coordination/B_TEAM/events/T5/20261105T2110Z-T5-chat-retain-delivery-a6f8.json"
+  ],
+  "experiment_key": "t5-42058825739-native-delivery-archive-single-source-stream-sha256-fullpart-v1",
+  "resource_key": "actions-artifact-13441227298-6GB-retention-exclusive",
+  "hypothesis": "Native signed delivery artifact is expiring despite successful Unity packaging; exact fixed archive can be read back, checked against immutable metadata/part hashes, and retained in a new source-only Actions run without Unity rerun or release rights.",
+  "related_work": [
+    "prompt/coordination/work/INTEGRATION-001/20261105T2055Z-T5-chat-obb-pair-9f2d.json"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/T5/sessions/20261105T1953Z-T5-scheduled-release-permission-a72e.md",
+    "prompt/coordination/clients/T5/sessions/20261105T2055Z-T5-chat-obb-pair-9f2d.md",
+    "docs/DEVICE_FEEDBACK_42058825739_AR.md"
+  ],
+  "experiment_ids": [
+    "20261105T2110Z-T5-chat-retain-delivery-a6f8"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement source-free archive verifier with adversarial controls; independent source-only rescue workflow pins 42058825739 artifact 13441227298 archive SHA/bytes; if authorized upload succeeds, preserve with short 2-day retention; no Unity rerun.",
+  "updated_at": "2026-11-05T21:07:43.391Z"
+}
