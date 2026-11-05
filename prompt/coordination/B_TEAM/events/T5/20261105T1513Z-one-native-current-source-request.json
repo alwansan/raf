@@ -1,0 +1,15 @@
+{
+  "id": "T5-20261105T1513Z-one-native-current-source-request",
+  "owner": "T5",
+  "session_id": "20261105T1508Z-T5-chat-native-retry-c2b7",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "type": "integration",
+  "summary": "Exactly one approved incomplete-water Unity ARM64 diagnostic signed APK+OBB/XAPK request was issued after prior run42042902522 cancelled pre-Editor without source failure. New immutable source b0c4b4c05011. Run42052375742 request/license checks succeeded; reconstruct in progress at checkpoint. Strict water/authenticity, signatures and transport unchanged; no original game assets or source changed by request, no existing job cancelled; no signed candidate/device proof yet.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42052375742",
+    "https://github.com/alwansan/raf/commit/b0c4b4c05011d915cd845259f06b5f80ee368092",
+    "https://github.com/alwansan/raf/actions/runs/42042902522"
+  ],
+  "at": "2026-11-05T15:13:00Z"
+}
