@@ -5,7 +5,7 @@
   "session_id": "20261105T1542Z-T3-chat-io-drift-integration-a6d9",
   "origin": "chat",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed",
   "base_sha": "523565b107732b5817056feeac0d90cd3b3877a9",
   "experiment_key": "T3-ZIP2-15964ea8-6scene-4owner-top921-Shader48-4passes-8realstages-vkd3d-SPV-HLSL-roundtrip-IO-input-output-location-type-drift-classify-v2",
   "resource_key": "T3-private-ZIP2-6scene-4owner-4pass-authentic-SPV-IO-drift-CPU-one-distinct-run",
@@ -20,7 +20,9 @@
     "prompt/coordination/clients/T3/sessions/20261105T1542Z-T3-chat-io-drift-integration-a6d9.md",
     "prompt/coordination/experiments/T3/20261105T1542Z-T3-chat-io-drift-integration-a6d9.json",
     "prompt/coordination/B_TEAM/events/T3/20261105T1542Z-T3-chat-io-drift-integration-a6d9.json",
-    "docs/T3_ORIGINAL_921_STAGE_IO_DRIFT_CLASSIFICATION_2026-11-05.md"
+    "docs/T3_ORIGINAL_921_STAGE_IO_DRIFT_CLASSIFICATION_2026-11-05.md",
+    ".github/workflows/raft-t3-original-921-io-drift-controls.yml",
+    "prompt/coordination/B_TEAM/resources/T3-original-921-stage-IO-drift-source-classification.json"
   ],
   "taken_over_from": [
     "prompt/coordination/clients/T3/sessions/20261105T1459Z-T3-chat-921-4pass-translation-c7d2.md",
@@ -35,8 +37,36 @@
     "prompt/coordination/work/RENDER-002/T3-20261105T1526Z-T3-scheduled-iosem-6c42-stage-io-classification.json",
     "prompt/coordination/work/RENDER-002/T3-20261105T1459Z-T3-chat-921-4pass-translation-c7d2.json"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Build and test opt-in real stage I/O drift classification from helper committed by scheduled T3; classify real original vs derived HLSL SPIR-V with numeric-only safe totals, no proprietary raw output, no game asset modifications.",
-  "updated_at": "2026-11-05T15:43:43.186Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42058541334",
+    "https://github.com/alwansan/raf/actions/runs/42058710660",
+    "https://github.com/alwansan/raf/actions/runs/42058881426"
+  ],
+  "result": {
+    "source_authenticated": "ZIP2 commit 15964ea8f246b6e076ce26b60931ee2e1a9a2385; six scenes and four owners SHA-pinned",
+    "original_T3_source_translator": "scripts/t3_original_top_shader_fourpass_translation.py with scheduled T3 helper scripts/t3_stage_io_drift.py --classify-io-drift opt-in",
+    "code_commit": "95ea7a4c0afc5009dc85e752a259b8e8dbd2a0cd",
+    "synthetic_test_commit": "b53e6e1a557c32aeb5fdc19acec54636d4407557",
+    "CI_green_run": "https://github.com/alwansan/raf/actions/runs/42058881426",
+    "CI_conclusion": "success",
+    "synthetic_tests": 71,
+    "real_original_Pass_pairs": 4,
+    "source_and_roundtrip_valid_D3D11_compiled_stages": 8,
+    "source_input_type_multiset_equal": 8,
+    "source_output_type_multiset_equal": 8,
+    "input_location_only_remap_candidate_stages": 8,
+    "output_location_only_remap_candidate_stages": 4,
+    "input_source_roundtrip_locations": "34 and 34",
+    "output_source_roundtrip_locations": "29 and 29",
+    "input_removed_added": "8/8",
+    "output_removed_added": "4/4",
+    "source_to_roundtrip_structural_stage_input_output_lists_equal": "0/8",
+    "numeric_resource_slot_reflection_dictionaries_equal": "8/8",
+    "source_Bytecode_or_private_hlsl_artifacts_uploaded": false,
+    "full_native_or_phone_verified": false,
+    "game_assets_modified": false,
+    "artifact_id": 13429604578
+  },
+  "next_step": "Preserve successful source-on-run IO classification; privately verify exact original DXBC signature semantics vs emitted SPIRV BuiltIn/Location/Component/Interpolation and HLSL roundtrip attributes (not only type multiset), original Pass states/CB/sampler/texture/material keyword binding. Do not claim visual parity or drop 8 unpaired original vertex permutations; RENDER-002 OPEN.",
+  "updated_at": "2026-11-05T15:54:16.524Z"
 }
