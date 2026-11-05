@@ -4,7 +4,7 @@
   "session_id": "20261105T1607Z-T3-chat-spv-name-location-7c2d",
   "origin": "chat",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed",
   "base_sha": "8d7cf4b47d739fdf9bed8873e992d8ffb29195e3",
   "resumed_from_sessions": [
     "20261105T1542Z-T3-chat-io-drift-integration-a6d9",
@@ -35,6 +35,33 @@
     "https://github.com/alwansan/raf/actions/runs/42058825739",
     "https://github.com/alwansan/raf/actions/runs/42061316352"
   ],
-  "next_step": "Implement privacy-safe name/type/location interface comparator and synthetic tests; source check only after green, keep original DXBC signature semantic equivalence UNVERIFIED.",
-  "updated_at": "2026-11-05T16:09:27.294Z"
+  "next_step": "Parse authentic original DXBC ISGN/OSGN/ISG1/OSG1/OSG5 signature entries (name/index/system/register/masks) via a bounds-safe private parser; relate to SPIRV Location/Component/BuiltIn, not generated names. Preserve 29 unsampled matched pairs and eight original unpaired vertex variants. RENDER-002 OPEN.",
+  "updated_at": "2026-11-05T16:20:57.148Z",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42062415122",
+    "https://github.com/alwansan/raf/actions/runs/42062573338"
+  ],
+  "result": {
+    "authentic_original_source": "SHA-pinned ZIP2 15964ea8f246b6e076ce26b60931ee2e1a9a2385; 6 scenes, 4 Shader/Material owners",
+    "CI": "SUCCESS",
+    "CI_run_url": "https://github.com/alwansan/raf/actions/runs/42062573338",
+    "new_synthetic_tests": "15 new, 40 source-free focused PASS; 86 inherited+new tests before original source PASS",
+    "source_used_Shader48_slots": 921,
+    "selected_original_Passes": 4,
+    "translated_real_compiled_DXBC_stages": 8,
+    "source_and_roundtrip_spirv1_1_valid": 8,
+    "source_reflected_names_original_input": 34,
+    "derived_reflected_names_input": 34,
+    "name_type_input_matches": 0,
+    "source_reflected_names_original_output": 29,
+    "derived_reflected_names_output": 29,
+    "name_type_output_matches": 0,
+    "stage_input_type_multisets_equal": 8,
+    "stage_output_type_multisets_equal": 8,
+    "per_stage_interface_name_total_matches": 0,
+    "actual_original_DXBC_semantic_signature_mapping_proven": false,
+    "full_ShaderLab_or_Android_Adreno_verified": false,
+    "game_assets_edited": false,
+    "safe_artifact_id": 13432423131
+  }
 }
