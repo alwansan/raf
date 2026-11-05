@@ -6,9 +6,9 @@
   "origin": "chat",
   "issue_id": "RENDER-002",
   "track": "SHA-original ParticleSystemRenderer Shader48 use-rank/source coverage",
-  "status": "active",
+  "status": "completed",
   "base_sha": "8dcbff4441cdc3645c060779b1ed98ea7b96c2f8",
-  "updated_at": "2026-11-05T21:13:13.298Z",
+  "updated_at": "2026-11-05T21:15:55Z",
   "intended_files": [
     "scripts/t3_original_renderer_shader_impact.py",
     "tests/test_t3_original_renderer_shader_impact.py",
@@ -21,12 +21,15 @@
   ],
   "hypothesis": "The 215 SHA-original typed ParticleSystemRenderer material slots, which do NOT use the top921 mesh Shader48, may be concentrated in one source Shader48. Distinguish unique particle shader impact and original global usage/pass count with public-safe rank counts, without leaking source private names/IDs/GUIDs.",
   "experiment_key": "T3-zip2-SHA15964-6scene-4owner-particle-215-class48-rank-global-slot-use-pass-count-unique-top-v1",
-  "resource_key": "t3-ZIP2-6scene-4owner-source-only-22min",
+  "resource_key": null,
   "taken_over_from": [
     "prompt/coordination/clients/T3/sessions/20261105T210656Z-T3-chat-renderer-class921-7d62.md",
     "https://github.com/alwansan/raf/actions/runs/42109994654"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Add class-specific per-Sh48 ranked source slot counts and a unique highest ParticleSystemRenderer Sh48/global-use/pass relationship; synthetic tie/duplicate safeguards, run a single SHA-authenticated source workflow. Do not equate with emitted particles, Blend state or phone pixels."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42110973101"
+  ],
+  "result": "Real original SHA-verified 6 scenes/4 owners source-only CI42110973101 SUCCESS; synthetic tests 19+22=41/41. ParticleSystemRenderer 219 slots, 215 typed Shader48, SIX sources ranks 108/34/34/20/16/3. Unique highest 108 original slots, global 108 and nonparticle 0, 54 distinct Particle Renderers and one Pass. Device/alpha/export status unknown.",
+  "next_step": "On SHA-authenticated original ParticleSystemRenderer highest-used Shader48 (108 particle slots, 54 Renderer objects, one serialized Pass), privately extract its original Pass render-state Blend/SrcBlend/DstBlend/ZWrite/ZTest/alpha coverage, texture/sampler and keyword references with integrity checks; compare to actual postrestorer ShaderLab GUID and target device square-smoke screenshot before editing Unity shader assets. Preserve provenance, source-only verdict, no private IDs, and coordinate with T5's full native workflow. Investigate second-place tied shaders (34/34) without choosing one arbitrarily.",
+  "integration_commit": "5d81dc7e89960c87be8a077b5c214e163ddabe81"
 }
