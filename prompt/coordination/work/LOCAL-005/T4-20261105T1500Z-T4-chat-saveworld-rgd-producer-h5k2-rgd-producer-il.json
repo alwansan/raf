@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261105T1500Z-T4-chat-saveworld-rgd-producer-h5k2",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "status": "active",
+  "base_sha": "696ca2f9c933001dd9cb1aac457bccce6db928c4",
+  "track": "original-compiled-SaveWorld-RGD-argument-provenance",
+  "experiment_key": "local005-original-zip2-sha0a6f-compiled-CIL-SaveWorld-to-SaveRGD-argument-construction-count-v1",
+  "resource_key": "read-only original ZIP2 Assembly-CSharp SHA256 0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+  "hypothesis": "The genuine compiled SaveWorld method forwards a real RGD-typed object to an original Save(string,RGD) call; map direct constructor and exact call metadata without executing original Unity game/save or confusing shipped Data.rgd with world RGD.",
+  "approach": "Mono.Cecil 0.11.5 private SHA-pinned original DLL CIL only; validate unique SaveWorld, private Save(string,RGD), callee shape and direct constructor count, optional local-argument provenance only if provable. Numeric/boolean bounded report, no decompiled source, game DLL or original asset logs/artifacts. Compare to B14 lexical order, T4 previous seed type mismatch and device contract. Source-free adversarial validator and workflow no Unity/native.",
+  "intended_files": [
+    "android-port/Experiments/T4/OriginalRgdProducerIl/OriginalRgdProducerIl.csproj",
+    "android-port/Experiments/T4/OriginalRgdProducerIl/Program.cs",
+    "scripts/t4_validate_original_rgd_producer.py",
+    "tests/test_t4_validate_original_rgd_producer.py",
+    ".github/workflows/raft-t4-original-rgd-producer-il.yml",
+    "docs/T4_ORIGINAL_SAVEWORLD_RGD_PRODUCER_2026-11-05.md",
+    "prompt/coordination/work/LOCAL-005/T4-20261105T1500Z-T4-chat-saveworld-rgd-producer-h5k2-rgd-producer-il.json",
+    "prompt/coordination/clients/T4/sessions/20261105T1500Z-T4-chat-saveworld-rgd-producer-h5k2.md"
+  ],
+  "taken_over_from": [
+    "docs/B14_ORIGINAL_LOCAL_SAVE_ORDER_2026-11-04.md",
+    "docs/T4_ORIGINAL_RGD_SAVE_ROUNDTRIP_2026-11-05.md",
+    "prompt/coordination/clients/T4/sessions/20261105T1433Z-T4-chat-original-seed-save-roundtrip-j2v8.md",
+    "prompt/coordination/clients/T4/sessions/20261105T1440Z-T4-scheduled-q8p3.md"
+  ],
+  "related_sessions": [
+    "20261105T1433Z-T4-chat-original-seed-save-roundtrip-j2v8",
+    "20261105T1440Z-T4-scheduled-q8p3",
+    "20261105T1405Z-T4-chat-original-rgd-runtime-k6n8"
+  ],
+  "run_urls": [],
+  "result": null,
+  "updated_at": "2026-11-05T15:08:36.266Z",
+  "next_step": "Authenticate original DLL then observe whether SaveWorld itself constructs RGD and passes it to Save; never infer player state/device from IL. Do not edit scheduled JSONL verifier."
+}
