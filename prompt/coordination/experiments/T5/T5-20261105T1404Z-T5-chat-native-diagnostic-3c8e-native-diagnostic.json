@@ -25,16 +25,21 @@
     "No gameplay/device claim from CI"
   ],
   "workflow_path": ".github/workflows/raft-unity-editor-android-import.yml",
-  "run_url": null,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42042902522",
   "artifact_urls": [],
   "budget": "One existing diagnostic reconstruct up to 240min plus publishing up to 30min; no retry without new evidence; share engine mutex",
-  "status": "active",
+  "status": "waiting_ci",
   "observed_result": null,
   "rejected_hypotheses": [],
   "limitations": [
     "Original shader author identity/runtime parity open",
     "Any generated package must be tested on owner phone for real .rgd"
   ],
-  "integration_commit": null,
-  "next_step": "Recheck resource mutex and release request overlap, trigger once if safe; record run URL and pass/fail/waiting."
+  "integration_commit": "753802d75196210d721cca0f4fdec6ce7800bf0d",
+  "next_step": "One diagnostic native delivery run 42042902522 pending; wait for exact job steps, no duplicate or cancel. Mark true outcome only with proof.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42042902522"
+  ],
+  "request_commit": "753802d75196210d721cca0f4fdec6ce7800bf0d",
+  "updated_at": "2026-11-05T14:14:00Z"
 }
