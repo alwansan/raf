@@ -1,0 +1,27 @@
+{
+  "id": "20261105T140815Z-T1-chat-592ae2",
+  "session_id": "20261105T140815Z-T1-chat-592ae2",
+  "origin": "chat",
+  "owner": "T1",
+  "issue_id": "WATER-001",
+  "status": "waiting_ci",
+  "base_sha": "6b90be5f921bf17cc921c94749be55e0d4ffb4e6",
+  "updated_at": "2026-11-05T14:09:38.575Z",
+  "intended_files": [
+    ".github/workflows/raft-t1-unity-vulkan-smoke.yml"
+  ],
+  "experiment_key": "unity-2021.3.45f2-gameci-v4-force-vulkan-linux-rgba32f-two-pass-source-free",
+  "resource_key": "raft-native-engine-feature/android-native-port",
+  "resumed_from_sessions": [
+    "20261105T131036Z-T1-chat-877585",
+    "20261105T130700Z-T1-scheduled-a8d4"
+  ],
+  "implementation_sha": "5c2668162e5e21e4d25e3b76ca257dbc8bda7852",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42042230791"
+  ],
+  "next_step": "Read the observed API marker and exact NUnit result. Only a proven Vulkan runtime plus successful dispatch/readback allows the exact authenticated FFT rerun.",
+  "result": "pending",
+  "scope": "Synthetic Unity project only; no game assets",
+  "reference_run": "https://github.com/alwansan/raf/actions/runs/42033745802"
+}
