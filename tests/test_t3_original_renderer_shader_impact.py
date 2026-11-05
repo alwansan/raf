@@ -96,6 +96,22 @@ class OriginalSceneShaderUsage(unittest.TestCase):
                         <= m.RENDERER_CLASSES)
         self.assertEqual(sum(result["original_renderer_material_slots_by_renderer_class"].values()),8)
 
+    def test_original_particle_shader_materials_outparam_is_private_and_class_specific(self):
+        materials={}
+        summary=m.summarize(*self.fixture(),expected_slots=8,expected_nonnull=6,
+                            private_particle_materials=materials)
+        self.assertEqual(materials,{
+            ("sharedassets0.assets",11):{("sharedassets0.assets",2)}})
+        self.assertEqual(summary["original_particle_typed_Shader48_material_slots"],1)
+        self.assertNotIn("private_particle_materials",json.dumps(summary))
+
+    def test_private_particle_material_target_outparam_rejects_stale_or_nonmap(self):
+        for stale in ({"old":1},[],True):
+            with self.subTest(stale=repr(stale)),self.assertRaisesRegex(ValueError,
+                                    "private_particle_original_materials"):
+                m.summarize(*self.fixture(),expected_slots=8,expected_nonnull=6,
+                            private_particle_materials=stale)
+
     def test_private_particle_source_identity_only_in_caller_owned_outparam(self):
         private={}
         data=self.fixture()
