@@ -5,8 +5,8 @@
   "generation": "T-2026-11-05",
   "session_id": "20261105T221843Z-T3-chat-particle28-stream-7c49",
   "issue_id": "RENDER-002",
-  "status": "active",
-  "updated_at": "2026-11-05T22:24:00Z",
+  "status": "completed",
+  "updated_at": "2026-11-05T22:26:20Z",
   "base_sha": "04b24a431be8e24204e6ad4bc1471c2460863792",
   "track": "SHA-original 108-use Particle Shader48 three local material Texture PPtrs resolve to class28 and streamed-payload dependencies",
   "hypothesis": "The 10 non-null local original m_TexEnvs from 5 ParticleShader48 materials resolve to three unique original Texture2D objects, whose original m_StreamData may require .resS providers not staged for the bounded export. Verify object type, stream provider extent and missing staged inputs without claiming output pixels.",
@@ -30,9 +30,10 @@
     ".github/workflows/raft-t3-ledger-refresh.yml"
   ],
   "run_urls": [
-    "https://github.com/alwansan/raf/actions/runs/42120918486"
+    "https://github.com/alwansan/raf/actions/runs/42120918486",
+    "https://github.com/alwansan/raf/actions/runs/42121705420"
   ],
-  "result": "Authentic ZIP2 six-scene/4-owner original ParticleShader48 108 Renderer material slots → five Material21 → ten local bound Texture PPtrs → three actual class28 Texture2D objects, all three m_StreamData extents fit one manifest-listed external .resS provider; ZERO provider payloads staged in bounded run; original pixels and actual Android resource parity UNKNOWN. CI42120918486 SUCCESS, 88/88 source-free tests.",
-  "next_step": "Refresh canonical T_TEAM ledger using the newly appended source-only RENDER-002 Texture2D28 stream proof CI42120918486, verify terminal CI, then close.",
+  "result": "SHA-original exact ParticleShader48 108 Material slots / 5 source Material21 / 10 local TexEnv pointers / 3 actual original Texture2D class28; all 3 externally streamed from one manifest-listed source .resS provider, none staged in this bounded run, original payload hash and native Android pixels unknown. CI42120918486 SUCCESS 88/88 Python tests; ledger CI42121705420 SUCCESS.",
+  "next_step": "T5 coordinated same-export W1 Material21 + B02 Texture2D28 and signed APK/OBB proof: preserve all five source materials/three actual source Texture2D and one streaming provider, verify actual native GUID/TextureImporter/image content/particle emitter binding; do not claim Android missing resource from narrow experiment.",
   "integration_commit": "87ca7a76309ef68e69dcb65b1dff9c822482694c"
 }
