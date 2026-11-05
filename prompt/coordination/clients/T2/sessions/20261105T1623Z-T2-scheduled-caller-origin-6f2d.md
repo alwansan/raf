@@ -1,0 +1,13 @@
+# T2 scheduled — Foam caller-length provenance handoff
+
+- session_id: `20261105T1623Z-T2-scheduled-caller-origin-6f2d`; origin: scheduled; status: scoped_waiting_independent_implementation.
+- baseline_sha: `8517a66c23ed1fe96d62aec56c91889de4470a78`; scope reservation commit: `67e096b69ab0a45d4a26f1c7fd363fc3c76b406b`.
+- resumed_from_sessions: `20261105T1611Z-T2-chat-foam-length-source-9ab4.md` and `20261105T1520Z-T2-scheduled-e7c1.md`.
+- [CI42063244298](https://github.com/alwansan/raf/actions/runs/42063244298) completed SUCCESS: SHA-authenticated original managed IL confirms the RenderTexture[] newarr length is a direct `System.Int32` formal argument load (`ldarg`), **not a compile-time literal at that callee**. Original four private indices distinct/nonnegative; whether in range remains unknown.
+- [CI42062967598](https://github.com/alwansan/raf/actions/runs/42062967598) was compiler failure before source verification; fixed by another T2 chat session at `ddba7cab`; do not repeat.
+- Live branch HEAD at first inspection `8517a66c23ed1fe96d62aec56c91889de4470a78`. [T5 native42058825739](https://github.com/alwansan/raf/actions/runs/42058825739) still in_progress at last inspection; not cancelled, repeated or counted as game success.
+- Independent experiment key: `T2|ZIP2-15964ea8|managed-0a6f0527|caller-int32-length-argument-to-RenderTexture-newarr|exact-callsite-v1`. Scope reservation: `prompt/coordination/work/WATER-001/20261105T1623Z-T2-scheduled-caller-origin-6f2d-caller-length.json`.
+- Engineering source review: existing managed-literals workflow has a strict original-DLL SHA check, original private four-index literal verification, and fail-closed bounds field. It deliberately leaves `FourPrivateOriginalIndicesInBoundsForCompiledLength=null` when length not a literal. **Do not change that to true without original callsite proof.**
+- New test required: locate original exact typed caller(s) of byref RenderTexture[] recipient and recover the actual Int32 argument stack producer; branch/alias ambiguity must remain unknown. Compare private indices inside authenticated runner; publish only aggregate verdict. No raw original symbols, IL, numeric values, low-domain hashes or tokens.
+- No game code/ShaderLab/.meta/GUID, sound/Settings, touch, native request, release, or running Action modified. No new original experiment or device proof in this checkpoint; WATER-001 OPEN, NOT_READY 0/3.
+- next_step: implement a separately named caller argument verifier and synthetic branch/alias negative controls without touching the concurrently active T2 chat's managed C# files; only dispatch CI after rechecking overlap and HEAD.
