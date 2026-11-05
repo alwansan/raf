@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T1226Z-T4-original-save-argument",
+  "issue_id": "LOCAL-005",
+  "status": "active",
+  "base_sha": "4b9771c522306392f3dfc503ec9f6944a5a840e1",
+  "track": "world-save",
+  "hypothesis": "The new post-Save File.Exists(filename) telemetry only observes the actual file path if the authentic original SaveAndLoad.Save compiled call to FileManager.Create uses the same first filename argument unchanged. Verify compiled IL argument stack immediately before the exact resolved FileManager target rather than assuming decompiled source semantics.",
+  "approach": "Extend T4's original SHA-verified Mono.Cecil FileManager call-flow oracle with one public boolean for direct original Save first filename-argument forwarding. Require a unique real Save caller and original string parameter; classify direct IL ldarg.1 without dumping original IL or names. Keep result as source observation, allow false to fail integration assessment instead of silently declaring snapshot correct.",
+  "intended_files": [
+    "android-port/Experiments/T4/OriginalFileIoFlow/Program.cs",
+    "scripts/t4_validate_original_file_io_flow.py",
+    "tests/test_t4_validate_original_file_io_flow.py",
+    "docs/T4_ANDROID_SAVE_FILE_POSTCHECK_2026-11-05.md"
+  ],
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/actions/runs/42019696138",
+    "prompt/coordination/work/LOCAL-005/T4-20261105T1217Z-android-save-file-postcheck.json"
+  ],
+  "related_work": [
+    "docs/T4_ORIGINAL_FILE_IO_CONTROL_FLOW_2026-11-05.md"
+  ],
+  "run_urls": [],
+  "result": null,
+  "updated_at": "2026-11-05T12:26:00Z",
+  "next_step": "Check exact compiled original Save call argument forwarding; integrate only grounded filename-context observation. Maintain source pins and no game/device claim."
+}
