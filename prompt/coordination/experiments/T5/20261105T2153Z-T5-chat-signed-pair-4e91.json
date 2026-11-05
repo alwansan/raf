@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261105T2153Z-T5-chat-signed-pair-4e91",
+  "issue_id": "INTEGRATION-001",
+  "experiment_key": "t5-signed-apk-obb-rehydrate-verified-42058825739-13454900880-aapt-apksigner-v1",
+  "resource_key": "read-only-original-artifact-13454900880-GHA-6GB",
+  "hypothesis": "Original compiled signed APK and OBB share actual package/version/signature and match immutable delivery hash; mismatched transport is not supported as explanation of original on-device GUID warning.",
+  "source_commit": "cbe80c452ec8973f6cb5f55f26df6c113cd2ac4d",
+  "input_hashes": [
+    "original native source e9c358eda01785b65e4eb14f18723da426635628, run42058825739, versionCode89",
+    "retained outer archive 5948243834B sha256:41bf01f9991521fac876c591b75adc19b493ad47882687846e5aae1c2af6a3ef",
+    "inner original 5948243524B sha256:29d967c5f1868a10aa0f8f3b9f0306e828c1d32ef3cda2909f7482b5d111eef6"
+  ],
+  "tool_versions": {
+    "runner": "ubuntu-24.04",
+    "aapt": "Android Asset Packaging Tool v0.2-15087165",
+    "apksigner": "0.9",
+    "python": "ubuntu runner system Python 3"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t5_extract_actual_signed_pair.py -v",
+    "python3 -m unittest discover -s tests -p test_t5_verify_apk_obb_pair.py -v",
+    "scripts/t5_extract_actual_signed_pair.py --source-zip original.zip --output private --version-code 89 --expected-archive-sha <pinned>",
+    "scripts/t5_verify_apk_obb_pair.py --delivery private/delivery.json --apk private/Raft-Android-Test.apk --obb private/main.89.com.alwansan.raft.androidtest.obb --aapt <toolpath>",
+    "apksigner verify --verbose private/Raft-Android-Test.apk"
+  ],
+  "negative_controls": [
+    "source ZIP SHA/size drift",
+    "package and versionCode drift",
+    "partial OBB same-size tampering",
+    "missing or reordered part",
+    "symlink/duplicate/traversal ZIP",
+    "malformed metadata and bad APK ZIP core"
+  ],
+  "workflow_path": ".github/workflows/raft-t5-real-apk-obb-identity.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42117471172",
+  "artifact_urls": [],
+  "budget": "one 5.95GB read-only retained archive download and temporary private unpack; zero new game artifact, no Unity/native build or LFS; 55min max runner",
+  "status": "completed_real_bytes_verified",
+  "observed_result": {
+    "run_conclusion": "success",
+    "job_id": 127560839415,
+    "tests_new": "17/17",
+    "tests_previous": "17/17",
+    "original_zip_and_outer_sha_verified": true,
+    "actual_apk_obb_bytes_matched_logical_sha": true,
+    "actual_pair_bytes": 2974110182,
+    "package": "com.alwansan.raft.androidtest",
+    "versionCode": "89",
+    "apk_zip_members": 31,
+    "obb_zip_members": 39,
+    "actual_aapt_package_version_pass": true,
+    "actual_apksigner_verify_pass": true,
+    "unity_obb_guid_verified": false,
+    "android_obb_mount_verified": false,
+    "gameplay_retest": false
+  },
+  "rejected_hypotheses": [
+    "Original retained APK and OBB transport files have wrong package identity or wrong versionCode",
+    "Actual source-pinned APK is unsigned/has invalid APK signing",
+    "Original source-pinned delivery files have wrong logical SHA or missing core ZIP"
+  ],
+  "limitations": [
+    "Original on-device installed OBB bytes/path unverified",
+    "Exact Unity GUID warning target and underlying map unavailable",
+    "Owner phone world/save/reopen is separate prior evidence, not reproduced",
+    "Release POST403 remains unresolved"
+  ],
+  "integration_commit": "247a6e253a6ec61e6646834c46b9ceb784718af6",
+  "next_step": "Correlate exact CL obb_guid_load_failed log lines to the immutable versionCode89 files; if installed bytes differ, repair installation; if identical, trace Unity internal resource GUID/offset mapping, not transport packaging."
+}
