@@ -5,11 +5,13 @@
   "origin": "chat",
   "issue_id": "WATER-001",
   "base_sha": "8dcbff4441cdc3645c060779b1ed98ea7b96c2f8",
-  "status": "active",
+  "status": "completed",
   "intended_files": [
     "scripts/t1_fft_trace_compare.py",
     "tests/test_t1_fft_trace_compare.py"
   ],
   "experiment_key": "fft-trace-invocation-keyed-comparator-synthetic-v2",
-  "updated_at": "2026-11-05T21:13:00Z"
+  "updated_at": "2026-11-05T21:13:00Z",
+  "result": "107 local FFT unit tests passed, including four synthetic invocation controls. The comparator pairs by Load site, dispatch ID and occurrence and reports coordinate drift and value-bit drift separately. Legacy fixtures and consumers still use the existing format. No runtime producer integration or replay in this cycle.",
+  "next_step": "Wire the 12-word record to the private Unity and Vulkan trace producers: write SV_DispatchThreadID and explicit per-site occurrence, update both buffer sizes, and call compare_invocations only after both output-parity gates. Then replay the same pinned pair."
 }
