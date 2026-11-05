@@ -3,9 +3,9 @@
   "origin": "chat",
   "owner": "T3",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed",
   "base_sha": "0d30cba0843a70f875060f8c84c4e0e53d336f79",
-  "updated_at": "2026-11-05T17:28:00Z",
+  "updated_at": "2026-11-05T17:39:00Z",
   "resumed_from_sessions": [
     "20261105T1715Z-T3-chat-ps-readmask-spv-5e84",
     "20261105T172341Z-T1-chat-18786c"
@@ -28,5 +28,27 @@
     "prompt/coordination/B_TEAM/events/T3/20261105T1728Z-T3-chat-rawspirv-T1-original-3f7c.json"
   ],
   "avoid_collision": "Do NOT modify T1 original direct validator or test/workflow; direct original repo SHA and existing private compiler; preserve T1 ownership. No changes to T2 foam T4 world T5 native or live Actions.",
-  "active_jobs_snapshot": []
+  "active_jobs_snapshot": [],
+  "completed_at": "2026-11-05T17:39:00Z",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42076083800",
+  "result": {
+    "source_conclusion": "SUCCESS",
+    "source_request_SHA": "665882701002aef024398df0bea8e5fc5fc20849",
+    "source_free_tests": 39,
+    "source_fourpass_original_VF_pairs": 4,
+    "source_VS_numeric_component_lanes": 75,
+    "source_PS_numeric_component_lanes": 44,
+    "source_missing_component_lanes": 0,
+    "source_type_mismatches": 0,
+    "source_extra_VS_components": 31,
+    "source_numerically_compatible_passes": 4,
+    "roundtrip_numerically_compatible_passes": 4,
+    "original_PS_readmask_perpass_matches_direct_SPIRV": 4,
+    "source_DXBC_semantic_to_SPIRV_Location_mapping_proven": false,
+    "Android_pixels_proven": false,
+    "game_assets_changed": false,
+    "T1_source_modified": false,
+    "prior_inconclusive_due_to": "local PosixPath type-guard, repaired and source retest successful"
+  },
+  "next_step": "Target DXBC original semantic identity→numeric SPIRV Location only with uniquely verifiable mapping, or actual authored Unity ShaderLab/material texture/sRGB binding and device proof; do not re-run identical fourpair structural count. RENDER-002 OPEN."
 }
