@@ -1,0 +1,14 @@
+{
+  "id": "T5-20261105T2055Z-obb-pair-controls",
+  "owner": "T5",
+  "session_id": "20261105T2055Z-T5-chat-obb-pair-9f2d",
+  "issue_id": "INTEGRATION-001",
+  "type": "integration",
+  "summary": "Added standalone streaming APK/OBB pair verifier; GitHub Actions 42108354510 success 17/17 synthetic controls; unsigned/hash-untrusted full game data not accessed; actual phone OBB GUID remains unknown",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42108354510",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/t5_verify_apk_obb_pair.py",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_APK_OBB_PAIR_VERIFIER_2026-11-05.md"
+  ],
+  "at": "2026-11-05T21:00:10.882Z"
+}
