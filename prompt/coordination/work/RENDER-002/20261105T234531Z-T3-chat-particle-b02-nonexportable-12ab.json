@@ -7,7 +7,7 @@
   "issue_id": "RENDER-002",
   "base_sha": "b6a66b64875ec053c05f5204e0cded84d886731a",
   "status": "active",
-  "updated_at": "2026-11-05T23:45:31.393Z",
+  "updated_at": "2026-11-05T23:55:51.915Z",
   "track": "T3 exact original ParticleShader48 one missing B02 Texture2D28 export trace classification in disposable C#",
   "hypothesis": "One of 3 original class28 Texture2D targets has no B02 exported trace despite 10 nonnull exported Material TexEnv slots. B02 intentionally skips nonexportable export collections; classify exact missing source identity as NON_EXPORTABLE_COLLECTION vs ABSENT_FROM_EXPORT_COLLECTION without disclosing private IDs or inventing a missing APK texture.",
   "experiment_key": "T3-SHA15964-particle108-1missing-B02-Texture2D-class28-nonexportable-vs-uncollected-actual-one-export-v1",
@@ -26,9 +26,12 @@
     "prompt/coordination/clients/T3/sessions/20261105T234531Z-T3-chat-particle-b02-nonexportable-12ab.md",
     "prompt/coordination/experiments/T3/20261105T234531Z-T3-chat-particle-b02-nonexportable-12ab.json",
     "prompt/coordination/B_TEAM/events/T3/20261105T234531Z-T3-chat-particle-b02-nonexportable-12ab.json",
-    "docs/T3_PARTICLE108_B02_NONEXPORTABLE_CAUSE_2026-11-06.md"
+    "docs/T3_PARTICLE108_B02_NONEXPORTABLE_CAUSE_2026-11-06.md",
+    "prompt/coordination/B_TEAM/resources/T3-particle108-source-sameexport-material-texture-parity.json",
+    ".github/workflows/raft-t3-ledger-refresh.yml",
+    "prompt/coordination/discussions/RENDER-002/20261105T234531Z-T3-chat-particle-b02-nonexportable-12ab-to-T5.md"
   ],
   "result": null,
   "run_urls": [],
-  "next_step": "Apply exact pinned source-only C# disposable helper annotation to B02: record private original class28 source identities for nonexportable export collections; keep W1/B02 export_instance identical and actual YAML unchanged. Extend safe subset comparator to classify one missing source Texture2D28 as explicitly SKIPPED_NONEXPORTABLE or ABSENT_FROM_ALL_COLLECTIONS or UNKNOWN, strict negative synthetic tests. Rerun isolated CI once; no live game build or shader edit."
+  "next_step": "CI42132262184 SUCCESS verifies missing original Particle Texture2D target belongs to AssetRipper nonexportable collection. Attach source-evidence canonical refresh and then close; actual nonexportable runtime export pointer parity remains follow-up."
 }
