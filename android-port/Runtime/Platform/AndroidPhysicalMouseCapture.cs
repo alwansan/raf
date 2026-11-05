@@ -48,6 +48,13 @@ namespace RaftAndroid.Platform
                 {
                     return false; // Fail open to Unity's original handling.
                 }
+                finally
+                {
+                    // AndroidJavaProxy creates JNI wrappers per callback. Avoid
+                    // retaining references for every high-frequency mouse move.
+                    if (motionEvent != null) motionEvent.Dispose();
+                    if (view != null) view.Dispose();
+                }
             }
         }
 
@@ -136,6 +143,10 @@ namespace RaftAndroid.Platform
 
         private void RequestCapture()
         {
+            if (!requested)
+                RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("input",
+                    "physical_mouse_capture_requested",
+                    "androidApi26=true; nativeAccepted=unknown; requiresDeviceConfirmation=true");
             requested = true;
             int currentEpoch = Interlocked.Increment(ref epoch);
             try
@@ -171,6 +182,11 @@ namespace RaftAndroid.Platform
 
         private void ReleaseCapture()
         {
+            if (requested || nativeHasMotion)
+                RaftAndroid.Diagnostics.AndroidRuntimeLog.Write("input",
+                    "physical_mouse_capture_released",
+                    "focus=" + focused + "; paused=" + paused +
+                    "; requested=" + requested + "; relativeEvents=" + deltas.ReceivedCount);
             Interlocked.Increment(ref epoch);
             requested = false;
             nativeHasMotion = false;
