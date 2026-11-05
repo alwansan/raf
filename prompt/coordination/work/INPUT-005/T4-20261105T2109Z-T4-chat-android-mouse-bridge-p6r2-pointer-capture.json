@@ -5,9 +5,9 @@
   "session_id": "20261105T2109Z-T4-chat-android-mouse-bridge-p6r2",
   "issue_id": "INPUT-005",
   "track": "physical-mouse-pointer-capture",
-  "status": "active",
+  "status": "completed_source_integrated_device_unverified",
   "base_sha": "2db482cfb80f2a26f8de7e715d842a1819191990",
-  "updated_at": "2026-11-05T21:09:00Z",
+  "updated_at": "2026-11-05T21:22:00Z",
   "resumed_from_sessions": [
     "20261105T2050Z-T4-chat-original-mouse-routing-q9c4",
     "20261105T2040Z-T4-scheduled-p4m8"
@@ -37,7 +37,29 @@
   "experiment_ids": [
     "20261105T2109Z-T4-chat-android-mouse-bridge-p6r2"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Publish bounded C#/Python adapter and original CI controls, then integrate only after authenticated source patch succeeds; native/phone acceptance remains open."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42111826974",
+    "https://github.com/alwansan/raf/actions/runs/42111311168",
+    "https://github.com/alwansan/raf/actions/runs/42111302568"
+  ],
+  "result": {
+    "integration": "source-integrated",
+    "sha": "73777a9887dbdde4d688bb1045bb4709d2a6a5e7",
+    "final_CI_run": 42111826974,
+    "conclusion": "success",
+    "verifiedOriginal": "ZIP2 SHA 0a6f0527... / 3211776 bytes",
+    "source_sites": {
+      "mouseX": 4,
+      "mouseY": 4,
+      "cursorLock": 2,
+      "files": 5
+    },
+    "pythonTests": "20/20",
+    "deltaTests": "13/13",
+    "unityManagedCompile": "SUCCESS",
+    "nativeBuild": false,
+    "deviceVerified": false,
+    "localWorldRegressionNotRun": true
+  },
+  "next_step": "On authorized T5 native candidate, validate physical mouse capture and actual camera look on POCO F5 Pro including menu/focus/unplug/keyboard/touch and world/save/reopen; source-only CI not device readiness. If no candidate, investigate Android pointer capture event/input path with a bounded independent diagnostic."
 }
