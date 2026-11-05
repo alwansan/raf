@@ -6,7 +6,7 @@
   "origin": "chat",
   "issue_id": "WATER-001",
   "track": "SHA-original-Foam-authored-properties-private-ShaderLab-candidate",
-  "status": "active",
+  "status": "completed",
   "base_sha": "0db34ca7729053fe53f1e124a87eb09284b1f68b",
   "resumed_from_sessions": [
     "20261105T2220Z-T2-chat-foam-passpair-f174",
@@ -38,7 +38,28 @@
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B45_ORIGINAL_SUBSURFACE_BLUR_SHADERLAB_2026-11-04.md"
   ],
   "last_verified_result": "CI42121817207 original 2/2 paired VS+PS HLSL compile+4/4 SPIR-V validate, 10/10 controls; original shader has exactly two authored props, one texture, original 6 sample rows only 2 match authored prop, no original CB0 alias, material runtime upload or Unity ShaderLab import verified.",
-  "run_urls": [],
-  "updated_at": "2026-11-05T22:41:00Z",
-  "next_step": "Implement private candidate with source SHA gates, safe original property-type diagnostics, synthetic adversarial tests; run original CI and revise only proof-backed schema. No game asset installation."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42125000030"
+  ],
+  "updated_at": "2026-11-05T22:53:00Z",
+  "next_step": "Source-authenticate original DXBC per-pass Shader Model pragma in separate tracked work; current #pragma target 5.0 remains provisional. No real Unity/device water acceptance.",
+  "integration_commit": "7657f5b3fd9f1e8ed980928bd8e07046ebe1ea8f",
+  "result": {
+    "source_original_sha_verified": true,
+    "ci_run_id": 42125000030,
+    "job_id": 127586794609,
+    "conclusion": "success",
+    "synthetic_tests_passed": 15,
+    "actual_original_authored_properties": 2,
+    "actual_texture_properties": 1,
+    "actual_vector_properties": 1,
+    "passes": 2,
+    "stage_programs": 4,
+    "authentic_states": 2,
+    "private_candidate_bytes": 9731,
+    "structurally_complete_passes": 2,
+    "shader_model_source_target_verified": false,
+    "unity_import_or_material_cb0_runtime_verified": false,
+    "android_device_pixels_verified": false
+  }
 }
