@@ -1,0 +1,14 @@
+{
+  "id": "20261105T143200Z-T1-chat-04494d",
+  "owner": "T1",
+  "session_id": "20261105T143200Z-T1-chat-04494d",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "12/12 synthetic tests passed locally and in CI42046084741 (four spatial, five scheduled channel diagnostic, three parity). No actual FFT captures were used, so real spatial fault remains untested. Base Unity Vulkan smoke CI42042230791 failed with other_backend; separate Mesa Vulkan runner CI42046073285 was in progress at last check.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42046084741",
+    "https://github.com/alwansan/raf/actions/runs/42042230791",
+    "https://github.com/alwansan/raf/actions/runs/42046073285"
+  ],
+  "at": "2026-11-05T14:33:26.900Z"
+}
