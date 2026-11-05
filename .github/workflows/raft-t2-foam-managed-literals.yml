@@ -107,8 +107,15 @@ jobs:
           assert r['status']=='original_foam_compiled_managed_literal_contexts_scanned'
           assert r['original_dll_sha256_authenticated'] and r['original_dll_size_bytes']==3211776
           assert r['source_original_non_authored_tex_names']==4 and r['source_original_authored_tex_names']==1
-          assert 0<=r['distinct_non_authored_source_names_seen_as_ldstr']<=4
-          assert 0<=r['distinct_authored_source_names_seen_as_ldstr']<=1
+          assert r['distinct_non_authored_source_names_seen_as_ldstr']==4
+          assert r['distinct_authored_source_names_seen_as_ldstr']==1
+          assert r['distinct_non_authored_source_names_proven_as_exact_typed_settexture_first_argument']==4
+          assert r['non_authored_exact_name_arg_literal_occurrences']==4
+          assert r['non_authored_exact_settexture_first_args_material']==4
+          assert r['non_authored_exact_settexture_first_args_material_property_block']==0
+          assert r['non_authored_exact_name_via_propertytoid']==0
+          assert r['non_authored_exact_name_via_direct_string']==4
+          assert r['original_four_non_authored_names_exact_setter_name_arg_proven'] is True
           assert r['original_managed_method_bodies_scanned']>0
           assert not r['same_method_cooccurrence_is_argument_dataflow_proof']
           assert not r['original_foam_texture_runtime_binding_verified']
