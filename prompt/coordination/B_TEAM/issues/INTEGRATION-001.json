@@ -6,17 +6,19 @@
   "track": "integration",
   "evidence": [
     "https://github.com/alwansan/raf/actions/runs/41812889049",
-    "https://github.com/alwansan/raf/releases/tag/android-early-test-41812889049-1"
+    "https://github.com/alwansan/raf/releases/tag/android-early-test-41812889049-1",
+    "https://github.com/alwansan/raf/actions/runs/42042902522"
   ],
   "remaining": [
     "APK86/source d181ee7152580f49ee0b41dfd05fa2bfdacfafe5 آخرلعبةمنشورةمراجعة",
     "إصلاحاتHEADلاحقةليستهاتفاً",
-    "قيودwaterالمعلنةمفتوحة"
+    "قيودwaterالمعلنةمفتوحة",
+    "T5 chat native signed APK+OBB/XAPK diagnostic request CI42042902522 source 753802d75196210d721cca0f4fdec6ce7800bf0d: native-request-gate and Unity license-preflight SUCCESS, reconstruct PENDING behind T1 Unity shared mutex at initial checkpoint; no native artifact or phone acceptance and water limitations remain explicitly open."
   ],
   "acceptance": [
     "دمجالتغييرمعاختبارودليلومصدرنسخة",
     "لاتسميةREADYإلا3مراجعاتكاملةلنفسSHAوإغلاقالعوائق"
   ],
-  "updated_by": "owner-team-bootstrap",
-  "updated_at": "2026-11-04"
+  "updated_by": "T5",
+  "updated_at": "2026-11-05T14:15:00Z"
 }
