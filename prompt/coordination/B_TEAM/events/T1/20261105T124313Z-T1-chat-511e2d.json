@@ -1,0 +1,13 @@
+{
+  "id": "20261105T124313Z-T1-chat-511e2d",
+  "owner": "T1",
+  "session_id": "20261105T124313Z-T1-chat-511e2d",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Local workflow syntax, fixture generation and NUnit gate checks passed; Unity control still running.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42029739318",
+    "https://github.com/alwansan/raf/commit/3fe976889d153443744525569c0bdde2c720b808"
+  ],
+  "at": "2026-11-05T12:46:13.403Z"
+}

@@ -1,0 +1,25 @@
+{
+  "id": "20261105T124313Z-T1-chat-511e2d",
+  "session_id": "20261105T124313Z-T1-chat-511e2d",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "waiting_ci",
+  "baseline_run": "https://github.com/alwansan/raf/actions/runs/42025620147",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42029739318"
+  ],
+  "implementation_sha": "3fe976889d153443744525569c0bdde2c720b808",
+  "experiment_key": "unity2021.3.45f2-gameci0.1.72-rgba32f-1024x32-synthetic-texture-load-uav-readpixels",
+  "hypothesis": "Isolate the RGBA32F input and output path of CI42025620147 with a source-free GPU control using known exact channel data and spatial markers across two sampled input textures and one intermediate UAV.",
+  "extent": [
+    1024,
+    32
+  ],
+  "expected": "Zero mismatches across 32768 texels per pass and exact NUnit case",
+  "result": "Local workflow syntax, fixture generation and NUnit gate checks passed; Unity control still running.",
+  "next_step": "Check exact NUnit control verdict. If passing, isolate original pass 0 with channel counts and private recompiled SPIR-V comparison. If failing, isolate the synthetic failing stage before testing original inputs again.",
+  "limits": [
+    "Synthetic transfer only",
+    "No original FFT or device validation"
+  ]
+}
