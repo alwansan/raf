@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "origin": "chat",
+  "session_id": "20261105T1645Z-T4-chat-original-rgd-init-context-q6m2",
+  "issue_id": "LOCAL-005",
+  "status": "active",
+  "base_sha": "5081a37400dc9c6cd2364ba8af31da4e1650c9fb",
+  "track": "authentic-world-and-user-derived-RGD-producer-provenance",
+  "experiment_key": "T4-original-zip2-sha0a6f-saveworld-local-call-owner-and-saveuser-field-direct-store-context-v1",
+  "resource_key": null,
+  "hypothesis": "Exact original compiled SaveWorld derived-RGD local is assigned from a call in same/other original type; SaveUser SaveAndLoad-owned derived-RGD field has three direct stores whose method categories and immediate value patterns can be bounded. Distinguish constructor/uninitialized/null source candidates without treating source IL as execution.",
+  "approach": "New independent SHA+size pinned read-only Mono.Cecil 0.11.5 .NET8 CIL source-free report, original SaveWorld/SaveUser private Save(string,RGD) unique calls, inspect single source call's declaring scope and arity and classify three field-stores by method owner constructor/save/other and nearest lexical value. Strict Python fail-closed tests; only workflow exact files path trigger and private no game/IL artifacts. Never execute Save or Unity; preserve original RGD subtype/runtime schema.",
+  "intended_files": [
+    "android-port/Experiments/T4/OriginalRgdInitContext/OriginalRgdInitContext.csproj",
+    "android-port/Experiments/T4/OriginalRgdInitContext/Program.cs",
+    "scripts/t4_validate_original_rgd_init_context.py",
+    "tests/test_t4_validate_original_rgd_init_context.py",
+    ".github/workflows/raft-t4-original-rgd-init-context.yml",
+    "docs/T4_ORIGINAL_RGD_INIT_CONTEXT_2026-11-05.md",
+    "prompt/coordination/work/LOCAL-005/T4-20261105T1645Z-T4-chat-original-rgd-init-context-q6m2-original-rgd-initialization-context.json",
+    "prompt/coordination/clients/T4/sessions/20261105T1645Z-T4-chat-original-rgd-init-context-q6m2.md"
+  ],
+  "taken_over_from": [
+    "20261105T1610Z-T4-chat-derived-rgd-write-sites-n3q7",
+    "20261105T1640Z-T4-scheduled-r8k2",
+    "20261105T1548Z-T4-scheduled-m7q4"
+  ],
+  "dependencies": [
+    "https://github.com/alwansan/raf/actions/runs/42062124798",
+    "https://github.com/alwansan/raf/actions/runs/42058825739"
+  ],
+  "updated_at": "2026-11-05T16:45:00Z",
+  "next_step": "Produce bounded source-authentic method owner and original SaveUser field store context with negative controls; no inference of actual world or phone. T4 scheduled JSONL overflow hint scope untouched."
+}
