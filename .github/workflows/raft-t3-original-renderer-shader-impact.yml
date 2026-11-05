@@ -27,9 +27,10 @@ jobs:
       - name: Source-free exact original Renderer and class48 join controls
         run: |
           set -euo pipefail
-          python3 -m py_compile scripts/w1_depth_shaderlab.py scripts/t3_original_renderer_shader_impact.py scripts/t3_original_particle_shader_state.py
+          python3 -m py_compile scripts/w1_depth_shaderlab.py scripts/t3_original_renderer_shader_impact.py scripts/t3_original_particle_shader_state.py scripts/t3_original_particle_material_texenv.py
           python3 -m unittest discover -s tests -p 'test_t3_original_renderer_shader_impact.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_original_particle_shader_state.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_original_particle_material_texenv.py' -v
           python3 -m unittest discover -s tests -p 'test_w1_depth_shaderlab.py' -v
           python3 -m unittest discover -s tests -p 'test_b25_foam_pass_state.py' -v
           python3 -m unittest discover -s tests -p 'test_b03_original_renderer_materials.py' -v
@@ -181,6 +182,32 @@ jobs:
             --original "$RUNNER_TEMP/t3-original-six-scene" \
             --manifest zip2-source/RAFT_FILE_MANIFEST.tsv \
             --out "$RUNNER_TEMP/t3-original-108particle-pass-state-safe.json"
+      - name: Verify genuine source 108-slot Particle Shader48 original Material TexEnv pointer scope
+        run: |
+          set -euo pipefail
+          python3 -m scripts.t3_original_particle_material_texenv \
+            --original "$RUNNER_TEMP/t3-original-six-scene" \
+            --manifest zip2-source/RAFT_FILE_MANIFEST.tsv \
+            --out "$RUNNER_TEMP/t3-original-particle108-material-texenv-safe.json"
+          python3 - <<'PY'
+          import os,json
+          from pathlib import Path
+          report=Path(os.environ['RUNNER_TEMP'])/'t3-original-particle108-material-texenv-safe.json'
+          d=json.loads(report.read_text())
+          assert d['status']=='SHA_ORIGINAL_PARTICLE_108_MATERIAL_TEXENV_SOURCE_BOUND_VERIFIED'
+          assert d['six_original_scene_SHA_verified'] is True
+          assert d['four_original_shader_Material_owner_SHA_verified'] is True
+          assert d['original_108_use_ParticleShader48_reference_authenticated'] is True
+          assert d['original_particle_renderer_material_slot_references']==108
+          assert 1<=d['original_particle_material_objects']<=108
+          assert d['original_particle_texenv_slots']==sum(d[k] for k in (
+              'original_particle_texenv_null_texture_slots',
+              'original_particle_texenv_local_texture_pointers',
+              'original_particle_texenv_external_texture_pointers'))
+          assert d['same_instance_export_or_Android_device_texture_binding_verified'] is False
+          assert d['private_original_Shader_and_material_names_PathIDs_or_labels_disclosed'] is False
+          print('RAFT_T3_SHA_ORIGINAL_PARTICLE108_MATERIAL_TEXENV_CENSUS_ACCEPTED=true device_pixels_proven=false')
+          PY
       - name: Upload only safe numeric source Shader usage bands, never private IDs
         if: always()
         uses: actions/upload-artifact@v4
@@ -191,5 +218,6 @@ jobs:
             ${{ runner.temp }}/t3-top921-renderer-class-safe-aggregate.json
             ${{ runner.temp }}/t3-original-particle-shader48-rank-safe.json
             ${{ runner.temp }}/t3-original-108particle-pass-state-safe.json
+            ${{ runner.temp }}/t3-original-particle108-material-texenv-safe.json
           if-no-files-found: ignore
           retention-days: 7
