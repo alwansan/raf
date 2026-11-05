@@ -2,11 +2,9 @@ name: T3 RENDER-002 genuine original scene Shader48 to postvendor GUID Dummy pri
 # DISTINCT experiment: original 6 pinned scenes' Renderer material-slot weights
 # joined to W1 same-instance source Shader48 -> exact vendor-restored .shader GUID.
 # NOT a repeat of vendor Material document counts and NOT phone draw calls.
+# The genuine original run 42044249541 already settled this source/export
+# question. Keep repeat of the expensive 12-owner export explicit/manual only.
 on:
-  push:
-    branches: [feature/android-native-port]
-    paths:
-      - '.github/workflows/raft-t3-scene-renderer-shader-postvendor-join.yml'
   workflow_dispatch:
 permissions:
   contents: read
