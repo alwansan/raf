@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "session_id": "20261105T2148Z-T2-chat-multiarity-stack-6b31",
+  "issue_id": "WATER-001",
+  "origin": "chat",
+  "hypothesis": "Source-original matching newobj RenderTexture by FullName also shares metadata defining assembly with the return-local type; same-named false assembly must be rejected.",
+  "source_commit": "ef4b74ed7ace170ca0e9dd80b7498928fdb7a340",
+  "input_hashes": [
+    "ZIP2:15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "Assembly-CSharp.dll/3211776/SHA256:0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e"
+  ],
+  "tool_versions": {
+    "Mono.Cecil": "0.11.5",
+    "dotnet": "9.0"
+  },
+  "commands": [
+    "dotnet publish android-port/Experiments/T2/FoamRuntimeStringBridge/FoamRuntimeStringBridge.csproj -c Release",
+    "dotnet FoamRuntimeStringBridge.dll --selftest",
+    "original-CIL authenticated scan via .github/workflows/raft-t2-foam-managed-literals.yml"
+  ],
+  "negative_controls": [
+    "same FullName with foreign assembly reference rejected",
+    "invalid constructor declaration shape rejected",
+    "true assembly scope and constructor signature positive",
+    "preserve prior multi-input void call and original stack proof"
+  ],
+  "workflow_path": ".github/workflows/raft-t2-foam-managed-literals.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42117556866",
+  "artifact_urls": [],
+  "status": "completed",
+  "observed_result": "Original Cecil reports exact ctor void signature true, constructor and returned local type assembly scope equal true. Reused exact original same-block stack newobj proof from CI42116699643. Entire CI passed.",
+  "rejected_hypotheses": [
+    "Same UnityEngine.RenderTexture FullName but different original constructor assembly scope"
+  ],
+  "limitations": [
+    "Metadata identity proves neither successful original runtime constructor execution nor actual non-null RenderTexture.",
+    "No whole-method branch join, Unity ShaderLab import, Foam/FFT GPU shader pixels or Android device acceptance."
+  ],
+  "integration_commit": "ef4b74ed7ace170ca0e9dd80b7498928fdb7a340",
+  "next_step": "Source-original CIL ctor -> exact RT local metadata flow is structurally proven, with no whole-method CFG or runtime proof. Highest-value next: use original RenderTexture constructor/setting contract in actual Foam ShaderLab/Unity source export and test on Adreno, coordinate T1 FFT and T5 build; only extend original stack scope if a concrete rendering integration blocker requires it."
+}

@@ -6,7 +6,7 @@
   "origin": "chat",
   "issue_id": "WATER-001",
   "track": "source-authentic-RT-constructor-assembly-identity",
-  "status": "active",
+  "status": "completed",
   "base_sha": "f093e804e90c3ba5ee7f7436087c13ebac18025d",
   "approach": "Use already source-original exact same-block newobj opcode and exact returned RT local; compare Mono.Cecil constructor declaring TypeReference identity and assembly scope to local TypeReference (full assembly name & signature, not name only); fail closed if scope ambiguous/unverifiable; add foreign-assembly same-name fixture and log boolean safe aggregate.",
   "hypothesis": "Source-original matching newobj RenderTexture by FullName also shares metadata defining assembly with the return-local type; same-named false assembly must be rejected.",
@@ -28,7 +28,23 @@
     "dll_bytes": 3211776,
     "dll_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e"
   },
-  "run_urls": [],
-  "updated_at": "2026-11-05T21:56:00Z",
-  "next_step": "Implement exact type+metadata assembly scope comparison on source-constructor and returned local in already-authenticated original Cecil process, plus false foreign assembly decoy test."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42117556866"
+  ],
+  "updated_at": "2026-11-05T22:00:00Z",
+  "next_step": "Source-original CIL ctor -> exact RT local metadata flow is structurally proven, with no whole-method CFG or runtime proof. Highest-value next: use original RenderTexture constructor/setting contract in actual Foam ShaderLab/Unity source export and test on Adreno, coordinate T1 FFT and T5 build; only extend original stack scope if a concrete rendering integration blocker requires it.",
+  "source_commits": [
+    "ef4b74ed7ace170ca0e9dd80b7498928fdb7a340"
+  ],
+  "result": {
+    "run_id": 42117556866,
+    "job_id": 127561140151,
+    "conclusion": "success",
+    "sha_original_authenticated": true,
+    "exact_void_constructor_signature": true,
+    "constructor_and_return_local_same_declared_assembly_scope": true,
+    "same_fullname_foreign_assembly_synthetic_decoy_rejected": true,
+    "source_newobj_verified_same_block": true,
+    "runtime_constructor_execution_or_nonnull_or_pixels_proven": false
+  }
 }

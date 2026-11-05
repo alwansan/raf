@@ -1,7 +1,7 @@
 # T2 chat — original Foam multi-operand void-call surviving-stack provenance
 - session_id: `20261105T2148Z-T2-chat-multiarity-stack-6b31`
 - origin: `chat`
-- status: `active`
+- status: `completed`
 - base_sha: `0f41844a4c95eec07e615cfef7c12f6ea3e1a71c`
 - resumed_from_sessions: `20261105T2107Z-T2-chat-writer-call-ab1c`, `20261105T2124Z-T2-scheduled-stackcap-6c2e`
 - work_ids: `prompt/coordination/work/WATER-001/T2-20261105T2148Z-T2-chat-multiarity-stack-6b31.json`
@@ -22,3 +22,10 @@
 - Negative tests: null survivor, duplicated survivor, branch-to-call bypass, insufficient/unknown incoming stack, unsupported operation, instruction budget. The source-safe log never includes raw original method names, IL or integer literals.
 - First scope `prompt/coordination/work/WATER-001/T2-20261105T2148Z-T2-chat-multiarity-stack-6b31.json` is completed; WATER-001 remains OPEN and original game NOT_READY for water fidelity.
 - Next separate work planned before code: `prompt/coordination/work/WATER-001/T2-20261105T2148Z-T2-chat-multiarity-stack-6b31-ctor-scope.json` — source-original `newobj RenderTexture` constructor metadata scope identity versus exact returned local, with synthetic foreign-assembly same-name rejection; do not report Unity runtime proof.
+
+## Verified original constructor assembly-scope identity — 2026-11-05T22:00Z
+- Second-scope code/guard commit [ef4b74ed](https://github.com/alwansan/raf/commit/ef4b74ed7ace170ca0e9dd80b7498928fdb7a340); original [CI42117556866](https://github.com/alwansan/raf/actions/runs/42117556866) **COMPLETED SUCCESS**, job `127561140151`. Authentication: original ZIP2 SHA `15964ea8f246b6e076ce26b60931ee2e1a9a2385`, DLL 3,211,776B SHA256 `0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e`, owner `sharedassets0.assets` 115,978,112B.
+- Original safe report `T2_FOAM_RT_CONSTRUCTOR_ASSEMBLY_SCOPE_SAFE`: `exact_ctor_void_signature=true`, `original_ctor_and_rt_local_same_assembly_scope=true`, `original_runtime_or_pixels_verified=false`. Positive + foreign assembly same-FullName negative + bad constructor signature synthetic controls passed.
+- Prior source-authentic CI42116699643 also remains success: same-basic-block stack value producer `named_rendertexture_constructor` through multi-input void call, exact returned local `stloc`, no full-function branch/reachability proof. Compiler constructor identity and declared metadata scope are proven, not runtime object creation/non-null or original ShaderLab textures/water/FFT or actual Adreno.
+- Canonical resource `prompt/coordination/B_TEAM/resources/T2-foam-original-RT-return-local-writer-provenance.json` and evidence memo `docs/T2_FOAM_ORIGINAL_RENDERTEXTURE_ARRAY_PROVENANCE_2026-11-05.md` updated in same checkpoint. No other T client/Unity/asset/.meta/Steam/FMΟD/Settings/touch files modified; no workflow canceled. Scope marked **completed**, but WATER-001 stays **OPEN**, game water/device `NOT_READY`.
+- **Next useful engineering step**: pivot to original resource-to-Unity ShaderLab/material and real Foam pass integration, paired with T1 FFT source and T5 native build. Only revisit managed CIL upon concrete unexplained shader/resource binding evidence; avoid repeated generic source-only scans. No device acceptance claim.

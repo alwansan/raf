@@ -1,0 +1,14 @@
+{
+  "id": "20261105T2200Z-T2-foam-RT-ctor-scope-proven",
+  "owner": "T2",
+  "session_id": "20261105T2148Z-T2-chat-multiarity-stack-6b31",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "SHA-original Foam CIL RT local value from same-block newobj was verified to use a valid void constructor with identical Cecil assembly-scoped RenderTexture type as the returned local. CI42117556866 PASS; no runtime or GPU/Adreno pixel proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42116699643",
+    "https://github.com/alwansan/raf/actions/runs/42117556866",
+    "https://github.com/alwansan/raf/commit/ef4b74ed7ace170ca0e9dd80b7498928fdb7a340"
+  ],
+  "at": "2026-11-05T22:00:00Z"
+}
