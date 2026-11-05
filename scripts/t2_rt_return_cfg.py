@@ -65,6 +65,10 @@ def classify(instructions, *, max_states=10000):
                 return UNKNOWN
             candidate = (stack,locals_)
             if target in incoming:
+                # Inconsistent evaluation-stack heights are invalid at a CIL join.
+                # Do not let a later stloc/pop erase this structural violation.
+                if len(incoming[target][0]) != len(candidate[0]):
+                    return UNKNOWN
                 merged = join(incoming[target],candidate)
                 if merged != incoming[target]:
                     incoming[target] = merged
