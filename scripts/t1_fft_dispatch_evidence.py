@@ -24,7 +24,9 @@ def audit(source: bytes, expected_sha256: str) -> dict:
     # Mask strings and comments: names inside diagnostics are not calls.
     masked = re.sub(r'''(?:\$@|@\$|@)"(?:[^"]|"")*"|\$?"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|//[^\n]*|/\*[\s\S]*?\*/''',
                     lambda m: " " * len(m.group()), text)
-    counts = {name: len(re.findall(r"\b" + name + r"\s*\(", masked)) for name in CALLS}
+    # Bare names can be declarations or local helpers, not ComputeShader calls.
+    # Require member-call syntax; indirect wrappers remain unclassified.
+    counts = {name: len(re.findall(r"\.\s*" + name + r"\s*\(", masked)) for name in CALLS}
     # Even all call families present cannot establish dataflow, kernel identity or runtime behavior.
     return {
         "source_sha256_verified": True,
