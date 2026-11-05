@@ -5,7 +5,7 @@
   "session_id": "20261105T1020Z-T2-original-foam-explicit-spv-map",
   "issue_id": "WATER-001",
   "track": "Foam original DXBC active sample-register to translated SPIRV active descriptor use join",
-  "status": "active",
+  "status": "completed",
   "base_sha": "72b1abb9af85722fab36c1627115104fe4b84221",
   "hypothesis": "Confirmed compiler-register-to-SPIRV descriptor variable identities (CI42011706016) allow a per-stage exact pair join of real original DXBC SAMPLE op69 tN/sN with actual compiled SPIR-V OpSampledImage uses. Equal counts alone insufficient; require exact sets and roles and matching total calls.",
   "taken_over_from": [
@@ -25,8 +25,27 @@
     "https://github.com/alwansan/raf/actions/runs/41958159556",
     "https://github.com/alwansan/raf/actions/runs/41942245746"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement exact per-stage active source→translated sample pairing join, run synthetic+real CI, update issue/hand-off and no game asset changes.",
-  "updated_at": "2026-11-05T10:37Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42012755702",
+    "https://github.com/alwansan/raf/actions/runs/42013221572",
+    "https://github.com/alwansan/raf/actions/runs/42013532274",
+    "https://github.com/alwansan/raf/actions/runs/42013590671"
+  ],
+  "result": {
+    "original_CI": "42013590671 SUCCESS",
+    "synthetic_tests": "16 explicit profile +17 active pair = 33/33",
+    "original_DXBC_sample_calls": 21,
+    "original_translated_SPV_sample_calls": 21,
+    "original_source_t_s_to_active_translated_sample_pair_identity_exact": 6,
+    "pass0_fragment_pairs": "t0/s0..t4/s4,17 calls",
+    "pass1_fragment_pairs": "t0/s0,4 calls",
+    "both_vertex_stages": "0 t/s pairs,0 sample calls",
+    "source_and_compiled_original_stage_sha_authenticated": true,
+    "initial_CI_failures": "42012755702/42013221572 Python KeyError due to inconsistent proof field name; no original shader data mismatch; corrected e5a88387 + regression 57a70041",
+    "artifact_id": 13407977911,
+    "artifact_sha256": "93046863e5fa788b234b990a613554eb479851d4a9098131c7bd50efe7def0e1",
+    "unverified_material_shaderlab_device": true
+  },
+  "next_step": "Move proven source/translated register bindings into authentic authored Material texture-slot/sampler-state/CB0 upload and genuine Foam two-pass ShaderLab. Preserve WATER-001 OPEN and NOT_READY0/3.",
+  "updated_at": "2026-11-05T10:51Z"
 }
