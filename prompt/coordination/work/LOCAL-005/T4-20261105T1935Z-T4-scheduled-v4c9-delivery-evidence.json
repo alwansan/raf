@@ -1,0 +1,19 @@
+{
+  "session_id": "20261105T1935Z-T4-scheduled-v4c9",
+  "origin": "scheduled",
+  "issue_id": "LOCAL-005",
+  "status": "active",
+  "baseline_sha": "f756e8ac924a9c1fd10d159f2165e939f2f3c94f",
+  "taken_over_from": [
+    "clients/T4/sessions/20261105T1838Z-T4-chat-cl-rgd-real-9p4s.md",
+    "clients/T4/sessions/20261105T1842Z-T4-scheduled-p9x7.md"
+  ],
+  "intended_files": [
+    "prompt/coordination/work/LOCAL-005/T4-20261105T1935Z-T4-scheduled-v4c9-delivery-evidence.json",
+    "prompt/coordination/clients/T4/sessions/20261105T1935Z-T4-scheduled-v4c9.md"
+  ],
+  "hypothesis": "The three authentic CL user-world RGD CLR load proofs are complete; signed native delivery checkpoint remains available but Release HTTP403 blocks device validation.",
+  "experiment_key": "T4-CL-original-RGD-CI42086855402-and-native-delivery-artifact-42058825739-status-20261105T1935Z",
+  "resource_key": "read-only-actions-artifact-metadata",
+  "updated_at": "2026-11-05T19:35:00Z"
+}
