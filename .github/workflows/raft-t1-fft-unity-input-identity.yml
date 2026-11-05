@@ -1,5 +1,6 @@
 name: T1 WATER-001 exact Unity FFT sampled input identity
 
+# Opt-in replay session: 20261105T154026Z-T1-chat-b05def
 on:
   workflow_dispatch:
   push:
