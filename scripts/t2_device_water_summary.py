@@ -30,7 +30,7 @@ def classify(summary):
     total = stop.get("final_shader_pass_errors_total")
     if type(total) is not int or total < 0 or sum(rows.values()) != total:
         raise ValueError("material_total_inconsistent")
-    groups = stop.get("final_error_category_breakdown")
+    groups = summary.get("final_error_category_breakdown")
     if not isinstance(groups, dict) or not isinstance(groups.get("ultimate_water_invalid_pass"), dict) or groups["ultimate_water_invalid_pass"].get("count") != total:
         raise ValueError("root_category_total_inconsistent")
     kernel = stop.get("final_compute_kernel_errors_total")
