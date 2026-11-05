@@ -103,10 +103,19 @@ class MaterialPropertyContractTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"SAVED_CONTAINER_SCHEMA"):
             t3.normalize_private_saved_properties(data)
 
-    def test_duplicate_saved_name_across_families_rejected(self):
-        with self.assertRaisesRegex(ValueError,"OVERLAPPING_PROPERTY_FAMILIES"):
-            t3.normalize_private_saved_properties(
-                saved(floats=[scalar(name=SECRET)]))
+    def test_authentic_cross_family_saved_name_is_counted_without_alias_discard(self):
+        data=saved(floats=[scalar(name=SECRET)])
+        owned,counts,_=t3.normalize_private_saved_properties(data)
+        self.assertEqual(owned[SECRET],frozenset(("color","float")))
+        self.assertEqual(counts["color"],1)
+        self.assertEqual(counts["float"],1)
+        row=classified(props={("sharedassets0.assets",9):data})["counts"]
+        self.assertEqual(row["source_saved_names_repeated_across_families"],1)
+        self.assertEqual(row["source_Materials_with_cross_family_name_overlap"],1)
+        self.assertEqual(row["source_renderer_slots_with_cross_family_name_overlap"],921)
+        self.assertEqual(row["source_saved_wrong_family_entries"],1)
+        self.assertEqual(row["source_declared_properties_without_matching_saved_family"],1)
+        self.assertEqual(row["source_declared_property_saved_matches"],2)
 
     def test_invalid_private_texenv_uv_rejected(self):
         entry=tex()
@@ -146,6 +155,15 @@ class MaterialPropertyContractTests(unittest.TestCase):
         self.assertEqual(c["source_declared_property_saved_matches"],5)
         self.assertEqual(c["source_Materials_with_any_declared_texture_bound"],1)
         self.assertEqual(c["source_renderer_slots_with_at_least_one_unsaved_declared"],920)
+
+    def test_cross_family_duplicate_that_includes_correct_type_is_not_false_missing(self):
+        data=saved(floats=[scalar(name=SECRET),scalar()])
+        c=classified(props={("sharedassets0.assets",9):data})["counts"]
+        self.assertEqual(c["source_saved_names_repeated_across_families"],1)
+        self.assertEqual(c["source_declared_property_saved_matches"],3)
+        self.assertEqual(c["source_declared_properties_without_matching_saved_family"],0)
+        self.assertEqual(c["source_materials_with_at_least_one_unsaved_declared"],0)
+        self.assertEqual(c["source_saved_wrong_family_entries"],1)
 
     def test_material_int_stale_entry_kept_separate(self):
         c=classified(props={("sharedassets0.assets",9):saved(ints=[{"m_First":"SAVED_INT","m_Second":2}])})["counts"]
