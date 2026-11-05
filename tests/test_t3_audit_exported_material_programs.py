@@ -60,6 +60,19 @@ class MaterialShaderQuality(unittest.TestCase):
         self.assertFalse(r["linked_dummy_Shader_program_risk_present"])
         self.assertFalse(r["selected_ShaderLab_documents_have_proven_original_programs"])
 
+    def test_dummy_target_impact_bands_preserve_total_without_exposing_ids(self):
+        self.material("fourth",G1,idx=4)
+        self.material("fifth",G1,idx=5)
+        self.shader("another_dummy",G3,"//DummyShaderTextExporter\n"+SHADER)
+        self.material("sixth",G3,idx=6)
+        r=t3.audit(self.root)
+        bands=r["dummy_target_material_link_frequency_bands"]
+        self.assertEqual(bands,{"1":1,"2_to_4":1,"5_to_16":0,"17_plus":0})
+        self.assertEqual(sum(bands.values()),r["counts"]["distinct_dummy_Shader_targets_referenced"])
+        self.assertEqual(r["counts"]["material_docs_using_dummy_Shader"],4)
+        self.assertNotIn(G1,json.dumps(bands))
+        self.assertNotIn(G3,json.dumps(bands))
+
     def test_builtin_and_null_dont_claim_custom_shader_program(self):
         self.material("engine",BUILTIN,fileid=46,kind=0,idx=4)
         self.material("null","0"*32,fileid=0,kind=0,idx=5)
