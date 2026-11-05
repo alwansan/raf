@@ -10,6 +10,8 @@ _DISPATCH_COMPUTE = """// Authored dispatch-address control.
 StructuredBuffer<uint> Input;
 RWStructuredBuffer<uint> Output;
 static uint3 DispatchId;
+uint AddressOffset;
+float CarrierScale;
 
 struct EntryInput
 {
@@ -31,8 +33,15 @@ void T1Canary(EntryInput input)
 {
     DispatchId = input.thread;
     uint x = input.thread.x;
-    Output[2 * x] = ViaGlobal();
-    Output[2 * x + 1] = ViaArgument(x);
+    uint address = ((x << 2) + x + AddressOffset) & 63u;
+    precise float subnormal = asfloat(address) * CarrierScale;
+    precise float normal = asfloat(0x3f800000u | address) * CarrierScale;
+    Output[6 * x] = ViaGlobal();
+    Output[6 * x + 1] = ViaArgument(x);
+    Output[6 * x + 2] = address;
+    Output[6 * x + 3] = asuint(asfloat(address));
+    Output[6 * x + 4] = asuint(subnormal);
+    Output[6 * x + 5] = asuint(normal);
 }
 """
 
@@ -41,7 +50,7 @@ _DISPATCH_ASSERTIONS = """        Assert.That(SystemInfo.graphicsDeviceType,
         var input = new uint[64];
         for (uint i = 0; i < 64; i++)
             input[i] = 17U + 13U * i;
-        var output = new uint[128];
+        var output = new uint[384];
         using (var inputBuffer = new ComputeBuffer(input.Length, sizeof(uint)))
         using (var outputBuffer = new ComputeBuffer(output.Length, sizeof(uint)))
         {
@@ -49,15 +58,32 @@ _DISPATCH_ASSERTIONS = """        Assert.That(SystemInfo.graphicsDeviceType,
             outputBuffer.SetData(output);
             shader.SetBuffer(kernel, "Input", inputBuffer);
             shader.SetBuffer(kernel, "Output", outputBuffer);
+            shader.SetInt("AddressOffset", 11);
+            shader.SetFloat("CarrierScale", 1.0f);
             shader.Dispatch(kernel, 1, 1, 1);
             outputBuffer.GetData(output);
         }
         int viaGlobalMismatches = 0, viaArgumentMismatches = 0;
+        int integerMismatches = 0, bitcastMismatches = 0, subnormalMismatches = 0, normalMismatches = 0;
         for (int i = 0; i < input.Length; i++)
         {
-            if (output[2 * i] != input[i]) viaGlobalMismatches++;
-            if (output[2 * i + 1] != input[i]) viaArgumentMismatches++;
+            uint address = (uint)((i * 5 + 11) & 63);
+            int row = 6 * i;
+            if (output[row] != input[i]) viaGlobalMismatches++;
+            if (output[row + 1] != input[i]) viaArgumentMismatches++;
+            if (output[row + 2] != address) integerMismatches++;
+            if (output[row + 3] != address) bitcastMismatches++;
+            if (output[row + 4] != address) subnormalMismatches++;
+            if (output[row + 5] != (0x3f800000U | address)) normalMismatches++;
         }
+        string report = System.IO.Path.Combine(
+            System.IO.Directory.GetParent(Application.dataPath).FullName, "dispatch-address-counts.txt");
+        System.IO.File.WriteAllLines(report, new[] {
+            integerMismatches.ToString(), bitcastMismatches.ToString(),
+            subnormalMismatches.ToString(), normalMismatches.ToString()
+        });
+        Assert.That(integerMismatches, Is.Zero, "Bound integer shift/add/mask");
+        Assert.That(normalMismatches, Is.Zero, "Normal float multiply control");
         Assert.That(viaArgumentMismatches, Is.Zero, "Explicit argument address control");
         Assert.That(viaGlobalMismatches, Is.Zero, "Structured input via static global");
 """
