@@ -1,4 +1,7 @@
 name: T3 RENDER-002 real Texture2D export WITH original SHA-locked resS pixels
+# Scoped DXT5nm semantically identical RGBA requires exact pinned AssetRipper
+# UnpackNormal BGRA conversion; raw 76 exact/30 drift stays visible in report.
+# Typed source and exact math synthetic controls CI42014621926 SUCCESS.
 # T3 authenticated metadata diagnostic retry: CI42010930444 verified 76/30
 # decoded original/output pairs but all codec/space attributes were UNKNOWN;
 # source now reads original typetree m_TextureFormat + m_ColorSpace,
@@ -48,6 +51,7 @@ jobs:
           python3 -m unittest discover -s tests -p 'test_t3_decoded_texture_pixel_parity.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_pixel_drift_diagnostics.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_pixel_diagnostic_boundary.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_normalmap_dxt5_semantic.py' -v
           python3 -m unittest discover -s tests -p 'test_b15_texture_sampler_parity.py' -v
           python3 -m unittest discover -s tests -p 'test_b21_stage_light_lineage.py' -v
           python3 -m unittest discover -s tests -p 'test_b21_compare_export_lights.py' -v
@@ -247,6 +251,7 @@ jobs:
           set -euo pipefail
           python3 -m pip install --user --disable-pip-version-check Pillow==11.3.0
           python3 -m scripts.t3_authentic_decoded_pixel_export \
+            --verify-normalmap-semantic \
             --original "$RUNNER_TEMP/b21-original" \
             --project "$RUNNER_TEMP/b21-private-export/ExportedProject" \
             --manifest zip2-original/RAFT_FILE_MANIFEST.tsv \
