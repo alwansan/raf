@@ -1,0 +1,21 @@
+{
+  "session_id": "20261105T1933Z-T3-scheduled-a91f",
+  "origin": "scheduled",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "base_sha": "fc6aeedc72d8b215e3f21feaa83607cf4affff79",
+  "intended_files": [
+    "scripts/t3_native_original_921_shader_target_audit.py",
+    "tests/test_t3_native_original_921_shader_target_audit.py",
+    "prompt/coordination/clients/T3/sessions/20261105T1933Z-T3-scheduled-a91f.md",
+    "prompt/coordination/work/RENDER-002/20261105T1933Z-T3-scheduled-a91f.json"
+  ],
+  "experiment_key": "T3-native-top921-profile-unknown-exporter-unbalanced-failclosed-v1",
+  "resource_key": null,
+  "hypothesis": "An unknown exporter or unbalanced ShaderLab profile can be falsely labeled non-Dummy even with a program count; reject ambiguous profiles before reporting recovered shader.",
+  "resumed_from_sessions": [
+    "20261105T1831Z-T3-scheduled-profileguard-7b2e",
+    "20261105T1815Z-T3-chat-native-source921-guid-6cb4"
+  ],
+  "updated_at": "2026-11-05T19:33:00Z"
+}
