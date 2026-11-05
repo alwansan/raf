@@ -49,6 +49,18 @@ class ProvenanceTests(unittest.TestCase):
               ("nop",), ("newobj_rt",), ("nop",), ("br", 8), ("ret",)]
         self.assertEqual(classify(il), "unknown")
 
+    def test_straight_line_stack_limit(self):
+        # Distinct from max_states: a single method may push thousands of
+        # values without looping. Reject before retaining an oversized stack.
+        il = [("ldnull",)] * 10 + [("ret",)]
+        self.assertEqual(classify(il, max_stack=8), "unknown")
+        self.assertEqual(classify([("ldnull",), ("ret",)], max_stack=1), "null")
+        self.assertEqual(classify([("ldnull",), ("ret",)], max_stack=0), "unknown")
+
+    def test_stack_limit_does_not_change_valid_local_flow(self):
+        il = [("newobj_rt",), ("stloc", 0), ("ldloc", 0), ("ret",)]
+        self.assertEqual(classify(il, max_stack=1), "constructed")
+
     def test_uninitialized(self):
         self.assertEqual(classify([("ldloc",0),("ret",)]),"unknown")
 
