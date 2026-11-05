@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T214810Z-T3-chat-selective-colormask-a82d",
+  "issue_id": "RENDER-002",
+  "hypothesis": "Unity 2021.3 ColorWriteMask serialized low bit is Alpha, not Red, and genuine 108-slot ParticleShader48 partial source mask can be represented exactly as opt-in ShaderLab ColorMask RGB while keeping legacy W1/B25 fail-closed default.",
+  "source_commit": "d6926a0bbd862cf3a8af0fd6ee0b5da018bdaf2d",
+  "input_hashes": [
+    "UnityCsReference 2021.3 GraphicsEnums.cs blob 855eebe69c60dcaea85a74d91656fc02df43ea90",
+    "ZIP2 SHA 15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "six Raft scene SHA pins scripts/b21_scene_lightmap_links.py",
+    "4 owner Shader/Material SHA pins, 269007288 original owner bytes"
+  ],
+  "tool_versions": {
+    "UnityCsReference": "branch 2021.3 (exact blob above)",
+    "UnityPy": "1.23.0",
+    "Python": "GitHub Ubuntu 24.04 python3",
+    "Unity Editor": "not run"
+  },
+  "commands": [
+    "python3 -m py_compile scripts/w1_depth_shaderlab.py scripts/t3_original_renderer_shader_impact.py scripts/t3_original_particle_shader_state.py",
+    "python3 -m unittest discover -s tests -p test_t3_original_renderer_shader_impact.py -v",
+    "python3 -m unittest discover -s tests -p test_t3_original_particle_shader_state.py -v",
+    "python3 -m unittest discover -s tests -p test_w1_depth_shaderlab.py -v",
+    "python3 -m unittest discover -s tests -p test_b25_foam_pass_state.py -v",
+    "python3 -m unittest discover -s tests -p test_b03_original_renderer_materials.py -v",
+    "python3 -m scripts.t3_original_particle_shader_state --original \"$RUNNER_TEMP/t3-original-six-scene\" --manifest zip2-source/RAFT_FILE_MANIFEST.tsv --out \"$RUNNER_TEMP/t3-original-108particle-pass-state-safe.json\""
+  ],
+  "negative_controls": [
+    "all sixteen 0..15 mapped using Unity ABGR-bit order; 14=RGB, 7=GBA, 1=A, 8=R",
+    "invalid mask negative/overflow/float-nonintegral/bool/string rejected",
+    "private dynamic property never logged",
+    "without opt-in old translator rejects original partial mask",
+    "W1 Depth/B25 Foam unchanged unit tests pass under default"
+  ],
+  "workflow_path": ".github/workflows/raft-t3-original-renderer-shader-impact.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42116530618",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42116530618/artifacts"
+  ],
+  "budget": "22min source-only SHA-pinned six scenes and four original owner UnityPy, no Unity/AssetRipper native export or phone",
+  "status": "completed",
+  "observed_result": {
+    "original_SHA_authenticated": true,
+    "original_particle_Shader48_slots": 108,
+    "distinct_original_particle_renderers": 54,
+    "original_color_mask_shaderlab": "RGB",
+    "legacy_default_partial_mask_accepted": false,
+    "explicit_opt_in_partial_mask_accepted": true,
+    "alpha_blend": "ALPHA_DEPENDENT",
+    "zwrite": "OFF",
+    "tests_passed": 72,
+    "source_only": true
+  },
+  "rejected_hypotheses": [
+    "Unity 2021.3 ColorWriteMask Red=1/Green=2/Blue=4/Alpha=8",
+    "The original 108-use ParticleShader48 partial ColorMask cannot be represented by a faithful ShaderLab channel subset translator"
+  ],
+  "limitations": [
+    "does not prove native ShaderLab/fragment program fidelity",
+    "no source→private full native same-instance GUID mapping",
+    "no device pixel or particle emitter association",
+    "legacy default opt-in remains intentional"
+  ],
+  "integration_commit": "d6926a0bbd862cf3a8af0fd6ee0b5da018bdaf2d",
+  "next_step": "Use the original 108-use particle Shader48 private ID, same-instance native W1 export GUID, and installed Android package scene/prefab/material trace to compare source ColorMask RGB and Blend to actual compiled ShaderLab and failing pixels. Only then consider editing a game shader. Do not duplicate source-only ZIP2 runs or declare RENDER-002 ready."
+}
