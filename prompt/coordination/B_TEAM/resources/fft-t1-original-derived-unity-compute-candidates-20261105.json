@@ -1,0 +1,31 @@
+{
+  "id": "fft-t1-original-derived-unity-compute-candidates-20261105",
+  "title": "T1 private 20 original compiled FFT DXBC-derived single-kernel Unity .compute candidates",
+  "kind": "experimental-translated-compute-import-input-not-authored-source",
+  "source": {
+    "provider": "ZIP2_SHA_PINNED",
+    "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "path": "Raft/Raft_Data/sharedassets0.assets#ComputeShader-pathID2456",
+    "bytes": 115978112,
+    "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3"
+  },
+  "stages": {
+    "acquisition": "SHA_VERIFIED",
+    "extraction": "20_COMPILED_SLOTS_SHA_VERIFIED",
+    "reconstruction": "PRIVATE_20_HLSL50_COMPUTE_CANDIDATES_ROUNDTRIP_VERIFIED",
+    "binding": "ORIGINAL_RUNTIME_MAPPING_UNKNOWN",
+    "integration": "PRIVATE_UNITY_IMPORT_RUNNING",
+    "device": "NOT_TESTED"
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41957549770",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_FFT_ORIGINAL_DERIVED_UNITY_CANDIDATES_2026-11-05.md",
+    "https://github.com/alwansan/raf/actions/runs/41737548860"
+  ],
+  "remaining": [
+    "Original authored multi-variant .compute kernel and keyword names not recovered; candidate paths and main are generated import handles",
+    "Actual Unity Editor import and compute support under test in CI41958245907",
+    "Original runtime FindKernel/Dispatch mapping, phone Adreno pixels, actual water still unknown"
+  ],
+  "updated_by": "T1"
+}
