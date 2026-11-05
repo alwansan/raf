@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261105T1736Z-T2-chat-ret-reason-28ce",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "9b02920ff126d09e701f0ab342c6a7f59ddae1de",
+  "updated_at": "2026-11-05T17:42:00Z",
+  "resumed_from_work": "prompt/coordination/work/WATER-001/T2-20261105T1736Z-T2-chat-ret-reason-28ce-ret-reason.json",
+  "experiment_key": "T2|ZIP2-15964ea8|original-0a6f0527|exact-Foam-RT-return-local-writers-and-immediate-producer-families-v1",
+  "resource_key": "T2-Foam-RT-return-local-stloc-private-writer-census",
+  "hypothesis": "Original RT-returning method's sole ret is a sequential ldloc; finding all original matching stloc sites and their immediate value-producer categories can isolate null, typed RT construction, nested typed call, or unresolved aliases without fabricating CFG joins.",
+  "method": "Preserve exact matching managed return method, sole ret and its local identity privately; enumerate exact stloc writers to that local and their immediately prior opcode as a coarse declared-type category. A writer at branch/handler boundary is categorized unknown, not trusted. No whole-method reachability or runtime claims; positive synthetic local-null, direct newobj and wrong local-decoy controls; original SHA-pinned numeric-safe CI.",
+  "intended_files": [
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/FoamByrefElementValueOrigin.cs",
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/Program.cs",
+    ".github/workflows/raft-t2-foam-managed-literals.yml",
+    "prompt/coordination/work/WATER-001/T2-20261105T1736Z-T2-chat-ret-reason-28ce-return-local-writers.json",
+    "prompt/coordination/clients/T2/sessions/20261105T1736Z-T2-chat-ret-reason-28ce.md"
+  ],
+  "preflight": {
+    "head": "9b02920ff126d09e701f0ab342c6a7f59ddae1de",
+    "latest_original_CI": "42076713202 SUCCESS",
+    "scheduled_T2_nonoverlap": "synthetic scripts/t2_rt_return_cfg.py and tests/test_t2_rt_return_cfg.py only"
+  },
+  "next_step": "Run original SHA-pinned CI to classify exact ret local stloc writer categories, not CFG runtime paths. WATER-001 OPEN NOT_READY0/3."
+}
