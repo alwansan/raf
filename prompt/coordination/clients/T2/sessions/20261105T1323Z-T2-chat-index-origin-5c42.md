@@ -10,3 +10,10 @@
 - experiment_key: `T2|shaoriginalZIP2-15964ea8|managed-0a6f0527|four-settexture-callvirt-Texture-int|actual-source-stack-tag-v1`.
 - test strategy: synthetic direct integer, field and unsupported-token/unknown controls, SHA-original managed workflow assertions 4 caller categories, safe artifact only, preserve existing getter field writer and source proof.
 - next_step: apply strict source-code changes with expected HEAD lease, check original CI, save verified histogram and remaining limits.
+
+## Source commit / CI checkpoint
+
+- Implemented on [afb3e94af6c34a345d8fcfd81e6daaa2c01a89e4](https://github.com/alwansan/raf/commit/afb3e94af6c34a345d8fcfd81e6daaa2c01a89e4): bounded actual `Texture(int)` producer argument source category propagated through the existing verified `Material.SetTexture` second-value stack tracer; no original int value emitted. Public synthetic controls: exact `ldc.i4`, method argument, and invalid `ldtoken` not accepted as an int literal. SHA-original workflow checks four covered calls and allowed provenance categories.
+- [Original CI42035529042](https://github.com/alwansan/raf/actions/runs/42035529042) **in_progress**, so no original index category claim yet. Work status `waiting_ci`.
+- During review, canonical summary workflow CI42034986678 failed due newly created resource missing `stages` dictionary. Repaired **only its metadata schema** in [0cf6e48](https://github.com/alwansan/raf/commit/0cf6e48fe17d53c587166f8a5939c189fe354252); exact original 1 null stfld evidence unchanged. Recheck summary CI before finishing.
+- Next step: inspect CI and safe artifact, record actual four original operand categories and limitations; source-only, no Unity/device pixels.
