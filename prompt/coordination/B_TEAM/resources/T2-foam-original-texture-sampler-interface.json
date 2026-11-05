@@ -15,7 +15,7 @@
     "acquisition": "SHA_PINNED_ORIGINAL_NO_LFS_VALIDATED",
     "extraction": "AUTHENTIC_FOAM_PASS0_FRAGMENT_5_TEXTURES_PASS1_FRAGMENT_1_TEXTURE;VERTEX_0",
     "reconstruction": "4_B20_REAL_STAGES_TRANSLATED_PRIVATE",
-    "binding": "SIX_SOURCE_TEXTURES_TO_SIX_SPIRV_SEPARATE_IMAGE_AND_SIX_SAMPLER_NUMERIC_CARDINALITY_VERIFIED; NAMES_AND_SAMPLER_STATE_UNKNOWN",
+    "binding": "SOURCE_6_TEXTURES_SPIRV_6_IMAGES_AND_6_SAMPLERS_NUMERIC_CARDINALITY_VERIFIED; SOURCE_TO_SPIRV_LITERAL_IMAGE_SYMBOLS_0_OF_6_EQUAL; UNPROVEN_SAMPLER_ALIAS_UNITY_MATERIAL_UPLOAD",
     "integration": "T2_BOUNDED_SOURCE_VALIDATOR_AND_WORKFLOW_TRUE;NO_SHADERLAB_INSTALLED",
     "device": "NOT_TESTED"
   },
@@ -60,13 +60,17 @@
     "https://github.com/alwansan/raf/actions/runs/41939956032",
     "https://github.com/alwansan/raf/actions/runs/41940321740",
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_ORIGINAL_TEXTURE_SAMPLER_ABI_2026-11-05.md",
-    "https://github.com/alwansan/raf/commit/023ae9690bccd2a5c22ee6160a7e397d05b971f7"
+    "https://github.com/alwansan/raf/commit/023ae9690bccd2a5c22ee6160a7e397d05b971f7",
+    "https://github.com/alwansan/raf/actions/runs/41941354379",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_TEXTURE_LITERAL_IDENTITY_2026-11-05.md",
+    "https://github.com/alwansan/raf/commit/5dd02e7931aedfbb92c5cbcf3cc10ac1a6f9fd7c"
   ],
   "remaining": [
     "Auth original m_TextureParams name and sampler/type semantics to translated image and sampler identities privately",
     "Create genuine two-pass Foam ShaderLab with no guessed original binding and import in Unity",
-    "Validate original material/GUID, GPU pixels Adreno and phone pass/kernel errors"
+    "Validate original material/GUID, GPU pixels Adreno and phone pass/kernel errors",
+    "T2 new name-gap: source 6 original texture symbol values vs translated SPIR-V separate image name values equal 0/6 (SHA-authentic); prove numeric source index/sampler/upload association without guessed symbols"
   ],
   "updated_by": "T2",
-  "updated_at": "2026-11-05T00:19:00Z"
+  "updated_at": "2026-11-05T00:29:55.178Z"
 }
