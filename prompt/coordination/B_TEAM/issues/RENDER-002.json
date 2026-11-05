@@ -100,7 +100,8 @@
     "https://github.com/alwansan/raf/actions/runs/42042819113",
     "https://github.com/alwansan/raf/actions/runs/42044249541",
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_SCENE_SHADER_USE_AND_POSTVENDOR_PRIORITY_2026-11-05.md",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-original-scene-renderer-shader-postvendor-use.json"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-original-scene-renderer-shader-postvendor-use.json",
+    "https://github.com/alwansan/raf/actions/runs/42046329453"
   ],
   "remaining": [
     "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -141,7 +142,8 @@
     "T3 authentic source+same-export CI41941363661 SUCCESS: 41 SHA-pinned original Material valid/invalid keyword lists and disabledShaderPasses equal 41 actual export documents; excludes keyword/pass serialization loss in this limited subset, NOT Shader GUID/compiled variant/Adreno or 25 external textures. No game asset edit; RENDER-002 remains OPEN.",
     "T3 immutable ZIP2 original+real AssetRipper same-export CI41942377246: 25/25 external Texture2D references (22 sharedassets0, 3 sharedassets1) typed and GUID/fileID/type retained, zero missing/wrong/null; combined with prior 89 exact internal = 114 bound Texture slot occurrences preserved in the 41 selected original Materials. This rejects selected export pointer loss only; not importer samplers/sRGB/Shader/GPU/device. New scoped B15 sampler trial CI41943122343 INCONCLUSIVE on ValueError before evidence; classified retry launched.",
     "T3 CI42026630845: authentic bounded 12-owner PRE-restorer AssetRipper export has 731 Material docs (511 custom, 220 Unity builtin), all 511 custom docs point to 54 dummy Shader GUIDs and all 126 ShaderLab files carry default-Dummy marker; new native post-restorer quality audit integrated but not executed. Actual Android visual state and authored ShaderLab restoration remain UNKNOWN; RENDER-002 OPEN.",
-    "T3 genuine same-instance ZIP2 6-scene source Renderer->Material->21 typed Shader48 use map: 1633 source material slots, 1373 still target DummyShaderTextExporter after bounded TMP/PostFX/Volumetric vendor restore, 256 Unity builtin, 4 non-Dummy, 2 Shader pointers outside selected typed owner; highest-use 921-slot original source Shader remains Dummy at this bounded stage. No full native post-restorer/Adreno evidence; prioritize authentic program reconstruction but check native builtins stage before claiming 921 device issue."
+    "T3 genuine same-instance ZIP2 6-scene source Renderer->Material->21 typed Shader48 use map: 1633 source material slots, 1373 still target DummyShaderTextExporter after bounded TMP/PostFX/Volumetric vendor restore, 256 Unity builtin, 4 non-Dummy, 2 Shader pointers outside selected typed owner; highest-use 921-slot original source Shader remains Dummy at this bounded stage. No full native post-restorer/Adreno evidence; prioritize authentic program reconstruction but check native builtins stage before claiming 921 device issue.",
+    "T3 source SHA-pinned 6-scene top-921 Renderer-use Shader48 has NO exact match among 198 official Unity2021.3.45f2 SHA-pinned runtime builtin shaders (CI42046329453). Exactly 3 other typed source shaders cover 256 original renderer slots and match builtin-name library (independently corroborates W1 exporter 3 builtins/256 slots). Top 921 still Dummy after TMP/PostFX/Volumetric in bounded export; must target original compiled stage/pass/variants, not archived builtin name substitution. Full native/Adreno pixels unknown; RENDER-002 OPEN."
   ],
   "acceptance": [
     "مطابقة روابط ومراجع الأصل",
@@ -149,5 +151,5 @@
     "نجاحعلىالهاتف"
   ],
   "updated_by": "T3",
-  "updated_at": "2026-11-05T14:25:00Z"
+  "updated_at": "2026-11-05T14:36:00Z"
 }
