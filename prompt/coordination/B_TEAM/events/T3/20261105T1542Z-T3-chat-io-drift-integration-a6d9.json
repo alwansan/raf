@@ -1,0 +1,15 @@
+{
+  "id": "T3-20261105T1542Z-authentic921-IO-location-remap",
+  "owner": "T3",
+  "session_id": "20261105T1542Z-T3-chat-io-drift-integration-a6d9",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "CI42058881426 SUCCESS on real SHA-pinned original Raft 921-slot Shader48 four-Pass source: all 8 SPV/HLSL roundtrip validated and resource slot shape 8/8, but 0/8 I/O location arrays equal; classifier proves stage input and output counts/type multisets equal 8/8, with 8/8 input and 4/8 output location-only remap candidates. 71 source-free tests pass. Semantic/output image parity still unknown.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42058881426",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_921_STAGE_IO_DRIFT_CLASSIFICATION_2026-11-05.md",
+    "https://github.com/alwansan/raf/actions/runs/42058710660"
+  ],
+  "at": "2026-11-05T15:53:10.756Z"
+}
