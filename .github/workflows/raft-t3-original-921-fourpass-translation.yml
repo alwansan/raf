@@ -2,13 +2,9 @@ name: T3 RENDER-002 genuine four-pass original 921 Shader48 DXBC SPIRV HLSL tran
 # Distinct from CI42047611046 original source stage count: translate one exact
 # original V/F pair per Pass with real vkd3d→SPIR-V→HLSL+roundtrip.
 # Original compressed programs in disposable private temp only; no code uploaded.
+# CI42052605123 completed the SHA-authentic 4-pass translation question.
+# Manual-only to avoid a second equivalent ~4m translation/ZIP2 source run.
 on:
-  push:
-    branches: [feature/android-native-port]
-    paths:
-      - 'scripts/t3_original_top_shader_fourpass_translation.py'
-      - 'tests/test_t3_original_top_shader_fourpass_translation.py'
-      - '.github/workflows/raft-t3-original-921-fourpass-translation.yml'
   workflow_dispatch:
 permissions:
   contents: read
