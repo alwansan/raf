@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T024000Z-T1-original-derived-fft-unity",
+  "issue_id": "WATER-001",
+  "track": "Authenticate 20 original FFT DXBC compiled programs and privately stage per-slot reconstructed Unity .compute importer candidates",
+  "approach": "Implement SHA-gated private DXBC→vkd3d-SPIR-V→SPIRV-Cross-HLSL50→glslang roundtrip pipeline and stage 20 isolated one-entrypoint .compute candidate assets with hashed manifest. Each is a distinct translated compiled slot, not a reconstructed original authored multi-variant ComputeShader; confirm staging and Unity entrypoint preconditions without modifying actual Raft assets.",
+  "status": "planned",
+  "base_sha": "8397f6ce5bb3fecb5d8a3c82e7e9ba2d38ded810",
+  "intended_files": [
+    "scripts/t1_stage_original_fft_compute_candidates.py",
+    "tests/test_t1_stage_original_fft_compute_candidates.py",
+    ".github/workflows/raft-t1-fft-original-compute-candidates.yml",
+    "docs/T1_FFT_ORIGINAL_DERIVED_UNITY_CANDIDATES_2026-11-05.md",
+    "prompt/coordination/clients/T1/sessions/20261105T024000Z-T1-original-derived-fft-unity.md"
+  ],
+  "hypothesis": "Private original DXBC roundtrip sources can be turned into 20 valid one-kernel Unity .compute import candidates while preserving original per-program threadgroup and descriptor-class topology, so Unity importer readiness can be tested without fabricating original runtime kernel identities or publishing shaders.",
+  "related_work": [
+    "prompt/coordination/work/WATER-001/T1-20261105T002257Z-T1-fft-unity-contract-unity-kernel-runtime-probe.json",
+    "prompt/coordination/work/WATER-001/T1-20261105T011343Z-T1-runtime-dispatch-audit-dispatch-evidence.json"
+  ],
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/actions/runs/41737548860",
+    "https://github.com/alwansan/raf/actions/runs/41941716641",
+    "https://github.com/alwansan/raf/actions/runs/41939314440",
+    "prompt/coordination/clients/B18/MEMORY.md",
+    "prompt/coordination/clients/B48/MEMORY.md"
+  ],
+  "experiment_ids": [
+    "20261105T024000Z-T1-authentic-fft-derived-compute-candidates"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Private original source SHA-pinned staging + all 20 converted candidate Unity .compute files with source-free negative tests, then a separate actual Unity 2021 import gate. Do not commit staged shaders or claim Unity runtime mapper recovered.",
+  "updated_at": "2026-11-05T02:40:00Z",
+  "identity_conflict": "An independent T1 caller-audit work record remains active; separate unique session/file scope without shared state overwrite"
+}
