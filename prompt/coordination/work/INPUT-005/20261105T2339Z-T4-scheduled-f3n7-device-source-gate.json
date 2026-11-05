@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "session_id": "20261105T2339Z-T4-scheduled-f3n7",
+  "origin": "scheduled",
+  "owner": "T4",
+  "issue_id": "INPUT-005",
+  "status": "active",
+  "base_sha": "7a8833bfa46c141618df76204d2cf88101c8df36",
+  "updated_at": "2026-11-05T23:39:00Z",
+  "resumed_from_sessions": [
+    "20261105T2235Z-T4-scheduled-u8k3",
+    "20261105T2258Z-T4-chat-motion-callback-epoch-v6k8"
+  ],
+  "intended_files": [
+    "prompt/coordination/work/INPUT-005/20261105T2339Z-T4-scheduled-f3n7-device-source-gate.json",
+    "prompt/coordination/clients/T4/sessions/20261105T2339Z-T4-scheduled-f3n7.md"
+  ],
+  "experiment_key": "T4-inputsystem-physical-mouse-presence-vs-legacy-mousePresent-Unity2021-source-gate-v1",
+  "resource_key": "source-only",
+  "hypothesis": "PhysicalMousePresent() requires both legacy Input.mousePresent and InputSystem Mouse.all; Android hardware mouse recognized only by InputSystem could be rejected, preventing capture entirely. This is a conditional source gap, not observed device failure.",
+  "approach": "Audit code and existing coverage; do not edit shared capture source while chat has active changes. Record falsifiable device criteria and isolated follow-up.",
+  "next_step": "Add standalone executable test of presence decision with mixed legacy/new input states, then consider removing legacy prerequisite only if Unity2021 source/runtime confirms safe; capture logs on exact signed Android build."
+}
