@@ -92,9 +92,10 @@ def normalize_private_saved_properties(props: dict):
             any(type(v) is not int or v < 0 for v in ptr)):
             raise ValueError("malformed_private_original_texture_pointer")
         texture_bound += int(ptr[1] != 0)
+    bound_texture_names={name for name,(ptr,_uv) in tex.items() if ptr[1] != 0}
     return owned, {"texture":len(tex),"color":len(colors),
                    "float":len(numeric["m_Floats"]),
-                   "int":len(numeric["m_Ints"]), "texture_bound":texture_bound}
+                   "int":len(numeric["m_Ints"]), "texture_bound":texture_bound}, bound_texture_names
 
 
 def classify_private_921_materials(declared: dict, source_materials: dict,
@@ -126,7 +127,7 @@ def classify_private_921_materials(declared: dict, source_materials: dict,
             type(weight) is not int or weight<=0 or
             type(saved) is not dict):
             raise ValueError("invalid_authentic_Material_shaders_or_slot_weights")
-        owned, stats=normalize_private_saved_properties(saved)
+        owned, stats, bound_texture_names=normalize_private_saved_properties(saved)
         for name,value in stats.items():
             if name=="texture_bound":
                 counts["source_saved_bound_texture_entries"]+=value
@@ -150,8 +151,7 @@ def classify_private_921_materials(declared: dict, source_materials: dict,
         counts["source_Materials_with_all_declared_properties_explicitly_saved"]+=not bool(unsaved)
         counts["source_Materials_with_no_declared_props_saved"]+=not bool(matched)
         counts["source_Materials_with_any_declared_texture_bound"]+=any(
-            p in owned and owned[p]=="texture" and p in declared
-            for p in saved["m_TexEnvs"] and []  # replaced by explicit private checker
+            declared.get(name)=="texture" for name in bound_texture_names
         )
     # Real source Shader properties may be absent from Material and use defaults:
     # this is a structural census, NOT a runtime binding or renderer failure.
