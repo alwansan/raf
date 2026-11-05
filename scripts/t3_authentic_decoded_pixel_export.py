@@ -14,7 +14,8 @@ from scripts import t3_linked_texture_sampler_export as linked
 from scripts import b05_verify_material_texenv_bindings as b05
 from scripts.b03_original_renderer_materials import manifest_provider_basename_counts
 from scripts.t3_decoded_texture_pixel_parity import compare_pair, aggregate
-from scripts.t3_pixel_drift_diagnostics import classify as diagnose_pair, aggregate as aggregate_diagnostics
+from scripts.t3_pixel_drift_diagnostics import (classify as diagnose_pair, aggregate as aggregate_diagnostics,
+    original_texture_categories)
 
 GUID = re.compile(r"(?m)^guid: ([0-9a-f]{32})\s*$")
 EXPECTED = 106
@@ -87,11 +88,14 @@ def run(original: Path, manifest: Path, project: Path, w1path: Path, b02path: Pa
         # A diagnostic failure is NOT an unsupported source decoder. Let it
         # propagate to main() as INCONCLUSIVE rather than falsifying parity.
         if category in ('EXACT', 'RGB_DRIFT', 'ALPHA_ONLY_DRIFT'):
-            raw_format = getattr(texture, 'm_TextureFormat', 'UNKNOWN')
-            fmt = getattr(raw_format, 'name', str(raw_format))
-            raw_srgb = getattr(texture, 'm_IsSRGB', None)
+            # Source original typetree has m_TextureFormat as int and
+            # m_ColorSpace 0=Gamma/1=Linear. The previous .read() attribute
+            # display + nonexistent m_IsSRGB yielded 106 UNKNOWN labels.
+            # This diagnostic guard is outside the decoder exception handler:
+            # bad source schema is INCONCLUSIVE, not fake UNSUPPORTED_MODE.
+            fmt, color_space = original_texture_categories(obj.read_typetree())
             diagnostic_rows.append(diagnose_pair(decoded, exported_image,
-                texture_format=fmt, srgb=str(raw_srgb) if raw_srgb is not None else 'UNKNOWN'))
+                texture_format=fmt, srgb=color_space))
         categories.append(category)
     report = aggregate(categories, expected=EXPECTED)
     if len(diagnostic_rows) == EXPECTED:
