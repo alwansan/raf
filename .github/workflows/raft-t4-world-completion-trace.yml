@@ -1,0 +1,81 @@
+name: T4 LOCAL-005 genuine world-ready assignment boundary
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/instrument_android_runtime_operations.py'
+      - 'tests/test_t4_world_completion_trace.py'
+      - '.github/workflows/raft-t4-world-completion-trace.yml'
+permissions:
+  contents: read
+concurrency:
+  group: raft-t4-completion-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  world-completion-boundary:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - name: Check out instrumentation and synthetic tests only
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests/test_t4_world_completion_trace.py
+            config/runtime-operation-traces.json
+      - name: T4 Python syntax and negative controls
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/instrument_android_runtime_operations.py tests/test_t4_world_completion_trace.py
+          python3 -m unittest discover -s tests -p test_t4_world_completion_trace.py -v
+      - name: Check out immutable original game DLL in separate directory
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: t4-original
+          lfs: false
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            Raft/Raft_Data/Managed/Assembly-CSharp.dll
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Original ZIP2 managed provenance and Android adapted runtime boundary
+        shell: bash
+        env:
+          DOTNET_PROCESSOR_COUNT: '2'
+          DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+        run: |
+          set -euo pipefail
+          test "$(git -C t4-original rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          test "$(df -Pk . | awk 'NR==2 {print $4}')" -gt 1200000
+          mkdir -p "$RUNNER_TEMP/t4-ilspy" "$RUNNER_TEMP/t4-private-source"
+          dotnet tool install ilspycmd --version 11.2.0.10050 --tool-path "$RUNNER_TEMP/t4-ilspy" >/dev/null
+          timeout 360s "$RUNNER_TEMP/t4-ilspy/ilspycmd" -p -lv CSharp9_0 -o "$RUNNER_TEMP/t4-private-source" t4-original/Raft/Raft_Data/Managed/Assembly-CSharp.dll >"$RUNNER_TEMP/t4-private-decompile.log" 2>&1
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          from scripts.b07_probe_original_world_callbacks import assert_original_dll, _source, method_body
+          from scripts.adapt_android_offline_startup import adapt, fingerprint
+          from scripts.b07_world_coroutine_trace import ORIGINAL_NETWORK_SHA256
+          from scripts.instrument_android_runtime_operations import instrument
+          assert_original_dll(Path('t4-original/Raft/Raft_Data/Managed/Assembly-CSharp.dll'))
+          src, digest = _source(Path(os.environ['RUNNER_TEMP'])/'t4-private-source', 'Raft_Network', ORIGINAL_NETWORK_SHA256)
+          adapted = adapt('Raft_Network', src)
+          manifest = json.loads(Path('config/runtime-operation-traces.json').read_text())
+          assert fingerprint(adapted) == manifest['sources']['Raft_Network']['sha256'], 'Offline-adapted original SHA drift'
+          result = instrument('Raft_Network', adapted, manifest)
+          body = method_body(result, 'WorldHasBeenLoaded')[1]
+          assert body.count('WorldHasBeenLoaded.firstMoveNext') == 1
+          assert body.count('WorldHasBeenLoaded.originalCompletionAssigned') == 1
+          assert body.count('WorldHasBeenRecieved = true;') == 1
+          assert body.count('yield return') == method_body(src, 'WorldHasBeenLoaded')[1].count('yield return')
+          print('T4_WORLD_COMPLETION_SOURCE_AUTHENTIC ' + json.dumps({'original_network_sha':digest,'offline_sha':fingerprint(adapted),'entry_and_completion_markers':1,'original_completion_write_preserved':True,'new_ready_flag_added':False,'device_result':False},sort_keys=True))
+          PY
+          # Private game sources, snippets, and binary bytes are NOT uploaded.
