@@ -3,6 +3,8 @@ import unittest
 
 from scripts.t2_foam_resource_abi import (
     STAGES, safe_compiled_resources, combine,
+    verify_genuine_texture_sampler_pair_count, ORIGINAL_TEXTURES_PER_STAGE,
+    COMPILED_NUMERIC_RESOURCE_BINDINGS,
 )
 
 
@@ -104,6 +106,59 @@ class T2FoamResourceAbiTests(unittest.TestCase):
         self.assertEqual(result["source_stage_descriptor_rows"], 0)
         self.assertEqual(result["compiled_non_cb_descriptors"], 1)
         self.assertFalse(result["original_name_register_join_verified"])
+
+
+    def test_exact_original_six_textures_map_to_six_image_sampler_pairs(self):
+        profile = {}
+        resources = {}
+        for key in STAGES:
+            count = ORIGINAL_TEXTURES_PER_STAGE[key]
+            profile[key] = {
+                "table_rows": {"m_TextureParams": count, "m_Samplers": 0,
+                               "m_UAVParams": 0},
+                "descriptor_rows": count,
+                "numeric_descriptor_sha256": "a" * 64,
+            }
+            resources[key] = {
+                "separate_images": [{"set": ds, "binding": binding}
+                    for category, ds, binding in COMPILED_NUMERIC_RESOURCE_BINDINGS[key]
+                    if category == "separate_images"],
+                "separate_samplers": [{"set": ds, "binding": binding}
+                    for category, ds, binding in COMPILED_NUMERIC_RESOURCE_BINDINGS[key]
+                    if category == "separate_samplers"]
+            }
+        genuine = verify_genuine_texture_sampler_pair_count(combine(profile, resources))
+        self.assertTrue(genuine["original_to_compiled_resource_cardinality_verified"])
+        self.assertEqual(genuine["authenticated_original_texture_rows"], 6)
+        self.assertEqual(genuine["authenticated_translated_sampled_images"], 6)
+        self.assertEqual(genuine["authenticated_translated_separate_samplers"], 6)
+        self.assertFalse(genuine["original_texture_to_hlsl_sampler_identity_verified"])
+        return profile, resources
+
+    def test_missing_genuine_sampler_pair_fails_closed(self):
+        profile, resources = self.test_exact_original_six_textures_map_to_six_image_sampler_pairs()
+        resources[(0, 0)]["separate_samplers"].pop()
+        with self.assertRaises(ValueError):
+            verify_genuine_texture_sampler_pair_count(combine(profile, resources))
+
+    def test_source_texture_count_drift_fails_closed(self):
+        profile, resources = self.test_exact_original_six_textures_map_to_six_image_sampler_pairs()
+        profile[(1, 0)]["table_rows"]["m_TextureParams"] = 0
+        profile[(1, 0)]["descriptor_rows"] = 0
+        with self.assertRaises(ValueError):
+            verify_genuine_texture_sampler_pair_count(combine(profile, resources))
+
+    def test_translated_sampler_binding_drift_fails_closed(self):
+        profile, resources = self.test_exact_original_six_textures_map_to_six_image_sampler_pairs()
+        resources[(1, 0)]["separate_samplers"][0]["binding"] = 22
+        with self.assertRaises(ValueError):
+            verify_genuine_texture_sampler_pair_count(combine(profile, resources))
+
+    def test_translated_resource_category_drift_fails_closed(self):
+        profile, resources = self.test_exact_original_six_textures_map_to_six_image_sampler_pairs()
+        resources[(0, 0)]["separate_images"][0]["set"] = 1
+        with self.assertRaises(ValueError):
+            verify_genuine_texture_sampler_pair_count(combine(profile, resources))
 
 
 if __name__ == "__main__":
