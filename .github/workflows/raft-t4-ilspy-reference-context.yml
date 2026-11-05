@@ -1,0 +1,113 @@
+name: T4 LOCAL-005 original ILSpy managed reference context
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t4_probe_ilspy_reference_context.py
+      - tests/test_t4_probe_ilspy_reference_context.py
+      - .github/workflows/raft-t4-ilspy-reference-context.yml
+permissions:
+  contents: read
+concurrency:
+  group: raft-t4-original-reference-context-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  exact-original-reference-context:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - name: Checkout isolated T4 source tools without LFS
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests/test_t4_probe_ilspy_reference_context.py
+      - name: Run source-free T4 strict negative controls
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t4_probe_ilspy_reference_context.py tests/test_t4_probe_ilspy_reference_context.py
+          python3 -m unittest discover -s tests -p test_t4_probe_ilspy_reference_context.py -v
+      - name: Checkout immutable original ZIP2 managed DLL only
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: original-zip2
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            Raft/Raft_Data/Managed/Assembly-CSharp.dll
+      - name: Checkout unchanged sibling managed references at pinned source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 02e9fba7fb42b83579595885391be636ee3b56e8
+          path: managed-reference-pin
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            Raft/Raft_Data/Managed/
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Stage only SHA-verified original DLL and its reference context privately
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C original-zip2 rev-parse HEAD)" = "15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+          test "$(git -C managed-reference-pin rev-parse HEAD)" = "02e9fba7fb42b83579595885391be636ee3b56e8"
+          test "$(df -Pk . | awk 'NR==2 {print $4}')" -gt 1500000
+          mkdir -p "$RUNNER_TEMP/t4-context/solo-a" "$RUNNER_TEMP/t4-context/solo-b" "$RUNNER_TEMP/t4-context/with-refs"
+          mkdir -p "$RUNNER_TEMP/t4-context/out-a" "$RUNNER_TEMP/t4-context/out-b" "$RUNNER_TEMP/t4-context/out-refs"
+          for dir in solo-a solo-b with-refs; do
+            cp original-zip2/Raft/Raft_Data/Managed/Assembly-CSharp.dll "$RUNNER_TEMP/t4-context/$dir/Assembly-CSharp.dll"
+          done
+          for dep in managed-reference-pin/Raft/Raft_Data/Managed/*.dll; do
+            if [ "$(basename "$dep")" != "Assembly-CSharp.dll" ]; then
+              test -f "$dep" && test ! -L "$dep"
+              cp "$dep" "$RUNNER_TEMP/t4-context/with-refs/"
+            fi
+          done
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          from scripts.b07_probe_original_world_callbacks import assert_original_dll
+          root = Path(os.environ['RUNNER_TEMP']) / 't4-context'
+          for name in ('solo-a', 'solo-b', 'with-refs'):
+              assert_original_dll(root/name/'Assembly-CSharp.dll')
+          count = len(list((root/'with-refs').glob('*.dll'))) - 1
+          if count < 100:
+              raise ValueError('Incomplete original Managed sibling input')
+          print('T4_REFERENCE_CONTEXT_STAGED original_dll_sha_verified=true sibling_dll_count=' + str(count) + ' original_bytes_published=false')
+          PY
+      - name: Privately decompile three identical original DLLs with/without siblings
+        shell: bash
+        env:
+          DOTNET_PROCESSOR_COUNT: '2'
+          DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/t4-ilspy"
+          dotnet tool install ilspycmd --version 11.2.0.10050 --tool-path "$RUNNER_TEMP/t4-ilspy" >/dev/null
+          for pair in solo-a:out-a solo-b:out-b with-refs:out-refs; do
+            src="${pair%%:*}"
+            dst="${pair#*:}"
+            timeout 240s "$RUNNER_TEMP/t4-ilspy/ilspycmd" -p -lv CSharp9_0 \
+              -o "$RUNNER_TEMP/t4-context/$dst" \
+              "$RUNNER_TEMP/t4-context/$src/Assembly-CSharp.dll" \
+              >"$RUNNER_TEMP/t4-$src-private-ilspy.log" 2>&1
+          done
+          python3 -m scripts.t4_probe_ilspy_reference_context \
+            --solo-a-dll "$RUNNER_TEMP/t4-context/solo-a/Assembly-CSharp.dll" \
+            --solo-b-dll "$RUNNER_TEMP/t4-context/solo-b/Assembly-CSharp.dll" \
+            --refs-dll "$RUNNER_TEMP/t4-context/with-refs/Assembly-CSharp.dll" \
+            --solo-a-source "$RUNNER_TEMP/t4-context/out-a" \
+            --solo-b-source "$RUNNER_TEMP/t4-context/out-b" \
+            --refs-source "$RUNNER_TEMP/t4-context/out-refs" \
+            --managed-dir "$RUNNER_TEMP/t4-context/with-refs"
+          # No private original code, DLL payload, metadata or decompiler log is uploaded.
