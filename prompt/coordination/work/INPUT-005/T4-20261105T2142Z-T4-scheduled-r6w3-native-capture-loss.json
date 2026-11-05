@@ -2,7 +2,7 @@
   "session_id": "20261105T2142Z-T4-scheduled-r6w3",
   "origin": "scheduled",
   "issue_id": "INPUT-005",
-  "status": "active",
+  "status": "blocked_on_device_capture_state_design",
   "baseline_sha": "unknown_live_head_connector_does_not_expose_ref_sha",
   "taken_over_from": [
     "20261105T2109Z-T4-chat-android-mouse-bridge-p6r2"
@@ -15,5 +15,7 @@
   "resource_key": null,
   "hypothesis": "The source bridge tracks requested, not native capture acceptance/loss; an OS capture revocation without focus callback can leave nativeHasMotion=true and replace legacy axes with zeros until a later native motion.",
   "device_proof": "not_run",
-  "updated_at": "2026-11-05T21:42:00Z"
+  "updated_at": "2026-11-05T21:42:00Z",
+  "result": "Source-only capture-loss hypothesis recorded; T4 chat bridge already integrated and CI42111826974 successful. No duplicate CI or patch.",
+  "session_commit": "c64e3930cf3cf09b0ef221d682bda70fbe117255"
 }
