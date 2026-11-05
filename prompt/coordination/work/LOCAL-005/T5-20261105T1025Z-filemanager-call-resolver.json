@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T1025Z-T5-filemanager-metadata-bridge",
+  "issue_id": "LOCAL-005",
+  "track": "Authentic managed FileManager read/write edges independent of CSharp ILSpy regex",
+  "approach": "Resolve original SaveAndLoad.Load<T> and Save direct FileManager method call operands using Mono.Cecil compiled ECMA-335 metadata/IL, after exact ZIP2 Assembly-CSharp.dll size/SHA pin. Emit only target resolved/declaring class/IL body + I/O/catch aggregate counts, never private names/source/IL. This discriminates T4 regex-unrecognized method shape from actual absence. Add strict public report parser adversarial controls and isolated no-Unity/no-LFS original CI, without editing T4 code.",
+  "status": "active",
+  "base_sha": "37c537cdab55f146cab12fe121ba35b5d6bb119c",
+  "intended_files": [
+    "android-port/Experiments/T5/FileManagerMetadataBridge/FileManagerMetadataBridge.csproj",
+    "android-port/Experiments/T5/FileManagerMetadataBridge/Program.cs",
+    "scripts/t5_validate_filemanager_metadata.py",
+    "tests/test_t5_validate_filemanager_metadata.py",
+    ".github/workflows/raft-t5-original-filemanager-metadata.yml",
+    "prompt/coordination/clients/T5/MEMORY.md",
+    "prompt/coordination/clients/T5/state.json"
+  ],
+  "hypothesis": "T4 original run41942655373 discovered one lexical call token for Load<T> and Save but zero regex block-body declarations. Direct original IL metadata will prove whether both called FileManager target methods are concrete, body-bearing same-module methods, independent of C# ILSpy formatting.",
+  "related_work": [
+    "https://github.com/alwansan/raf/actions/runs/41942655373",
+    "https://github.com/alwansan/raf/actions/runs/41996790205",
+    "https://github.com/alwansan/raf/actions/runs/41944365772"
+  ],
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/T4/MEMORY.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/T5/MEMORY.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/B19/MEMORY.md"
+  ],
+  "last_verified_result": "T4 genuine original managed DLL SHA 0a6f052... validated, T4 original FileManager lexical source 1 token read/1 write but restricted decompiler block-body parser 0 recognized methods; original target presence and I/O counts unknown. T4 synthetic shape controls pass, original metadata resolution not yet performed.",
+  "experiment_ids": [
+    "T5-20261105T1025Z-original-il-call-metadata"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement exact original assembly SHA gated Mono.Cecil metadata lookup; strict report validation and synthetic controls; execute original DLL in own bounded CI; record whether read/write are concrete methods without claiming .rgd save.",
+  "updated_at": "2026-11-05T10:25:00Z"
+}
