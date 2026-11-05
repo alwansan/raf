@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T002850Z-T1-bank1-isolated",
+  "issue_id": "WATER-001",
+  "track": "Bank1 original FFT CPU Vulkan negative-case validation and failure isolation",
+  "approach": "Isolate previously failing original bank1 candidate pairs under Khronos Vulkan validation with sanitized process outcomes, distinguishing driver/descriptor issues from result mismatch without treating any as Unity/device success.",
+  "status": "planned",
+  "base_sha": "a92132b54b92605529cbe0f7f756e98c29fb6365",
+  "intended_files": [
+    "scripts/t1_fft_bank1_validation.py",
+    "tests/test_t1_fft_bank1_validation.py",
+    ".github/workflows/raft-t1-fft-bank1-validation.yml",
+    "prompt/coordination/clients/T1/sessions/20261105T002850Z-T1-bank1-isolated.md",
+    "prompt/coordination/work/WATER-001/T1-20261105T002850Z-T1-bank1-isolated-bank1-validator.json"
+  ],
+  "hypothesis": "True negative-bank1 Vulkan validation can report bounded resource/layout violations; if none, bank1 remains inconclusive without code or Unity reconstruction.",
+  "related_work": [
+    "prompt/coordination/work/WATER-001/T1-20261104T235355Z-T1-9fca-runtime-kernel-provenance.json",
+    "prompt/coordination/work/WATER-001/T1-20261105T002257Z-T1-fft-unity-contract-unity-kernel-runtime-probe.json"
+  ],
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/actions/runs/41938536760",
+    "https://github.com/alwansan/raf/actions/runs/41939082498",
+    "https://github.com/alwansan/raf/actions/runs/41939314440"
+  ],
+  "experiment_ids": [],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Produce synthetic-fail-closed and genuine original Vulkan validation run; record exact negative outcomes; keep other active T1 session unaffected.",
+  "updated_at": "2026-11-05T00:28:50Z",
+  "identity_conflict": "T1 other active 20261105T002257Z; canonical state unchanged"
+}
