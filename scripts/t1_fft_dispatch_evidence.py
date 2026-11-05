@@ -9,7 +9,7 @@ import json
 import re
 from pathlib import Path
 
-CALLS = ("FindKernel", "Dispatch", "SetTexture", "SetBuffer", "SetInt", "SetFloat", "SetVector")
+CALLS = ("FindKernel", "Dispatch", "DispatchIndirect", "SetTexture", "SetBuffer", "SetConstantBuffer", "SetInt", "SetInts", "SetFloat", "SetFloats", "SetVector", "SetVectorArray", "SetMatrix", "SetMatrixArray")
 
 
 def audit(source: bytes, expected_sha256: str) -> dict:
