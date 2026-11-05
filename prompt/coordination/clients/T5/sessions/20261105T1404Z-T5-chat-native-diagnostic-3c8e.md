@@ -25,3 +25,13 @@ One owner-authorized, incompletely restored water, native APK+OBB/XAPK diagnosti
 - one native request only; T1 Unity Vulkan was active with shared raft-native-engine resource lock and cancel-in-progress false. No T1 cancellation or competing active native delivery observed.
 - original water unmet names are explicitly copied from older working native trial request; live source gate will fail if these no longer match. This is NOT a green build or phone proof.
 - next_step: inspect run step-level evidence, no duplicate, update completed result with exact verification.
+
+## Verified native diagnostic staging and handoff
+- ONE request commit: 753802d75196210d721cca0f4fdec6ce7800bf0d, branch feature/android-native-port.
+- Native run: https://github.com/alwansan/raf/actions/runs/42042902522.
+- Native-request gate SUCCESS and Unity-license-preflight SUCCESS; reconstruct was IN_PROGRESS at original ComputeShader container audit (status snapshot), no complete Unity/IL2CPP/APK/OBB/XAPK/release yet.
+- Shared raft-native-engine mutex was held by T1 Unity smoke when request was accepted; existing cancel-in-progress=false, no other native request and no cancellations.
+- Team canonical index run https://github.com/alwansan/raf/actions/runs/42043849990 COMPLETED SUCCESS. Both SUMMARY.md and snapshot.json independently include new T5 native request event 20261105T1415Z-single-native-diagnostic-request.
+- Independent work/experiment records now waiting_ci; branch HEAD changes after request do not alter the immutable queued source SHA.
+- status: waiting_ci. This chat did not claim background assistant monitoring; GitHub Actions continues according to its own workflow. No device/Adreno/world/.rgd success from these steps. Game NOT_READY 0/3.
+- next_step: inspect actual run 42042902522 status/jobs first; if failed, identify exact gate and source SHA; if complete SUCCESS, verify Release file sizes/hashes before owner installs tests for offline world, file Save.argumentFileSnapshot, .rgd reopen and water/graphics.
