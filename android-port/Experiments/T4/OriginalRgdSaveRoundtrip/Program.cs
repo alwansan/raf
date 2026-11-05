@@ -83,9 +83,10 @@ internal static class Program
 
 
     private static MethodDefinition? AuditOriginalPrivateSave(
-        string assemblyPath, Type originalRootType, out int safeCallCount)
+        string assemblyPath, Type originalRootType, out int safeCallCount, out string auditCategory)
     {
         safeCallCount = 0;
+        auditCategory = "NO_EXACT_PRIVATE_SAVE_SIGNATURE";
         using var defs = AssemblyDefinition.ReadAssembly(
             assemblyPath, new ReaderParameters { ReadSymbols = false });
         var matches = defs.MainModule.Types
@@ -102,11 +103,17 @@ internal static class Program
         var candidate = matches[0];
         if (candidate.Body.Instructions.Count > 500 ||
             candidate.Body.ExceptionHandlers.Count > 2)
+        {
+            auditCategory = "UNEXPECTED_ORIGINAL_SAVE_IL_COMPLEXITY";
             return null;
+        }
         bool create = false, serialize = false;
         var handlers = candidate.Body.ExceptionHandlers;
         if (handlers.Any(h => h.HandlerType != ExceptionHandlerType.Catch))
+        {
+            auditCategory = "UNEXPECTED_ORIGINAL_SAVE_EXCEPTION_REGION";
             return null;
+        }
         var instructions = candidate.Body.Instructions;
         for (int i = 0; i < instructions.Count; ++i)
         {
@@ -114,11 +121,18 @@ internal static class Program
             if (insn.OpCode.Code is Code.Ldfld or Code.Ldflda or Code.Stfld or
                 Code.Ldsfld or Code.Ldsflda or Code.Stsfld or Code.Calli or
                 Code.Stobj or Code.Ldftn or Code.Ldvirtftn)
+            {
+                auditCategory = "ORIGINAL_SAVE_FIELD_OR_INDIRECT_ACCESS";
                 return null;
+            }
             if (insn.OpCode.Code != Code.Call &&
                 insn.OpCode.Code != Code.Callvirt &&
                 insn.OpCode.Code != Code.Newobj) continue;
-            if (insn.Operand is not MethodReference called) return null;
+            if (insn.Operand is not MethodReference called)
+            {
+                auditCategory = "UNKNOWN_ORIGINAL_SAVE_CALL_OPERAND";
+                return null;
+            }
             // Reject any original game or Unity runtime action, except the
             // authenticated FileManager path. One known Unity Debug error
             // printer may be present in the original catch only; do not
@@ -145,11 +159,18 @@ internal static class Program
                 owner == "UnityEngine.Debug" &&
                 called.Name.StartsWith("Log", StringComparison.Ordinal);
             if (!fileManager && !safeBcl && !catchOnlyDebug)
+            {
+                auditCategory = insideCatch
+                    ? "UNKNOWN_ORIGINAL_SAVE_CATCH_CALLEE"
+                    : "UNKNOWN_ORIGINAL_SAVE_SUCCESS_CALLEE";
                 return null;
+            }
             if (fileManager && !insideCatch) create = true;
             if (formatter && !insideCatch) serialize = true;
             safeCallCount++;
         }
+        auditCategory = create && serialize ? "NONE" :
+            "ORIGINAL_SAVE_EXPECTED_CREATE_OR_SERIALIZE_MISSING";
         return create && serialize ? candidate : null;
     }
 
@@ -270,17 +291,19 @@ internal static class Program
             bool removedTemp = false;
             string saveCategory = "ORIGINAL_ROOT_TYPE_UNAVAILABLE";
             int safeSaveCalls = 0;
+            string saveAuditCategory = "NOT_AUDITED";
             string? workDirectory = null;
             if (originalRootType is not null)
             {
                 try
                 {
                     var audited = AuditOriginalPrivateSave(
-                        assemblyPath, originalRootType, out safeSaveCalls);
+                        assemblyPath, originalRootType, out safeSaveCalls,
+                        out saveAuditCategory);
                     saveIlGuard = audited is not null;
                     if (!saveIlGuard)
                     {
-                        saveCategory = "ORIGINAL_PRIVATE_SAVE_METHOD_IL_NOT_AUTHENTICATED";
+                        saveCategory = saveAuditCategory;
                     }
                     else
                     {
@@ -374,6 +397,7 @@ internal static class Program
                 ["original_data_or_private_type_names_published"] = false,
                 ["original_private_Save_IL_guard_passed"] = saveIlGuard,
                 ["original_private_Save_safe_calls"] = safeSaveCalls,
+                ["original_private_Save_audit_category"] = saveAuditCategory,
                 ["original_private_Save_invoked"] = savedOriginalObjectByGameMethod,
                 ["original_private_Save_output_created"] = savedFileExisted,
                 ["original_private_Save_output_nonzero"] = savedFileNonzero,
