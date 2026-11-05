@@ -45,7 +45,7 @@ class OriginalLoaderContractTests(unittest.TestCase):
 
     def test_unbalanced_original_body_refused(self):
         with self.assertRaisesRegex(ValueError, "Unbalanced"):
-            self._check(HEADER.rstrip("}\\n"))
+            self._check(HEADER.rsplit(" }", 1)[0])
 
     def test_non_load_named_deserializer_not_lost(self):
         fixture = HEADER.replace("Load<T>", "Read<T>")
