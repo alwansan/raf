@@ -1,0 +1,18 @@
+{
+  "id": "T3-20261105T1436Z-highuse-Sh48-not-Unity-builtin",
+  "type": "result",
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T1402Z-T3-chat-renderer-shader-impact-f63e",
+  "issue_id": "RENDER-002",
+  "summary": "CI42046329453 authentic six-scene original 21 source Shader48 names compared privately against SHA-pinned official Unity2021.3.45f2 builtin archive 198 shader identities. Exactly 3 original Shader names match builtin library covering 256 original Renderer Material slots and independently agree with exact same-instance export builtin pointer transport. Highest original 921-slot source Shader48 has NO exact builtin match, still Dummy after three vendor restorers; prioritization toward authentic original compiled shader subprogram/pass recovery, not white-pixel/device claim.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42046329453",
+    "https://github.com/alwansan/raf/actions/runs/42044249541",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_SCENE_SHADER_USE_AND_POSTVENDOR_PRIORITY_2026-11-05.md"
+  ],
+  "at": "2026-11-05T14:36:00Z",
+  "device_confirmed": false,
+  "original_source_names_disclosed": false,
+  "issue_stays_open": true
+}
