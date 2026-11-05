@@ -1,0 +1,176 @@
+name: T4 LOCAL-005 real CL world RGD original CLR loader (read-only)
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'android-port/Experiments/T4/ClWorldRgdRuntime/**'
+      - '.github/workflows/raft-t4-cl-real-world-rgd-readonly.yml'
+permissions:
+  contents: read
+concurrency:
+  group: raft-t4-real-cl-world-rgd-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  actual-cl-saves-original-clr:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - name: Checkout only public T4 code (never original game data)
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /android-port/Experiments/T4/ClWorldRgdRuntime/*
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Compile bounded original game CLR loader without printing private metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          ulimit -c 0
+          timeout 200s dotnet publish android-port/Experiments/T4/ClWorldRgdRuntime/ClWorldRgdRuntime.csproj \
+            -c Release --self-contained false -o "$RUNNER_TEMP/t4-cl-rgd-probe" \
+            >"$RUNNER_TEMP/t4-cl-rgd-compile.private" 2>&1 || {
+              python3 - <<'PY'
+          import collections,os,re
+          from pathlib import Path
+          data=(Path(os.environ["RUNNER_TEMP"])/"t4-cl-rgd-compile.private").read_text(errors="replace")
+          print("T4_CL_RGD_COMPILE_FAILURE errorCodes",dict(collections.Counter(re.findall(r'error +(CS[0-9]+|NETSDK[0-9]+)',data))))
+          PY
+              exit 1
+            }
+          test -s "$RUNNER_TEMP/t4-cl-rgd-probe/ClWorldRgdRuntime.dll"
+      - name: Read exact original ZIP2 game DLL only
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: original-t4-source
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /Raft/Raft_Data/Managed/Assembly-CSharp.dll
+      - name: Read pinned original managed sibling DLL context
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 02e9fba7fb42b83579595885391be636ee3b56e8
+          path: original-t4-siblings
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /Raft/Raft_Data/Managed/
+      - name: Stage exact original DLLs inside ephemeral runner
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C original-t4-source rev-parse HEAD)" = "15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+          test "$(git -C original-t4-siblings rev-parse HEAD)" = "02e9fba7fb42b83579595885391be636ee3b56e8"
+          test "$(df -Pk . | awk 'NR==2 {print $4}')" -gt 900000
+          mkdir -p "$RUNNER_TEMP/t4-original-managed"
+          for original in original-t4-siblings/Raft/Raft_Data/Managed/*.dll; do
+            if [ "$(basename "$original")" != "Assembly-CSharp.dll" ]; then
+              test ! -L "$original"
+              cp "$original" "$RUNNER_TEMP/t4-original-managed/"
+            fi
+          done
+          test "$(find "$RUNNER_TEMP/t4-original-managed" -maxdepth 1 -name '*.dll' | wc -l)" -eq 151
+          cp original-t4-source/Raft/Raft_Data/Managed/Assembly-CSharp.dll "$RUNNER_TEMP/t4-original-managed/Assembly-CSharp.dll"
+          python3 - <<'PY'
+          import hashlib,os
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"t4-original-managed/Assembly-CSharp.dll"
+          assert p.is_file() and not p.is_symlink() and p.stat().st_size==3211776
+          assert hashlib.sha256(p.read_bytes()).hexdigest()=="0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e"
+          print("T4_CL_RGD_AUTHENTIC_ORIGINAL compiledGameDll=true siblingAssemblies=151")
+          PY
+      - name: Retrieve only three pinned real CL user-world RGD Git blobs privately
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import base64,hashlib,json,os,urllib.request
+          from pathlib import Path
+          # All three Git object SHAs were independently checked as reachable
+          # from alwansan/CL@5394407b5cd0a0ca1848ff0902f8d2133bf6ea29.
+          exact={
+            "small": (11255,"8d250dec17e0ff5688fb760948ced35db7808580"),
+            "large_a": (310140,"64f5cbfb35ab12a986d007cfbbb89d298ca5b46f"),
+            "large_b": (309863,"65b5b93d98c3e17c679e74d1568ef99ff52e1145"),
+          }
+          root=Path(os.environ["RUNNER_TEMP"])/"t4-original-managed"
+          for label,(size,sha) in exact.items():
+              url="https://api.github.com/repos/alwansan/CL/git/blobs/"+sha
+              req=urllib.request.Request(url,headers={"Accept":"application/vnd.github+json","User-Agent":"RaftT4-original-world-RGD-authenticated"})
+              with urllib.request.urlopen(req,timeout=35) as response:
+                  body=json.load(response)
+              if body.get("sha")!=sha or body.get("encoding")!="base64":
+                  raise SystemExit("T4_CL_RGD_REMOTE_BLOB_MISMATCH")
+              raw=base64.b64decode("".join(body["content"].split()),validate=True)
+              if len(raw)!=size or hashlib.sha1(b"blob "+str(size).encode()+b"\0"+raw).hexdigest()!=sha:
+                  raise SystemExit("T4_CL_RGD_CONTENT_INTEGRITY_FAILURE")
+              (root/(label+".rgd")).write_bytes(raw)
+          print("T4_CL_RGD_INPUTS authenticated_count=3 user_content_published=false")
+          PY
+      - name: Execute genuine original BinaryFormatter and original SaveAndLoad.LoadT on CL world RGD
+        shell: bash
+        run: |
+          set -euo pipefail
+          ulimit -c 0
+          export DOTNET_DbgEnableMiniDump=0 COMPlus_DbgEnableMiniDump=0 DOTNET_EnableCrashReport=0
+          for item in small large_a large_b; do
+            timeout 35s dotnet "$RUNNER_TEMP/t4-cl-rgd-probe/ClWorldRgdRuntime.dll" \
+              --assembly "$RUNNER_TEMP/t4-original-managed/Assembly-CSharp.dll" \
+              --seed "$RUNNER_TEMP/t4-original-managed/$item.rgd" \
+              --output "$RUNNER_TEMP/t4-$item-result.json" --original-loadt \
+              >"$RUNNER_TEMP/t4-$item-private-output.log" 2>&1 || {
+                echo "T4_CL_RGD_RUNTIME_PROCESS_ERROR category=INCONCLUSIVE raw_game_error_logged=false"
+                exit 1
+              }
+          done
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])
+          for label in ["small","large_a","large_b"]:
+              report=json.loads((root/("t4-"+label+"-result.json")).read_text())
+              assert report["source"]=="IMMUTABLE_SHA_VERIFIED_PUBLIC_CL_WORLD_RGD"
+              assert report["original_dll_sha_verified"] is True
+              assert report["cl_world_git_blob_verified"] is True
+              assert report["original_CLR_assembly_loaded"] is True
+              assert report["actual_formatter_deserialize_attempted"] is True
+              assert report["managed_reference_siblings"]==151
+              assert report["user_generated_game_world_loaded"] is False
+              assert report["android_unity_il2cpp_or_phone_executed"] is False
+              assert report["real_game_rgd_write_or_roundtrip"] is False
+              assert report["original_data_or_private_type_names_published"] is False
+              print("T4_CL_RGD_REAL_LOADER",json.dumps({
+                  "source_class":label,
+                  "formatter_created":report["actual_formatter_deserialize_object_created"],
+                  "type_in_original_dll":report["deserialized_root_defined_in_original_dll"],
+                  "original_LoadT_invoked":report["original_SaveAndLoad_LoadT_invoked"],
+                  "original_LoadT_matching":report["user_generated_rgd_original_CLR_loadT_result"],
+                  "original_LoadT_category":report.get("original_LoadT_result_category","UNAVAILABLE"),
+                  "formatter_category":report["bounded_runtime_category"],
+                  "android_playable_world_verified":False,
+              },sort_keys=True))
+          PY
+          printf 'not original RGD' > "$RUNNER_TEMP/t4-original-managed/small.corrupt.rgd"
+          if timeout 8s dotnet "$RUNNER_TEMP/t4-cl-rgd-probe/ClWorldRgdRuntime.dll" \
+            --assembly "$RUNNER_TEMP/t4-original-managed/Assembly-CSharp.dll" \
+            --seed "$RUNNER_TEMP/t4-original-managed/small.corrupt.rgd" \
+            --output "$RUNNER_TEMP/t4-invalid-result.json" --original-loadt \
+            >"$RUNNER_TEMP/t4-invalid-private-output.log" 2>&1; then
+            echo "T4_CL_RGD_BAD_SOURCE_ACCEPTED"; exit 1
+          fi
+          test ! -e "$RUNNER_TEMP/t4-invalid-result.json"
+          echo "T4_CL_RGD_NEGATIVE original_blob_mismatch_rejected=true"
+      - name: State strict device boundary
+        if: always()
+        run: echo 'source=real user world RGD; device=false; playable_world=false; no raw original game/code/log/artifact uploaded'
