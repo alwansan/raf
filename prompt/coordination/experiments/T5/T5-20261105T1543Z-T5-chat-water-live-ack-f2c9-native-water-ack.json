@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261105T1543Z-T5-chat-water-live-ack-f2c9",
+  "issue_id": "INTEGRATION-001",
+  "hypothesis": "The latest unchanged original water source failure can be safely acknowledged only with the exact live five unmet conditions, correcting the stale request list without marking water authentic or modifying the strict guard.",
+  "source_commit": "e9c358eda01785b65e4eb14f18723da426635628",
+  "input_hashes": [
+    "native run42052375742 head_sha b0c4b4c05011d915cd845259f06b5f80ee368092",
+    "safe aggregate five-shader contract from job127331915972",
+    "current guard script Git blob 29a527f79e2bfdfcf052800adb77f4f40bd58afe"
+  ],
+  "tool_versions": {
+    "runner": "ubuntu-24.04",
+    "python": "Python3 standard library",
+    "workflow": "raft-unity-editor-android-import.yml existing unchanged"
+  },
+  "commands": [
+    "python3 -m unittest -v tests.test_t5_live_water_ack",
+    "Update only .github/raft-native-build-request.json after source-only CI and exact comparison"
+  ],
+  "negative_controls": [
+    "Previous five-condition request with Blur+without Depth must be rejected by original guard",
+    "Corrected five conditions must be accepted as experimental with strict_water_gate=not_passed and authentic_water_kernel_identity_verified=false",
+    "Additional unmet Volumetric or newly restored Depth must cause stale corrected request to fail closed",
+    "Duplicate or missing Depth condition must fail closed",
+    "No original shader content/IDs/ILSPY/FFT bytecode or private assets included in fixture"
+  ],
+  "workflow_path": ".github/workflows/raft-t5-live-water-ack.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42058357801",
+  "artifact_urls": [],
+  "budget": "Isolated CPU-only 5-minute test workflow, original full-native workflow unchanged; exactly one subsequent native request under existing native-engine mutex",
+  "status": "source_gate_verified_native_waiting_ci",
+  "observed_result": {
+    "failed_native_run": 42052375742,
+    "first_failing_job": 127331915972,
+    "first_failing_step": "Authentic water gate (strict) or exact documented trial limitation",
+    "exception": "ValueError: Documented water limitations do not exactly match the live unmet conditions",
+    "corrected_delta": {
+      "removed": "shader_pass_contract:UltimateWater/Utilities/Blur (Subsurface Scattering)",
+      "added": "shader_pass_contract:UltimateWater/Depth/Depth Copy"
+    },
+    "verified_current_unmet_conditions": [
+      "authentic_water_kernel_identity",
+      "shader_pass_contract:UltimateWater/Depth/Depth Copy",
+      "shader_pass_contract:UltimateWater/Foam/Global",
+      "shader_pass_contract:UltimateWater/Spectrum/Water Spectrum",
+      "water_compute_source_candidate"
+    ],
+    "test_run": 42058357801,
+    "test_job": 127352834175,
+    "source_only_tests": 12,
+    "source_only_failed": 0,
+    "test_conclusion": "success",
+    "next_native_request_commit": "e9c358eda01785b65e4eb14f18723da426635628",
+    "next_native_run": 42058825739,
+    "native_request_gate": "success",
+    "native_license_gate": "success",
+    "native_reconstruct": "in_progress as last observed",
+    "signed_apk": false,
+    "obb": false,
+    "xapk": false,
+    "device": false
+  },
+  "rejected_hypotheses": [
+    "A failed water contract proves Unity Editor compilation failure: false; native run stopped before Editor import.",
+    "Blur structural pass-count still fails: false according to authentic failed-job report; source structural success does not imply original ShaderLab/GPU program.",
+    "Edited trial acknowledgement marks water authentic: false; guard retains strict_water_gate=not_passed."
+  ],
+  "limitations": [
+    "The safe aggregate fixture replays immutable CI42052375742, not a full original asset graph at newer source.",
+    "Next native run may still fail if another live source condition changes; fail-closed mismatch must remain and be diagnosed from its own report.",
+    "No new signed installable APK or Android device validation as of this checkpoint; local world, water FFT, material authenticity still OPEN.",
+    "Other T workers' native/T1 resources must be observed and not canceled."
+  ],
+  "integration_commit": "e9c358eda01785b65e4eb14f18723da426635628",
+  "next_step": "Read native run42058825739 immutable commit; wait without additional dispatch, isolate first failing gate if red or verify signed APK/OBB/XAPK+Release before device test if green."
+}
