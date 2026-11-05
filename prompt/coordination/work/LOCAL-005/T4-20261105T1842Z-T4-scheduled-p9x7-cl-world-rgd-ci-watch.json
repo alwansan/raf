@@ -1,0 +1,21 @@
+{
+  "session_id": "20261105T1842Z-T4-scheduled-p9x7",
+  "origin": "scheduled",
+  "issue_id": "LOCAL-005",
+  "status": "waiting_ci",
+  "baseline_sha": "08052de7ae2d4d5c5dba7a62809cc6748ce11dda",
+  "taken_over_from": [
+    "20261105T1838Z-T4-chat-cl-rgd-real-9p4s",
+    "20261105T181919Z-T4-chat-overflow-ci-9dzc8"
+  ],
+  "intended_files": [
+    "prompt/coordination/work/LOCAL-005/T4-20261105T1842Z-T4-scheduled-p9x7-cl-world-rgd-ci-watch.json",
+    "prompt/coordination/clients/T4/sessions/20261105T1842Z-T4-scheduled-p9x7.md"
+  ],
+  "hypothesis": "The authentic CL user-generated RGD CLR loader test already running distinguishes original managed compatibility from device integration; avoid duplicate dispatch.",
+  "experiment_key": "T4-authentic-CL-world-RGD-original-compiled-LoadT-08052de7",
+  "resource_key": "original-DLL-zip2-15964ea8-readonly-CPU",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42086641322",
+  "updated_at": "2026-11-05T18:42:00Z",
+  "next_step": "Consume completed run and inspect exact assertion; preserve source vs Android distinction. T5 reuse delivery artifact before expiry 2026-11-06T18:19:05Z."
+}
