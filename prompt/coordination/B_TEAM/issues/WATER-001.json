@@ -119,7 +119,12 @@
     "https://github.com/alwansan/raf/actions/runs/42019735778",
     "https://github.com/alwansan/raf/actions/runs/42021183522",
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_ORIGINAL_MATERIAL_SETTEXTURE_ARGUMENT_PROOF_2026-11-05.md",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T2-foam-original-material-settexture-name-arguments.json"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T2-foam-original-material-settexture-name-arguments.json",
+    "https://github.com/alwansan/raf/actions/runs/42026683133",
+    "https://github.com/alwansan/raf/actions/runs/42028108346",
+    "https://github.com/alwansan/raf/actions/runs/42028369439",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_ORIGINAL_RENDERTEXTURE_ARRAY_PROVENANCE_2026-11-05.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T2-foam-original-null-guarded-rendertexture-producer.json"
   ],
   "remaining": [
     "Spectrum/Foam/Blur passes ناقصة في APK86",
@@ -170,7 +175,8 @@
     "T2 source-authentic Foam compiler-stage resource identity VERIFIED: two different explicit native DXBC tN/sN→SPIR-V descriptor maps preserve every variable ID and all SPIR-V program words except numeric Binding/DescriptorSet literals; B20 original module matches default normalized graph. Real native DXBC 21 SAMPLE uses and translated SPIR-V 21 OpImageSample uses reconstruct exact six stage-scoped active original t/s pairs, final CI42013590671 PASS (16+17 synthetic tests). **NEXT OPEN:** authored Unity Material texture property/pointer/upload, original sampler state & UV, CB member/upload, authentic ShaderLab import, GPU/Adreno and device visuals. WATER-001 OPEN, NOT_READY0/3.",
     "T1 confirmed genuine Unity2021.3.45f2 imported 20/20 SHA-authenticated original compiled FFT DXBC-derived single-kernel private candidates in CI42014120625, with generated-main HasKernel/FindKernel/group XYZ(64..1024,1,1) matching source and 1/1 original-derived NUnit pass. Remaining: original authored multi-variant shader/Unity runtime kernel indices/keyword selection, exact in-game SetTexture/CB/RenderTexture/Dispatch, ShaderLab linkage and Adreno/water pixels; no native game assets changed.",
     "T1 bounded actual Unity2021 GPU proof CI42019283679: 20 original compiled FFT derived kernels remain imported; exact source-derived pair0/1 actually bound translated t0/t1/u2 names, executed BOTH GPU Dispatch passes with chained float RenderTexture, baseline initialized and GPU readback finite with changed output in both, private Unity NUnit2/2 SUCCESS. NOT source author's original C# runtime kernel IDs/keywords/material names, original FFT numeric pixel parity or Android/Adreno water. Native DXBC original output u0 becomes converter-generated HLSL u2; do not reuse native register as Unity property binding.",
-    "T2 original Foam authored texture/material/managed binding: ZIP2 source Shader has one authored Texture property used twice, four pass0 Texture resources not authored; 351 same-owner Material objects show 0 direct local Foam m_Shader PPtr, NOT game-wide. Authenticated original Assembly-CSharp.dll via Mono.Cecil: 4/4 non-authored resource names passed as actual direct System.String first formal argument to UnityEngine.Material.SetTexture, source original CI42021183522 PASS; no Shader.PropertyToID for those four. Original Material instance, second Texture operand origin, runtime reachability, sampler filter/wrap/UV, CB uploads, ShaderLab import and Adreno pixels remain UNKNOWN. WATER-001 OPEN, NOT_READY0/3."
+    "T2 original Foam authored texture/material/managed binding: ZIP2 source Shader has one authored Texture property used twice, four pass0 Texture resources not authored; 351 same-owner Material objects show 0 direct local Foam m_Shader PPtr, NOT game-wide. Authenticated original Assembly-CSharp.dll via Mono.Cecil: 4/4 non-authored resource names passed as actual direct System.String first formal argument to UnityEngine.Material.SetTexture, source original CI42021183522 PASS; no Shader.PropertyToID for those four. Original Material instance, second Texture operand origin, runtime reachability, sampler filter/wrap/UV, CB uploads, ShaderLab import and Adreno pixels remain UNKNOWN. WATER-001 OPEN, NOT_READY0/3.",
+    "T2 SHA-authentic original Foam SOURCE SETTEXTURE→RENDERTEXTURE ARRAY VERIFIED: four non-authored Foam DXBC t/s resource names are exact direct string first arguments to Material.SetTexture; each second Texture formal is callvirt result from ONE original defined instance UnityEngine.Texture Method(int index) with genuine IL body; exact 10-instruction method null-checks 1D UnityEngine.RenderTexture[] instance field (same field twice) and returns null if absent or array[index] when available (strict branch target and two returns). Genuine CI42028369439 SUCCESS; not proof of runtime field initialization/texture contents, four int indices, Material receiver Foam association, ShaderLab Unity import, sampler/CB/UV, Adreno pixels. WATER-001 OPEN and NOT_READY0/3."
   ],
   "acceptance": [
     "هوية برامج ونوى أصلية أو تطابق موثق دونdummy",
@@ -178,5 +184,5 @@
     "اختبار هاتف يثبت الماء بلا pass/kernel errors"
   ],
   "updated_by": "T2",
-  "updated_at": "2026-11-05T11:49Z"
+  "updated_at": "2026-11-05T12:36Z"
 }
