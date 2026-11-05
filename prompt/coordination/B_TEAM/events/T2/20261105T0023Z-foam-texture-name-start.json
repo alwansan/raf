@@ -1,0 +1,13 @@
+{
+  "id": "T2-20261105T0023Z-original-foam-texture-identity-start",
+  "owner": "T2",
+  "session_id": "20261105T0023Z-T2-foam-texture-identity",
+  "issue_id": "WATER-001",
+  "type": "start",
+  "summary": "Resumed from paused T2 Foam source ABI checkpoint. Registered work and integrated private-safe original texture name-index to translated image literal identity test plus adversarial tests. SHA-pinned CI41941354379 running; no material/ShaderLab/phone proof claimed.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/5dd02e7931aedfbb92c5cbcf3cc10ac1a6f9fd7c",
+    "https://github.com/alwansan/raf/actions/runs/41941354379"
+  ],
+  "at": "2026-11-05T00:27:16.372Z"
+}
