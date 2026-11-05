@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261105T1648Z-T2-chat-rt-return-definition-f7d2",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "f191f352f251bdcea3460f3f142bb5f5aa07764c",
+  "updated_at": "2026-11-05T16:48:00Z",
+  "resumed_from_sessions": [
+    "20261105T1611Z-T2-chat-foam-length-source-9ab4",
+    "20261105T1623Z-T2-scheduled-caller-origin-6f2d"
+  ],
+  "taken_over_from": [
+    "B20 original 4-stage Foam packet",
+    "T2 verified original exact ref RenderTexture[] callsite and element call return"
+  ],
+  "experiment_key": "T2|ZIP2-15964ea8|managed-DLL-0a6f0527|exact-Foam-stelem-rendertexture-callee-return-body-v1",
+  "resource_key": "T2-Foam-RenderTexture-array-element-exact-returning-callee-provenance",
+  "hypothesis": "Actual SHA-original stelem.ref immediate value is call returning UnityEngine.RenderTexture. Its exact MethodReference may resolve to same original managed DLL or external UnityEngine API; source-only return IL may contain direct newobj, null or unknown. Declared return type never proves runtime valid object.",
+  "method": "Capture exact source-proven call MethodReference directly preceding stelem.ref; signature match against original scanned managed definitions; classify internal/external/UnityEngine and bounded return predecessor value categories (newobj RenderTexture/ldnull/call/local/field/unknown), no branch-join assumptions; source-free synthetic internal/Unity external/wrong signature/call-null fixtures; original SHA-pinned GitHub CI numeric-safe report only.",
+  "intended_files": [
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/FoamByrefElementValueOrigin.cs",
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/FoamRenderTextureReturnBody.cs",
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/Program.cs",
+    ".github/workflows/raft-t2-foam-managed-literals.yml",
+    "prompt/coordination/work/WATER-001/T2-20261105T1648Z-T2-chat-rt-return-definition-f7d2-return-method.json",
+    "prompt/coordination/clients/T2/sessions/20261105T1648Z-T2-chat-rt-return-definition-f7d2.md"
+  ],
+  "preflight": {
+    "head": "f191f352f251bdcea3460f3f142bb5f5aa07764c",
+    "active_other_workflows": [
+      "42066983894 T1 Vulkan FFT",
+      "42058825739 T5 native build"
+    ],
+    "last_same_source_verified": "42065864809 SUCCESS",
+    "last_T2_chat_snapshot": "20261105T1611Z-T2-chat-foam-length-source-9ab4",
+    "other_T2_pending": false
+  },
+  "next_step": "Implement strict original return-call callee resolution and source-only adversarial controls; run authenticated managed CI and save checked result. Preserve all original proprietary source privacy. WATER-001 OPEN, NOT_READY0/3."
+}
