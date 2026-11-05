@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T0028Z-T3-externaltex-7af2",
+  "issue_id": "RENDER-002",
+  "track": "colors-materials/original-streamed-texture-identity",
+  "approach": "Run bounded authentic SHA-locked ZIP2 AssetRipper actual exporter with three original .resS streaming-payload files staged next to 11 previously authenticated serialized owners; compare selected 106 Texture2D GUID->.meta presence, 114 Material-bound texture link identities and actual B15 source sampler fields. Preserve source/outputs private, publish only counts. This is new delta against prior 13 PNG/0 target GUID export missing those 3 files.",
+  "status": "active",
+  "base_sha": null,
+  "intended_files": [
+    ".github/workflows/raft-t3-streamed-original-texture-export.yml",
+    "scripts/t3_original_texture_stream_dependencies.py",
+    "scripts/t3_exported_texture_inventory.py",
+    "prompt/coordination/clients/T3/sessions/20261105T0028Z-T3-externaltex-7af2.md"
+  ],
+  "hypothesis": "The previously omitted original external image stream bytes (106/106 linked Texture2D requiring .resS) are the gating reason actual AssetRipper produces no matching .meta for selected texture GUIDs. Adding exact original streams should produce linked TextureImporter GUID metadata, allowing real B15 sampler check; reject hypothesis if unchanged.",
+  "related_work": [
+    "https://github.com/alwansan/raf/actions/runs/41945116133",
+    "https://github.com/alwansan/raf/actions/runs/41945642710",
+    "https://github.com/alwansan/raf/actions/runs/41944064897"
+  ],
+  "taken_over_from": [
+    "scripts/w1_stage_zip2_owners.py",
+    "scripts/b15_texture_sampler_parity.py",
+    "scripts/t3_texture_importer_presence.py"
+  ],
+  "experiment_ids": [
+    "T3-authentic-resS-three-owner-reexport-20261105"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Check runner disk budget, stage 3 SHA-verified .resS providers (~2.26GB) from immutable ZIP2 into exact original data root, invoke previously proven AssetRipper source, measure same export GUID closure and B15 flags; use read-only aggregate and do not claim APK visual fix.",
+  "updated_at": "2026-11-05T01:04:00Z"
+}
