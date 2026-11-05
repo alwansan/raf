@@ -43,6 +43,9 @@ FIELDS=(
     "selected_exact_material_texenv_pointer_matches",
     "selected_uv_scale_offset_matches",
     "selected_uv_missing_or_mismatched",
+    "selected_missing_texture_skipped_nonexportable_collection",
+    "selected_missing_texture_absent_all_export_collections",
+    "selected_missing_texture_reason_unclassified",
 )
 PRIVACY_FALSE="private_original_export_shader_material_texture_labels_guids_disclosed"
 
@@ -116,6 +119,31 @@ def assess(source_materials:dict,source_texture_targets:dict,
     counts["traced_selected_texture2d28"]=len(selected_textures)
     counts["selected_material21_missing_export_trace"]=EXPECTED_MATERIALS-len(selected_materials)
     counts["selected_texture2d28_missing_export_trace"]=EXPECTED_TEXTURES-len(selected_textures)
+    missing=set(source_texture_targets)-set(selected_textures)
+    if "nonexportable_texture_sources" in b02:
+        candidates=b02["nonexportable_texture_sources"]
+        if type(candidates) is not list:
+            raise ValueError("malformed_private_B02_nonexportable_collection_trace")
+        skipped=set()
+        for candidate in candidates:
+            # PRIVATE: use only source identity, never expose source IDs/owner.
+            src=b05._trace_source(candidate)
+            if src in source_texture_targets:
+                skipped.add(src)
+        if skipped & set(selected_textures):
+            raise ValueError("selected_B02_texture_both_exportable_and_nonexportable")
+        counts["selected_missing_texture_skipped_nonexportable_collection"]=len(
+            missing & skipped)
+        counts["selected_missing_texture_absent_all_export_collections"]=len(
+            missing-skipped)
+    else:
+        counts["selected_missing_texture_reason_unclassified"]=len(missing)
+    if (sum(counts[k] for k in (
+        "selected_missing_texture_skipped_nonexportable_collection",
+        "selected_missing_texture_absent_all_export_collections",
+        "selected_missing_texture_reason_unclassified"))
+            !=counts["selected_texture2d28_missing_export_trace"]):
+        raise ValueError("B02_original_texture_missing_causal_category_drift")
     if counts["selected_material21_export_guid_collisions"] or counts["selected_texture2d28_export_guid_collisions"]:
         # No original→export source identity collision can constitute a match.
         raise ValueError("original_particle_export_pointer_alias_collision")
