@@ -22,7 +22,7 @@ def audit(source: bytes, expected_sha256: str) -> dict:
     except UnicodeDecodeError as exc:
         raise ValueError("Original caller must be UTF-8") from exc
     # Mask strings and comments: names inside diagnostics are not calls.
-    masked = re.sub(r'@"(?:[^"]|"")*"|"(?:\\.|[^"\\])*"|//[^\n]*|/\*[\s\S]*?\*/',
+    masked = re.sub(r'''(?:\$@|@\$|@)"(?:[^"]|"")*"|\$?"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|//[^\n]*|/\*[\s\S]*?\*/''',
                     lambda m: " " * len(m.group()), text)
     counts = {name: len(re.findall(r"\b" + name + r"\s*\(", masked)) for name in CALLS}
     # Even all call families present cannot establish dataflow, kernel identity or runtime behavior.
