@@ -1,0 +1,14 @@
+{
+  "id": "T3-20261105T1642Z-authentic921-vf-component",
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T1642Z-T3-chat-original-vf-component-bridge-d42e",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "Original ZIP2 SHA-pinned six scenes, four owners and 921 Renderer-use Shader48 four matched Vertex/Fragment Pass samples CI42068915602 SUCCESS. Original SPIR-V and derived HLSL roundtrip: 4/4 typed Location+Component structural candidates each; both 75 vertex-output,44 fragment-input,31 extra vertex components and 0 missing/type-mismatched, with no unsupported types. This rejects sampled structural lane deficit only, not authentic DXBC semantics, interpolation, ShaderLab or Android pixels; 34 source-free controls pass. No game resources altered.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42068915602",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_921_VF_COMPONENT_COVERAGE_2026-11-05.md"
+  ],
+  "at": "2026-11-05T16:56:00Z"
+}
