@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "issue_id": "RENDER-002",
+  "status": "source_authentic_cpu_diagnostic_proven_not_render_integrated",
+  "resource_key": "T3-source-top921-Shader48-fourPass-stageIO-lookup",
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "source_shader_reference_weight": 921,
+  "source_stage_passes": 4,
+  "stage_pairs_compared": 8,
+  "input_type_multiset_preserved_stage_count": 8,
+  "output_type_multiset_preserved_stage_count": 8,
+  "input_location_remap_candidate_stages": 8,
+  "output_location_remap_candidate_stages": 4,
+  "source_to_derived_semantic_equality": "NOT_PROVEN",
+  "shaderlab_unity_android_compiled": false,
+  "Adreno_pixels_verified": false,
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42058881426",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_921_STAGE_IO_DRIFT_CLASSIFICATION_2026-11-05.md"
+  ],
+  "next_step": "Verify actual source DXBC signature semantics/component mapping to SPIRV builtin and generated HLSL attributes, with private artifacts, before ShaderLab installation.",
+  "updated_at": "2026-11-05T15:53:10.756Z"
+}
