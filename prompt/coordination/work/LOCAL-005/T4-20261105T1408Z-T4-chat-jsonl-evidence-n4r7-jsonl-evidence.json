@@ -4,7 +4,7 @@
   "generation": "T-2026-11-05",
   "session_id": "20261105T1408Z-T4-chat-jsonl-evidence-n4r7",
   "origin": "chat",
-  "status": "active",
+  "status": "completed",
   "issue_id": "LOCAL-005",
   "base_sha": "87c0e1b9b889a67b245891819d44d4d9c0b18898",
   "track": "world-save-log-correlation",
@@ -29,8 +29,23 @@
     "docs/T4_ANDROID_LOAD_ARGUMENT_SNAPSHOT_2026-11-05.md",
     "docs/B07_LOCAL_WORLD_CALLBACK_CHAIN_2026-11-04.md"
   ],
-  "run_urls": [],
-  "result": null,
-  "updated_at": "2026-11-05T14:08:57.818Z",
-  "next_step": "Publish safe JSONL session-order semantic classifier, synthetic negative controls and targeted no-LFS CI; use CLI only on approved device exports, T4 original seed CLR experiment remains independently active."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42043385806",
+    "https://github.com/alwansan/raf/actions/runs/42042997915"
+  ],
+  "result": {
+    "source_commit": "305e8952e4fc91afd0b3f2aef8a83df649d65db4",
+    "chronology_fix_commit": "b383b6e86720369069e7cb61026105b78d6d668d",
+    "regression_commit": "fa3d5555d964d217351d43c4e1673642eb6bdb39",
+    "test_run": "42043385806",
+    "test_result": "SUCCESS 13/13 synthetic controls",
+    "logger_schema_source": "android-port/Runtime/Platform/PersistentDiagnosticLog.cs",
+    "privacy_raw_details_emitted": false,
+    "real_device_logs_processed": false,
+    "real_game_rgd_processed": false,
+    "native_build_executed": false,
+    "device_acceptance": false
+  },
+  "updated_at": "2026-11-05T14:17:21.342Z",
+  "next_step": "T5 next signed Android candidate log export (JSONL startup + rotating segments): run verifier on owner-controlled logs, correlate source/package SHA and owner-verified playable new world + save, complete stop and reopen. Never infer valid RGD from nonzero snapshot; original CLR RGD deserialization is separate active T4 experiment. LOCAL-005 OPEN NOT_READY 0/3."
 }
