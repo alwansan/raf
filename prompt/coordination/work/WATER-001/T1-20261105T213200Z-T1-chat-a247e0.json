@@ -3,7 +3,7 @@
   "origin": "chat",
   "session_id": "20261105T213200Z-T1-chat-a247e0",
   "issue_id": "WATER-001",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "58c1a809eb3d5ffbc56a936153e8a7259d604666",
   "intended_files": [],
   "experiment_key": "fft-invocation-keyed-structured-dispatch-semantic",
@@ -12,6 +12,6 @@
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42113634484"
   ],
-  "next_step": "Check the source-free compiler control, then the original trace shader compile and output-parity gates before interpreting invocation counters.",
-  "result": "Prior replay https://github.com/alwansan/raf/actions/runs/42111819138 stopped at the keyed Vulkan shader compile before original Unity dispatch. Compiler diagnostics were intentionally redacted, so the exact failure is unconfirmed. A concrete flaw was fixed: the generator could append a second SV_DispatchThreadID when SPIRV-Cross provides it inside the entry input struct. Reuse the structured member, reject unsupported declarations, and require a source-free glslang plus spirv-val control before acquiring original data. 110 local FFT tests passed; compiler control is pending in CI."
+  "next_step": "Run axis-enabled capture on pinned pair 0 when shared Unity lane is available. Use aggregate x/y/mip counts to choose a coordinate hypothesis before investigating the generated address computation.",
+  "result": "Structured trace compile, private Unity dispatch tests, both trace nonperturbation checks and input identity passed. Unity OpenGLCore versus Mesa Vulkan paired all reads (64/256/64), missing/extra zero. Coordinate mismatches 63/64, 252/256, 64/64. Values at different coordinates differed 63, 252, 63 times; shared-coordinate value bits matched for the five same-coordinate reads. Final pixel parity failed. No Android or same-backend result."
 }
