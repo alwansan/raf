@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T1100Z-T3-original-material-shader-edges",
+  "issue_id": "RENDER-002",
+  "track": "colors-materials/original-Shader48-pass-topology",
+  "approach": "After genuine 41/41 Material Shader source/export PPtr and 9/9 ShaderLab metadata proof, inspect original m_ParsedForm.m_SubShaders[].m_Passes topology for exactly the 10 source Shader targets from 4 SHA-pinned ZIP2 owner files, before comparing 9 actual .shader single-pass files. No original shader program bytes/assets published.",
+  "status": "active",
+  "base_sha": null,
+  "intended_files": [
+    "scripts/t3_original_shader_pass_topology.py",
+    "tests/test_t3_original_shader_pass_topology.py",
+    ".github/workflows/raft-t3-original-target-shader-passes.yml"
+  ],
+  "hypothesis": "Original 10 Material-referenced Shader objects have >1 authored Pass/SubShader each despite the nine custom ShaderLab exports containing only 9 syntactically programmed Passes total; a pass topology loss would identify a new real shader restoration blocker.",
+  "related_work": [
+    "https://github.com/alwansan/raf/actions/runs/42018170879",
+    "https://github.com/alwansan/raf/actions/runs/42017451573",
+    "scripts/a15_probe_original_shader_passes.py"
+  ],
+  "taken_over_from": [
+    "scripts/a15_probe_original_shader_passes.py",
+    "scripts/b49_shaderlab_pass_contract.py",
+    "scripts/t3_material_shader_same_export.py"
+  ],
+  "experiment_ids": [
+    "T3-original-target-Shader-pass-topology-20261105"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "SHA-verify four source owners and 10 typed Shader48 original target m_ParsedForm pass counts; only then same-instance real exported 9 ShaderLab topology if needed.",
+  "updated_at": "2026-11-05"
+}
