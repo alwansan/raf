@@ -1,0 +1,73 @@
+{
+  "id": "T2-foam-original-native-dxbc-sample-edges",
+  "title": "SHA-authentic original Foam serialized t/s to native DXBC declarations and executable SAMPLE operands",
+  "kind": "source_authenticated_original_water_shader_D3D11_sample_instruction_bindings",
+  "source": {
+    "provider": "zip2",
+    "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "path": "Raft_Data/sharedassets0.assets",
+    "bytes": 115978112,
+    "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "original_shader_path_id": 2420,
+    "original_shader_raw_sha256": "67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1"
+  },
+  "stages": {
+    "acquisition": "SOURCE_BYTES_SHA256_VERIFIED_ACTUAL_ZIP2_CI41958159556",
+    "extraction": "FOUR_ORIGINAL_DXBC_STAGES_PINNED_AND_SOURCE_TEXTURE_INDICES_6_VERIFIED",
+    "reconstruction": "NATIVE_DXBC_DECLARATION_AND_21_EXECUTABLE_SAMPLE_OPERANDS_VERIFIED_WITH_B17_BLUR_DECODERS",
+    "binding": "ORIGINAL_SOURCE_m_Index_m_SamplerIndex_TO_NATIVE_DXBC_t_s_AND_ACTIVE_SAMPLE_PAIRS_VERIFIED;NATIVE_TO_SPIRV_AND_UNITY_UPLOAD_UNKNOWN",
+    "integration": "T2_WORKFLOW_PARSER_TESTS_CI_SUCCESS_NO_UNITY_SHADERLAB_INSTALL",
+    "device": "NOT_TESTED"
+  },
+  "observed": {
+    "source_native_dxbc_stage_t_parity": 4,
+    "source_native_dxbc_stage_s_parity": 4,
+    "original_executable_sample_calls": 21,
+    "distinct_original_pairs": 6,
+    "pass0_fragment_calls": 17,
+    "pass0_fragment_pairs": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        3,
+        3
+      ],
+      [
+        4,
+        4
+      ]
+    ],
+    "pass1_fragment_calls": 4,
+    "pass1_fragment_pairs": [
+      [
+        0,
+        0
+      ]
+    ],
+    "unhandled_sample_variants_70_74": 0,
+    "translated_spirv_pixel_identity_verified": false
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41957269478",
+    "https://github.com/alwansan/raf/actions/runs/41958159556",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_ORIGINAL_DXBC_TEXTURE_SAMPLER_REGISTERS_2026-11-05.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/t2_foam_original_sample_edges.py"
+  ],
+  "remaining": [
+    "Prove exact native D3D11 tN/sN to translated SPIRV set/binding resource identity, not just coincident source/sample cardinality",
+    "Prove original material shader texture property and sampler state/UV upload",
+    "Create/import genuine Foam two-pass ShaderLab and test on Unity/Adreno and owner device"
+  ],
+  "updated_by": "T2",
+  "updated_at": "2026-11-05T02:57Z"
+}
