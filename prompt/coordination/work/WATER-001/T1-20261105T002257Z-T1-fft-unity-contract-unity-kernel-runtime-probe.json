@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T002257Z-T1-fft-unity-contract",
+  "issue_id": "WATER-001",
+  "track": "FFT authored compute→Unity 2021 runtime kernel selection",
+  "approach": "Build isolated fail-closed Unity batchmode probe that ingests a private SHA-pinned authored .compute and the B48 source selector candidate-row contract; observe named FindKernel/HasKernel and runtime workgroup dimensions without equating serialized program slots with Unity kernel IDs; no main native build or raw source publication.",
+  "status": "active",
+  "base_sha": "1219f24fbd8d1194e0c913403dd171d70cf03a3b",
+  "intended_files": [
+    "scripts/t1_stage_unity_fft_kernel_probe.py",
+    "android-port/Editor/T1FftKernelRuntimeProbe.cs",
+    "tests/test_t1_stage_unity_fft_kernel_probe.py",
+    "prompt/coordination/clients/T1/sessions/20261105T002257Z-T1-fft-unity-contract.md",
+    "prompt/coordination/work/WATER-001/T1-20261105T002257Z-T1-fft-unity-contract-unity-kernel-runtime-probe.json"
+  ],
+  "hypothesis": "A genuine imported authored compute asset with explicit private kernel names and a SHA-bound B48 selector contract can be instrumented in Unity to report runtime kernel IDs and threadgroup dimensions, which compiled-slot census alone cannot prove.",
+  "related_work": [
+    "prompt/coordination/work/WATER-001/T1-20261104T235355Z-T1-9fca-runtime-kernel-provenance.json"
+  ],
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/B48/MEMORY.md",
+    "https://github.com/alwansan/raf/actions/runs/41912422220",
+    "https://github.com/alwansan/raf/actions/runs/41939314440"
+  ],
+  "experiment_ids": [],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement bounded staging and execute local negative/positive synthetic tests; never call it Unity proof until actual private Unity run; coordinate authentic .compute restoration with T2/T5.",
+  "updated_at": "2026-11-05T00:22:57Z"
+}
