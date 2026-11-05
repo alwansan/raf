@@ -86,7 +86,15 @@ internal static class Program
         string rgd)
     {
         var call = FindOriginalCall(method, save);
-        int at = method.Body.Instructions.IndexOf(call);
+        return ClassifyPredecessorAt(method, module, rgd,
+            method.Body.Instructions.IndexOf(call), save.DeclaringType.FullName);
+    }
+
+    // Lexical predecessor only: not a control-flow or SSA proof.
+    private static string ClassifyPredecessorAt(
+        MethodDefinition method, ModuleDefinition module, string rgd,
+        int at, string ownerType)
+    {
         int previous = at - 1;
         while (previous >= 0 && method.Body.Instructions[previous].OpCode.Code == Code.Nop)
             previous--;
@@ -109,7 +117,7 @@ internal static class Program
             var result = called.ReturnType;
             if (i.Operand is GenericInstanceMethod g &&
                 g.Name == "Load" && g.GenericArguments.Count == 1 &&
-                g.DeclaringType.FullName == save.DeclaringType.FullName)
+                g.DeclaringType.FullName == ownerType)
                 result = g.GenericArguments[0];
             return WithRelation("CALL_RETURN", result, module, rgd);
         }
@@ -135,6 +143,89 @@ internal static class Program
         if (opcode == Code.Ldelem_Ref) return "ARRAY_REF_LOAD";
         if (opcode == Code.Ldstr) return "STRING_LITERAL";
         return "OTHER_PRECALL";
+    }
+
+
+    // Interpret only local-slot opcodes; no branch-path or stack inference.
+    private static int LocalSlot(Instruction i, bool store)
+    {
+        if (store)
+            return i.OpCode.Code switch
+            {
+                Code.Stloc_0 => 0, Code.Stloc_1 => 1,
+                Code.Stloc_2 => 2, Code.Stloc_3 => 3,
+                Code.Stloc or Code.Stloc_S when i.Operand is VariableDefinition v =>
+                    v.Index,
+                _ => -1
+            };
+        return i.OpCode.Code switch
+        {
+            Code.Ldloc_0 => 0, Code.Ldloc_1 => 1,
+            Code.Ldloc_2 => 2, Code.Ldloc_3 => 3,
+            Code.Ldloc or Code.Ldloc_S when i.Operand is VariableDefinition v =>
+                v.Index,
+            _ => -1
+        };
+    }
+
+    private static (int Stores, string NearestSource) SaveWorldLocalStores(
+        MethodDefinition world, MethodDefinition save, ModuleDefinition module,
+        string originalRgd)
+    {
+        var il = world.Body.Instructions;
+        int at = il.IndexOf(FindOriginalCall(world, save));
+        int prior = at - 1;
+        while (prior >= 0 && il[prior].OpCode.Code == Code.Nop) prior--;
+        if (prior < 0) return (0, "NOT_A_LOCAL_LOAD");
+        int localSlot = LocalSlot(il[prior], store: false);
+        if (localSlot < 0 || localSlot >= world.Body.Variables.Count)
+            return (0, "NOT_A_LOCAL_LOAD");
+        if (TypeRelation(module, world.Body.Variables[localSlot].VariableType,
+                originalRgd) is not ("EXACT_RGD" or "DERIVED_RGD"))
+            return (0, "NOT_A_LOCAL_LOAD");
+        var stores = Enumerable.Range(0, at)
+            .Where(i => LocalSlot(il[i], store: true) == localSlot).ToArray();
+        if (stores.Length == 0) return (0, "NO_LEXICAL_STORE");
+        return (stores.Length, ClassifyPredecessorAt(world, module, originalRgd,
+            stores[^1], save.DeclaringType.FullName));
+    }
+
+    private static IEnumerable<TypeDefinition> NestedTypes(TypeDefinition type)
+    {
+        yield return type;
+        foreach (var nested in type.NestedTypes)
+            foreach (var found in NestedTypes(nested))
+                yield return found;
+    }
+
+    private static (string OwnerScope, int DirectStores) SaveUserFieldStores(
+        MethodDefinition user, MethodDefinition save, ModuleDefinition module)
+    {
+        var il = user.Body.Instructions;
+        int index = il.IndexOf(FindOriginalCall(user, save)) - 1;
+        while (index >= 0 && il[index].OpCode.Code == Code.Nop) index--;
+        if (index < 0 ||
+            (il[index].OpCode.Code != Code.Ldfld &&
+             il[index].OpCode.Code != Code.Ldsfld) ||
+            il[index].Operand is not FieldReference field)
+            return ("NOT_A_FIELD_LOAD", 0);
+
+        string owner = field.DeclaringType.FullName;
+        var types = module.Types.SelectMany(NestedTypes).ToArray();
+        string ownerScope = owner == save.DeclaringType.FullName ?
+            "SAVEANDLOAD_CLASS" :
+            types.Any(t => t.FullName == owner) ?
+                "OTHER_ORIGINAL_CLASS" : "DECLARER_UNRESOLVED";
+        int stores = types.SelectMany(t => t.Methods)
+            .Where(m => m.HasBody)
+            .SelectMany(m => m.Body.Instructions)
+            .Count(i => (i.OpCode.Code == Code.Stfld ||
+                         i.OpCode.Code == Code.Stsfld) &&
+                i.Operand is FieldReference f &&
+                f.Name == field.Name &&
+                f.DeclaringType.FullName == owner &&
+                f.FieldType.FullName == field.FieldType.FullName);
+        return (ownerScope, stores);
     }
 
     private static int Main(string[] args)
@@ -167,6 +258,10 @@ internal static class Program
             if (!actualRgd.IsClass)
                 throw new InvalidDataException("original_RGD_not_class");
 
+            var worldLocalStores = SaveWorldLocalStores(world, save,
+                assembly.MainModule, rgd);
+            var userFieldStores = SaveUserFieldStores(user, save,
+                assembly.MainModule);
             // No names/opcodes/surrounding IL, private path or source leave this tool.
             var report = new
             {
@@ -180,6 +275,13 @@ internal static class Program
                     assembly.MainModule, rgd),
                 user_precall_type_class = ClassifyPrecall(user, save,
                     assembly.MainModule, rgd),
+                world_local_lexical_store_site_count = worldLocalStores.Stores,
+                world_nearest_lexical_store_precall_class =
+                    worldLocalStores.NearestSource,
+                user_field_declaring_scope = userFieldStores.OwnerScope,
+                user_field_direct_store_site_count = userFieldStores.DirectStores,
+                lexical_local_store_reached_save_at_runtime = false,
+                user_field_initialized_at_runtime = false,
                 original_save_executed = false,
                 original_RGD_created_or_read = false,
                 original_game_source_or_payload_published = false,
