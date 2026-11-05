@@ -34,6 +34,8 @@ jobs:
           # Source class21 Materials have exactly three valid original
           # owner files; the fourth SHA-authenticated owner is Shader48 only.
           python3 -m unittest discover -s tests -p 'test_t3_particle_same_export_bindings.py' -v
+          # A single source Texture2D may feed several Material TexEnv slots;
+          # count original object/slot multiplicities independently.
           python3 -m unittest discover -s tests -p 'test_t3_stage_particle_nonexportable_trace.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_original_particle_shader_state.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_original_particle_material_texenv.py' -v
