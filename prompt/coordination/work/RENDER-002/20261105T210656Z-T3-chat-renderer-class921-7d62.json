@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T210656Z-T3-chat-renderer-class921-7d62",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "track": "genuine original six-scene Renderer class→top-921 Shader48 impact attribution",
+  "status": "active",
+  "base_sha": "2e3cbbc13c5b9523d2655cf325abf92c4fcabc18",
+  "updated_at": "2026-11-05T21:06:56.348Z",
+  "intended_files": [
+    "scripts/t3_original_renderer_shader_impact.py",
+    "tests/test_t3_original_renderer_shader_impact.py",
+    ".github/workflows/raft-t3-original-renderer-shader-impact.yml",
+    "prompt/coordination/work/RENDER-002/20261105T210656Z-T3-chat-renderer-class921-7d62.json",
+    "prompt/coordination/clients/T3/sessions/20261105T210656Z-T3-chat-renderer-class921-7d62.md",
+    "prompt/coordination/experiments/T3/20261105T210656Z-T3-chat-renderer-class921-7d62.json",
+    "prompt/coordination/B_TEAM/events/T3/20261105T210656Z-T3-chat-renderer-class921-7d62.json"
+  ],
+  "hypothesis": "The verified highest-use original 4-Pass Shader48 with 921 six-scene renderer material slots can be class-attributed to MeshRenderer/SkinnedMeshRenderer versus ParticleSystemRenderer/Trail/Line/Sprite to prioritize the white raft/hand vs square smoke/fire, without reverse-engineering private IDs in public logs.",
+  "experiment_key": "T3-original-ZIP2-15964ea8-6scene-4owner-top921-by-UnityRenderer-class-multislot-distinct-renderer-source-only-v1",
+  "resource_key": "t3-ZIP2-6scene-4owner-source-only-22min",
+  "taken_over_from": [
+    "prompt/coordination/clients/T3/sessions/20261105T2102Z-T3-chat-builtin-null-pointer-0d3e.md",
+    "https://github.com/alwansan/raf/actions/runs/42042819113"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Add safe aggregation to existing original source graph (no private IDs), adversarial synthetic tests for slot count vs distinct renderers and effects, then run existing PINNED original 6 scenes/4 owners workflow only once. Record actual class breakdown and boundaries, keep RENDER-002 open."
+}
