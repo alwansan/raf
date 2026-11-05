@@ -2,13 +2,9 @@ name: T3 RENDER-002 authentic 921-use Shader48 D3D11 pass stage variant feasibil
 # The official 2021 builtin-name route is disproven for source 921-use shader
 # by separate CI42046329453; this is a NEW compiled stage/variant question.
 # Pinned original ZIP2 6 scenes + 4 owners only; no real source/bytecode in logs.
+# The authentic D3D11 stage source test completed SUCCESS in CI42047611046.
+# Manual-only to avoid repeating this 6-scene/4-owner SHA-pinned experiment.
 on:
-  push:
-    branches: [feature/android-native-port]
-    paths:
-      - 'scripts/t3_original_top_shader_dxbc_feasibility.py'
-      - 'tests/test_t3_original_top_shader_dxbc_feasibility.py'
-      - '.github/workflows/raft-t3-original-921-dxbc-feasibility.yml'
   workflow_dispatch:
 permissions:
   contents: read
