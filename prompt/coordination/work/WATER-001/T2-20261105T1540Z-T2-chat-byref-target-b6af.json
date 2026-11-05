@@ -4,9 +4,9 @@
   "origin": "chat",
   "session_id": "20261105T1540Z-T2-chat-byref-target-b6af",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "76f309602e3456164360c41b8db6e223c3bbee04",
-  "updated_at": "2026-11-05T15:40:00Z",
+  "updated_at": "2026-11-05T15:46:48.916Z",
   "resumed_from_sessions": [
     "20261105T1509Z-T2-chat-original-byref-sink-a83c",
     "20261105T1520Z-T2-scheduled-e7c1"
@@ -28,5 +28,14 @@
     "unrelated_active": "42057399746 T1 FFT",
     "last_T2_original_CI": "42053062181 success"
   },
-  "next_step": "Implement and run the private source-authentic original managed classifier, verify output and save handoff. WATER-001 OPEN NOT_READY0/3."
+  "next_step": "Read 42058352098. On success inspect T2_FOAM_BYREF_TARGET_SAFE job log. If failure inspect first broken step and fix only T2 code. Original field contents and runtime execution remain unproven.",
+  "source_commit": "8080364261e1590e8c6db1eb025d756c08506980",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42058352098"
+  ],
+  "result": {
+    "code": "Exact typed recipient captured from original bounded byref address stack, original method definition match and per-body direct opcode summaries; source-free matching/decoy controls",
+    "original_CI": "queued",
+    "device": "not tested"
+  }
 }
