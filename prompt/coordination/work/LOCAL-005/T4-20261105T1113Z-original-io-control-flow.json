@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T1113Z-T4-io-control-flow",
+  "issue_id": "LOCAL-005",
+  "track": "world-save",
+  "approach": "Inspect only the two exact SHA-verified original compiled FileManager read/write targets previously resolved by T5. Classify public BCL IO call intent, parameter/return shapes, catch-handler presence and fallback path, without publishing game symbols/IL or claiming device success. Use a standalone Cecil oracle and strict source-free validators; choose any subsequent Android instrumentation only from demonstrated behavior.",
+  "status": "active",
+  "base_sha": "72a16de3f7350a743bd0a0e10c915bedcaeab0f8",
+  "intended_files": [
+    "android-port/Experiments/T4/OriginalFileIoFlow/OriginalFileIoFlow.csproj",
+    "android-port/Experiments/T4/OriginalFileIoFlow/Program.cs",
+    "scripts/t4_validate_original_file_io_flow.py",
+    "tests/test_t4_validate_original_file_io_flow.py",
+    ".github/workflows/raft-t4-original-file-io-flow.yml",
+    "docs/T4_ORIGINAL_FILE_IO_CONTROL_FLOW_2026-11-05.md"
+  ],
+  "hypothesis": "Existing wrapper around SaveAndLoad may report exit without escaped exception while original FileManager internal handler may absorb System.IO faults. Resolve exact genuine System.IO callee/return and handler-flow facts before deciding on Android logging or a persistence fix.",
+  "related_work": [
+    "docs/T5_ORIGINAL_FILEMANAGER_IL_METADATA_2026-11-05.md",
+    "docs/T4_ORIGINAL_FILEMANAGER_IO_2026-11-05.md",
+    "docs/T4_ILSPY_REFERENCE_CONTEXT_2026-11-05.md"
+  ],
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/actions/runs/42012597665",
+    "https://github.com/alwansan/raf/actions/runs/42012049920",
+    "prompt/coordination/clients/B14/MEMORY.md",
+    "prompt/coordination/clients/B19/MEMORY.md",
+    "prompt/coordination/clients/B50/MEMORY.md"
+  ],
+  "experiment_ids": [
+    "20261105T1113Z-compiled-original-io-handler"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Resolve exact compiled original FileManager call edges; produce bounded privacy-safe method shape/exception flow with synthetic adversarial controls; then test in isolated GH Actions at immutable ZIP2 SHA and decide next concrete Android adjustment.",
+  "updated_at": "2026-11-05T11:13:00Z"
+}
