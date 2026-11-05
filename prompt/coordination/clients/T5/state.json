@@ -2,12 +2,12 @@
   "schema_version": 1,
   "username": "T5",
   "generation": "T-2026-11-05",
-  "session_id": "20261105T1025Z-T5-filemanager-metadata-bridge",
-  "resumed_from_session": "20261105T1021Z-T5-sourcefree-gameci",
-  "status": "completed",
-  "base_sha": "37c537cdab55f146cab12fe121ba35b5d6bb119c",
+  "session_id": "20261105T1115Z-T5-filemanager-runtime-sandbox",
+  "resumed_from_session": "20261105T1025Z-T5-filemanager-metadata-bridge",
+  "status": "active",
+  "base_sha": "0da800c16cd641224cca7d50148215f6696b6bbd",
   "last_commit": "7159dba501f4ee2615b92009c2b4622dd8d39f34",
-  "updated_at": "2026-11-05T10:46:00Z",
+  "updated_at": "2026-11-05T11:15:00Z",
   "tracks": [
     "INTEGRATION-001",
     "ASSET-RESTORE-001",
@@ -27,7 +27,8 @@
     "T5-20261105T0647Z-alpha-drift-diagnostic",
     "T5-20261105T0746Z-t3-syntax-boundary",
     "T5-20261105T1021Z-sourcefree-managed-unity",
-    "T5-20261105T1025Z-filemanager-call-resolver"
+    "T5-20261105T1025Z-filemanager-call-resolver",
+    "T5-20261105T1115Z-original-managed-file-io"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41937719270",
@@ -46,6 +47,6 @@
     "https://github.com/alwansan/raf/actions/runs/42012597665",
     "https://github.com/alwansan/raf/actions/runs/42013496499"
   ],
-  "next_step": "T5 original FileManager compiled metadata oracle CI42012597665 PASS, 11/11+authentic read/write methods; team canonical index CI42013496499 PASS with T5 event included. LOCAL-005 OPEN, NOT_READY 0/3. Next compare Android source FileManager argument/path semantics and coordinate playable world/.rgd phone roundtrip with T4, preserving T1/T3 independent runs.",
+  "next_step": "T5 source-authentic original FileManager CLR on isolated Unix scratch: runtime method invocation, bounded calls and durable readback; no Unity, phone or RGD acceptance. Work and experiment registered prior to edits.",
   "memory_path": "prompt/coordination/clients/T5/MEMORY.md"
 }
