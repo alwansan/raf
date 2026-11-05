@@ -34,8 +34,9 @@ internal static class Program
         return method;
     }
 
-    private sealed record Scope(int system_io, int safe_core, int unity_or_steam,
-        int other, int total, bool known_bounded_io_shape);
+    private sealed record Scope(int system_io, int safe_core, int safe_extra_bcl,
+        int local_original_method, int unity_or_steam, int other,
+        int total, bool known_bounded_io_shape);
 
     private static Scope CalleeScope(MethodDefinition method)
     {
@@ -51,13 +52,25 @@ internal static class Program
             (x.DeclaringType.FullName == "System.String" ||
              x.DeclaringType.FullName == "System.Object" ||
              x.DeclaringType.FullName == "System.Exception"));
+        int extra = calls.Count(x => x != null &&
+            x.DeclaringType.FullName.StartsWith("System.", StringComparison.Ordinal) &&
+            !x.DeclaringType.FullName.StartsWith("System.IO.", StringComparison.Ordinal) &&
+            x.DeclaringType.FullName != "System.String" &&
+            x.DeclaringType.FullName != "System.Object" &&
+            x.DeclaringType.FullName != "System.Exception" &&
+            !x.DeclaringType.FullName.StartsWith("System.Net.", StringComparison.Ordinal) &&
+            !x.DeclaringType.FullName.StartsWith("System.Reflection.", StringComparison.Ordinal) &&
+            !x.DeclaringType.FullName.StartsWith("System.Diagnostics.Process", StringComparison.Ordinal) &&
+            x.DeclaringType.FullName != "System.Environment");
+        int local = calls.Count(x => x != null &&
+            x.DeclaringType.FullName == method.DeclaringType.FullName);
         int engine = calls.Count(x => x != null &&
             (x.DeclaringType.FullName.StartsWith("UnityEngine.", StringComparison.Ordinal) ||
              x.DeclaringType.FullName.StartsWith("Steamworks.", StringComparison.Ordinal)));
-        int other = calls.Count - io - safe - engine;
-        return new Scope(io, safe, engine, other, calls.Count,
-            io >= 1 && engine == 0 && other == 0 &&
-            calls.Count <= 4 && method.Body.ExceptionHandlers.Count == 1 &&
+        int other = calls.Count - io - safe - extra - local - engine;
+        return new Scope(io, safe, extra, local, engine, other, calls.Count,
+            io >= 1 && local == 0 && engine == 0 && other == 0 &&
+            calls.Count <= 5 && method.Body.ExceptionHandlers.Count == 1 &&
             method.Body.Instructions.Count <= 20);
     }
 
