@@ -1,0 +1,133 @@
+{
+  "id": "T2-foam-original-active-sample-descriptor-identity",
+  "owner": "T2",
+  "title": "SHA-authentic original Foam DXBC t/s registers through explicit source remaps to actively sampled SPIR-V descriptor IDs",
+  "kind": "source_authentic_native_DXBC_to_compiled_SPIRV_actual_active_sampling_resource_identity",
+  "source": {
+    "provider": "zip2",
+    "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "owner": "Raft_Data/sharedassets0.assets",
+    "bytes": 115978112,
+    "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "original_shader_path_id": 2420,
+    "original_shader_raw_sha256": "67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1",
+    "original_dx_bc_stages": 4
+  },
+  "stages": {
+    "acquisition": "ORIGINAL_SOURCE_ZIP2_SHA_VERIFIED",
+    "extraction": "ORIGINAL_SHADER_FOUR_STAGE_PROGRAM_SHA_PINS_VERIFIED",
+    "reconstruction": "TWO_CONTROLLED_VKD3D_EXPLICIT_NATIVE_T_S_BINDING_MAPS_PROVE_SAME_SPIRV_TYPED_VARIABLE_IDS_FULL_BINARY_GRAPH_EXCEPT_DESCRIPTOR_SET_BINDING_LITERALS",
+    "binding": "ORIGINAL_SERIALIZED_tN_sN_TO_NATIVE_OPCODE69_SAMPLE_TO_ACTUAL_TRANSLATED_SPIRV_SAMPLED_IMAGE_SAMPLER_BINDING_IDENTITY_VERIFIED_FOR_SIX_PAIRS",
+    "integration": "T2_SOURCE_SCOPED_CODE_AND_CI_VERIFIED_NO_AUTHORED_UNITY_MATERIAL_UPLOAD",
+    "device": "NOT_TESTED"
+  },
+  "observed": {
+    "original_fragment_stages": 2,
+    "original_vertex_texture_rows": 0,
+    "native_sample_calls": 21,
+    "translated_sample_calls": 21,
+    "exact_source_to_translated_active_sampled_pairs": 6,
+    "source_register_binding_table": {
+      "pass0_fragment": [
+        {
+          "source_texture_register": 0,
+          "source_sampler_register": 0,
+          "compiled_image_set_binding": [
+            0,
+            6
+          ],
+          "compiled_sampler_set_binding": [
+            0,
+            1
+          ]
+        },
+        {
+          "source_texture_register": 1,
+          "source_sampler_register": 1,
+          "compiled_image_set_binding": [
+            0,
+            7
+          ],
+          "compiled_sampler_set_binding": [
+            0,
+            2
+          ]
+        },
+        {
+          "source_texture_register": 2,
+          "source_sampler_register": 2,
+          "compiled_image_set_binding": [
+            0,
+            8
+          ],
+          "compiled_sampler_set_binding": [
+            0,
+            3
+          ]
+        },
+        {
+          "source_texture_register": 3,
+          "source_sampler_register": 3,
+          "compiled_image_set_binding": [
+            0,
+            9
+          ],
+          "compiled_sampler_set_binding": [
+            0,
+            4
+          ]
+        },
+        {
+          "source_texture_register": 4,
+          "source_sampler_register": 4,
+          "compiled_image_set_binding": [
+            0,
+            10
+          ],
+          "compiled_sampler_set_binding": [
+            0,
+            5
+          ]
+        }
+      ],
+      "pass1_fragment": [
+        {
+          "source_texture_register": 0,
+          "source_sampler_register": 0,
+          "compiled_image_set_binding": [
+            0,
+            2
+          ],
+          "compiled_sampler_set_binding": [
+            0,
+            1
+          ]
+        }
+      ]
+    },
+    "source_to_translated_register_identity_proven": true,
+    "source_to_spirv_actual_sampled_pair_identity_proven": true,
+    "authored_unity_texture_property_material_upload_proven": false,
+    "original_sampler_filter_wrap_uv_proven": false,
+    "shaderlab_import_proven": false,
+    "adreno_pixels_proven": false
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42011706016",
+    "https://github.com/alwansan/raf/actions/runs/42013590671",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_ORIGINAL_DXBC_SPIRV_ACTIVE_BRIDGE_2026-11-05.md"
+  ],
+  "artifact": {
+    "id": 13407977911,
+    "sha256": "93046863e5fa788b234b990a613554eb479851d4a9098131c7bd50efe7def0e1",
+    "safe_numeric_only": true
+  },
+  "remaining": [
+    "Original Unity authored Material texture property/sampler/UV upload and texture pointer identity",
+    "Constant buffer original upload member types/offsets/CB0 alias",
+    "Rebuild authentic two-pass Foam ShaderLab and test Unity import",
+    "GPU/Adreno device visual water compatibility and end-to-end world test"
+  ],
+  "updated_by": "T2",
+  "updated_at": "2026-11-05T10:50Z"
+}
