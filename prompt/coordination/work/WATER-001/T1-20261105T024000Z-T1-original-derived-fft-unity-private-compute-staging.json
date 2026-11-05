@@ -6,7 +6,7 @@
   "issue_id": "WATER-001",
   "track": "Authenticate 20 original FFT DXBC compiled programs and privately stage per-slot reconstructed Unity .compute importer candidates",
   "approach": "Implement SHA-gated private DXBC→vkd3d-SPIR-V→SPIRV-Cross-HLSL50→glslang roundtrip pipeline and stage 20 isolated one-entrypoint .compute candidate assets with hashed manifest. Each is a distinct translated compiled slot, not a reconstructed original authored multi-variant ComputeShader; confirm staging and Unity entrypoint preconditions without modifying actual Raft assets.",
-  "status": "planned",
+  "status": "active",
   "base_sha": "8397f6ce5bb3fecb5d8a3c82e7e9ba2d38ded810",
   "intended_files": [
     "scripts/t1_stage_original_fft_compute_candidates.py",
@@ -33,6 +33,6 @@
   "run_urls": [],
   "result": null,
   "next_step": "Private original source SHA-pinned staging + all 20 converted candidate Unity .compute files with source-free negative tests, then a separate actual Unity 2021 import gate. Do not commit staged shaders or claim Unity runtime mapper recovered.",
-  "updated_at": "2026-11-05T02:40:00Z",
+  "updated_at": "2026-11-05T02:41:00Z",
   "identity_conflict": "An independent T1 caller-audit work record remains active; separate unique session/file scope without shared state overwrite"
 }
