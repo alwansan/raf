@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T213100Z-T3-scheduled-clstage-8b4f",
+  "origin": "scheduled",
+  "issue_id": "RENDER-002",
+  "track": "device-graphics-log-correlation",
+  "status": "active",
+  "base_sha": "df6c913c249c09d4aa7cf58dee6723160e99ddba",
+  "intended_files": [
+    "prompt/coordination/work/RENDER-002/20261105T213100Z-T3-scheduled-clstage-8b4f.json",
+    "prompt/coordination/clients/T3/sessions/20261105T213100Z-T3-scheduled-clstage-8b4f.md"
+  ],
+  "hypothesis": "Distinct 2026-11-05 LogRaft sessions may localize white and square smoke symptoms to render-pass versus particle shader failures without duplicating ongoing original Shader48 state experiment.",
+  "experiment_key": "T3-CL-520c4cf-220911-230108-log-metadata-error-context-v1",
+  "resource_key": null,
+  "related_work": [
+    "20261105T211313Z-T3-chat-particle-shader-rank-4e92"
+  ],
+  "taken_over_from": [],
+  "run_urls": [],
+  "updated_at": "2026-11-05T21:31:00Z",
+  "next_step": "Inspect exact CL log files and classify diagnostic specificity; preserve unknown if logs too large."
+}
