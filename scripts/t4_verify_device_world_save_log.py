@@ -126,7 +126,7 @@ def summarize(paths):
                 # SHA is used *only internally* to disambiguate replayed lines.
                 fp = hashlib.sha256(raw.rstrip(b"\r\n")).digest()
                 group = sessions.setdefault(session, {
-                    "seen": {}, "events": [], "first": stamp,
+                    "seen": {}, "utc_by_sequence": {}, "events": [], "first": stamp,
                     "last": stamp, "duplicate_count": 0,
                 })
                 if seq in group["seen"]:
@@ -135,6 +135,7 @@ def summarize(paths):
                     group["duplicate_count"] += 1
                     continue
                 group["seen"][seq] = fp
+                group["utc_by_sequence"][seq] = stamp
                 group["first"] = min(group["first"], stamp)
                 group["last"] = max(group["last"], stamp)
                 marker = MARKERS.get((area, operation))
@@ -152,6 +153,8 @@ def summarize(paths):
     for index, group in enumerate(ordered, 1):
         ids = sorted(group["seen"])
         sequence_complete = ids[0] == 1 and ids[-1] == len(ids)
+        utc_monotonic = all(group["utc_by_sequence"][a] <= group["utc_by_sequence"][b]
+                            for a, b in zip(ids, ids[1:]))
         entries = sorted(group["events"])
         counts = Counter(event for _, event, _ in entries)
         save_states = Counter(value for _, event, value in entries if event == "save_snapshot")
@@ -166,11 +169,14 @@ def summarize(paths):
             anomalies.append("load_caught_without_observed_load_entry")
         if not sequence_complete:
             anomalies.append("missing_or_rotated_sequence")
+        if not utc_monotonic:
+            anomalies.append("utc_reverses_sequence")
         if any(x in ("contradictory", "unparseable") for x in (*save_states, *load_states)):
             anomalies.append("unparseable_snapshot")
         out.append({
             "session_index": index,
             "sequence_complete": sequence_complete,
+            "utc_monotonic": utc_monotonic,
             "deduplicated_replay_lines": group["duplicate_count"],
             "marker_counts": dict(sorted(counts.items())),
             "save_argument_file_classes": dict(sorted(save_states.items())),
@@ -179,6 +185,8 @@ def summarize(paths):
         })
     valid_pairs = [(i, j) for i in range(len(out)) for j in range(i + 1, len(out))
                    if ordered[i]["last"] < ordered[j]["first"]
+                   and out[i]["sequence_complete"] and out[j]["sequence_complete"]
+                   and out[i]["utc_monotonic"] and out[j]["utc_monotonic"]
                    and out[i]["save_argument_file_classes"].get("nonzero", 0)
                    and out[j]["load_argument_file_classes"].get("nonzero", 0)]
     save_any = bool(valid_pairs)
