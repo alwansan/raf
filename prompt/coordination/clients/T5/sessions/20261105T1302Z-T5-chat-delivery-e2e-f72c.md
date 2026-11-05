@@ -2,7 +2,7 @@
 
 - session_id: `20261105T1302Z-T5-chat-delivery-e2e-f72c`
 - origin: `chat`
-- status: `active`
+- status: `completed`
 - resumed_from_sessions: `20261105T1248Z-T5-chat-linkport-6a19` and scheduled `20261105T1255Z-T5-scheduled-b7c2`
 - base_sha: `8d16132dd39d490a2a45f9a8eea855271abfb818`
 - issue_id: DELIVERY-013, resource_key: android-delivery-python-reassembler
@@ -21,3 +21,19 @@ Plan: write bounded Python synthetic integration test and run in existing isolat
 
 ## Pending
 Record test commits, exact CI run ID/result/assertions; next actionable T5 task should be Unity/native-authentic graphics and world/save integration, not repeated scripted delivery checks without a new hypothesis.
+
+
+## Verified actual integration checkpoint — 2026-11-05 13:20 UTC
+
+**Status: completed (bounded source/packaging integration; game and Android not accepted).** Production package entrypoint exercised in a tiny fixture without building or signing a game APK.
+
+- New code fixture [test commit be0f728114f3a02045eb5e516e6ac2946a680e6a](https://github.com/alwansan/raf/commit/be0f728114f3a02045eb5e516e6ac2946a680e6a) `tests/test_t5_bundled_reassembly_e2e.py`.
+- Source unchanged: `scripts/package_android_delivery.py::main()` actually called with synthetic valid ZIP fixtures and small injected transport limits to force three original-format split logical releases. Packaged `reassemble.py` exact-byte-equal to `scripts/reassemble_android_delivery.py`.
+- Standalone copied `reassemble.py` executed in a NEW Python interpreter via `runpy.run_path(...,run_name="__main__")` with `os.link` deleted from the new process. XAPK/APK/OBB recovered exactly: SHA256 full size match, ZIP CRC valid, embedded APK+OBB member bytes equal original tiny synthetic input.
+- Adversarial controls: existing output sentinel preserved with clear CLI refusal; tampered second XAPK part detected by SHA256 before output publication.
+- Isolated existing T5 workflow updated [commit2d7e2d251cbf0b15f6409afa6a6a2a290dd1eec8](https://github.com/alwansan/raf/commit/2d7e2d251cbf0b15f6409afa6a6a2a290dd1eec8), `.github/workflows/raft-t5-portable-reassembly.yml`. [**Real run42034420876**](https://github.com/alwansan/raf/actions/runs/42034420876) completed **SUCCESS**, job127268724365; log explicitly `Ran 27 tests in 0.638s / OK`. This includes the 3 new actual standalone package->copy->CLI controls plus prior 24/24 T5/A3/delivery tests.
+- Experiment `prompt/coordination/experiments/T5/T5-20261105T1302Z-T5-chat-delivery-e2e-f72c-bundled-cli-e2e.json`; event `prompt/coordination/B_TEAM/events/T5/20261105T1319Z-delivery-bundled-cli-e2e.json`; work `prompt/coordination/work/DELIVERY-013/T5-20261105T1302Z-T5-chat-delivery-e2e-f72c-bundled-reassembler-e2e.json` marked completed.
+- No original Raft assets/managed binaries or Unity/IL2CPP/native app/actual phone tests. This is NOT proof on Termux /storage/emulated/0, hardlink-denied EPERM storage, APK86's older embedded script, XAPK installer, FFT/ShaderLab, WorldHasBeenLoaded, or .rgd persistence. P0s still OPEN and NOT_READY 0/3.
+- No T1–T4 code or running Actions interrupted. GitHub coordination files are source of truth between separate chat/scheduled T5 sessions; T5 shared state/MEMORY remain older index and were left untouched to avoid same-identity overlap.
+
+**Next resumable step:** prioritize a coordinated authentic Unity import/FFT/material post-restorer & offline-world-save candidate based on T1/T3/T4 latest verified observations. Verify HEAD, actual Actions, and resource_key ownership first; avoid repeating already green delivery synthetic controls absent a new question.
