@@ -7,6 +7,8 @@ on:
       - 'android-port/Experiments/T4/OriginalRgdRuntimeLoad/**'
       - 'scripts/t4_validate_original_rgd_runtime_load.py'
       - 'tests/test_t4_validate_original_rgd_runtime_load.py'
+      - 'scripts/t4_validate_original_rgd_loadt.py'
+      - 'tests/test_t4_validate_original_rgd_loadt.py'
       - '.github/workflows/raft-t4-original-rgd-runtime-load.yml'
 permissions:
   contents: read
@@ -28,12 +30,15 @@ jobs:
             /android-port/Experiments/T4/OriginalRgdRuntimeLoad/*
             /scripts/t4_validate_original_rgd_runtime_load.py
             /tests/test_t4_validate_original_rgd_runtime_load.py
+            /scripts/t4_validate_original_rgd_loadt.py
+            /tests/test_t4_validate_original_rgd_loadt.py
       - name: Validate original-seed result contract before original input staging
         shell: bash
         run: |
           set -euo pipefail
           python3 -m py_compile scripts/t4_validate_original_rgd_runtime_load.py tests/test_t4_validate_original_rgd_runtime_load.py
           python3 -m unittest discover -s tests -p test_t4_validate_original_rgd_runtime_load.py -v
+          python3 -m unittest discover -s tests -p test_t4_validate_original_rgd_loadt.py -v
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
@@ -145,6 +150,24 @@ jobs:
           grep '^T4_ORIGINAL_RGD_DESERIALIZE ' "$RUNNER_TEMP/t4-rgd-private-runtime.log"
           python3 -m scripts.t4_validate_original_rgd_runtime_load \
             --report "$RUNNER_TEMP/t4-rgd-source-probe.json"
+          # Invoke exactly original SaveAndLoad.Load<T> with the root CLR type
+          # established by the original 2941-byte seed direct decode above.
+          # Same original SHA constraints apply; never log original symbols.
+          set +e
+          timeout 45s dotnet "$RUNNER_TEMP/t4-rgd-formatter-runner/OriginalRgdRuntimeLoad.dll" \
+            --assembly "$RUNNER_TEMP/t4-rgd-immutable/Assembly-CSharp.dll" \
+            --seed "$RUNNER_TEMP/t4-rgd-immutable/Data.rgd" \
+            --output "$RUNNER_TEMP/t4-original-loadt-report.json" \
+            --original-loadt >"$RUNNER_TEMP/t4-original-loadt-private-runtime.log" 2>&1
+          original_result=$?
+          set -e
+          if test "$original_result" -ne 0; then
+            echo "T4_ORIGINAL_LOADT_RUNNER_FAILURE original_format_proven_separately=true raw_game_data_published=false"
+            exit 1
+          fi
+          grep '^T4_ORIGINAL_RGD_DESERIALIZE ' "$RUNNER_TEMP/t4-original-loadt-private-runtime.log"
+          python3 -m scripts.t4_validate_original_rgd_loadt \
+            --report "$RUNNER_TEMP/t4-original-loadt-report.json"
           # A source mismatch must fail BEFORE the formatter gets untrusted input.
           printf 'wrong-seed' > "$RUNNER_TEMP/t4-rgd-immutable/wrong-seed.rgd"
           if timeout 8s dotnet "$RUNNER_TEMP/t4-rgd-formatter-runner/OriginalRgdRuntimeLoad.dll" \
