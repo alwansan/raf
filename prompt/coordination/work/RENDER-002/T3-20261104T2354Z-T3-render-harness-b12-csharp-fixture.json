@@ -6,7 +6,7 @@
   "issue_id": "RENDER-002",
   "track": "colors-materials",
   "approach": "Restore executable C# synthetic scene diagnostic guard after production compute-resource observation changed source method dependencies; retain all eight bounded tree/renderer/material validations; then investigate real original-vs-export material parity.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "b56ebc3847f251cee2539e9797471417d32698d2",
   "intended_files": [
     "scripts/b12_scene_render_harness.py",
@@ -29,7 +29,12 @@
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41933025319"
   ],
-  "result": null,
-  "next_step": "Patch managed Unity stubs, re-run exact production coroutine compilation/execution and negative controls; avoid real game changes without actual export mismatch.",
-  "updated_at": "2026-11-04T23:54:00Z"
+  "result": {
+    "code_commit": "05718f67ba31a6be8ec169fcfcb609b4f3e05a9e",
+    "test_run": "https://github.com/alwansan/raf/actions/runs/41937719270",
+    "conclusion": "SUCCESS",
+    "scope": "Synthetic exact-production C# coroutine test only; 8 bounded cases, read-only loaded ComputeShader probe; no Unity/Adreno/pixels"
+  },
+  "next_step": "No further B12 harness work unless production diagnostics change; proceed to genuine same-instance original/export comparison.",
+  "updated_at": "2026-11-05T00:02:00Z"
 }
