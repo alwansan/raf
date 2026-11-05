@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "generation": "T-2026-11-05",
+  "origin": "chat",
+  "session_id": "20261105T2150Z-T4-chat-capture-lease-n5k8",
+  "issue_id": "INPUT-005",
+  "track": "Android pointer capture loss and regain",
+  "status": "active",
+  "base_sha": "ebee473a8419a62fb145ade05b120533e9957525",
+  "updated_at": "2026-11-05T21:50:00Z",
+  "resumed_from_sessions": [
+    "20261105T2142Z-T4-scheduled-r6w3",
+    "20261105T2109Z-T4-chat-android-mouse-bridge-p6r2"
+  ],
+  "intended_files": [
+    "prompt/coordination/work/INPUT-005/T4-20261105T2150Z-T4-chat-capture-lease-n5k8-lease-state.json",
+    "prompt/coordination/clients/T4/sessions/20261105T2150Z-T4-chat-capture-lease-n5k8.md",
+    "android-port/Runtime/Platform/PhysicalMouseCaptureLease.cs",
+    "android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs",
+    "android-port/Tests/PhysicalMouse/Program.cs",
+    "android-port/Tests/PhysicalMouse/PhysicalMouse.csproj",
+    "android-port/Tests/PhysicalMouse/UnityBridgeCompile.csproj",
+    ".github/workflows/raft-t4-mouse-capture-bridge.yml",
+    ".github/workflows/raft-unity-editor-android-import.yml",
+    "scripts/verify_android_offline_candidate.py",
+    "tests/test_t4_android_pointer_capture_policy.py",
+    "prompt/coordination/experiments/T4/20261105T2150Z-T4-chat-capture-lease-n5k8.json",
+    "prompt/coordination/B_TEAM/events/T4/20261105T2150Z-T4-chat-capture-lease-n5k8.json"
+  ],
+  "experiment_key": "T4-captured-mouse-lease-Android26-View.hasPointerCapture-original-legacy-axis-originalZIP2-sha0a6f0527-v2",
+  "resource_key": "Android-pointer-capture-ui-thread-API26; original-ZIP2-Unity2021-CSharp-managed-sha0a6f0527",
+  "hypothesis": "After OS revokes capture without Unity focus callback, requested and previously observed motion leave legacy axis hijacked to zero; native status polling and generational lease with loss-reset must restore fallback and allow reacquisition without double injection.",
+  "approach": "Introduce pure C# generational capture-lease gate with frame-atomic movement and executable positive/negative transition controls; use UI-thread hasPointerCapture sampling and captured listener to confirm acceptance/loss and invalidate stale async callbacks. Keep original source patch, touch, save/UGUI, native request permissions unchanged; reuse dedicated source-only CI.",
+  "related_work": [
+    "prompt/coordination/work/INPUT-005/T4-20261105T2109Z-T4-chat-android-mouse-bridge-p6r2-pointer-capture.json",
+    "prompt/coordination/work/INPUT-005/T4-20261105T2142Z-T4-scheduled-r6w3-native-capture-loss.json"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/T4/sessions/20261105T2142Z-T4-scheduled-r6w3.md",
+    "prompt/coordination/clients/T4/sessions/20261105T2109Z-T4-chat-android-mouse-bridge-p6r2.md"
+  ],
+  "run_urls": [],
+  "experiment_ids": [
+    "20261105T2150Z-T4-chat-capture-lease-n5k8"
+  ],
+  "next_step": "Implement lease, integrate asynchronous probe and run guarded CI against original managed ABI; no Android device claim.",
+  "result": null
+}
