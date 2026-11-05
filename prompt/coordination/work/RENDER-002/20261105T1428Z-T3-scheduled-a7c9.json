@@ -1,0 +1,15 @@
+{
+  "session_id": "20261105T1428Z-T3-scheduled-a7c9",
+  "origin": "scheduled",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "base_sha": "0a0b5d5ebcd3346aaf8182f95fcd6c4925bfe563",
+  "intended_files": [
+    "prompt/coordination/clients/T3/sessions/20261105T1428Z-T3-scheduled-a7c9.md",
+    "prompt/coordination/work/RENDER-002/20261105T1428Z-T3-scheduled-a7c9.json"
+  ],
+  "hypothesis": "Cross-check authentic original Renderer Shader48 coverage and post-vendor Dummy usage without confusing source populations or re-dispatching equivalent heavy experiments",
+  "experiment_key": "T3-20261105-authentic-Shader48-1633-vs-postvendor-Dummy495-evidence-reconciliation",
+  "resource_key": null,
+  "updated_at": "2026-11-05T14:28:00Z"
+}
