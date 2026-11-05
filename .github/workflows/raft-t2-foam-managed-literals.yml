@@ -51,7 +51,7 @@ jobs:
           log=(Path(os.environ['RUNNER_TEMP'])/'t2-foam-cecil-build.log').read_text(errors='replace')
           codes=dict(collections.Counter(re.findall(r'error\s+((?:CS|NU|NETSDK)[0-9]+)',log)))
           # Source-only T2 compiler diagnostics; never emit proprietary ZIP2 source.
-          locs=re.findall(r'(FoamByrefAllocationFlow\\.cs|Program\\.cs)\\((\\d+),(\\d+)\\):\\s+error\\s+(CS\\d+)',log)
+          locs=re.findall(r'(FoamByrefAllocationFlow\.cs|Program\.cs)\((\d+),(\d+)\):\s+error\s+(CS\d+)',log)
           safe=[{'file':name,'line':int(line),'column':int(col),'code':code}
                 for name,line,col,code in locs[:16]]
           print('T2_FOAM_CECIL_BUILD_BLOCKED '+json.dumps({
