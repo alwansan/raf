@@ -56,7 +56,7 @@ internal static class Program
                callee.Parameters[0].ParameterType.FullName == "System.String";
     }
 
-    private static string? SetterClass(Instruction instruction)
+    internal static string? SetterClass(Instruction instruction)
     {
         if (instruction.OpCode.Code is not (Code.Call or Code.Callvirt) ||
             instruction.Operand is not MethodReference callee)
@@ -92,6 +92,14 @@ internal static class Program
         public int NonAuthoredLiteralAdjacentPropertyToId;
         public int AuthoredLiteralAdjacentPropertyToId;
         public int NonAuthoredLiteralWithSetterWithin8Instructions;
+        public readonly HashSet<string> NonAuthoredExactSetterArgumentNames = new(StringComparer.Ordinal);
+        public readonly HashSet<string> AuthoredExactSetterArgumentNames = new(StringComparer.Ordinal);
+        public int NonAuthoredExactSetterLiteralUses;
+        public int AuthoredExactSetterLiteralUses;
+        public int NonAuthoredExactMaterialSetTextureNameArgs;
+        public int NonAuthoredExactMaterialPropertyBlockSetTextureNameArgs;
+        public int NonAuthoredExactNameViaPropertyToId;
+        public int NonAuthoredExactNameViaDirectString;
         public readonly Dictionary<string,int> TotalSetterCalls = new(StringComparer.Ordinal)
         {
             ["shader_global_texture"] = 0,
@@ -176,6 +184,34 @@ internal static class Program
                 result.MethodsWithAuthoredAndSetter++;
             foreach ((int idx, bool non) in literalTargets)
             {
+                // An exact first formal name argument follows the actual IL
+                // evaluation-stack and local tags, not just an eight-opcode
+                // window or same-method setter count. Only bounded flow counts.
+                var exact=FoamSetterFlow.Trace(method,idx);
+                if (exact is not null)
+                {
+                    string? sourceLiteral=body[idx].Operand as string;
+                    if (sourceLiteral is null)
+                        throw new InvalidDataException("Original named source IL literal changed");
+                    if (non)
+                    {
+                        result.NonAuthoredExactSetterLiteralUses++;
+                        result.NonAuthoredExactSetterArgumentNames.Add(Sha(sourceLiteral));
+                        if (exact.Value.SetterKind=="material_texture")
+                            result.NonAuthoredExactMaterialSetTextureNameArgs++;
+                        if (exact.Value.SetterKind=="material_propertyblock_texture")
+                            result.NonAuthoredExactMaterialPropertyBlockSetTextureNameArgs++;
+                        if (exact.Value.FirstArgRole=="property_id")
+                            result.NonAuthoredExactNameViaPropertyToId++;
+                        else if (exact.Value.FirstArgRole=="string")
+                            result.NonAuthoredExactNameViaDirectString++;
+                    }
+                    else
+                    {
+                        result.AuthoredExactSetterLiteralUses++;
+                        result.AuthoredExactSetterArgumentNames.Add(Sha(sourceLiteral));
+                    }
+                }
                 // Adjacent means the exact next IL instruction, not a guess
                 // that the string reached a later SetTexture argument.
                 if (idx + 1 < body.Count && IsPropertyToId(body[idx + 1]))
@@ -223,6 +259,15 @@ internal static class Program
             non_authored_source_literal_directly_adjacent_to_shader_propertytoid = result.NonAuthoredLiteralAdjacentPropertyToId,
             authored_source_literal_directly_adjacent_to_shader_propertytoid = result.AuthoredLiteralAdjacentPropertyToId,
             non_authored_literal_with_texture_setter_within_eight_IL_instructions = result.NonAuthoredLiteralWithSetterWithin8Instructions,
+            distinct_non_authored_source_names_proven_as_exact_typed_settexture_first_argument = result.NonAuthoredExactSetterArgumentNames.Count,
+            distinct_authored_source_names_proven_as_exact_typed_settexture_first_argument = result.AuthoredExactSetterArgumentNames.Count,
+            non_authored_exact_name_arg_literal_occurrences = result.NonAuthoredExactSetterLiteralUses,
+            authored_exact_name_arg_literal_occurrences = result.AuthoredExactSetterLiteralUses,
+            non_authored_exact_settexture_first_args_material = result.NonAuthoredExactMaterialSetTextureNameArgs,
+            non_authored_exact_settexture_first_args_material_property_block = result.NonAuthoredExactMaterialPropertyBlockSetTextureNameArgs,
+            non_authored_exact_name_via_propertytoid = result.NonAuthoredExactNameViaPropertyToId,
+            non_authored_exact_name_via_direct_string = result.NonAuthoredExactNameViaDirectString,
+            original_four_non_authored_names_exact_setter_name_arg_proven = result.NonAuthoredExactSetterArgumentNames.Count==4,
             original_managed_texture_setter_calls_by_kind = result.TotalSetterCalls,
             non_authored_source_literal_and_setter_same_method_by_kind = result.MatchedNonAuthoredSameMethodSetter,
             same_method_cooccurrence_is_argument_dataflow_proof = false,
@@ -263,12 +308,71 @@ internal static class Program
             observed.MatchedAuthored.Count != 0 ||
             observed.MethodsWithNonAuthoredAndSetter != 0)
             throw new InvalidDataException("Synthetic exact IL literal-to-PropertyToID fixture failed");
+        // Synthetic positive direct Material.SetTexture(string, Texture)
+        // and negative same-window coincidence. No game source method names.
+        var materialType = new TypeReference("UnityEngine","Material",m,m.TypeSystem.Object.Scope);
+        var setTexture = new MethodReference("SetTexture",m.TypeSystem.Void,materialType)
+            { HasThis=true };
+        setTexture.Parameters.Add(new ParameterDefinition(m.TypeSystem.String));
+        setTexture.Parameters.Add(new ParameterDefinition(m.TypeSystem.Object));
+        var positive = new MethodDefinition("PositivePublicSetTexture",
+            Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,
+            m.TypeSystem.Void);
+        positive.Parameters.Add(new ParameterDefinition(m.TypeSystem.Object));
+        td.Methods.Add(positive);
+        var lip=positive.Body.GetILProcessor();
+        lip.Append(lip.Create(OpCodes.Ldarg_0));
+        lip.Append(lip.Create(OpCodes.Ldstr,"public-direct-tex-name"));
+        lip.Append(lip.Create(OpCodes.Ldnull));
+        lip.Append(lip.Create(OpCodes.Callvirt,setTexture));
+        lip.Append(lip.Create(OpCodes.Ret));
+        var verified=FoamSetterFlow.Trace(positive,1);
+        if (verified is null || verified.Value.SetterKind!="material_texture" ||
+            verified.Value.FirstArgRole!="string")
+            throw new InvalidDataException("Direct original marker to SetTexture arg fixture failed");
+        var negative = new MethodDefinition("NearbyButWrongPublicSetTexture",
+            Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,
+            m.TypeSystem.Void);
+        negative.Parameters.Add(new ParameterDefinition(m.TypeSystem.Object));
+        td.Methods.Add(negative);
+        var lin=negative.Body.GetILProcessor();
+        lin.Append(lin.Create(OpCodes.Ldarg_0));
+        lin.Append(lin.Create(OpCodes.Ldstr,"public-unrelated-tex-name"));
+        lin.Append(lin.Create(OpCodes.Pop));
+        lin.Append(lin.Create(OpCodes.Ldstr,"other-later-name"));
+        lin.Append(lin.Create(OpCodes.Ldnull));
+        lin.Append(lin.Create(OpCodes.Callvirt,setTexture));
+        lin.Append(lin.Create(OpCodes.Ret));
+        if (FoamSetterFlow.Trace(negative,1) is not null)
+            throw new InvalidDataException("Unrelated proximity must not establish argument flow");
+        var idTexture = new MethodReference("SetTexture",m.TypeSystem.Void,materialType)
+            { HasThis=true };
+        idTexture.Parameters.Add(new ParameterDefinition(m.TypeSystem.Int32));
+        idTexture.Parameters.Add(new ParameterDefinition(m.TypeSystem.Object));
+        var numeric = new MethodDefinition("PropertyIdPublicSetTexture",
+            Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,
+            m.TypeSystem.Void);
+        numeric.Parameters.Add(new ParameterDefinition(m.TypeSystem.Object));
+        td.Methods.Add(numeric);
+        var lid=numeric.Body.GetILProcessor();
+        lid.Append(lid.Create(OpCodes.Ldarg_0));
+        lid.Append(lid.Create(OpCodes.Ldstr,"public-prop-id-name"));
+        lid.Append(lid.Create(OpCodes.Call,propertyToId));
+        lid.Append(lid.Create(OpCodes.Ldnull));
+        lid.Append(lid.Create(OpCodes.Callvirt,idTexture));
+        lid.Append(lid.Create(OpCodes.Ret));
+        var throughId=FoamSetterFlow.Trace(numeric,1);
+        if (throughId is null || throughId.Value.FirstArgRole!="property_id")
+            throw new InvalidDataException("Original marker PropertyToID to SetTexture nameID fixture failed");
         Console.WriteLine("T2_FOAM_CECIL_SELFTEST " +
             JsonSerializer.Serialize(new {
                 status = "synthetic_cecil_source_literal_controls_passed",
                 matched_one_exact_public_literal = true,
                 direct_adjacent_property_to_id_call_observed = true,
                 fake_texture_setter_evidence_rejected = true,
+                direct_original_name_to_settexture_first_arg_positive_fixture=true,
+                same_window_false_positive_rejected=true,
+                propertytoid_name_id_to_settexture_first_arg_fixture=true,
                 private_IL_names_or_source_published = false
             }));
         return 0;
