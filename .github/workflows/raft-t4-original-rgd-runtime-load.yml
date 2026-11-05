@@ -107,7 +107,10 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          ulimit -f 4096
+          # Core dumps are not needed, and can exceed the intentionally
+          # limited output quota even before a safe result is printed.
+          ulimit -c 0
+          ulimit -f 262144
           timeout 90s dotnet "$RUNNER_TEMP/t4-rgd-formatter-runner/OriginalRgdRuntimeLoad.dll" \
             --assembly "$RUNNER_TEMP/t4-rgd-immutable/Assembly-CSharp.dll" \
             --seed "$RUNNER_TEMP/t4-rgd-immutable/Data.rgd" \
