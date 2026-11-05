@@ -60,6 +60,10 @@ jobs:
           # 1,373 map via W1 real export GUID to still-Dummy vendor shader.
           renderer_proof="https://github.com/alwansan/raf/actions/runs/42044249541"
           assert renderer_proof in issue[0]["evidence"]
+          # Original 108-slot ParticleShader48 one-Pass Blend/ColorMask source
+          # is authenticated; this does not prove any Android pixels.
+          original_particle_state_proof="https://github.com/alwansan/raf/actions/runs/42112666211"
+          assert original_particle_state_proof in issue[0]["evidence"]
           # T3 source-only class/particle rankings are real SHA-pinned evidence,
           # not an Android shader restoration/device acceptance.
           for genuine_source_proof in (
