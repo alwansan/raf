@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T1021Z-T5-sourcefree-gameci",
+  "issue_id": "INTEGRATION-001",
+  "track": "Unity 2021.3.45f2 source-free GameCI managed activation executable boundary",
+  "approach": "Run a genuinely minimal zero-Raft Unity 2021 editmode NUnit project through game-ci/unity-test-runner@v4 (managed activation, unlike T1 bare Docker CLI). Reuse UNITY_LICENSE environment and shared native Editor mutex without changing T1 or native workflows. Enforce exact test-case XML evidence and negative controls using an independent T5 result verifier; never upload raw logs/credential/compiler output. If sourcefree passes, notify T1 to replay private 20 FFT .compute candidate import. If red, retain classified environment failure; do not rerun private originals.",
+  "status": "active",
+  "base_sha": "02e9fba7fb42b83579595885391be636ee3b56e8",
+  "intended_files": [
+    ".github/workflows/raft-t5-unity-sourcefree-activation.yml",
+    "android-port/Experiments/T5/SourceFreeUnity/ProjectSettings/ProjectVersion.txt",
+    "android-port/Experiments/T5/SourceFreeUnity/Packages/manifest.json",
+    "android-port/Experiments/T5/SourceFreeUnity/Assets/Editor/T5SourceFreeUnityTests.asmdef",
+    "android-port/Experiments/T5/SourceFreeUnity/Assets/Editor/T5SourceFreeUnityTests.cs",
+    "scripts/t5_validate_unity_editmode_result.py",
+    "tests/test_t5_validate_unity_editmode_result.py",
+    "prompt/coordination/clients/T5/MEMORY.md",
+    "prompt/coordination/clients/T5/state.json"
+  ],
+  "hypothesis": "The existing main game-ci/unity-builder@v4 successfully activated Unity in native41812889049, but T1 direct docker /opt/unity/Editor/Unity failed source-free activation41959712898; game-ci managed test-runner activation could establish a working Unity Editor validation route without game data. Exact junit/nunit test-case pass must be required to prevent green with zero tests.",
+  "related_work": [
+    "https://github.com/alwansan/raf/actions/runs/41812889049",
+    "https://github.com/alwansan/raf/actions/runs/41959712898",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/discussions/WATER-001/20261105T0310Z-T1-unity-license-sourcefree-to-T5.md"
+  ],
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/T5/MEMORY.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/T1/MEMORY.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/B16/MEMORY.md"
+  ],
+  "last_verified_result": "Older Raft native 41812889049 unity-builder SUCCESS; T1 source-free bare Unity container 41959712898 FAIL license category; neither proved current T1 actual 20 .compute imports.",
+  "experiment_ids": [
+    "T5-20261105T1021Z-gameci-empty-unity-editor"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Create source-free self-contained Unity 2021 EditMode project/verified result parser, run synthetic pytest/unittest and isolated GameCI Editor CI; inspect failure categories without secrets and record durable T1 handoff.",
+  "updated_at": "2026-11-05T10:21:00Z"
+}
