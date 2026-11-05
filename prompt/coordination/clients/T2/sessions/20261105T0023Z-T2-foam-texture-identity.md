@@ -12,3 +12,10 @@ Live branch 87d1869a580f2f028db5e81434b63a2e6774eee4; no in_progress or queued A
 Planned work: Use authenticated original Foam pass m_NameIndices and fragment m_TextureParams (six rows) to cross-check exact original texture symbol identity vs reflected translated SPIR-V separate image names while retaining source m_Index/sampler index as numeric observations only. Fail closed on duplicates/missing schema, never equate matching counts or names with sampler state/Unity upload, report safe aggregate only, then run existing SHA-pinned private Foam workflow with adversarial controls.
 Work plan: prompt/coordination/work/WATER-001/T2-20261105T0023Z-T2-foam-texture-identity-texture-identity.json
 No device, compile, ShaderLab, or material-upload success claimed. No heavy Unity run or native request.
+
+## Result checkpoint (2026-11-05T00:30:26.660Z)
+- Integrated scripts/tests/workflow at commit `5dd02e7931aedfbb92c5cbcf3cc10ac1a6f9fd7c`.
+- 52/52 synthetic controls and original SHA-authentic Foam 4-stage run success: https://github.com/alwansan/raf/actions/runs/41941354379
+- Result original 6/6 texture name indices resolvable through authentic pass registry, 0/6 equal translated SPIRV separate-image literal symbols. Prior numeric 6 texture ↔6 image +6 sampler counts remain valid.
+- See https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_TEXTURE_LITERAL_IDENTITY_2026-11-05.md for proof and limitations. No Unity/Adreno/device claim, no source code or original GPU bytes published, game WATER-001 OPEN, readiness 0/3.
+- Work scoped completed; next: exact original numeric sampler/image role and translated HLSL active usage, prove ShaderLab material upload rather than guess aliases. Session paused for following automation cycle.
