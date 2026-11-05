@@ -1,4 +1,7 @@
 name: T3 RENDER-002 original Shader48 vs same-export ShaderLab Pass topology
+# T3 verify whether all nine real same-instance .shader output programs
+# use pinned AssetRipper DummyShaderTextExporter fallback; previous run
+# CI42020419098 authentic per-source 22 Pass deficit confirmed.
 # T3 source-verified retry: CI42019975340 isolated invalid Python
 # utf8-sig codec in actual .shader/.meta reader; fixed to utf-8-sig,
 # with 9-real-file BOM regression. No source/game shaders changed.
