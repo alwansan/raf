@@ -8,16 +8,20 @@
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/DEVICE_FEEDBACK_42058825739_AR.md",
     "https://github.com/alwansan/raf/actions/runs/42058825739",
     "https://github.com/alwansan/CL/tree/520c4cf409aa20a4db54ff80ed87d8807d9cba57/raft%20log",
-    "owner-message-2026-11-04"
+    "owner-message-2026-11-04",
+    "https://github.com/alwansan/raf/commit/02665b11061ccb070bf6e24797d47a2866ef250c",
+    "https://github.com/alwansan/raf/actions/runs/42118499200"
   ],
   "remaining": [
     "معالجة ظهور أشرطة النظام عند حواف اللعبة بالماوس الفعلي واستخدام مؤشر Raft.",
     "اختبار التقاط الحركة النسبية في اللعب وإفلاتها عند القائمة وفقد التركيز.",
-    "الحفاظ على الكيبورد واللمس الحالي. تطوير تخطيط التاتش العام مؤجل."
+    "الحفاظ على الكيبورد واللمس الحالي. تطوير تخطيط التاتش العام مؤجل.",
+    "T4: تحقق هاتف فعلي من View pointer capture فقدانه/استعادته، حركة الكاميرا دون حواف، مؤشر القائمة، أشرطة النظام، ومنافذ اللمس/الكيبورد، مع اختبار حفظ/إعادة فتح العالم على نفس SHA."
   ],
   "acceptance": [
     "دوران الكاميرا بلا توقف عند الحواف، ومؤشر اللعبة في القوائم، والتحرير الآمن عند الخروج أو تبديل التركيز."
   ],
-  "updated_by": "owner-device-feedback",
-  "updated_at": "2026-11-05"
+  "updated_by": "T4",
+  "updated_at": "2026-11-05T22:07:00Z",
+  "source_status": "SOURCE_FIXED_MANAGED_CI_VERIFIED_DEVICE_UNCONFIRMED"
 }
