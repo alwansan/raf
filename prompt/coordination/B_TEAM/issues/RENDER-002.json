@@ -118,7 +118,11 @@
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_921_MATERIAL_SHADER_PROPERTY_CONTRACT_2026-11-05.md",
     "https://github.com/alwansan/raf/actions/runs/42058825739",
     "https://github.com/alwansan/raf/actions/runs/42083469621",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_NATIVE_POSTRESTORER_DUMMY_EVIDENCE_2026-11-05.md"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_NATIVE_POSTRESTORER_DUMMY_EVIDENCE_2026-11-05.md",
+    "https://github.com/alwansan/raf/actions/runs/42109994654",
+    "https://github.com/alwansan/raf/actions/runs/42110973101",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_RENDERER_CLASS_SH48_2026-11-05.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE_SHADER_RANK_2026-11-05.md"
   ],
   "remaining": [
     "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -176,5 +180,5 @@
     "نجاحعلىالهاتف"
   ],
   "updated_by": "T3",
-  "updated_at": "2026-11-05T14:36:00Z"
+  "updated_at": "2026-11-05T21:16:00Z"
 }
