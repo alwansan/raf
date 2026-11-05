@@ -86,7 +86,9 @@
     "https://github.com/alwansan/raf/actions/runs/42068520588",
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_RGD_INIT_CONTEXT_2026-11-05.md",
     "https://github.com/alwansan/raf/actions/runs/42072718216",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_RGD_RETURN_SITES_2026-11-05.md"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_RGD_RETURN_SITES_2026-11-05.md",
+    "https://github.com/alwansan/raf/actions/runs/42076494669",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_RGD_RETURN_LOCAL_STORES_2026-11-05.md"
   ],
   "remaining": [
     "Original Cheat.AllowCheatsForLocalPlayer SteamUser.GetSteamID direct object call now source-guarded in B50 2bb6c2; no native/phone verification. Do not infer all Steam callbacks are removed.",
@@ -119,7 +121,8 @@
     "T4 exact compiled original SaveWorld/SaveUser RGD precall structural relation CI42058900699 SUCCESS 22/22: immediate original SaveWorld pre-call pushes LOCAL_DERIVED_RGD, SaveUser pre-call pushes FIELD_DERIVED_RGD, with authentic original 3211776B SHA-pinned DLL. These are static derived subtype loading facts, not RGD object initialization/dynamic argument identity, actual Save execution, Android device or same-world reopen. Native CI42052375742 failed strict water gate before delivery (T5/T1), not game Save. Keep LOCAL-005 OPEN NOT_READY 0/3; do not use shipped StreamingAssets/Data.rgd as a user world save.",
     "T4 immutable original RGD-derived data initialization evidence CI42062124798 SUCCESS 36/36: genuine SaveWorld local has one lexical stloc with nearest immediate producer CALL_RETURN_DERIVED_RGD; SaveUser has SaveAndLoad-owned FIELD_DERIVED_RGD with three direct stfld sites across original DLL. Static lexical references/types only, no control-flow/SSA, no proof of actual game-world RGD save durability, Android/IL2CPP, same-world relaunch, or constructor/field runtime execution. Keep LOCAL-005 OPEN; NOT_READY 0/3.",
     "T4 authenticated original RGD initialization-classification CI42068520588 SUCCESS 32/32: exact pinned original compiled SaveWorld derived RGD-producing call is a zero-argument instance method declared by SaveAndLoad with original body; SaveUser SaveAndLoad-owned derived RGD field has 1 lexical store inside SaveUser and 2 inside other SaveAndLoad methods (0 constructors and other types), 2 derived-typed immediate predecessors, one unknown, zero literal-null. Source-only metadata, not executed branch, object nonnull/Save/durable RGD or Android phone proof. T5 CI42058825739 in-progress Unity import at latest check. LOCAL-005 OPEN NOT_READY 0/3.",
-    "T4 exact original SaveAndLoad zeroarg world RGD-producing method compiled factory return-site CI42072718216 SUCCESS 50/50: 1 ret lexically preceded by derived-RGD local, 2 derived-RGD local slots, 1 direct derived-RGD constructor, 1 call with derived-RGD return, 34 conditional branches, 10 ldnull loads and 0 throw/rethrow sites. Original read-only metadata only; no path-sensitive return value, object non-null, actual world Save .rgd durability or Android device/reopen proven. T5 native CI42058825739 was still Unity Editor IN_PROGRESS on latest read. LOCAL-005 OPEN NOT_READY 0/3."
+    "T4 exact original SaveAndLoad zeroarg world RGD-producing method compiled factory return-site CI42072718216 SUCCESS 50/50: 1 ret lexically preceded by derived-RGD local, 2 derived-RGD local slots, 1 direct derived-RGD constructor, 1 call with derived-RGD return, 34 conditional branches, 10 ldnull loads and 0 throw/rethrow sites. Original read-only metadata only; no path-sensitive return value, object non-null, actual world Save .rgd durability or Android device/reopen proven. T5 native CI42058825739 was still Unity Editor IN_PROGRESS on latest read. LOCAL-005 OPEN NOT_READY 0/3.",
+    "T4 authentic original SaveAndLoad RGD world factory returned-local assignment CI42076494669 SUCCESS 67/67: exact original SHA-pinned source IL has one lexical stloc to local loaded before unique ret, immediately preceded by derived-RGD newobj; no other direct literal null, call/local/field store to that slot. Constructor adjacency is not branch execution or device-proven non-null. No actual world/user .rgd durability, local-host play, Android exit/reopen proven. LOCAL-005 remains OPEN NOT_READY 0/3."
   ],
   "acceptance": [
     "دخول عالم جديد محلي قابل للعب بلا Steam أو سيرفر خارجي",
@@ -127,5 +130,5 @@
     "لا يكفي إخفاء رسالة الاتصال"
   ],
   "updated_by": "T4",
-  "updated_at": "2026-11-05T17:19:00Z"
+  "updated_at": "2026-11-05T17:42:00Z"
 }
