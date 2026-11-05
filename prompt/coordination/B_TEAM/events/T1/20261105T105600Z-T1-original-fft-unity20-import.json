@@ -1,0 +1,14 @@
+{
+  "id": "20261105T105600Z-T1-original-fft-unity20-import",
+  "owner": "T1",
+  "session_id": "20261105T104500Z-T1-private-gameci-import",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "CI42014120625 SUCCESS: 20/20 immutable ZIP2 SHA-authenticated original Raft compiled FFT DXBC programs privately translated into derived ComputeShader .compute candidates and imported by genuine licensed Unity 2021.3.45f2 via pinned GameCI CLI; each generated main HasKernel/FindKernel/group dimensions matched original per-slot 64–1024x1x1. One private original-derived Unity NUnit test passed plus two synthetic Unity tests; private shader code/logs cleaned; not original authored multi-variant Unity kernel mapping, no in-game Dispatch or Android/Adreno pixels.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42014120625",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_GAMECI_ORIGINAL_FFT_IMPORT_2026-11-05.md",
+    "https://github.com/alwansan/raf/commit/9d729b3adba90fc3e7fe6a3317c302267ec5605a"
+  ],
+  "at": "2026-11-05T10:56:00Z"
+}
