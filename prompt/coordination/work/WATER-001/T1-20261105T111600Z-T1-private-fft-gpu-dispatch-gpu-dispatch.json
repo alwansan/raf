@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T111600Z-T1-private-fft-gpu-dispatch",
+  "issue_id": "WATER-001",
+  "track": "Original FFT translated Unity ComputeShader actual GPU Dispatch and resource role binding",
+  "approach": "From verified 20/20 authentic Unity kernel imports CI42014120625, privately extract exactly three translated HLSL resource declarations by register t0,t1,u0, bind dynamically using names only in an ephemeral Unity EditMode run, execute small selected original-derived FFT kernels with genuine GPU Dispatch and finite output/sentinel checks, never print private names/shader source. Prove GPU execution separately from actual original game resource mapping/pixel fidelity.",
+  "status": "planned",
+  "base_sha": "72a16de3f7350a743bd0a0e10c915bedcaeab0f8",
+  "intended_files": [
+    "scripts/t1_fft_unity_gpu_resource_bridge.py",
+    "tests/test_t1_fft_unity_gpu_resource_bridge.py",
+    "android-port/Experiments/T1/T1PrivateFftGpuDispatchTests.cs",
+    ".github/workflows/raft-t1-private-original-fft-unity-gpu-dispatch.yml",
+    "prompt/coordination/clients/T1/sessions/20261105T111600Z-T1-private-fft-gpu-dispatch.md"
+  ],
+  "hypothesis": "After genuine original-DXBC-derived per-slot .compute imports, the translated HLSL register t0,t1,u0 declarations can be mapped privately to Unity SetTexture property names and a real Editor GPU Dispatch that modifies the intended output. This does not establish original authored kernel index mapping or Adreno fidelity.",
+  "related_work": [
+    "prompt/coordination/work/WATER-001/T1-20261105T104500Z-T1-private-gameci-import-private-original-import.json",
+    "https://github.com/alwansan/raf/actions/runs/42014120625",
+    "scripts/probe_original_fft_resource_bindings.py",
+    "scripts/b18_fft_compiled_rdef_bindings.py"
+  ],
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/actions/runs/42014120625",
+    "https://github.com/alwansan/raf/actions/runs/41939314440",
+    "https://github.com/alwansan/raf/actions/runs/41931883517"
+  ],
+  "experiment_ids": [],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Build a conservative source-free resource declaration parser with negative controls, then real private Unity GPU execution workflow on selected original-derived slots. If true graphics execution unsupported or translated resource symbols differ, preserve negative evidence without false Unity kernel mapping claim.",
+  "updated_at": "2026-11-05T11:16:00Z",
+  "identity_conflict": "Multiple independent T1 sessions exist; do not overwrite current T1 shared state/peer session/other T2-T5 files."
+}
