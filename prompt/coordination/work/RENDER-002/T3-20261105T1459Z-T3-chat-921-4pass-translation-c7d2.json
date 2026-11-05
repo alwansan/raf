@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T1459Z-T3-chat-921-4pass-translation-c7d2",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "base_sha": "ea4789db15fe87c832b5dcc05af715c178f9e771",
+  "experiment_key": "T3-ZIP2-15964ea8-6realScenes-4owners-top921-Shader48-4Pass-33ExactLinkedPairs-DXBCvkd3dSPVspirvValSPIRVCrossHLSLglslang-1pairPerPass-v1",
+  "resource_key": "T3-6scene-4owner-921-stage-translation-CI-cpu",
+  "hypothesis": "At least one exact original D3D11 compiled vertex/fragment permutation pair per one of 4 real Shader48 passes may translate to validated SPIR-V and roundtrip HLSL; original SPIR-V stage interface and resource bindings can be compared structurally without fabricating missing eight unmatched vertex permutations.",
+  "approach": "Bounded four-pass source-pinned exact 921 Renderer slot original source graph, select one authentic exact vertex/fragment match each pass; real vkd3d-compiler, spirv-val, spirv-cross and glslang; summarize only safe aggregate validated stages/passes/reflection interface and resource equivalence; private temporary D3D11/SPV/HLSL files never uploaded.",
+  "intended_files": [
+    "scripts/t3_original_top_shader_fourpass_translation.py",
+    "tests/test_t3_original_top_shader_fourpass_translation.py",
+    ".github/workflows/raft-t3-original-921-fourpass-translation.yml",
+    "prompt/coordination/work/RENDER-002/T3-20261105T1459Z-T3-chat-921-4pass-translation-c7d2.json",
+    "prompt/coordination/clients/T3/sessions/20261105T1459Z-T3-chat-921-4pass-translation-c7d2.md",
+    "prompt/coordination/experiments/T3/20261105T1459Z-T3-chat-921-4pass-translation-c7d2.json",
+    "prompt/coordination/B_TEAM/events/T3/20261105T1459Z-T3-chat-921-4pass-translation-c7d2.json",
+    "docs/T3_ORIGINAL_921_FOURPASS_TRANSLATION_2026-11-05.md"
+  ],
+  "related_work": [
+    "prompt/coordination/work/RENDER-002/T3-20261105T143219Z-T3-chat-original921-builtin-2f7b.json"
+  ],
+  "resumed_from_sessions": [
+    "20261105T143219Z-T3-chat-original921-builtin-2f7b",
+    "20261105T1428Z-T3-scheduled-a7c9",
+    "20261105T1402Z-T3-chat-renderer-shader-impact-f63e"
+  ],
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/actions/runs/42047611046",
+    "scripts/w1_recover_graphics_programs.py",
+    "scripts/w1_recover_depth_passes.py"
+  ],
+  "tests": [],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Build/test exactly one authentic V/F matched original permutation for each of four original passes; record pass translation and source interface reflection only, preserve unmatched 8 source vertex permutations and no game assets.",
+  "updated_at": "2026-11-05T15:07:56.983Z"
+}
