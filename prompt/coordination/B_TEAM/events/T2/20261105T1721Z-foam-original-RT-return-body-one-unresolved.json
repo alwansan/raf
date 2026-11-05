@@ -1,0 +1,14 @@
+{
+  "id": "T2-20261105T1721Z-foam-original-RT-return-body-one-unresolved",
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261105T1712Z-T2-chat-return-identity-minimal-4c8f",
+  "issue_id": "WATER-001",
+  "type": "original_managed_foam_rt_return_target_and_body_evidence",
+  "at": "2026-11-05T17:21:00Z",
+  "summary": "Actual original Foam RenderTexture[] stelem.ref value direct RT-returning call has one matching same-SHA managed signature with compiled body (CI42072739153 SUCCESS). Return-body immediate-source CI42073459459 SUCCESS: one ret, three branch opcodes, no direct ldnull, RenderTexture constructor or RT-typed call immediately before ret; one return producer unresolved. This does not prove a non-null RenderTexture or Android water. Original symbols/IL/private ints withheld; WATER-001 OPEN NOT_READY0/3.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42072739153",
+    "https://github.com/alwansan/raf/actions/runs/42073459459"
+  ]
+}
