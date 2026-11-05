@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "origin": "chat",
+  "session_id": "20261105T1713Z-T4-chat-original-rgd-return-sites-j7q4",
+  "issue_id": "LOCAL-005",
+  "track": "original-derived-RGD-return-control-flow-boundaries",
+  "status": "active",
+  "base_sha": "456f48286a4d62a2a7b43ee35d83940f026e4bf9",
+  "experiment_key": "T4-authentic-zip2-sha0a6f-SaveAndLoad-zeroarg-derived-RGD-factory-return-site-and-direct-constructor-census-v1",
+  "resource_key": null,
+  "hypothesis": "Source-authentic original zeroarg SaveAndLoad method which returns derived-RGD may contain multiple lexical return sites, direct newobj/stloc patterns, unconditional null or branch/throw alternatives; distinguish bounded structural counts from live runtime flow.",
+  "approach": "Extend already SHA/size-authentic read-only original Mono.Cecil inspector within T4-owned code, add finite source-free return predecessor and direct derived-RGD constructor categories, fail closed if original body or method anchor drifts. Expand strict validator and synthetic controls, rerun path-triggered isolated CI; no execution of original Save or Unity/phone; no proprietary IL/type/method names/payload in output.",
+  "intended_files": [
+    "android-port/Experiments/T4/OriginalRgdInitContext/Program.cs",
+    "scripts/t4_validate_original_rgd_init_context.py",
+    "tests/test_t4_validate_original_rgd_init_context.py",
+    "docs/T4_ORIGINAL_RGD_RETURN_SITES_2026-11-05.md",
+    "prompt/coordination/work/LOCAL-005/T4-20261105T1713Z-T4-chat-original-rgd-return-sites-j7q4-original-rgd-return-sites.json",
+    "prompt/coordination/clients/T4/sessions/20261105T1713Z-T4-chat-original-rgd-return-sites-j7q4.md",
+    "prompt/coordination/discussions/LOCAL-005/20261105T1713Z-T4-return-sites-to-T5.md"
+  ],
+  "resumed_from_sessions": [
+    "20261105T1645Z-T4-chat-original-rgd-init-context-q6m2",
+    "20261105T1640Z-T4-scheduled-r8k2"
+  ],
+  "links": [
+    "https://github.com/alwansan/raf/actions/runs/42068520588",
+    "https://github.com/alwansan/raf/actions/runs/42058825739"
+  ],
+  "updated_at": "2026-11-05T17:13:00Z",
+  "next_step": "Implement source-authenticated real compiled zeroarg producer return-site counters; CI negative controls; T4 scheduled JSONL overflow audit isolated, T5 Unity native still in progress."
+}
