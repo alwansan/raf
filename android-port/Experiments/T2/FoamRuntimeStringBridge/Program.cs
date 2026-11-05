@@ -149,6 +149,7 @@ internal static class Program
         public FoamByrefTargetBody.SafeProfile? OriginalByrefTargetBodyProfile;
         public FoamByrefAllocationFlow.SafeProfile? OriginalByrefAllocationFlowProfile;
         public FoamByrefArrayBounds.SafeProfile? OriginalByrefArrayBoundsProfile;
+        public FoamByrefLengthOrigin.SafeProfile? OriginalByrefLengthOriginProfile;
         public readonly Dictionary<string,int> TotalSetterCalls = new(StringComparer.Ordinal)
         {
             ["shader_global_texture"] = 0,
@@ -395,6 +396,10 @@ internal static class Program
                 FoamByrefArrayBounds.Inspect(sourceMethods,exactByrefRecipients[0],
                     result.OriginalByrefAllocationFlowProfile,
                     result.PrivateExactFourI4Values);
+            result.OriginalByrefLengthOriginProfile=
+                FoamByrefLengthOrigin.Inspect(sourceMethods,exactByrefRecipients[0],
+                    result.OriginalByrefAllocationFlowProfile,
+                    result.PrivateExactFourI4Values);
             // Resolve the exact original FieldDefinition without publishing
             // private type, token or field identifiers.
             var sourceTypes=sourceMethods.Count==0
@@ -469,6 +474,7 @@ internal static class Program
             original_exact_RenderTexture_array_byref_target_body_profile = result.OriginalByrefTargetBodyProfile,
             original_exact_RenderTexture_array_byref_target_allocation_flow = result.OriginalByrefAllocationFlowProfile,
             original_exact_RenderTexture_array_byref_compiled_bounds_vs_callers = result.OriginalByrefArrayBoundsProfile,
+            original_exact_RenderTexture_array_byref_length_origin_same_block = result.OriginalByrefLengthOriginProfile,
             original_exact_Texture_int_producer_body_accepted_same_SHA_definition = result.OriginalSingleProducerBodyProfile is not null,
             original_exact_method_definition_is_original_runtime_called_or_output_proof = false,
             producer_declared_signature_is_actual_runtime_texture_object_proof = false,
@@ -1114,6 +1120,79 @@ internal static class Program
         if(unknownBound.FourOriginalIndicesWithinThisCompiledAllocation is not null ||
             unknownBound.NewarrLengthOperandOriginCategory!="length_source_not_direct_i4")
             throw new InvalidDataException("Dynamic original allocation size must remain unproven");
+        // Invented public fixtures: same-block literal via local; argument
+        // via local; and cross-branch local which MUST remain unresolved.
+        var t2LocalSize=new MethodDefinition("SyntheticLocalI4Length",
+            Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,
+            m.TypeSystem.Void);
+        t2LocalSize.Parameters.Add(new ParameterDefinition(
+            new ByReferenceType(new ArrayType(renderTextureType))));
+        t2LocalSize.Body.Variables.Add(new VariableDefinition(m.TypeSystem.Int32));
+        t2LocalSize.Body.InitLocals=true;
+        factoryDef.Methods.Add(t2LocalSize);
+        var ilLs=t2LocalSize.Body.GetILProcessor();
+        ilLs.Append(ilLs.Create(OpCodes.Ldc_I4_4));
+        ilLs.Append(ilLs.Create(OpCodes.Stloc_0));
+        ilLs.Append(ilLs.Create(OpCodes.Ldarg_0));
+        ilLs.Append(ilLs.Create(OpCodes.Ldloc_0));
+        ilLs.Append(ilLs.Create(OpCodes.Newarr,renderTextureType));
+        ilLs.Append(ilLs.Create(OpCodes.Stind_Ref));
+        ilLs.Append(ilLs.Create(OpCodes.Ret));
+        var t2LocalFlow=FoamByrefAllocationFlow.Inspect(new[]{t2LocalSize},t2LocalSize);
+        var t2LocalOrigin=FoamByrefLengthOrigin.Inspect(new[]{t2LocalSize},
+            t2LocalSize,t2LocalFlow,new[]{0,1,2,3});
+        if(t2LocalOrigin.ImmediateLengthProducerCategory!="ldloc" ||
+            t2LocalOrigin.ResolvedLengthSourceCategory!="same_block_local_i4" ||
+            !t2LocalOrigin.CompileTimePositiveArrayLengthProven ||
+            t2LocalOrigin.FourPrivateOriginalIndicesInBoundsForCompiledLength!=true)
+            throw new InvalidDataException("Same-block synthetic literal local failed");
+        var t2ArgSize=new MethodDefinition("SyntheticLocalArgLength",
+            Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,
+            m.TypeSystem.Void);
+        t2ArgSize.Parameters.Add(new ParameterDefinition(
+            new ByReferenceType(new ArrayType(renderTextureType))));
+        t2ArgSize.Parameters.Add(new ParameterDefinition(m.TypeSystem.Int32));
+        t2ArgSize.Body.Variables.Add(new VariableDefinition(m.TypeSystem.Int32));
+        t2ArgSize.Body.InitLocals=true;
+        factoryDef.Methods.Add(t2ArgSize);
+        var ilLa=t2ArgSize.Body.GetILProcessor();
+        ilLa.Append(ilLa.Create(OpCodes.Ldarg_1));
+        ilLa.Append(ilLa.Create(OpCodes.Stloc_0));
+        ilLa.Append(ilLa.Create(OpCodes.Ldarg_0));
+        ilLa.Append(ilLa.Create(OpCodes.Ldloc_0));
+        ilLa.Append(ilLa.Create(OpCodes.Newarr,renderTextureType));
+        ilLa.Append(ilLa.Create(OpCodes.Stind_Ref));
+        ilLa.Append(ilLa.Create(OpCodes.Ret));
+        var t2ArgFlow=FoamByrefAllocationFlow.Inspect(new[]{t2ArgSize},t2ArgSize);
+        var t2ArgOrigin=FoamByrefLengthOrigin.Inspect(new[]{t2ArgSize},
+            t2ArgSize,t2ArgFlow,new[]{0,1,2,3});
+        if(t2ArgOrigin.ResolvedLengthSourceCategory!="same_block_local_from_int32_argument" ||
+            t2ArgOrigin.FourPrivateOriginalIndicesInBoundsForCompiledLength is not null)
+            throw new InvalidDataException("Local from argument cannot prove length");
+        var t2BranchSize=new MethodDefinition("SyntheticCrossBlockLength",
+            Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,
+            m.TypeSystem.Void);
+        t2BranchSize.Parameters.Add(new ParameterDefinition(
+            new ByReferenceType(new ArrayType(renderTextureType))));
+        t2BranchSize.Body.Variables.Add(new VariableDefinition(m.TypeSystem.Int32));
+        t2BranchSize.Body.InitLocals=true;
+        factoryDef.Methods.Add(t2BranchSize);
+        var ilLb=t2BranchSize.Body.GetILProcessor();
+        var t2Target=ilLb.Create(OpCodes.Ldarg_0);
+        ilLb.Append(ilLb.Create(OpCodes.Ldc_I4_4));
+        ilLb.Append(ilLb.Create(OpCodes.Stloc_0));
+        ilLb.Append(ilLb.Create(OpCodes.Br_S,t2Target));
+        ilLb.Append(t2Target);
+        ilLb.Append(ilLb.Create(OpCodes.Ldloc_0));
+        ilLb.Append(ilLb.Create(OpCodes.Newarr,renderTextureType));
+        ilLb.Append(ilLb.Create(OpCodes.Stind_Ref));
+        ilLb.Append(ilLb.Create(OpCodes.Ret));
+        var t2BranchFlow=FoamByrefAllocationFlow.Inspect(new[]{t2BranchSize},t2BranchSize);
+        var t2BranchOrigin=FoamByrefLengthOrigin.Inspect(new[]{t2BranchSize},
+            t2BranchSize,t2BranchFlow,new[]{0,1,2,3});
+        if(t2BranchOrigin.ResolvedLengthSourceCategory!="local_definition_outside_block" ||
+            t2BranchOrigin.FourPrivateOriginalIndicesInBoundsForCompiledLength is not null)
+            throw new InvalidDataException("Cross-block size must remain unknown");
         var syntheticIndirect=new MethodDefinition("SyntheticFieldReferenceStore",
             Mono.Cecil.MethodAttributes.Public,m.TypeSystem.Void);
         factoryDef.Methods.Add(syntheticIndirect);
@@ -1285,6 +1364,7 @@ internal static class Program
                 exact_byref_target_internal_body_and_wrong_signature_controls=true,
                 strict_newarr_to_ref_array_same_block_and_cross_branch_negative_controls=true,
                 private_compiled_allocation_length_inbounds_and_dynamic_negative_controls=true,
+                source_original_length_same_block_local_arg_and_branch_controls=true,
                 four_original_style_Texture_int_argument_origin_controls=true,
                 signed_short_wide_and_duplicate_private_i4_aggregate_controls=true,
                 private_IL_names_or_source_published = false

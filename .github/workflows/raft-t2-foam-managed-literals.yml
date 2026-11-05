@@ -273,6 +273,35 @@ jobs:
           assert z['RuntimeArrayAllocationOrBoundsVerified'] is False
           if z['NewarrLengthOperandOriginCategory']!='direct_ldc_i4_literal':
               assert z['FourOriginalIndicesWithinThisCompiledAllocation'] is None
+          h=r['original_exact_RenderTexture_array_byref_length_origin_same_block']
+          assert h is not None
+          assert h['ExactRecipientDefinitions']==1
+          assert h['ExactOriginalRenderTextureNewarrSites']==1
+          assert h['ImmediateLengthProducerCategory'] in (
+              'ldc_i4','ldloc','ldarg','ldlen','call','field','arithmetic','other',
+              'no_same_block_producer','ambiguous_allocation','unresolved_recipient')
+          assert type(h['ResolvedLengthSourceCategory']) is str
+          assert len(h['ResolvedLengthSourceCategory'])<=160
+          assert all(c in 'abcdefghijklmnopqrstuvwxyz0123456789_'
+              for c in h['ResolvedLengthSourceCategory'])
+          assert type(h['SameBasicBlockLocalDefinitionFound']) is bool
+          assert type(h['CompileTimePositiveArrayLengthProven']) is bool
+          assert h['FourPrivateOriginalIndicesInBoundsForCompiledLength'] in (
+              True,False,None)
+          if not h['CompileTimePositiveArrayLengthProven']:
+              assert h['FourPrivateOriginalIndicesInBoundsForCompiledLength'] is None
+          assert h['BranchJoinsOrRuntimeExecutionVerified'] is False
+          assert h['OriginalNumericValuesOrDigestsExposed'] is False
+          print('T2_FOAM_LENGTH_LOCAL_ORIGIN_SAFE '+json.dumps({
+              'immediate_length_producer':h['ImmediateLengthProducerCategory'],
+              'resolved_length_source':h['ResolvedLengthSourceCategory'],
+              'same_block_local_definition':h['SameBasicBlockLocalDefinitionFound'],
+              'compile_time_positive_size_proven':h['CompileTimePositiveArrayLengthProven'],
+              'four_private_indices_in_range_if_proven':
+                  h['FourPrivateOriginalIndicesInBoundsForCompiledLength'],
+              'branch_joins_or_runtime_verified':False,
+              'original_values_or_digests_exposed':False,
+          },sort_keys=True))
           print('T2_FOAM_COMPILED_PRIVATE_ARRAY_BOUNDS_SAFE '+json.dumps({
               'single_original_newarr_ref_write_proven':
                   z['ProvenNewarrRefArrayStoreSites']==1,
