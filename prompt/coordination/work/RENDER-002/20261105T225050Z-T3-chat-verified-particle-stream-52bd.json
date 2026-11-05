@@ -4,13 +4,13 @@
   "origin": "chat",
   "session_id": "20261105T225050Z-T3-chat-verified-particle-stream-52bd",
   "issue_id": "RENDER-002",
-  "status": "active",
-  "updated_at": "2026-11-05T23:05:12.456Z",
+  "status": "completed",
+  "updated_at": "2026-11-05T23:06:19.375Z",
   "base_sha": "4a4e986fa3df4490f69e02c239a2cbde6d8f877f",
   "track": "SOURCE_PARTICLE_TEXTURE_RESOURCE_BYTES_SHA_VERIFICATION",
   "hypothesis": "For the authentic source three Texture2D28 objects used by the original 108-slot Particle Shader48, one ZIP2 manifest listed external .resS provider contains all three ranges. Byte-authenticate that exact provider from SHA-pinned ZIP2 and read each mapped range (private only), rather than assuming missing source image payload.",
   "experiment_key": "T3-zip2-SHA15964-source-108ParticleShader48-3Texture2D28-one-stream-provider-full-SHA-three-real-ranges-v1",
-  "resource_key": "T3-exact-one-zip2-stream-provider-checkout-2GB-cap-30min",
+  "resource_key": null,
   "taken_over_from": [
     "prompt/coordination/clients/T3/sessions/20261105T221843Z-T3-chat-particle28-stream-7c49.md",
     "prompt/coordination/clients/T3/sessions/20261105T2230Z-T3-scheduled-streamrange-9c62.md"
@@ -30,7 +30,11 @@
     "prompt/coordination/B_TEAM/events/T4/20261105T2241Z-T4-chat-immersive-bars-h8q2.json",
     "prompt/coordination/discussions/INPUT-005/20261105T225050Z-T3-chat-verified-particle-stream-52bd-to-T4-ledger-compat.md"
   ],
-  "result": null,
-  "run_urls": [],
-  "next_step": "Source CI42125608932 full resource SHA success; canonical ledger originally blocked by T4 event missing id/at, minimally repaired on commit d7dcaee5, retry CI42126758778 SUCCESS. Notify T4 via independent discussion, checkpoint session and release task scope."
+  "result": "Real immutable ZIP2 original six scenes/four owners authenticated, unique 108 ParticleRenderer slot shader→five Materials→10 local TexEnv refs→3 class28 Texture2D objects. Exact ONE external .resS provider full size/SHA matched after sparse checkout; three original ranges totaling 983052 bytes read, 3 nonzero and 3 distinct private SHA range fingerprints; no overlap/duplicates. Source CI42125608932 SUCCESS 106/106 controls. Initial CI42125435490 failed two source-free tests, fixed. Canonical ledger CI42126758778 SUCCESS after surgical id/at metadata correction on unrelated T4 event; T4 notified. No Unity original-to-export GUID/OBB/pixels proof.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42125608932",
+    "https://github.com/alwansan/raf/actions/runs/42126758778"
+  ],
+  "next_step": "Coordinate T5 same-instance W1 Shader48/Material21 and B02 Texture2D28 private GUID/material TexEnv mapping to actual Unity project and signed APK/OBB; prove decoded TextureImporter/pixels and runtime emitter use. RENDER-002 remains OPEN. Do not repeat original-only source stream SHA and do not cancel other clients.",
+  "integration_commit": "276aad3df4b76067e9061b267caf3c12c1616cb3"
 }
