@@ -131,7 +131,7 @@ namespace RaftAndroid.Platform
         {
             using (var player = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
             using (var activity = player.GetStatic<AndroidJavaObject>("currentActivity"))
-                activity.Call("runOnUiThread", new AndroidJavaRunnable(work));
+                activity.Call("runOnUiThread", new AndroidJavaRunnable(() => work()));
         }
 
         private void RequestCapture()
