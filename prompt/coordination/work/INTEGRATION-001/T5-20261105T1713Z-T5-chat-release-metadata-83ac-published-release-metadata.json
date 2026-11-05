@@ -1,0 +1,31 @@
+{
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261105T1713Z-T5-chat-release-metadata-83ac",
+  "issue_id": "INTEGRATION-001",
+  "status": "active",
+  "base_sha": "528e21018c912f187ed6e0310804b72db9a66288",
+  "resumed_from_sessions": [
+    "20261105T1647Z-T5-chat-native-milestone-7b4e",
+    "20261105T1646Z-T5-scheduled-c71e"
+  ],
+  "resource_key": "release-public-metadata-readonly+isolated-cpu-ci; native Unity run 42058825739 untouched",
+  "experiment_key": "t5-apk86-published-release-41812889049-1-actual-release-target-run-sha-split-asset-byte-digest-identity-v1",
+  "hypothesis": "The previous signed early-test Release should have a reproducible publisher-side consistency check: native workflow source SHA matches release target and Source body; declared loose APK/OBB/XAPK logical bytes equal published transport parts sizes; each transport asset has expected API SHA256 metadata; missing/duplicate parts, mutated hashes or source mismatch must fail closed. This is metadata-only, not file-byte/signature/device proof.",
+  "intended_files": [
+    "scripts/t5_audit_published_raft_release.py",
+    "tests/fixtures/t5_raft_release_41812889049.json",
+    "tests/test_t5_audit_published_raft_release.py",
+    ".github/workflows/raft-t5-published-release-audit.yml",
+    "prompt/coordination/work/INTEGRATION-001/T5-20261105T1713Z-T5-chat-release-metadata-83ac-published-release-metadata.json",
+    "prompt/coordination/clients/T5/sessions/20261105T1713Z-T5-chat-release-metadata-83ac.md",
+    "prompt/coordination/experiments/T5/T5-20261105T1713Z-T5-chat-release-metadata-83ac-published-release-audit.json",
+    "prompt/coordination/B_TEAM/events/T5/20261105T1718Z-release-metadata-audit.json"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41812889049",
+    "https://github.com/alwansan/raf/actions/runs/42058825739"
+  ],
+  "next_step": "Create safe exact metadata fixture and pure validator; isolated source-only tests + CI while current native compile runs; prove only public metadata consistency with explicit digest/signature/device false flags.",
+  "updated_at": "2026-11-05T17:13:00Z"
+}
