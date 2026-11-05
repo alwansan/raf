@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "session_id": "20261104T2357Z-T5-b12-fixture-7e2",
+  "issue_id": "ASSET-RESTORE-001",
+  "hypothesis": "A selected original graphics asset reconstructed from ZIP2's immutable Git source can replace a feature-branch LFS pointer without Git LFS iff the ZIP2 manifest SHA/size exactly equals the independently pinned feature LFS SHA/size; the same already-tested downstream hydration consumer should accept the verified source without changing Unity's real byte identity.",
+  "source_commit": "396eab4d3cd8acc0d462e96b748e56537a49bd01",
+  "input_hashes": [
+    {
+      "provider": "ZIP2 commit",
+      "sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+    },
+    {
+      "source": "RAFT_FILE_MANIFEST.tsv git blob",
+      "sha": "4201fda426d80caba36c275ceaddb440b05c5b4e"
+    },
+    {
+      "source": "Raft_Data/resources.assets",
+      "size": 111533516,
+      "sha256": "87493249f1adfc0c5eb8b82e4e199e208cd2c95eabe9796cab82116c4838595c"
+    }
+  ],
+  "tool_versions": {
+    "ci_runner": "ubuntu-24.04",
+    "python": "Python 3 on GitHub runner",
+    "unity": "not run"
+  },
+  "commands": [
+    "python3 -m unittest -v tests.test_t5_stage_zip2_render_owners",
+    "python3 -m scripts.t5_stage_zip2_render_owners --zip2-checkout zip2-original --output-root \"$RUNNER_TEMP/t5-original-graphics\" --owner Raft_Data/resources.assets --byte-budget 120000000",
+    "python3 snippet importing scripts.hydrate_render_payloads.plan/reuse_verified_staged_sources and SHA256 rehashing Raft/Raft_Data/resources.assets"
+  ],
+  "negative_controls": [
+    "wrong immutable ZIP2 commit or modified manifest",
+    "corrupted split part of correct byte length",
+    "missing, extra or wrong-size chunk",
+    "feature LFS SHA mismatch and unrequested owner",
+    "symlink/hardlink and overlapping output",
+    "budget overrun, duplicate or empty requests",
+    "existing conflicting output preserved",
+    "staged resource accepted only by exact verified independent feature pointer"
+  ],
+  "workflow_path": ".github/workflows/raft-t5-zip2-render-stage.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41939143108",
+  "artifact_urls": [],
+  "budget": "15 min ubuntu-24.04 per test; sparse ZIP2 original ~112MB, no LFS, no upload, no Unity",
+  "status": "completed",
+  "observed_result": {
+    "first_run": {
+      "id": 41938979840,
+      "conclusion": "failure",
+      "reason": "10 synthetic checks passed, one failed because output dir created before unsafe input rejection; fixed by full-batch source preflight before any staging mkdir"
+    },
+    "final_run": {
+      "id": 41939143108,
+      "conclusion": "success",
+      "job_id": 126955134356,
+      "source_sha": "396eab4d3cd8acc0d462e96b748e56537a49bd01",
+      "synthetic_cases": "11/11",
+      "original_resource_count": 1,
+      "original_bytes_verified": 111533516,
+      "feature_lfs_pointer_reuse": true,
+      "lfs_used": false
+    }
+  },
+  "rejected_hypotheses": [
+    "Successful per-file ZIP2 assembly alone proves shader/kernel/original scene integration or Android pixels: false; source-staging only",
+    "Old B12 CI remains broken: false, T3 fixed separately with CI41937719270"
+  ],
+  "limitations": [
+    "Only resources.assets tested on real ZIP2; 7.79GB overall not recovered or checked in this run",
+    "Opt-in variable RAFT_T5_VERIFIED_ZIP2_RENDER_ROOT must point to staged source root before actual graphics hydrator can consume; current native workflow does not yet stage all owners",
+    "No Unity Editor/IL2CPP/APK/OBB, shader/FFT/kernel, real-game render or Adreno pixel/device test",
+    "No new game build beyond APK86; source SHA after source-only repairs differs from APK86"
+  ],
+  "integration_commit": "1c68ef8ea8a38b9d92c1e1cc204a6b9c913555a4",
+  "next_step": "Coordinate with T1/T3 for next real Unity render export and run broader ZIP2 batch within bounded disk, then check Shader/Material links; do not invoke concurrent full Unity builds or claim device success."
+}
