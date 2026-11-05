@@ -14,7 +14,7 @@
     "extraction": "20_COMPILED_SLOTS_SHA_VERIFIED",
     "reconstruction": "PRIVATE_20_HLSL50_COMPUTE_CANDIDATES_ROUNDTRIP_VERIFIED",
     "binding": "ORIGINAL_RUNTIME_MAPPING_UNKNOWN",
-    "integration": "BLOCKED_UNITY_ACTIVATION_NO_IMPORT_RESULT",
+    "integration": "BLOCKED_UNITY_LICENSE_IN_SOURCE_FREE_FIXTURE",
     "device": "NOT_TESTED"
   },
   "evidence": [
@@ -23,13 +23,15 @@
     "https://github.com/alwansan/raf/actions/runs/41737548860",
     "https://github.com/alwansan/raf/actions/runs/41958245907",
     "https://github.com/alwansan/raf/actions/runs/41958511122",
-    "https://github.com/alwansan/raf/actions/runs/41958963107"
+    "https://github.com/alwansan/raf/actions/runs/41958963107",
+    "https://github.com/alwansan/raf/actions/runs/41959712898"
   ],
   "remaining": [
     "Original authored multi-variant .compute kernel and keyword names not recovered; candidate paths and main are generated import handles",
     "Original runtime FindKernel/Dispatch mapping, phone Adreno pixels, actual water still unknown",
     "No Unity imported ComputeShader result: three Editor CI attempts failed before reporting; last 41958963107 Unity exit1/licensing_failure_category=true, no observed C#/shader error",
-    "Need successful authorized Unity 2021 activation on a synthetic project before repeating private source import"
+    "Need successful authorized Unity 2021 activation on a synthetic project before repeating private source import",
+    "Unity 2021.3.45f2 synthetic source-free project itself failed to activate in CI41959712898, before original asset download: licensing_failure_category=true, no derived ComputeShader imported; resolve separate environment gate first."
   ],
   "updated_by": "T1"
 }
