@@ -1,0 +1,14 @@
+{
+  "id": "20261105T031000Z-T1-source-free-unity-activation-gate",
+  "owner": "T1",
+  "session_id": "20261105T024000Z-T1-original-derived-fft-unity",
+  "issue_id": "WATER-001",
+  "type": "failure",
+  "summary": "Unity 2021.3.45f2 in isolated CI cannot activate even on source-free empty project: CI41959712898 exit nonzero, empty project absent, licensing_failure_category true; zero original asset bytes acquired. 20/20 original compiled FFT private candidate source transformation separately proven CI41957549770; runtime/device still not proven.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41959712898",
+    "https://github.com/alwansan/raf/actions/runs/41957549770",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_FFT_ORIGINAL_DERIVED_UNITY_CANDIDATES_2026-11-05.md"
+  ],
+  "at": "2026-11-05T03:10:00Z"
+}
