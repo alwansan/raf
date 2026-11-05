@@ -6,7 +6,7 @@
   "issue_id": "WATER-001",
   "track": "FFT authored compute→Unity 2021 runtime kernel selection",
   "approach": "Build isolated fail-closed Unity batchmode probe that ingests a private SHA-pinned authored .compute and the B48 source selector candidate-row contract; observe named FindKernel/HasKernel and runtime workgroup dimensions without equating serialized program slots with Unity kernel IDs; no main native build or raw source publication.",
-  "status": "active",
+  "status": "paused",
   "base_sha": "1219f24fbd8d1194e0c913403dd171d70cf03a3b",
   "intended_files": [
     "scripts/t1_stage_unity_fft_kernel_probe.py",
@@ -24,9 +24,29 @@
     "https://github.com/alwansan/raf/actions/runs/41912422220",
     "https://github.com/alwansan/raf/actions/runs/41939314440"
   ],
-  "experiment_ids": [],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement bounded staging and execute local negative/positive synthetic tests; never call it Unity proof until actual private Unity run; coordinate authentic .compute restoration with T2/T5.",
-  "updated_at": "2026-11-05T00:22:57Z"
+  "experiment_ids": [
+    "20261105T0031Z-T1-authored-unity-kernel-stage"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41941690194",
+    "https://github.com/alwansan/raf/actions/runs/41941716641"
+  ],
+  "result": {
+    "scope": "Isolated Unity 2021 Editor runtime FindKernel probe source and SHA-bound staging integrated; actual Unity invocation pending",
+    "script": "scripts/t1_stage_unity_fft_kernel_probe.py",
+    "editor": "android-port/Editor/T1FftKernelRuntimeProbe.cs",
+    "tested_commit": "602e9963ea8f45e71823412d4b5e35016e370f7c",
+    "source_only_synthetic_suite_count": 7,
+    "green_ci_runs": [
+      41941690194,
+      41941716641
+    ],
+    "original_unity_runtime_mapping_proven": false,
+    "authored_original_fft_source_reconstructed": false,
+    "android_device_tested": false,
+    "water_fixed": false,
+    "report": "docs/T1_UNITY_FFT_RUNTIME_PROBE_2026-11-05.md"
+  },
+  "next_step": "Authentically reconstruct private FFT authored compute + source/binding interface, prepare SHA-pinned candidate name/keyword manifest and execute real isolated Unity 2021 graphics Editor probe; only then determine original kernel identity and coordinate T5 Android integration. WATER-001 OPEN.",
+  "updated_at": "2026-11-05T00:31:58.563Z"
 }
