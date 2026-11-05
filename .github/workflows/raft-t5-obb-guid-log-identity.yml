@@ -1,0 +1,98 @@
+name: T5 INTEGRATION-001 real CL Unity OBB patch GUID identity
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths: [.github/workflows/raft-t5-obb-guid-log-identity.yml]
+permissions:
+  contents: read
+concurrency:
+  group: raft-t5-cl-obb-guid-patch-20261105
+  cancel-in-progress: false
+jobs:
+  classify-pinned-cl-guid-warnings:
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && contains(github.event.head_commit.message, '[t5-obb-guid-CL-20261105]'))
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    env:
+      CL_COMMIT: "520c4cf409aa20a4db54ff80ed87d8807d9cba57"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+      - name: Synthetic optional-patch versus main GUID warning controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p 'test_t5_classify_obb_guid_logs.py' -v
+          python3 -m py_compile scripts/t5_classify_obb_guid_logs.py
+      - name: Download only six immutable original CL phone log segments and authenticate git blob SHA
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/t5-cl/220911" "$RUNNER_TEMP/t5-cl/230108"
+          while read -r session file blob_sha; do
+            case "$session" in
+              LogRaft-20261105-220911-559) out="$RUNNER_TEMP/t5-cl/220911/$file" ;;
+              LogRaft-20261105-230108-327) out="$RUNNER_TEMP/t5-cl/230108/$file" ;;
+              *) echo 'Unrecognized pinned session'; exit 1 ;;
+            esac
+            url="https://raw.githubusercontent.com/alwansan/CL/$CL_COMMIT/raft%20log/lf/$session/$file"
+            curl -fsSL --retry 2 --connect-timeout 15 --max-time 120 "$url" -o "$out"
+            actual="$(git hash-object "$out")"
+            if [ "$actual" != "$blob_sha" ]; then
+              echo "::error::Original CL log segment blob mismatch"; exit 1
+            fi
+          done <<'ROWS'
+          LogRaft-20261105-220911-559 raft-20261105-220911-559-00001.log.txt d50b9fde330c425e15d444922c214a5b112bb264
+          LogRaft-20261105-220911-559 raft-20261105-220911-559-00002.log.txt 9a6d3ba358b89ba387217c87e0b410b401fd150e
+          LogRaft-20261105-230108-327 raft-20261105-230108-327-00001.log.txt cb3a3318b604c1cfbc43583e05580a39bcb66c81
+          LogRaft-20261105-230108-327 raft-20261105-230108-327-00002.log.txt 5275f859334fa47bcfc74f0ca5f0530e260102e6
+          LogRaft-20261105-230108-327 raft-20261105-230108-327-00003.log.txt a28d2451af66cfc60a682b3bc22626041eccae2b
+          LogRaft-20261105-230108-327 raft-20261105-230108-327-00004.log.txt 660f9ef6030cd30ae33bbcf5ac7389d85fcd5d4e
+          ROWS
+          echo "T5_CL_LOG_SHA_PROOF six_segments_sha_match=true"
+      - name: Count original Unity GUID warnings and separate optional patch from main OBB
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from contextlib import ExitStack
+          import json,os
+          from pathlib import Path
+          from scripts.t5_classify_obb_guid_logs import classify_streams,PACKAGE
+          root=Path(os.environ["RUNNER_TEMP"])/"t5-cl"
+          meta={"package":PACKAGE,"version_code":"89","files":[
+              {"name":"Raft-Android-Test.apk"},
+              {"name":"main.89."+PACKAGE+".obb"},
+              {"name":"Raft-Android-Test.xapk"}]}
+          # Derived signed delivery names are source-authenticated by T5 real
+          # APK/OBB CI42117471172, not by fresh private game extraction here.
+          def audit(folder):
+              paths=sorted((root/folder).glob("*.log.txt"))
+              if len(paths)!=(2 if folder=="220911" else 4):
+                  raise SystemExit("Original expected CL segment inventory differs")
+              with ExitStack() as stack:
+                  handles=[stack.enter_context(p.open("r",encoding="utf8",errors="replace")) for p in paths]
+                  return classify_streams(handles,delivery=meta)
+          one=audit("220911")
+          two=audit("230108")
+          if not (one["total_guid_warning_lines"]==1 and
+                  one["optional_patch_lookup_not_packaged_count"]==1 and
+                  one["main_obb_guid_warning_count"]==0 and
+                  two["total_guid_warning_lines"]==2 and
+                  two["optional_patch_lookup_not_packaged_count"]==2 and
+                  two["main_obb_guid_warning_count"]==0):
+              raise SystemExit("Unexpected real original CL Unity OBB GUID warning classification")
+          print("T5_ACTUAL_CL_GUID_PROOF "+json.dumps({
+              "pinned_cl_commit":os.environ["CL_COMMIT"],
+              "session_220911":one["warning_categories"],
+              "session_230108":two["warning_categories"],
+              "total_actual_patch_probe_warnings":3,
+              "actual_main_obb_guid_warnings":0,
+              "physical_patch_absence_on_device_proven":False,
+              "actual_main_obb_device_mount_verified":False,
+              "raw_phone_log_artifact_uploaded":False},sort_keys=True))
+          PY
+          echo "T5 original CL 2026-11-05 sessions: all 3 GUID warnings are unshipped optional patch.89 OBB probes; zero main.89 GUID warnings. APK/OBB integrity separate CI42117471172. Device main mount unverified." >> "$GITHUB_STEP_SUMMARY"
