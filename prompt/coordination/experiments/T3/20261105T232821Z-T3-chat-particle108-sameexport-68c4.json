@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T232821Z-T3-chat-particle108-sameexport-68c4",
+  "issue_id": "RENDER-002",
+  "hypothesis": "Exact original five particle Shader48 Materials and 3 class28 Texture2D can be compared to one real pinned AssetRipper same-instance W1+B02 trace and actual Unity Material YAML without guessing GUID; original source byte presence alone not same-export fidelity.",
+  "source_commit": "7a8833bfa46c141618df76204d2cf88101c8df36",
+  "source_hashes": [
+    "ZIP2 SHA 15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "6 scene and 4 Shader/Material owner SHA verified",
+    "2 original global runtime provider SHA verified",
+    "1 source .resS full provider SHA verified, 3 image spans read (private byte values)",
+    "AssetRipper public pinned SHA 036098ab525a3f9f693dc101edeb21faad4d32d8"
+  ],
+  "tool_versions": {
+    "UnityPy": "1.23.0",
+    "PyYAML": "6.0.3",
+    "dotnet": "9.0",
+    "AssetRipperCLI": "036098ab525a3f9f693dc101edeb21faad4d32d8"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t3_particle_same_export_bindings.py -v",
+    "dotnet publish android-port/Experiments/ExportLineage/ExportLineage.csproj -c Release -p:PublishAot=false -p:PublishTrimmed=false --self-contained false",
+    "python3 -m scripts.t3_original_particle_texture_targets --original $RUNNER_TEMP/t3-particle-original --manifest zip2-original/RAFT_FILE_MANIFEST.tsv --out $RUNNER_TEMP/t3-source-safe.json --private-plan $RUNNER_TEMP/t3-private-source-stream-plan.json",
+    "python3 -m scripts.t3_original_particle_stream_provider --private-plan $RUNNER_TEMP/t3-private-source-stream-plan.json --zip2 zip2-original --original $RUNNER_TEMP/t3-particle-original --out $RUNNER_TEMP/t3-source-bytes-safe.json",
+    "dotnet $RUNNER_TEMP/t3-particle-compiled/ExportLineage.dll $RUNNER_TEMP/t3-particle-original $RUNNER_TEMP/t3-particle-export",
+    "python3 -m scripts.t3_particle_same_export_bindings --original $RUNNER_TEMP/t3-particle-original --manifest zip2-original/RAFT_FILE_MANIFEST.tsv --project $RUNNER_TEMP/t3-particle-export/ExportedProject --w1-trace $RUNNER_TEMP/t3-particle-w1-private.json --b02-trace $RUNNER_TEMP/t3-particle-b02-private.json --out $RUNNER_TEMP/t3-particle-safe-export-result.json"
+  ],
+  "negative_controls": [
+    "cross exporter instances rejected",
+    "wrong exported texture GUID and bound->null distinguished from missing B02 source trace",
+    "missing exported Material and material source owner rejected",
+    "private source label/PathID/export GUID collision rejection",
+    "UV value drift and missing original TexEnv property rejection",
+    "exact same source provider SHA/private byte ranges required, no copied source assets uploaded"
+  ],
+  "workflow_path": ".github/workflows/raft-t3-particle108-sameexport.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42130529677",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42130529677/artifacts"
+  ],
+  "budget": "50min isolated dedicated single AssetRipper export and 2GB source .resS provider cap, no Unity Android full build",
+  "status": "completed",
+  "observed_result": {
+    "real_pinned_assetripper_export_completed": true,
+    "source_original_particle_slots": 108,
+    "original_source_Material21": 5,
+    "original_source_Texture2D28": 3,
+    "actual_exported_Material21_trace_matches": 5,
+    "actual_exported_Texture2D28_trace_matches": 2,
+    "source_texenv_PPtr_exact_matches": 9,
+    "source_texenv_target_untraced": 1,
+    "source_texenv_UV_matches": 10,
+    "source_null_to_bound": 0,
+    "source_bound_to_null": 0,
+    "wrong_texture_GUID": 0,
+    "extra_or_missing_material_TexEnv_labels": 0,
+    "source_free_python_tests_passed": 93,
+    "android_device_or_full_native_import_verified": false
+  },
+  "rejected_hypotheses": [
+    "All 3 original Particle Shader48 Texture2D objects are present in the bounded same-instance B02 trace",
+    "The bounded same-instance export loses all original Particle Material21 textures or UV coordinates"
+  ],
+  "limitations": [
+    "one original source Texture2D is untraced, not proven removed from exported Unity assets or Android OBB",
+    "B02 nonexportable classification not yet tied to that exact private source target",
+    "full Unity ARM64/native Android renderer and Adreno screenshots not tested"
+  ],
+  "initial_synthetic_test_failures": [
+    "https://github.com/alwansan/raf/actions/runs/42130208972",
+    "https://github.com/alwansan/raf/actions/runs/42130365900"
+  ],
+  "integration_commit": "7a8833bfa46c141618df76204d2cf88101c8df36",
+  "next_step": "Investigate why exactly 1 of 3 original class28 Texture2D source targets is absent from B02 same-instance export trace: B02 intentionally skips non-exportable collections. Add PRIVATE source-identity classification for selected missing object (nonexportable vs missing in exporter collections) in disposable compiled helper, not raw ID/public GUID. Compare actual nonnull exported Material TexEnv GUID and only then coordinate T5 full-native/Android smoke screenshot to attribute the effects. Preserve original ColorMask RGB / alpha Blend and do not force fallback texture."
+}
