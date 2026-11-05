@@ -42,7 +42,8 @@ jobs:
           python3 -m unittest discover -s tests -p 'test_t3_original_921_vf_component_bridge.py' -v
           PYTHONPATH=scripts python3 -m unittest discover -s tests -p 'test_t3_vf_spirv_component_coverage.py' -v
   original-genuine-fourpass-components:
-    if: ${{ (github.event_name == 'workflow_dispatch' && inputs.run_private_original) || (github.event_name == 'push' && github.event.head_commit.message == 'experiment(T3): authorize original Shader48 VF component probe') }}
+    if: >-
+      ${{ (github.event_name == 'workflow_dispatch' && inputs.run_private_original) || (github.event_name == 'push' && github.event.head_commit.message == 'experiment(T3): authorize original Shader48 VF component probe') }}
     needs: source-free-security-and-component-controls
     runs-on: ubuntu-24.04
     timeout-minutes: 28
