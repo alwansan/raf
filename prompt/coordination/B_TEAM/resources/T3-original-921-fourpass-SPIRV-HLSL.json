@@ -1,6 +1,17 @@
 {
-  "schema_version": 1,
+  "id": "T3-ORIGINAL-921-FOURPASS-SPIRV-HLSL-PRIVATE-TRANSLATION",
+  "title": "Original high-use 921-slot Shader48 one genuine D3D11 Vertex Fragment pair per Pass, SPIRV HLSL CPU roundtrip",
   "owner": "T3",
+  "kind": "source-authentic-compiled-shader-diagnostic",
+  "stages": {
+    "acquisition": "ORIGINAL_ZIP2_PINNED_6_SCENES_AND_4_SHADER_MATERIAL_OWNER_SHA_VERIFIED",
+    "extraction": "ORIGINAL_TYPED_Shader48_SOURCE_SELECTED_BY_921_RENDERER_SLOT_USE_4_NORMAL_PASSES_33_PAIRS",
+    "reconstruction": "CI42052605123_SUCCESS_ONE_EXACT_PAIR_PER_4_PASSES_EIGHT_DXBC_TO_SPIRV_HLSL_ROUNDTRIP_STAGES",
+    "binding": "SOURCE_ROUNDTRIP_NUMERIC_RESOURCE_SLOT_DICTIONARIES_8_OF_8_EQUAL_IO_LOCATION_TYPE_LISTS_0_OF_8_EQUAL_SEMANTICS_UNVERIFIED",
+    "integration": "NOT_INSTALLED_NO_SHADERLAB_UNITY_ANDROID_GPU_RENDERER",
+    "device": "NOT_TESTED"
+  },
+  "schema_version": 1,
   "status": "evidence_source_only_open_integration",
   "issue_id": "RENDER-002",
   "resource_key": "T3-authentic-original-top-921-Shader48-D3D11-fourPass-onePair-each",
