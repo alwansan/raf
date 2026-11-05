@@ -1,0 +1,135 @@
+name: T2 WATER-001 genuine Foam nonproperty texture names to original managed IL literal contexts
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t2_foam_managed_literal_targets.py
+      - tests/test_t2_foam_managed_literal_targets.py
+      - android-port/Experiments/T2/FoamRuntimeStringBridge/**
+      - .github/workflows/raft-t2-foam-managed-literals.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t2-foam-original-managed-literals-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  source-authentic-original-foam-managed-IL:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Source-only negative controls for private original four-name target registry
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t2_foam_managed_literal_targets.py
+          python3 -m unittest discover -s tests -p 'test_t2_foam_managed_literal_targets.py' -v
+      - name: Establish source-only disk budget
+        run: |
+          python3 - <<'PY'
+          import shutil
+          assert shutil.disk_usage('.').free > 3*1024**3
+          PY
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Compile pinned Mono.Cecil typed IL literal and setter-context oracle
+        run: |
+          set -euo pipefail
+          timeout 240s dotnet publish \
+            android-port/Experiments/T2/FoamRuntimeStringBridge/FoamRuntimeStringBridge.csproj \
+            -c Release --self-contained false -o "$RUNNER_TEMP/t2-foam-cecil" \
+            > "$RUNNER_TEMP/t2-foam-cecil-build.log" 2>&1 || {
+              python3 - <<'PY'
+          import re,os,json,collections
+          from pathlib import Path
+          log=(Path(os.environ['RUNNER_TEMP'])/'t2-foam-cecil-build.log').read_text(errors='replace')
+          codes=dict(collections.Counter(re.findall(r'error\s+((?:CS|NU|NETSDK)[0-9]+)',log)))
+          print('T2_FOAM_CECIL_BUILD_BLOCKED '+json.dumps({'public_diagnostic_codes':codes,'private_compiler_text_published':False}))
+          PY
+              exit 1
+            }
+          test -s "$RUNNER_TEMP/t2-foam-cecil/FoamRuntimeStringBridge.dll"
+          dotnet "$RUNNER_TEMP/t2-foam-cecil/FoamRuntimeStringBridge.dll" --selftest
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: t2-foam-managed-zip2
+          lfs: false
+          persist-credentials: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/Managed/Assembly-CSharp.dll
+      - name: SHA-authenticate immutable original Foam source and managed assembly
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os,subprocess,hashlib
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import ZIP2_SHA,PINS,stage
+          repo=Path('t2-foam-managed-zip2')
+          assert subprocess.check_output(['git','-C',str(repo),'rev-parse','HEAD'],text=True).strip()==ZIP2_SHA
+          target=Path(os.environ['RUNNER_TEMP'])/'t2-foam-managed-source'
+          a=stage(repo,target,{'Raft_Data/sharedassets0.assets':PINS['Raft_Data/sharedassets0.assets']})
+          assert a['verified_bytes']==115978112 and a['lfs_used'] is False
+          dll=repo/'Raft/Raft_Data/Managed/Assembly-CSharp.dll'
+          assert dll.is_file() and not dll.is_symlink() and dll.stat().st_size==3211776
+          assert hashlib.sha256(dll.read_bytes()).hexdigest()=='0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e'
+          print('T2_FOAM_ORIGINAL_MANAGED_SOURCE exact_zip2_SHA=true original_Foam_owner_bytes=115978112 original_managed_Dll_bytes=3211776')
+          PY
+      - name: Prepare private hashed Foam texture-name search targets without source symbols
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4 -q
+          timeout 150s python3 -m scripts.t2_foam_managed_literal_targets \
+            --source "$RUNNER_TEMP/t2-foam-managed-source" \
+            --out "$RUNNER_TEMP/t2-private-source-name-hashes.json"
+      - name: Inspect original compiled managed ldstr and typed Texture setter contexts; only numeric safe report
+        run: |
+          set -euo pipefail
+          timeout 150s dotnet "$RUNNER_TEMP/t2-foam-cecil/FoamRuntimeStringBridge.dll" \
+            "t2-foam-managed-zip2/Raft/Raft_Data/Managed/Assembly-CSharp.dll" \
+            "$RUNNER_TEMP/t2-private-source-name-hashes.json" \
+            "$RUNNER_TEMP/t2-foam-managed-literals-safe.json"
+          python3 - <<'PY'
+          import os,json
+          from pathlib import Path
+          r=json.loads((Path(os.environ['RUNNER_TEMP'])/'t2-foam-managed-literals-safe.json').read_text())
+          assert r['status']=='original_foam_compiled_managed_literal_contexts_scanned'
+          assert r['original_dll_sha256_authenticated'] and r['original_dll_size_bytes']==3211776
+          assert r['source_original_non_authored_tex_names']==4 and r['source_original_authored_tex_names']==1
+          assert 0<=r['distinct_non_authored_source_names_seen_as_ldstr']<=4
+          assert 0<=r['distinct_authored_source_names_seen_as_ldstr']<=1
+          assert r['original_managed_method_bodies_scanned']>0
+          assert not r['same_method_cooccurrence_is_argument_dataflow_proof']
+          assert not r['original_foam_texture_runtime_binding_verified']
+          assert not r['original_all_managed_assemblies_examined']
+          assert not r['original_native_plugin_writer_examined']
+          assert not r['authored_shaderlab_unity_import_verified']
+          assert not r['android_device_water_pixels_verified']
+          assert not r['private_names_hashes_method_names_assembly_or_IL_published']
+          PY
+      - name: Erase all source/managed original inputs, private hashed names and compiler build log on success or failure
+        if: always()
+        run: |
+          rm -rf -- "$RUNNER_TEMP/t2-foam-managed-source" \
+            "$RUNNER_TEMP/t2-private-source-name-hashes.json" \
+            "$RUNNER_TEMP/t2-foam-cecil" "$RUNNER_TEMP/t2-foam-cecil-build.log" \
+            "$GITHUB_WORKSPACE/t2-foam-managed-zip2"
+      - name: Publish only bounded numeric original managed literal counts; no private source or names
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: t2-foam-original-managed-literals-safe-${{ github.run_id }}
+          path: ${{ runner.temp }}/t2-foam-managed-literals-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
