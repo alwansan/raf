@@ -4,9 +4,9 @@
   "origin": "chat",
   "session_id": "20261105T1323Z-T2-chat-index-origin-5c42",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "3d35b501e38bea1468bd696325369fb61069c6ae",
-  "updated_at": "2026-11-05T13:22:55.586Z",
+  "updated_at": "2026-11-05T13:25:57.155Z",
   "resumed_from_sessions": [
     "20261105T1314Z-T2-chat-foam-writers-72c9",
     "20261105T1213Z-T2-foam-return-producer-call-isolated"
@@ -29,6 +29,14 @@
     "t5_build_path": "independent"
   },
   "approach": "Propagate a bounded typed IL argument-source category through the existing exact four-name source call tracer. Only classify producer's one System.Int32 argument when the actual second Texture call return reaches Material.SetTexture. Unknown locals/branches/metadata tokens must not be labeled literals. Source-free positive/negative controls; original DLL SHA-gated CI and aggregate-only output.",
-  "run_urls": [],
-  "next_step": "Implement source/test gate in owned files on HEAD lease; record actual 4/4 aggregate origins and runtime limits. WATER-001 OPEN NOT_READY0/3."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42035529042"
+  ],
+  "next_step": "Read CI42035529042. On pass fetch artifact and inspect four original index-arg source histogram; on failure inspect first error, fix only owned files. Team summary schema fix 0cf6e48 remains separate and should be rechecked.",
+  "implementation_sha": "afb3e94af6c34a345d8fcfd81e6daaa2c01a89e4",
+  "result": {
+    "code": "owned FoamSetterFlow and Program source-only typed actual int-argument classification implemented; 3 synthetic provenance controls",
+    "authentic_original_CI": "in_progress",
+    "device": "unknown"
+  }
 }
