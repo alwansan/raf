@@ -306,7 +306,10 @@
         "https://github.com/alwansan/raf/actions/runs/41931942755",
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B21_LIGHT_EXPORT_LINEAGE_2026-11-04.md",
         "https://github.com/alwansan/raf/actions/runs/41939404454",
-        "https://github.com/alwansan/raf/commit/77d312f546f1fc80c72f57a57de5d90699d66302"
+        "https://github.com/alwansan/raf/commit/77d312f546f1fc80c72f57a57de5d90699d66302",
+        "https://github.com/alwansan/raf/actions/runs/41940350604",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_AUTHENTIC_MATERIAL_EXPORT_PARITY_2026-11-05.md",
+        "https://github.com/alwansan/raf/commit/33ae0f760ea9f82a792b04419de1ba7df34d6e5"
       ],
       "remaining": [
         "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -342,7 +345,8 @@
         "B15 actual original: ZIP2 SHA-verified sharedassets6 (6,607,272B) read via production original_sampler() 87/87 actual Texture2D settings, 87 filter and 261 wrap, all mip biases 0, CI41930143093 SUCCESS with 8 synthetic negative controls. This does NOT establish any real original-to-export importer equivalence (0 paired records) or restore white shaders/device pixels.",
         "B03 verified 1635/1635 source-only non-null Renderer Material target class links across 6 original ZIP2 scenes and three SHA-pinned owners (4 original null). Actual same-instance Unity Renderer→Material GUID/fileID export preservation and Android white/pixel fix remain unproven.",
         "B21 actual 9-provider ZIP2 bounded original Raft AssetRipper same-instance export: 2/2 native Light108 values preserved and 2/2 exact Light.m_GameObject→GameObject1 owner pointers preserved in actual Unity YAML; 0 drift/misattached, CI41930891466 and 41931942755 both SUCCESS (40 owner-trial synthetic controls). This excludes Light value/owner export loss for these two scenes only; shader/material/ambient/Unity GPU pixels, remaining 34 scenes and phone not verified. RENDER-002 OPEN.",
-        "T3 actual SHA-pinned ZIP2 original->same-instance export CI41939404454 VERIFIED 41 selected Materials/227 TexEnv+UV with zero mismatches, 89 exact internal Texture targets, but 25 external targets and all shader/pixel/device proof remain unknown; do not treat these scoped materials as white cause."
+        "T3 actual SHA-pinned ZIP2 original->same-instance export CI41939404454 VERIFIED 41 selected Materials/227 TexEnv+UV with zero mismatches, 89 exact internal Texture targets, but 25 external targets and all shader/pixel/device proof remain unknown; do not treat these scoped materials as white cause.",
+        "T3 real SHA-pinned same-export Material m_Colors test CI41940350604: 41 selected original Material identities, 150 RGBA slots, 40 nonidentity originals; zero changed, missing or unexpected m_Colors values. Combined with previous 227 TexEnv/UV matches, this RULES OUT loss of these selected source colors/textures during this AssetRipper export only. Keep RENDER-002 OPEN: shader pass/subprogram, external 25 texture owners, importer/sRGB and Android pixels not proven."
       ],
       "acceptance": [
         "مطابقة روابط ومراجع الأصل",
@@ -350,7 +354,7 @@
         "نجاحعلىالهاتف"
       ],
       "updated_by": "T3",
-      "updated_at": "2026-11-05T00:12:00Z",
+      "updated_at": "2026-11-05T00:21:00Z",
       "_record_path": "../B_TEAM/issues/RENDER-002.json"
     },
     {
@@ -463,7 +467,10 @@
         "https://github.com/alwansan/raf/actions/runs/41938551022",
         "https://github.com/alwansan/raf/actions/runs/41939314440",
         "https://github.com/alwansan/raf/actions/runs/41938536760",
-        "https://github.com/alwansan/raf/actions/runs/41939082498"
+        "https://github.com/alwansan/raf/actions/runs/41939082498",
+        "https://github.com/alwansan/raf/actions/runs/41940321740",
+        "https://github.com/alwansan/raf/actions/runs/41939956032",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_ORIGINAL_TEXTURE_SAMPLER_ABI_2026-11-05.md"
       ],
       "remaining": [
         "Spectrum/Foam/Blur passes ناقصة في APK86",
@@ -501,15 +508,16 @@
         "B18 CI41931883517 source-authentic original FFT SPIR-V identity: 20/20 compiled programs × two explicit target maps have stable 3 resource variable IDs and entire SPIR-V code byte-equivalent after masking only intended descriptor set/binding OpDecorate literals; 20/20 synthetic tests PASS. No independent t0 vs t1 numerical pixel behavior, authored shader import, Unity runtime FindKernel mapping or Adreno device proof; water remains broken in APK86, WATER-001 OPEN.",
         "B20 original Foam CI41931585626: all four HLSL b-register and SPIRV set0-binding slot sets numerically equal B25 authentic original CB register sets (8 links). But original partial CB m_Size vs reflected SPIRV block_size numerically differ 7/8; original member offset/type equivalence and opaque CB0 source→HLSL alias/Unity material upload remain UNPROVEN. CI41932300308 source-only size checker PASS9/9. Not original ShaderLab render or Android device proof.",
         "T2 authenticated original Foam CB member indices + private 3-way CB symbol bridge: original source→translated HLSL name 0/8 equals, translated HLSL→SPIRV name 8/8 equals; source names literal HLSL usable 4/8; 20/20 synthetic controls + real ZIP2 CI41938898381 SUCCESS. Original register identity/byte offsets CB0 alias/Unity material upload and real ShaderLab/Adreno still UNKNOWN (source-only).",
-        "T1 original bank0 FFT compiled candidate pairs 0/1 and 8/9: 6/6 authentic 2-pass CPU Vulkan runs, both first and second sampled read-input swaps change numeric output (2/2 pairs), CI41939314440. Bank1 pair18 second-swap SIGSEGV in Mesa (CI41938536760), bank1 pair10 second-swap independent identical-program comparator mismatch (CI41939082498); these are explicitly INCONCLUSIVE, not original Unity kernel or source rescue. WATER-001 remains OPEN; Unity .compute/FindKernel/Android pixels untested."
+        "T1 original bank0 FFT compiled candidate pairs 0/1 and 8/9: 6/6 authentic 2-pass CPU Vulkan runs, both first and second sampled read-input swaps change numeric output (2/2 pairs), CI41939314440. Bank1 pair18 second-swap SIGSEGV in Mesa (CI41938536760), bank1 pair10 second-swap independent identical-program comparator mismatch (CI41939082498); these are explicitly INCONCLUSIVE, not original Unity kernel or source rescue. WATER-001 remains OPEN; Unity .compute/FindKernel/Android pixels untested.",
+        "T2 original Foam texture/sampler CI41940321740 SUCCESS: pass0/1 fragment authentic source m_TextureParams counts 5/1; original m_Samplers=0, compiled SPIRV separate_images=5/1 and separate_samplers=5/1 (total six genuine texture rows, six images, six samplers), vertex none. 20 CB + 17 resource synthetic controls, authentic four-stage numeric card+slot guard integrated. But original texture name/slot/sampler state to translated image/sampler/Unity material identity, private ShaderLab, Adreno pixels still UNPROVEN; WATER-001 OPEN."
       ],
       "acceptance": [
         "هوية برامج ونوى أصلية أو تطابق موثق دونdummy",
         "تثبيت فيالتصدير+Unity import/render",
         "اختبار هاتف يثبت الماء بلا pass/kernel errors"
       ],
-      "updated_by": "T1",
-      "updated_at": "2026-11-05T00:14:17.595Z",
+      "updated_by": "T2",
+      "updated_at": "2026-11-05T00:19:00Z",
       "_record_path": "../B_TEAM/issues/WATER-001.json"
     }
   ],
@@ -1042,6 +1050,39 @@
       "updated_by": "T2",
       "updated_at": "2026-11-05T00:19:00Z",
       "_record_path": "../B_TEAM/resources/T2-foam-original-texture-sampler-interface.json"
+    },
+    {
+      "id": "T3-SHAREDASSETS6-MATERIAL-COLOR-SAME-EXPORT",
+      "title": "T3 original ZIP2 sharedassets6 Material RGBA source-to-actual-same-export",
+      "kind": "authenticated-original-to-real-export-material-rgba-parity",
+      "source": {
+        "provider": "immutable ZIP2 plain Git SHA-pinned bytes via B21 staging",
+        "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+        "path": "Raft_Data/sharedassets6.assets",
+        "bytes": 6607272,
+        "sha256": "0476792cfeffac19d16e920011ed8d2fb2da62973c2f09a8689bc59e1ac4b632"
+      },
+      "stages": {
+        "acquisition": "VERIFIED_SHA_PINNED_REAL_NINE_PROVIDER_BOUNDED_EXPORT",
+        "extraction": "VERIFIED_41_SOURCE_MATERIALS_150_COLOR_SLOTS",
+        "reconstruction": "NOT_APPLICABLE_DIRECT_ORIGINAL_TO_EXPORT_VALUE_COMPARISON",
+        "binding": "VERIFIED_SAME_EXPORT_41_MATERIAL_IDENTITIES_150_RGBA_COLOR_VALUES_ZERO_DIFF",
+        "integration": "VERIFIER_EXTENDED_SCOPED_REAL_EXPORT_CI_PASS_NO_GAME_ASSETS_MODIFIED",
+        "device": "UNKNOWN"
+      },
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41940350604",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_AUTHENTIC_MATERIAL_EXPORT_PARITY_2026-11-05.md",
+        "https://github.com/alwansan/raf/commit/33ae0f760ea9f82a792b04419de1ba7df34d6e5"
+      ],
+      "remaining": [
+        "Only 41 materials from one original owner proven. Full original 14-owners not checked in same export.",
+        "Unknown shader variant/compiled passes/Material shader identity and runtime sRGB/sampler/GPU pixel behavior.",
+        "No Unity Android build or device visual acceptance. White materials may be shader rendering despite preserved RGBA values."
+      ],
+      "updated_by": "T3",
+      "updated_at": "2026-11-05T00:21:00Z",
+      "_record_path": "../B_TEAM/resources/T3-sharedassets6-material-rgba-same-export.json"
     },
     {
       "id": "T5-zip2-original-render-provider",
@@ -3743,6 +3784,23 @@
       "_record_path": "../B_TEAM/events/T3/20261105T0002Z-render-harness-result-export-start.json"
     },
     {
+      "id": "T3-20261105T0023Z-authentic-material-parity-results",
+      "owner": "T3",
+      "session_id": "20261104T2354Z-T3-render-harness",
+      "issue_id": "RENDER-002",
+      "type": "result",
+      "summary": "Genuine source+same-instance AssetRipper export verified SHA-pinned sharedassets6 41 Materials/227 Texture/UV slots (89 exact internal, 25 external unproven, 113 original null) and 41 Materials/150 RGBA m_Colors slots (40 originally tinted). Zero internal texture identity, UV or color drift; this rejects selected export SavedProperties loss only. B05/B44 verifier supports authentic exported YAML mapping, strict original arrays retained. No Android GPU/pixels/FFT/world readiness. Original B05/B44/B03/B21 workers remain credited.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41939404454",
+        "https://github.com/alwansan/raf/actions/runs/41940350604",
+        "https://github.com/alwansan/raf/commit/77d312f546f1fc80c72f57a57de5d90699d66302",
+        "https://github.com/alwansan/raf/commit/33ae0f760ea9f82a792b04419de1ba7df34d6e5",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_AUTHENTIC_MATERIAL_EXPORT_PARITY_2026-11-05.md"
+      ],
+      "at": "2026-11-05T00:23:00Z",
+      "_record_path": "../B_TEAM/events/T3/20261105T0023Z-authentic-material-parity-results.json"
+    },
+    {
       "id": "T4-20261104T2357Z-local-load-start",
       "owner": "T4",
       "session_id": "20261104T2357Z-T4-lw01",
@@ -3851,7 +3909,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "f6d4083a7b0f43fe5ab4ea40252381b137bfde2ee27f1b9943c2a23302c9855c",
+  "source_input_sha256": "4f92955d761f971f72eff00a82e9e9e9e43e4fc8b8cf41e136f0b518772cd11b",
   "generation": "T-2026-11-05",
-  "input_sha256": "5acba3922a50f2bdfa52a13709eb907e7e0928f32ceaec966e3c3c96d56933d8"
+  "input_sha256": "ca7298eca9848decb2ea910b57ef537c0aca13229f33adc75aafe79144d8a89a"
 }
