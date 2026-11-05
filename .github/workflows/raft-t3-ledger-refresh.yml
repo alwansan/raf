@@ -63,6 +63,12 @@ jobs:
           assert any(r["id"]=="T3-ORIGINAL-SIXSCENE-RENDERER-SHADER-POSTVENDOR-USE" for r in s["resources"])
           assert any(e["id"]=="T3-20261105T1425Z-renderer-source-postvendor-join" and e["owner"]=="T3"
                      for e in s["events"])
+          # Top 921 source Shader48 was independently excluded from exact
+          # official Unity 2021.3.45f2 SHA-pinned builtin archive identities.
+          builtin_proof="https://github.com/alwansan/raf/actions/runs/42046329453"
+          assert builtin_proof in issue[0]["evidence"]
+          assert any(e["id"]=="T3-20261105T1436Z-highuse-Sh48-not-Unity-builtin" and e["owner"]=="T3"
+                     for e in s["events"])
           ev=[e for e in s["events"] if e["id"]=="T3-20261105T0023Z-authentic-material-parity-results"]
           assert len(ev)==1 and ev[0]["owner"]=="T3"
           new=[e for e in s["events"] if e["id"]=="T3-20261105T1226Z-native-shader-dummy-audit"]
