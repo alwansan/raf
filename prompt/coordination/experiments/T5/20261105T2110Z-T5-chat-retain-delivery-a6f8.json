@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "session_id": "20261105T2110Z-T5-chat-retain-delivery-a6f8",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "experiment_key": "t5-42058825739-native-delivery-archive-single-source-stream-sha256-fullpart-v1",
+  "resource_key": "actions-artifact-13441227298-6GB-retention-exclusive",
+  "hypothesis": "A source-pinned actual native delivery Actions ZIP can be streamed and every transport part and complete logical APK/OBB/XAPK digest authenticated then re-retained without rebuilding Unity or requiring GitHub Release write permission.",
+  "source_commit": "df6144411a130cc1ac23f1df4ae7f653d61e9704",
+  "input_hashes": [
+    "native source e9c358eda01785b65e4eb14f18723da426635628",
+    "original archived artifact 13441227298 5948243524B SHA256 29d967c5f1868a10aa0f8f3b9f0306e828c1d32ef3cda2909f7482b5d111eef6"
+  ],
+  "tool_versions": {
+    "runner": "ubuntu-24.04",
+    "python": "python3 stdlib",
+    "actions": "actions/upload-artifact@v4"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p 'test_t5_verify_retained_delivery_archive.py' -v",
+    "gh api repos/$GITHUB_REPOSITORY/actions/artifacts/13441227298/zip",
+    "python3 scripts/t5_verify_retained_delivery_archive.py --archive ... --expected-archive-bytes 5948243524 --expected-archive-sha 29d967c5f1868a10aa0f8f3b9f0306e828c1d32ef3cda2909f7482b5d111eef6 --version-code 89"
+  ],
+  "negative_controls": [
+    "wrong original ZIP digest/size",
+    "package and versionCode changes",
+    "same-size physical part mutation",
+    "part and whole SHA mismatches",
+    "missing/duplicate/unsafe files",
+    "incorrect SHA256SUMS and metadata"
+  ],
+  "workflow_path": ".github/workflows/raft-t5-retain-native-delivery.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42110297871",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42110297871"
+  ],
+  "budget": "One pinned 5.95GB archive download + three-day exact ZIP artifact reupload; no Unity or LFS; self-limited runner 50m and disk precheck.",
+  "status": "completed_verified",
+  "observed_result": {
+    "conclusion": "success",
+    "job_id": 127535758223,
+    "synthetic_tests": "18/18 passed 0.030s",
+    "archive_sha256_matches": true,
+    "source_pinned": true,
+    "parts_sha256_verified": 7,
+    "logical_apk_obb_xapk_sha256_verified": 3,
+    "logical_transport_bytes": 5948221616,
+    "new_artifact": {
+      "id": 13454900880,
+      "name": "t5-retained-native-delivery-42058825739",
+      "size_in_bytes": 5948243834,
+      "outer_digest": "sha256:41bf01f9991521fac876c591b75adc19b493ad47882687846e5aae1c2af6a3ef",
+      "expires_at": "2026-11-08T21:12:40Z"
+    },
+    "release_published": false,
+    "apk_signature_reverified": false,
+    "obb_internal_guid_verified": false,
+    "device_retested": false
+  },
+  "rejected_hypotheses": [
+    "Original native reconstruct failure caused missing delivery: actual package exists and hashes were all verified",
+    "Github Release HTTP403 implies artifact cannot be retained: Actions read and upload succeeded independently"
+  ],
+  "limitations": [
+    "Nested ZIP archive must be unpacked twice and original inner ZIP SHA rechecked for downstream use",
+    "New GitHub Actions artifact is not a GitHub Release",
+    "No independent aapt badging, APK signing/OBB internal GUID inspection or Android game retest",
+    "Actions storage retention is 3 days, not permanent"
+  ],
+  "integration_commit": "d58aabb470da40ffd56934743a33e3b2639d256f",
+  "next_step": "Use new verified artifact id 13454900880 (expires Nov8 21:12:40Z) for optional authorized artifact download/reassembly and aapt/OBB GUID diagnostics; diagnose Github Release permission 403 with authorized maintainer; do not rebuild equivalent Unity."
+}
