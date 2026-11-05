@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "session_id": "20261105T2230Z-T4-chat-captured-mouse-sources-r7n5",
+  "origin": "chat",
+  "owner": "T4",
+  "issue_id": "INPUT-005",
+  "status": "active",
+  "base_sha": "376e082f845dd7211a64d976d72f1170d07eb3ab",
+  "updated_at": "2026-11-05T22:30:00Z",
+  "resumed_from_sessions": [
+    "20261105T2150Z-T4-chat-capture-lease-n5k8",
+    "20261105T2142Z-T4-scheduled-r6w3"
+  ],
+  "intended_files": [
+    "prompt/coordination/work/INPUT-005/T4-20261105T2230Z-T4-chat-captured-mouse-sources-r7n5-event-source.json",
+    "prompt/coordination/clients/T4/sessions/20261105T2230Z-T4-chat-captured-mouse-sources-r7n5.md",
+    "android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs",
+    "android-port/Runtime/Platform/PhysicalMouseMotionSource.cs",
+    "android-port/Tests/PhysicalMouse/Program.cs",
+    "android-port/Tests/PhysicalMouse/PhysicalMouse.csproj",
+    "android-port/Tests/PhysicalMouse/UnityBridgeCompile.csproj",
+    "tests/test_t4_android_pointer_capture_policy.py",
+    ".github/workflows/raft-t4-mouse-capture-bridge.yml",
+    ".github/workflows/raft-unity-editor-android-import.yml",
+    "scripts/verify_android_offline_candidate.py",
+    "prompt/coordination/experiments/T4/20261105T2230Z-T4-chat-captured-mouse-sources-r7n5.json",
+    "prompt/coordination/B_TEAM/events/T4/20261105T2230Z-T4-chat-captured-mouse-sources-r7n5.json"
+  ],
+  "resource_key": "bounded-source-only-dotnet-Unity2021-originalSHA0a6f0527",
+  "experiment_key": "T4-API26-View-captured-SOURCE_MOUSE_RELATIVE-X-Y-vs-TOUCHPAD-AXIS_RELATIVE_X-Y-batched-historical-v1",
+  "hypothesis": "Existing listener treats every captured ACTION_MOVE as relative getX/Y and consumes only latest sample; under captured TOUCHPAD it can send absolute coords into camera while historical mouse movement is lost.",
+  "approach": "Use source-typed classification (MouseRelative or Touchpad only), process bounded historical samples then current, keep button/scroll/touch untreated; add managed executable negative controls and exact original Unity2021 ABI compile in isolated CI, no full native build.",
+  "related_runs": [
+    "https://github.com/alwansan/raf/actions/runs/42118499200"
+  ],
+  "result": null
+}
