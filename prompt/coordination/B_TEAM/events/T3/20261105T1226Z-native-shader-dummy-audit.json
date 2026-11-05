@@ -13,5 +13,8 @@
   "requires_follow_up": true,
   "android_visuals_verified": false,
   "touch_deferred": true,
-  "recorded_at": "2026-11-05T12:26:00Z"
+  "recorded_at": "2026-11-05T12:26:00Z",
+  "id": "T3-20261105T1226Z-native-shader-dummy-audit",
+  "type": "result",
+  "at": "2026-11-05T12:26:00Z"
 }
