@@ -4,9 +4,9 @@
   "origin": "chat",
   "session_id": "20261105T1736Z-T2-chat-ret-reason-28ce",
   "issue_id": "WATER-001",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "4874be485a8ee9ff1d4e09e71d7dcabbd42bdba9",
-  "updated_at": "2026-11-05T17:52:00Z",
+  "updated_at": "2026-11-05T17:51:00Z",
   "resumed_from_work": "prompt/coordination/work/WATER-001/T2-20261105T1736Z-T2-chat-ret-reason-28ce-return-local-writers.json",
   "experiment_key": "T2|ZIP2-15964ea8|sha-0a6f0527|exact-RT-return-one-stloc-value-source-family-v1",
   "resource_key": "T2-Foam-original-RT-return-local-writer-opcode",
@@ -24,7 +24,7 @@
     "source_original_previous": "42077586809 SUCCESS; sole exact local writer unresolved",
     "scheduled_T2_nonoverlap": "synthetic scripts/t2_rt_return_cfg.py and tests/test_t2_rt_return_cfg.py only"
   },
-  "next_step": "Read 42078263113 T2_FOAM_SINGLE_RT_LOCAL_WRITER_REASON_SAFE, then determine branch-safe value origin only after independent SSA; avoid non-null or Android graphics claim.",
+  "next_step": "Resolve exact call MethodReference preceding sole stloc in original matching RT-return method; classify declared return type and actual argument/stack placement before claiming call value feeds local. If not exact typed RT, inspect intervening stack or aliases and branch paths. Source-only; verify live Unity/Android separately. WATER-001 OPEN NOT_READY0/3.",
   "source_commits": [
     "880d76bb6ec403de62bb696ded7eb4ecb8f662ab",
     "d3d14d1e98ddd0d5655f845731fe0591c8bfaa2d",
@@ -34,8 +34,16 @@
     "https://github.com/alwansan/raf/actions/runs/42078263113"
   ],
   "result": {
-    "source": "Exact original return local one writer predecessor opcode family and branch-entry status, original SHA with source-free fixture gates",
-    "CI": "in_progress",
-    "device": "not tested"
+    "original_ci": "42078263113 COMPLETED SUCCESS",
+    "source_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "one_exact_ReturnTexture_local_writer": true,
+    "writer_immediately_preceded_by_opcode_family": "call",
+    "writer_is_branch_handler_or_method_entry": false,
+    "writer_source_exact_return_type_RenderTexture_proven": false,
+    "branch_join_or_runtime_execution_proven": false,
+    "synthetic_controls": "passed",
+    "private_original_il_names_values_disclosed": false,
+    "artifact_id": 13438633085,
+    "artifact_sha256": "e165be18752ce4bd17ed2f7a1d42a83140cddf1331120238ade9ec8fab122d51"
   }
 }
