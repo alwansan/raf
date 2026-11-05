@@ -1,0 +1,50 @@
+{
+  "id": "T2-foam-original-material-settexture-second-value-provenance",
+  "owner": "T2",
+  "kind": "source_authentic_compiled_original_Material_SetTexture_second_Texture_value_opcode_class",
+  "title": "All four original Foam Material.SetTexture second typed Texture parameters originate from call-return IL operand",
+  "source": {
+    "zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "foam_shader_owner_sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "original_managed_dll_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "foam_shader_path_id": 2420
+  },
+  "stages": {
+    "acquisition": "ORIGINAL_ZIP2_FOAM_OWNER_AND_3211776B_ORIGINAL_MANAGED_DLL_SHA_AUTHENTIC",
+    "extraction": "ORIGINAL_FOUR_NON_PROPERTY_SOURCE_NAMES_MATCH_TYPED_MATERIAL_SETTEXTURE_FIRST_STRING_ARGS",
+    "reconstruction": "BOUNDED_CECIL_SECOND_ARG_STACK_OPCODE_PROVENANCE_4_OF_4_CALL_RETURN_AND_DECLARED_UnityEngine_Texture",
+    "binding": "COMPILED_ARG_OPCODE_ONLY;UNKNOWN_CALLEE_RETURN_VALUE_MATERIAL_RECEIVER_RUNTIME_INVOCATION",
+    "integration": "AUTHENTIC_ORIGINAL_SOURCE_ONLY_T2_CI42022922743_SUCCESS",
+    "device": "NOT_TESTED"
+  },
+  "observed": {
+    "exact_first_settexture_string_name_args": 4,
+    "exact_second_formal_texture_parameters": 4,
+    "second_arg_from_direct_prior_call_return_opcodes": 4,
+    "second_arg_from_direct_static_or_instance_field": 0,
+    "second_arg_from_direct_ldarg_or_null": 0,
+    "original_texture_producer_callee_or_return_type_proven": false,
+    "original_runtime_material_setter_reached": false,
+    "actual_Texture_object_validity_proven": false,
+    "original_sampler_wrap_filter_uv_cb_proven": false,
+    "unity_shaderlab_or_adreno_pixels_proven": false
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42022637009",
+    "https://github.com/alwansan/raf/actions/runs/42022922743",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_ORIGINAL_MATERIAL_SETTEXTURE_ARGUMENT_PROOF_2026-11-05.md"
+  ],
+  "artifact": {
+    "id": 13412103206,
+    "zip_sha256": "209c5271486e798a1811f7081c9d8bc3c3103bf90fb62a3d20494dd916b0e908",
+    "safe_aggregates_only": true
+  },
+  "remaining": [
+    "Identify each original second-arg call-result producer exact method return type and ownership without publishing symbols",
+    "Prove actual original material receiver association with Foam Shader and codepath reachability",
+    "Resolve real Texture instance data + sampler wrap/filter/UV and CB0 upload",
+    "Recreate authentic Foam 2-pass ShaderLab privately and test Unity/Adreno output"
+  ],
+  "updated_by": "T2",
+  "updated_at": "2026-11-05T12:00Z"
+}
