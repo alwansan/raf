@@ -257,6 +257,40 @@ class ZIP2RenderStageTests(unittest.TestCase):
             self.assertEqual((feature / name).read_bytes(), original[name])
         self.assertEqual(list(feature.rglob(".verified-zip2-*")), [])
 
+    def test_consumer_second_rename_failure_removes_new_first_destination(self):
+        """Rollback must remove a first target that did not exist initially."""
+        from scripts import hydrate_render_payloads as hyd
+        second, _, options = self.install_second_original()
+        self.stage(**options)
+        feature = self.root / "feature"
+        first = feature / self.owner
+        later = feature / "Raft" / second
+        first.parent.mkdir(parents=True, exist_ok=True)
+        later.parent.mkdir(parents=True, exist_ok=True)
+        self.assertFalse(first.exists())
+        later_pointer = (
+            "version https://git-lfs.github.com/spec/v1\\n"
+            f"oid sha256:{self.digest}\\nsize {len(self.original)}\\n"
+        ).encode("ascii")
+        later.write_bytes(later_pointer)
+        real_replace = hyd.os.replace
+        calls = 0
+
+        def fail_second(source, target):
+            nonlocal calls
+            calls += 1
+            if calls == 2:
+                raise OSError("injected second publication failure")
+            return real_replace(source, target)
+
+        with mock.patch.object(hyd.os, "replace", side_effect=fail_second):
+            with self.assertRaisesRegex(OSError, "injected second publication"):
+                hyd.reuse_verified_staged_sources(
+                    options["entries"], self.output / "Raft_Data", feature)
+        self.assertFalse(first.exists())
+        self.assertEqual(later.read_bytes(), later_pointer)
+        self.assertEqual(list(feature.rglob(".verified-zip2-*")), [])
+
     def test_consumer_later_symlink_preserves_first_pointer(self):
         from scripts.hydrate_render_payloads import reuse_verified_staged_sources
         second, _, options = self.install_second_original()
