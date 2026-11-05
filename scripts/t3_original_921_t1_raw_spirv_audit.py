@@ -24,6 +24,32 @@ SHAPE = frozenset((
     "vertex_components", "fragment_components", "missing_components",
     "scalar_type_mismatches", "unused_vertex_components", "compatible_numeric_coverage",
 ))
+# Only these hardcoded T1 validator errors can appear in the public report.
+# No exception interpolation, private compiler text, SPIR-V names or bytecode.
+T1_FAILURE_CODES = {
+    "Unsupported private entry point": "ENTRY_POINT_UNSUPPORTED",
+    "Expected one unambiguous private entry point": "ENTRY_POINT_AMBIGUOUS",
+    "Invalid private interface decoration": "DECORATION_INVALID",
+    "Invalid private interface variable": "VARIABLE_INVALID",
+    "Invalid private interface pointer": "POINTER_INVALID",
+    "Unsupported private interface without direct location": "NON_DIRECT_OR_UNLOCATED_INTERFACE",
+    "Unsupported private interface type": "TYPE_UNSUPPORTED",
+    "Unsupported private component layout": "COMPONENT_LAYOUT_UNSUPPORTED",
+    "Overlapping private interface components": "COMPONENT_OVERLAP",
+    "No direct fragment input components": "NO_USER_FRAGMENT_INPUT",
+}
+
+
+class PrivateInterfaceUnsupported(ValueError):
+    """Carries only a non-sensitive fixed category and bounded sample ordinal."""
+
+    def __init__(self, original_pass_ordinal, source_or_roundtrip, category):
+        super().__init__("original_SPIRV_numeric_interface_fail_closed")
+        self.original_pass_ordinal = original_pass_ordinal
+        self.source_or_roundtrip = source_or_roundtrip
+        self.category = category
+
+
 COUNTS = (
     "passes_examined",
     "original_DXBC_read_component_lanes",
@@ -118,7 +144,15 @@ def original_fourpass_private(pairs: list, root: Path, *,
         for label, rel in (("source", "original.spv"), ("roundtrip", "roundtrip.spv")):
             vtext = disassembler(stage_paths[1] / rel)
             ftext = disassembler(stage_paths[0] / rel)
-            approved = numeric_checker(vtext, ftext)
+            try:
+                approved = numeric_checker(vtext, ftext)
+            except (ValueError, KeyError) as exc:
+                # Source-free T1 static errors only; never emit raw error text.
+                code = (
+                    T1_FAILURE_CODES.get(str(exc), "VALIDATION_OTHER")
+                    if type(exc) is ValueError else "INTERFACE_DEFINITION_UNRESOLVED"
+                )
+                raise PrivateInterfaceUnsupported(index, label, code) from None
             per[label] = approved
             for target, key in (
                 ("vertex_components", "vertex_components"),
@@ -211,6 +245,12 @@ def main(argv=None):
             "original_Android_Adreno_device_pixels_verified": False,
             "private_names_compiled_programs_source_or_SPIRV_published": False,
         }
+        if isinstance(err, PrivateInterfaceUnsupported):
+            result.update({
+                "failure_pass_ordinal": err.original_pass_ordinal,
+                "failure_source_or_roundtrip": err.source_or_roundtrip,
+                "failure_category": err.category,
+            })
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(result, sort_keys=True, indent=2) + "\n", encoding="utf-8")
     print("T3_ORIGINAL_921_T1_DIRECT_SPIRV " + json.dumps(result, sort_keys=True))
