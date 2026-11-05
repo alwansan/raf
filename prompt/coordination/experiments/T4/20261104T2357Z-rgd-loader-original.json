@@ -10,24 +10,66 @@
     "Assembly-CSharp.dll:0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
     "Data.rgd:b2785187aa11e33872698adfa79ab252cf65a824d92bee7e88773ce4aa11cbba"
   ],
-  "tool_versions": {},
-  "commands": [],
+  "tool_versions": {
+    "ilspycmd": "11.2.0.10050",
+    "dotnet": "10.0.x",
+    "python": "3.x",
+    "runner": "ubuntu-24.04"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t4_original_rgd_load_contract.py -v",
+    "dotnet tool install ilspycmd --version 11.2.0.10050 --tool-path $RUNNER_TEMP/t4-ilspy",
+    "ilspycmd -p -lv CSharp9_0 -o $RUNNER_TEMP/t4-private-source zip2-original/Raft/Raft_Data/Managed/Assembly-CSharp.dll",
+    "python3 -m scripts.t4_original_rgd_load_contract --original-managed-dll zip2-original/Raft/Raft_Data/Managed/Assembly-CSharp.dll --source $RUNNER_TEMP/t4-private-source",
+    "dotnet build $RUNNER_TEMP/original/Candidate.csproj --configuration Release --nologo -v:q"
+  ],
   "negative_controls": [
-    "Wrong original DLL SHA",
-    "Wrong Data.rgd SHA",
-    "Unknown SaveAndLoad source revision",
-    "Missing or duplicate loader method"
+    "Wrong DLL original SHA rejects",
+    "Wrong decompiler source hash rejects unless independently B14 verified read-only exact variant",
+    "Unknown/wrong method signature rejects",
+    "Missing/extra Deserialize call rejects",
+    "Missing/extra catch handler rejects",
+    "Comment/string-only Deserialize/catch ignored",
+    "Duplicate caught-error probe rejects",
+    "Android branch logging preserves original handler/returns",
+    "No fake success or user .rgd serialized"
   ],
   "workflow_path": ".github/workflows/raft-t4-original-rgd-load.yml",
-  "run_url": null,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41939908432",
   "artifact_urls": [],
   "budget": "No LFS/full Unity; 12 minute ubuntu runner at most, SHA-pinned original small inputs; no raw original bytes in artifacts.",
-  "status": "planned",
-  "observed_result": null,
-  "rejected_hypotheses": [],
-  "limitations": [
-    "No Unity/IL2CPP/Android .rgd roundtrip; cannot assert on-device world success."
+  "status": "completed",
+  "observed_result": {
+    "original_loader_deserialize": 1,
+    "catch_blocks": 1,
+    "binder_assignments": 0,
+    "explicit_assembly_resolver_tokens": 0,
+    "source_sha256": "0215aaae188f338c8288294f59cea53a7bd860207371f778416597653519dfd2",
+    "production_adapter_pin_unchanged": true,
+    "source_b14_contract_passed": true,
+    "tests_passed": "16/16",
+    "authentic_loader_probe_passed": true,
+    "managed_original_compile": "exit=0",
+    "device_compatibility_proven": false
+  },
+  "rejected_hypotheses": [
+    "Raw stored assembly version mismatch is enough to diagnose Android loader failure",
+    "Missing regex parser matches means no original Load<T>",
+    "Outer operation wrapper reliably reports internally caught Load<T> failure"
   ],
-  "integration_commit": null,
-  "next_step": "Run original source retrieval/staging and bounded authentic loader test."
+  "limitations": [
+    "Private source was not published; only hashes and counts are reported.",
+    "No BinaryFormatter.Deserialize on original Data.rgd; original save compatibility not established.",
+    "No Unity Editor / IL2CPP / signed APK / device run; .rgd create/save/reload not verified.",
+    "Production source hash and read-only decompiler hash differ; no production pin replaced."
+  ],
+  "integration_commit": "ed39104941ff9c6880829556fbb6d4a985898d3e",
+  "next_step": "New source-integrated candidate on Android device; compare SaveAndLoad.Load.caughtException against operation trace, test actual .rgd roundtrip.",
+  "related_run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41939385466",
+    "https://github.com/alwansan/raf/actions/runs/41939846508",
+    "https://github.com/alwansan/raf/actions/runs/41939807107",
+    "https://github.com/alwansan/raf/actions/runs/41938843132"
+  ],
+  "updated_at": "2026-11-05T00:17:00Z"
 }
