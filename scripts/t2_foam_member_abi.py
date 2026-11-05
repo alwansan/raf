@@ -8,15 +8,17 @@ B20 authentic four-stage packet and exact source object are mandatory inputs.
 import argparse
 import hashlib
 import json
+import re
 from pathlib import Path
 
-from scripts.b20_foam_cb_descriptor_lineage import SOURCE_SLOTS, probe as b20_probe, reflect
+from scripts.b20_foam_cb_descriptor_lineage import (SOURCE_SLOTS, MAX_HLSL, LEXICAL, probe as b20_probe, reflect)
 from scripts.b20_private_foam_packet import ORIGINAL_OBJECT_SHA256, _physical
 from scripts.b24_original_foam_stage_translation import OBJECT_ID, OWNER, TARGET, validate_stage
-from scripts.b25_foam_cb_namebridge import inspect_parsed as b25_inspect
+from scripts.b25_foam_cb_namebridge import (inspect_parsed as b25_inspect, original_name_registry, IDENT)
 from scripts.w1_stage_zip2_owners import PINS, fingerprint
 
 STAGES = ((0, 1), (0, 0), (1, 1), (1, 0))
+CBUFFER_DECL = re.compile(r'\bcbuffer\s+([A-Za-z_]\w*)\s*:\s*register\s*\(\s*b(\d+)(?:\s*,\s*space\d+)?\s*\)\s*\{')
 SOURCE_MEMBER_MAX = 128
 INDEX_MAX = 65535
 ALLOWED_NUMERIC = ("m_Index", "m_ArraySize", "m_Type", "m_Dim", "m_RowCount")
@@ -72,8 +74,15 @@ def source_rows(parsed):
         prog = passes[pi][field]
         validate_stage(prog, stage, {"original_pass": pi})
         buffers = prog["m_CommonParameters"]["m_ConstantBuffers"]
+        names = original_name_registry(passes[pi]["m_NameIndices"])
         for slot in SOURCE_SLOTS[(pi, stage)]:
-            result[(pi, stage, slot)] = original_members(buffers[slot])
+            member = original_members(buffers[slot])
+            name_index = buffers[slot].get("m_NameIndex")
+            if type(name_index) is not int or name_index not in names:
+                raise ValueError("Original Foam private CB name registry drift")
+            # Private names remain in process memory, never in JSON results.
+            member["_private_original_name"] = names[name_index]
+            result[(pi, stage, slot)] = member
     if set(result) != set(EXPECTED_EXTENTS):
         raise ValueError("Original Foam member slot set changed")
     return result
@@ -114,7 +123,46 @@ def reflected_members(reflection, slot):
             "reflected_member_count": len(offsets)}
 
 
-def compare(source, reflection, slot, key):
+def translated_private_cbuffer_names(hlsl):
+    """Lexically resolve compiled HLSL b-registers to names, no public strings."""
+    if not isinstance(hlsl, str) or not 0 < len(hlsl.encode("utf-8")) <= MAX_HLSL:
+        raise ValueError("Unsafe private HLSL size")
+    masked = LEXICAL.sub(lambda m: re.sub(r"[^\r\n]", " ", m.group()), hlsl)
+    pairs = {}
+    for match in CBUFFER_DECL.finditer(masked):
+        slot = int(match.group(2))
+        if slot > 31 or slot in pairs:
+            raise ValueError("Ambiguous private HLSL cbuffer name binding")
+        pairs[slot] = match.group(1)
+    return pairs
+
+
+def private_name_parity(original_name, hlsl_name, reflection, slot):
+    """Verify literal symbol equality only, never authenticate upload/alias."""
+    if not isinstance(original_name, str) or not original_name:
+        raise ValueError("Original CB symbol absent")
+    if not isinstance(hlsl_name, str) or not IDENT.fullmatch(hlsl_name):
+        raise ValueError("Translated CB symbol malformed")
+    ubos = reflection.get("ubos")
+    if not isinstance(ubos, list):
+        raise ValueError("Translated name reflection unavailable")
+    matches = [x for x in ubos if isinstance(x, dict)
+               and x.get("set") == 0 and x.get("binding") == slot]
+    if len(matches) != 1:
+        raise ValueError("Translated name register ambiguous")
+    reflected_name = matches[0].get("name")
+    if not isinstance(reflected_name, str):
+        raise ValueError("Translated reflected name missing")
+    return {
+        "source_name_literal_hlsl_usable": bool(IDENT.fullmatch(original_name)),
+        "source_name_equals_translated_hlsl": original_name == hlsl_name,
+        "translated_hlsl_name_equals_spirv_name": hlsl_name == reflected_name,
+        "source_name_equals_spirv_name": original_name == reflected_name,
+        "unity_original_cb_upload_alias_verified": False,
+    }
+
+
+def compare(source, reflection, slot, key, name_parity=None):
     target = reflected_members(reflection, slot)
     expected_source, expected_reflected = EXPECTED_EXTENTS[key]
     if (source["partial_declared_bytes"] != expected_source
@@ -136,6 +184,7 @@ def compare(source, reflection, slot, key):
             len(register16_candidates & reflected_offsets),
         "original_index_unit_verified": False,
         "source_to_translated_member_identity_verified": False,
+        **(name_parity or {}),
     }
 
 
@@ -167,10 +216,19 @@ def audit(source, packet, manifest):
     original = source_rows(original_source_tree(source))
     results = []
     for pi, stage in STAGES:
-        raw_reflection = reflect(packet / ("pass%d-stage%d" % (pi, stage)) / "original.spv")
+        stage_dir = packet / ("pass%d-stage%d" % (pi, stage))
+        raw_reflection = reflect(stage_dir / "original.spv")
+        hlsl_path = stage_dir / "private.hlsl"
+        if not _physical(hlsl_path) or not hlsl_path.is_file():
+            raise ValueError("Private authenticated HLSL stage missing")
+        private_hlsl_names = translated_private_cbuffer_names(hlsl_path.read_text(encoding="utf-8"))
+        if set(private_hlsl_names) != set(SOURCE_SLOTS[(pi, stage)]):
+            raise ValueError("Translated HLSL CB name/register coverage drift")
         for slot in SOURCE_SLOTS[(pi, stage)]:
             key = (pi, stage, slot)
-            results.append(compare(original[key], raw_reflection, slot, key))
+            evidence = private_name_parity(original[key]["_private_original_name"],
+                                           private_hlsl_names[slot], raw_reflection, slot)
+            results.append(compare(original[key], raw_reflection, slot, key, evidence))
     if len(results) != 8:
         raise ValueError("Foam source member audit coverage incomplete")
     return {
@@ -182,6 +240,9 @@ def audit(source, packet, manifest):
             x["original_partial_declared_bytes"] == x["translated_reflected_block_bytes"]
             for x in results),
         "rows": results,
+        "source_name_matches_hlsl_count": sum(x["source_name_equals_translated_hlsl"] for x in results),
+        "hlsl_name_matches_reflected_spirv_count": sum(x["translated_hlsl_name_equals_spirv_name"] for x in results),
+        "source_name_is_literal_hlsl_count": sum(x["source_name_literal_hlsl_usable"] for x in results),
         "original_index_unit_verified": False,
         "source_to_translated_member_identity_verified": False,
         "opaque_cb0_alias_verified": False,
