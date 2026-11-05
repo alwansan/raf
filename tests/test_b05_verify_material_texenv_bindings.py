@@ -90,6 +90,38 @@ class B05TexEnvTests(unittest.TestCase):
             self.assertEqual(exported_texenvs(Path(td)),{MAT:{'_MainTex':(TEX,None)}})
 
 
+    def test_actual_exported_texenv_mapping_shape_and_strict_original(self):
+        # Authentic same-instance T3 run 41939065539 failed with
+        # texenv_wrong_container. Export YAML can use a dictionary; the source
+        # Unity typetree is still required to use an explicit list.
+        value={'m_Texture':{'fileID':TEX[0],'guid':TEX[1],'type':TEX[2]},
+               'm_Scale':{'x':1,'y':1},'m_Offset':{'x':0,'y':0}}
+        self.assertEqual(normalize_texenvs({'_MainTex':value},exported=True),
+                         {'_MainTex':(TEX,(1.,1.,0.,0.))})
+        self.assertEqual(normalize_texenvs({},exported=True),{})
+        with self.assertRaisesRegex(ValueError,'array'):
+            normalize_texenvs({'_MainTex':value})
+        with self.assertRaisesRegex(ValueError,'Malformed or duplicate'):
+            normalize_texenvs({12:value},exported=True)
+        with self.assertRaisesRegex(ValueError,'Incomplete'):
+            normalize_texenvs({'_MainTex':{'m_Texture':value['m_Texture'],
+                           'm_Scale':{'x':1,'y':1}}},exported=True)
+
+    def test_actual_exported_material_mapping_yaml(self):
+        with tempfile.TemporaryDirectory() as td:
+            assets=Path(td)/'Assets';assets.mkdir()
+            mat=assets/'scope.mat'
+            mat.write_text('%YAML 1.1\\n--- !u!21 &2100000\\nMaterial:\\n'
+                           '  m_SavedProperties:\\n'
+                           '    m_TexEnvs:\\n'
+                           '      _MainTex:\\n'
+                           '        m_Texture: {fileID: 2800000, guid: '+ 'b'*32 +', type: 3}\\n'
+                           '        m_Scale: {x: 1, y: 1}\\n'
+                           '        m_Offset: {x: 0, y: 0}\\n')
+            (assets/'scope.mat.meta').write_text('fileFormatVersion: 2\\nguid: '+'a'*32+'\\n')
+            self.assertEqual(exported_texenvs(Path(td)),
+                             {MAT:{'_MainTex':(TEX,(1.,1.,0.,0.))}})
+
     def test_uv_transforms_same_and_modified(self):
         t,s,a=fixture()
         s[SRC]['_MainTex']=((0,101),(2.,1.,.5,0.))
