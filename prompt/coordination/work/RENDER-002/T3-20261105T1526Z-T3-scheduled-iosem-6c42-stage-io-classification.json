@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "username": "T3",
+  "session_id": "20261105T1526Z-T3-scheduled-iosem-6c42",
+  "origin": "scheduled",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "base_sha": "ef29c202aad740ced71fac943b574ae9232a40df",
+  "resumed_from_sessions": [
+    "20261105T1459Z-T3-chat-921-4pass-translation-c7d2",
+    "20261105T1428Z-T3-scheduled-a7c9"
+  ],
+  "experiment_key": "T3-921-Shader48-4pass-8stage-DXBC-SPIRV-HLSL-roundtrip-IO-decoration-type-builtin-categorization-v1",
+  "resource_key": "existing-CI42052605123-safe-aggregates-no-reexport",
+  "hypothesis": "0/8 IO reflection mismatches may be semantic/location remapping rather than value/semantic shader loss; distinguish builtins, locations, types, array widths before restoration",
+  "intended_files": [
+    "prompt/coordination/work/RENDER-002/T3-20261105T1526Z-T3-scheduled-iosem-6c42-stage-io-classification.json",
+    "prompt/coordination/clients/T3/sessions/20261105T1526Z-T3-scheduled-iosem-6c42.md"
+  ],
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42052605123"
+  ],
+  "next_step": "Add privacy-safe differential classification to existing T3 translator without rerunning identical original export; test synthetic controls first, then opt-in original run only if changed question and no overlapping T3 chat experiment."
+}
