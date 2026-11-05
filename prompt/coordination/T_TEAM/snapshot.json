@@ -434,7 +434,10 @@
         "https://github.com/alwansan/raf/commit/92b8c5111174cddace33c0944318c1a66f77ba5d",
         "https://github.com/alwansan/raf/actions/runs/42119098398",
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_MATERIAL_TEXENV_2026-11-05.md",
-        "https://github.com/alwansan/raf/commit/02bdaba315805fe48684faafdeedf2a692725f16"
+        "https://github.com/alwansan/raf/commit/02bdaba315805fe48684faafdeedf2a692725f16",
+        "https://github.com/alwansan/raf/actions/runs/42120918486",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_TEXTURE2D_STREAM_2026-11-06.md",
+        "https://github.com/alwansan/raf/commit/9cf384847fd4bd4e1fc8d1c8ebd67a0afbf788b2"
       ],
       "remaining": [
         "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -492,7 +495,7 @@
         "نجاحعلىالهاتف"
       ],
       "updated_by": "T3",
-      "updated_at": "2026-11-05T22:11:00Z",
+      "updated_at": "2026-11-05T22:23:10Z",
       "_record_path": "../B_TEAM/issues/RENDER-002.json"
     },
     {
@@ -6825,6 +6828,28 @@
       "_record_path": "../B_TEAM/events/T3/20261105T2204Z-T3-chat-particle108-mattex-a4c6.json"
     },
     {
+      "id": "20261105T221843Z-T3-chat-particle28-stream-7c49",
+      "owner": "T3",
+      "origin": "chat",
+      "session_id": "20261105T221843Z-T3-chat-particle28-stream-7c49",
+      "issue_id": "RENDER-002",
+      "type": "result",
+      "at": "2026-11-05T22:23:10Z",
+      "summary": "SHA-original sixscene/four-owner ParticleShader48 108-slot chain: 5 actual Material21 → 10 local non-null TexEnv PPtrs → 3 unique actual Texture2D class28 objects. All three require one manifest-declared external .resS provider, 3 extents valid; resource provider payload not staged in narrow run. CI42120918486 SUCCESS 88/88. Not Android missing-resource claim.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42120918486",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_TEXTURE2D_STREAM_2026-11-06.md",
+        "https://github.com/alwansan/raf/commit/9cf384847fd4bd4e1fc8d1c8ebd67a0afbf788b2"
+      ],
+      "limitations": [
+        "no source external .resS payload SHA",
+        "no W1/B02 same-instance Unity export GUID",
+        "no Android pixel/particle emitter acceptance",
+        "RENDER-002 OPEN"
+      ],
+      "_record_path": "../B_TEAM/events/T3/20261105T221843Z-T3-chat-particle28-stream-7c49.json"
+    },
+    {
       "id": "T4-20261104T2357Z-local-load-start",
       "owner": "T4",
       "session_id": "20261104T2357Z-T4-lw01",
@@ -7718,7 +7743,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "c6b614938546e214b00b159c71f75290070e0484360b12fec2fde0a0396aadc2",
+  "source_input_sha256": "a6b7f6c6d7e222f3201fe766778c1131de86e7d2229baa2c749e8c5566fa3e08",
   "generation": "T-2026-11-05",
-  "input_sha256": "744d75cd7d2db96f3ae90e34e3538f0484c99355185d76ce3e78969fad7bff85"
+  "input_sha256": "c1db5d44b36652e72632ba170fc85b23bb78e52a7fc29c2d173b8c9b3a3e1507"
 }
