@@ -1,0 +1,214 @@
+name: T3 RENDER-002 authentic Shader48 USC Decompile versus default Dummy ShaderLab
+# Exact original 12 provider experiment: modify only isolated runner Program.cs
+# from pinned AssetRipper default Dummy to explicit unstable Decompile.
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-t3-real-shader-decompile-export.yml'
+permissions:
+  contents: read
+concurrency:
+  group: raft-t3-original-USCShaderDecompile-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  bounded-actual-export:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - name: Checkout only B21 scripts/W1/B02 SHA-locked staging source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            android-port/Experiments/ExportLineage
+            scripts
+            tests
+      - name: Check disk budget and synthetic original/export parity tests
+        run: |
+          set -euo pipefail
+          python3 -c "import shutil; assert shutil.disk_usage('.').free > 8 * 1024**3"
+          python3 -m unittest discover -s tests -p 'test_t3_external_texture_lineage.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_external_texture_export.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_material_shader_same_export.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_original_shader_pass_topology.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_same_export_shader_pass_topology.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_original_material_shader_target.py' -v
+          python3 -m unittest discover -s tests -p 'test_a13_exported_material_shader_guids.py' -v
+          python3 -m unittest discover -s tests -p 'test_b21_stage_light_lineage.py' -v
+          python3 -m unittest discover -s tests -p 'test_b21_compare_export_lights.py' -v
+          python3 -m unittest discover -s tests -p 'test_b21_compare_light_owners.py' -v
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Obtain exact public AssetRipperCLI source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: nowl-it/AssetRipperCLI
+          ref: 036098ab525a3f9f693dc101edeb21faad4d32d8
+          path: ar-host
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            Source
+      - name: Compile SHA-pinned optional W1+B02+B21 exporter in disposable public checkout
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/b21"
+          python3 -m scripts.b21_stage_light_lineage \
+            --base-helper android-port/Experiments/ExportLineage/RaftExportLineage.cs \
+            --destination "$RUNNER_TEMP/b21/RaftExportLineage.cs"
+          python3 -m scripts.patch_export_lineage --tool-source ar-host --helper "$RUNNER_TEMP/b21/RaftExportLineage.cs"
+          # Only this disposable experiment opts into unstable original DXBC
+          # decompilation. Do NOT commit change to shared Program.cs/game.
+          python3 - <<'PY'
+          from pathlib import Path
+          path=Path('android-port/Experiments/ExportLineage/Program.cs')
+          original=path.read_text('utf-8')
+          anchor='settings.ExportSettings.ScriptExportMode = ScriptExportMode.Decompiled;'
+          assert original.count(anchor)==1 and 'ShaderExportMode.Decompile' not in original
+          updated=original.replace(anchor,anchor+'\nsettings.ExportSettings.ShaderExportMode = ShaderExportMode.Decompile;')
+          path.write_text(updated,'utf-8')
+          assert updated.count('ShaderExportMode.Decompile')==1
+          print('RAFT_T3_PRIVATE_DECOMPILE_MODE=Decompile')
+          PY
+          timeout 780s dotnet publish android-port/Experiments/ExportLineage/ExportLineage.csproj \
+            -c Release -p:PublishAot=false -p:PublishTrimmed=false \
+            -p:EnableTrimAnalyzer=false -p:EnableAotAnalyzer=false \
+            --self-contained false -o "$RUNNER_TEMP/b21-compiled" \
+            > "$RUNNER_TEMP/b21-build-public-tool.log" 2>&1 || {
+              tail -60 "$RUNNER_TEMP/b21-build-public-tool.log"; exit 1;
+            }
+          dotnet "$RUNNER_TEMP/b21-compiled/ExportLineage.dll" --probe-tool > /dev/null
+      - name: Checkout immutable ZIP2 NINE SMALL original serialized providers (no LFS)
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-original
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/level0
+            Raft/Raft_Data/level1
+            Raft/Raft_Data/level2
+            Raft/Raft_Data/level3
+            Raft/Raft_Data/level4
+            Raft/Raft_Data/level5
+            Raft/Raft_Data/globalgamemanagers
+            Raft/Raft_Data/globalgamemanagers.assets
+            Raft/Raft_Data/sharedassets6.assets
+            Raft/Raft_Data/sharedassets0.assets
+            Raft/Raft_Data/resources.assets
+      - name: Include exact plain original sharedassets1 provider with safe non-cone patterns
+        run: |
+          set -euo pipefail
+          # sharedassets0 is a ZIP2 multipart directory; sharedassets1 is a
+          # real plain asset. Cone sparse selectors cannot select a plain file.
+          git -C zip2-original sparse-checkout set --no-cone -- \
+            '/RAFT_FILE_MANIFEST.tsv' \
+            '/Raft/Raft_Data/level0' '/Raft/Raft_Data/level1' \
+            '/Raft/Raft_Data/level2' '/Raft/Raft_Data/level3' \
+            '/Raft/Raft_Data/level4' '/Raft/Raft_Data/level5' \
+            '/Raft/Raft_Data/globalgamemanagers' \
+            '/Raft/Raft_Data/globalgamemanagers.assets' \
+            '/Raft/Raft_Data/sharedassets6.assets' \
+            '/Raft/Raft_Data/sharedassets0.assets/*' \
+            '/Raft/Raft_Data/sharedassets1.assets' \
+            '/Raft/Raft_Data/resources.assets/*'
+          test -d zip2-original/Raft/Raft_Data/resources.assets
+          test -f zip2-original/Raft/Raft_Data/sharedassets1.assets
+          test -d zip2-original/Raft/Raft_Data/sharedassets0.assets
+      - name: Reconstruct in temporary staging with exact per-file size and SHA256
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import subprocess,os,json
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import ZIP2_SHA,stage
+          from scripts.b21_scene_lightmap_links import PIN
+          from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
+          from scripts.b04_restore_original_color_settings import ORIGINAL_SIZE,ORIGINAL_SHA256
+          zip2=Path('zip2-original')
+          assert subprocess.check_output(['git','-C',str(zip2),'rev-parse','HEAD'],text=True).strip()==ZIP2_SHA
+          pins={'Raft_Data/'+name:v for name,v in PIN.items()}
+          pins.update({
+            'Raft_Data/globalgamemanagers':(ORIGINAL_SIZE,ORIGINAL_SHA256),
+            'Raft_Data/globalgamemanagers.assets': SHADER_OWNERS['globalgamemanagers.assets'],
+            'Raft_Data/sharedassets6.assets':SHADER_OWNERS['sharedassets6.assets'],
+            'Raft_Data/sharedassets0.assets':SHADER_OWNERS['sharedassets0.assets'],
+            'Raft_Data/sharedassets1.assets':SHADER_OWNERS['sharedassets1.assets'],
+            'Raft_Data/resources.assets':SHADER_OWNERS['resources.assets']
+          })
+          result=stage(zip2,Path(os.environ['RUNNER_TEMP'])/'b21-original',pins)
+          assert len(result['owners'])==12 and not result['lfs_used']
+          print('RAFT_T3_TWELVE_ORIGINAL_PROVIDERS_AUTHENTICATED=12')
+          PY
+      - name: Install pinned original serialized reader and verify source Light population
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.23.0
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          import UnityPy
+          from scripts.b21_compare_export_lights import original_lights
+          root=Path(os.environ['RUNNER_TEMP'])/'b21-original/Raft_Data'
+          assert len(original_lights(root))==2
+          objs=[o for f in ('globalgamemanagers.assets','sharedassets6.assets') for o in UnityPy.load(str(root/f)).objects]
+          materials=sum(o.type.name=='Material' for o in objs)
+          shaders=sum(o.type.name=='Shader' for o in objs)
+          print(f'RAFT_B21_SMALL_EXPORT_GRAPH materials={materials} shaders={shaders} sourceLights=2')
+          assert materials>0 and shaders>0, 'Bounded source lacks exporter required graph; do not attempt empty export'
+          PY
+      - name: Run one bounded genuine source export with THREE same-instance private traces
+        env:
+          DOTNET_PROCESSOR_COUNT: '2'
+          RAFT_PRIVATE_EXPORT_LINEAGE: ${{ runner.temp }}/b21-w1-private.json
+          RAFT_PRIVATE_EXPORT_TEXTURE_LINEAGE: ${{ runner.temp }}/b21-b02-private.json
+          RAFT_PRIVATE_EXPORT_LIGHT_LINEAGE: ${{ runner.temp }}/b21-light-private.json
+        run: |
+          set -euo pipefail
+          if timeout 720s dotnet "$RUNNER_TEMP/b21-compiled/ExportLineage.dll" \
+               "$RUNNER_TEMP/b21-original" "$RUNNER_TEMP/b21-private-export" \
+               > "$RUNNER_TEMP/b21-original-export-private.log" 2>&1; then
+            test -s "$RAFT_PRIVATE_EXPORT_LINEAGE"
+            test -s "$RAFT_PRIVATE_EXPORT_LIGHT_LINEAGE"
+            echo 'RAFT_B21_BOUNDED_GAME_EXPORT_COMPLETED=true'
+          else
+            python3 - <<'PY'
+          import os,json,re
+          from pathlib import Path
+          root=Path(os.environ['RUNNER_TEMP'])
+          raw=(root/'b21-original-export-private.log').read_text(errors='replace')
+          report={'actual_export_completed':False,'tool_exception_categories':sorted(set(re.findall(r'\b(?:System|AssetRipper)\.[A-Za-z.]+Exception\b',raw))),
+                  'trace_w1_created':(root/'b21-w1-private.json').is_file(),
+                  'trace_light_created':(root/'b21-light-private.json').is_file(),
+                  'private_log_bytes':len(raw.encode()),'android_render_executed':False}
+          (root/'t3-USC-shader-decompile-safe.json').write_text(json.dumps(report,sort_keys=True))
+          print('RAFT_B21_BOUNDED_EXPORT_INCONCLUSIVE '+json.dumps(report,sort_keys=True))
+          PY
+            exit 2
+          fi
+      - name: Prove actual Shader48 to ShaderLab per-object Pass deficit after exact Material PPtr and GUID acceptance
+        run: |
+          set -euo pipefail
+          python3 -m scripts.t3_same_export_shader_pass_topology \
+            --original "$RUNNER_TEMP/b21-original" \
+            --project "$RUNNER_TEMP/b21-private-export/ExportedProject" \
+            --w1-trace "$RUNNER_TEMP/b21-w1-private.json" \
+            --b02-trace "$RUNNER_TEMP/b21-b02-private.json" \
+            --out "$RUNNER_TEMP/t3-USC-shader-decompile-safe.json"
+      - name: Publish ONLY safe aggregate, never game assets or private traces
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: t3-authentic-original-ShaderUSC-Decompile-Pass-evidence-${{ github.run_id }}
+          path: ${{ runner.temp }}/t3-USC-shader-decompile-safe.json
+          retention-days: 7
+          if-no-files-found: ignore
