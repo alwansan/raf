@@ -1,0 +1,22 @@
+{
+  "session_id": "20261105T2230Z-T3-scheduled-streamrange-9c62",
+  "origin": "scheduled",
+  "identity": "T3",
+  "issue_id": "RENDER-002",
+  "status": "in_progress",
+  "base_sha": "cb649454069ff110d1d16393391fd15a2259e3cf",
+  "scope": [
+    "scripts/t3_stream_extent_guard.py",
+    "tests/test_t3_stream_extent_guard.py",
+    "prompt/coordination/work/RENDER-002/20261105T2230Z-T3-scheduled-streamrange-9c62.json",
+    "prompt/coordination/clients/T3/sessions/20261105T2230Z-T3-scheduled-streamrange-9c62.md"
+  ],
+  "hypothesis": "Validate streamed texture offset/size against manifest length with overflow-safe bounds and overlap detection, prior to claiming .resS payload coverage.",
+  "experiment_key": "T3-synthetic-stream-extent-overlap-guard-v1",
+  "resource_key": "cpu-only-no-ZIP2",
+  "resumed_from": [
+    "20261105T221843Z-T3-chat-particle28-stream-7c49",
+    "20261105T213100Z-T3-scheduled-clstage-8b4f"
+  ],
+  "coordination": "T2 run 42121817207 in progress; no overlap; no source asset changes"
+}
