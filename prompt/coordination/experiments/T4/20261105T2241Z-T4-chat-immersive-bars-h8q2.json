@@ -1,0 +1,84 @@
+{
+  "session_id": "20261105T2241Z-T4-chat-immersive-bars-h8q2",
+  "owner": "T4",
+  "origin": "chat",
+  "issue_id": "INPUT-005",
+  "status": "completed_source_integrated_device_unverified",
+  "title": "API26+ Android system bar immersive behavior without modifying Unity resolution or OS gesture exits",
+  "input_provenance": {
+    "original": "ZIP2@15964ea8f246b6e076ce26b60931ee2e1a9a2385/Assembly-CSharp.dll size 3211776 sha256 0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "official_android": "https://developer.android.com/develop/ui/views/layout/immersive",
+    "android_15_os_gestures": "https://source.android.com/docs/compatibility/15/android-15-cdd"
+  },
+  "hypothesis": "Native Unity source staging does not set persistent immersive system bars when a physical mouse touches the game edge; Android app foreground may request modern WindowInsetsController.hide(Type.systemBars) on API30+ and additive legacy sticky fullscreen flags for API26-29, without blocking Home/Back gestures.",
+  "source_changes": [
+    {
+      "path": "android-port/Runtime/Platform/AndroidImmersiveSystemBars.cs",
+      "commit": "40b567a2f2772a2489359848d9cd2a79ab78b7b4"
+    },
+    {
+      "path": "android-port/Runtime/Platform/AndroidSystemBarPolicy.cs",
+      "commit": "0db34ca7729053fe53f1e124a87eb09284b1f68b"
+    },
+    {
+      "path": ".github/workflows/raft-unity-editor-android-import.yml",
+      "commit": "39c3e711872a9ebb71a4a0c964d25e684b5fb7a7"
+    },
+    {
+      "path": "scripts/verify_android_offline_candidate.py",
+      "commit": "d0f523196ad654ab4ef503469d2e0feecce7f680"
+    },
+    {
+      "path": "android-port/Tests/ImmersiveBars/ImmersiveBars.csproj",
+      "commit": "c446c3cc77fb1deef4b87e8a32c251a959cd4701"
+    },
+    {
+      "path": "android-port/Tests/ImmersiveBars/UnityManagedCompile.csproj",
+      "commit": "1c38447ad259d6e0ed53decc54d2d036d003d8a3"
+    },
+    {
+      "path": "android-port/Tests/ImmersiveBars/Program.cs",
+      "commit": "4a4e986fa3df4490f69e02c239a2cbde6d8f877f"
+    },
+    {
+      "path": "tests/test_t4_android_immersive_system_bars.py",
+      "commit": "82701f3f79cd8e69d6dd016734d1a17cbe5b9717"
+    },
+    {
+      "path": ".github/workflows/raft-t4-immersive-system-bars.yml",
+      "commit": "0d27dccdae0e47e649b247af990d6675ee5680ec"
+    }
+  ],
+  "tests": {
+    "workflow": ".github/workflows/raft-t4-immersive-system-bars.yml",
+    "failed_initial_run": {
+      "url": "https://github.com/alwansan/raf/actions/runs/42124747838",
+      "cause": "CSharp test-only bit pattern literal 0x80000008 treated as uint, CS0266; corrected to unchecked((int)0x80000008u)"
+    },
+    "final_run": "https://github.com/alwansan/raf/actions/runs/42124859112",
+    "job_id": 127586307830,
+    "result": "COMPLETED SUCCESS",
+    "python_unittest": "7/7",
+    "dotnet_policy_checks": "18/18",
+    "original_Unity2021_managed_compile": "SUCCESS",
+    "original_dll_sha_gate": "PASS",
+    "unity_editor_android_build": false,
+    "android_device_tested": false
+  },
+  "safety_boundaries": [
+    "API30+ native WindowInsetsController with systemBars and BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE=2 (OS Back/Home still accessible)",
+    "API26-29 uses additive View.SYSTEM_UI flags using OR, retaining all existing Unity flags; no flags cleared",
+    "Only Android UNITY_ANDROID non-Editor and focused unpaused Activity; UI thread dispatch; no Screen.SetResolution or Orientation changes",
+    "15-second sparse reapply to avoid fighting transient system edge gestures",
+    "No modifications to T4 physical mouse bridge, T5 Resolution/UI, touch, native request JSON, original game .meta GUIDs, audio or world/save",
+    "Compiled source can issue hide calls but cannot guarantee bars never appear: OS gestures may show transient overlays"
+  ],
+  "limitations": [
+    "No full Unity IL2CPP APK/OBB/XAPK output from this source SHA",
+    "No live POCO F5 Pro confirmation whether navigation/status overlays are hidden, transient or restored",
+    "Android OS remains able to reveal transient bars with swipe gestures; no attempt to disable them",
+    "Owner 42058825739 world/save/reopen proof is only that original APK source SHA e9c358e, not this source",
+    "Android 15/window insets and legacy fullscreen behavior may depend on target SDK and Unity activity state; device verification mandatory"
+  ],
+  "next_step": "T5 next signed diagnostic APK candidate: confirm exact sha/manifest, test Android 15 mouse edge navigation/status bars in game/menu with normal system swipe exits preserved, landscape/Resolution, physical mouse capture and world/save/reopen regressions; do not mark INPUT-005 closed until phone proves it."
+}
