@@ -33,6 +33,7 @@ jobs:
         run: |
           test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2{print $4}')" -gt 1048576
           python3 -m unittest discover -s tests -p test_t1_fft_readback_parity.py -v
+          python3 -m unittest discover -s tests -p test_t1_fft_empty_capture_guard.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_pass0_trace_variant.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_spirv_read_provenance.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_pass0_load_inventory.py -v
@@ -76,7 +77,10 @@ jobs:
           python3 -m scripts.t1_fft_pass0_trace_variant "$TMPDIR/candidates/Assets/T1OriginalDerived/FFT_Candidate_00.compute"
           python3 -m scripts.t1_fft_vulkan_roundtrip_isolation --project "$TMPDIR/candidates"
           # The trace runner validates capacity for the observed 384 reads.
-          python3 -m scripts.t1_fft_pass0_vulkan_trace --project "$TMPDIR/candidates"
+          python3 -m scripts.t1_fft_pass0_vulkan_trace --project "$TMPDIR/candidates" \
+            --export-private-trace "$TMPDIR/vulkan-trace.bin"
+          # Verify the actual private binary export is accepted by the paired comparator.
+          python3 -m scripts.t1_fft_trace_compare "$TMPDIR/vulkan-trace.bin" "$TMPDIR/vulkan-trace.bin"
       - name: Remove all private inputs and scratch data
         if: always()
         run: |
