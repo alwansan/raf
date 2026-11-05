@@ -8,6 +8,8 @@ on:
       - .github/workflows/raft-t1-spirv-interface-component-audit.yml
       - scripts/t1_spirv_interface_component_audit.py
       - tests/test_t1_spirv_interface_component_audit.py
+      - scripts/t1_spirv_interface_roundtrip_drift.py
+      - tests/test_t1_spirv_interface_roundtrip_drift.py
 
 permissions:
   contents: read
@@ -25,6 +27,7 @@ jobs:
             tests
       - run: python3 -m unittest discover -s tests -p test_t1_spirv_interface_component_audit.py -v
 
+      - run: python3 -m unittest discover -s tests -p test_t1_spirv_interface_roundtrip_drift.py -v
       - name: Compile and validate a synthetic vertex and fragment pair
         run: |
           set -euo pipefail
@@ -51,3 +54,5 @@ jobs:
           spirv-val "$scratch/vertex.spv"
           spirv-val "$scratch/fragment.spv"
           python3 -m scripts.t1_spirv_interface_component_audit "$scratch/vertex.spv" "$scratch/fragment.spv"
+          python3 -m scripts.t1_spirv_interface_roundtrip_drift \
+            "$scratch/vertex.spv" "$scratch/fragment.spv" "$scratch/vertex.spv" "$scratch/fragment.spv"
