@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "work_id": "T4-20261105T1338Z-T4-scheduled-v6n9-device-evidence-contract",
+  "session_id": "20261105T1338Z-T4-scheduled-v6n9",
+  "origin": "scheduled",
+  "issue_id": "LOCAL-005",
+  "status": "active",
+  "base_sha": "7574ee6176eabeacc5360c3e393278c1fec34236",
+  "taken_over_from": [
+    "prompt/coordination/clients/T4/sessions/20261105T1246Z-T4-chat-load-file-gate-m8q2.md",
+    "prompt/coordination/clients/T4/sessions/20261105T1217Z-T4-android-save-postcheck.md"
+  ],
+  "intended_files": [
+    "prompt/coordination/work/LOCAL-005/T4-20261105T1338Z-T4-scheduled-v6n9-device-evidence-contract.json",
+    "prompt/coordination/clients/T4/sessions/20261105T1338Z-T4-scheduled-v6n9.md",
+    "prompt/coordination/discussions/LOCAL-005/20261105T1338Z-T4-scheduled-v6n9-device-evidence-contract.md"
+  ],
+  "hypothesis": "A source-free, deterministic device-evidence contract can distinguish post-Save file existence from durable valid RGD reopen and prevent false LOCAL-005 closure.",
+  "experiment_key": "local005-device-event-correlation-contract-source-only-20261105-v1",
+  "resource_key": null,
+  "updated_at": "2026-11-05T13:38:41Z"
+}
