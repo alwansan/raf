@@ -6,7 +6,7 @@
   "origin": "chat",
   "issue_id": "WATER-001",
   "track": "source-authentic-foam-two-pass-vf-pair-compilation",
-  "status": "active",
+  "status": "completed",
   "base_sha": "eb2785806a6cc52b8fc86051dfebb28c6cb6ec15",
   "resumed_from_sessions": [
     "20261105T2148Z-T2-chat-multiarity-stack-6b31",
@@ -39,7 +39,46 @@
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_ORIGINAL_DXBC_SPIRV_ACTIVE_BRIDGE_2026-11-05.md"
   ],
   "last_verified_result": "B20 original private packet 4 source stages + 2 render states, B24 standalone SPIRV+HLSL recompilation, T2 exact 21 SAMPLE/t-s active register identity; no paired HLSL integration, CB0 alias/upload or Unity ShaderLab/Adreno proven.",
-  "run_urls": [],
-  "updated_at": "2026-11-05T22:20:00Z",
-  "next_step": "Author isolated source-only pair compiled-stage validation and run on pinned authentic original; record whether both passes compile together. If blocked, classify phase only and preserve logs private."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42121569920",
+    "https://github.com/alwansan/raf/actions/runs/42121619881",
+    "https://github.com/alwansan/raf/actions/runs/42121817207"
+  ],
+  "updated_at": "2026-11-05T22:31:00Z",
+  "next_step": "With original 2/2 paired HLSL source compilation proven, integrate exact original 2 authored properties (1 serialized texture, 1 other type) into private ShaderLab template without guessed property defaults; use B25 source states and proper CB0/texture alias, and attempt an isolated Unity importer test if coordinated. Must not install dummy shader or claim pixels. WATER-001 OPEN.",
+  "source_commits": [
+    "a0e1aebcd82b8f780eacea75428ba129a9cf3d07",
+    "acce626247a8111af51511574aa9216e5281b81c",
+    "ff938dbe4a0db6e6dac5d2808c944ee882415cf7"
+  ],
+  "result": {
+    "conclusion": "success",
+    "run_id": 42121817207,
+    "job_id": 127575852396,
+    "source_authentication": true,
+    "original_foam_two_passes": 2,
+    "paired_hlsl_inputs": 2,
+    "validated_spirv_stage_variants": 4,
+    "same_source_pair_glslang_compiled": true,
+    "vulkan11_spirv_val": true,
+    "synthetic_test_count": 10,
+    "synthetic_test_failures": 0,
+    "previous_failures": [
+      {
+        "run_id": 42121569920,
+        "reason": "original source compiler not reached; unsafe private scratch path guard rejected nested B20 source"
+      },
+      {
+        "run_id": 42121619881,
+        "reason": "original source compiler not reached; safe aggregate output path inside RUNNER_TEMP disallowed"
+      }
+    ],
+    "new_unknowns": [
+      "original ShaderLab two-pass authored Properties and CB0 alias",
+      "Unity 2021 import of ShaderLab",
+      "material/sampler/CB runtime delivery",
+      "original shader numeric output parity on Adreno"
+    ]
+  },
+  "integration_commit": "ff938dbe4a0db6e6dac5d2808c944ee882415cf7"
 }

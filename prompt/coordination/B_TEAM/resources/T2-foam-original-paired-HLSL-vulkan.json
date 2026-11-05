@@ -1,0 +1,30 @@
+{
+  "id": "T2-foam-original-paired-HLSL-vulkan",
+  "owner": "T2",
+  "issue_id": "WATER-001",
+  "title": "Source-authenticated original Foam 2-pass paired VS/PS HLSL composition validates all 4 Vulkan1.1 stages",
+  "kind": "sha_original_two_pass_stage_pair_vulkan_validation",
+  "stages": {
+    "acquisition": "zip2_sha15964ea8_original_sharedassets0_sha0498f738_verified",
+    "extraction": "shader_path2420_sha67bd7a7f_verified_4_original_stages_2_render_states",
+    "reconstruction": "two_passes_both_have_paired_VS_PS_HLSL_program_text_glslang_and_spirv_val_success",
+    "binding": "source_resource_register_identity_prior_verified;_cb0_alias_and_material_property_runtime_binding_unverified",
+    "integration": "CI42121817207_4_stage_compilations_success;_ShaderLab_not_constructed_or_installed",
+    "device": "NOT_TESTED"
+  },
+  "observed": {
+    "original_pass_count": 2,
+    "authentic_stage_count": 4,
+    "paired_program_text_count": 2,
+    "recompiled_and_validated_stages": 4,
+    "synthetic_controls_passed": 10,
+    "private_hlsl_spirv_published": false,
+    "shaderlab_unity_import_proven": false,
+    "android_water_pixels_proven": false
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42121817207",
+    "https://github.com/alwansan/raf/commit/a0e1aebcd82b8f780eacea75428ba129a9cf3d07"
+  ],
+  "next_step": "With original 2/2 paired HLSL source compilation proven, integrate exact original 2 authored properties (1 serialized texture, 1 other type) into private ShaderLab template without guessed property defaults; use B25 source states and proper CB0/texture alias, and attempt an isolated Unity importer test if coordinated. Must not install dummy shader or claim pixels. WATER-001 OPEN."
+}

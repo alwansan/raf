@@ -1,0 +1,13 @@
+{
+  "id": "20261105T2220Z-T2-chat-foam-passpair-f174-result",
+  "owner": "T2",
+  "session_id": "20261105T2220Z-T2-chat-foam-passpair-f174",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Original SHA-verified Foam 2/2 VS/PS HLSL pass pairs compile as per-pass joint source with 4/4 SPIR-V Vulkan1.1 validations, 10/10 synthetic tests. Not Unity ShaderLab/Adreno proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42121817207",
+    "https://github.com/alwansan/raf/commit/ff938dbe4a0db6e6dac5d2808c944ee882415cf7"
+  ],
+  "at": "2026-11-05T22:31:00Z"
+}
