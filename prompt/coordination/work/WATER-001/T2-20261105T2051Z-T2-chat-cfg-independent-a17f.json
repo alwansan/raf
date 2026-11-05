@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T2051Z-T2-chat-cfg-independent-a17f",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "track": "foam-rendertexture-cfg-synthetic-validation",
+  "status": "active",
+  "base_sha": "b6c65407a97b91a55aa05a516bd0a59b68904069",
+  "resumed_from_sessions": [
+    "20261105T2017Z-T2-scheduled-retfix-7c3a",
+    "20261105T1736Z-T2-chat-ret-reason-28ce"
+  ],
+  "approach": "Independently validate latest scheduled CFG fixes using a new source-free, bounded metamorphic regression suite and an isolated GitHub Actions workflow. Do not edit the scheduled owner's scripts/t2_rt_return_cfg.py or tests/test_t2_rt_return_cfg.py.",
+  "hypothesis": "Existing synthetic CFG provenance classifier is fail-closed on variant branch paths, malformed operands and multi-return cases; new tests should expose any false 'constructed' claims before original-only integration.",
+  "intended_files": [
+    "tests/test_t2_rt_return_cfg_independent.py",
+    ".github/workflows/raft-t2-rt-return-cfg-independent.yml",
+    "prompt/coordination/work/WATER-001/T2-20261105T2051Z-T2-chat-cfg-independent-a17f.json",
+    "prompt/coordination/clients/T2/sessions/20261105T2051Z-T2-chat-cfg-independent-a17f.md",
+    "prompt/coordination/experiments/T2/T2-20261105T2051Z-T2-chat-cfg-independent-a17f.json",
+    "prompt/coordination/B_TEAM/events/T2/20261105T2051Z-T2-chat-cfg-independent-a17f-result.json"
+  ],
+  "experiment_key": "source-free-synthetic-rt-cfg-branch-meta-invalid-multi-return-v1",
+  "resource_key": null,
+  "related_work": [
+    "prompt/coordination/work/WATER-001/T2-20261105T1916Z-T2-scheduled-localbound-c61f.json",
+    "prompt/coordination/work/WATER-001/T2-20261105T1821Z-scheduled-cfg-stack-join.json"
+  ],
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/T2/sessions/20261105T2017Z-T2-scheduled-retfix-7c3a.md",
+    "https://github.com/alwansan/raf/actions/runs/42078263113"
+  ],
+  "last_verified_result": "Scheduled source commits 16248184074... and 220a329d... added CFG guards but tests not executed; original SHA-pinned Foam writer prior-call opcode only, not runtime nonnull proof.",
+  "experiment_ids": [
+    "T2-20261105T2051Z-T2-chat-cfg-independent-a17f"
+  ],
+  "run_urls": [],
+  "updated_at": "2026-11-05T20:51:00Z",
+  "next_step": "Create separate source-free test+CI workflow, inspect results, record strict scope and outcome. Do not modify existing scheduled files or run heavy Unity build."
+}

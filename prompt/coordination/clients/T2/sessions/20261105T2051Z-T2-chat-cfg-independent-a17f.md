@@ -1,0 +1,14 @@
+# T2 chat session 20261105T2051Z-T2-chat-cfg-independent-a17f
+- session_id: `20261105T2051Z-T2-chat-cfg-independent-a17f`
+- origin: `chat`
+- status: `active`
+- base_sha: `b6c65407a97b91a55aa05a516bd0a59b68904069`
+- resumed_from_sessions: `20261105T2017Z-T2-scheduled-retfix-7c3a`, `20261105T1736Z-T2-chat-ret-reason-28ce`
+- issue: `WATER-001`
+- work_id: `prompt/coordination/work/WATER-001/T2-20261105T2051Z-T2-chat-cfg-independent-a17f.json`
+- experiment_key: `source-free-synthetic-rt-cfg-branch-meta-invalid-multi-return-v1`
+- intended_files: `tests/test_t2_rt_return_cfg_independent.py`, `.github/workflows/raft-t2-rt-return-cfg-independent.yml`, this session, own work/experiment/event records.
+- scope: test the scheduled CFG fix independently without editing scheduled files. The source-free CI is a narrow verification, NOT original game, shader, Unity, GPU or device pixel evidence.
+- baseline: scheduled `20261105T2017Z-T2-scheduled-retfix-7c3a` published source corrections but reported tests not executed; authenticated original ReturnTexture one stloc preceded by call has not proven live non-null output.
+- team: latest tested phone package run 42058825739 can enter/save/reenter world; water pass and FFT failures persist in owner evidence. Incoming global adapter integration CI 42106538822/42106538730 queued, 42106524153/42106524365 running at initial scan. Do not cancel, duplicate or modify Unity workflows.
+- next_step: add independent test + targeted CI, verify job, report any failures with strict source-only caveat.
