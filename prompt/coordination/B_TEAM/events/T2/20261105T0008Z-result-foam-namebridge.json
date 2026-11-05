@@ -1,0 +1,15 @@
+{
+  "id": "T2-20261105T0008Z-result-foam-namebridge",
+  "owner": "T2",
+  "session_id": "20261104T2354Z-T2-foamabi01",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Original SHA-authenticated Foam 8 CB source partial members vs translated SPIRV UBO offsets audited; only 2/8 candidate index*16 overlaps; original CB names 0/8 equal translated HLSL names, HLSL names 8/8 equal reflected SPIRV names, original HLSL-legal symbols 4/8. 20/20 synthetic controls and three authentic T2 CI runs SUCCESS. No source-to-member identity, CB0 upload alias, ShaderLab, Unity/device or water readiness claimed.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41937996942",
+    "https://github.com/alwansan/raf/actions/runs/41938551022",
+    "https://github.com/alwansan/raf/actions/runs/41938898381",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_MEMBER_ABI_NAME_BRIDGE_2026-11-05.md"
+  ],
+  "at": "2026-11-05T00:08:00Z"
+}
