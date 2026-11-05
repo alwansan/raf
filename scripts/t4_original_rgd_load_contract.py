@@ -85,6 +85,40 @@ def analyze(source, expected_sha=PINS["SaveAndLoad"]):
 
 
 
+
+def inspect_exact_original_loader_method(source, expected_sha):
+    """Read the same Load<T> declaration traced by native operations manifest.
+
+    Scope is the exact original method. Never claim compatibility solely from
+    a missing/assigned Binder token or a serialized assembly version.
+    """
+    if fingerprint(source) != expected_sha:
+        raise ValueError("Unknown original SaveAndLoad SHA256")
+    from scripts.instrument_android_runtime_operations import body_bounds
+    signature = "public static T Load<T>(string filename)"
+    begin, end = body_bounds(source, signature)
+    code = _executable_positions(source)[begin:end]
+    count = len(DESERIALIZE.findall(code))
+    if count != 1:
+        raise ValueError("Expected exactly one original Load<T> Deserialize call")
+    return {
+        "original_saveandload_sha256": fingerprint(source),
+        "loader_signature_verified_from_runtime_manifest": True,
+        "loader_body_sha256": fingerprint(source[begin:end]),
+        "loader_deserialize_call_count": count,
+        "loader_binder_assignment_count": len(BINDER.findall(code)),
+        "loader_assembly_resolver_token_count": len(CUSTOM_RESOLVE.findall(code)),
+        "loader_file_manager_calls": len(FILE_IO.findall(code)),
+        "loader_catch_blocks": len(CATCH.findall(code)),
+        "original_file_or_schema_modified": False,
+        "binder_version_runtime_compatibility_tested": False,
+        "rgd_deserialized_or_saved": False,
+        "android_unity_device_tested": False,
+        "raw_original_code_published": False,
+    }
+
+
+
 def inspect_original_saveandload_scope(source, expected_sha):
     """Bounded executable site inventory when ILSpy method signatures defy parser.
 
@@ -103,7 +137,7 @@ def inspect_original_saveandload_scope(source, expected_sha):
         "binder_assignments_in_file": len(BINDER.findall(code)),
         "assembly_resolution_tokens_in_file": len(CUSTOM_RESOLVE.findall(code)),
         "file_manager_calls_in_file": len(FILE_IO.findall(code)),
-        "generic_load_identifier_tokens_in_file": len(re.findall(r"\\bLoad\\s*<", code)),
+        "generic_load_identifier_tokens_in_file": len(re.findall(r"\bLoad\s*<", code)),
         "source_method_parser_resolved": False,
         "binder_proves_old_rgds_compatible": False,
         "original_rgd_deserialized": False,
@@ -182,14 +216,10 @@ def main():
             "production_adapter_pin_unchanged": True,
             "readonly": True,
         }, sort_keys=True))
-    try:
-        report = analyze(source, expected_sha=observed)
-        print("T4_ORIGINAL_RGD_LOADER " + json.dumps(report, sort_keys=True))
-    except ValueError as exc:
-        if str(exc) != "No recognizable original load/deserialization method":
-            raise
-        result = inspect_original_saveandload_scope(source, expected_sha=observed)
-        print("T4_ORIGINAL_RGD_FILE_SCOPE " + json.dumps(result, sort_keys=True))
+    report = inspect_exact_original_loader_method(source, expected_sha=observed)
+    print("T4_ORIGINAL_RGD_METHOD_SCOPE " + json.dumps(report, sort_keys=True))
+    result = inspect_original_saveandload_scope(source, expected_sha=observed)
+    print("T4_ORIGINAL_RGD_FILE_SCOPE " + json.dumps(result, sort_keys=True))
 
 
 if __name__ == "__main__":
