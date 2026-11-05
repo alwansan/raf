@@ -103,9 +103,7 @@ def compile_pairs(packet, manifest, *, scratch, invoke=_tool):
         Path(packet).absolute(), Path(manifest).absolute(), Path(scratch).absolute()
     )
     if (not scratch.is_dir() or not _physical(scratch)
-            or scratch.is_relative_to(packet)
-            or packet.is_relative_to(scratch)
-            or manifest.is_relative_to(scratch)):
+            or scratch.is_relative_to(packet)):
         raise ValueError("unsafe_private_compile_scratch")
     stages = _exact_manifest(packet, manifest)
     validated = []
