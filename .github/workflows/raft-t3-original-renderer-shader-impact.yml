@@ -27,9 +27,11 @@ jobs:
       - name: Source-free exact original Renderer and class48 join controls
         run: |
           set -euo pipefail
-          python3 -m py_compile scripts/t3_original_renderer_shader_impact.py scripts/t3_original_particle_shader_state.py
+          python3 -m py_compile scripts/w1_depth_shaderlab.py scripts/t3_original_renderer_shader_impact.py scripts/t3_original_particle_shader_state.py
           python3 -m unittest discover -s tests -p 'test_t3_original_renderer_shader_impact.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_original_particle_shader_state.py' -v
+          python3 -m unittest discover -s tests -p 'test_w1_depth_shaderlab.py' -v
+          python3 -m unittest discover -s tests -p 'test_b25_foam_pass_state.py' -v
           python3 -m unittest discover -s tests -p 'test_b03_original_renderer_materials.py' -v
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
