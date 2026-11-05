@@ -31,6 +31,23 @@ class GateTests(unittest.TestCase):
         s['final_compute_kernel_errors_total'] = 6026
         self.assertEqual(summarize(s)['invalid_kernel_total'], 6026)
 
+    def test_real_stop_time_counter_shape(self):
+        s = fixture()
+        keys = ('final_shader_pass_errors_total', 'final_compute_kernel_errors_total')
+        s['stop_time_android_process_exit_info'] = {key: s.pop(key) for key in keys}
+        report = summarize(s)
+        self.assertEqual(report['invalid_kernel_total'], 3850)
+        self.assertEqual(report['session'], 'LogRaft-20261105-220911-559')
+
+    def test_conflicting_or_partial_counters_rejected(self):
+        for stop_info in ({'final_compute_kernel_errors_total': 3850},
+                          {'final_compute_kernel_errors_total': 3851,
+                           'final_shader_pass_errors_total': 23884}):
+            s = fixture()
+            s['stop_time_android_process_exit_info'] = stop_info
+            with self.assertRaises(ValueError):
+                summarize(s)
+
     def test_mismatch_rejected(self):
         s = fixture()
         s['final_render_failure_breakdown']['ultimate_water_invalid_pass_by_material']['spectrum'] += 1
