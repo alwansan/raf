@@ -1,0 +1,14 @@
+{
+  "id": "20261105T0040Z-T4-filemanager-result",
+  "owner": "T4",
+  "session_id": "20261105T0024Z-T4-filemanager-restore01",
+  "issue_id": "LOCAL-005",
+  "type": "result",
+  "summary": "Original managed DLL SHA verified; exact FileManager SHA established. 10/10 synthetic tests pass; authentic CI41942655373 deliberately fails with bounded parser-unresolved read/write targets (one lexical name token each, zero recognized method bodies), no evidence of missing functions or .rgd device success. Independent work/session recorded; prior possibly active T4 state/MEMORY not overwritten.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41942655373",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_FILEMANAGER_IO_2026-11-05.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/work/LOCAL-005/T4-20261105T0024Z-filemanager-io.json"
+  ],
+  "at": "2026-11-05T00:40:00Z"
+}
