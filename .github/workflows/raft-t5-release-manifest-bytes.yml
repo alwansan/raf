@@ -1,0 +1,58 @@
+name: T5 INTEGRATION-001 real published Release small manifest byte hashes (CPU only)
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t5_verify_release_manifest_bytes.py
+      - tests/test_t5_verify_release_manifest_bytes.py
+      - .github/workflows/raft-t5-release-manifest-bytes.yml
+permissions:
+  contents: read
+concurrency:
+  group: t5-public-release-manifest-bytes-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  authenticate-real-small-release-manifest:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Source-only synthetic strict manifest and SHA256SUMS adversarial controls
+        run: |
+          set -euo pipefail
+          python3 -m unittest -v tests.test_t5_verify_release_manifest_bytes
+      - name: Fetch ONLY two small published Raft metadata files and live public asset declarations
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag='android-early-test-41812889049-1'
+          out="$RUNNER_TEMP/t5-release-public-metadata"
+          mkdir -p "$out"
+          gh release download "$tag" --repo "$GITHUB_REPOSITORY" \
+            --pattern 'delivery.json' --pattern 'SHA256SUMS' --dir "$out"
+          gh api "repos/$GITHUB_REPOSITORY/releases/tags/$tag" \
+            --jq '{tag_name: .tag_name, target_commitish: .target_commitish, prerelease: .prerelease, assets: [.assets[] | {name: .name, size: .size, digest: .digest}]}' \
+            > "$out/current-release.json"
+          test "$(stat -c%s "$out/delivery.json")" -le 12000
+          test "$(stat -c%s "$out/SHA256SUMS")" -le 12000
+          echo 'Fetched exactly two small published metadata files; NO APK/OBB/XAPK or part bytes.'
+      - name: Authenticate downloaded manifest/sums bytes and exact official published part identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/t5-release-public-metadata"
+          python3 -m scripts.t5_verify_release_manifest_bytes \
+            --snapshot tests/fixtures/t5_raft_release_41812889049.json \
+            --current-release "$out/current-release.json" \
+            --delivery "$out/delivery.json" \
+            --sums "$out/SHA256SUMS"
+      - name: Explicit signed binary and device boundary
+        if: always()
+        run: echo 'Two genuine published tiny metadata byte hashes only; no proprietary game bytes, APK signature, package assembly or Android world tested.'
