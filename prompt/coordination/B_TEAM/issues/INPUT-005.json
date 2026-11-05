@@ -1,19 +1,23 @@
 {
   "id": "INPUT-005",
-  "title": "التاتش والأزرار واللاي آوت مؤجلة",
-  "priority": "DEFERRED",
-  "status": "DEFERRED",
-  "track": "deferred",
+  "title": "التقاط الماوس الفعلي ومؤشر اللعبة على Android",
+  "priority": "P1",
+  "status": "OPEN",
+  "track": "input",
   "evidence": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/DEVICE_FEEDBACK_42058825739_AR.md",
+    "https://github.com/alwansan/raf/actions/runs/42058825739",
+    "https://github.com/alwansan/CL/tree/520c4cf409aa20a4db54ff80ed87d8807d9cba57/raft%20log",
     "owner-message-2026-11-04"
   ],
   "remaining": [
-    "لا تطوير أو تجارب مخصصة للتاتش والأزرار واللاي آوت حالياً",
-    "حافظ على LEFT/Mouse0 وhold500ms ومنع الازدواج"
+    "معالجة ظهور أشرطة النظام عند حواف اللعبة بالماوس الفعلي واستخدام مؤشر Raft.",
+    "اختبار التقاط الحركة النسبية في اللعب وإفلاتها عند القائمة وفقد التركيز.",
+    "الحفاظ على الكيبورد واللمس الحالي. تطوير تخطيط التاتش العام مؤجل."
   ],
   "acceptance": [
-    "توجيه جديد من المالك لإعادة العمل عليه"
+    "دوران الكاميرا بلا توقف عند الحواف، ومؤشر اللعبة في القوائم، والتحرير الآمن عند الخروج أو تبديل التركيز."
   ],
-  "updated_by": "owner-team-bootstrap",
-  "updated_at": "2026-11-04"
+  "updated_by": "owner-device-feedback",
+  "updated_at": "2026-11-05"
 }
