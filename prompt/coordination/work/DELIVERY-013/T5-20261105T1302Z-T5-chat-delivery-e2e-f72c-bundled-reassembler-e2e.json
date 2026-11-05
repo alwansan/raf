@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T1302Z-T5-chat-delivery-e2e-f72c",
+  "origin": "chat",
+  "issue_id": "DELIVERY-013",
+  "status": "active",
+  "track": "Bundled release reassembler executed end-to-end in synthetic delivery",
+  "approach": "Invoke actual package_android_delivery.main with synthetic valid APK/OBB and bounded split parts; verify copied release reassemble.py exact source; run copied standalone script in a new Python process with os.link absent, verify XAPK ZIP and APK/OBB bytes, and negative tests for collision/tamper. No game bytes or Unity.",
+  "base_sha": "8d16132dd39d490a2a45f9a8eea855271abfb818",
+  "intended_files": [
+    "tests/test_t5_bundled_reassembly_e2e.py",
+    ".github/workflows/raft-t5-portable-reassembly.yml",
+    "prompt/coordination/work/DELIVERY-013/T5-20261105T1302Z-T5-chat-delivery-e2e-f72c-bundled-reassembler-e2e.json",
+    "prompt/coordination/clients/T5/sessions/20261105T1302Z-T5-chat-delivery-e2e-f72c.md"
+  ],
+  "experiment_key": "t5-bundled-release-script-execution-no-oslink-valid-synthetic-apk-obb-xapk-v1",
+  "resource_key": "android-delivery-python-reassembler",
+  "hypothesis": "Package main's copied reassemble.py is byte-exact and works as a standalone Python CLI without os.link on a full synthetic split APK+OBB XAPK transport, not merely the importable library.",
+  "resumed_from_sessions": [
+    "20261105T1248Z-T5-chat-linkport-6a19",
+    "20261105T1255Z-T5-scheduled-b7c2"
+  ],
+  "related_work": [
+    "prompt/coordination/work/DELIVERY-013/20261105T1255Z-T5-scheduled-b7c2-portable-review.json"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/T5/sessions/20261105T1255Z-T5-scheduled-b7c2.md",
+    "prompt/coordination/clients/T5/sessions/20261105T1248Z-T5-chat-linkport-6a19.md"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Add real packager-main-to-copied-CLI e2e synthetic controls, run exact isolated existing workflow, capture test count/result and limitations.",
+  "updated_at": "2026-11-05T13:02:00Z"
+}
