@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261105T1736Z-T2-chat-ret-reason-28ce",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "4874be485a8ee9ff1d4e09e71d7dcabbd42bdba9",
+  "updated_at": "2026-11-05T17:48:00Z",
+  "resumed_from_work": "prompt/coordination/work/WATER-001/T2-20261105T1736Z-T2-chat-ret-reason-28ce-return-local-writers.json",
+  "experiment_key": "T2|ZIP2-15964ea8|sha-0a6f0527|exact-RT-return-one-stloc-value-source-family-v1",
+  "resource_key": "T2-Foam-original-RT-return-local-writer-opcode",
+  "hypothesis": "The only original managed stloc writer feeding the sole RT-return local has an unknown immediate source. Identifying its immediate instruction family and whether stloc is a branch/handler entry narrows the required true def-use, without claiming value is non-null.",
+  "method": "Reuse exact same SHA managed callee/sole return-local identity, enforce one writer, report prior instruction family from fixed whitelist and writer branch/handler entry flag. Public fixtures: direct null writer, constructor writer, call-return writer, wrong-local, branch-target stloc with unrelated prior source; categorized only. No raw original method/class/IL/literal values.",
+  "intended_files": [
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/FoamByrefElementValueOrigin.cs",
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/Program.cs",
+    ".github/workflows/raft-t2-foam-managed-literals.yml",
+    "prompt/coordination/work/WATER-001/T2-20261105T1736Z-T2-chat-ret-reason-28ce-writer-source-reason.json",
+    "prompt/coordination/clients/T2/sessions/20261105T1736Z-T2-chat-ret-reason-28ce.md"
+  ],
+  "preflight": {
+    "head": "4874be485a8ee9ff1d4e09e71d7dcabbd42bdba9",
+    "source_original_previous": "42077586809 SUCCESS; sole exact local writer unresolved",
+    "scheduled_T2_nonoverlap": "synthetic scripts/t2_rt_return_cfg.py and tests/test_t2_rt_return_cfg.py only"
+  },
+  "next_step": "Original SHA-pinned CI and safe single-writer producer opcode family. Then proper branch CFG or local/alias tracing. WATER-001 OPEN NOT_READY0/3."
+}
