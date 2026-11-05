@@ -18,5 +18,8 @@
     "no_raw_game_asset_upload": true,
     "cancel_existing_workflows": false
   },
-  "created_at": "2026-11-05T16:49:00Z"
+  "created_at": "2026-11-05T16:49:00Z",
+  "attempt": 2,
+  "note": "First commit was rejected by GitHub YAML parser before jobs; folded if expression fixed at b6027ff6. Only this marker changed to trigger previously source-free-verified workflow.",
+  "reissued_at": "2026-11-05T16:52:00Z"
 }
