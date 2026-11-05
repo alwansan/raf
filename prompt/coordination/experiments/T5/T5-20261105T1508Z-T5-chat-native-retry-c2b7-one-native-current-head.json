@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "session_id": "20261105T1508Z-T5-chat-native-retry-c2b7",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "hypothesis": "The previous immutable build was cancelled before Editor without a source failure; one distinct updated-source diagnostic native run with unchanged authenticity/water limitations may create an APK/OBB/XAPK or identify an actual failing source gate.",
+  "source_commit": "b0c4b4c05011d915cd845259f06b5f80ee368092",
+  "input_hashes": [
+    "current branch feature/android-native-port request source baseline 5ed806ea1b8170988ea0f49140511021a8f239d3",
+    "previous cancelled run42042902522 head 753802d75196210d721cca0f4fdec6ce7800bf0d"
+  ],
+  "tool_versions": {
+    "unity": "2021.3.45f2, unchanged native workflow",
+    "runner": "ubuntu-24.04 existing full native workflow"
+  },
+  "commands": [
+    "GitHub push path .github/raft-native-build-request.json with commit message markers [raft-native-build] [raft-device-test]",
+    "GitHub Actions workflow raft-unity-editor-android-import.yml"
+  ],
+  "negative_controls": [
+    "No prior active/queued/pending branch workflow before native request",
+    "Original water limitations list identical to prior approved request",
+    "Previous run's cancellation is not misrepresented as source/compiler error",
+    "No signed or device claim before full artifact verification"
+  ],
+  "workflow_path": ".github/workflows/raft-unity-editor-android-import.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42052375742",
+  "artifact_urls": [],
+  "budget": "existing workflow native reconstruct max240 minutes with queue/engine concurrency cancel-in-progress:false; one request only, preserve other clients and original source",
+  "status": "waiting_ci",
+  "observed_result": {
+    "source_sha": "b0c4b4c05011d915cd845259f06b5f80ee368092",
+    "run_id": 42052375742,
+    "run_status": "in_progress",
+    "source_candidate": "incomplete water, local-world/device proof outstanding",
+    "early_verdict": "Request accepted by GitHub workflow scheduling; native-request-gate in progress at first snapshot; no APK/XAPK yet."
+  },
+  "rejected_hypotheses": [
+    "Original canceled immutable run proves Mesh source failure: unsupported",
+    "Green managed original seed Save/Load test proves user-generated Android world: unsupported"
+  ],
+  "limitations": [
+    "No full Unity Editor import, ARM64 IL2CPP, signed APK/OBB/XAPK or phone test as of recorded checkpoint.",
+    "Run may take long; use exact GitHub CI status rather than guessing.",
+    "Actual native/visual/runtime readiness remains NOT_READY 0/3."
+  ],
+  "integration_commit": "b0c4b4c05011d915cd845259f06b5f80ee368092",
+  "next_step": "Inspect exact run42052375742 terminal status. If failure, inspect first actual failing job/step; if success verify signed artifacts+published release (identity/hash/bytes) before any device readiness; do not dispatch duplicate native request."
+}
