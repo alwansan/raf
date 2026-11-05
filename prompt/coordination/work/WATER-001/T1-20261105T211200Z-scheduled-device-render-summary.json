@@ -1,0 +1,24 @@
+{
+  "session_id": "20261105T211200Z-T1-scheduled-7c2e",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "baseline_sha": "05cb87019d468e7547d83da9aeee17bef3331077",
+  "resumed_from_session": "20261105T121347Z-T1-paired-capture",
+  "taken_over_from": [
+    "B01",
+    "B06",
+    "B08",
+    "B18",
+    "B30",
+    "B48"
+  ],
+  "intended_files": [
+    "scripts/t1_device_water_summary_gate.py",
+    "tests/test_t1_device_water_summary_gate.py"
+  ],
+  "experiment_key": "CL-520c4cf-42058825739-final-render-breakdown-consistency",
+  "resource_key": null,
+  "hypothesis": "LogRaft final invalid-pass material counts and invalid-kernel-index roots can be validated without attributing index 6 to FFT runtime or conflating presentation FPS with GPU time",
+  "updated_at": "2026-11-05T21:12:00Z"
+}
