@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261105T1408Z-T2-chat-foam-four-i4-uniqueness-4e7a",
+  "issue_id": "WATER-001",
+  "status": "completed",
+  "hypothesis": "Four SHA-authentic Foam Texture(int) argument producer values are literal IL integer constants; decode exact opcodes only privately and classify distinctness/sign without publishing original low-domain integer values or digests.",
+  "experiment_key": "T2|ZIP2-15964ea8|AssemblyCSharp-0a6f0527|four-exact-ldc.i4-int-values|private-unique-and-sign-only|v1",
+  "original": {
+    "zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "assembly_size_bytes": 3211776,
+    "assembly_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e"
+  },
+  "source_commits": [
+    "37403b9abe10df9857f39d359288caa434c07822",
+    "84338ab8bf89d8af41b0aa3e1fdcda1a4030d391",
+    "43a633869a4185bd0176e139b9abf3b28045bd8e"
+  ],
+  "method": "Bounded Mono.Cecil argument-stack propagation of actual original ldci4 value forms short/signed/wide; private list never serialized; source-free duplicate/negative/ldtoken controls; source-authentic workflow asserts four decoded literals and safe aggregate type/range/no leak.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42043293335",
+    "https://github.com/alwansan/raf/commit/43a633869a4185bd0176e139b9abf3b28045bd8e"
+  ],
+  "original_run": {
+    "id": 42043293335,
+    "status": "completed_success",
+    "artifact_id": 13423996658,
+    "artifact_digest_sha256": "724e25d6f7de6d78abb054a75f37bdd73303096a19205e485efbc1f548edc00b"
+  },
+  "observed": {
+    "decoded_original_call_int_literals_count": 4,
+    "distinct_count_field": "non_authored_actual_i4_index_values_distinct_count",
+    "all_nonnegative_field": "non_authored_actual_i4_index_values_all_nonnegative",
+    "distinct_count_value_inspected_by_this_chat": false,
+    "all_nonnegative_value_inspected_by_this_chat": false,
+    "output_count_gate": "integer range 1..4",
+    "raw_original_values_or_digest_disclosed": false,
+    "unity_original_runtime_array_length_verified": false,
+    "device_pixels_verified": false
+  },
+  "limitations": [
+    "Downloaded safe artifact but ZIP inspection from chat execution environment failed with SessionLimitReachedError/ClientError; do not infer the exact distinct/sign result from only the passing type and cardinality assertions.",
+    "No exact original RenderTexture[] length, instance assignment, material receiver, ShaderLab upload, Unity GPU or owner phone proof.",
+    "Scoped CI success validates source code and original data, not game readiness."
+  ],
+  "next_step": "Read safe artifact 13423996658 exact distinct_count and all_nonnegative; separately identify authentic backing field serialization/array bound, then author and test genuine Foam ShaderLab. WATER-001 OPEN NOT_READY0/3."
+}
