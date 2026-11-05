@@ -11,7 +11,8 @@
 - pinned source: ZIP2 `15964ea8f246b6e076ce26b60931ee2e1a9a2385`, 12-owner SHA manifest and previous verified export pipeline; actual pinned official vendors in restoration scripts. No raw original assets or source in public report/artifacts.
 - budget: isolated 2-core real export, 35-min ceiling, no runner cancellation; safe aggregate before/after and immutable original existing .shader.meta comparison. All original importer assets remain untouched.
 - result: **COMPLETE** [GitHub Actions #42033940194](https://github.com/alwansan/raf/actions/runs/42033940194) SUCCESS on source commit `dcb81c72b91817872cacc0fd664d937ea2f9ddef`; original 12 source owners SHA-verified, real original same-export run, TMP/PostFX/Volumetric restorers all SUCCESS; Material links 731 total, 511 custom, 220 builtin. Dummy links **511 → 495**, linked distinct Dummy targets **54 → 50**, non-Dummy custom material links **0 → 16**; total shader files 126 → 128, Dummy marker files 126 → 98. Existing `.mat` and `.shader.meta` bytes SHA-identical; material reference category counts unchanged. Bounded source-only; no Unity/Android/Adreno/phone proof.
-- next_step: prioritize 495 residual Dummy-linked bounded custom Materials against B03 original renderer graph and compiled Shader48 programs; inspect full native post-restorer quality on next **separately authorized** import, not from this trial. RENDER-002 OPEN.\n
+- next_step: prioritize 495 residual Dummy-linked bounded custom Materials against B03 original renderer graph and compiled Shader48 programs; inspect full native post-restorer quality on next **separately authorized** import, not from this trial. RENDER-002 OPEN.
+
 ## Verified final checkpoint
 
 - Original pre-vendor vs post-vendor evidence and limits: [`docs/T3_BOUNDED_POSTVENDOR_MATERIAL_SHADER_2026-11-05.md`](https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_BOUNDED_POSTVENDOR_MATERIAL_SHADER_2026-11-05.md).
