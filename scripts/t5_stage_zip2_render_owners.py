@@ -166,18 +166,24 @@ def stage(zip2_checkout: Path, output_root: Path, *, owners: list[str],
         if total > byte_budget:
             raise ValueError("original_graphics_staging_budget_exceeded")
         requested.append((rel, kind, size, digest))
-    output.mkdir(parents=True, exist_ok=True)
-    _safe(output)
-    built = cached = 0
+    # Preflight the entire selected batch before touching output directories.
+    # Linked/missing later originals must not leave a partial accepted stage.
+    prepared = []
     for rel, kind, size, digest in requested:
         source = root / "Raft" / rel
         target = output / rel
         _safe(source)
         _safe(target)
         inputs = _inputs(source, kind, size)
-        if target.exists():
-            if not target.is_file() or _fingerprint(target) != (size, digest):
-                raise ValueError("existing_staged_original_conflicts_with_pin")
+        cached_hit = target.exists()
+        if cached_hit and (not target.is_file() or _fingerprint(target) != (size, digest)):
+            raise ValueError("existing_staged_original_conflicts_with_pin")
+        prepared.append((target, size, digest, inputs, cached_hit))
+    output.mkdir(parents=True, exist_ok=True)
+    _safe(output)
+    built = cached = 0
+    for target, size, digest, inputs, cached_hit in prepared:
+        if cached_hit:
             cached += 1
             continue
         target.parent.mkdir(parents=True, exist_ok=True)
