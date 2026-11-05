@@ -13,19 +13,22 @@
     "acquisition": "VERIFIED",
     "extraction": "VERIFIED",
     "reconstruction": "UNKNOWN",
-    "binding": "UNKNOWN",
-    "integration": "UNKNOWN",
+    "binding": "VERIFIED_BOUNDED_SAME_INSTANCE_EXPORT_41_MATERIALS_227_TEXENV_UV_89_INTERNAL_TEXTURE_TARGETS_MATCH_25_EXTERNAL_UNVERIFIED",
+    "integration": "VERIFICATION_HELPER_SOURCE_FIX_AND_REAL_AUTHENTIC_EXPERIMENT_CI_PASS_NO_GAME_ASSET_PATCH",
     "device": "UNKNOWN"
   },
   "evidence": [
     "https://github.com/alwansan/raf/actions/runs/41928076197",
     "https://github.com/alwansan/raf/actions/runs/41929077930",
-    "https://github.com/alwansan/raf/commit/d6fa219c769e3c4d11f798f41bfc0cbd8451465b"
+    "https://github.com/alwansan/raf/commit/d6fa219c769e3c4d11f798f41bfc0cbd8451465b",
+    "https://github.com/alwansan/raf/actions/runs/41939404454",
+    "https://github.com/alwansan/raf/commit/77d312f546f1fc80c72f57a57de5d90699d66302"
   ],
   "remaining": [
-    "Only original SHA-verified source parsed; 41 Materials, 227 slots (89 internal, 25 external, 113 null), 227 fully decoded UV.",
-    "Need exact same-instance Unity exported Material/Texture trace to compare source against exported texture PPtrs and UV; external texture targets unproven.",
-    "No Unity/Android shader/pixel verification, no restored source asset and no actual white color cause proven."
+    "Exact same-export 41 Materials/227 Texture slots/UV matched, zero loss or drift in selected source; preserves 113 original null and verified 89 internal targets.",
+    "25 original external-owner Texture references remain UNVERIFIED in this bounded source/export graph.",
+    "Other original source owners, shader/variant/sRGB/lighting, Unity import and actual Android pixels remain UNKNOWN. No original asset or image restoration claimed."
   ],
-  "updated_by": "B05"
+  "updated_by": "T3",
+  "updated_at": "2026-11-05T00:12:00Z"
 }
