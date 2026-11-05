@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "origin": "chat",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T1838Z-T4-chat-cl-rgd-real-9p4s",
+  "issue_id": "LOCAL-005",
+  "track": "user-generated-RGD-authenticity-and-real-original-loader",
+  "status": "active",
+  "base_sha": "4c5b77b3499eb5ec5f82878409532975156d860f",
+  "resumed_from_sessions": [
+    "20261105T181919Z-T4-chat-overflow-ci-9dzc8",
+    "20261105T1736Z-T4-chat-rgd-return-local-stores-r6n8"
+  ],
+  "taken_over_from": [
+    "B07/B14/B19/B37/B50 original local save path and Steam guards"
+  ],
+  "hypothesis": "User-generated APK86 CL world save blobs can be actually deserialized by original compiled SaveAndLoad.Load<T> with SHA-authenticated exact original Assembly-CSharp and dependencies; this distinguishes broken NRBF/save data from Android host lifecycle without claiming device success.",
+  "approach": "Pin CL main commit and three genuine public-CL RGD blob identities (one small new world and two ~310KB saves), stage only those bytes in ephemeral Actions; run actual original CLR formatter and compiled generic Load<T> under strict size/hash guards and closed exception categories. Never upload or print user game data, original code, paths or private identifiers.",
+  "experiment_key": "T4-CL5394407b-7-world5-8-worldgh-and-sad-authentic-blob-sha-runtime-original-LoadT-v1",
+  "resource_key": "original-DLL-zip2-15964ea8-readonly-CPU",
+  "intended_files": [
+    "android-port/Experiments/T4/ClWorldRgdRuntime/ClWorldRgdRuntime.csproj",
+    "android-port/Experiments/T4/ClWorldRgdRuntime/Program.cs",
+    ".github/workflows/raft-t4-cl-real-world-rgd-readonly.yml",
+    "prompt/coordination/work/LOCAL-005/T4-20261105T1838Z-T4-chat-cl-rgd-real-9p4s-authenticated-cl-world-rgd.json",
+    "prompt/coordination/clients/T4/sessions/20261105T1838Z-T4-chat-cl-rgd-real-9p4s.md",
+    "prompt/coordination/experiments/T4/20261105T1838Z-T4-chat-cl-rgd-real-9p4s.json",
+    "prompt/coordination/B_TEAM/events/T4/20261105T1838Z-T4-chat-cl-rgd-real-9p4s.json",
+    "prompt/coordination/discussions/LOCAL-005/20261105T1838Z-T4-chat-cl-rgd-real-9p4s-to-T5.md"
+  ],
+  "related_work": [],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Write standalone guarded original actual-RGD CLR loader and path-scoped workflow, trigger once and report whether known CL user-generated saves load; retain LOCAL-005 open until Android offline gameplay, save and full-relaunch.",
+  "updated_at": "2026-11-05T18:38:00Z"
+}
