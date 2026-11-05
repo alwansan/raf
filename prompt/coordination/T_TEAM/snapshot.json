@@ -87,18 +87,22 @@
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/DEVICE_FEEDBACK_42058825739_AR.md",
         "https://github.com/alwansan/raf/actions/runs/42058825739",
         "https://github.com/alwansan/CL/tree/520c4cf409aa20a4db54ff80ed87d8807d9cba57/raft%20log",
-        "owner-message-2026-11-04"
+        "owner-message-2026-11-04",
+        "https://github.com/alwansan/raf/commit/02665b11061ccb070bf6e24797d47a2866ef250c",
+        "https://github.com/alwansan/raf/actions/runs/42118499200"
       ],
       "remaining": [
         "معالجة ظهور أشرطة النظام عند حواف اللعبة بالماوس الفعلي واستخدام مؤشر Raft.",
         "اختبار التقاط الحركة النسبية في اللعب وإفلاتها عند القائمة وفقد التركيز.",
-        "الحفاظ على الكيبورد واللمس الحالي. تطوير تخطيط التاتش العام مؤجل."
+        "الحفاظ على الكيبورد واللمس الحالي. تطوير تخطيط التاتش العام مؤجل.",
+        "T4: تحقق هاتف فعلي من View pointer capture فقدانه/استعادته، حركة الكاميرا دون حواف، مؤشر القائمة، أشرطة النظام، ومنافذ اللمس/الكيبورد، مع اختبار حفظ/إعادة فتح العالم على نفس SHA."
       ],
       "acceptance": [
         "دوران الكاميرا بلا توقف عند الحواف، ومؤشر اللعبة في القوائم، والتحرير الآمن عند الخروج أو تبديل التركيز."
       ],
-      "updated_by": "owner-device-feedback",
-      "updated_at": "2026-11-05",
+      "updated_by": "T4",
+      "updated_at": "2026-11-05T22:07:00Z",
+      "source_status": "SOURCE_FIXED_MANAGED_CI_VERIFIED_DEVICE_UNCONFIRMED",
       "_record_path": "../B_TEAM/issues/INPUT-005.json"
     },
     {
@@ -427,7 +431,10 @@
         "https://github.com/alwansan/raf/commit/9207acc55dfb988a8826ed0725c3fb9032655089",
         "https://github.com/alwansan/raf/actions/runs/42116530618",
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE_COLORMASK_MAPPING_2026-11-06.md",
-        "https://github.com/alwansan/raf/commit/92b8c5111174cddace33c0944318c1a66f77ba5d"
+        "https://github.com/alwansan/raf/commit/92b8c5111174cddace33c0944318c1a66f77ba5d",
+        "https://github.com/alwansan/raf/actions/runs/42119098398",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_MATERIAL_TEXENV_2026-11-05.md",
+        "https://github.com/alwansan/raf/commit/02bdaba315805fe48684faafdeedf2a692725f16"
       ],
       "remaining": [
         "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -485,7 +492,7 @@
         "نجاحعلىالهاتف"
       ],
       "updated_by": "T3",
-      "updated_at": "2026-11-05T21:53:00Z",
+      "updated_at": "2026-11-05T22:11:00Z",
       "_record_path": "../B_TEAM/issues/RENDER-002.json"
     },
     {
@@ -6797,6 +6804,27 @@
       "_record_path": "../B_TEAM/events/T3/20261105T214810Z-T3-chat-selective-colormask-a82d.json"
     },
     {
+      "id": "20261105T2204Z-T3-chat-particle108-mattex-a4c6",
+      "owner": "T3",
+      "origin": "chat",
+      "session_id": "20261105T2204Z-T3-chat-particle108-mattex-a4c6",
+      "issue_id": "RENDER-002",
+      "type": "result",
+      "at": "2026-11-05T22:10:29Z",
+      "summary": "SHA-authentic six-scene 108-slot ParticleShader48 source has five distinct Material21 objects, ten complete original TexEnv slots, ALL TEN non-null local Texture PPtrs, exactly three distinct scoped original Texture pointer targets, all ten UV data complete. CI42119098398 SUCCESS 81/81 source-free tests plus original SHA; no exported GUID/phone proof.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42119098398",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_MATERIAL_TEXENV_2026-11-05.md",
+        "https://github.com/alwansan/raf/commit/02bdaba315805fe48684faafdeedf2a692725f16"
+      ],
+      "limitations": [
+        "source bound PPtr not same-export Texture2D28 GUID",
+        "not Android pixel/particle emitter proof",
+        "RENDER-002 OPEN"
+      ],
+      "_record_path": "../B_TEAM/events/T3/20261105T2204Z-T3-chat-particle108-mattex-a4c6.json"
+    },
+    {
       "id": "T4-20261104T2357Z-local-load-start",
       "owner": "T4",
       "session_id": "20261104T2357Z-T4-lw01",
@@ -7271,6 +7299,23 @@
       "_record_path": "../B_TEAM/events/T4/20261105T2109Z-T4-chat-android-mouse-bridge-p6r2.json"
     },
     {
+      "id": "T4-20261105T2150Z-T4-chat-capture-lease-n5k8",
+      "owner": "T4",
+      "session_id": "20261105T2150Z-T4-chat-capture-lease-n5k8",
+      "origin": "chat",
+      "issue_id": "INPUT-005",
+      "type": "integration",
+      "summary": "Android physical mouse capture-loss fallback source fixed: UI-thread View.hasPointerCapture probe every 150ms, epoch-qualified state reset on OS revocation and legacy Input.GetAxis fallback. CI42118295717+42118499200 SUCCESS, 24 Python source checks, 13 .NET mouse-motion controls and authentic Unity2021 managed compilation. No APK or phone verification; INPUT-005 remains OPEN.",
+      "evidence": [
+        "https://github.com/alwansan/raf/commit/02665b11061ccb070bf6e24797d47a2866ef250c",
+        "https://github.com/alwansan/raf/commit/8ba2351fe53025487fddae91fe06e315f36052d2",
+        "https://github.com/alwansan/raf/actions/runs/42118499200",
+        "prompt/coordination/experiments/T4/20261105T2150Z-T4-chat-capture-lease-n5k8.json"
+      ],
+      "at": "2026-11-05T22:07:00Z",
+      "_record_path": "../B_TEAM/events/T4/20261105T2150Z-T4-chat-capture-lease-n5k8.json"
+    },
+    {
       "id": "T5-20261104T2357Z-b12-fixture-start",
       "owner": "T5",
       "session_id": "20261104T2357Z-T5-b12-fixture-7e2",
@@ -7630,6 +7675,21 @@
       "_record_path": "../B_TEAM/events/T5/20261105T2153Z-T5-chat-signed-pair-4e91.json"
     },
     {
+      "id": "T5-20261105T2208Z-real-cl-patch-guid-identity",
+      "owner": "T5",
+      "session_id": "20261105T2208Z-T5-chat-obb-guid-3d7a",
+      "issue_id": "INTEGRATION-001",
+      "type": "discovery",
+      "summary": "Pinned original CL six log blobs SHA checked and parsed in CI42119428667: all 3 owner phone OBB GUID warnings are optional unshipped patch.89 probes (1+2), none for signed main.89. Source-pinned main APK/OBB signature and SHA separately verified in CI42117471172. Do not fabricate patch asset or hide Unity logs.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42119428667",
+        "https://github.com/alwansan/raf/actions/runs/42117471172",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_REAL_CL_OBB_PATCH_GUID_DIAGNOSIS_2026-11-05.md"
+      ],
+      "at": "2026-11-05T22:14:21.534Z",
+      "_record_path": "../B_TEAM/events/T5/20261105T2208Z-T5-chat-obb-guid-3d7a.json"
+    },
+    {
       "id": "20261104-b-generation",
       "owner": "owner-team-bootstrap",
       "session_id": "b-team-setup-20261104",
@@ -7658,7 +7718,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "2371a1d0f672c9d169bc166cde0ebcc72e7c2c55eef6eeb6e3fd61fc3db2ed6f",
+  "source_input_sha256": "c6b614938546e214b00b159c71f75290070e0484360b12fec2fde0a0396aadc2",
   "generation": "T-2026-11-05",
-  "input_sha256": "10688dc602e233c020b648d064485340762efcf48a34a5960047c4a7e836812c"
+  "input_sha256": "744d75cd7d2db96f3ae90e34e3538f0484c99355185d76ce3e78969fad7bff85"
 }
