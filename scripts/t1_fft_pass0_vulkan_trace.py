@@ -104,16 +104,19 @@ def analyze(project):
         print("RAFT_T1_TRACE_STAGE readback", flush=True)
         trace = read_image(work / "trace.bin", 2049 * 4)
         (count,) = struct.unpack_from("<I", trace)
+        print("RAFT_T1_TRACE_RECORD_COUNT " + str(count), flush=True)
         if not 0 < count <= 256:
             raise ValueError("Empty or overflowed private trace")
         sites = [0, 0, 0]
         out_of_bounds = [0, 0, 0]
         for site, x, y, mip, *_ in struct.iter_unpack("<Iiii4I", trace[4:4 + count * 32]):
             if site >= len(sites):
+                print("RAFT_T1_TRACE_STATUS invalid_site", flush=True)
                 raise ValueError("Unknown private trace site")
             sites[site] += 1
             if not (0 <= x < WIDTH and 0 <= y < HEIGHT and mip == 0):
                 out_of_bounds[site] += 1
+        print("RAFT_T1_TRACE_STAGE output_compare", flush=True)
         passes = []
         for slot in (0, 1):
             images = [read_image(work / f"{name}{slot}.rgba32f", WIDTH * HEIGHT * 16)
