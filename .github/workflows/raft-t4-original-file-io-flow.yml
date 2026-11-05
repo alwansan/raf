@@ -42,7 +42,14 @@ jobs:
         run: |
           set -euo pipefail
           timeout 240s dotnet publish             android-port/Experiments/T4/OriginalFileIoFlow/OriginalFileIoFlow.csproj             -c Release --self-contained false -o "$RUNNER_TEMP/t4-original-io-oracle"             >"$RUNNER_TEMP/t4-private-compiler.log" 2>&1 || {
-              echo 'T4_IO_FLOW_ORACLE_COMPILE_FAILED diagnostic log kept private'
+              python3 - <<'PY'
+              import collections, json, os, re
+              from pathlib import Path
+              log = (Path(os.environ['RUNNER_TEMP']) / 't4-private-compiler.log').read_text(errors='replace')
+              codes = dict(collections.Counter(re.findall(r'error\\s+((?:CS|NU|NETSDK)[0-9]+)', log)))
+              lines = re.findall(r'Program\\.cs\\((\\d+),(\\d+)\\):\\s*error\\s+(CS[0-9]+)', log)
+              print('T4_ORACLE_COMPILE_DIAGNOSTICS ' + json.dumps({'codes':codes,'source_locations':lines[:15], 'raw_text_published':False},sort_keys=True))
+              PY
               exit 1
             }
           test -s "$RUNNER_TEMP/t4-original-io-oracle/OriginalFileIoFlow.dll"
