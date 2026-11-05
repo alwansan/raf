@@ -1,6 +1,6 @@
 name: T1 WATER-001 exact Unity FFT sampled input identity
 
-# Opt-in replay session: 20261105T230130Z-T1-chat-017f9c
+# Opt-in replay session: 20261105T232830Z-T1-chat-5d3b90
 on:
   workflow_dispatch:
   push:
@@ -106,6 +106,20 @@ jobs:
           python3 -m scripts.t1_gameci_private_result_gate \
             --stage synthetic --exit-code "$rc" \
             --result t1-cli-synthetic-artifacts/editmode-results.xml
+          if [[ "$T1_DISPATCH_CANARY" == true ]]; then
+            python3 - <<'PY'
+          import json
+          from pathlib import Path
+          report = Path("t1-cli-synthetic/dispatch-address-counts.txt")
+          if report.stat().st_size > 64:
+              raise SystemExit("Invalid dispatch count report")
+          counts = [int(line) for line in report.read_text().splitlines()]
+          if len(counts) != 4 or any(not 0 <= count <= 64 for count in counts):
+              raise SystemExit("Invalid dispatch mismatch counts")
+          print("RAFT_T1_DISPATCH_ADDRESS_CONTROL " + json.dumps(dict(zip(
+              ("integer", "bitcast_only", "subnormal_multiply", "normal_multiply"), counts))))
+          PY
+          fi
           echo 'RAFT_T1_PRIVATE_GAMECI sourcefree_supports_compute=true original_source_not_yet_acquired=true'
           sudo rm -rf t1-cli-synthetic t1-cli-synthetic-artifacts
           rm -f "$RUNNER_TEMP/t1-synthetic-private-cli.log"
