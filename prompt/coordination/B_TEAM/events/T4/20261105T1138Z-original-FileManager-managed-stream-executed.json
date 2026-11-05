@@ -1,0 +1,16 @@
+{
+  "id": "20261105T1138Z-T4-original-filemanager-stream",
+  "owner": "T4",
+  "session_id": "20261105T1121Z-T4-managed-stream",
+  "issue_id": "LOCAL-005",
+  "type": "integration",
+  "summary": "Exact original ZIP2 3211776B DLL compiled IL T4 CI42019696138 19/19 proves read/write each one File.Open/File.Create call in try and three transitive calls entirely in catch. Source-authenticated CI42020039305 SUCCESS 15/15 + actually invoked both ORIGINAL compiled FileManager methods with 151 pinned Managed siblings and safe resolver against disposable synthetic .rgd-suffixed file, write/flush/close/reopen/read byte-identical/cleanup. NOT original Raft RGD serialization, process restart, Unity IL2CPP, Android storage, local world playability. T5 earlier whole-method guard red evidence preserved; LOCAL-005 OPEN NOT_READY.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42018088542",
+    "https://github.com/alwansan/raf/actions/runs/42019696138",
+    "https://github.com/alwansan/raf/actions/runs/42020039305",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_MANAGED_STREAM_ROUNDTRIP_2026-11-05.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/discussions/LOCAL-005/20261105T1136Z-T4-original-stream-proof-to-T5.md"
+  ],
+  "at": "2026-11-05T11:38:00Z"
+}
