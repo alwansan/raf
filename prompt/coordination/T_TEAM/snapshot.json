@@ -518,7 +518,11 @@
         "https://github.com/alwansan/raf/actions/runs/41959712898",
         "https://github.com/alwansan/raf/actions/runs/42010878771",
         "https://github.com/alwansan/raf/actions/runs/42011720822",
-        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_GAMECI_SOURCEFREE_UNITY_LICENSE_2026-11-05.md"
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_GAMECI_SOURCEFREE_UNITY_LICENSE_2026-11-05.md",
+        "https://github.com/alwansan/raf/actions/runs/42011706016",
+        "https://github.com/alwansan/raf/actions/runs/42013590671",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_ORIGINAL_DXBC_SPIRV_ACTIVE_BRIDGE_2026-11-05.md",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T2-foam-original-active-sample-descriptor-identity.json"
       ],
       "remaining": [
         "Spectrum/Foam/Blur passes ناقصة في APK86",
@@ -562,18 +566,19 @@
         "T1 authored .compute SHA-bound isolated Unity 2021 runtime kernel probe staged and 7 source-only negative/positive suites PASS (CI41941716641); actual private original-authenticated authored FFT source, Unity Editor HasKernel/FindKernel/threadgroups execution, original program-to-kernel equivalence, Vulkan/Adreno and water pixels all remain unverified. WATER-001 OPEN.",
         "T1 bank1 Vulkan: original pair18/19 swapped-second SIGSEGV reproduced twice and pair10/11 swapped-second same-program numeric comparison varied between runs; no VUID markers; not a Unity/Adreno repair.",
         "Foam original compiled SPIR-V sampler use 21 calls / 6 numeric pairs proven by T2; source m_Index/m_SamplerIndex→material/Unity shader/Adreno remains unverified",
-        "T2 authentic original Foam: source serialized t/s matches genuine native DXBC declarations and all six t/s pairs actively SAMPLE-used in 21 instructions; DXBC→translated SPIRV ID/descriptor identity, Unity original Material upload, authentic ShaderLab and Adreno device remain unverified (CI41958159556).",
+        "HISTORICAL at T2 CI41958159556: native→compiled SPIR-V exact descriptor ID join was then unverified; subsequently source-proven by independent T2 CI42011706016 and actual sampling-pair join CI42013590671. Unity Material upload/ShaderLab/Adreno remain unverified.",
         "T1 original 20/20 compiled FFT private DXBC-derived .compute candidate staging SUCCESS (CI41957549770), but three actual Unity Editor import attempts failed before a result; latest41958963107 Unity exit1 and sanitized licensing_failure_category=true. Verify activation using source-free Unity fixture, then authenticate actual Unity import and original runtime FindKernel/Dispatch. Not a game/device water fix.",
         "T1 source-free Unity 2021 Editor project CI41959712898 failed before Raft acquisition: empty_project_created=false, licensing_failure_category=true, original_raft_data_acquired=false. Resolved shader source is not responsible for this test's failure; actual Editor activation and FindKernel/Adreno remain unknown.",
-        "T1 2026-11-05: Unity2021.3.45f2 activation works via supported GameCI unity-test-runner and synthetic original-free ComputeShader was imported, with actual HasKernel/FindKernel/group(64,1,1) passing 2/2 CI42011720822. Old custom direct Docker licensing failure was not proof account credentials invalid. Authenticated 20 original FFT-derived candidates still not imported by this safe route; authored runtime mapping/pixels/Adreno remain unverified."
+        "T1 2026-11-05: Unity2021.3.45f2 activation works via supported GameCI unity-test-runner and synthetic original-free ComputeShader was imported, with actual HasKernel/FindKernel/group(64,1,1) passing 2/2 CI42011720822. Old custom direct Docker licensing failure was not proof account credentials invalid. Authenticated 20 original FFT-derived candidates still not imported by this safe route; authored runtime mapping/pixels/Adreno remain unverified.",
+        "T2 source-authentic Foam compiler-stage resource identity VERIFIED: two different explicit native DXBC tN/sN→SPIR-V descriptor maps preserve every variable ID and all SPIR-V program words except numeric Binding/DescriptorSet literals; B20 original module matches default normalized graph. Real native DXBC 21 SAMPLE uses and translated SPIR-V 21 OpImageSample uses reconstruct exact six stage-scoped active original t/s pairs, final CI42013590671 PASS (16+17 synthetic tests). **NEXT OPEN:** authored Unity Material texture property/pointer/upload, original sampler state & UV, CB member/upload, authentic ShaderLab import, GPU/Adreno and device visuals. WATER-001 OPEN, NOT_READY0/3."
       ],
       "acceptance": [
         "هوية برامج ونوى أصلية أو تطابق موثق دونdummy",
         "تثبيت فيالتصدير+Unity import/render",
         "اختبار هاتف يثبت الماء بلا pass/kernel errors"
       ],
-      "updated_by": "T1",
-      "updated_at": "2026-11-05T10:37:00Z",
+      "updated_by": "T2",
+      "updated_at": "2026-11-05T10:53Z",
       "_record_path": "../B_TEAM/issues/WATER-001.json"
     }
   ],
@@ -1036,6 +1041,140 @@
       "updated_by": "T2",
       "updated_at": "2026-11-05T00:08:00Z",
       "_record_path": "../B_TEAM/resources/T2-foam-member-abi-namebridge.json"
+    },
+    {
+      "id": "T2-foam-original-active-sample-descriptor-identity",
+      "owner": "T2",
+      "title": "SHA-authentic original Foam DXBC t/s registers through explicit source remaps to actively sampled SPIR-V descriptor IDs",
+      "kind": "source_authentic_native_DXBC_to_compiled_SPIRV_actual_active_sampling_resource_identity",
+      "source": {
+        "provider": "zip2",
+        "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+        "owner": "Raft_Data/sharedassets0.assets",
+        "bytes": 115978112,
+        "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+        "original_shader_path_id": 2420,
+        "original_shader_raw_sha256": "67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1",
+        "original_dx_bc_stages": 4
+      },
+      "stages": {
+        "acquisition": "ORIGINAL_SOURCE_ZIP2_SHA_VERIFIED",
+        "extraction": "ORIGINAL_SHADER_FOUR_STAGE_PROGRAM_SHA_PINS_VERIFIED",
+        "reconstruction": "TWO_CONTROLLED_VKD3D_EXPLICIT_NATIVE_T_S_BINDING_MAPS_PROVE_SAME_SPIRV_TYPED_VARIABLE_IDS_FULL_BINARY_GRAPH_EXCEPT_DESCRIPTOR_SET_BINDING_LITERALS",
+        "binding": "ORIGINAL_SERIALIZED_tN_sN_TO_NATIVE_OPCODE69_SAMPLE_TO_ACTUAL_TRANSLATED_SPIRV_SAMPLED_IMAGE_SAMPLER_BINDING_IDENTITY_VERIFIED_FOR_SIX_PAIRS",
+        "integration": "T2_SOURCE_SCOPED_CODE_AND_CI_VERIFIED_NO_AUTHORED_UNITY_MATERIAL_UPLOAD",
+        "device": "NOT_TESTED"
+      },
+      "observed": {
+        "original_fragment_stages": 2,
+        "original_vertex_texture_rows": 0,
+        "native_sample_calls": 21,
+        "translated_sample_calls": 21,
+        "exact_source_to_translated_active_sampled_pairs": 6,
+        "source_register_binding_table": {
+          "pass0_fragment": [
+            {
+              "source_texture_register": 0,
+              "source_sampler_register": 0,
+              "compiled_image_set_binding": [
+                0,
+                6
+              ],
+              "compiled_sampler_set_binding": [
+                0,
+                1
+              ]
+            },
+            {
+              "source_texture_register": 1,
+              "source_sampler_register": 1,
+              "compiled_image_set_binding": [
+                0,
+                7
+              ],
+              "compiled_sampler_set_binding": [
+                0,
+                2
+              ]
+            },
+            {
+              "source_texture_register": 2,
+              "source_sampler_register": 2,
+              "compiled_image_set_binding": [
+                0,
+                8
+              ],
+              "compiled_sampler_set_binding": [
+                0,
+                3
+              ]
+            },
+            {
+              "source_texture_register": 3,
+              "source_sampler_register": 3,
+              "compiled_image_set_binding": [
+                0,
+                9
+              ],
+              "compiled_sampler_set_binding": [
+                0,
+                4
+              ]
+            },
+            {
+              "source_texture_register": 4,
+              "source_sampler_register": 4,
+              "compiled_image_set_binding": [
+                0,
+                10
+              ],
+              "compiled_sampler_set_binding": [
+                0,
+                5
+              ]
+            }
+          ],
+          "pass1_fragment": [
+            {
+              "source_texture_register": 0,
+              "source_sampler_register": 0,
+              "compiled_image_set_binding": [
+                0,
+                2
+              ],
+              "compiled_sampler_set_binding": [
+                0,
+                1
+              ]
+            }
+          ]
+        },
+        "source_to_translated_register_identity_proven": true,
+        "source_to_spirv_actual_sampled_pair_identity_proven": true,
+        "authored_unity_texture_property_material_upload_proven": false,
+        "original_sampler_filter_wrap_uv_proven": false,
+        "shaderlab_import_proven": false,
+        "adreno_pixels_proven": false
+      },
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42011706016",
+        "https://github.com/alwansan/raf/actions/runs/42013590671",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_ORIGINAL_DXBC_SPIRV_ACTIVE_BRIDGE_2026-11-05.md"
+      ],
+      "artifact": {
+        "id": 13407977911,
+        "sha256": "93046863e5fa788b234b990a613554eb479851d4a9098131c7bd50efe7def0e1",
+        "safe_numeric_only": true
+      },
+      "remaining": [
+        "Original Unity authored Material texture property/sampler/UV upload and texture pointer identity",
+        "Constant buffer original upload member types/offsets/CB0 alias",
+        "Rebuild authentic two-pass Foam ShaderLab and test Unity import",
+        "GPU/Adreno device visual water compatibility and end-to-end world test"
+      ],
+      "updated_by": "T2",
+      "updated_at": "2026-11-05T10:50Z",
+      "_record_path": "../B_TEAM/resources/T2-foam-original-active-sample-descriptor-identity.json"
     },
     {
       "id": "T2-foam-original-native-dxbc-sample-edges",
@@ -4315,6 +4454,22 @@
       "_record_path": "../B_TEAM/events/T2/20261105T0259Z-original-foam-native-sampling-edges.json"
     },
     {
+      "id": "T2-20261105T1054Z-foam-original-dxbc-active-spirv-proven",
+      "owner": "T2",
+      "session_id": "20261105T1020Z-T2-original-foam-explicit-spv-map",
+      "issue_id": "WATER-001",
+      "type": "source_authenticated_translation_resource_identity_result",
+      "summary": "CI42013590671 SUCCESS: SHA-original Foam 4-stage packet and source DXBC declarations; explicit libvkd3d A/B remaps prove each source tN/sN register→original compiled SPIR-V descriptor variable ID with full SPIR-V graph equal after masking only numeric DescriptorSet/Binding values. The 21 real native DXBC SAMPLE operations vs 21 compiled SPIR-V SSA samples reconstruct exactly six stage-scoped active source t/s pairs. 16+17 synthetic controls. No authored Material property/CB upload or genuine ShaderLab/Unity/Adreno/device pixel proof; WATER-001 OPEN NOT_READY0/3. No private program published.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42011706016",
+        "https://github.com/alwansan/raf/actions/runs/42013590671",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_ORIGINAL_DXBC_SPIRV_ACTIVE_BRIDGE_2026-11-05.md",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T2-foam-original-active-sample-descriptor-identity.json"
+      ],
+      "at": "2026-11-05T10:54:00Z",
+      "_record_path": "../B_TEAM/events/T2/20261105T1054Z-foam-original-dxbc-active-spirv-proven.json"
+    },
+    {
       "id": "T3-20261105-0002-render-harness-result-and-export-start",
       "owner": "T3",
       "session_id": "20261104T2354Z-T3-render-harness",
@@ -4638,7 +4793,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "3b7f5108a6e45b075e4d074ba4aa3d9d21146445fe2ca89616b8d4f7d57f71b0",
+  "source_input_sha256": "6e7f72db275f6963fc226799a2131d32cb6e4893ea9f8ffdfd64939eff32f443",
   "generation": "T-2026-11-05",
-  "input_sha256": "54e2c76f23c9053a733793aaa64370c999c6a260dc3d968b9a41dbd5ad397e5c"
+  "input_sha256": "2c0ebc95bb217d86cf0e4aec438c1cfbc9180f1631260969e69f8fccf6f18fa5"
 }
