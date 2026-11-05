@@ -25,6 +25,7 @@ jobs:
           sparse-checkout: |
             scripts
             tests/test_t4_probe_ilspy_reference_context.py
+            config/runtime-operation-traces.json
       - name: Run source-free T4 strict negative controls
         run: |
           set -euo pipefail
@@ -111,3 +112,55 @@ jobs:
             --refs-source "$RUNNER_TEMP/t4-context/out-refs" \
             --managed-dir "$RUNNER_TEMP/t4-context/with-refs"
           # No private original code, DLL payload, metadata or decompiler log is uploaded.
+      - name: Verify real B07-pinned Android offline and T4 completion instrumentation against full original context
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          import os
+          import re
+          from pathlib import Path
+          from scripts.b07_probe_original_world_callbacks import (
+              _source, assert_original_dll, method_body, fingerprint, _executable_positions
+          )
+          from scripts.b07_world_coroutine_trace import ORIGINAL_NETWORK_SHA256, ORIGINAL_ITERATOR_BODY_SHA256
+          from scripts.adapt_android_offline_startup import adapt
+          from scripts.instrument_android_runtime_operations import instrument
+          root = Path(os.environ['RUNNER_TEMP']) / 't4-context'
+          assert_original_dll(root / 'with-refs' / 'Assembly-CSharp.dll')
+          source, original_sha = _source(root / 'out-refs', 'Raft_Network', ORIGINAL_NETWORK_SHA256)
+          original_return, original_body = method_body(source, 'WorldHasBeenLoaded')
+          if original_return != 'IEnumerator' or fingerprint(original_body) != ORIGINAL_ITERATOR_BODY_SHA256:
+              raise ValueError('Managed context did not restore authenticated original coroutine identity')
+          adapted = adapt('Raft_Network', source)
+          manifest = json.loads(Path('config/runtime-operation-traces.json').read_text())
+          expected_adapted = manifest['sources']['Raft_Network']['sha256']
+          if fingerprint(adapted) != expected_adapted:
+              raise ValueError('Native source staging manifest mismatch; keep original gate')
+          staged = instrument('Raft_Network', adapted, manifest)
+          staged_ret, staged_body = method_body(staged, 'WorldHasBeenLoaded')
+          before = _executable_positions(original_body)
+          after = _executable_positions(staged_body)
+          ready = r'\\bWorldHasBeenRecieved\\s*=\\s*true\\s*;'
+          if staged_ret != 'IEnumerator' or len(re.findall(ready, before)) != 1 or len(re.findall(ready, after)) != 1:
+              raise ValueError('Original world completion assignment contract changed')
+          if after.count('WorldHasBeenLoaded.firstMoveNext') != 1 or after.count('WorldHasBeenLoaded.originalCompletionAssigned') != 1:
+              raise ValueError('Expected B07 firstMoveNext and T4 actual assignment markers')
+          if len(re.findall(r'\\byield\\s+return\\b', after)) != len(re.findall(r'\\byield\\s+return\\b', before)):
+              raise ValueError('Original coroutine yield statements changed')
+          print('T4_NATIVE_SOURCE_STAGE_FULL_CONTEXT ' + json.dumps({
+              'source_sha256': original_sha,
+              'adapted_sha256': fingerprint(adapted),
+              'matches_original_runtime_manifest': True,
+              'original_world_assignment_preserved': True,
+              'first_movenext_and_original_completion_markers': True,
+              'original_yield_count_preserved': True,
+              'production_adapter_exercised': True,
+              'no_production_source_pin_changed': True,
+              'unity_or_il2cpp_compiled': False,
+              'device_tested': False,
+              'raw_original_code_published': False,
+          },sort_keys=True))
+          PY
+          # No original source, managed binaries or private decompiler details are uploaded.
