@@ -1,0 +1,84 @@
+name: T1 WATER-001 official GameCI Unity 2021 source-free activation comparison
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - .github/workflows/raft-t1-gameci-unity-activation.yml
+      - scripts/t1_sourcefree_unity_fixture.py
+      - tests/test_t1_sourcefree_unity_fixture.py
+
+permissions:
+  contents: read
+  checks: write
+
+concurrency:
+  group: raft-t1-official-gameci-activation-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  source-free-gameci:
+    runs-on: ubuntu-24.04
+    environment: UNITY_LICENSE
+    timeout-minutes: 35
+    concurrency:
+      group: raft-native-engine-${{ github.ref }}
+      cancel-in-progress: false
+    steps:
+      - name: Require the existing Unity activation environment, never print secrets
+        shell: bash
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          set +x
+          if [ -z "${UNITY_LICENSE:-}" ] && { [ -z "${UNITY_SERIAL:-}" ] || [ -z "${UNITY_EMAIL:-}" ] || [ -z "${UNITY_PASSWORD:-}" ]; }; then
+            echo 'RAFT_T1_GAMECI_LICENSE env_available=false source_free=true original_data_downloaded=false'
+            exit 1
+          fi
+          echo 'RAFT_T1_GAMECI_LICENSE env_available=true input_values_not_disclosed=true'
+      - name: Checkout only original-free test fixture generator and unit controls
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Verify source-free fixture and stage independent Unity EditMode project
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_t1_sourcefree_unity_fixture.py -v
+          python3 -m scripts.t1_sourcefree_unity_fixture --project t1-sourcefree-gameci
+          test "$(find t1-sourcefree-gameci/Assets -type f -name '*.cs' | wc -l)" = 1
+          test ! -e t1-sourcefree-gameci/Assets/T1OriginalDerived
+          echo 'RAFT_T1_GAMECI_STAGING synthetic_only=true original_fft_data=false project_version=2021.3.45f2'
+      - name: Activate through the supported GameCI test runner and run one synthetic EditMode test
+        id: gameci
+        uses: game-ci/unity-test-runner@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          projectPath: t1-sourcefree-gameci
+          unityVersion: 2021.3.45f2
+          testMode: editmode
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          artifactsPath: t1-sourcefree-gameci-private-artifacts
+      - name: Report sharply bounded source-free result only
+        if: success()
+        run: |
+          echo 'RAFT_T1_GAMECI_ACTIVATION official_runner_exited_success=true synthetic_editmode_test=true real_original_fft_compute=false unity_original_runtime_mapping=false android_device=false'
+      - name: Remove temporary synthetic test project and local runner reports
+        if: always()
+        shell: bash
+        run: |
+          sudo rm -rf t1-sourcefree-gameci t1-sourcefree-gameci-private-artifacts
