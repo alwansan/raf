@@ -1,0 +1,61 @@
+{
+  "id": "T2-foam-original-material-settexture-name-arguments",
+  "owner": "T2",
+  "kind": "genuine_source_authenticated_compiled_Unity_Material_SetTexture_name_parameter_IL_flow",
+  "title": "Original Foam four non-authored texture resource names as exact Unity Material.SetTexture string first-arg operands",
+  "source": {
+    "zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "foam_source_owner": "Raft_Data/sharedassets0.assets",
+    "foam_owner_size": 115978112,
+    "foam_owner_sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "foam_shader_original_pathid": 2420,
+    "foam_raw_sha256": "67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1",
+    "original_managed_dll": "Raft_Data/Managed/Assembly-CSharp.dll",
+    "dll_bytes": 3211776,
+    "dll_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e"
+  },
+  "stages": {
+    "acquisition": "ORIGINAL_FOAM_SOURCE_AND_ORIGINAL_MANAGED_DLL_SHA_VERIFIED",
+    "extraction": "SOURCE_FOAM_1_AUTHORED_TEXTURE_AND_4_EXTRA_PASS0_NON_PROPERTY_NAMES;EXACT_FOUR_MATCHING_ORIGINAL_MANAGED_LDSTR_NAMES_VERIFIED",
+    "reconstruction": "CONSERVATIVE_CECIL_SINGLE_BLOCK_STACK_FIRST_ARGUMENT_PROOF_FOUR_OF_FOUR_ORIGINAL_NAME_STRINGS",
+    "binding": "ORIGINAL_COMPILED_MATERIAL_SETTEXTURE_SYSTEM_STRING_FIRST_ARG_4_OF_4;SOURCE_TEXTURE_SECOND_ARG_MATERIAL_RECEIVER_NOT_YET_PROVEN",
+    "integration": "SOURCE_ONLY_GITHUB_CI42021183522_SUCCESS_NO_SHADERLAB_OR_UNITY_IMPORT",
+    "device": "NOT_TESTED"
+  },
+  "observed": {
+    "original_foam_texture_name_occurrences": 6,
+    "original_foam_authored_texture_names": 1,
+    "original_foam_non_authored_unique_names": 4,
+    "compiled_original_managed_non_authored_texture_name_matches": 4,
+    "exact_original_non_authored_names_as_typed_first_settexture_argument": 4,
+    "direct_string_names_to_material_settexture": 4,
+    "names_to_MPB_settexture_exact_first_arg": 0,
+    "intermediate_propertytoid": 0,
+    "original_managed_bodies_scanned": 19118,
+    "original_managed_instructions_scanned": 491490,
+    "original_texture_value_source_proven": false,
+    "material_receiver_source_proven": false,
+    "actual_runtime_method_reachability_verified": false,
+    "unity_material_upload_or_filter_wrap_cb_verified": false,
+    "shaderlab_import_adreno_pixels_verified": false
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42019735778",
+    "https://github.com/alwansan/raf/actions/runs/42020924870",
+    "https://github.com/alwansan/raf/actions/runs/42021183522",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_ORIGINAL_MATERIAL_SETTEXTURE_ARGUMENT_PROOF_2026-11-05.md"
+  ],
+  "artifact": {
+    "id": 13412190775,
+    "zip_sha256": "0a7603130abb87c8ab000777eb276cab00b5d2a3c59bdcc9cc4438716eac9498",
+    "safe_numeric_aggregate_only": true
+  },
+  "remaining": [
+    "Prove 2nd Texture parameter typed/origin and Material receiver identity for four original compiler calls",
+    "Verify execution/reachability and material Foam Shader binding in real game or compiled original",
+    "Verify original sampler states/UV/render targets and CB0 upload",
+    "Rebuild private genuine two-pass Foam ShaderLab, Unity import and actual GPU/Adreno pixels"
+  ],
+  "updated_by": "T2",
+  "updated_at": "2026-11-05T11:47Z"
+}
