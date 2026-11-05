@@ -6,7 +6,7 @@
   "origin": "chat",
   "issue_id": "INTEGRATION-001",
   "track": "one diagnostic native APK OBB XAPK request",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "5eed7b6715a25177e733d17f383bb8735368bdbf",
   "intended_files": [
     ".github/raft-native-build-request.json",
@@ -32,8 +32,13 @@
   "experiment_ids": [
     "T5-20261105T1404Z-T5-chat-native-diagnostic-3c8e-native"
   ],
-  "run_urls": [],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42042902522"
+  ],
   "result": null,
-  "next_step": "Trigger exact one native delivery request, record URL and first gate, do not claim device success.",
-  "updated_at": "2026-11-05T14:04:00Z"
+  "next_step": "One diagnostic native delivery run 42042902522 pending; wait for exact job steps, no duplicate or cancel. Mark true outcome only with proof.",
+  "updated_at": "2026-11-05T14:14:00Z",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42042902522",
+  "integration_commit": "753802d75196210d721cca0f4fdec6ce7800bf0d",
+  "request_commit": "753802d75196210d721cca0f4fdec6ce7800bf0d"
 }
