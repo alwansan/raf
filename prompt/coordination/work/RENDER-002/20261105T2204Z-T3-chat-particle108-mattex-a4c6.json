@@ -6,8 +6,8 @@
   "origin": "chat",
   "issue_id": "RENDER-002",
   "base_sha": "8b8519327c887b59893fca43a44d9a764fa639eb",
-  "status": "active",
-  "updated_at": "2026-11-05T22:12:00Z",
+  "status": "completed",
+  "updated_at": "2026-11-05T22:14:00Z",
   "track": "original exact ParticleShader48 108-use Renderer↔Material↔Texture slot original binding",
   "hypothesis": "The unique original 108-slot ParticleSystemRenderer Shader48 has a bounded, authentic set of source Material21 objects and texture PPtrs; determine null vs bound original textures and UV/keyword coverage before comparing same-export full-native GUID; never infer real phone texture loss without a same-instance Android export.",
   "experiment_key": "T3-ZIP2-15964-6scene-4owner-source108-particleShader48-material-texenv-private-map-source-bound-v1",
@@ -29,10 +29,11 @@
     "prompt/coordination/clients/T3/sessions/20261105T214810Z-T3-chat-selective-colormask-a82d.md",
     "prompt/coordination/clients/T3/sessions/20261105T213100Z-T3-scheduled-clstage-8b4f.md"
   ],
-  "next_step": "Regenerate T-team canonical index with new RENDER-002 original ParticleTexEnv authenticated CI42119098398, then close.",
+  "next_step": "Compare exact five private Material21 and three Texture source PPtrs with same-instance W1/B02 native full export trace, verify actual Texture2D28 target class and installed emitter Shader/Texture links. Keep RENDER-002 OPEN, no pixel acceptance or ShaderLab asset changes.",
   "run_urls": [
-    "https://github.com/alwansan/raf/actions/runs/42119098398"
+    "https://github.com/alwansan/raf/actions/runs/42119098398",
+    "https://github.com/alwansan/raf/actions/runs/42119891933"
   ],
-  "result": "Real SHA-pinned six Raft scenes/4 original Material/Shader owners CI42119098398 SUCCESS (81/81 source-free checks). Unique original ParticleShader48 108 renderer Material slots bind exactly FIVE original Material21 source objects with TEN non-null local Texture PPtrs, THREE unique owner-scoped target PPtr shapes and TEN complete UVs; no empty/missing texture slots. Source-only, no Texture2D payload or native exported GUID/device pixel proof.",
+  "result": "Real six-scene/four-owner pinned ZIP2 source 108 ParticleShader48 slots → 5 actual original Material21 objects, 10 non-null LOCAL original TexEnv texture PPtrs, 3 distinct scoped target shapes, 10 complete UVs. CI42119098398 SUCCESS 81/81 controls; T TEAM canonical source-evidence index CI42119891933 SUCCESS. No native export Material/Texture GUID or phone pixel equivalence.",
   "integration_commit": "775a18ec59a061783d46e7fbb77125c0929c8d34"
 }
