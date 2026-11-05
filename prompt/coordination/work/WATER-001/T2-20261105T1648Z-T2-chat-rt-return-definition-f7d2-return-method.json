@@ -4,9 +4,9 @@
   "origin": "chat",
   "session_id": "20261105T1648Z-T2-chat-rt-return-definition-f7d2",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "blocked",
   "base_sha": "f191f352f251bdcea3460f3f142bb5f5aa07764c",
-  "updated_at": "2026-11-05T16:48:00Z",
+  "updated_at": "2026-11-05T16:53:00Z",
   "resumed_from_sessions": [
     "20261105T1611Z-T2-chat-foam-length-source-9ab4",
     "20261105T1623Z-T2-scheduled-caller-origin-6f2d"
@@ -37,5 +37,17 @@
     "last_T2_chat_snapshot": "20261105T1611Z-T2-chat-foam-length-source-9ab4",
     "other_T2_pending": false
   },
-  "next_step": "Implement strict original return-call callee resolution and source-only adversarial controls; run authenticated managed CI and save checked result. Preserve all original proprietary source privacy. WATER-001 OPEN, NOT_READY0/3."
+  "next_step": "First inspect new HEAD, compare T2-owned files with baseline blobs, and only if permitted safely merge candidate (or develop a separate scoped source-free probe). Do not reattempt safety-blocked action unchanged; do not imply CI or original declaration proof. WATER-001 OPEN NOT_READY 0/3.",
+  "result": {
+    "original_CI": "NOT_RUN",
+    "source_merge": "NOT_PUBLISHED_ON_BRANCH",
+    "source_code_candidate_unmerged_commits": [
+      "54932da8f508059eafb5d59db0ae19c669a75079",
+      "c1d257d844f8ddb6ff4fe786f320ab8e4fceccca"
+    ],
+    "prior_original_CI": "42065864809 COMPLETED SUCCESS",
+    "prior_proven": "actual original stelem.ref value is direct call declaring UnityEngine.RenderTexture; exact called MethodReference and return body unclassified",
+    "blocker": "Concurrent T1/T3/T4/T5 branch advances caused two GitHub expected-head update_ref UNKNOWN errors; subsequent rebase tool action blocked by a tool safety check. Did not use force, bypass, or claim successful source merge or source-original results.",
+    "runtime_or_device": "not tested"
+  }
 }
