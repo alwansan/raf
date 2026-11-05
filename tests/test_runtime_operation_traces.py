@@ -121,3 +121,58 @@ class OperationTraceTests(unittest.TestCase):
             instrument('SaveAndLoad', source.replace('SaveWorld()', 'EraseWorld()'), manifest)
         with self.assertRaisesRegex(ValueError, 'Unknown adapted original revision'):
             instrument('SaveAndLoad', result, manifest)
+
+    def test_t4_save_postcheck_runs_in_finally_even_with_early_return(self):
+        signature = 'private void Save(string filename, RGD raftgamedata)'
+        source = ('class SaveAndLoad { ' + signature +
+                  ' { if (raftgamedata == null) return; OriginalSerialize(); } }')
+        transformed = wrap(source, signature, 'save', 'filename')
+        self.assertEqual(transformed.count('Save.argumentFileSnapshot"'), 1)
+        self.assertIn('System.IO.File.Exists(filename)', transformed)
+        self.assertIn('new System.IO.FileInfo(filename).Length == 0L', transformed)
+        self.assertIn('if (raftgamedata == null) return; OriginalSerialize();', transformed)
+        self.assertLess(transformed.index('} finally { '),
+                        transformed.index('Save.argumentFileSnapshot"'))
+        self.assertLess(transformed.index('Save.argumentFileSnapshot"'),
+                        transformed.index('AndroidRuntimeLog.EndOperation('))
+        self.assertIn('durable_RGD_unverified=true', transformed)
+
+    def test_t4_save_postcheck_has_no_new_serialization_or_rethrow(self):
+        signature = 'private void Save(string filename, RGD raftgamedata)'
+        source = signature + ' { bool original = false; /* original */ }'
+        transformed = wrap(source, signature, 'save')
+        self.assertEqual(transformed.count('System.IO.File.Exists(filename)'), 1)
+        self.assertNotIn('File.Create(', transformed)
+        self.assertNotIn('WriteAllBytes(', transformed)
+        self.assertNotIn('WorldHasBeenRecieved = true', transformed)
+        self.assertIn('Save.argumentFileSnapshot.unavailable', transformed)
+        self.assertIn('catch (System.Exception) { }', transformed)
+        self.assertIn('bool original = false; /* original */', transformed)
+
+    def test_t4_save_postcheck_not_in_other_methods_or_non_save_area(self):
+        signature = 'private void Save(string filename, RGD raftgamedata)'
+        text = signature + ' { OriginalSave(); }'
+        self.assertNotIn('Save.argumentFileSnapshot', wrap(text, signature, 'world'))
+        other = 'private void SaveUser() { OriginalSave(); }'
+        self.assertNotIn('Save.argumentFileSnapshot', wrap(other, 'private void SaveUser()', 'save'))
+        game = 'public void SaveGame(bool sendRemoteMessage) { OriginalSave(); }'
+        self.assertNotIn('Save.argumentFileSnapshot',
+                         wrap(game, 'public void SaveGame(bool sendRemoteMessage)', 'save'))
+
+    def test_t4_save_postcheck_preserves_original_path_and_source_gate(self):
+        signature = 'private void Save(string filename, RGD raftgamedata)'
+        source = 'class SaveAndLoad { ' + signature + ' { OriginalSave(filename); } }'
+        manifest = {'sources': {'SaveAndLoad': {
+            'sha256': hashlib.sha256(source.encode()).hexdigest(),
+            'area': 'save', 'methods': [{'signature': signature}],
+        }}}
+        # instrument() additionally authenticates the SteamStats call for full
+        # SaveAndLoad. Exercise wrap() here; source SHA source gating was already
+        # covered by the full original manifest and existing SaveGame fixtures.
+        result = wrap(source, signature, 'save', 'filename')
+        self.assertEqual(result.count('OriginalSave(filename);'), 1)
+        self.assertNotIn('Path.Combine(', result)
+        self.assertNotIn('filename =', result)
+        with self.assertRaisesRegex(ValueError, 'duplicate operation instrumentation'):
+            wrap(result, signature, 'save', 'filename')
+
