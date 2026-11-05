@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261105T142000Z-T1-chat-lavapipe-unity",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "be5b3aab8b12ac22fe93660ba0fcf955615bedff",
+  "resumed_from_sessions": [
+    "20261105T140300Z-T1-chat-vulkan-editor",
+    "20261105T140815Z-T1-chat-592ae2",
+    "20261105T131036Z-T1-chat-877585"
+  ],
+  "experiment_key": "sourcefree-unity2021.3.45f2-gameci-v0.1.72-mesa-lavapipe-vulkan-driver-overlay",
+  "resource_key": "raft-native-engine-feature/android-native-port",
+  "intended_files": [
+    ".github/workflows/raft-t1-sourcefree-mesa-vulkan-overlay.yml",
+    "docs/T1_UNITY_VULKAN_MESA_DRIVER_2026-11-05.md",
+    "prompt/coordination/clients/T1/sessions/20261105T142000Z-T1-chat-lavapipe-unity.md"
+  ],
+  "hypothesis": "Pinned Unity2021 GameCI container may fall back to OpenGLCore under -force-vulkan due Vulkan loader/ICD unavailable. Inspect same image; build disposable runtime overlay installing libvulkan1 + mesa-vulkan-drivers with explicit lavapipe ICD, require vulkaninfo enumerates device, then run exact three source-free Unity NUnit tests with Vulkan API and 64-pixel synthetic numeric GPU output before any original FFT download.",
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/actions/runs/42042230791",
+    "https://github.com/alwansan/raf/actions/runs/42042650298",
+    "https://github.com/alwansan/raf/actions/runs/42025620147"
+  ],
+  "run_urls": [],
+  "updated_at": "2026-11-05T14:20:00Z",
+  "next_step": "Build only ephemeral test container on ubuntu-24.04 with original GameCI image; run loader/ICD/vulkaninfo controls without exposing source or credentials. If Vulkan hardware/ICD enumerates, invoke exact GameCI CLI with --customImage and --dockerEnv for VK_ICD_FILENAMES, --customParameters=-force-vulkan and require exact three NUnit pass. Never claim game or Adreno proof. If it still uses nonVulkan, preserve reason and investigate original OpenGLCore arithmetic shader semantics.",
+  "identity_conflict": "Multiple T1 scheduled/chat sessions; existing older shared state preserved. Distinct image-only test, no source compilation/production game paths."
+}
