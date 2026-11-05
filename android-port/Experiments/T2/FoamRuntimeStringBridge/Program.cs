@@ -293,11 +293,13 @@ internal static class Program
                                         candidates[0].Parameters[0].ParameterType.FullName=="System.Int32" &&
                                         candidates[0].ReturnType.FullName=="UnityEngine.Texture")
                                     {
-                                        var profile=FoamProducerBody.Inspect(candidates[0]);
-                                        if (result.OriginalSingleProducerBodyProfile is not null &&
-                                            result.OriginalSingleProducerBodyProfile!=profile)
-                                            throw new InvalidDataException("Inconsistent private original producer body profile");
-                                        result.OriginalSingleProducerBodyProfile=profile;
+                                        // All four source names resolve one SHA-original
+                                        // producer signature. Inspect that one body
+                                        // once; a repeated dictionary-valued record
+                                        // is not compared by object identity.
+                                        if (result.OriginalSingleProducerBodyProfile is null)
+                                            result.OriginalSingleProducerBodyProfile=
+                                                FoamProducerBody.Inspect(candidates[0]);
                                     }
                                 }
                             }
@@ -565,7 +567,50 @@ internal static class Program
             !knownShape.TypedTextureArrayFieldReferenced ||
             knownShape.IndexedReferenceLoads!=1)
             throw new InvalidDataException("Synthetic exact Texture[] indexed return not validated");
-        var wrongIndexed=new MethodDefinition("PublicSyntheticExtraSourceInstruction",
+        var guarded=new MethodDefinition("PublicSyntheticNullGuardedArrayTexture",
+            Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Virtual,
+            textureType);
+        guarded.Parameters.Add(new ParameterDefinition(m.TypeSystem.Int32));
+        factoryDef.Methods.Add(guarded);
+        var ilguard=guarded.Body.GetILProcessor();
+        var fallBack=ilguard.Create(OpCodes.Ldnull);
+        ilguard.Append(ilguard.Create(OpCodes.Ldarg_0));
+        ilguard.Append(ilguard.Create(OpCodes.Ldfld,indexedField));
+        ilguard.Append(ilguard.Create(OpCodes.Brfalse_S,fallBack));
+        ilguard.Append(ilguard.Create(OpCodes.Ldarg_0));
+        ilguard.Append(ilguard.Create(OpCodes.Ldfld,indexedField));
+        ilguard.Append(ilguard.Create(OpCodes.Ldarg_1));
+        ilguard.Append(ilguard.Create(OpCodes.Ldelem_Ref));
+        ilguard.Append(ilguard.Create(OpCodes.Ret));
+        ilguard.Append(fallBack);
+        ilguard.Append(ilguard.Create(OpCodes.Ret));
+        var guardProfile=FoamProducerBody.Inspect(guarded);
+        if (!guardProfile.ExactNullGuardedOriginalTextureArrayIndexByInt ||
+            !guardProfile.OriginalFallbackReturnsNull ||
+            !guardProfile.TypedTextureArrayFieldReferenced ||
+            guardProfile.InstanceFieldLoads!=2 ||
+            guardProfile.InstructionCount!=10)
+            throw new InvalidDataException("Original null-guarded Texture[] return fixture failed");
+        var guardedWrong=new MethodDefinition("PublicSyntheticWrongConditionalTarget",
+            Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Virtual,
+            textureType);
+        guardedWrong.Parameters.Add(new ParameterDefinition(m.TypeSystem.Int32));
+        factoryDef.Methods.Add(guardedWrong);
+        var ilgw=guardedWrong.Body.GetILProcessor();
+        var badReturn=ilgw.Create(OpCodes.Ret);
+        ilgw.Append(ilgw.Create(OpCodes.Ldarg_0));
+        ilgw.Append(ilgw.Create(OpCodes.Ldfld,indexedField));
+        ilgw.Append(ilgw.Create(OpCodes.Brfalse_S,badReturn));
+        ilgw.Append(ilgw.Create(OpCodes.Ldarg_0));
+        ilgw.Append(ilgw.Create(OpCodes.Ldfld,indexedField));
+        ilgw.Append(ilgw.Create(OpCodes.Ldarg_1));
+        ilgw.Append(ilgw.Create(OpCodes.Ldelem_Ref));
+        ilgw.Append(badReturn);
+        ilgw.Append(ilgw.Create(OpCodes.Ldnull));
+        ilgw.Append(ilgw.Create(OpCodes.Ret));
+        if (FoamProducerBody.Inspect(guardedWrong).ExactNullGuardedOriginalTextureArrayIndexByInt)
+            throw new InvalidDataException("Wrong branch target must not prove null fallback");
+                var wrongIndexed=new MethodDefinition("PublicSyntheticExtraSourceInstruction",
             Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Virtual,
             textureType);
         wrongIndexed.Parameters.Add(new ParameterDefinition(m.TypeSystem.Int32));
@@ -651,6 +696,8 @@ internal static class Program
                 source_class_declaring_same_assembly_without_real_definition_rejected=true,
                 strict_original_managed_Texture_array_int_index_return_fixture=true,
                 altered_extra_instruction_return_body_shape_rejected=true,
+                guarded_original_texture_array_null_fallback_fixture=true,
+                wrong_branch_target_guarded_texture_array_rejected=true,
                 private_IL_names_or_source_published = false
             }));
         return 0;
