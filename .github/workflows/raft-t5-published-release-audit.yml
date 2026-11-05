@@ -1,0 +1,33 @@
+name: T5 INTEGRATION-001 published Raft early-test release metadata audit (CPU only)
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t5_audit_published_raft_release.py
+      - tests/fixtures/t5_raft_release_41812889049.json
+      - tests/test_t5_audit_published_raft_release.py
+      - .github/workflows/raft-t5-published-release-audit.yml
+permissions:
+  contents: read
+concurrency:
+  group: t5-raft-release-metadata-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  published-release-multipart-consistency:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Audit real published APK86 official Run/Release metadata and false-green controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest -v tests.test_t5_audit_published_raft_release
+      - name: Explicit authenticity boundary
+        if: always()
+        run: echo 'This compares public Release API metadata only. No download bytes, Android signature verification, OBB mounting, XAPK integrity, or device test.'
