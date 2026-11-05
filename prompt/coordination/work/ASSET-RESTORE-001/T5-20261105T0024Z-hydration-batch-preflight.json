@@ -6,7 +6,7 @@
   "issue_id": "ASSET-RESTORE-001",
   "track": "T5 graphics staging consumer safety/integration",
   "approach": "Preflight the entire selected set of SHA-pinned staged graphics source paths, target LFS pointer identities, lengths and linked-path guards before publishing ANY owner's hydrated original. Existing per-owner streaming SHA256 validation remains; no extra full-source hash pass, no new LFS or Unity build. Add T5 two-owner negative test proving a later unsafe/mismatched source cannot cause partial earlier replacement; preserve positive bridge path.",
-  "status": "planned",
+  "status": "paused",
   "base_sha": "e500e0633f0fcda6149e7dffd607a42660435d41",
   "intended_files": [
     "scripts/hydrate_render_payloads.py",
@@ -26,8 +26,11 @@
   "last_verified_result": "CI41940032540 13/13 synthetic, 337660952 bytes original three-owner staging + independent feature pointer check. This does not prove all-or-nothing consumer on later bad batch owner.",
   "expected_validation": "Local synthetic two-owner fixture and isolated T5 CI path-trigger, followed by real ZIP2 stage+consume if CI succeeds.",
   "run_urls": [],
-  "result": null,
-  "next_step": "Implement guarded batch source/destination preflight, prove no first target is replaced when second source is invalid, then check CI and persist outcome.",
-  "updated_at": "2026-11-05T00:24:00Z",
-  "updated_by": "T5"
+  "result": "T5 original graphics hydration consumer was modified to preflight all staged source and feature-pointer metadata before any pointer replacement (e8b63e4). Three positive/negative two-owner test cases added and newline fixture corrected (1648d7b). CI after code change NOT YET CONFIRMED. Prior 41940032540 passed original three-owner source staging before this modification; no device/Unity claim.",
+  "next_step": "Observe new path-triggered T5 CI (positive+later-bad-target+later-symlink and authenticated 3-owner stage) and fix if red; then coordinate T1/T3 actual ShaderLab/FFT/material import, and keep ASSET-RESTORE-001 OPEN until integration evidence.",
+  "updated_at": "2026-11-05T00:29:00Z",
+  "updated_by": "T5",
+  "experiment_ids": [
+    "T5-20261105T0024Z-hydration-batch-preflight"
+  ]
 }
