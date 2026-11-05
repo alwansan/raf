@@ -7,7 +7,7 @@
   "issue_id": "INTEGRATION-001",
   "track": "platform-smoke-forensics",
   "approach": "Extract previously inaccessible failed job log; isolate exact assertion and assess runtime race without touching T4 platform code.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "952684b060f6aec1b02471294b5a726a8048ee7e",
   "intended_files": [
     "prompt/coordination/work/INTEGRATION-001/T5-20261105T1348Z-T5-scheduled-7c91-multiprocess-identity-log-forensics.json",
@@ -24,7 +24,7 @@
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42020924863"
   ],
-  "result": null,
-  "next_step": "Capture failing assertion from original log and distinguish concrete cause from concurrency hypotheses.",
+  "result": "Retrieved original job127223188005 log: smoke 16 PASS/1 FAIL, exact failure cross-process identity initialization with InvalidDataException from ReadExistingId line105. Underlying cause still open; no source change.",
+  "next_step": "Coordinate with T4 on deterministic isolated cross-process read-vs-write delay test, retaining corrupt-file fail-closed negative control; do not edit shared platform runtime until reproduced.",
   "updated_at": "2026-11-05T13:48:00Z"
 }
