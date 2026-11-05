@@ -223,6 +223,41 @@ internal static class Program
                 typedCallPredecessor + typedNewPredecessor + otherPredecessor != returns)
             throw new InvalidDataException("original_factory_return_counts_inconsistent");
 
+        if (returns != 1 || localPredecessor != 1)
+            throw new InvalidDataException("factory_expected_single_derived_RGD_local_return");
+        int retAt = il.ToList().FindIndex(i => i.OpCode.Code == Code.Ret);
+        int loadAt = PriorNonNop(original, retAt);
+        int returnedSlot = loadAt < 0 ? -1 :
+            LocalSlot(il[loadAt], store: false);
+        if (returnedSlot < 0 || returnedSlot >= original.Body.Variables.Count ||
+            !DerivesFrom(original.Body.Variables[returnedSlot].VariableType,
+                rgd, types))
+            throw new InvalidDataException("factory_return_local_shape_drift");
+        int returnedStores = 0, storeNull = 0, storeCtor = 0, storeCall = 0,
+            storeLocal = 0, storeField = 0, storeUnknown = 0;
+        string lastStoreClass = "NO_STORES";
+        for (int at = 0; at < retAt; at++)
+        {
+            var candidate = il[at];
+            if (LocalSlot(candidate, store: true) != returnedSlot) continue;
+            returnedStores++;
+            string source = FactoryLocalPrestoreClass(original, candidate, types, rgd);
+            lastStoreClass = source;
+            switch (source)
+            {
+                case "NULL_LITERAL": storeNull++; break;
+                case "DERIVED_CONSTRUCTOR": storeCtor++; break;
+                case "DERIVED_CALL": storeCall++; break;
+                case "DERIVED_LOCAL": storeLocal++; break;
+                case "DERIVED_FIELD": storeField++; break;
+                default: storeUnknown++; break;
+            }
+        }
+        if (returnedStores > 10000 ||
+            storeNull + storeCtor + storeCall + storeLocal +
+                storeField + storeUnknown != returnedStores)
+            throw new InvalidDataException("factory_local_store_partition_invalid");
+
         int derivedLocals = original.Body.Variables.Count(v =>
             DerivesFrom(v.VariableType, rgd, types));
         return new
@@ -240,8 +275,46 @@ internal static class Program
             factory_conditional_branch_sites = conditionalBranches,
             factory_throw_or_rethrow_sites = throwSites,
             factory_null_literal_load_sites = nullLiteralLoads,
-            factory_all_return_paths_proven = false
+            factory_all_return_paths_proven = false,
+            factory_return_local_lexical_store_sites = returnedStores,
+            factory_return_local_store_null_literal = storeNull,
+            factory_return_local_store_derived_constructor = storeCtor,
+            factory_return_local_store_derived_call = storeCall,
+            factory_return_local_store_derived_local = storeLocal,
+            factory_return_local_store_derived_field = storeField,
+            factory_return_local_store_other_or_unknown = storeUnknown,
+            factory_return_local_nearest_lexical_store_source = lastStoreClass,
+            factory_return_local_store_path_reachability_proven = false
         };
+    }
+
+
+    // The exact original returned local, counted only by lexical stloc writes.
+    // These categories say nothing about executed control flow, nonnull values,
+    // or whether a store has reached the one return in a particular world.
+    private static string FactoryLocalPrestoreClass(
+        MethodDefinition method, Instruction store, TypeDefinition[] types,
+        string rgd)
+    {
+        int previous = PriorNonNop(method, method.Body.Instructions.IndexOf(store));
+        if (previous < 0) return "OTHER_OR_UNKNOWN";
+        var i = method.Body.Instructions[previous];
+        if (i.OpCode.Code == Code.Ldnull) return "NULL_LITERAL";
+        if (i.OpCode.Code == Code.Newobj && i.Operand is MethodReference ctor &&
+            DerivesFrom(ctor.DeclaringType, rgd, types))
+            return "DERIVED_CONSTRUCTOR";
+        if (IsCall(i) && i.Operand is MethodReference called &&
+            DerivesFrom(called.ReturnType, rgd, types))
+            return "DERIVED_CALL";
+        int slot = LocalSlot(i, store: false);
+        if (slot >= 0 && slot < method.Body.Variables.Count &&
+            DerivesFrom(method.Body.Variables[slot].VariableType, rgd, types))
+            return "DERIVED_LOCAL";
+        if (i.OpCode.Code is Code.Ldfld or Code.Ldsfld &&
+            i.Operand is FieldReference field &&
+            DerivesFrom(field.FieldType, rgd, types))
+            return "DERIVED_FIELD";
+        return "OTHER_OR_UNKNOWN";
     }
 
     private static string ImmediateStoreValueCategory(
