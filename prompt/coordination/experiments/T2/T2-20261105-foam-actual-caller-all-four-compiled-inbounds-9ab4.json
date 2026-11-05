@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261105T1611Z-T2-chat-foam-length-source-9ab4",
+  "issue_id": "WATER-001",
+  "status": "completed",
+  "experiment_key": "T2|original-DLL-0a6f0527|exact-Foam-ldflda-refarray-call-int-length-formal|typed-caller-stack-v1",
+  "source": {
+    "original_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "original_managed_dll_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "bytes": 3211776
+  },
+  "source_commits": [
+    "cd21db83712feeb0d851866f1a104c52f46859de",
+    "668cfb4529baf1a0a10a11ed629311e9b7a74784"
+  ],
+  "original_ci": "https://github.com/alwansan/raf/actions/runs/42064653958",
+  "method": "Captured actual source-original callsite only when same exact field address reached formal ref UnityEngine.RenderTexture[]; resolved exact callee newarr System.Int32 formal, bounded typed actual caller argument evaluation stack; synthetic literal, true argument and wrong nearby dataflow rejection. All private values compared in ephemeral runner.",
+  "result": {
+    "original_CI": "SUCCESS",
+    "source_exact_original_callsite_count": 1,
+    "int32_newarr_formal_proven": true,
+    "actual_compiled_length_argument_source": "direct_ldc_i4_literal",
+    "positive_compiled_allocation_length_proven": true,
+    "all_four_original_compiled_Texture_int_indices_distinct_and_nonnegative": true,
+    "all_four_original_compiled_Texture_int_indices_in_bounds_for_this_call": true,
+    "original_values_or_reversible_digests_disclosed": false,
+    "actual_runtime_call_execution_proven": false,
+    "actual_Unity_RenderTexture_instances_verified": false,
+    "ShaderLab_Adreno_pixels_verified": false
+  },
+  "artifact": {
+    "id": 13433575749,
+    "bytes": 2778,
+    "sha256": "a084bab746c1191543d7a40c4e933d912df8d726f59de40f39f64ef8f86e0029"
+  },
+  "limitations": [
+    "The assertion is compiled source-index bounds if this exact call path executes; does not prove original runtime reachability or Unity frame rendering.",
+    "Callee has branch instructions whose runtime outcomes are not verified.",
+    "Array members may be unpopulated at runtime; no valid RT instance/content/material sampler or ShaderLab integration proof.",
+    "No original literal values, original symbol names, IL or enumerable hash disclosed."
+  ],
+  "next_step": "Investigate exact original stelem.ref *value operand* origin and creation of per-element UnityEngine.RenderTexture; then runtime/Android ShaderLab/Adreno verification. WATER-001 OPEN NOT_READY0/3."
+}
