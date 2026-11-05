@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T1633Z-T3-chat-vf-component-coverage-b71d",
+  "issue_id": "RENDER-002",
+  "status": "completed_sourcefree_controls",
+  "experiment_key": "T3-SPIRVCross-VSPS-Location-Component-typed-coverage-sourcefree-v1",
+  "base_sha": "466b59718e271a5ca7071258b2f5938f34e702e9",
+  "source_commits": [
+    "51f0e695c0474e095cb3f6592632b18a26d17094",
+    "e17ffd6d19a0907cf3e0333b2a7a09beda33a553",
+    "920d52a9d83f051c4e758c2977fb4681490a233d"
+  ],
+  "workflow_path": ".github/workflows/raft-t3-vf-spv-component-coverage.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42065947764",
+  "result": {
+    "conclusion": "success",
+    "py_compile": "passed",
+    "sourcefree_tests": 17,
+    "test_failures": 0,
+    "authentic_original_dxbc_samples": 0,
+    "unity_gpu_test": false,
+    "device_pixels_test": false,
+    "respects_packed_location_component": true,
+    "detects_missing_or_type_mismatch": true,
+    "refuses_private_name_fields": true,
+    "keeps_original_dxbc_semantics_unproven": true
+  },
+  "rejected_hypotheses": [
+    "Location-only matching can prove original DXBC semantic/interpolation fidelity (not proven)",
+    "An unsupported matrix/array/64-bit layout can safely be counted as a match (must stay inconclusive)"
+  ],
+  "limitations": [
+    "Pure synthetic typed component contract; no exact original Shader48 data fed to helper yet",
+    "No reflection adapter linking original paired vertex/fragment SPIR-V to sanitized component records",
+    "Not an authored ShaderLab replacement; 921-use shader original pixels unverified",
+    "Heavy native build 42058825739 running concurrently and left unchanged"
+  ],
+  "next_step": "Implement a private fail-closed original four-pass reflection sanitizer with safe Location/Component/type-only bridge. Compare source and roundtrip stage pairs under existing SHA-pinned ZIP2 workflow when resource scheduling permits; keep DXBC-signature extraction in independent scheduled T3 scope.",
+  "updated_at": "2026-11-05T16:36:00Z"
+}
