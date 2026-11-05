@@ -5,7 +5,7 @@
   "origin": "chat",
   "session_id": "20261105T1402Z-T3-chat-renderer-shader-impact-f63e",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed",
   "base_sha": "b383b6e86720369069e7cb61026105b78d6d668d",
   "experiment_key": "T3-ZIP2-15964ea8-sixscene1633-Sh48-W1-AssetRipper036098-TMPPostFXVolumetric-sameexport-GUID-dummy-v1",
   "resource_key": "T3-12owner-true-original-same-export-postvendor",
@@ -23,8 +23,22 @@
     "scripts/t3_audit_exported_material_programs.py"
   ],
   "hypothesis": "Authenticated source 21 typed original Shader48 target 1633 scene Renderer Material slots. Join their exact W1 same-instance original-to-export GUID with real postvendor shader Dummy marker, learn whether 921-slot highest-use source Shader remains dummy vs restored/builtin; never infer device pixels.",
-  "run_urls": [],
-  "result": null,
-  "next_step": "Prepare and synthetic-test exact private source Shader48 to same-export vendor restoration classifier. Concurrent full native Action 42042902522 running, do not cancel or launch another heavy export until no resource conflict. Work only T3-owned script and new workflow.",
-  "updated_at": "2026-11-05T14:17:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42044249541"
+  ],
+  "result": {
+    "status": "SUCCESS_SHA_AUTHENTIC_ORIGINAL_TO_SAME_EXPORT_VENDOR_SHADER_PROGRAM_IDENTITY",
+    "original_source_Shader48_count": 21,
+    "original_source_typed_renderer_material_slots": 1633,
+    "source_renderer_slots_to_dummy_post_vendor": 1373,
+    "source_renderer_slots_to_builtin_Export": 256,
+    "source_renderer_slots_to_nondummy_vendor_Export": 4,
+    "original_shader_owner_unverified_slots": 2,
+    "source_top_shader_921_material_slot_uses_after_vendor": "STILL_DUMMY",
+    "original_Material_Shader_export_parity_41": true,
+    "compiled_Android_device_pixels": false,
+    "game_assets_changed": false
+  },
+  "next_step": "Prioritize actual real shader HLSL/compiled variants for highest authentic scene-use 921-slot Shader48 still Dummy after three vendor restorers; first test whether official native built-in restore can recover it, then ensure original GUID/metadata/pass and Unity Android GPU acceptance. Native full run 42042902522 cancelled, no APK evidence. RENDER-002 OPEN.",
+  "updated_at": "2026-11-05T14:27:00Z"
 }
