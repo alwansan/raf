@@ -1,0 +1,14 @@
+{
+  "id": "T5-20261105T1125Z-original-managed-file-io-safety-negative",
+  "owner": "T5",
+  "session_id": "20261105T1115Z-T5-filemanager-runtime-sandbox",
+  "issue_id": "LOCAL-005",
+  "type": "negative-execution",
+  "summary": "Original SHA-authentic FileManager standalone CLR invocation deliberately blocked before disk I/O: each read/write compiled method calls 1 System.IO, 1 core, 1 internal original helper and 1 other unattested callee. Authentic CI42018587431 FAILURE at COMPILED_IL_GUARD, invoked=false; 13/13 report controls PASS. Does not imply game write failure. Workflow manual-only pending transitive proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42018587431",
+    "https://github.com/alwansan/raf/actions/runs/42018332386",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_FILEMANAGER_MANAGED_RUNTIME_2026-11-05.md"
+  ],
+  "at": "2026-11-05T11:25:00Z"
+}
