@@ -47,6 +47,8 @@ namespace RaftAndroid.Platform
             host.AddComponent<AndroidTouchGamepadOverlay>();
             host.AddComponent<AndroidTouchUiPanel>();
             host.AddComponent<AndroidTouchPointer>();
+            // Independent API26+ physical mouse; original touch pointer remains untouched.
+            host.AddComponent<AndroidPhysicalMouseCapture>();
             ReportPriorExits();
             Debug.Log("RAFT_ANDROID_DEVICE_TEST earlyStartupCandidate=true gameplayVerified=false");
         }
