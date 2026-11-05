@@ -29,7 +29,9 @@ class DiagnosticBoundaryTests(unittest.TestCase):
         run = next(n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == "run")
         compare_calls = [n for n in ast.walk(run) if isinstance(n, ast.Call)
                          and isinstance(n.func, ast.Name) and n.func.id == "compare_pair"]
-        self.assertEqual(len(compare_calls), 1)
+        # Raw comparison is preserved; exact DXT5nm semantic comparison adds
+        # one more source-authenticated pair, both outside decoder handlers.
+        self.assertEqual(len(compare_calls), 2)
         png_calls = [n for n in ast.walk(run) if isinstance(n, ast.Call)
                      and isinstance(n.func, ast.Attribute)
                      and isinstance(n.func.value, ast.Name)
@@ -41,7 +43,8 @@ class DiagnosticBoundaryTests(unittest.TestCase):
             if not any(isinstance(child, ast.Constant) and child.value == "UNSUPPORTED_MODE"
                        for handler in node.handlers for child in ast.walk(handler)):
                 continue
-            self.assertFalse(any(child is compare_calls[0] for child in ast.walk(node)))
+            for comparison in compare_calls:
+                self.assertFalse(any(child is comparison for child in ast.walk(node)))
             self.assertFalse(any(child is png_calls[0] for child in ast.walk(node)))
 
     def test_inconclusive_top_level_remains_fail_closed(self):
