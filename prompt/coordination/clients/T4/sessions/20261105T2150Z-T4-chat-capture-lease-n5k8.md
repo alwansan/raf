@@ -21,4 +21,4 @@
 
 ## Implementation and results
 
-Pending.
+Observed OS capture-loss risk requires an accepted-state gate. Source experiment proposal prepared, but code commits were blocked by tool safety checks; do not claim runtime integration or device acceptance. Baseline CI42111826974 SUCCESS remains the verified result. Next: introduce a gated View.hasPointerCapture observation and lease-revocation negative controls when writes become possible.
