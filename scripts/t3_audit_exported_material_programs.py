@@ -145,6 +145,7 @@ def audit(project:Path):
     c["material_documents"]=len(refs)
     custom=set()
     dummy=set()
+    dummy_frequency=Counter()
     for file_id,guid,kind in refs:
         if file_id==0:
             if guid not in ("", "0"*32) or kind not in (None, "0"):
@@ -159,6 +160,7 @@ def audit(project:Path):
             if profile["dummy"]:
                 c["material_docs_using_dummy_Shader"]+=1
                 dummy.add(guid)
+                dummy_frequency[guid]+=1
             else:
                 c["material_docs_using_non_dummy_Shader"]+=1
             if profile["unbalanced"]:
@@ -182,6 +184,13 @@ def audit(project:Path):
         "schema_version":1,
         "purpose":"native_post_restorer_actual_Material_to_ShaderLab_quality",
         "counts":{k:c[k] for k in COUNT_KEYS},
+        # Only aggregated impact bands; never expose original GUIDs or names.
+        "dummy_target_material_link_frequency_bands":{
+            "1":sum(v==1 for v in dummy_frequency.values()),
+            "2_to_4":sum(2<=v<=4 for v in dummy_frequency.values()),
+            "5_to_16":sum(5<=v<=16 for v in dummy_frequency.values()),
+            "17_plus":sum(v>=17 for v in dummy_frequency.values()),
+        },
         "selected_ShaderLab_documents_have_proven_original_programs":False,
         "source_original_Shader48_or_same_export_join_performed":False,
         "correct_GUID_does_not_establish_Shader_program_authenticity":True,
