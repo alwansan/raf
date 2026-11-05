@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "client": "T5",
+  "session_id": "20261105T0252Z-T5-fix-escaped-pointer-fixture",
+  "status": "in_progress",
+  "issue_id": "ASSET-RESTORE-001",
+  "baseline_sha": "8f65e02c940bd7258a079460eb5c1b937f6738fb",
+  "taken_over_from": [
+    "prompt/coordination/clients/T5/MEMORY.md",
+    "https://github.com/alwansan/raf/commit/1cd3a5efb4f76d48842537109a22170ffc840ee2"
+  ],
+  "last_verified_result": "CI41943881793 passed prior rename-injection test; CI41951215380 failed after absent-target fixture",
+  "hypothesis": "Literal backslash-n instead of LF in second target LFS pointer causes preflight error before injected rename",
+  "files": [
+    "tests/test_t5_stage_zip2_render_owners.py"
+  ],
+  "next_step": "Fix fixture and verify post-change T5 CI; preserve source hydration implementation unchanged"
+}
