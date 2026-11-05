@@ -1,0 +1,12 @@
+{
+  "id": "20261105T181052Z-T1-chat-885348",
+  "owner": "T1",
+  "session_id": "20261105T181052Z-T1-chat-885348",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "CI42081798997 passed scheduled regressions for invalid tolerances, empty captures, and manifest-relative paths along with existing paired diagnostics. This verifies source behavior only; no real capture or Unity comparison occurred. T3 CI42080105181 separately confirmed all 1505 expected Shader48 material property-family entries in original assets, without establishing export/device fidelity.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42081798997"
+  ],
+  "at": "2026-11-05T18:11:41.712Z"
+}
