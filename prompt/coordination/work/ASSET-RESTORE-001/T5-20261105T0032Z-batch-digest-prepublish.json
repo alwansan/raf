@@ -5,7 +5,7 @@
   "session_id": "20261105T0032Z-T5-content-batch-preflight",
   "issue_id": "ASSET-RESTORE-001",
   "track": "Verified original graphics: all-batch content integrity before any hydration publication",
-  "status": "active",
+  "status": "completed",
   "base_sha": "087bd9f58d586559272b50c71aed9c2164ebb7f4",
   "approach": "Current metadata preflight rejects invalid second owner metadata, but same-length second SHA mismatch occurs only during copy after first pointer has been replaced. Verify and stage ALL owners to per-target private temp files (streaming size+SHA once each) before first os.replace, then publish; cleanup staged temps on failure, preserving original pointers. Keep zero extra original-copy budget, paths/links/sha safety, existing W1/T5 source bridges and LFS fallback. Test adversarial later same-size bad digest and two-owner success; use isolated T5 CI real source stage.",
   "intended_files": [
@@ -28,8 +28,27 @@
   "experiment_ids": [
     "T5-20261105T0032Z-all-source-digest-prepublish"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement staged batch SHA verification and failure cleanup, add later corrupt owner negative, run isolated T5 workflow, then update state/issue/evidence.",
-  "updated_at": "2026-11-05T00:32:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41942039458",
+    "https://github.com/alwansan/raf/actions/runs/41941962390",
+    "https://github.com/alwansan/raf/actions/runs/41941969217"
+  ],
+  "result": {
+    "code_commits": [
+      "bb4d33e9828bf85873935002ea1c6106d8b87319",
+      "3f8ee6cd47be76490693226c4740f017694a453d",
+      "7cf650ca49468d061d722446f5735f6e84fc6407"
+    ],
+    "new_test": "test_consumer_later_same_length_sha_corruption_preserves_first_pointer",
+    "synthetic_tests": "17/17 PASS",
+    "authentic_originals": "3/3 SHA and sizes match original ZIP2 manifest and independent feature LFS; 337660952 bytes staged/consumed without LFS",
+    "ci_run_id": 41942039458,
+    "ci_conclusion": "success",
+    "negative_control": "late same-size source corruption raises SHA verification; earlier pointer remains untouched and temporary copies removed",
+    "limitations": "No global OS-level cross-file atomicity, Unity Editor, shader binding, Adreno pixels or world-save proof.",
+    "failed_intermediate_run": 41941969217,
+    "failed_reason": "Synthetic test pointer encoded literal backslash-n instead of LF; corrected commit 7cf650ca49468d061d722446f5735f6e84fc6407"
+  },
+  "next_step": "Coordinate T1/T3 actual Unity renderer/FFT resource consumers and bounded export; validate integration in Unity without touching ongoing native Actions. NOT_READY 0/3.",
+  "updated_at": "2026-11-05T00:34:00Z"
 }
