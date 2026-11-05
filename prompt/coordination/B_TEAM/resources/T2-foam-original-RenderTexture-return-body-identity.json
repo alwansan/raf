@@ -1,0 +1,31 @@
+{
+  "id": "T2-foam-original-RenderTexture-return-body-identity",
+  "owner": "T2",
+  "issue_id": "WATER-001",
+  "title": "Original Foam RT array element direct call signature matched compiled managed method with one unresolved return",
+  "kind": "sha_original_managed_RenderTexture_array_element_return_provenance",
+  "stages": {
+    "acquisition": "ZIP2_ORIGINAL_MANAGED_3211776_BYTES_SHA_0a6f0527_VERIFIED",
+    "extraction": "EXACT_STELEM_REF_VALUE_TYPED_UNITY_RENDER_TEXTURE_CALL_AND_1_MATCHING_SHA_MANAGED_METHOD_SIGNATURE",
+    "reconstruction": "EXACT_METHOD_BODY_1_RET_3_BRANCHES_NULL_CONSTRUCTOR_AND_TYPED_CALL_DIRECT_RET_SOURCES_ALL_ZERO;_1_RET_UNRESOLVED",
+    "binding": "SOURCE_DECLARATION_IDENTITY_NOT_LIVE_RETURNED_OBJECT_PROOF;_FOUR_ORIGINAL_TEXTURE_INDICES_COMPILATION_BOUNDS_PROVEN_PRIOR",
+    "integration": "CECIL_ORIGINAL_CI42072739153_AND_42073459459_SUCCESS_WITH_SYNTHETIC_BRANCH_GUARDS_NO_ASSET_SHADER_EDIT",
+    "device": "NOT_TESTED"
+  },
+  "observed": {
+    "original_signature_compatible_method_definitions": 1,
+    "has_body": true,
+    "compiled_ret_sites": 1,
+    "branch_opcodes": 3,
+    "direct_null_ret": 0,
+    "direct_RT_constructor_ret": 0,
+    "direct_RT_typed_call_ret": 0,
+    "unresolved_ret_sources": 1,
+    "runtime_nonnull_or_pixels_proven": false
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42072739153",
+    "https://github.com/alwansan/raf/actions/runs/42073459459"
+  ],
+  "next_step": "Verify exact assembly identity and branch-safe return producer; source-only success not device pixels. WATER-001 OPEN NOT_READY0/3."
+}
