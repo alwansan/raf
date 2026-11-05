@@ -4,9 +4,9 @@
   "origin": "chat",
   "owner": "T1",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "99de98051b20c1f719c0e28ed896b942542ff2e2",
-  "updated_at": "2026-11-05T15:34:11.988Z",
+  "updated_at": "2026-11-05T15:35:05.138Z",
   "intended_files": [
     "scripts/t1_fft_pass0_spatial_diagnostic.py",
     "tests/test_t1_fft_pass0_spatial_diagnostic.py"
@@ -15,5 +15,12 @@
   "resumed_from_sessions": [
     "20261105T152005Z-T1-chat-439b69",
     "20261105T143200Z-T1-chat-04494d"
-  ]
+  ],
+  "implementation_sha": "01a403ef1dd058ac71d640913879c7a88f1a4061",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42056377861",
+    "https://github.com/alwansan/raf/actions/runs/42052375742"
+  ],
+  "result": "CI42056377861 passed all 14 source-only tests (6 spatial, 5 channel and 3 parity). A reversal within sparse reference bounds is detected even with identical written coverage, and extra writes still reject a match. No real paired captures measured.",
+  "next_step": "Once the native Unity job is terminal and shared Unity queue is clear, trigger the opt-in paired replay and read RAFT_T1_PAIRED_DIAGNOSTIC. Use footprint mirrors alongside global transforms and channel permutation before tracing pass-zero shader loads."
 }
