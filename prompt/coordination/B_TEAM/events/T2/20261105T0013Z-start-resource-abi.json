@@ -1,0 +1,13 @@
+{
+  "id": "T2-20261105T0013Z-start-resource-abi",
+  "owner": "T2",
+  "session_id": "20261104T2354Z-T2-foamabi01",
+  "issue_id": "WATER-001",
+  "type": "start",
+  "summary": "After source-authentic CB name gap, T2 starts distinct original Foam texture/sampler descriptor table vs four translated SPIR-V stage resource interface proof, reusing B17 numeric canonicalizer and B20 private stages; no new full game build or dummy ShaderLab.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41938898381",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/b17_spectrum_stage_descriptors.py"
+  ],
+  "at": "2026-11-05T00:13:00Z"
+}
