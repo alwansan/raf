@@ -63,13 +63,13 @@ jobs:
         if: ${{ github.event_name == 'push' }}
         run: |
           set -euo pipefail
-          marker='.github/t3-921-material-property-requests/20261105T1745Z-T3-chat-921-shader-material-property-7a6e-retry2.json'
+          marker='.github/t3-921-material-property-requests/20261105T1745Z-T3-chat-921-shader-material-property-7a6e-retry3.json'
           files="$(git diff-tree --no-commit-id --name-only -r HEAD)"
           if [ "$files" != "$marker" ]; then echo "T3_EXPLICIT_MARKER_COMMIT_SCOPE_MISMATCH" >&2; exit 1; fi
           python3 - <<'PY'
           import json,subprocess
           from pathlib import Path
-          p=Path('.github/t3-921-material-property-requests/20261105T1745Z-T3-chat-921-shader-material-property-7a6e-retry2.json')
+          p=Path('.github/t3-921-material-property-requests/20261105T1745Z-T3-chat-921-shader-material-property-7a6e-retry3.json')
           d=json.loads(p.read_text())
           assert d['session_id']=='20261105T1745Z-T3-chat-921-shader-material-property-7a6e'
           assert d['origin']=='chat' and d['owner']=='T3'
