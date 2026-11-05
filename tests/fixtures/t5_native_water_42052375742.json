@@ -1,0 +1,48 @@
+{
+  "provenance": {
+    "github_run_id": 42052375742,
+    "source_sha": "b0c4b4c05011d915cd845259f06b5f80ee368092",
+    "job_id": 127331915972,
+    "failed_step": "Authentic water gate (strict) or exact documented trial limitation",
+    "capture": "safe aggregate from actual failed native job log, not original source"
+  },
+  "aggregated_live_report": {
+    "shader_contracts": {
+      "Sandbox/VolumetricLight": {
+        "contract_satisfied": true
+      },
+      "UltimateWater/Depth/Depth Copy": {
+        "contract_satisfied": false
+      },
+      "UltimateWater/Foam/Global": {
+        "contract_satisfied": false
+      },
+      "UltimateWater/Spectrum/Water Spectrum": {
+        "contract_satisfied": false
+      },
+      "UltimateWater/Utilities/Blur (Subsurface Scattering)": {
+        "contract_satisfied": true
+      }
+    },
+    "all_logged_shader_pass_requirements_satisfied": false,
+    "water_compute_source_candidate_present": false,
+    "authentic_water_kernel_identity_verified": false,
+    "device_execution_verified": false,
+    "modified_source": false
+  },
+  "original_request_list": [
+    "authentic_water_kernel_identity",
+    "shader_pass_contract:UltimateWater/Foam/Global",
+    "shader_pass_contract:UltimateWater/Spectrum/Water Spectrum",
+    "shader_pass_contract:UltimateWater/Utilities/Blur (Subsurface Scattering)",
+    "water_compute_source_candidate"
+  ],
+  "expected_corrected_list": [
+    "authentic_water_kernel_identity",
+    "shader_pass_contract:UltimateWater/Depth/Depth Copy",
+    "shader_pass_contract:UltimateWater/Foam/Global",
+    "shader_pass_contract:UltimateWater/Spectrum/Water Spectrum",
+    "water_compute_source_candidate"
+  ],
+  "caveat": "A source-only replay of live aggregate at source b0c4b4c, not a new reconstruct or a proof that later source produces the same pass counts."
+}
