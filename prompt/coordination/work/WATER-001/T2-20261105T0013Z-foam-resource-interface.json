@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "generation": "T-2026-11-05",
+  "session_id": "20261104T2354Z-T2-foamabi01",
+  "issue_id": "WATER-001",
+  "track": "water-foam-texture-sampler-resource-binding",
+  "approach": "Use same exact ZIP2 original Foam PathID2420 and B20 translated stage packet to inspect actual Unity stage m_CommonParameters Texture/Sampler/UAV descriptor schemas via B17 bounded canonical numeric tool, compare to native SPIRV reflection category/set/binding, preserve private names/binaries. Stage a distinct resource interface verifier to enable authentic ShaderLab assembly, without conflating source members with GPU bindings.",
+  "status": "active",
+  "base_sha": "7cc2f13ed8895cc6c8ba9d41a04f16a27eef828f",
+  "intended_files": [
+    "scripts/t2_foam_resource_abi.py",
+    "tests/test_t2_foam_resource_abi.py",
+    ".github/workflows/raft-t2-foam-member-abi.yml",
+    "prompt/coordination/clients/T2/MEMORY.md",
+    "prompt/coordination/B_TEAM/events/T2/"
+  ],
+  "hypothesis": "The original Foam two-pass resource and sampler tables can be linked to four translated stage interface declarations with authenticated counts and slots, identifying required bindings without guessed shader source or names.",
+  "related_work": [
+    "https://github.com/alwansan/raf/actions/runs/41938898381",
+    "https://github.com/alwansan/raf/actions/runs/41920232173"
+  ],
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/B17/MEMORY.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/B20/MEMORY.md"
+  ],
+  "experiment_ids": [
+    "T2-foam-resource-original-20261105"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement authenticated original texture/sampler/UAV schema extraction and four-stage SPIR-V descriptor reflection; original CI and safe counts; then actionable shaderlab resource plan.",
+  "updated_at": "2026-11-05T00:13:00Z"
+}
