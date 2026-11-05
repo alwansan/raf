@@ -1,5 +1,7 @@
 name: T3 RENDER-002 authentic original Material color same-export trial
 # Independent bounded SHA-verified original color/tint source-vs-export question.
+# Original CI41940116028 stopped in synthetic fixtures (before asset loading).
+# Fakes corrected; check both B44 and B05 map fixture negative controls.
 on:
   workflow_dispatch:
   push:
@@ -33,6 +35,7 @@ jobs:
           python3 -c "import shutil; assert shutil.disk_usage('.').free > 8 * 1024**3"
           python3 -m unittest discover -s tests -p 'test_t3_same_export_material_colors.py' -v
           python3 -m unittest discover -s tests -p 'test_b44_verify_material_colors.py' -v
+          python3 -m unittest discover -s tests -p 'test_b05_verify_material_texenv_bindings.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_same_export_material_texenv.py' -v
           python3 -m unittest discover -s tests -p 'test_b21_stage_light_lineage.py' -v
           python3 -m unittest discover -s tests -p 'test_b21_compare_export_lights.py' -v
