@@ -35,18 +35,27 @@
     "https://github.com/alwansan/raf/actions/runs/41941363661"
   ],
   "budget": "25min isolated two-core real-export CI, reuse existing bounded same-export pipeline; no Unity APK/LFS; no cancellation",
-  "status": "RUNNING_NOT_YET_VERIFIED",
+  "status": "SUCCESS_BOUNDED_SOURCE_EXPORT_PARITY",
   "observed_result": {
-    "synthetic_tests": "PASS according to Actions step",
-    "true_original_same_export": "NOT_YET_TERMINAL",
-    "android_pixels_verified": false
+    "real_original_export_completed": true,
+    "authenticated_original_providers": 9,
+    "source_materials": 41,
+    "actual_export_materials": 41,
+    "keyword_and_disabled_pass_fields_equal": true,
+    "mismatched_materials": 0,
+    "device_pixels_verified": false,
+    "shader_variants_verified": false,
+    "artifact": "t3-authentic-material-properties-export-41941363661",
+    "run_url": "https://github.com/alwansan/raf/actions/runs/41941363661"
   },
-  "rejected_hypotheses": [],
+  "rejected_hypotheses": [
+    "Original Material valid/invalid shader keywords or disabled passes lost in the selected 41 genuine source→same-export scope"
+  ],
   "limitations": [
     "Original source/bytecode and private raw traces remain runner-only",
     "Only 41 selected original Materials; external reference and ShaderLab GPU/pixels unresolved",
     "No full Unity or Android device proof; CI running at checkpoint"
   ],
   "integration_commit": "6940ccf0161a3ea4a52c083702692de74c0c64be",
-  "next_step": "Check CI41941363661 after completion, review safe t3-keyword-safe-result.json and update hypothesis/status; retain issue OPEN."
+  "next_step": "Verify original Material Shader PPtr to same-export Shader GUID/ShaderLab variants, 25 cross-owner texture references, actual device pixels. RENDER-002 OPEN."
 }
