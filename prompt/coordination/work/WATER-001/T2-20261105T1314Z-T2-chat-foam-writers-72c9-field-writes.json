@@ -4,8 +4,8 @@
   "origin": "chat",
   "session_id": "20261105T1314Z-T2-chat-foam-writers-72c9",
   "issue_id": "WATER-001",
-  "status": "active",
-  "updated_at": "2026-11-05T13:13:52.952Z",
+  "status": "waiting_ci",
+  "updated_at": "2026-11-05T13:18:17.070Z",
   "base_sha": "8efdc028bb88f5acbd42f996a6c1c3accbbbce2a",
   "resumed_from_sessions": [
     "20261105T1244Z-T2-chat-digest-removal-a6f4",
@@ -34,6 +34,15 @@
     "t2_original_managed_ci_active": false
   },
   "approach": "New conservative Cecil original getter field extractor requires exact prior guarded 10-op pattern. Scan all original managed methods for matching stfld, count distinct writers and direct null/newarr ReturnTexture[] immediate values. Synthetic writer/decoy/guard rejection; original SHA-pinned managed CI with numeric-safe aggregate assertions. No Unity, game assets, or private IL published.",
-  "run_urls": [],
-  "next_step": "Implement scope-specific code and selftest, push with SHA-lease, inspect bounded genuine-source CI, save session and event. Actual index operands deliberately separate follow-up."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42034458197"
+  ],
+  "next_step": "Verify CI42034458197. Success proves source-authentic direct writer counts only, no runtime executed claim. On CI fail, read first failed step and fix. During wait, independently design index argument trace without modifying active workflow.",
+  "implementation_sha": "d47c73943b11e3b1d193dc56446fb63632abd47a",
+  "result": {
+    "status": "source_committed",
+    "synthetic_ci": "in_progress",
+    "original_sha_pinned_ci": "in_progress",
+    "device": "unknown"
+  }
 }
