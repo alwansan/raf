@@ -4,9 +4,9 @@
   "origin": "chat",
   "owner": "T1",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "df334d3adda17f265696dc9569892a03aafc2441",
-  "updated_at": "2026-11-05T16:32:56.491Z",
+  "updated_at": "2026-11-05T16:44:21.691Z",
   "intended_files": [
     "scripts/t1_fft_pass0_vulkan_trace.py",
     ".github/workflows/raft-t1-fft-vulkan-roundtrip-isolation.yml"
@@ -14,5 +14,17 @@
   "experiment_key": "authenticated-pass0-vulkan-storage-trace-output-parity",
   "resumed_from_sessions": [
     "20261105T162656Z-T1-chat-1a2751"
-  ]
+  ],
+  "implementation_sha": "ad1b1f0d753bcf7a01ebd942dcb048ec7f0c23f8",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42066760632",
+    "https://github.com/alwansan/raf/actions/runs/42066983894"
+  ],
+  "result": {
+    "observed_counter": 384,
+    "previous_capacity": 256,
+    "new_capacity": 512,
+    "retry_job_status": "in_progress"
+  },
+  "next_step": "Read the per-site counts and instrumented parity from CI42066983894. If both pass, stage an equivalent Unity trace buffer and only compare complete captures after checking output parity."
 }

@@ -1,0 +1,13 @@
+{
+  "id": "20261105T163256Z-T1-chat-dc7c61",
+  "owner": "T1",
+  "session_id": "20261105T163256Z-T1-chat-dc7c61",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "CI42066760632 compiled and dispatched the instrumented pass-zero Vulkan shader and read a counter of 384. Its 256-record cap overflowed, so the trace is incomplete and the instrumentation output parity has not been established. Uninstrumented same-Vulkan reference remained matched. Increased both shader cap and host allocation to 512; CI42066983894 was still running at checkpoint.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42066760632",
+    "https://github.com/alwansan/raf/actions/runs/42066983894"
+  ],
+  "at": "2026-11-05T16:44:21.691Z"
+}
