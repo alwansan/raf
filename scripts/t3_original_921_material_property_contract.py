@@ -21,6 +21,21 @@ from scripts.b22_verify_material_scalars import normalize as normalize_scalars
 from scripts.w1_probe_original_shader_links import resolve_pointer
 
 STATUS = "ORIGINAL_921_SHADER48_TO_RENDERER_LINKED_MATERIAL_PROPERTY_CONTRACT_CENSUSED"
+PHASES = frozenset((
+    "AUTHENTIC_ORIGINAL_GRAPH", "TOP_SOURCE_SHADER_SELECTION",
+    "AUTHENTIC_SHADER_PROPERTY_PARSE", "AUTHENTIC_SCENE_RENDERER_WEIGHTS",
+    "AUTHENTIC_MATERIAL_SHADER_LINKAGE", "PRIVATE_PROPERTY_FAMILY_JOIN",
+    "SAFE_AGGREGATE_REPORT",
+))
+
+class OriginalPropertyPhaseError(ValueError):
+    """Only a predeclared safe phase, never a source exception message."""
+    def __init__(self, phase):
+        if phase not in PHASES:
+            raise ValueError("unknown_private_original_property_phase")
+        self.phase = phase
+        super().__init__("source_original_Material_property_phase_inconclusive")
+
 MAX_MATERIALS = 120
 MAX_SHADER_PROPERTIES = 256
 EXPECTED_SCENE_MATERIAL_SLOTS = 921
@@ -201,60 +216,70 @@ def private_scene_material_weights(original:Path):
 
 
 def probe(original:Path,manifest:Path):
-    import UnityPy
-    profile={}
-    source=prior.prior.original.load_original(
-        original,manifest,private_slot_counts=profile)
-    owner,shader_id=prior.prior.feasibility.selected_high_use(profile,source)
-    original_path=original/"Raft_Data"/owner
-    if original_path.is_symlink() or prior.prior.fingerprint(original_path)!=prior.prior.SHADER_OWNERS[owner]:
-        raise ValueError("original_highest_use_Shader_owner_SHA_changed")
-    objects=[o for o in UnityPy.load(str(original_path)).file.objects.values()
-             if o.path_id==shader_id]
-    if len(objects)!=1 or objects[0].type.name!="Shader":
-        raise ValueError("missing_original_highest_use_Shader48")
-    parsed=objects[0].read_typetree().get("m_ParsedForm")
-    declarations,_=declared_property_families(parsed)
-    weights=private_scene_material_weights(original)
-    matched, selected_weights={},{}
-    for material_owner in prior.prior.original.MATERIAL_OWNERS:
-        path=original/"Raft_Data"/material_owner
-        if path.is_symlink() or prior.prior.fingerprint(path)!=prior.prior.SHADER_OWNERS[material_owner]:
-            raise ValueError("original_Material_owner_SHA_changed")
-        f=UnityPy.load(str(path)).file
-        ext=[x.path for x in f.externals]
-        for o in f.objects.values():
-            if o.type.name!="Material":
-                continue
-            key=(material_owner,o.path_id)
-            if key not in weights:
-                continue
-            tree=o.read_typetree()
-            ptr=tree.get("m_Shader")
-            if not isinstance(ptr,dict):
-                raise ValueError("missing_original_Material_Shader_pointer")
-            resolved=resolve_pointer(material_owner,ext,ptr)
-            if resolved != (owner,shader_id):
-                continue
-            saved=tree.get("m_SavedProperties")
-            if type(saved) is not dict:
-                raise ValueError("missing_original_Material_SavedProperties")
-            if key in matched:
-                raise ValueError("duplicate_original_Material_in_same_owner")
-            matched[key]=saved
-            selected_weights[key]=weights[key]
-    if sum(selected_weights.values())!=EXPECTED_SCENE_MATERIAL_SLOTS:
-        raise ValueError("source_shader921_renderer_weighted_Materials_not_complete")
-    result=classify_private_921_materials(declarations,matched,selected_weights)
-    result.update({
-        "source_original_six_scenes_SHA_verified":6,
-        "source_original_owners_SHA_verified":4,
-        "original_referenced_renderer_Material_slots":prior.prior.original.SCENE_MATERIAL_SLOTS,
-        "original_distinct_typed_Shader48_from_source":source["original_distinct_typed_Shader48_targets"],
-        "original_renderer_Material_slot_count_to_selected_Shader48":EXPECTED_SCENE_MATERIAL_SLOTS,
-    })
-    return result
-
+    phase="AUTHENTIC_ORIGINAL_GRAPH"
+    try:
+        import UnityPy
+        phase="AUTHENTIC_ORIGINAL_GRAPH"
+        profile={}
+        source=prior.prior.original.load_original(
+            original,manifest,private_slot_counts=profile)
+        phase="TOP_SOURCE_SHADER_SELECTION"
+        owner,shader_id=prior.prior.feasibility.selected_high_use(profile,source)
+        phase="AUTHENTIC_SHADER_PROPERTY_PARSE"
+        original_path=original/"Raft_Data"/owner
+        if original_path.is_symlink() or prior.prior.fingerprint(original_path)!=prior.prior.SHADER_OWNERS[owner]:
+            raise ValueError("original_highest_use_Shader_owner_SHA_changed")
+        objects=[o for o in UnityPy.load(str(original_path)).file.objects.values()
+                 if o.path_id==shader_id]
+        if len(objects)!=1 or objects[0].type.name!="Shader":
+            raise ValueError("missing_original_highest_use_Shader48")
+        parsed=objects[0].read_typetree().get("m_ParsedForm")
+        declarations,_=declared_property_families(parsed)
+        phase="AUTHENTIC_SCENE_RENDERER_WEIGHTS"
+        weights=private_scene_material_weights(original)
+        phase="AUTHENTIC_MATERIAL_SHADER_LINKAGE"
+        matched, selected_weights={},{} 
+        for material_owner in prior.prior.original.MATERIAL_OWNERS:
+            path=original/"Raft_Data"/material_owner
+            if path.is_symlink() or prior.prior.fingerprint(path)!=prior.prior.SHADER_OWNERS[material_owner]:
+                raise ValueError("original_Material_owner_SHA_changed")
+            f=UnityPy.load(str(path)).file
+            ext=[x.path for x in f.externals]
+            for o in f.objects.values():
+                if o.type.name!="Material":
+                    continue
+                key=(material_owner,o.path_id)
+                if key not in weights:
+                    continue
+                tree=o.read_typetree()
+                ptr=tree.get("m_Shader")
+                if not isinstance(ptr,dict):
+                    raise ValueError("missing_original_Material_Shader_pointer")
+                resolved=resolve_pointer(material_owner,ext,ptr)
+                if resolved != (owner,shader_id):
+                    continue
+                saved=tree.get("m_SavedProperties")
+                if type(saved) is not dict:
+                    raise ValueError("missing_original_Material_SavedProperties")
+                if key in matched:
+                    raise ValueError("duplicate_original_Material_in_same_owner")
+                matched[key]=saved
+                selected_weights[key]=weights[key]
+        if sum(selected_weights.values())!=EXPECTED_SCENE_MATERIAL_SLOTS:
+            raise ValueError("source_shader921_renderer_weighted_Materials_not_complete")
+        phase="PRIVATE_PROPERTY_FAMILY_JOIN"
+        result=classify_private_921_materials(declarations,matched,selected_weights)
+        phase="SAFE_AGGREGATE_REPORT"
+        result.update({
+            "source_original_six_scenes_SHA_verified":6,
+            "source_original_owners_SHA_verified":4,
+            "original_referenced_renderer_Material_slots":prior.prior.original.SCENE_MATERIAL_SLOTS,
+            "original_distinct_typed_Shader48_from_source":source["original_distinct_typed_Shader48_targets"],
+            "original_renderer_Material_slot_count_to_selected_Shader48":EXPECTED_SCENE_MATERIAL_SLOTS,
+        })
+        return result
+    except Exception:
+        raise OriginalPropertyPhaseError(phase) from None
 
 def main(argv=None):
     p=argparse.ArgumentParser(description=__doc__.splitlines()[0])
@@ -270,6 +295,8 @@ def main(argv=None):
                 "exception_type":type(error).__name__,
                 "unity_Adreno_pixel_color_fixed_or_verified":False,
                 "original_private_names_values_pathIDs_programs_published":False}
+        if isinstance(error,OriginalPropertyPhaseError):
+            result["failure_phase"] = error.phase
     a.out.parent.mkdir(parents=True,exist_ok=True)
     a.out.write_text(json.dumps(result,indent=2,sort_keys=True)+"\n",encoding="utf8")
     print("T3_ORIGINAL_921_SHADER_MATERIAL_PROPERTIES "+json.dumps(result,sort_keys=True))
