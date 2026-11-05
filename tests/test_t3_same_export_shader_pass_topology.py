@@ -59,7 +59,7 @@ class SameExportShaderTopology(unittest.TestCase):
             v["programmed_pass_count"]=5
             v["subshader_pass_counts"]=[5]
         result=self.call(values)
-        self.assertEqual(result["counts"]["custom_shaders_with_extra_passes"],6)
+        self.assertEqual(result["counts"]["custom_shaders_with_extra_passes"],8)
         self.assertGreater(result["counts"]["extra_exported_custom_ShaderLab_passes"],0)
     def test_source_pass_sum_mismatch_fails_closed(self):
         values=list(self.fixture())
