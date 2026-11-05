@@ -1,0 +1,34 @@
+name: T5 DELIVERY-013 Android Termux Python no-link reassembly
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/reassemble_android_delivery.py
+      - tests/test_t5_portable_reassembly.py
+      - .github/workflows/raft-t5-portable-reassembly.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raft-t5-portable-reassembly-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  portable-reassembler:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Verify missing os.link behavior and original no-overwrite regression
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest -v \
+            tests.test_t5_portable_reassembly \
+            tests.test_a3_reassembly_publish_race \
+            tests.test_android_delivery_package
+      - name: Record exact test scope
+        if: always()
+        run: echo "T5 synthetic Android split-delivery validation only; no APK, OBB, Unity or phone build."
