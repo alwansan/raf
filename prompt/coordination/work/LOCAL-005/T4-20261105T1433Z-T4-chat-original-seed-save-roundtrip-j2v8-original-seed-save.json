@@ -3,7 +3,7 @@
   "owner": "T4",
   "origin": "chat",
   "session_id": "20261105T1433Z-T4-chat-original-seed-save-roundtrip-j2v8",
-  "status": "active",
+  "status": "completed",
   "issue_id": "LOCAL-005",
   "track": "original-authentic-save-path",
   "base_sha": "7058aa34de519c498ce89e41d0ddd2c1c753e298",
@@ -26,7 +26,26 @@
     "20261105T1408Z-T4-chat-jsonl-evidence-n4r7",
     "20261105T1338Z-T4-scheduled-v6n9"
   ],
-  "run_urls": [],
-  "updated_at": "2026-11-05T14:32:47.763Z",
-  "next_step": "Implement guard and probe, run bounded CI, report whether guarded original private Save can execute or a method/IL safety guard blocks it. If incompatible don't relax source gates or change serializer. LOCAL-005 OPEN NOT_READY 0/3."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42046842892",
+    "https://github.com/alwansan/raf/actions/runs/42047232842",
+    "https://github.com/alwansan/raf/actions/runs/42047540260"
+  ],
+  "updated_at": "2026-11-05T14:43:46.403Z",
+  "next_step": "Do NOT treat the 2941B shipped StreamingAssets/Data.rgd as a real world RGD. Original Save(string,RGD) expects a different type than the decoded shipped seed; no serialization was invoked. T5 new signed candidate and actual game-created world/save/exit/relaunch/open with owner logs remain required. Preserve strict source pins, no fake RGD constructors. LOCAL-005 OPEN NOT_READY 0/3.",
+  "result": {
+    "classification": "SHIPPED_SEED_ROOT_DIFFERS_FROM_ORIGINAL_RGD_SAVE_ARGUMENT",
+    "actual_original_Save_method_signature_shape_verified": true,
+    "original_seed_root_matches_Save_RGD_argument": false,
+    "original_private_Save_IL_guard_passed": false,
+    "original_private_Save_invoked": false,
+    "original_file_written": false,
+    "original_data_rgd_LoadT_seed_passed_previously": true,
+    "tests": "16/16 source-free CI42047540260 SUCCESS",
+    "authentic_dll_and_seed_sha_verified": true,
+    "managed_original_reference_siblings": 151,
+    "android_unity_il2cpp_device": false,
+    "game_world_save_play_relaunch": false,
+    "report": "docs/T4_ORIGINAL_RGD_SAVE_ROUNDTRIP_2026-11-05.md"
+  }
 }
