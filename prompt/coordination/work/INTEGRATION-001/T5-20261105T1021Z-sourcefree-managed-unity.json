@@ -6,7 +6,7 @@
   "issue_id": "INTEGRATION-001",
   "track": "Unity 2021.3.45f2 source-free GameCI managed activation executable boundary",
   "approach": "Run a genuinely minimal zero-Raft Unity 2021 editmode NUnit project through game-ci/unity-test-runner@v4 (managed activation, unlike T1 bare Docker CLI). Reuse UNITY_LICENSE environment and shared native Editor mutex without changing T1 or native workflows. Enforce exact test-case XML evidence and negative controls using an independent T5 result verifier; never upload raw logs/credential/compiler output. If sourcefree passes, notify T1 to replay private 20 FFT .compute candidate import. If red, retain classified environment failure; do not rerun private originals.",
-  "status": "active",
+  "status": "paused",
   "base_sha": "02e9fba7fb42b83579595885391be636ee3b56e8",
   "intended_files": [
     ".github/workflows/raft-t5-unity-sourcefree-activation.yml",
@@ -34,8 +34,12 @@
   "experiment_ids": [
     "T5-20261105T1021Z-gameci-empty-unity-editor"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Create source-free self-contained Unity 2021 EditMode project/verified result parser, run synthetic pytest/unittest and isolated GameCI Editor CI; inspect failure categories without secrets and record durable T1 handoff.",
-  "updated_at": "2026-11-05T10:21:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42010878771"
+  ],
+  "result": {
+    "cause": "T1 began same GameCI Unity source-free hypothesis in live run42010878771 before T5 implementation; T5 intentionally did not create duplicate workflow or contend Unity Editor license."
+  },
+  "next_step": "T1 owns live GameCI comparison, T5 does not duplicate; resume only for separate downstream integration after T1 result.",
+  "updated_at": "2026-11-05T10:24:00Z"
 }
