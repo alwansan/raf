@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "session_id": "20261105T1442Z-T2-chat-foam-field-reads-c8d1",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "completed",
+  "experiment_key": "T2|ZIP2-15964ea8|managed-0a6f0527|exact-RenderTexture[]-field-ldfld-ldflda|v1",
+  "source": {
+    "zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "managed_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "managed_bytes": 3211776
+  },
+  "source_commit": "0881f9722f553e01e3694d7d49b964d53d2dff1e",
+  "workflow": "https://github.com/alwansan/raf/actions/runs/42047763379",
+  "method": "SHA-original Mono.Cecil exact FieldReference matching across all managed method bodies, count ldfld/ldflda and distinct original method cardinalities; synthetic getter/other reader/byref/typed decoy pass; safe totals only.",
+  "observed": {
+    "authentic_CI": "success",
+    "ldfld_total": 10,
+    "ldfld_in_getter": 2,
+    "ldfld_outside_getter": 8,
+    "distinct_reader_methods": 4,
+    "ldflda_total": 1,
+    "ldflda_outside_getter": 1,
+    "distinct_address_methods": 1,
+    "field_runtime_contents_proven": false,
+    "array_elements_written_or_populated_proven": false,
+    "original_identifiers_or_IL_disclosed": false
+  },
+  "artifact": {
+    "id": 13426150452,
+    "size_bytes": 2016,
+    "sha256": "6340258c4c983df3bbf8c4ca68845ed7960c4f84e69f95d562ab4e03e7245cca"
+  },
+  "limits": [
+    "Direct IL opcode and field-identity proof in original Assembly-CSharp.dll only",
+    "One address-taking use is a candidate for private indirect modification, NOT a demonstrated write or runtime execution",
+    "No original private method names/IL source or four literal values disclosed",
+    "No Unity scene or prefab data, source ShaderLab import, Adreno phone pixels"
+  ],
+  "next_step": "Inspect precise one original ldflda site with bounded classified sink and non-getter reads for true array element writes, no raw IL. WATER-001 OPEN NOT_READY 0/3."
+}
