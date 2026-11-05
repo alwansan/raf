@@ -6,7 +6,7 @@
   "issue_id": "LOCAL-005",
   "track": "Authentic managed FileManager read/write edges independent of CSharp ILSpy regex",
   "approach": "Resolve original SaveAndLoad.Load<T> and Save direct FileManager method call operands using Mono.Cecil compiled ECMA-335 metadata/IL, after exact ZIP2 Assembly-CSharp.dll size/SHA pin. Emit only target resolved/declaring class/IL body + I/O/catch aggregate counts, never private names/source/IL. This discriminates T4 regex-unrecognized method shape from actual absence. Add strict public report parser adversarial controls and isolated no-Unity/no-LFS original CI, without editing T4 code.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "37c537cdab55f146cab12fe121ba35b5d6bb119c",
   "intended_files": [
     "android-port/Experiments/T5/FileManagerMetadataBridge/FileManagerMetadataBridge.csproj",
@@ -32,8 +32,37 @@
   "experiment_ids": [
     "T5-20261105T1025Z-original-il-call-metadata"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement exact original assembly SHA gated Mono.Cecil metadata lookup; strict report validation and synthetic controls; execute original DLL in own bounded CI; record whether read/write are concrete methods without claiming .rgd save.",
-  "updated_at": "2026-11-05T10:25:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42012597665"
+  ],
+  "result": {
+    "ci_id": 42012597665,
+    "ci_conclusion": "success",
+    "source_bytes": 3211776,
+    "source_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "synthetic_report_controls": "11/11 PASS",
+    "original_compiled_read": {
+      "direct_call_count": 1,
+      "target_resolved": true,
+      "static": true,
+      "il_instructions": 14,
+      "parameter_count": 2,
+      "system_io_calls": 1,
+      "exception_handlers": 1
+    },
+    "original_compiled_write": {
+      "direct_call_count": 1,
+      "target_resolved": true,
+      "static": true,
+      "il_instructions": 13,
+      "parameter_count": 1,
+      "system_io_calls": 1,
+      "exception_handlers": 1
+    },
+    "read_write_different_target": true,
+    "source_code_or_method_names_published": false,
+    "android_save_reopen_proven": false
+  },
+  "next_step": "T4 original FileManager decompiler regex parser can no longer imply missing method definitions. Compare exact original callsite argument roles and Android FileManager adaptation; next real Unity/phone .rgd create/save/relaunch/reopen. NOT_READY 0/3.",
+  "updated_at": "2026-11-05T10:41:00Z"
 }
