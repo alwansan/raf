@@ -4,7 +4,7 @@
   "owner": "T5",
   "issue": "ASSET-RESTORE-001",
   "session_id": "20261105T0149Z-T5-rollback-absent-target",
-  "status": "IN_PROGRESS",
+  "status": "SOURCE_CHANGE_PENDING_CI",
   "baseline_sha": "46adaa1d7f7cbc2b8a104630a307aa36819600cf",
   "taken_over_from": [
     "prompt/coordination/clients/T5/MEMORY.md",
@@ -15,5 +15,7 @@
   "files": [
     "tests/test_t5_stage_zip2_render_owners.py"
   ],
-  "next_step": "Run isolated T5 CI and record result; then Unity integration coordination"
+  "next_step": "Find post-1cd3a5e isolated workflow run, validate both rename regression cases, then coordinate Unity integration",
+  "code_commit": "1cd3a5efb4f76d48842537109a22170ffc840ee2",
+  "test_result": "NOT_YET_EXECUTED_IN_CONFIRMED_POST_COMMIT_CI"
 }
