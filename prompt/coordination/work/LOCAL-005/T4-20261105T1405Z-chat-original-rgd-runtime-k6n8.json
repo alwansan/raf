@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T1405Z-T4-chat-original-rgd-runtime-k6n8",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "track": "world-save",
+  "status": "active",
+  "base_sha": "5eed7b6715a25177e733d17f383bb8735368bdbf",
+  "hypothesis": "Authentic 2,941-byte original Data.rgd NRBF seed can or cannot be deserialized to an actual CLR object by .NET8 BinaryFormatter with exact immutable original Raft managed DLL and its authentic 151 sibling Managed assembly references; isolate category of failure, not infer Android/save-world from the shipped seed.",
+  "experiment_key": "t4-original-data-rgd-net8-binaryformatter-exact-sha-original-seed-151-ref-20261105-v1",
+  "resource_key": null,
+  "approach": "New isolated signed SHA-only-input execution experiment with pinned original ZIP2 2,941B Data.rgd and 3,211,776B original DLL, 151 pinned managed siblings, .NET8 restricted temporary runtime and bounded timings; inspect NRBF root metadata safely first and then actually invoke BinaryFormatter.Deserialize once on the exact SHA-pinned original seed with original CLR type loading. Never modify user file, modify existing .rgd game serializer, publish raw game type/fields/source or leak stack. Fail/return unresolved when runtime dependencies or deserialization don't work. Compare scope to earlier B37/A10 read-only record probes, T4 original stream-only proof and T4 device contract. This is an original seed test, not SaveAndLoad.Load<T> or device.",
+  "intended_files": [
+    "android-port/Experiments/T4/OriginalRgdRuntimeLoad/OriginalRgdRuntimeLoad.csproj",
+    "android-port/Experiments/T4/OriginalRgdRuntimeLoad/Program.cs",
+    "scripts/t4_validate_original_rgd_runtime_load.py",
+    "tests/test_t4_validate_original_rgd_runtime_load.py",
+    ".github/workflows/raft-t4-original-rgd-runtime-load.yml",
+    "docs/T4_ORIGINAL_RGD_RUNTIME_LOAD_2026-11-05.md"
+  ],
+  "taken_over_from": [
+    "docs/A10_ZIP2_ORIGINAL_RGD_SCHEMA_2026-11-04.md",
+    "docs/B37_ORIGINAL_RGD_INHERITED_FIELD_2026-11-04.md",
+    "docs/T4_ORIGINAL_RGD_LOAD_COMPAT_2026-11-05.md",
+    "docs/T4_ORIGINAL_MANAGED_STREAM_ROUNDTRIP_2026-11-05.md",
+    "prompt/coordination/clients/T4/sessions/20261105T1338Z-T4-scheduled-v6n9.md"
+  ],
+  "run_urls": [],
+  "result": null,
+  "updated_at": "2026-11-05T14:05:00Z",
+  "next_step": "Execute authentic original seed deserialization in an isolated restricted runtime with verified bytes; report only SHA/auth and controlled CLR status, then interpret compatibility limits. If blocked, no schema change or fake RGD compatibility."
+}
