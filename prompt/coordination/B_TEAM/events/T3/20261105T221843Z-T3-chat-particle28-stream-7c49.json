@@ -1,0 +1,21 @@
+{
+  "id": "20261105T221843Z-T3-chat-particle28-stream-7c49",
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T221843Z-T3-chat-particle28-stream-7c49",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "at": "2026-11-05T22:23:10Z",
+  "summary": "SHA-original sixscene/four-owner ParticleShader48 108-slot chain: 5 actual Material21 → 10 local non-null TexEnv PPtrs → 3 unique actual Texture2D class28 objects. All three require one manifest-declared external .resS provider, 3 extents valid; resource provider payload not staged in narrow run. CI42120918486 SUCCESS 88/88. Not Android missing-resource claim.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42120918486",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_TEXTURE2D_STREAM_2026-11-06.md",
+    "https://github.com/alwansan/raf/commit/9cf384847fd4bd4e1fc8d1c8ebd67a0afbf788b2"
+  ],
+  "limitations": [
+    "no source external .resS payload SHA",
+    "no W1/B02 same-instance Unity export GUID",
+    "no Android pixel/particle emitter acceptance",
+    "RENDER-002 OPEN"
+  ]
+}
