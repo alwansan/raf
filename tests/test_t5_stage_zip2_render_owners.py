@@ -194,6 +194,36 @@ class ZIP2RenderStageTests(unittest.TestCase):
         self.assertEqual(later.read_text(encoding="ascii").splitlines()[1],
                          "oid sha256:" + "0" * 64)
 
+    def test_consumer_later_same_length_sha_corruption_preserves_first_pointer(self):
+        """No first-owner publication before validating a later owner digest."""
+        from scripts.hydrate_render_payloads import reuse_verified_staged_sources
+        second, _, options = self.install_second_original()
+        self.stage(**options)
+        feature = self.root / "feature"
+        for name, digest, size in options["entries"]:
+            target = feature / name
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_text(
+                "version https://git-lfs.github.com/spec/v1\\n"
+                f"oid sha256:{digest}\\nsize {size}\\n",
+                encoding="ascii",
+            )
+        first = feature / self.owner
+        later = feature / "Raft" / second
+        expected_first = first.read_bytes()
+        expected_later = later.read_bytes()
+        later_source = self.output / second
+        later_source.write_bytes(b"X" * len(self.original))
+        self.assertEqual(later_source.stat().st_size, len(self.original))
+        self.assertNotEqual(hashlib.sha256(later_source.read_bytes()).hexdigest(),
+                            self.digest)
+        with self.assertRaisesRegex(ValueError, "SHA verification"):
+            reuse_verified_staged_sources(
+                options["entries"], self.output / "Raft_Data", feature)
+        self.assertEqual(first.read_bytes(), expected_first)
+        self.assertEqual(later.read_bytes(), expected_later)
+        self.assertEqual(list(feature.rglob(".verified-zip2-graphics-*")), [])
+
     def test_consumer_later_symlink_preserves_first_pointer(self):
         from scripts.hydrate_render_payloads import reuse_verified_staged_sources
         second, _, options = self.install_second_original()
