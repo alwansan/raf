@@ -229,8 +229,23 @@ def main():
         }))
         return 0
     except BaseException as exc:
+        # An exception key or message could contain private Unity/Shader names.
+        # Publish only a static-source module token and numeric source line.
+        frame=exc.__traceback__
+        while frame is not None and frame.tb_next is not None:
+            frame=frame.tb_next
+        public_files={
+            "t2_foam_native_spv_active_join.py",
+            "t2_foam_original_sample_edges.py",
+            "t2_foam_spirv_sampler_use.py",
+            "t2_foam_original_dxbc_registers.py",
+        }
+        module=Path(frame.tb_frame.f_code.co_filename).name if frame else ""
+        site=({"source_module":module,"source_line":frame.tb_lineno}
+              if frame is not None and module in public_files else
+              {"source_module":"external","source_line":None})
         print("T2_FOAM_NATIVE_SPV_ACTIVE "+json.dumps({
-            "status":"blocked","failure_class":type(exc).__name__,
+            "status":"blocked","failure_class":type(exc).__name__,**site,
             "actual_native_to_spv_proven":False,
             "private_shader_published":False,
         }))
