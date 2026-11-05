@@ -66,6 +66,8 @@ jobs:
           # Separate 2-test license control: no Vulkan assertion or custom
           # parameters. This distinguishes image activation from graphics API.
           python3 -m scripts.t1_sourcefree_unity_fixture --project t1-mesa-license-control
+          # Orthogonal ABI control: same image, only ICD env injection.
+          python3 -m scripts.t1_sourcefree_unity_fixture --project t1-mesa-envonly-control
           cp android-port/Experiments/T1/T1SourceFreeVulkanBackendTests.cs \
             t1-vulkan-mesa-sourcefree/Assets/Tests/Editor/T1SourceFreeVulkanBackendTests.cs
           test "$(find t1-vulkan-mesa-sourcefree -name '*.compute' -type f | wc -l)" = 1
@@ -164,7 +166,33 @@ jobs:
           echo 'RAFT_T1_MESA_VULKAN_LICENSE_CONTROL derived_image_Unity2021_2of2=true forced_vulkan=false original_data=false'
           sudo rm -rf t1-mesa-license-control t1-mesa-license-control-results
           rm -f "$RUNNER_TEMP/t1-mesa-license-control-private.log"
-      - name: Require real Unity Vulkan and numeric authored ComputeShader result via driver overlay
+      - name: Verify ICD environment injection alone does not break licensed Unity
+        shell: bash
+        run: |
+          set -euo pipefail
+          set +x
+          cli="$(cat "$RUNNER_TEMP/t1-mesa-cli-exe.txt")"
+          set +e
+          timeout 800s "$cli" test --docker --dockerShmSize=1025m --engine=unity \
+            t1-mesa-envonly-control --testPlatforms=editmode --engineVersion=2021.3.45f2 \
+            --customImage="$T1_DERIVED_IMAGE" \
+            --dockerEnv="VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/lvp_icd.x86_64.json" \
+            --artifactsPath=t1-mesa-envonly-control-results \
+            > "$RUNNER_TEMP/t1-mesa-envonly-control-private.log" 2>&1
+          rc=$?
+          set -e
+          python3 -m scripts.t1_unity_vulkan_cli_failure_classifier \
+            --log "$RUNNER_TEMP/t1-mesa-envonly-control-private.log" --process-exit "$rc"
+          sudo chown -R "$(id -u):$(id -g)" \
+            t1-mesa-envonly-control t1-mesa-envonly-control-results || true
+          python3 -m scripts.t1_gameci_private_result_gate \
+            --stage synthetic --exit-code "$rc" \
+            --result t1-mesa-envonly-control-results/editmode-results.xml
+          echo 'RAFT_T1_MESA_VULKAN_ENVONLY license_2of2=true icd_env_injected=true force_flag=false original_data=false'
+          sudo rm -rf t1-mesa-envonly-control t1-mesa-envonly-control-results
+          rm -f "$RUNNER_TEMP/t1-mesa-envonly-control-private.log"
+      - name: Verify forced Vulkan alone supports exact synthetic GPU math
+
         shell: bash
         run: |
           set -euo pipefail
@@ -174,7 +202,6 @@ jobs:
           timeout 1100s "$cli" test --docker --dockerShmSize=1025m --engine=unity \
             t1-vulkan-mesa-sourcefree --testPlatforms=editmode --engineVersion=2021.3.45f2 \
             --customImage="$T1_DERIVED_IMAGE" \
-            --dockerEnv="VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/lvp_icd.x86_64.json" \
             --customParameters=-force-vulkan \
             --artifactsPath=t1-mesa-sourcefree-test-results \
             > "$RUNNER_TEMP/t1-mesa-vulkan-unity-private.log" 2>&1
@@ -193,10 +220,12 @@ jobs:
         shell: bash
         run: |
           sudo rm -rf t1-vulkan-mesa-sourcefree t1-mesa-sourcefree-test-results \
-            t1-mesa-license-control t1-mesa-license-control-results
+            t1-mesa-license-control t1-mesa-license-control-results \
+            t1-mesa-envonly-control t1-mesa-envonly-control-results
           docker image rm "$T1_DERIVED_IMAGE" >/dev/null 2>&1 || true
           rm -rf "$RUNNER_TEMP/t1-mesa-cli" "$RUNNER_TEMP/t1-mesa-cli.tar.gz" \
              "$RUNNER_TEMP/t1-mesa-cli-exe.txt" "$RUNNER_TEMP/t1-vulkan-overlay.Dockerfile" \
              "$RUNNER_TEMP/t1-image-vulkaninfo.log" "$RUNNER_TEMP/t1-vulkan-image-build.log" \
              "$RUNNER_TEMP/t1-base-docker-pull.log" "$RUNNER_TEMP/t1-mesa-vulkan-unity-private.log" \
-             "$RUNNER_TEMP/t1-mesa-license-control-private.log"
+             "$RUNNER_TEMP/t1-mesa-license-control-private.log" \
+             "$RUNNER_TEMP/t1-mesa-envonly-control-private.log"
