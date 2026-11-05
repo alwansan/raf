@@ -7,5 +7,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="../../Runtime/Platform/PhysicalMouseDeltaAccumulator.cs" Link="PhysicalMouseDeltaAccumulator.cs" />
+    <Compile Include="../../Runtime/Platform/PhysicalMouseMotionSource.cs" Link="PhysicalMouseMotionSource.cs" />
   </ItemGroup>
 </Project>
