@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T1405Z-T3-chat-renderer-dummy-join-8c41",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "track": "colors-materials/exported-renderer-material-shader-dummy-impact",
+  "base_sha": "4a314334bc4313ea017613ae37ad48ffa6a5c44d",
+  "experiment_key": "T3-ZIP2-15964ea8f-12-owners-AssetRipper-036098ab5-same-export-TMP3.0.6-PostFX933df236-Volumetricd20b6f9-RendererMaterialShaderFullGuidJoin-v1",
+  "resource_key": "T3-authentic-bounded-12-owner-export-2core-35min",
+  "approach": "Independent aggregate-only Renderer.m_Materials->serialized Material.m_Shader->actual .shader.meta GUID/Dummy marker join using exact exporter project produced by new SHA-pinned bounded original export; count render-slot use frequency by actual linked target and explicit unknown slots, no private identifiers or guessed visual acceptance.",
+  "hypothesis": "Post-vendor 495 Dummy-linked Materials include an unknown number of exported actual Renderer material references, potentially concentrated on a smaller target set; source-only material counts alone cannot prioritize visible scene exposure.",
+  "intended_files": [
+    "scripts/t3_exported_renderer_shader_impact.py",
+    "tests/test_t3_exported_renderer_shader_impact.py",
+    ".github/workflows/raft-t3-original-renderer-shader-impact.yml",
+    "prompt/coordination/work/RENDER-002/T3-20261105T1405Z-T3-chat-renderer-dummy-join-8c41.json",
+    "prompt/coordination/clients/T3/sessions/20261105T1405Z-T3-chat-renderer-dummy-join-8c41.md",
+    "prompt/coordination/experiments/T3/20261105T1405Z-T3-chat-renderer-dummy-join-8c41.json",
+    "prompt/coordination/B_TEAM/events/T3/20261105T1405Z-T3-chat-renderer-dummy-join-8c41.json"
+  ],
+  "related_work": [
+    "prompt/coordination/clients/T3/sessions/20261105T132841Z-T3-scheduled-6e9a.md",
+    "prompt/coordination/clients/T3/sessions/20261105T131204828Z-T3-chat-bounded-postrestorer-4a8c.md"
+  ],
+  "resumed_from_sessions": [
+    "20261105T132841Z-T3-scheduled-6e9a",
+    "20261105T131204828Z-T3-chat-bounded-postrestorer-4a8c"
+  ],
+  "taken_over_from": [
+    "scripts/b03_verify_renderer_material_links.py",
+    "scripts/t3_audit_exported_material_programs.py"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement read-only authenticated exported Renderer->Material->Shader quality join and synthetic guards; run one distinct original-source bounded 12-owner CI and publish aggregate, then document limits.",
+  "updated_at": "2026-11-05T14:08:51.219Z"
+}
