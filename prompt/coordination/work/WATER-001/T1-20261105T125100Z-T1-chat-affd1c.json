@@ -4,9 +4,9 @@
   "owner": "T1",
   "origin": "chat",
   "issue_id": "WATER-001",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "4f76356c05a9b482e7aea82a0c5ccba7af46cf9e",
-  "updated_at": "2026-11-05T12:53:13.592Z",
+  "updated_at": "2026-11-05T12:54:12.859Z",
   "intended_files": [
     ".github/workflows/raft-t1-fft-vulkan-roundtrip-isolation.yml",
     "scripts/t1_fft_vulkan_roundtrip_isolation.py"
@@ -23,5 +23,6 @@
     "https://github.com/alwansan/raf/actions/runs/42030877911"
   ],
   "implementation_sha": "9cfbb55d818e84854321cf7d61d8e55fcd71ca72",
-  "next_step": "Read per-pass match and RGBA counts from same-Vulkan CI. Distinguish setup failure from numeric divergence before choosing the next experiment."
+  "next_step": "Identify actual Unity graphics backend and verify sampled GPU inputs using the exact paired fixture with an identity readback. If that matches, isolate Unity shader compiler/backend with private pass-zero coordinate and arithmetic checks.",
+  "result": "CI42030877911 completed successfully. Both same-Vulkan passes match: 64 written pixels in pass 0 and 32 in pass 1, zero mismatches in all RGBA channels, zero coverage or nonfinite discrepancies. Authenticated staging and cleanup succeeded."
 }

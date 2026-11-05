@@ -4,11 +4,11 @@
   "session_id": "20261105T125100Z-T1-chat-affd1c",
   "issue_id": "WATER-001",
   "type": "result",
-  "summary": "Synthetic Unity RGBA32F transfer control passed. Exact-workload Vulkan FFT translation experiment is running.",
+  "summary": "CI42030877911 completed successfully. Both same-Vulkan passes match: 64 written pixels in pass 0 and 32 in pass 1, zero mismatches in all RGBA channels, zero coverage or nonfinite discrepancies. Authenticated staging and cleanup succeeded.",
   "evidence": [
     "https://github.com/alwansan/raf/actions/runs/42029739318",
     "https://github.com/alwansan/raf/actions/runs/42025620147",
     "https://github.com/alwansan/raf/actions/runs/42030877911"
   ],
-  "at": "2026-11-05T12:53:13.592Z"
+  "at": "2026-11-05T12:54:12.859Z"
 }
