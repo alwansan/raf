@@ -16,8 +16,8 @@
     "acquisition": "AUTHENTIC_ZIP2_SIX_SCENE_FOUR_MATERIAL_SHADER_OWNERS_AND_TWO_RUNTIME_GLOBALS_PLUS_ONE_EXTERNAL_RES_S_SOURCE_SHA_VERIFIED",
     "extraction": "REAL_SOURCE_PARTICLE108_RENDERER_SLOTS_FIVE_MATERIAL21_TEN_NONNULL_LOCAL_TEXENVS_THREE_TYPED_TEXTURE2D28",
     "reconstruction": "ONE_ACTUAL_PINNED_ASSETRIPPER_CLI_EXPORT_FROM_SAME_SHA_SOURCE_WITH_W1_B02_B21_PRIVATE_TRACES",
-    "binding": "REAL_SAME_INSTANCE_5_OF_5_MATERIAL21_2_OF_3_TEXTURE2D28_SOURCE_TRACES_9_OF_10_EXACT_EXPORT_MATERIAL_TEXENV_TEXTURE_PPTR_10_OF_10_UV_1_ORIGINAL_SOURCE_TEXTURE_TRACE_MISSING",
-    "integration": "T3_ISOLATED_SAMEINSTANCE_GITHUB_CI_42130529677_SUCCESS_93_OF_93_SOURCE_FREE_TESTS_READ_ONLY_NO_GAME_ASSETS_EDITED",
+    "binding": "ACTUAL_ONE_ASSETRIPPER_SAMEINSTANCE_W1_B02_EXPORT_FIVE_OF_FIVE_MATERIAL21_TWO_OF_THREE_EXPORTABLE_CLASS28_TEXTURE_TRACES_ONE_OF_THREE_SOURCE_TEXTURE2D28_CONFIRMED_IN_NONEXPORTABLE_COLLECTION_NINE_OF_TEN_MATERIAL_TEXENV_EXACT_TEN_OF_TEN_UV",
+    "integration": "T3_SOURCE_AND_ONE_PINNED_ACTUAL_ASSETRIPPER_CI42130529677_AND_DISPOSABLE_B02_NONEXPORTABLE_AUDIT_CI42132262184_SUCCESS_NO_GAME_ASSETS_CHANGED",
     "device": "NOT_TESTED"
   },
   "counts": {
@@ -37,18 +37,23 @@
     "exported_texture_guid_collisions": 0,
     "source_free_tests_passed": 93,
     "real_native_full_game_export_verified": false,
-    "android_pixels_verified": false
+    "android_pixels_verified": false,
+    "original_texture_source_skipped_due_nonexportable_collection": 1,
+    "original_texture_source_absent_all_export_collections": 0,
+    "original_texture_source_missing_reason_unclassified": 0
   },
   "evidence": [
     "https://github.com/alwansan/raf/actions/runs/42130529677",
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_PARTICLE108_SAMEINSTANCE_EXPORT_2026-11-06.md",
-    "https://github.com/alwansan/raf/commit/7a8833bfa46c141618df76204d2cf88101c8df36"
+    "https://github.com/alwansan/raf/commit/7a8833bfa46c141618df76204d2cf88101c8df36",
+    "https://github.com/alwansan/raf/actions/runs/42132262184",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_PARTICLE108_B02_NONEXPORTABLE_CAUSE_2026-11-06.md"
   ],
   "remaining": [
-    "B02 omission for one genuine Texture2D28 target may be nonexportable collection or other scoped exporter reason. Neither classification is yet authenticated.",
-    "The 1/3 missing B02 lineage is NOT proof of missing installed APK/OBB image or an incorrectly sampled source texture. The corresponding exported Material TexEnv slot is nonnull, but its expected original target GUID cannot be checked.",
-    "T5 actual full native Unity importer/Android shader TextureImporter alpha/fire/smoke pixel matching unverified."
+    "One original Texture2D28 was intentionally omitted from B02 exportable trace due to AssetRipper collection.Exportable=false; it was NOT missing from all actual export collections.",
+    "Need compare actual private nonexportable source class28 container.CreateExportPointer with tenth still-nonnull exported Material TexEnv pointer to prove engine/builtin representation; do not infer wrong Android image.",
+    "Full-native Unity output/Android signed APK/OBB image/fragment alpha and actual device ParticleRenderer pixels remain unverified."
   ],
   "updated_by": "T3",
-  "updated_at": "2026-11-05T23:42:22.105Z"
+  "updated_at": "2026-11-05T23:55:29.974Z"
 }
