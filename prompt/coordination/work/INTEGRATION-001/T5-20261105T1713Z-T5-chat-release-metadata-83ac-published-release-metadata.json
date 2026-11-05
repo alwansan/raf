@@ -3,7 +3,7 @@
   "origin": "chat",
   "session_id": "20261105T1713Z-T5-chat-release-metadata-83ac",
   "issue_id": "INTEGRATION-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "528e21018c912f187ed6e0310804b72db9a66288",
   "resumed_from_sessions": [
     "20261105T1647Z-T5-chat-native-milestone-7b4e",
@@ -24,8 +24,31 @@
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41812889049",
+    "https://github.com/alwansan/raf/actions/runs/42072829025",
     "https://github.com/alwansan/raf/actions/runs/42058825739"
   ],
-  "next_step": "Create safe exact metadata fixture and pure validator; isolated source-only tests + CI while current native compile runs; prove only public metadata consistency with explicit digest/signature/device false flags.",
-  "updated_at": "2026-11-05T17:13:00Z"
+  "next_step": "Keep current native run42058825739 waiting_ci in previous native T5 work; this independent release metadata scope completed. On actual new release run API comparator but require download hashes and APK signatures before binary/device claims. Do not dispatch duplicate current build.",
+  "updated_at": "2026-11-05T17:18:00Z",
+  "result": {
+    "source_commit": "f22e4e772461bd430ff5497a28c1d78956a7188d",
+    "source_only_ci": 42072829025,
+    "conclusion": "success",
+    "tests_passed": 28,
+    "failed": 0,
+    "exact_published_release": "android-early-test-41812889049-1",
+    "release_id": 433995856,
+    "run_identity_verified": true,
+    "published_metadata_asset_count": 12,
+    "transport_part_assets": 7,
+    "auxiliary_assets": 5,
+    "logical_claims_verified_as_metadata_only": 3,
+    "total_claimed_transport_bytes": 5948194034,
+    "signed_or_original_binary_bytes_verified": false,
+    "cryptographic_part_sha_verified": false,
+    "android_install_verified": false,
+    "current_native_build_42058825739": "in_progress Unity Editor step62 as last observed",
+    "new_native_build_dispatched": false
+  },
+  "experiment": "prompt/coordination/experiments/T5/T5-20261105T1713Z-T5-chat-release-metadata-83ac-published-release-audit.json",
+  "event": "prompt/coordination/B_TEAM/events/T5/20261105T1718Z-release-metadata-audit.json"
 }
