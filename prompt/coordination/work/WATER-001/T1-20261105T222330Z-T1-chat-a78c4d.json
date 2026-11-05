@@ -1,0 +1,14 @@
+{
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261105T222330Z-T1-chat-a78c4d",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "8fd267f83e093e6d75705f082e15196f3da1432a",
+  "intended_files": [
+    "scripts/t1_device_water_summary_gate.py",
+    "tests/test_t1_device_water_summary_gate.py"
+  ],
+  "experiment_key": "device-summary-real-stop-time-counters-schema",
+  "updated_at": "2026-11-05T22:23:30Z"
+}
