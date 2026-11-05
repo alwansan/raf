@@ -35,7 +35,7 @@ def join(source_use:dict, w1:dict, shader_profiles:dict, *,
         or not isinstance(w1,dict) or not isinstance(w1.get("objects"),list)
         or not isinstance(shader_profiles,dict)
         or verified_source_report.get("status")!=original.STATUS
-        or verified_source_report.get("original_slots_to_verified_Shader48", -1)!=EXPECTED_TYPED_SLOT_USE):
+        or verified_source_report.get("counts",{}).get("original_slots_to_verified_Shader48", -1)!=EXPECTED_TYPED_SLOT_USE):
         raise ValueError("untrusted_original_scene_Shader48_usage_scope")
     # Explicit original typed SourceShader48 identity, never file name matching.
     selected=set(source_use)
