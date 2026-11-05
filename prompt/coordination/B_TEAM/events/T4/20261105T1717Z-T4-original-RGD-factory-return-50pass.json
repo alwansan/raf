@@ -1,0 +1,30 @@
+{
+  "id": "20261105T1717Z-T4-original-RGD-factory-return-50pass",
+  "owner": "T4",
+  "origin": "chat",
+  "session_id": "20261105T1713Z-T4-chat-original-rgd-return-sites-j7q4",
+  "issue_id": "LOCAL-005",
+  "type": "original_source_authentic_RGD_factory_return_metadata",
+  "status": "SOURCE_VERIFIED_ONLY",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42072718216",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_RGD_RETURN_SITES_2026-11-05.md"
+  ],
+  "result": {
+    "test_success": "50/50",
+    "original_assembly_sha_verified": true,
+    "original_factory_returns": 1,
+    "ret_immediate_derived_RGD_local": 1,
+    "direct_RGD_derived_constructor_sites": 1,
+    "direct_RGD_derived_call_return_sites": 1,
+    "derived_RGD_local_slots": 2,
+    "conditional_branch_sites": 34,
+    "ldnull_sites": 10,
+    "explicit_throw_sites": 0,
+    "runtime_return_value_or_path_proven": false,
+    "original_save_executed": false,
+    "Android_or_Unity_phone_tested": false
+  },
+  "boundaries": "Original derived-RGD factory has structural constructor and null literal sites; no path-sensitive non-null or saved world guarantee. T5 native CI42058825739 Unity Editor in_progress; no T4 heavy build.",
+  "created_at": "2026-11-05T17:17:00Z"
+}
