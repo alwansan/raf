@@ -14,6 +14,7 @@ from scripts import t3_linked_texture_sampler_export as linked
 from scripts import b05_verify_material_texenv_bindings as b05
 from scripts.b03_original_renderer_materials import manifest_provider_basename_counts
 from scripts.t3_decoded_texture_pixel_parity import compare_pair, aggregate
+from scripts.t3_pixel_drift_diagnostics import classify as diagnose_pair, aggregate as aggregate_diagnostics
 
 GUID = re.compile(r"(?m)^guid: ([0-9a-f]{32})\s*$")
 EXPECTED = 106
@@ -51,6 +52,7 @@ def run(original: Path, manifest: Path, project: Path, w1path: Path, b02path: Pa
     pngs = _safe_png_index(project / "Assets")
     source_by_owner = {}
     categories = []
+    diagnostic_rows = []
     for row in selected["objects"]:
         src = row["source"]
         name = src["owner"].removeprefix("Raft_Data/")
@@ -68,17 +70,29 @@ def run(original: Path, manifest: Path, project: Path, w1path: Path, b02path: Pa
         if obj is None:
             raise ValueError("missing_original_Texture2D")
         try:
-            decoded = obj.read().image
+            texture = obj.read()
+            decoded = texture.image
             if decoded is None:
                 category = "UNSUPPORTED_MODE"
             else:
                 with Image.open(pngs[guid]) as image:
-                    category = compare_pair(decoded, image.copy(), original_id=guid,
+                    exported_image = image.copy()
+                    category = compare_pair(decoded, exported_image, original_id=guid,
                                             exported_id=guid, authenticated=True)
+                    if category in ('EXACT', 'RGB_DRIFT', 'ALPHA_ONLY_DRIFT'):
+                        raw_format = getattr(texture, 'm_TextureFormat', 'UNKNOWN')
+                        fmt = getattr(raw_format, 'name', str(raw_format))
+                        raw_srgb = getattr(texture, 'm_IsSRGB', None)
+                        diagnostic_rows.append(diagnose_pair(decoded, exported_image,
+                            texture_format=fmt, srgb=str(raw_srgb) if raw_srgb is not None else 'UNKNOWN'))
         except (NotImplementedError, ValueError, TypeError, OSError):
             category = "UNSUPPORTED_MODE"
         categories.append(category)
     report = aggregate(categories, expected=EXPECTED)
+    if len(diagnostic_rows) == EXPECTED:
+        report['pixel_drift_diagnostics'] = aggregate_diagnostics(diagnostic_rows, expected=EXPECTED)
+    else:
+        report['pixel_drift_diagnostics_status'] = 'INCOMPLETE_AUTHENTICATED_RGBA_SCOPE'
     report.update(experiment="T3-authentic-decoded-original-to-export-pixels",
                   original_source_texture_candidates=counts["unique_linked_source_Texture2D_candidates"],
                   actual_export_guid_png_pairs=len(categories),
