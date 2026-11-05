@@ -4,8 +4,8 @@
   "origin": "chat",
   "session_id": "20261105T1736Z-T2-chat-rt-return-reason-8e2d",
   "issue_id": "WATER-001",
-  "status": "active",
-  "updated_at": "2026-11-05T17:36:58.599Z",
+  "status": "redirected_overlap",
+  "updated_at": "2026-11-05T17:45:05.245Z",
   "base_sha": "fb5c198578be00e19e9b093d6150ba0815d46fc9",
   "resumed_from_sessions": [
     "20261105T1712Z-T2-chat-return-identity-minimal-4c8f",
@@ -31,5 +31,14 @@
     "scheduled_T2_work": "scripts/t2_rt_return_cfg.py and tests/test_t2_rt_return_cfg.py, distinct from T2 own Mono.Cecil files",
     "prior_source_CI": "42073459459 SUCCESS, 1 ret 3 branch opcodes unresolved"
   },
-  "next_step": "Create session, commit small own-file source + positive/negative synthetic guards, inspect authentic source CI; if unresolved at branch target, do not claim local value path. WATER-001 OPEN NOT_READY 0/3."
+  "next_step": "Independent chat scope: prompt/coordination/work/WATER-001/T2-20261105T1736Z-T2-chat-rt-return-reason-8e2d-assembly-scope-guard.json. Keep scheduled RT local-writer source untouched. WATER-001 OPEN NOT_READY0/3.",
+  "result": {
+    "reason": "Scheduled T2 concurrently published same original return-site placement/predecessor classification before chat source modification; no overwrite.",
+    "source_original_ci": [
+      "42076640591 SUCCESS",
+      "42076713202 SUCCESS"
+    ],
+    "scheduled_report": "one sequential ldloc return predecessor",
+    "runtime_nonnull_proven": false
+  }
 }
