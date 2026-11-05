@@ -89,17 +89,37 @@ internal static class Program
         auditCategory = "NO_EXACT_PRIVATE_SAVE_SIGNATURE";
         using var defs = AssemblyDefinition.ReadAssembly(
             assemblyPath, new ReaderParameters { ReadSymbols = false });
-        var matches = defs.MainModule.Types
-            .Where(t => t.Name == "SaveAndLoad")
-            .SelectMany(t => t.Methods)
+        var saveTypes = defs.MainModule.Types
+            .Where(t => t.Name == "SaveAndLoad").ToArray();
+        if (saveTypes.Length != 1)
+        {
+            auditCategory = "ORIGINAL_SAVE_CLASS_IDENTITY_MISSING";
+            return null;
+        }
+        var matchingShape = saveTypes[0].Methods
             .Where(m => m.Name == "Save" && !m.IsStatic && !m.IsPublic &&
                 !m.HasGenericParameters && m.HasBody &&
                 m.ReturnType.FullName == "System.Void" &&
                 m.Parameters.Count == 2 &&
-                m.Parameters[0].ParameterType.FullName == "System.String" &&
-                m.Parameters[1].ParameterType.Name == originalRootType.Name)
+                m.Parameters[0].ParameterType.FullName == "System.String")
             .ToArray();
-        if (matches.Length != 1) return null;
+        if (matchingShape.Length != 1)
+        {
+            auditCategory = "ORIGINAL_SAVE_PRIVATE_SIGNATURE_SHAPE_MISSING";
+            return null;
+        }
+        var matches = matchingShape
+            .Where(m => m.Parameters[1].ParameterType.Name == originalRootType.Name)
+            .ToArray();
+        if (matches.Length != 1)
+        {
+            // Report only structural relation to known RGD argument, not
+            // either original CLR type name or metadata values.
+            auditCategory = matchingShape[0].Parameters[1].ParameterType.Name == "RGD"
+                ? "SHIPPED_SEED_ROOT_DIFFERS_FROM_ORIGINAL_RGD_SAVE_ARGUMENT"
+                : "ORIGINAL_SAVE_ARGUMENT_DIFFERS_FROM_SHIPPED_SEED_ROOT";
+            return null;
+        }
         var candidate = matches[0];
         if (candidate.Body.Instructions.Count > 500 ||
             candidate.Body.ExceptionHandlers.Count > 2)
