@@ -433,7 +433,7 @@ internal static class Program
         var traced=FoamSetterFlow.Trace(produced,1);
         if (traced is null || traced.Value.SecondTextureOperandOrigin!="call_return" ||
             traced.Value.SecondProducerDeclaredReturnClass!="unity_texture" ||
-            traced.Value.SecondProducerDeclaringTypeClass!="other_external_or_unresolved_declaring_type" ||
+            traced.Value.SecondProducerDeclaringTypeClass!="original_managed_assembly_declared" ||
             traced.Value.SecondProducerHasThis || traced.Value.SecondProducerIsCallvirt ||
             traced.Value.SecondProducerParameterCount!=0)
             throw new InvalidDataException("Exact typed call producer source fixture failed");
