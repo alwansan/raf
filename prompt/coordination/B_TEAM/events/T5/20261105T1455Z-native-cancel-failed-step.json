@@ -1,0 +1,15 @@
+{
+  "event_id": "20261105T1455Z-T5-native-cancel-failed-step",
+  "actor": "T5",
+  "origin": "scheduled",
+  "session_id": "20261105T1453Z-T5-scheduled-6e82",
+  "issue_id": "INTEGRATION-001",
+  "type": "source_test_pass",
+  "status": "SOURCE_FIXED",
+  "source_sha": "de9b8491628bbf680bef496c704f938415784c73",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42049488845"
+  ],
+  "summary": "Cancelled native job with failed step no longer erased by blanket no-source-failure verdict; 19/19 bounded tests PASS; original cancelled job remains no established source failure.",
+  "limits": "No native game build, no signed APK, no Android device test; readiness NOT_READY 0/3."
+}
