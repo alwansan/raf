@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T2204Z-T3-chat-particle108-mattex-a4c6",
+  "issue_id": "RENDER-002",
+  "hypothesis": "Specific source 108-use ParticleSystemRenderer Shader48 108 renderer slots may have authentic non-null Material m_TexEnvs; source exact Material21 and Texture pointer population must be measured separately from same-export Android binding.",
+  "source_commit": "775a18ec59a061783d46e7fbb77125c0929c8d34",
+  "input_hashes": [
+    "ZIP2 pinned 15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "6 SHA-pinned original scenes b21_scene_lightmap_links.py",
+    "4 SHA-pinned Shader/Material owners 269007288 bytes a12_probe_original_blur_passes.py"
+  ],
+  "tool_versions": {
+    "UnityPy": "1.23.0",
+    "Python": "GitHub Actions ubuntu-24.04 python3",
+    "Unity Editor": "not run"
+  },
+  "commands": [
+    "python3 -m py_compile scripts/t3_original_renderer_shader_impact.py scripts/t3_original_particle_material_texenv.py",
+    "python3 -m unittest discover -s tests -p test_t3_original_particle_material_texenv.py -v",
+    "python3 -m unittest discover -s tests -p test_t3_original_renderer_shader_impact.py -v",
+    "python3 -m scripts.t3_original_particle_material_texenv --original \"$RUNNER_TEMP/t3-original-six-scene\" --manifest zip2-source/RAFT_FILE_MANIFEST.tsv --out \"$RUNNER_TEMP/t3-original-particle108-material-texenv-safe.json\""
+  ],
+  "negative_controls": [
+    "only exact private source shader→original Material keys with SHA-original Shader PPtr revalidation",
+    "source Material field parser reused from B05 strict normalize_texenvs",
+    "invalid source fileID beyond externals, null external pointer, nonfinite UV, duplicate property labels rejected",
+    "private shader/Material keys never serialized",
+    "distinct Material source objects cannot equal 108 repeated renderer slots"
+  ],
+  "workflow_path": ".github/workflows/raft-t3-original-renderer-shader-impact.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42119098398",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42119098398/artifacts"
+  ],
+  "budget": "22min source-only pinned 6 scenes+4 owners, no AssetRipper/Unity native APK",
+  "status": "completed",
+  "observed_result": {
+    "source_authentic": true,
+    "original_source_particle_renderer_slots": 108,
+    "original_distinct_material21": 5,
+    "original_texenv_slots": 10,
+    "original_nonnull_texture_PPtr_slots": 10,
+    "original_null_texture_PPtr_slots": 0,
+    "original_local_texture_PPtr_slots": 10,
+    "original_external_texture_PPtr_slots": 0,
+    "unique_original_texture_PPtr_shapes": 3,
+    "uv_complete_slots": 10,
+    "source_free_tests_passed": 81
+  },
+  "rejected_hypotheses": [
+    "The five original highest-use particle Shader48 Material21 objects have no original Texture PPtr bindings",
+    "Every original Particle Renderer slot represents a unique Material21 object"
+  ],
+  "limitations": [
+    "original source pointers alone do not prove referenced class 28 Texture2D payload",
+    "no same-instance W1/B02 exporter Material/Texture GUID parity",
+    "no Android emitter material identification or phone pixels"
+  ],
+  "integration_commit": "775a18ec59a061783d46e7fbb77125c0929c8d34",
+  "next_step": "Compare the exact 5 SHA-original ParticleShader48 Material21 objects and their 10 non-null local Texture PPtrs / 3 unique source targets with *same-instance* W1 Material21/B02 Texture2D28 export trace and current Android-installed shader/texture GUID bindings. Check Texture2D object type/metadata before claiming source texture payload presence. Match phone emitter prefab/material and fire/smoke pixels before changing game shaders."
+}
