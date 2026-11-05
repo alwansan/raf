@@ -1,4 +1,7 @@
 name: T3 RENDER-002 real Texture2D export WITH original SHA-locked resS pixels
+# T3 2026-11-05 new causal question: 76 exact / 30 RGB drift actual pairs
+# grouped by authenticated original texture codec, preserving source privacy.
+# New controls pass CI42003607001; old source/output parity checks not reinterpreted.
 # Bounded real follow-up to 106/106 m_StreamData original external providers not staged
 on:
   workflow_dispatch:
@@ -37,6 +40,10 @@ jobs:
           python3 -m unittest discover -s tests -p 'test_t3_texture_importer_presence.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_exported_texture_inventory.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_original_texture_stream_dependencies.py' -v
+          python3 -m pip install --user --disable-pip-version-check Pillow==11.3.0
+          python3 -m unittest discover -s tests -p 'test_t3_decoded_texture_pixel_parity.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_pixel_drift_diagnostics.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_pixel_diagnostic_boundary.py' -v
           python3 -m unittest discover -s tests -p 'test_b15_texture_sampler_parity.py' -v
           python3 -m unittest discover -s tests -p 'test_b21_stage_light_lineage.py' -v
           python3 -m unittest discover -s tests -p 'test_b21_compare_export_lights.py' -v
