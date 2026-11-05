@@ -1198,14 +1198,14 @@
       "id": "T2-foam-original-RT-return-local-writer-provenance",
       "owner": "T2",
       "issue_id": "WATER-001",
-      "title": "Original Foam RenderTexture return uses a local with exactly one stloc preceded by call",
+      "title": "Original Foam RenderTexture return local has exact same-block constructor and matching assembly-scoped type",
       "kind": "sha_original_managed_foam_rendertexture_return_local_writer_provenance",
       "stages": {
         "acquisition": "ZIP2_ORIGINAL_MANAGED_DLL_SHA_0a6f0527_BYTES_3211776_VERIFIED",
         "extraction": "EXACT_TYPED_STELEM_REF_RETURNING_RENDER_TEXTURE_METHOD_MATCHES_ONE_ORIGINAL_SHA_MANAGED_BODY",
-        "reconstruction": "ONE_SEQUENTIAL_RET_PREVIOUS_LDLOC;_ONE_EXACT_TYPED_RENDER_TEXTURE_RETURN_LOCAL_STLOC_PREVIOUS_CALL",
-        "binding": "CALL_ADJACENCY_ONLY_NOT_TYPED_STACK_SOURCE_OR_NONNULL_PROOF;_FOUR_INDEX_COMPILED_BOUNDS_PRIOR_PROVEN",
-        "integration": "SHA_ORIGINAL_CECIL_CI42076713202_42077586809_42078263113_SUCCESS_NO_GAME_SHADER_EDITS",
+        "reconstruction": "ONE_SEQUENTIAL_RET_LDLOC;_ONE_EXACT_RT_LOCAL_STLOC;_MULTI_INPUT_VOID_CALL_PREVIOUS;_BOUNDED_STACK_SOURCE_NEWOBJ_RT_SAME_BLOCK;_CTOR_SCOPE_MATCHES_TYPED_RT_LOCAL",
+        "binding": "ORIGINAL_COMPILED_RT_LOCAL_VALUE_AND_METADATA_SCOPE_PROVEN_CONDITIONALLY;_NO_UNITY_SHADERLAB_OR_GPU_RESOURCE_BINDING_PROOF",
+        "integration": "CECIL_SHA_ORIGINAL_RUNS_42111118348_42116699643_42117556866_SUCCESS;_NO_UNITY_GAME_SHADER_ASSET_INTEGRATION",
         "device": "NOT_TESTED"
       },
       "observed": {
@@ -1216,14 +1216,23 @@
         "stloc_predecessor_opcode": "call",
         "stloc_is_branch_target": false,
         "source_return_nonnull_verified": false,
-        "android_water_pixels_verified": false
+        "android_water_pixels_verified": false,
+        "source_immediate_previous_call_return": "void",
+        "source_immediate_previous_call_consumes": "multiple",
+        "stack_source_in_same_basic_block": "newobj_UnityEngine_RenderTexture",
+        "ctor_void_signature_valid": true,
+        "ctor_and_returned_local_same_metadata_assembly_scope": true,
+        "whole_function_control_flow_verified": false
       },
       "evidence": [
         "https://github.com/alwansan/raf/actions/runs/42076713202",
         "https://github.com/alwansan/raf/actions/runs/42077586809",
-        "https://github.com/alwansan/raf/actions/runs/42078263113"
+        "https://github.com/alwansan/raf/actions/runs/42078263113",
+        "https://github.com/alwansan/raf/actions/runs/42111118348",
+        "https://github.com/alwansan/raf/actions/runs/42116699643",
+        "https://github.com/alwansan/raf/actions/runs/42117556866"
       ],
-      "next_step": "Check real prior call declared return and true typed stack into original stloc; do not conflate source structural facts with Unity pixels. WATER-001 OPEN NOT_READY0/3.",
+      "next_step": "Use original proven RenderTexture factory metadata and preexisting Foam shader sampler/CB evidence for real ShaderLab/Unity integration. Run Adreno water pass and FFT tests with T1/T5. Source-only same-block proof is not runtime non-null or visual acceptance; WATER-001 OPEN NOT_READY.",
       "_record_path": "../B_TEAM/resources/T2-foam-original-RT-return-local-writer-provenance.json"
     },
     {
@@ -6284,6 +6293,21 @@
       "_record_path": "../B_TEAM/events/T2/20261105T2148Z-T2-chat-multiarity-stack-6b31-stack-source-result.json"
     },
     {
+      "id": "20261105T2200Z-T2-foam-RT-ctor-scope-proven",
+      "owner": "T2",
+      "session_id": "20261105T2148Z-T2-chat-multiarity-stack-6b31",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "summary": "SHA-original Foam CIL RT local value from same-block newobj was verified to use a valid void constructor with identical Cecil assembly-scoped RenderTexture type as the returned local. CI42117556866 PASS; no runtime or GPU/Adreno pixel proof.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42116699643",
+        "https://github.com/alwansan/raf/actions/runs/42117556866",
+        "https://github.com/alwansan/raf/commit/ef4b74ed7ace170ca0e9dd80b7498928fdb7a340"
+      ],
+      "at": "2026-11-05T22:00:00Z",
+      "_record_path": "../B_TEAM/events/T2/20261105T2200Z-T2-foam-RT-ctor-scope-proven.json"
+    },
+    {
       "id": "T2-20261105T2115Z-chat-precall-operand-4be0-result",
       "owner": "T2",
       "session_id": "20261105T2107Z-T2-chat-writer-call-ab1c",
@@ -7592,6 +7616,20 @@
       "_record_path": "../B_TEAM/events/T5/20261105T2110Z-T5-chat-retain-delivery-a6f8.json"
     },
     {
+      "id": "T5-20261105T2153Z-T5-chat-signed-pair-4e91-real-apk-obb-aapt-signed",
+      "owner": "T5",
+      "session_id": "20261105T2153Z-T5-chat-signed-pair-4e91",
+      "issue_id": "INTEGRATION-001",
+      "type": "integration",
+      "summary": "Actual native APK+OBB from pinned CI42058825739 verified in independent CI42117471172; 34/34 synthetic controls, paired 2974110182 real bytes SHA match, aapt package/version89 and apksigner verify PASS, APK31/OBB39 ZIP entries. Unity internal GUID and device mount remain unverified.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42117471172",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_REAL_SIGNED_APK_OBB_IDENTITY_2026-11-05.md"
+      ],
+      "at": "2026-11-05T22:02:54.500Z",
+      "_record_path": "../B_TEAM/events/T5/20261105T2153Z-T5-chat-signed-pair-4e91.json"
+    },
+    {
       "id": "20261104-b-generation",
       "owner": "owner-team-bootstrap",
       "session_id": "b-team-setup-20261104",
@@ -7620,7 +7658,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "6f4173b4785413d8278bfc32399d5383a875900c2223e2dba0c504affee35b4c",
+  "source_input_sha256": "2371a1d0f672c9d169bc166cde0ebcc72e7c2c55eef6eeb6e3fd61fc3db2ed6f",
   "generation": "T-2026-11-05",
-  "input_sha256": "3e677b948acc822b838f79b9be6804814c654de174e354dcc0ac80d59b0cd277"
+  "input_sha256": "10688dc602e233c020b648d064485340762efcf48a34a5960047c4a7e836812c"
 }
