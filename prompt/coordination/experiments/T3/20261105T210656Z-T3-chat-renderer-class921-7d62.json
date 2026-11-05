@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "session_id": "20261105T210656Z-T3-chat-renderer-class921-7d62",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "hypothesis": "Top original 921-slot four-pass Shader48 may or may not be referenced by ParticleSystemRenderer; SHA-original Renderer class and distinct-object attribution separates white mesh candidate from square particle effect shaders.",
+  "source_commit": "3342cf6b1c996c2bcf7b7bf4d6caae23e3b7c29e",
+  "input_hashes": [
+    "zip2 SHA 15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "four original shader/material owners bytes 269007288 SHA pins in scripts/a12_probe_original_blur_passes.py",
+    "six scene per-file SHA pins in scripts/b21_scene_lightmap_links.py"
+  ],
+  "tool_versions": {
+    "UnityPy": "1.23.0",
+    "python": "GitHub Actions Ubuntu 24.04 python3",
+    "Unity_editor": "not invoked"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p 'test_t3_original_renderer_shader_impact.py' -v",
+    "python3 -m unittest discover -s tests -p 'test_b03_original_renderer_materials.py' -v",
+    "python3 -m scripts.t3_original_renderer_shader_impact --original \"$RUNNER_TEMP/t3-original-six-scene\" --manifest zip2-source/RAFT_FILE_MANIFEST.tsv --out \"$RUNNER_TEMP/t3-original-six-scene-shader-usage-aggregate.json\""
+  ],
+  "negative_controls": [
+    "synthetic multiple slots on one Renderer do not inflate distinct-object counts",
+    "top shader tie rejects arbitrary private source identity",
+    "report fields contain only Unity Renderer engine class labels, not names/IDs/GUIDs"
+  ],
+  "workflow_path": ".github/workflows/raft-t3-original-renderer-shader-impact.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42109994654",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42109994654/artifacts"
+  ],
+  "budget": "Ubuntu 24.04, 22min timeout, 269007288 pinned original provider bytes, no LFS, no Unity native",
+  "status": "completed",
+  "observed_result": {
+    "source_sha_verified": true,
+    "six_scenes": 6,
+    "four_original_owners": 4,
+    "original_renderers": 1495,
+    "total_material_slots": 1639,
+    "typed_shader48_slots": 1633,
+    "top_original_shader48_slots": 921,
+    "top_921_slots_by_renderer_class": {
+      "MeshRenderer": 914,
+      "SkinnedMeshRenderer": 7,
+      "ParticleSystemRenderer": 0
+    },
+    "other_particle_typed_shader48_slots": 215,
+    "synthetic_tests_passed": 37
+  },
+  "rejected_hypotheses": [
+    "The top used original 921-slot Shader48 serves ParticleSystemRenderer material slots in these six original scenes"
+  ],
+  "limitations": [
+    "source-only no exact top921 full native ShaderLab GUID",
+    "no particle emitter, alpha blending, GPU draw-call or device pixel proof",
+    "not full Raft scene coverage or full shader reconstruction"
+  ],
+  "integration_commit": "3342cf6b1c996c2bcf7b7bf4d6caae23e3b7c29e",
+  "next_step": "Use same SHA-original class evidence to attribute the 215 ParticleSystemRenderer-linked typed Shader48 slots by anonymous shader-use rank and original pass/Blend/alpha family, then correlate candidate with fire/smoke logs/screenshots without claiming particle emitter or Android pixels. Separately preserve exact original top921→full native private GUID join when T5 has same-export full restoration; do not re-run an equivalent export."
+}
