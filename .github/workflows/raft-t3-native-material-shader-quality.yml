@@ -1,0 +1,37 @@
+name: T3 RENDER-002 actual post-restore Material Shader program audit controls
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t3_audit_exported_material_programs.py
+      - tests/test_t3_audit_exported_material_programs.py
+      - .github/workflows/raft-t3-native-material-shader-quality.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raft-t3-native-shader-program-quality-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  synthetic-after-restorer-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Audit actual Material Shader references and dummy marker controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p 'test_t3_audit_exported_material_programs.py' -v
+          python3 -m unittest discover -s tests -p 'test_w1_export_material_shaders.py' -v
+          python3 -m unittest discover -s tests -p 'test_b49_shaderlab_pass_contract.py' -v
+      - name: Run syntax and static named module checks
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t3_audit_exported_material_programs.py tests/test_t3_audit_exported_material_programs.py
