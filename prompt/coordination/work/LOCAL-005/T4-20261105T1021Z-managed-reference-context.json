@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T1021Z-T4-ref-context",
+  "issue_id": "LOCAL-005",
+  "track": "world-save",
+  "approach": "Controlled same-original-DLL ILSpy reference-context A/B: privately decompile exact SHA-verified original managed binary alone versus alongside the pinned full feature Managed sibling assemblies, holding CLI/runtimes constant. Verify prior source-pair fingerprints; do not modify Android adapters/source SHA gates.",
+  "status": "active",
+  "base_sha": "02e9fba7fb42b83579595885391be636ee3b56e8",
+  "intended_files": [
+    "scripts/t4_probe_ilspy_reference_context.py",
+    "tests/test_t4_probe_ilspy_reference_context.py",
+    ".github/workflows/raft-t4-ilspy-reference-context.yml",
+    "docs/T4_ILSPY_REFERENCE_CONTEXT_2026-11-05.md"
+  ],
+  "hypothesis": "B07's original Raft_Network class/body hashes and T4's later alternate hashes arise from managed sibling dependencies present in the feature integration checkout but absent from zip2 DLL-only sparse checkout; matching bytes of Assembly-CSharp.dll alone does not fix decompiler reference resolution.",
+  "taken_over_from": [
+    "docs/T4_ORIGINAL_ILSPY_REPRODUCIBILITY_2026-11-05.md",
+    "https://github.com/alwansan/raf/actions/runs/41944365772",
+    "https://github.com/alwansan/raf/actions/runs/41942118067",
+    "prompt/coordination/clients/B07/MEMORY.md"
+  ],
+  "related_work": [
+    "prompt/coordination/work/LOCAL-005/T4-20261105T0049Z-ilspy-reproducibility.json"
+  ],
+  "experiment_ids": [
+    "20261105T1021Z-ilspy-managed-references"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Build SHA-only A/B three-directory dependency-context comparator, source-free negative controls, isolated 12min GitHub Action pinned original binary and fixed feature Managed sibling SHA, then report whether the two prior source pairs are explained; preserve production pins. LOCAL-005 still OPEN.",
+  "updated_at": "2026-11-05T10:21:00Z"
+}
