@@ -1,0 +1,14 @@
+{
+  "id": "20261105T170847Z-T1-chat-015973",
+  "owner": "T1",
+  "session_id": "20261105T170847Z-T1-chat-015973",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Source-only CI42071855851 passed. Opt-in workflow now exports a complete Vulkan trace only after both outputs match, stages the same instrumented HLSL for Unity, clears and reads a 4097-word buffer, verifies Unity baseline versus traced pass-zero output, then emits aggregate trace comparison. All raw data stays in job scratch. Unity execution was skipped by opt-in gate; native build 42058825739 was in Unity Editor Android import and compile at last check.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42071855851",
+    "https://github.com/alwansan/raf/actions/runs/42071855906",
+    "https://github.com/alwansan/raf/actions/runs/42058825739"
+  ],
+  "at": "2026-11-05T17:10:06.671Z"
+}
