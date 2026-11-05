@@ -50,8 +50,14 @@ jobs:
           assert len(issue)==1 and issue[0]["status"]=="OPEN"
           required="https://github.com/alwansan/raf/actions/runs/41940350604"
           assert required in issue[0]["evidence"]
+          # Include new authentic 12-owner 731/511 pre-restorer source result
+          # without setting native/device readiness or rewriting B-agent credit.
+          proof="https://github.com/alwansan/raf/actions/runs/42026630845"
+          assert proof in issue[0]["evidence"]
           ev=[e for e in s["events"] if e["id"]=="T3-20261105T0023Z-authentic-material-parity-results"]
           assert len(ev)==1 and ev[0]["owner"]=="T3"
+          new=[e for e in s["events"] if e["id"]=="T3-20261105T1226Z-native-shader-dummy-audit"]
+          assert len(new)==1 and new[0]["owner"]=="T3"
           assert s["readiness"] is not True
           print("RAFT_T3_TEAM_SUMMARY SOURCE_ACTUAL_MATERIAL_RGBA=true ISSUE_OPEN=true")
           PY
