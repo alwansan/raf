@@ -2,7 +2,7 @@
   "session_id": "20261105T1548Z-T4-scheduled-m7q4",
   "origin": "scheduled",
   "issue_id": "LOCAL-005",
-  "status": "active",
+  "status": "waiting_ci",
   "baseline_sha": "155268906f0350a4f44dbdd101bdff8d997f72b0",
   "taken_over_from": [
     "prompt/coordination/clients/T4/sessions/20261105T1440Z-T4-scheduled-q8p3.md",
@@ -15,5 +15,11 @@
   ],
   "experiment_key": "T4-jsonl-utc-monotonic-per-sequence-negative-control-v1",
   "resource_key": null,
-  "updated_at": "2026-11-05T15:48:00Z"
+  "updated_at": "2026-11-05T15:54:00Z",
+  "source_commits": [
+    "7aa3578639f615de69a3c0f69453d3e938a36159",
+    "c4858f5de9369a03ea0256f3d8ca97ab1e4b362b"
+  ],
+  "session_file": "prompt/coordination/clients/T4/sessions/20261105T1548Z-T4-scheduled-m7q4.md",
+  "next_step": "Execute source-free negative controls in isolated CI; no device confirmation"
 }
