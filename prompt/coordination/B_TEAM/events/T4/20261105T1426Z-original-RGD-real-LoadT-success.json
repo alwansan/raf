@@ -1,0 +1,16 @@
+{
+  "id": "20261105T1426Z-T4-original-typed-rgd-loader",
+  "owner": "T4",
+  "origin": "chat",
+  "session_id": "20261105T1405Z-T4-chat-original-rgd-runtime-k6n8",
+  "issue_id": "LOCAL-005",
+  "type": "integration",
+  "summary": "T4 exact original ZIP2 shipped Data.rgd 2941B SHA b2785187... and original Assembly-CSharp.dll 3211776B SHA0a6f0527... with 151 pinned Managed siblings. CI42042814576 SUCCESS actual BinaryFormatter.Deserialize instantiated nonnull object defined by original game assembly; 18/18 controls. CI42043768798 SUCCESS actually invoked original compiled generic SaveAndLoad.Load<T> on same seed with root original CLR type, returned matching nonnull original object, 18+18 controls, wrong seed SHA rejected. Earlier two CI failures were harness core dump file-size cap SIGXFSZ; corrected. Not a player-generated RGD, Unity/IL2CPP, Android native gameplay/playable world, or save/exit/relaunch acceptance. LOCAL-005 OPEN NOT_READY.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42042814576",
+    "https://github.com/alwansan/raf/actions/runs/42043768798",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_RGD_RUNTIME_LOAD_2026-11-05.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/discussions/LOCAL-005/20261105T1425Z-T4-original-Data-rgd-real-LoadT-to-T5.md"
+  ],
+  "at": "2026-11-05T14:26:00Z"
+}
