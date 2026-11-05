@@ -22,6 +22,8 @@ def baseline():
         "world_rgd_typed_locals": 1,
         "user_rgd_typed_locals": 0,
         "world_rgd_field_stores": 3,
+        "world_pre_call_rgd_source_clue": "RGD_TYPED_INSTANCE_FIELD_LOAD",
+        "user_pre_call_rgd_source_clue": "RGD_TYPED_CALL_RETURN",
         "direct_constructor_is_dynamically_proven_save_argument": False,
         "original_save_method_invoked": False,
         "game_world_rgd_written_or_loaded": False,
@@ -46,6 +48,23 @@ class TestOriginalSaveWorldProvenance(unittest.TestCase):
         y=validate(x)
         self.assertEqual(y["world_argument_construction_clue"], "NO_DIRECT_RGD_CTOR_IN_SAVEWORLD")
         self.assertFalse(y["actual_argument_instance_identity_proven"])
+
+    def test_unrecognized_precall_producer_rejected(self):
+        x=baseline()
+        x["world_pre_call_rgd_source_clue"]="Game.RGD.private_member_name"
+        with self.assertRaises(ValueError):validate(x)
+
+    def test_precall_producer_missing_rejected(self):
+        x=baseline()
+        del x["user_pre_call_rgd_source_clue"]
+        with self.assertRaises(ValueError):validate(x)
+
+    def test_unknown_static_predecessor_never_claims_dynamic_dataflow(self):
+        x=baseline()
+        x["world_pre_call_rgd_source_clue"]="UNKNOWN_PRECALL_SOURCE"
+        y=validate(x)
+        self.assertFalse(y["actual_argument_instance_identity_proven"])
+        self.assertEqual(y["world_pre_call_rgd_source_clue"], "UNKNOWN_PRECALL_SOURCE")
 
     def test_duplicate_direct_save_calls_rejected(self):
         x=baseline()
