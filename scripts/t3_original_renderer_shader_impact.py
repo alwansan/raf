@@ -58,6 +58,13 @@ def summarize(original_edges:list, materials:dict, typed_shaders:dict,
     count=Counter()
     used_materials=set()
     by_shader_owner=defaultdict(Counter)
+    # Only Unity engine Renderer class labels/counts may leave the runner.
+    # Shader identity and per-scene object IDs remain private in these maps.
+    source_slots_by_class=Counter()
+    source_renderers_by_class=defaultdict(set)
+    typed_shader_slots_by_class=Counter()
+    typed_shader_class_slots=defaultdict(Counter)
+    typed_shader_class_renderers=defaultdict(lambda: defaultdict(set))
     for row in original_edges:
         if not isinstance(row,tuple) or len(row)!=4:
             raise ValueError("malformed_original_renderer_material_edge")
@@ -67,6 +74,8 @@ def summarize(original_edges:list, materials:dict, typed_shaders:dict,
             raise ValueError("invalid_original_renderer_identity")
         renderer=(scene,pid)
         distinct_renderers.add(renderer)
+        source_slots_by_class[kind]+=1
+        source_renderers_by_class[kind].add(renderer)
         count["original_material_slots"]+=1
         if material is None:
             count["original_null_material_slots"]+=1
@@ -97,6 +106,9 @@ def summarize(original_edges:list, materials:dict, typed_shaders:dict,
                 or shdata["subshaders"]<0 or shdata["passes"]<0):
                 raise ValueError("malformed_original_typed_Shader48_parsed_structure")
             count["original_slots_to_verified_Shader48"]+=1
+            typed_shader_slots_by_class[kind]+=1
+            typed_shader_class_slots[shader][kind]+=1
+            typed_shader_class_renderers[shader][kind].add(renderer)
             count["original_slots_to_verified_multi_pass_Shader48"]+=int(shdata["passes"]>1)
         elif shader[0].lower() in BUILTIN_NAMES:
             count["original_slots_to_unstaged_Unity_engine_Shader"]+=1
@@ -117,6 +129,24 @@ def summarize(original_edges:list, materials:dict, typed_shaders:dict,
     typed_keys={key for key in slot_by_shader if key in typed_shaders}
     raw_sorted=sorted(slot_by_shader.values(), reverse=True)
     verified_sorted=sorted((slot_by_shader[k] for k in typed_keys),reverse=True)
+    # Separate material-slot multiplicity from distinct Renderer object count.
+    # A scene may use the SAME source Shader in multiple material slots on
+    # ONE Renderer; neither quantity is a GPU draw-call count.
+    high=verified_sorted[0] if verified_sorted else 0
+    winners=[k for k in typed_keys if slot_by_shader[k]==high]
+    high_unique=bool(high and len(winners)==1)
+    highest_slots_by_class=(dict(sorted(typed_shader_class_slots[winners[0]].items()))
+                            if high_unique else {})
+    highest_renderers_by_class=(
+        {kind:len(ids) for kind,ids in sorted(
+            typed_shader_class_renderers[winners[0]].items())}
+        if high_unique else {})
+    if (sum(source_slots_by_class.values())!=count["original_material_slots"]
+        or sum(typed_shader_slots_by_class.values())!=count["original_slots_to_verified_Shader48"]
+        or (high_unique and sum(highest_slots_by_class.values())!=high)
+        or (high_unique and any(highest_renderers_by_class[k]>v
+                                for k,v in highest_slots_by_class.items()))):
+        raise ValueError("original_Renderer_class_slot_accounting_mismatch")
     by_owner={
       owner:{"renderer_material_slots":dict(stats)["material_slots"],
              "distinct_referenced_source_Shaders":sum(k[0]==owner for k in slot_by_shader),
@@ -151,6 +181,16 @@ def summarize(original_edges:list, materials:dict, typed_shaders:dict,
         "per_authenticated_source_shader_owner_counts":by_owner,
         "original_Shader_material_slot_use_frequency_bands":dict(sorted(freq.items())),
         "original_Shader_distinct_renderer_use_frequency_bands":dict(sorted(uniq_renderer_freq.items())),
+        "original_renderer_material_slots_by_renderer_class":dict(sorted(source_slots_by_class.items())),
+        "original_renderer_objects_with_slots_by_renderer_class":{
+            k:len(v) for k,v in sorted(source_renderers_by_class.items())},
+        "original_verified_Shader48_slots_by_renderer_class":dict(sorted(typed_shader_slots_by_class.items())),
+        "original_highest_used_typed_Shader48_slot_use":high,
+        "original_highest_used_typed_Shader48_unique":high_unique,
+        "original_highest_used_typed_Shader48_slots_by_renderer_class":highest_slots_by_class,
+        "original_highest_used_typed_Shader48_distinct_renderers_by_class":highest_renderers_by_class,
+        # No private shader identity, scene renderer object IDs or names leave.
+        "renderer_class_breakdown_is_original_source_only_not_Android_drawcalls":True,
         "top_ten_original_shader_slot_counts_no_identity":raw_sorted[:10],
         "top_ten_typed_Shader48_slot_counts_no_identity":verified_sorted[:10],
         "source_shader_target_names_guids_ids_hashes_disclosed":False,
