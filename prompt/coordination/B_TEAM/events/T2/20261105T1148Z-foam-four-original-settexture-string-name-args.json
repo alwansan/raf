@@ -1,0 +1,16 @@
+{
+  "id": "T2-20261105T1148Z-foam-four-original-settexture-string-name-args",
+  "owner": "T2",
+  "session_id": "20261105T1104Z-T2-foam-material-property-bridge-isolated",
+  "issue_id": "WATER-001",
+  "type": "source_authentic_original_managed_Material_SetTexture_name_argument_proof",
+  "summary": "SHA-authentic original Foam Shader/Assembly-CSharp source scan CI42021183522 SUCCESS; four non-authored pass0 Foam DXBC t/s resource names found exactly in original managed ldstr, conservative Cecil evaluation-stack proves 4/4 directly occupy first formal System.String name argument at UnityEngine.Material.SetTexture calls. Zero of four require Shader.PropertyToID, zero go to MPB first arg in this bounded method; second Texture value/Material receiver, runtime invocation, ShaderLab/Unity/Adreno remain UNKNOWN. 13 Python +3 public Cecil fixtures; no proprietary names/hash values/IL published, no other T clients changed. WATER-001 OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42017542487",
+    "https://github.com/alwansan/raf/actions/runs/42019735778",
+    "https://github.com/alwansan/raf/actions/runs/42021183522",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_ORIGINAL_MATERIAL_SETTEXTURE_ARGUMENT_PROOF_2026-11-05.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T2-foam-original-material-settexture-name-arguments.json"
+  ],
+  "at": "2026-11-05T11:48Z"
+}
