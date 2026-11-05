@@ -4,7 +4,8 @@ from collections import deque
 UNKNOWN, NULL, CONSTRUCTED = "unknown", "null", "constructed"
 
 def classify(instructions, *, max_states=10000, max_locals=4096, max_stack=256):
-    if not instructions or max_states <= 0 or max_locals <= 0 or max_stack <= 0:
+    if (not isinstance(instructions, (list, tuple)) or not instructions
+            or any(type(limit) is not int or limit <= 0 for limit in (max_states, max_locals, max_stack))):
         return UNKNOWN
     n = len(instructions)
     incoming = {0: ((), ())}
@@ -27,7 +28,10 @@ def classify(instructions, *, max_states=10000, max_locals=4096, max_stack=256):
             return UNKNOWN
         pc = pending.popleft()
         stack, locals_ = incoming[pc]
-        op, *args = instructions[pc]
+        record = instructions[pc]
+        if not isinstance(record, (tuple, list)) or not record or type(record[0]) is not str or len(record) > 2:
+            return UNKNOWN
+        op, *args = record
         arg = args[0] if args else None
         if op == "ldnull":
             stack += (NULL,)
