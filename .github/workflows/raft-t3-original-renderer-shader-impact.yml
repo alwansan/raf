@@ -239,6 +239,8 @@ jobs:
       - name: SHA-restore exact ONE original Particle Texture2D stream provider and read 3 private image spans
         run: |
           set -euo pipefail
+          test -s "$RUNNER_TEMP/t3-particle-private-stream-plan.json"
+          test "$(stat -c '%a' "$RUNNER_TEMP/t3-particle-private-stream-plan.json")" = 600
           python3 -m scripts.t3_original_particle_stream_provider \
             --private-plan "$RUNNER_TEMP/t3-particle-private-stream-plan.json" \
             --zip2 zip2-source \
