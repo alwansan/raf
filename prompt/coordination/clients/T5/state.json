@@ -2,12 +2,12 @@
   "schema_version": 1,
   "username": "T5",
   "generation": "T-2026-11-05",
-  "session_id": "20261105T0046Z-T5-rename-failure-review",
-  "resumed_from_session": "20261105T0040Z-T5-real-hydrator-entrypoint",
+  "session_id": "20261105T0149Z-T5-rollback-absent-target",
+  "resumed_from_session": "20261105T0046Z-T5-rename-failure-review",
   "status": "paused_ci_pending",
   "base_sha": "bf3b2e278e7b82cc6c0e58ea7ee51f2050b408b5",
-  "last_commit": "46adaa1d7f7cbc2b8a104630a307aa36819600cf",
-  "updated_at": "2026-11-05T00:49:00Z",
+  "last_commit": "1cd3a5efb4f76d48842537109a22170ffc840ee2",
+  "updated_at": "2026-11-05T01:50:00Z",
   "tracks": [
     "INTEGRATION-001",
     "ASSET-RESTORE-001"
@@ -18,7 +18,8 @@
     "T5-20261105T0015Z-three-owner-batch",
     "T5-20261105T0024Z-hydration-batch-preflight",
     "T5-20261105T0032Z-batch-digest-prepublish",
-    "T5-20261105T0040Z-real-hydrator-entrypoint"
+    "T5-20261105T0040Z-real-hydrator-entrypoint",
+    "T5-20261105T0149Z-absent-target-rollback"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41937719270",
@@ -32,6 +33,6 @@
     "https://github.com/alwansan/raf/actions/runs/41942815626",
     "https://github.com/alwansan/raf/actions/runs/41943856117"
   ],
-  "next_step": "Check T5 workflow on 46adaa1d or later (CI41943856117 predates regression test), inspect injected second os.replace failure rollback. Best effort only; rollback failure remains possible. Then coordinate actual Unity import with T1/T3. NOT_READY 0/3.",
+  "next_step": "CI41943856117 success predates both 46adaa1 and new 1cd3a5e absent-first-target regression. Locate newest isolated T5 workflow run and verify test, then move to Unity integration with T1/T3; no phone evidence, NOT_READY 0/3.",
   "memory_path": "prompt/coordination/clients/T5/MEMORY.md"
 }
