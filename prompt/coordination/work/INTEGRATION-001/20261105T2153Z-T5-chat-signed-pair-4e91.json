@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T2153Z-T5-chat-signed-pair-4e91",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "track": "signed APK and OBB actual identity",
+  "status": "active",
+  "base_sha": "0c17397f349789e94aaf8bfa8ec6cc1f75971529",
+  "intended_files": [
+    "prompt/coordination/work/INTEGRATION-001/20261105T2153Z-T5-chat-signed-pair-4e91.json",
+    "prompt/coordination/clients/T5/sessions/20261105T2153Z-T5-chat-signed-pair-4e91.md",
+    "scripts/t5_extract_actual_signed_pair.py",
+    "tests/test_t5_extract_actual_signed_pair.py",
+    ".github/workflows/raft-t5-real-apk-obb-identity.yml",
+    "docs/T5_REAL_SIGNED_APK_OBB_IDENTITY_2026-11-05.md"
+  ],
+  "experiment_key": "t5-signed-apk-obb-rehydrate-verified-42058825739-13454900880-aapt-apksigner-v1",
+  "resource_key": "read-only-original-artifact-13454900880-GHA-6GB",
+  "hypothesis": "Previously SHA-authenticated archived APK+OBB contain matching actual package/version and signature when independently inspected with Android build tools; if they do, CL GUID warnings point beyond a simple mismatched package or transport corruption.",
+  "related_work": [
+    "prompt/coordination/work/INTEGRATION-001/20261105T2110Z-T5-chat-retain-delivery-a6f8.json",
+    "prompt/coordination/work/INTEGRATION-001/20261105T2055Z-T5-chat-obb-pair-9f2d.json"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/T5/sessions/20261105T2110Z-T5-chat-retain-delivery-a6f8.md",
+    "prompt/coordination/clients/T5/sessions/20261105T2045Z-T5-scheduled-ui-right-a71.md"
+  ],
+  "experiment_ids": [
+    "20261105T2153Z-T5-chat-signed-pair-4e91"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement safe bounded authentic nested Actions artifact extraction and hash validation; check actual aapt versionCode/APK crypto signature and OBB data archive in independent CI. No changes to concurrent T5 Resolution policy or Unity.",
+  "updated_at": "2026-11-05T21:53:42.033Z"
+}
