@@ -1,0 +1,76 @@
+name: T1 WATER-001 same-Vulkan FFT translation isolation
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-t1-fft-vulkan-roundtrip-isolation.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: t1-fft-vulkan-roundtrip-isolation-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  compare:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      DEBIAN_FRONTEND: noninteractive
+      ZIP2_SHA: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Check scratch budget and comparator tests
+        run: |
+          test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2{print $4}')" -gt 1048576
+          python3 -m unittest discover -s tests -p test_t1_fft_readback_parity.py -v
+      - name: Install Vulkan and DXBC translation tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools python3-venv g++ libvulkan-dev mesa-vulkan-drivers
+          python3 -m venv "$RUNNER_TEMP/t1-python-venv"
+          "$RUNNER_TEMP/t1-python-venv/bin/python" -m pip install \
+            --disable-pip-version-check UnityPy==1.25.4 -q
+      - name: Recover exact SHA-verified original FFT object from immutable ZIP2
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/t1-private-zip2"
+          git -C "$RUNNER_TEMP/t1-private-zip2" init -q
+          git -C "$RUNNER_TEMP/t1-private-zip2" remote add origin https://github.com/alwansan/raf.git
+          git -C "$RUNNER_TEMP/t1-private-zip2" -c protocol.version=2 fetch -q --depth=1 --filter=blob:none origin zip2
+          test "$(git -C "$RUNNER_TEMP/t1-private-zip2" rev-parse FETCH_HEAD)" = "$ZIP2_SHA"
+          git -C "$RUNNER_TEMP/t1-private-zip2" sparse-checkout init --no-cone
+          printf '%s\n' '/RAFT_FILE_MANIFEST.tsv' '/Raft/Raft_Data/sharedassets0.assets/' |
+            git -C "$RUNNER_TEMP/t1-private-zip2" sparse-checkout set --no-cone --stdin
+          git -C "$RUNNER_TEMP/t1-private-zip2" checkout -q --detach FETCH_HEAD
+          python3 -m scripts.stage_zip2_fft_owner \
+            --zip2-checkout "$RUNNER_TEMP/t1-private-zip2" \
+            --destination "$RUNNER_TEMP/t1-original-verified/Raft_Data/sharedassets0.assets"
+      - name: Stage private FFT pair and compare both passes on the same Vulkan device
+        run: |
+          set -euo pipefail
+          export TMPDIR="$RUNNER_TEMP/t1-roundtrip-scratch"
+          mkdir -m 700 "$TMPDIR"
+          export VK_DRIVER_FILES="$(find /usr/share/vulkan/icd.d -maxdepth 1 -name '*lvp*.json' -print -quit)"
+          test -f "$VK_DRIVER_FILES"
+          "$RUNNER_TEMP/t1-python-venv/bin/python" -m scripts.t1_stage_original_fft_compute_candidates \
+            --original-data "$RUNNER_TEMP/t1-original-verified/Raft_Data" \
+            --project "$TMPDIR/candidates" --keep-first-pair-spirv
+          python3 -m scripts.t1_fft_vulkan_roundtrip_isolation --project "$TMPDIR/candidates"
+      - name: Remove all private inputs and scratch data
+        if: always()
+        run: |
+          rm -rf "$RUNNER_TEMP/t1-private-zip2" "$RUNNER_TEMP/t1-original-verified" \
+            "$RUNNER_TEMP/t1-roundtrip-scratch" "$RUNNER_TEMP/t1-python-venv"
