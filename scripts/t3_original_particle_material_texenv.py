@@ -24,7 +24,8 @@ EXPECTED_RANKS=[108,34,34,20,16,3]
 STATUS="SHA_ORIGINAL_PARTICLE_108_MATERIAL_TEXENV_SOURCE_BOUND_VERIFIED"
 
 
-def census(materials:dict, expected_keys:set, *, renderer_slots:int=108):
+def census(materials:dict, expected_keys:set, *, renderer_slots:int=108,
+           private_local_texture_targets:dict|None=None):
     """Pure source object census; material data stays in private caller memory.
 
     materials maps original private (owner, pathID) -> (B05 normalized TexEnvs,
@@ -34,8 +35,12 @@ def census(materials:dict, expected_keys:set, *, renderer_slots:int=108):
         or not expected_keys or set(materials)!=expected_keys
         or type(renderer_slots) is not int or renderer_slots<len(expected_keys)):
         raise ValueError("incomplete_exact_particle_material_source_scope")
+    if private_local_texture_targets is not None and (
+        type(private_local_texture_targets) is not dict or private_local_texture_targets):
+        raise ValueError("private_original_local_Texture2D_target_map_outparam_not_empty")
     stats=Counter()
     texture_targets=set()
+    local_texture_use=Counter()  # PRIVATE owner+PathID source identities only
     for key,row in materials.items():
         if (type(key) is not tuple or len(key)!=2
             or key[0] not in source.MATERIAL_OWNERS
@@ -66,6 +71,7 @@ def census(materials:dict, expected_keys:set, *, renderer_slots:int=108):
             elif fid==0:
                 stats["original_particle_texenv_local_texture_pointers"]+=1
                 texture_targets.add((key[0],fid,pid))
+                local_texture_use[(key[0],pid)]+=1
                 any_bound=True
             else:
                 stats["original_particle_texenv_external_texture_pointers"]+=1
@@ -89,6 +95,12 @@ def census(materials:dict, expected_keys:set, *, renderer_slots:int=108):
             stats["original_particle_texenv_uv_unrecorded"]+
             stats["original_particle_texenv_uv_complete"])):
         raise ValueError("original_particle_material_TexEnv_accounting_mismatch")
+    if private_local_texture_targets is not None:
+        if (sum(local_texture_use.values())
+              !=stats["original_particle_texenv_local_texture_pointers"]):
+            raise ValueError("private_original_local_Texture2D_PPtr_accounting_mismatch")
+        # Never serialize or log original (owner, PathID) private target keys.
+        private_local_texture_targets.update(local_texture_use)
     return {
         "schema_version":1,"status":STATUS,
         "original_particle_renderer_material_slot_references":renderer_slots,
@@ -109,7 +121,7 @@ def census(materials:dict, expected_keys:set, *, renderer_slots:int=108):
     }
 
 
-def run(original:Path, manifest:Path):
+def run(original:Path, manifest:Path, *, private_local_texture_targets:dict|None=None):
     import UnityPy
     private_counts={}
     private_materials={}
@@ -157,7 +169,7 @@ def run(original:Path, manifest:Path):
                 raise ValueError("original_particle_Material_missing_TexEnvs")
             rows[identity]=(normalize_texenvs(saved["m_TexEnvs"],exported=False),
                             len(external))
-    out=census(rows,selected)
+    out=census(rows,selected,private_local_texture_targets=private_local_texture_targets)
     out["six_original_scene_SHA_verified"]=True
     out["four_original_shader_Material_owner_SHA_verified"]=True
     out["original_108_use_ParticleShader48_reference_authenticated"]=True
