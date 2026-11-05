@@ -364,7 +364,11 @@
         "https://github.com/alwansan/raf/actions/runs/42026630845",
         "https://github.com/alwansan/raf/actions/runs/42026545273",
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_NATIVE_MATERIAL_SHADER_PROGRAM_AUDIT_2026-11-05.md",
-        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-native-export-material-shader-program-quality.json"
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-native-export-material-shader-program-quality.json",
+        "https://github.com/alwansan/raf/actions/runs/42042819113",
+        "https://github.com/alwansan/raf/actions/runs/42044249541",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_SCENE_SHADER_USE_AND_POSTVENDOR_PRIORITY_2026-11-05.md",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-original-scene-renderer-shader-postvendor-use.json"
       ],
       "remaining": [
         "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -404,7 +408,8 @@
         "T3 real SHA-pinned same-export Material m_Colors test CI41940350604: 41 selected original Material identities, 150 RGBA slots, 40 nonidentity originals; zero changed, missing or unexpected m_Colors values. Combined with previous 227 TexEnv/UV matches, this RULES OUT loss of these selected source colors/textures during this AssetRipper export only. Keep RENDER-002 OPEN: shader pass/subprogram, external 25 texture owners, importer/sRGB and Android pixels not proven.",
         "T3 authentic source+same-export CI41941363661 SUCCESS: 41 SHA-pinned original Material valid/invalid keyword lists and disabledShaderPasses equal 41 actual export documents; excludes keyword/pass serialization loss in this limited subset, NOT Shader GUID/compiled variant/Adreno or 25 external textures. No game asset edit; RENDER-002 remains OPEN.",
         "T3 immutable ZIP2 original+real AssetRipper same-export CI41942377246: 25/25 external Texture2D references (22 sharedassets0, 3 sharedassets1) typed and GUID/fileID/type retained, zero missing/wrong/null; combined with prior 89 exact internal = 114 bound Texture slot occurrences preserved in the 41 selected original Materials. This rejects selected export pointer loss only; not importer samplers/sRGB/Shader/GPU/device. New scoped B15 sampler trial CI41943122343 INCONCLUSIVE on ValueError before evidence; classified retry launched.",
-        "T3 CI42026630845: authentic bounded 12-owner PRE-restorer AssetRipper export has 731 Material docs (511 custom, 220 Unity builtin), all 511 custom docs point to 54 dummy Shader GUIDs and all 126 ShaderLab files carry default-Dummy marker; new native post-restorer quality audit integrated but not executed. Actual Android visual state and authored ShaderLab restoration remain UNKNOWN; RENDER-002 OPEN."
+        "T3 CI42026630845: authentic bounded 12-owner PRE-restorer AssetRipper export has 731 Material docs (511 custom, 220 Unity builtin), all 511 custom docs point to 54 dummy Shader GUIDs and all 126 ShaderLab files carry default-Dummy marker; new native post-restorer quality audit integrated but not executed. Actual Android visual state and authored ShaderLab restoration remain UNKNOWN; RENDER-002 OPEN.",
+        "T3 genuine same-instance ZIP2 6-scene source Renderer->Material->21 typed Shader48 use map: 1633 source material slots, 1373 still target DummyShaderTextExporter after bounded TMP/PostFX/Volumetric vendor restore, 256 Unity builtin, 4 non-Dummy, 2 Shader pointers outside selected typed owner; highest-use 921-slot original source Shader remains Dummy at this bounded stage. No full native post-restorer/Adreno evidence; prioritize authentic program reconstruction but check native builtins stage before claiming 921 device issue."
       ],
       "acceptance": [
         "مطابقة روابط ومراجع الأصل",
@@ -412,7 +417,7 @@
         "نجاحعلىالهاتف"
       ],
       "updated_by": "T3",
-      "updated_at": "2026-11-05T12:26:00Z",
+      "updated_at": "2026-11-05T14:25:00Z",
       "_record_path": "../B_TEAM/issues/RENDER-002.json"
     },
     {
@@ -1905,6 +1910,60 @@
       "updated_by": "T3",
       "updated_at": "2026-11-05T12:25:00Z",
       "_record_path": "../B_TEAM/resources/T3-native-export-material-shader-program-quality.json"
+    },
+    {
+      "id": "T3-ORIGINAL-SIXSCENE-RENDERER-SHADER-POSTVENDOR-USE",
+      "title": "T3 true original 6-scene Renderer Material slot uses joined to same AssetRipper export Shader GUID/post-vendor real program",
+      "kind": "authenticated-original-scene-renderer-shader48-to-actual-same-export-postvendor-program-priority",
+      "owner": "T3",
+      "source": {
+        "zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+        "asset_ripper_commit": "036098ab525a3f9f693dc101edeb21faad4d32d8",
+        "scenes_sha_verified": 6,
+        "original_shader_material_owners_sha_verified": 4,
+        "original_same_export_provider_sources_sha_verified": 12
+      },
+      "stages": {
+        "acquisition": "SHA_PINNED_REAL_6_SCENES_AND_4_MATERIAL_SHADER_OWNERS_CI42042819113_PLUS_12_SAMEEXPORT_ORIGINALS_CI42044249541",
+        "extraction": "VERIFIED_1495_ORIGINAL_RENDERERS_1639_SLOTS_1635_NON_NULL_120_MATERIAL_OBJECTS_21_TYPED_Shader48_1633_SLOTS",
+        "reconstruction": "TMP3_POSTFXV1_VOLUMETRIC_VENDOR_ONLY_REAL_EXPORT_STILL_17_OF_21_TYPED_SOURCE_SCENE_SHADERS_DUMMY_NO_NATIVE_BUILTIN_DEPTH_BLUR",
+        "binding": "VERIFIED_ORIGINAL_SOURCE_Shader48_POINTER_TO_W1_SAMEINSTANCE_ACTUAL_SHADER_GUID_TO_POSTVENDOR_SHADERLAB_21_OF_21; 1373_ORIGINAL_SCENE_SLOTS_DUMMY_256_ENGINE_4_NONDUMMY_2_UNKNOWN_UNSTAGED",
+        "integration": "ISOLATED_ACTUAL_SHA_PINNED_GITHUB_ACTIONS_CI42042819113_AND_42044249541_SUCCESS_NO_GAME_ASSET_EDITS_NO_FULL_NATIVE_BUILD",
+        "device": "NOT_TESTED"
+      },
+      "counts": {
+        "original_renderers": 1495,
+        "original_slots": 1639,
+        "source_nonnull_Material_slots": 1635,
+        "source_distinct_Material_objects": 120,
+        "source_typed_Shader48_slots": 1633,
+        "source_other_unverified_shader_owner_slots": 2,
+        "source_typed_Shader48_targets": 21,
+        "typed_targets_after_vendor_still_dummy": 17,
+        "typed_targets_exported_Unity_builtin": 3,
+        "typed_targets_after_vendor_non_dummy": 1,
+        "source_original_renderer_slots_target_still_dummy": 1373,
+        "source_original_renderer_slots_target_builtin": 256,
+        "source_original_renderer_slots_target_non_dummy_vendor": 4,
+        "source_top_shader_material_slot_uses": 921,
+        "source_top_shader_after_vendor": "STILL_DUMMY_AFTER_VENDOR_RESTORERS",
+        "bounded_export_material_documents": 731,
+        "bounded_export_custom_material_docs_still_dummy_after_vendor": 495
+      },
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42042819113",
+        "https://github.com/alwansan/raf/actions/runs/42044249541",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_SCENE_SHADER_USE_AND_POSTVENDOR_PRIORITY_2026-11-05.md"
+      ],
+      "remaining": [
+        "Program authenticity and actual full native post-restorer output unproven; this limited experiment excludes Unity builtins/Depth/Blur/FFT/ShaderCompiler",
+        "Source Renderer assignment to exported Renderer component and GPU draws/pixels not verified; white-on-phone count cannot be inferred",
+        "True source high-use 921-slot shader remains default Dummy after three vendor restorers only; reconstruction needs exact source compiled program/variants",
+        "Two original Shader pointers target unstaged globalgamemanagers.assets; not claimed typed Shader48"
+      ],
+      "updated_by": "T3",
+      "updated_at": "2026-11-05T14:25:00Z",
+      "_record_path": "../B_TEAM/resources/T3-original-scene-renderer-shader-postvendor-use.json"
     },
     {
       "id": "T3-SHAREDASSETS6-EXTERNAL-TEXTURE2D-25-REAL-EXPORT",
@@ -5376,6 +5435,24 @@
       "_record_path": "../B_TEAM/events/T3/20261105T1405Z-T3-chat-renderer-dummy-join-8c41.json"
     },
     {
+      "id": "T3-20261105T1425Z-renderer-source-postvendor-join",
+      "owner": "T3",
+      "origin": "chat",
+      "session_id": "20261105T1402Z-T3-chat-renderer-shader-impact-f63e",
+      "issue_id": "RENDER-002",
+      "type": "result",
+      "summary": "CI42042819113 verified original six scenes with 1,633 typed Shader48 Renderer Material slots and 21 original Shader48. CI42044249541 actual SHA-verified same-instance W1 Shader48 to postvendor GUID and ShaderLab resolved 1,373 original scene Material slots still Dummy, 256 builtin, 4 vendor non-Dummy; highest 921-slot original Shader still Dummy after three vendor restorers. This is source original Renderer-slot weight, not Android GPU/display readiness.",
+      "at": "2026-11-05T14:25:00Z",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42042819113",
+        "https://github.com/alwansan/raf/actions/runs/42044249541",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_SCENE_SHADER_USE_AND_POSTVENDOR_PRIORITY_2026-11-05.md"
+      ],
+      "android_device_confirmed": false,
+      "issue_stays_open": true,
+      "_record_path": "../B_TEAM/events/T3/20261105T1425Z-renderer-source-postvendor-join.json"
+    },
+    {
       "id": "T4-20261104T2357Z-local-load-start",
       "owner": "T4",
       "session_id": "20261104T2357Z-T4-lw01",
@@ -5783,7 +5860,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "a92bd7bc3648d9c89eb47e06e9969fc3b3b7aa856dc5041df95fe0889389b842",
+  "source_input_sha256": "d75b8ef798880d27be4300f26263af1b190b40679af5f78c639c33b1d604f5f6",
   "generation": "T-2026-11-05",
-  "input_sha256": "e194165255e9fdc427fd743ac2829e2863511f6769d26e4367c619bc9e538c17"
+  "input_sha256": "20ba61f4acfbb16f51c0a051300ba6d34c78df66227d42a17df3e149834e2ae2"
 }
