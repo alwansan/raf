@@ -1,0 +1,16 @@
+{
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261105T213200Z-T1-chat-a247e0",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "58c1a809eb3d5ffbc56a936153e8a7259d604666",
+  "intended_files": [
+    "scripts/t1_fft_pass0_trace_variant.py",
+    "tests/test_t1_fft_pass0_trace_variant.py",
+    ".github/workflows/raft-t1-fft-unity-input-identity.yml"
+  ],
+  "experiment_key": "fft-invocation-keyed-structured-dispatch-semantic",
+  "resource_key": "raft-native-engine-feature/android-native-port",
+  "updated_at": "2026-11-05T21:32:00Z"
+}
