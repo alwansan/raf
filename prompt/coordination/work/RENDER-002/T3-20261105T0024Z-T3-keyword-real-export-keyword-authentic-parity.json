@@ -6,7 +6,7 @@
   "issue_id": "RENDER-002",
   "track": "colors-materials/shader-keywords",
   "approach": "Reuse B43 verifier with exact B05 sharedassets6 source SHA selection and T3 authenticated W1+B02 single-export lineage; add real run to bounded T3 exporter, publish only safe aggregate.",
-  "status": "paused",
+  "status": "completed",
   "base_sha": "80cfbe55f2ef647f8c71089ad6115c8d03d317a4",
   "intended_files": [
     "scripts/b43_material_keyword_fidelity.py",
@@ -40,9 +40,15 @@
       "6940ccf0161a3ea4a52c083702692de74c0c64be"
     ],
     "synthetic_suite": "SUCCESS in Actions 41941363661 preflight",
-    "real_source_export_comparison": "RUNNING",
-    "device_proof": false
+    "real_source_export_comparison": "SUCCESS_BOUNDED_SOURCE_EXPORT_PARITY",
+    "device_proof": false,
+    "verified_original_providers": 9,
+    "original_materials": 41,
+    "actual_exported_materials": 41,
+    "keyword_and_disabled_pass_mismatch": 0,
+    "android_pixels_verified": false,
+    "run_url": "https://github.com/alwansan/raf/actions/runs/41941363661"
   },
-  "next_step": "Check CI41941363661 terminal status + safe artifact; if real B43 keywords/pass match, close narrow hypothesis but not RENDER-002 or phone graphics; if inconclusive, identify stage safely and correct verified issue. Coordinate other T agents.",
-  "updated_at": "2026-11-05T00:27:50Z"
+  "next_step": "Investigate Material→Shader PPtr/GUID and ShaderLab compiled variant/pass, sRGB/texture importer and Adreno pixels; 25 external textures unproven. Do not retest already-proven scoped keyword/TexEnv/RGBA without new purpose.",
+  "updated_at": "2026-11-05T00:30:00Z"
 }
