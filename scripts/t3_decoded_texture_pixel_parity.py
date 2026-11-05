@@ -18,6 +18,13 @@ CATEGORIES = frozenset({
 })
 
 
+def _same_rgba(a: Any, b: Any) -> bool:
+    """Compare every channel; PIL RGBA getbbox alone can mask RGB differences."""
+    from PIL import ImageChops
+    return all(ImageChops.difference(x, y).getbbox() is None
+               for x, y in zip(a.split(), b.split()))
+
+
 def compare_pair(original: Any, exported: Any, *, original_id: str,
                  exported_id: str, authenticated: bool = False) -> str:
     """Compare two PIL Image objects; output category only, no pixel details.
@@ -39,7 +46,7 @@ def compare_pair(original: Any, exported: Any, *, original_id: str,
         width, height = original.size
         if width <= 0 or height <= 0 or width * height > MAX_PIXELS:
             return "INVALID_INPUT"
-        if ImageChops.difference(original, exported).getbbox() is None:
+        if _same_rgba(original, exported):
             return "EXACT"
         # Orientation is diagnostic only: NEVER silently normalize/flip source.
         transpose = Image.Transpose
@@ -48,7 +55,7 @@ def compare_pair(original: Any, exported: Any, *, original_id: str,
             ("HORIZONTAL_FLIP", transpose.FLIP_LEFT_RIGHT),
             ("BOTH_AXES_FLIP", transpose.ROTATE_180),
         ):
-            if ImageChops.difference(original.transpose(op), exported).getbbox() is None:
+            if _same_rgba(original.transpose(op), exported):
                 return category
         rgb_a = original.getchannel("R"), original.getchannel("G"), original.getchannel("B")
         rgb_b = exported.getchannel("R"), exported.getchannel("G"), exported.getchannel("B")
