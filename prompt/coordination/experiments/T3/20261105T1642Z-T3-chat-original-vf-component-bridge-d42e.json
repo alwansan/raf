@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T1642Z-T3-chat-original-vf-component-bridge-d42e",
+  "issue_id": "RENDER-002",
+  "status": "completed",
+  "experiment_key": "T3-ZIP2-15964ea8-6scenes-4owners-Sh48-921-4pass-VF-SPIRVCross-Location-Component-typed-source-v-roundtrip-v1",
+  "source_sha": "df1d56d385e6961d8d3442caf8d9a1cc43f190da",
+  "original_source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "workflow": ".github/workflows/raft-t3-original-921-vf-component-bridge.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42068915602",
+  "artifact_id": 13435221320,
+  "artifact_name": "t3-921-original-VF-component-counts-42068915602",
+  "artifact_retention_days": 7,
+  "source_integrity": {
+    "sha_verified_scenes": 6,
+    "sha_verified_owners": 4,
+    "verified_owner_bytes": 269007288,
+    "lfs_used": false,
+    "original_renderer_slot_uses": 921,
+    "exact_original_Passes_sampled": 4,
+    "compiled_original_stages_sampled": 8
+  },
+  "sourcefree_controls": {
+    "bridge": 17,
+    "component": 17,
+    "combined": 34,
+    "ci": "https://github.com/alwansan/raf/actions/runs/42067757782"
+  },
+  "observed_result": {
+    "conclusion": "success",
+    "status": "ORIGINAL_TOP_921_FOURPASS_VF_COMPONENT_COVERAGE_CLASSIFIED",
+    "source": {
+      "passed_structural_candidates": 4,
+      "deficits": 0,
+      "inconclusive": 0,
+      "vertex_output_records": 22,
+      "fragment_input_records": 14,
+      "vertex_output_components": 75,
+      "fragment_input_components": 44,
+      "missing_components": 0,
+      "type_mismatch_components": 0,
+      "unused_vertex_components": 31,
+      "unsupported_type_records": 0
+    },
+    "hlsl_roundtrip": {
+      "passed_structural_candidates": 4,
+      "deficits": 0,
+      "inconclusive": 0,
+      "vertex_output_records": 22,
+      "fragment_input_records": 14,
+      "vertex_output_components": 75,
+      "fragment_input_components": 44,
+      "missing_components": 0,
+      "type_mismatch_components": 0,
+      "unused_vertex_components": 31,
+      "unsupported_type_records": 0
+    },
+    "authentic_DXBC_semantics_proven": false,
+    "interpolation_proven": false,
+    "authored_ShaderLab_proven": false,
+    "device_pixels_proven": false,
+    "original_assets_edited": false
+  },
+  "failed_preconditions": [
+    {
+      "run_url": "https://github.com/alwansan/raf/actions/runs/42068542470",
+      "failure": "invalid YAML, colon in plain scalar expression, no jobs started",
+      "fix_commit": "b6027ff6e7bb26897692d0d9b23b93c9afa7e303"
+    },
+    {
+      "run_url": "https://github.com/alwansan/raf/actions/runs/42068710185",
+      "failure": "single commit checkout lacked parent for request-only Git diff; no original assets read",
+      "fix_commit": "b3e6caeffdb4cfc592cf05526f5c0ae9b6aedbc5"
+    }
+  ],
+  "safety": {
+    "original_program_or_generated_names_uploaded": false,
+    "private_bytecode_or_hash_uploaded": false,
+    "no_Unity_native_build_dispatched": true,
+    "existing_jobs_cancelled": false
+  },
+  "document": "docs/T3_ORIGINAL_921_VF_COMPONENT_COVERAGE_2026-11-05.md",
+  "limitations": [
+    "sampled exactly one original matched pair per four Passes; other 29 matched and eight unmatched vertex permutations not analyzed",
+    "Location/Component/type matching cannot reconstruct original DXBC semantics or interpolation/lighting/texture",
+    "Aggregate counts do not prove per-program original/derived semantic identity or Unity pixels"
+  ],
+  "next_step": "Coordinate with scheduled T3 DXBC ISGN/OSGN/ISG1/OSG1 signature reader to map genuine original semantic register/mask/SystemValue to SPIR-V Location/Component per exact stage privately; then original ShaderLab Pass states/material/sRGB and Unity device visuals. Keep RENDER-002 OPEN.",
+  "updated_at": "2026-11-05T16:56:00Z"
+}
