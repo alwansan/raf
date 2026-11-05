@@ -52,6 +52,21 @@ class PixelDriftDiagnosticTests(unittest.TestCase):
         self.assertNotIn("rows", result)
         self.assertFalse(result["device_validated"])
 
+    def test_format_drift_summary_and_rare_pooling(self):
+        a = Image.new("RGBA", (1, 1), (10, 20, 30, 255))
+        b = Image.new("RGBA", (1, 1), (11, 20, 30, 255))
+        exact = classify(a, a, texture_format="DXT1")
+        drift = classify(a, b, texture_format="DXT1")
+        rare = classify(a, b, texture_format="BC7")
+        rows = [exact] * 5 + [drift] * 2 + [rare]
+        result = aggregate(rows, expected=8)
+        self.assertEqual(result["format_drift_summary"]["DXT1"],
+                         {"EXACT": 5, "ALPHA_ONLY": 0, "RGB_DRIFT": 2})
+        self.assertEqual(result["format_drift_summary"]["POOLED_RARE_FORMATS"]["RGB_DRIFT"], 1)
+        self.assertNotIn("BC7", result["format_drift_summary"])
+        self.assertEqual(sum(sum(v.values()) for v in result["format_drift_summary"].values()), 8)
+        self.assertNotIn("rows", result)
+
     def test_aggregate_fail_closed(self):
         with self.assertRaises(ValueError):
             aggregate([], expected=106)
