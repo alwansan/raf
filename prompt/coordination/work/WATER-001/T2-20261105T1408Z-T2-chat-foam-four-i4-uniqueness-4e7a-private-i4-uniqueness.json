@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261105T1408Z-T2-chat-foam-four-i4-uniqueness-4e7a",
+  "generation": "T-2026-11-05",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "5c2668162e5e21e4d25e3b76ca257dbc8bda7852",
+  "updated_at": "2026-11-05T14:09:22.483Z",
+  "resumed_from_sessions": [
+    "20261105T1323Z-T2-chat-index-origin-5c42",
+    "20261105T1325Z-T2-scheduled-boundary-7c2f"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/work/WATER-001/T2-20261105T1323Z-T2-chat-index-origin-5c42-index-operand-source.json"
+  ],
+  "experiment_key": "T2|ZIP2-15964ea8|AssemblyCSharp-0a6f0527|four-exact-ldc.i4-int-values|private-unique-and-sign-only|v1",
+  "resource_key": "t2-foam-original-managed-cecil-private-four-i4",
+  "hypothesis": "The four authentic original Material.SetTexture->Texture(int) source-proven ldc.i4 values may or may not be distinct/nonnegative. Decode actual opcode forms only in ephemeral SHA-original CI memory and publish safe cardinality/sign summaries, not raw int values/hashes or guessed runtime array bounds.",
+  "approach": "Extend T2 owned FoamSetterFlow real IL value extraction only for valid ldc.i4 opcode/operand; propagate through actual one-int producer call to verified four-name setter; check decoded count/distinctness/negative in original SHA-pinned workflow. Synthetic controls for ldc.i4 literal forms, negative/duplicate and ldtoken false positive; no shaders/Unity, no arbitrary private numeric values logged.",
+  "intended_files": [
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/FoamSetterFlow.cs",
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/Program.cs",
+    ".github/workflows/raft-t2-foam-managed-literals.yml",
+    "prompt/coordination/work/WATER-001/T2-20261105T1408Z-T2-chat-foam-four-i4-uniqueness-4e7a-private-i4-uniqueness.json",
+    "prompt/coordination/clients/T2/sessions/20261105T1408Z-T2-chat-foam-four-i4-uniqueness-4e7a.md"
+  ],
+  "preflight": {
+    "head": "5c2668162e5e21e4d25e3b76ca257dbc8bda7852",
+    "other_in_progress": [
+      {
+        "id": 42042230791,
+        "name": "T1 WATER-001 Unity Vulkan backend smoke"
+      },
+      {
+        "id": 42042206739,
+        "name": "Raft Android offline platform adapter - build and test"
+      }
+    ],
+    "overlap_with_scheduled": "Scheduled T2 last reported independent test_t2_foam_report_boundary.py; current effort uses managed Mono.Cecil original index value controls, not that test file.",
+    "last_source_success": "https://github.com/alwansan/raf/actions/runs/42035529042"
+  },
+  "run_urls": [],
+  "next_step": "Implement after current HEAD recheck; original SHA authentic CI must prove literal decode with no public raw values, then compare to independent array allocation/bounds evidence. WATER-001 stays OPEN NOT_READY0/3."
+}
