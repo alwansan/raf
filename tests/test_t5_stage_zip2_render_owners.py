@@ -149,6 +149,74 @@ class ZIP2RenderStageTests(unittest.TestCase):
         self.assertFalse(self.output.exists())
         self.assertEqual(external.read_bytes(), self.parts[1])
 
+    def test_consumer_two_owner_positive_publishes_both_verified_sources(self):
+        from scripts.hydrate_render_payloads import reuse_verified_staged_sources
+        second, _, options = self.install_second_original()
+        self.stage(**options)
+        feature = self.root / "feature"
+        for name, digest, size in options["entries"]:
+            target = feature / name
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_text(
+                "version https://git-lfs.github.com/spec/v1\\n"
+                f"oid sha256:{digest}\\nsize {size}\\n",
+                encoding="ascii",
+            )
+        reused, count = reuse_verified_staged_sources(
+            options["entries"], self.output / "Raft_Data", feature)
+        self.assertEqual((reused, count), (2, 2 * len(self.original)))
+        self.assertEqual((feature / self.owner).read_bytes(), self.original)
+        self.assertEqual((feature / "Raft" / second).read_bytes(), self.original)
+
+    def test_consumer_invalid_later_target_preserves_first_pointer(self):
+        from scripts.hydrate_render_payloads import reuse_verified_staged_sources
+        second, _, options = self.install_second_original()
+        self.stage(**options)
+        feature = self.root / "feature"
+        first = feature / self.owner
+        later = feature / "Raft" / second
+        first.parent.mkdir(parents=True, exist_ok=True)
+        later.parent.mkdir(parents=True, exist_ok=True)
+        first_pointer = (
+            "version https://git-lfs.github.com/spec/v1\\n"
+            f"oid sha256:{self.digest}\\nsize {len(self.original)}\\n"
+        )
+        first.write_text(first_pointer, encoding="ascii")
+        later.write_text(
+            "version https://git-lfs.github.com/spec/v1\\n"
+            f"oid sha256:{'0' * 64}\\nsize {len(self.original)}\\n",
+            encoding="ascii",
+        )
+        with self.assertRaisesRegex(ValueError, "pointer"):
+            reuse_verified_staged_sources(
+                options["entries"], self.output / "Raft_Data", feature)
+        self.assertEqual(first.read_text(encoding="ascii"), first_pointer)
+        self.assertEqual(later.read_text(encoding="ascii").splitlines()[1],
+                         "oid sha256:" + "0" * 64)
+
+    def test_consumer_later_symlink_preserves_first_pointer(self):
+        from scripts.hydrate_render_payloads import reuse_verified_staged_sources
+        second, _, options = self.install_second_original()
+        self.stage(**options)
+        feature = self.root / "feature"
+        first = feature / self.owner
+        first.parent.mkdir(parents=True, exist_ok=True)
+        first_pointer = (
+            "version https://git-lfs.github.com/spec/v1\\n"
+            f"oid sha256:{self.digest}\\nsize {len(self.original)}\\n"
+        )
+        first.write_text(first_pointer, encoding="ascii")
+        later_source = self.output / second
+        later_source.unlink()
+        external = self.root / "unsafe-other"
+        external.write_bytes(self.original)
+        later_source.symlink_to(external)
+        with self.assertRaisesRegex(ValueError, "Unsafe"):
+            reuse_verified_staged_sources(
+                options["entries"], self.output / "Raft_Data", feature)
+        self.assertEqual(first.read_text(encoding="ascii"), first_pointer)
+        self.assertEqual(external.read_bytes(), self.original)
+
     def test_tampered_part_same_size_not_published(self):
         (self.source / "part-00001").write_bytes(b"87654321")
         with self.assertRaisesRegex(ValueError, "sha256"):
