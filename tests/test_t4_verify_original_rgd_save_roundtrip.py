@@ -23,6 +23,7 @@ def genuine():
         "original_LoadT_result_category":"NONE",
         "original_private_Save_IL_guard_passed":True,
         "original_private_Save_safe_calls":5,
+        "original_private_Save_audit_category":"NONE",
         "original_private_Save_invoked":True,
         "original_private_Save_output_created":True,
         "original_private_Save_output_nonzero":True,
@@ -45,9 +46,16 @@ class OriginalSaveContract(unittest.TestCase):
                   "original_private_Save_generated_LoadT_matching_root",
                   "original_private_Save_isolated_temp_removed"):
             p[k]=False
-        p["original_private_Save_result_category"]="ORIGINAL_PRIVATE_SAVE_METHOD_IL_NOT_AUTHENTICATED"
+        p["original_private_Save_result_category"]="NO_EXACT_PRIVATE_SAVE_SIGNATURE"
+        p["original_private_Save_audit_category"]="NO_EXACT_PRIVATE_SAVE_SIGNATURE"
         q=validate(p)
         self.assertFalse(q["original_private_Save_invoked"])
+
+    def test_guard_category_inconsistent_refused(self):
+        p=genuine()
+        p["original_private_Save_audit_category"]="ORIGINAL_SAVE_FIELD_OR_INDIRECT_ACCESS"
+        with self.assertRaises(ValueError):
+            validate(p)
 
     def test_invocation_without_guard_refused(self):
         p=genuine()
