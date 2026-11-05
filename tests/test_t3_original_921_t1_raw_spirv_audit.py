@@ -1,6 +1,8 @@
 """Source-free T3 fourpass original DXBC + T1 raw SPIR-V stage test fixtures."""
 import json
 from pathlib import Path
+import subprocess
+from unittest.mock import patch
 import tempfile
 import unittest
 
@@ -186,6 +188,30 @@ class OriginalRawDisassemblyTests(unittest.TestCase):
     def test_no_source_spv_length_or_symlink_outside_scope(self):
         with self.assertRaisesRegex(ValueError, "untrusted_private"):
             bridge.safe_numeric_audit("", "fake")
+
+    def test_real_linux_posixpath_is_accepted_for_private_disassembly(self):
+        path = self.root / "fixture.spv"
+        path.write_bytes(b"SPV" + b"X" * 21)
+        calls = []
+        def trusted_fake(command, **_kwargs):
+            calls.append(command[0])
+            return subprocess.CompletedProcess(
+                command, 0, stdout="OpEntryPoint Fragment %1 \\"main\\" %2"
+                if command[0] == "spirv-dis" else "")
+        with patch.object(bridge.subprocess, "run", side_effect=trusted_fake):
+            text = bridge.private_module_disassemble(path)
+        self.assertIn("OpEntryPoint Fragment", text)
+        self.assertEqual(calls, ["spirv-val", "spirv-dis"])
+
+    def test_private_disassembler_symlink_and_nonPath_inputs_fail_closed(self):
+        actual = self.root / "real.spv"
+        actual.write_bytes(b"SPV" + b"X" * 21)
+        link = self.root / "linked.spv"
+        link.symlink_to(actual)
+        for obj in (link, str(actual), self.root / "missing.spv"):
+            with self.subTest(value=type(obj).__name__), self.assertRaisesRegex(
+                    ValueError, "invalid_private_original_SPIRV_stage_size"):
+                bridge.private_module_disassemble(obj)
 
     def test_t1_original_owned_code_remains_unchanged(self):
         from scripts import t1_spirv_interface_component_audit as t1
