@@ -1,0 +1,20 @@
+{
+  "identity": "T1",
+  "session_id": "20261105T050710Z-T1-raw-string-lexical-guard",
+  "resumed_from_session": "20261105T041234Z-T1-indirect-dispatch-regression",
+  "identity_conflict": "possible parallel T1 sessions; isolated work only",
+  "issue": "WATER-001",
+  "baseline_sha": "d3539213fc1fbcbf0ecc5c25d59d675cd1f7c527",
+  "hypothesis": "C# raw multi-quote literals can inject false member-call evidence into existing regex masker; fail closed by masking raw literals before ordinary lexical tokens",
+  "files": [
+    "scripts/t1_fft_dispatch_evidence.py",
+    "tests/test_t1_fft_dispatch_evidence.py"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/T1/sessions/20261105T041234Z-T1-indirect-dispatch-regression.md",
+    "https://github.com/alwansan/raf/actions/runs/41939314440"
+  ],
+  "source_private_bytes_used": false,
+  "expected_result": "synthetic lexical negative regression only; no Unity/Adreno evidence",
+  "status": "planned"
+}
