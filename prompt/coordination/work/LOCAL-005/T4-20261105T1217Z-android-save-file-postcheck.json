@@ -5,7 +5,7 @@
   "session_id": "20261105T1217Z-T4-android-save-postcheck",
   "issue_id": "LOCAL-005",
   "track": "world-save",
-  "status": "active",
+  "status": "completed",
   "base_sha": "5707abc593986d2e0c3dc603cf55ccc62f8f9631",
   "approach": "Add a constrained Android-only, no-mutation post-operation filesystem snapshot to SHA-pinned original SaveAndLoad.Save wrapper in scripts/instrument_android_runtime_operations.py. Record only whether the exact filename argument exists and whether its file length is nonzero, even when original Save returns early or FileManager catches an exception. Keep probe exceptions non-throwing and never label an IO status as durable RGD/gameplay success. Test source-free adversarial controls then authentic original managed C# compile via existing offline integration workflow; avoid native Unity/Android packaging and changes to source pins.",
   "hypothesis": "Original FileManager can leave catch normally; existing SaveAndLoad operation exit-with-no-escaped-exception is insufficient to distinguish actual file existence. An Android-only post-Save noninvasive File.Exists/FileInfo probe inside the wrapper's finally will provide needed next-device save evidence without changing serializer or .rgd schema.",
@@ -27,8 +27,29 @@
     "docs/T5_FILEMANAGER_MANAGED_RUNTIME_2026-11-05.md"
   ],
   "experiment_ids": [],
-  "run_urls": [],
-  "result": null,
-  "updated_at": "2026-11-05T12:17:00Z",
-  "next_step": "Implement scoped Save wrapper post-state probe, synthetic source reconstruction and compile with private authentic original decompiled SaveAndLoad; no game/device success until newer installed APK and real .rgd readback."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42026146727",
+    "https://github.com/alwansan/raf/actions/runs/42026271243",
+    "https://github.com/alwansan/raf/actions/runs/42026671909",
+    "https://github.com/alwansan/raf/actions/runs/42027197515"
+  ],
+  "result": {
+    "post_save_state_android_only": true,
+    "original_source_sha_gate_unchanged": true,
+    "original_Save_body_preserved": true,
+    "original_SteamStats_guard_preserved": true,
+    "original_world_flag_changes": false,
+    "observes_argument_path_exists_and_size_class": true,
+    "source_control_tests": "15/15 PASS",
+    "android_preprocessor_compiled": true,
+    "synthetic_runtime_probe_executed": true,
+    "synthetic_early_return_and_logger_fault_nonfatal": true,
+    "authentic_original_managed_csharp_compile": "CI42026271243 exit0 14 original classes",
+    "original_filename_argument_verified_against_compiled_IL": "CI42027197515 true",
+    "original_real_game_rgd_serialized": false,
+    "unity_il2cpp_device": false,
+    "report": "docs/T4_ANDROID_SAVE_FILE_POSTCHECK_2026-11-05.md"
+  },
+  "updated_at": "2026-11-05T12:33:00Z",
+  "next_step": "T5 coordinate one new Android candidate. On-device trace Save.argumentFileSnapshot alongside Save/World/Load.caughtException, verify playable local raft then real .rgd save-exit-relaunch-reopen; no native request changed and device unverified."
 }
