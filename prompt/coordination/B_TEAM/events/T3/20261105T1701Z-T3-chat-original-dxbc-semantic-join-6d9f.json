@@ -1,0 +1,14 @@
+{
+  "id": "T3-20261105T1701Z-original921-dxbc-semantic-mask-parity",
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T1701Z-T3-chat-original-dxbc-semantic-join-6d9f",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "SHA-verified genuine ZIP2 original 921-use Shader48 exact 4 V/F D3D11 pairs/8 DXBC programs CI42071059741 SUCCESS. Original ISGN/OSGN signatures: all 22/22 Fragment user semantic name+index records match same-pass Vertex output; 75/75 declared mask component lanes, 0 missing lanes, 0 component-type mismatches; system-value records counted separately. DXBC compiled semantics to SPIR-V Location/interpolation/Android pixels remain unproven; source only, no game patch.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42071059741",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_921_DXBC_SEMANTIC_MASK_JOIN_2026-11-05.md"
+  ],
+  "at": "2026-11-05T17:07:00Z"
+}
