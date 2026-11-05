@@ -522,7 +522,9 @@
         "https://github.com/alwansan/raf/actions/runs/42011706016",
         "https://github.com/alwansan/raf/actions/runs/42013590671",
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_ORIGINAL_DXBC_SPIRV_ACTIVE_BRIDGE_2026-11-05.md",
-        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T2-foam-original-active-sample-descriptor-identity.json"
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T2-foam-original-active-sample-descriptor-identity.json",
+        "https://github.com/alwansan/raf/actions/runs/42014120625",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_GAMECI_ORIGINAL_FFT_IMPORT_2026-11-05.md"
       ],
       "remaining": [
         "Spectrum/Foam/Blur passes ناقصة في APK86",
@@ -570,15 +572,16 @@
         "T1 original 20/20 compiled FFT private DXBC-derived .compute candidate staging SUCCESS (CI41957549770), but three actual Unity Editor import attempts failed before a result; latest41958963107 Unity exit1 and sanitized licensing_failure_category=true. Verify activation using source-free Unity fixture, then authenticate actual Unity import and original runtime FindKernel/Dispatch. Not a game/device water fix.",
         "T1 source-free Unity 2021 Editor project CI41959712898 failed before Raft acquisition: empty_project_created=false, licensing_failure_category=true, original_raft_data_acquired=false. Resolved shader source is not responsible for this test's failure; actual Editor activation and FindKernel/Adreno remain unknown.",
         "T1 2026-11-05: Unity2021.3.45f2 activation works via supported GameCI unity-test-runner and synthetic original-free ComputeShader was imported, with actual HasKernel/FindKernel/group(64,1,1) passing 2/2 CI42011720822. Old custom direct Docker licensing failure was not proof account credentials invalid. Authenticated 20 original FFT-derived candidates still not imported by this safe route; authored runtime mapping/pixels/Adreno remain unverified.",
-        "T2 source-authentic Foam compiler-stage resource identity VERIFIED: two different explicit native DXBC tN/sN→SPIR-V descriptor maps preserve every variable ID and all SPIR-V program words except numeric Binding/DescriptorSet literals; B20 original module matches default normalized graph. Real native DXBC 21 SAMPLE uses and translated SPIR-V 21 OpImageSample uses reconstruct exact six stage-scoped active original t/s pairs, final CI42013590671 PASS (16+17 synthetic tests). **NEXT OPEN:** authored Unity Material texture property/pointer/upload, original sampler state & UV, CB member/upload, authentic ShaderLab import, GPU/Adreno and device visuals. WATER-001 OPEN, NOT_READY0/3."
+        "T2 source-authentic Foam compiler-stage resource identity VERIFIED: two different explicit native DXBC tN/sN→SPIR-V descriptor maps preserve every variable ID and all SPIR-V program words except numeric Binding/DescriptorSet literals; B20 original module matches default normalized graph. Real native DXBC 21 SAMPLE uses and translated SPIR-V 21 OpImageSample uses reconstruct exact six stage-scoped active original t/s pairs, final CI42013590671 PASS (16+17 synthetic tests). **NEXT OPEN:** authored Unity Material texture property/pointer/upload, original sampler state & UV, CB member/upload, authentic ShaderLab import, GPU/Adreno and device visuals. WATER-001 OPEN, NOT_READY0/3.",
+        "T1 confirmed genuine Unity2021.3.45f2 imported 20/20 SHA-authenticated original compiled FFT DXBC-derived single-kernel private candidates in CI42014120625, with generated-main HasKernel/FindKernel/group XYZ(64..1024,1,1) matching source and 1/1 original-derived NUnit pass. Remaining: original authored multi-variant shader/Unity runtime kernel indices/keyword selection, exact in-game SetTexture/CB/RenderTexture/Dispatch, ShaderLab linkage and Adreno/water pixels; no native game assets changed."
       ],
       "acceptance": [
         "هوية برامج ونوى أصلية أو تطابق موثق دونdummy",
         "تثبيت فيالتصدير+Unity import/render",
         "اختبار هاتف يثبت الماء بلا pass/kernel errors"
       ],
-      "updated_by": "T2",
-      "updated_at": "2026-11-05T10:53Z",
+      "updated_by": "T1",
+      "updated_at": "2026-11-05T10:56:00Z",
       "_record_path": "../B_TEAM/issues/WATER-001.json"
     }
   ],
@@ -1876,8 +1879,8 @@
         "acquisition": "SHA_VERIFIED",
         "extraction": "20_COMPILED_SLOTS_SHA_VERIFIED",
         "reconstruction": "PRIVATE_20_HLSL50_COMPUTE_CANDIDATES_ROUNDTRIP_VERIFIED",
-        "binding": "ORIGINAL_RUNTIME_MAPPING_UNKNOWN",
-        "integration": "ORIGINAL_FFT_UNITY_IMPORT_UNVERIFIED_GAMECI_SYNTHETIC_COMPUTE_VERIFIED",
+        "binding": "ORIGINAL_AUTHORED_RUNTIME_KERNEL_MAPPING_UNPROVEN",
+        "integration": "UNITY2021_GENUINE_IMPORT_20_AUTHENTIC_DERIVED_KERNELS_AND_GROUPS_VERIFIED",
         "device": "NOT_TESTED"
       },
       "evidence": [
@@ -1890,17 +1893,19 @@
         "https://github.com/alwansan/raf/actions/runs/41959712898",
         "https://github.com/alwansan/raf/actions/runs/42010878771",
         "https://github.com/alwansan/raf/actions/runs/42011720822",
-        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_GAMECI_SOURCEFREE_UNITY_LICENSE_2026-11-05.md"
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_GAMECI_SOURCEFREE_UNITY_LICENSE_2026-11-05.md",
+        "https://github.com/alwansan/raf/actions/runs/42014120625",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_GAMECI_ORIGINAL_FFT_IMPORT_2026-11-05.md"
       ],
       "remaining": [
         "Original authored multi-variant .compute kernel and keyword names not recovered; candidate paths and main are generated import handles",
         "Original runtime FindKernel/Dispatch mapping, phone Adreno pixels, actual water still unknown",
         "No Unity imported ComputeShader result: three Editor CI attempts failed before reporting; last 41958963107 Unity exit1/licensing_failure_category=true, no observed C#/shader error",
-        "Need successful authorized Unity 2021 activation on a synthetic project before repeating private source import",
         "Unity 2021.3.45f2 synthetic source-free project itself failed to activate in CI41959712898, before original asset download: licensing_failure_category=true, no derived ComputeShader imported; resolve separate environment gate first.",
-        "Supported GameCI Unity 2021.3.45f2 source-free synthetic ComputeShader successfully imported with HasKernel/FindKernel/group(64,1,1) on CI42011720822; original 20 compiled FFT import not yet executed by this safe pathway, so original authored runtime mapping/device still unverified."
+        "CURRENT T1 CI42014120625: all 20 original compiled DXBC-derived private single-kernel .compute candidates imported into licensed Unity2021; generated main HasKernel/FindKernel/groupXYZ(64..1024,1,1) passed. This is NOT original authored multi-variant Unity kernel ID, real in-game source resource binding/Dispatch or Adreno water pixel parity."
       ],
       "updated_by": "T1",
+      "updated_at": "2026-11-05T10:56:00Z",
       "_record_path": "../B_TEAM/resources/fft-t1-original-derived-unity-compute-candidates-20261105.json"
     }
   ],
@@ -4336,6 +4341,21 @@
       "_record_path": "../B_TEAM/events/T1/20261105T103700Z-T1-gameci-unity-compute-sourcefree-pass.json"
     },
     {
+      "id": "20261105T105600Z-T1-original-fft-unity20-import",
+      "owner": "T1",
+      "session_id": "20261105T104500Z-T1-private-gameci-import",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "summary": "CI42014120625 SUCCESS: 20/20 immutable ZIP2 SHA-authenticated original Raft compiled FFT DXBC programs privately translated into derived ComputeShader .compute candidates and imported by genuine licensed Unity 2021.3.45f2 via pinned GameCI CLI; each generated main HasKernel/FindKernel/group dimensions matched original per-slot 64–1024x1x1. One private original-derived Unity NUnit test passed plus two synthetic Unity tests; private shader code/logs cleaned; not original authored multi-variant Unity kernel mapping, no in-game Dispatch or Android/Adreno pixels.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42014120625",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_GAMECI_ORIGINAL_FFT_IMPORT_2026-11-05.md",
+        "https://github.com/alwansan/raf/commit/9d729b3adba90fc3e7fe6a3317c302267ec5605a"
+      ],
+      "at": "2026-11-05T10:56:00Z",
+      "_record_path": "../B_TEAM/events/T1/20261105T105600Z-T1-original-fft-unity20-import.json"
+    },
+    {
       "id": "T2-20261104T2354Z-start-foamabi",
       "owner": "T2",
       "session_id": "20261104T2354Z-T2-foamabi01",
@@ -4793,7 +4813,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "6e7f72db275f6963fc226799a2131d32cb6e4893ea9f8ffdfd64939eff32f443",
+  "source_input_sha256": "e4ca82e7810d88fee8db6f6c9ad8a9d44a37f47fe9991511286867a315beac76",
   "generation": "T-2026-11-05",
-  "input_sha256": "2c0ebc95bb217d86cf0e4aec438c1cfbc9180f1631260969e69f8fccf6f18fa5"
+  "input_sha256": "62349e2d184dbdbe462d1afa7ab8ccc9251e04e17805cf5397c75e9a3ca22b14"
 }
