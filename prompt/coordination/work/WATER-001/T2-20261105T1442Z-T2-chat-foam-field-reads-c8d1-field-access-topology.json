@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261105T1442Z-T2-chat-foam-field-reads-c8d1",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "updated_at": "2026-11-05T14:41:57.961Z",
+  "base_sha": "18ca0e65f5cee37f2833757677a1523e36b6b3af",
+  "resumed_from_sessions": [
+    "20261105T1434Z-T2-chat-rendertexture-serialization-93ad",
+    "20261105T1408Z-T2-chat-foam-four-i4-uniqueness-4e7a"
+  ],
+  "experiment_key": "T2|ZIP2-15964ea8|managed-0a6f0527|exact-RenderTexture[]-field-ldfld-ldflda|v1",
+  "resource_key": "T2-foam-managed-il-read-address-topology",
+  "hypothesis": "Exact original Foam backing RenderTexture[] field load/address accesses outside the verified Texture(int) getter may provide original managed population clues; count exact opcodes with no original names, and reject mismatched typed decoys.",
+  "intended_files": [
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/FoamFieldReadTopology.cs",
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/Program.cs",
+    ".github/workflows/raft-t2-foam-managed-literals.yml",
+    "prompt/coordination/work/WATER-001/T2-20261105T1442Z-T2-chat-foam-field-reads-c8d1-field-access-topology.json",
+    "prompt/coordination/clients/T2/sessions/20261105T1442Z-T2-chat-foam-field-reads-c8d1.md"
+  ],
+  "preflight": {
+    "head": "18ca0e65f5cee37f2833757677a1523e36b6b3af",
+    "existing_t2_CI": "42046650774 SUCCESS",
+    "active_t1_unity_CI": "42047391061",
+    "other_t2_original_managed_CI_active": false
+  },
+  "method": "Exact source-original field reference captured from previously source-verified ten-op getter, scan genuine original managed IL for matching ldfld/ldflda and distinct method counts, synthetic getter/other-reader/byref/decoy, fail closed. Report only numeric counts, no original symbols/IL. Does not prove runtime execution or array contents.",
+  "run_urls": [],
+  "next_step": "Publish source-free checker and SHA-pinned authentic T2 workflow, verify counts, record narrow source discovery and remaining Unity/device limits."
+}
