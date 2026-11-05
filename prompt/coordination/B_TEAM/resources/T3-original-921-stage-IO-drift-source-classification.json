@@ -1,6 +1,17 @@
 {
-  "schema_version": 1,
+  "id": "T3-ORIGINAL-921-STAGE-IO-DRIFT-CLASSIFICATION",
+  "title": "Original high-use Shader48 SPIRV roundtrip location relocation and type multiset source-only classification",
   "owner": "T3",
+  "kind": "source-authentic-compiled-shader-diagnostic",
+  "stages": {
+    "acquisition": "ORIGINAL_ZIP2_PINNED_6_SCENES_AND_4_SHADER_MATERIAL_OWNER_SHA_VERIFIED",
+    "extraction": "AUTHENTIC_921_SOURCE_RENDERER_SLOT_Shader48_4_PASSES_8_STAGES_SOURCE_IDENTITIES",
+    "reconstruction": "CI42058881426_SUCCESS_8_OF_8_GENUINE_DXBC_SPIRV_HLSL_ROUNDTRIP_STAGES_71_CONTROLS",
+    "binding": "8_OF_8_INPUT_AND_OUTPUT_TYPE_MULTISETS_EQUAL_BUT_INPUT_LOCATION_REMAP_8_OF_8_OUTPUT_LOCATION_REMAP_4_OF_8_SEMANTICS_UNPROVEN",
+    "integration": "NOT_INSTALLED_NO_SHADERLAB_NO_DEVICE_IMAGE_MATCH",
+    "device": "NOT_TESTED"
+  },
+  "schema_version": 1,
   "issue_id": "RENDER-002",
   "status": "source_authentic_cpu_diagnostic_proven_not_render_integrated",
   "resource_key": "T3-source-top921-Shader48-fourPass-stageIO-lookup",
