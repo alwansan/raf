@@ -101,6 +101,16 @@ class LinkedImporterScope(unittest.TestCase):
         r["source_texture_object_guids"]=["e"*32]
         out=str(m.output_aggregate(r,{"unique_linked_source_Texture2D_candidates":2}))
         self.assertNotIn("e"*32,out)
+    def test_classified_importer_failure_never_leaks_raw_private_paths(self):
+        err=m.StageFailure("actual_TextureImporter_guid_asset_mapping",
+                          ValueError("private-original-name/pathid123"))
+        self.assertEqual(err.reason,"unclassified_safe_reason")
+        self.assertNotIn("private-original-name",str(err))
+        known=m.StageFailure("actual_TextureImporter_guid_asset_mapping",
+                             ValueError("missing exact exported TextureImporter GUID target"))
+        self.assertEqual(known.reason,"missing exact exported TextureImporter GUID target")
+        self.assertEqual(known.category,"ValueError")
+
     def test_missing_importer_documents_cannot_pass(self):
         with self.assertRaisesRegex(ValueError,"not_all_linked"):
             m.output_aggregate(self.fake_report(count=1),{"unique_linked_source_Texture2D_candidates":2})
