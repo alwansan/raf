@@ -1,0 +1,16 @@
+{
+  "session_id": "20261105T1625Z-T3-scheduled-dxbc-contract-8f2c",
+  "origin": "scheduled",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "base_sha": "ae8fbd240a1cc64f9711489fe3172c27b46fd9a8",
+  "intended_files": [
+    "scripts/t3_dxbc_signature_contract.py",
+    "tests/test_t3_dxbc_signature_contract.py",
+    "prompt/coordination/clients/T3/sessions/20261105T1625Z-T3-scheduled-dxbc-contract-8f2c.md"
+  ],
+  "experiment_key": "T3-DXBC-signature-register-mask-schema-sourcefree-v1",
+  "resource_key": null,
+  "hypothesis": "DXBC signature component masks require strict overlap and schema validation before any private original-to-SPIRV semantic attribution",
+  "updated_at": "2026-11-05T16:25:00Z"
+}
