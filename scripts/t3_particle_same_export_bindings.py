@@ -171,7 +171,7 @@ def assess(source_materials:dict,source_texture_targets:dict,
            and counts["traced_selected_texture2d28"]==EXPECTED_TEXTURES
            and counts["selected_exact_material_texenv_pointer_matches"]==EXPECTED_SLOTS
            and counts["selected_uv_scale_offset_matches"]==EXPECTED_SLOTS
-           and not any(counts[k] for k in FIELDS[5:17]))
+           and not any(counts[k] for k in FIELDS[5:15]+FIELDS[17:]))
     out["status"]=STATUS_MATCH if exact else STATUS_MISMATCH
     return out
 
