@@ -4,10 +4,10 @@
   "generation": "T-2026-11-05",
   "session_id": "20261104T235355Z-T1-9fca",
   "resumed_from_session": null,
-  "status": "active",
+  "status": "paused",
   "base_sha": "cde13f783e5274d5898703459e8178e2485ef9db",
-  "last_commit": "ec6618e14ef6a26ba0d0dc925f3b17056d03721a",
-  "updated_at": "2026-11-05T00:14:17.595Z",
+  "last_commit": "710e6c3692ffc6290a2d89a5d4af8efef450a491",
+  "updated_at": "2026-11-05T00:19:00.765Z",
   "tracks": [
     "WATER-001: original FFT runtime program-to-kernel selection and genuine compute staging"
   ],
@@ -17,8 +17,9 @@
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41939314440",
     "https://github.com/alwansan/raf/actions/runs/41938536760",
-    "https://github.com/alwansan/raf/actions/runs/41939082498"
+    "https://github.com/alwansan/raf/actions/runs/41939082498",
+    "https://github.com/alwansan/raf/actions/runs/41939982067"
   ],
-  "next_step": "Move from FFT original-byte descriptor-role proof to actual isolated authored ComputeShader .compute/staging for Unity 2021 kernel enumeration, preserving source identity and no fake indices; coordinate full native builds with T5. Continue WATER-001 OPEN.",
+  "next_step": "Resume authentic original FFT authored .compute asset/Unity kernel-index routing. Prior T1 bank0 6/6 lavapipe proof and bank1 negative runs are documented. Coordinate with T5 for native import; do NOT claim device water recovered or alter audio/Settings/touch.",
   "memory_path": "prompt/coordination/clients/T1/MEMORY.md"
 }
