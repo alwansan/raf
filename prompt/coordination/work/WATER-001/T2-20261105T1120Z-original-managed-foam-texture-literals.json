@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T1104Z-T2-foam-material-property-bridge-isolated",
+  "issue_id": "WATER-001",
+  "track": "Four original Foam non-authored Texture register names to original Assembly-CSharp compiled IL string/callsite provenance",
+  "status": "active",
+  "base_sha": "cb773b1bbdf567e7de6ca0e8f08a1fe64cc8dfc2",
+  "hypothesis": "Some original source-authentic Foam pass0 texture names not declared as authored Shader properties occur as managed ldstr literals and can be associated within a method with Shader/Material/CommandBuffer texture setter or PropertyToID calls; exact source identifiers stay private, method-level co-occurrence is not argument dataflow proof.",
+  "taken_over_from": [
+    "scripts/t2_foam_material_property_bridge.py",
+    "scripts/probe_fft_managed_asset_links.py",
+    "android-port/Experiments/T5/FileManagerMetadataBridge",
+    "docs/T2_FOAM_ORIGINAL_DXBC_SPIRV_ACTIVE_BRIDGE_2026-11-05.md"
+  ],
+  "approach": "Immutable ZIP2 pinned sharedassets0.assets and SHA-pinned Assembly-CSharp.dll 3211776 bytes SHA0a6f..., compute SHA256 of exactly 4 non-authored original Shader resource names and one authored texture name locally only, pass private hashes to independently pinned Mono.Cecil IL opcode scanner. Record strict numeric literal matches, direct ldstr→PropertyToID short-distance and same-method setter candidates separately; no raw names, IL, methods, assembly bytes or strings in public logs/artifacts. Reject source/input drift and unknown setter classes.",
+  "intended_files": [
+    "scripts/t2_foam_managed_literal_targets.py",
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/FoamRuntimeStringBridge.csproj",
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/Program.cs",
+    "tests/test_t2_foam_managed_literal_targets.py",
+    ".github/workflows/raft-t2-foam-managed-literals.yml"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement independent original managed literal + typed setter callsite inspection on SHA-pinned source; add unit controls, run isolated CI. Then integrate only verified upload relations and keep WATER-001 OPEN.",
+  "updated_at": "2026-11-05T11:20Z"
+}
