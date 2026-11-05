@@ -6,7 +6,7 @@
   "issue_id": "WATER-001",
   "track": "Foam original serialized texture t/s numeric DXBC joins",
   "approach": "Authenticate original ZIP2 owner and Foam object and stage SHA, then reuse B17 compiled DXBC declaration parser against original m_TextureParams m_Index/m_SamplerIndex for every pass/stage. Classify numeric parity and ambiguity without deriving SPIR-V→Unity material aliases; private source-only low-budget CI.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "8397f6ce5bb3fecb5d8a3c82e7e9ba2d38ded810",
   "intended_files": [
     "scripts/t2_foam_original_dxbc_registers.py",
@@ -28,8 +28,22 @@
   "experiment_ids": [
     "T2-20261105-original-foam-dxbc-registers"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Write verifier/tests and isolate original SHA-pinned workflow; inspect authentic outcomes, do not claim untested Unity material or Adreno.",
-  "updated_at": "2026-11-05T02:39:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41957269478"
+  ],
+  "result": {
+    "source_exact": true,
+    "synthetic_tests": "15/15",
+    "original_CI": "SUCCESS",
+    "four_stage_dxbc_sha_verified": true,
+    "source_to_native_dxbc_t_parity": "4/4 stages",
+    "source_to_native_dxbc_s_parity": "4/4 stages",
+    "source_texture_pair_details": "pass0 t0/s0 through t4/s4; pass1 t0/s0; vertex none",
+    "artifact_id": 13384056820,
+    "artifact_transport_sha256": "6523865257841c0c73b3d82b5c2e5ce276a618806def78b514298e61dd3981b0",
+    "source_to_spirv_translation_binding_map_verified": false,
+    "material_upload_shaderlab_device_verified": false
+  },
+  "next_step": "DXBC executable Op69 sample t/s operand relationship from same authenticated original, then exact native→translated resource mapping and Unity Material upload/ShaderLab; don't infer original to SPV from ordered list.",
+  "updated_at": "2026-11-05T02:47Z"
 }
