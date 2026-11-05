@@ -75,3 +75,12 @@ class InvocationTraceTests(unittest.TestCase):
         for bad in (invocation_trace(INVOCATIONS + INVOCATIONS[:1]), trace(BASE)):
             with self.assertRaises(ValueError):
                 compare_invocations(invocation_trace(INVOCATIONS), bad)
+
+    def test_counts_each_coordinate_axis_without_exporting_coordinates(self):
+        rows = list(INVOCATIONS)
+        row = rows[0]
+        rows[0] = (*row[:5], row[5], row[6] + 1, row[7] + 1, *row[8:])
+        result = compare_invocations(invocation_trace(INVOCATIONS), invocation_trace(rows))
+        self.assertEqual(result["sites"][0]["coordinate_mismatches"], 1)
+        self.assertEqual(result["sites"][0]["coordinate_axis_mismatches"],
+                         {"x": 0, "y": 1, "mip": 1})
