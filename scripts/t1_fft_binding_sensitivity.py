@@ -23,9 +23,12 @@ from scripts.probe_original_fft_two_pass_software_vulkan import (
 from scripts.probe_original_fft_software_vulkan import private_command
 
 PROFILES = ("baseline", "swap_first", "swap_second")
-SLOTS = (0, 8, 10)  # small+large original bank0 and independent small bank1
-# Authentic compiled pair18 second-pass swap caused Mesa lavapipe SIGSEGV
-# in 41938536760. Preserve that failure as INCONCLUSIVE, not numeric proof.
+# Restrict positive numerical inference to the verified bank0 source candidate
+# pairs. Bank1 pair18 second-pass swap SIGSEGV (41938536760), and bank1
+# pair10 second-pass swap fails independent same-program comparator tolerance
+# (41939082498). Both negative outcomes stay documented, not hidden or
+# counted as recovered kernels. This bounded probe makes no bank1 claim.
+SLOTS = (0, 8)
 SEED = 19
 MARKER = "RAFT_T1_BINDING_FINGERPRINT "
 MAX_SOURCE_BYTES = 100_000
