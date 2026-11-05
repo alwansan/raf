@@ -6,7 +6,7 @@
   "issue_id": "ASSET-RESTORE-001",
   "track": "integration-original-graphics-acquisition",
   "approach": "Implement a pinned ZIP2-to-verified-render-payload bridge that reconstructs only requested feature LFS graphics owners, verifies manifest and independent LFS SHA/size, atomically stages ephemeral source; add isolated real-owner CI and integrate opt-in reuse into existing hydrate_render_payloads (no edits to shared native workflow).",
-  "status": "active",
+  "status": "completed",
   "base_sha": "711dc94bebe342e07d1f8ffe6e46bc8d79c108b5",
   "intended_files": [
     "scripts/t5_stage_zip2_render_owners.py",
@@ -28,8 +28,11 @@
   "experiment_ids": [
     "T5-20261105T0004Z-original-owner-bridge"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Code SHA-locked reconstruction to isolated staging with fail-closed split manifest; run synthetic tests and SHA-verified real original owner in isolated CI; avoid touching shared Unity workflow and publishing raw data.",
-  "updated_at": "2026-11-05T00:04:06.546Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41938979840",
+    "https://github.com/alwansan/raf/actions/runs/41939143108"
+  ],
+  "result": "Actual authenticated ZIP2 original resources.assets 111533516 bytes reconstructed and used to replace the feature LFS pointer in isolated CI41939143108 SUCCESS. 11/11 synthetic tests pass. SHA256 original 87493249f1adfc0c5eb8b82e4e199e208cd2c95eabe9796cab82116c4838595c. No Unity/phone test. Initial CI41938979840 test found output directory created before source preflight; source fix 396eab4. Optional production hydration adapter 1c68ef8; no shared Unity workflow modified.",
+  "next_step": "Build a second bounded authentic multi-owner ZIP2/feature pointer integration verification or coordinate next Unity export material/FFT validation; keep native/phone unknown.",
+  "updated_at": "2026-11-05T00:12:07.647Z"
 }
