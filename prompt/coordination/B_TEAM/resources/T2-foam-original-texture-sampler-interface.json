@@ -1,0 +1,72 @@
+{
+  "id": "T2-foam-original-texture-sampler-interface",
+  "title": "T2 original two-pass Foam 6 texture rows to SPIRV 6 image + 6 sampler numeric ABI",
+  "kind": "original_water_shader_compiled_texture_sampler_interface",
+  "source": {
+    "provider": "zip2",
+    "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "original_path": "Raft_Data/sharedassets0.assets",
+    "bytes": 115978112,
+    "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "foam_path_id": 2420,
+    "foam_object_sha256": "67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1"
+  },
+  "stages": {
+    "acquisition": "SHA_PINNED_ORIGINAL_NO_LFS_VALIDATED",
+    "extraction": "AUTHENTIC_FOAM_PASS0_FRAGMENT_5_TEXTURES_PASS1_FRAGMENT_1_TEXTURE;VERTEX_0",
+    "reconstruction": "4_B20_REAL_STAGES_TRANSLATED_PRIVATE",
+    "binding": "SIX_SOURCE_TEXTURES_TO_SIX_SPIRV_SEPARATE_IMAGE_AND_SIX_SAMPLER_NUMERIC_CARDINALITY_VERIFIED; NAMES_AND_SAMPLER_STATE_UNKNOWN",
+    "integration": "T2_BOUNDED_SOURCE_VALIDATOR_AND_WORKFLOW_TRUE;NO_SHADERLAB_INSTALLED",
+    "device": "NOT_TESTED"
+  },
+  "original_table_rows": {
+    "pass0_vertex": 0,
+    "pass0_fragment": 5,
+    "pass1_vertex": 0,
+    "pass1_fragment": 1
+  },
+  "compiled_descriptor_rows": {
+    "pass0_fragment_images": 5,
+    "pass0_fragment_samplers": 5,
+    "pass1_fragment_images": 1,
+    "pass1_fragment_samplers": 1,
+    "vertex": 0
+  },
+  "translated_spirv_descriptor_bindings": {
+    "pass0_images": [
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "pass0_samplers": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "pass1_images": [
+      2
+    ],
+    "pass1_samplers": [
+      1
+    ],
+    "set": 0,
+    "semantic_identity_verified": false
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41939956032",
+    "https://github.com/alwansan/raf/actions/runs/41940321740",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_ORIGINAL_TEXTURE_SAMPLER_ABI_2026-11-05.md",
+    "https://github.com/alwansan/raf/commit/023ae9690bccd2a5c22ee6160a7e397d05b971f7"
+  ],
+  "remaining": [
+    "Auth original m_TextureParams name and sampler/type semantics to translated image and sampler identities privately",
+    "Create genuine two-pass Foam ShaderLab with no guessed original binding and import in Unity",
+    "Validate original material/GUID, GPU pixels Adreno and phone pass/kernel errors"
+  ],
+  "updated_by": "T2",
+  "updated_at": "2026-11-05T00:19:00Z"
+}
