@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T1115Z-T5-filemanager-runtime-sandbox",
+  "issue_id": "LOCAL-005",
+  "track": "original compiled FileManager read/write runtime path acceptance on private temporary Unix file",
+  "status": "active",
+  "base_sha": "b9dccf3264738ff5a462f1ba08d766329b2247af",
+  "hypothesis": "T5 CI42012597665 proved actual original FileManager methods exist with System.IO calls; but neither B19 original path adapter nor T4 probe executed those exact compiled I/O methods. A bounded actual managed CLR invocation against an isolated synthetic temporary path can discriminate original FileManager OS/path behavior and provide a more useful pre-Android execution gate without pretending real .rgd saves.",
+  "approach": "Create independent T5-only .NET9 runtime probe. SHA-verify exact ZIP2 Assembly-CSharp.dll before metadata/Reflection load. Resolve only original SaveAndLoad.Load<T>/Save direct call operands to original FileManager methods using Cecil, restrict invocations to one absolute path in a private fresh temporary directory, refuse unrecognized parameter/return types, use fixed synthetic bytes, classify failures using error categories without private names/logs. Assert actual readback and no unrelated filesystem writes; never change original production source. Protect no-LFS/no-Unity/no-native. Add positive and negative synthetic contract controls, isolated Actions workflow 15-min budget. Record evidence and enforce source vs CLR vs Android distinction.",
+  "intended_files": [
+    "android-port/Experiments/T5/FileManagerRuntimeSandbox/FileManagerRuntimeSandbox.csproj",
+    "android-port/Experiments/T5/FileManagerRuntimeSandbox/Program.cs",
+    "tests/test_t5_filemanager_runtime_contract.py",
+    ".github/workflows/raft-t5-filemanager-runtime-sandbox.yml",
+    "docs/T5_FILEMANAGER_MANAGED_RUNTIME_2026-11-05.md",
+    "prompt/coordination/clients/T5/MEMORY.md",
+    "prompt/coordination/clients/T5/state.json"
+  ],
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/actions/runs/42012597665",
+    "https://github.com/alwansan/raf/actions/runs/42012049920",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B19_ORIGINAL_SAVE_PATH_TRANSACTION_2026-11-04.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/T4/MEMORY.md"
+  ],
+  "related_work": [
+    "https://github.com/alwansan/raf/actions/runs/42012597665",
+    "https://github.com/alwansan/raf/actions/runs/42014120625",
+    "https://github.com/alwansan/raf/actions/runs/42014733420"
+  ],
+  "last_verified_result": "Original compiled static FileManager read/write bodies exist: 14/13 IL instructions, direct System.IO and EH each (CI42012597665). Correct original decompile with managed refs and Android stage passed T4 CI42012049920. Real current Android .rgd save/reopen UNKNOWN; APK86 old.",
+  "experiment_ids": [
+    "T5-20261105T1115Z-original-managed-file-io"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Execute original compiled methods safely on a private sandboxed path, confirm exact bytes persist/read or record unsupported signature/environment; no device claim.",
+  "updated_at": "2026-11-05T11:15:00Z"
+}
