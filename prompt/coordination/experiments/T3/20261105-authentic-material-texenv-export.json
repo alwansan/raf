@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "session_id": "20261104T2354Z-T3-render-harness",
+  "issue_id": "RENDER-002",
+  "hypothesis": "Authenticate source sharedassets6 Material TexEnv/UV and compare W1 Material+ B02 Texture2D actual same-instance exporter YAML rather than source-only scans.",
+  "source_commit": "615f914728cf15f5d60607115ecb7a4a8919d8e5",
+  "input_hashes": [
+    "zip2:15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "sharedassets6.assets 6607272 bytes sha256:0476792cfeffac19d16e920011ed8d2fb2da62973c2f09a8689bc59e1ac4b632",
+    "B21 W1+B02 staged helper exact SHA-locked by existing tests"
+  ],
+  "tool_versions": {
+    "AssetRipperCLI_source_commit": "036098ab525a3f9f693dc101edeb21faad4d32d8",
+    "dotnet": "9.0.x",
+    "UnityPy": "1.23.0",
+    "PyYAML": "6.0.3"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t3_same_export_material_texenv.py -v",
+    "python3 -m scripts.b21_stage_light_lineage --base-helper android-port/Experiments/ExportLineage/RaftExportLineage.cs --destination $RUNNER_TEMP/b21/RaftExportLineage.cs",
+    "dotnet $RUNNER_TEMP/b21-compiled/ExportLineage.dll $RUNNER_TEMP/b21-original $RUNNER_TEMP/b21-private-export",
+    "python3 -m scripts.t3_same_export_material_texenv --original $RUNNER_TEMP/b21-original --project $RUNNER_TEMP/b21-private-export/ExportedProject --w1-trace $RUNNER_TEMP/b21-w1-private.json --b02-trace $RUNNER_TEMP/b21-b02-private.json --out $RUNNER_TEMP/t3-safe-result.json"
+  ],
+  "negative_controls": [
+    "11 same-instance, class/type, missing original, wrong scope, UV drift, no leak tests passed"
+  ],
+  "workflow_path": ".github/workflows/raft-t3-real-material-texenv-export.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41938229887",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41938229887"
+  ],
+  "budget": "25 minutes timeout, 2 dotnet processors, no Unity game build, no LFS, only bounded original data",
+  "status": "INCONCLUSIVE",
+  "observed_result": {
+    "original_sha_locked_providers": 9,
+    "material_sources": 42,
+    "shader_sources": 18,
+    "asset_export": true,
+    "raw_private_traces_created": true,
+    "compare_exception_type": "ValueError",
+    "phase": "UNKNOWN"
+  },
+  "rejected_hypotheses": [
+    "AssetRipper original input is absent",
+    "Unable to compile instrumented exporter"
+  ],
+  "limitations": [
+    "ValueError stage not yet classified",
+    "No Android GPU/Unity import, color pixels, full exported game links verified"
+  ],
+  "integration_commit": "615f914728cf15f5d60607115ecb7a4a8919d8e5",
+  "next_step": "Classify exact failure phase safely with aggregate counts and one rerun, then repair only supported material/export issue."
+}
