@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "session_id": "20261105T224830Z-T1-chat-3f14c2",
+  "issue_id": "WATER-001",
+  "status": "completed",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42124676507",
+  "run_conclusion": "failure",
+  "source_commit": "dbde6d1a96ca1fab3db09374c34d7f5d5c8f034f",
+  "observed_result": "On authenticated pair 0, input identity and both instrumentation output-parity controls passed. All 384 reads paired. Unity OpenGLCore collapsed varied Vulkan X coordinates to a constant at each of the three Load sites (63/64, 252/256, 63/64 X mismatches); neither uniform translation nor reflection fits. Third-site Y differs 64/64 with no reference Y variation, and mip matches throughout. Final numeric parity remains failed. No actual address, constant, or operand value was published.",
+  "next_step": "Probe the shared X producer upstream of all three Load calls. The trace keys still identify and pair distinct invocations, so distinguish a dispatch-ID-to-shader-state handoff issue from later address arithmetic or missing parameter binding. Use a source-free structured-input-to-helper synthetic control before another authentic replay."
+}
