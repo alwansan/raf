@@ -1,0 +1,8 @@
+# T2 chat — minimal original Foam RT call target signature provenance
+
+- session_id: `20261105T1712Z-T2-chat-return-identity-minimal-4c8f`; origin: chat; owner: T2; WATER-001; status: active; base SHA: `3cbee8c415d9ad289acc90ff422e70b439d8e7a7`.
+- Resumed from T2 `20261105T1648Z-T2-chat-rt-return-definition-f7d2`, `20261105T1611Z-T2-chat-foam-length-source-9ab4`, and scheduled `20261105T1623Z-T2-scheduled-caller-origin-6f2d`.
+- Work reserved before any edits at `prompt/coordination/work/WATER-001/T2-20261105T1712Z-T2-chat-return-identity-minimal-4c8f-return-identity.json`.
+- Authenticated original [CI42065864809](https://github.com/alwansan/raf/actions/runs/42065864809) proves exact `stelem.ref` element supplied by a method whose declared return is `UnityEngine.RenderTexture`. Previously all four compiled caller index values in bounds from [CI42064653958](https://github.com/alwansan/raf/actions/runs/42064653958). Neither proves runtime non-null, shader binding or pixels.
+- Previous T2 session stopped at blocked unmerged larger four-file candidate, NO new original source result. New v2 tests **only** whether exact typed call return signature matches an original managed method definition, or is external/UnityEngine/unresolved. Limit source to existing T2-owned `FoamByrefElementValueOrigin.cs`, `Program.cs`, workflow. New synthetic positive internal and negative wrong-signature/external tests. Keep compiled source private; output numeric counts/category, no original symbols/IL/int values.
+- No team pipeline cancelled or changed. T1 FFT, T3 Shader48, T4 local world and T5 native independently owned. Do not claim APK or phone acceptance. WATER-001 OPEN, NOT_READY 0/3.
