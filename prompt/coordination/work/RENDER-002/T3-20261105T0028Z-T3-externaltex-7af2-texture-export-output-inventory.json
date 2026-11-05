@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T0028Z-T3-externaltex-7af2",
+  "issue_id": "RENDER-002",
+  "track": "colors-materials/actual-texture-output-identity",
+  "approach": "After authentic CI41944064897 found all 106 distinct Material-linked Texture2D exporter trace GUIDs absent from any .meta, independently inventory ALL actual bounded exported image/TextureImporter and other importer files plus GUID overlap; separate missing assets from alternate GUID transport. Do not edit AssetRipper or game resources until exporter output shape measured.",
+  "status": "active",
+  "base_sha": "c6fe5439ad9cb71c41a4d08ad4004c915dbda49e",
+  "intended_files": [
+    "scripts/t3_exported_texture_inventory.py",
+    "tests/test_t3_exported_texture_inventory.py",
+    ".github/workflows/raft-t3-true-texture-output-inventory.yml",
+    "prompt/coordination/clients/T3/sessions/20261105T0028Z-T3-externaltex-7af2.md"
+  ],
+  "hypothesis": "The 106 trace GUID absences may reflect alternate importer GUID assignment/embedded assets or no Texture2D image files in selected original→export. A read-only census of all actual output image/TextureImporter metadata, correlated with exact trace GUIDs, can distinguish these cases.",
+  "related_work": [
+    "https://github.com/alwansan/raf/actions/runs/41944064897",
+    "https://github.com/alwansan/raf/actions/runs/41942377246"
+  ],
+  "taken_over_from": [
+    "scripts/t3_texture_importer_presence.py",
+    "scripts/b15_texture_sampler_parity.py",
+    "docs/T3_ORIGINAL_EXTERNAL_TEXTURE_LINEAGE_2026-11-05.md"
+  ],
+  "experiment_ids": [
+    "T3-real-export-global-image-vs-trace-guid-20261105"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Build safe aggregate inventory and 9+ synthetic controls, run true SHA-pinned 11-owner exporter once, then distinguish alias vs missing image artifacts and choose exact integration fix; do not claim device pixels.",
+  "updated_at": "2026-11-05T00:52:00Z"
+}
