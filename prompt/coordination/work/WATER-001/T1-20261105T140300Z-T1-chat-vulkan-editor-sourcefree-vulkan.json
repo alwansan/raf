@@ -4,7 +4,7 @@
   "origin": "chat",
   "session_id": "20261105T140300Z-T1-chat-vulkan-editor",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "5eed7b6715a25177e733d17f383bb8735368bdbf",
   "resumed_from_sessions": [
     "20261105T131036Z-T1-chat-877585",
@@ -28,8 +28,24 @@
     "https://github.com/alwansan/raf/actions/runs/42029739318",
     "https://github.com/alwansan/raf/actions/runs/42033745802"
   ],
-  "run_urls": [],
-  "updated_at": "2026-11-05T14:03:00Z",
-  "next_step": "Implement real Unity graphicsDeviceType==Vulkan and 64x1 float compute output numerical assertion in entirely synthetic sourcefree EditMode fixture, GameCI v0.1.72 with --customParameters=-force-vulkan in isolated workflow, robust NUnit result gate. If positive, launch genuine same SHA-pinned pair0/1 original Unity Vulkan parity experiment; if not, classify block and switch to shader arithmetic/coordinates. Retain WATER-001 OPEN.",
-  "identity_conflict": "Multiple T1 scheduled/chat sessions; use unique session/work files; no shared T1 state override."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42042650298",
+    "https://github.com/alwansan/raf/actions/runs/42042230791"
+  ],
+  "updated_at": "2026-11-05T14:16:00Z",
+  "next_step": "Classify actual Unity Docker image Vulkan ICD/loader and run one source-free driver-enabled derived-image experiment if justified. Do not fetch original FFT until true Vulkan device is verified; retain original OpenGLCore vs Vulkan numeric mismatch and WATER-001 OPEN.",
+  "identity_conflict": "Multiple T1 scheduled/chat sessions; use unique session/work files; no shared T1 state override.",
+  "result": {
+    "sourcefree_github_action": "completed_failure",
+    "real_unity_version": "2021.3.45f2",
+    "expected_tests": 3,
+    "passed": 2,
+    "failed": 1,
+    "exact_nunit_test_cases": true,
+    "actual_vulkan_backend_verified": false,
+    "actual_synthetic_vulkan_gpu_math_verified": false,
+    "original_raft_data_acquired": false,
+    "second_independent_vulkan_sourcefree_smoke_other_backend": true,
+    "cleanup": "success"
+  }
 }
