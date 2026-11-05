@@ -1,0 +1,14 @@
+{
+  "id": "20261105T103700Z-T1-gameci-unity-compute-sourcefree-pass",
+  "owner": "T1",
+  "session_id": "20261105T102000Z-T1-gameci-sourcefree",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Official GameCI unity-test-runner v4 ran Unity2021.3.45f2 source-free test successfully CI42010878771 (1/1) and a second real Unity ComputeShader import/HasKernel/FindKernel/GetKernelThreadGroupSizes synthetic canary CI42011720822 (2/2); supportsComputeShaders=true, XYZ(64,1,1) matched. Original FFT source and device unchanged; prior direct Docker licensing failure is activation-method-specific, not proof credentials invalid.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42010878771",
+    "https://github.com/alwansan/raf/actions/runs/42011720822",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_GAMECI_SOURCEFREE_UNITY_LICENSE_2026-11-05.md"
+  ],
+  "at": "2026-11-05T10:37:00Z"
+}
