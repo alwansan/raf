@@ -1,0 +1,20 @@
+{
+  "session_id": "20261105T1737Z-T4-scheduled-h6v2",
+  "origin": "scheduled",
+  "issue_id": "LOCAL-005",
+  "status": "active",
+  "baseline_sha": "d2b1a1e83f269a66e4db7b7be2c135977a941a49",
+  "baseline_note": "prior observed only; refresh required before edit",
+  "taken_over_from": [
+    "20261105T1640Z-T4-scheduled-r8k2",
+    "20261105T1548Z-T4-scheduled-m7q4"
+  ],
+  "intended_files": [
+    "scripts/t4_verify_device_world_save_log.py",
+    "scripts/test_t4_overflow_gate.py"
+  ],
+  "hypothesis": "Global logging.queue_overflow must suppress positive cross-session hints",
+  "experiment_key": "T4-overflow-cross-session-negative-control-v1",
+  "resource_key": null,
+  "updated_at": "2026-11-05T17:37:00Z"
+}
