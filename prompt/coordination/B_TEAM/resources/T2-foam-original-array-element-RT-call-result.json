@@ -1,0 +1,29 @@
+{
+  "id": "T2-foam-original-array-element-RT-call-result",
+  "owner": "T2",
+  "issue_id": "WATER-001",
+  "title": "Original Foam RenderTexture[] element store uses a method return declared UnityEngine.RenderTexture",
+  "kind": "SHA_original_managed_compiled_stelem_element_value_provenance",
+  "stages": {
+    "acquisition": "ORIGINAL_ZIP2_MANAGED_DLL_EXACT_SHA_SIZE_VERIFIED",
+    "extraction": "SAME_EXACT_FOAM_GETTER_FIELD_REF_RENDER_TEXTURE_ARRAY_CALL_AND_SOURCE_PROVEN_STELEM_REF_SITE",
+    "reconstruction": "ELEMENT_VALUE_IS_DIRECT_METHOD_CALL_RETURN_WITH_DECLARED_UNITYENGINE_RENDERTEXTURE_TYPE_NOT_DIRECT_NEWOBJ_OR_NULL",
+    "binding": "ORIGINAL_CALLER_SIZE_POSITIVE_LITERAL_AND_FOUR_INDEX_VALUES_IN_BOUNDS_PROVEN_BUT_ELEMENT_RETURN_NON_NULL_RUNTIME_UNPROVEN",
+    "integration": "SHA_AUTHENTIC_SOURCE_ONLY_CI42065864809_SUCCESS_NO_ORIGINAL_GAME_ASSET_OR_SHADERLAB_EDITS",
+    "device": "NOT_TESTED"
+  },
+  "observed": {
+    "actual_managed_element_stores": 1,
+    "element_value_declared_Unity_RenderTexture_call_return": true,
+    "element_value_direct_null": false,
+    "element_value_direct_newobj_RT": false,
+    "actual_return_nonnull_and_texture_validity_proven": false,
+    "original_numeric_values_disclosed": false
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42065864809",
+    "https://github.com/alwansan/raf/actions/runs/42064653958",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/T2/sessions/20261105T1611Z-T2-chat-foam-length-source-9ab4.md"
+  ],
+  "next_step": "Trace exact producing method for original RenderTexture call-return and runtime allocation/content; WATER-001 OPEN NOT_READY0/3."
+}
