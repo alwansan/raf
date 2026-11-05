@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T0349Z-T5-unity-integration-boundary",
+  "issue_id": "INTEGRATION-001",
+  "track": "Unity graphics original-owner import integration",
+  "approach": "Verify repaired rollback CI, inspect current Unity graphics hydration workflow and its exact source owners; identify and if possible fix a concrete integration gap without overlapping T1-T4.",
+  "status": "active",
+  "base_sha": "b780c69bbf786fd30ef5693768a59305594fc30f",
+  "intended_files": [
+    "prompt/coordination/clients/T5/",
+    "prompt/coordination/work/INTEGRATION-001/"
+  ],
+  "hypothesis": "Three-owner authenticated production hydration has no proof of Unity import; existing workflow may have a concrete bounded integration validation gap.",
+  "related_work": [
+    "ASSET-RESTORE-001"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/T5/MEMORY.md",
+    "prompt/coordination/T_TEAM/LEGACY_HANDOFF.md"
+  ],
+  "experiment_ids": [],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41958001501"
+  ],
+  "result": null,
+  "next_step": "Inspect actual Unity workflow/CI and implement scoped useful validation if a gap is proven.",
+  "updated_at": "2026-11-05T03:49:00Z"
+}
