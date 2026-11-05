@@ -49,10 +49,10 @@ class OriginalIlspyRepeatabilityTests(unittest.TestCase):
         self.assertTrue(r["method_body_sha_equal"])
 
     def test_string_literal_diff_can_change_body_but_not_masked_code(self):
-        self.write(self.b, BASE.replace("var fake =", "var fake =").replace("7);", "7);").replace(
-            '"WorldHasBeenRecieved = true; Helper.BroadCastToScene(5);"',
-            '"entirely other fake content { }"',
-        ))
+        old_literal = '"WorldHasBeenRecieved = true; Helper.BroadCastToScene(5);"'
+        replacement_literal = '"' + 'x' * (len(old_literal) - 2) + '"'
+        self.assertEqual(len(old_literal), len(replacement_literal))
+        self.write(self.b, BASE.replace(old_literal, replacement_literal))
         r = compare_roots(self.a, self.b)
         self.assertFalse(r["method_body_sha_equal"])
         self.assertTrue(r["masked_executable_body_sha_equal"])
