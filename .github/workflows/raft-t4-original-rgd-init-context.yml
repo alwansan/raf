@@ -1,0 +1,115 @@
+name: T4 LOCAL-005 original derived RGD producer and field initializer scope
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'android-port/Experiments/T4/OriginalRgdInitContext/**'
+      - 'scripts/t4_validate_original_rgd_init_context.py'
+      - 'tests/test_t4_validate_original_rgd_init_context.py'
+      - '.github/workflows/raft-t4-original-rgd-init-context.yml'
+permissions:
+  contents: read
+concurrency:
+  group: raft-t4-original-rgd-init-context-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  bounded-original-RGD-context:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout T4 bounded metadata code and negative controls only
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /android-port/Experiments/T4/OriginalRgdInitContext/
+            /scripts/t4_validate_original_rgd_init_context.py
+            /tests/test_t4_validate_original_rgd_init_context.py
+      - name: Source-free falsification controls must reject phone and fake RGD
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t4_validate_original_rgd_init_context.py tests/test_t4_validate_original_rgd_init_context.py
+          python3 -m unittest discover -s tests -p 'test_t4_validate_original_rgd_init_context.py' -v
+          test ! -e Raft
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Compile isolated .NET8 Mono.Cecil original metadata inspector
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 190s dotnet publish android-port/Experiments/T4/OriginalRgdInitContext/OriginalRgdInitContext.csproj \
+            -c Release --self-contained false -o "$RUNNER_TEMP/t4-rgd-init-inspector" \
+            >"$RUNNER_TEMP/t4-original-private-compile.log" 2>&1 || {
+              python3 - <<'PY'
+          import os,re,collections,pathlib
+          s=(pathlib.Path(os.environ['RUNNER_TEMP'])/'t4-original-private-compile.log').read_text(errors='replace')
+          print('T4_RGD_INIT_COMPILER_CODES',
+                dict(collections.Counter(re.findall(r'error\s+(CS[0-9]+|NETSDK[0-9]+|NU[0-9]+)',s))))
+          PY
+              exit 1
+            }
+          test -s "$RUNNER_TEMP/t4-rgd-init-inspector/OriginalRgdInitContext.dll"
+      - name: Checkout exact original owner ZIP2 DLL with no LFS
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: t4-original-sha-locked
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /Raft/Raft_Data/Managed/Assembly-CSharp.dll
+      - name: Authenticate immutable original SHA and size before CIL
+        shell: bash
+        run: |
+          set -euo pipefail
+          f=t4-original-sha-locked/Raft/Raft_Data/Managed/Assembly-CSharp.dll
+          test "$(git -C t4-original-sha-locked rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          test ! -L "$f"
+          test "$(stat -c '%s' "$f")" = 3211776
+          echo "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e  $f" | sha256sum -c --status
+          echo 'T4_RGD_INIT_ORIGINAL authenticated=true source_published=false'
+      - name: Inspect original compiled class and writer sites without running game
+        shell: bash
+        run: |
+          set -euo pipefail
+          ulimit -c 0
+          export DOTNET_DbgEnableMiniDump=0 COMPlus_DbgEnableMiniDump=0 DOTNET_EnableCrashReport=0
+          timeout 45s dotnet "$RUNNER_TEMP/t4-rgd-init-inspector/OriginalRgdInitContext.dll" \
+            --assembly t4-original-sha-locked/Raft/Raft_Data/Managed/Assembly-CSharp.dll \
+            --output "$RUNNER_TEMP/t4-private-rgd-init-classification.json" \
+            >"$RUNNER_TEMP/t4-private-rgd-init.log" 2>&1 || {
+              echo 'T4_RGD_INIT status=INCONCLUSIVE private_details_published=false'
+              exit 1
+            }
+          python3 -m scripts.t4_validate_original_rgd_init_context \
+            --report "$RUNNER_TEMP/t4-private-rgd-init-classification.json"
+      - name: Reject altered original SHA before reading private CIL
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os,pathlib
+          original=pathlib.Path('t4-original-sha-locked/Raft/Raft_Data/Managed/Assembly-CSharp.dll')
+          fake=pathlib.Path(os.environ['RUNNER_TEMP'])/'t4-modified-original.dll'
+          b=bytearray(original.read_bytes())
+          b[177] ^= 1
+          fake.write_bytes(b)
+          PY
+          if timeout 8s dotnet "$RUNNER_TEMP/t4-rgd-init-inspector/OriginalRgdInitContext.dll" \
+            --assembly "$RUNNER_TEMP/t4-modified-original.dll" \
+            --output "$RUNNER_TEMP/t4-untrusted-output.json" >"$RUNNER_TEMP/t4-bad-src-private.log" 2>&1; then
+            echo 'T4_RGD_INIT_ALTERED_SOURCE_ACCEPTED'
+            exit 1
+          fi
+          test ! -e "$RUNNER_TEMP/t4-untrusted-output.json"
+          echo 'T4_RGD_INIT incorrect_original_sha_rejected=true'
+      - name: Assert no private game data artifact upload or Unity execution
+        if: always()
+        run: echo 'source_only=true original_save_uninvoked=true original_RGD_unread=true game_data_artifacts_unpublished=true Android_device=false'
