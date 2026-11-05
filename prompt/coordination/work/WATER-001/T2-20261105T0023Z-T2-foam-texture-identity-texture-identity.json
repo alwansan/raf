@@ -6,7 +6,7 @@
   "issue_id": "WATER-001",
   "track": "foam-original-texture-name-index-to-spirv-identity",
   "approach": "Use authenticated original Foam pass m_NameIndices and fragment m_TextureParams (six rows) to cross-check exact original texture symbol identity vs reflected translated SPIR-V separate image names while retaining source m_Index/sampler index as numeric observations only. Fail closed on duplicates/missing schema, never equate matching counts or names with sampler state/Unity upload, report safe aggregate only, then run existing SHA-pinned private Foam workflow with adversarial controls.",
-  "status": "planned",
+  "status": "active",
   "base_sha": "87d1869a580f2f028db5e81434b63a2e6774eee4",
   "intended_files": [
     "scripts/t2_foam_texture_identity.py",
@@ -31,5 +31,5 @@
   "run_urls": [],
   "result": null,
   "next_step": "Implement bounded private texture registry symbol matching and type/index checks, run synthetic negatives and SHA-pinned original-source CI, then infer only evidence-supported next shader binding decision.",
-  "updated_at": "2026-11-05T00:23:44.051Z"
+  "updated_at": "2026-11-05T00:24:23.912Z"
 }
