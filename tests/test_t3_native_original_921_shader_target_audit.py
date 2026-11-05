@@ -153,6 +153,25 @@ class NativeTopShaderJoinTests(unittest.TestCase):
         self.assertFalse(result["original_DXBC_to_native_shader_program_equivalence_proven"])
         self.assertFalse(result["unity_compile_or_Android_pixels_proven"])
 
+    def test_marker_free_shader_without_programs_must_not_count_as_restored(self):
+        for no_subprograms, programmed in ((True, 4), (False, 0), (True, 0)):
+            args=list(fixture(top_dummy=False, top_passes=4))
+            top_profile=args[4][f"{1:032x}"]
+            top_profile["no_subprograms"]=no_subprograms
+            top_profile["programmed"]=programmed
+            with self.subTest(no_subprograms=no_subprograms, programmed=programmed):
+                with self.assertRaisesRegex(ValueError, "non_dummy_native_shader_without_subprograms"):
+                    t3.strict_native_top_join(*args)
+
+    def test_dummy_marker_remains_classified_dummy_even_if_no_subprograms(self):
+        args=list(fixture(top_dummy=True, top_passes=4))
+        top_profile=args[4][f"{1:032x}"]
+        top_profile["no_subprograms"]=True
+        top_profile["programmed"]=0
+        result=t3.strict_native_top_join(*args)
+        self.assertEqual(result["native_high_use_source_shader_export_status"],
+                         "DUMMY_AFTER_NATIVE_RESTORERS")
+
     def test_safe_aggregate_does_not_leak_private_identity_or_guid(self):
         result=self.checked()
         encoded=json.dumps(result,sort_keys=True)
