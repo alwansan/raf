@@ -19,7 +19,7 @@
     "cancel_existing_workflows": false
   },
   "created_at": "2026-11-05T16:49:00Z",
-  "attempt": 2,
-  "note": "First commit was rejected by GitHub YAML parser before jobs; folded if expression fixed at b6027ff6. Only this marker changed to trigger previously source-free-verified workflow.",
-  "reissued_at": "2026-11-05T16:52:00Z"
+  "attempt": 3,
+  "note": "retry of marker-only push after fetch-depth 2 parent compare repair b3e6caeffdb4cfc592cf05526f5c0ae9b6aedbc5; no previous original game asset read in CI42068710185",
+  "reissued_at": "2026-11-05T16:55:00Z"
 }
