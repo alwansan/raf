@@ -6,7 +6,7 @@
   "origin": "chat",
   "issue_id": "LOCAL-005",
   "track": "world-save",
-  "status": "active",
+  "status": "completed",
   "base_sha": "5eed7b6715a25177e733d17f383bb8735368bdbf",
   "hypothesis": "Authentic 2,941-byte original Data.rgd NRBF seed can or cannot be deserialized to an actual CLR object by .NET8 BinaryFormatter with exact immutable original Raft managed DLL and its authentic 151 sibling Managed assembly references; isolate category of failure, not infer Android/save-world from the shipped seed.",
   "experiment_key": "t4-original-data-rgd-net8-binaryformatter-exact-sha-original-seed-151-ref-20261105-v1",
@@ -27,8 +27,27 @@
     "docs/T4_ORIGINAL_MANAGED_STREAM_ROUNDTRIP_2026-11-05.md",
     "prompt/coordination/clients/T4/sessions/20261105T1338Z-T4-scheduled-v6n9.md"
   ],
-  "run_urls": [],
-  "result": null,
-  "updated_at": "2026-11-05T14:05:00Z",
-  "next_step": "Execute authentic original seed deserialization in an isolated restricted runtime with verified bytes; report only SHA/auth and controlled CLR status, then interpret compatibility limits. If blocked, no schema change or fake RGD compatibility."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42042350875",
+    "https://github.com/alwansan/raf/actions/runs/42042563929",
+    "https://github.com/alwansan/raf/actions/runs/42042814576",
+    "https://github.com/alwansan/raf/actions/runs/42043768798"
+  ],
+  "result": {
+    "original_seed_size": 2941,
+    "original_seed_sha256": "b2785187aa11e33872698adfa79ab252cf65a824d92bee7e88773ce4aa11cbba",
+    "original_dll_size": 3211776,
+    "original_dll_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "managed_siblings": 151,
+    "actual_binaryformatter_deserialize": true,
+    "returned_object_type_defined_in_original_dll": true,
+    "synthetic_controls": "18/18 PASS",
+    "wrong_seed_sha_rejected": true,
+    "actual_original_SaveAndLoad_LoadT_followup": "CI42043768798 SUCCESS",
+    "original_game_world_loaded": false,
+    "android_device_unity_il2cpp": false,
+    "report": "docs/T4_ORIGINAL_RGD_RUNTIME_LOAD_2026-11-05.md"
+  },
+  "updated_at": "2026-11-05T14:23:00Z",
+  "next_step": "Shipped original Data.rgd actual CLR decode and original generic loader return now proven on Linux/.NET8; T5-coordinated new native device world/save/relaunch/reopen still required. Keep LOCAL-005 OPEN NOT_READY."
 }
