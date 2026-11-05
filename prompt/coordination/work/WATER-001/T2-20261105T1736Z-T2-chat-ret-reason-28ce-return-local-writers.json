@@ -4,9 +4,9 @@
   "origin": "chat",
   "session_id": "20261105T1736Z-T2-chat-ret-reason-28ce",
   "issue_id": "WATER-001",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "9b02920ff126d09e701f0ab342c6a7f59ddae1de",
-  "updated_at": "2026-11-05T17:46:00Z",
+  "updated_at": "2026-11-05T17:47:00Z",
   "resumed_from_work": "prompt/coordination/work/WATER-001/T2-20261105T1736Z-T2-chat-ret-reason-28ce-ret-reason.json",
   "experiment_key": "T2|ZIP2-15964ea8|original-0a6f0527|exact-Foam-RT-return-local-writers-and-immediate-producer-families-v1",
   "resource_key": "T2-Foam-RT-return-local-stloc-private-writer-census",
@@ -24,7 +24,7 @@
     "latest_original_CI": "42076713202 SUCCESS",
     "scheduled_T2_nonoverlap": "synthetic scripts/t2_rt_return_cfg.py and tests/test_t2_rt_return_cfg.py only"
   },
-  "next_step": "Read final CI42077586809 genuine T2_FOAM_RETURN_LOCAL_WRITERS_SAFE. Interpret writer counts as source existence only; not reachable branch, array content or Android pixels. WATER-001 OPEN NOT_READY0/3.",
+  "next_step": "Explain exact one original return local stloc writer predecessor coarse opcode and control-flow entry status; then branch-safe SSA/CFG with strict unknown. No Unity/Android water pixels yet. WATER-001 OPEN NOT_READY0/3.",
   "source_commits": [
     "765042f2ee82967b0f1432622e2bf9c28c288a16",
     "5a9e47a7d3caf835a53a4d2bfb14e66034eb88eb",
@@ -34,8 +34,20 @@
     "https://github.com/alwansan/raf/actions/runs/42077586809"
   ],
   "result": {
-    "code": "Exact original RT return sole ldloc local typed writer aggregate with original-return matching and synthetic null/newobj/typed-call/wrong-local decoys",
-    "CI": "queued",
-    "runtime": "not tested"
+    "original_ci": "42077586809 COMPLETED SUCCESS",
+    "original_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "original_exact_return_local_loads": 1,
+    "original_local_declared_RenderTexture": true,
+    "matching_original_stloc_writer_sites": 1,
+    "direct_literal_null_writers": 0,
+    "direct_newobj_RenderTexture_writers": 0,
+    "direct_typed_RenderTexture_call_writers": 0,
+    "local_alias_writers": 0,
+    "unresolved_writer_source_sites": 1,
+    "branch_join_or_runtime_verified": false,
+    "private_source_values_symbols_disclosed": false,
+    "artifact_id": 13440120178,
+    "artifact_sha256": "0213f49bb65973257a884d43c479cf5fc4c2784dfe56b2fd061e3d0731021855",
+    "synthetic_sourcefree_controls": "passed"
   }
 }
