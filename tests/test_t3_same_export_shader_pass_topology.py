@@ -71,6 +71,12 @@ class SameExportShaderTopology(unittest.TestCase):
         target=next(iter(values[2].values()))
         target["pass_count"]=2
         with self.assertRaisesRegex(ValueError,"invalid_actual_ShaderLab_profile"):self.call(values)
+    def test_safe_failure_stage_never_exposes_original_private_exception(self):
+        problem=m.SafeStageFailure("original_Shader48_parsed_pass_topology","LookupError")
+        self.assertEqual(problem.stage,"original_Shader48_parsed_pass_topology")
+        self.assertEqual(problem.category,"LookupError")
+        self.assertNotIn("private",str(problem))
+
     def test_private_names_ids_guid_not_in_result(self):
         result=str(self.call())
         self.assertNotIn("0000000000000000f000000000000000",result)
