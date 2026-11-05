@@ -50,6 +50,64 @@ jobs:
           set -euo pipefail
           df -h /
           test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2 {print $4}')" -ge 20971520
+      - name: Verify real Unity activation on tiny source-free project BEFORE acquiring game data
+        shell: bash
+        run: |
+          set -euo pipefail
+          set +x
+          scratch="$RUNNER_TEMP/t1-unity-sourcefree-license"
+          mkdir -p "$scratch"
+          image='unityci/editor:ubuntu-2021.3.45f2-base-3'
+          # Docker pull can be reused by later import in this same job; never echo private stderr.
+          docker pull "$image" > "$RUNNER_TEMP/t1-unity-preflight-pull.log" 2>&1
+          set +e
+          timeout 480s docker run --rm --memory=8g --cpus=2 --shm-size=512m \
+            --env UNITY_LICENSE --env UNITY_SERIAL --env UNITY_EMAIL --env UNITY_PASSWORD \
+            -v "$scratch:/scratch:rw" "$image" /bin/bash -c '
+              set +x
+              set -euo pipefail
+              umask 077
+              mkdir -p /root/.local/share/unity3d/Unity
+              if [ -n "${UNITY_LICENSE:-}" ]; then
+                printf "%s" "$UNITY_LICENSE" | tr -d "\r" > /root/.local/share/unity3d/Unity/Unity_lic.ulf
+                /opt/unity/Editor/Unity -quit -batchmode -nographics \
+                  -manualLicenseFile /root/.local/share/unity3d/Unity/Unity_lic.ulf \
+                  -logFile /scratch/private-license-activation.log > /scratch/private-license-activation.stdout 2>&1 || true
+              elif [ -n "${UNITY_SERIAL:-}" ] && [ -n "${UNITY_EMAIL:-}" ] && [ -n "${UNITY_PASSWORD:-}" ]; then
+                /opt/unity/Editor/Unity -quit -batchmode -nographics \
+                  -username "$UNITY_EMAIL" -password "$UNITY_PASSWORD" -serial "$UNITY_SERIAL" \
+                  -logFile /scratch/private-license-activation.log > /scratch/private-license-activation.stdout 2>&1 || true
+              fi
+              /opt/unity/Editor/Unity -batchmode -nographics -quit \
+                -createProject /scratch/empty-fft-preflight \
+                -logFile /scratch/private-unity.log > /scratch/private-unity.stdout 2>&1
+            ' > "$RUNNER_TEMP/t1-unity-preflight-docker.log" 2>&1
+          rc=$?
+          set -e
+          sudo chown -R "$(id -u):$(id -g)" "$scratch"
+          UNITY_PREFLIGHT_RC="$rc" T1_UNITY_PREFLIGHT_DIR="$scratch" python3 - <<'PY'
+          import json,os,re
+          from pathlib import Path
+          src=Path(os.environ["T1_UNITY_PREFLIGHT_DIR"])
+          log=(src/"private-unity.log").read_text(errors="replace") if (src/"private-unity.log").is_file() else ""
+          rc=int(os.environ["UNITY_PREFLIGHT_RC"])
+          project=(src/"empty-fft-preflight/ProjectSettings/ProjectVersion.txt").is_file()
+          status={
+              "source_free_fixture":True,
+              "unity_command_exit_zero":rc==0,
+              "empty_unity_project_created":project,
+              "licensing_failure_category":bool(re.search(
+                  r"(?:licen[cs]|entitlement|serial)[^\\n]{0,100}(?:invalid|fail|expired|denied|not activat|missing)|(?:invalid|fail|expired|denied|no valid)[^\\n]{0,100}(?:licen[cs]|entitlement|serial)",log,re.I)),
+              "log_present":bool(log),
+              "original_raft_data_acquired":False,
+              "original_fft_compute_imported":False,
+              "android_device_tested":False
+          }
+          print("RAFT_T1_UNITY_SOURCEFREE_PREFLIGHT "+json.dumps(status,sort_keys=True))
+          if not (rc==0 and project):
+              raise SystemExit("Unity source-free activation gate failed; original game data intentionally not acquired")
+          PY
+          rm -rf "$scratch" "$RUNNER_TEMP/t1-unity-preflight-docker.log" "$RUNNER_TEMP/t1-unity-preflight-pull.log"
       - name: Checkout only public probe code and scripts
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
