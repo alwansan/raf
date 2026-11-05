@@ -77,12 +77,17 @@ def exported_profiles(assets:Path,guids:set):
         shader=Path(str(file)[:-5])
         if not shader.is_file() or shader.is_symlink() or shader.stat().st_size>8_000_000:
             raise ValueError("missing_selected_export_ShaderLab_source")
-        info=pass_coverage(shader.read_text("utf-8-sig"))
+        shader_text=shader.read_text("utf-8-sig")
+        info=pass_coverage(shader_text)
         if not info["pass_braces_balanced"]:
             raise ValueError("unbalanced_selected_ShaderLab_source")
+        # SHA-pinned AssetRipperCLI DummyShaderTextExporter deliberately emits
+        # this source marker when it substitutes a template/fallback program;
+        # a balanced CGPROGRAM block is NOT evidence of authored shader parity.
         found[gid]={"pass_count":info["pass_count"],
                     "subshader_pass_counts":info["subshader_pass_counts"],
-                    "programmed_pass_count":info["passes_with_complete_program"]}
+                    "programmed_pass_count":info["passes_with_complete_program"],
+                    "dummy_exporter_marker":("//DummyShaderTextExporter" in shader_text)}
     if set(found)!=guids:
         raise ValueError("missing_selected_ShaderLab_custom_GUID")
     return found
@@ -140,13 +145,15 @@ def compare(source:dict,w1:dict,actual:dict,*,real_links_proven:bool):
             or not isinstance(out.get("subshader_pass_counts"),list) or
             any(type(v) is not int or v<0 for v in out["subshader_pass_counts"])
             or sum(out["subshader_pass_counts"])!=out["pass_count"]
-            or out["programmed_pass_count"]>out["pass_count"]):
+            or out["programmed_pass_count"]>out["pass_count"]
+            or type(out.get("dummy_exporter_marker")) is not bool):
             raise ValueError("invalid_actual_ShaderLab_profile")
         destpass=out["pass_count"]
         owner=key[0]
         totals["original_custom_Shader_pass_records"]+=originalpass
         totals["exported_custom_ShaderLab_passes"]+=destpass
         totals["exported_custom_ShaderLab_programmed_passes"]+=out["programmed_pass_count"]
+        totals["exported_custom_with_DummyShaderTextExporter_marker"]+=int(out["dummy_exporter_marker"])
         totals["selected_custom_ShaderLab_count"]+=1
         totals["custom_shaders_with_pass_deficit"]+=int(originalpass>destpass)
         totals["custom_shaders_with_extra_passes"]+=int(originalpass<destpass)
@@ -160,7 +167,10 @@ def compare(source:dict,w1:dict,actual:dict,*,real_links_proven:bool):
         raise ValueError("original_10_ShaderPass_count_changed")
     if totals["selected_custom_ShaderLab_count"]!=OUTPUT_EXPECTED_CUSTOM:
         raise ValueError("incomplete_same_export_custom_ShaderLab_scope")
-    status=("SCOPED_SHADERLAB_PASS_TOPOLOGY_DEFICIT"
+    status=("SCOPED_DUMMY_SHADERLAB_PASS_DEFICIT"
+           if totals["missing_original_passes_in_custom_ShaderLab"]>0
+              and totals["exported_custom_with_DummyShaderTextExporter_marker"]>0
+           else "SCOPED_SHADERLAB_PASS_TOPOLOGY_DEFICIT"
            if totals["missing_original_passes_in_custom_ShaderLab"]>0
            else "SCOPED_SHADERLAB_PASS_COUNT_MATCH_NOT_PROGRAM_EQUIVALENCE")
     return {
