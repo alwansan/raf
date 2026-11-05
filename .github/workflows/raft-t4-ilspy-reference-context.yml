@@ -142,12 +142,12 @@ jobs:
           staged_ret, staged_body = method_body(staged, 'WorldHasBeenLoaded')
           before = _executable_positions(original_body)
           after = _executable_positions(staged_body)
-          ready = r'\\bWorldHasBeenRecieved\\s*=\\s*true\\s*;'
+          ready = r'\bWorldHasBeenRecieved\s*=\s*true\s*;'
           if staged_ret != 'IEnumerator' or len(re.findall(ready, before)) != 1 or len(re.findall(ready, after)) != 1:
               raise ValueError('Original world completion assignment contract changed')
           if after.count('WorldHasBeenLoaded.firstMoveNext') != 1 or after.count('WorldHasBeenLoaded.originalCompletionAssigned') != 1:
               raise ValueError('Expected B07 firstMoveNext and T4 actual assignment markers')
-          if len(re.findall(r'\\byield\\s+return\\b', after)) != len(re.findall(r'\\byield\\s+return\\b', before)):
+          if len(re.findall(r'\byield\s+return\b', after)) != len(re.findall(r'\byield\s+return\b', before)):
               raise ValueError('Original coroutine yield statements changed')
           print('T4_NATIVE_SOURCE_STAGE_FULL_CONTEXT ' + json.dumps({
               'source_sha256': original_sha,
