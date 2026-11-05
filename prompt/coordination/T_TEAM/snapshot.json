@@ -13,21 +13,23 @@
         "https://github.com/alwansan/raf/actions/runs/41914505411",
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B04_MESH_SOURCE_PATH_SAFETY_2026-11-04.md",
         "https://github.com/alwansan/raf/commit/f0afb5983694cec91a61bcd6f9825ca1cf658f7e",
-        "https://github.com/alwansan/raf/actions/runs/41939143108"
+        "https://github.com/alwansan/raf/actions/runs/41939143108",
+        "https://github.com/alwansan/raf/actions/runs/41940032540"
       ],
       "remaining": [
         "تحقق stream ranges/format/sRGB/normalmaps وGUIDs",
         "missingMonoScript وconvexmeshwarnings أسبابغيرمحسومة",
         "جردنطاقمحددومرحلةاستعادةلكلمورد",
         "B04 linked-path source provenance guarded for YAML Mesh utility (CI synthetic only); still need actual original Mesh source and device geometry binding verification",
-        "T5 restored real original resources.assets 111533516B in isolated ZIP2-to-feature LFS hydration CI41939143108 (11/11 synthetic controls); optional consumer integrated but Unity export, other owners and Android pixels remain unverified"
+        "T5 restored real original resources.assets 111533516B in isolated ZIP2-to-feature LFS hydration CI41939143108 (11/11 synthetic controls); optional consumer integrated but Unity export, other owners and Android pixels remain unverified",
+        "T5 3 original ZIP2 graphics owners exact SHA/size verified and consumed through feature graphics staging at CI41940032540 (337660952B, 13/13 synthetic); full Unity export/Material/ComputeShader binding and Android pixels remain OPEN"
       ],
       "acceptance": [
         "تغطيةmanifestوالتبعياتالمطلوبة",
         "اكتمالgeometry/bindingsمعاختباروظيفي"
       ],
       "updated_by": "T5",
-      "updated_at": "2026-11-05T00:12:07.647Z",
+      "updated_at": "2026-11-05T00:18:04.491Z",
       "_record_path": "../B_TEAM/issues/ASSET-RESTORE-001.json"
     },
     {
@@ -157,7 +159,10 @@
         "https://github.com/alwansan/raf/commit/2d59494d4c77c715ab76ef0b5ac21b566059c6d5",
         "https://github.com/alwansan/raf/commit/89455426b6a9c1cafd4651e671e558dc12bb80d2",
         "https://github.com/alwansan/raf/actions/runs/41929845587",
-        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B19_SAVE_HARDLINK_ALIAS_GUARD_2026-11-04.md"
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B19_SAVE_HARDLINK_ALIAS_GUARD_2026-11-04.md",
+        "https://github.com/alwansan/raf/actions/runs/41939908432",
+        "https://github.com/alwansan/raf/actions/runs/41939846508",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_RGD_LOAD_COMPAT_2026-11-05.md"
       ],
       "remaining": [
         "Original Cheat.AllowCheatsForLocalPlayer SteamUser.GetSteamID direct object call now source-guarded in B50 2bb6c2; no native/phone verification. Do not infer all Steam callbacks are removed.",
@@ -173,15 +178,16 @@
         "B07 first-MoveNext diagnostic source-integrated after original Raft_Network SHA/body gate; CI41929041686 proves 9+19 Python cases, synthetic CLR Android/nonAndroid yield invariance and original-source staging. No Unity/device world/.rgd confirmation; this log indicates entry, NOT world completion.",
         "B14 original ZIP2-managed source proves SaveGame direct call order SaveWorld -> SaveUser -> SteamUserStats.StoreStats, exactly one each, SaveUser/World each call original Save; Android stats-only guard retains order and has no other direct Steam/PlayFab in these three methods. Strict source CI41929777877 SUCCESS 9/9 synthetic plus authentic original. File .rgd durability and phone world create/save/reopen NOT proven.",
         "B07 source-integrated iterator firstMoveNext diagnostics now pass real adapted original managed .NET compile and RPC/identity harness (CI41929721761); strict adapted SHA manifest parity CI41929910850 passes after stale-manifest incident closure. No Unity IL2CPP/APK/device or real .rgd roundtrip evidence.",
-        "B19 SaveAndLoad original C# and .meta source-stage hardlink alias guard is SOURCE_FIXED with CI41929845587 15/15 path tests plus authentic 16 path expressions; synthetic safety proof only, not root cause of APK86 world/Steam stats or .rgd device result."
+        "B19 SaveAndLoad original C# and .meta source-stage hardlink alias guard is SOURCE_FIXED with CI41929845587 15/15 path tests plus authentic 16 path expressions; synthetic safety proof only, not root cause of APK86 world/Steam stats or .rgd device result.",
+        "T4 exact original Load<T> (CI41939908432 PASS, original ZIP2 DLL SHA verified): Deserialize=1, catch=1, FileManager=1, Binder assignments=0; source-only Android Load.caughtException diagnostic integrated (original adapted C# compile CI41939846508 PASS); original Data.rgd compatibility and on-device create/save/reload are unverified. Keep LOCAL-005 OPEN, NOT_READY 0/3, preserve Steam/sound/Settings, defer touch."
       ],
       "acceptance": [
         "دخول عالم جديد محلي قابل للعب بلا Steam أو سيرفر خارجي",
         "حفظ .rgd ثم إعادة تحميله فعلياً",
         "لا يكفي إخفاء رسالة الاتصال"
       ],
-      "updated_by": "B19",
-      "updated_at": "2026-11-04T23:02:00Z",
+      "updated_by": "T4",
+      "updated_at": "2026-11-05T00:20:00Z",
       "_record_path": "../B_TEAM/issues/LOCAL-005.json"
     },
     {
@@ -965,21 +971,94 @@
       "_record_path": "../B_TEAM/resources/T2-foam-member-abi-namebridge.json"
     },
     {
-      "id": "T5-zip2-original-render-provider",
-      "title": "T5 SHA-verified ZIP2 graphics source into feature LFS hydration (resources.assets single real original)",
-      "kind": "graphics-source-provider",
+      "id": "T2-foam-original-texture-sampler-interface",
+      "title": "T2 original two-pass Foam 6 texture rows to SPIRV 6 image + 6 sampler numeric ABI",
+      "kind": "original_water_shader_compiled_texture_sampler_interface",
       "source": {
-        "provider": "alwansan/raf zip2 immutable Git checkout",
+        "provider": "zip2",
         "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
-        "path": "Raft/Raft_Data/resources.assets",
-        "bytes": 111533516,
-        "sha256": "87493249f1adfc0c5eb8b82e4e199e208cd2c95eabe9796cab82116c4838595c"
+        "original_path": "Raft_Data/sharedassets0.assets",
+        "bytes": 115978112,
+        "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+        "foam_path_id": 2420,
+        "foam_object_sha256": "67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1"
       },
       "stages": {
-        "acquisition": "VERIFIED_EXACT_ORIGINAL_BYTES_SHA256_REAL_ZIP2_CI41939143108",
-        "extraction": "SPLIT_PART_REASSEMBLY_EXACT_SHA256_AND_SIZE_REAL_CI",
+        "acquisition": "SHA_PINNED_ORIGINAL_NO_LFS_VALIDATED",
+        "extraction": "AUTHENTIC_FOAM_PASS0_FRAGMENT_5_TEXTURES_PASS1_FRAGMENT_1_TEXTURE;VERTEX_0",
+        "reconstruction": "4_B20_REAL_STAGES_TRANSLATED_PRIVATE",
+        "binding": "SIX_SOURCE_TEXTURES_TO_SIX_SPIRV_SEPARATE_IMAGE_AND_SIX_SAMPLER_NUMERIC_CARDINALITY_VERIFIED; NAMES_AND_SAMPLER_STATE_UNKNOWN",
+        "integration": "T2_BOUNDED_SOURCE_VALIDATOR_AND_WORKFLOW_TRUE;NO_SHADERLAB_INSTALLED",
+        "device": "NOT_TESTED"
+      },
+      "original_table_rows": {
+        "pass0_vertex": 0,
+        "pass0_fragment": 5,
+        "pass1_vertex": 0,
+        "pass1_fragment": 1
+      },
+      "compiled_descriptor_rows": {
+        "pass0_fragment_images": 5,
+        "pass0_fragment_samplers": 5,
+        "pass1_fragment_images": 1,
+        "pass1_fragment_samplers": 1,
+        "vertex": 0
+      },
+      "translated_spirv_descriptor_bindings": {
+        "pass0_images": [
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "pass0_samplers": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "pass1_images": [
+          2
+        ],
+        "pass1_samplers": [
+          1
+        ],
+        "set": 0,
+        "semantic_identity_verified": false
+      },
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41939956032",
+        "https://github.com/alwansan/raf/actions/runs/41940321740",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_ORIGINAL_TEXTURE_SAMPLER_ABI_2026-11-05.md",
+        "https://github.com/alwansan/raf/commit/023ae9690bccd2a5c22ee6160a7e397d05b971f7"
+      ],
+      "remaining": [
+        "Auth original m_TextureParams name and sampler/type semantics to translated image and sampler identities privately",
+        "Create genuine two-pass Foam ShaderLab with no guessed original binding and import in Unity",
+        "Validate original material/GUID, GPU pixels Adreno and phone pass/kernel errors"
+      ],
+      "updated_by": "T2",
+      "updated_at": "2026-11-05T00:19:00Z",
+      "_record_path": "../B_TEAM/resources/T2-foam-original-texture-sampler-interface.json"
+    },
+    {
+      "id": "T5-zip2-original-render-provider",
+      "title": "T5 original ZIP2 3 graphics/FFT source owner integration, SHA-authenticated with feature LFS pointers",
+      "kind": "graphics-source-provider",
+      "source": {
+        "provider": "alwansan/raf ZIP2 immutable commit",
+        "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+        "path": "Raft_Data/{resources.assets,sharedassets0.assets,sharedassets36.assets}",
+        "bytes": 337660952,
+        "sha256": null
+      },
+      "stages": {
+        "acquisition": "VERIFIED_EXACT_3_ORIGINAL_ZIP2_OWNERS_337660952_BYTES_CI41940032540",
+        "extraction": "3_SHA_PINNED_SPLIT_GRAPHICS_OWNERS_REASSEMBLED_WITH_MANIFEST_AND_FEATURE_LFS_IDENTITY",
         "reconstruction": "NOT_APPLICABLE_ORIGINAL_SERIALIZED_RESOURCE_BYTES_PRESERVED",
-        "binding": "VERIFIED_FEATURE_LFS_POINTER_REUSE_IN_STAGING_ONLY_NO_UNITY_EXPORT",
+        "binding": "FEATURE_LFS_REUSE_CONSUMER_IN_EXPERIMENT_ALL_3_REAL_OWNER_BYTES_SHA256_VERIFIED_NOT_UNITY",
         "integration": "OPTIONAL_VERIFIED_SOURCE_CONSUMER_IN_PRODUCTION_HYDRATOR_SOURCE_PATCH_1c68ef8_NOT_TRIGGERED_NATIVE",
         "device": "UNKNOWN"
       },
@@ -987,15 +1066,35 @@
         "https://github.com/alwansan/raf/actions/runs/41939143108",
         "https://github.com/alwansan/raf/actions/runs/41938979840",
         "https://github.com/alwansan/raf/commit/396eab4d3cd8acc0d462e96b748e56537a49bd01",
-        "https://github.com/alwansan/raf/commit/1c68ef8ea8a38b9d92c1e1cc204a6b9c913555a4"
+        "https://github.com/alwansan/raf/commit/1c68ef8ea8a38b9d92c1e1cc204a6b9c913555a4",
+        "https://github.com/alwansan/raf/actions/runs/41940032540",
+        "https://github.com/alwansan/raf/commit/0f3739e38f6b42c92100e75697a314988869cf63"
       ],
       "remaining": [
         "Test additional original graphics owner providers, byte budget and Unity project actual export integration after coordination",
         "No original FFT authentic .compute install, ShaderLab, material pixel, Adreno device or world-save confirmation",
-        "Do not mark WATER-001/RENDER-002/LOCAL-005 or ASSET-RESTORE-001 closed"
+        "Do not mark WATER-001/RENDER-002/LOCAL-005 or ASSET-RESTORE-001 closed",
+        "3 genuine serialized sources do not establish actual original Unity ComputeShader kernel/program identity, Material/Texture export, native performance or Adreno pixels"
       ],
       "updated_by": "T5",
-      "updated_at": "2026-11-05T00:11:31.625Z",
+      "updated_at": "2026-11-05T00:18:04.491Z",
+      "original_owners": [
+        {
+          "path": "Raft_Data/resources.assets",
+          "bytes": 111533516,
+          "sha256": "87493249f1adfc0c5eb8b82e4e199e208cd2c95eabe9796cab82116c4838595c"
+        },
+        {
+          "path": "Raft_Data/sharedassets0.assets",
+          "bytes": 115978112,
+          "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3"
+        },
+        {
+          "path": "Raft_Data/sharedassets36.assets",
+          "bytes": 110149324,
+          "sha256": "b32fcd9d327c8926b2309ffc1b5645a0c23d64ed95be37ed94e96f34736530c8"
+        }
+      ],
       "_record_path": "../B_TEAM/resources/T5-zip2-original-render-provider.json"
     },
     {
@@ -3613,6 +3712,21 @@
       "_record_path": "../B_TEAM/events/T2/20261105T0013Z-start-resource-abi.json"
     },
     {
+      "id": "T2-20261105T0019Z-result-resource-abi",
+      "owner": "T2",
+      "session_id": "20261104T2354Z-T2-foamabi01",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "summary": "Original SHA-authenticated Foam PathID2420 source has p0 fragment 5 textures/p1 fragment 1 texture (vertices zero); four translated genuine SPIRV stages provide exactly six separate sampled images + six samplers, structural numeric slot/signature guard enforced. Real source CI41939956032 and final CI41940321740 SUCCESS (20 CB+17 resource tests). Texture/sampler original-to-compiled names/state, Unity ShaderLab, material upload and phone remain UNKNOWN, WATER-001 OPEN.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41939956032",
+        "https://github.com/alwansan/raf/actions/runs/41940321740",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_ORIGINAL_TEXTURE_SAMPLER_ABI_2026-11-05.md"
+      ],
+      "at": "2026-11-05T00:19:00Z",
+      "_record_path": "../B_TEAM/events/T2/20261105T0019Z-result-resource-abi.json"
+    },
+    {
       "id": "T3-20261105-0002-render-harness-result-and-export-start",
       "owner": "T3",
       "session_id": "20261104T2354Z-T3-render-harness",
@@ -3641,6 +3755,26 @@
       ],
       "at": "2026-11-04T23:57:00Z",
       "_record_path": "../B_TEAM/events/T4/20261104T2357Z-local-load-start.json"
+    },
+    {
+      "id": "T4-20261105T0020Z-local-loader-integrated",
+      "owner": "T4",
+      "session_id": "20261104T2357Z-T4-lw01",
+      "issue_id": "LOCAL-005",
+      "type": "progress",
+      "summary": "Original ZIP2 Load<T> authenticated (1 Deserialize, 1 catch, no binder) and Android catch logging source-integrated. Original adapted managed C# CI PASS; phone .rgd roundtrip unverified.",
+      "commits": [
+        "ed39104941ff9c6880829556fbb6d4a985898d3e",
+        "fa6bd57c4f8d29b17e4d038e18be5ac8c48d42b2"
+      ],
+      "ci": [
+        "https://github.com/alwansan/raf/actions/runs/41939908432",
+        "https://github.com/alwansan/raf/actions/runs/41939846508"
+      ],
+      "evidence": "docs/T4_ORIGINAL_RGD_LOAD_COMPAT_2026-11-05.md",
+      "remaining": "new Unity/IL2CPP/APK/phone world create-save-reload; no false success",
+      "at": "2026-11-05T00:20:00Z",
+      "_record_path": "../B_TEAM/events/T4/20261105T0020Z-local-loader-integrated.json"
     },
     {
       "id": "T5-20261104T2357Z-b12-fixture-start",
@@ -3674,6 +3808,21 @@
       "_record_path": "../B_TEAM/events/T5/20261105T0010Z-zip2-render-success.json"
     },
     {
+      "id": "T5-20261105T0017Z-zip2-three-owner",
+      "owner": "T5",
+      "session_id": "20261104T2357Z-T5-b12-fixture-7e2",
+      "issue_id": "ASSET-RESTORE-001",
+      "type": "integration",
+      "summary": "T5 extended source-integrated ZIP2 bridge to 3 authentic original Unity graphics owners (resources.assets, sharedassets0.assets, sharedassets36.assets), total 337660952B. Isolated actual ZIP2 checkout and independent feature LFS consumer SHA verification CI41940032540 SUCCESS, 13/13 synthetic including two-owner fail-before-first-publish. No Unity import, real compute FFT kernel, Adreno/pixels or device claim.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41940032540",
+        "https://github.com/alwansan/raf/actions/runs/41940016502",
+        "https://github.com/alwansan/raf/commit/0f3739e38f6b42c92100e75697a314988869cf63"
+      ],
+      "at": "2026-11-05T00:17:37.064Z",
+      "_record_path": "../B_TEAM/events/T5/20261105T0017Z-zip2-three-owner.json"
+    },
+    {
       "id": "20261104-b-generation",
       "owner": "owner-team-bootstrap",
       "session_id": "b-team-setup-20261104",
@@ -3702,7 +3851,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "5b48aae56f9fde625cfec271e7106cd46ace725a96127efaed32ad9899998205",
+  "source_input_sha256": "f6d4083a7b0f43fe5ab4ea40252381b137bfde2ee27f1b9943c2a23302c9855c",
   "generation": "T-2026-11-05",
-  "input_sha256": "78dedef4f5f7239020828576354a463134049a9945f5928dcbe750edb9850fb3"
+  "input_sha256": "5acba3922a50f2bdfa52a13709eb907e7e0928f32ceaec966e3c3c96d56933d8"
 }
