@@ -6,7 +6,7 @@
   "issue_id": "RENDER-002",
   "track": "colors-materials/textures",
   "approach": "Run one genuine bounded original ZIP2 -> AssetRipper export using the already-proven B21 W1+B02 same-process Material21/Texture2D28 trace instrumentation, combine only identical export_instance identifiers, authenticate sharedassets6 original bytes, and exercise existing B05 material texture pointer/UV comparator against actual exported .mat YAML. Never publish raw sources/traces.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "bf3d876201751447fae149ea32fc275df98f91b0",
   "intended_files": [
     "scripts/t3_same_export_material_texenv.py",
@@ -32,19 +32,24 @@
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41938229887",
     "https://github.com/alwansan/raf/actions/runs/41938711186",
-    "https://github.com/alwansan/raf/actions/runs/41939065539"
+    "https://github.com/alwansan/raf/actions/runs/41939065539",
+    "https://github.com/alwansan/raf/actions/runs/41939404454"
   ],
   "result": {
-    "code_commit": "3c3f7ada3efa0384ffc81143221a4055c5d0c39a",
-    "stage": "actual_exported_material_yaml",
+    "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "integration_sha": "4bd56a47c4836f84ecd02093bd9c5eafdc7c4c1a",
+    "workflow_result": "SUCCESS",
+    "run_url": "https://github.com/alwansan/raf/actions/runs/41939404454",
+    "actual_export_completed": true,
     "original_materials": 41,
-    "original_texenvs": 227,
-    "same_export_material_trace": 57,
-    "same_export_texture_trace": 92,
-    "source_export_parity": "UNKNOWN",
-    "run_url": "https://github.com/alwansan/raf/actions/runs/41939065539",
-    "status": "DIAGNOSTIC_RERUN_IN_PROGRESS"
+    "texenv_slots_compared": 227,
+    "internal_texture_targets_exact": 89,
+    "original_null": 113,
+    "external_texture_targets_unproven": 25,
+    "uv_mismatches": 0,
+    "texture_pointer_mismatches": 0,
+    "device_proof": false
   },
-  "next_step": "Read safe YAML reason from 41939065539 and fix parser/schema precisely; no source claims yet.",
-  "updated_at": "2026-11-05T00:02:00Z"
+  "next_step": "B44 same-instance Material colors selected owner; if colors match, look at Shader/variants/sRGB/lighting and external owners; no speculative repair.",
+  "updated_at": "2026-11-05T00:12:00Z"
 }
