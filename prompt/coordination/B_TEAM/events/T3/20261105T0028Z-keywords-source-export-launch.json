@@ -1,0 +1,16 @@
+{
+  "id": "T3-20261105T0028Z-keyword-original-export",
+  "owner": "T3",
+  "session_id": "20261105T0024Z-T3-keyword-real-export",
+  "issue_id": "RENDER-002",
+  "type": "integration",
+  "summary": "B43's SHA-restricted original Material keyword reader and T3 safe same-instance 41-Material keyword/pass comparator were integrated into an existing genuine bounded exporter workflow; synthetic CI checks passed, genuine source/export comparison was still running. Original 41/227 texture/UV and 150 RGBA parity evidence unaffected; no source GPU/device success claim.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/36cc349c1d2a7744ad37ea13aae59e5074ea87ae",
+    "https://github.com/alwansan/raf/commit/40ff84fd897efee7e730dc110dde34b7e34b110d",
+    "https://github.com/alwansan/raf/commit/c77d1c1de07af0526bcc17d00b3fbc5a50a1faf5",
+    "https://github.com/alwansan/raf/commit/6940ccf0161a3ea4a52c083702692de74c0c64be",
+    "https://github.com/alwansan/raf/actions/runs/41941363661"
+  ],
+  "at": "2026-11-05T00:28:00Z"
+}
