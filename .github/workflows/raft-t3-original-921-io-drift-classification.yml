@@ -4,11 +4,9 @@ name: T3 RENDER-002 genuine original 921 Shader48 SPIRV stage IO drift classific
 # New DISTINCT source question: numeric-only source input vs output relocation,
 # type changes, slot losses, and type-multiset equality using scheduled T3 helper.
 # Original source code/bytes, private HLSL or SPIRV never leave disposable runner.
+# Authenticated original experiment CI42058881426 SUCCESS; manual-only to
+# preserve source/runner budget and avoid redundant 6-scene retranslation.
 on:
-  push:
-    branches: [feature/android-native-port]
-    paths:
-      - .github/workflows/raft-t3-original-921-io-drift-classification.yml
   workflow_dispatch:
 permissions:
   contents: read
