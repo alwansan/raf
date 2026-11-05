@@ -110,6 +110,65 @@ def combine(profiles, compiled):
     }
 
 
+
+# Frozen genuine source and current translation interface from CI41939956032;
+# proves bounded resource *cardinality*, NOT which original texture is which.
+ORIGINAL_TEXTURES_PER_STAGE = {(0, 1): 0, (0, 0): 5, (1, 1): 0, (1, 0): 1}
+COMPILED_NUMERIC_RESOURCE_BINDINGS = {
+    (0, 1): (),
+    (0, 0): (("separate_images", 0, 6), ("separate_images", 0, 7),
+             ("separate_images", 0, 8), ("separate_images", 0, 9),
+             ("separate_images", 0, 10), ("separate_samplers", 0, 1),
+             ("separate_samplers", 0, 2), ("separate_samplers", 0, 3),
+             ("separate_samplers", 0, 4), ("separate_samplers", 0, 5)),
+    (1, 1): (),
+    (1, 0): (("separate_images", 0, 2), ("separate_samplers", 0, 1)),
+}
+
+
+def verify_genuine_texture_sampler_pair_count(report):
+    """Fail closed on lost original source textures or compiled descriptor side."""
+    if (not isinstance(report, dict) or report.get("status") !=
+            "original_foam_resource_interface_observed" or
+            report.get("original_stages") != 4 or
+            not isinstance(report.get("rows"), list) or len(report["rows"]) != 4):
+        raise ValueError("Original resource audit prerequisite absent")
+    seen = set()
+    for row in report["rows"]:
+        if not isinstance(row, dict):
+            raise ValueError("Invalid original resource stage")
+        key = row.get("pass"), row.get("stage_code")
+        if key not in ORIGINAL_TEXTURES_PER_STAGE or key in seen:
+            raise ValueError("Original Foam pass/stage duplicate or unknown")
+        seen.add(key)
+        fields = row.get("original_numeric_table_rows")
+        if (not isinstance(fields, dict) or fields.get("m_TextureParams") !=
+                ORIGINAL_TEXTURES_PER_STAGE[key] or
+                fields.get("m_Samplers") != 0 or fields.get("m_UAVParams") != 0):
+            raise ValueError("Authentic original Foam source resource table drift")
+        bindings = row.get("translated_resource_bindings")
+        if not isinstance(bindings, list):
+            raise ValueError("Compiled Foam texture/sampler bindings unavailable")
+        numeric = tuple(sorted(
+            (r["category"], r["set"], r["binding"]) for r in bindings
+        ))
+        if numeric != COMPILED_NUMERIC_RESOURCE_BINDINGS[key]:
+            raise ValueError("Translated Foam sampled image/sampler numeric ABI drift")
+        count = ORIGINAL_TEXTURES_PER_STAGE[key]
+        images = sum(r["category"] == "separate_images" for r in bindings)
+        samplers = sum(r["category"] == "separate_samplers" for r in bindings)
+        if images != count or samplers != count:
+            raise ValueError("Missing actual translated image/sampler pair")
+    if seen != set(ORIGINAL_TEXTURES_PER_STAGE):
+        raise ValueError("Authentic Foam stage coverage incomplete")
+    report["authenticated_original_texture_rows"] = 6
+    report["authenticated_translated_sampled_images"] = 6
+    report["authenticated_translated_separate_samplers"] = 6
+    report["original_to_compiled_resource_cardinality_verified"] = True
+    report["original_texture_to_hlsl_sampler_identity_verified"] = False
+    return report
+
+
 def audit(source, packet, manifest):
     source, packet, manifest = map(lambda p: Path(p).absolute(), (source, packet, manifest))
     if (not source.is_dir() or not packet.is_dir() or
@@ -122,7 +181,7 @@ def audit(source, packet, manifest):
     source_profile = original_stage_resource_profiles(original_source_tree(source))
     compiled = {key: reflect(packet / ("pass%d-stage%d" % key) / "original.spv")
                 for key in STAGES}
-    return combine(source_profile, compiled)
+    return verify_genuine_texture_sampler_pair_count(combine(source_profile, compiled))
 
 
 def main():
