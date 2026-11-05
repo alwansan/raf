@@ -48,6 +48,56 @@ def compare(reference, observed):
                                      "value_bit_mismatches")) for row in reports)}
 
 
+# Site, dispatch ID (xyz), per-site occurrence, Load coordinate (xyz), value bits.
+INVOCATION_RECORD = struct.Struct("<5I3i4I")
+INVOCATION_SIZE = 4 + CAPACITY * INVOCATION_RECORD.size
+
+
+def decode_invocations(data):
+    if len(data) != INVOCATION_SIZE:
+        raise ValueError("Incorrect invocation trace size")
+    (count,) = struct.unpack_from("<I", data)
+    if not 0 < count <= CAPACITY:
+        raise ValueError("Empty or overflowed invocation trace")
+    sites = [{}, {}, {}]
+    end = 4 + count * INVOCATION_RECORD.size
+    for site, x, y, z, occurrence, *sample in INVOCATION_RECORD.iter_unpack(data[4:end]):
+        key = (x, y, z, occurrence)
+        if site >= len(sites) or key in sites[site]:
+            raise ValueError("Invalid or duplicate invocation trace key")
+        sites[site][key] = (tuple(sample[:3]), tuple(sample[3:]))
+    if not all(sites):
+        raise ValueError("Missing invocation trace site")
+    return sites
+
+
+def compare_invocations(reference, observed):
+    """Compare corresponding reads without exposing invocation IDs or samples."""
+    reports = []
+    for left, right in zip(decode_invocations(reference), decode_invocations(observed)):
+        shared = left.keys() & right.keys()
+        coordinate_mismatches = same_coordinate_value_mismatches = changed_coordinate_value_mismatches = 0
+        for key in shared:
+            left_coord, left_value = left[key]
+            right_coord, right_value = right[key]
+            if left_coord == right_coord:
+                same_coordinate_value_mismatches += left_value != right_value
+            else:
+                coordinate_mismatches += 1
+                changed_coordinate_value_mismatches += left_value != right_value
+        reports.append({
+            "missing_reads": len(left.keys() - right.keys()),
+            "extra_reads": len(right.keys() - left.keys()),
+            "paired_reads": len(shared),
+            "coordinate_mismatches": coordinate_mismatches,
+            "same_coordinate_value_mismatches": same_coordinate_value_mismatches,
+            "changed_coordinate_value_mismatches": changed_coordinate_value_mismatches,
+        })
+    return {"sites": reports, "match": all(
+        not any(row[key] for key in ("missing_reads", "extra_reads", "coordinate_mismatches",
+                                     "same_coordinate_value_mismatches")) for row in reports)}
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("reference", type=Path)
