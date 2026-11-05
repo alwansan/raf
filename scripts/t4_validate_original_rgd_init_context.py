@@ -25,7 +25,32 @@ FACTORY_FIELDS = (
     "factory_throw_or_rethrow_sites",
     "factory_null_literal_load_sites",
     "factory_all_return_paths_proven",
+    *FACTORY_RETURN_LOCAL_FIELDS,
 )
+FACTORY_RETURN_LOCAL_FIELDS = (
+    "factory_return_local_lexical_store_sites",
+    "factory_return_local_store_null_literal",
+    "factory_return_local_store_derived_constructor",
+    "factory_return_local_store_derived_call",
+    "factory_return_local_store_derived_local",
+    "factory_return_local_store_derived_field",
+    "factory_return_local_store_other_or_unknown",
+    "factory_return_local_nearest_lexical_store_source",
+    "factory_return_local_store_path_reachability_proven",
+)
+FACTORY_RETURN_LOCAL_PARTITION = (
+    "factory_return_local_store_null_literal",
+    "factory_return_local_store_derived_constructor",
+    "factory_return_local_store_derived_call",
+    "factory_return_local_store_derived_local",
+    "factory_return_local_store_derived_field",
+    "factory_return_local_store_other_or_unknown",
+)
+FACTORY_STORE_CATEGORIES = {
+    "NULL_LITERAL", "DERIVED_CONSTRUCTOR", "DERIVED_CALL",
+    "DERIVED_LOCAL", "DERIVED_FIELD", "OTHER_OR_UNKNOWN", "NO_STORES",
+}
+
 FACTORY_RETURN_PARTITION = (
     "factory_return_preceded_by_null_literal",
     "factory_return_preceded_by_derived_local",
@@ -97,9 +122,14 @@ def validate(result):
     if not isinstance(factory, dict) or set(factory) != set(FACTORY_FIELDS):
         raise ValueError("unknown_original_factory_return_contract")
     for key in FACTORY_FIELDS:
-        if key == "factory_all_return_paths_proven":
+        if key in ("factory_all_return_paths_proven",
+                   "factory_return_local_store_path_reachability_proven"):
             if factory[key] is not False:
                 raise ValueError("fabricated_control_flow_path_proof")
+            continue
+        if key == "factory_return_local_nearest_lexical_store_source":
+            if type(factory[key]) is not str or factory[key] not in FACTORY_STORE_CATEGORIES:
+                raise ValueError("invalid_original_return_local_source_class")
             continue
         if type(factory[key]) is not int or not 0 <= factory[key] <= 10000:
             raise ValueError("invalid_original_factory_site_count")
@@ -117,6 +147,31 @@ def validate(result):
     if (factory["factory_return_preceded_by_derived_call"] >
             factory["factory_direct_derived_rgd_returning_call_sites"]):
         raise ValueError("call_return_without_call_site")
+    store_sites = factory["factory_return_local_lexical_store_sites"]
+    if sum(factory[k] for k in FACTORY_RETURN_LOCAL_PARTITION) != store_sites:
+        raise ValueError("original_return_local_unaccounted_stores")
+    if store_sites == 0 and factory["factory_return_local_nearest_lexical_store_source"] != "NO_STORES":
+        raise ValueError("fabricated_nearest_store_without_writes")
+    if store_sites > 0 and factory["factory_return_local_nearest_lexical_store_source"] == "NO_STORES":
+        raise ValueError("missing_nearest_store_with_writes")
+    if store_sites == 0 and any(factory[k] for k in FACTORY_RETURN_LOCAL_PARTITION):
+        raise ValueError("missing_original_local_store_site")
+    nearest_to_key = {
+        "NULL_LITERAL": "factory_return_local_store_null_literal",
+        "DERIVED_CONSTRUCTOR": "factory_return_local_store_derived_constructor",
+        "DERIVED_CALL": "factory_return_local_store_derived_call",
+        "DERIVED_LOCAL": "factory_return_local_store_derived_local",
+        "DERIVED_FIELD": "factory_return_local_store_derived_field",
+        "OTHER_OR_UNKNOWN": "factory_return_local_store_other_or_unknown",
+    }
+    nearest = factory["factory_return_local_nearest_lexical_store_source"]
+    if nearest in nearest_to_key and factory[nearest_to_key[nearest]] < 1:
+        raise ValueError("nearest_source_without_matching_store_site")
+    if (factory["factory_return_local_store_derived_constructor"] >
+            factory["factory_direct_derived_rgd_constructor_sites"] or
+            factory["factory_return_local_store_derived_call"] >
+            factory["factory_direct_derived_rgd_returning_call_sites"]):
+        raise ValueError("typed_immediate_producer_without_original_site")
     b = result["field_write_breakdown"]
     if not isinstance(b, dict) or set(b) != set(WRITE_KEYS):
         raise ValueError("unrecognized_field_writer_contract")
@@ -151,7 +206,8 @@ def validate(result):
             result["world_producer_compiled_method_body_found"],
         "source_authentic_world_factory_return_site_categories": {
             key: factory[key] for key in FACTORY_FIELDS
-            if key != "factory_all_return_paths_proven"
+            if key not in ("factory_all_return_paths_proven",
+                           "factory_return_local_store_path_reachability_proven")
         },
         "factory_control_flow_paths_or_runtime_values_proven": False,
         "saveuser_direct_writer_method_categories": {
