@@ -1,0 +1,54 @@
+{
+  "id": "T3-ORIGINAL-921-SPIRV-REFLECTED-NAME-RETENTION",
+  "title": "T3 original highest-use Shader48 four-Pass source/roundtrip SPIRV generated-name identity",
+  "kind": "source-authentic-private-spirv-reflection-identity-discriminator",
+  "owner": "T3",
+  "issue_id": "RENDER-002",
+  "source_zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "stages": {
+    "acquisition": "SIX_SHA_AUTHENTIC_ORIGINAL_SCENES_FOUR_SHADER_MATERIAL_OWNER_SOURCES",
+    "extraction": "ORIGINAL_921_RENDERER_MATERIAL_SLOT_SOURCE_Shader48_4_PASSES",
+    "reconstruction": "CI42062573338_SUCCESS_8_REAL_DXBC_SPIRV_HLSL_ROUNDTRIP_STAGE_PROGRAMS_86_TESTS",
+    "binding": "ORIGINAL_TO_DERIVED_SPIRV_REFLECTED_NAMES_0_OF_34_INPUT_0_OF_29_OUTPUT_KEEP_TEXT_TYPE_STAGE_IO_TYPES_PRESERVED_REAL_DXBC_SEMANTIC_MAPPING_UNPROVEN",
+    "integration": "NO_SOURCE_SHADERS_OR_UNITY_SHADERLAB_INSTALLED_NO_ANDROID_GPU",
+    "device": "NOT_TESTED"
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42062573338",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_921_SPIRV_INTERFACE_NAME_DRIFT_2026-11-05.md"
+  ],
+  "actual_counts": {
+    "source_shader_original_renderer_material_slot_weight": 921,
+    "original_scenes_sha_verified": 6,
+    "ShaderMaterial_owners_sha_verified": 4,
+    "actual_original_Passes_sampled": 4,
+    "original_DXBC_vertex_fragment_stage_programs": 8,
+    "real_DXBC_to_SpirV1_1_valid": 8,
+    "roundtrip_HLSL_to_SpirV1_1_valid": 8,
+    "reflected_name_stage_pairs_classified": 8,
+    "source_input_interface_named": 34,
+    "roundtrip_input_interface_named": 34,
+    "input_name_type_exact_matches": 0,
+    "input_source_only_names": 34,
+    "input_roundtrip_only_names": 34,
+    "source_output_interface_named": 29,
+    "roundtrip_output_interface_named": 29,
+    "output_name_type_exact_matches": 0,
+    "output_source_only_names": 29,
+    "output_roundtrip_only_names": 29,
+    "stage_input_type_multisets_equal": 8,
+    "stage_output_type_multisets_equal": 8,
+    "stage_input_location_remap_candidates": 8,
+    "stage_output_location_remap_candidates": 4,
+    "stages_with_original_roundtrip_exact_location_type_lists": 0,
+    "original_DXBC_signature_semantic_proven": false,
+    "Android_Adreno_visual_proven": false
+  },
+  "remaining": [
+    "Original DXBC signed semantic name/index/register/mask must be parsed before any semantic-mapping inference",
+    "Eight unmatched Vertex permutations and other 29 matched pairs not tested",
+    "Original ShaderLab render states and Adreno framebuffer unverified"
+  ],
+  "updated_by": "T3",
+  "updated_at": "2026-11-05T16:20:05.265Z"
+}
