@@ -5,7 +5,7 @@
   "session_id": "20261105T1713Z-T4-chat-original-rgd-return-sites-j7q4",
   "issue_id": "LOCAL-005",
   "track": "original-derived-RGD-return-control-flow-boundaries",
-  "status": "active",
+  "status": "completed",
   "base_sha": "456f48286a4d62a2a7b43ee35d83940f026e4bf9",
   "experiment_key": "T4-authentic-zip2-sha0a6f-SaveAndLoad-zeroarg-derived-RGD-factory-return-site-and-direct-constructor-census-v1",
   "resource_key": null,
@@ -28,6 +28,34 @@
     "https://github.com/alwansan/raf/actions/runs/42068520588",
     "https://github.com/alwansan/raf/actions/runs/42058825739"
   ],
-  "updated_at": "2026-11-05T17:13:00Z",
-  "next_step": "Implement source-authenticated real compiled zeroarg producer return-site counters; CI negative controls; T4 scheduled JSONL overflow audit isolated, T5 Unity native still in progress."
+  "updated_at": "2026-11-05T17:18:00Z",
+  "next_step": "Analyze writes to derived RGD local that is immediately loaded before exactly one return in authentic original SaveAndLoad zeroarg factory, with branch ambiguity. T5 immutable native CI42058825739 remains in_progress Unity Editor at 17:15, no game test. LOCAL-005 OPEN NOT_READY 0/3. Scheduled JSONL queue overflow scope separate; no native duplicate or fake world save.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42072718216"
+  ],
+  "results": {
+    "authenticated_original_input": {
+      "zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+      "managed_dll_bytes": 3211776,
+      "managed_dll_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e"
+    },
+    "final_ci": "42072718216 COMPLETED SUCCESS",
+    "source_sha": "b1203fb30fa91eab56ec0507e720574d7aa75ecf",
+    "source_free_tests": "50/50",
+    "wrong_source_sha_rejected": true,
+    "original_factory_lexical_return_sites": 1,
+    "return_immediately_preceded_derived_rgd_local": 1,
+    "derived_rgd_local_slot_count": 2,
+    "direct_derived_rgd_constructor_sites": 1,
+    "direct_calls_returning_derived_rgd_sites": 1,
+    "conditional_branches": 34,
+    "null_literal_load_sites": 10,
+    "throw_rethrow_sites": 0,
+    "original_save_invoked": false,
+    "control_flow_or_runtime_return_value_proven": false,
+    "gameplay_world_rgd_written_or_loaded": false,
+    "Android_Unity_IL2CPP_or_device_tested": false,
+    "report": "docs/T4_ORIGINAL_RGD_RETURN_SITES_2026-11-05.md",
+    "handoff": "prompt/coordination/discussions/LOCAL-005/20261105T1717Z-T4-RGD-factory-return-shape-to-T5.md"
+  }
 }
