@@ -1,2 +1,5 @@
 # 20261105T0554Z-T5-ci-boundary-forensics
 Identity T5. Resumed from paused 20261105T0349Z-T5-unity-integration-boundary; baseline a4b215e8fa94f3c7280489297c41c5b8b91d1ffd. Current state previously paused, no evidence of another active T5 session (Git cannot prove exclusivity). Plan: independently inspect failing actual CI job logs and isolate reproducible integration blocker, do not touch T1/T3 code, record actionable evidence and safe next steps. APK86 last verified; NOT_READY 0/3.
+
+## Final checkpoint
+Exact T3 41968665857 job logs: 76/106 original-vs-export decoded pixel pairs EXACT, 30 RGB_DRIFT, 106 GUID/TextureImporter sampler parity, genuine export completed; fidelity gate exit2. Exact T1 41959712898 source-free Unity activation failed licensing category before original assets. Separate evidence discussion commit ac45c3a5850447ba977b101a4f6e3dce4605ba97. No gameplay code fix, CI or device test; scoped investigation completed. Next independent discriminators from T3/T1. NOT_READY 0/3.
