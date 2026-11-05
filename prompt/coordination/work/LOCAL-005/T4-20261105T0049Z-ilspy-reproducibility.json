@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "generation": "T-2026-11-05",
+  "session_id": "20261104T2357Z-T4-lw01",
+  "issue_id": "LOCAL-005",
+  "track": "world-save",
+  "approach": "Re-decompile the same SHA-verified original DLL twice in independent private directories under one pinned Actions job. Compare complete Raft_Network and WorldHasBeenLoaded method hashes plus executor/CLI versions without outputting original code; preserve existing source pins and native staging.",
+  "status": "active",
+  "base_sha": "a0e1fe9323e55c7147e549371553d6e7a3728ce6",
+  "intended_files": [
+    "scripts/t4_compare_private_ilspy_runs.py",
+    "tests/test_t4_compare_private_ilspy_runs.py",
+    ".github/workflows/raft-t4-world-completion-trace.yml",
+    "docs/T4_ORIGINAL_ILSPY_REPRODUCIBILITY_2026-11-05.md"
+  ],
+  "hypothesis": "Original T4 and B07 source-body SHA differences for same DLL may come from nondeterministic IlSpy output within the same environment; compare two independent same-run extractions, without changing accepted source hashes.",
+  "related_work": [
+    "prompt/coordination/work/LOCAL-005/T4-20261105T0029Z-original-completion-trace.json"
+  ],
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/actions/runs/41929041686",
+    "https://github.com/alwansan/raf/actions/runs/41943357681",
+    "docs/T4_WORLD_COMPLETION_TRACE_2026-11-05.md"
+  ],
+  "experiment_ids": [
+    "20261105T0049Z-ilspy-reproducibility"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Build read-only source-hash comparison negative controls; run two independent private ILSpy11.2.0.10050 complete exports from same authenticated original DLL in an isolated T4 workflow; publish SHA-only aggregate and no game data.",
+  "updated_at": "2026-11-05T00:49:00Z"
+}
