@@ -1,12 +1,12 @@
 {
-  "request_id": "t5-chat-current-native-diagnostic-20261105T1508Z-c2b7",
-  "reason": "One updated-source diagnostic retry after run42042902522 was cancelled during Mesh inspection before Unity; no source failure established. Include current source, T4 local-world Save/Load traces, current original material/water recovery and B50 offline guards. Retain strict authenticity, integrity, signature and release checks; water FFT and ShaderLab fidelity and device save/reopen remain unproven. Test build only; NOT_READY 0/3.",
-  "requested_from_sha": "5ed806ea1b8170988ea0f49140511021a8f239d3",
+  "request_id": "t5-exact-water-ack-20261105T1543Z-f2c9",
+  "reason": "New diagnostic request from the updated feature branch. Previous native run reached the existing strict water gate; document the observed five outstanding conditions exactly. Preserve original assets, Unity integrity, signature and packaging checks. Experimental water remains unproven; NOT_READY 0/3.",
+  "requested_from_sha": "f4c5f00f81cd91f34272b331c8801d0478888293",
   "documented_water_limitations": [
     "authentic_water_kernel_identity",
     "shader_pass_contract:UltimateWater/Foam/Global",
     "shader_pass_contract:UltimateWater/Spectrum/Water Spectrum",
-    "shader_pass_contract:UltimateWater/Utilities/Blur (Subsurface Scattering)",
+    "shader_pass_contract:UltimateWater/Depth/Depth Copy",
     "water_compute_source_candidate"
   ]
 }
