@@ -1,0 +1,13 @@
+{
+  "session_id": "20261105T1453Z-T5-scheduled-6e82",
+  "origin": "scheduled",
+  "issue_id": "INTEGRATION-001",
+  "experiment_key": "t5-native-cancelled-job-with-failed-step-vs-cancelled-step-42042902522-metadata-v1",
+  "source_sha": "de9b8491628bbf680bef496c704f938415784c73",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42049488845",
+  "result": "PASS 19/19 unittest; 3 new negative/positive controls",
+  "baseline": "CI42046665995 16/16",
+  "observed": "A cancelled native job with a failed step now reports native_job_cancelled_failed_step_causality_unresolved. The original immutable cancelled fixture still reports no source failure established.",
+  "limits": "Synthetic step perturbations; no actual mixed failure observed, no Unity/Android/device proof.",
+  "next_step": "Apply classifier to authentic future mixed GitHub metadata only, avoid inferring cancellation actor."
+}
