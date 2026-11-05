@@ -33,12 +33,26 @@
     "T5-20261105T1404Z-T5-chat-native-diagnostic-3c8e-native"
   ],
   "run_urls": [
-    "https://github.com/alwansan/raf/actions/runs/42042902522"
+    "https://github.com/alwansan/raf/actions/runs/42042902522",
+    "https://github.com/alwansan/raf/actions/runs/42043849990"
   ],
-  "result": null,
-  "next_step": "One diagnostic native delivery run 42042902522 pending; wait for exact job steps, no duplicate or cancel. Mark true outcome only with proof.",
-  "updated_at": "2026-11-05T14:14:00Z",
+  "result": {
+    "native_run_id": 42042902522,
+    "request_gate": "success",
+    "unity_license_preflight": "success",
+    "reconstruct": "in_progress",
+    "signed_apk": "unverified",
+    "obb": "unverified",
+    "xapk": "unverified",
+    "published_release": "unverified",
+    "device_world_save": "unverified",
+    "team_index_run": 42043849990,
+    "team_index_conclusion": "success"
+  },
+  "next_step": "Follow CI42042902522 immutable source 753802d through strict water/Unity/source/export/signature/transport checks. If still running, keep waiting_ci. If failure, record exact failed step before any repair; do not cancel or duplicate. Once release proven, request owner device world save / water visuals test.",
+  "updated_at": "2026-11-05T14:17:00Z",
   "run_url": "https://github.com/alwansan/raf/actions/runs/42042902522",
   "integration_commit": "753802d75196210d721cca0f4fdec6ce7800bf0d",
-  "request_commit": "753802d75196210d721cca0f4fdec6ce7800bf0d"
+  "request_commit": "753802d75196210d721cca0f4fdec6ce7800bf0d",
+  "observed_result": "CI42042902522 source 753802d: native-request-gate PASS, unity-license-preflight PASS, reconstruct IN_PROGRESS through original ComputeShader container audit at checkpoint; signed APK/OBB/XAPK and phone unknown. CI42043849990 canonical generated index SUCCESS and includes native request event. No duplicate native requests."
 }
