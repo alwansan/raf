@@ -1,0 +1,33 @@
+name: T5 INTEGRATION-001 immutable native source-to-signed-delivery milestone audit
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t5_native_milestone_gate.py
+      - tests/test_t5_native_milestone_gate.py
+      - tests/fixtures/t5_native_milestones_42058825739.json
+      - .github/workflows/raft-t5-native-milestone-gate.yml
+permissions:
+  contents: read
+concurrency:
+  group: t5-native-milestones-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  native-step-artifact-provenance:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Verify real Unity-running snapshot and 20 adverse delivery boundaries
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest -v tests.test_t5_native_milestone_gate
+      - name: State explicit acceptance limit
+        if: always()
+        run: echo 'Source-only GitHub run milestone snapshot; no game assets, original sources, signed APK/OBB/XAPK or Android execution.'
