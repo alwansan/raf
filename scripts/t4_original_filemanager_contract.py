@@ -38,14 +38,18 @@ def inspect(save, manager, save_sha, manager_sha):
 
     def resolve(name):
         hits = [raw for meth, _, raw, _ in methods if meth == name]
-        if not hits:
-            raise ValueError("FileManager implementation not found")
+        # A missing regex-parsed body is NOT proof the original target is absent.
+        # Expression bodies, generics, inherited methods, or parser limitations
+        # may explain it. Record bounded counts, never the private method name.
+        token_count = len(re.findall(r"\\b" + re.escape(name) + r"\\s*\\(", _executable_positions(manager)))
         return {
             "possible_overloads": len(hits),
             "unique_target": len(hits) == 1,
             "target_sha256": fingerprint(hits[0]) if len(hits) == 1 else None,
             "direct_io_site_count": len(IO.findall(_executable_positions(hits[0]))) if len(hits) == 1 else None,
             "internal_catch_site_count": len(CATCH.findall(_executable_positions(hits[0]))) if len(hits) == 1 else None,
+            "unresolved_original_name_tokens": token_count if not hits else None,
+            "target_absence_proven": False,
         }
     read, write = resolve(read_edges[0]), resolve(write_edges[0])
     return {
@@ -110,7 +114,9 @@ def main():
     p.add_argument("--source", type=Path, required=True)
     args = p.parse_args()
     try:
-        report, code = probe(args.original_managed_dll, args.source), 0
+        report = probe(args.original_managed_dll, args.source)
+        code = 0 if report["read"]["unique_target"] and report["write"]["unique_target"] else 2
+        report["status"] = "BOUNDED_DIRECT_EDGES" if code == 0 else "ORIGINAL_TARGET_PARSER_UNRESOLVED"
     except Exception as exc:
         report, code = {"status": "UNRESOLVED", "error_type": type(exc).__name__,
                         "bounded_failure_phase": str(exc) if isinstance(exc, RuntimeError)
