@@ -1,0 +1,19 @@
+{
+  "session_id": "20261105T2334Z-T3-scheduled-extent-nesting-c4a7",
+  "origin": "scheduled",
+  "owner": "T3",
+  "baseline_sha": "39351c071b1a8cd53f2cacf9c8d9c5ad0ef77148",
+  "issue": "RENDER-002",
+  "experiment_key": "T3-stream-extents-nested-duplicate-accounting-v2",
+  "resource_key": "source-free-python-only",
+  "files": [
+    "scripts/t3_stream_extent_guard.py",
+    "tests/test_t3_stream_extent_guard.py",
+    "prompt/coordination/work/RENDER-002/20261105T2334Z-T3-scheduled-extent-nesting-c4a7.json",
+    "prompt/coordination/clients/T3/sessions/20261105T2334Z-T3-scheduled-extent-nesting-c4a7.md"
+  ],
+  "hypothesis": "When a range is contained inside a prior larger range, a repeated identical contained range is incorrectly counted as partial overlap instead of exact duplicate. Add source-free regression and correct accounting without changing extent validity or authentic source evidence.",
+  "taken_over_from": "20261105T2230Z-T3-scheduled-streamrange-9c62 and 20261105T225050Z-T3-chat-verified-particle-stream-52bd",
+  "status": "planned",
+  "coordination": "No Unity/ZIP2/CL/Android runs. Independent metadata-only code; T3 chat source proof complete. T1 running FFT Actions untouched."
+}
