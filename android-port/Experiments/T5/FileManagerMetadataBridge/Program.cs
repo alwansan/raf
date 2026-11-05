@@ -39,10 +39,10 @@ internal static class Program
         MethodDefinition? target = null;
         try { target = reference.Resolve(); }
         catch (AssemblyResolutionException) { /* Unknown, never claim absent. */ }
-        catch (ResolutionException) { /* Unknown, never claim absent. */ }
+        catch (Exception) { /* Unknown, never claim absent. */ }
         bool sameType = target is not null &&
                         target.DeclaringType.FullName == manager.FullName &&
-                        manager.Methods.Any(method => method.MetadataToken == target.MetadataToken);
+                        manager.Methods.Any(method => method.MetadataToken.ToInt32() == target.MetadataToken.ToInt32());
         if (!sameType || target is null)
             return new Edge(false, false, false, false, null, null, null, null);
         bool hasBody = target.HasBody;
@@ -110,6 +110,7 @@ internal static class Program
                 original_dll_bytes = OriginalSize,
                 read_direct_call_count = readEdges.Count,
                 write_direct_call_count = writeEdges.Count,
+                same_target_metadata_token = readEdges[0].MetadataToken.ToInt32() == writeEdges[0].MetadataToken.ToInt32(),
                 read,
                 write,
                 both_target_bodies_resolved = targetsResolved,
