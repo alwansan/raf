@@ -2,7 +2,7 @@
   "session_id": "20261105T1428Z-T3-scheduled-a7c9",
   "origin": "scheduled",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed",
   "base_sha": "0a0b5d5ebcd3346aaf8182f95fcd6c4925bfe563",
   "intended_files": [
     "prompt/coordination/clients/T3/sessions/20261105T1428Z-T3-scheduled-a7c9.md",
@@ -11,5 +11,13 @@
   "hypothesis": "Cross-check authentic original Renderer Shader48 coverage and post-vendor Dummy usage without confusing source populations or re-dispatching equivalent heavy experiments",
   "experiment_key": "T3-20261105-authentic-Shader48-1633-vs-postvendor-Dummy495-evidence-reconciliation",
   "resource_key": null,
-  "updated_at": "2026-11-05T14:28:00Z"
+  "updated_at": "2026-11-05T14:29:00Z",
+  "result": "Cross-population source vs export evidence reconciled; no duplicate heavy run; genuine exported Renderer Dummy slot count remains unknown",
+  "session_path": "prompt/coordination/clients/T3/sessions/20261105T1428Z-T3-scheduled-a7c9.md",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42042819113",
+    "https://github.com/alwansan/raf/actions/runs/42033940194",
+    "https://github.com/alwansan/raf/actions/runs/42043678564",
+    "https://github.com/alwansan/raf/actions/runs/42036281059"
+  ]
 }
