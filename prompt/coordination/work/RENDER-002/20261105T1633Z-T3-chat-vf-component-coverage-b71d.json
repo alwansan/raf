@@ -1,0 +1,25 @@
+{
+  "session_id": "20261105T1633Z-T3-chat-vf-component-coverage-b71d",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "base_sha": "466b59718e271a5ca7071258b2f5938f34e702e9",
+  "updated_at": "2026-11-05T16:33:00Z",
+  "resumed_from_sessions": [
+    "20261105T1607Z-T3-chat-spv-name-location-7c2d",
+    "20261105T1625Z-T3-scheduled-dxbc-contract-8f2c"
+  ],
+  "taken_over_from": "T3 original Shader48 four-pass genuine CI42062573338, component mapping unresolved",
+  "intended_files": [
+    "scripts/t3_vf_spirv_component_coverage.py",
+    "tests/test_t3_vf_spirv_component_coverage.py",
+    ".github/workflows/raft-t3-vf-spv-component-coverage.yml",
+    "prompt/coordination/clients/T3/sessions/20261105T1633Z-T3-chat-vf-component-coverage-b71d.md",
+    "prompt/coordination/experiments/T3/20261105T1633Z-T3-chat-vf-component-coverage-b71d.json",
+    "prompt/coordination/B_TEAM/events/T3/20261105T1633Z-T3-chat-vf-component-coverage-b71d.json"
+  ],
+  "experiment_key": "T3-SPIRVCross-VSPS-Location-Component-typed-coverage-sourcefree-v1",
+  "resource_key": null,
+  "hypothesis": "A conservative typed Location/Component vertex-output to fragment-input coverage validator can classify structural loss while withholding original DXBC semantic, interpolation and pixel-fidelity claims; separate from scheduled DXBC signature records",
+  "avoid_overlap": "Do not touch scheduled scripts/t3_dxbc_signature_contract.py or its tests; no private source read/Unity build and no edits to other T members."
+}
