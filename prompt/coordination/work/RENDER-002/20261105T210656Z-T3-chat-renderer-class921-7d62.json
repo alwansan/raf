@@ -6,9 +6,9 @@
   "origin": "chat",
   "issue_id": "RENDER-002",
   "track": "genuine original six-scene Renderer class→top-921 Shader48 impact attribution",
-  "status": "active",
+  "status": "completed",
   "base_sha": "2e3cbbc13c5b9523d2655cf325abf92c4fcabc18",
-  "updated_at": "2026-11-05T21:06:56.348Z",
+  "updated_at": "2026-11-05T21:09:38Z",
   "intended_files": [
     "scripts/t3_original_renderer_shader_impact.py",
     "tests/test_t3_original_renderer_shader_impact.py",
@@ -20,12 +20,15 @@
   ],
   "hypothesis": "The verified highest-use original 4-Pass Shader48 with 921 six-scene renderer material slots can be class-attributed to MeshRenderer/SkinnedMeshRenderer versus ParticleSystemRenderer/Trail/Line/Sprite to prioritize the white raft/hand vs square smoke/fire, without reverse-engineering private IDs in public logs.",
   "experiment_key": "T3-original-ZIP2-15964ea8-6scene-4owner-top921-by-UnityRenderer-class-multislot-distinct-renderer-source-only-v1",
-  "resource_key": "t3-ZIP2-6scene-4owner-source-only-22min",
+  "resource_key": null,
   "taken_over_from": [
     "prompt/coordination/clients/T3/sessions/20261105T2102Z-T3-chat-builtin-null-pointer-0d3e.md",
     "https://github.com/alwansan/raf/actions/runs/42042819113"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Add safe aggregation to existing original source graph (no private IDs), adversarial synthetic tests for slot count vs distinct renderers and effects, then run existing PINNED original 6 scenes/4 owners workflow only once. Record actual class breakdown and boundaries, keep RENDER-002 open."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42109994654"
+  ],
+  "result": "Genuine SHA-pinned original 6 scenes/4 Shader owners CI42109994654 SUCCESS: 37/37 synthetic controls, 1639 source Material slots, 1633 typed Shader48 slots, exactly one highest-used 921 Shader48 = 914 Mesh +7 Skinned, zero ParticleSystemRenderer; remaining 215 typed particle shader slots are other Shader48 objects. NOT Android pixel proof.",
+  "next_step": "Use same SHA-original class evidence to attribute the 215 ParticleSystemRenderer-linked typed Shader48 slots by anonymous shader-use rank and original pass/Blend/alpha family, then correlate candidate with fire/smoke logs/screenshots without claiming particle emitter or Android pixels. Separately preserve exact original top921→full native private GUID join when T5 has same-export full restoration; do not re-run an equivalent export.",
+  "integration_commit": "3342cf6b1c996c2bcf7b7bf4d6caae23e3b7c29e"
 }
