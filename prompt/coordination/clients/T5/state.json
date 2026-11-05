@@ -2,12 +2,12 @@
   "schema_version": 1,
   "username": "T5",
   "generation": "T-2026-11-05",
-  "session_id": "20261105T0032Z-T5-content-batch-preflight",
-  "resumed_from_session": "20261105T0024Z-T5-hydration-preflight-a1",
+  "session_id": "20261105T0040Z-T5-real-hydrator-entrypoint",
+  "resumed_from_session": "20261105T0032Z-T5-content-batch-preflight",
   "status": "completed",
-  "base_sha": "087bd9f58d586559272b50c71aed9c2164ebb7f4",
-  "last_commit": "7cf650ca49468d061d722446f5735f6e84fc6407",
-  "updated_at": "2026-11-05T00:36:00Z",
+  "base_sha": "1940a856cc2ee0724bff04d47aba408e10ac7eae",
+  "last_commit": "e5b461837bdcec38b11f74b0d26e2c8d7c52657b",
+  "updated_at": "2026-11-05T00:41:00Z",
   "tracks": [
     "INTEGRATION-001",
     "ASSET-RESTORE-001"
@@ -17,7 +17,8 @@
     "T5-20261105T0004Z-zip2-render-integration",
     "T5-20261105T0015Z-three-owner-batch",
     "T5-20261105T0024Z-hydration-batch-preflight",
-    "T5-20261105T0032Z-batch-digest-prepublish"
+    "T5-20261105T0032Z-batch-digest-prepublish",
+    "T5-20261105T0040Z-real-hydrator-entrypoint"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41937719270",
@@ -27,8 +28,9 @@
     "https://github.com/alwansan/raf/actions/runs/41940032540",
     "https://github.com/alwansan/raf/actions/runs/41940609086",
     "https://github.com/alwansan/raf/actions/runs/41942039458",
-    "https://github.com/alwansan/raf/actions/runs/41941969217"
+    "https://github.com/alwansan/raf/actions/runs/41941969217",
+    "https://github.com/alwansan/raf/actions/runs/41942815626"
   ],
-  "next_step": "T5 full-batch streamed SHA guard verified (17/17 and authentic ZIP2 337660952 bytes in CI41942039458); next use authentic owners in coordinated Unity Editor/ShaderLab/FFT/render export, not repeat metadata/source-only test. No phone acceptance; NOT_READY 0/3.",
+  "next_step": "Production --apply 3-owner SHA-authentic opt-in ZIP2 graphics hydrated in CI41942815626, zero LFS; next coordinate actual Unity Editor/material/FFT imports with T1/T3. No full original set/device evidence, NOT_READY 0/3.",
   "memory_path": "prompt/coordination/clients/T5/MEMORY.md"
 }
