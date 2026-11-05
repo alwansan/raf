@@ -123,10 +123,11 @@ class MaterialPropertyContractTests(unittest.TestCase):
             classified(weights={("sharedassets0.assets",9):920})
 
     def test_reject_bool_or_zero_renderer_weight(self):
+        a,b=("sharedassets0.assets",9),("resources.assets",1)
         for w in (True,0,-1):
             with self.subTest(w=w),self.assertRaisesRegex(ValueError,"slot_weights"):
-                classified(weights={("sharedassets0.assets",9):w} if w==True else
-                           {("sharedassets0.assets",9):w,("resources.assets",1):921-w})
+                classified(props={a:saved(),b:saved()},
+                           weights={a:w,b:921-int(w)})
 
     def test_missing_original_material_weight_identity_rejected(self):
         with self.assertRaisesRegex(ValueError,"untrusted_original_921"):
