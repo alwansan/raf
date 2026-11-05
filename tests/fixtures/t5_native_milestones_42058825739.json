@@ -1,0 +1,114 @@
+{
+  "provenance": {
+    "run_url": "https://github.com/alwansan/raf/actions/runs/42058825739",
+    "run_id": 42058825739,
+    "source_sha": "e9c358eda01785b65e4eb14f18723da426635628",
+    "source": "filtered official GitHub REST run/jobs/artifacts metadata",
+    "observation": "in_progress while Unity Editor step62 running, before native build or signed release"
+  },
+  "run": {
+    "id": 42058825739,
+    "head_sha": "e9c358eda01785b65e4eb14f18723da426635628",
+    "status": "in_progress",
+    "conclusion": null
+  },
+  "jobs": {
+    "jobs": [
+      {
+        "name": "native-request-gate",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "unity-license-preflight",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "reconstruct",
+        "status": "in_progress",
+        "conclusion": null,
+        "steps": [
+          {
+            "number": 15,
+            "name": "Restore every pinned external Mesh buffer while retaining original serialized identities",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Export 40 scenes into a Unity Editor project with correct MonoScript metadata",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 43,
+            "name": "Authentic water gate (strict) or exact documented trial limitation",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 59,
+            "name": "Validate reconstructed editor project structure and GUID references",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 62,
+            "name": "Unity Editor 2021.3.45f2 Android import and compile",
+            "status": "in_progress",
+            "conclusion": null
+          },
+          {
+            "number": 65,
+            "name": "Audit private native APK payload and ARM64 IL2CPP structure",
+            "status": "pending",
+            "conclusion": null
+          },
+          {
+            "number": 67,
+            "name": "Verify actual APK signature before any early device-test delivery",
+            "status": "pending",
+            "conclusion": null
+          },
+          {
+            "number": 69,
+            "name": "Package complete owner-authorized APK OBB and XAPK delivery",
+            "status": "pending",
+            "conclusion": null
+          },
+          {
+            "number": 71,
+            "name": "Retain complete owner-authorized install packages for release delivery",
+            "status": "pending",
+            "conclusion": null
+          }
+        ]
+      }
+    ]
+  },
+  "artifacts": {
+    "artifacts": [
+      {
+        "name": "raft-water-limitation-e9c358eda01785b65e4eb14f18723da426635628",
+        "size_in_bytes": 833,
+        "expired": false
+      },
+      {
+        "name": "raft-b45-original-blur-native-staging-e9c358eda01785b65e4eb14f18723da426635628",
+        "size_in_bytes": 1990,
+        "expired": false
+      },
+      {
+        "name": "w1-native-depth-staging-e9c358eda01785b65e4eb14f18723da426635628",
+        "size_in_bytes": 3242,
+        "expired": false
+      },
+      {
+        "name": "w1-native-export-reference-audit-e9c358eda01785b65e4eb14f18723da426635628",
+        "size_in_bytes": 2095,
+        "expired": false
+      }
+    ]
+  }
+}
