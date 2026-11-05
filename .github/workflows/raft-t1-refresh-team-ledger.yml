@@ -64,7 +64,10 @@ jobs:
           recent=[x for x in data["events"] if x["id"]=="20261105T030800Z-T1-unity-editor-activation-gate"]
           assert len(recent)==1 and recent[0]["owner"]=="T1"
           resource=[x for x in data["resources"] if x["id"]=="fft-t1-original-derived-unity-compute-candidates-20261105"]
-          assert len(resource)==1 and resource[0]["stages"]["integration"]=="BLOCKED_UNITY_ACTIVATION_NO_IMPORT_RESULT"
+          assert len(resource)==1 and resource[0]["stages"]["integration"]=="BLOCKED_UNITY_LICENSE_IN_SOURCE_FREE_FIXTURE"
+          assert "https://github.com/alwansan/raf/actions/runs/41959712898" in water[0]["evidence"]
+          license_gate=[x for x in data["events"] if x["id"]=="20261105T031000Z-T1-source-free-unity-activation-gate"]
+          assert len(license_gate)==1 and license_gate[0]["owner"]=="T1"
           assert data["readiness"] is not True
           print("RAFT_T1_LEDGER_RECONCILE current_T1_event=true unity_probe_source_only=true original_water_open=true")
           PY
