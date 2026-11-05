@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261105T1314Z-T2-chat-foam-writers-72c9",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "updated_at": "2026-11-05T13:13:52.952Z",
+  "base_sha": "8efdc028bb88f5acbd42f996a6c1c3accbbbce2a",
+  "resumed_from_sessions": [
+    "20261105T1244Z-T2-chat-digest-removal-a6f4",
+    "20261105T1213Z-T2-foam-return-producer-call-isolated"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/B_TEAM/resources/T2-foam-original-null-guarded-rendertexture-producer.json"
+  ],
+  "hypothesis": "The exact SHA-original compiled getter RenderTexture[] backing FieldReference can be matched to original Assembly-CSharp stfld writers, and direct newarr/null assignment sources classified, without guesses or exposing original field symbols.",
+  "experiment_key": "T2|ZIP2-15964ea8|managed-dll-0a6f0527|same-field-reference|stfld-producer|strict-pattern-v1",
+  "resource_key": "t2-shaoriginal-foam-managed-cecil-only",
+  "intended_files": [
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/FoamFieldWriterLineage.cs",
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/Program.cs",
+    ".github/workflows/raft-t2-foam-managed-literals.yml",
+    "prompt/coordination/work/WATER-001/T2-20261105T1314Z-T2-chat-foam-writers-72c9-field-writes.json",
+    "prompt/coordination/clients/T2/sessions/20261105T1314Z-T2-chat-foam-writers-72c9.md"
+  ],
+  "preflight": {
+    "sha": "8efdc028bb88f5acbd42f996a6c1c3accbbbce2a",
+    "existing_original_managed_run": "42028369439 success",
+    "other_active_actions": [
+      "42033745544 platform adapter",
+      "42033745802 T1 input identity"
+    ],
+    "t2_original_managed_ci_active": false
+  },
+  "approach": "New conservative Cecil original getter field extractor requires exact prior guarded 10-op pattern. Scan all original managed methods for matching stfld, count distinct writers and direct null/newarr ReturnTexture[] immediate values. Synthetic writer/decoy/guard rejection; original SHA-pinned managed CI with numeric-safe aggregate assertions. No Unity, game assets, or private IL published.",
+  "run_urls": [],
+  "next_step": "Implement scope-specific code and selftest, push with SHA-lease, inspect bounded genuine-source CI, save session and event. Actual index operands deliberately separate follow-up."
+}
