@@ -90,7 +90,14 @@ def main():
     parser.add_argument("--source", type=Path, required=True)
     args = parser.parse_args()
     assert_original_dll(args.original_managed_dll)
-    source, _ = _source(args.source, "SaveAndLoad", PINS["SaveAndLoad"])
+    source, observed = _source(args.source, "SaveAndLoad", None)
+    if observed != PINS["SaveAndLoad"]:
+        print("T4_ORIGINAL_SOURCE_MISMATCH " + json.dumps({
+            "observed_sha256": observed,
+            "expected_sha256": PINS["SaveAndLoad"],
+            "loader_or_device_validated": False,
+        }, sort_keys=True))
+        raise ValueError("Original source SHA mismatch; refuse unsupported decompiler output")
     print("T4_ORIGINAL_RGD_LOADER " + json.dumps(analyze(source), sort_keys=True))
 
 
