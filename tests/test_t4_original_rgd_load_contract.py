@@ -1,6 +1,6 @@
 import unittest
 from scripts.b07_probe_original_world_callbacks import fingerprint
-from scripts.t4_original_rgd_load_contract import analyze, inspect_original_saveandload_scope
+from scripts.t4_original_rgd_load_contract import analyze, inspect_original_saveandload_scope, inspect_exact_original_loader_method
 
 HEADER = """public class SaveAndLoad {
  public T Load<T>(string filename) {
@@ -55,6 +55,23 @@ class OriginalLoaderContractTests(unittest.TestCase):
     def test_source_scope_rejects_wrong_fingerprint(self):
         with self.assertRaisesRegex(ValueError, "SHA256"):
             inspect_original_saveandload_scope(HEADER, "0" * 64)
+
+    def test_authenticated_loader_method_multiline_brace_and_binder(self):
+        source = HEADER.replace(") {", ")\\n {", 1)
+        report = inspect_exact_original_loader_method(source, fingerprint(source))
+        self.assertEqual(report["loader_deserialize_call_count"], 1)
+        self.assertEqual(report["loader_binder_assignment_count"], 1)
+        self.assertTrue(report["loader_signature_verified_from_runtime_manifest"])
+        self.assertFalse(report["binder_version_runtime_compatibility_tested"])
+
+    def test_authenticated_loader_method_missing_call_fails(self):
+        source = HEADER.replace("formatter.Deserialize(", "formatter.Serialize(")
+        with self.assertRaisesRegex(ValueError, "exactly one"):
+            inspect_exact_original_loader_method(source, fingerprint(source))
+
+    def test_authenticated_loader_method_wrong_sha_fails(self):
+        with self.assertRaisesRegex(ValueError, "SHA256"):
+            inspect_exact_original_loader_method(HEADER, "0" * 64)
 
     def test_binder_not_assumed_from_assembly_version(self):
         fixture = HEADER.replace("formatter.Binder = new LegacyBinder();", "")
