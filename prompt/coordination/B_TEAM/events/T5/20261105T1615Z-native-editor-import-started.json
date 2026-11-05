@@ -1,0 +1,15 @@
+{
+  "id": "T5-20261105T1615Z-native-editor-import-started",
+  "owner": "T5",
+  "session_id": "20261105T1611Z-T5-chat-native-provenance-5d7b",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "type": "checkpoint",
+  "summary": "Current authentic native source e9c358eda01785b65e4eb14f18723da426635628 passed exact documented water gate (experimental deficit acknowledged, NOT original water authenticity), exported 40 scenes, restored meshes/SDK/FM0D/Unity project and passed structure+memory gates. Native run42058825739 entered actual Unity 2021.3.45f2 Android import/compile at step62/78 and remained in_progress at checkpoint. GitHub compare from source to sampled 75382fab HEAD had 58 later commits, no production-game Runtime/Unity/Asset changes or full native workflow/request modifications in 49 changed paths. No signed APK/OBB/XAPK or device acceptance. No new native dispatch or cancellation.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42058825739",
+    "https://github.com/alwansan/raf/compare/e9c358eda01785b65e4eb14f18723da426635628...75382fab995d1e9847d2384b83b8cd157e4b354a",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/experiments/T5/T5-20261105T1611Z-T5-chat-native-provenance-5d7b-immutable-native-progress.json"
+  ],
+  "at": "2026-11-05T16:15:00Z"
+}
