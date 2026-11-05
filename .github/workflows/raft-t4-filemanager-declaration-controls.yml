@@ -1,0 +1,32 @@
+name: T4 LOCAL-005 FileManager declaration-shape controls
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/t4_filemanager_declaration_shapes.py'
+      - 'tests/test_t4_filemanager_declaration_shapes.py'
+      - '.github/workflows/raft-t4-filemanager-declaration-controls.yml'
+permissions:
+  contents: read
+concurrency:
+  group: raft-t4-filemanager-declaration-controls
+  cancel-in-progress: false
+jobs:
+  synthetic-declaration-controls:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests/test_t4_filemanager_declaration_shapes.py
+      - name: Validate isolated synthetic classifier
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t4_filemanager_declaration_shapes.py tests/test_t4_filemanager_declaration_shapes.py
+          python3 -m unittest discover -s tests -p test_t4_filemanager_declaration_shapes.py -v
