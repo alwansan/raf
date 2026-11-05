@@ -4,7 +4,7 @@
   "origin": "chat",
   "owner": "T4",
   "issue_id": "INPUT-005",
-  "status": "active",
+  "status": "completed_source_integrated_device_unverified",
   "base_sha": "376e082f845dd7211a64d976d72f1170d07eb3ab",
   "updated_at": "2026-11-05T22:30:00Z",
   "resumed_from_sessions": [
@@ -33,5 +33,20 @@
   "related_runs": [
     "https://github.com/alwansan/raf/actions/runs/42118499200"
   ],
-  "result": null
+  "result": {
+    "integration_source_sha": "868eac2784efa1fcf7806a23b32bd1a1a1220fcf",
+    "ci": "SUCCESS 42121598304 job 127575325748",
+    "source_classifier": "mouse relative vs captured touchpad; bounded history; nonrelative actions ignored",
+    "python": "28/28",
+    "dotnet": "30/30",
+    "unity2021_original_managed_compile": "SUCCESS",
+    "original_mouse_sites": "4 Mouse X + 4 Mouse Y + 2 cursor locks, 5 original files",
+    "new_native_build": false,
+    "device_tested": false
+  },
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42121540200",
+    "https://github.com/alwansan/raf/actions/runs/42121598304"
+  ],
+  "next_step": "T5 signed candidate only when separately coordinated; on-device continuous camera / OS capture release/reacquire / menu cursor/system bars / wheel+buttons/keyboard/touch / same SHA world/save/reopen and safe source logging; the source completion does not close INPUT-005."
 }
