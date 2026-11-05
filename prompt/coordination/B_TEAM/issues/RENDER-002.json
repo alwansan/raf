@@ -103,7 +103,9 @@
     "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-original-scene-renderer-shader-postvendor-use.json",
     "https://github.com/alwansan/raf/actions/runs/42046329453",
     "https://github.com/alwansan/raf/actions/runs/42058881426",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_921_STAGE_IO_DRIFT_CLASSIFICATION_2026-11-05.md"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_921_STAGE_IO_DRIFT_CLASSIFICATION_2026-11-05.md",
+    "https://github.com/alwansan/raf/actions/runs/42062573338",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_921_SPIRV_INTERFACE_NAME_DRIFT_2026-11-05.md"
   ],
   "remaining": [
     "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -146,7 +148,8 @@
     "T3 CI42026630845: authentic bounded 12-owner PRE-restorer AssetRipper export has 731 Material docs (511 custom, 220 Unity builtin), all 511 custom docs point to 54 dummy Shader GUIDs and all 126 ShaderLab files carry default-Dummy marker; new native post-restorer quality audit integrated but not executed. Actual Android visual state and authored ShaderLab restoration remain UNKNOWN; RENDER-002 OPEN.",
     "T3 genuine same-instance ZIP2 6-scene source Renderer->Material->21 typed Shader48 use map: 1633 source material slots, 1373 still target DummyShaderTextExporter after bounded TMP/PostFX/Volumetric vendor restore, 256 Unity builtin, 4 non-Dummy, 2 Shader pointers outside selected typed owner; highest-use 921-slot original source Shader remains Dummy at this bounded stage. No full native post-restorer/Adreno evidence; prioritize authentic program reconstruction but check native builtins stage before claiming 921 device issue.",
     "T3 source SHA-pinned 6-scene top-921 Renderer-use Shader48 has NO exact match among 198 official Unity2021.3.45f2 SHA-pinned runtime builtin shaders (CI42046329453). Exactly 3 other typed source shaders cover 256 original renderer slots and match builtin-name library (independently corroborates W1 exporter 3 builtins/256 slots). Top 921 still Dummy after TMP/PostFX/Volumetric in bounded export; must target original compiled stage/pass/variants, not archived builtin name substitution. Full native/Adreno pixels unknown; RENDER-002 OPEN.",
-    "T3: SHA-authentic original 921-use Shader48 four-Pass D3D11→SPIR-V→derivative HLSL roundtrip real CI42058881426 passed 71 controls. Per-stage input/output type-multisets preserved 8/8 each; I/O numeric-location relocation candidates inputs 8/8, outputs 4/8, not semantic/output parity. No ShaderLab source installed; Unity Android/phone visuals still unverified. RENDER-002 OPEN."
+    "T3: SHA-authentic original 921-use Shader48 four-Pass D3D11→SPIR-V→derivative HLSL roundtrip real CI42058881426 passed 71 controls. Per-stage input/output type-multisets preserved 8/8 each; I/O numeric-location relocation candidates inputs 8/8, outputs 4/8, not semantic/output parity. No ShaderLab source installed; Unity Android/phone visuals still unverified. RENDER-002 OPEN.",
+    "T3 CI42062573338: authentic 921-use original Shader48 source/private HLSL SPIRV roundtrip has 34 original input and 29 original output reflected variable names but 0/34 and 0/29 compiler-reflected names retained after roundtrip. Previous 8/8 stage type-multiset/numeric binding shape preserves still hold; this demonstrates generated naming drift, NOT original semantic preservation/loss or a white-material fix. Original DXBC signature semantic index/register/masks to SPIRV BuiltIn/Location/Component are unverified; Unity/Android pixels UNKNOWN."
   ],
   "acceptance": [
     "مطابقة روابط ومراجع الأصل",
