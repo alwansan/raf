@@ -1,0 +1,14 @@
+{
+  "id": "T2-20261105T1438Z-source-original-Foam-serialization-gate",
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261105T1434Z-T2-chat-rendertexture-serialization-93ad",
+  "issue_id": "WATER-001",
+  "type": "original_foam_field_metadata_and_four_private_i4_aggregate",
+  "at": "2026-11-05T14:38:00Z",
+  "summary": "SHA-original Foam field metadata CI42046650774 SUCCESS proves exact backing RenderTexture[] FieldDefinition count1, private and no SerializeField; not static, not readonly, not NonSerialized. Thus ordinary field-modifier serialization eligibility false (not proof of scene content). In same verified source, 4 Texture(int) direct i4 index values decoded, 4 distinct and all nonnegative; actual values withheld, runtime array length and pixels unknown. WATER-001 OPEN NOT_READY0/3.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42046650774",
+    "https://github.com/alwansan/raf/commit/9b01015a9e3aa47718d9b102d31bd8d39d52b638"
+  ]
+}
