@@ -31,7 +31,8 @@ REL_COLUMNS=("kind","bytes","sha256","mode","relative_path_under_Raft")
 def plan_contract(plan:dict, manifest:Path):
     """Validate a private source-scope plan against the immutable manifest."""
     if (type(plan) is not dict or set(plan)!={"schema_version","source_sha",
-        "source_scope","providers"} or plan["schema_version"]!=1
+        "source_scope","providers"} or type(plan["schema_version"]) is not int
+        or plan["schema_version"]!=1
         or plan["source_sha"]!=ZIP2_SHA
         or plan["source_scope"]!="T3_private_108_particle_original_Texture2D"
         or type(plan["providers"]) is not dict or len(plan["providers"])!=1):
