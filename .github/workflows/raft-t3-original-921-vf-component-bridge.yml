@@ -54,6 +54,7 @@ jobs:
         with:
           persist-credentials: false
           lfs: false
+          fetch-depth: 2
           sparse-checkout: |
             scripts
             tests
@@ -64,7 +65,7 @@ jobs:
           set -euo pipefail
           marker='.github/t3-original-vf-requests/20261105T1642Z-T3-chat-original-vf-component-bridge-d42e.json'
           files="$(git diff-tree --no-commit-id --name-only -r HEAD)"
-          test "$files" = "$marker"
+          if [ "$files" != "$marker" ]; then echo "T3_EXPLICIT_MARKER_COMMIT_SCOPE_MISMATCH" >&2; exit 1; fi
           python3 - <<'PY'
           import json,subprocess
           from pathlib import Path
