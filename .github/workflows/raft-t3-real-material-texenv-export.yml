@@ -2,6 +2,9 @@ name: T3 RENDER-002 genuine original Material and TexEnv same-export trial
 # T3 bounded diagnostic revision: first authenticated export 41938229887 succeeded,
 # but B05 comparator returned an unclassified ValueError. This one recheck
 # records the safe failing stage/aggregate counts, never private asset IDs.
+# Follow-up from 41938711186: all 41 original Materials/227 slots parsed,
+# but actual exported Material YAML reader rejects a document. Keep exact
+# SHA-pinned export and classify its static parser reason without exposing IDs.
 on:
   workflow_dispatch:
   push:
