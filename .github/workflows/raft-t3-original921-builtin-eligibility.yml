@@ -2,13 +2,10 @@ name: T3 RENDER-002 source 921-use Shader exact official Unity built-in name can
 # Distinct from A12 original all-Shader aggregate: weigh source names by verified
 # 1633 scene Renderer slots and isolate the source 921-slot target. No raw names,
 # IDs, shader code, or device/pixel claims. After success, manual-only reruns.
+# This exact builtin-name hypothesis was already settled by independent
+# T3 source CI42046329453; this redundant implementation remains review-only.
+# Do not repeat this source experiment without an independently new question.
 on:
-  push:
-    branches: [feature/android-native-port]
-    paths:
-      - scripts/t3_original_shader_builtin_eligibility.py
-      - tests/test_t3_original_shader_builtin_eligibility.py
-      - '.github/workflows/raft-t3-original921-builtin-eligibility.yml'
   workflow_dispatch:
 permissions:
   contents: read
