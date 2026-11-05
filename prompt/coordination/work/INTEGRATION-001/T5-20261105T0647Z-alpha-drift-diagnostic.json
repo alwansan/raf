@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T0647Z-T5-alpha-drift-classifier-review",
+  "issue_id": "INTEGRATION-001",
+  "track": "decoded-pixel-diagnostic",
+  "approach": "Independent minimal alpha-only negative control for existing T3 diagnostics, no edits to T3-owned files",
+  "status": "active",
+  "base_sha": "388b5317780f438667cbb62351ba999fbbcc153c",
+  "intended_files": [
+    "prompt/coordination/clients/T5/sessions/20261105T0647Z-T5-alpha-drift-classifier-review.md",
+    "prompt/coordination/discussions/RENDER-002/20261105T0647Z-T5-alpha-only-diagnostic-boundary.md"
+  ],
+  "hypothesis": "T3 max_rgb_delta_bin reports RGB_1 for alpha-only drift, potentially confusing aggregate interpretation",
+  "related_work": [
+    "https://github.com/alwansan/raf/actions/runs/41968665857"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/T5/MEMORY.md"
+  ],
+  "experiment_ids": [],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Validate synthetic alpha-only control, record narrowly scoped issue and next action",
+  "updated_at": "2026-11-05T06:47:00Z"
+}
