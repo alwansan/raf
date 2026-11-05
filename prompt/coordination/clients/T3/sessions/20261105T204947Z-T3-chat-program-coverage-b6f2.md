@@ -9,7 +9,7 @@
 
 ## Proven starting point and team coordination
 
-T3 scheduled [CI 42104666494](https://github.com/alwansan/raf/actions/runs/42104666494) completed SUCCESS for Python syntax + synthetic original921 native GUID controls on `87c8658`. Its scheduled work file is completed. At checkpoint, other source/platform CI could be running; none was cancelled or re-run. The authentic original six-scene shader identity-to-full-native private trace remains **NOT RUN**. Owner phone feedback [DEVICE_FEEDBACK_42058825739_AR](../../../docs/DEVICE_FEEDBACK_42058825739_AR.md) confirms that the newer test package entered/saved/reentered a world; white graphics/water are unresolved. T5 full-native postrestorer aggregate measured 110/142 ShaderLab Dummy and 770/1536 Material documents pointing to Dummy; no source identity attribution to the high-use 921 original shader.
+T3 scheduled [CI 42104666494](https://github.com/alwansan/raf/actions/runs/42104666494) completed SUCCESS for Python syntax + synthetic original921 native GUID controls on `87c8658`. Its scheduled work file is completed. At checkpoint, other source/platform CI could be running; none was cancelled or re-run. The authentic original six-scene shader identity-to-full-native private trace remains **NOT RUN**. Owner phone feedback [DEVICE_FEEDBACK_42058825739_AR](https://github.com/alwansan/raf/blob/feature/android-native-port/docs/DEVICE_FEEDBACK_42058825739_AR.md) confirms that the newer test package entered/saved/reentered a world; white graphics/water are unresolved. T5 full-native postrestorer aggregate measured 110/142 ShaderLab Dummy and 770/1536 Material documents pointing to Dummy; no source identity attribution to the high-use 921 original shader.
 
 ## Concrete bug and change
 
