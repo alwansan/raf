@@ -1,0 +1,17 @@
+{
+  "id": "T2-20261105T2222Z-cfg-malformed-input",
+  "agent": "T2",
+  "origin": "scheduled",
+  "baseline_file_sha": "81253e15ba1e10b52cce47bcd521c48325228a5f",
+  "scope": [
+    "scripts/t2_rt_return_cfg.py"
+  ],
+  "hypothesis": "Malformed instruction records and invalid resource bounds may raise exceptions instead of returning unknown; enforce fail-closed without changing valid CIL classification.",
+  "experiment_key": "T2-CFG-MALFORMED-RECORD-20261105",
+  "taken_over_from": [
+    "T2 previous CFG hardening 16248184074deb9ced932c7a1dc6f5bfc15f74a8"
+  ],
+  "resource": "source-only Python; no Unity",
+  "device_evidence": "42058825739 owner world save/reopen success; water pass/FFT errors persist",
+  "status": "planned"
+}
