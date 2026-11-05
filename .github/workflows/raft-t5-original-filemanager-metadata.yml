@@ -1,0 +1,78 @@
+name: T5 LOCAL-005 original managed FileManager IL metadata oracle
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-t5-original-filemanager-metadata.yml
+      - android-port/Experiments/T5/FileManagerMetadataBridge/**
+      - scripts/t5_validate_filemanager_metadata.py
+      - tests/test_t5_validate_filemanager_metadata.py
+permissions:
+  contents: read
+concurrency:
+  group: raft-t5-original-filemanager-metadata-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  authentic-original-compiled-edges:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout only public metadata oracle and synthetic controls
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /android-port/Experiments/T5/FileManagerMetadataBridge/*
+            /scripts/t5_validate_filemanager_metadata.py
+            /tests/test_t5_validate_filemanager_metadata.py
+      - name: Prove report gate rejects fake or omitted original method evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          test ! -e Raft
+          python3 -m py_compile scripts/t5_validate_filemanager_metadata.py
+          python3 -m unittest discover -s tests -p test_t5_validate_filemanager_metadata.py -v
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Compile independent Cecil metadata oracle (no original game source)
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 240s dotnet publish \
+            android-port/Experiments/T5/FileManagerMetadataBridge/FileManagerMetadataBridge.csproj \
+            -c Release --self-contained false -o "$RUNNER_TEMP/t5-filemanager-metadata" \
+            > "$RUNNER_TEMP/t5-cecil-build.log" 2>&1 || {
+              tail -35 "$RUNNER_TEMP/t5-cecil-build.log"
+              exit 1
+            }
+          test -s "$RUNNER_TEMP/t5-filemanager-metadata/FileManagerMetadataBridge.dll"
+      - name: Checkout exact immutable ZIP2 original managed DLL only (no LFS)
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-original
+          lfs: false
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /Raft/Raft_Data/Managed/Assembly-CSharp.dll
+      - name: Authenticate genuine original DLL and resolve read/write call instructions
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C zip2-original rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          test "$(stat -c '%s' zip2-original/Raft/Raft_Data/Managed/Assembly-CSharp.dll)" = 3211776
+          dotnet "$RUNNER_TEMP/t5-filemanager-metadata/FileManagerMetadataBridge.dll" \
+            --assembly zip2-original/Raft/Raft_Data/Managed/Assembly-CSharp.dll \
+            --output "$RUNNER_TEMP/t5-original-filemanager-safe.json"
+          python3 -m scripts.t5_validate_filemanager_metadata \
+            --report "$RUNNER_TEMP/t5-original-filemanager-safe.json"
+          echo 'T5_FILEMANAGER_ORIGINAL_IL source_authentic=true private_method_names_published=false original_rgd_reopened=false android_tested=false'
+      - name: Never upload managed source, original DLL, IL bytes or raw probes
+        if: always()
+        run: echo 'T5 compiled IL original evidence is source only, NOT device or durable RGD proof; no original files uploaded.'
