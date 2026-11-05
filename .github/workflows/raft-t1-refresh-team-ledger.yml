@@ -76,6 +76,9 @@ jobs:
           assert "https://github.com/alwansan/raf/actions/runs/42019283679" in water[0]["evidence"]
           gpu=[x for x in data["events"] if x["id"]=="20261105T113500Z-T1-authentic-fft-firstpair-unity-gpu-dispatch"]
           assert len(gpu)==1 and gpu[0]["owner"]=="T1"
+          assert "https://github.com/alwansan/raf/actions/runs/42047391061" in water[0]["evidence"]
+          flags=[x for x in data["events"] if x["id"]=="20261105T144500Z-T1-unity-vulkan-force-flag-isolated"]
+          assert len(flags)==1 and flags[0]["owner"]=="T1"
           assert data["readiness"] is not True
           print("RAFT_T1_LEDGER_RECONCILE current_T1_event=true unity_probe_source_only=true original_water_open=true")
           PY
