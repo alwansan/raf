@@ -112,6 +112,29 @@ COMPARE = {0: 'Off', 1: 'Never', 2: 'Less', 3: 'Equal', 4: 'LEqual', 5: 'Greater
 BLEND = {0: 'Zero', 1: 'One', 2: 'DstColor', 3: 'SrcColor', 4: 'OneMinusDstColor', 5: 'SrcAlpha', 6: 'OneMinusSrcColor', 7: 'DstAlpha', 8: 'OneMinusDstAlpha', 9: 'SrcAlphaSaturate', 10: 'OneMinusSrcAlpha'}
 BLENDOP = {0: 'Add', 1: 'Sub', 2: 'RevSub', 3: 'Min', 4: 'Max'}
 STENCILOP = {0: 'Keep', 1: 'Zero', 2: 'Replace', 3: 'IncrSat', 4: 'DecrSat', 5: 'Invert', 6: 'IncrWrap', 7: 'DecrWrap'}
+# Unity 2021.3 ColorWriteMask, not the reversed GL/Vulkan/WebGPU mask:
+# UnityCsReference 2021.3 Runtime/Export/Graphics/GraphicsEnums.cs
+# Alpha=1, Blue=2, Green=4, Red=8, All=15.
+# Unity 2021.3 ShaderLab ColorMask accepts any RGBA channel combination.
+COLOR_MASK_BITS = ((8, 'R'), (4, 'G'), (2, 'B'), (1, 'A'))
+
+
+def color_mask(record):
+    """Render an exact original Unity ColorWriteMask into ShaderLab channels.
+
+    Never swap Unity's ABGR-bit enum with another API's RGBA-bit convention.
+    A source material property must retain its property name, not be
+    guessed from its serialized numeric fallback.
+    """
+    name = property_name(record)
+    if name is not None:
+        return '[' + name + ']'
+    value = val(record)
+    if (type(value) not in (int, float) or not math.isfinite(value)
+            or value != int(value) or not 0 <= value <= 15):
+        raise ValueError('Unsupported original Unity 2021 ColorWriteMask')
+    return ''.join(channel for bit, channel in COLOR_MASK_BITS if int(value) & bit) or '0'
+
 
 
 def render_state(state):
@@ -127,9 +150,9 @@ def render_state(state):
         lines.append('Blend ' + index + enum(blend['srcBlend'], BLEND) + ' ' + enum(blend['destBlend'], BLEND)
                      + ', ' + enum(blend['srcBlendAlpha'], BLEND) + ' ' + enum(blend['destBlendAlpha'], BLEND))
         lines.append('BlendOp ' + index + enum(blend['blendOp'], BLENDOP) + ', ' + enum(blend['blendOpAlpha'], BLENDOP))
-        # Only all/none masks occur in the supported depth recovery. Selective
-        # masks require separate serialized-vs-runtime bit-order proof.
-        mask = enum(blend['colMask'], {0: '0', 15: 'RGBA'})
+        # Source Unity 2021.3 ColorWriteMask is A=1, B=2, G=4, R=8.
+        # Preserve selective channels as ShaderLab (e.g. 14 -> RGB).
+        mask = color_mask(blend['colMask'])
         lines.append('ColorMask ' + mask + (' ' + str(i) if state['rtSeparateBlend'] else ''))
     lines.append('AlphaToMask ' + enum(state['alphaToMask'], {0: 'Off', 1: 'On'}))
     lines.append('ZClip ' + enum(state['zClip'], {0: 'Off', 1: 'On'}))
