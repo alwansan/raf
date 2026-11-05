@@ -1,0 +1,30 @@
+{
+  "id": "T2-foam-original-backing-field-read-topology",
+  "owner": "T2",
+  "issue_id": "WATER-001",
+  "title": "SHA-original Foam RenderTexture[] backing field has eight other compiled reads and one byref address access",
+  "kind": "source_verified_compiled_IL_backing_field_read_address_usage",
+  "stages": {
+    "acquisition": "ZIP2_ORIGINAL_MANAGED_DLL_EXACT_SIZE_SHA_PIN",
+    "extraction": "SAME_PRIVATE_RENDER_TEXTURE_ARRAY_FIELD_REFERENCE_FROM_STRICT_ORIGINAL_NULL_GUARDED_GETTER",
+    "reconstruction": "10_MATCHING_LDFLD_TOTAL_2_IN_GETTER_8_OTHER_AND_1_LDFLDA_IN_OTHER_METHOD",
+    "binding": "ONE_MANAGED_ADDRESS_USE_CANDIDATE_NOT_PROVEN_FIELD_WRITE_OR_ARRAY_ELEMENT_POPULATION",
+    "integration": "T2_ORIGINAL_SHA_CECIL_CI42047763379_SUCCESS_SAFE_AGGREGATES_ONLY_NO_GAME_SHADERLAB_PATCH",
+    "device": "NOT_TESTED"
+  },
+  "observed": {
+    "ldfld_total": 10,
+    "ldfld_getter": 2,
+    "ldfld_non_getter": 8,
+    "reader_methods": 4,
+    "ldflda_total": 1,
+    "ldflda_non_getter": 1,
+    "distinct_address_methods": 1,
+    "original_field_value_runtime_verified": false
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42047763379",
+    "https://github.com/alwansan/raf/commit/0881f9722f553e01e3694d7d49b964d53d2dff1e"
+  ],
+  "next_step": "Source trace original address-use instruction sink and candidate element-store dataflow; not an Android pixels claim."
+}
