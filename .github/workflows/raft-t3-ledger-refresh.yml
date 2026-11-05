@@ -56,6 +56,13 @@ jobs:
           # without setting native/device readiness or rewriting B-agent credit.
           proof="https://github.com/alwansan/raf/actions/runs/42026630845"
           assert proof in issue[0]["evidence"]
+          # Genuine source six-scene 1,633 typed Shader48 Renderer slots:
+          # 1,373 map via W1 real export GUID to still-Dummy vendor shader.
+          renderer_proof="https://github.com/alwansan/raf/actions/runs/42044249541"
+          assert renderer_proof in issue[0]["evidence"]
+          assert any(r["id"]=="T3-ORIGINAL-SIXSCENE-RENDERER-SHADER-POSTVENDOR-USE" for r in s["resources"])
+          assert any(e["id"]=="T3-20261105T1425Z-renderer-source-postvendor-join" and e["owner"]=="T3"
+                     for e in s["events"])
           ev=[e for e in s["events"] if e["id"]=="T3-20261105T0023Z-authentic-material-parity-results"]
           assert len(ev)==1 and ev[0]["owner"]=="T3"
           new=[e for e in s["events"] if e["id"]=="T3-20261105T1226Z-native-shader-dummy-audit"]
