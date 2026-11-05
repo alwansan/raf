@@ -61,7 +61,11 @@
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_FILEMANAGER_MANAGED_RUNTIME_2026-11-05.md",
     "https://github.com/alwansan/raf/actions/runs/42019696138",
     "https://github.com/alwansan/raf/actions/runs/42020039305",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_MANAGED_STREAM_ROUNDTRIP_2026-11-05.md"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_MANAGED_STREAM_ROUNDTRIP_2026-11-05.md",
+    "https://github.com/alwansan/raf/actions/runs/42026271243",
+    "https://github.com/alwansan/raf/actions/runs/42026671909",
+    "https://github.com/alwansan/raf/actions/runs/42027197515",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ANDROID_SAVE_FILE_POSTCHECK_2026-11-05.md"
   ],
   "remaining": [
     "Original Cheat.AllowCheatsForLocalPlayer SteamUser.GetSteamID direct object call now source-guarded in B50 2bb6c2; no native/phone verification. Do not infer all Steam callbacks are removed.",
@@ -84,7 +88,8 @@
     "T4 exact original managed-reference context CI42011353849 PASS: 3211776B SHA-verified DLL decompiled twice solo -> old T4 alternate class/body SHA, same DLL alongside 151 siblings -> exact B07 production source SHA. Subsequent CI42012049920 PASS with actual production offline adapt + operation instrument, source/manifest hashes unchanged, firstMoveNext/completion traces present and original assignment/yields preserved. Earlier original C# managed compile CI41942118067 PASS. This resolves source-intake context discrepancy at tested scope, NOT Unity IL2CPP/device playable world or genuine .rgd create-save-relaunch-reopen. LOCAL-005 stays OPEN NOT_READY.",
     "T5 genuine original compiled IL CI42012597665 verifies both SaveAndLoad direct read/write FileManager targets exist as distinct static body-bearing methods (14/13 IL instructions, 1 System.IO call and exception handler each), overcoming T4 text parser unresolved declarations; actual Android path, world entry and durable .rgd create/relaunch/load remain unverified.",
     "T5 original CLR synthetic FileManager experiment CI42018587431 FAILED SAFELY at COMPILED_IL_GUARD before method invocation: 1 System.IO + 1 core + 1 original local + 1 other unattested callee per read/write. No synthetic byte roundtrip, game RGD file, Unity or Android save test. Workflow manual-only until transitive dependency provenance; LOCAL-005 OPEN.",
-    "T4 real original compiled I/O progress: CI42019696138 PASS 19/19 authentic Cecil original try/catch call placement—one File.Open/Create BCL IO and zero other calls in each normal try, three extra game/framework/helper calls only in original catch. CI42020039305 PASS 15/15 + ACTUALLY INVOKED original FileManager Create/Open stream methods using immutable original SHA and 151 pinned Managed companions + restricted CLR resolver; synthetic disposable .rgd-suffixed filename only, write/flush/close/reopen bytes equal and cleanup. T5 earlier whole-method execution blocked for unproven catch callees, remains valid. NO genuine game .rgd serialization/relaunch, Android app-private file storage, Unity IL2CPP or playable offline local world, so LOCAL-005 OPEN NOT_READY and no full readiness review."
+    "T4 real original compiled I/O progress: CI42019696138 PASS 19/19 authentic Cecil original try/catch call placement—one File.Open/Create BCL IO and zero other calls in each normal try, three extra game/framework/helper calls only in original catch. CI42020039305 PASS 15/15 + ACTUALLY INVOKED original FileManager Create/Open stream methods using immutable original SHA and 151 pinned Managed companions + restricted CLR resolver; synthetic disposable .rgd-suffixed filename only, write/flush/close/reopen bytes equal and cleanup. T5 earlier whole-method execution blocked for unproven catch callees, remains valid. NO genuine game .rgd serialization/relaunch, Android app-private file storage, Unity IL2CPP or playable offline local world, so LOCAL-005 OPEN NOT_READY and no full readiness review.",
+    "T4 Android Save diagnostic integrated after exact adapted SaveAndLoad SHA gate: Save.argumentFileSnapshot in original Save wrapper finally reads File.Exists(filename) and if present FileInfo.Length class, never contents or changing original Save logic; catches only snapshot/logger errors, logs durable_RGD_unverified=true. CI42026271243 PASS original 14-class stage RPC and C# compile exit0, CI42026671909 PASS 15/15 plus actual UNITY_ANDROID-preprocessed synthetic C# runtime tests, CI42027197515 PASS 21/21 plus authentic original DLL Cecil confirms original Save directly forwards filename first argument to FileManager writer. No native Unity/IL2CPP, phone, playable local host or genuine .rgd serialize/quit/relaunch/reopen evidence; LOCAL-005 OPEN NOT_READY."
   ],
   "acceptance": [
     "دخول عالم جديد محلي قابل للعب بلا Steam أو سيرفر خارجي",
@@ -92,5 +97,5 @@
     "لا يكفي إخفاء رسالة الاتصال"
   ],
   "updated_by": "T4",
-  "updated_at": "2026-11-05T11:39:00Z"
+  "updated_at": "2026-11-05T12:32:00Z"
 }
