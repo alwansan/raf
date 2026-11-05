@@ -2,12 +2,11 @@ name: T3 RENDER-002 bounded authentic shader vendor-restorer delta
 # New question: after authentic 12-owner same-instance real export, do
 # official TMP/PostFX/volumetric vendor restorers remove actually linked Dummy
 # programs? Safe aggregates only; not the full native importer or device.
+# This source-authenticated export reuses expensive private staging.
+# Keep manual-only after the first proved run; never rerun on a documentation
+# or tooling change without a distinct hypothesis and coordination.
 on:
   workflow_dispatch:
-  push:
-    branches: [feature/android-native-port]
-    paths:
-      - '.github/workflows/raft-t3-bounded-postrestorer-shader.yml'
 permissions:
   contents: read
 concurrency:
@@ -298,7 +297,7 @@ jobs:
               'game_assets_modified':False,
               'status':'SOURCE_BOUNDED_VENDOR_RESTORE_DIAGNOSTIC_ONLY'
           }
-          (base/'t3-bounded-delta-safe.json').write_text(json.dumps(summary,sort_keys=True,indent=2)+'\\n')
+          (base/'t3-bounded-delta-safe.json').write_text(json.dumps(summary,sort_keys=True,indent=2)+'\n')
           print('RAFT_T3_BOUNDED_POSTVENDOR_SHADER_COUNTS '+json.dumps(summary,sort_keys=True))
           if not all_preserved or not same_material_contract or dummy_delta<0:
               raise AssertionError('original_export_shader_restorer_contract_changed')
