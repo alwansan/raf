@@ -1,0 +1,25 @@
+{
+  "session_id": "20261105T1623Z-T2-scheduled-caller-origin-6f2d",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "baseline_sha": "8517a66c23ed1fe96d62aec56c91889de4470a78",
+  "resumed_from_sessions": [
+    "20261105T1611Z-T2-chat-foam-length-source-9ab4.md",
+    "20261105T1520Z-T2-scheduled-e7c1.md"
+  ],
+  "taken_over_from": [
+    "B20 original CB proof",
+    "B45 original Blur proof"
+  ],
+  "experiment_key": "T2|ZIP2-15964ea8|managed-0a6f0527|caller-int32-length-argument-to-RenderTexture-newarr|exact-callsite-v1",
+  "resource_key": "ZIP2-managed-Assembly-CSharp-read-only",
+  "intended_files": [
+    "prompt/coordination/work/WATER-001/20261105T1623Z-T2-scheduled-caller-origin-6f2d-caller-length.json",
+    "prompt/coordination/clients/T2/sessions/20261105T1623Z-T2-scheduled-caller-origin-6f2d.md"
+  ],
+  "hypothesis": "Original typed RenderTexture[] callee's newarr length is loaded from int32 formal; trace original caller argument before asserting 4 texture indices are in bounds.",
+  "last_evidence": "https://github.com/alwansan/raf/actions/runs/42063244298",
+  "next_test": "Find exact original callsites of byref RenderTexture[] callee; prove int32 actual argument producer with branch-safe stack tracking; compare four private indices only inside runner, emit aggregate boolean without raw values.",
+  "constraints": "No raw shader/IL/index/digest publication; no duplicate Unity job; do not edit concurrently active T2 managed C# files until latest work check."
+}
