@@ -1,0 +1,47 @@
+name: T5 one-shot team evidence index refresh
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-t5-ledger-refresh.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: raft-t5-ledger-refresh-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  refresh:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Checkout current permitted integration branch, no LFS
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: feature/android-native-port
+          lfs: false
+          persist-credentials: true
+      - name: Regenerate from inherited ledger and push only index
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for attempt in 1 2 3; do
+            git fetch --no-tags origin feature/android-native-port
+            git checkout -B t5-temporary-ledger-refresh FETCH_HEAD
+            python3 scripts/refresh_t_team.py
+            git add prompt/coordination/T_TEAM/SUMMARY.md prompt/coordination/T_TEAM/snapshot.json
+            if git diff --cached --quiet; then
+              echo "T5_LEDGER_REFRESH already_current=true"
+              exit 0
+            fi
+            git commit -m "T5: regenerate T_TEAM evidence index from canonical ledger"
+            if git push origin HEAD:feature/android-native-port; then
+              echo "T5_LEDGER_REFRESH generated=true force=false protected_branches_untouched=true"
+              exit 0
+            fi
+            echo "Concurrent HEAD moved; re-reading ledger for next bounded attempt"
+          done
+          echo "::error::T5 index still needs regeneration against current HEAD"
+          exit 1
