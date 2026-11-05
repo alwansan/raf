@@ -131,6 +131,46 @@ jobs:
               json.dumps(safe,indent=2,sort_keys=True)+'\n')
           print('RAFT_T3_AUTHENTIC_ORIGINAL_TOP921_RENDERER_CLASSES '+json.dumps(safe,sort_keys=True))
           PY
+      - name: Assert original ParticleSystemRenderer source Sh48 rank and write public-safe evidence
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          src=Path(os.environ['RUNNER_TEMP'])/'t3-original-six-scene-shader-usage-aggregate.json'
+          d=json.loads(src.read_text())
+          assert d['status']=='AUTHENTIC_SIX_SCENE_RENDERER_SHADER_USE_FREQUENCY_VERIFIED'
+          assert d['six_original_scenes_sha_verified'] is True
+          counts=d['original_particle_Shader48_ranked_material_slot_use_no_identity']
+          assert sum(counts)==215 and counts==sorted(counts,reverse=True)
+          assert counts and all(type(x) is int and x>0 for x in counts)
+          assert len(counts)==d['original_particle_distinct_typed_Shader48_source_targets']
+          top=counts[0]; unique=d['original_particle_highest_Shader48_unique']
+          assert d['original_particle_highest_Shader48_particle_class_slots']==top
+          if unique:
+              total=d['original_particle_highest_Shader48_global_renderer_slots']
+              other=d['original_particle_highest_Shader48_nonparticle_renderer_slots']
+              distinct=d['original_particle_highest_Shader48_distinct_particle_renderers']
+              assert counts.count(top)==1 and total==top+other
+              assert 0<distinct<=top
+              assert type(d['original_particle_highest_Shader48_original_pass_count']) is int
+          else:
+              assert counts.count(top)>1
+              assert d['original_particle_highest_Shader48_global_renderer_slots'] is None
+          safe={'status':'ORIGINAL_SHA_VERIFIED_PARTICLE_SHADER48_RANK',
+                'particle_typed_material_slots':215,
+                'particle_source_shader_ranked_slots_no_identity':counts,
+                'particle_shader_source_targets':len(counts),
+                'particle_highest_unique':unique,
+                'particle_highest_source_global_slot_use':d['original_particle_highest_Shader48_global_renderer_slots'],
+                'particle_highest_original_passes':d['original_particle_highest_Shader48_original_pass_count'],
+                'particle_highest_other_renderer_slots':d['original_particle_highest_Shader48_nonparticle_renderer_slots'],
+                'particle_highest_distinct_particle_renderers':d['original_particle_highest_Shader48_distinct_particle_renderers'],
+                'unity_native_or_Android_pixels_proven':False}
+          out=Path(os.environ['RUNNER_TEMP'])/'t3-original-particle-shader48-rank-safe.json'
+          out.write_text(json.dumps(safe,indent=2,sort_keys=True)+'\n')
+          print('RAFT_T3_ORIGINAL_PARTICLE_SHADER48_RANK '+json.dumps(safe,sort_keys=True))
+          PY
       - name: Upload only safe numeric source Shader usage bands, never private IDs
         if: always()
         uses: actions/upload-artifact@v4
@@ -139,5 +179,6 @@ jobs:
           path: |
             ${{ runner.temp }}/t3-original-six-scene-shader-usage-aggregate.json
             ${{ runner.temp }}/t3-top921-renderer-class-safe-aggregate.json
+            ${{ runner.temp }}/t3-original-particle-shader48-rank-safe.json
           if-no-files-found: ignore
           retention-days: 7
