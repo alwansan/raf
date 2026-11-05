@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T1701Z-T3-chat-original-dxbc-semantic-join-6d9f",
+  "issue_id": "RENDER-002",
+  "status": "completed",
+  "experiment_key": "T3-originalZIP2-15964ea8-sixscene-fourshaderowners-top921-Shader48-exact-4pass-DXBC-ISGN-OSGN-ISG1-OSG1-OSG5-VF-semantic-mask-private",
+  "original_source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "workflow": ".github/workflows/raft-t3-original-921-dxbc-semantic-join.yml",
+  "workflow_source_sha": "f0a02d6e634e3f93ea34f82343f51e5223f07ef0",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42071059741",
+  "artifact_id": 13436566216,
+  "artifact_name": "t3-original-921-DXBC-semantic-safe-42071059741",
+  "synthetic_tests": {
+    "new": 21,
+    "scheduled_shared": 6,
+    "sourcefree_run_url": "https://github.com/alwansan/raf/actions/runs/42070932298",
+    "status": "SUCCESS"
+  },
+  "original_inputs": {
+    "sha_verified_scenes": 6,
+    "sha_verified_owners": 4,
+    "verified_owner_bytes": 269007288,
+    "original_renderer_slot_uses": 921,
+    "source_matched_compiled_pairs_total": 33,
+    "source_pairs_tested": 4,
+    "source_unpaired_vertex_variants": 8
+  },
+  "observed_result": {
+    "conclusion": "SUCCESS",
+    "original_dxBC_programs": 8,
+    "original_input_signature_kind": "ISGN",
+    "original_output_signature_kind": "OSGN",
+    "declared_user_vs_records": 22,
+    "declared_user_fs_records": 22,
+    "matched_original_semantic_name_index_records": 22,
+    "missing_name_or_index_records": 0,
+    "declared_component_mask_lanes_vs": 75,
+    "declared_component_mask_lanes_fs": 75,
+    "missing_fragment_lanes": 0,
+    "component_type_mismatches": 0,
+    "original_system_value_input_records": 4,
+    "original_system_value_output_records": 4,
+    "dxbc_semantic_to_spirv_location_mapping_verified": false,
+    "interpolation_verified": false,
+    "device_pixels_verified": false,
+    "original_assets_changed": false
+  },
+  "next_step": "Compare real original ISGN fragment read/used-mask against declared 75 lanes and previously authenticated original SPIR-V Fragment input 44 scalar lanes without equating aggregate equality to semantic mapping; preserve all names private.",
+  "documentation": "docs/T3_ORIGINAL_921_DXBC_SEMANTIC_MASK_JOIN_2026-11-05.md",
+  "updated_at": "2026-11-05T17:07:00Z"
+}
