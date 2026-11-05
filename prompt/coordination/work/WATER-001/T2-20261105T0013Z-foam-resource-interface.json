@@ -6,7 +6,7 @@
   "issue_id": "WATER-001",
   "track": "water-foam-texture-sampler-resource-binding",
   "approach": "Use same exact ZIP2 original Foam PathID2420 and B20 translated stage packet to inspect actual Unity stage m_CommonParameters Texture/Sampler/UAV descriptor schemas via B17 bounded canonical numeric tool, compare to native SPIRV reflection category/set/binding, preserve private names/binaries. Stage a distinct resource interface verifier to enable authentic ShaderLab assembly, without conflating source members with GPU bindings.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "7cc2f13ed8895cc6c8ba9d41a04f16a27eef828f",
   "intended_files": [
     "scripts/t2_foam_resource_abi.py",
@@ -27,8 +27,27 @@
   "experiment_ids": [
     "T2-foam-resource-original-20261105"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement authenticated original texture/sampler/UAV schema extraction and four-stage SPIR-V descriptor reflection; original CI and safe counts; then actionable shaderlab resource plan.",
-  "updated_at": "2026-11-05T00:13:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41939956032",
+    "https://github.com/alwansan/raf/actions/runs/41940279771",
+    "https://github.com/alwansan/raf/actions/runs/41940321740"
+  ],
+  "result": {
+    "scope": "Authenticated original two-pass Foam texture/sampler numeric resource pair ABI, not Unity ShaderLab",
+    "original_texture_rows": 6,
+    "fragment_pass_0_textures": 5,
+    "fragment_pass_1_textures": 1,
+    "vertex_textures": 0,
+    "compiled_spirv_separate_images": 6,
+    "compiled_spirv_separate_samplers": 6,
+    "source_resource_to_translated_name_verified": false,
+    "authentic_source_stage_counts_verified": true,
+    "strict_cardinality_gate_merged": true,
+    "synthetic_tests": 17,
+    "original_source_run_success": true,
+    "unity_shaderlab_import_verified": false,
+    "device_pixels_verified": false
+  },
+  "next_step": "Authenticated per-resource texture/sampler original-to-HLSL/SPIRV name/index/state/Unity ShaderLab material upload proof, then actual Unity/Adreno; no source-only completion as device fix.",
+  "updated_at": "2026-11-05T00:19:00Z"
 }
