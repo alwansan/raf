@@ -167,6 +167,12 @@ namespace RaftAndroid.Platform
             button.navigation = new Navigation { mode = Navigation.Mode.None };
             button.onClick.AddListener(() => pressed());
             label = Label(rect, caption, 0, 0, width, 42);
+            // The button's pivot is top-right; stretch its caption inside
+            // that rect rather than placing the label to its right.
+            var captionRect = label.rectTransform;
+            captionRect.anchorMin = Vector2.zero;
+            captionRect.anchorMax = Vector2.one;
+            captionRect.offsetMin = captionRect.offsetMax = Vector2.zero;
             label.alignment = TextAnchor.MiddleCenter;
         }
 
