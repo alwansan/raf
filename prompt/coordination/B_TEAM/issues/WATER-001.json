@@ -89,7 +89,10 @@
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_TEXTURE_LITERAL_IDENTITY_2026-11-05.md",
     "https://github.com/alwansan/raf/commit/5dd02e7931aedfbb92c5cbcf3cc10ac1a6f9fd7c",
     "https://github.com/alwansan/raf/actions/runs/41941716641",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_UNITY_FFT_RUNTIME_PROBE_2026-11-05.md"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_UNITY_FFT_RUNTIME_PROBE_2026-11-05.md",
+    "https://github.com/alwansan/raf/actions/runs/41942024538",
+    "https://github.com/alwansan/raf/actions/runs/41942366020",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_FFT_BANK1_VULKAN_VALIDATION_2026-11-05.md"
   ],
   "remaining": [
     "Spectrum/Foam/Blur passes ناقصة في APK86",
@@ -130,7 +133,8 @@
     "T1 original bank0 FFT compiled candidate pairs 0/1 and 8/9: 6/6 authentic 2-pass CPU Vulkan runs, both first and second sampled read-input swaps change numeric output (2/2 pairs), CI41939314440. Bank1 pair18 second-swap SIGSEGV in Mesa (CI41938536760), bank1 pair10 second-swap independent identical-program comparator mismatch (CI41939082498); these are explicitly INCONCLUSIVE, not original Unity kernel or source rescue. WATER-001 remains OPEN; Unity .compute/FindKernel/Android pixels untested.",
     "T2 original Foam texture/sampler CI41940321740 SUCCESS: pass0/1 fragment authentic source m_TextureParams counts 5/1; original m_Samplers=0, compiled SPIRV separate_images=5/1 and separate_samplers=5/1 (total six genuine texture rows, six images, six samplers), vertex none. 20 CB + 17 resource synthetic controls, authentic four-stage numeric card+slot guard integrated. But original texture name/slot/sampler state to translated image/sampler/Unity material identity, private ShaderLab, Adreno pixels still UNPROVEN; WATER-001 OPEN.",
     "T2 source-authentic Foam six original texture name indices ↔ translated image literal symbols 0/6 equal (CI41941354379 SUCCESS); exact texture/sampler alias/material upload/ShaderLab/Unity/Adreno pixels still UNKNOWN; cannot use direct-name bridging.",
-    "T1 authored .compute SHA-bound isolated Unity 2021 runtime kernel probe staged and 7 source-only negative/positive suites PASS (CI41941716641); actual private original-authenticated authored FFT source, Unity Editor HasKernel/FindKernel/threadgroups execution, original program-to-kernel equivalence, Vulkan/Adreno and water pixels all remain unverified. WATER-001 OPEN."
+    "T1 authored .compute SHA-bound isolated Unity 2021 runtime kernel probe staged and 7 source-only negative/positive suites PASS (CI41941716641); actual private original-authenticated authored FFT source, Unity Editor HasKernel/FindKernel/threadgroups execution, original program-to-kernel equivalence, Vulkan/Adreno and water pixels all remain unverified. WATER-001 OPEN.",
+    "T1 bank1 Vulkan: original pair18/19 swapped-second SIGSEGV reproduced twice and pair10/11 swapped-second same-program numeric comparison varied between runs; no VUID markers; not a Unity/Adreno repair."
   ],
   "acceptance": [
     "هوية برامج ونوى أصلية أو تطابق موثق دونdummy",
@@ -138,5 +142,5 @@
     "اختبار هاتف يثبت الماء بلا pass/kernel errors"
   ],
   "updated_by": "T1",
-  "updated_at": "2026-11-05T00:33:45.253Z"
+  "updated_at": "2026-11-05T00:36:30Z"
 }
