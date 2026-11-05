@@ -27,13 +27,13 @@
   "run_url": null,
   "artifact_urls": [],
   "budget": "One isolated Ubuntu24.04 Unity 2021 GameCI EditMode test, timeout 30 minutes, no game data downloads/LFS/APK, native-engine mutex",
-  "status": "active",
-  "observed_result": null,
+  "status": "paused",
+  "observed_result": "No T5 GameCI run. Live T1 equivalent 42010878771 in progress; not duplicate. Unity source-free proof pending T1.",
   "rejected_hypotheses": [],
   "limitations": [
     "Success confirms Unity Editor source-free GameCI test in its container only, not original T1 generated candidates or game's native build.",
     "Failure is a classified environment/test-configuration outcome, not proof original shaders are wrong."
   ],
   "integration_commit": null,
-  "next_step": "Create source-free self-contained Unity 2021 EditMode project/verified result parser, run synthetic pytest/unittest and isolated GameCI Editor CI; inspect failure categories without secrets and record durable T1 handoff."
+  "next_step": "Wait for T1 result, not rerun. Reallocate T5 to independent original FileManager metadata call-edge gap."
 }
