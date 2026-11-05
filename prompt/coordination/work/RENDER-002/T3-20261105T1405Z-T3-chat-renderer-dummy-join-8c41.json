@@ -5,7 +5,7 @@
   "session_id": "20261105T1405Z-T3-chat-renderer-dummy-join-8c41",
   "origin": "chat",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed",
   "track": "colors-materials/exported-renderer-material-shader-dummy-impact",
   "base_sha": "4a314334bc4313ea017613ae37ad48ffa6a5c44d",
   "experiment_key": "T3-ZIP2-15964ea8f-12-owners-AssetRipper-036098ab5-same-export-TMP3.0.6-PostFX933df236-Volumetricd20b6f9-RendererMaterialShaderFullGuidJoin-v1",
@@ -15,11 +15,14 @@
   "intended_files": [
     "scripts/t3_exported_renderer_shader_impact.py",
     "tests/test_t3_exported_renderer_shader_impact.py",
-    ".github/workflows/raft-t3-original-renderer-shader-impact.yml",
+    ".github/workflows/raft-t3-renderer-shader-impact-tests.yml",
+    ".github/workflows/raft-t3-exported-renderer-shader-impact.yml",
+    "docs/T3_EXPORTED_RENDERER_SHADER_IMPACT_INSTRUMENT_2026-11-05.md",
     "prompt/coordination/work/RENDER-002/T3-20261105T1405Z-T3-chat-renderer-dummy-join-8c41.json",
     "prompt/coordination/clients/T3/sessions/20261105T1405Z-T3-chat-renderer-dummy-join-8c41.md",
     "prompt/coordination/experiments/T3/20261105T1405Z-T3-chat-renderer-dummy-join-8c41.json",
-    "prompt/coordination/B_TEAM/events/T3/20261105T1405Z-T3-chat-renderer-dummy-join-8c41.json"
+    "prompt/coordination/B_TEAM/events/T3/20261105T1405Z-T3-chat-renderer-dummy-join-8c41.json",
+    "prompt/coordination/discussions/RENDER-002/20261105T1415Z-T3-exported-renderer-shader-impact-to-T5.md"
   ],
   "related_work": [
     "prompt/coordination/clients/T3/sessions/20261105T132841Z-T3-scheduled-6e9a.md",
@@ -33,8 +36,37 @@
     "scripts/b03_verify_renderer_material_links.py",
     "scripts/t3_audit_exported_material_programs.py"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement read-only authenticated exported Renderer->Material->Shader quality join and synthetic guards; run one distinct original-source bounded 12-owner CI and publish aggregate, then document limits.",
-  "updated_at": "2026-11-05T14:08:51.219Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42042789807",
+    "https://github.com/alwansan/raf/actions/runs/42043583643",
+    "https://github.com/alwansan/raf/actions/runs/42043678564"
+  ],
+  "result": {
+    "source_code_commit": "3eeda3d50d065ab75aeb2f28a3672d3c04e07315",
+    "test_commit": "c800f946ce543a870d27006fe20ed82409a52373",
+    "manual_workflow_commit": "7cc724d51e14ceb173686fe42493e0400020d5fe",
+    "latest_ci": "https://github.com/alwansan/raf/actions/runs/42043678564",
+    "ci_conclusion": "success",
+    "test_counts": {
+      "new_T3_renderer_join": 11,
+      "inherited_B03": 17,
+      "inherited_T3_Shader": 16,
+      "total": 44
+    },
+    "privacy_guards": "PASS",
+    "same_export_original_12_owner_run_with_join": "NOT_RUN_MANUAL_ONLY",
+    "source_original_six_scene_impact_other_T3_run": "https://github.com/alwansan/raf/actions/runs/42042819113",
+    "source_export_same_identity": "UNKNOWN",
+    "unity_android_device": "NOT_TESTED",
+    "game_assets_modified": false
+  },
+  "next_step": "Current T5 full native run 42042902522 owns heavy resource. After completion inspect post-restorer T3 aggregate. For next separately authorized native import add non-gating read-only renderer join, or manually run isolated authentic 12-owner source exporter, not both; compare source Shader48 use only after trace-authenticated source→export identity. RENDER-002 OPEN.",
+  "updated_at": "2026-11-05T14:21:06.933Z",
+  "related_run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42042819113",
+    "https://github.com/alwansan/raf/actions/runs/42042902522"
+  ],
+  "experiment_ids": [
+    "prompt/coordination/experiments/T3/20261105T1405Z-T3-chat-renderer-dummy-join-8c41.json"
+  ]
 }
