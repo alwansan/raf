@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261105T1021Z-T4-ref-context",
+  "issue_id": "LOCAL-005",
+  "hypothesis": "The original B07-vs-T4 ILSpy class/body SHA discrepancy on the exact same DLL is explained by presence/absence of original Managed sibling assemblies during decompiler reference resolution.",
+  "source_commit": "57d24bc676e3d99edc81e1454302b90c3b12b34c",
+  "input_hashes": [
+    "original_zip2_commit=15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "original_dll_bytes=3211776",
+    "original_dll_sha256=0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "feature_managed_sibling_commit=02e9fba7fb42b83579595885391be636ee3b56e8",
+    "without_siblings_class_sha256=d16c36336a6aec4e23781c135820692a233130a3f1c1d9ab9052d432d76eedef",
+    "without_siblings_body_sha256=2bf76a189a69d23444c5ede9f00a5444a48f819c64d87ec298ebeedbf5d9088c",
+    "with_siblings_class_sha256=080035c137e446828226ed84a23190656b6f235d274436cafb477feaf93caa03",
+    "with_siblings_body_sha256=cbd74c24f1c6a86dd50e8d320f4f4142f5b3f3fc5bf8f64ded04710c30c3a140"
+  ],
+  "tool_versions": {
+    "ilspycmd": "11.2.0.10050 -p -lv CSharp9_0",
+    "dotnet": "10.0.x",
+    "runner": "ubuntu-24.04"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t4_probe_ilspy_reference_context.py -v",
+    "git checkout pinned original ZIP2 DLL and pinned 151 feature Managed siblings into isolated private runner directories",
+    "assert_original_dll three copies of source SHA",
+    "ilspycmd -p -lv CSharp9_0 on isolated-A, isolated-B, and sibling-rich exact same original DLL",
+    "python3 -m scripts.t4_probe_ilspy_reference_context --solo-a-dll ... --solo-b-dll ... --refs-dll ... --solo-a-source ... --solo-b-source ... --refs-source ... --managed-dir ..."
+  ],
+  "negative_controls": [
+    "unrecognized class/body pair refused",
+    "source-free isolated controls must match",
+    "wrong iterator/duplicate original completion/missing broadcast rejected",
+    "incomplete siblings rejected",
+    "no fake device claim"
+  ],
+  "workflow_path": ".github/workflows/raft-t4-ilspy-reference-context.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42011353849",
+  "artifact_urls": [],
+  "budget": "One isolated ~12 minute ubuntu24.04 job, no LFS, Unity/native/APK or original private source artifact",
+  "status": "active",
+  "observed_result": {
+    "original_AB_C_run": "42011353849 COMPLETED SUCCESS 10/10 controls",
+    "source_binary_same_sha_three": true,
+    "sibling_count": 151,
+    "isolated_controls_identical": true,
+    "solo_source_pair_T4": true,
+    "rich_source_pair_B07": true,
+    "masked_source_body_changed": true,
+    "production_source_pins_changed": false,
+    "companion_context_effect_evidenced": true,
+    "potential_path_confounds": "not excluded",
+    "production_native_adapter_replay": "CI42012049920 pending at last update",
+    "actual_unity_or_device": false
+  },
+  "rejected_hypotheses": [
+    "Separate original DLL inputs caused source SHA difference — rejected by same binary SHA verified three times",
+    "Same-run nondeterminism with isolated source — rejected in two controls and prior T4 duplicate CI",
+    "Only comments/literals affect class text — masked executable body hash also changed"
+  ],
+  "limitations": [
+    "Companions and directory path varied together; cannot isolate a specific reference DLL or fully exclude path effect",
+    "No proof of gameplay or .rgd persistence",
+    "Original production SHA untouched; native stage adapter validation being explicitly exercised separately"
+  ],
+  "integration_commit": "8718d038608aa3a4d6af9592fc80119a2011e029",
+  "next_step": "Complete dedicated real production Raft_Network source adapter replay in dependency-rich authenticated original context, keep strict pins; coordinate native candidate with T5 for Android host/gameplay and actual .rgd readback."
+}
