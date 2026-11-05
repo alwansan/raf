@@ -27,6 +27,20 @@ class PixelDriftDiagnosticTests(unittest.TestCase):
         self.assertEqual(r["max_rgb_delta_bin"], "RGB_5_16")
         self.assertEqual(r["alpha_delta"], "NONZERO")
 
+    def test_alpha_only_drift_not_mislabeled_rgb(self):
+        a = Image.new("RGBA", (1, 1), (100, 101, 102, 255))
+        b = Image.new("RGBA", (1, 1), (100, 101, 102, 250))
+        r = classify(a, b)
+        self.assertEqual(r["max_rgb_delta_bin"], "ALPHA_ONLY")
+        self.assertEqual(r["alpha_delta"], "NONZERO")
+        self.assertEqual(aggregate([r], expected=1)["diagnostics"]["max_rgb_delta_bin"], {"ALPHA_ONLY": 1})
+
+    def test_exact_transparent_channels_remain_exact(self):
+        a = Image.new("RGBA", (1, 1), (200, 201, 202, 0))
+        r = classify(a, a.copy())
+        self.assertEqual(r["max_rgb_delta_bin"], "EXACT")
+        self.assertEqual(r["alpha_delta"], "NONE")
+
     def test_reject_dimension_mismatch(self):
         with self.assertRaises(ValueError):
             classify(Image.new("RGBA", (1, 1)), Image.new("RGBA", (2, 2)))
