@@ -1,0 +1,13 @@
+{
+  "id": "20261105T121347Z-T1-paired-capture",
+  "session_id": "20261105T121347Z-T1-paired-capture",
+  "owner": "T1",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "baseline_sha": "9560bc7c922e70d663f2869f30cffef9c1b90c41",
+  "taken_over_from": [
+    "20261105T121028Z-T1-parity-oracle",
+    "https://github.com/alwansan/raf/actions/runs/42019283679"
+  ],
+  "approach": "Capture one-row authenticated Vulkan source/butterfly and both pass outputs; feed exact RGBA32F input bytes into the licensed private Unity fixture and compare both readbacks."
+}
