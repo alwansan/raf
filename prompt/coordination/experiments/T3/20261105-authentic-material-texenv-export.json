@@ -26,7 +26,7 @@
     "11 same-instance, class/type, missing original, wrong scope, UV drift, no leak tests passed"
   ],
   "workflow_path": ".github/workflows/raft-t3-real-material-texenv-export.yml",
-  "run_url": "https://github.com/alwansan/raf/actions/runs/41938229887",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41939065539",
   "artifact_urls": [
     "https://github.com/alwansan/raf/actions/runs/41938229887"
   ],
@@ -36,10 +36,14 @@
     "original_sha_locked_providers": 9,
     "material_sources": 42,
     "shader_sources": 18,
-    "asset_export": true,
-    "raw_private_traces_created": true,
-    "compare_exception_type": "ValueError",
-    "phase": "UNKNOWN"
+    "actual_bounded_export_completed": true,
+    "original_selected_materials": 41,
+    "original_selected_texenvs": 227,
+    "same_export_material_trace": 57,
+    "same_export_texture_trace": 92,
+    "b05_compare_exception_type": "ValueError",
+    "phase": "actual_exported_material_yaml",
+    "root_cause": "UNKNOWN_UNTIL_SAFE_REASON"
   },
   "rejected_hypotheses": [
     "AssetRipper original input is absent",
@@ -50,5 +54,5 @@
     "No Android GPU/Unity import, color pixels, full exported game links verified"
   ],
   "integration_commit": "615f914728cf15f5d60607115ecb7a4a8919d8e5",
-  "next_step": "Classify exact failure phase safely with aggregate counts and one rerun, then repair only supported material/export issue."
+  "next_step": "Read run 41939065539 safe_failure_reason; fix true YAML parser structural limitation then compare exact same-process export. Avoid reading/publishing private IDs."
 }
