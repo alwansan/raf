@@ -1,4 +1,6 @@
 name: T3 RENDER-002 original Shader48 vs same-export ShaderLab Pass topology
+# Follow-up classified stage only after first source+export CI42019508704
+# returned sanitized LookupError without a private stage. No source changes.
 on:
   workflow_dispatch:
   push:
