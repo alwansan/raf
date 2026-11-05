@@ -38,6 +38,17 @@ class ProvenanceTests(unittest.TestCase):
         self.assertEqual(classify([("newobj_rt",), ("stloc", 4), ("ret",)], max_locals=4), "unknown")
         self.assertEqual(classify([("ldnull",), ("stloc", True), ("ret",)]), "unknown")
 
+    def test_bool_branch_targets_rejected(self):
+        # bool is an int subclass in Python, but not a valid IL instruction index.
+        self.assertEqual(classify([("br", True), ("ldnull",), ("ret",)]), "unknown")
+        self.assertEqual(classify([("ldcond",), ("brtrue", False), ("ldnull",), ("ret",)]), "unknown")
+
+    def test_revisited_return_site_uses_final_joined_state(self):
+        # The short path reaches ret before the longer path joins it.
+        il = [("ldcond",), ("brtrue", 5), ("ldnull",), ("br", 8),
+              ("nop",), ("newobj_rt",), ("nop",), ("br", 8), ("ret",)]
+        self.assertEqual(classify(il), "unknown")
+
     def test_uninitialized(self):
         self.assertEqual(classify([("ldloc",0),("ret",)]),"unknown")
 
