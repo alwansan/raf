@@ -4,7 +4,7 @@
   "generation": "T-2026-11-05",
   "session_id": "20261105T1213Z-T2-foam-return-producer-call-isolated",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "9560bc7c922e70d663f2869f30cffef9c1b90c41",
   "track": "SHA-authentic original Foam four SetTexture second-argument call-return exact MethodReference typed provenance",
   "hypothesis": "Four actual original original IL Texture second parameters originate from call results; attach the producing IL MethodReference to the stack value and classify its declared return type/declaring assembly/category/call-vs-callvirt without publishing game symbols, then strengthen CI accepting exact expected evidence but not runtime claims.",
@@ -23,8 +23,23 @@
   "related_run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42022922743"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement exact producer typed IL call stack provenance with public synthetic fixtures, run original SHA-locked CI and archive accurate result. Then if verified, continue toward source Material receiver and original Unity ShaderLab; WATER-001 OPEN NOT_READY0/3.",
-  "updated_at": "2026-11-05T12:13:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42025874516",
+    "https://github.com/alwansan/raf/actions/runs/42026068605",
+    "https://github.com/alwansan/raf/actions/runs/42026683133"
+  ],
+  "result": {
+    "original_SHA_managed_and_shader_verified": true,
+    "original_exact_four_second_Texture_callable_producers": 4,
+    "distinct_source_compiled_producer_signature_count": 1,
+    "return_type": "UnityEngine.Texture",
+    "index_param_type": "System.Int32",
+    "call_kind": "callvirt",
+    "original_exact_method_definition_body_verified": true,
+    "final_original_CI": "42026683133 SUCCESS",
+    "initial_synthetic_failure": "CI42025874516 failed because same-module synthetic producer incorrectly expected external declaring type; corrected in 312316aa, CI42026068605 PASS",
+    "all_fake_runtime_flags": false
+  },
+  "next_step": "Locate actual original RenderTexture[] field assignment and original index literals/receiver Material proof; integrate authentic Foam two-pass ShaderLab/CB states; no device/READY claims. WATER-001 remains OPEN.",
+  "updated_at": "2026-11-05T12:35Z"
 }
