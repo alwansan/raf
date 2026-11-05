@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T0028Z-T3-externaltex-7af2",
+  "issue_id": "RENDER-002",
+  "track": "colors-materials/real-TextureImporter-metadata",
+  "approach": "After genuine source+same-export B15 sampler run could not locate exact exported TextureImporter GUID (CI41943498076), classify actual private same-instance Texture2D export GUIDs against actual Unity project .meta presence, importer kinds, duplicate GUIDs and source-target coverage, without publishing raw IDs or guessing an importer. Keep B15 strict sampler gate unchanged.",
+  "status": "active",
+  "base_sha": "fb737ceba19a2dc63705eb59726504ceb5cb097a",
+  "intended_files": [
+    "scripts/t3_texture_importer_presence.py",
+    "tests/test_t3_texture_importer_presence.py",
+    ".github/workflows/raft-t3-texture-importer-presence.yml",
+    "prompt/coordination/clients/T3/sessions/20261105T0028Z-T3-externaltex-7af2.md"
+  ],
+  "hypothesis": "B15 missing exact TextureImporter GUID arises because some source-linked exported Texture2D pointers map to no .meta file or to a non-TextureImporter asset; inspect actual exporter layout without accepting pointer loss or fake semantic equivalence.",
+  "related_work": [
+    "https://github.com/alwansan/raf/actions/runs/41942377246",
+    "https://github.com/alwansan/raf/actions/runs/41943498076"
+  ],
+  "taken_over_from": [
+    "scripts/b15_texture_sampler_parity.py",
+    "prompt/coordination/clients/B15/MEMORY.md",
+    "docs/T3_ORIGINAL_EXTERNAL_TEXTURE_LINEAGE_2026-11-05.md"
+  ],
+  "experiment_ids": [
+    "T3-authentic-importer-guid-presence-20261105"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement read-only exact GUID metadata presence classification with strict source/trace provenance and synthetic wrong importers/duplicates/absence/symlinks. Execute one isolated true original/export run, then decide whether to repair B15 selector or actual export asset.",
+  "updated_at": "2026-11-05T00:47:00Z"
+}
