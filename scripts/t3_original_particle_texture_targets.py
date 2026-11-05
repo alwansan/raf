@@ -12,13 +12,14 @@ from __future__ import annotations
 
 import argparse
 from collections import Counter
+import os
 import json
 from pathlib import Path, PurePosixPath
 
 from scripts import t3_original_particle_material_texenv as particle_material
 from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
 from scripts.t3_original_texture_stream_dependencies import manifest_stream_index
-from scripts.w1_stage_zip2_owners import fingerprint
+from scripts.w1_stage_zip2_owners import fingerprint, ZIP2_SHA
 
 STATUS="ZIP2_ORIGINAL_PARTICLE108_THREE_TEXTURE2D28_SOURCE_STREAM_PROVEN"
 EXPECTED_LOCAL_TEXTURE_REFERENCES=10
@@ -27,7 +28,8 @@ EXPECTED_DISTINCT_TEXTURE_TARGETS=3
 
 def assess(targets:dict, records:dict, manifest_providers:dict, staged:Path,
            *, expected_local:int=EXPECTED_LOCAL_TEXTURE_REFERENCES,
-           expected_distinct:int=EXPECTED_DISTINCT_TEXTURE_TARGETS):
+           expected_distinct:int=EXPECTED_DISTINCT_TEXTURE_TARGETS,
+           private_stream_plan:dict|None=None):
     """Analyze PRIVATE Texture2D typetrees; do not write identifiers to result.
 
     targets: {(original_owner, private_path_id): count of Material TexEnv refs}
@@ -43,8 +45,12 @@ def assess(targets:dict, records:dict, manifest_providers:dict, staged:Path,
     if (type(expected_distinct) is not int or expected_distinct<1
         or type(expected_local) is not int or expected_local<expected_distinct):
         raise ValueError("untrusted_original_particle_Texture2D_reference_expectation")
+    if private_stream_plan is not None and (type(private_stream_plan) is not dict
+        or private_stream_plan):
+        raise ValueError("private_original_stream_plan_outparam_must_be_empty_dict")
     stats=Counter()
     used_stream_names=set()
+    private_providers={}
     for (owner,pid),row in records.items():
         if (owner not in particle_material.source.MATERIAL_OWNERS
             or type(pid) is not int or pid<=0
@@ -90,6 +96,11 @@ def assess(targets:dict, records:dict, manifest_providers:dict, staged:Path,
         if offset+size>provider[0]:
             raise ValueError("original_particle_texture_stream_extent_beyond_manifest")
         used_stream_names.add(name)
+        provider_plan=private_providers.setdefault(name,{
+            "bytes":provider[0],"sha256":provider[1],"ranges":[]})
+        if provider_plan["bytes"]!=provider[0] or provider_plan["sha256"]!=provider[1]:
+            raise ValueError("source_particle_stream_manifest_pin_changed")
+        provider_plan["ranges"].append([offset,size])
         stats["original_selected_Texture2D28_manifest_verified_streamed"]+=1
         # Do not stage .resS payloads merely to inspect source metadata;
         # check real file hash only if the bounded source workflow staged one.
@@ -115,6 +126,12 @@ def assess(targets:dict, records:dict, manifest_providers:dict, staged:Path,
             stats["original_selected_Texture2D28_stream_payload_SHA_verified"]+
             stats["original_selected_Texture2D28_stream_provider_not_staged"])):
         raise ValueError("original_particle_Texture2D28_stream_accounting_mismatch")
+    if private_stream_plan is not None:
+        if (len(private_providers)!=len(used_stream_names)
+            or sum(len(v["ranges"]) for v in private_providers.values())
+              !=stats["original_selected_Texture2D28_manifest_verified_streamed"]):
+            raise ValueError("private_original_stream_provider_scope_mismatch")
+        private_stream_plan.update(private_providers)
     return {"schema_version":1,"status":STATUS,
         "original_selected_particle_material_texture_ref_slots":expected_local,
         "original_selected_typed_Texture2D28_targets":expected_distinct,
@@ -132,7 +149,7 @@ def assess(targets:dict, records:dict, manifest_providers:dict, staged:Path,
         "raw_Shader_Texture_Material_IDs_names_stream_paths_disclosed":False}
 
 
-def run(original:Path,manifest:Path):
+def run(original:Path,manifest:Path, *, private_stream_plan:dict|None=None):
     import UnityPy
     private={}
     baseline=particle_material.run(original,manifest,private_local_texture_targets=private)
@@ -172,7 +189,8 @@ def run(original:Path,manifest:Path):
             })
     if set(found)!=set(private):
         raise ValueError("original_particle_local_Texture2D_missing_from_authenticated_owner")
-    out=assess(private,found,manifest_stream_index(manifest),original/"Raft_Data")
+    out=assess(private,found,manifest_stream_index(manifest),
+               original/"Raft_Data",private_stream_plan=private_stream_plan)
     out["six_original_scene_SHA_verified"]=True
     out["four_original_material_shader_owner_SHA_verified"]=True
     out["source_108_particle_Shader48_Material21_and_Texture2D28_chain_verified"]=True
@@ -183,11 +201,33 @@ def main(argv=None):
     ap=argparse.ArgumentParser(description=__doc__.splitlines()[0])
     for flag in ("original","manifest","out"):
         ap.add_argument("--"+flag,type=Path,required=True)
+    ap.add_argument("--private-plan",type=Path)
     args=ap.parse_args(argv)
     if (args.out.exists() or args.out.is_symlink()
         or args.out.resolve().is_relative_to(args.original.resolve())):
         raise ValueError("unsafe_original_particle_Texture2D_public_report_path")
-    try:result=run(args.original,args.manifest)
+    if args.private_plan is not None:
+        plan_path=args.private_plan.absolute()
+        if (plan_path.is_symlink() or plan_path.exists()
+            or plan_path==args.out.absolute()
+            or plan_path.resolve().is_relative_to(args.original.resolve())
+            or any(x.is_symlink() for x in plan_path.parents)):
+            raise ValueError("unsafe_source_private_stream_plan_path")
+    try:
+        private_plan={} if args.private_plan is not None else None
+        result=run(args.original,args.manifest,private_stream_plan=private_plan)
+        if private_plan is not None and result["status"]==STATUS:
+            if (len(private_plan)!=1
+                or sum(len(v["ranges"]) for v in private_plan.values())!=3):
+                raise ValueError("unexpected_exact_original_particle_stream_provider")
+            doc={"schema_version":1,"source_sha":ZIP2_SHA,
+                 "source_scope":"T3_private_108_particle_original_Texture2D",
+                 "providers":private_plan}
+            args.private_plan.parent.mkdir(parents=True,exist_ok=True)
+            with args.private_plan.open("x",encoding="utf-8") as out:
+                json.dump(doc,out,sort_keys=True)
+                out.write("\n")
+            os.chmod(args.private_plan,0o600)
     except Exception as exc:
         result={"schema_version":1,"status":"INCONCLUSIVE",
                 "failure_type":type(exc).__name__,
