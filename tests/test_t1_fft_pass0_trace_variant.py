@@ -29,3 +29,21 @@ class TraceVariantTests(unittest.TestCase):
                       HLSL + "\nRWStructuredBuffer<uint> other : register(u3);"):
             with self.assertRaises(ValueError):
                 instrument(value)
+
+    def test_invocation_layout_reuses_existing_dispatch_semantic(self):
+        source = HLSL + "[numthreads(64,1,1)] void main(uint3 id : SV_DispatchThreadID) { pass0(); }"
+        variant = instrument(source, keyed=True)
+        self.assertEqual(variant.count("SV_DispatchThreadID"), 1)
+        self.assertIn("T1TraceDispatchID = id;", variant)
+        self.assertIn("index * 12u", variant)
+        for site in range(3):
+            self.assertIn(f"T1TraceOccurrences[{site}]++", variant)
+        self.assertIn("base + 4u] = occurrence", variant)
+        self.assertIn("base + 5u] = asuint(coord.x)", variant)
+        self.assertIn("base + 8u] = asuint(value.x)", variant)
+
+    def test_invocation_layout_injects_missing_dispatch_semantic(self):
+        variant = instrument(HLSL + "void main() { pass0(); }", keyed=True)
+        self.assertIn("main(uint3 T1TraceInputID : SV_DispatchThreadID)", variant)
+        with self.assertRaises(ValueError):
+            instrument(HLSL, keyed=True)
