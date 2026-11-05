@@ -34,6 +34,8 @@ jobs:
           set -euo pipefail
           python3 -c "import shutil; assert shutil.disk_usage('.').free > 8 * 1024**3"
           python3 -m unittest discover -s tests -p 'test_t3_same_export_material_colors.py' -v
+          python3 -m unittest discover -s tests -p 'test_b43_material_keyword_fidelity.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_same_export_material_keywords.py' -v
           python3 -m unittest discover -s tests -p 'test_b44_verify_material_colors.py' -v
           python3 -m unittest discover -s tests -p 'test_b05_verify_material_texenv_bindings.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_same_export_material_texenv.py' -v
@@ -166,11 +168,22 @@ jobs:
             --w1-trace "$RUNNER_TEMP/b21-w1-private.json" \
             --b02-trace "$RUNNER_TEMP/b21-b02-private.json" \
             --out "$RUNNER_TEMP/t3-color-safe-result.json"
+      - name: Compare B43 original Material shader keywords/disabled passes against SAME private export
+        run: |
+          set -euo pipefail
+          python3 -m scripts.t3_same_export_material_keywords \
+            --original "$RUNNER_TEMP/b21-original" \
+            --project "$RUNNER_TEMP/b21-private-export/ExportedProject" \
+            --w1-trace "$RUNNER_TEMP/b21-w1-private.json" \
+            --b02-trace "$RUNNER_TEMP/b21-b02-private.json" \
+            --out "$RUNNER_TEMP/t3-keyword-safe-result.json"
       - name: Publish ONLY safe aggregate, never game assets or private traces
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: t3-authentic-material-colors-export-${{ github.run_id }}
-          path: ${{ runner.temp }}/t3-color-safe-result.json
+          name: t3-authentic-material-properties-export-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/t3-color-safe-result.json
+            ${{ runner.temp }}/t3-keyword-safe-result.json
           retention-days: 7
           if-no-files-found: ignore
