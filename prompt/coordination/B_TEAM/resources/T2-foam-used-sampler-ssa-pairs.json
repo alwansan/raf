@@ -1,0 +1,85 @@
+{
+  "id": "T2-foam-used-sampler-ssa-pairs",
+  "title": "Authentic Foam compiled six actually sampled image→sampler use pairs",
+  "kind": "original_water_shader_numeric_compiled_sampling_use",
+  "source": {
+    "provider": "zip2",
+    "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "path": "Raft_Data/sharedassets0.assets",
+    "bytes": 115978112,
+    "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "object_path_id": 2420,
+    "object_sha256": "67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1"
+  },
+  "stages": {
+    "acquisition": "EXACT_ORIGINAL_SHA_VERIFIED_CI41942245746",
+    "extraction": "FOAM_2_PASS_4_AUTHENTIC_STAGE_PACKET_B20_B24_B25",
+    "reconstruction": "PRIVATE_ORIGINAL_COMPILED_SPIRV_SAMPLING_SSA_TRACED_21_USED_SAMPLES",
+    "binding": "SIX_COMPILED_IMAGE_SAMPLER_NUMERIC_USED_PAIRS_VERIFIED_SOURCE_TO_MATERIAL_UNKNOWN",
+    "integration": "NEW_T2_ISOLATED_PARSER_TEST_WORKFLOW_SOURCE_ONLY_NO_SHADERLAB_INSTALL",
+    "device": "NOT_TESTED"
+  },
+  "compiled_observed": {
+    "pass0_fragment": {
+      "image_set": 0,
+      "image_bindings": [
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "sampler_set": 0,
+      "sampler_bindings": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "sample_calls": 17,
+      "used_pairs": [
+        [
+          6,
+          1
+        ],
+        [
+          7,
+          2
+        ],
+        [
+          8,
+          3
+        ],
+        [
+          9,
+          4
+        ],
+        [
+          10,
+          5
+        ]
+      ]
+    },
+    "pass1_fragment": {
+      "sample_calls": 4,
+      "image_binding": 2,
+      "sampler_binding": 1
+    },
+    "vertex_sample_calls": 0,
+    "total_sample_calls": 21,
+    "total_used_pairs": 6
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41942245746",
+    "https://github.com/alwansan/raf/commit/abf2365857feef030fe0450c90c70472a1d74d9c",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_ORIGINAL_USED_SAMPLER_PAIRS_2026-11-05.md"
+  ],
+  "remaining": [
+    "Original m_TextureParams m_Index/m_SamplerIndex to compiled numeric binding identity not verified",
+    "No verified original Unity material property/UV/sampler-state upload mapping",
+    "No actual Foam ShaderLab import, Unity compile or Adreno device pixels"
+  ],
+  "updated_by": "T2",
+  "updated_at": "2026-11-05T00:35Z"
+}
