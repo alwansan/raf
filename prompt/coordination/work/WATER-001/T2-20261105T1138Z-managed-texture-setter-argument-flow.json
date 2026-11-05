@@ -4,7 +4,7 @@
   "session_id": "20261105T1104Z-T2-foam-material-property-bridge-isolated",
   "generation": "T-2026-11-05",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "90646aa2eea80e2034d47863ae8712cd38c765d7",
   "hypothesis": "The four original non-authored Foam source Texture ldstr strings located in one managed method are actual first arguments of typed Material.SetTexture or MaterialPropertyBlock.SetTexture calls (possibly through Shader.PropertyToID) rather than merely in the same method or within 8 opcode positions.",
   "approach": "Add conservative bounded basic-block IL marker stack trace in isolated T2 Cecil oracle; follow ldstr string/Shader.PropertyToID return ID through only provably modeled stack/local opcodes; require exact first setter name argument type and reject branches, unknown opcodes, indirect storage and unrelated nearby setters. Add public synthetic positive/negative Cecil bytecode fixtures, retain source original SHA/ZIP2 and only numeric output. Do not execute game or claim runtime setter dispatch or texture object provenance.",
@@ -21,8 +21,34 @@
   "related_run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42019735778"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement bounded IL stack verifier with actual first-argument proof and negative controls, execute on same original sha-pinned DLL; preserve no ShaderLab/Unity/Adreno assertion.",
-  "updated_at": "2026-11-05T11:38Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42020924870",
+    "https://github.com/alwansan/raf/actions/runs/42021183522"
+  ],
+  "result": {
+    "source_pins_authenticated": true,
+    "original_managed_dll_bytes": 3211776,
+    "original_shader_owner_bytes": 115978112,
+    "original_source_non_authored_names_as_compiled_IL_literals": 4,
+    "original_non_authored_names_confirmed_as_actual_first_formal_SetTexture_name_argument": 4,
+    "call_kind": "UnityEngine.Material.SetTexture(System.String,...)",
+    "string_name_argument_calls": 4,
+    "via_PropertyToID_calls": 0,
+    "material_property_block_first_arg_calls": 0,
+    "one_source_method_with_all_four_literal_calls": true,
+    "synthetic_controls": "13/13 Python + three separate public Cecil IL branch/operand fixtures",
+    "strict_final_original_CI": "42021183522 SUCCESS",
+    "source_scan_CI": "42020924870 SUCCESS",
+    "artifact_id": 13412190775,
+    "artifact_zip_sha256": "0a7603130abb87c8ab000777eb276cab00b5d2a3c59bdcc9cc4438716eac9498",
+    "unproven": {
+      "runtime_setter_invocation": true,
+      "original_texture_value_object": true,
+      "material_object_identity": true,
+      "shaderlab_import": true,
+      "device_pixels": true
+    }
+  },
+  "next_step": "Bounded original Cecil flow of actual typed second SetTexture argument/source object and Material instance; do not claim actual runtime dispatch or GPU pixels. Coordinate with T1 FFT source and T3 pixels. WATER-001 remains OPEN.",
+  "updated_at": "2026-11-05T11:46Z"
 }
