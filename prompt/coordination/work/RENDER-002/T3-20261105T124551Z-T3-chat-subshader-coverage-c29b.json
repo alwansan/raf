@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T124551Z-T3-chat-subshader-coverage-c29b",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "track": "colors-materials/actual-ShaderLab-multi-SubShader-structural-quality",
+  "base_sha": "c2b4948875748f38cc3bcf5086c4e51d3715ba47",
+  "experiment_key": "T3-post-restorer-shaderlab-all-subshaders-coverage-source-56d3f6a-b49-structural-pass-coverage-v1",
+  "resource_key": "source-only-t3-native-material-program-quality",
+  "approach": "Distinguish at least one completed CGPROGRAM/HLSLPROGRAM Pass from complete coverage across every serialized ShaderLab SubShader. Current diagnostic treats a partly programmed multi-SubShader shader as 'with completed program pass' without an explicit incomplete coverage count. Add non-authenticity diagnostic counts and regression controls, no game Shader/source modifications.",
+  "hypothesis": "In a multi-SubShader ShaderLab source, some variants or quality tiers may have unprogrammed Passes while another has a complete Pass; current aggregate can obscure this bounded structural risk.",
+  "intended_files": [
+    "scripts/t3_audit_exported_material_programs.py",
+    "tests/test_t3_audit_exported_material_programs.py",
+    "prompt/coordination/work/RENDER-002/T3-20261105T124551Z-T3-chat-subshader-coverage-c29b.json",
+    "prompt/coordination/clients/T3/sessions/20261105T124551Z-T3-chat-subshader-coverage-c29b.md",
+    "prompt/coordination/B_TEAM/events/T3/20261105T124551Z-subshader-coverage.json"
+  ],
+  "related_work": [
+    "prompt/coordination/work/RENDER-002/T3-20261105T1213Z-T3-native-shader-dummy-audit-post-restore-linked-dummy-scan.json"
+  ],
+  "resumed_from_sessions": [
+    "20261105T1213Z-T3-native-shader-dummy-audit",
+    "20261105T1130Z-T3-nonnormal-semantic-guard"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Add structural diagnostic counters and synthetic multi-SubShader controls; run isolated existing T3 GitHub workflow on push; preserve no-device-proof.",
+  "updated_at": "2026-11-05T12:45:51Z"
+}
