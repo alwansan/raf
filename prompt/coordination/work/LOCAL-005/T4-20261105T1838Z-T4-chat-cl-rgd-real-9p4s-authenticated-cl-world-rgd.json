@@ -6,7 +6,7 @@
   "session_id": "20261105T1838Z-T4-chat-cl-rgd-real-9p4s",
   "issue_id": "LOCAL-005",
   "track": "user-generated-RGD-authenticity-and-real-original-loader",
-  "status": "active",
+  "status": "completed",
   "base_sha": "4c5b77b3499eb5ec5f82878409532975156d860f",
   "resumed_from_sessions": [
     "20261105T181919Z-T4-chat-overflow-ci-9dzc8",
@@ -30,8 +30,51 @@
     "prompt/coordination/discussions/LOCAL-005/20261105T1838Z-T4-chat-cl-rgd-real-9p4s-to-T5.md"
   ],
   "related_work": [],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Write standalone guarded original actual-RGD CLR loader and path-scoped workflow, trigger once and report whether known CL user-generated saves load; retain LOCAL-005 open until Android offline gameplay, save and full-relaunch.",
-  "updated_at": "2026-11-05T18:38:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42086855402"
+  ],
+  "result": {
+    "status": "REAL_USER_RGD_ORIGINAL_MANAGED_LOAD_VERIFIED",
+    "build_tested_sha": "cbbc296c95b53d13354661eef3bd5212456f5364",
+    "run_id": 42086855402,
+    "job_id": 127454186223,
+    "conclusion": "success",
+    "verified_cl_commit": "5394407b5cd0a0ca1848ff0902f8d2133bf6ea29",
+    "pinned_original_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "original_dll_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "managed_dependency_count": 151,
+    "world_saves": [
+      {
+        "class": "small",
+        "length": 11255,
+        "originalCLRformatter": true,
+        "original_SaveAndLoad_LoadT_invoked": true,
+        "original_LoadT_matching": true,
+        "category": "NONE"
+      },
+      {
+        "class": "large_a",
+        "length": 310140,
+        "originalCLRformatter": true,
+        "original_SaveAndLoad_LoadT_invoked": true,
+        "original_LoadT_matching": true,
+        "category": "NONE"
+      },
+      {
+        "class": "large_b",
+        "length": 309863,
+        "originalCLRformatter": true,
+        "original_SaveAndLoad_LoadT_invoked": true,
+        "original_LoadT_matching": true,
+        "category": "NONE"
+      }
+    ],
+    "wrong_input_rejected": true,
+    "original_CL_user_rgd_bytes_exported": false,
+    "android_unity_runtime": false,
+    "phone_playability": false,
+    "device_full_restart": false
+  },
+  "next_step": "Now saved-world NRBF corruption-as-universal-cause is contradicted for three actual user saves under .NET8; prioritize real Android host/world callback after B50 Steam guard and verified newer signed candidate; T5 should recover current build delivery without Unity rerun. LOCAL-005 OPEN NOT_READY 0/3.",
+  "updated_at": "2026-11-05T18:45:00Z"
 }

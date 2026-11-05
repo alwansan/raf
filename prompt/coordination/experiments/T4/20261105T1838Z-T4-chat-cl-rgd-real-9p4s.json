@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261105T1838Z-T4-chat-cl-rgd-real-9p4s",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "hypothesis": "Genuine CL saved worlds might be invalid at original compiled generic game loader level; test exact original bytes to distinguish file corruption from local world lifecycle.",
+  "source_commit": "cbbc296c95b53d13354661eef3bd5212456f5364",
+  "input_hashes": [
+    {
+      "provider": "CL@5394407b5cd0a0ca1848ff0902f8d2133bf6ea29",
+      "git_blob": "8d250dec17e0ff5688fb760948ced35db7808580",
+      "size": 11255
+    },
+    {
+      "provider": "CL@5394407b5cd0a0ca1848ff0902f8d2133bf6ea29",
+      "git_blob": "64f5cbfb35ab12a986d007cfbbb89d298ca5b46f",
+      "size": 310140
+    },
+    {
+      "provider": "CL@5394407b5cd0a0ca1848ff0902f8d2133bf6ea29",
+      "git_blob": "65b5b93d98c3e17c679e74d1568ef99ff52e1145",
+      "size": 309863
+    },
+    {
+      "provider": "ZIP2",
+      "sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+      "size": 3211776
+    }
+  ],
+  "tool_versions": {
+    "dotnet": "8.0.x ubuntu-24.04",
+    "clr": "original Assembly-CSharp 3211776B verified",
+    "game_loader": "original compiled SaveAndLoad.Load<T>"
+  },
+  "commands": [
+    "dotnet publish android-port/Experiments/T4/ClWorldRgdRuntime/ClWorldRgdRuntime.csproj -c Release --self-contained false",
+    "git blob object API read pinned CL world saves; verify Git object SHA and bytes",
+    "dotnet ClWorldRgdRuntime.dll --assembly [pinned original] --seed [pinned public CL RGD] --output [private report] --original-loadt x3",
+    "wrong-input negative pre-deserialization control"
+  ],
+  "negative_controls": [
+    "all three exact object hashes verified before historical BinaryFormatter load",
+    "wrong input file rejected and no report emitted",
+    "never output original CLR type names or serialized members",
+    "no game world/Android acceptance flag asserted"
+  ],
+  "workflow_path": ".github/workflows/raft-t4-cl-real-world-rgd-readonly.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42086855402",
+  "artifact_urls": [],
+  "budget": "source-readonly CPU; 12min runner timeout; 35s each case; no Unity, no uploaded original data",
+  "status": "completed",
+  "observed_result": {
+    "status": "REAL_USER_RGD_ORIGINAL_MANAGED_LOAD_VERIFIED",
+    "build_tested_sha": "cbbc296c95b53d13354661eef3bd5212456f5364",
+    "run_id": 42086855402,
+    "job_id": 127454186223,
+    "conclusion": "success",
+    "verified_cl_commit": "5394407b5cd0a0ca1848ff0902f8d2133bf6ea29",
+    "pinned_original_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "original_dll_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "managed_dependency_count": 151,
+    "world_saves": [
+      {
+        "class": "small",
+        "length": 11255,
+        "originalCLRformatter": true,
+        "original_SaveAndLoad_LoadT_invoked": true,
+        "original_LoadT_matching": true,
+        "category": "NONE"
+      },
+      {
+        "class": "large_a",
+        "length": 310140,
+        "originalCLRformatter": true,
+        "original_SaveAndLoad_LoadT_invoked": true,
+        "original_LoadT_matching": true,
+        "category": "NONE"
+      },
+      {
+        "class": "large_b",
+        "length": 309863,
+        "originalCLRformatter": true,
+        "original_SaveAndLoad_LoadT_invoked": true,
+        "original_LoadT_matching": true,
+        "category": "NONE"
+      }
+    ],
+    "wrong_input_rejected": true,
+    "original_CL_user_rgd_bytes_exported": false,
+    "android_unity_runtime": false,
+    "phone_playability": false,
+    "device_full_restart": false
+  },
+  "rejected_hypotheses": [
+    "The three selected real CL world save files are universally unreadable by the original compiled SaveAndLoad.Load<T> on .NET8 (observed all three load with matching type)"
+  ],
+  "limitations": [
+    "Not Unity 2021 IL2CPP Android or actual game process",
+    "Does not check block/player world completeness, user progress, durability across process restart",
+    "Steam StoreStats guard source already exists; no actual on-device post-fix execution",
+    "Input files are CL public records; hashes validated but runtime serializers on device may differ"
+  ],
+  "integration_commit": "cbbc296c95b53d13354661eef3bd5212456f5364",
+  "next_step": "Now saved-world NRBF corruption-as-universal-cause is contradicted for three actual user saves under .NET8; prioritize real Android host/world callback after B50 Steam guard and verified newer signed candidate; T5 should recover current build delivery without Unity rerun. LOCAL-005 OPEN NOT_READY 0/3."
+}

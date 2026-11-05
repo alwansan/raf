@@ -1,0 +1,14 @@
+{
+  "id": "20261105T1838Z-T4-chat-cl-rgd-real-9p4s",
+  "owner": "T4",
+  "session_id": "20261105T1838Z-T4-chat-cl-rgd-real-9p4s",
+  "issue_id": "LOCAL-005",
+  "type": "result",
+  "summary": "Actual CL user-created 3 world .rgd blobs authenticated; .NET8 BinaryFormatter and genuine compiled original game SaveAndLoad.Load<T> each succeeded with nonnull matching original game type (3/3), wrong input rejected; Android gameplay unresolved.",
+  "at": "2026-11-05T18:45:00Z",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42086855402",
+    "https://github.com/alwansan/raf/commit/cbbc296c95b53d13354661eef3bd5212456f5364",
+    "prompt/coordination/clients/T4/sessions/20261105T1838Z-T4-chat-cl-rgd-real-9p4s.md"
+  ]
+}
