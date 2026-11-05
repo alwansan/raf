@@ -71,6 +71,38 @@ class MaterialColorsTests(unittest.TestCase):
         self.assertEqual(normalize_colors([{'m_First': '_Tint', 'm_Second': color()}]), expected)
         self.assertEqual(normalize_colors([{'_Tint': color()}], exported=True), expected)
 
+    def test_exported_yaml_color_property_map_without_original_relaxation(self):
+        actual={'_Tint':color()}
+        self.assertEqual(normalize_colors(actual,exported=True),
+                         {'_Tint':(.12,.5,1.,1.)})
+        self.assertEqual(normalize_colors({},exported=True),{})
+        with self.assertRaisesRegex(ValueError, 'array'):
+            normalize_colors(actual)
+        with self.assertRaisesRegex(ValueError, 'Malformed or duplicated'):
+            normalize_colors({19:color()},exported=True)
+        with self.assertRaisesRegex(ValueError, 'RGBA'):
+            normalize_colors({'_Tint':dict(r=1,g=1,b=1)},exported=True)
+
+    def test_exported_yaml_color_mapping_actual_document(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            assets=Path(tmp)/'Assets';assets.mkdir()
+            path=assets/'material.mat'
+            path.write_text('%YAML 1.1\\n--- !u!21 &2100000\\nMaterial:\\n'
+                            '  m_SavedProperties:\\n'
+                            '    m_Colors:\\n'
+                            '      _Tint: {r: 0.12, g: 0.5, b: 1, a: 1}\\n')
+            (assets/'material.mat.meta').write_text('guid: '+'a'*32+'\\n')
+            self.assertEqual(exported_colors(Path(tmp)),
+                             {(2100000,'a'*32):{'_Tint':(.12,.5,1.,1.)}})
+
+    def test_unpinned_selected_material_colors_refused_before_source_loading(self):
+        from scripts.b44_verify_material_colors import original_colors
+        with tempfile.TemporaryDirectory() as tmp:
+            with self.assertRaisesRegex(ValueError, 'Unpinned'):
+                original_colors(Path(tmp), selected_owners={'../unsafe.assets'})
+            with self.assertRaisesRegex(ValueError, 'Unpinned'):
+                original_colors(Path(tmp), selected_owners=set())
+
     def test_engine_redirect_and_font_material_are_excluded(self):
         t, s, a = fixture()
         t['objects'].append(dict(class_id=21, source=dict(owner='original.assets', path_id=13),
