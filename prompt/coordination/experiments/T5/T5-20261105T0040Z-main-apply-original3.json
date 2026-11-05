@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "session_id": "20261105T0040Z-T5-real-hydrator-entrypoint",
+  "issue_id": "ASSET-RESTORE-001",
+  "hypothesis": "Direct consumer test cannot prove production --apply honors the T5 stage root and skips LFS. Real main() with exact original three-pointer subset closes this execution gap.",
+  "source_commit": "1940a856cc2ee0724bff04d47aba408e10ac7eae",
+  "input_hashes": [
+    "3 SHA-authentic ZIP2 originals 337660952 bytes",
+    "source commit 15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+  ],
+  "tool_versions": {
+    "python": "ubuntu-24.04 python3"
+  },
+  "commands": [
+    "CI T5 original staging workflow isolated real hydrate_render_payloads.main() --apply"
+  ],
+  "negative_controls": [
+    "patch subprocess.run to fail if LFS fallback occurs",
+    "restore exact three feature pointer Git blobs before entrypoint"
+  ],
+  "workflow_path": ".github/workflows/raft-t5-zip2-render-stage.yml",
+  "run_url": null,
+  "artifact_urls": [],
+  "budget": "15min ubuntu-24.04 workflow, reuse same 337MB, no Unity/LFS/raw artifacts",
+  "status": "active",
+  "observed_result": null,
+  "rejected_hypotheses": [],
+  "limitations": [
+    "Python plan patched only for bounded 3 originals, not full project imported",
+    "No Unity Editor, GPU or phone validation"
+  ],
+  "integration_commit": null,
+  "next_step": "Append real production main() trial to own workflow; inspect actual CI then record evidence."
+}
