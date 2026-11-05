@@ -26,6 +26,8 @@ EXPECTED_TYPED_SLOT_USE=1633
 EXPECTED_UNKNOWN_SHADER_SLOTS=2
 EXPECTED_TOP_ORIGINAL_SH=921
 STATUS="SIX_SCENE_SOURCE_SHADER_TO_POSTVENDOR_ACTUAL_GUID_JOIN_VERIFIED"
+# A zero GUID is a null/unresolved reference, never an engine Shader object.
+VALID_BUILTIN_GUIDS=frozenset(BUILTIN - {"0"*32})
 
 
 def join(source_use:dict, w1:dict, shader_profiles:dict, *,
@@ -66,7 +68,7 @@ def join(source_use:dict, w1:dict, shader_profiles:dict, *,
             or not isinstance(export[2],str)):
             raise ValueError("invalid_same_instance_export_Shader_pointer")
         fileid,guid,ptype=export
-        if guid in BUILTIN and ptype=="0":
+        if fileid>0 and guid in VALID_BUILTIN_GUIDS and ptype=="0":
             status="unity_builtin"
         elif fileid==4800000 and ptype=="3" and guid in shader_profiles:
             if guid in exported_custom_guids:
@@ -94,7 +96,8 @@ def join(source_use:dict, w1:dict, shader_profiles:dict, *,
         raise ValueError("original_921_slot_Shader_reference_changed")
     maxkey=max(source_use,key=source_use.get)
     high_shader_target=by_original[maxkey]
-    if high_shader_target[1] in BUILTIN and high_shader_target[2]=="0":
+    if (high_shader_target[0]>0 and high_shader_target[1] in VALID_BUILTIN_GUIDS
+            and high_shader_target[2]=="0"):
         high_status="UNITY_BUILTIN_EXPORT_TARGET"
     elif shader_profiles[high_shader_target[1]]["dummy"]:
         high_status="STILL_DUMMY_AFTER_VENDOR_RESTORERS"
