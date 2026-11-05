@@ -31,7 +31,7 @@ def audit(source: bytes, expected_sha256: str) -> dict:
     return {
         "source_sha256_verified": True,
         "call_families_present": {name: counts[name] > 0 for name in CALLS},
-        "findkernel_and_dispatch_syntax_present": counts["FindKernel"] > 0 and counts["Dispatch"] > 0,
+        "findkernel_and_dispatch_syntax_present": counts["FindKernel"] > 0 and (counts["Dispatch"] > 0 or counts["DispatchIndirect"] > 0),
         "original_program_to_kernel_mapping_proven": False,
         "resource_binding_dataflow_proven": False,
         "unity_execution_proven": False,
