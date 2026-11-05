@@ -1,0 +1,38 @@
+name: T4 LOCAL-005 JSONL session evidence parser negative controls
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/t4_verify_device_world_save_log.py'
+      - 'tests/test_t4_verify_device_world_save_log.py'
+      - '.github/workflows/raft-t4-world-save-log-evidence.yml'
+permissions:
+  contents: read
+concurrency:
+  group: raft-t4-world-save-log-evidence-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  source-free-evidence-contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Checkout source-free parser/test only
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/t4_verify_device_world_save_log.py
+            /tests/test_t4_verify_device_world_save_log.py
+      - name: Run 11 synthetic-only, fail-closed JSONL controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t4_verify_device_world_save_log.py tests/test_t4_verify_device_world_save_log.py
+          python3 -m unittest discover -s tests -p 'test_t4_verify_device_world_save_log.py' -v
+          test ! -e Raft
+      - name: No phone logs, original RGD data, game source or unity tests
+        if: always()
+        run: echo 'source_free_only=true device_acceptance=false real_RGD_read=false'
