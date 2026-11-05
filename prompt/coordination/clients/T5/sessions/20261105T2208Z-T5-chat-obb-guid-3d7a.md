@@ -1,0 +1,15 @@
+# T5 chat — original phone OBB GUID warning classification
+- session_id: 20261105T2208Z-T5-chat-obb-guid-3d7a
+- origin: chat
+- base_sha: 01cc44242f0abcbae9cb0900eff82c8b4b27bcf8
+- resumed_from_sessions: 20261105T2153Z-T5-chat-signed-pair-4e91; 20261105T2110Z-T5-chat-retain-delivery-a6f8
+- issue_id: INTEGRATION-001
+- status: active
+- work: prompt/coordination/work/INTEGRATION-001/20261105T2208Z-T5-chat-obb-guid-3d7a.json
+- experiment_key: t5-CL-pinned-520c4c-guid-warning-version89-patch-vs-main-actual-log-parity-v1
+- resource_key: CL-read-only-20261105-phone-log-sha-blobs
+- source CL fixed commit 520c4cf409aa20a4db54ff80ed87d8807d9cba57. Session 220911-559 segment 1 blob d50b9fde330c425e15d444922c214a5b112bb264 contains one 'Unable to load GUID' for *patch.89...obb*, segment2 none. Session 230108-327 seg1 blob cb3a3318b604c1cfbc43583e05580a39bcb66c81 contains two same patch.89...obb; other three segments contain none.
+- Actual signed source artifact of run42058825739, versionCode89 verified from aapt, signed APK cryptographic signature and pair SHA as CI42117471172 success.
+- Source delivery.json logical files APK, *main.89.com.alwansan.raft.androidtest.obb*, XAPK. No *patch.89* signed artifact declared or shipped. Three warning paths are patch, not main. Does not prove phone patch file absence or mounted main path.
+- planned work files: scripts/t5_classify_obb_guid_logs.py, tests/test_t5_classify_obb_guid_logs.py, .github/workflows/raft-t5-obb-guid-log-identity.yml, docs/T5_REAL_CL_OBB_PATCH_GUID_DIAGNOSIS_2026-11-05.md.
+- Avoid T1–T4 and concurrent T5 scheduled Resolution code. No Unity/no game patch/no Unity warning suppression. Next: implement classification plus source-free CI, document genuine CL counted evidence and limitations.
