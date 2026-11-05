@@ -32,6 +32,7 @@ COUNT_KEYS=(
     "shader_files_with_unknown_exporter_marker",
     "shader_files_with_unbalanced_ShaderLab",
     "shader_files_without_passes", "shader_files_with_complete_program_pass",
+    "shader_files_with_partial_subshader_program_coverage",
     "material_documents", "material_docs_using_local_custom_Shader",
     "material_docs_using_Unity_builtin_Shader", "material_docs_with_null_Shader",
     "material_docs_with_unknown_or_broken_Shader",
@@ -39,6 +40,7 @@ COUNT_KEYS=(
     "material_docs_using_unbalanced_ShaderLab",
     "material_docs_using_Shader_without_completed_program_pass",
     "material_docs_using_Shader_with_completed_program_pass",
+    "material_docs_using_Shader_with_partial_subshader_program_coverage",
     "distinct_custom_Shader_targets_referenced",
     "distinct_dummy_Shader_targets_referenced",
 )
@@ -79,6 +81,11 @@ def _shader_profiles(entries:list[Path]):
             "unbalanced": not profile["pass_braces_balanced"],
             "pass_count":profile["pass_count"],
             "programmed":profile["passes_with_complete_program"],
+            # One programmed Pass may coexist with another incomplete SubShader.
+            # This is source structure, not verified runtime branch selection.
+            "partial_subshader_coverage":(
+                profile["passes_with_complete_program"]>0
+                and not profile["all_subshaders_programmed"]),
         }
     return result
 
@@ -133,6 +140,8 @@ def audit(project:Path):
         c["shader_files_with_unbalanced_ShaderLab"]+=int(v["unbalanced"])
         c["shader_files_without_passes"]+=int(v["pass_count"]==0)
         c["shader_files_with_complete_program_pass"]+=int(v["programmed"]>0)
+        c["shader_files_with_partial_subshader_program_coverage"]+=int(
+            v["partial_subshader_coverage"])
     c["material_documents"]=len(refs)
     custom=set()
     dummy=set()
@@ -154,6 +163,8 @@ def audit(project:Path):
                 c["material_docs_using_non_dummy_Shader"]+=1
             if profile["unbalanced"]:
                 c["material_docs_using_unbalanced_ShaderLab"]+=1
+            if profile["partial_subshader_coverage"]:
+                c["material_docs_using_Shader_with_partial_subshader_program_coverage"]+=1
             if profile["programmed"]>0:
                 c["material_docs_using_Shader_with_completed_program_pass"]+=1
             else:
