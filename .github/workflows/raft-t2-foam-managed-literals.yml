@@ -461,6 +461,21 @@ jobs:
               assert ss['MultiInputVoidCallConsumptionModeled'] is True
               assert ss['ConditionalSourceOpcodeFamily']!='unresolved'
           assert ss['MultiInputVoidCallConsumptionModeled'] is True
+          assert type(ss['NamedConstructorHasValidVoidSignature']) is bool
+          assert type(ss['ConstructorAndWriterLocalExactAssemblyScopeAgree']) is bool
+          if ss['ConstructorAndWriterLocalExactAssemblyScopeAgree']:
+              assert ss['NamedConstructorHasValidVoidSignature'] is True
+              assert ss['ConditionalSourceOpcodeFamily']=='named_rendertexture_constructor'
+              assert ss['SameBlockSurvivingValueSourceFound'] is True
+          print('T2_FOAM_RT_CONSTRUCTOR_ASSEMBLY_SCOPE_SAFE '+json.dumps({
+              'exact_ctor_void_signature':
+                  ss['NamedConstructorHasValidVoidSignature'],
+              'original_ctor_and_rt_local_same_assembly_scope':
+                  ss['ConstructorAndWriterLocalExactAssemblyScopeAgree'],
+              'verified_assembly_scope_metadata_only':True,
+              'original_runtime_or_pixels_verified':False,
+              'original_type_assembly_names_or_IL_published':False,
+          },sort_keys=True))
           print('T2_FOAM_MULTIARG_VOID_STACK_SLICE_SAFE '+json.dumps({
               'analysis_status':ss['AnalysisStatus'],
               'conditional_surviving_source_opcode_family':

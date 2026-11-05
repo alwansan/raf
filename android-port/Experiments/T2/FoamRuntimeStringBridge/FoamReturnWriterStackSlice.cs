@@ -12,7 +12,9 @@ internal static class FoamReturnWriterStackSlice
         bool MultiInputVoidCallConsumptionModeled,
         bool WholeFunctionBranchJoinProven=false,
         bool OriginalRuntimeValueOrPixelsVerified=false,
-        bool PrivateSourceNamesIlOrValuesDisclosed=false);
+        bool PrivateSourceNamesIlOrValuesDisclosed=false,
+        bool NamedConstructorHasValidVoidSignature=false,
+        bool ConstructorAndWriterLocalExactAssemblyScopeAgree=false);
 
     // A block entry may have a non-empty incoming stack. We never claim
     // to know values that predate the block or cross handler/branch entries.
@@ -143,9 +145,52 @@ internal static class FoamReturnWriterStackSlice
         _ => "other_stack_producer"
     };
 
+    // Compare the resolved metadata identity, not just the published
+    // UnityEngine.RenderTexture FullName. No scope string leaves CI.
+    private static string? AssemblyScope(TypeReference type) =>
+        type.Scope switch
+        {
+            AssemblyNameReference a => a.FullName,
+            ModuleDefinition m when m.Assembly!=null => m.Assembly.Name.FullName,
+            _ => null
+        };
+
+    private static int? WriterSlot(Instruction writer) =>
+        writer.OpCode.Code switch
+        {
+            Code.Stloc_0 => 0, Code.Stloc_1 => 1,
+            Code.Stloc_2 => 2, Code.Stloc_3 => 3,
+            Code.Stloc or Code.Stloc_S when
+                writer.Operand is VariableDefinition variable => variable.Index,
+            _ => null
+        };
+
+    private static (bool CtorVoidShape,bool ExactScope) ConstructorIdentity(
+        MethodDefinition method,Instruction writer,Instruction source)
+    {
+        if(source.OpCode.Code!=Code.Newobj ||
+           source.Operand is not MethodReference ctor ||
+           ctor.DeclaringType.FullName!="UnityEngine.RenderTexture")
+            return (false,false);
+        bool valid=ctor.Name==".ctor" && ctor.HasThis &&
+            ctor.ReturnType.MetadataType==MetadataType.Void;
+        int? slot=WriterSlot(writer);
+        if(!valid || slot is not int n || n<0 || n>=method.Body.Variables.Count)
+            return (valid,false);
+        var local=method.Body.Variables[n].VariableType;
+        var constructed=ctor.DeclaringType;
+        string? localAssembly=AssemblyScope(local);
+        string? ctorAssembly=AssemblyScope(constructed);
+        bool matches=local.FullName=="UnityEngine.RenderTexture" &&
+            localAssembly is not null && ctorAssembly is not null &&
+            StringComparer.Ordinal.Equals(localAssembly,ctorAssembly);
+        return (valid,matches);
+    }
+
     private static SafeProfile Result(string state,string producer="unresolved",
-        bool found=false,bool modeled=false) =>
-        new(state,producer,found,modeled,false,false,false);
+        bool found=false,bool modeled=false,bool ctorShape=false,
+        bool exactScope=false) =>
+        new(state,producer,found,modeled,false,false,false,ctorShape,exactScope);
 
     internal static SafeProfile Inspect(MethodDefinition method,
         Instruction returnLocalWriter,int maxInstructions=192,int maxDepth=128)
@@ -197,8 +242,12 @@ internal static class FoamReturnWriterStackSlice
                 continue;
             }
             if(push>=distance)
+            {
+                var identity=ConstructorIdentity(method,returnLocalWriter,ins);
                 return Result("same_block_stack_source_found",
-                    Producer(ins),true,true);
+                    Producer(ins),true,true,identity.CtorVoidShape,
+                    identity.ExactScope);
+            }
             distance=distance-push+pop;
             if(distance>maxDepth || distance<1)
                 return Result("stack_depth_budget",modeled:true);
@@ -225,14 +274,16 @@ internal static class FoamReturnWriterStackSlice
             m.TypeSystem.Void,host){HasThis=false};
         rtAndInt.Parameters.Add(new ParameterDefinition(rt));
         rtAndInt.Parameters.Add(new ParameterDefinition(m.TypeSystem.Int32));
-        (MethodDefinition Method,Instruction Writer,ILProcessor Il) Build(string name)
+        (MethodDefinition Method,Instruction Writer,ILProcessor Il) Build(
+            string name,TypeReference? localType=null)
         {
+            var local=localType??rt;
             var method=new MethodDefinition(name,
                 Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,
-                rt);
+                local);
             host.Methods.Add(method);
             method.Body.InitLocals=true;
-            method.Body.Variables.Add(new VariableDefinition(rt));
+            method.Body.Variables.Add(new VariableDefinition(local));
             var ip=method.Body.GetILProcessor();
             var wr=ip.Create(OpCodes.Stloc_0);
             return (method,wr,ip);
@@ -310,5 +361,51 @@ internal static class FoamReturnWriterStackSlice
         if(Inspect(origin.Method,origin.Writer,maxInstructions:1)
             .SameBlockSurvivingValueSourceFound)
             throw new InvalidDataException("Instruction budget bypassed");
+
+        // Synthetic positive and same-FullName foreign-assembly negative.
+        // Only boolean equality is reported, never the scope strings.
+        var unityRef=new AssemblyNameReference("UnityEngine.CoreModule",
+            new Version(0,0,0,0));
+        var wrongRef=new AssemblyNameReference("PublicFakeAssembly",
+            new Version(0,0,0,0));
+        var localRt=new TypeReference("UnityEngine","RenderTexture",m,unityRef);
+        var rightCtor=new MethodReference(".ctor",m.TypeSystem.Void,localRt)
+            {HasThis=true};
+        var spoofRt=new TypeReference("UnityEngine","RenderTexture",m,wrongRef);
+        var wrongCtor=new MethodReference(".ctor",m.TypeSystem.Void,spoofRt)
+            {HasThis=true};
+        var positiveScope=Build("SyntheticAssemblyScopePositive",localRt);
+        positiveScope.Il.Append(positiveScope.Il.Create(OpCodes.Newobj,rightCtor));
+        positiveScope.Il.Append(positiveScope.Il.Create(OpCodes.Ldc_I4_0));
+        positiveScope.Il.Append(positiveScope.Il.Create(OpCodes.Ldc_I4_1));
+        positiveScope.Il.Append(positiveScope.Il.Create(OpCodes.Call,multi));
+        End(positiveScope);
+        var matching=Inspect(positiveScope.Method,positiveScope.Writer);
+        if(!matching.NamedConstructorHasValidVoidSignature ||
+           !matching.ConstructorAndWriterLocalExactAssemblyScopeAgree ||
+           matching.OriginalRuntimeValueOrPixelsVerified)
+            throw new InvalidDataException("Synthetic matched assembly scope rejected");
+        var decoy=Build("SyntheticAssemblyScopeNegative",localRt);
+        decoy.Il.Append(decoy.Il.Create(OpCodes.Newobj,wrongCtor));
+        decoy.Il.Append(decoy.Il.Create(OpCodes.Ldc_I4_0));
+        decoy.Il.Append(decoy.Il.Create(OpCodes.Ldc_I4_1));
+        decoy.Il.Append(decoy.Il.Create(OpCodes.Call,multi));
+        End(decoy);
+        var foreign=Inspect(decoy.Method,decoy.Writer);
+        if(!foreign.SameBlockSurvivingValueSourceFound ||
+           !foreign.NamedConstructorHasValidVoidSignature ||
+           foreign.ConstructorAndWriterLocalExactAssemblyScopeAgree)
+            throw new InvalidDataException("Same FullName foreign-assembly decoy accepted");
+        var invalidCtor=new MethodReference("NotAConstructor",m.TypeSystem.Void,
+            localRt){HasThis=true};
+        var badShape=Build("SyntheticBadConstructorShape",localRt);
+        badShape.Il.Append(badShape.Il.Create(OpCodes.Newobj,invalidCtor));
+        badShape.Il.Append(badShape.Il.Create(OpCodes.Ldc_I4_0));
+        badShape.Il.Append(badShape.Il.Create(OpCodes.Ldc_I4_1));
+        badShape.Il.Append(badShape.Il.Create(OpCodes.Call,multi));
+        End(badShape);
+        if(Inspect(badShape.Method,badShape.Writer)
+            .NamedConstructorHasValidVoidSignature)
+            throw new InvalidDataException("Invalid constructor declaration accepted");
     }
 }
