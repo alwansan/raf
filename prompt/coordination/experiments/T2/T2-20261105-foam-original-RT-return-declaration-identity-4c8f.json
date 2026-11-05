@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261105T1712Z-T2-chat-return-identity-minimal-4c8f",
+  "issue_id": "WATER-001",
+  "status": "completed",
+  "experiment_key": "T2|ZIP2-15964ea8|managed-0a6f0527|Foam-stelem-call-target-exact-signature-identity-minimal-v2",
+  "source": {
+    "ZIP2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "original_managed_DLL_bytes": 3211776,
+    "original_managed_DLL_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e"
+  },
+  "source_commits": [
+    "3c77bdc402c6a7dc42c0f82e3ad1e714003eea66",
+    "1f77969f3728cf13ec3e033b7e76c1479a5b6667",
+    "87c5a3e887144efef11e172d4cd3fb69d8d86e59"
+  ],
+  "original_ci": "https://github.com/alwansan/raf/actions/runs/42072739153",
+  "artifact": {
+    "id": 13435558953,
+    "bytes": 2921,
+    "sha256": "9fa9717b4791bf9b53b63778a53a3f0b3fcd0073cdf946b46b3567cd2b43b8d0"
+  },
+  "result": {
+    "original_sha_pinned_ci_success": true,
+    "typed_element_call_original_declared_return": "UnityEngine.RenderTexture",
+    "original_same_sha_managed_signature_matches": 1,
+    "matching_method_body_available": true,
+    "synthetic_internal_wrong_signature_unity_external_controls_passed": true,
+    "exact_assembly_dispatch_or_runtime_execution_proven": false,
+    "nonnull_runtime_object_or_gpu_pixels_proven": false,
+    "private_symbols_il_numeric_values_disclosed": false
+  },
+  "next_step": "Original typed return body direct source census, then branch/local value flow and assembly scope to distinguish external same-name decoy. No game/Unity/device proof."
+}
