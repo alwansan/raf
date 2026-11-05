@@ -24,7 +24,9 @@ internal static class FoamByrefElementValueOrigin
         int DirectRenderTextureConstructorReturnSites=0,
         int DirectRenderTextureCallReturnSites=0,
         int ReturnSitesWithUnresolvedProducer=0,
-        int BodyBranchInstructionCount=0);
+        int BodyBranchInstructionCount=0,
+        string OriginalReturnSitePlacementCategory="not_examined",
+        string OriginalReturnImmediatePriorOpcodeCategory="not_examined");
 
     private readonly record struct Origin(string Category,bool NewRt=false,
         bool CallRt=false,bool Null=false,bool Local=false);
@@ -218,6 +220,57 @@ internal static class FoamByrefElementValueOrigin
         return (total,nulls,constructors,calls,unknown,branches);
     }
 
+
+    // Original method symbols, IL bytes and numeric operands are private.
+    // Report only fixed coarse categories; branch targets NEVER imply
+    // straight-line return-value provenance.
+    internal static (string Placement,string Immediate) ExplainRetSite(
+        IEnumerable<MethodDefinition> originals, MethodReference exactReturnCall)
+    {
+        var found=originals.Where(m=>
+            m.FullName==exactReturnCall.FullName &&
+            m.DeclaringType.FullName==exactReturnCall.DeclaringType.FullName &&
+            m.HasThis==exactReturnCall.HasThis &&
+            m.ReturnType.FullName==exactReturnCall.ReturnType.FullName &&
+            m.Parameters.Count==exactReturnCall.Parameters.Count &&
+            m.Parameters.Zip(exactReturnCall.Parameters,
+                (a,b)=>a.ParameterType.FullName==b.ParameterType.FullName)
+                .All(x=>x)).Take(2).ToList();
+        if(found.Count!=1 || !found[0].HasBody)
+            return ("unresolved_method","unresolved_method");
+        var method=found[0];
+        var il=method.Body.Instructions;
+        var rets=Enumerable.Range(0,il.Count)
+            .Where(i=>il[i].OpCode.Code==Code.Ret).ToList();
+        if(rets.Count!=1)
+            return ("zero_or_multiple_returns","zero_or_multiple_returns");
+        int site=rets[0];
+        bool atEntry=Entries(method).Contains(il[site]);
+        string placement=atEntry?"branch_exception_or_method_entry":
+            "sequential_return_site";
+        int prev=Prev(il,0,site);
+        if(prev<0)
+            return (placement,"no_prior_opcode");
+        var op=il[prev];
+        string prior=op.OpCode.Code switch
+        {
+            Code.Ldnull => "ldnull",
+            Code.Ldloc or Code.Ldloc_S or Code.Ldloc_0 or Code.Ldloc_1 or
+                Code.Ldloc_2 or Code.Ldloc_3 => "ldloc",
+            Code.Ldarg or Code.Ldarg_S or Code.Ldarg_0 or Code.Ldarg_1 or
+                Code.Ldarg_2 or Code.Ldarg_3 => "ldarg",
+            Code.Ldfld or Code.Ldsfld => "field_load",
+            Code.Call or Code.Callvirt => "call",
+            Code.Newobj => "newobj",
+            Code.Dup => "dup",
+            Code.Ldelem_Ref or Code.Ldind_Ref => "indirect_load",
+            _ when op.OpCode.FlowControl is FlowControl.Branch or
+                FlowControl.Cond_Branch => "branch_opcode",
+            _ => "other_opcode"
+        };
+        return (placement,prior);
+    }
+
     internal static SafeProfile Inspect(IEnumerable<MethodDefinition> originals,
         MethodReference recipient,FoamByrefAllocationFlow.SafeProfile prior)
     {
@@ -265,10 +318,15 @@ internal static class FoamByrefElementValueOrigin
             op.Operand is MethodReference rtCall
             ? ScanMatchingReturnBody(originals,rtCall)
             : (0,0,0,0,0,0);
+        var retReason=identity.Item1==1 && identity.Item3 &&
+            op.Operand is MethodReference originalCall
+            ? ExplainRetSite(originals,originalCall)
+            : ("not_examined","not_examined");
         return new SafeProfile(1,1,immediate,origin.Category,origin.NewRt,
             origin.CallRt,origin.Null,origin.Local,false,false,
             identity.Item1,identity.Item2,identity.Item3,
             returns.Item1,returns.Item2,returns.Item3,
-            returns.Item4,returns.Item5,returns.Item6);
+            returns.Item4,returns.Item5,returns.Item6,
+            retReason.Item1,retReason.Item2);
     }
 }
