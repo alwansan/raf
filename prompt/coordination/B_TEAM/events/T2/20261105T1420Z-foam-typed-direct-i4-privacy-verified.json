@@ -1,0 +1,14 @@
+{
+  "id": "T2-20261105T1420Z-foam-typed-direct-i4-privacy-verified",
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261105T1408Z-T2-chat-foam-four-i4-uniqueness-4e7a",
+  "issue_id": "WATER-001",
+  "type": "original_managed_four_i4_typed_private_aggregate_result",
+  "at": "2026-11-05T14:20:00Z",
+  "summary": "SHA-original Foam four exact Texture(int) index input direct ldc.i4 values decoded privately with signed/wide/short and false-token synthetic controls; real CI42043293335 SUCCESS, only safe distinct-count and sign fields published in artifact13423996658, no raw int values or low-domain digest. Aggregate field exact values not yet read in chat due artifact inspection tool limits; do not claim four distinct or nonnegative. No original runtime RenderTexture[] bounds/ShaderLab/Unity/device proof; WATER-001 OPEN NOT_READY0/3.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42043293335",
+    "https://github.com/alwansan/raf/commit/43a633869a4185bd0176e139b9abf3b28045bd8e"
+  ]
+}
