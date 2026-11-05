@@ -145,7 +145,7 @@ jobs:
           ready = r'\bWorldHasBeenRecieved\s*=\s*true\s*;'
           if staged_ret != 'IEnumerator' or len(re.findall(ready, before)) != 1 or len(re.findall(ready, after)) != 1:
               raise ValueError('Original world completion assignment contract changed')
-          if after.count('WorldHasBeenLoaded.firstMoveNext') != 1 or after.count('WorldHasBeenLoaded.originalCompletionAssigned') != 1:
+          if staged_body.count('WorldHasBeenLoaded.firstMoveNext') != 1 or staged_body.count('WorldHasBeenLoaded.originalCompletionAssigned') != 1:
               raise ValueError('Expected B07 firstMoveNext and T4 actual assignment markers')
           if len(re.findall(r'\byield\s+return\b', after)) != len(re.findall(r'\byield\s+return\b', before)):
               raise ValueError('Original coroutine yield statements changed')
