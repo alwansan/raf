@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T0238Z-T2-dxbc-texture-registers",
+  "issue_id": "WATER-001",
+  "track": "Foam original serialized texture t/s numeric DXBC joins",
+  "approach": "Authenticate original ZIP2 owner and Foam object and stage SHA, then reuse B17 compiled DXBC declaration parser against original m_TextureParams m_Index/m_SamplerIndex for every pass/stage. Classify numeric parity and ambiguity without deriving SPIR-V→Unity material aliases; private source-only low-budget CI.",
+  "status": "active",
+  "base_sha": "8397f6ce5bb3fecb5d8a3c82e7e9ba2d38ded810",
+  "intended_files": [
+    "scripts/t2_foam_original_dxbc_registers.py",
+    "tests/test_t2_foam_original_dxbc_registers.py",
+    ".github/workflows/raft-t2-foam-original-dxbc-registers.yml",
+    "prompt/coordination/clients/T2/sessions/20261105T0238Z-T2-dxbc-texture-registers.md"
+  ],
+  "hypothesis": "Original serialized per-texture m_Index/m_SamplerIndex may match real DXBC dcl_resource(tN)/dcl_sampler(sN) registers; mismatches or -1 must remain unknown, and unrelated translated SPIR-V numeric bindings must not be equated without explicit mapping.",
+  "related_work": [
+    "https://github.com/alwansan/raf/actions/runs/41942245746",
+    "https://github.com/alwansan/raf/actions/runs/41941354379"
+  ],
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/B17/MEMORY.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/B20/MEMORY.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/B24/MEMORY.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/T2/sessions/20261105T0030Z-T2-sampler-ssa-isolated.md"
+  ],
+  "experiment_ids": [
+    "T2-20261105-original-foam-dxbc-registers"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Write verifier/tests and isolate original SHA-pinned workflow; inspect authentic outcomes, do not claim untested Unity material or Adreno.",
+  "updated_at": "2026-11-05T02:39:00Z"
+}
