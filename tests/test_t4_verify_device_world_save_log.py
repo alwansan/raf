@@ -121,5 +121,35 @@ class DeviceWorldSaveLogTests(unittest.TestCase):
         self.assertIn("assignment_precedes_iterator", summary["sessions"][0]["anomalies"])
         self.assertFalse(summary["world_playability_proven"])
 
+    def test_three_sessions_load_before_save_is_not_reordered_as_success(self):
+        self.put("one.jsonl", [row("first", 1, "save", "Load.argumentFileSnapshot",
+                                     "exists_at_filename_argument=True; length_class=nonzero",
+                                     utc="2026-11-05T12:00:00Z")])
+        self.put("two.jsonl", [row("second", 1, "save", "Save.argumentFileSnapshot",
+                                     "exists_at_filename_argument=True; length_class=nonzero",
+                                     utc="2026-11-05T13:00:00Z")])
+        self.put("three.jsonl", [row("third", 1, "startup", "logger.ready",
+                                       utc="2026-11-05T14:00:00Z")])
+        result = summarize(_paths(self.root))
+        self.assertFalse(result["save_nonzero_in_earlier_session"])
+        self.assertFalse(result["load_nonzero_in_later_session"])
+        self.assertFalse(result["local005_device_confirmed"])
+
+    def test_overlapping_logger_sessions_are_not_a_restart_pair(self):
+        self.put("one.jsonl", [
+            row("first", 1, "save", "Save.argumentFileSnapshot",
+                "exists_at_filename_argument=True; length_class=nonzero",
+                utc="2026-11-05T12:00:00Z"),
+            row("first", 2, "startup", "logger.ready",
+                utc="2026-11-05T14:00:00Z")])
+        self.put("two.jsonl", [
+            row("second", 1, "save", "Load.argumentFileSnapshot",
+                "exists_at_filename_argument=True; length_class=nonzero",
+                utc="2026-11-05T13:00:00Z")])
+        result = summarize(_paths(self.root))
+        self.assertFalse(result["save_nonzero_in_earlier_session"])
+        self.assertFalse(result["load_nonzero_in_later_session"])
+        self.assertFalse(result["process_restart_proven"])
+
 if __name__ == "__main__":
     unittest.main()
