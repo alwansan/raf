@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "origin": "chat",
+  "session_id": "20261105T2230Z-T4-chat-captured-mouse-sources-r7n5",
+  "issue_id": "INPUT-005",
+  "status": "completed_source_integrated_device_unverified",
+  "title": "Android API26 captured physical mouse and trackpad motion source separation with historical batch",
+  "hypothesis": "The Android capture callback previously interpreted every captured ACTION_MOVE via getX/getY and only the final sample. Relative mouse uses SOURCE_MOUSE_RELATIVE getX/getY, whereas captured SOURCE_TOUCHPAD uses absolute getX/getY and AXIS_RELATIVE_X/Y for movement. Missing history loses batched movement and may jerk the camera.",
+  "input_provenance": {
+    "original_runtime": "ZIP2 15964ea8f246b6e076ce26b60931ee2e1a9a2385, 3211776B Assembly-CSharp.dll sha256 0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "source_refs": [
+      "https://developer.android.com/reference/android/view/InputDevice",
+      "https://developer.android.com/reference/android/view/MotionEvent",
+      "https://learn.microsoft.com/en-us/dotnet/api/android.views.view.requestpointercapture?view=net-android-37.0"
+    ]
+  },
+  "implementation_commits": [
+    "5fcfea24b52230d236269be2528fc2b11a530780",
+    "a22fef7861d0a9124013d420fd8a0efc6982e01f",
+    "aa5d13d2355c64889b82c9a1af908cd28ed7044f",
+    "148d249a395f8f090e42474fa8bf70dd7caf8d2e",
+    "bd2b844d4f8140674728fea5c3a1309a8d720fa3",
+    "f9782c9a1de3e064a53325ce6b591398d0848c9f",
+    "868eac2784efa1fcf7806a23b32bd1a1a1220fcf"
+  ],
+  "touched_files": [
+    "android-port/Runtime/Platform/PhysicalMouseMotionSource.cs",
+    "android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs",
+    "android-port/Tests/PhysicalMouse/Program.cs",
+    "android-port/Tests/PhysicalMouse/PhysicalMouse.csproj",
+    "android-port/Tests/PhysicalMouse/UnityBridgeCompile.csproj",
+    "tests/test_t4_android_pointer_capture_policy.py",
+    ".github/workflows/raft-t4-mouse-capture-bridge.yml",
+    ".github/workflows/raft-unity-editor-android-import.yml",
+    "scripts/verify_android_offline_candidate.py"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42121540200",
+    "https://github.com/alwansan/raf/actions/runs/42121598304"
+  ],
+  "workflow": ".github/workflows/raft-t4-mouse-capture-bridge.yml",
+  "source_commit": "868eac2784efa1fcf7806a23b32bd1a1a1220fcf",
+  "toolkit_versions": {
+    "dotnet": "8.0.x and 10.0.x",
+    "ilspycmd": "11.2.0.10050",
+    "ubuntu": "24.04",
+    "unity_managed": "Original immutable UnityEngine AndroidJNI/Core/InputLegacy, Unity.InputSystem"
+  },
+  "test_commands": [
+    "python3 -m unittest discover -s tests -p test_t4_original_mouse_routing.py -v",
+    "python3 -m unittest discover -s tests -p test_t4_adapt_original_mouse_axes.py -v",
+    "python3 -m unittest discover -s tests -p test_t4_android_pointer_capture_policy.py -v",
+    "dotnet run --project android-port/Tests/PhysicalMouse/PhysicalMouse.csproj -c Release",
+    "dotnet build android-port/Tests/PhysicalMouse/UnityBridgeCompile.csproj -c Release -p:OriginalManagedDir=ORIGINAL_DLLS",
+    "private ilspycmd 11.2.0.10050 original and guarded Python exact-site rewrite"
+  ],
+  "negative_controls": [
+    "Uncaptured SOURCE_MOUSE=8194 is ignored; SOURCE_TOUCHSCREEN=4098 ignored; unknown and invalid sources ignored.",
+    "Only SOURCE_MOUSE_RELATIVE=131076 uses relative getX/Y; SOURCE_TOUCHPAD=1048584 uses AXIS_RELATIVE_X=27/Y=28, never absolute touchpad getX/Y.",
+    "ACTION_MOVE only; scroll and button events return false, preserving Unity's original handlers.",
+    "Batched events include getHistoricalX/Y or getHistoricalAxisValue before current sample; maximum 64 historical records per Android event to bound JNI work.",
+    "Zero, nonfinite and >10000-delta rejected before enabling relative-axis override.",
+    "Original ZIP2 DLL SHA and exact direct legacy camera axis count (4+4+2) must match; original meta/GUID and save untouched."
+  ],
+  "result": {
+    "ci_status": "SUCCESS",
+    "run_id": 42121598304,
+    "job_id": 127575325748,
+    "python_tests": {
+      "original_census": 7,
+      "original_patch": 7,
+      "source_policy": 14,
+      "total": 28
+    },
+    "dotnet_executable_checks": 30,
+    "original_unity_managed_compile": "SUCCESS",
+    "verified_original_input_sites": {
+      "mouse_x": 4,
+      "mouse_y": 4,
+      "cursor_lock": 2,
+      "source_files": 5
+    },
+    "native_Unity_build": false,
+    "android_device_tested": false,
+    "original_gameplay_save_retested": false
+  },
+  "timeline_note": "Earlier intermediate commits failed at missing PhysicalMouseMotionSource.cs in sparse-checkout before workflow list update; corrected workflow commit f9782c9 passed CI42121540200 and final policy commit 868eac passed CI42121598304.",
+  "limitations": [
+    "Static source checks and managed compile do not prove Android JNI event source/relative coordinate behavior on actual Poco F5 Pro.",
+    "History >64 is deliberately passed to legacy handling rather than consuming a partial packet; requires device frequency evidence before tuning.",
+    "Pointer focus, game menu pointer, Android OS navigation bars, external wheel/buttons and same-SHA world/save regression remain untested.",
+    "Original playable world/save/reopen owner confirmation relates only to signed artifact run42058825739 SHA e9c358eda0; no new APK produced."
+  ],
+  "next_step": "When coordinated T5 signed diagnostic APK is available, validate physical USB/Bluetooth mouse SOURCE_MOUSE_RELATIVE/trackpad on target Android device, continuous camera turn, capture loss/regrant, safe menu cursor/bars, wheel/buttons/touch and world/save/reopen; log native observed source kind without collecting raw events or input payload."
+}
