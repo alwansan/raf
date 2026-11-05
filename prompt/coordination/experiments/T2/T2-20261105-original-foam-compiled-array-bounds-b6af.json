@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261105T1540Z-T2-chat-byref-target-b6af",
+  "issue_id": "WATER-001",
+  "status": "completed",
+  "experiment_key": "T2|original-0a6f0527|Foam-ref-RenderTexture-newarr-private-length-vs-four-index-ops-v1",
+  "source_sha": "fa7c0296ddcc2b70fa7d53bc481c3d03ac52c3cc",
+  "original_run": "https://github.com/alwansan/raf/actions/runs/42060975715",
+  "result": {
+    "source_authenticated": true,
+    "actual_compiled_newarr_ref_store_proven": true,
+    "original_allocation_length_source": "not_direct_ldc_i4",
+    "four_private_compiled_caller_indices_inbounds_verdict": null,
+    "actual_original_ints_revealed": false,
+    "actual_runtime_array_size_verified": false,
+    "runtime_or_pixels_verified": false
+  },
+  "artifact": {
+    "id": 13430897331,
+    "bytes": 2544,
+    "sha256": "16ff66202a28f353efd90bf6d42d53c4d4bf36dadcf6b65e756a986549afd3b2"
+  },
+  "method": "Require exact original typed ref-array newarr store proof, exactly one source RenderTexture newarr, only decode immediate preceding actual ldc.i4 length; never publish source length or original caller indices/digests. Synthetic positive/inbounds, negative/out-of-range and nonliteral dynamic-length controls.",
+  "next_step": "Source-only dataflow for allocation length operand through same block locals/arguments/arithmetic, fail closed on branches. Keep WATER-001 OPEN NOT_READY 0/3."
+}
