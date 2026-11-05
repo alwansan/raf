@@ -2,7 +2,9 @@
 import copy
 import unittest
 from scripts.b24_original_foam_stage_translation import TARGET
-from scripts.t2_foam_private_shaderlab_candidate import assemble,serialize_properties,properties_shape
+from scripts.t2_foam_private_shaderlab_candidate import (
+    assemble,serialize_properties,properties_shape,select_exact_pass_models
+)
 
 
 def fixture():
@@ -22,10 +24,14 @@ def fixture():
     return parsed,{(0,1):vs,(0,0):fs,(1,1):vs,(1,0):fs},["ZWrite Off","ZWrite Off"]
 
 
+def source_model_fixture():
+    return ("5.0","5.0")
+
+
 class TestFoamCandidate(unittest.TestCase):
     def test_complete_private_two_pass_candidate(self):
         p,st,states=fixture()
-        text,shape=assemble(p,st,states)
+        text,shape=assemble(p,st,states,source_model_fixture())
         self.assertEqual(text.count("HLSLPROGRAM"),2)
         self.assertEqual(shape["authored_texture_properties"],1)
         self.assertNotIn("DummyShaderTextExporter",text)
@@ -80,17 +86,17 @@ class TestFoamCandidate(unittest.TestCase):
 
     def test_missing_stage_or_state_rejected(self):
         p,st,states=fixture();st.pop((1,0))
-        with self.assertRaises(ValueError):assemble(p,st,states)
+        with self.assertRaises(ValueError):assemble(p,st,states,source_model_fixture())
         p,st,states=fixture()
-        with self.assertRaises(ValueError):assemble(p,st,states[:1])
+        with self.assertRaises(ValueError):assemble(p,st,states[:1],source_model_fixture())
 
     def test_wrong_pass_count_rejected(self):
         p,st,states=fixture();p["m_SubShaders"][0]["m_Passes"].append({"m_Type":0})
-        with self.assertRaises(ValueError):assemble(p,st,states)
+        with self.assertRaises(ValueError):assemble(p,st,states,source_model_fixture())
 
     def test_original_properties_not_mutated(self):
         p,st,states=fixture();before=copy.deepcopy(p)
-        assemble(p,st,states);self.assertEqual(before,p)
+        assemble(p,st,states,source_model_fixture());self.assertEqual(before,p)
 
     def test_safe_schema_no_private_values(self):
         p,_,_=fixture()
@@ -98,6 +104,33 @@ class TestFoamCandidate(unittest.TestCase):
         self.assertNotIn("_DemoTex",str(safe))
         self.assertNotIn("0.75",str(safe))
 
+
+
+    def test_original_shader_model_must_be_source_derived(self):
+        p,st,states=fixture()
+        with self.assertRaises(TypeError):
+            assemble(p,st,states)
+        with self.assertRaises(ValueError):
+            assemble(p,st,states,("5.0","made-up"))
+        with self.assertRaises(ValueError):
+            assemble(p,st,states,("5.0","5.0","5.0"))
+        text,_=assemble(p,st,states,("4.0","5.0"))
+        self.assertEqual(text.count("#pragma target 4.0"),1)
+        self.assertEqual(text.count("#pragma target 5.0"),1)
+
+    def test_source_four_stage_model_exactness(self):
+        stages={(0,1):(5,0),(0,0):(5,0),
+                (1,1):(4,0),(1,0):(4,0)}
+        self.assertEqual(select_exact_pass_models(stages),("5.0","4.0"))
+        invalid=dict(stages);invalid[(0,0)]=(4,0)
+        with self.assertRaises(ValueError):
+            select_exact_pass_models(invalid)
+        invalid=dict(stages);invalid[(1,1)]=(7,0)
+        with self.assertRaises(ValueError):
+            select_exact_pass_models(invalid)
+        invalid=dict(stages);invalid.pop((1,0))
+        with self.assertRaises(ValueError):
+            select_exact_pass_models(invalid)
 
 if __name__=="__main__":
     unittest.main()
