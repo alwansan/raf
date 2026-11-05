@@ -55,6 +55,29 @@ class NativeRunVerdictTests(unittest.TestCase):
         ]:
             self.assertFalse(result[field])
 
+    def test_cancelled_native_with_failed_step_preserves_failure_evidence(self):
+        self.job("reconstruct")["steps"][0]["conclusion"] = "failure"
+        result = self.audit()
+        self.assertEqual(
+            result["verdict"],
+            "native_job_cancelled_failed_step_causality_unresolved"
+        )
+        self.assertEqual(result["native_stage"], "original_mesh_restoration")
+        self.assertEqual(result["cancellation_initiator"], "unknown")
+        self.assertFalse(result["signed_release_assets_verified"])
+
+    def test_cancelled_native_with_cancelled_step_remains_unproven(self):
+        self.job("reconstruct")["steps"][0]["conclusion"] = "cancelled"
+        self.assertEqual(
+            self.audit()["verdict"],
+            "native_job_cancelled_no_source_failure_established"
+        )
+
+    def test_cancelled_native_malformed_steps_fails_closed(self):
+        self.job("reconstruct")["steps"] = "invalid"
+        with self.assertRaisesRegex(ValueError, "steps must be an array"):
+            self.audit()
+
     def test_genuine_reconstruct_failure_is_not_cancelled(self):
         self.run["conclusion"] = "failure"
         self.job("reconstruct")["conclusion"] = "failure"
