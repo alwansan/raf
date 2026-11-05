@@ -1,7 +1,7 @@
 {
-  "request_id": "w4-documented-water-trial-20261104",
-  "reason": "Owner-directed trial continuation after run 41808015938: builtin ownership gate passes on the full export; authentic water/FFT reconstruction is still incomplete and is exactly acknowledged below so the experimental early-test package can be produced with recorded limitations in its notes. Strict water gate remains the default; no fake kernels and no identity-flag toggle. NOT_READY 0/3; inspect first failure.",
-  "requested_from_sha": "8dc58ec185177608591c7332f7c63c16e80ea8a0",
+  "request_id": "t5-chat-diagnostic-world-save-render-20261105T1404Z-3c8e",
+  "reason": "Owner-authorized one incomplete-water signed APK+OBB/XAPK diagnostic from latest feature branch. Include T4 Android Save.argumentFileSnapshot/local-world traces and existing shader/vendor fixes; preserve B50 offline guards and audio/Settings. Original FFT authored kernel runtime identity, Spectrum/Foam passes and water compute remain unproven and are explicitly acknowledged. Enforce all existing source/Unity/signature/transport checks; NOT_READY 0/3 and device playability unverified.",
+  "requested_from_sha": "19f2af5a7940108ed4d9d6dc40b0cfd565e2644c",
   "documented_water_limitations": [
     "authentic_water_kernel_identity",
     "shader_pass_contract:UltimateWater/Foam/Global",
