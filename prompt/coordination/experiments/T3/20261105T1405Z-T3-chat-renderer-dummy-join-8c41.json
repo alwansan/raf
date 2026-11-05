@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "session_id": "20261105T1405Z-T3-chat-renderer-dummy-join-8c41",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "hypothesis": "Exact same-export Renderer.m_Materials slot usage of 495 postvendor Dummy-linked custom Material documents can be assessed with strict private GUID joins; original source Shader48 reference frequencies and exported Material document counts cannot alone prove Renderer visibility.",
+  "source_commit": "c800f946ce543a870d27006fe20ed82409a52373",
+  "input_hashes": [
+    {
+      "provider": "ZIP2 original 12 owners",
+      "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+      "status": "pinned for future manual-only source run"
+    },
+    {
+      "provider": "AssetRipperCLI",
+      "commit": "036098ab525a3f9f693dc101edeb21faad4d32d8"
+    },
+    {
+      "provider": "TMP3.0.6",
+      "sha256": "1ce172027b906a30be33cefe7b2ee46e1c8d35f729359b8b9785fc120d57b637"
+    },
+    {
+      "provider": "PostFX",
+      "commit": "933df236f509ed64ae5763ed57af33f2342cd1c2"
+    },
+    {
+      "provider": "Volumetric",
+      "commit": "d20b6f9a47ae857e1d313b147db2df3ef44b9196"
+    }
+  ],
+  "tool_versions": {
+    "python": "GitHub Actions Ubuntu 24.04 Python 3",
+    "shaderlab_parser": "scripts/t3_audit_exported_material_programs.py at source commit",
+    "renderer_parser": "scripts/b03_verify_renderer_material_links.py"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p 'test_t3_exported_renderer_shader_impact.py' -v",
+    "python3 -m unittest discover -s tests -p 'test_b03_verify_renderer_material_links.py' -v",
+    "python3 -m unittest discover -s tests -p 'test_t3_audit_exported_material_programs.py' -v",
+    "python3 -m py_compile scripts/t3_exported_renderer_shader_impact.py tests/test_t3_exported_renderer_shader_impact.py"
+  ],
+  "negative_controls": [
+    "Renderer slot join counts differ from Material doc counts",
+    "GUID/names/paths/private object IDs never reported",
+    "m_Shader ambiguous or absent refused",
+    "stale same-export Material audit refused",
+    "null and builtin renderer slots not silently accepted as native shaders",
+    "duplicate renderer anchors and YAML GUID refused",
+    "cross-type Shader.meta/YAML.meta GUID alias refused",
+    "symlink and output inside source rejected",
+    "unknown material external owner stays unknown not white/not restored"
+  ],
+  "workflow_path": ".github/workflows/raft-t3-renderer-shader-impact-tests.yml",
+  "manual_original_workflow_path": ".github/workflows/raft-t3-exported-renderer-shader-impact.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42043678564",
+  "artifact_urls": [],
+  "budget": "Synthetic 6-minute isolated CI only. Manual-only actual 35-minute original 12-provider exporter prepared but NOT dispatched; full native T5 currently owns heavy resource.",
+  "status": "completed_source_instrument_only",
+  "observed_result": {
+    "source_free_ci": "success",
+    "run_id": 42043678564,
+    "tests": {
+      "t3_renderer_join": 11,
+      "b03_inherited": 17,
+      "t3_shader_inherited": 16,
+      "total": 44
+    },
+    "python_compile": "pass",
+    "original_12_owner_export_with_new_join_executed": false,
+    "original_rendered_slot_counts": null,
+    "full_native_unity_run_with_new_join": false,
+    "device_pixel_verification": false
+  },
+  "rejected_hypotheses": [
+    "Material document count alone equals Renderer slot use",
+    "Verified original Shader48 slot frequency automatically corresponds to same GUID/variant in later AssetRipper ShaderLab export",
+    "A structurally resolved Shader PPtr proves source-authentic program or Android pixels"
+  ],
+  "limitations": [
+    "All tests use synthetic Unity YAML fixtures; no real Raft exported Renderer joins yet",
+    "The parallel genuine six-scene original source result CI42042819113 is independently verified but does not provide postvendor ShaderLab GUID join",
+    "T5 native run 42042902522 predates new diagnostic stage and may not emit renderer-impact JSON",
+    "Manual original CI not run to avoid competing with owner-requested native build; still OPEN"
+  ],
+  "integration_commit": "7cc724d51e14ceb173686fe42493e0400020d5fe",
+  "source_code_sha": "3eeda3d50d065ab75aeb2f28a3672d3c04e07315",
+  "tests_sha": "c800f946ce543a870d27006fe20ed82409a52373",
+  "next_step": "After native run 42042902522 finishes, check safe post-restorer output then coordinate with T5 on adding read-only renderer impact for next native request OR running manual authenticated 12-owner exporter, not both. Preserve Original Shader48 vs exported Dummy identity distinction."
+}
