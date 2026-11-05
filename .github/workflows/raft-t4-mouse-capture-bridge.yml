@@ -6,6 +6,7 @@ on:
     paths:
       - 'android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs'
       - 'android-port/Runtime/Platform/PhysicalMouseDeltaAccumulator.cs'
+      - 'android-port/Runtime/Platform/PhysicalMouseMotionSource.cs'
       - 'android-port/Tests/PhysicalMouse/**'
       - 'scripts/t4_adapt_original_mouse_axes.py'
       - 'tests/test_t4_adapt_original_mouse_axes.py'
@@ -44,6 +45,7 @@ jobs:
             /android-port/Runtime/Platform/AndroidTouchPointer.cs
             /android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs
             /android-port/Runtime/Platform/PhysicalMouseDeltaAccumulator.cs
+            /android-port/Runtime/Platform/PhysicalMouseMotionSource.cs
             /android-port/Runtime/Platform/AndroidRuntimeLog.cs
             /android-port/Runtime/Platform/PersistentDiagnosticLog.cs
             /android-port/Tests/PhysicalMouse/
