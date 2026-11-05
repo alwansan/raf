@@ -1,0 +1,15 @@
+{
+  "id": "T3-20261105T1728Z-rawspirv-binary-source-stage-interface-confirmed",
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T1728Z-T3-chat-rawspirv-T1-original-3f7c",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "at": "2026-11-05T17:38:00Z",
+  "summary": "T3 integrated T1's unchanged direct raw SPIR-V numeric Location+Component audit into real SHA-verified ZIP2 original 921-slot-use Shader48 four exact V/F Pass pair/source-and-HLSL-roundtrip stages. Genuine CI42076083800 SUCCESS: source and roundtrip each 75 Vertex/44 Fragment component lanes, zero missing or typed mismatch, 31 unused VS lanes, 4/4 Passes structurally numerically compatible, each PS direct input count matches original DXBC ISGN used-mask. Source-free 39/39 PASS. T1 synthetic tool attribution retained. No DXBC semantic->SPIRV Location, interpolation/pixel, original ShaderLab or Android device proof; original game assets unchanged. Fixed local PosixPath guard, two prior source-only INCONCLUSIVE attempts explained by T3 bridge bug.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42076083800",
+    "https://github.com/alwansan/raf/actions/runs/42075936259",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_921_DIRECT_SPIRV_DISASSEMBLY_2026-11-05.md"
+  ]
+}
