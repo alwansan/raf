@@ -4,11 +4,9 @@ name: T3 RENDER-002 genuine original Shader48 SPIRV reflected name and Location 
 # do private SPIRV-Cross-reflected *names and types* survive relocation?
 # Names are NOT authenticated original DXBC signature semantics or GPU pixels.
 # Raw proprietary names/DXBC/HLSL/SPV stay private and unuploaded.
+# Authenticated original reflected-name check CI42062573338 SUCCESS.
+# Manual-only: same source and settings already answered the name-retention question.
 on:
-  push:
-    branches: [feature/android-native-port]
-    paths:
-      - .github/workflows/raft-t3-original-921-spv-name-drift.yml
   workflow_dispatch:
 permissions:
   contents: read
