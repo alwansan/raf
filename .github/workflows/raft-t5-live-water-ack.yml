@@ -1,0 +1,32 @@
+name: T5 INTEGRATION-001 authentic native water-contract drift replay (source only)
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - tests/fixtures/t5_native_water_42052375742.json
+      - tests/test_t5_live_water_ack.py
+      - .github/workflows/raft-t5-live-water-ack.yml
+permissions:
+  contents: read
+concurrency:
+  group: t5-exact-water-ack-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  compare-real-native-water-contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Replay real failed native water booleans against unchanged source production guard
+        run: |
+          set -euo pipefail
+          python3 -m unittest -v tests.test_t5_live_water_ack
+      - name: Record source-only limitation
+        if: always()
+        run: echo "This verifies only CI42052375742 exact aggregate, not Unity source code, native readiness, or Android device."
