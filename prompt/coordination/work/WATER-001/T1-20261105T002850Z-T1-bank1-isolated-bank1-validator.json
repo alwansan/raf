@@ -6,7 +6,7 @@
   "issue_id": "WATER-001",
   "track": "Bank1 original FFT CPU Vulkan negative-case validation and failure isolation",
   "approach": "Isolate previously failing original bank1 candidate pairs under Khronos Vulkan validation with sanitized process outcomes, distinguishing driver/descriptor issues from result mismatch without treating any as Unity/device success.",
-  "status": "planned",
+  "status": "completed",
   "base_sha": "a92132b54b92605529cbe0f7f756e98c29fb6365",
   "intended_files": [
     "scripts/t1_fft_bank1_validation.py",
@@ -25,10 +25,16 @@
     "https://github.com/alwansan/raf/actions/runs/41939082498",
     "https://github.com/alwansan/raf/actions/runs/41939314440"
   ],
-  "experiment_ids": [],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Produce synthetic-fail-closed and genuine original Vulkan validation run; record exact negative outcomes; keep other active T1 session unaffected.",
-  "updated_at": "2026-11-05T00:28:50Z",
+  "experiment_ids": [
+    "20261105T003630Z-T1-bank1-khronos-vulkan-negatives"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41941989016",
+    "https://github.com/alwansan/raf/actions/runs/41942024538",
+    "https://github.com/alwansan/raf/actions/runs/41942366020"
+  ],
+  "result": "Authenticated original bank1 CPU Vulkan attempted 4 runs in each of 2 successful diagnostic CI jobs (6 synthetic controls each); original pair18/19 swapped-second SIGSEGV both times, pair10/11 swapped-second comparator true then false across runs; zero VUID markers in both. Diagnostic completion only; no Unity/Adreno/asset fix.",
+  "next_step": "Integrate SHA-authenticated reconstructed .compute with real Unity FindKernel/HasKernel/GetKernelThreadGroupSizes; coordinate with T5; avoid renaming/swap assumptions. WATER-001 OPEN.",
+  "updated_at": "2026-11-05T00:36:30Z",
   "identity_conflict": "T1 other active 20261105T002257Z; canonical state unchanged"
 }
