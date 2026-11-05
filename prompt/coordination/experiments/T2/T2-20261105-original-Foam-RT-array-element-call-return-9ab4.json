@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261105T1611Z-T2-chat-foam-length-source-9ab4",
+  "issue_id": "WATER-001",
+  "status": "completed",
+  "experiment_key": "T2|original-DLL-0a6f0527|exact-Foam-ref-array-stelem-ref-value-source|same-block-v1",
+  "source": {
+    "ZIP2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "managed_DLL_SHA256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "original_dll_bytes": 3211776
+  },
+  "source_commit": "d7d4af389d4a5235088055901ced5bf4b4bc084e",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42065864809",
+  "method": "Exact original managed ref-array callee and previous source-proven stelem.ref array reference; classify immediate value-operand source and same-block local def-use only. Synthetic typed newobj RT positive vs literal null and wrong typed newobj negatives. Never publish original private names or IL.",
+  "result": {
+    "CI": "COMPLETED_SUCCESS",
+    "source_exact_stelem_ref_sites": 1,
+    "immediate_value_producer": "call",
+    "resolved_value_origin": "call_returns_rendertexture",
+    "method_declared_UnityEngine_RenderTexture_return": true,
+    "direct_newobj_RenderTexture_proven": false,
+    "direct_null_value_proven": false,
+    "original_return_nonnull_at_runtime_proven": false,
+    "runtime_water_pixels_verified": false,
+    "private_symbols_IL_or_numeric_values_disclosed": false
+  },
+  "artifact": {
+    "id": 13433411926,
+    "bytes": 2889,
+    "zip_sha256": "1bd8fe0e0db971f57eecee5ad75d1069e22919a0b43f9ce74137593b45630c13"
+  },
+  "next_step": "Resolve actual original RT-returning method at stelem.ref and classify internal versus external Unity API; preserve private symbol names, then test Unity/Adreno water pixels. WATER-001 OPEN NOT_READY0/3."
+}
