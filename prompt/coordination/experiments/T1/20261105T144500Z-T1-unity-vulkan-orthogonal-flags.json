@@ -1,0 +1,67 @@
+{
+  "id": "20261105T144500Z-T1-mesa-unity-vulkan-forcing-discriminant",
+  "schema_version": 1,
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261105T142000Z-T1-chat-lavapipe-unity",
+  "issue_id": "WATER-001",
+  "status": "completed",
+  "experiment_key": "sourcefree-unity2021.3.45f2-gameci-v0.1.72-mesa-driver-noflag-vs-vkicd-only-vs-force-vulkan-only",
+  "source_commit": "5e19fe8f445cf353e583ec868eb19c77fbefab44",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42047391061",
+  "original_source_provider_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "original_data_acquired": false,
+  "unity": "2021.3.45f2",
+  "cli_version": "v0.1.72",
+  "cli_tar_sha256": "1de550a620ee92e05e920b6db7d431621440b60b2577f04b4a997dc92a58cb0a",
+  "hypothesis": "The earlier pre-NUnit startup failure in a licensed derived Mesa Vulkan Unity2021 image with combined --dockerEnv=VK_ICD_FILENAMES and --customParameters=-force-vulkan may be caused by one option alone, not the custom image itself. Run orthogonal source-free A/B while the exact original FFT data stays unfetched.",
+  "observed_result": {
+    "original_unity_image_vulkan_loader_present": false,
+    "original_image_mesa_lavapipe_icd_present": false,
+    "disposable_custom_image_build_passed": true,
+    "derived_image_vulkaninfo_summary_exited_success": true,
+    "same_image_noflag_actual_unity_nunit": {
+      "passed": 2,
+      "failed": 0,
+      "process_exit_zero": true
+    },
+    "same_image_icd_env_only_actual_unity_nunit": {
+      "passed": 2,
+      "failed": 0,
+      "process_exit_zero": true
+    },
+    "same_image_force_vulkan_only": {
+      "process_exit_zero": false,
+      "private_nunit_report_created": false,
+      "log_category_license_failure": true,
+      "cli_unknown_argument_category": false,
+      "docker_launch_error_category": false,
+      "image_unavailable_category": false,
+      "compiler_error_category": false
+    },
+    "actual_unity_vulkan_backend_confirmed": false,
+    "fft_gpu_math_under_unity_vulkan_tested": false,
+    "source_authentic_original_fft_numeric_parity_proven": false,
+    "android_adreno_device_tested": false,
+    "private_log_or_shader_bytes_exported": false,
+    "cleaned_temporary_image_and_artifacts": true
+  },
+  "negative_controls": [
+    "6 synthetic private NUnit parser fail-closed tests, 6 CLI private category controls, 4 source-free Unity fixture controls",
+    "Pre-original zero Raft bytes or proprietary Unity shader fetched",
+    "Actual identical Unity image and GameCI 0.1.72 SHA pinned across three option variants",
+    "Real 2/2 NUnit proof required for each positive control; a successful vulkaninfo is not Unity Vulkan proof"
+  ],
+  "rejected_hypotheses": [
+    "The derived Mesa image breaks normal Unity licensing: real 2/2 source-free no-flag PASS",
+    "Injecting VK_ICD_FILENAMES alone breaks Unity licensing: real 2/2 env-only PASS",
+    "An explicit -force-vulkan enables a working Vulkan graphics device under this image: exits before NUnit, no proof"
+  ],
+  "limits": [
+    "Vulkan flag may cause Unity graphics initialization failure or other startup failure; license regex is only a textual symptom, not definitive license diagnosis",
+    "No original author ComputeShader kernel identity or exact in-game resource/Dispatch binding",
+    "No numeric original DXBC-vs-Unity parity or mobile Adreno output; earlier OpenGLCore parity remains negative 63/64 pass0,31/32 pass1",
+    "No native APK or protected game resource modified"
+  ],
+  "next_step": "Investigate specific Unity Editor forced Vulkan startup only with genuinely different driver/display configuration and separate source-free flags; or bypass the unavailable editor Vulkan backend and instrument original-derived OpenGLCore FFT coordinate/math stages using private same-input captures. Keep WATER-001 OPEN and NOT_READY0/3."
+}
