@@ -39,6 +39,8 @@ jobs:
           sparse-checkout: |
             RAFT_FILE_MANIFEST.tsv
             Raft/Raft_Data/resources.assets
+            Raft/Raft_Data/sharedassets0.assets
+            Raft/Raft_Data/sharedassets36.assets
       - name: Reconstruct one real SHA-pinned graphics owner and consume in feature checkout
         shell: bash
         run: |
@@ -48,25 +50,33 @@ jobs:
             --zip2-checkout zip2-original \
             --output-root "$RUNNER_TEMP/t5-original-graphics" \
             --owner Raft_Data/resources.assets \
-            --byte-budget 120000000
+            --owner Raft_Data/sharedassets0.assets \
+            --owner Raft_Data/sharedassets36.assets \
+            --byte-budget 360000000
           python3 - <<'PY'
           import hashlib
           import os
           from pathlib import Path
           from scripts.hydrate_render_payloads import plan, reuse_verified_staged_sources
-          rows = [row for row in plan() if row[0] == 'Raft/Raft_Data/resources.assets']
-          if len(rows) != 1 or rows[0][2] != 111533516:
-              raise SystemExit("Expected authenticated feature LFS graphics owner absent")
+          expected = {
+              'Raft/Raft_Data/resources.assets': 111533516,
+              'Raft/Raft_Data/sharedassets0.assets': 115978112,
+              'Raft/Raft_Data/sharedassets36.assets': 110149324,
+          }
+          rows = [row for row in plan() if row[0] in expected]
+          if len(rows) != len(expected) or any(expected[path] != count for path, _, count in rows):
+              raise SystemExit("Expected independent feature-LFS graphics pointers absent")
           source = Path(os.environ['RUNNER_TEMP']) / 't5-original-graphics/Raft_Data'
           reused, count = reuse_verified_staged_sources(rows, source, Path.cwd())
-          if (reused, count) != (1, 111533516):
-              raise SystemExit("Feature-LFS consumer did not accept original ZIP2 graphics owner")
-          target = Path('Raft/Raft_Data/resources.assets')
-          with target.open('rb') as stream:
-              digest = hashlib.file_digest(stream, 'sha256').hexdigest()
-          if digest != rows[0][1] or target.stat().st_size != rows[0][2]:
-              raise SystemExit("Staged original graphics bytes failed independent SHA")
-          print('T5_REAL_ZIP2_GRAPHICS owner_count=1 sha256_verified=true feature_pointer_reused=true lfs_used=false unity=false phone=false')
+          if (reused, count) != (3, 337660952):
+              raise SystemExit("Feature-LFS consumer did not accept 3 original ZIP2 owners")
+          for pathname, sha, size in rows:
+              target = Path(pathname)
+              with target.open('rb') as stream:
+                  digest = hashlib.file_digest(stream, 'sha256').hexdigest()
+              if digest != sha or target.stat().st_size != size:
+                  raise SystemExit("Staged original graphics bytes failed independent SHA")
+          print('T5_REAL_ZIP2_GRAPHICS owner_count=3 original_bytes_verified=337660952 sha256_verified=true feature_pointer_reused=true lfs_used=false unity=false phone=false')
           PY
       - name: Never upload original game payload
         if: always()
