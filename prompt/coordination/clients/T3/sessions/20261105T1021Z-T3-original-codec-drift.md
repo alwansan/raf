@@ -1,0 +1,18 @@
+# T3 independent continuation — 20261105T1021Z-T3-original-codec-drift
+
+Worker T3, branch `feature/android-native-port` only; resumed from `20261105T0934Z-T3-format-drift-attribution`. Shared T3 state/MEMORY is older and same-name parallel sessions cannot be ruled out; no edits to shared state/MEMORY. Initial HEAD `02e9fba7fb42b83579595885391be636ee3b56e8`; no in-progress or queued Actions at session start.
+
+## Durable inherited actual evidence
+- Original ZIP2 SHA `15964ea8f246b6e076ce26b60931ee2e1a9a2385`, SHA-checked eleven serialized owners and three .resS pixels exactly 2,262,546,672 bytes in [authentic run 41968665857](https://github.com/alwansan/raf/actions/runs/41968665857).
+- Selected original 41 Materials retain 227 TexEnv/UV, 150 RGBA, 41 keyword/pass state, 114 non-null Texture target pointers (89 internal+25 external) with exact actual-export identity.
+- Original source 106 distinct Texture2D, all m_StreamData from three .resS. With resS, 106/106 exact importer GUID present and 106/106 importer six sampler fields match; PNG original/actual-export decoded RGBA **76 EXACT, 30 RGB_DRIFT**. Run failure exit 2 intentionally fail-closed; not a renderer/Android device comparison.
+- T3 previous sessions 0529–0934 hardened alpha-only class, error boundary, non-identifying codec x drift grouped aggregate. Last source CI [42003607001](https://github.com/alwansan/raf/actions/runs/42003607001) SUCCESS on `11dc1162e5e58de7c79000249afdfc6cbe909b96` validating current diagnostic code; no genuine original/export rerun with new aggregate yet. No live Actions running or queued at check. Do not repeat old 106 importer identity tests for their own sake.
+
+## Plan before changing workflow
+1. Modify ONLY T3-owned `.github/workflows/raft-t3-streamed-original-texture-export.yml` to run one new diagnostic after previous positive genuine original+resS data and all synthetic checks; avoid editing shared native workflow and changing source game assets. Ensure corrected current diagnostic is used, privacy-safe aggregate and failure exit 2 retained. Avoid duplicate heavy workflows; 45-minute cap and cancel-in-progress:false already present.
+2. Run at latest T3 code SHA, inspect real 106 decoded RGBA grouped format-by-drift and marginal alpha/color-space/delta histogram from returned aggregate only. If authentic run fails before comparison, classify phase rather than claiming drift.
+3. Distinguish codec-specific exporter/decoder/color-space causes; if drift clusters by format, inspect pinned AssetRipper conversion method vs UnityPy decoder for that codec and prepare bounded cause-specific verification, not guess an sRGB patch. Device/Unity Android pixels remain unknown and RENDER-002 stays OPEN.
+4. Record immutable Actions run, tested HEAD, results and next step in independent T3 work, experiment, session, T-team resource/event as appropriate. Keep T1/T2/T4/T5 jobs untouched, sound and Settings unchanged, touch deferred.
+
+## Operational resource budget
+No Git LFS, immutable ZIP2 bytes+SHA-pinned 11 serialized source owners + 3 original pixel streams (~2.26 GB) read in runner temp, original source never committed or uploaded. One isolated genuine AssetRipper/UnityPy/PNG export run with 45m timeout, 2 DOTNET processors, aggregate artifact only. An optional codec-group analysis is new evidence; NOT a full APK or device test.
