@@ -14,7 +14,7 @@
     "extraction": "3_SHA_PINNED_SPLIT_GRAPHICS_OWNERS_REASSEMBLED_WITH_MANIFEST_AND_FEATURE_LFS_IDENTITY",
     "reconstruction": "NOT_APPLICABLE_ORIGINAL_SERIALIZED_RESOURCE_BYTES_PRESERVED",
     "binding": "FEATURE_LFS_REUSE_CONSUMER_IN_EXPERIMENT_ALL_3_REAL_OWNER_BYTES_SHA256_VERIFIED_NOT_UNITY",
-    "integration": "OPTIONAL_VERIFIED_SOURCE_CONSUMER_IN_PRODUCTION_HYDRATOR_SOURCE_PATCH_1c68ef8_NOT_TRIGGERED_NATIVE",
+    "integration": "T5 3 REAL OWNER OPT-IN HYDRATION VERIFIED PLUS FULL BATCH SHA BEFORE FIRST POINTER PUBLICATION CI41942039458; UNITY IMPORT STILL UNVERIFIED",
     "device": "UNKNOWN"
   },
   "evidence": [
@@ -23,16 +23,19 @@
     "https://github.com/alwansan/raf/commit/396eab4d3cd8acc0d462e96b748e56537a49bd01",
     "https://github.com/alwansan/raf/commit/1c68ef8ea8a38b9d92c1e1cc204a6b9c913555a4",
     "https://github.com/alwansan/raf/actions/runs/41940032540",
-    "https://github.com/alwansan/raf/commit/0f3739e38f6b42c92100e75697a314988869cf63"
+    "https://github.com/alwansan/raf/commit/0f3739e38f6b42c92100e75697a314988869cf63",
+    "https://github.com/alwansan/raf/actions/runs/41942039458",
+    "https://github.com/alwansan/raf/commit/bb4d33e9828bf85873935002ea1c6106d8b87319"
   ],
   "remaining": [
     "Test additional original graphics owner providers, byte budget and Unity project actual export integration after coordination",
     "No original FFT authentic .compute install, ShaderLab, material pixel, Adreno device or world-save confirmation",
     "Do not mark WATER-001/RENDER-002/LOCAL-005 or ASSET-RESTORE-001 closed",
-    "3 genuine serialized sources do not establish actual original Unity ComputeShader kernel/program identity, Material/Texture export, native performance or Adreno pixels"
+    "3 genuine serialized sources do not establish actual original Unity ComputeShader kernel/program identity, Material/Texture export, native performance or Adreno pixels",
+    "Batch source SHA rejection now prevents partial pointer publication, but os.replace sequence is not an OS-level multi-file transaction if a later rename fails; verify complete working-set before Unity."
   ],
   "updated_by": "T5",
-  "updated_at": "2026-11-05T00:18:04.491Z",
+  "updated_at": "2026-11-05T00:35:00Z",
   "original_owners": [
     {
       "path": "Raft_Data/resources.assets",
