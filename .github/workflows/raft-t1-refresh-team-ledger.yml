@@ -64,10 +64,15 @@ jobs:
           recent=[x for x in data["events"] if x["id"]=="20261105T030800Z-T1-unity-editor-activation-gate"]
           assert len(recent)==1 and recent[0]["owner"]=="T1"
           resource=[x for x in data["resources"] if x["id"]=="fft-t1-original-derived-unity-compute-candidates-20261105"]
-          assert len(resource)==1 and resource[0]["stages"]["integration"]=="BLOCKED_UNITY_LICENSE_IN_SOURCE_FREE_FIXTURE"
+          assert len(resource)==1 and resource[0]["stages"]["integration"]=="UNITY2021_GENUINE_IMPORT_20_AUTHENTIC_DERIVED_KERNELS_AND_GROUPS_VERIFIED"
           assert "https://github.com/alwansan/raf/actions/runs/41959712898" in water[0]["evidence"]
           license_gate=[x for x in data["events"] if x["id"]=="20261105T031000Z-T1-source-free-unity-activation-gate"]
           assert len(license_gate)==1 and license_gate[0]["owner"]=="T1"
+          assert "https://github.com/alwansan/raf/actions/runs/42014120625" in water[0]["evidence"]
+          verified=[x for x in data["events"] if x["id"]=="20261105T105600Z-T1-original-fft-unity20-import"]
+          assert len(verified)==1 and verified[0]["owner"]=="T1"
+          assert resource[0]["stages"]["binding"]=="ORIGINAL_AUTHORED_RUNTIME_KERNEL_MAPPING_UNPROVEN"
+          assert resource[0]["stages"]["device"]=="NOT_TESTED"
           assert data["readiness"] is not True
           print("RAFT_T1_LEDGER_RECONCILE current_T1_event=true unity_probe_source_only=true original_water_open=true")
           PY
