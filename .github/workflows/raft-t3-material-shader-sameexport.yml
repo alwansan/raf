@@ -1,4 +1,6 @@
 name: T3 RENDER-002 authentic original 41 Material and 10 Shader same-export parity
+# New scoped question: count Material documents whose real exported ShaderLab
+# GUID points to a generated Dummy program; same original twelve-provider SHA pins.
 on:
   workflow_dispatch:
   push:
@@ -33,6 +35,7 @@ jobs:
           python3 -m unittest discover -s tests -p 'test_t3_external_texture_lineage.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_external_texture_export.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_material_shader_same_export.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_audit_exported_material_programs.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_original_material_shader_target.py' -v
           python3 -m unittest discover -s tests -p 'test_a13_exported_material_shader_guids.py' -v
           python3 -m unittest discover -s tests -p 'test_b21_stage_light_lineage.py' -v
@@ -187,11 +190,19 @@ jobs:
             --w1-trace "$RUNNER_TEMP/b21-w1-private.json" \
             --b02-trace "$RUNNER_TEMP/b21-b02-private.json" \
             --out "$RUNNER_TEMP/t3-shader-parity-safe.json"
+      - name: Audit actual bounded export Material target ShaderLab dummy markers, no asset changes
+        run: |
+          set -euo pipefail
+          python3 -m scripts.t3_audit_exported_material_programs \
+            --project "$RUNNER_TEMP/b21-private-export/ExportedProject" \
+            --out "$RUNNER_TEMP/t3-bounded-material-shader-quality-safe.json"
       - name: Publish ONLY safe aggregate, never game assets or private traces
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: t3-original-41-Material-Shader-same-export-${{ github.run_id }}
-          path: ${{ runner.temp }}/t3-shader-parity-safe.json
+          path: |
+            ${{ runner.temp }}/t3-shader-parity-safe.json
+            ${{ runner.temp }}/t3-bounded-material-shader-quality-safe.json
           retention-days: 7
           if-no-files-found: ignore
