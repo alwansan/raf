@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "session_id": "20261105T1244Z-T2-chat-digest-removal-a6f4",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "9fae6ebe5fdadace352daa79ca73c04739b030c2",
+  "updated_at": "2026-11-05T12:47:00Z",
+  "resumed_from_sessions": [
+    "20261105T1218Z-T2-digest-safety-isolated",
+    "20261105T1213Z-T2-foam-return-producer-call-isolated"
+  ],
+  "intended_files": [
+    "scripts/t2_foam_texture_identity.py",
+    "tests/test_t2_foam_texture_identity.py",
+    ".github/workflows/raft-t2-foam-member-abi.yml",
+    "prompt/coordination/clients/T2/sessions/20261105T1244Z-T2-chat-digest-removal-a6f4.md",
+    "prompt/coordination/work/WATER-001/T2-20261105T1244Z-T2-chat-digest-removal-a6f4-privacy-report.json"
+  ],
+  "experiment_key": "t2-foam-original-lowdomain-pair-sha256-removal-zip2-15964ea8-v1",
+  "resource_key": "t2-foam-member-abi-original-ci",
+  "hypothesis": "SHA256 of low-domain numeric texture register pairs is brute-force enumerable; remove digest from original-derived public report without altering numeric aggregate proof.",
+  "approach": "Source removal, synthetic regression and authentic workflow assertion. No material/game shader changes; distinct from T2 original RenderTexture lookup and T1 FFT.",
+  "preflight": {
+    "checked_at": "2026-11-05T12:43Z",
+    "queued_runs": 0,
+    "running_runs": 0,
+    "independent_T1_work": "T1-20261105T124313Z-T1-chat-511e2d-rgba32f-control.json"
+  },
+  "run_urls": [],
+  "next_step": "Modify intended files; observe independently triggered original SHA-pinned CI; report evidence and limitations."
+}
