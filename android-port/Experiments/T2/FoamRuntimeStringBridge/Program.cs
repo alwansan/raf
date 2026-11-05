@@ -1477,7 +1477,9 @@ internal static class Program
             !t2NullWriter.ReturnLocalDeclaredRenderTexture ||
             t2NullWriter.ExactLocalAssignmentSites!=1 ||
             t2NullWriter.DirectNullAssignmentSites!=1 ||
-            t2NullWriter.UnresolvedAssignmentSites!=0)
+            t2NullWriter.UnresolvedAssignmentSites!=0 ||
+            t2NullWriter.SoleWriterImmediatePriorOpcodeCategory!="ldnull" ||
+            t2NullWriter.SoleWriterIsControlFlowEntry)
             throw new InvalidDataException("Typed return local direct null writer fixture failed");
         var t2CtorWriterMethod=new MethodDefinition("SyntheticReturnLocalCtorWriter",
             Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,
@@ -1495,7 +1497,8 @@ internal static class Program
             new[]{t2CtorWriterMethod},t2CtorWriterMethod);
         if(t2CtorWriter.ExactLocalAssignmentSites!=1 ||
             t2CtorWriter.DirectRenderTextureConstructorAssignmentSites!=1 ||
-            t2CtorWriter.DirectNullAssignmentSites!=0)
+            t2CtorWriter.DirectNullAssignmentSites!=0 ||
+            t2CtorWriter.SoleWriterImmediatePriorOpcodeCategory!="newobj")
             throw new InvalidDataException("Synthetic RT constructor return-local writer rejected");
         var t2CallWriterMethod=new MethodDefinition("SyntheticReturnLocalCallWriter",
             Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,
@@ -1512,7 +1515,8 @@ internal static class Program
         var t2CallWriter=FoamByrefElementValueOrigin.ScanExactReturnLocalWriters(
             new[]{t2CallWriterMethod},t2CallWriterMethod);
         if(t2CallWriter.ExactLocalAssignmentSites!=1 ||
-            t2CallWriter.DirectRenderTextureTypedCallAssignmentSites!=1)
+            t2CallWriter.DirectRenderTextureTypedCallAssignmentSites!=1 ||
+            t2CallWriter.SoleWriterImmediatePriorOpcodeCategory!="call")
             throw new InvalidDataException("Synthetic RT-typed return-local call writer rejected");
         var t2OtherWriterMethod=new MethodDefinition("SyntheticWrongReturnLocalWriter",
             Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,
@@ -1532,7 +1536,8 @@ internal static class Program
             new[]{t2OtherWriterMethod},t2OtherWriterMethod);
         if(t2WrongLocalWriter.ExactReturnLocalLoadSites!=1 ||
             t2WrongLocalWriter.ExactLocalAssignmentSites!=0 ||
-            t2WrongLocalWriter.DirectNullAssignmentSites!=0)
+            t2WrongLocalWriter.DirectNullAssignmentSites!=0 ||
+            t2WrongLocalWriter.SoleWriterImmediatePriorOpcodeCategory!="not_examined")
             throw new InvalidDataException("Wrong local typed decoy was counted as return writer");
 
         var syntheticIndirect=new MethodDefinition("SyntheticFieldReferenceStore",
@@ -1713,6 +1718,7 @@ internal static class Program
                 exact_original_return_direct_null_newobj_and_branch_controls=true,
                 synthetic_return_branch_target_and_local_predecessor_classifier=true,
                 synthetic_exact_rt_return_local_writer_and_wrong_local_controls=true,
+                synthetic_single_writer_prior_opcode_and_entry_controls=true,
                 four_original_style_Texture_int_argument_origin_controls=true,
                 signed_short_wide_and_duplicate_private_i4_aggregate_controls=true,
                 private_IL_names_or_source_published = false
