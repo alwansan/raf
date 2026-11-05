@@ -6,7 +6,7 @@
   "origin": "chat",
   "issue_id": "INTEGRATION-001",
   "track": "actual CL phone OBB GUID warning identity",
-  "status": "active",
+  "status": "completed",
   "base_sha": "01cc44242f0abcbae9cb0900eff82c8b4b27bcf8",
   "intended_files": [
     "prompt/coordination/work/INTEGRATION-001/20261105T2208Z-T5-chat-obb-guid-3d7a.json",
@@ -29,8 +29,21 @@
   "experiment_ids": [
     "20261105T2208Z-T5-chat-obb-guid-3d7a"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Prove exact CL messages from immutable log blobs and archive manifest; add fail-closed reusable classifier with synthetic controls, distinct patch-vs-main categories; never suppress Unity errors in gameplay.",
-  "updated_at": "2026-11-05T22:08:33.902Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42119428667"
+  ],
+  "result": {
+    "run_id": 42119428667,
+    "conclusion": "success",
+    "real_CL_blob_sha_checked": 6,
+    "synthetic_tests": "16/16",
+    "actual_guid_warning_paths_version": "patch.89",
+    "actual_patch_guid_warning_count": 3,
+    "actual_main_guid_warning_count": 0,
+    "signed_delivery_patch_file_declared": false,
+    "actual_phone_main_obb_hash_verified": false,
+    "unity_warning_suppressed": false
+  },
+  "next_step": "Actual device main OBB SHA/mount check, not package rebuild: three warnings refer only to optional patch.89. Prioritize water shaders and missing FFT; do not tamper with internal GUID or invent patch OBB.",
+  "updated_at": "2026-11-05T22:14:41.855Z"
 }
