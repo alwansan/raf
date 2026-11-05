@@ -195,7 +195,10 @@
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ANDROID_LOAD_ARGUMENT_SNAPSHOT_2026-11-05.md",
         "https://github.com/alwansan/raf/commit/305e8952e4fc91afd0b3f2aef8a83df649d65db4",
         "https://github.com/alwansan/raf/actions/runs/42043385806",
-        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_DEVICE_LOG_EVIDENCE_CHECKER_2026-11-05.md"
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_DEVICE_LOG_EVIDENCE_CHECKER_2026-11-05.md",
+        "https://github.com/alwansan/raf/actions/runs/42042814576",
+        "https://github.com/alwansan/raf/actions/runs/42043768798",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_RGD_RUNTIME_LOAD_2026-11-05.md"
       ],
       "remaining": [
         "Original Cheat.AllowCheatsForLocalPlayer SteamUser.GetSteamID direct object call now source-guarded in B50 2bb6c2; no native/phone verification. Do not infer all Steam callbacks are removed.",
@@ -221,7 +224,8 @@
         "T4 real original compiled I/O progress: CI42019696138 PASS 19/19 authentic Cecil original try/catch call placement—one File.Open/Create BCL IO and zero other calls in each normal try, three extra game/framework/helper calls only in original catch. CI42020039305 PASS 15/15 + ACTUALLY INVOKED original FileManager Create/Open stream methods using immutable original SHA and 151 pinned Managed companions + restricted CLR resolver; synthetic disposable .rgd-suffixed filename only, write/flush/close/reopen bytes equal and cleanup. T5 earlier whole-method execution blocked for unproven catch callees, remains valid. NO genuine game .rgd serialization/relaunch, Android app-private file storage, Unity IL2CPP or playable offline local world, so LOCAL-005 OPEN NOT_READY and no full readiness review.",
         "T4 Android Save diagnostic integrated after exact adapted SaveAndLoad SHA gate: Save.argumentFileSnapshot in original Save wrapper finally reads File.Exists(filename) and if present FileInfo.Length class, never contents or changing original Save logic; catches only snapshot/logger errors, logs durable_RGD_unverified=true. CI42026271243 PASS original 14-class stage RPC and C# compile exit0, CI42026671909 PASS 15/15 plus actual UNITY_ANDROID-preprocessed synthetic C# runtime tests, CI42027197515 PASS 21/21 plus authentic original DLL Cecil confirms original Save directly forwards filename first argument to FileManager writer. No native Unity/IL2CPP, phone, playable local host or genuine .rgd serialize/quit/relaunch/reopen evidence; LOCAL-005 OPEN NOT_READY.",
         "T4 source-integrated Android-only SaveAndLoad.Load<T> filename argument existence/zero/nonzero observation in finally (commit a88000086d); original managed compile CI42030693004 SUCCESS (14 pinned sources, exit0), synthetic UNITY_ANDROID C# and 5/5 tests CI42031436693 SUCCESS after fixing only fixture's generic Load<T>.exit assertion. Does not read RGD bytes or prove genuine game save/load, offline playable world, Unity/IL2CPP or phone; LOCAL-005 stays OPEN NOT_READY 0/3.",
-        "T4 device log JSONL validator source-integrated (commit 305e8952), chronological matching refined b383b6e/fa3d5555, CI42043385806 SUCCESS 13/13 synthetic. Reads actual PersistentDiagnosticLog schema but no new phone log/device was read; even ordered cross-session nonzero Save/Load does not prove restart, same world, valid .rgd or playability. LOCAL-005 OPEN NOT_READY 0/3."
+        "T4 device log JSONL validator source-integrated (commit 305e8952), chronological matching refined b383b6e/fa3d5555, CI42043385806 SUCCESS 13/13 synthetic. Reads actual PersistentDiagnosticLog schema but no new phone log/device was read; even ordered cross-session nonzero Save/Load does not prove restart, same world, valid .rgd or playability. LOCAL-005 OPEN NOT_READY 0/3.",
+        "T4 2026-11-05 original shipped Data.rgd CLR execution, not just NRBF syntax: exact ZIP2 2941B seed and original 3211776B Assembly-CSharp.dll SHA-verified with 151 Managed siblings; CI42042814576 SUCCESS actual .NET8 BinaryFormatter.Deserialize returned nonnull ORIGINAL game assembly CLR type (18/18 controls). CI42043768798 SUCCESS actually invoked compiled ORIGINAL static generic SaveAndLoad.Load<T> with same exact shipped seed and original root T, returned matching nonnull original type, 18+18 controls, changed seed SHA refused. Previous B37/A10 assembly-version and field-name metadata mismatch therefore not necessarily fatal to this .NET8 original seed load. NOT a real user-generated world save, Android/Unity/IL2CPP, playable offline local host or persisted game .rgd save/exit/relaunch/load. LOCAL-005 remains OPEN and overall NOT_READY 0/3."
       ],
       "acceptance": [
         "دخول عالم جديد محلي قابل للعب بلا Steam أو سيرفر خارجي",
@@ -229,7 +233,7 @@
         "لا يكفي إخفاء رسالة الاتصال"
       ],
       "updated_by": "T4",
-      "updated_at": "2026-11-05T14:18:58.151Z",
+      "updated_at": "2026-11-05T14:27:00Z",
       "_record_path": "../B_TEAM/issues/LOCAL-005.json"
     },
     {
@@ -1220,6 +1224,40 @@
       "updated_by": "T2",
       "updated_at": "2026-11-05T10:50Z",
       "_record_path": "../B_TEAM/resources/T2-foam-original-active-sample-descriptor-identity.json"
+    },
+    {
+      "id": "T2-foam-original-actual-four-i4-aggregate-privacy",
+      "owner": "T2",
+      "issue_id": "WATER-001",
+      "kind": "original_sha_authentic_compiled_Foam_int_literal_private_aggregate",
+      "title": "Source-authenticated four Foam Texture(int) actual integer values decoded privately with non-disclosing aggregate CI",
+      "source": {
+        "zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+        "original_managed_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e"
+      },
+      "stages": {
+        "acquisition": "ZIP2_ORIGINAL_MANAGED_BYTES_SIZE_SHA256_VERIFIED",
+        "extraction": "FOUR_EXACT_ORIGINAL_SET_TEXTURE_INT_CALL_ARGUMENTS_DECODED_FROM_TRUE_IL_LDC_I4",
+        "reconstruction": "PRIVATE_SIGNED_SHORT_WIDE_INT_OPCODE_SOURCE_VALIDATOR_AND_SYNTHETIC_NEGATIVE_CONTROLS",
+        "binding": "FOUR_DIRECT_LDC_I4_SOURCE_VALUES_DECODED_PRIVATE_DISTINCT_SIGN_AGGREGATE_STORED_ARTIFACT_NOT_IN_CHAT_INSPECTED_RUNTIME_ARRAY_BOUNDS_UNKNOWN",
+        "integration": "T2_CECIL_SOURCE_ONLY_SHA_AUTHENTIC_CI42043293335_SUCCESS_NO_GAME_SHADERLAB_INSTALL",
+        "device": "NOT_TESTED"
+      },
+      "observed": {
+        "authentic_original_i4_values_decoded": 4,
+        "public_raw_ints_or_digests": false,
+        "distinct_count_field_in_safe_artifact": "non_authored_actual_i4_index_values_distinct_count",
+        "actual_distinct_count_not_retrieved_by_this_chat": true,
+        "all_nonnegative_field_in_safe_artifact": "non_authored_actual_i4_index_values_all_nonnegative",
+        "actual_sign_boolean_not_retrieved_by_this_chat": true,
+        "shaderlab_unity_runtime_verified": false
+      },
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42043293335",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/T2/sessions/20261105T1408Z-T2-chat-foam-four-i4-uniqueness-4e7a.md"
+      ],
+      "next_step": "Open safe artifact 13423996658 and inspect true unique/sign classification before declaring any exact result; separately acquire original RT array/serialization length to verify actual range.",
+      "_record_path": "../B_TEAM/resources/T2-foam-original-actual-four-i4-aggregate-privacy.json"
     },
     {
       "id": "T2-foam-original-authored-shader-property-lineage",
@@ -5176,6 +5214,21 @@
       "_record_path": "../B_TEAM/events/T2/20261105T1326Z-foam-four-original-texture-int-direct-literals.json"
     },
     {
+      "id": "T2-20261105T1420Z-foam-typed-direct-i4-privacy-verified",
+      "owner": "T2",
+      "origin": "chat",
+      "session_id": "20261105T1408Z-T2-chat-foam-four-i4-uniqueness-4e7a",
+      "issue_id": "WATER-001",
+      "type": "original_managed_four_i4_typed_private_aggregate_result",
+      "at": "2026-11-05T14:20:00Z",
+      "summary": "SHA-original Foam four exact Texture(int) index input direct ldc.i4 values decoded privately with signed/wide/short and false-token synthetic controls; real CI42043293335 SUCCESS, only safe distinct-count and sign fields published in artifact13423996658, no raw int values or low-domain digest. Aggregate field exact values not yet read in chat due artifact inspection tool limits; do not claim four distinct or nonnegative. No original runtime RenderTexture[] bounds/ShaderLab/Unity/device proof; WATER-001 OPEN NOT_READY0/3.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42043293335",
+        "https://github.com/alwansan/raf/commit/43a633869a4185bd0176e139b9abf3b28045bd8e"
+      ],
+      "_record_path": "../B_TEAM/events/T2/20261105T1420Z-foam-typed-direct-i4-privacy-verified.json"
+    },
+    {
       "id": "T3-20261105-0002-render-harness-result-and-export-start",
       "owner": "T3",
       "session_id": "20261104T2354Z-T3-render-harness",
@@ -5305,6 +5358,22 @@
       ],
       "at": "2026-11-05T13:20:31.585Z",
       "_record_path": "../B_TEAM/events/T3/20261105T131204828Z-T3-chat-bounded-postrestorer-4a8c.json"
+    },
+    {
+      "id": "T3-20261105T1405Z-renderer-dummy-join",
+      "owner": "T3",
+      "session_id": "20261105T1405Z-T3-chat-renderer-dummy-join-8c41",
+      "issue_id": "RENDER-002",
+      "type": "integration",
+      "summary": "New source-free exported Renderer→Material→actual ShaderLab dummy join and privacy-safe aggregate frequency counters: CI42043678564 SUCCESS 44 synthetic tests. Manual-only authentic 12 ZIP2 owner exporter prepared but unexecuted due concurrent T5 native build 42042902522; source-vs-export identity and Adreno remain unknown.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42043678564",
+        "https://github.com/alwansan/raf/actions/runs/42042819113",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_EXPORTED_RENDERER_SHADER_IMPACT_INSTRUMENT_2026-11-05.md",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/discussions/RENDER-002/20261105T1415Z-T3-exported-renderer-shader-impact-to-T5.md"
+      ],
+      "at": "2026-11-05T14:20:24.772Z",
+      "_record_path": "../B_TEAM/events/T3/20261105T1405Z-T3-chat-renderer-dummy-join-8c41.json"
     },
     {
       "id": "T4-20261104T2357Z-local-load-start",
@@ -5484,6 +5553,23 @@
       ],
       "at": "2026-11-05T14:18:25.625Z",
       "_record_path": "../B_TEAM/events/T4/20261105T1417Z-T4-jsonl-evidence-13pass.json"
+    },
+    {
+      "id": "20261105T1426Z-T4-original-typed-rgd-loader",
+      "owner": "T4",
+      "origin": "chat",
+      "session_id": "20261105T1405Z-T4-chat-original-rgd-runtime-k6n8",
+      "issue_id": "LOCAL-005",
+      "type": "integration",
+      "summary": "T4 exact original ZIP2 shipped Data.rgd 2941B SHA b2785187... and original Assembly-CSharp.dll 3211776B SHA0a6f0527... with 151 pinned Managed siblings. CI42042814576 SUCCESS actual BinaryFormatter.Deserialize instantiated nonnull object defined by original game assembly; 18/18 controls. CI42043768798 SUCCESS actually invoked original compiled generic SaveAndLoad.Load<T> on same seed with root original CLR type, returned matching nonnull original object, 18+18 controls, wrong seed SHA rejected. Earlier two CI failures were harness core dump file-size cap SIGXFSZ; corrected. Not a player-generated RGD, Unity/IL2CPP, Android native gameplay/playable world, or save/exit/relaunch acceptance. LOCAL-005 OPEN NOT_READY.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42042814576",
+        "https://github.com/alwansan/raf/actions/runs/42043768798",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_RGD_RUNTIME_LOAD_2026-11-05.md",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/discussions/LOCAL-005/20261105T1425Z-T4-original-Data-rgd-real-LoadT-to-T5.md"
+      ],
+      "at": "2026-11-05T14:26:00Z",
+      "_record_path": "../B_TEAM/events/T4/20261105T1426Z-original-RGD-real-LoadT-success.json"
     },
     {
       "id": "T5-20261104T2357Z-b12-fixture-start",
@@ -5697,7 +5783,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "c3a3c81f7b9c30f9ebb7db84f2c4bd0f46a3b44298e04cd089d6447396472037",
+  "source_input_sha256": "a92bd7bc3648d9c89eb47e06e9969fc3b3b7aa856dc5041df95fe0889389b842",
   "generation": "T-2026-11-05",
-  "input_sha256": "80e2726d23f162a43d5e5c45c5476f44e9498d301c41fe6d423aa22a05fcb5ef"
+  "input_sha256": "e194165255e9fdc427fd743ac2829e2863511f6769d26e4367c619bc9e538c17"
 }
