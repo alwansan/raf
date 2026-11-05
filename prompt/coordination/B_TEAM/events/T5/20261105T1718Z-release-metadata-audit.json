@@ -1,0 +1,16 @@
+{
+  "id": "T5-20261105T1718Z-release-metadata-audit",
+  "owner": "T5",
+  "session_id": "20261105T1713Z-T5-chat-release-metadata-83ac",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "type": "result",
+  "at": "2026-11-05T17:18:00Z",
+  "summary": "A new T5 source-only GitHub Release metadata audit reconciled actual APK86 native CI41812889049 immutable d181ee7 source, published Raft release target/body SHA, 12 required public asset records, 7 transport chunks (APK whole, OBB3, XAPK3), declared logical sizes and hash syntax. Independent CI42072829025 passed 28/28 negative/positive controls. This checks publisher-side API consistency only, not downloaded file hashes, signature, XAPK reassembly/OBB mount or Android world/save. The new immutable native run42058825739 remains in_progress at Unity Editor step62; no new APK, no duplicate native dispatch or T-team source modifications.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41812889049",
+    "https://github.com/alwansan/raf/releases/tag/android-early-test-41812889049-1",
+    "https://github.com/alwansan/raf/actions/runs/42072829025",
+    "https://github.com/alwansan/raf/actions/runs/42058825739"
+  ]
+}
