@@ -6,7 +6,7 @@
   "issue_id": "RENDER-002",
   "track": "colors-materials/external-texture-owners",
   "approach": "Resolve 25 original sharedassets6 external Texture PPtrs via original Unity serialized external dependency table, SHA-pinned referenced original provider/object class and same-instance W1/B02 export texture lineage with exact exported GUID+fileID; avoid active B43 keywords run.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "6f899a2d2bd03cf74d7f0d8628e09dc59a08811a",
   "intended_files": [
     "scripts/t3_external_texture_lineage.py",
@@ -29,8 +29,24 @@
   "experiment_ids": [
     "T3-external-texenv-20261105"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Build original dependency table and verified cross-owner Texture class resolution; connect to same-process exporter trace, run bounded authentic CI, report counts only; preserve active T3 B43 workflow without edits.",
-  "updated_at": "2026-11-05T00:28:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41941882103",
+    "https://github.com/alwansan/raf/actions/runs/41942377246"
+  ],
+  "result": {
+    "originalExternalSlots": 25,
+    "sourceOwners": {
+      "sharedassets0.assets": 22,
+      "sharedassets1.assets": 3
+    },
+    "authenticTypedTexture2DTargets": 25,
+    "sameExportExactExternalGUIDFileIDMatches": 25,
+    "wrong": 0,
+    "missing": 0,
+    "nullTransition": 0,
+    "realExport": true,
+    "devicePixels": false
+  },
+  "next_step": "B15 original Texture2D sampler/TextureImporter parity on same scope, then Shader/variant/pixel integration. No unnecessary pointer rerun.",
+  "updated_at": "2026-11-05T00:37:00Z"
 }
