@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "session_id": "20261105T1611Z-T5-chat-native-provenance-5d7b",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "hypothesis": "A frozen one-shot native candidate must be attributed only to its immutable SHA and true satisfied job stages, not later T-team diagnostic changes or unbuilt signatures.",
+  "input_hashes": [
+    "GitHub Actions native run 42058825739 immutable source e9c358eda01785b65e4eb14f18723da426635628",
+    "GitHub REST compare e9c358eda01785b65e4eb14f18723da426635628...75382fab995d1e9847d2384b83b8cd157e4b354a"
+  ],
+  "source_commit": "e9c358eda01785b65e4eb14f18723da426635628",
+  "tool_versions": {
+    "github_actions": "REST job/step status and compare metadata",
+    "unity": "2021.3.45f2 through existing native GitHub workflow",
+    "runner": "ubuntu-24.04 native import runner"
+  },
+  "commands": [
+    "GitHub GET /repos/alwansan/raf/actions/runs/42058825739",
+    "GitHub GET /repos/alwansan/raf/actions/runs/42058825739/jobs",
+    "GitHub GET /repos/alwansan/raf/compare/e9c358...75382fab"
+  ],
+  "workflow_path": ".github/workflows/raft-unity-editor-android-import.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42058825739",
+  "artifact_urls": [],
+  "status": "waiting_ci",
+  "observed_result": {
+    "request_gate": "success",
+    "unity_license_preflight": "success",
+    "native_reconstruct": "in_progress",
+    "water_gate": "success (exact experimentally acknowledged deficits, not authentic water)",
+    "water_report_saved": "success",
+    "editor_project_40_scene_export": "success",
+    "mesh_restore": "success",
+    "native_entrypoint_staged": "success",
+    "unity_project_and_guid_structure": "success",
+    "prebuild_swap_memory_reservation": "success",
+    "unity_editor_android_import": "in_progress (step62 at last check)",
+    "apk_obb_xapk": "not produced as of this checkpoint",
+    "github_release": "not published",
+    "android_device": "not tested",
+    "compare_sample": {
+      "base": "e9c358eda01785b65e4eb14f18723da426635628",
+      "head": "75382fab995d1e9847d2384b83b8cd157e4b354a",
+      "ahead_commits": 58,
+      "changed_files": 49,
+      "paths_by_type": {
+        "game_runtime_or_original_assets": 0,
+        "full_native_request_or_workflow": 0,
+        "diagnostic_scripts": 1,
+        "experiment_sources": 3,
+        "tests": 1,
+        "docs_workflows_and_coordination": 44
+      },
+      "one_changed_script": "scripts/t1_fft_pass0_load_inventory.py",
+      "note": "Only explicit root classes audited; source code in experiments is not included in actual candidate and script modifications may matter for future diagnostics, but do not retroactively modify frozen native build."
+    }
+  },
+  "negative_controls": [
+    "A green step43 documented water limitation is NOT original water-authentic pass",
+    "Future branch source files are NOT part of immutable running candidate",
+    "A passed Unity import step is insufficient to claim signed release or Android world success",
+    "The previous failed run42052375742 error is distinct from current source's actual water-gate pass"
+  ],
+  "limitations": [
+    "No Unity Editor terminal result yet; current source is immutable and cannot be patched in-place.",
+    "Release APK/OBB/XAPK digest and signature not verified; no device test.",
+    "Compared HEAD fixed at 75382fab; later commits may extend drift. The selected file classes do not prove semantic parity of every build-side generated artifact."
+  ],
+  "next_step": "Follow true Unity stage and then native packaging; if error inspect first real failure before any request. No duplicate heavy build while this run executes."
+}
