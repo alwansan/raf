@@ -91,9 +91,33 @@ jobs:
           try:
               payload=json.loads(allowed[0])
               assert type(payload) is dict
-              # The public report gate checks every key/value; never print the
-              # untrusted JSON before that verification.
-              from scripts.t5_validate_filemanager_runtime import verify
+              # Safe diagnostic fields are strictly enumerated; never print raw
+              # input, original method names, paths, CLR errors, or private log.
+              from scripts.t5_validate_filemanager_runtime import FIELDS, verify
+              assert set(payload)==FIELDS
+              phases={'SOURCE_PIN','COMPILED_IL_GUARD','SCRATCH_GUARD',
+                      'ORIGINAL_MANAGED_INVOCATION','NONE'}
+              failures={'NONE','MISSING_FILE','MISSING_DIRECTORY','ACCESS_DENIED',
+                        'DEPENDENCY_UNRESOLVED','DEPENDENCY_LOAD_FAILED',
+                        'UNSUPPORTED_RUNTIME','ARGUMENT_REJECTED',
+                        'FILE_IO_FAILURE','UNKNOWN_RUNTIME_FAILURE'}
+              outcomes={'INCONCLUSIVE','FILE_NOT_CREATED','BYTES_MISMATCH',
+                        'UNSUPPORTED_READ_RETURN','MANAGED_SYNTHETIC_ROUNDTRIP'}
+              assert payload['status'] in outcomes
+              assert payload['failed_phase'] in phases
+              assert payload['failure_category'] in failures
+              for field in ('original_sha_verified',
+                            'static_compiled_call_safety_guard',
+                            'original_managed_methods_invoked',
+                            'synthetic_bytes_exact_readback'):
+                  assert type(payload[field]) is bool
+              print('T5_ORIGINAL_MANAGED_IO_DIAG'
+                    ' phase='+payload['failed_phase']+
+                    ' category='+payload['failure_category']+
+                    ' outcome='+payload['status']+
+                    ' original_pin='+str(payload['original_sha_verified']).lower()+
+                    ' call_scope='+str(payload['static_compiled_call_safety_guard']).lower()+
+                    ' invoked='+str(payload['original_managed_methods_invoked']).lower())
               verify(payload)
           except (AssertionError,ValueError,TypeError):
               print('T5_ORIGINAL_MANAGED_IO result=UNVERIFIED_OR_UNSUPPORTED')
