@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "generation": "T-2026-11-05",
+  "origin": "chat",
+  "session_id": "20261105T2150Z-T4-chat-capture-lease-n5k8",
+  "issue_id": "INPUT-005",
+  "hypothesis": "Android may revoke View pointer capture without Unity focus callback, leaving a previously requested physical-mouse delta override active. A UI-thread hasPointerCapture probe plus epoch-guarded reset restores original legacy Mouse X/Y fallback.",
+  "source_commit": "8ba2351fe53025487fddae91fe06e315f36052d2",
+  "input_hashes": [
+    "ZIP2@15964ea8 Assembly-CSharp.dll size=3211776 SHA256=0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e"
+  ],
+  "tool_versions": {
+    "python": "GitHub Actions ubuntu-24.04",
+    "dotnet": "8.0.x and 10.0.x",
+    "ilspycmd": "11.2.0.10050",
+    "android_api": "26+ View.hasPointerCapture"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t4_original_mouse_routing.py -v",
+    "python3 -m unittest discover -s tests -p test_t4_adapt_original_mouse_axes.py -v",
+    "python3 -m unittest discover -s tests -p test_t4_android_pointer_capture_policy.py -v",
+    "dotnet run --project android-port/Tests/PhysicalMouse/PhysicalMouse.csproj -c Release",
+    "dotnet build android-port/Tests/PhysicalMouse/UnityBridgeCompile.csproj -c Release -p:OriginalManagedDir=PINNED_ORIGINAL",
+    "ilspycmd -p -lv CSharp9_0 on exact original DLL, then python3 -m scripts.t4_adapt_original_mouse_axes in private directory"
+  ],
+  "negative_controls": [
+    "Original axis rewrite rejects source SHA and method-site count drift",
+    "Relative input override requires requested, nativeCaptured, nativeHasMotion and shared lock",
+    "Revocation resets buffered relative axes and increments loss transition diagnostic only if previously captured",
+    "Poll uses current focused Android view and checks View.hasPointerCapture on UI thread",
+    "Queued UI poll token must match current epoch and request; release invalidates pending probe",
+    "Uncaptured/unfocused device returns to original Input.GetAxis/GetAxisRaw path"
+  ],
+  "workflow_path": ".github/workflows/raft-t4-mouse-capture-bridge.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42118499200",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42118295717",
+    "https://github.com/alwansan/raf/actions/runs/42118499200"
+  ],
+  "artifact_urls": [],
+  "budget": "ubuntu-24.04 15-min source-only run, no APK/Unity native build, no original payload artifacts",
+  "status": "completed_source_fixed",
+  "observed_result": {
+    "ci_42118295717": "success",
+    "ci_42118499200": "success",
+    "python_source_free_tests": "7+7+10=24/24",
+    "dotnet_motion_tests": "13/13",
+    "managed_unity_2021_compile": "success",
+    "verified_private_original_sites": {
+      "mouseX": 4,
+      "mouseY": 4,
+      "cursorLock": 2,
+      "files": 5
+    },
+    "native_source_capture_change": "source-integrated",
+    "phone_tested": false,
+    "original_win_assets_mutated": false
+  },
+  "rejected_hypotheses": [
+    "A request is proof that capture remains active: false by Android official API; now polled."
+  ],
+  "limitations": [
+    "CI verifies lexical/source contract and genuine managed C# compilation but does not emulate OS capture revocation.",
+    "No Android Unity IL2CPP/APK build, no physical mouse device test, no system-bar or menu-cursor confirmation.",
+    "The bridge uses a 150ms polling interval; capture loss may be detected up to roughly one probe interval later plus UI-thread delay.",
+    "Original owner world/save/exit/reopen evidence still applies only to older 42058825739 artifact/source e9c358eda0.",
+    "A proposed pure helper class was not integrated; existing bridge and lock were patched directly after tool refusal."
+  ],
+  "integration_commit": "02665b11061ccb070bf6e24797d47a2866ef250c",
+  "regression_guard_commit": "8ba2351fe53025487fddae91fe06e315f36052d2",
+  "next_step": "Coordinate with T5 next signed candidate, obtain exact APK/OBB manifest, test physical mouse capture/revocation/reacquisition/menu/focus/unplug, rotating camera and world/save/reopen on POCO F5 Pro. Inspect safe physical_mouse_capture_lost markers if failure."
+}
