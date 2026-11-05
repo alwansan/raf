@@ -4,7 +4,7 @@
   "session_id": "20261105T1213Z-T2-foam-return-producer-call-isolated",
   "generation": "T-2026-11-05",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "b65ca101043bb7b6b45e8edead0a5e5ad850a479",
   "hypothesis": "The sole byte-authentic original managed Texture producer with signature UnityEngine.Texture method(int) may read a typed Texture array or indexed resource collection. The actual compiled method-body IL shape can identify a conservative supported field/index/array-return path, or show the path remains unknown.",
   "approach": "From four SHA-original name→SetTexture call arguments, require one exact original MethodDefinition with body and 4/4 references; inspect only its IL opcode-class histogram (aggregate whitelisted numeric) and recognize exact basic-block this.field Texture[] indexed by original int arg, fail closed on branch/dynamic alternatives. Never output names/IL sequence/field values/private bytes and keep runtime semantics unknown; synthetic positive/negative Cecil producer-body fixture. Reuse existing isolated T2 workflow.",
@@ -18,8 +18,28 @@
     "android-port/Experiments/T2/FoamRuntimeStringBridge/Program.cs",
     ".github/workflows/raft-t2-foam-managed-literals.yml"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Inspect real single original producer body's bounded structural IL evidence and only if strict proof validates use for actual Foam resource runtime binding; else report unknown and move to original runtime Material owner route. WATER-001 OPEN.",
-  "updated_at": "2026-11-05T12:25:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42027242310",
+    "https://github.com/alwansan/raf/actions/runs/42027729117",
+    "https://github.com/alwansan/raf/actions/runs/42028108346",
+    "https://github.com/alwansan/raf/actions/runs/42028369439"
+  ],
+  "result": {
+    "original_verified_CI": "42028369439 SUCCESS STRICT SOURCE GATE",
+    "original_program_method_count": 1,
+    "original_method_IL_instructions": 10,
+    "original_1D_RenderTexture_array_field_loads": 2,
+    "original_null_guard_with_correct_branch_target": true,
+    "original_return_when_array_null": "null",
+    "original_return_nonnull": "indexed RenderTexture[] element",
+    "original_index_arg_type": "System.Int32",
+    "original_second_valued_texture_present_at_runtime_proven": false,
+    "original_guarded_shape_rejected_when_wrong_branch": true,
+    "failed_synthetic_predecessor": "CI42027623639 failed dictionary-record identity comparison; fixed, CI42027729117 SUCCESS",
+    "safe_artifact_id": 13413774825,
+    "safe_zip_sha256": "9cd20667c99523fdba6fd859a796d31f7f30c80247d92c15fc72e3e323570acc",
+    "shaderlab_unity_adreno_proven": false
+  },
+  "next_step": "Locate actual original RenderTexture[] field assignment and original index literals/receiver Material proof; integrate authentic Foam two-pass ShaderLab/CB states; no device/READY claims. WATER-001 remains OPEN.",
+  "updated_at": "2026-11-05T12:35Z"
 }
