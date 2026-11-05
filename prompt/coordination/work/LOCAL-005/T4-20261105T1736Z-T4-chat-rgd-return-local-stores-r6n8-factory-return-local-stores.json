@@ -3,7 +3,7 @@
   "origin": "chat",
   "owner": "T4",
   "issue_id": "LOCAL-005",
-  "status": "active",
+  "status": "completed",
   "base_sha": "72e59de980ca8803e08e7ad1ad9edb9b35c54313",
   "resumed_from_sessions": [
     "20261105T1713Z-T4-chat-original-rgd-return-sites-j7q4",
@@ -22,5 +22,28 @@
     "prompt/coordination/discussions/LOCAL-005/20261105T1740Z-T4-original-return-local-stores-to-T5.md"
   ],
   "scope": "Add finite original-source read-only return-local direct stloc & immediate source census to existing isolated SHA-verified Mono.Cecil inspector, original-free validator and adversarial tests, reuse source CI; never disclose private members/IL/bytes, never execute Save or Unity, do not touch scheduled T4 JSONL overflow or T5 native.",
-  "updated_at": "2026-11-05T17:36:00Z"
+  "updated_at": "2026-11-05T17:41:00Z",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42076494669",
+  "result": {
+    "status": "ORIGINAL_READONLY_SOURCE_VERIFIED_ONLY",
+    "tests": "67/67",
+    "ci": "42076494669 completed success",
+    "tested_sha": "961e637a5236ed900c179fe41b96e5f65a26084b",
+    "original_source": "ZIP2 commit 15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "original_dll_length": 3211776,
+    "original_dll_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "returned_local_direct_lexical_stores": 1,
+    "immediate_derived_constructor_stores": 1,
+    "immediate_null_stores": 0,
+    "other_immediate_stores": 0,
+    "original_return_sites": 1,
+    "invalid_source_sha_rejected": true,
+    "path_sensitive_value_identity_proven": false,
+    "original_Save_executed": false,
+    "gameplay_RGD_saved_or_reopened": false,
+    "Android_Unity_IL2CPP_phone_executed": false,
+    "report": "docs/T4_ORIGINAL_RGD_RETURN_LOCAL_STORES_2026-11-05.md",
+    "handoff": "prompt/coordination/discussions/LOCAL-005/20261105T1740Z-T4-original-return-local-stores-to-T5.md"
+  },
+  "next_step": "Final source-only proof identifies one returned derived RGD local direct stloc immediately preceded by derived newobj. Do not infer executed branch or phone save; coordinate T5 actual native CI42058825739 signed deliverables and device logs, then offline world/create + .rgd save + complete exit + same-world reopen. T4 scheduled JSONL overflow work separate; LOCAL-005 remains OPEN NOT_READY 0/3."
 }
