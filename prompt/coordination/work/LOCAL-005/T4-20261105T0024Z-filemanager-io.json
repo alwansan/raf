@@ -6,7 +6,7 @@
   "issue_id": "LOCAL-005",
   "track": "world-save",
   "approach": "SHA-authenticated read-only original FileManager IO/catch contract and real SaveAndLoad direct call edges; isolate file-read failure semantics before any Android patch",
-  "status": "active",
+  "status": "completed",
   "base_sha": "365ffc9be6f952e89bfa6f227cfa6577e8df8d68",
   "intended_files": [
     "scripts/t4_original_filemanager_contract.py",
@@ -30,9 +30,32 @@
   "experiment_ids": [
     "20261105T0024Z-original-filemanager-io"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Build sanitized authenticated original FileManager call-edge probe and adversarial tests; inspect private decomp in isolated CI; do not imply .rgd compatibility or device success.",
-  "updated_at": "2026-11-05T00:24:00Z",
-  "identity_conflict": "possible_active_T4_previous_session_do_not_overwrite_shared_state"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41941915205",
+    "https://github.com/alwansan/raf/actions/runs/41942104318",
+    "https://github.com/alwansan/raf/actions/runs/41942292529",
+    "https://github.com/alwansan/raf/actions/runs/41942655373"
+  ],
+  "result": {
+    "scope": "SHA-verified original FileManager lexical I/O edge experiment",
+    "original_DLL_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "original_FileManager_sha256": "bc64b8cf066aeaa5a822ce394e7a1ee5df1e0aa6f87d3c4bc961f668c9e65f0f",
+    "original_SaveAndLoad_sha256": "0215aaae188f338c8288294f59cea53a7bd860207371f778416597653519dfd2",
+    "synthetic_tests": "10/10 PASS",
+    "authentic_original_CI": "41942655373 FAILURE: original parser targets unresolved",
+    "read_write_source_calls": "one each",
+    "original_FileManager_method_name_tokens": "one for each edge",
+    "method_bodies_recognized_by_bounded_parser": "zero for each edge",
+    "actual_read_catch_semantics": "UNKNOWN",
+    "device_world_or_rgd_tested": false,
+    "production_save_patch": false,
+    "report": "docs/T4_ORIGINAL_FILEMANAGER_IO_2026-11-05.md"
+  },
+  "next_step": "Resolve original FileManager declaration shape and potential parser gap in a SHA-pinned private-source trial. Do not patch serializer or assume target missing. Coordinate new APK/.rgd device roundtrip with T5.",
+  "updated_at": "2026-11-05T00:39:00Z",
+  "identity_conflict": "possible_active_T4_previous_session_do_not_overwrite_shared_state",
+  "rejected_hypotheses": [
+    "Parser body not found proves original method does not exist: not supported",
+    "Original RGD or Android save/reopen success follows from lexical probe: not supported"
+  ]
 }
