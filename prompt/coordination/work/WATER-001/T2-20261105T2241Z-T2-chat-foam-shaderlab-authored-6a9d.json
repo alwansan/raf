@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T2241Z-T2-chat-foam-shaderlab-authored-6a9d",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "track": "SHA-original-Foam-authored-properties-private-ShaderLab-candidate",
+  "status": "active",
+  "base_sha": "0db34ca7729053fe53f1e124a87eb09284b1f68b",
+  "resumed_from_sessions": [
+    "20261105T2220Z-T2-chat-foam-passpair-f174",
+    "20261105T2225Z-T2-scheduled-cfg-malformed-6f2c"
+  ],
+  "experiment_key": "sha15964ea8-foam-2-properties-b20-4-stages-2-states-ShaderLab-private-assembly-v1",
+  "resource_key": "zip2@15964ea8:sharedassets0.assets:shader2420",
+  "approach": "Source-authenticate two serialized authored Shader properties, serialize only real original texture+numeric values into ShaderLab Properties with strict type/default/attribute/flags bounds; assemble a private 1-subshader 2-real-pass candidate from exact B20 4 HLSL stages and B25 247-byte pass states, check B49 structural pass syntax, keep all original ShaderLab/source private, report bounded metadata. Fail closed on unsupported prop types/CB0 and explicitly do not claim Unity import, material upload, device readiness. Independent CI not T1/T3/T5 game build.",
+  "hypothesis": "Exact SHA-original serialized Foam m_PropInfo has two safely expressible authored ShaderLab properties; combining with two paired original HLSL passes and genuine 247-byte states yields a complete private structural two-pass ShaderLab candidate without fabricating 6 authored textures.",
+  "intended_files": [
+    "scripts/t2_foam_private_shaderlab_candidate.py",
+    "tests/test_t2_foam_private_shaderlab_candidate.py",
+    ".github/workflows/raft-t2-foam-private-shaderlab-candidate.yml",
+    "prompt/coordination/work/WATER-001/T2-20261105T2241Z-T2-chat-foam-shaderlab-authored-6a9d.json",
+    "prompt/coordination/clients/T2/sessions/20261105T2241Z-T2-chat-foam-shaderlab-authored-6a9d.md",
+    "prompt/coordination/experiments/T2/T2-20261105T2241Z-T2-chat-foam-shaderlab-authored-6a9d.json",
+    "prompt/coordination/B_TEAM/events/T2/20261105T2241Z-T2-chat-foam-shaderlab-authored-6a9d-result.json"
+  ],
+  "source_pin": {
+    "zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "owner_sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "owner_bytes": 115978112,
+    "original_shader_object_sha256": "67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1"
+  },
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/actions/runs/42121817207",
+    "https://github.com/alwansan/raf/actions/runs/42017542487",
+    "https://github.com/alwansan/raf/actions/runs/41930578292",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B45_ORIGINAL_SUBSURFACE_BLUR_SHADERLAB_2026-11-04.md"
+  ],
+  "last_verified_result": "CI42121817207 original 2/2 paired VS+PS HLSL compile+4/4 SPIR-V validate, 10/10 controls; original shader has exactly two authored props, one texture, original 6 sample rows only 2 match authored prop, no original CB0 alias, material runtime upload or Unity ShaderLab import verified.",
+  "run_urls": [],
+  "updated_at": "2026-11-05T22:41:00Z",
+  "next_step": "Implement private candidate with source SHA gates, safe original property-type diagnostics, synthetic adversarial tests; run original CI and revise only proof-backed schema. No game asset installation."
+}

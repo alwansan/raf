@@ -1,0 +1,13 @@
+# T2 chat — original Foam authored properties and private ShaderLab candidate
+- session_id: `20261105T2241Z-T2-chat-foam-shaderlab-authored-6a9d`
+- origin: `chat`; status: `active`
+- base_sha: `0db34ca7729053fe53f1e124a87eb09284b1f68b`
+- resumed_from_sessions: `20261105T2220Z-T2-chat-foam-passpair-f174`, `20261105T2225Z-T2-scheduled-cfg-malformed-6f2c`
+- work: `prompt/coordination/work/WATER-001/T2-20261105T2241Z-T2-chat-foam-shaderlab-authored-6a9d.json`; experiment: `sha15964ea8-foam-2-properties-b20-4-stages-2-states-ShaderLab-private-assembly-v1`
+- source pin ZIP2 `15964ea8f246b6e076ce26b60931ee2e1a9a2385`, owner 115,978,112 bytes SHA256 `0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3`, Foam original Shader object SHA256 `67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1`.
+- Prior proven source: [CI42121817207](https://github.com/alwansan/raf/actions/runs/42121817207) genuine 2/2 pass-local paired HLSL recompile and 4/4 SPIR-V validation; [CI42017542487](https://github.com/alwansan/raf/actions/runs/42017542487) two authored shader properties (only one texture; original t/s uses 2/6); [CI41930578292](https://github.com/alwansan/raf/actions/runs/41930578292) private four original HLSL stages and two genuine original pass states.
+- Another scheduled T2 session only modified synthetic CIL CFG malformed checks; no overlap with new T2 ShaderLab paths. Latest Actions checked; no running shared Unity/full build.
+- Scope: fail-closed serialization of only **two genuinely authored** original Foam properties, reconstruct private two-pass ShaderLab candidate from exact SHA-authenticated original four HLSL stages and pass states; source-free adversarial tests and CI. Never invent non-authored texture Properties, source CB names/aliases, GUIDs, or material bindings.
+- Original shaders, private HLSL, ShaderLab, IL, tokens and source identifiers stay under RUNNER_TEMP; publish booleans, broad property categories and counts only.
+- No changes to game assets, .meta, T1 FFT, T3 render, T4 input, T5 build, audio, Settings or deferred touch. No native Unity build, no CI cancel.
+- Next: inspect original typed property shape with bounded sanitizer if unknown; serialize/assemble/test privately; record actual CI and proof limits, WATER-001 OPEN.
