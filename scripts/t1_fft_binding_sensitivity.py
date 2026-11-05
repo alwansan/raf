@@ -63,25 +63,25 @@ def render_host(source: str) -> str:
             '                                (readSlot==1?1:passTarget[set]));',
         ),
         (
-            '     uint64_t writesA=0,writesB=0,missing=0,nonFinite=0,canaryErrors=0;',
-            '     uint64_t originalFingerprint=14695981039346656037ull;\n'
-            '     uint64_t writesA=0,writesB=0,missing=0,nonFinite=0,canaryErrors=0;',
+            '    uint64_t writesA=0,writesB=0,missing=0,nonFinite=0,canaryErrors=0;',
+            '    uint64_t originalFingerprint=14695981039346656037ull;\n'
+            '    uint64_t writesA=0,writesB=0,missing=0,nonFinite=0,canaryErrors=0;',
         ),
         (
-            '             const float va=a[c],vb=b[c];',
-            '             const float va=a[c],vb=b[c];\n'
-            '             uint32_t bits=0;\n'
-            '             std::memcpy(&bits,&va,sizeof(bits));\n'
-            '             originalFingerprint^=uint64_t(bits);\n'
-            '             originalFingerprint*=1099511628211ull;',
+            '            const float va=a[c],vb=b[c];',
+            '            const float va=a[c],vb=b[c];\n'
+            '            uint32_t bits=0;\n'
+            '            std::memcpy(&bits,&va,sizeof(bits));\n'
+            '            originalFingerprint^=uint64_t(bits);\n'
+            '            originalFingerprint*=1099511628211ull;',
         ),
         (
-            '     check(vkDeviceWaitIdle(device),"vkDeviceWaitIdle");',
-            '     std::cout<<"RAFT_T1_BINDING_FINGERPRINT {\\"profile\\":\\""<<profile\n'
+            '    check(vkDeviceWaitIdle(device),"vkDeviceWaitIdle");',
+            '    std::cout<<"RAFT_T1_BINDING_FINGERPRINT {\\"profile\\":\\""<<profile\n'
             '              <<"\\",\\"checksum\\":\\""<<originalFingerprint\n'
             '              <<"\\",\\"same_source_comparator\\":"<<(match?"true":"false")\n'
             '              <<"}\\n";\n'
-            '     check(vkDeviceWaitIdle(device),"vkDeviceWaitIdle");',
+            '    check(vkDeviceWaitIdle(device),"vkDeviceWaitIdle");',
         ),
     )
     output = source
