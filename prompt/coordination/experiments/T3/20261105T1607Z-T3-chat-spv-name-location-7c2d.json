@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T1607Z-T3-chat-spv-name-location-7c2d",
+  "issue_id": "RENDER-002",
+  "status": "completed",
+  "experiment_key": "T3-originalZIP2-15964ea8-6scenes-4owners-921-sourceShader48-4pass-8stage-spirvCross-interface-name-type-location-relocation-1pair-pass",
+  "hypothesis": "Compiler-reflected source->roundtrip SPIRV interface names and types may be stable after location remapping; if not, raw reflected names must not substitute for source DXBC signature semantics.",
+  "source_commit": "bf8190103f19e9899fae4037b276f1e110fd5094",
+  "original_source_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "workflow_path": ".github/workflows/raft-t3-original-921-spv-name-drift.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42062573338",
+  "artifact_id": 13432423131,
+  "artifact_name": "t3-authentic-original-921-SPIRV-private-name-drift-42062573338",
+  "source_integrity": "same pinned original six scenes and four owner files; SHA verified and true original source 921 Renderer material slot Shader48 selection",
+  "tool_versions": {
+    "unitypy": "1.23.0",
+    "compiler": "vkd3d-compiler from Ubuntu24.04 apt, spirv-tools/spirv-cross/glslang-tools",
+    "privacy_reader": "scripts/t3_spirv_interface_name_drift.py"
+  },
+  "observed_result": {
+    "conclusion": "success",
+    "source_free_controls_passed": 86,
+    "actual_counts": {
+      "source_shader_original_renderer_material_slot_weight": 921,
+      "original_scenes_sha_verified": 6,
+      "ShaderMaterial_owners_sha_verified": 4,
+      "actual_original_Passes_sampled": 4,
+      "original_DXBC_vertex_fragment_stage_programs": 8,
+      "real_DXBC_to_SpirV1_1_valid": 8,
+      "roundtrip_HLSL_to_SpirV1_1_valid": 8,
+      "reflected_name_stage_pairs_classified": 8,
+      "source_input_interface_named": 34,
+      "roundtrip_input_interface_named": 34,
+      "input_name_type_exact_matches": 0,
+      "input_source_only_names": 34,
+      "input_roundtrip_only_names": 34,
+      "source_output_interface_named": 29,
+      "roundtrip_output_interface_named": 29,
+      "output_name_type_exact_matches": 0,
+      "output_source_only_names": 29,
+      "output_roundtrip_only_names": 29,
+      "stage_input_type_multisets_equal": 8,
+      "stage_output_type_multisets_equal": 8,
+      "stage_input_location_remap_candidates": 8,
+      "stage_output_location_remap_candidates": 4,
+      "stages_with_original_roundtrip_exact_location_type_lists": 0,
+      "original_DXBC_signature_semantic_proven": false,
+      "Android_Adreno_visual_proven": false
+    },
+    "private_name_values_published": false,
+    "source_vs_roundtrip_generated_names_all_different": true,
+    "real_source_semantic_identity": "UNPROVEN",
+    "game_assets_modified": false
+  },
+  "controls": {
+    "new_name_classification": 10,
+    "new_integration": 5,
+    "previous_io_classification": 5,
+    "previous_fourpass_translator": 20,
+    "original_DXBC_linkage": 12,
+    "original_renderer_graph": 12,
+    "inherited_B03": 22,
+    "total": 86
+  },
+  "negative_controls": [
+    "No fabricated original Shader semantic from generated names",
+    "full exact private reflected name dataset remains in temporary runner only",
+    "reject duplicate private reflection names and numeric locations",
+    "reject conflicting private named reflection vs safe location/type baseline",
+    "legacy source translator still independent optional modes",
+    "reject arbitrary private classifier fields and missing 8-stage results"
+  ],
+  "rejected_hypotheses": [
+    "Exact SPIRV-Cross reflected names+types survive the same source's HLSL roundtrip (0 of 34 input, 0 of 29 output names retained)",
+    "Same type-multiset and Location remap candidate implies matching original DXBC named semantics (not proven)"
+  ],
+  "limitations": [
+    "One authentic D3D11 source permutation pair per four original Passes; remaining 29 matched source pairs untested",
+    "Eight unmatched source Vertex variants excluded",
+    "Source DXBC signature registers, mask, system-value and semantic indices not yet mapped to SPIRV Location/BuiltIn/Component",
+    "No authored Unity ShaderLab, Android ARM64/Vulkan compilation or device pixel parity"
+  ],
+  "workflow_manual_only_after_success_commit": "58d2378f539237eab94cf3b2388b735546e7d70f",
+  "next_step": "Create fail-closed source-only DXBC signature parser for ISGN/OSGN/ISG1/OSG1/OSG5 with exact bounds and compare authentic semantic name/index/register/mask to SPIRV decorations privately; no semantics assumptions from generated names.",
+  "updated_at": "2026-11-05T16:20:05.265Z"
+}
