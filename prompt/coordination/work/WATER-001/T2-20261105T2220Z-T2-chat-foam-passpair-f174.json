@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T2220Z-T2-chat-foam-passpair-f174",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "track": "source-authentic-foam-two-pass-vf-pair-compilation",
+  "status": "active",
+  "base_sha": "eb2785806a6cc52b8fc86051dfebb28c6cb6ec15",
+  "resumed_from_sessions": [
+    "20261105T2148Z-T2-chat-multiarity-stack-6b31",
+    "20261105T2124Z-T2-scheduled-stackcap-6c2e"
+  ],
+  "experiment_key": "sha15964ea8-foam-original-stage-pair-vertex-fragment-vulkan-glslang-v1",
+  "resource_key": "zip2@15964ea8:sharedassets0.assets:foam-path2420",
+  "approach": "Reuse independently SHA-original B20 private 4-stage packet+two authenticated 247-byte render states; compile each real pass's two HLSL stage programs together under stage macros via glslangValidator+spirv-val to discover actual cross-stage ShaderLab integration blockers. Keep HLSL/ShaderLab and originals only in runner temp, source-free anti-spoof tests. No Unity build, no asset commit or synthetic alias.",
+  "hypothesis": "The authentic B20 pass0/1 translated vertex and fragment stage sources can be safely co-located as a paired HLSLPROGRAM input and independently recompiled for both stages; failures distinguish cross-stage HLSL integration from previous standalone stage success.",
+  "intended_files": [
+    "scripts/t2_foam_original_pair_compile.py",
+    "tests/test_t2_foam_original_pair_compile.py",
+    ".github/workflows/raft-t2-foam-original-pair-compile.yml",
+    "prompt/coordination/work/WATER-001/T2-20261105T2220Z-T2-chat-foam-passpair-f174.json",
+    "prompt/coordination/clients/T2/sessions/20261105T2220Z-T2-chat-foam-passpair-f174.md",
+    "prompt/coordination/experiments/T2/T2-20261105T2220Z-T2-chat-foam-passpair-f174.json",
+    "prompt/coordination/B_TEAM/events/T2/20261105T2220Z-T2-chat-foam-passpair-f174-result.json"
+  ],
+  "source_pin": {
+    "zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "owner_bytes": 115978112,
+    "owner_sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "shader_id": 2420,
+    "object_sha256": "67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1"
+  },
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/actions/runs/42117556866",
+    "https://github.com/alwansan/raf/actions/runs/41930578292",
+    "https://github.com/alwansan/raf/actions/runs/41919758958",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_ORIGINAL_DXBC_SPIRV_ACTIVE_BRIDGE_2026-11-05.md"
+  ],
+  "last_verified_result": "B20 original private packet 4 source stages + 2 render states, B24 standalone SPIRV+HLSL recompilation, T2 exact 21 SAMPLE/t-s active register identity; no paired HLSL integration, CB0 alias/upload or Unity ShaderLab/Adreno proven.",
+  "run_urls": [],
+  "updated_at": "2026-11-05T22:20:00Z",
+  "next_step": "Author isolated source-only pair compiled-stage validation and run on pinned authentic original; record whether both passes compile together. If blocked, classify phase only and preserve logs private."
+}

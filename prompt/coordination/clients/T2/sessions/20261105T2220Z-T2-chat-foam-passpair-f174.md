@@ -1,0 +1,11 @@
+# T2 chat — original Foam two-pass paired vertex/fragment HLSL validation
+- session_id: `20261105T2220Z-T2-chat-foam-passpair-f174`; origin: chat; status: active
+- base_sha: `eb2785806a6cc52b8fc86051dfebb28c6cb6ec15`
+- resumed_from_sessions: `20261105T2148Z-T2-chat-multiarity-stack-6b31`; `20261105T2124Z-T2-scheduled-stackcap-6c2e`
+- scope work: `prompt/coordination/work/WATER-001/T2-20261105T2220Z-T2-chat-foam-passpair-f174.json`
+- original source ZIP2 pin `15964ea8f246b6e076ce26b60931ee2e1a9a2385`; Foam owner `sharedassets0.assets` 115978112B SHA256 `0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3`; Shader pathID2420 object SHA256 `67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1`.
+- Restored authentic B20 [41930578292](https://github.com/alwansan/raf/actions/runs/41930578292) four stage programs and 247B per pass states, T2 exact original Foam typed texture/sampler bindings and original managed RenderTexture constructor [42117556866](https://github.com/alwansan/raf/actions/runs/42117556866).
+- Scope only combined pass-level stage HLSL compilation with Vulkan validator (4 stage recompilations from 2 paired sources), genuine original B20 source/private scratch; no Unity ShaderLab candidate installed, no original property/CB0 aliases fabricated, no assets/GUID changed, no device claims.
+- Files: `scripts/t2_foam_original_pair_compile.py`, `tests/test_t2_foam_original_pair_compile.py`, `.github/workflows/raft-t2-foam-original-pair-compile.yml` + own records.
+- Do not edit T1 FFT, T3 material, T4 input, T5 integration or scheduled T2 files; no heavy Unity build or cancellations.
+- next_step: write/tests and run isolated SHA-original CI; if source fails, report actual classified blocker and preserve safe handoff.
