@@ -1,0 +1,105 @@
+name: T3 RENDER-002 genuine six-scene Renderer Material Shader48 usage priority
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-t3-original-renderer-shader-impact.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raft-t3-original-scene-renderer-shader-impact-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  original-six-scene-impact:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 22
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Source-free exact original Renderer and class48 join controls
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t3_original_renderer_shader_impact.py
+          python3 -m unittest discover -s tests -p 'test_t3_original_renderer_shader_impact.py' -v
+          python3 -m unittest discover -s tests -p 'test_b03_original_renderer_materials.py' -v
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-source
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/level0
+            Raft/Raft_Data/level1
+            Raft/Raft_Data/level2
+            Raft/Raft_Data/level3
+            Raft/Raft_Data/level4
+            Raft/Raft_Data/level5
+      - name: Select exact four needed original Material and Shader owner serialized files
+        run: |
+          set -euo pipefail
+          git -C zip2-source sparse-checkout set --no-cone -- \
+            '/RAFT_FILE_MANIFEST.tsv' \
+            '/Raft/Raft_Data/level0' \
+            '/Raft/Raft_Data/level1' \
+            '/Raft/Raft_Data/level2' \
+            '/Raft/Raft_Data/level3' \
+            '/Raft/Raft_Data/level4' \
+            '/Raft/Raft_Data/level5' \
+            '/Raft/Raft_Data/resources.assets/*' \
+            '/Raft/Raft_Data/sharedassets0.assets/*' \
+            '/Raft/Raft_Data/sharedassets1.assets' \
+            '/Raft/Raft_Data/sharedassets6.assets'
+          test "$(git -C zip2-source rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+      - name: SHA-verify real ZIP2 six scenes and reassemble exact four pinned owners
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import stage
+          from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
+          from scripts.b21_scene_lightmap_links import PIN,verify_source
+          from scripts.t3_original_renderer_shader_impact import SHADER_OWNERS_SELECTED
+          zip2=Path('zip2-source')
+          roots=Path(os.environ['RUNNER_TEMP'])/'t3-original-six-scene'
+          pins={'Raft_Data/'+n:SHADER_OWNERS[n] for n in SHADER_OWNERS_SELECTED}
+          result=stage(zip2,roots,pins)
+          assert len(result['owners'])==4 and result['verified_bytes']==269007288 and not result['lfs_used']
+          dst=roots/'Raft_Data'
+          for scene,pin in PIN.items():
+              source=zip2/'Raft/Raft_Data'/scene
+              verify_source(source,pin)
+              target=dst/scene
+              if target.exists() or target.is_symlink():raise ValueError('scene_stage_collision')
+              with source.open('rb') as s, target.open('xb') as t:
+                  while block:=s.read(1024*1024):t.write(block)
+              verify_source(target,pin)
+          print('RAFT_T3_ORIGINAL_6_SCENES_SHA_VERIFIED=6 four_owner_SHA=4 assembled_owner_bytes=269007288')
+          PY
+      - name: Count real original Shader48 used by six scene Renderer Material slots
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.23.0
+          python3 -m scripts.t3_original_renderer_shader_impact \
+            --original "$RUNNER_TEMP/t3-original-six-scene" \
+            --manifest zip2-source/RAFT_FILE_MANIFEST.tsv \
+            --out "$RUNNER_TEMP/t3-original-six-scene-shader-usage-aggregate.json"
+      - name: Upload only safe numeric source Shader usage bands, never private IDs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: t3-authentic-original-6scene-renderer-shader-use-${{ github.run_id }}
+          path: ${{ runner.temp }}/t3-original-six-scene-shader-usage-aggregate.json
+          if-no-files-found: ignore
+          retention-days: 7
