@@ -1,0 +1,19 @@
+{
+  "id": "20261105T170102Z-T1-chat-af2a33",
+  "session_id": "20261105T170102Z-T1-chat-af2a33",
+  "origin": "chat",
+  "owner": "T1",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "33ab7672e2fd919e4560c9ab4c60fe64caadda70",
+  "updated_at": "2026-11-05T17:01:02.932Z",
+  "intended_files": [
+    "scripts/t1_fft_trace_compare.py",
+    "tests/test_t1_fft_trace_compare.py",
+    ".github/workflows/raft-t1-fft-paired-diagnostic-checks.yml"
+  ],
+  "experiment_key": "pass0-private-trace-order-independent-coordinate-value-multiset",
+  "resumed_from_sessions": [
+    "20261105T163256Z-T1-chat-dc7c61"
+  ]
+}
