@@ -1,0 +1,16 @@
+{
+  "id": "20261105T1300Z-T4-chat-load-snapshot-m8q2",
+  "owner": "T4",
+  "session_id": "20261105T1246Z-T4-chat-load-file-gate-m8q2",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "type": "integration",
+  "summary": "Added Android-only read-only Load<T> argument-path existence/zero/nonzero classifier after original SHA gate; authentic 14-source managed compile and synthetic UNITY_ANDROID C# checks pass, no original RGD/Unity/phone proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/a88000086d973adfcb05a85a7ecd0b12133cbf81",
+    "https://github.com/alwansan/raf/actions/runs/42030693004",
+    "https://github.com/alwansan/raf/actions/runs/42031436693",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ANDROID_LOAD_ARGUMENT_SNAPSHOT_2026-11-05.md"
+  ],
+  "at": "2026-11-05T13:00:00.568Z"
+}
