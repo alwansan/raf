@@ -1,0 +1,19 @@
+{
+  "session_id": "20261105T1548Z-T4-scheduled-m7q4",
+  "origin": "scheduled",
+  "issue_id": "LOCAL-005",
+  "status": "active",
+  "baseline_sha": "155268906f0350a4f44dbdd101bdff8d997f72b0",
+  "taken_over_from": [
+    "prompt/coordination/clients/T4/sessions/20261105T1440Z-T4-scheduled-q8p3.md",
+    "prompt/coordination/clients/T4/sessions/20261105T1500Z-T4-chat-saveworld-rgd-producer-h5k2.md"
+  ],
+  "hypothesis": "UTC timestamp can regress with increasing sequence, yielding misleading cross-session save/load hints",
+  "intended_files": [
+    "scripts/t4_verify_device_world_save_log.py",
+    "tests/test_t4_verify_device_world_save_log.py"
+  ],
+  "experiment_key": "T4-jsonl-utc-monotonic-per-sequence-negative-control-v1",
+  "resource_key": null,
+  "updated_at": "2026-11-05T15:48:00Z"
+}
