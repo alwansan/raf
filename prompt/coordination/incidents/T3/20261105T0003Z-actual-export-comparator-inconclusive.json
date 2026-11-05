@@ -15,7 +15,14 @@
     "private_material_texture_traces_present": true,
     "source_free_unit_controls_passed": 11,
     "compare_status": "INCONCLUSIVE",
-    "compare_exception_type": "ValueError"
+    "compare_exception_type": "ValueError",
+    "second_run": "https://github.com/alwansan/raf/actions/runs/41938711186",
+    "original_selected_materials": 41,
+    "original_selected_slots": 227,
+    "export_material_trace": 57,
+    "export_texture_trace": 92,
+    "failure_stage": "actual_exported_material_yaml",
+    "failure_type": "ValueError"
   },
   "rejected_hypotheses": [
     "Original ZIP2 source missing",
@@ -27,6 +34,6 @@
     "Failure stage not recorded in first-safe report; cannot yet distinguish material trace population, original typetree shape, YAML parse or exact B05 pointer mismatch.",
     "No raw paths or private identifiers may enter public artifact."
   ],
-  "recovery": "Add source/trace/export stage labels and safe aggregate counts to T3 helper, rerun once with same pinned input; investigate only the specific failing stage. Do not weaken B05 integrity checks or announce material mismatch from generic exception.",
+  "recovery": "Run 41939065539 classifies exact static YAML parser reason; adapt parser only to verified exported YAML structure, preserving duplicate-key and private-identity integrity checks. No actual material drift established.",
   "closed_reason": null
 }
