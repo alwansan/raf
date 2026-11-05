@@ -1,0 +1,114 @@
+name: T4 INPUT-005 authentic Android physical mouse capture bridge controls
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs'
+      - 'android-port/Runtime/Platform/PhysicalMouseDeltaAccumulator.cs'
+      - 'android-port/Tests/PhysicalMouse/**'
+      - 'scripts/t4_adapt_original_mouse_axes.py'
+      - 'tests/test_t4_adapt_original_mouse_axes.py'
+      - '.github/workflows/raft-t4-mouse-capture-bridge.yml'
+
+permissions:
+  contents: read
+concurrency:
+  group: raft-t4-physical-mouse-source-bridge-v1
+  cancel-in-progress: false
+
+jobs:
+  original-authenticated-captured-mouse-bridge:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout bounded T4 test and native bridge sources
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/t4_original_mouse_routing.py
+            /scripts/t4_adapt_original_mouse_axes.py
+            /tests/test_t4_original_mouse_routing.py
+            /tests/test_t4_adapt_original_mouse_axes.py
+            /android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs
+            /android-port/Runtime/Platform/PhysicalMouseDeltaAccumulator.cs
+            /android-port/Runtime/Platform/AndroidRuntimeLog.cs
+            /android-port/Runtime/Platform/PersistentDiagnosticLog.cs
+            /android-port/Tests/PhysicalMouse/
+      - name: Source-free route and patch lexical negative controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t4_original_mouse_routing.py scripts/t4_adapt_original_mouse_axes.py tests/test_t4_original_mouse_routing.py tests/test_t4_adapt_original_mouse_axes.py
+          python3 -m unittest discover -s tests -p test_t4_original_mouse_routing.py -v
+          python3 -m unittest discover -s tests -p test_t4_adapt_original_mouse_axes.py -v
+          test ! -d Raft
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.x
+      - name: Execute CSharp thread-safe captured motion controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 150s dotnet run --project android-port/Tests/PhysicalMouse/PhysicalMouse.csproj -c Release
+      - name: Checkout pinned original compiled CLR source and Unity2021 ABI
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: t4-original
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /Raft/Raft_Data/Managed/Assembly-CSharp.dll
+            /Raft/Raft_Data/Managed/UnityEngine.CoreModule.dll
+            /Raft/Raft_Data/Managed/UnityEngine.InputLegacyModule.dll
+            /Raft/Raft_Data/Managed/UnityEngine.AndroidJNIModule.dll
+            /Raft/Raft_Data/Managed/Unity.InputSystem.dll
+      - name: Authentic original DLL SHA and disk budget gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C t4-original rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          f=t4-original/Raft/Raft_Data/Managed/Assembly-CSharp.dll
+          test ! -L "$f"
+          test "$(stat -c '%s' "$f")" = 3211776
+          echo "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e  $f" | sha256sum -c --status
+          test "$(df -Pk . | awk 'NR==2 {print $4}')" -gt 900000
+          echo 'T4_MOUSE_SOURCE original_clr_authenticated=true source_published=false'
+      - name: Compile actual CSharp Java proxy and native logging interfaces against original Unity2021 managed ABI
+        shell: bash
+        env:
+          DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+        run: |
+          set -euo pipefail
+          managed="$GITHUB_WORKSPACE/t4-original/Raft/Raft_Data/Managed"
+          timeout 150s dotnet build android-port/Tests/PhysicalMouse/UnityBridgeCompile.csproj -c Release -p:OriginalManagedDir="$managed" > "$RUNNER_TEMP/t4-private-compile.log" 2>&1 || {
+            python3 - <<'PY'
+          import os,re,pathlib,collections
+          s=(pathlib.Path(os.environ["RUNNER_TEMP"])/"t4-private-compile.log").read_text(errors="replace")
+          print("T4_MOUSE_COMPILE_ERROR_CODES",dict(collections.Counter(re.findall(r"error +((?:CS|NETSDK|NU)\d+)",s))))
+          PY
+            exit 1
+          }
+          echo 'T4_MOUSE_MANAGED_COMPILE originalUnityRefs=true actualUnityPlayerBuild=false'
+      - name: Decompile immutable original DLL only in ephemeral runner
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/t4-mouse-ilspy" "$RUNNER_TEMP/t4-mouse-private-src"
+          timeout 140s dotnet tool install ilspycmd --version 11.2.0.10050 --tool-path "$RUNNER_TEMP/t4-mouse-ilspy" > "$RUNNER_TEMP/t4-mouse-tool-private.log" 2>&1 || { echo T4_MOUSE_TOOL_UNAVAILABLE; exit 1; }
+          timeout 360s "$RUNNER_TEMP/t4-mouse-ilspy/ilspycmd" -p -lv CSharp9_0 -o "$RUNNER_TEMP/t4-mouse-private-src" t4-original/Raft/Raft_Data/Managed/Assembly-CSharp.dll > "$RUNNER_TEMP/t4-mouse-decompile-private.log" 2>&1 || { echo T4_MOUSE_PRIVATE_DECOMPILER_FAILED; exit 1; }
+      - name: Apply exact eight-axis and two-cursor-assignment patch only to authenticated temporary original
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 120s python3 -m scripts.t4_adapt_original_mouse_axes --original-dll t4-original/Raft/Raft_Data/Managed/Assembly-CSharp.dll --source-root "$RUNNER_TEMP/t4-mouse-private-src" --backup "$RUNNER_TEMP/t4-original-mouse-backup" --apply
+          echo 'T4_MOUSE_BRIDGE authored_runtime_input_verified=false android_device_verified=false'
+          # No DLL, .rgd, source, original assets or private compiler logs are uploaded.
