@@ -4,7 +4,7 @@
   "generation": "T-2026-11-05",
   "session_id": "20261105T1213Z-T3-native-shader-dummy-audit",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed",
   "track": "colors-materials/native-post-restore-Material-Shader-dummy-audit",
   "base_sha": "de2f2a5b3bf9c6bc6f8614ca4b1c1b17dffb0962",
   "approach": "Native full build currently defaults AssetRipper ShaderExportMode.Dummy, and the W1 Material→Shader GUID inventory ignores actual Shader program quality. Add safe strict read-only post-restorer scan of Material YAML m_Shader→.shader.meta GUID and only aggregate DummyShaderTextExporter/no-program source counts without disclosing proprietary assets; integrate before water strict/limited gate and artifact publish on failure. Unit and genuine bounded export tests; preserve all original shaders, no fake passes.",
@@ -18,12 +18,33 @@
   "intended_files": [
     "scripts/t3_audit_exported_material_programs.py",
     "tests/test_t3_audit_exported_material_programs.py",
-    ".github/workflows/raft-t3-postrestore-shader-audit.yml",
+    ".github/workflows/raft-t3-native-material-shader-quality.yml",
     ".github/workflows/raft-unity-editor-android-import.yml",
     "prompt/coordination/clients/T3/sessions/20261105T1213Z-T3-native-shader-dummy-audit.md"
   ],
   "hypothesis": "The native export pipeline may legitimately resolve Material Shader GUID while retaining a large number of default-Dummy actual custom ShaderLab programs after partial restoration; actionable per-project count currently missing.",
-  "run_urls": [],
-  "next_step": "Implement strict bounded scanner; synthetic CI; add non-blocking but explicit native post-restorer evidence step and failure artifact; show no phone claim.",
-  "updated_at": "2026-11-05"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42026250167",
+    "https://github.com/alwansan/raf/actions/runs/42026343292",
+    "https://github.com/alwansan/raf/actions/runs/42026545273",
+    "https://github.com/alwansan/raf/actions/runs/42026630845"
+  ],
+  "next_step": "On next authorized full native pipeline execution inspect t3-native-material-shader-quality.json AFTER existing Shader restorations, prioritize authentic source reconstruction for surviving high-use dummy shader targets, then Unity import/Android visual acceptance. RENDER-002 remains OPEN; no fake flags or dummy program swaps.",
+  "updated_at": "2026-11-05T12:27:00Z",
+  "result": {
+    "source_only_synthetic": "SUCCESS_CI42026545273",
+    "actual_source_export": "SUCCESS_CI42026630845",
+    "actual_original_owner_sources_sha_authenticated": 12,
+    "original_41_Material_Shader_PPtr_faithful": true,
+    "pre_restorer_real_export_material_documents": 731,
+    "pre_restorer_custom_material_shader_links": 511,
+    "pre_restorer_custom_links_to_dummy": 511,
+    "pre_restorer_distinct_dummy_targets": 54,
+    "pre_restorer_actual_ShaderLab_files": 126,
+    "pre_restorer_actual_ShaderLab_files_with_Dummy_marker": 126,
+    "native_source_integration": "COMMITTED_TO_NATIVE_AFTER_RESTORERS_BEFORE_WATER_GATE",
+    "native_post_restorer_execution": "NOT_EXECUTED",
+    "android_device_pixels_verified": false,
+    "project_shader_assets_modified": false
+  }
 }
