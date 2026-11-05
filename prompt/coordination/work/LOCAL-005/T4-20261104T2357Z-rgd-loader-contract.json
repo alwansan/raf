@@ -6,12 +6,14 @@
   "issue_id": "LOCAL-005",
   "track": "world-save",
   "approach": "Authenticate original SaveAndLoad.Load<T>, BinaryFormatter binder and RGD version compatibility at the exact ZIP2 source, then implement only a proven Android-compatible load repair or executable contract test.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "902b67ba05c6a303072ff6511576e026e67e3c0d",
   "intended_files": [
     "scripts/t4_original_rgd_load_contract.py",
     "tests/test_t4_original_rgd_load_contract.py",
     ".github/workflows/raft-t4-original-rgd-load.yml",
+    "docs/T4_ORIGINAL_RGD_LOAD_COMPAT_2026-11-05.md",
+    "scripts/instrument_android_runtime_operations.py",
     "docs/T4_ORIGINAL_RGD_LOAD_COMPAT_2026-11-05.md"
   ],
   "hypothesis": "Original SaveAndLoad.Load<T> may use a binder or assembly-version handling path that makes B37 seed-version mismatch benign; verify before editing any serialization.",
@@ -30,8 +32,45 @@
   "experiment_ids": [
     "20261104T2357Z-rgd-loader-original"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Inspect original Load<T> and perform exact pinned source loader test with negative controls; avoid needless StoreStats/Steam and save-order repeats.",
-  "updated_at": "2026-11-04T23:57:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41939908432",
+    "https://github.com/alwansan/raf/actions/runs/41939846508",
+    "https://github.com/alwansan/raf/actions/runs/41939385466",
+    "https://github.com/alwansan/raf/actions/runs/41938573739",
+    "https://github.com/alwansan/raf/actions/runs/41938843132",
+    "https://github.com/alwansan/raf/actions/runs/41939807107"
+  ],
+  "result": {
+    "original_dll_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "original_readonly_source_sha256": "0215aaae188f338c8288294f59cea53a7bd860207371f778416597653519dfd2",
+    "production_pin_unchanged": true,
+    "independent_b14_original_save_order_passed": true,
+    "load_method_body_sha256": "a07f4546b5cc3a64d3013e96a02b508bdec5e9849d5b2533e3a626d7b17b87d6",
+    "original_load_deserialize_count": 1,
+    "original_load_catch_count": 1,
+    "original_load_binder_assignments": 0,
+    "original_load_file_manager_calls": 1,
+    "original_loader_assembly_resolver_tokens": 0,
+    "t4_synthetic_tests": "16/16",
+    "actual_original_source_inspection": true,
+    "adapted_original_managed_compile": "PASS exit=0",
+    "android_catch_diagnostic_integrated": true,
+    "unity_il2cpp_or_device": false,
+    "world_playable_or_rgd_roundtrip": false,
+    "report": "docs/T4_ORIGINAL_RGD_LOAD_COMPAT_2026-11-05.md"
+  },
+  "next_step": "Coordinated newest native APK/OBB/XAPK with T5; inspect world coroutine, original Load.caughtException, save path, and actual persistent .rgd create-save-relaunch-load on phone. If blocked, follow original FileManager/Load error handling with SHA-pinned private source; no false success.",
+  "updated_at": "2026-11-05T00:17:00Z",
+  "completed_scope": "Exact original loader SHA-authenticated inspection and Android catch-boundary diagnostic integrated into production source instrumentation; not world save/reload",
+  "rejected_hypotheses": [
+    "B37 NRBF member/version mismatch itself proves corruption — unsupported",
+    "No original loader exists because a custom regex cannot parse ILSpy method signatures — rejected by exact body_bounds original extraction",
+    "Historical production adapter source SHA may safely be replaced with newly observed decompiler SHA — rejected; read-only alternate requires DLL+B14 independent proof",
+    "An original catch is observable by outer exception wrapper alone — not assured; added Android catch-entry diagnostic."
+  ],
+  "integration_commits": [
+    "bc69f1c8f7087d14cdb65858be89a3a4283d4369",
+    "ed39104941ff9c6880829556fbb6d4a985898d3e",
+    "fa6bd57c4f8d29b17e4d038e18be5ac8c48d42b2"
+  ]
 }
