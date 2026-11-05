@@ -1,7 +1,9 @@
 import struct
 import unittest
 
-from scripts.t1_fft_trace_compare import RECORD, SIZE, compare
+from scripts.t1_fft_trace_compare import (
+    INVOCATION_RECORD, INVOCATION_SIZE, RECORD, SIZE, compare, compare_invocations,
+)
 
 
 BASE = [(0, 1, 2, 0, 10, 0, 0, 0), (1, 1, 2, 0, 20, 0, 0, 0),
@@ -30,3 +32,46 @@ class TraceCompareTests(unittest.TestCase):
         for bad in (trace(BASE, 513), trace(BASE[:2]), trace(BASE)[:-1]):
             with self.assertRaises(ValueError):
                 compare(trace(BASE), bad)
+
+INVOCATIONS = [(site, 3, 0, 0, 0, *sample) for site, *sample in BASE]
+
+
+def invocation_trace(rows):
+    return (struct.pack("<I", len(rows)) +
+            b"".join(INVOCATION_RECORD.pack(*row) for row in rows)).ljust(INVOCATION_SIZE, b"\0")
+
+
+class InvocationTraceTests(unittest.TestCase):
+    def test_keys_pair_across_order_and_repeated_reads(self):
+        repeated = (0, 3, 0, 0, 1, *BASE[0][1:])
+        rows = INVOCATIONS + [repeated]
+        self.assertTrue(compare_invocations(invocation_trace(rows),
+                                            invocation_trace(rows[::-1]))["match"])
+
+    def test_swapped_coordinates_hide_drift_in_the_legacy_histogram(self):
+        first = (0, 3, 0, 0, 0, 1, 2, 0, 10, 0, 0, 0)
+        second = (0, 4, 0, 0, 0, 9, 2, 0, 20, 0, 0, 0)
+        before = [first, second, *INVOCATIONS[1:]]
+        after = [(*first[:5], *second[5:]), (*second[:5], *first[5:]),
+                 (*INVOCATIONS[1][:-4], 99, 0, 0, 0), INVOCATIONS[2]]
+        self.assertTrue(compare(trace([row[:1] + row[5:] for row in before[:2] + INVOCATIONS[1:]]),
+                                trace([row[:1] + row[5:] for row in after[:2] + INVOCATIONS[1:]]))["match"])
+        result = compare_invocations(invocation_trace(before), invocation_trace(after))
+        self.assertFalse(result["match"])
+        self.assertEqual(result["sites"][0]["coordinate_mismatches"], 2)
+        self.assertEqual(result["sites"][0]["changed_coordinate_value_mismatches"], 2)
+        self.assertEqual(result["sites"][1]["same_coordinate_value_mismatches"], 1)
+
+    def test_missing_and_extra_invocations_do_not_certify_parity(self):
+        other = (0, 4, *INVOCATIONS[0][2:])
+        result = compare_invocations(invocation_trace(INVOCATIONS),
+                                     invocation_trace([other, *INVOCATIONS[1:]]))
+        self.assertFalse(result["match"])
+        self.assertEqual(result["sites"][0]["missing_reads"], 1)
+        self.assertEqual(result["sites"][0]["extra_reads"], 1)
+        self.assertEqual(result["sites"][0]["paired_reads"], 0)
+
+    def test_rejects_duplicate_keys_and_legacy_layout(self):
+        for bad in (invocation_trace(INVOCATIONS + INVOCATIONS[:1]), trace(BASE)):
+            with self.assertRaises(ValueError):
+                compare_invocations(invocation_trace(INVOCATIONS), bad)
