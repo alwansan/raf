@@ -133,6 +133,9 @@ internal static class Program
             new(StringComparer.Ordinal);
         public readonly Dictionary<string,int> SecondProducerActualIndexInt32Origins =
             new(StringComparer.Ordinal);
+        // Original small-domain indices remain private to this running process.
+        // Never serialize this list or hash its contents into a public report.
+        public readonly List<int> PrivateExactFourI4Values = new();
         public readonly HashSet<string> SecondProducerDistinctPrivateSignatures =
             new(StringComparer.Ordinal);
         public int SecondProducerExactManagedMethodDefinitionMatches;
@@ -269,6 +272,14 @@ internal static class Program
                         var indexOrigin=exact.Value.SecondProducerIndexInt32ArgumentOrigin;
                         result.SecondProducerActualIndexInt32Origins[indexOrigin]=
                             result.SecondProducerActualIndexInt32Origins.GetValueOrDefault(indexOrigin)+1;
+                        if (indexOrigin=="direct_ldc_i4_literal")
+                        {
+                            if (exact.Value.SecondProducerIndexInt32ArgumentLiteral is not int literal)
+                                throw new InvalidDataException("Exact int32 source marker missing typed numeric operand");
+                            result.PrivateExactFourI4Values.Add(literal);
+                        }
+                        else if (exact.Value.SecondProducerIndexInt32ArgumentLiteral is not null)
+                            throw new InvalidDataException("Nonliteral index source cannot carry exact numeric value");
                         var producer=exact.Value.SecondProducerReference;
                         if (producer is not null)
                         {
@@ -404,6 +415,12 @@ internal static class Program
             non_authored_second_exact_producer_parameter_count_histogram = result.SecondProducerParameterCount,
             non_authored_second_producer_parameter_declared_type_categories = result.SecondProducerParameterTypeCategories,
             non_authored_second_Texture_int_actual_index_argument_origin_histogram = result.SecondProducerActualIndexInt32Origins,
+            non_authored_actual_i4_index_values_decoded_count = result.PrivateExactFourI4Values.Count,
+            non_authored_actual_i4_index_values_distinct_count = result.PrivateExactFourI4Values.Distinct().Count(),
+            non_authored_actual_i4_index_values_all_nonnegative =
+                result.PrivateExactFourI4Values.Count==4 && result.PrivateExactFourI4Values.All(v=>v>=0),
+            original_RenderTexture_array_runtime_length_or_element_validity_verified = false,
+            private_original_i4_index_values_or_digests_disclosed = false,
             non_authored_second_producer_distinct_compiled_private_method_signatures = result.SecondProducerDistinctPrivateSignatures.Count,
             non_authored_second_producer_compiled_signature_exact_original_method_definition_matches = result.SecondProducerExactManagedMethodDefinitionMatches,
             non_authored_second_producer_exact_original_method_definitions_with_body = result.SecondProducerExactManagedBodyMatches,
@@ -571,6 +588,7 @@ internal static class Program
         var literalOrigin=FoamSetterFlow.Trace(literalCall,1);
         if (literalOrigin is null ||
             literalOrigin.Value.SecondProducerIndexInt32ArgumentOrigin!="direct_ldc_i4_literal" ||
+            literalOrigin.Value.SecondProducerIndexInt32ArgumentLiteral!=2 ||
             literalOrigin.Value.SecondTextureOperandOrigin!="call_return")
             throw new InvalidDataException("Exact synthetic one-int literal provenance fixture failed");
         var parameterCall=new MethodDefinition("PublicSyntheticOneIntParameter",
@@ -588,7 +606,8 @@ internal static class Program
         ilParam.Append(ilParam.Create(OpCodes.Ret));
         var paramOrigin=FoamSetterFlow.Trace(parameterCall,1);
         if (paramOrigin is null ||
-            paramOrigin.Value.SecondProducerIndexInt32ArgumentOrigin!="argument_load")
+            paramOrigin.Value.SecondProducerIndexInt32ArgumentOrigin!="argument_load" ||
+            paramOrigin.Value.SecondProducerIndexInt32ArgumentLiteral is not null)
             throw new InvalidDataException("Exact synthetic one-int argument provenance fixture failed");
         var invalidTokenCall=new MethodDefinition("PublicSyntheticTokenIsNotAnIntLiteral",
             Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,
@@ -604,8 +623,69 @@ internal static class Program
         ilToken.Append(ilToken.Create(OpCodes.Ret));
         var tokenOrigin=FoamSetterFlow.Trace(invalidTokenCall,1);
         if (tokenOrigin is null ||
-            tokenOrigin.Value.SecondProducerIndexInt32ArgumentOrigin=="direct_ldc_i4_literal")
+            tokenOrigin.Value.SecondProducerIndexInt32ArgumentOrigin=="direct_ldc_i4_literal" ||
+            tokenOrigin.Value.SecondProducerIndexInt32ArgumentLiteral is not null)
             throw new InvalidDataException("Non-i4 metadata token cannot prove an int literal");
+        // Public synthetic -1 / short / 32-bit integer opcode controls.
+        // These constants are invented test data, never original game values.
+        var smallNegative=new MethodDefinition("SyntheticNegativeShortI4",
+            Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,
+            m.TypeSystem.Void);
+        smallNegative.Parameters.Add(new ParameterDefinition(materialType));
+        td.Methods.Add(smallNegative);
+        var ilNegative=smallNegative.Body.GetILProcessor();
+        ilNegative.Append(ilNegative.Create(OpCodes.Ldarg_0));
+        ilNegative.Append(ilNegative.Create(OpCodes.Ldstr,"public-synthetic-short-negative"));
+        ilNegative.Append(ilNegative.Create(OpCodes.Ldc_I4_S,(sbyte)-5));
+        ilNegative.Append(ilNegative.Create(OpCodes.Call,oneIndexMethod));
+        ilNegative.Append(ilNegative.Create(OpCodes.Callvirt,setTexture));
+        ilNegative.Append(ilNegative.Create(OpCodes.Ret));
+        var negativeOrigin=FoamSetterFlow.Trace(smallNegative,1);
+        if (negativeOrigin is null ||
+            negativeOrigin.Value.SecondProducerIndexInt32ArgumentLiteral!=-5 ||
+            negativeOrigin.Value.SecondProducerIndexInt32ArgumentOrigin!="direct_ldc_i4_literal")
+            throw new InvalidDataException("Signed synthetic ldc.i4.s source decoding failed");
+        var widePositive=new MethodDefinition("SyntheticWideI4",
+            Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,
+            m.TypeSystem.Void);
+        widePositive.Parameters.Add(new ParameterDefinition(materialType));
+        td.Methods.Add(widePositive);
+        var ilWide=widePositive.Body.GetILProcessor();
+        ilWide.Append(ilWide.Create(OpCodes.Ldarg_0));
+        ilWide.Append(ilWide.Create(OpCodes.Ldstr,"public-synthetic-wide"));
+        ilWide.Append(ilWide.Create(OpCodes.Ldc_I4,300));
+        ilWide.Append(ilWide.Create(OpCodes.Call,oneIndexMethod));
+        ilWide.Append(ilWide.Create(OpCodes.Callvirt,setTexture));
+        ilWide.Append(ilWide.Create(OpCodes.Ret));
+        var wideOrigin=FoamSetterFlow.Trace(widePositive,1);
+        if (wideOrigin is null ||
+            wideOrigin.Value.SecondProducerIndexInt32ArgumentLiteral!=300 ||
+            wideOrigin.Value.SecondProducerIndexInt32ArgumentOrigin!="direct_ldc_i4_literal")
+            throw new InvalidDataException("Synthetic wide ldc.i4 source decoding failed");
+        var negativeOne=new MethodDefinition("SyntheticMinusOneI4",
+            Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,
+            m.TypeSystem.Void);
+        negativeOne.Parameters.Add(new ParameterDefinition(materialType));
+        td.Methods.Add(negativeOne);
+        var ilMinus=negativeOne.Body.GetILProcessor();
+        ilMinus.Append(ilMinus.Create(OpCodes.Ldarg_0));
+        ilMinus.Append(ilMinus.Create(OpCodes.Ldstr,"public-synthetic-minus-one"));
+        ilMinus.Append(ilMinus.Create(OpCodes.Ldc_I4_M1));
+        ilMinus.Append(ilMinus.Create(OpCodes.Call,oneIndexMethod));
+        ilMinus.Append(ilMinus.Create(OpCodes.Callvirt,setTexture));
+        ilMinus.Append(ilMinus.Create(OpCodes.Ret));
+        var minusOrigin=FoamSetterFlow.Trace(negativeOne,1);
+        if (minusOrigin is null ||
+            minusOrigin.Value.SecondProducerIndexInt32ArgumentLiteral!=-1)
+            throw new InvalidDataException("Synthetic ldc.i4.m1 source decoding failed");
+        var syntheticSafeValues=new[]{literalOrigin.Value.SecondProducerIndexInt32ArgumentLiteral,
+            literalOrigin.Value.SecondProducerIndexInt32ArgumentLiteral,
+            wideOrigin.Value.SecondProducerIndexInt32ArgumentLiteral,
+            negativeOrigin.Value.SecondProducerIndexInt32ArgumentLiteral};
+        if (syntheticSafeValues.Any(v=>v is null) ||
+            syntheticSafeValues.Distinct().Count()!=3 ||
+            syntheticSafeValues.Count(v=>v<0)!=1)
+            throw new InvalidDataException("Synthetic repeated/negative aggregate controls failed");
         var strict=Scan(new[]{produced,producerDef},
             new HashSet<string>(StringComparer.Ordinal){Sha("public-direct-typed-producer")},
             new HashSet<string>(StringComparer.Ordinal));
@@ -849,6 +929,7 @@ internal static class Program
                 early_null_brtrue_guarded_RenderTexture_array_fixture=true,
                 exact_backing_field_writer_newarr_null_decoy_fixture=true,
                 four_original_style_Texture_int_argument_origin_controls=true,
+                signed_short_wide_and_duplicate_private_i4_aggregate_controls=true,
                 private_IL_names_or_source_published = false
             }));
         return 0;
