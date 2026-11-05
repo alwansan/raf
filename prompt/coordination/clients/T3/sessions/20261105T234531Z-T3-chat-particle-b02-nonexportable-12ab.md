@@ -17,3 +17,9 @@
 
 Detailed report: https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_PARTICLE108_B02_NONEXPORTABLE_CAUSE_2026-11-06.md
 Next: Privately derive same-instance container.CreateExportPointer for the exact source class28 Texture2D skipped by B02 because collection.Exportable=false, and compare it to the still-nonnull exported Material .mat TexEnv pointer. This may legitimately reference an engine/builtin Texture rather than missing Android asset; no game shader or texture must be changed until pointer parity and device pixels are verified.
+
+## Canonical ledger
+
+- Updated OPEN RENDER-002 with real CI42130529677 (same-instance 5/5/2/3/9/10) and new CI42132262184 (one original class28 source definitely in nonexportable AssetRipper collection).
+- [T-team evidence refresh CI42133120833](https://github.com/alwansan/raf/actions/runs/42133120833) **SUCCESS**, source workflow change `98a3ef0584e96ddc59a2b2378ce973a80cca17c7`. The generated summary verifies the source export resource and OPEN/NOT_READY state, not device repair.
+- The next untested question is whether AssetRipper's nonexportable source Texture2D has a stable runtime/internal pointer matching actual exported tenth Material TexEnv PPtr. Do not restore or fake the image before this comparison.
