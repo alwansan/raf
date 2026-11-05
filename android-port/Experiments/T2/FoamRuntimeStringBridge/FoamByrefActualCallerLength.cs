@@ -118,7 +118,7 @@ internal static class FoamByrefActualCallerLength
         {
             if(op.Operand is Instruction t) entries.Add(t);
             if(op.Operand is Instruction[] arr)
-                foreach(var t in arr) entries.Add(t);
+                foreach(var targetInstruction in arr) entries.Add(targetInstruction);
         }
         foreach(var eh in owner.Body.ExceptionHandlers)
         {
