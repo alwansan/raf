@@ -37,6 +37,7 @@ _ASMDEF = {
     "allowUnsafeCode": False,
     "overrideReferences": True,
     "precompiledReferences": ["nunit.framework.dll"],
+    "optionalUnityReferences": ["TestAssemblies"],
     "autoReferenced": False,
     "defineConstraints": [],
     "versionDefines": [],
