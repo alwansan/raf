@@ -92,7 +92,9 @@
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_UNITY_FFT_RUNTIME_PROBE_2026-11-05.md",
     "https://github.com/alwansan/raf/actions/runs/41942024538",
     "https://github.com/alwansan/raf/actions/runs/41942366020",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_FFT_BANK1_VULKAN_VALIDATION_2026-11-05.md"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_FFT_BANK1_VULKAN_VALIDATION_2026-11-05.md",
+    "https://github.com/alwansan/raf/actions/runs/41942245746",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_ORIGINAL_USED_SAMPLER_PAIRS_2026-11-05.md"
   ],
   "remaining": [
     "Spectrum/Foam/Blur passes ناقصة في APK86",
@@ -134,13 +136,14 @@
     "T2 original Foam texture/sampler CI41940321740 SUCCESS: pass0/1 fragment authentic source m_TextureParams counts 5/1; original m_Samplers=0, compiled SPIRV separate_images=5/1 and separate_samplers=5/1 (total six genuine texture rows, six images, six samplers), vertex none. 20 CB + 17 resource synthetic controls, authentic four-stage numeric card+slot guard integrated. But original texture name/slot/sampler state to translated image/sampler/Unity material identity, private ShaderLab, Adreno pixels still UNPROVEN; WATER-001 OPEN.",
     "T2 source-authentic Foam six original texture name indices ↔ translated image literal symbols 0/6 equal (CI41941354379 SUCCESS); exact texture/sampler alias/material upload/ShaderLab/Unity/Adreno pixels still UNKNOWN; cannot use direct-name bridging.",
     "T1 authored .compute SHA-bound isolated Unity 2021 runtime kernel probe staged and 7 source-only negative/positive suites PASS (CI41941716641); actual private original-authenticated authored FFT source, Unity Editor HasKernel/FindKernel/threadgroups execution, original program-to-kernel equivalence, Vulkan/Adreno and water pixels all remain unverified. WATER-001 OPEN.",
-    "T1 bank1 Vulkan: original pair18/19 swapped-second SIGSEGV reproduced twice and pair10/11 swapped-second same-program numeric comparison varied between runs; no VUID markers; not a Unity/Adreno repair."
+    "T1 bank1 Vulkan: original pair18/19 swapped-second SIGSEGV reproduced twice and pair10/11 swapped-second same-program numeric comparison varied between runs; no VUID markers; not a Unity/Adreno repair.",
+    "Foam original compiled SPIR-V sampler use 21 calls / 6 numeric pairs proven by T2; source m_Index/m_SamplerIndex→material/Unity shader/Adreno remains unverified"
   ],
   "acceptance": [
     "هوية برامج ونوى أصلية أو تطابق موثق دونdummy",
     "تثبيت فيالتصدير+Unity import/render",
     "اختبار هاتف يثبت الماء بلا pass/kernel errors"
   ],
-  "updated_by": "T1",
-  "updated_at": "2026-11-05T00:36:30Z"
+  "updated_by": "T2",
+  "updated_at": "2026-11-05T00:37Z"
 }
