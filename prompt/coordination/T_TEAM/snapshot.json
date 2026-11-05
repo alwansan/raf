@@ -180,7 +180,10 @@
         "https://github.com/alwansan/raf/actions/runs/42012597665",
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_ORIGINAL_FILEMANAGER_IL_METADATA_2026-11-05.md",
         "https://github.com/alwansan/raf/actions/runs/42018587431",
-        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_FILEMANAGER_MANAGED_RUNTIME_2026-11-05.md"
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_FILEMANAGER_MANAGED_RUNTIME_2026-11-05.md",
+        "https://github.com/alwansan/raf/actions/runs/42019696138",
+        "https://github.com/alwansan/raf/actions/runs/42020039305",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_MANAGED_STREAM_ROUNDTRIP_2026-11-05.md"
       ],
       "remaining": [
         "Original Cheat.AllowCheatsForLocalPlayer SteamUser.GetSteamID direct object call now source-guarded in B50 2bb6c2; no native/phone verification. Do not infer all Steam callbacks are removed.",
@@ -202,15 +205,16 @@
         "T4 CI41944365772 original same-DLL ILSpy reproducibility: SHA-pinned 3211776B original DLL decompiled twice independently in one runner; class/method/masked SHA exactly equal across both passes; 10/10 new source-free controls plus 10/10 original completion controls and real CLR synthetic branches PASS. This excludes same-run nondeterminism in that scope but does not explain older B07 vs T4 cross-run decompiler SHA difference; native production adapter full gate/Unity/IL2CPP/real world/.rgd device still untested. Do not loosen source pin.",
         "T4 exact original managed-reference context CI42011353849 PASS: 3211776B SHA-verified DLL decompiled twice solo -> old T4 alternate class/body SHA, same DLL alongside 151 siblings -> exact B07 production source SHA. Subsequent CI42012049920 PASS with actual production offline adapt + operation instrument, source/manifest hashes unchanged, firstMoveNext/completion traces present and original assignment/yields preserved. Earlier original C# managed compile CI41942118067 PASS. This resolves source-intake context discrepancy at tested scope, NOT Unity IL2CPP/device playable world or genuine .rgd create-save-relaunch-reopen. LOCAL-005 stays OPEN NOT_READY.",
         "T5 genuine original compiled IL CI42012597665 verifies both SaveAndLoad direct read/write FileManager targets exist as distinct static body-bearing methods (14/13 IL instructions, 1 System.IO call and exception handler each), overcoming T4 text parser unresolved declarations; actual Android path, world entry and durable .rgd create/relaunch/load remain unverified.",
-        "T5 original CLR synthetic FileManager experiment CI42018587431 FAILED SAFELY at COMPILED_IL_GUARD before method invocation: 1 System.IO + 1 core + 1 original local + 1 other unattested callee per read/write. No synthetic byte roundtrip, game RGD file, Unity or Android save test. Workflow manual-only until transitive dependency provenance; LOCAL-005 OPEN."
+        "T5 original CLR synthetic FileManager experiment CI42018587431 FAILED SAFELY at COMPILED_IL_GUARD before method invocation: 1 System.IO + 1 core + 1 original local + 1 other unattested callee per read/write. No synthetic byte roundtrip, game RGD file, Unity or Android save test. Workflow manual-only until transitive dependency provenance; LOCAL-005 OPEN.",
+        "T4 real original compiled I/O progress: CI42019696138 PASS 19/19 authentic Cecil original try/catch call placement—one File.Open/Create BCL IO and zero other calls in each normal try, three extra game/framework/helper calls only in original catch. CI42020039305 PASS 15/15 + ACTUALLY INVOKED original FileManager Create/Open stream methods using immutable original SHA and 151 pinned Managed companions + restricted CLR resolver; synthetic disposable .rgd-suffixed filename only, write/flush/close/reopen bytes equal and cleanup. T5 earlier whole-method execution blocked for unproven catch callees, remains valid. NO genuine game .rgd serialization/relaunch, Android app-private file storage, Unity IL2CPP or playable offline local world, so LOCAL-005 OPEN NOT_READY and no full readiness review."
       ],
       "acceptance": [
         "دخول عالم جديد محلي قابل للعب بلا Steam أو سيرفر خارجي",
         "حفظ .rgd ثم إعادة تحميله فعلياً",
         "لا يكفي إخفاء رسالة الاتصال"
       ],
-      "updated_by": "T5",
-      "updated_at": "2026-11-05T11:26:00Z",
+      "updated_by": "T4",
+      "updated_at": "2026-11-05T11:39:00Z",
       "_record_path": "../B_TEAM/issues/LOCAL-005.json"
     },
     {
@@ -1240,6 +1244,68 @@
       ],
       "updated_at": "2026-11-05T11:18Z",
       "_record_path": "../B_TEAM/resources/T2-foam-original-authored-shader-property-lineage.json"
+    },
+    {
+      "id": "T2-foam-original-material-settexture-name-arguments",
+      "owner": "T2",
+      "kind": "genuine_source_authenticated_compiled_Unity_Material_SetTexture_name_parameter_IL_flow",
+      "title": "Original Foam four non-authored texture resource names as exact Unity Material.SetTexture string first-arg operands",
+      "source": {
+        "zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+        "foam_source_owner": "Raft_Data/sharedassets0.assets",
+        "foam_owner_size": 115978112,
+        "foam_owner_sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+        "foam_shader_original_pathid": 2420,
+        "foam_raw_sha256": "67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1",
+        "original_managed_dll": "Raft_Data/Managed/Assembly-CSharp.dll",
+        "dll_bytes": 3211776,
+        "dll_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e"
+      },
+      "stages": {
+        "acquisition": "ORIGINAL_FOAM_SOURCE_AND_ORIGINAL_MANAGED_DLL_SHA_VERIFIED",
+        "extraction": "SOURCE_FOAM_1_AUTHORED_TEXTURE_AND_4_EXTRA_PASS0_NON_PROPERTY_NAMES;EXACT_FOUR_MATCHING_ORIGINAL_MANAGED_LDSTR_NAMES_VERIFIED",
+        "reconstruction": "CONSERVATIVE_CECIL_SINGLE_BLOCK_STACK_FIRST_ARGUMENT_PROOF_FOUR_OF_FOUR_ORIGINAL_NAME_STRINGS",
+        "binding": "ORIGINAL_COMPILED_MATERIAL_SETTEXTURE_SYSTEM_STRING_FIRST_ARG_4_OF_4;SOURCE_TEXTURE_SECOND_ARG_MATERIAL_RECEIVER_NOT_YET_PROVEN",
+        "integration": "SOURCE_ONLY_GITHUB_CI42021183522_SUCCESS_NO_SHADERLAB_OR_UNITY_IMPORT",
+        "device": "NOT_TESTED"
+      },
+      "observed": {
+        "original_foam_texture_name_occurrences": 6,
+        "original_foam_authored_texture_names": 1,
+        "original_foam_non_authored_unique_names": 4,
+        "compiled_original_managed_non_authored_texture_name_matches": 4,
+        "exact_original_non_authored_names_as_typed_first_settexture_argument": 4,
+        "direct_string_names_to_material_settexture": 4,
+        "names_to_MPB_settexture_exact_first_arg": 0,
+        "intermediate_propertytoid": 0,
+        "original_managed_bodies_scanned": 19118,
+        "original_managed_instructions_scanned": 491490,
+        "original_texture_value_source_proven": false,
+        "material_receiver_source_proven": false,
+        "actual_runtime_method_reachability_verified": false,
+        "unity_material_upload_or_filter_wrap_cb_verified": false,
+        "shaderlab_import_adreno_pixels_verified": false
+      },
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42019735778",
+        "https://github.com/alwansan/raf/actions/runs/42020924870",
+        "https://github.com/alwansan/raf/actions/runs/42021183522",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_ORIGINAL_MATERIAL_SETTEXTURE_ARGUMENT_PROOF_2026-11-05.md"
+      ],
+      "artifact": {
+        "id": 13412190775,
+        "zip_sha256": "0a7603130abb87c8ab000777eb276cab00b5d2a3c59bdcc9cc4438716eac9498",
+        "safe_numeric_aggregate_only": true
+      },
+      "remaining": [
+        "Prove 2nd Texture parameter typed/origin and Material receiver identity for four original compiler calls",
+        "Verify execution/reachability and material Foam Shader binding in real game or compiled original",
+        "Verify original sampler states/UV/render targets and CB0 upload",
+        "Rebuild private genuine two-pass Foam ShaderLab, Unity import and actual GPU/Adreno pixels"
+      ],
+      "updated_by": "T2",
+      "updated_at": "2026-11-05T11:47Z",
+      "_record_path": "../B_TEAM/resources/T2-foam-original-material-settexture-name-arguments.json"
     },
     {
       "id": "T2-foam-original-native-dxbc-sample-edges",
@@ -4620,6 +4686,23 @@
       "_record_path": "../B_TEAM/events/T2/20261105T1054Z-foam-original-dxbc-active-spirv-proven.json"
     },
     {
+      "id": "T2-20261105T1148Z-foam-four-original-settexture-string-name-args",
+      "owner": "T2",
+      "session_id": "20261105T1104Z-T2-foam-material-property-bridge-isolated",
+      "issue_id": "WATER-001",
+      "type": "source_authentic_original_managed_Material_SetTexture_name_argument_proof",
+      "summary": "SHA-authentic original Foam Shader/Assembly-CSharp source scan CI42021183522 SUCCESS; four non-authored pass0 Foam DXBC t/s resource names found exactly in original managed ldstr, conservative Cecil evaluation-stack proves 4/4 directly occupy first formal System.String name argument at UnityEngine.Material.SetTexture calls. Zero of four require Shader.PropertyToID, zero go to MPB first arg in this bounded method; second Texture value/Material receiver, runtime invocation, ShaderLab/Unity/Adreno remain UNKNOWN. 13 Python +3 public Cecil fixtures; no proprietary names/hash values/IL published, no other T clients changed. WATER-001 OPEN.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42017542487",
+        "https://github.com/alwansan/raf/actions/runs/42019735778",
+        "https://github.com/alwansan/raf/actions/runs/42021183522",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_ORIGINAL_MATERIAL_SETTEXTURE_ARGUMENT_PROOF_2026-11-05.md",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T2-foam-original-material-settexture-name-arguments.json"
+      ],
+      "at": "2026-11-05T11:48Z",
+      "_record_path": "../B_TEAM/events/T2/20261105T1148Z-foam-four-original-settexture-string-name-args.json"
+    },
+    {
       "id": "T3-20261105-0002-render-harness-result-and-export-start",
       "owner": "T3",
       "session_id": "20261104T2354Z-T3-render-harness",
@@ -4810,6 +4893,23 @@
       "_record_path": "../B_TEAM/events/T4/20261105T1040Z-managed-reference-context-production-stage.json"
     },
     {
+      "id": "20261105T1138Z-T4-original-filemanager-stream",
+      "owner": "T4",
+      "session_id": "20261105T1121Z-T4-managed-stream",
+      "issue_id": "LOCAL-005",
+      "type": "integration",
+      "summary": "Exact original ZIP2 3211776B DLL compiled IL T4 CI42019696138 19/19 proves read/write each one File.Open/File.Create call in try and three transitive calls entirely in catch. Source-authenticated CI42020039305 SUCCESS 15/15 + actually invoked both ORIGINAL compiled FileManager methods with 151 pinned Managed siblings and safe resolver against disposable synthetic .rgd-suffixed file, write/flush/close/reopen/read byte-identical/cleanup. NOT original Raft RGD serialization, process restart, Unity IL2CPP, Android storage, local world playability. T5 earlier whole-method guard red evidence preserved; LOCAL-005 OPEN NOT_READY.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42018088542",
+        "https://github.com/alwansan/raf/actions/runs/42019696138",
+        "https://github.com/alwansan/raf/actions/runs/42020039305",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_MANAGED_STREAM_ROUNDTRIP_2026-11-05.md",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/discussions/LOCAL-005/20261105T1136Z-T4-original-stream-proof-to-T5.md"
+      ],
+      "at": "2026-11-05T11:38:00Z",
+      "_record_path": "../B_TEAM/events/T4/20261105T1138Z-original-FileManager-managed-stream-executed.json"
+    },
+    {
       "id": "T5-20261104T2357Z-b12-fixture-start",
       "owner": "T5",
       "session_id": "20261104T2357Z-T5-b12-fixture-7e2",
@@ -4958,7 +5058,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "4a3a7ae4f10c7aca91847ac71b32af242370a58bed08421181e486337573266d",
+  "source_input_sha256": "1c942eee75dcbf87af1edc48a4d2d9a8d40fc22dec6d72e23913440764cb8c1d",
   "generation": "T-2026-11-05",
-  "input_sha256": "85e292dda370a7f9ce417ce0c82878d568c2ba60c6f85be19b725b646e86e9b1"
+  "input_sha256": "df1efb7aaf693e7047619a47d21f061d8c902b1f40a7cd83376b04556ff52383"
 }
