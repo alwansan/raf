@@ -1,0 +1,15 @@
+{
+  "id": "T2-20261105T1239Z-foam-source-RenderTexture-array-proven",
+  "owner": "T2",
+  "session_id": "20261105T1213Z-T2-foam-return-producer-call-isolated",
+  "issue_id": "WATER-001",
+  "type": "source_authenticated_original_Foam_RenderTexture_array_getter_result",
+  "summary": "New SHA-verified original CI42028369439 SUCCESS: four original non-authored Foam source texture strings are typed Material.SetTexture first args, and four second Texture values use one original compiled game instance callvirt UnityEngine.Texture Method(System.Int32), exact same original managed MethodDefinition has IL body. Strict original body ten-op/branch/field identity proves null-guarded UnityEngine.RenderTexture[] instance indexed lookup: return null if array missing, otherwise array[index]. Original source SHA owner/DLL authenticated, no private IL/source/class/method names published. Exact four index values, array initialization and content, receiving Material Foam Shader association, runtime reachability, CB/sampler/UV, ShaderLab Unity import and Adreno device remain unknown. WATER-001 OPEN, NOT_READY0/3; no game asset changes or other Actions cancelled.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42026683133",
+    "https://github.com/alwansan/raf/actions/runs/42028369439",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_ORIGINAL_RENDERTEXTURE_ARRAY_PROVENANCE_2026-11-05.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T2-foam-original-null-guarded-rendertexture-producer.json"
+  ],
+  "at": "2026-11-05T12:39Z"
+}
