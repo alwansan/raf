@@ -1,6 +1,6 @@
 # T2 chat — Foam RenderTexture-returning element call target
 
-- session_id: `20261105T1648Z-T2-chat-rt-return-definition-f7d2`, origin: `chat`, owner: `T2`, issue: `WATER-001`, status: active.
+- session_id: `20261105T1648Z-T2-chat-rt-return-definition-f7d2`, origin: `chat`, owner: `T2`, issue: `WATER-001`, status: blocked.
 - base_sha: `f191f352f251bdcea3460f3f142bb5f5aa07764c`.
 - work recorded BEFORE code: `prompt/coordination/work/WATER-001/T2-20261105T1648Z-T2-chat-rt-return-definition-f7d2-return-method.json` at `5cf98dbd71fcb45bbfa92debbf5d87e9ddc87336`.
 - resumed_from_sessions: `20261105T1611Z-T2-chat-foam-length-source-9ab4` and `20261105T1623Z-T2-scheduled-caller-origin-6f2d`.
@@ -10,3 +10,13 @@
 - intended files: own `FoamByrefElementValueOrigin.cs`, new `FoamRenderTextureReturnBody.cs`, own `Program.cs`, own managed-literals workflow, work/experiments/session/evidence. No gameplay assets, .meta/GUID, ShaderLab, FMOD/Settings or deferred touch.
 - coordination: [T1 FFT run42066983894](https://github.com/alwansan/raf/actions/runs/42066983894) and [T5 native run42058825739](https://github.com/alwansan/raf/actions/runs/42058825739) separately active; no T2 managed CI queued at reservation. Don't cancel or duplicate.
 - next: implement source-free signed/typed internal and external decoy controls, run SHA-genuine original Cecil CI. Work remains active; overarching WATER-001 OPEN, Raft NOT_READY0/3.
+
+## Final checkpoint — code candidate unmerged, CI not run
+
+- Source-authentic previous proof [CI42065864809](https://github.com/alwansan/raf/actions/runs/42065864809) **COMPLETED SUCCESS**: original compiled `stelem.ref` element value is a direct call with declared `UnityEngine.RenderTexture` return type. This **does not** establish the exact called implementation, non-null return, actual resource allocation, runtime execution, ShaderLab sampling or pixels.
+- This cycle registered work *before* edits at commit `5cf98dbd71fcb45bbfa92debbf5d87e9ddc87336`, experiment key `T2|ZIP2-15964ea8|managed-DLL-0a6f0527|exact-Foam-stelem-rendertexture-callee-return-body-v1`.
+- Prepared an isolated typed Cecil verifier: capture the **actual source-original** call MethodReference at the previously proven direct `call` before `stelem.ref`; match exact original SHA-managed MethodDefinition or classify declaration as UnityEngine/external-unresolved. Only if matched and body available, count typed direct immediate return sources (`ldnull`, `newobj UnityEngine.RenderTexture`, call declaring RT return, or unresolved), with branch targets fail-closed. Proposed synthetic controls for internal direct-null, internal direct-newobj, wrong-signature, unresolved Unity API, branch-return ambiguity.
+- **NOT MERGED:** Two unreferenced candidate commits `54932da8f508059eafb5d59db0ae19c669a75079`, `c1d257d844f8ddb6ff4fe786f320ab8e4fceccca` were constructed, but GitHub `update_ref` returned transient `UNKNOWN` after competing branch moves. A later rebase action was blocked by the tool's safety checks, and was not bypassed. Neither commit was published on `feature/android-native-port`.
+- **NO NEW AUTHENTIC CI WAS TRIGGERED OR PASSED** for this proposed return-body verifier, and no source-original target category or null/non-null method outcome is asserted. No original game files, shaders, .meta, Unity native requests, FMOD, Settings, touch, or other T-team source mutated by T2 in this cycle.
+- Work record `prompt/coordination/work/WATER-001/T2-20261105T1648Z-T2-chat-rt-return-definition-f7d2-return-method.json` set `blocked`, not `completed`, with precise links and candidate SHAs. Continue only with permitted implementation path after rechecking live HEAD and latest same files; do not repeatedly push unchanged safety-blocked payload or force branches.
+- **Next:** if permitted, finish independently tested original return-body definition determination; or shift to an unblocked original Foam ShaderLab/resource integration task. WATER-001 OPEN; Raft NOT_READY 0/3. No phone test.
