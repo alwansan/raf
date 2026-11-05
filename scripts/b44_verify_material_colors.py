@@ -35,6 +35,12 @@ def normalize_colors(entries, *, exported=False):
 
     Rejects duplicates and unsupported shapes, never logs original names/values.
     """
+    # Unity/AssetRipper emits exported YAML m_Colors either as a list of
+    # singleton maps or as a property-name mapping, including an empty {}.
+    # Original compiled source typetrees must remain arrays, not inferred maps.
+    # The exported YAML loader below already rejects duplicate keys.
+    if exported and isinstance(entries, dict):
+        entries = list(entries.items())
     if not isinstance(entries, list):
         raise ValueError('Material m_Colors must be an array')
     result = {}
@@ -55,14 +61,27 @@ def normalize_colors(entries, *, exported=False):
     return result
 
 
-def original_colors(source_root: Path):
-    """Only accept SHA-pinned original owner payloads, never archive labels."""
+def original_colors(source_root: Path, *, selected_owners=None):
+    """Only accept SHA-pinned original owner payloads, never archive labels.
+
+    The original B44 full-provider mode remains unchanged by default. A
+    bounded selection is allowed only for exact independently SHA-verified
+    owners, not arbitrary caller-provided filenames or archive labels.
+    """
     import UnityPy
     from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
+    from scripts.b05_verify_material_texenv_bindings import B05_SMALL_OWNER_PINS
     from scripts.w1_stage_zip2_owners import fingerprint
 
+    if selected_owners is None:
+        pins = SHADER_OWNERS
+    else:
+        names = set(selected_owners)
+        if not names or not names.issubset(B05_SMALL_OWNER_PINS):
+            raise ValueError('Unpinned selected Material color source')
+        pins = {name:B05_SMALL_OWNER_PINS[name] for name in names}
     result = {}
-    for name, expected in SHADER_OWNERS.items():
+    for name, expected in pins.items():
         path = source_root / 'Raft_Data' / name
         if path.is_symlink() or not path.is_file() or fingerprint(path) != expected:
             raise ValueError('Original Material owner SHA/size mismatch')
