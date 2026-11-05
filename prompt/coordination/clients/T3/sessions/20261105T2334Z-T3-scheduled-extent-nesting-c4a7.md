@@ -1,0 +1,12 @@
+# T3 scheduled — nested streamed Texture2D extent accounting
+
+- session_id: `20261105T2334Z-T3-scheduled-extent-nesting-c4a7`; origin: **scheduled**; identity: **T3**.
+- Baseline HEAD: `39351c071b1a8cd53f2cacf9c8d9c5ad0ef77148`; scope plan committed at `53d3980052a05f004e09c7fd28992927c06a905e`.
+- Work: `prompt/coordination/work/RENDER-002/20261105T2334Z-T3-scheduled-extent-nesting-c4a7.json`; experiment key `T3-stream-extents-nested-duplicate-accounting-v2`.
+- Resumed from T3 scheduled `20261105T2230Z-T3-scheduled-streamrange-9c62` and T3 chat `20261105T225050Z-T3-chat-verified-particle-stream-52bd`. Authentic source run [42125608932](https://github.com/alwansan/raf/actions/runs/42125608932) verified one provider and 3 distinct nonoverlapping stream ranges; this change does not redo that experiment.
+- Owner device evidence: [DEVICE_FEEDBACK_42058825739_AR](https://github.com/alwansan/raf/blob/feature/android-native-port/docs/DEVICE_FEEDBACK_42058825739_AR.md): world entry/save/re-entry confirmed for artifact 42058825739, white surfaces and square particle effect unresolved. No inference from source range metadata to device pixels.
+- **Defect:** previous extent checker remembered only the widest preceding interval. For [0,20), [3,8), [3,8) it incorrectly classified the repeated nested range as another partial overlap, rather than one true overlap and one exact shared range.
+- Fix `c65f8c8d6a2311c0b68d8c97b370edf0b316a42a`: track every previously seen exact interval separately from max-end overlap detection; keep provider/size/bounds validation unchanged.
+- Tests `da2ddb840626d985d668c577a29f06ac2fe1eb06`: two regression cases for repeated nested ranges and distinct nested overlaps. Two isolated equivalent algorithm reproductions passed locally. **Repository unittest/CI not yet verified**; do not claim source-export or device improvement.
+- At initial live check: HEAD `39351c07`; T1 FFT Actions 42129683160 and 42129683073 in progress, no queued jobs; no duplicate or cancellation. No Unity/ZIP2/CL download, no .meta, shaders, assets, save, audio, Settings, mouse or resolution changes.
+- RENDER-002 OPEN, NOT_READY. Next: verify repository unit test/CI after commit; then coordinate with T5 on same-instance actual exported Texture2D28 GUID/importer and installed APK/OBB mapping for three authenticated particle images. This isolated metadata correction is not a visual fix.
