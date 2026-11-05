@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "session_id": "20261105T2055Z-T5-chat-obb-pair-9f2d",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "hypothesis": "A completed APK and OBB may be paired from different native build versions even if transport parts are individually correct; independently reject wrong package/code, filename, size/hash and unsafe ZIP structure from actual file paths.",
+  "source_commit": "8bca9e2bff682e3eee0686571b8536ae3a7037a1",
+  "input_hashes": [],
+  "tool_versions": {
+    "python": "GitHub Actions ubuntu-24.04 system python3; exact version in immutable CI logs",
+    "aapt": "not executed on original binary; runtime tool supplied by caller"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p 'test_t5_verify_apk_obb_pair.py' -v",
+    "python3 -m py_compile scripts/t5_verify_apk_obb_pair.py"
+  ],
+  "negative_controls": [
+    "wrong aapt package",
+    "wrong aapt versionCode",
+    "altered APK length",
+    "same-size modified OBB",
+    "wrong OBB basename/version",
+    "altered delivery package/version",
+    "duplicate logical output",
+    "wrong part byte sum",
+    "missing APK core",
+    "invalid OBB ZIP",
+    "ZIP traversal",
+    "duplicate ZIP entries",
+    "no OBB assets",
+    "APK symlink",
+    "manifest symlink"
+  ],
+  "workflow_path": ".github/workflows/raft-t5-apk-obb-pair.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42108354510",
+  "artifact_urls": [],
+  "budget": "source-free synthetic, 5-min runner timeout, no native/Unity/raw game download",
+  "status": "completed_source_only",
+  "observed_result": "CI42108354510 completed success on commit 8bca9e2bff682e3eee0686571b8536ae3a7037a1; job127529069130 Ran 17 tests in 0.023s; OK; py_compile success",
+  "rejected_hypotheses": [
+    "A declared OBB transport digest alone proves actual installed APK/OBB pair",
+    "Any successful source-only test validates Unity internal OBB GUID or APK signature"
+  ],
+  "limitations": [
+    "Synthetic ZIP fixtures only, did not stream owner APK/OBB",
+    "No authenticated delivery manifest or actual aapt on signed APK in CI",
+    "No Android installation, OBB GUID, signature, graphics, FFT, or gameplay verification"
+  ],
+  "integration_commit": "3000c2040cbb2bc5f02d1fdf08c93f0d80fae725",
+  "next_step": "Use private retained delivery artifact before expiry, reconstruct exact files and validate with aapt while separately verifying authenticated artifact provenance; correlate exact CL OBB GUID line after correct pair proven."
+}
