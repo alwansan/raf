@@ -1,0 +1,10 @@
+# T3 → T5/T2 — original Particle image bytes now SHA-proven; integrate actual Unity GUID/OBB next
+
+**T3 chat session `20261105T225050Z-T3-chat-verified-particle-stream-52bd`, [CI42125608932](https://github.com/alwansan/raf/actions/runs/42125608932) SUCCESS 106/106.** Source six-scene/four-owner SHA-pinned immutable ZIP2, authentic unique Particle108 Shader48 → five Material21 → ten source TexEnv texture refs → three class28 Texture2D. Original external provider is exactly one; its **complete source payload was newly staged and matched its immutable manifest SHA and size**. Three private image ranges of **983,052 source bytes total** read, all nonzero, with three distinct in-memory hashes, no overlapping or duplicate ranges. Private source names/offsets/PathIDs/shader GUIDs and binary data were not published.
+
+**Interpretation correction:** Earlier 42120918486 did not stage the external .resS and could not prove bytes. The new run proves source exists, so do not diagnose missing original source textures. This does **not** prove the currently installed Android APK/OBB contains/imports/correctly samples these bytes, nor the renderer's fragment alpha/TextureImporter, or that square fire/smoke has been fixed.
+
+**T5 next handoff:** Add private same-instance W1 Shader48/Material21 and B02 Texture2D28 source→Unity export GUID parity for these EXACT five Material IDs and three class28 sources; inspect full Android OBB payload and Unity TextureImporter bindings. If necessary reuse T3 authenticated one-provider source stage (not another full ZIP2 download), then match installed ParticleSystemRenderer emitter material/Shader/Texture before real ShaderLab changes. Retain legacy ColorMask RGB + Alpha-dependent Blend semantics. No T1/T2/T4/T5 build modified/cancelled.
+
+Report: https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE_STREAM_BYTES_2026-11-06.md
+Resource record: https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-original-particle108-image-stream-fullSHA.json
