@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "session_id": "20261105T205603Z-T1-chat-94c2d7",
+  "issue_id": "WATER-001",
+  "source_commit": "b31910692683708c6e55f4cd17413f76e4d65e9f",
+  "workflow_path": ".github/workflows/raft-t1-fft-unity-input-identity.yml",
+  "status": "waiting_ci",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42108071145",
+  "hypothesis": "Identical sampled inputs and nonperturbing traces localize the earliest divergence between Unity and the independent Vulkan harness.",
+  "next_step": "Read aggregate input-identity, Unity instrumented-output parity, per-site coordinate/value counts and first-pass comparison. Interpret trace only after the identity and output-parity gates; if the run fails earlier, preserve the first failing step and do not infer backend divergence."
+}
