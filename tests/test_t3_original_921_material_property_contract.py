@@ -100,18 +100,18 @@ class MaterialPropertyContractTests(unittest.TestCase):
     def test_material_missing_saved_family_rejected(self):
         data=saved()
         del data["m_Ints"]
-        with self.assertRaisesRegex(ValueError,"missing_original"):
+        with self.assertRaisesRegex(ValueError,"SAVED_CONTAINER_SCHEMA"):
             t3.normalize_private_saved_properties(data)
 
     def test_duplicate_saved_name_across_families_rejected(self):
-        with self.assertRaisesRegex(ValueError,"cross_family"):
+        with self.assertRaisesRegex(ValueError,"OVERLAPPING_PROPERTY_FAMILIES"):
             t3.normalize_private_saved_properties(
                 saved(floats=[scalar(name=SECRET)]))
 
     def test_invalid_private_texenv_uv_rejected(self):
         entry=tex()
         del entry["m_Second"]["m_Offset"]
-        with self.assertRaisesRegex(ValueError,"UV"):
+        with self.assertRaisesRegex(ValueError,"TEXENV_READER"):
             t3.normalize_private_saved_properties(saved(textures=[entry]))
 
     def test_nonfinite_private_scalar_value_rejected(self):
@@ -163,6 +163,22 @@ class MaterialPropertyContractTests(unittest.TestCase):
     def test_unapproved_phase_cannot_be_emitted_in_public_report(self):
         with self.assertRaisesRegex(ValueError,"unknown_private_original_property_phase"):
             t3.OriginalPropertyPhaseError(SECRET)
+
+    def test_static_family_categories_cannot_emit_private_error_messages(self):
+        for code in t3.FAMILY_FAILURES:
+            with self.subTest(category=code):
+                err=t3.PrivateFamilyDecodeError(code)
+                self.assertEqual(err.category,code)
+                self.assertNotIn(SECRET,str(err))
+                parent=t3.OriginalPropertyPhaseError("PRIVATE_PROPERTY_FAMILY_JOIN",code)
+                self.assertEqual(parent.category,code)
+                self.assertNotIn(PRIVATE_TEX,str(parent))
+
+    def test_private_arbitrary_error_text_rejected_as_category(self):
+        with self.assertRaisesRegex(ValueError,"unknown_original_Material_family_category"):
+            t3.PrivateFamilyDecodeError(SECRET)
+        with self.assertRaisesRegex(ValueError,"unknown_private_original_property_phase"):
+            t3.OriginalPropertyPhaseError("PRIVATE_PROPERTY_FAMILY_JOIN",SECRET)
 
     def test_private_property_names_values_never_leave_aggregate(self):
         output=json.dumps(classified(),sort_keys=True)
