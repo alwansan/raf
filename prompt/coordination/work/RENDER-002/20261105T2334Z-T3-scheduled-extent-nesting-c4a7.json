@@ -14,6 +14,14 @@
   ],
   "hypothesis": "When a range is contained inside a prior larger range, a repeated identical contained range is incorrectly counted as partial overlap instead of exact duplicate. Add source-free regression and correct accounting without changing extent validity or authentic source evidence.",
   "taken_over_from": "20261105T2230Z-T3-scheduled-streamrange-9c62 and 20261105T225050Z-T3-chat-verified-particle-stream-52bd",
-  "status": "planned",
-  "coordination": "No Unity/ZIP2/CL/Android runs. Independent metadata-only code; T3 chat source proof complete. T1 running FFT Actions untouched."
+  "status": "completed_source_only_pending_ci",
+  "coordination": "No Unity/ZIP2/CL/Android runs. Independent metadata-only code; T3 chat source proof complete. T1 running FFT Actions untouched.",
+  "commits": [
+    "53d3980052a05f004e09c7fd28992927c06a905e",
+    "c65f8c8d6a2311c0b68d8c97b370edf0b316a42a",
+    "da2ddb840626d985d668c577a29f06ac2fe1eb06",
+    "4ea94e4dac0ebf09b98aebd99a0efbd036c96ff7"
+  ],
+  "result": "Nested identical range now duplicate rather than extra partial overlap; two new regression tests; equivalent local algorithm checks pass; CI not yet verified",
+  "next_step": "Verify repository unittest/CI, then genuine same-instance exported Texture2D importer/particle shader and APK/OBB correlation; no repeated source census."
 }
