@@ -43,7 +43,7 @@ class AndroidPhysicalMouseIntegrationPolicy(unittest.TestCase):
     def test_input_events_preserve_touch_and_physical_mouse_clicks(self):
         self.assertIn('base("android.view.View$OnCapturedPointerListener")', BRIDGE)
         self.assertIn('getActionMasked") != 2', BRIDGE)
-        self.assertIn("return false; // ACTION_MOVE only.", BRIDGE)
+        self.assertIn("return false; // ACTION_MOVE only and current generation.", BRIDGE)
         self.assertIn("return false; // Fail open to Unity", BRIDGE)
         self.assertIn('mouse.name != VirtualTouchMouse', BRIDGE)
         self.assertIn('Input.simulateMouseWithTouches = false;', TOUCH)
@@ -150,7 +150,7 @@ class AndroidPhysicalMouseIntegrationPolicy(unittest.TestCase):
         self.assertIn('motionEvent.Call<float>("getAxisValue",', listener)
         self.assertIn("PhysicalMouseMotionSource.AxisRelativeX", listener)
         self.assertIn("PhysicalMouseMotionSource.AxisRelativeY", listener)
-        self.assertIn("return owner.RecordCapturedMotion(dx, dy);", listener)
+        self.assertIn("return owner.RecordCapturedMotion(listenerEpoch, dx, dy);", listener)
         record = BRIDGE.split("private bool RecordCapturedMotion(int listenerEpoch, float dx, float dy)", 1)[1].split(
             "public static CursorLockMode ApplyCursorLock", 1)[0]
         self.assertIn("PhysicalMouseMotionSource.ValidDelta(dx, dy)", record)
