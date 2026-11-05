@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "session_id": "20261105T1431Z-T5-chat-native-cancel-d41e",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "hypothesis": "GitHub full-native run42042902522 is a canceled asset-restore stage rather than demonstrated code/mesh failure, downstream delivery-result failure is a guard consequence, and metadata alone cannot prove signed release or Android install.",
+  "source_commit": "0186107e2d79622fc934d2430ad94d51e194043e",
+  "input_hashes": [
+    "GitHub run42042902522 immutable head_sha=753802d75196210d721cca0f4fdec6ce7800bf0d",
+    "tests/fixtures/t5_native_run_42042902522.json: filtered official GitHub REST run/jobs/artifacts metadata (no logs, secrets, original asset data)"
+  ],
+  "tool_versions": {
+    "runner": "ubuntu-24.04",
+    "python": "Python3 standard library",
+    "github_workflow": "Raft full native APK OBB XAPK build and delivery"
+  },
+  "commands": [
+    "python3 -m unittest -v tests.test_t5_native_run_verdict",
+    "python3 -m scripts.t5_audit_native_run_verdict --run <official-run-json> --jobs <official-jobs-json> --artifacts <official-artifacts-json> --id 42042902522 --sha 753802d75196210d721cca0f4fdec6ce7800bf0d"
+  ],
+  "negative_controls": [
+    "Native reconstruct failure must not be reported as cancellation",
+    "Timed-out native run must not be reported as successful",
+    "Queued/nonterminal run with conclusion is rejected",
+    "Completed success with cancelled native job rejected",
+    "Wrong source SHA/run ID rejected",
+    "Duplicate native job and missing artifact list rejected",
+    "Arbitrary artifact count and publish-job success alone never count as verified signed release",
+    "Unknown interrupted stage not guessed or printed as original asset name"
+  ],
+  "workflow_path": ".github/workflows/raft-t5-native-run-verdict.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42046665995",
+  "artifact_urls": [],
+  "budget": "Single ubuntu-24.04 CPU-only run, timeout six minutes, no Unity/LFS/ZIP2/native release. Only official filtered run metadata and synthetic negative cases.",
+  "status": "completed",
+  "observed_result": {
+    "ci_run": 42046665995,
+    "job_id": 127311357157,
+    "conclusion": "success",
+    "passed": 16,
+    "failed": 0,
+    "actual_prior_native_run": {
+      "id": 42042902522,
+      "head_sha": "753802d75196210d721cca0f4fdec6ce7800bf0d",
+      "conclusion": "cancelled",
+      "request_gate": "success",
+      "unity_license": "success",
+      "reconstruct": "cancelled",
+      "cancelled_step": "original_mesh_restoration",
+      "downstream_delivery_result": "failure",
+      "publish_early_test": "skipped",
+      "artifact_records": 0,
+      "release_verified": false,
+      "android_install_verified": false,
+      "cancellation_initiator": "unknown"
+    },
+    "reconstruct_job_id": 127298291857,
+    "delivery_result_job_id": 127303886996,
+    "job_log_last_reachable": "Position audit header completed: sharedassets24.assets, then The operation was canceled",
+    "native_source_failure_proven": false,
+    "duplicate_native_dispatch": false
+  },
+  "rejected_hypotheses": [
+    "Downstream delivery-result failure proves original game code or Mesh corruption: false; native result was cancelled.",
+    "cancel-in-progress false establishes specific cancellation actor: false; initiator remains unknown.",
+    "A successful native workflow job by itself proves signed APK/OBB/XAPK Release: false; independent authentic asset/hash/device evidence is still required."
+  ],
+  "limitations": [
+    "Official run/job metadata cannot reveal the cancellation initiator, and this experiment does not query protected audit logs.",
+    "Filtered official-data fixture retains only safe job conclusions and interrupted step; it is not a complete raw job log.",
+    "No source fix/Unity build triggered; no new APK/OBB/XAPK; no device or offline game acceptance.",
+    "T1 Vulkan, T3 shaders and T4 original RGD work remain independent; project NOT_READY 0/3."
+  ],
+  "integration_commit": "0186107e2d79622fc934d2430ad94d51e194043e",
+  "next_step": "Use actual latest source and T1/T3/T4 evidence to plan a single coordinated native retry only when resource available and cancellation provenance known or owner initiates; don't attribute cancellation to mesh source without new failing evidence. If future run emits an actual failed step, isolate that step instead."
+}
