@@ -3768,6 +3768,20 @@
       "_record_path": "../B_TEAM/events/T2/20261105T0019Z-result-resource-abi.json"
     },
     {
+      "id": "T2-20261105T0023Z-original-foam-texture-identity-start",
+      "owner": "T2",
+      "session_id": "20261105T0023Z-T2-foam-texture-identity",
+      "issue_id": "WATER-001",
+      "type": "start",
+      "summary": "Resumed from paused T2 Foam source ABI checkpoint. Registered work and integrated private-safe original texture name-index to translated image literal identity test plus adversarial tests. SHA-pinned CI41941354379 running; no material/ShaderLab/phone proof claimed.",
+      "evidence": [
+        "https://github.com/alwansan/raf/commit/5dd02e7931aedfbb92c5cbcf3cc10ac1a6f9fd7c",
+        "https://github.com/alwansan/raf/actions/runs/41941354379"
+      ],
+      "at": "2026-11-05T00:27:16.372Z",
+      "_record_path": "../B_TEAM/events/T2/20261105T0023Z-foam-texture-name-start.json"
+    },
+    {
       "id": "T3-20261105-0002-render-harness-result-and-export-start",
       "owner": "T3",
       "session_id": "20261104T2354Z-T3-render-harness",
@@ -3833,6 +3847,20 @@
       "remaining": "new Unity/IL2CPP/APK/phone world create-save-reload; no false success",
       "at": "2026-11-05T00:20:00Z",
       "_record_path": "../B_TEAM/events/T4/20261105T0020Z-local-loader-integrated.json"
+    },
+    {
+      "id": "20261105T0024Z-T4-filemanager-start",
+      "owner": "T4",
+      "session_id": "20261105T0024Z-T4-filemanager-restore01",
+      "issue_id": "LOCAL-005",
+      "type": "start",
+      "summary": "Isolated possible-overlap T4 restoration; source-authenticated FileManager I/O and catch-path investigation, without touching predecessor T4 state/MEMORY. All native/device outcomes remain unknown.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41939908432",
+        "https://github.com/alwansan/raf/actions/runs/41939846508"
+      ],
+      "at": "2026-11-05T00:24:00Z",
+      "_record_path": "../B_TEAM/events/T4/20261105T0024Z-filemanager-start.json"
     },
     {
       "id": "T5-20261104T2357Z-b12-fixture-start",
@@ -3909,7 +3937,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "4f92955d761f971f72eff00a82e9e9e9e43e4fc8b8cf41e136f0b518772cd11b",
+  "source_input_sha256": "c0060ce5d2cfd65c75e6f1cb951449ab20a5d35b0fc5916013b1aa2b2e7e1b96",
   "generation": "T-2026-11-05",
-  "input_sha256": "ca7298eca9848decb2ea910b57ef537c0aca13229f33adc75aafe79144d8a89a"
+  "input_sha256": "9ede5a2ab4789f18fd3351e355db8baeaed356db87d894ede39c5588d7b481fe"
 }
