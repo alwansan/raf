@@ -7460,6 +7460,20 @@
       "_record_path": "../B_TEAM/events/T5/20261105T2055Z-T5-chat-obb-pair-9f2d.json"
     },
     {
+      "id": "T5-20261105T2110Z-real-delivery-archive-rescue",
+      "owner": "T5",
+      "session_id": "20261105T2110Z-T5-chat-retain-delivery-a6f8",
+      "issue_id": "INTEGRATION-001",
+      "type": "integration",
+      "summary": "Native delivery run42058825739 verified exact ZIP and full real 7 transport-part plus 3 logical APK/OBB/XAPK SHA256, source pinned, and re-retained as artifact13454900880 until 2026-11-08T21:12:40Z via CI42110297871 SUCCESS. Release creation HTTP403 remains open, no device retest.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42110297871",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_NATIVE_DELIVERY_RETENTION_2026-11-05.md"
+      ],
+      "at": "2026-11-05T21:15:49.272Z",
+      "_record_path": "../B_TEAM/events/T5/20261105T2110Z-T5-chat-retain-delivery-a6f8.json"
+    },
+    {
       "id": "20261104-b-generation",
       "owner": "owner-team-bootstrap",
       "session_id": "b-team-setup-20261104",
@@ -7488,7 +7502,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "fcfde0e9c0cef4af6b32f0f98134806fb74f2910ffc792d033cef8fcc0079ca0",
+  "source_input_sha256": "6cca153bde9986148b3e59801d244412f5c60509ced6c35cfa4cd711cac0680b",
   "generation": "T-2026-11-05",
-  "input_sha256": "c687dc78c6efc664e8fcd628d60c8d0176bb10c64b39fdf10def1084605b9366"
+  "input_sha256": "0e4142d8a0de41fddd38f557208d3ff5f088c916482f8228be4933b1d1a3a5c0"
 }
