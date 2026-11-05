@@ -23,12 +23,15 @@ def validate_extents(provider_sizes, extents):
     overlaps = duplicates = 0
     for ranges in grouped.values():
         ranges.sort()
-        prior_start, prior_end = -1, -1
+        max_end = -1
+        seen = set()
         for start, end in ranges:
-            if start == prior_start and end == prior_end:
+            # Exact sharing is valid even when a larger containing range
+            # precedes it; track all prior intervals, not only the widest.
+            if (start, end) in seen:
                 duplicates += 1
-            elif start < prior_end:
+            elif start < max_end:
                 overlaps += 1
-            if end > prior_end:
-                prior_start, prior_end = start, end
+            seen.add((start, end))
+            max_end = max(max_end, end)
     return {"extents": count, "providers": len(grouped), "partial_overlaps": overlaps, "duplicate_ranges": duplicates}
