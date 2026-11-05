@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T102000Z-T1-gameci-sourcefree",
+  "issue_id": "WATER-001",
+  "track": "Independent GameCI-supported source-free Unity 2021 activation pathway",
+  "approach": "Probe exact Unity2021.3.45f2 license activation using the official GameCI unity-test-runner v4 on an isolated synthetic EditMode project, before downloading Raft original FFT or emitting proprietary shader bytes. Classify action result separately from custom Docker -manualLicenseFile failures; no native build request.",
+  "status": "planned",
+  "base_sha": "02e9fba7fb42b83579595885391be636ee3b56e8",
+  "intended_files": [
+    ".github/workflows/raft-t1-gameci-unity-activation.yml",
+    "scripts/t1_sourcefree_unity_fixture.py",
+    "tests/test_t1_sourcefree_unity_fixture.py",
+    "docs/T1_GAMECI_SOURCEFREE_UNITY_LICENSE_2026-11-05.md",
+    "prompt/coordination/clients/T1/sessions/20261105T102000Z-T1-gameci-sourcefree.md"
+  ],
+  "hypothesis": "GameCI unity-test-runner v4 official activation on a synthetic project may avoid a custom Unity manual-license CLI invocation failure; if official action also fails, record license/environment blockage without blaming FFT compiled shaders.",
+  "related_work": [
+    "prompt/coordination/work/WATER-001/T1-20261105T024000Z-T1-original-derived-fft-unity-private-compute-staging.json",
+    "prompt/coordination/discussions/WATER-001/20261105T0310Z-T1-unity-license-sourcefree-to-T5.md"
+  ],
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/actions/runs/41959712898",
+    "https://github.com/alwansan/raf/actions/runs/41958963107",
+    "https://github.com/alwansan/raf/actions/runs/41957549770",
+    "https://game.ci/docs/github/activation/",
+    "https://game.ci/docs/github/test-runner/"
+  ],
+  "experiment_ids": [],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Create exact synthetic Unity EditMode fixture and independent v4 action workflow with existing UNITY_LICENSE environment and build engine mutex. Run first external-activation test and record bounded outcome. No ZIP2 or proprietary assets.",
+  "updated_at": "2026-11-05T10:20:00Z",
+  "identity_conflict": "T1 multiple independent sessions; do not overwrite canonical T1 state or prior T1 file scopes."
+}
