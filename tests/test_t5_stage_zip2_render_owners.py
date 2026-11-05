@@ -204,8 +204,8 @@ class ZIP2RenderStageTests(unittest.TestCase):
             target = feature / name
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_text(
-                "version https://git-lfs.github.com/spec/v1\\n"
-                f"oid sha256:{digest}\\nsize {size}\\n",
+                "version https://git-lfs.github.com/spec/v1\n"
+                f"oid sha256:{digest}\nsize {size}\n",
                 encoding="ascii",
             )
         first = feature / self.owner
