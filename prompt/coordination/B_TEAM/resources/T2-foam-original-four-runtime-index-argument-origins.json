@@ -1,0 +1,35 @@
+{
+  "id": "T2-foam-original-four-runtime-index-argument-origins",
+  "owner": "T2",
+  "issue_id": "WATER-001",
+  "kind": "verified_original_managed_SetTexture_Texture_int_second_call_argument_source",
+  "title": "SHA-original Foam four Material.SetTexture(Texture(int)) int arguments are direct compiled ldc.i4 operands",
+  "source": {
+    "zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "assembly_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "assembly_bytes": 3211776
+  },
+  "stages": {
+    "acquisition": "ORIGINAL_ZIP2_MANAGED_SHA_AND_SIZE_AUTHENTICATED",
+    "extraction": "FOUR_ORIGINAL_NON_PROPERTY_FOAM_RESOURCE_STRINGS_AND_ACTUAL_MATERIAL_SETTEXTURE_TYPED_CALLS_VERIFIED",
+    "reconstruction": "FOUR_EXACT_TYPED_TEXTURE_INT_PRODUCER_CALL_STACKS_ANALYZED_SOURCE_ONLY",
+    "binding": "FOUR_OF_FOUR_ORIGINAL_INT_CALL_ARG_SOURCES_ARE_DIRECT_LDC_I4; VALUES_UNIQUE_RANGE_RUNTIME_UNKNOWN",
+    "integration": "OWN_CECIL_VERIFIER_AND_SAME_PINNED_ORIGINAL_CI42035529042_SUCCESS_NO_GAME_SHADERLAB_OR_ASSET_EDIT",
+    "device": "NOT_TESTED"
+  },
+  "observed": {
+    "four_actual_call_arg_sources": "direct_ldc_i4_literal",
+    "source_verified_occurrences": 4,
+    "source_producer_signatures": 1,
+    "raw_private_numeric_values_published": false,
+    "distinct_values_proven": false,
+    "valid_array_in_bounds_proven": false,
+    "source_original_RenderTexture_array_writer_ldnull_count": 1
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42035529042",
+    "https://github.com/alwansan/raf/commit/afb3e94af6c34a345d8fcfd81e6daaa2c01a89e4",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/T2/sessions/20261105T1323Z-T2-chat-index-origin-5c42.md"
+  ],
+  "next_step": "Privately compare actual four original constant values to independently authenticated array bounds and RT element writers; then ShaderLab/Unity/Adreno."
+}
