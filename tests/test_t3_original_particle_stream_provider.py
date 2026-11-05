@@ -121,7 +121,7 @@ class ParticleSourceStreamStage(unittest.TestCase):
                     range_fingerprints(file,spans,expected_size=5)
 
     def test_source_only_result_never_claims_export_or_mobile_pixels(self):
-        self.assertIn("SOURCE",STATUS)
+        self.assertIn("ORIGINAL",STATUS)
         self.assertNotIn("ANDROID",STATUS)
         self.assertEqual(REL_COLUMNS[0],"kind")
 
