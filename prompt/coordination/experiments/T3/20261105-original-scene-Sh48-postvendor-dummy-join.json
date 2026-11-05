@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T1402Z-T3-chat-renderer-shader-impact-f63e",
+  "issue_id": "RENDER-002",
+  "experiment_key": "T3-ZIP2-15964ea8-sixscene1633-Sh48-W1-AssetRipper036098-TMPPostFXVolumetric-sameexport-GUID-dummy-v1",
+  "hypothesis": "Original source Shader48 use by Renderer slots is concentrated and highest-use source Shader48 remains default Dummy after authentic same-instance vendor shader restoration. Material document frequency alone cannot establish Renderer importance.",
+  "source": {
+    "zip2_revision": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "pinned_exporter_revision": "036098ab525a3f9f693dc101edeb21faad4d32d8",
+    "original_scenes": 6,
+    "original_material_and_shader_typed_owners": 4,
+    "sameexport_original_owners": 12
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t3_original_renderer_shader_impact.py -v",
+    "python3 -m unittest discover -s tests -p test_t3_source_renderer_shader_to_postvendor_export.py -v",
+    "python3 -m scripts.t3_original_renderer_shader_impact --original $RUNNER_TEMP/t3-original-six-scene --manifest zip2-source/RAFT_FILE_MANIFEST.tsv --out $RUNNER_TEMP/t3-original-six-scene-shader-usage-aggregate.json",
+    "python3 -m scripts.t3_source_renderer_shader_to_postvendor_export --original $RUNNER_TEMP/b21-original --manifest zip2-original/RAFT_FILE_MANIFEST.tsv --project $RUNNER_TEMP/b21-private-export/ExportedProject --w1-trace $RUNNER_TEMP/b21-w1-private.json --b02-trace $RUNNER_TEMP/b21-b02-private.json --out $RUNNER_TEMP/t3-scene-Shader48-postvendor-aggregate.json"
+  ],
+  "runs": [
+    {
+      "url": "https://github.com/alwansan/raf/actions/runs/42042819113",
+      "status": "SUCCESS",
+      "proves": "6 authentic original sources Renderer→Material→Shader48 source typed 1633 slot/21 shader frequency"
+    },
+    {
+      "url": "https://github.com/alwansan/raf/actions/runs/42044249541",
+      "status": "SUCCESS",
+      "proves": "same-instance 21 original Shader48 exact GUID export→postvendor program marker join after all three official vendors"
+    }
+  ],
+  "negative_controls": [
+    "one-based external PPtr typed Material21/Shader48 and null source attribution",
+    "reject missing/class mismatched source Material/Shader and unknown owner aliases",
+    "reject W1 same-instance duplicate/missing/source substitution and export GUID collision",
+    "reject missing/malformed ShaderLab metadata, unknown export type, fake original source authentication",
+    "refuse original private object ID/GUID/name/hash in stdout/report; no raw asset artifact",
+    "original .mat/.shader.meta SHA byte identity across three vendor restorers"
+  ],
+  "observed": {
+    "original_sixscene_renderers": 1495,
+    "original_Material_slots": 1639,
+    "source_typed_Shader48_Material_slots": 1633,
+    "source_typed_Shader48_targets": 21,
+    "still_dummy_source_Shader48_targets_after_vendor": 17,
+    "source_renderer_slots_postvendor_dummy": 1373,
+    "source_renderer_slots_postvendor_builtin": 256,
+    "source_renderer_slots_postvendor_vendor_nondummy": 4,
+    "source_unknown_owner_slots": 2,
+    "highest_original_shader_slot_uses": 921,
+    "highest_use_shader_remains_dummy": true,
+    "postvendor_Material_docs_still_dummy_separate_population": 495
+  },
+  "status": "SCOPED_TRUE_ORIGINAL_SCENE_SHADER48_GUID_POSTVENDOR_STATUS_VERIFIED",
+  "limitations": [
+    "Original six/forty scenes only, source Renderer→exported Renderer assignment not tested",
+    "Not full native post-restorer; missing engine builtins/Depth/Blur/FFT, Unity compilation and device output",
+    "Dummy marker observation cannot quantify white objects/draw calls or frame time",
+    "No playable new APK or Android Game readiness"
+  ],
+  "next_step": "Prioritize real compiled original Shader48 stage/variant recovery for the one 921-scene-slot Shader target and next ranked genuine Dummy targets; ensure full native builtin restorer would not already cover them. Keep GUID/meta and source/pass exact."
+}
