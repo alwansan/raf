@@ -1287,6 +1287,36 @@
       "_record_path": "../B_TEAM/resources/T2-foam-original-actual-four-i4-aggregate-privacy.json"
     },
     {
+      "id": "T2-foam-original-array-element-RT-call-result",
+      "owner": "T2",
+      "issue_id": "WATER-001",
+      "title": "Original Foam RenderTexture[] element store uses a method return declared UnityEngine.RenderTexture",
+      "kind": "SHA_original_managed_compiled_stelem_element_value_provenance",
+      "stages": {
+        "acquisition": "ORIGINAL_ZIP2_MANAGED_DLL_EXACT_SHA_SIZE_VERIFIED",
+        "extraction": "SAME_EXACT_FOAM_GETTER_FIELD_REF_RENDER_TEXTURE_ARRAY_CALL_AND_SOURCE_PROVEN_STELEM_REF_SITE",
+        "reconstruction": "ELEMENT_VALUE_IS_DIRECT_METHOD_CALL_RETURN_WITH_DECLARED_UNITYENGINE_RENDERTEXTURE_TYPE_NOT_DIRECT_NEWOBJ_OR_NULL",
+        "binding": "ORIGINAL_CALLER_SIZE_POSITIVE_LITERAL_AND_FOUR_INDEX_VALUES_IN_BOUNDS_PROVEN_BUT_ELEMENT_RETURN_NON_NULL_RUNTIME_UNPROVEN",
+        "integration": "SHA_AUTHENTIC_SOURCE_ONLY_CI42065864809_SUCCESS_NO_ORIGINAL_GAME_ASSET_OR_SHADERLAB_EDITS",
+        "device": "NOT_TESTED"
+      },
+      "observed": {
+        "actual_managed_element_stores": 1,
+        "element_value_declared_Unity_RenderTexture_call_return": true,
+        "element_value_direct_null": false,
+        "element_value_direct_newobj_RT": false,
+        "actual_return_nonnull_and_texture_validity_proven": false,
+        "original_numeric_values_disclosed": false
+      },
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42065864809",
+        "https://github.com/alwansan/raf/actions/runs/42064653958",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/T2/sessions/20261105T1611Z-T2-chat-foam-length-source-9ab4.md"
+      ],
+      "next_step": "Trace exact producing method for original RenderTexture call-return and runtime allocation/content; WATER-001 OPEN NOT_READY0/3.",
+      "_record_path": "../B_TEAM/resources/T2-foam-original-array-element-RT-call-result.json"
+    },
+    {
       "id": "T2-foam-original-authored-shader-property-lineage",
       "owner": "T2",
       "kind": "source_sha_authentic_Foam_authored_Shader_texture_property_and_direct_material_scope",
@@ -5875,6 +5905,21 @@
       "_record_path": "../B_TEAM/events/T2/20261105T1629Z-source-original-Foam-four-indices-inbounds.json"
     },
     {
+      "id": "T2-20261105T1636Z-original-Foam-element-RT-typed-return",
+      "owner": "T2",
+      "origin": "chat",
+      "session_id": "20261105T1611Z-T2-chat-foam-length-source-9ab4",
+      "issue_id": "WATER-001",
+      "type": "source_original_Foam_RenderTexture_array_element_call_result",
+      "at": "2026-11-05T16:36:00Z",
+      "summary": "SHA-original managed Foam CI42065864809 SUCCESS proves exact stelem.ref value is direct call whose declared return is UnityEngine.RenderTexture (not direct null or direct newobj RT). Previous CI42064653958 proved the same original helper's positive compiled length, all four private original Texture(int) indices within allocation bounds. Call return type alone does not prove actual non-null object, uploaded textures, runtime execution or Android water pixels. No original names/IL/numeric literals published. WATER-001 OPEN NOT_READY0/3.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42065864809",
+        "https://github.com/alwansan/raf/commit/d7d4af389d4a5235088055901ced5bf4b4bc084e"
+      ],
+      "_record_path": "../B_TEAM/events/T2/20261105T1636Z-original-Foam-element-RT-typed-return.json"
+    },
+    {
       "id": "T3-20261105-0002-render-harness-result-and-export-start",
       "owner": "T3",
       "session_id": "20261104T2354Z-T3-render-harness",
@@ -6713,7 +6758,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "f902ef5a5e6583348ce80a2dec9d2d1ab445639e4f85bb2d18d129c640026ebe",
+  "source_input_sha256": "5c0d93a82844a75a752bd646939b034bb80da6363f7df47083e735f210763880",
   "generation": "T-2026-11-05",
-  "input_sha256": "d2635261a4eabf50a292ba7603c6d36f2343d6db77a75379b0dc2a0db7f7adcb"
+  "input_sha256": "b046c433a46686250f8ad05b7b26169196d65f3e523fc51406e337ef1b539ad2"
 }
