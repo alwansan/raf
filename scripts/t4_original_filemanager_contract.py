@@ -41,7 +41,7 @@ def inspect(save, manager, save_sha, manager_sha):
         # A missing regex-parsed body is NOT proof the original target is absent.
         # Expression bodies, generics, inherited methods, or parser limitations
         # may explain it. Record bounded counts, never the private method name.
-        token_count = len(re.findall(r"\\b" + re.escape(name) + r"\\s*\\(", _executable_positions(manager)))
+        token_count = len(re.findall(r"\b" + re.escape(name) + r"\s*\(", _executable_positions(manager)))
         return {
             "possible_overloads": len(hits),
             "unique_target": len(hits) == 1,
