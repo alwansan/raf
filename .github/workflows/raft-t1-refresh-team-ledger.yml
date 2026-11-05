@@ -1,0 +1,72 @@
+name: T1 refresh current T-team ledger after FFT evidence checkpoint
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-t1-refresh-team-ledger.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: raft-t-team-ledger-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - name: Checkout only current scripts and canonical inherited coordination ledger
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 1
+          lfs: false
+          persist-credentials: true
+          sparse-checkout: |
+            scripts
+            prompt/coordination/B_TEAM
+            prompt/coordination/T_TEAM
+      - name: Regenerate T summary from authoritative B-history ledger and fast-forward safely
+        env:
+          EXPECTED_BRANCH: feature/android-native-port
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF" = "refs/heads/$EXPECTED_BRANCH"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          for attempt in 1 2 3; do
+            git fetch --no-tags -q origin "$EXPECTED_BRANCH"
+            git reset --hard -q FETCH_HEAD
+            python3 scripts/refresh_t_team.py
+            python3 - <<'PY'
+          import json
+          from pathlib import Path
+          path=Path("prompt/coordination/T_TEAM/snapshot.json")
+          data=json.loads(path.read_text())
+          assert data["generation"]=="T-2026-11-05"
+          water=[x for x in data["issues"] if x["id"]=="WATER-001"]
+          assert len(water)==1 and water[0]["status"]=="OPEN"
+          assert "https://github.com/alwansan/raf/actions/runs/41939314440" in water[0]["evidence"]
+          events=[x for x in data["events"] if x["id"]=="T1-20261105T001110Z-T1-original-fft-sampled-roles"]
+          assert len(events)==1 and events[0]["owner"]=="T1"
+          assert data["readiness"] is not True
+          print("RAFT_T1_LEDGER_RECONCILE current_T1_event=true original_water_open=true")
+          PY
+            git add -- prompt/coordination/T_TEAM/SUMMARY.md prompt/coordination/T_TEAM/snapshot.json
+            if git diff --cached --quiet; then
+              echo 'RAFT_T1_LEDGER_RECONCILE unchanged=true'
+              exit 0
+            fi
+            git commit -q -m "docs(T1): refresh T team snapshot from canonical inherited ledger"
+            if git push origin HEAD:refs/heads/"$EXPECTED_BRANCH"; then
+              echo 'RAFT_T1_LEDGER_RECONCILE committed=true'
+              exit 0
+            fi
+            echo "T1 ledger snapshot lease raced concurrent T worker; retry $attempt"
+          done
+          echo "::error::Could not fast-forward refreshed snapshot after bounded retries"
+          exit 1
