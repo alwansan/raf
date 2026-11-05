@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261105T1509Z-T2-chat-original-byref-sink-a83c",
+  "issue_id": "WATER-001",
+  "status": "completed",
+  "experiment_key": "T2|ZIP2-sha15964ea8|manageddll-sha0a6f0527|exact-foam-RenderTexture-array-ldflda-consumer|bounded-source-only-v1",
+  "source_sha": "34f840561993b44c59cd7c61b22f1f013e64cd89",
+  "source": {
+    "zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "original_managed_bytes": 3211776,
+    "original_managed_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e"
+  },
+  "method": "Bounded branchless exact-original Cecil field-address tagged evaluation stack. Tests synthetic byref call, indirect reference store, array element store, length read and same-typed wrong-field decoy; fail closed on branches/unsupported IL.",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42053062181",
+  "artifact": {
+    "id": 13428570089,
+    "sha256": "153c1a689176b885f3bd62feeeb44bbf986dd7b1ad82108df2f6a627b8cf908b",
+    "safe_numeric_only": true
+  },
+  "finding": {
+    "original_exact_address_sites": 1,
+    "typed_byref_rendertexture_array_argument_sites": 1,
+    "declaring_callee_definition_verified": false,
+    "original_runtime_array_write_proven": false,
+    "source_original_call_reachable_at_runtime_proven": false,
+    "actual_array_contents_or_length_proven": false
+  },
+  "next_step": "Resolve the exact typed ref RenderTexture[] callee definition and body privately under SHA-original source; inspect direct pointer write and external declarations, no inferred runtime mutation. WATER-001 OPEN NOT_READY0/3."
+}
