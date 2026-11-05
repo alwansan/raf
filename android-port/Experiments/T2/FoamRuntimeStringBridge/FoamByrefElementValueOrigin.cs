@@ -26,7 +26,19 @@ internal static class FoamByrefElementValueOrigin
         int ReturnSitesWithUnresolvedProducer=0,
         int BodyBranchInstructionCount=0,
         string OriginalReturnSitePlacementCategory="not_examined",
-        string OriginalReturnImmediatePriorOpcodeCategory="not_examined");
+        string OriginalReturnImmediatePriorOpcodeCategory="not_examined",
+        SafeLocalWriters? OriginalReturnLocalWriterCensus=null);
+
+    internal sealed record SafeLocalWriters(
+        int ExactReturnLocalLoadSites,
+        bool ReturnLocalDeclaredRenderTexture,
+        int ExactLocalAssignmentSites,
+        int DirectNullAssignmentSites,
+        int DirectRenderTextureConstructorAssignmentSites,
+        int DirectRenderTextureTypedCallAssignmentSites,
+        int LocalAliasAssignmentSites,
+        int UnresolvedAssignmentSites,
+        bool BranchJoinOrRuntimeValueVerified=false);
 
     private readonly record struct Origin(string Category,bool NewRt=false,
         bool CallRt=false,bool Null=false,bool Local=false);
@@ -271,6 +283,75 @@ internal static class FoamByrefElementValueOrigin
         return (placement,prior);
     }
 
+
+    // An opcode census, not reaching-definition/CFG proof. Counting a
+    // local write never means that path is executed or that a value is live.
+    internal static SafeLocalWriters ScanExactReturnLocalWriters(
+        IEnumerable<MethodDefinition> originals,
+        MethodReference exactReturnCall)
+    {
+        var found=originals.Where(m=>
+            m.FullName==exactReturnCall.FullName &&
+            m.DeclaringType.FullName==exactReturnCall.DeclaringType.FullName &&
+            m.HasThis==exactReturnCall.HasThis &&
+            m.ReturnType.FullName==exactReturnCall.ReturnType.FullName &&
+            m.Parameters.Count==exactReturnCall.Parameters.Count &&
+            m.Parameters.Zip(exactReturnCall.Parameters,
+                (a,b)=>a.ParameterType.FullName==b.ParameterType.FullName)
+                .All(x=>x)).Take(2).ToList();
+        if(found.Count!=1 || !found[0].HasBody)
+            return new SafeLocalWriters(0,false,0,0,0,0,0,0);
+        var method=found[0];
+        var il=method.Body.Instructions;
+        var retSites=Enumerable.Range(0,il.Count)
+            .Where(i=>il[i].OpCode.Code==Code.Ret).ToList();
+        if(retSites.Count!=1)
+            return new SafeLocalWriters(0,false,0,0,0,0,0,0);
+        int predecessor=Prev(il,0,retSites[0]);
+        if(predecessor<0 || !Load(il[predecessor]))
+            return new SafeLocalWriters(0,false,0,0,0,0,0,0);
+        int? localIndex=Local(il[predecessor]);
+        if(localIndex is not int n || n<0 || n>=method.Body.Variables.Count)
+            return new SafeLocalWriters(0,false,0,0,0,0,0,0);
+        bool typed=method.Body.Variables[n].VariableType.FullName==
+            "UnityEngine.RenderTexture";
+        var entries=Entries(method);
+        int total=0,nulls=0,newrt=0,rtcalls=0,aliases=0,unknown=0;
+        for(int i=0;i<il.Count;i++)
+        {
+            if(!Store(il[i]) || Local(il[i])!=n)
+                continue;
+            total++;
+            int previous=Prev(il,0,i);
+            if(previous<0 || entries.Contains(il[i]) ||
+                il[previous].OpCode.FlowControl is FlowControl.Branch or
+                    FlowControl.Cond_Branch or FlowControl.Throw)
+            {
+                unknown++;
+                continue;
+            }
+            var op=il[previous];
+            if(op.OpCode.Code==Code.Ldnull)
+                nulls++;
+            else if(op.OpCode.Code==Code.Newobj &&
+                op.Operand is MethodReference ctor &&
+                ctor.Name==".ctor" &&
+                ctor.DeclaringType.FullName=="UnityEngine.RenderTexture")
+                newrt++;
+            else if(op.OpCode.Code is (Code.Call or Code.Callvirt) &&
+                op.Operand is MethodReference producer &&
+                producer.ReturnType.FullName=="UnityEngine.RenderTexture")
+                rtcalls++;
+            else if(Load(op))
+                aliases++;
+            else unknown++;
+        }
+        if(total!=nulls+newrt+rtcalls+aliases+unknown)
+            throw new InvalidDataException("Unbalanced original RT local write categories");
+        return new SafeLocalWriters(1,typed,total,nulls,newrt,rtcalls,
+            aliases,unknown,false);
+    }
+
     internal static SafeProfile Inspect(IEnumerable<MethodDefinition> originals,
         MethodReference recipient,FoamByrefAllocationFlow.SafeProfile prior)
     {
@@ -322,11 +403,15 @@ internal static class FoamByrefElementValueOrigin
             op.Operand is MethodReference originalCall
             ? ExplainRetSite(originals,originalCall)
             : ("not_examined","not_examined");
+        var localWrites=identity.Item1==1 && identity.Item3 &&
+            op.Operand is MethodReference targetCall
+            ? ScanExactReturnLocalWriters(originals,targetCall)
+            : new SafeLocalWriters(0,false,0,0,0,0,0,0);
         return new SafeProfile(1,1,immediate,origin.Category,origin.NewRt,
             origin.CallRt,origin.Null,origin.Local,false,false,
             identity.Item1,identity.Item2,identity.Item3,
             returns.Item1,returns.Item2,returns.Item3,
             returns.Item4,returns.Item5,returns.Item6,
-            retReason.Item1,retReason.Item2);
+            retReason.Item1,retReason.Item2,localWrites);
     }
 }
