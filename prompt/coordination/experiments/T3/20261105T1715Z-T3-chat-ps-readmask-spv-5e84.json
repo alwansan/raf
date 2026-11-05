@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T1715Z-T3-chat-ps-readmask-spv-5e84",
+  "issue_id": "RENDER-002",
+  "status": "completed",
+  "experiment_key": "T3-ZIP2-15964ea8-921-Shader48-four-original-VF-pairs-ISGN-fragment-read-mask-compare-same-source-SPIRV-Cross-user-input-component-count",
+  "resource_key": "T3-921-fourpass-original-PS-readmask-vkd3d-CPU",
+  "source_sha": "48f35ed6bfe64d829b1996beeab27d6202608019",
+  "original_zip2_provider_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "workflow": ".github/workflows/raft-t3-original-921-dxbc-readmask-spv.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42073397586",
+  "artifact_name": "t3-921-original-PS-readmask-SPIRV-counts-42073397586",
+  "artifact_id": 13436913300,
+  "artifact_retention_days": 7,
+  "authenticity": {
+    "SHA_original_scenes": 6,
+    "SHA_original_shader_material_owner_files": 4,
+    "owner_bytes_verified": 269007288,
+    "original_renderer_material_slot_uses": 921,
+    "exact_original_passes": 4,
+    "original_fragment_programs_translated": 4,
+    "original_exact_matched_variants_total": 33,
+    "original_unmatched_vertex_permutations": 8
+  },
+  "synthetic_controls": {
+    "new_tests": 21,
+    "original_DXBC_semantic_tests": 21,
+    "SPIRV_component_tests": 17,
+    "total": 59,
+    "CI_url": "https://github.com/alwansan/raf/actions/runs/42073255841",
+    "conclusion": "success"
+  },
+  "genuine_result": {
+    "conclusion": "success",
+    "status": "ORIGINAL_921_DXBC_PS_READ_MASK_VS_SPIRV_INPUT_COUNTS_MEASURED",
+    "original_PS_user_input_semantic_records": 22,
+    "original_PS_system_values": 4,
+    "original_PS_declared_mask_component_lanes": 75,
+    "original_PS_used_read_mask_component_lanes": 44,
+    "original_PS_declared_but_unread_component_lanes": 31,
+    "original_PS_wholly_unread_user_semantics": 8,
+    "original_PS_partly_unread_user_semantics": 0,
+    "original_PS_read_component_lanes_missing_on_original_VS_declared_output": 0,
+    "original_SPIRV_user_input_records": 14,
+    "original_SPIRV_user_input_components": 44,
+    "roundtrip_SPIRV_user_input_records": 14,
+    "roundtrip_SPIRV_user_input_components": 44,
+    "passes_readmask_equals_original_SPIRV_component_count": 4,
+    "passes_readmask_equals_roundtrip_SPIRV_component_count": 4,
+    "passes_original_equals_roundtrip_SPIRV_component_count": 4,
+    "total_per_pass_readmask_to_original_SPIRV_absolute_component_difference": 0,
+    "total_per_pass_readmask_to_roundtrip_SPIRV_absolute_component_difference": 0,
+    "source_semantic_name_index_to_SPIRV_location_mapping_verified": false,
+    "shader_interpolation_or_device_pixels_verified": false,
+    "original_assets_changed": false
+  },
+  "failed_preflight": {
+    "url": "https://github.com/alwansan/raf/actions/runs/42073175240",
+    "stage": "synthetic_only",
+    "cause": "three tests passed duplicate keyword overrides through fixture helper",
+    "repaired_commit": "522551776669108903001a14f116f4cc7833162a"
+  },
+  "documentation": "docs/T3_ORIGINAL_921_DXBC_READMASK_SPV_2026-11-05.md",
+  "limitations": [
+    "Source four original matched pairs, 29 other matched original pairs not measured",
+    "Per-pass equality of DXBC readmask and SPIRV input cardinality does not establish private semantic to Location binding",
+    "No original compiled stage value/interpolation parity, actual ShaderLab, Unity sRGB, native device color or world proof"
+  ],
+  "next_step": "Reconcile same-stage private original DXBC read SemanticNameIndex/Register/mask to exact SPIRV Location/Component/type with ambiguity rejection, then resource/pass and device evidence; preserve RENDER-002 OPEN.",
+  "updated_at": "2026-11-05T17:22:00Z"
+}
