@@ -39,8 +39,46 @@ namespace RaftAndroid.Platform
                 {
                     if (!owner.requested || motionEvent.Call<int>("getActionMasked") != 2)
                         return false; // ACTION_MOVE only.
-                    float dx = motionEvent.Call<float>("getX");
-                    float dy = motionEvent.Call<float>("getY");
+                    int source = motionEvent.Call<int>("getSource");
+                    var kind = PhysicalMouseMotionSource.Classify(source);
+                    if (kind == PhysicalMouseMotionSource.Kind.Ignore)
+                        return false; // Ordinary touchscreen/mouse UI events remain Unity-owned.
+                    int historyCount = motionEvent.Call<int>("getHistorySize");
+                    if (!PhysicalMouseMotionSource.ValidHistory(historyCount))
+                        return false; // Never block Android UI on unbounded batched packets.
+                    float dx = 0f, dy = 0f;
+                    // Android batches historical deltas; reading only the final
+                    // sample loses actual physical movement under load.
+                    for (int h = 0; h < historyCount; h++)
+                    {
+                        if (kind == PhysicalMouseMotionSource.Kind.Mouse)
+                        {
+                            dx += motionEvent.Call<float>("getHistoricalX", h);
+                            dy += motionEvent.Call<float>("getHistoricalY", h);
+                        }
+                        else
+                        {
+                            dx += motionEvent.Call<float>("getHistoricalAxisValue",
+                                PhysicalMouseMotionSource.AxisRelativeX, h);
+                            dy += motionEvent.Call<float>("getHistoricalAxisValue",
+                                PhysicalMouseMotionSource.AxisRelativeY, h);
+                        }
+                    }
+                    if (kind == PhysicalMouseMotionSource.Kind.Mouse)
+                    {
+                        // SOURCE_MOUSE_RELATIVE: getX/Y are deltas, not screen pixels.
+                        dx += motionEvent.Call<float>("getX");
+                        dy += motionEvent.Call<float>("getY");
+                    }
+                    else
+                    {
+                        // SOURCE_TOUCHPAD: getX/Y are absolute positions; use
+                        // relative axes instead to prevent huge camera jumps.
+                        dx += motionEvent.Call<float>("getAxisValue",
+                            PhysicalMouseMotionSource.AxisRelativeX);
+                        dy += motionEvent.Call<float>("getAxisValue",
+                            PhysicalMouseMotionSource.AxisRelativeY);
+                    }
                     return owner.RecordCapturedMotion(dx, dy);
                 }
                 catch (AndroidJavaException)
@@ -61,7 +99,8 @@ namespace RaftAndroid.Platform
         {
             lock (captureGate)
             {
-                if (!requested) return false;
+                if (!requested || !PhysicalMouseMotionSource.ValidDelta(dx, dy))
+                    return false;
                 deltas.Push(dx, dy);
                 nativeCaptured = nativeHasMotion = true;
                 return true;
