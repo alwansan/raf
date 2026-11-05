@@ -1,0 +1,58 @@
+name: T2 WATER-001 independent synthetic RenderTexture CFG regression
+
+on:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - 'scripts/t2_rt_return_cfg.py'
+      - 'tests/test_t2_rt_return_cfg.py'
+      - 'tests/test_t2_rt_return_cfg_independent.py'
+      - '.github/workflows/raft-t2-rt-return-cfg-independent.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: t2-water-rt-cfg-independent-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  synthetic-cfg-safety:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Sparse checkout only source-free synthetic controls
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            scripts/t2_rt_return_cfg.py
+            tests/test_t2_rt_return_cfg.py
+            tests/test_t2_rt_return_cfg_independent.py
+
+      - name: Run scheduled plus independent fail-closed source-free controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 --version
+          python3 -m unittest discover -s tests -p 'test_t2_rt_return_cfg*.py' -v 2>&1 | tee /tmp/t2-rt-cfg-source-free.log
+          grep -Eq '^Ran [0-9]+ tests in ' /tmp/t2-rt-cfg-source-free.log
+          grep -qx 'OK' /tmp/t2-rt-cfg-source-free.log
+
+      - name: Record strictly bounded acceptance scope
+        if: success()
+        shell: bash
+        run: |
+          set -euo pipefail
+          {
+            echo '### T2 synthetic RenderTexture CFG regression'
+            echo 'PASS: both scheduled and independent synthetic unittest fixtures.'
+            echo 'Scope: no original game assemblies, shader sources, assets, Unity, GPU, or device pixels loaded.'
+            echo 'This does not establish runtime non-null RenderTexture or water restoration.'
+          } >> "$GITHUB_STEP_SUMMARY"
