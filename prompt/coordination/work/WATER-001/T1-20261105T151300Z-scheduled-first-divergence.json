@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "origin": "scheduled",
+  "session_id": "20261105T151300Z-T1-scheduled-7c2f",
+  "status": "active",
+  "baseline_sha": "4ea0fd1b71e195acfd02196de868071477128463",
+  "issue": "WATER-001",
+  "hypothesis": "Find earliest divergent private RGBA32F FFT pass, separating unwritten coverage from numeric mismatch.",
+  "experiment_key": "t1-first-divergence-pass-sequence-20261105",
+  "files": [
+    "scripts/t1_fft_first_divergence.py",
+    "tests/test_t1_fft_first_divergence.py"
+  ],
+  "taken_over_from": [
+    "scripts/t1_fft_rgba_error_signature.py",
+    "https://github.com/alwansan/raf/actions/runs/42025620147"
+  ],
+  "shared_resource": "none",
+  "constraints": "No raw capture output; no CI; no state overwrite"
+}
