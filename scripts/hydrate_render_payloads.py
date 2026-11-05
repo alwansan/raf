@@ -77,7 +77,11 @@ def reuse_verified_staged_sources(rows, source_root, work_root=Path('.')):
         return 0, 0
     if not source_root.is_dir():
         raise ValueError('Staged graphics source root is not a directory')
-    reused, reused_bytes = 0, 0
+    # Validate the entire available batch BEFORE replacing any LFS pointer.
+    # Previously an invalid second owner could leave the first one hydrated.
+    # This metadata-only preflight avoids a second multi-GB SHA read; each
+    # source still receives full streaming SHA256 validation while copied.
+    candidates = []
     for name, digest, size in rows:
         if not PATTERN.fullmatch(name):
             raise ValueError('Staged graphics source is outside original allowlist')
@@ -96,6 +100,11 @@ def reuse_verified_staged_sources(rows, source_root, work_root=Path('.')):
                 raise ValueError('Original destination pointer does not match source pin')
         if not target.parent.is_dir():
             raise ValueError('Missing original graphics destination parent')
+        candidates.append((source, target, digest, size))
+    reused, reused_bytes = 0, 0
+    for source, target, digest, size in candidates:
+        _check_regular_path(source)
+        _check_regular_path(target)
         temporary = None
         try:
             with tempfile.NamedTemporaryFile(
