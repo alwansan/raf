@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T1728Z-T3-chat-rawspirv-T1-original-3f7c",
+  "issue_id": "RENDER-002",
+  "original_provider_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "request_type": "one genuine source-original 921-use Shader48 fourpass linked VS-FS direct T1 raw SPIRV numeric interface and derived roundtrip test",
+  "source_blob_shas": {
+    "scripts/t3_original_921_t1_raw_spirv_audit.py": "efc619278b7e794140ae287ad7d2af6f76a4a1c2",
+    "tests/test_t3_original_921_t1_raw_spirv_audit.py": "cbd46e0648e4d16d3eab8d5cc94c2be2a9ef07b8",
+    "scripts/t1_spirv_interface_component_audit.py": "ce892f5c378dee1cd6ef1436b5dd8e892ad1485c",
+    "scripts/t3_original_921_dxbc_semantic_join.py": "8a7b0178f4502d7c163a7c8a313e7f754cd68162"
+  },
+  "workflow": "raft-t3-original-921-t1-raw-spv.yml",
+  "resource_key": "T3-921-fourpass-original-SPIRV-dis-CPU",
+  "safety": {
+    "private_SPIRV_disassembly_only_in_runner": true,
+    "no_private_name_or_bytecode_artifacts": true,
+    "no_Unity_native_build": true,
+    "cancel_previous_actions": false
+  },
+  "created_at": "2026-11-05T17:30:00Z"
+}
