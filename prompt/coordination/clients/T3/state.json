@@ -4,10 +4,10 @@
   "generation": "T-2026-11-05",
   "session_id": "20261105T0024Z-T3-keyword-real-export",
   "resumed_from_session": "20261104T2354Z-T3-render-harness",
-  "status": "paused",
+  "status": "completed",
   "base_sha": "80cfbe55f2ef647f8c71089ad6115c8d03d317a4",
   "last_commit": "6940ccf0161a3ea4a52c083702692de74c0c64be",
-  "updated_at": "2026-11-05T00:28:00Z",
+  "updated_at": "2026-11-05T00:30:00Z",
   "tracks": [
     "RENDER-002",
     "ASSET-RESTORE-001"
@@ -29,6 +29,6 @@
     "https://github.com/alwansan/raf/actions/runs/41940350604",
     "https://github.com/alwansan/raf/actions/runs/41941363661"
   ],
-  "next_step": "Current real source/export Material keywords and disabled-pass parity CI41941363661 in progress after successful synthetic controls. Read safe artifact/result; if inconclusive fix evidence-stage issue, if match redirect to ShaderLab/subprogram/variant/Adreno pixels and external texture refs; RENDER-002 OPEN, NOT_READY. New session is paused pending scheduled resume; no other jobs cancelled.",
+  "next_step": "T3 scoped RENDER-002 keyword+disabled-pass original→true-export 41/41 match CI41941363661 (9 SHA-proven ZIP2 inputs). Next priority Material original Shader PPtr → actual export ShaderLab GUID/pass/subprogram or external texture 25 and Unity GPU visuals; no APK/device claim. RENDER-002 OPEN and NOT_READY.",
   "memory_path": "prompt/coordination/clients/T3/MEMORY.md"
 }
