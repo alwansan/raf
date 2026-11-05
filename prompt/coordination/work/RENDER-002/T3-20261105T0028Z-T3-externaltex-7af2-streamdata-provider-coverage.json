@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T0028Z-T3-externaltex-7af2",
+  "issue_id": "RENDER-002",
+  "track": "colors-materials/texture-original-stream-payload",
+  "approach": "Analyze original SHA-pinned three owner Texture2D serialized m_StreamData for the 106 distinct source textures genuinely linked by 41 Materials; verify referenced streaming provider filenames/sizes against immutable ZIP2 manifest and whether those bytes were included in bounded AssetRipper export. Read-only source, no .resS download until exact required providers established.",
+  "status": "active",
+  "base_sha": "96cc396a3df8244a2a2e1ae4890b48ef51a18c2a",
+  "intended_files": [
+    "scripts/t3_original_texture_stream_dependencies.py",
+    "tests/test_t3_original_texture_stream_dependencies.py",
+    ".github/workflows/raft-t3-original-texture-stream-deps.yml",
+    "prompt/coordination/clients/T3/sessions/20261105T0028Z-T3-externaltex-7af2.md"
+  ],
+  "hypothesis": "Original linked Texture2Ds require external .resS pixels that were not staged in bounded 11-owner export, leading to missing .meta and TextureAssetExporter.CheckAssetIntegrity failures; quantify actual source m_StreamData before proposing staging remedy.",
+  "related_work": [
+    "https://github.com/alwansan/raf/actions/runs/41944064897",
+    "https://github.com/alwansan/raf/actions/runs/41945116133"
+  ],
+  "taken_over_from": [
+    "scripts/audit_texture_stream_coverage.py",
+    "docs/B31_ORIGINAL_GRAPHICS_REUSE_2026-11-04.md",
+    "https://raw.githubusercontent.com/nowl-it/AssetRipperCLI/036098ab525a3f9f693dc101edeb21faad4d32d8/Source/AssetRipper.Export.UnityProjects/Textures/TextureAssetExporter.cs"
+  ],
+  "experiment_ids": [
+    "T3-authentic-selected-streamdata-dependencies-20261105"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Read genuine 106 source linked Texture2D m_StreamData, classify authentic original streaming files and whether bounded staging omitted required bytes; do not treat missing bitmap conversion as proven before original data and exporter output log.",
+  "updated_at": "2026-11-05T00:57:00Z"
+}
