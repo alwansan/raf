@@ -1,0 +1,12 @@
+{
+  "id": "20261105T154026Z-T1-chat-b05def",
+  "owner": "T1",
+  "session_id": "20261105T154026Z-T1-chat-b05def",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Exact paired FFT replay started after native job released Unity lane.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42057399746"
+  ],
+  "at": "2026-11-05T15:41:00.131Z"
+}
