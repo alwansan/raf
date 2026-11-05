@@ -2,9 +2,9 @@
   "session_id": "20261105T1715Z-T3-chat-ps-readmask-spv-5e84",
   "origin": "chat",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed",
   "base_sha": "8590ee379b29e19d122d88a3aca9b0e6729e3621",
-  "updated_at": "2026-11-05T17:15:00Z",
+  "updated_at": "2026-11-05T17:23:00Z",
   "resumed_from_sessions": [
     "20261105T1701Z-T3-chat-original-dxbc-semantic-join-6d9f",
     "20261105T1625Z-T3-scheduled-dxbc-contract-8f2c"
@@ -37,5 +37,25 @@
       "id": 42072599747,
       "name": "T2 WATER-001 genuine Foam nonproperty texture names to original managed IL literal contexts"
     }
-  ]
+  ],
+  "completed_at": "2026-11-05T17:23:00Z",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42073397586",
+  "result": {
+    "original_run_conclusion": "SUCCESS",
+    "original_run_SHA": "48f35ed6bfe64d829b1996beeab27d6202608019",
+    "source_free_tests_passed": 59,
+    "source_SCENES_sha_verified": 6,
+    "source_owners_sha_verified": 4,
+    "original_PsPasses": 4,
+    "dxbc_ps_declared_lanes": 75,
+    "dxbc_ps_read_lanes": 44,
+    "dxbc_ps_unused_lanes": 31,
+    "original_SPIRV_user_input_lanes": 44,
+    "roundtrip_SPIRV_user_input_lanes": 44,
+    "per_pass_source_and_roundtrip_cardinality_matches": 4,
+    "DXBC_to_SPIRV_semantic_Location_mapping_proven": false,
+    "Android_pixels_proven": false,
+    "game_assets_changed": false
+  },
+  "next_step": "Do not re-run successful 44/75 count. Build private original SemanticName+Index/Register/ReadMask to SPIR-V Location/Component/type correspondence proof with ambiguity rejection, or authentic full ShaderLab/material/sRGB binding/pixel difference. RENDER-002 OPEN."
 }
