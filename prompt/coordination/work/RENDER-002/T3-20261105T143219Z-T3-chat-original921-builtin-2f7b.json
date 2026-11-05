@@ -10,8 +10,8 @@
   "base_sha": "cf97a3725bb29b230ef766c5a17480a707fa6ebd",
   "experiment_key": "T3-original6scenes-ZIP2-15964ea8-4typedowners-Shader48-use1633-top921-officialUnity2021.3.45f2-builtin-shader-exactname-intersection",
   "resource_key": "ZIP2-15964ea8-original6scene-4owner-cpu-only-Unity2021vendor2MB",
-  "hypothesis": "The highest-original-renderer-use 921-slot original Shader48 still Dummy after vendor-only restore could be an exact official Unity 2021.3.45f2 built-in shader identity recoverable by the existing native builtin restorer; original source names must be compared against SHA256-locked official 198 name list, not guessed from Material document counts.",
-  "approach": "Source-only strict original ZIP2 six-scene/4 owner SHA-authenticated source Renderer->Material->Shader48 use-weight + parsed name comparison to SHA-verified Unity builtin archive, with nonidentifiable aggregates; prevent interpreting exact official-name as original Pass/variant equivalence.",
+  "hypothesis": "The highest-original-renderer-use 921-slot original Shader48 still Dummy after vendor-only restore could be an exact official Unity 2021.3.45f2 built-in shader identity recoverable by the existing native builtin restorer; original source names must be compared against SHA256-locked official 198 name list, not guessed from Material document counts. Next distinct question: original top 921-slot Shader48 D3D11 pass/vertex/fragment variants link from authenticated original, after another T3 verified high shader is non-official built-in.",
+  "approach": "Source-only strict original ZIP2 six-scene/4 owner SHA-authenticated source Renderer->Material->Shader48 use-weight + parsed name comparison to SHA-verified Unity builtin archive, with nonidentifiable aggregates; prevent interpreting exact official-name as original Pass/variant equivalence. Avoid repeating independently successful builtin source test CI42046329453; own name classifier CI42046452052 was inconclusive genuine run. Now CPU-only source feasibility with private shader bytecodes and aggregate-only stage linkage counts.",
   "intended_files": [
     "scripts/t3_original_shader_builtin_eligibility.py",
     "tests/test_t3_original_shader_builtin_eligibility.py",
@@ -20,7 +20,10 @@
     "prompt/coordination/clients/T3/sessions/20261105T143219Z-T3-chat-original921-builtin-2f7b.md",
     "prompt/coordination/experiments/T3/20261105T143219Z-T3-chat-original921-builtin-2f7b.json",
     "prompt/coordination/B_TEAM/events/T3/20261105T143219Z-T3-chat-original921-builtin-2f7b.json",
-    "docs/T3_ORIGINAL_921_BUILTIN_ELIGIBILITY_2026-11-05.md"
+    "docs/T3_ORIGINAL_921_BUILTIN_ELIGIBILITY_2026-11-05.md",
+    "scripts/t3_original_top_shader_dxbc_feasibility.py",
+    "tests/test_t3_original_top_shader_dxbc_feasibility.py",
+    ".github/workflows/raft-t3-original-921-dxbc-feasibility.yml"
   ],
   "resumed_from_sessions": [
     "20261105T1428Z-T3-scheduled-a7c9",
@@ -37,6 +40,10 @@
   ],
   "run_urls": [],
   "result": null,
-  "next_step": "Commit standalone pure source identity intersection and tests; run one pinned source-only 6-scene/4-owner and SHA-pinned Unity built-in archive CI if nonoverlapping; capture 921 verdict, count-weighted source names only, never original Shader name.",
-  "updated_at": "2026-11-05T14:32:19.470Z"
+  "next_step": "Implement source-authentic D3D11 top-921 Shader48 pass/variant stage linkage experiment with no shader source/metadata leaked; keep name experiment manual-only and unexecuted again.",
+  "updated_at": "2026-11-05T14:38:47.014Z",
+  "related_run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42046329453",
+    "https://github.com/alwansan/raf/actions/runs/42046452052"
+  ]
 }
