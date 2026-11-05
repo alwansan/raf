@@ -1,0 +1,35 @@
+name: T1 WATER-001 authored FFT Unity kernel probe contract
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - scripts/t1_stage_unity_fft_kernel_probe.py
+      - android-port/Editor/T1FftKernelRuntimeProbe.cs
+      - tests/test_t1_stage_unity_fft_kernel_probe.py
+      - .github/workflows/raft-t1-fft-unity-kernel-probe.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: t1-fft-unity-kernel-probe-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  source-contract-only:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+      - name: Parse isolated FFT probe staging tool
+        run: python3 -m py_compile scripts/t1_stage_unity_fft_kernel_probe.py
+      - name: Validate candidate mapping, provenance guards and private staging boundaries
+        run: python3 -m unittest discover -s tests -p 'test_t1_stage_unity_fft_kernel_probe.py' -v
+      - name: State experiment boundary
+        run: |
+          echo "T1 FFT authored-source staging SOURCE-ONLY: no original kernel IDs, Unity compilation, Android execution, or device validation claimed"
