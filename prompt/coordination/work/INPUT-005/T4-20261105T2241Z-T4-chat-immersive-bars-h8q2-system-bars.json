@@ -3,9 +3,9 @@
   "origin": "chat",
   "owner": "T4",
   "issue_id": "INPUT-005",
-  "status": "active",
+  "status": "completed_source_integrated_device_unverified",
   "base_sha": "04e0e891d6c333638a4e8f43e09edef47057bd31",
-  "updated_at": "2026-11-05T22:41:00Z",
+  "updated_at": "2026-11-05T22:53:00Z",
   "resumed_from_sessions": [
     "20261105T2235Z-T4-scheduled-u8k3",
     "20261105T2230Z-T4-chat-captured-mouse-sources-r7n5"
@@ -33,6 +33,21 @@
   "hypothesis": "The current native Android staging has no source-owned immersive system bar enforcement and native mouse can trigger status/nav overlays at edges; adding a focus/pause-safe immersive mode adapter at API26-29 and API30+ reduces accidental bar exposure without altering UI, display resolution, touch, or OS mandatory navigation.",
   "approach": "Use separate BeforeSceneLoad Android-only component; API30+ window.getInsetsController hide WindowInsets.Type.systemBars with transient gestures behavior; API26-29 merge legacy IMMERSIVE_STICKY fullscreen/hide_navigation flags without clobbering existing View flags. Reapply periodically only when focused; no gestures/exclusion overrides. Bound tests and authentic Unity2021 managed compile in independent existing T4 CI.",
   "status_detail": "No native build or phone acceptance. Keep T5 Settings ownership and existing mouse capture callbacks untouched.",
-  "run_urls": [],
-  "result": null
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42124747838",
+    "https://github.com/alwansan/raf/actions/runs/42124859112"
+  ],
+  "result": {
+    "source": "AndroidImmersiveSystemBars and AndroidSystemBarPolicy staged in native Unity import and offline managed verification",
+    "run": 42124859112,
+    "ci": "SUCCESS",
+    "python": "7/7",
+    "CSharp": "18/18",
+    "originalUnity2021ManagedCompile": "SUCCESS",
+    "firstRunFailure": "Test-only literal CS0266, fixed",
+    "nativeUnityBuild": false,
+    "phoneTested": false,
+    "issueRemainsOpen": true
+  },
+  "next_step": "T5 native build (when separately coordinated): Android 15 system-bar visibility at mouse edges, normal transient swipes/OS escape, physical pointer, keyboard/touch, settings, world/save/exit/reopen; verify signed exact source."
 }
