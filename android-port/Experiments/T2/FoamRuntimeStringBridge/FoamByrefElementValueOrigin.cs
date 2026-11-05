@@ -18,7 +18,13 @@ internal static class FoamByrefElementValueOrigin
         bool OriginalPrivateSymbolOrNumericValueDisclosed,
         int MatchingOriginalReturnMethodDefinitions=0,
         string ActualReturnTargetDeclarationCategory="not_examined",
-        bool MatchingOriginalMethodBodyAvailable=false);
+        bool MatchingOriginalMethodBodyAvailable=false,
+        int OriginalReturnInstructionSites=0,
+        int DirectNullReturnSites=0,
+        int DirectRenderTextureConstructorReturnSites=0,
+        int DirectRenderTextureCallReturnSites=0,
+        int ReturnSitesWithUnresolvedProducer=0,
+        int BodyBranchInstructionCount=0);
 
     private readonly record struct Origin(string Category,bool NewRt=false,
         bool CallRt=false,bool Null=false,bool Local=false);
@@ -152,6 +158,66 @@ internal static class FoamByrefElementValueOrigin
             candidates.Count==1 && candidates[0].HasBody);
     }
 
+
+    // Method-wide compiled return census. A return at a branch/exception
+    // entry is never inferred from its textual predecessor.
+    internal static (int Total,int Null,int NewRt,int CallRt,int Unknown,int Branches)
+        ScanMatchingReturnBody(IEnumerable<MethodDefinition> originals,
+                               MethodReference exactRtTarget)
+    {
+        var found=originals.Where(m=>
+            m.FullName==exactRtTarget.FullName &&
+            m.DeclaringType.FullName==exactRtTarget.DeclaringType.FullName &&
+            m.HasThis==exactRtTarget.HasThis &&
+            m.ReturnType.FullName==exactRtTarget.ReturnType.FullName &&
+            m.Parameters.Count==exactRtTarget.Parameters.Count &&
+            m.Parameters.Zip(exactRtTarget.Parameters,
+                (a,b)=>a.ParameterType.FullName==b.ParameterType.FullName)
+                .All(x=>x)).Take(2).ToList();
+        if(found.Count!=1 || !found[0].HasBody)
+            return (0,0,0,0,0,0);
+        var method=found[0];
+        var ins=method.Body.Instructions;
+        var entries=Entries(method);
+        int total=0,nulls=0,constructors=0,calls=0,unknown=0,branches=0;
+        for(int i=0;i<ins.Count;i++)
+        {
+            if(ins[i].OpCode.FlowControl is FlowControl.Branch or
+                FlowControl.Cond_Branch) branches++;
+            if(ins[i].OpCode.Code!=Code.Ret) continue;
+            total++;
+            if(entries.Contains(ins[i]))
+            {
+                unknown++;
+                continue;
+            }
+            int p=Prev(ins,0,i);
+            if(p<0 || p>=i ||
+                ins[p].OpCode.FlowControl is FlowControl.Branch or
+                    FlowControl.Cond_Branch or FlowControl.Throw)
+            {
+                unknown++;
+                continue;
+            }
+            var op=ins[p];
+            if(op.OpCode.Code==Code.Ldnull)
+                nulls++;
+            else if(op.OpCode.Code==Code.Newobj &&
+                op.Operand is MethodReference ctor &&
+                ctor.Name==".ctor" &&
+                ctor.DeclaringType.FullName=="UnityEngine.RenderTexture")
+                constructors++;
+            else if(op.OpCode.Code is (Code.Call or Code.Callvirt) &&
+                op.Operand is MethodReference returned &&
+                returned.ReturnType.FullName=="UnityEngine.RenderTexture")
+                calls++;
+            else unknown++;
+        }
+        if(total!=nulls+constructors+calls+unknown)
+            throw new InvalidDataException("Unbalanced original RT return count");
+        return (total,nulls,constructors,calls,unknown,branches);
+    }
+
     internal static SafeProfile Inspect(IEnumerable<MethodDefinition> originals,
         MethodReference recipient,FoamByrefAllocationFlow.SafeProfile prior)
     {
@@ -195,8 +261,14 @@ internal static class FoamByrefElementValueOrigin
             op.Operand is MethodReference call
             ? MatchActualRtCall(originals,call)
             : (0,"not_an_immediate_rendertexture_call",false);
+        var returns=identity.Item1==1 && identity.Item3 &&
+            op.Operand is MethodReference rtCall
+            ? ScanMatchingReturnBody(originals,rtCall)
+            : (0,0,0,0,0,0);
         return new SafeProfile(1,1,immediate,origin.Category,origin.NewRt,
             origin.CallRt,origin.Null,origin.Local,false,false,
-            identity.Item1,identity.Item2,identity.Item3);
+            identity.Item1,identity.Item2,identity.Item3,
+            returns.Item1,returns.Item2,returns.Item3,
+            returns.Item4,returns.Item5,returns.Item6);
     }
 }
