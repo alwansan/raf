@@ -1,4 +1,8 @@
 name: T3 RENDER-002 real Texture2D export WITH original SHA-locked resS pixels
+# T3 authenticated metadata diagnostic retry: CI42010930444 verified 76/30
+# decoded original/output pairs but all codec/space attributes were UNKNOWN;
+# source now reads original typetree m_TextureFormat + m_ColorSpace,
+# CI42012046489 passed typed metadata / category privacy controls.
 # T3 2026-11-05 new causal question: 76 exact / 30 RGB drift actual pairs
 # grouped by authenticated original texture codec, preserving source privacy.
 # New controls pass CI42003607001; old source/output parity checks not reinterpreted.
