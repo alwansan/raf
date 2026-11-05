@@ -69,6 +69,23 @@ static class Program
         Check(!PhysicalMouseMotionSource.ValidDelta(10001f, 1f),
             "Reject out-of-range delta");
 
+
+        // The native View listener itself is tied to a specific capture request.
+        // A previous ACTION_MOVE may finish after release and a newer request:
+        // even if requested becomes true again, the stale packet must fail.
+        Check(PhysicalMouseMotionSource.AcceptEpoch(17, 17, true),
+            "Current captured listener accepted");
+        Check(!PhysicalMouseMotionSource.AcceptEpoch(17, 18, true),
+            "Old captured listener cannot enter newer request");
+        Check(!PhysicalMouseMotionSource.AcceptEpoch(18, 18, false),
+            "Release rejects same-generation callback");
+        Check(!PhysicalMouseMotionSource.AcceptEpoch(18, 19, false),
+            "Release plus new epoch rejects callback");
+        Check(PhysicalMouseMotionSource.AcceptEpoch(19, 19, true),
+            "New listener restores current mouse movement");
+        Check(!PhysicalMouseMotionSource.AcceptEpoch(-1, 19, true),
+            "Invalid generation never accepted for current capture");
+
         Console.WriteLine("T4_PHYSICAL_MOUSE_DELTA_CONTROLS passed=" + tests +
             " AndroidJavaBridgeCompiled=false DeviceVerified=false");
         return 0;
