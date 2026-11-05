@@ -22,3 +22,7 @@ Code: private materials map `05d460d6853397ce6df765a435f21fbe4930435c`, SHA sour
 Compare the exact 5 SHA-original ParticleShader48 Material21 objects and their 10 non-null local Texture PPtrs / 3 unique source targets with *same-instance* W1 Material21/B02 Texture2D28 export trace and current Android-installed shader/texture GUID bindings. Check Texture2D object type/metadata before claiming source texture payload presence. Match phone emitter prefab/material and fire/smoke pixels before changing game shaders.
 
 Do not silently substitute a known-looking public shader, remove alpha, switch ColorMask RGB to RGBA, or declare RENDER-002 READY based on material slots. No game source/ShaderLab/.meta/GUID/audio/Settings/input/local-save/assets/Unity build changed. Separate scheduled T3 sessions and old state/MEMORY not overwritten.
+
+## Canonical team ledger
+
+[GitHub Actions 42119891933](https://github.com/alwansan/raf/actions/runs/42119891933) **SUCCESS** at workflow source `bdd28c85a6692c33208201660ba46b2d77785fde`, reindexing the new genuine source-only Material/TexEnv evidence in the still-OPEN `RENDER-002` issue. No team readiness or Android pixels were inferred.
