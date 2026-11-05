@@ -1,0 +1,115 @@
+name: T1 WATER-001 source-free Unity 2021 Vulkan backend and compute smoke
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-t1-fft-sourcefree-force-vulkan.yml
+      - scripts/t1_vulkan_editor_smoke_gate.py
+      - tests/test_t1_vulkan_editor_smoke_gate.py
+      - android-port/Experiments/T1/T1SourceFreeVulkanBackendTests.cs
+
+permissions:
+  contents: read
+
+concurrency:
+  group: t1-fft-sourcefree-vulkan-2021-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  licensed-sourcefree-editor-vulkan:
+    runs-on: ubuntu-24.04
+    environment: UNITY_LICENSE
+    timeout-minutes: 35
+    concurrency:
+      group: raft-native-engine-${{ github.ref }}
+      cancel-in-progress: false
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      CLI_SHA256: 1de550a620ee92e05e920b6db7d431621440b60b2577f04b4a997dc92a58cb0a
+      UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+      UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+      UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+      UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+    steps:
+      - name: Check activation inputs and disk without printing credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          set +x
+          if [ -z "${UNITY_LICENSE:-}" ] && {
+             [ -z "${UNITY_SERIAL:-}" ] || [ -z "${UNITY_EMAIL:-}" ] ||
+             [ -z "${UNITY_PASSWORD:-}" ]; }; then
+            echo 'RAFT_T1_VULKAN_PREFLIGHT activation_inputs_missing=true original_data_acquired=false'
+            exit 1
+          fi
+          test "$(df -Pk "$RUNNER_TEMP" | awk 'NR==2{print $4}')" -gt 20971520
+          echo 'RAFT_T1_VULKAN_PREFLIGHT sourcefree=true source_authentic_raft_acquired=false'
+      - name: Checkout only source-free public scripts and fixtures
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+            android-port/Experiments/T1
+      - name: Run strict source-free fake-report and Unity fixture controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_t1_vulkan_editor_smoke_gate.py -v
+          python3 -m unittest discover -s tests -p test_t1_sourcefree_unity_fixture.py -v
+      - name: Create a tiny authored Unity 2021 EditMode fixture with no original FFT
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.t1_sourcefree_unity_fixture --project t1-vulkan-sourcefree
+          cp android-port/Experiments/T1/T1SourceFreeVulkanBackendTests.cs \
+            t1-vulkan-sourcefree/Assets/Tests/Editor/T1SourceFreeVulkanBackendTests.cs
+          test "$(find t1-vulkan-sourcefree -name '*.compute' -type f | wc -l)" = 1
+          test "$(find t1-vulkan-sourcefree -name '*.cs' -type f | wc -l)" = 2
+          test ! -e t1-vulkan-sourcefree/Assets/T1OriginalDerived
+          echo 'RAFT_T1_VULKAN_STAGING original_fft=false authored_synthetic_compute=true testcases_expected=3'
+      - name: Pin exactly GameCI CLI v0.1.72 verified by earlier genuine Unity tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/t1-vulkan-cli"
+          curl --fail --location --silent --show-error --retry 3 \
+            "https://github.com/game-ci/cli/releases/download/v0.1.72/game-ci-linux-x64.tar.gz" \
+            --output "$RUNNER_TEMP/t1-vulkan-cli.tar.gz"
+          echo "$CLI_SHA256  $RUNNER_TEMP/t1-vulkan-cli.tar.gz" | sha256sum --check --status
+          tar -xzf "$RUNNER_TEMP/t1-vulkan-cli.tar.gz" -C "$RUNNER_TEMP/t1-vulkan-cli"
+          find "$RUNNER_TEMP/t1-vulkan-cli" -type f -name game-ci -print -quit > "$RUNNER_TEMP/t1-vulkan-cli-exe.txt"
+          test -s "$RUNNER_TEMP/t1-vulkan-cli-exe.txt"
+          chmod +x "$(cat "$RUNNER_TEMP/t1-vulkan-cli-exe.txt")"
+          echo 'RAFT_T1_VULKAN_CLI pinned_version=0.1.72 hash_verified=true'
+      - name: Run exact Editor Unity 2021 -force-vulkan with synthetic GPU arithmetic, private logs
+        shell: bash
+        run: |
+          set -euo pipefail
+          set +x
+          cli="$(cat "$RUNNER_TEMP/t1-vulkan-cli-exe.txt")"
+          set +e
+          timeout 1000s "$cli" test --docker --dockerShmSize=1025m --engine=unity \
+            t1-vulkan-sourcefree --testPlatforms=editmode --engineVersion=2021.3.45f2 \
+            --artifactsPath=t1-vulkan-private-reports \
+            --containerRegistryRepository=unityci/editor --containerRegistryImageVersion=3 \
+            --customParameters=-force-vulkan \
+            > "$RUNNER_TEMP/t1-vulkan-cli-private.log" 2>&1
+          rc=$?
+          set -e
+          sudo chown -R "$(id -u):$(id -g)" \
+            t1-vulkan-sourcefree t1-vulkan-private-reports || true
+          python3 -m scripts.t1_vulkan_editor_smoke_gate \
+            --xml t1-vulkan-private-reports/editmode-results.xml --editor-exit "$rc"
+      - name: Delete all disposable Unity test projects and local reports
+        if: always()
+        shell: bash
+        run: |
+          sudo rm -rf "$GITHUB_WORKSPACE/t1-vulkan-sourcefree" \
+            "$GITHUB_WORKSPACE/t1-vulkan-private-reports"
+          rm -rf "$RUNNER_TEMP/t1-vulkan-cli" "$RUNNER_TEMP/t1-vulkan-cli.tar.gz" \
+            "$RUNNER_TEMP/t1-vulkan-cli-exe.txt" "$RUNNER_TEMP/t1-vulkan-cli-private.log"
