@@ -1,0 +1,41 @@
+{
+  "session_id": "20261105T1715Z-T3-chat-ps-readmask-spv-5e84",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "base_sha": "8590ee379b29e19d122d88a3aca9b0e6729e3621",
+  "updated_at": "2026-11-05T17:15:00Z",
+  "resumed_from_sessions": [
+    "20261105T1701Z-T3-chat-original-dxbc-semantic-join-6d9f",
+    "20261105T1625Z-T3-scheduled-dxbc-contract-8f2c"
+  ],
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/actions/runs/42071059741",
+    "https://github.com/alwansan/raf/actions/runs/42068915602"
+  ],
+  "experiment_key": "T3-ZIP2-15964ea8-921-Shader48-four-original-VF-pairs-ISGN-fragment-read-mask-compare-same-source-SPIRV-Cross-user-input-component-count",
+  "resource_key": "T3-921-fourpass-original-PS-readmask-vkd3d-CPU",
+  "hypothesis": "DXBC ISGN/ISG1 PixelShader ReadWriteMask read lanes are a strict subset of declared 75 lanes and may account for 44 user component lanes in original vs derived SPIR-V fragment reflection. Equality of aggregate counts is diagnostic only, not name/register Location mapping.",
+  "intended_files": [
+    "scripts/t3_original_921_dxbc_readmask_spirv.py",
+    "tests/test_t3_original_921_dxbc_readmask_spirv.py",
+    ".github/workflows/raft-t3-original-921-dxbc-readmask-spv.yml",
+    ".github/t3-dxbc-readmask-requests/20261105T1715Z-T3-chat-ps-readmask-spv-5e84.json",
+    "docs/T3_ORIGINAL_921_DXBC_READMASK_SPV_2026-11-05.md",
+    "prompt/coordination/clients/T3/sessions/20261105T1715Z-T3-chat-ps-readmask-spv-5e84.md",
+    "prompt/coordination/experiments/T3/20261105T1715Z-T3-chat-ps-readmask-spv-5e84.json",
+    "prompt/coordination/B_TEAM/events/T3/20261105T1715Z-T3-chat-ps-readmask-spv-5e84.json"
+  ],
+  "independence": "Scheduled T3 has DXBC signature validator script; do NOT edit it. Reuse new genuine signature parser unchanged, same-source original PS SPIR-V reflection via proven translation. No native build, no sound/Settings/touch, no other T agents workflows.",
+  "safety": "Only source-safe aggregate; raw Shader48 DXBC/SPV/HLSL/semantic strings ephemeral, no upload. No CI duplicates of unchanged experiments.",
+  "active_jobs_snapshot": [
+    {
+      "id": 42072599788,
+      "name": "Raft Android offline platform adapter - build and test"
+    },
+    {
+      "id": 42072599747,
+      "name": "T2 WATER-001 genuine Foam nonproperty texture names to original managed IL literal contexts"
+    }
+  ]
+}
