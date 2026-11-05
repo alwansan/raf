@@ -136,6 +136,7 @@ internal static class Program
         public int SecondProducerExactManagedMethodDefinitionMatches;
         public int SecondProducerExactManagedBodyMatches;
         public int SecondProducerAmbiguousOrMissingMethodDefinitions;
+        public FoamProducerBody.SafeProfile? OriginalSingleProducerBodyProfile;
         public readonly Dictionary<string,int> TotalSetterCalls = new(StringComparer.Ordinal)
         {
             ["shader_global_texture"] = 0,
@@ -285,7 +286,20 @@ internal static class Program
                                 result.SecondProducerExactManagedMethodDefinitionMatches++;
                                 if (candidates[0].HasBody &&
                                     candidates[0].Body.Instructions.Count>0)
+                                {
                                     result.SecondProducerExactManagedBodyMatches++;
+                                    if (candidates[0].HasThis &&
+                                        candidates[0].Parameters.Count==1 &&
+                                        candidates[0].Parameters[0].ParameterType.FullName=="System.Int32" &&
+                                        candidates[0].ReturnType.FullName=="UnityEngine.Texture")
+                                    {
+                                        var profile=FoamProducerBody.Inspect(candidates[0]);
+                                        if (result.OriginalSingleProducerBodyProfile is not null &&
+                                            result.OriginalSingleProducerBodyProfile!=profile)
+                                            throw new InvalidDataException("Inconsistent private original producer body profile");
+                                        result.OriginalSingleProducerBodyProfile=profile;
+                                    }
+                                }
                             }
                             else
                                 result.SecondProducerAmbiguousOrMissingMethodDefinitions++;
@@ -377,6 +391,8 @@ internal static class Program
             non_authored_second_producer_compiled_signature_exact_original_method_definition_matches = result.SecondProducerExactManagedMethodDefinitionMatches,
             non_authored_second_producer_exact_original_method_definitions_with_body = result.SecondProducerExactManagedBodyMatches,
             non_authored_second_producer_missing_or_ambiguous_original_definitions = result.SecondProducerAmbiguousOrMissingMethodDefinitions,
+            original_exact_Texture_int_producer_body_op_classes = result.OriginalSingleProducerBodyProfile,
+            original_exact_Texture_int_producer_body_accepted_same_SHA_definition = result.OriginalSingleProducerBodyProfile is not null,
             original_exact_method_definition_is_original_runtime_called_or_output_proof = false,
             producer_declared_signature_is_actual_runtime_texture_object_proof = false,
             second_argument_origin_label_is_actual_texture_instance_proof = false,
@@ -530,7 +546,41 @@ internal static class Program
         if (missing.SecondProducerExactManagedMethodDefinitionMatches!=0 ||
             missing.SecondProducerAmbiguousOrMissingMethodDefinitions!=1)
             throw new InvalidDataException("Unresolved original method definition must not be invented");
-        var wrongProducer=new MethodReference("PublicSyntheticWrongReturn",
+        var indexedField=new FieldDefinition("PublicSyntheticTextureArray",
+            Mono.Cecil.FieldAttributes.Public,new ArrayType(textureType));
+        factoryDef.Fields.Add(indexedField);
+        var indexedGetter=new MethodDefinition("PublicSyntheticIndexedTexture",
+            Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Virtual,
+            textureType);
+        indexedGetter.Parameters.Add(new ParameterDefinition(m.TypeSystem.Int32));
+        factoryDef.Methods.Add(indexedGetter);
+        var ilidx=indexedGetter.Body.GetILProcessor();
+        ilidx.Append(ilidx.Create(OpCodes.Ldarg_0));
+        ilidx.Append(ilidx.Create(OpCodes.Ldfld,indexedField));
+        ilidx.Append(ilidx.Create(OpCodes.Ldarg_1));
+        ilidx.Append(ilidx.Create(OpCodes.Ldelem_Ref));
+        ilidx.Append(ilidx.Create(OpCodes.Ret));
+        var knownShape=FoamProducerBody.Inspect(indexedGetter);
+        if (!knownShape.ExactThisTextureArrayIndexedByIntParameter ||
+            !knownShape.TypedTextureArrayFieldReferenced ||
+            knownShape.IndexedReferenceLoads!=1)
+            throw new InvalidDataException("Synthetic exact Texture[] indexed return not validated");
+        var wrongIndexed=new MethodDefinition("PublicSyntheticExtraSourceInstruction",
+            Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Virtual,
+            textureType);
+        wrongIndexed.Parameters.Add(new ParameterDefinition(m.TypeSystem.Int32));
+        factoryDef.Methods.Add(wrongIndexed);
+        var ilwrong=wrongIndexed.Body.GetILProcessor();
+        ilwrong.Append(ilwrong.Create(OpCodes.Ldarg_0));
+        ilwrong.Append(ilwrong.Create(OpCodes.Ldfld,indexedField));
+        ilwrong.Append(ilwrong.Create(OpCodes.Ldarg_1));
+        ilwrong.Append(ilwrong.Create(OpCodes.Ldc_I4_0));
+        ilwrong.Append(ilwrong.Create(OpCodes.Pop));
+        ilwrong.Append(ilwrong.Create(OpCodes.Ldelem_Ref));
+        ilwrong.Append(ilwrong.Create(OpCodes.Ret));
+        if (FoamProducerBody.Inspect(wrongIndexed).ExactThisTextureArrayIndexedByIntParameter)
+            throw new InvalidDataException("Changed original Texture[] body must reject exact pattern");
+                var wrongProducer=new MethodReference("PublicSyntheticWrongReturn",
             m.TypeSystem.Object,publicFactory){HasThis=false};
         var producedWrong=new MethodDefinition("PublicSyntheticNonTextureProducer",
             Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,
@@ -599,6 +649,8 @@ internal static class Program
                 producer_runtime_execution_not_claimed=true,
                 actual_original_method_signature_and_body_fixture=true,
                 source_class_declaring_same_assembly_without_real_definition_rejected=true,
+                strict_original_managed_Texture_array_int_index_return_fixture=true,
+                altered_extra_instruction_return_body_shape_rejected=true,
                 private_IL_names_or_source_published = false
             }));
         return 0;
