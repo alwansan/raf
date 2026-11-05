@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T0030Z-T2-sampler-ssa-isolated",
+  "issue_id": "WATER-001",
+  "track": "foam-actual-compiled-sampler-use-edges",
+  "approach": "Independently trace direct SPIR-V SSA OpLoad/OpCopyObject→OpSampledImage→OpImageSample* edges to numeric descriptor slots for B20 authenticated four-stage original Foam. Fail closed on ambiguous resource provenance. Compare against original source-authenticated six resource descriptor slots without assuming Unity Material identity. Private scratch/only safe numeric report.",
+  "status": "active",
+  "base_sha": "491b7a34c281107af30bce7e5021764ef202397a",
+  "intended_files": [
+    "scripts/t2_foam_spirv_sampler_use.py",
+    "tests/test_t2_foam_spirv_sampler_use.py",
+    ".github/workflows/raft-t2-foam-sampler-use.yml",
+    "prompt/coordination/clients/T2/sessions/20261105T0030Z-T2-sampler-ssa-isolated.md"
+  ],
+  "hypothesis": "Compiled separate sampled images and samplers are materially combined in original stage use graph with resolvable numeric pairs, beyond prior counts and failed 0/6 original symbol name equality.",
+  "related_work": [
+    "https://github.com/alwansan/raf/actions/runs/41941354379"
+  ],
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/B20/MEMORY.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/B25/MEMORY.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/T2/MEMORY.md"
+  ],
+  "experiment_ids": [
+    "T2-foam-sampler-ssa-used-pairs-20261105"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41942245746"
+  ],
+  "result": null,
+  "next_step": "Inspect actual CI synthetic and authentic source outcome; preserve only numeric pair evidence, reject unsupported SSA rather than invent resource pairing; coordinate current T2 session without overwriting shared memory/state.",
+  "updated_at": "2026-11-05T00:34Z",
+  "identity_conflict": "Shared T2 state/MEMORY not modified; isolated session"
+}
