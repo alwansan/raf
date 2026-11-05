@@ -1,0 +1,32 @@
+name: T5 INTEGRATION-001 exact cancelled native run verdict (CPU only)
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t5_audit_native_run_verdict.py
+      - tests/test_t5_native_run_verdict.py
+      - tests/fixtures/t5_native_run_42042902522.json
+      - .github/workflows/raft-t5-native-run-verdict.yml
+permissions:
+  contents: read
+concurrency:
+  group: t5-native-verdict-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  cancelled-native-run-verdict:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Test exact canceled native run snapshot and adversarial false green gates
+        run: |
+          set -euo pipefail
+          python3 -m unittest -v tests.test_t5_native_run_verdict
+      - name: Record source-only semantics
+        if: always()
+        run: echo 'GitHub Actions JSON verdict only; no original Unity, Raft game binaries or Android build; cancelled actor unknown.'
