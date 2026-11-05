@@ -6,7 +6,7 @@
   "issue_id": "LOCAL-005",
   "track": "world-save",
   "approach": "Controlled same-original-DLL ILSpy reference-context A/B: privately decompile exact SHA-verified original managed binary alone versus alongside the pinned full feature Managed sibling assemblies, holding CLI/runtimes constant. Verify prior source-pair fingerprints; do not modify Android adapters/source SHA gates.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "02e9fba7fb42b83579595885391be636ee3b56e8",
   "intended_files": [
     "scripts/t4_probe_ilspy_reference_context.py",
@@ -27,8 +27,26 @@
   "experiment_ids": [
     "20261105T1021Z-ilspy-managed-references"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Build SHA-only A/B three-directory dependency-context comparator, source-free negative controls, isolated 12min GitHub Action pinned original binary and fixed feature Managed sibling SHA, then report whether the two prior source pairs are explained; preserve production pins. LOCAL-005 still OPEN.",
-  "updated_at": "2026-11-05T10:21:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42011353849",
+    "https://github.com/alwansan/raf/actions/runs/42012049920",
+    "https://github.com/alwansan/raf/actions/runs/41942118067"
+  ],
+  "result": {
+    "original_assembly_same_sha_three": true,
+    "original_managed_dll_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "reference_siblings": 151,
+    "isolated_pair": "T4 alternate exactly reproduced twice",
+    "with_references_pair": "B07 authentic original exactly reproduced",
+    "source_free_tests": "10/10 PASS",
+    "production_adapter_exercised": true,
+    "adapted_sha256_matches_manifest": "996e4c4c2bcf593436af6ef895116dbdfe4a13c99b5618971c91bf2c1626385f",
+    "original_world_completion_and_yields_preserved": true,
+    "actual_original_csharp_managed_compile": "CI41942118067 PASS exit=0 at T4 original marker commit",
+    "unity_il2cpp_device": false,
+    "rgd_roundtrip": false,
+    "report": "docs/T4_ILSPY_REFERENCE_CONTEXT_2026-11-05.md"
+  },
+  "next_step": "Coordinate T5 future native Unity/IL2CPP integration using full Managed sibling reference context; on actual new device build capture firstMoveNext, originalCompletionAssigned, OnWorldRecieved, SaveGame/SaveUser/SaveWorld, Load.caughtException and genuine persistent .rgd create-save-reopen. No native package/device evidence; preserve strict SHA pins, LOCAL-005 OPEN NOT_READY.",
+  "updated_at": "2026-11-05T10:39:00Z"
 }
