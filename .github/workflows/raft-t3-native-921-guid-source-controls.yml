@@ -5,6 +5,8 @@ on:
     paths:
       - scripts/t3_native_original_921_shader_target_audit.py
       - tests/test_t3_native_original_921_shader_target_audit.py
+      - scripts/t3_source_renderer_shader_to_postvendor_export.py
+      - tests/test_t3_source_renderer_shader_to_postvendor_export.py
       - .github/workflows/raft-t3-native-921-guid-source-controls.yml
   workflow_dispatch:
 permissions:
