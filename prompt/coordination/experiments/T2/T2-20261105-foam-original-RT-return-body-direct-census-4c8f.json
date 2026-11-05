@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261105T1712Z-T2-chat-return-identity-minimal-4c8f",
+  "issue_id": "WATER-001",
+  "status": "completed",
+  "experiment_key": "T2|ZIP2-15964ea8|original-DLL-0a6f0527|Foam-typed-RT-return-method-immediate-ret-sources-v2",
+  "source": {
+    "ZIP2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "original_managed_DLL_bytes": 3211776,
+    "original_managed_DLL_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e"
+  },
+  "source_commits": [
+    "be96f7688724885e0af7b7352c1260cd37acd57c",
+    "7fc3f0f41b7183627d5a07ba7450d776a72bfd6c",
+    "8f36b1f6cc07ecd749410df3456b82b93d26f340"
+  ],
+  "original_ci": "https://github.com/alwansan/raf/actions/runs/42073459459",
+  "artifact": {
+    "id": 13437103838,
+    "bytes": 2962,
+    "sha256": "522be100d6ca08b37a0310e610f89816b15f01310669bf45a258cf5107f15aae"
+  },
+  "method": "Cecil source-authentic exact same-SHA matching typed RT return signature, count compiled ret sites and direct prior opcode. Return at branch/exception target explicitly unresolved. Synthetic immediate null, RenderTexture constructor, branch-target negative controls.",
+  "result": {
+    "CI": "COMPLETED SUCCESS",
+    "matching_method_body_available": true,
+    "total_compiled_ret_sites": 1,
+    "compiled_branch_instructions": 3,
+    "direct_null_return_sites": 0,
+    "direct_RenderTexture_newobj_return_sites": 0,
+    "direct_RenderTexture_typed_call_return_sites": 0,
+    "unresolved_return_source_sites": 1,
+    "source_original_nonnull_return_verified": false,
+    "game_device_rendering_verified": false,
+    "original_symbols_il_private_numbers_disclosed": false
+  },
+  "next_step": "Classify source of sole unresolved return and branch/aliases with conservative SSA or exact basic-block logic; actual Unity RenderTexture runtime nonnull, pixels, and material binding remain unknown. WATER-001 OPEN NOT_READY0/3."
+}
