@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T0040Z-T5-real-hydrator-entrypoint",
+  "issue_id": "ASSET-RESTORE-001",
+  "track": "Real production hydration --apply opt-in execution with SHA-pinned 3 owners",
+  "approach": "Extend only T5-owned isolated workflow after genuine ZIP2 3-owner direct reuse. Restore exact feature Git LFS pointers in ephemeral checkout, patch production plan() ONLY to a bounded 3-original-owner immutable subset, then invoke REAL hydrate_render_payloads.main() with --apply and RAFT_T5_VERIFIED_ZIP2_RENDER_ROOT. Verify it SHA-hydrates all three, blocks any subprocess.run (enforcing no Git LFS fallback), and logs authentic source count. No shared native workflow changes or Unity build.",
+  "status": "active",
+  "base_sha": "1940a856cc2ee0724bff04d47aba408e10ac7eae",
+  "intended_files": [
+    ".github/workflows/raft-t5-zip2-render-stage.yml",
+    "prompt/coordination/clients/T5/MEMORY.md",
+    "prompt/coordination/clients/T5/state.json"
+  ],
+  "hypothesis": "Direct consumer test cannot prove production --apply actually honors T5 opt-in stage root and skips LFS; running genuine main() with exact original 3-path subset catches wiring regressions without 7.79GB Unity build.",
+  "related_work": [
+    "https://github.com/alwansan/raf/actions/runs/41942039458"
+  ],
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/T5/MEMORY.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/work/ASSET-RESTORE-001/T5-20261105T0032Z-batch-digest-prepublish.json"
+  ],
+  "last_verified_result": "CI41942039458 17/17 and real 3-owner direct consumer authentic 337660952B, but main --apply was not invoked.",
+  "experiment_ids": [
+    "T5-20261105T0040Z-main-apply-original3"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement isolated T5 workflow exact original 3-pointer restore plus production --apply invoked through guarded entrypoint, check resulting CI, document limitations.",
+  "updated_at": "2026-11-05T00:40:00Z"
+}
