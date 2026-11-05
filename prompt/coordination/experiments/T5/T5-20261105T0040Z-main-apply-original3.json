@@ -20,16 +20,18 @@
     "restore exact three feature pointer Git blobs before entrypoint"
   ],
   "workflow_path": ".github/workflows/raft-t5-zip2-render-stage.yml",
-  "run_url": null,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41942815626",
   "artifact_urls": [],
   "budget": "15min ubuntu-24.04 workflow, reuse same 337MB, no Unity/LFS/raw artifacts",
-  "status": "active",
-  "observed_result": null,
-  "rejected_hypotheses": [],
+  "status": "completed",
+  "observed_result": "CI41942815626 COMPLETED SUCCESS, 17/17 tests, production hydrate_render_payloads.main() --apply consumed actual ZIP2 3 owners verified 337660952 bytes and exactly 0 LFS subprocess.run calls. Log RAFT_FULL_GRAPHICS_VERIFIED objects=3 SHA true.",
+  "rejected_hypotheses": [
+    "Production --apply cannot use verified T5 stage root without Git LFS (false for bounded authentic 3-owner trial)"
+  ],
   "limitations": [
     "Python plan patched only for bounded 3 originals, not full project imported",
     "No Unity Editor, GPU or phone validation"
   ],
-  "integration_commit": null,
-  "next_step": "Append real production main() trial to own workflow; inspect actual CI then record evidence."
+  "integration_commit": "e5b461837bdcec38b11f74b0d26e2c8d7c52657b",
+  "next_step": "Real Unity Editor ShaderLab/Material/FFT import still OPEN; no pixels/device or whole full-graphics-plan demonstration."
 }
