@@ -1,0 +1,26 @@
+{
+  "session_id": "20261105T1723Z-T2-scheduled-rtcfg-a72e",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "baseline_sha": "19e06f45ce619a07481eb467b801f209033c0538",
+  "resumed_from_sessions": [
+    "20261105T1712Z-T2-chat-return-identity-minimal-4c8f",
+    "20261105T1623Z-T2-scheduled-caller-origin-6f2d"
+  ],
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/actions/runs/42073459459"
+  ],
+  "hypothesis": "The single unresolved original return may originate in locals or branches; fail-closed abstract interpretation of a bounded IL subset distinguishes definite null, definite construction and unknown without guessing.",
+  "experiment_key": "T2|synthetic-CIL|bounded-CFG-return-provenance-v1|no-original-data",
+  "resource_key": null,
+  "intended_files": [
+    "scripts/t2_rt_return_cfg.py",
+    "tests/test_t2_rt_return_cfg.py",
+    "prompt/coordination/work/WATER-001/T2-20261105T1723Z-scheduled-rt-cfg-provenance.json",
+    "prompt/coordination/clients/T2/sessions/20261105T1723Z-T2-scheduled-rtcfg-a72e.md"
+  ],
+  "last_evidence": "42073459459 source original one unresolved return, three branch opcodes; no runtime proof",
+  "next_step": "Implement and test standalone fail-closed CFG provenance before considering original integration.",
+  "updated_at": "2026-11-05T17:23:00Z"
+}
