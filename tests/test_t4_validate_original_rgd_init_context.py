@@ -13,6 +13,22 @@ def good():
         "world_producer_argument_count_category": "ZERO",
         "world_producer_invocation_kind": "STATIC_CALL",
         "world_producer_compiled_method_body_found": True,
+        "world_factory_return_metadata": {
+            "factory_lexical_return_sites": 2,
+            "factory_return_preceded_by_null_literal": 0,
+            "factory_return_preceded_by_derived_local": 1,
+            "factory_return_preceded_by_derived_field": 0,
+            "factory_return_preceded_by_derived_call": 0,
+            "factory_return_preceded_by_derived_constructor": 0,
+            "factory_return_preceded_by_other_or_unknown": 1,
+            "factory_derived_rgd_local_slot_count": 1,
+            "factory_direct_derived_rgd_constructor_sites": 1,
+            "factory_direct_derived_rgd_returning_call_sites": 0,
+            "factory_conditional_branch_sites": 2,
+            "factory_throw_or_rethrow_sites": 0,
+            "factory_null_literal_load_sites": 0,
+            "factory_all_return_paths_proven": False,
+        },
         "field_write_breakdown": {
             "user_original_direct_write_sites": 3,
             "user_field_writes_in_instance_constructor": 1,
@@ -35,6 +51,109 @@ def good():
 
 
 class TestOriginalRgdInitContext(unittest.TestCase):
+    def test_factory_original_return_partition_still_not_runtime_proof(self):
+        out = validate(good())
+        f = out["source_authentic_world_factory_return_site_categories"]
+        self.assertEqual(f["factory_lexical_return_sites"], 2)
+        self.assertFalse(out["factory_control_flow_paths_or_runtime_values_proven"])
+        self.assertFalse(out["same_world_saved_or_reopened_proven"])
+
+    def test_original_factory_direct_constructor_not_executed_proof(self):
+        out = validate(good())
+        f = out["source_authentic_world_factory_return_site_categories"]
+        self.assertEqual(f["factory_direct_derived_rgd_constructor_sites"], 1)
+        self.assertFalse(out["derived_RGD_runtime_value_initialized_proven"])
+
+    def test_factory_no_returns_rejected(self):
+        x = good()
+        x["world_factory_return_metadata"]["factory_lexical_return_sites"] = 0
+        with self.assertRaises(ValueError): validate(x)
+
+    def test_factory_unaccounted_return_rejected(self):
+        x = good()
+        x["world_factory_return_metadata"]["factory_return_preceded_by_other_or_unknown"] = 0
+        with self.assertRaises(ValueError): validate(x)
+
+    def test_factory_oversubscribed_returns_rejected(self):
+        x = good()
+        x["world_factory_return_metadata"]["factory_return_preceded_by_derived_field"] = 2
+        with self.assertRaises(ValueError): validate(x)
+
+    def test_factory_bool_return_count_rejected(self):
+        x = good()
+        x["world_factory_return_metadata"]["factory_lexical_return_sites"] = True
+        with self.assertRaises(ValueError): validate(x)
+
+    def test_factory_negative_return_count_rejected(self):
+        x = good()
+        x["world_factory_return_metadata"]["factory_conditional_branch_sites"] = -1
+        with self.assertRaises(ValueError): validate(x)
+
+    def test_factory_unbounded_return_count_rejected(self):
+        x = good()
+        x["world_factory_return_metadata"]["factory_conditional_branch_sites"] = 10001
+        with self.assertRaises(ValueError): validate(x)
+
+    def test_factory_missing_field_rejected(self):
+        x = good()
+        del x["world_factory_return_metadata"]["factory_null_literal_load_sites"]
+        with self.assertRaises(ValueError): validate(x)
+
+    def test_factory_private_member_name_rejected(self):
+        x = good()
+        x["world_factory_return_metadata"]["private_method_name"] = "OriginalFactory"
+        with self.assertRaises(ValueError): validate(x)
+
+    def test_factory_branch_path_proof_rejected(self):
+        x = good()
+        x["world_factory_return_metadata"]["factory_all_return_paths_proven"] = True
+        with self.assertRaises(ValueError): validate(x)
+
+    def test_factory_null_return_needs_null_literal(self):
+        x = good()
+        x["world_factory_return_metadata"]["factory_return_preceded_by_null_literal"] = 1
+        x["world_factory_return_metadata"]["factory_return_preceded_by_other_or_unknown"] = 0
+        with self.assertRaises(ValueError): validate(x)
+
+    def test_factory_constructor_return_needs_constructor(self):
+        x = good()
+        x["world_factory_return_metadata"]["factory_return_preceded_by_derived_constructor"] = 1
+        x["world_factory_return_metadata"]["factory_return_preceded_by_other_or_unknown"] = 0
+        x["world_factory_return_metadata"]["factory_direct_derived_rgd_constructor_sites"] = 0
+        with self.assertRaises(ValueError): validate(x)
+
+    def test_factory_call_return_needs_call_site(self):
+        x = good()
+        x["world_factory_return_metadata"]["factory_return_preceded_by_derived_call"] = 1
+        x["world_factory_return_metadata"]["factory_return_preceded_by_other_or_unknown"] = 0
+        with self.assertRaises(ValueError): validate(x)
+
+    def test_missing_original_factory_body_rejected(self):
+        x = good()
+        x["world_producer_compiled_method_body_found"] = False
+        with self.assertRaises(ValueError): validate(x)
+
+    def test_missing_factory_metadata_rejected(self):
+        x = good()
+        del x["world_factory_return_metadata"]
+        with self.assertRaises(ValueError): validate(x)
+
+    def test_original_factory_metadata_string_rejected(self):
+        x = good()
+        x["world_factory_return_metadata"] = "private original bytes"
+        with self.assertRaises(ValueError): validate(x)
+
+    def test_multiple_lexical_return_sites_can_include_null_but_not_executed(self):
+        x = good()
+        f = x["world_factory_return_metadata"]
+        f["factory_return_preceded_by_null_literal"] = 1
+        f["factory_return_preceded_by_other_or_unknown"] = 0
+        f["factory_null_literal_load_sites"] = 1
+        out = validate(x)
+        self.assertEqual(
+            out["source_authentic_world_factory_return_site_categories"]["factory_return_preceded_by_null_literal"], 1)
+        self.assertFalse(out["factory_control_flow_paths_or_runtime_values_proven"])
+
     def test_valid_context_remains_source_only(self):
         out = validate(good())
         self.assertEqual(out["world_producer_owner_scope"], "OTHER_ORIGINAL_CLASS")
