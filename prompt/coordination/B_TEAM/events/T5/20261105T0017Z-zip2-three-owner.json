@@ -1,0 +1,14 @@
+{
+  "id": "T5-20261105T0017Z-zip2-three-owner",
+  "owner": "T5",
+  "session_id": "20261104T2357Z-T5-b12-fixture-7e2",
+  "issue_id": "ASSET-RESTORE-001",
+  "type": "integration",
+  "summary": "T5 extended source-integrated ZIP2 bridge to 3 authentic original Unity graphics owners (resources.assets, sharedassets0.assets, sharedassets36.assets), total 337660952B. Isolated actual ZIP2 checkout and independent feature LFS consumer SHA verification CI41940032540 SUCCESS, 13/13 synthetic including two-owner fail-before-first-publish. No Unity import, real compute FFT kernel, Adreno/pixels or device claim.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41940032540",
+    "https://github.com/alwansan/raf/actions/runs/41940016502",
+    "https://github.com/alwansan/raf/commit/0f3739e38f6b42c92100e75697a314988869cf63"
+  ],
+  "at": "2026-11-05T00:17:37.064Z"
+}
