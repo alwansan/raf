@@ -1,0 +1,65 @@
+name: T4 LOCAL-005 Android post-Save file-state diagnostic compile and runtime
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/instrument_android_runtime_operations.py'
+      - 'scripts/t4_verify_android_save_postcheck.py'
+      - 'tests/test_runtime_operation_traces.py'
+      - '.github/workflows/raft-t4-android-save-file-postcheck.yml'
+permissions:
+  contents: read
+concurrency:
+  group: raft-t4-android-save-file-postcheck-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  bounded-synthetic-android-save-probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - name: Checkout only public T4 operation instrumentation and source-free tests
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/instrument_android_runtime_operations.py
+            /scripts/t4_verify_android_save_postcheck.py
+            /tests/test_runtime_operation_traces.py
+      - name: Run source-free Save and operation-gate controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/instrument_android_runtime_operations.py scripts/t4_verify_android_save_postcheck.py tests/test_runtime_operation_traces.py
+          python3 -m unittest discover -s tests -p test_runtime_operation_traces.py -v
+          test ! -e Raft
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Compile and execute only synthetic Save under UNITY_ANDROID preprocessor
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.t4_verify_android_save_postcheck --output "$RUNNER_TEMP/t4-post-save-fixture"
+          set +e
+          timeout 120s dotnet run --project "$RUNNER_TEMP/t4-post-save-fixture/Probe.csproj" -c Release \
+            >"$RUNNER_TEMP/t4-post-save-private.log" 2>&1
+          code=$?
+          set -e
+          if test "$code" -ne 0; then
+            python3 - <<'PY'
+          import collections,os,re
+          from pathlib import Path
+          log=(Path(os.environ['RUNNER_TEMP'])/'t4-post-save-private.log').read_text(errors='replace')
+          print('T4_POST_SAVE_SYNTHETIC_ERROR_CODES',dict(collections.Counter(
+              re.findall(r'error +(CS[0-9]+|NETSDK[0-9]+)',log))))
+          PY
+            exit 1
+          fi
+          grep -x 'T4_ANDROID_POST_SAVE_CHECK synthetic_android_csharp_compiled=true nonempty_file_observed=true empty_path_observed=true logger_failure_nonfatal=true original_exception_preserved=true original_game_serializer_executed=false real_RGD_roundtrip=false unity_il2cpp_or_device_tested=false' \
+            "$RUNNER_TEMP/t4-post-save-private.log"
+      - name: No original Raft data, saved games, device or Unity build involved
+        if: always()
+        run: echo 'Synthetic post-Save source only; authentic original-source compile runs separately in offline integration. No user save, private source, Unity/IL2CPP or real device.'
