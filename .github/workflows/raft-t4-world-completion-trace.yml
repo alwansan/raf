@@ -69,26 +69,49 @@ jobs:
           src, digest = _source(Path(os.environ['RUNNER_TEMP'])/'t4-private-source', 'Raft_Network', None)
           original_return, original_body = method_body(src, 'WorldHasBeenLoaded')
           original_body_sha = fingerprint(original_body)
-          print('T4_ORIGINAL_COMPILER_VARIANT ' + json.dumps({
-              'sha256_original_dll_verified':True,
-              'decompiler_class_sha256':digest,
-              'matches_production_class_pin':digest == ORIGINAL_NETWORK_SHA256,
-              'coroutine_body_sha256':original_body_sha,
-              'original_return_type':original_return,
-              'source_bytes_length':len(src.encode()),
-              'original_source_published':False,
-          },sort_keys=True))
-          if digest != ORIGINAL_NETWORK_SHA256:
-              raise ValueError('Original decompiler class SHA differs from production pin; require independent proof before native adaptation')
-          adapted = adapt('Raft_Network', src)
-          manifest = json.loads(Path('config/runtime-operation-traces.json').read_text())
-          assert fingerprint(adapted) == manifest['sources']['Raft_Network']['sha256'], 'Offline-adapted original SHA drift'
-          result = instrument('Raft_Network', adapted, manifest)
+          # Only two independently observed class/body output pairs from the
+          # same exact original SHA-verified DLL are admissible here.
+          pinned = (ORIGINAL_NETWORK_SHA256,
+                    'cbd74c24f1c6a86dd50e8d320f4f4142f5b3f3fc5bf8f64ded04710c30c3a140')
+          readonly_variant = ('d16c36336a6aec4e23781c135820692a233130a3f1c1d9ab9052d432d76eedef',
+                              '2bf76a189a69d23444c5ede9f00a5444a48f819c64d87ec298ebeedbf5d9088c')
+          if (digest, original_body_sha) not in (pinned, readonly_variant):
+              raise ValueError('Unknown original decompiler source or coroutine body, fail closed')
+          assert original_return == 'IEnumerator'
+          if (digest, original_body_sha) == pinned:
+              adapted = adapt('Raft_Network', src)
+              manifest = json.loads(Path('config/runtime-operation-traces.json').read_text())
+              assert fingerprint(adapted) == manifest['sources']['Raft_Network']['sha256'], 'Offline-adapted original SHA drift'
+              result = instrument('Raft_Network', adapted, manifest)
+              production_adapter_exercised = True
+          else:
+              # Only read-only original-code observation: do NOT admit an
+              # additional SHA into the production adapter or runtime manifest.
+              from scripts.b07_world_coroutine_trace import ENTRY
+              from scripts.instrument_android_runtime_operations import trace_original_world_completion
+              if src.count(original_body) != 1:
+                  raise ValueError('Ambiguous authenticated original coroutine')
+              entry_only = src.replace(original_body, ENTRY + original_body, 1)
+              result = trace_original_world_completion(entry_only)
+              production_adapter_exercised = False
           body = method_body(result, 'WorldHasBeenLoaded')[1]
           assert body.count('WorldHasBeenLoaded.firstMoveNext') == 1
           assert body.count('WorldHasBeenLoaded.originalCompletionAssigned') == 1
-          assert body.count('WorldHasBeenRecieved = true;') == 1
-          assert body.count('yield return') == method_body(src, 'WorldHasBeenLoaded')[1].count('yield return')
-          print('T4_WORLD_COMPLETION_SOURCE_AUTHENTIC ' + json.dumps({'original_network_sha':digest,'offline_sha':fingerprint(adapted),'entry_and_completion_markers':1,'original_completion_write_preserved':True,'new_ready_flag_added':False,'device_result':False},sort_keys=True))
+          from scripts.b07_probe_original_world_callbacks import _executable_positions
+          import re
+          assignments = r'\\bWorldHasBeenRecieved\\s*=\\s*true\\s*;'
+          assert len(re.findall(assignments, _executable_positions(original_body))) == 1
+          assert len(re.findall(assignments, _executable_positions(body))) == 1
+          assert body.count('yield return') == original_body.count('yield return')
+          print('T4_WORLD_COMPLETION_SOURCE_AUTHENTIC ' + json.dumps({
+              'original_network_sha':digest,
+              'coroutine_body_sha':original_body_sha,
+              'original_binary_sha_verified':True,
+              'entry_and_completion_markers':1,
+              'original_completion_write_preserved':True,
+              'new_ready_flag_added':False,
+              'production_adapter_exercised':production_adapter_exercised,
+              'device_result':False,
+          },sort_keys=True))
           PY
           # Private game sources, snippets, and binary bytes are NOT uploaded.
