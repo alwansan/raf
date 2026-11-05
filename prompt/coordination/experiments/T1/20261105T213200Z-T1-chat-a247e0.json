@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "session_id": "20261105T213200Z-T1-chat-a247e0",
+  "issue_id": "WATER-001",
+  "status": "waiting_ci",
+  "source_commit": "859ffdf49dc418ba6de9b71e80d532d01f51f57a",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42113634484",
+  "observed_result": "Prior replay https://github.com/alwansan/raf/actions/runs/42111819138 stopped at the keyed Vulkan shader compile before original Unity dispatch. Compiler diagnostics were intentionally redacted, so the exact failure is unconfirmed. A concrete flaw was fixed: the generator could append a second SV_DispatchThreadID when SPIRV-Cross provides it inside the entry input struct. Reuse the structured member, reject unsupported declarations, and require a source-free glslang plus spirv-val control before acquiring original data. 110 local FFT tests passed; compiler control is pending in CI.",
+  "next_step": "Check the source-free compiler control, then the original trace shader compile and output-parity gates before interpreting invocation counters."
+}
