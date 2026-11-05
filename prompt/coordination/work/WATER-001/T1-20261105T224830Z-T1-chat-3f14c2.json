@@ -1,0 +1,16 @@
+{
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261105T224830Z-T1-chat-3f14c2",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "d0f523196ad654ab4ef503469d2e0feecce7f680",
+  "intended_files": [
+    "scripts/t1_fft_trace_compare.py",
+    "tests/test_t1_fft_trace_compare.py",
+    ".github/workflows/raft-t1-fft-unity-input-identity.yml"
+  ],
+  "experiment_key": "fft-pair0-private-axis-mapping-classification",
+  "resource_key": "raft-native-engine-feature/android-native-port",
+  "updated_at": "2026-11-05T22:48:30Z"
+}
