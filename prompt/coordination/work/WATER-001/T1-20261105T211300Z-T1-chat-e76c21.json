@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "session_id": "20261105T211300Z-T1-chat-e76c21",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "base_sha": "8dcbff4441cdc3645c060779b1ed98ea7b96c2f8",
+  "status": "active",
+  "intended_files": [
+    "scripts/t1_fft_trace_compare.py",
+    "tests/test_t1_fft_trace_compare.py"
+  ],
+  "experiment_key": "fft-trace-invocation-keyed-comparator-synthetic-v2",
+  "updated_at": "2026-11-05T21:13:00Z"
+}
