@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T211313Z-T3-chat-particle-shader-rank-4e92",
+  "issue_id": "RENDER-002",
+  "hypothesis": "215 typed ParticleSystemRenderer slots may be dominated by a single original Shader48; distinguish ranked counts, global use, original Pass count and object multiplicity with fail-closed tie/zero controls, while excluding source high-use mesh921.",
+  "source_commit": "5d81dc7e89960c87be8a077b5c214e163ddabe81",
+  "input_hashes": [
+    "zip2 pin 15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "6 original scene SHA pins scripts/b21_scene_lightmap_links.py",
+    "4 Shader owner pins SHA bytes=269007288 scripts/a12_probe_original_blur_passes.py"
+  ],
+  "tool_versions": {
+    "UnityPy": "1.23.0",
+    "runner": "Ubuntu 24.04 Python3",
+    "Unity": "not invoked"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t3_original_renderer_shader_impact.py -v",
+    "python3 -m unittest discover -s tests -p test_b03_original_renderer_materials.py -v",
+    "python3 -m scripts.t3_original_renderer_shader_impact --original \"$RUNNER_TEMP/t3-original-six-scene\" --manifest zip2-source/RAFT_FILE_MANIFEST.tsv --out \"$RUNNER_TEMP/t3-original-six-scene-shader-usage-aggregate.json\""
+  ],
+  "negative_controls": [
+    "multiple particle renderers sharing one shader have distinct objects vs slots accounted",
+    "equal two particle Shader48 top counts do not pick arbitrary private shader",
+    "no particle scope returns zero ranks and unknown top",
+    "source shader global slots independent from particle slots"
+  ],
+  "workflow_path": ".github/workflows/raft-t3-original-renderer-shader-impact.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42110973101",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42110973101/artifacts"
+  ],
+  "budget": "22 minutes maximum, 6 original scenes+4 SHA-pinned shader/material owners, source-only UnityPy, no Unity native/AssetRipper exporter, public-safe JSON",
+  "status": "completed",
+  "observed_result": {
+    "original_sha_verified": true,
+    "particle_total_slots": 219,
+    "particle_typed_shader48_slots": 215,
+    "distinct_particle_source_shaders": 6,
+    "particle_slot_ranks": [
+      108,
+      34,
+      34,
+      20,
+      16,
+      3
+    ],
+    "particle_highest_unique": true,
+    "particle_highest_original_pass_count": 1,
+    "particle_highest_global_scene_material_slots": 108,
+    "particle_highest_nonparticle_slots": 0,
+    "particle_highest_distinct_renderer_objects": 54,
+    "source_free_tests_passed": 41
+  },
+  "rejected_hypotheses": [
+    "The single original highest-used mesh921 Shader48 accounts for original ParticleSystemRenderer material slots",
+    "All 215 typed particle Material slots use one original Shader48"
+  ],
+  "limitations": [
+    "No original typed Shader48→full native W1 GUID join for particles",
+    "no Blend/alpha/texture or runtime particle evidence",
+    "not original authored source or Unity/Adreno pixels"
+  ],
+  "integration_commit": "5d81dc7e89960c87be8a077b5c214e163ddabe81",
+  "next_step": "On SHA-authenticated original ParticleSystemRenderer highest-used Shader48 (108 particle slots, 54 Renderer objects, one serialized Pass), privately extract its original Pass render-state Blend/SrcBlend/DstBlend/ZWrite/ZTest/alpha coverage, texture/sampler and keyword references with integrity checks; compare to actual postrestorer ShaderLab GUID and target device square-smoke screenshot before editing Unity shader assets. Preserve provenance, source-only verdict, no private IDs, and coordinate with T5's full native workflow. Investigate second-place tied shaders (34/34) without choosing one arbitrarily."
+}
