@@ -1,0 +1,36 @@
+name: T1 WATER-001 paired FFT diagnostic checks
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-t1-fft-paired-diagnostic-checks.yml
+      - scripts/t1_fft_paired_diagnostic.py
+      - tests/test_t1_fft_paired_diagnostic.py
+      - .github/workflows/raft-t1-fft-unity-input-identity.yml
+
+permissions:
+  contents: read
+
+jobs:
+  synthetic:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+            .github/workflows
+      - name: Verify paired diagnostic and scheduled first divergence
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_t1_fft_paired_diagnostic.py -v
+          python3 -m unittest discover -s tests -p test_t1_fft_first_divergence.py -v
+          python3 -m unittest discover -s tests -p test_t1_fft_pass0_spatial_diagnostic.py -v
+          python3 -m unittest discover -s tests -p test_t1_fft_first_pass_channel_diagnostic.py -v
+          python3 -m unittest discover -s tests -p test_t1_fft_readback_parity.py -v
+          ruby -ryaml -e 'YAML.load_file(ARGV.fetch(0))' .github/workflows/raft-t1-fft-unity-input-identity.yml

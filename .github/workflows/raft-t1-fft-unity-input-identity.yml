@@ -16,6 +16,7 @@ concurrency:
 
 jobs:
   sha-original-derived-fft-unity:
+    if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[t1-paired-replay]')
     runs-on: ubuntu-24.04
     environment: UNITY_LICENSE
     concurrency:
@@ -226,6 +227,9 @@ jobs:
               "rgba_mismatches": [c["mismatched"] for c in channels],
               "rgba_nonfinite": [c["nonfinite"] for c in channels]}))
           PY
+          python3 -m scripts.t1_fft_paired_diagnostic \
+            t1-original-derived-unity/T1VulkanCapture/pass0.rgba32f \
+            t1-original-derived-unity/T1UnityCapture/pass0.rgba32f 1024 32
           python3 -m scripts.t1_fft_readback_parity \
             t1-original-derived-unity/T1VulkanCapture \
             t1-original-derived-unity/T1UnityCapture 1024 32
