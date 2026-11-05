@@ -41,7 +41,8 @@ def band(n:int):
 
 def summarize(original_edges:list, materials:dict, typed_shaders:dict,
               *, expected_slots:int=SCENE_MATERIAL_SLOTS,
-              expected_nonnull:int=SCENE_NONNULL_SLOTS):
+              expected_nonnull:int=SCENE_NONNULL_SLOTS,
+              source_sha_authenticated:bool=False):
     """Pure original-source join: edge=(scene,pid,renderer-class,material-key|None)."""
     if (not isinstance(original_edges,list) or not isinstance(materials,dict)
         or not isinstance(typed_shaders,dict) or len(original_edges)!=expected_slots
@@ -124,9 +125,9 @@ def summarize(original_edges:list, materials:dict, typed_shaders:dict,
     return {
         "schema_version":1,
         "experiment":"T3-authentic-original-six-scenes-Renderer-Material-Shader48-impact",
-        "six_original_scenes_sha_verified":True,
-        "original_material_target_owners_sha_verified":len(MATERIAL_OWNERS),
-        "original_selected_shader_owners_sha_verified":len(SHADER_OWNERS_SELECTED),
+        "six_original_scenes_sha_verified":source_sha_authenticated,
+        "original_material_target_owners_sha_verified":len(MATERIAL_OWNERS) if source_sha_authenticated else 0,
+        "original_selected_shader_owners_sha_verified":len(SHADER_OWNERS_SELECTED) if source_sha_authenticated else 0,
         "original_renderer_material_slots":count["original_material_slots"],
         "original_nonnull_renderer_material_slots":count["original_nonnull_material_slots"],
         "original_null_renderer_material_slots":count["original_null_material_slots"],
@@ -149,7 +150,7 @@ def summarize(original_edges:list, materials:dict, typed_shaders:dict,
         "postvendor_dummy_marker_or_same_export_Shader_identity_checked":False,
         "unity_or_android_drawcalls_white_pixels_verified":False,
         "renderers_without_material_slots_not_counted_here":True,
-        "status":STATUS,
+        "status":STATUS if source_sha_authenticated else "SYNTHETIC_OR_UNAUTHENTICATED_SOURCE_ONLY",
     }
 
 
@@ -247,7 +248,7 @@ def load_original(source:Path, manifest:Path):
             typed[(owner,obj.path_id)]={"passes":passes,"subshaders":len(sub)}
     if set(typed)!=needed:
         raise ValueError("incomplete_typed_original_Shader48_sources")
-    return summarize(original_edges,mats,typed)
+    return summarize(original_edges,mats,typed,source_sha_authenticated=True)
 
 
 def main(argv=None):
