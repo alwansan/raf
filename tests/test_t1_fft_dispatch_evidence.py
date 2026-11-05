@@ -22,6 +22,16 @@ class DispatchEvidenceTests(unittest.TestCase):
         self.assertFalse(result["findkernel_and_dispatch_syntax_present"])
         self.assertFalse(result["call_families_present"]["SetTexture"])
 
+    def test_interpolated_and_verbatim_literals_are_not_calls(self):
+        source = '''var a = $"FindKernel(1)"; var b = $@"Dispatch(1)";
+var c = @$"SetTexture(1)"; var d = 'x';
+shader.Dispatch(k, 1, 1, 1);'''
+        result = self.check(source)
+        self.assertFalse(result["findkernel_and_dispatch_syntax_present"])
+        self.assertFalse(result["call_families_present"]["FindKernel"])
+        self.assertFalse(result["call_families_present"]["SetTexture"])
+        self.assertTrue(result["call_families_present"]["Dispatch"])
+
     def test_missing_dispatch_cannot_pass(self):
         self.assertFalse(self.check("shader.FindKernel(x);")["findkernel_and_dispatch_syntax_present"])
 
