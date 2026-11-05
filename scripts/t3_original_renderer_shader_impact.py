@@ -44,7 +44,8 @@ def summarize(original_edges:list, materials:dict, typed_shaders:dict,
               expected_nonnull:int=SCENE_NONNULL_SLOTS,
               source_sha_authenticated:bool=False,
               private_slot_counts:dict|None=None,
-              private_particle_slot_counts:dict|None=None):
+              private_particle_slot_counts:dict|None=None,
+              private_particle_materials:dict|None=None):
     """Pure original-source join: edge=(scene,pid,renderer-class,material-key|None)."""
     if (not isinstance(original_edges,list) or not isinstance(materials,dict)
         or not isinstance(typed_shaders,dict) or len(original_edges)!=expected_slots
@@ -66,6 +67,7 @@ def summarize(original_edges:list, materials:dict, typed_shaders:dict,
     typed_shader_slots_by_class=Counter()
     typed_shader_class_slots=defaultdict(Counter)
     typed_shader_class_renderers=defaultdict(lambda: defaultdict(set))
+    particle_shader_materials=defaultdict(set)  # PRIVATE Material owner and PathID only
     for row in original_edges:
         if not isinstance(row,tuple) or len(row)!=4:
             raise ValueError("malformed_original_renderer_material_edge")
@@ -110,6 +112,8 @@ def summarize(original_edges:list, materials:dict, typed_shaders:dict,
             typed_shader_slots_by_class[kind]+=1
             typed_shader_class_slots[shader][kind]+=1
             typed_shader_class_renderers[shader][kind].add(renderer)
+            if kind=="ParticleSystemRenderer":
+                particle_shader_materials[shader].add(material)
             count["original_slots_to_verified_multi_pass_Shader48"]+=int(shdata["passes"]>1)
         elif shader[0].lower() in BUILTIN_NAMES:
             count["original_slots_to_unstaged_Unity_engine_Shader"]+=1
@@ -193,6 +197,12 @@ def summarize(original_edges:list, materials:dict, typed_shaders:dict,
         # Only a private, in-memory map with the original owner/pathID keys.
         # Caller must NEVER JSON-serialize or print this private mapping.
         private_particle_slot_counts.update(particle_sources)
+    if private_particle_materials is not None:
+        if (type(private_particle_materials) is not dict or private_particle_materials):
+            raise ValueError("private_particle_original_materials_outparam_not_empty")
+        if set(particle_shader_materials)!=set(particle_sources):
+            raise ValueError("private_particle_original_materials_source_coverage_drift")
+        private_particle_materials.update(particle_shader_materials)
     return {
         "schema_version":1,
         "experiment":"T3-authentic-original-six-scenes-Renderer-Material-Shader48-impact",
@@ -246,7 +256,8 @@ def summarize(original_edges:list, materials:dict, typed_shaders:dict,
 
 
 def load_original(source:Path, manifest:Path, *, private_slot_counts:dict|None=None,
-                  private_particle_slot_counts:dict|None=None):
+                  private_particle_slot_counts:dict|None=None,
+                  private_particle_materials:dict|None=None):
     import UnityPy
     root=source/"Raft_Data"
     if any(p.is_symlink() for p in (source,root,*source.parents)):
@@ -342,7 +353,8 @@ def load_original(source:Path, manifest:Path, *, private_slot_counts:dict|None=N
         raise ValueError("incomplete_typed_original_Shader48_sources")
     return summarize(original_edges,mats,typed,source_sha_authenticated=True,
                      private_slot_counts=private_slot_counts,
-                     private_particle_slot_counts=private_particle_slot_counts)
+                     private_particle_slot_counts=private_particle_slot_counts,
+                     private_particle_materials=private_particle_materials)
 
 
 def main(argv=None):
