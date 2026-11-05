@@ -1,0 +1,32 @@
+{
+  "session_id": "20261105T1728Z-T3-chat-rawspirv-T1-original-3f7c",
+  "origin": "chat",
+  "owner": "T3",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "base_sha": "0d30cba0843a70f875060f8c84c4e0e53d336f79",
+  "updated_at": "2026-11-05T17:28:00Z",
+  "resumed_from_sessions": [
+    "20261105T1715Z-T3-chat-ps-readmask-spv-5e84",
+    "20261105T172341Z-T1-chat-18786c"
+  ],
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/actions/runs/42073397586",
+    "https://github.com/alwansan/raf/actions/runs/42074345951"
+  ],
+  "experiment_key": "T3-ZIP2-15964ea8-Sh48-921-4pass-SHA-original-8SPV-source-and-roundtrip-T1-direct-spirv-dis-numeric-IO-coverage-v1",
+  "resource_key": "T3-921-fourpass-original-SPIRV-dis-CPU",
+  "hypothesis": "T1 independent direct SPIRV disassembly interface parser can verify per-component typed VS-output to PS-input numerical coverage on the same authentic SHA originals and HLSL roundtrips (four pairs each) without relying on SPIRV-Cross reflection; unsupported layouts must stay inconclusive.",
+  "intended_files": [
+    "scripts/t3_original_921_t1_raw_spirv_audit.py",
+    "tests/test_t3_original_921_t1_raw_spirv_audit.py",
+    ".github/workflows/raft-t3-original-921-t1-raw-spv.yml",
+    ".github/t3-raw-spirv-requests/20261105T1728Z-T3-chat-rawspirv-T1-original-3f7c.json",
+    "docs/T3_ORIGINAL_921_DIRECT_SPIRV_DISASSEMBLY_2026-11-05.md",
+    "prompt/coordination/clients/T3/sessions/20261105T1728Z-T3-chat-rawspirv-T1-original-3f7c.md",
+    "prompt/coordination/experiments/T3/20261105T1728Z-T3-chat-rawspirv-T1-original-3f7c.json",
+    "prompt/coordination/B_TEAM/events/T3/20261105T1728Z-T3-chat-rawspirv-T1-original-3f7c.json"
+  ],
+  "avoid_collision": "Do NOT modify T1 original direct validator or test/workflow; direct original repo SHA and existing private compiler; preserve T1 ownership. No changes to T2 foam T4 world T5 native or live Actions.",
+  "active_jobs_snapshot": []
+}
