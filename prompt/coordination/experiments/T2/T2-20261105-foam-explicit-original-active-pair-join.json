@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "session_id": "20261105T1020Z-T2-original-foam-explicit-spv-map",
+  "issue_id": "WATER-001",
+  "hypothesis": "Two distinct explicit remaps of source-authentic Foam native DXBC tN/sN registers preserve all SPIR-V variable IDs and exact original compiler graph after masking only descriptor numeric literals; proven mapping can join actual original SAMPLE operands to translated SPIR-V sampled-image and sampler uses per stage.",
+  "source_commits": [
+    "df7d4199caf96231e5056b959cb8f3bdbb239852",
+    "5aab73ac04db9eaeb3592d0cc852dbe1c824d2f0",
+    "9a21b6fca154e64b5472ad1a53da971b177dd591",
+    "72b1abb9af85722fab36c1627115104fe4b84221",
+    "f851b57cb8490f0dbe9399698427447a823d8439",
+    "a4b6dbd01bb7aace3d252f94743b100ce65de04f",
+    "e5a883872423ab980c32dc45062f222a33677fbf",
+    "57a700412733903c1a61e6134376a332f40ccae8"
+  ],
+  "input_hashes": [
+    "zip2:15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "Raft_Data/sharedassets0.assets:0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "Foam original shader raw:67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1",
+    "B20 original stages exact ORIGINAL_STAGE_SHA pinned all four"
+  ],
+  "tools": {
+    "compiler": "Ubuntu 24.04 distro libvkd3d-shader-dev + public vkd3d-compiler",
+    "translator": "two explicit source-indexed vkd3d descriptor maps A,B plus default D",
+    "spv_decoder": "typed SPIR-V binary OpTypeImage/OpTypeSampler/OpVariable/OpDecorate and full-word masked identity",
+    "real_sampling": "B Blur DXBC executable sampler parser, T2 SPIRV SSA sampled-image use tracing",
+    "unity_reader": "UnityPy 1.25.4",
+    "original_stage_packer": "B20/B24/B25 SHA-authenticated Foam packet"
+  },
+  "workflow": ".github/workflows/raft-t2-foam-explicit-descriptor-identity.yml",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42011706016",
+    "https://github.com/alwansan/raf/actions/runs/42012755702",
+    "https://github.com/alwansan/raf/actions/runs/42013221572",
+    "https://github.com/alwansan/raf/actions/runs/42013532274",
+    "https://github.com/alwansan/raf/actions/runs/42013590671"
+  ],
+  "status": "completed",
+  "negative_controls": "16 typed SPIR-V/explicit-map strict tests; 17 native-to-compiled active resource pairing, duplicate, stale-key and exact-stage rollup tests",
+  "observed": {
+    "native_stage_count": 4,
+    "nonempty_original_fragment_stages": 2,
+    "actual_native_sample_calls": 21,
+    "actual_compiled_spirv_sample_calls": 21,
+    "original_active_sampler_pairs": 6,
+    "two_explicit_interfaces_prove_same_spv_ids_and_exact_graph_excluding_numeric_descriptors": true,
+    "original_packet_default_spirv_graph_equal_after_numeric_descriptor_mask": true,
+    "exact_per_stage_source_t_s_to_actual_translated_sampling_identity": true,
+    "pass0_mapping": "t0..t4 -> images set0/b6..10, s0..s4 -> samplers set0/b1..5",
+    "pass1_mapping": "t0 -> image set0/b2, s0 -> sampler set0/b1",
+    "synthetic_tests": "16/16 explicit mapping and 17/17 active join",
+    "final_run": "CI42013590671 SUCCESS",
+    "artifact_id": 13407977911,
+    "artifact_sha256": "93046863e5fa788b234b990a613554eb479851d4a9098131c7bd50efe7def0e1",
+    "proprietary_shader_program_published": false,
+    "material_state_shaderlab_device_tested": false
+  },
+  "failure_and_recovery": "CI42012755702 and CI42013221572 failed on a Python result-field KeyError at a safe static source line; no original shader evidence drift. Unified proof field and added strict four-stage rollup regression, CI42013532274 and final42013590671 SUCCESS.",
+  "limitations": [
+    "No Unity authored Material property/name → actual texture data, sampler filter/wrap or UV linkage",
+    "No original constant-buffer member/CB0 upload semantics",
+    "No authentic complete two-pass ShaderLab Unity compile/RenderTexture/effects",
+    "No native Android build or original Adreno screen/pixel/owner phone test",
+    "No evidence of 100% authored shader source restoration"
+  ],
+  "next_step": "Use proven per-register texture/sampler descriptor map to reconstruct original Unity Material property upload and sampler/UV/CB semantics; then construct actual private Foam 2-pass ShaderLab and validate Unity/Android. Water and game remain NOT_READY."
+}
