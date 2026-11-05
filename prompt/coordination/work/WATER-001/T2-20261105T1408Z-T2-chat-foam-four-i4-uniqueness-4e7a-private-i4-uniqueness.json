@@ -5,9 +5,9 @@
   "session_id": "20261105T1408Z-T2-chat-foam-four-i4-uniqueness-4e7a",
   "generation": "T-2026-11-05",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "5c2668162e5e21e4d25e3b76ca257dbc8bda7852",
-  "updated_at": "2026-11-05T14:09:22.483Z",
+  "updated_at": "2026-11-05T14:16:34.348Z",
   "resumed_from_sessions": [
     "20261105T1323Z-T2-chat-index-origin-5c42",
     "20261105T1325Z-T2-scheduled-boundary-7c2f"
@@ -41,6 +41,18 @@
     "overlap_with_scheduled": "Scheduled T2 last reported independent test_t2_foam_report_boundary.py; current effort uses managed Mono.Cecil original index value controls, not that test file.",
     "last_source_success": "https://github.com/alwansan/raf/actions/runs/42035529042"
   },
-  "run_urls": [],
-  "next_step": "Implement after current HEAD recheck; original SHA authentic CI must prove literal decode with no public raw values, then compare to independent array allocation/bounds evidence. WATER-001 stays OPEN NOT_READY0/3."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42043293335"
+  ],
+  "next_step": "Inspect CI42043293335 first synthetic test/compile and genuine original stage; original result must show decoded literal count 4, distinct count 1..4, sign bool, no raw values. If failure, fix first cause using only owned files. Keep T5 original native build42042902522 untouched.",
+  "source_commits": [
+    "37403b9abe10df9857f39d359288caa434c07822",
+    "84338ab8bf89d8af41b0aa3e1fdcda1a4030d391",
+    "43a633869a4185bd0176e139b9abf3b28045bd8e"
+  ],
+  "result": {
+    "source": "Three T2 code/test/workflow edits committed with per-blob SHA lease; first two [skip ci] to avoid invalid intermediate CI, final triggers one original SHA-pinned private run",
+    "CI": "in_progress",
+    "device": "not tested"
+  }
 }
