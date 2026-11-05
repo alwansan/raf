@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261105T1540Z-T2-chat-byref-target-b6af",
+  "issue_id": "WATER-001",
+  "status": "completed",
+  "experiment_key": "T2|original-0a6f0527|exact-ref-RenderTexture-array-callee|newarr-to-stind-same-block-v1",
+  "source": {
+    "zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "managed_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "managed_bytes": 3211776
+  },
+  "source_commit": "81589064359a025cbe268ba74b3c8502f5678517",
+  "last_fixture_fix": "fc64d43986f3aaad30cab90ce2604ddde3f7fb4e",
+  "original_ci": "https://github.com/alwansan/raf/actions/runs/42060338704",
+  "method": "Conservative source-original Mono.Cecil IL basic-block stack tagging; authentic same-block newarr RenderTexture array value to exact ref RenderTexture[] formal stind.ref, plus ldind.ref from exact same formal feeding stelem.ref. Synthetic positive, wrong-array-element negative, cross-branch negative. No private original identifiers or literals emitted.",
+  "result": {
+    "CI": "success",
+    "exact_source_original_callee_definitions": 1,
+    "compiled_stind_ref_sites": 1,
+    "proven_newarr_to_ref_array_stores": 1,
+    "unproven_stind_sites": 0,
+    "compiled_stelem_ref_sites": 1,
+    "proven_array_member_store_via_exact_ref_formal": 1,
+    "unproven_element_sites": 0,
+    "branch_join_proven": false,
+    "runtime_execution_or_array_contents_proven": false,
+    "original_method_or_numeric_values_disclosed": false
+  },
+  "artifact": {
+    "id": 13431786317,
+    "bytes": 2425,
+    "sha256": "091c11ec46f30c8df4c7a6e5aa23ca92bb99cddf1c7cd861a8365ee7499fa4e9"
+  },
+  "limitations": [
+    "Same straight-line basic block only; branch joins and runtime execution not established",
+    "New RenderTexture[] array reference and an element store compile, but neither asserts valid elements at runtime or Android pixels",
+    "Exact original allocations may have variable-size or conditional guards; cannot infer caller index validity from opcode census"
+  ],
+  "next_step": "Trace original newarr size source privately and compare exact four caller indices; validate runtime and Unity import separately. WATER-001 OPEN NOT_READY 0/3."
+}
