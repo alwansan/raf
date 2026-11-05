@@ -100,7 +100,9 @@ class OriginalParticleSameInstanceExport(unittest.TestCase):
         self.assertEqual(r["selected_missing_texture_skipped_nonexportable_collection"],1)
         self.assertEqual(r["selected_missing_texture_absent_all_export_collections"],0)
         self.assertEqual(r["selected_missing_texture_reason_unclassified"],0)
-        self.assertEqual(r["selected_exact_material_texenv_pointer_matches"],9)
+        # This synthetic third source texture is shared by TWO material slots;
+        # missing one original Texture2D trace means 8/10 pointer matches.
+        self.assertEqual(r["selected_exact_material_texenv_pointer_matches"],8)
         safe=json.dumps(r)
         self.assertNotIn(missed["source"]["owner"],safe)
         self.assertNotIn('"path_id"',safe)
