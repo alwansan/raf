@@ -5,6 +5,7 @@ on:
     branches: [feature/android-native-port]
     paths:
       - 'scripts/t4_verify_device_world_save_log.py'
+      - 'scripts/test_t4_overflow_gate.py'
       - 'tests/test_t4_verify_device_world_save_log.py'
       - '.github/workflows/raft-t4-world-save-log-evidence.yml'
 permissions:
@@ -25,13 +26,15 @@ jobs:
           sparse-checkout-cone-mode: false
           sparse-checkout: |
             /scripts/t4_verify_device_world_save_log.py
+            /scripts/test_t4_overflow_gate.py
             /tests/test_t4_verify_device_world_save_log.py
-      - name: Run 11 synthetic-only, fail-closed JSONL controls
+      - name: Run 17 synthetic-only, fail-closed JSONL controls (15 parser + 2 overflow)
         shell: bash
         run: |
           set -euo pipefail
-          python3 -m py_compile scripts/t4_verify_device_world_save_log.py tests/test_t4_verify_device_world_save_log.py
+          python3 -m py_compile scripts/t4_verify_device_world_save_log.py scripts/test_t4_overflow_gate.py tests/test_t4_verify_device_world_save_log.py
           python3 -m unittest discover -s tests -p 'test_t4_verify_device_world_save_log.py' -v
+          python3 -m unittest scripts.test_t4_overflow_gate -v
           test ! -e Raft
       - name: No phone logs, original RGD data, game source or unity tests
         if: always()
