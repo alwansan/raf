@@ -23,7 +23,9 @@ from scripts.probe_original_fft_two_pass_software_vulkan import (
 from scripts.probe_original_fft_software_vulkan import private_command
 
 PROFILES = ("baseline", "swap_first", "swap_second")
-SLOTS = (0, 8, 18)  # one small/large and both original serialized banks
+SLOTS = (0, 8, 10)  # small+large original bank0 and independent small bank1
+# Authentic compiled pair18 second-pass swap caused Mesa lavapipe SIGSEGV
+# in 41938536760. Preserve that failure as INCONCLUSIVE, not numeric proof.
 SEED = 19
 MARKER = "RAFT_T1_BINDING_FINGERPRINT "
 MAX_SOURCE_BYTES = 100_000
