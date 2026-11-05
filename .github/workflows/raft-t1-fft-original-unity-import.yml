@@ -132,6 +132,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          # The private Docker container writes root-owned mode 0600 logs.
+          # Reassign only to this ephemeral runner account; NEVER print logs.
+          sudo chown -R "$(id -u):$(id -g)" "$GITHUB_WORKSPACE/t1-private-fft-unity"
           python3 - <<'PY'
           import json,re
           from pathlib import Path
