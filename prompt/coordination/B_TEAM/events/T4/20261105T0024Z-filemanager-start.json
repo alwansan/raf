@@ -1,0 +1,13 @@
+{
+  "id": "20261105T0024Z-T4-filemanager-start",
+  "owner": "T4",
+  "session_id": "20261105T0024Z-T4-filemanager-restore01",
+  "issue_id": "LOCAL-005",
+  "type": "start",
+  "summary": "Isolated possible-overlap T4 restoration; source-authenticated FileManager I/O and catch-path investigation, without touching predecessor T4 state/MEMORY. All native/device outcomes remain unknown.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41939908432",
+    "https://github.com/alwansan/raf/actions/runs/41939846508"
+  ],
+  "at": "2026-11-05T00:24:00Z"
+}

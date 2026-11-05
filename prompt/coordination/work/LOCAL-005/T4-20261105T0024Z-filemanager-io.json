@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T0024Z-T4-filemanager-restore01",
+  "issue_id": "LOCAL-005",
+  "track": "world-save",
+  "approach": "SHA-authenticated read-only original FileManager IO/catch contract and real SaveAndLoad direct call edges; isolate file-read failure semantics before any Android patch",
+  "status": "active",
+  "base_sha": "365ffc9be6f952e89bfa6f227cfa6577e8df8d68",
+  "intended_files": [
+    "scripts/t4_original_filemanager_contract.py",
+    "tests/test_t4_original_filemanager_contract.py",
+    ".github/workflows/raft-t4-original-filemanager-io.yml",
+    "docs/T4_ORIGINAL_FILEMANAGER_IO_2026-11-05.md"
+  ],
+  "hypothesis": "The original FileManager open/create path may swallow, reroute, or throw read errors before SaveAndLoad.Load<T>'s internal catch; inspect actual original call graph rather than treating NRBF version mismatch as proven failure.",
+  "related_work": [
+    "prompt/coordination/work/LOCAL-005/T4-20261104T2357Z-rgd-loader-contract.json"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/B07/MEMORY.md",
+    "prompt/coordination/clients/B14/MEMORY.md",
+    "prompt/coordination/clients/B19/MEMORY.md",
+    "prompt/coordination/clients/B37/MEMORY.md",
+    "prompt/coordination/clients/B50/MEMORY.md",
+    "https://github.com/alwansan/raf/actions/runs/41939908432",
+    "https://github.com/alwansan/raf/actions/runs/41939846508"
+  ],
+  "experiment_ids": [
+    "20261105T0024Z-original-filemanager-io"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Build sanitized authenticated original FileManager call-edge probe and adversarial tests; inspect private decomp in isolated CI; do not imply .rgd compatibility or device success.",
+  "updated_at": "2026-11-05T00:24:00Z",
+  "identity_conflict": "possible_active_T4_previous_session_do_not_overwrite_shared_state"
+}
