@@ -4,9 +4,9 @@
   "origin": "chat",
   "session_id": "20261105T1736Z-T2-chat-ret-reason-28ce",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "4874be485a8ee9ff1d4e09e71d7dcabbd42bdba9",
-  "updated_at": "2026-11-05T17:48:00Z",
+  "updated_at": "2026-11-05T17:52:00Z",
   "resumed_from_work": "prompt/coordination/work/WATER-001/T2-20261105T1736Z-T2-chat-ret-reason-28ce-return-local-writers.json",
   "experiment_key": "T2|ZIP2-15964ea8|sha-0a6f0527|exact-RT-return-one-stloc-value-source-family-v1",
   "resource_key": "T2-Foam-original-RT-return-local-writer-opcode",
@@ -24,5 +24,18 @@
     "source_original_previous": "42077586809 SUCCESS; sole exact local writer unresolved",
     "scheduled_T2_nonoverlap": "synthetic scripts/t2_rt_return_cfg.py and tests/test_t2_rt_return_cfg.py only"
   },
-  "next_step": "Original SHA-pinned CI and safe single-writer producer opcode family. Then proper branch CFG or local/alias tracing. WATER-001 OPEN NOT_READY0/3."
+  "next_step": "Read 42078263113 T2_FOAM_SINGLE_RT_LOCAL_WRITER_REASON_SAFE, then determine branch-safe value origin only after independent SSA; avoid non-null or Android graphics claim.",
+  "source_commits": [
+    "880d76bb6ec403de62bb696ded7eb4ecb8f662ab",
+    "d3d14d1e98ddd0d5655f845731fe0591c8bfaa2d",
+    "62a405339c877385ca39487f12c85bb7c61897f8"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42078263113"
+  ],
+  "result": {
+    "source": "Exact original return local one writer predecessor opcode family and branch-entry status, original SHA with source-free fixture gates",
+    "CI": "in_progress",
+    "device": "not tested"
+  }
 }
