@@ -56,11 +56,41 @@ def wrap(text, signature, area, detail='""'):
         'long __raftOperationStart = RaftAndroid.Diagnostics.AndroidRuntimeLog.BeginOperation(' +
         json.dumps(area) + ', ' + json.dumps(name) + ', ' + detail + ');\n' +
         'bool __raftOperationFailed = false;\ntry {\n#endif\n')
+    # Only the authenticated original Save method receives the extra
+    # read-only, post-body snapshot. Original FileManager may return normally
+    # from a caught File.Create failure; EndOperation(exceptionEscaped=false)
+    # alone cannot prove that a file was created or made durable. Observe the
+    # exact original filename argument, without printing it or reading bytes.
+    # A missing argument-path file is NOT proof the game save failed: it is
+    # a bounded diagnostic to interpret alongside the original runtime logs.
+    after_save_snapshot = ''
+    if signature == 'private void Save(string filename, RGD raftgamedata)' and area == 'save':
+        after_save_snapshot = (
+            '\ntry {\n'
+            'bool __raftArgumentFileExists = System.IO.File.Exists(filename);\n'
+            'string __raftArgumentLengthClass = __raftArgumentFileExists '
+            '? (new System.IO.FileInfo(filename).Length == 0L ? "zero" : "nonzero") '
+            ': "not_checked";\n'
+            'try { RaftAndroid.Diagnostics.AndroidRuntimeLog.Write('
+            '"save", "Save.argumentFileSnapshot", '
+            '"exists_at_filename_argument=" + __raftArgumentFileExists '
+            '+ "; length_class=" + __raftArgumentLengthClass '
+            '+ "; durable_RGD_unverified=true", true); } '
+            'catch (System.Exception) { }\n'
+            '} catch (System.Exception __raftFileProbeError) {\n'
+            'try { RaftAndroid.Diagnostics.AndroidRuntimeLog.Write('
+            '"save", "Save.argumentFileSnapshot.unavailable", '
+            '"probe_error_type=" + __raftFileProbeError.GetType().Name '
+            '+ "; durable_RGD_unverified=true", true); } '
+            'catch (System.Exception) { }\n'
+            '}\n'
+        )
     suffix = '\n#if UNITY_ANDROID && !UNITY_EDITOR\n' + (
         '} catch (System.Exception __raftOperationError) {\n' +
         '__raftOperationFailed = true;\nRaftAndroid.Diagnostics.AndroidRuntimeLog.Write(' +
         json.dumps(area) + ', ' + json.dumps(name + '.exception') + ', __raftOperationError.ToString(), true);\nthrow;\n' +
-        '} finally { RaftAndroid.Diagnostics.AndroidRuntimeLog.EndOperation(' +
+        '} finally { ' + after_save_snapshot +
+        'RaftAndroid.Diagnostics.AndroidRuntimeLog.EndOperation(' +
         json.dumps(area) + ', ' + json.dumps(name) + ', __raftOperationStart, __raftOperationFailed); }\n#endif\n')
     result = text[:start] + prefix + original + suffix + text[end:]
     if result[:start] + result[start:].replace(prefix, '', 1).replace(suffix, '', 1) != text:
