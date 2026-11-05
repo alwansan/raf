@@ -1,0 +1,20 @@
+{
+  "id": "20261105T2102Z-T3-chat-builtin-null-pointer-0d3e",
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T2102Z-T3-chat-builtin-null-pointer-0d3e",
+  "issue_id": "RENDER-002",
+  "type": "integration",
+  "at": "2026-11-05T21:00:07Z",
+  "summary": "Closed zero-GUID false Built-in classification in original-21-Shader48→full-native top921 join; source-free CI 42108532173 PASS 54/54. Real shader/Android pixels still unknown.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42108532173",
+    "https://github.com/alwansan/raf/commit/dc3f3ea04347ae98ce8e8ff05517d9fadb795c1c",
+    "https://github.com/alwansan/raf/commit/c52603ff0fd48f747764f908ce957e03335c5522",
+    "https://github.com/alwansan/raf/commit/8ff409feafc56188ab7f462b814d13849d576d04"
+  ],
+  "limitations": [
+    "source-free synthetic control only",
+    "RENDER-002 remains OPEN, no Unity/Android device rendering proof"
+  ]
+}
