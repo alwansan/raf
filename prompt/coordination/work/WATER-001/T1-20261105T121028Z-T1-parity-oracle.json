@@ -1,0 +1,13 @@
+{
+  "id": "T1-20261105T121028Z-T1-parity-oracle",
+  "issue_id": "WATER-001",
+  "owner": "T1",
+  "session_id": "20261105T121028Z-T1-parity-oracle",
+  "status": "active",
+  "baseline_sha": "9fcaab52bdff0b5616d146ee29883741f40070c3",
+  "taken_over_from": [
+    "20261105T111600Z-T1-private-fft-gpu-dispatch",
+    "https://github.com/alwansan/raf/actions/runs/42019283679"
+  ],
+  "approach": "Audit input, dispatch and readback contracts before comparing licensed Unity output with independent original-DXBC Vulkan output."
+}
