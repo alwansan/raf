@@ -6,9 +6,9 @@
   "session_id": "20261105T2102Z-T3-chat-builtin-null-pointer-0d3e",
   "issue_id": "RENDER-002",
   "track": "original-to-native Shader48 builtin pointer integrity",
-  "status": "active",
+  "status": "completed",
   "base_sha": "fe9a9ae5264821304923d6bac04d21089f3a3df8",
-  "updated_at": "2026-11-05T21:04:00Z",
+  "updated_at": "2026-11-05T21:00:07Z",
   "intended_files": [
     "scripts/t3_source_renderer_shader_to_postvendor_export.py",
     "tests/test_t3_source_renderer_shader_to_postvendor_export.py",
@@ -31,8 +31,11 @@
     "prompt/coordination/work/RENDER-002/20261105T204947Z-T3-chat-program-coverage-b6f2.json"
   ],
   "run_urls": [
-    "https://github.com/alwansan/raf/actions/runs/42107128075"
+    "https://github.com/alwansan/raf/actions/runs/42108532173",
+    "https://github.com/alwansan/raf/actions/runs/42108313304",
+    "https://github.com/alwansan/raf/actions/runs/42108337297"
   ],
-  "next_step": "Extend narrowly-scoped source-free workflow path filters to cover its already-executed dependency test/script; run full source-free CI on final source and tests (including corrected early pointer-layer expectation).",
-  "result": null
+  "next_step": "When a future authentic same-process T5 native export runs, execute scripts/t3_native_original_921_shader_target_audit.py with independently SHA-verified ZIP2 six scenes/four owners and W1 private trace plus postrestorer exported project. Only publish allowlisted aggregate source→target result. Then recover missing genuine ShaderLab Pass/subprogram/variant links and verify Unity+phone pixels. No duplicate full build.",
+  "result": "Valid engine GUID requires fileID>0 and nonzero engine GUID; upstream already rejects fileID=0. Final source-free CI 42108532173 PASS 54/54 on 8ff409fe. Earlier failed runs due to test assertion text were corrected. Original+native private export test still unrun.",
+  "integration_commit": "8ff409feafc56188ab7f462b814d13849d576d04"
 }
