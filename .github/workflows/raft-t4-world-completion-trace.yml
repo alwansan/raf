@@ -66,7 +66,20 @@ jobs:
           from scripts.b07_world_coroutine_trace import ORIGINAL_NETWORK_SHA256
           from scripts.instrument_android_runtime_operations import instrument
           assert_original_dll(Path('t4-original/Raft/Raft_Data/Managed/Assembly-CSharp.dll'))
-          src, digest = _source(Path(os.environ['RUNNER_TEMP'])/'t4-private-source', 'Raft_Network', ORIGINAL_NETWORK_SHA256)
+          src, digest = _source(Path(os.environ['RUNNER_TEMP'])/'t4-private-source', 'Raft_Network', None)
+          original_return, original_body = method_body(src, 'WorldHasBeenLoaded')
+          original_body_sha = fingerprint(original_body)
+          print('T4_ORIGINAL_COMPILER_VARIANT ' + json.dumps({
+              'sha256_original_dll_verified':True,
+              'decompiler_class_sha256':digest,
+              'matches_production_class_pin':digest == ORIGINAL_NETWORK_SHA256,
+              'coroutine_body_sha256':original_body_sha,
+              'original_return_type':original_return,
+              'source_bytes_length':len(src.encode()),
+              'original_source_published':False,
+          },sort_keys=True))
+          if digest != ORIGINAL_NETWORK_SHA256:
+              raise ValueError('Original decompiler class SHA differs from production pin; require independent proof before native adaptation')
           adapted = adapt('Raft_Network', src)
           manifest = json.loads(Path('config/runtime-operation-traces.json').read_text())
           assert fingerprint(adapted) == manifest['sources']['Raft_Network']['sha256'], 'Offline-adapted original SHA drift'
