@@ -3,7 +3,7 @@
   "session_id": "20261105T1738Z-T5-chat-release-manifest-6e91",
   "origin": "chat",
   "issue_id": "INTEGRATION-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "380f59958bda4b47895c8239bf5327f48c2ff7fa",
   "resumed_from_sessions": [
     "20261105T1713Z-T5-chat-release-metadata-83ac",
@@ -25,6 +25,32 @@
   "previous_verified_run": "https://github.com/alwansan/raf/actions/runs/42072829025",
   "current_native_run": "https://github.com/alwansan/raf/actions/runs/42058825739",
   "note": "GitHub REST fetch could read public asset metadata but did not supply downloadable bytes; GitHub runner gh release download will fetch only 2166B delivery.json and 727B SHA256SUMS; tests must limit file names/sizes and explicitly decline all game-byte claims.",
-  "next_step": "Write independent strict validator and synthetic negative controls; execute one source-only CI that reads two actual GitHub Release metadata files; inspect its exact digest and totals; close work if verified. No native build while run42058825739 in_progress.",
-  "updated_at": "2026-11-05T17:38:00Z"
+  "next_step": "Own source-only metadata bytes experiment completed; follow native run42058825739. Reuse small manifest download/hash validator on any newer Release only after exact new run/immutable SHA match, then hash actual game parts and APK signing separately. Do not dispatch native duplicate while current in_progress.",
+  "updated_at": "2026-11-05T17:44:00Z",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42077040831",
+    "https://github.com/alwansan/raf/actions/runs/42058825739"
+  ],
+  "result": {
+    "source_commit": "54adc9b235a56b815095f5de622664bc1fb03144",
+    "source_only_ci": 42077040831,
+    "job_id": 127419899287,
+    "ci_conclusion": "success",
+    "tests_passed": 28,
+    "tests_failed": 0,
+    "actual_small_manifest_bytes_verified": 2,
+    "total_bytes_fetched": 2893,
+    "manifest_and_SHA256SUMS_source_bound": true,
+    "transport_part_metadata_records": 7,
+    "logical_file_declarations": 3,
+    "actual_game_part_sha_verified": false,
+    "actual_APK_signature_verified": false,
+    "OBB_mount_verified": false,
+    "XAPK_install_verified": false,
+    "device_world_create_save_reopen_verified": false,
+    "native_run_42058825739": "Unity 2021 Android import step62 in_progress, no new Release",
+    "new_native_requested": false
+  },
+  "experiment_path": "prompt/coordination/experiments/T5/T5-20261105T1738Z-T5-chat-release-manifest-6e91-manifest-authenticity.json",
+  "event_path": "prompt/coordination/B_TEAM/events/T5/20261105T1744Z-release-manifest-bytes.json"
 }
