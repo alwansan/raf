@@ -1,0 +1,171 @@
+"""T5 original ZIP2 render owner bridge: independent tiny Git/split fixtures.
+
+Never downloads proprietary files. Real immutable ZIP2 input is checked by
+raft-t5-zip2-render-stage.yml separately. No Unity or device proof here.
+"""
+import hashlib
+from pathlib import Path
+import subprocess
+import tempfile
+import unittest
+from unittest import mock
+
+from scripts import t5_stage_zip2_render_owners as bridge
+
+
+class ZIP2RenderStageTests(unittest.TestCase):
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+        self.root = Path(self.temp.name)
+        self.repo = self.root / "zip2"
+        self.repo.mkdir()
+        self._git("init", "-q")
+        self.relative = "Raft_Data/resources.assets"
+        self.owner = "Raft/" + self.relative
+        self.parts = [b"abcdefgh", b"12345678", b"end"]
+        self.original = b"".join(self.parts)
+        self.digest = hashlib.sha256(self.original).hexdigest()
+        self.source = self.repo / "Raft" / self.relative
+        self.source.mkdir(parents=True)
+        for index, chunk in enumerate(self.parts):
+            (self.source / f"part-{index:05d}").write_bytes(chunk)
+        (self.source / "README.txt").write_text("synthetic")
+        self.manifest = self.repo / "RAFT_FILE_MANIFEST.tsv"
+        self.manifest.write_text(
+            "kind\tbytes\tsha256\tmode\trelative_path_under_Raft\n"
+            f"split\t{len(self.original)}\t{self.digest}\t660\t{self.relative}\n",
+            encoding="utf-8",
+        )
+        self._git("add", ".")
+        self._git("-c", "user.name=T5-Synthetic", "-c",
+                  "user.email=t5@example.invalid", "commit", "-qm", "fixture")
+        self.commit = self._git("rev-parse", "HEAD")
+        self.manifest_blob = self._git(
+            "hash-object", "--", "RAFT_FILE_MANIFEST.tsv")
+        self.output = self.root / "staged"
+        self.destination = self.output / self.relative
+        self.entries = [(self.owner, self.digest, len(self.original))]
+        self.patched_part = mock.patch.object(bridge, "PART", 8)
+        self.patched_part.start()
+        self.addCleanup(self.patched_part.stop)
+
+    def _git(self, *args):
+        return subprocess.check_output(
+            ["git", "-C", str(self.repo), *args], text=True,
+            stderr=subprocess.DEVNULL,
+        ).strip()
+
+    def stage(self, **changes):
+        args = dict(owners=[self.relative], entries=self.entries,
+                    expected_commit=self.commit,
+                    expected_manifest_blob=self.manifest_blob,
+                    byte_budget=1024)
+        args.update(changes)
+        return bridge.stage(self.repo, self.output, **args)
+
+    def no_asset_or_temp(self):
+        self.assertFalse(self.destination.exists())
+        self.assertEqual(list(self.output.rglob(".t5-original-graphics-*.partial"))
+                         if self.output.exists() else [], [])
+
+    def test_exact_split_staged_sha_and_repeat_is_read_only(self):
+        first = self.stage()
+        self.assertEqual(self.destination.read_bytes(), self.original)
+        self.assertEqual(first["owners_staged"], 1)
+        self.assertEqual(first["owners_cached"], 0)
+        self.assertEqual(first["original_bytes_verified"], len(self.original))
+        self.assertFalse(first["used_lfs"])
+        second = self.stage()
+        self.assertEqual(second["owners_staged"], 0)
+        self.assertEqual(second["owners_cached"], 1)
+        self.assertEqual(self.destination.read_bytes(), self.original)
+
+    def test_tampered_part_same_size_not_published(self):
+        (self.source / "part-00001").write_bytes(b"87654321")
+        with self.assertRaisesRegex(ValueError, "sha256"):
+            self.stage()
+        self.no_asset_or_temp()
+
+    def test_missing_extra_and_wrong_size_part_refused(self):
+        part = self.source / "part-00001"
+        part.rename(self.root / "taken")
+        with self.assertRaisesRegex(ValueError, "parts"):
+            self.stage()
+        self.no_asset_or_temp()
+        part.write_bytes(b"somethingtoo-long")
+        with self.assertRaisesRegex(ValueError, "length"):
+            self.stage()
+        self.no_asset_or_temp()
+        part.write_bytes(b"12345678")
+        (self.source / "part-00003").write_bytes(b"X")
+        with self.assertRaisesRegex(ValueError, "parts"):
+            self.stage()
+        self.no_asset_or_temp()
+
+    def test_wrong_pinned_commit_or_manifest_rejected(self):
+        with self.assertRaisesRegex(ValueError, "commit"):
+            self.stage(expected_commit="0" * 40)
+        self.manifest.write_text(self.manifest.read_text() + "#touched\n")
+        with self.assertRaisesRegex(ValueError, "manifest"):
+            self.stage()
+        self.no_asset_or_temp()
+
+    def test_disagreeing_feature_lfs_pointer_fails_closed(self):
+        with self.assertRaisesRegex(ValueError, "identity_disagree"):
+            self.stage(entries=[(self.owner, "0" * 64, len(self.original))])
+        with self.assertRaisesRegex(ValueError, "both_immutable"):
+            self.stage(owners=["Raft_Data/sharedassets0.assets"])
+        self.no_asset_or_temp()
+
+    def test_requested_owner_or_budget_must_be_bounded(self):
+        with self.assertRaisesRegex(ValueError, "budget"):
+            self.stage(byte_budget=len(self.original) - 1)
+        with self.assertRaisesRegex(ValueError, "duplicate"):
+            self.stage(owners=[self.relative, self.relative])
+        with self.assertRaisesRegex(ValueError, "empty"):
+            self.stage(owners=[])
+        self.no_asset_or_temp()
+
+    def test_existing_conflicting_destination_not_overwritten(self):
+        self.destination.parent.mkdir(parents=True)
+        self.destination.write_bytes(b"other_asset")
+        with self.assertRaisesRegex(ValueError, "conflicts"):
+            self.stage()
+        self.assertEqual(self.destination.read_bytes(), b"other_asset")
+
+    def test_symlink_in_original_or_output_cannot_redirect(self):
+        external = self.root / "outside"
+        external.write_bytes(b"abcdefgh")
+        part = self.source / "part-00000"
+        part.unlink()
+        part.symlink_to(external)
+        with self.assertRaisesRegex(ValueError, "symlinked"):
+            self.stage()
+        self.no_asset_or_temp()
+        part.unlink()
+        part.write_bytes(self.parts[0])
+        self.output.symlink_to(self.root, target_is_directory=True)
+        with self.assertRaisesRegex(ValueError, "symlinked"):
+            self.stage()
+        self.assertEqual(external.read_bytes(), b"abcdefgh")
+
+    def test_hardlinked_part_rejected_before_copy(self):
+        source_part = self.source / "part-00000"
+        external = self.root / "alias"
+        external.hardlink_to(source_part)
+        with self.assertRaisesRegex(ValueError, "hardlinked"):
+            self.stage()
+        self.no_asset_or_temp()
+        self.assertEqual(external.read_bytes(), self.parts[0])
+
+    def test_output_under_original_zip2_source_refused(self):
+        with self.assertRaisesRegex(ValueError, "overlapping"):
+            bridge.stage(self.repo, self.repo / "Raft" / "staged",
+                         owners=[self.relative], entries=self.entries,
+                         expected_commit=self.commit,
+                         expected_manifest_blob=self.manifest_blob)
+
+
+if __name__ == "__main__":
+    unittest.main()
