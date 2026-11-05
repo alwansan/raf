@@ -128,7 +128,10 @@
     "https://github.com/alwansan/raf/commit/9207acc55dfb988a8826ed0725c3fb9032655089",
     "https://github.com/alwansan/raf/actions/runs/42116530618",
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE_COLORMASK_MAPPING_2026-11-06.md",
-    "https://github.com/alwansan/raf/commit/92b8c5111174cddace33c0944318c1a66f77ba5d"
+    "https://github.com/alwansan/raf/commit/92b8c5111174cddace33c0944318c1a66f77ba5d",
+    "https://github.com/alwansan/raf/actions/runs/42119098398",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_MATERIAL_TEXENV_2026-11-05.md",
+    "https://github.com/alwansan/raf/commit/02bdaba315805fe48684faafdeedf2a692725f16"
   ],
   "remaining": [
     "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -186,5 +189,5 @@
     "نجاحعلىالهاتف"
   ],
   "updated_by": "T3",
-  "updated_at": "2026-11-05T21:53:00Z"
+  "updated_at": "2026-11-05T22:11:00Z"
 }
