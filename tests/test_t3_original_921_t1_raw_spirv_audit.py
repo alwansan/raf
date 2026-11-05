@@ -196,7 +196,7 @@ class OriginalRawDisassemblyTests(unittest.TestCase):
         def trusted_fake(command, **_kwargs):
             calls.append(command[0])
             return subprocess.CompletedProcess(
-                command, 0, stdout="OpEntryPoint Fragment %1 \\"main\\" %2"
+                command, 0, stdout='OpEntryPoint Fragment %1 "main" %2'
                 if command[0] == "spirv-dis" else "")
         with patch.object(bridge.subprocess, "run", side_effect=trusted_fake):
             text = bridge.private_module_disassemble(path)
