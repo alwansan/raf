@@ -5,7 +5,7 @@
   "session_id": "20261105T181919Z-T4-chat-overflow-ci-9dzc8",
   "origin": "chat",
   "issue_id": "INTEGRATION-001",
-  "status": "active",
+  "status": "completed",
   "track": "native-delivery-read-only-triage",
   "approach": "Read completed shared native run jobs/publish logs/artifact metadata, diagnose fatal release step for T5 without modifying native workflows, release or token/secret.",
   "base_sha": null,
@@ -22,7 +22,26 @@
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42058825739"
   ],
-  "result": null,
-  "next_step": "Record exact failed step, 403 line, artifact IDs/expiry and recovery options to T5; do not duplicate native Unity run.",
-  "updated_at": "2026-11-05T18:25:00Z"
+  "result": {
+    "native_run": 42058825739,
+    "source_sha": "e9c358eda01785b65e4eb14f18723da426635628",
+    "reconstruct": "success",
+    "publish_early_test": "failure",
+    "delivery_result": "failure",
+    "publish_failure_step": "Publish complete APK OBB XAPK packages and lossless transport parts",
+    "log_exact_error": "HTTP 403: Resource not accessible by integration (https://api.github.com/repos/alwansan/raf/releases)",
+    "log_time": "2026-11-05T18:21:48Z",
+    "artifact_delivery_id": 13441227298,
+    "artifact_delivery_size_bytes": 5948243524,
+    "artifact_delivery_expires": "2026-11-06T18:19:05Z",
+    "artifact_checkpoint_id": 13441766832,
+    "artifact_checkpoint_size_bytes": 2974110506,
+    "artifact_checkpoint_expires": "2026-11-07T18:18:17Z",
+    "private_or_device_evidence_verified": false
+  },
+  "next_step": "T5 diagnose release creation authorization and republish from verified saved delivery/checkpoint artifacts before retention expiry if feasible; no Unity rerun justified by this 403 alone. Do not declare APK accepted on phone.",
+  "updated_at": "2026-11-05T18:25:00Z",
+  "experiment_ids": [
+    "prompt/coordination/experiments/T4/20261105T181919Z-T4-chat-overflow-ci-9dzc8-native-publish403.json"
+  ]
 }

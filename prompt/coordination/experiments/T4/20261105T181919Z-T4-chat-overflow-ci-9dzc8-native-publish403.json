@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261105T181919Z-T4-chat-overflow-ci-9dzc8",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "hypothesis": "Native run failed at Release publication authorization while compilation/packaging and delivery artifact preparation succeeded; existing artifacts can be used for a narrow authorized recovery.",
+  "source_commit": "e9c358eda01785b65e4eb14f18723da426635628",
+  "input_hashes": [],
+  "tool_versions": {
+    "github": "GitHub Actions jobs/logs/artifacts API"
+  },
+  "commands": [
+    "Read GitHub run 42058825739 jobs",
+    "Read publish-early-test job 127441439836 decoded logs",
+    "Read Actions artifacts metadata for run42058825739"
+  ],
+  "negative_controls": [
+    "Fatal 403 occurs after download-artifact success, not inside Unity reconstruct",
+    "Do not infer APK signature, install or save from artifact existence"
+  ],
+  "workflow_path": ".github/workflows/raft-unity-editor-android-import.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42058825739",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42058825739"
+  ],
+  "budget": "Read-only GitHub API requests; no new heavy build, no credentials or secrets",
+  "status": "completed",
+  "observed_result": {
+    "native_run": 42058825739,
+    "source_sha": "e9c358eda01785b65e4eb14f18723da426635628",
+    "reconstruct": "success",
+    "publish_early_test": "failure",
+    "delivery_result": "failure",
+    "publish_failure_step": "Publish complete APK OBB XAPK packages and lossless transport parts",
+    "log_exact_error": "HTTP 403: Resource not accessible by integration (https://api.github.com/repos/alwansan/raf/releases)",
+    "log_time": "2026-11-05T18:21:48Z",
+    "artifact_delivery_id": 13441227298,
+    "artifact_delivery_size_bytes": 5948243524,
+    "artifact_delivery_expires": "2026-11-06T18:19:05Z",
+    "artifact_checkpoint_id": 13441766832,
+    "artifact_checkpoint_size_bytes": 2974110506,
+    "artifact_checkpoint_expires": "2026-11-07T18:18:17Z",
+    "private_or_device_evidence_verified": false
+  },
+  "rejected_hypotheses": [
+    "Unity reconstruct failed (job result success)",
+    "Release publication completed (HTTP403)"
+  ],
+  "limitations": [
+    "Artifact archives not downloaded or contents independently byte-authenticated by T4",
+    "Release failure root permission/policy details not yet conclusively established",
+    "T5 owns native workflow; T4 did not mutate it or cancel/rerun"
+  ],
+  "integration_commit": null,
+  "next_step": "T5 to recover publication using permitted credentials and retained signed deliverables, verify output bytes, then device test; read-only handoff linked."
+}
