@@ -1,0 +1,14 @@
+{
+  "id": "20261105T152005Z-T1-chat-439b69",
+  "owner": "T1",
+  "session_id": "20261105T152005Z-T1-chat-439b69",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Source-only CI42054085947 passed 20 tests (3 paired, 5 first divergence, 4 spatial, 5 channel, 3 parity) and workflow YAML parse. Unity replay skipped by explicit gate in CI42054085725; no paired capture measured this session.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42054085947",
+    "https://github.com/alwansan/raf/actions/runs/42054085725",
+    "https://github.com/alwansan/raf/actions/runs/42052375742"
+  ],
+  "at": "2026-11-05T15:21:33.872Z"
+}

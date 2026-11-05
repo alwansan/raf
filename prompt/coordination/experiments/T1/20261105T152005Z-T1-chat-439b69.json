@@ -1,0 +1,32 @@
+{
+  "id": "20261105T152005Z-T1-chat-439b69",
+  "session_id": "20261105T152005Z-T1-chat-439b69",
+  "origin": "chat",
+  "owner": "T1",
+  "issue_id": "WATER-001",
+  "status": "completed",
+  "base_sha": "03978c08dff9cc58a84acea60948bd7d6461d6bf",
+  "updated_at": "2026-11-05T15:21:33.872Z",
+  "intended_files": [
+    "scripts/t1_fft_paired_diagnostic.py",
+    "tests/test_t1_fft_paired_diagnostic.py",
+    ".github/workflows/raft-t1-fft-unity-input-identity.yml",
+    ".github/workflows/raft-t1-fft-paired-diagnostic-checks.yml"
+  ],
+  "experiment_key": "unity-openGLCore-exact-paired-fft-private-spatial-and-channel-combined-v1",
+  "resource_key": "raft-native-engine-feature/android-native-port",
+  "resumed_from_sessions": [
+    "20261105T143200Z-T1-chat-04494d",
+    "20261105T151300Z-T1-scheduled-7c2f",
+    "20261105T142000Z-T1-chat-lavapipe-unity"
+  ],
+  "implementation_sha": "ffdc85acfcb2c9854db1811b456ecf1d7fa9a52d",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42054085947",
+    "https://github.com/alwansan/raf/actions/runs/42054085725",
+    "https://github.com/alwansan/raf/actions/runs/42052375742"
+  ],
+  "result": "Source-only CI42054085947 passed 20 tests (3 paired, 5 first divergence, 4 spatial, 5 channel, 3 parity) and workflow YAML parse. Unity replay skipped by explicit gate in CI42054085725; no paired capture measured this session.",
+  "next_step": "After the native Unity lane is free, dispatch exact Unity FFT sampled input identity on feature/android-native-port, or push a workflow-only change with [t1-paired-replay] in the commit message. Read RAFT_T1_PAIRED_DIAGNOSTIC before the strict parity verdict. If neither channel permutation nor spatial transform fully matches, trace actual pass-zero loads and arithmetic.",
+  "scope": "Source-only diagnostic and gated replay integration"
+}
