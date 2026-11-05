@@ -1,0 +1,14 @@
+{
+  "id": "20261105T125100Z-T1-chat-affd1c",
+  "owner": "T1",
+  "session_id": "20261105T125100Z-T1-chat-affd1c",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Synthetic Unity RGBA32F transfer control passed. Exact-workload Vulkan FFT translation experiment is running.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42029739318",
+    "https://github.com/alwansan/raf/actions/runs/42025620147",
+    "https://github.com/alwansan/raf/actions/runs/42030877911"
+  ],
+  "at": "2026-11-05T12:53:13.592Z"
+}

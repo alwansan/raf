@@ -4,9 +4,9 @@
   "owner": "T1",
   "origin": "chat",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "4f76356c05a9b482e7aea82a0c5ccba7af46cf9e",
-  "updated_at": "2026-11-05T12:51:00.005Z",
+  "updated_at": "2026-11-05T12:53:13.592Z",
   "intended_files": [
     ".github/workflows/raft-t1-fft-vulkan-roundtrip-isolation.yml",
     "scripts/t1_fft_vulkan_roundtrip_isolation.py"
@@ -19,6 +19,9 @@
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42029739318",
-    "https://github.com/alwansan/raf/actions/runs/42025620147"
-  ]
+    "https://github.com/alwansan/raf/actions/runs/42025620147",
+    "https://github.com/alwansan/raf/actions/runs/42030877911"
+  ],
+  "implementation_sha": "9cfbb55d818e84854321cf7d61d8e55fcd71ca72",
+  "next_step": "Read per-pass match and RGBA counts from same-Vulkan CI. Distinguish setup failure from numeric divergence before choosing the next experiment."
 }
