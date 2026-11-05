@@ -1,0 +1,15 @@
+{
+  "id": "T2-20261105T1629Z-source-original-Foam-four-indices-inbounds",
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261105T1611Z-T2-chat-foam-length-source-9ab4",
+  "issue_id": "WATER-001",
+  "type": "authentic_original_compiled_RT_array_length_caller_and_four_inbounds",
+  "at": "2026-11-05T16:29:00Z",
+  "summary": "Original SHA-authentic managed Foam CI42063244298 SUCCESS established newarr RenderTexture[] length loads System.Int32 formal. CI42064653958 SUCCESS captured exact original ref RenderTexture[] callsite and proved its matching System.Int32 actual argument is a positive direct ldc.i4; private comparison verifies four distinct nonnegative original Texture(int) caller index literals all in bounds for that compiled allocation. This is compiled source structural evidence only: no actual runtime execution, RT member content, ShaderLab material or Android water pixels verified. No original number/method/field/IL leaked. WATER-001 OPEN NOT_READY0/3.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42063244298",
+    "https://github.com/alwansan/raf/actions/runs/42064653958",
+    "https://github.com/alwansan/raf/commit/668cfb4529baf1a0a10a11ed629311e9b7a74784"
+  ]
+}
