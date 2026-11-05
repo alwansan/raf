@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "session_id": "20261105T1407Z-T5-chat-profile-reader-window-c8a1",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "hypothesis": "Original LocalProfileStore.GetOrCreateProfileId can fail a legitimate concurrent first-launch reader if a separate exclusive writer leaves a newly created empty profile.id visible beyond 99x10ms retries; short hold should succeed; permanently corrupt ID should remain unchanged and rejected.",
+  "source_commit": "1e369deb03909f20c75eda30706b5d034d716ee2",
+  "input_hashes": [
+    "synthetic disposable GUIDs and local paths; no real game/device bytes",
+    "real unchanged LocalProfileStore.cs Git blob d0c3105973461e14c740c0052734d4239d6d567d"
+  ],
+  "tool_versions": {
+    "runner": "ubuntu-24.04",
+    "runtime": ".NET 8.0 via actions/setup-dotnet@v4",
+    "platform_library": "android-port/Runtime/Platform/RaftAndroid.Platform.csproj (netstandard2.1)"
+  },
+  "commands": [
+    "dotnet build android-port/Experiments/T5/LocalProfileWindowProbe/LocalProfileWindowProbe.csproj --configuration Release --nologo -v:q",
+    "dotnet android-port/Experiments/T5/LocalProfileWindowProbe/bin/Release/net8.0/LocalProfileWindowProbe.dll"
+  ],
+  "negative_controls": [
+    "300ms exclusive empty-profile writer: reader must eventually return same complete ID and remain stable on reopen",
+    "3500ms exclusive empty-profile writer: reader must finish with bounded exception before file completion; original eventual writer ID must remain stable",
+    "preexisting persistently invalid profile.id: InvalidDataException, no replacement"
+  ],
+  "workflow_path": ".github/workflows/raft-t5-local-profile-window.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42043111968",
+  "artifact_urls": [],
+  "budget": "8 minute max ubuntu-24.04 .NET8-only job; actual 5 second synthetic reader-window fixture; no LFS, Unity, original private data or native request",
+  "status": "completed",
+  "observed_result": {
+    "conclusion": "success",
+    "job_id": 127298820854,
+    "short_writer_hold_ms": 300,
+    "short_result": "success",
+    "short_before_writer_release": false,
+    "long_writer_hold_ms": 3500,
+    "long_result": "io_failure",
+    "long_before_writer_release": true,
+    "persisted_identity_after_writer_stable": true,
+    "permanently_corrupt_result": "invalid_data",
+    "permanently_corrupt_file_unchanged": true,
+    "source_library_modified": false,
+    "first_run": {
+      "run_url": "https://github.com/alwansan/raf/actions/runs/42042891917",
+      "conclusion": "failure",
+      "classification": "workflow CLI invocation forwarded unexpected arguments; build succeeded but harness Main rejected args",
+      "correction_commit": "1e369deb03909f20c75eda30706b5d034d716ee2"
+    }
+  },
+  "rejected_hypotheses": [
+    "A short exclusive creation necessarily fails: false in 300ms bounded original C# fixture.",
+    "All original read failures are persistent corruption: false, valid eventually-written ID can trigger bounded IOException under a long writer hold.",
+    "The original CI42020924863 InvalidDataException was definitely caused by the over-limit writer hold: NOT established; new long-writer fixture generated IOException on current Linux CI."
+  ],
+  "limitations": [
+    "This is actual platform C#/.NET8 behavior under synthetic controlled Linux file concurrency, not Android/Unity IL2CPP or real game save.",
+    "A long deliberate writer hold is not proof of real production writer latency or the original 12-process incident cause; source-original error categories differ.",
+    "The original 2026-11-05 16/17 CI failure was an InvalidDataException, whereas this controlled 3500ms hold produced IOException.",
+    "No production runtime change or platform smoke suite rewrite; T4 owns source modification decision after coordination.",
+    "Original StoreStats guards and Android .rgd world creation remain unproven on phone. Project NOT_READY 0/3."
+  ],
+  "integration_commit": "69fe4aedcdd85f4dc75149f6472a09000b12bf2b",
+  "next_step": "T4 should evaluate a bounded retry design that tolerates slow legitimate first creation yet preserves fail-closed corruption and no-clobber, test the same executable fixture and a deterministic persistent-malformed counterexample before production change; T5 to coordinate one native candidate without canceling active full build."
+}
