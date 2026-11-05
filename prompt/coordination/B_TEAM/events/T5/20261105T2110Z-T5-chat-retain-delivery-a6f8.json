@@ -1,0 +1,13 @@
+{
+  "id": "T5-20261105T2110Z-real-delivery-archive-rescue",
+  "owner": "T5",
+  "session_id": "20261105T2110Z-T5-chat-retain-delivery-a6f8",
+  "issue_id": "INTEGRATION-001",
+  "type": "integration",
+  "summary": "Native delivery run42058825739 verified exact ZIP and full real 7 transport-part plus 3 logical APK/OBB/XAPK SHA256, source pinned, and re-retained as artifact13454900880 until 2026-11-08T21:12:40Z via CI42110297871 SUCCESS. Release creation HTTP403 remains open, no device retest.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42110297871",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_NATIVE_DELIVERY_RETENTION_2026-11-05.md"
+  ],
+  "at": "2026-11-05T21:15:49.272Z"
+}
