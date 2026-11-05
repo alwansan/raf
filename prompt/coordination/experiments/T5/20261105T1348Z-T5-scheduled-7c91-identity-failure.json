@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "session_id": "20261105T1348Z-T5-scheduled-7c91",
+  "origin": "scheduled",
+  "issue_id": "INTEGRATION-001",
+  "hypothesis": "The CI failure is isolated to simultaneous independent processes reading a newly created profile.id; precise mechanism (writer scheduling, partial visibility, filesystem behavior) remains unproven.",
+  "source_commit": "92b3e28e989708b1779a6996866dc50cb455550e",
+  "input_hashes": [],
+  "tool_versions": {
+    "GitHub Actions": "ubuntu runner 2026-11-05",
+    "dotnet": "version not extracted from job log"
+  },
+  "commands": [
+    "GitHub Actions fetch_workflow_job_logs(job_id=127223188005)",
+    "GitHub fetch_file(android-port/Runtime/Platform/LocalProfileStore.cs)",
+    "GitHub fetch_file(android-port/Tests/Smoke/Program.cs)"
+  ],
+  "negative_controls": [
+    "Same failed job: 16/17 other platform smoke tests passed, including 8x24 thread initialization and delayed 75ms writer test",
+    "Prior CI42020751210 passed same source according to earlier T5 compare"
+  ],
+  "workflow_path": null,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42020924863",
+  "artifact_urls": [],
+  "budget": "No CI dispatch, no native build, GitHub read-only log fetch",
+  "status": "completed",
+  "observed_result": "Exact failed assertion: concurrent separate processes preserve one durable profile identity. Child process threw InvalidDataException from LocalProfileStore.ReadExistingId line105, via ReadWhenWriterCloses line65 and GetOrCreateProfileId line35. Smoke TOTAL passed=16 failed=1. Code currently retries InvalidDataException and IOException up to 99*10ms, but no evidence yet whether retry budget exhaustion, invalid contents, or unrelated filesystem behavior caused failure.",
+  "rejected_hypotheses": [
+    "The failure was in offline solo-host or world-save assertions (both passed in same run).",
+    "The failing test was thread-only first-launch (thread test passed).",
+    "A changed platform source between compared runs was necessary (earlier exact diff showed none)."
+  ],
+  "limitations": [
+    "No local dotnet runtime; no new deterministic reproduction.",
+    "No Android device execution.",
+    "Failure stack lacks exact invalid file bytes; do not print identity values.",
+    "Concurrent T4 ownership of platform runtime: no production edit."
+  ],
+  "integration_commit": null,
+  "next_step": "Coordinate T4 to instrument only metadata (attempt count, observed byte length, writer-open timing) in a separate deterministic synthetic multi-process test; avoid logging profile IDs. If retries exhaust, test bounded extended wait with timeout and corrupt-file negative control before proposing source fix."
+}
