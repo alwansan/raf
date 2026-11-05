@@ -90,22 +90,25 @@
         "owner-message-2026-11-04",
         "https://github.com/alwansan/raf/commit/02665b11061ccb070bf6e24797d47a2866ef250c",
         "https://github.com/alwansan/raf/actions/runs/42118499200",
-        "https://github.com/alwansan/raf/actions/runs/42121598304"
+        "https://github.com/alwansan/raf/actions/runs/42121598304",
+        "https://github.com/alwansan/raf/actions/runs/42124859112"
       ],
       "remaining": [
         "معالجة ظهور أشرطة النظام عند حواف اللعبة بالماوس الفعلي واستخدام مؤشر Raft.",
         "اختبار التقاط الحركة النسبية في اللعب وإفلاتها عند القائمة وفقد التركيز.",
         "الحفاظ على الكيبورد واللمس الحالي. تطوير تخطيط التاتش العام مؤجل.",
         "T4: تحقق هاتف فعلي من View pointer capture فقدانه/استعادته، حركة الكاميرا دون حواف، مؤشر القائمة، أشرطة النظام، ومنافذ اللمس/الكيبورد، مع اختبار حفظ/إعادة فتح العالم على نفس SHA.",
-        "On-device test of SOURCE_MOUSE_RELATIVE vs SOURCE_TOUCHPAD captured motion, batching, cursor lock/release, wheel/buttons and old world/save/exit/reopen on same candidate SHA; source tests do not prove Android behavior."
+        "On-device test of SOURCE_MOUSE_RELATIVE vs SOURCE_TOUCHPAD captured motion, batching, cursor lock/release, wheel/buttons and old world/save/exit/reopen on same candidate SHA; source tests do not prove Android behavior.",
+        "Immersive WindowInsetsController/legacy source added; validate on actual POCO F5 Pro whether bars disappear at mouse edges while OS swipes still work and landscape/Settings/game world-save remain stable on same signed candidate."
       ],
       "acceptance": [
         "دوران الكاميرا بلا توقف عند الحواف، ومؤشر اللعبة في القوائم، والتحرير الآمن عند الخروج أو تبديل التركيز."
       ],
       "updated_by": "T4",
-      "updated_at": "2026-11-05T22:30:00Z",
+      "updated_at": "2026-11-05T22:54:00Z",
       "source_status": "SOURCE_FIXED_MANAGED_CI_VERIFIED_DEVICE_UNCONFIRMED",
       "latest_T4_source_proof": "SOURCE_INTEGRATED_CI42121598304: API26 relative mouse getX/Y, captured touchpad AXIS_RELATIVE_X/Y, 0..64 historical samples; 28 Python +30 CSharp + original Unity2021 compile PASS; Android physical device unverified",
+      "latest_T4_immersive_source": "SOURCE_INTEGRATED_CI42124859112: API30+ WindowInsetsController systemBars transient OS swipes; API26-29 additive legacy IMMERSIVE_STICKY flags; 7 Python and 18 CSharp policy checks; authentic original Unity2021 AndroidJNI/Core compile; NO DEVICE ACCEPTANCE",
       "_record_path": "../B_TEAM/issues/INPUT-005.json"
     },
     {
@@ -440,7 +443,10 @@
         "https://github.com/alwansan/raf/commit/02bdaba315805fe48684faafdeedf2a692725f16",
         "https://github.com/alwansan/raf/actions/runs/42120918486",
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_TEXTURE2D_STREAM_2026-11-06.md",
-        "https://github.com/alwansan/raf/commit/9cf384847fd4bd4e1fc8d1c8ebd67a0afbf788b2"
+        "https://github.com/alwansan/raf/commit/9cf384847fd4bd4e1fc8d1c8ebd67a0afbf788b2",
+        "https://github.com/alwansan/raf/actions/runs/42125608932",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE_STREAM_BYTES_2026-11-06.md",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-original-particle108-image-stream-fullSHA.json"
       ],
       "remaining": [
         "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -498,7 +504,7 @@
         "نجاحعلىالهاتف"
       ],
       "updated_by": "T3",
-      "updated_at": "2026-11-05T22:23:10Z",
+      "updated_at": "2026-11-05T23:01:58.538Z",
       "_record_path": "../B_TEAM/issues/RENDER-002.json"
     },
     {
@@ -1918,6 +1924,41 @@
       "_record_path": "../B_TEAM/resources/T2-foam-original-paired-HLSL-vulkan.json"
     },
     {
+      "id": "T2-foam-original-private-two-pass-ShaderLab-candidate",
+      "owner": "T2",
+      "issue_id": "WATER-001",
+      "kind": "sha_original_foam_private_structural_ShaderLab",
+      "stages": {
+        "acquisition": "ZIP2_ORIGINAL_SHA_VERIFIED",
+        "extraction": "TWO_AUTHORED_PROPERTIES_TEXTURE_VECTOR_FOUR_STAGES_TWO_STATES",
+        "reconstruction": "PRIVATE_SHADERLAB_9731_BYTES_TWO_COMPLETE_PASSES_ORIGINAL_DXBC_SOURCE_TARGET_MODELS",
+        "binding": "ORIGINAL_CB0_MATERIAL_TEXTURE_SAMPLER_UPLOAD_UNVERIFIED",
+        "integration": "CI42125000030_CI42125847863_SUCCESS_UNITY_IMPORT_UNTESTED",
+        "device": "NOT_TESTED"
+      },
+      "observed": {
+        "private_structural_ShaderLab_candidate": true,
+        "original_authored_properties": 2,
+        "original_texture_properties": 1,
+        "original_vector_properties": 1,
+        "original_passes": 2,
+        "original_stage_programs": 4,
+        "original_render_states": 2,
+        "exact_original_DXBC_shader_models_verified": 4,
+        "private_candidate_bytes": 9731,
+        "source_free_tests_passed": 17,
+        "Unity2021_import_verified": false,
+        "CB0_and_original_Material_sampler_upload_verified": false,
+        "Android_Adreno_pixels_verified": false
+      },
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42125000030",
+        "https://github.com/alwansan/raf/actions/runs/42125847863"
+      ],
+      "next_step": "Recover original CB0 uploads and four non-authored Foam dynamic sampler/textures, then coordinate Unity2021/Adreno with T1 and T5.",
+      "_record_path": "../B_TEAM/resources/T2-foam-original-private-two-pass-ShaderLab-candidate.json"
+    },
+    {
       "id": "T2-foam-original-ref-array-caller-compiled-bounds",
       "owner": "T2",
       "issue_id": "WATER-001",
@@ -2493,6 +2534,61 @@
       "updated_by": "T3",
       "updated_at": "2026-11-05T14:45:34.592Z",
       "_record_path": "../B_TEAM/resources/T3-original-highuse-dxbc-source-variants.json"
+    },
+    {
+      "id": "T3-ORIGINAL-PARTICLE108-IMAGE-STREAM-FULLSHA",
+      "title": "Top original Particle Shader48's three Texture2D28 source image ranges verified in one full-SHA authentic ZIP2 streaming provider",
+      "kind": "SHA-original-six-scene-108-ParticleShader48-5Material21-3Texture2D28-stream-provider-byte-fidelity",
+      "owner": "T3",
+      "source": {
+        "provider": "immutable ZIP2 original Raft PC sources; exactly one PRIVATE original resource provider selected from typed Texture2D28 m_StreamData",
+        "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+        "scene_shas_verified": 6,
+        "serialized_owner_shas_verified": 4,
+        "original_full_resource_provider_count": 1,
+        "resource_provider_sha256_verified": true,
+        "original_provider_name_and_digest_published": false
+      },
+      "stages": {
+        "acquisition": "VERIFIED_SIX_SCENE_AND_FOUR_SERIALIZED_OWNER_SHA_269007288_BYTES_PLUS_ONE_EXTERNAL_SOURCE_STREAM_PROVIDER_FULL_BYTES_SHA256_AUTHENTIC",
+        "extraction": "108_SOURCE_PARTICLE_RENDERER_SLOTS_5_MATERIAL21_10_NONNULL_LOCAL_TEXENVS_3_TYPED_TEXTURE2D28_ALL_THREE_ORIGINAL_BYTE_RANGES_READ_AND_SHA_FINGERPRINTED",
+        "reconstruction": "ORIGINAL_SOURCE_ONE_STREAM_PROVIDER_SPARSE_CHECKED_OUT_AND_RECONSTRUCTED_SHA_PINNED_IN_DISPOSABLE_CI_ONLY_NO_GAME_IMPORT",
+        "binding": "VERIFIED_ORIGINAL_RENDERER_TO_MATERIAL21_TO_TEXTURE2D28_SOURCE_PPTR_GRAPH_SOURCE_ONLY; NATIVE_UNITY_EXPORT_GUID_AND_ANDROID_OBB_BINDING_NOT_VERIFIED",
+        "integration": "T3_SOURCE_ONLY_VERIFIER_AND_PINNED_GITHUB_ACTIONS_42125608932_SUCCESS_106_OF_106_PYTHON_TESTS_NO_EXPORTED_GAME_SHADER_ASSETS",
+        "device": "NOT_TESTED"
+      },
+      "counts": {
+        "original_particle_material_slots": 108,
+        "distinct_original_particle_renderers": 54,
+        "distinct_original_particle_material21": 5,
+        "original_nonnull_local_material_texture_PPtrs": 10,
+        "distinct_original_texture2d28": 3,
+        "original_stream_providers_full_size_sha_verified": 1,
+        "original_typed_stream_ranges_read": 3,
+        "original_source_stream_ranges_total_bytes_read": 983052,
+        "original_nonzero_ranges": 3,
+        "distinct_sha256_range_fingerprints_without_digest_publication": 3,
+        "partial_overlaps": 0,
+        "duplicate_ranges": 0,
+        "source_payload_decoded_to_pixels": false,
+        "same_instance_native_export_texture_guid_verified": false,
+        "android_device_shader_sampler_pixels_verified": false
+      },
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42125608932",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE_STREAM_BYTES_2026-11-06.md",
+        "https://github.com/alwansan/raf/commit/6b63f836711de38274db64b2a7e6d1f246015d61",
+        "https://github.com/alwansan/raf/commit/276aad3df4b76067e9061b267caf3c12c1616cb3"
+      ],
+      "remaining": [
+        "Three authentic source Texture2D stream ranges have full-parent SHA and byte-level read proof, NOT a decoded Unity RGBA image or texture importer parity.",
+        "Full-native same-instance original 5 Material21/3 Texture2D28 → emitted Unity GUID and actual material TexEnv references still unproven.",
+        "Actual installed Android APK/OBB/XAPK resource image coverage, shader alpha/fragment source fidelity and device fire/smoke emitter pixels still unverified.",
+        "Do not infer absence from a previously narrow 4-owner run; the exact source resource was deliberately staged only in new 42125608932."
+      ],
+      "updated_by": "T3",
+      "updated_at": "2026-11-05T22:59:58.266Z",
+      "_record_path": "../B_TEAM/resources/T3-original-particle108-image-stream-fullSHA.json"
     },
     {
       "id": "T3-ORIGINAL-SIXSCENE-RENDERER-SHADER-POSTVENDOR-USE",
@@ -6366,6 +6462,20 @@
       "_record_path": "../B_TEAM/events/T2/20261105T2220Z-T2-chat-foam-passpair-f174-result.json"
     },
     {
+      "id": "20261105T2241Z-T2-chat-foam-shaderlab-authored-6a9d-private-shaderlab-result",
+      "owner": "T2",
+      "session_id": "20261105T2241Z-T2-chat-foam-shaderlab-authored-6a9d",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "summary": "CI42125000030+42125847863 SUCCESS: source-authentic original Foam private 9731B two-pass ShaderLab structural candidate from exactly two original authored props (Texture+Vector), 4 stages, 2 states, and 4 original DXBC Shader Model profiles; 17/17 negative controls, no actual Unity/Adreno proof.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42125000030",
+        "https://github.com/alwansan/raf/actions/runs/42125847863"
+      ],
+      "at": "2026-11-05T23:04:00Z",
+      "_record_path": "../B_TEAM/events/T2/20261105T2241Z-T2-chat-foam-shaderlab-authored-6a9d-private-shaderlab-result.json"
+    },
+    {
       "id": "T2-20261105T2115Z-chat-precall-operand-4be0-result",
       "owner": "T2",
       "session_id": "20261105T2107Z-T2-chat-writer-call-ab1c",
@@ -6898,6 +7008,27 @@
       "_record_path": "../B_TEAM/events/T3/20261105T221843Z-T3-chat-particle28-stream-7c49.json"
     },
     {
+      "id": "20261105T225050Z-T3-chat-verified-particle-stream-52bd",
+      "owner": "T3",
+      "origin": "chat",
+      "session_id": "20261105T225050Z-T3-chat-verified-particle-stream-52bd",
+      "issue_id": "RENDER-002",
+      "type": "result",
+      "at": "2026-11-05T23:01:22.724Z",
+      "summary": "Real SHA-authenticated original Particle108 source material and three Texture2D28 full stream bytes. One immutable ZIP2 provider entirely size+SHA verified; three original ranges read totaling 983052 bytes, nonzero and distinct SHA digests, no overlaps. CI42125608932 SUCCESS 106/106 Python suites; no decode/native GUID/device pixels.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42125608932",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE_STREAM_BYTES_2026-11-06.md",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-original-particle108-image-stream-fullSHA.json"
+      ],
+      "limitations": [
+        "source-byte payload proof only",
+        "RENDER-002 remains OPEN",
+        "Android renderer pixels unverified"
+      ],
+      "_record_path": "../B_TEAM/events/T3/20261105T225050Z-T3-chat-verified-particle-stream-52bd.json"
+    },
+    {
       "id": "T4-20261104T2357Z-local-load-start",
       "owner": "T4",
       "session_id": "20261104T2357Z-T4-lw01",
@@ -7407,6 +7538,23 @@
       "_record_path": "../B_TEAM/events/T4/20261105T2230Z-T4-chat-captured-mouse-sources-r7n5.json"
     },
     {
+      "id": "20261105T2241Z-T4-chat-immersive-bars-h8q2",
+      "at": "2026-11-05T22:53:00Z",
+      "session_id": "20261105T2241Z-T4-chat-immersive-bars-h8q2",
+      "owner": "T4",
+      "origin": "chat",
+      "issue_id": "INPUT-005",
+      "timestamp": "2026-11-05T22:53:00Z",
+      "type": "source_integration",
+      "summary": "Android immersive system bars added independent of T5 Settings or pointer capture. API30+ WindowInsetsController.hide(systemBars) with transient swipe exits; API26-29 additive legacy flags. CI42124859112 success 7 Python/18 .NET/original Unity2021 managed compile; initial failed run CS0266 test-only signed literal corrected. No native APK/device proof; INPUT-005 remains OPEN.",
+      "references": [
+        "https://github.com/alwansan/raf/actions/runs/42124859112",
+        "https://github.com/alwansan/raf/commit/40b567a2f2772a2489359848d9cd2a79ab78b7b4",
+        "prompt/coordination/experiments/T4/20261105T2241Z-T4-chat-immersive-bars-h8q2.json"
+      ],
+      "_record_path": "../B_TEAM/events/T4/20261105T2241Z-T4-chat-immersive-bars-h8q2.json"
+    },
+    {
       "id": "T5-20261104T2357Z-b12-fixture-start",
       "owner": "T5",
       "session_id": "20261104T2357Z-T5-b12-fixture-7e2",
@@ -7809,7 +7957,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "3e4669302680a1b17147099d3e84bbf22b7a95880ce284d16eea0539a45b4301",
+  "source_input_sha256": "be949ffea1cde0e3f47d57f2deb869e9a7fc76cc84218568146ec4bd16609509",
   "generation": "T-2026-11-05",
-  "input_sha256": "2321070a3692a5cf4acf8496b8777c0b214d18148f84fc72449892f619159a08"
+  "input_sha256": "f212354ab4b8a7a3c35239b8ecf66aefb7bb0c62dec72eb830057cdb2212eab5"
 }
