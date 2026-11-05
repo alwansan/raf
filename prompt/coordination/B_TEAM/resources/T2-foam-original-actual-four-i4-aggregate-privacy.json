@@ -1,0 +1,33 @@
+{
+  "id": "T2-foam-original-actual-four-i4-aggregate-privacy",
+  "owner": "T2",
+  "issue_id": "WATER-001",
+  "kind": "original_sha_authentic_compiled_Foam_int_literal_private_aggregate",
+  "title": "Source-authenticated four Foam Texture(int) actual integer values decoded privately with non-disclosing aggregate CI",
+  "source": {
+    "zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "original_managed_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e"
+  },
+  "stages": {
+    "acquisition": "ZIP2_ORIGINAL_MANAGED_BYTES_SIZE_SHA256_VERIFIED",
+    "extraction": "FOUR_EXACT_ORIGINAL_SET_TEXTURE_INT_CALL_ARGUMENTS_DECODED_FROM_TRUE_IL_LDC_I4",
+    "reconstruction": "PRIVATE_SIGNED_SHORT_WIDE_INT_OPCODE_SOURCE_VALIDATOR_AND_SYNTHETIC_NEGATIVE_CONTROLS",
+    "binding": "FOUR_DIRECT_LDC_I4_SOURCE_VALUES_DECODED_PRIVATE_DISTINCT_SIGN_AGGREGATE_STORED_ARTIFACT_NOT_IN_CHAT_INSPECTED_RUNTIME_ARRAY_BOUNDS_UNKNOWN",
+    "integration": "T2_CECIL_SOURCE_ONLY_SHA_AUTHENTIC_CI42043293335_SUCCESS_NO_GAME_SHADERLAB_INSTALL",
+    "device": "NOT_TESTED"
+  },
+  "observed": {
+    "authentic_original_i4_values_decoded": 4,
+    "public_raw_ints_or_digests": false,
+    "distinct_count_field_in_safe_artifact": "non_authored_actual_i4_index_values_distinct_count",
+    "actual_distinct_count_not_retrieved_by_this_chat": true,
+    "all_nonnegative_field_in_safe_artifact": "non_authored_actual_i4_index_values_all_nonnegative",
+    "actual_sign_boolean_not_retrieved_by_this_chat": true,
+    "shaderlab_unity_runtime_verified": false
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42043293335",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/T2/sessions/20261105T1408Z-T2-chat-foam-four-i4-uniqueness-4e7a.md"
+  ],
+  "next_step": "Open safe artifact 13423996658 and inspect true unique/sign classification before declaring any exact result; separately acquire original RT array/serialization length to verify actual range."
+}
