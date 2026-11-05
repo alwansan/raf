@@ -49,12 +49,28 @@ def parse_fields(body):
     if set(found)!=set(FIELDS): raise GuardError("missing_keyword_fields")
     return tuple(found[k] for k in FIELDS)
 
-def source_materials(root):
-    import UnityPy
+def source_materials(root, *, selected_owners=None):
+    """Full original B43 mode or explicitly SHA-allowed bounded source mode.
+
+    Do not replace original payload authentication with a filename check.
+    Reject arbitrary/empty scoped selections before loading optional UnityPy.
+    """
     root=Path(root)
     if root.is_symlink(): raise GuardError("unsafe_original_root")
+    if selected_owners is None:
+        pins=SHADER_OWNERS
+    else:
+        from scripts.b05_verify_material_texenv_bindings import B05_SMALL_OWNER_PINS
+        try:
+            names=set(selected_owners)
+        except TypeError:
+            raise GuardError("unapproved_original_material_owner") from None
+        if not names or not names.issubset(B05_SMALL_OWNER_PINS):
+            raise GuardError("unapproved_original_material_owner")
+        pins={name:B05_SMALL_OWNER_PINS[name] for name in sorted(names)}
+    import UnityPy
     out={}
-    for name,pin in SHADER_OWNERS.items():
+    for name,pin in pins.items():
         path=root/"Raft_Data"/name
         if path.is_symlink() or not path.is_file() or fingerprint(path)!=pin:
             raise GuardError("original_byte_pin_mismatch")
