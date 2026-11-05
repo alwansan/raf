@@ -172,6 +172,22 @@ class NativeTopShaderJoinTests(unittest.TestCase):
         self.assertEqual(result["native_high_use_source_shader_export_status"],
                          "DUMMY_AFTER_NATIVE_RESTORERS")
 
+    def test_marker_free_unknown_or_unbalanced_profile_is_inconclusive(self):
+        for field in ("unknown_exporter", "unbalanced"):
+            args=list(fixture(top_dummy=False, top_passes=4))
+            args[4][f"{1:032x}"][field]=True
+            with self.subTest(field=field):
+                with self.assertRaisesRegex(ValueError, "non_dummy_native_shader_ambiguous_export_profile"):
+                    t3.strict_native_top_join(*args)
+
+    def test_dummy_marker_remains_dummy_with_unknown_exporter(self):
+        args=list(fixture(top_dummy=True, top_passes=4))
+        args[4][f"{1:032x}"]["unknown_exporter"]=True
+        args[4][f"{1:032x}"]["unbalanced"]=True
+        result=t3.strict_native_top_join(*args)
+        self.assertEqual(result["native_high_use_source_shader_export_status"],
+                         "DUMMY_AFTER_NATIVE_RESTORERS")
+
     def test_safe_aggregate_does_not_leak_private_identity_or_guid(self):
         result=self.checked()
         encoded=json.dumps(result,sort_keys=True)
