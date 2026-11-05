@@ -81,6 +81,14 @@ jobs:
           # This remains original source-only; Unity/Android pixels unproven.
           particle_source_payload_proof="https://github.com/alwansan/raf/actions/runs/42125608932"
           assert particle_source_payload_proof in issue[0]["evidence"]
+          assert any(r["id"]=="T3-ORIGINAL-PARTICLE108-IMAGE-STREAM-FULLSHA"
+                     and r["stages"]["device"]=="NOT_TESTED"
+                     for r in s["resources"])
+          # T4 historic event was repaired ONLY for stable ledger identity
+          # and timestamp; its input/behavior/evidence are unchanged.
+          assert any(e["id"]=="20261105T2241Z-T4-chat-immersive-bars-h8q2"
+                     and e["owner"]=="T4" and e["at"]==e["timestamp"]
+                     for e in s["events"])
           # T3 source-only class/particle rankings are real SHA-pinned evidence,
           # not an Android shader restoration/device acceptance.
           for genuine_source_proof in (
