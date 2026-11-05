@@ -1,0 +1,162 @@
+name: T3 RENDER-002 authentic 921-slot Shader48 Material property family census
+# Source-free property contract tests run on scoped pushes. Original Material data
+# are read only on explicit dispatch, with private disposable staging.
+# Source property family counts cannot prove Unity export binding or pixels.
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t3_original_921_material_property_contract.py
+      - tests/test_t3_original_921_material_property_contract.py
+      - scripts/t3_original_renderer_shader_impact.py
+      - .github/workflows/raft-t3-original-921-material-property.yml
+      - .github/t3-921-material-property-requests/*.json
+  workflow_dispatch:
+    inputs:
+      run_private_original:
+        description: 'Confirm SHA-pinned Shader48 to original saved Material props (no Unity/native)'
+        required: true
+        type: boolean
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: raft-t3-original921-material-property-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  source-free-original-property-family-controls:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Compile source original Material-Shaders property family parser
+        run: |
+          python3 -m py_compile scripts/t3_original_921_material_property_contract.py scripts/t3_original_renderer_shader_impact.py tests/test_t3_original_921_material_property_contract.py
+      - name: Verify private Shader Material property contract and original renderer controls
+        run: |
+          python3 -m unittest discover -s tests -p 'test_t3_original_921_dxbc_semantic_join.py' -v
+          PYTHONPATH=scripts python3 -m unittest discover -s tests -p 'test_t3_original_renderer_shader_impact.py' -v
+  original-genuine-921-material-property:
+    if: >-
+      ${{ (github.event_name == 'workflow_dispatch' && inputs.run_private_original) || (github.event_name == 'push' && github.event.head_commit.message == 'experiment(T3): authorize original 921 Shader48 Material property census') }}
+    needs: source-free-original-property-family-controls
+    runs-on: ubuntu-24.04
+    timeout-minutes: 28
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          fetch-depth: 2
+          sparse-checkout: |
+            scripts
+            tests
+            .github/t3-921-material-property-requests
+      - name: Verify explicit push request contains only signed-off marker and pinned code
+        if: ${{ github.event_name == 'push' }}
+        run: |
+          set -euo pipefail
+          marker='.github/t3-921-material-property-requests/20261105T1745Z-T3-chat-921-shader-material-property-7a6e.json'
+          files="$(git diff-tree --no-commit-id --name-only -r HEAD)"
+          if [ "$files" != "$marker" ]; then echo "T3_EXPLICIT_MARKER_COMMIT_SCOPE_MISMATCH" >&2; exit 1; fi
+          python3 - <<'PY'
+          import json,subprocess
+          from pathlib import Path
+          p=Path('.github/t3-921-material-property-requests/20261105T1745Z-T3-chat-921-shader-material-property-7a6e.json')
+          d=json.loads(p.read_text())
+          assert d['session_id']=='20261105T1745Z-T3-chat-921-shader-material-property-7a6e'
+          assert d['origin']=='chat' and d['owner']=='T3'
+          assert d['original_provider_sha']=='15964ea8f246b6e076ce26b60931ee2e1a9a2385'
+          assert len(d['source_blob_shas'])==3
+          for path,sha in d['source_blob_shas'].items():
+              actual=subprocess.check_output(['git','rev-parse','HEAD:'+path],text=True).strip()
+              assert actual==sha, 'tracked source blob changed'
+          print('T3_EXPLICIT_921_PROPERTY_SHA_CONTRACT_OK=3')
+          PY
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-source
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/level0
+            Raft/Raft_Data/level1
+            Raft/Raft_Data/level2
+            Raft/Raft_Data/level3
+            Raft/Raft_Data/level4
+            Raft/Raft_Data/level5
+      - name: Select exactly four pinned owners for Shader48 Material source census
+        run: |
+          set -euo pipefail
+          git -C zip2-source sparse-checkout set --no-cone -- \
+            '/RAFT_FILE_MANIFEST.tsv' \
+            '/Raft/Raft_Data/level0' \
+            '/Raft/Raft_Data/level1' \
+            '/Raft/Raft_Data/level2' \
+            '/Raft/Raft_Data/level3' \
+            '/Raft/Raft_Data/level4' \
+            '/Raft/Raft_Data/level5' \
+            '/Raft/Raft_Data/resources.assets/*' \
+            '/Raft/Raft_Data/sharedassets0.assets/*' \
+            '/Raft/Raft_Data/sharedassets1.assets' \
+            '/Raft/Raft_Data/sharedassets6.assets'
+          test "$(git -C zip2-source rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+      - name: SHA-verify original six scenes and reassemble four exact owners without LFS
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import stage
+          from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
+          from scripts.b21_scene_lightmap_links import PIN, verify_source
+          from scripts.t3_original_renderer_shader_impact import SHADER_OWNERS_SELECTED
+          root = Path('zip2-source')
+          output = Path(os.environ['RUNNER_TEMP']) / 't3-original-921-material-property'
+          requested = {'Raft_Data/' + name: SHADER_OWNERS[name] for name in SHADER_OWNERS_SELECTED}
+          data = stage(root, output, requested)
+          assert len(data['owners']) == 4
+          assert data['verified_bytes'] == 269007288 and not data['lfs_used']
+          for name, pin in PIN.items():
+              source = root / 'Raft/Raft_Data' / name
+              verify_source(source, pin)
+              target = output / 'Raft_Data' / name
+              if target.exists() or target.is_symlink():
+                  raise ValueError('scene_stage_collision')
+              with source.open('rb') as reader, target.open('xb') as writer:
+                  while block := reader.read(1024 * 1024):
+                      writer.write(block)
+              verify_source(target, pin)
+          print('T3_921_SOURCE_MATERIAL_SHA_AUTHENTICATED scenes=6 owners=4 bytes=269007288')
+          PY
+      - name: Install pinned UnityPy original extraction reader
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.23.0
+      - name: Privately count true source Shader48 property families versus 921-used Materials
+        run: |
+          set -euo pipefail
+          timeout 420s python3 -m scripts.t3_original_921_material_property_contract \
+            --original "$RUNNER_TEMP/t3-original-921-material-property" \
+            --manifest zip2-source/RAFT_FILE_MANIFEST.tsv \
+            --out "$RUNNER_TEMP/t3-921-original-material-property-safe-summary.json"
+      - name: Upload only public-safe aggregate counts (never bytes or compiler names)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: t3-original-921-material-property-safe-${{ github.run_id }}
+          path: ${{ runner.temp }}/t3-921-original-material-property-safe-summary.json
+          if-no-files-found: ignore
+          retention-days: 7
