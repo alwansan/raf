@@ -1,0 +1,14 @@
+{
+  "id": "T2-20261105T1326Z-foam-four-original-texture-int-direct-literals",
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261105T1323Z-T2-chat-index-origin-5c42",
+  "issue_id": "WATER-001",
+  "at": "2026-11-05T13:26:00Z",
+  "type": "source_authenticated_managed_Texture_int_index_operand_origin_result",
+  "summary": "Actual original SHA-verified managed compiled Foam four non-authored name Material.SetTexture callsites' second Texture(int) call-return producer argument origin histogram is 4/4 direct ldc.i4, no unknown direct source. Includes synthetic direct integer, method argument, and metadata token false literal controls plus original strict getter/field writers. CI42035529042 SUCCESS and only safe numeric counts public, no raw indices. Original constants uniqueness/array size/runtime/Unity/Adreno unknown; WATER-001 OPEN NOT_READY 0/3.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42035529042",
+    "https://github.com/alwansan/raf/commit/afb3e94af6c34a345d8fcfd81e6daaa2c01a89e4"
+  ]
+}
