@@ -83,7 +83,17 @@ def _slot(value):
 
 
 def normalize_texenvs(entries, *, exported=False):
-    """Keep private property names only in-memory; reject duplicates and drift."""
+    """Keep private property names only in-memory; reject duplicates and drift.
+
+    Unity/AssetRipper YAML can serialize an exported material's TexEnvs as
+    a property-name mapping (including the legitimate empty mapping `{}`),
+    rather than the sequence form used by the source typetree or older YAML.
+    The exported YAML parser already rejects duplicate keys recursively.
+    Never apply this relaxation to original game typetrees: originals remain
+    required to be explicit arrays with immutable PPtr/UV semantics.
+    """
+    if exported and isinstance(entries, dict):
+        entries = list(entries.items())
     if not isinstance(entries, list):
         raise ValueError('Texture environment slots must be an array')
     slots = {}
