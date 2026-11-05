@@ -3,12 +3,17 @@
   "origin": "chat",
   "session_id": "20261105T222330Z-T1-chat-a78c4d",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "8fd267f83e093e6d75705f082e15196f3da1432a",
   "intended_files": [
     "scripts/t1_device_water_summary_gate.py",
     "tests/test_t1_device_water_summary_gate.py"
   ],
   "experiment_key": "device-summary-real-stop-time-counters-schema",
-  "updated_at": "2026-11-05T22:23:30Z"
+  "updated_at": "2026-11-05T22:23:30Z",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42118867515"
+  ],
+  "result": "Vulkan original versus HLSL roundtrip passed 64 pass-0 and 32 pass-1 written pixels with zero tolerance or coverage differences. Original bounded coordinate slices end at OpLoad; roundtrip adds constructs/extracts and hits unresolved/depth boundaries. The 384-record trace self-compare only checks format; no original-vs-roundtrip coordinate identity or Unity/Android parity claim. Real pinned CL summaries initially failed the device gate (nested totals), and then the bundle contract (unprefixed labels). Gate now accepts real stop-time counters, rejects conflicts/partial counts, and normalizes strict session labels. Both pinned CL summaries passed end-to-end and all 15 tests passed.",
+  "next_step": "Isolate Unity-specific read address divergence with a same-backend or controlled shader address replay; avoid treating a Vulkan self-compare as cross-implementation evidence."
 }
