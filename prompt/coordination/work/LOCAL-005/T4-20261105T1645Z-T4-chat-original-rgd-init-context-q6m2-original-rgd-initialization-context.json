@@ -4,7 +4,7 @@
   "origin": "chat",
   "session_id": "20261105T1645Z-T4-chat-original-rgd-init-context-q6m2",
   "issue_id": "LOCAL-005",
-  "status": "active",
+  "status": "completed",
   "base_sha": "5081a37400dc9c6cd2364ba8af31da4e1650c9fb",
   "track": "authentic-world-and-user-derived-RGD-producer-provenance",
   "experiment_key": "T4-original-zip2-sha0a6f-saveworld-local-call-owner-and-saveuser-field-direct-store-context-v1",
@@ -30,6 +30,32 @@
     "https://github.com/alwansan/raf/actions/runs/42062124798",
     "https://github.com/alwansan/raf/actions/runs/42058825739"
   ],
-  "updated_at": "2026-11-05T16:45:00Z",
-  "next_step": "Produce bounded source-authentic method owner and original SaveUser field store context with negative controls; no inference of actual world or phone. T4 scheduled JSONL overflow hint scope untouched."
+  "updated_at": "2026-11-05T16:52:00Z",
+  "next_step": "Source-authentic zero-arg instance method of SaveAndLoad returns derived RGD to SaveWorld local; field owned by same class has 1 SaveUser+2 other SaveAndLoad direct lexical write sites, 2 derived-typed immediate producers and 1 unresolved, no literal null. Next focus on bounded call/return dependencies of factory or wait for T5 signed native candidate (run42058825739 still Unity import in progress) to prove offline world/real save/relaunch. Never equate lexical site with runtime world acceptance.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42068520588"
+  ],
+  "result": {
+    "CI": "42068520588 SUCCESS",
+    "source_sha": "2e54986dbc7cbd8295c6bae5a03ef5851d24be35",
+    "test_count": "32/32",
+    "original_source": "ZIP2 SHA15964ea8f246b6e076ce26b60931ee2e1a9a2385 original Assembly-CSharp.dll 3211776B SHA256 0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "world_producer_scope": "SAVEANDLOAD",
+    "world_producer_arity": "ZERO",
+    "world_producer_invocation": "INSTANCE_CALL",
+    "world_producer_original_method_body_found": true,
+    "saveuser_field_writes_saveuser": 1,
+    "saveuser_field_writes_other_saveandload": 2,
+    "saveuser_field_writes_ctor": 0,
+    "saveuser_field_writes_saveworld": 0,
+    "saveuser_field_writes_other_type": 0,
+    "saveuser_field_writes_immediate_derived_typed": 2,
+    "saveuser_field_writes_immediate_null_literal": 0,
+    "saveuser_field_writes_immediate_unknown": 1,
+    "modified_original_game_code": false,
+    "original_game_save_executed": false,
+    "user_world_rgd_written": false,
+    "Android_Unity_IL2CPP_or_phone_tested": false,
+    "report": "docs/T4_ORIGINAL_RGD_INIT_CONTEXT_2026-11-05.md"
+  }
 }
