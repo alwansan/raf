@@ -1,0 +1,28 @@
+# T3 chat — original Shader48 PS DXBC read-mask to SPIR-V input lane comparison
+
+- session_id: `20261105T1715Z-T3-chat-ps-readmask-spv-5e84`, origin: **chat**, owner: T3, issue: RENDER-002 OPEN, NOT_READY.
+- base SHA `8590ee379b29e19d122d88a3aca9b0e6729e3621`, scope reserved BEFORE any code at commit `0f9b50ccd4ee29c90075815abe4520e2840b9ea4`, path `prompt/coordination/work/RENDER-002/20261105T1715Z-T3-chat-ps-readmask-spv-5e84.json`.
+- resumed_from_sessions: `20261105T1701Z-T3-chat-original-dxbc-semantic-join-6d9f`, `20261105T1625Z-T3-scheduled-dxbc-contract-8f2c`.
+- experiment key: `T3-ZIP2-15964ea8-921-Shader48-four-original-VF-pairs-ISGN-fragment-read-mask-compare-same-source-SPIRV-Cross-user-input-component-count`.
+- resource key: `T3-921-fourpass-original-PS-readmask-vkd3d-CPU`; native build resource not touched.
+
+## Prior genuine source evidence and new distinct question
+
+[42071059741](https://github.com/alwansan/raf/actions/runs/42071059741) verifies 8 original D3D11 programs/four exact V/F Pass pairs source SHA and 22/22 PS original semantic-name/index signatures, declared 75 original PS input mask components. Separately, [42068915602](https://github.com/alwansan/raf/actions/runs/42068915602) verifies the same selected four PS programs source SPIR-V reflection aggregate 44 fragment input components after vkd3d→SPIR-V, and 44 after HLSL roundtrip. Names not preserved (0/34 input + 0/29 output stage names), so prior classifies **structural-only**, not semantic mapping.
+
+Real DXBC ISGN/ISG1 stores a distinct ReadWriteMask for input **read components** (unlike output signature's inverted write semantics). Need count private PS source user read-lane mask bits and compare to source SPIR-V and HLSL roundtrip per-Pass, not equate private name or Location identity. Original six scene and four Shader/Material owners from immutable ZIP2 source `15964ea8f246b6e076ce26b60931ee2e1a9a2385`, exact original Shader48 selected by 921 Renderer material slots, same pinned 4/33 exact permutations (eight unpaired vertices).
+
+## Implemented isolated source-free contract
+
+- `scripts/t3_original_921_dxbc_readmask_spirv.py` at [commit 8714a2ac](https://github.com/alwansan/raf/commit/8714a2ac88e24092a2f052d4b0273ff11002d22c). Requires source-authenticated four exact Pass V/F pairs, genuine original PS ISGN/ISG1 read mask strict subset of allocated mask, original DXBC semantic linkage preserved, compiles **only four original PS programs** through existing W1 private translator and reflects both original `original.spv` and derived `roundtrip.spv`. Counts only user original PS declared/read/unread lanes, source SPIR-V input typed scalar/vectors, per-Pass equal/unequal totals. Explicit false claims for source semantic→SPIR-V Location mapping, interpolation, ShaderLab and Unity/Adreno pixels. Private names/code/hashes never leave ephemeral runner.
+- `tests/test_t3_original_921_dxbc_readmask_spirv.py` at [commit 544fb7b3](https://github.com/alwansan/raf/commit/544fb7b3418b789ab497a86b0a126309befe7edd): **21 synthetic controls**, mask subset and unknowns, system-value exclusions, private name leakage, source semantic and translation failures, same-vs-different reflected source/roundtrip counts.
+- `.github/workflows/raft-t3-original-921-dxbc-readmask-spv.yml` [commit 7ebca620](https://github.com/alwansan/raf/commit/7ebca62016d8d81cfe76c6e516cc3f269d9ae5fa) scoped source-free CI, explicit marker-only SHA-pinned original opt-in, run-only on marker commit with exact matching message, independent concurrency, cancel-in-progress:false; original SHA providers staged+reverified privately with no LFS, vkd3d and spirv tools with glslang, timeout 28m.
+- [42073175240](https://github.com/alwansan/raf/actions/runs/42073175240) source-free 18/21 tests passed then 3 errors solely because synthetic `run_probe` wrapper duplicated keyword `reflector` or `translator`; fixed wrapper at `522551776669108903001a14f116f4cc7833162a`. No original code attempted on failed synthetic job.
+- [42073255841](https://github.com/alwansan/raf/actions/runs/42073255841) **SUCCESS** source-free: **21 new read-mask + 21 prior authentic DXBC semantic signature + 17 SPIR-V component = 59/59**. Original opt-in job skipped as intended.
+- Authenticated original explicit request file `.github/t3-dxbc-readmask-requests/20261105T1715Z-T3-chat-ps-readmask-spv-5e84.json`, commit `48f35ed6bfe64d829b1996beeab27d6202608019`, pinned four source/test Git blob SHAs. **Genuine original run ID/result not yet verified** at initial checkpoint. Search Actions for source SHA `48f35ed6bfe64d829b1996beeab27d6202608019` and workflow `T3 RENDER-002 authentic PS DXBC read-mask to SPIR-V input lanes`, inspect original job logs/aggregate artifact, do not send duplicate opt-in while running.
+
+## Interpretation and owner constraints
+
+Original DXBC PS read mask input count may be 44, 75 or neither; no assumption of outcome. Even per-Pass cardinality agreement doesn't map source original semantic names/indices/register masks to SPIR-V Location/Component, nor validate numerical shader execution, rendering, actual Android white surfaces. Tests only synthetic until source job confirms source result. If PS used-mask has out-of-range bits, parser rejects, preserve failure rather than guess. Do not modify scheduled signature validator `scripts/t3_dxbc_signature_contract.py`, T1 FFT, T2 Foam, T4 local world, T5 full native, audio/Settings, or deferred touch. Remain RENDER-002 OPEN/NOT_READY.
+
+**Next:** fetch exact original run and interpret safe aggregate; publish source-authenticated report and event/experiment/work, or record error category and independently fix source tool if warranted. Retain CI URLs and source SHA.
