@@ -124,10 +124,10 @@ class OriginalShaderD3D11(unittest.TestCase):
 
     def test_full_report_keeps_original_names_bytecode_and_ids_private(self):
         p = pass0(vert=[meta(0,keyword=19)],frag=[meta(1,keyword=19)])
-        r = target.summarize(parsed([p]), [(0,b"private")], link=link)
+        r = target.summarize(parsed([p]), [(0,b"ORIGINAL_SECRET_STAGE_PAYLOAD_921")], link=link)
         txt = json.dumps(r)
         for forbidden in ("shadername", "original-vertex", "original-fragment", "sharedassets0.assets",
-                          "m_BlobIndex", "m_KeywordIndices", "private"):
+                          "m_BlobIndex", "m_KeywordIndices", "ORIGINAL_SECRET_STAGE_PAYLOAD_921"):
             self.assertNotIn(forbidden,txt)
         self.assertEqual(r["stage_variants_with_keywords"],2)
 
