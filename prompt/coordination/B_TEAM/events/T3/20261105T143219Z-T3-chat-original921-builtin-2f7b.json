@@ -1,0 +1,13 @@
+{
+  "id": "T3-20261105T143219Z-top921-source-stage-variants",
+  "owner": "T3",
+  "session_id": "20261105T143219Z-T3-chat-original921-builtin-2f7b",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "Original six-scene top 921-slot Shader48 authenticated D3D11 program feasibility: 4 normal Passes, 1 SubShader, 41 vertex and 33 fragment variants, 33 matched and 8 unpaired vertex permutations. CPU-only source evidence, not Android rendering.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42047611046",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_921_SHADER_D3D11_STAGE_FEASIBILITY_2026-11-05.md"
+  ],
+  "at": "2026-11-05T14:46:29.142Z"
+}
