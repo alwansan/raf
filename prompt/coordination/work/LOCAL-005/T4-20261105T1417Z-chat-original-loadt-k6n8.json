@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261105T1405Z-T4-chat-original-rgd-runtime-k6n8",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "track": "world-save",
+  "status": "active",
+  "base_sha": "5faca76e1b59ae1185af9a758db52d233bed35b1",
+  "hypothesis": "The authentic compiled original static SaveAndLoad.Load<T>(string) can read the same shipped SHA-verified 2,941-byte Data.rgd and return a real object of the original root CLR type, not just direct BinaryFormatter.Deserialize. This would distinguish original game loader compatibility in isolated managed CLR from .rgd format/parser-only evidence.",
+  "experiment_key": "t4-real-original-SaveAndLoad-LoadT-shipped-2941-RGD-seed-net8-151-original-refs-k6n8-v1",
+  "resource_key": null,
+  "approach": "Extend pinned original seed .NET8 harness with an opt-in original Load<T> reflection execution selected by exact compiled method signature and original DLL SHA. Use already verified direct formatter root type and exact shipped seed path as typed argument, no real save modifications or private type names. Report loader invocation/returned same type and bounded error category without raw exception, and add separate fail-closed validator. Keep existing no-option provenance test unchanged, and avoid source changes, Unity/native build.",
+  "intended_files": [
+    "android-port/Experiments/T4/OriginalRgdRuntimeLoad/Program.cs",
+    "scripts/t4_validate_original_rgd_loadt.py",
+    "tests/test_t4_validate_original_rgd_loadt.py",
+    ".github/workflows/raft-t4-original-rgd-loadt.yml",
+    "docs/T4_ORIGINAL_RGD_RUNTIME_LOAD_2026-11-05.md"
+  ],
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/actions/runs/42042814576",
+    "docs/T4_ORIGINAL_RGD_LOAD_COMPAT_2026-11-05.md",
+    "prompt/coordination/work/LOCAL-005/T4-20261105T1405Z-chat-original-rgd-runtime-k6n8.json"
+  ],
+  "run_urls": [],
+  "updated_at": "2026-11-05T14:17:00Z",
+  "next_step": "On exact original seed and managed context, exercise original generic loader with CLR original root type, separately distinguish type-match/returned-default/original caught errors; no Android or real persisted user .rgd claims."
+}
