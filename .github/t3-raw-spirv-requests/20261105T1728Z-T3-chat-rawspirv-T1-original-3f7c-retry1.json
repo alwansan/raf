@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T1728Z-T3-chat-rawspirv-T1-original-3f7c",
+  "issue_id": "RENDER-002",
+  "original_provider_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "request_type": "single SHA-original Shader48 direct SPIRV T1 stage fail-closed reason recheck after synthetic controls improved; no payload names",
+  "source_blob_shas": {
+    "scripts/t3_original_921_t1_raw_spirv_audit.py": "0ec19011d56e4864e1cea29973f9cbdf51f50639",
+    "tests/test_t3_original_921_t1_raw_spirv_audit.py": "1aa4ccdcd61e0e11bbd0691fe5ed347f41de2a70",
+    "scripts/t1_spirv_interface_component_audit.py": "ce892f5c378dee1cd6ef1436b5dd8e892ad1485c",
+    "scripts/t3_original_921_dxbc_semantic_join.py": "8a7b0178f4502d7c163a7c8a313e7f754cd68162"
+  },
+  "workflow": "raft-t3-original-921-t1-raw-spv.yml",
+  "reason_for_retry": "First original run reached source with SHA validation but reported INCONCLUSIVE ValueError without category; code now outputs only allowlisted T1 error codes, stage and pass ordinal. No shader assets changed.",
+  "safety": {
+    "private_compiler_names_never_in_output": true,
+    "do_not_cancel_existing_builds": true,
+    "one_original_attempt": true
+  },
+  "created_at": "2026-11-05T17:33:00Z"
+}
