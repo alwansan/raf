@@ -4,7 +4,7 @@
   "origin": "chat",
   "session_id": "20261105T142000Z-T1-chat-lavapipe-unity",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "be5b3aab8b12ac22fe93660ba0fcf955615bedff",
   "resumed_from_sessions": [
     "20261105T140300Z-T1-chat-vulkan-editor",
@@ -24,8 +24,11 @@
     "https://github.com/alwansan/raf/actions/runs/42042650298",
     "https://github.com/alwansan/raf/actions/runs/42025620147"
   ],
-  "run_urls": [],
-  "updated_at": "2026-11-05T14:20:00Z",
-  "next_step": "Build only ephemeral test container on ubuntu-24.04 with original GameCI image; run loader/ICD/vulkaninfo controls without exposing source or credentials. If Vulkan hardware/ICD enumerates, invoke exact GameCI CLI with --customImage and --dockerEnv for VK_ICD_FILENAMES, --customParameters=-force-vulkan and require exact three NUnit pass. Never claim game or Adreno proof. If it still uses nonVulkan, preserve reason and investigate original OpenGLCore arithmetic shader semantics.",
-  "identity_conflict": "Multiple T1 scheduled/chat sessions; existing older shared state preserved. Distinct image-only test, no source compilation/production game paths."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42044388619"
+  ],
+  "updated_at": "2026-11-05T14:27:00Z",
+  "next_step": "Check CI42044388619 step-level outcome. Only if lavapipe enumerates and exact 3/3 real Unity tests pass claim sourcefree Vulkan enablement; then separately run genuine original pair0/1 same-input numeric parity. On failure classify base libvulkan/ICD vs overlay build vs Vulkan enumeration vs backend and do not download ZIP2.",
+  "identity_conflict": "Multiple T1 scheduled/chat sessions; existing older shared state preserved. Distinct image-only test, no source compilation/production game paths.",
+  "result": "Isolated sourcefree workflow implemented commit22a250e7, fixture redaction/3-case parser already source-only and earlier base image Unity Vulkan failure CI42042650298 confirmed. Exact UnityCI Docker image Mesa-loader/ICD probe and temporary driver overlay CI42044388619 in_progress at last check; no driver or Unity success conclusion claimed. Other T5 native build42042902522 ended cancelled independently; this job does not cancel or rerun it."
 }
