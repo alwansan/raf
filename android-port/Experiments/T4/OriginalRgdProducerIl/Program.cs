@@ -37,6 +37,14 @@ internal static class Program
             i.Operand is FieldReference f && f.DeclaringType.FullName == rgdType);
 
 
+    private static int CountOriginalGenericRgdLoads(
+        MethodDefinition caller, TypeDefinition owner, string rgdType) =>
+        caller.Body.Instructions.Count(i =>
+            IsCall(i) && i.Operand is GenericInstanceMethod g &&
+            g.DeclaringType.FullName == owner.FullName &&
+            g.Name == "Load" && g.GenericArguments.Count == 1 &&
+            g.GenericArguments[0].FullName == rgdType);
+
     // Classify only the immediate non-NOP producer instruction before the
     // exact Save(string,RGD) call. IL branches and upstream field
     // initialization are not reconstructed: this is a *local syntax clue*,
@@ -64,6 +72,12 @@ internal static class Program
             previous.Operand is FieldReference staticField &&
             staticField.FieldType.FullName == rgdType)
             return "RGD_TYPED_STATIC_FIELD_LOAD";
+        if (IsCall(previous) &&
+            previous.Operand is GenericInstanceMethod genericLoad &&
+            genericLoad.DeclaringType.FullName == owner.FullName &&
+            genericLoad.Name == "Load" && genericLoad.GenericArguments.Count == 1 &&
+            genericLoad.GenericArguments[0].FullName == rgdType)
+            return "RGD_GENERIC_LOAD_CALL_RETURN";
         if (IsCall(previous) &&
             previous.Operand is MethodReference factory &&
             factory.ReturnType.FullName == rgdType)
@@ -164,6 +178,11 @@ internal static class Program
                 v.VariableType.FullName == rgdType);
             int userRgdLocals = user.Body.Variables.Count(v =>
                 v.VariableType.FullName == rgdType);
+            int otherOwnerCtor = owner.Methods.Where(m => m.HasBody &&
+                    m != world && m != user)
+                .Sum(m => CountRgdConstructor(m, rgdType));
+            int worldGenericLoad = CountOriginalGenericRgdLoads(world, owner, rgdType);
+            int userGenericLoad = CountOriginalGenericRgdLoads(user, owner, rgdType);
 
             var report = new
             {
@@ -183,6 +202,9 @@ internal static class Program
                 world_rgd_typed_locals = worldRgdLocals,
                 user_rgd_typed_locals = userRgdLocals,
                 world_rgd_field_stores = CountRgdFieldStores(world, rgdType),
+                other_saveandload_methods_rgd_constructor_calls = otherOwnerCtor,
+                world_original_load_rgd_generic_calls = worldGenericLoad,
+                user_original_load_rgd_generic_calls = userGenericLoad,
                 world_pre_call_rgd_source_clue =
                     ImmediatePrecallRgdProducer(world, owner, save, rgdType),
                 user_pre_call_rgd_source_clue =
