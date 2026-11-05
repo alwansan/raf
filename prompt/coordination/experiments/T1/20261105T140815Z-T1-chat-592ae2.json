@@ -23,5 +23,7 @@
   "next_step": "Read the observed API marker and exact NUnit result. Only a proven Vulkan runtime plus successful dispatch/readback allows the exact authenticated FFT rerun.",
   "result": "pending",
   "scope": "Synthetic Unity project only; no game assets",
-  "reference_run": "https://github.com/alwansan/raf/actions/runs/42033745802"
+  "reference_run": "https://github.com/alwansan/raf/actions/runs/42033745802",
+  "ci_job_id": 127295723466,
+  "observed_job_status": "in_progress"
 }
