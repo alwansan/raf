@@ -1,0 +1,24 @@
+{
+  "session_id": "20261105T2040Z-T4-scheduled-p4m8",
+  "origin": "scheduled",
+  "issue_id": "INPUT-005",
+  "status": "active",
+  "baseline_sha": "a018aa4a673419466beebc94769c7acf8bafe3c5",
+  "taken_over_from": [
+    "docs/DEVICE_FEEDBACK_42058825739_AR.md",
+    "prompt/coordination/clients/T4/sessions/20261105T1935Z-T4-scheduled-v4c9.md"
+  ],
+  "intended_files": [
+    "prompt/coordination/work/INPUT-005/T4-20261105T2040Z-scheduled-mouse-capture.json",
+    "prompt/coordination/clients/T4/sessions/20261105T2040Z-T4-scheduled-p4m8.md"
+  ],
+  "experiment_key": "T4-physical-mouse-capture-Unity2021-Android13-API26-relative-axis-device-feedback-42058825739",
+  "resource_key": null,
+  "hypothesis": "Physical Android mouse is not captured by current touch-only adapter; OS pointer reaches screen edges and invokes system bars; native View pointer capture and relative events must be bridged without changing keyboard/touch.",
+  "updated_at": "2026-11-05T20:40:00Z",
+  "constraints": [
+    "Do not modify T5 resolution/buttons",
+    "Do not change AndroidTouchPointer touch semantics",
+    "Do not claim phone-tested without device evidence"
+  ]
+}
