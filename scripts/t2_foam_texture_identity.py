@@ -107,7 +107,8 @@ def compare_private_names(original_rows, reflected_names):
     numeric_pairs = [x["_private_numeric_pair"] for x in original_rows]
     # A repeated original pair is ambiguous, not evidence of a translated alias.
     # Only aggregate counts and a digest leave private scratch.
-    complete_pairs = [p for p in numeric_pairs if all(type(v) is int for v in p)]
+    # m_SamplerIndex == -1 is explicitly unknown/disabled; never hash it as a proven pair.
+    complete_pairs = [p for p in numeric_pairs if (type(p[0]) is int and type(p[1]) is int and p[1] >= 0)]
     numeric_pair_digest = hashlib.sha256(json.dumps(sorted(complete_pairs), separators=(",", ":")).encode()).hexdigest()
     presence = {
         k: sum(bool(x["_field_presence"][k]) for x in original_rows)
