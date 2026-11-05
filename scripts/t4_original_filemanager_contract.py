@@ -84,7 +84,24 @@ def probe(dll: Path, root: Path):
         result["original_managed_dll_sha256_verified"] = True
         return result
     except Exception as exc:
-        raise RuntimeError("probe_phase=" + phase + ";cause=" + type(exc).__name__) from None
+        # Explicitly whitelist classifications controlled by THIS verifier;
+        # never forward raw private ILSpy exception text to public CI logs.
+        exact = {
+            "Unverified source fingerprints": "fingerprint_gate",
+            "FileManager declaration missing": "filemanager_type_gate",
+            "Original Save return type changed": "save_return_contract",
+            "Original load/save direct call or catch contract changed": "load_save_edge_cardinality",
+            "FileManager implementation not found": "unresolved_filemanager_method",
+        }
+        reason = exact.get(str(exc), "unclassified_parser_or_contract")
+        if str(exc).startswith("Operation signature must"):
+            reason = "load_method_signature"
+        elif str(exc).startswith("Expected one original Save"):
+            reason = "save_method_signature"
+        raise RuntimeError(
+            "probe_phase=" + phase + ";cause=" + type(exc).__name__
+            + ";reason=" + reason
+        ) from None
 
 
 def main():
