@@ -25,3 +25,9 @@ The original phone log `obb_guid_load_failed` **category conflates an optional p
 Do not 'fix' this by hiding Unity errors or creating an invented empty patch OBB. Next scoped test should inspect on-device `/Android/obb/com.alwansan.raft.androidtest/main.89...obb` hash/location, and seek exact Unity resource GUID/offset failures only if the **main** path appears in new logs. Keep `INTEGRATION-001` open, `NOT_READY 0/3`; audio/Settings, T5 scheduled Resolution, T1–T4 source and deferred touch remain unchanged.
 
 Session: `prompt/coordination/clients/T5/sessions/20261105T2208Z-T5-chat-obb-guid-3d7a.md`.
+
+## Actual CI proof (2026-11-05 22:12 UTC)
+
+[CI42119428667](https://github.com/alwansan/raf/actions/runs/42119428667), job127567590987, **COMPLETED SUCCESS**: 16/16 synthetic negative/positive controls; downloaded six **actual owner CL logs** from immutable commit 520c4cf409aa20a4db54ff80ed87d8807d9cba57, verified **all six Git blob SHAs** before analysis; scanned entire raw segments and independently reproduced exactly `{"session_220911":{"optional_patch_probe_not_packaged":1},"session_230108":{"optional_patch_probe_not_packaged":2},"actual_main_obb_guid_warnings":0}`. The workflow uploaded **no raw log, original game APK, OBB or private data artifact**.
+
+This is an independently reproduced *real owner phone log classification* rather than synthetic parser-only proof. **No observed MAIN OBB GUID warning** in the six exact segments; remaining unknowns are physical installed main OBB digest/location and any OTHER Unity resource GUID mapping. Source-pinned CI42117471172 already independently verified cryptographically signed APK and complete APK/main OBB byte pair. Avoid repackaging solely to respond to a `patch.89` lookup. Shared issue remains OPEN because full Android gameplay/graphics/FFT and actual installed OBB mount are separate acceptance gates.
