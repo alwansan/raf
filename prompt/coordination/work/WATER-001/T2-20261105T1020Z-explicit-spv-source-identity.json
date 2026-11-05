@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T1020Z-T2-original-foam-explicit-spv-map",
+  "issue_id": "WATER-001",
+  "track": "Foam original DXBC t/s→SPIR-V descriptor variable identity",
+  "status": "active",
+  "base_sha": "02e9fba7fb42b83579595885391be636ee3b56e8",
+  "approach": "Compile SHA-pinned original Foam fragment DXBC via B18 proven libvkd3d interface with default and two distinct explicit source t/s register→target descriptor maps. Decode full SPIR-V binary numeric declarations, enforce category/set/binding and stable per-source variable IDs and exact program equivalence after masking only OpDecorate DescriptorSet/Binding literals. Cross-check B20 original.spv from same original, retain false if drift. Fail closed/no shader publish.",
+  "hypothesis": "A/B remaps of exact native t/s registers yield deterministic stable SPIR-V resource variable IDs and graph so explicit source-to-compiler binding map can be anchored to default translated descriptors rather than inferred by ordering.",
+  "taken_over_from": [
+    "scripts/b18_vkd3d_explicit_bindings.c",
+    "scripts/b18_spirv_variable_identity.py",
+    "scripts/b20_private_foam_packet.py",
+    "scripts/t2_foam_original_sample_edges.py",
+    "scripts/t2_foam_spirv_sampler_use.py"
+  ],
+  "intended_files": [
+    "scripts/t2_foam_explicit_descriptor_map.c",
+    "scripts/t2_foam_explicit_descriptor_identity.py",
+    "tests/test_t2_foam_explicit_descriptor_identity.py",
+    ".github/workflows/raft-t2-foam-explicit-descriptor-identity.yml"
+  ],
+  "related_run_ids": [
+    41958159556,
+    41942245746,
+    42009445569
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Write C remapper, SPV typed variable and masked graph verifier, synthetic regression; run original isolated SHA-pinned CI; document exact known/unknown boundary.",
+  "updated_at": "2026-11-05T10:20Z"
+}
