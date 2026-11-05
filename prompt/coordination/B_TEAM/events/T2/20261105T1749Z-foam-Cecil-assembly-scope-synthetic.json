@@ -1,0 +1,14 @@
+{
+  "id": "T2-20261105T1749Z-foam-Cecil-assembly-scope-synthetic",
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261105T1736Z-T2-chat-rt-return-reason-8e2d",
+  "issue_id": "WATER-001",
+  "type": "sourcefree_Cecil_cross_assembly_malformed_aliased_method_rejection",
+  "at": "2026-11-05T17:49:00Z",
+  "summary": "T2 separate .NET9 Mono.Cecil0.11.5 synthetic CI42078113502 SUCCESS: same FullName RenderTexture method in different assemblies collides under loose signature check but is rejected with exact declaring assembly/return type scope. Module and wrong-formal negative controls pass. No original Raft DLL/source used, so no claim on actual original Foam RT return target scope, runtime nonnull, ShaderLab or device water. Scheduled T2 local-writer work not edited. WATER-001 OPEN NOT_READY0/3.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42078113502",
+    "https://github.com/alwansan/raf/commit/f32c3f744e579eaf7c9b001722efa079618cb715"
+  ]
+}
