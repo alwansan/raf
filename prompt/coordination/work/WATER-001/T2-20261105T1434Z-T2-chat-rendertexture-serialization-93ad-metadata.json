@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "session_id": "20261105T1434Z-T2-chat-rendertexture-serialization-93ad",
+  "origin": "chat",
+  "owner": "T2",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "updated_at": "2026-11-05T14:34:15.962Z",
+  "base_sha": "e8aea886cbd0ce0667eddf32f1b0ebd0bb2da23b",
+  "resumed_from_sessions": [
+    "20261105T1408Z-T2-chat-foam-four-i4-uniqueness-4e7a",
+    "20261105T1418Z-T2-scheduled-a91c",
+    "20261105T1323Z-T2-chat-index-origin-5c42"
+  ],
+  "experiment_key": "T2|zip2-15964ea8|original-dll-0a6f0527|exact-RenderTexture-array-managed-fielddef-serialized-attributes|v1",
+  "resource_key": "T2-foam-original-managed-cecil-serialization-metadata",
+  "hypothesis": "The original Foam getter's exact private RenderTexture[] backing FieldDefinition metadata reveals whether the field is public, [SerializeField], [NonSerialized], static or initonly, constraining Unity serialization as a potential population path; metadata does not prove scene instances or execution.",
+  "intended_files": [
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/FoamFieldSerializationMetadata.cs",
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/Program.cs",
+    ".github/workflows/raft-t2-foam-managed-literals.yml",
+    "prompt/coordination/work/WATER-001/T2-20261105T1434Z-T2-chat-rendertexture-serialization-93ad-metadata.json",
+    "prompt/coordination/clients/T2/sessions/20261105T1434Z-T2-chat-rendertexture-serialization-93ad.md"
+  ],
+  "preflight": {
+    "head": "e8aea886cbd0ce0667eddf32f1b0ebd0bb2da23b",
+    "active_t1": "42046073285 (separate Unity Vulkan)",
+    "active_t2_original_managed": 0,
+    "independent_t2_scheduled": "JSON producer schema tests; no Cecil modifications",
+    "previous_sha_original_ci": "https://github.com/alwansan/raf/actions/runs/42043293335"
+  },
+  "approach": "Conservative exact Cecil field reference vs defining FieldDefinition search in SHA-pinned original managed assembly. Report aggregate booleans for public/[SerializeField]/NonSerialized/static/initonly and exact-definition match; source-free positive/negative synthetic fixtures, original workflow asserts nonexecution. Do not emit name/token/field value, raw source or hash. Preserve all other jobs and no game changes.",
+  "run_urls": [],
+  "next_step": "Create own session, then implement exact metadata oracle in T2-owned files, SHA-private CI, safe summary and handoff. Distinct i4 values still unread; do not claim them before verifying."
+}
