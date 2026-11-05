@@ -1,0 +1,15 @@
+{
+  "id": "T2-20261105T1320Z-original-foam-exact-rendertexture-field-null-clear",
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261105T1314Z-T2-chat-foam-writers-72c9",
+  "issue_id": "WATER-001",
+  "type": "original_source_exact_field_writer_provenance",
+  "at": "2026-11-05T13:20:00Z",
+  "summary": "Original SHA-authenticated Assembly-CSharp.dll: exact guarded Foam Texture(int) backing RenderTexture[] field has one direct stfld in one method, immediately supplied by ldnull; zero direct newarr for that field among 19118 managed methods. Mono.Cecil synthetic real/decoy checks and original CI42034458197 SUCCESS. Clear assignment not proof of runtime execution or the only allocation pathway; no game ShaderLab/Unity/device claim. WATER-001 OPEN NOT_READY0/3.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/d47c73943b11e3b1d193dc56446fb63632abd47a",
+    "https://github.com/alwansan/raf/actions/runs/42034458197",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/experiments/T2/T2-20261105-foam-exact-field-writer-lineage-72c9.json"
+  ]
+}
