@@ -2,9 +2,9 @@
   "session_id": "20261105T1831Z-T3-scheduled-profileguard-7b2e",
   "origin": "scheduled",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "e76f703de2d778425154a6f97d0cb64a8a462768",
-  "updated_at": "2026-11-05T18:31:00Z",
+  "updated_at": "2026-11-05T18:35:00Z",
   "intended_files": [
     "scripts/t3_native_original_921_shader_target_audit.py",
     "tests/test_t3_native_original_921_shader_target_audit.py",
@@ -14,5 +14,16 @@
   "experiment_key": "T3-native-921-source-profile-no-subprogram-failclosed-synthetic-v1",
   "resource_key": null,
   "taken_over_from": "20261105T1815Z-T3-chat-native-source921-guid-6cb4",
-  "hypothesis": "A non-Dummy ShaderLab with zero subprograms can be falsely labeled non-Dummy usable by current native source identity audit; fail closed on inconsistent profile flags."
+  "hypothesis": "A non-Dummy ShaderLab with zero subprograms can be falsely labeled non-Dummy usable by current native source identity audit; fail closed on inconsistent profile flags.",
+  "code_commits": [
+    "d62e5a609e00fc59dd822a9db6de0f05388765f4",
+    "1f4e0d4b3ec4e0906a6203bfe923fde76c2fc0ef"
+  ],
+  "ci": {
+    "source_guard": "https://github.com/alwansan/raf/actions/runs/42085101023",
+    "source_guard_result": "success",
+    "new_regression": "https://github.com/alwansan/raf/actions/runs/42085122394",
+    "new_regression_result": "in_progress_at_last_check"
+  },
+  "next_step": "Verify 42085122394; original private source-to-native export join still pending"
 }
