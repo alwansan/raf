@@ -151,5 +151,39 @@ class DeviceWorldSaveLogTests(unittest.TestCase):
         self.assertFalse(result["load_nonzero_in_later_session"])
         self.assertFalse(result["process_restart_proven"])
 
+
+    def test_utc_rollback_disables_cross_session_hint(self):
+        self.put("save.jsonl", [
+            row("first", 1, "save", "Save.argumentFileSnapshot",
+                "exists_at_filename_argument=True; length_class=nonzero",
+                utc="2026-11-05T12:00:01Z"),
+            row("first", 2, "startup", "logger.ready",
+                utc="2026-11-05T12:00:00Z")])
+        self.put("load.jsonl", [
+            row("second", 1, "save", "Load.argumentFileSnapshot",
+                "exists_at_filename_argument=True; length_class=nonzero",
+                utc="2026-11-05T13:00:00Z")])
+        result = summarize(_paths(self.root))
+        self.assertIn("utc_reverses_sequence", result["sessions"][0]["anomalies"])
+        self.assertFalse(result["sessions"][0]["utc_monotonic"])
+        self.assertFalse(result["save_nonzero_in_earlier_session"])
+        self.assertFalse(result["load_nonzero_in_later_session"])
+
+    def test_monotonic_utc_allows_hint_but_not_device_acceptance(self):
+        self.put("save.jsonl", [
+            row("first", 1, "save", "Save.argumentFileSnapshot",
+                "exists_at_filename_argument=True; length_class=nonzero",
+                utc="2026-11-05T12:00:00Z"),
+            row("first", 2, "startup", "logger.ready",
+                utc="2026-11-05T12:00:01Z")])
+        self.put("load.jsonl", [
+            row("second", 1, "save", "Load.argumentFileSnapshot",
+                "exists_at_filename_argument=True; length_class=nonzero",
+                utc="2026-11-05T13:00:00Z")])
+        result = summarize(_paths(self.root))
+        self.assertTrue(result["sessions"][0]["utc_monotonic"])
+        self.assertTrue(result["save_nonzero_in_earlier_session"])
+        self.assertFalse(result["local005_device_confirmed"])
+
 if __name__ == "__main__":
     unittest.main()
