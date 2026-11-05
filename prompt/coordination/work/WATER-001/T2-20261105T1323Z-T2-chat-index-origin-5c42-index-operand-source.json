@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261105T1323Z-T2-chat-index-origin-5c42",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "3d35b501e38bea1468bd696325369fb61069c6ae",
+  "updated_at": "2026-11-05T13:22:55.586Z",
+  "resumed_from_sessions": [
+    "20261105T1314Z-T2-chat-foam-writers-72c9",
+    "20261105T1213Z-T2-foam-return-producer-call-isolated"
+  ],
+  "experiment_key": "T2|shaoriginalZIP2-15964ea8|managed-0a6f0527|four-settexture-callvirt-Texture-int|actual-source-stack-tag-v1",
+  "resource_key": "T2-original-managed-Cecil-index-provenance",
+  "hypothesis": "The exact original compiled four Material.SetTexture calls' Texture(int) integer argument operand origins can be classified with a strict bound on managed IL stack flow and without emitting source constants/method names.",
+  "intended_files": [
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/FoamSetterFlow.cs",
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/Program.cs",
+    ".github/workflows/raft-t2-foam-managed-literals.yml",
+    "prompt/coordination/work/WATER-001/T2-20261105T1323Z-T2-chat-index-origin-5c42-index-operand-source.json",
+    "prompt/coordination/clients/T2/sessions/20261105T1323Z-T2-chat-index-origin-5c42.md"
+  ],
+  "preflight": {
+    "head": "3d35b501e38bea1468bd696325369fb61069c6ae",
+    "active_original_T2_managed_run": false,
+    "t1_fft_path": "independent",
+    "t4_world_path": "independent",
+    "t5_build_path": "independent"
+  },
+  "approach": "Propagate a bounded typed IL argument-source category through the existing exact four-name source call tracer. Only classify producer's one System.Int32 argument when the actual second Texture call return reaches Material.SetTexture. Unknown locals/branches/metadata tokens must not be labeled literals. Source-free positive/negative controls; original DLL SHA-gated CI and aggregate-only output.",
+  "run_urls": [],
+  "next_step": "Implement source/test gate in owned files on HEAD lease; record actual 4/4 aggregate origins and runtime limits. WATER-001 OPEN NOT_READY0/3."
+}
