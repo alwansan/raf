@@ -50,9 +50,11 @@ class TestT4FileManager(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "direct call"):
             verify(s=S.replace("FileManager.OpenFile(filename)", "Unknown.OpenFile(filename)"))
 
-    def test_missing_concrete_target_rejected(self):
-        with self.assertRaisesRegex(ValueError, "implementation"):
-            verify(f=F.replace("OpenFile(", "Unknown("))
+    def test_missing_concrete_target_classified_unknown(self):
+        r = verify(f=F.replace("OpenFile(", "Unknown("))
+        self.assertFalse(r["read"]["unique_target"])
+        self.assertIsNone(r["read"]["direct_io_site_count"])
+        self.assertEqual(r["read"]["unresolved_original_name_tokens"], 0)
 
     def test_overload_not_falsely_resolved(self):
         f = F.replace(" public static System.IO.Stream CreateFile(string p)",
