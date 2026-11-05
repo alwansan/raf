@@ -1,7 +1,7 @@
 """Synthetic negative controls for T3 authentic decoded pixel diagnostic."""
 import unittest
 from PIL import Image
-from scripts.t3_pixel_drift_diagnostics import classify, aggregate
+from scripts.t3_pixel_drift_diagnostics import classify, aggregate, original_texture_categories
 
 class PixelDriftDiagnosticTests(unittest.TestCase):
     def test_exact_opaque(self):
@@ -66,6 +66,44 @@ class PixelDriftDiagnosticTests(unittest.TestCase):
         self.assertNotIn("BC7", result["format_drift_summary"])
         self.assertEqual(sum(sum(v.values()) for v in result["format_drift_summary"].values()), 8)
         self.assertNotIn("rows", result)
+
+    def test_typed_original_TextureFormat_and_Gamma_Linear_source(self):
+        self.assertEqual(original_texture_categories({"m_TextureFormat":10,"m_ColorSpace":0}),("DXT1","gamma"))
+        self.assertEqual(original_texture_categories({"m_TextureFormat":12,"m_ColorSpace":1}),("DXT5","linear"))
+        self.assertEqual(original_texture_categories({"m_TextureFormat":25,"m_ColorSpace":0}),("BC7","gamma"))
+        self.assertEqual(original_texture_categories({"m_TextureFormat":4,"m_ColorSpace":1}),("RGBA32","linear"))
+        self.assertEqual(original_texture_categories({"m_TextureFormat":999,"m_ColorSpace":0}),("OTHER_OR_UNKNOWN","gamma"))
+
+    def test_malformed_authentic_texture_metadata_fails_closed(self):
+        samples=({},{"m_TextureFormat":"10","m_ColorSpace":0},{"m_TextureFormat":10,"m_ColorSpace":"gamma"},
+                 {"m_TextureFormat":True,"m_ColorSpace":0},{"m_TextureFormat":10,"m_ColorSpace":2},
+                 {"m_TextureFormat":-1,"m_ColorSpace":1})
+        for sample in samples:
+            with self.subTest(sample=sample):
+                with self.assertRaises(ValueError):
+                    original_texture_categories(sample)
+
+    def test_original_gamma_linear_color_space_x_rgb_drift(self):
+        a=Image.new("RGBA",(1,1),(20,30,40,255))
+        b=Image.new("RGBA",(1,1),(255,30,40,0))
+        gamma=classify(a,a,texture_format="DXT1",srgb="gamma")
+        linear=classify(a,b,texture_format="DXT5",srgb="linear")
+        report=aggregate([gamma]*6+[linear]*6,expected=12)
+        self.assertEqual(report["schema_version"],3)
+        self.assertEqual(report["color_space_drift_summary"]["GAMMA"]["EXACT"],6)
+        self.assertEqual(report["color_space_drift_summary"]["LINEAR"]["RGB_DRIFT"],6)
+        self.assertEqual(report["format_drift_summary"]["DXT5"]["RGB_DRIFT"],6)
+        self.assertFalse(report["device_validated"])
+
+    def test_rare_color_spaces_and_formats_pool_without_identity_leak(self):
+        a=Image.new("RGBA",(1,1),(12,24,36,255))
+        typical=classify(a,a,texture_format="DXT1",srgb="gamma")
+        rare=classify(a,a,texture_format="OTHER_OR_UNKNOWN",srgb="linear")
+        summary=aggregate([typical]*6+[rare],expected=7)
+        self.assertIn("POOLED_RARE_FORMATS",summary["format_drift_summary"])
+        self.assertIn("POOLED_RARE_COLORSPACES",summary["color_space_drift_summary"])
+        self.assertNotIn("LINEAR",summary["color_space_drift_summary"])
+        self.assertNotIn("rows",summary)
 
     def test_aggregate_fail_closed(self):
         with self.assertRaises(ValueError):
