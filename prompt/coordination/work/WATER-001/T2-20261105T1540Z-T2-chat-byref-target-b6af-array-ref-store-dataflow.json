@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261105T1540Z-T2-chat-byref-target-b6af",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "0ad4b376091be2088cd21961e2c45920e10346cb",
+  "updated_at": "2026-11-05T15:50:13.620Z",
+  "resumed_from_work": "prompt/coordination/work/WATER-001/T2-20261105T1540Z-T2-chat-byref-target-b6af.json",
+  "experiment_key": "T2|original-0a6f0527|exact-ref-RenderTexture-array-callee|newarr-to-stind-same-block-v1",
+  "resource_key": "T2-original-sha-managed-Foam-newarr-byref-dataflow",
+  "hypothesis": "The unique genuine original RenderTexture[] newarr may feed a stind.ref whose destination is the exact byref RenderTexture[] formal of the identified matching managed callee. Only source dataflow in one straight-line basic block can prove this without branch joins.",
+  "method": "Identify Cecil basic block entries from branch targets/fallthrough and exception boundaries. For each stind.ref, conservatively emulate typed stack and local tags from its block start through the sink; match RenderTexture[] newarr value and ref-array parameter address, otherwise report unresolved. Synthetic positive, wrong-ref and cross-branch negative controls. No original literals/IL/names in outputs.",
+  "intended_files": [
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/FoamByrefAllocationFlow.cs",
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/Program.cs",
+    ".github/workflows/raft-t2-foam-managed-literals.yml",
+    "prompt/coordination/work/WATER-001/T2-20261105T1540Z-T2-chat-byref-target-b6af-array-ref-store-dataflow.json",
+    "prompt/coordination/clients/T2/sessions/20261105T1540Z-T2-chat-byref-target-b6af.md"
+  ],
+  "previous_original_ci": "42058352098 SUCCESS",
+  "next_step": "Commit source-free bounded flow proof, run original SHA-pinned CI, publish safe counts and relevant limitation. WATER-001 OPEN NOT_READY0/3."
+}
