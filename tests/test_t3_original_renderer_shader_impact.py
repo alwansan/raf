@@ -56,6 +56,46 @@ class OriginalSceneShaderUsage(unittest.TestCase):
         self.assertEqual(result["original_Shader_distinct_renderer_use_frequency_bands"],{"1":1,"2-4":2})
         self.assertEqual(result["per_authenticated_source_shader_owner_counts"]["sharedassets0.assets"]["renderer_material_slots"],5)
 
+    def test_top_Shader48_renderer_class_impact_separates_slots_from_objects(self):
+        r=self.run_data()
+        self.assertEqual(r["original_renderer_material_slots_by_renderer_class"],{
+            "MeshRenderer":6,"ParticleSystemRenderer":1,"SkinnedMeshRenderer":1})
+        self.assertEqual(r["original_renderer_objects_with_slots_by_renderer_class"],{
+            "MeshRenderer":5,"ParticleSystemRenderer":1,"SkinnedMeshRenderer":1})
+        self.assertEqual(r["original_verified_Shader48_slots_by_renderer_class"],{
+            "MeshRenderer":3,"ParticleSystemRenderer":1,"SkinnedMeshRenderer":1})
+        self.assertTrue(r["original_highest_used_typed_Shader48_unique"])
+        self.assertEqual(r["original_highest_used_typed_Shader48_slot_use"],3)
+        self.assertEqual(r["original_highest_used_typed_Shader48_slots_by_renderer_class"],{
+            "MeshRenderer":2,"SkinnedMeshRenderer":1})
+        self.assertEqual(r["original_highest_used_typed_Shader48_distinct_renderers_by_class"],{
+            "MeshRenderer":1,"SkinnedMeshRenderer":1})
+        self.assertTrue(r["renderer_class_breakdown_is_original_source_only_not_Android_drawcalls"])
+        self.assertEqual(r["status"],"SYNTHETIC_OR_UNAUTHENTICATED_SOURCE_ONLY")
+
+    def test_equal_top_shader_slot_use_cannot_pick_arbitrary_private_identity(self):
+        data=self.fixture()
+        data[1][("sharedassets1.assets",3)]=("sharedassets0.assets",11)
+        result=self.run_data(data)
+        self.assertEqual(result["original_verified_Shader48_slots_by_renderer_class"],{
+            "MeshRenderer":4,"ParticleSystemRenderer":1,"SkinnedMeshRenderer":1})
+        self.assertEqual(result["original_highest_used_typed_Shader48_slot_use"],3)
+        self.assertFalse(result["original_highest_used_typed_Shader48_unique"])
+        self.assertEqual(result["original_highest_used_typed_Shader48_slots_by_renderer_class"],{})
+        self.assertEqual(result["original_highest_used_typed_Shader48_distinct_renderers_by_class"],{})
+
+    def test_class_audit_never_exposes_original_scene_object_or_material_ids(self):
+        result=self.run_data()
+        data=json.dumps({
+            "classes":result["original_highest_used_typed_Shader48_slots_by_renderer_class"],
+            "renderers":result["original_highest_used_typed_Shader48_distinct_renderers_by_class"]})
+        for token in ("level0","level1","resources.assets","sharedassets0.assets",
+                      "m_PathID",'"pid"','"guid"'):
+            self.assertNotIn(token,data)
+        self.assertTrue(set(result["original_renderer_material_slots_by_renderer_class"])
+                        <= m.RENDERER_CLASSES)
+        self.assertEqual(sum(result["original_renderer_material_slots_by_renderer_class"].values()),8)
+
     def test_same_renderer_multiple_slots_do_not_fake_distinct_renderer_count(self):
         data=self.fixture()
         data[0][1]=("level0",11,"MeshRenderer",("resources.assets",1))
