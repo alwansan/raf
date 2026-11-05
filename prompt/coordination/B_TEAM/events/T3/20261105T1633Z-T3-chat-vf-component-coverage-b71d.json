@@ -1,0 +1,14 @@
+{
+  "id": "T3-20261105T1633Z-vf-spv-component-controls",
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T1633Z-T3-chat-vf-component-coverage-b71d",
+  "issue_id": "RENDER-002",
+  "type": "sourcefree_controls",
+  "summary": "Isolated conservative SPIR-V source-free VS-output to FS-input typed Location+Component validator and 17 regression controls passed in CI42065947764. Detects missing/type-mismatched component lanes; unsupported layouts inconclusive, private labels rejected. No original Shader48 run, authored ShaderLab or Adreno pixel proof. Scheduled DXBC parser and native job untouched.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42065947764",
+    "https://github.com/alwansan/raf/commit/920d52a9d83f051c4e758c2977fb4681490a233d"
+  ],
+  "at": "2026-11-05T16:36:00Z"
+}
