@@ -84,7 +84,12 @@ def strict_native_top_join(original_counts: dict, source_report: dict,
         # than silently reporting a non-Dummy native shader.
         if (not p["dummy"] and (p["no_subprograms"] or p["programmed"] == 0)):
             raise ValueError("non_dummy_native_shader_without_subprograms")
-        # An unknown exporter marker or structurally unbalanced ShaderLab\n        # cannot support a positive marker-free native-program classification.\n        # Preserve explicit Dummy attribution; reject ambiguous non-Dummy.\n        if not p["dummy"] and (p["unknown_exporter"] or p["unbalanced"]):\n            raise ValueError("non_dummy_native_shader_ambiguous_export_profile")\n        status=("DUMMY_AFTER_NATIVE_RESTORERS" if p["dummy"] else
+        # An unknown exporter marker or structurally unbalanced ShaderLab
+        # cannot support a positive marker-free native-program classification.
+        # Preserve explicit Dummy attribution; reject ambiguous non-Dummy.
+        if not p["dummy"] and (p["unknown_exporter"] or p["unbalanced"]):
+            raise ValueError("non_dummy_native_shader_ambiguous_export_profile")
+        status=("DUMMY_AFTER_NATIVE_RESTORERS" if p["dummy"] else
                 "NON_DUMMY_NATIVE_PROGRAM_AUTHENTICITY_UNPROVEN")
         source_pass_count_compared=True
         native_passes=p["pass_count"]
