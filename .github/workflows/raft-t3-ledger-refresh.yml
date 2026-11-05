@@ -76,6 +76,11 @@ jobs:
           # stream from one manifest provider; no actual mobile pixels verified.
           particle_texture28_stream_proof="https://github.com/alwansan/raf/actions/runs/42120918486"
           assert particle_texture28_stream_proof in issue[0]["evidence"]
+          # Three exact original Particle Texture2D image byte ranges were
+          # read from one immutable ZIP2 provider verified full size/SHA.
+          # This remains original source-only; Unity/Android pixels unproven.
+          particle_source_payload_proof="https://github.com/alwansan/raf/actions/runs/42125608932"
+          assert particle_source_payload_proof in issue[0]["evidence"]
           # T3 source-only class/particle rankings are real SHA-pinned evidence,
           # not an Android shader restoration/device acceptance.
           for genuine_source_proof in (
