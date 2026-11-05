@@ -190,6 +190,42 @@ jobs:
               t['ExactInstanceFieldAddressInstructions'])
           assert not t['ActualRuntimeArrayContentsVerified']
           assert not t['ManagedArrayElementsWrittenOrPopulatedProven']
+          a=r['original_exact_RenderTexture_array_field_address_consumer']
+          assert a is not None
+          assert a['ExactFieldAddressSites']==t['ExactInstanceFieldAddressInstructions']
+          assert a['DistinctAddressSiteMethods']==t['DistinctDirectAddressMethods']
+          assert sum(a['SinkCategories'].values())==a['ExactFieldAddressSites']
+          assert sum(a['FirstFollowingOpCategories'].values())==a['ExactFieldAddressSites']
+          allowed_sinks={
+              'control_flow_or_return_before_proven_sink','address_discarded',
+              'array_value_discarded','unsupported_local_alias',
+              'typed_indirect_load_mismatch','direct_field_clear_initobj',
+              'unproven_initobj_target','typed_indirect_store_mismatch',
+              'direct_field_reference_store','address_escape_to_another_store',
+              'direct_field_copy_to_address','address_used_as_copy_source',
+              'array_length_read_via_address','array_element_address_taken_via_field',
+              'array_element_read_via_field','direct_array_element_store_via_field',
+              'unknown_call_operand','call_argument_budget',
+              'typed_byref_array_call_potential_mutation',
+              'address_escaped_to_other_call_argument',
+              'array_value_passed_to_call_contents_unknown',
+              'address_used_as_call_receiver',
+              'address_used_as_instance_field_receiver',
+              'address_escaped_via_instance_store',
+              'array_value_stored_in_another_field',
+              'unsupported_opcode_before_proven_sink',
+              'bounded_without_proven_sink'}
+          assert set(a['SinkCategories']).issubset(allowed_sinks)
+          assert not a['OriginalRuntimeExecutionVerified']
+          assert not a['OriginalRuntimeArrayContentsVerified']
+          print('T2_FOAM_ORIGINAL_FIELD_ADDRESS_SINK_SAFE '+json.dumps({
+              'original_exact_address_sites':a['ExactFieldAddressSites'],
+              'distinct_address_methods':a['DistinctAddressSiteMethods'],
+              'sink_category_counts':a['SinkCategories'],
+              'first_post_address_op_categories':a['FirstFollowingOpCategories'],
+              'runtime_execution_verified':False,
+              'runtime_array_contents_verified':False,
+          },sort_keys=True))
           print('T2_FOAM_FIELD_TOPOLOGY_SAFE '+json.dumps({
               'ldfld_exact_total':t['ExactInstanceFieldLoadInstructions'],
               'ldfld_in_getter':t['OriginalGetterFieldLoadInstructions'],

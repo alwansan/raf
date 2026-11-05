@@ -145,6 +145,7 @@ internal static class Program
         public FoamFieldWriterLineage.SafeProfile? OriginalFieldWriterProfile;
         public FoamFieldSerializationMetadata.SafeProfile? OriginalFieldSerializationProfile;
         public FoamFieldReadTopology.SafeProfile? OriginalFieldReadTopologyProfile;
+        public FoamFieldAddressConsumer.SafeProfile? OriginalAddressConsumerProfile;
         public readonly Dictionary<string,int> TotalSetterCalls = new(StringComparer.Ordinal)
         {
             ["shader_global_texture"] = 0,
@@ -377,6 +378,8 @@ internal static class Program
             result.OriginalFieldReadTopologyProfile=
                 FoamFieldReadTopology.Scan(sourceMethods,exactGetterBackingField,
                     exactOriginalTextureGetter);
+            result.OriginalAddressConsumerProfile=
+                FoamFieldAddressConsumer.Scan(sourceMethods,exactGetterBackingField);
             // Resolve the exact original FieldDefinition without publishing
             // private type, token or field identifiers.
             var sourceTypes=sourceMethods.Count==0
@@ -447,6 +450,7 @@ internal static class Program
             original_exact_Texture_int_backing_field_writer_op_classes = result.OriginalFieldWriterProfile,
             original_exact_RenderTexture_array_field_serialization_metadata = result.OriginalFieldSerializationProfile,
             original_exact_RenderTexture_array_field_managed_read_topology = result.OriginalFieldReadTopologyProfile,
+            original_exact_RenderTexture_array_field_address_consumer = result.OriginalAddressConsumerProfile,
             original_exact_Texture_int_producer_body_accepted_same_SHA_definition = result.OriginalSingleProducerBodyProfile is not null,
             original_exact_method_definition_is_original_runtime_called_or_output_proof = false,
             producer_declared_signature_is_actual_runtime_texture_object_proof = false,
@@ -937,6 +941,83 @@ internal static class Program
             readProof.ActualRuntimeArrayContentsVerified ||
             readProof.ManagedArrayElementsWrittenOrPopulatedProven)
             throw new InvalidDataException("Original field access topology fixture must exclude typed decoy");
+        // Public synthetic address consumers: exact typed byref call, direct
+        // indirection store, array-element store, read and typed-field decoy.
+        var syntheticByref=new MethodReference("SyntheticMayWriteArrayByRef",
+            m.TypeSystem.Void,publicFactory){HasThis=false};
+        syntheticByref.Parameters.Add(new ParameterDefinition(
+            new ByReferenceType(new ArrayType(renderTextureType))));
+        var typedByrefSite=new MethodDefinition("SyntheticTypedByrefArrayCall",
+            Mono.Cecil.MethodAttributes.Public,m.TypeSystem.Void);
+        factoryDef.Methods.Add(typedByrefSite);
+        var ilTb=typedByrefSite.Body.GetILProcessor();
+        ilTb.Append(ilTb.Create(OpCodes.Ldarg_0));
+        ilTb.Append(ilTb.Create(OpCodes.Ldflda,renderArray));
+        ilTb.Append(ilTb.Create(OpCodes.Call,syntheticByref));
+        ilTb.Append(ilTb.Create(OpCodes.Ret));
+        var typedProf=FoamFieldAddressConsumer.Scan(
+            new[]{typedByrefSite},originalField);
+        if (typedProf.ExactFieldAddressSites!=1 ||
+            typedProf.SinkCategories.GetValueOrDefault(
+                "typed_byref_array_call_potential_mutation")!=1 ||
+            typedProf.OriginalRuntimeExecutionVerified)
+            throw new InvalidDataException("Typed original array byref call fixture failed");
+        var syntheticIndirect=new MethodDefinition("SyntheticFieldReferenceStore",
+            Mono.Cecil.MethodAttributes.Public,m.TypeSystem.Void);
+        factoryDef.Methods.Add(syntheticIndirect);
+        var ilIs=syntheticIndirect.Body.GetILProcessor();
+        ilIs.Append(ilIs.Create(OpCodes.Ldarg_0));
+        ilIs.Append(ilIs.Create(OpCodes.Ldflda,renderArray));
+        ilIs.Append(ilIs.Create(OpCodes.Ldnull));
+        ilIs.Append(ilIs.Create(OpCodes.Stind_Ref));
+        ilIs.Append(ilIs.Create(OpCodes.Ret));
+        var directProf=FoamFieldAddressConsumer.Scan(
+            new[]{syntheticIndirect},originalField);
+        if (directProf.SinkCategories.GetValueOrDefault(
+                "direct_field_reference_store")!=1)
+            throw new InvalidDataException("Direct byref store synthetic fixture failed");
+        var syntheticElementStore=new MethodDefinition("SyntheticArrayMemberStore",
+            Mono.Cecil.MethodAttributes.Public,m.TypeSystem.Void);
+        factoryDef.Methods.Add(syntheticElementStore);
+        var ilEs=syntheticElementStore.Body.GetILProcessor();
+        ilEs.Append(ilEs.Create(OpCodes.Ldarg_0));
+        ilEs.Append(ilEs.Create(OpCodes.Ldflda,renderArray));
+        ilEs.Append(ilEs.Create(OpCodes.Ldind_Ref));
+        ilEs.Append(ilEs.Create(OpCodes.Ldc_I4_0));
+        ilEs.Append(ilEs.Create(OpCodes.Ldnull));
+        ilEs.Append(ilEs.Create(OpCodes.Stelem_Ref));
+        ilEs.Append(ilEs.Create(OpCodes.Ret));
+        var elementProf=FoamFieldAddressConsumer.Scan(
+            new[]{syntheticElementStore},originalField);
+        if (elementProf.SinkCategories.GetValueOrDefault(
+                "direct_array_element_store_via_field")!=1)
+            throw new InvalidDataException("Array member store from field address fixture failed");
+        var syntheticLength=new MethodDefinition("SyntheticArrayLengthRead",
+            Mono.Cecil.MethodAttributes.Public,m.TypeSystem.Void);
+        factoryDef.Methods.Add(syntheticLength);
+        var ilLen=syntheticLength.Body.GetILProcessor();
+        ilLen.Append(ilLen.Create(OpCodes.Ldarg_0));
+        ilLen.Append(ilLen.Create(OpCodes.Ldflda,renderArray));
+        ilLen.Append(ilLen.Create(OpCodes.Ldind_Ref));
+        ilLen.Append(ilLen.Create(OpCodes.Ldlen));
+        ilLen.Append(ilLen.Create(OpCodes.Pop));
+        ilLen.Append(ilLen.Create(OpCodes.Ret));
+        var lengthProf=FoamFieldAddressConsumer.Scan(
+            new[]{syntheticLength},originalField);
+        if (lengthProf.SinkCategories.GetValueOrDefault(
+                "array_length_read_via_address")!=1)
+            throw new InvalidDataException("Array length from field address fixture failed");
+        var wrongAddress=new MethodDefinition("SyntheticSameTypedWrongFieldAddr",
+            Mono.Cecil.MethodAttributes.Public,m.TypeSystem.Void);
+        factoryDef.Methods.Add(wrongAddress);
+        var ilWa=wrongAddress.Body.GetILProcessor();
+        ilWa.Append(ilWa.Create(OpCodes.Ldarg_0));
+        ilWa.Append(ilWa.Create(OpCodes.Ldflda,decoyField));
+        ilWa.Append(ilWa.Create(OpCodes.Pop));
+        ilWa.Append(ilWa.Create(OpCodes.Ret));
+        var wrongProf=FoamFieldAddressConsumer.Scan(new[]{wrongAddress},originalField);
+        if (wrongProf.ExactFieldAddressSites!=0 || wrongProf.SinkCategories.Count!=0)
+            throw new InvalidDataException("Similar-typed decoy address must not count");
         var guardedWrong=new MethodDefinition("PublicSyntheticWrongConditionalTarget",
             Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Virtual,
             textureType);
@@ -1048,6 +1129,7 @@ internal static class Program
                 exact_backing_field_writer_newarr_null_decoy_fixture=true,
                 strict_original_backing_field_serialization_metadata_fixtures=true,
                 strict_original_field_load_address_typed_decoy_fixture=true,
+                typed_byref_indirect_array_store_length_and_decoy_sink_controls=true,
                 four_original_style_Texture_int_argument_origin_controls=true,
                 signed_short_wide_and_duplicate_private_i4_aggregate_controls=true,
                 private_IL_names_or_source_published = false
