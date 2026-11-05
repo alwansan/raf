@@ -1,0 +1,14 @@
+{
+  "id": "T2-20261105T1605Z-original-foam-ref-array-dataflow-proven",
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261105T1540Z-T2-chat-byref-target-b6af",
+  "issue_id": "WATER-001",
+  "type": "original_compiled_typed_RenderTexture_array_write_dataflow",
+  "at": "2026-11-05T16:05:00Z",
+  "summary": "SHA-original Foam managed CI42060338704 SUCCESS proves newarr RenderTexture[] stored into exact ref RenderTexture[] method formal by stind.ref within same straight-line block, plus stelem.ref member write from same formal. Source-only CI42060975715 SUCCESS shows newarr size immediately preceding source is not a direct ldc.i4, so original four distinct nonnegative caller indices cannot yet be proven in bounds. No private original literals/IL/symbols published, no runtime/Unity/Adreno claim. WATER-001 OPEN NOT_READY0/3.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42060338704",
+    "https://github.com/alwansan/raf/actions/runs/42060975715"
+  ]
+}
