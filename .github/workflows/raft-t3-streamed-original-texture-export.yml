@@ -230,6 +230,18 @@ jobs:
             --w1-trace "$RUNNER_TEMP/b21-w1-private.json" \
             --b02-trace "$RUNNER_TEMP/b21-b02-private.json" \
             --out "$RUNNER_TEMP/t3-streamed-sampler-safe.json"
+      - name: T3 authentic decoded original Texture2D versus same-export PNG RGBA
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check Pillow==11.3.0
+          python3 -m scripts.t3_authentic_decoded_pixel_export \
+            --original "$RUNNER_TEMP/b21-original" \
+            --project "$RUNNER_TEMP/b21-private-export/ExportedProject" \
+            --manifest zip2-original/RAFT_FILE_MANIFEST.tsv \
+            --w1-trace "$RUNNER_TEMP/b21-w1-private.json" \
+            --b02-trace "$RUNNER_TEMP/b21-b02-private.json" \
+            --out "$RUNNER_TEMP/t3-authentic-decoded-pixel-safe.json"
       - name: Publish ONLY safe aggregate, never game assets or private traces
         if: always()
         uses: actions/upload-artifact@v4
@@ -238,5 +250,6 @@ jobs:
           path: |
             ${{ runner.temp }}/t3-streamed-export-output-safe.json
             ${{ runner.temp }}/t3-streamed-sampler-safe.json
+            ${{ runner.temp }}/t3-authentic-decoded-pixel-safe.json
           retention-days: 7
           if-no-files-found: ignore
