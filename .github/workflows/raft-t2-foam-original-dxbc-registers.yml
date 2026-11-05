@@ -5,6 +5,8 @@ on:
     paths:
       - scripts/t2_foam_original_dxbc_registers.py
       - tests/test_t2_foam_original_dxbc_registers.py
+      - scripts/t2_foam_original_sample_edges.py
+      - tests/test_t2_foam_original_sample_edges.py
       - .github/workflows/raft-t2-foam-original-dxbc-registers.yml
   workflow_dispatch:
 
@@ -31,6 +33,8 @@ jobs:
           set -euo pipefail
           python3 -m py_compile scripts/t2_foam_original_dxbc_registers.py
           python3 -m unittest discover -s tests -p 'test_t2_foam_original_dxbc_registers.py' -v
+          python3 -m py_compile scripts/t2_foam_original_sample_edges.py
+          python3 -m unittest discover -s tests -p 'test_t2_foam_original_sample_edges.py' -v
       - name: Available disk before source staging
         run: |
           python3 - <<'PY'
@@ -85,6 +89,23 @@ jobs:
           assert not r['unity_material_upload_or_device_verified']
           assert not r['private_program_or_shader_names_published']
           PY
+      - name: Verify actual source-authenticated original DXBC sample opcode69 t/s operands
+        run: |
+          set -euo pipefail
+          timeout 180s python3 -m scripts.t2_foam_original_sample_edges \
+            --source "$RUNNER_TEMP/t2-foam-original-dxbc-source" \
+            --out "$RUNNER_TEMP/t2-foam-dxbc-sample-safe.json"
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          r = json.loads((Path(os.environ['RUNNER_TEMP'])/'t2-foam-dxbc-sample-safe.json').read_text())
+          assert r['status'] == 'original_foam_native_dxbc_sample_instruction_uses_observed'
+          assert r['original_stages'] == 4
+          assert len(r['stages']) == 4
+          assert not r['source_to_translated_spirv_descriptor_join_verified']
+          assert not r['unity_shaderlab_or_material_binding_verified']
+          assert not r['adreno_pixels_verified'] and not r['private_binary_or_symbol_published']
+          PY
       - name: Erase private source and ZIP2 checkout even if preceding checks fail
         if: always()
         run: |
@@ -94,6 +115,8 @@ jobs:
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: t2-foam-original-dxbc-safe-${{ github.run_id }}
-          path: ${{ runner.temp }}/t2-foam-dxbc-numeric-safe.json
+          path: |
+            ${{ runner.temp }}/t2-foam-dxbc-numeric-safe.json
+            ${{ runner.temp }}/t2-foam-dxbc-sample-safe.json
           if-no-files-found: ignore
           retention-days: 7
