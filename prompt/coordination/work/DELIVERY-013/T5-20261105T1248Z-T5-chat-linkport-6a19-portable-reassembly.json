@@ -7,7 +7,7 @@
   "issue_id": "DELIVERY-013",
   "track": "Android/Termux release-part reassembly portability",
   "approach": "Fix missing os.link in Termux without losing exclusive destination creation, SHA256 verification or owned-temp cleanup; preserve old hardlink path and A3 EPERM rejection; run synthetic isolated tests and targeted CI.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "e8f3641551c54e7f5cd64bd74b01a9d0fcb3b871",
   "intended_files": [
     "scripts/reassemble_android_delivery.py",
@@ -28,9 +28,26 @@
     "docs/A3_RELEASE_REASSEMBLY_ATOMIC_2026-11-03.md",
     "docs/ANDROID_INSTALL_AR.md"
   ],
-  "experiment_ids": [],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement isolated missing-os.link fallback, run original A3 and T5 synthetic safety tests, preserve exact bytes and refuse overwrite, then inspect Actions result.",
-  "updated_at": "2026-11-05T12:48:00Z"
+  "experiment_ids": [
+    "prompt/coordination/experiments/T5/T5-20261105T1248Z-T5-chat-linkport-6a19-portable-reassembly.json"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42030902212",
+    "https://github.com/alwansan/raf/actions/runs/42030746423"
+  ],
+  "result": {
+    "result": "SOURCE_FIXED_TESTED",
+    "implementation_sha": "ee12bb7450d993e8cfb42ff17e165ea340aa00c8",
+    "tests_sha": "5c41bad4a2d4f484431cae0123bb6b82f089f8d9",
+    "workflow_sha": "57a7c30b7ae055265b1509345156abbe9099d5a3",
+    "docs_sha": "4a66364c9e9642f7f60ee740f49b035e43821f62",
+    "test_run": 42030902212,
+    "test_job": 127256793078,
+    "passed": 24,
+    "failed": 0,
+    "limits": "Simulated missing os.link on Ubuntu, not observed on real Termux. Fallback output is no-clobber but may be incompletely visible after abrupt death. Source fix does not update APK86 release; no Unity/Android phone acceptance.",
+    "t4_nonoverlap": "T4 already isolated transient concurrent profile.id failure and CI42028108335 passed 17/17. No platform/LOCAL-005 files edited."
+  },
+  "next_step": "For the next genuinely built and owner-tested Android candidate, verify real phone-side reassemble SHA256/full length, install via XAPK/OBB and preserve world/save and graphics evidence; read T1 ongoing Unity graphics before native request.",
+  "updated_at": "2026-11-05T12:55:00Z"
 }
