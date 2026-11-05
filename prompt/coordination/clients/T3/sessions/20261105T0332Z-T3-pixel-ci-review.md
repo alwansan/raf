@@ -1,0 +1,14 @@
+# T3 independent recovery 20261105T0332Z-T3-pixel-ci-review
+
+Identity T3 only; branch feature/android-native-port. Baseline HEAD 7447a0185b9f4bc8cb09bda9af9d77248d910291 (2026-11-05 03:14Z). Resumed from 20261105T0227Z-T3-pixel-guard. Shared state.json is stale (00:30Z), while multiple independent T3 sessions exist; avoid overwriting state/MEMORY/shared work until identity concurrency is resolved. Status paused_identity_conflict for shared writes; this isolated session is a durable checkpoint.
+
+## Verified new result
+GitHub Actions 41955404774 completed SUCCESS, created 2026-11-05 02:28:11Z: T3 decoded pixel synthetic controls workflow. This confirms the 11 source-free tests are CI green, **not** genuine decoded original-vs-export pixel parity. Previous 41946037472 SUCCESS authenticates 106/106 TextureImporter GUID closure, six sampler fields, three original .resS SHA-pinned sources (2,262,546,672 bytes), but does not decode and compare 106 original pixel arrays. RENDER-002 OPEN, NOT_READY 0/3.
+
+## Technical integration analysis
+Existing workflow .github/workflows/raft-t3-streamed-original-texture-export.yml stages eleven serialized original providers and three .resS files, UnityPy==1.23.0, AssetRipperCLI SHA 036098ab525a3f9f693dc101edeb21faad4d32d8, and one bounded actual export. The last stage runs scripts.t3_exported_texture_inventory (GUID closure) and scripts.t3_linked_texture_sampler_export (samplers), **not** scripts.t3_decoded_texture_pixel_parity. The comparator requires PIL RGBA images and authenticated matching IDs; it has no original UnityPy Texture2D reader or exported GUID→PNG pairing runner. Do not claim decoded pixel parity or rewrite Unity source texture formats based on a synthetic green run.
+
+## Exact next engineering work
+Build isolated private runner from the existing SHA-pinned streamed export (do not modify shared active workflow). In original UnityPy objects, resolve 106 selected source Texture2D identities from original pointer→owner/pathID and stream providers, reject unsupported decoder formats; read decoded original Texture2D image in RGBA. On exported side verify unique importer .meta GUID and PNG path against actual inventory, decode PNG RGBA, compare using scripts.t3_decoded_texture_pixel_parity.compare_pair(authenticated=True). Assert exactly 106 unique paired source identities, check original sRGB metadata separately, publish ONLY aggregate categories. If UnityPy source decoder fails for a format, classify unsupported explicitly and do not silently drop from scope. Reuse 11+3 SHA-pinned provider staging and 45m/2-core/no-cancel policy; no public raw pixels/assets. CI and phone evidence remain separate.
+
+No game asset edits, no Actions cancellation, no new APK, no GPU claim. Historical B05/B15/B21/B43/B44 work remains credited. Other T-team jobs unaffected.
