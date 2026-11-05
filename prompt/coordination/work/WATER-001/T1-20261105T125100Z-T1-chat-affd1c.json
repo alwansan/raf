@@ -1,0 +1,24 @@
+{
+  "id": "20261105T125100Z-T1-chat-affd1c",
+  "session_id": "20261105T125100Z-T1-chat-affd1c",
+  "owner": "T1",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "4f76356c05a9b482e7aea82a0c5ccba7af46cf9e",
+  "updated_at": "2026-11-05T12:51:00.005Z",
+  "intended_files": [
+    ".github/workflows/raft-t1-fft-vulkan-roundtrip-isolation.yml",
+    "scripts/t1_fft_vulkan_roundtrip_isolation.py"
+  ],
+  "experiment_key": "zip2-15964ea8-fft-slots0-1-vkd3d-spirv-cross-hlsl-glslang-same-lavapipe-1024x32-rgba32f-seed19-groups1",
+  "resource_key": "t1-fft-vulkan-roundtrip-cpu",
+  "resumed_from_sessions": [
+    "20261105T124313Z-T1-chat-511e2d",
+    "20261105T121347Z-T1-paired-capture"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42029739318",
+    "https://github.com/alwansan/raf/actions/runs/42025620147"
+  ]
+}
