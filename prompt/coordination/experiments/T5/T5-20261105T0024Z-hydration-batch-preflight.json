@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "session_id": "20261105T0024Z-T5-hydration-preflight-a1",
+  "issue_id": "ASSET-RESTORE-001",
+  "hypothesis": "Later invalid staged source or destination pointer must not replace earlier valid source in same hydration batch; preflight all metadata before any copy, retain per-owner streaming SHA verification.",
+  "source_commit": "1648d7b98df1e34511ea24b88de70abdca1cc51b",
+  "input_hashes": [
+    {
+      "provider_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+    },
+    {
+      "previous_exact_three_owner_bytes": 337660952,
+      "verified_run": "41940032540"
+    }
+  ],
+  "tool_versions": {
+    "python": "std library on ubuntu-24.04"
+  },
+  "commands": [
+    "python3 -m unittest -v tests.test_t5_stage_zip2_render_owners",
+    "CI .github/workflows/raft-t5-zip2-render-stage.yml path-trigger"
+  ],
+  "negative_controls": [
+    "Later source symlink preserves first pointer",
+    "Later destination pointer mismatch preserves first pointer",
+    "Positive two-owner staged SHA-pinned consumer"
+  ],
+  "workflow_path": ".github/workflows/raft-t5-zip2-render-stage.yml",
+  "run_url": null,
+  "artifact_urls": [],
+  "budget": "Isolated T5 source-only CI; no LFS, Unity, game build or proprietary payload artifact",
+  "status": "source_patched_ci_unverified",
+  "observed_result": "Source patch e8b63e4 and tests corrected at 1648d7b. Source checks static only so far; CI results after changes have not been confirmed.",
+  "rejected_hypotheses": [
+    "T5 existing ZIP2 producer does not already preflight: false, producer already preflights batch",
+    "Source staging alone proves Unity/Adreno rendered water: false"
+  ],
+  "limitations": [
+    "No confirmed new CI result yet",
+    "Structural preflight cannot provide multi-file transactional rollback on source mutation after preflight",
+    "No native or device acceptance; Raft NOT_READY 0/3"
+  ],
+  "integration_commit": "e8b63e45983932244c9115ac6f44ce659f21eec6",
+  "test_commit": "1648d7b98df1e34511ea24b88de70abdca1cc51b",
+  "next_step": "Check T5 path-triggered CI; register run/negative checks on success and then coordinate actual shader/FFT/material same-instance Unity export with T1/T3."
+}
