@@ -6,7 +6,7 @@
   "issue_id": "WATER-001",
   "track": "Run authentic original compiled FFT-derived ComputeShader imports through proven GameCI Unity2021 CLI without publishing shader logs",
   "approach": "Pin successful GameCI CLI v0.1.72 release SHA; first run synthetic exact Editor canary silently with result-XML fail-closed gate, then privately authenticate ZIP2 FFT owner, translate 20 original DXBC candidates, and import/HasKernel/group check all 20 in a private Editor NUnit suite with raw compiler logs captured/deleted, publish only numeric aggregate flags.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "04d921e1fa3debc5cfb008e793ec459c1c1aee84",
   "intended_files": [
     "scripts/t1_gameci_private_result_gate.py",
@@ -31,8 +31,8 @@
     "https://github.com/alwansan/raf/actions/runs/42013637262",
     "https://github.com/alwansan/raf/actions/runs/42014120625"
   ],
-  "result": "First CI42013637262 proved pinned GameCI CLI SHA and private-log source-free ComputeShader 2/2 pass, but stopped BEFORE original asset download at pip --user PermissionError on runner ~/.local/lib. No original shader import executed. Fixed with ephemeral venv at commit9d729b3; follow-up actual CI42014120625 in_progress.",
-  "next_step": "Secure result parser tests, private runtime NUnit probe, workflow pinned GameCI executable and original SHA input. Do not assert original author/runtime kernel selection or device water even if importer succeeds.",
+  "result": "REAL original-data CI42014120625 SUCCESS: 8 private XML, 4 sourcefree fixture, 7 authentic staging Python controls; pinned GameCI CLI v0.1.72 verified release SHA; synthetic ComputeShader 2/2 on exact licensed Unity2021; original SHA-authenticated ZIP2 sharedassets0 object pathID2456, 20/20 compiled DXBC→translated private .compute; actual Unity 2021 EditMode 1/1 PASS after all 20 AssetDatabase.ImportAsset/ComputeShader load/HasKernel(main)/FindKernel(main)/GetKernelThreadGroupSizes exact original groupXYZ. All private shader/compiler logs deleted, no source output. CI42013637262 failed pre-original at pip --user permission, fixed via venv. Original authored source/runtime IDs/Adreno not proven.",
+  "next_step": "Original-authored Unity runtime kernel name/ID and generated-candidate mapping via immutable original C# plus serialized ComputeShader; original SetTexture resources/bindings and device GPU/water pixels with T5/T2. Do NOT equate original compiled index with generated Unity runtime kernel. WATER-001 remains OPEN, NOT_READY 0/3.",
   "updated_at": "2026-11-05T10:55:00Z",
   "identity_conflict": "Concurrent T1 sessions possible; no shared T1 state overwrite, unique isolated work and files."
 }
