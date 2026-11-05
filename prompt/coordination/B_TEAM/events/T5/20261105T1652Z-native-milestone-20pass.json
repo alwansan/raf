@@ -1,0 +1,15 @@
+{
+  "id": "T5-20261105T1652Z-native-milestone-20pass",
+  "owner": "T5",
+  "session_id": "20261105T1647Z-T5-chat-native-milestone-7b4e",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "type": "result",
+  "summary": "Native CI42058825739 immutable source e9c358ed is still in_progress at actual Unity Editor step62; previous original Mesh/40-scene/GUID and experimental water-trial gates passed. Only four small water/graphics diagnostic artifacts exist, not signed game packages. Added separate source-only fail-closed milestone classifier with official filtered snapshot and 20/20 verified GitHub CI42068527576 tests. Classifier distinguishes Unity step running, stage failure, signature/package/retention step outcomes and refuses fake release/device claims. No native retry or T1–T4 code change.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42058825739",
+    "https://github.com/alwansan/raf/actions/runs/42068527576",
+    "https://github.com/alwansan/raf/commit/58f66a0fbe898394f8e45a385a57a7a833672c50"
+  ],
+  "at": "2026-11-05T16:52:00Z"
+}
