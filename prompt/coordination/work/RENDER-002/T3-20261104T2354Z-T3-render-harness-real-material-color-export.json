@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "generation": "T-2026-11-05",
+  "session_id": "20261104T2354Z-T3-render-harness",
+  "issue_id": "RENDER-002",
+  "track": "colors-materials",
+  "approach": "Authentic B44 Material m_Colors original-versus-same-export for selected SHA-verified sharedassets6 41 materials, adapt B44 exported YAML map support without relaxing original typed source, preserve W1 Material21 exact trace; no other T files edited.",
+  "status": "active",
+  "base_sha": "55d32abd4ff8f1ec0b40c38f7f6c1712fab5d1b4",
+  "intended_files": [
+    "scripts/b44_verify_material_colors.py",
+    "tests/test_b44_verify_material_colors.py",
+    "scripts/t3_same_export_material_colors.py",
+    "tests/test_t3_same_export_material_colors.py",
+    ".github/workflows/raft-t3-real-material-colors-export.yml"
+  ],
+  "hypothesis": "As with m_TexEnvs, current B44 parser expects exported YAML array though true AssetRipper may emit dict; bounded actual source-export color/tint comparison could rule out lost original Material colors.",
+  "related_work": [
+    "T3-20261104T2354Z-T3-render-harness-real-texenv-export"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/B44/MEMORY.md",
+    "docs/B44_ORIGINAL_MATERIAL_COLOR_LINEAGE_2026-11-04.md",
+    "https://github.com/alwansan/raf/actions/runs/41939404454"
+  ],
+  "experiment_ids": [
+    "T3-small-original-same-export-colors-20261105"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement selected SHA pinned source colors, exported YAML map shapes, exact same-instance W1 mapping, add controls and bounded export CI.",
+  "updated_at": "2026-11-05T00:15:00Z"
+}
