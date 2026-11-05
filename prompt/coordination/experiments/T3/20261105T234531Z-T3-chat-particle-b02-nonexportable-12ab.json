@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T234531Z-T3-chat-particle-b02-nonexportable-12ab",
+  "issue_id": "RENDER-002",
+  "hypothesis": "Untraced one of three original Particle Shader48 source Texture2D28 in B02 may be excluded because the real AssetRipper collection is Exportable=false, not because object is absent or source `.resS` missing.",
+  "source_commit": "aeca9d9c39132a448cf15ca3b357369deb6a7a4f",
+  "input_hashes": [
+    "immutable ZIP2 15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "six scene and four Material/Shader owners plus two globals exact SHA",
+    "one .resS external original provider full SHA verified",
+    "public AssetRipperCLI 036098ab525a3f9f693dc101edeb21faad4d32d8 pinned"
+  ],
+  "tool_versions": {
+    "UnityPy": "1.23.0",
+    "PyYAML": "6.0.3",
+    "dotnet": "9.0",
+    "AssetRipperCLI": "036098ab525a3f9f693dc101edeb21faad4d32d8"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t3_stage_particle_nonexportable_trace.py -v",
+    "python3 -m unittest discover -s tests -p test_t3_particle_same_export_bindings.py -v",
+    "python3 -m scripts.t3_stage_particle_nonexportable_trace --base-helper android-port/Experiments/ExportLineage/RaftExportLineage.cs --staged-helper $RUNNER_TEMP/t3-particle-helpers/RaftExportLineage.cs",
+    "dotnet $RUNNER_TEMP/t3-particle-compiled/ExportLineage.dll $RUNNER_TEMP/t3-particle-original $RUNNER_TEMP/t3-particle-export",
+    "python3 -m scripts.t3_particle_same_export_bindings --original $RUNNER_TEMP/t3-particle-original --manifest zip2-original/RAFT_FILE_MANIFEST.tsv --project $RUNNER_TEMP/t3-particle-export/ExportedProject --w1-trace $RUNNER_TEMP/t3-particle-w1-private.json --b02-trace $RUNNER_TEMP/t3-particle-b02-private.json --out $RUNNER_TEMP/t3-particle-safe-export-result.json"
+  ],
+  "negative_controls": [
+    "SHA-locked reviewed W1/B02/B21 helper bytes before any disposable patch",
+    "only disposable AssetRipper helper patched, no actual export logic changed",
+    "private original skipped Texture2D source IDs remain under runner temp",
+    "source object present in nonexportable collection vs absent from collections distinguished",
+    "synthetic repeated original texture slot multiplicities cannot be miscounted"
+  ],
+  "workflow_path": ".github/workflows/raft-t3-particle108-sameexport.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42132262184",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42132262184/artifacts"
+  ],
+  "budget": "50 min one bounded AssetRipper export with one original .resS provider, no full Unity Android build",
+  "status": "completed",
+  "observed_result": {
+    "actual_source_export_success": true,
+    "source_original_materials": 5,
+    "original_texture2d28": 3,
+    "material_export_traces": 5,
+    "b02_exportable_texture_traces": 2,
+    "exact_original_texture_pointers": 9,
+    "uv_matches": 10,
+    "missing_source_Texture2D_in_nonexportable_collection": 1,
+    "missing_source_Texture2D_absent_all_collections": 0,
+    "missing_reason_unclassified": 0,
+    "wrong_export_guid": 0,
+    "null_texture_regression": 0,
+    "tests_passed": 100,
+    "android_pixel_proof": false
+  },
+  "rejected_hypotheses": [
+    "The third original ParticleShader48 Texture2D source target is absent from every AssetRipper collection",
+    "The third Texture2D target is truly missing in original ZIP2 stream data"
+  ],
+  "limitations": [
+    "nonexportable target actual export pointer was not yet matched to serialized YAML tenth pointer",
+    "full native APK/OBB and Unity/Adreno pixel verification unrun"
+  ],
+  "initial_synthetic_test_failure": "https://github.com/alwansan/raf/actions/runs/42132171708",
+  "integration_commit": "aeca9d9c39132a448cf15ca3b357369deb6a7a4f",
+  "next_step": "Privately derive same-instance container.CreateExportPointer for the exact source class28 Texture2D skipped by B02 because collection.Exportable=false, and compare it to the still-nonnull exported Material .mat TexEnv pointer. This may legitimately reference an engine/builtin Texture rather than missing Android asset; no game shader or texture must be changed until pointer parity and device pixels are verified."
+}
