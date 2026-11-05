@@ -5,6 +5,8 @@ on:
     paths:
       - scripts/reassemble_android_delivery.py
       - tests/test_t5_portable_reassembly.py
+      - tests/test_t5_bundled_reassembly_e2e.py
+      - scripts/package_android_delivery.py
       - .github/workflows/raft-t5-portable-reassembly.yml
   workflow_dispatch:
 permissions:
@@ -27,8 +29,9 @@ jobs:
           set -euo pipefail
           python3 -m unittest -v \
             tests.test_t5_portable_reassembly \
+            tests.test_t5_bundled_reassembly_e2e \
             tests.test_a3_reassembly_publish_race \
             tests.test_android_delivery_package
       - name: Record exact test scope
         if: always()
-        run: echo "T5 synthetic Android split-delivery validation only; no APK, OBB, Unity or phone build."
+        run: echo "T5 synthetic ZIP-based APK/OBB/XAPK transport validation only; no signed game, Unity, Release or phone build."
