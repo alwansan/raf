@@ -17,7 +17,8 @@ def signature(expected, observed, *, atol=1e-5, rtol=1e-4):
     if len(expected) != len(observed) or len(expected) % 16:
         raise ValueError("RGBA32F inputs must have equal whole-pixel byte lengths")
     channels = [dict(compared=0, mismatched=0, nonfinite=0, signed_positive=0,
-                     signed_negative=0, max_ulp=0, max_absolute_error=0.0,\n                     uninformative_tolerance=0) for _ in range(4)]
+                     signed_negative=0, max_ulp=0, max_absolute_error=0.0,
+                     uninformative_tolerance=0) for _ in range(4)]
     for offset in range(0, len(expected), 4):
         c = channels[(offset // 4) % 4]
         ab, bb = struct.unpack_from("<I", expected, offset)[0], struct.unpack_from("<I", observed, offset)[0]
@@ -30,7 +31,14 @@ def signature(expected, observed, *, atol=1e-5, rtol=1e-4):
         error = abs(a - b)
         c["max_absolute_error"] = max(c["max_absolute_error"], error)
         c["max_ulp"] = max(c["max_ulp"], abs(ordered_bits(ab) - ordered_bits(bb)))
-        threshold = atol + rtol * abs(a)\n        if not math.isfinite(threshold):\n            # Finite user tolerances can overflow when scaled by a float32 reference.\n            # Do not certify parity from an infinite effective threshold.\n            c["uninformative_tolerance"] += 1\n            c["mismatched"] += 1\n            continue\n        if error > threshold:
+        threshold = atol + rtol * abs(a)
+        if not math.isfinite(threshold):
+            # Finite user tolerances can overflow when scaled by a float32 reference.
+            # Do not certify parity from an infinite effective threshold.
+            c["uninformative_tolerance"] += 1
+            c["mismatched"] += 1
+            continue
+        if error > threshold:
             c["mismatched"] += 1
             c["signed_positive" if b > a else "signed_negative"] += 1
     return {"pixels": len(expected) // 16, "channels": channels,
