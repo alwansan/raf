@@ -5,7 +5,7 @@
   "origin": "chat",
   "issue_id": "LOCAL-005",
   "track": "world-save",
-  "status": "active",
+  "status": "completed",
   "base_sha": "5faca76e1b59ae1185af9a758db52d233bed35b1",
   "hypothesis": "The authentic compiled original static SaveAndLoad.Load<T>(string) can read the same shipped SHA-verified 2,941-byte Data.rgd and return a real object of the original root CLR type, not just direct BinaryFormatter.Deserialize. This would distinguish original game loader compatibility in isolated managed CLR from .rgd format/parser-only evidence.",
   "experiment_key": "t4-real-original-SaveAndLoad-LoadT-shipped-2941-RGD-seed-net8-151-original-refs-k6n8-v1",
@@ -23,7 +23,21 @@
     "docs/T4_ORIGINAL_RGD_LOAD_COMPAT_2026-11-05.md",
     "prompt/coordination/work/LOCAL-005/T4-20261105T1405Z-chat-original-rgd-runtime-k6n8.json"
   ],
-  "run_urls": [],
-  "updated_at": "2026-11-05T14:17:00Z",
-  "next_step": "On exact original seed and managed context, exercise original generic loader with CLR original root type, separately distinguish type-match/returned-default/original caught errors; no Android or real persisted user .rgd claims."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42043768798"
+  ],
+  "updated_at": "2026-11-05T14:23:00Z",
+  "next_step": "Do not infer RGD game save durability from shipped seed. Coordinate Android signed candidate for playable world and real SaveWorld/SaveUser/Save, process exit, Load same user-generated .rgd and resumed playable scene.",
+  "result": {
+    "compiled_original_SaveAndLoad_generic_LoadT_invoked": true,
+    "original_method_signature_verified": true,
+    "real_original_shipped_seed_input": true,
+    "returned_nonnull_original_game_type": true,
+    "original_seed_binaryformatter_direct": true,
+    "sourcefree_controls": "18 direct + 18 LoadT tests PASS",
+    "wrong_seed_sha_rejected": true,
+    "real_user_generated_world_saved_or_loaded": false,
+    "android_device_unity_il2cpp": false,
+    "report": "docs/T4_ORIGINAL_RGD_RUNTIME_LOAD_2026-11-05.md"
+  }
 }
