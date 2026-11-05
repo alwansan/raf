@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T1021Z-T3-original-codec-drift",
+  "issue_id": "RENDER-002",
+  "track": "textures/actual-decoded-RGB-drift-codec-attribution",
+  "approach": "Run one SHA-pinned original 11 owners+3 streamed .resS actual AssetRipper same-export 106-pair image comparison with newly tested source per-format drift summary, no pixel/game assets disclosed.",
+  "status": "active",
+  "base_sha": "02e9fba7fb42b83579595885391be636ee3b56e8",
+  "intended_files": [
+    ".github/workflows/raft-t3-streamed-original-texture-export.yml",
+    "prompt/coordination/clients/T3/sessions/20261105T1021Z-T3-original-codec-drift.md",
+    "prompt/coordination/experiments/T3/20261105T1021-authentic-codec-drift.json"
+  ],
+  "hypothesis": "The 30 observed RGB_DRIFT pairs among 106 authentic source/export decoded images cluster by specific compressed texture formats/alpha/sRGB classes rather than missing source pixels or Material reference changes.",
+  "related_work": [
+    "https://github.com/alwansan/raf/actions/runs/41968665857",
+    "https://github.com/alwansan/raf/actions/runs/42003607001"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/T3/sessions/20261105T0934Z-T3-format-drift-attribution.md",
+    "scripts/t3_authentic_decoded_pixel_export.py",
+    "scripts/t3_pixel_drift_diagnostics.py"
+  ],
+  "experiment_ids": [
+    "T3-authentic-codec-drift-20261105T1021"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Trigger existing T3-only streamed original texture workflow once after annotating new causal diagnostic objective; inspect success/failure and grouped aggregate; do not apply speculative import changes.",
+  "updated_at": "2026-11-05T10:21:00Z"
+}
