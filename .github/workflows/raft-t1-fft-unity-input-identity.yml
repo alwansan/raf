@@ -1,6 +1,6 @@
 name: T1 WATER-001 exact Unity FFT sampled input identity
 
-# Opt-in replay session: 20261105T211830Z-T1-chat-c98e42
+# Opt-in replay session: 20261105T213200Z-T1-chat-a247e0
 on:
   workflow_dispatch:
   push:
@@ -115,6 +115,11 @@ jobs:
           python3 -m venv "$RUNNER_TEMP/t1-python-venv"
           "$RUNNER_TEMP/t1-python-venv/bin/python" -m pip install \
             --disable-pip-version-check UnityPy==1.25.4 -q
+      - name: Compile source-free structured dispatch trace before acquiring original data
+        run: |
+          command -v glslangValidator
+          command -v spirv-val
+          python3 -m unittest discover -s tests -p test_t1_fft_pass0_trace_variant.py -v
       - name: Recover exact SHA-verified original FFT object from immutable ZIP2
         shell: bash
         run: |
