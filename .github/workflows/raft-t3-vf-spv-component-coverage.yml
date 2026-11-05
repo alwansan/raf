@@ -1,0 +1,28 @@
+name: T3 RENDER-002 VS-FS typed SPIR-V component coverage
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t3_vf_spirv_component_coverage.py
+      - tests/test_t3_vf_spirv_component_coverage.py
+      - .github/workflows/raft-t3-vf-spv-component-coverage.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raft-t3-vf-spv-component-coverage-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  source-free-component-contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Compile bounded analysis only
+        run: python3 -m py_compile scripts/t3_vf_spirv_component_coverage.py tests/test_t3_vf_spirv_component_coverage.py
+      - name: Synthetic location, component, type and disclosure controls
+        env:
+          PYTHONPATH: scripts
+        run: python3 -m unittest discover -s tests -p 'test_t3_vf_spirv_component_coverage.py' -v
