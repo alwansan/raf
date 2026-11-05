@@ -105,6 +105,50 @@ class ZIP2RenderStageTests(unittest.TestCase):
                 self.entries, self.output / "Raft_Data", feature)
         self.assertTrue(target.read_bytes().startswith(b"version https://git-lfs"))
 
+    def install_second_original(self):
+        """Second independent synthetic split original and immutable test Git pin."""
+        second = "Raft_Data/sharedassets0.assets"
+        source = self.repo / "Raft" / second
+        source.mkdir(parents=True)
+        for i, data in enumerate(self.parts):
+            (source / f"part-{i:05d}").write_bytes(data)
+        self.manifest.write_text(
+            self.manifest.read_text(encoding="utf-8") +
+            f"split\t{len(self.original)}\t{self.digest}\t660\t{second}\n",
+            encoding="utf-8")
+        self._git("add", ".")
+        self._git("-c", "user.name=T5-Synthetic", "-c",
+                  "user.email=t5@example.invalid", "commit", "-qm", "second fixture")
+        options = dict(
+            owners=[self.relative, second],
+            entries=self.entries + [("Raft/" + second, self.digest, len(self.original))],
+            expected_commit=self._git("rev-parse", "HEAD"),
+            expected_manifest_blob=self._git(
+                "hash-object", "--", "RAFT_FILE_MANIFEST.tsv"),
+            byte_budget=1024)
+        return second, source, options
+
+    def test_multi_owner_authentic_consumer_shares_one_bounded_batch(self):
+        second, _, options = self.install_second_original()
+        result = self.stage(**options)
+        self.assertEqual(result["owners_verified"], 2)
+        self.assertEqual(result["owners_staged"], 2)
+        self.assertEqual(result["original_bytes_verified"], 2 * len(self.original))
+        self.assertEqual(self.destination.read_bytes(), self.original)
+        self.assertEqual((self.output / second).read_bytes(), self.original)
+
+    def test_multi_owner_unsafe_second_preflight_writes_nothing(self):
+        second, source, options = self.install_second_original()
+        unsafe = source / "part-00001"
+        unsafe.unlink()
+        external = self.root / "original-source-alias"
+        external.write_bytes(self.parts[1])
+        unsafe.symlink_to(external)
+        with self.assertRaisesRegex(ValueError, "symlinked"):
+            self.stage(**options)
+        self.assertFalse(self.output.exists())
+        self.assertEqual(external.read_bytes(), self.parts[1])
+
     def test_tampered_part_same_size_not_published(self):
         (self.source / "part-00001").write_bytes(b"87654321")
         with self.assertRaisesRegex(ValueError, "sha256"):
