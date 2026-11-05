@@ -1,6 +1,7 @@
 """Fail-closed LogRaft water root-accounting gate; no runtime provenance claims."""
 import argparse
 import json
+import re
 from pathlib import Path
 
 MATERIALS = ('spectrum', 'foam_global', 'subsurface_blur', 'utility_noise', 'other_ultimate_water')
@@ -20,9 +21,21 @@ def summarize(s):
     kernel_total = valid(categories['water_fft_invalid_compute_kernel']['count'])
     if sum(valid(v) for v in materials.values()) != passes or sum(valid(v) for v in kernels.values()) != kernel_total:
         raise ValueError('root count mismatch')
-    if valid(s['final_shader_pass_errors_total']) != passes or valid(s['final_compute_kernel_errors_total']) != kernel_total:
-        raise ValueError('counter mismatch')
-    return {'session': str(s['session']), 'invalid_pass_total': passes,
+    keys = ('final_shader_pass_errors_total', 'final_compute_kernel_errors_total')
+    stop_info = s.get('stop_time_android_process_exit_info', {})
+    if not isinstance(stop_info, dict):
+        raise ValueError('invalid stop-time counters')
+    locations = [section for section in (s, stop_info) if any(key in section for key in keys)]
+    if not locations:
+        raise ValueError('missing final counters')
+    for section in locations:
+        if tuple(valid(section.get(key)) for key in keys) != (passes, kernel_total):
+            raise ValueError('counter mismatch')
+    session = s['session']
+    if not isinstance(session, str) or not re.fullmatch(r'(?:LogRaft-)?[0-9]{8}-[0-9]{6}-[0-9]{3}', session):
+        raise ValueError('invalid session identifier')
+    session = 'LogRaft-' + session.removeprefix('LogRaft-')
+    return {'session': session, 'invalid_pass_total': passes,
             'invalid_pass_by_material': materials, 'invalid_kernel_total': kernel_total,
             'invalid_kernel_by_index': kernels, 'kernel_index_6_is_fft_proven': False,
             'source_to_unity_kernel_mapping_proven': False,
