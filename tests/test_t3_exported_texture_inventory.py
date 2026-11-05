@@ -34,7 +34,7 @@ class ExportOutputShape(unittest.TestCase):
         report=self.inspect()
         self.assertEqual(report["exact_source_linked_GUIDs_absent_from_meta"],1)
         self.assertEqual(report["bounded_export_texture_asset_assessment"],
-                         "NO_TEXTURE_ASSET_FILES_IN_BOUNDED_EXPORT")
+                         "NO_RECOGNIZED_IMAGE_OR_EMBEDDED_TEXTURE_OUTPUT")
         self.assertFalse(report["real_Unity_editor_import_or_device_pixels_verified"])
 
     def test_true_guid_with_png_texture_importer(self):
