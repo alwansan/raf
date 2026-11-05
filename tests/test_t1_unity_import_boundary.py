@@ -43,6 +43,13 @@ class BoundaryTests(unittest.TestCase):
                 {"name": ACTIVATION, "conclusion": "failure"},
                 {"name": IMPORT, "conclusion": "success"}]}]})
 
+    def test_success_without_start_is_not_completed(self):
+        payload = sample("success", "success")
+        payload["jobs"][0]["steps"][1].pop("started_at")
+        result = classify(payload)
+        self.assertEqual(result["boundary"], "unity_import_unverified")
+        self.assertFalse(result["shader_import_attempted"])
+
 
 if __name__ == "__main__":
     unittest.main()
