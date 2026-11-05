@@ -15,6 +15,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicLong;
 import org.json.JSONArray;
 import rikka.shizuku.Shizuku;
@@ -172,7 +174,16 @@ public final class CaptureService extends Service {
     private long segmentBytes, totalBytes, lastStatus;
     private int part;
     private volatile boolean active;
-    private volatile boolean failed, stopping;
+    private volatile boolean failed, stopping, starting;
+    private volatile long startupRequestedElapsedMs=-1, startupReadyElapsedMs=-1;
+    private volatile String startupPhase="not_started";
+    // All session creation, shutdown and privileged Binder setup are serialized
+    // off the Android service main looper. SAF can block for seconds on MediaProvider.
+    private final ExecutorService lifecycle=Executors.newSingleThreadExecutor(r->{
+        Thread t=new Thread(r,"lograf-control");
+        t.setPriority(Thread.NORM_PRIORITY-1);
+        return t;
+    });
     private IRemoteLog remote;
     private String session;
     private Shizuku.UserServiceArgs args;
@@ -188,15 +199,30 @@ public final class CaptureService extends Service {
     };
 
     private final ServiceConnection connection=new ServiceConnection() {
-        @Override public void onServiceConnected(ComponentName c, IBinder binder) {
+        @Override public void onServiceConnected(ComponentName component, IBinder binder) {
+            final IRemoteLog bound=IRemoteLog.Stub.asInterface(binder);
+            // remote.start may synchronously wait for a Shizuku Binder; Android
+            // dispatches onServiceConnected on the app main thread by default.
+            // A late Shizuku callback after Stop must not enqueue work on
+            // a destroyed executor or revive an already closed session.
+            if(lifecycle.isShutdown() || !active || stopping || failed)return;
             try {
-                remote=IRemoteLog.Stub.asInterface(binder);
-                ApplicationInfo info=getPackageManager().getApplicationInfo(Config.PACKAGE,0);
-                remote.start(info.uid,Config.PACKAGE,sink);
-                saveStatus("Recording: " + Config.PACKAGE + " (UID " + info.uid + ")");
-            } catch (Exception e) { fatal("Cannot start privileged capture: " + e); }
+                lifecycle.execute(()->{
+                if(!active || stopping || failed)return;
+                try {
+                    ApplicationInfo info=getPackageManager().getApplicationInfo(Config.PACKAGE,0);
+                    remote=bound;
+                    bound.start(info.uid,Config.PACKAGE,sink);
+                    startupReadyElapsedMs=SystemClock.elapsedRealtime();
+                    startupPhase="remote_started";
+                    saveStatus("Recording: " + Config.PACKAGE + " (UID " + info.uid + ")");
+                } catch(Exception e){fatal("Cannot start privileged capture: " + e);}
+            });
+            } catch(java.util.concurrent.RejectedExecutionException ignored) {
+                // Service already destroyed; never revive a finished session.
+            }
         }
-        @Override public void onServiceDisconnected(ComponentName c) {
+        @Override public void onServiceDisconnected(ComponentName component) {
             remote=null;
             if(active && !stopping) fatal("Shizuku disconnected; capture ended. Reconnect and restart.");
         }
@@ -225,39 +251,62 @@ public final class CaptureService extends Service {
     }
 
     @Override public int onStartCommand(Intent intent,int flags,int startId) {
-        if(intent != null && MARK.equals(intent.getAction())) {
-            appendMarker();
+        if(intent!=null && MARK.equals(intent.getAction())){
+            appendMarker(); // bounded non-blocking FIFO offer
             return START_NOT_STICKY;
         }
-        if(intent != null && STOP.equals(intent.getAction())) {
-            // Never block Android's main thread while waiting on slow SAF drains.
-            new Thread(()->{halt("Stopped by user");stopSelf();},"lograf-stop").start();
+        if(intent!=null && STOP.equals(intent.getAction())){
+            // Serialize Stop after any pending startup, never join the writer
+            // or invoke slow SAF calls on Android's event-dispatching thread.
+            lifecycle.execute(()->{
+                halt("Stopped by user");
+                stopSelf();
+            });
             return START_NOT_STICKY;
         }
-        // A previous session may still be draining its buffered log batches.
-        // Never open another session or replace its files until Stop has finished.
-        if (active || stopping) return START_STICKY;
+        if(active || starting || stopping)return START_STICKY;
         boolean recovering=intent==null;
         if(recovering && !Config.prefs(this).getBoolean("recording",false)){
-            stopSelf();return START_NOT_STICKY;
+            stopSelfResult(startId);
+            return START_NOT_STICKY;
         }
-        try {
+        try{
+            // Foreground notification must be promoted promptly on the caller
+            // thread; all document creation, shell probes, file opens and
+            // Shizuku binding happen on the serial background control thread.
             startForeground(NOTIFICATION,notification());
+            starting=true;
+            startupRequestedElapsedMs=SystemClock.elapsedRealtime();
+            startupReadyElapsedMs=-1;
+            startupPhase="initializing";
+            lifecycle.execute(()->initializeSession(recovering));
+            return START_STICKY;
+        }catch(Exception e){
+            starting=false;
+            fatal("Startup scheduling failed: "+e);
+            return START_NOT_STICKY;
+        }
+    }
+
+    private void initializeSession(boolean recovering) {
+        try {
             Uri selected=Config.folder(this);
             if(selected==null) throw new IOException("Select a recording folder first");
             if(!Shizuku.pingBinder() ||
-                    Shizuku.checkSelfPermission()!=PackageManager.PERMISSION_GRANTED) {
+                    Shizuku.checkSelfPermission()!=PackageManager.PERMISSION_GRANTED)
                 throw new SecurityException("Shizuku is not running or not permitted");
-            }
             folder=selected;
             session = new SimpleDateFormat("yyyyMMdd-HHmmss-SSS",Locale.US).format(new Date());
             Uri base=DocumentsContract.buildDocumentUriUsingTree(folder,DocumentsContract.getTreeDocumentId(folder));
             sessionFolder=DocumentsContract.createDocument(getContentResolver(),base,
                     DocumentsContract.Document.MIME_TYPE_DIR,"LogRaft-"+session);
             if(sessionFolder==null) throw new IOException("Folder creation failed");
-            active=true; stopping=false; failed=false; totalBytes=0; metricsSegmentBytes=0; part=0; metricsPart=0;
+            active=true; stopping=false; failed=false;
+            totalBytes=0;metricsSegmentBytes=0;part=0;metricsPart=0;
             fileUris.clear();
-            Config.prefs(this).edit().remove("metrics_last").remove("last_exit_history_sample").remove("exit_history_status").remove("writer_pending_bytes").remove("writer_max_lag_ms").remove("writer_failed_batches").apply();
+            Config.prefs(this).edit().remove("metrics_last").remove("last_exit_history_sample")
+                    .remove("exit_history_status").remove("writer_pending_bytes")
+                    .remove("writer_max_lag_ms").remove("writer_failed_batches").apply();
             String metadata="LogRaft "+BuildConfig.VERSION_NAME+"\nTarget="+Config.PACKAGE+
                     "\nRecoveryRestart="+recovering+
                     "\nStart="+new Date()+"\nBuild="+Build.MANUFACTURER+" "+Build.MODEL+
@@ -269,7 +318,8 @@ public final class CaptureService extends Service {
                     "Telemetry=3s sampling CPU process, process/system memory, KGSL GPU, thermal, battery, SurfaceFlinger displayed frames\n"+
                     "Missing metrics are null, not measured zeros. Game-internal FPS needs Unity logging.\n"+
                     "Warnings=Low available RAM, raw log flood, and suspected presented-frame stalls are heuristic indicators.\n";
-            Uri meta=DocumentsContract.createDocument(getContentResolver(),sessionFolder,"text/plain","session-info.txt");
+            Uri meta=DocumentsContract.createDocument(getContentResolver(),sessionFolder,
+                    "text/plain","session-info.txt");
             if(meta==null) throw new IOException("Metadata creation failed");
             try(OutputStream out=getContentResolver().openOutputStream(meta,"w")){
                 if(out==null) throw new IOException("Cannot write metadata");
@@ -280,14 +330,18 @@ public final class CaptureService extends Service {
             openMetricSegment();
             startWriter();
             saveStatus("Preparing Shizuku logger...");
-            args=new Shizuku.UserServiceArgs(new ComponentName(getPackageName(),RemoteLogService.class.getName()))
-                .daemon(false).processNameSuffix("lograf").debuggable(false).version(1);
-            Shizuku.bindUserService(args,connection);
-            return START_STICKY;
-        } catch(Exception e) {
-            fatal("Startup failed: " + e);
-            stopSelf();
-            return START_NOT_STICKY;
+            args=new Shizuku.UserServiceArgs(
+                    new ComponentName(getPackageName(),RemoteLogService.class.getName()))
+                    .daemon(false).processNameSuffix("lograf").debuggable(false).version(1);
+            if(!failed){
+                startupPhase="shizuku_binding_requested";
+                Shizuku.bindUserService(args,connection);
+            }
+        }catch(Exception e){
+            startupPhase="failed";
+            fatal("Startup failed: "+e);
+        }finally{
+            starting=false;
         }
     }
 
@@ -341,7 +395,10 @@ public final class CaptureService extends Service {
         if(failed) return;
         failed=true;
         saveStatus(message);
-        new Thread(()->{halt(message);stopSelf();},"lograf-fatal-stop").start();
+        if(!lifecycle.isShutdown()) lifecycle.execute(()->{
+            halt(message);
+            stopSelf();
+        });
     }
 
     private void writeSessionSummary(String stopReason) {
@@ -369,6 +426,12 @@ public final class CaptureService extends Service {
             report.put("writer_peak_pending_bytes",peakPendingBytes.get());
             report.put("writer_max_queue_delay_ms",maxQueueDelayMs.get());
             report.put("writer_failure",writerFailure.isEmpty()?org.json.JSONObject.NULL:writerFailure);
+            report.put("session_startup_phase",startupPhase);
+            report.put("session_remote_startup_duration_ms",
+                    startupRequestedElapsedMs>=0 && startupReadyElapsedMs>=startupRequestedElapsedMs?
+                        startupReadyElapsedMs-startupRequestedElapsedMs:org.json.JSONObject.NULL);
+            report.put("startup_duration_scope",
+                    "elapsed from app foreground-service request to Shizuku remote.start reply; null if unconfirmed");
             report.put("backpressure_notice","Logcat ring buffer losses cannot be detected perfectly; zero dropped local batches does not prove zero OS buffer loss");
             report.put("performance_statistics",sessionMetrics.toJson());
             report.put("game_process_exit_cause","unknown unless explicitly supported by exit evidence");
@@ -458,7 +521,12 @@ public final class CaptureService extends Service {
     }
 
     @Override public void onDestroy() {
-        if(active) halt("Recorder service stopped");
+        // onDestroy is a main-thread callback; no 18-second writer join here.
+        if(active || starting){
+            if(!lifecycle.isShutdown())
+                lifecycle.execute(()->halt("Recorder service stopped"));
+        }
+        lifecycle.shutdown(); // queued startup/stop tasks still finish in FIFO order
         super.onDestroy();
     }
     @Override public IBinder onBind(Intent intent){return null;}

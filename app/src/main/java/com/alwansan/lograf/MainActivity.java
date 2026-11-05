@@ -27,7 +27,12 @@ public final class MainActivity extends Activity {
     private Button start, stop, share;
     private final Handler handler=new Handler(Looper.getMainLooper());
     private final Runnable refresh=new Runnable(){
-        @Override public void run(){ update(); handler.postDelayed(this,1100); }
+        @Override public void run(){
+            update();
+            // Metrics arrive every ~3 seconds. Avoid 1.1s JSON parsing and
+            // large selectable TextView relayouts under device CPU pressure.
+            handler.postDelayed(this,3000);
+        }
     };
     private final Shizuku.OnRequestPermissionResultListener permissionListener=(code, result)->{
         if(code==SHIZUKU_REQUEST) runOnUiThread(()-> {
@@ -118,7 +123,17 @@ public final class MainActivity extends Activity {
         catch(Throwable t){ message("Shizuku API error: "+t.getMessage()); }
         if(Build.VERSION.SDK_INT>=33 && checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)!=PackageManager.PERMISSION_GRANTED)
             requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS},301);
-        handler.post(refresh);
+    }
+
+    @Override protected void onStart(){
+        super.onStart();
+        handler.removeCallbacks(refresh);
+        handler.post(refresh); // refresh only while UI is actually visible
+    }
+
+    @Override protected void onStop(){
+        handler.removeCallbacks(refresh); // do not relayout behind full-screen Raft
+        super.onStop();
     }
 
     private void requestShizuku(boolean thenStart){
