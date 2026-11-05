@@ -6,9 +6,9 @@
   "session_id": "20261105T214810Z-T3-chat-selective-colormask-a82d",
   "issue_id": "RENDER-002",
   "track": "Unity 2021.3 ColorWriteMask bit mapping and source Shader48 partial RenderState ShaderLab translator",
-  "status": "active",
+  "status": "completed",
   "base_sha": "19a8e9fc02c3cd22c6f09857779f5199f9eb3a12",
-  "updated_at": "2026-11-05T21:53:00Z",
+  "updated_at": "2026-11-05T21:56:00Z",
   "intended_files": [
     "scripts/w1_depth_shaderlab.py",
     "tests/test_w1_depth_shaderlab.py",
@@ -34,9 +34,10 @@
     "prompt/coordination/clients/T3/sessions/20261105T213100Z-T3-scheduled-clstage-8b4f.md"
   ],
   "run_urls": [
-    "https://github.com/alwansan/raf/actions/runs/42116530618"
+    "https://github.com/alwansan/raf/actions/runs/42116530618",
+    "https://github.com/alwansan/raf/actions/runs/42117318733"
   ],
-  "result": "Source SHA-authenticated 108-slot Particle Shader48 ColorMask RGB maps with Unity2021 A1 B2 G4 R8 using opt-in translator. W1/B25 default unchanged. Real six-scene/four-owner ZIP2 CI42116530618 succeeded: 72/72 tests. Android pixels not verified.",
-  "next_step": "Refresh team source-evidence index from OPEN RENDER-002 issue including completed CI42116530618, then close this source-only work scope.",
+  "result": "Verified UnityCsReference 2021.3 ColorWriteMask A1 B2 G4 R8; opt-in original ShaderLab partial mask support preserves legacy W1/B25 default. SHA-pinned six original Raft scenes/four owners actual 108-slot Particle Shader48 ColorMask RGB accepted opt-in; CI 42116530618 SUCCESS 72/72; canonical ledger 42117318733 SUCCESS. No compiled shader/mobile pixels.",
+  "next_step": "Await same-instance source Shader48→full-native GUID/Material and matching installed Android emitter/pixel proof before a real game shader change; retain RENDER-002 OPEN.",
   "integration_commit": "d6926a0bbd862cf3a8af0fd6ee0b5da018bdaf2d"
 }
