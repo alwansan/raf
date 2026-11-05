@@ -12,6 +12,7 @@ from scripts.t4_validate_original_rgd_loadt import LOADT_FIELDS
 ADDITIONAL = {
     "original_private_Save_IL_guard_passed",
     "original_private_Save_safe_calls",
+    "original_private_Save_audit_category",
     "original_private_Save_invoked",
     "original_private_Save_output_created",
     "original_private_Save_output_nonzero",
@@ -20,7 +21,15 @@ ADDITIONAL = {
     "original_private_Save_result_category",
 }
 CATEGORIES = {
-    "NONE", "ORIGINAL_ROOT_TYPE_UNAVAILABLE",
+    "NONE", "ORIGINAL_ROOT_TYPE_UNAVAILABLE", "NOT_AUDITED",
+    "NO_EXACT_PRIVATE_SAVE_SIGNATURE",
+    "UNEXPECTED_ORIGINAL_SAVE_IL_COMPLEXITY",
+    "UNEXPECTED_ORIGINAL_SAVE_EXCEPTION_REGION",
+    "ORIGINAL_SAVE_FIELD_OR_INDIRECT_ACCESS",
+    "UNKNOWN_ORIGINAL_SAVE_CALL_OPERAND",
+    "UNKNOWN_ORIGINAL_SAVE_CATCH_CALLEE",
+    "UNKNOWN_ORIGINAL_SAVE_SUCCESS_CALLEE",
+    "ORIGINAL_SAVE_EXPECTED_CREATE_OR_SERIALIZE_MISSING",
     "ORIGINAL_PRIVATE_SAVE_METHOD_IL_NOT_AUTHENTICATED",
     "ORIGINAL_SAVE_REFLECTION_SIGNATURE_MISMATCH",
     "GENUINE_SAVE_OR_LOAD_ROUNDTRIP_UNVERIFIED",
@@ -66,6 +75,12 @@ def validate(doc):
     if type(calls) is not int or not 0 <= calls <= 100:
         raise ValueError("invalid_original_save_guard_count")
     category = doc["original_private_Save_result_category"]
+    audit = doc["original_private_Save_audit_category"]
+    if type(audit) is not str or audit not in CATEGORIES:
+        raise ValueError("unrecognized_original_il_audit")
+    if (doc["original_private_Save_IL_guard_passed"] and audit != "NONE") or (
+            not doc["original_private_Save_IL_guard_passed"] and audit == "NONE"):
+        raise ValueError("contradictory_il_guard_and_category")
     if type(category) is not str or category not in CATEGORIES:
         raise ValueError("invalid_original_save_outcome_category")
     guard = doc["original_private_Save_IL_guard_passed"]
@@ -90,6 +105,7 @@ def validate(doc):
         "generated_original_seed_LoadT_same_type": loaded,
         "temp_cleanup_proven": cleaned,
         "bounded_result_category": category,
+        "bounded_il_audit_category": audit,
         "user_world_save_or_relaunch_proven": False,
         "Android_Unity_IL2CPP_device_executed": False,
         "private_data_published": False,
