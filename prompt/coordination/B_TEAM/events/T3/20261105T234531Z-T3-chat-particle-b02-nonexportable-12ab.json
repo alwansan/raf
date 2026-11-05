@@ -1,0 +1,18 @@
+{
+  "id": "20261105T234531Z-T3-chat-particle-b02-nonexportable-12ab",
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T234531Z-T3-chat-particle-b02-nonexportable-12ab",
+  "issue_id": "RENDER-002",
+  "type": "source_export_diagnosis",
+  "at": "2026-11-05T23:55:04.081Z",
+  "summary": "Genuine original 108 ParticleShader48 one missing B02 Texture2D28 target is present inside collection.Exportable=false, not absent from all AssetRipper collections. CI42132262184 PASS 100/100 source-free tests plus same-instance real W1+B02 export: 5/5 Materials, 2/3 exportable Texture source traces, 9/10 exact PPtrs, 10/10 UV, no null/wrong GUID. Last Material pointer to nonexportable source not yet matched to engine pointer; no Android pixel claim.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42132262184",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_PARTICLE108_B02_NONEXPORTABLE_CAUSE_2026-11-06.md"
+  ],
+  "limitations": [
+    "one original nonexportable Texture2D pointer engine mapping unresolved",
+    "not Android device/pixel proof"
+  ]
+}
