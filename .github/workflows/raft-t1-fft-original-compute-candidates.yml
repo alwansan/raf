@@ -1,0 +1,76 @@
+name: T1 WATER-001 genuine FFT compiled programs to private Unity compute import candidates
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t1_stage_original_fft_compute_candidates.py
+      - tests/test_t1_stage_original_fft_compute_candidates.py
+      - .github/workflows/raft-t1-fft-original-compute-candidates.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: raft-t1-genuine-fft-private-compute-stage
+  cancel-in-progress: false
+
+jobs:
+  original-derived-candidates:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      DEBIAN_FRONTEND: noninteractive
+      GIT_LFS_SKIP_SMUDGE: '1'
+      ZIP2_SHA: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+    steps:
+      - name: Checkout only public scripts and adversarial controls
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Fail closed against false authored identity and partial projects
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_t1_stage_original_fft_compute_candidates.py -v
+          python3 -m py_compile scripts/t1_stage_original_fft_compute_candidates.py
+      - name: Install private-source translators, no Unity build
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4 -q
+      - name: Authenticate exact original FFT asset from SHA-pinned ZIP2 only
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/t1zip"
+          git -C "$RUNNER_TEMP/t1zip" init -q
+          git -C "$RUNNER_TEMP/t1zip" remote add origin https://github.com/alwansan/raf.git
+          git -C "$RUNNER_TEMP/t1zip" -c protocol.version=2 fetch -q --depth=1 --filter=blob:none origin zip2
+          test "$(git -C "$RUNNER_TEMP/t1zip" rev-parse FETCH_HEAD)" = "$ZIP2_SHA"
+          git -C "$RUNNER_TEMP/t1zip" sparse-checkout init --no-cone
+          printf '%s\n' '/RAFT_FILE_MANIFEST.tsv' '/Raft/Raft_Data/sharedassets0.assets/' |
+            git -C "$RUNNER_TEMP/t1zip" sparse-checkout set --no-cone --stdin
+          git -C "$RUNNER_TEMP/t1zip" checkout -q --detach FETCH_HEAD
+          python3 -m scripts.stage_zip2_fft_owner \
+            --zip2-checkout "$RUNNER_TEMP/t1zip" \
+            --destination "$RUNNER_TEMP/t1original/Raft_Data/sharedassets0.assets"
+      - name: Construct twenty private original-derived candidate Unity ComputeShader files
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s python3 -m scripts.t1_stage_original_fft_compute_candidates \
+            --original-data "$RUNNER_TEMP/t1original/Raft_Data" \
+            --project "$RUNNER_TEMP/t1-fft-candidate-project"
+          test -f "$RUNNER_TEMP/t1-fft-candidate-project/Assets/T1OriginalDerived/PrivateCandidates.json"
+          test "$(find "$RUNNER_TEMP/t1-fft-candidate-project/Assets/T1OriginalDerived" -maxdepth 1 -type f -name '*.compute' | wc -l)" = 20
+          echo "RAFT_T1_FFT_20 original_derived_only=true compiled_slot_is_not_runtime_kernel=true unity_editor_not_started=true"
+      - name: Destroy temporary proprietary shaders, generated HLSL and original owner
+        if: always()
+        run: |
+          rm -rf "$RUNNER_TEMP/t1zip" "$RUNNER_TEMP/t1original" "$RUNNER_TEMP/t1-fft-candidate-project"
