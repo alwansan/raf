@@ -151,7 +151,7 @@ class AndroidPhysicalMouseIntegrationPolicy(unittest.TestCase):
         self.assertIn("PhysicalMouseMotionSource.AxisRelativeX", listener)
         self.assertIn("PhysicalMouseMotionSource.AxisRelativeY", listener)
         self.assertIn("return owner.RecordCapturedMotion(dx, dy);", listener)
-        record = BRIDGE.split("private bool RecordCapturedMotion(float dx, float dy)", 1)[1].split(
+        record = BRIDGE.split("private bool RecordCapturedMotion(int listenerEpoch, float dx, float dy)", 1)[1].split(
             "public static CursorLockMode ApplyCursorLock", 1)[0]
         self.assertIn("PhysicalMouseMotionSource.ValidDelta(dx, dy)", record)
 
@@ -163,6 +163,39 @@ class AndroidPhysicalMouseIntegrationPolicy(unittest.TestCase):
         abi_project = (ROOT / "android-port/Tests/PhysicalMouse/UnityBridgeCompile.csproj").read_text()
         self.assertIn("PhysicalMouseMotionSource.cs", project)
         self.assertIn("PhysicalMouseMotionSource.cs", abi_project)
+
+
+
+    def test_old_android_move_cannot_cross_request_generation(self):
+        source = (ROOT / "android-port/Runtime/Platform/PhysicalMouseMotionSource.cs").read_text()
+        self.assertIn("public static bool AcceptEpoch(", source)
+        self.assertIn("requested && listenerEpoch == activeEpoch", source)
+        self.assertIn("private readonly int listenerEpoch;", BRIDGE)
+        self.assertIn("new CapturedListener(this, currentEpoch)", BRIDGE)
+        self.assertIn("listener = requestListener;", BRIDGE)
+        self.assertIn('view.Call("setOnCapturedPointerListener", requestListener)', BRIDGE)
+
+    def test_callback_prefilters_generation_and_rechecks_inside_capture_lock(self):
+        listener = BRIDGE.split(
+            "public bool onCapturedPointer(AndroidJavaObject view, AndroidJavaObject motionEvent)", 1
+        )[1].split("private bool RecordCapturedMotion", 1)[0]
+        self.assertIn("PhysicalMouseMotionSource.AcceptEpoch(listenerEpoch,", listener)
+        self.assertIn("Volatile.Read(ref owner.epoch)", listener)
+        self.assertIn("owner.RecordCapturedMotion(listenerEpoch, dx, dy)", listener)
+        record = BRIDGE.split(
+            "private bool RecordCapturedMotion(int listenerEpoch, float dx, float dy)", 1
+        )[1].split("public static CursorLockMode ApplyCursorLock", 1)[0]
+        self.assertIn("lock (captureGate)", record)
+        self.assertIn("PhysicalMouseMotionSource.AcceptEpoch(listenerEpoch, epoch, requested)", record)
+        self.assertIn("deltas.Push(dx, dy);", record)
+        self.assertLess(record.index("AcceptEpoch"), record.index("deltas.Push"))
+
+    def test_prior_queued_release_implementation_is_retained(self):
+        release = BRIDGE.split("private void ReleaseCapture()", 1)[1].split(
+            "private void OnApplicationPause", 1
+        )[0]
+        self.assertIn("int releaseEpoch = Volatile.Read(ref epoch);", release)
+        self.assertIn("if (releaseEpoch != Volatile.Read(ref epoch) || requested) return;", release)
 
 
 
