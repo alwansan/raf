@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261105T1323Z-T2-chat-index-origin-5c42",
+  "issue_id": "WATER-001",
+  "status": "completed",
+  "hypothesis": "Four genuine original non-authored Foam Material.SetTexture Texture(int) second-return producer calls have identifiable numeric argument provenance in the same exact stack trace.",
+  "experiment_key": "T2|shaoriginalZIP2-15964ea8|managed-0a6f0527|four-settexture-callvirt-Texture-int|actual-source-stack-tag-v1",
+  "source": {
+    "zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "dll_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "dll_bytes": 3211776
+  },
+  "source_commit": "afb3e94af6c34a345d8fcfd81e6daaa2c01a89e4",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42035529042",
+  "tooling": "Mono.Cecil 0.11.5 net9, private original SHA scan with bounded single basic-block stack input tags; source-free synthetic direct i4/argument/not-int-token tests",
+  "result": {
+    "CI_status": "success",
+    "authentic_source_methods_scanned": 19118,
+    "non_authored_foam_exact_typed_settexture_first_args": 4,
+    "source_exact_Texture_int_producer_returns": 4,
+    "actual_producer_int_arg_origin_histogram": {
+      "direct_ldc_i4_literal": 4
+    },
+    "nonliteral_or_unknown_source_count": 0,
+    "raw_int_values_published": false,
+    "original_indices_distinct_or_inbounds_proven": false,
+    "material_receiver_runtime_foam_shader_verified": false,
+    "device_water_pixels_verified": false
+  },
+  "artifact": {
+    "id": 13417228996,
+    "zip_sha256": "2c9ff99f340c7364044bc5f8cfdcf2875fd1aa86c4b71da4a10c897efe0d0fe9"
+  },
+  "limitations": [
+    "Direct ldc.i4 origin within the four source-proven call sites does not establish array length, index uniqueness or runtime reachability.",
+    "Original four integer literal values are withheld and cannot be reconstructed from the published aggregate.",
+    "No original backing array allocation or contents, ShaderLab/CB/sampler/Unity import/Adreno/device evidence."
+  ],
+  "next_step": "Check original four constants privately against source-authentic RenderTexture[] allocation/element assignment and runtime material receiver. WATER-001 OPEN NOT_READY 0/3."
+}
