@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T1348Z-T5-scheduled-7c91",
+  "origin": "scheduled",
+  "issue_id": "INTEGRATION-001",
+  "track": "platform-smoke-forensics",
+  "approach": "Extract previously inaccessible failed job log; isolate exact assertion and assess runtime race without touching T4 platform code.",
+  "status": "active",
+  "base_sha": "952684b060f6aec1b02471294b5a726a8048ee7e",
+  "intended_files": [
+    "prompt/coordination/work/INTEGRATION-001/T5-20261105T1348Z-T5-scheduled-7c91-multiprocess-identity-log-forensics.json",
+    "prompt/coordination/clients/T5/sessions/20261105T1348Z-T5-scheduled-7c91.md",
+    "prompt/coordination/experiments/T5/20261105T1348Z-T5-scheduled-7c91-identity-failure.json"
+  ],
+  "hypothesis": "Failure is specific to cross-process concurrent profile identity initialization rather than world-save or unrelated Foam changes.",
+  "experiment_key": "CI42020924863-job127223188005-original-log-cross-process-profile-id-v1",
+  "resource_key": null,
+  "related_work": [
+    "prompt/coordination/work/INTEGRATION-001/T5-20261105T1146Z-platform-smoke-forensics.json"
+  ],
+  "taken_over_from": [],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42020924863"
+  ],
+  "result": null,
+  "next_step": "Capture failing assertion from original log and distinguish concrete cause from concurrency hypotheses.",
+  "updated_at": "2026-11-05T13:48:00Z"
+}
