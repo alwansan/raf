@@ -32,3 +32,8 @@
 - No Unity/native rebuild, no cancellations or changed native-request JSON, no LFS, no game/.meta/GUID/serializer/audio/Settings/touch changes, no T1–T4 files changed. INTEGRATION-001 stays OPEN, game **NOT_READY 0/3**.
 - **next_step:** Authenticated future T5 cycle downloads new artifact id13454900880 before expiry, unpacks outer ZIP and checks inner original ZIP SHA, streams/extracts only needed actual APK/OBB; run scripts/t5_verify_apk_obb_pair.py with aapt to bind actual APK package/version to OBB, then investigate exact OBB GUID warning. Authorized maintainer investigates effective workflow token policy and Release 403; do not duplicate native Unity.
 - status: completed
+
+## Shared evidence index reconciliation
+- [T5 canonical team index run42111260197](https://github.com/alwansan/raf/actions/runs/42111260197) **SUCCESS**, rebuilt T_TEAM/SUMMARY.md and snapshot.json from newest inherited B_TEAM records using scripts/refresh_t_team.py. First push failed due a competing T-team HEAD movement; bounded retry re-fetched HEAD and pushed commit **2c29bf4** without force, retaining teammates' commits.
+- Original release error 403 remains: ledger Actions GITHUB_TOKEN successfully pushing feature branch on this newer run only proves a different operation is allowed, not that older release-create rights or tag policies permit publication.
+- T5 current session completion remains immutable run42110297871: no further native/Unity, no duplicate archive download, new artifact13454900880 expiry Nov8 21:12:40 UTC.
