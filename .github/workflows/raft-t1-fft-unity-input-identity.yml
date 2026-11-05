@@ -1,6 +1,6 @@
 name: T1 WATER-001 exact Unity FFT sampled input identity
 
-# Opt-in replay session: 20261105T205603Z-T1-chat-94c2d7
+# Opt-in replay session: 20261105T211830Z-T1-chat-c98e42
 on:
   workflow_dispatch:
   push:
@@ -64,6 +64,8 @@ jobs:
           python3 -m unittest discover -s tests -p test_t1_fft_unity_gpu_resource_bridge.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_unity_gpu_result_gate.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_readback_parity.py -v
+          python3 -m unittest discover -s tests -p test_t1_fft_pass0_trace_variant.py -v
+          python3 -m unittest discover -s tests -p test_t1_fft_trace_compare.py -v
           PYTHONPATH=scripts python3 -m unittest discover -s tests -p test_t1_fft_rgba_error_signature.py -v
       - name: Download exact GameCI CLI v0.1.72 binary used in proven test and verify SHA
         shell: bash
@@ -169,7 +171,7 @@ jobs:
           test -f "$VK_DRIVER_FILES"
           python3 -m scripts.t1_fft_vulkan_parity_capture --project t1-original-derived-unity
           python3 -m scripts.t1_fft_pass0_vulkan_trace --project t1-original-derived-unity \
-            --export-private-trace t1-original-derived-unity/T1VulkanCapture/trace.bin
+            --invocation-keys --export-private-trace t1-original-derived-unity/T1VulkanCapture/trace.bin
           python3 - <<'PY'
           from pathlib import Path
           from scripts.t1_fft_pass0_trace_variant import instrument
@@ -179,7 +181,7 @@ jobs:
           pragma, hlsl = candidate.read_text(encoding="utf-8").split("\n", 1)
           if pragma != "#pragma kernel main":
               raise SystemExit("Unexpected private trace entry point")
-          (assets/"T1TracePass0.compute").write_text(pragma + "\n" + instrument(hlsl))
+          (assets/"T1TracePass0.compute").write_text(pragma + "\n" + instrument(hlsl, keyed=True))
           PY
           rm -rf t1-original-derived-unity/_private_vulkan
       - name: Validate privately translated original FFT t0/t1/u2 HLSL resources for first candidate pair
@@ -213,7 +215,7 @@ jobs:
           import json
           from pathlib import Path
           from scripts.t1_fft_readback_parity import PIXEL, SENTINEL, compare_pass, read_image
-          from scripts.t1_fft_trace_compare import SIZE, compare
+          from scripts.t1_fft_trace_compare import INVOCATION_SIZE, compare_invocations
           from scripts.t1_fft_rgba_error_signature import signature
 
           root = Path("t1-original-derived-unity")
@@ -229,6 +231,8 @@ jobs:
           print("RAFT_T1_INPUT_IDENTITY " + json.dumps({
               "unity_backend": backend, "texels_per_input": 32768,
               "source_mismatches": counts[0], "butterfly_mismatches": counts[1]}))
+          if any(counts):
+              raise SystemExit("Sampled input identity failed")
           data = [read_image(root/folder/"pass0.rgba32f", 32768 * 16)
                   for folder in ("T1VulkanCapture", "T1UnityCapture")]
           common = [i for i in range(0, len(data[0]), 16)
@@ -249,9 +253,9 @@ jobs:
           if not trace_parity["match"]:
               raise SystemExit("Unity trace changed pass-zero output")
           try:
-              paired_trace = compare(
-                  read_image(root/"T1VulkanCapture/trace.bin", SIZE),
-                  read_image(unity/"trace.bin", SIZE))
+              paired_trace = compare_invocations(
+                  read_image(root/"T1VulkanCapture/trace.bin", INVOCATION_SIZE),
+                  read_image(unity/"trace.bin", INVOCATION_SIZE))
           except (OSError, ValueError):
               raise SystemExit("Invalid private trace comparison") from None
           print("RAFT_T1_FFT_TRACE_COMPARE " + json.dumps(paired_trace, sort_keys=True))
