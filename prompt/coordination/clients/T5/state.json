@@ -5,19 +5,22 @@
   "session_id": "20261104T2357Z-T5-b12-fixture-7e2",
   "resumed_from_session": null,
   "status": "active",
-  "base_sha": null,
-  "last_commit": null,
-  "updated_at": "2026-11-04T23:58:36.308Z",
+  "base_sha": "711dc94bebe342e07d1f8ffe6e46bc8d79c108b5",
+  "last_commit": "396eab4d3cd8acc0d462e96b748e56537a49bd01",
+  "updated_at": "2026-11-05T00:13:03.950Z",
   "tracks": [
     "INTEGRATION-001",
-    "RENDER-002"
+    "ASSET-RESTORE-001"
   ],
   "work_ids": [
-    "T5-20261104T2357Z-b12-fixture"
+    "T5-20261104T2357Z-b12-fixture",
+    "T5-20261105T0004Z-zip2-render-integration"
   ],
   "run_urls": [
-    "https://github.com/alwansan/raf/actions/runs/41933025319"
+    "https://github.com/alwansan/raf/actions/runs/41937719270",
+    "https://github.com/alwansan/raf/actions/runs/41938979840",
+    "https://github.com/alwansan/raf/actions/runs/41939143108"
   ],
-  "next_step": "Repair exact-production B12+B18 renderer/loaded-compute diagnostic CLR harness integration; test real C# execution without relaxing production assertions; document verified CI versus device limits.",
+  "next_step": "ZIP2 graphics source stage CI41939143108 PASS real 111533516B original resources.assets; next test extra owners batch, coordinate with T1/T3 for Unity rendering. T3 resolved B12 CI41937719270. Not device proof.",
   "memory_path": "prompt/coordination/clients/T5/MEMORY.md"
 }
