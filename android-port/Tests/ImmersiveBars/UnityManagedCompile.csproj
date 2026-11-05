@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <DefineConstants>UNITY_ANDROID;UNITY_5_3_OR_NEWER</DefineConstants>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <NoWarn>0618;0672;CS1701;CS1702</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../../Runtime/Platform/AndroidImmersiveSystemBars.cs" />
+    <Compile Include="../../Runtime/Platform/AndroidSystemBarPolicy.cs" />
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(OriginalManagedDir)/UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AndroidJNIModule">
+      <HintPath>$(OriginalManagedDir)/UnityEngine.AndroidJNIModule.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>
