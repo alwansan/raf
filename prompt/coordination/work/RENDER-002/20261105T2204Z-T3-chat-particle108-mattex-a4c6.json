@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T2204Z-T3-chat-particle108-mattex-a4c6",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "base_sha": "8b8519327c887b59893fca43a44d9a764fa639eb",
+  "status": "active",
+  "updated_at": "2026-11-05T22:04:00Z",
+  "track": "original exact ParticleShader48 108-use Renderer↔Material↔Texture slot original binding",
+  "hypothesis": "The unique original 108-slot ParticleSystemRenderer Shader48 has a bounded, authentic set of source Material21 objects and texture PPtrs; determine null vs bound original textures and UV/keyword coverage before comparing same-export full-native GUID; never infer real phone texture loss without a same-instance Android export.",
+  "experiment_key": "T3-ZIP2-15964-6scene-4owner-source108-particleShader48-material-texenv-private-map-source-bound-v1",
+  "resource_key": "t3-original-6scene-4owner-sourceonly-22min",
+  "intended_files": [
+    "scripts/t3_original_renderer_shader_impact.py",
+    "tests/test_t3_original_renderer_shader_impact.py",
+    "scripts/t3_original_particle_material_texenv.py",
+    "tests/test_t3_original_particle_material_texenv.py",
+    ".github/workflows/raft-t3-original-renderer-shader-impact.yml",
+    "prompt/coordination/work/RENDER-002/20261105T2204Z-T3-chat-particle108-mattex-a4c6.json",
+    "prompt/coordination/clients/T3/sessions/20261105T2204Z-T3-chat-particle108-mattex-a4c6.md",
+    "prompt/coordination/experiments/T3/20261105T2204Z-T3-chat-particle108-mattex-a4c6.json",
+    "prompt/coordination/B_TEAM/events/T3/20261105T2204Z-T3-chat-particle108-mattex-a4c6.json",
+    "docs/T3_ORIGINAL_PARTICLE108_MATERIAL_TEXENV_2026-11-05.md"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/T3/sessions/20261105T214810Z-T3-chat-selective-colormask-a82d.md",
+    "prompt/coordination/clients/T3/sessions/20261105T213100Z-T3-scheduled-clstage-8b4f.md"
+  ],
+  "next_step": "Add private-only shader→Particle Material set source join after immutable 6scene4owner SHA, exact type21 m_SavedProperties.m_TexEnvs parsing with existing B05 normalizer; publish safe counters for distinct Material objects, Texture PPtr bounds/null, UV validity and per-Renderer multiplicity. Test adversarial fixtures; integrate source-only existing original workflow once, no AssetRipper full export or Unity build.",
+  "run_urls": [],
+  "result": null
+}
