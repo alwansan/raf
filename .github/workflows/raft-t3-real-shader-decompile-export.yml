@@ -1,4 +1,7 @@
 name: T3 RENDER-002 authentic Shader48 USC Decompile versus default Dummy ShaderLab
+# Real output diagnosis: previous CI42021786476 export completed, strict
+# per-Pass parser inconclusive; classify missing/invalid shaders and fallbacks
+# without guessing GUIDs or modifying shared game sources.
 # Exact original 12 provider experiment: modify only isolated runner Program.cs
 # from pinned AssetRipper default Dummy to explicit unstable Decompile.
 on:
@@ -37,6 +40,7 @@ jobs:
           python3 -m unittest discover -s tests -p 'test_t3_material_shader_same_export.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_original_shader_pass_topology.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_same_export_shader_pass_topology.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_decompile_shader_output_quality.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_original_material_shader_target.py' -v
           python3 -m unittest discover -s tests -p 'test_a13_exported_material_shader_guids.py' -v
           python3 -m unittest discover -s tests -p 'test_b21_stage_light_lineage.py' -v
@@ -195,6 +199,15 @@ jobs:
           PY
             exit 2
           fi
+      - name: Classify exact source-linked Decompile shader output GUIDs, malformed ShaderLab and fallback programs
+        run: |
+          set -euo pipefail
+          python3 -m scripts.t3_decompile_shader_output_quality \
+            --original "$RUNNER_TEMP/b21-original" \
+            --project "$RUNNER_TEMP/b21-private-export/ExportedProject" \
+            --w1-trace "$RUNNER_TEMP/b21-w1-private.json" \
+            --b02-trace "$RUNNER_TEMP/b21-b02-private.json" \
+            --out "$RUNNER_TEMP/t3-USC-output-quality-safe.json"
       - name: Prove actual Shader48 to ShaderLab per-object Pass deficit after exact Material PPtr and GUID acceptance
         run: |
           set -euo pipefail
@@ -209,6 +222,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: t3-authentic-original-ShaderUSC-Decompile-Pass-evidence-${{ github.run_id }}
-          path: ${{ runner.temp }}/t3-USC-shader-decompile-safe.json
+          path: |
+            ${{ runner.temp }}/t3-USC-shader-decompile-safe.json
+            ${{ runner.temp }}/t3-USC-output-quality-safe.json
           retention-days: 7
           if-no-files-found: ignore
