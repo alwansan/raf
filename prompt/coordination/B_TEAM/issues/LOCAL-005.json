@@ -46,7 +46,10 @@
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B19_SAVE_HARDLINK_ALIAS_GUARD_2026-11-04.md",
     "https://github.com/alwansan/raf/actions/runs/41939908432",
     "https://github.com/alwansan/raf/actions/runs/41939846508",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_RGD_LOAD_COMPAT_2026-11-05.md"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_RGD_LOAD_COMPAT_2026-11-05.md",
+    "https://github.com/alwansan/raf/commit/ea98fb0fe5ca393d31468df752a262ef777a2fc4",
+    "https://github.com/alwansan/raf/actions/runs/41943357681",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_WORLD_COMPLETION_TRACE_2026-11-05.md"
   ],
   "remaining": [
     "Original Cheat.AllowCheatsForLocalPlayer SteamUser.GetSteamID direct object call now source-guarded in B50 2bb6c2; no native/phone verification. Do not infer all Steam callbacks are removed.",
@@ -63,7 +66,8 @@
     "B14 original ZIP2-managed source proves SaveGame direct call order SaveWorld -> SaveUser -> SteamUserStats.StoreStats, exactly one each, SaveUser/World each call original Save; Android stats-only guard retains order and has no other direct Steam/PlayFab in these three methods. Strict source CI41929777877 SUCCESS 9/9 synthetic plus authentic original. File .rgd durability and phone world create/save/reopen NOT proven.",
     "B07 source-integrated iterator firstMoveNext diagnostics now pass real adapted original managed .NET compile and RPC/identity harness (CI41929721761); strict adapted SHA manifest parity CI41929910850 passes after stale-manifest incident closure. No Unity IL2CPP/APK/device or real .rgd roundtrip evidence.",
     "B19 SaveAndLoad original C# and .meta source-stage hardlink alias guard is SOURCE_FIXED with CI41929845587 15/15 path tests plus authentic 16 path expressions; synthetic safety proof only, not root cause of APK86 world/Steam stats or .rgd device result.",
-    "T4 exact original Load<T> (CI41939908432 PASS, original ZIP2 DLL SHA verified): Deserialize=1, catch=1, FileManager=1, Binder assignments=0; source-only Android Load.caughtException diagnostic integrated (original adapted C# compile CI41939846508 PASS); original Data.rgd compatibility and on-device create/save/reload are unverified. Keep LOCAL-005 OPEN, NOT_READY 0/3, preserve Steam/sound/Settings, defer touch."
+    "T4 exact original Load<T> (CI41939908432 PASS, original ZIP2 DLL SHA verified): Deserialize=1, catch=1, FileManager=1, Binder assignments=0; source-only Android Load.caughtException diagnostic integrated (original adapted C# compile CI41939846508 PASS); original Data.rgd compatibility and on-device create/save/reload are unverified. Keep LOCAL-005 OPEN, NOT_READY 0/3, preserve Steam/sound/Settings, defer touch.",
+    "T4 original coroutine completion assignment marker is source-integrated: exact original write preserved; 10/10 Python + managed CLR false/true semantic branches PASS, and SHA-authenticated original DLL private method read-only variant PASS (CI41943357681). The original ILSpy class SHA differs between B07 and T4 on the same verified DLL, and T4 run reports production_adapter_exercised=false; Android Unity/IL2CPP/native/device playability and real .rgd roundtrip NOT tested. Do not lower production source gate; maintain LOCAL-005 OPEN."
   ],
   "acceptance": [
     "دخول عالم جديد محلي قابل للعب بلا Steam أو سيرفر خارجي",
@@ -71,5 +75,5 @@
     "لا يكفي إخفاء رسالة الاتصال"
   ],
   "updated_by": "T4",
-  "updated_at": "2026-11-05T00:20:00Z"
+  "updated_at": "2026-11-05T00:45:00Z"
 }
