@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "session_id": "20261105T0023Z-T2-foam-texture-identity",
+  "issue_id": "WATER-001",
+  "hypothesis": "SHA-pinned original Foam m_TextureParams m_NameIndex can resolve six original per-stage symbols and enable literal identity comparison to four translated SPIR-V separate_images symbol lists without leaking names or inventing Unity texture upload mappings.",
+  "source_commit": "5dd02e7931aedfbb92c5cbcf3cc10ac1a6f9fd7c",
+  "input_hashes": [
+    "zip2:15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "sharedassets0.assets:0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "Foam PathID2420:67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1"
+  ],
+  "tool_versions": {
+    "UnityPy": "1.25.4",
+    "spirv-cross": "ubuntu-24.04 apt pinned by available repository"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p 'test_t2_foam_texture_identity.py' -v",
+    "python3 -m scripts.t2_foam_texture_identity --source $RUNNER_TEMP/t2-foam-source --packet $RUNNER_TEMP/t2-foam-private-packet --manifest $RUNNER_TEMP/t2-foam-manifest.json --out $RUNNER_TEMP/t2-texture-identity-safe.json"
+  ],
+  "negative_controls": [
+    "missing/unknown original texture registry indices",
+    "invalid or duplicate original symbol",
+    "invalid original sampler/index numeric types",
+    "invalid/duplicate translated image name and binding",
+    "mismatched stage resource counts",
+    "zero literal match must not be misreported as upload fix"
+  ],
+  "workflow_path": ".github/workflows/raft-t2-foam-member-abi.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41941354379",
+  "artifact_urls": [],
+  "budget": "same isolated SHA-pinned original 115978112-byte provider; 25-minute CI timeout; no Unity/native build",
+  "status": "running",
+  "observed_result": null,
+  "rejected_hypotheses": [],
+  "limitations": [
+    "Name equality alone cannot authenticate shader material property upload or sampler state",
+    "No original shader import, GPU numeric comparison, or phone pixels",
+    "Artifact aggregates must not include original symbol values"
+  ],
+  "integration_commit": "5dd02e7931aedfbb92c5cbcf3cc10ac1a6f9fd7c",
+  "next_step": "Read source-authentic CI output, correct any actual schema assumption with evidence; then work on authenticated private ShaderLab/material sampler mapping."
+}
