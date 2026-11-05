@@ -1168,6 +1168,38 @@
       "_record_path": "../B_TEAM/resources/T2-foam-member-abi-namebridge.json"
     },
     {
+      "id": "T2-foam-original-RT-return-local-writer-provenance",
+      "owner": "T2",
+      "issue_id": "WATER-001",
+      "title": "Original Foam RenderTexture return uses a local with exactly one stloc preceded by call",
+      "kind": "sha_original_managed_foam_rendertexture_return_local_writer_provenance",
+      "stages": {
+        "acquisition": "ZIP2_ORIGINAL_MANAGED_DLL_SHA_0a6f0527_BYTES_3211776_VERIFIED",
+        "extraction": "EXACT_TYPED_STELEM_REF_RETURNING_RENDER_TEXTURE_METHOD_MATCHES_ONE_ORIGINAL_SHA_MANAGED_BODY",
+        "reconstruction": "ONE_SEQUENTIAL_RET_PREVIOUS_LDLOC;_ONE_EXACT_TYPED_RENDER_TEXTURE_RETURN_LOCAL_STLOC_PREVIOUS_CALL",
+        "binding": "CALL_ADJACENCY_ONLY_NOT_TYPED_STACK_SOURCE_OR_NONNULL_PROOF;_FOUR_INDEX_COMPILED_BOUNDS_PRIOR_PROVEN",
+        "integration": "SHA_ORIGINAL_CECIL_CI42076713202_42077586809_42078263113_SUCCESS_NO_GAME_SHADER_EDITS",
+        "device": "NOT_TESTED"
+      },
+      "observed": {
+        "source_return_sites": 1,
+        "return_site_previous_opcode": "ldloc",
+        "return_local_is_rt": true,
+        "exact_local_stloc_sites": 1,
+        "stloc_predecessor_opcode": "call",
+        "stloc_is_branch_target": false,
+        "source_return_nonnull_verified": false,
+        "android_water_pixels_verified": false
+      },
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42076713202",
+        "https://github.com/alwansan/raf/actions/runs/42077586809",
+        "https://github.com/alwansan/raf/actions/runs/42078263113"
+      ],
+      "next_step": "Check real prior call declared return and true typed stack into original stloc; do not conflate source structural facts with Unity pixels. WATER-001 OPEN NOT_READY0/3.",
+      "_record_path": "../B_TEAM/resources/T2-foam-original-RT-return-local-writer-provenance.json"
+    },
+    {
       "id": "T2-foam-original-RenderTexture-return-body-identity",
       "owner": "T2",
       "issue_id": "WATER-001",
@@ -6128,6 +6160,22 @@
       "_record_path": "../B_TEAM/events/T2/20261105T1749Z-foam-Cecil-assembly-scope-synthetic.json"
     },
     {
+      "id": "T2-20261105T1751Z-foam-rt-return-one-local-call-preceding",
+      "owner": "T2",
+      "origin": "chat",
+      "session_id": "20261105T1736Z-T2-chat-ret-reason-28ce",
+      "issue_id": "WATER-001",
+      "type": "source_original_rt_return_local_writer_instruction_provenance",
+      "at": "2026-11-05T17:51:00Z",
+      "summary": "Original SHA-managed Foam source CIs42076713202,42077586809,42078263113 SUCCESS: exact RT-return method sole sequential ret immediately loads local RenderTexture, with exactly one matching stloc, and that stloc is non-branch target immediately preceded by call opcode. The call's actual typed result to stloc, runtime non-null value and graphics are NOT proven; original typed direct-null/newobj/call writer census zero, one unresolved. Synthetic negative controls pass; source private symbols/IL/index literals withheld. WATER-001 OPEN NOT_READY0/3.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42076713202",
+        "https://github.com/alwansan/raf/actions/runs/42077586809",
+        "https://github.com/alwansan/raf/actions/runs/42078263113"
+      ],
+      "_record_path": "../B_TEAM/events/T2/20261105T1751Z-foam-rt-return-one-local-call-preceding.json"
+    },
+    {
       "id": "T3-20261105-0002-render-harness-result-and-export-start",
       "owner": "T3",
       "session_id": "20261104T2354Z-T3-render-harness",
@@ -7187,7 +7235,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "35b627153035ee4f54838902d35c28ab9211b39fc286130d5987468ec62588ae",
+  "source_input_sha256": "f92ba06b44f8ae3518d2abb23b71cc2b4dec9f78ad3e8d6181c3fad42b460906",
   "generation": "T-2026-11-05",
-  "input_sha256": "e18aadf66b95769c7fb3d73c84518b5a21f60a683f51a416b4748454fd9e2820"
+  "input_sha256": "dd88b000ede4580f8c078d5edbdfc50636c6d7aa4f331590d925b21b9fadf31c"
 }
