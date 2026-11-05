@@ -88,6 +88,16 @@ class NativeTopShaderJoinTests(unittest.TestCase):
         self.assertIsNone(result["native_high_use_shaderlab_has_dummy_exporter_marker"])
         self.assertEqual(result["native_original_scene_shader_slots_to_unity_builtin"],921)
 
+    def test_top_builtin_null_or_zero_guid_cannot_be_called_valid_engine_shader(self):
+        valid="0000000000000000e000000000000000"
+        for fid,guid in ((0,valid),(0,"0"*32),(46,"0"*32),(-1,valid)):
+            args=list(fixture(top_builtin=True))
+            args[3]["objects"][0]["export"]={
+                "file_id":fid,"guid":guid,"type":0}
+            with self.subTest(fileid=fid,zero_guid=guid=="0"*32):
+                with self.assertRaises(ValueError):
+                    t3.strict_native_top_join(*args)
+
     def test_missing_actual_exported_top_shader_meta_is_rejected(self):
         args=list(fixture())
         args[4].pop(f"{1:032x}")
