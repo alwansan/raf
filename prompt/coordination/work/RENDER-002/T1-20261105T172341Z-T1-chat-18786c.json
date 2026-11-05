@@ -1,0 +1,19 @@
+{
+  "id": "20261105T172341Z-T1-chat-18786c",
+  "session_id": "20261105T172341Z-T1-chat-18786c",
+  "origin": "chat",
+  "owner": "T1",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "base_sha": "a8f2248332373548d25b66f2b6aec4c47de6604a",
+  "updated_at": "2026-11-05T17:23:41.357Z",
+  "intended_files": [
+    "scripts/t1_spirv_interface_component_audit.py",
+    "tests/test_t1_spirv_interface_component_audit.py",
+    ".github/workflows/raft-t1-spirv-interface-component-audit.yml"
+  ],
+  "experiment_key": "spirv-vs-ps-numeric-component-linkage-independent-source-free",
+  "resumed_from_sessions": [
+    "20261105T1715Z-T3-chat-ps-readmask-spv-5e84"
+  ]
+}
