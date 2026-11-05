@@ -10,6 +10,31 @@ from pathlib import Path
 SCOPE = {"SAVEANDLOAD", "OTHER_ORIGINAL_CLASS", "EXTERNAL_OR_UNRESOLVED"}
 ARITY = {"ZERO", "ONE", "MULTIPLE"}
 KIND = {"INSTANCE_CALL", "STATIC_CALL"}
+FACTORY_FIELDS = (
+    "factory_lexical_return_sites",
+    "factory_return_preceded_by_null_literal",
+    "factory_return_preceded_by_derived_local",
+    "factory_return_preceded_by_derived_field",
+    "factory_return_preceded_by_derived_call",
+    "factory_return_preceded_by_derived_constructor",
+    "factory_return_preceded_by_other_or_unknown",
+    "factory_derived_rgd_local_slot_count",
+    "factory_direct_derived_rgd_constructor_sites",
+    "factory_direct_derived_rgd_returning_call_sites",
+    "factory_conditional_branch_sites",
+    "factory_throw_or_rethrow_sites",
+    "factory_null_literal_load_sites",
+    "factory_all_return_paths_proven",
+)
+FACTORY_RETURN_PARTITION = (
+    "factory_return_preceded_by_null_literal",
+    "factory_return_preceded_by_derived_local",
+    "factory_return_preceded_by_derived_field",
+    "factory_return_preceded_by_derived_call",
+    "factory_return_preceded_by_derived_constructor",
+    "factory_return_preceded_by_other_or_unknown",
+)
+
 WRITE_KEYS = (
     "user_original_direct_write_sites",
     "user_field_writes_in_instance_constructor",
@@ -42,7 +67,7 @@ TOP = {
     "world_producer_argument_count_category",
     "world_producer_invocation_kind",
     "world_producer_compiled_method_body_found",
-    "field_write_breakdown", *MUST_FALSE
+    "field_write_breakdown", "world_factory_return_metadata", *MUST_FALSE
 }
 
 
@@ -68,6 +93,30 @@ def validate(result):
     if (result["world_producer_declaring_scope"] == "EXTERNAL_OR_UNRESOLVED"
             and result["world_producer_compiled_method_body_found"]):
         raise ValueError("external_method_cannot_claim_pinned_original_body")
+    factory = result["world_factory_return_metadata"]
+    if not isinstance(factory, dict) or set(factory) != set(FACTORY_FIELDS):
+        raise ValueError("unknown_original_factory_return_contract")
+    for key in FACTORY_FIELDS:
+        if key == "factory_all_return_paths_proven":
+            if factory[key] is not False:
+                raise ValueError("fabricated_control_flow_path_proof")
+            continue
+        if type(factory[key]) is not int or not 0 <= factory[key] <= 10000:
+            raise ValueError("invalid_original_factory_site_count")
+    returns = factory["factory_lexical_return_sites"]
+    if returns == 0 or sum(factory[k] for k in FACTORY_RETURN_PARTITION) != returns:
+        raise ValueError("unaccounted_original_factory_lexical_return")
+    if result["world_producer_compiled_method_body_found"] is not True:
+        raise ValueError("factory_returns_without_exact_original_body")
+    if (factory["factory_return_preceded_by_null_literal"] >
+            factory["factory_null_literal_load_sites"]):
+        raise ValueError("null_return_without_literal_site")
+    if (factory["factory_return_preceded_by_derived_constructor"] >
+            factory["factory_direct_derived_rgd_constructor_sites"]):
+        raise ValueError("constructor_return_without_constructor")
+    if (factory["factory_return_preceded_by_derived_call"] >
+            factory["factory_direct_derived_rgd_returning_call_sites"]):
+        raise ValueError("call_return_without_call_site")
     b = result["field_write_breakdown"]
     if not isinstance(b, dict) or set(b) != set(WRITE_KEYS):
         raise ValueError("unrecognized_field_writer_contract")
@@ -100,6 +149,11 @@ def validate(result):
         "world_producer_invocation": result["world_producer_invocation_kind"],
         "world_producer_original_method_body_exists":
             result["world_producer_compiled_method_body_found"],
+        "source_authentic_world_factory_return_site_categories": {
+            key: factory[key] for key in FACTORY_FIELDS
+            if key != "factory_all_return_paths_proven"
+        },
+        "factory_control_flow_paths_or_runtime_values_proven": False,
         "saveuser_direct_writer_method_categories": {
             key: b[key] for key in (
                 "user_field_writes_in_instance_constructor",
