@@ -10,6 +10,8 @@ def ordered_bits(bits):
     return (~bits & 0xffffffff) if bits & 0x80000000 else (bits | 0x80000000)
 
 def signature(expected, observed, *, atol=1e-5, rtol=1e-4):
+    if not all(math.isfinite(x) and x >= 0 for x in (atol, rtol)):
+        raise ValueError("RGBA32F tolerances must be nonnegative and finite")
     if not expected or not observed:
         raise ValueError("RGBA32F captures must contain at least one pixel")
     if len(expected) != len(observed) or len(expected) % 16:
