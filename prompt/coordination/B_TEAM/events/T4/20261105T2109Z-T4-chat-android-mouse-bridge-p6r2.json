@@ -1,0 +1,18 @@
+{
+  "id": "T4-20261105T2109Z-T4-chat-android-mouse-bridge-p6r2",
+  "owner": "T4",
+  "session_id": "20261105T2109Z-T4-chat-android-mouse-bridge-p6r2",
+  "origin": "chat",
+  "issue_id": "INPUT-005",
+  "type": "integration",
+  "summary": "Android-only original legacy Mouse X/Y -> View.pointer capture source integrated with fail-closed original ZIP2 SHA/4+4+2 call-site gate. CI42111826974 SUCCESS: 20 Python controls +13 managed motion controls + Unity2021 managed compile + private exact original ILSpy patch 5 files. Android original startup CI42111311168 SUCCESS. No Unity native build or device acceptance; INPUT-005 remains OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42111826974",
+    "https://github.com/alwansan/raf/actions/runs/42111311168",
+    "https://github.com/alwansan/raf/commit/22213d5065d142ce182fa8b98edf245f2113a21b",
+    "https://github.com/alwansan/raf/commit/86ba437270ee9ffaebb1f3739c3cb68f4790eac7",
+    "https://github.com/alwansan/raf/commit/73777a9887dbdde4d688bb1045bb4709d2a6a5e7",
+    "prompt/coordination/experiments/T4/20261105T2109Z-T4-chat-android-mouse-bridge-p6r2.json"
+  ],
+  "at": "2026-11-05T21:22:00Z"
+}
