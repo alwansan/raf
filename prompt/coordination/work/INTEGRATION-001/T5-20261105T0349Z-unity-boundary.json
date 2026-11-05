@@ -6,7 +6,7 @@
   "issue_id": "INTEGRATION-001",
   "track": "Unity graphics original-owner import integration",
   "approach": "Verify repaired rollback CI, inspect current Unity graphics hydration workflow and its exact source owners; identify and if possible fix a concrete integration gap without overlapping T1-T4.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "b780c69bbf786fd30ef5693768a59305594fc30f",
   "intended_files": [
     "prompt/coordination/clients/T5/",
@@ -24,7 +24,7 @@
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41958001501"
   ],
-  "result": null,
-  "next_step": "Inspect actual Unity workflow/CI and implement scoped useful validation if a gap is proven.",
-  "updated_at": "2026-11-05T03:49:00Z"
+  "result": "Verified CI41958001501 success at exact fix SHA 1eec3608. Inspected current native workflow: W1 stages SHA-authenticated 3 scene owners and engine resources; full graphics hydrate_render_payloads --apply --release-cache runs BEFORE Unity export and can still fetch remaining graphics via Git LFS. T5's three-owner subset CI is not full native import. No independent new native execution or actual Unity import proof. Avoided duplicate build and redundant ZIP2 staging.",
+  "next_step": "Obtain native run/Unity activation evidence and identify bounded missing owner/import failure; coordinate T1/T3 same-instance material/compute validation rather than rerun 3-owner SHA checks.",
+  "updated_at": "2026-11-05T03:58:00Z"
 }
