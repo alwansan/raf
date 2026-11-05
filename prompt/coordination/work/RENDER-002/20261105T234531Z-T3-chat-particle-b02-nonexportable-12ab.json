@@ -6,12 +6,12 @@
   "session_id": "20261105T234531Z-T3-chat-particle-b02-nonexportable-12ab",
   "issue_id": "RENDER-002",
   "base_sha": "b6a66b64875ec053c05f5204e0cded84d886731a",
-  "status": "active",
-  "updated_at": "2026-11-05T23:55:51.915Z",
+  "status": "completed",
+  "updated_at": "2026-11-05T23:56:50.557Z",
   "track": "T3 exact original ParticleShader48 one missing B02 Texture2D28 export trace classification in disposable C#",
   "hypothesis": "One of 3 original class28 Texture2D targets has no B02 exported trace despite 10 nonnull exported Material TexEnv slots. B02 intentionally skips nonexportable export collections; classify exact missing source identity as NON_EXPORTABLE_COLLECTION vs ABSENT_FROM_EXPORT_COLLECTION without disclosing private IDs or inventing a missing APK texture.",
   "experiment_key": "T3-SHA15964-particle108-1missing-B02-Texture2D-class28-nonexportable-vs-uncollected-actual-one-export-v1",
-  "resource_key": "T3-own-dedicated-12owner-one-stream-B02-collection-classification-50min",
+  "resource_key": null,
   "taken_over_from": [
     "prompt/coordination/clients/T3/sessions/20261105T232821Z-T3-chat-particle108-sameexport-68c4.md",
     "https://github.com/alwansan/raf/actions/runs/42130529677"
@@ -31,7 +31,11 @@
     ".github/workflows/raft-t3-ledger-refresh.yml",
     "prompt/coordination/discussions/RENDER-002/20261105T234531Z-T3-chat-particle-b02-nonexportable-12ab-to-T5.md"
   ],
-  "result": null,
-  "run_urls": [],
-  "next_step": "CI42132262184 SUCCESS verifies missing original Particle Texture2D target belongs to AssetRipper nonexportable collection. Attach source-evidence canonical refresh and then close; actual nonexportable runtime export pointer parity remains follow-up."
+  "result": "Authentic pinned SHA ZIP2 original ParticleShader48 108 Renderer slots, five source Material21, three source Texture2D28, one source external .resS verified. Real same AssetRipper export B02 source 2/3 exportable; the sole third source Texture2D is PROVEN present only in nonexportable AssetRipper collection. CI42132262184 SUCCESS 100/100 source-free controls plus actual export; 5/5 Material, 9/10 exact export texture PPtrs, 10/10 UV, 0 null/wrong GUID; tenth actual nonnull Material PPtr not yet matched to nonexportable source runtime pointer. Canonical T-team ledger CI42133120833 SUCCESS. RENDER-002 OPEN, Android graphics not tested.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42132262184",
+    "https://github.com/alwansan/raf/actions/runs/42133120833"
+  ],
+  "next_step": "Use disposable exact B02/W1 private instrumenter on the nonexportable source Texture2D to capture container.CreateExportPointer (fail closed) and compare it with actual exported tenth nonnull Material TexEnv PPtr. If runtime/builtin pointer matches, source→export original mapping may be fully faithful; still needs T5 full native/Adreno fire/smoke pixel proof. Do NOT inject fake/opaque texture.",
+  "integration_commit": "aeca9d9c39132a448cf15ca3b357369deb6a7a4f"
 }
