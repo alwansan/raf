@@ -182,7 +182,12 @@ def run_original(source: Path, runner: Path) -> dict:
                          "1024", "1024", str(SEED), "1", "rgba32f"] +
                         ([] if mode == "baseline" else ["--t1-" + mode.replace("_", "-")]))
                 # Keep all original bytecode and image data private, even on failure.
-                output = private_command(args, timeout=110).decode("utf-8", "strict")
+                try:
+                    output = private_command(args, timeout=110).decode("utf-8", "strict")
+                except ValueError as exc:
+                    raise ValueError("T1 bounded original program pair=" + str(first) +
+                                     " profile=" + mode +
+                                     " CPU Vulkan runner failed; no private shader data disclosed") from exc
                 parsed = parse_two_pass_result(output)
                 if (not parsed["within_selected_tolerance"]
                         or parsed["input_seed"] != SEED
