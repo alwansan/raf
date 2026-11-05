@@ -3,16 +3,15 @@
   "session_id": "20261105T211830Z-T1-chat-c98e42",
   "origin": "chat",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "2c29bf4bd5f5d224bd5238c4c665846a14562631",
-  "intended_files": [
-    "scripts/t1_fft_pass0_trace_variant.py",
-    "scripts/t1_fft_pass0_vulkan_trace.py",
-    "tests/test_t1_fft_pass0_trace_variant.py",
-    "android-port/Experiments/T1/T1PrivateFftInputIdentityTests.cs",
-    ".github/workflows/raft-t1-fft-unity-input-identity.yml"
-  ],
+  "intended_files": [],
   "experiment_key": "fft-pair0-invocation-v2-private",
   "resource_key": "raft-native-engine-feature/android-native-port",
-  "updated_at": "2026-11-05T21:18:30Z"
+  "updated_at": "2026-11-05T21:18:30Z",
+  "source_commit": "413538f60a02c480a0aa5f99251e34ba7f333c7c",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42111819138"
+  ],
+  "next_step": "Read the paired per-site counters only after sampled-input identity and both instrumentation output-parity gates. If compilation or a gate fails, diagnose that first. No Adreno inference."
 }
