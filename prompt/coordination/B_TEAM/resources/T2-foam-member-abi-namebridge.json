@@ -1,0 +1,35 @@
+{
+  "id": "T2-foam-member-abi-namebridge",
+  "title": "T2 authentic Foam 2-pass CB member/count and source-to-HLSL/SPIRV name bridge (bounded)",
+  "kind": "original_shader_constant_buffer_abi_evidence",
+  "source": {
+    "provider": "zip2 authenticated original",
+    "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "path": "Raft_Data/sharedassets0.assets [original Shader PathID2420]",
+    "bytes": 115978112,
+    "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3"
+  },
+  "stages": {
+    "acquisition": "EXACT_ZIP2_SHA_SIZE_VERIFIED_NO_LFS",
+    "extraction": "SOURCE_CB8_MEMBERS_AND_PRIVATE_CB_SYMBOLS_AUTHENTICATED",
+    "reconstruction": "FOUR_B20_VERIFIED_TRANSLATED_PROGRAMS_REFERENCE_ONLY",
+    "binding": "8_8_HLSL_SPIRV_SYMBOL_EQUAL_BUT_0_8_SOURCE_HLSL_SYMBOL_EQUAL;UNITY_UPLOAD_UNVERIFIED",
+    "integration": "SOURCE_ABI_PROBE_AND_PRIVATE_WORKFLOW_VERIFIED_NOT_SHADERLAB_OR_GAME",
+    "device": "NOT_TESTED"
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41937996942",
+    "https://github.com/alwansan/raf/actions/runs/41938551022",
+    "https://github.com/alwansan/raf/actions/runs/41938898381",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_MEMBER_ABI_NAME_BRIDGE_2026-11-05.md",
+    "https://github.com/alwansan/raf/commit/bed03ac405a628396f12e9ad1ecd5dcc5b690820"
+  ],
+  "remaining": [
+    "Prove source m_Index units, source-to-translated individual member offsets/types/usage",
+    "Prove Unity constant buffer aliases/upload with authentic original material/property semantics",
+    "Construct exact two-pass private ShaderLab and verify pass, sampler, material GUID, Unity import and Adreno pixels",
+    "WATER-001 stays OPEN; FFT and Spectrum remain independent"
+  ],
+  "updated_by": "T2",
+  "updated_at": "2026-11-05T00:08:00Z"
+}
