@@ -1,0 +1,14 @@
+{
+  "id": "20261105T121028Z-T1-parity-oracle",
+  "owner": "T1",
+  "session_id": "20261105T121028Z-T1-parity-oracle",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "The existing Unity run uses 1024×1 generated textures and the Vulkan role test uses 1024×1024 seed 19. Existing outputs cannot establish parity. Added a standalone private readback comparator requiring byte-identical finite source and butterfly inputs and independently checking both passes for nonempty matching write coverage, finite channels and numeric tolerance. Three local unittest cases passed.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42019283679",
+    "https://github.com/alwansan/raf/actions/runs/41939314440",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/t1_fft_readback_parity.py"
+  ],
+  "at": "2026-11-05T12:11:55.110Z"
+}

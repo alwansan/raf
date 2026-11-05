@@ -3,11 +3,17 @@
   "issue_id": "WATER-001",
   "owner": "T1",
   "session_id": "20261105T121028Z-T1-parity-oracle",
-  "status": "active",
+  "status": "paused",
   "baseline_sha": "9fcaab52bdff0b5616d146ee29883741f40070c3",
   "taken_over_from": [
     "20261105T111600Z-T1-private-fft-gpu-dispatch",
     "https://github.com/alwansan/raf/actions/runs/42019283679"
   ],
-  "approach": "Audit input, dispatch and readback contracts before comparing licensed Unity output with independent original-DXBC Vulkan output."
+  "approach": "Audit input, dispatch and readback contracts before comparing licensed Unity output with independent original-DXBC Vulkan output.",
+  "files": [
+    "scripts/t1_fft_readback_parity.py",
+    "tests/test_t1_fft_readback_parity.py"
+  ],
+  "result": "The existing Unity run uses 1024×1 generated textures and the Vulkan role test uses 1024×1024 seed 19. Existing outputs cannot establish parity. Added a standalone private readback comparator requiring byte-identical finite source and butterfly inputs and independently checking both passes for nonempty matching write coverage, finite channels and numeric tolerance. Three local unittest cases passed.",
+  "next_step": "Instrument both private producers to consume identical RGBA32F inputs, verify row order and per-pass sentinel initialization, and capture both stages privately. Run authenticated pair 0/1 once under Unity and Vulkan. This checkpoint includes only synthetic comparator tests, no real parity or Android evidence."
 }
