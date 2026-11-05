@@ -1,3 +1,5 @@
+> **تحديث المالك، 5 نوفمبر 2026.** الدردشة العامة تبقى في مكانها (Stay in Chat). الدردشة والمهمة المجدولة تتشاركان هوية العامل وتكتبان في ملفات جلسات مستقلة. تتقدم كل دورة في نطاق مختلف عند وجود تداخل. [بروتوكول الدردشة والجدولة](CHAT_AND_SCHEDULE_AR.md) هو المرجع الحالي عند تعارض تعليمات الذاكرة أو حالة الجلسة أدناه. أذن المالك باستخدام REA والأدوات المفيدة وتجارب GitHub Actions وفق سياسة الفريق.
+
 > T1–T5 الأسماء الفعلية؛ Tn مجردplaceholder للقالب. ملفاتissues/resources/events فيB_TEAM مقصودة لإبقاء السجل القانوني نفسه، ولا تعني عملB.
 
 # قوالب فريق T — لا تنشئ نتائج وهمية
@@ -32,3 +34,6 @@
 
 ## discussions وincidents
 عنوان/author/session/issue/date/sourceSHA/reply_to، السؤال أوالفرضية، الدليل، المطلوب أوالقرار، حالةالحوار والخطوةالتالية. العطللهimpact وrecovery وclosed_reason. ملفمستقل لكلرسالة/عطل.
+
+## نقاط حفظ الدردشة والجدولة
+ملف sessions/<session_id>.md هو نقطة حفظ الدورة. الحقول المطلوبة origin وsession_id وresumed_from_session(s) وbase_sha وstatus وwork_ids وrun_urls وnext_step. استخدم chat أو scheduled في origin. في work أضف experiment_key وresource_key عند اللزوم، وwaiting_ci عند انتظار تشغيل معروف مع رابطه. اتبع بروتوكول الدردشة والجدولة قبل العمل والدمج.
