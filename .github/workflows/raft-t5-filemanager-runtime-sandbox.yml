@@ -1,0 +1,110 @@
+name: T5 LOCAL-005 authentic original managed FileManager scratch I/O
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-t5-filemanager-runtime-sandbox.yml
+      - android-port/Experiments/T5/FileManagerRuntimeSandbox/**
+      - scripts/t5_validate_filemanager_runtime.py
+      - tests/test_t5_validate_filemanager_runtime.py
+permissions:
+  contents: read
+concurrency:
+  group: raft-t5-filemanager-original-managed-runtime-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  original-managed-scratch-io:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout only T5 public runtime harness and negative controls
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /android-port/Experiments/T5/FileManagerRuntimeSandbox/*
+            /scripts/t5_validate_filemanager_runtime.py
+            /tests/test_t5_validate_filemanager_runtime.py
+      - name: Run strict fail-closed original method execution result controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t5_validate_filemanager_runtime.py
+          python3 -m unittest discover -s tests -p test_t5_validate_filemanager_runtime.py -v
+          test ! -e Raft
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Build isolated Mono.Cecil original method execution sandbox
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 240s dotnet publish \
+            android-port/Experiments/T5/FileManagerRuntimeSandbox/FileManagerRuntimeSandbox.csproj \
+            -c Release --self-contained false -o "$RUNNER_TEMP/t5-original-io-bin" \
+            > "$RUNNER_TEMP/t5-original-io-compile.log" 2>&1 || {
+              echo "::error::T5 runtime harness compile failed before original data"
+              tail -30 "$RUNNER_TEMP/t5-original-io-compile.log"
+              exit 1
+            }
+          test -s "$RUNNER_TEMP/t5-original-io-bin/FileManagerRuntimeSandbox.dll"
+      - name: Read immutable ZIP2 original Assembly-CSharp.dll only
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-original
+          lfs: false
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /Raft/Raft_Data/Managed/Assembly-CSharp.dll
+      - name: Run real original managed FileManager methods on synthetic private temporary file
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C zip2-original rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          test "$(stat -c '%s' zip2-original/Raft/Raft_Data/Managed/Assembly-CSharp.dll)" = 3211776
+          scratch="$(mktemp -d "$RUNNER_TEMP/t5-authentic-managed-file.XXXXXX")"
+          chmod 700 "$scratch"
+          log="$RUNNER_TEMP/t5-private-managed-io.log"
+          set +e
+          timeout 90s dotnet "$RUNNER_TEMP/t5-original-io-bin/FileManagerRuntimeSandbox.dll" \
+            --assembly zip2-original/Raft/Raft_Data/Managed/Assembly-CSharp.dll \
+            --scratch "$scratch" > "$log" 2>&1
+          original_rc=$?
+          set -e
+          # Fail closed and print only a strict public allowlist, not CLR's raw
+          # missing dependency errors, filenames, symbols or stack traces.
+          python3 - "$log" "$RUNNER_TEMP/t5-safe-managed-io-report.json" <<'PY'
+          import json,sys
+          from pathlib import Path
+          lines=Path(sys.argv[1]).read_text(errors='replace').splitlines()
+          allowed=[s[len('T5_FILEMANAGER_RUNTIME '):] for s in lines
+                   if s.startswith('T5_FILEMANAGER_RUNTIME {')]
+          if len(allowed)!=1:
+              print('T5_ORIGINAL_MANAGED_IO result=INCONCLUSIVE_PRIVATE_LOG_ONLY')
+              raise SystemExit(2)
+          try:
+              payload=json.loads(allowed[0])
+              assert type(payload) is dict
+              # The public report gate checks every key/value; never print the
+              # untrusted JSON before that verification.
+              from scripts.t5_validate_filemanager_runtime import verify
+              verify(payload)
+          except (AssertionError,ValueError,TypeError):
+              print('T5_ORIGINAL_MANAGED_IO result=UNVERIFIED_OR_UNSUPPORTED')
+              raise SystemExit(2)
+          Path(sys.argv[2]).write_text(json.dumps(payload,sort_keys=True))
+          print('T5_ORIGINAL_MANAGED_IO original_compiled_runtime=true synthetic_file_exact=true phone=false original_rgd=false')
+          PY
+          python3 -m scripts.t5_validate_filemanager_runtime \
+            --report "$RUNNER_TEMP/t5-safe-managed-io-report.json"
+          test "$original_rc" -eq 0
+          rm -rf "$scratch" "$log"
+      - name: Never upload original DLL, managed execution logs, generated data or Unity artifacts
+        if: always()
+        run: echo 'Original managed FileManager experiment is private synthetic scratch data, never device or RGD acceptance.'
