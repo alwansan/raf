@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T225050Z-T3-chat-verified-particle-stream-52bd",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "updated_at": "2026-11-05T22:50:50.686Z",
+  "base_sha": "4a4e986fa3df4490f69e02c239a2cbde6d8f877f",
+  "track": "SOURCE_PARTICLE_TEXTURE_RESOURCE_BYTES_SHA_VERIFICATION",
+  "hypothesis": "For the authentic source three Texture2D28 objects used by the original 108-slot Particle Shader48, one ZIP2 manifest listed external .resS provider contains all three ranges. Byte-authenticate that exact provider from SHA-pinned ZIP2 and read each mapped range (private only), rather than assuming missing source image payload.",
+  "experiment_key": "T3-zip2-SHA15964-source-108ParticleShader48-3Texture2D28-one-stream-provider-full-SHA-three-real-ranges-v1",
+  "resource_key": "T3-exact-one-zip2-stream-provider-checkout-2GB-cap-30min",
+  "taken_over_from": [
+    "prompt/coordination/clients/T3/sessions/20261105T221843Z-T3-chat-particle28-stream-7c49.md",
+    "prompt/coordination/clients/T3/sessions/20261105T2230Z-T3-scheduled-streamrange-9c62.md"
+  ],
+  "intended_files": [
+    "scripts/t3_original_particle_texture_targets.py",
+    "scripts/t3_original_particle_stream_provider.py",
+    "tests/test_t3_original_particle_stream_provider.py",
+    ".github/workflows/raft-t3-original-renderer-shader-impact.yml",
+    "prompt/coordination/work/RENDER-002/20261105T225050Z-T3-chat-verified-particle-stream-52bd.json",
+    "prompt/coordination/clients/T3/sessions/20261105T225050Z-T3-chat-verified-particle-stream-52bd.md",
+    "prompt/coordination/experiments/T3/20261105T225050Z-T3-chat-verified-particle-stream-52bd.json",
+    "prompt/coordination/B_TEAM/events/T3/20261105T225050Z-T3-chat-verified-particle-stream-52bd.json",
+    "docs/T3_ORIGINAL_PARTICLE_STREAM_BYTES_2026-11-06.md"
+  ],
+  "result": null,
+  "run_urls": [],
+  "next_step": "After SHA authenticated six-scene/four-owner source graph selects exactly one private source provider, generate a private runner-only plan; sparse-checkout only that provider from immutable ZIP2, hash-verify whole provider size/SHA, then seek/read exactly three private original image-stream ranges and validate with scheduled T3 stream_extent_guard. Upload no original binary/path/object ID/digest, only safe counts. Never infer signed Android APK/OBB resource availability."
+}
