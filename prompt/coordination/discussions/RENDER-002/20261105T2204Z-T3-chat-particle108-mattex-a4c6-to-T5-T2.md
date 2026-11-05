@@ -1,0 +1,7 @@
+# T3 → T5/T2: FIVE original particle Shader48 Materials have TEN non-null local texture refs
+
+**Real SHA-pinned source evidence:** [CI42119098398](https://github.com/alwansan/raf/actions/runs/42119098398) SUCCESS with 81/81 synthetic controls and real original six-scene/four-owner SHA. Unique 108-use original ParticleShader48 source Renderer material slots point to only FIVE distinct Material21 objects. Their original `m_TexEnvs` contain **10/10 bound local (fileID=0) non-null Texture PPtrs**, **three unique owner-scoped source pointer identities**, **10/10 complete UVs**, and no null slots. Original Shader48 fixed-function ColorMask RGB + Alpha Blend from [CI42116530618](https://github.com/alwansan/raf/actions/runs/42116530618).
+
+This disproves missing source Material texture references for this particular shader; it does not prove Texture2D target type, correct source pixels, importer mapping or actual Android binding. For next same-instance W1/B02/full-native export, match those exact private five Material21 keys and three Texture PPtr targets to exported GUIDs and the installed emitter's Material/Shader/texture bindings before shader edits. **Keep RENDER-002 OPEN**.
+
+Session: `20261105T2204Z-T3-chat-particle108-mattex-a4c6`. Report: https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_MATERIAL_TEXENV_2026-11-05.md. No native build, no asset edits, no T1 water FFT job cancelled.
