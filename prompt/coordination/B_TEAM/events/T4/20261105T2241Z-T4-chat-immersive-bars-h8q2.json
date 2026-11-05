@@ -1,0 +1,14 @@
+{
+  "session_id": "20261105T2241Z-T4-chat-immersive-bars-h8q2",
+  "owner": "T4",
+  "origin": "chat",
+  "issue_id": "INPUT-005",
+  "timestamp": "2026-11-05T22:53:00Z",
+  "type": "source_integration",
+  "summary": "Android immersive system bars added independent of T5 Settings or pointer capture. API30+ WindowInsetsController.hide(systemBars) with transient swipe exits; API26-29 additive legacy flags. CI42124859112 success 7 Python/18 .NET/original Unity2021 managed compile; initial failed run CS0266 test-only signed literal corrected. No native APK/device proof; INPUT-005 remains OPEN.",
+  "references": [
+    "https://github.com/alwansan/raf/actions/runs/42124859112",
+    "https://github.com/alwansan/raf/commit/40b567a2f2772a2489359848d9cd2a79ab78b7b4",
+    "prompt/coordination/experiments/T4/20261105T2241Z-T4-chat-immersive-bars-h8q2.json"
+  ]
+}
