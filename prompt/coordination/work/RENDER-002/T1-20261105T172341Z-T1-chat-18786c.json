@@ -4,9 +4,9 @@
   "origin": "chat",
   "owner": "T1",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed",
   "base_sha": "a8f2248332373548d25b66f2b6aec4c47de6604a",
-  "updated_at": "2026-11-05T17:23:41.357Z",
+  "updated_at": "2026-11-05T17:25:07.518Z",
   "intended_files": [
     "scripts/t1_spirv_interface_component_audit.py",
     "tests/test_t1_spirv_interface_component_audit.py",
@@ -15,5 +15,11 @@
   "experiment_key": "spirv-vs-ps-numeric-component-linkage-independent-source-free",
   "resumed_from_sessions": [
     "20261105T1715Z-T3-chat-ps-readmask-spv-5e84"
-  ]
+  ],
+  "implementation_sha": "94466f97c315418ae7e39af83835455cbe283e28",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42074345951"
+  ],
+  "result": "CI42074345951 passed three synthetic controls for direct 32-bit scalar/vector VS-output to PS-input numeric Location/Component linkage: matching coverage, separate missing-component/type mismatches, and overlap/unsupported-layout rejection. Original shader modules and runtime interpolation were not tested.",
+  "next_step": "T3 can run the CLI on a proven matched private pair after spirv-val. Expose only counts; direct stage numeric linkage is independent of original DXBC semantic identity or Unity rendering. T1 paired FFT replay remains deferred while native Unity is occupied."
 }
