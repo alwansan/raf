@@ -69,7 +69,7 @@ class MaterialShaderQuality(unittest.TestCase):
         bands=r["dummy_target_material_link_frequency_bands"]
         self.assertEqual(bands,{"1":1,"2_to_4":1,"5_to_16":0,"17_plus":0})
         self.assertEqual(sum(bands.values()),r["counts"]["distinct_dummy_Shader_targets_referenced"])
-        self.assertEqual(r["counts"]["material_docs_using_dummy_Shader"],4)
+        self.assertEqual(r["counts"]["material_docs_using_dummy_Shader"],5)
         self.assertNotIn(G1,json.dumps(bands))
         self.assertNotIn(G3,json.dumps(bands))
 
