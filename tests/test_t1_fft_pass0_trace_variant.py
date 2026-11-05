@@ -1,3 +1,7 @@
+from pathlib import Path
+import shutil
+import subprocess
+import tempfile
 import unittest
 
 from scripts.t1_fft_pass0_trace_variant import instrument
@@ -47,3 +51,25 @@ class TraceVariantTests(unittest.TestCase):
         self.assertIn("main(uint3 T1TraceInputID : SV_DispatchThreadID)", variant)
         with self.assertRaises(ValueError):
             instrument(HLSL, keyed=True)
+
+    def test_structured_dispatch_semantic_is_not_duplicated(self):
+        source = HLSL + """
+struct SPIRV_Cross_Input
+{
+    uint3 gl_GlobalInvocationID : SV_DispatchThreadID;
+};
+[numthreads(64,1,1)]
+void main(SPIRV_Cross_Input stage_input) { pass0(); }
+"""
+        variant = instrument(source, keyed=True)
+        self.assertEqual(variant.count("SV_DispatchThreadID"), 1)
+        self.assertIn("T1TraceDispatchID = stage_input.gl_GlobalInvocationID;", variant)
+        if shutil.which("glslangValidator") and shutil.which("spirv-val"):
+            with tempfile.TemporaryDirectory() as directory:
+                Path(directory, "trace.hlsl").write_text(variant, encoding="utf-8")
+                for command in (
+                    ["glslangValidator", "-V", "-D", "-S", "comp", "-e", "main",
+                     "-o", "trace.spv", "trace.hlsl"],
+                    ["spirv-val", "--target-env", "vulkan1.1", "trace.spv"],
+                ):
+                    subprocess.run(command, cwd=directory, check=True, capture_output=True, timeout=30)
