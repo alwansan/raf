@@ -7,6 +7,7 @@ import json
 import unittest
 
 from scripts import t3_original_particle_shader_state as t3
+from scripts.w1_depth_shaderlab import color_mask, render_state
 
 
 def v(x,name="<noninit>"):
@@ -47,6 +48,54 @@ class SourceOnlyParticlePassState(unittest.TestCase):
         self.assertEqual(result["original_pass_color_mask_category"],"RGBA")
         self.assertTrue(result["original_pass_fixed_function_state_translator_accepted"])
         self.assertFalse(result["native_ShaderLab_or_Android_pixels_not_verified"] is False)
+
+    def test_unity2021_colorwrite_16_masks_are_exact_rgba_not_webgpu_bits(self):
+        bits=((8,"R"),(4,"G"),(2,"B"),(1,"A"))
+        for mask in range(16):
+            want="".join(name for bit,name in bits if mask & bit) or "0"
+            with self.subTest(mask=mask):
+                self.assertEqual(color_mask(v(mask)),want)
+                src=state()
+                src["rtBlend0"]["colMask"]=v(mask)
+                text=render_state(src,allow_selective_color_mask=True)
+                self.assertIn("ColorMask "+want,text)
+                result=t3.classify_state(src)
+                self.assertEqual(result["original_pass_color_mask_shaderlab_channels"],want)
+                self.assertTrue(result["original_pass_opt_in_selective_colormask_translator_accepted"])
+                if mask in (0,15):
+                    self.assertTrue(result["original_pass_fixed_function_state_translator_accepted"])
+                else:
+                    self.assertFalse(result["original_pass_fixed_function_state_translator_accepted"])
+        self.assertEqual(color_mask(v(1)),"A")
+        self.assertEqual(color_mask(v(8)),"R")
+        self.assertEqual(color_mask(v(14)),"RGB")
+        self.assertEqual(color_mask(v(7)),"GBA")
+
+    def test_selective_mask_legacy_unchanged_and_opt_in_binds_actual_channels(self):
+        src=state()
+        src["rtBlend0"]["colMask"]=v(7)
+        result=t3.inspect_parsed(parsed(src))
+        self.assertEqual(result["original_pass_color_mask_category"],"PARTIAL")
+        self.assertEqual(result["original_pass_color_mask_shaderlab_channels"],"GBA")
+        self.assertFalse(result["original_pass_fixed_function_state_translator_accepted"])
+        self.assertTrue(result["original_pass_opt_in_selective_colormask_translator_accepted"])
+        self.assertTrue(result["serialized_Unity2021_ColorWriteMask_ABGR_bits_not_reversed"])
+
+    def test_bad_color_mask_source_value_cannot_be_emitted_as_shaderlab(self):
+        for bad in (-1,16,True,False,7.3,float("nan"),float("inf"),"7"):
+            src=state()
+            src["rtBlend0"]["colMask"]=v(bad)
+            with self.subTest(bad=repr(bad)),self.assertRaises(ValueError):
+                t3.classify_state(src)
+
+    def test_color_mask_dynamic_property_not_disclosed_as_shader_label(self):
+        src=state()
+        src["rtBlend0"]["colMask"]=v(0,"_SourcePrivateMask")
+        summary=t3.classify_state(src)
+        self.assertEqual(summary["original_pass_color_mask_shaderlab_channels"],
+                         "PROPERTY_DRIVEN_UNRESOLVED")
+        self.assertNotIn("_SourcePrivateMask",json.dumps(summary))
+        self.assertTrue(summary["original_pass_opt_in_selective_colormask_translator_accepted"])
 
     def test_opaque_replace_and_depth_write_remain_distinct(self):
         result=t3.classify_state(state(1,0,1))
