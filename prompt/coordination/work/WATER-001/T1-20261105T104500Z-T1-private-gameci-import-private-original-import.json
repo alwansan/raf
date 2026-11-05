@@ -28,10 +28,11 @@
   ],
   "experiment_ids": [],
   "run_urls": [
-    "https://github.com/alwansan/raf/actions/runs/42013637262"
+    "https://github.com/alwansan/raf/actions/runs/42013637262",
+    "https://github.com/alwansan/raf/actions/runs/42014120625"
   ],
-  "result": "Code/test/workflow integrated. Source-free private XML parser regression controls and exact GameCI CLI 0.1.72 SHA verification passed in running CI; synthetic CLI canary step in progress before any original source acquisition. Original FFT Unity import not yet executed or proven.",
+  "result": "First CI42013637262 proved pinned GameCI CLI SHA and private-log source-free ComputeShader 2/2 pass, but stopped BEFORE original asset download at pip --user PermissionError on runner ~/.local/lib. No original shader import executed. Fixed with ephemeral venv at commit9d729b3; follow-up actual CI42014120625 in_progress.",
   "next_step": "Secure result parser tests, private runtime NUnit probe, workflow pinned GameCI executable and original SHA input. Do not assert original author/runtime kernel selection or device water even if importer succeeds.",
-  "updated_at": "2026-11-05T10:54:00Z",
+  "updated_at": "2026-11-05T10:55:00Z",
   "identity_conflict": "Concurrent T1 sessions possible; no shared T1 state overwrite, unique isolated work and files."
 }
