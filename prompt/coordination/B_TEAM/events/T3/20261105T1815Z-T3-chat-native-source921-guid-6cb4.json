@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "id": "T3-20261105T1815Z-native-real-dummy-plus-source921-link-probe",
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T1815Z-T3-chat-native-source921-guid-6cb4",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "at": "2026-11-05T18:24:00Z",
+  "summary": "T3 inspected actual T5 native CI42058825739 post-full-restorer transient Unity export log: 110/142 actual .shader files carry literal Dummy marker, 770/1536 actual Material docs reference Dummy, 750 builtin and 16 custom non-Dummy, 0 broken/null; 60 of 64 referenced custom Shader GUID targets still Dummy. This is real transient full native export BEFORE Unity compile, NOT device pixels or proof that original top 921 Renderer use Shader48 is one of these Dummy GUIDs. Prepared new source SHA→private W1 native trace→post-restorer actual GUID/Pass/dummy tool, source-free CI42083469621 PASS45/45; it has NOT run on same original source and native temp export yet. No source/Unity/other-client workflow changed. Keep RENDER-002 OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42058825739",
+    "https://github.com/alwansan/raf/actions/runs/42083469621",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_NATIVE_POSTRESTORER_DUMMY_EVIDENCE_2026-11-05.md"
+  ]
+}
