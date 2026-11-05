@@ -60,6 +60,7 @@ jobs:
         run: |
           set -euo pipefail
           python3 -m unittest discover -s tests -p test_t1_vulkan_editor_smoke_gate.py -v
+          python3 -m unittest discover -s tests -p test_t1_unity_vulkan_cli_failure_classifier.py -v
           python3 -m unittest discover -s tests -p test_t1_sourcefree_unity_fixture.py -v
           python3 -m scripts.t1_sourcefree_unity_fixture --project t1-vulkan-mesa-sourcefree
           cp android-port/Experiments/T1/T1SourceFreeVulkanBackendTests.cs \
@@ -152,6 +153,10 @@ jobs:
             > "$RUNNER_TEMP/t1-mesa-vulkan-unity-private.log" 2>&1
           rc=$?
           set -e
+          # Inspect the CLI's private stdout/stderr BEFORE always-cleanup.
+          # Emit only approved categorical flags and exit status, never log text.
+          python3 -m scripts.t1_unity_vulkan_cli_failure_classifier \
+            --log "$RUNNER_TEMP/t1-mesa-vulkan-unity-private.log" --process-exit "$rc"
           sudo chown -R "$(id -u):$(id -g)" \
             t1-vulkan-mesa-sourcefree t1-mesa-sourcefree-test-results || true
           python3 -m scripts.t1_vulkan_editor_smoke_gate \
