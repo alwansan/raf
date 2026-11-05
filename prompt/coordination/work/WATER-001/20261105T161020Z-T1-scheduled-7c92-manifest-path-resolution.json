@@ -1,0 +1,19 @@
+{
+  "session_id": "20261105T161020Z-T1-scheduled-7c92",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "0e25b282bd96d876a31a19b43300041d362cf72d",
+  "resumed_from_session": "T1 first-divergence scheduled 398353a",
+  "hypothesis": "relative capture paths must resolve against manifest parent, not process cwd",
+  "intended_files": [
+    "scripts/t1_fft_first_divergence.py",
+    "tests/test_t1_fft_first_divergence.py"
+  ],
+  "experiment_key": "T1-FFT-private-manifest-paths-relative-to-manifest-v1",
+  "resource_key": null,
+  "taken_over_from": [
+    "398353a1970c4b4689cf8565fb8f3d4fe6b25c1e"
+  ],
+  "updated_at": "2026-11-05T16:10:20Z"
+}
