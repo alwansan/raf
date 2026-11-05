@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261105T1736Z-T2-chat-rt-return-reason-8e2d",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "updated_at": "2026-11-05T17:45:35.456Z",
+  "base_sha": "a7a94b623eaf6148c36e85c437f453f2fd36f132",
+  "resumed_from_sessions": [
+    "20261105T1712Z-T2-chat-return-identity-minimal-4c8f",
+    "20261105T1723Z-T2-scheduled-rtcfg-a72e"
+  ],
+  "experiment_key": "T2|Cecil0.11.5|sourcefree-identical-fullname-cross-assembly-collision-v1|no-original",
+  "resource_key": "T2-method-declaring-assembly-scope-synthetic-guard",
+  "hypothesis": "Two compiled methods in different original/external assemblies may share identical Mono.Cecil MethodReference.FullName and signatures. Current T2 verifier matches names without proving declaring assembly identity; distinguish true same-assembly scope from cross-assembly decoy with a source-free Cecil fixture before source-authentic integration.",
+  "method": "Create independent tiny .NET9 + Mono.Cecil 0.11.5 synthetic experiment with two DLL assemblies same type+method+RT return. Verify loose FullName accepts false cross-assembly alias while strict AssemblyNameReference/ModuleDefinition scope guard rejects it. Explicitly reject ambiguous ModuleReference, malformed scopes, overloaded formal. CI CPU-only independent workflow with no original source or ZIP2 input; summarize safe counts; next integrate check only after scheduled concurrent RT callee edits complete.",
+  "intended_files": [
+    "android-port/Experiments/T2/FoamAssemblyScopeGuard/FoamAssemblyScopeGuard.csproj",
+    "android-port/Experiments/T2/FoamAssemblyScopeGuard/Program.cs",
+    ".github/workflows/raft-t2-foam-assembly-scope-guard.yml",
+    "prompt/coordination/work/WATER-001/T2-20261105T1736Z-T2-chat-rt-return-reason-8e2d-assembly-scope-guard.json",
+    "prompt/coordination/clients/T2/sessions/20261105T1736Z-T2-chat-rt-return-reason-8e2d.md"
+  ],
+  "preflight": {
+    "head": "a7a94b623eaf6148c36e85c437f453f2fd36f132",
+    "live_scheduled_T2_scope": "return-local writer to RT producer, distinct files",
+    "last_original_CI": "42076713202 SUCCESS",
+    "runtime_device_test": "not in scope"
+  },
+  "next_step": "Publish standalone synthetic Cecil scope disambiguation and run CI; report whether weak name match can be false-positive and guarded true assembly match. Do not assert original call identity until original SHA-pinned integration. WATER-001 OPEN NOT_READY0/3."
+}
