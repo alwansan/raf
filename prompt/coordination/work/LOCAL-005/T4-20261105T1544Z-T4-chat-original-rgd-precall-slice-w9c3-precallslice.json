@@ -6,7 +6,7 @@
   "session_id": "20261105T1544Z-T4-chat-original-rgd-precall-slice-w9c3",
   "issue_id": "LOCAL-005",
   "track": "world-save",
-  "status": "active",
+  "status": "completed",
   "base_sha": "c4858f5de9369a03ea0256f3d8ca97ab1e4b362b",
   "experiment_key": "t4-zip2-15964-original-sha0a6f-SaveWorld-and-SaveUser-precalls-v1",
   "resource_key": null,
@@ -27,7 +27,23 @@
     "prompt/coordination/clients/T4/sessions/20261105T1440Z-T4-scheduled-q8p3.md",
     "docs/T4_ORIGINAL_SAVEWORLD_RGD_PRODUCER_2026-11-05.md"
   ],
-  "run_urls": [],
-  "updated_at": "2026-11-05T15:45:09.617Z",
-  "next_step": "Prove exact original immediate Save RGD operand producer family and bounded type relation without game execution. Keep separate from active scheduled JSONL verifier; no interference with T1 water/native T5. LOCAL-005 OPEN NOT_READY 0/3."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42058900699"
+  ],
+  "updated_at": "2026-11-05T15:56:17.009Z",
+  "next_step": "Original SaveWorld Save(string,RGD) immediate source type is a derived-RGD local; SaveUser is derived-RGD field. Constructor/field-init/control-flow and runtime Save outcome still unknown. A further same-cycle lexical-store/static-field refinement was not published because code publishing tool was blocked; no result or CI is claimed. Coordinate new T5 native candidate only after current strict water gate failure is addressed by owners. LOCAL-005 OPEN NOT_READY 0/3.",
+  "result": {
+    "source": "pinned ZIP2 original Assembly-CSharp.dll 3211776B SHA256 0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "ci": "42058900699 SUCCESS",
+    "source_free_controls": "22/22",
+    "wrong_source_sha_rejected": true,
+    "compiled_original_SaveWorld_precall_type": "LOCAL_DERIVED_RGD",
+    "compiled_original_SaveUser_precall_type": "FIELD_DERIVED_RGD",
+    "actual_RGD_argument_instance_identity_proven": false,
+    "local_assignment_or_field_initializer_proven": false,
+    "original_game_Save_invoked": false,
+    "Android_Unity_IL2CPP_or_phone_executed": false,
+    "new_signed_Raft_build": false,
+    "report": "docs/T4_ORIGINAL_RGD_PRECALL_SLICE_2026-11-05.md"
+  }
 }
