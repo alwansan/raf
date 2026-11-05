@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "session_id": "20261105T1248Z-T5-chat-linkport-6a19",
+  "origin": "chat",
+  "issue_id": "DELIVERY-013",
+  "hypothesis": "Absent os.link on certain Android/Termux Python builds should be recoverable using exclusive output creation with streamed SHA256 without overwriting an existing package; old atomic hard-link route must remain unchanged.",
+  "source_commit": "57a7c30b7ae055265b1509345156abbe9099d5a3",
+  "input_hashes": [
+    "synthetic-fixtures-only; no real APK/OBB/asset hash"
+  ],
+  "tool_versions": {
+    "ci_runner": "ubuntu-24.04",
+    "python": "GitHub Actions runner Python3, runtime minor not logged here"
+  },
+  "commands": [
+    "python3 -m unittest -v tests.test_t5_portable_reassembly tests.test_a3_reassembly_publish_race tests.test_android_delivery_package"
+  ],
+  "negative_controls": [
+    "Missing os.link attribute via module-os proxy",
+    "Existing output no-clobber",
+    "Racing competing output between precheck and exclusive open",
+    "Wrong assembled SHA cleans owned destination",
+    "Synthetic fsync ENOSPC cleans owned destination",
+    "Tampered part rejected pre-publication",
+    "A3 hard-link EPERM refuses safely (legacy regression)"
+  ],
+  "workflow_path": ".github/workflows/raft-t5-portable-reassembly.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42030902212",
+  "artifact_urls": [],
+  "budget": "6 minute ubuntu-24.04 source-only run; 0 LFS, 0 Unity, tiny synthetic byte fixtures",
+  "status": "completed",
+  "observed_result": {
+    "conclusion": "success",
+    "passed": 24,
+    "failed": 0,
+    "job_id": 127256793078,
+    "source_fix_commit": "ee12bb7450d993e8cfb42ff17e165ea340aa00c8",
+    "test_commit": "5c41bad4a2d4f484431cae0123bb6b82f089f8d9",
+    "workflow_commit": "57a7c30b7ae055265b1509345156abbe9099d5a3",
+    "documentation_commit": "4a66364c9e9642f7f60ee740f49b035e43821f62",
+    "older_a3_ci": "https://github.com/alwansan/raf/actions/runs/42030746423"
+  },
+  "rejected_hypotheses": [
+    "All Termux hard-link errors are missing-symbol errors: EPERM with present os.link remains a separate filesystem limitation.",
+    "Exclusive output creation makes final-byte visibility atomic: false if abruptly killed before completion."
+  ],
+  "limitations": [
+    "CI ran Ubuntu with a simulated absent os.link module member, not Termux on the user's Android device.",
+    "No real signed APK/OBB/XAPK, GitHub Release re-upload or device install performed.",
+    "In missing-link fallback, abrupt process death may leave a partial output; future attempts refuse overwrite until independently verified and intentionally cleared.",
+    "APK86 bundle carries older reassemble.py; repository-source fix is used by future package builds, not retroactive."
+  ],
+  "integration_commit": "ee12bb7450d993e8cfb42ff17e165ea340aa00c8",
+  "next_step": "On next real Android delivery candidate, verify Termux actual Python mode, SHA256 and size on the phone, then XAPK/OBB install and user gameplay. Avoid uncoordinated Unity request while T1 is working."
+}
