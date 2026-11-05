@@ -2,26 +2,30 @@
   "schema_version": 1,
   "username": "T4",
   "generation": "T-2026-11-05",
-  "session_id": "20261104T2357Z-T4-lw01",
-  "resumed_from_session": null,
-  "status": "active",
-  "base_sha": "902b67ba05c6a303072ff6511576e026e67e3c0d",
-  "last_commit": "fecaa228478f8e3947db1acb7a53b30bec522604",
-  "updated_at": "2026-11-05T00:54:00Z",
+  "session_id": "20261105T1021Z-T4-ref-context",
+  "resumed_from_session": "20261104T2357Z-T4-lw01",
+  "status": "completed",
+  "base_sha": "02e9fba7fb42b83579595885391be636ee3b56e8",
+  "last_commit": "0565553103e3e0e60f7254cec242b66fd9ef004d",
+  "updated_at": "2026-11-05T10:46:00Z",
   "tracks": [
     "LOCAL-005"
   ],
   "work_ids": [
     "T4-20261104T2357Z-rgd-loader-contract",
     "T4-20261105T0029Z-original-completion-trace",
-    "T4-20261105T0049Z-ilspy-reproducibility"
+    "T4-20261105T0049Z-ilspy-reproducibility",
+    "T4-20261105T1021Z-managed-reference-context"
   ],
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41939908432",
     "https://github.com/alwansan/raf/actions/runs/41939846508",
     "https://github.com/alwansan/raf/actions/runs/41943357681",
-    "https://github.com/alwansan/raf/actions/runs/41944365772"
+    "https://github.com/alwansan/raf/actions/runs/41944365772",
+    "https://github.com/alwansan/raf/actions/runs/42011353849",
+    "https://github.com/alwansan/raf/actions/runs/42012049920",
+    "https://github.com/alwansan/raf/actions/runs/41942118067"
   ],
-  "next_step": "Two T4 scopes completed: authentic original world ready-assignment marker source-integrated, CLR two-branch and 10/10 original controls CI41943357681; same pinned original DLL independently ILSpy-decompiled twice in same CI41944365772, identical class/body/masked SHA (new 10/10 tests), ruling out within-run drift but not B07-vs-T4 cross-run SHA variation. Production source SHA gates unchanged; original latest APK86 only; Unity/IL2CPP and phone .rgd/create-save-relaunch-reopen unverified. Coordinate T5 native source provider provenance, then real integrated Android test. LOCAL-005 OPEN NOT_READY 0/3. Independent T4 FileManager session not overwritten. No Actions canceled.",
+  "next_step": "Source-intake SHA discrepancy diagnosed with authentic exact same original DLL vs 151 Managed companion context, CI42011353849 SUCCESS. Correct full original Managed context reproduces B07 production SHA; CI42012049920 SUCCESS actual offline native source adaptation and runtime operations instrumentation to exact manifest SHA 996e4c..., both world markers, original completion and iterator yields preserved. Managed original C# 14-source compile CI41942118067 SUCCESS. Do not change original SHA pins; coordinate T5 single future native Unity/IL2CPP candidate and verify real world local playability and .rgd save/quit/relaunch/reopen via device. No new Raft APK, LOCAL-005 OPEN/NOT_READY 0/3; sound/Settings preserved, touch deferred; T4 FileManager separate session untouched.",
   "memory_path": "prompt/coordination/clients/T4/MEMORY.md"
 }
