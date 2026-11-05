@@ -1,0 +1,169 @@
+name: T3 RENDER-002 authentic Shader48 T1 raw SPIR-V stage linkage
+# Source-free direct T1 stage parser controls run on scoped pushes. Original D3D11 contents
+# are read only on explicit dispatch, with private disposable staging.
+# Raw SPIR-V numeric interface agreement does not prove DXBC semantics or pixels.
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t3_original_921_t1_raw_spirv_audit.py
+      - tests/test_t3_original_921_t1_raw_spirv_audit.py
+      - scripts/t1_spirv_interface_component_audit.py
+      - scripts/t3_original_921_dxbc_semantic_join.py
+      - scripts/t3_original_921_dxbc_readmask_spirv.py
+      - scripts/t3_vf_spirv_component_coverage.py
+      - .github/workflows/raft-t3-original-921-t1-raw-spv.yml
+      - .github/t3-raw-spirv-requests/*.json
+  workflow_dispatch:
+    inputs:
+      run_private_original:
+        description: 'Confirm SHA-verified Shader48 direct SPIR-V source interface (no Unity/native)'
+        required: true
+        type: boolean
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: raft-t3-original921-t1-rawspv-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  source-free-T1-raw-SPIRV-source-controls:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Compile independent original T1 direct SPIRV stage audit
+        run: |
+          python3 -m py_compile scripts/t3_original_921_t1_raw_spirv_audit.py scripts/t1_spirv_interface_component_audit.py scripts/t3_original_921_dxbc_semantic_join.py tests/test_t3_original_921_t1_raw_spirv_audit.py
+      - name: Verify direct 32-bit typed numeric SPIRV interface controls
+        run: |
+          python3 -m unittest discover -s tests -p 'test_t3_original_921_t1_raw_spirv_audit.py' -v
+          python3 -m unittest discover -s tests -p 'test_t1_spirv_interface_component_audit.py' -v
+          PYTHONPATH=scripts python3 -m unittest discover -s tests -p 'test_t3_vf_spirv_component_coverage.py' -v
+  original-genuine-fourpass-T1-raw-SPIRV:
+    if: >-
+      ${{ (github.event_name == 'workflow_dispatch' && inputs.run_private_original) || (github.event_name == 'push' && github.event.head_commit.message == 'experiment(T3): authorize original Shader48 T1 raw SPIRV stage audit') }}
+    needs: source-free-T1-raw-SPIRV-source-controls
+    runs-on: ubuntu-24.04
+    timeout-minutes: 28
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          fetch-depth: 2
+          sparse-checkout: |
+            scripts
+            tests
+            .github/t3-raw-spirv-requests
+      - name: Verify explicit push request contains only signed-off marker and pinned code
+        if: ${{ github.event_name == 'push' }}
+        run: |
+          set -euo pipefail
+          marker='.github/t3-raw-spirv-requests/20261105T1728Z-T3-chat-rawspirv-T1-original-3f7c.json'
+          files="$(git diff-tree --no-commit-id --name-only -r HEAD)"
+          if [ "$files" != "$marker" ]; then echo "T3_EXPLICIT_MARKER_COMMIT_SCOPE_MISMATCH" >&2; exit 1; fi
+          python3 - <<'PY'
+          import json,subprocess
+          from pathlib import Path
+          p=Path('.github/t3-raw-spirv-requests/20261105T1728Z-T3-chat-rawspirv-T1-original-3f7c.json')
+          d=json.loads(p.read_text())
+          assert d['session_id']=='20261105T1728Z-T3-chat-rawspirv-T1-original-3f7c'
+          assert d['origin']=='chat' and d['owner']=='T3'
+          assert d['original_provider_sha']=='15964ea8f246b6e076ce26b60931ee2e1a9a2385'
+          assert len(d['source_blob_shas'])==4
+          for path,sha in d['source_blob_shas'].items():
+              actual=subprocess.check_output(['git','rev-parse','HEAD:'+path],text=True).strip()
+              assert actual==sha, 'tracked source blob changed'
+          print('T3_EXPLICIT_T1_RAW_SPIRV_SHA_CONTRACT_OK=4')
+          PY
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-source
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/level0
+            Raft/Raft_Data/level1
+            Raft/Raft_Data/level2
+            Raft/Raft_Data/level3
+            Raft/Raft_Data/level4
+            Raft/Raft_Data/level5
+      - name: Select exactly four pinned owners for Shader48 sample
+        run: |
+          set -euo pipefail
+          git -C zip2-source sparse-checkout set --no-cone -- \
+            '/RAFT_FILE_MANIFEST.tsv' \
+            '/Raft/Raft_Data/level0' \
+            '/Raft/Raft_Data/level1' \
+            '/Raft/Raft_Data/level2' \
+            '/Raft/Raft_Data/level3' \
+            '/Raft/Raft_Data/level4' \
+            '/Raft/Raft_Data/level5' \
+            '/Raft/Raft_Data/resources.assets/*' \
+            '/Raft/Raft_Data/sharedassets0.assets/*' \
+            '/Raft/Raft_Data/sharedassets1.assets' \
+            '/Raft/Raft_Data/sharedassets6.assets'
+          test "$(git -C zip2-source rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+      - name: SHA-verify original six scenes and reassemble four exact owners without LFS
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import stage
+          from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
+          from scripts.b21_scene_lightmap_links import PIN, verify_source
+          from scripts.t3_original_renderer_shader_impact import SHADER_OWNERS_SELECTED
+          root = Path('zip2-source')
+          output = Path(os.environ['RUNNER_TEMP']) / 't3-original-921-t1-rawspv'
+          requested = {'Raft_Data/' + name: SHADER_OWNERS[name] for name in SHADER_OWNERS_SELECTED}
+          data = stage(root, output, requested)
+          assert len(data['owners']) == 4
+          assert data['verified_bytes'] == 269007288 and not data['lfs_used']
+          for name, pin in PIN.items():
+              source = root / 'Raft/Raft_Data' / name
+              verify_source(source, pin)
+              target = output / 'Raft_Data' / name
+              if target.exists() or target.is_symlink():
+                  raise ValueError('scene_stage_collision')
+              with source.open('rb') as reader, target.open('xb') as writer:
+                  while block := reader.read(1024 * 1024):
+                      writer.write(block)
+              verify_source(target, pin)
+          print('T3_921_T1_DIRECT_SPIRV_SHA_AUTHENTICATED scenes=6 owners=4 bytes=269007288')
+          PY
+      - name: Install pinned UnityPy and platform CPU shader tools
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.23.0
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
+          dpkg-query -W vkd3d-compiler spirv-tools spirv-cross glslang-tools
+      - name: Privately validate original Shader48 direct SPIR-V VS-to-FS numeric coverage via T1 audit
+        run: |
+          set -euo pipefail
+          timeout 540s python3 -m scripts.t3_original_921_t1_raw_spirv_audit \
+            --original "$RUNNER_TEMP/t3-original-921-t1-rawspv" \
+            --manifest zip2-source/RAFT_FILE_MANIFEST.tsv \
+            --out "$RUNNER_TEMP/t3-921-original-T1-direct-SPIRV-safe.json"
+      - name: Upload only public-safe aggregate counts (never bytes or compiler names)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: t3-921-original-T1-raw-SPIRV-counts-${{ github.run_id }}
+          path: ${{ runner.temp }}/t3-921-original-T1-direct-SPIRV-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
