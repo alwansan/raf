@@ -1,0 +1,23 @@
+{
+  "session_id": "20261105T1453Z-T5-scheduled-6e82",
+  "origin": "scheduled",
+  "issue_id": "INTEGRATION-001",
+  "status": "active",
+  "base_sha": "f4dc80ad300380cd29516166ac60d24df4292ee4",
+  "resumed_from_sessions": [
+    "20261105T1431Z-T5-chat-native-cancel-d41e",
+    "20261105T1348Z-T5-scheduled-7c91"
+  ],
+  "intended_files": [
+    "scripts/t5_audit_native_run_verdict.py",
+    "tests/test_t5_native_run_verdict.py",
+    "prompt/coordination/clients/T5/sessions/20261105T1453Z-T5-scheduled-6e82.md",
+    "prompt/coordination/experiments/T5/20261105T1453Z-T5-scheduled-6e82-native-step-failure.json"
+  ],
+  "experiment_key": "t5-native-cancelled-job-with-failed-step-vs-cancelled-step-42042902522-metadata-v1",
+  "resource_key": null,
+  "hypothesis": "Current classifier labels any cancelled reconstruct as no source failure even if a failed step is present; differentiate failed-step evidence without attributing causality.",
+  "updated_at": "2026-11-05T14:53:00Z",
+  "taken_over_from": "T5 chat native verdict CI42046665995",
+  "next_step": "Add synthetic contradictory step controls; validate locally then source-only CI if existing workflow triggers."
+}
