@@ -10,18 +10,21 @@
     "https://github.com/alwansan/CL/tree/520c4cf409aa20a4db54ff80ed87d8807d9cba57/raft%20log",
     "owner-message-2026-11-04",
     "https://github.com/alwansan/raf/commit/02665b11061ccb070bf6e24797d47a2866ef250c",
-    "https://github.com/alwansan/raf/actions/runs/42118499200"
+    "https://github.com/alwansan/raf/actions/runs/42118499200",
+    "https://github.com/alwansan/raf/actions/runs/42121598304"
   ],
   "remaining": [
     "معالجة ظهور أشرطة النظام عند حواف اللعبة بالماوس الفعلي واستخدام مؤشر Raft.",
     "اختبار التقاط الحركة النسبية في اللعب وإفلاتها عند القائمة وفقد التركيز.",
     "الحفاظ على الكيبورد واللمس الحالي. تطوير تخطيط التاتش العام مؤجل.",
-    "T4: تحقق هاتف فعلي من View pointer capture فقدانه/استعادته، حركة الكاميرا دون حواف، مؤشر القائمة، أشرطة النظام، ومنافذ اللمس/الكيبورد، مع اختبار حفظ/إعادة فتح العالم على نفس SHA."
+    "T4: تحقق هاتف فعلي من View pointer capture فقدانه/استعادته، حركة الكاميرا دون حواف، مؤشر القائمة، أشرطة النظام، ومنافذ اللمس/الكيبورد، مع اختبار حفظ/إعادة فتح العالم على نفس SHA.",
+    "On-device test of SOURCE_MOUSE_RELATIVE vs SOURCE_TOUCHPAD captured motion, batching, cursor lock/release, wheel/buttons and old world/save/exit/reopen on same candidate SHA; source tests do not prove Android behavior."
   ],
   "acceptance": [
     "دوران الكاميرا بلا توقف عند الحواف، ومؤشر اللعبة في القوائم، والتحرير الآمن عند الخروج أو تبديل التركيز."
   ],
   "updated_by": "T4",
-  "updated_at": "2026-11-05T22:07:00Z",
-  "source_status": "SOURCE_FIXED_MANAGED_CI_VERIFIED_DEVICE_UNCONFIRMED"
+  "updated_at": "2026-11-05T22:30:00Z",
+  "source_status": "SOURCE_FIXED_MANAGED_CI_VERIFIED_DEVICE_UNCONFIRMED",
+  "latest_T4_source_proof": "SOURCE_INTEGRATED_CI42121598304: API26 relative mouse getX/Y, captured touchpad AXIS_RELATIVE_X/Y, 0..64 historical samples; 28 Python +30 CSharp + original Unity2021 compile PASS; Android physical device unverified"
 }
