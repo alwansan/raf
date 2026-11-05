@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261104T2357Z-T4-lw01",
+  "issue_id": "LOCAL-005",
+  "hypothesis": "Original same-DLL decompiler class/body SHA mismatch between B07 and T4 might be random between two private ILSpy exports under one identical GitHub runner environment; verify repeatability instead of changing adapted production source pins.",
+  "source_commit": "077ba873cb929d013c8eb89c739dbcdd8a2e0767",
+  "input_hashes": [
+    "zip2_original_commit=15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "original_Dll_bytes=3211776_sha256=0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "B07_prior_class_sha=080035c137e446828226ed84a23190656b6f235d274436cafb477feaf93caa03",
+    "B07_prior_body_sha=cbd74c24f1c6a86dd50e8d320f4f4142f5b3f3fc5bf8f64ded04710c30c3a140",
+    "T4_both_same_run_class_sha=d16c36336a6aec4e23781c135820692a233130a3f1c1d9ab9052d432d76eedef",
+    "T4_both_same_run_body_sha=2bf76a189a69d23444c5ede9f00a5444a48f819c64d87ec298ebeedbf5d9088c",
+    "T4_both_same_run_masked_body_sha=a0dcff37dc0aea1b76335f89e328decf446e12c01928646fea45d149c442c755"
+  ],
+  "tool_versions": {
+    "ilspycmd": "11.2.0.10050 -p -lv CSharp9_0",
+    "dotnet": "10.0.403 SDK",
+    "runner": "ubuntu-24.04"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t4_compare_private_ilspy_runs.py -v",
+    "python3 -m unittest discover -s tests -p test_t4_world_completion_trace.py -v",
+    "timeout 360s \"$RUNNER_TEMP/t4-ilspy/ilspycmd\" -p -lv CSharp9_0 -o \"$RUNNER_TEMP/t4-private-source\" t4-original/Raft/Raft_Data/Managed/Assembly-CSharp.dll",
+    "timeout 360s \"$RUNNER_TEMP/t4-ilspy/ilspycmd\" -p -lv CSharp9_0 -o \"$RUNNER_TEMP/t4-private-source-second\" t4-original/Raft/Raft_Data/Managed/Assembly-CSharp.dll",
+    "python3 -m scripts.t4_compare_private_ilspy_runs --original-managed-dll t4-original/Raft/Raft_Data/Managed/Assembly-CSharp.dll --source-a \"$RUNNER_TEMP/t4-private-source\" --source-b \"$RUNNER_TEMP/t4-private-source-second\""
+  ],
+  "negative_controls": [
+    "two identical texts same class/body/lexical hash",
+    "comment-only change affects class SHA but not method body SHA",
+    "same-length string-literal change affects raw body hash but not masked executable hash",
+    "executable change affects masked hash",
+    "wrong allowed hash rejected",
+    "duplicate and missing classes rejected",
+    "wrong iterator return type rejected",
+    "fake broadcast and completion tokens inside comments do not count"
+  ],
+  "workflow_path": ".github/workflows/raft-t4-world-completion-trace.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41944365772",
+  "artifact_urls": [],
+  "budget": "One ubuntu24.04 12min noncanceling isolated job, 2 private ILSpy exports, 0 LFS and 0 Unity/native builds, no proprietary artifact uploaded",
+  "status": "completed",
+  "observed_result": {
+    "original_dll_sha_verified": true,
+    "same_run_class_hash_equal": true,
+    "same_run_method_body_hash_equal": true,
+    "same_run_masked_executable_body_hash_equal": true,
+    "class_sha256": "d16c36336a6aec4e23781c135820692a233130a3f1c1d9ab9052d432d76eedef",
+    "body_sha256": "2bf76a189a69d23444c5ede9f00a5444a48f819c64d87ec298ebeedbf5d9088c",
+    "masked_executable_body_sha256": "a0dcff37dc0aea1b76335f89e328decf446e12c01928646fea45d149c442c755",
+    "true_original_ready_assignments": 1,
+    "true_original_scene_broadcast": 1,
+    "yield_returns": 3,
+    "new_synthetic_controls": "10/10 PASS",
+    "previous_completion_controls": "10/10 PASS",
+    "managed_clr_true_false": "PASS",
+    "production_adapter_exercised": false,
+    "native_and_device": false
+  },
+  "rejected_hypotheses": [
+    "Current same-DLL class source varies between two independent ILSpy exports within one runner — not observed",
+    "Original scene broadcast and ready-write only appeared in literal decoy — false (masked original contains one of each)",
+    "Two different-length string literals must produce identical offset-preserving masked fingerprints — false test fixture, corrected"
+  ],
+  "limitations": [
+    "Cross-run discrepancy between B07 and T4 is not explained; repeated same-run output only tests one runner environment",
+    "Two previously observed SHA pairs accepted read-only after original DLL authenticity; production pins remain strict",
+    "No Unity, IL2CPP, game world, .rgd device roundtrip or APK test",
+    "Raw original source/private logs were not published"
+  ],
+  "integration_commit": "3731c11e9c1ae9476d6e99ab77efa914ce521530",
+  "next_step": "T5 should compare actual native source restoration/decompiler image/version and stage SHA with B07; preserve strict source hash checks, then verify full Unity staging and true device playable world/.rgd on integrated candidate."
+}
