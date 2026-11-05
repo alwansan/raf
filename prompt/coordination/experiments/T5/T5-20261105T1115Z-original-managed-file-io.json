@@ -26,16 +26,19 @@
     "byte-for-byte readback required before success"
   ],
   "workflow_path": ".github/workflows/raft-t5-filemanager-runtime-sandbox.yml",
-  "run_url": null,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42018587431",
   "artifact_urls": [],
   "budget": "Ubuntu24.04 15min isolated runner; pinned original DLL 3.2MB; no Unity/Native/Git LFS/private source upload",
-  "status": "active",
-  "observed_result": null,
-  "rejected_hypotheses": [],
+  "status": "completed",
+  "observed_result": "Authentic original source SHA and C# harness build passed; 13/13 negative tests. Original managed I/O NOT EXECUTED: current original compiled read and write each has 1 System.IO + 1 safe core + 1 internal original FileManager helper + 1 other unknown callee. CI42018587431 FAILS CLOSED COMPILED_IL_GUARD, call_scope=false, invoked=false; no .rgd or synthetic file write/read evidence. Workflow switched to manual-only, red runs remain public.",
+  "rejected_hypotheses": [
+    "Both original FileManager read/write targets are single-call self-contained System.IO wrappers that can be safely executed by themselves on Linux CLR (refuted by actual 4-callee original IL grouping).",
+    "A green synthetic report gate or source SHA validates original managed CLR method execution (false; separate original runtime gate red)."
+  ],
   "limitations": [
     "A successful .NET Linux original FileManager smoke is NOT Unity2021, IL2CPP, Android scoped storage or RGD serialization evidence.",
     "Failure to load original assembly may be missing Unity deps, not game bug."
   ],
-  "integration_commit": null,
-  "next_step": "Execute original compiled methods safely on a private sandboxed path, confirm exact bytes persist/read or record unsupported signature/environment; no device claim."
+  "integration_commit": "09037918ef284cb57aa7fe40b278b344feb5e0a2",
+  "next_step": "Authenticate transitive original helper/callee shape and Unity/native path, then test synthetic managed or actual Android .rgd roundtrip without overclaiming."
 }
