@@ -105,19 +105,21 @@
       "track": "integration",
       "evidence": [
         "https://github.com/alwansan/raf/actions/runs/41812889049",
-        "https://github.com/alwansan/raf/releases/tag/android-early-test-41812889049-1"
+        "https://github.com/alwansan/raf/releases/tag/android-early-test-41812889049-1",
+        "https://github.com/alwansan/raf/actions/runs/42042902522"
       ],
       "remaining": [
         "APK86/source d181ee7152580f49ee0b41dfd05fa2bfdacfafe5 آخرلعبةمنشورةمراجعة",
         "إصلاحاتHEADلاحقةليستهاتفاً",
-        "قيودwaterالمعلنةمفتوحة"
+        "قيودwaterالمعلنةمفتوحة",
+        "T5 chat native signed APK+OBB/XAPK diagnostic request CI42042902522 source 753802d75196210d721cca0f4fdec6ce7800bf0d: native-request-gate and Unity license-preflight SUCCESS, reconstruct PENDING behind T1 Unity shared mutex at initial checkpoint; no native artifact or phone acceptance and water limitations remain explicitly open."
       ],
       "acceptance": [
         "دمجالتغييرمعاختبارودليلومصدرنسخة",
         "لاتسميةREADYإلا3مراجعاتكاملةلنفسSHAوإغلاقالعوائق"
       ],
-      "updated_by": "owner-team-bootstrap",
-      "updated_at": "2026-11-04",
+      "updated_by": "T5",
+      "updated_at": "2026-11-05T14:15:00Z",
       "_record_path": "../B_TEAM/issues/INTEGRATION-001.json"
     },
     {
@@ -190,7 +192,10 @@
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ANDROID_SAVE_FILE_POSTCHECK_2026-11-05.md",
         "https://github.com/alwansan/raf/actions/runs/42031436693",
         "https://github.com/alwansan/raf/commit/a88000086d973adfcb05a85a7ecd0b12133cbf81",
-        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ANDROID_LOAD_ARGUMENT_SNAPSHOT_2026-11-05.md"
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ANDROID_LOAD_ARGUMENT_SNAPSHOT_2026-11-05.md",
+        "https://github.com/alwansan/raf/commit/305e8952e4fc91afd0b3f2aef8a83df649d65db4",
+        "https://github.com/alwansan/raf/actions/runs/42043385806",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_DEVICE_LOG_EVIDENCE_CHECKER_2026-11-05.md"
       ],
       "remaining": [
         "Original Cheat.AllowCheatsForLocalPlayer SteamUser.GetSteamID direct object call now source-guarded in B50 2bb6c2; no native/phone verification. Do not infer all Steam callbacks are removed.",
@@ -215,7 +220,8 @@
         "T5 original CLR synthetic FileManager experiment CI42018587431 FAILED SAFELY at COMPILED_IL_GUARD before method invocation: 1 System.IO + 1 core + 1 original local + 1 other unattested callee per read/write. No synthetic byte roundtrip, game RGD file, Unity or Android save test. Workflow manual-only until transitive dependency provenance; LOCAL-005 OPEN.",
         "T4 real original compiled I/O progress: CI42019696138 PASS 19/19 authentic Cecil original try/catch call placement—one File.Open/Create BCL IO and zero other calls in each normal try, three extra game/framework/helper calls only in original catch. CI42020039305 PASS 15/15 + ACTUALLY INVOKED original FileManager Create/Open stream methods using immutable original SHA and 151 pinned Managed companions + restricted CLR resolver; synthetic disposable .rgd-suffixed filename only, write/flush/close/reopen bytes equal and cleanup. T5 earlier whole-method execution blocked for unproven catch callees, remains valid. NO genuine game .rgd serialization/relaunch, Android app-private file storage, Unity IL2CPP or playable offline local world, so LOCAL-005 OPEN NOT_READY and no full readiness review.",
         "T4 Android Save diagnostic integrated after exact adapted SaveAndLoad SHA gate: Save.argumentFileSnapshot in original Save wrapper finally reads File.Exists(filename) and if present FileInfo.Length class, never contents or changing original Save logic; catches only snapshot/logger errors, logs durable_RGD_unverified=true. CI42026271243 PASS original 14-class stage RPC and C# compile exit0, CI42026671909 PASS 15/15 plus actual UNITY_ANDROID-preprocessed synthetic C# runtime tests, CI42027197515 PASS 21/21 plus authentic original DLL Cecil confirms original Save directly forwards filename first argument to FileManager writer. No native Unity/IL2CPP, phone, playable local host or genuine .rgd serialize/quit/relaunch/reopen evidence; LOCAL-005 OPEN NOT_READY.",
-        "T4 source-integrated Android-only SaveAndLoad.Load<T> filename argument existence/zero/nonzero observation in finally (commit a88000086d); original managed compile CI42030693004 SUCCESS (14 pinned sources, exit0), synthetic UNITY_ANDROID C# and 5/5 tests CI42031436693 SUCCESS after fixing only fixture's generic Load<T>.exit assertion. Does not read RGD bytes or prove genuine game save/load, offline playable world, Unity/IL2CPP or phone; LOCAL-005 stays OPEN NOT_READY 0/3."
+        "T4 source-integrated Android-only SaveAndLoad.Load<T> filename argument existence/zero/nonzero observation in finally (commit a88000086d); original managed compile CI42030693004 SUCCESS (14 pinned sources, exit0), synthetic UNITY_ANDROID C# and 5/5 tests CI42031436693 SUCCESS after fixing only fixture's generic Load<T>.exit assertion. Does not read RGD bytes or prove genuine game save/load, offline playable world, Unity/IL2CPP or phone; LOCAL-005 stays OPEN NOT_READY 0/3.",
+        "T4 device log JSONL validator source-integrated (commit 305e8952), chronological matching refined b383b6e/fa3d5555, CI42043385806 SUCCESS 13/13 synthetic. Reads actual PersistentDiagnosticLog schema but no new phone log/device was read; even ordered cross-session nonzero Save/Load does not prove restart, same world, valid .rgd or playability. LOCAL-005 OPEN NOT_READY 0/3."
       ],
       "acceptance": [
         "دخول عالم جديد محلي قابل للعب بلا Steam أو سيرفر خارجي",
@@ -223,7 +229,7 @@
         "لا يكفي إخفاء رسالة الاتصال"
       ],
       "updated_by": "T4",
-      "updated_at": "2026-11-05T13:01:18.971Z",
+      "updated_at": "2026-11-05T14:18:58.151Z",
       "_record_path": "../B_TEAM/issues/LOCAL-005.json"
     },
     {
@@ -4943,6 +4949,19 @@
       "_record_path": "../B_TEAM/events/T1/20261105T131036Z-T1-chat-877585.json"
     },
     {
+      "id": "20261105T140815Z-T1-chat-592ae2",
+      "owner": "T1",
+      "session_id": "20261105T140815Z-T1-chat-592ae2",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "summary": "Explicit Unity Vulkan smoke started.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42042230791"
+      ],
+      "at": "2026-11-05T14:09:38.575Z",
+      "_record_path": "../B_TEAM/events/T1/20261105T140815Z-T1-chat-592ae2.json"
+    },
+    {
       "id": "T2-20261104T2354Z-start-foamabi",
       "owner": "T2",
       "session_id": "20261104T2354Z-T2-foamabi01",
@@ -5450,6 +5469,23 @@
       "_record_path": "../B_TEAM/events/T4/20261105T1300Z-T4-chat-load-snapshot-m8q2.json"
     },
     {
+      "id": "20261105T1417Z-T4-jsonl-evidence-13pass",
+      "owner": "T4",
+      "session_id": "20261105T1408Z-T4-chat-jsonl-evidence-n4r7",
+      "origin": "chat",
+      "issue_id": "LOCAL-005",
+      "type": "integration",
+      "summary": "Independent source-free Android app JSONL verifier enforces deduplication of startup/segment lines, sequence completeness, safe snapshot categories and strict cross-session chronological Save-before-Load; synthetic 13/13 CI success. No device acceptance.",
+      "evidence": [
+        "https://github.com/alwansan/raf/commit/305e8952e4fc91afd0b3f2aef8a83df649d65db4",
+        "https://github.com/alwansan/raf/commit/b383b6e86720369069e7cb61026105b78d6d668d",
+        "https://github.com/alwansan/raf/actions/runs/42043385806",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_DEVICE_LOG_EVIDENCE_CHECKER_2026-11-05.md"
+      ],
+      "at": "2026-11-05T14:18:25.625Z",
+      "_record_path": "../B_TEAM/events/T4/20261105T1417Z-T4-jsonl-evidence-13pass.json"
+    },
+    {
       "id": "T5-20261104T2357Z-b12-fixture-start",
       "owner": "T5",
       "session_id": "20261104T2357Z-T5-b12-fixture-7e2",
@@ -5602,6 +5638,37 @@
       "_record_path": "../B_TEAM/events/T5/20261105T1319Z-delivery-bundled-cli-e2e.json"
     },
     {
+      "id": "T5-20261105T1415Z-single-native-diagnostic-request",
+      "owner": "T5",
+      "session_id": "20261105T1404Z-T5-chat-native-diagnostic-3c8e",
+      "origin": "chat",
+      "issue_id": "INTEGRATION-001",
+      "type": "start",
+      "summary": "Requested one authorized incomplete-water signed APK+OBB/XAPK diagnostic native delivery from feature commit 753802d75196210d721cca0f4fdec6ce7800bf0d. CI42042902522 accepted native request gate and Unity-license-preflight; reconstruct pending under shared raft-native-engine lock during active T1 Unity job. No native APK/phone/visual/save proof yet, no cancellations.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42042902522",
+        "https://github.com/alwansan/raf/commit/753802d75196210d721cca0f4fdec6ce7800bf0d"
+      ],
+      "at": "2026-11-05T14:15:00Z",
+      "_record_path": "../B_TEAM/events/T5/20261105T1415Z-single-native-diagnostic-request.json"
+    },
+    {
+      "id": "T5-20261105T1418Z-crossprocess-profile-window",
+      "owner": "T5",
+      "session_id": "20261105T1407Z-T5-chat-profile-reader-window-c8a1",
+      "origin": "chat",
+      "issue_id": "INTEGRATION-001",
+      "type": "result",
+      "summary": "Source-real net8 LocalProfileStore cross-process writer test: holding empty exclusive profile for 300ms allows identical persistent profile; holding for 3500ms exhausts bounded retries with IOException before writer completes, while persistent corruption fails closed unchanged. Distinct from CI42020924863 InvalidDataException and not Android world/save proof.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42043111968",
+        "https://github.com/alwansan/raf/commit/69fe4aedcdd85f4dc75149f6472a09000b12bf2b",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/discussions/LOCAL-005/20261105T1417Z-T5-original-profile-writer-window-to-T4.md"
+      ],
+      "at": "2026-11-05T14:18:00Z",
+      "_record_path": "../B_TEAM/events/T5/20261105T1418Z-crossprocess-profile-window.json"
+    },
+    {
       "id": "20261104-b-generation",
       "owner": "owner-team-bootstrap",
       "session_id": "b-team-setup-20261104",
@@ -5630,7 +5697,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "4fe86b4d1bd6a9965aeb4f2a161b466dfe78df9be0b4fa9c74645b36f50b4c30",
+  "source_input_sha256": "c3a3c81f7b9c30f9ebb7db84f2c4bd0f46a3b44298e04cd089d6447396472037",
   "generation": "T-2026-11-05",
-  "input_sha256": "2df47f1e75b6b5403c3a62357f18a4db7f4ecc1cd9c1a206cb643f91f03e0965"
+  "input_sha256": "80e2726d23f162a43d5e5c45c5476f44e9498d301c41fe6d423aa22a05fcb5ef"
 }
