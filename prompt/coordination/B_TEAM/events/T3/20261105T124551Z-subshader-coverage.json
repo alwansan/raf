@@ -1,0 +1,15 @@
+{
+  "id": "T3-20261105T124551Z-subshader-coverage",
+  "owner": "T3",
+  "session_id": "20261105T124551Z-T3-chat-subshader-coverage-c29b",
+  "issue_id": "RENDER-002",
+  "type": "integration",
+  "summary": "Added source-only post-restorer material-linked multi-SubShader partial program coverage counters; CI42030761276 passed 31 synthetic/legacy tests and py_compile. RENDER-002 OPEN, native/Adreno unverified.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/efb1d7bc675ff7b9650f6a3e246c1c7f6fb1aeda",
+    "https://github.com/alwansan/raf/commit/f0062b39297b1e4953bac2934e479e25fa199a27",
+    "https://github.com/alwansan/raf/actions/runs/42030761276",
+    "prompt/coordination/clients/T3/sessions/20261105T124551Z-T3-chat-subshader-coverage-c29b.md"
+  ],
+  "at": "2026-11-05T12:53:40.508Z"
+}
