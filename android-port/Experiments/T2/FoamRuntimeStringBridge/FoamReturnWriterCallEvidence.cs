@@ -34,7 +34,7 @@ internal static class FoamReturnWriterCallEvidence
         {
             if(ins.Operand is Instruction dest) targets.Add(dest);
             if(ins.Operand is Instruction[] dests)
-                foreach(var dest in dests) targets.Add(dest);
+                foreach(var branchDestination in dests) targets.Add(branchDestination);
         }
         foreach(var h in method.Body.ExceptionHandlers)
         {
