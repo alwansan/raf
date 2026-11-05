@@ -36,3 +36,16 @@ class InterfaceAuditTests(unittest.TestCase):
                          stage("Fragment", "Input", component=3)):
             with self.assertRaises(ValueError):
                 audit(stage("Vertex", "Output"), fragment)
+
+    def test_builtin_only_struct_is_ignored_but_mixed_is_rejected(self):
+        vertex = stage("Vertex", "Output").replace('%5 %7', '%5 %7 %12') + """
+        %10 = OpTypeStruct %3 %2
+        %11 = OpTypePointer Output %10
+        %12 = OpVariable %11 Output
+        OpMemberDecorate %10 0 BuiltIn Position
+        OpMemberDecorate %10 1 BuiltIn PointSize
+        """
+        fragment = stage("Fragment", "Input")
+        self.assertTrue(audit(vertex, fragment)["compatible_numeric_coverage"])
+        with self.assertRaises(ValueError):
+            audit(vertex.replace("OpMemberDecorate %10 1 BuiltIn PointSize", ""), fragment)

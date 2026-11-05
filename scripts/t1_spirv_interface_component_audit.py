@@ -7,6 +7,7 @@ import subprocess
 
 def interface(text, model, storage):
     entries, definitions, decorations = [], {}, {}
+    builtin_members = {}
     for line in text.splitlines():
         words = line.split()
         if not words:
@@ -17,6 +18,8 @@ def interface(text, model, storage):
             if len(fields) != 3:
                 raise ValueError("Unsupported private entry point")
             entries.append(fields[2].split())
+        elif len(words) == 5 and words[0] == "OpMemberDecorate" and words[3] == "BuiltIn":
+            builtin_members.setdefault(words[1], set()).add(int(words[2]))
         elif words[0] == "OpDecorate" and len(words) >= 3:
             target, kind = words[1:3]
             if kind in {"Location", "Component", "BuiltIn"}:
@@ -37,6 +40,12 @@ def interface(text, model, storage):
         pointer_op, pointer = definitions[args[0]]
         if pointer_op != "OpTypePointer" or len(pointer) != 2 or pointer[0] != storage:
             raise ValueError("Invalid private interface pointer")
+        pointee_op, members = definitions[pointer[1]]
+        if (pointee_op == "OpTypeStruct" and members and
+                builtin_members.get(pointer[1]) == set(range(len(members))) and
+                (variable, "Location") not in decorations and
+                (variable, "Component") not in decorations):
+            continue
         if (variable, "Location") not in decorations:
             raise ValueError("Unsupported private interface without direct location")
         location = int(decorations[variable, "Location"])

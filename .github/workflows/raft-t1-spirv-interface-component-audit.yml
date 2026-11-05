@@ -24,3 +24,30 @@ jobs:
             scripts
             tests
       - run: python3 -m unittest discover -s tests -p test_t1_spirv_interface_component_audit.py -v
+
+      - name: Compile and validate a synthetic vertex and fragment pair
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq glslang-tools spirv-tools
+          scratch="$(mktemp -d)"
+          trap 'rm -rf "$scratch"' EXIT
+          cat > "$scratch/test.vert" <<'GLSL'
+          #version 450
+          layout(location=3, component=1) out vec2 varyingValue;
+          void main() {
+            gl_Position = vec4(0, 0, 0, 1);
+            varyingValue = vec2(1, 2);
+          }
+          GLSL
+          cat > "$scratch/test.frag" <<'GLSL'
+          #version 450
+          layout(location=3, component=1) in vec2 varyingValue;
+          layout(location=0) out vec4 color;
+          void main() { color = vec4(varyingValue, 0, 1); }
+          GLSL
+          glslangValidator -V "$scratch/test.vert" -o "$scratch/vertex.spv"
+          glslangValidator -V "$scratch/test.frag" -o "$scratch/fragment.spv"
+          spirv-val "$scratch/vertex.spv"
+          spirv-val "$scratch/fragment.spv"
+          python3 -m scripts.t1_spirv_interface_component_audit "$scratch/vertex.spv" "$scratch/fragment.spv"
