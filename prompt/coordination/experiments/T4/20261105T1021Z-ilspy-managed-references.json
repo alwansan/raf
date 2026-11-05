@@ -25,7 +25,8 @@
     "git checkout pinned original ZIP2 DLL and pinned 151 feature Managed siblings into isolated private runner directories",
     "assert_original_dll three copies of source SHA",
     "ilspycmd -p -lv CSharp9_0 on isolated-A, isolated-B, and sibling-rich exact same original DLL",
-    "python3 -m scripts.t4_probe_ilspy_reference_context --solo-a-dll ... --solo-b-dll ... --refs-dll ... --solo-a-source ... --solo-b-source ... --refs-source ... --managed-dir ..."
+    "python3 -m scripts.t4_probe_ilspy_reference_context --solo-a-dll ... --solo-b-dll ... --refs-dll ... --solo-a-source ... --solo-b-source ... --refs-source ... --managed-dir ...",
+    "isolated original-context workflow production step: adapt('Raft_Network', SHA-pinned original class) then instrument('Raft_Network', manifest) and assert source SHA, manifest adapted SHA, original completion/yield preservation and both authentic diagnostic markers"
   ],
   "negative_controls": [
     "unrecognized class/body pair refused",
@@ -35,10 +36,10 @@
     "no fake device claim"
   ],
   "workflow_path": ".github/workflows/raft-t4-ilspy-reference-context.yml",
-  "run_url": "https://github.com/alwansan/raf/actions/runs/42011353849",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42012049920",
   "artifact_urls": [],
   "budget": "One isolated ~12 minute ubuntu24.04 job, no LFS, Unity/native/APK or original private source artifact",
-  "status": "active",
+  "status": "completed",
   "observed_result": {
     "original_AB_C_run": "42011353849 COMPLETED SUCCESS 10/10 controls",
     "source_binary_same_sha_three": true,
@@ -50,19 +51,31 @@
     "production_source_pins_changed": false,
     "companion_context_effect_evidenced": true,
     "potential_path_confounds": "not excluded",
-    "production_native_adapter_replay": "CI42012049920 pending at last update",
-    "actual_unity_or_device": false
+    "production_native_adapter_replay": "CI42012049920 COMPLETED SUCCESS",
+    "actual_unity_or_device": false,
+    "production_adapter_exercised": true,
+    "original_source_sha256": "080035c137e446828226ed84a23190656b6f235d274436cafb477feaf93caa03",
+    "runtime_manifest_adapted_sha256": "996e4c4c2bcf593436af6ef895116dbdfe4a13c99b5618971c91bf2c1626385f",
+    "original_completion_assignment_preserved": true,
+    "original_yield_count_preserved": true,
+    "first_movenext_and_completion_marker": true,
+    "prior_original_CSharp_compile": "CI41942118067 success, exit=0 on source marker ea98fb0",
+    "current_unity_il2cpp": false,
+    "current_android_device": false
   },
   "rejected_hypotheses": [
     "Separate original DLL inputs caused source SHA difference — rejected by same binary SHA verified three times",
     "Same-run nondeterminism with isolated source — rejected in two controls and prior T4 duplicate CI",
-    "Only comments/literals affect class text — masked executable body hash also changed"
+    "Only comments/literals affect class text — masked executable body hash also changed",
+    "Production adapter must accept T4 DLL-only decompiler SHA as alternate — rejected: full original Managed references reproduce B07 existing original pin and production adapted manifest without changing any pin"
   ],
   "limitations": [
     "Companions and directory path varied together; cannot isolate a specific reference DLL or fully exclude path effect",
     "No proof of gameplay or .rgd persistence",
-    "Original production SHA untouched; native stage adapter validation being explicitly exercised separately"
+    "Original production SHA untouched; native stage adapter validation being explicitly exercised separately",
+    "Production source adapter and existing managed CLR compile pass are not Unity Editor IL2CPP / Android device / original .rgd persistence proof"
   ],
   "integration_commit": "8718d038608aa3a4d6af9592fc80119a2011e029",
-  "next_step": "Complete dedicated real production Raft_Network source adapter replay in dependency-rich authenticated original context, keep strict pins; coordinate native candidate with T5 for Android host/gameplay and actual .rgd readback."
+  "next_step": "Source intake discrepancy resolved at bounded context-level; do not change production SHA. Next coordinate a single integrated Unity/native test package and actual phone world/.rgd readback. No cancellation or duplicate native request.",
+  "updated_at": "2026-11-05T10:39:00Z"
 }
