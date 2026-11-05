@@ -1,0 +1,21 @@
+{
+  "session_id": "20261105T130700Z-T1-scheduled-a8d4",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "f4b99fb7dc2b51933f7322ac61e71742b45a7d70",
+  "resumed_from_sessions": [
+    "20261105T125100Z-T1-chat-affd1c",
+    "20261105T121347Z-T1-paired-capture"
+  ],
+  "hypothesis": "A per-channel ULP and signed-bias diagnostic on already captured RGBA32F pass-zero buffers can distinguish magnitude/rounding errors from channel swaps without rerunning Unity or private shaders.",
+  "intended_files": [
+    "scripts/t1_fft_rgba_error_signature.py",
+    "tests/test_t1_fft_rgba_error_signature.py",
+    "prompt/coordination/clients/T1/sessions/20261105T130700Z-T1-scheduled-a8d4.md"
+  ],
+  "experiment_key": "fft-pass0-rgba32f-ulp-error-signature-cpu-only-1024x32-seed19-pair0-1",
+  "resource_key": null,
+  "taken_over_from": "T1 chat paired capture CI42025620147; roundtrip CI42030877911",
+  "updated_at": "2026-11-05T13:07:00Z"
+}
