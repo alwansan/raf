@@ -1,4 +1,6 @@
 name: T3 RENDER-002 genuine exporter Texture2D image files and GUID closure
+# T3 retry after synthetic test caught missing source GUID count default;
+# preserve 106 original-linked genuine export scope, no game asset mutations.
 # Read-only metadata GUID presence diagnostic after B15 failed to find TextureImporter.
 on:
   workflow_dispatch:
