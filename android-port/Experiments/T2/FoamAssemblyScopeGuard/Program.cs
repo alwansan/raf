@@ -129,7 +129,7 @@ internal static class Program
         Require(LooseSignature(external, definition), "external decoy must share FullName");
         Require(!StrictSignatureAndScope(external, definition),
             "foreign assembly with same FullName must be rejected");
-        Require(!StrictSignatureAndScope(external, otherDefinition) == false,
+        Require(StrictSignatureAndScope(external, otherDefinition),
             "foreign reference should match its actual other assembly definition");
         Require(LooseSignature(returnSpoof, definition),
             "spoofed RT return assembly must share public FullName");
