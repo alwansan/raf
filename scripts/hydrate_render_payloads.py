@@ -79,8 +79,9 @@ def reuse_verified_staged_sources(rows, source_root, work_root=Path('.')):
         raise ValueError('Staged graphics source root is not a directory')
     # Validate the entire available batch BEFORE replacing any LFS pointer.
     # Previously an invalid second owner could leave the first one hydrated.
-    # This metadata-only preflight avoids a second multi-GB SHA read; each
-    # source still receives full streaming SHA256 validation while copied.
+    # Full content verification happens in private temporary copies below,
+    # BEFORE the first pointer is published. This prevents a later same-size
+    # corrupted owner from leaving earlier owners partially hydrated.
     candidates = []
     for name, digest, size in rows:
         if not PATTERN.fullmatch(name):
@@ -101,16 +102,22 @@ def reuse_verified_staged_sources(rows, source_root, work_root=Path('.')):
         if not target.parent.is_dir():
             raise ValueError('Missing original graphics destination parent')
         candidates.append((source, target, digest, size))
+    # Stage and digest-verify the WHOLE batch before publishing even one
+    # original. Peak workspace space is the final hydrated batch size, not a
+    # second copy of it; staging uses the same per-target filesystem.
+    staged = []
     reused, reused_bytes = 0, 0
-    for source, target, digest, size in candidates:
-        _check_regular_path(source)
-        _check_regular_path(target)
-        temporary = None
-        try:
+    try:
+        for source, target, digest, size in candidates:
+            _check_regular_path(source)
+            _check_regular_path(target)
             with tempfile.NamedTemporaryFile(
                 dir=target.parent, prefix='.verified-zip2-graphics-', delete=False
             ) as output:
                 temporary = Path(output.name)
+                # Track the temporary immediately so even a read/write or SHA
+                # failure in a later owner removes every earlier staged copy.
+                staged.append((temporary, target, digest, size))
                 copied, sha = 0, hashlib.sha256()
                 with source.open('rb') as original:
                     while chunk := original.read(2 * 1024 * 1024):
@@ -124,14 +131,30 @@ def reuse_verified_staged_sources(rows, source_root, work_root=Path('.')):
             if copied != size or sha.hexdigest() != digest:
                 raise ValueError('Staged original failed independent LFS SHA verification')
             os.chmod(temporary, 0o644)
+
+        # Check every pointer again before committing; no content SHA failure
+        # or changed target can publish a partially authenticated batch.
+        for temporary, target, digest, size in staged:
+            _check_regular_path(target)
+            if target.exists():
+                if not target.is_file() or target.stat().st_size > 1024:
+                    raise ValueError('Refusing to replace nonpointer graphics destination')
+                if pointer(target.read_bytes()) != (digest, size):
+                    raise ValueError('Original destination pointer changed during staging')
+            if not target.parent.is_dir():
+                raise ValueError('Missing original graphics destination parent')
+
+        # Individual rename is atomic, but the sequence of renames is not a
+        # cross-file transaction if the OS fails mid-publication.
+        for temporary, target, digest, size in staged:
             os.replace(temporary, target)
-            temporary = None
-        finally:
-            if temporary is not None:
-                temporary.unlink(missing_ok=True)
-        reused += 1
-        reused_bytes += size
-    return reused, reused_bytes
+            reused += 1
+            reused_bytes += size
+        return reused, reused_bytes
+    finally:
+        for temporary, target, digest, size in staged:
+            temporary.unlink(missing_ok=True)
+
 
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--apply',action='store_true');p.add_argument('--release-cache',action='store_true');args=p.parse_args()
