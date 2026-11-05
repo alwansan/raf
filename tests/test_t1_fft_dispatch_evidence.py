@@ -42,6 +42,15 @@ shader.Dispatch(k, 1, 1, 1);'''
         self.assertTrue(result["call_families_present"]["Dispatch"])
         self.assertFalse(result["findkernel_and_dispatch_syntax_present"])
 
+    def test_four_quote_raw_delimiter_does_not_close_on_inner_triple(self):
+        source = '''var text = """"shader.FindKernel("K"); """ shader.SetTexture(k, "A", t); """";
+shader.Dispatch(k, 1, 1, 1);'''
+        result = self.check(source)
+        self.assertFalse(result["call_families_present"]["FindKernel"])
+        self.assertFalse(result["call_families_present"]["SetTexture"])
+        self.assertTrue(result["call_families_present"]["Dispatch"])
+        self.assertFalse(result["findkernel_and_dispatch_syntax_present"])
+
     def test_missing_dispatch_cannot_pass(self):
         self.assertFalse(self.check("shader.FindKernel(x);")["findkernel_and_dispatch_syntax_present"])
 
