@@ -1,0 +1,20 @@
+{
+  "id": "20261105T210656Z-T3-chat-renderer-class921-7d62",
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T210656Z-T3-chat-renderer-class921-7d62",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "at": "2026-11-05T21:09:38Z",
+  "summary": "Actual SHA-pinned six original Raft scenes: uniquely most-used original Shader48 accounts for 921 Renderer Material slots (914 MeshRenderer, 7 SkinnedMeshRenderer, 0 ParticleSystemRenderer); 215 other verified Shader48 slots belong to ParticleSystemRenderer. CI42109994654 PASS; no Unity/Android proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42109994654",
+    "https://github.com/alwansan/raf/commit/6a07848324991973598a45378dd85ff055d279f3",
+    "https://github.com/alwansan/raf/commit/7fb7889b838b71f330dc95c5a7f7c2d95d5167dc",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_RENDERER_CLASS_SH48_2026-11-05.md"
+  ],
+  "limitations": [
+    "actual original source, not full-native Shader GUID/pixel",
+    "RENDER-002 OPEN"
+  ]
+}
