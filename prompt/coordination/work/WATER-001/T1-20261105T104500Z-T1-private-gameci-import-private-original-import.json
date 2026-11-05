@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T104500Z-T1-private-gameci-import",
+  "issue_id": "WATER-001",
+  "track": "Run authentic original compiled FFT-derived ComputeShader imports through proven GameCI Unity2021 CLI without publishing shader logs",
+  "approach": "Pin successful GameCI CLI v0.1.72 release SHA; first run synthetic exact Editor canary silently with result-XML fail-closed gate, then privately authenticate ZIP2 FFT owner, translate 20 original DXBC candidates, and import/HasKernel/group check all 20 in a private Editor NUnit suite with raw compiler logs captured/deleted, publish only numeric aggregate flags.",
+  "status": "planned",
+  "base_sha": "04d921e1fa3debc5cfb008e793ec459c1c1aee84",
+  "intended_files": [
+    "scripts/t1_gameci_private_result_gate.py",
+    "tests/test_t1_gameci_private_result_gate.py",
+    "android-port/Experiments/T1/T1PrivateFftImportTests.cs",
+    ".github/workflows/raft-t1-private-gameci-original-fft-import.yml",
+    "docs/T1_GAMECI_ORIGINAL_FFT_IMPORT_2026-11-05.md",
+    "prompt/coordination/clients/T1/sessions/20261105T104500Z-T1-private-gameci-import.md"
+  ],
+  "hypothesis": "Using the exact GameCI CLI/image/license route verified by real source-free CI42011720822, actual SHA-authenticated translated FFT .compute assets may be imported and runtime kernel/query groups observed inside Unity 2021 while all private source and compiler diagnostics remain unpublished.",
+  "related_work": [
+    "prompt/coordination/work/WATER-001/T1-20261105T102000Z-T1-gameci-sourcefree-gameci-activation.json",
+    "prompt/coordination/work/WATER-001/T1-20261105T024000Z-T1-original-derived-fft-unity-private-compute-staging.json"
+  ],
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/actions/runs/42011720822",
+    "https://github.com/alwansan/raf/actions/runs/41957549770",
+    "https://github.com/alwansan/raf/actions/runs/41959712898"
+  ],
+  "experiment_ids": [],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Secure result parser tests, private runtime NUnit probe, workflow pinned GameCI executable and original SHA input. Do not assert original author/runtime kernel selection or device water even if importer succeeds.",
+  "updated_at": "2026-11-05T10:45:00Z",
+  "identity_conflict": "Concurrent T1 sessions possible; no shared T1 state overwrite, unique isolated work and files."
+}
