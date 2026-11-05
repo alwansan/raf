@@ -111,14 +111,14 @@ class B05TexEnvTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as td:
             assets=Path(td)/'Assets';assets.mkdir()
             mat=assets/'scope.mat'
-            mat.write_text('%YAML 1.1\\n--- !u!21 &2100000\\nMaterial:\\n'
-                           '  m_SavedProperties:\\n'
-                           '    m_TexEnvs:\\n'
-                           '      _MainTex:\\n'
-                           '        m_Texture: {fileID: 2800000, guid: '+ 'b'*32 +', type: 3}\\n'
-                           '        m_Scale: {x: 1, y: 1}\\n'
-                           '        m_Offset: {x: 0, y: 0}\\n')
-            (assets/'scope.mat.meta').write_text('fileFormatVersion: 2\\nguid: '+'a'*32+'\\n')
+            mat.write_text('%YAML 1.1\n--- !u!21 &2100000\nMaterial:\n'
+                           '  m_SavedProperties:\n'
+                           '    m_TexEnvs:\n'
+                           '      _MainTex:\n'
+                           '        m_Texture: {fileID: 2800000, guid: '+ 'b'*32 +', type: 3}\n'
+                           '        m_Scale: {x: 1, y: 1}\n'
+                           '        m_Offset: {x: 0, y: 0}\n')
+            (assets/'scope.mat.meta').write_text('fileFormatVersion: 2\nguid: '+'a'*32+'\n')
             self.assertEqual(exported_texenvs(Path(td)),
                              {MAT:{'_MainTex':(TEX,(1.,1.,0.,0.))}})
 
