@@ -1,0 +1,17 @@
+# T5 chat — 20261105T2110Z-T5-chat-retain-delivery-a6f8
+- session_id: 20261105T2110Z-T5-chat-retain-delivery-a6f8
+- origin: chat
+- status: active
+- resumed_from_sessions: 20261105T2055Z-T5-chat-obb-pair-9f2d; 20261105T1953Z-T5-scheduled-release-permission-a72e
+- base_sha: 2f065e1524f2723d62e9d4bf142d55767f55258f
+- intent: recover expiring fully packaged native release-delivery artifact WITHOUT rerunning Unity or testing T1–T4 shaders/mouse.
+- work: prompt/coordination/work/INTEGRATION-001/20261105T2110Z-T5-chat-retain-delivery-a6f8.json
+- experiment_key: t5-42058825739-native-delivery-archive-single-source-stream-sha256-fullpart-v1
+- resource_key: actions-artifact-13441227298-6GB-retention-exclusive
+- owner: T5
+- pinned immutable native run: https://github.com/alwansan/raf/actions/runs/42058825739 (source e9c358eda01785b65e4eb14f18723da426635628; native reconstruct SUCCESS, publish POST403).
+- expiring artifact: delivery id13441227298, 5,948,243,524 bytes, digest sha256:29d967c5f1868a10aa0f8f3b9f0306e828c1d32ef3cda2909f7482b5d111eef6, expires 2026-11-06 18:19:05Z; signed checkpoint id13441766832 expires 2026-11-07 18:18:17Z.
+- Actions check: no in-progress as of initial poll; T1/T2/T3/T4 hold rendering/input work independently.
+- planned files: scripts/t5_verify_retained_delivery_archive.py, tests/test_t5_verify_retained_delivery_archive.py, .github/workflows/raft-t5-retain-native-delivery.yml, docs/T5_NATIVE_DELIVERY_RETENTION_2026-11-05.md.
+- limitations: source-free tests do not prove actual ZIP or signed binary; destination artifact reupload is possible only after actual runner result. Retain 2 days to avoid long storage charges; do not cancel native CI.
+- next: register checker + tests and narrowly scoped one-shot workflow, check actual result and SHA, record full evidence; if 403/quota/disk, document without retries.
