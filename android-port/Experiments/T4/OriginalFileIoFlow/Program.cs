@@ -165,7 +165,7 @@ internal static class Program
             var read = ExactlyOneCall(manager,
                 save.Methods.Where(m => m.Name == "Load" && m.HasGenericParameters));
             var write = ExactlyOneCall(manager, save.Methods.Where(m => m.Name == "Save"));
-            if (read.MetadataToken == write.MetadataToken)
+            if (read.MetadataToken.ToInt32() == write.MetadataToken.ToInt32())
                 throw new InvalidDataException("read_write_target_not_distinct");
             var readShape = Inspect(manager, read, 2);
             var writeShape = Inspect(manager, write, 1);
