@@ -1,0 +1,24 @@
+{
+  "session_id": "20261105T1730Z-T3-scheduled-rawspv-gate-c8e1",
+  "origin": "scheduled",
+  "owner": "T3",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "base_sha": "f48b5f795fac1b05db012593d20e352479fb4710",
+  "updated_at": "2026-11-05T17:30:00Z",
+  "resumed_from_sessions": [
+    "20261105T1715Z-T3-chat-ps-readmask-spv-5e84",
+    "20261105T1728Z-T3-chat-rawspirv-T1-original-3f7c"
+  ],
+  "intended_files": [
+    "prompt/coordination/work/RENDER-002/20261105T1730Z-T3-scheduled-rawspv-gate-c8e1.json",
+    "prompt/coordination/clients/T3/sessions/20261105T1730Z-T3-scheduled-rawspv-gate-c8e1.md"
+  ],
+  "experiment_key": "T3-rawspv-original-gate-audit-42075031892-no-reexecution",
+  "resource_key": null,
+  "hypothesis": "Latest workflow success may be source-free only, original SHA-authenticated job skipped; verify gates before assigning genuine result.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42075031892"
+  ],
+  "avoid_collision": "T3 chat owns raw SPIRV code and opt-in original workflow; scheduled session audits gate only, no dispatch or edits."
+}
