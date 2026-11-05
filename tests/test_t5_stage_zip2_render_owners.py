@@ -158,8 +158,8 @@ class ZIP2RenderStageTests(unittest.TestCase):
             target = feature / name
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_text(
-                "version https://git-lfs.github.com/spec/v1\\n"
-                f"oid sha256:{digest}\\nsize {size}\\n",
+                "version https://git-lfs.github.com/spec/v1\n"
+                f"oid sha256:{digest}\nsize {size}\n",
                 encoding="ascii",
             )
         reused, count = reuse_verified_staged_sources(
@@ -178,13 +178,13 @@ class ZIP2RenderStageTests(unittest.TestCase):
         first.parent.mkdir(parents=True, exist_ok=True)
         later.parent.mkdir(parents=True, exist_ok=True)
         first_pointer = (
-            "version https://git-lfs.github.com/spec/v1\\n"
-            f"oid sha256:{self.digest}\\nsize {len(self.original)}\\n"
+            "version https://git-lfs.github.com/spec/v1\n"
+            f"oid sha256:{self.digest}\nsize {len(self.original)}\n"
         )
         first.write_text(first_pointer, encoding="ascii")
         later.write_text(
-            "version https://git-lfs.github.com/spec/v1\\n"
-            f"oid sha256:{'0' * 64}\\nsize {len(self.original)}\\n",
+            "version https://git-lfs.github.com/spec/v1\n"
+            f"oid sha256:{'0' * 64}\nsize {len(self.original)}\n",
             encoding="ascii",
         )
         with self.assertRaisesRegex(ValueError, "pointer"):
@@ -202,8 +202,8 @@ class ZIP2RenderStageTests(unittest.TestCase):
         first = feature / self.owner
         first.parent.mkdir(parents=True, exist_ok=True)
         first_pointer = (
-            "version https://git-lfs.github.com/spec/v1\\n"
-            f"oid sha256:{self.digest}\\nsize {len(self.original)}\\n"
+            "version https://git-lfs.github.com/spec/v1\n"
+            f"oid sha256:{self.digest}\nsize {len(self.original)}\n"
         )
         first.write_text(first_pointer, encoding="ascii")
         later_source = self.output / second
