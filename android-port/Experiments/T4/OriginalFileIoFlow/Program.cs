@@ -188,6 +188,34 @@ internal static class Program
         return calls[0]!;
     }
 
+    private static bool SavePassesDirectOriginalFilename(TypeDefinition manager,
+        TypeDefinition save, MethodReference expectedFileManagerTarget)
+    {
+        var sites = new List<(MethodDefinition method, int index)>();
+        foreach (var method in save.Methods.Where(m => m.Name == "Save" && m.HasBody))
+        {
+            var instructions = method.Body.Instructions;
+            for (int index = 0; index < instructions.Count; index++)
+            {
+                var insn = instructions[index];
+                if ((insn.OpCode.Code == Code.Call || insn.OpCode.Code == Code.Callvirt) &&
+                    insn.Operand is MethodReference target &&
+                    target.DeclaringType.FullName == manager.FullName &&
+                    target.MetadataToken.ToInt32() == expectedFileManagerTarget.MetadataToken.ToInt32())
+                    sites.Add((method, index));
+            }
+        }
+        if (sites.Count != 1 || sites[0].method.IsStatic ||
+            sites[0].method.Parameters.Count != 2 ||
+            sites[0].method.Parameters[0].ParameterType.FullName != "System.String" ||
+            sites[0].index == 0)
+            throw new InvalidDataException("unverified_original_Save_filename_operand");
+        Instruction preceding = sites[0].method.Body.Instructions[sites[0].index - 1];
+        return preceding.OpCode.Code == Code.Ldarg_1 ||
+            (preceding.OpCode.Code == Code.Ldarg_S &&
+             preceding.Operand is ParameterDefinition parameter && parameter.Index == 0);
+    }
+
     private static int Main(string[] args)
     {
         if (args.Length != 4 || args[0] != "--assembly" || args[2] != "--output")
@@ -222,6 +250,7 @@ internal static class Program
                 throw new InvalidDataException("read_write_target_not_distinct");
             var readShape = Inspect(manager, read, 2);
             var writeShape = Inspect(manager, write, 1);
+            bool exactOriginalFilename = SavePassesDirectOriginalFilename(manager, save, write);
 
             var result = new
             {
@@ -231,6 +260,7 @@ internal static class Program
                 read_target_unique = true,
                 write_target_unique = true,
                 original_methods_distinct = true,
+                save_original_filename_directly_forwarded = exactOriginalFilename,
                 read = readShape,
                 write = writeShape,
                 actual_file_io_invoked = false,
