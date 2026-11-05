@@ -60,6 +60,35 @@ jobs:
           sparse-checkout-cone-mode: false
           sparse-checkout: |
             /Raft/Raft_Data/Managed/Assembly-CSharp.dll
+      - name: Checkout pinned original Managed sibling runtime dependencies
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 02e9fba7fb42b83579595885391be636ee3b56e8
+          path: t4-managed-reference-pin
+          lfs: false
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /Raft/Raft_Data/Managed/
+      - name: Stage authentic original DLL alongside its verified Managed reference context
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C t4-managed-reference-pin rev-parse HEAD)" = 02e9fba7fb42b83579595885391be636ee3b56e8
+          mkdir -p "$RUNNER_TEMP/t4-managed-runtime"
+          siblings=0
+          for dep in t4-managed-reference-pin/Raft/Raft_Data/Managed/*.dll; do
+            if [ "$(basename "$dep")" != "Assembly-CSharp.dll" ]; then
+              test -f "$dep" && test ! -L "$dep"
+              cp "$dep" "$RUNNER_TEMP/t4-managed-runtime/"
+              siblings=$((siblings + 1))
+            fi
+          done
+          test "$siblings" -eq 151
+          cp original-zip2/Raft/Raft_Data/Managed/Assembly-CSharp.dll "$RUNNER_TEMP/t4-managed-runtime/Assembly-CSharp.dll"
+          test "$(stat -c '%s' "$RUNNER_TEMP/t4-managed-runtime/Assembly-CSharp.dll")" = 3211776
+          echo "T4_ORIGINAL_MANAGED_CONTEXT original_assembly_sha_reverified_in_probe=true sibling_files=$siblings private_original_bytes_published=false"
       - name: Execute true original static FileManager Create/Open and close/reopen synthetic stream
         shell: bash
         run: |
@@ -68,7 +97,7 @@ jobs:
           test "$(stat -c '%s' original-zip2/Raft/Raft_Data/Managed/Assembly-CSharp.dll)" = 3211776
           test "$(df -Pk . | awk 'NR==2 {print $4}')" -gt 900000
           dotnet "$RUNNER_TEMP/t4-real-managed-file-io/OriginalManagedStreamRoundtrip.dll" \
-            --assembly original-zip2/Raft/Raft_Data/Managed/Assembly-CSharp.dll \
+            --assembly "$RUNNER_TEMP/t4-managed-runtime/Assembly-CSharp.dll" \
             --output "$RUNNER_TEMP/t4-real-original-stream-proof.json"
           python3 -m scripts.t4_validate_original_managed_stream_roundtrip \
             --report "$RUNNER_TEMP/t4-real-original-stream-proof.json"
