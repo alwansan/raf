@@ -4,9 +4,9 @@
   "origin": "chat",
   "session_id": "20261105T1736Z-T2-chat-ret-reason-28ce",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "a7366262b312bbfb2b92934fbd82c61a944871f9",
-  "updated_at": "2026-11-05T17:36:00Z",
+  "updated_at": "2026-11-05T17:39:00Z",
   "resumed_from_sessions": [
     "20261105T1712Z-T2-chat-return-identity-minimal-4c8f",
     "20261105T1723Z-T2-scheduled-rtcfg-a72e"
@@ -27,5 +27,18 @@
     "T1_T3_T4_T5": "no source/CI cancellation or edits"
   },
   "prior_original_CI": "42073459459 SUCCESS; one RT return, three branches, immediate producer unresolved",
-  "next_step": "CI original result for branch-target vs direct local/field vs other. If unknown preserve unknown, then integrate independent CFG source tool in separately reserved scope; no Android pixels claim. WATER-001 OPEN NOT_READY0/3."
+  "next_step": "Read original CI42076713202 T2_FOAM_RT_RETURN_REASON_SAFE; if success note only source original branch-entry/immediate family, not actual return value. WATER-001 OPEN NOT_READY0/3.",
+  "source_commits": [
+    "b7b249e532eef114e227055d203301ccdfbbe48b",
+    "d707e19112587bf40b5161f59a2b90f0f85cdc9f",
+    "98a83ed9fbd33effaab59608d8a7e6493c2b2630"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42076713202"
+  ],
+  "result": {
+    "code": "Exact original matching ReturnTexture method sole ret placement and prior opcode category, synthetic direct-null, branch target, local load controls",
+    "original_CI": "queued",
+    "runtime": null
+  }
 }
