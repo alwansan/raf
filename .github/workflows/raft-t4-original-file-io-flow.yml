@@ -1,0 +1,72 @@
+name: T4 LOCAL-005 original FileManager IO exception flow
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'android-port/Experiments/T4/OriginalFileIoFlow/**'
+      - 'scripts/t4_validate_original_file_io_flow.py'
+      - 'tests/test_t4_validate_original_file_io_flow.py'
+      - '.github/workflows/raft-t4-original-file-io-flow.yml'
+permissions:
+  contents: read
+concurrency:
+  group: raft-t4-compiled-file-io-flow-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  original-io-flow:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - name: Checkout only T4 public IO oracle and fail-closed tests
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /android-port/Experiments/T4/OriginalFileIoFlow/*
+            /scripts/t4_validate_original_file_io_flow.py
+            /tests/test_t4_validate_original_file_io_flow.py
+      - name: Verify 15 synthetic negative controls before touching original DLL
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t4_validate_original_file_io_flow.py tests/test_t4_validate_original_file_io_flow.py
+          python3 -m unittest discover -s tests -p test_t4_validate_original_file_io_flow.py -v
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Compile isolated Mono.Cecil oracle with pinned dependency
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 240s dotnet publish             android-port/Experiments/T4/OriginalFileIoFlow/OriginalFileIoFlow.csproj             -c Release --self-contained false -o "$RUNNER_TEMP/t4-original-io-oracle"             >"$RUNNER_TEMP/t4-private-compiler.log" 2>&1 || {
+              echo 'T4_IO_FLOW_ORACLE_COMPILE_FAILED diagnostic log kept private'
+              exit 1
+            }
+          test -s "$RUNNER_TEMP/t4-original-io-oracle/OriginalFileIoFlow.dll"
+      - name: Read immutable exact original ZIP2 game binary only
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: immutable-original
+          lfs: false
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /Raft/Raft_Data/Managed/Assembly-CSharp.dll
+      - name: Authenticate exact original compiled FileManager and inspect IO handler flow
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C immutable-original rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          test "$(stat -c '%s' immutable-original/Raft/Raft_Data/Managed/Assembly-CSharp.dll)" = 3211776
+          test "$(df -Pk . | awk 'NR==2 {print $4}')" -gt 900000
+          dotnet "$RUNNER_TEMP/t4-original-io-oracle/OriginalFileIoFlow.dll"             --assembly immutable-original/Raft/Raft_Data/Managed/Assembly-CSharp.dll             --output "$RUNNER_TEMP/t4-verified-private-io-flow.json"
+          python3 -m scripts.t4_validate_original_file_io_flow             --report "$RUNNER_TEMP/t4-verified-private-io-flow.json"
+          echo 'T4_IO_FLOW_AUTHENTIC_SOURCE original_sha_verified=true original_io_execution=false android_device=false'
+      - name: Do not upload original source, game bytes, IL or raw logs
+        if: always()
+        run: echo 'T4 source-only compiled original exception-flow evidence. NO RGD roundtrip, Unity or device proof.'
