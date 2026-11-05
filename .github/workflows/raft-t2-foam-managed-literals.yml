@@ -326,6 +326,26 @@ jobs:
           assert type(v['SameBlockLocalValueDefinitionProven']) is bool
           assert v['RuntimeRenderTextureObjectOrPixelsVerified'] is False
           assert v['OriginalPrivateSymbolOrNumericValueDisclosed'] is False
+          assert v['MatchingOriginalReturnMethodDefinitions'] in (0,1)
+          assert v['ActualReturnTargetDeclarationCategory'] in (
+              'matching_sha_managed_signature',
+              'unresolved_unityengine_declaration',
+              'unresolved_nonunity_declaration',
+              'not_an_immediate_rendertexture_call',
+              'not_examined')
+          assert type(v['MatchingOriginalMethodBodyAvailable']) is bool
+          if v['MatchingOriginalMethodBodyAvailable']:
+              assert v['MatchingOriginalReturnMethodDefinitions']==1
+          print('T2_FOAM_RETURN_SIGNATURE_IDENTITY_SAFE '+json.dumps({
+              'matches_original_sha_managed_signatures':
+                  v['MatchingOriginalReturnMethodDefinitions'],
+              'source_target_declaration_category':
+                  v['ActualReturnTargetDeclarationCategory'],
+              'matching_definition_has_compiled_body':
+                  v['MatchingOriginalMethodBodyAvailable'],
+              'runtime_nonnull_or_pixels_verified':False,
+              'original_method_names_or_il_exposed':False,
+          },sort_keys=True))
           print('T2_FOAM_ELEMENT_VALUE_SOURCE_SAFE '+json.dumps({
               'exact_stelem_sites':v['ExactStelemRefSites'],
               'immediate_value_source':v['ImmediateElementValueProducerCategory'],
