@@ -1,0 +1,27 @@
+{
+  "id": "T2-foam-Cecil-assembly-scope-guard-synthetic",
+  "owner": "T2",
+  "issue_id": "WATER-001",
+  "title": "Cecil source-free guard rejects cross-assembly same-signature RenderTexture method aliases",
+  "kind": "synthetic_compiled_method_identity_guard_not_original_game_evidence",
+  "stages": {
+    "acquisition": "SOURCEFREE_SYNTHETIC_ASSEMBLY_A_AND_B_MONO_CECIL_0_11_5",
+    "extraction": "SAME_FULLNAME_RETURN_TYPE_AND_DECLARING_CLASS_ACROSS_DIFFERENT_FAKE_ASSEMBLIES",
+    "reconstruction": "STRICT_DECLARING_ASSEMBLY_AND_RETURN_TYPE_SCOPE_REJECT_FALSE_SOURCE_MATCH",
+    "binding": "PENDING_ORIGINAL_SHA_MANAGED_FOAM_METHODREFERENCE_SCOPE_INTEGRATION",
+    "integration": "OWN_INDEPENDENT_NET9_CI42078113502_SUCCESS_NO_ORIGINAL_GAME_ASSETS",
+    "device": "NOT_TESTED"
+  },
+  "observed": {
+    "CI_success": true,
+    "sourcefree_control_cases_passed": true,
+    "actual_original_target_identity_verified": false,
+    "original_game_data_accessed": false,
+    "runtime_valid_RT_and_pixels_verified": false
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42078113502",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/android-port/Experiments/T2/FoamAssemblyScopeGuard/Program.cs"
+  ],
+  "next_step": "Actual SHA-original return MethodReference assembly identity needed; do not infer from FullName alone. WATER-001 OPEN NOT_READY0/3."
+}
