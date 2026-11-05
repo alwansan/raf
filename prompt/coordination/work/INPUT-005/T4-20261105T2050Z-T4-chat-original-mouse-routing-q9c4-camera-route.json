@@ -6,7 +6,7 @@
   "origin": "chat",
   "issue_id": "INPUT-005",
   "track": "physical Android mouse relative look",
-  "status": "active",
+  "status": "completed",
   "approach": "Resolve authentic compiled Raft camera/look mouse-consumer path before choosing event injection. Source-authenticated, read-only original DLL via ZIP2, bounded ILSpy extraction with redacted report and negative controls. No Unity build or gameplay mutation.",
   "base_sha": "c365d724bb7fe17484a6e6f033e1c7b24f7beb8d",
   "intended_files": [
@@ -28,8 +28,26 @@
     "prompt/coordination/clients/T4/sessions/20261105T2040Z-T4-scheduled-p4m8.md",
     "docs/DEVICE_FEEDBACK_42058825739_AR.md"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Add a source-free parser and CI to enumerate the original compiled mouse-look method usage with negative controls, then decide Android pointer-capture and camera bridge changes.",
-  "updated_at": "2026-11-05T20:50:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42107935479"
+  ],
+  "result": {
+    "integration_commit": "fe9a9ae5264821304923d6bac04d21089f3a3df8",
+    "workflow_status": "SUCCESS",
+    "tests_passed": "7/7",
+    "original_source_authenticated": true,
+    "source_files": 2395,
+    "direct_legacy_mouse_x": 4,
+    "direct_legacy_mouse_y": 4,
+    "custom_wrapper_mouse_axes": 0,
+    "inputsystem_delta_syntax_sites": 0,
+    "camera_named_direct_sites": 8,
+    "compiled_android": false,
+    "device_confirmed": false
+  },
+  "next_step": "Design and test original legacy axis-aware Android API26+ pointer capture bridge with lifecycle and no doubled input; device acceptance remains OPEN.",
+  "updated_at": "2026-11-05T20:56:29Z",
+  "experiment_ids": [
+    "20261105T2050Z-T4-chat-original-mouse-routing-q9c4"
+  ]
 }
