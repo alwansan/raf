@@ -119,6 +119,44 @@ def trace_caught_original_load_error(text):
     return result
 
 
+def trace_original_world_completion(text):
+    """Observe the genuine original coroutine assignment, never set a ready flag.
+
+    Called only after the full offline-adapted Raft_Network SHA gate. The
+    preceding B07 first-MoveNext trace does not prove this assignment ran.
+    A scoped statement block is necessary: a bare log after an unbraced
+    conditional could falsely report completion on the opposite branch.
+    """
+    from scripts.b07_probe_original_world_callbacks import method_body, _executable_positions
+    from scripts.b07_world_coroutine_trace import ENTRY
+
+    return_type, body = method_body(text, 'WorldHasBeenLoaded')
+    if return_type != 'IEnumerator' or not body.startswith(ENTRY):
+        raise ValueError('Expected B07 authenticated original coroutine entry')
+    if 'WorldHasBeenLoaded.originalCompletionAssigned' in text:
+        raise ValueError('Refuse duplicate world completion diagnostic')
+    executable = _executable_positions(body)
+    calls = list(re.finditer(r'\bHelper\s*\.\s*BroadCastToScene\s*\(', executable))
+    assignments = list(re.finditer(r'\bWorldHasBeenRecieved\s*=\s*true\s*;', executable))
+    if len(assignments) != 1 or not any(c.start() < assignments[0].start() for c in calls):
+        raise ValueError('Expected one original world assignment following scene broadcast')
+    start, end = assignments[0].span()
+    statement = body[start:end]
+    block = ('{ ' + statement + '\n'
+             '#if UNITY_ANDROID && !UNITY_EDITOR\n'
+             'RaftAndroid.Diagnostics.AndroidRuntimeLog.Write('
+             '"world", "WorldHasBeenLoaded.originalCompletionAssigned", '
+             '"Original ready assignment executed; playability and save not yet proven", false);\n'
+             '#endif\n}')
+    updated_body = body[:start] + block + body[end:]
+    if text.count(body) != 1:
+        raise ValueError('Ambiguous original world coroutine body')
+    result = text.replace(body, updated_body, 1)
+    if result.replace(block, statement, 1) != text:
+        raise ValueError('World completion diagnostic altered other statements')
+    return result
+
+
 def wrap_original_world_callback(text, method_name, expected_body_sha, area):
     """Wrap an authenticated original void callback without changing its body.
 
@@ -157,6 +195,8 @@ def instrument(name, text, manifest):
             method['signature'] == 'public static T Load<T>(string filename)'
             for method in row['methods'])):
         result = trace_caught_original_load_error(result)
+    if name == 'Raft_Network':
+        result = trace_original_world_completion(result)
     for method in row['methods']:
         if name == 'GameManager' and method.get('name') == 'OnWorldRecieved':
             result = wrap_original_world_callback(result, method['name'], method['body_sha256'], row['area'])
