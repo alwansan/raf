@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261105T1540Z-T2-chat-byref-target-b6af",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "b83b127d4edc6b6ef857ed03f01e5e08ac45df06",
+  "updated_at": "2026-11-05T16:01:38.838Z",
+  "resumed_from_experiment": "T2|original-0a6f0527|exact-ref-RenderTexture-array-callee|newarr-to-stind-same-block-v1",
+  "experiment_key": "T2|original-0a6f0527|Foam-ref-RenderTexture-newarr-private-length-vs-four-index-ops-v1",
+  "resource_key": "T2-original-managed-Foam-compiled-array-bounds",
+  "hypothesis": "A single exact compiled RenderTexture[] newarr feeding the ref parameter may have a direct int32 size literal; if so it can be privately compared with four distinct nonnegative compiled Texture(int) indices, without disclosing original integers. No runtime allocation guarantee.",
+  "method": "Use exact matching managed byref callee and previously proven same-block newarr→ref store; inspect immediately preceding size producer and decode only actual ldc.i4 forms. Compare four private original caller indices, report nullable in-bounds verdict with no literals or low-domain hashes; synthetic literal positive/negative and nonliteral unresolved controls. SHA original managed CI, no game asset edits.",
+  "intended_files": [
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/FoamByrefArrayBounds.cs",
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/Program.cs",
+    ".github/workflows/raft-t2-foam-managed-literals.yml",
+    "prompt/coordination/work/WATER-001/T2-20261105T1540Z-T2-chat-byref-target-b6af-array-size-vs-four-indices.json",
+    "prompt/coordination/clients/T2/sessions/20261105T1540Z-T2-chat-byref-target-b6af.md"
+  ],
+  "next_step": "Run original source-pinned CI and record bounds only if source-proven. WATER-001 OPEN NOT_READY0/3."
+}
