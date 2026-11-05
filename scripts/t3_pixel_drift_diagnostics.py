@@ -23,7 +23,8 @@ def classify(original: Image.Image, exported: Image.Image, *, texture_format: st
     low, high = alpha.getextrema()
     occupancy = "OPAQUE" if low == 255 else ("TRANSPARENT" if high == 0 else "MIXED")
     magnitude = ("EXACT" if not max_rgb and not max_alpha else
-                 "ALPHA_ONLY" if not max_rgb else\n                 "RGB_1" if max_rgb <= 1 else
+                 "ALPHA_ONLY" if not max_rgb else
+                 "RGB_1" if max_rgb <= 1 else
                  "RGB_2_4" if max_rgb <= 4 else
                  "RGB_5_16" if max_rgb <= 16 else
                  "RGB_17_64" if max_rgb <= 64 else "RGB_65_255")
