@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T143219Z-T3-chat-original921-builtin-2f7b",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "track": "original shader source identity / official Unity built-in recovery candidate",
+  "base_sha": "cf97a3725bb29b230ef766c5a17480a707fa6ebd",
+  "experiment_key": "T3-original6scenes-ZIP2-15964ea8-4typedowners-Shader48-use1633-top921-officialUnity2021.3.45f2-builtin-shader-exactname-intersection",
+  "resource_key": "ZIP2-15964ea8-original6scene-4owner-cpu-only-Unity2021vendor2MB",
+  "hypothesis": "The highest-original-renderer-use 921-slot original Shader48 still Dummy after vendor-only restore could be an exact official Unity 2021.3.45f2 built-in shader identity recoverable by the existing native builtin restorer; original source names must be compared against SHA256-locked official 198 name list, not guessed from Material document counts.",
+  "approach": "Source-only strict original ZIP2 six-scene/4 owner SHA-authenticated source Renderer->Material->Shader48 use-weight + parsed name comparison to SHA-verified Unity builtin archive, with nonidentifiable aggregates; prevent interpreting exact official-name as original Pass/variant equivalence.",
+  "intended_files": [
+    "scripts/t3_original_shader_builtin_eligibility.py",
+    "tests/test_t3_original_shader_builtin_eligibility.py",
+    ".github/workflows/raft-t3-original921-builtin-eligibility.yml",
+    "prompt/coordination/work/RENDER-002/T3-20261105T143219Z-T3-chat-original921-builtin-2f7b.json",
+    "prompt/coordination/clients/T3/sessions/20261105T143219Z-T3-chat-original921-builtin-2f7b.md",
+    "prompt/coordination/experiments/T3/20261105T143219Z-T3-chat-original921-builtin-2f7b.json",
+    "prompt/coordination/B_TEAM/events/T3/20261105T143219Z-T3-chat-original921-builtin-2f7b.json",
+    "docs/T3_ORIGINAL_921_BUILTIN_ELIGIBILITY_2026-11-05.md"
+  ],
+  "resumed_from_sessions": [
+    "20261105T1428Z-T3-scheduled-a7c9",
+    "20261105T1402Z-T3-chat-renderer-shader-impact-f63e",
+    "20261105T1405Z-T3-chat-renderer-dummy-join-8c41"
+  ],
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/actions/runs/42044249541",
+    "https://github.com/alwansan/raf/actions/runs/41659840282",
+    "scripts/a12_probe_original_vendor_identity_overlap.py"
+  ],
+  "related_work": [
+    "prompt/coordination/work/RENDER-002/T3-20261105T1402Z-T3-chat-renderer-shader-impact-f63e-sameexport-renderer-shader-dummy-join.json"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Commit standalone pure source identity intersection and tests; run one pinned source-only 6-scene/4-owner and SHA-pinned Unity built-in archive CI if nonoverlapping; capture 921 verdict, count-weighted source names only, never original Shader name.",
+  "updated_at": "2026-11-05T14:32:19.470Z"
+}
