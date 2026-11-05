@@ -1,0 +1,78 @@
+name: T4 LOCAL-005 real original FileManager managed stream roundtrip
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'android-port/Experiments/T4/OriginalManagedStreamRoundtrip/**'
+      - 'scripts/t4_validate_original_managed_stream_roundtrip.py'
+      - 'tests/test_t4_validate_original_managed_stream_roundtrip.py'
+      - '.github/workflows/raft-t4-original-managed-stream-roundtrip.yml'
+permissions:
+  contents: read
+concurrency:
+  group: raft-t4-original-managed-stream-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  execute-original-stream:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - name: Check out isolated original stream test implementation
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /android-port/Experiments/T4/OriginalManagedStreamRoundtrip/*
+            /scripts/t4_validate_original_managed_stream_roundtrip.py
+            /tests/test_t4_validate_original_managed_stream_roundtrip.py
+      - name: Run 15 adversarial rejection controls before using original DLL
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t4_validate_original_managed_stream_roundtrip.py tests/test_t4_validate_original_managed_stream_roundtrip.py
+          python3 -m unittest discover -s tests -p test_t4_validate_original_managed_stream_roundtrip.py -v
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Compile reflection+Cecil original FileManager sandbox harness
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 240s dotnet publish \
+            android-port/Experiments/T4/OriginalManagedStreamRoundtrip/OriginalManagedStreamRoundtrip.csproj \
+            -c Release --self-contained false -o "$RUNNER_TEMP/t4-real-managed-file-io" \
+            >"$RUNNER_TEMP/t4-original-stream-compiler.log" 2>&1 || {
+              python3 -c "import collections,json,os,re,pathlib; s=(pathlib.Path(os.environ['RUNNER_TEMP'])/'t4-original-stream-compiler.log').read_text(errors='replace'); print('T4_STREAM_COMPILE_ERRORS '+json.dumps(dict(collections.Counter(re.findall(r'error +((?:CS|NU|NETSDK)[0-9]+)',s))),sort_keys=True))"
+              exit 1
+            }
+          test -s "$RUNNER_TEMP/t4-real-managed-file-io/OriginalManagedStreamRoundtrip.dll"
+      - name: Read immutable original ZIP2 managed binary only
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: original-zip2
+          lfs: false
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /Raft/Raft_Data/Managed/Assembly-CSharp.dll
+      - name: Execute true original static FileManager Create/Open and close/reopen synthetic stream
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C original-zip2 rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          test "$(stat -c '%s' original-zip2/Raft/Raft_Data/Managed/Assembly-CSharp.dll)" = 3211776
+          test "$(df -Pk . | awk 'NR==2 {print $4}')" -gt 900000
+          dotnet "$RUNNER_TEMP/t4-real-managed-file-io/OriginalManagedStreamRoundtrip.dll" \
+            --assembly original-zip2/Raft/Raft_Data/Managed/Assembly-CSharp.dll \
+            --output "$RUNNER_TEMP/t4-real-original-stream-proof.json"
+          python3 -m scripts.t4_validate_original_managed_stream_roundtrip \
+            --report "$RUNNER_TEMP/t4-real-original-stream-proof.json"
+          echo 'T4_MANAGED_STREAM original_method_execution=true actual_rgd_game_serialization=false unity_device=false'
+      - name: Do not publish original private managed data, stream contents, symbols or raw runtime exception
+        if: always()
+        run: echo 'T4 synthetic file exercise only, no actual Raft save/Android device evidence and no uploaded game files.'
