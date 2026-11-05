@@ -1,0 +1,54 @@
+name: T4 LOCAL-005 Android Load argument-path classification compiled proof
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/instrument_android_runtime_operations.py'
+      - 'scripts/t4_verify_android_load_snapshot.py'
+      - 'tests/test_t4_android_load_snapshot.py'
+      - '.github/workflows/raft-t4-android-load-snapshot.yml'
+permissions:
+  contents: read
+concurrency:
+  group: raft-t4-android-load-snapshot-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  synthetic-android-load-filename-probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - name: Source-free sparse checkout; never fetch game assets
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/instrument_android_runtime_operations.py
+            /scripts/t4_verify_android_load_snapshot.py
+            /tests/test_t4_android_load_snapshot.py
+      - name: Run bounded Python semantic and source-gate tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/instrument_android_runtime_operations.py scripts/t4_verify_android_load_snapshot.py tests/test_t4_android_load_snapshot.py
+          python3 -m unittest discover -s tests -p 'test_t4_android_load_snapshot.py' -v
+          test ! -e Raft
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Compile/run only synthetic UNITY_ANDROID original-catch preservation fixture
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m scripts.t4_verify_android_load_snapshot --output "$RUNNER_TEMP/t4-load-fixture"
+          timeout 120s dotnet run --project "$RUNNER_TEMP/t4-load-fixture/Probe.csproj" -c Release >"$RUNNER_TEMP/t4-load-private.log" 2>&1 || {
+            grep -Eo 'error (CS[0-9]+|NETSDK[0-9]+)' "$RUNNER_TEMP/t4-load-private.log" | sort | uniq -c || true
+            exit 1
+          }
+          grep -x 'T4_ANDROID_LOAD_SNAPSHOT synthetic_android_csharp_compiled=true missing_file_classified=true zero_file_classified=true corrupt_nonzero_file_classified=true successful_load_retained=true logger_failure_nonfatal=true original_load_exception_caught=true game_rgd_unread=true unity_il2cpp_device_unverified=true' "$RUNNER_TEMP/t4-load-private.log"
+          test ! -e Raft
+      - name: Synthetic only, no real RGD/Unity/native device acceptance
+        if: always()
+        run: echo 'No private original assets, Unity/IL2CPP, APK, or device; synthetic read path only.'

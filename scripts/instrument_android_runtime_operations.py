@@ -85,11 +85,36 @@ def wrap(text, signature, area, detail='""'):
             'catch (System.Exception) { }\n'
             '}\n'
         )
+    # Original Load<T> catches file-open and deserialization failures internally.
+    # Classify the *actual* filename argument without reading data or changing
+    # original returns; an existing file is NOT proof of successful deserialization.
+    after_load_snapshot = ''
+    if signature == 'public static T Load<T>(string filename)' and area == 'save':
+        after_load_snapshot = (
+            '\ntry {\n'
+            'bool __raftLoadArgumentExists = System.IO.File.Exists(filename);\n'
+            'string __raftLoadArgumentLength = __raftLoadArgumentExists '
+            '? (new System.IO.FileInfo(filename).Length == 0L ? "zero" : "nonzero") '
+            ': "not_checked";\n'
+            'try { RaftAndroid.Diagnostics.AndroidRuntimeLog.Write('
+            '"save", "Load.argumentFileSnapshot", '
+            '"exists_at_filename_argument=" + __raftLoadArgumentExists '
+            '+ "; length_class=" + __raftLoadArgumentLength '
+            '+ "; readback_and_deserialization_unverified=true", true); } '
+            'catch (System.Exception) { }\n'
+            '} catch (System.Exception __raftLoadProbeError) {\n'
+            'try { RaftAndroid.Diagnostics.AndroidRuntimeLog.Write('
+            '"save", "Load.argumentFileSnapshot.unavailable", '
+            '"probe_error_type=" + __raftLoadProbeError.GetType().Name '
+            '+ "; readback_and_deserialization_unverified=true", true); } '
+            'catch (System.Exception) { }\n'
+            '}\n'
+        )
     suffix = '\n#if UNITY_ANDROID && !UNITY_EDITOR\n' + (
         '} catch (System.Exception __raftOperationError) {\n' +
         '__raftOperationFailed = true;\nRaftAndroid.Diagnostics.AndroidRuntimeLog.Write(' +
         json.dumps(area) + ', ' + json.dumps(name + '.exception') + ', __raftOperationError.ToString(), true);\nthrow;\n' +
-        '} finally { ' + after_save_snapshot +
+        '} finally { ' + after_save_snapshot + after_load_snapshot +
         'RaftAndroid.Diagnostics.AndroidRuntimeLog.EndOperation(' +
         json.dumps(area) + ', ' + json.dumps(name) + ', __raftOperationStart, __raftOperationFailed); }\n#endif\n')
     result = text[:start] + prefix + original + suffix + text[end:]
