@@ -177,8 +177,12 @@ def summarize(paths):
             "load_argument_file_classes": dict(sorted(load_states.items())),
             "anomalies": anomalies,
         })
-    save_any = any(x["save_argument_file_classes"].get("nonzero", 0) for x in out[:-1])
-    load_after = any(x["load_argument_file_classes"].get("nonzero", 0) for x in out[1:])
+    valid_pairs = [(i, j) for i in range(len(out)) for j in range(i + 1, len(out))
+                   if ordered[i]["last"] < ordered[j]["first"]
+                   and out[i]["save_argument_file_classes"].get("nonzero", 0)
+                   and out[j]["load_argument_file_classes"].get("nonzero", 0)]
+    save_any = bool(valid_pairs)
+    load_after = bool(valid_pairs)
     return {
         "schema": 1,
         "analysis_type": "source_free_log_evidence_only",
