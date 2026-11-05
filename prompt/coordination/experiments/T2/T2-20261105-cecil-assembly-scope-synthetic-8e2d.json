@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261105T1736Z-T2-chat-rt-return-reason-8e2d",
+  "issue_id": "WATER-001",
+  "status": "completed",
+  "experiment_key": "T2|Cecil0.11.5|sourcefree-identical-fullname-cross-assembly-collision-v1|no-original",
+  "source_commits": [
+    "420b1a5a998aabb6d91cd32eab0abba72a930385",
+    "4874be485a8ee9ff1d4e09e71d7dcabbd42bdba9",
+    "e0b51fddce98e1ce31af23dcedcc8be34bc260a7",
+    "f32c3f744e579eaf7c9b001722efa079618cb715"
+  ],
+  "original_game_DLL_used": false,
+  "source_only": "synthetic in-memory .NET9 Mono.Cecil 0.11.5 synthetic assemblies",
+  "ci_url": "https://github.com/alwansan/raf/actions/runs/42078113502",
+  "ci_job_id": 127423644826,
+  "result": {
+    "CI": "COMPLETED SUCCESS",
+    "loose_same_signature_other_assembly_collision": true,
+    "strict_correct_same_assembly_accepted": true,
+    "strict_same_fullname_foreign_declaring_assembly_rejected": true,
+    "correct_foreign_definition_matched": true,
+    "spoofed_Unity_RenderTexture_return_assembly_rejected": true,
+    "same_module_scope_accepted": true,
+    "foreign_module_and_unresolved_module_reference_rejected": true,
+    "wrong_formal_signature_rejected": true,
+    "actual_original_Foam_RT_return_scope_proven": false,
+    "nonnull_runtime_GPU_pixels_proven": false
+  },
+  "next_step": "Integrate into real source-original Foam callee resolution only after scheduled T2 concurrent return-local writer modifications settle; run SHA-original Cecil CI then. WATER-001 OPEN NOT_READY0/3."
+}
