@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "session_id": "20261104T2354Z-T2-foamabi01",
+  "issue_id": "WATER-001",
+  "hypothesis": "Authenticated original Foam resource binding tables can be compared against translated Vulkan stage resource categories/slot IDs without leaking shader names or promising original runtime upload.",
+  "source_commit": "7cc2f13ed8895cc6c8ba9d41a04f16a27eef828f",
+  "input_hashes": [
+    "ZIP2:15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "sharedassets0.assets:0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "Foam Shader PathID2420:67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1"
+  ],
+  "tool_versions": {
+    "UnityPy": "1.25.4",
+    "spirv-cross": "2021.01.15+1.3.239.0-1build1"
+  },
+  "commands": [],
+  "negative_controls": [
+    "reject duplicate resource binding, unmodeled source table, private names in aggregate, missing source object SHA, incorrect stage order"
+  ],
+  "workflow_path": ".github/workflows/raft-t2-foam-member-abi.yml",
+  "run_url": null,
+  "artifact_urls": [],
+  "budget": "No new native/Unity build; single private-source CI <=25m via existing T2 scoped workflow; exact pinned owner and guaranteed cleanup",
+  "status": "planned",
+  "observed_result": null,
+  "rejected_hypotheses": [],
+  "limitations": [
+    "Numeric descriptor relation != Unity sampler state or actual pixel proof"
+  ],
+  "integration_commit": null,
+  "next_step": "Implement test and run authentic source two-pass Foam descriptor reader with translated SPIR-V reflection"
+}
