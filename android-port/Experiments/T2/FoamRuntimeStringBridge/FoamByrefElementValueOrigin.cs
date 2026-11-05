@@ -40,7 +40,8 @@ internal static class FoamByrefElementValueOrigin
         int UnresolvedAssignmentSites,
         bool BranchJoinOrRuntimeValueVerified=false,
         string SoleWriterImmediatePriorOpcodeCategory="not_examined",
-        bool SoleWriterIsControlFlowEntry=false);
+        bool SoleWriterIsControlFlowEntry=false,
+        FoamReturnWriterCallEvidence.SafeProfile? OriginalSoleWriterCallReturnEvidence=null);
 
     private readonly record struct Origin(string Category,bool NewRt=false,
         bool CallRt=false,bool Null=false,bool Local=false);
@@ -391,8 +392,17 @@ internal static class FoamByrefElementValueOrigin
         }
         if(total!=nulls+newrt+rtcalls+aliases+unknown)
             throw new InvalidDataException("Unbalanced original RT local write categories");
+        var soleWriterSite=total==1
+            ? Enumerable.Range(0,il.Count)
+                .FirstOrDefault(i=>Store(il[i]) && Local(il[i])==n,-1)
+            : -1;
+        var typedCallEvidence=soleWriterSite>=0
+            ? FoamReturnWriterCallEvidence.Inspect(
+                method,il[soleWriterSite],typed)
+            : null;
         return new SafeLocalWriters(1,typed,total,nulls,newrt,rtcalls,
-            aliases,unknown,false,soleWriterPrior,soleWriterIsEntry);
+            aliases,unknown,false,soleWriterPrior,soleWriterIsEntry,
+            typedCallEvidence);
     }
 
     internal static SafeProfile Inspect(IEnumerable<MethodDefinition> originals,

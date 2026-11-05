@@ -391,6 +391,47 @@ jobs:
           if lw['ExactLocalAssignmentSites']==1:
               assert lw['SoleWriterImmediatePriorOpcodeCategory'] not in (
                   'not_examined','multiple_writers')
+          e=lw['OriginalSoleWriterCallReturnEvidence']
+          assert e is not None and lw['ExactLocalAssignmentSites']==1
+          assert e['PrecedingInstructionIsCall'] is True
+          assert e['DeclaredCallReturnCategory'] in (
+              'void_return','byref_or_pointer_return',
+              'generic_parameter_return','rendertexture_named_return',
+              'texture_named_return','unity_object_named_return',
+              'other_value_type_return','other_reference_return')
+          for key in ('CallHasDeclaredReturnValue',
+                      'AlternateControlFlowEntryBetweenCallAndStore',
+                      'ConditionalCallResultIsImmediateStoreStackTop',
+                      'DeclaredReturnExactlyRenderTextureByName',
+                      'OriginalAssemblyTypeIdentityVerified',
+                      'RuntimeCallOrNonNullVerified',
+                      'OriginalSymbolsOrIlDisclosed'):
+              assert type(e[key]) is bool
+          assert e['OriginalAssemblyTypeIdentityVerified'] is False
+          assert e['RuntimeCallOrNonNullVerified'] is False
+          assert e['OriginalSymbolsOrIlDisclosed'] is False
+          if e['DeclaredCallReturnCategory']=='void_return':
+              assert e['CallHasDeclaredReturnValue'] is False
+              assert e['ConditionalCallResultIsImmediateStoreStackTop'] is False
+          if e['AlternateControlFlowEntryBetweenCallAndStore']:
+              assert e['ConditionalCallResultIsImmediateStoreStackTop'] is False
+          if e['ConditionalCallResultIsImmediateStoreStackTop']:
+              assert e['CallHasDeclaredReturnValue'] is True
+              assert e['AlternateControlFlowEntryBetweenCallAndStore'] is False
+          if e['DeclaredCallReturnCategory']!='rendertexture_named_return':
+              assert e['DeclaredReturnExactlyRenderTextureByName'] is False
+          print('T2_FOAM_WRITER_PRECEDING_CALL_RETURN_SAFE '+json.dumps({
+              'preceding_exact_writer_call':e['PrecedingInstructionIsCall'],
+              'declared_return_category':e['DeclaredCallReturnCategory'],
+              'call_pushes_declared_value':e['CallHasDeclaredReturnValue'],
+              'alternate_entry_possible':e['AlternateControlFlowEntryBetweenCallAndStore'],
+              'conditional_stack_top_is_call_result':
+                  e['ConditionalCallResultIsImmediateStoreStackTop'],
+              'named_rendertexture_return':
+                  e['DeclaredReturnExactlyRenderTextureByName'],
+              'runtime_or_nonnull_verified':False,
+              'original_symbols_il_or_numeric_values_disclosed':False,
+          },sort_keys=True))
           print('T2_FOAM_SINGLE_RT_LOCAL_WRITER_REASON_SAFE '+json.dumps({
               'one_exact_return_local_writer':
                   lw['ExactLocalAssignmentSites']==1,

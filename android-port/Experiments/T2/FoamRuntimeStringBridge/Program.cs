@@ -514,6 +514,7 @@ internal static class Program
 
     private static int SelfTest()
     {
+        FoamReturnWriterCallEvidence.RunSyntheticControls();
         using var m = ModuleDefinition.CreateModule("SyntheticPublicTextureLiteral", ModuleKind.Dll);
         var td = new TypeDefinition("Synthetic", "Fixture",
             Mono.Cecil.TypeAttributes.Public | Mono.Cecil.TypeAttributes.Class,
@@ -1719,6 +1720,7 @@ internal static class Program
                 synthetic_return_branch_target_and_local_predecessor_classifier=true,
                 synthetic_exact_rt_return_local_writer_and_wrong_local_controls=true,
                 synthetic_single_writer_prior_opcode_and_entry_controls=true,
+                synthetic_writer_call_declared_return_and_branch_bypass_controls=true,
                 four_original_style_Texture_int_argument_origin_controls=true,
                 signed_short_wide_and_duplicate_private_i4_aggregate_controls=true,
                 private_IL_names_or_source_published = false
