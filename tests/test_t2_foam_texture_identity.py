@@ -135,9 +135,19 @@ class OriginalFoamTextureIdentityTests(unittest.TestCase):
             {"m_NameIndex": 2, "m_Index": 3, "m_SamplerIndex": -1},
         ]), {1: "SourceA", 2: "SourceB"}, 2)
         out = compare_private_names(rows, ["CompiledA", "CompiledB"])
+        self.assertEqual(out["original_complete_numeric_pairs"], 0)
+        self.assertEqual(out["original_distinct_numeric_pairs"], 0)
+        self.assertEqual(out["original_numeric_field_presence_counts"]["m_SamplerIndex"], 1)
+        self.assertFalse(out["numeric_pair_identity_to_spirv_verified"])
+
+    def test_disabled_sampler_never_counts_as_complete_numeric_pair(self):
+        rows = original_texture_rows(program([
+            {"m_NameIndex": 1, "m_Index": 7, "m_SamplerIndex": -1},
+            {"m_NameIndex": 2, "m_Index": 7, "m_SamplerIndex": 0},
+        ]), {1: "SourceA", 2: "SourceB"}, 2)
+        out = compare_private_names(rows, ["CompiledA", "CompiledB"])
         self.assertEqual(out["original_complete_numeric_pairs"], 1)
         self.assertEqual(out["original_distinct_numeric_pairs"], 1)
-        self.assertEqual(out["original_numeric_field_presence_counts"]["m_SamplerIndex"], 1)
         self.assertFalse(out["numeric_pair_identity_to_spirv_verified"])
 
     def test_numeric_digest_is_order_independent_within_stage(self):
