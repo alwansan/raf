@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "session_id": "20261105T002850Z-T1-bank1-isolated",
+  "issue_id": "WATER-001",
+  "hypothesis": "Original bank1 compiled FFT pairs' intentionally swapped second pass may yield observable Vulkan validation errors vs driver/numerical instability in a SHA-authenticated software GPU run.",
+  "source_commit": "342e4634c18df161eb18224634a45252e0668e0b",
+  "input_hashes": [
+    "zip2 commit 15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "sharedassets0.assets SHA256 0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "original ComputeShader pathID2456 SHA256 9d934f5c99183c6df5cf2f1fefc9d3e5ec4bce5da5f96a86e4c02910d5322247"
+  ],
+  "tool_versions": {
+    "python": "GitHub ubuntu-24.04 system Python3",
+    "vulkan": "Mesa lavapipe with VK_LAYER_KHRONOS_validation requested; exact package build not pinned",
+    "Unity": "not executed"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t1_fft_bank1_validation.py -v",
+    "python3 -m scripts.t1_fft_bank1_validation --source \"$RUNNER_TEMP/t1original/Raft_Data\" --runner /tmp/t1-bank1-host"
+  ],
+  "negative_controls": [
+    "Source-free synthetic six tests guard SIGSEGV/nonzero/timeout/missing-layer/oversize/validation marker redaction",
+    "Original second-pass swapped pair18/19 SIGSEGV (reproduced in two separate runs)",
+    "Original second-pass swapped pair10/11 comparator success then failure across runs"
+  ],
+  "workflow_path": ".github/workflows/raft-t1-fft-bank1-validation.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41942366020",
+  "artifact_urls": [],
+  "budget": "One isolated job per source modification, ubuntu-24.04 timeout28m, two genuine original candidate pairs, 4 process executions/job, bounded per-process120s and no raw artifacts.",
+  "status": "completed",
+  "observed_result": {
+    "first_ci": "41942024538 diagnostic SUCCESS: pair10 swap numeric true, pair18 swap -11, no VUID markers",
+    "second_ci": "41942366020 diagnostic SUCCESS: pair10 swap numeric false, pair18 swap -11, no VUID markers",
+    "previous_failure": "41941989016 pre-original missing test file",
+    "recovered_water": false
+  },
+  "rejected_hypotheses": [
+    "One passing bank1 comparator run proves stable second-pass swap equivalence",
+    "A zero-validator-marker software run rules out shader memory errors",
+    "A successful CI status means Unity FFT imported or Android water fixed"
+  ],
+  "limitations": [
+    "Khronos layer requested and listed but activation of each validation feature not separately instrumented",
+    "No original authored .compute, Unity FindKernel mapping or Android shader/device execution",
+    "Intentionally invalid swapped descriptors cannot establish a real game's binding bug"
+  ],
+  "integration_commit": "342e4634c18df161eb18224634a45252e0668e0b",
+  "next_step": "Private authored FFT .compute assembly, actual Unity import/FindKernel mapping and Adreno original-binding dispatch with T5; keep WATER-001 OPEN."
+}
