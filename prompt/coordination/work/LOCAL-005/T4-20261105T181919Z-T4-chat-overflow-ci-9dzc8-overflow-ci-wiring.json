@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T181919Z-T4-chat-overflow-ci-9dzc8",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "track": "local-world-save-evidence",
+  "approach": "Add the existing synthetic overflow controls to the narrow source-free GitHub Actions workflow. Independently verify the scheduled fail-closed source change; no edits to scheduled-owned analyzer or fixture and no Unity dispatch.",
+  "status": "active",
+  "base_sha": "b855f3b921411deb66d138bf795ff29bb77bda0f",
+  "intended_files": [
+    ".github/workflows/raft-t4-world-save-log-evidence.yml",
+    "prompt/coordination/work/LOCAL-005/T4-20261105T181919Z-T4-chat-overflow-ci-9dzc8-overflow-ci-wiring.json",
+    "prompt/coordination/clients/T4/sessions/20261105T181919Z-T4-chat-overflow-ci-9dzc8.md",
+    "prompt/coordination/experiments/T4/20261105T181919Z-T4-chat-overflow-ci-9dzc8.json",
+    "prompt/coordination/B_TEAM/events/T4/20261105T181919Z-T4-chat-overflow-ci-9dzc8.json"
+  ],
+  "experiment_key": "T4-jsonl-queue-overflow-global-failclosed-05631bd-15plus2-sourcefree-CI-wiring-v1",
+  "resource_key": null,
+  "hypothesis": "Current workflow sparse checkout and test invocation omit scripts/test_t4_overflow_gate.py, leaving the scheduled fix's 2 new controls unverified by this workflow.",
+  "related_work": [
+    "prompt/coordination/work/LOCAL-005/T4-20261105T1737Z-scheduled-overflow-gate.json"
+  ],
+  "taken_over_from": [
+    "20261105T1737Z-T4-scheduled-h6v2",
+    "20261105T1736Z-T4-chat-rgd-return-local-stores-r6n8"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Modify only narrow workflow to include existing two overflow synthetic controls, observe push-run on immutable commit, then record test output and limits.",
+  "updated_at": "2026-11-05T18:19:19Z"
+}
