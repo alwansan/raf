@@ -72,5 +72,23 @@ class T3TraceContract(unittest.TestCase):
         c=self.good_counters()
         c["private_material_names"]=["DoNotLeak"]
         self.assertNotIn("private_material_names",m.aggregate(c))
+    def test_failed_stage_exposes_only_safe_class_and_counts(self):
+        err=m.ScopedStageError("actual_exported_material_yaml","ValueError",
+                               {"actual_export_materials":19})
+        self.assertEqual(err.stage,"actual_exported_material_yaml")
+        self.assertEqual(err.category,"ValueError")
+        self.assertEqual(err.counters,{"actual_export_materials":19})
+        self.assertNotIn("secret_material_name",str(err))
+    def test_missing_json_remains_classified_without_original_assets(self):
+        from pathlib import Path
+        import tempfile
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp)
+            (root/"bad.json").write_text("{invalid json",encoding="utf-8")
+            (root/"b02.json").write_text("{}",encoding="utf-8")
+            with self.assertRaises(m.ScopedStageError) as ctx:
+                m.run(root,root,root/"bad.json",root/"b02.json")
+            self.assertEqual(ctx.exception.stage,"private_input")
+            self.assertEqual(ctx.exception.category,"JSONDecodeError")
 if __name__=="__main__":
     unittest.main()
