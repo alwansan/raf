@@ -23,16 +23,34 @@
   "negative_controls": [
     "Source-free 7 tests include real single-main, source drift, path traversal, digest mismatch, fake runtime identity, invalid slot, partial output/overwrite rejection",
     "Initial CI41957453300 failed before source acquisition due missing test-import pin alias; corrected source c51b67c",
-    "Unity import CI41958245907 failed sanitized-report reader permission gate; raw Unity result unknown, corrected workflow9e94d6a"
+    "Unity import CI41958245907 failed sanitized-report reader permission gate; raw Unity result unknown, corrected workflow9e94d6a",
+    "Three real Unity attempts failed without result; latest 41958963107 safe classification indicates Unity activation/licensing failure, no kernel import evidence"
   ],
-  "workflow_path": ".github/workflows/raft-t1-fft-original-compute-candidates.yml",
+  "workflow_path": ".github/workflows/raft-t1-fft-original-compute-candidates.yml; .github/workflows/raft-t1-fft-original-unity-import.yml",
   "run_url": "https://github.com/alwansan/raf/actions/runs/41957549770",
   "artifact_urls": [],
   "budget": "Original staging job25min per modified candidate source; Unity 2021 Editor isolated job65min, shared native Editor mutex, owner-provided Unity license, no APK or artifacts.",
-  "status": "active",
+  "status": "paused",
   "observed_result": {
-    "original_staging_run": "41957549770 SUCCESS; 7/7 synthetic tests, 20/20 authentic DXBC to private HLSL50 roundtrip to Unity .compute files; private auto cleanup",
-    "actual_Unity_Editor": "41958511122 IN_PROGRESS at experiment checkpoint; import outcome not yet observed",
+    "original_staging_run": "41957549770 COMPLETED SUCCESS, 7/7 synthetic controls, 20/20 actual original DXBC-derived private Unity .compute candidates, cleared after job",
+    "unity_attempts": [
+      {
+        "run": "41958245907",
+        "outcome": "NO_RESULT_FILE",
+        "blocker": "host PermissionError on mode0600 root-owned private Unity log; corrected ownership"
+      },
+      {
+        "run": "41958511122",
+        "outcome": "NO_RESULT_FILE",
+        "blocker": "licensing-related keyword present; no observed C#/shader error class"
+      },
+      {
+        "run": "41958963107",
+        "outcome": "NO_RESULT_FILE",
+        "blocker": "Unity process exit1; licensing_failure_category=true; execute_method_lookup_failure=false; no C#/shader error category"
+      }
+    ],
+    "actual_unity_compute_import_proven": false,
     "game_water_recovered": false
   },
   "rejected_hypotheses": [
@@ -43,8 +61,15 @@
   "limitations": [
     "No original authored .compute or resource names restored",
     "No evidence Unity has imported genuine FFT compute successfully until sanitized Unity report",
-    "No current Unity 2021 runtime GPU capability or Adreno device test"
+    "No current Unity 2021 runtime GPU capability or Adreno device test",
+    "Unity Editor licensing/activation gate blocked import observation in all three attempts; no authenticated imported kernel IDs or group sizes"
   ],
   "integration_commit": "c51b67c4940f44e1417b4b5e106bb4412d454a10",
-  "next_step": "Read actual Unity2021 run41958511122 sanitized result, fix only proven stage/import bug; then original names/runtime variant lookup and GPU dispatch before game integration."
+  "next_step": "Verify Unity 2021.3.45f2 activation in tiny source-free authorized project, only then replay private SHA-verified candidates; preserve secret/log safety and native workflow mutex.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41957549770",
+    "https://github.com/alwansan/raf/actions/runs/41958245907",
+    "https://github.com/alwansan/raf/actions/runs/41958511122",
+    "https://github.com/alwansan/raf/actions/runs/41958963107"
+  ]
 }
