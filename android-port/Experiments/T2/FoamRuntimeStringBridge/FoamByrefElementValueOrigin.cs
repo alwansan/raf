@@ -15,7 +15,10 @@ internal static class FoamByrefElementValueOrigin
         bool LiteralNullElementValueProven,
         bool SameBlockLocalValueDefinitionProven,
         bool RuntimeRenderTextureObjectOrPixelsVerified,
-        bool OriginalPrivateSymbolOrNumericValueDisclosed);
+        bool OriginalPrivateSymbolOrNumericValueDisclosed,
+        int MatchingOriginalReturnMethodDefinitions=0,
+        string ActualReturnTargetDeclarationCategory="not_examined",
+        bool MatchingOriginalMethodBodyAvailable=false);
 
     private readonly record struct Origin(string Category,bool NewRt=false,
         bool CallRt=false,bool Null=false,bool Local=false);
@@ -119,6 +122,36 @@ internal static class FoamByrefElementValueOrigin
         return new Origin("unsupported_value_producer");
     }
 
+
+    // Match declaration only. No source return-value semantics or runtime
+    // non-null guarantees follow from a matching signature.
+    internal static (int Count,string Category,bool Body) MatchActualRtCall(
+        IEnumerable<MethodDefinition> originals,MethodReference call)
+    {
+        if (originals is null || call is null ||
+            call.ReturnType.FullName!="UnityEngine.RenderTexture")
+            throw new InvalidDataException("Typed original RT call required");
+        var candidates=originals.Where(m=>
+            m.FullName==call.FullName &&
+            m.DeclaringType.FullName==call.DeclaringType.FullName &&
+            m.HasThis==call.HasThis &&
+            m.ReturnType.FullName==call.ReturnType.FullName &&
+            m.Parameters.Count==call.Parameters.Count &&
+            m.Parameters.Zip(call.Parameters,
+                (a,b)=>a.ParameterType.FullName==b.ParameterType.FullName)
+                .All(x=>x)).Take(2).ToList();
+        if(candidates.Count>1)
+            throw new InvalidDataException("Ambiguous original RT return signature");
+        string category=candidates.Count==1
+            ?"matching_sha_managed_signature"
+            :call.DeclaringType.FullName.StartsWith("UnityEngine.",
+                StringComparison.Ordinal)
+                ?"unresolved_unityengine_declaration"
+                :"unresolved_nonunity_declaration";
+        return (candidates.Count,category,
+            candidates.Count==1 && candidates[0].HasBody);
+    }
+
     internal static SafeProfile Inspect(IEnumerable<MethodDefinition> originals,
         MethodReference recipient,FoamByrefAllocationFlow.SafeProfile prior)
     {
@@ -157,7 +190,13 @@ internal static class FoamByrefElementValueOrigin
             _ => "other"
         };
         var origin=Resolve(method,producer,start,0);
+        var identity=origin.CallRt &&
+            op.OpCode.Code is (Code.Call or Code.Callvirt) &&
+            op.Operand is MethodReference call
+            ? MatchActualRtCall(originals,call)
+            : (0,"not_an_immediate_rendertexture_call",false);
         return new SafeProfile(1,1,immediate,origin.Category,origin.NewRt,
-            origin.CallRt,origin.Null,origin.Local,false,false);
+            origin.CallRt,origin.Null,origin.Local,false,false,
+            identity.Item1,identity.Item2,identity.Item3);
     }
 }
