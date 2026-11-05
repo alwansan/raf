@@ -79,6 +79,11 @@ def strict_native_top_join(original_counts: dict, source_report: dict,
         if (type(p["pass_count"]) is not int or type(p["programmed"]) is not int or
             not 0 <= p["programmed"] <= p["pass_count"] <= 512):
             raise ValueError("invalid_native_top_shader_pass_counts")
+        # A marker-free file with no executable subprograms is not evidence
+        # of a restored program. Reject contradictory profile claims rather
+        # than silently reporting a non-Dummy native shader.
+        if (not p["dummy"] and (p["no_subprograms"] or p["programmed"] == 0)):
+            raise ValueError("non_dummy_native_shader_without_subprograms")
         status=("DUMMY_AFTER_NATIVE_RESTORERS" if p["dummy"] else
                 "NON_DUMMY_NATIVE_PROGRAM_AUTHENTICITY_UNPROVEN")
         source_pass_count_compared=True
