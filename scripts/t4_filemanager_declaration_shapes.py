@@ -9,29 +9,29 @@ import sys
 from pathlib import Path
 from scripts.b07_probe_original_world_callbacks import _executable_positions
 
-ACCESS = re.compile(r"(?m)^[ \\t]*(?:public|private|protected|internal)\\b")
-NAME = re.compile(r"\\b([A-Za-z_]\\w*)\\s*(?:<[^(){};]*>)?\\s*\\(")
+ACCESS = re.compile(r"(?m)^[ \t]*(?:public|private|protected|internal)\b")
+NAME = re.compile(r"\b([A-Za-z_]\w*)\s*(?:<[^(){};]*>)?\s*\(")
 
 def classify(source, target):
-    if not re.fullmatch(r"[A-Za-z_]\\w*", target):
+    if not re.fullmatch(r"[A-Za-z_]\w*", target):
         raise ValueError("Invalid target identifier")
     masked = _executable_positions(source)
     counts = {"block_candidate": 0, "expression_candidate": 0,
               "declaration_unresolved": 0, "call_like_token": 0}
-    for match in re.finditer(r"\\b" + re.escape(target) + r"\\s*\\(", masked):
+    for match in re.finditer(r"\b" + re.escape(target) + r"\s*\(", masked):
         # A declaration is expected to begin on an access-modifier line.
-        line_start = masked.rfind("\\n", 0, match.start()) + 1
+        line_start = masked.rfind("\n", 0, match.start()) + 1
         # Permit a multiline return type, bounded to 8 lines / 600 chars.
         prefix_start = max(0, match.start() - 600)
         prefix = masked[prefix_start:match.start()]
         accesses = list(ACCESS.finditer(prefix))
         start = prefix_start + accesses[-1].start() if accesses else None
-        if start is None or masked[start:match.start()].count("\\n") > 8:
+        if start is None or masked[start:match.start()].count("\n") > 8:
             counts["call_like_token"] += 1
             continue
         between = masked[start:match.start()]
         # Reject a prior statement/body or a method call in another declaration.
-        if any(c in between for c in ";{}=") or not re.search(r"\\s", between):
+        if any(c in between for c in ";{}=") or not re.search(r"\s", between):
             counts["call_like_token"] += 1
             continue
         depth, end = 1, None
