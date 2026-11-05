@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T1728Z-T3-chat-rawspirv-T1-original-3f7c",
+  "issue_id": "RENDER-002",
+  "original_provider_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "request_type": "one source-original T1 binary SPIRV disassembly after PosixPath input gate repair",
+  "source_blob_shas": {
+    "scripts/t3_original_921_t1_raw_spirv_audit.py": "327cc8e6a1f6390bc9147ac19586dcf80b0ee419",
+    "tests/test_t3_original_921_t1_raw_spirv_audit.py": "7fdd6c565a2bece758cc97ec49d68eb5d9ef1941",
+    "scripts/t1_spirv_interface_component_audit.py": "ce892f5c378dee1cd6ef1436b5dd8e892ad1485c",
+    "scripts/t3_original_921_dxbc_semantic_join.py": "8a7b0178f4502d7c163a7c8a313e7f754cd68162"
+  },
+  "workflow": "raft-t3-original-921-t1-raw-spv.yml",
+  "reason_for_retry": "Previous SHA-authenticated source failed before spirv-dis because `type(Path(...)) is not Path` rejects PosixPath. Source and new synthetic PosixPath/symlink guards fixed and CI42075936259 successful.",
+  "security": {
+    "private_stage_bytecode_names_no_public_output": true,
+    "no_device_claim": true,
+    "no_other_jobs_cancelled": true
+  },
+  "created_at": "2026-11-05T17:36:00Z"
+}
