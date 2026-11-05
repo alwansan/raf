@@ -12,6 +12,29 @@ internal static class Program
     private const string OriginalSha =
         "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e";
 
+    private sealed record CallGroups(int system_io, int system_non_io,
+        int same_original_filemanager, int other_original_or_external);
+
+    private static CallGroups CategorizeCalls(IEnumerable<Instruction> instructions,
+        TypeDefinition manager)
+    {
+        int io = 0, core = 0, internalMethods = 0, other = 0;
+        foreach (var insn in instructions)
+        {
+            if (insn.OpCode.Code != Code.Call && insn.OpCode.Code != Code.Callvirt &&
+                insn.OpCode.Code != Code.Newobj)
+                continue;
+            if (insn.Operand is not MethodReference callee)
+                throw new InvalidDataException("unrecognized_original_compiled_call");
+            string owner = callee.DeclaringType.FullName;
+            if (owner.StartsWith("System.IO.", StringComparison.Ordinal)) io++;
+            else if (owner == manager.FullName) internalMethods++;
+            else if (owner.StartsWith("System.", StringComparison.Ordinal)) core++;
+            else other++;
+        }
+        return new CallGroups(io, core, internalMethods, other);
+    }
+
     private sealed record Edge(
         int parameter_count,
         string[] parameter_categories,
@@ -24,7 +47,11 @@ internal static class Program
         bool catch_contains_explicit_throw,
         bool catch_contains_null_literal,
         bool catch_can_exit_normally,
-        bool exception_swallow_on_device_proven);
+        bool exception_swallow_on_device_proven,
+        CallGroups original_try_calls,
+        CallGroups original_catch_calls,
+        CallGroups original_outside_handler_calls,
+        bool original_transitive_callees_executed);
 
     private static string TypeCategory(TypeReference type)
     {
@@ -103,7 +130,29 @@ internal static class Program
         int end = catchHandler.HandlerEnd is null ? all.Count : all.IndexOf(catchHandler.HandlerEnd);
         if (start < 0 || end <= start || end > all.Count)
             throw new InvalidDataException("invalid_original_exception_handler_region");
+        int tryStart = all.IndexOf(catchHandler.TryStart);
+        int tryEnd = catchHandler.TryEnd is null ? all.Count : all.IndexOf(catchHandler.TryEnd);
+        if (tryStart < 0 || tryEnd <= tryStart || tryEnd > all.Count ||
+            (tryStart < end && start < tryEnd))
+            throw new InvalidDataException("invalid_original_try_catch_regions");
+        var inTry = all.Skip(tryStart).Take(tryEnd - tryStart).ToList();
         var handler = all.Skip(start).Take(end - start).ToList();
+        var outside = all.Where((_, position) =>
+            !(position >= tryStart && position < tryEnd) &&
+            !(position >= start && position < end)).ToList();
+        var tryCalls = CategorizeCalls(inTry, manager);
+        var catchCalls = CategorizeCalls(handler, manager);
+        var otherCalls = CategorizeCalls(outside, manager);
+        int originalCallCount = all.Count(i => i.OpCode.Code == Code.Call ||
+            i.OpCode.Code == Code.Callvirt || i.OpCode.Code == Code.Newobj);
+        if (originalCallCount != 4 ||
+            tryCalls.system_io + catchCalls.system_io + otherCalls.system_io != 1 ||
+            tryCalls.same_original_filemanager + catchCalls.same_original_filemanager +
+            otherCalls.same_original_filemanager != 1 ||
+            tryCalls.system_non_io + catchCalls.system_non_io + otherCalls.system_non_io != 1 ||
+            tryCalls.other_original_or_external + catchCalls.other_original_or_external +
+            otherCalls.other_original_or_external != 1)
+            throw new InvalidDataException("original_transitive_callee_profile_changed");
         bool hasLeave = handler.Any(i => IsLeave(i.OpCode.Code));
         bool hasThrow = handler.Any(i => IsThrow(i.OpCode.Code));
         bool hasNull = handler.Any(i => i.OpCode.Code == Code.Ldnull);
@@ -119,6 +168,10 @@ internal static class Program
             hasThrow,
             hasNull,
             hasLeave && !hasThrow,
+            false,
+            tryCalls,
+            catchCalls,
+            otherCalls,
             false);
     }
 
