@@ -157,6 +157,42 @@ jobs:
           assert w['DirectRenderTextureArrayNewarrSources'] + w['DirectNullSources'] + w['OtherOrUnprovenSources'] == w['ExactBackingFieldStoreInstructions']
           assert not w['OriginalRuntimeWriteExecutedProven']
           assert not w['OriginalArrayElementsPopulatedProven']
+          s=r['original_exact_RenderTexture_array_field_serialization_metadata']
+          assert s is not None
+          assert s['ExactOriginalManagedFieldDefinitionCount']==1
+          assert s['ExactBackingFieldTypeIsRenderTextureArray'] is True
+          assert type(s['DeclaredPublic']) is bool
+          assert type(s['HasExplicitUnitySerializeField']) is bool
+          assert type(s['HasNonSerializedMetadata']) is bool
+          assert type(s['IsStatic']) is bool
+          assert type(s['IsInitOnly']) is bool
+          assert type(s['EligibleByFieldModifiersOnly']) is bool
+          assert s['OwnerDirectBaseTypeCategory'] in (
+              'direct_unity_monobehaviour','direct_unity_scriptableobject',
+              'direct_unity_behaviour','not_proven_unity_owner_by_direct_base')
+          assert s['EligibleByFieldModifiersOnly'] == (
+              (s['DeclaredPublic'] or s['HasExplicitUnitySerializeField']) and
+              not s['HasNonSerializedMetadata'] and not s['IsStatic'] and
+              not s['IsInitOnly'])
+          assert s['OriginalSceneOrPrefabValueVerified'] is False
+          assert s['RuntimeArrayLengthOrMembersVerified'] is False
+          # Print numeric/boolean aggregate only; no original private field name,
+          # original int, SHA of small-domain value, token or Cecil IL escapes.
+          print('T2_FOAM_FIELD_METADATA_SAFE '+json.dumps({
+              'definition_count':s['ExactOriginalManagedFieldDefinitionCount'],
+              'declared_public':s['DeclaredPublic'],
+              'explicit_serialize_field':s['HasExplicitUnitySerializeField'],
+              'nonserialized':s['HasNonSerializedMetadata'],
+              'static':s['IsStatic'],
+              'initonly':s['IsInitOnly'],
+              'eligible_by_field_modifiers_only':s['EligibleByFieldModifiersOnly'],
+              'owner_direct_base_category':s['OwnerDirectBaseTypeCategory'],
+              'scene_or_prefab_values_verified':False,
+              'runtime_array_length_verified':False,
+              'four_i4_decoded':r['non_authored_actual_i4_index_values_decoded_count'],
+              'four_i4_distinct_count':r['non_authored_actual_i4_index_values_distinct_count'],
+              'four_i4_all_nonnegative':r['non_authored_actual_i4_index_values_all_nonnegative'],
+          },sort_keys=True))
           assert r['material_receiver_identity_or_runtime_reachability_verified'] is False
           assert r['original_managed_method_bodies_scanned']>0
           assert not r['same_method_cooccurrence_is_argument_dataflow_proof']

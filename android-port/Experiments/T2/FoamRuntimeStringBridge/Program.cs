@@ -143,6 +143,7 @@ internal static class Program
         public int SecondProducerAmbiguousOrMissingMethodDefinitions;
         public FoamProducerBody.SafeProfile? OriginalSingleProducerBodyProfile;
         public FoamFieldWriterLineage.SafeProfile? OriginalFieldWriterProfile;
+        public FoamFieldSerializationMetadata.SafeProfile? OriginalFieldSerializationProfile;
         public readonly Dictionary<string,int> TotalSetterCalls = new(StringComparer.Ordinal)
         {
             ["shader_global_texture"] = 0,
@@ -365,8 +366,17 @@ internal static class Program
             }
         }
         if (exactGetterBackingField is not null)
+        {
             result.OriginalFieldWriterProfile=
                 FoamFieldWriterLineage.Scan(sourceMethods,exactGetterBackingField);
+            // Resolve the exact original FieldDefinition without publishing
+            // private type, token or field identifiers.
+            var sourceTypes=sourceMethods.Count==0
+                ? Enumerable.Empty<TypeDefinition>()
+                : WalkTypes(sourceMethods[0].Module.Types);
+            result.OriginalFieldSerializationProfile=
+                FoamFieldSerializationMetadata.Inspect(sourceTypes,exactGetterBackingField);
+        }
         return result;
     }
 
@@ -427,6 +437,7 @@ internal static class Program
             non_authored_second_producer_missing_or_ambiguous_original_definitions = result.SecondProducerAmbiguousOrMissingMethodDefinitions,
             original_exact_Texture_int_producer_body_op_classes = result.OriginalSingleProducerBodyProfile,
             original_exact_Texture_int_backing_field_writer_op_classes = result.OriginalFieldWriterProfile,
+            original_exact_RenderTexture_array_field_serialization_metadata = result.OriginalFieldSerializationProfile,
             original_exact_Texture_int_producer_body_accepted_same_SHA_definition = result.OriginalSingleProducerBodyProfile is not null,
             original_exact_method_definition_is_original_runtime_called_or_output_proof = false,
             producer_declared_signature_is_actual_runtime_texture_object_proof = false,
@@ -819,6 +830,63 @@ internal static class Program
             writerProof.OriginalArrayElementsPopulatedProven)
             throw new InvalidDataException("Synthetic exact writer/decoy provenance fixture failed");
 
+        // Public synthetic metadata negatives: don't confuse visibility,
+        // SerializeField and a runtime scene assignment. Field names here are
+        // fixture-only and never copied from the original assembly.
+        var publicMetadata=FoamFieldSerializationMetadata.Inspect(
+            new[]{factoryDef},renderArray);
+        if (publicMetadata.ExactOriginalManagedFieldDefinitionCount!=1 ||
+            !publicMetadata.DeclaredPublic ||
+            !publicMetadata.EligibleByFieldModifiersOnly ||
+            publicMetadata.OriginalSceneOrPrefabValueVerified ||
+            publicMetadata.RuntimeArrayLengthOrMembersVerified)
+            throw new InvalidDataException("Synthetic public RenderTexture[] metadata control failed");
+        var hiddenArray=new FieldDefinition("SyntheticHiddenArray",
+            Mono.Cecil.FieldAttributes.Private,new ArrayType(renderTextureType));
+        factoryDef.Fields.Add(hiddenArray);
+        var hiddenMeta=FoamFieldSerializationMetadata.Inspect(new[]{factoryDef},hiddenArray);
+        if (hiddenMeta.EligibleByFieldModifiersOnly || hiddenMeta.DeclaredPublic)
+            throw new InvalidDataException("Private unmarked array must not imply serialization");
+        var serializedArray=new FieldDefinition("SyntheticExplicitSerializeField",
+            Mono.Cecil.FieldAttributes.Private,new ArrayType(renderTextureType));
+        factoryDef.Fields.Add(serializedArray);
+        var serializeAttrType=new TypeReference("UnityEngine","SerializeField",
+            m,m.TypeSystem.Object.Scope);
+        var serializeCtor=new MethodReference(".ctor",m.TypeSystem.Void,serializeAttrType)
+            {HasThis=true};
+        serializedArray.CustomAttributes.Add(new CustomAttribute(serializeCtor));
+        var serialMeta=FoamFieldSerializationMetadata.Inspect(new[]{factoryDef},serializedArray);
+        if (!serialMeta.HasExplicitUnitySerializeField ||
+            !serialMeta.EligibleByFieldModifiersOnly)
+            throw new InvalidDataException("Explicit synthetic SerializeField ignored");
+        var notSerialized=new FieldDefinition("SyntheticExcludedArray",
+            Mono.Cecil.FieldAttributes.Public|Mono.Cecil.FieldAttributes.NotSerialized,
+            new ArrayType(renderTextureType));
+        factoryDef.Fields.Add(notSerialized);
+        var blockedMeta=FoamFieldSerializationMetadata.Inspect(new[]{factoryDef},notSerialized);
+        if (!blockedMeta.HasNonSerializedMetadata ||
+            blockedMeta.EligibleByFieldModifiersOnly)
+            throw new InvalidDataException("NonSerialized synthetic array incorrectly eligible");
+        var staticArray=new FieldDefinition("SyntheticStaticArray",
+            Mono.Cecil.FieldAttributes.Public|Mono.Cecil.FieldAttributes.Static,
+            new ArrayType(renderTextureType));
+        factoryDef.Fields.Add(staticArray);
+        var staticMeta=FoamFieldSerializationMetadata.Inspect(new[]{factoryDef},staticArray);
+        if (!staticMeta.IsStatic || staticMeta.EligibleByFieldModifiersOnly)
+            throw new InvalidDataException("Static synthetic array must be excluded");
+        var readonlyArray=new FieldDefinition("SyntheticReadonlyArray",
+            Mono.Cecil.FieldAttributes.Public|Mono.Cecil.FieldAttributes.InitOnly,
+            new ArrayType(renderTextureType));
+        factoryDef.Fields.Add(readonlyArray);
+        var readonlyMeta=FoamFieldSerializationMetadata.Inspect(new[]{factoryDef},readonlyArray);
+        if (!readonlyMeta.IsInitOnly || readonlyMeta.EligibleByFieldModifiersOnly)
+            throw new InvalidDataException("Readonly synthetic array must be excluded");
+        var missingArray=new FieldReference("SyntheticMissingRenderTexture",
+            new ArrayType(renderTextureType),factoryDef);
+        var missingMeta=FoamFieldSerializationMetadata.Inspect(new[]{factoryDef},missingArray);
+        if (missingMeta.ExactOriginalManagedFieldDefinitionCount!=0 ||
+            missingMeta.EligibleByFieldModifiersOnly)
+            throw new InvalidDataException("Missing field definition must not be invented");
         var guardedWrong=new MethodDefinition("PublicSyntheticWrongConditionalTarget",
             Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Virtual,
             textureType);
@@ -928,6 +996,7 @@ internal static class Program
                 wrong_branch_target_guarded_texture_array_rejected=true,
                 early_null_brtrue_guarded_RenderTexture_array_fixture=true,
                 exact_backing_field_writer_newarr_null_decoy_fixture=true,
+                strict_original_backing_field_serialization_metadata_fixtures=true,
                 four_original_style_Texture_int_argument_origin_controls=true,
                 signed_short_wide_and_duplicate_private_i4_aggregate_controls=true,
                 private_IL_names_or_source_published = false
