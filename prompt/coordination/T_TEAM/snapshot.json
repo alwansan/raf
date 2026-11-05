@@ -298,7 +298,9 @@
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B03_ORIGINAL_RENDERER_MATERIALS_2026-11-04.md",
         "https://github.com/alwansan/raf/actions/runs/41930891466",
         "https://github.com/alwansan/raf/actions/runs/41931942755",
-        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B21_LIGHT_EXPORT_LINEAGE_2026-11-04.md"
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/B21_LIGHT_EXPORT_LINEAGE_2026-11-04.md",
+        "https://github.com/alwansan/raf/actions/runs/41939404454",
+        "https://github.com/alwansan/raf/commit/77d312f546f1fc80c72f57a57de5d90699d66302"
       ],
       "remaining": [
         "تتبع material->shader variant->texture/sampler/CB->lighting/color space",
@@ -333,15 +335,16 @@
         "B05 actual original ZIP2 sharedassets6 source parser and bounded owner accessor PASS (CI41929077930, 41 real Materials/227 TexEnv slots/227 UV sets; 89 same-file,25 external,113 null), and scoped source-to-full-export comparator 18/18 synthetic CI41928852363. No genuine same-instance Unity export/Material PPtr+UV match or Adreno/phone color restoration yet. RENDER-002 OPEN.",
         "B15 actual original: ZIP2 SHA-verified sharedassets6 (6,607,272B) read via production original_sampler() 87/87 actual Texture2D settings, 87 filter and 261 wrap, all mip biases 0, CI41930143093 SUCCESS with 8 synthetic negative controls. This does NOT establish any real original-to-export importer equivalence (0 paired records) or restore white shaders/device pixels.",
         "B03 verified 1635/1635 source-only non-null Renderer Material target class links across 6 original ZIP2 scenes and three SHA-pinned owners (4 original null). Actual same-instance Unity Renderer→Material GUID/fileID export preservation and Android white/pixel fix remain unproven.",
-        "B21 actual 9-provider ZIP2 bounded original Raft AssetRipper same-instance export: 2/2 native Light108 values preserved and 2/2 exact Light.m_GameObject→GameObject1 owner pointers preserved in actual Unity YAML; 0 drift/misattached, CI41930891466 and 41931942755 both SUCCESS (40 owner-trial synthetic controls). This excludes Light value/owner export loss for these two scenes only; shader/material/ambient/Unity GPU pixels, remaining 34 scenes and phone not verified. RENDER-002 OPEN."
+        "B21 actual 9-provider ZIP2 bounded original Raft AssetRipper same-instance export: 2/2 native Light108 values preserved and 2/2 exact Light.m_GameObject→GameObject1 owner pointers preserved in actual Unity YAML; 0 drift/misattached, CI41930891466 and 41931942755 both SUCCESS (40 owner-trial synthetic controls). This excludes Light value/owner export loss for these two scenes only; shader/material/ambient/Unity GPU pixels, remaining 34 scenes and phone not verified. RENDER-002 OPEN.",
+        "T3 actual SHA-pinned ZIP2 original->same-instance export CI41939404454 VERIFIED 41 selected Materials/227 TexEnv+UV with zero mismatches, 89 exact internal Texture targets, but 25 external targets and all shader/pixel/device proof remain unknown; do not treat these scoped materials as white cause."
       ],
       "acceptance": [
         "مطابقة روابط ومراجع الأصل",
         "مقارنةصوريةلنفسالمشهد",
         "نجاحعلىالهاتف"
       ],
-      "updated_by": "B21",
-      "updated_at": "2026-11-04T23:17:00Z",
+      "updated_by": "T3",
+      "updated_at": "2026-11-05T00:12:00Z",
       "_record_path": "../B_TEAM/issues/RENDER-002.json"
     },
     {
@@ -550,21 +553,24 @@
         "acquisition": "VERIFIED",
         "extraction": "VERIFIED",
         "reconstruction": "UNKNOWN",
-        "binding": "UNKNOWN",
-        "integration": "UNKNOWN",
+        "binding": "VERIFIED_BOUNDED_SAME_INSTANCE_EXPORT_41_MATERIALS_227_TEXENV_UV_89_INTERNAL_TEXTURE_TARGETS_MATCH_25_EXTERNAL_UNVERIFIED",
+        "integration": "VERIFICATION_HELPER_SOURCE_FIX_AND_REAL_AUTHENTIC_EXPERIMENT_CI_PASS_NO_GAME_ASSET_PATCH",
         "device": "UNKNOWN"
       },
       "evidence": [
         "https://github.com/alwansan/raf/actions/runs/41928076197",
         "https://github.com/alwansan/raf/actions/runs/41929077930",
-        "https://github.com/alwansan/raf/commit/d6fa219c769e3c4d11f798f41bfc0cbd8451465b"
+        "https://github.com/alwansan/raf/commit/d6fa219c769e3c4d11f798f41bfc0cbd8451465b",
+        "https://github.com/alwansan/raf/actions/runs/41939404454",
+        "https://github.com/alwansan/raf/commit/77d312f546f1fc80c72f57a57de5d90699d66302"
       ],
       "remaining": [
-        "Only original SHA-verified source parsed; 41 Materials, 227 slots (89 internal, 25 external, 113 null), 227 fully decoded UV.",
-        "Need exact same-instance Unity exported Material/Texture trace to compare source against exported texture PPtrs and UV; external texture targets unproven.",
-        "No Unity/Android shader/pixel verification, no restored source asset and no actual white color cause proven."
+        "Exact same-export 41 Materials/227 Texture slots/UV matched, zero loss or drift in selected source; preserves 113 original null and verified 89 internal targets.",
+        "25 original external-owner Texture references remain UNVERIFIED in this bounded source/export graph.",
+        "Other original source owners, shader/variant/sRGB/lighting, Unity import and actual Android pixels remain UNKNOWN. No original asset or image restoration claimed."
       ],
-      "updated_by": "B05",
+      "updated_by": "T3",
+      "updated_at": "2026-11-05T00:12:00Z",
       "_record_path": "../B_TEAM/resources/B05-sharedassets6-texenv.json"
     },
     {
@@ -3538,6 +3544,20 @@
       "_record_path": "../B_TEAM/events/T2/20261105T0008Z-result-foam-namebridge.json"
     },
     {
+      "id": "T2-20261105T0013Z-start-resource-abi",
+      "owner": "T2",
+      "session_id": "20261104T2354Z-T2-foamabi01",
+      "issue_id": "WATER-001",
+      "type": "start",
+      "summary": "After source-authentic CB name gap, T2 starts distinct original Foam texture/sampler descriptor table vs four translated SPIR-V stage resource interface proof, reusing B17 numeric canonicalizer and B20 private stages; no new full game build or dummy ShaderLab.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41938898381",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/b17_spectrum_stage_descriptors.py"
+      ],
+      "at": "2026-11-05T00:13:00Z",
+      "_record_path": "../B_TEAM/events/T2/20261105T0013Z-start-resource-abi.json"
+    },
+    {
       "id": "T3-20261105-0002-render-harness-result-and-export-start",
       "owner": "T3",
       "session_id": "20261104T2354Z-T3-render-harness",
@@ -3627,7 +3647,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "71e86f7d5aa6584c1cd9bf6ce256cb60506e1fbf6663178b8e30052cd8145f05",
+  "source_input_sha256": "36334f41f730538863faf9cdbcf5a84032f6d32c90f6df00c9da856751670262",
   "generation": "T-2026-11-05",
-  "input_sha256": "63e92104fc4970be04d5664f10da651c5b50a2971a133f67e5fcaa39b26fcbac"
+  "input_sha256": "7bdb11c038d176ddea000b87638eb7b808d765e3bb2dfa4344aa7f278a59bce1"
 }
