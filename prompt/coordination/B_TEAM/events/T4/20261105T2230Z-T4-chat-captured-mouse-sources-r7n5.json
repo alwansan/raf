@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "id": "T4-20261105T2230Z-T4-chat-captured-mouse-sources-r7n5",
+  "owner": "T4",
+  "session_id": "20261105T2230Z-T4-chat-captured-mouse-sources-r7n5",
+  "origin": "chat",
+  "type": "source_integration",
+  "issue_id": "INPUT-005",
+  "timestamp": "2026-11-05T22:30:00Z",
+  "summary": "T4 source-integrated Android API26 captured input classifier: SOURCE_MOUSE_RELATIVE gets relative getX/Y; SOURCE_TOUCHPAD gets AXIS_RELATIVE_X/Y, includes 0..64 historical batched samples; invalid/absolute motion fail open. Bounded CI42121598304 SUCCESS: 7+7+14 Python, 30 .NET controls, Unity2021 original managed compile, private original 4+4+2 legacy source. No Android APK or phone acceptance; issue remains OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42121598304",
+    "https://github.com/alwansan/raf/commit/868eac2784efa1fcf7806a23b32bd1a1a1220fcf",
+    "prompt/coordination/experiments/T4/20261105T2230Z-T4-chat-captured-mouse-sources-r7n5.json"
+  ],
+  "integration_scope": "Captured physical relative motion decoding only; no touch layout, T5 settings, original assets/Unity scenes/.meta/GUID/.rgd or native build request."
+}
