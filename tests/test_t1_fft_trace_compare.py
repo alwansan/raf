@@ -2,7 +2,7 @@ import struct
 import unittest
 
 from scripts.t1_fft_trace_compare import (
-    INVOCATION_RECORD, INVOCATION_SIZE, RECORD, SIZE, compare, compare_invocations,
+    INVOCATION_RECORD, INVOCATION_SIZE, RECORD, SIZE, axis_mapping, compare, compare_invocations,
 )
 
 
@@ -84,3 +84,15 @@ class InvocationTraceTests(unittest.TestCase):
         self.assertEqual(result["sites"][0]["coordinate_mismatches"], 1)
         self.assertEqual(result["sites"][0]["coordinate_axis_mismatches"],
                          {"x": 0, "y": 1, "mip": 1})
+
+    def test_axis_mapping_discriminates_address_shapes(self):
+        for name, pairs in (
+            ("uniform_translation", [(1, 4), (2, 5), (3, 6)]),
+            ("uniform_reflection", [(1, 6), (2, 5), (3, 4)]),
+            ("constant_observed", [(1, 6), (2, 6), (3, 6)]),
+        ):
+            mapping = axis_mapping(pairs)
+            self.assertEqual({key for key, matched in mapping.items() if matched},
+                             {"varied_reference", name})
+        self.assertFalse(any(axis_mapping([(1, 9), (1, 9)]).values()))
+        self.assertFalse(any(axis_mapping([]).values()))
