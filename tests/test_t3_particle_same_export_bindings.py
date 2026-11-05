@@ -15,9 +15,11 @@ INSTANCE="e"*32
 
 
 def source():
+    # Authenticated six-scene originals have Material21 only in the first
+    # three owners; sharedassets6 is a Shader48 owner, not Material21 owner.
     materials=[(OWNERS[0],101),(OWNERS[0],102),(OWNERS[1],103),
-               (OWNERS[1],104),(OWNERS[3],105)]
-    textures=[(OWNERS[0],201),(OWNERS[1],202),(OWNERS[3],203)]
+               (OWNERS[1],104),(OWNERS[2],105)]
+    textures=[(OWNERS[0],201),(OWNERS[1],202),(OWNERS[2],203)]
     # For m_FileID=0 a source material texture must be in the SAME
     # serialized owner, not merely share an arbitrary PathID.
     keys=[textures[0]]*4+[textures[1]]*4+[textures[2]]*2
