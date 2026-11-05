@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261105T1712Z-T2-chat-return-identity-minimal-4c8f",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "updated_at": "2026-11-05T17:12:00Z",
+  "base_sha": "528e21018c912f187ed6e0310804b72db9a66288",
+  "resumed_from_sessions": [
+    "20261105T1648Z-T2-chat-rt-return-definition-f7d2",
+    "20261105T1611Z-T2-chat-foam-length-source-9ab4",
+    "20261105T1623Z-T2-scheduled-caller-origin-6f2d"
+  ],
+  "taken_over_from": [
+    "T2 original ZIP2 Foam exact typed RT call_return CI42065864809"
+  ],
+  "experiment_key": "T2|ZIP2-15964ea8|managed-0a6f0527|Foam-stelem-call-target-exact-signature-identity-minimal-v2",
+  "resource_key": "T2-Foam-SHA-original-exact-RT-return-target-signature",
+  "hypothesis": "The exact call returning UnityEngine.RenderTexture immediately before source-proven stelem.ref can be matched against original managed MethodDefinition or safely classified unresolved; do not infer non-null return from declared type.",
+  "method": "Extend existing verified FoamByrefElementValueOrigin only with optional internal definition match/category while passing original sourceMethods already available. Minimal source-only tests for true matching definition, typed mismatched signature and external declaration. Emit aggregate counts/declaring UnityEngine status only, never raw original names/IL/numeric values.",
+  "intended_files": [
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/FoamByrefElementValueOrigin.cs",
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/Program.cs",
+    ".github/workflows/raft-t2-foam-managed-literals.yml",
+    "prompt/coordination/work/WATER-001/T2-20261105T1712Z-T2-chat-return-identity-minimal-4c8f-return-identity.json",
+    "prompt/coordination/clients/T2/sessions/20261105T1712Z-T2-chat-return-identity-minimal-4c8f.md"
+  ],
+  "preflight": {
+    "head": "528e21018c912f187ed6e0310804b72db9a66288",
+    "T2_owned_sources_unchanged_since_earlier_verified_CI": true,
+    "active_T2_managed_ci": false,
+    "other_active": [
+      "T1 paired FFT diagnostic [42071855851] SUCCESS; current T1 edits",
+      "T3 Shader48 original semantic mask [42071059741] SUCCESS",
+      "T5 native source-to-release milestone separately owned"
+    ],
+    "previous_blocked_work": "20261105T1648Z-T2-chat-rt-return-definition-f7d2; complex four-file merge blocked, will not reissue unchanged blocked payload"
+  },
+  "next_step": "Publish small modifications in 3 expected-blob SHA guarded updates (not earlier blocked tree payload), run original SHA-pinned T2 CI, inspect safe result or fix first source-only failures; NO Unity or phone validation. WATER-001 OPEN NOT_READY0/3."
+}
