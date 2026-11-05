@@ -1,0 +1,14 @@
+{
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261105T215300Z-T1-chat-68f40b",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "22b06730fa2ca7893e448c2596fb6c4004c82e35",
+  "intended_files": [
+    ".github/workflows/raft-t1-fft-unity-input-identity.yml"
+  ],
+  "experiment_key": "fft-keyed-axis-pair0-and-device-summary-exact-verification",
+  "resource_key": "raft-native-engine-feature/android-native-port",
+  "updated_at": "2026-11-05T21:53:00Z"
+}
