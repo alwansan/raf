@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "session_id": "20261105T0238Z-T2-dxbc-texture-registers",
+  "issue_id": "WATER-001",
+  "hypothesis": "Original per-texture m_Index/m_SamplerIndex numeric values match actual native DXBC dcl_resource tN and dcl_sampler sN per authenticated original Foam pass/stage, unlike mere translated resource cardinality.",
+  "source_commit": "c3bc183901411fefc0ec3a977e0ea27ef07c11fc",
+  "input_hashes": [
+    "zip2:15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "sharedassets0.assets sha256:0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "Foam pathID2420 sha256:67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1",
+    "original-stage-DXBC SHA roster scripts/b20_private_foam_packet.py ORIGINAL_STAGE_SHA"
+  ],
+  "tool_versions": {
+    "UnityPy": "1.25.4",
+    "python": "GitHub ubuntu-24.04 python3",
+    "DXBC": "B17 existing native DXBC token declaration parser"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t2_foam_original_dxbc_registers.py -v",
+    "python3 -m scripts.t2_foam_original_dxbc_registers --source $RUNNER_TEMP/t2-foam-original-dxbc-source --out $RUNNER_TEMP/t2-foam-dxbc-numeric-safe.json"
+  ],
+  "negative_controls": [
+    "15 cases including duplicate t index, same-count wrong t/s numeric slots, m_SamplerIndex=-1, invalid type/overflow, wrong UAV/extra fields and private symbol spoof"
+  ],
+  "workflow_path": ".github/workflows/raft-t2-foam-original-dxbc-registers.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41957269478",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41957269478"
+  ],
+  "budget": "18min Ubuntu24.04 no Unity nor LFS; actual run ~1 minute",
+  "status": "completed",
+  "observed_result": {
+    "source_sha_authenticated": true,
+    "all_original_dxbc_sha_authenticated": true,
+    "source_stages": 4,
+    "source_texture_rows": 6,
+    "pass0_fragment_source_native_slots": "t0..t4, s0..s4",
+    "pass1_fragment_source_native_slots": "t0,s0",
+    "vertex_source_native_slots": "none",
+    "numeric_t_parity_stages": 4,
+    "numeric_s_parity_stages": 4,
+    "sampler_mode_native_dxbc": "0 at all six compiled declarations",
+    "synthetic_tests_pass": "15/15",
+    "original_run": "SUCCESS",
+    "artifact_id": 13384056820,
+    "zip_sha256": "6523865257841c0c73b3d82b5c2e5ce276a618806def78b514298e61dd3981b0"
+  },
+  "rejected_hypotheses": [
+    "Same texture/sampler counts alone prove a register join; tested exact numeric sets instead",
+    "Native DXBC register parity proves translated SPIRV bindings or real Unity material upload; it does not"
+  ],
+  "limitations": [
+    "No original native DXBC sample t/s instruction-use proof",
+    "No original DXBC to SPIR-V resource identifier/descriptor translation join",
+    "No verified material property/UV/sampler-state binding or ShaderLab/Unity/Adreno/device pixels"
+  ],
+  "integration_commit": "c3bc183901411fefc0ec3a977e0ea27ef07c11fc",
+  "next_step": "Inspect original DXBC executable sample instructions with B17/Bur inherited decoder and verify t/s pair operands, then prove DXBC→SPIRV mapping and Unity upload."
+}
