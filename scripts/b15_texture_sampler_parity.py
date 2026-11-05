@@ -25,6 +25,13 @@ SOURCE_PINS = {
         6_607_272,
         "0476792cfeffac19d16e920011ed8d2fb2da62973c2f09a8689bc59e1ac4b632",
     ),
+    # T3 actual immutable ZIP2 SHA-pinned external provider, not an inferred
+    # basename: original 3/25 external Material Texture refs resolve here.
+    # Source authenticated with 11-provider original AssetRipper CI41942377246.
+    "sharedassets1.assets": (
+        34_888_388,
+        "c6bdf49f7d38ab060872fcb298770bc7113959f85ea2fd1a42dc663323d7660a",
+    ),
 }
 
 ZIP2_COMMIT = "15964ea8f246b6e076ce26b60931ee2e1a9a2385"
