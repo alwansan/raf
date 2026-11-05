@@ -94,7 +94,7 @@ class T4OriginalCompletionTests(unittest.TestCase):
         candidate = ORIGINAL.replace(
             "    WorldHasBeenRecieved = true;\n  else",
             "    NotReady();\n  else",
-        ).replace("}\n", " void Other() { WorldHasBeenRecieved = true; }\n}\n")
+        ).replace("  yield return null;\n }\n", "  yield return null;\n }\n void Other() { WorldHasBeenRecieved = true; }\n")
         with self.assertRaises(ValueError):
             trace_original_world_completion(candidate)
 
