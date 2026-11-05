@@ -420,6 +420,26 @@ jobs:
               assert e['AlternateControlFlowEntryBetweenCallAndStore'] is False
           if e['DeclaredCallReturnCategory']!='rendertexture_named_return':
               assert e['DeclaredReturnExactlyRenderTextureByName'] is False
+          assert e['ImmediatePreCallOpcodeCategory'] in (
+              'no_prior_instruction','dup','ldnull','ldloc','ldarg',
+              'call','newobj','field_load','other')
+          assert e['CallConsumedOperandCategory'] in ('none','one','multiple')
+          assert type(e['RetainedDuplicateAfterOneInputVoidCall']) is bool
+          assert e['OriginalRuntimeStackContentsVerified'] is False
+          if e['RetainedDuplicateAfterOneInputVoidCall']:
+              assert e['DeclaredCallReturnCategory']=='void_return'
+              assert e['ImmediatePreCallOpcodeCategory']=='dup'
+              assert e['CallConsumedOperandCategory']=='one'
+              assert e['AlternateControlFlowEntryBetweenCallAndStore'] is False
+          print('T2_FOAM_VOID_CALL_PRECALL_STACK_SAFE '+json.dumps({
+              'precall_opcode_category':e['ImmediatePreCallOpcodeCategory'],
+              'void_call_consumes_operand_count_category':
+                  e['CallConsumedOperandCategory'],
+              'retained_dup_if_void_call_executes':
+                  e['RetainedDuplicateAfterOneInputVoidCall'],
+              'original_runtime_stack_or_nonnull_verified':False,
+              'source_method_names_il_and_literals_disclosed':False,
+          },sort_keys=True))
           print('T2_FOAM_WRITER_PRECEDING_CALL_RETURN_SAFE '+json.dumps({
               'preceding_exact_writer_call':e['PrecedingInstructionIsCall'],
               'declared_return_category':e['DeclaredCallReturnCategory'],

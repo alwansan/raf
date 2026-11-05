@@ -14,7 +14,11 @@ internal static class FoamReturnWriterCallEvidence
         bool DeclaredReturnExactlyRenderTextureByName,
         bool OriginalAssemblyTypeIdentityVerified,
         bool RuntimeCallOrNonNullVerified,
-        bool OriginalSymbolsOrIlDisclosed);
+        bool OriginalSymbolsOrIlDisclosed,
+        string ImmediatePreCallOpcodeCategory="not_examined",
+        string CallConsumedOperandCategory="not_examined",
+        bool RetainedDuplicateAfterOneInputVoidCall=false,
+        bool OriginalRuntimeStackContentsVerified=false);
 
     private static string ReturnCategory(TypeReference type) =>
         type.MetadataType == MetadataType.Void ? "void_return" :
@@ -76,12 +80,36 @@ internal static class FoamReturnWriterCallEvidence
         var category=ReturnCategory(call.ReturnType);
         bool pushes=category!="void_return";
         bool namedRt=category=="rendertexture_named_return";
+        int pre=prior-1;
+        while(pre>=0 && il[pre].OpCode.Code==Code.Nop) pre--;
+        string preCategory=pre<0 ? "no_prior_instruction" :
+            il[pre].OpCode.Code switch {
+                Code.Dup => "dup",
+                Code.Ldnull => "ldnull",
+                Code.Ldloc or Code.Ldloc_S or Code.Ldloc_0 or Code.Ldloc_1
+                  or Code.Ldloc_2 or Code.Ldloc_3 => "ldloc",
+                Code.Ldarg or Code.Ldarg_S or Code.Ldarg_0 or Code.Ldarg_1
+                  or Code.Ldarg_2 or Code.Ldarg_3 => "ldarg",
+                Code.Call or Code.Callvirt => "call",
+                Code.Newobj => "newobj",
+                Code.Ldfld or Code.Ldsfld => "field_load",
+                _ => "other"
+            };
+        int count=call.Parameters.Count+(call.HasThis?1:0);
+        string consumes=count==0 ? "none" : count==1 ? "one" : "multiple";
+        bool bypassPre=false;
+        if(pre>=0)
+            for(int i=pre+1;i<=at;i++)
+                if(nonSequential.Contains(il[i])) bypassPre=true;
+        bool retained=category=="void_return" && count==1 &&
+            preCategory=="dup" && !bypassPre;
         // Conditional IL evaluation-stack result, NOT original runtime
         // call execution, value non-null, assignment type verification, or
         // Unity engine assembly identity. Reference equality by name alone
         // is NOT a proof of source/Unity assembly identity.
         return new SafeProfile(true,category,pushes,bypass,
-            pushes && !bypass,namedRt,false,false,false);
+            pushes && !bypass,namedRt,false,false,false,
+            preCategory,consumes,retained,false);
     }
 
     // Explicit synthetic-only fixtures: no source game assembly and no
@@ -163,5 +191,34 @@ internal static class FoamReturnWriterCallEvidence
         var nonCall=Create(Ref("SyntheticRT",rt),includeCall:false);
         if(Inspect(nonCall.Method,nonCall.Writer,true).PrecedingInstructionIsCall)
             throw new InvalidDataException("Non-call promoted as call");
+
+        // A void call consuming a duplicated receiver can leave the
+        // original stack reference for the following stloc. No null proof.
+        var one=Ref("SyntheticOneVoid",module.TypeSystem.Void);
+        one.HasThis=true;
+        var dupCase=Create(one);
+        var dupProcessor=dupCase.Method.Body.GetILProcessor();
+        var dupCall=dupCase.Method.Body.Instructions[0];
+        dupProcessor.InsertBefore(dupCall,dupProcessor.Create(OpCodes.Ldnull));
+        dupProcessor.InsertBefore(dupCall,dupProcessor.Create(OpCodes.Dup));
+        var retained=Inspect(dupCase.Method,dupCase.Writer,true);
+        if(retained.ImmediatePreCallOpcodeCategory!="dup" ||
+           retained.CallConsumedOperandCategory!="one" ||
+           !retained.RetainedDuplicateAfterOneInputVoidCall ||
+           retained.OriginalRuntimeStackContentsVerified)
+           throw new InvalidDataException("Synthetic retained dup not recognized");
+        // Branch directly to call, bypassing dup: fail closed.
+        var jumpCase=Create(one);
+        var jumpProcessor=jumpCase.Method.Body.GetILProcessor();
+        var jumpCall=jumpCase.Method.Body.Instructions[0];
+        jumpProcessor.InsertBefore(jumpCall,jumpProcessor.Create(OpCodes.Ldnull));
+        jumpProcessor.InsertBefore(jumpCall,jumpProcessor.Create(OpCodes.Dup));
+        jumpProcessor.Append(jumpProcessor.Create(OpCodes.Br_S,jumpCall));
+        if(Inspect(jumpCase.Method,jumpCase.Writer,true)
+           .RetainedDuplicateAfterOneInputVoidCall)
+           throw new InvalidDataException("Branch bypass incorrectly proved dup");
+        var noArgs=Create(Ref("SyntheticNoArgs",module.TypeSystem.Void));
+        if(Inspect(noArgs.Method,noArgs.Writer,true).CallConsumedOperandCategory!="none")
+           throw new InvalidDataException("No-arg void call operand category incorrect");
     }
 }
