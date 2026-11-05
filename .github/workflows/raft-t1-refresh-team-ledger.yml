@@ -53,8 +53,14 @@ jobs:
           assert "https://github.com/alwansan/raf/actions/runs/41939314440" in water[0]["evidence"]
           events=[x for x in data["events"] if x["id"]=="T1-20261105T001110Z-T1-original-fft-sampled-roles"]
           assert len(events)==1 and events[0]["owner"]=="T1"
+          new=[x for x in data["events"] if x["id"].endswith("fft-unity-probe-source-gate-2026-11-05T00:31:11.000Z")]
+          # The source-only T1 event is required, but its exact UTC subseconds are not a build oracle.
+          if not new:
+              new=[x for x in data["events"] if x.get("owner")=="T1" and "fft-unity-probe-source-gate" in x.get("id","")]
+          assert len(new)==1
+          assert "https://github.com/alwansan/raf/actions/runs/41941716641" in water[0]["evidence"]
           assert data["readiness"] is not True
-          print("RAFT_T1_LEDGER_RECONCILE current_T1_event=true original_water_open=true")
+          print("RAFT_T1_LEDGER_RECONCILE current_T1_event=true unity_probe_source_only=true original_water_open=true")
           PY
             git add -- prompt/coordination/T_TEAM/SUMMARY.md prompt/coordination/T_TEAM/snapshot.json
             if git diff --cached --quiet; then
