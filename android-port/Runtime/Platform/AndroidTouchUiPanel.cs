@@ -65,14 +65,14 @@ namespace RaftAndroid.Platform
             // Block game UI behind the non-interactive performance bar.
             var bar = Node("HudTouchBlocker", safeRoot, 0, 0, 1920, 70);
             bar.gameObject.AddComponent<Image>().color = Color.clear;
-            AddButton(safeRoot, "Show Xbox", 8, 78, 150, () => gamepad.SetVisible(!gamepad.Visible), out toggleText);
-            AddButton(safeRoot, "Xbox layout", 8, 126, 150, () =>
+            AddRightButton(safeRoot, "Show Xbox", 8, 78, 150, () => gamepad.SetVisible(!gamepad.Visible), out toggleText);
+            AddRightButton(safeRoot, "Xbox layout", 8, 126, 150, () =>
             {
                 if (!gamepad.Visible) gamepad.SetVisible(true);
                 gamepad.SetLayoutEditMode(!gamepad.Editing);
                 reportOpen = false;
             });
-            AddButton(safeRoot, "Test report", 8, 174, 150, () => { reportOpen = !reportOpen; gamepad.SetLayoutEditMode(false); });
+            AddRightButton(safeRoot, "Test report", 8, 174, 150, () => { reportOpen = !reportOpen; gamepad.SetLayoutEditMode(false); });
             editorObject = Panel("Xbox layout editor", 500, 252);
             var edit = editorObject.GetComponent<RectTransform>();
             selectionText = Label(edit, "Select a controller button", 12, 10, 476, 30);
@@ -151,6 +151,29 @@ namespace RaftAndroid.Platform
             button.navigation = new Navigation { mode = Navigation.Mode.None };
             button.onClick.AddListener(() => pressed());
             label = Label(rect, caption, 0, 0, width, 42); label.alignment = TextAnchor.MiddleCenter;
+        }
+
+        // Diagnostic actions live against the RIGHT edge of Screen.safeArea,
+        // independent of resolution/aspect ratio and without moving gameplay controls.
+        private static void AddRightButton(Transform parent, string caption, float inset, float y, float width, Action pressed, out Text label)
+        {
+            var rect = Node(caption, parent, 0, y, width, 42);
+            rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(1, 1);
+            rect.anchoredPosition = new Vector2(-inset, -y);
+            var image = rect.gameObject.AddComponent<Image>();
+            image.color = new Color(.12f, .16f, .2f, .96f);
+            var button = rect.gameObject.AddComponent<Button>();
+            button.targetGraphic = image;
+            button.navigation = new Navigation { mode = Navigation.Mode.None };
+            button.onClick.AddListener(() => pressed());
+            label = Label(rect, caption, 0, 0, width, 42);
+            label.alignment = TextAnchor.MiddleCenter;
+        }
+
+        private static void AddRightButton(Transform parent, string caption, float inset, float y, float width, Action pressed)
+        {
+            Text unused;
+            AddRightButton(parent, caption, inset, y, width, pressed, out unused);
         }
 
         private void OnDisable() { if (canvasObject != null) canvasObject.SetActive(false); }
