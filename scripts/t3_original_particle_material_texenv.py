@@ -121,8 +121,12 @@ def census(materials:dict, expected_keys:set, *, renderer_slots:int=108,
     }
 
 
-def run(original:Path, manifest:Path, *, private_local_texture_targets:dict|None=None):
+def run(original:Path, manifest:Path, *, private_local_texture_targets:dict|None=None,
+        private_material_texenvs:dict|None=None):
     import UnityPy
+    if private_material_texenvs is not None and (
+        type(private_material_texenvs) is not dict or private_material_texenvs):
+        raise ValueError("private_original_particle_Material_TexEnv_outparam_not_empty")
     private_counts={}
     private_materials={}
     original_report=source.load_original(
@@ -170,6 +174,13 @@ def run(original:Path, manifest:Path, *, private_local_texture_targets:dict|None
             rows[identity]=(normalize_texenvs(saved["m_TexEnvs"],exported=False),
                             len(external))
     out=census(rows,selected,private_local_texture_targets=private_local_texture_targets)
+    if private_material_texenvs is not None:
+        if (set(rows)!=selected or len(rows)!=5
+            or sum(len(v[0]) for v in rows.values())!=10):
+            raise ValueError("private_original_particle_Material_TexEnv_scope_changed")
+        # Do not serialize original Material identities or TexEnv property
+        # labels: the caller keeps this strictly private in memory.
+        private_material_texenvs.update({key:value[0] for key,value in rows.items()})
     out["six_original_scene_SHA_verified"]=True
     out["four_original_shader_Material_owner_SHA_verified"]=True
     out["original_108_use_ParticleShader48_reference_authenticated"]=True
