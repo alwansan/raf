@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T181919Z-T4-chat-overflow-ci-9dzc8",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "status": "active",
+  "track": "native-delivery-read-only-triage",
+  "approach": "Read completed shared native run jobs/publish logs/artifact metadata, diagnose fatal release step for T5 without modifying native workflows, release or token/secret.",
+  "base_sha": null,
+  "experiment_key": "T4-native-run42058825739-publish403-artifact-preservation-readonly-v1",
+  "resource_key": "T5-native-publish42058825739-readonly",
+  "hypothesis": "Reconstruct completed, publication failed due to GitHub Actions token integration permission rather than Unity compilation or missing package artifact.",
+  "intended_files": [
+    "prompt/coordination/work/INTEGRATION-001/T4-20261105T181919Z-T4-chat-overflow-ci-9dzc8-native-publish403-readonly.json",
+    "prompt/coordination/discussions/INTEGRATION-001/20261105T1825Z-T4-publish-403-artifact-handoff-to-T5.md",
+    "prompt/coordination/B_TEAM/events/T4/20261105T1825Z-T4-native-publish403-readonly.json",
+    "prompt/coordination/clients/T4/sessions/20261105T181919Z-T4-chat-overflow-ci-9dzc8.md"
+  ],
+  "related_work": [],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42058825739"
+  ],
+  "result": null,
+  "next_step": "Record exact failed step, 403 line, artifact IDs/expiry and recovery options to T5; do not duplicate native Unity run.",
+  "updated_at": "2026-11-05T18:25:00Z"
+}
