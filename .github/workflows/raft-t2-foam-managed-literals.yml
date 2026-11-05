@@ -259,6 +259,30 @@ jobs:
           assert not f['WholeFunctionBranchJoinVerified']
           assert not f['RuntimeArraySizeOrContentsVerified']
           assert not f['RuntimeExecutionVerified']
+          z=r['original_exact_RenderTexture_array_byref_compiled_bounds_vs_callers']
+          assert z is not None
+          assert z['ExactRecipientDefinitionMatches']==1
+          assert z['ProvenNewarrRefArrayStoreSites']==f['ProvenNewarrRenderTextureArrayToRefFormalStores']
+          assert z['ExactRenderTextureNewarrSites']==q['BodyDirectArrayNewarrOpcodeCount']
+          assert z['NewarrLengthOperandOriginCategory'] in (
+              'direct_ldc_i4_literal','length_source_not_direct_i4',
+              'length_source_not_proven','exact_allocation_relation_not_unique',
+              'recipient_unresolved')
+          assert z['FourOriginalIndicesWithinThisCompiledAllocation'] in (True,False,None)
+          assert z['OriginalNumericLiteralsOrDigestsDisclosed'] is False
+          assert z['RuntimeArrayAllocationOrBoundsVerified'] is False
+          if z['NewarrLengthOperandOriginCategory']!='direct_ldc_i4_literal':
+              assert z['FourOriginalIndicesWithinThisCompiledAllocation'] is None
+          print('T2_FOAM_COMPILED_PRIVATE_ARRAY_BOUNDS_SAFE '+json.dumps({
+              'single_original_newarr_ref_write_proven':
+                  z['ProvenNewarrRefArrayStoreSites']==1,
+              'allocation_length_operand_category':
+                  z['NewarrLengthOperandOriginCategory'],
+              'four_compiled_index_literals_in_range_if_allocation_executes':
+                  z['FourOriginalIndicesWithinThisCompiledAllocation'],
+              'runtime_allocation_or_bounds_verified':False,
+              'actual_numeric_values_disclosed':False,
+          },sort_keys=True))
           print('T2_FOAM_REF_ARRAY_DATAFLOW_SAFE '+json.dumps({
               'stind_ref_sites':f['ExactStindRefSites'],
               'newarr_rt_to_ref_array_proven_same_block':f['ProvenNewarrRenderTextureArrayToRefFormalStores'],

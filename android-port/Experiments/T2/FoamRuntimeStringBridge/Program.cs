@@ -148,6 +148,7 @@ internal static class Program
         public FoamFieldAddressConsumer.SafeProfile? OriginalAddressConsumerProfile;
         public FoamByrefTargetBody.SafeProfile? OriginalByrefTargetBodyProfile;
         public FoamByrefAllocationFlow.SafeProfile? OriginalByrefAllocationFlowProfile;
+        public FoamByrefArrayBounds.SafeProfile? OriginalByrefArrayBoundsProfile;
         public readonly Dictionary<string,int> TotalSetterCalls = new(StringComparer.Ordinal)
         {
             ["shader_global_texture"] = 0,
@@ -390,6 +391,10 @@ internal static class Program
                 FoamByrefTargetBody.Inspect(sourceMethods,exactByrefRecipients[0]);
             result.OriginalByrefAllocationFlowProfile=
                 FoamByrefAllocationFlow.Inspect(sourceMethods,exactByrefRecipients[0]);
+            result.OriginalByrefArrayBoundsProfile=
+                FoamByrefArrayBounds.Inspect(sourceMethods,exactByrefRecipients[0],
+                    result.OriginalByrefAllocationFlowProfile,
+                    result.PrivateExactFourI4Values);
             // Resolve the exact original FieldDefinition without publishing
             // private type, token or field identifiers.
             var sourceTypes=sourceMethods.Count==0
@@ -463,6 +468,7 @@ internal static class Program
             original_exact_RenderTexture_array_field_address_consumer = result.OriginalAddressConsumerProfile,
             original_exact_RenderTexture_array_byref_target_body_profile = result.OriginalByrefTargetBodyProfile,
             original_exact_RenderTexture_array_byref_target_allocation_flow = result.OriginalByrefAllocationFlowProfile,
+            original_exact_RenderTexture_array_byref_compiled_bounds_vs_callers = result.OriginalByrefArrayBoundsProfile,
             original_exact_Texture_int_producer_body_accepted_same_SHA_definition = result.OriginalSingleProducerBodyProfile is not null,
             original_exact_method_definition_is_original_runtime_called_or_output_proof = false,
             producer_declared_signature_is_actual_runtime_texture_object_proof = false,
@@ -1071,6 +1077,43 @@ internal static class Program
         if(wrongProof.ProvenNewarrRenderTextureArrayToRefFormalStores!=0 ||
             wrongProof.RefFormalStoresWithUnprovenValue!=1)
             throw new InvalidDataException("Wrong-element array cannot prove source RT allocation");
+        // Source-free bounded size checks. Synthetic original-style length=3
+        // is not related to the actual private original constant.
+        var syntheticFlow=FoamByrefAllocationFlow.Inspect(
+            new[]{syntheticAlloc},syntheticAlloc);
+        var boundedYes=FoamByrefArrayBounds.Inspect(
+            new[]{syntheticAlloc},syntheticAlloc,syntheticFlow,
+            new[]{0,1,2,2});
+        var boundedNo=FoamByrefArrayBounds.Inspect(
+            new[]{syntheticAlloc},syntheticAlloc,syntheticFlow,
+            new[]{0,1,2,3});
+        if(boundedYes.FourOriginalIndicesWithinThisCompiledAllocation!=true ||
+            boundedNo.FourOriginalIndicesWithinThisCompiledAllocation!=false ||
+            boundedYes.NewarrLengthOperandOriginCategory!="direct_ldc_i4_literal" ||
+            boundedYes.OriginalNumericLiteralsOrDigestsDisclosed ||
+            boundedYes.RuntimeArrayAllocationOrBoundsVerified)
+            throw new InvalidDataException("Synthetic exact size vs caller bounds control failed");
+        var syntheticUnknownLength=new MethodDefinition("SyntheticDynamicLengthByref",
+            Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,
+            m.TypeSystem.Void);
+        syntheticUnknownLength.Parameters.Add(new ParameterDefinition(
+            new ByReferenceType(new ArrayType(renderTextureType))));
+        syntheticUnknownLength.Parameters.Add(new ParameterDefinition(m.TypeSystem.Int32));
+        factoryDef.Methods.Add(syntheticUnknownLength);
+        var unknownIl=syntheticUnknownLength.Body.GetILProcessor();
+        unknownIl.Append(unknownIl.Create(OpCodes.Ldarg_0));
+        unknownIl.Append(unknownIl.Create(OpCodes.Ldarg_1));
+        unknownIl.Append(unknownIl.Create(OpCodes.Newarr,renderTextureType));
+        unknownIl.Append(unknownIl.Create(OpCodes.Stind_Ref));
+        unknownIl.Append(unknownIl.Create(OpCodes.Ret));
+        var unknownFlow=FoamByrefAllocationFlow.Inspect(
+            new[]{syntheticUnknownLength},syntheticUnknownLength);
+        var unknownBound=FoamByrefArrayBounds.Inspect(
+            new[]{syntheticUnknownLength},syntheticUnknownLength,unknownFlow,
+            new[]{0,1,2,3});
+        if(unknownBound.FourOriginalIndicesWithinThisCompiledAllocation is not null ||
+            unknownBound.NewarrLengthOperandOriginCategory!="length_source_not_direct_i4")
+            throw new InvalidDataException("Dynamic original allocation size must remain unproven");
         var syntheticIndirect=new MethodDefinition("SyntheticFieldReferenceStore",
             Mono.Cecil.MethodAttributes.Public,m.TypeSystem.Void);
         factoryDef.Methods.Add(syntheticIndirect);
@@ -1241,6 +1284,7 @@ internal static class Program
                 typed_byref_indirect_array_store_length_and_decoy_sink_controls=true,
                 exact_byref_target_internal_body_and_wrong_signature_controls=true,
                 strict_newarr_to_ref_array_same_block_and_cross_branch_negative_controls=true,
+                private_compiled_allocation_length_inbounds_and_dynamic_negative_controls=true,
                 four_original_style_Texture_int_argument_origin_controls=true,
                 signed_short_wide_and_duplicate_private_i4_aggregate_controls=true,
                 private_IL_names_or_source_published = false
