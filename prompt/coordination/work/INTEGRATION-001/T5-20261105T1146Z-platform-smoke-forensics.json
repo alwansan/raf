@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T1146Z-T5-platform-smoke-diff",
+  "issue_id": "INTEGRATION-001",
+  "track": "CI platform smoke regression",
+  "approach": "Compare failing platform CI with immediately preceding successful run and audit actual smoke-test code for deterministic failure or nondeterminism; do not edit T4-owned platform implementation.",
+  "status": "active",
+  "base_sha": "ae7a98b870c2ddc3faf2e7a734278be01ff67433",
+  "intended_files": [
+    "prompt/coordination/work/INTEGRATION-001/T5-20261105T1146Z-platform-smoke-forensics.json",
+    "prompt/coordination/clients/T5/sessions/20261105T1146Z-T5-platform-smoke-diff.md"
+  ],
+  "hypothesis": "CI42020924863 failure in platform smoke may be unrelated to T2 Foam change and indicate nondeterministic concurrency fixture.",
+  "related_work": [],
+  "taken_over_from": [
+    "prompt/coordination/clients/T5/MEMORY.md",
+    "https://github.com/alwansan/raf/actions/runs/42020751210"
+  ],
+  "experiment_ids": [],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42020924863"
+  ],
+  "result": null,
+  "next_step": "Inspect failing job and source changes; isolate exact assertion before patch.",
+  "updated_at": "2026-11-05T11:46:00Z"
+}
