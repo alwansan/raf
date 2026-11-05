@@ -134,14 +134,15 @@ def probe(source: Path, manifest: Path, *, official_names=None, reader=None):
             )
     if set(names) != set(selected):
         raise ValueError("incomplete_original_selected_Shader48_name_records")
-    if official_names is None:
+    verified_official_archive = official_names is None
+    if verified_official_archive:
         archive, _, _ = archive_sources(download())
         if len(archive) != EXPECTED_OFFICIAL_NAMES:
             raise ValueError("official_Unity_2021_shader_archive_count_drift")
         official_names = set(archive)
     report = compare(selected, names, official_names, source_report)
     report["official_Unity_2021_3_45f2_builtins_archive_SHA256_verified"] = (
-        official_names is not None and reader is None
+        verified_official_archive
     )
     return report
 
