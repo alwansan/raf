@@ -5,9 +5,9 @@
   "session_id": "20261105T1408Z-T2-chat-foam-four-i4-uniqueness-4e7a",
   "generation": "T-2026-11-05",
   "issue_id": "WATER-001",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "5c2668162e5e21e4d25e3b76ca257dbc8bda7852",
-  "updated_at": "2026-11-05T14:16:34.348Z",
+  "updated_at": "2026-11-05T14:22:22.913Z",
   "resumed_from_sessions": [
     "20261105T1323Z-T2-chat-index-origin-5c42",
     "20261105T1325Z-T2-scheduled-boundary-7c2f"
@@ -44,15 +44,28 @@
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42043293335"
   ],
-  "next_step": "Inspect CI42043293335 first synthetic test/compile and genuine original stage; original result must show decoded literal count 4, distinct count 1..4, sign bool, no raw values. If failure, fix first cause using only owned files. Keep T5 original native build42042902522 untouched.",
+  "next_step": "Read original safe artifact 13423996658 JSON distinct count and all_nonnegative; local file extraction unavailable in current chat tool runtime (SessionLimitReachedError). Do not guess values. Then investigate exact original backing RenderTexture[] serialized metadata/array initialization. WATER-001 OPEN NOT_READY 0/3.",
   "source_commits": [
     "37403b9abe10df9857f39d359288caa434c07822",
     "84338ab8bf89d8af41b0aa3e1fdcda1a4030d391",
     "43a633869a4185bd0176e139b9abf3b28045bd8e"
   ],
   "result": {
-    "source": "Three T2 code/test/workflow edits committed with per-blob SHA lease; first two [skip ci] to avoid invalid intermediate CI, final triggers one original SHA-pinned private run",
-    "CI": "in_progress",
-    "device": "not tested"
+    "source_authentic_CI": "42043293335 COMPLETED SUCCESS",
+    "head_sha": "43a633869a4185bd0176e139b9abf3b28045bd8e",
+    "original_Assembly_CSharp_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "decoded_i4_literal_count": 4,
+    "safe_distinct_count_field": "non_authored_actual_i4_index_values_distinct_count",
+    "safe_all_nonnegative_field": "non_authored_actual_i4_index_values_all_nonnegative",
+    "distinct_count_value_verified_in_this_chat": false,
+    "nonnegative_value_verified_in_this_chat": false,
+    "CI_asserted_distinct_count_range": "1..4",
+    "CI_asserted_all_nonnegative_boolean": true,
+    "artifact_id": 13423996658,
+    "artifact_sha256": "724e25d6f7de6d78abb054a75f37bdd73303096a19205e485efbc1f548edc00b",
+    "source_free_controls": "passed",
+    "original_source_and_cleanup": "passed",
+    "no_original_literal_values_disclosed": true,
+    "game_runtime_array_length_or_elements_proven": false
   }
 }
