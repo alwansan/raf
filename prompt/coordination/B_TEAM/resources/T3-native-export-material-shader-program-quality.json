@@ -1,0 +1,44 @@
+{
+  "id": "T3-NATIVE-EXPORTED-MATERIAL-SHADER-PROGRAM-QUALITY",
+  "title": "T3 true exported Material Shader GUID resolves to Dummy ShaderLab program despite correct pointer",
+  "kind": "authenticated-source-bounded-real-export-to-native-postrestore-audit",
+  "owner": "T3",
+  "source": {
+    "zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "original_shader_owners_sha_verified": 4,
+    "actual_export_original_providers_sha_verified": 12,
+    "exporter_commit": "036098ab525a3f9f693dc101edeb21faad4d32d8"
+  },
+  "stages": {
+    "acquisition": "VERIFIED_12_ZIP2_OWNER_SHA_PINNED_BOUNDED_SOURCE_ONLY",
+    "extraction": "VERIFIED_ACTUAL_731_MATERIAL_YAML_DOCS_126_SHADERLAB_FILES",
+    "reconstruction": "ALL_126_UNRESTORED_DIAGNOSTIC_OUTPUT_SHADERLAB_DUMMY_MARKER_NOT_AUTHORED_PROGRAMS",
+    "binding": "VERIFIED_511_OF_511_CUSTOM_MATERIAL_GUID_LINKS_TARGET_54_DUMMY_SHADERLAB_GUIDS_220_BUILTIN",
+    "integration": "NATIVE_WORKFLOW_POST_RESTORER_SOURCE_INSTRUMENTED_EXECUTION_PENDING_NEXT_AUTHORIZED_NATIVE_BUILD",
+    "device": "UNKNOWN"
+  },
+  "bounded_actual_source_output_counts": {
+    "material_documents": 731,
+    "custom_material_documents": 511,
+    "builtin_shader_material_documents": 220,
+    "custom_material_documents_with_dummy_shader_program": 511,
+    "distinct_dummy_shader_guid_targets": 54,
+    "shaderlab_dummy_source_files": 126,
+    "shaderlab_source_files": 126
+  },
+  "exporter_mode": "DEFAULT_DUMMY_SOURCE_AUTHENTIC_NO_RESTORERS_APPLIED_YET",
+  "native_post_restorer_result": "NOT_YET_EXECUTED",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42026630845",
+    "https://github.com/alwansan/raf/actions/runs/42026545273",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_NATIVE_MATERIAL_SHADER_PROGRAM_AUDIT_2026-11-05.md",
+    "https://github.com/alwansan/raf/commit/e90d1c3521833feb51f7051dd0d05ab2d79e9234"
+  ],
+  "remaining": [
+    "Actual native post-restorer export/material counts unknown; don't infer 511 visible white materials on phone",
+    "Authored shader compilation, Shader48 pass/variant identity, Unity Android and Adreno GPU pixels not proven",
+    "No restoration of default Dummy source performed by this audit. RENDER-002 OPEN."
+  ],
+  "updated_by": "T3",
+  "updated_at": "2026-11-05T12:25:00Z"
+}
