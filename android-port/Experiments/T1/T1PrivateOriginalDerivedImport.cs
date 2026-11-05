@@ -104,6 +104,14 @@ internal static class T1PrivateOriginalDerivedImport
                     continue;
                 }
                 imported++;
+                // Count, but never emit Unity shader compiler diagnostics. A
+                // warning is conservatively treated as an unresolved import.
+                int messages = ShaderUtil.GetComputeShaderMessageCount(asset);
+                if (messages > 0)
+                {
+                    errors++;
+                    continue;
+                }
                 if (!compute)
                     continue; // Headless Editor may import without GPU execution.
                 try
