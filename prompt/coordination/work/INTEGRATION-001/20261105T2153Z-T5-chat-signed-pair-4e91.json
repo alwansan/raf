@@ -6,7 +6,7 @@
   "origin": "chat",
   "issue_id": "INTEGRATION-001",
   "track": "signed APK and OBB actual identity",
-  "status": "active",
+  "status": "completed",
   "base_sha": "0c17397f349789e94aaf8bfa8ec6cc1f75971529",
   "intended_files": [
     "prompt/coordination/work/INTEGRATION-001/20261105T2153Z-T5-chat-signed-pair-4e91.json",
@@ -30,8 +30,26 @@
   "experiment_ids": [
     "20261105T2153Z-T5-chat-signed-pair-4e91"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement safe bounded authentic nested Actions artifact extraction and hash validation; check actual aapt versionCode/APK crypto signature and OBB data archive in independent CI. No changes to concurrent T5 Resolution policy or Unity.",
-  "updated_at": "2026-11-05T21:53:42.033Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42117471172"
+  ],
+  "result": {
+    "run_id": 42117471172,
+    "status": "success",
+    "immutable_source": "e9c358eda01785b65e4eb14f18723da426635628",
+    "source_archive_sha_verified": true,
+    "outer_archive_sha_verified": true,
+    "tests": "34/34 synthetic controls",
+    "actual_apk_obb_bytes_verified": 2974110182,
+    "package": "com.alwansan.raft.androidtest",
+    "version_code": "89",
+    "apk_signature_verified": true,
+    "obb_zip_entries": 39,
+    "apk_zip_entries": 31,
+    "unity_internal_guid_verified": false,
+    "installed_phone_obb_verified": false,
+    "original_release_http_403_unresolved": true
+  },
+  "next_step": "Identify exact CL OBB GUID warning and pathname/asset mapping (no raw source disclosed), distinguish installed on-device OBB from original authenticated artifact; do not rerun Unity or touch scheduled Resolution.",
+  "updated_at": "2026-11-05T22:03:24.880Z"
 }
