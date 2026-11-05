@@ -57,6 +57,21 @@ class OriginalSaveContract(unittest.TestCase):
         with self.assertRaises(ValueError):
             validate(p)
 
+    def test_shipped_seed_root_not_RGD_is_safe_noninvocation(self):
+        p=genuine()
+        for k in ("original_private_Save_IL_guard_passed",
+                  "original_private_Save_invoked",
+                  "original_private_Save_output_created",
+                  "original_private_Save_output_nonzero",
+                  "original_private_Save_generated_LoadT_matching_root",
+                  "original_private_Save_isolated_temp_removed"):
+            p[k]=False
+        p["original_private_Save_audit_category"] = "SHIPPED_SEED_ROOT_DIFFERS_FROM_ORIGINAL_RGD_SAVE_ARGUMENT"
+        p["original_private_Save_result_category"] = "SHIPPED_SEED_ROOT_DIFFERS_FROM_ORIGINAL_RGD_SAVE_ARGUMENT"
+        result=validate(p)
+        self.assertFalse(result["original_private_Save_invoked"])
+        self.assertFalse(result["user_world_save_or_relaunch_proven"])
+
     def test_invocation_without_guard_refused(self):
         p=genuine()
         p["original_private_Save_IL_guard_passed"]=False
