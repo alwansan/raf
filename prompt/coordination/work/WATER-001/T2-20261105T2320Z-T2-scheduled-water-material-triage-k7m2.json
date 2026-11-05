@@ -1,0 +1,22 @@
+{
+  "session_id": "20261105T2320Z-T2-scheduled-water-material-triage-k7m2",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "2fd011eab9fcfea390a979f2eacf5490081a87ce",
+  "updated_at": "2026-11-05T23:20:00Z",
+  "intended_files": [
+    "scripts/t2_device_water_summary.py",
+    "tests/test_t2_device_water_summary.py",
+    "prompt/coordination/clients/T2/sessions/20261105T2320Z-T2-scheduled-water-material-triage-k7m2.md"
+  ],
+  "hypothesis": "Pinned CL game-UID summaries can deterministically rank Spectrum/Foam/Blur pass failures independently of FFT and distinguish zero observed Blur failures from proof of correctness.",
+  "experiment_key": "CL-520c4cf-42058825739-water-material-summary-v1",
+  "resource_key": null,
+  "resumed_from_sessions": [
+    "20261105T2241Z-T2-chat-foam-shaderlab-authored-6a9d",
+    "20261105T2225Z-T2-scheduled-cfg-malformed-6f2c"
+  ],
+  "taken_over_from": "B20 original Foam packet and B25 pass states; T2 chat source-authentic private ShaderLab candidate; owner CL 520c4cf snapshot",
+  "no_shared_game_assets": true
+}
