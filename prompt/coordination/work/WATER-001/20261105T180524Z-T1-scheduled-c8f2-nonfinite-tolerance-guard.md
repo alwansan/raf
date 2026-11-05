@@ -10,3 +10,8 @@ resource_key: none; source-only, no CI/Unity resource
 hypothesis: direct signature() accepts NaN/negative tolerances even though CLI checks, so nonmatching finite pixels may be classified as matching. Reject invalid tolerance at API boundary.
 taken_over_from: T1 existing RGBA comparator (6247a6c) and T1 scheduled empty-capture guard (02ab907), preserving both.
 verification: synthetic unittest with finite mismatched pixel and NaN, infinity, negative tolerances; no private capture.
+
+status: completed_source_pending_tests
+result: direct signature API now rejects NaN/infinite/negative tolerances; regression tests added, not yet executed in repo.
+commits: c11bd8c3b1e881bd671ce494b1f277091980b174; ffb1914d58f763ef53518cd5a594bcbd5848577d; a3cc9f22481bf263f0d752a72c1466b9e2516fbd
+next: run python3 -m unittest tests.test_t1_fft_tolerance_validation and related signature suites; preserve WATER-001 OPEN.
