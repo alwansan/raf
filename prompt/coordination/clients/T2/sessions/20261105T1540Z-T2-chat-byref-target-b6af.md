@@ -8,3 +8,10 @@
 - planned files: own `FoamFieldAddressConsumer.cs`, new `FoamByrefTargetBody.cs`, own `Program.cs`, own `raft-t2-foam-managed-literals.yml`, work/experiment/event/session files.
 - coordination: no overlapping T2 managed workflow at reservation; active T1 FFT CI42057399746 not touched. T5 prior native package run42052375742 finished FAILURE, not silently assumed built. No ShaderLab, .meta, scenes, sound/Settings or postponed touch work.
 - next: implement exact MethodReference capture with conservative original signature match and synthetic internal/external controls; genuine SHA-original CI. Keep WATER-001 OPEN, NOT_READY0/3.
+
+## Source implementation and CI checkpoint
+
+- Source commit [8080364261e1590e8c6db1eb025d756c08506980](https://github.com/alwansan/raf/commit/8080364261e1590e8c6db1eb025d756c08506980), HEAD-lease fast-forward after T1/T4 concurrent pushes; no force. Own files: `FoamFieldAddressConsumer.cs` precise target callback, new `FoamByrefTargetBody.cs`, own `Program.cs`, own `raft-t2-foam-managed-literals.yml`.
+- Synthetic controls: real matching byref callee body containing a literal `ldarg; ldnull; stind.ref` and same-name differently typed callee rejected; original method names/IL and private small-domain indices withheld.
+- Original SHA-pinned CI [42058352098](https://github.com/alwansan/raf/actions/runs/42058352098) **queued at checkpoint**. It discriminates known framework `System.Array.Resize` signature, matching SHA-original internal definition, and missing/external body; actual ref mutation/runtime execution remains unproven unless strictly verified.
+- T1 FFT, T4 RGD and T5 native scopes not edited or cancelled. Previous T5 native package CI42052375742 finished FAILURE, not a finished APK delivery. WATER-001 OPEN, NOT_READY 0/3.
