@@ -1,0 +1,98 @@
+{
+  "provenance": {
+    "source": "Filtered official GitHub REST Release + workflow run metadata; no release asset bytes",
+    "release_id": 433995856,
+    "run_id": 41812889049,
+    "release_url": "https://github.com/alwansan/raf/releases/tag/android-early-test-41812889049-1",
+    "run_url": "https://github.com/alwansan/raf/actions/runs/41812889049"
+  },
+  "run": {
+    "id": 41812889049,
+    "name": "Raft full native APK OBB XAPK build and delivery",
+    "head_sha": "d181ee7152580f49ee0b41dfd05fa2bfdacfafe5",
+    "status": "completed",
+    "conclusion": "success"
+  },
+  "release": {
+    "tag_name": "android-early-test-41812889049-1",
+    "target_commitish": "d181ee7152580f49ee0b41dfd05fa2bfdacfafe5",
+    "prerelease": true,
+    "source_claim": "d181ee7152580f49ee0b41dfd05fa2bfdacfafe5",
+    "logical_file_claims": {
+      "Raft-Android-Test.apk": {
+        "bytes": 672894330,
+        "sha256": "b6e6ca15f039b4640381bc7cf10b4dd1774fea36d4bdf3183696d82374587077"
+      },
+      "main.86.com.alwansan.raft.androidtest.obb": {
+        "bytes": 2301202061,
+        "sha256": "72db0510ef8dde20a4a8efef946c2bd7d8a7cf9be96d633aa9b7c158ac9c23a5"
+      },
+      "Raft-Android-Test.xapk": {
+        "bytes": 2974097643,
+        "sha256": "89090c451b0f0c0f81bd8f6d74f671481ac6b8bcf9cc07ee7e36d168234e10a9"
+      }
+    },
+    "assets": [
+      {
+        "name": "delivery.json",
+        "size": 2166,
+        "digest": "sha256:3a672dd06f1b582eb56a670c6b54ddf6296c3f4b62c031af32ee8c3c768c97b9"
+      },
+      {
+        "name": "INSTALL_AR.md",
+        "size": 5504,
+        "digest": "sha256:bd975d82c946545837f31ecfcac7dcc1a85d518469f55b2e187a263ff83858a7"
+      },
+      {
+        "name": "main.86.com.alwansan.raft.androidtest.obb.part001",
+        "size": 1073741824,
+        "digest": "sha256:32dbb9c149c3ff3bf4b93b00c2328a34a14f026a18bde8b0fe01d1a39407de90"
+      },
+      {
+        "name": "main.86.com.alwansan.raft.androidtest.obb.part002",
+        "size": 1073741824,
+        "digest": "sha256:ca3022354daee652c105f79b73e99c4c427785c0a9ae17847e60be7cb46b073d"
+      },
+      {
+        "name": "main.86.com.alwansan.raft.androidtest.obb.part003",
+        "size": 153718413,
+        "digest": "sha256:a7643cfa89347297555b15a0a660edea15f8ab4bbf46051ee01e7b34f2394770"
+      },
+      {
+        "name": "Raft-Android-Test.apk",
+        "size": 672894330,
+        "digest": "sha256:b6e6ca15f039b4640381bc7cf10b4dd1774fea36d4bdf3183696d82374587077"
+      },
+      {
+        "name": "Raft-Android-Test.xapk.part001",
+        "size": 1073741824,
+        "digest": "sha256:d7dbe74da9b8b754729f65e0281098c287a257c8fd30c723e5a6eede2014d596"
+      },
+      {
+        "name": "Raft-Android-Test.xapk.part002",
+        "size": 1073741824,
+        "digest": "sha256:b5f4094b6e622922f1e953eab2479befc7ebcfa3f84cd9d082e65d136102e97d"
+      },
+      {
+        "name": "Raft-Android-Test.xapk.part003",
+        "size": 826613995,
+        "digest": "sha256:f1c10bcc8177b302567a21461248a7e320afa85053420ff9a67ea84871deea17"
+      },
+      {
+        "name": "reassemble.py",
+        "size": 3798,
+        "digest": "sha256:ea8dece60475390e91eb9496ec6b455227ef7ed7a69b8edca0a6323355163ee8"
+      },
+      {
+        "name": "RECORDED_LIMITATIONS.json",
+        "size": 2135,
+        "digest": "sha256:9f714a753684c7c3b061a6d797bfbe33d6f7c989ae91c05c9be42f73f867a6b5"
+      },
+      {
+        "name": "SHA256SUMS",
+        "size": 727,
+        "digest": "sha256:18eb4be15a90b2b861284eb3179168f8614f60d99412429125f361f882a53daf"
+      }
+    ]
+  }
+}
