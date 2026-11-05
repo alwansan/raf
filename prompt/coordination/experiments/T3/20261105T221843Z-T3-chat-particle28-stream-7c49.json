@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T221843Z-T3-chat-particle28-stream-7c49",
+  "issue_id": "RENDER-002",
+  "hypothesis": "Three unique local non-null original Material TexEnv Texture pointers on top Particle108 Shader resolve to actual Texture2D28 original objects, and missing narrow-stage .resS can be classified separately from true Android missing pixel resources.",
+  "source_commit": "87ca7a76309ef68e69dcb65b1dff9c822482694c",
+  "input_hashes": [
+    "immutable ZIP2 15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "six scene SHA pins b21_scene_lightmap_links.py",
+    "four original Material/Shader owners SHA pins a12_probe_original_blur_passes.py, 269007288 bytes",
+    "external resource provider declared by ZIP2 manifest byte-count and digest (private name not emitted)"
+  ],
+  "tool_versions": {
+    "UnityPy": "1.23.0",
+    "Python": "GitHub ubuntu-24.04",
+    "Unity": "not invoked"
+  },
+  "commands": [
+    "python3 -m py_compile scripts/t3_original_particle_material_texenv.py scripts/t3_original_particle_texture_targets.py",
+    "python3 -m unittest discover -s tests -p test_t3_original_particle_texture_targets.py -v",
+    "python3 -m scripts.t3_original_particle_texture_targets --original \"$RUNNER_TEMP/t3-original-six-scene\" --manifest zip2-source/RAFT_FILE_MANIFEST.tsv --out \"$RUNNER_TEMP/t3-original-particle108-texture2d28-stream-safe.json\""
+  ],
+  "negative_controls": [
+    "source only SHA-pinned original 6scene/4owner graph",
+    "wrong/missing source Texture2D class28 rejected",
+    "invalid size/dimension/malformed stream path/provider/offset over manifest rejected",
+    "staged .resS payload SHA mismatch rejected",
+    "only anonymous counts public, private Texture PathIDs/owner names not emitted"
+  ],
+  "workflow_path": ".github/workflows/raft-t3-original-renderer-shader-impact.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42120918486",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42120918486/artifacts"
+  ],
+  "budget": "22min SHA-original source only, no full native AssetRipper exporter, no .resS staged/Unity",
+  "status": "completed",
+  "observed_result": {
+    "source_scene_SHA_verified": true,
+    "source_owner_SHA_verified": true,
+    "source_particle_material21": 5,
+    "material_texenv_local_nonnull": 10,
+    "original_unique_texture_pptr": 3,
+    "original_type28_texture2d_targets": 3,
+    "m_streamdata_present": 3,
+    "distinct_declared_resource_providers": 1,
+    "source_stream_manifest_extents_valid": 3,
+    "required_resource_objects_not_staged": 3,
+    "staged_resource_payload_SHA_verified": 0,
+    "synthetic_controls_passed": 88
+  },
+  "rejected_hypotheses": [
+    "The 108-use Particle Shader Material texture pointers refer to non-Texture2D asset types",
+    "The 3 source Texture2D objects store their complete source image bytes inline in the four verified source owner files"
+  ],
+  "limitations": [
+    "external .resS actual bytes not staged/verified in this narrow run",
+    "not same-instance full-native W1/B02 material texture GUID identity",
+    "not shader sampler/fragment alpha or Android pixel proof"
+  ],
+  "integration_commit": "87ca7a76309ef68e69dcb65b1dff9c822482694c",
+  "next_step": "T5 joint bounded/real full-native: use same-instance private original W1 Material21 and B02 Texture2D28 export trace to match 5 authenticated original Materials / 3 original Texture2D class28 to exported Unity GUIDs, actual TexEnv source parity and real full pipeline .resS provider bytes; correlate installed signed APK/OBB emitter and alpha/render pixels. Do not launch equivalent heavy export from T3 uncoordinated; source-only checker can be reused."
+}
