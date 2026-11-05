@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T131204828Z-T3-chat-bounded-postrestorer-4a8c",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "hypothesis": "SHA-authentic 12-original-owner Material→Shader real export retains dummy links after selected official vendor restorers; quantify exact before/after, verify Material/.shader.meta unchanged.",
+  "source_commit": "dcb81c72b91817872cacc0fd664d937ea2f9ddef",
+  "input_hashes": [
+    {
+      "kind": "ZIP2_commit",
+      "value": "15964ea8f246b6e076ce26b60931ee2e1a9a2385"
+    },
+    {
+      "kind": "AssetRipperCLI_commit",
+      "value": "036098ab525a3f9f693dc101edeb21faad4d32d8"
+    },
+    {
+      "kind": "TMP_SHA256",
+      "value": "1ce172027b906a30be33cefe7b2ee46e1c8d35f729359b8b9785fc120d57b637"
+    },
+    {
+      "kind": "PostFX_git_commit",
+      "value": "933df236f509ed64ae5763ed57af33f2342cd1c2"
+    },
+    {
+      "kind": "Volumetric_git_commit",
+      "value": "d20b6f9a47ae857e1d313b147db2df3ef44b9196"
+    }
+  ],
+  "experiment_key": "T3-ZIP2-15964ea8f246b6e076ce26b60931ee2e1a9a2385-12-owners-AssetRipperCLI-036098ab5-B21Export-9.0-TMP3.0.6-PostFX933df236-Volumetricd20b6f9-nat-restorer-quality-audit",
+  "tool_versions": {
+    "asset_ripper_cli": "036098ab525a3f9f693dc101edeb21faad4d32d8",
+    "dotnet": "9.0.x",
+    "unitypy": "1.23.0",
+    "vendor_tmp": "3.0.6",
+    "vendor_postfx_git_commit": "933df236f509ed64ae5763ed57af33f2342cd1c2",
+    "vendor_volumetric_git_commit": "d20b6f9a47ae857e1d313b147db2df3ef44b9196"
+  },
+  "workflow_path": ".github/workflows/raft-t3-bounded-postrestorer-shader.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42033940194",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42033940194/artifacts"
+  ],
+  "commands": [
+    "GitHub Actions CI42033940194: stage exact twelve source owners; compile pinned AssetRipperCLI; one genuine export; run scripts.t3_material_shader_same_export",
+    "python3 -m scripts.t3_audit_exported_material_programs --project (private temporary exported project) --out (safe before JSON)",
+    "python3 -m scripts.restore_tmp_shaders --project TEMP_PROJECT --backup EXTERNAL_TEMP_BACKUP",
+    "python3 -m scripts.restore_postfx_shaders --project TEMP_PROJECT --backup EXTERNAL_TEMP_BACKUP",
+    "python3 -m scripts.restore_volumetric_shaders --project TEMP_PROJECT --backup EXTERNAL_TEMP_BACKUP",
+    "python3 -m scripts.t3_audit_exported_material_programs --project (private temporary exported project) --out (safe after JSON)",
+    "Private SHA256 snapshot of pre-existing .mat and .shader.meta with fail-closed comparator, aggregate-only safe console/artifact"
+  ],
+  "negative_controls": [
+    "Before/after 731 Material YAML docs identical reference category counts",
+    "Existing .mat and .shader.meta bytes SHA256-identical",
+    "Vendor source authentication and transaction rollback included in existing restorers",
+    "Dummy linked Materials must not increase after restoration"
+  ],
+  "budget": "35-min timeout, runner ubuntu-24.04, exporter DOTNET_PROCESSOR_COUNT=2, isolated no cancellation, no native ARM64/Unity build",
+  "status": "completed",
+  "observed_result": {
+    "github_conclusion": "success",
+    "original_owners_sha_verified": 12,
+    "source_export_authentic": true,
+    "vendor_restorers_success": 3,
+    "materials_total": 731,
+    "builtin_material_refs": 220,
+    "custom_material_refs": 511,
+    "pre_dummy_links": 511,
+    "post_dummy_links": 495,
+    "non_dummy_vendor_linked_materials": 16,
+    "pre_dummy_targets": 54,
+    "post_dummy_targets": 50,
+    "pre_dummy_shader_files": 126,
+    "post_dummy_shader_files": 98,
+    "pre_total_shader_files": 126,
+    "post_total_shader_files": 128,
+    "original_meta_and_material_bytes_unchanged": true,
+    "device_pixels_verified": false,
+    "full_native_restorer_run": false
+  },
+  "rejected_hypotheses": [
+    "Restoring pinned TMP, PostFX and Volumetric vendor programs alone removes the Dummy marker from all bounded Material-linked Shader files.",
+    "Correct Material→Shader GUID alone proves original Shader source or GPU correctness."
+  ],
+  "limitations": [
+    "Twelve authentic original owners only; not full Raft",
+    "No W1 builtin/Depth/B45 Blur or Unity Editor native main import",
+    "No original Shader48 compiled program equivalence, runtime variant choice, GPU samples, Adreno screen or RGD world tests",
+    "First-run aggregate delta artifact may end in literal escaped newline and require validity check; console JSON is complete; bug repaired in later manual-only source revision"
+  ],
+  "integration_commit": "dcb81c72b91817872cacc0fd664d937ea2f9ddef",
+  "tooling_fix_commit": "2fa28c993be93c59c1d15c4586ec62292cccbd88",
+  "next_step": "Use actual Renderer→Material custom Shader target frequency plus bounded 495 links to prioritize authentic Shader48 program restoration; await authorized full native importer post-restorer report; RENDER-002 OPEN."
+}
