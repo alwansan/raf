@@ -1,0 +1,13 @@
+{
+  "id": "20261105T2241Z-T2-chat-foam-shaderlab-authored-6a9d-private-shaderlab-result",
+  "owner": "T2",
+  "session_id": "20261105T2241Z-T2-chat-foam-shaderlab-authored-6a9d",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "CI42125000030+42125847863 SUCCESS: source-authentic original Foam private 9731B two-pass ShaderLab structural candidate from exactly two original authored props (Texture+Vector), 4 stages, 2 states, and 4 original DXBC Shader Model profiles; 17/17 negative controls, no actual Unity/Adreno proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42125000030",
+    "https://github.com/alwansan/raf/actions/runs/42125847863"
+  ],
+  "at": "2026-11-05T23:04:00Z"
+}
