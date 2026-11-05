@@ -49,9 +49,11 @@ class TestFragmentReadMaskDiagnostic(unittest.TestCase):
             (CODE + b"_vertex", CODE + b"_fragment") for _ in range(4)]
 
     def run_probe(self, **kwargs):
+        overrides = {"translator": translated, "reflector": reflection,
+                     "parser": fakes}
+        overrides.update(kwargs)
         return probe.evaluate_private_fourpass(
-            self.samples, self.root, translator=translated,
-            reflector=reflection, parser=fakes, **kwargs)
+            self.samples, self.root, **overrides)
 
     def test_four_source_paired_actual_read_masks_agree_with_original_spirv(self):
         result = self.run_probe()
