@@ -4,9 +4,9 @@
   "origin": "chat",
   "session_id": "20261105T1540Z-T2-chat-byref-target-b6af",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "0ad4b376091be2088cd21961e2c45920e10346cb",
-  "updated_at": "2026-11-05T15:50:13.620Z",
+  "updated_at": "2026-11-05T15:53:46.811Z",
   "resumed_from_work": "prompt/coordination/work/WATER-001/T2-20261105T1540Z-T2-chat-byref-target-b6af.json",
   "experiment_key": "T2|original-0a6f0527|exact-ref-RenderTexture-array-callee|newarr-to-stind-same-block-v1",
   "resource_key": "T2-original-sha-managed-Foam-newarr-byref-dataflow",
@@ -20,5 +20,14 @@
     "prompt/coordination/clients/T2/sessions/20261105T1540Z-T2-chat-byref-target-b6af.md"
   ],
   "previous_original_ci": "42058352098 SUCCESS",
-  "next_step": "Commit source-free bounded flow proof, run original SHA-pinned CI, publish safe counts and relevant limitation. WATER-001 OPEN NOT_READY0/3."
+  "next_step": "Read 42059508444, inspect T2_FOAM_REF_ARRAY_DATAFLOW_SAFE on success. Do not infer branch joins or runtime array length. Fix only T2 code on failure.",
+  "implementation_sha": "81589064359a025cbe268ba74b3c8502f5678517",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42059508444"
+  ],
+  "result": {
+    "sourcefree_controls": "committed",
+    "SHA_original_CI": "in_progress",
+    "runtime": "not tested"
+  }
 }
