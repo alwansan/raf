@@ -1,0 +1,130 @@
+name: T4 LOCAL-005 genuine original RGD seed CLR deserialize compatibility
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'android-port/Experiments/T4/OriginalRgdRuntimeLoad/**'
+      - 'scripts/t4_validate_original_rgd_runtime_load.py'
+      - 'tests/test_t4_validate_original_rgd_runtime_load.py'
+      - '.github/workflows/raft-t4-original-rgd-runtime-load.yml'
+permissions:
+  contents: read
+concurrency:
+  group: raft-t4-original-rgd-clr-once-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  original-seed-on-managed-CLR:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout only T4 public original-seed experiment and controls
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /android-port/Experiments/T4/OriginalRgdRuntimeLoad/*
+            /scripts/t4_validate_original_rgd_runtime_load.py
+            /tests/test_t4_validate_original_rgd_runtime_load.py
+      - name: Validate original-seed result contract before original input staging
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t4_validate_original_rgd_runtime_load.py tests/test_t4_validate_original_rgd_runtime_load.py
+          python3 -m unittest discover -s tests -p test_t4_validate_original_rgd_runtime_load.py -v
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Compile isolated authentic seed-only .NET8 formatter runner
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 200s dotnet publish \
+            android-port/Experiments/T4/OriginalRgdRuntimeLoad/OriginalRgdRuntimeLoad.csproj \
+            -c Release --self-contained false -o "$RUNNER_TEMP/t4-rgd-formatter-runner" \
+            >"$RUNNER_TEMP/t4-rgd-private-compile.log" 2>&1 || {
+              python3 -c "import collections,os,re,pathlib; s=(pathlib.Path(os.environ['RUNNER_TEMP'])/'t4-rgd-private-compile.log').read_text(errors='replace'); print('T4_RGD_COMPILER_CODES',dict(collections.Counter(re.findall(r'error +((?:CS|NETSDK|NU)[0-9]+)',s))))"
+              exit 1
+            }
+          test -s "$RUNNER_TEMP/t4-rgd-formatter-runner/OriginalRgdRuntimeLoad.dll"
+      - name: Checkout exact original ZIP2 DLL and shipped Data.rgd seed
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: t4-zip2-seed
+          lfs: false
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /Raft/Raft_Data/Managed/Assembly-CSharp.dll
+            /Raft/Raft_Data/StreamingAssets/Data.rgd
+      - name: Checkout exact pinned managed sibling reference context
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 02e9fba7fb42b83579595885391be636ee3b56e8
+          path: t4-original-companions
+          lfs: false
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /Raft/Raft_Data/Managed/
+      - name: Stage exact original bytes privately and check fixed immutable SHA
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C t4-zip2-seed rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          test "$(git -C t4-original-companions rev-parse HEAD)" = 02e9fba7fb42b83579595885391be636ee3b56e8
+          test "$(df -Pk . | awk 'NR==2 {print $4}')" -gt 900000
+          test "$(stat -c '%s' t4-zip2-seed/Raft/Raft_Data/Managed/Assembly-CSharp.dll)" = 3211776
+          test "$(stat -c '%s' t4-zip2-seed/Raft/Raft_Data/StreamingAssets/Data.rgd)" = 2941
+          mkdir -p "$RUNNER_TEMP/t4-rgd-immutable"
+          for dep in t4-original-companions/Raft/Raft_Data/Managed/*.dll; do
+            if [ "$(basename "$dep")" != "Assembly-CSharp.dll" ]; then
+              test ! -L "$dep"
+              cp "$dep" "$RUNNER_TEMP/t4-rgd-immutable/"
+            fi
+          done
+          test "$(find "$RUNNER_TEMP/t4-rgd-immutable" -maxdepth 1 -name '*.dll' | wc -l)" -eq 151
+          cp t4-zip2-seed/Raft/Raft_Data/Managed/Assembly-CSharp.dll "$RUNNER_TEMP/t4-rgd-immutable/Assembly-CSharp.dll"
+          cp t4-zip2-seed/Raft/Raft_Data/StreamingAssets/Data.rgd "$RUNNER_TEMP/t4-rgd-immutable/Data.rgd"
+          python3 - <<'PY'
+          import hashlib,os
+          from pathlib import Path
+          p=Path(os.environ['RUNNER_TEMP'])/'t4-rgd-immutable'
+          expect={'Assembly-CSharp.dll':(3211776,'0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e'),
+                  'Data.rgd':(2941,'b2785187aa11e33872698adfa79ab252cf65a824d92bee7e88773ce4aa11cbba')}
+          for name,(size,digest) in expect.items():
+              f=p/name
+              if f.is_symlink() or f.stat().st_size!=size or hashlib.sha256(f.read_bytes()).hexdigest()!=digest:
+                  raise SystemExit('Authentic original intake mismatch')
+          print('T4_EXACT_ORIGINAL_RGD_INPUT source_verified=true original_binary_bytes_published=false')
+          PY
+      - name: Execute one genuine original Data.rgd BinaryFormatter attempt in bounded isolated CLR
+        shell: bash
+        run: |
+          set -euo pipefail
+          ulimit -f 4096
+          timeout 90s dotnet "$RUNNER_TEMP/t4-rgd-formatter-runner/OriginalRgdRuntimeLoad.dll" \
+            --assembly "$RUNNER_TEMP/t4-rgd-immutable/Assembly-CSharp.dll" \
+            --seed "$RUNNER_TEMP/t4-rgd-immutable/Data.rgd" \
+            --output "$RUNNER_TEMP/t4-rgd-source-probe.json"
+          python3 -m scripts.t4_validate_original_rgd_runtime_load \
+            --report "$RUNNER_TEMP/t4-rgd-source-probe.json"
+          # A source mismatch must fail BEFORE the formatter gets untrusted input.
+          printf 'wrong-seed' > "$RUNNER_TEMP/t4-rgd-immutable/wrong-seed.rgd"
+          if timeout 8s dotnet "$RUNNER_TEMP/t4-rgd-formatter-runner/OriginalRgdRuntimeLoad.dll" \
+              --assembly "$RUNNER_TEMP/t4-rgd-immutable/Assembly-CSharp.dll" \
+              --seed "$RUNNER_TEMP/t4-rgd-immutable/wrong-seed.rgd" \
+              --output "$RUNNER_TEMP/t4-bad-seed-output.json"; then
+            echo 'T4_BAD_ORIGINAL_SHA_NOT_REJECTED'
+            exit 1
+          fi
+          test ! -e "$RUNNER_TEMP/t4-bad-seed-output.json"
+          echo 'T4_ORIGINAL_RGD_NEGATIVE bad_original_seed_sha_rejected=true'
+      - name: No published private Data.rgd, game types, decompiled source or CLR exception details
+        if: always()
+        run: echo 'Only SHA-authenticated shipped seed investigated. No SaveAndLoad.Load, real gameplay save, Unity/IL2CPP or Android-device evidence.'
