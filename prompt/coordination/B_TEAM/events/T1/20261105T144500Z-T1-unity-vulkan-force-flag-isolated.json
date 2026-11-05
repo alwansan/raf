@@ -1,0 +1,18 @@
+{
+  "id": "20261105T144500Z-T1-unity-vulkan-force-flag-isolated",
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261105T142000Z-T1-chat-lavapipe-unity",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "at": "2026-11-05T14:45:00Z",
+  "summary": "Source-free licensed Unity2021.3.45f2 Mesa software-Vulkan custom image CI42047391061: no-flag actual Unity NUnit2/2 PASS; SAME image+VK_ICD_FILENAMES only NUnit2/2 PASS; SAME image+-force-vulkan only exited before NUnit XML, textual license-error category but no CLI unknown flag/Docker image/container/compiler category. Original image lacked libvulkan loader & lavapipe ICD; overlay vulkaninfo enumerated device. Thus explicit forced-Vulkan Unity launch path correlates with failure, not image alone or ICD env alone. Original SHA-authentic FFT OpenGLCore vs Vulkan numeric mismatch 63/64 and31/32 remains, no original FFT acquired or Android/device proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42042650298",
+    "https://github.com/alwansan/raf/actions/runs/42044388619",
+    "https://github.com/alwansan/raf/actions/runs/42045389521",
+    "https://github.com/alwansan/raf/actions/runs/42046073285",
+    "https://github.com/alwansan/raf/actions/runs/42047391061",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_UNITY_VULKAN_MESA_DRIVER_2026-11-05.md"
+  ]
+}
