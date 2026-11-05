@@ -4,8 +4,8 @@
   "origin": "chat",
   "session_id": "20261105T1712Z-T2-chat-return-identity-minimal-4c8f",
   "issue_id": "WATER-001",
-  "status": "active",
-  "updated_at": "2026-11-05T17:12:00Z",
+  "status": "waiting_ci",
+  "updated_at": "2026-11-05T17:15:00Z",
   "base_sha": "528e21018c912f187ed6e0310804b72db9a66288",
   "resumed_from_sessions": [
     "20261105T1648Z-T2-chat-rt-return-definition-f7d2",
@@ -37,5 +37,20 @@
     ],
     "previous_blocked_work": "20261105T1648Z-T2-chat-rt-return-definition-f7d2; complex four-file merge blocked, will not reissue unchanged blocked payload"
   },
-  "next_step": "Publish small modifications in 3 expected-blob SHA guarded updates (not earlier blocked tree payload), run original SHA-pinned T2 CI, inspect safe result or fix first source-only failures; NO Unity or phone validation. WATER-001 OPEN NOT_READY0/3."
+  "next_step": "Read CI42072739153 and safe T2_FOAM_RETURN_SIGNATURE_IDENTITY_SAFE result. If failed at fixture/compiler, fix only T2. Never assert source or runtime success prematurely; WATER-001 OPEN NOT_READY0/3.",
+  "source_commits": [
+    "3c77bdc402c6a7dc42c0f82e3ad1e714003eea66",
+    "1f77969f3728cf13ec3e033b7e76c1479a5b6667",
+    "87c5a3e887144efef11e172d4cd3fb69d8d86e59"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42072739153"
+  ],
+  "result": {
+    "source": "Minimal original managed signature declaration classification integrated with previously verified exact stelem.ref call",
+    "ci": "in_progress",
+    "private_values_published": false,
+    "body_return_verification": "not in scope",
+    "device": "not tested"
+  }
 }
