@@ -1,0 +1,71 @@
+name: T3 refresh team source-evidence summary after verified Material parity
+
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-t3-ledger-refresh.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# Join the same T-team ledger lease as T1 to avoid concurrent snapshot writes.
+concurrency:
+  group: raft-t-team-ledger-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - name: Checkout only coordination ledger and approved source refresh scripts
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 1
+          lfs: false
+          persist-credentials: true
+          sparse-checkout: |
+            scripts
+            prompt/coordination/B_TEAM
+            prompt/coordination/T_TEAM
+      - name: Regenerate T TEAM from authoritative source and fast-forward safely
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF" = "refs/heads/feature/android-native-port"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          for attempt in 1 2 3; do
+            git fetch --no-tags -q origin feature/android-native-port
+            git reset --hard -q FETCH_HEAD
+            python3 scripts/refresh_t_team.py
+            python3 - <<'PY'
+          import json
+          from pathlib import Path
+          s=json.loads(Path("prompt/coordination/T_TEAM/snapshot.json").read_text())
+          assert s["generation"]=="T-2026-11-05"
+          issue=[i for i in s["issues"] if i["id"]=="RENDER-002"]
+          assert len(issue)==1 and issue[0]["status"]=="OPEN"
+          required="https://github.com/alwansan/raf/actions/runs/41940350604"
+          assert required in issue[0]["evidence"]
+          ev=[e for e in s["events"] if e["id"]=="T3-20261105T0023Z-authentic-material-parity-results"]
+          assert len(ev)==1 and ev[0]["owner"]=="T3"
+          assert s["readiness"] is not True
+          print("RAFT_T3_TEAM_SUMMARY SOURCE_ACTUAL_MATERIAL_RGBA=true ISSUE_OPEN=true")
+          PY
+            git add -- prompt/coordination/T_TEAM/SUMMARY.md prompt/coordination/T_TEAM/snapshot.json
+            if git diff --cached --quiet; then
+              echo 'RAFT_T3_TEAM_SUMMARY unchanged=true'
+              exit 0
+            fi
+            git commit -q -m 'docs(T3): regenerate T team ledger with authentic Material source/export evidence'
+            if git push origin HEAD:refs/heads/feature/android-native-port; then
+              echo 'RAFT_T3_TEAM_SUMMARY committed=true'
+              exit 0
+            fi
+            echo "T3 summary source branch advanced; retry lease attempt $attempt"
+          done
+          echo "::error::T3 snapshot refresh could not fast-forward after three retries"
+          exit 1
