@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T1642Z-T3-chat-original-vf-component-bridge-d42e",
+  "issue_id": "RENDER-002",
+  "original_provider_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "request_type": "one bounded genuine original Shader48 vertex-fragment component coverage experiment",
+  "source_blob_shas": {
+    "scripts/t3_original_921_vf_component_bridge.py": "2f5802dac69ba397c9ebaea955216c26f1342c16",
+    "tests/test_t3_original_921_vf_component_bridge.py": "d2000e210e7b8c12c040734b42fc6eab42b1a0b8",
+    "scripts/t3_vf_spirv_component_coverage.py": "14e59ca70379b100b5aab20a03c5806679d12fe1"
+  },
+  "workflow_name": "raft-t3-original-921-vf-component-bridge.yml",
+  "resource_key": "T3-921-fourpass-original-vkd3d-CPU",
+  "safety": {
+    "no_native_unity_build": true,
+    "no_raw_game_asset_upload": true,
+    "cancel_existing_workflows": false
+  },
+  "created_at": "2026-11-05T16:49:00Z"
+}
