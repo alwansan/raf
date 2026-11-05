@@ -2,7 +2,7 @@
   "session_id": "20261105T2351Z-T5-scheduled-resolution-bind-k7m2",
   "origin": "scheduled",
   "issue_id": "INTEGRATION-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "188839a8bbf35cb96e71971935284206666ae06d",
   "intended_files": [
     "prompt/coordination/work/INTEGRATION-001/T5-20261105T2351Z-T5-scheduled-resolution-bind-k7m2.json",
@@ -15,5 +15,7 @@
     "docs/T5_RESOLUTION_ANDROID_POLICY_REVIEW_2026-11-05.md",
     "docs/DEVICE_FEEDBACK_42058825739_AR.md"
   ],
-  "updated_at": "2026-11-05T23:51:00Z"
+  "updated_at": "2026-11-05T23:54:00Z",
+  "result": "Source-audit confirmed A2 Settings.cs MonoScript field/scene evidence cannot identify GraphicsSettingsBox.cs resolution dropdown callback/persistence; no runtime change justified",
+  "session_commit": "6b75450fcdb6b89cfb47e260813cf3424fbf42ef"
 }
