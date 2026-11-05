@@ -507,7 +507,8 @@
         "https://github.com/alwansan/raf/actions/runs/41958245907",
         "https://github.com/alwansan/raf/actions/runs/41958511122",
         "https://github.com/alwansan/raf/actions/runs/41958963107",
-        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_FFT_ORIGINAL_DERIVED_UNITY_CANDIDATES_2026-11-05.md"
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_FFT_ORIGINAL_DERIVED_UNITY_CANDIDATES_2026-11-05.md",
+        "https://github.com/alwansan/raf/actions/runs/41959712898"
       ],
       "remaining": [
         "Spectrum/Foam/Blur passes ناقصة في APK86",
@@ -552,7 +553,8 @@
         "T1 bank1 Vulkan: original pair18/19 swapped-second SIGSEGV reproduced twice and pair10/11 swapped-second same-program numeric comparison varied between runs; no VUID markers; not a Unity/Adreno repair.",
         "Foam original compiled SPIR-V sampler use 21 calls / 6 numeric pairs proven by T2; source m_Index/m_SamplerIndex→material/Unity shader/Adreno remains unverified",
         "T2 authentic original Foam: source serialized t/s matches genuine native DXBC declarations and all six t/s pairs actively SAMPLE-used in 21 instructions; DXBC→translated SPIRV ID/descriptor identity, Unity original Material upload, authentic ShaderLab and Adreno device remain unverified (CI41958159556).",
-        "T1 original 20/20 compiled FFT private DXBC-derived .compute candidate staging SUCCESS (CI41957549770), but three actual Unity Editor import attempts failed before a result; latest41958963107 Unity exit1 and sanitized licensing_failure_category=true. Verify activation using source-free Unity fixture, then authenticate actual Unity import and original runtime FindKernel/Dispatch. Not a game/device water fix."
+        "T1 original 20/20 compiled FFT private DXBC-derived .compute candidate staging SUCCESS (CI41957549770), but three actual Unity Editor import attempts failed before a result; latest41958963107 Unity exit1 and sanitized licensing_failure_category=true. Verify activation using source-free Unity fixture, then authenticate actual Unity import and original runtime FindKernel/Dispatch. Not a game/device water fix.",
+        "T1 source-free Unity 2021 Editor project CI41959712898 failed before Raft acquisition: empty_project_created=false, licensing_failure_category=true, original_raft_data_acquired=false. Resolved shader source is not responsible for this test's failure; actual Editor activation and FindKernel/Adreno remain unknown."
       ],
       "acceptance": [
         "هوية برامج ونوى أصلية أو تطابق موثق دونdummy",
@@ -560,7 +562,7 @@
         "اختبار هاتف يثبت الماء بلا pass/kernel errors"
       ],
       "updated_by": "T1",
-      "updated_at": "2026-11-05T03:08:00Z",
+      "updated_at": "2026-11-05T03:11:00Z",
       "_record_path": "../B_TEAM/issues/WATER-001.json"
     }
   ],
@@ -1674,7 +1676,7 @@
         "extraction": "20_COMPILED_SLOTS_SHA_VERIFIED",
         "reconstruction": "PRIVATE_20_HLSL50_COMPUTE_CANDIDATES_ROUNDTRIP_VERIFIED",
         "binding": "ORIGINAL_RUNTIME_MAPPING_UNKNOWN",
-        "integration": "BLOCKED_UNITY_ACTIVATION_NO_IMPORT_RESULT",
+        "integration": "BLOCKED_UNITY_LICENSE_IN_SOURCE_FREE_FIXTURE",
         "device": "NOT_TESTED"
       },
       "evidence": [
@@ -1683,13 +1685,15 @@
         "https://github.com/alwansan/raf/actions/runs/41737548860",
         "https://github.com/alwansan/raf/actions/runs/41958245907",
         "https://github.com/alwansan/raf/actions/runs/41958511122",
-        "https://github.com/alwansan/raf/actions/runs/41958963107"
+        "https://github.com/alwansan/raf/actions/runs/41958963107",
+        "https://github.com/alwansan/raf/actions/runs/41959712898"
       ],
       "remaining": [
         "Original authored multi-variant .compute kernel and keyword names not recovered; candidate paths and main are generated import handles",
         "Original runtime FindKernel/Dispatch mapping, phone Adreno pixels, actual water still unknown",
         "No Unity imported ComputeShader result: three Editor CI attempts failed before reporting; last 41958963107 Unity exit1/licensing_failure_category=true, no observed C#/shader error",
-        "Need successful authorized Unity 2021 activation on a synthetic project before repeating private source import"
+        "Need successful authorized Unity 2021 activation on a synthetic project before repeating private source import",
+        "Unity 2021.3.45f2 synthetic source-free project itself failed to activate in CI41959712898, before original asset download: licensing_failure_category=true, no derived ComputeShader imported; resolve separate environment gate first."
       ],
       "updated_by": "T1",
       "_record_path": "../B_TEAM/resources/fft-t1-original-derived-unity-compute-candidates-20261105.json"
@@ -4097,6 +4101,21 @@
       "_record_path": "../B_TEAM/events/T1/20261105T030800Z-T1-unity-editor-activation-gate.json"
     },
     {
+      "id": "20261105T031000Z-T1-source-free-unity-activation-gate",
+      "owner": "T1",
+      "session_id": "20261105T024000Z-T1-original-derived-fft-unity",
+      "issue_id": "WATER-001",
+      "type": "failure",
+      "summary": "Unity 2021.3.45f2 in isolated CI cannot activate even on source-free empty project: CI41959712898 exit nonzero, empty project absent, licensing_failure_category true; zero original asset bytes acquired. 20/20 original compiled FFT private candidate source transformation separately proven CI41957549770; runtime/device still not proven.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/41959712898",
+        "https://github.com/alwansan/raf/actions/runs/41957549770",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_FFT_ORIGINAL_DERIVED_UNITY_CANDIDATES_2026-11-05.md"
+      ],
+      "at": "2026-11-05T03:10:00Z",
+      "_record_path": "../B_TEAM/events/T1/20261105T031000Z-T1-source-free-unity-activation-gate.json"
+    },
+    {
       "id": "T2-20261104T2354Z-start-foamabi",
       "owner": "T2",
       "session_id": "20261104T2354Z-T2-foamabi01",
@@ -4507,7 +4526,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "685303020b99f7dbec096f256d84a9308772ca196e1e2c925edd4466c5a74785",
+  "source_input_sha256": "adfad01f0a6d45fa0f819d3edf8cc76f04f181584ad44f8204dbd5bf64c71930",
   "generation": "T-2026-11-05",
-  "input_sha256": "d1c0d38378aeb13f9f19f5ee8c3023fba8dc1014b5f60d5d0308242cbb2ad085"
+  "input_sha256": "6712d634b077d1dd86a0b34cbd9be8b86a4245f66f8c138e857ccccce3613646"
 }
