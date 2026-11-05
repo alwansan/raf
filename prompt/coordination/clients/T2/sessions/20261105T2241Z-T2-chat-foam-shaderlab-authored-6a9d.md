@@ -1,6 +1,6 @@
 # T2 chat — original Foam authored properties and private ShaderLab candidate
 - session_id: `20261105T2241Z-T2-chat-foam-shaderlab-authored-6a9d`
-- origin: `chat`; status: `active`
+- origin: `chat`; status: `completed`
 - base_sha: `0db34ca7729053fe53f1e124a87eb09284b1f68b`
 - resumed_from_sessions: `20261105T2220Z-T2-chat-foam-passpair-f174`, `20261105T2225Z-T2-scheduled-cfg-malformed-6f2c`
 - work: `prompt/coordination/work/WATER-001/T2-20261105T2241Z-T2-chat-foam-shaderlab-authored-6a9d.json`; experiment: `sha15964ea8-foam-2-properties-b20-4-stages-2-states-ShaderLab-private-assembly-v1`
@@ -11,3 +11,10 @@
 - Original shaders, private HLSL, ShaderLab, IL, tokens and source identifiers stay under RUNNER_TEMP; publish booleans, broad property categories and counts only.
 - No changes to game assets, .meta, T1 FFT, T3 render, T4 input, T5 build, audio, Settings or deferred touch. No native Unity build, no CI cancel.
 - Next: inspect original typed property shape with bounded sanitizer if unknown; serialize/assemble/test privately; record actual CI and proof limits, WATER-001 OPEN.
+
+## Source-authentic original private ShaderLab result — verified
+- Implemented strict source-pinned two authored property serializer, private two-pass original Foam ShaderLab candidate, and independent workflow. Code [7657f5b3](https://github.com/alwansan/raf/commit/7657f5b3fd9f1e8ed980928bd8e07046ebe1ea8f). Original [CI42125000030](https://github.com/alwansan/raf/actions/runs/42125000030) **SUCCESS** (job 127586794609), 15 adversarial tests: source Foam has exactly 2 authored properties (1 Texture, 1 Vector), no attributes/nonzero flags; original B20 four HLSL stages, two B25 states, private two-pass structural ShaderLab **9731 bytes** produced. All private shader/source and raw input deleted before artifact upload.
+- Removed provisional target5.0: source [commit 27b2d7a](https://github.com/alwansan/raf/commit/27b2d7aca9228e56a678ffbbf2af37546735c97e) reads actual 4 original linked DXBC stage Shader Model tokens with exact original stage SHA and VS/PS per-pass consistency guard; no hardcoded guess. Re-run original [CI42125847863](https://github.com/alwansan/raf/actions/runs/42125847863) **SUCCESS** (job 127589715365), **17 synthetic tests**, all 4 original models source-verified, private two-pass candidate still **9731 bytes**, generated after model guard. Sanitized numeric-only report; original source and private ShaderLab removed.
+- Final files: scripts/t2_foam_private_shaderlab_candidate.py, tests/test_t2_foam_private_shaderlab_candidate.py, .github/workflows/raft-t2-foam-private-shaderlab-candidate.yml. Work scopes are completed: T2-20261105T2241Z-T2-chat-foam-shaderlab-authored-6a9d.json and companion -source-target.json.
+- Strict limitation: no actual Unity 2021 ShaderLab import/Adreno pixels, runtime CB0 alias/uniform upload, Material texture/sampler binding, original pixel numerical parity, APK or phone proof. Candidate is private source-authentic structural evidence, not installed or a water fix. WATER-001 OPEN, game NOT_READY. Original game .shader/.meta/GUID, audio/Settings/touch and other T agents not modified; no jobs cancelled.
+- Next: authenticate CB0 source-to-HLSL/Unity upload and the four non-authored texture runtime bindings, then coordinate a real Unity importer/Android water comparison with T1 FFT and T5 integration.
