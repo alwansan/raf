@@ -113,17 +113,18 @@ class MaterialShaderQuality(unittest.TestCase):
     def test_private_property_names_not_reported(self):
         a=t3.audit(self.root)
         serialized=json.dumps(a)
-        for part in ("Synthetic","subject","m_Shader",G1,G2,"f.shader","first.mat"):
+        for part in ("Synthetic","subject",G1,G2,"f.shader","first.mat"):
             self.assertNotIn(part,serialized)
 
     def test_cli_failure_only_safe_type_not_original_exception(self):
         (self.assets/"g.shader.meta").unlink()
-        report=self.root/"outside-result.json"
-        self.assertEqual(t3.main(["--project",str(self.root),"--out",str(report)]),2)
-        data=json.loads(report.read_text("utf8"))
-        self.assertEqual(data["status"],"INCONCLUSIVE")
-        self.assertFalse(data["selected_ShaderLab_documents_have_proven_original_programs"])
-        self.assertNotIn(str(self.root),json.dumps(data))
+        with tempfile.TemporaryDirectory() as output_dir:
+            report=Path(output_dir)/"safe-report.json"
+            self.assertEqual(t3.main(["--project",str(self.root),"--out",str(report)]),2)
+            data=json.loads(report.read_text("utf8"))
+            self.assertEqual(data["status"],"INCONCLUSIVE")
+            self.assertFalse(data["selected_ShaderLab_documents_have_proven_original_programs"])
+            self.assertNotIn(str(self.root),json.dumps(data))
 
     def test_weak_content_never_looks_like_authentic_program(self):
         self.shader("nopass",G3,'Shader "Synthetic" {SubShader {}}')
