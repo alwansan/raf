@@ -1,0 +1,16 @@
+{
+  "id": "20261105T030800Z-T1-unity-editor-activation-gate",
+  "owner": "T1",
+  "session_id": "20261105T024000Z-T1-original-derived-fft-unity",
+  "issue_id": "WATER-001",
+  "type": "failure",
+  "summary": "Real SHA-verified 20/20 original FFT source-derived private .compute staging passed CI41957549770. Three isolated Unity 2021 Editor import attempts produced no kernel report; last 41958963107 exit1 and sanitized licensing_failure_category true, without C#/shader compiler-category indication. Do not claim Unity import or Android water recovery. Retry only after verified activation.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41957549770",
+    "https://github.com/alwansan/raf/actions/runs/41958245907",
+    "https://github.com/alwansan/raf/actions/runs/41958511122",
+    "https://github.com/alwansan/raf/actions/runs/41958963107",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_FFT_ORIGINAL_DERIVED_UNITY_CANDIDATES_2026-11-05.md"
+  ],
+  "at": "2026-11-05T03:08:00Z"
+}
