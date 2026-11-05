@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261105T1736Z-T2-chat-ret-reason-28ce",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "a7366262b312bbfb2b92934fbd82c61a944871f9",
+  "updated_at": "2026-11-05T17:36:00Z",
+  "resumed_from_sessions": [
+    "20261105T1712Z-T2-chat-return-identity-minimal-4c8f",
+    "20261105T1723Z-T2-scheduled-rtcfg-a72e"
+  ],
+  "experiment_key": "T2|ZIP2-15964ea8|original-managed-0a6f0527|Foam-exact-RT-return-unresolved-reason|branch-entry-predecessor-v1",
+  "resource_key": "T2-Foam-original-RT-return-reason-source",
+  "hypothesis": "One source-original ReturnTexture method ret unresolved by conservative direct producer census because return may be branch target, local load, or unhandled opcode. Narrow categorical classification can determine next branch-safe work without publishing original symbol/IL.",
+  "method": "For exact source-matched managed return method already found by T2, inspect sole compiled ret site: branch-target/exception entry vs straight-line, preceding opcode coarse whitelist and local index existence (never raw original value or identifier). Fixed closed enum. Synthetic branch-to-ret, ldloc, direct null and unknown opcode controls. Original SHA managed CI safe-only result; no actual CFG completion or runtime non-null claim.",
+  "intended_files": [
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/FoamByrefElementValueOrigin.cs",
+    "android-port/Experiments/T2/FoamRuntimeStringBridge/Program.cs",
+    ".github/workflows/raft-t2-foam-managed-literals.yml",
+    "prompt/coordination/work/WATER-001/T2-20261105T1736Z-T2-chat-ret-reason-28ce-ret-reason.json",
+    "prompt/coordination/clients/T2/sessions/20261105T1736Z-T2-chat-ret-reason-28ce.md"
+  ],
+  "non_overlap": {
+    "scheduled_original_task": "20261105T1723Z-T2-scheduled-rtcfg-a72e only writes scripts/t2_rt_return_cfg.py and tests/test_t2_rt_return_cfg.py; this chat does not edit those",
+    "T1_T3_T4_T5": "no source/CI cancellation or edits"
+  },
+  "prior_original_CI": "42073459459 SUCCESS; one RT return, three branches, immediate producer unresolved",
+  "next_step": "CI original result for branch-target vs direct local/field vs other. If unknown preserve unknown, then integrate independent CFG source tool in separately reserved scope; no Android pixels claim. WATER-001 OPEN NOT_READY0/3."
+}
