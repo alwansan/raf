@@ -4,7 +4,7 @@
   "session_id": "20261104T2354Z-T2-foamabi01",
   "issue_id": "WATER-001",
   "hypothesis": "Authenticated original Foam resource binding tables can be compared against translated Vulkan stage resource categories/slot IDs without leaking shader names or promising original runtime upload.",
-  "source_commit": "7cc2f13ed8895cc6c8ba9d41a04f16a27eef828f",
+  "source_commit": "54a52f47d16e6dd2f452496e7c95aa0f1834dace",
   "input_hashes": [
     "ZIP2:15964ea8f246b6e076ce26b60931ee2e1a9a2385",
     "sharedassets0.assets:0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
@@ -14,20 +14,76 @@
     "UnityPy": "1.25.4",
     "spirv-cross": "2021.01.15+1.3.239.0-1build1"
   },
-  "commands": [],
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t2_foam_member_abi.py -v",
+    "python3 -m unittest discover -s tests -p test_t2_foam_resource_abi.py -v",
+    "python3 -m scripts.b20_private_foam_packet --source $RUNNER_TEMP/t2-foam-source --repo $GITHUB_WORKSPACE --private $RUNNER_TEMP/t2-foam-private-packet --out $RUNNER_TEMP/t2-foam-manifest.json",
+    "python3 -m scripts.t2_foam_resource_abi --source $RUNNER_TEMP/t2-foam-source --packet $RUNNER_TEMP/t2-foam-private-packet --manifest $RUNNER_TEMP/t2-foam-manifest.json --out $RUNNER_TEMP/t2-resource-safe.json"
+  ],
   "negative_controls": [
-    "reject duplicate resource binding, unmodeled source table, private names in aggregate, missing source object SHA, incorrect stage order"
+    "17 source-free tests final, missing sampler/image/category and source count drift rejected",
+    "20 original CB/name lexical tests reused",
+    "No name/ShaderLab/device false-positive controls"
   ],
   "workflow_path": ".github/workflows/raft-t2-foam-member-abi.yml",
-  "run_url": null,
-  "artifact_urls": [],
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41940321740",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41939956032",
+    "https://github.com/alwansan/raf/actions/runs/41940321740"
+  ],
   "budget": "No new native/Unity build; single private-source CI <=25m via existing T2 scoped workflow; exact pinned owner and guaranteed cleanup",
-  "status": "planned",
-  "observed_result": null,
-  "rejected_hypotheses": [],
+  "status": "completed",
+  "observed_result": {
+    "authenticated_runs_success": [
+      41939956032,
+      41940279771,
+      41940321740
+    ],
+    "test_counts": {
+      "cb_member": 20,
+      "texture_sampler": 17
+    },
+    "original_vertex_resource_rows": 0,
+    "original_fragment_texture_rows": {
+      "pass0": 5,
+      "pass1": 1
+    },
+    "original_samplers_table_rows": 0,
+    "translated_separate_images": 6,
+    "translated_separate_samplers": 6,
+    "translated_descriptor_set": 0,
+    "translated_fragment_pass0_image_bindings": [
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "translated_fragment_pass0_sampler_bindings": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "translated_fragment_pass1_image_bindings": [
+      2
+    ],
+    "translated_fragment_pass1_sampler_bindings": [
+      1
+    ],
+    "original_material_texture_identity_verified": false,
+    "unity_compiled": false,
+    "game_fixed": false,
+    "artifact_zip_sha256": "aafc51035d2976a1b9bf4fba3b1a4761af91ab62ffaef1b909d4c8b0046873b2"
+  },
+  "rejected_hypotheses": [
+    "Original m_Samplers zero means no translated samplers required: contradicted by genuine 6 separate samplers in SPIRV",
+    "Numeric descriptor cardinality alone authenticates material texture/sampler name mapping: rejected; identity and sampler mode still unknown"
+  ],
   "limitations": [
     "Numeric descriptor relation != Unity sampler state or actual pixel proof"
   ],
-  "integration_commit": null,
-  "next_step": "Implement test and run authentic source two-pass Foam descriptor reader with translated SPIR-V reflection"
+  "integration_commit": "54a52f47d16e6dd2f452496e7c95aa0f1834dace",
+  "next_step": "Original per texture name/slot/sampler-state identity and actual ShaderLab material property mapping, then Unity validation; preserve source SHA and private data."
 }
