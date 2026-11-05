@@ -1,0 +1,16 @@
+{
+  "id": "T5-20261105T1744Z-release-manifest-bytes",
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261105T1738Z-T5-chat-release-manifest-6e91",
+  "issue_id": "INTEGRATION-001",
+  "type": "result",
+  "at": "2026-11-05T17:44:00Z",
+  "summary": "Actual old Raft APK86 Release delivery.json (2166 B) and SHA256SUMS (727 B) downloaded and cryptographically verified against official GitHub API asset SHA256 digests in independent T5 CI42077040831; 28/28 source-only synthetic security tests pass. Downloaded manifest's three logical APK/OBB/XAPK declarations and SHA256SUMS 7 part entries bind exactly to current Release public asset size/hash declarations. This proves two real tiny metadata blobs, not actual large game part SHA/bytes, APK signature, XAPK install/OBB mount or gameplay. Current original native CI42058825739 immutable e9c358ed still in_progress in Unity step62; no duplicate native build/cancel and no original game code modified.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42077040831",
+    "https://github.com/alwansan/raf/releases/tag/android-early-test-41812889049-1",
+    "https://github.com/alwansan/raf/actions/runs/42058825739",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/t5_verify_release_manifest_bytes.py"
+  ]
+}
