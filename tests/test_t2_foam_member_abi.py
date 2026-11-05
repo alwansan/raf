@@ -1,7 +1,8 @@
 """T2 source-free Foam member layout adversarial unit tests."""
 import unittest
 from scripts.t2_foam_member_abi import (
-    bounded_parameter, original_members, reflected_members, compare, EXPECTED_EXTENTS
+    bounded_parameter, original_members, reflected_members, compare, EXPECTED_EXTENTS,
+    translated_private_cbuffer_names, private_name_parity
 )
 
 
@@ -109,6 +110,60 @@ class T2FoamMemberAbiTests(unittest.TestCase):
     def test_reflection_bool_offset_rejected(self):
         with self.assertRaises(ValueError):
             reflected_members(reflect((True,)), 0)
+
+    def test_translated_cbuffer_name_extraction_ignores_comments_and_strings(self):
+        hlsl = (
+            '// cbuffer Wrong : register(b4) { float4 a; }\n'
+            '/* cbuffer Ghost : register(b5) { float4 a; } */\n'
+            '"cbuffer Quote : register(b6) { float4 a; }"\n'
+            'cbuffer Generated0 : register(b0) { float4 x; }\n'
+            'cbuffer Generated1 : register(b1) { float4 x; }\n'
+        )
+        self.assertEqual(translated_private_cbuffer_names(hlsl),
+                         {0: "Generated0", 1: "Generated1"})
+
+    def test_duplicate_or_unbounded_private_cbuffer_register_fails(self):
+        for hlsl in (
+            'cbuffer A : register(b0) { float4 x; } cbuffer B : register(b0) { float4 y; }',
+            'cbuffer A : register(b32) { float4 x; }',
+            'void main(){}' * 100000,
+        ):
+            with self.subTest(hlsl_len=len(hlsl)), self.assertRaises(ValueError):
+                translated_private_cbuffer_names(hlsl)
+
+    def test_private_name_three_way_mismatch_must_not_become_upload_proof(self):
+        reflection = reflect()
+        reflection["ubos"][0]["name"] = "Generated0"
+        result = private_name_parity("Original_Compiler_0", "Generated0", reflection, 0)
+        self.assertTrue(result["translated_hlsl_name_equals_spirv_name"])
+        self.assertFalse(result["source_name_equals_translated_hlsl"])
+        self.assertFalse(result["source_name_equals_spirv_name"])
+        self.assertFalse(result["unity_original_cb_upload_alias_verified"])
+        self.assertNotIn("Original_Compiler_0", str(result))
+        self.assertNotIn("Generated0", str(result))
+
+    def test_private_literal_name_equality_is_still_not_upload_proof(self):
+        reflection = reflect()
+        reflection["ubos"][0]["name"] = "ExactCB"
+        result = private_name_parity("ExactCB", "ExactCB", reflection, 0)
+        self.assertTrue(result["source_name_literal_hlsl_usable"])
+        self.assertTrue(result["source_name_equals_spirv_name"])
+        self.assertFalse(result["unity_original_cb_upload_alias_verified"])
+
+    def test_private_invalid_name_and_ambiguous_reflection_fails(self):
+        reflection = reflect()
+        reflection["ubos"][0]["name"] = "Generated0"
+        for original_name, hlsl_name in (("", "Generated0"), ("Original", "Bad-name")):
+            with self.subTest(name=hlsl_name), self.assertRaises(ValueError):
+                private_name_parity(original_name, hlsl_name, reflection, 0)
+        broken = reflect()
+        broken["ubos"][0].pop("name")
+        with self.assertRaises(ValueError):
+            private_name_parity("Original", "Generated0", broken, 0)
+        broken = reflect()
+        broken["ubos"].append(dict(broken["ubos"][0]))
+        with self.assertRaises(ValueError):
+            private_name_parity("Original", "Generated0", broken, 0)
 
 
 if __name__ == "__main__":
