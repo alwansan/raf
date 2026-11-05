@@ -36,7 +36,7 @@ class VulkanSmokeGateTests(unittest.TestCase):
         for blob in (report(result="Failed", passed=0, failed=3),
                      report(passed=2, skipped=1),
                      report(passed=2, failed=1),
-                     report().replace(b'<test-run ', b'<test-run result="Skipped" ', 1)):
+                     report().replace(b' result="Passed">', b' result="Skipped">', 1)):
             self.assertFalse(evaluate(blob,0)
                              ["vulkan_editor_backend_and_synthetic_gpu_dispatch_verified"])
 
