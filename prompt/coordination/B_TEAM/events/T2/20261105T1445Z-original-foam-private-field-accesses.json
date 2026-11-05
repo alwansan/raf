@@ -1,0 +1,14 @@
+{
+  "id": "T2-20261105T1445Z-original-foam-private-field-accesses",
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261105T1442Z-T2-chat-foam-field-reads-c8d1",
+  "issue_id": "WATER-001",
+  "type": "original_compiled_field_read_address_provenance",
+  "at": "2026-11-05T14:45:00Z",
+  "summary": "Genuine original ZIP2 SHA-pinned Foam managed IL CI42047763379 SUCCESS: exact private RenderTexture[] getter backing field has 10 direct ldfld (2 in getter, 8 outside), 4 distinct reader methods and one original ldflda outside getter. One address use is NOT by itself proof of field mutation, array init, ShaderLab/Unity import or Android pixels. Private original names/IL/constants withheld. WATER-001 OPEN NOT_READY0/3.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42047763379",
+    "https://github.com/alwansan/raf/commit/0881f9722f553e01e3694d7d49b964d53d2dff1e"
+  ]
+}
