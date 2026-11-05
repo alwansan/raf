@@ -89,15 +89,19 @@ def analyze(project):
         if pragma != "#pragma kernel main":
             raise ValueError("Unexpected private entry point")
         (work / "trace.hlsl").write_text(instrument(hlsl))
+        print("RAFT_T1_TRACE_STAGE shader_compile", flush=True)
         run(["glslangValidator", "-V", "-D", "-S", "comp", "-e", "main",
              "-o", "trace.spv", "trace.hlsl"], work)
         run(["spirv-val", "--target-env", "vulkan1.1", "trace.spv"], work)
+        print("RAFT_T1_TRACE_STAGE host_compile", flush=True)
         host = Path("scripts/a1_fft_two_pass_vulkan.cpp").read_text()
         (work / "trace.cpp").write_text(trace_host(host))
         run(["g++", "-std=c++17", "-O2", "trace.cpp", "-lvulkan", "-o", "trace"], work)
+        print("RAFT_T1_TRACE_STAGE dispatch", flush=True)
         modules = project / "_private_vulkan"
         run(["./trace", str(modules / "slot0.spv"), "trace.spv", str(modules / "slot1.spv"),
              str(modules / "slot1.spv"), str(WIDTH), str(HEIGHT), "19", "1", "rgba32f"], work)
+        print("RAFT_T1_TRACE_STAGE readback", flush=True)
         trace = read_image(work / "trace.bin", 2049 * 4)
         (count,) = struct.unpack_from("<I", trace)
         if not 0 < count <= 256:
@@ -110,8 +114,6 @@ def analyze(project):
             sites[site] += 1
             if not (0 <= x < WIDTH and 0 <= y < HEIGHT and mip == 0):
                 out_of_bounds[site] += 1
-        if not all(sites):
-            raise ValueError("A trace site was never observed")
         passes = []
         for slot in (0, 1):
             images = [read_image(work / f"{name}{slot}.rgba32f", WIDTH * HEIGHT * 16)
@@ -130,7 +132,7 @@ def main():
     except (OSError, ValueError, subprocess.SubprocessError):
         parser.exit(2, "Private Vulkan trace execution or validation failed\n")
     print("RAFT_T1_VULKAN_TRACE " + json.dumps(result, sort_keys=True))
-    if not all(row["match"] for row in result["output_parity"]):
+    if not all(result["records_by_site"]) or not all(row["match"] for row in result["output_parity"]):
         raise SystemExit(1)
 
 
