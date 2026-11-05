@@ -13,8 +13,8 @@
     "acquisition": "SHA_VERIFIED",
     "extraction": "20_COMPILED_SLOTS_SHA_VERIFIED",
     "reconstruction": "PRIVATE_20_HLSL50_COMPUTE_CANDIDATES_ROUNDTRIP_VERIFIED",
-    "binding": "ORIGINAL_RUNTIME_MAPPING_UNKNOWN",
-    "integration": "ORIGINAL_FFT_UNITY_IMPORT_UNVERIFIED_GAMECI_SYNTHETIC_COMPUTE_VERIFIED",
+    "binding": "ORIGINAL_AUTHORED_RUNTIME_KERNEL_MAPPING_UNPROVEN",
+    "integration": "UNITY2021_GENUINE_IMPORT_20_AUTHENTIC_DERIVED_KERNELS_AND_GROUPS_VERIFIED",
     "device": "NOT_TESTED"
   },
   "evidence": [
@@ -27,15 +27,17 @@
     "https://github.com/alwansan/raf/actions/runs/41959712898",
     "https://github.com/alwansan/raf/actions/runs/42010878771",
     "https://github.com/alwansan/raf/actions/runs/42011720822",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_GAMECI_SOURCEFREE_UNITY_LICENSE_2026-11-05.md"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_GAMECI_SOURCEFREE_UNITY_LICENSE_2026-11-05.md",
+    "https://github.com/alwansan/raf/actions/runs/42014120625",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_GAMECI_ORIGINAL_FFT_IMPORT_2026-11-05.md"
   ],
   "remaining": [
     "Original authored multi-variant .compute kernel and keyword names not recovered; candidate paths and main are generated import handles",
     "Original runtime FindKernel/Dispatch mapping, phone Adreno pixels, actual water still unknown",
     "No Unity imported ComputeShader result: three Editor CI attempts failed before reporting; last 41958963107 Unity exit1/licensing_failure_category=true, no observed C#/shader error",
-    "Need successful authorized Unity 2021 activation on a synthetic project before repeating private source import",
     "Unity 2021.3.45f2 synthetic source-free project itself failed to activate in CI41959712898, before original asset download: licensing_failure_category=true, no derived ComputeShader imported; resolve separate environment gate first.",
-    "Supported GameCI Unity 2021.3.45f2 source-free synthetic ComputeShader successfully imported with HasKernel/FindKernel/group(64,1,1) on CI42011720822; original 20 compiled FFT import not yet executed by this safe pathway, so original authored runtime mapping/device still unverified."
+    "CURRENT T1 CI42014120625: all 20 original compiled DXBC-derived private single-kernel .compute candidates imported into licensed Unity2021; generated main HasKernel/FindKernel/groupXYZ(64..1024,1,1) passed. This is NOT original authored multi-variant Unity kernel ID, real in-game source resource binding/Dispatch or Adreno water pixel parity."
   ],
-  "updated_by": "T1"
+  "updated_by": "T1",
+  "updated_at": "2026-11-05T10:56:00Z"
 }
