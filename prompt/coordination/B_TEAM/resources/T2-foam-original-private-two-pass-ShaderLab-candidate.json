@@ -1,0 +1,34 @@
+{
+  "id": "T2-foam-original-private-two-pass-ShaderLab-candidate",
+  "owner": "T2",
+  "issue_id": "WATER-001",
+  "kind": "sha_original_foam_private_structural_ShaderLab",
+  "stages": {
+    "acquisition": "ZIP2_ORIGINAL_SHA_VERIFIED",
+    "extraction": "TWO_AUTHORED_PROPERTIES_TEXTURE_VECTOR_FOUR_STAGES_TWO_STATES",
+    "reconstruction": "PRIVATE_SHADERLAB_9731_BYTES_TWO_COMPLETE_PASSES_ORIGINAL_DXBC_SOURCE_TARGET_MODELS",
+    "binding": "ORIGINAL_CB0_MATERIAL_TEXTURE_SAMPLER_UPLOAD_UNVERIFIED",
+    "integration": "CI42125000030_CI42125847863_SUCCESS_UNITY_IMPORT_UNTESTED",
+    "device": "NOT_TESTED"
+  },
+  "observed": {
+    "private_structural_ShaderLab_candidate": true,
+    "original_authored_properties": 2,
+    "original_texture_properties": 1,
+    "original_vector_properties": 1,
+    "original_passes": 2,
+    "original_stage_programs": 4,
+    "original_render_states": 2,
+    "exact_original_DXBC_shader_models_verified": 4,
+    "private_candidate_bytes": 9731,
+    "source_free_tests_passed": 17,
+    "Unity2021_import_verified": false,
+    "CB0_and_original_Material_sampler_upload_verified": false,
+    "Android_Adreno_pixels_verified": false
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42125000030",
+    "https://github.com/alwansan/raf/actions/runs/42125847863"
+  ],
+  "next_step": "Recover original CB0 uploads and four non-authored Foam dynamic sampler/textures, then coordinate Unity2021/Adreno with T1 and T5."
+}
