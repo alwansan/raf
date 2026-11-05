@@ -1,0 +1,39 @@
+{
+  "id": "T3-sharedassets6-material-keyword-pass-same-export",
+  "title": "Authentic 41-Material original->same-export valid/invalid shader keyword + disabled pass preservation",
+  "kind": "Material shader keyword/pass source/export parity",
+  "source": {
+    "provider": "zip2/Raft SHA-pinned original",
+    "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "path": "Raft/Raft_Data/sharedassets6.assets",
+    "bytes": 6607272,
+    "sha256": "0476792cfeffac19d16e920011ed8d2fb2da62973c2f09a8689bc59e1ac4b632"
+  },
+  "stages": {
+    "acquisition": "VERIFIED_9_AUTHENTIC_ORIGINAL_PROVIDERS",
+    "extraction": "VERIFIED_41_ORIGINAL_MATERIALS",
+    "reconstruction": "VERIFIED_SAME_EXPORT_41_MATERIAL_YAML",
+    "binding": "VERIFIED_SELECTED_SERIALIZED_KEYWORDS_AND_DISABLED_PASSES_MATCH",
+    "integration": "SAFE_VERIFIER_AND_ONE_SHOT_WORKFLOW_INTEGRATED",
+    "device": "NOT_TESTED"
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41941363661",
+    "https://github.com/alwansan/raf/commit/36cc349c1d2a7744ad37ea13aae59e5074ea87ae",
+    "https://github.com/alwansan/raf/commit/40ff84fd897efee7e730dc110dde34b7e34b110d",
+    "https://github.com/alwansan/raf/commit/c77d1c1de07af0526bcc17d00b3fbc5a50a1faf5",
+    "https://github.com/alwansan/raf/commit/6940ccf0161a3ea4a52c083702692de74c0c64be"
+  ],
+  "counts": {
+    "original_materials": 41,
+    "exported_materials": 41,
+    "keyword_or_disabled_pass_mismatches": 0,
+    "source_providers": 9
+  },
+  "remaining": [
+    "This is not original Material m_Shader PPtr → exported Shader GUID/pass/subprogram equivalence",
+    "Original source compiled shaders/variants, shader importer, 25 external texture targets, Unity import and Android visual pixels remain unknown",
+    "RENDER-002 issue OPEN, READY not established"
+  ],
+  "updated_by": "T3"
+}
