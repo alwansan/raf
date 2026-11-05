@@ -173,7 +173,12 @@
         "https://github.com/alwansan/raf/actions/runs/41943357681",
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_WORLD_COMPLETION_TRACE_2026-11-05.md",
         "https://github.com/alwansan/raf/actions/runs/41944365772",
-        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_ILSPY_REPRODUCIBILITY_2026-11-05.md"
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_ILSPY_REPRODUCIBILITY_2026-11-05.md",
+        "https://github.com/alwansan/raf/actions/runs/42011353849",
+        "https://github.com/alwansan/raf/actions/runs/42012049920",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ILSPY_REFERENCE_CONTEXT_2026-11-05.md",
+        "https://github.com/alwansan/raf/actions/runs/42012597665",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_ORIGINAL_FILEMANAGER_IL_METADATA_2026-11-05.md"
       ],
       "remaining": [
         "Original Cheat.AllowCheatsForLocalPlayer SteamUser.GetSteamID direct object call now source-guarded in B50 2bb6c2; no native/phone verification. Do not infer all Steam callbacks are removed.",
@@ -192,15 +197,17 @@
         "B19 SaveAndLoad original C# and .meta source-stage hardlink alias guard is SOURCE_FIXED with CI41929845587 15/15 path tests plus authentic 16 path expressions; synthetic safety proof only, not root cause of APK86 world/Steam stats or .rgd device result.",
         "T4 exact original Load<T> (CI41939908432 PASS, original ZIP2 DLL SHA verified): Deserialize=1, catch=1, FileManager=1, Binder assignments=0; source-only Android Load.caughtException diagnostic integrated (original adapted C# compile CI41939846508 PASS); original Data.rgd compatibility and on-device create/save/reload are unverified. Keep LOCAL-005 OPEN, NOT_READY 0/3, preserve Steam/sound/Settings, defer touch.",
         "T4 original coroutine completion assignment marker is source-integrated: exact original write preserved; 10/10 Python + managed CLR false/true semantic branches PASS, and SHA-authenticated original DLL private method read-only variant PASS (CI41943357681). The original ILSpy class SHA differs between B07 and T4 on the same verified DLL, and T4 run reports production_adapter_exercised=false; Android Unity/IL2CPP/native/device playability and real .rgd roundtrip NOT tested. Do not lower production source gate; maintain LOCAL-005 OPEN.",
-        "T4 CI41944365772 original same-DLL ILSpy reproducibility: SHA-pinned 3211776B original DLL decompiled twice independently in one runner; class/method/masked SHA exactly equal across both passes; 10/10 new source-free controls plus 10/10 original completion controls and real CLR synthetic branches PASS. This excludes same-run nondeterminism in that scope but does not explain older B07 vs T4 cross-run decompiler SHA difference; native production adapter full gate/Unity/IL2CPP/real world/.rgd device still untested. Do not loosen source pin."
+        "T4 CI41944365772 original same-DLL ILSpy reproducibility: SHA-pinned 3211776B original DLL decompiled twice independently in one runner; class/method/masked SHA exactly equal across both passes; 10/10 new source-free controls plus 10/10 original completion controls and real CLR synthetic branches PASS. This excludes same-run nondeterminism in that scope but does not explain older B07 vs T4 cross-run decompiler SHA difference; native production adapter full gate/Unity/IL2CPP/real world/.rgd device still untested. Do not loosen source pin.",
+        "T4 exact original managed-reference context CI42011353849 PASS: 3211776B SHA-verified DLL decompiled twice solo -> old T4 alternate class/body SHA, same DLL alongside 151 siblings -> exact B07 production source SHA. Subsequent CI42012049920 PASS with actual production offline adapt + operation instrument, source/manifest hashes unchanged, firstMoveNext/completion traces present and original assignment/yields preserved. Earlier original C# managed compile CI41942118067 PASS. This resolves source-intake context discrepancy at tested scope, NOT Unity IL2CPP/device playable world or genuine .rgd create-save-relaunch-reopen. LOCAL-005 stays OPEN NOT_READY.",
+        "T5 genuine original compiled IL CI42012597665 verifies both SaveAndLoad direct read/write FileManager targets exist as distinct static body-bearing methods (14/13 IL instructions, 1 System.IO call and exception handler each), overcoming T4 text parser unresolved declarations; actual Android path, world entry and durable .rgd create/relaunch/load remain unverified."
       ],
       "acceptance": [
         "دخول عالم جديد محلي قابل للعب بلا Steam أو سيرفر خارجي",
         "حفظ .rgd ثم إعادة تحميله فعلياً",
         "لا يكفي إخفاء رسالة الاتصال"
       ],
-      "updated_by": "T4",
-      "updated_at": "2026-11-05T00:53:00Z",
+      "updated_by": "T5",
+      "updated_at": "2026-11-05T10:43:00Z",
       "_record_path": "../B_TEAM/issues/LOCAL-005.json"
     },
     {
@@ -508,7 +515,10 @@
         "https://github.com/alwansan/raf/actions/runs/41958511122",
         "https://github.com/alwansan/raf/actions/runs/41958963107",
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_FFT_ORIGINAL_DERIVED_UNITY_CANDIDATES_2026-11-05.md",
-        "https://github.com/alwansan/raf/actions/runs/41959712898"
+        "https://github.com/alwansan/raf/actions/runs/41959712898",
+        "https://github.com/alwansan/raf/actions/runs/42010878771",
+        "https://github.com/alwansan/raf/actions/runs/42011720822",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_GAMECI_SOURCEFREE_UNITY_LICENSE_2026-11-05.md"
       ],
       "remaining": [
         "Spectrum/Foam/Blur passes ناقصة في APK86",
@@ -554,7 +564,8 @@
         "Foam original compiled SPIR-V sampler use 21 calls / 6 numeric pairs proven by T2; source m_Index/m_SamplerIndex→material/Unity shader/Adreno remains unverified",
         "T2 authentic original Foam: source serialized t/s matches genuine native DXBC declarations and all six t/s pairs actively SAMPLE-used in 21 instructions; DXBC→translated SPIRV ID/descriptor identity, Unity original Material upload, authentic ShaderLab and Adreno device remain unverified (CI41958159556).",
         "T1 original 20/20 compiled FFT private DXBC-derived .compute candidate staging SUCCESS (CI41957549770), but three actual Unity Editor import attempts failed before a result; latest41958963107 Unity exit1 and sanitized licensing_failure_category=true. Verify activation using source-free Unity fixture, then authenticate actual Unity import and original runtime FindKernel/Dispatch. Not a game/device water fix.",
-        "T1 source-free Unity 2021 Editor project CI41959712898 failed before Raft acquisition: empty_project_created=false, licensing_failure_category=true, original_raft_data_acquired=false. Resolved shader source is not responsible for this test's failure; actual Editor activation and FindKernel/Adreno remain unknown."
+        "T1 source-free Unity 2021 Editor project CI41959712898 failed before Raft acquisition: empty_project_created=false, licensing_failure_category=true, original_raft_data_acquired=false. Resolved shader source is not responsible for this test's failure; actual Editor activation and FindKernel/Adreno remain unknown.",
+        "T1 2026-11-05: Unity2021.3.45f2 activation works via supported GameCI unity-test-runner and synthetic original-free ComputeShader was imported, with actual HasKernel/FindKernel/group(64,1,1) passing 2/2 CI42011720822. Old custom direct Docker licensing failure was not proof account credentials invalid. Authenticated 20 original FFT-derived candidates still not imported by this safe route; authored runtime mapping/pixels/Adreno remain unverified."
       ],
       "acceptance": [
         "هوية برامج ونوى أصلية أو تطابق موثق دونdummy",
@@ -562,7 +573,7 @@
         "اختبار هاتف يثبت الماء بلا pass/kernel errors"
       ],
       "updated_by": "T1",
-      "updated_at": "2026-11-05T03:11:00Z",
+      "updated_at": "2026-11-05T10:37:00Z",
       "_record_path": "../B_TEAM/issues/WATER-001.json"
     }
   ],
@@ -1371,6 +1382,57 @@
       "_record_path": "../B_TEAM/resources/T3-sharedassets6-material-rgba-same-export.json"
     },
     {
+      "id": "T5-original-filemanager-compiled-il-call-edges",
+      "title": "Original Raft SaveAndLoad→FileManager compiled IL read/write roles",
+      "kind": "original-managed-metadata-execution-contract",
+      "source": {
+        "provider": "alwansan/raf ZIP2 original managed DLL",
+        "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+        "path": "Raft_Data/Managed/Assembly-CSharp.dll",
+        "bytes": 3211776,
+        "sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e"
+      },
+      "stages": {
+        "acquisition": "ORIGINAL_SHA256_VERIFIED",
+        "extraction": "COMPILED_IL_METADATA_READ_MONO_CECIL",
+        "reconstruction": "NOT_APPLICABLE",
+        "binding": "SAVED_LOAD_AND_SAVE_DIRECT_FILEMANAGER_TARGETS_RESOLVED_IN_ORIGINAL_IL",
+        "integration": "INDEPENDENT_SOURCE_METADATA_ORACLE_CI42012597665_NOT_NATIVE",
+        "device": "UNKNOWN"
+      },
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42012597665",
+        "https://github.com/alwansan/raf/commit/7159dba501f4ee2615b92009c2b4622dd8d39f34",
+        "https://github.com/alwansan/raf/actions/runs/41942655373"
+      ],
+      "observed": {
+        "read": {
+          "resolved": true,
+          "parameter_count": 2,
+          "il_instruction_count": 14,
+          "direct_system_io_calls": 1,
+          "exception_handlers": 1
+        },
+        "write": {
+          "resolved": true,
+          "parameter_count": 1,
+          "il_instruction_count": 13,
+          "direct_system_io_calls": 1,
+          "exception_handlers": 1
+        },
+        "same_target": false,
+        "report_test_cases_passed": 11
+      },
+      "remaining": [
+        "ILSpy regex mismatch reason unresolved despite compiled existence proven",
+        "No Android path/durable RGD write/read-back, host world completion or native/phone evidence",
+        "Do not infer source-level parser hit rate or Unity/IL2CPP correctness from compiled original"
+      ],
+      "updated_by": "T5",
+      "updated_at": "2026-11-05T10:42:00Z",
+      "_record_path": "../B_TEAM/resources/T5-original-filemanager-compiled-il-call-edges.json"
+    },
+    {
       "id": "T5-zip2-original-render-provider",
       "title": "T5 original ZIP2 3 graphics/FFT source owner integration, SHA-authenticated with feature LFS pointers",
       "kind": "graphics-source-provider",
@@ -1676,7 +1738,7 @@
         "extraction": "20_COMPILED_SLOTS_SHA_VERIFIED",
         "reconstruction": "PRIVATE_20_HLSL50_COMPUTE_CANDIDATES_ROUNDTRIP_VERIFIED",
         "binding": "ORIGINAL_RUNTIME_MAPPING_UNKNOWN",
-        "integration": "BLOCKED_UNITY_LICENSE_IN_SOURCE_FREE_FIXTURE",
+        "integration": "ORIGINAL_FFT_UNITY_IMPORT_UNVERIFIED_GAMECI_SYNTHETIC_COMPUTE_VERIFIED",
         "device": "NOT_TESTED"
       },
       "evidence": [
@@ -1686,14 +1748,18 @@
         "https://github.com/alwansan/raf/actions/runs/41958245907",
         "https://github.com/alwansan/raf/actions/runs/41958511122",
         "https://github.com/alwansan/raf/actions/runs/41958963107",
-        "https://github.com/alwansan/raf/actions/runs/41959712898"
+        "https://github.com/alwansan/raf/actions/runs/41959712898",
+        "https://github.com/alwansan/raf/actions/runs/42010878771",
+        "https://github.com/alwansan/raf/actions/runs/42011720822",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_GAMECI_SOURCEFREE_UNITY_LICENSE_2026-11-05.md"
       ],
       "remaining": [
         "Original authored multi-variant .compute kernel and keyword names not recovered; candidate paths and main are generated import handles",
         "Original runtime FindKernel/Dispatch mapping, phone Adreno pixels, actual water still unknown",
         "No Unity imported ComputeShader result: three Editor CI attempts failed before reporting; last 41958963107 Unity exit1/licensing_failure_category=true, no observed C#/shader error",
         "Need successful authorized Unity 2021 activation on a synthetic project before repeating private source import",
-        "Unity 2021.3.45f2 synthetic source-free project itself failed to activate in CI41959712898, before original asset download: licensing_failure_category=true, no derived ComputeShader imported; resolve separate environment gate first."
+        "Unity 2021.3.45f2 synthetic source-free project itself failed to activate in CI41959712898, before original asset download: licensing_failure_category=true, no derived ComputeShader imported; resolve separate environment gate first.",
+        "Supported GameCI Unity 2021.3.45f2 source-free synthetic ComputeShader successfully imported with HasKernel/FindKernel/group(64,1,1) on CI42011720822; original 20 compiled FFT import not yet executed by this safe pathway, so original authored runtime mapping/device still unverified."
       ],
       "updated_by": "T1",
       "_record_path": "../B_TEAM/resources/fft-t1-original-derived-unity-compute-candidates-20261105.json"
@@ -4116,6 +4182,21 @@
       "_record_path": "../B_TEAM/events/T1/20261105T031000Z-T1-source-free-unity-activation-gate.json"
     },
     {
+      "id": "20261105T103700Z-T1-gameci-unity-compute-sourcefree-pass",
+      "owner": "T1",
+      "session_id": "20261105T102000Z-T1-gameci-sourcefree",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "summary": "Official GameCI unity-test-runner v4 ran Unity2021.3.45f2 source-free test successfully CI42010878771 (1/1) and a second real Unity ComputeShader import/HasKernel/FindKernel/GetKernelThreadGroupSizes synthetic canary CI42011720822 (2/2); supportsComputeShaders=true, XYZ(64,1,1) matched. Original FFT source and device unchanged; prior direct Docker licensing failure is activation-method-specific, not proof credentials invalid.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42010878771",
+        "https://github.com/alwansan/raf/actions/runs/42011720822",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T1_GAMECI_SOURCEFREE_UNITY_LICENSE_2026-11-05.md"
+      ],
+      "at": "2026-11-05T10:37:00Z",
+      "_record_path": "../B_TEAM/events/T1/20261105T103700Z-T1-gameci-unity-compute-sourcefree-pass.json"
+    },
+    {
       "id": "T2-20261104T2354Z-start-foamabi",
       "owner": "T2",
       "session_id": "20261104T2354Z-T2-foamabi01",
@@ -4407,6 +4488,23 @@
       "_record_path": "../B_TEAM/events/T4/20261105T0052Z-ilspy-repeatability.json"
     },
     {
+      "id": "20261105T1040Z-T4-original-managed-context",
+      "owner": "T4",
+      "session_id": "20261105T1021Z-T4-ref-context",
+      "issue_id": "LOCAL-005",
+      "type": "integration",
+      "summary": "Original ZIP2 SHA-pinned Assembly-CSharp.dll decompiled solo vs with 151 original Managed sibling DLLs, same exact binary bytes. Solo reproduces T4 class/body pair; with siblings exactly reproduces B07 production SHA and existing manifest. CI42011353849 succeeded A/B/C 10/10; final CI42012049920 succeeded production adapt('Raft_Network') and instrument('Raft_Network'), manifest SHA996e4c..., both original firstMoveNext and completion markers preserved, original assignment and yield count unchanged. Separate real original managed compiler integration CI41942118067 SUCCESS. No Unity/native APK/device, playable world or .rgd roundtrip; LOCAL-005 OPEN NOT_READY 0/3.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42011353849",
+        "https://github.com/alwansan/raf/actions/runs/42012049920",
+        "https://github.com/alwansan/raf/actions/runs/41942118067",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ILSPY_REFERENCE_CONTEXT_2026-11-05.md",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/t4_probe_ilspy_reference_context.py"
+      ],
+      "at": "2026-11-05T10:40:00Z",
+      "_record_path": "../B_TEAM/events/T4/20261105T1040Z-managed-reference-context-production-stage.json"
+    },
+    {
       "id": "T5-20261104T2357Z-b12-fixture-start",
       "owner": "T5",
       "session_id": "20261104T2357Z-T5-b12-fixture-7e2",
@@ -4498,6 +4596,20 @@
       "_record_path": "../B_TEAM/events/T5/20261105T0041Z-production-hydrator-main-apply.json"
     },
     {
+      "id": "T5-20261105T1042Z-original-filemanager-compiled-il-result",
+      "owner": "T5",
+      "session_id": "20261105T1025Z-T5-filemanager-metadata-bridge",
+      "issue_id": "LOCAL-005",
+      "type": "result",
+      "summary": "Authentic ZIP2 managed DLL original compiled IL resolves Load<T> and Save call edges to distinct static FileManager body-bearing methods; 1 direct System.IO call and exception handler each. Read 2 params/14 IL instructions, write 1 param/13. Original CI42012597665 SUCCESS, 11/11 schema tests; no Android save proof. T4 decompiler regex zero bodies is not absence.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42012597665",
+        "https://github.com/alwansan/raf/commit/7159dba501f4ee2615b92009c2b4622dd8d39f34"
+      ],
+      "at": "2026-11-05T10:42:00Z",
+      "_record_path": "../B_TEAM/events/T5/20261105T1042Z-original-filemanager-compiled-il-result.json"
+    },
+    {
       "id": "20261104-b-generation",
       "owner": "owner-team-bootstrap",
       "session_id": "b-team-setup-20261104",
@@ -4526,7 +4638,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "adfad01f0a6d45fa0f819d3edf8cc76f04f181584ad44f8204dbd5bf64c71930",
+  "source_input_sha256": "3b7f5108a6e45b075e4d074ba4aa3d9d21146445fe2ca89616b8d4f7d57f71b0",
   "generation": "T-2026-11-05",
-  "input_sha256": "6712d634b077d1dd86a0b34cbd9be8b86a4245f66f8c138e857ccccce3613646"
+  "input_sha256": "54e2c76f23c9053a733793aaa64370c999c6a260dc3d968b9a41dbd5ad397e5c"
 }
