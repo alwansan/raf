@@ -32,6 +32,16 @@ shader.Dispatch(k, 1, 1, 1);'''
         self.assertFalse(result["call_families_present"]["SetTexture"])
         self.assertTrue(result["call_families_present"]["Dispatch"])
 
+    def test_csharp_raw_and_interpolated_raw_literals_are_not_calls(self):
+        source = '''var x = """shader.FindKernel("K"); shader.Dispatch(k, 1, 1, 1);""";
+var y = $"""shader.SetTexture(k, "A", t);""";
+shader.Dispatch(k, 1, 1, 1);'''
+        result = self.check(source)
+        self.assertFalse(result["call_families_present"]["FindKernel"])
+        self.assertFalse(result["call_families_present"]["SetTexture"])
+        self.assertTrue(result["call_families_present"]["Dispatch"])
+        self.assertFalse(result["findkernel_and_dispatch_syntax_present"])
+
     def test_missing_dispatch_cannot_pass(self):
         self.assertFalse(self.check("shader.FindKernel(x);")["findkernel_and_dispatch_syntax_present"])
 
