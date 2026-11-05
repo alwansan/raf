@@ -1,0 +1,18 @@
+{
+  "session_id": "20261105T1325Z-T2-scheduled-boundary-7c2f",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "baseline_sha": "d0cac2b679d5b6a8acf99232ee27a08f396efed4",
+  "resumed_from_sessions": [
+    "20261105T1218Z-T2-digest-safety-isolated.md",
+    "20261105T1020Z-T2-original-foam-explicit-spv-map.md"
+  ],
+  "intended_files": [
+    "tests/test_t2_foam_report_boundary.py"
+  ],
+  "experiment_key": "foam-public-report-schema-negative-controls-v1-no-original-input",
+  "resource_key": null,
+  "hypothesis": "Current producer no longer emits enumerable numeric digest, but a standalone regression should verify exact public schema and prohibit nested private fields.",
+  "next_step": "Add synthetic producer-boundary tests, execute locally, preserve no original game assets."
+}
