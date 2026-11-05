@@ -79,6 +79,8 @@ jobs:
           assert "https://github.com/alwansan/raf/actions/runs/42047391061" in water[0]["evidence"]
           flags=[x for x in data["events"] if x["id"]=="20261105T144500Z-T1-unity-vulkan-force-flag-isolated"]
           assert len(flags)==1 and flags[0]["owner"]=="T1"
+          t4_record=[x for x in data["events"] if x["id"]=="20261105T1443Z-T4-shipped-seed-not-world-save-parameter"]
+          assert len(t4_record)==1 and t4_record[0]["owner"]=="T4"
           assert data["readiness"] is not True
           print("RAFT_T1_LEDGER_RECONCILE current_T1_event=true unity_probe_source_only=true original_water_open=true")
           PY
