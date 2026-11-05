@@ -1,0 +1,15 @@
+{
+  "id": "T5-20261105T0034Z-batch-content-sha-verified",
+  "owner": "T5",
+  "session_id": "20261105T0032Z-T5-content-batch-preflight",
+  "issue_id": "ASSET-RESTORE-001",
+  "type": "integration",
+  "summary": "Consumer now copies and SHA-validates all selected original ZIP2 graphics assets before publishing any feature LFS pointer. CI41942039458 PASS 17/17 including same-size corrupt second original negative, and authenticated 3 originals 337660952 bytes. No Unity/phone acceptance.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41942039458",
+    "https://github.com/alwansan/raf/commit/bb4d33e9828bf85873935002ea1c6106d8b87319",
+    "https://github.com/alwansan/raf/commit/3f8ee6cd47be76490693226c4740f017694a453d",
+    "https://github.com/alwansan/raf/commit/7cf650ca49468d061d722446f5735f6e84fc6407"
+  ],
+  "at": "2026-11-05T00:34:00Z"
+}
