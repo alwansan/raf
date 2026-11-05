@@ -1,0 +1,13 @@
+{
+  "id": "20261105T2107Z-T2-chat-writer-call-ab1c-void-return",
+  "owner": "T2",
+  "session_id": "20261105T2107Z-T2-chat-writer-call-ab1c",
+  "issue_id": "WATER-001",
+  "type": "discovery",
+  "summary": "Exact SHA-original Foam RT return-local stloc is preceded by a void-returning call: it cannot be its own value producer; original pre-call stack still unknown. Source-only CI42110292828 SUCCESS.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42110292828",
+    "https://github.com/alwansan/raf/commit/c65e8dddf7b15f12dda8602165ecad8d41720048"
+  ],
+  "at": "2026-11-05T21:15:00Z"
+}

@@ -6,7 +6,7 @@
   "origin": "chat",
   "issue_id": "WATER-001",
   "track": "original-managed-Foam-return-writer-call",
-  "status": "active",
+  "status": "completed",
   "base_sha": "4f34b37babfacbdc52527362d9c83c2eade1404a",
   "resumed_from_sessions": [
     "20261105T2051Z-T2-chat-cfg-independent-a17f",
@@ -40,10 +40,31 @@
     "zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385"
   },
   "last_verified_result": "Original exact one RT-return local writer preceding opcode call (CI42078263113 SUCCESS), but typed call return and stack producer unresolved. Source-free CFG 23/23 PASS (CI42107377757).",
-  "run_urls": [],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42110060240",
+    "https://github.com/alwansan/raf/actions/runs/42110292828"
+  ],
   "experiment_ids": [
     "T2-20261105T2107Z-T2-chat-writer-call-ab1c"
   ],
-  "updated_at": "2026-11-05T21:07:00Z",
-  "next_step": "Run SHA-original Cecil call return type/source evidence in own existing T2 workflow; retain only category and strict source proof."
+  "updated_at": "2026-11-05T21:15:00Z",
+  "next_step": "New independent scope in prompt/coordination/work/WATER-001/T2-20261105T2115Z-chat-precall-operand-4be0.json: classify compiled pre-call stack operand count and immediate producer; do not infer nonnull/Unity GPU.",
+  "source_commits": [
+    "385e9054775a2000ed30e23d09561e9d6096ce80",
+    "c65e8dddf7b15f12dda8602165ecad8d41720048"
+  ],
+  "result": {
+    "final_run_id": 42110292828,
+    "conclusion": "success",
+    "original_dll_sha_verified": true,
+    "original_foam_owner_size_verified": 115978112,
+    "return_call_category": "void_return",
+    "call_pushes_declared_value": false,
+    "alternate_entry_possible": false,
+    "conditional_call_result_is_stack_top": false,
+    "original_runtime_or_pixels_verified": false,
+    "synthetic_controls": true,
+    "prior_failed_run_id": 42110060240,
+    "prior_failure": "C# CS0136 shadowing corrected"
+  }
 }

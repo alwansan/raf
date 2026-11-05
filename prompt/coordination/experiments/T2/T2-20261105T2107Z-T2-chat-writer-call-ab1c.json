@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "session_id": "20261105T2107Z-T2-chat-writer-call-ab1c",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "hypothesis": "The immediate call can be classified into typed CLR return categories without guessing non-null RenderTexture or branch execution; void or nonmatching returns must not be promoted to direct typed RT stack producer.",
+  "source_commit": "c65e8dddf7b15f12dda8602165ecad8d41720048",
+  "input_hashes": [
+    "zip2@15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "Assembly-CSharp.dll/3211776/sha256:0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e"
+  ],
+  "tool_versions": {
+    "MonoCecil": "0.11.5",
+    "dotnet": "9.0",
+    "UnityPy": "1.25.4"
+  },
+  "commands": [
+    "dotnet publish android-port/Experiments/T2/FoamRuntimeStringBridge/FoamRuntimeStringBridge.csproj -c Release",
+    "dotnet FoamRuntimeStringBridge.dll --selftest",
+    "run genuine signed-SHA ZIP2 original scan in raft-t2-foam-managed-literals.yml"
+  ],
+  "negative_controls": [
+    "void call not stack result",
+    "non-RT value return cannot become RT",
+    "branch may enter between producer and stloc",
+    "wrong local type and noncall are rejected",
+    "ordinary nop not branch entry"
+  ],
+  "workflow_path": ".github/workflows/raft-t2-foam-managed-literals.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42110292828",
+  "artifact_urls": [],
+  "status": "completed",
+  "observed_result": "Source-original exact preceding call declared return is void. Caller call does not push a value at its return-local store. First CI CS0136 compiler failure fixed; follow-up authentic CI success.",
+  "rejected_hypotheses": [
+    "Original adjacent call provides a direct typed RenderTexture return value"
+  ],
+  "limitations": [
+    "Does not trace pre-call stack or prove returned local value initialized/non-null.",
+    "No original runtime execution, shaders, Unity, device or pixels."
+  ],
+  "integration_commit": "c65e8dddf7b15f12dda8602165ecad8d41720048",
+  "next_step": "Inspect precall void target consume count and immediate instruction; then bounded stack def-use if supported."
+}
