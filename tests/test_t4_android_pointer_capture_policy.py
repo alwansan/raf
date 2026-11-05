@@ -106,5 +106,51 @@ class AndroidPhysicalMouseIntegrationPolicy(unittest.TestCase):
 
 
 
+    def test_captured_packet_source_contract_matches_android_api26(self):
+        source = (ROOT / "android-port/Runtime/Platform/PhysicalMouseMotionSource.cs").read_text()
+        self.assertIn("public const int MouseRelative = 131076;", source)
+        self.assertIn("public const int Touchpad = 1048584;", source)
+        self.assertIn("public const int AxisRelativeX = 27;", source)
+        self.assertIn("public const int AxisRelativeY = 28;", source)
+        self.assertIn("return Kind.Ignore;", source)
+        self.assertIn("Math.Abs(x) <= 10000f", source)
+
+    def test_captured_mouse_uses_relative_getx_and_batched_samples(self):
+        listener = BRIDGE.split("public bool onCapturedPointer(AndroidJavaObject view, AndroidJavaObject motionEvent)", 1)[1].split(
+            "private bool RecordCapturedMotion", 1)[0]
+        self.assertIn('motionEvent.Call<int>("getSource")', listener)
+        self.assertIn("PhysicalMouseMotionSource.Classify(source)", listener)
+        self.assertIn("kind == PhysicalMouseMotionSource.Kind.Ignore", listener)
+        self.assertIn("PhysicalMouseMotionSource.ValidHistory(historyCount)", listener)
+        self.assertIn("for (int h = 0; h < historyCount; h++)", listener)
+        self.assertIn('motionEvent.Call<float>("getHistoricalX", h)', listener)
+        self.assertIn('motionEvent.Call<float>("getHistoricalY", h)', listener)
+        self.assertIn('motionEvent.Call<float>("getX")', listener)
+        self.assertIn('motionEvent.Call<float>("getY")', listener)
+
+    def test_touchpad_uses_relative_axes_not_absolute_position(self):
+        listener = BRIDGE.split("public bool onCapturedPointer(AndroidJavaObject view, AndroidJavaObject motionEvent)", 1)[1].split(
+            "private bool RecordCapturedMotion", 1)[0]
+        self.assertIn("kind == PhysicalMouseMotionSource.Kind.Mouse", listener)
+        self.assertIn('motionEvent.Call<float>("getHistoricalAxisValue",', listener)
+        self.assertIn('motionEvent.Call<float>("getAxisValue",', listener)
+        self.assertIn("PhysicalMouseMotionSource.AxisRelativeX", listener)
+        self.assertIn("PhysicalMouseMotionSource.AxisRelativeY", listener)
+        self.assertIn("return owner.RecordCapturedMotion(dx, dy);", listener)
+        record = BRIDGE.split("private bool RecordCapturedMotion(float dx, float dy)", 1)[1].split(
+            "public static CursorLockMode ApplyCursorLock", 1)[0]
+        self.assertIn("PhysicalMouseMotionSource.ValidDelta(dx, dy)", record)
+
+    def test_new_source_is_in_both_managed_compilers_and_native_export(self):
+        native = "AndroidPhysicalMouseCapture.cs PhysicalMouseDeltaAccumulator.cs PhysicalMouseMotionSource.cs"
+        self.assertIn(native, NATIVE)
+        self.assertIn("'PhysicalMouseMotionSource.cs'", COMPILER)
+        project = (ROOT / "android-port/Tests/PhysicalMouse/PhysicalMouse.csproj").read_text()
+        abi_project = (ROOT / "android-port/Tests/PhysicalMouse/UnityBridgeCompile.csproj").read_text()
+        self.assertIn("PhysicalMouseMotionSource.cs", project)
+        self.assertIn("PhysicalMouseMotionSource.cs", abi_project)
+
+
+
 if __name__ == "__main__":
     unittest.main()
