@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T211313Z-T3-chat-particle-shader-rank-4e92",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "track": "SHA-original ParticleSystemRenderer Shader48 use-rank/source coverage",
+  "status": "active",
+  "base_sha": "8dcbff4441cdc3645c060779b1ed98ea7b96c2f8",
+  "updated_at": "2026-11-05T21:13:13.298Z",
+  "intended_files": [
+    "scripts/t3_original_renderer_shader_impact.py",
+    "tests/test_t3_original_renderer_shader_impact.py",
+    ".github/workflows/raft-t3-original-renderer-shader-impact.yml",
+    "prompt/coordination/work/RENDER-002/20261105T211313Z-T3-chat-particle-shader-rank-4e92.json",
+    "prompt/coordination/clients/T3/sessions/20261105T211313Z-T3-chat-particle-shader-rank-4e92.md",
+    "prompt/coordination/experiments/T3/20261105T211313Z-T3-chat-particle-shader-rank-4e92.json",
+    "prompt/coordination/B_TEAM/events/T3/20261105T211313Z-T3-chat-particle-shader-rank-4e92.json",
+    "docs/T3_ORIGINAL_PARTICLE_SHADER_RANK_2026-11-05.md"
+  ],
+  "hypothesis": "The 215 SHA-original typed ParticleSystemRenderer material slots, which do NOT use the top921 mesh Shader48, may be concentrated in one source Shader48. Distinguish unique particle shader impact and original global usage/pass count with public-safe rank counts, without leaking source private names/IDs/GUIDs.",
+  "experiment_key": "T3-zip2-SHA15964-6scene-4owner-particle-215-class48-rank-global-slot-use-pass-count-unique-top-v1",
+  "resource_key": "t3-ZIP2-6scene-4owner-source-only-22min",
+  "taken_over_from": [
+    "prompt/coordination/clients/T3/sessions/20261105T210656Z-T3-chat-renderer-class921-7d62.md",
+    "https://github.com/alwansan/raf/actions/runs/42109994654"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Add class-specific per-Sh48 ranked source slot counts and a unique highest ParticleSystemRenderer Sh48/global-use/pass relationship; synthetic tie/duplicate safeguards, run a single SHA-authenticated source workflow. Do not equate with emitted particles, Blend state or phone pixels."
+}
