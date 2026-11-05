@@ -1,0 +1,70 @@
+name: T3 RENDER-002 original 41 Material Shader PPtr owner dependency
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-t3-original-material-shader-target.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raft-t3-original-41-shader-source-only-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  original-typed-shader-dependencies:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Source-free original PPtr/one-based external owner controls
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p 'test_t3_original_material_shader_target.py' -v
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-original
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/sharedassets6.assets
+      - name: Authenticated original selected Material owner exactly bytes/SHA
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os,subprocess
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import stage,ZIP2_SHA
+          from scripts.b05_verify_material_texenv_bindings import B05_SMALL_OWNER_PINS
+          source=Path('zip2-original')
+          assert subprocess.check_output(['git','-C',str(source),'rev-parse','HEAD'],text=True).strip()==ZIP2_SHA
+          report=stage(source,Path(os.environ['RUNNER_TEMP'])/'t3-shader-original',{'Raft_Data/sharedassets6.assets':B05_SMALL_OWNER_PINS['sharedassets6.assets']})
+          assert report['verified_bytes']==6607272 and len(report['owners'])==1 and not report['lfs_used']
+          print('T3_AUTHENTIC_ORIGINAL_MATERIAL_SHADER_SOURCE_PIN=1')
+          PY
+      - name: Original Material source Shader PPtr one-based dependency classification
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.23.0
+          python3 -m scripts.t3_original_material_shader_target \
+            --original "$RUNNER_TEMP/t3-shader-original" \
+            --manifest zip2-original/RAFT_FILE_MANIFEST.tsv \
+            --out "$RUNNER_TEMP/t3-shader-original-source-only.json"
+      - name: Keep only public owner dependency counts (no source IDs)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: t3-41-authentic-original-Material-shader-owners-${{ github.run_id }}
+          path: ${{ runner.temp }}/t3-shader-original-source-only.json
+          if-no-files-found: ignore
+          retention-days: 7
