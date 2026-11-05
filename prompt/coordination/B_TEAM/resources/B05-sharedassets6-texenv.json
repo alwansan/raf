@@ -13,8 +13,8 @@
     "acquisition": "VERIFIED",
     "extraction": "VERIFIED",
     "reconstruction": "UNKNOWN",
-    "binding": "VERIFIED_BOUNDED_SAME_INSTANCE_EXPORT_41_MATERIALS_227_TEXENV_UV_89_INTERNAL_TEXTURE_TARGETS_MATCH_25_EXTERNAL_UNVERIFIED",
-    "integration": "VERIFICATION_HELPER_SOURCE_FIX_AND_REAL_AUTHENTIC_EXPERIMENT_CI_PASS_NO_GAME_ASSET_PATCH",
+    "binding": "VERIFIED_BOUNDED_SAME_EXPORT_41_MATERIALS_227_SLOTS_89_INTERNAL_PLUS_25_EXTERNAL_TEXTURE2D_TARGET_IDENTITIES_114_BOUND_MATCH_113_ORIGINAL_NULL_227_UV_MATCH",
+    "integration": "READ_ONLY_B05_T3_VERIFIER_REAL_SOURCE_SAME_EXPORT_CI41939404454_AND_41942377246_SUCCESS_NO_GAME_ASSET_MODIFICATION",
     "device": "UNKNOWN"
   },
   "evidence": [
@@ -22,13 +22,16 @@
     "https://github.com/alwansan/raf/actions/runs/41929077930",
     "https://github.com/alwansan/raf/commit/d6fa219c769e3c4d11f798f41bfc0cbd8451465b",
     "https://github.com/alwansan/raf/actions/runs/41939404454",
-    "https://github.com/alwansan/raf/commit/77d312f546f1fc80c72f57a57de5d90699d66302"
+    "https://github.com/alwansan/raf/commit/77d312f546f1fc80c72f57a57de5d90699d66302",
+    "https://github.com/alwansan/raf/actions/runs/41941882103",
+    "https://github.com/alwansan/raf/actions/runs/41942377246",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_EXTERNAL_TEXTURE_LINEAGE_2026-11-05.md"
   ],
   "remaining": [
-    "Exact same-export 41 Materials/227 Texture slots/UV matched, zero loss or drift in selected source; preserves 113 original null and verified 89 internal targets.",
-    "25 original external-owner Texture references remain UNVERIFIED in this bounded source/export graph.",
-    "Other original source owners, shader/variant/sRGB/lighting, Unity import and actual Android pixels remain UNKNOWN. No original asset or image restoration claimed."
+    "Original B05 41 Materials/227 TexEnv+UV already authenticated; 89 original local Texture2D pointers and 25 cross-owner (22 sharedassets0 +3 sharedassets1) ALL matched exact same-export PPtr GUID/fileID/type across two independent bounded real original/AssetRipper CI runs; 113 source null pointers remain legitimately null.",
+    "Proof is limited to selected 41 original Materials; distinct image content, original/export sampler/sRGB/import metadata, real ShaderLab compiled programs and Android pixels NOT YET VERIFIED.",
+    "Current T3 same-export original importer sampler trial 41943122343 was INCONCLUSIVE; new stage-classified rerun 41943498076 pending."
   ],
   "updated_by": "T3",
-  "updated_at": "2026-11-05T00:12:00Z"
+  "updated_at": "2026-11-05T00:46:00Z"
 }
