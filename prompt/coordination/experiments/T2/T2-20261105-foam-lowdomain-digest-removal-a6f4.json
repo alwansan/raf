@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "session_id": "20261105T1244Z-T2-chat-digest-removal-a6f4",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "completed",
+  "experiment_key": "t2-foam-original-lowdomain-pair-sha256-removal-zip2-15964ea8-v1",
+  "hypothesis": "Plain SHA256 of bounded original numeric texture/sampler register pairs can be enumerated from a public safe artifact; removal at producer is necessary.",
+  "source_commit": "e8f3641551c54e7f5cd64bd74b01a9d0fcb3b871",
+  "source_pin": "zip2:15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "original_owner_sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+  "method": "Remove original_numeric_pair_digest_sha256 output at producer, retain stage/cardinality and compiled ABI checks; add synthetic original-pair counterexample and CI assertions against hash/digest fields on original SHA-pinned safe JSON.",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42030329788",
+  "runner_guard_url": "https://github.com/alwansan/raf/actions/runs/42030329635",
+  "observed": {
+    "workflow_status": "success",
+    "authentic_stages": 4,
+    "artifact_id": 13416016571,
+    "artifact_bytes": 2128,
+    "original_resource_member_and_texture_checks": "success",
+    "public_numeric_pair_hash_present_in_new_report": false,
+    "device_water_pixels_proven": false
+  },
+  "limitations": [
+    "Historical CI artifacts containing previous digest not retroactively deleted",
+    "No proof of original four index literal values, RenderTexture backing field allocation/write, runtime ShaderLab/Unity or Android pixels"
+  ],
+  "next_step": "Next distinct T2 source-authentic Cecil field writer/Texture(int) caller index dataflow, new work reservation; WATER-001 remains OPEN NOT_READY 0/3."
+}
