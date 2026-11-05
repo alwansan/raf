@@ -4,7 +4,7 @@
   "origin": "scheduled",
   "session_id": "20261105T1255Z-T5-scheduled-b7c2",
   "issue_id": "DELIVERY-013",
-  "status": "active",
+  "status": "completed",
   "base_sha": "3f8504bd670d07b761236f2f16b07ab320a74754",
   "intended_files": [
     "prompt/coordination/work/DELIVERY-013/20261105T1255Z-T5-scheduled-b7c2-portable-review.json",
@@ -17,6 +17,10 @@
     "20261105T1248Z-T5-chat-linkport-6a19",
     "20261105T1146Z-T5-platform-smoke-diff"
   ],
-  "updated_at": "2026-11-05T12:55:00Z",
-  "next_step": "Verify packaging copy and exact CI job; independently inspect safety gaps without modifying active chat-owned files."
+  "updated_at": "2026-11-05T12:56:00Z",
+  "next_step": "Coordinate real Termux end-to-end verification; preserve chat T5 file ownership and avoid duplicate CI.",
+  "result": "CI42030902212 success at 57a7c30b; packaging copies current reassembler; Linux synthetic proof only, no Termux phone test; EPERM remains distinct from missing os.link.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42030902212"
+  ]
 }
