@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "session_id": "20261105T1213Z-T3-native-shader-dummy-audit",
+  "issue_id": "RENDER-002",
+  "kind": "authentic-real-export-and-native-diagnostic-integration",
+  "summary": "An actual 12 SHA-pinned original source bounded AssetRipper export preserves 41 original Material→Shader identities while 511/511 custom Shader references target 54 distinct Dummy shader GUID files; all 126 .shader sources carry pinned Dummy marker. Added read-only source integrated full native post-restoration audit; full native and Android device acceptance not executed.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42026630845",
+    "https://github.com/alwansan/raf/actions/runs/42026545273",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_NATIVE_MATERIAL_SHADER_PROGRAM_AUDIT_2026-11-05.md"
+  ],
+  "requires_follow_up": true,
+  "android_visuals_verified": false,
+  "touch_deferred": true,
+  "recorded_at": "2026-11-05T12:26:00Z"
+}
