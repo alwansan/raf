@@ -25,3 +25,20 @@ Each native original DXBC sampler declaration has numeric mode **0** in this bou
 ### Next
 
 Inspect real original DXBC executable `sample` instructions and t/s register operands (reuse pre-existing `blur_sample_operands.py` when supported), reject unsupported opcode/dynamic resource index rather than assuming declarations are used. Then verify native register to translated SPIR-V binding identity with explicit translation provenance, map source property/Material upload, reconstruct private two-pass ShaderLab and validate Unity/GPU/Android separately.
+
+## Follow-up: genuine executable DXBC SAMPLE instruction-use proof (2026-11-05)
+
+**[Original CI41958159556](https://github.com/alwansan/raf/actions/runs/41958159556) COMPLETED SUCCESS**, source commit [faed3a4a](https://github.com/alwansan/raf/commit/faed3a4a57d4113e0bcf907461a9d25baf4469af): **15/15 declaration controls + 16/16 new SAMPLE operand/unsupported-opcode controls PASS**, original ZIP2 `sharedassets0.assets` SHA authenticated and four exact original stage SHA pins. Added [T2 native instruction scanner](https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/t2_foam_original_sample_edges.py), reusing **the inherited `scripts/blur_sample_operands.py` decoder** and exact native source row t/s register pairs; compiler tokens bounded, dynamic/modified or unowned t/s reference rejected.
+
+| Original stage | Genuine native DXBC opcode69 SAMPLE calls | Distinct actively used original numeric pairs | Unsupported sample variants (70–74) |
+|---|---:|---|---:|
+| Pass0 vertex | 0 | none | 0 |
+| Pass0 fragment | **17** | **t0/s0, t1/s1, t2/s2, t3/s3, t4/s4** | **0** |
+| Pass1 vertex | 0 | none | 0 |
+| Pass1 fragment | **4** | **t0/s0** | **0** |
+
+**21 native DXBC SAMPLE calls / 6 distinct active native pairs**. All six original `m_TextureParams` row candidates were actually used by SAMPLE opcode69 in the appropriate original fragment stage; vertex stages contain none. No unhandled DXBC SAMPLE variants 70–74 observed in these four original stages. This is **not just declaration parity**. Earlier independently authenticated [translated SPIR-V use CI41942245746](https://github.com/alwansan/raf/actions/runs/41942245746) found **17+4=21** translated sampling calls and six compiled image/sampler pairs, with pass0 b6→b1 through b10→b5 and pass1 b2→b1. This identical scoped cardinality/usage is strong parallel evidence but not a per-resource **native DXBC tN/sN ↔ compiled SPIR-V descriptor/binding identity proof**. Neither shader register numbering nor ordering alone proves a Unity Material shader property, source sampler state, ShaderLab import or device pixel equivalence.
+
+New safe numeric artifact ID **13383159040**, ZIP SHA256 `14f55dd06ca25aa4d1cb83f70ff3ad37d8f2b861758007f82294e1009ca86bbb`, independently downloaded and inspected. No proprietary symbols, DXBC or HLSL/SPIR-V uploaded. Private original staged source deleted by workflow even on failure. Source-only; **WATER-001 remains OPEN, NOT_READY 0/3**, real game latest APK86 unmodified. Other T clients' workflows, audio, Settings and deferred touch unchanged.
+
+**Next necessary proof:** authenticate native t/s resource → translated SPIR-V descriptor identity, including CB offset/separate sampler remapping and sample operands; map actual original Material shader properties and texture/sampler upload. Only then construct/install an authentic two-pass Foam ShaderLab and validate Unity import, numeric GPU/pixels and device on a new build. No fake property aliases or claimed visual restoration.
