@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "session_id": "20261105T1021Z-T3-original-codec-drift",
+  "issue_id": "RENDER-002",
+  "hypothesis": "All 30 DXT5 Gamma raw source-to-AssetRipper PNG RGB+Alpha differences are the exact, intentional post-decode TextureConverter.UnpackNormal BGRA mapping requested by original TextureUsageMode NormalmapDXT5nm=3, while 76 other source textures are raw equal. After faithful in-memory transform only for 30, 106/106 decoded RGBA should match.",
+  "source_commit": "1a494e0a4307ddd2f735f57a6e28041980cd95ec",
+  "input_hashes": [
+    "ZIP2 original commit 15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "original 11 selected owners SHA authenticated in workflow",
+    "sharedassets0.assets.resS 1779131136 sha256 9169e628e6e7c6fcadfc20e8eae92218f9edbb33c573f6cc474f532437b50ff8",
+    "sharedassets1.assets.resS 388054288 sha256 730c91dc3c9d23cc3053d5a8cd8fdb91f09635b96fa5d413e85dbb863b77b2da",
+    "sharedassets6.assets.resS 95361248 sha256 5fa2b99646a50762bef980fe4d3dcbba165e7a70aa9fbc4e710a5a9043c67995"
+  ],
+  "tool_versions": {
+    "AssetRipperCLI": "036098ab525a3f9f693dc101edeb21faad4d32d8",
+    "UnityPy": "1.23.0",
+    "Pillow": "11.3.0",
+    "dotnet": "9.0.x"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t3_normalmap_dxt5_semantic.py -v",
+    "python3 -m unittest discover -s tests -p test_t3_pixel_diagnostic_boundary.py -v",
+    "python3 -m scripts.t3_authentic_decoded_pixel_export --verify-normalmap-semantic --original $RUNNER_TEMP/b21-original --manifest zip2-original/RAFT_FILE_MANIFEST.tsv --project $RUNNER_TEMP/b21-private-export/ExportedProject --w1-trace $RUNNER_TEMP/b21-w1-private.json --b02-trace $RUNNER_TEMP/b21-b02-private.json --out $RUNNER_TEMP/t3-authentic-decoded-pixel-safe.json"
+  ],
+  "negative_controls": [
+    "Exact BGRA UnpackNormal lane mapping, clamp, sqrt, byte truncation and input nonmutation",
+    "Reject normalmap usage3 on non-DXT5 or non-Gamma original",
+    "Require 30 source NormalmapDXT5nm and 30 source raw RGB drift and 106 semantic exact, preserve old 76 raw exact",
+    "Synthetic CI42014621926 SUCCESS; previous AST 1 comparison false positive corrected to guard both comparisons",
+    "Strict original source/exact same exported Texture2D 106 GUID files and six-field sampler acceptance, no private pixels/IDs in public report"
+  ],
+  "workflow_path": ".github/workflows/raft-t3-streamed-original-texture-export.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42014733420",
+  "artifact_urls": [],
+  "budget": "45m independent SHA-locked ZIP2 11 original owners + three 2.26GB raw .resS in runner temp, no Git LFS or Unity/Adreno, 2 DOTNET processors, safe aggregates only, never original texture publication",
+  "status": "RUNNING",
+  "observed_result": {
+    "original_usage_run": "https://github.com/alwansan/raf/actions/runs/42013419416",
+    "original_30_Gamma_DXT5_with_m_LightmapFormat_3": 30,
+    "original_76_non_normalmap": 76,
+    "old_raw_run": "https://github.com/alwansan/raf/actions/runs/42012169446",
+    "raw_RGBA_exact": 76,
+    "raw_RGB_and_Alpha_drift": 30,
+    "source_free_semantic_controls": "https://github.com/alwansan/raf/actions/runs/42014621926",
+    "semantic_exact_result": null
+  },
+  "rejected_hypotheses": [
+    "30 RGB drift images are random corrupted original textures with no common source usage",
+    "Missing original .resS or actual .meta targets after authenticated staging",
+    "Texture importer sampler fields causing 30 raw decoded mismatches"
+  ],
+  "limitations": [
+    "Raw RGBA unequal by design for DXT5nm normal-map unpack; semantic transform proof pending",
+    "Even 106 semantic exact PNG only bounds this original subset, no Unity/Adreno rendered pixels, shaders/passes/FFT/local world or full game integration"
+  ],
+  "integration_commit": "1a494e0a4307ddd2f735f57a6e28041980cd95ec",
+  "next_step": "Inspect run42014733420 safe dual raw/semantic category results. If semantic exact across 106, retain correct AssetRipper transform and reclassify original 30 raw mismatch as intentionally unpacked normals; no actual game asset edits. If residual, inspect exact conversion math and note scoped source differential."
+}
