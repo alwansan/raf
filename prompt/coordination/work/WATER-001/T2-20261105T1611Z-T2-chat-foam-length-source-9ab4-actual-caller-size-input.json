@@ -4,7 +4,7 @@
   "origin": "chat",
   "session_id": "20261105T1611Z-T2-chat-foam-length-source-9ab4",
   "issue_id": "WATER-001",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "41880c64b02b16e3ecc561965cd543fecf52814b",
   "updated_at": "2026-11-05T16:29:00Z",
   "resumed_from_experiment": "T2|original-ZIP2-15964ea8|DLL-0a6f0527|exact-RT-newarr-length-producer-local-arg-call|bounded-basicblock-v1",
@@ -25,14 +25,27 @@
     "original_CI": "42063244298 SUCCESS",
     "independent_running": "T1 FFT actions separate; no T2 scheduled managed CI observed"
   },
-  "next_step": "Inspect CI42064423841 first compile/test and T2_FOAM_ACTUAL_CALLER_INT_LENGTH_SAFE aggregate. If pass classify direct literal and private bounds only when structurally proven. Never publish original values or claim runtime pixel acceptance.",
+  "next_step": "Now inspect the exact same source-original ref RenderTexture[] helper stelem.ref element-value producer (UnityEngine.RenderTexture newobj vs field/argument/null), then guarantee runtime-created texture content and Unity shader binding with device logs. Bounds proven only for compiled original caller literal, not runtime reachability; WATER-001 OPEN NOT_READY0/3.",
   "source_commit": "cd21db83712feeb0d851866f1a104c52f46859de",
   "run_urls": [
-    "https://github.com/alwansan/raf/actions/runs/42064423841"
+    "https://github.com/alwansan/raf/actions/runs/42064653958"
   ],
   "result": {
-    "code": "actual original ldflda→typed ref RenderTexture[] callsite and exact int32 newarr size formal source stack trace with synthetic direct I4 / int parameter controls",
-    "CI": "in_progress",
-    "original_numeric_values_disclosed": false
-  }
+    "original_ci": "42064653958 COMPLETED SUCCESS",
+    "source_original_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "actual_matching_callsite_count": 1,
+    "original_newarr_length_int32_formal_proven": true,
+    "original_call_actual_int32_length_source": "direct_i4",
+    "source_positive_compiled_length_proven": true,
+    "four_original_private_index_values_in_range_if_source_call_executes": true,
+    "original_integer_values_or_digests_disclosed": false,
+    "runtime_executed_or_actual_array_length_verified": false,
+    "artifact_id": 13433575749,
+    "artifact_sha256": "a084bab746c1191543d7a40c4e933d912df8d726f59de40f39f64ef8f86e0029",
+    "synthetic_internal_sourcefree_controls": "passed"
+  },
+  "source_commits": [
+    "cd21db83712feeb0d851866f1a104c52f46859de",
+    "668cfb4529baf1a0a10a11ed629311e9b7a74784"
+  ]
 }
