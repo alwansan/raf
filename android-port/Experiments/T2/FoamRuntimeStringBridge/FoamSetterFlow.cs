@@ -15,7 +15,8 @@ internal static class FoamSetterFlow
                                                  string SecondProducerDeclaringTypeClass,
                                                  bool SecondProducerIsCallvirt,
                                                  bool SecondProducerHasThis,
-                                                 int SecondProducerParameterCount);
+                                                 int SecondProducerParameterCount,
+                                                 MethodReference? SecondProducerReference);
     private enum Tag {
         Unknown, OriginalNameString, OriginalPropertyId,
         ArgumentLoad, StaticFieldLoad, InstanceFieldLoad,
@@ -221,7 +222,8 @@ internal static class FoamSetterFlow
                             ProducerDeclaringClass(second,method.Module),
                             second.ProducerOpcode==Code.Callvirt,
                             second.Producer?.HasThis ?? false,
-                            second.Producer?.Parameters.Count ?? 0);
+                            second.Producer?.Parameters.Count ?? 0,
+                            second.Producer);
                     }
                 }
                 // Do not accept unrelated methods with the same name or
