@@ -1,0 +1,93 @@
+name: T4 INPUT-005 Android immersive system bars source and original Unity ABI checks
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'android-port/Runtime/Platform/AndroidImmersiveSystemBars.cs'
+      - 'android-port/Runtime/Platform/AndroidSystemBarPolicy.cs'
+      - 'android-port/Tests/ImmersiveBars/**'
+      - 'tests/test_t4_android_immersive_system_bars.py'
+      - '.github/workflows/raft-t4-immersive-system-bars.yml'
+      - '.github/workflows/raft-unity-editor-android-import.yml'
+      - 'scripts/verify_android_offline_candidate.py'
+
+permissions:
+  contents: read
+concurrency:
+  group: raft-t4-immersive-source-abi-20261105
+  cancel-in-progress: false
+
+jobs:
+  immersive-source-and-real-unity-managed-abi:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 9
+    steps:
+      - name: Checkout narrow public source-only T4 immersive policy
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /android-port/Runtime/Platform/AndroidImmersiveSystemBars.cs
+            /android-port/Runtime/Platform/AndroidSystemBarPolicy.cs
+            /android-port/Tests/ImmersiveBars/
+            /tests/test_t4_android_immersive_system_bars.py
+            /.github/workflows/raft-unity-editor-android-import.yml
+            /scripts/verify_android_offline_candidate.py
+      - name: Source-free lifecycle, OS exit, JNI threading and native staging policy
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_t4_android_immersive_system_bars.py -v
+          test ! -d Raft
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Execute CSharp legacy flags and foreground policy controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 100s dotnet run --project android-port/Tests/ImmersiveBars/ImmersiveBars.csproj -c Release
+      - name: Checkout immutable original ZIP2 Unity2021 Android JNI and Core managed ABI
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: t4-original
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /Raft/Raft_Data/Managed/Assembly-CSharp.dll
+            /Raft/Raft_Data/Managed/UnityEngine.CoreModule.dll
+            /Raft/Raft_Data/Managed/UnityEngine.AndroidJNIModule.dll
+      - name: Authenticate real original DLL before using its Unity managed ABI
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C t4-original rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          f=t4-original/Raft/Raft_Data/Managed/Assembly-CSharp.dll
+          test ! -L "$f"
+          test "$(stat -c '%s' "$f")" = 3211776
+          echo "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e  $f" | sha256sum -c --status
+          test "$(df -Pk . | awk 'NR==2 {print $4}')" -gt 900000
+          echo 'T4_IMMERSIVE_SOURCE authenticated_original_unity_managed_provider=true'
+      - name: Compile actual AndroidJavaObject immersive Unity component against exact original Unity2021 CLR API
+        shell: bash
+        env:
+          DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+        run: |
+          set -euo pipefail
+          managed="$GITHUB_WORKSPACE/t4-original/Raft/Raft_Data/Managed"
+          timeout 100s dotnet build android-port/Tests/ImmersiveBars/UnityManagedCompile.csproj -c Release -p:OriginalManagedDir="$managed" > "$RUNNER_TEMP/t4-immersive-private-compile.log" 2>&1 || {
+            python3 - <<'PY'
+          import collections,os,pathlib,re
+          log=(pathlib.Path(os.environ["RUNNER_TEMP"])/"t4-immersive-private-compile.log").read_text(errors="replace")
+          print("T4_IMMERSIVE_COMPILE_ERROR_CODES", dict(collections.Counter(re.findall(r"error +((?:CS|NETSDK|NU)\d+)",log))))
+          PY
+            exit 1
+          }
+          echo 'T4_IMMERSIVE_MANAGED_COMPILE originalUnity2021=true AndroidPlayerBuilt=false DeviceVerified=false'
+          # No game files or original raw sources are published or uploaded.
