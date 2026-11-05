@@ -1,0 +1,15 @@
+{
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261105T232830Z-T1-chat-5d3b90",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "d7b5960cf1e3760f579c3fcdcbb143df0ddf6c2f",
+  "intended_files": [
+    "scripts/t1_sourcefree_dispatch_fixture.py",
+    ".github/workflows/raft-t1-fft-unity-input-identity.yml"
+  ],
+  "experiment_key": "unity-openglcore-fft-uint-vs-float-bitcarrier-runtime-binding",
+  "resource_key": "raft-native-engine-feature/android-native-port",
+  "updated_at": "2026-11-05T23:28:30Z"
+}
