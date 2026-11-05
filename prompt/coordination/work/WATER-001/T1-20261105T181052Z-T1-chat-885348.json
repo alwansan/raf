@@ -1,0 +1,19 @@
+{
+  "id": "20261105T181052Z-T1-chat-885348",
+  "session_id": "20261105T181052Z-T1-chat-885348",
+  "origin": "chat",
+  "owner": "T1",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "364d7b27696684d43ccb88e1eb9767b8fe6d7eff",
+  "updated_at": "2026-11-05T18:10:52.738Z",
+  "intended_files": [
+    ".github/workflows/raft-t1-fft-paired-diagnostic-checks.yml"
+  ],
+  "experiment_key": "scheduled-t1-fft-nonfinite-and-capture-regression-ci",
+  "resumed_from_sessions": [
+    "20261105T180524Z-T1-scheduled-c8f2",
+    "20261105T171319Z-T1-scheduled-a6e4",
+    "20261105T161020Z-T1-scheduled-7c92"
+  ]
+}
