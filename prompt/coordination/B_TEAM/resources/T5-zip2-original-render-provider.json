@@ -1,0 +1,33 @@
+{
+  "id": "T5-zip2-original-render-provider",
+  "title": "T5 SHA-verified ZIP2 graphics source into feature LFS hydration (resources.assets single real original)",
+  "kind": "graphics-source-provider",
+  "source": {
+    "provider": "alwansan/raf zip2 immutable Git checkout",
+    "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "path": "Raft/Raft_Data/resources.assets",
+    "bytes": 111533516,
+    "sha256": "87493249f1adfc0c5eb8b82e4e199e208cd2c95eabe9796cab82116c4838595c"
+  },
+  "stages": {
+    "acquisition": "VERIFIED_EXACT_ORIGINAL_BYTES_SHA256_REAL_ZIP2_CI41939143108",
+    "extraction": "SPLIT_PART_REASSEMBLY_EXACT_SHA256_AND_SIZE_REAL_CI",
+    "reconstruction": "NOT_APPLICABLE_ORIGINAL_SERIALIZED_RESOURCE_BYTES_PRESERVED",
+    "binding": "VERIFIED_FEATURE_LFS_POINTER_REUSE_IN_STAGING_ONLY_NO_UNITY_EXPORT",
+    "integration": "OPTIONAL_VERIFIED_SOURCE_CONSUMER_IN_PRODUCTION_HYDRATOR_SOURCE_PATCH_1c68ef8_NOT_TRIGGERED_NATIVE",
+    "device": "UNKNOWN"
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41939143108",
+    "https://github.com/alwansan/raf/actions/runs/41938979840",
+    "https://github.com/alwansan/raf/commit/396eab4d3cd8acc0d462e96b748e56537a49bd01",
+    "https://github.com/alwansan/raf/commit/1c68ef8ea8a38b9d92c1e1cc204a6b9c913555a4"
+  ],
+  "remaining": [
+    "Test additional original graphics owner providers, byte budget and Unity project actual export integration after coordination",
+    "No original FFT authentic .compute install, ShaderLab, material pixel, Adreno device or world-save confirmation",
+    "Do not mark WATER-001/RENDER-002/LOCAL-005 or ASSET-RESTORE-001 closed"
+  ],
+  "updated_by": "T5",
+  "updated_at": "2026-11-05T00:11:31.625Z"
+}
