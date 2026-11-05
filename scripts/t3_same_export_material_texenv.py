@@ -102,17 +102,51 @@ def aggregate(result: dict) -> dict:
     return safe
 
 
+class ScopedStageError(ValueError):
+    """Safe public failure category, never original object IDs or source paths."""
+    def __init__(self, stage: str, category: str, counters: dict):
+        super().__init__("T3 bounded parity stage inconclusive")
+        self.stage = stage
+        self.category = category
+        self.counters = dict(counters)
+
+
 def run(source: Path, project: Path, w1_path: Path, b02_path: Path) -> dict:
-    if any(p.is_symlink() for p in (source, project, w1_path, b02_path)):
-        raise ValueError("Linked source/export/trace path")
-    w1 = json.loads(w1_path.read_text(encoding="utf-8"))
-    b02 = json.loads(b02_path.read_text(encoding="utf-8"))
-    joined = combine_same_export(w1, b02)
-    original = b05.original_texenvs(source, owner_names={OWNER})
-    if len(original) != SOURCE_MATERIALS or sum(len(v) for v in original.values()) != SOURCE_SLOTS:
-        raise ValueError("Source owner is not authenticated B05 sample")
-    exported = b05.exported_texenvs(project)
-    return aggregate(b05.compare(joined, original, exported, selected_owners={OWNER}))
+    stage = "private_input"
+    counters = {}
+    try:
+        if any(p.is_symlink() for p in (source, project, w1_path, b02_path)):
+            raise ValueError("Linked source/export/trace path")
+        w1 = json.loads(w1_path.read_text(encoding="utf-8"))
+        b02 = json.loads(b02_path.read_text(encoding="utf-8"))
+
+        stage = "same_export_trace_join"
+        joined = combine_same_export(w1, b02)
+        counters["w1_material_trace_count"] = sum(
+            x.get("class_id") == 21 for x in w1["objects"])
+        counters["b02_texture_trace_count"] = len(b02["objects"])
+
+        stage = "sha_locked_original_texenvs"
+        original = b05.original_texenvs(source, owner_names={OWNER})
+        counters["original_selected_materials"] = len(original)
+        counters["original_selected_slots"] = sum(len(v) for v in original.values())
+        if (counters["original_selected_materials"] != SOURCE_MATERIALS
+                or counters["original_selected_slots"] != SOURCE_SLOTS):
+            raise ValueError("Source owner is not authenticated B05 sample")
+
+        stage = "actual_exported_material_yaml"
+        exported = b05.exported_texenvs(project)
+        counters["actual_export_materials"] = len(exported)
+
+        stage = "b05_same_instance_lineage_compare"
+        compared = b05.compare(joined, original, exported, selected_owners={OWNER})
+
+        stage = "public_aggregate_acceptance"
+        return aggregate(compared)
+    except Exception as error:
+        # Avoid raw third-party exception text; preserve only a predefined
+        # phase, a Python exception class and aggregate unsigned counts.
+        raise ScopedStageError(stage, type(error).__name__, counters) from None
 
 
 def main(argv=None) -> int:
@@ -129,11 +163,15 @@ def main(argv=None) -> int:
         raise ValueError("Unsafe aggregate report destination")
     try:
         result = run(a.original, a.project, a.w1_trace, a.b02_trace)
+    except ScopedStageError as error:
+        result = dict(RESULT_TEMPLATE, status="INCONCLUSIVE",
+                      exception_type=error.category, failure_stage=error.stage,
+                      inspected_counts=error.counters)
     except Exception as error:
         # Never output raw error messages: private YAML names and paths can
         # appear in third-party exceptions. Preserve only the exception TYPE.
         result = dict(RESULT_TEMPLATE, status="INCONCLUSIVE",
-                      exception_type=type(error).__name__)
+                      exception_type=type(error).__name__, failure_stage="unclassified")
     a.out.parent.mkdir(parents=True, exist_ok=True)
     a.out.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print("T3_SAME_EXPORT_MATERIAL_AGGREGATE " + json.dumps(result, sort_keys=True))
