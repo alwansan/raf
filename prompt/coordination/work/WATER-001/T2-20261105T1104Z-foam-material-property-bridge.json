@@ -4,7 +4,7 @@
   "session_id": "20261105T1104Z-T2-foam-material-property-bridge-isolated",
   "issue_id": "WATER-001",
   "track": "Foam SHA-authentic Unity Shader property to actual Material texture binding",
-  "status": "active",
+  "status": "completed",
   "base_sha": "0da800c16cd641224cca7d50148215f6696b6bbd",
   "hypothesis": "Original Shader m_PropInfo Texture properties exactly match pass-resolved original m_TextureParams identifiers for a bounded subset; local original Materials referencing Shader PathID2420 may contain corresponding original m_TexEnvs with typed texture pointers/UV transforms.",
   "approach": "Read one SHA-pinned original ZIP2 sharedassets0.assets and Foam shader object, original private names only in memory; use B25 original pass name registry, B05 strict normalize_texenvs, W3 m_PropInfo parsed shader property schema. Verify actual Material m_Shader local PPtr & direct typed Texture2D pointers, never infer external or runtime upload. Publish only safe numeric counts, no property names/IDs/texture payload. Falsify missing/ambiguous/dynamic matches; independent SHA-pinned CI with adversarial synthetic controls.",
@@ -24,8 +24,27 @@
   "related_run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42013590671"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement source-only strict original Foam property and Material TexEnv string join, test on real SHA-locked source, classify exact scope, then advance original asset/provider dependencies as warranted.",
-  "updated_at": "2026-11-05T11:04Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42017542487"
+  ],
+  "result": {
+    "original_CI": "42017542487 SUCCESS",
+    "synthetic_controls": "21/21 PASS",
+    "original_sharedassets0_sha_exact": true,
+    "original_foam_shader_path_id_2420_sha_exact": true,
+    "authored_shader_properties": 2,
+    "authored_shader_texture_properties": 1,
+    "serialized_source_texture_uses_across_4_stages": 6,
+    "source_texture_uses_matching_authored_texture_property": 2,
+    "source_non_authored_texture_uses_pass0": 4,
+    "original_same_owner_materials_scanned": 351,
+    "direct_local_foam_shader_materials": 0,
+    "matched_same_owner_texenvs": 0,
+    "other_game_owners_and_runtime_materials_scanned": false,
+    "unity_texture_runtime_upload_proven": false,
+    "artifact_id": 13409313191,
+    "artifact_sha256": "07bf2ec8be15eee1a89e63e363c9b33ece3300ab2436bbd072299e69d8cfbd9d"
+  },
+  "next_step": "Probe four original non-authored source t/s resource names against SHA-authentic original managed DLL IL literal contexts without publishing names; then inspect other owner Material Shader PPtr and actual runtime upload; no six-Properties fabrication.",
+  "updated_at": "2026-11-05T11:29Z"
 }
