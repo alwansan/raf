@@ -26,7 +26,7 @@ static class Program
             "Legacy flags contain only expected fullscreen/immersive bits");
         Check(AndroidSystemBarPolicy.MergeLegacy(mask) == mask,
             "Legacy flags are idempotent");
-        const int original = 0x80000008;
+        const int original = unchecked((int)0x80000008u);
         int merged = AndroidSystemBarPolicy.MergeLegacy(original);
         Check((merged & original) == original, "Existing Unity flags preserved");
         Check((merged & mask) == mask, "All six system-bar flags requested");
