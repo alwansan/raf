@@ -85,7 +85,11 @@ class RendererShaderRealExportBridge(unittest.TestCase):
                 data[1]["objects"][idx]["export"]={
                     "file_id":file_id,"guid":guid,"type":0}
                 with self.subTest(source_row=idx,file_id=file_id,zero_guid=guid=="0"*32):
-                    with self.assertRaisesRegex(ValueError,"unresolved_or_wrong_actual"):
+                    # fileID=0 is rejected by the shared pointer parser;
+                    # nonzero fileIDs with zero GUID or negative IDs reach the join guard.
+                    error=("Null or malformed trace export pointer" if file_id==0
+                           else "unresolved_or_wrong_actual")
+                    with self.assertRaisesRegex(ValueError,error):
                         self.call(data)
 
     def test_source_B03_provenance_cannot_be_substituted_by_unchecked_rows(self):
