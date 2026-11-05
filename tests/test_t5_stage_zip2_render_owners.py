@@ -224,6 +224,39 @@ class ZIP2RenderStageTests(unittest.TestCase):
         self.assertEqual(later.read_bytes(), expected_later)
         self.assertEqual(list(feature.rglob(".verified-zip2-graphics-*")), [])
 
+    def test_consumer_later_rename_failure_rolls_back_first_pointer(self):
+        """An injected second publication failure restores original pointers."""
+        from unittest import mock
+        from scripts import hydrate_render_payloads as hyd
+        second, _, options = self.install_second_original()
+        self.stage(**options)
+        feature = self.root / "feature"
+        original = {}
+        for name, digest, size in options["entries"]:
+            target = feature / name
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_text(
+                "version https://git-lfs.github.com/spec/v1\n"
+                f"oid sha256:{digest}\nsize {size}\n", encoding="ascii")
+            original[name] = target.read_bytes()
+        actual_replace = hyd.os.replace
+        calls = 0
+
+        def fail_second(source, target):
+            nonlocal calls
+            calls += 1
+            if calls == 2:
+                raise OSError("injected second rename failure")
+            return actual_replace(source, target)
+
+        with mock.patch.object(hyd.os, "replace", side_effect=fail_second):
+            with self.assertRaisesRegex(OSError, "injected"):
+                hyd.reuse_verified_staged_sources(
+                    options["entries"], self.output / "Raft_Data", feature)
+        for name, _, _ in options["entries"]:
+            self.assertEqual((feature / name).read_bytes(), original[name])
+        self.assertEqual(list(feature.rglob(".verified-zip2-*")), [])
+
     def test_consumer_later_symlink_preserves_first_pointer(self):
         from scripts.hydrate_render_payloads import reuse_verified_staged_sources
         second, _, options = self.install_second_original()
