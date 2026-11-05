@@ -43,11 +43,12 @@ def main():
         if not isinstance(entries, list):
             raise ValueError("manifest must be a list")
         pairs = []
+        manifest_dir = args.manifest.resolve().parent
         for entry in entries:
             if not isinstance(entry, dict) or set(entry) != {"name", "reference", "observed"}:
                 raise ValueError("invalid pass entry")
-            pairs.append((entry["name"], Path(entry["reference"]).read_bytes(),
-                          Path(entry["observed"]).read_bytes()))
+            pairs.append((entry["name"], (manifest_dir / entry["reference"]).read_bytes(),
+                          (manifest_dir / entry["observed"]).read_bytes()))
         report = compare_passes(pairs, atol=args.atol, rtol=args.rtol)
     except (OSError, ValueError, TypeError, KeyError) as exc:
         parser.exit(2, "Invalid private FFT pass manifest or capture: " + type(exc).__name__ + "\n")
