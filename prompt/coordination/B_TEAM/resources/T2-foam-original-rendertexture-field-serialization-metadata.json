@@ -1,0 +1,38 @@
+{
+  "id": "T2-foam-original-rendertexture-field-serialization-metadata",
+  "owner": "T2",
+  "issue_id": "WATER-001",
+  "title": "Original Foam private RenderTexture[] field and four distinct direct int caller indices",
+  "kind": "source_authentic_managed_compiled_field_metadata",
+  "source": {
+    "zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "managed_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e"
+  },
+  "stages": {
+    "acquisition": "ZIP2_ORIGINAL_DLL_SHA_SIZE_PINNED",
+    "extraction": "EXACT_GETTER_BACKING_RENDER_TEXTURE_ARRAY_FIELDDEFINITION_UNIQUE_RESOLUTION",
+    "reconstruction": "PRIVATE_NO_SERIALIZEFIELD_NOT_STATIC_NOT_READONLY; FOUR_ORIGINAL_I4_ARGS_DISTINCT_AND_NONNEGATIVE",
+    "binding": "FIELD_MODIFIER_SERIALIZATION_ELIGIBILITY_FALSE; ACTUAL_UNITY_SCENE_OR_RT_ARRAY_LENGTH_NOT_PROVEN",
+    "integration": "SOURCE_ONLY_PINNED_ORIGINAL_CI42046650774_SUCCESS_NO_GAME_ASSET_EDIT",
+    "device": "NOT_TESTED"
+  },
+  "observed": {
+    "exact_field_definitions": 1,
+    "field_is_public": false,
+    "explicit_serializefield": false,
+    "nonserialized": false,
+    "static": false,
+    "readonly": false,
+    "eligible_by_modifiers_only": false,
+    "original_caller_index_literal_count": 4,
+    "distinct_literal_count": 4,
+    "all_nonnegative": true,
+    "original_values_published": false,
+    "actual_scene_or_runtime_array_verified": false
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42046650774",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/T2/sessions/20261105T1434Z-T2-chat-rendertexture-serialization-93ad.md"
+  ],
+  "next_step": "Locate original managed indirect RenderTexture[] field uses and owning type hierarchy, then independently authenticate array construction and runtime bounds. WATER-001 OPEN NOT_READY 0/3."
+}
