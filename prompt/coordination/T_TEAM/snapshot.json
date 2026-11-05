@@ -178,7 +178,9 @@
         "https://github.com/alwansan/raf/actions/runs/42012049920",
         "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ILSPY_REFERENCE_CONTEXT_2026-11-05.md",
         "https://github.com/alwansan/raf/actions/runs/42012597665",
-        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_ORIGINAL_FILEMANAGER_IL_METADATA_2026-11-05.md"
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_ORIGINAL_FILEMANAGER_IL_METADATA_2026-11-05.md",
+        "https://github.com/alwansan/raf/actions/runs/42018587431",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_FILEMANAGER_MANAGED_RUNTIME_2026-11-05.md"
       ],
       "remaining": [
         "Original Cheat.AllowCheatsForLocalPlayer SteamUser.GetSteamID direct object call now source-guarded in B50 2bb6c2; no native/phone verification. Do not infer all Steam callbacks are removed.",
@@ -199,7 +201,8 @@
         "T4 original coroutine completion assignment marker is source-integrated: exact original write preserved; 10/10 Python + managed CLR false/true semantic branches PASS, and SHA-authenticated original DLL private method read-only variant PASS (CI41943357681). The original ILSpy class SHA differs between B07 and T4 on the same verified DLL, and T4 run reports production_adapter_exercised=false; Android Unity/IL2CPP/native/device playability and real .rgd roundtrip NOT tested. Do not lower production source gate; maintain LOCAL-005 OPEN.",
         "T4 CI41944365772 original same-DLL ILSpy reproducibility: SHA-pinned 3211776B original DLL decompiled twice independently in one runner; class/method/masked SHA exactly equal across both passes; 10/10 new source-free controls plus 10/10 original completion controls and real CLR synthetic branches PASS. This excludes same-run nondeterminism in that scope but does not explain older B07 vs T4 cross-run decompiler SHA difference; native production adapter full gate/Unity/IL2CPP/real world/.rgd device still untested. Do not loosen source pin.",
         "T4 exact original managed-reference context CI42011353849 PASS: 3211776B SHA-verified DLL decompiled twice solo -> old T4 alternate class/body SHA, same DLL alongside 151 siblings -> exact B07 production source SHA. Subsequent CI42012049920 PASS with actual production offline adapt + operation instrument, source/manifest hashes unchanged, firstMoveNext/completion traces present and original assignment/yields preserved. Earlier original C# managed compile CI41942118067 PASS. This resolves source-intake context discrepancy at tested scope, NOT Unity IL2CPP/device playable world or genuine .rgd create-save-relaunch-reopen. LOCAL-005 stays OPEN NOT_READY.",
-        "T5 genuine original compiled IL CI42012597665 verifies both SaveAndLoad direct read/write FileManager targets exist as distinct static body-bearing methods (14/13 IL instructions, 1 System.IO call and exception handler each), overcoming T4 text parser unresolved declarations; actual Android path, world entry and durable .rgd create/relaunch/load remain unverified."
+        "T5 genuine original compiled IL CI42012597665 verifies both SaveAndLoad direct read/write FileManager targets exist as distinct static body-bearing methods (14/13 IL instructions, 1 System.IO call and exception handler each), overcoming T4 text parser unresolved declarations; actual Android path, world entry and durable .rgd create/relaunch/load remain unverified.",
+        "T5 original CLR synthetic FileManager experiment CI42018587431 FAILED SAFELY at COMPILED_IL_GUARD before method invocation: 1 System.IO + 1 core + 1 original local + 1 other unattested callee per read/write. No synthetic byte roundtrip, game RGD file, Unity or Android save test. Workflow manual-only until transitive dependency provenance; LOCAL-005 OPEN."
       ],
       "acceptance": [
         "دخول عالم جديد محلي قابل للعب بلا Steam أو سيرفر خارجي",
@@ -207,7 +210,7 @@
         "لا يكفي إخفاء رسالة الاتصال"
       ],
       "updated_by": "T5",
-      "updated_at": "2026-11-05T10:43:00Z",
+      "updated_at": "2026-11-05T11:26:00Z",
       "_record_path": "../B_TEAM/issues/LOCAL-005.json"
     },
     {
@@ -1180,6 +1183,62 @@
       "_record_path": "../B_TEAM/resources/T2-foam-original-active-sample-descriptor-identity.json"
     },
     {
+      "id": "T2-foam-original-authored-shader-property-lineage",
+      "owner": "T2",
+      "kind": "source_sha_authentic_Foam_authored_Shader_texture_property_and_direct_material_scope",
+      "title": "Authenticated Foam original m_PropInfo Texture property ↔ source m_TextureParams names; bounded same-owner Material PPtr negative",
+      "source": {
+        "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+        "owner": "Raft_Data/sharedassets0.assets",
+        "size": 115978112,
+        "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+        "shader_path_id": 2420,
+        "shader_raw_sha256": "67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1"
+      },
+      "stages": {
+        "acquisition": "AUTHENTIC_IMMUTABLE_ZIP2_OWNER_115978112_BYTES_AND_SHA",
+        "extraction": "ORIGINAL_FOAM_TYPED_SHADER_m_PropInfo_AND_FOUR_STAGE_m_TextureParams_PRIVATE_NAMES",
+        "reconstruction": "VERIFIED_EXACT_SOURCE_NAME_EQUALITY_OF_AUTHORED_TEXTURE_PROPERTY_2_OF_6_OCCURRENCES",
+        "binding": "SINGLE_ORIGINAL_OWNER_351_MATERIALS_SCANNED_ZERO_DIRECT_LOCAL_PPTR_TO_FOAM;CROSS_OWNER_OR_RUNTIME_UPLOAD_UNKNOWN",
+        "integration": "SOURCE_ONLY_T2_PYTHON_PROBE_AND_ORIGINAL_GITHUB_CI_SUCCESS",
+        "device": "NO_SHADERLAB_UNITY_ADRENO_PIXEL_PROOF"
+      },
+      "observed": {
+        "original_shader_authored_properties": 2,
+        "authored_texture_properties": 1,
+        "source_program_texture_row_count": 6,
+        "source_stage_occurrences_matching_authored_texture_property": 2,
+        "source_stage_occurrences_without_authored_texture_property": 4,
+        "pass0_fragment": "5 source t/s rows; 1 matches authored Texture property, 4 do not",
+        "pass1_fragment": "1 source t/s row; 1 matches authored Texture property",
+        "other_stage_texture_rows": 0,
+        "same_owner_materials_total": 351,
+        "direct_local_material_shader_reference_matches": 0,
+        "verified_local_texenvs_for_foam": 0,
+        "cross_owner_material_search_complete": false,
+        "runtime_global_texture_upload_verified": false,
+        "original_TextureImporter_filter_wrap_verified": false,
+        "shaderlab_import_device_render_verified": false
+      },
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42017542487",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_ORIGINAL_AUTHORED_PROPERTIES_AND_MATERIALS_2026-11-05.md"
+      ],
+      "artifact": {
+        "id": 13409313191,
+        "transport_sha256": "07bf2ec8be15eee1a89e63e363c9b33ece3300ab2436bbd072299e69d8cfbd9d",
+        "numeric_only": true
+      },
+      "remaining": [
+        "Exact original managed or native runtime writer/provider of four non-authored Foam source texture names",
+        "Other source owners may contain Materials pointing externally at Foam Shader; same-owner zero is limited scope",
+        "Actual authored one Texture property's Material pointer/upload and ShaderLab/UV/filter/wrap",
+        "CB constant buffer member upload and Unity shader import/Adreno device correctness"
+      ],
+      "updated_at": "2026-11-05T11:18Z",
+      "_record_path": "../B_TEAM/resources/T2-foam-original-authored-shader-property-lineage.json"
+    },
+    {
       "id": "T2-foam-original-native-dxbc-sample-edges",
       "title": "SHA-authentic original Foam serialized t/s to native DXBC declarations and executable SAMPLE operands",
       "kind": "source_authenticated_original_water_shader_D3D11_sample_instruction_bindings",
@@ -1522,6 +1581,53 @@
       "updated_by": "T3",
       "updated_at": "2026-11-05T00:21:00Z",
       "_record_path": "../B_TEAM/resources/T3-sharedassets6-material-rgba-same-export.json"
+    },
+    {
+      "id": "T5-filemanager-managed-original-sandbox-boundary",
+      "title": "Original managed FileManager standalone CLR runtime dependency safety boundary",
+      "kind": "authenticated-original-compiled-IL-sandbox-negative",
+      "source": {
+        "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+        "path": "Raft_Data/Managed/Assembly-CSharp.dll",
+        "bytes": 3211776,
+        "sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e"
+      },
+      "stages": {
+        "acquisition": "AUTHENTIC_ORIGINAL_SHA_VERIFIED",
+        "extraction": "DIRECT_CALLEE_GROUPS_CLASSIFIED",
+        "reconstruction": "NOT_APPLICABLE",
+        "binding": "ORIGINAL_STATIC_COMPILED_FILEMANAGER_READ_WRITE_TARGETS_RESOLVED_PRIOR_CI42012597665",
+        "integration": "STANDALONE_MANAGED_RUNTIME_BLOCKED_BY_TRANSITIVE_ORIGINAL_CALL_SCOPE_CI42018587431",
+        "device": "NOT_TESTED"
+      },
+      "observed": {
+        "both_roles": {
+          "direct_system_io": 1,
+          "safe_core": 1,
+          "local_original_helper": 1,
+          "other_nonwhitelisted": 1,
+          "unity_or_steam_direct": 0
+        },
+        "actual_original_method_invoked": false,
+        "actual_synthetic_bytes_readback": false,
+        "synthetic_report_tests_passed": 13,
+        "source_sha_verified": true
+      },
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42017959763",
+        "https://github.com/alwansan/raf/actions/runs/42018106259",
+        "https://github.com/alwansan/raf/actions/runs/42018332386",
+        "https://github.com/alwansan/raf/actions/runs/42018587431",
+        "https://github.com/alwansan/raf/actions/runs/42012597665"
+      ],
+      "remaining": [
+        "Authenticate local original FileManager helper and other method call provenance recursively before any CLR invocation",
+        "T4 original compiled File.Open/Create classifications are not CLR disk execution",
+        "Actual .rgd create/save/relaunch/reopen and Unity/Android world are untested"
+      ],
+      "updated_by": "T5",
+      "updated_at": "2026-11-05T11:25:00Z",
+      "_record_path": "../B_TEAM/resources/T5-filemanager-managed-original-sandbox-boundary.json"
     },
     {
       "id": "T5-original-filemanager-compiled-il-call-edges",
@@ -4785,6 +4891,21 @@
       "_record_path": "../B_TEAM/events/T5/20261105T1042Z-original-filemanager-compiled-il-result.json"
     },
     {
+      "id": "T5-20261105T1125Z-original-managed-file-io-safety-negative",
+      "owner": "T5",
+      "session_id": "20261105T1115Z-T5-filemanager-runtime-sandbox",
+      "issue_id": "LOCAL-005",
+      "type": "negative-execution",
+      "summary": "Original SHA-authentic FileManager standalone CLR invocation deliberately blocked before disk I/O: each read/write compiled method calls 1 System.IO, 1 core, 1 internal original helper and 1 other unattested callee. Authentic CI42018587431 FAILURE at COMPILED_IL_GUARD, invoked=false; 13/13 report controls PASS. Does not imply game write failure. Workflow manual-only pending transitive proof.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42018587431",
+        "https://github.com/alwansan/raf/actions/runs/42018332386",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_FILEMANAGER_MANAGED_RUNTIME_2026-11-05.md"
+      ],
+      "at": "2026-11-05T11:25:00Z",
+      "_record_path": "../B_TEAM/events/T5/20261105T1125Z-original-managed-file-io-safety-negative.json"
+    },
+    {
       "id": "20261104-b-generation",
       "owner": "owner-team-bootstrap",
       "session_id": "b-team-setup-20261104",
@@ -4813,7 +4934,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "e4ca82e7810d88fee8db6f6c9ad8a9d44a37f47fe9991511286867a315beac76",
+  "source_input_sha256": "852e7f6d091c1e8e58fed4d3e11663a4982b40f2bb285dc1d7666b98c3bdc437",
   "generation": "T-2026-11-05",
-  "input_sha256": "62349e2d184dbdbe462d1afa7ab8ccc9251e04e17805cf5397c75e9a3ca22b14"
+  "input_sha256": "c3a97855db162ffd6c8c22e6f9738f8615fbce7975f34cd050aa9b87bda75f17"
 }
