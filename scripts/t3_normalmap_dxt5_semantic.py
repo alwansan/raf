@@ -68,6 +68,14 @@ def semantic_rgba_input(decoded, *, format_code:int, color_space:int,
         or type(lightmap_format) is not int or color_space not in (0,1)
         or not 0<=lightmap_format<=11):
         raise ValueError("malformed_original_normalmap_usage")
+    # Fail closed for every usage, not only the DXT5nm branch: an invalid
+    # decoded image or serialized format must never pass through as "EXACT".
+    from PIL import Image
+    if (not isinstance(decoded, Image.Image) or decoded.mode != "RGBA"
+        or decoded.width <= 0 or decoded.height <= 0
+        or decoded.width * decoded.height > MAX_PIXELS
+        or format_code <= 0):
+        raise ValueError("invalid_authenticated_decoded_texture_input")
     if lightmap_format==NORMALMAP_DXT5NM:
         if format_code!=DXT5 or color_space!=0:
             raise ValueError("unexpected_dxt5nm_original_codec_color_space")
