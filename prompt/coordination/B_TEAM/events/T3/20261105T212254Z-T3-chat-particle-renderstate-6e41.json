@@ -1,0 +1,19 @@
+{
+  "id": "20261105T212254Z-T3-chat-particle-renderstate-6e41",
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T212254Z-T3-chat-particle-renderstate-6e41",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "at": "2026-11-05T21:27:10Z",
+  "summary": "Genuine ZIP2 SHA-original six-scene Particle Shader48 108-slot single Pass: color and alpha blend ALPHA_DEPENDENT, ZWrite OFF, Cull OFF, ColorMask PARTIAL, current render_state translator rejects; CI 42112666211 SUCCESS 52/52 controls. Source-only; no Android pixels or ShaderLab restoration.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42112666211",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE_SHADER_RENDERSTATE_2026-11-05.md"
+  ],
+  "limitations": [
+    "full native Shader GUID unresolved",
+    "original ColorMask serialized-to-ShaderLab bit mapping not yet independently proven",
+    "RENDER-002 OPEN"
+  ]
+}
