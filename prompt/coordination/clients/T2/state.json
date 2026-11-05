@@ -4,10 +4,10 @@
   "generation": "T-2026-11-05",
   "session_id": "20261105T0023Z-T2-foam-texture-identity",
   "resumed_from_session": "20261104T2354Z-T2-foamabi01",
-  "status": "active",
+  "status": "paused",
   "base_sha": "b56ebc3847f251cee2539e9797471417d32698d2",
-  "last_commit": "e203f647d9b678357d52dff8b1099dc025c0258f",
-  "updated_at": "2026-11-05T00:24:23.912Z",
+  "last_commit": "5dd02e7931aedfbb92c5cbcf3cc10ac1a6f9fd7c",
+  "updated_at": "2026-11-05T00:30:26.660Z",
   "tracks": [
     "WATER-001",
     "foam-cb-abi",
@@ -27,8 +27,9 @@
     "https://github.com/alwansan/raf/actions/runs/41939956032",
     "https://github.com/alwansan/raf/actions/runs/41940279771",
     "https://github.com/alwansan/raf/actions/runs/41940321740",
-    "https://github.com/alwansan/raf/actions/runs/41939553448"
+    "https://github.com/alwansan/raf/actions/runs/41939553448",
+    "https://github.com/alwansan/raf/actions/runs/41941354379"
   ],
-  "next_step": "Private SHA-authenticated Foam six-source-texture symbol registry↔SPIR-V separate image name comparison; synthetic controls then original-source CI. No alias/material/upload or GPU assumption.",
+  "next_step": "Current CI 41941354379 authentic Foam texture names 0/6 equal translated image names; probe numeric original m_Index/m_SamplerIndex to active translated sample and Unity material alias before ShaderLab/Adreno. WATER-001 OPEN; do not repeat CI without new hypothesis.",
   "memory_path": "prompt/coordination/clients/T2/MEMORY.md"
 }
