@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "session_id": "20261105T0024Z-T3-keyword-real-export",
+  "issue_id": "RENDER-002",
+  "hypothesis": "In SHA-authenticated sharedassets6 source, 41 original Material keyword/disabled-pass fields might be altered in true same-process AssetRipper exporter despite proven TexEnv and RGBA identity; compare exact W1 material trace and B43 fields.",
+  "source_commit": "6940ccf0161a3ea4a52c083702692de74c0c64be",
+  "input_hashes": [
+    "zip2:15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "sharedassets6.assets 6607272 bytes sha256:0476792cfeffac19d16e920011ed8d2fb2da62973c2f09a8689bc59e1ac4b632",
+    "B21 nine original source files SHA/size verified as run prerequisite"
+  ],
+  "tool_versions": {
+    "UnityPy": "1.23.0",
+    "PyYAML": "6.0.3",
+    "AssetRipperCLI": "036098ab525a3f9f693dc101edeb21faad4d32d8"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t3_same_export_material_keywords.py -v",
+    "python3 -m unittest discover -s tests -p test_b43_material_keyword_fidelity.py -v",
+    "python3 -m scripts.t3_same_export_material_keywords --original \"$RUNNER_TEMP/b21-original\" --project \"$RUNNER_TEMP/b21-private-export/ExportedProject\" --w1-trace \"$RUNNER_TEMP/b21-w1-private.json\" --b02-trace \"$RUNNER_TEMP/b21-b02-private.json\" --out \"$RUNNER_TEMP/t3-keyword-safe-result.json\""
+  ],
+  "negative_controls": [
+    "No unapproved/empty original owner",
+    "Same-export instance mismatch",
+    "Exact 41-material scope",
+    "Missing changed keyword",
+    "Changed disabled pass",
+    "No raw asset/object/keyword leakage into public safe report",
+    "Reject fake build-readiness or shader-variant proof"
+  ],
+  "workflow_path": ".github/workflows/raft-t3-real-material-colors-export.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41941363661",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41941363661"
+  ],
+  "budget": "25min isolated two-core real-export CI, reuse existing bounded same-export pipeline; no Unity APK/LFS; no cancellation",
+  "status": "RUNNING_NOT_YET_VERIFIED",
+  "observed_result": {
+    "synthetic_tests": "PASS according to Actions step",
+    "true_original_same_export": "NOT_YET_TERMINAL",
+    "android_pixels_verified": false
+  },
+  "rejected_hypotheses": [],
+  "limitations": [
+    "Original source/bytecode and private raw traces remain runner-only",
+    "Only 41 selected original Materials; external reference and ShaderLab GPU/pixels unresolved",
+    "No full Unity or Android device proof; CI running at checkpoint"
+  ],
+  "integration_commit": "6940ccf0161a3ea4a52c083702692de74c0c64be",
+  "next_step": "Check CI41941363661 after completion, review safe t3-keyword-safe-result.json and update hypothesis/status; retain issue OPEN."
+}
