@@ -50,7 +50,20 @@ def aggregate(rows: list[dict[str, str]], *, expected: int) -> dict:
     }
     if any(set(r) != set(fields) or any(r[f] not in allowed[f] for f in fields) for r in rows):
         raise ValueError("invalid diagnostic category")
-    # Marginal aggregates only: avoid leaking identifiable joint metadata.
-    return {"schema_version": 1, "scope": expected,
+    # Attribute RGB drift to broad codec groups, not individual assets.
+    # Rare formats are pooled before the joint distribution is computed.
+    # Never emit GUIDs, filenames, hashes, or per-object rows.
+    format_counts = Counter(r["format"] for r in rows)
+    by_format = {}
+    for row in rows:
+        fmt = row["format"] if format_counts[row["format"]] >= 5 else "POOLED_RARE_FORMATS"
+        magnitude = row["max_rgb_delta_bin"]
+        outcome = ("EXACT" if magnitude == "EXACT" else
+                   "ALPHA_ONLY" if magnitude == "ALPHA_ONLY" else "RGB_DRIFT")
+        by_format.setdefault(fmt, Counter())[outcome] += 1
+    joint = {fmt: {key: counts.get(key, 0) for key in ("EXACT", "ALPHA_ONLY", "RGB_DRIFT")}
+             for fmt, counts in sorted(by_format.items())}
+    return {"schema_version": 2, "scope": expected,
             "diagnostics": {f: dict(sorted(Counter(r[f] for r in rows).items())) for f in fields},
+            "format_drift_summary": joint,
             "original_pixels_published": False, "device_validated": False}
