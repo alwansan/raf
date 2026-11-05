@@ -4,8 +4,8 @@
   "origin": "chat",
   "session_id": "20261105T1712Z-T2-chat-return-identity-minimal-4c8f",
   "issue_id": "WATER-001",
-  "status": "waiting_ci",
-  "updated_at": "2026-11-05T17:19:00Z",
+  "status": "completed",
+  "updated_at": "2026-11-05T17:21:00Z",
   "base_sha": "99bd2332e5e50dda949a62eb89a5f45ff8b71c72",
   "resumed_from_work": "prompt/coordination/work/WATER-001/T2-20261105T1712Z-T2-chat-return-identity-minimal-4c8f-return-identity.json",
   "experiment_key": "T2|ZIP2-15964ea8|original-DLL-0a6f0527|Foam-typed-RT-return-method-immediate-ret-sources-v2",
@@ -25,7 +25,7 @@
     "prior_source_result": "1 original signature-compatible RT-return method, compiled body available",
     "no_T2_unfinished_CI_expected": false
   },
-  "next_step": "Read CI42073459459 and T2_FOAM_RETURN_BODY_DIRECT_SOURCE_SAFE, check synthetic tests and genuine original-safe aggregate; publish only numeric counts and ambiguity. Do not call game READY. WATER-001 OPEN NOT_READY0/3.",
+  "next_step": "Classify unresolved ret origin reason (branch-target return vs ldloc/field/call/unhandled), preserve actual declaring assembly identity, then track branch-safe local def-use. Do not assert returning null or nonnull; validate Unity/Adreno separately. WATER-001 OPEN NOT_READY0/3.",
   "source_commits": [
     "be96f7688724885e0af7b7352c1260cd37acd57c",
     "7fc3f0f41b7183627d5a07ba7450d776a72bfd6c",
@@ -35,8 +35,20 @@
     "https://github.com/alwansan/raf/actions/runs/42073459459"
   ],
   "result": {
-    "source": "Compile-authenticated same-SHA managed RenderTexture-return method body return-site counts; direct null/newobj RT/direct RT call/unknown; branch-target-safe, public synthetic controls",
-    "CI": "in_progress",
-    "game_device": "not tested"
+    "original_sha_pinned_ci": "42073459459 COMPLETED SUCCESS",
+    "original_dll_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "same_sha_managed_signature_match_count": 1,
+    "method_body_available": true,
+    "compiled_return_sites": 1,
+    "body_conditional_branch_opcodes": 3,
+    "direct_null_return_sites": 0,
+    "direct_newobj_rendertexture_return_sites": 0,
+    "direct_typed_rendertexture_call_return_sites": 0,
+    "unresolved_return_sites": 1,
+    "synthetic_controls_passed": true,
+    "source_original_method_symbol_il_published": false,
+    "game_runtime_return_nonnull_or_gpu_proven": false,
+    "artifact_id": 13437103838,
+    "artifact_sha256": "522be100d6ca08b37a0310e610f89816b15f01310669bf45a258cf5107f15aae"
   }
 }
