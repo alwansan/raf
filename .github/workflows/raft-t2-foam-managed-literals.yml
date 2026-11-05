@@ -381,6 +381,26 @@ jobs:
           assert lw['BranchJoinOrRuntimeValueVerified'] is False
           if v['OriginalReturnImmediatePriorOpcodeCategory']=='ldloc':
               assert lw['ExactReturnLocalLoadSites']==1
+          allowed_prior=(
+              'not_examined','no_prior_opcode','multiple_writers','ldnull',
+              'newobj','call','ldloc','ldarg','field_load',
+              'indirect_reference_load','reference_type_cast','dup',
+              'integer_literal','branch_opcode','other_opcode')
+          assert lw['SoleWriterImmediatePriorOpcodeCategory'] in allowed_prior
+          assert type(lw['SoleWriterIsControlFlowEntry']) is bool
+          if lw['ExactLocalAssignmentSites']==1:
+              assert lw['SoleWriterImmediatePriorOpcodeCategory'] not in (
+                  'not_examined','multiple_writers')
+          print('T2_FOAM_SINGLE_RT_LOCAL_WRITER_REASON_SAFE '+json.dumps({
+              'one_exact_return_local_writer':
+                  lw['ExactLocalAssignmentSites']==1,
+              'writer_previous_opcode_family':
+                  lw['SoleWriterImmediatePriorOpcodeCategory'],
+              'writer_is_branch_exception_or_entry_target':
+                  lw['SoleWriterIsControlFlowEntry'],
+              'writer_value_proven_or_executed':False,
+              'private_il_names_or_numeric_operands_disclosed':False,
+          },sort_keys=True))
           print('T2_FOAM_RETURN_LOCAL_WRITERS_SAFE '+json.dumps({
               'return_loads_exact_local':lw['ExactReturnLocalLoadSites'],
               'return_local_declared_rt':lw['ReturnLocalDeclaredRenderTexture'],
