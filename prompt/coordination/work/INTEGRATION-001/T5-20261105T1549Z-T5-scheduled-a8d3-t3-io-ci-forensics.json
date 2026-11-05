@@ -1,0 +1,19 @@
+{
+  "session_id": "20261105T1549Z-T5-scheduled-a8d3",
+  "origin": "scheduled",
+  "issue_id": "INTEGRATION-001",
+  "status": "active",
+  "base_sha": "ad686295f0f084a5d8060b29f3420c2131afb181",
+  "resumed_from_sessions": [
+    "20261105T1543Z-T5-chat-water-live-ack-f2c9",
+    "20261105T1453Z-T5-scheduled-6e82"
+  ],
+  "intended_files": [
+    "prompt/coordination/work/INTEGRATION-001/T5-20261105T1549Z-T5-scheduled-a8d3-t3-io-ci-forensics.json",
+    "prompt/coordination/clients/T5/sessions/20261105T1549Z-T5-scheduled-a8d3.md"
+  ],
+  "experiment_key": "T5|CI42058541334|T3-source-free-IO-stage-failure-metadata|immutable-f224c5ab",
+  "resource_key": null,
+  "hypothesis": "Determine whether T3 synthetic IO guard failure is runner/setup or test assertion without touching T3 code, water or Unity",
+  "updated_at": "2026-11-05T15:49:00Z"
+}
