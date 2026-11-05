@@ -5,7 +5,7 @@
   "session_id": "20261105T143219Z-T3-chat-original921-builtin-2f7b",
   "origin": "chat",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed",
   "track": "original shader source identity / official Unity built-in recovery candidate",
   "base_sha": "cf97a3725bb29b230ef766c5a17480a707fa6ebd",
   "experiment_key": "T3-original6scenes-ZIP2-15964ea8-4typedowners-Shader48-use1633-top921-officialUnity2021.3.45f2-builtin-shader-exactname-intersection",
@@ -38,12 +38,40 @@
   "related_work": [
     "prompt/coordination/work/RENDER-002/T3-20261105T1402Z-T3-chat-renderer-shader-impact-f63e-sameexport-renderer-shader-dummy-join.json"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement source-authentic D3D11 top-921 Shader48 pass/variant stage linkage experiment with no shader source/metadata leaked; keep name experiment manual-only and unexecuted again.",
-  "updated_at": "2026-11-05T14:38:47.014Z",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42046452052",
+    "https://github.com/alwansan/raf/actions/runs/42047453578",
+    "https://github.com/alwansan/raf/actions/runs/42047611046"
+  ],
+  "result": {
+    "original_builtin_name_subexperiment": "INCONCLUSIVE in our duplicate CI42046452052; superseded by independent T3 AUTHENTIC CI42046329453 SUCCESS top source 921 Shader is NOT exact official built-in name",
+    "original_compiled_stage_result": "SUCCESS",
+    "source_ci": "https://github.com/alwansan/raf/actions/runs/42047611046",
+    "original_sha_verified": true,
+    "source6_scene_original_owners4": true,
+    "top_source_renderer_material_slot_weight": 921,
+    "original_subshaders": 1,
+    "original_passes": 4,
+    "original_normal_passes": 4,
+    "d3d11_records": 120,
+    "vertex_variant_records": 41,
+    "fragment_variant_records": 33,
+    "distinct_original_DXBC_stage_programs": 58,
+    "matched_vertex_fragment_pairs": 33,
+    "unmatched_original_vertex_permutations": 8,
+    "source_free_tests_passed": 46,
+    "shaderlab_android_adreno_verified": false,
+    "game_assets_modified": false,
+    "builtin_name_workflow_manual_only_commit": "c24bb5929e2dc6417da913b3e0e4aa4b7b268c4e",
+    "dxbc_workflow_manual_only_commit": "ff0f038082e9cb16fa51dbfb84276870c485ca0d"
+  },
+  "next_step": "Original 921-use Shader48 not official Unity builtin by independent CI42046329453. Reconstruct genuine 4-Pass D3D11 shader privately from linked original 41 vertex/33 fragment variants with 33 matches and 8 unmatched vertex permutations; validate resource/sampler/CB/pass state and Vulkan translation, preserve metadata/source and no fake passes. RENDER-002 OPEN, no phone acceptance.",
+  "updated_at": "2026-11-05T14:47:06.878Z",
   "related_run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42046329453",
     "https://github.com/alwansan/raf/actions/runs/42046452052"
+  ],
+  "experiment_ids": [
+    "prompt/coordination/experiments/T3/20261105T143219Z-T3-chat-original921-builtin-2f7b.json"
   ]
 }
