@@ -42,3 +42,10 @@ No production code changes or native retry requested. Next checkpoint requires r
 
 ### Next resumable step
 Read HEAD and all nonterminal Actions before any resource allocation. Confirm cancellation provenance before re-requesting a huge native import when possible; do not assert a Mesh source bug from the canceled step. Choose single immutable current source candidate only after coordinating T1 graphics and T3 real material program-quality gaps plus T4 source/game save markers. If native attempt fails with a genuine step exception, fix that exact gate and rerun separately. Do not mix newer HEAD with the canceled immutable source.
+
+
+## Final Git handoff verification — 2026-11-05 14:41 UTC
+- Session and work completed in their own T5 files; independent discussion `prompt/coordination/discussions/INTEGRATION-001/20261105T1440Z-T5-native-cancelled-recovery-boundary.md` [commit227d575b](https://github.com/alwansan/raf/commit/227d575b8fd347c3f5f147e87cade27a1f90cda9), preserving prior chat's separate `20261105T1404Z-T5-chat-native-diagnostic-3c8e` waiting checkpoint without overwriting.
+- Project status updated by [6d3d2b44](https://github.com/alwansan/raf/commit/6d3d2b4438f76a7adbcd645d43cbf3e1da9f83f4) with the cancelled-versus-failed source boundary.
+- Fresh branch HEAD after other clients' commits: `c2746cc80c9d546b8f303d22d9047167688c98c9`; this is **not** the immutable source SHA for canceled run 42042902522. T4 `guarded original SaveAndLoad Save RGD seed roundtrip` CI42047232842 and platform smoke CI42047120381 were in progress, no queued runs. Do not interfere. Latest true Raft release still `android-early-test-41812889049-1` (12 assets); newer LogRaft releases are unrelated. No newer tested game candidate.
+- Scope is complete and released. Source-independent test verdict 16/16, no heavy workflow requested. Resume future T5 work based on these live conditions, team priorities and genuine next native CI result; project remains NOT_READY 0/3.
