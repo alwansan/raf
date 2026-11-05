@@ -6,7 +6,7 @@
   "origin": "chat",
   "issue_id": "INTEGRATION-001",
   "track": "LOCAL-005 independent original compiled platform profile-creation cross-process race reproduction",
-  "status": "active",
+  "status": "completed",
   "base_sha": "0b92538ad46403bc2cdd7c3bf06b403eba88b7a4",
   "resumed_from_sessions": [
     "20261105T1302Z-T5-chat-delivery-e2e-f72c",
@@ -30,8 +30,28 @@
     "prompt/coordination/clients/T5/sessions/20261105T1348Z-T5-scheduled-7c91.md",
     "prompt/coordination/clients/T4/sessions/20261105T1237Z-T4-scheduled-k7m2.md"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement deterministic actual separate-process source harness with bounded waits and safe aggregate outcomes; run isolated CPU CI, classify exact failure, hand off to T4 before any production change.",
-  "updated_at": "2026-11-05T14:07:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42042891917",
+    "https://github.com/alwansan/raf/actions/runs/42043111968"
+  ],
+  "result": {
+    "source_real_execution": true,
+    "run_id": 42043111968,
+    "job_id": 127298820854,
+    "conclusion": "success",
+    "source_sha": "1e369deb03909f20c75eda30706b5d034d716ee2",
+    "short_hold_300ms": "success_original_identity_stable",
+    "long_hold_3500ms": "io_failure_before_valid_writer_completion; original later persisted id stable",
+    "persistently_corrupt": "invalid_data; original bytes unchanged",
+    "first_run_failed_harness_invocation_not_source": "42042891917; dotnet run --nologo forwarded app args",
+    "production_runtime_modified": false,
+    "android_device_verified": false,
+    "old_smoke_failure_proven_same_cause": false,
+    "limitations": "controlled synthetic Linux cross-process file-stall can fail source's bounded retry; previous original CI had InvalidDataException while this trial long holder gave IOException. No real Android world/save and no auth artifacts"
+  },
+  "next_step": "T4 review evidence and consider bounded retry/fail-closed design; test actual .NET original 12-child smoke and short/long/persistent controls before source change. T5 coordinate one native candidate and device evidence when current pending native run completes, preserving T1/3/4 work.",
+  "updated_at": "2026-11-05T14:18:00Z",
+  "experiment_ids": [
+    "prompt/coordination/experiments/T5/T5-20261105T1407Z-T5-chat-profile-reader-window-c8a1-actual-crossprocess-profile-window.json"
+  ]
 }
