@@ -21,3 +21,10 @@
 - [SHA-pinned original CI42030329788](https://github.com/alwansan/raf/actions/runs/42030329788): **in_progress** at 12:49Z; [runner guard42030329635](https://github.com/alwansan/raf/actions/runs/42030329635): in_progress. They were triggered by **one** atomic three-file push. No original CI success/device claims until result verified.
 - status: `waiting_ci`; resource occupied only by T2 Foam private source CI. No Unity/native job launched; T1 independent FFT RGBA32F control previously succeeded in CI42029739318.
 - next_step: inspect result/first failed step/artifact schema; close scoped work if passed, then start distinct field-write/index-argument provenance experiment, preserving current owner code and water shader authenticity restrictions.
+
+## Final verified result — 2026-11-05T12:53Z
+
+- Original SHA-pinned [CI42030329788](https://github.com/alwansan/raf/actions/runs/42030329788) **COMPLETED SUCCESS** on `e8f3641551c54e7f5cd64bd74b01a9d0fcb3b871`: new single-pair/order-count source-free tests, authenticated original 4 stages, resource/name/member ABI checks and added safe-report no-hash/digest guard all succeeded. Job `127254850541`; safe aggregate artifact `13416016571` (2128B). [Runner guard42030329635](https://github.com/alwansan/raf/actions/runs/42030329635) SUCCESS; cleanup of original source/staged programs succeeded.
+- Source only now removes enumerable original numeric pair SHA256 at the producer; other private numeric pair values are not published by this output. Historical artifacts containing previous digests were **not retroactively purged**; avoid claims of universal confidentiality.
+- Scope `completed`; issue WATER-001 **OPEN** and game **NOT_READY 0/3**. Original producer's array writer and 4 caller integer values, native ShaderLab/Unity and Adreno pixels remain unknown.
+- Next T2 separate experiment: SHA-original Mono.Cecil trace of the exact original `RenderTexture[]` backing field's `stfld` writers and four `Texture(int)` actual index argument origins; fail closed on branches, avoid private identifiers in reports. Preserve T1 FFT, T3 Material, T4 world, T5 build.
