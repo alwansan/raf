@@ -1,13 +1,9 @@
 name: T5 LOCAL-005 authentic original managed FileManager scratch I/O
+# Diagnostic opt-in only: actual original FileManager has unresolved
+# transitive game/external calls; CI must not repeatedly rerun the same blocked
+# original CLR experiment on unrelated commits. Keep red evidence visible.
 on:
   workflow_dispatch:
-  push:
-    branches: [feature/android-native-port]
-    paths:
-      - .github/workflows/raft-t5-filemanager-runtime-sandbox.yml
-      - android-port/Experiments/T5/FileManagerRuntimeSandbox/**
-      - scripts/t5_validate_filemanager_runtime.py
-      - tests/test_t5_validate_filemanager_runtime.py
 permissions:
   contents: read
 concurrency:
