@@ -28,6 +28,16 @@ class ProvenanceTests(unittest.TestCase):
         ]
         self.assertEqual(classify(il), "unknown")
 
+    def test_huge_local_index_fails_closed(self):
+        # A malformed IL local operand must not allocate billions of entries.
+        self.assertEqual(classify([("ldnull",), ("stloc", 10**9), ("ldnull",), ("ret",)]), "unknown")
+        self.assertEqual(classify([("ldloc", 10**9), ("ret",)]), "unknown")
+
+    def test_local_limit_boundary(self):
+        self.assertEqual(classify([("newobj_rt",), ("stloc", 3), ("ldloc", 3), ("ret",)], max_locals=4), "constructed")
+        self.assertEqual(classify([("newobj_rt",), ("stloc", 4), ("ret",)], max_locals=4), "unknown")
+        self.assertEqual(classify([("ldnull",), ("stloc", True), ("ret",)]), "unknown")
+
     def test_uninitialized(self):
         self.assertEqual(classify([("ldloc",0),("ret",)]),"unknown")
 
