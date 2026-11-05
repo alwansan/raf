@@ -4,7 +4,7 @@
   "owner": "T4",
   "origin": "chat",
   "session_id": "20261105T1610Z-T4-chat-derived-rgd-write-sites-n3q7",
-  "status": "active",
+  "status": "completed",
   "base_sha": "4f1677b4c84c3f0dce0dcc229a5685c983fada97",
   "track": "original-RGD-derived-construction-and-state-initialization",
   "experiment_key": "T4-pinned-ZIP2-15964ea-original-DLL-0a6f-precalls-SaveWorld-local-store-SaveUser-field-write-count-v1",
@@ -28,6 +28,33 @@
     "https://github.com/alwansan/raf/actions/runs/42058900699",
     "https://github.com/alwansan/raf/actions/runs/42052375742"
   ],
-  "updated_at": "2026-11-05T16:10:00Z",
-  "notes": "T4 scheduled 1548Z owns device JSONL verifier+tests and is waiting on CI. DO NOT edit or duplicate. T1 water/FFT and T5 native integration separate. Re-check all file SHAs before updates. No force pushes."
+  "updated_at": "2026-11-05T16:15:00Z",
+  "notes": "T4 scheduled 1548Z owns device JSONL verifier+tests and is waiting on CI. DO NOT edit or duplicate. T1 water/FFT and T5 native integration separate. Re-check all file SHAs before updates. No force pushes.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42062124798"
+  ],
+  "result": {
+    "source_pin": {
+      "zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+      "original_managed_size": 3211776,
+      "original_managed_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e"
+    },
+    "CI": "42062124798 completed SUCCESS",
+    "verified_source_sha": "cff6351d68c1941610dfabdc3b18ee0f77e7c8d4",
+    "source_free_controls": "36/36",
+    "precursor_world": "LOCAL_DERIVED_RGD",
+    "world_local_lexical_stores": 1,
+    "nearest_world_local_store_source": "CALL_RETURN_DERIVED_RGD",
+    "precursor_user": "FIELD_DERIVED_RGD",
+    "user_field_owner": "SAVEANDLOAD_CLASS",
+    "user_field_direct_store_sites": 3,
+    "wrong_original_sha_rejected": true,
+    "actual_path_sensitive_flow_proven": false,
+    "original_game_save_invoked": false,
+    "RGD_bytes_written_or_reloaded": false,
+    "Android_Unity_IL2CPP_phone_executed": false,
+    "report": "docs/T4_ORIGINAL_RGD_WRITE_SITE_PROVENANCE_2026-11-05.md",
+    "handoff": "prompt/coordination/discussions/LOCAL-005/20261105T1610Z-T4-derived-RGD-store-handoff-to-T5.md"
+  },
+  "next_step": "One original call returning a derived-RGD value feeds the unique SaveWorld local store; original SaveAndLoad-owned SaveUser derived-RGD field has 3 direct store sites. Original runtime control flow and field initialization still unknown. A new T5 signed Android candidate, blocked by WATER strict gate in last run, must prove playable offline world, genuine world/user RGD durable persistence and restart/reopen. T4 scheduled device JSONL work separate, no force/overlap."
 }
