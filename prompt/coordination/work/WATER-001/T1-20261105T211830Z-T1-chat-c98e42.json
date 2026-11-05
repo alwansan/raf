@@ -3,7 +3,7 @@
   "session_id": "20261105T211830Z-T1-chat-c98e42",
   "origin": "chat",
   "issue_id": "WATER-001",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "2c29bf4bd5f5d224bd5238c4c665846a14562631",
   "intended_files": [],
   "experiment_key": "fft-pair0-invocation-v2-private",
@@ -13,5 +13,6 @@
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42111819138"
   ],
-  "next_step": "Read the paired per-site counters only after sampled-input identity and both instrumentation output-parity gates. If compilation or a gate fails, diagnose that first. No Adreno inference."
+  "next_step": "Check the source-free compiler control, then the original trace shader compile and output-parity gates before interpreting invocation counters.",
+  "result": "Prior replay https://github.com/alwansan/raf/actions/runs/42111819138 stopped at the keyed Vulkan shader compile before original Unity dispatch. Compiler diagnostics were intentionally redacted, so the exact failure is unconfirmed. A concrete flaw was fixed: the generator could append a second SV_DispatchThreadID when SPIRV-Cross provides it inside the entry input struct. Reuse the structured member, reject unsupported declarations, and require a source-free glslang plus spirv-val control before acquiring original data. 110 local FFT tests passed; compiler control is pending in CI."
 }
