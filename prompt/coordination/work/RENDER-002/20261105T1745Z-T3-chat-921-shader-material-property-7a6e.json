@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "session_id": "20261105T1745Z-T3-chat-921-shader-material-property-7a6e",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "base_sha": "8fa5e35b5b0044f99cd03d56b2afe154e59101b3",
+  "updated_at": "2026-11-05T17:45:00Z",
+  "resumed_from_sessions": [
+    "20261105T1728Z-T3-chat-rawspirv-T1-original-3f7c",
+    "20261105T1730Z-T3-scheduled-rawspv-gate-c8e1",
+    "20261105T1405Z-T3-chat-renderer-dummy-join-8c41"
+  ],
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/actions/runs/42076083800",
+    "https://github.com/alwansan/raf/actions/runs/42044249541",
+    "https://github.com/alwansan/raf/actions/runs/41940350604"
+  ],
+  "experiment_key": "T3-ZIP2-15964ea8-6scenes-4owner-921-sourcetype48-mPropInfo-vs-real-source-class21-mSavedProperties-families-and-renderer-slot-weighted-scope-v1",
+  "resource_key": "T3-921-Sh48-source-Material-PropertySchema-CPU-no-export",
+  "hypothesis": "Authentic top Shader48 (921 six-scene renderer slots) typed property schema may expose saved Material property family mismatches, absent/unused declared properties or textures; quantify exact matched source Material→Shader identity without guessing source/export GUID or claiming missing fields break rendering.",
+  "intended_files": [
+    "scripts/t3_original_921_material_property_contract.py",
+    "tests/test_t3_original_921_material_property_contract.py",
+    ".github/workflows/raft-t3-original-921-material-property.yml",
+    ".github/t3-921-material-property-requests/20261105T1745Z-T3-chat-921-shader-material-property-7a6e.json",
+    "docs/T3_ORIGINAL_921_MATERIAL_SHADER_PROPERTY_CONTRACT_2026-11-05.md",
+    "prompt/coordination/clients/T3/sessions/20261105T1745Z-T3-chat-921-shader-material-property-7a6e.md",
+    "prompt/coordination/experiments/T3/20261105T1745Z-T3-chat-921-shader-material-property-7a6e.json",
+    "prompt/coordination/B_TEAM/events/T3/20261105T1745Z-T3-chat-921-shader-material-property-7a6e.json"
+  ],
+  "coordination": "Not editing T1 direct SPIRV, T2 Foam/FFT, T4 world/save, T5 integration/native. Source only on independent SHA-authenticated six-scene/four-original-owner CPU job. No exporter/Unity due native resource contention. No private game names/pathIDs/GUID/SHA of payloads in public output. Legacy T3 prior 41 Material export parity not repeated.",
+  "active_jobs_snapshot": []
+}
