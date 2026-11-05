@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "session_id": "20261105T2051Z-T2-chat-cfg-independent-a17f",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "hypothesis": "Independent synthetic CFG tests exercise fail-closed branches, return-site and malformed inputs.",
+  "source_commit": "192661eab59810d1aada8ffab4003457e8049f41",
+  "input_hashes": [
+    "public-synthetic-code-only@192661eab59810d1aada8ffab4003457e8049f41"
+  ],
+  "tool_versions": {
+    "python": "3.12.3",
+    "checkout": "v4.2.2-pinned-sha"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p 'test_t2_rt_return_cfg*.py' -v"
+  ],
+  "negative_controls": [
+    "divergent branch locals",
+    "multiple return disagreement",
+    "invalid bool/float/huge operands",
+    "unreachable invalid code",
+    "insufficient max_states"
+  ],
+  "workflow_path": ".github/workflows/raft-t2-rt-return-cfg-independent.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42107377757",
+  "artifact_urls": [],
+  "budget": "ubuntu-24.04 <=8min, sparse checkout, no LFS",
+  "status": "completed",
+  "observed_result": "Completed success, job 127525647859, Python 3.12.3, Ran 23 tests: OK (13 inherited + 10 new)",
+  "rejected_hypotheses": [],
+  "limitations": [
+    "synthetic-only",
+    "no original game DLL/shader, Unity, device, GPU, or RenderTexture non-null proof"
+  ],
+  "integration_commit": "192661eab59810d1aada8ffab4003457e8049f41",
+  "next_step": "Privately verify exact original preceding managed MethodReference return signature and typed stack flow, then authentic Unity/Adreno testing; coordinate with scheduled T2, avoid duplicate smoke."
+}
