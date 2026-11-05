@@ -4,9 +4,9 @@
   "session_id": "20261105T1244Z-T2-chat-digest-removal-a6f4",
   "origin": "chat",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "9fae6ebe5fdadace352daa79ca73c04739b030c2",
-  "updated_at": "2026-11-05T12:47:00Z",
+  "updated_at": "2026-11-05T12:49:00Z",
   "resumed_from_sessions": [
     "20261105T1218Z-T2-digest-safety-isolated",
     "20261105T1213Z-T2-foam-return-producer-call-isolated"
@@ -28,6 +28,16 @@
     "running_runs": 0,
     "independent_T1_work": "T1-20261105T124313Z-T1-chat-511e2d-rgba32f-control.json"
   },
-  "run_urls": [],
-  "next_step": "Modify intended files; observe independently triggered original SHA-pinned CI; report evidence and limitations."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42030329788",
+    "https://github.com/alwansan/raf/actions/runs/42030329635"
+  ],
+  "next_step": "Inspect CI42030329788 full outcome and artifact schema; if successful, mark work completed and append verified original result in own chat session. If failed, inspect first failing step, fix only T2 source/test without modifying shared Unity jobs. Continue independent source-authentic RenderTexture[] field write/index provenance in a new scope after coordinating.",
+  "source_commit": "e8f3641551c54e7f5cd64bd74b01a9d0fcb3b871",
+  "result": {
+    "code": "removed original_numeric_pair_digest_sha256 at source, preserved complete/distinct numeric counts",
+    "tests": "new source-free singleton attack regression, count/order regression, SHA-pinned workflow assert no hash/digest keys in safe output",
+    "original_ci": "in_progress; not yet accepted",
+    "device": "unknown; unchanged"
+  }
 }
