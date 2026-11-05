@@ -6,7 +6,7 @@
   "issue_id": "RENDER-002",
   "track": "colors-materials",
   "approach": "Authentic B44 Material m_Colors original-versus-same-export for selected SHA-verified sharedassets6 41 materials, adapt B44 exported YAML map support without relaxing original typed source, preserve W1 Material21 exact trace; no other T files edited.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "55d32abd4ff8f1ec0b40c38f7f6c1712fab5d1b4",
   "intended_files": [
     "scripts/b44_verify_material_colors.py",
@@ -27,8 +27,23 @@
   "experiment_ids": [
     "T3-small-original-same-export-colors-20261105"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement selected SHA pinned source colors, exported YAML map shapes, exact same-instance W1 mapping, add controls and bounded export CI.",
-  "updated_at": "2026-11-05T00:15:00Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41940116028",
+    "https://github.com/alwansan/raf/actions/runs/41940350604"
+  ],
+  "result": {
+    "authentic_zip2_source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "actual_export_source_commit": "0abfd808f5b17e45e8167681f26ec426adb45be3",
+    "real_export_run": "https://github.com/alwansan/raf/actions/runs/41940350604",
+    "result": "SUCCESS_BOUNDED_RGBA_PARITY",
+    "materials_compared": 41,
+    "color_slots_compared": 150,
+    "materials_with_nonidentity_colors": 40,
+    "missing_color_slots": 0,
+    "unexpected_color_slots": 0,
+    "changed_color_values": 0,
+    "shader_or_device_pixels_verified": false
+  },
+  "next_step": "Investigate shader/subprogram/keyword/texture external owner and actual Android Adreno pixels; no selected m_Colors export loss proven.",
+  "updated_at": "2026-11-05T00:23:00Z"
 }
