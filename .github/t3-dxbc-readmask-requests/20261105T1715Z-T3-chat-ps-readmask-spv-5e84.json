@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261105T1715Z-T3-chat-ps-readmask-spv-5e84",
+  "issue_id": "RENDER-002",
+  "original_provider_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "request_type": "one genuine source-original Shader48 exact four-Pass PS DXBC ISGN ReadWriteMask read counts against same-source and roundtrip SPIRV fragment inputs",
+  "source_blob_shas": {
+    "scripts/t3_original_921_dxbc_readmask_spirv.py": "6d5c575f74090b47f23f1220816ef54678a9ef14",
+    "scripts/t3_original_921_dxbc_semantic_join.py": "8a7b0178f4502d7c163a7c8a313e7f754cd68162",
+    "scripts/t3_vf_spirv_component_coverage.py": "14e59ca70379b100b5aab20a03c5806679d12fe1",
+    "tests/test_t3_original_921_dxbc_readmask_spirv.py": "e95e9ced6ed943b773846ff788c82cfaacd64ce2"
+  },
+  "workflow_name": "raft-t3-original-921-dxbc-readmask-spv.yml",
+  "resource_key": "T3-921-fourpass-original-PS-readmask-vkd3d-CPU",
+  "safety": {
+    "original_semantic_names_private": true,
+    "no_raw_compiled_program_artifact": true,
+    "cancel_existing_builds": false,
+    "no_Unity_native_build": true
+  },
+  "created_at": "2026-11-05T17:20:00Z"
+}
