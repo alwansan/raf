@@ -16,9 +16,11 @@ INSTANCE="e"*32
 
 def source():
     materials=[(OWNERS[0],101),(OWNERS[0],102),(OWNERS[1],103),
-               (OWNERS[2],104),(OWNERS[3],105)]
+               (OWNERS[1],104),(OWNERS[3],105)]
     textures=[(OWNERS[0],201),(OWNERS[1],202),(OWNERS[3],203)]
-    keys=[textures[0]]*4+[textures[1]]*3+[textures[2]]*3
+    # For m_FileID=0 a source material texture must be in the SAME
+    # serialized owner, not merely share an arbitrary PathID.
+    keys=[textures[0]]*4+[textures[1]]*4+[textures[2]]*2
     src, counts={},{}
     for i,key in enumerate(materials):
         slots={}
