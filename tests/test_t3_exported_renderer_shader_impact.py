@@ -130,6 +130,13 @@ class RendererShaderImpact(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "duplicate_exported_YAML_meta_guid"):
             impact.audit(self.project)
 
+    def test_material_asset_guid_cannot_alias_shader_importer_guid(self):
+        (self.assets / "m4.mat.meta").write_text(
+            "fileFormatVersion: 2\nguid: " + D + "\n", encoding="utf8")
+        with self.assertRaisesRegex(ValueError,
+                                    "Shader_and_YAML_asset_meta_GUID_collision"):
+            impact.audit(self.project)
+
     def test_duplicate_renderer_anchor_rejected(self):
         path = self.assets / "PrivateName.unity"
         raw = path.read_text()
