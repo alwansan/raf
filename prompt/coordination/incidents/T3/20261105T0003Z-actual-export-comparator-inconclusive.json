@@ -1,0 +1,32 @@
+{
+  "id": "T3-20261105-original-export-compare-inconclusive",
+  "owner": "T3",
+  "session_id": "20261104T2354Z-T3-render-harness",
+  "issue_id": "RENDER-002",
+  "impact": "First genuine nine-provider ZIP2 bounded AssetRipper export succeeded and same-instance Material21 and Texture2D28 private traces were produced, but the final B05 comparison raised ValueError; original/export texture link or UV parity is UNKNOWN.",
+  "source_sha": "615f914728cf15f5d60607115ecb7a4a8919d8e5",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41938229887",
+  "observed": {
+    "source_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "source_sha_size_verified_providers": 9,
+    "source_original_materials_across_two_owners": 42,
+    "source_original_shaders": 18,
+    "actual_bounded_export_completed": true,
+    "private_material_texture_traces_present": true,
+    "source_free_unit_controls_passed": 11,
+    "compare_status": "INCONCLUSIVE",
+    "compare_exception_type": "ValueError"
+  },
+  "rejected_hypotheses": [
+    "Original ZIP2 source missing",
+    "Exporter failed to run",
+    "C# helper failed to compile",
+    "Same-instance private trace files absent"
+  ],
+  "limitations": [
+    "Failure stage not recorded in first-safe report; cannot yet distinguish material trace population, original typetree shape, YAML parse or exact B05 pointer mismatch.",
+    "No raw paths or private identifiers may enter public artifact."
+  ],
+  "recovery": "Add source/trace/export stage labels and safe aggregate counts to T3 helper, rerun once with same pinned input; investigate only the specific failing stage. Do not weaken B05 integrity checks or announce material mismatch from generic exception.",
+  "closed_reason": null
+}
