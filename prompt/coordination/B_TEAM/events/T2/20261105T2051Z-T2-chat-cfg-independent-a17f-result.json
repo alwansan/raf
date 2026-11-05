@@ -1,0 +1,13 @@
+{
+  "id": "20261105T2051Z-T2-chat-cfg-independent-a17f-result",
+  "owner": "T2",
+  "session_id": "20261105T2051Z-T2-chat-cfg-independent-a17f",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "T2 independent synthetic CFG checks PASS 23/23 (10 new); not original Foam/Unity/device proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/192661eab59810d1aada8ffab4003457e8049f41",
+    "https://github.com/alwansan/raf/actions/runs/42107377757"
+  ],
+  "at": "2026-11-05T20:54:00Z"
+}
