@@ -1,0 +1,54 @@
+{
+  "id": "T3-PARTICLE108-SOURCE-SAMEINSTANCE-MATERIAL-TEXTURE-PARITY",
+  "title": "Authenticated original 108 Particle Shader48 to same AssetRipper W1 Material21/B02 Texture2D28 exported Unity Material TexEnv identity",
+  "kind": "SHA-authentic-108ParticleShader48-5Material-3Texture-same-instance-source-to-AssetRipper-export-GUID-and-YAML",
+  "owner": "T3",
+  "issue_id": "RENDER-002",
+  "source": {
+    "zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "assetripper_sha": "036098ab525a3f9f693dc101edeb21faad4d32d8",
+    "real_original_scene_sha_verified": 6,
+    "original_material_shader_source_owners_sha_verified": 4,
+    "original_runtime_global_source_owners_sha_verified": 2,
+    "resource_stream_providers_full_sha_verified": 1
+  },
+  "stages": {
+    "acquisition": "AUTHENTIC_ZIP2_SIX_SCENE_FOUR_MATERIAL_SHADER_OWNERS_AND_TWO_RUNTIME_GLOBALS_PLUS_ONE_EXTERNAL_RES_S_SOURCE_SHA_VERIFIED",
+    "extraction": "REAL_SOURCE_PARTICLE108_RENDERER_SLOTS_FIVE_MATERIAL21_TEN_NONNULL_LOCAL_TEXENVS_THREE_TYPED_TEXTURE2D28",
+    "reconstruction": "ONE_ACTUAL_PINNED_ASSETRIPPER_CLI_EXPORT_FROM_SAME_SHA_SOURCE_WITH_W1_B02_B21_PRIVATE_TRACES",
+    "binding": "REAL_SAME_INSTANCE_5_OF_5_MATERIAL21_2_OF_3_TEXTURE2D28_SOURCE_TRACES_9_OF_10_EXACT_EXPORT_MATERIAL_TEXENV_TEXTURE_PPTR_10_OF_10_UV_1_ORIGINAL_SOURCE_TEXTURE_TRACE_MISSING",
+    "integration": "T3_ISOLATED_SAMEINSTANCE_GITHUB_CI_42130529677_SUCCESS_93_OF_93_SOURCE_FREE_TESTS_READ_ONLY_NO_GAME_ASSETS_EDITED",
+    "device": "NOT_TESTED"
+  },
+  "counts": {
+    "original_source_particle_material_slots": 108,
+    "distinct_original_materials": 5,
+    "distinct_original_textures": 3,
+    "source_texture_slots": 10,
+    "exported_material_trace_covered": 5,
+    "exported_texture_trace_covered": 2,
+    "matched_source_to_export_texenv_texture_ptrs": 9,
+    "source_texture_to_null": 0,
+    "source_texture_wrong_export_guid": 0,
+    "source_target_absent_from_B02_trace": 1,
+    "source_uv_transforms_matching": 10,
+    "missing_or_extra_exported_material_texenv_slots": 0,
+    "exported_material_guid_collisions": 0,
+    "exported_texture_guid_collisions": 0,
+    "source_free_tests_passed": 93,
+    "real_native_full_game_export_verified": false,
+    "android_pixels_verified": false
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42130529677",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_PARTICLE108_SAMEINSTANCE_EXPORT_2026-11-06.md",
+    "https://github.com/alwansan/raf/commit/7a8833bfa46c141618df76204d2cf88101c8df36"
+  ],
+  "remaining": [
+    "B02 omission for one genuine Texture2D28 target may be nonexportable collection or other scoped exporter reason. Neither classification is yet authenticated.",
+    "The 1/3 missing B02 lineage is NOT proof of missing installed APK/OBB image or an incorrectly sampled source texture. The corresponding exported Material TexEnv slot is nonnull, but its expected original target GUID cannot be checked.",
+    "T5 actual full native Unity importer/Android shader TextureImporter alpha/fire/smoke pixel matching unverified."
+  ],
+  "updated_by": "T3",
+  "updated_at": "2026-11-05T23:42:22.105Z"
+}
