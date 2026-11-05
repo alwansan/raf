@@ -1,0 +1,73 @@
+name: T4 INPUT-005 authentic original mouse-look input route census
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'scripts/t4_original_mouse_routing.py'
+      - 'tests/test_t4_original_mouse_routing.py'
+      - '.github/workflows/raft-t4-original-mouse-routing.yml'
+permissions:
+  contents: read
+concurrency:
+  group: raft-t4-original-mouse-routing-source-only
+  cancel-in-progress: false
+jobs:
+  read-only-original-mouse-route:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - name: Checkout bounded source-free scanner and adverse controls
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/t4_original_mouse_routing.py
+            /tests/test_t4_original_mouse_routing.py
+      - name: Test lexical scanner and safe output before acquiring original data
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t4_original_mouse_routing.py tests/test_t4_original_mouse_routing.py
+          python3 -m unittest discover -s tests -p test_t4_original_mouse_routing.py -v
+          test ! -d Raft
+      - name: Checkout immutable ZIP2 original compiled game DLL without LFS
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: t4-original-mouse-source
+          lfs: false
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /Raft/Raft_Data/Managed/Assembly-CSharp.dll
+      - name: Validate exact original DLL and disk budget
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C t4-original-mouse-source rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          f=t4-original-mouse-source/Raft/Raft_Data/Managed/Assembly-CSharp.dll
+          test ! -L "$f"
+          test "$(stat -c '%s' "$f")" = 3211776
+          echo "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e  $f" | sha256sum -c --status
+          test "$(df -Pk . | awk 'NR==2 {print $4}')" -gt 800000
+          echo 'T4_MOUSE_SOURCE authenticated=true original_source_logged=false'
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Run pinned ILSpy on private original assembly with bounded time
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/t4-ilspy-bin" "$RUNNER_TEMP/t4-mouse-private-source"
+          timeout 140s dotnet tool install ilspycmd --version 11.2.0.10050 --tool-path "$RUNNER_TEMP/t4-ilspy-bin" >"$RUNNER_TEMP/t4-mouse-tool.log" 2>&1 || { echo 'T4_MOUSE_TOOL_INSTALL_FAILED'; exit 1; }
+          timeout 360s "$RUNNER_TEMP/t4-ilspy-bin/ilspycmd" -p -lv CSharp9_0 -o "$RUNNER_TEMP/t4-mouse-private-source" t4-original-mouse-source/Raft/Raft_Data/Managed/Assembly-CSharp.dll >"$RUNNER_TEMP/t4-mouse-private-ilspy.log" 2>&1 || { echo 'T4_MOUSE_PRIVATE_DECOMPILER_FAILED'; exit 1; }
+      - name: Emit only authentic bounded mouse axis and capture consumer counts
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 120s python3 -m scripts.t4_original_mouse_routing --dll t4-original-mouse-source/Raft/Raft_Data/Managed/Assembly-CSharp.dll --source "$RUNNER_TEMP/t4-mouse-private-source"
+          echo 'T4_MOUSE_CONTRACT UnityAndroidCompiled=false PointerCaptured=false PhoneVerified=false'
+          # Never upload private DLL, source tree, ILSpy log or original symbols.
