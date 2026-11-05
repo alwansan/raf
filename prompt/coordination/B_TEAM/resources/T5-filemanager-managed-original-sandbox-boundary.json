@@ -1,0 +1,46 @@
+{
+  "id": "T5-filemanager-managed-original-sandbox-boundary",
+  "title": "Original managed FileManager standalone CLR runtime dependency safety boundary",
+  "kind": "authenticated-original-compiled-IL-sandbox-negative",
+  "source": {
+    "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "path": "Raft_Data/Managed/Assembly-CSharp.dll",
+    "bytes": 3211776,
+    "sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e"
+  },
+  "stages": {
+    "acquisition": "AUTHENTIC_ORIGINAL_SHA_VERIFIED",
+    "extraction": "DIRECT_CALLEE_GROUPS_CLASSIFIED",
+    "reconstruction": "NOT_APPLICABLE",
+    "binding": "ORIGINAL_STATIC_COMPILED_FILEMANAGER_READ_WRITE_TARGETS_RESOLVED_PRIOR_CI42012597665",
+    "integration": "STANDALONE_MANAGED_RUNTIME_BLOCKED_BY_TRANSITIVE_ORIGINAL_CALL_SCOPE_CI42018587431",
+    "device": "NOT_TESTED"
+  },
+  "observed": {
+    "both_roles": {
+      "direct_system_io": 1,
+      "safe_core": 1,
+      "local_original_helper": 1,
+      "other_nonwhitelisted": 1,
+      "unity_or_steam_direct": 0
+    },
+    "actual_original_method_invoked": false,
+    "actual_synthetic_bytes_readback": false,
+    "synthetic_report_tests_passed": 13,
+    "source_sha_verified": true
+  },
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42017959763",
+    "https://github.com/alwansan/raf/actions/runs/42018106259",
+    "https://github.com/alwansan/raf/actions/runs/42018332386",
+    "https://github.com/alwansan/raf/actions/runs/42018587431",
+    "https://github.com/alwansan/raf/actions/runs/42012597665"
+  ],
+  "remaining": [
+    "Authenticate local original FileManager helper and other method call provenance recursively before any CLR invocation",
+    "T4 original compiled File.Open/Create classifications are not CLR disk execution",
+    "Actual .rgd create/save/relaunch/reopen and Unity/Android world are untested"
+  ],
+  "updated_by": "T5",
+  "updated_at": "2026-11-05T11:25:00Z"
+}
