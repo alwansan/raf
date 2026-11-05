@@ -1,6 +1,6 @@
 import unittest
 from scripts.b07_probe_original_world_callbacks import fingerprint
-from scripts.t4_original_rgd_load_contract import analyze
+from scripts.t4_original_rgd_load_contract import analyze, inspect_original_saveandload_scope
 
 HEADER = """public class SaveAndLoad {
  public T Load<T>(string filename) {
@@ -38,6 +38,23 @@ class OriginalLoaderContractTests(unittest.TestCase):
         fixture = "public class A { public void Save() { FileManager.CreateFile(\"x\"); } }"
         with self.assertRaisesRegex(ValueError, "No recognizable"):
             self._check(fixture)
+
+    def test_method_parser_failure_does_not_hide_real_source_file_deserializer(self):
+        synthetic = "public class SaveAndLoad { private object Property => x.Deserialize(y); }"
+        report = inspect_original_saveandload_scope(synthetic, fingerprint(synthetic))
+        self.assertEqual(report["executable_deserialize_sites_in_file"], 1)
+        self.assertEqual(report["binder_assignments_in_file"], 0)
+        self.assertFalse(report["source_method_parser_resolved"])
+        self.assertFalse(report["binder_proves_old_rgds_compatible"])
+
+    def test_source_scope_rejects_textual_false_positive(self):
+        synthetic = 'class S { string s = "Deserialize(x)"; /* Deserialize(y) */ }'
+        with self.assertRaisesRegex(ValueError, "no executable deserialize"):
+            inspect_original_saveandload_scope(synthetic, fingerprint(synthetic))
+
+    def test_source_scope_rejects_wrong_fingerprint(self):
+        with self.assertRaisesRegex(ValueError, "SHA256"):
+            inspect_original_saveandload_scope(HEADER, "0" * 64)
 
     def test_binder_not_assumed_from_assembly_version(self):
         fixture = HEADER.replace("formatter.Binder = new LegacyBinder();", "")
