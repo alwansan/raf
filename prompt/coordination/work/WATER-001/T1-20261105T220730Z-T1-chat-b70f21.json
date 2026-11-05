@@ -3,7 +3,7 @@
   "origin": "chat",
   "session_id": "20261105T220730Z-T1-chat-b70f21",
   "issue_id": "WATER-001",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "05d460d6853397ce6df765a435f21fbe4930435c",
   "intended_files": [
     "scripts/t1_fft_spirv_read_provenance.py",
@@ -16,5 +16,6 @@
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42118867515"
   ],
-  "next_step": "Compare original and HLSL roundtrip static address producer opcode counts and same-device numerical parity; a matched Vulkan result cannot identify the Unity OpenGLCore backend transformation."
+  "next_step": "Isolate Unity-specific read address divergence with a same-backend or controlled shader address replay; avoid treating a Vulkan self-compare as cross-implementation evidence.",
+  "result": "Vulkan original versus HLSL roundtrip passed 64 pass-0 and 32 pass-1 written pixels with zero tolerance or coverage differences. Original bounded coordinate slices end at OpLoad; roundtrip adds constructs/extracts and hits unresolved/depth boundaries. The 384-record trace self-compare only checks format; no original-vs-roundtrip coordinate identity or Unity/Android parity claim. Real pinned CL summaries initially failed the device gate (nested totals), and then the bundle contract (unprefixed labels). Gate now accepts real stop-time counters, rejects conflicts/partial counts, and normalizes strict session labels. Both pinned CL summaries passed end-to-end and all 15 tests passed."
 }
