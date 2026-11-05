@@ -1,0 +1,27 @@
+{
+  "id": "20261105T1614Z-T4-original-RGD-local-field-write-sites-36pass",
+  "owner": "T4",
+  "origin": "chat",
+  "session_id": "20261105T1610Z-T4-chat-derived-rgd-write-sites-n3q7",
+  "issue_id": "LOCAL-005",
+  "status": "SOURCE_VERIFIED_ONLY",
+  "type": "authentic_original_managed_RGD_write_site_provenance",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42062124798",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_RGD_WRITE_SITE_PROVENANCE_2026-11-05.md"
+  ],
+  "result": {
+    "authentic_original_sha_verified": true,
+    "source_free_negative_tests": "36/36",
+    "source_provenance": "ZIP2 Assembly-CSharp.dll original",
+    "save_world_derived_rgd_local_stores": 1,
+    "world_nearest_store_source": "CALL_RETURN_DERIVED_RGD",
+    "save_user_field_declaring_scope": "SAVEANDLOAD_CLASS",
+    "save_user_original_direct_write_sites": 3,
+    "actual_world_save_rgd_written": false,
+    "original_user_field_runtime_initialized_proven": false,
+    "process_reopen_or_device_proven": false
+  },
+  "notes": "Static lexical CIL/class relation only, not executed dataflow/SSA or actual Save; CI42052375742 failed water gate before build; no native jobs cancelled.",
+  "created_at": "2026-11-05T16:14:00Z"
+}
