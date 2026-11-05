@@ -120,21 +120,67 @@ def output_aggregate(actual,counts):
     }
 
 
+# All exposed reasons are literal, reviewed source code's fixed error strings.
+# Never copy an arbitrary third-party exception: it could contain game names,
+# raw property values, original paths, or transient private export GUIDs.
+SAFE_REASONS = frozenset((
+    "no pinned Texture2D identities in exporter trace",
+    "invalid same-instance exporter trace",
+    "missing exact exported TextureImporter GUID target",
+    "missing unique TextureImporter/GUID",
+    "missing TextureImporter.textureSettings",
+    "absent/ambiguous exported sampler field",
+    "original sampler field missing",
+    "original Texture2D has no sampler settings",
+    "missing original Texture2D pathID",
+    "missing unique original Texture2D identity",
+    "original owner byte size mismatch",
+    "original owner SHA256 mismatch",
+    "ambiguous target export metadata GUID",
+    "duplicate/wrong TextureImporter GUID mapping",
+    "sampler enum must be integer",
+    "non-finite sampler mip bias",
+    "not Unity importer meta",
+    "unexpected_selected_original_material_scope",
+    "missing_exact_original_linked_Texture2D_trace",
+    "unrecognized_untrusted_source_owner_path",
+    "material_source_bound_texture_counts_changed",
+    "not_all_linked_Texture2D_importers_compared",
+))
+
+class StageFailure(ValueError):
+    def __init__(self, stage, original):
+        super().__init__("source-to-importer-comparison-inconclusive")
+        self.stage=stage
+        self.category=type(original).__name__
+        raw=str(original)
+        self.reason=raw if raw in SAFE_REASONS else "unclassified_safe_reason"
+
+
 def run(root:Path, manifest:Path, project:Path, w1path:Path, b02path:Path):
-    import UnityPy
-    material=b05.original_texenvs(root,owner_names={OWNER})
-    src=root/"Raft_Data"/OWNER
-    env=UnityPy.load(str(src))
-    paths=[x.path for x in env.file.externals]
-    source_set,counts=source_targets(material,paths,manifest_provider_basename_counts(manifest))
-    w1=json.loads(w1path.read_text(encoding="utf8"))
-    b02=json.loads(b02path.read_text(encoding="utf8"))
-    trace=subset_same_export(source_set,w1,b02)
-    sidecar=b15.sidecar_from_export_trace(project,trace)
-    # Under B15's original contract original_root is the directory holding
-    # serialized owner .assets files, not the ZIP2 transport root.
-    result=b15.inspect(root/"Raft_Data",project,sidecar)
-    return output_aggregate(result,counts)
+    stage="original_SHA_pinned_material_source"
+    try:
+        import UnityPy
+        material=b05.original_texenvs(root,owner_names={OWNER})
+        src=root/"Raft_Data"/OWNER
+        env=UnityPy.load(str(src))
+        paths=[x.path for x in env.file.externals]
+        stage="original_dependency_and_linked_Texture2D_selection"
+        source_set,counts=source_targets(material,paths,manifest_provider_basename_counts(manifest))
+        stage="same_export_W1_B02_exact_target_trace_selection"
+        w1=json.loads(w1path.read_text(encoding="utf8"))
+        b02=json.loads(b02path.read_text(encoding="utf8"))
+        trace=subset_same_export(source_set,w1,b02)
+        stage="actual_TextureImporter_guid_asset_mapping"
+        sidecar=b15.sidecar_from_export_trace(project,trace)
+        stage="actual_original_Texture2D_sampler_importer_field_compare"
+        # Under B15's original contract original_root is the directory holding
+        # serialized owner .assets files, not the ZIP2 transport root.
+        result=b15.inspect(root/"Raft_Data",project,sidecar)
+        stage="safe_six_sampler_field_result"
+        return output_aggregate(result,counts)
+    except Exception as ex:
+        raise StageFailure(stage,ex) from None
 
 
 def main(argv=None):
@@ -149,10 +195,16 @@ def main(argv=None):
     stage="original_source_and_trace"
     try:
         report=run(a.original,a.manifest,a.project,a.w1_trace,a.b02_trace)
+    except StageFailure as ex:
+        report={"schema_version":1,
+                "experiment":"T3-authentic-linked-original-TextureImporter-samplers",
+                "status":"INCONCLUSIVE","phase":ex.stage,"exception_type":ex.category,
+                "safe_failure_reason":ex.reason,
+                "original_sampler_or_phone_pixels_verified":False}
     except Exception as ex:
         report={"schema_version":1,
                 "experiment":"T3-authentic-linked-original-TextureImporter-samplers",
-                "status":"INCONCLUSIVE","phase":stage,"exception_type":type(ex).__name__,
+                "status":"INCONCLUSIVE","phase":"unclassified","exception_type":type(ex).__name__,
                 "original_sampler_or_phone_pixels_verified":False}
     a.out.parent.mkdir(parents=True,exist_ok=True)
     a.out.write_text(json.dumps(report,sort_keys=True,indent=2)+"\n",encoding="utf8")
