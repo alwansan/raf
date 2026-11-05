@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "session_id": "20261105T1104Z-T2-foam-material-property-bridge-isolated",
+  "issue_id": "WATER-001",
+  "track": "Foam SHA-authentic Unity Shader property to actual Material texture binding",
+  "status": "active",
+  "base_sha": "0da800c16cd641224cca7d50148215f6696b6bbd",
+  "hypothesis": "Original Shader m_PropInfo Texture properties exactly match pass-resolved original m_TextureParams identifiers for a bounded subset; local original Materials referencing Shader PathID2420 may contain corresponding original m_TexEnvs with typed texture pointers/UV transforms.",
+  "approach": "Read one SHA-pinned original ZIP2 sharedassets0.assets and Foam shader object, original private names only in memory; use B25 original pass name registry, B05 strict normalize_texenvs, W3 m_PropInfo parsed shader property schema. Verify actual Material m_Shader local PPtr & direct typed Texture2D pointers, never infer external or runtime upload. Publish only safe numeric counts, no property names/IDs/texture payload. Falsify missing/ambiguous/dynamic matches; independent SHA-pinned CI with adversarial synthetic controls.",
+  "taken_over_from": [
+    "scripts/b05_verify_material_texenv_bindings.py",
+    "scripts/probe_w3_shader_property_schema.py",
+    "scripts/b25_foam_cb_namebridge.py",
+    "scripts/t2_foam_texture_identity.py",
+    "scripts/t2_foam_original_dxbc_registers.py",
+    "docs/T2_FOAM_ORIGINAL_DXBC_SPIRV_ACTIVE_BRIDGE_2026-11-05.md"
+  ],
+  "intended_files": [
+    "scripts/t2_foam_material_property_bridge.py",
+    "tests/test_t2_foam_material_property_bridge.py",
+    ".github/workflows/raft-t2-foam-material-property-bridge.yml"
+  ],
+  "related_run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42013590671"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement source-only strict original Foam property and Material TexEnv string join, test on real SHA-locked source, classify exact scope, then advance original asset/provider dependencies as warranted.",
+  "updated_at": "2026-11-05T11:04Z"
+}
