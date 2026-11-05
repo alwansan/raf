@@ -4,9 +4,9 @@
   "origin": "chat",
   "session_id": "20261105T1611Z-T2-chat-foam-length-source-9ab4",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "1a5a48da31a3b7b6532d49eff182dc9c3afbc4e7",
-  "updated_at": "2026-11-05T16:35:00Z",
+  "updated_at": "2026-11-05T16:37:00Z",
   "resumed_from_scope": "T2|original-DLL-0a6f0527|exact-Foam-ldflda-refarray-call-int-length-formal|typed-caller-stack-v1",
   "experiment_key": "T2|original-DLL-0a6f0527|exact-Foam-ref-array-stelem-ref-value-source|same-block-v1",
   "resource_key": "T2-Foam-original-stelem-element-value-provenance",
@@ -26,5 +26,14 @@
     "distinct_team_shaders_T3": "disjoint",
     "distinct_team_water_FFT_T1": "disjoint"
   },
-  "next_step": "Compile synthetic correct/wrong origin and branch guards; run original SHA-pinned CI; report one real stelem ref value source and remaining runtime gap. WATER-001 OPEN NOT_READY0/3."
+  "next_step": "Read original CI42065864809 and T2_FOAM_ELEMENT_VALUE_SOURCE_SAFE; on failure fix first compile/test cause in owned code. No actual runtime RenderTexture pixels or ShaderLab claim.",
+  "source_commit": "d7d4af389d4a5235088055901ced5bf4b4bc084e",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42065864809"
+  ],
+  "result": {
+    "source": "Same SHA-original exact stelem.ref source opcode classification with synthetic RenderTexture constructor, null value and wrong typed constructor",
+    "CI": "in_progress",
+    "device": "not tested"
+  }
 }
