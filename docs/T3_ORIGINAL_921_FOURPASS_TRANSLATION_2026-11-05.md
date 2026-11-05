@@ -17,10 +17,33 @@ All scene/provider files are obtained from immutable ZIP2 commit `15964ea8f246b6
 
 Only safe **aggregate integer counters** are published: attempts, stages with valid original SPIR-V, HLSL generation, valid HLSL→SPIR-V roundtrip, source/reflected interfaces compared and structurally matching, resource-slot comparison counts. **No** original Shader names/IDs/GUIDs, DXBC, SPIR-V, generated HLSL, source paths, per-code digests or individual translated-program records may be logged or uploaded. All private program files are created inside an automatically deleted GitHub runner temporary directory. The artifact allow-list contains only two previously safe source-number reports and the new aggregate report. Original game assets and `.meta` are not edited.
 
-**Workflow:** [original high-use four-pass source translator](../.github/workflows/raft-t3-original-921-fourpass-translation.yml). **CI:** [#42052605123](https://github.com/alwansan/raf/actions/runs/42052605123). The authentic four-Pass outcome is **pending verification as this document is first written**; do not count green preliminary synthetic checks as a successful translation. At initial inspection, original SHA staging and source tests succeeded; package installation was in progress. T5 simultaneously owns an independent full native [CI42052375742](https://github.com/alwansan/raf/actions/runs/42052375742), which was not modified or cancelled.
+**Workflow:** [original high-use four-pass source translator](../.github/workflows/raft-t3-original-921-fourpass-translation.yml). **CI:** [#42052605123](https://github.com/alwansan/raf/actions/runs/42052605123). **Verified real outcome:** [CI42052605123](https://github.com/alwansan/raf/actions/runs/42052605123) completed **SUCCESS**, committed original source test at `86065408846ef4268ce9a26112c09547bd613bfc`; 15 new four-pass synthetic tests + 12 prior high-use source tests + 12 original Renderer source tests + 22 inherited B03 tests = **61 tests passed**, and the real original six-scene/four-owner SHA source translation completed. SHA-verified input and original source used, translated derivative files never uploaded. T5 simultaneously owns an independent full native [CI42052375742](https://github.com/alwansan/raf/actions/runs/42052375742), which was not modified or cancelled.
+
+
+## Verified real source translation and reflection counts
+
+All counts below come from the **real** source-bound pipeline in [CI42052605123](https://github.com/alwansan/raf/actions/runs/42052605123), not synthetic test fixtures. Artifact `t3-authentic-original-921-fourpass-SPIRV-HLSL-42052605123` (id **13427388772**) contains numeric aggregate JSON only.
+
+| Stage-level check (one real matched V/F pair × four original Passes) | Verified count |
+| --- | ---: |
+| Original normal Passes sampled | **4/4** |
+| Original compiled D3D11 stages attempted | **8/8** |
+| D3D11 stages translated to SPIR-V accepted by Vulkan 1.1 validator | **8/8** |
+| Source stages translated to derivative HLSL | **8/8** |
+| Derivative HLSL recompiled to Vulkan 1.1-valid SPIR-V | **8/8** |
+| Source SPIR-V stage reflections parsed | **8/8** |
+| HLSL roundtrip SPIR-V stage reflections parsed | **8/8** |
+| Original source-SPIR-V V/F linked Pass interfaces accepted structurally | **4/4** |
+| Roundtrip V/F linked Pass interfaces accepted structurally | **4/4** |
+| Original ↔ roundtrip **numeric resource-slot binding dictionaries** equal | **8/8** |
+| Original ↔ roundtrip **input/output location and type lists** equal | **0/8** |
+
+The last entry is a **proven structural reflection discrepancy** in all eight sampled stages, despite source- and roundtrip-**within-pass** V/F interfaces being mutually compatible and numeric resource-slot layouts appearing unchanged. The exact cause (builtin semantic remapping, explicit input/output relocation, change in register decorations/types, or other) has **not been determined**. This must NOT be erased by a permissive compare or used to claim pixel parity. Next isolate the drift privately by input vs output, location vs scalar type vs builtin semantic shape and test Unity-specific bindings; do not disclose original source shader identifiers or stage bytecode.
+
+Only 8 selected stage programs out of 58 distinct linked original DXBC programs and 4 selected pairs out of 33 original matched permutations were translated. Eight unpaired original Vertex variants remain **untranslated**. Source SubShader/Pass render states, per-stage uniform/resource names, sampler/matrix conventions, material keywords in Unity, actual Unity ShaderLab compilation and Adreno framebuffer output remain **unverified**.
 
 ## Interpretation safeguards
 
 An SPIR-V validation pass proves that the generated SPIR-V is structurally valid according to the selected validator, **not** ShaderLab render-state fidelity, binding semantic fidelity, correct textures/colors, original HLSL source, numeric image parity or Adreno device pixels. HLSL is a **derived translation**, not recovered original author source. A successful one-pair-per-Pass sample does **not** translate all 33 original matched pairs or restore the eight unpaired Vertex variants. Runtime framebuffer comparison, actual Unity 2021 ARM64/Vulkan shader compilation and device scenes remain separate later acceptance gates.
 
-**Next:** record real translation counts; identify the first failing phase if any, then privately inspect genuine constant buffer/texture/sampler/keyword and original Pass state. Do not install synthesized shaders, bypass Unity graphics gates or declare RENDER-002 READY.
+**Next:** investigate the real 0/8 stage input/output reflection parity before considering Unity ShaderLab installation. Compare generated original versus HLSL-roundtrip SPIR-V stage interface decorations and binding semantics privately; then inspect genuine constant buffer/texture/sampler/keyword and original Pass state. Do not install synthesized shaders, bypass Unity graphics gates or declare RENDER-002 READY.
