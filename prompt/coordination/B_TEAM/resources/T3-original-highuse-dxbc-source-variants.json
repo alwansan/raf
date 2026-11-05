@@ -1,0 +1,55 @@
+{
+  "id": "T3-AUTHENTIC-ORIGINAL-921-RENDERER-SHADER48-D3D11-PASS-VARIANT-LINKAGE",
+  "title": "T3 six-scene highest Renderer-use original Shader48: exact D3D11 pass and variant program linkage",
+  "kind": "source-sha-authenticated-targeted-original-compiled-shader-recovery-feasibility",
+  "owner": "T3",
+  "source": {
+    "provider": "original ZIP2 6 scenes/4 SHA-pinned Shader and Material owners",
+    "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "original_material_shader_owner_bytes": 269007288
+  },
+  "stages": {
+    "acquisition": "6 original level scenes and 4 owner files SHA_VERIFIED original ZIP2 source",
+    "extraction": "SELECTED_TRUE_SOURCE_SHADER48_BY_921_RENDERER_MATERIAL_SLOTS_AND_ORIGINAL_TYPED_PTR",
+    "reconstruction": "D3D11_PARSED_SUBSHADER_PASS_PROGRAM_AND_VERTEX_FRAGMENT_VARIANT_LINKAGE_SOURCE_ONLY",
+    "binding": "ALL_FOUR_PASS_HAVE_MATCHED_VERTEX_FRAGMENT_PERMUTATION_PAIR_33_PAIRS_8_UNMATCHED_VERTEX_VARIANTS",
+    "integration": "NOT_INSTALLED_NO_SHADERLAB_NO_ANDROID_FULL_NATIVE",
+    "device": "NOT_TESTED"
+  },
+  "data": {
+    "source_original_scenes": 6,
+    "source_shader_material_owners": 4,
+    "source_shader_material_owner_bytes": 269007288,
+    "renderer_material_slots_to_target": 921,
+    "subshaders": 1,
+    "passes": 4,
+    "normal_passes": 4,
+    "non_normal_passes": 0,
+    "d3d11_program_table_records": 120,
+    "linked_vertex_variant_records": 41,
+    "linked_fragment_variant_records": 33,
+    "distinct_private_dxbc_program_hashes": 58,
+    "exact_matched_vertex_fragment_pairs": 33,
+    "passes_with_at_least_one_pair": 4,
+    "unmatched_vertex_permutations": 8,
+    "unmatched_fragment_permutations": 0,
+    "stage_variants_with_keywords": 72
+  },
+  "source_top_name_exact_Unity2021_builtin": false,
+  "source_top_name_evidence": "https://github.com/alwansan/raf/actions/runs/42046329453",
+  "source_actual_postvendor_Dummy_verified": true,
+  "source_to_postvendor_evidence": "https://github.com/alwansan/raf/actions/runs/42044249541",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42047611046",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_921_SHADER_D3D11_STAGE_FEASIBILITY_2026-11-05.md",
+    "https://github.com/alwansan/raf/commit/71276a55afc165102852def8b84ea21995c3ca53"
+  ],
+  "limitations": [
+    "D3D11 source program linkage only; not original authored HLSL, Android shader, numerical or pixel parity",
+    "Unmatched eight original vertex permutations must not be dropped or given fabricated fragment pairs",
+    "No resource/constant buffer/sampler/texture binding or original pass state shaderlab translation yet",
+    "No game .shader/.meta or GUID edited, no APK/OBB/XAPK or device test"
+  ],
+  "updated_by": "T3",
+  "updated_at": "2026-11-05T14:45:34.592Z"
+}
