@@ -11,7 +11,7 @@ from pathlib import Path
 ROOT = {
     "schema_version", "source", "exact_dll_size_sha_verified",
     "read_target_unique", "write_target_unique", "original_methods_distinct",
-    "read", "write", "actual_file_io_invoked", "real_rgd_reopened",
+    "save_original_filename_directly_forwarded", "read", "write", "actual_file_io_invoked", "real_rgd_reopened",
     "android_or_unity_executed", "original_source_or_private_symbols_published",
 }
 EDGE = {
@@ -52,6 +52,8 @@ def validate(report):
            ("actual_file_io_invoked", "real_rgd_reopened",
             "android_or_unity_executed", "original_source_or_private_symbols_published")):
         raise ValueError("fabricated_runtime")
+    if type(report["save_original_filename_directly_forwarded"]) is not bool:
+        raise ValueError("original_save_filename_evidence_type")
     for label, param_count in (("read", 2), ("write", 1)):
         row = report[label]
         if not isinstance(row, dict) or set(row) != EDGE:
@@ -96,6 +98,7 @@ def validate(report):
     return {
         "status": "AUTHENTIC_COMPILED_IO_CONTROL_FLOW_CLASSIFIED",
         "original_binary_proven": True,
+        "save_argument_path_matches_original_filemanager_input": report["save_original_filename_directly_forwarded"],
         "read_io_intent": report["read"]["direct_io_intent"],
         "write_io_intent": report["write"]["direct_io_intent"],
         "read_normal_catch_exit_possible": report["read"]["catch_can_exit_normally"],
