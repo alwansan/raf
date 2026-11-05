@@ -146,10 +146,40 @@ def reuse_verified_staged_sources(rows, source_root, work_root=Path('.')):
 
         # Individual rename is atomic, but the sequence of renames is not a
         # cross-file transaction if the OS fails mid-publication.
-        for temporary, target, digest, size in staged:
-            os.replace(temporary, target)
-            reused += 1
-            reused_bytes += size
+        # Preserve original pointer bytes for best-effort recovery if a later
+        # rename fails. This is NOT an OS-level multi-file transaction.
+        originals = [(target, target.read_bytes() if target.exists() else None)
+                     for _, target, _, _ in staged]
+        published = []
+        try:
+            for temporary, target, digest, size in staged:
+                os.replace(temporary, target)
+                published.append(target)
+                reused += 1
+                reused_bytes += size
+        except OSError:
+            # Restore only files published by this call, in reverse order.
+            # Recovery itself can fail (disk/permissions); surface that error
+            # rather than claiming an all-or-nothing guarantee.
+            for target, previous in reversed(originals):
+                if target not in published:
+                    continue
+                if previous is None:
+                    target.unlink()
+                else:
+                    with tempfile.NamedTemporaryFile(
+                        dir=target.parent, prefix='.verified-zip2-rollback-',
+                        delete=False
+                    ) as rollback:
+                        rollback_path = Path(rollback.name)
+                        try:
+                            rollback.write(previous)
+                            rollback.flush()
+                            os.fsync(rollback.fileno())
+                            os.replace(rollback_path, target)
+                        finally:
+                            rollback_path.unlink(missing_ok=True)
+            raise
         return reused, reused_bytes
     finally:
         for temporary, target, digest, size in staged:
