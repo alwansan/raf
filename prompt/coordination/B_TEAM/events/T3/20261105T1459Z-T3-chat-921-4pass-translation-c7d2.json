@@ -1,0 +1,13 @@
+{
+  "id": "T3-20261105T1459Z-original921-fourpass-real-translation",
+  "owner": "T3",
+  "session_id": "20261105T1459Z-T3-chat-921-4pass-translation-c7d2",
+  "issue_id": "RENDER-002",
+  "type": "result",
+  "summary": "CI42052605123 SUCCESS true original 921-use 4-pass Shader48 source: one genuine original V/F pair per pass, 8/8 DXBC->Vulkan1.1 SPIRV->derived HLSL->roundtrip SPIRV accepted; 4/4 source and roundtrip Pass V/F interfaces structurally compatible, 8/8 resource slot dictionaries same, but original-vs-roundtrip per-stage IO location/type lists differ 0/8. 61 synthetic controls PASS. No Android, no full variants, no original ShaderLab authored source.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42052605123",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_921_FOURPASS_TRANSLATION_2026-11-05.md"
+  ],
+  "at": "2026-11-05T15:19:29.286Z"
+}
