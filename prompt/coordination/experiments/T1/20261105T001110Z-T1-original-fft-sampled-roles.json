@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "session_id": "20261104T235355Z-T1-9fca",
+  "issue_id": "WATER-001",
+  "hypothesis": "Original compiled FFT sampled descriptors for source texture and butterfly texture are not interchangeable even with identical original shaders, on 2-pass deterministic software Vulkan; distinguish original C# binding identities without inferring Unity runtime kernel IDs.",
+  "source_commit": "ec6618e14ef6a26ba0d0dc925f3b17056d03721a",
+  "input_hashes": [
+    {
+      "source": "alwansan/raf zip2",
+      "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+      "original_path": "Raft_Data/sharedassets0.assets",
+      "bytes": 115978112,
+      "sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3"
+    },
+    {
+      "source": "original ComputeShader pathID 2456",
+      "sha256": "9d934f5c99183c6df5cf2f1fefc9d3e5ec4bce5da5f96a86e4c02910d5322247"
+    }
+  ],
+  "tool_versions": {
+    "runner": "GitHub Actions ubuntu-24.04",
+    "python": "distribution Python 3",
+    "unitypy": "1.25.4 pinned",
+    "vkd3d-compiler": "Ubuntu 24.04 apt package",
+    "vulkan_driver": "Mesa lavapipe CPU (VK_DRIVER_FILES *lvp*.json)",
+    "vulkan_host": "C++17 isolated derivative of published A1 authentic two-pass host; source unmodified"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t1_fft_binding_sensitivity.py -v",
+    "g++ -std=c++17 -O2 -Wall -Wextra /tmp/t1-original-fft-host.cpp -lvulkan -o /tmp/t1-original-fft-host",
+    "python3 -m scripts.stage_zip2_fft_owner --zip2-checkout $RUNNER_TEMP/t1zip --destination $RUNNER_TEMP/t1original/Raft_Data/sharedassets0.assets",
+    "python3 -m scripts.t1_fft_binding_sensitivity --source $RUNNER_TEMP/t1original/Raft_Data --runner /tmp/t1-original-fft-host"
+  ],
+  "negative_controls": [
+    "6/6 source-free tests pass, including missing/malformed/duplicate fingerprint and changed runner anchor rejection.",
+    "CI41938039589 failed pre-private at strict source anchoring and was corrected in 318eb3d.",
+    "CI41938536760: original compiled candidate pair18, swap_second produced CPU Vulkan SIGSEGV/-11; not evidence of source correctness or Android failure.",
+    "CI41939082498: original compiled candidate pair10, swap_second produced tolerance=false though output finite/written; this unsafe comparator prevents bank1 numeric conclusion.",
+    "No private bytes, shader names, HLSL, SPIR-V modules, image pixels, or artifacts published."
+  ],
+  "workflow_path": ".github/workflows/raft-t1-fft-binding-sensitivity.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/41939314440",
+  "artifact_urls": [],
+  "budget": "Isolated CPU-only workflow. Restores just the 115978112-byte sharedassets0 owner from 3 ZIP2 parts without LFS, 2 candidate program pairs × 3 input-binding profiles = 6 true two-pass CPU Vulkan runs in final positive scope.",
+  "status": "completed",
+  "observed_result": {
+    "code_and_input_authenticated": true,
+    "synthetic_tests_passed": 6,
+    "original_candidate_pairs_tested": [
+      0,
+      8
+    ],
+    "original_pair_count": 2,
+    "original_two_pass_vulkan_executions": 6,
+    "first_pass_swaps_alter_original_outputs_pair_count": 2,
+    "second_pass_swaps_alter_original_outputs_pair_count": 2,
+    "original_cpu_gpu_output_pixels_published": false,
+    "bank1_original_candidate_pairs_verified": 0,
+    "unity_kernel_id_mapped": false,
+    "authored_compute_imported": false,
+    "adreno_phone_tested": false,
+    "ci_conclusion": "success"
+  },
+  "rejected_hypotheses": [
+    "The two original sampled image inputs t0/t1 are freely interchangeable in the tested bank0 workgroups: REJECTED by 6 authentic numeric runs.",
+    "Original compiled program slot equals Unity runtime FindKernel index: NOT PROVEN, do not assert.",
+    "Bank1 18 and 10 swapped second-stage profiles are safe numerical oracles in this lab: REJECTED by observed SIGSEGV/mismatch; no inference of original phone bug."
+  ],
+  "limitations": [
+    "CPU Mesa/lavapipe only, not hardware Vulkan/Adreno.",
+    "Two original compiled candidate pairs bank0 only; no bank1 result.",
+    "No Unity 2021.3 native .compute, no FindKernel/Dispatch or runtime shader object identity proof.",
+    "No Android APK/OBB/XAPK produced and device water still reported broken in APK86.",
+    "Two-pass original shader numeric role sensitivity is not full FFT correctness or image fidelity."
+  ],
+  "integration_commit": "ec6618e14ef6a26ba0d0dc925f3b17056d03721a",
+  "next_step": "Stage genuine original derived FFT compute variants with importable Unity .compute source and verified multiple runtime kernels in isolated Unity 2021 harness; preserve C# original index semantics and test Adreno separately."
+}

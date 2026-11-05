@@ -1,0 +1,15 @@
+{
+  "id": "T1-20261105T001110Z-T1-original-fft-sampled-roles",
+  "owner": "T1",
+  "session_id": "20261104T235355Z-T1-9fca",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Original SHA-pinned FFT actual CPU Vulkan bank0 sampled input noninterchangeability proven for 2/2 original pairs (6 pipelines); bank1 pair18 SIGSEGV and pair10 no identical-source comparison retained inconclusive. Does NOT restore Unity shader kernels or device water.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41939314440",
+    "https://github.com/alwansan/raf/actions/runs/41938536760",
+    "https://github.com/alwansan/raf/actions/runs/41939082498",
+    "prompt/coordination/experiments/T1/20261105T001110Z-T1-original-fft-sampled-roles.json"
+  ],
+  "at": "2026-11-05T00:14:17.595Z"
+}

@@ -5,16 +5,18 @@
   "session_id": "20261104T235355Z-T1-9fca",
   "issue_id": "WATER-001",
   "track": "P0 FFT runtime FindKernel/Dispatch and original .compute asset integration",
-  "approach": "Trace original original-byte SHA-pinned Dx11FFT/GpuFFT dispatch path, existing Unity-exported compute resources and current loader; address one demonstrated runtime/kernel integration defect instead of repeating 20-program DXBC census.",
+  "approach": "In parallel with original Unity compute integration, prove typed sampled image identity matters numerically using true SHA-authenticated original FFT DXBC in isolated lavapipe two-pass pipelines. Keep unsafe bank1 negative evidence and reserve authored .compute/FindKernel work for next step.",
   "status": "active",
   "base_sha": "cde13f783e5274d5898703459e8178e2485ef9db",
   "intended_files": [
-    "scripts/t1_fft_runtime_contract.py",
-    "tests/test_t1_fft_runtime_contract.py",
+    "scripts/t1_fft_binding_sensitivity.py",
+    "tests/test_t1_fft_binding_sensitivity.py",
+    ".github/workflows/raft-t1-fft-binding-sensitivity.yml",
+    "docs/T1_ORIGINAL_FFT_INPUT_ROLES_2026-11-05.md",
     "prompt/coordination/clients/T1/*",
-    "prompt/coordination/work/WATER-001/*",
     "prompt/coordination/experiments/T1/*",
-    "prompt/coordination/B_TEAM/events/T1/*"
+    "prompt/coordination/B_TEAM/events/T1/*",
+    "prompt/coordination/B_TEAM/resources/*"
   ],
   "hypothesis": "Available original compiled-slot identity is insufficient to infer Unity runtime kernel indices; a runtime caller/serialized asset comparison can identify the missing binding and support a fail-closed integration fix.",
   "related_work": [
@@ -30,10 +32,18 @@
     "https://github.com/alwansan/raf/actions/runs/41931883517",
     "https://github.com/alwansan/raf/actions/runs/41912422220"
   ],
-  "last_verified_result": "B18 41931883517: 20 original compiled programs translated with identical SSA under two explicit descriptor maps, not Unity runtime kernel equivalence; APK86 original device FFT invalid kernels remain.",
-  "experiment_ids": [],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Read original call-graph source and exported compute asset; implement and test a concrete authenticity/runtime binding gate in isolated code.",
-  "updated_at": "2026-11-04T23:54:43.431Z"
+  "last_verified_result": "T1 positive actual source-authentic CPU Vulkan 41939314440: 6 executions across two bank0 2-pass original pairs, both first/second sampled input swaps numerically matter; bank1 swap negative outcomes 41938536760 -11 and 41939082498 comparator mismatch. Unity and phone still unproven.",
+  "experiment_ids": [
+    "20261105T001110Z-T1-original-fft-sampled-roles"
+  ],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41939314440",
+    "https://github.com/alwansan/raf/actions/runs/41938536760",
+    "https://github.com/alwansan/raf/actions/runs/41939082498",
+    "https://github.com/alwansan/raf/actions/runs/41938039589",
+    "https://github.com/alwansan/raf/actions/runs/41938194915"
+  ],
+  "result": "Scoped independent FFT input-role proof done. BANK0: 2/2 pairs, 6 original two-pass executions, first/second swapped input changes output. BANK1: two negative/inconclusive safety cases. Full Unity kernel mapping not established.",
+  "next_step": "Move from FFT original-byte descriptor-role proof to actual isolated authored ComputeShader .compute/staging for Unity 2021 kernel enumeration, preserving source identity and no fake indices; coordinate full native builds with T5. Continue WATER-001 OPEN.",
+  "updated_at": "2026-11-05T00:14:17.595Z"
 }

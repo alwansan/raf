@@ -79,7 +79,10 @@
     "https://github.com/alwansan/raf/commit/c5bb92083d8a704977ac5a8495dec29f1c6958e6",
     "https://github.com/alwansan/raf/actions/runs/41938898381",
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_MEMBER_ABI_NAME_BRIDGE_2026-11-05.md",
-    "https://github.com/alwansan/raf/actions/runs/41938551022"
+    "https://github.com/alwansan/raf/actions/runs/41938551022",
+    "https://github.com/alwansan/raf/actions/runs/41939314440",
+    "https://github.com/alwansan/raf/actions/runs/41938536760",
+    "https://github.com/alwansan/raf/actions/runs/41939082498"
   ],
   "remaining": [
     "Spectrum/Foam/Blur passes ناقصة في APK86",
@@ -116,13 +119,14 @@
     "B18 CI41930824777 source-authentic FFT 20/20 programs each mapped by libvkd3d-shader to two different CHOSEN descriptor layouts (20x2 passes), using SRV t0/t1 and UAV u0 explicit IMAGE flags; 10/10 synthetic controls PASS. This proves explicit target interface binding support, NOT original per-input numeric t0/t1 behavior, Unity FindKernel/index mapping, original ShaderLab restored passes or Adreno water pixels. WATER-001 remains OPEN.",
     "B18 CI41931883517 source-authentic original FFT SPIR-V identity: 20/20 compiled programs × two explicit target maps have stable 3 resource variable IDs and entire SPIR-V code byte-equivalent after masking only intended descriptor set/binding OpDecorate literals; 20/20 synthetic tests PASS. No independent t0 vs t1 numerical pixel behavior, authored shader import, Unity runtime FindKernel mapping or Adreno device proof; water remains broken in APK86, WATER-001 OPEN.",
     "B20 original Foam CI41931585626: all four HLSL b-register and SPIRV set0-binding slot sets numerically equal B25 authentic original CB register sets (8 links). But original partial CB m_Size vs reflected SPIRV block_size numerically differ 7/8; original member offset/type equivalence and opaque CB0 source→HLSL alias/Unity material upload remain UNPROVEN. CI41932300308 source-only size checker PASS9/9. Not original ShaderLab render or Android device proof.",
-    "T2 authenticated original Foam CB member indices + private 3-way CB symbol bridge: original source→translated HLSL name 0/8 equals, translated HLSL→SPIRV name 8/8 equals; source names literal HLSL usable 4/8; 20/20 synthetic controls + real ZIP2 CI41938898381 SUCCESS. Original register identity/byte offsets CB0 alias/Unity material upload and real ShaderLab/Adreno still UNKNOWN (source-only)."
+    "T2 authenticated original Foam CB member indices + private 3-way CB symbol bridge: original source→translated HLSL name 0/8 equals, translated HLSL→SPIRV name 8/8 equals; source names literal HLSL usable 4/8; 20/20 synthetic controls + real ZIP2 CI41938898381 SUCCESS. Original register identity/byte offsets CB0 alias/Unity material upload and real ShaderLab/Adreno still UNKNOWN (source-only).",
+    "T1 original bank0 FFT compiled candidate pairs 0/1 and 8/9: 6/6 authentic 2-pass CPU Vulkan runs, both first and second sampled read-input swaps change numeric output (2/2 pairs), CI41939314440. Bank1 pair18 second-swap SIGSEGV in Mesa (CI41938536760), bank1 pair10 second-swap independent identical-program comparator mismatch (CI41939082498); these are explicitly INCONCLUSIVE, not original Unity kernel or source rescue. WATER-001 remains OPEN; Unity .compute/FindKernel/Android pixels untested."
   ],
   "acceptance": [
     "هوية برامج ونوى أصلية أو تطابق موثق دونdummy",
     "تثبيت فيالتصدير+Unity import/render",
     "اختبار هاتف يثبت الماء بلا pass/kernel errors"
   ],
-  "updated_by": "T2",
-  "updated_at": "2026-11-05T00:08:00Z"
+  "updated_by": "T1",
+  "updated_at": "2026-11-05T00:14:17.595Z"
 }
