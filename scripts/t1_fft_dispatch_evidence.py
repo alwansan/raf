@@ -21,6 +21,11 @@ def audit(source: bytes, expected_sha256: str) -> dict:
         text = source.decode("utf-8")
     except UnicodeDecodeError as exc:
         raise ValueError("Original caller must be UTF-8") from exc
+    # Mask C# 11 raw (including interpolated) strings before ordinary tokens.
+    # This deliberately ignores interpolation expressions: a lexical hit is not
+    # evidence of a ComputeShader call, and false negatives fail closed.
+    raw_literals = re.compile(r'\$*(?P<quotes>"{3,})[\s\S]*?(?P=quotes)')
+    text = raw_literals.sub(lambda m: " " * len(m.group()), text)
     # Mask strings and comments: names inside diagnostics are not calls.
     masked = re.sub(r'''(?:\$@|@\$|@)"(?:[^"]|"")*"|\$?"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|//[^\n]*|/\*[\s\S]*?\*/''',
                     lambda m: " " * len(m.group()), text)
