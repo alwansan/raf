@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T1100Z-T3-original-material-shader-edges",
+  "issue_id": "RENDER-002",
+  "track": "colors-materials/real-ShadeExportMode-Decompile-vs-Dummy",
+  "approach": "SHA-pinned original 12-provider AssetRipper export identical to CI42021188920 except explicit ShaderExportMode.Decompile set in disposable CI local Program.cs (never commit/modify shared Program); compare actual 41 Material→10 Shader PPtrs, 9 custom ShaderLab m_ParsedForm 31 Pass topology, presence of DummyShaderTextExporter marker. Retain private original/exported Shader source in runner, publish aggregate only.",
+  "status": "active",
+  "base_sha": null,
+  "intended_files": [
+    ".github/workflows/raft-t3-real-shader-decompile-export.yml",
+    "scripts/t3_same_export_shader_pass_topology.py",
+    "prompt/coordination/clients/T3/sessions/20261105T1100Z-T3-original-material-shader-edges.md"
+  ],
+  "hypothesis": "Dummy 9-of-9 ShaderLab/22 missing Passes in default mode reflect only explicit ShaderExportMode.Dummy default; opting into original USC Decompile should recover some or all 31 actual Pass structures without dummy fallback, but may be unstable and cannot be assumed production-ready.",
+  "related_work": [
+    "https://github.com/alwansan/raf/actions/runs/42021188920",
+    "https://raw.githubusercontent.com/nowl-it/AssetRipperCLI/036098ab525a3f9f693dc101edeb21faad4d32d8/Source/AssetRipper.Export.UnityProjects/Configuration/ExportSettings.cs",
+    "https://raw.githubusercontent.com/nowl-it/AssetRipperCLI/036098ab525a3f9f693dc101edeb21faad4d32d8/Source/AssetRipper.Export.UnityProjects/Shaders/USCShaderExporter.cs"
+  ],
+  "taken_over_from": [
+    "android-port/Experiments/ExportLineage/Program.cs",
+    "scripts/t3_same_export_shader_pass_topology.py",
+    "scripts/w1_audit_export_material_shaders.py"
+  ],
+  "experiment_ids": [
+    "T3-actual-original-ShaderDecompile-20261105"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Create isolated no-LFS, 12 SHA-authenticated owner, 2-core, 35-min workflow with exact source anchor changing disposable ShaderExportMode from Dummy to Decompile, inspect same-export 31 custom original Pass vs actual ShaderLab counts and dummy fallback markers. No project assets, .meta, shared workflow, APK, or GPU changes.",
+  "updated_at": "2026-11-05"
+}
