@@ -105,7 +105,20 @@ def classify(run, jobs, artifacts, *, expected_id, expected_sha):
     if status != "completed":
         verdict = "awaiting_terminal_workflow"
     elif native_result == "cancelled":
-        verdict = "native_job_cancelled_no_source_failure_established"
+        # A cancelled job may also contain a failed step. Do not erase that
+        # independent evidence or claim the cancellation caused the failure.
+        steps = native.get("steps", []) if native else []
+        if not isinstance(steps, list):
+            raise ValueError("GitHub job steps must be an array")
+        failed_step_seen = any(
+            isinstance(step, dict) and step.get("conclusion") == "failure"
+            for step in steps
+        )
+        verdict = (
+            "native_job_cancelled_failed_step_causality_unresolved"
+            if failed_step_seen else
+            "native_job_cancelled_no_source_failure_established"
+        )
     elif native_result in {"failure", "timed_out"}:
         verdict = "native_job_failed_or_timed_out"
     elif native_result == "success":
