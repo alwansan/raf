@@ -64,3 +64,10 @@ Canonical WATER-001 remains **OPEN**, Raft **NOT_READY 0/3**.
 Next T2 scope: verify original integer distinctness/range *privately* against
 authenticated array-size/element-writer provenance; never invent aliases
 or the original array contents.
+
+
+## Addendum: private signed IL-int decoding and actual artifact gate — 2026-11-05T14:20Z
+
+T2's subsequent original SHA-pinned experiment [CI42043293335](https://github.com/alwansan/raf/actions/runs/42043293335) **COMPLETED SUCCESS** on source commit [43a6338](https://github.com/alwansan/raf/commit/43a633869a4185bd0176e139b9abf3b28045bd8e). It extends the exact original four-name `Material.SetTexture(string,Texture)` argument flow: all four previously proven direct integer IL sources were **decoded in private scratch** from typed `ldc.i4.m1`, short signed `ldc.i4.s`, compact and wide `ldc.i4` forms. Public synthetic tests reject method-argument and metadata-token false literal evidence and include duplicate/negative controls. The original report passes the exact **four decoded integer** gate and preserves a safe *distinct-count integer in 1..4* and *all-nonnegative boolean*, without exporting any four original numeric values or reversible numeric hashes.
+
+Safe artifact ID `13423996658`, GitHub-reported SHA256 `724e25d6f7de6d78abb054a75f37bdd73303096a19205e485efbc1f548edc00b`. Its **actual** distinct-count and sign output values have **not been inspected by this chat** due artifact ZIP reader limitations; do **not** infer four distinct/positive inputs from the mere successful CI gate. The original `RenderTexture[]` allocation, actual runtime length and element validity, `Material` receiver shader relationship, true Foam two-pass ShaderLab integration and Adreno pixels remain unverified. A source-only CI pass is **not** a playable water result. Work/experiment/event and artifact identifiers are in `prompt/coordination/clients/T2/sessions/20261105T1408Z-T2-chat-foam-four-i4-uniqueness-4e7a.md`. **WATER-001 OPEN / NOT_READY 0/3**.
