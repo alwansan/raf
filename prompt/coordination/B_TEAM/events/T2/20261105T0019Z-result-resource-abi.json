@@ -1,0 +1,14 @@
+{
+  "id": "T2-20261105T0019Z-result-resource-abi",
+  "owner": "T2",
+  "session_id": "20261104T2354Z-T2-foamabi01",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "summary": "Original SHA-authenticated Foam PathID2420 source has p0 fragment 5 textures/p1 fragment 1 texture (vertices zero); four translated genuine SPIRV stages provide exactly six separate sampled images + six samplers, structural numeric slot/signature guard enforced. Real source CI41939956032 and final CI41940321740 SUCCESS (20 CB+17 resource tests). Texture/sampler original-to-compiled names/state, Unity ShaderLab, material upload and phone remain UNKNOWN, WATER-001 OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/41939956032",
+    "https://github.com/alwansan/raf/actions/runs/41940321740",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_ORIGINAL_TEXTURE_SAMPLER_ABI_2026-11-05.md"
+  ],
+  "at": "2026-11-05T00:19:00Z"
+}
