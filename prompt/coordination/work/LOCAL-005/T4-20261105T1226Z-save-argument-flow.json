@@ -4,7 +4,7 @@
   "generation": "T-2026-11-05",
   "session_id": "20261105T1226Z-T4-original-save-argument",
   "issue_id": "LOCAL-005",
-  "status": "active",
+  "status": "completed",
   "base_sha": "4b9771c522306392f3dfc503ec9f6944a5a840e1",
   "track": "world-save",
   "hypothesis": "The new post-Save File.Exists(filename) telemetry only observes the actual file path if the authentic original SaveAndLoad.Save compiled call to FileManager.Create uses the same first filename argument unchanged. Verify compiled IL argument stack immediately before the exact resolved FileManager target rather than assuming decompiled source semantics.",
@@ -22,8 +22,19 @@
   "related_work": [
     "docs/T4_ORIGINAL_FILE_IO_CONTROL_FLOW_2026-11-05.md"
   ],
-  "run_urls": [],
-  "result": null,
-  "updated_at": "2026-11-05T12:26:00Z",
-  "next_step": "Check exact compiled original Save call argument forwarding; integrate only grounded filename-context observation. Maintain source pins and no game/device claim."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42027197515"
+  ],
+  "result": {
+    "original_dll_size": 3211776,
+    "original_dll_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "compiled_original_Save_filename_directly_forwarded": true,
+    "compiled_original_FileManager_writer_BCL": "File.Create",
+    "original_compiled_try_one_IO_three_catch_callers_verified": true,
+    "controls": "21/21 PASS",
+    "actual_original_game_android_save": false,
+    "report": "docs/T4_ANDROID_SAVE_FILE_POSTCHECK_2026-11-05.md"
+  },
+  "updated_at": "2026-11-05T12:33:00Z",
+  "next_step": "Original compiled direct filename forwarding verified; Android-only filename snapshot now has grounded pathname. Device save durability, local world and .rgd reopen still unverified."
 }
