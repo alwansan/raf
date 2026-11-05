@@ -9,7 +9,7 @@ def classify(instructions, *, max_states=10000, max_locals=4096):
     n = len(instructions)
     incoming = {0: ((), ())}
     pending = deque([0])
-    returns = []
+    returns = {}
     steps = 0
     def join(a, b):
         sa, la = a
@@ -45,9 +45,9 @@ def classify(instructions, *, max_states=10000, max_locals=4096):
             ls[arg] = value
             locals_ = tuple(ls)
             successors = [pc+1]
-        elif op == "br" and isinstance(arg,int):
+        elif op == "br" and type(arg) is int:
             successors = [arg]
-        elif op == "brtrue" and isinstance(arg,int) and stack:
+        elif op == "brtrue" and type(arg) is int and stack:
             stack = stack[:-1]
             successors = [arg,pc+1]
         elif op == "ldcond":
@@ -56,7 +56,7 @@ def classify(instructions, *, max_states=10000, max_locals=4096):
         elif op == "nop":
             successors = [pc+1]
         elif op == "ret":
-            returns.append(stack[-1] if len(stack)==1 else UNKNOWN)
+            returns[pc] = stack[-1] if len(stack)==1 else UNKNOWN
             continue
         else:
             return UNKNOWN
@@ -76,4 +76,5 @@ def classify(instructions, *, max_states=10000, max_locals=4096):
             else:
                 incoming[target] = candidate
                 pending.append(target)
-    return returns[0] if returns and all(v == returns[0] for v in returns) else UNKNOWN
+    values = tuple(returns.values())
+    return values[0] if values and all(v == values[0] for v in values) else UNKNOWN
