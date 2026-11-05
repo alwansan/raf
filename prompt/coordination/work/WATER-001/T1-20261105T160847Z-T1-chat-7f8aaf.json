@@ -1,0 +1,19 @@
+{
+  "id": "20261105T160847Z-T1-chat-7f8aaf",
+  "session_id": "20261105T160847Z-T1-chat-7f8aaf",
+  "origin": "chat",
+  "owner": "T1",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "2ca961949db2211a1c177757084836fb2ce8f74f",
+  "updated_at": "2026-11-05T16:08:47.899Z",
+  "intended_files": [
+    "scripts/t1_fft_pass0_load_inventory.py",
+    "tests/test_t1_fft_pass0_load_inventory.py",
+    ".github/workflows/raft-t1-fft-vulkan-roundtrip-isolation.yml"
+  ],
+  "experiment_key": "authenticated-pass0-generated-hlsl-texture-helper-body-usage-cpu",
+  "resumed_from_sessions": [
+    "20261105T160359Z-T1-chat-15ae9e"
+  ]
+}
