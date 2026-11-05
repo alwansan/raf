@@ -6,6 +6,8 @@ on:
       - scripts/t2_foam_member_abi.py
       - tests/test_t2_foam_member_abi.py
       - .github/workflows/raft-t2-foam-member-abi.yml
+      - scripts/t2_foam_resource_abi.py
+      - tests/test_t2_foam_resource_abi.py
   workflow_dispatch:
 
 permissions:
@@ -31,6 +33,8 @@ jobs:
           set -euo pipefail
           python3 -m py_compile scripts/t2_foam_member_abi.py
           python3 -m unittest discover -s tests -p 'test_t2_foam_member_abi.py' -v
+          python3 -m py_compile scripts/t2_foam_resource_abi.py
+          python3 -m unittest discover -s tests -p 'test_t2_foam_resource_abi.py' -v
       - name: Runner budget guard
         run: |
           python3 - <<'PY'
@@ -99,6 +103,25 @@ jobs:
           assert not r["shaderlab_installed"] and not r["android_pixels_verified"]
           assert not r["private_source_published"]
           PY
+      - name: Compare authenticated original Foam resource tables with compiled stage descriptor interface
+        run: |
+          set -euo pipefail
+          timeout 180s python3 -m scripts.t2_foam_resource_abi \
+            --source "$RUNNER_TEMP/t2-foam-source" \
+            --packet "$RUNNER_TEMP/t2-foam-private-packet" \
+            --manifest "$RUNNER_TEMP/t2-foam-manifest.json" \
+            --out "$RUNNER_TEMP/t2-resource-safe.json"
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          r=json.loads((Path(os.environ["RUNNER_TEMP"])/"t2-resource-safe.json").read_text())
+          assert r["status"]=="original_foam_resource_interface_observed"
+          assert r["original_passes"]==2 and r["original_stages"]==4
+          assert len(r["rows"])==4
+          assert not r["shaderlab_or_unity_import_verified"]
+          assert not r["original_name_register_join_verified"]
+          assert not r["private_shader_symbols_published"] and not r["device_pixels_verified"]
+          PY
       - name: Remove private source and translated programs even on failure
         if: always()
         run: |
@@ -109,6 +132,8 @@ jobs:
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: t2-foam-member-safe-${{ github.run_id }}
-          path: ${{ runner.temp }}/t2-safe.json
+          path: |
+            ${{ runner.temp }}/t2-safe.json
+            ${{ runner.temp }}/t2-resource-safe.json
           if-no-files-found: ignore
           retention-days: 7
