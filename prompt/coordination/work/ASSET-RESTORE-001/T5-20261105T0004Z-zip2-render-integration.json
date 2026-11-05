@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "session_id": "20261104T2357Z-T5-b12-fixture-7e2",
+  "issue_id": "ASSET-RESTORE-001",
+  "track": "integration-original-graphics-acquisition",
+  "approach": "Implement a pinned ZIP2-to-verified-render-payload bridge that reconstructs only requested feature LFS graphics owners, verifies manifest and independent LFS SHA/size, atomically stages ephemeral source; add isolated real-owner CI and integrate opt-in reuse into existing hydrate_render_payloads (no edits to shared native workflow).",
+  "status": "active",
+  "base_sha": "711dc94bebe342e07d1f8ffe6e46bc8d79c108b5",
+  "intended_files": [
+    "scripts/t5_stage_zip2_render_owners.py",
+    "tests/test_t5_stage_zip2_render_owners.py",
+    "scripts/hydrate_render_payloads.py",
+    ".github/workflows/raft-t5-zip2-render-stage.yml",
+    "prompt/coordination/clients/T5/",
+    "prompt/coordination/B_TEAM/events/T5/"
+  ],
+  "hypothesis": "Current real native staging still relies on LFS for graphics except W1 subset, despite pinned ZIP2 original provider. A selective ZIP2 stage matched against independent feature LFS size/SHA can provide actual source assets without LFS and feed existing hydration consumer, preserving full asset fidelity.",
+  "related_work": [
+    "https://github.com/alwansan/raf/actions/runs/41937719270",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/ZIP2_SOURCE_PROVIDER.md"
+  ],
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/B03/MEMORY.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/B13/MEMORY.md"
+  ],
+  "experiment_ids": [
+    "T5-20261105T0004Z-original-owner-bridge"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Code SHA-locked reconstruction to isolated staging with fail-closed split manifest; run synthetic tests and SHA-verified real original owner in isolated CI; avoid touching shared Unity workflow and publishing raw data.",
+  "updated_at": "2026-11-05T00:04:06.546Z"
+}
