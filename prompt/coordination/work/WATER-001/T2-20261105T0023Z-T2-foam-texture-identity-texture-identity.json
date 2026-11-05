@@ -6,7 +6,7 @@
   "issue_id": "WATER-001",
   "track": "foam-original-texture-name-index-to-spirv-identity",
   "approach": "Use authenticated original Foam pass m_NameIndices and fragment m_TextureParams (six rows) to cross-check exact original texture symbol identity vs reflected translated SPIR-V separate image names while retaining source m_Index/sampler index as numeric observations only. Fail closed on duplicates/missing schema, never equate matching counts or names with sampler state/Unity upload, report safe aggregate only, then run existing SHA-pinned private Foam workflow with adversarial controls.",
-  "status": "active",
+  "status": "completed",
   "base_sha": "87d1869a580f2f028db5e81434b63a2e6774eee4",
   "intended_files": [
     "scripts/t2_foam_texture_identity.py",
@@ -28,8 +28,22 @@
   "experiment_ids": [
     "T2-foam-texture-name-identity-20261105"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Implement bounded private texture registry symbol matching and type/index checks, run synthetic negatives and SHA-pinned original-source CI, then infer only evidence-supported next shader binding decision.",
-  "updated_at": "2026-11-05T00:24:23.912Z"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/41941354379"
+  ],
+  "result": {
+    "scope": "Private SHA-authenticated original Foam texture-name literal continuity vs translated SPIR-V separate_image symbols",
+    "original_texture_rows": 6,
+    "translated_separate_images": 6,
+    "translated_separate_samplers": 6,
+    "literal_source_name_equal_reflected_spirv_image_names": 0,
+    "synthetic_tests_added": 15,
+    "synthetic_tests_total_in_job": 52,
+    "source_original_workflow_success": true,
+    "source_to_shaderlab_material_upload_verified": false,
+    "original_sampler_state_verified": false,
+    "unity_or_device_pixels_verified": false
+  },
+  "next_step": "With 0/6 original literal texture symbols preserved, inspect original m_Index/m_SamplerIndex and translated active sample register/source-use in private stage, prove explicit alias/material binding before real Foam ShaderLab/Unity.",
+  "updated_at": "2026-11-05T00:29:14.530Z"
 }
