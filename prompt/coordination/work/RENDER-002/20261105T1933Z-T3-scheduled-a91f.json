@@ -2,7 +2,7 @@
   "session_id": "20261105T1933Z-T3-scheduled-a91f",
   "origin": "scheduled",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed",
   "base_sha": "fc6aeedc72d8b215e3f21feaa83607cf4affff79",
   "intended_files": [
     "scripts/t3_native_original_921_shader_target_audit.py",
@@ -17,5 +17,12 @@
     "20261105T1831Z-T3-scheduled-profileguard-7b2e",
     "20261105T1815Z-T3-chat-native-source921-guid-6cb4"
   ],
-  "updated_at": "2026-11-05T19:33:00Z"
+  "updated_at": "2026-11-05T19:37:00Z",
+  "result": "Fail-closed unknown_exporter/unbalanced marker-free native shader profile; source-only tests added, CI pending",
+  "commits": [
+    "26f4c222f7e498b397ac162d1cd35ae007b99d80",
+    "ee7c43f0324437a1edc05a429ae03b8dd9c175a6",
+    "403591076de2d251676ec9d0e3549f474b6c8150"
+  ],
+  "next_step": "Verify new tests in CI; then run authentic SHA-pinned private original 921 source-to-native GUID join once."
 }
