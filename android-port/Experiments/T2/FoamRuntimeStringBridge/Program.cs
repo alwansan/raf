@@ -311,7 +311,7 @@ internal static class Program
             Summary scan = Scan(WalkTypes(assembly.MainModule.Types)
                                     .SelectMany(t => t.Methods),non,author);
             string safe = JsonSerializer.Serialize(PublicReport(scan,true,false));
-            File.WriteAllText(output,safe + Environment.NewLine,Encoding.UTF8);
+            File.WriteAllText(output,safe + Environment.NewLine,new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
             Console.WriteLine("T2_FOAM_MANAGED_IL " + JsonSerializer.Serialize(new
             {
                 status = "source_authenticated_original_managed_IL_static_scan_complete",
