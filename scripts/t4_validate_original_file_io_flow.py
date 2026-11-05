@@ -20,6 +20,12 @@ EDGE = {
     "finally_handler_count", "catch_contains_leave",
     "catch_contains_explicit_throw", "catch_contains_null_literal",
     "catch_can_exit_normally", "exception_swallow_on_device_proven",
+    "original_try_calls", "original_catch_calls",
+    "original_outside_handler_calls", "original_transitive_callees_executed",
+}
+CALL_GROUPS = {
+    "system_io", "system_non_io", "same_original_filemanager",
+    "other_original_or_external",
 }
 CATEGORIES = {"void", "string", "bool", "byte_array", "stream", "io_enum",
               "integer", "byref_other", "other"}
@@ -74,6 +80,19 @@ def validate(report):
             raise ValueError("incoherent_handler_exit")
         if row["exception_swallow_on_device_proven"] is not False:
             raise ValueError("fabricated_swallow")
+        if row["original_transitive_callees_executed"] is not False:
+            raise ValueError("fabricated_transitive_execution")
+        phases = []
+        for phase in ("original_try_calls", "original_catch_calls",
+                      "original_outside_handler_calls"):
+            counts = row[phase]
+            if not isinstance(counts, dict) or set(counts) != CALL_GROUPS or any(
+                    type(n) is not int or n < 0 or n > 4 for n in counts.values()):
+                raise ValueError("call_phase_schema")
+            phases.append(counts)
+        if sum(sum(p.values()) for p in phases) != 4 or any(
+                sum(p[k] for p in phases) != 1 for k in CALL_GROUPS):
+            raise ValueError("unverified_original_call_group_cardinality")
     return {
         "status": "AUTHENTIC_COMPILED_IO_CONTROL_FLOW_CLASSIFIED",
         "original_binary_proven": True,
@@ -81,6 +100,12 @@ def validate(report):
         "write_io_intent": report["write"]["direct_io_intent"],
         "read_normal_catch_exit_possible": report["read"]["catch_can_exit_normally"],
         "write_normal_catch_exit_possible": report["write"]["catch_can_exit_normally"],
+        "read_catch_local_and_external_calls": (
+            report["read"]["original_catch_calls"]["same_original_filemanager"] +
+            report["read"]["original_catch_calls"]["other_original_or_external"]),
+        "write_catch_local_and_external_calls": (
+            report["write"]["original_catch_calls"]["same_original_filemanager"] +
+            report["write"]["original_catch_calls"]["other_original_or_external"]),
         "original_device_file_io_executed": False,
         "rgd_reopen_proven": False,
     }
