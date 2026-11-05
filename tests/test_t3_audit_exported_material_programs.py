@@ -82,6 +82,37 @@ class MaterialShaderQuality(unittest.TestCase):
         self.assertEqual(r["counts"]["shader_files_with_unbalanced_ShaderLab"],1)
         self.assertEqual(r["counts"]["material_docs_using_unbalanced_ShaderLab"],1)
 
+
+    def test_programmed_first_subshader_does_not_hide_incomplete_sibling(self):
+        (self.assets/"g.shader").write_text(
+            'Shader "Synthetic" { '
+            'SubShader { Pass { CGPROGRAM\nvoid frag() {}\nENDCG } } '
+            'SubShader { Pass { ZWrite Off } } }',encoding="utf8")
+        c=t3.audit(self.root)["counts"]
+        # Existing any-program counter stays true, but the second quality
+        # tier remains structurally incomplete. Not a GPU/pixel verdict.
+        self.assertEqual(c["material_docs_using_Shader_with_completed_program_pass"],3)
+        self.assertEqual(c["shader_files_with_partial_subshader_program_coverage"],1)
+        self.assertEqual(c["material_docs_using_Shader_with_partial_subshader_program_coverage"],1)
+
+    def test_two_complete_subshaders_have_no_partial_coverage(self):
+        complete='SubShader { Pass { CGPROGRAM\nvoid frag() {}\nENDCG } }'
+        (self.assets/"g.shader").write_text(
+            'Shader "Synthetic" { '+complete+" "+complete+" }",encoding="utf8")
+        c=t3.audit(self.root)["counts"]
+        self.assertEqual(c["shader_files_with_partial_subshader_program_coverage"],0)
+        self.assertEqual(c["material_docs_using_Shader_with_partial_subshader_program_coverage"],0)
+
+    def test_unbalanced_after_complete_pass_remains_structurally_partial(self):
+        (self.assets/"g.shader").write_text(
+            'Shader "Synthetic" { SubShader { Pass { '
+            'CGPROGRAM\nvoid frag() {}\nENDCG } } '
+            'SubShader { Pass { ZWrite Off } ',encoding="utf8")
+        c=t3.audit(self.root)["counts"]
+        self.assertEqual(c["material_docs_using_Shader_with_completed_program_pass"],3)
+        self.assertEqual(c["shader_files_with_unbalanced_ShaderLab"],1)
+        self.assertEqual(c["shader_files_with_partial_subshader_program_coverage"],1)
+
     def test_duplicate_shader_meta_guid_rejected(self):
         self.shader("duplicate",G1,SHADER)
         with self.assertRaisesRegex(ValueError,"reserved_or_duplicate"):
