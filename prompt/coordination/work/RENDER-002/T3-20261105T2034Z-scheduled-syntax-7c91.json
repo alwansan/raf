@@ -1,0 +1,19 @@
+{
+  "session_id": "20261105T2034Z-T3-scheduled-7c91",
+  "origin": "scheduled",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "base_sha": "426667abca3a9975b62fbc7b7ba7ff372d3c00e8",
+  "intended_files": [
+    "scripts/t3_native_original_921_shader_target_audit.py",
+    "prompt/coordination/clients/T3/sessions/20261105T2034Z-T3-scheduled-7c91.md"
+  ],
+  "hypothesis": "Literal escaped newline in source introduced IndentationError, preventing original native Shader48 audit from running",
+  "experiment_key": "t3-original921-native-guid-compile-syntax-42094853931",
+  "resource_key": null,
+  "updated_at": "2026-11-05T20:34:00Z",
+  "taken_over_from": [
+    "T3 scheduled 20261105T1933Z",
+    "CI 42094853931"
+  ]
+}
