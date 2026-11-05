@@ -1,0 +1,21 @@
+{
+  "session_id": "20261105T2235Z-T4-scheduled-u8k3",
+  "origin": "scheduled",
+  "issue_id": "INPUT-005",
+  "baseline_sha": "0714fdc66b01e2939696d1959105aa7708eb997b",
+  "resumed_from_sessions": [
+    "20261105T2230Z-T4-chat-captured-mouse-sources-r7n5",
+    "20261105T2142Z-T4-scheduled-r6w3"
+  ],
+  "status": "active",
+  "hypothesis": "ReleaseCapture posts an unguarded UI-thread release that can run after a newer RequestCapture; old release may cancel newly granted capture.",
+  "intended_files": [
+    "android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs",
+    "prompt/coordination/clients/T4/sessions/20261105T2235Z-T4-scheduled-u8k3.md"
+  ],
+  "experiment_key": "T4-android-pointer-capture-UI-queued-release-epoch-race-v1",
+  "resource_key": "Android-UI-pointer-capture-View",
+  "shared_resource": "none; no Unity CI or native build",
+  "owner_device_evidence": "42058825739 owner-confirmed world/save/exit/reopen; mouse not device-confirmed",
+  "next_step": "Guard release callback with epoch; source test; device capture transition validation."
+}
