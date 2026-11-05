@@ -1,0 +1,15 @@
+{
+  "id": "T5-20261105T1319Z-delivery-bundled-cli-e2e",
+  "owner": "T5",
+  "session_id": "20261105T1302Z-T5-chat-delivery-e2e-f72c",
+  "origin": "chat",
+  "issue_id": "DELIVERY-013",
+  "type": "result",
+  "summary": "Authenticated production packager main copies byte-exact release reassemble.py; standalone copied script executed in new Python process with os.link removed and assembled split synthetic APK+OBB+XAPK exactly. Negative collision/tamper controls succeeded. T5 27/27 isolated source CI, not Android/device/Unity proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42034420876",
+    "https://github.com/alwansan/raf/commit/be0f728114f3a02045eb5e516e6ac2946a680e6a",
+    "https://github.com/alwansan/raf/commit/2d7e2d251cbf0b15f6409afa6a6a2a290dd1eec8"
+  ],
+  "at": "2026-11-05T13:19:00Z"
+}
