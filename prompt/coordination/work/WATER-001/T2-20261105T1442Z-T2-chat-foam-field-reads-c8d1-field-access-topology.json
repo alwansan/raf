@@ -4,8 +4,8 @@
   "origin": "chat",
   "session_id": "20261105T1442Z-T2-chat-foam-field-reads-c8d1",
   "issue_id": "WATER-001",
-  "status": "active",
-  "updated_at": "2026-11-05T14:41:57.961Z",
+  "status": "waiting_ci",
+  "updated_at": "2026-11-05T14:43:59.159Z",
   "base_sha": "18ca0e65f5cee37f2833757677a1523e36b6b3af",
   "resumed_from_sessions": [
     "20261105T1434Z-T2-chat-rendertexture-serialization-93ad",
@@ -28,6 +28,14 @@
     "other_t2_original_managed_CI_active": false
   },
   "method": "Exact source-original field reference captured from previously source-verified ten-op getter, scan genuine original managed IL for matching ldfld/ldflda and distinct method counts, synthetic getter/other-reader/byref/decoy, fail closed. Report only numeric counts, no original symbols/IL. Does not prove runtime execution or array contents.",
-  "run_urls": [],
-  "next_step": "Publish source-free checker and SHA-pinned authentic T2 workflow, verify counts, record narrow source discovery and remaining Unity/device limits."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42047763379"
+  ],
+  "next_step": "Read CI42047763379, particularly T2_FOAM_FIELD_TOPOLOGY_SAFE job log for exact managed reader/address counts; on failure inspect first failing step and repair only T2 files. Do not touch T1 Unity CI42047391061.",
+  "implementation_sha": "0881f9722f553e01e3694d7d49b964d53d2dff1e",
+  "result": {
+    "code": "Strict Cecil source-original exact matching ldfld and ldflda aggregate, synthetic positive/typed decoy negative tests",
+    "original_sha_CI": "in_progress",
+    "device": "not tested"
+  }
 }
