@@ -4,8 +4,8 @@
   "origin": "chat",
   "session_id": "20261105T1314Z-T2-chat-foam-writers-72c9",
   "issue_id": "WATER-001",
-  "status": "waiting_ci",
-  "updated_at": "2026-11-05T13:18:17.070Z",
+  "status": "completed",
+  "updated_at": "2026-11-05T13:20:14.012Z",
   "base_sha": "8efdc028bb88f5acbd42f996a6c1c3accbbbce2a",
   "resumed_from_sessions": [
     "20261105T1244Z-T2-chat-digest-removal-a6f4",
@@ -37,12 +37,22 @@
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42034458197"
   ],
-  "next_step": "Verify CI42034458197. Success proves source-authentic direct writer counts only, no runtime executed claim. On CI fail, read first failed step and fix. During wait, independently design index argument trace without modifying active workflow.",
+  "next_step": "Start separate exact original four Texture(int) integer call-argument provenance analysis via bounded Mono.Cecil stack or same-method def-use. Do not assume a literal index or a runtime RenderTexture; no game shader/Unity edits. WATER-001 OPEN NOT_READY0/3.",
   "implementation_sha": "d47c73943b11e3b1d193dc56446fb63632abd47a",
   "result": {
-    "status": "source_committed",
-    "synthetic_ci": "in_progress",
-    "original_sha_pinned_ci": "in_progress",
-    "device": "unknown"
+    "status": "original_SHA_authentic_ci_success",
+    "artifact_id": 13417637189,
+    "original_dll_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+    "original_dll_bytes": 3211776,
+    "artifact_zip_sha256": "6f6737164c859f136d7790f995d001658110feba6e4d2d30c0b583277e934128",
+    "exact_backing_field_stfld": 1,
+    "distinct_direct_writer_methods": 1,
+    "constructor_direct_writer_methods": 0,
+    "immediate_null_values": 1,
+    "immediate_newarr_RenderTexture_values": 0,
+    "unproven_immediate_values": 0,
+    "original_managed_method_bodies_scanned": 19118,
+    "runtime_writer_executed_proven": false,
+    "original_render_texture_contents_proven": false
   }
 }
