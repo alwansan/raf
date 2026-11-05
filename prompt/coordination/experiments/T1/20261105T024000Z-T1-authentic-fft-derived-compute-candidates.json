@@ -24,7 +24,8 @@
     "Source-free 7 tests include real single-main, source drift, path traversal, digest mismatch, fake runtime identity, invalid slot, partial output/overwrite rejection",
     "Initial CI41957453300 failed before source acquisition due missing test-import pin alias; corrected source c51b67c",
     "Unity import CI41958245907 failed sanitized-report reader permission gate; raw Unity result unknown, corrected workflow9e94d6a",
-    "Three real Unity attempts failed without result; latest 41958963107 safe classification indicates Unity activation/licensing failure, no kernel import evidence"
+    "Three real Unity attempts failed without result; latest 41958963107 safe classification indicates Unity activation/licensing failure, no kernel import evidence",
+    "Real source-free Unity 2021 Editor activation test CI41959712898 prevents unnecessary original-data download and fails independently of FFT generated HLSL"
   ],
   "workflow_path": ".github/workflows/raft-t1-fft-original-compute-candidates.yml; .github/workflows/raft-t1-fft-original-unity-import.yml",
   "run_url": "https://github.com/alwansan/raf/actions/runs/41957549770",
@@ -51,7 +52,8 @@
       }
     ],
     "actual_unity_compute_import_proven": false,
-    "game_water_recovered": false
+    "game_water_recovered": false,
+    "source_free_unity_activation": "41959712898 FAILED early: source_free_fixture=true, unity_command_exit_zero=false, empty_project=false, licensing_failure_category=true, original_raft_data_acquired=false; source-to-private-20 test remains proven separately"
   },
   "rejected_hypotheses": [
     "A generated per-compiled-slot kernel name main is the original authored runtime kernel identity",
@@ -65,11 +67,12 @@
     "Unity Editor licensing/activation gate blocked import observation in all three attempts; no authenticated imported kernel IDs or group sizes"
   ],
   "integration_commit": "c51b67c4940f44e1417b4b5e106bb4412d454a10",
-  "next_step": "Verify Unity 2021.3.45f2 activation in tiny source-free authorized project, only then replay private SHA-verified candidates; preserve secret/log safety and native workflow mutex.",
+  "next_step": "Repair source-free Unity Editor licensing/activation first, then SHA-authenticated actual 20 private candidate import. Neither original authored runtime mapping nor Android water proof established.",
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/41957549770",
     "https://github.com/alwansan/raf/actions/runs/41958245907",
     "https://github.com/alwansan/raf/actions/runs/41958511122",
-    "https://github.com/alwansan/raf/actions/runs/41958963107"
+    "https://github.com/alwansan/raf/actions/runs/41958963107",
+    "https://github.com/alwansan/raf/actions/runs/41959712898"
   ]
 }
