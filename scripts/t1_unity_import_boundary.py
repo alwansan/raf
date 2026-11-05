@@ -25,19 +25,26 @@ def classify(payload):
         name = step.get("name")
         if name in by_name:
             raise ValueError("duplicate step identity")
-        by_name[name] = step.get("conclusion")
+        by_name[name] = step
     if ACTIVATION not in by_name or IMPORT not in by_name:
         raise ValueError("required gate missing")
-    activation = by_name[ACTIVATION]
-    imported = by_name[IMPORT]
+    activation_step = by_name[ACTIVATION]
+    import_step = by_name[IMPORT]
+    activation = activation_step.get("conclusion")
+    imported = import_step.get("conclusion")
+    # A conclusion without a started_at timestamp is insufficient to prove that
+    # the import command actually ran. GitHub step JSON includes started_at.
+    import_started = bool(import_step.get("started_at"))
+    if steps.index(activation_step) >= steps.index(import_step):
+        raise ValueError("import gate precedes activation")
     if activation != "success":
         return {"boundary": "unity_activation", "activation": activation, "import": imported,
                 "shader_import_attempted": False, "unity_runtime_proven": False}
     if imported != "success":
         return {"boundary": "unity_import", "activation": activation, "import": imported,
-                "shader_import_attempted": imported not in ("skipped", None), "unity_runtime_proven": False}
+                "shader_import_attempted": import_started and imported not in ("skipped", None), "unity_runtime_proven": False}
     return {"boundary": "unity_import_completed", "activation": activation, "import": imported,
-            "shader_import_attempted": True, "unity_runtime_proven": False}
+            "shader_import_attempted": import_started, "unity_runtime_proven": False}
 
 
 def main():
