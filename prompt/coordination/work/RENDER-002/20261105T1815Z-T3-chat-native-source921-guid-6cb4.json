@@ -6,7 +6,7 @@
   "issue_id": "RENDER-002",
   "status": "completed",
   "base_sha": "f95e8d7e2c8fa39182d6781e01ea58b7df62ca2d",
-  "updated_at": "2026-11-05T18:26:00Z",
+  "updated_at": "2026-11-05T18:30:00Z",
   "resumed_from_sessions": [
     "20261105T1745Z-T3-chat-921-shader-material-property-7a6e",
     "20261105T1405Z-T3-chat-renderer-dummy-join-8c41"
@@ -71,5 +71,20 @@
     "game_assets_changed": false,
     "T5_build_cancelled": false
   },
-  "next_step": "Run prepared strict SHA original source top921->native W1 private trace->exact actual .shader GUID and Pass count on next authorized post-full-restorer export. Do not infer 921 source identity from 770 native dummy docs. T5 active Unity import 42058825739 must be preserved."
+  "next_step": "Run prepared strict SHA original source top921->native W1 private trace->exact actual .shader GUID and Pass count on next authorized post-full-restorer export. Do not infer 921 source identity from 770 native dummy docs. T5 active Unity import 42058825739 must be preserved.",
+  "native_run_terminal_observation": {
+    "run_id": 42058825739,
+    "overall_conclusion": "failure",
+    "reconstruct": "success",
+    "publish_early_test": "failure",
+    "publish_failure_reason": "HTTP_403_Resource_not_accessible_by_integration",
+    "delivery_result": "failure",
+    "signed_APK_artifact_id": 13441766832,
+    "combined_test_delivery_artifact_id": 13441227298,
+    "APK_bytes": 672853870,
+    "OBB_bytes": 2301256312,
+    "lossless_transport_parts": 7,
+    "device_install_verified": false,
+    "overall_GAME_READY": false
+  }
 }
