@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "generation": "T-2026-11-05",
+  "session_id": "20261105T0238Z-T2-dxbc-texture-registers",
+  "issue_id": "WATER-001",
+  "track": "actual-authentic-native-dxbc-sample-t-s-operand-use",
+  "approach": "Reuse inherited blur_sample_operands.sample plus bounded SM4/5 executable instruction-token parser on B20 SHA-pinned original four Foam stages. Validate each source m_Index/m_SamplerIndex sampled pair against actual native DXBC sample opcode69 tN/sN operand values. Fail closed for ambiguous/dynamic/unlisted opcode; record limited sample family coverage, not ShaderLab/Unity proof.",
+  "status": "active",
+  "base_sha": "c3bc183901411fefc0ec3a977e0ea27ef07c11fc",
+  "intended_files": [
+    "scripts/t2_foam_original_sample_edges.py",
+    "tests/test_t2_foam_original_sample_edges.py",
+    ".github/workflows/raft-t2-foam-original-dxbc-registers.yml",
+    "docs/T2_FOAM_ORIGINAL_DXBC_TEXTURE_SAMPLER_REGISTERS_2026-11-05.md"
+  ],
+  "hypothesis": "Original Foam native executable DXBC sample instructions explicitly use the same tN/sN row pairs authenticated from m_TextureParams, not merely declare matching register sets.",
+  "related_work": [
+    "https://github.com/alwansan/raf/actions/runs/41957269478",
+    "https://github.com/alwansan/raf/actions/runs/41942245746"
+  ],
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/blur_sample_operands.py",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/B17/MEMORY.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/clients/B20/MEMORY.md"
+  ],
+  "experiment_ids": [
+    "T2-20261105-authentic-dxbc-sample-edges"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Implement bounded real DXBC executable sample family scanner and inherited parser reuse, synthetic negative controls, execute original SHA-pinned new question in existing isolated T2 workflow.",
+  "updated_at": "2026-11-05T02:49Z"
+}
