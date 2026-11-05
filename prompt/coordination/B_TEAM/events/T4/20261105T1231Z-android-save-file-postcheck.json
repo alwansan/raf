@@ -1,0 +1,16 @@
+{
+  "id": "20261105T1231Z-T4-save-file-argument-snapshot",
+  "owner": "T4",
+  "session_id": "20261105T1217Z-T4-android-save-postcheck",
+  "issue_id": "LOCAL-005",
+  "type": "integration",
+  "summary": "Added Android-only nonmutating Save.argumentFileSnapshot to the already SHA-pinned original SaveAndLoad.Save operation wrapper. After original method execution/early-return, File.Exists(filename) and conditional FileInfo.Length zero/nonzero classes logged; diagnostic failures caught without changing original Save return, no payload read or new file writes, no false success. CI42026271243 SUCCESS 14 original C# class adaptation/compile exit0 and local RPC; CI42026671909 SUCCESS 15 tests plus actual generated UNITY_ANDROID C# synthetic early-return/exception/logger-failure runtime; CI42027197515 SUCCESS 21 tests and actual immutable original DLL IL proved SaveAndLoad.Save directly forwards filename to FileManager.Create. No native APK, real game .rgd serial/deserialize, Android device/world acceptance. LOCAL-005 OPEN NOT_READY 0/3.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42026271243",
+    "https://github.com/alwansan/raf/actions/runs/42026671909",
+    "https://github.com/alwansan/raf/actions/runs/42027197515",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ANDROID_SAVE_FILE_POSTCHECK_2026-11-05.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/discussions/LOCAL-005/20261105T1230Z-T4-android-post-save-file-state-to-T5.md"
+  ],
+  "at": "2026-11-05T12:31:00Z"
+}
