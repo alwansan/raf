@@ -36,3 +36,11 @@ Implement and test snapshot, then record exact commits, workflow outcomes, limit
 - [CI42031436693](https://github.com/alwansan/raf/actions/runs/42031436693) FINAL SUCCESS: 5/5 Python plus actual synthetic C# UNITY_ANDROID compile/run, absent/zero/corrupt-nonzero/valid file categories, reporter throwing nonfatal, preserved original synthetic return/catch. No original game source/serialized RGD read in synthetic workflow.
 - report: docs/T4_ANDROID_LOAD_ARGUMENT_SNAPSHOT_2026-11-05.md; source-gated integration only, not Android Unity/IL2CPP or live device. No new APK, original `.rgd` save/relaunch/restore or world playability proof; LOCAL-005 remains OPEN; NOT_READY 0/3. Existing audio, Settings, deferred touch, B50 Steam guards unchanged. No running Actions canceled.
 - next_step: ask T5 coordination for a single native candidate with new Save/Load snapshots and B07 completion; correlate on-device firstMoveNext, originalCompletionAssigned, Save.argumentFileSnapshot, Load.caughtException, Load.argumentFileSnapshot with genuine playable offline new world and save-exit-relaunch-load. Avoid duplicate equivalent CI.
+
+
+## Canonical ledger, handoff and global STATUS
+- LOCAL-005 canonical issue updated without closing it: [commit e1faed98](https://github.com/alwansan/raf/commit/e1faed98681ffe87c8e27b02ad9613cbaf72ae56).
+- T4 standalone event: `prompt/coordination/B_TEAM/events/T4/20261105T1300Z-T4-chat-load-snapshot-m8q2.json`, [commit 8c111933](https://github.com/alwansan/raf/commit/8c11193325650aafb3f30a40e727cc6881a14a07).
+- T5 standalone integration handoff: `prompt/coordination/discussions/LOCAL-005/20261105T1300Z-T4-load-argument-device-handoff-to-T5.md`, [commit 371a8eb6](https://github.com/alwansan/raf/commit/371a8eb600fb87cc78670f52996422ecfce7c5e2).
+- `prompt/STATUS.md` appended an exact evidence/limitation checkpoint without deleting concurrent work: [commit 8a521810](https://github.com/alwansan/raf/commit/8a521810019d0b09800e6b3482c9e38e252c213e).
+- Shared generated `T_TEAM/SUMMARY.md` deliberately not hand edited; next refresh_t_team.py generation may include canonical event. No additional game source modification since a880.
