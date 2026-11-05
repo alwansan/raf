@@ -1,0 +1,20 @@
+{
+  "id": "20261105T170847Z-T1-chat-015973",
+  "session_id": "20261105T170847Z-T1-chat-015973",
+  "origin": "chat",
+  "owner": "T1",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "29ccaba7eb6d6ef7966525dd3d6da91a2b02f4a2",
+  "updated_at": "2026-11-05T17:08:47.033Z",
+  "intended_files": [
+    "scripts/t1_fft_pass0_vulkan_trace.py",
+    "android-port/Experiments/T1/T1PrivateFftInputIdentityTests.cs",
+    ".github/workflows/raft-t1-fft-unity-input-identity.yml"
+  ],
+  "experiment_key": "private-paired-vulkan-unity-pass0-trace-replay-v1",
+  "resource_key": "raft-native-engine-feature/android-native-port",
+  "resumed_from_sessions": [
+    "20261105T170102Z-T1-chat-af2a33"
+  ]
+}
