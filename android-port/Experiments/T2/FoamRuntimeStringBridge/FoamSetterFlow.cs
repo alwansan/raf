@@ -16,7 +16,8 @@ internal static class FoamSetterFlow
                                                  bool SecondProducerIsCallvirt,
                                                  bool SecondProducerHasThis,
                                                  int SecondProducerParameterCount,
-                                                 MethodReference? SecondProducerReference);
+                                                 MethodReference? SecondProducerReference,
+                                                 string SecondProducerIndexInt32ArgumentOrigin);
     private enum Tag {
         Unknown, OriginalNameString, OriginalPropertyId,
         ArgumentLoad, StaticFieldLoad, InstanceFieldLoad,
@@ -35,8 +36,22 @@ internal static class FoamSetterFlow
         _ => "unknown",
     };
     private readonly record struct Value(Tag Tag, MethodReference? Producer,
-                                         Code ProducerOpcode);
+                                         Code ProducerOpcode,
+                                         string? ProducerIndexInt32Origin = null,
+                                         bool IsDirectInt32Literal = false);
     private static Value V(Tag tag) => new(tag,null,Code.Nop);
+
+    // This is the origin of the actual argument popped by a single-int
+    // producer call. Never emit the value of an original int literal.
+    private static string IndexInt32Origin(Value value) => value.Tag switch {
+        Tag.NumericLiteral when value.IsDirectInt32Literal => "direct_ldc_i4_literal",
+        Tag.NumericLiteral => "numeric_not_proven_int32_literal",
+        Tag.ArgumentLoad => "argument_load",
+        Tag.StaticFieldLoad => "static_field_load",
+        Tag.InstanceFieldLoad => "instance_field_load",
+        Tag.CallResult => "call_return",
+        _ => "unknown"
+    };
     private static string ProducerReturnClass(Value value) {
         if (value.Tag!=Tag.CallResult || value.Producer is null) return "not_a_traced_producer_call";
         return value.Producer.ReturnType.FullName switch {
@@ -147,7 +162,8 @@ internal static class FoamSetterFlow
             if (op.StartsWith("ldc.",StringComparison.Ordinal) ||
                 op=="ldtoken")
             {
-                stack.Add(V(Tag.NumericLiteral));
+                stack.Add(new Value(Tag.NumericLiteral,null,Code.Nop,null,
+                    op.StartsWith("ldc.i4",StringComparison.Ordinal)));
                 continue;
             }
             if (op=="ldnull")
@@ -223,7 +239,8 @@ internal static class FoamSetterFlow
                             second.ProducerOpcode==Code.Callvirt,
                             second.Producer?.HasThis ?? false,
                             second.Producer?.Parameters.Count ?? 0,
-                            second.Producer);
+                            second.Producer,
+                            second.ProducerIndexInt32Origin ?? "unknown");
                     }
                 }
                 // Do not accept unrelated methods with the same name or
@@ -235,11 +252,18 @@ internal static class FoamSetterFlow
                                 && args[0].Tag==Tag.OriginalNameString
                                 && !methodRef.HasThis
                                 && methodRef.ReturnType.FullName=="System.Int32";
+                // Exact first formal producer input, not an adjacent opcode
+                // guess. The traced value may remain unknown when its def is
+                // outside this bounded straight-line block.
+                string? oneIntOrigin = pcount==1 &&
+                    methodRef.Parameters[0].ParameterType.FullName=="System.Int32"
+                    ? IndexInt32Origin(args[0]) : null;
                 for (int i=0;i<total;i++)
                     Pop();
                 if (methodRef.ReturnType.FullName!="System.Void")
                     stack.Add(propertyId?V(Tag.OriginalPropertyId):
-                        new Value(Tag.CallResult,methodRef,instruction.OpCode.Code));
+                        new Value(Tag.CallResult,methodRef,instruction.OpCode.Code,
+                                  oneIntOrigin));
                 continue;
             }
             // Never fake argument dataflow for arithmetic, blocks, Phi-like

@@ -131,6 +131,8 @@ internal static class Program
         public readonly Dictionary<int,int> SecondProducerParameterCount = new();
         public readonly Dictionary<string,int> SecondProducerParameterTypeCategories =
             new(StringComparer.Ordinal);
+        public readonly Dictionary<string,int> SecondProducerActualIndexInt32Origins =
+            new(StringComparer.Ordinal);
         public readonly HashSet<string> SecondProducerDistinctPrivateSignatures =
             new(StringComparer.Ordinal);
         public int SecondProducerExactManagedMethodDefinitionMatches;
@@ -264,6 +266,9 @@ internal static class Program
                         var argc=exact.Value.SecondProducerParameterCount;
                         result.SecondProducerParameterCount[argc] =
                             result.SecondProducerParameterCount.GetValueOrDefault(argc)+1;
+                        var indexOrigin=exact.Value.SecondProducerIndexInt32ArgumentOrigin;
+                        result.SecondProducerActualIndexInt32Origins[indexOrigin]=
+                            result.SecondProducerActualIndexInt32Origins.GetValueOrDefault(indexOrigin)+1;
                         var producer=exact.Value.SecondProducerReference;
                         if (producer is not null)
                         {
@@ -398,6 +403,7 @@ internal static class Program
             non_authored_second_exact_producer_known_Unity_Texture_return_types = result.SecondProducerReturnKnownUnityTextureTypeCount,
             non_authored_second_exact_producer_parameter_count_histogram = result.SecondProducerParameterCount,
             non_authored_second_producer_parameter_declared_type_categories = result.SecondProducerParameterTypeCategories,
+            non_authored_second_Texture_int_actual_index_argument_origin_histogram = result.SecondProducerActualIndexInt32Origins,
             non_authored_second_producer_distinct_compiled_private_method_signatures = result.SecondProducerDistinctPrivateSignatures.Count,
             non_authored_second_producer_compiled_signature_exact_original_method_definition_matches = result.SecondProducerExactManagedMethodDefinitionMatches,
             non_authored_second_producer_exact_original_method_definitions_with_body = result.SecondProducerExactManagedBodyMatches,
@@ -544,6 +550,62 @@ internal static class Program
             traced.Value.SecondProducerHasThis || traced.Value.SecondProducerIsCallvirt ||
             traced.Value.SecondProducerParameterCount!=0)
             throw new InvalidDataException("Exact typed call producer source fixture failed");
+
+        // Source-free exact producer-int operand origin tests: use the
+        // immediate call stack, never infer a guessed original integer.
+        var oneIndexMethod=new MethodReference("PublicSyntheticOneIntTexture",
+            textureType,publicFactory){HasThis=false};
+        oneIndexMethod.Parameters.Add(new ParameterDefinition(m.TypeSystem.Int32));
+        var literalCall=new MethodDefinition("PublicSyntheticOneIntLiteral",
+            Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,
+            m.TypeSystem.Void);
+        literalCall.Parameters.Add(new ParameterDefinition(materialType));
+        td.Methods.Add(literalCall);
+        var ilLit=literalCall.Body.GetILProcessor();
+        ilLit.Append(ilLit.Create(OpCodes.Ldarg_0));
+        ilLit.Append(ilLit.Create(OpCodes.Ldstr,"public-synthetic-index-literal"));
+        ilLit.Append(ilLit.Create(OpCodes.Ldc_I4_2));
+        ilLit.Append(ilLit.Create(OpCodes.Call,oneIndexMethod));
+        ilLit.Append(ilLit.Create(OpCodes.Callvirt,setTexture));
+        ilLit.Append(ilLit.Create(OpCodes.Ret));
+        var literalOrigin=FoamSetterFlow.Trace(literalCall,1);
+        if (literalOrigin is null ||
+            literalOrigin.Value.SecondProducerIndexInt32ArgumentOrigin!="direct_ldc_i4_literal" ||
+            literalOrigin.Value.SecondTextureOperandOrigin!="call_return")
+            throw new InvalidDataException("Exact synthetic one-int literal provenance fixture failed");
+        var parameterCall=new MethodDefinition("PublicSyntheticOneIntParameter",
+            Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,
+            m.TypeSystem.Void);
+        parameterCall.Parameters.Add(new ParameterDefinition(materialType));
+        parameterCall.Parameters.Add(new ParameterDefinition(m.TypeSystem.Int32));
+        td.Methods.Add(parameterCall);
+        var ilParam=parameterCall.Body.GetILProcessor();
+        ilParam.Append(ilParam.Create(OpCodes.Ldarg_0));
+        ilParam.Append(ilParam.Create(OpCodes.Ldstr,"public-synthetic-index-argument"));
+        ilParam.Append(ilParam.Create(OpCodes.Ldarg_1));
+        ilParam.Append(ilParam.Create(OpCodes.Call,oneIndexMethod));
+        ilParam.Append(ilParam.Create(OpCodes.Callvirt,setTexture));
+        ilParam.Append(ilParam.Create(OpCodes.Ret));
+        var paramOrigin=FoamSetterFlow.Trace(parameterCall,1);
+        if (paramOrigin is null ||
+            paramOrigin.Value.SecondProducerIndexInt32ArgumentOrigin!="argument_load")
+            throw new InvalidDataException("Exact synthetic one-int argument provenance fixture failed");
+        var invalidTokenCall=new MethodDefinition("PublicSyntheticTokenIsNotAnIntLiteral",
+            Mono.Cecil.MethodAttributes.Public|Mono.Cecil.MethodAttributes.Static,
+            m.TypeSystem.Void);
+        invalidTokenCall.Parameters.Add(new ParameterDefinition(materialType));
+        td.Methods.Add(invalidTokenCall);
+        var ilToken=invalidTokenCall.Body.GetILProcessor();
+        ilToken.Append(ilToken.Create(OpCodes.Ldarg_0));
+        ilToken.Append(ilToken.Create(OpCodes.Ldstr,"public-synthetic-not-int-literal"));
+        ilToken.Append(ilToken.Create(OpCodes.Ldtoken,m.TypeSystem.Int32));
+        ilToken.Append(ilToken.Create(OpCodes.Call,oneIndexMethod));
+        ilToken.Append(ilToken.Create(OpCodes.Callvirt,setTexture));
+        ilToken.Append(ilToken.Create(OpCodes.Ret));
+        var tokenOrigin=FoamSetterFlow.Trace(invalidTokenCall,1);
+        if (tokenOrigin is null ||
+            tokenOrigin.Value.SecondProducerIndexInt32ArgumentOrigin=="direct_ldc_i4_literal")
+            throw new InvalidDataException("Non-i4 metadata token cannot prove an int literal");
         var strict=Scan(new[]{produced,producerDef},
             new HashSet<string>(StringComparer.Ordinal){Sha("public-direct-typed-producer")},
             new HashSet<string>(StringComparer.Ordinal));
@@ -786,6 +848,7 @@ internal static class Program
                 wrong_branch_target_guarded_texture_array_rejected=true,
                 early_null_brtrue_guarded_RenderTexture_array_fixture=true,
                 exact_backing_field_writer_newarr_null_decoy_fixture=true,
+                four_original_style_Texture_int_argument_origin_controls=true,
                 private_IL_names_or_source_published = false
             }));
         return 0;

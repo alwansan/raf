@@ -124,6 +124,12 @@ jobs:
           assert r['non_authored_second_producer_exact_original_method_definitions_with_body']==4
           assert r['non_authored_second_producer_missing_or_ambiguous_original_definitions']==0
           assert r['non_authored_second_producer_parameter_declared_type_categories']=={'system_int32':4}
+          o=r['non_authored_second_Texture_int_actual_index_argument_origin_histogram']
+          allowed={'direct_ldc_i4_literal','numeric_not_proven_int32_literal',
+                   'argument_load','static_field_load','instance_field_load',
+                   'call_return','unknown'}
+          assert set(o).issubset(allowed) and sum(o.values())==4
+          assert all(type(v) is int and v>=0 for v in o.values())
           b=r['original_exact_Texture_int_producer_body_op_classes']
           assert r['original_exact_Texture_int_producer_body_accepted_same_SHA_definition']
           assert b['InstructionCount']==10 and b['Branches']==1 and b['ReturnInstructions']==2
