@@ -1,0 +1,15 @@
+{
+  "id": "T2-20261105T1054Z-foam-original-dxbc-active-spirv-proven",
+  "owner": "T2",
+  "session_id": "20261105T1020Z-T2-original-foam-explicit-spv-map",
+  "issue_id": "WATER-001",
+  "type": "source_authenticated_translation_resource_identity_result",
+  "summary": "CI42013590671 SUCCESS: SHA-original Foam 4-stage packet and source DXBC declarations; explicit libvkd3d A/B remaps prove each source tN/sN register→original compiled SPIR-V descriptor variable ID with full SPIR-V graph equal after masking only numeric DescriptorSet/Binding values. The 21 real native DXBC SAMPLE operations vs 21 compiled SPIR-V SSA samples reconstruct exactly six stage-scoped active source t/s pairs. 16+17 synthetic controls. No authored Material property/CB upload or genuine ShaderLab/Unity/Adreno/device pixel proof; WATER-001 OPEN NOT_READY0/3. No private program published.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42011706016",
+    "https://github.com/alwansan/raf/actions/runs/42013590671",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T2_FOAM_ORIGINAL_DXBC_SPIRV_ACTIVE_BRIDGE_2026-11-05.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T2-foam-original-active-sample-descriptor-identity.json"
+  ],
+  "at": "2026-11-05T10:54:00Z"
+}
