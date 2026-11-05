@@ -51,7 +51,7 @@ public static class T1FftKernelRuntimeProbe
             throw new InvalidOperationException("T1 original compiled candidate proof absent or false runtime proof");
         using (var sha = SHA256.Create())
         {
-            var digest = BitConverter.ToString(sha.ComputeHash(File.ReadAllBytes(computePath)))
+            var digest = BitConverter.ToString(sha.ComputeHash(File.ReadAllBytes(Path.Combine(Application.dataPath, "T1Private/FFTProbe.compute"))))
                 .Replace("-", "").ToLowerInvariant();
             if (digest != manifest.authored_compute_sha256)
                 throw new InvalidOperationException("T1 private authored compute file SHA256 mismatch after staging");
