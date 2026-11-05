@@ -78,7 +78,9 @@
     "https://github.com/alwansan/raf/actions/runs/42047540260",
     "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_RGD_SAVE_ROUNDTRIP_2026-11-05.md",
     "https://github.com/alwansan/raf/actions/runs/42053882300",
-    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_SAVEWORLD_RGD_PRODUCER_2026-11-05.md"
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_SAVEWORLD_RGD_PRODUCER_2026-11-05.md",
+    "https://github.com/alwansan/raf/actions/runs/42058900699",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_RGD_PRECALL_SLICE_2026-11-05.md"
   ],
   "remaining": [
     "Original Cheat.AllowCheatsForLocalPlayer SteamUser.GetSteamID direct object call now source-guarded in B50 2bb6c2; no native/phone verification. Do not infer all Steam callbacks are removed.",
@@ -107,7 +109,8 @@
     "T4 device log JSONL validator source-integrated (commit 305e8952), chronological matching refined b383b6e/fa3d5555, CI42043385806 SUCCESS 13/13 synthetic. Reads actual PersistentDiagnosticLog schema but no new phone log/device was read; even ordered cross-session nonzero Save/Load does not prove restart, same world, valid .rgd or playability. LOCAL-005 OPEN NOT_READY 0/3.",
     "T4 2026-11-05 original shipped Data.rgd CLR execution, not just NRBF syntax: exact ZIP2 2941B seed and original 3211776B Assembly-CSharp.dll SHA-verified with 151 Managed siblings; CI42042814576 SUCCESS actual .NET8 BinaryFormatter.Deserialize returned nonnull ORIGINAL game assembly CLR type (18/18 controls). CI42043768798 SUCCESS actually invoked compiled ORIGINAL static generic SaveAndLoad.Load<T> with same exact shipped seed and original root T, returned matching nonnull original type, 18+18 controls, changed seed SHA refused. Previous B37/A10 assembly-version and field-name metadata mismatch therefore not necessarily fatal to this .NET8 original seed load. NOT a real user-generated world save, Android/Unity/IL2CPP, playable offline local host or persisted game .rgd save/exit/relaunch/load. LOCAL-005 remains OPEN and overall NOT_READY 0/3.",
     "T4 exact original CLR seed-vs-serializer shape: CI42047540260 SUCCESS 16/16 demonstrates shipped StreamingAssets/Data.rgd root is NOT the original private Save(string,RGD) parameter. Genuine compiled Save not invoked due protected type mismatch; no game save/roundtrip. Earlier CI42043768798 loaded shipped seed as a different original CLR type, not a real world save. Do not use seed as .rgd Save fixture; verify actual game-generated RGD on owner Android. LOCAL-005 OPEN NOT_READY 0/3.",
-    "T4 immutable original SaveWorld RGD producer IL proof CI42053882300 SUCCESS 22/22: original SaveWorld and SaveUser each directly call private Save(string,RGD) once; zero direct RGD newobj across SaveAndLoad, zero original generic Load<RGD> in both methods, immediate RGD argument-source classification unresolved. No actual game Save invoked, RGD contents processed, Unity/IL2CPP/device run, file durability or offline world playability shown. Do not treat shipped StreamingAssets/Data.rgd as a user world save. T4 scheduled JSONL UTC work remains separate; LOCAL-005 OPEN NOT_READY 0/3."
+    "T4 immutable original SaveWorld RGD producer IL proof CI42053882300 SUCCESS 22/22: original SaveWorld and SaveUser each directly call private Save(string,RGD) once; zero direct RGD newobj across SaveAndLoad, zero original generic Load<RGD> in both methods, immediate RGD argument-source classification unresolved. No actual game Save invoked, RGD contents processed, Unity/IL2CPP/device run, file durability or offline world playability shown. Do not treat shipped StreamingAssets/Data.rgd as a user world save. T4 scheduled JSONL UTC work remains separate; LOCAL-005 OPEN NOT_READY 0/3.",
+    "T4 exact compiled original SaveWorld/SaveUser RGD precall structural relation CI42058900699 SUCCESS 22/22: immediate original SaveWorld pre-call pushes LOCAL_DERIVED_RGD, SaveUser pre-call pushes FIELD_DERIVED_RGD, with authentic original 3211776B SHA-pinned DLL. These are static derived subtype loading facts, not RGD object initialization/dynamic argument identity, actual Save execution, Android device or same-world reopen. Native CI42052375742 failed strict water gate before delivery (T5/T1), not game Save. Keep LOCAL-005 OPEN NOT_READY 0/3; do not use shipped StreamingAssets/Data.rgd as a user world save."
   ],
   "acceptance": [
     "دخول عالم جديد محلي قابل للعب بلا Steam أو سيرفر خارجي",
@@ -115,5 +118,5 @@
     "لا يكفي إخفاء رسالة الاتصال"
   ],
   "updated_by": "T4",
-  "updated_at": "2026-11-05T15:23:34.943Z"
+  "updated_at": "2026-11-05T15:57:21.963Z"
 }
