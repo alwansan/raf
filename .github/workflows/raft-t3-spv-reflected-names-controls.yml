@@ -1,0 +1,37 @@
+name: T3 RENDER-002 SPIRV-Cross reflected name drift source-free controls
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t3_spirv_interface_name_drift.py
+      - tests/test_t3_spirv_interface_name_drift.py
+      - tests/test_t3_spv_reflected_name_integration.py
+      - scripts/t3_original_top_shader_fourpass_translation.py
+      - .github/workflows/raft-t3-spv-reflected-names-controls.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: raft-t3-spv-reflect-names-sourcefree-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  private-name-sourcefree-regressions:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Verify private reflected-name classifier and integrated four-pass opt-in
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t3_spirv_interface_name_drift.py scripts/t3_original_top_shader_fourpass_translation.py tests/test_t3_spirv_interface_name_drift.py tests/test_t3_spv_reflected_name_integration.py
+          python3 -m unittest discover -s tests -p 'test_t3_spirv_interface_name_drift.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_spv_reflected_name_integration.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_original_top_shader_fourpass_translation.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_stage_io_drift.py' -v
