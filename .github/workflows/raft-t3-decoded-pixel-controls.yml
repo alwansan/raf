@@ -7,6 +7,8 @@ on:
       - scripts/t3_decoded_texture_pixel_parity.py
       - scripts/t3_pixel_drift_diagnostics.py
       - scripts/t3_authentic_decoded_pixel_export.py
+      - scripts/t3_normalmap_dxt5_semantic.py
+      - tests/test_t3_normalmap_dxt5_semantic.py
       - tests/test_t3_pixel_diagnostic_boundary.py
       - tests/test_t3_decoded_texture_pixel_parity.py
       - tests/test_t3_pixel_drift_diagnostics.py
@@ -29,6 +31,8 @@ jobs:
             scripts/t3_decoded_texture_pixel_parity.py
             scripts/t3_pixel_drift_diagnostics.py
             scripts/t3_authentic_decoded_pixel_export.py
+            scripts/t3_normalmap_dxt5_semantic.py
+            tests/test_t3_normalmap_dxt5_semantic.py
             tests/test_t3_pixel_diagnostic_boundary.py
             tests/test_t3_decoded_texture_pixel_parity.py
             tests/test_t3_pixel_drift_diagnostics.py
@@ -38,3 +42,4 @@ jobs:
           python3 -m unittest discover -s tests -p 'test_t3_decoded_texture_pixel_parity.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_pixel_drift_diagnostics.py' -v
           python3 -m unittest discover -s tests -p 'test_t3_pixel_diagnostic_boundary.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_normalmap_dxt5_semantic.py' -v
