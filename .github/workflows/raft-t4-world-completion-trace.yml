@@ -6,7 +6,9 @@ on:
     paths:
       - 'scripts/instrument_android_runtime_operations.py'
       - 'scripts/t4_compile_world_completion_fixture.py'
+      - 'scripts/t4_compare_private_ilspy_runs.py'
       - 'tests/test_t4_world_completion_trace.py'
+      - 'tests/test_t4_compare_private_ilspy_runs.py'
       - '.github/workflows/raft-t4-world-completion-trace.yml'
 permissions:
   contents: read
@@ -26,12 +28,15 @@ jobs:
           sparse-checkout: |
             scripts
             tests/test_t4_world_completion_trace.py
+            tests/test_t4_compare_private_ilspy_runs.py
             config/runtime-operation-traces.json
       - name: T4 Python syntax and negative controls
         run: |
           set -euo pipefail
           python3 -m py_compile scripts/instrument_android_runtime_operations.py tests/test_t4_world_completion_trace.py scripts/t4_compile_world_completion_fixture.py
           python3 -m unittest discover -s tests -p test_t4_world_completion_trace.py -v
+          python3 -m py_compile scripts/t4_compare_private_ilspy_runs.py tests/test_t4_compare_private_ilspy_runs.py
+          python3 -m unittest discover -s tests -p test_t4_compare_private_ilspy_runs.py -v
       - name: Check out immutable original game DLL in separate directory
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
@@ -122,3 +127,14 @@ jobs:
           },sort_keys=True))
           PY
           # Private game sources, snippets, and binary bytes are NOT uploaded.
+      - name: Re-decompile same original DLL in independent private directory
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/t4-private-source-second"
+          timeout 360s "$RUNNER_TEMP/t4-ilspy/ilspycmd" -p -lv CSharp9_0 -o "$RUNNER_TEMP/t4-private-source-second" t4-original/Raft/Raft_Data/Managed/Assembly-CSharp.dll >"$RUNNER_TEMP/t4-private-decompile-repeat.log" 2>&1
+          python3 -m scripts.t4_compare_private_ilspy_runs \
+            --original-managed-dll t4-original/Raft/Raft_Data/Managed/Assembly-CSharp.dll \
+            --source-a "$RUNNER_TEMP/t4-private-source" \
+            --source-b "$RUNNER_TEMP/t4-private-source-second"
+          # Only SHA digest/count metadata is printed. No private sources/artifacts.
