@@ -89,6 +89,37 @@ def guard_android_local_savegame_stats(text):
 
 
 
+
+def trace_caught_original_load_error(text):
+    """Log the original Load<T> catch boundary, without changing its handling.
+
+    The outer operation wrapper only observes uncaught exceptions; genuine
+    original Load<T> contains one internal catch. Record that catch separately
+    so a returned default cannot be mistaken for a clean load on the phone.
+    """
+    signature = 'public static T Load<T>(string filename)'
+    begin, end = body_bounds(text, signature)
+    code = executable_only(text[begin:end])
+    if len(re.findall(r'\\bDeserialize\\s*\\(', code)) != 1:
+        raise ValueError('Require one authenticated Load<T> deserialization call')
+    catches = list(re.finditer(r'\\bcatch\\s*(?:\\([^{}]*\\))?\\s*\\{', code))
+    if len(catches) != 1:
+        raise ValueError('Require one original Load<T> catch handler')
+    if 'Load.caughtException' in text:
+        raise ValueError('Refuse duplicate Load<T> caught exception diagnostic')
+    insertion = begin + catches[0].end()
+    snippet = ('\\n#if UNITY_ANDROID && !UNITY_EDITOR\\n'
+               'RaftAndroid.Diagnostics.AndroidRuntimeLog.Write('
+               '"save", "Load.caughtException", '
+               '"Original Load<T> entered its error handler; no world/save success implied", true);'
+               '\\n#endif\\n')
+    result = text[:insertion] + snippet + text[insertion:]
+    if result.replace(snippet, '', 1) != text:
+        raise ValueError('Original Load<T> error handler modified outside diagnostic')
+    return result
+
+
+
 def wrap_original_world_callback(text, method_name, expected_body_sha, area):
     """Wrap an authenticated original void callback without changing its body.
 
@@ -121,6 +152,12 @@ def instrument(name, text, manifest):
     if digest != row['sha256']:
         raise ValueError('Unknown adapted original revision: ' + name)
     result = guard_android_local_savegame_stats(text) if name == 'SaveAndLoad' else text
+    # Only original SaveAndLoad manifests containing the real Load<T> operation
+    # receive this diagnostic; synthetic SaveGame-only manifests are unchanged.
+    if (name == 'SaveAndLoad' and any(
+            method['signature'] == 'public static T Load<T>(string filename)'
+            for method in row['methods'])):
+        result = trace_caught_original_load_error(result)
     for method in row['methods']:
         if name == 'GameManager' and method.get('name') == 'OnWorldRecieved':
             result = wrap_original_world_callback(result, method['name'], method['body_sha256'], row['area'])
