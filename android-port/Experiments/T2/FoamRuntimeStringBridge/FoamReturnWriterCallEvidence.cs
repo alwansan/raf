@@ -18,7 +18,8 @@ internal static class FoamReturnWriterCallEvidence
         string ImmediatePreCallOpcodeCategory="not_examined",
         string CallConsumedOperandCategory="not_examined",
         bool RetainedDuplicateAfterOneInputVoidCall=false,
-        bool OriginalRuntimeStackContentsVerified=false);
+        bool OriginalRuntimeStackContentsVerified=false,
+        FoamReturnWriterStackSlice.SafeProfile? OriginalSameBlockSurvivingStackSlice=null);
 
     private static string ReturnCategory(TypeReference type) =>
         type.MetadataType == MetadataType.Void ? "void_return" :
@@ -107,9 +108,10 @@ internal static class FoamReturnWriterCallEvidence
         // call execution, value non-null, assignment type verification, or
         // Unity engine assembly identity. Reference equality by name alone
         // is NOT a proof of source/Unity assembly identity.
+        var slice=FoamReturnWriterStackSlice.Inspect(method,returnLocalWriter);
         return new SafeProfile(true,category,pushes,bypass,
             pushes && !bypass,namedRt,false,false,false,
-            preCategory,consumes,retained,false);
+            preCategory,consumes,retained,false,slice);
     }
 
     // Explicit synthetic-only fixtures: no source game assembly and no
@@ -220,5 +222,6 @@ internal static class FoamReturnWriterCallEvidence
         var noArgs=Create(Ref("SyntheticNoArgs",module.TypeSystem.Void));
         if(Inspect(noArgs.Method,noArgs.Writer,true).CallConsumedOperandCategory!="none")
            throw new InvalidDataException("No-arg void call operand category incorrect");
+        FoamReturnWriterStackSlice.RunSyntheticControls();
     }
 }

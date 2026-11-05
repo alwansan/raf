@@ -431,6 +431,47 @@ jobs:
               assert e['ImmediatePreCallOpcodeCategory']=='dup'
               assert e['CallConsumedOperandCategory']=='one'
               assert e['AlternateControlFlowEntryBetweenCallAndStore'] is False
+          ss=e['OriginalSameBlockSurvivingStackSlice']
+          assert ss is not None
+          assert ss['AnalysisStatus'] in (
+              'invalid_input','invalid_writer','not_a_supported_void_call',
+              'not_multi_input_void_call','alternate_entry_before_store',
+              'instruction_budget','control_flow_crossing',
+              'unsupported_stack_opcode','stack_effect_budget',
+              'same_block_stack_source_found','stack_depth_budget',
+              'incoming_stack_unresolved')
+          assert ss['ConditionalSourceOpcodeFamily'] in (
+              'unresolved','literal_null','named_rendertexture_constructor',
+              'other_constructor','named_rendertexture_call_result',
+              'other_call_result','local_load','argument_load',
+              'field_load','indirect_reference_load','address_load',
+              'reference_cast','string_literal','integer_literal',
+              'other_stack_producer')
+          for k in ('SameBlockSurvivingValueSourceFound',
+                    'MultiInputVoidCallConsumptionModeled',
+                    'WholeFunctionBranchJoinProven',
+                    'OriginalRuntimeValueOrPixelsVerified',
+                    'PrivateSourceNamesIlOrValuesDisclosed'):
+              assert type(ss[k]) is bool
+          assert ss['WholeFunctionBranchJoinProven'] is False
+          assert ss['OriginalRuntimeValueOrPixelsVerified'] is False
+          assert ss['PrivateSourceNamesIlOrValuesDisclosed'] is False
+          if ss['SameBlockSurvivingValueSourceFound']:
+              assert ss['AnalysisStatus']=='same_block_stack_source_found'
+              assert ss['MultiInputVoidCallConsumptionModeled'] is True
+              assert ss['ConditionalSourceOpcodeFamily']!='unresolved'
+          assert ss['MultiInputVoidCallConsumptionModeled'] is True
+          print('T2_FOAM_MULTIARG_VOID_STACK_SLICE_SAFE '+json.dumps({
+              'analysis_status':ss['AnalysisStatus'],
+              'conditional_surviving_source_opcode_family':
+                  ss['ConditionalSourceOpcodeFamily'],
+              'same_block_source_found':ss['SameBlockSurvivingValueSourceFound'],
+              'multi_input_void_call_arity_modeled':
+                  ss['MultiInputVoidCallConsumptionModeled'],
+              'whole_function_control_flow_verified':False,
+              'original_runtime_value_or_pixels_verified':False,
+              'private_symbols_il_int_values_disclosed':False,
+          },sort_keys=True))
           print('T2_FOAM_VOID_CALL_PRECALL_STACK_SAFE '+json.dumps({
               'precall_opcode_category':e['ImmediatePreCallOpcodeCategory'],
               'void_call_consumes_operand_count_category':
