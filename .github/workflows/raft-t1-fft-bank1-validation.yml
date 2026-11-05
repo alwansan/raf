@@ -1,0 +1,87 @@
+name: T1 WATER-001 bank1 original FFT validation-layer negative investigation
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - .github/workflows/raft-t1-fft-bank1-validation.yml
+      - scripts/t1_fft_bank1_validation.py
+      - tests/test_t1_fft_bank1_validation.py
+
+permissions:
+  contents: read
+
+concurrency:
+  group: raft-t1-bank1-khronos-validator
+  cancel-in-progress: false
+
+jobs:
+  original-bank1-diagnostic:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 28
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      DEBIAN_FRONTEND: noninteractive
+      ZIP2_SHA: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+    steps:
+      - name: Checkout public probe files only
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Fail-closed synthetic negative controls before any game data
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_t1_fft_bank1_validation.py -v
+          python3 -m py_compile scripts/t1_fft_bank1_validation.py
+      - name: Install software Vulkan validation and original DXBC tools
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends g++ libvulkan-dev mesa-vulkan-drivers vulkan-tools vulkan-validationlayers spirv-tools vkd3d-compiler
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4 -q
+      - name: Build isolated original-preserving T1 runner
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          from scripts.t1_fft_binding_sensitivity import render_host
+          Path("/tmp/t1-bank1-host.cpp").write_text(
+              render_host(Path("scripts/a1_fft_two_pass_vulkan.cpp").read_text()))
+          print("RAFT_T1_BANK1_RUNNER isolated=true inherited_a1_unchanged=true")
+          PY
+          g++ -std=c++17 -O2 -Wall -Wextra /tmp/t1-bank1-host.cpp -lvulkan -o /tmp/t1-bank1-host
+      - name: Recover and SHA-verify only the pinned original FFT owner
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/t1bank1zip"
+          git -C "$RUNNER_TEMP/t1bank1zip" init -q
+          git -C "$RUNNER_TEMP/t1bank1zip" remote add origin https://github.com/alwansan/raf.git
+          git -C "$RUNNER_TEMP/t1bank1zip" -c protocol.version=2 fetch -q --depth=1 --filter=blob:none origin zip2
+          test "$(git -C "$RUNNER_TEMP/t1bank1zip" rev-parse FETCH_HEAD)" = "$ZIP2_SHA"
+          git -C "$RUNNER_TEMP/t1bank1zip" sparse-checkout init --no-cone
+          printf '%s\n' '/RAFT_FILE_MANIFEST.tsv' '/Raft/Raft_Data/sharedassets0.assets/' |
+            git -C "$RUNNER_TEMP/t1bank1zip" sparse-checkout set --no-cone --stdin
+          git -C "$RUNNER_TEMP/t1bank1zip" checkout -q --detach FETCH_HEAD
+          python3 -m scripts.stage_zip2_fft_owner \
+            --zip2-checkout "$RUNNER_TEMP/t1bank1zip" \
+            --destination "$RUNNER_TEMP/t1original/Raft_Data/sharedassets0.assets"
+      - name: Classify original bank1 Vulkan baseline/swap under Khronos validation
+        run: |
+          set -euo pipefail
+          export VK_DRIVER_FILES="$(find /usr/share/vulkan/icd.d -maxdepth 1 -name '*lvp*.json' -print -quit)"
+          test -n "$VK_DRIVER_FILES"
+          timeout 1100s python3 -m scripts.t1_fft_bank1_validation \
+            --source "$RUNNER_TEMP/t1original/Raft_Data" \
+            --runner /tmp/t1-bank1-host
+          echo "RAFT_T1_BANK1 result_is_diagnostic_only=true unity=false android=false"
+      - name: Remove private shader-derived temporary data
+        if: always()
+        shell: bash
+        run: |
+          rm -rf "$RUNNER_TEMP/t1original" "$RUNNER_TEMP/t1bank1zip" /tmp/t1-bank1-host /tmp/t1-bank1-host.cpp
