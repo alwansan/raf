@@ -43,8 +43,11 @@ def classify(payload):
     if imported != "success":
         return {"boundary": "unity_import", "activation": activation, "import": imported,
                 "shader_import_attempted": import_started and imported not in ("skipped", None), "unity_runtime_proven": False}
+    if not import_started:
+        return {"boundary": "unity_import_unverified", "activation": activation, "import": imported,
+                "shader_import_attempted": False, "unity_runtime_proven": False}
     return {"boundary": "unity_import_completed", "activation": activation, "import": imported,
-            "shader_import_attempted": import_started, "unity_runtime_proven": False}
+            "shader_import_attempted": True, "unity_runtime_proven": False}
 
 
 def main():
