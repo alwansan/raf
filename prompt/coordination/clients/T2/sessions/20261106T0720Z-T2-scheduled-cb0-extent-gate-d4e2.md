@@ -1,0 +1,11 @@
+# T2 scheduled — CB0 extent/member/upload evidence gate
+
+- session_id: `20261106T0720Z-T2-scheduled-cb0-extent-gate-d4e2`; origin: `scheduled`; issue: WATER-001; status: completed_source_smoke_only.
+- resumed_from_sessions: `20261106T0620Z-T2-scheduled-selective-id-coordinate-4e8b`, `20261106T024715Z-T2-chat-selective-descriptor-cbguard-a91c`.
+- base_sha: `cae0dbe8c4a98d2d874e0d0f593d91d2dadc3fb5`. Scope first published at `0ba0c6d94a1fc6b84e6378ab078563a1b5cb956f`.
+- Owner baseline: `docs/DEVICE_FEEDBACK_42058825739_AR.md`; phone world entry/save/reentry succeeded from run 42058825739 Artifact; package publication failed. CL pinned `520c4cf409aa20a4db54ff80ed87d8807d9cba57`. Water/FFT and visual effects still fail; APK86 historical account superseded.
+- Existing authentic original experiment [42153150468](https://github.com/alwansan/raf/actions/runs/42153150468) passed 71 source-free tests; 4→0 Vulkan descriptor class collisions after 4 selective edits, with **two CB0 reflected byte extent mismatches** remaining. No Unity/device proof.
+- Work: `prompt/coordination/work/WATER-001/20261106T0720Z-T2-scheduled-cb0-extent-gate-d4e2.json`; experiment_key `foam-cb0-cross-stage-byte-extent-evidence-gate-synthetic-v1`.
+- New source-only code `scripts/t2_foam_cb0_extent_gate.py` at `2f7ff680df6ca49f11cd62e044020efb133b6439`; tests `tests/test_t2_foam_cb0_extent_gate.py` at `801e0a3995e8980571eef3c1c793375821f184d0`. Gate rejects missing/untrusted coordinates, invalid extent values, mismatched extents, and equal extents without independent member ABI and Unity upload evidence. Even satisfied source gate explicitly does not mean Unity/device verified.
+- Two isolated local smoke assertions passed; full repository unittest suite **not run** (local git remote DNS inaccessible). Six regression test methods committed but not executed. No original source assets, ShaderLab, .meta/GUID, .rgd, sound, Settings, mouse, Resolution, touch, or other agent files changed. No CI/build dispatched.
+- Next: run `python -m unittest tests.test_t2_foam_cb0_extent_gate` on live branch; feed verified private original CB0 member layouts and Unity upload proof before changing any readiness state; coordinate T1 FFT/T3 FX. WATER-001 remains OPEN, NOT_READY.
