@@ -23,7 +23,7 @@
   ],
   "budget": "source-only CI; no native Unity build",
   "status": "completed",
-  "observed_result": "Source test job 128079447681 SUCCESS 22/22 on 2ca4541c; workflow aggregate FAILURE from separate refresh_b_team.py T3 event identity schema (job 128079529176). Original startup and B07 jobs pending at checkpoint.",
+  "observed_result": "Synthetic B13 test-only RED exactly 2 silent corrupt-backup subcases; production 2ca4541c GREEN 22/22 B13 fault-injection source job128079447681. B13 workflow overall FAILURE due unrelated T3 event missing record identity in summary job128079529176. Same SHA original local startup CI42272236313, B07 CI42272236197, B14 CI42272236350, reconstruction preflight CI42272236493 all COMPLETED SUCCESS.",
   "rejected_hypotheses": [
     "shutil.copy2 returning normally always guarantees backup byte equality"
   ],
@@ -33,5 +33,5 @@
     "Unrelated summary-refresh job fails independently"
   ],
   "integration_commit": "2ca4541c4b5ed5c9b81e737ae021080f05fe04d4",
-  "next_step": "Check runs 42272236313 and 42272236197; T3/T5 handle own event schema; source scope completed."
+  "next_step": "Synthetic source staging scope closed; no duplicate CI. T3/T5 can repair independently malformed T3 event schema. Follow on phone world/save validation only with legitimate approved signed candidate."
 }
