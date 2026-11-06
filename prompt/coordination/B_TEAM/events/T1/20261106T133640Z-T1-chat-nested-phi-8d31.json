@@ -1,0 +1,15 @@
+{
+  "id": "20261106T133640Z-T1-chat-nested-phi-8d31",
+  "owner": "T1",
+  "session_id": "20261106T133640Z-T1-chat-nested-phi-8d31",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "at": "2026-11-06T13:51:30.459Z",
+  "summary": "Source-authentic original FFT slot0 translated HLSL butterfly1 X selected float32-vector OpPhi has one uint32 Private load-to-bitcarrier entry and one self-fed OpCompositeInsert incoming path. Private CFG check 42228497335 SUCCESS shows second incoming predecessor is a real structural CFG backedge; first is not. One Phi expansion, one self-reference boundary, one CFG backedge. Nested Phi source-only tests 14/14 and scheduled T1 ULP tests 7/7 also passed in source-only CI 42228404633 (61/61 total). First test 42227505971 had incorrect one-ULP expectation within rel_tol 1e-5, corrected fixture without changing comparator. No actual branch execution, numeric original↔Unity parity, authored shader runtime identity or Adreno water proven.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42227795780",
+    "https://github.com/alwansan/raf/actions/runs/42228404633",
+    "https://github.com/alwansan/raf/actions/runs/42228497335",
+    "https://github.com/alwansan/raf/commit/e936ad1f96c0bb0617a7a7199c2304c5f47442ff"
+  ]
+}
