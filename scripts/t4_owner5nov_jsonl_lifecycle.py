@@ -6,7 +6,7 @@ acceptance or authentic save-deserialization proof.
 """
 import argparse
 from collections import Counter
-from datetime import datetime, timezone
+import hashlib
 import json
 from pathlib import Path
 
@@ -18,6 +18,11 @@ from scripts.t4_verify_device_world_save_log import (
 # File byte sizes are public fixed non-content provenance checks on the exact
 # immutable CL@520c4cf phone snapshot. Nothing is fetched by this module.
 PINNED_BYTES = (869991, 499456, 1443270)
+PINNED_GIT_BLOBS = (
+    "28264b50a5a8aaefefb3bdd0256f0869c79e6116",
+    "413932e92fc24cd50b1fae1cbb25120f392e8158",
+    "60674be571e4979e329924e5e2679f43e40ec41a",
+)
 
 TRACKED = {
     ("world", "WorldHasBeenLoaded.firstMoveNext"): "iterator_first_move_next",
@@ -58,8 +63,19 @@ def analyze(paths, pinned=False):
     files = sorted(Path(p) for p in paths)
     if not files or len(files) > 3 or any(not p.is_file() or p.is_symlink() for p in files):
         raise EvidenceInputError("invalid_owner_log_files")
-    if pinned and (len(files) != 3 or tuple(p.stat().st_size for p in files) != PINNED_BYTES):
-        raise EvidenceInputError("unverified_pinned_owner_log_bytes")
+    if pinned:
+        if len(files) != 3 or tuple(p.stat().st_size for p in files) != PINNED_BYTES:
+            raise EvidenceInputError("unverified_pinned_owner_log_bytes")
+        # Immutable commit in the workflow is the first provenance layer; also
+        # authenticate each Git blob independently so a local --pinned call
+        # cannot pass a same-sized synthetic JSONL file as genuine owner data.
+        for path, expected in zip(files, PINNED_GIT_BLOBS):
+            payload = path.read_bytes()
+            digest = hashlib.sha1(
+                b"blob " + str(len(payload)).encode("ascii") + b"\0" + payload
+            ).hexdigest()
+            if digest != expected:
+                raise EvidenceInputError("unverified_pinned_owner_log_git_blob")
     base = summarize(files)
     groups = {}
     for path in files:
@@ -113,7 +129,7 @@ def analyze(paths, pinned=False):
     return {
         "schema": 1,
         "evidence_type": "pinned_owner_5nov_raw_runtime_marker_census",
-        "source_pin": "CL_520c4cf_2026_11_05",
+        "source_pin": "CL_520c4cf_2026_11_05" if pinned else "unverified_synthetic_source",
         "session_count": len(sessions),
         "sessions": sessions,
         "save_nonzero_in_earlier_session_hint": base["save_nonzero_in_earlier_session"],
