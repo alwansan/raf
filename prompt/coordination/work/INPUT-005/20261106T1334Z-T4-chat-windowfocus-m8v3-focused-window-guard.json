@@ -5,7 +5,7 @@
   "origin": "chat",
   "issue_id": "INPUT-005",
   "base_sha": "2ec048fefdc2167fdd55faa2c2f5ce43f3082302",
-  "status": "waiting_ci",
+  "status": "completed_source_managed_ci_success_device_unverified",
   "hypothesis": "Unity focus callback and Android main-window focus can temporarily differ during overlay transitions.",
   "approach": "Check Android Activity.hasWindowFocus before applying immersive UI changes. Retain existing Activity identity and generation guards.",
   "intended_files": [
@@ -21,10 +21,12 @@
   "resumed_from_sessions": [
     "20261106T1320Z-T4-chat-immersive-lease-v4n8"
   ],
-  "next_step": "Check exact run 42227039188 final outcome and source managed ABI compile, then record results and submit independent T5 handoff.",
-  "updated_at": "2026-11-06T13:38:37.583Z",
+  "next_step": "T5: one immutable signed Raft APK with matching OBB and source SHA/versionCode/hashes, hardware mouse+keyboard plus native/system window focus/notification panel/home/menu transitions; preserve OS swipe/Back/Home and verify same world save force-stop reopen. Only device evidence establishes OS bars or camera success.",
+  "updated_at": "2026-11-06T13:39:56.835Z",
   "source_commit": "1496971df6f14335b5d479d8cc488d7636a998be",
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42227039188"
-  ]
+  ],
+  "implementation_commit": "1496971df6f14335b5d479d8cc488d7636a998be",
+  "result": "Exact final run 42227039188 COMPLETED SUCCESS on source 1496971: Python source 10/10 including Android native main-window focus regression; executable C# 33/33 including AndroidFocus=false while UnityFocus=true; pinned original ZIP2 Unity2021 managed AndroidJNI/Core C# compile passed. No Unity player, device or gameplay tests."
 }
