@@ -4,7 +4,7 @@
   "origin": "chat",
   "session_id": "20261106T1308Z-T3-chat-particle108-postvendor-f8c1",
   "issue_id": "RENDER-002",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "6e498046b70129bfa255e248fc65292818f966fe",
   "resumed_from_sessions": [
     "20261106T1125Z-T3-chat-glslang-iomap-d37f",
@@ -26,23 +26,35 @@
     "prompt/coordination/B_TEAM/events/T3/20261106T1308Z-T3-chat-particle108-postvendor-f8c1.json"
   ],
   "experiment_key": "T3-SHAZIP2-15964-6scenes-12owners-AssetRipper036098-W1B02-sameexport-ParticleShader48-108-before-after-vendor-TMPPostFXVolumetric-v1",
-  "resource_key": "T3-bounded-12-owner-original-export-38min-no-native",
+  "resource_key": null,
   "hypothesis": "Same-instance genuine original 108-use Particle Shader48 remains an AssetRipper dummy after the official vendor restorers; previous evidence shows pre-restorer dummy and separately top921 source dummy, not exact 108 postvendor outcome.",
   "approach": "Reuse only existing manual T3 12-owner SHA-original CI; obtain exact pre/post source-selected W1 Shader48 GUID classification with same W1/B02 exporter, fail-closed comparison safe public counts and statuses. Add isolated guarded diagnostic controls; do not alter game files.",
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42222939320",
     "https://github.com/alwansan/raf/actions/runs/42223071341"
   ],
-  "updated_at": "2026-11-06T13:11:04.827Z",
+  "updated_at": "2026-11-06T13:13:36.203Z",
   "limits": "No Unity/APK/Adreno pixel proof; one bounded original source experiment; no secrets/raw assets/GUIDs/hashes in artifacts; no active T1/T2/T4/T5 tasks affected.",
-  "next_step": "Inspect 42223071341 terminal job and only safe pre/post/delta JSON; if necessary use new scoped work for data-backed patch, do not duplicate while running; update this same work+session+experiment with terminal status.",
+  "next_step": "Use independent paired glslang HLSL result T3 20261106T1223Z to recover genuine 108-use Shader48 four-pair programs and original ColorMask RGB/Blend/Cull/ZWrite state; separately correlate exact installed Android emitter before claiming device issue fixed. RENDER-002 still OPEN.",
   "synthetic_source_free_ci_conclusion": "success",
   "exact_original_export_run_id": 42223071341,
   "exact_original_export_job_id": 127909618354,
   "exact_original_export_sha": "90149d3f7ec3f89a40dcaad976f8102737370693",
   "results": {
-    "source_free_tests": "PASS 8 unittest controls",
-    "real_original_asset_before_after": "PENDING_CI",
-    "android_pixels": "NOT_TESTED"
-  }
+    "source_free_tests": "PASS 8 unittest tests, run 42222939320",
+    "real_original_asset_before_after": "PASS: DUMMY_PERSISTS_AFTER_VENDOR_RESTORERS, run 42223071341",
+    "twelve_source_owners_verified": true,
+    "six_original_scenes_SHA_verified": true,
+    "same_export_W1_B02_verified": true,
+    "prevendor_dummy_material_docs": 511,
+    "postvendor_dummy_material_docs": 495,
+    "selected_original_particle_renderer_material_slots": 108,
+    "selected_particle108_shader_dummy_prevendor": true,
+    "selected_particle108_shader_dummy_postvendor": true,
+    "android_pixels": "NOT_TESTED",
+    "source_program_authenticity": "NOT_RESTORED"
+  },
+  "exact_original_export_conclusion": "success",
+  "exact_original_export_artifact_id": 13503374104,
+  "resource_released": true
 }
