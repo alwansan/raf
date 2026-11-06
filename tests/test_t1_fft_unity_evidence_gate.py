@@ -1,6 +1,8 @@
 import unittest
 import json
-from scripts.t1_fft_unity_evidence_gate import classify, parse_sanitized_json
+import tempfile
+from pathlib import Path
+from scripts.t1_fft_unity_evidence_gate import classify, parse_sanitized_json, read_sanitized_evidence
 
 
 def fixture(**changes):
@@ -61,6 +63,39 @@ class GateTests(unittest.TestCase):
 
     def test_error_blocks_positive(self):
         self.assertFalse(classify(fixture(observed_errors=1))['candidate_import_proven'])
+
+
+    def test_bounded_descriptor_reads_valid_evidence(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / 'evidence.json'
+            path.write_text(json.dumps(fixture()), encoding='utf-8')
+            self.assertTrue(read_sanitized_evidence(path)['candidate_import_proven'])
+
+    def test_bounded_descriptor_rejects_oversized_evidence(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / 'evidence.json'
+            path.write_bytes(b' ' * 4097)
+            with self.assertRaisesRegex(ValueError, 'invalid evidence file'):
+                read_sanitized_evidence(path)
+
+    def test_bounded_descriptor_rejects_symlink(self):
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory) / 'target.json'
+            target.write_text(json.dumps(fixture()), encoding='utf-8')
+            link = Path(directory) / 'link.json'
+            try:
+                link.symlink_to(target)
+            except (OSError, NotImplementedError):
+                self.skipTest('symlinks unavailable on this platform')
+            with self.assertRaises((ValueError, OSError)):
+                read_sanitized_evidence(link)
+
+    def test_bounded_descriptor_rejects_invalid_utf8(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / 'evidence.json'
+            path.write_bytes(b'\\xff')
+            with self.assertRaises(UnicodeError):
+                read_sanitized_evidence(path)
 
 
 if __name__ == '__main__':
