@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T1625Z-T3-chat-particle108-nativeRDEF-7d2c",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "base_sha": "2ddeeedb17364461a4237b81076b4c49f371e971",
+  "resumed_from_sessions": [
+    "20261106T1614Z-T3-chat-particle108-bindings-b9c2",
+    "20261106T1515Z-T3-chat-5mat-yamlphase-e73b",
+    "20261106T1532Z-T3-scheduled-particle108-causality-8f3a"
+  ],
+  "experiment_key": "T3-ZIP2-15964-6scenes-4owners-Particle108-4VSFS-8actual-DXBC-SM40SM50-RDEF-resource-registers-before-SPIRV-v1",
+  "resource_key": "T3-Particle108-4owner-6scene-DXBC-RDEF-CPU-no-graphics-export",
+  "hypothesis": "The original DXBC RDEF resource binding table (CB, texture SRV, sampler, UAV) for exact 8 original Particle108 stage programs may be fully recovered without compiler-dependent SPIR-V set/binding ambiguity; compare register layout consistency across four genuine keyword pairs.",
+  "intended_files": [
+    "scripts/t3_particle108_original_dxbc_rdef.py",
+    "tests/test_t3_particle108_original_dxbc_rdef.py",
+    ".github/workflows/raft-t3-particle108-original-rdef.yml",
+    "prompt/coordination/work/RENDER-002/20261106T1625Z-T3-chat-particle108-nativeRDEF-7d2c.json",
+    "prompt/coordination/clients/T3/sessions/20261106T1625Z-T3-chat-particle108-nativeRDEF-7d2c.md",
+    "prompt/coordination/experiments/T3/20261106T1625Z-T3-chat-particle108-nativeRDEF-7d2c.json",
+    "prompt/coordination/B_TEAM/events/T3/20261106T1625Z-T3-chat-particle108-nativeRDEF-7d2c.json"
+  ],
+  "method": "Parse SHA-original DXBC RDEF binary container/resource bindings privately using strict bounds, inspect four source-true VSFS keyword permutations selected by six-scene original PPtrs. Report only aggregate counts: bound kinds, register-range overlap, per-variant original register layout stability, source-authentic material shader properties=13 and original Texture props=2. No proprietary resource names/register numbers published. No SPV tools, no Unity or Android build.",
+  "updated_at": "2026-11-06T16:00:39.454Z",
+  "next_step": "Implement parser and source-only negative controls; one immutable original ZIP2 source runner. Preserve all other clients' code and jobs. RENDER-002 stays OPEN."
+}
