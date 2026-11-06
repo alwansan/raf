@@ -13,6 +13,8 @@ on:
       - tests/test_t1_fft_hlsl_nested_phi_lineage.py
       - scripts/t1_fft_float32_ulp_diagnostic.py
       - tests/test_t1_fft_float32_ulp_diagnostic.py
+      - scripts/t1_fft_invocation_trace_cli.py
+      - tests/test_t1_fft_invocation_trace_cli.py
       - .github/workflows/raft-t1-fft-invocation-pair-gate.yml
 
 permissions:
@@ -41,6 +43,7 @@ jobs:
           python3 -m unittest discover -s tests -p test_t1_fft_trace_compare.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_hlsl_nested_phi_lineage.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_float32_ulp_diagnostic.py -v
+          python3 -m unittest discover -s tests -p test_t1_fft_invocation_trace_cli.py -v
       - name: Privacy and actual-source acceptance boundary
         run: |
           set -euo pipefail
