@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261106T2148Z-T2-chat-cb0-array-bounds-5bc1",
+  "issue_id": "WATER-001",
+  "hypothesis": "Reflected SPIRV-Cross member arrays whose final element begins outside the declared UBO block, or whose stride is missing, currently pass as valid CB0 geometry; rejecting them prevents fictitious compatibility and disambiguates original Foam mismatch.",
+  "source_commit": "2dae3686d9f2a3144172b035d795e5cd975e13ac",
+  "input_hashes": [
+    "SHA-pinned ZIP2 owner via scripts.w1_stage_zip2_owners PINS; no raw object digest published here"
+  ],
+  "tool_versions": {
+    "unityPy": "1.25.4",
+    "vkd3d": "system apt vkd3d-compiler",
+    "glslang": "ubuntu-24.04 runner glslangValidator",
+    "spirv_tools": "ubuntu-24.04 runner spirv-val"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p 'test_t2_foam_private_cb0_member_shape.py' -v",
+    "python3 -m scripts.t2_foam_private_cb0_member_shape --candidate $RUNNER_TEMP/t2-authentic-foam-private.shader --scratch $RUNNER_TEMP --out $RUNNER_TEMP/t2-foam-cb0-member-shape-safe.json",
+    "python3 -m scripts.t2_foam_private_cb0_index_access --candidate $RUNNER_TEMP/t2-authentic-foam-private.shader --scratch $RUNNER_TEMP --out $RUNNER_TEMP/t2-foam-cb0-index-safe.json"
+  ],
+  "negative_controls": [
+    "array first-dimension last start reaches or exceeds reflected block_size",
+    "array missing array_stride rejected",
+    "array with nonzero starting offset and too-short block refused",
+    "nested array declared last outer-element starts past block refused"
+  ],
+  "positive_controls": [
+    "valid reflected array final slot starts within block_size",
+    "valid scalar without array stride",
+    "SHA-authentic original four compiled stages remain accepted"
+  ],
+  "workflow_path": ".github/workflows/raft-t2-foam-private-shaderlab-candidate.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42300107157",
+  "artifact_urls": [],
+  "budget": "25-minute source-original private CPU workflow; no native Unity",
+  "status": "completed",
+  "observed_result": "Source-authentic private Foam CI PASS. New synthetic CB0 geometry 15/15 PASS; both original passes retain stage-specific extent/array length difference, no own-reflection out-of-bounds loads; conservative missing-stride and terminal-start guards do not reject authentic data.",
+  "rejected_hypotheses": [
+    "Original Foam reflection has last declared array element starting outside own reflected UBO block",
+    "A matching member start/type token implies identical cross-stage declared CB0 array extent or upload"
+  ],
+  "limitations": [
+    "Synthetic and private source SPIR-V reflection only; no actual Unity importer/Adreno pixels",
+    "A final element starting within a block does not prove its full byte footprint fits",
+    "Original stage-specific lengths differ; compiled load paths may be non-executed branches",
+    "No original Unity runtime CB0 property origin or managed upload proven"
+  ],
+  "integration_commit": "2dae3686d9f2a3144172b035d795e5cd975e13ac",
+  "next_step": "Coordinate with T5 on authentic Unity export and shader importer; compute true original CB0 runtime vector uploads and verify VS/FS compatible member semantics/layout. Neither a successful SPIR-V validator nor array lower-bound proves runtime CB0 upload/pixels."
+}
