@@ -6,7 +6,7 @@
   "origin": "chat",
   "issue_id": "LOCAL-005",
   "track": "original-saveandload-path-portability-stale-post-backup-source",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "70922d3736c55c716a7d4f7151fe7661c798912a",
   "intended_files": [
     "scripts/adapt_original_save_paths.py",
@@ -21,7 +21,12 @@
     "20261106T1835Z-T4-chat-backup-byte-verify-z7n4",
     "20261106T2035Z-T4-scheduled-native-failure-h7q2"
   ],
-  "run_urls": [],
-  "updated_at": "2026-11-06T20:52:00Z",
-  "next_step": "Add failing synthetic source/meta interleaving and validate RED via existing original-save-path CI; implement bounded fail-closed check and verify GREEN. Do not run Unity native or touch T5 workflows."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42292236717",
+    "https://github.com/alwansan/raf/actions/runs/42292421337"
+  ],
+  "updated_at": "2026-11-06T20:56:00Z",
+  "next_step": "Await exact-SHA 42292421337 ZIP2 private source stage; close files only if GREEN. No native request.",
+  "negative_control_commit": "1e6d4133acdd8f864095494883a0ad9596063cab",
+  "integration_commit": "5d3743920eaead00ac40d6ad863f53c638629a76"
 }
