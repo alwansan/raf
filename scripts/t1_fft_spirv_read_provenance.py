@@ -49,7 +49,7 @@ def bitcast_kind(value, values, types):
     return f"{numeric_kind(source_type, types)}_to_{numeric_kind(destination, types)}:{storage}"
 
 
-def coordinate_profile(root, values, types):
+def coordinate_profile(root, values, types, max_depth):
     pending = [(root, 0)]
     seen, counts, bitcasts = set(), {}, {}
     while pending:
@@ -68,19 +68,21 @@ def coordinate_profile(root, values, types):
             inputs = args
         elif op == "OpPhi":
             inputs = args[::2]
-        elif op in ("OpCompositeExtract", "OpVectorShuffle"):
+        elif op in ("OpCompositeExtract", "OpCompositeInsert", "OpVectorShuffle"):
             inputs = args[:1 if op == "OpCompositeExtract" else 2]
         elif op not in LEAF_OPS:
             op = "unresolved"
         counts[op] = counts.get(op, 0) + 1
-        if depth < 4:
+        if depth < max_depth:
             pending.extend((operand, depth + 1) for operand in reversed(inputs))
         elif inputs:
             counts["depth_boundary"] = counts.get("depth_boundary", 0) + 1
     return counts, bitcasts
 
 
-def analyze(disassembly, *, coordinates=False):
+def analyze(disassembly, *, coordinates=False, coordinate_depth=4):
+    if not 1 <= coordinate_depth <= 12:
+        raise ValueError("Private coordinate slice depth outside bounds")
     decorations, definitions, operations = {}, {}, []
     values, types = {}, {}
     for line in disassembly.splitlines():
@@ -118,7 +120,7 @@ def analyze(disassembly, *, coordinates=False):
             role = {0: "source", 1: "butterfly"}.get(decorations.get((root, "Binding")), role)
         report[role][operation] += 1
         if coordinates and operation == "fetch":
-            counts, bitcasts = coordinate_profile(coordinate, values, types)
+            counts, bitcasts = coordinate_profile(coordinate, values, types, coordinate_depth)
             site = {"role": role, "producer_opcodes": counts}
             if bitcasts:
                 site["typed_coordinate_bitcasts"] = bitcasts
@@ -132,13 +134,15 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("module", type=Path)
     parser.add_argument("--coordinates", action="store_true")
+    parser.add_argument("--coordinate-depth", type=int, default=4)
     args = parser.parse_args()
     try:
         if not 20 <= args.module.stat().st_size <= 1024 * 1024:
             raise ValueError("Private module outside size bounds")
         disassembly = subprocess.run(["spirv-dis", "--raw-id", str(args.module)],
                                      check=True, capture_output=True, text=True, timeout=20)
-        report = analyze(disassembly.stdout, coordinates=args.coordinates)
+        report = analyze(disassembly.stdout, coordinates=args.coordinates,
+                         coordinate_depth=args.coordinate_depth)
     except (OSError, ValueError, subprocess.SubprocessError):
         parser.exit(2, "Private SPIR-V operand audit failed\n")
     print("RAFT_T1_PASS0_SPIRV_PROVENANCE " + json.dumps(report, sort_keys=True))
