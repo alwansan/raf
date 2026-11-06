@@ -84,7 +84,7 @@ jobs:
             "$TMPDIR/candidates/_private_vulkan/slot0.spv" -o "$TMPDIR/coordinate-ssa.spv" \
             > "$TMPDIR/coordinate-ssa.log" 2>&1
           spirv-val --target-env vulkan1.1 "$TMPDIR/coordinate-ssa.spv" > "$TMPDIR/coordinate-ssa-validation.log" 2>&1
-          echo "RAFT_T1_COORDINATE_PROFILE original_slot0_promoted_ssa"
+          echo "RAFT_T1_COORDINATE_PROFILE original_slot0_promoted_ssa lane_sensitive=true"
           python3 -m scripts.t1_fft_spirv_read_provenance --coordinates --coordinate-depth 12 "$TMPDIR/coordinate-ssa.spv"
           echo "RAFT_T1_COORDINATE_PROFILE hlsl_roundtrip_slot0"
           python3 -m scripts.t1_fft_spirv_read_provenance --coordinates "$TMPDIR/coordinate.spv"
