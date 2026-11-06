@@ -243,8 +243,96 @@ internal static class Program
         return create && serialize ? candidate : null;
     }
 
+    // Fresh child CLR: never invoke the legacy formatter on unverified bytes.
+    // Generated Save output is accepted only when it is itself identical to
+    // one exact immutable 5-Nov owner Git blob; no arbitrary RGD is accepted.
+    private static int FreshClrLoadChild(string[] args)
+    {
+        if (args.Length != 5 || args[0] != "--fresh-load-child" ||
+            args[1] != "--assembly" || args[3] != "--generated")
+            return 2;
+        try
+        {
+            string assemblyPath = Path.GetFullPath(args[2]);
+            string generatedPath = Path.GetFullPath(args[4]);
+            if (!OriginalFile(assemblyPath, OriginalDllSize, OriginalDllSha) ||
+                !AuthenticOwnerWorldFile(generatedPath))
+                return 3;
+            string refs = Path.GetDirectoryName(assemblyPath)
+                ?? throw new InvalidDataException();
+            var companions = Directory.GetFiles(refs, "*.dll")
+                .Where(p => Path.GetFileName(p) != "Assembly-CSharp.dll")
+                .ToArray();
+            if (companions.Length != 151 ||
+                companions.Any(p => new FileInfo(p).LinkTarget is not null))
+                return 4;
+            InstallLocalReferenceResolver(refs);
+            var original = AssemblyLoadContext.Default.LoadFromAssemblyPath(assemblyPath);
+            if (original.GetName().Name != "Assembly-CSharp") return 5;
+
+            AppContext.SetSwitch(
+                "System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization", true);
+#pragma warning disable SYSLIB0011
+            object? root;
+            using (var input = File.OpenRead(generatedPath))
+                root = new BinaryFormatter().Deserialize(input);
+#pragma warning restore SYSLIB0011
+            if (root is null || root.GetType().Assembly != original) return 6;
+            var originalRoot = root.GetType();
+            var originalType = original.GetType("SaveAndLoad", throwOnError: false);
+            var load = originalType?.GetMethods(BindingFlags.Static |
+                    BindingFlags.Public | BindingFlags.NonPublic)
+                .Where(m => m.Name == "Load" && m.IsGenericMethodDefinition &&
+                    m.GetGenericArguments().Length == 1 &&
+                    m.ReturnType.IsGenericParameter &&
+                    m.GetParameters().Length == 1 &&
+                    m.GetParameters()[0].ParameterType == typeof(string))
+                .ToArray() ?? Array.Empty<MethodInfo>();
+            if (load.Length != 1) return 7;
+            object? loaded = load[0].MakeGenericMethod(originalRoot)
+                .Invoke(null, new object[] { generatedPath });
+            return loaded is not null && loaded.GetType() == originalRoot ? 0 : 8;
+        }
+        catch (Exception)
+        {
+            // No exception, user type name, RGD filename or serialized bytes
+            // are emitted by the child to the CI log.
+            return 9;
+        }
+    }
+
+    private static bool FreshClrProcessLoadsGeneratedOwnerSave(
+        string assemblyPath, string generatedPath)
+    {
+        var start = new System.Diagnostics.ProcessStartInfo("dotnet")
+        {
+            UseShellExecute = false,
+            CreateNoWindow = true,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+        };
+        start.ArgumentList.Add(typeof(Program).Assembly.Location);
+        start.ArgumentList.Add("--fresh-load-child");
+        start.ArgumentList.Add("--assembly");
+        start.ArgumentList.Add(assemblyPath);
+        start.ArgumentList.Add("--generated");
+        start.ArgumentList.Add(generatedPath);
+        using var child = System.Diagnostics.Process.Start(start);
+        if (child is null) return false;
+        if (!child.WaitForExit(12000))
+        {
+            child.Kill(entireProcessTree: true);
+            child.WaitForExit(2000);
+            return false;
+        }
+        // Only the process exit result is observed; do not read its output.
+        return child.ExitCode == 0;
+    }
+
     private static int Main(string[] args)
     {
+        if (args.Length > 0 && args[0] == "--fresh-load-child")
+            return FreshClrLoadChild(args);
         if ((args.Length != 6 && (args.Length != 7 || args[6] != "--original-save-roundtrip")) ||
             args[0] != "--assembly" || args[2] != "--seed" || args[4] != "--output")
         {
@@ -362,6 +450,8 @@ internal static class Program
             bool privateWireCompared = false;
             bool privateWireIdentical = false;
             bool loadedSavedObjectByGameMethod = false;
+            bool freshClrChildAttempted = false;
+            bool freshClrChildLoaded = false;
             bool removedTemp = false;
             string saveCategory = "ORIGINAL_ROOT_TYPE_UNAVAILABLE";
             int safeSaveCalls = 0;
@@ -448,6 +538,17 @@ internal static class Program
                                 loadedSavedObjectByGameMethod = loaded is not null &&
                                     loaded.GetType() == originalRootType;
                             }
+                            if (loadedSavedObjectByGameMethod && privateWireIdentical)
+                            {
+                                // This target is the actual original Save-generated
+                                // file, not the CL seed. Parent first confirmed the
+                                // generated bytes are identical to the verified seed;
+                                // the child independently authenticates its Git blob
+                                // before any historical BinaryFormatter use.
+                                freshClrChildAttempted = true;
+                                freshClrChildLoaded = FreshClrProcessLoadsGeneratedOwnerSave(
+                                    assemblyPath, savedPath);
+                            }
                             saveCategory = loadedSavedObjectByGameMethod
                                 ? "NONE" : "GENUINE_SAVE_OR_LOAD_ROUNDTRIP_UNVERIFIED";
                         }
@@ -498,6 +599,8 @@ internal static class Program
                 ["original_private_Save_output_created"] = savedFileExisted,
                 ["original_private_Save_output_nonzero"] = savedFileNonzero,
                 ["original_private_Save_generated_LoadT_matching_root"] = loadedSavedObjectByGameMethod,
+                ["original_private_Save_fresh_CLR_child_attempted"] = freshClrChildAttempted,
+                ["original_private_Save_fresh_CLR_child_LoadT_matching_root"] = freshClrChildLoaded,
                 ["original_private_Save_private_wire_compared"] = privateWireCompared,
                 ["original_private_Save_private_wire_identical"] = privateWireIdentical,
                 ["original_private_Save_isolated_temp_removed"] = removedTemp,
