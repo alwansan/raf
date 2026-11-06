@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "origin": "chat",
+  "session_id": "20261106T0218Z-T4-chat-owner5nov-rgd-compat-k6p9",
+  "issue_id": "LOCAL-005",
+  "status": "completed_verified_owner_world_original_clr_load_device_unverified",
+  "title": "Authentic owner 5 Nov phone-snapshot seven world RGD original compiled CLR Load<T> compatibility",
+  "hypothesis": "Owner's newer 5-Nov world RGD saves may deserialize differently from previously tested 4-Nov APK86 saves; a fail-closed real original CLR test can distinguish save schema/root corruption from runtime Android world/host issues.",
+  "input_provenance": {
+    "owner_cl_snapshot": {
+      "repo": "alwansan/CL",
+      "commit": "520c4cf409aa20a4db54ff80ed87d8807d9cba57",
+      "selection": "World/*.rgd under user-private original directory; no private user/world names recorded",
+      "world_blob_count": 7,
+      "world_sizes_bytes": [
+        309519,
+        319239,
+        319239,
+        331887,
+        330281,
+        311063,
+        318536
+      ],
+      "distinct_original_git_objects": 7
+    },
+    "original_raft_zip2": {
+      "repo": "alwansan/raf",
+      "commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+      "assembly_size_bytes": 3211776,
+      "assembly_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e"
+    },
+    "managed_siblings": {
+      "commit": "02e9fba7fb42b83579595885391be636ee3b56e8",
+      "count": 151
+    }
+  },
+  "source_commits": {
+    "allowlist_extended": "fae341c8475a54dea6223f784f3cefb674a5e0d8",
+    "owner_authenticator": "8b5fee5b1e8570c78cfdbc5482c4ba785fc86b51",
+    "source_free_tests": "2c17e8c177b713d53d179dc789fbf1e49e248b70",
+    "workflow": "c9f7b0bf133bb5a102640f32c39a956fd8057e92"
+  },
+  "real_input_workflow": ".github/workflows/raft-t4-owner5nov-world-rgd-clr.yml",
+  "run": "https://github.com/alwansan/raf/actions/runs/42150216417",
+  "run_id": 42150216417,
+  "run_job_id": 127671362899,
+  "commit_tested": "c9f7b0bf133bb5a102640f32c39a956fd8057e92",
+  "test_commands": [
+    "python3 -m unittest discover -s tests -p test_t4_stage_owner5nov_world_rgds.py -v",
+    "dotnet publish android-port/Experiments/T4/ClWorldRgdRuntime/ClWorldRgdRuntime.csproj -c Release (private log)",
+    "actions/checkout owner CL@520c... sparse User/ dir and ZIP2 original DLL+151 exact siblings; integrity validation before any unsafe formatter",
+    "scripts/t4_stage_owner5nov_world_rgds.py --checkout owner-cl --stage-dir ephemeral-owned",
+    "dotnet ClWorldRgdRuntime.dll --assembly EXACT_ORIGINAL_DLL --seed EACH_VERIFIED_OWNER_SAMPLE --output PRIVATE_JSON --original-loadt",
+    "one-byte tampered copy must fail before formatter and not create result"
+  ],
+  "negative_controls": [
+    "Two distinct original world files have identical byte size 319239 but different exact Git object hashes; new C# allowlist must match size AND exact SHA1.",
+    "Changed same-size source Git blob rejected before stage; unknown extra and missing source rejected.",
+    "Symlink file, checkout root symlink, ambiguous collection, output collision and output-inside-source refused.",
+    "Non-world player RGD files excluded by selection rather than fed to world loader.",
+    "Tampered known blob rejects original formatter gate with no output report.",
+    "Previous three 4 Nov input blobs are kept in exact CLR allowlist; regression real original CI42149781353 SUCCESS."
+  ],
+  "observed": {
+    "workflow_status": "COMPLETED_SUCCESS",
+    "synthetic_source_free_tests": {
+      "passed": 12,
+      "total": 12
+    },
+    "owner_world_blobs_authenticated": 7,
+    "formatter_deserialize_object_created": 7,
+    "root_type_defined_in_original_game_assembly": 7,
+    "original_compiled_SaveAndLoad_LoadT_invoked": 7,
+    "original_compiled_LoadT_return_matches_original_root": 7,
+    "formatter_error_categories": {
+      "NONE": 7
+    },
+    "loader_error_categories": {
+      "NONE": 7
+    },
+    "tampered_sample_rejected": true,
+    "prior_4nov_three_save_regression_run": "https://github.com/alwansan/raf/actions/runs/42149781353",
+    "prior_4nov_regression_result": "SUCCESS",
+    "native_android_unity_player_build": false,
+    "android_phone_save_reopen_rerun": false,
+    "original_save_serializer_invoked": false,
+    "world_progress_content_verified": false,
+    "device_ready_verified": false
+  },
+  "security_and_privacy": "No user names, game world names, raw save paths/bytes, private exception details, game fields or original method source emitted into public CI output. Seven .rgd bytes staged ephemerally after git blob verification. Original BinaryFormatter is unsafe with unknown inputs, so exact CL commit, original DLL SHA and 7 hardcoded trusted blob identities are checked first; runners have read-only GitHub permissions and no persisted credentials.",
+  "limitations": [
+    "Typed original .NET8 CLR load compatibility of seven snapshots is not proof of Unity2021 IL2CPP Android runtime or actual gameplay/SaveGame calls.",
+    "CL snapshot is from owner phone evidence; per-file originating APK/OBB manifest and chronology are not cryptographically verified by this test.",
+    "Matching original CLR root type and Load<T> return does not verify world progress, player controls, local host callbacks, data durability, or full-process same-world reopen.",
+    "Five-Nov owner-confirmed playable world/save/reopen of prior artifact42058825739 remains bounded to that device and source SHA e9c358eda0; cannot transfer its success to newer source.",
+    "LOCAL-005 remains OPEN; no Unity/Android build or actual device regression from this scope."
+  ],
+  "next_step": "T5 coordinates exact current signed APK+matching OBB and owner repeats same-world playable create/save/exit/reopen; correlate Android Save.argumentFileSnapshot, Load.argumentFileSnapshot, Load.caughtException, GameManager.OnWorldRecieved, original completion markers and actual RGD from that exact candidate, plus mouse/graphics regression."
+}
