@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T152810Z-T1-chat-original-key-preflight-c41b",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "a99436ff7ee8351a465ef5f13ea4abad42841cbe",
+  "updated_at": "2026-11-06T15:28:10.506Z",
+  "resumed_from_sessions": [
+    "20261106T151730Z-T1-chat-keyed-candidate-3a7f",
+    "20261106T1511Z-T1-scheduled-invocation-cli-k7m2",
+    "20261106T1408Z-T1-scheduled-pair-input-readiness-v3"
+  ],
+  "track": "Original SPIR-V invocation-keyed capture preflight for independent paired FFT trace",
+  "hypothesis": "Existing original private SPIR-V may expose three typed ImageFetch sites with recognizable integer coordinates and GlobalInvocationId; source-only strict layout/descriptor audit can prevent unsafe original buffer instrumentation and clarify prerequisites.",
+  "approach": "Add nonmutating fail-closed preflight that inspects original SPIR-V disassembly, descriptor binding collision, GlobalInvocationId Input type and fetch coordinate/result numeric types. Publish only bounded boolean/type-family fields, no SSA IDs, shader literals or source. Run synthetic unit controls on source-only 4-minute workflow while previous T1 keyed candidate Vulkan job runs separately.",
+  "intended_files": [
+    "scripts/t1_fft_original_keyed_preflight.py",
+    "tests/test_t1_fft_original_keyed_preflight.py",
+    ".github/workflows/raft-t1-fft-invocation-pair-gate.yml",
+    "prompt/coordination/clients/T1/sessions/20261106T152810Z-T1-chat-original-key-preflight-c41b.md",
+    "prompt/coordination/experiments/T1/20261106T152810Z-T1-chat-original-key-preflight-c41b.json",
+    "prompt/coordination/B_TEAM/events/T1/20261106T152810Z-T1-chat-original-key-preflight-c41b.json"
+  ],
+  "experiment_key": "water001-original-spirv-direct-keyed-trace-typed-fetch-builtin-descriptor-preflight-v1-sha15964ea8",
+  "resource_key": "t1-sourceonly-python-4min-different-from-running-private-vulkan",
+  "run_urls": [],
+  "result": null,
+  "next_step": "Build strict SPIR-V source-safe audit and synthetic controls without downloading original binary or launching a second private Vulkan runner. Original-actual validation will occur only after candidate run completes and when a new non-overlapping original-source experiment is reserved."
+}
