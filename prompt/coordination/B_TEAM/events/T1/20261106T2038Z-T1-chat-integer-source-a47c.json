@@ -1,0 +1,15 @@
+{
+  "id": "20261106T2038Z-T1-chat-integer-source-a47c",
+  "owner": "T1",
+  "session_id": "20261106T2038Z-T1-chat-integer-source-a47c",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "type": "start",
+  "at": "2026-11-06T20:40:50Z",
+  "summary": "Controlled T1 integer_source slot0 private Unity FFT counterfactual launched: original direct SPIR-V Vulkan unchanged; only source ImageFetch coordinate integer-lane HLSL translator before real Unity, baseline 42289238865 site mismatches [63,252,64]. CI42290211798 in progress after passing CLI/source-only preflights. No original variant or Android result yet.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42290211798",
+    "https://github.com/alwansan/raf/actions/runs/42289238865"
+  ],
+  "status": "waiting_ci"
+}
