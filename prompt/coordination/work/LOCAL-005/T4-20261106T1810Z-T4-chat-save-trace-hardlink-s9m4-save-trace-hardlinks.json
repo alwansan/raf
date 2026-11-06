@@ -4,7 +4,7 @@
   "session_id": "20261106T1810Z-T4-chat-save-trace-hardlink-s9m4",
   "origin": "chat",
   "issue_id": "LOCAL-005",
-  "status": "active",
+  "status": "completed",
   "base_sha": "667e98849029ead2bac08439224fd163e274e8e0",
   "track": "genuine original SaveAndLoad Android operation-trace source import guard",
   "resource_key": null,
@@ -24,14 +24,45 @@
   ],
   "hypothesis": "Original runtime-operation trace instrumenter modifies SHA-authenticated SaveAndLoad and Raft_Network sources after only symbolic-link checks. Hardlinked original source or .meta are regular files and can alias outside originals; in-place path.write_bytes mutates external source. The first stage adapter now rejects hardlinks but independent instrumentation path still lacks equivalent guard.",
   "planned_test": "Two synthetic apply()-level tests with manifest/valid SHA SaveAndLoad operation source; externally hardlinked source and separately hardlinked metadata must reject before backup or writing. Confirm outside bytes and GUID unchanged. Source-only CI initial red and green original offline compile and B50 regression.",
-  "run_urls": [],
-  "result": null,
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42268654636",
+    "https://github.com/alwansan/raf/actions/runs/42268781552",
+    "https://github.com/alwansan/raf/actions/runs/42268781586",
+    "https://github.com/alwansan/raf/actions/runs/42268781987",
+    "https://github.com/alwansan/raf/actions/runs/42268781607",
+    "https://github.com/alwansan/raf/actions/runs/42268781691",
+    "https://github.com/alwansan/raf/actions/runs/42268781655",
+    "https://github.com/alwansan/raf/actions/runs/42268781957",
+    "https://github.com/alwansan/raf/actions/runs/42268781646"
+  ],
+  "result": {
+    "red_sha": "9e9b7efe7ffbc906cc21d17ce19da4bf14122657",
+    "red_run": "42268654636 completed expected failure: 2 new linked-source/meta tests failed, existing 15 passed",
+    "production_fix_sha": "8e8e9e8dba123d1ee0b185e45745b03a06c88add",
+    "green_run": "42268781552 success 17/17 + original Android post-Save C# synthetic proof",
+    "other_green_runs": [
+      "42268781586 B22 source transaction",
+      "42268781987 B50 SteamStats original source boundaries",
+      "42268781607 genuine original local startup compilation",
+      "42268781691 reconstruction preflight",
+      "42268781655 original Load argument classification",
+      "42268781957 original ready-boundary check",
+      "42268781646 original callback chain"
+    ],
+    "modified_files": [
+      "scripts/instrument_android_runtime_operations.py",
+      "tests/test_runtime_operation_traces.py"
+    ],
+    "original_game_source_changed": false,
+    "unity_native_or_android_device_tested": false,
+    "trial_vote_unchanged": true
+  },
   "trial_vote": {
     "round_id": "trial-20261106-r1",
     "decision": "يحتاج",
     "unchanged": true,
     "reason": "Prior material post-device physical mouse source improvements; this trace staging guard is minor"
   },
-  "updated_at": "2026-11-06T18:10:00Z",
-  "next_step": "Run read→red→green with original runtime-operation source compiler evidence; no original game bytes published and no native build."
+  "updated_at": "2026-11-06T18:15:00Z",
+  "next_step": "Source-stage bound finished; prepare future correct signed APK+OBB only on true 5/5 trial vote and T5-owned request. No actual native game world/save acceptance. LOCAL-005 and INPUT-005 OPEN."
 }
