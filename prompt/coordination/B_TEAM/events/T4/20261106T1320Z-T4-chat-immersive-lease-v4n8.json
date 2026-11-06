@@ -1,0 +1,14 @@
+{
+  "id": "20261106T1320Z-T4-chat-immersive-lease-v4n8",
+  "owner": "T4",
+  "session_id": "20261106T1320Z-T4-chat-immersive-lease-v4n8",
+  "issue_id": "INPUT-005",
+  "type": "integration",
+  "at": "2026-11-06T13:27:11.646Z",
+  "summary": "Android immersive queued WindowInsets hide now checks original Activity identity plus focus/pause/disable generation and fails closed against replacement Activity. Exact final source CI 42225179203 passed 9 Python+28 executable C# and genuine original Unity2021 managed ABI compile; no Android device proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/f4b92e1da30fd78356f57ffe3c28bd72aae4be55",
+    "https://github.com/alwansan/raf/actions/runs/42225179203"
+  ],
+  "device_confirmed": false
+}
