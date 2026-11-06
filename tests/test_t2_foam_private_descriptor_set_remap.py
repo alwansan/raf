@@ -113,6 +113,21 @@ class PrivateSPIRVDecorationOnlyControls(unittest.TestCase):
         with self.assertRaises(ValueError):
             scan_binary_decorations(struct.pack("<%dI"%len(words),*words))
 
+    def test_truncated_opdecorate_word_count_fails_closed(self):
+        # Valid word boundaries but an invalid OpDecorate arity must not
+        # silently bypass descriptor validation (including unknown modes).
+        original = list(struct.unpack("<%dI" % (len(binary()) // 4), binary()))
+        for count in (1, 2):
+            with self.subTest(word_count=count):
+                words = original[:5] + [((count << 16) | 71)]
+                if count == 2:
+                    words.append(6)
+                words += original[9:]
+                blob = struct.pack("<%dI" % len(words), *words)
+                with self.assertRaisesRegex(ValueError,
+                        "^malformed_private_descriptor_decoration$"):
+                    scan_binary_decorations(blob)
+
     def test_duplicate_binding_or_set_decorations_rejected(self):
         for duplicate in (op(34,6,0),op(33,6,1)):
             words=list(struct.unpack("<%dI"%(len(binary())//4),binary()))
