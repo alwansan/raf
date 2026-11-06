@@ -1,0 +1,21 @@
+{
+  "id": "20261106T005710Z-T3-chat-particle108-vulkan-c8f1",
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T005710Z-T3-chat-particle108-vulkan-c8f1",
+  "issue_id": "RENDER-002",
+  "type": "source_shader_translation_drift_result",
+  "at": "2026-11-06T01:11:34.368Z",
+  "summary": "SHA-original unique 108 ParticleShader48 source 4 VS/FS pairs: real vkd3d to Vulkan1.1 SPIRV 8/8, SPIRV-Cross HLSL and glslang SPIRV valid 8/8, source interfaces 4/4 but roundtrip interfaces 2/4; 0/8 exact IO stage parity; preserved type multisets 8/8, candidate location-only remap on 4 input and 4 output stages, resource binding shapes 6/8. CI42141506120 SUCCESS 133 tests. Android graphics not tested.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42141506120",
+    "https://github.com/alwansan/raf/actions/runs/42141030091",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_ORIGINAL_PARTICLE108_SPIRV_TRANSLATION_2026-11-06.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-original-particle108-authentic-D3D11-variants.json"
+  ],
+  "limitations": [
+    "source-only compiler diagnosis, no game shader asset/Unity Vulkan output changed",
+    "actual fire/smoke emitter not matched",
+    "RENDER-002 OPEN"
+  ]
+}
