@@ -1,0 +1,20 @@
+{
+  "session_id": "20261106T1230Z-T3-scheduled-source-gate-7e4c",
+  "origin": "scheduled",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "base_sha": "fb58c70c247c6d8c7ec7593c183647339a76e96d",
+  "updated_at": "2026-11-06T12:30:27Z",
+  "intended_files": [
+    "scripts/t3_shader_identity_gate.py",
+    "tests/test_t3_shader_identity_gate.py",
+    "prompt/coordination/clients/T3/sessions/20261106T1230Z-T3-scheduled-source-gate-7e4c.md"
+  ],
+  "experiment_key": "t3-shader48-structural-gate-current-python-tests-13-source-64343680",
+  "resource_key": null,
+  "hypothesis": "Existing structural gate tests may be unexecuted and may conceal parser regressions; verify without touching Unity assets.",
+  "taken_over_from": [
+    "prompt/coordination/clients/T3/sessions/20261106T1131Z-T3-scheduled-newline-7d4c.md"
+  ],
+  "limits": "Source-only. No native/device or pixel proof; no duplicate CI."
+}
