@@ -2,7 +2,7 @@
   "session_id": "20261106T2021Z-T2-scheduled-foam-guid-collision-f8a3",
   "origin": "scheduled",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "waiting_ci",
   "baseline_sha": "14084580e7ac2e2959d30198201dc8e54fbe370f",
   "resumed_from_sessions": [
     "20261106T2000Z-T2-chat-foam-private-installer-a4c7",
@@ -15,6 +15,13 @@
   "hypothesis": "An otherwise unique Foam ShaderLab target can share its GUID with another exported .meta; fail closed before backup or promotion.",
   "experiment_key": "t2-foam-unique-export-guid-synthetic-20261106",
   "resource_key": null,
-  "updated_at": "2026-11-06T20:21:00Z",
-  "notes": "T3 Shader48 CI 42287201379 in progress; no shared CI/native request; source-only tests."
+  "updated_at": "2026-11-06T20:24:00Z",
+  "notes": "T3 Shader48 CI 42287201379 in progress; no shared CI/native request; source-only tests.",
+  "result_commits": [
+    "014d48fafbfd93b0bf0f2bff46c3c82ad2940ef3",
+    "edc70e76ec5cd8d694c2a531f3a54139282d09e1",
+    "41e2ae8736971c24dbe956c05d5aaf597d63874b"
+  ],
+  "waiting_ci": "https://github.com/alwansan/raf/actions/runs/42287347419",
+  "session_path": "prompt/coordination/clients/T2/sessions/20261106T2021Z-T2-scheduled-foam-guid-collision-f8a3.md"
 }
