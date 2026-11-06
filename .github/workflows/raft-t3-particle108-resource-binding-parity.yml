@@ -1,11 +1,5 @@
 name: T3 RENDER-002 SHA-original Particle108 VSFS resource descriptor parity
 on:
-  push:
-    branches: [feature/android-native-port]
-    paths:
-      - '.github/workflows/raft-t3-particle108-resource-binding-parity.yml'
-      - 'scripts/t3_particle108_resource_binding_parity.py'
-      - 'tests/test_t3_particle108_resource_binding_parity.py'
   workflow_dispatch:
 permissions:
   contents: read
