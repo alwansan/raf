@@ -1,0 +1,20 @@
+{
+  "id": "20261106T000407Z-T3-chat-nonexportable-pointer-b42f",
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T000407Z-T3-chat-nonexportable-pointer-b42f",
+  "issue_id": "RENDER-002",
+  "type": "source_export_result",
+  "at": "2026-11-06T00:13:23.224Z",
+  "summary": "CI42134436841 SUCCESS (104/104 source-free tests) plus real SHA-original one-AssetRipper export. Five authentic original Particle Materials and 3 typed Texture2D28: 9 exact regular Texture export GUID links + 1 exact nonexportable source container.CreateExportPointer equals tenth actual Material YAML TexEnv pointer = 10/10 exact source→same-instance-export binding parity, 10/10 UV, zero null/wrong GUID/unresolved. No Android device acceptance.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42134436841",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T3_PARTICLE108_NONEXPORTABLE_SAMEINSTANCE_POINTER_2026-11-06.md",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/B_TEAM/resources/T3-particle108-source-sameexport-material-texture-parity.json"
+  ],
+  "limitations": [
+    "one source Texture2D internal/nonexportable, NOT necessarily a separate Unity Texture asset",
+    "Android GPU fragment/pixel/OBB and emitter identity not verified",
+    "RENDER-002 OPEN"
+  ]
+}
