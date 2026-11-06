@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T1918Z-T4-chat-owner-log-lifecycle-p6n2",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "track": "real-owner-5nov-world-save-jsonl-evidence",
+  "base_sha": "63994936f9c476642abd6494893f937705962266",
+  "status": "active",
+  "approach": "Analyze actual immutable 5-Nov CL owner Android raft-logs (three session JSONL files) in ephemeral GitHub Actions, verifying original SaveGame/SaveWorld/SaveUser/Load/Restore/ready event sequence and conservative evidence classifier. Publish only privacy-safe per-session event counts and caveats, no device IDs, paths or original RGD.",
+  "intended_files": [
+    "scripts/t4_owner5nov_jsonl_lifecycle.py",
+    "tests/test_t4_owner5nov_jsonl_lifecycle.py",
+    ".github/workflows/raft-t4-owner5nov-jsonl-lifecycle.yml"
+  ],
+  "hypothesis": "The earlier owner device logs contain strong original world/save/load execution evidence that can be source-authentically extracted, while current source-only tests alone do not show which original markers executed on the real phone. Actual logs might reveal missing/reordered SaveUser/RestoreRGDGame/caught exception markers.",
+  "experiment_key": "T4-owner5nov-CL520c4c-three-actual-raft-jsonl-original-world-save-load-sequence-20261106",
+  "resource_key": "T4-owner-CL520c4c-readonly-small-sparse-CI",
+  "related_work": [
+    "T4-20261106T1908Z-T4-chat-diagnostic-boundary-noninterference-r5k9",
+    "T4-20261106T1850Z-T4-chat-overflow-shape-integrity-v6q3"
+  ],
+  "taken_over_from": [
+    "T4 prior synthetic real-log classifier, owner report docs/DEVICE_FEEDBACK_42058825739_AR.md"
+  ],
+  "run_urls": [],
+  "result": null,
+  "updated_at": "2026-11-06T19:18:00Z",
+  "next_step": "Implement safe bounded runner-only JSONL original lifecycle aggregation and synthetic negative controls, run pinned CL immutable SHA CI; verify third session rather than inferring phone acceptance from first two logs."
+}
