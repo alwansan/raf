@@ -1,0 +1,17 @@
+{
+  "id": "20261106T1326Z-T2-chat-source-Shader-field-51d2-result",
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261106T1326Z-T2-chat-source-Shader-field-51d2",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "at": "2026-11-06T13:30:00Z",
+  "summary": "Source-original Foam CB0 typed Shader instance field passed to verified new Material(Shader) ctor: CI42225913516 SUCCESS (original managed DLL and Foam owner SHA). Exactly 1 private original Shader field resolved, nonpublic with UnityEngine.SerializeField, Unity-serialization eligible, exactly one managed stfld write in one method. Material field stfld ctor identity from CI42224883549 still proven. Exact Shader asset Foam identity, executed value and 160B CB0 upload/Android pixels NOT proven. WATER-001 OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42225913516",
+    "https://github.com/alwansan/raf/actions/runs/42224883549",
+    "docs/T2_FOAM_ORIGINAL_SHADER_FIELD_PROVENANCE_2026-11-06.md"
+  ],
+  "limits": "Private original field names/tokens, game assembly and shader source are not shared; SerializeField indicates eligibility only, no runtime instance/data identity.",
+  "next_step": "Analyze private Shader stfld exact value source, then serialized field→original Shader Foam asset identity and real Unity CB0 upload proof."
+}
