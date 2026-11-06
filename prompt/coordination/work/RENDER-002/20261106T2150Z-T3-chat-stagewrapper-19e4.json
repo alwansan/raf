@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "username": "T3",
+  "session_id": "20261106T2150Z-T3-chat-stagewrapper-19e4",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "created_at": "2026-11-06T21:50:04Z",
+  "updated_at": "2026-11-06T21:50:04Z",
+  "base_sha": "f5996ddef53c5004dd1033059bfac291ab3e673d",
+  "resumed_from_sessions": [
+    "20261106T2138Z-T3-chat-variant-proofgate-5dc9",
+    "20261106T2043Z-T3-chat-private-shaderlab-variants-6b2f",
+    "20261106T2133Z-T3-scheduled-contract-schema-9a2f"
+  ],
+  "scope": "Check the HLSLPROGRAM combined original Shader48 candidate stage conditional wrapper by compiling BOTH branch macros independently to SPIR-V with glslang, not just each original HLSL stage. Source remains private runner-only. Does not establish Unity import, original runtime keywords or graphics parity.",
+  "experiment_key": "T3-Particle108-four-authenticated-private-HLSLPROGRAM-wrapper-dual-macro-8stage-glslang-vulkan11-exact-ZIP2-15964-20261106-19e4",
+  "resource_key": "T3 bounded source-original 4 owners 6 scenes <=270MB, existing T3 original private workflow; no Unity runner or APK request",
+  "intended_files": [
+    "scripts/t3_particle108_private_stagewrapper_compile.py",
+    "tests/test_t3_particle108_private_stagewrapper_compile.py",
+    ".github/workflows/raft-t3-particle108-private-shaderlab-variants.yml"
+  ],
+  "other_active_jobs": [
+    "42296450023 native in_progress head a1737bd7; no cancel, don't alter native request"
+  ],
+  "other_recent_jobs": [
+    "42298502781 T3 private variants success 14 tests 8/8 stage proof",
+    "42298467191 T2 Foam private structural success"
+  ],
+  "trial_vote": "لا يحتاج",
+  "test_plan": "Source-free negative extraction/attestation tests first; lightweight glslang/spirv-val for both macro branches of four SHA-authentic private original Shader48 HLSLPROGRAM blocks in existing independent CI, safe counts only; no Unity import.",
+  "next_step": "Compare terminal CI and classify stage macro compiler outcomes; only after 8/8 consider isolated Unity editor import with team resource coordination."
+}
