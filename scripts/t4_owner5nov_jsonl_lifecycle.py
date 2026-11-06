@@ -72,6 +72,7 @@ def _fully_traced_original_savegame_cycles(events, evidence_sequence_complete):
     phase = None
     failed = False
     save_open = False
+    save_snapshot_count = 0
     world_nonzero = False
     user_nonzero = False
     good = incomplete = 0
@@ -81,6 +82,7 @@ def _fully_traced_original_savegame_cycles(events, evidence_sequence_complete):
                 incomplete += 1
             phase = "await_world"
             failed = save_open = world_nonzero = user_nonzero = False
+            save_snapshot_count = 0
         elif marker == "savegame_exit":
             if phase == "await_finish" and world_nonzero and user_nonzero and not failed:
                 good += 1
@@ -115,11 +117,15 @@ def _fully_traced_original_savegame_cycles(events, evidence_sequence_complete):
                 failed = True
             else:
                 save_open = True
+                save_snapshot_count = 0
         elif marker == "save_file_snapshot":
             if not save_open or phase not in ("in_world", "in_user"):
                 failed = True
-            elif snapshot_class == "nonzero":
-                if phase == "in_world":
+            else:
+                save_snapshot_count += 1
+                if save_snapshot_count != 1 or snapshot_class != "nonzero":
+                    failed = True
+                elif phase == "in_world":
                     world_nonzero = True
                 else:
                     user_nonzero = True
@@ -127,6 +133,9 @@ def _fully_traced_original_savegame_cycles(events, evidence_sequence_complete):
             if not save_open or phase not in ("in_world", "in_user"):
                 failed = True
             else:
+                # A snapshot in another Save() call cannot prove this one.
+                if save_snapshot_count != 1:
+                    failed = True
                 save_open = False
     if phase is not None:
         incomplete += 1
