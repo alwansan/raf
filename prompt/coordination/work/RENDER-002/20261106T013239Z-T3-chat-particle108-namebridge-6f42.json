@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "id": "20261106T013239Z-T3-chat-particle108-namebridge-6f42",
+  "session_id": "20261106T013239Z-T3-chat-particle108-namebridge-6f42",
+  "owner": "T3",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "base_sha": "f0e6cfd60761195ff38292b2b6765e029df051c6",
+  "updated_at": "2026-11-06T01:32:39.832Z",
+  "experiment_key": "T3-ZIP2-15964-SHA6Scene-Particle108-4VSFS-8Stg-SPIRV-Cross-original-roundtrip-private-name-type-location-bridge-v1",
+  "resource_key": "T3-isolated-Particle108-eight-stage-source-name-reflection-v1",
+  "hypothesis": "The 2/4 roundtrip VS/FS mismatch could be compiler-generated I/O Location remaps. Before rewriting a shader, distinguish complete names+types preserved, renamed stages, builtin/unlocated semantics and duplicate typed varyings on real eight stages, with privacy-safe aggregate counters only.",
+  "resumed_from_sessions": [
+    "20261106T005710Z-T3-chat-particle108-vulkan-c8f1.md",
+    "20261106T0131Z-T3-scheduled-io-order-6d9a.md"
+  ],
+  "intended_files": [
+    "scripts/t3_particle108_reflected_name_bridge.py",
+    "tests/test_t3_particle108_reflected_name_bridge.py",
+    ".github/workflows/raft-t3-original-renderer-shader-impact.yml",
+    "prompt/coordination/work/RENDER-002/20261106T013239Z-T3-chat-particle108-namebridge-6f42.json",
+    "prompt/coordination/clients/T3/sessions/20261106T013239Z-T3-chat-particle108-namebridge-6f42.md",
+    "prompt/coordination/experiments/T3/20261106T013239Z-T3-chat-particle108-namebridge-6f42.json",
+    "prompt/coordination/B_TEAM/events/T3/20261106T013239Z-T3-chat-particle108-namebridge-6f42.json",
+    "docs/T3_PARTICLE108_SPIRV_NAME_BRIDGE_2026-11-06.md",
+    "prompt/coordination/discussions/RENDER-002/20261106T013239Z-T3-chat-particle108-namebridge-6f42-to-T5.md",
+    "prompt/coordination/B_TEAM/resources/T3-original-particle108-authentic-D3D11-variants.json"
+  ],
+  "constraints": [
+    "Do NOT edit scheduled T3 active scripts/t3_original_particle108_spirv_translation.py and tests/test_t3_original_particle108_spirv_translation.py.",
+    "No original game Shader, shader bytecode, Mat, meta, scene, OBB/APK modified.",
+    "Use runner-private reflection names only, no raw original IO names/locations/IDs per stage published.",
+    "No user device acceptance from CPU SPIRV result."
+  ],
+  "run_urls": [],
+  "next_step": "Add source-only strict name/type/location bridge classification for all four exact original Particle108 keyword pairs, with negative tests; run real six-scene SHA ZIP2 with isolated T3 workflow. If names cannot provide unique safe mapping, mark no automap; T5 postvendor/Android still needed."
+}
