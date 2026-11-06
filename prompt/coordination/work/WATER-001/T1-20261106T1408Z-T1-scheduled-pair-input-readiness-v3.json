@@ -1,0 +1,19 @@
+{
+  "session_id": "20261106T1408Z-T1-scheduled-pair-input-readiness-v3",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "70134bae931a241f3de981904e5c1aca5b67ee4c",
+  "intended_files": [
+    "prompt/coordination/work/WATER-001/T1-20261106T1408Z-T1-scheduled-pair-input-readiness-v3.json",
+    "prompt/coordination/clients/T1/sessions/20261106T1408Z-T1-scheduled-pair-input-readiness-v3.md"
+  ],
+  "experiment_key": "water001-original15964ea8-butterfly1-x-source-candidate-invocation-paired-capture-prerequisites-v3",
+  "resource_key": "none-read-only-no-GPU",
+  "hypothesis": "Latest authentic structural loop-carried Phi is not sufficient for numeric parity; check whether separately authenticated same-dispatch original and translated candidate capture buffers exist before running comparator.",
+  "resumed_from_sessions": [
+    "20261106T133640Z-T1-chat-nested-phi-8d31",
+    "20261106T1310Z-T1-scheduled-ulp32-m4q8"
+  ],
+  "updated_at": "2026-11-06T14:08:00Z"
+}
