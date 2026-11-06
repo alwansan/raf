@@ -1,0 +1,29 @@
+# T3 chat — SHA-original Particle108 properties and Pass state private ShaderLab fragment
+
+- **session_id:** `20261106T1337Z-T3-chat-particle108-propstate-62fb`; **origin:** `chat`; `RENDER-002` remains **OPEN / NOT_READY**.
+- **base_sha:** `ec6c948277d0a621285e25aa827b069e30570fe7`. Scope registered before implementation at `prompt/coordination/work/RENDER-002/20261106T1337Z-T3-chat-particle108-propstate-62fb.json`, commit `88d3ddebbce3965b7b3f31bd1f028527136342b0`.
+- **resumed_from_sessions:** `20261106T1308Z-T3-chat-particle108-postvendor-f8c1`, `20261106T1125Z-T3-chat-glslang-iomap-d37f`, `20261106T1230Z-T3-scheduled-source-gate-7e4c`.
+- **Parallel T3 work avoided:** `20261106T1223Z-T3-chat-paired-glslang-a74c` active on `scripts/t3_particle108_paired_hlsl_link.py` and workflow; this session changed no paired-linker files or related run.
+- **Previous verified root obstacle:** [42223071341](https://github.com/alwansan/raf/actions/runs/42223071341) original six-scene/12-owner SHA same-export confirms exact 108-particle-slot Shader48 remains `//DummyShaderTextExporter` even after TMP/PostFX/Volumetric restoration. Property+state is a distinct missing prerequisite; no real HLSL substitute was invented.
+
+## Implemented private recovery stage
+
+- [`scripts/t3_particle108_source_propstate.py`](https://github.com/alwansan/raf/blob/feature/android-native-port/scripts/t3_particle108_source_propstate.py) commit `828c7771ca3d71e5e56316dd5a527ba48f5cef56`. Selects the exact SHA-pinned original Shader48 by genuine 6-scene Renderer→Material→Shader source PPtrs (unique 108 source particle material slots / 54 renderer objects), reads serialized `m_PropInfo.m_Props` and single original normal Pass `m_State`, and emits a **runner-private** non-executable ShaderLab structural fragment preserving original property name/default/declared family and state. Strict rejects unknown types, flags, attributes, missing/duplicate properties, invalid ranges/default textures/injection, unrecognized original Pass state, and oversize output. No original names/values/GUIDs/programs are written in safe aggregate reports.
+- [`tests/test_t3_particle108_source_propstate.py`](https://github.com/alwansan/raf/blob/feature/android-native-port/tests/test_t3_particle108_source_propstate.py) commit `344aad756b1bad7e74cbbe76b2bc8ef6a5508b3d` adds **14 synthetic source-free tests**, including exact selective `ColorMask RGB`, `Cull Off`, `ZWrite Off`, title/privacy, invalid property family/type, flag/attribute rejection, duplicate names, nonfinite defaults and wrong Pass.
+- [`.github/workflows/raft-t3-particle108-source-propstate.yml`](https://github.com/alwansan/raf/blob/feature/android-native-port/.github/workflows/raft-t3-particle108-source-propstate.yml), SHA `6504d56834048181b986b2f4ef1bc28b792f0a15`. CPU-only, 18-minute timeout, exact original ZIP2 pinned commit `15964ea8f246b6e076ce26b60931ee2e1a9a2385`, 4 original provider files, 6 original scenes and 269007288 bytes source SHA checked before original read; runner-private fragment never artifact-uploaded, only bounded safe JSON. After first authenticated run, workflow restored to **manual-only**, commit `6229e30b235c71b4dc30e032383164c670de5f1b`, to avoid duplicate private-source exports.
+
+## Terminal genuine original result
+
+[**GitHub Actions run 42226905270**](https://github.com/alwansan/raf/actions/runs/42226905270), job `127922574314`, source commit `6504d56834048181b986b2f4ef1bc28b792f0a15` **COMPLETED SUCCESS**. All 14 source-free tests pass; genuine original four providers and six scenes SHA verified; exact unique selected Particle108 Shader48 property/default and fixed-function state exported to runner-private non-executable fragment.
+
+Source facts confirmed (safe aggregate only): **13 authored properties** comprising **2 Texture**, **1 Color**, **4 Float**, **6 Range**, **0 Vector**. Original single SubShader/Pass full fixed state serialization accepted with **ColorMask RGB** preserved; fragment explicitly has no `HLSLPROGRAM`, no actual HLSL source and no fake compiled program. The source 4 original VS/FS keyword pairs are **not integrated** and compiled Unity or mobile GPU pixels are **not verified**. Seven-day safe JSON artifact id **13506590606**, `t3-particle108-source-propstate-safe-42226905270` — proprietary ShaderLab text was **not** uploaded.
+
+Result status: **SOURCE-VERIFIED PRIVATE PROPERTY+PASS FRAGMENT ONLY**. The previous exact original source shader is still a Dummy in bounded postvendor asset export. This cycle **does not** install a ShaderLab replacement, alter Materials/GUIDs, fix Android fire/smoke, or prove the 108-use shader is the device square-smoke emitter.
+
+## Resume and next engineering gate
+
+1. Check independent T3 `20261106T1223Z-T3-chat-paired-glslang-a74c` terminal original CI and stage result. Prior HLSL semantic contract 4/4 but individually generated Vulkan SPIR-V link only 2/4; `--hlsl-iomap` / `--auto-map-locations` did not improve it. Do not guess original semantic→roundtrip Location or blindly modify widths.
+2. Combine **this exact 13-property / one-Pass original state** with genuine per-keyword VS/FS programs only after **4/4 source-authentic semantic identity and linkage, original sampler/resource/CB model**, plus ShaderLab keyword/permutation support. Candidate must remain private/ephemeral until validated by actual Unity compile/GUID linkage and device emitter/pixel test; never replace Dummy with another placeholder.
+3. Coordinate T1/T2/T4/T5. Source-free/private success does not close RENDER-002 or establish READY. No raw game shader/code/source IDs, `.meta`, scene, Material, texture, APK/OBB, save, water/FFT, audio, Settings, touch or controller changed; other jobs not canceled.
+
+**This scoped experiment completed; original-source CPU resource released.**
