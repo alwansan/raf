@@ -2,7 +2,7 @@
   "session_id": "20261106T0916Z-T2-scheduled-cb0-pass-identity-c91e",
   "origin": "scheduled",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed_source_patch_pending_tests",
   "base_sha": "e6e60329362a23798e42b76e0ffe61dec3fe6313",
   "experiment_key": "foam-cb0-two-pass-identity-uniqueness-source-gate-v1",
   "resource_key": null,
@@ -15,5 +15,10 @@
   "taken_over_from": [
     "prompt/coordination/clients/T2/sessions/20261106T0820Z-T2-scheduled-cb0-pass-coverage-8f3a.md"
   ],
-  "updated_at": "2026-11-06T09:16:36Z"
+  "updated_at": "2026-11-06T09:19:00Z",
+  "source_commit": "941153deb7c28ad767444d42f61b5bd7f812a81e",
+  "regression_commit": "feb49143a75d6fae7256ff4de3707c67a4c18437",
+  "session_commit": "81fdb8fe0d0859659439e1cc9eacb64c11c26cff",
+  "validation": "not_executed",
+  "next_step": "python -m unittest tests.test_t2_foam_cb0_extent_gate; authenticate pass indices in producer; CB0 member ABI and Unity upload remain open"
 }
