@@ -1,0 +1,57 @@
+name: T5 INTEGRATION-001 original signed main OBB full SHA256 and CRC32 attestation
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t5_verify_real_signed_obb.py
+      - tests/test_t5_verify_real_signed_obb.py
+      - .github/workflows/raft-t5-real-signed-obb-attestation.yml
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: raft-t5-42058825739-original-main-obb-2301256312-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  authentic-original-obb-sha-crc-stream:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 24
+    steps:
+      - name: Sparse checkout only T5 original OBB verifier and source-free test
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/t5_probe_github_artifact_zip_range.py
+            /scripts/t5_probe_signed_nested_zip_range.py
+            /scripts/t5_verify_apk_obb_pair.py
+            /scripts/t5_verify_real_signed_apk.py
+            /scripts/t5_verify_real_signed_obb.py
+            /tests/test_t5_verify_real_signed_obb.py
+      - name: Prove bounded OBB SHA and outer CRC logic with tiny synthetic bytes
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PYTHONDONTWRITEBYTECODE=1
+          python3 -m unittest discover -s tests -p test_t5_verify_real_signed_obb.py -v
+          python3 -m py_compile scripts/t5_verify_real_signed_obb.py
+          test ! -e Raft
+          echo 'T5_OBB_SYNTHETIC source_only=true unsigned_fixture=true phone=false' >> "$GITHUB_STEP_SUMMARY"
+      - name: Hash the full actual owner-tested 2.3GB STORED main OBB without disk copy
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          export PYTHONDONTWRITEBYTECODE=1
+          # max 2,400,000,000 actual OBB bytes + 8MiB metadata; strict HTTP 206.
+          # This never downloads the 2.97GB outer ZIP or 5.95GB delivery envelope.
+          timeout 1260s python3 -m scripts.t5_verify_real_signed_obb --live
+          echo 'T5_REAL_SIGNED_OBB full_SHA256_vs_original_manifest=true outer_ZIP_CRC32=true Unity_GUID=false phone=false render_water=false' >> "$GITHUB_STEP_SUMMARY"
+      - name: Protect original files and secrets from artifacts and logs
+        if: always()
+        shell: bash
+        run: echo 'No source game OBB bytes, signed URLs, credentials or proprietary resource filenames uploaded. Current Unity game not rebuilt.'
