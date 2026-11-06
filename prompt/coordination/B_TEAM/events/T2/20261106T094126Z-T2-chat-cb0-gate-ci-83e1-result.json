@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "type": "result",
+  "event_type": "result",
+  "username": "T2",
+  "author": "T2",
+  "session_id": "20261106T094126Z-T2-chat-cb0-gate-ci-83e1",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "at": "2026-11-06T09:44:00Z",
+  "source_sha": "88f1c258362061b54703285863e51f1eaa682bbd",
+  "title": "Source-only CB0 two-pass gate regression CI passed",
+  "summary": "10/10 source-free tests pass in isolated Ubuntu 24.04 run; no private shader or Unity/device evidence; original two CB0 extent mismatches still unresolved.",
+  "evidence": {
+    "workflow_run": "https://github.com/alwansan/raf/actions/runs/42197159968",
+    "job_id": 127823183108,
+    "workflow_file": ".github/workflows/raft-t2-foam-cb0-gate-smoke.yml"
+  },
+  "status": "SOURCE_FIXED_SOURCE_ONLY_GUARD_WATER_OPEN",
+  "next_step": "Privately authenticate both original Foam pass CB0 member offsets/types and their Unity material upload; only then wire original ShaderLab and perform Unity/Adreno validation."
+}
