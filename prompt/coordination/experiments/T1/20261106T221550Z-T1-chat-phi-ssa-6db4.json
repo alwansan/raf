@@ -4,7 +4,7 @@
   "origin": "chat",
   "session_id": "20261106T221550Z-T1-chat-phi-ssa-6db4",
   "issue_id": "WATER-001",
-  "status": "waiting_ci",
+  "status": "completed",
   "experiment_key": "ZIP2-15964ea8-FFT-slot0-HLSL50-site2Y-Phi-SSA-component-recurrence-v1",
   "source_original_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
   "source_owner_sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
@@ -30,12 +30,16 @@
     "source_job": 128189156035,
     "source_tests_passed": 35,
     "private_job": 128189212633,
-    "private_status": "in_progress_at_checkpoint"
+    "private_status": "success",
+    "sha_original_component_loop_result": "selected_component_cycle",
+    "sha_original_entry_result": "no_direct_selected_component_cycle_in_supported_SSA",
+    "original_sha_verified": true
   },
   "limits": [
     "Syntactic Phi data recurrence not runtime branch truth",
     "No Unity compiled binary attestation or Android proof",
     "No numeric FFT parity or production water fix"
   ],
-  "next": "Check private job 128189212633 then decide keyed GPU Phi branch selection test."
+  "next": "Check private job 128189212633 then decide keyed GPU Phi branch selection test.",
+  "next_step": "Perform a SHA-pinned direct-original Vulkan versus derived Unity/OpenGLCore *per-invocation* test which records Phi predecessor choice at Site2 Y (privacy-safe keyed aggregate only), verify trace output invariance and same physical input/dispatch before attributing any 64/64 Y collapse to loop branch. Do not ship a game shader or dispatch new native build without numeric parity."
 }
