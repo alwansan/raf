@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T1702Z-T5-chat-offline-obb-compile-58cf",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "track": "offline-managed-build-dependency",
+  "status": "active",
+  "base_sha": "d8b014363bcfcf82cbcb496a81e512acad60b7d8",
+  "updated_at": "2026-11-06T17:02:00Z",
+  "resumed_from_sessions": [
+    "20261106T1649Z-T5-scheduled-runtime-attribution-c82f.md",
+    "20261106T1541Z-T5-chat-obb-routes-b8a1.md"
+  ],
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/actions/runs/42256234615",
+    "prompt/coordination/work/INTEGRATION-001/20261106T1645Z-T5-chat-installed-obb-read-e7c4.json"
+  ],
+  "intended_files": [
+    "scripts/verify_android_offline_candidate.py",
+    "tests/test_t5_offline_runtime_support_deps.py",
+    ".github/workflows/raft-android-offline-integration-tests.yml",
+    "prompt/coordination/work/INTEGRATION-001/20261106T1702Z-T5-chat-offline-obb-compile-58cf.json",
+    "prompt/coordination/clients/T5/sessions/20261106T1702Z-T5-chat-offline-obb-compile-58cf.md",
+    "prompt/coordination/experiments/T5/20261106T1702Z-T5-chat-offline-obb-compile-58cf.json",
+    "prompt/coordination/B_TEAM/events/T5/20261106T1702Z-T5-chat-offline-obb-compile-58cf.json"
+  ],
+  "experiment_key": "T5-42256234615-offline-compile-CS0103-AndroidExpansionArchiveProbe-missing-copy-dependency-v1",
+  "resource_key": "offline managed gameplay compile only, independent of Unity native/OBB source probe",
+  "hypothesis": "Offline original managed build excludes newly used AndroidExpansionArchiveProbe.cs from runtime source copy allowlist, causing two CS0103 in copied AndroidTestDiagnostics; adding only source dependency and a fail-closed parity test should restore compile.",
+  "coordination": "Active T5 chat owns AndroidTestDiagnostics.cs and .github/workflows/raft-t5-installed-obb-read-probe.yml; scheduled T5 owns PERF-007 PID epoch guard. Neither touched. T4 local gameplay untouched.",
+  "next_step": "Inspect HEAD and isolated test, add source allowlist/workflow triggers, rerun existing cheap offline integration CI; avoid full native build."
+}
