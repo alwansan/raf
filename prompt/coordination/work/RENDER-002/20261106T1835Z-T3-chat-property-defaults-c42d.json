@@ -6,9 +6,9 @@
   "origin": "chat",
   "issue_id": "RENDER-002",
   "track": "colors-materials",
-  "status": "active",
+  "status": "completed",
   "base_sha": "f86e1ac9d651440bbb2aa98736dd01477ac65be9",
-  "updated_at": "2026-11-06T18:36:00Z",
+  "updated_at": "2026-11-06T18:41:14Z",
   "approach": "Improve original-authored Shader48 same-export ShaderLab semantic default-property parity: numeric Color/Vector/Float/Range and default Texture fallback. Keep count-only reporting, fail closed; source-free regressions then existing bounded Actions CI. No private asset retrieval.",
   "hypothesis": "Current name/type-only parity can accept changed original Color default, Range bounds or Texture fallback despite matching authored property names/types.",
   "experiment_key": "T3-PARTICLE108-SAMEEXPORT-SHADER48-PROPERTY-DEFAULT-SEMANTICS-c42d",
@@ -35,6 +35,19 @@
     "No game assets, .meta, Unity build or owner trial vote changes",
     "No private property names or values printed"
   ],
-  "result": null,
-  "next_step": "Implement safe semantic default checks and run existing source-free tests via Actions, verify terminal status before claiming PASS"
+  "result": "Source-only typed default-parity check integrated into same-export Shader48 ShaderLab fidelity classifier; altered Color/Range/Texture defaults rejected with count-only evidence. CI42272706523 SUCCESS (19/19), CI42272760367 SUCCESS (16/16). No actual original shader restored or device pixels verified.",
+  "next_step": "Use independent scheduled T3 genuine DXBC↔SPIR-V contract provenance result, then original Shader48 non-dummy four keyword VS/PS code recovery and same-instance exported shader property/default/typed binding validation; Unity/Android pixels remain OPEN. T3 vote stays NO until major integrated render fix.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42272706523",
+    "https://github.com/alwansan/raf/actions/runs/42272760367"
+  ],
+  "experiment_ids": [
+    "20261106T1835Z-T3-chat-property-defaults-c42d"
+  ],
+  "commits": [
+    "59b9e9f4c0e1c6f0cd68f7658612141dd63b6bf6",
+    "70b45cf448724c50a93f216bf421223abe758d6f",
+    "2653e5f6c836ce13d1d3ed31a6c348ced506dfd2",
+    "9aeebcd42d427080257a348e38ab6d249692c743"
+  ]
 }
