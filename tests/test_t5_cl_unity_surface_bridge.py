@@ -119,5 +119,67 @@ class BridgeTests(unittest.TestCase):
             load_unity(self.path)
 
 
+    @staticmethod
+    def with_scene_provenance(record, *, start="MainScene", end="MainScene",
+                              active_changes=0, content_events=0,
+                              active_stable=True, content_stable=True):
+        record["detail"] += ("; frame_window_start_scene=" + start
+                             + "; frame_window_end_scene=" + end
+                             + "; frame_window_active_scene_changes=" + str(active_changes)
+                             + "; frame_window_content_scene_events=" + str(content_events)
+                             + "; frame_window_active_scene_stable=" + str(active_stable)
+                             + "; frame_window_content_stable=" + str(content_stable))
+        return record
+
+    def test_legacy_scene_samples_are_not_claimed_tagged_stable(self):
+        a = self.read([unity_row(1)])
+        assert a[0]["scene_window_provenance"] == "legacy_unlabeled"
+        report = analyze(a, [], "old-APK")
+        self.assertEqual(report["unity_qualified_scene_window_provenance"],
+                         {"legacy_unlabeled":1,"tagged_stable_content":0,"tagged_mixed_loading":0})
+        self.assertTrue(report["tagged_stable_scene_does_not_prove_same_world_or_camera"])
+
+    def test_new_stable_scene_content_provenance(self):
+        a = self.read([self.with_scene_provenance(unity_row(1))])
+        self.assertEqual(a[0]["scene_window_provenance"], "tagged_stable_content")
+
+    def test_menu_to_main_scene_crossing_is_labeled_mixed(self):
+        a = self.read([self.with_scene_provenance(
+            unity_row(1), start="MainMenuScene", end="MainScene",
+            active_changes=1, content_events=2, active_stable=False,
+            content_stable=False)])
+        self.assertEqual(a[0]["scene_window_provenance"], "tagged_mixed_loading")
+        self.assertEqual(analyze(a, [], "new-APK")[
+            "unity_qualified_scene_window_provenance"]["tagged_stable_content"], 0)
+
+    def test_additive_scene_load_marks_same_active_scene_non_stable(self):
+        a = self.read([self.with_scene_provenance(
+            unity_row(1), content_events=1, content_stable=False)])
+        self.assertEqual(a[0]["scene_window_provenance"], "tagged_mixed_loading")
+
+    def test_partial_telemetry_flags_fail_closed(self):
+        row = unity_row(1)
+        row["detail"] += "; frame_window_start_scene=MainScene"
+        with self.assertRaisesRegex(ValueError, "Partial mixed-scene"):
+            self.read([row])
+
+    def test_contradictory_scene_stable_flags_fail_closed(self):
+        row = self.with_scene_provenance(
+            unity_row(1), start="MainMenuScene", end="MainScene",
+            active_changes=1, active_stable=True, content_stable=True)
+        with self.assertRaisesRegex(ValueError, "Contradictory"):
+            self.read([row])
+
+    def test_negative_scene_transition_counter_fail_closed(self):
+        row = self.with_scene_provenance(unity_row(1), active_changes=-1)
+        with self.assertRaisesRegex(ValueError, "Negative scene"):
+            self.read([row])
+
+    def test_end_scene_disagrees_with_existing_report_scene(self):
+        row = self.with_scene_provenance(unity_row(1), end="OtherScene")
+        with self.assertRaisesRegex(ValueError, "Invalid start/end"):
+            self.read([row])
+
+
 if __name__ == "__main__":
     unittest.main()
