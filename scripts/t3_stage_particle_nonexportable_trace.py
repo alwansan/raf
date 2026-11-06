@@ -51,6 +51,20 @@ def annotate(source:bytes)->bytes:
         {
             json.WriteStartObject();
             Identity(json, "source", asset);
+            // A private, read-only diagnostic of the exact pointer AssetRipper
+            // resolves through the same instance's container. DO NOT force
+            // collection.Exportable=true or export any missing source texture.
+            try
+            {
+                Pointer(json, "container_export", container.CreateExportPointer(asset));
+                json.WriteBoolean("container_export_pointer_captured", true);
+            }
+            catch (Exception)
+            {
+                // Never serialize private AssetRipper exception text.
+                json.WriteNull("container_export");
+                json.WriteBoolean("container_export_pointer_captured", false);
+            }
             json.WriteEndObject();
         }
         json.WriteEndArray();
@@ -59,6 +73,8 @@ def annotate(source:bytes)->bytes:
     result=(before+TEXTURE_METHOD+body+LIGHT_METHOD+after).encode("utf8")
     if (result.count(b'nonexportable_texture_sources')!=1
         or result.count(b'nonExportableSourceObjects')!=3
+        or result.count(b'container.CreateExportPointer(asset)')!=1
+        or result.count(b'container_export_pointer_captured')!=2
         or result.count(b'json.WriteString("export_instance", exportInstance);')!=3
         or result.count(b'if (asset.ClassID is not (21 or 48))')!=1):
         raise ValueError("unsafe_original_B02_nonexportable_trace_instrumentation")
