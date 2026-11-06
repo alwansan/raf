@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T185041Z-T3-chat-dcl-spv-family-census-a91d",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "track": "shader-original-to-vulkan-resource-parity",
+  "status": "active",
+  "base_sha": "97f156f9f09e8cd6f5412e281bb751d2bb1a8cd6",
+  "approach": "Build independent SHA-original four-keyword/8-stage DXBC DCL family presence versus translated SPIR-V reflected resource-family census. Report only stage aggregate counts/presence, never infer exact register mapping or mislabel optimization as corruption. Source-free CI first, one bounded original CI only if no similar job.",
+  "hypothesis": "Current source DCL reports and source SPIRV reflection reports separately cannot tell whether a stage declaring CB/SRV/Sampler has a reflected SPIRV resource-family representation at all; stage-local join can classify missing-family signals before exact provenance map.",
+  "experiment_key": "T3-Particle108-original-SHDR-DCL-versus-VKD3D-SPV-stagefamily-census-15964ea8-8stage-v1",
+  "resource_key": "zip2-15964-particle108-four-owner-sixscene-original-cpu-vkd3d-single",
+  "intended_files": [
+    "scripts/t3_particle108_dcl_spv_family_census.py",
+    "tests/test_t3_particle108_dcl_spv_family_census.py",
+    ".github/workflows/raft-t3-particle108-dcl-spv-family-census.yml",
+    "prompt/coordination/requests/20261106T185041Z-T3-chat-dcl-spv-family-census-a91d.trigger",
+    "prompt/coordination/experiments/T3/20261106T185041Z-T3-chat-dcl-spv-family-census-a91d.json",
+    "prompt/coordination/clients/T3/sessions/20261106T185041Z-T3-chat-dcl-spv-family-census-a91d.md",
+    "prompt/coordination/B_TEAM/events/T3/20261106T185041Z-T3-chat-dcl-spv-family-census-a91d.json"
+  ],
+  "resumed_from_sessions": [
+    "20261106T1835Z-T3-chat-property-defaults-c42d",
+    "20261106T1730Z-T3-chat-primary-index-4d8c",
+    "20261106T1828Z-T3-scheduled-contract-fixture-b6e1"
+  ],
+  "related_work": [
+    "20261106T1828Z-T3-scheduled-contract-fixture-b6e1 (different filenames; no DXBC->SPV provenance-map editing)"
+  ],
+  "trial_vote": "لا يحتاج",
+  "trial_round": "trial-20261106-r1",
+  "constraints": [
+    "No source program or private register numbers in public reports",
+    "Do not touch scheduled t3_dxbc_spirv_contract_join.py or tests",
+    "No Unity game source, .meta, build request, assets or native full build changes",
+    "No blind repeated original export; distinct stage-family evidence"
+  ],
+  "updated_at": "2026-11-06T18:50:41.946Z",
+  "result": null,
+  "next_step": "Run synthetic tests and one SHA-authentic source-only stage-family census; report count-only original/SPV resource families; preserve NOT_READY until full provenance+Unity+device."
+}
