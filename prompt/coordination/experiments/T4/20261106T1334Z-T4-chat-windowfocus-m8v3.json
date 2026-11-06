@@ -27,12 +27,12 @@
   "run_url": "https://github.com/alwansan/raf/actions/runs/42227039188",
   "artifact_urls": [],
   "budget": "existing 9min source-only workflow and genuine Unity2021 managed ABI; no native Unity Player/actual phone",
-  "status": "waiting_ci",
-  "observed_result": null,
+  "status": "completed_source_managed_ci_success_device_unverified",
+  "observed_result": "Exact final run 42227039188 COMPLETED SUCCESS on source 1496971: Python source 10/10 including Android native main-window focus regression; executable C# 33/33 including AndroidFocus=false while UnityFocus=true; pinned original ZIP2 Unity2021 managed AndroidJNI/Core C# compile passed. No Unity player, device or gameplay tests.",
   "limitations": [
     "Android window focus source/compiled ABI is not Android device behavior; owner 5 Nov APK predates new guard.",
     "Focus query before Java UI mutation cannot establish OS bars visibility on actual hardware."
   ],
   "integration_commit": "1496971df6f14335b5d479d8cc488d7636a998be",
-  "next_step": "Verify exact 42227039188 final run and source log; hand off matching signed APK/OBB and real focus/home mouse tests to T5."
+  "next_step": "T5: one immutable signed Raft APK with matching OBB and source SHA/versionCode/hashes, hardware mouse+keyboard plus native/system window focus/notification panel/home/menu transitions; preserve OS swipe/Back/Home and verify same world save force-stop reopen. Only device evidence establishes OS bars or camera success."
 }
