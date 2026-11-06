@@ -1,0 +1,16 @@
+{
+  "id": "20261106T1221Z-T5-chat-resolution-param-5df2",
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261106T1221Z-T5-chat-resolution-param-5df2",
+  "issue_id": "DISPLAY-003",
+  "type": "result",
+  "at": "2026-11-06T12:29:57.347Z",
+  "summary": "Original SHA-pinned GraphicsSettingsBox 3 Apply callers: sole one-parameter private void instance caller takes custom reference type, has 4 Dropdown value writes, 1 shown-value refresh, 0 get_value, 0 direct onValueChanged/AddListener; class has 0 direct AddListener. CI42217714507 passed 9 Python+8 synthetic and real original gates. Likely UI synchronization but serialized callbacks/persistence/device unproven. No game changes.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42217714507",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_ORIGINAL_RESOLUTION_PARAMETER_2026-11-06.md"
+  ],
+  "limits": "Source-only IL category proof; not a new Settings feature, Android phone acceptance, water/FFT graphics fix or performance measurement.",
+  "next_step": "Deprioritize working Settings until real regression; focus on release/asset integration with T1-T3."
+}
