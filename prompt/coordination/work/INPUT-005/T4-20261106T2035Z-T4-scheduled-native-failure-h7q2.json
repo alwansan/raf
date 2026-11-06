@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "session_id": "20261106T2035Z-T4-scheduled-native-failure-h7q2",
+  "origin": "scheduled",
+  "issue_id": "INPUT-005",
+  "status": "completed",
+  "base_sha": "ca21657f1d36cb4b3e07b394f56acd4d2c38200f",
+  "intended_files": [
+    "prompt/coordination/work/INPUT-005/T4-20261106T2035Z-T4-scheduled-native-failure-h7q2.json",
+    "prompt/coordination/clients/T4/sessions/20261106T2035Z-T4-scheduled-native-failure-h7q2.md"
+  ],
+  "experiment_key": "native-42281310905-d692400-editor-CS0234-physicalmouse-symbol-vs-f554e8b6-editor-ABI-green",
+  "resource_key": null,
+  "hypothesis": "The owner-direct build failure is Editor missing mouse symbol and has an independently validated later fix; no equivalent native rerun by T4.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42281310905",
+    "https://github.com/alwansan/raf/actions/runs/42287041110"
+  ],
+  "updated_at": "2026-11-06T20:35:00Z"
+}
