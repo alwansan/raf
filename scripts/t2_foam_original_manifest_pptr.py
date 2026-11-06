@@ -187,7 +187,19 @@ def stage_and_check_targets(zip2, destination, targets, manifest, checkpoint=lam
             timeout=180, check=False,
         )
         if process.returncode != 0:
-            raise ValueError("private_source_sparse_checkout_unavailable")
+            # Git installations differ in how sparse-checkout add interprets
+            # negative-cone patterns. Reset the same immutable input patterns
+            # explicitly, preserving the already authenticated Foam owner.
+            checkpoint("candidate_sparse_set_fallback")
+            fallback = subprocess.run(
+                ["git", "-C", str(zip2), "sparse-checkout", "set",
+                 "--no-cone", "/RAFT_FILE_MANIFEST.tsv",
+                 "/Raft/Raft_Data/sharedassets0.assets/*", *patterns],
+                text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                timeout=180, check=False,
+            )
+            if fallback.returncode != 0:
+                raise ValueError("private_source_sparse_checkout_unavailable")
         target_dest = destination / name
         # stage() checks manifest exact row, full size, SHA and ordered parts.
         checkpoint("candidate_bytes_sha_stage")
