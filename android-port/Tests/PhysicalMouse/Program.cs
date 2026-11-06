@@ -86,6 +86,42 @@ static class Program
         Check(!PhysicalMouseMotionSource.AcceptEpoch(-1, 19, true),
             "Invalid generation never accepted for current capture");
 
+
+        // Android InputDevice docs: the touchpad's MotionEvent source usually
+        // says SOURCE_MOUSE. Its InputDevice.getSources() advertises TOUCHPAD.
+        // Never promote a regular mouse or touchscreen into touchpad deltas.
+        const int mouseSource = PhysicalMouseMotionSource.Mouse;
+        const int trackpadSources = mouseSource | PhysicalMouseMotionSource.Touchpad;
+        Check(PhysicalMouseMotionSource.Classify(mouseSource, trackpadSources) ==
+            PhysicalMouseMotionSource.Kind.Touchpad,
+            "Documented touchpad event MOUSE with touchpad device capability");
+        Check(PhysicalMouseMotionSource.Classify(mouseSource,
+            PhysicalMouseMotionSource.Touchpad) == PhysicalMouseMotionSource.Kind.Touchpad,
+            "Touchpad capability alone sufficient for MOUSE event");
+        Check(PhysicalMouseMotionSource.Classify(mouseSource, mouseSource) ==
+            PhysicalMouseMotionSource.Kind.Ignore, "Ordinary mouse remains unclassified");
+        Check(PhysicalMouseMotionSource.Classify(mouseSource, 0) ==
+            PhysicalMouseMotionSource.Kind.Ignore, "Missing physical device ignored");
+        Check(PhysicalMouseMotionSource.Classify(mouseSource, -1) ==
+            PhysicalMouseMotionSource.Kind.Ignore, "Invalid device sources ignored");
+        Check(PhysicalMouseMotionSource.Classify(4098, trackpadSources) ==
+            PhysicalMouseMotionSource.Kind.Ignore,
+            "Touchscreen event ignored even on composite touchpad device");
+        Check(PhysicalMouseMotionSource.Classify(65540, trackpadSources) ==
+            PhysicalMouseMotionSource.Kind.Ignore, "Trackball event cannot spoof touchpad");
+        Check(PhysicalMouseMotionSource.Classify(131076, 0) ==
+            PhysicalMouseMotionSource.Kind.Mouse,
+            "Actual relative mouse remains accepted without extra JNI lookup");
+        Check(PhysicalMouseMotionSource.Classify(1048584, 0) ==
+            PhysicalMouseMotionSource.Kind.Touchpad,
+            "Explicit touchpad event remains accepted");
+        Check(PhysicalMouseMotionSource.Classify(-1, trackpadSources) ==
+            PhysicalMouseMotionSource.Kind.Ignore, "Negative event source rejected");
+        Check(PhysicalMouseMotionSource.Classify(mouseSource, mouseSource | 16386) ==
+            PhysicalMouseMotionSource.Kind.Ignore, "Stylus-capable mouse not a touchpad");
+        Check(PhysicalMouseMotionSource.Classify(4098, trackpadSources | 4098) ==
+            PhysicalMouseMotionSource.Kind.Ignore, "Composite touchscreen stays separate");
+
         Console.WriteLine("T4_PHYSICAL_MOUSE_DELTA_CONTROLS passed=" + tests +
             " AndroidJavaBridgeCompiled=false DeviceVerified=false");
         return 0;
