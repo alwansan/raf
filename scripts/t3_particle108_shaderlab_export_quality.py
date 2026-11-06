@@ -22,6 +22,10 @@ from scripts import t3_same_export_material_texenv as sameexport
 from scripts.b05_verify_material_texenv_bindings import _trace_source,_trace_export
 from scripts.probe_a13_exported_material_shader_guids import GUID,BUILTIN
 from scripts.b49_shaderlab_pass_contract import pass_coverage
+from scripts import t3_particle108_shaderlab_property_parity as property_parity
+from scripts.t3_particle108_source_propstate import serialize_properties
+from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
+from scripts.w1_stage_zip2_owners import fingerprint
 
 STATUS="T3_ORIGINAL_PARTICLE108_REAL_SAMEEXPORT_SHADERLAB_CLASSIFIED"
 RANKS=(108,34,34,20,16,3)
@@ -29,7 +33,7 @@ LIMIT_ITEMS=150000
 LIMIT_SHADER=8_000_000
 
 
-def classify(shader_key:tuple,w1:dict,b02:dict,assets:Path)->dict:
+def classify(shader_key:tuple,w1:dict,b02:dict,assets:Path,\n             *,private_authored_properties:str|None=None)->dict:
     """Pure source-owned identity join, never text-name-based identity lookup."""
     if (type(shader_key) is not tuple or len(shader_key)!=2
         or shader_key[0] not in source.SHADER_OWNERS_SELECTED
@@ -66,7 +70,11 @@ def classify(shader_key:tuple,w1:dict,b02:dict,assets:Path)->dict:
            "selected_shaderlab_subshader_count":0,
            "selected_shaderlab_one_pass_per_subshader":False,
            "selected_shaderlab_all_subshaders_programmed":False,
-           "selected_shaderlab_active_subshader_runtime_verified":False}
+           "selected_shaderlab_active_subshader_runtime_verified":False,
+           "source_authored_properties_compared_to_exact_export":False,
+           "source_to_export_authored_property_names_types_match":False,
+           "source_to_export_authored_property_counts":{},
+           "authored_property_or_original_program_android_pixels_verified":False}
     if ptr[1] in BUILTIN:
         if ptr[2]!=0:
             raise ValueError("invalid_builtin_original_particle_Shader48_export_type")
@@ -136,10 +144,25 @@ def classify(shader_key:tuple,w1:dict,b02:dict,assets:Path)->dict:
         n==1 for n in sub_counts)
     basic["selected_shaderlab_all_subshaders_programmed"]=coverage["all_subshaders_programmed"]
     basic["selected_shaderlab_active_subshader_runtime_verified"]=False
+    if (private_authored_properties is not None and
+        not basic["selected_shaderlab_dummy_exporter_marker"] and
+        not basic["selected_shaderlab_no_subprogram_marker"]):
+        # Source-only exact original-author property names/types must survive
+        # the SAME AssetRipper shader GUID trace before claiming structural
+        # ShaderLab readiness. Names/defaults never enter the returned report.
+        checked=property_parity.compare(private_authored_properties,code)
+        basic["source_authored_properties_compared_to_exact_export"]=True
+        basic["source_to_export_authored_property_names_types_match"]=(
+            checked["original_authored_property_names_types_exact"])
+        basic["source_to_export_authored_property_counts"]=checked["counts"]
+
     if basic["selected_shaderlab_dummy_exporter_marker"]:
         basic["exported_ShaderLab_source_status"]="ACTUAL_DUMMY_SHADER_TEXT_EXPORTER"
     elif basic["selected_shaderlab_no_subprogram_marker"]:
         basic["exported_ShaderLab_source_status"]="NO_PROGRAM_SUBPROGRAMS_EXPORTED"
+    elif (basic["source_authored_properties_compared_to_exact_export"]
+          and not basic["source_to_export_authored_property_names_types_match"]):
+        basic["exported_ShaderLab_source_status"]="AUTHORED_PROPERTY_NAME_OR_TYPE_MISMATCH"
     elif (not coverage["pass_braces_balanced"] or count==0 or good==0
           or not sub_counts):
         basic["exported_ShaderLab_source_status"]="INCOMPLETE_OR_UNPROGRAMMED_CUSTOM_SHADER"
@@ -155,6 +178,25 @@ def classify(shader_key:tuple,w1:dict,b02:dict,assets:Path)->dict:
     else:
         basic["exported_ShaderLab_source_status"]="STRUCTURAL_ONE_PASS_PROGRAM_PRESENT_NOT_EQUIVALENCE"
     return basic
+
+
+def _exact_original_private_properties(original:Path,shader_key:tuple)->str:
+    """Return only in-memory author Property source for SHA-selected Shader48."""
+    import UnityPy
+    owner,pid=shader_key
+    path=original/"Raft_Data"/owner
+    if (path.is_symlink() or not path.is_file()
+        or fingerprint(path)!=SHADER_OWNERS[owner]):
+        raise ValueError("source_original_particle_Shader48_SHA_changed")
+    rows=[o for o in UnityPy.load(str(path)).file.objects.values()
+          if o.path_id==pid]
+    if len(rows)!=1 or rows[0].type.name!="Shader":
+        raise ValueError("source_original_particle_Shader48_type_changed")
+    prop_text,shape=serialize_properties(rows[0].read_typetree()["m_ParsedForm"])
+    if (shape["original_authored_property_count"]!=13 or
+        shape["original_authored_texture_property_count"]!=2):
+        raise ValueError("source_original_particle_Shader48_authored_props_drift")
+    return prop_text
 
 
 def run(original:Path,manifest:Path,project:Path,w1path:Path,b02path:Path):
@@ -174,7 +216,9 @@ def run(original:Path,manifest:Path,project:Path,w1path:Path,b02path:Path):
         raise ValueError("ambiguous_real_original_particle108_shader_target")
     w1=json.loads(w1path.read_text(encoding="utf-8"))
     b02=json.loads(b02path.read_text(encoding="utf-8"))
-    out=classify(selected[0],w1,b02,project/"Assets")
+    private_authored=_exact_original_private_properties(original,selected[0])
+    out=classify(selected[0],w1,b02,project/"Assets",
+                 private_authored_properties=private_authored)
     out["original_six_scene_SHA_verified"]=True
     out["original_four_shader_owner_SHA_verified"]=True
     return out
