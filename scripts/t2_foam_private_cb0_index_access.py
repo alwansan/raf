@@ -141,23 +141,31 @@ def compiled_cb0_load_paths(blob, reflection, coordinate, own_length, other_leng
             if len(args) < 4:
                 raise ValueError("malformed_private_ptr_access_chain")
             if args[2] in aliases:
+                if not 0 < args[1] < bound or args[1] in aliases:
+                    raise ValueError("duplicate_or_invalid_private_pointer_id")
                 unresolved_paths += 1
                 aliases[args[1]] = None
         elif op == OP_COPY_OBJECT:
             if len(args) != 3:
                 raise ValueError("malformed_private_pointer_copy")
             if args[2] in aliases:
+                if not 0 < args[1] < bound or args[1] in aliases:
+                    raise ValueError("duplicate_or_invalid_private_pointer_id")
                 aliases[args[1]] = aliases[args[2]]
         elif op == OP_PHI:
             if len(args) < 4 or len(args[2:]) % 2:
                 raise ValueError("malformed_private_pointer_phi")
             if any(i in aliases for i in args[2::2]):
+                if not 0 < args[1] < bound or args[1] in aliases:
+                    raise ValueError("duplicate_or_invalid_private_pointer_id")
                 unresolved_paths += 1
                 aliases[args[1]] = None
         elif op == OP_SELECT:
             if len(args) != 5:
                 raise ValueError("malformed_private_pointer_select")
             if args[3] in aliases or args[4] in aliases:
+                if not 0 < args[1] < bound or args[1] in aliases:
+                    raise ValueError("duplicate_or_invalid_private_pointer_id")
                 unresolved_paths += 1
                 aliases[args[1]] = None
         elif op == OP_FUNCTION_CALL:
