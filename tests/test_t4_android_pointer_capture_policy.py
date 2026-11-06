@@ -112,13 +112,16 @@ class AndroidPhysicalMouseIntegrationPolicy(unittest.TestCase):
         self.assertIn("int releaseEpoch = Volatile.Read(ref epoch);", release)
         self.assertIn("OnAndroidUi(() =>", release)
         self.assertIn(
-            "if (releaseEpoch != Volatile.Read(ref epoch) || requested) return;",
+            "if (releaseEpoch != Volatile.Read(ref epoch) || requested)",
             release,
         )
-        self.assertLess(
-            release.index("if (releaseEpoch != Volatile.Read(ref epoch) || requested) return;"),
-            release.index('view.Call("releasePointerCapture")'),
-        )
+        guard = release.index("if (releaseEpoch != Volatile.Read(ref epoch) || requested)")
+        diagnostic = release.index('ReportReleaseOutcome("superseded_generation")', guard)
+        exit_stale = release.index("return;", diagnostic)
+        native_call = release.index('view.Call("releasePointerCapture")')
+        self.assertLess(guard, diagnostic)
+        self.assertLess(diagnostic, exit_stale)
+        self.assertLess(exit_stale, native_call)
 
     def test_captured_packet_source_contract_matches_android_api26(self):
         source = (ROOT / "android-port/Runtime/Platform/PhysicalMouseMotionSource.cs").read_text()
@@ -195,7 +198,7 @@ class AndroidPhysicalMouseIntegrationPolicy(unittest.TestCase):
             "private void OnApplicationPause", 1
         )[0]
         self.assertIn("int releaseEpoch = Volatile.Read(ref epoch);", release)
-        self.assertIn("if (releaseEpoch != Volatile.Read(ref epoch) || requested) return;", release)
+        self.assertIn("if (releaseEpoch != Volatile.Read(ref epoch) || requested)", release)
 
 
 
