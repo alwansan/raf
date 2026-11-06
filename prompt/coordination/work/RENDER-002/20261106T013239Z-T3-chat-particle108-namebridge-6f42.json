@@ -5,11 +5,11 @@
   "owner": "T3",
   "origin": "chat",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed",
   "base_sha": "f0e6cfd60761195ff38292b2b6765e029df051c6",
-  "updated_at": "2026-11-06T01:32:39.832Z",
+  "updated_at": "2026-11-06T01:44:29.313Z",
   "experiment_key": "T3-ZIP2-15964-SHA6Scene-Particle108-4VSFS-8Stg-SPIRV-Cross-original-roundtrip-private-name-type-location-bridge-v1",
-  "resource_key": "T3-isolated-Particle108-eight-stage-source-name-reflection-v1",
+  "resource_key": null,
   "hypothesis": "The 2/4 roundtrip VS/FS mismatch could be compiler-generated I/O Location remaps. Before rewriting a shader, distinguish complete names+types preserved, renamed stages, builtin/unlocated semantics and duplicate typed varyings on real eight stages, with privacy-safe aggregate counters only.",
   "resumed_from_sessions": [
     "20261106T005710Z-T3-chat-particle108-vulkan-c8f1.md",
@@ -25,7 +25,10 @@
     "prompt/coordination/B_TEAM/events/T3/20261106T013239Z-T3-chat-particle108-namebridge-6f42.json",
     "docs/T3_PARTICLE108_SPIRV_NAME_BRIDGE_2026-11-06.md",
     "prompt/coordination/discussions/RENDER-002/20261106T013239Z-T3-chat-particle108-namebridge-6f42-to-T5.md",
-    "prompt/coordination/B_TEAM/resources/T3-original-particle108-authentic-D3D11-variants.json"
+    "prompt/coordination/B_TEAM/resources/T3-original-particle108-authentic-D3D11-variants.json",
+    "prompt/coordination/B_TEAM/issues/RENDER-002.json",
+    ".github/workflows/raft-t3-ledger-refresh.yml",
+    "prompt/coordination/discussions/INPUT-005/20261106T013239Z-T3-chat-particle108-namebridge-6f42-to-T4-ledger-refresh-blocker.md"
   ],
   "constraints": [
     "Do NOT edit scheduled T3 active scripts/t3_original_particle108_spirv_translation.py and tests/test_t3_original_particle108_spirv_translation.py.",
@@ -33,6 +36,11 @@
     "Use runner-private reflection names only, no raw original IO names/locations/IDs per stage published.",
     "No user device acceptance from CPU SPIRV result."
   ],
-  "run_urls": [],
-  "next_step": "Add source-only strict name/type/location bridge classification for all four exact original Particle108 keyword pairs, with negative tests; run real six-scene SHA ZIP2 with isolated T3 workflow. If names cannot provide unique safe mapping, mark no automap; T5 postvendor/Android still needed."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42144978122",
+    "https://github.com/alwansan/raf/actions/runs/42145627443"
+  ],
+  "next_step": "T4-owned INPUT-005 missing event id must be fixed for shared refresh; independently, next T3 shader work requires original DXBC ISGN/OSGN authored semantics ↔ HLSL recovered semantic/register-to-location map, or declare mapping ambiguous. Match T5 postvendor exact original source Shader GUID/phone emitter. RENDER-002 stays OPEN and device NOT_TESTED.",
+  "integration_commit": "0998c6d82115b0f9753ede85d49ab2a9b7fc26ec",
+  "result": "Authenticated immutable 6scene/4Shader owner original Particle108 4 keyword VS/FS pairs, all 8 Vulkan1.1 valid, HLSL roundtrip 2/4 pairs compatible. New same-source `spirv-cross --reflect` compiler name identity proof: original and derived located source inputs 26 each, outputs 20 each, ZERO matching source-to-roundtrip name/type across 46 I/O names, 0/8 stages with complete name/type preservation. CI42144978122 SUCCESS 141/141 Python tests; no safe reflected-name-only location patch, no source game asset modified, no Android GPU proof. OPEN RENDER-002 issue and source resource updated. Canonical team summary CI42145627443 FAILED solely due missing top-level id in T4-owned INPUT-005 event; T4 handoff sent, no T4 files edited."
 }
