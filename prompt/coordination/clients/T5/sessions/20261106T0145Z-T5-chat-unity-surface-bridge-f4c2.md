@@ -1,0 +1,13 @@
+# T5 chat — 20261106T0145Z-T5-chat-unity-surface-bridge-f4c2
+- origin=chat
+- session_id: 20261106T0145Z-T5-chat-unity-surface-bridge-f4c2
+- base_sha: 726035aa11c5a7f2b43e7cc51db8a255498fed5c
+- status: active
+- resumed_from: 20261106T0138Z-T5-chat-performance-cohort-7ab4; scheduled 20261106T0047Z-T5-scheduled-c4e8; chat OBB verified 20261105T2208Z.
+- work: prompt/coordination/work/PERF-007/20261106T0145Z-T5-chat-unity-surface-bridge-f4c2.json
+- experiment_key: t5-realCL-520c4c-20261105-surface-stale-window-game-side-frame-same-utc-join-v1
+- selected resource: CL-4-pinned-readonly-metrics-and-unity-logs-total-under3MB
+- direct pre-CI observation: first actual Unity game log 413932e9.. has 39 performance intervals, second game log 60674be5.. has 123; 36 and 116 qualify at >=30 frames. External second SF stale from 2026-11-05T20:02:04.996Z through 20:07:48.413Z, 105 stale samples. Within this window, actual Unity log recorded 62 qualifying performance intervals (35 MainScene, 27 MainMenuScene).
+- strictly separate Unity Update interval FPS, SurfaceFlinger presentation and system-wide KGSL busy; scene+resolution alone not same-world proof. Do NOT infer that Unity timing proves actual presented frames.
+- planned new scripts/tests/workflow/report listed in prompt/coordination/work/PERF-007/20261106T0145Z-T5-chat-unity-surface-bridge-f4c2.json, no game source/Unity build/Release/APK/OBB, no T5 scheduled Resolution, T1-T4 code changes.
+- next: test strict source SHA/time alignment and fail-closed scene/window summaries on pinned real CL files.
