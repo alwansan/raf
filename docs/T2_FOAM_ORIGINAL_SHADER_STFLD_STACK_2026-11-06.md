@@ -1,0 +1,17 @@
+# T2 — SHA-original Foam CB0 Shader field exact stfld value
+
+Session: `20261106T1340Z-T2-chat-shader-stfld-source-a84d` (origin=chat), issue WATER-001 OPEN / NOT_READY.
+
+**Original source:** ZIP2 commit `15964ea8f246b6e076ce26b60931ee2e1a9a2385`, original `Raft_Data/sharedassets0.assets` 115978112 bytes SHA256 `0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3`, original `Assembly-CSharp.dll` 3211776 bytes SHA256 `0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e`. SHA authenticates inputs on private GitHub Actions runner. Neither source game DLL nor shader is published or executed.
+
+Earlier [CI42225913516](https://github.com/alwansan/raf/actions/runs/42225913516) established **one** private original `UnityEngine.Shader` instance field flows into the actual `new Material(Shader)` that populates the original Material receiving a `Material.SetVector(string,Vector4)` call with **one source-original Foam CB0 member name**. That nonpublic original Shader field is marked `[SerializeField]` and has exactly one compiled managed `stfld` in one method.
+
+**New experiment:** extended T2-owned `MaterialStoreValueTrace.cs` with a field-type-parametrized `Trace` for the exact authenticated Shader `stfld`, preserving the existing Material field call path, with strict 128-instruction same basic-block limit and branch/switch/exception entry guards. Synthetic Cecil tests cover direct typed `Shader` parameter and field, `Shader.Find(string)` result, a nearby discarded `Shader.Find` that must not be counted, wrong field type and branch to store. Extended `Program.cs`'s third original managed pass to record only finite source buckets, and the isolated T2 workflow gates their exact total. No raw private name, string/hash, IL, symbol, token, ShaderLab, DLL or asset is emitted.
+
+**Definitive genuine [CI42228032544](https://github.com/alwansan/raf/actions/runs/42228032544)**, job `127926415695`, source commit `cd2b4d3123ced1bd5cc835d70c8cabbbdd5d9914`: **SUCCESS**, 11/11 source-free Python tests, Cecil positive/negative synthetic controls, source owner/DLL SHA checks passed. Previous intermediate [CI42227948388](https://github.com/alwansan/raf/actions/runs/42227948388) also SUCCESS with identical source result.
+
+Original compiled result: the **same exact Shader field** consumed by `Material(Shader)` is assigned from the actual typed **`UnityEngine.Shader.Find(string)` return value**, not merely a nearby same-method `Find` call. The conservative original `stfld` trace scanned **3 preceding IL instructions**. The source-original field has **one** compiled stfld writer, and its source bucket is exactly `typed_Shader_Find_result:1`. This is statically compiled value propagation; not proof that method runs, or which literal string was supplied to Find, or which Unity Shader asset was returned.
+
+Remaining precise gate: compare the **actual first `string` formal of this exact `Shader.Find` call** with the authentic original Foam Shader's serialized `m_Name` from the same pinned original SHA asset, entirely in temporary CI/private memory. Exact match would prove requested shader *name*, not necessarily returned loaded asset or runtime correctness; mismatch would be equally important. No assertion about the 160B original CB0 upload or Adreno water pixels.
+
+No game shader, .meta/GUID, FMOD, Settings, world/save, input, native Unity, APK/OBB or other agents' files changed. WATER-001 OPEN.
