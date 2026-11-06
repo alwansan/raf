@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261106T1850Z-T4-chat-overflow-shape-integrity-v6q3",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "hypothesis": "A malformed queue_overflow JSONL object can silently suppress positive but nonacceptance world/save cross-session hints because area/operation alone bypass validation.",
+  "source_commit": "409222d455317044f2e021ac13420b7312e49e3f",
+  "input_hashes": [],
+  "tool_versions": {
+    "python": "GitHub Actions Ubuntu 24.04 unittest",
+    "android_logger_source": "android-port/Runtime/Platform/PersistentDiagnosticLog.cs::Drain (source inspected read-only)"
+  },
+  "commands": [
+    "python3 -m py_compile scripts/t4_verify_device_world_save_log.py scripts/test_t4_overflow_gate.py tests/test_t4_verify_device_world_save_log.py",
+    "python3 -m unittest discover -s tests -p test_t4_verify_device_world_save_log.py -v",
+    "python3 -m unittest scripts.test_t4_overflow_gate -v"
+  ],
+  "negative_controls": [
+    "a2b9e7f9 test-only CI42274640154 rejected no malformed overflow: nine missing exception assertion FAILS as expected",
+    "7977e6b6 CI42274682716 parser 30/30 green but old non-producer-shape legacy overflow test failed, corrected at 409222d4"
+  ],
+  "workflow_path": ".github/workflows/raft-t4-world-save-log-evidence.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42274708854",
+  "artifact_urls": [],
+  "budget": "source-only no Unity/OBB/private CL logs",
+  "status": "completed",
+  "observed_result": "Immutable 409222d455 source CI42274708854 COMPLETED SUCCESS: 30/30 verifier tests + 2/2 separate overflow gate tests; authentic source three-field queue overflow still globally suppresses only hints, invalid schemas fail closed before session analysis.",
+  "rejected_hypotheses": [
+    "Any object with matching area and operation can be trusted as queue overflow",
+    "Original logger queue_overflow record contains session/sequence/utc"
+  ],
+  "limitations": [
+    "No real Android device log was inspected in this synthetic experiment",
+    "No phone game world/save, Unity or IL2CPP acceptance",
+    "No claimed cross-session same world, process restart or .rgd durability",
+    "Source-only test does not justify signed APK/XAPK build"
+  ],
+  "integration_commit": "409222d455317044f2e021ac13420b7312e49e3f",
+  "next_step": "No duplicate test run. Future T4 work focus original local world/save or post-candidate phone log provenance; T4 vote unchanged, no 5/5."
+}
