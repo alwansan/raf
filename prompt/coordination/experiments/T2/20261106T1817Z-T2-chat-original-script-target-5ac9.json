@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "session_id": "20261106T1817Z-T2-chat-original-script-target-5ac9",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "experiment_key": "ZIP2-15964-40original-scenes-55328-opaque-m_Script-mFileID-owner-manifest-SHA-typed-MonoScript-join-v1",
+  "hypothesis": "Exact source-original MonoBehaviour m_Script PPtrs in all 40 scenes resolve via unique original manifest candidate to SHA-verified typed original MonoScript objects in a bounded provider.",
+  "provider_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "source_sha": "91e6df3cca18fb808b6a63538ce60cbefe1e6032",
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t2_original_monoscript_target_join.py -v",
+    "python3 -m scripts.t2_original_monoscript_target_join --zip2 <SHA-pinned read-only ZIP2 checkout> --scratch <ephemeral authenticated source> --out <safe count-only JSON>"
+  ],
+  "source": "scripts/t2_original_monoscript_target_join.py",
+  "tests": "tests/test_t2_original_monoscript_target_join.py",
+  "workflow": ".github/workflows/raft-t2-original-monoscript-target-join.yml",
+  "runner": "ubuntu-24.04",
+  "tool_versions": {
+    "UnityPy": "1.25.4"
+  },
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42269806221"
+  ],
+  "artifact_id": 13529310602,
+  "source_original": {
+    "zip2_commit_authenticated": true,
+    "original_scene_files_sha_authenticated": 40,
+    "scene_source_bytes_sha_authenticated": 233237972,
+    "external_target_files_sha_authenticated": 1,
+    "external_target_source_bytes_sha_authenticated": 758412
+  },
+  "result": {
+    "synthetic_negative_tests_passed": 16,
+    "script_PPtrs_examined": 55328,
+    "external_path_variants": 1,
+    "unique_original_manifest_candidate_ref_rows": 55328,
+    "ambiguous_or_missing_manifest_ref_rows": 0,
+    "stage_budget_excluded_rows": 0,
+    "sha_typed_target_ref_rows": 55328,
+    "typed_MonoScript_object_ref_rows": 55328,
+    "missing_or_wrong_type_target_rows": 0,
+    "distinct_target_MonoScript_objects": 473,
+    "source_original_MonoScript_class_metadata_exported": false,
+    "source_original_Foam_Shader_runtime_binding_verified": false,
+    "Android_water_pixels_verified": false,
+    "conclusion": "success"
+  },
+  "rejected_hypotheses": [
+    "Original 55,328 script refs are unresolved due to missing original serialized target files: all 55,328 mapped to one unique SHA-staged original target.",
+    "Original opaque MonoBehaviour m_Script PPtrs are invalid/wrong-type object targets in original file: 0/55,328 failures."
+  ],
+  "limitations": [
+    "Original MonoScript object typed association alone does not reconstruct custom component serialized fields or original managed runtime Mono Script execution.",
+    "Original file basename and PathID type are source evidence, not an independently verified Unity GUID/runtime resource link.",
+    "758412-byte staged target size also appeared in prior external Shader candidate source test; matching sizes alone cannot assert exact file identity. Requires direct private manifest SHA/file path comparison.",
+    "No ShaderLab/CB0/Adreno device pixels, original Foam Material host, or gameplay sound/state improvements verified."
+  ],
+  "trial_build_vote": {
+    "round_id": "trial-20261106-r1",
+    "T2": "لا يحتاج",
+    "updated_vote": false
+  },
+  "status": "completed",
+  "documentation": "docs/T2_ORIGINAL_SCRIPT_TARGET_PROVENANCE_2026-11-06.md",
+  "next_step": "Verify in SHA-authenticated private runner that 473 MonoScript target provider and earlier original external Shader target are same exact manifest path/SHA, then use original managed Assembly-CSharp schema to decode targeted custom MonoBehaviour PPtrs and original Foam material/Shader linkage. Do not repeat identical 55k census.",
+  "updated_at": "2026-11-06T18:23:31.621Z"
+}
