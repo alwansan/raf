@@ -1,0 +1,14 @@
+{
+  "id": "20261106T151730Z-T1-chat-keyed-candidate-3a7f",
+  "owner": "T1",
+  "session_id": "20261106T151730Z-T1-chat-keyed-candidate-3a7f",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "at": "2026-11-06T15:34:24.494Z",
+  "summary": "Authenticated ZIP2-original-derived HLSL Vulkan pass-zero candidate invocation-keyed trace executed successfully on Mesa/Lavapipe in CI 42242127723. 384 recorded reads: Source 64, Butterfly1 256, Butterfly2 64; duplicate invocation keys 0; out-of-bounds 0. Same-fixture pass outputs compared 64 and 32 written pixels internally with tolerance match. Source-only CI 42242015941 SUCCESS 74/74 tests, including 5 scheduled invocation CLI and 8 new candidate audit tests. Original independent SPIR-V keyed read capture does NOT exist, source-vs-translation paired numeric parity and Android water remain unproven. No raw samples/shaders exported, scratch cleanup passed.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42242015941",
+    "https://github.com/alwansan/raf/actions/runs/42242127723",
+    "https://github.com/alwansan/raf/commit/9505df9a085bbf800c303d6dfa5ee750012eba32"
+  ]
+}
