@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "session_id": "20261106T2207Z-T5-chat-strict-xapk-json-92e4",
+  "owner": "T5",
+  "origin": "chat",
+  "issue_id": "DELIVERY-013",
+  "experiment_key": "T5-DELIVERY-013-json-duplicate-keys-type-bool-xapk-actual-hash-07adfa6a-source-v1",
+  "base_sha": "307986cbdde31e578eda7651614f35c56291e7ae",
+  "resumed_from_sessions": [
+    "20261106T2151Z-T5-chat-split-xapk-member-attest-c4a8",
+    "20261106T2139Z-T5-chat-xapk-crosspass-consistency-71fa"
+  ],
+  "source_commit": "884475aadb32ee1d3c8451d7be5f3db12f4b7421",
+  "test_fix_commit": "44263e26419e9d3dda91930ecc28784a98d46f3b",
+  "red_ci": "https://github.com/alwansan/raf/actions/runs/42301708733",
+  "green_ci": "https://github.com/alwansan/raf/actions/runs/42301817654",
+  "result": "SUCCESS_SYNTHETIC_ONLY",
+  "tests_passed": 9,
+  "total_tests": 9,
+  "additional_negative_subcases": 6,
+  "hypothesis": "Python json.loads accepts duplicate keys by last-wins and bool True compares equal to integer 1. Nested XAPK and delivery manifest may pass typed gates despite ambiguous duplicate package/version/expansion fields; reject duplicate keys recursively and strictly type schema/xapk_version/total_size.",
+  "actual_observation": "JSON parser strictly rejects duplicate keys recursively and invalid NaN constants; booleans rejected as integer schema/xapk_version, total_size must be int. Green 9/9.",
+  "red_reason": "First immutable source CI red at 42301708733 with 8/9 green. Production duplicate key guard rejected unsafe input correctly; test expected inner Duplicate JSON key while public ValueError wraps as Invalid local delivery manifest. Revised test asserts external failure and chained cause, then green 9/9.",
+  "limits": [
+    "No original signed Android game APK/OBB/XAPK payload tested",
+    "Source-only tests use tiny synthetic ZIPs; no graphics/water or device evidence",
+    "No Android cryptographic signature or OBB GUID attested",
+    "Native 42296450023 predates this commit and runs on its own immutable SHA"
+  ],
+  "next_step": "Native 42296450023: inspect final Unity Editor/build output and signed APK/OBB/XAPK provenance when available. For actual completed package run T5 split verifier and tie SHA to GitHub payloads. No native retry, no 5/5 trial vote."
+}

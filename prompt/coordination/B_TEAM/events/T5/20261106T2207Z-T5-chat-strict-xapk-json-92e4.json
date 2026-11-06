@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "session_id": "20261106T2207Z-T5-chat-strict-xapk-json-92e4",
+  "origin": "chat",
+  "owner": "T5",
+  "event_type": "delivery_xapk_json_duplicate_key_failclosed_green",
+  "issue_id": "DELIVERY-013",
+  "at_utc": "2026-11-06T22:06:03.970Z",
+  "source_commit": "884475aadb32ee1d3c8451d7be5f3db12f4b7421",
+  "ci": "https://github.com/alwansan/raf/actions/runs/42301817654",
+  "red_ci": "https://github.com/alwansan/raf/actions/runs/42301708733",
+  "tests_passed": 9,
+  "device_verified": false,
+  "summary": "Reject duplicate manifest fields and nonstandard JSON numeric constants and enforce strict schema/xapk_version/size types on split XAPK read-only verifier; green 9/9 synthetic tests."
+}

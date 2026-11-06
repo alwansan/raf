@@ -4,9 +4,9 @@
   "origin": "chat",
   "owner": "T5",
   "issue_id": "DELIVERY-013",
-  "status": "active",
+  "status": "completed",
   "base_sha": "307986cbdde31e578eda7651614f35c56291e7ae",
-  "updated_at": "2026-11-06T22:07:00Z",
+  "updated_at": "2026-11-06T22:06:03.970Z",
   "resumed_from_sessions": [
     "20261106T2151Z-T5-chat-split-xapk-member-attest-c4a8",
     "20261106T2139Z-T5-chat-xapk-crosspass-consistency-71fa"
@@ -26,5 +26,21 @@
   "experiment_key": "T5-DELIVERY-013-json-duplicate-keys-type-bool-xapk-actual-hash-07adfa6a-source-v1",
   "resource_key": "source-only T5 XAPK CI, no Unity/no native download",
   "coordination": "Current native 42296450023 immutable a1737bd7 is in_progress Unity Editor; T5 scheduled 20261106T2150Z owns native observation only. No T1/T2/T3/T4 or scheduled pair verifier files.",
-  "next_step": "Write fail-closed JSON verifier and synthetic duplicate keys/bool tests, run immutable source CI and checkpoint."
+  "next_step": "Native 42296450023: inspect final Unity Editor/build output and signed APK/OBB/XAPK provenance when available. For actual completed package run T5 split verifier and tie SHA to GitHub payloads. No native retry, no 5/5 trial vote.",
+  "action": "scope_completed_release_files",
+  "source_commit": "884475aadb32ee1d3c8451d7be5f3db12f4b7421",
+  "result": {
+    "status": "SUCCESS_SOURCE_ONLY",
+    "source_patch": "884475aadb32ee1d3c8451d7be5f3db12f4b7421",
+    "test_fix": "44263e26419e9d3dda91930ecc28784a98d46f3b",
+    "red_ci": "https://github.com/alwansan/raf/actions/runs/42301708733",
+    "green_ci": "https://github.com/alwansan/raf/actions/runs/42301817654",
+    "green_tests": "9/9 PASS",
+    "new_negative_subcases": 6,
+    "native_run": "https://github.com/alwansan/raf/actions/runs/42296450023",
+    "native_state": "in_progress",
+    "native_source_sha": "a1737bd736e276d53df808442cfae3b1eea0d488",
+    "real_signed_payload_tested": false,
+    "device_verified": false
+  }
 }
