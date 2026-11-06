@@ -2,9 +2,9 @@
   "session_id": "20261106T110527Z-T2-chat-cb0-managed-namelinks-f2e1",
   "origin": "chat",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "da274472d3070d69a8377fbffc8253bca051b39b",
-  "updated_at": "2026-11-06T11:05:27Z",
+  "updated_at": "2026-11-06T11:18:10Z",
   "resumed_from_sessions": [
     "20261106T103459Z-T2-chat-cb0-index-48bd",
     "20261106T101538Z-T2-scheduled-uploadtrace-6c8f"
@@ -33,5 +33,15 @@
   "prior_completed_texture_il": "https://github.com/alwansan/raf/actions/runs/42019735778",
   "safe_output": "only counts/buckets of string literal hits, typed setter method co-occurrence, no original source, no names/hashes/tokens, no guessed runtime assignments",
   "no_game_asset_meta_guid_touch": true,
-  "next_step": "Stage exact original Foam m_VectorParams/m_MatrixParams source names privately; perform typed original Cecil managed ldstr join in isolated CI."
+  "next_step": "Conservative original SHA managed Cecil IL stack proof for first string/property-id formal argument, independent experimental scope; do not promote proximity to dataflow. WATER-001 OPEN.",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42208958212",
+  "run_id": 42208958212,
+  "run_conclusion": "success",
+  "source_commit": "eb1db19f3cdd38b43f61fdf842899c1ad10d6f9b",
+  "sourcefree_tests_passed": 11,
+  "private_original_sha_verified": true,
+  "result_evidence": "3 of 5 original CB0 vector name literals are present in managed IL; 4 occurrences across 4 methods; one source-matched literal within 16 instructions of typed Material.SetFloat and Material.SetVector calls; no original CB buffer name literal; actual first formal and data upload UNPROVEN",
+  "report": "docs/T2_FOAM_ORIGINAL_CB0_MANAGED_LITERAL_2026-11-06.md",
+  "experiment_record": "prompt/coordination/experiments/T2/20261106T110527Z-T2-chat-cb0-managed-namelinks-f2e1.json",
+  "canonical_event": "prompt/coordination/B_TEAM/events/T2/20261106T110527Z-T2-chat-cb0-managed-namelinks-f2e1-result.json"
 }
