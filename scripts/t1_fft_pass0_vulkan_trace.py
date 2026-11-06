@@ -12,7 +12,7 @@ from scripts.t1_fft_trace_compare import CAPACITY, INVOCATION_RECORD, RECORD
 from scripts.t1_fft_vulkan_roundtrip_isolation import HEIGHT, WIDTH, capture_host, run
 
 
-def trace_host(source, trace_bytes):
+def trace_host(source, trace_bytes, *, capture_inputs=False):
     source = capture_host(source)
     patches = {
         "std::array<VkDescriptorSetLayoutBinding,3> bindings{};": """constexpr VkDeviceSize traceBytes = TRACE_BYTE_SIZE;
@@ -79,7 +79,31 @@ def trace_host(source, trace_bytes):
         if source.count(anchor) != 1:
             raise ValueError("Private trace host anchor changed")
         source = source.replace(anchor, replacement)
-    return source.replace("TRACE_BYTE_SIZE", str(trace_bytes))
+    source = source.replace("TRACE_BYTE_SIZE", str(trace_bytes))
+    if capture_inputs:
+        # After GPU work is idle, read *actual mapped input images* before
+        # unmapping. Both original and HLSL trace hosts execute this same
+        # fixed helper with the same seed/dimensions/dispatch.
+        end_anchor = "    for(int i=0;i<6;i++){\n        vkUnmapMemory(device,images[i].memory);"
+        if source.count(end_anchor) != 1:
+            raise ValueError("Private input attestation host teardown anchor changed")
+        dump = """    const std::array<const char*,2> t1InputNames={
+        "t1-source-input.rgba32f","t1-butterfly-input.rgba32f"};
+    for(int inputIndex=0;inputIndex<2;inputIndex++) {
+        std::ofstream outfile(t1InputNames[inputIndex],
+                              std::ios::binary | std::ios::trunc);
+        require(bool(outfile),"Private input readback file open failed");
+        for(uint32_t y=0;y<h;y++)for(uint32_t x=0;x<w;x++) {
+            const auto texel=pixel(images[inputIndex],x,y,imageFormat);
+            outfile.write(reinterpret_cast<const char*>(texel.data()),
+                          4*sizeof(float));
+        }
+        outfile.close();
+        require(bool(outfile),"Private input readback file write failed");
+    }
+"""
+        source = source.replace(end_anchor, dump + end_anchor)
+    return source
 
 
 def analyze(project, export=None, *, keyed=False):
