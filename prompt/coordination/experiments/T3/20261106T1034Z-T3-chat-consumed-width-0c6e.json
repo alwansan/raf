@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T1034Z-T3-chat-consumed-width-0c6e",
+  "issue_id": "RENDER-002",
+  "status": "completed_source_level_only",
+  "experiment_key": "T3-Particle108-SHA-authentic-fourpair-roundtrip-vertex-width-by-fragment-consumption-v3",
+  "resource_key": "T3-original-Particle108-4owners-private-shader-runner",
+  "workflow": ".github/workflows/raft-t3-particle108-roundtrip-interface.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42203844803",
+  "job_id": 127845429843,
+  "conclusion": "success",
+  "test_controls": {
+    "source_free_unittests_passed": 18,
+    "compile_and_fixture_passed": true,
+    "original_owner_shas_verified": 4,
+    "original_scene_shas_verified": 6
+  },
+  "observed": {
+    "original_keyword_pairs": 4,
+    "original_DXBC_stage_programs": 8,
+    "source_SPIRV_vertex_fragment_pairs_compatible": 4,
+    "regenerated_HLSL_roundtrip_pairs_compatible": 2,
+    "roundtrip_fragment_missing_vertex_location_records": 0,
+    "roundtrip_fragment_same_numeric_location_type_mismatch_records": 2,
+    "vertex_output_same_location_type_changes": 4,
+    "vertex_output_consumed_by_fragment_width_narrowing": 2,
+    "vertex_output_consumed_by_fragment_width_widening": 0,
+    "vertex_output_unconsumed_width_narrowing": 0,
+    "vertex_output_unconsumed_width_widening": 2,
+    "roundtrip_fragment_expected_original_source_vertex_type_for_consumed": 2,
+    "roundtrip_fragment_expected_roundtrip_vertex_type_for_consumed": 0
+  },
+  "limits": {
+    "original_DXBC_semantic_to_roundtrip_HLSL_struct_field_mapping_proven": false,
+    "Android_Adreno_actual_pixels_verified": false,
+    "original_Unity_shader_or_material_modified": false,
+    "RT_2of4_stage_link_accepted_for_game": false,
+    "RENDER_002_status": "OPEN / NOT_READY"
+  },
+  "next_step": "In ephemeral CI, inspect source SPV reflected output identity vs generated private.hlsl Vertex output struct type/semantic and roundtrip SPV via strict field mapping; distinguish SPIRV-Cross-generated width truncation from glslangValidator HLSL-stage effect. If ambiguity remains, report it rather than patching Unity assets.",
+  "updated_at": "2026-11-06T10:37:23.967Z"
+}
