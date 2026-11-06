@@ -230,6 +230,25 @@ jobs:
           assert r['original_exact_Material_ctor_private_Shader_fields_convention_eligible_for_Unity_serialization']<=exact_source
           assert r['original_exact_Material_ctor_private_Shader_fields_with_managed_stfld']<=exact_source
           assert r['original_exact_Material_ctor_private_Shader_managed_writer_method_count']<=r['original_exact_Material_ctor_private_Shader_stfld_instructions']
+          shader_store_buckets=r['original_exact_Material_ctor_private_Shader_field_stfld_value_stack_origin_buckets']
+          shader_store_allowed={
+            'invalid_Shader_stfld','alternate_entry_at_store',
+            'unbounded_basic_block','window_truncated',
+            'flow_boundary_inside_block','unbounded_stack',
+            'invalid_local_definition','local_address_alias_not_proven',
+            'malformed_or_unbounded_field_read',
+            'malformed_or_unbounded_static_field_read',
+            'invalid_method_reference','unsupported_opcode',
+            'typed_Shader_parameter','typed_Shader_instance_field',
+            'typed_Shader_static_field','typed_Shader_Find_result',
+            'typed_Shader_other_call_result','null_literal','unproven'}
+          assert set(shader_store_buckets)<=shader_store_allowed
+          assert all(type(v) is int and v>=0 for v in shader_store_buckets.values())
+          assert sum(shader_store_buckets.values())==r['original_exact_Material_ctor_private_Shader_stfld_instructions']
+          store_steps=r['original_exact_Material_ctor_private_Shader_field_store_block_instructions_examined']
+          assert type(store_steps) is int and 0<=store_steps<=128*r['original_exact_Material_ctor_private_Shader_stfld_instructions']
+          assert r['original_exact_Material_ctor_private_Shader_field_writer_is_Original_Foam_Shader_verified'] is False
+          assert r['original_exact_Material_ctor_private_Shader_field_writer_is_runtime_executed_verified'] is False
           assert r['original_exact_Shader_field_original_Foam_asset_reference_verified'] is False
           assert r['original_exact_Shader_field_runtime_populated_verified'] is False
           assert r['compiled_Material_store_Shader_is_original_Foam_verified'] is False
