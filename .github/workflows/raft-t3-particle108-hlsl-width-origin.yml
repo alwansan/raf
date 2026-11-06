@@ -1,0 +1,121 @@
+name: T3 RENDER-002 source-authentic Particle108 HLSL output type origin
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths: ['.github/workflows/raft-t3-particle108-hlsl-width-origin.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t3-original-particle108-hlsl-width-origin-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  original-hlsl-width-origin-probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 26
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Validate source-free HLSL output parser, type shapes and private-name controls
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t3_particle108_hlsl_output_width_origin.py tests/test_t3_particle108_hlsl_output_width_origin.py
+          python3 -m unittest discover -s tests -p 'test_t3_particle108_hlsl_output_width_origin.py' -v
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-source
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/level0
+            Raft/Raft_Data/level1
+            Raft/Raft_Data/level2
+            Raft/Raft_Data/level3
+            Raft/Raft_Data/level4
+            Raft/Raft_Data/level5
+      - name: Restore only four original source shader owners
+        run: |
+          set -euo pipefail
+          git -C zip2-source sparse-checkout set --no-cone -- \
+            '/RAFT_FILE_MANIFEST.tsv' '/Raft/Raft_Data/level0' \
+            '/Raft/Raft_Data/level1' '/Raft/Raft_Data/level2' \
+            '/Raft/Raft_Data/level3' '/Raft/Raft_Data/level4' \
+            '/Raft/Raft_Data/level5' '/Raft/Raft_Data/resources.assets/*' \
+            '/Raft/Raft_Data/sharedassets0.assets/*' \
+            '/Raft/Raft_Data/sharedassets1.assets' \
+            '/Raft/Raft_Data/sharedassets6.assets'
+          test "$(git -C zip2-source rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+      - name: Verify four SHA-authentic owners and six original scenes
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import stage
+          from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
+          from scripts.b21_scene_lightmap_links import PIN,verify_source
+          from scripts.t3_original_renderer_shader_impact import SHADER_OWNERS_SELECTED
+          source=Path('zip2-source')
+          out=Path(os.environ['RUNNER_TEMP'])/'t3-particle108-private-source'
+          pins={'Raft_Data/'+n:SHADER_OWNERS[n] for n in SHADER_OWNERS_SELECTED}
+          r=stage(source,out,pins)
+          assert len(r['owners'])==4 and r['verified_bytes']==269007288 and not r['lfs_used']
+          for scene,pin in PIN.items():
+              p=source/'Raft/Raft_Data'/scene
+              verify_source(p,pin)
+              dst=out/'Raft_Data'/scene
+              if dst.exists() or dst.is_symlink():raise ValueError('scene_stage_collision')
+              with p.open('rb') as src,dst.open('xb') as target:
+                  while piece:=src.read(1024*1024):target.write(piece)
+              verify_source(dst,pin)
+          print('T3_ORIGINAL_SHA_AUTHENTIC=4_owners_6_scenes')
+          PY
+      - name: Pin reflection and translation dependencies
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.23.0
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
+          dpkg-query -W vkd3d-compiler spirv-tools spirv-cross glslang-tools
+      - name: Compare private original SPIR-V vs emitted HLSL vs recompiled SPIR-V output type shapes
+        run: |
+          set -euo pipefail
+          timeout 720s python3 -m scripts.t3_particle108_hlsl_output_width_origin \
+            --original "$RUNNER_TEMP/t3-particle108-private-source" \
+            --manifest zip2-source/RAFT_FILE_MANIFEST.tsv \
+            --out "$RUNNER_TEMP/t3-particle108-hlsl-width-origin-safe-aggregate.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"t3-particle108-hlsl-width-origin-safe-aggregate.json"
+          d=json.loads(p.read_text())
+          assert d["status"]=="T3_ORIGINAL_PARTICLE108_PRIVATE_HLSL_VERTEX_OUTPUT_TYPE_ORIGIN"
+          assert d["source_original_six_scenes_SHA_verified"] is True
+          assert d["source_original_four_Shader_Material_owner_SHA_verified"] is True
+          assert d["original_keyword_pairs"]==4
+          c=d["counts"]
+          assert c["vertex_variants_checked"]==4
+          assert c["original_vs_fs_pairs_linked"]==4
+          assert c["roundtrip_vs_fs_pairs_linked"]==2
+          assert c["source_vertex_output_records"]==16
+          assert c["roundtrip_vertex_output_records"]==16
+          assert c["generated_hlsl_output_struct_found"]+c["generated_hlsl_output_struct_not_found"]==4
+          assert d["source_semantic_to_HLSL_field_identity_proven"] is False
+          assert d["HLSL_type_multiset_equivalence_proves_field_identity"] is False
+          assert d["native_Android_Adreno_pixels_verified"] is False
+          assert d["private_names_HLSL_and_programs_published"] is False
+          print("T3_PARTICLE108_HLSL_OUTPUT_WIDTH_COUNTS_SAFE="+json.dumps(c,sort_keys=True))
+          PY
