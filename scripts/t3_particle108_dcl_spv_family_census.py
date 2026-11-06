@@ -54,7 +54,32 @@ def _stage_evidence(layout,reflected):
     source_sampler=records_by_family["sampler"]>0
     spv_image_or_combined=n["textures"]+n["separate_images"]+n["images"]>0
     spv_sampler_or_combined=n["textures"]+n["separate_samplers"]>0
+    # Compare source DCL declarations to translated SPIR-V reflection
+    # *within this exact keyword/stage*, rather than globally across stages.
+    # This catches offsetting drift even when 24/10/10 totals match.
+    # Combined sampler images participate in both SRV and sampler counts.
+    family_counts={
+        "cbuffer":(records_by_family["cbuffer"],n["ubos"]),
+        "srv":(records_by_family["srv"],n["textures"]+n["separate_images"]),
+        "sampler":(records_by_family["sampler"],n["textures"]+n["separate_samplers"]),
+        "uav":(records_by_family["uav"],n["images"]+n["ssbos"]),
+    }
+    cardinality={
+        "stage_"+family+"_cardinality_equal":int(src==spv)
+        for family,(src,spv) in family_counts.items()
+    }
+    cardinality.update({
+        "stage_"+family+"_cardinality_mismatch":int(src!=spv)
+        for family,(src,spv) in family_counts.items()
+    })
+    cardinality.update({
+        "stage_"+family+"_absolute_descriptor_count_delta":abs(src-spv)
+        for family,(src,spv) in family_counts.items()
+    })
+    cardinality["stage_all_four_resource_family_cardinalities_equal"]=int(
+        all(src==spv for src,spv in family_counts.values()))
     return {
+        **cardinality,
         "source_decl_cbuffer":records_by_family["cbuffer"],
         "source_decl_srv":records_by_family["srv"],
         "source_decl_sampler":records_by_family["sampler"],
@@ -114,6 +139,7 @@ def classify(pairs,tempdir,*,translator=translate,reflector=reflection):
         "original_to_SPIRV_descriptor_register_provenance_proven":False,
         "source_declared_resource_can_be_unused_or_optimized":True,
         "per_family_presence_is_not_shader_pixel_equivalence":True,
+        "per_stage_family_count_equality_is_not_register_identity":True,
         "Unity_ShaderLab_or_device_pixels_verified":False,
     }
 
