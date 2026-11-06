@@ -6904,6 +6904,22 @@
       "_record_path": "../B_TEAM/events/T2/20261106T094126Z-T2-chat-cb0-gate-ci-83e1-result.json"
     },
     {
+      "id": "20261106T102054Z-T2-chat-cb0-member-shape-3f9e-result",
+      "owner": "T2",
+      "session_id": "20261106T102054Z-T2-chat-cb0-member-shape-3f9e",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "at": "2026-11-06T10:24:00Z",
+      "summary": "Real SHA-original 2-pass Foam CI42201778065 SUCCESS: 86 source-free tests; 4 authentic stage SPIR-V reflections, each pass has 1 shared UBO and one same-offset same-type same-stride member in VS/FS, but reflected array shape and block extent differ in BOTH passes; exact member shape 0/1 per pass. Unity CB0 upload/Adreno water remain UNKNOWN, WATER-001 OPEN.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42201778065",
+        "https://github.com/alwansan/raf/commit/d8c5134e36f588a8273a5476e393d708c2ad639e",
+        "docs/T2_FOAM_ORIGINAL_CB0_MEMBER_ARRAY_SHAPE_2026-11-06.md"
+      ],
+      "next_step": "Authenticate original per-pass array extent direction and runtime CB0 material/global upload; no unproven ShaderLab install.",
+      "_record_path": "../B_TEAM/events/T2/20261106T102054Z-T2-chat-cb0-member-shape-3f9e-result.json"
+    },
+    {
       "id": "T2-20261105T2115Z-chat-precall-operand-4be0-result",
       "owner": "T2",
       "session_id": "20261105T2107Z-T2-chat-writer-call-ab1c",
@@ -8937,7 +8953,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "f1381a4c9fa1617c98b640eb694395c9a1604d3c944aec254144472ac69a5c72",
+  "source_input_sha256": "c9000d3f3438d573227b3407eba14f28671ac3668ad21696dfdf95f339a6a326",
   "generation": "T-2026-11-05",
-  "input_sha256": "a316c8a5081cac33134d0f6694f6cb9798c3fe9a1bf47844ed2fb74c04e8b803"
+  "input_sha256": "73a59c68d77c86055b2c30c573c5bb13c80e1bd99a4c8b83120bbfb6f8b8e0ea"
 }
