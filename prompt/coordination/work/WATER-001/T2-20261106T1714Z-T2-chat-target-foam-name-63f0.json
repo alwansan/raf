@@ -7,7 +7,7 @@
   "issue_id": "WATER-001",
   "track": "original cross-file Foam Shader name and external Material target identity",
   "approach": "Compare exactly the two newly SHA-authenticated external Material.m_Shader target Shader m_ParsedForm.m_Name values against original Foam Shader m_Name on authentic ZIP2 original objects in private runner; emit only comparisons/counters. Check source SerializedFile external GUID structural presence but do not assert target identity without independent GUID attestation.",
-  "status": "active",
+  "status": "waiting_ci",
   "base_sha": "08b0215aab074689de9fe0daf62b8964f2473a02",
   "intended_files": [
     "scripts/t2_foam_original_target_name_relation.py",
@@ -32,8 +32,10 @@
   "experiment_ids": [
     "20261106T1714Z-T2-chat-target-foam-name-63f0"
   ],
-  "run_urls": [],
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42260145863"
+  ],
   "result": null,
-  "next_step": "Use the final original-manifest T2 verifier to stage authenticated target, compare target original Shader parsed names and Foam source serialized name in private runner, with sourcefree bad name/duplicate/unparsed cases; capture strictly aggregated safe result.",
-  "updated_at": "2026-11-06T17:13:44.882Z"
+  "next_step": "Inspect live CI 42260145863 for synthetic-test+original PIN+exact-name comparisons; on success publish only finite safe counts and record canonical event, on failure categorize phase safely and fix distinct evidenced CI issue. Keep source original GUID/Unity/device unproven.",
+  "updated_at": "2026-11-06T17:17:13.442Z"
 }
