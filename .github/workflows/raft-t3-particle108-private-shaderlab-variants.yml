@@ -1,0 +1,129 @@
+name: T3 RENDER-002 SHA-original Particle108 four private ShaderLab compile-only variants
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - '.github/workflows/raft-t3-particle108-private-shaderlab-variants.yml'
+      - 'scripts/t3_particle108_private_shaderlab_variants.py'
+      - 'tests/test_t3_particle108_private_shaderlab_variants.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t3-particle108-private-variants-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  private-shaderlab-structural-only:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 26
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Verify all synthetic negative controls before touching original
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t3_particle108_private_shaderlab_variants.py tests/test_t3_particle108_private_shaderlab_variants.py
+          python3 -m unittest discover -s tests -p 'test_t3_particle108_private_shaderlab_variants.py' -v
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-source
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/level0
+            Raft/Raft_Data/level1
+            Raft/Raft_Data/level2
+            Raft/Raft_Data/level3
+            Raft/Raft_Data/level4
+            Raft/Raft_Data/level5
+      - name: Authenticate original source without staging all PC data
+        run: |
+          set -euo pipefail
+          git -C zip2-source sparse-checkout set --no-cone -- \
+            '/RAFT_FILE_MANIFEST.tsv' '/Raft/Raft_Data/level0' \
+            '/Raft/Raft_Data/level1' '/Raft/Raft_Data/level2' \
+            '/Raft/Raft_Data/level3' '/Raft/Raft_Data/level4' \
+            '/Raft/Raft_Data/level5' '/Raft/Raft_Data/resources.assets/*' \
+            '/Raft/Raft_Data/sharedassets0.assets/*' \
+            '/Raft/Raft_Data/sharedassets1.assets' \
+            '/Raft/Raft_Data/sharedassets6.assets'
+          test "$(git -C zip2-source rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import stage
+          from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
+          from scripts.b21_scene_lightmap_links import PIN,verify_source
+          from scripts.t3_original_renderer_shader_impact import SHADER_OWNERS_SELECTED
+          source=Path('zip2-source')
+          out=Path(os.environ['RUNNER_TEMP'])/'t3-private-variant-original'
+          pins={'Raft_Data/'+name:SHADER_OWNERS[name] for name in SHADER_OWNERS_SELECTED}
+          checked=stage(source,out,pins)
+          assert len(checked['owners'])==4
+          assert checked['verified_bytes']==269007288 and not checked['lfs_used']
+          for scene,pin in PIN.items():
+              p=source/'Raft/Raft_Data'/scene
+              verify_source(p,pin)
+              target=out/'Raft_Data'/scene
+              if target.exists() or target.is_symlink():
+                  raise ValueError('unsafe_original_scene_target')
+              with p.open('rb') as reader,target.open('xb') as writer:
+                  while data:=reader.read(1024*1024):
+                      writer.write(data)
+              verify_source(target,pin)
+          print('T3_PRIVATE_VARIANTS_ORIGINAL_AUTHENTICATED=4_owners_6_scenes')
+          PY
+      - name: Install pinned original-only shader analysis tools
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.23.0 -q
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
+          dpkg-query -W vkd3d-compiler spirv-tools spirv-cross glslang-tools
+      - name: Privately construct four source-authentic HLSL ShaderLab variants; never publish source
+        run: |
+          set -euo pipefail
+          timeout 720s python3 -m scripts.t3_particle108_private_shaderlab_variants \
+            --source "$RUNNER_TEMP/t3-private-variant-original" \
+            --manifest zip2-source/RAFT_FILE_MANIFEST.tsv \
+            --private-dir "$RUNNER_TEMP/t3-private-variant-shaderlab" \
+            --out "$RUNNER_TEMP/t3-particle108-private-variant-safe.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          report=json.loads((Path(os.environ['RUNNER_TEMP'])/'t3-particle108-private-variant-safe.json').read_text())
+          assert report['status']=='T3_ORIGINAL_PARTICLE108_FOUR_PRIVATE_SHADERLAB_STRUCTURAL_VARIANTS'
+          assert report['source_authenticated_keyword_pairs']==4
+          assert report['original_authored_property_count']==13
+          assert report['original_authored_texture_property_count']==2
+          assert report['counts']['genuine_original_DXBC_stages_translated']==8
+          assert report['counts']['private_complete_one_pass_ShaderLab_candidates']==4
+          assert report['counts']['private_property_default_parity_passes']==4
+          for field in ('four_keywords_selectable_in_one_runtime_shader',
+                        'source_keyword_routing_or_original_descriptors_preserved',
+                        'Unity_ShaderLab_import_or_GPU_compile_proven',
+                        'original_Material_texture_resource_bindings_equivalent',
+                        'original_Android_pixels_or_emitter_verified',
+                        'original_name_program_HLSL_DXBC_SPV_GUID_or_private_values_published'):
+              assert report[field] is False
+          print('T3_PRIVATE_VARIANT_PROOF_SAFE='+json.dumps(report,sort_keys=True))
+          PY
+      - name: Erase private staged sources and candidates from runner
+        if: always()
+        shell: bash
+        run: |
+          rm -rf -- "$RUNNER_TEMP/t3-private-variant-shaderlab" "$RUNNER_TEMP/t3-private-variant-original"
+          rm -f -- "$RUNNER_TEMP/t3-particle108-private-variant-safe.json"
