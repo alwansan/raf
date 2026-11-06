@@ -6,9 +6,9 @@
   "session_id": "20261106T2155Z-T2-chat-blur-export-guid-guard-9f1c",
   "issue_id": "WATER-001",
   "track": "Blur original shader guarded install",
-  "status": "active",
+  "status": "completed",
   "base_sha": "ebbdf7917eb581d5a6379a95afdd86f0613d2fd5",
-  "updated_at": "2026-11-06T21:54:36.149Z",
+  "updated_at": "2026-11-06T21:56:08.545Z",
   "resumed_from_sessions": [
     "20261106T2148Z-T2-chat-cb0-array-bounds-5bc1",
     "20261106T2138Z-T2-chat-foam-matdoc-82bd"
@@ -35,5 +35,17 @@
     "original private source/asset"
   ],
   "ci_existing": ".github/workflows/raft-b45-blur-install-check.yml",
-  "next_step": "Add duplicate-GUID rejection before backup and symlink sidecar guard, source-only synthetic red/green tests, check CI; do not change B45 pinned private candidate or Unity assets."
+  "next_step": "T5 authorised authentic Unity export: enumerate all .meta GUIDs and verified Blur target, use private source candidate only after matching authoritative original and clean importer; verify Unity original Blur pass colors and phone pixels; no forced native.",
+  "code_commit": "52dc2c6a8410f24893342a3b8c7db9db2c920522",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42300619078",
+    "https://github.com/alwansan/raf/actions/runs/42300619027"
+  ],
+  "result": {
+    "source_only_ci": "SUCCESS",
+    "blur_install_tests": 12,
+    "second_rollback_workflow": "SUCCESS",
+    "real_export_or_unity_tested": false,
+    "original_source_payload_changed": false
+  }
 }
