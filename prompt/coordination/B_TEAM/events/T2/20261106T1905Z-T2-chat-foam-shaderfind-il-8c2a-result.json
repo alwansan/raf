@@ -1,0 +1,19 @@
+{
+  "id": "T2-20261106T1905Z-T2-chat-foam-shaderfind-il-8c2a-original-foam-typed-shaderfind-result",
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261106T1905Z-T2-chat-foam-shaderfind-il-8c2a",
+  "issue_id": "WATER-001",
+  "type": "discovery",
+  "summary": "Authenticated original Foam Shader m_Name appears in exactly 1 compiled original Assembly-CSharp ldstr, passed immediately to exactly 1 typed UnityEngine.Shader.Find(System.String) call (out of 81 typed Shader.Find calls); 0 in-method Material(Shader) constructor cooccurrences, no runtime material/pixels proof. CI42278043015 SUCCESS, 6 Python controls plus Cecil selftest, 115978112B shader owner and 3211776B DLL SHA-verified, private name purged. WATER-001 OPEN, T2 trial r1 no-needs unchanged.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42278043015",
+    "docs/T2_ORIGINAL_FOAM_SHADERFIND_IL_2026-11-06.md"
+  ],
+  "limitations": [
+    "One direct typed Find source IL call does not verify runtime execution, Shader object resolution, Material/renderer binding, CB0 upload or Android pixels.",
+    "The Material(Shader) no-call result is a single-method bound, not whole-program proof of absence.",
+    "No proprietary asset, IL, original name or private object names exported."
+  ],
+  "at": "2026-11-06T19:17:00Z"
+}

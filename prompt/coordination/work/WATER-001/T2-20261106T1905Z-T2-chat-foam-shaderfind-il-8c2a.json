@@ -6,9 +6,9 @@
   "session_id": "20261106T1905Z-T2-chat-foam-shaderfind-il-8c2a",
   "issue_id": "WATER-001",
   "track": "original Foam shader name to exact managed Shader.Find IL call-site evidence",
-  "status": "active",
+  "status": "completed",
   "base_sha": "89f358edfab3bbe3ab10b4608413ef9722b89afd",
-  "updated_at": "2026-11-06T19:05:00Z",
+  "updated_at": "2026-11-06T19:17:00Z",
   "intended_files": [
     "prompt/coordination/work/WATER-001/T2-20261106T1905Z-T2-chat-foam-shaderfind-il-8c2a.json",
     "prompt/coordination/clients/T2/sessions/20261106T1905Z-T2-chat-foam-shaderfind-il-8c2a.md",
@@ -19,7 +19,8 @@
     ".github/workflows/raft-t2-foam-original-shaderfind-il.yml",
     "docs/T2_ORIGINAL_FOAM_SHADERFIND_IL_2026-11-06.md",
     "prompt/coordination/experiments/T2/20261106T1905Z-T2-chat-foam-shaderfind-il-8c2a.json",
-    "prompt/coordination/B_TEAM/events/T2/20261106T1905Z-T2-chat-foam-shaderfind-il-8c2a-result.json"
+    "prompt/coordination/B_TEAM/events/T2/20261106T1905Z-T2-chat-foam-shaderfind-il-8c2a-result.json",
+    "docs/T2_ORIGINAL_FOAM_SHADERFIND_IL_2026-11-06.md"
   ],
   "experiment_key": "ZIP2-15964-original-Foam-shader-mName-to-AssemblyCSharp-typed-Shader.Find-ldstr-v1",
   "resource_key": "original-sharedassets0-115978112-and-managedDLL-3211776-isolated-CPU-run",
@@ -33,8 +34,32 @@
     "20261106T1846Z-T2-chat-monoclass-assembly-7d3e",
     "20261106T1900Z-T2-chat-scene-script-typed-6f9a"
   ],
-  "run_urls": [],
-  "result": null,
-  "next_step": "Sourcefree tests then SHA original Foam/name and original DLL through immutable ZIP2, Cecil typed IL exact ldstr immediate Shader.Find consumer. Counts-only safe result, no original names/IDs/artifact. No game/Android build.",
-  "trial_build_vote": "لا يحتاج"
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42278043015"
+  ],
+  "result": {
+    "status": "success",
+    "sha": "9aed14b5fd8a266d2ca45e4319ce78f7eda990fc",
+    "run_id": 42278043015,
+    "job_id": 128099419262,
+    "python_synthetic_tests": 6,
+    "cecil_selftest": true,
+    "original_Shader_owner_bytes_SHA_verified": 115978112,
+    "original_managed_DLL_bytes_SHA_verified": 3211776,
+    "methods_with_body": 19118,
+    "IL_instructions": 491490,
+    "ldstr_instructions": 7246,
+    "shaderfind_typed_calls": 81,
+    "shaderfind_methods": 25,
+    "original_foam_shader_name_literal_occurrences": 1,
+    "source_literal_and_find_same_method": 1,
+    "source_literal_direct_typed_Shader_Find_calls": 1,
+    "direct_find_and_material_constructor_same_method": 0,
+    "artifact_id": 13534805523,
+    "artifact_zip_digest": "sha256:9ada181d534edf9b06c8731f943be2e9439c91a9358e6b7acc4e01847602c16e",
+    "original_foam_android_pixels_verified": false
+  },
+  "next_step": "Source-private typed IL def-use of original Shader.Find return value (look at immediate stfld/stloc and subsequent Material/Renderer consumers); combine with source-original 473 MonoScript managed TypeDef subset when prior active T2 scope completes. Never equate source Shader.Find call to water pixels.",
+  "trial_build_vote": "لا يحتاج",
+  "integration_commit": "9aed14b5fd8a266d2ca45e4319ce78f7eda990fc"
 }

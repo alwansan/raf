@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "generation": "T-2026-11-05",
+  "origin": "chat",
+  "session_id": "20261106T1905Z-T2-chat-foam-shaderfind-il-8c2a",
+  "issue_id": "WATER-001",
+  "experiment_key": "ZIP2-15964-original-Foam-shader-mName-to-AssemblyCSharp-typed-Shader.Find-ldstr-v1",
+  "hypothesis": "Exact SHA-original Foam Shader m_Name may occur in Assembly-CSharp ldstr and be passed directly to UnityEngine.Shader.Find; count exact call arguments without inventing runtime use if only lexical/call cooccurrence.",
+  "source_commit": "9aed14b5fd8a266d2ca45e4319ce78f7eda990fc",
+  "original_provider_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "tool_versions": {
+    "UnityPy": "1.25.4",
+    "Mono.Cecil": "0.11.5",
+    "dotnet": "9",
+    "runner": "ubuntu-24.04"
+  },
+  "workflow_path": ".github/workflows/raft-t2-foam-original-shaderfind-il.yml",
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t2_original_foam_shaderfind_name.py -v",
+    "dotnet publish android-port/Experiments/T2/FoamShaderFindOriginal/FoamShaderFindOriginal.csproj -c Release",
+    "dotnet FoamShaderFindOriginal.dll --selftest",
+    "python3 -m scripts.t2_original_foam_shaderfind_name --source <SHA-original-owner> --private-out <private>",
+    "dotnet FoamShaderFindOriginal.dll <original-dll> <private-name> <safe-json>"
+  ],
+  "negative_controls": [
+    "wrong shader literal",
+    "casefold mismatch",
+    "invalid private literal",
+    "non-Shade.Find MethodReference",
+    "wrong Find return type",
+    "different original string"
+  ],
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42278043015",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42278043015/artifacts/13534805523"
+  ],
+  "status": "completed",
+  "observed_result": {
+    "status": "success",
+    "sha": "9aed14b5fd8a266d2ca45e4319ce78f7eda990fc",
+    "run_id": 42278043015,
+    "job_id": 128099419262,
+    "python_synthetic_tests": 6,
+    "cecil_selftest": true,
+    "original_Shader_owner_bytes_SHA_verified": 115978112,
+    "original_managed_DLL_bytes_SHA_verified": 3211776,
+    "methods_with_body": 19118,
+    "IL_instructions": 491490,
+    "ldstr_instructions": 7246,
+    "shaderfind_typed_calls": 81,
+    "shaderfind_methods": 25,
+    "original_foam_shader_name_literal_occurrences": 1,
+    "source_literal_and_find_same_method": 1,
+    "source_literal_direct_typed_Shader_Find_calls": 1,
+    "direct_find_and_material_constructor_same_method": 0,
+    "artifact_id": 13534805523,
+    "artifact_zip_digest": "sha256:9ada181d534edf9b06c8731f943be2e9439c91a9358e6b7acc4e01847602c16e",
+    "original_foam_android_pixels_verified": false
+  },
+  "limitations": [
+    "One direct typed Find source IL call does not verify runtime execution, Shader object resolution, Material/renderer binding, CB0 upload or Android pixels.",
+    "The Material(Shader) no-call result is a single-method bound, not whole-program proof of absence.",
+    "No proprietary asset, IL, original name or private object names exported."
+  ],
+  "integration_commit": "9aed14b5fd8a266d2ca45e4319ce78f7eda990fc",
+  "next_step": "Source-private typed IL def-use of original Shader.Find return value (look at immediate stfld/stloc and subsequent Material/Renderer consumers); combine with source-original 473 MonoScript managed TypeDef subset when prior active T2 scope completes. Never equate source Shader.Find call to water pixels.",
+  "updated_at": "2026-11-06T19:17:00Z"
+}
