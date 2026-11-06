@@ -29,14 +29,18 @@
   ],
   "team_conflicts": "T1 water FFT, T2 Foam, T4 local input, T5 packaging operate outside these files; T3 scheduled session 1429 read-only native dummy audit.",
   "plan": "Restore expensive exporter to manual-only if tool permits; classify exact selected YAML failure with sanitized enumerated stage and no raw private values; source-free 19+ control regression, one original read-only SHA-locked export if relevant; record terminal or waiting run.",
-  "updated_at": "2026-11-06T15:21:31.386Z",
-  "next_step": "Read terminal 42242213756 safe_document_reason/values; investigate evidenced genuine selected Material YAML shape, not guessed pass; don't dispatch duplicate exporter. Keep source and Pixel/Android findings separate.",
+  "updated_at": "2026-11-06T15:27:41.403Z",
+  "next_step": "Inspect 42243130856 terminal and safe numeric/field result; if inconclusive record category; do not claim device graphics fixed.",
   "ci_runs": [
     "https://github.com/alwansan/raf/actions/runs/42241999485",
-    "https://github.com/alwansan/raf/actions/runs/42242213756"
+    "https://github.com/alwansan/raf/actions/runs/42242213756",
+    "https://github.com/alwansan/raf/actions/runs/42243009945",
+    "https://github.com/alwansan/raf/actions/runs/42243130856"
   ],
-  "source_only_controls": "21/21 PASS (42241999485)",
-  "original_run": 42242213756,
-  "original_run_immutable_sha": "e5c36cb8adbc5fde144891ab62826b4e5c068309",
-  "workflow_manual_only_commit": "599c3a8b623aa7eb81fc69ac7362a4a12aeb3f78"
+  "source_only_controls": "24/24 PASS (42243009945)",
+  "original_run": 42243130856,
+  "original_run_immutable_sha": "0cdab0cbd0e19c868261a3cbb556a3c4adacb19f",
+  "workflow_manual_only_commit": "0c962a0f5354dbc0f253e40388b5333f7d1a06db",
+  "latest_proven_failure_reason": "42242213756 real selected Particle108 YAML EXPORTED_RGBA_YAML=>SELECTED_SCALAR_SCHEMA (no values compared)",
+  "new_adaptation": "private selected exported m_Floats/m_Ints dict→original pairs, B22 float32/int32 preserved, no missing fields synthesized"
 }
