@@ -61,8 +61,19 @@ class OriginalRdefTests(unittest.TestCase):
     def test_missing_original_RDEF_is_rejected(self):
         source=bytearray(synthetic_dxbc([]))
         source[36:40]=b"ISGN"
-        with self.assertRaisesRegex(ValueError,"DXBC_ORIGINAL_RDEF_NOT_UNIQUE"):
+        with self.assertRaisesRegex(ValueError,"DXBC_ORIGINAL_RDEF_ABSENT"):
             source_rdef(bytes(source))
+    def test_multiple_original_RDEF_chunks_are_distinguished_from_absence(self):
+        source=bytearray(synthetic_dxbc([]))
+        # Duplicate the synthetic RDEF chunk and rebuild the DXBC chunk-offset table.
+        first=bytes(source[36:])
+        second_offset=40+len(first)
+        duplicate=(b"DXBC"+b"\\x00"*16+
+                   struct.pack("<III",1,second_offset+len(first),2)+
+                   struct.pack("<II",40,second_offset)+first+first)
+        with self.assertRaisesRegex(ValueError,"DXBC_ORIGINAL_RDEF_MULTIPLE"):
+            source_rdef(duplicate)
+
     def test_original_DXBC_total_length_mismatch_rejected(self):
         source=bytearray(synthetic_dxbc([]))
         struct.pack_into("<I",source,24,len(source)+1)
@@ -98,8 +109,10 @@ class OriginalRdefTests(unittest.TestCase):
         _,count=_private_register_layout(((0,0,1),(2,0,1),(3,0,1)))
         self.assertEqual(count["same_family_overlapping_register_slots"],0)
     def test_rdef_fail_reason_is_only_safe_static_classifier(self):
-        self.assertEqual(SAFE_RDEF_FAILURE_REASON["DXBC_ORIGINAL_RDEF_NOT_UNIQUE"],
-                         "ORIGINAL_RDEF_ABSENT_OR_AMBIGUOUS")
+        self.assertEqual(SAFE_RDEF_FAILURE_REASON["DXBC_ORIGINAL_RDEF_ABSENT"],
+                         "ORIGINAL_RDEF_ABSENT")
+        self.assertEqual(SAFE_RDEF_FAILURE_REASON["DXBC_ORIGINAL_RDEF_MULTIPLE"],
+                         "ORIGINAL_RDEF_MULTIPLE")
         self.assertNotIn("_PrivateTexture",json.dumps(SAFE_RDEF_FAILURE_REASON))
     def test_missing_four_original_pairs_rejected(self):
         for bad in ([],fixtures()[:3],fixtures()+fixtures()[:1]):
