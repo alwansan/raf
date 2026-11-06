@@ -1960,8 +1960,8 @@
         "acquisition": "ZIP2_ORIGINAL_SHA_VERIFIED",
         "extraction": "TWO_AUTHORED_PROPERTIES_TEXTURE_VECTOR_FOUR_STAGES_TWO_STATES",
         "reconstruction": "ORIGINAL_FOAM_PRIVATE_2PASS_9731B_SHADERLAB_4STAGES_VULKAN11_COMPILED_AND_VALIDATED_NUMERIC_VS_FS_VARYINGS_MATCH_BOTH_PASSES",
-        "binding": "SOURCE_ORIGINAL_PRIVATE_SPIRV_PRE_REMAP_4_DESCRIPTOR_TYPE_COLLISIONS;_FRAGMENT_ONLY_DECORATION_SET_RELOCATED_14_RESOURCES_ZERO_COLLISIONS_IN_SCRATCH;_UNITY_CB0_AND_MATERIAL_RUNTIME_UPLOAD_UNVERIFIED",
-        "integration": "CI42151620701_SUCCESS_67_SOURCE_FREE_TESTS_4_ORIGINAL_STAGES_2_REMAPPED_SPIRV_VAL;_UNITY_IMPORT_UNTESTED",
+        "binding": "SOURCE_ORIGINAL_PRIVATE_SPIRV_FOUR_NUMERIC_TYPE_CONFLICTS;_MINIMAL_FOUR_FRAGMENT_DESCRIPTORSET_EDIT_REMOVES_ALL_FOUR_PRESERVES_TWO_SHARED_CB0_NUMERIC_COORDINATES;_TWO_CB_BLOCK_EXTENT_DIFFERENCES_UNRESOLVED;_UNITY_MATERIAL_RUNTIME_UNVERIFIED",
+        "integration": "CI42153150468_SUCCESS_71_SOURCE_FREE_TESTS_ORIGINAL_TWO_FRAGMENT_PRIVATE_SELECTIVE_SPIRV_VAL;_UNITY_SHADERLAB_IMPORT_NOT_RUN",
         "device": "NOT_TESTED"
       },
       "observed": {
@@ -1974,7 +1974,7 @@
         "original_render_states": 2,
         "exact_original_DXBC_shader_models_verified": 4,
         "private_candidate_bytes": 9731,
-        "source_free_tests_passed": 67,
+        "source_free_tests_passed": 71,
         "Unity2021_import_verified": false,
         "CB0_and_original_Material_sampler_upload_verified": false,
         "Android_Adreno_pixels_verified": false,
@@ -1999,7 +1999,15 @@
         "private_fragment_descriptor_set_literals_relocated": 14,
         "original_SPIRV_non_DescriptorSet_words_preserved": true,
         "private_relocated_fragment_binaries_validated_vulkan11": 2,
-        "original_Unity_DescriptorSet_binding_integration_verified": false
+        "original_Unity_DescriptorSet_binding_integration_verified": false,
+        "original_fragment_descriptor_type_conflicts_before": 4,
+        "private_fragment_selective_remap_modified_literals": 4,
+        "private_fragment_selective_remap_type_conflicts_after": 0,
+        "private_same_type_CB0_numeric_links_preserved": 2,
+        "private_CB0_byte_extent_differences_unresolved": 2,
+        "private_selectively_remapped_SPIRV_modules_vulkan11_validated": 2,
+        "all_original_other_SPIRV_words_preserved": true,
+        "original_Unity_material_or_CB0_upload_verified": false
       },
       "evidence": [
         "https://github.com/alwansan/raf/actions/runs/42125000030",
@@ -2008,9 +2016,10 @@
         "https://github.com/alwansan/raf/actions/runs/42144036981",
         "https://github.com/alwansan/raf/actions/runs/42146401691",
         "https://github.com/alwansan/raf/actions/runs/42149571827",
-        "https://github.com/alwansan/raf/actions/runs/42151620701"
+        "https://github.com/alwansan/raf/actions/runs/42151620701",
+        "https://github.com/alwansan/raf/actions/runs/42153150468"
       ],
-      "next_step": "Production integration needs exact Unity resource alias + CB0 upload remap, not simply copying private relocated binaries. Run separate minimal collision-only remap test to retain shared CB0 coordinates where source semantics allow, with source-original SHA and Vulkan validation; then genuine Unity importer + Adreno phone. WATER-001 remains OPEN.",
+      "next_step": "Source-proof: 4 minimal Fragment DescriptorSet literal edits suffice to eliminate all four Vulkan descriptor class collisions while preserving same-type shared CB0 coords (1 each pass). BUT original same-class CB0 reflected block extents differ in both passes; require original field-by-field layout and Unity CB0 upload before installing any ShaderLab; then genuine Unity2021 import and Android phone proof with T1/T5. WATER-001 OPEN.",
       "_record_path": "../B_TEAM/resources/T2-foam-original-private-two-pass-ShaderLab-candidate.json"
     },
     {
@@ -6769,6 +6778,20 @@
       "_record_path": "../B_TEAM/events/T2/20261106T022741Z-T2-chat-foam-private-set-remap-f6a2-result.json"
     },
     {
+      "id": "20261106T024715Z-T2-chat-selective-descriptor-cbguard-a91c-result",
+      "owner": "T2",
+      "session_id": "20261106T024715Z-T2-chat-selective-descriptor-cbguard-a91c",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "at": "2026-11-06T02:55:00Z",
+      "summary": "SHA-original Foam final private two-pass Vulkan candidate: after detecting four VS/FS descriptor class conflicts, selective Fragment OpDecorate DescriptorSet only relocation of FOUR conflicting resources (rather than all 14) reduces type collisions 4→0, preserves 2 shared same-class CB0 numeric coordinates and all other SPIR-V words; both remapped fragment SPIR-V validate. 71 synthetic tests. Two source CB0 byte extent mismatches still open. CI42153150468 SUCCESS. Unity/Material/Adreno unknown.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42153150468",
+        "https://github.com/alwansan/raf/commit/143ae1345a0bb222dba1cefe7bc82bf80da47bfa"
+      ],
+      "_record_path": "../B_TEAM/events/T2/20261106T024715Z-T2-chat-selective-descriptor-cbguard-a91c-result.json"
+    },
+    {
       "id": "T2-20261105T2115Z-chat-precall-operand-4be0-result",
       "owner": "T2",
       "session_id": "20261105T2107Z-T2-chat-writer-call-ab1c",
@@ -8502,6 +8525,21 @@
       "_record_path": "../B_TEAM/events/T5/20261106T0214Z-T5-chat-scene-window-attribution-8d91.json"
     },
     {
+      "id": "T5-20261106-native-retention-3day-release-token",
+      "owner": "T5",
+      "session_id": "20261106T0248Z-T5-chat-native-delivery-retention-e8a3",
+      "issue_id": "INTEGRATION-001",
+      "type": "integration",
+      "at": "2026-11-06T02:54:49.603Z",
+      "summary": "After genuine native source42058825739 build succeeded but release create failed HTTP403, source patched future native delivery retention from 1d to 3d, signed/audited 2d to 3d, optional RAFT_RELEASE_TOKEN fallback to github.token. Strict release denial still fails delivery job. CI42153075428 SUCCESS 9/9 tests. No actual Release created; old artifact expiry unchanged.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42153075428",
+        "https://github.com/alwansan/raf/actions/runs/42058825739",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_NATIVE_DELIVERY_FALLBACK_2026-11-06.md"
+      ],
+      "_record_path": "../B_TEAM/events/T5/20261106T0248Z-T5-chat-native-delivery-retention-e8a3.json"
+    },
+    {
       "id": "20261104-b-generation",
       "owner": "owner-team-bootstrap",
       "session_id": "b-team-setup-20261104",
@@ -8530,7 +8568,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "5b1f133960b4818fb7e63f94bf5311d46aac42d7628fc806a665ff68b8867e2f",
+  "source_input_sha256": "b2c39d818be88f953c6ad1040ddaf1b600fa5c23e51b61ad50e9c3cc419c45f5",
   "generation": "T-2026-11-05",
-  "input_sha256": "4a802e66b9fd0caa8c82483ace5a3ef8a09ae7cdae673adb04b6e48957b935ce"
+  "input_sha256": "5e94e07ca22ea0060ed43f2ff59fc7482febdf1d78fbbb88aa9f20ea76e0d906"
 }
