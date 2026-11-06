@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261106T1900Z-T2-chat-scene-script-typed-6f9a",
+  "issue_id": "WATER-001",
+  "experiment_key": "ZIP2-15964-40scene-55328-mScript-473unique-MonoScript-typed-managed-AssemblyCSharp-TypeDef-original-v1",
+  "hypothesis": "The 473 typed original MonoScript objects actually referenced by 55,328 opaque components in 40 original level scenes can be isolated by precise source file PPtr+PathID and cross-matched against SHA-authenticated original managed TypeDef without name leaks.",
+  "provider_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "source_commit": "fdaa5bf749ed07a0a6cd7d34718a90290b5e9322",
+  "tool_versions": {
+    "UnityPy": "1.25.4",
+    "dnfile": "0.18.0",
+    "runner": "ubuntu-24.04"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t2_original_scene_managed_subset.py -v",
+    "python3 -m scripts.t2_original_scene_managed_subset --zip2 <immutable ZIP2> --scratch <ephemeral stage> --out <safe counts>"
+  ],
+  "negative_controls": [
+    "ambiguous/missing external provider",
+    "foreign source fileID and PathID",
+    "negative/boolean/floating PPtr",
+    "unreferenced full-owner MonoScript is excluded",
+    "actual target PathID absent is fail-closed",
+    "metadata unreadable explicitly unknown",
+    "case-sensitive TypeDef and ambiguous duplicate"
+  ],
+  "workflow_path": ".github/workflows/raft-t2-original-scene-monoscript-managed-subset.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42276583082",
+  "artifact_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42276583082/artifacts/13533820909"
+  ],
+  "status": "completed",
+  "observed_result": {
+    "status": "success",
+    "run_id": 42276583082,
+    "synthetic_tests": 15,
+    "original_scene_files_sha_checked": 40,
+    "original_scene_bytes_sha_checked": 233237972,
+    "original_mono_owner_sha_checked": 758412,
+    "original_dll_sha_checked": 3211776,
+    "original_total_sha_checked": 237208160,
+    "opaque_m_script_refs": 55328,
+    "actual_referenced_distinct_MonoScripts": 473,
+    "exact_Assembly_CSharp_candidate_objects": 428,
+    "unique_TypeDef_matches": 427,
+    "ambiguous_TypeDef": 1,
+    "missing_TypeDef": 0,
+    "other_assembly_original_scripts": 45,
+    "unreadable_MonoScript_metadata": 0,
+    "whole_source_provider_MonoScript_objects": 3827,
+    "original_managed_typedef_rows": 3033,
+    "device_water_pixels_verified": false,
+    "artifact_id": 13533820909
+  },
+  "limitations": [
+    "Original manifest candidate + actual typed target PPtr is source evidence, not independent Unity runtime GUID.",
+    "427 original managed TypeDef matches are not 427 complete Unity custom field layouts.",
+    "One ambiguous same-namespace TypeDef remains unresolved.",
+    "No real Foam runtime ShaderLab/CB0 integration nor Android pixels."
+  ],
+  "integration_commit": "fdaa5bf749ed07a0a6cd7d34718a90290b5e9322",
+  "next_step": "Private source-authentic join of 427 proven in-scene MonoScript TypeDefs to original managed field signatures + actual original water Material/Shader/CB0 entry points. Keep 1 ambiguous TypeDef unresolved until independent disambiguation. No fuzzy matching, no game asset edits or APK until substantive integrated render patch.",
+  "updated_at": "2026-11-06T19:07:15Z"
+}
