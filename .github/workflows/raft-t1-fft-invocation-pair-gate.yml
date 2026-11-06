@@ -17,6 +17,8 @@ on:
       - tests/test_t1_fft_invocation_trace_cli.py
       - scripts/t1_fft_candidate_keyed_trace_audit.py
       - tests/test_t1_fft_candidate_keyed_trace_audit.py
+      - scripts/t1_fft_original_keyed_preflight.py
+      - tests/test_t1_fft_original_keyed_preflight.py
       - .github/workflows/raft-t1-fft-invocation-pair-gate.yml
 
 permissions:
@@ -47,6 +49,7 @@ jobs:
           python3 -m unittest discover -s tests -p test_t1_fft_float32_ulp_diagnostic.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_invocation_trace_cli.py -v
           python3 -m unittest discover -s tests -p test_t1_fft_candidate_keyed_trace_audit.py -v
+          python3 -m unittest discover -s tests -p test_t1_fft_original_keyed_preflight.py -v
       - name: Privacy and actual-source acceptance boundary
         run: |
           set -euo pipefail
