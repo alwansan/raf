@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261106T1936Z-T4-chat-original-save-cycle-nesting-w8r2",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "hypothesis": "Equal counts of SaveGame/SaveWorld/SaveUser enter and exit markers can falsely suggest successful world-user save when emitted in an impossible order or one phase lacks its own nonzero original Save file snapshot.",
+  "experiment_key": "T4-owner5nov-CL520c4c-original-nested-savegame-world-user-snapshots-source-negative-v2",
+  "source_commit": "044110be481eeb7ca3d903986e0ef4c9b528aca6",
+  "input_snapshot": {
+    "repo": "alwansan/CL",
+    "commit": "520c4cf409aa20a4db54ff80ed87d8807d9cba57",
+    "jsonl_file_count": 3,
+    "bytes": [
+      869991,
+      499456,
+      1443270
+    ],
+    "git_blob_sha1": [
+      "28264b50a5a8aaefefb3bdd0256f0869c79e6116",
+      "413932e92fc24cd50b1fae1cbb25120f392e8158",
+      "60674be571e4979e329924e5e2679f43e40ec41a"
+    ],
+    "raw_owner_data_emitted": false
+  },
+  "tool_versions": {
+    "python": "Ubuntu 24.04 runner Python3",
+    "git_checkout": "11bd71901bbe5b1630ceea73d27597364c9af683"
+  },
+  "workflow_path": ".github/workflows/raft-t4-owner5nov-jsonl-lifecycle.yml",
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t4_owner5nov_jsonl_lifecycle.py -v",
+    "python3 -m scripts.t4_owner5nov_jsonl_lifecycle --root <isolated pinned CL 5-Nov raft-logs> --pinned"
+  ],
+  "negative_controls": [
+    "Valid nested SaveGame→SaveWorld→SaveUser each with own Save.enter/snapshot=nonzero/Save.exit yields one full cycle.",
+    "Equal marker counts but SaveUser before SaveWorld yields no fully traced cycle.",
+    "Matching SaveWorld/SaveUser enter/exit without nonzero user file snapshot yields no full cycle.",
+    "Sequence gaps/UTC rollback/queue_overflow prevent a positive complete trace verdict.",
+    "Original deterministic RED CI42281305651 on test-only b3155267 fails 3 new tests due missing strict original cycle fields; eight prior tests pass."
+  ],
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42281498879",
+  "comparison_run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42281305651",
+    "https://github.com/alwansan/raf/actions/runs/42280021182"
+  ],
+  "status": "completed",
+  "result": {
+    "real_owner_android_runtimes": 3,
+    "valid_nested_world_then_user_cycles": [
+      3,
+      1,
+      3
+    ],
+    "invalid_incomplete_or_misordered_cycles": [
+      0,
+      0,
+      0
+    ],
+    "all_original_cycles_have_both_phase_nonzero_file_snapshots": true,
+    "per_session_sequence_complete": true,
+    "per_session_utc_monotonic": true,
+    "observed_queue_overflow": false,
+    "observed_load_caught_exception": false,
+    "synthetic_controls_passed": 11,
+    "source_CI_conclusion": "success",
+    "original_world_rgd_payload_read": false,
+    "same_world_or_process_restart_proven": false,
+    "installed_new_candidate_proven": false
+  },
+  "limitations": [
+    "Owner phone 5-Nov only, later Android source not run on real device here",
+    "Save.argumentFileSnapshot size nonzero only, no RGD deserialize verification or persistence fsync/power-loss guarantee",
+    "No exact installed APK/OBB build SHA attestation; no same world/restart conclusion",
+    "All original asset/Sha data remained in CL; no private path, game material or user save bytes printed or exported",
+    "No native build launched, cancelled or modified by T4; separate owner-direct run42281310905 observed in progress"
+  ],
+  "next_step": "Use 7/7 original call ordering + two nonzero snapshots per SaveGame as baseline for later owner-approved signed APK and OBB test, then verify same-world force-stop/reopen and continue original-world/save engineering."
+}
