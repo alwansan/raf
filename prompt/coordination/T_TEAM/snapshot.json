@@ -7191,6 +7191,23 @@
       "_record_path": "../B_TEAM/events/T2/20261106T1250Z-T2-chat-CB0-fieldwriters-materialprefix-7b2e-result.json"
     },
     {
+      "id": "20261106T1306Z-T2-chat-material-field-assignment-8e6a-localvalue",
+      "owner": "T2",
+      "origin": "chat",
+      "session_id": "20261106T1306Z-T2-chat-material-field-assignment-8e6a",
+      "type": "result",
+      "issue_id": "WATER-001",
+      "at": "2026-11-06T13:08:00Z",
+      "summary": "Original SHA-private managed Cecil Material receiver assignment typed local/parameter follow-up CI42222884964 SUCCESS, Python 11 tests + Cecil positive/negative controls: same exact one Material stfld still immediate_value_source_unproven, i.e. not a directly verified typed local or method parameter. Same writer method contains Material ctor, but no source-authentic ctor→field value proof. WATER-001 OPEN.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42222884964",
+        "docs/T2_FOAM_ORIGINAL_MATERIAL_FIELD_ASSIGNMENT_2026-11-06.md"
+      ],
+      "limits": "No compiled IL symbols or bytes published, no Unity runtime CB0 upload/Shader Foam proven, no game assets touched.",
+      "next_step": "Analyze exact original stfld stack ownership, with branch/control-flow and typed reaching definitions before promoting Material constructor link.",
+      "_record_path": "../B_TEAM/events/T2/20261106T1306Z-T2-chat-material-field-assignment-8e6a-localvalue.json"
+    },
+    {
       "id": "20261106T1306Z-T2-chat-material-field-assignment-8e6a-result",
       "session_id": "20261106T1306Z-T2-chat-material-field-assignment-8e6a",
       "owner": "T2",
@@ -9462,6 +9479,23 @@
       "_record_path": "../B_TEAM/events/T5/20261106T1243Z-T5-chat-zip-local-headers-9e2a.json"
     },
     {
+      "id": "20261106T1301Z-T5-chat-artifact-range-probe-f9c2",
+      "owner": "T5",
+      "origin": "chat",
+      "session_id": "20261106T1301Z-T5-chat-artifact-range-probe-f9c2",
+      "issue_id": "INTEGRATION-001",
+      "type": "result",
+      "at": "2026-11-06T13:07:26.541Z",
+      "summary": "REAL source-authenticated owner Android CI 42058825739 artifact ZIP envelopes successfully read over HTTP 206 ranges: delivery 12 members, checkpoint 2, actual delivery.json versionCode 89 with APK 672853870B, OBB 2301256312B, XAPK 2974111434B; signed checkpoint central APK+OBB uncompressed sizes match. 3468 bytes downloaded total, 11 synthetic plus live ZIP probe passed CI42222494746. Inner SHA/APK certificate/OBB runtime/GUID and device unverified.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42222494746",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T5_REAL_ARTIFACT_ZIP_RANGE_2026-11-06.md"
+      ],
+      "limits": "Real outer ZIP metadata and small manifest only; original inner APK/OBB/XAPK signature/content not authenticated, game readiness unchanged.",
+      "next_step": "Bounded nested ZIP central directory inspect for real checkpoint APK/OBB without bulk download.",
+      "_record_path": "../B_TEAM/events/T5/20261106T1301Z-T5-chat-artifact-range-probe-f9c2.json"
+    },
+    {
       "id": "20261104-b-generation",
       "owner": "owner-team-bootstrap",
       "session_id": "b-team-setup-20261104",
@@ -9490,7 +9524,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "0d1bffc4a8edb27951e65ee909e6e15e60302e1eed54a820801eaf2cd35fc88e",
+  "source_input_sha256": "cffff895b9acaf0d2a4c2583e84a2536b99df152ba717409eb7953a0e8795443",
   "generation": "T-2026-11-05",
-  "input_sha256": "0e770a89f964e4bda5a5a33c7a5b34f9c203be92913e08cbe3002d9ea1671804"
+  "input_sha256": "9a4f450c3b1a329161c0a99bde782f907d4e5c113c2e9d781bfc59654af8c426"
 }
