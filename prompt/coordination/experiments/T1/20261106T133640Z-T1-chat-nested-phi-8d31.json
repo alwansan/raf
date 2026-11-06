@@ -31,7 +31,7 @@
   "run_url": "https://github.com/alwansan/raf/actions/runs/42228497335",
   "artifact_urls": [],
   "budget": "One exact SHA-pinned private Ubuntu 24.04 Vulkan workflow, 20-minute timeout; source-only separate four-minute unit suite",
-  "status": "waiting_original_cfg_backedge_verification",
+  "status": "completed_scoped_cfg_loop_carried_phi",
   "observed_result": {
     "first_original_run": {
       "run": "https://github.com/alwansan/raf/actions/runs/42227795780",
@@ -57,21 +57,46 @@
     },
     "last_original_source": {
       "run": "https://github.com/alwansan/raf/actions/runs/42228497335",
-      "status": "in_progress",
-      "actual_structural_backedges": null
+      "job_id": 127928005249,
+      "status": "completed",
+      "conclusion": "success",
+      "private_SHA_recovery": "success",
+      "Vulkan_roundtrip": "success",
+      "scratch_cleanup": "success",
+      "synthetic_nested_phi_tests": "14/14 PASS",
+      "exact_translated_butterfly1_X": {
+        "top_phi_kind": "float32_vector",
+        "selected_component": "x",
+        "incoming_count": 2,
+        "phi_expansions": 1,
+        "self_reference_boundaries": 1,
+        "structural_phi_backedges": 1,
+        "incoming": [
+          {
+            "kind": "uint32 Private OpLoad through signed/float bitcast into float vector",
+            "predecessor_structural_backedge": false
+          },
+          {
+            "kind": "OpCompositeInsert of same Phi value",
+            "predecessor_structural_backedge": true
+          }
+        ],
+        "runtime_backedge_iteration_proven": false
+      }
     },
     "runtime_loop_iteration_truth_proven": false,
     "numeric_original_vs_candidate_parity_proven": false,
     "android_water_proven": false
   },
   "rejected_hypotheses": [
-    "Second incoming X path ends in a distinct independent nested Phi: first source-authentic output self-recurses into same Phi from composite insert."
+    "Second incoming X path ends in a distinct independent nested Phi: first source-authentic output self-recurses into same Phi from composite insert.",
+    "The self-referential Phi could be a synthetic SSA cycle lacking a CFG return edge: source-authentic flow graph shows an actual predecessor structural backedge for the second incoming path."
   ],
   "limitations": [
-    "Static Phi SSA self-reference alone is not necessarily a CFG backedge; source-original second run tests reachability.",
-    "A structural CFG cycle does not establish runtime branch truth or number of loop iterations.",
-    "No independent same-input original/candidate execution trace, authored Unity FindKernel mapping or Adreno water acceptance."
+    "A CFG backedge proves possible loop-carried recurrence, not branch truth or number of GPU iterations",
+    "The first path's signed integer bit carrier and loop-carried second path are structural only; no actual independent original-versus-HLSL/Unity numeric parity",
+    "Strict SHA-paired GPU invocation samples and Adreno phone water acceptance still required."
   ],
   "integration_commit": "e936ad1f96c0bb0617a7a7199c2304c5f47442ff",
-  "next_step": "When 42228497335 terminates, read only sanitized RAFT_T1_FFT_HLSL_NESTED_PHI_X structural_phi_backedges and cycle_boundaries; close work/session/event. Then attempt independent paired numerical replay with source/dispatch provenance and strict pair gate before shader rewrite."
+  "next_step": "Use the original SHA fixed private FFT slot0 to instrument *two separate* invocation-keyed original and translated candidate captures for the exact same input and dispatch, document authenticated source/dispatch identity, then apply scripts/t1_fft_invocation_pair_gate.py and ULP helper to locate numerical first divergence. Do not rewrite shader based merely on Phi provenance."
 }
