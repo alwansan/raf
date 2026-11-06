@@ -159,6 +159,32 @@ jobs:
                           'direct_adjacent_typed_Material_call_result',
                           'direct_adjacent_typed_Material_local_load'}
           assert set(prefixes)<=allowed_prefix and sum(prefixes.values())==1
+          material_fields=r['original_source_name_exact_receiver_Material_FieldReference_count']
+          material_stores=r['original_source_name_exact_receiver_Material_stfld_instruction_count']
+          distinct_stored=r['original_source_name_exact_receiver_Material_distinct_fields_with_stfld']
+          material_methods=r['original_source_name_exact_receiver_Material_writer_method_count']
+          assert type(material_fields) is int and material_fields==1
+          assert type(material_stores) is int and 0<=material_stores<=10000
+          assert type(distinct_stored) is int and 0<=distinct_stored<=material_fields
+          assert type(material_methods) is int and 0<=material_methods<=material_stores
+          immediate=r['original_source_name_exact_receiver_Material_store_immediate_producer_buckets']
+          valid_immediate={'unverified_Material_field_store','alternate_entry_at_store',
+                           'immediate_new_Material_with_Shader_formal',
+                           'immediate_new_Material_other_formals',
+                           'immediate_Renderer_material_getter',
+                           'immediate_typed_Material_call_result',
+                           'immediate_typed_Material_field_load',
+                           'immediate_typed_Material_static_field_load',
+                           'immediate_null_literal','immediate_value_source_unproven'}
+          assert set(immediate)<=valid_immediate
+          assert all(type(v) is int and v>=0 for v in immediate.values())
+          assert sum(immediate.values())==material_stores
+          assert 0 <= r['original_source_name_exact_receiver_Material_declaring_type_count']<=1
+          for key in ('original_source_name_exact_receiver_Material_writer_methods_with_Shader_Find',
+                      'original_source_name_exact_receiver_Material_writer_methods_with_Material_ctor',
+                      'original_source_name_exact_receiver_Material_writer_methods_with_Renderer_getter'):
+            assert type(r[key]) is int and 0<=r[key]<=material_methods
+          assert r['original_exact_Material_shader_is_source_Foam_verified'] is False
           assert r['original_150_byte_or_160_byte_CB0_complete_managed_upload_proven'] is False
           assert r['original_Vector4_ctor_input_values_verified'] is False
           assert r['exact_original_Vector4_value_dataflow_to_CB0_verified'] is False
