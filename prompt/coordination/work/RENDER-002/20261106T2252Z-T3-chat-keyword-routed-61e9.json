@@ -4,9 +4,9 @@
   "session_id": "20261106T2252Z-T3-chat-keyword-routed-61e9",
   "origin": "chat",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "waiting_ci",
   "created_at": "2026-11-06T22:52:00Z",
-  "updated_at": "2026-11-06T22:52:00Z",
+  "updated_at": "2026-11-06T22:58:00Z",
   "resumed_from_sessions": [
     "20261106T2213Z-T3-chat-keyword-name-table-c9a2",
     "20261106T2158Z-T3-chat-keyword-lattice-e6d4",
@@ -23,5 +23,17 @@
   "acceptance": "Original SHA-pinned four pairs and stage metadata name mapping only; one private provisional ShaderLab assembled, 8/8 HLSL (4 combos x vertex/frag) Vulkan1.1 validations, synthetic fail-closed controls; no original names, indices, source, or compiler traces in logs; no Unity Editor import/game integration",
   "planning_run": "Native owner/T5 42296450023 still in_progress pinned a1737bd; existing T3 original 42303585869 SUCCESS; scheduled T3 contract file separate; no native dispatch",
   "trial_vote": "لا يحتاج",
-  "base_sha": "748562011da90ec95ee6121134a7866da7fcb4d1"
+  "base_sha": "748562011da90ec95ee6121134a7866da7fcb4d1",
+  "implementation_commits": [
+    "605aa2dec53ff07765769b0c03fe9edf8da29198",
+    "6a9d99fad45181ecfdfa7da737d4a84167eec0f3",
+    "bc07e487a7b7621150296387d4801609860268f3",
+    "8ba7d3d9f98e2b917292df67a4e0ec851267f809"
+  ],
+  "initial_ci": "https://github.com/alwansan/raf/actions/runs/42308363626",
+  "initial_ci_failure": "8/9 new synthetic controls passed; pre-existing output path matched generic original wildcard before overwrite guard; no original data staged",
+  "correction": "Move output-path conflict guard before glob discovery; 8ba7d3d",
+  "waiting_ci": "https://github.com/alwansan/raf/actions/runs/42308450871",
+  "tested_sha": "8ba7d3d9f98e2b917292df67a4e0ec851267f809",
+  "next_step": "Inspect terminal 42308450871: 9/9 source-free negative tests followed by exact private SHA-authentic 4 original routes and 8 validated glslang macro stage branches. If fails, categorize synthetic vs original without logs of private data."
 }
