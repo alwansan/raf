@@ -30,6 +30,15 @@ class OriginalSite2YPhiVulkanControls(unittest.TestCase):
         self.assertEqual(result["threads_with_both_entry_and_loop_edges"], 64)
         self.assertEqual(result["total_loop_backedge_visits"], 192)
         self.assertTrue(result["all_invocations_have_entry_edge"])
+        self.assertFalse(result["all_64_invocations_have_exactly_four_backedges"])
+        self.assertEqual(result["loop_backedge_visit_buckets"]["three"], 64)
+        self.assertFalse(result["actual_shader_choice_at_site2_fetch_proven"])
+
+    def test_exactly_four_loop_edges_requires_per_thread_evidence(self):
+        result = run.counter_profile(ZERO, encoded([1]*64, [4]*64))
+        self.assertTrue(result["all_64_invocations_have_exactly_four_backedges"])
+        self.assertEqual(result["loop_backedge_visit_buckets"]["four"], 64)
+        self.assertEqual(result["total_loop_backedge_visits"], 256)
         self.assertFalse(result["actual_shader_choice_at_site2_fetch_proven"])
 
     def test_untagged_shader_must_leave_private_buffer_zero(self):
