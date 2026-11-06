@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "session_id": "20261106T1128Z-T4-chat-device-mouse-release-evidence-p8m2",
+  "owner": "T4",
+  "origin": "chat",
+  "issue_id": "INPUT-005",
+  "status": "completed_source_free_parser_ci_success_device_unverified",
+  "experiment_key": "T4-INPUT005-device-JSONL-release-status-eight-static-original-20261106-e06566a-source-free-overflow-privacy-negative-v1",
+  "base_sha": "f9a71c33d502f9155cb79ad8f1cb677ac059bff4",
+  "source_sha": "4d18a096707d4c7fc134e967e7f807aeee8a5c0e",
+  "changes": [
+    "scripts/t4_verify_device_world_save_log.py",
+    "tests/test_t4_verify_device_world_save_log.py"
+  ],
+  "question": "Can new physical mouse release outcomes from the already-shipped T4 Android UI callback be safely classified from future device JSONL, distinguishing JNI release call returned from mere Unity request and protecting private values?",
+  "result": "Eight result categories and six input markers parsed with strict anchored allowlist, aggregate-only counts and malformed forgery anomaly; 5 new tests; older world/save semantics preserved.",
+  "ci": {
+    "run_url": "https://github.com/alwansan/raf/actions/runs/42210561898",
+    "run_id": 42210561898,
+    "job_id": 127867883932,
+    "head_sha": "4d18a096707d4c7fc134e967e7f807aeee8a5c0e",
+    "conclusion": "success",
+    "parser_tests": {
+      "passed": 20,
+      "total": 20
+    },
+    "overflow_tests": {
+      "passed": 2,
+      "total": 2
+    },
+    "total": {
+      "passed": 22,
+      "total": 22
+    }
+  },
+  "privacy": "Only allowlisted result names/counters exposed. Raw detail, session ID, source paths, relative mouse positions, app/private paths, hashes and exception text never returned.",
+  "limits": "Synthetic/source-only JSONL negative controls. Does not process new phone logs or prove Java UI callback, OS release, camera movement or Unity on-device world persistence.",
+  "next_step": "Next exact signed APK+matching OBB phone logs and owner hardware mouse + full-world reopen; safely summarize JSONL locally."
+}
