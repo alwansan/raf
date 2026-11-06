@@ -23,3 +23,9 @@ Updated source-to-export resource ledger: https://github.com/alwansan/raf/blob/f
 Android Unity ARM64 actual APK/OBB resource and ShaderLab pass/fragment compiled texture/alpha behavior, texture decode and real fire/smoke ParticleSystemRenderer emitter identity are **NOT verified** by this bounded source/export test; `RENDER-002` must remain OPEN. No game `.shader`, `.meta`, Material, texture, prefab, scene, audio, Settings, water/FFT, input, saved world, APK or OBB was edited, and no other worker CI cancelled.
 
 Next: Do NOT replace the third source Texture2D or inject an opaque/placeholder image: its actual nonexportable AssetRipper container PPtr equals the nonnull exported Material YAML tenth TexEnv pointer. Identify the real installed Android fire/smoke emitter source prefab/Material and inspect its compiled fragment shader texture/alpha/discard, image decoding/importer, native Unity/OBB image and actual device pixels. Coordinate T5 same exact APK+OBB run and results. Keep RENDER-002 OPEN.
+
+## Canonical team source-evidence refresh
+
+- [T3 canonical T-team ledger refresh CI42135375280](https://github.com/alwansan/raf/actions/runs/42135375280) **COMPLETED SUCCESS** on workflow source `d5fe6cf3ea3ba2c397058f8a9d51ec58ec625878`, after `prompt/coordination/B_TEAM/issues/RENDER-002.json` was updated to include real CI42134436841.
+- The live resource `T3-PARTICLE108-SOURCE-SAMEINSTANCE-MATERIAL-TEXTURE-PARITY` now records **10 exact Material→same-instance Texture pointers**, including 1 nonexportable original class28 container pointer, and **10/10 UV**, while its device stage remains explicitly `NOT_TESTED`. The issue remains `OPEN`.
+- No background work, no Android pixels, no native game build or device test took place in this scope; the transient source CI and record refresh finished successfully.
