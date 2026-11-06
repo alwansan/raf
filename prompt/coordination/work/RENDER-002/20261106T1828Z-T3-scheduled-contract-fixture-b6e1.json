@@ -1,0 +1,17 @@
+{
+  "session_id": "20261106T1828Z-T3-scheduled-contract-fixture-b6e1",
+  "origin": "scheduled",
+  "owner": "T3",
+  "issue": "RENDER-002",
+  "baseline_sha": "ac61f1e6fe26a8f23213f67acc5a5e065046773f",
+  "scope": [
+    "scripts/t3_dxbc_spirv_contract_join.py",
+    "tests/test_t3_dxbc_spirv_contract_join.py",
+    "prompt/coordination/clients/T3/sessions/20261106T1828Z-T3-scheduled-contract-fixture-b6e1.md"
+  ],
+  "hypothesis": "DXBC register identity cannot be inferred from SPIR-V set/binding equality; explicit provenance map plus stage/family/array-count is needed",
+  "experiment_key": "T3-DXBC-SPIRV-SYNTHETIC-JOIN-b6e1",
+  "shared_resource": "none; synthetic-only; no CI dispatch",
+  "taken_over_from": "T3 scheduled crosscontract 20261106T1734Z; T3 chat shaderlab-property parity 20261106T1818Z; no overlap",
+  "status": "in_progress"
+}
