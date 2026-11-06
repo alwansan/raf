@@ -237,6 +237,44 @@ namespace RaftAndroid.Diagnostics
     // Capacity overflow passes through rather than concealing unknown failures.
     public sealed class RepeatedDiagnosticMessages
     {
+        // The previous group-key concatenation allocated an entire duplicate
+        // operation+stack string on EVERY occurrence. Original Android shader
+        // errors can repeat thousands of times: use the existing string
+        // references as an immutable pair without changing exact-match rules.
+        // A hash collision is never a message collision: Equals checks BOTH
+        // complete strings with ordinal semantics.
+        private readonly struct MessageKey : IEquatable<MessageKey>
+        {
+            internal readonly string Operation;
+            internal readonly string Detail;
+
+            internal MessageKey(string operation, string detail)
+            {
+                Operation = operation;
+                Detail = detail;
+            }
+
+            public bool Equals(MessageKey other)
+            {
+                return StringComparer.Ordinal.Equals(Operation, other.Operation) &&
+                       StringComparer.Ordinal.Equals(Detail, other.Detail);
+            }
+
+            public override bool Equals(object other)
+            {
+                return other is MessageKey key && Equals(key);
+            }
+
+            public override int GetHashCode()
+            {
+                unchecked
+                {
+                    return StringComparer.Ordinal.GetHashCode(Operation) * 397 ^
+                           StringComparer.Ordinal.GetHashCode(Detail);
+                }
+            }
+        }
+
         private sealed class Entry
         {
             public long Repeated;
@@ -245,16 +283,16 @@ namespace RaftAndroid.Diagnostics
             public int OperationLength;
         }
         private readonly object gate = new object();
-        private readonly Dictionary<string, Entry> entries = new Dictionary<string, Entry>(StringComparer.Ordinal);
+        private readonly Dictionary<MessageKey, Entry> entries = new Dictionary<MessageKey, Entry>();
         public bool First(string operation, string detail, DateTime now)
         {
-            // Include the operation length to disambiguate ("a\\nb", "stack")
-            // from ("a", "b\\nstack"). A plain newline separator can silently
-            // suppress the first occurrence of an unrelated crash.
+            // The two fields remain separate. Distinct pairs such as
+            // ("a\\nb", "stack") and ("a", "b\\nstack") can never share a key;
+            // the first full stack is still persisted once per exact pair.
             operation = operation ?? "";
             detail = detail ?? "";
             if ((long)operation.Length + detail.Length + 1 > 8192) return true;
-            string key = operation.Length.ToString(CultureInfo.InvariantCulture) + ":" + operation + detail;
+            var key = new MessageKey(operation, detail);
             lock (gate)
             {
                 if (entries.TryGetValue(key, out var entry))
@@ -271,9 +309,9 @@ namespace RaftAndroid.Diagnostics
         {
             // Never zero all groups before sending the first one: a failing
             // persistent sink would otherwise erase summaries it never received.
-            List<string> keys;
-            lock (gate) keys = new List<string>(entries.Keys);
-            foreach (string key in keys)
+            List<MessageKey> keys;
+            lock (gate) keys = new List<MessageKey>(entries.Keys);
+            foreach (MessageKey key in keys)
             {
                 long repeated;
                 DateTime first, last;
