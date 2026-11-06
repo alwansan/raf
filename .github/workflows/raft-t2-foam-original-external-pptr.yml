@@ -1,0 +1,132 @@
+name: T2 WATER-001 original four owner external Material Shader PPtr graph
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t2_foam_original_external_pptr_graph.py
+      - tests/test_t2_foam_original_external_pptr_graph.py
+      - .github/workflows/raft-t2-foam-original-external-pptr.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t2-original-four-owner-pptr-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  original-four-owner-shader-graph:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 16
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Verify source-free original graph synthetic controls
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t2_foam_original_external_pptr_graph.py
+          python3 -m unittest discover -s tests -p 'test_t2_foam_original_external_pptr_graph.py' -v
+          python3 - <<'PY'
+          import shutil
+          assert shutil.disk_usage('.').free > 3*1024**3
+          PY
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: t2-foam-original-four-owner-zip2
+          lfs: false
+          persist-credentials: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /RAFT_FILE_MANIFEST.tsv
+            /Raft/Raft_Data/resources.assets/*
+            /Raft/Raft_Data/sharedassets0.assets/*
+            /Raft/Raft_Data/Resources/unity default resources
+            /Raft/Raft_Data/Resources/unity_builtin_extra
+      - name: Reconstruct four immutable original owners with byte size and SHA attestation
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,os,subprocess
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import PINS,ZIP2_SHA,stage
+          source=Path("t2-foam-original-four-owner-zip2")
+          assert subprocess.check_output(
+            ["git","-C",str(source),"rev-parse","HEAD"],text=True
+          ).strip()==ZIP2_SHA
+          target=Path(os.environ["RUNNER_TEMP"])/"t2-foam-four-original-owners"
+          result=stage(source,target,PINS)
+          assert result["verified_bytes"]==233281064
+          assert len(result["owners"])==4 and result["lfs_used"] is False
+          print("T2_ORIGINAL_FOUR_OWNER_SOURCE "+json.dumps({
+            "source_zip2_sha_verified":True,
+            "four_original_owner_sha_verified":True,
+            "original_bytes_verified":result["verified_bytes"],
+            "original_game_binaries_not_executed":True,
+          },sort_keys=True))
+          PY
+      - name: Read original Material and Shader external graph in private runner
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.25.4 -q
+          timeout 240s python3 -m scripts.t2_foam_original_external_pptr_graph \
+            --source "$RUNNER_TEMP/t2-foam-four-original-owners" \
+            --out "$RUNNER_TEMP/t2-foam-four-owner-pptr-safe.json"
+      - name: Check original single owner regression and bounded four-owner graph
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          file=Path(os.environ["RUNNER_TEMP"])/"t2-foam-four-owner-pptr-safe.json"
+          r=json.loads(file.read_text(encoding="utf8"))
+          assert r["status"]=="source_original_four_SHA_owner_external_Shader_PPtr_census"
+          assert r["original_pinned_owner_count"]==4
+          assert r["foam_original_owner_pathid_object_authenticated"] is True
+          owner_rows=r["per_owner_public_tags_only"]
+          tags={x["owner_tag"] for x in owner_rows}
+          assert tags=={"resources","sharedassets0","unity_default_resources","unity_builtin_extra"}
+          assert len(owner_rows)==4
+          for row in owner_rows:
+            for key in ("shader_count","material_count","material_unparsed",
+                        "external_table_entries","local_original_Foam_Shader_ref_count",
+                        "foreign_local_same_PathID_not_Foam",
+                        "external_original_Foam_basename_candidate",
+                        "external_to_known_pinned_typed_Shader_candidate",
+                        "external_unresolved_or_unpinned"):
+              assert type(row[key]) is int and row[key]>=0
+          source=next(x for x in owner_rows if x["owner_tag"]=="sharedassets0")
+          assert source["shader_count"]==58
+          assert source["material_count"]==351
+          assert source["material_unparsed"]==0
+          assert source["local_original_Foam_Shader_ref_count"]==0
+          assert r["material_objects_examined"]>=351
+          assert r["material_external_pointer_count"]>=7
+          assert r["external_basename_and_PathID_Foam_candidates"]<=r["material_external_pointer_count"]
+          assert r["external_known_pinned_typed_Shader_PPtr_candidates"]<=r["material_external_pointer_count"]
+          assert r["external_file_basename_is_actual_Shader_GUID_identity_verified"] is False
+          assert r["material_PPtr_runtime_resolution_verified"] is False
+          assert r["original_Foam_host_CB0_upload_verified"] is False
+          assert r["Android_Adreno_water_pixels_verified"] is False
+          assert r["private_external_paths_or_GUID_published"] is False
+          forbidden=("original_external_paths","original_shader_names",
+                     "external_file_GUID","private_raw")
+          assert not any(s in file.read_text() for s in forbidden)
+          print("T2_ORIGINAL_FOUR_OWNER_GRAPH_SAFE_ASSERTIONS pass")
+          PY
+      - name: Remove original staged owners before publication
+        if: always()
+        run: |
+          rm -rf -- "$RUNNER_TEMP/t2-foam-four-original-owners" \
+            "$GITHUB_WORKSPACE/t2-foam-original-four-owner-zip2"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: success()
+        with:
+          name: t2-foam-four-owner-pptr-safe-${{ github.run_id }}
+          path: ${{ runner.temp }}/t2-foam-four-owner-pptr-safe.json
+          if-no-files-found: error
+          retention-days: 7
