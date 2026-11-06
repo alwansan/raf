@@ -6371,6 +6371,21 @@
       "_record_path": "../B_TEAM/events/T1/20261106T110543Z-T1-chat-cfgreach-f4d9.json"
     },
     {
+      "id": "20261106T112050Z-T1-chat-alias-origins-b62f",
+      "owner": "T1",
+      "session_id": "20261106T112050Z-T1-chat-alias-origins-b62f",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "summary": "Source-authenticated FFT original slot0 alias-store pointer form proved to be statically indexed OpAccessChain (source+butterfly1 four static alias writes each; butterfly2 eight). Both X and Y pre-load paths may include such writes. CI 42209856944 SUCCESS with 11/11 new synthetic controls and original private SPIR-V audit. Static indices do not prove per-component reaching value or original integer semantics; no shader rewrite/Android water acceptance.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42209856944",
+        "https://github.com/alwansan/raf/commit/1979568f7741872e6ac965fe7b73eee1d48f9331",
+        "https://github.com/alwansan/raf/actions/runs/42208932160"
+      ],
+      "at": "2026-11-06T11:25:07.386Z",
+      "_record_path": "../B_TEAM/events/T1/20261106T112050Z-T1-chat-alias-origins-b62f.json"
+    },
+    {
       "id": "T2-20261104T2354Z-start-foamabi",
       "owner": "T2",
       "session_id": "20261104T2354Z-T2-foamabi01",
@@ -6985,6 +7000,24 @@
       "limits": "No private names, SHA hashes, original DLL, shader or source printed; no Unity host CB0 upload proof, no Adreno water acceptance.",
       "next_step": "Trace actual IL first argument of original matched literal candidate; preserve existing texture work and both CB0 compiled load direction findings.",
       "_record_path": "../B_TEAM/events/T2/20261106T110527Z-T2-chat-cb0-managed-namelinks-f2e1-result.json"
+    },
+    {
+      "id": "20261106T110527Z-T2-chat-cb0-managed-namelinks-f2e1-typed-operand",
+      "owner": "T2",
+      "origin": "chat",
+      "session_id": "20261106T110527Z-T2-chat-cb0-managed-namelinks-f2e1",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "at": "2026-11-06T11:27:40Z",
+      "summary": "SHA-original Foam CB0 vector name original managed Cecil bounded IL first formal proof: CI42209967318 and CI42210166957 SUCCESS, 11 sourcefree tests and Cecil false-positive controls. Exactly 1 of 5 original CB0 vector source names proven direct string first argument to Material.SetVector(string,Vector4), exact public setter family material_vector:1. Other 4 vector names, receiver Material→Foam, second Vector4 data and runtime full CB0 upload UNPROVEN. WATER-001 OPEN.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42209967318",
+        "https://github.com/alwansan/raf/actions/runs/42210166957",
+        "docs/T2_FOAM_ORIGINAL_CB0_MANAGED_FIRST_OPERAND_2026-11-06.md"
+      ],
+      "limits": "Original Shader/DLL SHA exact; private member names, hashes, method identities, IL and bytes never published. Source-matched compiled first string formal is not runtime call/CB0 upload or device pixels.",
+      "next_step": "T2 trace typed Vector4 second-operand and Material receiver provenance; preserve pass0 Fragment/pass1 Vertex larger compiled array capacity constraints and coordinate Unity integration with T1/T5.",
+      "_record_path": "../B_TEAM/events/T2/20261106T110527Z-T2-chat-cb0-managed-namelinks-f2e1-typed-operand.json"
     },
     {
       "id": "T2-20261105T2115Z-chat-precall-operand-4be0-result",
@@ -7807,6 +7840,21 @@
       ],
       "at": "2026-11-06T10:37:41.450Z",
       "_record_path": "../B_TEAM/events/T3/20261106T1034Z-T3-chat-consumed-width-0c6e.json"
+    },
+    {
+      "id": "20261106T1108Z-T3-chat-hlsl-width-origin-73ac",
+      "owner": "T3",
+      "origin": "chat",
+      "session_id": "20261106T1108Z-T3-chat-hlsl-width-origin-73ac",
+      "issue_id": "RENDER-002",
+      "type": "result",
+      "summary": "SHA-verified Particle108 4 original VSFS pairs: recovered HLSL Vertex output 16/16 exact source SPIR-V names/types, HLSL semantic VSFS link 4/4 (14 Fragment user inputs, zero missing or type mismatched), yet separate glslang HLSL->SPIRV roundtrip 2/4. Source/HLSL/roundtrip VS output type multisets match all 4; glslang roundtrip outputs have entirely different reflected names (0/16 exact match). Thus numeric same-Location earlier apparent narrowing is not proven component loss; inspect recompile stage IO mapping privately. 25/25 tests, CI 42209509708 SUCCESS. No original Unity assets patched, Adreno pixels not tested, RENDER-002 OPEN.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42209509708",
+        "https://github.com/alwansan/raf/blob/feature/android-native-port/prompt/coordination/experiments/T3/20261106T1108Z-T3-chat-hlsl-width-origin-73ac.json"
+      ],
+      "at": "2026-11-06T11:23:57.596Z",
+      "_record_path": "../B_TEAM/events/T3/20261106T1108Z-T3-chat-hlsl-width-origin-73ac.json"
     },
     {
       "id": "T4-20261104T2357Z-local-load-start",
@@ -9126,7 +9174,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "0cc013668e143d8272ab072a725174fed562b792cd0e1d7327aeaaf5687bf8b4",
+  "source_input_sha256": "fc23aca94cb389f2beedcdc8079c6333caa035bcdbef85eba880c902313153ca",
   "generation": "T-2026-11-05",
-  "input_sha256": "ecfd0731f15e6ef772051c9d1d92ca75d54eb77cfda9c0d124afc04b0b25ebd8"
+  "input_sha256": "282cbdcaab15d90c4a6c37fbb7da60701e470fbda4f858618ddc1904c6f9a9fa"
 }
