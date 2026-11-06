@@ -1,0 +1,20 @@
+{
+  "id": "20261106T1702Z-T5-chat-offline-obb-compile-58cf",
+  "owner": "T5",
+  "session_id": "20261106T1702Z-T5-chat-offline-obb-compile-58cf",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "type": "integration",
+  "at": "2026-11-06T17:06:09.887Z",
+  "summary": "Restored original-managed gameplay compile after AndroidTestDiagnostics acquired new AndroidExpansionArchiveProbe dependency: preflight/copy full runtime support set, 4/4 negative/positive source tests, CI42258190836 original managed compile exit=0 (previous CI42256234615 CS0103 x2). Not Unity/phone proof.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42256234615",
+    "https://github.com/alwansan/raf/actions/runs/42258190836",
+    "https://github.com/alwansan/raf/commit/591e6e7da79b69916f8fe9a63f6242a17c226934"
+  ],
+  "limitations": [
+    "Unity native IL2CPP not built in this experiment",
+    "No physical Android installed main OBB read",
+    "P0 water/FFT and visuals remain unresolved"
+  ]
+}
