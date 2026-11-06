@@ -1,0 +1,20 @@
+{
+  "session_id": "20261106T0740Z-T4-scheduled-p4k8",
+  "origin": "scheduled",
+  "issue_id": "INPUT-005",
+  "status": "active",
+  "baseline_sha": "ecd4490f669d8cc7bacf558810762dd9c2565c29",
+  "intended_files": [
+    "android-port/Runtime/Platform/AndroidPhysicalMouseCapture.cs",
+    "tests/test_t4_pointer_view_identity_contract.py",
+    "prompt/coordination/clients/T4/sessions/20261106T0740Z-T4-scheduled-p4k8.md"
+  ],
+  "hypothesis": "A request with no focused View has identity zero; a subsequent probe may accept an unrelated focused View's hasPointerCapture=true. New request epochs may retain old view identity until the UI task runs.",
+  "experiment_key": "T4-input005-zero-view-identity-guard-source-20261106",
+  "resource_key": null,
+  "taken_over_from": [
+    "20261106T0644Z-T4-scheduled-h6r9",
+    "20261106T0336Z-T4-scheduled-m7q2"
+  ],
+  "updated_at": "2026-11-06T07:40:00Z"
+}
