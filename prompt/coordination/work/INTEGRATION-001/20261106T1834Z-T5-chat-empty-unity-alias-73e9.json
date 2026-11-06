@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T1834Z-T5-chat-empty-unity-alias-73e9",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "track": "OBB Unity ZIP central-directory duplicate empty alias detection",
+  "status": "active",
+  "base_sha": "f86e1ac9d651440bbb2aa98736dd01477ac65be9",
+  "updated_at": "2026-11-06T18:34:42Z",
+  "resumed_from_sessions": [
+    "20261106T1813Z-T5-chat-obb-fmod-duplicate-2e6c",
+    "20261106T1759Z-T5-chat-pid-prefix-regression-4ca1",
+    "20261106T1751Z-T5-scheduled-lifecycle-7c4e",
+    "20261106T1745Z-T5-chat-trial-vote-adoption-46c2"
+  ],
+  "intended_files": [
+    "android-port/Runtime/Platform/AndroidExpansionArchiveProbe.cs",
+    "android-port/Tests/ExpansionArchiveProbe/Program.cs",
+    "prompt/coordination/work/INTEGRATION-001/20261106T1834Z-T5-chat-empty-unity-alias-73e9.json",
+    "prompt/coordination/clients/T5/sessions/20261106T1834Z-T5-chat-empty-unity-alias-73e9.md",
+    "prompt/coordination/experiments/T5/20261106T1834Z-T5-chat-empty-unity-alias-73e9.json",
+    "prompt/coordination/B_TEAM/events/T5/20261106T1834Z-T5-chat-empty-unity-alias-73e9.json"
+  ],
+  "experiment_key": "T5-real-installed-OBB-Unity-ZIP-path-empty-duplicate-entry-order-synthetic-strict-v1",
+  "resource_key": "T5 own .NET8 installed OBB source-only probe workflow no heavy Unity",
+  "hypothesis": "Unity data duplicate same exact ZIP FullName with one zero-length entry bypasses duplicate check because name is registered only if entry.Length>0; diagnostic falsely accepts ambiguous ZIP on Android jar file loader. Require duplicate name rejection independently of entry length and file order, with no private entry paths logged.",
+  "coordination": "T5 last OBB scope completed; scheduled same T5 PID helper waiting_ci untouched; T1/T2/T3/T4 files disjoint; NO native build request without 5/5 votes.",
+  "next_step": "Patch read-only probe + two ordered synthetic cases, validate workflow existing source only, persist session/experiment/event and close work. No phone claim."
+}
