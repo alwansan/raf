@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "session_id": "20261106T0145Z-T5-chat-unity-surface-bridge-f4c2",
+  "origin": "chat",
+  "status": "active",
+  "issue_id": "PERF-007",
+  "base_sha": "726035aa11c5a7f2b43e7cc51db8a255498fed5c",
+  "track": "original Unity/internal and external SF frame telemetry bounded join",
+  "intended_files": [
+    "prompt/coordination/work/PERF-007/20261106T0145Z-T5-chat-unity-surface-bridge-f4c2.json",
+    "prompt/coordination/clients/T5/sessions/20261106T0145Z-T5-chat-unity-surface-bridge-f4c2.md",
+    "scripts/t5_cl_unity_surface_bridge.py",
+    "tests/test_t5_cl_unity_surface_bridge.py",
+    ".github/workflows/raft-t5-cl-unity-surface-bridge.yml",
+    "docs/T5_CL_UNITY_SURFACE_BRIDGE_2026-11-06.md",
+    "prompt/coordination/experiments/T5/20261106T0145Z-T5-chat-unity-surface-bridge-f4c2.json",
+    "prompt/coordination/B_TEAM/events/T5/20261106T0145Z-T5-chat-unity-surface-bridge-f4c2.json"
+  ],
+  "experiment_key": "t5-realCL-520c4c-20261105-surface-stale-window-game-side-frame-same-utc-join-v1",
+  "resource_key": "CL-4-pinned-readonly-metrics-and-unity-logs-total-under3MB",
+  "hypothesis": "Despite 105 stale SurfaceFlinger telemetry samples in 230108, real Unity performance.sample intervals continue at matched UTC timestamps in 2D scenes; demonstrate source specific blind spot without asserting frame presentation or game freeze.",
+  "source_inputs": {
+    "CL_commit": "520c4cf409aa20a4db54ff80ed87d8807d9cba57",
+    "unity_blobs": {
+      "220911": "413932e92fc24cd50b1fae1cbb25120f392e8158",
+      "230108": "60674be571e4979e329924e5e2679f43e40ec41a"
+    },
+    "sf_blobs": {
+      "220911": "bb24dda68503897cf4e2a5e4e2d8aef3e71777b8",
+      "230108": "0327e5a3bb01ca944b2c40e07d49f503914dd274"
+    }
+  },
+  "taken_over_from": [
+    "prompt/coordination/clients/T5/sessions/20261106T0138Z-T5-chat-performance-cohort-7ab4.md",
+    "docs/A4_PERF_GPU_SCENE_DIAGNOSTICS_2026-11-04.md",
+    "docs/DEVICE_FEEDBACK_42058825739_AR.md"
+  ],
+  "run_urls": [],
+  "next_step": "Implement UTC matched source-only Unity sample + external stale-window validator and negative fixtures, perform small source-pinned CI without altering runtime, report non-causal counts and scene distribution.",
+  "updated_at": "2026-11-06T01:45:04.981Z"
+}
