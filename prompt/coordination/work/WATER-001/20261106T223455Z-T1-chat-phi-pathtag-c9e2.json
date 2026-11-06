@@ -6,7 +6,7 @@
   "issue_id": "WATER-001",
   "status": "active",
   "base_sha": "531453ff9990d45898336a206192e4385e6c5e11",
-  "updated_at": "2026-11-06T22:34:55.949Z",
+  "updated_at": "2026-11-06T22:42:21.102Z",
   "resumed_from_sessions": [
     "20261106T221550Z-T1-chat-phi-ssa-6db4",
     "20261106T221403Z-T1-scheduled-phi-runtime-pair-k8d4"
@@ -22,9 +22,25 @@
     "prompt/coordination/work/WATER-001/20261106T223455Z-T1-chat-phi-pathtag-c9e2.json",
     "prompt/coordination/clients/T1/sessions/20261106T223455Z-T1-chat-phi-pathtag-c9e2.md",
     "prompt/coordination/experiments/T1/20261106T223455Z-T1-chat-phi-pathtag-c9e2.json",
-    "prompt/coordination/B_TEAM/events/T1/20261106T223455Z-T1-chat-phi-pathtag-c9e2.json"
+    "prompt/coordination/B_TEAM/events/T1/20261106T223455Z-T1-chat-phi-pathtag-c9e2.json",
+    "scripts/t1_fft_site2_y_phi_vulkan_runtime.py",
+    "tests/test_t1_fft_site2_y_phi_vulkan_runtime.py",
+    ".github/workflows/raft-t1-fft-site2y-phi-vulkan-runtime.yml"
   ],
   "collision_check": "Latest T1 scheduled 20261106T221403Z only wrote evidence-gap plan (no active overlapping source changes); prior T1 42304106607 success; only native 42296450023 and T5 42305228829 in_progress. Do not touch shared heavy Unity builds or T2/T3/T4/T5 files.",
   "trial_vote": "لا يحتاج",
-  "next_step": "Create bounded source-free synthetic adversarial Phi predecessor path counter injection and validate exact SHA-original-derived HLSL candidate SPIR-V with spirv-as/val. No GPU launch, no claim of runtime branch selection until physical capture and parity join."
+  "next_step": "Create bounded source-free synthetic adversarial Phi predecessor path counter injection and validate exact SHA-original-derived HLSL candidate SPIR-V with spirv-as/val. No GPU launch, no claim of runtime branch selection until physical capture and parity join.",
+  "scope_extension": {
+    "at": "2026-11-06T22:42:21.101Z",
+    "reason": "Authenticated original private SPIR-V path-tag assembly CI42306367304 success; next required safety condition is physical counter readback and output-invariance control on CPU Vulkan, independent of native Unity.",
+    "experiment_key": "ZIP2-sha15964ea8-fft-slot0-derived-HLSL50-Phi-tagged-vs-untagged-same-MesaVulkan-1024x32-seed19-groupsY1-rgba32f-v1",
+    "resource_key": "one separate GitHub ubuntu-24.04 CPU software-Vulkan runner, original ZIP2 owner ~116MB; no GameCI Unity or native mutex",
+    "intended_additional_files": [
+      "scripts/t1_fft_site2_y_phi_vulkan_runtime.py",
+      "tests/test_t1_fft_site2_y_phi_vulkan_runtime.py",
+      ".github/workflows/raft-t1-fft-site2y-phi-vulkan-runtime.yml",
+      "scripts/t1_fft_site2_y_hlsl_pair.py"
+    ],
+    "note": "Use existing pinned original DXBC staging, prevalidated private tagged SPIR-V, existing T1 trace_host Vulkan binding3 for 128-word counter, compare actual physically distinct runs source+butterfly input bytes and pass0/pass1 untagged/tagged readbacks. Reject any proof of Android/Unity authored kernel."
+  }
 }
