@@ -17,6 +17,19 @@ from scripts.t1_fft_spirv_reaching_stores import parse_functions
 from scripts.t1_fft_site1_x_writer_lineage import trace_component, safe_op
 
 MAX_STEPS = 12
+SAFE_REJECTION_REASONS = {
+    "Unexpected original FFT fetch count",
+    "Unexpected FFT descriptor source identity",
+    "Unexpected scalar Phi lane type",
+    "Malformed Phi incoming value/predecessor list",
+    "Phi incoming path bound exceeded",
+    "Unresolvable translated Phi Function owner",
+    "Incoming Phi value type does not match destination",
+    "Phi predecessor is not a CFG incoming block",
+    "Invalid predecessor branch edge",
+    "Invalid conditional predecessor edge",
+    "Unsupported original Phi predecessor terminator",
+}
 MAX_PHI_INPUTS = 12
 MAX_FETCHES = 16
 CONTINUE = {
@@ -146,7 +159,16 @@ def main():
         dis = subprocess.run(["spirv-dis", "--raw-id", str(args.module)],
                              capture_output=True, text=True, check=True, timeout=20)
         report = analyze(dis.stdout, original_source_layout=True)
-    except (OSError, ValueError, subprocess.SubprocessError):
+    except ValueError as e:
+        # Errors from a private source are ONLY reported by fixed internal
+        # category names. Never forward unknown exception text or SPIR-V IDs.
+        tag = str(e) if str(e) in SAFE_REJECTION_REASONS else "unclassified_validation"
+        print("RAFT_T1_FFT_HLSL_PHI_DIAGNOSTIC " +
+              json.dumps({"reason": tag}, sort_keys=True), flush=True)
+        p.exit(2, "Private translated FFT Phi input analysis failed\n")
+    except (OSError, subprocess.SubprocessError):
+        print("RAFT_T1_FFT_HLSL_PHI_DIAGNOSTIC " +
+              json.dumps({"reason": "tool_or_input_read_failure"}), flush=True)
         p.exit(2, "Private translated FFT Phi input analysis failed\n")
     print("RAFT_T1_FFT_HLSL_BUTTERFLY_X_PHI_INPUTS " +
           json.dumps(report, sort_keys=True))
