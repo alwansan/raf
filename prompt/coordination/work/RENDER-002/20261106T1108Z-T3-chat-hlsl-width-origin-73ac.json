@@ -4,7 +4,7 @@
   "origin": "chat",
   "session_id": "20261106T1108Z-T3-chat-hlsl-width-origin-73ac",
   "issue_id": "RENDER-002",
-  "status": "active",
+  "status": "completed",
   "generation": "T-2026-11-05",
   "base_sha": "ec6714b57ab1f56ed97cac1019c3cbce8dc6bd74",
   "resumed_from_sessions": [
@@ -25,5 +25,27 @@
   "experiment_key": "T3-Particle108-fourSHA-original-VS-HLSL-user-output-struct-width-multiset-triangle-v1",
   "resource_key": "T3-private-Particle108-fourowners-HLSL-probe",
   "approach": "Independent script workflow based on source-authentic established original four-pair probe, no shared game edits or heavy Unity. Count-only reports; strict synthetic tests, HLSL private; not semantic proof.",
-  "updated_at": "2026-11-06T11:06:41.674Z"
+  "updated_at": "2026-11-06T11:25:19.182Z",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42209509708"
+  ],
+  "result": {
+    "run_id": 42209509708,
+    "job_id": 127864903249,
+    "conclusion": "success",
+    "source_free_tests_passed": 25,
+    "original_owner_SHA_verified": 4,
+    "original_scene_SHA_verified": 6,
+    "source_SPIRV_stage_pairs_linked": 4,
+    "generated_HLSL_semantic_stage_pairs_linked": 4,
+    "recompiled_SPIRV_stage_pairs_linked": 2,
+    "source_HLSL_exact_field_names_and_types_match": 16,
+    "source_roundtrip_SPIRV_output_exact_names_match": 0,
+    "HLSL_fragment_user_inputs": 14,
+    "HLSL_fragment_input_missing_vertex_output": 0,
+    "HLSL_fragment_input_type_mismatch": 0,
+    "game_assets_modified": false,
+    "device_pixels_verified": false
+  },
+  "next_step": "On isolated private original four-pair runner, test paired-stage glslang/semantic Location mapping and spirv-val; avoid source ShaderLab and original authored semantic identity assumptions; RENDER-002 remains OPEN."
 }
