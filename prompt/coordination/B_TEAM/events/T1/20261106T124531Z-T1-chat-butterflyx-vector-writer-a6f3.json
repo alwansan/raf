@@ -1,0 +1,13 @@
+{
+  "id": "20261106T124531Z-T1-chat-butterflyx-vector-writer-a6f3",
+  "owner": "T1",
+  "session_id": "20261106T124531Z-T1-chat-butterflyx-vector-writer-a6f3",
+  "issue_id": "WATER-001",
+  "type": "result",
+  "at": "2026-11-06T12:51:46.047Z",
+  "summary": "Private original FFT slot0 butterfly1 X exact last whole-vector writer has selected scalar SSA chain OpVectorShuffle→OpBitcast(sint32_bits_to_float32)→OpVectorShuffle→OpLoad Input signed 32-bit vector. Three static X-affecting whole-vector writes, only one last writer possible at actual read in bounded CFG. No unknown alias/escape path observed. Source-authentic isolated Vulkan CI 42220554705 SUCCESS 16/16 synthetic controls and original SHA recovery. Original↔Unity 252/256 coordinate mismatch, authored binding and Adreno water remain unproven.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42220554705",
+    "https://github.com/alwansan/raf/commit/00a9157d69ba7bdbca9ba9d9cd1d8881feb1fe3f"
+  ]
+}
