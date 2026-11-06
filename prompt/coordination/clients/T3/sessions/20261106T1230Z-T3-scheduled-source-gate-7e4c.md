@@ -13,3 +13,6 @@
 - result: waiting_ci; no test pass claimed yet. No edits to Unity, original game assets, GUIDs, .rgd, FMOD, Settings, touch or T4/T5 files.
 - critical limit: even if all tests pass, structural link gate does NOT prove original Shader48 identity, true post-export Unity material binding, shader variant authenticity, visual white/square smoke repair, or GPU pixels.
 - next: read exact CI result; if failure fix only reproducible defect; if success move from synthetic structural gate to SHA-authenticated original Shader48 → same actual exported shader/material GUID join with true subprogram evidence and original Particle108 stage mismatch, then inspect white hand/raft/square smoke material and renderer from CL. Do not duplicate CI or native build.
+
+## CI conclusion
+Run 42218286983 completed **SUCCESS** on immutable SHA 51434e548a796f6e26a805810d86f3e7404156f4. This confirms the workflow's py_compile + exact unittest invocation exited 0. It does not prove original Shader48 or pixels. Scope completed; RENDER-002 remains OPEN.
