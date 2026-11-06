@@ -50,6 +50,9 @@ class ProvenanceGateTests(unittest.TestCase):
         self.assertIn("shader.Dispatch(kernel, 1, 1, 1)", editor)
         self.assertIn("o.GetData(observed)", editor)
         self.assertIn("t1-address-provenance-counts.txt", editor)
+        self.assertIn("t1-address-provenance-zero-signatures.txt", editor)
+        self.assertIn("(actual & 0x7fffffffu) == 0u", editor)
+        self.assertIn("fetchedImage && actual == zeroPixel", editor)
         for index in (0, 1, 8, 9, 14, 15):
             self.assertIn(f"Assert.That(mismatch[{index}], Is.Zero", editor)
         for index in (2, 3, 4, 5, 6, 7, 10, 11, 12, 13):
@@ -59,7 +62,7 @@ class ProvenanceGateTests(unittest.TestCase):
 
     def test_clean_sixteen_category_gpu_report(self):
         self.assertEqual(parse_metrics(ZERO), (0,) * 16)
-        report = analyze(xml(), 0, ZERO)
+        report = analyze(xml(), 0, ZERO, ZERO)
         self.assertEqual(report["classification"], "no_synthetic_context_difference")
         self.assertFalse(report["diagnostic_mismatch_found"])
         self.assertTrue(report["positive_controls_passed"])
@@ -71,7 +74,7 @@ class ProvenanceGateTests(unittest.TestCase):
         values = [0] * 16
         for i in (2, 4, 6, 10, 12):
             values[i] = 63
-        r = analyze(xml(), 0, metric(*values))
+        r = analyze(xml(), 0, metric(*values), ZERO)
         self.assertEqual(r["classification"], "computed_only_context_difference")
         self.assertEqual(r["computed_address_category_mismatches"], [63] * 5)
         self.assertEqual(r["buffered_address_category_mismatches"], [0] * 5)
@@ -79,7 +82,7 @@ class ProvenanceGateTests(unittest.TestCase):
     def test_buffered_only_difference_without_failed_baseline(self):
         values = [0] * 16
         values[3] = values[7] = values[13] = 64
-        r = analyze(xml(), 0, metric(*values))
+        r = analyze(xml(), 0, metric(*values), ZERO)
         self.assertEqual(r["classification"], "buffered_only_context_difference")
         self.assertEqual(r["computed_address_category_mismatches"], [0] * 5)
         self.assertEqual(r["buffered_address_category_mismatches"], [64, 0, 64, 0, 64])
@@ -87,7 +90,7 @@ class ProvenanceGateTests(unittest.TestCase):
     def test_mixed_provenance_differences(self):
         a = [0] * 16
         a[4], a[11] = 17, 1
-        r = analyze(xml(), 0, metric(*a))
+        r = analyze(xml(), 0, metric(*a), ZERO)
         self.assertEqual(r["classification"], "computed_and_buffered_context_differences")
         self.assertEqual(len(r["pair_names"]), 5)
 
@@ -96,7 +99,7 @@ class ProvenanceGateTests(unittest.TestCase):
             values = [0] * 16
             values[index] = 1
             with self.subTest(index=index), self.assertRaises(ValueError):
-                analyze(xml(), 0, metric(*values))
+                analyze(xml(), 0, metric(*values), ZERO)
 
     def test_metric_boundaries_and_noncanonical_rejection(self):
         bad = [
@@ -157,15 +160,67 @@ class ProvenanceGateTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 read_bounded(marker, MAX_METRICS)
 
+    def test_bitcarrier_zero_and_image_x0_signatures_are_distinct(self):
+        # On this canary, computed paths are even 2,4,6,10,12;
+        # image signatures indicate a pixel sampled from x=0, not zero-pixel data.
+        count = [0] * 16
+        sign = [0] * 16
+        for lane in (2, 4, 6, 10, 12):
+            count[lane] = 63
+            sign[lane] = 63
+        r = analyze(xml(), 0, metric(*count), metric(*sign))
+        self.assertEqual(r["computed_zero_signatures"], [63] * 5)
+        self.assertEqual(r["buffered_zero_signatures"], [0] * 5)
+        self.assertEqual(r["computed_other_mismatches"], [0] * 5)
+        self.assertFalse(r["zero_signature_is_float_FTZ_causality"])
+        self.assertFalse(r["float32_FTZ_cause_proven"])
+
+    def test_other_mismatch_kept_when_signature_only_partial(self):
+        count = [0] * 16
+        sign = [0] * 16
+        count[2], sign[2] = 63, 42
+        count[10], sign[10] = 63, 0
+        report = analyze(xml(), 0, metric(*count), metric(*sign))
+        self.assertEqual(report["computed_other_mismatches"], [21, 0, 0, 63, 0])
+        self.assertEqual(report["computed_zero_signatures"], [42, 0, 0, 0, 0])
+
+    def test_signature_count_must_not_exceed_mismatch_in_any_path(self):
+        count = [0] * 16
+        signatures = [0] * 16
+        signatures[2] = 1
+        with self.assertRaises(ValueError):
+            analyze(xml(), 0, metric(*count), metric(*signatures))
+        count[2] = 2
+        signatures[2] = 3
+        with self.assertRaises(ValueError):
+            analyze(xml(), 0, metric(*count), metric(*signatures))
+
+    def test_signature_on_positive_control_is_invalid(self):
+        for category in (0, 1, 8, 9, 14, 15):
+            count = [0] * 16
+            signatures = [0] * 16
+            count[category] = signatures[category] = 1
+            with self.subTest(category=category), self.assertRaises(ValueError):
+                analyze(xml(), 0, metric(*count), metric(*signatures))
+
+    def test_bad_signature_payload_rejected_independent_of_valid_metrics(self):
+        for payload in (b"", b"0\\n", metric(*([0] * 15)),
+                        metric(*([0] * 17)), b"00\\n" * 16,
+                        b"0\\r\\n" * 16, b"9" * (MAX_METRICS + 1)):
+            with self.subTest(payload=payload[:8]), self.assertRaises(ValueError):
+                analyze(xml(), 0, ZERO, payload)
+
     def test_public_cli_redacts_private_data(self):
         with tempfile.TemporaryDirectory() as d:
             root = Path(d)
-            x, m = root / "unity-nunit.xml", root / "private-metrics.txt"
+            x, m, z = root / "unity-nunit.xml", root / "private-metrics.txt", root / "signatures.txt"
             x.write_bytes(xml())
             m.write_bytes(ZERO)
+            z.write_bytes(ZERO)
             import sys
             with patch.object(sys, "argv", ["gate", "--xml", str(x),
-                                            "--metrics", str(m), "--exit-code", "0"]):
+                                            "--metrics", str(m), "--signatures", str(z),
+                                            "--exit-code", "0"]):
                 out = io.StringIO()
                 with redirect_stdout(out):
                     self.assertEqual(main(), 0)
