@@ -2,7 +2,7 @@
 
 - session_id: `20261106T1314Z-T2-chat-material-stfld-stack-4c62`
 - origin: `chat`
-- status: `active`
+- status: `completed_original_Material_stfld_source_and_Shader_input_field`
 - work: [reserved scope](../../../work/WATER-001/T2-20261106T1314Z-T2-chat-material-stfld-stack-4c62.json)
 - registration base_sha: `1ce09e9c248739c788ea2fc40eff358d1da7f112`; scope commit `062421387d483b0a4e89c9099404d337f3ef25e8`
 - resumed_from_sessions: `20261106T1306Z-T2-chat-material-field-assignment-8e6a` (original SHA [CI42222313603](https://github.com/alwansan/raf/actions/runs/42222313603) and [CI42222884964](https://github.com/alwansan/raf/actions/runs/42222884964) success), `20261106T122027Z-T2-scheduled-ci-reconcile-a7c2`.
@@ -12,3 +12,13 @@
 - intended files: T2-only `android-port/Experiments/T2/FoamCb0ManagedLiterals/MaterialStoreValueTrace.cs`, calling `Program.cs`, isolated T2 workflow plus this own work/experiment/event/session/report. No original game Shader/Meta/GUID, audio, Settings, world, input or other team files.
 - run_urls: no new run at registration.
 - next_step: code+synthetic rigorous controls, authenticate original CI, record per-typed-origin-only result, explicit NOT_READY for Unity/Adreno water.
+
+## Verified genuine original source result — 2026-11-06T13:24Z
+
+- Added T2-only `android-port/Experiments/T2/FoamCb0ManagedLiterals/MaterialStoreValueTrace.cs` and integrated it with exactly one source-original Foam CB0 name→Material.SetVector receiver's matching `stfld` in T2's static Cecil scanner. Bounded single-basic-block stack with typed constructor, `dup`, local definitions, branch/switch/exception guards, unsupported-IL fail closed, 128-step and 96-stack maximum. No original game assembly execution; private field/source/IL names never published.
+- Source-only CI compilation failures [42224601338](https://github.com/alwansan/raf/actions/runs/42224601338), [42224703030](https://github.com/alwansan/raf/actions/runs/42224703030), [42224754004](https://github.com/alwansan/raf/actions/runs/42224754004) were public C# diagnostics `CS0136` and `CS1929`; fixed at `d623cef56876b2ffd9fc76949e20598d02090391`, not hidden or used as original-game verdict.
+- **Definitive exact original ZIP2 private CI [42224883549](https://github.com/alwansan/raf/actions/runs/42224883549)**, job `127915749429`: **SUCCESS**, 11/11 Python source-free checks, Cecil public synthetic positive/false-positive controls, source Foam Shader + managed DLL SHA pinned.
+- **New important conclusion:** The exact original `stfld` that populates the Material field from which the authentic CB0-named `Material.SetVector(string,Vector4)` is invoked **does receive the product of a typed `new Material(Shader)` constructor** along a seven-instruction verified same-basic-block IL stack path. Its actual first `Shader` parameter came from **a typed `UnityEngine.Shader` instance-field load**. This is exact compiled assignment stack provenance, upgrading previous same-method `Material::.ctor` co-occurrence. The Shader field may or may not reference original Foam Shader; **no asset identity or runtime execution proven**.
+- Evidence: [bounded original stfld report](../../../../../docs/T2_FOAM_ORIGINAL_MATERIAL_STFLD_STACK_2026-11-06.md), `prompt/coordination/experiments/T2/20261106T1314Z-T2-chat-material-stfld-stack-4c62.json`, `prompt/coordination/B_TEAM/events/T2/20261106T1314Z-T2-chat-material-stfld-stack-4c62-result.json`, completed work `prompt/coordination/work/WATER-001/T2-20261106T1314Z-T2-chat-material-stfld-stack-4c62.json`.
+- No original Foam Shader/Unity meta/GUID, world/save, audio/Settings, input, Unity import, Vulkan/Adreno pixels, APK/OBB, or T1/T3/T4/T5 work touched. T5 delivery CI ran independently; none cancelled.
+- **Next source question:** retain private exact Shader-field `FieldReference` and inspect its original managed `stfld` writers / serialized field eligibility, then verify original Foam Shader asset link; only then host CB0 completeness for all stage-specific array accesses. WATER-001 still OPEN / NOT_READY.
