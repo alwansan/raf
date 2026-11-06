@@ -6,9 +6,9 @@
   "session_id": "20261106T195959Z-T1-chat-ci-log-pin-7b42",
   "issue_id": "WATER-001",
   "track": "Historical original FFT/Unity evidence CI source-log authentication",
-  "status": "active",
+  "status": "completed",
   "base_sha": "a0a86b07e093ea404982a078159d53a257e20c02",
-  "updated_at": "2026-11-06T19:59:59Z",
+  "updated_at": "2026-11-06T20:08:20Z",
   "resumed_from_sessions": [
     "20261106T1942Z-T1-chat-auth-producer-bridge-62a9",
     "20261106T1933Z-T1-chat-zero-coordinate-signature-73e1",
@@ -33,5 +33,23 @@
   ],
   "native_run_not_touched": 42281310905,
   "trial_vote": "لا يحتاج",
-  "next_step": "Verify three immutable run/job success metadata and unique historical safe marker values, then publish source-only CI proof; never publish raw logs/shaders."
+  "next_step": "Coordinate original ZIP2 SHA-authored FFT-vs-Unity same-dispatch private trace with T1 scheduled capture controls, then minimal shader correction if proven; owner direct native 42281310905 not touched.",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42285184968",
+    "https://github.com/alwansan/raf/actions/runs/42285244540",
+    "https://github.com/alwansan/raf/actions/runs/42285401655"
+  ],
+  "result": {
+    "source_sha": "47df6c4b344a688928219596cae66ef865108050",
+    "run_id": 42285401655,
+    "job_id": 128124791160,
+    "conclusion": "success",
+    "historical_real_logs_verified": 3,
+    "unique_safe_markers": 3,
+    "tests_new": "12/12",
+    "tests_prior": "14/14",
+    "CI_logs_signed_attestation": false,
+    "real_original_vs_unity_parity": false,
+    "android_water_fixed": false
+  }
 }
