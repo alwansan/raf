@@ -50,7 +50,7 @@ class RealUnityObbGuidSourceFreeTests(unittest.TestCase):
         data = compare(payload(b"\x00\x01-GUID-UNIQUE"), payload(b"\x00\x01-GUID-UNIQUE"))
         self.assertEqual(data["unity_obb_guid_marker_identity"], "both_present_byte_identical")
         self.assertTrue(data["unity_internal_engine_guid_verified"])
-        self.assertEqual(data["marker_exact_bytes_compared"], 15)
+        self.assertEqual(data["marker_exact_bytes_compared"], 14)
         self.assertFalse(data["unity_obb_guid_embedded_value_revealed"])
         self.assertFalse(data["actual_installed_phone_obb_mount_verified"])
 
