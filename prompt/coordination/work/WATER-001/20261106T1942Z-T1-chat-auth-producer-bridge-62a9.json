@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "generation": "T-2026-11-05",
+  "owner": "T1",
+  "origin": "chat",
+  "session_id": "20261106T1942Z-T1-chat-auth-producer-bridge-62a9",
+  "issue_id": "WATER-001",
+  "track": "Original FFT Butterfly1 X original Input vs translated Phi evidence join",
+  "status": "active",
+  "base_sha": "83eb4f1f90c1436afc5c529c525791f50ac0b068",
+  "updated_at": "2026-11-06T19:42:00Z",
+  "resumed_from_sessions": [
+    "20261106T1933Z-T1-chat-zero-coordinate-signature-73e1",
+    "20261106T1916Z-T1-chat-address-provenance-e6b2",
+    "20261106T1850Z-T1-chat-gpu-input-join-b71c"
+  ],
+  "experiment_key": "source-safe-sha-pinned-original-spirv-site1x-input-sint32-bitcast-vs-hlsl-phi-private-typed-boundaries-plus-unity-computed-63-0-signature-proof-gap-v1",
+  "resource_key": "none: source-only evidence join, no Unity/private assets/APK",
+  "hypothesis": "Actual SHA-original SPIR-V butterfly1 X has a signed32 Input memory-load boundary and bitcast; generated HLSL candidate has float32 Phi with loop-carried boundary. Those structural facts plus 63/64 sourcefree Unity zero signatures constrain but do not prove original runtime origin or water cause; a fail-closed evidence bridge should prevent unproven classification and point to exact next capture.",
+  "scope": "Create isolated source-only strict fixed-schema, bounded, privacy-safe evidence provenance report from previously successful historical CI; verify original-vs-translation structural categories, distinct runs immutable SHAs and synthetic GPU controls; output only safe origin boundary and follow-up gap. No duplicate native run and no Unity mutex; do not touch T2–T5 files or source assets.",
+  "intended_files": [
+    "scripts/t1_fft_original_phi_bridge.py",
+    "tests/test_t1_fft_original_phi_bridge.py",
+    "tests/data/t1_fft_original_phi_evidence_public.json",
+    ".github/workflows/raft-t1-fft-original-phi-bridge.yml",
+    "prompt/coordination/work/WATER-001/20261106T1942Z-T1-chat-auth-producer-bridge-62a9.json",
+    "prompt/coordination/experiments/T1/20261106T1942Z-T1-chat-auth-producer-bridge-62a9.json",
+    "prompt/coordination/clients/T1/sessions/20261106T1942Z-T1-chat-auth-producer-bridge-62a9.md",
+    "prompt/coordination/B_TEAM/events/T1/20261106T1942Z-T1-chat-auth-producer-bridge-62a9.json"
+  ],
+  "evidence_runs": [
+    42220554705,
+    42228497335,
+    42279949574
+  ],
+  "related_work": [
+    "20261106T125645Z-T1-chat-hlsl-x-stop-a93d",
+    "20261106T133640Z-T1-chat-nested-phi-8d31",
+    "20261106T1933Z-T1-chat-zero-coordinate-signature-73e1"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Create exact safe evidence bridge and adversarial tests; source-only CI; never claim dynamic Unity original FFT parity based on structural/driver evidence."
+}
