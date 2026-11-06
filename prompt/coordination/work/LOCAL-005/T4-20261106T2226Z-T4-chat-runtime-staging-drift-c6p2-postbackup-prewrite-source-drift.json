@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T2226Z-T4-chat-runtime-staging-drift-c6p2",
+  "origin": "chat",
+  "status": "active",
+  "issue_id": "LOCAL-005",
+  "track": "original-runtime-operations-staging-source-drift",
+  "base_sha": "dc395792b78aff3c93308c0312f7e2335e3cbe3d",
+  "updated_at": "2026-11-06T22:27:06.211Z",
+  "resumed_from_sessions": [
+    "20261106T2215Z-T4-chat-immutable-log-snapshot-n7b4",
+    "20261106T2138Z-T4-scheduled-native-retry-q4n7"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/T4/sessions/20261106T2215Z-T4-chat-immutable-log-snapshot-n7b4.md"
+  ],
+  "intended_files": [
+    "scripts/instrument_android_runtime_operations.py",
+    "tests/test_runtime_operation_traces.py"
+  ],
+  "experiment_key": "T4-original-operation-apply-postbackup-prewrite-stale-CSharp-meta-guard-synthetic-v1",
+  "resource_key": "T4-original-operation-instrumenter-source-only",
+  "hypothesis": "apply() authenticates original source during plan and backup but not again before instrumented C# overwrite. If an independent writer updates .cs/.meta after backup copy, this transaction can silently destroy updated source or rollback over it.",
+  "approach": "Use two synthetic controlled shutil.copy2 interleaves after backup snapshot; expect RED current source overwrites concurrent edit or meta drift; implement source+metadata prewrite fail-closed before first mutation, retaining complete byte-identical backup for reconciliation; validate T4 test and full existing offline integration CI.",
+  "native_run": "https://github.com/alwansan/raf/actions/runs/42296450023",
+  "next_step": "Preserve native owner T5 CI. No source data or RGD schema changes; detect drift before any instrumented source write; run source integration and checkpoint."
+}
