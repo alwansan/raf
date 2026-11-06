@@ -1,0 +1,16 @@
+{
+  "id": "20261106T1306Z-T2-chat-material-field-assignment-8e6a-localvalue",
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261106T1306Z-T2-chat-material-field-assignment-8e6a",
+  "type": "result",
+  "issue_id": "WATER-001",
+  "at": "2026-11-06T13:08:00Z",
+  "summary": "Original SHA-private managed Cecil Material receiver assignment typed local/parameter follow-up CI42222884964 SUCCESS, Python 11 tests + Cecil positive/negative controls: same exact one Material stfld still immediate_value_source_unproven, i.e. not a directly verified typed local or method parameter. Same writer method contains Material ctor, but no source-authentic ctor→field value proof. WATER-001 OPEN.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42222884964",
+    "docs/T2_FOAM_ORIGINAL_MATERIAL_FIELD_ASSIGNMENT_2026-11-06.md"
+  ],
+  "limits": "No compiled IL symbols or bytes published, no Unity runtime CB0 upload/Shader Foam proven, no game assets touched.",
+  "next_step": "Analyze exact original stfld stack ownership, with branch/control-flow and typed reaching definitions before promoting Material constructor link."
+}
