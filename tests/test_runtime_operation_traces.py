@@ -122,6 +122,74 @@ class OperationTraceTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'Unknown adapted original revision'):
             instrument('SaveAndLoad', result, manifest)
 
+    def test_hardlinked_original_save_source_refused_before_trace_and_backup(self):
+        # A source file can be a regular file yet share its inode with an
+        # upstream original outside the staging tree. Tracing in-place would
+        # silently mutate that external original if this guard is missing.
+        import tempfile
+        from pathlib import Path
+        from scripts.instrument_android_runtime_operations import apply
+        source = ('class SaveAndLoad { public void SaveGame(bool sendRemoteMessage) '
+                  '{ SaveWorld(); SteamUserStats.StoreStats(); SaveUser(); } }')
+        manifest = {'sources': {'SaveAndLoad': {
+            'sha256': hashlib.sha256(source.encode()).hexdigest(),
+            'area': 'save', 'methods': [{
+                'signature': 'public void SaveGame(bool sendRemoteMessage)',
+            }],
+        }}}
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            original = root / 'upstream-original-SaveAndLoad.cs'
+            original.write_text(source)
+            stage = root / 'project/Assets/Assembly-CSharp/SaveAndLoad.cs'
+            stage.parent.mkdir(parents=True)
+            try:
+                stage.hardlink_to(original)
+            except (OSError, NotImplementedError):
+                self.skipTest('Hardlinks unavailable on test filesystem')
+            meta = stage.with_suffix('.cs.meta')
+            meta.write_bytes(b'guid: synthetic-untouched-save-original\n')
+            backup = root / 'backup'
+            with self.assertRaisesRegex(ValueError, 'hardlinked'):
+                apply(root / 'project', backup, manifest, write=True)
+            self.assertEqual(original.read_text(), source)
+            self.assertEqual(stage.read_text(), source)
+            self.assertEqual(meta.read_bytes(), b'guid: synthetic-untouched-save-original\n')
+            self.assertFalse(backup.exists())
+
+    def test_hardlinked_original_save_guid_meta_refused_before_trace(self):
+        import tempfile
+        from pathlib import Path
+        from scripts.instrument_android_runtime_operations import apply
+        source = ('class SaveAndLoad { public void SaveGame(bool sendRemoteMessage) '
+                  '{ SaveWorld(); SteamUserStats.StoreStats(); SaveUser(); } }')
+        manifest = {'sources': {'SaveAndLoad': {
+            'sha256': hashlib.sha256(source.encode()).hexdigest(),
+            'area': 'save', 'methods': [{
+                'signature': 'public void SaveGame(bool sendRemoteMessage)',
+            }],
+        }}}
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            stage = root / 'project/Assets/Assembly-CSharp/SaveAndLoad.cs'
+            stage.parent.mkdir(parents=True)
+            stage.write_text(source)
+            external_meta = root / 'outside-original-GUID-meta'
+            original_guid = b'guid: synthetic-keep-original-GUID\n'
+            external_meta.write_bytes(original_guid)
+            meta = stage.with_suffix('.cs.meta')
+            try:
+                meta.hardlink_to(external_meta)
+            except (OSError, NotImplementedError):
+                self.skipTest('Hardlinks unavailable on test filesystem')
+            backup = root / 'backup'
+            with self.assertRaisesRegex(ValueError, 'hardlinked'):
+                apply(root / 'project', backup, manifest, write=True)
+            self.assertEqual(stage.read_text(), source)
+            self.assertEqual(meta.read_bytes(), original_guid)
+            self.assertEqual(external_meta.read_bytes(), original_guid)
+            self.assertFalse(backup.exists())
+
     def test_t4_save_postcheck_runs_in_finally_even_with_early_return(self):
         signature = 'private void Save(string filename, RGD raftgamedata)'
         source = ('class SaveAndLoad { ' + signature +
