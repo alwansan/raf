@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "origin": "chat",
+  "session_id": "20261106T1553Z-T4-chat-diagnostic-queue-c4r7",
+  "issue_id": "LOCAL-005",
+  "hypothesis": "When startup log I/O temporarily fails, existing Drain drops the pending JSONL full first diagnostic before successful append, and exchanges dropped-count overflow without restoration, so actual lost-logs evidence and first original error may vanish. Bounded critical queue pressure should not grow.",
+  "experiment_key": "T4-LOCAL005-PersistentDiagnosticLog-source-synthetic-IO-failure-mixed-critical-uncritical-queueLimit-redgreen-net8-v1",
+  "source_commit": "73cfdc1878607bdb185ab40cc527807c4e09f71f",
+  "source_files": [
+    "android-port/Runtime/Platform/PersistentDiagnosticLog.cs",
+    "android-port/Tests/Diagnostics/Program.cs"
+  ],
+  "workflow_path": ".github/workflows/raft-persistent-diagnostics-tests.yml",
+  "red_test": {
+    "commit": "fbe4a89064500b8c32881709e50812381cb0f990",
+    "run_url": "https://github.com/alwansan/raf/actions/runs/42247880072",
+    "conclusion": "failure",
+    "job_id": 127994790335,
+    "assertion": "Program.cs:148 Require(overflowRetained > 0) failed, proving zero dropped count after failed Append; old basic queue bound test passed and was an insufficient negative"
+  },
+  "green_test": {
+    "commit": "73cfdc1878607bdb185ab40cc527807c4e09f71f",
+    "run_url": "https://github.com/alwansan/raf/actions/runs/42248102165",
+    "status": "waiting_ci"
+  },
+  "negative_controls": [
+    "synthetic startup FileStream disposal with ioGate held prevents background worker race",
+    "one pending critical-style seed, interleave 24 noncritical overflows and critical attempts",
+    "during outage pending cap queueLimit=1 and original seed remains in pending",
+    "on recovery flushed original seed in JSONL and overflow count nonzero",
+    "existing Unicode JSONL, rotation, startup limit, 8 shutdown races, duplicate stack aggregation and healthy critical immediate flush"
+  ],
+  "limitations": [
+    "Synthetic I/O fault is not evidence of physical Android storage failure or world persistence.",
+    "This logging source change will need to be included in a new APK and tested on device before claiming runtime acceptance.",
+    "Unexpected no-op line-dropping can still occur on partially successful storage writes; this test covers append-throw rather than fsync/crash atomicity."
+  ],
+  "safety": "No original game worlds/Unity/Android phone data in CI; controlled private synthetic only, all game/asset/save serializations untouched.",
+  "next_step": "Inspect exact final CI42248102165. On success record event/T5 handoff; on failure revise only bounded diagnostic logger and tests.",
+  "status": "waiting_ci",
+  "updated_at": "2026-11-06T16:00:21.278Z"
+}
