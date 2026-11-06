@@ -1,0 +1,30 @@
+{
+  "id": "20261106T1340Z-T2-chat-shader-stfld-source-a84d",
+  "session_id": "20261106T1340Z-T2-chat-shader-stfld-source-a84d",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "original_sha_authentic_Shader_Find_typed_stfld_value_proven",
+  "experiment_key": "ZIP2-original-SHA-15964-exact-MaterialCtor-Shader-field-stfld-value-basicblock-typed-Shader-origin-v1",
+  "source_zip2_sha": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+  "original_managed_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e",
+  "run_id": 42228032544,
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42228032544",
+  "job_id": 127926415695,
+  "source_sha": "cd2b4d3123ced1bd5cc835d70c8cabbbdd5d9914",
+  "run_conclusion": "success",
+  "sourcefree_python_tests_passed": 11,
+  "cecil_typed_shader_store_false_positive_controls_passed": true,
+  "source_original_exact_Shader_field_writer_count": 1,
+  "exact_original_Shader_field_store_value_IL_origin_buckets": {
+    "typed_Shader_Find_result": 1
+  },
+  "exact_original_Shader_field_store_BB_IL_steps": 3,
+  "source_Shader_Find_actual_string_equals_original_Foam_name_verified": false,
+  "source_Shader_Find_runtime_call_executed_verified": false,
+  "actual_Shader_asset_loaded_verified": false,
+  "complete_CB0_GPU_upload_verified": false,
+  "adreno_water_verified": false,
+  "private_original_shader_string_or_il_published": false,
+  "report": "docs/T2_FOAM_ORIGINAL_SHADER_STFLD_STACK_2026-11-06.md",
+  "next_step": "SHA-pinned original Shader.Find exact first literal source name vs original Foam Shader serialized m_Name; private digest compare only, no original name release."
+}
