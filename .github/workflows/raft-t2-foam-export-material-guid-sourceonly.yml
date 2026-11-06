@@ -1,0 +1,34 @@
+name: T2 WATER-001 Foam exported Shader GUID and serialized Material PPtr controls
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t2_foam_export_binding_probe.py
+      - tests/test_t2_foam_export_binding_probe.py
+      - .github/workflows/raft-t2-foam-export-material-guid-sourceonly.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t2-foam-exported-material-guid-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  synthetic-export-pointers:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Parse Foam ShaderLab exact header and exported Material PPtr red-green synthetic controls
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t2_foam_export_binding_probe.py tests/test_t2_foam_export_binding_probe.py
+          python3 -m unittest discover -s tests -p 'test_t2_foam_export_binding_probe.py' -v
+          python3 -m unittest discover -s tests -p 'test_t2_foam_private_installer.py' -v
+      - name: Evidence boundary
+        run: |
+          echo 'T2_FOAM_GUID_SYNTHETIC source_original_export=false original_GUID_proven=false unity_import=false android_pixels=false'

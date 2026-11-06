@@ -3,6 +3,8 @@ on:
   push:
     branches: [feature/android-native-port]
     paths:
+      - scripts/t2_foam_export_binding_probe.py
+      - tests/test_t2_foam_export_binding_probe.py
       - scripts/t2_foam_private_shaderlab_candidate.py
       - tests/test_t2_foam_private_shaderlab_candidate.py
       - scripts/t2_foam_candidate_embedded_validation.py
@@ -38,6 +40,8 @@ jobs:
       - name: Test no fake properties and 2-pass controls without original
         run: |
           set -euo pipefail
+          python3 -m py_compile scripts/t2_foam_export_binding_probe.py
+          python3 -m unittest discover -s tests -p 'test_t2_foam_export_binding_probe.py' -v
           python3 -m py_compile scripts/t2_foam_private_shaderlab_candidate.py
           python3 -m unittest discover -s tests -p 'test_t2_foam_private_shaderlab_candidate.py' -v
           python3 -m py_compile scripts/t2_foam_candidate_embedded_validation.py
@@ -161,6 +165,71 @@ jobs:
                           original_Source_Sha_verified_by_prior_staging=True)
               (temp/"t2-foam-install-safe.json").write_text(json.dumps(safe,sort_keys=True)+"\n")
               print("T2_FOAM_PRIVATE_SOURCE_TO_SYNTH_EXPORT_INSTALL "+json.dumps(safe,sort_keys=True))
+          finally:
+              shutil.rmtree(scratch,ignore_errors=True)
+          PY
+      - name: T2 prove SHA-authentic Foam private two-pass candidate preserves synthetic exported Material GUID links
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib,json,os,shutil
+          from pathlib import Path
+          from scripts.b24_original_foam_stage_translation import TARGET
+          from scripts.t2_foam_private_installer import install
+          from scripts.t2_foam_export_binding_probe import inspect_export
+          temp=Path(os.environ["RUNNER_TEMP"])
+          scratch=temp/"t2-foam-private-material-reference-scratch"
+          project=scratch/"UnityProject"
+          shader=project/"Assets"/"SyntheticExport"/"Foam.shader"
+          shader.parent.mkdir(parents=True,exist_ok=False)
+          guid="a"*32
+          initial=('Shader "'+TARGET+'" { SubShader { Pass { HLSLPROGRAM\nvoid main(){}\nENDHLSL } } }\n')
+          shader.write_text(initial,encoding="utf-8")
+          meta=Path(str(shader)+".meta")
+          meta.write_text("fileFormatVersion: 2\nguid: "+guid+"\n",encoding="utf-8")
+          mat=project/"Assets"/"OnlySyntheticMaterial.mat"
+          mat.write_text("%YAML 1.1\n--- !u!21 &2100000\nMaterial:\n"
+                         "  m_Name: Synthetic\n"
+                         "  m_Shader: {fileID: 4800000, guid: "+guid+", type: 3}\n",
+                         encoding="utf-8")
+          candidate=temp/"t2-authentic-foam-private.shader"
+          original_stage=json.loads((temp/"t2-foam-candidate-safe.json").read_text())
+          try:
+              before=inspect_export(project)
+              assert before["foam_exported_subshader_pass_counts"]==[1]
+              assert before["material_docs_referencing_exported_Foam_guid"]==1
+              original_meta=meta.read_bytes()
+              original_mat=mat.read_bytes()
+              payload=candidate.read_bytes()
+              result=install(project,candidate,scratch/"private-original-recovery",
+                             hashlib.sha256(payload).hexdigest(),original_stage)
+              after=inspect_export(project)
+              assert after["foam_exported_subshader_pass_counts"]==[2]
+              assert after["foam_exported_all_subshaders_programmed"] is True
+              assert before["material_documents"]==after["material_documents"]==1
+              assert before["material_docs_referencing_exported_Foam_guid"]==after["material_docs_referencing_exported_Foam_guid"]==1
+              assert after["all_Assets_meta_guids_unique_and_wellformed"] is True
+              assert meta.read_bytes()==original_meta and mat.read_bytes()==original_mat
+              assert shader.read_bytes()==payload
+              assert result["external_recovery_backup_complete"] is True
+              assert result["original_export_meta_bytes_unchanged"] is True
+              assert result["Unity_2021_import_verified"] is False
+              safe={"status":"SHA_ORIGINAL_CANDIDATE_SYNTHETIC_MATERIAL_PPTR_STABLE",
+                    "original_source_SHA_authenticated_by_prior_stages":True,
+                    "before_exported_Foam_passes":before["foam_exported_subshader_pass_counts"],
+                    "after_exported_Foam_passes":after["foam_exported_subshader_pass_counts"],
+                    "material_documents":after["material_documents"],
+                    "material_links_to_synthetic_export_guid":after["material_docs_referencing_exported_Foam_guid"],
+                    "material_bytes_unchanged":True,
+                    "exported_shader_meta_bytes_unchanged":True,
+                    "private_candidate_bytes":len(payload),
+                    "actual_original_AssetRipper_export_tested":False,
+                    "real_original_Unity_GUID_proven":False,
+                    "unity_shader_import_compile_verified":False,
+                    "android_Foam_pixels_verified":False,
+                    "private_shaderlab_published":False}
+              (temp/"t2-foam-material-bridge-safe.json").write_text(json.dumps(safe,sort_keys=True)+"\n")
+              print("T2_FOAM_SOURCE_AUTH_MATERIAL_PPTR_BRIDGE "+json.dumps(safe,sort_keys=True))
           finally:
               shutil.rmtree(scratch,ignore_errors=True)
           PY
@@ -328,6 +397,7 @@ jobs:
           name: t2-foam-private-shaderlab-safe-${{ github.run_id }}
           path: |
             ${{ runner.temp }}/t2-foam-candidate-safe.json
+            ${{ runner.temp }}/t2-foam-material-bridge-safe.json
             ${{ runner.temp }}/t2-foam-install-safe.json
             ${{ runner.temp }}/t2-foam-embedded-safe.json
             ${{ runner.temp }}/t2-foam-io-safe.json
