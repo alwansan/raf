@@ -8,10 +8,13 @@ on:
       - .github/workflows/raft-t1-fft-original-phi-bridge.yml
       - scripts/t1_fft_original_phi_bridge.py
       - tests/test_t1_fft_original_phi_bridge.py
+      - scripts/t1_fft_historical_ci_log_verify.py
+      - tests/test_t1_fft_historical_ci_log_verify.py
       - tests/data/t1_fft_original_phi_evidence_public.json
 
 permissions:
   contents: read
+  actions: read
 
 concurrency:
   group: t1-water001-source-only-original-phi-bridge-${{ github.ref }}
@@ -35,7 +38,8 @@ jobs:
         run: |
           set -euo pipefail
           python3 -m unittest discover -s tests -p test_t1_fft_original_phi_bridge.py -v
-          python3 -m py_compile scripts/t1_fft_original_phi_bridge.py
+          python3 -m unittest discover -s tests -p test_t1_fft_historical_ci_log_verify.py -v
+          python3 -m py_compile scripts/t1_fft_original_phi_bridge.py scripts/t1_fft_historical_ci_log_verify.py
       - name: Classify public CI evidence boundaries without claiming original GPU parity
         shell: bash
         run: |
@@ -43,3 +47,38 @@ jobs:
           python3 -m scripts.t1_fft_original_phi_bridge \
             --evidence tests/data/t1_fft_original_phi_evidence_public.json
           echo 'RAFT_T1_FFT_ORIGINAL_PHI_BACKEND original_assets_acquired=false real_unity_original_fft_executed=false full_game_water_fixed=false'
+
+      - name: Verify three immutable historical CI job logs against safe evidence
+        shell: bash
+        env:
+          GH_TOKEN: \${{ github.token }}
+        run: |
+          set -euo pipefail
+          d="$(mktemp -d)"
+          trap 'rm -rf "$d"' EXIT
+          # Do not echo or upload the raw log, original shader, private GPU data,
+          # GitHub token, signed redirect, or decoded proprietary identifiers.
+          for entry in \
+            "original 42220554705 127901229510" \
+            "candidate 42228497335 127928005249" \
+            "synthetic_unity 42279949574 128106388433"
+          do
+            read -r name run job <<< "$entry"
+            gh api "repos/alwansan/raf/actions/runs/$run" > "$d/$name-run" 2>/dev/null ||
+              { echo 'T1 historical run metadata unavailable'; exit 1; }
+            gh api "repos/alwansan/raf/actions/jobs/$job" > "$d/$name-job" 2>/dev/null ||
+              { echo 'T1 historical job metadata unavailable'; exit 1; }
+            gh api "repos/alwansan/raf/actions/jobs/$job/logs" > "$d/$name-log" 2>/dev/null ||
+              { echo 'T1 historical job log unavailable'; exit 1; }
+          done
+          python3 -m scripts.t1_fft_historical_ci_log_verify \
+            --evidence tests/data/t1_fft_original_phi_evidence_public.json \
+            --original-run "$d/original-run" \
+            --original-job "$d/original-job" \
+            --original-log "$d/original-log" \
+            --candidate-run "$d/candidate-run" \
+            --candidate-job "$d/candidate-job" \
+            --candidate-log "$d/candidate-log" \
+            --synthetic_unity-run "$d/synthetic_unity-run" \
+            --synthetic_unity-job "$d/synthetic_unity-job" \
+            --synthetic_unity-log "$d/synthetic_unity-log"
