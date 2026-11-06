@@ -34,6 +34,26 @@ def _object(item, label):
     return item
 
 
+def _unique_json_pairs(pairs):
+    """Reject ambiguous fields at every JSON object depth, not only the root."""
+    record = {}
+    for name, value in pairs:
+        if name in record:
+            raise ValueError("Duplicate JSON key in delivery or XAPK manifest")
+        record[name] = value
+    return record
+
+
+def _invalid_json_constant(value):
+    # Python's default json.loads accepts nonstandard NaN/Infinity.
+    raise ValueError("Non-standard JSON numeric constant in manifest")
+
+
+def _load_strict_json(data):
+    return json.loads(data, object_pairs_hook=_unique_json_pairs,
+                      parse_constant=_invalid_json_constant)
+
+
 def _safe_name(name):
     return (type(name) is str and SAFE.fullmatch(name) is not None
             and name not in (".", ".."))
@@ -152,11 +172,12 @@ class SplitZipReader(io.RawIOBase):
 
 def _delivery(root: Path):
     try:
-        data = _object(json.loads(_read_small(root / "delivery.json", MAX_METADATA)), "delivery.json")
+        data = _object(_load_strict_json(_read_small(root / "delivery.json", MAX_METADATA)), "delivery.json")
     except (ValueError, UnicodeError, json.JSONDecodeError) as exc:
         raise ValueError("Invalid local delivery manifest") from exc
     code = data.get("version_code")
-    if (data.get("schema") != 1 or data.get("package") != PACKAGE
+    if (type(data.get("schema")) is not int or data["schema"] != 1
+            or data.get("package") != PACKAGE
             or type(code) is not str or re.fullmatch(r"[1-9][0-9]*", code) is None
             or data.get("companion_required") is not True
             or data.get("transport_only_parts") is not True
@@ -230,12 +251,14 @@ def verify(root: Path) -> dict:
                         raise ValueError("Unexpected or unsafe XAPK member identity")
                 if not 0 < entries[0].file_size <= MAX_XAPK_MANIFEST:
                     raise ValueError("XAPK manifest exceeds bound")
-                manifest = _object(json.loads(archive.read(entries[0])), "XAPK manifest")
+                manifest = _object(_load_strict_json(archive.read(entries[0])), "XAPK manifest")
                 expansion = expected[2][0]
-                if (manifest.get("xapk_version") != 1
+                if (type(manifest.get("xapk_version")) is not int
+                        or manifest["xapk_version"] != 1
                         or manifest.get("package_name") != PACKAGE
                         or manifest.get("version_code") != code
-                        or manifest.get("total_size") != records[0][0]["bytes"] + records[1][0]["bytes"]
+                        or type(manifest.get("total_size")) is not int
+                        or manifest["total_size"] != records[0][0]["bytes"] + records[1][0]["bytes"]
                         or manifest.get("expansions") != [{
                             "file": expansion,
                             "install_location": "EXTERNAL_STORAGE",

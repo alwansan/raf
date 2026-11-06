@@ -47,6 +47,57 @@ class SplitDeliveryAttestationTests(unittest.TestCase):
             for item in data["files"] for part in item["parts"]
         ))
 
+    def test_delivery_rejects_duplicate_manifest_key_and_boolean_schema(self):
+        for case in ("duplicate", "boolean"):
+            with self.subTest(case=case):
+                with tempfile.TemporaryDirectory() as tmp:
+                    root = self.fixtures(Path(tmp), split=False)
+                    path = root / "delivery.json"
+                    if case == "duplicate":
+                        body = path.read_text().rstrip()
+                        self.assertTrue(body.endswith("}"))
+                        body = body[:-1] + ', "package": "' + PACKAGE + '"}'
+                        path.write_text(body)
+                        error = "Duplicate JSON key"
+                    else:
+                        data = json.loads(path.read_text())
+                        data["schema"] = True
+                        path.write_text(json.dumps(data))
+                        error = "Delivery identity/companion"
+                    with self.assertRaisesRegex(ValueError, error):
+                        verify(root)
+
+    def test_nested_xapk_rejects_ambiguous_or_noncanonical_json(self):
+        for case in ("duplicate_root", "duplicate_expansion", "boolean_version", "nan"):
+            with self.subTest(case=case):
+                with tempfile.TemporaryDirectory() as tmp:
+                    root = self.fixtures(Path(tmp), split=False)
+
+                    def mutate(name, data):
+                        if name != "manifest.json":
+                            return data
+                        if case == "duplicate_root":
+                            return data[:-1] + b', "package_name": "' + PACKAGE.encode() + b'"}'
+                        obj = json.loads(data)
+                        if case == "boolean_version":
+                            obj["xapk_version"] = True
+                            return json.dumps(obj).encode()
+                        if case == "nan":
+                            return json.dumps(obj)[:-1].encode() + b', "extra": NaN}'
+                        obj["expansions"][0]["file"] = obj["expansions"][0]["file"]
+                        canonical = json.dumps(obj).encode()
+                        field = json.dumps(obj["expansions"][0]["install_path"]).encode()
+                        target = b'"install_path": ' + field
+                        self.assertIn(target, canonical)
+                        return canonical.replace(target, target + b', "install_path": ' + field, 1)
+
+                    self._rewrite_single_xapk(root, mutate)
+                    error = ("Duplicate JSON key" if case.startswith("duplicate")
+                             else "nested manifest differs" if case == "boolean_version"
+                             else "Non-standard JSON numeric")
+                    with self.assertRaisesRegex(ValueError, error):
+                        verify(root)
+
     def test_split_parts_cross_zip_boundaries_without_reassembly(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = self.fixtures(Path(tmp), split=True)
