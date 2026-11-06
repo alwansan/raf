@@ -1,0 +1,34 @@
+name: T2 WATER-001 Foam private candidate transactional export installer source-only controls
+on:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - scripts/t2_foam_private_installer.py
+      - tests/test_t2_foam_private_installer.py
+      - .github/workflows/raft-t2-foam-private-installer-sourceonly.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t2-foam-private-export-installer-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  synthetic-install-rollback:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          lfs: false
+          persist-credentials: false
+      - name: Source-only preflight of private Foam exported target transaction
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t2_foam_private_installer.py tests/test_t2_foam_private_installer.py
+          python3 -m unittest discover -s tests -p 'test_t2_foam_private_installer.py' -v
+          python3 -m unittest discover -s tests -p 'test_b45_install_original_blur.py' -v
+      - name: Declare narrow evidence boundary
+        run: |
+          echo 'T2_FOAM_INSTALL_SYNTHETIC_ONLY actual_original_source=false unity_import=false runtime_binding=false android_pixels=false'
