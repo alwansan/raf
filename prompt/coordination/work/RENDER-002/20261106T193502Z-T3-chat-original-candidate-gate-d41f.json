@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "session_id": "20261106T193502Z-T3-chat-original-candidate-gate-d41f",
+  "origin": "chat",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "base_sha": "3bc7c96a42b566f302417dde91193baab691f6ad",
+  "updated_at": "2026-11-06T19:35:02.933Z",
+  "resumed_from_sessions": [
+    "20261106T191751Z-T3-chat-spv-opname-b71e",
+    "20261106T1934Z-T3-scheduled-contract-validation-8c4e",
+    "20261106T190315Z-T3-chat-stage-cardinality-e6a2"
+  ],
+  "scope_files": [
+    ".github/workflows/raft-t3-particle108-spv-named-original-manual.yml",
+    ".github/workflows/raft-t3-shader-candidate-source-only.yml",
+    "prompt/coordination/clients/T3/sessions/20261106T193502Z-T3-chat-original-candidate-gate-d41f.md",
+    "prompt/coordination/experiments/T3/20261106T193502Z-T3-chat-original-candidate-gate-d41f.json",
+    "prompt/coordination/B_TEAM/events/T3/20261106T193502Z-T3-chat-original-candidate-gate-d41f.json",
+    "prompt/coordination/work/RENDER-002/20261106T193502Z-T3-chat-original-candidate-gate-d41f.json"
+  ],
+  "experiment_key": "T3-ZIP2-SHA15964-Particle108-eightstage-SPV-debug-resource-candidates-manual-gated-v1",
+  "resource_key": "manual-only-zip2-15964-original-4-owners-6-scenes-no-active-source-staging",
+  "hypothesis": "Prior source-free SPV debug-name candidate parser and scheduled DXBC/SPV provenance validator are published but not independently gated together; create a manual-only original SHA-pinned experiment and lightweight CI to verify both source-free test suites before any authentic source execution. Keep OpName nonauthoritative.",
+  "approach": "Create distinct manual-only eight-stage original-source workflow derived from prior authenticated original SHA-gate, using existing candidate adapter and per-stage resource counts plus strict safe report assertions. Create separate source-only CI triggered on these new workflow paths that runs Python 2 suites, compile Python and tests, no original source/network dependencies and no manual dispatch. Source-only result is NOT source authenticity or device acceptance.",
+  "constraints": [
+    "Do not alter or bypass blocked existing original workflow arming",
+    "Do not edit in-progress scheduled validator's scripts or test files",
+    "Do not dispatch expensive original ZIP2 action or native Unity build from this chat",
+    "No private stage bytes, HLSL, SPIRV, resource names/bindings or GUIDs in public artifacts",
+    "Maintain RENDER-002 OPEN / NOT_READY; trial T3 لا يحتاج"
+  ],
+  "active_jobs_at_scope": [
+    "42280404780 T2 WATER-001 source IL",
+    "42280404628 Android offline adapter; neither touched"
+  ],
+  "next_step": "Commit two isolated workflow files; observe new sourcefree CI; save session/experiment/event. Future authorized manual workflow dispatch on current vetted HEAD to extract only anonymous original SPV OpName candidate counts."
+}
