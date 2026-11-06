@@ -1,0 +1,17 @@
+{
+  "session_id": "20261106T110837Z-T1-scheduled-fft-first-divergence",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "updated_at": "2026-11-06T11:08:37Z",
+  "intended_files": [
+    "scripts/t1_fft_first_divergence.py",
+    "tests/test_t1_fft_first_divergence.py",
+    "prompt/coordination/clients/T1/sessions/20261106T110837Z-T1-scheduled-fft-first-divergence.md"
+  ],
+  "experiment_key": "T1-FFT-first-divergence-compare-vulkan-unity-structured-samples-v1",
+  "resource_key": null,
+  "hypothesis": "The first numeric mismatch can be isolated by coordinate keyed comparisons without confusing missing samples, signed zeros, NaNs or differing pass order.",
+  "base_reference": "owner run 42058825739; Vulkan 42141540903; Unity 42160755558",
+  "scope": "Independent offline comparison tool; no Unity/Actions dispatch; no game assets"
+}
