@@ -1,0 +1,22 @@
+{
+  "id": "20261106T2010Z-T5-chat-native-runtime-bytes-8c3e",
+  "owner": "T5",
+  "session_id": "20261106T2010Z-T5-chat-native-runtime-bytes-8c3e",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "type": "integration",
+  "at": "2026-11-06T20:17:17.294Z",
+  "summary": "Source-only final Unity Android runtime C# exact byte staging guard integrated before Unity Editor at 52c5e25f. CI42286390122 passed 14 tests, runtime manifests 17/17, actual post-restorer project not yet tested. Owner-direct native 42281310905 (older d6924001) failed Unity Editor on CS0234 missing AndroidPhysicalMouseCapture Editor branch (10 errors), not OOM (0). T4 now owns specific compile fix; no native retry.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/52c5e25fa189a6eb04c97f1ba054635905a84127",
+    "https://github.com/alwansan/raf/actions/runs/42286390122",
+    "https://github.com/alwansan/raf/actions/runs/42281310905",
+    "prompt/coordination/clients/T5/sessions/20261106T2010Z-T5-chat-native-runtime-bytes-8c3e.md",
+    "prompt/coordination/work/INPUT-005/T4-20261106T2014Z-T4-chat-editor-mouse-symbol-k3m9-unity-editor-symbol.json"
+  ],
+  "limits": [
+    "no actual final candidate compiled with new staging guard",
+    "no released XAPK, old owner-direct build source immutable",
+    "no gameplay/shader/phone proof or permission for duplicate native build"
+  ]
+}

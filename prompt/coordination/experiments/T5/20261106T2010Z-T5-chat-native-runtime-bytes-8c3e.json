@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T2010Z-T5-chat-native-runtime-bytes-8c3e",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "status": "completed",
+  "source_base_sha": "bb1824954bed52b48c7a14434b364ab445628fde",
+  "source_commit": "52c5e25fa189a6eb04c97f1ba054635905a84127",
+  "experiment_key": "T5-INTEGRATION-001-17-runtime-source-sha256-to-final-Unity-candidate-v1",
+  "source_test_workflow": ".github/workflows/raft-t5-native-runtime-byte-parity.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42286390122",
+  "job_id": 128128193304,
+  "commands": [
+    "python3 -W error -m unittest -v tests.test_t5_runtime_staging_parity",
+    "python3 -m scripts.t5_validate_runtime_staging_parity",
+    "python3 -m scripts.t5_validate_runtime_staging_parity --project \"$GITHUB_WORKSPACE/unity-candidate\" [future gated native]"
+  ],
+  "negative_controls": [
+    "stale changed LocalProfileStore.cs bytes rejected",
+    "missing staged LocalProfileStore.cs or unexpected extra C# rejected",
+    "symlinked file or project root rejected",
+    "native stage must follow final candidate and precede Unity Editor"
+  ],
+  "observed_result": {
+    "CI": "SUCCESS",
+    "checks": 14,
+    "runtime_names": 17,
+    "actual_unity_candidate_hashes_read": false,
+    "new_native_job_run": false,
+    "failed_owner_run": 42281310905,
+    "first_native_compile_error": "CS0234 x10",
+    "OOM_kill": 0,
+    "device_verified": false
+  },
+  "limitations": [
+    "Original Unity project only future native stage can attest",
+    "T4 owns editor symbol fix: active independent scope",
+    "Owner-direct 42281310905 pinned older source, no signed output"
+  ],
+  "updated_at": "2026-11-06T20:17:17.294Z",
+  "next_step": "Consume T4 editor-branch CLR RED/GREEN evidence and conditionally plan one later permitted signed build without duplicating original run."
+}

@@ -5,9 +5,9 @@
   "session_id": "20261106T2010Z-T5-chat-native-runtime-bytes-8c3e",
   "origin": "chat",
   "issue_id": "INTEGRATION-001",
-  "status": "active",
+  "status": "completed",
   "base_sha": "bb1824954bed52b48c7a14434b364ab445628fde",
-  "updated_at": "2026-11-06T20:10:56.354Z",
+  "updated_at": "2026-11-06T20:17:17.294Z",
   "resumed_from_sessions": [
     "20261106T1959Z-T5-chat-texenv-structural-f6a9",
     "20261106T1950Z-T5-chat-native-stage-shift-4c6b",
@@ -35,7 +35,28 @@
     "T5 20261106T1710Z-T5-chat-crossclient-copy-parity-a6d9"
   ],
   "coordination": "Do not edit T4 LocalProfileStore or its tests; T1/T2/T3 water shaders, T4 local save/owner original source, T5 scheduled ZIP tester or native milestone tester paths untouched. Only insert fail-closed native staging guard on future source SHA, not in already-running owner-native immutable 42281310905.",
-  "run_urls": [],
-  "result": null,
-  "next_step": "Source/tests+source-only CI; verify live native workflow stage placement and actual runner result; record no phone/native claims."
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42286390122",
+    "https://github.com/alwansan/raf/actions/runs/42281310905"
+  ],
+  "result": {
+    "status": "SUCCESS_SOURCE_ONLY",
+    "source_commit": "52c5e25fa189a6eb04c97f1ba054635905a84127",
+    "CI_run": 42286390122,
+    "CI_job": 128128193304,
+    "source_only_tests_passed": 14,
+    "source_manifest_files": 17,
+    "final_staging_byte_equality_checked_synthetically": true,
+    "actual_native_Unity_project_checked": false,
+    "owner_native_42281310905": {
+      "source": "d692400115c36c4839fa4f4954e5f6ed1c60d413",
+      "status": "FAILED",
+      "first_native_step": "Unity Editor 2021.3.45f2 Android import and compile",
+      "first_error": "CS0234: missing Editor visibility of AndroidPhysicalMouseCapture; 10 actual compile errors",
+      "OOM_kernel_occurrences": 0,
+      "install_package_produced": false
+    },
+    "T4_owned_fix_scope": "20261106T2014Z-T4-chat-editor-mouse-symbol-k3m9"
+  },
+  "next_step": "Scope released; current native source/SDK compile guard is T4-owned, wait for its RED→GREEN 2021 Editor ABI test. No duplicate Unity native build; no source newer than d692400 is present in failed owner build."
 }
