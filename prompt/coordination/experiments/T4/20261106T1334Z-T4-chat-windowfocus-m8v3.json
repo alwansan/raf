@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261106T1334Z-T4-chat-windowfocus-m8v3",
+  "origin": "chat",
+  "issue_id": "INPUT-005",
+  "hypothesis": "Android native main-window focus may be false during overlay while Unity focus flag stays true.",
+  "source_commit": "1496971df6f14335b5d479d8cc488d7636a998be",
+  "input_hashes": [],
+  "tool_versions": {
+    "Android_Activity_hasWindowFocus": "API3+ official Android SDK",
+    "Unity2021_original_managed": "ZIP2 exact SHA-pinned original managed API verified in workflow"
+  },
+  "commands": [
+    "python3 -m unittest discover -s tests -p test_t4_android_immersive_system_bars.py -v",
+    "dotnet run --project android-port/Tests/ImmersiveBars/ImmersiveBars.csproj -c Release",
+    "dotnet build android-port/Tests/ImmersiveBars/UnityManagedCompile.csproj -c Release -p:OriginalManagedDir=..."
+  ],
+  "negative_controls": [
+    "Unity focused=true but Android Activity.hasWindowFocus=false -> suppress",
+    "original focused Activity+same generation -> permit",
+    "new Activity or stale generation -> suppress",
+    "paused or disabled -> suppress",
+    "modern and legacy apply sites must each query window focus"
+  ],
+  "workflow_path": ".github/workflows/raft-t4-immersive-system-bars.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42227039188",
+  "artifact_urls": [],
+  "budget": "existing 9min source-only workflow and genuine Unity2021 managed ABI; no native Unity Player/actual phone",
+  "status": "waiting_ci",
+  "observed_result": null,
+  "limitations": [
+    "Android window focus source/compiled ABI is not Android device behavior; owner 5 Nov APK predates new guard.",
+    "Focus query before Java UI mutation cannot establish OS bars visibility on actual hardware."
+  ],
+  "integration_commit": "1496971df6f14335b5d479d8cc488d7636a998be",
+  "next_step": "Verify exact 42227039188 final run and source log; hand off matching signed APK/OBB and real focus/home mouse tests to T5."
+}
