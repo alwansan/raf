@@ -1,0 +1,20 @@
+{
+  "session_id": "20261106T1310Z-T1-scheduled-ulp32-m4q8",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "status": "in_progress",
+  "base_sha": "90149d3f7ec3f89a40dcaad976f8102737370693",
+  "experiment_key": "fft-coordinate-first-difference-float32-ulp-diagnostic-v1",
+  "files": [
+    "scripts/t1_fft_coordinate_probe_compare.py",
+    "tests/test_t1_fft_coordinate_probe_compare.py"
+  ],
+  "resource": "source-only Python; no GPU/Unity/Actions",
+  "hypothesis": "A float32 ULP distance alongside absolute delta discriminates 1-ULP roundoff from large coordinate errors without exposing private samples.",
+  "overlap": "T1 chat original HLSL SSA lane workflow 42221700354 still running; do not edit it or launch equivalent CI.",
+  "resumed_from": [
+    "20261106T125645Z-T1-chat-hlsl-x-stop-a93d",
+    "20261106T1215Z-T1-scheduled-coordinate-overflow-r6q2"
+  ],
+  "owner_device_run": 42058825739
+}
