@@ -2,8 +2,8 @@
   "session_id": "20261106T094126Z-T2-chat-cb0-gate-ci-83e1",
   "origin": "chat",
   "issue_id": "WATER-001",
-  "status": "active",
-  "updated_at": "2026-11-06T09:47:00Z",
+  "status": "completed_T2_event_identity_metadata_external_T4_blocker_reported",
+  "updated_at": "2026-11-06T09:50:00Z",
   "base_sha": "e3fb67812368fb6cafd327c9e99ce1886eea1b57",
   "experiment_key": "t2-inherited-event-schema-identity-repair-ci-failure-42197371532-v1",
   "resource_key": null,
@@ -17,7 +17,23 @@
   "hypothesis": "Canonical summary refresh failed at source-authentic scheduled T2 CB0 event missing required id; this session's new own T2 event also omitted id, so normalize only missing unique id and owner without changing evidence/result contents or other clients' events.",
   "evidence_run": "https://github.com/alwansan/raf/actions/runs/42197371532",
   "original_error": "ValueError: Missing record identity: prompt/coordination/B_TEAM/events/T2/20261106T0720Z-T2-scheduled-cb0-extent-gate-d4e2.json",
-  "next_step": "Use GitHub expected blob SHA updates on only the two observed T2 event files; allow canonical refresher to revalidate ledger, repair additional demonstrated blockers if any; no authored source changes.",
+  "next_step": "T4 owns the independently failing T4 event; T2 should not overwrite it. Resume CB0 member ABI/upload original proof. Refresh summary remains blocked until T4 fixes id.",
   "remaining_external_blocker": "T4 event 20261106T0740Z-zero-view-identity-guard-p4k8.json missing canonical id; DO NOT edit T4 event from T2 session.",
-  "latest_failed_regen_run": "https://github.com/alwansan/raf/actions/runs/42197783466"
+  "latest_failed_regen_run": "https://github.com/alwansan/raf/actions/runs/42197783466",
+  "t2_events_fixed": [
+    {
+      "path": "prompt/coordination/B_TEAM/events/T2/20261106T0720Z-T2-scheduled-cb0-extent-gate-d4e2.json",
+      "commit": "453c96a72abe5eba3667ff84d9124ced2a5bd07f"
+    },
+    {
+      "path": "prompt/coordination/B_TEAM/events/T2/20261106T094126Z-T2-chat-cb0-gate-ci-83e1-result.json",
+      "commit": "909086b0e075b0df56417fc3d4a8dcaad5fe97e5"
+    }
+  ],
+  "validation": {
+    "first_failure_run": "https://github.com/alwansan/raf/actions/runs/42197371532",
+    "after_t2_fixes_run": "https://github.com/alwansan/raf/actions/runs/42197783466",
+    "after_t2_fixes_error": "Missing record identity T4/20261106T0740Z-zero-view-identity-guard-p4k8.json",
+    "handoff": "prompt/coordination/discussions/INTEGRATION-001/20261106T094126Z-T2-chat-cb0-gate-ci-83e1-T4-summary-event-schema-blocker.md"
+  }
 }
