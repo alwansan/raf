@@ -45,6 +45,39 @@ class MouseOriginalPatchTests(unittest.TestCase):
                 self.assertIn(SHIM, path.read_text(encoding="utf-8"))
             self.assertEqual(len(list(backup.rglob("*.cs"))), 4)
 
+    def test_original_changes_after_replacement_plan_must_not_be_overwritten(self):
+        # The external Unity stage could rewrite a C# source after a lexical
+        # replacement plan was computed. A later backup of the new bytes is NOT
+        # proof that installing the old planned result is safe.
+        from scripts import t4_adapt_original_mouse_axes as stage
+        with tempfile.TemporaryDirectory() as temp:
+            _, source_root, backup, originals = self._source_and_backup(temp)
+            changed = source_root / "Camera0.cs"
+            authentic_plan = stage.replacement_plan
+            intervening_edit = b"// synthetic independent source edit after planning\n"
+
+            def change_after_plan(*args, **kwargs):
+                plan = authentic_plan(*args, **kwargs)
+                changed.write_bytes(changed.read_bytes() + intervening_edit)
+                return plan
+
+            with mock_patch("scripts.t4_adapt_original_mouse_axes.replacement_plan",
+                            side_effect=change_after_plan):
+                with self.assertRaisesRegex(ValueError, "changed after source plan"):
+                    self._invoke(source_root, backup)
+            self.assertEqual(changed.read_bytes(),
+                             originals[changed] + intervening_edit)
+            for source, original_bytes in originals.items():
+                if source != changed:
+                    self.assertEqual(source.read_bytes(), original_bytes)
+            self.assertFalse(backup.exists(), "stale original plan cannot acquire backup or mutate")
+            # Retrying against the now-current sources must recalculate the
+            # plan and retain the other writer's addition byte-for-byte.
+            self.assertTrue(self._invoke(source_root, backup)["applied"])
+            self.assertIn(intervening_edit, changed.read_bytes())
+            self.assertEqual((backup / changed.name).read_bytes(),
+                             originals[changed] + intervening_edit)
+
     def test_interrupted_original_backup_copy_leaves_all_originals_and_retryable(self):
         with tempfile.TemporaryDirectory() as temp:
             _, source_root, backup, original = self._source_and_backup(temp)
