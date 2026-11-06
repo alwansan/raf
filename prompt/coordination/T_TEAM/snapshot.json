@@ -6475,6 +6475,34 @@
       "_record_path": "../B_TEAM/events/T1/20261106T124531Z-T1-chat-butterflyx-vector-writer-a6f3.json"
     },
     {
+      "id": "20261106T125300Z-T1-chat-hlsl-deep-lane-8e4c",
+      "owner": "T1",
+      "session_id": "20261106T125300Z-T1-chat-hlsl-deep-lane-8e4c",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "at": "2026-11-06T12:55:24.755Z",
+      "summary": "Source-authentic original/roundtrip FFT glslang SPIR-V at supported coordinate-depth12: Source X/Y reach load, butterfly1 X ends unresolved (previous default depth4 ended depth_limit), butterfly1 Y hits constant; butterfly2 X/Y unresolved. Thus short depth alone does not explain translated X; private whole-slice has OpPhi and OpIAdd but no proven X-specific stop opcode. Scheduled T1 coordinate probe comparator tests validated on exact checkout 10/10 PASS. All CI 42221101286 SUCCESS, original recovery, same-Vulkan roundtrip, scratch cleanup. Original↔Unity numerical parity and Android water unproven.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42221101286",
+        "https://github.com/alwansan/raf/commit/327c1b6431ad75de2a215c338e91c359e2f0a8f7"
+      ],
+      "_record_path": "../B_TEAM/events/T1/20261106T125300Z-T1-chat-hlsl-deep-lane-8e4c.json"
+    },
+    {
+      "id": "20261106T125645Z-T1-chat-hlsl-x-stop-a93d",
+      "owner": "T1",
+      "session_id": "20261106T125645Z-T1-chat-hlsl-x-stop-a93d",
+      "issue_id": "WATER-001",
+      "type": "progress",
+      "at": "2026-11-06T13:01:20.727Z",
+      "summary": "New bounded HLSL FFT butterfly1 X unresolved-lane stop opcode and numeric-kind reporter added; four synthetic tests for OpPhi/OpIAdd/unknown sanitization/resolved-load backward compatibility passed in original CI test gate. Run 42221700354 source authentic Vulkan stage still in progress while runner installs dependencies. No actual X stop opcode claimed yet, no original source bits or raw IDs emitted, no Android water fix.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42221700354",
+        "https://github.com/alwansan/raf/commit/952c2a3f74f6e2623dc9bcbdbfd6cd3a143421c1"
+      ],
+      "_record_path": "../B_TEAM/events/T1/20261106T125645Z-T1-chat-hlsl-x-stop-a93d.json"
+    },
+    {
       "id": "T2-20261104T2354Z-start-foamabi",
       "owner": "T2",
       "session_id": "20261104T2354Z-T2-foamabi01",
@@ -7161,6 +7189,24 @@
       "limitations": "No original source symbols/values/IL private binary published; no game ShaderLab or .meta/GUID/content/native workflow edits; static stfld sites do not prove runtime writes or original Foam Shader binding.",
       "next_step": "Authentically tie loaded Material field to its producer and actual Foam shader; verify 3 field value writers and all original CB0 upload ranges before integration.",
       "_record_path": "../B_TEAM/events/T2/20261106T1250Z-T2-chat-CB0-fieldwriters-materialprefix-7b2e-result.json"
+    },
+    {
+      "id": "20261106T1306Z-T2-chat-material-field-assignment-8e6a-result",
+      "session_id": "20261106T1306Z-T2-chat-material-field-assignment-8e6a",
+      "owner": "T2",
+      "origin": "chat",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "at": "2026-11-06T13:07:00Z",
+      "summary": "Real SHA-original Foam source/member to typed Material.SetVector receiver field audit CI42222313603 SUCCESS (11 sourcefree tests+Cecil negatives). Exactly one typed Material field used by the source-authenticated setter has exactly one original compiled stfld writer site in one method. Same writer method contains Material constructor, no Shader.Find/Renderer.material getter; direct stfld value producer unproven. No Material.shader Foam identity, 160B CB0 upload or Android water verified. WATER-001 OPEN.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42222313603",
+        "docs/T2_FOAM_ORIGINAL_MATERIAL_FIELD_ASSIGNMENT_2026-11-06.md",
+        "https://github.com/alwansan/raf/commit/cf5a01b3149128c8ca6ee995537896baf2df524b"
+      ],
+      "limits": "Material ctor same-method co-occurrence is not assignment producer proof; no original source names/bytes or method labels published; no game shader/meta/native alterations.",
+      "next_step": "Trace exact original stfld stack value back through local/ctor and Shader first formal; verify Foam material association separately before device shader integration.",
+      "_record_path": "../B_TEAM/events/T2/20261106T1306Z-T2-chat-material-field-assignment-8e6a-result.json"
     },
     {
       "id": "T2-20261105T2115Z-chat-precall-operand-4be0-result",
@@ -9444,7 +9490,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "c4642c74667c555eb69e88f1210ead66cf36a6a8989cd5cc06b3babb169849ef",
+  "source_input_sha256": "0d1bffc4a8edb27951e65ee909e6e15e60302e1eed54a820801eaf2cd35fc88e",
   "generation": "T-2026-11-05",
-  "input_sha256": "d42e47833f52e707ff0e494e9027aa0c2fc9f5bce5fcd21ea9eee45b0c1bfda5"
+  "input_sha256": "0e770a89f964e4bda5a5a33c7a5b34f9c203be92913e08cbe3002d9ea1671804"
 }
