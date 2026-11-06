@@ -1,0 +1,19 @@
+{
+  "session_id": "20261106T0910Z-T1-scheduled-j6k3",
+  "origin": "scheduled",
+  "issue_id": "WATER-001",
+  "baseline_sha": "c16e7ac515b342f064f1e398043be98c112df36c",
+  "status": "active",
+  "intended_files": [
+    "scripts/t1_fft_unity_evidence_gate.py",
+    "tests/test_t1_fft_unity_evidence_gate.py",
+    "prompt/coordination/clients/T1/sessions/20261106T0910Z-T1-scheduled-j6k3.md"
+  ],
+  "hypothesis": "JSON duplicate keys silently overwrite contradictory sanitized FFT evidence; fail closed before classification.",
+  "experiment_key": "t1-fft-evidence-json-duplicate-key-failclosed-v1",
+  "resource_key": null,
+  "taken_over_from": [
+    "prompt/coordination/clients/T1/sessions/20261106T0813Z-T1-scheduled-q4n8.md"
+  ],
+  "updated_at": "2026-11-06T09:10:35Z"
+}
