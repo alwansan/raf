@@ -1,0 +1,11 @@
+# T2 — original Foam two-pass Vulkan descriptor cross-stage layout
+
+- session_id: `20261106T021504Z-T2-chat-foam-descriptor-collision-c7e8`; origin chat; status active
+- resumed_from_sessions: `20261106T0145Z-T2-chat-foam-stage-io-9c4a`; `20261106T0120Z-T2-scheduled-json-evidence-7c91`
+- base SHA `e41ee753de4342aff8e1359f258a03c05fab584a`; issue WATER-001; work `prompt/coordination/work/WATER-001/T2-20261106T021504Z-T2-chat-foam-descriptor-collision-c7e8.json`; experiment `zip2_15964ea8_Foam_full_private_ShaderLab_spirv_VSFS_descriptor_set_binding_type_overlap_v1`
+- Source immutable: ZIP2 `15964ea8f246b6e076ce26b60931ee2e1a9a2385`, original `sharedassets0.assets` 115978112B SHA `0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3`, Foam shader raw SHA `67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1`.
+- Prior SHA-real [CI42146401691](https://github.com/alwansan/raf/actions/runs/42146401691) PASS 41 synthetic + 4 real stages, pass0 varying ABI 3/3 and pass1 2/2. Original B20/T2 registered source b0/b1/b2 cb and pass0 fragment samplers/images; potential cross-stage descriptor binding collisions cannot be inferred solely from independent compilation/VS-FS varying match.
+- New objective: reflect actual 4 compiled stage binaries from **fully assembled private** original ShaderLab, compare Vulkan set/binding descriptor classes and array/CB byte ranges per pass, detect exact conflicts by numeric internal keys without publishing source symbols or slot IDs.
+- Scope file list: `scripts/t2_foam_embedded_descriptor_layout.py`, `tests/test_t2_foam_embedded_descriptor_layout.py`, own isolated `.github/workflows/raft-t2-foam-private-shaderlab-candidate.yml` addition and this session's work/experiment/event/docs.
+- Results must distinguish raw Vulkan pipeline layout collisions from **actual Unity importer** and runtime Material/CB0 textures, which remain untested. Use only bounded category-only safe JSON, delete original HLSL/private shader/SPV, no game asset/meta/GUID, no T1/T3/T4/T5 edits, no full native build or workflow cancellation.
+- next: synthetic compile+reflection controls, exact source CI, checkpoint result. WATER-001 OPEN and NOT_READY.

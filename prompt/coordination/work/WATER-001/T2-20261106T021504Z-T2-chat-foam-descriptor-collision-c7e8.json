@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261106T021504Z-T2-chat-foam-descriptor-collision-c7e8",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "e41ee753de4342aff8e1359f258a03c05fab584a",
+  "experiment_key": "zip2_15964ea8_Foam_full_private_ShaderLab_spirv_VSFS_descriptor_set_binding_type_overlap_v1",
+  "resource_key": "Foam/Shader2420/privateVulkan1.1/2pass+4stages/descriptor-layout",
+  "source_pin": {
+    "zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "owner_bytes": 115978112,
+    "owner_sha256": "0498f738dc86e90ebfb2c29da6860ba74e5f81de727ff279d419497c1628a3c3",
+    "shader_object_sha256": "67bd7a7fadd7934c9b2b4925945c2df2a489e14b34692ce3c721aeffd63166b1"
+  },
+  "resumed_from_sessions": [
+    "20261106T0145Z-T2-chat-foam-stage-io-9c4a",
+    "20261106T0120Z-T2-scheduled-json-evidence-7c91"
+  ],
+  "hypothesis": "Compiled Vulkan stages derived from original two-pass Foam private ShaderLab may contain duplicate (set,binding) slots assigned different resource classes (e.g. vertex UBO vs fragment sampler/image), invisible to individual spirv-val and numeric VS→FS varying ABI. A real per-stage descriptor reflection join will distinguish exact collision/missing source.",
+  "approach": "SHA-authenticate source as previous T2 original workflow, assemble original 2-pass private ShaderLab, extract HLSLPROGRAM and compile all 4 stages, reflect with spirv-cross; bounded unique descriptor keys (set,binding) per stage, cross-stage join requiring same class/shape for shared slots and safe CB block size differences; report only bounded counts/class categories, not private slot IDs/names/HLSL/compiled bytes. Test adversarial duplicates, array/type/stage category mismatches, fake compiler. Do not claim Unity pipeline or any device recovery.",
+  "intended_files": [
+    "scripts/t2_foam_embedded_descriptor_layout.py",
+    "tests/test_t2_foam_embedded_descriptor_layout.py",
+    ".github/workflows/raft-t2-foam-private-shaderlab-candidate.yml",
+    "prompt/coordination/work/WATER-001/T2-20261106T021504Z-T2-chat-foam-descriptor-collision-c7e8.json",
+    "prompt/coordination/clients/T2/sessions/20261106T021504Z-T2-chat-foam-descriptor-collision-c7e8.md",
+    "prompt/coordination/experiments/T2/T2-20261106T021504Z-T2-chat-foam-descriptor-collision-c7e8.json",
+    "prompt/coordination/B_TEAM/events/T2/20261106T021504Z-T2-chat-foam-descriptor-collision-c7e8-result.json",
+    "docs/T2_FOAM_PRIVATE_VULKAN_DESCRIPTOR_LAYOUT_2026-11-06.md"
+  ],
+  "prior_verified": "CI42146401691 all actual SPIR-V vertex↔fragment numeric varying 3/3 and 2/2; existing source-original Stage HLSL 4/4; source UBO/Sampler registries and per-stage actual descriptor cross-stage collision not yet measured. WATER-001 OPEN.",
+  "run_urls": [],
+  "updated_at": "2026-11-06T02:15:04Z",
+  "next_step": "Implement independent descriptor set/binding/class collision check on fully assembled original private ShaderLab and source-authentic CI."
+}
