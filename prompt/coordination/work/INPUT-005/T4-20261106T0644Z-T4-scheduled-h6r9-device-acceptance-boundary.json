@@ -1,0 +1,19 @@
+{
+  "session_id": "20261106T0644Z-T4-scheduled-h6r9",
+  "origin": "scheduled",
+  "issue_id": "INPUT-005",
+  "status": "active",
+  "base_sha": "fc86bb1ef5c343c0f299dc71c9a17ec2f1d4a437",
+  "updated_at": "2026-11-06T06:44:00Z",
+  "intended_files": [
+    "prompt/coordination/work/INPUT-005/T4-20261106T0644Z-T4-scheduled-h6r9-device-acceptance-boundary.json",
+    "prompt/coordination/clients/T4/sessions/20261106T0644Z-T4-scheduled-h6r9.md"
+  ],
+  "experiment_key": "T4-physical-pointer-View-identity-device-acceptance-CL520c-baseline-v1",
+  "resource_key": null,
+  "hypothesis": "Source CI success cannot establish Android pointer capture, Raft cursor, or OS bars; classify exact device evidence required without rerunning existing CI.",
+  "taken_over_from": [
+    "prompt/coordination/clients/T4/sessions/20261106T0542Z-T4-scheduled-c8v5.md",
+    "prompt/coordination/clients/T4/sessions/20261106T0246Z-T4-chat-original-owner-save-roundtrip-j4q8.md"
+  ]
+}
