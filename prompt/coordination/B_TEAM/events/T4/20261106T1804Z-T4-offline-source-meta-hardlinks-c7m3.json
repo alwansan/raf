@@ -1,0 +1,18 @@
+{
+  "id": "20261106T1804Z-T4-offline-source-meta-hardlinks-c7m3",
+  "owner": "T4",
+  "session_id": "20261106T1801Z-T4-chat-offline-hardlink-safety-c7m3",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "type": "source_fixed",
+  "summary": "T4 found Android offline 13-source original CSharp/.meta stage did not reject hardlinks unlike Save path adapter. RED CI42266760305 2 new symlink-independent real Linux synthetic inode tests failed (ValueError not raised) while 19 old controls passed. PRODUCTION e88c54fa3f2add8cb05397a1cd8f90ab53fec2a7 rejects st_nlink !=1 before backup/overwrite. GREEN exact-source B13 fault-injection job128060948927 SUCCESS 21/21; B13 full run42266868340 FAILURE only from downstream B-team summary existing T3 event missing identity (job128061025208), not this source test. Same-source B14 path, B07 coroutine, original local startup and reconstruction preflight SUCCESS. No phone, private game files, native APK or user RGD. T4 r1 needs vote unchanged based earlier mouse integration.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42266760305",
+    "https://github.com/alwansan/raf/commit/e88c54fa3f2add8cb05397a1cd8f90ab53fec2a7",
+    "https://github.com/alwansan/raf/actions/runs/42266868340",
+    "https://github.com/alwansan/raf/actions/runs/42266867777",
+    "https://github.com/alwansan/raf/actions/runs/42266868238",
+    "https://github.com/alwansan/raf/blob/feature/android-native-port/docs/T4_ORIGINAL_OFFLINE_SOURCE_HARDLINK_GUARD_2026-11-06.md"
+  ],
+  "at": "2026-11-06T18:04:00Z"
+}
