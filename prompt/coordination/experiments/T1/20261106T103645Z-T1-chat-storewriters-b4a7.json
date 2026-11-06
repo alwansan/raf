@@ -26,14 +26,59 @@
   "run_url": "https://github.com/alwansan/raf/actions/runs/42204760126",
   "artifact_urls": [],
   "budget": "Existing isolated 20-minute Ubuntu-24.04 workflow; no Unity Editor build, no native Android build, no public raw original output",
-  "status": "waiting_ci",
-  "observed_result": "Runner step 3 synthetic suite completed successfully; original source acquisition step 5 completed; step 6 was in progress at last check. Local separate synthetic 8/8 PASS.",
-  "rejected_hypotheses": [],
+  "status": "completed_scoped_original_audit",
+  "observed_result": {
+    "run": "https://github.com/alwansan/raf/actions/runs/42204760126",
+    "run_conclusion": "success",
+    "job_id": 127848498727,
+    "exact_source_unittests": "8/8 PASS GitHub Actions and local",
+    "authenticated_input": "ZIP2 SHA pin; private original SPIR-V layout check passed",
+    "direct_store_candidate_census": [
+      {
+        "site": 0,
+        "role": "source",
+        "x": 3,
+        "y": 3,
+        "writer_opcodes": {
+          "OpVectorShuffle": 3
+        },
+        "numeric_kind": "float32"
+      },
+      {
+        "site": 1,
+        "role": "butterfly",
+        "x": 3,
+        "y": 3,
+        "writer_opcodes": {
+          "OpVectorShuffle": 3
+        },
+        "numeric_kind": "float32"
+      },
+      {
+        "site": 2,
+        "role": "butterfly",
+        "x": 8,
+        "y": 8,
+        "writer_opcodes": {
+          "OpVectorShuffle": 7,
+          "OpImageFetch": 1
+        },
+        "numeric_kind": "float32"
+      }
+    ],
+    "all_lanes_bitcast": "float32_to_sint32:1",
+    "reaching_definition_proven": false,
+    "authored_kernel_identity_proven": false,
+    "android_pixels_verified": false
+  },
+  "rejected_hypotheses": [
+    "Both butterfly sites have exactly one unambiguous store producer; disproven by counts 3 and 8, which remain static candidates only."
+  ],
   "limitations": [
     "Direct OpStore candidate counts are NOT reaching definitions; pointer aliases/branches/function calls unverified",
     "No original authored kernel index, numerical pixel match, Adreno/Android device proof",
     "Private original SPIR-V never published"
   ],
   "integration_commit": "ac6c8c4fb5e7cd2651baabe4d4900f3c6ef93440",
-  "next_step": "Inspect only bounded RAFT_T1_FFT_LOCAL_STORE_CANDIDATES label after actual CI; note site1 X and site2 X/Y. If step fails, isolate compilation-versus-audit and adjust once with fresh scope lease."
+  "next_step": "CFG-aware reaching-write proof for butterfly site1 X and site2 X/Y; inspect OpVectorShuffle lane sources before any shader operand rewrite, repeat paired Vulkan/Unity parity only for distinct supported candidate."
 }
