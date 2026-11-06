@@ -88,7 +88,7 @@ class OriginalParticle108RoundtripTests(unittest.TestCase):
 
     def test_boolean_register_and_duplicate_spirv_location_rejected(self):
         sv=stage(); sf=stage()
-        with self.assertRaisesRegex(ValueError,"unbounded_original_fragment_register"):
+        with self.assertRaisesRegex(ValueError,"invalid_original_fragment_used_mask_record"):
             self.check(sv,sf,sv,sf,[original_record(reg=True)])
         duplicate=stage(outputs=[(0,"vec4"),(0,"vec3")])
         with self.assertRaisesRegex(ValueError,"duplicate_private_SPIRV_IO_location"):
