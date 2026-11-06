@@ -39,6 +39,19 @@ def classify(record):
     }
 
 
+
+def parse_sanitized_json(raw):
+    """Reject duplicate keys before classifying an untrusted evidence record."""
+    def unique_pairs(pairs):
+        record = {}
+        for key, value in pairs:
+            if key in record:
+                raise ValueError('duplicate Unity evidence field')
+            record[key] = value
+        return record
+    return classify(json.loads(raw, object_pairs_hook=unique_pairs))
+
+
 def main():
     import argparse
     from pathlib import Path
@@ -47,7 +60,7 @@ def main():
     args = p.parse_args()
     if args.sanitized_json.is_symlink() or args.sanitized_json.stat().st_size > 4096:
         p.error('invalid evidence file')
-    print(json.dumps(classify(json.loads(args.sanitized_json.read_text())), sort_keys=True))
+    print(json.dumps(parse_sanitized_json(args.sanitized_json.read_text()), sort_keys=True))
 
 
 if __name__ == '__main__':
