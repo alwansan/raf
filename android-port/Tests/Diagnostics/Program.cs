@@ -255,7 +255,7 @@ class Program
             AndroidRuntimeLog.Shutdown();
             string recoveredLogs = Path.Combine(blockedAppRoot, "raft-logs");
             Require(Directory.GetFiles(recoveredLogs, "raft-*.jsonl").Length == 1);
-            Require(Lines(recoveredLogs).Any(l => l.Contains("\\"operation\\":\\"logger.ready\\"")));
+            Require(Lines(recoveredLogs).Any(l => l.Contains("\"operation\":\"logger.ready\"")));
             foreach (string line in Lines(recoveredLogs))
                 using (JsonDocument.Parse(line)) { }
             Console.WriteLine("RAFT_PERSISTENT_LOG_TEST checks=" + checks + " passed=true actualAndroidStorageVerified=false");
