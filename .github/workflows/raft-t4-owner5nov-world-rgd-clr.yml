@@ -1,0 +1,190 @@
+name: T4 LOCAL-005 genuine owner 5Nov seven World RGDs original CLR compatibility
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/android-native-port]
+    paths:
+      - 'android-port/Experiments/T4/ClWorldRgdRuntime/Program.cs'
+      - 'scripts/t4_stage_owner5nov_world_rgds.py'
+      - 'tests/test_t4_stage_owner5nov_world_rgds.py'
+      - '.github/workflows/raft-t4-owner5nov-world-rgd-clr.yml'
+permissions:
+  contents: read
+concurrency:
+  group: raft-t4-owner5nov-original-clr-readonly-v1
+  cancel-in-progress: false
+jobs:
+  original-managed-typed-load-on-authentic-owner-world-saves:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Read only T4 bounded verifier and production-original loader test source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /android-port/Experiments/T4/ClWorldRgdRuntime/
+            /scripts/t4_stage_owner5nov_world_rgds.py
+            /tests/test_t4_stage_owner5nov_world_rgds.py
+      - name: Validate source-free exact-identity negative controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PYTHONDONTWRITEBYTECODE=1
+          python3 -m unittest discover -s tests -p test_t4_stage_owner5nov_world_rgds.py -v
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Compile isolated original LoadT harness without original data
+        shell: bash
+        run: |
+          set -euo pipefail
+          ulimit -c 0
+          timeout 140s dotnet publish android-port/Experiments/T4/ClWorldRgdRuntime/ClWorldRgdRuntime.csproj \
+            -c Release --self-contained false -o "$RUNNER_TEMP/t4-owner5nov-clr" \
+            > "$RUNNER_TEMP/t4-owner5nov-compile.private" 2>&1 || {
+              python3 - <<'PY'
+          import collections, os, pathlib, re
+          data=(pathlib.Path(os.environ["RUNNER_TEMP"])/"t4-owner5nov-compile.private").read_text(errors="replace")
+          print("T4_OWNER_5NOV_BUILD_ERROR_CODES",dict(collections.Counter(re.findall(r"error +((?:CS|NU|NETSDK)\d+)",data))))
+          PY
+              exit 1
+            }
+          test -s "$RUNNER_TEMP/t4-owner5nov-clr/ClWorldRgdRuntime.dll"
+      - name: Checkout immutable original game compiled CLR DLL
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: original-game
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /Raft/Raft_Data/Managed/Assembly-CSharp.dll
+      - name: Checkout immutable set of 151 original managed CLR companions
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 02e9fba7fb42b83579595885391be636ee3b56e8
+          path: original-companions
+          persist-credentials: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /Raft/Raft_Data/Managed/
+      - name: Checkout exact 5-Nov owner phone CL World files without player identity in workflow
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/CL
+          ref: 520c4cf409aa20a4db54ff80ed87d8807d9cba57
+          path: owner-cl
+          persist-credentials: false
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /raft log/انتاج مسار /9/com.alwansan.raft.androidtest/files/User/
+      - name: Verify all exact immutable input commits, original SHA, and isolated resource budget
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C original-game rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          test "$(git -C original-companions rev-parse HEAD)" = 02e9fba7fb42b83579595885391be636ee3b56e8
+          test "$(git -C owner-cl rev-parse HEAD)" = 520c4cf409aa20a4db54ff80ed87d8807d9cba57
+          test "$(df -Pk . | awk 'NR==2 {print $4}')" -gt 900000
+          mkdir -p "$RUNNER_TEMP/t4-owner-original-managed"
+          for p in original-companions/Raft/Raft_Data/Managed/*.dll; do
+            test ! -L "$p"
+            if [ "$(basename "$p")" != "Assembly-CSharp.dll" ]; then
+              cp "$p" "$RUNNER_TEMP/t4-owner-original-managed/"
+            fi
+          done
+          test "$(find "$RUNNER_TEMP/t4-owner-original-managed" -maxdepth 1 -type f -name '*.dll' | wc -l)" -eq 151
+          orig=original-game/Raft/Raft_Data/Managed/Assembly-CSharp.dll
+          test ! -L "$orig"
+          test "$(stat -c '%s' "$orig")" -eq 3211776
+          echo "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e  $orig" | sha256sum --check --status
+          cp "$orig" "$RUNNER_TEMP/t4-owner-original-managed/Assembly-CSharp.dll"
+          echo "T4_OWNER_5NOV_SOURCE exactOriginalDll=true companions=151 ownerCLPin=true"
+      - name: Verify seven 5-Nov owner World RGD Git blobs BEFORE isolated staging
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/t4_stage_owner5nov_world_rgds.py \
+            --checkout owner-cl \
+            --stage-dir "$RUNNER_TEMP/t4-owner-original-managed/owner-private"
+          test "$(find "$RUNNER_TEMP/t4-owner-original-managed/owner-private" -maxdepth 1 -type f -name 'owner*.rgd' | wc -l)" -eq 7
+      - name: Exercise actual original compiled SaveAndLoad.LoadT on each owner phone world save
+        shell: bash
+        run: |
+          set -euo pipefail
+          ulimit -c 0
+          export DOTNET_DbgEnableMiniDump=0 COMPlus_DbgEnableMiniDump=0 DOTNET_EnableCrashReport=0
+          for i in 01 02 03 04 05 06 07; do
+            timeout 40s dotnet "$RUNNER_TEMP/t4-owner5nov-clr/ClWorldRgdRuntime.dll" \
+              --assembly "$RUNNER_TEMP/t4-owner-original-managed/Assembly-CSharp.dll" \
+              --seed "$RUNNER_TEMP/t4-owner-original-managed/owner-private/owner$i.rgd" \
+              --output "$RUNNER_TEMP/t4-owner$i-result.json" --original-loadt \
+              >"$RUNNER_TEMP/t4-owner$i-private-output.log" 2>&1 || {
+                echo "T4_OWNER_5NOV_CLR category=RUNTIME_INCONCLUSIVE private_error_printed=false"
+                exit 1
+              }
+          done
+          python3 - <<'PY'
+          import collections,json,os
+          from pathlib import Path
+          base=Path(os.environ["RUNNER_TEMP"])
+          results=[]
+          for i in range(1,8):
+              j=json.loads((base/f"t4-owner{i:02d}-result.json").read_text())
+              assert j["source"]=="IMMUTABLE_SHA_VERIFIED_PUBLIC_CL_WORLD_RGD"
+              assert j["original_dll_sha_verified"] is True
+              assert j["cl_world_git_blob_verified"] is True
+              assert j["original_CLR_assembly_loaded"] is True
+              assert j["managed_reference_siblings"]==151
+              assert j["actual_formatter_deserialize_attempted"] is True
+              assert j["android_unity_il2cpp_or_phone_executed"] is False
+              assert j["user_generated_game_world_loaded"] is False
+              assert j["real_game_rgd_write_or_roundtrip"] is False
+              assert j["original_data_or_private_type_names_published"] is False
+              results.append(j)
+          summary={
+              "sample_count":len(results),
+              "actual_formatter_created":sum(bool(j["actual_formatter_deserialize_object_created"]) for j in results),
+              "root_original_game_assembly":sum(bool(j["deserialized_root_defined_in_original_dll"]) for j in results),
+              "original_LoadT_invoked":sum(bool(j["original_SaveAndLoad_LoadT_invoked"]) for j in results),
+              "original_LoadT_matching":sum(bool(j["user_generated_rgd_original_CLR_loadT_result"]) for j in results),
+              "formatter_categories":dict(collections.Counter(j["bounded_runtime_category"] for j in results)),
+              "loader_categories":dict(collections.Counter(j.get("original_LoadT_result_category","UNAVAILABLE") for j in results)),
+              "android_device_playable_world_verified":False,
+          }
+          print("T4_OWNER_5NOV_REAL_ORIGINAL_CL_LOAD",json.dumps(summary,sort_keys=True))
+          PY
+      - name: Reject one-byte tampering before unsafe legacy formatter invocation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import os
+          root=Path(os.environ["RUNNER_TEMP"])/"t4-owner-original-managed/owner-private"
+          original=(root/"owner01.rgd").read_bytes()
+          changed=bytearray(original); changed[0]^=1
+          (root/"tampered.rgd").write_bytes(changed)
+          PY
+          if timeout 10s dotnet "$RUNNER_TEMP/t4-owner5nov-clr/ClWorldRgdRuntime.dll" \
+             --assembly "$RUNNER_TEMP/t4-owner-original-managed/Assembly-CSharp.dll" \
+             --seed "$RUNNER_TEMP/t4-owner-original-managed/owner-private/tampered.rgd" \
+             --output "$RUNNER_TEMP/t4-bad-result.json" --original-loadt \
+             > "$RUNNER_TEMP/t4-bad-private-output.log" 2>&1; then
+             echo "T4_OWNER_5NOV_TAMPER_UNEXPECTED_ACCEPTANCE"; exit 1
+          fi
+          test ! -e "$RUNNER_TEMP/t4-bad-result.json"
+          echo "T4_OWNER_5NOV_NEGATIVE tampered_blob_rejected=true"
+      - name: State bounded proof and avoid publishing original user game data
+        if: always()
+        run: |
+          echo "T4_OWNER_5NOV_BOUNDARY actual_original_clr_in_ephemeral_runner_only=true native_unity_player=false phone_retested=false save_process_restart=false raw_world_bytes_uploaded=false"
