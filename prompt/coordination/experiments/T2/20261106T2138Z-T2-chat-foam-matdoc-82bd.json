@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "owner": "T2",
+  "origin": "chat",
+  "session_id": "20261106T2138Z-T2-chat-foam-matdoc-82bd",
+  "issue_id": "WATER-001",
+  "hypothesis": "A syntactically YAML .mat file with no !u!21 Material document is silently excluded from the read-only Foam exported Material inventory, causing false successful completeness; fail closed only for malformed .mat, preserve no-material-file dynamic-host case.",
+  "source_commit": "9951deea2c2c055ceedfc4c0997efb040c5288db",
+  "input_hashes": [],
+  "tool_versions": {
+    "python": "GitHub ubuntu-24.04 runner python3 (source-only)"
+  },
+  "commands": [
+    "python3 -m py_compile scripts/t2_foam_export_binding_probe.py tests/test_t2_foam_export_binding_probe.py",
+    "python3 -m unittest discover -s tests -p 'test_t2_foam_export_binding_probe.py' -v",
+    "python3 -m unittest discover -s tests -p 'test_t2_foam_private_installer.py' -v"
+  ],
+  "negative_controls": [
+    "syntactically valid YAML .mat with no serialized Material",
+    "wrong Unity class in .mat",
+    "malformed !u!21 header in .mat"
+  ],
+  "positive_controls": [
+    "valid synthetic Foam Material GUID PPtr",
+    "non-material YAML .asset with zero serialized Materials",
+    "no .mat: runtime-generated dynamic Material not inferred as unbound"
+  ],
+  "workflow_path": ".github/workflows/raft-t2-foam-export-material-guid-sourceonly.yml",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42298466950",
+  "artifact_urls": [],
+  "budget": "Existing paths-filtered lightweight source-only workflow; ~7 min timeout, 0 Unity/native builds",
+  "status": "completed",
+  "observed_result": "CI 42298466950 success at exact code commit: 18/18 exported probe and 17/17 installer source-only synthetic tests. All 2 new test methods PASS, malformed .mat now fails closed.",
+  "rejected_hypotheses": [
+    "%YAML prefix alone guarantees .mat contains a Unity Material document"
+  ],
+  "limitations": [
+    "Synthetic material documents only; no original exported Unity project",
+    "No original ShaderLab compiled pass, original Material binding, CB0/FFT, Android pixels or device evidence",
+    "Other source-only Foam private workflow 42298467191 spawned automatically; not a Unity build"
+  ],
+  "integration_commit": "9951deea2c2c055ceedfc4c0997efb040c5288db",
+  "next_step": "When real Unity export is available and T5 owns the native runner, run this read-only inventory against exact export; separately verify original ShaderLab pass+material mapping, importer and phone pixels. Do not dispatch native or claim Foam/CB0 restored."
+}
