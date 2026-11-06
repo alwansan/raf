@@ -32,7 +32,7 @@
   "run_url": "https://github.com/alwansan/raf/actions/runs/42242127723",
   "artifact_urls": [],
   "budget": "Existing 20-minute source-authentic Ubuntu-24.04 T1 Vulkan job, not Unity; one added actual candidate capture in private scratch; source-only 4-minute 74-test job",
-  "status": "waiting_private_vulkan_candidate_keyed_execution",
+  "status": "completed_candidate_only_real_gpu_capture",
   "observed_result": {
     "source_only": {
       "run": "https://github.com/alwansan/raf/actions/runs/42242015941",
@@ -54,8 +54,30 @@
     },
     "private_vulkan_run": {
       "run": "https://github.com/alwansan/raf/actions/runs/42242127723",
-      "status": "in_progress",
-      "candidate_keyed_marker": null
+      "job_id": 127974821489,
+      "conclusion": "success",
+      "source_sha_verified": true,
+      "result": {
+        "candidate_keyed_record_count": 384,
+        "by_site": [
+          64,
+          256,
+          64
+        ],
+        "unique_invocation_keys_verified": true,
+        "all_out_of_bounds_by_site": [
+          0,
+          0,
+          0
+        ],
+        "same_fixture_internal_pass0_output_match": true,
+        "first_pass_written_pixels_compared": 64,
+        "second_pass_written_pixels_compared": 32,
+        "original_spirv_independent_keyed_capture_present": false,
+        "actual_original_vs_translated_per_invocation_numeric_parity_proven": false
+      },
+      "private_scratch_cleanup": "success",
+      "raw_trace_artifact_published": false
     },
     "original_invocation_keyed_capture_present": false,
     "paired_original_vs_translated_numeric_parity_proven": false,
@@ -67,5 +89,5 @@
     "Raw private trace never exported as artifact and no shader source leaks"
   ],
   "integration_commit": "9505df9a085bbf800c303d6dfa5ee750012eba32",
-  "next_step": "If private run passes, verify safe RAFT_T1_HLSL_KEYED_CANDIDATE_TRACE marker and record real candidate site counts. Then implement independently instrumented original SPIR-V captured with the same input, dispatch and manifest, compare strict pair. If fails, diagnose and fix keyed instrumentation minimal before new private run."
+  "next_step": "New T1 source-authentic nonoverlapping original-SPIRV prerequisite audit (scripts/t1_fft_original_keyed_preflight.py) on ZIP2 slot0, then implement a separately instrumented original GPU invocation trace and strict SHA pair comparison. Do NOT infer original/Unity numerical parity from candidate-only result."
 }
