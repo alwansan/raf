@@ -11,6 +11,8 @@ from scripts.t1_stage_unity_fft_kernel_probe import (
 
 # Deliberately synthetic authored shader; NOT the game's shader source.
 SHADER = ("#pragma kernel TestA\n#pragma kernel TestB\n"
+          "#pragma multi_compile BANK0 BANK1\n"
+          "#pragma multi_compile SIZE32 SIZE64 SIZE128 SIZE256 SIZE512\n"
           "[numthreads(64,1,1)] void TestA(uint3 id: SV_DispatchThreadID) { }\n"
           "[numthreads(64,1,1)] void TestB(uint3 id: SV_DispatchThreadID) { }\n")
 
@@ -24,7 +26,7 @@ def manifest():
                 rows.append({"compiled_slot": slot, "resolution": r, "bank": bank,
                              "pass_index": pass_index, "expected_group_x": 2*r,
                              "kernel_name": "TestA" if pass_index == 0 else "TestB",
-                             "keywords": []})
+                             "keywords": [f"BANK{bank}", f"SIZE{r}"]})
     return {"schema_version": 1,
             "candidate_provenance": "B48_SOURCE_SELECTED_COMPILED_CANDIDATES_ONLY",
             "original_fft_object_sha256": ORIGINAL_FFT_OBJECT_SHA256,
@@ -38,6 +40,7 @@ class T1FftUnityProbeStagingTests(unittest.TestCase):
         result = validate_private_manifest(manifest(), SHADER.encode())
         self.assertEqual(result["compiled_candidate_rows"], 20)
         self.assertEqual(result["unique_authored_kernel_names"], 2)
+        self.assertEqual(result["distinct_declared_kernel_keyword_selectors"], 20)
         self.assertFalse(result["original_unity_runtime_mapping_proven"])
 
     def test_stage_isolated_project_without_owning_game_or_claiming_unity(self):
@@ -83,6 +86,20 @@ class T1FftUnityProbeStagingTests(unittest.TestCase):
                 trial = manifest()
                 trial["rows"][0][field] = value
                 with self.assertRaises(ValueError):
+                    validate_private_manifest(trial, SHADER.encode())
+
+    def test_indistinguishable_selectors_rejected_across_original_slots(self):
+        # Different original bank/slot, same resolution/pass => same runtime
+        # selector if their declared keywords are identical.
+        for reverse in (False, True):
+            with self.subTest(reverse=reverse):
+                trial = manifest()
+                first = trial["rows"][0]
+                second = trial["rows"][10]
+                self.assertEqual(first["kernel_name"], second["kernel_name"])
+                self.assertNotEqual(first["compiled_slot"], second["compiled_slot"])
+                second["keywords"] = list(reversed(first["keywords"])) if reverse else list(first["keywords"])
+                with self.assertRaisesRegex(ValueError, "selector alias"):
                     validate_private_manifest(trial, SHADER.encode())
 
     def test_kernel_and_keyword_negative_controls(self):
