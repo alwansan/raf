@@ -59,6 +59,16 @@ class PairTests(unittest.TestCase):
                 for name, value in entries:
                     archive.writestr(name, value)
 
+    def mutate_obb_archive(self, mutator):
+        payload = bytearray(self.obb.read_bytes())
+        local = payload.find(b"PK\\x03\\x04")
+        self.assertGreaterEqual(local, 0)
+        mutator(payload, local)
+        self.obb.write_bytes(payload)
+        # A matching local delivery.json digest must never mask a ZIP that
+        # cannot actually be read by standard archive consumers.
+        self.write_manifest()
+
     def write_manifest(self, modify=None):
         data = {"schema": 1, "package": PACKAGE, "version_code": VERSION,
                 "companion_required": True, "transport_only_parts": True,
@@ -223,6 +233,71 @@ class PairTests(unittest.TestCase):
         except (OSError, NotImplementedError):
             self.skipTest("filesystem does not support links")
         self.rejected("linked input")
+
+
+    def test_obb_noncore_local_filename_mismatch_with_matching_manifest_hash(self):
+        def corrupt(payload, local):
+            name_size = struct.unpack_from("<H", payload, local + 26)[0]
+            name = bytes(payload[local + 30:local + 30 + name_size])
+            self.assertIn(b"resources.assets", name)
+            payload[local + 30 + name_size - 1] = ord("z")
+        self.mutate_obb_archive(corrupt)
+        self.rejected("ZIP local member header name")
+
+    def test_obb_noncore_local_compression_mismatch_with_matching_manifest_hash(self):
+        def corrupt(payload, local):
+            struct.pack_into("<H", payload, local + 8, 8)
+        self.mutate_obb_archive(corrupt)
+        self.rejected("ZIP local member header disagrees")
+
+    def test_obb_noncore_local_flags_mismatch_with_matching_manifest_hash(self):
+        def corrupt(payload, local):
+            flags = struct.unpack_from("<H", payload, local + 6)[0]
+            struct.pack_into("<H", payload, local + 6, flags ^ 0x800)
+        self.mutate_obb_archive(corrupt)
+        self.rejected("ZIP local member header disagrees")
+
+    def test_obb_noncore_local_crc_mismatch_with_matching_manifest_hash(self):
+        def corrupt(payload, local):
+            crc = struct.unpack_from("<I", payload, local + 14)[0]
+            struct.pack_into("<I", payload, local + 14, crc ^ 0x1)
+        self.mutate_obb_archive(corrupt)
+        self.rejected("ZIP local member header CRC/size")
+
+    def test_obb_noncore_local_signature_mismatch_with_matching_manifest_hash(self):
+        def corrupt(payload, local):
+            payload[local] = ord("X")
+        self.mutate_obb_archive(corrupt)
+        self.rejected("ZIP local member header disagrees")
+
+    def test_obb_compressed_payload_region_overlaps_next_local_entry(self):
+        self.make_obb([("assets/first", b"x"), ("assets/second", b"y")])
+        payload = bytearray(self.obb.read_bytes())
+        local = payload.find(b"PK\\x03\\x04")
+        central = payload.find(b"PK\\x01\\x02")
+        self.assertGreaterEqual(local, 0)
+        self.assertGreaterEqual(central, 0)
+        # Both headers agree on the corrupted length; neither can be trusted
+        # to protect the following member. The actual compressed bytes do
+        # not extend this far, so extracted assets would overlap.
+        struct.pack_into("<I", payload, local + 18, 30)
+        struct.pack_into("<I", payload, central + 20, 30)
+        self.obb.write_bytes(payload)
+        self.write_manifest()
+        self.rejected("ZIP compressed member regions overlap")
+
+    def test_apk_noncore_local_header_name_disagreement_rejected(self):
+        payload = bytearray(self.apk.read_bytes())
+        with zipfile.ZipFile(self.apk) as z:
+            member = z.getinfo("assets/bin/Data/globalgamemanagers")
+            local = member.header_offset
+        name_len = struct.unpack_from("<H", payload, local + 26)[0]
+        name_start = local + 30
+        payload[name_start + name_len - 1] = ord("x")
+        self.apk.write_bytes(payload)
+        self.write_manifest()
+        self.rejected("ZIP local member header name")
+
 
 
 if __name__ == "__main__":
