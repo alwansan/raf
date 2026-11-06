@@ -1,0 +1,36 @@
+name: T5 native delivery retention and Release fail-closed source guard
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - .github/workflows/raft-t5-native-delivery-fallback-policy.yml
+      - .github/workflows/raft-unity-editor-android-import.yml
+      - tests/test_t5_native_delivery_fallback_policy.py
+
+permissions:
+  contents: read
+
+concurrency:
+  group: t5-native-delivery-resilience-source-only
+  cancel-in-progress: false
+
+jobs:
+  native-delivery-source-contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Test real production workflow retention and strict Release result gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile tests/test_t5_native_delivery_fallback_policy.py
+          python3 -m unittest discover -s tests -p test_t5_native_delivery_fallback_policy.py -v
+          echo 'T5_NATIVE_DELIVERY_SOURCE policy_verified=true native_build_not_executed=true release_token_presence_unknown=true release_creation_not_attempted=true' >> "$GITHUB_STEP_SUMMARY"
