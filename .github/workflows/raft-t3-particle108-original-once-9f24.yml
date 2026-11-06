@@ -1,0 +1,163 @@
+name: T3 RENDER-002 ONE-SHOT SHA-original eight-stage DCL-SPV resource candidate probe 9f24
+on:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - 'prompt/coordination/trigger/T3/20261106T1959Z-T3-chat-original-stage-probe-9f24.txt'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t3-original-particle108-opname-stagefamily-once-9f24-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  original-8-stage-DXBC-SPV-debug-candidate-manual:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 24
+    env:
+      GIT_LFS_SKIP_SMUDGE: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Validate source-free debug names, stage counts, and explicit contract validator
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t3_particle108_spirv_opname_candidates.py scripts/t3_particle108_spv_named_original_probe.py scripts/t3_particle108_dcl_spv_family_census.py scripts/t3_dxbc_spirv_contract_join.py tests/test_t3_dxbc_spirv_contract_join.py tests/test_t3_particle108_dcl_spv_family_census.py
+          python3 -m unittest discover -s tests -p 'test_t3_particle108_dcl_spv_family_census.py' -v
+          python3 -m unittest discover -s tests -p 'test_t3_dxbc_spirv_contract_join.py' -v
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: alwansan/raf
+          ref: 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+          path: zip2-source
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: |
+            RAFT_FILE_MANIFEST.tsv
+            Raft/Raft_Data/level0
+            Raft/Raft_Data/level1
+            Raft/Raft_Data/level2
+            Raft/Raft_Data/level3
+            Raft/Raft_Data/level4
+            Raft/Raft_Data/level5
+      - name: Stage only four SHA pinned original shader owners
+        run: |
+          set -euo pipefail
+          git -C zip2-source sparse-checkout set --no-cone -- \
+            '/RAFT_FILE_MANIFEST.tsv' '/Raft/Raft_Data/level0' \
+            '/Raft/Raft_Data/level1' '/Raft/Raft_Data/level2' \
+            '/Raft/Raft_Data/level3' '/Raft/Raft_Data/level4' \
+            '/Raft/Raft_Data/level5' '/Raft/Raft_Data/resources.assets/*' \
+            '/Raft/Raft_Data/sharedassets0.assets/*' \
+            '/Raft/Raft_Data/sharedassets1.assets' \
+            '/Raft/Raft_Data/sharedassets6.assets'
+          test "$(git -C zip2-source rev-parse HEAD)" = 15964ea8f246b6e076ce26b60931ee2e1a9a2385
+      - name: Authenticate six original Renderer scenes and 4 genuine shader owners
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          from scripts.w1_stage_zip2_owners import stage
+          from scripts.a12_probe_original_blur_passes import SHADER_OWNERS
+          from scripts.b21_scene_lightmap_links import PIN,verify_source
+          from scripts.t3_original_renderer_shader_impact import SHADER_OWNERS_SELECTED
+          source=Path('zip2-source')
+          out=Path(os.environ['RUNNER_TEMP'])/'t3-original-Particle108-stage-family'
+          pins={'Raft_Data/'+name:SHADER_OWNERS[name] for name in SHADER_OWNERS_SELECTED}
+          found=stage(source,out,pins)
+          assert len(found['owners'])==4 and found['verified_bytes']==269007288 and not found['lfs_used']
+          for name,pin in PIN.items():
+              src=source/'Raft/Raft_Data'/name
+              verify_source(src,pin)
+              dest=out/'Raft_Data'/name
+              with src.open('rb') as inp,dest.open('xb') as outp:
+                  while block:=inp.read(1024*1024):outp.write(block)
+              verify_source(dest,pin)
+          print('T3_ORIGINAL_FOUR_OWNERS_SIX_SCENES_SHA_VERIFIED=true')
+          PY
+      - name: Source compiler and reflector dependencies
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          set -euo pipefail
+          python3 -m pip install --user --disable-pip-version-check UnityPy==1.23.0
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends vkd3d-compiler spirv-tools spirv-cross glslang-tools
+          dpkg-query -W vkd3d-compiler spirv-tools spirv-cross glslang-tools
+      - name: Privately compare eight SHA-original DCL resource families with VKD3D Vulkan stage reflections
+        run: |
+          set -euo pipefail
+          timeout 900s python3 -m scripts.t3_particle108_dcl_spv_family_census \
+            --original "$RUNNER_TEMP/t3-original-Particle108-stage-family" \
+            --manifest zip2-source/RAFT_FILE_MANIFEST.tsv \
+            --out "$RUNNER_TEMP/t3-particle108-dcl-spv-family-safe.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          r=json.loads((Path(os.environ["RUNNER_TEMP"])/"t3-particle108-dcl-spv-family-safe.json").read_text())
+          assert r["status"]=="T3_SHA_ORIGINAL_PARTICLE108_DCL_SPV_STAGE_FAMILY_CENSUS"
+          assert r["source_original_six_scenes_SHA_authenticated"] is True
+          assert r["source_original_four_owner_SHA_authenticated"] is True
+          assert r["original_selected_particle_renderer_material_use_slots"]==108
+          c=r["counts"]
+          assert c["exact_original_keyword_vs_fs_pairs_compared"]==4
+          assert c["exact_original_keyword_stage_programs_compared"]==8
+          assert c["source_decl_cbuffer"]==24
+          assert c["source_decl_srv"]==10
+          assert c["source_decl_sampler"]==10
+          assert c["source_decl_uav"]==0
+          assert r["per_stage_family_count_equality_is_not_register_identity"] is True
+          for family in ("cbuffer","srv","sampler","uav"):
+              assert (c["stage_"+family+"_cardinality_equal"]+
+                      c["stage_"+family+"_cardinality_mismatch"])==8
+          assert 0<=c["stage_all_four_resource_family_cardinalities_equal"]<=8
+          assert r["original_DCL_registers_or_Vulkan_set_binding_values_published"] is False
+          assert r["original_to_SPIRV_descriptor_register_provenance_proven"] is False
+          assert r["Unity_ShaderLab_or_device_pixels_verified"] is False
+          print("T3_ORIGINAL_DCL_SPV_STAGE_FAMILY_CENSUS_AUTHENTIC=true descriptor_register_provenance=false")
+          PY
+      - name: Analyze same authentic four VSFS original programs for SPIR-V typed debug-name candidates
+        run: |
+          set -euo pipefail
+          timeout 900s python3 -m scripts.t3_particle108_spv_named_original_probe \
+            --original "$RUNNER_TEMP/t3-original-Particle108-stage-family" \
+            --manifest zip2-source/RAFT_FILE_MANIFEST.tsv \
+            --out "$RUNNER_TEMP/t3-particle108-spv-debug-candidates-safe.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"t3-particle108-spv-debug-candidates-safe.json"
+          report=json.loads(p.read_text())
+          assert report["status"]=="T3_ORIGINAL_PARTICLE108_VKD3D_SPIRV_DEBUG_NAME_CANDIDATES"
+          assert report["source_original_six_scenes_SHA_verified"] is True
+          assert report["source_original_four_owners_SHA_verified"] is True
+          assert report["source_original_renderer_material_use_slots"]==108
+          c=report["counts"]
+          assert c["source_original_vsfs_keyword_pairs_analyzed"]==4
+          assert c["source_stages_analyzed"]==8
+          assert c["original_source_dcl_resource_rows"]==44
+          assert 0<=c["source_stages_with_all_debug_name_candidates"]<=8
+          assert report["debug_names_are_only_non_authoritative_candidates"] is True
+          assert report["source_register_to_vulkan_descriptor_equivalence_proven"] is False
+          assert report["original_shader_Unity_compile_or_Android_pixels_proven"] is False
+          assert report["source_original_register_shader_bytecode_or_spirv_names_published"] is False
+          print("T3_EXACT_ORIGINAL_VKD3D_OPNAME_CANDIDATES_SAFE=true authoritative_binding_provenance=false")
+          PY
+      - name: Upload only count-only SHA-original stage-family and optional debug-name candidate reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: t3-original-particle108-shader48-9f24-safe-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/t3-particle108-dcl-spv-family-safe.json
+            ${{ runner.temp }}/t3-particle108-spv-debug-candidates-safe.json
+          if-no-files-found: ignore
+          retention-days: 7
