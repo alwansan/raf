@@ -9,6 +9,7 @@ from collections import Counter
 import hashlib
 import json
 from pathlib import Path
+import re
 
 from scripts.t4_verify_device_world_save_log import (
     EvidenceInputError, _strict_json_object, _strict_json_constant,
@@ -31,12 +32,17 @@ TRACKED = {
     ("world", "OnWorldRecieved.exit"): "on_world_received_exit",
     ("save", "SaveGame.enter"): "savegame_enter",
     ("save", "SaveGame.exit"): "savegame_exit",
+    ("save", "SaveGame.exception"): "savegame_exception",
     ("save", "SaveWorld.enter"): "saveworld_enter",
     ("save", "SaveWorld.exit"): "saveworld_exit",
+    ("save", "SaveWorld.exception"): "saveworld_exception",
     ("save", "SaveUser.enter"): "saveuser_enter",
     ("save", "SaveUser.exit"): "saveuser_exit",
+    ("save", "SaveUser.exception"): "saveuser_exception",
     ("save", "Save.enter"): "save_enter",
     ("save", "Save.exit"): "save_exit",
+    ("save", "Save.exception"): "save_exception",
+    ("save", "Save.argumentFileSnapshot.unavailable"): "save_snapshot_unavailable",
     ("save", "Save.argumentFileSnapshot"): "save_file_snapshot",
     ("save", "Load<T>.enter"): "load_enter",
     ("save", "Load<T>.exit"): "load_exit",
@@ -48,6 +54,20 @@ TRACKED = {
     ("save", "RestoreUser.enter"): "restore_user_enter",
     ("save", "RestoreUser.exit"): "restore_user_exit",
 }
+# The original Android wrapper formats bool as capitalized C# True/False,
+# and elapsed milliseconds with F3/invariant culture. A missing or malformed
+# exit detail is not evidence of a clean return. Never echo raw details.
+ORIGINAL_SAVE_EXIT = re.compile(r"^exceptionEscaped=(True|False); elapsed_ms=[0-9]+[.][0-9]{3}$")
+SAVE_EXIT_MARKERS = frozenset(("savegame_exit", "saveworld_exit", "saveuser_exit", "save_exit"))
+
+
+def _clean_original_save_exit(detail):
+    if not isinstance(detail, str):
+        raise EvidenceInputError("invalid_original_save_exit_detail")
+    match = ORIGINAL_SAVE_EXIT.fullmatch(detail)
+    return "clean" if match and match.group(1) == "False" else "failed_or_unverifiable"
+
+
 EXPECTED_ORIGINAL_ORDER = (
     ("iterator_first_move_next", "world_ready_assignment"),
     ("on_world_received_enter", "on_world_received_exit"),
@@ -64,7 +84,7 @@ EXPECTED_ORIGINAL_ORDER = (
 def _fully_traced_original_savegame_cycles(events, evidence_sequence_complete):
     """Require each real SaveGame to contain ordered SaveWorld then SaveUser.
 
-    Only call boundaries and validated nonzero argument-file snapshots count.
+    Only call boundaries, clean exceptionEscaped=False original exits and validated nonzero argument-file snapshots count.
     Do not interpret snapshot as durable serialized RGD, or claim app restart.
     Stray SaveWorld/SaveUser calls outside SaveGame are not silently relabeled
     as complete SaveGame operations.
@@ -84,6 +104,8 @@ def _fully_traced_original_savegame_cycles(events, evidence_sequence_complete):
             failed = save_open = world_nonzero = user_nonzero = False
             save_snapshot_count = 0
         elif marker == "savegame_exit":
+            if snapshot_class != "clean":
+                failed = True
             if phase == "await_finish" and world_nonzero and user_nonzero and not failed:
                 good += 1
             else:
@@ -99,6 +121,8 @@ def _fully_traced_original_savegame_cycles(events, evidence_sequence_complete):
                 failed = True
         elif marker == "saveworld_exit":
             if phase == "in_world" and not save_open:
+                if snapshot_class != "clean":
+                    failed = True
                 phase = "await_user"
             else:
                 failed = True
@@ -109,6 +133,8 @@ def _fully_traced_original_savegame_cycles(events, evidence_sequence_complete):
                 failed = True
         elif marker == "saveuser_exit":
             if phase == "in_user" and not save_open:
+                if snapshot_class != "clean":
+                    failed = True
                 phase = "await_finish"
             else:
                 failed = True
@@ -133,10 +159,17 @@ def _fully_traced_original_savegame_cycles(events, evidence_sequence_complete):
             if not save_open or phase not in ("in_world", "in_user"):
                 failed = True
             else:
+                if snapshot_class != "clean":
+                    failed = True
                 # A snapshot in another Save() call cannot prove this one.
                 if save_snapshot_count != 1:
                     failed = True
                 save_open = False
+        elif marker in ("savegame_exception", "saveworld_exception", "saveuser_exception",
+                        "save_exception", "save_snapshot_unavailable"):
+            # These original wrapper/probe markers disqualify evidence even
+            # when a file happened to exist with nonzero bytes afterward.
+            failed = True
     if phase is not None:
         incomplete += 1
     # One complete SaveGame requires both nonzero phase snapshots and no
@@ -250,7 +283,9 @@ def analyze(paths, pinned=False):
                     group["events"].append((
                         seq, marker,
                         _parse_detail(record.get("detail"))
-                        if marker in ("save_file_snapshot", "load_file_snapshot") else None,
+                        if marker in ("save_file_snapshot", "load_file_snapshot")
+                        else (_clean_original_save_exit(record.get("detail"))
+                              if marker in SAVE_EXIT_MARKERS else None),
                     ))
     ordered = sorted(groups.values(), key=lambda g: (g["first"], g["last"]))
     if len(ordered) != base["session_count"]:
