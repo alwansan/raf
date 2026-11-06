@@ -1,0 +1,36 @@
+name: T3 RENDER-002 source-only DXBC RDEF fixture regression
+on:
+  push:
+    branches:
+      - feature/android-native-port
+    paths:
+      - tests/test_t3_particle108_original_dxbc_rdef.py
+      - scripts/t3_particle108_original_dxbc_rdef.py
+      - .github/workflows/raft-t3-rdef-fixture-source-only.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t3-rdef-sourcefree-fixture-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  synthetic-only:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      - name: Checkout exact committed source (no game data or LFS)
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          lfs: false
+          sparse-checkout: |
+            scripts
+            tests
+      - name: Syntax check and 14 synthetic negative/positive cases only
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/t3_particle108_original_dxbc_rdef.py tests/test_t3_particle108_original_dxbc_rdef.py
+          python3 -m unittest discover -s tests -p 'test_t3_particle108_original_dxbc_rdef.py' -v
