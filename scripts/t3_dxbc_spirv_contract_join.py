@@ -24,6 +24,16 @@ def check_contract(dx_resources, spv_resources, provenance):
     Provenance: stage/family/register/set/binding/count; one explicit row
     per DX resource. Count models array span, not just descriptor base.
     """
+    # Fail closed on incomplete reflection records instead of throwing KeyError.
+    schemas = (
+        (dx_resources, {"stage", "family", "register", "count"}),
+        (spv_resources, {"stage", "family", "set", "binding", "count"}),
+        (provenance, {"stage", "family", "register", "set", "binding", "count"}),
+    )
+    if any(not isinstance(group, (list, tuple)) or any(
+        not isinstance(item, dict) or not required.issubset(item)
+        for item in group) for group, required in schemas):
+        return ["invalid_schema"]
     errors = []
     dx_keys = [_key(x) for x in dx_resources]
     spv_keys = [(x["stage"], x["family"], x["set"], x["binding"]) for x in spv_resources]
