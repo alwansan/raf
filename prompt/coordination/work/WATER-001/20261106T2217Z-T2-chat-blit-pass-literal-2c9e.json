@@ -5,9 +5,9 @@
   "generation": "T-2026-11-05",
   "session_id": "20261106T2217Z-T2-chat-blit-pass-literal-2c9e",
   "issue_id": "WATER-001",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "dc6518bbbfadbd6887be868cdc1ff3996ebb2e09",
-  "updated_at": "2026-11-06T22:19:42.982Z",
+  "updated_at": "2026-11-06T22:21:33.475Z",
   "resumed_from_sessions": [
     "20261106T2211Z-T2-chat-blit-overload-b47a",
     "20261106T2203Z-T2-chat-graphics-path-7d3e"
@@ -33,9 +33,25 @@
   "evidence": [
     "https://github.com/alwansan/raf/actions/runs/42303074180"
   ],
-  "next_step": "Check CI42303756960 success and exact public literal 0/1/other/dynamic/mixed counts; fix source-only synthetic failure if present, do not assume source-original until SHA verified. Report only safe literal classes.",
+  "next_step": "Next independent source-only task: trace original Blit Texture source and RenderTexture destination ownership/producer (without leaking private identity), then T5 compare actual Unity two-pass import and material/CB0 binding; no APK build from this source-only result.",
   "code_commit": "a36bf27c60959abf1e4128abb31c21b31b2bd133",
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42303756960"
-  ]
+  ],
+  "result": {
+    "source_original_SHA_authenticated": true,
+    "CI_status": "SUCCESS",
+    "safe_report_tests": 61,
+    "source_name_tests": 6,
+    "cecil_synthetic": "PASS",
+    "source_original_Material_field_sites": 13,
+    "source_original_Graphics_Blit_ExplicitPass_sites": 2,
+    "pass_literal0_sites": 1,
+    "pass_literal1_sites": 1,
+    "pass_other_literal_sites": 0,
+    "pass_dynamic_unknown_sites": 0,
+    "pass_mixed_sites": 0,
+    "android_foam_pixels_verified": false,
+    "actual_Unity_import_verified": false
+  }
 }
