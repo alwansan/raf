@@ -49,3 +49,21 @@ class SpirvReadProvenanceTests(unittest.TestCase):
                                  "OpIAdd": 1, "OpCompositeExtract": 1,
                                  "OpConstant": 1, "unresolved": 1},
         }])
+
+    def test_reports_bitcast_type_and_load_storage_without_ids(self):
+        report = analyze("""
+        OpDecorate %1 DescriptorSet 0
+        OpDecorate %1 Binding 0
+        %20 = OpTypeFloat 32
+        %21 = OpTypeInt 32 1
+        %22 = OpTypeVector %20 2
+        %23 = OpTypeVector %21 2
+        %24 = OpTypePointer Function %22
+        %2 = OpVariable %24 Function
+        %3 = OpLoad %22 %2
+        %4 = OpBitcast %23 %3
+        %5 = OpImageFetch %22 %1 %4
+        """, coordinates=True)
+        site = report["coordinate_sites"][0]
+        self.assertEqual(site["typed_coordinate_bitcasts"], {"float32_to_sint32:Function": 1})
+        self.assertEqual(site["producer_opcodes"], {"OpBitcast": 1, "OpLoad": 1})
