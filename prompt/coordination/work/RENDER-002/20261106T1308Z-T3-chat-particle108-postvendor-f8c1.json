@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "session_id": "20261106T1308Z-T3-chat-particle108-postvendor-f8c1",
+  "issue_id": "RENDER-002",
+  "status": "active",
+  "base_sha": "6e498046b70129bfa255e248fc65292818f966fe",
+  "resumed_from_sessions": [
+    "20261106T1125Z-T3-chat-glslang-iomap-d37f",
+    "20261106T1230Z-T3-scheduled-source-gate-7e4c",
+    "20261106T001837Z-T3-chat-particle108-shaderlab-5d72"
+  ],
+  "parallel_active_scope": "20261106T1223Z-T3-chat-paired-glslang-a74c (distinct files/experiment, do not touch)",
+  "taken_over_from": [
+    "https://github.com/alwansan/raf/actions/runs/42136474867",
+    "https://github.com/alwansan/raf/actions/runs/42044249541"
+  ],
+  "intended_files": [
+    "scripts/t3_particle108_postvendor_delta.py",
+    "tests/test_t3_particle108_postvendor_delta.py",
+    ".github/workflows/raft-t3-scene-renderer-shader-postvendor-join.yml",
+    "prompt/coordination/work/RENDER-002/20261106T1308Z-T3-chat-particle108-postvendor-f8c1.json",
+    "prompt/coordination/clients/T3/sessions/20261106T1308Z-T3-chat-particle108-postvendor-f8c1.md",
+    "prompt/coordination/experiments/T3/20261106T1308Z-T3-chat-particle108-postvendor-f8c1.json",
+    "prompt/coordination/B_TEAM/events/T3/20261106T1308Z-T3-chat-particle108-postvendor-f8c1.json"
+  ],
+  "experiment_key": "T3-SHAZIP2-15964-6scenes-12owners-AssetRipper036098-W1B02-sameexport-ParticleShader48-108-before-after-vendor-TMPPostFXVolumetric-v1",
+  "resource_key": "T3-bounded-12-owner-original-export-38min-no-native",
+  "hypothesis": "Same-instance genuine original 108-use Particle Shader48 remains an AssetRipper dummy after the official vendor restorers; previous evidence shows pre-restorer dummy and separately top921 source dummy, not exact 108 postvendor outcome.",
+  "approach": "Reuse only existing manual T3 12-owner SHA-original CI; obtain exact pre/post source-selected W1 Shader48 GUID classification with same W1/B02 exporter, fail-closed comparison safe public counts and statuses. Add isolated guarded diagnostic controls; do not alter game files.",
+  "run_urls": [],
+  "updated_at": "2026-11-06T13:04:00.087Z",
+  "limits": "No Unity/APK/Adreno pixel proof; one bounded original source experiment; no secrets/raw assets/GUIDs/hashes in artifacts; no active T1/T2/T4/T5 tasks affected.",
+  "next_step": "Read existing postvendor workflow stage points, insert pre/post private classifications and safe delta, validate source-free controls, execute once and record terminal CI result."
+}
