@@ -21,23 +21,29 @@
     "A third identical UnityMessage after successful logging must return false; exactly one full original stack stored in recovered JSONL."
   ],
   "workflow_path": ".github/workflows/raft-persistent-diagnostics-tests.yml",
-  "run_url": "https://github.com/alwansan/raf/actions/runs/42260590793",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42260791146",
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42260446981",
-    "https://github.com/alwansan/raf/actions/runs/42260590793"
+    "https://github.com/alwansan/raf/actions/runs/42260590793",
+    "https://github.com/alwansan/raf/actions/runs/42260791146",
+    "https://github.com/alwansan/raf/actions/runs/42260590701",
+    "https://github.com/alwansan/raf/actions/runs/42260590952",
+    "https://github.com/alwansan/raf/actions/runs/42260590964"
   ],
   "artifact_urls": [],
   "budget": "Existing source-only .NET8 workflow and automatically triggered independent platform/FFT/local startup gates, no native Unity/APK/OBB or private assets.",
-  "status": "waiting_ci",
-  "observed_result": "Red CI42260446981 on test-only 2771b6cebf5629f50b61755b5722d8402c046fbd completed failure after actual original AndroidRuntimeLog.cs compiled; Program.cs:258 Persistent logging check failed: 291, the recovered first-critical event was already grouped without a sink. Production fix 5e0b52a8e9aef6bf0f66e54a51bc890f3151c20b moves null-sink guard before grouping, retaining return true for HUD; green CI42260590793 queued.",
+  "status": "completed",
+  "observed_result": "Original UnityMessage source compiled in CI. RED 42260446981 failed expected at Program.cs:258 / check291 when same full stack after recovery was dropped due sink-null dedup state. Production fix 5e0b52a8 moves sink-null guard before grouping and returns true for HUD. Intermediate 42260590793 passed recovered first-event check but failed check295 due test miscounting valid repeat_summary as second full crash. Test-only af9e5c5c counts operation=Error separately and requires repeat_summary. FINAL CI42260791146 SUCCESS, checks=297 passed=true actualAndroidStorageVerified=false; same original source integration and B06 FFT source smoke at 5e0b52a8 SUCCESS. No APK/device.",
   "rejected_hypotheses": [
     "No evidence owner device disk failed; this is deterministically injected startup failure only.",
     "No game SaveAndLoad/RGD code changed; not proof of saved-world corruption."
   ],
   "limitations": [
-    "No full Unity/IL2CPP or actual Android device proof.",
-    "If a sink exists but its writes fail, a separate diagnostic reliability question remains; not included in this bounded null-sink repair."
+    "Actual owner Android storage failure not established; only synthetic injected fault.",
+    "A later critical Write to an existing but failing sink is outside this null-sink scope.",
+    "Original RGD serialization, Unity/IL2CPP application/phone, OBB mount, physical mouse and water/FFT/color still unverified for latest SHA.",
+    "Full repeat_summary can legitimately contain the original stack text; test separately counts the Error operation."
   ],
   "integration_commit": "5e0b52a8e9aef6bf0f66e54a51bc890f3151c20b",
-  "next_step": "Verify green source CI and smoke; checkpoint T4 session, event and T5 handoff. Keep LOCAL-005 OPEN."
+  "next_step": "T5 single signed APK+main OBB on same source tests world save/reopen and actual device logger; keep LOCAL-005/INPUT-005 OPEN and do not claim phone proof."
 }
