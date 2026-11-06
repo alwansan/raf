@@ -1,0 +1,21 @@
+{
+  "id": "20261106T1128Z-T4-chat-device-mouse-release-evidence-p8m2",
+  "event_id": "20261106T1128Z-T4-chat-device-mouse-release-evidence-p8m2",
+  "session_id": "20261106T1128Z-T4-chat-device-mouse-release-evidence-p8m2",
+  "origin": "chat",
+  "owner": "T4",
+  "issue_id": "INPUT-005",
+  "type": "source_free_android_mouse_release_outcome_classifier",
+  "timestamp": "2026-11-06T11:30:00Z",
+  "at": "2026-11-06T11:30:00Z",
+  "summary": "T4 extended the existing source-free JSONL world/save evidence parser to classify original native mouse release outcomes with eight fixed labels, six input markers, counts only and strict forged/extra/private detail rejection. Immutable CI42210561898 SUCCESS at 4d18a096, 20/20 parser and 2/2 overflow (22/22); five new tests. No owner phone logs, hardware mouse/device, or Unity run checked. OS release/camera and world progress remain unverified; INPUT-005 and LOCAL-005 OPEN, NOT_READY 0/3.",
+  "source_commit": "4d18a096707d4c7fc134e967e7f807aeee8a5c0e",
+  "run_url": "https://github.com/alwansan/raf/actions/runs/42210561898",
+  "source_free_only": true,
+  "original_data_published": false,
+  "evidence": [
+    "prompt/coordination/clients/T4/sessions/20261106T1128Z-T4-chat-device-mouse-release-evidence-p8m2.md",
+    "prompt/coordination/experiments/T4/20261106T1128Z-T4-chat-device-mouse-release-evidence-p8m2.json"
+  ],
+  "native_phone_acceptance": "UNKNOWN"
+}
