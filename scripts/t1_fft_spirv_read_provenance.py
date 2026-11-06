@@ -24,9 +24,34 @@ ALL_VALUE_INPUTS = {
 LEAF_OPS = {"OpLoad", "OpConstant", "OpConstantNull", "OpFunctionCall", "OpUndef"}
 
 
-def coordinate_profile(root, values):
+def numeric_kind(type_id, types):
+    op, args = types.get(type_id, ("", ()))
+    if op == "OpTypeVector" and len(args) == 2:
+        op, args = types.get(args[0], ("", ()))
+    if op == "OpTypeFloat" and args == ["32"]:
+        return "float32"
+    if op == "OpTypeInt" and args in (["32", "0"], ["32", "1"]):
+        return "uint32" if args[1] == "0" else "sint32"
+    return "unresolved"
+
+
+def bitcast_kind(value, values, types):
+    _, destination, args = values[value]
+    source_op, source_type, source_args = values.get(args[0], ("", None, ())) if args else ("", None, ())
+    storage = "nonload"
+    if source_op == "OpLoad":
+        _, pointer_type, _ = values.get(source_args[0], ("", None, ())) if source_args else ("", None, ())
+        pointer_op, pointer_args = types.get(pointer_type, ("", ()))
+        known = {"Function", "Private", "Input", "Uniform", "UniformConstant",
+                 "StorageBuffer", "Workgroup", "PushConstant"}
+        storage = (pointer_args[0] if pointer_op == "OpTypePointer"
+                   and pointer_args and pointer_args[0] in known else "unresolved_load")
+    return f"{numeric_kind(source_type, types)}_to_{numeric_kind(destination, types)}:{storage}"
+
+
+def coordinate_profile(root, values, types):
     pending = [(root, 0)]
-    seen, counts = set(), {}
+    seen, counts, bitcasts = set(), {}, {}
     while pending:
         value, depth = pending.pop(0)
         if value in seen:
@@ -34,7 +59,10 @@ def coordinate_profile(root, values):
         seen.add(value)
         if len(seen) > 256:
             raise ValueError("Private coordinate slice exceeds node limit")
-        op, args = values.get(value, ("unresolved", ()))
+        op, _, args = values.get(value, ("unresolved", None, ()))
+        if op == "OpBitcast":
+            kind = bitcast_kind(value, values, types)
+            bitcasts[kind] = bitcasts.get(kind, 0) + 1
         inputs = ()
         if op in ALL_VALUE_INPUTS:
             inputs = args
@@ -49,12 +77,12 @@ def coordinate_profile(root, values):
             pending.extend((operand, depth + 1) for operand in reversed(inputs))
         elif inputs:
             counts["depth_boundary"] = counts.get("depth_boundary", 0) + 1
-    return counts
+    return counts, bitcasts
 
 
 def analyze(disassembly, *, coordinates=False):
     decorations, definitions, operations = {}, {}, []
-    values = {}
+    values, types = {}, {}
     for line in disassembly.splitlines():
         tokens = line.split()
         if len(tokens) == 4 and tokens[0] == "OpDecorate" and tokens[2] in ("Binding", "DescriptorSet"):
@@ -62,10 +90,14 @@ def analyze(disassembly, *, coordinates=False):
             if key in decorations:
                 raise ValueError("Duplicate descriptor decoration")
             decorations[key] = int(tokens[3])
+        if coordinates and len(tokens) >= 3 and tokens[1] == "=":
+            result, _, op, *args = tokens
+            if op.startswith("OpType"):
+                types[result] = (op, args)
+            elif args:
+                values[result] = (op, args[0], args[1:])
         if len(tokens) >= 5 and tokens[1] == "=":
             result, _, op, _, image = tokens[:5]
-            if coordinates:
-                values[result] = (op, tokens[4:])
             if op in ROOT_EDGES:
                 definitions[result] = image
             elif op in OPERATIONS:
@@ -86,7 +118,11 @@ def analyze(disassembly, *, coordinates=False):
             role = {0: "source", 1: "butterfly"}.get(decorations.get((root, "Binding")), role)
         report[role][operation] += 1
         if coordinates and operation == "fetch":
-            coordinate_sites.append({"role": role, "producer_opcodes": coordinate_profile(coordinate, values)})
+            counts, bitcasts = coordinate_profile(coordinate, values, types)
+            site = {"role": role, "producer_opcodes": counts}
+            if bitcasts:
+                site["typed_coordinate_bitcasts"] = bitcasts
+            coordinate_sites.append(site)
     if coordinates:
         report["coordinate_sites"] = coordinate_sites
     return report
