@@ -3,7 +3,7 @@
   "origin": "scheduled",
   "agent": "T2",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed_source_change_validation_pending",
   "baseline_sha": "e3b9f5223fcf2e874d8c43e2fba9a1cfd615fc38",
   "hypothesis": "Fixture nests final_error_category_breakdown under stop_time while production checker requires top-level; additionally duplicate JSON keys silently override source evidence.",
   "intended_files": [
@@ -17,5 +17,12 @@
     "20261106T0024Z-T2-scheduled-water-summary-rootguard-c8e1"
   ],
   "shared_resource": "none; source-only",
-  "updated_at": "2026-11-06T01:20:00Z"
+  "updated_at": "2026-11-06T01:20:00Z",
+  "result_commits": [
+    "b536ff807aa34a4e7494197c2968dc43e353179c",
+    "8270229420975aeb06665f6e1f9ff6f1a9031469",
+    "9408894a9ec8896ffedf14dbbb1d0515a371bcc3"
+  ],
+  "validation": "static review only; unittest not run",
+  "next_step": "python -m unittest tests.test_t2_device_water_summary; verify pinned CL summaries"
 }
