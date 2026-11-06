@@ -1,9 +1,9 @@
 {
   "session_id": "20261106T0950Z-T5-chat-focus-frame-a7c3",
   "origin": "chat",
-  "status": "active",
+  "status": "completed_source_ci_verified_device_unverified",
   "issue_id": "PERF-007",
-  "updated_at": "2026-11-06T09:50:23Z",
+  "updated_at": "2026-11-06T09:54:00Z",
   "base_sha": "79e75191aad283072d639a14ab985a216ea7eec9",
   "resumed_from_sessions": [
     "20261106T0214Z-T5-chat-scene-window-attribution-8d91.md",
@@ -20,5 +20,13 @@
   ],
   "hypothesis": "Unity can deliver focus transition without pause, leaving five-second FPS sampling contaminated with offscreen/return stalls; pause reset also leaves nextSample overdue so resumed one-frame interval is mislabeled as steady scene. Reset only lifecycle windows; keep true render/loading stalls and scene provenance.",
   "coordination": "T5 scheduled APK zip tests own a different issue/files; T1 FFT T2 Foam T3 shader and T4 input separate. Cheap source test CI only, no Unity build or dispatch.",
-  "prior_evidence": "CI42150565706 source-only scene attribution; real owner phone 42058825739 but not this patch."
+  "prior_evidence": "CI42150565706 source-only scene attribution; real owner phone 42058825739 but not this patch.",
+  "code_commit": "9f1dfa31c896e89b3d9b955d4b0572e337847fe7",
+  "test_commit": "c4cf247bcc4b84b257cb4769e6be9f8a0bb802fc",
+  "test_result": {
+    "run_id": 42198367607,
+    "job_id": 127827219361,
+    "conclusion": "success",
+    "diagnostic_tests": "12/12"
+  }
 }
