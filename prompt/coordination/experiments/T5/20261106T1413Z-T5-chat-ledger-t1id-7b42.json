@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "owner": "T5",
+  "origin": "chat",
+  "session_id": "20261106T1413Z-T5-chat-ledger-t1id-7b42",
+  "issue_id": "COORD-001",
+  "status": "one_field_T1_identity_fixed_live_index_pending",
+  "experiment_key": "T5-20261106T1408Z-T1-event-missing-id-strict-index-v1",
+  "failure_run": 42231823163,
+  "failure_reason": "ValueError Missing record identity for exact T1 scheduled WATER-001 event after 11 B and 3 T tests passed",
+  "repaired_file": "prompt/coordination/B_TEAM/events/T1/20261106T1408Z-T1-scheduled-pair-input-readiness-v3.json",
+  "old_blob_sha": "d8d5145ce953a322138cfef903ae3233b2ca37a4",
+  "fix_commit": "9dd0316b5713b894929d2fd6f61428d0150aba50",
+  "only_added_field": "id",
+  "new_id": "20261106T1408Z-T1-scheduled-pair-input-readiness-v3",
+  "original_fields_preserved_count": 7,
+  "source_parser_relaxed": false,
+  "owner_evidence_changed": false,
+  "checks": "All 1330Z+ recent T1–T5 records checked for explicit identity, no other malformed recent record.",
+  "next_step": "Strict T5 ledger refresh, include completed original OBB full digest evidence.",
+  "updated_at": "2026-11-06T14:14:57.637Z"
+}
