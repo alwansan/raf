@@ -4,7 +4,7 @@
   "session_id": "20261106T1702Z-T5-chat-offline-obb-compile-58cf",
   "origin": "chat",
   "issue_id": "INTEGRATION-001",
-  "status": "waiting_ci",
+  "status": "completed",
   "hypothesis": "The private original-managed compatibility build omitted new AndroidExpansionArchiveProbe.cs while AndroidTestDiagnostics.cs calls it; explicit dependency parity plus preflight should remove two compile CS0103.",
   "source_commit": "591e6e7da79b69916f8fe9a63f6242a17c226934",
   "input_hashes": [],
@@ -28,7 +28,23 @@
   "run_url": "https://github.com/alwansan/raf/actions/runs/42258190836",
   "artifact_urls": [],
   "budget": "single normal push-triggered ubuntu-24.04 CPU-only source CI; no new native Unity build or original data publication",
-  "observed_result": null,
+  "observed_result": {
+    "previous_run": 42256234615,
+    "previous_job": 128024049155,
+    "previous_compile_exit": 1,
+    "previous_error_codes": {
+      "CS0103": 2
+    },
+    "repaired_run": 42258190836,
+    "repaired_job": 128030880997,
+    "conclusion": "success",
+    "adversarial_unit_tests": "4/4 PASS",
+    "original_managed_source_units": 14,
+    "original_local_rpc_identity": "PASS",
+    "original_managed_compile_exit": 0,
+    "remaining_compile_errors": 0,
+    "runtime_apk_or_phone_verified": false
+  },
   "rejected_hypotheses": [],
   "limitations": [
     "Managed original C# compatibility compile is not Unity Editor/IL2CPP",
@@ -36,5 +52,27 @@
     "Does not solve water shaders or visuals"
   ],
   "integration_commit": "591e6e7da79b69916f8fe9a63f6242a17c226934",
-  "next_step": "Inspect 42258190836 terminal job and sanitized compile error summary, update session/work, preserve running other agents/jobs"
+  "next_step": "Preserve corrected compiler support allowlist in native diagnostic changes; future Unity ARM64 or phone exact installed OBB test needed for real device proof; separate T5 chat owns runtime probe and T5 scheduled owns performance epoch scope; no duplicate build.",
+  "updated_at": "2026-11-06T17:05:53.946Z",
+  "run_urls": [
+    "https://github.com/alwansan/raf/actions/runs/42256234615",
+    "https://github.com/alwansan/raf/actions/runs/42258190836"
+  ],
+  "result": {
+    "previous_run": 42256234615,
+    "previous_job": 128024049155,
+    "previous_compile_exit": 1,
+    "previous_error_codes": {
+      "CS0103": 2
+    },
+    "repaired_run": 42258190836,
+    "repaired_job": 128030880997,
+    "conclusion": "success",
+    "adversarial_unit_tests": "4/4 PASS",
+    "original_managed_source_units": 14,
+    "original_local_rpc_identity": "PASS",
+    "original_managed_compile_exit": 0,
+    "remaining_compile_errors": 0,
+    "runtime_apk_or_phone_verified": false
+  }
 }
