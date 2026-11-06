@@ -6518,6 +6518,22 @@
       "_record_path": "../B_TEAM/events/T1/20261106T130729Z-T1-chat-pair-gate-6c2e.json"
     },
     {
+      "id": "20261106T131603Z-T1-chat-hlsl-phi-inputs-a71e",
+      "owner": "T1",
+      "session_id": "20261106T131603Z-T1-chat-hlsl-phi-inputs-a71e",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "at": "2026-11-06T13:27:53.537Z",
+      "summary": "Authentic original SHA-pinned FFT HLSL-roundtrip butterfly1 X OpPhi is a float32 vector with exactly two selected-X component incoming paths. First immediate OpCompositeInsert traces through two bitcasts (uint32_bits_to_sint32, sint32_bits_to_float32) to uint32_vector OpLoad Private. Second OpCompositeInsert traces to nested float32-vector OpPhi. Both predecessor blocks terminate in unconditional OpBranch. Original CI 42225317476 SUCCESS and 18/18 synthetic tests. Two earlier private stage failures isolated scalar-only analyzer assumption; 42224927222 safe diagnostic. Runtime branch, numeric Vulkan↔Unity parity and phone water remain unproven.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42224533880",
+        "https://github.com/alwansan/raf/actions/runs/42224927222",
+        "https://github.com/alwansan/raf/actions/runs/42225317476",
+        "https://github.com/alwansan/raf/commit/6fc10ec699659167bd4a084c34839a2a3e519827"
+      ],
+      "_record_path": "../B_TEAM/events/T1/20261106T131603Z-T1-chat-hlsl-phi-inputs-a71e.json"
+    },
+    {
       "id": "T2-20261104T2354Z-start-foamabi",
       "owner": "T2",
       "session_id": "20261104T2354Z-T2-foamabi01",
@@ -7257,6 +7273,24 @@
       "limits": "Only one source-named Foam CB0 property candidate, synthetic Cecil and genuine source managed SHA; no original game private names/IL/assets published; no native Unity/GPU game change.",
       "next_step": "Trace exact original Shader field source/serialized reference and validate Foam asset identity, then stage-specific 160B CB0 values and device pixels.",
       "_record_path": "../B_TEAM/events/T2/20261106T1314Z-T2-chat-material-stfld-stack-4c62-result.json"
+    },
+    {
+      "id": "20261106T1326Z-T2-chat-source-Shader-field-51d2-result",
+      "owner": "T2",
+      "origin": "chat",
+      "session_id": "20261106T1326Z-T2-chat-source-Shader-field-51d2",
+      "issue_id": "WATER-001",
+      "type": "result",
+      "at": "2026-11-06T13:30:00Z",
+      "summary": "Source-original Foam CB0 typed Shader instance field passed to verified new Material(Shader) ctor: CI42225913516 SUCCESS (original managed DLL and Foam owner SHA). Exactly 1 private original Shader field resolved, nonpublic with UnityEngine.SerializeField, Unity-serialization eligible, exactly one managed stfld write in one method. Material field stfld ctor identity from CI42224883549 still proven. Exact Shader asset Foam identity, executed value and 160B CB0 upload/Android pixels NOT proven. WATER-001 OPEN.",
+      "evidence": [
+        "https://github.com/alwansan/raf/actions/runs/42225913516",
+        "https://github.com/alwansan/raf/actions/runs/42224883549",
+        "docs/T2_FOAM_ORIGINAL_SHADER_FIELD_PROVENANCE_2026-11-06.md"
+      ],
+      "limits": "Private original field names/tokens, game assembly and shader source are not shared; SerializeField indicates eligibility only, no runtime instance/data identity.",
+      "next_step": "Analyze private Shader stfld exact value source, then serialized field→original Shader Foam asset identity and real Unity CB0 upload proof.",
+      "_record_path": "../B_TEAM/events/T2/20261106T1326Z-T2-chat-source-Shader-field-51d2-result.json"
     },
     {
       "id": "T2-20261105T2115Z-chat-precall-operand-4be0-result",
@@ -8977,6 +9011,21 @@
       "_record_path": "../B_TEAM/events/T4/20261106T1304Z-T4-chat-null-activity-p7h2.json"
     },
     {
+      "id": "20261106T1320Z-T4-chat-immersive-lease-v4n8",
+      "owner": "T4",
+      "session_id": "20261106T1320Z-T4-chat-immersive-lease-v4n8",
+      "issue_id": "INPUT-005",
+      "type": "integration",
+      "at": "2026-11-06T13:27:11.646Z",
+      "summary": "Android immersive queued WindowInsets hide now checks original Activity identity plus focus/pause/disable generation and fails closed against replacement Activity. Exact final source CI 42225179203 passed 9 Python+28 executable C# and genuine original Unity2021 managed ABI compile; no Android device proof.",
+      "evidence": [
+        "https://github.com/alwansan/raf/commit/f4b92e1da30fd78356f57ffe3c28bd72aae4be55",
+        "https://github.com/alwansan/raf/actions/runs/42225179203"
+      ],
+      "device_confirmed": false,
+      "_record_path": "../B_TEAM/events/T4/20261106T1320Z-T4-chat-immersive-lease-v4n8.json"
+    },
+    {
       "id": "T5-20261104T2357Z-b12-fixture-start",
       "owner": "T5",
       "session_id": "20261104T2357Z-T5-b12-fixture-7e2",
@@ -9665,7 +9714,7 @@
   ],
   "overall_percent": null,
   "readiness": "NOT_ASSESSED_BY_THIS_SUMMARY",
-  "source_input_sha256": "2a6419e1f2a54d9fa3199f40bcd8475015ebf01731b25957dfab56312649641f",
+  "source_input_sha256": "da78ff2f8401005e10984a0463ee6cdbb1f9195638153a6f0cbfadcf7184bf43",
   "generation": "T-2026-11-05",
-  "input_sha256": "0a6452e879af1b206ea2f02da3b0e3646a2b491af86df0ebe3982222c58f0d9b"
+  "input_sha256": "5f2d9165f774fedc6629930a518b960f81c58d27c21289ff2cdc81ba23069505"
 }
