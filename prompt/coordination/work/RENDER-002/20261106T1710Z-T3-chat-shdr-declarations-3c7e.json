@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "owner": "T3",
+  "origin": "chat",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T1710Z-T3-chat-shdr-declarations-3c7e",
+  "issue_id": "RENDER-002",
+  "track": "Original Particle108 DXBC SHDR/SHEX instruction declaration source evidence",
+  "status": "active",
+  "base_sha": "edb7bd6ce0c8f50c4046fbd5463524abb1f34f1e",
+  "resumed_from_sessions": [
+    "20261106T1701Z-T3-chat-rdef-eightstage-9f28",
+    "20261106T164001Z-T3-chat-rdef-fixture-6d0abc"
+  ],
+  "intended_files": [
+    "scripts/t3_particle108_original_dxbc_declarations.py",
+    "tests/test_t3_particle108_original_dxbc_declarations.py",
+    ".github/workflows/raft-t3-particle108-declarations.yml",
+    "prompt/coordination/work/RENDER-002/20261106T1710Z-T3-chat-shdr-declarations-3c7e.json",
+    "prompt/coordination/clients/T3/sessions/20261106T1710Z-T3-chat-shdr-declarations-3c7e.md",
+    "prompt/coordination/experiments/T3/20261106T1710Z-T3-chat-shdr-declarations-3c7e.json",
+    "prompt/coordination/B_TEAM/events/T3/20261106T1710Z-T3-chat-shdr-declarations-3c7e.json"
+  ],
+  "hypothesis": "The 8 authentic source DXBC stages lack RDEF but may contain resource declaration opcodes in SHDR/SHEX. A strict version/length-validated token reader can count declaration families safely without inventing register slots or disclosing bytecode.",
+  "experiment_key": "T3-ZIP2-15964-Particle108-SHDR-SHEX-4pair-8stage-declaration-opcode-census-v1",
+  "resource_key": "zip2-15964-particle108-4owners-6scenes-cpu-private-staging",
+  "source_spec": "Microsoft DirectX-Headers D3D12TokenizedProgramFormat.hpp enum/bitfield (D3D11 tokenized format preserved); customdata handling per spec",
+  "related_work": [
+    "prompt/coordination/work/RENDER-002/20261106T1701Z-T3-chat-rdef-eightstage-9f28.json"
+  ],
+  "run_urls": [],
+  "next_step": "Build bounded new declaration-only parser and synthetic tests. Run source-free CI first; one private original diagnostic only after overlap check, then restore manual-only workflow.",
+  "updated_at": "2026-11-06T17:11:51.828Z"
+}
