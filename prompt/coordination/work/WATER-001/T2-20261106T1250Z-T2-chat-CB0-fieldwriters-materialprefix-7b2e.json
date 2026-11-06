@@ -1,0 +1,44 @@
+{
+  "session_id": "20261106T1250Z-T2-chat-CB0-fieldwriters-materialprefix-7b2e",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "cabf3442d80a63f16261f00ae261e42b2e97fb1d",
+  "updated_at": "2026-11-06T12:50:00Z",
+  "resumed_from_sessions": [
+    "20261106T1218Z-T2-chat-cb0-setvector-operands-4d79",
+    "20261106T122027Z-T2-scheduled-ci-reconcile-a7c2"
+  ],
+  "experiment_key": "ZIP2-original-Foam-CB0-confirmed-SetVector-4float-3ldfld-private-field-identity-types-writers-receiver-IL-prefix-v1",
+  "resource_key": "T2-original-Foam-private-Cecil-typed-fieldwriter-evidence",
+  "original_pins": {
+    "zip2_commit": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "managed_dll_sha256": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e"
+  },
+  "hypothesis": "Unique original CB0 setter's Vector4 3 ldfld inputs map to three original typed field identities, with managed stfld writer occurrence census. Independent strict immediately-before-name typed Material field-load check may structurally identify its call receiver if no branch-to-literal and only one preliteral pop.",
+  "baseline_ci": "https://github.com/alwansan/raf/actions/runs/42218712162",
+  "intended_files": [
+    "android-port/Experiments/T2/FoamCb0ManagedLiterals/Program.cs",
+    ".github/workflows/raft-t2-foam-cb0-managed-literals.yml",
+    "prompt/coordination/work/WATER-001/T2-20261106T1250Z-T2-chat-CB0-fieldwriters-materialprefix-7b2e.json",
+    "prompt/coordination/clients/T2/sessions/20261106T1250Z-T2-chat-CB0-fieldwriters-materialprefix-7b2e.md",
+    "prompt/coordination/experiments/T2/20261106T1250Z-T2-chat-CB0-fieldwriters-materialprefix-7b2e.json",
+    "prompt/coordination/B_TEAM/events/T2/20261106T1250Z-T2-chat-CB0-fieldwriters-materialprefix-7b2e-result.json",
+    "docs/T2_FOAM_ORIGINAL_CB0_FIELD_WRITERS_RECEIVER_2026-11-06.md"
+  ],
+  "negative_controls": [
+    "private field identities never serialized",
+    "only exact first-formal proven setter",
+    "typed ctor must remain unique and all four float formals",
+    "three ctor field operands require exactly 3 ldfld; any extra is ambiguous",
+    "preliteral receiver cannot be claimed from nearby variable unless type, stack and branch guard pass",
+    "source-free false-positive fixture tests"
+  ],
+  "actions_queued_running_at_registration": 0,
+  "restrictions": [
+    "No game .shader/.meta/GUID/scene/save/Settings/audio/input/native workflow changes",
+    "No cancelling T1 FFT job",
+    "Private original names/method tokens/bytes cannot appear in logs or artifacts",
+    "WATER-001 remains OPEN pending Unity upload and device pixels"
+  ]
+}
