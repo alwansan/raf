@@ -1,7 +1,7 @@
 {
-  "request_id": "owner-direct-20261106-latest-integrated-trial-xapk-42058825739-01",
-  "reason": "Direct instruction from the main project owner on 2026-11-06: run exactly one new experimental signed APK+OBB+XAPK delivery from the latest integrated feature/android-native-port HEAD. Prior run 42058825739 reconstructed successfully but Release POST returned HTTP403. Keep all real asset, signature, water, offline and delivery checks; no cancellation or other agent contact.",
-  "requested_from_sha": "0cb2b404843926a5a0be842bc8cd389a0fb08e77",
+  "request_id": "owner-direct-20261107-unity-cs0234-fixed-latest-xapk-42281310905-02",
+  "reason": "Owner direct continuation, 7 Nov 2026: run one latest integrated signed experimental APK+OBB+XAPK build after run 42281310905 failed Unity Editor C# CS0234 (10 unresolved AndroidPhysicalMouseCapture sites); fix commit f554e8b provides noncapturing Unity Editor branch while preserving Android JNI capture. Preserve original data, water, signatures, packaging and failure gates. If Release POST HTTP403 persists, keep complete install artifact and do not mislabel release success.",
+  "requested_from_sha": "40784db4e4072e419f04ac92efee36ec4f441131",
   "documented_water_limitations": [
     "authentic_water_kernel_identity",
     "shader_pass_contract:UltimateWater/Foam/Global",
@@ -10,6 +10,7 @@
     "water_compute_source_candidate"
   ],
   "owner_direct_request": true,
-  "owner_instruction": "Newer direct owner order for one trial build supersedes the optional T_TEAM 5/5 timing vote for this request only; do not modify or impersonate T1-T5 votes and do not claim READY.",
-  "previous_run_id": 42058825739
+  "owner_instruction": "Direct order to inspect and fix failing workflow and complete a new trial build. No messaging other workers, do not cancel jobs or alter their votes.",
+  "previous_run_id": 42281310905,
+  "fix_commit_sha": "f554e8b6757e46aa037603ed592a04acc2bf7a61"
 }
