@@ -1,6 +1,6 @@
 # T2 — Original Foam CB0 material constructor Shader field origin and serializable source
 
-- session_id: `20261106T1326Z-T2-chat-source-Shader-field-51d2`, origin: `chat`, status: `active`.
+- session_id: `20261106T1326Z-T2-chat-source-Shader-field-51d2`, origin: `chat`, status: `completed_source_original_Shader_field_declaration_and_managed_writer`.
 - base_sha: `1f37742820b8bba37dda396e397f7e5c9d81194d`.
 - work registration `69e56530cf3b1edd51324596dd60ac6930baa2bb` at [scoped work](../../../work/WATER-001/T2-20261106T1326Z-T2-chat-source-Shader-field-51d2.json).
 - resumed_from_sessions: `20261106T1314Z-T2-chat-material-stfld-stack-4c62`, `20261106T1306Z-T2-chat-material-field-assignment-8e6a`.
@@ -10,3 +10,14 @@
 - original ZIP2 SHA 15964ea8f246b6e076ce26b60931ee2e1a9a2385, original managed DLL SHA256 0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e.
 - at scope registration no T2 Cecil run active, T5 release metadata checks were independent. Preserve all other worker changes; no original game .shader/.meta/GUID edit or native Unity build.
 - tests not yet run; next step: source-free typed positive/negative tests and exact source CI, record bounded output; keep WATER-001 OPEN.
+
+## Authentic final result — 2026-11-06T13:30Z
+
+- Modified T2-owned `MaterialStoreValueTrace.cs` to preserve a private original Shader FieldReference throughout the **exact** source CB0 first-formal linked `new Material(Shader)` operand stack. Non-Shader/mismatched synthetic field is explicitly rejected; no names/tokens or private asset content published.
+- Extended T2-owned `Program.cs` with a third SHA-original managed DLL pass counting `stfld` references to that **same original Shader field**, then inspecting its original Cecil FieldDefinition for public declaration, Unity SerializeField and NonSerialized flags and eligible Unity serializable type. Updated only isolated T2 CI assertions.
+- **Original SHA-authentic [CI42225913516](https://github.com/alwansan/raf/actions/runs/42225913516)**, job `127919252873`, source `2e4e4112973b3c29db9b34db233b5f9089a4505d`: **SUCCESS**. 11 original-name source-free tests, Cecil synthetic typed identity/false-positive tests, 4 original Shader CB0 stage name references, exact ZIP2 original Foam owner and 3,211,776B Assembly-CSharp SHA verified. No game assembly executed.
+- **New verified original field:** one exact Shader FieldReference used as `Material(Shader)` formal, one resolved original declaration, **nonpublic**, **[SerializeField]** attribute, **not [NonSerialized]**, convention-eligible for Unity object serialization (1/1). Exactly **one compiled managed `stfld` writer site in one original method** to this same field. This supports two possible origin channels—serialized Unity Inspector value and managed writer—but **neither is proven actual runtime value or original Foam Shader identity**.
+- Report [exact original Shader field and managed writer](../../../../../docs/T2_FOAM_ORIGINAL_SHADER_FIELD_PROVENANCE_2026-11-06.md), experiment `prompt/coordination/experiments/T2/20261106T1326Z-T2-chat-source-Shader-field-51d2.json`, canonical event `prompt/coordination/B_TEAM/events/T2/20261106T1326Z-T2-chat-source-Shader-field-51d2-result.json`, scoped work `prompt/coordination/work/WATER-001/T2-20261106T1326Z-T2-chat-source-Shader-field-51d2.json` **completed**.
+- Handed off to T1/T5 in [combined genuine source evidence](../../../discussions/WATER-001/20261106T1330Z-T2-Foam-Material-Shadersource-to-T1T5.md). Separate prior exact Material stack experiment [CI42224883549](https://github.com/alwansan/raf/actions/runs/42224883549) success. Neither original compiled source result proves Unity shader import, CB0 runtime buffer upload, material shader Foam identity, Adreno colors/water or APK.
+- No original source Shader/MonoBehaviour/Prefab/Scenes, .meta/GUID, world/save, Settings, audio, touch, native Unity, APK/OBB or other T agents' files modified; no CI cancelled or forced update.
+- **Next:** source-original exact Shader field stfld **value** stack provenance and/or authentic serialized Inspector reference→original Foam Shader asset identity (not symbol/name guess); then validate CB0 larger stage accesses and Android pixels. WATER-001 OPEN / NOT_READY.
