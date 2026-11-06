@@ -6,7 +6,7 @@
   "origin": "chat",
   "session_id": "20261106T1753Z-T2-chat-original-levels-component-671a",
   "issue_id": "WATER-001",
-  "status": "waiting_ci",
+  "status": "completed",
   "base_sha": "277a8ccc8ab1f3355bc1b3f0e3f1b7ea958f83fa",
   "round_id": "trial-20261106-r1",
   "vote": "لا يحتاج",
@@ -29,10 +29,26 @@
   ],
   "last_source_proof": "https://github.com/alwansan/raf/actions/runs/42264851712",
   "hypothesis": "Actual source Foam shader may have direct authored Material Shader pointers or PPtr<Shader> references in 40 original scene serialized level files, absent from all 40 sharedassets Material records; inspect both negative and non-opaque coverage.",
-  "updated_at": "2026-11-06T17:57:23.641Z",
-  "next_step": "CI42266263645 in progress. Read sourcefree tests, original 40 pinned levels 233237972B stage, report component typed PPtr parser read/unreadable counts; no claim on opaque classes. Keep trial round r1 NO. No duplicate run.",
+  "updated_at": "2026-11-06T17:59:47.606Z",
+  "next_step": "Issue WATER-001 still OPEN. Unparsed 55328 original Unity scene components are an explicit proof frontier, not absence. Restore original custom Mono fields or compiled managed runtime Shader.Find/Material injection path, then integrate real ShaderLab/CB0 and test Unity/device; no build while source-only.",
   "last_source_commit": "ddf2011cdafacc7e18989f8eaed95ff3f4c812ad",
   "run_urls": [
     "https://github.com/alwansan/raf/actions/runs/42266263645"
-  ]
+  ],
+  "result": {
+    "original_40_level_files_sha_verified": true,
+    "source_original_bytes": 233237972,
+    "regression_controls_passed": 21,
+    "scene_components_total": 240961,
+    "scene_components_structurally_parsed": 185633,
+    "scene_components_opaque": 55328,
+    "original_component_pptrs_examined": 1277371,
+    "original_foam_source_Shader_candidate_ptrs": 0,
+    "original_source_owner_other_pathID_refs": 24660,
+    "conclusion": "success",
+    "artifact_id": 13525944952,
+    "doc": "docs/T2_FOAM_ORIGINAL_40_LEVEL_SCENE_COMPONENTS_2026-11-06.md",
+    "Android_render_verified": false,
+    "T2_trial_vote": "لا يحتاج"
+  }
 }
