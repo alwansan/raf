@@ -1,0 +1,31 @@
+{
+  "session_id": "20261106T1340Z-T2-chat-shader-stfld-source-a84d",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "462c4c6e93b580bdcc1ea68b00c0920c570a0511",
+  "updated_at": "2026-11-06T13:49:00Z",
+  "resumed_from_experiment": "prompt/coordination/experiments/T2/20261106T1340Z-T2-chat-shader-stfld-source-a84d.json",
+  "experiment_key": "ZIP2-original-SHA-Foam-source-ShadermName-exact-MaterialShader-field-stfld-ShaderFind-first-string-argument-equality-v1",
+  "resource_key": "T2-private-original-shader-name-comparison",
+  "hypothesis": "Original source-authenticated exact UnityEngine.Shader.Find(string) return stored into Foam's referenced managed Shader field requests the same exact name as authentic serialized original Foam Shader.m_Name, or requests a different name. Compare actual first-formal string (tracking IL locals) by SHA in private runner only; publish exact/different/unknown count, not string or digest. Even equality is requested-name proof only, not returned asset or actual CB0 upload.",
+  "intended_files": [
+    "scripts/t2_foam_private_cb0_managed_targets.py",
+    "tests/test_t2_foam_private_cb0_managed_targets.py",
+    "android-port/Experiments/T2/FoamCb0ManagedLiterals/MaterialStoreValueTrace.cs",
+    "android-port/Experiments/T2/FoamCb0ManagedLiterals/Program.cs",
+    ".github/workflows/raft-t2-foam-cb0-managed-literals.yml",
+    "prompt/coordination/work/WATER-001/T2-20261106T1340Z-T2-chat-shader-stfld-source-a84d-find-name-match.json",
+    "prompt/coordination/clients/T2/sessions/20261106T1340Z-T2-chat-shader-stfld-source-a84d.md",
+    "docs/T2_FOAM_ORIGINAL_SHADER_FIND_NAME_MATCH_2026-11-06.md",
+    "prompt/coordination/experiments/T2/20261106T1340Z-T2-chat-shader-stfld-source-a84d-find-name.json",
+    "prompt/coordination/B_TEAM/events/T2/20261106T1340Z-T2-chat-shader-stfld-source-a84d-find-name.json"
+  ],
+  "baseline_ci": "https://github.com/alwansan/raf/actions/runs/42228032544",
+  "no_original_shader_name_or_hash_logged": true,
+  "original_source_pins": {
+    "zip2": "15964ea8f246b6e076ce26b60931ee2e1a9a2385",
+    "managed": "0a6f0527856a9ce538d8d4217358b467c58fdcfad95e0ebebf9588c48f24f72e"
+  },
+  "limitations": "Compiled Shader.Find requested name string may differ from actual asset; Unity Shader.Find result runtime not established, no Shader asset/GUID/Material field load checked on phone."
+}
