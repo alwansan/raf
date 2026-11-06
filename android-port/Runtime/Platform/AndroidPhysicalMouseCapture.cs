@@ -160,7 +160,10 @@ namespace RaftAndroid.Platform
 
         private static bool PhysicalMousePresent()
         {
-            if (!Input.mousePresent) return false;
+            // The legacy Input.mousePresent flag is not authoritative for
+            // Input System devices on Android. A real added Input System mouse
+            // may exist even when legacy mousePresent reports false. Conversely,
+            // the virtual LEFT-touch mouse must never trigger pointer capture.
             foreach (var mouse in Mouse.all)
                 if (mouse != null && mouse.added && mouse.name != VirtualTouchMouse)
                     return true;
