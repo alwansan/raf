@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "owner": "T4",
+  "session_id": "20261106T1801Z-T4-chat-offline-hardlink-safety-c7m3",
+  "origin": "chat",
+  "issue_id": "LOCAL-005",
+  "status": "active",
+  "base_sha": "6a49666f951b91c63180f93507e7542fa200ba6b",
+  "track": "original local world/source-staging preservation",
+  "resource_key": null,
+  "experiment_key": "T4-LOCAL005-actual-pinned-offline-original-13source-import-hardlink-cs-meta-synthetic-inode-alias-fail-closed-linux-v1",
+  "hypothesis": "adapt_android_offline_startup.apply validates source and meta symlinks but not hardlink alias counts; overwriting a source hardlinked to ZIP2/restored original data silently changes the external original inode. Existing save-path adapter protects hardlink originals, so offline adapter should reject before any backup/install.",
+  "intended_files": [
+    "scripts/adapt_android_offline_startup.py",
+    "tests/test_android_offline_startup.py"
+  ],
+  "experiment_ids": [
+    "prompt/coordination/experiments/T4/20261106T1801Z-T4-chat-offline-hardlink-safety-c7m3.json"
+  ],
+  "taken_over_from": [
+    "prompt/coordination/clients/T4/sessions/20261106T1751Z-T4-chat-r1-logger-session-reset-n3f8.md",
+    "prompt/coordination/clients/T4/sessions/20261106T1731Z-T4-chat-log-pair-linear-w6q2.md",
+    "docs/T4_ANDROID_SAVE_FILE_POSTCHECK_2026-11-05.md"
+  ],
+  "trial_vote": {
+    "round_id": "trial-20261106-r1",
+    "status": "يحتاج",
+    "unchanged": true,
+    "basis": "Substantial post-device physical mouse capture integration, not this source staging fix"
+  },
+  "run_urls": [],
+  "result": null,
+  "next_step": "Write two synthetic Linux hardlinked C# and metadata rejection tests in existing isolated offline adapter tests, prove red CI; patch original 13-file adapter to fail closed on either hardlinked source/meta before backup or source mutations; green CI plus source original test smoke. No native APK, no private files.",
+  "updated_at": "2026-11-06T18:01:00Z"
+}
