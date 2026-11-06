@@ -2,7 +2,7 @@
   "session_id": "20261106T020900Z-T1-scheduled-trace-a7c2",
   "origin": "scheduled",
   "issue_id": "WATER-001",
-  "status": "active",
+  "status": "completed",
   "baseline_ref": "feature/android-native-port",
   "experiment_key": "T1-original-slot0-vulkan-trace-42141540903-384records-coordinate-ssa-vs-source-integer",
   "resource_key": null,
@@ -14,5 +14,7 @@
   "source_run": "https://github.com/alwansan/raf/actions/runs/42141540903",
   "owner_device_run": "https://github.com/alwansan/raf/actions/runs/42058825739",
   "notes": "Separate evidence audit; no shared runtime or shader files, no CI dispatch; other T1 sessions preserved.",
-  "updated_at": "2026-11-06T02:09:00Z"
+  "updated_at": "2026-11-06T02:12:00Z",
+  "outcome": "CI42141540903 original Vulkan slot0: 384 reads [64,256,64], zero OOB, zero self-trace value mismatch, 64/64 and 32/32 same-source parity; cross-backend mismatch remains unresolved",
+  "session_checkpoint": "prompt/coordination/clients/T1/sessions/20261106T020900Z-T1-scheduled-trace-a7c2.md"
 }
