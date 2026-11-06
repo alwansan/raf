@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "session_id": "20261106T223455Z-T1-chat-phi-pathtag-c9e2",
+  "owner": "T1",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "status": "active",
+  "base_sha": "531453ff9990d45898336a206192e4385e6c5e11",
+  "updated_at": "2026-11-06T22:34:55.949Z",
+  "resumed_from_sessions": [
+    "20261106T221550Z-T1-chat-phi-ssa-6db4",
+    "20261106T221403Z-T1-scheduled-phi-runtime-pair-k8d4"
+  ],
+  "experiment_key": "zip2-sha15964ea8-original-FFT-slot0-site2y-derived-HLSL50-glslang-phi-entry-backedge-runtime-counter-injection-v1",
+  "resource_key": "SHA-pinned ZIP2 first original FFT compiled slot0 ~116MB, CPU-only spirv-as+spirv-val, no Unity/Android",
+  "hypothesis": "Inject storage-buffer atomic counters into exactly the two verified third-butterfly-Y Phi predecessor CFG edges in a PRIVATE derived SPIR-V copy, keyed per invocation x, while preserving source bytes and candidate fetch types. A valid SPIR-V assembly creates a future branch-choice recorder; it does NOT prove execution or output preservation.",
+  "intended_files": [
+    "scripts/t1_fft_site2_y_phi_path_tag.py",
+    "tests/test_t1_fft_site2_y_phi_path_tag.py",
+    "scripts/t1_fft_site2_y_hlsl_pair.py",
+    ".github/workflows/raft-t1-fft-site2y-hlsl-pair.yml",
+    "prompt/coordination/work/WATER-001/20261106T223455Z-T1-chat-phi-pathtag-c9e2.json",
+    "prompt/coordination/clients/T1/sessions/20261106T223455Z-T1-chat-phi-pathtag-c9e2.md",
+    "prompt/coordination/experiments/T1/20261106T223455Z-T1-chat-phi-pathtag-c9e2.json",
+    "prompt/coordination/B_TEAM/events/T1/20261106T223455Z-T1-chat-phi-pathtag-c9e2.json"
+  ],
+  "collision_check": "Latest T1 scheduled 20261106T221403Z only wrote evidence-gap plan (no active overlapping source changes); prior T1 42304106607 success; only native 42296450023 and T5 42305228829 in_progress. Do not touch shared heavy Unity builds or T2/T3/T4/T5 files.",
+  "trial_vote": "لا يحتاج",
+  "next_step": "Create bounded source-free synthetic adversarial Phi predecessor path counter injection and validate exact SHA-original-derived HLSL candidate SPIR-V with spirv-as/val. No GPU launch, no claim of runtime branch selection until physical capture and parity join."
+}
