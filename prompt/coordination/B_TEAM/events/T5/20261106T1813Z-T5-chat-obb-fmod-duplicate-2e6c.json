@@ -1,0 +1,21 @@
+{
+  "id": "20261106T1813Z-T5-chat-obb-fmod-duplicate-2e6c",
+  "owner": "T5",
+  "session_id": "20261106T1813Z-T5-chat-obb-fmod-duplicate-2e6c",
+  "origin": "chat",
+  "issue_id": "INTEGRATION-001",
+  "type": "integration",
+  "at": "2026-11-06T18:15:26.300Z",
+  "summary": "Android exact installed-version OBB read-only first-byte diagnostic now refuses ambiguous duplicate original FMOD bank ZIP central directory paths, including empty second entry. Existing native Unity source-copy verification still passes and .NET8 CI42268743309 SUCCESS 29/29 synthetic OBB checks, 0 compilation errors. No actual phone OBB or FMOD playback measured; no APK build dispatched and no vote change.",
+  "evidence": [
+    "https://github.com/alwansan/raf/actions/runs/42268743309",
+    "https://github.com/alwansan/raf/commit/ff54a9f402143ad880fe19097adfe44e61555c1c",
+    "https://github.com/alwansan/raf/commit/830358d3f5cd5b18b02780561b244d33d4a4b577",
+    "prompt/coordination/experiments/T5/20261106T1813Z-T5-chat-obb-fmod-duplicate-2e6c.json"
+  ],
+  "limits": [
+    "no on-device installed OBB read or original data asset check",
+    "no shader/water/graphics restoration or actual FMOD engine playback claim",
+    "trial round1 T5 no need and NOT_READY 0/3"
+  ]
+}
