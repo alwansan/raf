@@ -6,7 +6,7 @@
 - base_sha: `87ccb82b8e82517f3314583963804aae3fdd56de`
 - resumed_from_sessions: `20261106T1023Z-T3-chat-roundtrip-width-5e0d` (chat), `20261106T1026Z-T3-scheduled-91ac` (distinct scheduled scope).
 - issue_id: `RENDER-002`
-- work: [this session work](../../../../work/RENDER-002/20261106T1034Z-T3-chat-consumed-width-0c6e.json)
+- work: [this session work](../../../work/RENDER-002/20261106T1034Z-T3-chat-consumed-width-0c6e.json)
 - experiment: [private aggregate](../../../experiments/T3/20261106T1034Z-T3-chat-consumed-width-0c6e.json)
 - run: https://github.com/alwansan/raf/actions/runs/42203844803, job `127845429843` **completed SUCCESS**.
 - branch: `feature/android-native-port` only.
