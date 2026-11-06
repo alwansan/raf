@@ -212,6 +212,26 @@ class PairTests(unittest.TestCase):
         self.write_manifest()
         self.rejected("Unsafe or duplicate")
 
+    def test_obb_regular_file_ancestor_collision(self):
+        # Both ZIP entries are individually safe and unique, but no normal
+        # filesystem can extract a regular assets file and assets/child.
+        self.make_obb([("assets", b"regular-file"),
+                       ("assets/bin/Data/resources.assets", b"synthetic-obb")])
+        self.write_manifest()
+        self.rejected("ZIP regular file collides with member directory")
+
+    def test_apk_regular_file_ancestor_collision(self):
+        with zipfile.ZipFile(self.apk, "a") as archive:
+            archive.writestr("assets/bin", b"regular-file")
+        self.write_manifest()
+        self.rejected("ZIP regular file collides with member directory")
+
+    def test_obb_explicit_directory_is_allowed(self):
+        self.make_obb([("assets/", b""),
+                       ("assets/bin/Data/resources.assets", b"synthetic-obb")])
+        self.write_manifest()
+        self.assertGreater(self.check()["obb_zip_members"], 0)
+
     def test_empty_obb_data(self):
         self.make_obb([("not-assets", b"x")])
         self.write_manifest()
