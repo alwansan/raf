@@ -26,17 +26,31 @@
   "run_url": "https://github.com/alwansan/raf/actions/runs/42259968584",
   "artifact_urls": [],
   "budget": "25min; sourcefree synthetic, shared engine mutex no overlap, no game files, CI runner scratch only",
-  "status": "waiting_ci",
+  "status": "completed_actual_unity2021_sourcefree_keyword_variant_gpu_positive",
   "observed_result": {
-    "preflight_and_source_only_tests": true,
-    "pinned_cli_download_verified": true,
-    "unity_editmode_step": "in_progress",
+    "run_id": 42259968584,
+    "job_id": 128037003200,
+    "conclusion": "success",
+    "actual_unity2021_editor_executed": true,
+    "exact_nunit_test_count": 2,
+    "exact_nunit_tests_passed": 2,
+    "source_only_python_test_count": 6,
+    "source_only_python_tests_passed": 6,
+    "real_gpu_dispatches": 3,
+    "asserted_uint32_readback_words": 192,
+    "declared_keyword_enabled_then_disabled": true,
+    "undeclared_keyword_rejected": true,
+    "source_sha": "b958990243523d18a6d44d888e6328e17fe07ddf",
+    "private_logs_and_project_removed": true,
+    "original_raft_data_acquired": false,
+    "full_t1_original_unity_kernel_probe_compiled": false,
     "android_water_proven": false
   },
   "rejected_hypotheses": [],
   "limitations": [
-    "No private original shader, numeric Unity-vs-original source parity, authored FFT kernel mapping or Adreno proof"
+    "No private original shader, numeric Unity-vs-original source parity, authored FFT kernel mapping or Adreno proof",
+    "The full 20-row T1FftKernelRuntimeProbe.cs itself was not compiled/executed by this synthetic fixture; actual authored FFT mappings remain unproven."
   ],
   "integration_commit": "b958990243523d18a6d44d888e6328e17fe07ddf",
-  "next_step": "Wait for actual Unity editmode NUnit terminal verdict, inspect bounded marker and correct only confirmed failing stage."
+  "next_step": "Use provenance-authenticated original authored FFT kernel + variant mapping in Unity; independently isolate OpenGLCore butterfly coordinate drift from source-matching Vulkan fixture before integration."
 }
