@@ -1,0 +1,20 @@
+{
+  "id": "20261106T185258Z-T5-chat-delivery-zip-collisions-e4d7",
+  "owner": "T5",
+  "session_id": "20261106T185258Z-T5-chat-delivery-zip-collisions-e4d7",
+  "origin": "chat",
+  "issue_id": "DELIVERY-013",
+  "type": "delivery",
+  "at": "2026-11-06T18:56:00Z",
+  "summary": "Source-only recovery hardening: package_android_delivery now rejects CRC-green duplicate APK/OBB ZIP member names before delivery; 4 synthetic adversarial tests committed at ccf88df8 and preflight CI42274874596 pending. Core full-native auditors already reject duplicates. No real phone package or native build submitted.",
+  "evidence": [
+    "https://github.com/alwansan/raf/commit/ccf88df86c6f274a63d4dc787bcfbba9d218f942",
+    "https://github.com/alwansan/raf/actions/runs/42274874596",
+    "prompt/coordination/experiments/T5/20261106T185258Z-T5-chat-delivery-zip-collisions-e4d7.json"
+  ],
+  "limits": [
+    "no original signed output inspected",
+    "no game engine/water/shader/FMOD/device proof",
+    "trial round lacks 5/5 consensus; NOT_READY 0/3"
+  ]
+}
