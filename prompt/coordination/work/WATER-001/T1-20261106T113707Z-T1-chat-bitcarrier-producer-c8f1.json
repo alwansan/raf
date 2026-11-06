@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "owner": "T1",
+  "generation": "T-2026-11-05",
+  "session_id": "20261106T113707Z-T1-chat-bitcarrier-producer-c8f1",
+  "origin": "chat",
+  "issue_id": "WATER-001",
+  "track": "FFT site1 Y vector component writer bitcarrier provenance",
+  "approach": "Classify original SPIR-V may-reaching scalar OpBitcast writer's numeric input/output type and distinguish exact bit reinterpretation from conversion/constant without exposing source constants or requiring source mutation. Use original fixed source pin, branch-aware writer set, 10+ synthetic controls, existing isolated Vulkan workflow.",
+  "status": "active",
+  "base_sha": "2d69ccfcc0b36e7cf6490848899f00955d61bffa",
+  "updated_at": "2026-11-06T11:37:07.748Z",
+  "intended_files": [
+    "scripts/t1_fft_spirv_scalar_writer_carrier.py",
+    "tests/test_t1_fft_spirv_scalar_writer_carrier.py",
+    ".github/workflows/raft-t1-fft-vulkan-roundtrip-isolation.yml",
+    "prompt/coordination/clients/T1/sessions/20261106T113707Z-T1-chat-bitcarrier-producer-c8f1.md",
+    "prompt/coordination/experiments/T1/20261106T113707Z-T1-chat-bitcarrier-producer-c8f1.json",
+    "prompt/coordination/B_TEAM/events/T1/20261106T113707Z-T1-chat-bitcarrier-producer-c8f1.json"
+  ],
+  "resumed_from_sessions": [
+    "20261106T113001Z-T1-chat-lane-alias-f73c",
+    "20261106T112050Z-T1-chat-alias-origins-b62f",
+    "20261106T110837Z-T1-scheduled-fft-first-divergence"
+  ],
+  "experiment_key": "water001-original-slot0-butterfly1-y-samecomponent-opbitcast-intcarrier-v1-pin15964ea8",
+  "resource_key": "t1-fft-vulkan-roundtrip-isolation-ubuntu24-no-unity",
+  "hypothesis": "The original butterfly site1 Y may-reaching OpBitcast store has a signed/unsigned integer 32-bit source reinterpreted into float bits, unlike its other constant candidate; proving this distinction may isolate HLSL translation's bit-pattern error before any rewrite.",
+  "related_work": [
+    "T1-20261106T113001Z-T1-chat-lane-alias-f73c"
+  ],
+  "run_urls": [],
+  "result": null,
+  "next_step": "Trace typed SSA OpBitcast producers to source kind in a privacy-safe reporter, preserve ambiguous branches; run one original source CI; no Unity/Android changes until numeric parity proof."
+}
